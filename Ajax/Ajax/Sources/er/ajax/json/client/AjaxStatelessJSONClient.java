@@ -5,7 +5,7 @@ import com.webobjects.appserver.WOResponse;
 
 import er.ajax.AjaxUtils;
 import er.ajax.json.JSONRequestHandler;
-import er.extensions.ERXComponent;
+import er.extensions.components.ERXComponent;
 
 /**
  * StatelessJSONClient renders a "new JSONRpcClient('...')" with a URL back to your application (along with a session ID if

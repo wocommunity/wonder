@@ -6,12 +6,13 @@
  * included with this distribution in the LICENSE.NPL file.  */
 
 package er.bugtracker;
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.directtoweb.*;
-import er.bugtracker.Component;
+
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSValidation;
+import er.directtoweb.components.ERDCustomEditComponent;
 
 public class ComponentPicker extends ERDCustomEditComponent {
 

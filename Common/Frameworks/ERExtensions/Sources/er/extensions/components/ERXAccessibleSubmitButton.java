@@ -10,8 +10,8 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXSubmitButton;
-import er.extensions.ERXStringUtilities;
+import er.extensions.components._private.ERXSubmitButton;
+import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * Extends ERXSubmitButton with self-configuring accessibility hot key for the

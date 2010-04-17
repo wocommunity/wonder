@@ -3,12 +3,12 @@
 // Created by eogenerator
 // DO NOT EDIT.  Make changes to Requirement.java instead.
 package er.bugtracker;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.extensions.*;
-import java.util.*;
-import java.math.BigDecimal;
+
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import er.extensions.eof.ERXGenericRecord;
 
 public abstract class _Requirement extends Bug {
 
@@ -16,7 +16,7 @@ public abstract class _Requirement extends Bug {
         super();
     }
 
-    public static abstract class _RequirementClazz extends er.extensions.ERXGenericRecord.ERXGenericRecordClazz {
+    public static abstract class _RequirementClazz extends ERXGenericRecord.ERXGenericRecordClazz {
 
         public NSArray myRequirementsWithUser(EOEditingContext ec, Object user) {
             NSMutableDictionary _dict = new NSMutableDictionary(6);

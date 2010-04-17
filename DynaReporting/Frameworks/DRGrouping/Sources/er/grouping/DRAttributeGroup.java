@@ -1,8 +1,12 @@
 package er.grouping;
 
-import java.util.*;
-import com.webobjects.foundation.*;
-import er.extensions.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import er.extensions.foundation.ERXValueUtilities;
+
+import java.util.Enumeration;
 
 public class DRAttributeGroup extends DRAttribute  {
 

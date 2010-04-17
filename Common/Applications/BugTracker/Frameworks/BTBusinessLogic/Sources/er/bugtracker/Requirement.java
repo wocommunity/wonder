@@ -1,10 +1,10 @@
 // Requirement.java
 // 
 package er.bugtracker;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.extensions.*;
+
+import com.webobjects.eocontrol.EOEditingContext;
+import er.extensions.eof.EOEnterpriseObjectClazz;
+import er.extensions.logging.ERXLogger;
 
 public class Requirement extends _Requirement {
     static final ERXLogger log = ERXLogger.getERXLogger(Requirement.class);
@@ -31,5 +31,5 @@ public class Requirement extends _Requirement {
         
     }
 
-    public static final RequirementClazz clazz = (RequirementClazz)EOEnterpriseObjectClazz.clazzForEntityNamed("Requirement");
+    public static final RequirementClazz clazz = (RequirementClazz) EOEnterpriseObjectClazz.clazzForEntityNamed("Requirement");
 }

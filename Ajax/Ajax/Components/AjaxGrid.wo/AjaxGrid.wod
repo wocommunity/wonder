@@ -1,6 +1,8 @@
 ColumnRepetition: WORepetition {
 	list = configurationData.columns; // VALID
 	item = currentColumn;
+	checkHashCodes = checkHashCodes;
+	uniqueKey = "title";
 }
 
 ColumnTitle: WOString {
@@ -61,6 +63,8 @@ RowRepetition: WORepetition {
 	list = displayGroup.displayedObjects;
 	item = row;
 	index = rowIndex;
+	checkHashCodes = checkHashCodes;
+	uniqueKey = rowIdentifierKey;
 }
 
 SortColumn: AjaxUpdateLink {

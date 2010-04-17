@@ -6,11 +6,8 @@
 //
 package er.workerchannel;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
 import com.codefab.wounittest.*;
-import er.extensions.ERXLogger;
+import er.extensions.logging.ERXLogger;
 
 public class ERWorkerThredsTestCase extends WOUTTestCase {
 

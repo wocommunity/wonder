@@ -1,13 +1,14 @@
 package er.excel;
 
-import java.io.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSData;
+import er.extensions.foundation.ERXFileUtilities;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
-import org.apache.poi.hssf.usermodel.*;
-
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
-
-import er.extensions.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * EGWorkbook is the "page" for the excel generation. It instantiates the 

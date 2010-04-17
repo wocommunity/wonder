@@ -6,16 +6,22 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.testrunner;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+import java.util.Enumeration;
 
-import junit.framework.*;
-import junit.runner.*;
-import java.io.PrintStream;
-import java.util.*;
-import er.extensions.*;
+import junit.framework.AssertionFailedError;
+import junit.framework.Test;
+
+import org.apache.log4j.Logger;
+
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
+import com.webobjects.foundation.NSComparator;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableSet;
+
+import er.extensions.foundation.ERXPatcher;
 
 /**
  * component for interactively running tests.<br />
@@ -25,7 +31,7 @@ import er.extensions.*;
 public class ERXWOTestInterface extends WOComponent implements ERXTestListener {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXWOTestInterface.class);
+    public static final Logger log = Logger.getLogger(ERXWOTestInterface.class);
 
     // bind to a WOTextField
     public String theTest;

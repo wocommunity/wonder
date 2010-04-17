@@ -10,7 +10,8 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 
-import er.extensions.*;
+import er.extensions.foundation.ERXConfigurationManager;
+import er.extensions.foundation.ERXUtilities;
 
 public class ERCMailableExceptionPage extends WOComponent {
 

@@ -6,13 +6,10 @@
  * included with this distribution in the LICENSE.NPL file.  */
 
 package er.bugtracker;
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.directtoweb.*;
-import er.extensions.*;
-import er.bugtracker.Bug;
+
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSDictionary;
+import er.directtoweb.components.ERDCustomEditComponent;
 
 public class LinkToBookmarkBug extends ERDCustomEditComponent {
 

@@ -4,6 +4,7 @@ import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOQualifierSQLGeneration;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eocontrol.EOQualifier;
+
 import er.extensions.jdbc.ERXSQLHelper;
 
 /**

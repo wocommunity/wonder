@@ -14,12 +14,9 @@ import org.apache.log4j.Logger;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
-import er.extensions.ERXProperties;
-import er.extensions.ERXLocalizer;
-import er.extensions.ERXFileUtilities;
-import er.extensions.ERXExtensions;
-import er.extensions.ERXStringUtilities;
 
+import er.extensions.ERXExtensions;
+import er.extensions.localization.ERXLocalizer;
 
 /**
  * Provides a set of utilities for displaying and managing exceptions.

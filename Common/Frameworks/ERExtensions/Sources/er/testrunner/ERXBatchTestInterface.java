@@ -6,15 +6,14 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.testrunner;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
-import junit.framework.*;
-import junit.runner.*;
+import er.extensions.logging.ERXLogger;
+import junit.framework.AssertionFailedError;
+import junit.framework.Test;
+import junit.framework.TestFailure;
+import junit.runner.BaseTestRunner;
+
 import java.io.PrintStream;
-import java.util.*;
-import er.extensions.*;
+import java.util.Enumeration;
 
 /**
  * Used for running a batch of tests.<br />

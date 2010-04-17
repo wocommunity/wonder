@@ -20,9 +20,9 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.foundation._NSUtilities;
 
-import er.extensions.ERXDynamicURL;
-import er.extensions.ERXMutableURL;
-import er.extensions.ERXProperties;
+import er.extensions.components.ERXDynamicURL;
+import er.extensions.foundation.ERXMutableURL;
+import er.extensions.foundation.ERXProperties;
 
 /**
  * JSONRequestHandler provides support for JSON RPC services that can be both 

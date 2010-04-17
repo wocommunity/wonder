@@ -1,10 +1,11 @@
 // Release.java
 // 
 package er.bugtracker;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.extensions.*;
+
+import com.webobjects.eocontrol.EOEditingContext;
+import er.extensions.eof.EOEnterpriseObjectClazz;
+import er.extensions.eof.ERXConstant;
+import er.extensions.logging.ERXLogger;
 
 public class Release extends _Release {
     static final ERXLogger log = ERXLogger.getERXLogger(Release.class);
@@ -38,5 +39,5 @@ public class Release extends _Release {
         }
     }
 
-    public static final ReleaseClazz clazz = (ReleaseClazz)EOEnterpriseObjectClazz.clazzForEntityNamed("Release");
+    public static final ReleaseClazz clazz = (ReleaseClazz) EOEnterpriseObjectClazz.clazzForEntityNamed("Release");
 }

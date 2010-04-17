@@ -3,8 +3,7 @@ package er.extensions.components;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 
-import er.extensions.ERXLocalizer;
-import er.extensions.ERXStatelessComponent;
+import er.extensions.localization.ERXLocalizer;
 
 /**
  * A custom boolean selector (defaults to "Yes", "No", and "All") for use as, for instance, a boolean search filter.

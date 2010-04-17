@@ -80,6 +80,11 @@ IfPropertyKeyIsNotOmitted: WOConditional {
 	negate = true;
 }
 
+InlineMetricsForPropertyKey: WOString {
+	escapeHTML = false;
+	value = latestEntryForCurrentPropertyKey.latestDuration;
+}
+
 ListPage: D2WList {
 	dataSource = queryDataSource;
 	entityName = entity;
@@ -98,6 +103,10 @@ MainTable: WOGenericContainer {
 NoValueString: ERXLocalizedString {
     value = "ERD2WQueryPage.noValueLabel";
     escapeHTML = false;
+}
+
+PageMetricsSummary: ERXStatsSummary {
+	aggregateStats = statsForPage;
 }
 
 PageWrapper: WOSwitchComponent {
@@ -179,12 +188,13 @@ PropertyNameSwitchComponent: WOSwitchComponent {
 	localContext = d2wContext;
 }
 
-ResourceInputRepresentation: WOSwitchComponent {
+ResourceInputRepresentation: ERXTimedSwitchComponent {
 	WOComponentName = d2wContext.componentName;
 	_componentUnroll = true;
 	_unroll = true;
 	displayGroup = displayGroup;
 	localContext = localContext;
+	statsKey = statsKeyForCurrentPropertyKey;
 }
 
 ResourceRepetition: WORepetition {
@@ -213,6 +223,14 @@ SavedQuerySwitchedComponent:  WOSwitchComponent {
 	_unroll = true;
 	displayGroup = displayGroup;
 	localContext = localContext;
+}
+
+ShouldDisplayDetailedPageMetrics: WOConditional {
+	condition = shouldDisplayDetailedPageMetrics;
+}
+
+ShouldDisplayMetricsSummary: WOConditional {
+	condition = shouldDisplayPageMetricsSummary;
 }
 
 ShowCancel: WOConditional {

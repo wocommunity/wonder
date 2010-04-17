@@ -6,10 +6,14 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.bugtracker;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import er.extensions.*;
-import er.corebusinesslogic.*;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+import er.corebusinesslogic.ERCPreference;
+import er.corebusinesslogic.ERCoreUserInterface;
+import er.extensions.eof.EOEnterpriseObjectClazz;
+import er.extensions.foundation.ERXValueUtilities;
+import er.extensions.logging.ERXLogger;
 
 public class People extends _People implements ERCoreUserInterface {
     static final ERXLogger log = ERXLogger.getERXLogger(People.class);
@@ -56,7 +60,7 @@ public class People extends _People implements ERCoreUserInterface {
         }
     }
 
-    public static final PeopleClazz clazz = (PeopleClazz)EOEnterpriseObjectClazz.clazzForEntityNamed("People");
+    public static final PeopleClazz clazz = (PeopleClazz) EOEnterpriseObjectClazz.clazzForEntityNamed("People");
 
     public void newPreference(EOEnterpriseObject pref) {
         addToPreferences((ERCPreference)pref);

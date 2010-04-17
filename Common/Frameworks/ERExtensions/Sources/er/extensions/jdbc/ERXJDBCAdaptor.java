@@ -2,7 +2,9 @@ package er.extensions.jdbc;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Enumeration;
+import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
@@ -23,11 +25,12 @@ import com.webobjects.jdbcadaptor.JDBCAdaptorException;
 import com.webobjects.jdbcadaptor.JDBCChannel;
 import com.webobjects.jdbcadaptor.JDBCContext;
 import com.webobjects.jdbcadaptor.JDBCPlugIn;
-import er.extensions.ERXSystem;
-import er.extensions.ERXProperties;
-import er.extensions.ERXPatcher;
+
 import er.extensions.eof.ERXAdaptorOperationWrapper;
-import er.extensions.ERXValueUtilities;
+import er.extensions.foundation.ERXPatcher;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXSystem;
+import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * Subclass of the JDBC adaptor and accompanying classes that supports

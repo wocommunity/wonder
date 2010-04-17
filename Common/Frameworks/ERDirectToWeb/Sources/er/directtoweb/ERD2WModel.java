@@ -6,16 +6,71 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.directtoweb.ERD2WUtilities;
-import java.util.*;
-import java.io.*;
-import er.extensions.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.EOFException;
+import java.io.File;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.URL;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
+
+import org.apache.log4j.Logger;
+
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.directtoweb.Assignment;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.D2WFastModel;
+import com.webobjects.directtoweb.D2WModel;
+import com.webobjects.directtoweb.DefaultAssignment;
+import com.webobjects.directtoweb.ERD2WUtilities;
+import com.webobjects.directtoweb.Rule;
+import com.webobjects.directtoweb.Services;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eocontrol.EOAndQualifier;
+import com.webobjects.eocontrol.EOKeyComparisonQualifier;
+import com.webobjects.eocontrol.EOKeyValueQualifier;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
+import com.webobjects.eocontrol.EONotQualifier;
+import com.webobjects.eocontrol.EOOrQualifier;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOQualifierEvaluation;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSSet;
+
+import er.directtoweb.assignments.ERDComputingAssignmentInterface;
+import er.directtoweb.assignments.ERDLocalizableAssignmentInterface;
+import er.directtoweb.assignments.delayed.ERDDelayedAssignment;
+import er.directtoweb.qualifiers.ERDQualifierTraversal;
+import er.directtoweb.qualifiers.ERDQualifierTraversalCallback;
+import er.extensions.ERXExtensions;
+import er.extensions.foundation.ERXArrayUtilities;
+import er.extensions.foundation.ERXFileUtilities;
+import er.extensions.foundation.ERXMappingObjectStream;
+import er.extensions.foundation.ERXMultiKey;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXSelectorUtilities;
+import er.extensions.localization.ERXLocalizer;
 
 /**
  * Overhaul of the caching system.
@@ -23,13 +78,13 @@ import java.net.URL;
 public class ERD2WModel extends D2WModel {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERD2WModel.class);
+    public static final Logger log = Logger.getLogger(ERD2WModel.class);
 
     /** logs rules being decoded */
-    public static final ERXLogger ruleDecodeLog = ERXLogger.getERXLogger("er.directtoweb.rules.decode");
+    public static final Logger ruleDecodeLog = Logger.getLogger("er.directtoweb.rules.decode");
 
     /** main category for enabling or disabling tracing of rules */
-    public static final ERXLogger ruleTraceEnabledLog = ERXLogger.getERXLogger("er.directtoweb.rules.ERD2WTraceRuleFiringEnabled");
+    public static final Logger ruleTraceEnabledLog = Logger.getLogger("er.directtoweb.rules.ERD2WTraceRuleFiringEnabled");
 
     //	===========================================================================
     //	Notification Title(s)
@@ -46,7 +101,7 @@ public class ERD2WModel extends D2WModel {
     private Hashtable _systemCache=new Hashtable(10000);
     private Hashtable _significantKeysPerKey=new Hashtable(500);
 
-    private static ERD2WModel _defaultModel;
+    private static D2WModel _defaultModel;
     
     // put here the keys than can either provided as input or computed
     // FIXME should add API from clients to add to this array
@@ -78,7 +133,6 @@ public class ERD2WModel extends D2WModel {
 
         return result;
     }
-    private final static NSArray _ruleSortOrderingKeyVector=ruleSortOrderingKeyArray();
 
     /**
      * Main constructor. Builds a model for a given
@@ -87,7 +141,11 @@ public class ERD2WModel extends D2WModel {
      */
     protected ERD2WModel(NSArray rules) {
         super(rules);
+    	NSNotificationCenter.defaultCenter().addObserver(this, 
+    			ERXSelectorUtilities.notificationSelector("applicationDidFinishLaunching"), 
+    			WOApplication.ApplicationDidFinishLaunchingNotification, null);
     }
+    
     protected ERD2WModel(File file) {
         super(file);
     }
@@ -97,10 +155,18 @@ public class ERD2WModel extends D2WModel {
     protected ERD2WModel(EOKeyValueUnarchiver unarchiver) {
         super(unarchiver);
     }
-    
+    /**/
     public void clearD2WRuleCache() {
         invalidateCaches();
         sortRules();
+    }
+    
+    public NSArray availableTasks() {
+    	return new NSArray(taskVector().toArray());
+    }
+    
+    public NSArray availablePageConfigurations() {
+    	return new NSArray(dynamicPages().toArray());
     }
     
     protected void sortRules() {
@@ -124,6 +190,25 @@ public class ERD2WModel extends D2WModel {
         log.debug("Finished sorting.");
         */
         if (rules() !=null && rules().count() > 0) prepareDataStructures();
+    }
+    
+    public void applicationWillDispatchRequest(NSNotification n) {
+    	checkRules();
+    }
+
+    public void applicationDidFinishLaunching(NSNotification n) {
+    	if(!WOApplication.application().isCachingEnabled()) {
+    		NSNotificationCenter.defaultCenter().addObserver(this, 
+    				ERXSelectorUtilities.notificationSelector("applicationWillDispatchRequest"), 
+    				WOApplication.ApplicationWillDispatchRequestNotification, null);
+        NSNotificationCenter.defaultCenter().addObserver(this, 
+            ERXSelectorUtilities.notificationSelector("clearD2WRuleCache"), 
+            "clearD2WRuleCache", null);
+    	}
+    }
+    
+    public void clearD2WRuleCache(NSNotification n) {
+      clearD2WRuleCache();
     }
     
     public NSArray rules() {
@@ -172,11 +257,19 @@ public class ERD2WModel extends D2WModel {
         }
     }
     
+    protected Object fireSystemRuleForKeyPathInContext(String keyPath, D2WContext context) {
+        return fireRuleForKeyPathInContext(_systemCache, keyPath,context);
+    }
+
+    protected Object fireRuleForKeyPathInContext(String keyPath, D2WContext context) {
+        return fireRuleForKeyPathInContext(_cache, keyPath, context);
+    }
+    
     protected boolean _shouldUseCacheForFiringRuleForKeyPathInContext(final String keyPath, final D2WContext context) {
         return true;
     }
     
-    protected Object fireRuleForKeyPathInContext(String keyPath, D2WContext context) {
+    private Object fireRuleForKeyPathInContext(Map cache, String keyPath, D2WContext context) {
         final boolean useCache = _shouldUseCacheForFiringRuleForKeyPathInContext(keyPath, context);
         
         if ( ! useCache && ruleTraceEnabledLog.isDebugEnabled() )
@@ -191,15 +284,15 @@ public class ERD2WModel extends D2WModel {
             lhsKeys[i]=ERD2WUtilities.contextValueForKeyNoInferenceNoException(context, significantKeys[i]);
         }
         lhsKeys[s]=keyPath;
-	ERXMultiKey k=new ERXMultiKey(lhsKeys);
+	    ERXMultiKey k=new ERXMultiKey(lhsKeys);
 
-        Object result=useCache ? _cache.get(k) : null;
+        Object result=useCache ? cache.get(k) : null;
         if (result==null) {
             boolean resetTraceRuleFiring = false;
-            ERXLogger ruleFireLog=null;
+            Logger ruleFireLog=null;
             if (ruleTraceEnabledLog.isDebugEnabled()) {
-                ERXLogger ruleCandidatesLog = ERXLogger.getERXLogger("er.directtoweb.rules." + keyPath + ".candidates");
-                ruleFireLog = ERXLogger.getERXLogger("er.directtoweb.rules." + keyPath + ".fire");
+                Logger ruleCandidatesLog = Logger.getLogger("er.directtoweb.rules." + keyPath + ".candidates");
+                ruleFireLog = Logger.getLogger("er.directtoweb.rules." + keyPath + ".fire");
                 if (ruleFireLog.isDebugEnabled() && !NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupRules)) {
                     NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupRules);
                     //NSLog.setAllowedDebugLevel(NSLog.DebugLevelDetailed);
@@ -210,12 +303,16 @@ public class ERD2WModel extends D2WModel {
                                       descriptionForRuleSet(canidateRuleSetForRHSInContext(keyPath, context)));
                 }
             }
+            if(cache == _systemCache) {
+                result=super.fireSystemRuleForKeyPathInContext(keyPath,context);
+            } else {
             result=super.fireRuleForKeyPathInContext(keyPath,context);
+            }
             if ( useCache )
-                _cache.put(k,result==null ? NULL_VALUE : result);
+                cache.put(k,result==null ? NULL_VALUE : result);
             if (ruleTraceEnabledLog.isDebugEnabled()) {
                 if (ruleFireLog.isDebugEnabled())
-                ruleFireLog.debug("FIRE: " + keyPath + " for propertyKey: " + context.propertyKey() + " depends on: " + new NSArray(significantKeys)
+                ruleFireLog.debug("FIRE: " +keyPath +  " depends on: "  + new NSArray(significantKeys) + " = " + k
                               + " value: " + (result==null ? "<NULL>" : (result instanceof EOEntity ? ((EOEntity)result).name() : result)));
             }
             if (resetTraceRuleFiring) {
@@ -223,10 +320,10 @@ public class ERD2WModel extends D2WModel {
             }
         } else {
             if (ruleTraceEnabledLog.isDebugEnabled()) {
-                ERXLogger ruleLog = ERXLogger.getERXLogger("er.directtoweb.rules." + keyPath + ".cache");
+                Logger ruleLog = Logger.getLogger("er.directtoweb.rules." + keyPath + ".cache");
                 if (ruleLog.isDebugEnabled())
-                    ruleLog.debug("CACHE: " + keyPath +  " for propertyKey: " + context.propertyKey() + " depends on: "
-                                  + new NSArray(significantKeys) + " value: " + (result==NULL_VALUE ? "<NULL>" : (result instanceof EOEntity ? ((EOEntity)result).name() : result)));
+                    ruleLog.debug("CACHE: " + keyPath +  " depends on: "  + new NSArray(significantKeys) + " = " + k
+                                  + " value: " + (result==NULL_VALUE ? "<NULL>" : (result instanceof EOEntity ? ((EOEntity)result).name() : result)));
             }
             if (result==NULL_VALUE)
                 result=null;
@@ -270,11 +367,6 @@ public class ERD2WModel extends D2WModel {
         }
         return canidateSet.count() == 0 ? canidateSet.allObjects() :
             EOSortOrdering.sortedArrayUsingKeyOrderArray(canidateSet.allObjects(), ruleSortOrderingKeyArray());
-    }
-
-    synchronized protected Object fireSystemRuleForKeyPathInContext(String keyPath, D2WContext context) {
-        // FIXME: optimize me!
-        return super.fireSystemRuleForKeyPathInContext(keyPath,context);
     }
 
 
@@ -379,7 +471,7 @@ public class ERD2WModel extends D2WModel {
                 _addKeyToVector("propertyKey", dependendantKeys);
             }
             if(localizationEnabled && r.rhs() instanceof ERDLocalizableAssignmentInterface) {
-                _addKeyToVector("session.localizer.language", dependendantKeys);
+                _addKeyToVector("session.language", dependendantKeys);
             }
             c.keys=new NSMutableArray();
         }
@@ -455,15 +547,44 @@ public class ERD2WModel extends D2WModel {
     protected void setCurrentFile(File currentFile) { _currentFile = currentFile; }
     protected File currentFile() { return _currentFile; }
 
+    protected static NSDictionary dictionaryFromPathUrl(URL url) {
+        NSDictionary model = null;
+        try {
+            log.debug("Loading url: " + url);
+            if(url != null) {
+                model = Services.dictionaryFromPathURL(url);
+                NSArray rules = (NSArray)model.objectForKey("rules");
+                Enumeration e = rules.objectEnumerator();
+                boolean patchRules = ERXProperties.booleanForKeyWithDefault("er.directtoweb.ERXD2WModel.patchRules", true);
+                while(e.hasMoreElements()) {
+                    NSMutableDictionary dict = (NSMutableDictionary)e.nextElement();
+                    if(patchRules) {
+                        if(Rule.class.getName().equals(dict.objectForKey("class"))) {
+                            dict.setObjectForKey(ERD2WRule.class.getName(), "class");
+                        }
+                    }
+                }
+            }
+        } catch (Throwable throwable) {
+            NSLog.err.appendln("****** DirectToWeb: Problem reading file "
+                               + url + " reason:" + throwable);
+            if (NSLog.debugLoggingAllowedForLevelAndGroups(1, 40L)) {
+                NSLog.err.appendln("STACKTRACE:");
+                NSLog.err.appendln(throwable);
+            }
+            throw NSForwardException._runtimeExceptionForThrowable(throwable);
+        }
+        return model;
+    }
+   
     protected void mergePathURL(URL modelURL) {
         if(modelURL != null) {
 
             File modelFile = new File(modelURL.getFile());
-            if (log.isDebugEnabled()) log.debug("Merging rule file \"" + modelFile.getPath()
-                                                + "\"");
+            log.debug("Merging rule file \"" + modelFile.getPath() + "\"");
             setCurrentFile(modelFile);
-            try {
-                NSDictionary dic = Services.dictionaryFromFile(modelFile);
+            NSDictionary dic = dictionaryFromPathUrl(modelURL);
+            if(dic != null) {
                 if (ruleDecodeLog.isDebugEnabled()) {
                     ruleDecodeLog.debug("Got dictionary for file: " + modelFile + "\n\n");
                     for (Enumeration e = ((NSArray)dic.objectForKey("rules")).objectEnumerator(); e.hasMoreElements();) {
@@ -477,11 +598,12 @@ public class ERD2WModel extends D2WModel {
                         }
                     }
                 } else {
-                    ERD2WModel model = new ERD2WModel(new EOKeyValueUnarchiver(dic));
+                    NSArray rules = (NSArray) new EOKeyValueUnarchiver(dic).decodeObjectForKey("rules");
+                    if(rules != null) {
+                        ERD2WModel model = new ERD2WModel(rules);
                     addRules(model.rules());
                 }
-            } catch (IOException except) {
-                ruleDecodeLog.error("Could not load rule file: " + except.getMessage());
+                }
             }
             setDirty(false);
         }
@@ -579,26 +701,76 @@ public class ERD2WModel extends D2WModel {
         }
     }
 
-    private boolean _hasAddedExtraModelFile=false;
+    //AK: this is probably never called in WO > 5.2
     public Vector modelFilesInBundles () {
         Vector modelFiles = super.modelFilesInBundles();
-        if (!_hasAddedExtraModelFile) {
-            String extraModelFilePath = System.getProperty("ERExtraD2WModelFile");
-            // it appears super cache's the Vector, so only add the extraModelFile if we haven't already done it
-            if (extraModelFilePath != null) {
-                if (log.isDebugEnabled()) log.debug("ERExtraD2WModelFile = \"" + extraModelFilePath + "\"");
-                File extraModelFile = new java.io.File(extraModelFilePath);
-                if (extraModelFile.exists() && extraModelFile.isFile() && extraModelFile.canRead()) {
-                    extraModelFilePath = extraModelFile.getAbsolutePath();
-                    if (log.isDebugEnabled()) log.debug("ERExtraD2WModelFile (absolute) = \"" + extraModelFilePath + "\"");
-                    modelFiles.addElement(extraModelFile);
-                    _hasAddedExtraModelFile = true;
-                } else
-                    log.warn("Can't read the ERExtraD2WModelFile file.");
-            }
-        }
-        return modelFiles;
+    	if (!_hasAddedExtraModelFiles) {
+    		NSArray additionalModelURLs = additionalModelURLs();
+    		for (Enumeration urlEnum = additionalModelURLs.objectEnumerator(); urlEnum.hasMoreElements();) {
+                URL url = (URL)urlEnum.nextElement();
+    			modelFiles.add(url.getFile());
+    		}
+    		_hasAddedExtraModelFiles = true;
+    	}
+    	return modelFiles;
     }
+
+    private boolean _hasAddedExtraModelFiles=false;
+
+    /**
+     * Overridden to support additional d2wmodel files. 
+     * Provide an array of filenames (including extension) in the property 
+     * 'er.directtoweb.ERD2WModel.additionalModelNames', these files should get 
+     * loaded and added to the rules set during application startup.
+     */
+	@Override
+	public Vector modelFilesPathURLsInBundles() {
+		Vector modelFilePaths = super.modelFilesPathURLsInBundles();
+		if (!_hasAddedExtraModelFiles) {
+			NSArray additionalModelURLs = additionalModelURLs();
+			modelFilePaths.addAll(additionalModelURLs.vector());
+			_hasAddedExtraModelFiles = true;
+		}
+		return modelFilePaths;
+	}
+
+	private NSArray additionalModelURLs() {
+		NSMutableArray result = new NSMutableArray();
+		if (log.isDebugEnabled()) log.debug("Adding additional rule files");
+		NSArray modelNames = additionalModelNames();
+		NSMutableArray bundles = NSBundle.frameworkBundles().mutableClone();
+		bundles.addObject(NSBundle.mainBundle());
+		if (modelNames.count() > 0 && bundles.count() > 0) {
+			for (Enumeration bundlesEnum = bundles.objectEnumerator(); bundlesEnum.hasMoreElements();) {
+                NSBundle bundle = (NSBundle)bundlesEnum.nextElement();
+				String name = bundle.name();
+				if (name != null) {
+					for (Enumeration modelNamesEnum = modelNames.objectEnumerator(); modelNamesEnum.hasMoreElements();) {
+                        String modelName = (String)modelNamesEnum.nextElement();
+						URL path = bundle.pathURLForResourcePath(modelName);
+						if (path != null) {
+							if (log.isDebugEnabled()) log.debug("Adding file '" + path + "' from framework '" + name + "'");
+							result.addObject(path);
+						}
+					}
+				}
+			}
+		}
+		return result;
+	}
+
+	private NSArray additionalModelNames() {
+		NSArray modelNames = ERXProperties.arrayForKeyWithDefault("er.directtoweb.ERD2WModel.additionalModelNames", NSArray.EmptyArray);
+		NSMutableArray result = new NSMutableArray();
+		result.addObjectsFromArray(modelNames);
+        String extraModelFilePath = System.getProperty("ERExtraD2WModelFile");
+        // it appears super caches the Vector, so only add the extraModelFile if we haven't already done it
+        if (extraModelFilePath != null) {
+			result.addObject(extraModelFilePath);
+		}
+		return result;
+	}
+    
     protected EOQualifier qualifierContainedInEnumeration(EOQualifierEvaluation q1, Enumeration e) {
         EOQualifier containedQualifier = null;
         while (e.hasMoreElements()) {
@@ -628,7 +800,7 @@ public class ERD2WModel extends D2WModel {
                 log.warn("Unknown qualifier type: " + q.getClass().getName());
             }
         } else {
-            log.warn("Asking caceh for a null qualifier.");
+            log.warn("Asking cache for a null qualifier.");
         }
         return cacheQualifier;
     }
@@ -878,7 +1050,7 @@ public class ERD2WModel extends D2WModel {
     protected Hashtable cacheFromBytes(byte[] bytes) {
         try {
             ByteArrayInputStream istream = new ByteArrayInputStream(bytes);
-            ObjectInputStream in = new ObjectInputStream(istream);
+			ObjectInputStream in = new ERXMappingObjectStream(istream);
             Hashtable newCache = new Hashtable(10000);
             try {
                 //FIXME ak how do I do without the EOFException?
@@ -913,4 +1085,5 @@ public class ERD2WModel extends D2WModel {
             System.out.println("\t" + theKey + " -> " + theValue);
         }
     }
+
 }

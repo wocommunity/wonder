@@ -6,9 +6,9 @@
 //
 package er.directtoweb.excel;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import er.extensions.*;
+import com.webobjects.foundation.NSBundle;
+import com.webobjects.foundation.NSDictionary;
+import er.extensions.foundation.ERXDictionaryUtilities;
 
 /**
  * Principal class of the framework. Not rgistered yet because it doesn't do anything yet.

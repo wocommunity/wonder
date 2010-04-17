@@ -13,7 +13,7 @@ import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 
-import er.extensions.ERXPatcher;
+import er.extensions.foundation.ERXPatcher;
 
 /**
  * Conditional component that tests if an object is an instance of a given class

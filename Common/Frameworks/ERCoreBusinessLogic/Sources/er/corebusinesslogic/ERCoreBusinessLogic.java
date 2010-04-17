@@ -11,6 +11,16 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import er.extensions.*;
+import er.extensions.appserver.ERXApplication;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.foundation.ERXConfigurationManager;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.foundation.ERXThreadStorage;
+import er.extensions.foundation.ERXUtilities;
+import er.extensions.logging.ERXLogger;
+
 import java.util.*;
 import java.lang.reflect.*;
 
@@ -80,7 +90,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
     public static EOEnterpriseObject actor(EOEditingContext ec) {
         EOEnterpriseObject result = actor();
         if (result != null && result.editingContext() != ec)
-            result = (EOEnterpriseObject)ERXEOControlUtilities.localInstanceOfObject(ec,result);
+            result = (EOEnterpriseObject) ERXEOControlUtilities.localInstanceOfObject(ec,result);
         return result;
     }
 
@@ -294,7 +304,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
                     log.error("Unable to log problem due to misconfiguration: recipients: "
                               + emailsForProblemRecipients() + " email domain: " + problemEmailDomain());
                 } else {
-                    ERCMailableExceptionPage standardExceptionPage = (ERCMailableExceptionPage)ERXApplication.instantiatePage("ERCMailableExceptionPage");
+                    ERCMailableExceptionPage standardExceptionPage = (ERCMailableExceptionPage) ERXApplication.instantiatePage("ERCMailableExceptionPage");
                     standardExceptionPage.setException(exception);
                     standardExceptionPage.setActor(actor());
                     standardExceptionPage.setExtraInfo(extraInfo);

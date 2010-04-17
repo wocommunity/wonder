@@ -16,16 +16,16 @@ import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSSet;
 
-import er.extensions.ERXArrayUtilities;
-import er.extensions.ERXProperties;
-import er.extensions.ERXThreadStorage;
-import er.extensions.ERXUtilities;
+import er.extensions.foundation.ERXArrayUtilities;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXThreadStorage;
+import er.extensions.foundation.ERXUtilities;
 
 /**
  * <p>
  * ERXStats provides a simple interface for logging statistics information like
  * WOEvent, but also tracked on a per-thread basis (so you can dump stats just
- * for a particular thread). DO PROBABLY DO NOT WANT TO TURN THIS ON IN
+ * for a particular thread). YOU PROBABLY DO NOT WANT TO TURN THIS ON IN
  * PRODUCTION.
  * </p>
  * 

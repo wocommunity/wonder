@@ -11,6 +11,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -21,8 +23,8 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXProperties;
 import er.extensions.foundation.ERXKeyValueCodingUtilities;
+import er.extensions.foundation.ERXProperties;
 
 /**
  * ERXAjaxSession is the part of ERXSession that handles Ajax requests.

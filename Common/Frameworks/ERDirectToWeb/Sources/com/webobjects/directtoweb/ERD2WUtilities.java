@@ -12,7 +12,7 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 
-import er.directtoweb.ERDPickPageInterface;
+import er.directtoweb.interfaces.ERDPickPageInterface;
 
 // This is needed because pageFinalized is a protected method.
 public class ERD2WUtilities {
@@ -64,9 +64,7 @@ public class ERD2WUtilities {
                         }
                     }
                 } catch (NSKeyValueCoding.UnknownKeyException e) {
-                    if (log.isDebugEnabled()) {
-                        log.debug("keyPath "+keyPath+" is not available for context "+c);
-                    }
+                    log.warn("keyPath "+keyPath+" is not available for context "+c);
                     return null;
                 }
             }

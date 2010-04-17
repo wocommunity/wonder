@@ -8,10 +8,12 @@ package er.corebusinesslogic;
 
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import java.util.*;
-import er.extensions.*;
+
+import er.extensions.appserver.ERXApplication;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.logging.ERXLogger;
 
 /**
 * Utility class used for sending mails via the

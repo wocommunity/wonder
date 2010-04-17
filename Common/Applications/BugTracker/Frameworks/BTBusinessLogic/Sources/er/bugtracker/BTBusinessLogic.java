@@ -6,13 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.bugtracker;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.extensions.*;
-import er.corebusinesslogic.*;
-import java.util.*;
+import er.corebusinesslogic.ERCoreBusinessLogic;
+import er.extensions.ERXFrameworkPrincipal;
 
 public class BTBusinessLogic extends ERXFrameworkPrincipal {
 

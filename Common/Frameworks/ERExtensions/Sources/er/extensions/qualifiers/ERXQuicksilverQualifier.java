@@ -3,7 +3,7 @@ package er.extensions.qualifiers;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSSelector;
 
-import er.extensions.ERXStringUtilities;
+import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * ERXQuicksilverQualifier is a KeyValueQualifier that compares values with

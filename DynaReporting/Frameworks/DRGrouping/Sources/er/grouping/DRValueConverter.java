@@ -1,13 +1,8 @@
 package er.grouping;
 
-import java.lang.*;
-import java.util.*;
-import java.io.*;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
-import er.extensions.*;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSTimestamp;
+import er.extensions.logging.ERXLogger;
 
 /**
  * Converts values. The main reason for this class is to provide a

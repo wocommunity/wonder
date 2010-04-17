@@ -18,7 +18,7 @@ import javax.mail.internet.*;
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 
-import er.extensions.ERXLogger;
+import er.extensions.logging.ERXLogger;
 
 /** Drop-in replacement for WOMailDelivery.
 

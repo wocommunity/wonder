@@ -13,8 +13,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.foundation.ERXExceptionUtilities;
 import er.extensions.foundation.ERXMutableDictionary;
-import er.extensions.ERXSimpleTemplateParser;
-import er.extensions.ERXNonSynchronizingComponent;
+import er.extensions.foundation.ERXSimpleTemplateParser;
 
 /**
  * ERXInlineTemplate allows to specify a component's template dynamically. <br />
@@ -43,7 +42,7 @@ import er.extensions.ERXNonSynchronizingComponent;
  * @binding wod WOD-part of the component (optional)
  * @binding cacheKey Key under which to cache the WOElement (optional)
  * @binding cacheVersion Hint to determine if the cached object is up-to-date (optional)
- * @binding errorTemplate Template to use for displaying error messages. Uses {@link ERXSimpleTemplateParser} for display.
+ * @binding errorTemplate Template to use for displaying error messages. Uses {@link er.extensions.foundation.ERXSimpleTemplateParser} for display.
  *                Method name and HTML-escaped message are provided by the "method" and "message" keys. (optional)
  * @binding proxyParent whether to proxy key path lookup to the parent (default is false)
  * @binding defaultToDynamicBindings whether to use dynamicBindings for unknown keys (default is true)

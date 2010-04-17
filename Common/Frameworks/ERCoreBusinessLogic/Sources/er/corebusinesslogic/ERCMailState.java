@@ -3,7 +3,10 @@
 package er.corebusinesslogic;
 
 import com.webobjects.eocontrol.*;
-import er.extensions.*;
+import er.extensions.eof.EOEnterpriseObjectClazz;
+import er.extensions.eof.ERXEOAccessUtilities;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.logging.ERXLogger;
 
 /**
  * Mail state.
@@ -33,7 +36,7 @@ public class ERCMailState extends _ERCMailState {
     
     public static class ERCMailStateClazz extends _ERCMailStateClazz {
         public ERCMailState sharedMailStateForKey(String key) {
-            return (ERCMailState)ERXEOControlUtilities.sharedObjectWithPrimaryKey(entityName(), key);
+            return (ERCMailState) ERXEOControlUtilities.sharedObjectWithPrimaryKey(entityName(), key);
         }
         
         public void initializeSharedData() {
@@ -53,5 +56,5 @@ public class ERCMailState extends _ERCMailState {
         }
     }
 
-    public static ERCMailStateClazz mailStateClazz() { return (ERCMailStateClazz)EOEnterpriseObjectClazz.clazzForEntityNamed("ERCMailState"); }
+    public static ERCMailStateClazz mailStateClazz() { return (ERCMailStateClazz) EOEnterpriseObjectClazz.clazzForEntityNamed("ERCMailState"); }
 }

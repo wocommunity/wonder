@@ -6,12 +6,14 @@
 
 package er.javamail;
 
-import er.extensions.*;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.logging.ERXLogger;
 
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.appserver.WOApplication;
+import er.extensions.formatters.ERXUnitAwareDecimalFormat;
 
 import javax.mail.*;
 import javax.mail.internet.*;

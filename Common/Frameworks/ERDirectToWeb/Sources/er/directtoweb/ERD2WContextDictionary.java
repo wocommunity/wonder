@@ -6,12 +6,22 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import er.extensions.*;
-import java.util.*;
+import java.util.Enumeration;
+
+import org.apache.log4j.Logger;
+
+import com.webobjects.directtoweb.Assignment;
+import com.webobjects.directtoweb.BooleanAssignment;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.Rule;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+
+import er.extensions.foundation.ERXDictionaryUtilities;
 
 /**
  * Converts given entries of a D2WContext with a specified page configuration to a dictionary and to rules again.<br />
@@ -30,7 +40,7 @@ import java.util.*;
  */
 
 public class ERD2WContextDictionary {
-    private static final ERXLogger log = ERXLogger.getERXLogger(ERD2WContextDictionary.class);
+    private static final Logger log = Logger.getLogger(ERD2WContextDictionary.class);
 
     protected D2WContext context;
     protected String pageConfiguration;

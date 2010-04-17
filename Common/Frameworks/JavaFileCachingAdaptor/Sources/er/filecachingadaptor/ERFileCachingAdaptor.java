@@ -5,9 +5,8 @@
 //
 package er.filecachingadaptor;
 
-import com.webobjects.eoaccess.EOAdaptorContext;
-
-import er.extensions.ERXForwardingAdaptor;
+import com.webobjects.eoaccess.*;
+import er.extensions.eof.ERXForwardingAdaptor;
 
 /**
  * ERFileCachingAdaptor is not a flat-file adaptor.  Ok, it really is, but it's a poor-man's flat file adaptor.  A very poor

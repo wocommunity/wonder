@@ -1,18 +1,18 @@
 package er.grouping;
 
-import java.lang.*;
-import java.util.*;
-import java.io.*;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
-import er.extensions.*;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import er.extensions.logging.ERXLogger;
+
+import java.util.Enumeration;
 
 /* DRRecordGroup.h created by Administrator on Sun 01-Nov-1998 */
 //#import <WebObjects/WebObjects.h>
 public class DRRecordGroup extends Object  {
-    private er.extensions.ERXLogger log = er.extensions.ERXLogger.getERXLogger(DRRecordGroup.class);
+    private ERXLogger log = ERXLogger.getERXLogger(DRRecordGroup.class);
 
     protected DRCriteria _criteria;
     protected DRGroup _group;

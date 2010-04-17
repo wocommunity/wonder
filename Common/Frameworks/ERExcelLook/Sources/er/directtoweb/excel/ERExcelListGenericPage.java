@@ -6,16 +6,13 @@
 //
 package er.directtoweb.excel;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.directtoweb.*;
-import er.extensions.*;
-import er.extensions.ERXLogger;
-import er.extensions.ERXValueUtilities;
-import er.directtoweb.excel.ERExcelListPage;
+import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.eocontrol.EOArrayDataSource;
+import com.webobjects.eocontrol.EODataSource;
+import com.webobjects.foundation.NSArray;
+import er.extensions.foundation.ERXValueUtilities;
+import er.extensions.logging.ERXLogger;
 
 public class ERExcelListGenericPage extends ERExcelListPage {
     public static ERXLogger log = ERXLogger.getERXLogger(ERExcelListGenericPage.class);

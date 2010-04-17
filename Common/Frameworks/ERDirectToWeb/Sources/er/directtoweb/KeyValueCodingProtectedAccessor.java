@@ -6,14 +6,18 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import java.lang.reflect.*;
-import com.webobjects.foundation.*;
-import er.extensions.ERXLogger;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import org.apache.log4j.Logger;
+
+import com.webobjects.foundation.NSKeyValueCoding;
 
 public class KeyValueCodingProtectedAccessor extends NSKeyValueCoding.ValueAccessor {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(KeyValueCodingProtectedAccessor.class);
+    public static final Logger log = Logger.getLogger(KeyValueCodingProtectedAccessor.class);
 
     public KeyValueCodingProtectedAccessor() { super(); }
 
@@ -30,7 +34,7 @@ public class KeyValueCodingProtectedAccessor extends NSKeyValueCoding.ValueAcces
     public Object methodValue(Object object, Method method) throws IllegalArgumentException, IllegalAccessException,
         InvocationTargetException {
             //log.warn("MethodValue, method: " + method.toString() + " object: " + object.toString());
-            return method.invoke(object, null);
+            return method.invoke(object, (Object[])null);
         }
 
     public void setMethodValue(Object object, Method method, Object value) throws IllegalArgumentException, IllegalAccessException,

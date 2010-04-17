@@ -1,8 +1,8 @@
 package er.extensions.eof.qualifiers;
 
 import com.webobjects.eoaccess.EOQualifierSQLGeneration;
-import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOQualifierSQLGeneration._OrQualifierSupport;
+import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eocontrol.EOAndQualifier;
 import com.webobjects.eocontrol.EOKeyComparisonQualifier;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
@@ -14,7 +14,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.ERXConstant;
+import er.extensions.eof.ERXConstant;
 import er.extensions.jdbc.ERXSQLHelper;
 import er.extensions.qualifiers.ERXKeyValueQualifier;
 

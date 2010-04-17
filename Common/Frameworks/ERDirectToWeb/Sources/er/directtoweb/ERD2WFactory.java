@@ -6,13 +6,33 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.directtoweb.*;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import er.extensions.*;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOSession;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.D2WComponent;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.D2WPage;
+import com.webobjects.directtoweb.D2WUtils;
+import com.webobjects.directtoweb.EditPageInterface;
+import com.webobjects.directtoweb.EditRelationshipPageInterface;
+import com.webobjects.directtoweb.ErrorPageInterface;
+import com.webobjects.directtoweb.InspectPageInterface;
+import com.webobjects.directtoweb.ListPageInterface;
+import com.webobjects.directtoweb.QueryPageInterface;
+import com.webobjects.directtoweb.SelectPageInterface;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+import er.directtoweb.interfaces.ERDErrorPageInterface;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.foundation.ERXUtilities;
+import er.extensions.logging.ERXLogger;
 
 
 /**

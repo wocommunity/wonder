@@ -8,18 +8,16 @@ package er.corebusinesslogic;
 
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
-import com.webobjects.appserver.*;
-import org.apache.log4j.*;
+import er.extensions.eof.ERXEditingContextDelegate;
+import er.extensions.logging.ERXMailAppender;
 import org.apache.log4j.spi.*;
 import org.apache.log4j.helpers.LogLog;
-import er.extensions.*;
-import java.util.Enumeration;
 
 /**
  * Basic log4j Mail Message Appender<br>
  *	Used for logging log events to a database that will eventually be emailed
  *	out. Logs events using {@link ERCMailDelivery ERCMailDelivery}.
- *  @see er.extensions.ERXMailAppender for more info.
+ *  @see er.extensions.logging.ERXMailAppender for more info.
  */
 public class ERCMailMessageAppender extends ERXMailAppender {
 

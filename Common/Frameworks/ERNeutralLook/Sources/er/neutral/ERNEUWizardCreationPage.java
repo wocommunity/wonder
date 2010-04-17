@@ -9,7 +9,7 @@ package er.neutral;
 
 import com.webobjects.appserver.WOContext;
 
-import er.directtoweb.ERD2WWizardCreationPage;
+import er.directtoweb.pages.ERD2WWizardCreationPage;
 
 public class ERNEUWizardCreationPage extends ERD2WWizardCreationPage {
 

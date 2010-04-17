@@ -6,8 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.look.ugly;
 
-import er.directtoweb.ERDSectionText;
 import com.webobjects.appserver.WOContext;
+import er.directtoweb.components.misc.ERDSectionText;
 
 public class ERDSectionTextUgly extends ERDSectionText {
 

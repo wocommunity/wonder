@@ -1,10 +1,11 @@
 // Priority.java
 // 
 package er.bugtracker;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.extensions.*;
+
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOSharedEditingContext;
+import er.extensions.eof.EOEnterpriseObjectClazz;
+import er.extensions.logging.ERXLogger;
 
 public class Priority extends _Priority {
     static final ERXLogger log = ERXLogger.getERXLogger(Priority.class);
@@ -38,5 +39,5 @@ public class Priority extends _Priority {
         }
     }
 
-    public static final PriorityClazz clazz = (PriorityClazz)EOEnterpriseObjectClazz.clazzForEntityNamed("Priority");
+    public static final PriorityClazz clazz = (PriorityClazz) EOEnterpriseObjectClazz.clazzForEntityNamed("Priority");
 }

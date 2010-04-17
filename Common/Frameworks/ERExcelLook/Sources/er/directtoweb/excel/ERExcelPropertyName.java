@@ -6,8 +6,8 @@
 //
 package er.directtoweb.excel;
 
-import com.webobjects.appserver.*;
-import er.directtoweb.*;
+import com.webobjects.appserver.WOContext;
+import er.directtoweb.components.ERD2WPropertyName;
 
 public class ERExcelPropertyName extends ERD2WPropertyName {
 

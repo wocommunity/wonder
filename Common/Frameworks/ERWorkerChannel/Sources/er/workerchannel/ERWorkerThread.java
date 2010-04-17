@@ -6,7 +6,7 @@
 //
 package er.workerchannel;
 
-import er.extensions.ERXLogger;
+import er.extensions.logging.ERXLogger;
 
 class ERWorkerThread extends Thread {
 

@@ -12,9 +12,10 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSPathUtilities;
 
-import er.extensions.ERXWOContext;
-import er.extensions.ERXWOForm;
+import er.extensions.appserver.ERXResponseRewriter;
+import er.extensions.appserver.ERXWOContext;
 import er.extensions.appserver.ajax.ERXAjaxApplication;
+import er.extensions.components._private.ERXWOForm;
 
 /**
  * <p>AjaxModalDialog is a modal dialog window based on ModalBox (see below for link).  It differs from AjaxModalContainer
@@ -221,14 +222,13 @@ public class AjaxModalDialog extends AjaxComponent {
 	 * @param title optional new title for the updated dialog
 	 */
 	public static void update(WOContext context, String title) {
-		
 		AjaxModalDialog currentDialog = currentDialog(context);
 		StringBuffer js = new StringBuffer(300);
 		js.append("Modalbox.show('");
 		js.append(currentDialog.openDialogURL(context));
 		js.append("', ");
 		
-		NSMutableDictionary options =  currentDialog.createModalBoxOptions();
+		NSMutableDictionary options = currentDialog.createModalBoxOptions();
 		if (title != null) {
 			options.setObjectForKey(AjaxUtils.quote(title), "title");
 		}
@@ -265,13 +265,32 @@ public class AjaxModalDialog extends AjaxComponent {
 		AjaxUtils.javascriptResponse("$wi('MB_caption').innerHTML=" + AjaxValue.javaScriptEscaped(title) + ";", context);
 	}
 
+	public void setCurrentDialogInPageIfNecessary(WOActionResults results, WORequest request, WOContext context) {
+		if (AjaxUtils.isAjaxRequest(request) && results instanceof WOComponent && results != context.page()) {
+			ERXResponseRewriter.pageUserInfo((WOComponent)results).setObjectForKey(this, AjaxModalDialog.class.getName());
+		}
+	}
+
+	/**
+	 * @param context the current WOContext
+	 * @return the AjaxModalDialog currently being processed
+	 * @throws RuntimeException if no AjaxModalDialog is currently being processed
+	 */
+	public static AjaxModalDialog _currentDialog(WOContext context) {
+		AjaxModalDialog currentDialog = (AjaxModalDialog) ERXWOContext.contextDictionary().objectForKey(AjaxModalDialog.class.getName());
+		if (currentDialog == null) {
+			currentDialog = (AjaxModalDialog) ERXResponseRewriter.pageUserInfo(context).objectForKey(AjaxModalDialog.class.getName());
+		}
+		return currentDialog;
+	}
+
 	/**
 	 * @param context the current WOContext
 	 * @return the AjaxModalDialog currently being processed
 	 * @throws RuntimeException if no AjaxModalDialog is currently being processed
 	 */
 	public static AjaxModalDialog currentDialog(WOContext context) {
-		AjaxModalDialog currentDialog = (AjaxModalDialog) ERXWOContext.contextDictionary().objectForKey(AjaxModalDialog.class.getName());
+		AjaxModalDialog currentDialog = _currentDialog(context);
 		if (currentDialog == null) {
 			throw new RuntimeException("Attempted to get current AjaxModalDialog when none active.  Check your page structure.");
 		}
@@ -283,7 +302,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	 * @return true if an AjaxModalDialog currently being processed
 	 */
 	public static boolean isInDialog(WOContext context) {
-		return ERXWOContext.contextDictionary().objectForKey(AjaxModalDialog.class.getName()) != null;
+		return _currentDialog(context) != null;
 	}
 	
 	/**
@@ -357,6 +376,7 @@ public class AjaxModalDialog extends AjaxComponent {
 					result = super.invokeAction(request, context);
 				}
 			}
+			setCurrentDialogInPageIfNecessary(result, request, context);
 
 			return result;
 		}
@@ -376,7 +396,7 @@ public class AjaxModalDialog extends AjaxComponent {
 		String elementID = context.elementID();
 		String senderID = context.senderID();
 
-		if (senderID.endsWith(Open_ElementID_Suffix) || senderID.endsWith(Close_ElementID_Suffix)) {
+		if (senderID != null && (senderID.endsWith(Open_ElementID_Suffix) || senderID.endsWith(Close_ElementID_Suffix))) {
 			senderID = NSPathUtilities.stringByDeletingPathExtension(senderID);
 		}
 
@@ -725,7 +745,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	
 	/**
 	 * Stash this dialog instance in the context so we can access it from the static methods.  If there is one AMD 
-	 * next in another (a rather dubious thing to do that we warn about but it may have its uses), we need to remember 
+	 * nested in another (a rather dubious thing to do that we warn about but it may have its uses), we need to remember 
 	 * the outer one while processing this inner one
 	 * @see AjaxModalDialog#popDialog()
 	 */
@@ -754,7 +774,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	/**
 	 * Make _actionResults (result of the action binding) the current component in context for WO processing.
 	 * Remembers the current component so that it can be restored.
-	 * @param context WOContext to push _cationResults into
+	 * @param context WOContext to push _actionResults into
 	 * @see #popActionResultsFromContext(WOContext)
 	 */
 	protected void pushActionResultsIntoContext(WOContext context) {

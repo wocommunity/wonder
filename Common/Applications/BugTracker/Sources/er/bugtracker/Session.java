@@ -6,13 +6,12 @@
  * included with this distribution in the LICENSE.NPL file.  */
 
 package er.bugtracker;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.foundation.*;
-import er.extensions.*;
+
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
 import er.corebusinesslogic.ERCoreBusinessLogic;
+import er.extensions.appserver.ERXSession;
 
 public class Session extends ERXSession {
     public Session() {

@@ -11,7 +11,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WONoContentElement;
 import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.ERXWOComponentContent;
+import er.extensions.components.ERXWOComponentContent;
 
 /**
  * Allows for multiple contents in a component. For every of one of these, when 

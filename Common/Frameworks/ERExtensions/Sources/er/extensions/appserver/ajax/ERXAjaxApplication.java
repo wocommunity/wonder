@@ -8,8 +8,8 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.ERXProperties;
-import er.extensions.ERXWOContext;
+import er.extensions.appserver.ERXWOContext;
+import er.extensions.foundation.ERXProperties;
 
 /**
  * ERXAjaxApplication is the part of ERXApplication that handles Ajax requests.

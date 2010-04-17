@@ -30,8 +30,8 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSSet;
 
-import er.extensions.ERXEOAccessUtilities;
-import er.extensions.ERXProperties;
+import er.extensions.eof.ERXEOAccessUtilities;
+import er.extensions.foundation.ERXProperties;
 import er.extensions.jdbc.ERXSQLHelper;
 import er.extensions.qualifiers.ERXKeyValueQualifier;
 

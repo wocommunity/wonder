@@ -8,7 +8,7 @@ package er.extensions.components.conditionals;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
-import er.extensions.ERXConstant;
+import er.extensions.eof.ERXConstant;
 
 /**
  * Conditional component that tests if a given Number

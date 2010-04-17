@@ -6,12 +6,15 @@
  * included with this distribution in the LICENSE.NPL file.  */
 
 package er.bugtracker;
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
-import er.extensions.*;
+
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.EditPageInterface;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOEditingContext;
+import er.extensions.eof.ERXEC;
+import er.extensions.localization.ERXLocalizer;
 
 public class CreateTestItemFromReq extends WOComponent {
 
@@ -22,7 +25,7 @@ public class CreateTestItemFromReq extends WOComponent {
     public Bug bug;
 
     public WOComponent createTestItem() {
-        ERXLocalizer localizer = ERXLocalizer.localizerForSession(session());
+        ERXLocalizer localizer = ERXLocalizer.currentLocalizer();
         EOEditingContext peer = ERXEC.newEditingContext(bug.editingContext().parentObjectStore());
         EditPageInterface epi = null;
         peer.lock();

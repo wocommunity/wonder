@@ -5,11 +5,10 @@
 //
 package er.filecachingadaptor;
 
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
 import com.webobjects.eoaccess.*;
 import java.util.*;
-import er.extensions.*;
+
+import er.extensions.eof.ERXForwardingAdaptorContext;
 
 public class ERFileCachingAdaptorContext extends ERXForwardingAdaptorContext {
     public ERFileCachingAdaptorContext(EOAdaptor adaptor, EOAdaptorContext ac) {

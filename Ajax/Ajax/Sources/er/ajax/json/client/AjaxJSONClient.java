@@ -2,7 +2,7 @@ package er.ajax.json.client;
 
 import com.webobjects.appserver.WOContext;
 
-import er.extensions.ERXRandomGUID;
+import er.extensions.foundation.ERXRandomGUID;
 
 /**
  * AjaxJSONClient renders a "new JSONRpcClient('...')" with a URL back to your application (along with a session ID if

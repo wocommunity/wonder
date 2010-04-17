@@ -1,15 +1,13 @@
 package er.ajax;
 
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 
 import com.webobjects.appserver.WOApplication;
-import com.webobjects.foundation.NSNotification;
-import com.webobjects.foundation.NSNotificationCenter;
-import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.*;
 
-import er.extensions.ERXConstant;
-import er.extensions.ERXFrameworkPrincipal;
+import er.extensions.*;
 import er.extensions.appserver.ajax.ERXAjaxApplication;
+import er.extensions.eof.ERXConstant;
 
 public class Ajax extends ERXFrameworkPrincipal {
 	public static Class[] REQUIRES = new Class[0];

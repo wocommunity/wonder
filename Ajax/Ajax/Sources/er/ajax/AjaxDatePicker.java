@@ -13,7 +13,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSTimestampFormatter;
 
-import er.extensions.ERXResponseRewriter;
+import er.extensions.appserver.ERXResponseRewriter;
 
 /**
  * Shameless port and adoption of Rails Date Kit.  This input understands the format symbols

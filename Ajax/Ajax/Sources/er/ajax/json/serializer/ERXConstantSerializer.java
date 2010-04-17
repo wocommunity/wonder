@@ -10,7 +10,7 @@ import org.json.JSONObject;
 
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXConstant;
+import er.extensions.eof.ERXConstant;
 
 /**
  * Serializes ERXConstants.

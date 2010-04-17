@@ -3,12 +3,12 @@
 // Created by eogenerator
 // DO NOT EDIT.  Make changes to Framework.java instead.
 package er.bugtracker;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.extensions.*;
-import java.util.*;
-import java.math.BigDecimal;
+
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSTimestamp;
+import er.extensions.eof.ERXGenericRecord;
 
 public abstract class _Framework extends ERXGenericRecord {
 
@@ -16,7 +16,7 @@ public abstract class _Framework extends ERXGenericRecord {
         super();
     }
 
-    public static abstract class _FrameworkClazz extends er.extensions.ERXGenericRecord.ERXGenericRecordClazz {
+    public static abstract class _FrameworkClazz extends ERXGenericRecord.ERXGenericRecordClazz {
 
         public NSArray orderedFrameworks(EOEditingContext ec) {
             return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, "Framework", "orderedFrameworks", null);

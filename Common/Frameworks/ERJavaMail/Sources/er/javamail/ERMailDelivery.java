@@ -12,8 +12,8 @@ import javax.mail.*;
 import javax.activation.*;
 import javax.mail.internet.*;
 
-import er.extensions.ERXLogger;
-import er.extensions.ERXUtilities;
+import er.extensions.foundation.ERXUtilities;
+import er.extensions.logging.ERXLogger;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;

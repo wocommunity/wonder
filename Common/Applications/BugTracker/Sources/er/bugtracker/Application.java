@@ -12,6 +12,10 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.foundation.*;
 import java.util.*;
 import er.extensions.*;
+import er.extensions.appserver.ERXApplication;
+import er.extensions.appserver.ERXWOContext;
+import er.extensions.eof.ERXEC;
+import er.extensions.foundation.ERXProperties;
 
 public class Application extends ERXApplication {
 
@@ -44,7 +48,7 @@ public class Application extends ERXApplication {
         NSLog.debug.appendln("finishInitialization called.");
         try {
             adjustConnectionDictionary(EOModelGroup.defaultGroup().modelNamed("BugTracker"));
-            boolean runBatchReport=ERXProperties.booleanForKey("BTRunBatchReport");
+            boolean runBatchReport= ERXProperties.booleanForKey("BTRunBatchReport");
             if (runBatchReport) {
                 runBatchReport();
                 System.exit(0);
@@ -65,7 +69,7 @@ public class Application extends ERXApplication {
 
     /** we run over all people in the DB and send them a summary email if they have unread bugs */
     public void runBatchReport() {
-        EOEditingContext ec=ERXEC.newEditingContext();
+        EOEditingContext ec= ERXEC.newEditingContext();
         try {
             NSArray everybody=People.clazz.allObjects(ec);
             for (Enumeration e=everybody.objectEnumerator(); e.hasMoreElements();) {

@@ -20,8 +20,7 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.ERXConstant;
-import er.extensions.ERXStringUtilities;
+import er.extensions.eof.ERXConstant;
 
 /**
  * Utilities for use with key value coding. You could instantiate one of these in your app-startup:

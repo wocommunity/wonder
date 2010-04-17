@@ -3,12 +3,13 @@
 // Created by eogenerator
 // DO NOT EDIT.  Make changes to People.java instead.
 package er.bugtracker;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.extensions.*;
-import java.util.*;
-import java.math.BigDecimal;
+
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import er.extensions.eof.ERXGenericRecord;
 
 public abstract class _People extends ERXGenericRecord {
 
@@ -16,7 +17,7 @@ public abstract class _People extends ERXGenericRecord {
         super();
     }
 
-    public static abstract class _PeopleClazz extends er.extensions.ERXGenericRecord.ERXGenericRecordClazz {
+    public static abstract class _PeopleClazz extends ERXGenericRecord.ERXGenericRecordClazz {
 
         public NSArray activeUsers(EOEditingContext ec) {
             return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, "People", "activeUsers", null);

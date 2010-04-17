@@ -13,8 +13,8 @@ import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 
-import er.extensions.ERXSelectorUtilities;
 import er.extensions.appserver.ERXKeepAliveResponse;
+import er.extensions.foundation.ERXSelectorUtilities;
 
 /**
  * Request handler that offers push-style notifications. <br>

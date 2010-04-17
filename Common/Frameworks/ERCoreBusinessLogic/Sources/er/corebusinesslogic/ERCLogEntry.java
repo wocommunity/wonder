@@ -3,8 +3,9 @@
 package er.corebusinesslogic;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.extensions.*;
+import er.extensions.eof.EOEnterpriseObjectClazz;
+import er.extensions.eof.ERXGenericRecord;
+import er.extensions.logging.ERXLogger;
 
 public class ERCLogEntry extends _ERCLogEntry {
     static final ERXLogger log = ERXLogger.getERXLogger(ERCLogEntry.class);
@@ -29,7 +30,7 @@ public class ERCLogEntry extends _ERCLogEntry {
         
     }
 
-    public static ERCLogEntryClazz logEntryClazz() { return (ERCLogEntryClazz)EOEnterpriseObjectClazz.clazzForEntityNamed("ERCLogEntry"); }
+    public static ERCLogEntryClazz logEntryClazz() { return (ERCLogEntryClazz) EOEnterpriseObjectClazz.clazzForEntityNamed("ERCLogEntry"); }
 
     // Logging support
     public static ERCLogEntry createLogEntryLinkedToEO(EOEnterpriseObject type,
