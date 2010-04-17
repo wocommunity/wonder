@@ -3,12 +3,11 @@
 // Created by eogenerator
 // DO NOT EDIT.  Make changes to RequirementSubType.java instead.
 package er.bugtracker;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.extensions.*;
-import java.util.*;
-import java.math.BigDecimal;
+
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.foundation.NSArray;
+import er.extensions.eof.ERXGenericRecord;
 
 public abstract class _RequirementSubType extends ERXGenericRecord {
 
@@ -16,7 +15,7 @@ public abstract class _RequirementSubType extends ERXGenericRecord {
         super();
     }
 
-    public static abstract class _RequirementSubTypeClazz extends er.extensions.ERXGenericRecord.ERXGenericRecordClazz {
+    public static abstract class _RequirementSubTypeClazz extends ERXGenericRecord.ERXGenericRecordClazz {
 
         public NSArray fetchAll(EOEditingContext ec) {
             return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, "RequirementSubType", "FetchAll", null);

@@ -6,16 +6,13 @@
 //
 package er.directtoweb.excel;
 
-import com.webobjects.appserver.*;
-import er.directtoweb.*;
-
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
-import er.extensions.ERXLogger;
-import java.util.regex.Matcher;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.logging.ERXLogger;
+
 import java.util.regex.Pattern;
-import er.extensions.*;
 
 // This class tries to strip out all the HTML in subcomponents so that it can be generically exported using the Excel libs
 public class ERExcelEscapeForXMLWrapper extends WOComponent {
@@ -69,7 +66,7 @@ public class ERExcelEscapeForXMLWrapper extends WOComponent {
             text = stylePattern.matcher(text).replaceAll("");
             text = scriptPattern.matcher(text).replaceAll("");
 
-            String extraRegExToStrip=ERXProperties.stringForKey("er.directtoweb.excel.ERExcelEscapeForXMLWrapper.extraRegExToStrip");
+            String extraRegExToStrip= ERXProperties.stringForKey("er.directtoweb.excel.ERExcelEscapeForXMLWrapper.extraRegExToStrip");
 
             if (extraRegExToStrip != null)
                 text = text.replaceAll(extraRegExToStrip,"");

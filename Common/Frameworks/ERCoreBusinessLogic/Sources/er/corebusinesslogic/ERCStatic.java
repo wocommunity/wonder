@@ -3,8 +3,11 @@
 package er.corebusinesslogic;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.extensions.*;
+import er.extensions.eof.EOEnterpriseObjectClazz;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.logging.ERXLogger;
 
 public class ERCStatic extends _ERCStatic {
 
@@ -142,7 +145,7 @@ public class ERCStatic extends _ERCStatic {
                                                        String key) {
             ERCStatic entry = ERCStatic.staticClazz().objectMatchingKey(editingContext,key);
             if (entry==null) {
-                entry=(ERCStatic)ERXEOControlUtilities.createAndInsertObject(editingContext, "ERCStatic");
+                entry=(ERCStatic) ERXEOControlUtilities.createAndInsertObject(editingContext, "ERCStatic");
                 entry.setKey(key);
             }
             entry.setValue(value);
@@ -150,7 +153,7 @@ public class ERCStatic extends _ERCStatic {
     }
 
     public static ERCStaticClazz staticClazz() {
-        return (ERCStaticClazz)EOEnterpriseObjectClazz.clazzForEntityNamed("ERCStatic");
+        return (ERCStaticClazz) EOEnterpriseObjectClazz.clazzForEntityNamed("ERCStatic");
     }
 
     public String toString() {

@@ -1,19 +1,33 @@
 package er.grouping;
 
-import java.lang.*;
-import java.util.*;
-import java.io.*;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
-import com.webobjects.appserver.xml.*;
-import org.xml.sax.*;
-import er.extensions.*;
-import sun.misc.*;
+import com.webobjects.appserver.xml.WOXMLCoder;
+import com.webobjects.appserver.xml.WOXMLDecoder;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation._NSStringUtilities;
+import er.extensions.eof.ERXConstant;
+import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.foundation.ERXValueUtilities;
+import er.extensions.logging.ERXLogger;
+import org.xml.sax.InputSource;
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.Enumeration;
 
 public class DRReportModel extends Object  {
-    private static er.extensions.ERXLogger log = er.extensions.ERXLogger.getERXLogger(DRReportModel.class);
+    private static ERXLogger log = ERXLogger.getERXLogger(DRReportModel.class);
 
     public static final String DRReportModelUpdateNotification = "DRReportModelUpdate";
     public static final String DRReportModelRebuildNotification = "DRReportModelRebuild";

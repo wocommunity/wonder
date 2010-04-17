@@ -12,41 +12,46 @@ import java.util.Enumeration;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOComponent;
-import com.webobjects.appserver.WOSession;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOSession;
 import com.webobjects.directtoweb.D2W;
 import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.D2WPage;
 import com.webobjects.directtoweb.ERD2WContext;
 import com.webobjects.directtoweb.KeyValuePath;
 import com.webobjects.directtoweb.QueryPageInterface;
-import com.webobjects.directtoweb.D2WPage;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
-import com.webobjects.foundation.NSMutableDictionary;
-import com.webobjects.foundation.NSKeyValueCoding;
 
+import er.directtoweb.pages.ERD2WPage;
 import er.extensions.ERXExtensions;
 import er.extensions.ERXFrameworkPrincipal;
-import er.extensions.ERXConstant;
-import er.extensions.ERXConfigurationManager;
-import er.extensions.ERXFileUtilities;
-import er.extensions.ERXProperties;
-import er.extensions.ERXSession;
-import er.extensions.ERXValueUtilities;
-import er.extensions.ERXLocalizer;
-import er.extensions.ERXWOContext;
+import er.extensions.appserver.ERXSession;
+import er.extensions.appserver.ERXWOContext;
+import er.extensions.eof.ERXConstant;
+import er.extensions.foundation.ERXArrayUtilities;
+import er.extensions.foundation.ERXConfigurationManager;
+import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXKeyValuePair;
+import er.extensions.foundation.ERXPatcher;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXValueUtilities;
+import er.extensions.localization.ERXLocalizer;
 
 /**
  * Principle class of the ERDirectToWeb framework.
@@ -80,11 +85,11 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
     }
 
     public void finishInitialization() {
-        //fixClasses();
+        fixClasses();
         ERD2WModel model=ERD2WModel.erDefaultModel();        // force initialization
     	// NOTE: doing Class.ERD2WModel doesn't seem enough
     	// to guarantee fire of ERD2WModel's static initializer
-//  	Configures the system for trace rule firing.
+        // Configures the system for trace rule firing.
         if(!(D2W.factory() instanceof ERD2WFactory)) {
         	D2W.setFactory(new ERD2WFactory());
         }
@@ -103,10 +108,11 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
     					null);
     }
 
-    /*
+    
     private void fixClasses(String oldName, String newName) {
-        NSArray<String> names =  NSBundle.bundleForClass(getClass()).bundleClassNames();
-        for (String name : names) {
+        NSArray names =  NSBundle.bundleForClass(getClass()).bundleClassNames();
+        for (Enumeration classNamesEnum = names.objectEnumerator(); classNamesEnum.hasMoreElements();) {
+		String name = (String)classNamesEnum.nextElement();
             if(name.startsWith(newName)) {
                 Class clazz = ERXPatcher.classForName(name);
                 name = name.replaceFirst(newName + "(\\.[a-z]+)?", oldName);
@@ -121,7 +127,6 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
         fixClasses("er.directtoweb", "er.directtoweb.assignments.delayed");
         fixClasses("er.directtoweb", "er.directtoweb.assignments.defaults");
     } 
-    */
     
     public void resetModel(NSNotification n) {
     	ERD2WModel.erDefaultModel().resetModel();
@@ -273,6 +278,28 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
         return result;
     }
 
+    /**
+     * Returns a valid sort ordering based on the <code>defaultSortOrdering</code> key.
+     * @param d2wContext
+     * @return
+     */
+	public static NSArray sortOrderings(D2WContext d2wContext) {
+		NSMutableArray validatedSortOrderings = new NSMutableArray();
+		NSArray sortOrderingDefinition = (NSArray) d2wContext.valueForKey("defaultSortOrdering");
+		if (sortOrderingDefinition != null) {
+			for (int i = 0; i < sortOrderingDefinition.count();) {
+				String sortKey = (String)sortOrderingDefinition.objectAtIndex(i++);
+				String sortSelectorKey = (String)sortOrderingDefinition.objectAtIndex(i++);
+				EOSortOrdering sortOrdering = new EOSortOrdering(sortKey, ERXArrayUtilities.sortSelectorWithKey(sortSelectorKey));
+				validatedSortOrderings.addObject(sortOrdering);
+			}
+			if (log.isDebugEnabled()) {
+				log.debug("Found sort Orderings in rules " + validatedSortOrderings);
+			}
+		}
+		return validatedSortOrderings;
+	}
+
     // This defaults to true.
     public static boolean booleanForKey(D2WContext context, String key) {
     	return ERXValueUtilities.booleanValue(context.valueForKey(key));
@@ -367,6 +394,8 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
      * and you need to find out just what the state of the D2WContext is.
      * @param ex
      * @param d2wContext
+     * @d2wKey componentName
+     * @d2wKey customComponentName
      */
     public static synchronized void reportException(Exception ex, D2WContext d2wContext) {
         if(d2wContext != null) {

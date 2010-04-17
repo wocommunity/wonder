@@ -7,10 +7,12 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSKeyValueCoding;
 
-import er.extensions.ERXValueUtilities;
-import er.extensions.ERXWOContext;
+import er.extensions.appserver.ERXWOContext;
 import er.extensions.appserver.ajax.ERXAjaxApplication;
+import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * This abstract (by design) superclass component isolate general utility methods.

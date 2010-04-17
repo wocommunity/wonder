@@ -23,9 +23,9 @@
 To get Log4j going, you will need something akin to the following in your WebObjects.properties (in your home directory under 5.1)
 //log4j appender and formatting
 log4j.rootLogger=INFO, A1
-log4j.loggerFactory=er.extensions.ERXLogger$Factory
+log4j.loggerFactory=er.extensions.logging.ERXLogger$Factory
 log4j.appender.A1=org.apache.log4j.ConsoleAppender
-log4j.appender.A1.layout=er.extensions.ERXPatternLayout
+log4j.appender.A1.layout=er.extensions.logging.ERXPatternLayout
 log4j.appender.A1.layout.ConversionPattern=%-5p %d{HH:mm:ss} (%-20c:%L) %x -%m%n
 
 //log4j logger configuration

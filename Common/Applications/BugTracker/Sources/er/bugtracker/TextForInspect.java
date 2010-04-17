@@ -6,7 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 
 package er.bugtracker;
-import com.webobjects.appserver.*;
+
+import com.webobjects.appserver.WOContext;
 
 public class TextForInspect extends TextForEdit {
 

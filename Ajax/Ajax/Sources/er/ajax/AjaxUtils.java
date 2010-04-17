@@ -16,17 +16,22 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXNumberFormatter;
-import er.extensions.ERXProperties;
-import er.extensions.ERXRedirect;
-import er.extensions.ERXResourceManager;
-import er.extensions.ERXResponseRewriter;
-import er.extensions.ERXStringUtilities;
-import er.extensions.ERXTimestampFormatter;
-import er.extensions.ERXWOContext;
+import er.extensions.appserver.ERXRedirect;
+import er.extensions.appserver.ERXResourceManager;
+import er.extensions.appserver.ERXResponseRewriter;
+import er.extensions.appserver.ERXWOContext;
 import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.appserver.ajax.ERXAjaxSession;
+import er.extensions.formatters.ERXNumberFormatter;
+import er.extensions.formatters.ERXTimestampFormatter;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXStringUtilities;
 
+/**
+ *
+ * @property er.ajax.compressed
+ * @property er.extensions.ERXResponseRewriter.javascriptTypeAttribute
+ */
 public class AjaxUtils {
 	private final static Logger log = Logger.getLogger(AjaxUtils.class);
 	private static final String SECURE_RESOURCES_KEY = "er.ajax.secureResources";

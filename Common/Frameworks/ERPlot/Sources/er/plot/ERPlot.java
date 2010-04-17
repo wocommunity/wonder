@@ -1,11 +1,6 @@
 package er.plot;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
 import er.extensions.*;
-import java.util.*;
-import java.lang.reflect.*;
+import er.extensions.logging.ERXLogger;
 
 public class ERPlot extends ERXFrameworkPrincipal {
     

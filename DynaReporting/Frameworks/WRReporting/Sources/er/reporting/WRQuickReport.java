@@ -1,14 +1,21 @@
 package er.reporting;
 
-import er.grouping.*;
-import java.lang.*;
-import java.util.*;
-import java.io.*;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
-import er.extensions.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.eocontrol.EODataSource;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation.NSSelector;
+import er.extensions.eof.ERXConstant;
+import er.extensions.foundation.ERXAssert;
+import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.foundation.ERXValueUtilities;
+import er.extensions.logging.ERXLogger;
+import er.grouping.DRReportModel;
 
 /**
  * Provides a quick way to set up a {@link WRReport}. Instead of binding all those keys,
@@ -26,7 +33,7 @@ import er.extensions.*;
 
 public class WRQuickReport extends WOComponent  {
 
-    private ERXLogger log = er.extensions.ERXLogger.getERXLogger(WRQuickReport.class);
+    private ERXLogger log = ERXLogger.getERXLogger(WRQuickReport.class);
     protected DRReportModel _model;
     protected NSDictionary _modelDictionary;
     protected NSDictionary _reportDictionary;

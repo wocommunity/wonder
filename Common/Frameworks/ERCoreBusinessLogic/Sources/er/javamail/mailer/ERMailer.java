@@ -10,9 +10,14 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 
-import er.extensions.*;
-import er.extensions.ERXJobLoadBalancer.*;
+import er.extensions.concurrency.ERXJobLoadBalancer.*;
 
+import er.extensions.concurrency.ERXJobLoadBalancer;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXFetchSpecificationBatchIterator;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXUtilities;
+import er.extensions.logging.ERXLogger;
 import er.javamail.*;
 import er.corebusinesslogic.*;
 
@@ -110,7 +115,7 @@ public class ERMailer {
     //  ---------------------------------------------------------------------------    
     
     public ERMailer() {
-        workerIdentification=new ERXJobLoadBalancer.WorkerIdentification(MAIL_WORKER_IDENTIFICATION, 
+        workerIdentification=new ERXJobLoadBalancer.WorkerIdentification(MAIL_WORKER_IDENTIFICATION,
                 ERXJobLoadBalancer.jobLoadBalancer().workerInstanceIdentification());
         int ttl=ERXProperties.intForKeyWithDefault("er.javamail.mailer.ERMailer.WorkerTimeOut", 300000);
         ERXJobLoadBalancer.jobLoadBalancer().setTtlForWorkerType(MAIL_WORKER_IDENTIFICATION, ttl); // 5mns

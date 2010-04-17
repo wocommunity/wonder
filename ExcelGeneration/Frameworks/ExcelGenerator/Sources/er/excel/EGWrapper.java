@@ -1,11 +1,17 @@
 package er.excel;
 
-import java.io.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSData;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import er.extensions.components.ERXNonSynchronizingComponent;
+import er.extensions.foundation.ERXValueUtilities;
+import er.extensions.logging.ERXLogger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
-
-import er.extensions.*;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 
 /**
  * Class for Excel Component EGWrapper.

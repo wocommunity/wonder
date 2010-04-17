@@ -22,8 +22,8 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableSet;
 
+import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.qualifiers.ERXKeyValueQualifier;
-import er.extensions.ERXEOAccessUtilities;
 
 /**
  * Optimized toMany qualifier, much, much better SQL than the Apple provided qualifier.

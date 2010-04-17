@@ -6,11 +6,10 @@ import java.io.UnsupportedEncodingException;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import com.webobjects.foundation.NSForwardException;
-
-import er.extensions.ERXResponse;
 
 /**
  * Special response that keeps the connection alive and pushes the data to

@@ -21,7 +21,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableSet;
-import er.extensions.ERXStringUtilities;
+import er.extensions.foundation.ERXStringUtilities;
 import java.util.Enumeration;
 import org.apache.log4j.Logger;
 

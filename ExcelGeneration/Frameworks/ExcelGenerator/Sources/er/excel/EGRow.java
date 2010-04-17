@@ -1,8 +1,8 @@
 package er.excel;
 
-import org.apache.poi.hssf.usermodel.*;
-
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOContext;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
 
 /**
  * Class for Excel Component EGRow.

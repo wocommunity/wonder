@@ -3,12 +3,10 @@
 // Created by eogenerator
 // DO NOT EDIT.  Make changes to Component.java instead.
 package er.bugtracker;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.extensions.*;
-import java.util.*;
-import java.math.BigDecimal;
+
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
+import er.extensions.eof.ERXGenericRecord;
 
 public abstract class _Component extends ERXGenericRecord {
 
@@ -16,7 +14,7 @@ public abstract class _Component extends ERXGenericRecord {
         super();
     }
 
-    public static abstract class _ComponentClazz extends er.extensions.ERXGenericRecord.ERXGenericRecordClazz {
+    public static abstract class _ComponentClazz extends ERXGenericRecord.ERXGenericRecordClazz {
 
     }
 

@@ -4,11 +4,19 @@ package er.corebusinesslogic;
 
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+
 import java.io.File;
-import java.util.*;
-import java.math.BigDecimal;
-import er.extensions.*;
+
+import er.extensions.concurrency.ERXJobLoadBalancer;
+import er.extensions.eof.EOEnterpriseObjectClazz;
+import er.extensions.eof.ERXConstant;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.eof.ERXFetchSpecificationBatchIterator;
+import er.extensions.eof.ERXModuloQualifier;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXValueUtilities;
+import er.extensions.logging.ERXLogger;
+import er.extensions.validation.ERXValidationFactory;
 
 public class ERCMailMessage extends _ERCMailMessage {
 
@@ -68,7 +76,7 @@ public class ERCMailMessage extends _ERCMailMessage {
      * @return sigleton clazz object
      */
     public static ERCMailMessageClazz mailMessageClazz() {
-        return (ERCMailMessageClazz)EOEnterpriseObjectClazz.clazzForEntityNamed("ERCMailMessage");
+        return (ERCMailMessageClazz) EOEnterpriseObjectClazz.clazzForEntityNamed("ERCMailMessage");
     }
 
     //	===========================================================================
@@ -252,7 +260,7 @@ public class ERCMailMessage extends _ERCMailMessage {
     }
 
     public void attachFileWithMimeType(String filePath, String mimeType, boolean deleteOnSent) {
-        ERCMessageAttachment attachment = (ERCMessageAttachment)ERXEOControlUtilities.createAndInsertObject(editingContext(),
+        ERCMessageAttachment attachment = (ERCMessageAttachment) ERXEOControlUtilities.createAndInsertObject(editingContext(),
                                                                                                             "ERCMessageAttachment");
         attachment.setFilePath(filePath);
         if(mimeType != null)

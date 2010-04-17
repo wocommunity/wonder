@@ -17,8 +17,8 @@ import com.webobjects.appserver.WOSession;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
-import er.extensions.ERXApplication;
-import er.extensions.ERXLogger;
+import er.extensions.appserver.ERXApplication;
+import er.extensions.logging.ERXLogger;
 
 /**
  * <code>ERMailUtils</code> contains various utility method related

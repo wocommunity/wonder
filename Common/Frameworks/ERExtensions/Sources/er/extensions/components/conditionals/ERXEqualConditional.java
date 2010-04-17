@@ -13,7 +13,7 @@ import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.ERXEOControlUtilities;
+import er.extensions.eof.ERXEOControlUtilities;
 
 /**
  * Conditional component that compares two objects using the <code>equals</code> method.<br/>

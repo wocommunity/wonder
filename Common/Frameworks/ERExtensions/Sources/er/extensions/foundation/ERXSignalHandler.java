@@ -1,12 +1,12 @@
 package er.extensions.foundation;
 
+import java.util.Enumeration;
+
 import sun.misc.Signal;
 import sun.misc.SignalHandler;
 
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
-
-import java.util.Enumeration;
 
 /**
  * There can only be one handler for any signal, so we have our own handler that

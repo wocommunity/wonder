@@ -1,11 +1,16 @@
 // Bug.java
 // 
 package er.bugtracker;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.extensions.*;
+
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSValidation;
 import er.corebusinesslogic.ERCoreBusinessLogic;
+import er.extensions.eof.EOEnterpriseObjectClazz;
+import er.extensions.foundation.ERXValueUtilities;
+import er.extensions.logging.ERXLogger;
 
 public class Bug extends _Bug {
     static final ERXLogger log = ERXLogger.getERXLogger(Bug.class);
@@ -154,7 +159,7 @@ public class Bug extends _Bug {
         
     }
 
-    public static final BugClazz clazz = (BugClazz)EOEnterpriseObjectClazz.clazzForEntityNamed("Bug");
+    public static final BugClazz clazz = (BugClazz) EOEnterpriseObjectClazz.clazzForEntityNamed("Bug");
 }
 
 

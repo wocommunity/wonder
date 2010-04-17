@@ -1,10 +1,11 @@
-package er. bugtracker;
+package er.bugtracker;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.directtoweb.*;
-import er.extensions.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
+import er.extensions.appserver.ERXSession;
+import er.extensions.localization.ERXLocalizer;
+import er.extensions.logging.ERXLogger;
 
 /**
  * Holds a D2W list in a collapsible component.

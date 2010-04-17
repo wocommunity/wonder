@@ -6,8 +6,11 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package com.webobjects.woextensions;
 
-import java.lang.reflect.*;
-import com.webobjects.foundation.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import com.webobjects.foundation.NSKeyValueCoding;
 
 public class KeyValueCodingProtectedAccessor extends NSKeyValueCoding.ValueAccessor {
     
@@ -23,7 +26,7 @@ public class KeyValueCodingProtectedAccessor extends NSKeyValueCoding.ValueAcces
 
     public Object methodValue(Object object, Method method) throws IllegalArgumentException, IllegalAccessException,
     InvocationTargetException {
-        return method.invoke(object, null);
+        return method.invoke(object, (Object[])null);
     }
 
     public void setMethodValue(Object object, Method method, Object value) throws IllegalArgumentException, IllegalAccessException,

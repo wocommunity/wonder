@@ -5,8 +5,8 @@ import java.util.NoSuchElementException;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXMutableURL;
-import er.extensions.ERXStringUtilities;
+import er.extensions.foundation.ERXMutableURL;
+import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * Provides an interface to retrieving information and URLs 

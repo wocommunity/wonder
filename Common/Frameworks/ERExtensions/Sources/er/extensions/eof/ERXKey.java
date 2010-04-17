@@ -9,9 +9,6 @@ import er.extensions.qualifiers.ERXAndQualifier;
 import er.extensions.qualifiers.ERXKeyValueQualifier;
 import er.extensions.qualifiers.ERXOrQualifier;
 import er.extensions.qualifiers.ERXPrefixQualifierTraversal;
-import er.extensions.eof.ERXSortOrdering;
-import er.extensions.eof.ERXS;
-import er.extensions.eof.ERXQ;
 
 /**
  * <p>

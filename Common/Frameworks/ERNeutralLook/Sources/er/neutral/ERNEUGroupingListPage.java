@@ -8,7 +8,7 @@ package er.neutral;
 
 import com.webobjects.appserver.WOContext;
 
-import er.directtoweb.ERD2WGroupingListPage;
+import er.directtoweb.pages.ERD2WGroupingListPage;
 
 public class ERNEUGroupingListPage extends ERD2WGroupingListPage {
 

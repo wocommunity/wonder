@@ -1,4 +1,5 @@
 package er.extensions.components.conditionals;
+
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOElement;
@@ -7,7 +8,7 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.woextensions.WOKeyValueConditional;
 
-import er.extensions.ERXEOControlUtilities;
+import er.extensions.eof.ERXEOControlUtilities;
 
 
 /**

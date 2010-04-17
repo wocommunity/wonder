@@ -1,10 +1,18 @@
 package er.grouping;
 
-import java.lang.*;
-import java.util.*;
-import java.text.*;
-import com.webobjects.foundation.*;
-import er.extensions.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSTimestampFormatter;
+import er.extensions.foundation.ERXValueUtilities;
+import er.extensions.logging.ERXLogger;
+
+import java.text.Format;
+import java.util.Enumeration;
 
 
 /**

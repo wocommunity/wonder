@@ -16,8 +16,8 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
-import er.extensions.eof.qualifiers.ERXInQualifier;
-import er.extensions.ERXEOAccessUtilities;
+
+import er.extensions.eof.ERXEOAccessUtilities;
 
 /**
  * The primary key list qualifier is used to generate

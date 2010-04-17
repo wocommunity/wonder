@@ -1,13 +1,12 @@
 package com.webobjects.foundation;
 
+import er.extensions.foundation.ERXProperties;
+import org.apache.log4j.Logger;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
-import org.apache.log4j.Logger;
-
-import er.extensions.ERXProperties;
 
 /**
  * Utilities for manipulating files. WO 5.4.3.1's _NSFileUtilies and this should be kept in sync.

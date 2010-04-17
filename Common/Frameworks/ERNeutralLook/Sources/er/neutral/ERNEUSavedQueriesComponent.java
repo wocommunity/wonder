@@ -2,7 +2,9 @@ package er.neutral;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
-import er.directtoweb.ERDSavedQueriesComponent;
+
+import er.directtoweb.components.misc.ERDSavedQueriesComponent;
+
 import org.apache.log4j.Logger;
 
 /**

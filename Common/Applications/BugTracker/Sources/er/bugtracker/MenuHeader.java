@@ -6,13 +6,35 @@
  * included with this distribution in the LICENSE.NPL file.  */
 
 package er.bugtracker;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.foundation.*;
-import com.webobjects.directtoweb.*;
-import java.lang.*;
-import er.extensions.*;
+
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODisplayGroup;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.D2WUtils;
+import com.webobjects.directtoweb.EditPageInterface;
+import com.webobjects.directtoweb.ErrorPageInterface;
+import com.webobjects.directtoweb.InspectPageInterface;
+import com.webobjects.directtoweb.ListPageInterface;
+import com.webobjects.directtoweb.NextPageDelegate;
+import com.webobjects.directtoweb.QueryPageInterface;
+import com.webobjects.eoaccess.EODatabaseDataSource;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOAndQualifier;
+import com.webobjects.eocontrol.EOClassDescription;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOKeyValueQualifier;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSTimestamp;
+import er.extensions.eof.ERXEC;
+import er.extensions.foundation.ERXValueUtilities;
 
 public class MenuHeader extends WOComponent {
 
@@ -66,7 +88,7 @@ public class MenuHeader extends WOComponent {
             api.setNextPage(context().page());
             nextPage=(WOComponent)api;
         } else {
-            EOEditingContext peerContext=ERXExtensions.newEditingContext(session().defaultEditingContext().parentObjectStore());
+            EOEditingContext peerContext = ERXEC.newEditingContext(session().defaultEditingContext().parentObjectStore());
             peerContext.lock();
             try {
                 EOEnterpriseObject aNewEO=(EOEnterpriseObject)aClassDesc.createInstanceWithEditingContext(peerContext, null);

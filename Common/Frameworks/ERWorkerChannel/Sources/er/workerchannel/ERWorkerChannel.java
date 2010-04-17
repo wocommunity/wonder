@@ -6,8 +6,6 @@
 //
 package er.workerchannel;
 
-import er.extensions.ERXLogger;
-
 public interface ERWorkerChannel {
 
     public void startWorkers();

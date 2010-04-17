@@ -6,14 +6,13 @@
  * included with this distribution in the LICENSE.NPL file.  */
 
 package er.bugtracker;
-import com.webobjects.foundation.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import java.util.*;
-import java.lang.*;
-import er.extensions.ERXConstant;
+
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.InspectPageInterface;
+import com.webobjects.directtoweb.NextPageDelegate;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import er.extensions.eof.ERXConstant;
 
 public class Inspectbug extends WOComponent implements InspectPageInterface {
 

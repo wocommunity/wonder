@@ -5,14 +5,8 @@
 //
 package er.filecachingadaptor;
 
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
 import com.webobjects.eoaccess.*;
-import java.util.*;
-import java.math.BigDecimal;
-import java.io.*;
-import java.text.ParseException;
-import er.extensions.*;
+import er.extensions.eof.ERXForwardingAdaptor;
 
 /**
  * ERFileCachingAdaptor is not a flat-file adaptor.  Ok, it really is, but it's a poor-man's flat file adaptor.  A very poor

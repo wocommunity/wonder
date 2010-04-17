@@ -2,12 +2,11 @@ package er.plot;
 
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import er.extensions.*;
+import er.extensions.logging.ERXLogger;
 import org.jfree.chart.*;
 import org.jfree.chart.plot.*;
 import org.jfree.data.*;
-import java.io.*;
+
 import java.util.*;
 
 /**

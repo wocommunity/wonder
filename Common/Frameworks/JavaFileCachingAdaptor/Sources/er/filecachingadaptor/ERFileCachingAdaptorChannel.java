@@ -8,8 +8,9 @@ package er.filecachingadaptor;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 import com.webobjects.eoaccess.*;
-import java.util.*;
-import er.extensions.*;
+import er.extensions.eof.ERXForwardingAdaptorChannel;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.logging.ERXLogger;
 
 public class ERFileCachingAdaptorChannel extends ERXForwardingAdaptorChannel {
     public static final ERXLogger log = ERXLogger.getERXLogger(ERFileCachingAdaptorChannel.class);

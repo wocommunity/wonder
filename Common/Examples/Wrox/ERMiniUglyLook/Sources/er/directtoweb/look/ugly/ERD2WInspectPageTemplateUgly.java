@@ -6,8 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.look.ugly;
 
-import er.directtoweb.ERD2WInspectPageTemplate;
 import com.webobjects.appserver.WOContext;
+import er.directtoweb.pages.templates.ERD2WInspectPageTemplate;
 
 public class ERD2WInspectPageTemplateUgly extends ERD2WInspectPageTemplate {
 

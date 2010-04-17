@@ -1,14 +1,13 @@
 package er.grouping;
 
-import java.lang.*;
-import java.util.*;
-import java.text.*;
-import java.io.*;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
-import er.extensions.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSTimestampFormatter;
+import er.extensions.logging.ERXLogger;
+
+import java.text.Format;
 
 /**
  * The "value" for the {@link DRMasterCriteria}. For example, given

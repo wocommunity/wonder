@@ -11,9 +11,9 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXProperties;
-import er.extensions.ERXWOForm;
 import er.extensions.appserver.ajax.ERXAjaxApplication;
+import er.extensions.components._private.ERXWOForm;
+import er.extensions.foundation.ERXProperties;
 
 /**
  * AjaxSubmitButton behaves just like a WOSubmitButton except that it submits in the background with an Ajax.Request.

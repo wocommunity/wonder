@@ -31,7 +31,7 @@ import com.webobjects.eocontrol.EOValidation;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSValidation;
 
-import er.extensions.ERXEC;
+import er.extensions.eof.ERXEC;
 /**
  * Basic test case class to do unit testing inside of WO. 
  * Provides an editingContext that is disposed on every setup/tearDown.

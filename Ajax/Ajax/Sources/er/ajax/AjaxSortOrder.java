@@ -2,7 +2,7 @@ package er.ajax;
 
 import com.webobjects.appserver.WOContext;
 
-import er.extensions.ERXSortOrder;
+import er.extensions.components.ERXSortOrder;
 
 /**
  * An Ajax version of ERXSortOrder.
@@ -28,10 +28,7 @@ public class AjaxSortOrder extends ERXSortOrder {
 	}
 	
 	public String updateContainerID() {
-		String updateContainerID = (String)valueForBinding("updateContainerID");
-		if(updateContainerID == null) {
-			updateContainerID = AjaxUpdateContainer.currentUpdateContainerID();
-		}
-		return updateContainerID;
+        String updateContainerID = (String)valueForBinding("updateContainerID");
+		return updateContainerID != null ? updateContainerID : AjaxUpdateContainer.currentUpdateContainerID();
 	}
 }

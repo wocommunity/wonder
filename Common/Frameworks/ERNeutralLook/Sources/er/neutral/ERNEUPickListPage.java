@@ -9,7 +9,7 @@ package er.neutral;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 
-import er.directtoweb.ERD2WPickListPage;
+import er.directtoweb.pages.ERD2WPickListPage;
 
 import java.util.Enumeration;
 

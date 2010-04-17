@@ -2,7 +2,7 @@ package er.ajax;
 
 import com.webobjects.appserver.WOContext;
 
-import er.extensions.ERXComponent;
+import er.extensions.components.ERXComponent;
 
 /**
  * AjaxSocialNetworkLink creates a link to the submission URL for 

@@ -6,14 +6,25 @@
  * included with this distribution in the LICENSE.NPL file.  */
 
 package er.bugtracker;
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
-import er.directtoweb.*;
-import java.util.*;
-import er.extensions.*;
+
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WORedirect;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.ErrorPageInterface;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import er.directtoweb.ERD2WDirectAction;
+import er.extensions.crypting.ERXCrypto;
+import er.extensions.eof.ERXEC;
+import er.extensions.foundation.ERXUtilities;
+
+import java.util.Enumeration;
 
 public class DirectAction extends ERD2WDirectAction {
 

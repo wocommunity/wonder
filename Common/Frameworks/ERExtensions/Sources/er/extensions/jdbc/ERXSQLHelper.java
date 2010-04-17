@@ -46,13 +46,14 @@ import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation._NSUtilities;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
 import com.webobjects.jdbcadaptor.JDBCPlugIn;
-import er.extensions.ERXEOAccessUtilities;
-import er.extensions.ERXEC;
-import er.extensions.ERXModelGroup;
-import er.extensions.ERXStringUtilities;
+
+import er.extensions.eof.ERXConstant;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOAccessUtilities;
+import er.extensions.eof.ERXModelGroup;
 import er.extensions.eof.qualifiers.ERXFullTextQualifier;
-import er.extensions.ERXConstant;
-import er.extensions.ERXProperties;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * ERXSQLHelper provides support for additional database-vender-specific

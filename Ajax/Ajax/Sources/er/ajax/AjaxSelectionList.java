@@ -8,8 +8,8 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.ERXComponentUtilities;
-import er.extensions.ERXWOContext;
+import er.extensions.appserver.ERXWOContext;
+import er.extensions.components.ERXComponentUtilities;
 
 /**
  * AjaxSelectionList provides a list component that supports keyboard navigation and component renderers. Externally,

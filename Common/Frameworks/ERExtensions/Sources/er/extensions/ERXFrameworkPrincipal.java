@@ -11,13 +11,16 @@ import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
-import com.webobjects.appserver.WOApplication;
+
+import er.extensions.eof.ERXConstant;
+import er.extensions.foundation.ERXStringUtilities;
 
 /** 
  * Designated starter class for frameworks, adds support for dependency management.<br />
@@ -103,7 +106,7 @@ public abstract class ERXFrameworkPrincipal {
     /**
      * Gets the shared framework principal instance for a given
      * class.
-     * @param principal class for a given framework
+     * @param c class for a given framework
      * @return framework principal initializer
      */
     public static ERXFrameworkPrincipal sharedInstance(Class c) {

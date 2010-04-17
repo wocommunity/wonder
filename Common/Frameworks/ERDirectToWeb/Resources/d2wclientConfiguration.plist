@@ -206,7 +206,7 @@
             editors = (valueWhenEmpty); 
             inspectionInformation = "Edits a boolean with radio buttons and Yes/No. Use ERD2WCustomEditBoolean instead."; 
         }; 
-        ERD2WEditableListPageTemplate = {
+        ERD2WEditableListTemplate = {
             editors = (
                 backgroundColorForTable, 
                 headComponentName, 
@@ -290,6 +290,11 @@
             editors = (crypter); 
             inspectionInformation = "Can make queries on encrypted properties."; 
         }; 
+        ERD2WQueryStringOperator = {
+            editors = ( length, qualifierOperators );
+            inspectionInformation = "A component building a query based on a string; a popup containing a choice of operators such as \"starts with\", \"contains\".. is offered to the user.";
+        };
+        
         ERD2WQueryNonNull = {
             comment = "should be localized"; 
             editors = (valueWhenEmpty); 
@@ -330,6 +335,23 @@
                 goingVertically, 
                 sortKey, 
                 localizeDisplayKeys, 
+                multiple,
+                size
+            ); 
+            inspectionInformation = "Same as the first except that it supports validation propogation and uses ERToOneRelationship."; 
+        }; 
+        ERD2WQueryToManyRelationship = {
+            editors = (
+                restrictedChoiceKey, 
+                restrictingFetchSpecification, 
+                keyWhenRelationship, 
+                numCols, 
+                itemWidth, 
+                toManyUIStyle, 
+                goingVertically, 
+                sortKey, 
+                localizeDisplayKeys, 
+                multiple,
                 size
             ); 
             inspectionInformation = "Same as the first except that it supports validation propogation and uses ERToOneRelationship."; 
@@ -508,7 +530,7 @@
         }; 
         ERDEditStringWithChoices = {
             comment = "the component uses a key() + 'Available' of of the object??"; 
-            editors = (entityNameForReport); 
+            editors = (possibleChoices); 
             inspectionInformation = "Provides a toOne relationship-like component except the value is pushed in as a string."; 
         }; 
         ERDEditYearsMonths = {
@@ -578,6 +600,10 @@
             editors = (); 
             inspectionInformation = "Used for building date queries with javascript"; 
         }; 
+        ERD2WQueryDateRange = {
+            editors = ( formatter, length );
+            inspectionInformation = "A component able to build a date query based on the range between two dates";
+        };
         ERDTrashcan = {
             comment = "needs to be more generic, for example having text instead of the delete button image"; 
             editors = (confirmDeleteConfigurationName); 
@@ -930,6 +956,12 @@
             inputSize = 15; 
             title = "Pick Button Label"; 
         }; 
+        possibleChoices = {
+            class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
+            editingFor = property; 
+            inputSize = 15; 
+            title = "Choices"; 
+        }; 
         pickComponentName = {
             class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
             editingFor = property; 
@@ -965,6 +997,15 @@
             editingFor = property; 
             inputSize = 15; 
             inspectionInformation = "Key that allows you to get your own nextPageDelegate into the fray"; 
+            title = "Pre relationship Keys"; 
+            type = stringEmptyIsNull; 
+        }; 
+        qualifierOperators = {
+            class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
+            comment = ""; 
+            editingFor = property; 
+            inputSize = 15; 
+            inspectionInformation = "Property list string defining the query operators"; 
             title = "Pre relationship Keys"; 
             type = stringEmptyIsNull; 
         }; 

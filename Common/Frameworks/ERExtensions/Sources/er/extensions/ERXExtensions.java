@@ -6,17 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOSession;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabase;
@@ -24,10 +13,10 @@ import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EOQualifierSQLGeneration;
+import com.webobjects.eoaccess.EOQualifierSQLGeneration.Support;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOUtilities;
-import com.webobjects.eoaccess.EOQualifierSQLGeneration.Support;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOFetchSpecification;
@@ -45,9 +34,40 @@ import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.jdbcadaptor.JDBCAdaptorException;
-import er.extensions.jdbc.ERXJDBCAdaptor;
-import er.extensions.eof.qualifiers.ERXToManyQualifier;
+import er.extensions.appserver.ERXApplication;
+import er.extensions.appserver.ERXSession;
+import er.extensions.eof.ERXConstant;
+import er.extensions.eof.ERXDatabaseContextDelegate;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOAccessUtilities;
+import er.extensions.eof.ERXEntityClassDescription;
+import er.extensions.eof.ERXGenericRecord;
+import er.extensions.eof.ERXModelGroup;
+import er.extensions.eof.ERXSharedEOLoader;
 import er.extensions.eof.qualifiers.ERXPrimaryKeyListQualifier;
+import er.extensions.eof.qualifiers.ERXToManyQualifier;
+import er.extensions.formatters.ERXSimpleHTMLFormatter;
+import er.extensions.foundation.ERXArrayUtilities;
+import er.extensions.foundation.ERXConfigurationManager;
+import er.extensions.foundation.ERXFileUtilities;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.foundation.ERXSystem;
+import er.extensions.foundation.ERXValueUtilities;
+import er.extensions.jdbc.ERXJDBCAdaptor;
+import er.extensions.localization.ERXLocalizer;
+import er.extensions.logging.ERXLogger;
+import er.extensions.validation.ERXValidationFactory;
+import org.apache.log4j.Logger;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * Principal class of the ERExtensions framework. This class
@@ -85,7 +105,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * Handling call all of the <code>did*</code> methods on
      * {@link ERXGenericRecord} subclasses after an editing context
      * has been saved. This delegate is also responsible for configuring
-     * the {@link ERXCompilerProxy} and {@link ERXValidationFactory}.
+     * the {@link ERXCompilerProxy} and {@link er.extensions.validation.ERXValidationFactory}.
      * This delegate is configured when this framework is loaded.
      */
     public static class Observer {
@@ -160,11 +180,11 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     	
     	try {
     		// This will load any optional configuration files, 
-    		ERXConfigurationManager.defaultManager().initialize();
     		// ensures that WOOutputPath's was processed with this @@
     		// variable substitution. WOApplication uses WOOutputPath in
     		// its constructor so we need to modify it before calling
     		// the constructor.
+    		ERXConfigurationManager.defaultManager().initialize();
         	EOModelGroup.setClassDelegate(this);
         	ERXSystem.updateProperties();
 
@@ -526,7 +546,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * Note: this is a very simplistic implementation
      * and will most likely not work with complex HTML.
      * Note: for actual conversion of HTML tags into regular
-     * strings have a look at {@link ERXSimpleHTMLFormatter}
+     * strings have a look at {@link er.extensions.formatters.ERXSimpleHTMLFormatter}
      * @param s html string
      * @return string with all of its html tags removed
      */
@@ -596,16 +616,10 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param s string to capitalize
      * @return capitalized string if the first char is a
      *		lowercase character.
+     *@deprecated ERXStringUtilities.capitalize()
      */
-    // MOVEME: ERXStringUtilities
     public static String capitalize(String s) {
-        String result=s;
-        if (s!=null && s.length()>0) {
-            char c=s.charAt(0);
-            if (Character.isLowerCase(c))
-                result=Character.toUpperCase(c)+s.substring(1);
-        }
-        return result;
+        return ERXStringUtilities.capitalize(s);
     }
 
     /**
@@ -615,8 +629,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param howMany number of its
      * @param language target language
      * @return plurified string
+     * @deprecated use ERXLocalizer.localizerForLanguage(language).plurifiedString(s, howMany)
      */
-    // MOVEME: ERXStringUtilities
     public static String plurify(String s, int howMany, String language) {
         return ERXLocalizer.localizerForLanguage(language).plurifiedString(s, howMany);
     }
@@ -768,9 +782,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param frameworkName name of the framework, null or "app"
      *		for the application bundle
      * @return the <code>lastModified</code> method of the file object
+     * @deprecated use ERXFileUtilities.lastModifiedDateForFileInFramework()
      */
-    // MOVEME: ERXFileUtilities
-    // ENHANCEME: Should be able to specify the language to check
     public static long lastModifiedDateForFileInFramework(String fileName, String frameworkName) {
         return ERXFileUtilities.lastModifiedDateForFileInFramework(fileName, frameworkName);
     }
@@ -782,9 +795,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      *		'app' for the application bundle.
      * @return de-serialized object from the plist formatted file
      *		specified.
+     * @deprecated use ERXFileUtilities.readPropertyListFromFileInFramework()
      */
-    // FIXME: Capitalize inFramework
-    // MOVEME: ERXFileUtilities
     public static Object readPropertyListFromFileinFramework(String fileName, String aFrameWorkName) {
         return ERXFileUtilities.readPropertyListFromFileInFramework(fileName, aFrameWorkName);
     }
@@ -798,9 +810,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param languageList language list search order
      * @return de-serialized object from the plist formatted file
      *		specified.
+     * @deprecated use ERXFileUtilities.readPropertyListFromFileInFramework()
      */
-    // FIXME: Not the best way of handling encoding
-    // MOVEME: ERXFileUtilities
     public static Object readPropertyListFromFileInFramework(String fileName,
                                                              String aFrameWorkName,
                                                              NSArray languageList) {
@@ -932,7 +943,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         sharedEC.lock();
         try {
             EOEntity entity = ERXEOAccessUtilities.entityNamed(sharedEC, entityName);
-            if( entity == null ) {
+            if (entity == null) {
                 _log.warn("Attempting to refresh a non-existent (or not accessible) EO: " + entityName);
                 return;
             }
@@ -1076,7 +1087,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     /**
      * Retrieves a value from the session's dictionary and evaulates
      * that object using the <code>booleanValue</code> method of
-     * {@link ERXUtilities}. If there is no object corresponding
+     * {@link er.extensions.foundation.ERXUtilities}. If there is no object corresponding
      * to the key passed in, then the default value is returned. The
      * usual way in which boolean values are set on the session object
      * is by using the method <code>setBooleanFlagOnSessionForKey</code>
@@ -1096,7 +1107,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 
     /**
      * Sets the current session for this thread. This is called
-     * from {@link ERXSession}'s awake and sleep methods.
+     * from {@link er.extensions.appserver.ERXSession}'s awake and sleep methods.
      * @param session that is currently active for this thread.
      * @deprecated use  ERXSession.setSession(session) instead
      */

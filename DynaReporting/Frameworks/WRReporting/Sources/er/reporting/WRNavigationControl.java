@@ -1,14 +1,14 @@
 package er.reporting;
 
-import er.grouping.*;
-import java.lang.*;
-import java.util.*;
-import java.io.*;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
-import er.extensions.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import er.extensions.components.ERXStatelessComponent;
+import er.grouping.DRCriteria;
+import er.grouping.DRGroup;
+import er.grouping.DRMasterCriteria;
+import er.grouping.DRReportModel;
 
 public class WRNavigationControl extends ERXStatelessComponent {
     public DRReportModel model;

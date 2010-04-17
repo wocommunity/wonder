@@ -8,11 +8,16 @@ package er.filecachingadaptor;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 import com.webobjects.eoaccess.*;
-import java.util.*;
+
 import java.math.BigDecimal;
 import java.io.*;
 import java.text.ParseException;
-import er.extensions.*;
+
+import er.extensions.eof.ERXConstant;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.foundation.ERXFileUtilities;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.logging.ERXLogger;
 
 public class ERFileCachingAdaptorUtilities {
     public static final ERXLogger log = ERXLogger.getERXLogger(ERFileCachingAdaptorUtilities.class);

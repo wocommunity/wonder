@@ -7,11 +7,11 @@ import com.webobjects.foundation.NSComparator;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
-import java.util.Enumeration;
+import er.extensions.foundation.ERXArrayUtilities;
+import er.extensions.components.ERXStatelessComponent;
+import er.extensions.foundation.ERXStringUtilities;
 
-import er.extensions.ERXStatelessComponent;
-import er.extensions.ERXStringUtilities;
-import er.extensions.ERXArrayUtilities;
+import java.util.Enumeration;
 
 /**
  * A component to display a summary of collected stats.

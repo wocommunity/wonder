@@ -5,17 +5,27 @@
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
 package er.excel;
-import java.io.*;
-import java.util.*;
 
-import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.hssf.util.*;
-import org.apache.poi.poifs.filesystem.*;
-
-import com.webobjects.foundation.*;
-
-import er.extensions.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableDictionary;
+import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXKeyValueCodingUtilities;
+import er.extensions.logging.ERXLogger;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Enumeration;
 
 /**
  * Dumps a workbook into the "HTML" needed to re-create it by the EGSimpleTableParser.

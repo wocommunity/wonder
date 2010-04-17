@@ -16,10 +16,10 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXMutableURL;
-import er.extensions.ERXRequest;
-import er.extensions.ERXStringUtilities;
-import er.extensions.ERXWOContext;
+import er.extensions.appserver.ERXRequest;
+import er.extensions.appserver.ERXWOContext;
+import er.extensions.foundation.ERXMutableURL;
+import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * Shows a link and wraps an area that is later presented as a modal window. Alternately, when you bind <b>action</b> then the content is used as the link.

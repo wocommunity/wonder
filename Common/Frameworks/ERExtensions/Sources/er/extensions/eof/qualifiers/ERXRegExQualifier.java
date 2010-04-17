@@ -9,8 +9,8 @@ import com.webobjects.eocontrol.EOQualifierVariable;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSSelector;
 
-import er.extensions.qualifiers.ERXKeyValueQualifier;
 import er.extensions.jdbc.ERXSQLHelper;
+import er.extensions.qualifiers.ERXKeyValueQualifier;
 
 /**
  * Provides regular expression matching of attributes. You can also bind a WODisplayGroup queryOperator to 

@@ -6,11 +6,17 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.bugtracker;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSValidation;
+import er.extensions.eof.ERXEC;
+
 import java.util.Enumeration;
-import er.extensions.*;
 
 public class Component extends _Component {
 
@@ -23,7 +29,7 @@ public class Component extends _Component {
     public static NSArray orderedComponents(EOEditingContext ec) {
         NSMutableArray result=new NSMutableArray();
         if (_cachedComponents==null) {
-            _editingContext=ERXEC.newEditingContext();
+            _editingContext= ERXEC.newEditingContext();
             _cachedComponents=new NSMutableArray();
             addChildrenOfComponentToArray(null,_cachedComponents,_editingContext);
         }

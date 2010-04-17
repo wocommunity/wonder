@@ -11,7 +11,7 @@ import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.appserver._private.WODynamicGroup;
 import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.ERXWOContext;
+import er.extensions.appserver.ERXWOContext;
 
 /**
  * ERXWOConditional behaves just like WOConditional except that it tracks its condition state for use with ERXElse.

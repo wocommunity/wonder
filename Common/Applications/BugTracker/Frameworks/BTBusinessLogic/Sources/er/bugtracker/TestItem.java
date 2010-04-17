@@ -1,10 +1,11 @@
 // TestItem.java
 // 
 package er.bugtracker;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.extensions.*;
+
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.foundation.NSTimestamp;
+import er.extensions.eof.EOEnterpriseObjectClazz;
+import er.extensions.logging.ERXLogger;
 
 public class TestItem extends _TestItem {
     static final ERXLogger log = ERXLogger.getERXLogger(TestItem.class);
@@ -26,5 +27,5 @@ public class TestItem extends _TestItem {
         
     }
 
-    public static final TestItemClazz clazz = (TestItemClazz)EOEnterpriseObjectClazz.clazzForEntityNamed("TestItem");
+    public static final TestItemClazz clazz = (TestItemClazz) EOEnterpriseObjectClazz.clazzForEntityNamed("TestItem");
 }

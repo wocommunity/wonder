@@ -1,10 +1,9 @@
 // ERCPreference.java
 // (c) by Anjo Krank (ak@kcmedia.ag)
 package er.corebusinesslogic;
-import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.extensions.*;
+import er.extensions.eof.EOEnterpriseObjectClazz;
+import er.extensions.logging.ERXLogger;
 
 public class ERCPreference extends _ERCPreference {
     static final ERXLogger log = ERXLogger.getERXLogger(ERCPreference.class);
@@ -24,5 +23,5 @@ public class ERCPreference extends _ERCPreference {
         
     }
 
-    public static ERCPreferenceClazz preferenceClazz() { return (ERCPreferenceClazz)EOEnterpriseObjectClazz.clazzForEntityNamed("ERCPreference"); }
+    public static ERCPreferenceClazz preferenceClazz() { return (ERCPreferenceClazz) EOEnterpriseObjectClazz.clazzForEntityNamed("ERCPreference"); }
 }

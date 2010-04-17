@@ -1,15 +1,20 @@
 package er.reporting;
 
-import er.grouping.*;
-import java.lang.*;
-import java.util.*;
-import java.io.*;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
-import er.extensions.*;
-import ognl.webobjects.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSNumberFormatter;
+import er.extensions.foundation.ERXValueUtilities;
+import er.extensions.logging.ERXLogger;
+import er.grouping.DRRecord;
+import er.grouping.DRRecordGroup;
+import er.grouping.DRReportModel;
+import er.grouping.DRValue;
+import er.grouping.DRValueConverter;
+import ognl.webobjects.WOOgnl;
 
 /**
  * Contains a cell in the table that {@link WRReport} has set up.

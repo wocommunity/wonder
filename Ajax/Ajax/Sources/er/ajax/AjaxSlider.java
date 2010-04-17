@@ -8,7 +8,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNumberFormatter;
 
-import er.extensions.ERXComponentUtilities;
+import er.extensions.components.ERXComponentUtilities;
 
 // PROTOTYPE FUNCTIONS (WRAPPER)
 /**

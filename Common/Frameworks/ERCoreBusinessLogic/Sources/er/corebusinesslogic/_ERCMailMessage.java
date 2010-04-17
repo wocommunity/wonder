@@ -6,9 +6,9 @@ package er.corebusinesslogic;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import er.extensions.*;
-import java.util.*;
-import java.math.BigDecimal;
+import er.extensions.eof.ERXGenericRecord;
+import er.extensions.foundation.ERXCompressionUtilities;
+import er.extensions.logging.ERXLogger;
 
 public abstract class _ERCMailMessage extends ERCStampedEnterpriseObject {
 
@@ -18,7 +18,7 @@ public abstract class _ERCMailMessage extends ERCStampedEnterpriseObject {
         super();
     }
 
-    public static abstract class _ERCMailMessageClazz extends er.extensions.ERXGenericRecord.ERXGenericRecordClazz {
+    public static abstract class _ERCMailMessageClazz extends ERXGenericRecord.ERXGenericRecordClazz {
 
         public NSArray messagesToBeSent(EOEditingContext ec) {
             return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, "ERCMailMessage", "messagesToBeSent", null);

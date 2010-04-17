@@ -7,7 +7,7 @@
 package er.workerchannel;
 
 import java.util.Random;
-import er.extensions.ERXLogger;
+import er.extensions.logging.ERXLogger;
 
 public class ERTestWorkUnit extends ERWorkUnit {
 

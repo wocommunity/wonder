@@ -1,8 +1,9 @@
 package er.excel;
 
-import com.webobjects.appserver.*;
-
-import er.extensions.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import er.extensions.components.ERXStatelessComponent;
+import er.extensions.logging.ERXLogger;
 
 /**
  * Class for Excel Component EGComponent.

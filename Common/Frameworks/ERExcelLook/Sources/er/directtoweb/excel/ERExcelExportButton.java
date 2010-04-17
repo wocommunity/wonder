@@ -3,27 +3,20 @@
 */
 package er.directtoweb.excel;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
-import er.extensions.ERXLogger;
-import er.directtoweb.*;
-
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WODisplayGroup;
-import com.webobjects.directtoweb.D2W;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.D2WPage;
-import com.webobjects.directtoweb.ListPageInterface;
 import com.webobjects.eocontrol.EOArrayDataSource;
 import com.webobjects.eocontrol.EOClassDescription;
-import er.extensions.ERXValueUtilities;
+import com.webobjects.eocontrol.EODataSource;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSSelector;
+import er.directtoweb.components.ERDCustomQueryComponent;
+import er.extensions.logging.ERXLogger;
 
-import java.io.*;
-import java.lang.reflect.*;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Component used in the List page to provide a generic excel export.<br />

@@ -17,9 +17,9 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.ERXFrameworkPrincipal;
-import er.extensions.ERXLogger;
-import er.extensions.ERXProperties;
-import er.extensions.ERXValidationFactory;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.logging.ERXLogger;
+import er.extensions.validation.ERXValidationFactory;
 
 /**
  * <code>ERJavaMail</code> is the prinicpal class for the ERJavaMail framework.

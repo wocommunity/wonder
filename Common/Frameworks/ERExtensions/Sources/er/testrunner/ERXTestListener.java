@@ -6,8 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.testrunner;
 
-import junit.framework.*;
-import junit.runner.*;
+import junit.framework.TestListener;
 
 /**
  * template listner interface.<br />

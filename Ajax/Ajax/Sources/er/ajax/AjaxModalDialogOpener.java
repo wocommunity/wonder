@@ -8,7 +8,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXWOContext;
+import er.extensions.appserver.ERXWOContext;
 
 /**
  * <p>Generates a link to open a specific AjaxModalDialog.  This is useful when you want to physically separate the modal dialog from what
@@ -141,7 +141,6 @@ public class AjaxModalDialogOpener extends AjaxComponent {
 		
 		return null;
 	}
-	
 	
 	/**
 	 * @return options for Ajax.Request that is made when the link is clicked

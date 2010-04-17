@@ -42,10 +42,10 @@ import com.webobjects.foundation.NSTimestampFormatter;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
 import com.webobjects.jdbcadaptor.JDBCContext;
 
+import er.extensions.eof.ERXEC;
 import er.extensions.foundation.ERXExceptionUtilities;
-import er.extensions.ERXStringUtilities;
-import er.extensions.ERXFileUtilities;
-import er.extensions.ERXEC;
+import er.extensions.foundation.ERXFileUtilities;
+import er.extensions.foundation.ERXStringUtilities;
 
 public class ERXJDBCUtilities {
 

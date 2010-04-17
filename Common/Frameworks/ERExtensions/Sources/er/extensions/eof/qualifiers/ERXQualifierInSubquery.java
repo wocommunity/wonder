@@ -6,13 +6,24 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.eof.qualifiers;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 import java.util.Enumeration;
 
-import er.extensions.ERXLogger;
-import er.extensions.ERXStringUtilities;
+import org.apache.log4j.Logger;
+
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EODatabaseContext;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOQualifierSQLGeneration;
+import com.webobjects.eoaccess.EOSQLExpression;
+import com.webobjects.eoaccess.EOSQLExpressionFactory;
+import com.webobjects.eocontrol.EOClassDescription;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOObjectStoreCoordinator;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableSet;
+import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * Generates a subquery for the qualifier given in argument
@@ -31,7 +42,7 @@ import er.extensions.ERXStringUtilities;
  * with the 3 arg constructor
  */
  
-//FIXME: Dues to the way the SQL is generated the three arguement constructor has conflicts in the
+//FIXME: Due to the way the SQL is generated the three argument constructor has conflicts in the
 //       table names used for instance, this bit of code:
 //       EOQualifier q = EOQualifier.qualifierWithQualifierFormat("firstName = 'Max'", null);
 //       ERXQualifierInSubquery qq = new ERXQualifierInSubquery(q, "User", "groupId");
@@ -42,7 +53,7 @@ import er.extensions.ERXStringUtilities;
 public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQLGeneration, Cloneable {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXQualifierInSubquery.class);
+    public static final Logger log = Logger.getLogger(ERXQualifierInSubquery.class);
     
     /** holds the subqualifier */
     protected EOQualifier qualifier;

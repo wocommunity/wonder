@@ -1,12 +1,28 @@
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.directtoweb.*;
-import er.extensions.*;
-import er.directtoweb.*;
+import org.apache.log4j.Logger;
+
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOSession;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.D2WComponent;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.D2WModel;
+import com.webobjects.directtoweb.ListPageInterface;
+import com.webobjects.directtoweb.QueryPageInterface;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EODataSource;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSForwardException;
+
+import er.directtoweb.delegates.ERDBranchDelegate;
+import er.extensions.eof.ERXEC;
+import er.extensions.foundation.ERXPatcher;
 
 /**
  * ERD2WControllerFactory a an enhancement of the D2W factory class with the notion of "Processes". <br />
@@ -28,14 +44,15 @@ import er.directtoweb.*;
 will spare you a lot of work.
 
  * The ERD2WControllerFactory is not heavily tested and the API might change. Especially that the controller subclasses are inner classes of this factory is subject to change. Feedback would be very welcome. 
- * @created ak on Tue Apr 08 2003
+ * @author ak on Tue Apr 08 2003
  * @project AHApp
+ * @d2wKey pageConfiguration
  */
 
 public class ERD2WControllerFactory extends ERD2WFactory {
 
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getERXLogger(ERD2WControllerFactory.class);
+    private static final Logger log = Logger.getLogger(ERD2WControllerFactory.class);
 	
     /**
      * Public constructor
@@ -58,7 +75,7 @@ public class ERD2WControllerFactory extends ERD2WFactory {
         try {
             String controllerClassName = (String)d2wContext.valueForKey("controllerClassName");
             if(controllerClassName != null)
-                c = (ERD2WController)ERXPatcher.classForName(controllerClassName).newInstance();
+                c = (ERD2WController) ERXPatcher.classForName(controllerClassName).newInstance();
         } catch(Exception ex) {
             throw new NSForwardException(ex);
         }

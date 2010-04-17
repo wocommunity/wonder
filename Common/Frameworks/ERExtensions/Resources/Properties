@@ -25,7 +25,7 @@
 er.extensions.ERXLocalizer.isLocalizationEnabled = true
 
 ## The order in which localized files are searched (first entry wins)
-er.extensions.ERXLocalizer.frameworkSearchPath = (app,ERDirectToWeb,ERExtensions)
+#er.extensions.ERXLocalizer.frameworkSearchPath = (app,ERDirectToWeb,ERExtensions)
 
 ## Which files to search
 er.extensions.ERXLocalizer.fileNamesToWatch = ("Localizable.strings","ValidationTemplate.strings")
@@ -181,8 +181,8 @@ er.extensions.ERXRaiseOnMissingEditingContextDelegate = true
 # Browser
 #########################################################################
 ## User-agent sniffing stuff
-# er.extensions.ERXBrowserFactory.FactoryClassName=er.extensions.ERXBrowserFactory
-# er.extensions.ERXBrowserFactory.BrowserClassName=er.extensions.ERXBasicBrowser
+# er.extensions.ERXBrowserFactory.FactoryClassName=er.extensions.appserver.ERXBrowserFactory
+# er.extensions.ERXBrowserFactory.BrowserClassName=er.extensions.appserver.ERXBasicBrowser
 
 #########################################################################
 # Direct Action 
@@ -200,7 +200,7 @@ er.extensions.ERXRaiseOnMissingEditingContextDelegate = true
 # Log4j Configuration
 #########################################################################
 # Don't change this	 
-log4j.loggerFactory = er.extensions.ERXLogger$Factory
+#log4j.loggerFactory = er.extensions.logging.ERXLogger$Factory
 
 #########################################################################
 # Signal Handling
@@ -292,6 +292,9 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 ## only log an error. Default is unset.
 # er.extensions.ERXDatabaseContextDelegate.tolerantEntityPattern = ^(Entity1|Entity3)$
 
+## The batch size for automatic batch faulting, default is 0 for unset
+# er.extensions.ERXDatabaseContextDelegate.autoBatchFetchSize = 100
+
 #########################################################################
 # ERXEC 
 #########################################################################
@@ -323,6 +326,16 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 # er.extensions.ERXApplication.StatisticsBaseLogPath = 
 ## When the logs get rotated [24 hours in ms]
 # er.extensions.ERXApplication.StatisticsLogRotationFrequency = 86400000 
+
+## ERXStats support enabling
+# er.extensions.erxStats.enabled = true
+
+## ERXStats max size
+# er.extensions.erxStats.max = 1000
+
+## to display the stats after the RR loop
+# log4j.category.er.extensions.ERXApplication.Statistics=DEBUG
+
 
 ## When set, starts refusing new session once memory is filled up to this 
 ## threshold, which results in a more responsive app. If mem comes available again
@@ -409,10 +422,21 @@ dbMinConnectionsGLOBAL=1
 # er.extensions.ERXWOResponseCache.Enabled = true
 
 #########################################################################
+# ERXWORepetition 
+#########################################################################
+## Add hash codes to element IDs so backtracking can be controlled.
+# er.extensions.ERXWORepetition.checkHashCodes = true
+## If an object wasn't found, raise an exception (if unset, the wrong object is used)
+# er.extensions.ERXWORepetition.raiseOnUnmatchedObject = true
+
+#########################################################################
 # ERXThreadStorage 
 #########################################################################
-## Define if child threads inherit the variables of the parent or not
+## Define if child threads inherit the variables of the parent or not. Defaults to true.
 # er.extensions.ERXThreadStorage.useInheritableThreadLocal = false
+## Define whether to log potential problems when using certain values inherited by the parent thread. 
+## Defaults to true when running in development mode, defaults to false when app is deployed.
+# er.extensions.ERXThreadStorage.logUsageOfProblematicInheritedValues = false
 
 #########################################################################
 # ERXModelGroup 
@@ -424,8 +448,57 @@ dbMinConnectionsGLOBAL=1
 ## that point to the same URL and have the same username
 # er.extensions.ERXModelGroup.raiseOnUnmatchingConnectionDictionaries=true
 
+## Enable Wonder's "extended prototypes" feature.
+## Allows for prototypes with naming conventions as follows and with prototype attributes
+## chosen in the following priority order where the same attibute name appears in
+## multiple prototype entities:
+## EOJDBC<pluginName><modelName>Prototypes, EO<adaptorName><modelName>Prototypes, EO<modelname>Prototypes, EOJDBC<pluginName>CustomPrototypes,
+##    EO<adaptorname>CustomPrototypes, EOCustomPrototypes, EOJDBC<pluginName>Prototypes, EO<adaptorname>Prototypes, EOPrototypes.
+##
+## Note that Wonder's erprototypes generally have the "EOJDBC<pluginName>Prototypes" convention for JDBC adaptor prototypes
+## so you can override Wonder's prototypes for your own project by having prototype entities with names such as
+## EOJDBCMySQLCustomPrototypes and even override that with model specific variations using sth like EOJDBCMoviesPrototypes
+## if your model name was 'Movies'.
+# er.extensions.ERXModelGroup.modelClassName = com.webobjects.eoaccess.ERXModel
+# er.extensions.ERXModel.useExtendedPrototypes = true
+
+#########################################################################
+
+#########################################################################
+# ERXExceptionUtilities 
+#########################################################################
+er.extensions.stackTrace.cleanup=true
+er.extensions.stackTrace.skipPatternsFile=StackTraceSkipPatterns-Normal.plist
 
 #########################################################################
 # Components 
 #########################################################################
 er.extensions.ERXWOForm.multipleSubmitDefault=true
+
+#########################################################################
+# SSL DirectConnect
+#########################################################################
+## You should probably not enable any of these settings in a normal Apache webserver deployment,
+## in particular the ssl port property, as this is used by ERX to generate https URLs, which must
+## match your Apache config.
+##
+## To enable SSL support with DirectConnect, you must do the following:
+##
+## * In your Resources folder, run "keytool -genkey -alias WebObjects -keyalg RSA -keystore adaptorssl.key".  Select a 
+##   password for your keystore (i.e. "changeit"), and set the "your first name and last name" field to match the hostname 
+##   that you will be running your directconnect app off of.
+## * In your Resources folder, create an executable script (it MUST BE EXECUTABLE) named "adaptorsslpassphrase" with the
+##   contents:
+##   echo changeit
+##   where you should replace "changeit" for whatever password you selected in the previous step.
+## * Set the following property to true
+#er.extensions.ERXApplication.ssl.enabled=true
+
+## (optional) To specify an SSL host name other than what is returned from a call to
+## application.host(), you can override it below  
+#er.extensions.ERXApplication.ssl.host=localhost
+
+## (optional) To select an SSL port other than 443, uncomment the following. If you are already running Apache with SSL,
+## you probably want to set this.  If the port number is 0, the SSL port will be automatically assigned (using the same
+## mechanism that WO uses to set the regular port) 
+#er.extensions.ERXApplication.ssl.port=0

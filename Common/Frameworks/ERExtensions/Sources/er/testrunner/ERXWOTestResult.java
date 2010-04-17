@@ -6,16 +6,23 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.testrunner;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import junit.framework.*;
-import junit.runner.*;
-import java.io.PrintStream;
 import java.io.ByteArrayOutputStream;
-import com.webobjects.woextensions.*;
-import er.extensions.*;
+import java.io.PrintStream;
+
+import junit.framework.TestCase;
+import junit.framework.TestFailure;
+import junit.framework.TestSuite;
+
+import org.apache.log4j.Logger;
+
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.woextensions.WOExceptionParser;
+import com.webobjects.woextensions.WOParsedErrorLine;
 
 /**
  * WOComponent display of an ERTestResult.<br />
@@ -49,7 +56,7 @@ public class ERXWOTestResult extends WOComponent {
     }
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXWOTestResult.class);
+    public static final Logger log = Logger.getLogger(ERXWOTestResult.class);
 
     public String errorMessage;
     public ERXTestResult testResult;

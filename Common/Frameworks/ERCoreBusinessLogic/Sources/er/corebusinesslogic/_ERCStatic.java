@@ -6,9 +6,7 @@ package er.corebusinesslogic;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import er.extensions.*;
-import java.util.*;
-import java.math.BigDecimal;
+import er.extensions.eof.ERXGenericRecord;
 
 public abstract class _ERCStatic extends ERXGenericRecord {
 
@@ -16,7 +14,7 @@ public abstract class _ERCStatic extends ERXGenericRecord {
         super();
     }
 
-    public static abstract class _ERCStaticClazz extends er.extensions.ERXGenericRecord.ERXGenericRecordClazz {
+    public static abstract class _ERCStaticClazz extends ERXGenericRecord.ERXGenericRecordClazz {
 
         public NSArray preferencesWithKey(EOEditingContext ec, Object key) {
             NSMutableDictionary _dict = new NSMutableDictionary(1);
