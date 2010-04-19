@@ -33,12 +33,4 @@ public class AjaxUploadContainer extends AjaxUpload {
 	public String elementName() {
 		return _elementName() != null ? _elementName() : "div";
 	}
-	
-	// R/R
-	@Override
-	public WOActionResults invokeAction(WORequest request, WOContext context) {
-		WOActionResults invokeAction = super.invokeAction(request, context);
-		
-		return invokeAction;
-	}
 }
