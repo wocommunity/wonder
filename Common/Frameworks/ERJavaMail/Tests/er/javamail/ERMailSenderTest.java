@@ -11,8 +11,9 @@ import javax.mail.Transport;
 import javax.mail.URLName;
 import javax.mail.internet.AddressException;
 
+import er.extensions.foundation.ERXProperties;
+
 import junit.framework.TestCase;
-import er.extensions.ERXProperties;
 
 public class ERMailSenderTest extends TestCase {
 	public List<RelayInfo> relays() {
