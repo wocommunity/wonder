@@ -17,6 +17,7 @@ import com.webobjects.appserver._private.WOHyperlink;
 import com.webobjects.appserver._private.WONoContentElement;
 import com.webobjects.foundation.NSDictionary;
 
+import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXSession;
 import er.extensions.foundation.ERXProperties;
 
@@ -78,21 +79,24 @@ public class ERXHyperlink extends WOHyperlink {
         }
         return result;
     }
-    
+ 
     @Override
-    protected void _appendQueryStringToResponse(WOResponse woresponse, WOContext wocontext, boolean escape) {
-    	if(_href != null && _href.valueInComponent(wocontext.component()) != null && escape) {
+    public void appendAttributesToResponse(final WOResponse woresponse, WOContext wocontext) {
+    	if(!ERXApplication.isWO54() && _href != null && _href.valueInComponent(wocontext.component()) != null) {
     		// AK: for whatever reason, WO double-quotes the '&' when you use the HREF binding, 
     		// so you end up with x=1&amp;amp;y=2 instead of x=1&amp;y=2
     		// setting escape to false fixes this (one could argue the escape is needed in the first place)
-    		escape = false;
-    	}
-    	super._appendQueryStringToResponse(woresponse, wocontext, escape);
-    }
-    
-    @Override
-    public void appendAttributesToResponse(WOResponse woresponse, WOContext wocontext) {
-    	super.appendAttributesToResponse(woresponse, wocontext);
+    		// This is a pretty inefficient method, but at least it's correct
+    		WOResponse response = new WOResponse() {
+    			public void appendContentHTMLAttributeValue(String s) {
+    				super.appendContentString(s);
+    			}
+    		};
+			super.appendAttributesToResponse(response, wocontext);
+			woresponse.appendContentString(response.contentString());
+     	} else {
+        	super.appendAttributesToResponse(woresponse, wocontext);
+     	}
     	if(defaultNoFollow && _action != null) {
     		woresponse.appendContentString(" rel=\"nofollow\"");
     	}
