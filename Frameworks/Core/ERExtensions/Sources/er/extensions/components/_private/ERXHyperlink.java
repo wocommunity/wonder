@@ -37,7 +37,7 @@ import er.extensions.foundation.ERXProperties;
  * action inside of a hyperlink).  
  * </ul>
  * @author david Logging
- * @author ak WONoContentElement fix, senderID fix
+ * @author ak WONoContentElement fix, senderID fix, double-quote fix
  */
 public class ERXHyperlink extends WOHyperlink {
     
@@ -77,6 +77,17 @@ public class ERXHyperlink extends WOHyperlink {
         	ERXSession.anySession().setObjectForKey(this.toString(), "ERXActionLogging");
         }
         return result;
+    }
+    
+    @Override
+    protected void _appendQueryStringToResponse(WOResponse woresponse, WOContext wocontext, boolean escape) {
+    	if(_href != null && _href.valueInComponent(wocontext.component()) != null && escape) {
+    		// AK: for whatever reason, WO double-quotes the '&' when you use the HREF binding, 
+    		// so you end up with x=1&amp;amp;y=2 instead of x=1&amp;y=2
+    		// setting escape to false fixes this (one could argue the escape is needed in the first place)
+    		escape = false;
+    	}
+    	super._appendQueryStringToResponse(woresponse, wocontext, escape);
     }
     
     @Override
