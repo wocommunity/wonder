@@ -34,34 +34,36 @@ public class ERXDatabase extends EODatabase {
 
 		// AK: huge performance optimization when you use badly distributed LONG keys
 
-		_snapshots = new NSMutableDictionary() {
-			Map hashMap = new HashMap();
+		if(_snapshots instanceof NSMutableDictionary) {
+			_snapshots = new NSMutableDictionary() {
+				Map hashMap = new HashMap();
 
-			@Override
-			public Object objectForKey(Object key) {
-				return hashMap.get(key);
-			}
+				@Override
+				public Object objectForKey(Object key) {
+					return hashMap.get(key);
+				}
 
-			@Override
-			public void setObjectForKey(Object object, Object key) {
-				hashMap.put(key, object);
-			}
+				@Override
+				public void setObjectForKey(Object object, Object key) {
+					hashMap.put(key, object);
+				}
 
-			@Override
-			public Object removeObjectForKey(Object key) {
-				return hashMap.remove(key);
-			}
+				@Override
+				public Object removeObjectForKey(Object key) {
+					return hashMap.remove(key);
+				}
 
-			@Override
-			public NSDictionary immutableClone() {
-				return new NSDictionary(hashMap);
-			}
+				@Override
+				public NSDictionary immutableClone() {
+					return new NSDictionary(hashMap);
+				}
 
-			@Override
-			public NSArray allKeys() {
-				return new NSArray(hashMap.keySet());
-			}
-		};
+				@Override
+				public NSArray allKeys() {
+					return new NSArray(hashMap.keySet());
+				}
+			};
+		}
 	}
 
 	public ERXDatabase(EOModel model) {
