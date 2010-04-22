@@ -15,11 +15,13 @@ import java.util.Hashtable;
 import java.util.Iterator;
 
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
 
+import er.extensions.ERXExtensions;
 import er.extensions.eof.ERXConstant;
 
 /**
@@ -277,5 +279,42 @@ public class ERXKeyValueCodingUtilities {
     		}
     	}
     	return null;
+    }
+    
+    /**
+     * Works like takeValuesFromDictionary, except that it only calls takeValueForKey if the current value
+     * is different than the new value.
+     *
+     * @param object the object on which to operate
+     * @param dictionary the key-value pairs to set
+     */
+    public static void takeChangedValuesFromDictionary(Object object, NSDictionary dictionary) {
+        if (dictionary == null) {
+            return;
+        }
+
+        // do this check only once in the beginning instead of using NSKeyValueCoding.Utility below
+        NSKeyValueCoding keyValueCodingObject = (object instanceof NSKeyValueCoding) ? (NSKeyValueCoding)object : null;
+
+        NSArray keys = dictionary.allKeys();
+        int count = keys.count();
+        for (int i = 0; i < count; i++) {
+            String key = (String)keys.objectAtIndex(i);
+            Object value = dictionary.objectForKey(key);
+            if (value == NSKeyValueCoding.NullValue) {
+                value = null;
+            }
+
+            if (keyValueCodingObject != null) {
+                if (ERXExtensions.safeDifferent(value, keyValueCodingObject.valueForKey(key))) {
+                    keyValueCodingObject.takeValueForKey(value, key);
+                }
+            }
+            else {
+                if (ERXExtensions.safeDifferent(value, NSKeyValueCoding.DefaultImplementation.valueForKey(object, key))) {
+                    NSKeyValueCoding.DefaultImplementation.takeValueForKey(object, value, key);
+                }
+            }
+        }
     }
 }
