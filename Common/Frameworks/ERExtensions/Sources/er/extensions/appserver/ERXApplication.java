@@ -6,6 +6,36 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.appserver;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Random;
+import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+
+import org.apache.log4j.Appender;
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOAction;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
@@ -27,6 +57,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSLog;
@@ -39,7 +70,9 @@ import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSRange;
 import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation.NSTimestamp;
+
 import er.extensions.ERXExtensions;
 import er.extensions.ERXFrameworkPrincipal;
 import er.extensions.appserver.ajax.ERXAjaxApplication;
@@ -53,6 +86,7 @@ import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXDatabaseContextDelegate;
 import er.extensions.eof.ERXEC;
 import er.extensions.formatters.ERXFormatterFactory;
+import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXCompressionUtilities;
 import er.extensions.foundation.ERXConfigurationManager;
 import er.extensions.foundation.ERXPatcher;
@@ -62,22 +96,6 @@ import er.extensions.foundation.ERXThreadStorage;
 import er.extensions.foundation.ERXTimestampUtility;
 import er.extensions.localization.ERXLocalizer;
 import er.extensions.statistics.ERXStats;
-import org.apache.log4j.Appender;
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Logger;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Method;
-import java.math.BigDecimal;
-import java.net.MalformedURLException;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Random;
 
 /**
  * ERXApplication is the abstract superclass of WebObjects applications built
@@ -110,6 +128,11 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	public static final String LowMemoryNotification = "LowMemoryNotification";
 
 	/**
+ 	 * Notification to get posted when terminate() is called.
+ 	 */
+	public static final String ApplicationWillTerminateNotification = "ApplicationWillTerminateNotification";
+
+	/**
 	 * Buffer we reserve lowMemBufSize KB to release when we get an
 	 * OutOfMemoryError, so we can post our notification and do other stuff
 	 */
@@ -139,6 +162,11 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * principal was called
 	 */
 	public static final String ApplicationDidCreateNotification = "NSApplicationDidCreateNotification";
+
+	/**
+   	 * Notification to post when all application initialization processes are complete (including migrations) 
+   	 */
+  	public static final String ApplicationDidFinishInitializationNotification = "NSApplicationDidFinishInitializationNotification";
 
 	/**
 	 * ThreadLocal that designates that the given thread is currently
@@ -1138,7 +1166,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 		if (responseCompressionEnabled()) {
 			String contentType = response.headerForKey("content-type");
-			if (!"gzip".equals(response.headerForKey("content-encoding")) && (contentType != null) && (contentType.startsWith("text/") || contentType.equals("application/x-javascript"))) {
+			if (!"gzip".equals(response.headerForKey("content-encoding")) && (contentType != null) && (contentType.startsWith("text/") || responseCompressionTypes().containsObject(contentType))) {
 				String acceptEncoding = request.headerForKey("accept-encoding");
 				if ((acceptEncoding != null) && (acceptEncoding.toLowerCase().indexOf("gzip") != -1)) {
 					long start = System.currentTimeMillis();
@@ -1196,7 +1224,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 	@Override
 	public WOResponse createResponseInContext(WOContext context) {
-		WOResponse response = new ERXResponse();
+		WOResponse response = new ERXResponse(context);
 		return response;
 	}
 
@@ -1403,6 +1431,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	/** Overridden to check the sessions */
 	@Override
 	public WOSession restoreSessionWithID(String sessionID, WOContext wocontext) {
+		if(sessionID != null && ERXSession.session() != null && sessionID.equals(ERXSession.session().sessionID())) {
+			// AK: I have no idea how this can happen
+			throw new IllegalStateException("Trying to check out a session twice in one RR loop: " + sessionID);
+		}
 		WOSession session = null;
 		if (useSessionStoreDeadlockDetection()) {
 			SessionInfo sessionInfo = _sessions.get(sessionID);
@@ -1446,6 +1478,22 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			_responseCompressionEnabled = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXApplication.responseCompressionEnabled", false) ? Boolean.TRUE : Boolean.FALSE;
 		}
 		return _responseCompressionEnabled.booleanValue();
+	}
+
+	protected NSSet _responseCompressionTypes;
+	
+	/**
+	 * checks the value of
+	 * <code>er.extensions.ERXApplication.responseCompressionTypes</code> for
+	 * mime types that allow response compression in addition to text/* types.
+	 * The default is ("application/x-javascript")
+	 * @return an array of mime type strings
+	 */
+	public NSSet responseCompressionTypes() {
+		if(_responseCompressionTypes == null) {
+			_responseCompressionTypes = new NSSet(ERXProperties.arrayForKeyWithDefault("er.extensions.ERXApplication.responseCompressionTypes", new NSArray("application/x-javascript")));
+		}
+		return _responseCompressionTypes;
 	}
 
 	/**
@@ -1656,7 +1704,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			if (!sslAdaptorConfigured) {
 				NSMutableDictionary sslAdaptor = new NSMutableDictionary();
 				sslAdaptor.setObjectForKey(ERXSecureDefaultAdaptor.class.getName(), WOProperties._AdaptorKey);
-				sslAdaptor.setObjectForKey(sslHost(), WOProperties._HostKey);
+				String sslHost = sslHost();
+				if (sslHost != null) {
+					sslAdaptor.setObjectForKey(sslHost, WOProperties._HostKey);
+				}
 				sslAdaptor.setObjectForKey(Integer.valueOf(sslPort()), WOProperties._PortKey);
 				additionalAdaptors.addObject(sslAdaptor);
 			}
@@ -1787,5 +1838,22 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	public void clearDebugEnabledForAllComponents() {
 		_debugComponents.removeAllObjects();
+	}
+	
+	/**
+	 * Workaround for method missing in 5.3. Misnamed because static methods can't override client methods. 
+	 * @return the request handler key for ajax.
+	 */
+	public static String erAjaxRequestHandlerKey() {
+		return ERXApplication.isWO54() ? "ja": "ajax";
+	}
+	
+	/**
+	 * Sends out a ApplicationWillTerminateNotification before actually starting to terminate.
+	 */
+	@Override
+	public void terminate() {
+		NSNotificationCenter.defaultCenter().postNotification(ApplicationWillTerminateNotification, this);
+		super.terminate();
 	}
 }
