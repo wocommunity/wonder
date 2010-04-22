@@ -5,6 +5,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 
+import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.components.ERXNonSynchronizingComponent;
 import er.extensions.foundation.ERXStringUtilities;
 
@@ -65,6 +66,7 @@ public class ERMSubmitLink extends ERXNonSynchronizingComponent
 	public void appendToResponse(WOResponse response, WOContext context) {
 		// Check if the link is in a form so we know if we need to
 		// use the link and a hidden field to submit the form.
+		ERXResponseRewriter.addScriptResourceInHead(response, context, "ERModernDirectToWeb", "ermodernd2w.js");
 		_isInForm = context.isInForm();
 		super.appendToResponse(response, context);
 	}
@@ -104,8 +106,9 @@ public class ERMSubmitLink extends ERXNonSynchronizingComponent
 	 */
 	public String linkScript()
 	{
-		return ("javascript:hf=window.document.getElementById('" + fieldName()
-				+ "');hf.value='" + fieldName() + "';" + additionalFunction() + "hf.form.submit();");
+		String func = additionalFunction();
+		String addInFunction = (func.length() > 0) ? "', '" + func : ""; 
+		return ("javascript:ERMSL.submit('" + fieldName() + addInFunction + "');");
 	}
 	
 	public boolean dontSubmitForm() {
