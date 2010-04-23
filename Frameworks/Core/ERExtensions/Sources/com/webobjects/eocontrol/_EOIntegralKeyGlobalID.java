@@ -16,7 +16,7 @@ import com.webobjects.foundation._NSUtilities;
 public class _EOIntegralKeyGlobalID extends EOKeyGlobalID {
 
 	public static final Class _CLASS = _NSUtilities._classWithFullySpecifiedName("com.webobjects.eocontrol._EOIntegralKeyGlobalID");
-	static final long serialVersionUID = -958860546L;
+	static final long serialVersionUID = 8168566851552998142L;
 	private Number keyValue;
 	private static final String SerializationKeyValueFieldKey = "keyValue";
 	private static final ObjectStreamField serialPersistentFields[];
