@@ -1010,9 +1010,9 @@
             zipfile="${dist.base}/Wonder-src-${project.version}.tgz"/>
 
         <delete file="${dist.base}/Wonder-src-${project.version}.tar"/>
-        <zip destfile="${dist.base}/Wonder-${project.version}.zip"
+        <!-- zip destfile="${dist.base}/Wonder-${project.version}.zip"
             basedir="${dist.base}/Wonder-${project.version}"
-            excludes="**/CVS/*, **/dist/**" />
+            excludes="**/CVS/*, **/dist/**" / -->
     </target>
 
 
