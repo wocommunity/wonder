@@ -150,7 +150,7 @@
                    version="true"
                    use="true"
                    verbose="false"
-                   maxmemory="128m"
+                   maxmemory="512m"
                    windowtitle="Project Wonder Reference Documentation">
 
             <classpath refid="classpath"/>
@@ -195,7 +195,7 @@
                    author="true"
                    version="true"
                    verbose="false"
-                   maxmemory="128m">
+                   maxmemory="512m">
 
             <classpath refid="classpath"/>
             <sourcepath>
@@ -218,7 +218,7 @@
                    author="true"
                    version="true"
                    verbose="false"
-                   maxmemory="128m">
+                   maxmemory="512m">
 
             <classpath refid="classpath"/>
             <sourcepath>
