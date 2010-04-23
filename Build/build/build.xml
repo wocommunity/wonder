@@ -983,7 +983,7 @@
         <antcall target="all.run" >
             <param name="dist.base" value="${dist.base}" />
             <param name="project.version" value="${project.version}" />
-            <param name="dist.dir" value="${dist.base}/Wonder-${project.version}"/>
+            <param name="dist.dir" value="${dist.base}/wonder-${project.version}"/>
             <param name="build.action" value="dist" />
         </antcall>
 
@@ -1011,7 +1011,7 @@
 
         <delete file="${dist.base}/Wonder-src-${project.version}.tar"/>
         <!-- zip destfile="${dist.base}/Wonder-${project.version}.zip"
-            basedir="${dist.base}/Wonder-${project.version}"
+            basedir="${dist.base}/wonder-${project.version}"
             excludes="**/CVS/*, **/dist/**" / -->
     </target>
 
