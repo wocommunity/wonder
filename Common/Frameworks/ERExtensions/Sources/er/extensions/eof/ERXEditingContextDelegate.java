@@ -49,8 +49,8 @@ public class ERXEditingContextDelegate extends Object implements java.io.Seriali
             return true;
         }
         Object delegate=editingContext.delegate();
-        boolean _raiseOnMissingEditingContextDelegate = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXRaiseOnMissingEditingContextDelegate", true);
         if (delegate==null) {
+            boolean _raiseOnMissingEditingContextDelegate = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXRaiseOnMissingEditingContextDelegate", true);
             EOObjectStore parent = editingContext.parentObjectStore();
             if(!_raiseOnMissingEditingContextDelegate && parent != null && parent instanceof EOEditingContext) {
                 Object parentDelegate=((EOEditingContext)parent).delegate();
@@ -69,6 +69,7 @@ public class ERXEditingContextDelegate extends Object implements java.io.Seriali
             }
         }
         if (delegate!=null && !(delegate instanceof ERXEditingContextDelegate)) {
+            boolean _raiseOnMissingEditingContextDelegate = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXRaiseOnMissingEditingContextDelegate", true);
             if(!_raiseOnMissingEditingContextDelegate) {
                 log.warn("Found unexpected delegate class: "+delegate.getClass().getName());
                 return true;
