@@ -67,13 +67,19 @@ public class ERXThreadStorage {
     	);
     }
 
+    private static Boolean _useInheritableThreadLocal;
+    private static Boolean _logUsageOfProblematicInheritedValues;
+    
     /**
      * Checks the system property <code>er.extensions.ERXThreadStorage.useInheritableThreadLocal</code> 
      * to decide whether to use inheritable thread variables or not.
      * @return true if set (default)
      */
     private static boolean useInheritableThreadLocal() {
-    	return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXThreadStorage.useInheritableThreadLocal", true);
+    	if (_useInheritableThreadLocal == null) {
+    		_useInheritableThreadLocal = Boolean.valueOf(ERXProperties.booleanForKeyWithDefault("er.extensions.ERXThreadStorage.useInheritableThreadLocal", true));
+    	}
+    	return _useInheritableThreadLocal.booleanValue();
     }
     
     /**
@@ -83,7 +89,10 @@ public class ERXThreadStorage {
      * @return true if set (default)
      */
 	private static boolean logUsageOfProblematicInheritedValues() {
-		return useInheritableThreadLocal() && ERXProperties.booleanForKeyWithDefault("er.extensions.ERXThreadStorage.logUsageOfProblematicInheritedValues", true);
+    	if (_logUsageOfProblematicInheritedValues == null) {
+    		_logUsageOfProblematicInheritedValues = Boolean.valueOf(useInheritableThreadLocal() && ERXProperties.booleanForKeyWithDefault("er.extensions.ERXThreadStorage.logUsageOfProblematicInheritedValues", true));
+    	}
+    	return _logUsageOfProblematicInheritedValues.booleanValue();
 	}
     
     /** Holds the default initialization value of the hash map. */
