@@ -340,7 +340,7 @@ function calendar_update() {
     }
     else {
       styles = 'blank';
-      el.innerHTML = '&nbsp;';
+      el.innerHTML = '&#160;';
       el.onmouseover = null;
       el.onmouseout = null;
       el.onclick = null;
