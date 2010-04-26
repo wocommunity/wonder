@@ -227,7 +227,7 @@ const char *tmp();
  */
 #if	defined(SOLARIS) || defined(IRIX)
 #define	HAS_REENTRANT_GETHOSTENT
-#if defined(NSAPI) || defined(Apache)
+#if defined(NSAPI)
 #define	NEEDS_HSTRERR
 #endif
 #endif
