@@ -2168,7 +2168,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	@Override
 	public WOSession createSessionForRequest(WORequest worequest) {
 		WOSession wosession = super.createSessionForRequest(worequest);
-		if (useSessionStoreDeadlockDetection()) {
+		if (wosession != null && useSessionStoreDeadlockDetection()) {
 			_sessions.put(wosession.sessionID(), new SessionInfo(null));
 		}
 		return wosession;
