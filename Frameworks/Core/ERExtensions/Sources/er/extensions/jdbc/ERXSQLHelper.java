@@ -1817,10 +1817,24 @@ public class ERXSQLHelper {
 			NSMutableArray<String> columnNames = columnNamesFromColumnIndexes(columnIndexes);
 			return "ALTER TABLE " + tableName + " ADD CONSTRAINT \"" + indexName + "\" UNIQUE(" + new NSArray<String>(columnNames).componentsJoinedByString(", ") + ")";
 		}
-
+		
+		@Override
 		public String sqlForCreateIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
 			NSMutableArray<String> columnNames = columnNamesFromColumnIndexes(columnIndexes);
 			return "CREATE INDEX \""+indexName+"\" ON "+tableName+" ("+new NSArray<String>(columnNames).componentsJoinedByString(", ")+")";
+		}
+
+		/**
+		 * @see er.extensions.jdbc.ERXSQLHelper#sqlForGetNextValFromSequencedNamed(java.lang.String)
+		 */
+		@Override
+		protected String sqlForGetNextValFromSequencedNamed(String sequenceName) {
+			return "select NEXTVAL('" + sequenceName + "') as key"; 
+		}
+
+		@Override
+		public String sqlForRegularExpressionQuery(String key, String value) {
+			return key + " REGEXP " + value + "";
 		}
 		
 		@Override
