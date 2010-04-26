@@ -1808,6 +1808,11 @@ public class ERXSQLHelper {
 	public static class H2SQLHelper extends ERXSQLHelper {
 		
 		@Override
+		public String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
+			return sql + " LIMIT " + (end - start) + " OFFSET " + start;
+		}
+		
+		@Override
 		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
 			NSMutableArray<String> columnNames = columnNamesFromColumnIndexes(columnIndexes);
 			return "ALTER TABLE " + tableName + " ADD CONSTRAINT \"" + indexName + "\" UNIQUE(" + new NSArray<String>(columnNames).componentsJoinedByString(", ") + ")";
