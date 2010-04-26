@@ -326,6 +326,9 @@ WOInstanceHandle ac_findInstance(WOApp *app, char *number)
             }
          }
       }
+	  if((index == AC_INVALID_HANDLE) && (i == WA_MAX_APP_INSTANCE_COUNT)){
+         WOLog(WO_ERR, "ac_findInstance(): Error: An instance with number '%s' could not be found after searching %d instances.  In a properly operating deployment environment, this is an unlikely senario and should be investigated!", number, WA_MAX_APP_INSTANCE_COUNT);
+	  }
    }
    return index;
 }

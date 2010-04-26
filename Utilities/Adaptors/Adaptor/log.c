@@ -58,7 +58,7 @@ and limitations under the License.
 
 #if defined(Netscape)
 #include <frame/log.h>
-#elif defined(Apache)
+#elif defined(APACHE)
 #if	defined(mach)
 #include <hsregex.h>
 #endif	/* mach-regex */
@@ -213,6 +213,11 @@ void WOLog(int level, const char *format, ...)
          va_end(ap);
          fprintf(log,"\n");
          fclose(log);
+      }else{
+// TODO - figure out how to report this for other web servers
+#if defined(APACHE)
+         ap_log_error(APLOG_MARK, APLOG_ERR, 0, _webobjects_server, "Failed to append to log file '%s'.  This can occur when the file is not writable by the child httpd process.  A workaround is to change the ownership of the file to match the child httpd process.", logPath);
+#endif
       }
    }
 
@@ -220,7 +225,7 @@ void WOLog(int level, const char *format, ...)
    /*
     *	if the error is serious, include it into the server's log
     */
-#if	defined(Netscape) || defined(Apache) || defined(IIS)
+#if	defined(Netscape) || defined(APACHE) || defined(IIS)
    if (level == WO_ERR) {
       String *str;
       str = str_create(NULL, 128);
@@ -229,8 +234,8 @@ void WOLog(int level, const char *format, ...)
       va_end(ap);
 #if defined(Netscape)
       log_error(0,"WebObjects",NULL,NULL,str->text);
-#elif defined(Apache)
-      ap_log_error("WebObjects",0, APLOG_ERR, _webobjects_server, str->text);
+#elif defined(APACHE)
+      ap_log_error(APLOG_MARK, APLOG_ERR, 0, _webobjects_server, str->text);
 #elif defined(IIS)
       /*
        *	again, we're stymied because we don't have a ptr to the

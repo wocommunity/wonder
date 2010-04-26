@@ -480,6 +480,18 @@ static HTTPResponse *_collectRequestInformation(WOAppReq *app, WOURLComponents *
                 memcpy(app->instance, instid, len);
                 app->instance[len] = 0;
              }
+
+			 // remove any quotes from the instance number
+			 char *before, *after;
+			 before = after = app->instance;
+			 while(*before){
+			 	if((*before == '\'') || (*before == '"')){
+					before++;
+				}
+				*after++ = *before++;
+			}
+			*after = 0;
+
              WOLog(WO_INFO,"Cookie instance %s from %s",app->instance,cookie);
           }
        }
