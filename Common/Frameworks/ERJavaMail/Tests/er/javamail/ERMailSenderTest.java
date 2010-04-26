@@ -12,7 +12,7 @@ import javax.mail.URLName;
 import javax.mail.internet.AddressException;
 
 import junit.framework.TestCase;
-import er.extensions.ERXProperties;
+import er.extensions.foundation.ERXProperties;
 
 public class ERMailSenderTest extends TestCase {
 	public List<RelayInfo> relays() {
