@@ -6,8 +6,13 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.corebusinesslogic;
 
+import java.util.Collections;
+import java.util.Map;
+import java.util.WeakHashMap;
+
 import org.apache.log4j.Logger;
 
+import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSNotification;
@@ -17,12 +22,9 @@ import com.webobjects.foundation.NSTimestamp;
 
 import er.extensions.ERXExtensions;
 import er.extensions.eof.ERXGenericRecord;
+import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXRetainer;
 import er.extensions.foundation.ERXSelectorUtilities;
-
-import java.util.Collections;
-import java.util.Map;
-import java.util.WeakHashMap;
 
 /**
  * EO subclass that has a timestamp with its creation date, the most recent modification, 
@@ -109,8 +111,32 @@ public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
         touch();
     }
 
+    private static Boolean _touchReadOnlyEntities;
     
+    /**
+     * Returns whether or not read-only entities should be touched. This setting is only here in case there is a performance
+     * issue introduced by looking up the entity() in touch(), so we can roll it back out.
+     * 
+     * @return whether or not read-only entities should be touched (defaults to false)
+     * @property er.corebusinesslogic.ERCStampedEnterpriseObject.touchReadOnlyEntities
+     */
+    protected static boolean touchReadOnlyEntities() {
+        if (_touchReadOnlyEntities == null) {
+            // MS: don't worry about double-null check this-and-that .. it's a Boolean, so no constructor and worst case we double-check a property 
+            _touchReadOnlyEntities = ERXProperties.booleanForKeyWithDefault("er.corebusinesslogic.ERCStampedEnterpriseObject.touchReadOnlyEntities", false);
+        }
+        return _touchReadOnlyEntities;
+    }
+
     private void touch() {
+        // MS: Don't touch read-only entities -- that's just rude.
+        if (!ERCStampedEnterpriseObject.touchReadOnlyEntities()) {
+            EOEntity entity = entity();
+            if (entity != null && entity.isReadOnly()) {
+                return;
+            }
+        }
+
         NSTimestamp date;
         EOEditingContext editingContext = editingContext();
 
