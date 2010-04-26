@@ -21,7 +21,6 @@ import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSSet;
 
 import er.extensions.appserver.ERXApplication;
-import er.extensions.appserver.ERXWOContext;
 import er.extensions.concurrency.ERXCloneableThreadLocal;
 import er.extensions.eof.ERXEOControlUtilities;
 /**
@@ -48,6 +47,9 @@ public class ERXThreadStorage {
     /** Holds the single instance of the thread map. */
     private static ThreadLocal threadMap;
     
+    private static Boolean _useInheritableThreadLocal;
+    private static Boolean _logUsageOfProblematicInheritedValues;
+
     static {
     	if(useInheritableThreadLocal()) {
     		threadMap = new ERXThreadStorageCloneableThreadLocal();
@@ -78,7 +80,10 @@ public class ERXThreadStorage {
      * @return true if set (default)
      */
     private static boolean useInheritableThreadLocal() {
-    	return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXThreadStorage.useInheritableThreadLocal", true);
+    	if (_useInheritableThreadLocal == null) {
+    		_useInheritableThreadLocal = Boolean.valueOf(ERXProperties.booleanForKeyWithDefault("er.extensions.ERXThreadStorage.useInheritableThreadLocal", true));
+    	}
+    	return _useInheritableThreadLocal.booleanValue();
     }
     
     /**
@@ -88,8 +93,11 @@ public class ERXThreadStorage {
      * @return true if set (default)
      */
 	private static boolean logUsageOfProblematicInheritedValues() {
-		boolean devMode = ERXApplication.isDevelopmentModeSafe();
-		return useInheritableThreadLocal() && ERXProperties.booleanForKeyWithDefault("er.extensions.ERXThreadStorage.logUsageOfProblematicInheritedValues", devMode);
+		if (_logUsageOfProblematicInheritedValues == null) {
+			boolean devMode = ERXApplication.isDevelopmentModeSafe();
+			_logUsageOfProblematicInheritedValues = Boolean.valueOf(useInheritableThreadLocal() && ERXProperties.booleanForKeyWithDefault("er.extensions.ERXThreadStorage.logUsageOfProblematicInheritedValues", devMode));
+		}
+		return _logUsageOfProblematicInheritedValues.booleanValue();
 	}
     
     /** Holds the default initialization value of the hash map. */
