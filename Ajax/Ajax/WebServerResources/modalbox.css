@@ -1,10 +1,13 @@
 #MB_overlay {
 	position: absolute;
 	margin: auto;
-	top: 0;	left: 0;
-	width: 100%; height: 100%;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 	z-index: 9999;
-	background-color: #000!important;
+	border: 0;
+	background-color: #000 !important;
 }
 #MB_overlay[id] { position: fixed; }
 
@@ -15,7 +18,7 @@
 	text-align: left;
 	z-index: 10000;
 }
-#MB_window[id] { position: fixed!important; }
+#MB_window[id] { position: fixed !important; }
 
 #MB_frame {
 	position: relative;
@@ -29,6 +32,7 @@
 }
 
 #MB_content {
+	position: relative;
 	padding: 6px .75em;
 	overflow: auto;
 }
@@ -44,7 +48,8 @@
 #MB_close {
 	display: block;
 	position: absolute;
-	right: 5px; top: 4px;
+	right: 5px;
+	top: 4px;
 	padding: 2px 3px;
 	font-weight: bold;
 	text-decoration: none;
@@ -61,28 +66,35 @@
 }
 
 /* Color scheme */
-#MB_frame {
-	padding-bottom: 7px;
-	-webkit-border-radius: 7px; 
-	-moz-border-radius: 7px;
-	border-radius: 7px;
-}
 #MB_window {
 	background-color: #EFEFEF;
 	color: #000;
-	-webkit-box-shadow: 0 8px 64px #000; 
-	-moz-box-shadow: 0 0 64px #000; 
+
+	-webkit-box-shadow: 0 0 64px #000; 
+	-moz-box-shadow: #000 0 0 64px; 
 	box-shadow: 0 0 64px #000;
-	
-	-webkit-border-radius: 7px; 
-	-moz-border-radius: 7px;
-	border-radius: 7px;
 }
+
+#MB_frame {
+	padding-bottom: 4px;
+
+	-webkit-border-bottom-left-radius: 4px;
+	-webkit-border-bottom-right-radius: 4px;
+
+	-moz-border-radius-bottomleft: 4px;
+	-moz-border-radius-bottomright: 4px;
+
+	border-bottom-left-radius: 4px;
+	border-bottom-right-radius: 4px;
+}
+	
 #MB_content { border-top: 1px solid #F9F9F9; }
+
 #MB_header {
   background-color: #DDD;
   border-bottom: 1px solid #CCC;
 }
+
 #MB_caption { color: #000 }
 #MB_close { color: #777 }
 #MB_close:hover { color: #000 }
