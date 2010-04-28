@@ -677,6 +677,16 @@
             <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax/YUI" />
         </antcall>
     </target>
+    
+    <target name="ERJQuery.all">
+        <antcall target="global.framework.${build.action}" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="ERJQuery" />
+            <param name="project.dir" value="Frameworks/Ajax/ERJQuery" />
+            <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}" />
+        </antcall>
+    </target>
 
     <target name="ERPrototaculous.all">
         <antcall target="global.framework.${build.action}" >
@@ -706,7 +716,7 @@
             <param name="project.dir" value="Examples/Ajax/ERDivaLookExample" />
 
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax/ERDivaLook/ERPrototaculous/DerbyPlugIn/ERMoviesLogic" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax/ERDivaLook/ERPrototaculous/H2PlugIn/ERMoviesLogic" />
         </antcall>
     </target>
 
@@ -716,7 +726,7 @@
             <param name="project.name" value="ERDivaliteLook" />
             <param name="project.dir" value="Frameworks/Misc/ERDivaliteLook" />
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax/ERAttachment" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/ERAttachment" />
         </antcall>
     </target>
 
@@ -728,7 +738,7 @@
             <param name="project.dir" value="Examples/D2W/ERDivaliteExample" />
 
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax/ERDivaLook/ERPrototaculous/DerbyPlugIn/ERMoviesLogic" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/ERDivaliteLook/H2PlugIn/ERMoviesLogic" />
         </antcall>
     </target>
     
@@ -950,7 +960,7 @@
 
     <target name="excelgeneration.frameworks.all" depends="ExcelGenerator.all" />
 
-    <target name="ajax.frameworks.all" depends="Ajax.all, YUI.all, AjaxLook.all, ERIUI.all, GoogleChart.all, ERPrototaculous.all, ERDivaLook.all, ERModernDirectToWeb.all, ERModernLook.all, ERModernDefaultSkin.all" />
+    <target name="ajax.frameworks.all" depends="Ajax.all, YUI.all, AjaxLook.all, ERIUI.all, GoogleChart.all, ERJQuery.all, ERPrototaculous.all, ERDivaLook.all, ERModernDirectToWeb.all, ERModernLook.all, ERModernDefaultSkin.all" />
     <target name="ajax.examples.all" depends="AjaxExample.all, AjaxExample2.all, YUIExample.all, AjaxLookExample.all, ERIUIExample.all, ERDivaLookExample.all, ERModernMoviesDemo.all" />
 
     <target name="plugins.all" depends="PostgresqlPlugIn.all,FrontBasePlugIn.all,DerbyPlugIn.all,EROraclePlugIn.all,H2PlugIn.all" />
