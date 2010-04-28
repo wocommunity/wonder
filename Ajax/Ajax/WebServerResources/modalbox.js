@@ -45,18 +45,20 @@ Modalbox.Methods = {
 		aspnet: false // Should be true when using with ASP.NET controls. When true Modalbox window will be injected into the first form element.
 	},
 	_options: {},
-	_initOptions: {}, // TC Added - Keep the initialization options around
+	_initOptions: {}, // TC Added - Keep the initialization options around.
 	
 	setOptions: function(options) {
 		// locked implies the overlay is also deactivated
 		if (options.locked) {
 			options.overlayClose = false;
 		}
-		Object.extend(this._initOptions, options || {});
 		Object.extend(this.options, options || {});
 	},
 	
 	_init: function(options) {
+		// TC Added - Save the initial options.
+		Object.extend(this._initOptions, options || {});
+		
 		// Setting up original options with default options
 		Object.extend(this._options, this.options);
 		this.setOptions(options);
