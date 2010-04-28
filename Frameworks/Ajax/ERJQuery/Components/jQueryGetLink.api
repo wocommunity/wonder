@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="jQueryGetLink.java" wocomponentcontent="false">
+
+        <binding defaults="Actions" name="action"/>
+        <binding defaults="Direct Actions" name="directActionName"/>
+        <binding name="callback"/>
+    </wo>
+</wodefinitions>

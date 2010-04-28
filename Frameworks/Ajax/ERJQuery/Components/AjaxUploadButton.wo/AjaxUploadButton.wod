@@ -1,0 +1,10 @@
+FileInput: WOGenericElement {
+	elementName = "input";
+	type = "file"; 
+	id = id;
+	name = uploadName;
+}
+
+String: WOString {
+	value = script;
+}
