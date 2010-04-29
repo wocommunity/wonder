@@ -4,15 +4,17 @@
 //
 // Created by travis on Tue Feb 12 2002
 //
+package er.wopaypal;
 
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import er.wopaypal.*;
 
 /**
- *  The PayPalNotificationLogger class is simply an example of a delegate for the PayPalNotificationListener class.  In reality, a delegate can implement any or all of these methods from the PayPalNotificationListener.Delegate interface, and use whatever custom logic fits the need.  Examples would be logging the transactions to a database, a file, etc.
+ * The PayPalNotificationLogger class is simply an example of a delegate for the PayPalNotificationListener class.  In
+ * reality, a delegate can implement any or all of these methods from the PayPalNotificationListener.Delegate interface,
+ * and use whatever custom logic fits the need.  Examples would be logging the transactions to a database, a file, etc.
  */
-
 public class PayPalNotificationLogger {
 
     /** Constructor.
@@ -20,7 +22,6 @@ public class PayPalNotificationLogger {
     public PayPalNotificationLogger() {
         super();
     }
-
 
     public void processDeniedPaypalTransaction(WORequest aRequest) {
         NSLog.out.appendln("PaypalNotificationLogger: Denied Paypal transaction: " + aRequest.formValueForKey("txn_id"));
@@ -41,6 +42,5 @@ public class PayPalNotificationLogger {
     public void processValidPaypalTransaction(WORequest aRequest) {
         NSLog.out.appendln("PaypalNotificationLogger: Valid Paypal transaction: " + aRequest.formValueForKey("txn_id"));
     }
-
 
 }
