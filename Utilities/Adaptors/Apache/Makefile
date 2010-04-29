@@ -15,6 +15,10 @@ CFLAGS += -Wall ${RC_CFLAGS}
 LDARCHS = $(patsubst %, -arch %, ${RC_ARCHS})
 LDFLAGS +=${OPENSSL_LIB_FLAGS} ${LDARCHS}
 STRIP_FLAGS = -S
+
+# Include the Apache headers - Adjust as required.
+CFLAGS += -I/usr/include/httpd
+
 endif
 
 ifeq "SOLARIS" "${OS}"
