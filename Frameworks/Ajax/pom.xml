@@ -14,8 +14,9 @@
 		<module>AjaxLook</module>
 		<module>ERDivaLook</module>
 		<module>ERIUI</module>
-		<module>GoogleChart</module>
+		<module>ERJQuery</module>
 		<module>ERPrototaculous</module>
+		<module>GoogleChart</module>
 		<module>YUI</module>
 	</modules>
 </project>
