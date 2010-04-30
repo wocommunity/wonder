@@ -16,7 +16,12 @@
         </validation>
     
         <binding name="accesskey"/>
-    <binding name="elementName"/>
-    <binding name="initiallyExpanded"/>
+        <binding name="elementName"/>
+        <binding name="initiallyExpanded"/>
+
+        <binding name="onLoading"/>
+        <binding name="onComplete"/>
+        <binding name="onFailure"/>
+        <binding name="onSuccess"/>
     </wo>
 </wodefinitions>
