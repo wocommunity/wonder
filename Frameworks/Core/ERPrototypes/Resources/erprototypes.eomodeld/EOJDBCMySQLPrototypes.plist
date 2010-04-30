@@ -9,7 +9,12 @@
             valueClassName = NSDecimalNumber; 
             valueType = B; 
         }, 
-        {columnName = ""; externalType = BLOB; name = blob; valueClassName = NSData; }, 
+        {
+            columnName = ""; 
+            externalType = LONGBLOB; 
+            name = blob; 
+            valueClassName = NSData; 
+        }, 
         {
             adaptorValueConversionMethodName = toString; 
             columnName = ""; 
