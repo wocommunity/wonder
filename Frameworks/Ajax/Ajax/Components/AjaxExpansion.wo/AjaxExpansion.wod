@@ -7,6 +7,10 @@ ToggleLink : AjaxUpdateLink {
   class = linkClass;
   accesskey = ^accesskey;
   elementName = ^elementName;
+  onLoading = ^onLoading;
+  onComplete = ^onComplete;
+  onFailure = ^onFailure;
+  onSuccess = ^onSuccess;
 }
 
 AjaxUpdateContainer : AjaxUpdateContainer {
