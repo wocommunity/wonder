@@ -30,9 +30,16 @@ import er.extensions.appserver.ERXWOContext;
  * @binding expanded optionally allows controlling the expansion state of the contents
  * @binding initiallyExpanded optionally allows controlling the initial expansion state when the "expanded" binding is NOT used
  * @binding string the string displayed for the link. For something fancier than a plain string, see above.
+ * @binding openedLabel the string to display when expanded.  An alternative to the 'string' binding.
+ * @binding closedLabel the string to display when not expanded.  An alternative to the 'string' binding.
  * @binding insertion the insertion effect (see AjaxUpdateLink)
  * @binding insertionDuration the insertion effect duration (see AjaxUpdateLink)
  * @binding action the action to fire when the contents are expanded
+ * @binding onLoading JavaScript function to evaluate when the update request begins
+ * @binding onComplete JavaScript function to evaluate when the update request has finished.
+ * @binding onSuccess JavaScript function to evaluate when the update request was successful.
+ * @binding onFailure JavaScript function to evaluate when the update request has failed.
+ * @binding onException JavaScript function to evaluate when the update request had errors.
  * @binding accesskey hot key that should toggle the expansion (optional)
  */
 public class AjaxExpansion extends AjaxComponent {
@@ -80,9 +87,16 @@ public class AjaxExpansion extends AjaxComponent {
 	}
 
 	public String string() {
-		String string = (String) valueForBinding("string", "Options");
-		return string;
-	}
+        String string = (String) valueForBinding("string");
+        if (null == string) {
+            if (isExpanded()) {
+                string = (String)valueForBinding("openedLabel", "Close");
+            } else {
+                string = (String)valueForBinding("closedLabel", "Open");
+            }
+        }
+        return string;
+    }
 
 	protected void addRequiredWebResources(WOResponse response) {
 		addScriptResourceInHead(response, "prototype.js");
