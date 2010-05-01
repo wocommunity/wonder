@@ -1,0 +1,117 @@
+{
+	components = {
+		ERMDAjaxDatePicker = {
+			editors = (
+				"datePickerDragDisabled",
+				datePickerCssFile,
+				"datePickerCssFramework",
+				"datePickerConstrainSelection",
+				"datePickerFillGrid",
+				"datePickerFinalOpacity",
+				"datePickerDisabledDays",
+				"datePickerDisabledDates",
+				"datePickerEnabledDates",
+				"datePickerHighlightDays",
+				"datePickerNoFadeEffect",
+				"datePickerNoTodayButton",
+				"datePickerRangeLow",
+				"datePickerRangeHigh",
+			);
+			"inspectionInformation" = "Modern skinnable javascript date picker";
+		};
+	};
+	editors = {
+		"datePickerDragDisabled" = {
+			class = "com.apple.client.directtoweb.CheckboxComponentConfigurationPanel";
+			editingFor = property;
+			title = "Date Picker Drag is Disabled";
+			type = boolean;
+		};
+		"datePickerCssFile" = {
+			class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel";
+			editingFor = property;
+			inputSize = 20;
+			title = "Name of alternate Date Picker CSS file";
+			type = stringEmptyIsNull;
+		};
+		"datePickerCssFramework" = {
+			class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel";
+			editingFor = property;
+			title = "Name of alertnate Date Picker CSS file framework";
+			type = stringEmptyIsNull;
+		};
+		"datePickerConstrainSelection" = {
+			class = "com.apple.client.directtoweb.CheckboxComponentConfigurationPanel";
+			editingFor = property;
+			title = "Constrain selection in Date Picker to current month (use with fillGrid)";
+			type = boolean;
+		};
+		datePickerFillGrid = {
+            class = "com.apple.client.directtoweb.CheckboxComponentConfigurationPanel";
+            editingFor = property; 
+            title = "Fill complete Date Picker grid, not just current month"; 
+            type = boolean; 
+        }; 
+        datePickerFinalOpacity = {
+            class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
+            editingFor = property; 
+            inputSize = 3; 
+            title = "Date Picker overlay final opacity (values: 20 - 100)"; 
+            type = stringEmptyIsNull; 
+        }; 
+		datePickerDisabledDays = {
+            class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
+            editingFor = property; 
+            inputSize = 20; 
+            title = "Disabled Date Picker days of the week (format: [1,1,0,0,0,0,0])"; 
+            type = stringEmptyIsNull; 
+        }; 
+        datePickerDisabledDates = {
+            class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
+            editingFor = property; 
+            inputSize = 30; 
+            title = "Range of Date Picker disabled dates (YYYYMMDD:YYYYMMDD or YYYYMMDD if single date)"; 
+            type = stringEmptyIsNull; 
+        }; 
+        datePickerEnabledDates = {
+            class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
+            editingFor = property; 
+            inputSize = 30; 
+            title = "Range of Date Picker enabled dates (YYYYMMDD:YYYYMMDD or YYYYMMDD if single date)"; 
+            type = stringEmptyIsNull; 
+        }; 
+    	datePickerHighlightDays = {
+            class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
+            editingFor = property; 
+            inputSize = 20; 
+            title = "Highlighted Date Picker days of the week (format: [1,1,0,0,0,0,0])"; 
+            type = stringEmptyIsNull; 
+        }; 
+        datePickerNoFadeEffect = {
+        	class = "com.apple.client.directtoweb.CheckboxComponentConfigurationPanel";
+        	editingFor = property; 
+            title = "Disable show-hide animation"; 
+            type = boolean; 
+        };
+        datePickerNoTodayButton = {
+            class = "com.apple.client.directtoweb.CheckboxComponentConfigurationPanel";
+            editingFor = property; 
+            title = "Hide Date Picker 'Today' button"; 
+            type = boolean; 
+        }; 
+        datePickerRangeLow = {
+            class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
+            editingFor = property; 
+            inputSize = 30; 
+            title = "Specifies the earliest selectable date (YYYYMMDD)"; 
+            type = stringEmptyIsNull; 
+        };  
+        datePickerRangeHigh = {
+            class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
+            editingFor = property; 
+            inputSize = 30; 
+            title = "Specifies the latest selectable date (YYYYMMDD)"; 
+            type = stringEmptyIsNull; 
+        }; 
+	};
+}

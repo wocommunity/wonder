@@ -6,11 +6,12 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.pages.templates;
 import com.webobjects.appserver.WOContext;
+
 import er.directtoweb.pages.ERD2WEditableListPage;
 
 /**
  * List page for editing all items in the list.<br />
- * See {@link er.directtoweb.pages.ERD2WEditableListPage}
+ * See {@link ERD2WEditableListPage}
  * 
  * @binding backAction
  * @binding dataSource
@@ -23,8 +24,15 @@ import er.directtoweb.pages.ERD2WEditableListPage;
  * @binding nextPage
  * @binding object
  * @binding showCancel
+ * @d2wKey formEncoding
+ * @d2wKey emptyListComponentName
+ * @d2wKey repetitionComponentName
+ * @d2wKey backgroundColorForTable
+ * @d2wKey displayNameForEntity
+ * @d2wKey textColor
+ * @d2wKey pageWrapperName
+ * @d2wKey showBanner
  */
-
 public class ERD2WEditableListTemplate extends ERD2WEditableListPage {
 
     public ERD2WEditableListTemplate(WOContext context) {super(context);}

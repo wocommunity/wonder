@@ -7,14 +7,22 @@ import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
+import er.directtoweb.ERD2WContainer;
+import er.extensions.foundation.ERXArrayUtilities;
+
 /**
- * Class for DirectToWeb Component ERDListPageRepetition.
+ * Can be used as a repetition in list pages.
  *
- * @binding sample sample binding explanation
- * @d2wKey sample sample d2w key
- *
- * @created ak on Mon Sep 01 2003
+ * @author ak on Mon Sep 01 2003
  * @project ERDirectToWeb
+ * @d2wKey componentName
+ * @d2wKey object
+ * @d2wKey extraListComponentName
+ * @d2wKey justification
+ * @d2wKey displayNameForProperty
+ * @d2wKey sortKeyForList
+ * @d2wKey sortCaseInsensitive
+ * @d2wKey propertyIsSortable 
  */
 public class ERDListPageRepetition extends ERDAttributeRepetition {
 
@@ -22,6 +30,8 @@ public class ERDListPageRepetition extends ERDAttributeRepetition {
     private static final Logger log = Logger.getLogger(ERDListPageRepetition.class);
 
     protected static final NSDictionary NO_ACTIONS = NSDictionary.EmptyDictionary;
+    
+    public int rowIndex;
     
     /**
      * Public constructor
@@ -41,9 +51,33 @@ public class ERDListPageRepetition extends ERDAttributeRepetition {
         NSDictionary actions = (NSDictionary)valueForBinding("actions");
         return actions == null ? NO_ACTIONS : actions;
     }
+    
+    public NSArray sectionsContents() {
+    	NSArray result = super.sectionsContents();
+    	if(result.count() == 1) {
+    		return result;
+    	}
+        if(result.count() == 0) {
+            return NSArray.EmptyArray;
+        }
+        ERD2WContainer pair = (ERD2WContainer) result.objectAtIndex(0);
+    	return (NSArray) new NSArray(pair);
+    }
+    
+    public NSArray itemSectionsContents() {
+    	NSArray result = super.sectionsContents();
+    	if(result.count() == 1) {
+    		return NSArray.EmptyArray;
+    	}
+    	return ERXArrayUtilities.arrayByRemovingFirstObject(result);
+    }
 
     public NSArray leftActions() {
         return (NSArray)actions().objectForKey("left");
+    }
+
+    public NSArray centerActions() {
+        return (NSArray)actions().objectForKey("center");
     }
 
     public NSArray rightActions() {
@@ -56,5 +90,13 @@ public class ERDListPageRepetition extends ERDAttributeRepetition {
 
     public boolean isListEmpty() {
         return displayGroup().allObjects().count() == 0;
+    }
+    
+    public String rowClass() {
+    	return "AttributeRow" + (rowIndex % 2);
+    }
+    
+    public int displayPropertyKeyCount() {
+     	return ((ERD2WContainer)sectionsContents().objectAtIndex(0)).keys.count();
     }
 }

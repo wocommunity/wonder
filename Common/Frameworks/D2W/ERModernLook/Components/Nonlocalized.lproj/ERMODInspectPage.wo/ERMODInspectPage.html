@@ -1,0 +1,46 @@
+<webobject name = "PageWrapper">
+  <webobject name = "RequiredWrapper">
+      <webobject name = "ShowTopActionBlock">
+        <webobject name = "TopActionBlock">
+          <ul class = "ActionList">
+            <webobject name = "IsEditingConditional">
+              <li><webobject name = "CancelButton" /></li>
+              <li><webobject name = "SubmitChanges" /></li>
+            </webobject>
+            <webobject name = "IsNotEditingConditional">
+              <webobject name = "ShowCancel">
+                <li><webobject name = "ReturnButton" /></li>
+              </webobject>
+              <webobject name = "IsObjectEditable">
+                <li><webobject name = "EditButton" /></li>
+              </webobject>
+            </webobject>
+          </ul>
+          <webobject name = "SecondaryActionBlock" />
+        </webobject>
+      </webobject>
+      <webobject name = "InnerWrapper">
+        <webobject name = "ErrorBlock"/>
+        <webobject name = "InspectPageRepetition" />
+      </webobject><div class="InnerClear"></div>
+      <webobject name = "ShowBottomActionBlock">
+        <webobject name = "BottomActionBlock">
+          <ul class = "ActionList">
+            <webobject name = "IsEditingConditional">
+                <li><webobject name = "CancelButton" /></li>
+                <li><webobject name = "SubmitChanges" /></li>
+            </webobject>
+            <webobject name = "IsNotEditingConditional">
+              <webobject name = "ShowCancel">
+                <li><webobject name = "ReturnButton" /></li>
+              </webobject>
+              <webobject name = "IsObjectEditable">
+                <li><webobject name = "EditButton" /></li>
+              </webobject>
+            </webobject>
+          </ul>
+          <webobject name = "SecondaryActionBlock" />
+        </webobject>
+      </webobject>
+    </webobject>
+</webobject>

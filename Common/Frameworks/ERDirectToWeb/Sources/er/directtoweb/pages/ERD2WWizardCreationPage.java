@@ -16,17 +16,17 @@ import com.webobjects.directtoweb.D2W;
 import com.webobjects.directtoweb.EditPageInterface;
 import com.webobjects.directtoweb.InspectPageInterface;
 import com.webobjects.directtoweb.NextPageDelegate;
-import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotificationCenter;
 
 import er.directtoweb.ERD2WContainer;
 import er.directtoweb.ERD2WFactory;
 import er.directtoweb.delegates.ERDPageDelegate;
-import er.directtoweb.pages.templates.ERD2WWizardCreationPageTemplate;
 import er.extensions.eof.ERXEOControlUtilities;
-import er.extensions.logging.ERXLogger;
 
+/**
+ * @d2wKey cancelMessage
+ */
 public class ERD2WWizardCreationPage extends ERD2WTabInspectPage {
 
     /** logging support */
@@ -35,9 +35,6 @@ public class ERD2WWizardCreationPage extends ERD2WTabInspectPage {
     // Notification titles
     // FIXME: This is silly now that we have validationKeys.  Once all referenecs are removed will delete.
     public final static String WILL_GOTO_NEXT_PAGE = "willGotoNextPage";
-    private Object _dummy;
-    private NSArray _subList; // used by the grouping repetition
-    private Object section;
     protected int _currentStep=1;
 
     public ERD2WWizardCreationPage(WOContext context) {
@@ -52,7 +49,7 @@ public class ERD2WWizardCreationPage extends ERD2WTabInspectPage {
 
     public WOComponent nextStep() {
         // FIXME: This is no longer needed.  We now have validationKeys that will serve the same purpose.
-        NSNotificationCenter.defaultCenter().postNotification(ERD2WWizardCreationPageTemplate.WILL_GOTO_NEXT_PAGE, null);
+        NSNotificationCenter.defaultCenter().postNotification(ERD2WWizardCreationPage.WILL_GOTO_NEXT_PAGE, null);
         if (errorMessages.count()==0 && _currentStep < tabSectionsContents().count())
             _currentStep++;
         return null;
@@ -87,16 +84,10 @@ public class ERD2WWizardCreationPage extends ERD2WTabInspectPage {
      }
      */
     public WOComponent printerFriendlyVersion() {
-        WOComponent result= ERD2WFactory.erFactory().printerFriendlyPageForD2WContext(d2wContext(),session());
+        WOComponent result=ERD2WFactory.erFactory().printerFriendlyPageForD2WContext(d2wContext(),session());
         ((EditPageInterface)result).setObject(object());
         return result;
     }
-
-    public String tabScriptString() {
-        return "var elem = document.EditForm.elements[0];"+
-        "if (elem!=null && (elem.type == 'text' || elem.type ==  'area')) elem.focus();";
-    }
-
 
     public WOComponent cancelAction() {
         WOComponent result=null;

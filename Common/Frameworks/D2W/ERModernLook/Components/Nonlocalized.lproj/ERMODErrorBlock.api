@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERMODErrorBlock" wocomponentcontent="false">    <binding name="errorMessages"/>
+        <validation message="'errorMessages' is a required binding.">
+            <unbound name="errorMessages"/>
+        </validation>
+        <binding name="errorMessage"/>
+        <validation message="'errorMessage' is a required binding.">
+            <unbound name="errorMessage"/>
+        </validation>
+        <binding name="d2wContext"/>
+        <validation message="'d2wContext' is a required binding.">
+            <unbound name="d2wContext"/>
+        </validation>
+        
+    </wo>
+</wodefinitions>

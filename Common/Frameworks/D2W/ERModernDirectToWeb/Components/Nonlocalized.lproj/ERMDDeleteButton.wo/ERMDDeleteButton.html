@@ -1,0 +1,28 @@
+<webobject name = "CanDelete">
+  <webobject name = "NotUseAjax">
+    <webobject name = "StandardDeleteButton"><span><webobject name = "DeleteButtonLabel" /></span> </webobject>
+  </webobject>
+  <webobject name = "UseAjax">
+    <webobject name = "ButtonUpdateContainer">
+      <webobject name = "NotShowDialog">
+        <webobject name = "ShowDialogButton"><span><webobject name = "DeleteButtonLabel" /></span></webobject>
+      </webobject>
+      <webobject name = "ShowDialog">
+        <webobject name = "DisabledDeleteButton"><span><webobject name = "DeleteButtonLabel" /></span></webobject>
+        <div class = "Dialog RemoveDialog">
+          <p><webobject name = "DialogMessage" /></p>
+          <ul class = "DialogActionList DialogObjActionList">
+            <li><webobject name = "CancelButton"><span><webobject name = "CancelButtonLabel" /></span></webobject></li>
+            <li><webobject name = "DeleteButton"><span><webobject name = "DeleteButtonLabel" /></span></webobject>
+            </li>
+          </ul>
+        </div>
+      </webobject>
+    </webobject>
+  </webobject>
+</webobject>
+<webobject name = "NotCanDelete">
+  <webobject name = "CantDeleteOuterSpan">
+    <span><webobject name = "DeleteButtonLabel" /></span>
+  </webobject>
+</webobject>

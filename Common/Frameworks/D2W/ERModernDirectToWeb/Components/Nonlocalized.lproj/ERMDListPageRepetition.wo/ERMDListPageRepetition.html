@@ -1,0 +1,45 @@
+<table class="ListRepetitionTable">
+	<webobject name=ListTableHeaderRow>
+		<th>&nbsp;</th>
+		<webobject name=SectionRepetition><webobject name=ColumnLabelRepetition>
+				<th nowrap><webobject name = "TableHeaderSwitchComponent"/></th>
+			</webobject></webobject>
+		<th>&nbsp;</th>
+	</webobject>
+	<webobject name=ObjectsRepetition>
+	<webobject name=ListTableRow>
+		<td rowspan=4>
+			<table border=0>
+				<tr>
+					<webobject name=LeftActions>
+						<td nowrap><webobject name=LeftAction></webobject></td>
+					</webobject>
+				</tr>
+			</table>
+		</td>
+		<webobject name=DividingCells><webobject name=ComponentContent1></webobject>
+			<spacer/>
+		</webobject>
+		<td rowspan=4>
+			<table border=0>
+				<tr>
+					<webobject name=RightActions>
+						<td nowrap><webobject name=RightAction></webobject></td>
+					</webobject>
+				</tr>
+			</table>
+		</td>
+		<webobject name = "AttributeRow">
+			<webobject name=SectionRepetition><webobject name=AttributeRepetition>
+					<webobject name=AttributeCell><webobject name=AttributeDisplay></webobject></webobject>
+				</webobject></webobject>
+		</webobject>
+		<webobject name = "ExtraRow">
+			<webobject name=ExtraCell><webobject name = "ItemSectionRepetition"><webobject name = "InspectRepetition"></webobject></webobject></webobject>
+		</webobject>
+		<webobject name = "ActionRow">
+			<webobject name=ActionCell><webobject name=CenterActions><webobject name=CenterAction></webobject></webobject></webobject>
+		</webobject>
+	</webobject>
+	</webobject>
+</table>

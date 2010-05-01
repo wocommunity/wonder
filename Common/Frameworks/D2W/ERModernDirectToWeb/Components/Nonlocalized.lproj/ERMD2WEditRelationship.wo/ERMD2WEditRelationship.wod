@@ -1,0 +1,13 @@
+Content: WOComponentContent {}
+
+SwitchComponent: ERD2WSwitchComponent {
+	_dynamicPage = ^pageConfiguration;
+	_entityName = ^entityName;
+	_settings = ^settings;
+	_task = "editRelationship";
+	_unroll = true;
+	displayKeys = ^displayKeys;
+	nextPage = ^nextPage;
+	nextPageDelegate = actionPageDelegate;
+	masterObjectAndRelationshipKey = masterObjectAndRelationshipKey;
+}

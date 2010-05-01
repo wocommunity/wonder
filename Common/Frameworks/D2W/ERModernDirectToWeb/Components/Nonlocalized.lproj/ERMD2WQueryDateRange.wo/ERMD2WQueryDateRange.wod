@@ -1,0 +1,49 @@
+DateMaxField: ERMDatePicker {
+	dateformat = formatter;
+	value = maxValue;
+	dragDisabled = dragDisabled;
+ 	cssFile = cssFile;
+	cssFramework = cssFramework;
+ 	constrainSelection = constrainSelection;
+	fillGrid = fillGrid;
+	finalOpacity = finalOpacity;
+	disabledDays = disabledDays;
+	disabledDates = disabledDates;
+	enabledDates = enabledDates;
+	highlightDays = highlightDays;
+	noFadeEffect = noFadeEffect;
+	noTodayButton = noTodayButton;
+	rangeLow = rangeLow;
+	rangeHigh = rangeHigh;
+	hideInput = hideInput;
+	hideControl = hideControl;
+}
+
+DateMinField: ERMDatePicker {
+	dateformat = formatter;
+	value = minValue;
+	dragDisabled = dragDisabled;
+ 	cssFile = cssFile;
+	cssFramework = cssFramework;
+ 	constrainSelection = constrainSelection;
+	fillGrid = fillGrid;
+	finalOpacity = finalOpacity;
+	disabledDays = disabledDays;
+	disabledDates = disabledDates;
+	enabledDates = enabledDates;
+	highlightDays = highlightDays;
+	noFadeEffect = noFadeEffect;
+	noTodayButton = noTodayButton;
+	rangeLow = rangeLow;
+	rangeHigh = rangeHigh;
+	hideInput = hideInput;
+	hideControl = hideControl;
+}
+
+ToLabel: ERXLocalizedString {
+	value = "ERD2WQueryDateRange.to";
+}
+
+FromLabel: ERXLocalizedString {
+	value = "ERD2WQueryDateRange.from";
+}

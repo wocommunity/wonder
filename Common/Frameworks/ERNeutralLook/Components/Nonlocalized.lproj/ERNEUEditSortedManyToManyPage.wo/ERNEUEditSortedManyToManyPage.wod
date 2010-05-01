@@ -183,7 +183,7 @@ QueryButton: WOImage {
 QueryComponent: D2WQuery {
 	action = queryAction;
 	entityName = destinationEntity.name;
-	queryDataSource = queryDataSource;
+	queryDataSource = selectDataSource;
 }
 
 QueryLink: WOHyperlink {

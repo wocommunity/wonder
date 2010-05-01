@@ -1,0 +1,30 @@
+Debug: ERDDebuggingHelp {
+	d2wContext = d2wContext;
+}
+
+Errors: ERXErrorDictionaryPanel {
+	errorMessages = errorMessages;
+	extraErrorMessage = errorMessage;
+	shouldShowNewLineAbove = true;
+	shouldShowNewLineBelow = true;
+}
+
+InspectPageRepetition: WOSwitchComponent {
+	WOComponentName = d2wContext.repetitionComponentName;
+	d2wContext = localContext;
+	object = object;
+}
+
+ErrorBlockDiv : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForErrorBlock;
+}
+
+HasErrors: WOConditional {
+    condition = errorMessages.allKeys.count;
+}
+
+WrapperDiv : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForWrapper;
+}

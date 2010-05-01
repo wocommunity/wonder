@@ -11,8 +11,19 @@ import com.webobjects.appserver.WODisplayGroup;
  * @binding sample sample binding explanation
  * @d2wKey sample sample d2w key
  *
- * @created ak on Mon Sep 01 2003
+ * @author ak on Mon Sep 01 2003
  * @project ERDirectToWeb
+ * @d2wKey componentName
+ * @d2wKey colSpan
+ * @d2wKey rowSpan
+ * @d2wKey maxColumns
+ * @d2wKey matrixLayoutVertical
+ * @d2wKey hidePropertyName
+ * @d2wKey useMatrixLayout
+ * @d2wKey useTableLayout
+ * @d2wKey propertyNameComponentName
+ * @d2wKey sectionComponentName
+ * @d2wKey useHorizontalLayoutTables
  */
 public class ERDQueryPageRepetition extends ERDAttributeRepetition {
 

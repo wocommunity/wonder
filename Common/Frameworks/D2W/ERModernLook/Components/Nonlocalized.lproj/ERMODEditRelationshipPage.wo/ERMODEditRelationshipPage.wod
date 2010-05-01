@@ -1,0 +1,219 @@
+AboveDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
+    localContext = d2wContext;
+	extraPropertiesKey = "aboveDisplayPropertyKeys";
+}
+
+BelowDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
+	localContext = d2wContext;
+	extraPropertiesKey = "belowDisplayPropertyKeys";
+}
+
+DisplayList: WOConditional {
+	condition = displayList;
+}
+
+DisplayNew: WOConditional {
+	condition = displayNew;
+}
+
+DisplayQuery: WOConditional {
+	condition = displayQuery;
+}
+
+
+InspectComponent: ERXD2WInspect {
+    pageConfiguration = inspectConfiguration;
+    task = inlineTask;
+	action = saveAction;
+	entityName = entity.name;
+	object = selectedObject;
+	settings = settings;
+}
+
+IsEntityWritable: WOConditional {
+	_unroll = true;
+	condition = isEntityReadOnly;
+	negate = true;
+}
+
+IsToMany: WOConditional {
+	condition = isRelationshipToMany;
+}
+
+IsToOne: WOConditional {
+	condition = isRelationshipToMany;
+	negate = true;
+}
+
+ListComponent: ERXD2WSelect {
+    pageConfiguration = d2wContext.selectEmbeddedConfigurationName;
+	action = selectAction;
+	dataSource = selectDataSource;
+	entityName = entity.name;
+	selectedObject = objectToAddToRelationship;
+	_settings = settings;
+}
+
+NewButton: ERMSmartAjaxButton {
+	alt = "Creates a new Object to add to the relationship";
+	action = newObjectAction;
+	class = "Button PageButton CreatePageButton";
+	value = "New";
+	useAjax = d2wContext.useAjaxControls;
+    updateContainerID = d2wContext.idForMainContainer;
+    dontSubmitForm = true;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = pageWrapperName;
+	_componentUnroll = true;
+	_unroll = true;
+}
+
+QueryComponent: ERMD2WQuery {
+    pageConfiguration = d2wContext.queryEmbeddedConfigurationName;
+	action = queryAction;
+	entityName = entity.name;
+	queryDataSource = selectDataSource;
+	settings = settings;
+}
+
+QueryButton: ERMSmartAjaxButton {
+	alt = "Find new objects to add to the relationship";
+	action = displayQueryAction;
+	class = "Button PageButton QueryPageButton";
+	value = "Search";
+	useAjax = d2wContext.useAjaxControls;
+	updateContainerID = d2wContext.idForMainContainer;
+	dontSubmitForm = true;
+}
+
+ReturnButton : ERMSmartAjaxButton {
+	alt = "Returns to the inspect page";
+	action = returnAction;
+	class = "Button PageButton ReturnPageButton";
+	value = "Return";
+	useAjax = d2wContext.useAjaxControlsWhenEmbedded;
+	updateContainerID = d2wContext.idForParentMainContainer;
+	dontSubmitForm = true;
+}
+
+RequiredWrapper : ERMODRequiredWrapper {
+	d2wContext = d2wContext;
+	object = object;
+    watchedContainerID = d2wContext.idForMainComponent;
+    key = relationshipKey;
+}
+
+ShowBottomActionBlock : WOConditional {
+    condition = d2wContext.showBottomActionBlock;
+}
+
+InnerWrapper : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForInnerWrapper;
+}
+
+RepetitionUpdateContainer : AjaxUpdateContainer {
+    elementName = "div";
+    id = d2wContext.idForRepetitionContainer;
+}
+
+ToManyListRepetition: WOSwitchComponent {
+    WOComponentName = d2wContext.toManyRepetitionComponentName;
+    d2wContext = localContext;
+    displayGroup = relationshipDisplayGroup;
+    updateContainerID = d2wContext.idForRepetitionContainer;
+}
+
+ToOneListRepetition: WOSwitchComponent {
+    WOComponentName = d2wContext.toOneRepetitionComponentName;
+    d2wContext = localContext;
+    displayGroup = relationshipDisplayGroup;
+    updateContainerID = d2wContext.idForRepetitionContainer;
+}
+
+ShowBottomBatchNavBar : WOConditional {
+  condition = d2wContext.showBottomBatchNavBar;
+}
+
+ShowBottomBatchCount : WOConditional {
+  condition = d2wContext.showBottomBatchCount;
+}
+
+BottomNavBar : WOGenericContainer {
+    elementName = "div";
+    class = d2wContext.classForBottomNavBar;
+}
+
+BottomNavBatchSize : WOGenericContainer {
+    elementName = "div";
+    class = d2wContext.classForBottomBatchSize;
+}
+
+NavigationBar: WOSwitchComponent {   
+    WOComponentName = d2wContext.batchNavigationBarComponentName;
+    displayGroup = relationshipDisplayGroup;
+    d2wContext = d2wContext;
+    updateContainerID = d2wContext.idForRepetitionContainer;
+}
+
+BatchSizeControl : ERMDBatchSizeControl {
+  displayGroup = relationshipDisplayGroup;
+  updateContainerID = d2wContext.idForRepetitionContainer;
+}
+
+BottomActionBlock : WOGenericContainer {
+    elementName = "div";
+    class = d2wContext.classForBottomActionBlock;
+}
+
+TopNavBar : WOGenericContainer {
+    elementName = "div";
+    class = d2wContext.classForTopNavBar;
+}
+
+TopNavBatchSize : WOGenericContainer {
+    elementName = "div";
+    class = d2wContext.classForTopBatchSize;
+}
+
+ShowTopBatchNavBar : WOConditional {
+  condition = d2wContext.showTopBatchNavBar;
+}
+
+ShowTopBatchCount : WOConditional {
+  condition = d2wContext.showTopBatchCount;
+}
+QueryBlock : WOGenericContainer {
+  elementName = "div";
+  class = d2wContext.classForEmbeddedQueryBlock;
+}
+
+ListBlock : WOGenericContainer {
+  elementName = "div";
+  class = d2wContext.classForEmbeddedListBlock;
+}
+
+InspectBlock : WOGenericContainer {
+  elementName = "div";
+  class = d2wContext.classForEmbeddedEditBlock;
+}
+
+ShowCancel : WOConditional {
+  condition = showCancel;
+}
+
+EmptyMessageComponent: WOSwitchComponent {
+    WOComponentName = d2wContext.emptyListComponentName;
+    d2wContext = d2wContext;
+}
+
+ListEmpty: WOConditional {
+    condition = isListEmpty;
+}
+
+ListNotEmpty: WOConditional {
+    condition = isListEmpty;
+    negate = true;
+}

@@ -1,0 +1,34 @@
+DisplayGroupAllObjectsCount : WOString {
+  value = ^displayGroup.allObjects.count;
+}
+
+ItemsString : ERXPluralString {
+  value = itemsString;
+  count = ^displayGroup.allObjects.count;
+  showNumber = false;
+}
+
+SeparatorString : WOString {
+  value = separatorString;
+}
+
+ShowString : ERXLocalizedString {
+  value = showString;
+}
+
+BatchNumberField : AjaxInPlaceEditor {
+  value = ^displayGroup.numberOfObjectsPerBatch;
+  width = "4";
+  numberformat = "0";
+  class = "ERMDBatchSize_BatchValue";
+  id = batchSizeFieldID;
+  submitOnBlur = true;
+  okButton = false;
+  cancelLink = false;
+  onComplete = updateFunction;
+  formClassName = "ERMDBatchSize_BatchForm";
+}
+
+ERXOptionalForm : ERXOptionalForm {
+  showForm = d2wContext.includeOptionalForm;
+}

@@ -1,0 +1,108 @@
+CancelButton: WOImage {
+	alt = "Reverts your changes";
+	border = 0;
+	name = "Reverts your changes";
+	framework = "JavaDirectToWeb";
+	filename = "CancelMetalBtn.gif";
+}
+
+CancelLink: WOHyperlink {
+	action = cancelPage;
+}
+
+CheckBoxList1: WOCheckBoxList {
+	displayString = displayName;
+	item = item;
+	list = choices;
+	selections = selections;
+	suffix = "<BR>";
+}
+
+ErrorDictionaryPanel1: ERXErrorDictionaryPanel {
+	extraErrorMessage = errorMessage;
+	shouldShowNewLineAbove = true;
+	shouldShowNewLineBelow = true;
+}
+
+Form1: WOForm {
+	enctype = d2wContext.formEncoding;
+	multipleSubmit = true;
+}
+
+Help: ERDDebuggingHelp {
+	d2wContext = d2wContext;
+}
+
+KeyValueConditional1: ERXEqualConditional {
+	value1 = d2wContext.uiStyle;
+	value2 = "radio";
+}
+
+KeyValueConditional2: ERXEqualConditional {
+	value1 = d2wContext.uiStyle;
+	value2 = "checkbox";
+}
+
+KeyValueConditional3: ERXEqualConditional {
+	value1 = d2wContext.uiStyle;
+	value2 = "popup";
+}
+
+NonNullConditional1: ERXNonNullConditional {
+	condition = d2wContext.explanationComponentName;
+}
+
+NonNullConditional2: ERXNonNullConditional {
+	condition = cancelPage;
+}
+
+NonNullConditional3: ERXNonNullConditional {
+	condition = d2wContext.explanationString;
+}
+
+PopUpButton1: WOPopUpButton {
+	displayString = displayName;
+	item = item;
+	list = choices;
+	noSelectionString = d2wContext.noSelectionString;
+	selection = selection;
+}
+
+RadioButton1: WORadioButton {
+	value = item;
+	name = "TypeSelection";
+	selection = selection;
+}
+
+Choices: WORepetition {
+	item = item;
+	list = choices;
+}
+
+RightArrow: WOImageButton {
+//    filename="next.gif";
+    border = "0";
+//    height = "11";
+//    width = "16";
+    action = nextPage;
+    alt = "next step";    
+	filename = "NextMetalBtn.gif";
+	framework = "ERExtensions";
+}
+
+DisplayName: WOString {
+	value = displayName;
+}
+
+D2wContextExplanationString: WOString {
+	value = d2wContext.explanationString;
+}
+
+SwitchComponent1: WOSwitchComponent {
+	WOComponentName = d2wContext.explanationComponentName;
+}
+
+SwitchComponent2: WOSwitchComponent {
+	WOComponentName = d2wContext.pageWrapperName;
+}
+

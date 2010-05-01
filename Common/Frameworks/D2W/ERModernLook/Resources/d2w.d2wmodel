@@ -1,0 +1,1111 @@
+{
+  "rules" = (
+    {
+      "author" = "9"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "baseClassForLine"; 
+        "value" = "Line"; 
+      }; 
+    }, 
+    {
+      "author" = "9"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "baseClassForBanner"; 
+        "value" = "Banner"; 
+      }; 
+    }, 
+    {
+      "author" = "9"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "baseClassForHeader"; 
+        "value" = "Header"; 
+      }; 
+    }, 
+    {
+      "author" = "9"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "baseClassForSection"; 
+        "value" = "Section"; 
+      }; 
+    }, 
+    {
+      "author" = "9"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "baseClassForWrapper"; 
+        "value" = "Wrapper"; 
+      }; 
+    }, 
+    {
+      "author" = "9"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "baseClassForObjectRow"; 
+        "value" = "ObjRow"; 
+      }; 
+    }, 
+    {
+      "author" = "9"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "baseClassForBatchNav"; 
+        "value" = "BatchNav"; 
+      }; 
+    }, 
+    {
+      "author" = "9"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "baseClassForBatchSize"; 
+        "value" = "BatchSize"; 
+      }; 
+    }, 
+    {
+      "author" = "9"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "baseClassForConfirmBlock"; 
+        "value" = "Banner"; 
+      }; 
+    }, 
+    {
+      "author" = "9"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "baseClassForErrorBlock"; 
+        "value" = "ErrBlock"; 
+      }; 
+    }, 
+    {
+      "author" = "9"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "baseClassForObjectTable"; 
+        "value" = "ObjTable"; 
+      }; 
+    }, 
+    {
+      "author" = "9"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "baseClassForTopActions"; 
+        "value" = "TopActions"; 
+      }; 
+    }, 
+    {
+      "author" = "9"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "baseClassForAttributeValue"; 
+        "value" = "AttrVal"; 
+      }; 
+    }, 
+    {
+      "author" = "9"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "baseClassForLabelSpan"; 
+        "value" = "LabelWrapper"; 
+      }; 
+    }, 
+    {
+      "author" = "9"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "baseClassForTopBatchNav"; 
+        "value" = "TopBatchNav"; 
+      }; 
+    }, 
+    {
+      "author" = "9"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "baseClassForBottomActions"; 
+        "value" = "BtmActions"; 
+      }; 
+    }, 
+    {
+      "author" = "9"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "baseClassForEmptyLabelSpan"; 
+        "value" = "EmptyLabel"; 
+      }; 
+    }, 
+    {
+      "author" = "9"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "baseClassForInnerWrapper"; 
+        "value" = "InnerWrapper"; 
+      }; 
+    }, 
+    {
+      "author" = "9"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "baseClassForTopBatchSize"; 
+        "value" = "TopBatchSize"; 
+      }; 
+    }, 
+    {
+      "author" = "9"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "baseClassForAttributeColumn"; 
+        "value" = "AttrColumn"; 
+      }; 
+    }, 
+    {
+      "author" = "9"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "baseClassForAttributeRepetition"; 
+        "value" = "AttrRep"; 
+      }; 
+    }, 
+    {
+      "author" = "9"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "baseClassForEmbeddedEditBlock"; 
+        "value" = "EditBlock"; 
+      }; 
+    }, 
+    {
+      "author" = "9"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "baseClassForEmbeddedListBlock"; 
+        "value" = "ListBlock"; 
+      }; 
+    }, 
+    {
+      "author" = "9"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "baseClassForObjectTableHeader"; 
+        "value" = "ObjTableHd"; 
+      }; 
+    }, 
+    {
+      "author" = "9"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "baseClassForBottomBatchNav"; 
+        "value" = "BottomBatchNav"; 
+      }; 
+    }, 
+    {
+      "author" = "9"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "baseClassForEmbeddedQueryBlock"; 
+        "value" = "QueryBlock"; 
+      }; 
+    }, 
+    {
+      "author" = "9"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "baseClassForBottomBatchSize"; 
+        "value" = "BottomBatchSize"; 
+      }; 
+    }, 
+    {
+      "author" = "9"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "baseClassForEmbeddedCreateBlock"; 
+        "value" = "CreateBlock"; 
+      }; 
+    }, 
+    {
+      "author" = "9"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "baseClassForEmbeddedInspectBlock"; 
+        "value" = "InspectBlock"; 
+      }; 
+    }, 
+    {
+      "author" = "9"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "baseClassForAttributeRepetitionWrapper"; 
+        "value" = "Attributes"; 
+      }; 
+    }, 
+    {
+      "author" = "9"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "baseClassForAttributeRepetitionWrapper"; 
+        "value" = "Attributes"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.BooleanAssignment"; 
+        "keyPath" = "showTopBatchCount"; 
+        "value" = "true"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.BooleanAssignment"; 
+        "keyPath" = "showTopActionBlock"; 
+        "value" = "true"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.BooleanAssignment"; 
+        "keyPath" = "showTopBatchNavBar"; 
+        "value" = "true"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.BooleanAssignment"; 
+        "keyPath" = "showBottomBatchCount"; 
+        "value" = "true"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.BooleanAssignment"; 
+        "keyPath" = "showBottomActionBlock"; 
+        "value" = "true"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.BooleanAssignment"; 
+        "keyPath" = "showBottomBatchNavBar"; 
+        "value" = "true"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "pageType"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "classForBanner"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "classForHeader"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "classForSection"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "classForWrapper"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "classForLabelSpan"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "classForTopNavBar"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "classForErrorBlock"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "idForMainContainer"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "classForObjectTable"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "classForBottomNavBar"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "classForConfirmBlock"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "classForInnerWrapper"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "classForTopBatchSize"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "idForPageTabContainer"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "classForAttributeValue"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "classForEmptyLabelSpan"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "classForTopActionBlock"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "idForMainBusyIndicator"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "idForPageConfiguration"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "idForPropertyContainer"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "classForAttributeColumn"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "classForBottomBatchSize"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "idForParentMainContainer"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "idForRepetitionContainer"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "classForBottomActionBlock"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "classForEmbeddedEditBlock"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "classForEmbeddedListBlock"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "classForObjectTableHeader"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "classForEmbeddedQueryBlock"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "classForAttributeRepetition"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "classForEmbeddedCreateBlock"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "classForEmbeddedInspectBlock"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "idForParentPageConfiguration"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "10"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment"; 
+        "keyPath" = "classForAttributeRepetitionWrapper"; 
+        "value" = "<ERMDDefaultCSSAssignment>"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "sectionElementName"; 
+        "value" = "h2"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "sortOrderComponentName"; 
+        "value" = "ERMSortOrder"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "sectionComponentName"; 
+        "value" = "ERMDSectionText"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "templateNameForListPage"; 
+        "value" = "ERMODListPage"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "headerComponentName"; 
+        "value" = "ERMD2WSimpleHeader"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "templateNameForQueryPage"; 
+        "value" = "ERMODQueryPage"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "templateNameForCSVListPage"; 
+        "value" = "ERMODCSVListPage"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "templateNameForConfirmPage"; 
+        "value" = "ERMODConfirmPage"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "templateNameForInspectPage"; 
+        "value" = "ERMODInspectPage"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "templateNameForListXMLPage"; 
+        "value" = "ERMODListXMLPage"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "templateNameForMessagePage"; 
+        "value" = "ERMODMessagePage"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "templateNameForCalendarPage"; 
+        "value" = "ERMODCalendarPage"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "templateNameForPickListPage"; 
+        "value" = "ERMODPickListPage"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "templateNameForPickTypePage"; 
+        "value" = "ERMODPickTypePage"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "templateNameForProgressPage"; 
+        "value" = "ERMODProgressPage"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "templateNameForTabInspectPage"; 
+        "value" = "ERMODTabInspectPage"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "templateNameForQueryAllPage"; 
+        "value" = "ERMODQueryEntitiesPage"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "wizardBannerComponentName"; 
+        "value" = "ERMDWizardDetailedBanner"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "templateNameForCompactListPage"; 
+        "value" = "ERMODCompactListPage"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "templateNameForListComparePage"; 
+        "value" = "ERMODListComparePage"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "templateNameForGroupingListPage"; 
+        "value" = "ERMODGroupingListPage"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "lhs" = {
+        "class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; 
+        "key" = "task"; 
+        "selectorName" = "isEqualTo"; 
+        "value" = "queryAll"; 
+      }; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "displayNameForPageConfiguration"; 
+        "value" = "Search All"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "batchNavigationBarComponentName"; 
+        "value" = "ERMD2WBatchNavigationBar"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "templateNameForCompactInspectPage"; 
+        "value" = "ERMODCompactInspectPage"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "templateNameForWizardCreationPage"; 
+        "value" = "ERMODWizardCreationPage"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "templateNameForCSVGroupingListPage"; 
+        "value" = "ERMODCSVGroupingListPage"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "templateNameForGroupingListXMLPage"; 
+        "value" = "ERMODGroupingListXMLPage"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "templateNameForPrinterFriendlyInspectPage"; 
+        "value" = "ERMODPrinterFriendlyInspectPage"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "lhs" = {
+        "class" = "com.webobjects.eocontrol.EOAndQualifier"; 
+        "qualifiers" = (
+          {
+            "class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; 
+            "key" = "task"; 
+            "selectorName" = "isEqualTo"; 
+            "value" = "edit"; 
+          }, 
+          {
+            "class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; 
+            "key" = "smartRelationship"; 
+            "selectorName" = "isNotEqualTo"; 
+            "value" = {
+              "class" = "com.webobjects.foundation.NSKeyValueCoding$Null"; 
+            }; 
+          }
+        ); 
+      }; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "componentName"; 
+        "value" = "ERMDEditRelationship"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "lhs" = {
+        "class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; 
+        "key" = "task"; 
+        "selectorName" = "isEqualTo"; 
+        "value" = "editRelationship"; 
+      }; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "templateNameForEditRelationshipPage"; 
+        "value" = "ERMODEditRelationshipPage"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "templateNameForGroupingPrinterFriendlyListPage"; 
+        "value" = "ERMODGroupingPrinterFriendlyListPage"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "lhs" = {
+        "class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; 
+        "key" = "pageConfiguration"; 
+        "selectorName" = "isLike"; 
+        "value" = "EditRelationship*"; 
+      }; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "headerComponentName"; 
+        "value" = "ERMD2WEditRelationshipHeader"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "stylesheets"; 
+        "value" = (
+          "defaultMainScreenStylesheet", 
+          "defaultMainPrintStylesheet", 
+          "datepickerStylesheet"
+        ); 
+      }; 
+    }, 
+    {
+      "author" = "30"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "lhs" = {
+        "class" = "com.webobjects.eocontrol.EOAndQualifier"; 
+        "qualifiers" = (
+          {
+            "class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; 
+            "key" = "task"; 
+            "selectorName" = "isEqualTo"; 
+            "value" = "list"; 
+          }, 
+          {
+            "class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; 
+            "key" = "parentPageConfiguration"; 
+            "selectorName" = "isNotEqualTo"; 
+            "value" = {
+              "class" = "com.webobjects.foundation.NSKeyValueCoding$Null"; 
+            }; 
+          }
+        ); 
+      }; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "actions"; 
+        "value" = {
+        }; 
+      }; 
+    }, 
+    {
+      "author" = "40"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "lhs" = {
+        "class" = "com.webobjects.eocontrol.EOAndQualifier"; 
+        "qualifiers" = (
+          {
+            "class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; 
+            "key" = "task"; 
+            "selectorName" = "isEqualTo"; 
+            "value" = "list"; 
+          }, 
+          {
+            "class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; 
+            "key" = "subTask"; 
+            "selectorName" = "isEqualTo"; 
+            "value" = "pick"; 
+          }, 
+          {
+            "class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; 
+            "key" = "parentPageConfiguration"; 
+            "selectorName" = "isNotEqualTo"; 
+            "value" = {
+              "class" = "com.webobjects.foundation.NSKeyValueCoding$Null"; 
+            }; 
+          }
+        ); 
+      }; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "actions"; 
+        "value" = {
+          "left" = (
+            "selectionAction"
+          ); 
+        }; 
+      }; 
+    }, 
+    {
+      "author" = "40"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "lhs" = {
+        "class" = "com.webobjects.eocontrol.EOOrQualifier"; 
+        "qualifiers" = (
+          {
+            "class" = "com.webobjects.eocontrol.EOAndQualifier"; 
+            "qualifiers" = (
+              {
+                "class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; 
+                "key" = "task"; 
+                "selectorName" = "isEqualTo"; 
+                "value" = "list"; 
+              }, 
+              {
+                "class" = "com.webobjects.eocontrol.EOOrQualifier"; 
+                "qualifiers" = (
+                  {
+                    "class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; 
+                    "key" = "parentPageConfiguration"; 
+                    "selectorName" = "isLike"; 
+                    "value" = "*Edit*"; 
+                  }, 
+                  {
+                    "class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; 
+                    "key" = "parentPageConfiguration"; 
+                    "selectorName" = "isLike"; 
+                    "value" = "*Create*"; 
+                  }
+                ); 
+              }
+            ); 
+          }, 
+          {
+            "class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; 
+            "key" = "pageConfiguration"; 
+            "selectorName" = "isLike"; 
+            "value" = "EditRelationship*"; 
+          }
+        ); 
+      }; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "actions"; 
+        "value" = {
+          "right" = (
+            "inspectAction", 
+            "editAction", 
+            "removeRelatedAction"
+          ); 
+        }; 
+      }; 
+    }
+  ); 
+}

@@ -1,0 +1,108 @@
+BranchButton: ERMSubmitLinkButton {
+	action = nextPageAction;
+	value = branch.branchButtonLabel; //VALID
+	class = "Button OptionButton";
+}
+
+Help: ERDDebuggingHelp {
+	d2wContext = d2wContext;
+}
+
+ERDConfirmMessage: ERDConfirmMessage {
+	confirmMessageManditory = d2wContext.confirmMessageManditory;
+	dataSource = dataSource;
+	object = object;
+	confirmMessageKey = d2wContext.confirmMessageKey;
+	confirmRows = d2wContext.confirmRows;
+	confirmMessageTextfieldSize = d2wContext.confirmMessageTextfieldSize;
+	confirmMessageManditoryErrorMessage = d2wContext.confirmMessageManditoryErrorMessage;
+	confirmMessageExplanation = d2wContext.confirmMessageExplanation;
+	confirmMessageIsTextfield = d2wContext.confirmMessageIsTextfield;
+	confirmMessageTextfieldMaxlength = d2wContext.confirmMessageTextfieldMaxlength;
+}
+
+Form: WOForm {
+	multipleSubmit = true;
+}
+
+HasBranchChoices: WOConditional {
+	condition = hasBranchChoices;
+}
+
+HasMessage: ERXNonNullConditional {
+	condition = message;
+}
+
+HasNoBranchChoices: WOConditional {
+	condition = hasBranchChoices;
+	negate = true;
+}
+
+Message: WOString {
+	value = message;
+	escapeHTML = false;
+}
+
+OKButton: ERMSubmitLinkButton {
+	action = nextPageAction;
+	value = d2wContext.okButtonLabel;
+	class = "Button PageButton OKPageButton";
+}
+
+CancelButton: ERMSubmitLinkButton {
+	action = cancelAction;
+	value = d2wContext.cancelButtonLabel;
+	class = "Button PageButton CancelPageButton";
+}
+
+BottomActionBlock : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForBottomActionBlock;
+}
+
+BranchChoices: WORepetition {
+	item = branch;
+	list = branchChoices;
+	checkHashCodes = false;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = d2wContext.pageWrapperName;
+}
+
+explanationComponentName: WOSwitchComponent {
+	WOComponentName = d2wContext.explanationComponentName;
+	dataSource = dataSource;
+	object = object;
+	pageConfiguration = d2wContext.explanationConfigurationName;
+	settings = settings;
+}
+
+ShowConfirmMessage: WOConditional {
+	condition = d2wContext.shouldProvideConfirmMessage;
+}
+
+ShowExplanation: WOConditional {
+	condition = showExplanationComponent;
+}
+
+WrapperDiv : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForWrapper;
+}
+
+ErrorBlock : ERMODErrorBlock {
+  d2wContext = d2wContext;
+  errorMessage = errorMessage;
+  errorMessages = errorMessages;
+}
+
+InnerWrapper : WOGenericContainer {
+  elementName = "div";
+  class = d2wContext.classForInnerWrapper;
+}
+
+Banner : WOGenericContainer {
+  elementName = "div";
+  class = d2wContext.classForConfirmBlock;
+}

@@ -8,30 +8,45 @@ package er.directtoweb.pages;
 
 import java.util.Enumeration;
 
+import com.webobjects.directtoweb.ConfirmPageInterface;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.NextPageDelegate;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
-import com.webobjects.directtoweb.ConfirmPageInterface;
-import com.webobjects.directtoweb.D2W;
-import com.webobjects.directtoweb.NextPageDelegate;
+import com.webobjects.directtoweb.EditRelationshipPageInterface;
+import com.webobjects.eoaccess.EODatabaseDataSource;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EODataSource;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSSet;
 
+import er.directtoweb.delegates.ERDBranchDelegate;
 import er.directtoweb.delegates.ERDPageDelegate;
 import er.directtoweb.interfaces.ERDPickPageInterface;
+import er.extensions.appserver.ERXDisplayGroup;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
+/**
+ * Allows the selection of one or more objects from a set of EOs. Can also be used directly as a 
+ * EditRelationshipPage for editing to-one and to-many relationships.
+ * @d2wKey showActions
+ * @d2wKey singleSelection
+ * @d2wKey restrictedChoiceKey
+ * @d2wKey restrictingFetchSpecification
+ */
 // FIXME: Need a formal protocol for cancel vs. selection.
-public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInterface {
+public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInterface, EditRelationshipPageInterface {
 
     /** logging support */
     public static final Logger log = Logger.getLogger(ERD2WPickListPage.class);
-
-    /** holds the selected objects */
-    protected NSMutableArray selectedObjects = new NSMutableArray();
 
     /**
      * IE sometimes won't submit the form if it only has checkboxes, we bind
@@ -41,6 +56,10 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
 
     /** Caches if we are in single selection mode. */
     public Boolean _singleSelection;
+
+    /** These are set when we are in edit-relationship mode. */
+    public EOEnterpriseObject _masterObject;
+    public String _relationshipKey;
 
     /**
      * Public constructor.
@@ -58,29 +77,31 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
      * @return if we have a nextPage set
      */
     public boolean showCancel() {
-        return nextPage() != null;
+        return ((!(nextPageDelegate() instanceof ERDBranchDelegate)) && nextPage() != null) || cancelPage() !=null;
     }
 
     public boolean checked() {
-        return selectedObjects.containsObject(object());
+        return selectedObjects().containsObject(object());
     }
 
     public void setChecked(boolean newChecked) {
+        NSMutableArray selectedObjects = selectedObjects().mutableClone();
         if (newChecked) {
-            if (!selectedObjects.containsObject(object())) selectedObjects.addObject(object());
-        } else
+            if (!selectedObjects.containsObject(object())) {
+                selectedObjects.addObject(object());
+            }
+        } else {
             selectedObjects.removeObject(object());
     }
-
-    //public WOComponent cancelPage()
-    //public void setCancelPage(WOComponent cp);
+        setSelectedObjects(selectedObjects);
+    }
 
     public NSArray selectedObjects() {
-        return selectedObjects;
+        return super.selectedObjects();
     }
 
     public void setSelectedObjects(NSArray selectedObjects) {
-        this.selectedObjects = selectedObjects.mutableClone();
+        super.setSelectedObjects(selectedObjects);
     }
 
     // FIXME: Not using cancel page at the moment. Only matters if not using a
@@ -95,8 +116,22 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
         _cancelPage = cp;
     }
 
-    // FIXME: Not sure if this makes sense to
+    public WOComponent backAction() {
+        if(_masterObject != null) {
+            EOEditingContext ec = _masterObject.editingContext();
+            ec.lock();
+            try {
+                _masterObject.takeValueForKey(singleSelection() ? selectedObjects().lastObject() : selectedObjects(), _relationshipKey);
+                ec.saveChanges();
+            } finally {
+                ec.unlock();
+            }
+        }
+        return super.backAction();
+    }
+
     public void setChoices(NSArray choices) {
+        displayGroup().setObjectArray(choices);
     }
 
     // Called by ERD2WListPage before the display group is updated
@@ -122,10 +157,18 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
         }
     }
     
+    public boolean showSelectionActions() {
+        return filteredObjects().count() > 0 && ERXValueUtilities.booleanValue(d2wContext().valueForKey("showActions"));
+    }
+    
     /**
      * The display group's objects, filtered by the display group qualifier (if any)
      */
     public NSArray filteredObjects() {
+        if (displayGroup() instanceof ERXDisplayGroup) {
+            ERXDisplayGroup dg = (ERXDisplayGroup) displayGroup();
+            return dg.filteredObjects();
+        }
         return displayGroup().qualifier() == null ? displayGroup().allObjects() : EOQualifier.filteredArrayWithQualifier(displayGroup().allObjects(), displayGroup().qualifier());
     }
    
@@ -137,7 +180,7 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
 	    int selectAllWarnThreshold=ERXValueUtilities.intValue(d2wContext().valueForKey("confirmSelectAllThreshold"));
 
         if (selectAllWarnThreshold>0 && selectAllCount>selectAllWarnThreshold) {
-            ConfirmPageInterface confirmPage = (ConfirmPageInterface)D2W.factory().pageForConfigurationNamed("ConfirmSelectAll", session());
+            ConfirmPageInterface confirmPage = (ConfirmPageInterface) D2W.factory().pageForConfigurationNamed("ConfirmSelectAll", session());
 
             // delegate
             ConfirmApprovalDelegate delegate = new ConfirmApprovalDelegate();
@@ -168,13 +211,13 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
     }
 
     public WOComponent _finishSelectAll() {
-        selectedObjects.removeAllObjects();
-
+        NSMutableArray selectedObjects = new NSMutableArray();
         NSArray list = filteredObjects();
         for (Enumeration e = list.objectEnumerator(); e.hasMoreElements();) {
             selectedObjects.addObject(e.nextElement());
         }
-        return null;
+        setSelectedObjects(selectedObjects);
+        return context().page();
     }
     
     public WOComponent selectAllOnPage() {
@@ -182,17 +225,19 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
     }
 
     public WOComponent _finishSelectAllOnPage() {
-        selectedObjects.removeAllObjects();
+        NSMutableArray selectedObjects = new NSMutableArray();
         NSArray list = displayGroup().displayedObjects();
         for (Enumeration e = list.objectEnumerator(); e.hasMoreElements();) {
             selectedObjects.addObject(e.nextElement());
         }
-        return null;
+        setSelectedObjects(selectedObjects);
+        return context().page();
     }
 
     public WOComponent unselectAll() {
-        selectedObjects.removeAllObjects();
-        return null;
+        NSMutableArray selectedObjects = new NSMutableArray();
+        setSelectedObjects(selectedObjects);
+        return context().page();
     }
 
     public boolean singleSelection() {
@@ -205,4 +250,35 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
     public String selectionWidgetName() {
         return singleSelection() ? "WORadioButton" : "WOCheckBox";
     }
+    
+    public void setMasterObjectAndRelationshipKey(EOEnterpriseObject eo, String relationshipName) {
+        EOEditingContext ec = ERXEC.newEditingContext(eo.editingContext(), false);
+        setEditingContext(ec);
+        _masterObject = EOUtilities.localInstanceOfObject(ec, eo);
+        _relationshipKey = relationshipName;
+        setObject(_masterObject);
+        _singleSelection = _masterObject.classDescription().toManyRelationshipKeys().containsObject(_relationshipKey) ? Boolean.FALSE : Boolean.TRUE;
+        d2wContext().takeValueForKey(_singleSelection, "singleSelection");
+         
+        EODataSource ds;
+        String restrictedChoiceKey = (String)d2wContext().valueForKeyPath("restrictedChoiceKey");
+        if(restrictedChoiceKey != null && restrictedChoiceKey.length() > 0) {
+            Object choices = d2wContext().valueForKeyPath(restrictedChoiceKey);
+            ds = ERXEOControlUtilities.dataSourceForArray((NSArray)choices);
+        } else {
+            ds = new EODatabaseDataSource(ec, d2wContext().entity().name(), (String)d2wContext().valueForKeyPath("restrictingFetchSpecification"));
+        }
+        setDataSource(ds);
+        
+        Object relationshipValue = _masterObject.valueForKey(relationshipName);
+        NSArray objects;
+        if(relationshipValue instanceof NSArray) {
+            objects = (NSArray)relationshipValue;
+        } else if(relationshipValue != null) {
+            objects = new NSArray(relationshipValue);
+        } else {
+            objects = NSArray.EmptyArray;
+        }
+        setSelectedObjects((NSArray)objects);
+     }
 }

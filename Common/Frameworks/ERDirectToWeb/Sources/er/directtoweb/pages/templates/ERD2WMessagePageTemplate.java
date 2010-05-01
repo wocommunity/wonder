@@ -7,13 +7,17 @@
 package er.directtoweb.pages.templates;
 
 import com.webobjects.appserver.WOContext;
+
 import er.directtoweb.pages.ERD2WMessagePage;
 
 /**
  * Used to present a message to the user with only one option, usually "OK".<br />
- * 
+ * @d2wKey okButtonLabel
+ * @d2wKey cancelButtonLabel
+ * @d2wKey pageWrapperName
+ * @d2wKey explanationComponentName
+ * @d2wKey explanationConfigurationName
  */
-
 public class ERD2WMessagePageTemplate extends ERD2WMessagePage {
     
     public ERD2WMessagePageTemplate(WOContext context) { super(context); }

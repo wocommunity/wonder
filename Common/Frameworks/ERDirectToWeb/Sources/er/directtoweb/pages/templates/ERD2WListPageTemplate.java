@@ -7,14 +7,26 @@
 package er.directtoweb.pages.templates;
 
 import com.webobjects.appserver.WOContext;
+
 import er.directtoweb.pages.ERD2WListPage;
 
 /**
  * Beefed up list page.<br />
- * 
+ * @d2wKey printerButtonComponentName
+ * @d2wKey emptyListComponentName
+ * @d2wKey headerComponentName
+ * @d2wKey entity
+ * @d2wKey allowsFiltering
+ * @d2wKey repetitionComponentName
+ * @d2wKey batchNavigationBarComponentName
+ * @d2wKey displayNameForEntity
+ * @d2wKey backgroundColorForTable
+ * @d2wKey pageWrapperName
+ * @d2wKey returnButtonLabel
  */
-
 public class ERD2WListPageTemplate extends ERD2WListPage {
-    
-    public ERD2WListPageTemplate(WOContext context) { super(context); }
+
+	public ERD2WListPageTemplate(WOContext context) {
+		super(context);
+	}
 }

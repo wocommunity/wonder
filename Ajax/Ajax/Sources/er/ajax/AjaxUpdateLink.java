@@ -15,8 +15,11 @@ import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.appserver.ERXRequest;
+import er.extensions.appserver.ERXWOContext;
 import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.components.ERXComponentUtilities;
+import er.extensions.components.conditionals.ERXWOConditional;
 import er.extensions.foundation.ERXMutableURL;
 import er.extensions.foundation.ERXStringUtilities;
 
@@ -171,7 +174,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 
 			String actionUrl = null;
 			if (directActionNameAssociation != null) {
-				actionUrl = context.directActionURLForActionNamed((String) directActionNameAssociation.valueInComponent(component), ERXComponentUtilities.queryParametersInComponent(associations(), component)).replaceAll("&amp;", "&");
+				actionUrl = context._directActionURL((String) directActionNameAssociation.valueInComponent(component), ERXComponentUtilities.queryParametersInComponent(associations(), component), ERXRequest.isRequestSecure(context.request())).replaceAll("&amp;", "&");
 			}
 			else {
 				actionUrl = AjaxUtils.ajaxComponentActionUrl(context);

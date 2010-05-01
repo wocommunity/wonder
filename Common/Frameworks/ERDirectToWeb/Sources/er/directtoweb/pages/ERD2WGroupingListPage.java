@@ -7,8 +7,16 @@
 package er.directtoweb.pages;
 
 import com.webobjects.appserver.WOContext;
+import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 
+/**
+ * Displays a groups of objects grouped by a key.<br />
+ * @d2wKey groupingKey
+ * @d2wKey groupingComponentName
+ * @d2wKey groupingItemKey
+ * @d2wKey subTask
+ */
 public class ERD2WGroupingListPage extends ERD2WListPage {
 
     /**
@@ -16,18 +24,41 @@ public class ERD2WGroupingListPage extends ERD2WListPage {
      * @param context current context
      */
     public ERD2WGroupingListPage(WOContext context) { super(context); }
-
-    protected NSArray sublist;
-    protected Object sublistSection;
+    
+    public NSArray sublist;
+    public Object sublistSection;
 
     // the sorting will come only from the rules
-    public boolean userPreferencesCanSpecifySorting() { return false; }
-    public String groupingKey() { return (String)d2wContext().valueForKey("groupingKey"); }
-    public String groupingComponentName() { return (String)d2wContext().valueForKey("groupingComponentName"); }
-    public int colspanForNavBar() { return 2*displayPropertyKeys().count()+2; }
-    public Object section() { return (Object)object().valueForKeyPath(groupingKey()); }
-    public Object sumForSublist() { return sublist.valueForKey("@sum."+propertyKey()); }
-
+    public boolean userPreferencesCanSpecifySorting() { 
+        return false;
+    }
+    public String groupingKey() { 
+        return (String)d2wContext().valueForKey("groupingKey");
+    }
+    public String groupingComponentName() { 
+        return (String)d2wContext().valueForKey("groupingComponentName"); 
+    }
+    public String groupingItemKey() {
+        return (String)d2wContext().valueForKey("groupingItemKey");
+    }
+    public int colspanForNavBar() { 
+        return 2*displayPropertyKeys().count()+2; 
+    }
+    public Object section() { 
+        return object().valueForKeyPath(groupingItemKey()); 
+    }
+    public Object sumForSublist() { 
+        return sublist.valueForKey("@sum."+propertyKey()); 
+    }
+    public void setSublist(NSArray value) {
+        NSArray sortOrderings = sortOrderings();
+        if(sortOrderings != null &&  sortOrderings.count() > 0) {
+            value = EOSortOrdering.sortedArrayUsingKeyOrderArray(value, sortOrderings);
+        }
+        sublist = value;
+    }
     // we don't ever want to batch for printerFriendly
-    public int numberOfObjectsPerBatch() { return ("printerFriendly".equals(d2wContext().valueForKey("subTask"))? 0 : super.numberOfObjectsPerBatch()); }
+    public int numberOfObjectsPerBatch() { 
+        return ("printerFriendly".equals(d2wContext().valueForKey("subTask"))? 0 : super.numberOfObjectsPerBatch()); 
+    }
 }

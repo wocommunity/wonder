@@ -7,13 +7,20 @@
 package er.directtoweb.pages.templates;
 
 import com.webobjects.appserver.WOContext;
+
 import er.directtoweb.pages.ERD2WQueryPage;
 
 /**
  * Beefed up query page.<br />
- * 
+ * @d2wKey headerComponentName
+ * @d2wKey showListInSamePage
+ * @d2wKey listConfigurationName
+ * @d2wKey clearButtonLabel
+ * @d2wKey findButtonLabel
+ * @d2wKey returnButtonLabel
+ * @d2wKey actionBarComponentName
+ * @d2wKey controllerButtonComponentName 
  */
-
 public class ERD2WQueryPageTemplate extends ERD2WQueryPage {
 
     public ERD2WQueryPageTemplate(WOContext context) {
