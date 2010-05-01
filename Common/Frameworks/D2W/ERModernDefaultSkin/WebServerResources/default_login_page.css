@@ -1,0 +1,58 @@
+body {
+	padding: 100px 20px;
+	font-family: helvetica, san-serif;
+	color: #666;
+	font-size: 90%;
+}
+
+a {
+	text-decoration: none;
+}
+
+#LoginForm {
+	width: 270px;
+	padding: 20px 20px;
+	margin: 0 auto;
+	background-color: #eee;
+	border: 1px solid #999;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+}
+
+label {
+	float: left;
+	width: 80px;
+	text-align: right;
+	line-height: 20px;
+	padding-right: 10px;
+}
+
+.button_bar {
+	padding-top: 10px;
+	padding-left: 160px;
+	overflow: hidden;
+}
+
+.Button {
+	float: left;
+	background-image: url(btn_blu.png);
+	background-repeat: no-repeat;
+	background-position: left bottom;
+	margin-left: 15px;
+	font-size: 12px;
+	color: #fff;
+	font-weight: bold;
+}
+
+.Button span {
+	float: left;
+	background-image: url(btn_blu.png);
+	background-repeat: no-repeat;
+	background-position: right bottom;
+	background-color: #eee;
+	padding: 0;
+	line-height: 26px;
+	margin-left: 23px;
+	padding-right: 23px;
+	text-shadow: #405882 0px -1px 0px;
+}

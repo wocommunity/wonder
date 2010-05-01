@@ -10,16 +10,19 @@ import com.webobjects.foundation.NSMutableArray;
 import er.directtoweb.ERD2WContainer;
 import er.directtoweb.ERDirectToWeb;
 import er.directtoweb.components.ERDCustomComponent;
-import er.extensions.foundation.ERXMutableUserInfoHolderInterface;
+import er.extensions.appserver.ERXWOContext;
 
 /**
  * Class for DirectToWeb Component ERDAttributeRepetition.
  *
- * @binding sample sample binding explanation
- * @d2wKey sample sample d2w key
- *
- * @created ak on Mon Sep 01 2003
+ * @author ak on Mon Sep 01 2003
  * @project ERDirectToWeb
+ * @d2wKey sectionKey
+ * @d2wKey displayNameForPageConfiguration
+ * @d2wKey pageConfiguration
+ * @d2wKey propertyKey
+ * @d2wKey alternateKeyInfo
+ * @d2wKey sectionsContents
  */
 public class ERDAttributeRepetition extends ERDCustomComponent {
 
@@ -47,13 +50,16 @@ public class ERDAttributeRepetition extends ERDCustomComponent {
 
     public String propertyKey() { return (String)d2wContext().valueForKey("propertyKey"); }
     public void setPropertyKey(String propertyKey) {
-        d2wContext().takeValueForKey(propertyKey, "propertyKey");
-        ((ERXMutableUserInfoHolderInterface)context()).mutableUserInfo().takeValueForKey(propertyKey, "componentIdentifier");
+    	d2wContext().takeValueForKey(propertyKey, "propertyKey");
+    	if(propertyKey != null) {
+    		ERXWOContext.contextDictionary().setObjectForKey(propertyKey, "componentIdentifier");
+    	} else {
+    		ERXWOContext.contextDictionary().removeObjectForKey("componentIdentifier");
+    	}
     }
     
     public boolean hasPropertyName() {
-        String displayNameForProperty=(String)d2wContext().valueForKey("displayNameForProperty");
-        return displayNameForProperty!=null && displayNameForProperty.length()>0;
+        return !booleanValueForBinding("hidePropertyName");
     }
 
     public NSArray displayPropertyKeys() {

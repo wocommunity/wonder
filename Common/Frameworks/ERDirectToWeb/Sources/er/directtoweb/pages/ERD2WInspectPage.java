@@ -37,7 +37,23 @@ import er.extensions.localization.ERXLocalizer;
 
 /**
  * Superclass for all inspecting/editing ERD2W templates.<br />
- * 
+ * @d2wKey inspectConfirmConfigurationName
+ * @d2wKey object
+ * @d2wKey editConfigurationName
+ * @d2wKey useNestedEditingContext
+ * @d2wKey shouldRenderBorder
+ * @d2wKey shouldShowActionButtons
+ * @d2wKey shouldShowCancelButtons
+ * @d2wKey shouldShowSubmitButton
+ * @d2wKey hasForm
+ * @d2wKey validationKeys
+ * @d2wKey shouldRevertChanges
+ * @d2wKey shouldSaveChanges
+ * @d2wKey shoudlvalidateBeforeSave
+ * @d2wKey shouldCollectValidationExceptions
+ * @d2wKey shouldRecoverFromOptimisticLockingFailure
+ * @d2wKey shouldRevertUponSaveFailure
+ * @d2wKey firstResponder
  */
 public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface, ERDEditPageInterface, ERDObjectSaverInterface, ERDFollowPageInterface, ERXComponentActionRedirector.Restorable  {
 
@@ -66,7 +82,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     }
 
     
-    private boolean _objectWasSaved;
+    protected boolean _objectWasSaved;
     public boolean objectWasSaved() { return _objectWasSaved; }
 
     private WOComponent _previousPage;
@@ -264,7 +280,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     }
 
     public WOComponent printerFriendlyVersion() {
-        WOComponent result= ERD2WFactory.erFactory().printerFriendlyPageForD2WContext(d2wContext(),session());
+        WOComponent result=ERD2WFactory.erFactory().printerFriendlyPageForD2WContext(d2wContext(),session());
         ((EditPageInterface)result).setObject(object());
         return result;
     }

@@ -1,0 +1,12 @@
+IsEditable: WOConditional {
+	condition = isEditable;
+}
+
+EditEOButton : ERMSmartAjaxButton {
+  value = buttonLabel;
+  action = editObjectAction;
+  alt = ^displayNameForEditConfiguration;
+  class = buttonClass;
+  updateContainerID = updateContainer;
+  useAjax = useAjax;
+}

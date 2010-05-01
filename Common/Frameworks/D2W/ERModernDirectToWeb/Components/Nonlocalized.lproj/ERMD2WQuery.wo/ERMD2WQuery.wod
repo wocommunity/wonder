@@ -1,0 +1,12 @@
+Content: WOComponentContent {}
+
+D2WSwitchComponent: ERD2WSwitchComponent {
+    _dynamicPage = ^pageConfiguration;
+    _entityName = ^entityName;
+    _settings = ^settings;
+    _task = "query";
+    _unroll = YES;
+    displayKeys = ^displayKeys;
+    nextPageDelegate = actionPageDelegate;
+    queryDataSource = ^queryDataSource;
+}

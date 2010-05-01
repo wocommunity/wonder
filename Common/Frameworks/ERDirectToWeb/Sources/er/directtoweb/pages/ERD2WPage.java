@@ -18,6 +18,7 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver.WOSession;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.D2WModel;
 import com.webobjects.directtoweb.D2WPage;
@@ -26,15 +27,22 @@ import com.webobjects.directtoweb.NextPageDelegate;
 import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOKeyValueQualifier;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOAndQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestamp;
 
 import er.directtoweb.ERD2WContainer;
+import er.directtoweb.ERD2WDirectAction;
 import er.directtoweb.ERDirectToWeb;
 import er.directtoweb.delegates.ERDBranchDelegate;
 import er.directtoweb.delegates.ERDBranchDelegateInterface;
@@ -42,8 +50,10 @@ import er.directtoweb.delegates.ERDBranchInterface;
 import er.directtoweb.interfaces.ERDUserInfoInterface;
 import er.extensions.ERXExtensions;
 import er.extensions.appserver.ERXComponentActionRedirector;
+import er.extensions.appserver.ERXSession;
 import er.extensions.components.ERXClickToOpenSupport;
 import er.extensions.components.ERXComponentUtilities;
+import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXGuardedObjectInterface;
 
 import er.extensions.foundation.ERXStringUtilities;
@@ -79,7 +89,30 @@ import er.extensions.validation.ERXValidationException;
  * (section3, key4, key..) ), ... ) OR with the alternate syntax, which ist most
  * useful with the WebAssistant ( "[tab1]", "(section1)", key1, key2, ...
  * "[tab2]", "(section3)", key4, key..... )
- * 
+ * @d2wKey object
+ * @d2wKey localContext
+ * @d2wKey keyPathsWithValidationExceptions
+ * @d2wKey shouldPropagateExceptions
+ * @d2wKey shouldCollectionValidationExceptions
+ * @d2wKey shouldSetFailedValidationValue
+ * @d2wKey errorMessages
+ * @d2wKey componentName
+ * @d2wKey customComponentName
+ * @d2wKey propertyKey
+ * @d2wKey sectionKey
+ * @d2wKey sectionContents
+ * @d2wKey tabKey
+ * @d2wKey displayNameForTabKey
+ * @d2wKey isEntityEditable
+ * @d2wKey pageConfiguration
+ * @d2wKey displayPropertyKeys
+ * @d2wKey tabSectionsContents
+ * @d2wKey displayVariant
+ * @d2wKey displayNameForEntity
+ * @d2wKey nextPageDelegate
+ * @d2wKey pageController
+ * @d2wKey pageWrapperName
+ * @d2wKey inlineStyle
  */
 public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, ERDUserInfoInterface, ERXComponentActionRedirector.Restorable, ERDBranchInterface {
 
@@ -809,6 +842,15 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
             d2wContext().takeValueForKey(currentTabKey, Keys.tabKey);
         }
         return _tabSectionsContents;
+    }
+
+    /**
+     * If you switch the context out from under a wizard page it will hold onto the keys in the tab
+     * sections and blow up the next time you use it if the entity has changed. This allows you to 
+     * clear the array so it rebuilds.
+     */
+    protected void clearTabSectionsContents() {
+    	_tabSectionsContents = null;
     }
 
     /** Dummy denoting to sections. */

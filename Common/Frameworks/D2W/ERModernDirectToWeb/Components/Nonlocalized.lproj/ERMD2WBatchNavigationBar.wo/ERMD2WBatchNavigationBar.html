@@ -1,0 +1,26 @@
+<div class = "paginatorContainer">
+	<webobject name = "HasMultiplePagesConditional">
+		<div class = "paginator">
+			<webobject name = "HasPreviousPageConditional">
+				<webobject name = "PreviousPageAction"><webobject name="PreviousLabel"/></webobject>
+			</webobject>
+			<webobject name = "HasNoPreviousPageConditional"><span class="paginatorAtStart"><webobject name="PreviousLabel"/></span></webobject>
+			<webobject name = "PageNumberRepetition">
+				<webobject name = "IsCurrentPageNumberConditional"><span class="paginatorCurrentPage"><webobject name = "PageNumber"/></span></webobject>
+				<webobject name = "IsNotCurrentPageNumberConditional">
+					<webobject name = "IsPageNumberConditional">
+						<webobject name = "SelectPageAction"><webobject name = "PageNumber"/></webobject>
+					</webobject>
+					<webobject name = "IsEllipsisConditional"><span class="paginatorBreak">...</span></webobject>
+				</webobject>
+			</webobject>
+			<webobject name = "HasNextPageConditional">
+				<webobject name = "NextPageAction"><webobject name="NextLabel"/></webobject>
+			</webobject>
+			<webobject name = "HasNoNextPageConditional"><span class="paginatorAtEnd"><webobject name="NextLabel"/></span></webobject>
+		</div>
+	</webobject>
+	<webobject name = "False">
+	<div class="paginatorResults">(<webobject name = "ShowPageRange"><webobject name = "FirstIndex"/>&#8211;<webobject name = "LastIndex"/> <webobject name = "OfLabel"/> </webobject><webobject name = "DisplayName"/>)</div>
+  </webobject>
+</div>

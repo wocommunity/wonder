@@ -1,0 +1,13 @@
+HelperShowErrorBlock : WOConditional {
+  condition = showErrorBlock;
+}
+
+ErrorBlockDiv : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForErrorBlock;
+}
+
+Errors: ERMErrorDictionaryPanel {
+	errorMessages = errorMessages;
+	extraErrorMessage = errorMessage;
+}

@@ -18,7 +18,12 @@ import er.directtoweb.interfaces.ERDMessagePageInterface;
 
 /**
  * Superclass for all message pages.<br />
- * 
+ * If the key <code>explanationComponentName</code> resolves to non-empty, then
+ * this component will get shown in the page and wired up with a 
+ * <code>object</code>, <code>dataSource</code> and <code>pageConfiguration</code> binding.
+ * @d2wKey displayNamePageConfiguration
+ * @d2wKey messageTitleForPage
+ * @d2wKey explanationComponentName
  */
 public abstract class ERD2WMessagePage extends ERD2WPage implements ERDMessagePageInterface, ERDErrorPageInterface {
 
@@ -41,19 +46,36 @@ public abstract class ERD2WMessagePage extends ERD2WPage implements ERDMessagePa
         super(c);
     }
     
-    public WOComponent cancelAction() { return (cancelDelegate() != null) ? cancelDelegate().nextPage(this) : cancelPage(); }
-    public WOComponent confirmAction() { return errorMessages.count()==0 ? nextPageAction() : null; }
-    public WOComponent nextPageAction() { return nextPageDelegate() != null ? nextPageDelegate().nextPage(this) : nextPage(); }
-
-    public void setException(Exception exception) { _exception=exception; }
-    public Exception exception() {return _exception; }
-
-    public void setMessage(String message) { _message = message; }
-    public String message() { return _message; }
-
-    public String formattedMessage() {
-        return WOMessage.stringByEscapingHTMLString(message());
-    }
+	public WOComponent cancelAction() {
+		return (cancelDelegate() != null)
+				? cancelDelegate().nextPage(this)
+				: cancelPage();
+	}
+	public WOComponent confirmAction() {
+		return errorMessages.count() == 0 ? nextPageAction() : null;
+	}
+	public WOComponent nextPageAction() {
+        WOComponent result = nextPageFromDelegate();
+    	if(result == null) {
+    		result = nextPage();
+    	}
+        return result;
+	}
+	public void setException(Exception exception) {
+		_exception = exception;
+	}
+	public Exception exception() {
+		return _exception;
+	}
+	public void setMessage(String message) {
+		_message = message;
+	}
+	public String message() {
+		return _message;
+	}
+	public String formattedMessage() {
+		return WOMessage.stringByEscapingHTMLString(message());
+	}
     
     public String title() {
         if(_title == null) {
@@ -65,27 +87,47 @@ public abstract class ERD2WMessagePage extends ERD2WPage implements ERDMessagePa
         _title = title;
     }
     
-    public void setCancelPage(WOComponent cancelPage) { _cancelPage = cancelPage; }
-    public WOComponent cancelPage() { return _cancelPage; }
-
-    public void setCancelDelegate(NextPageDelegate cancelDelegate) { _cancelDelegate = cancelDelegate; }
-    public NextPageDelegate cancelDelegate() { return _cancelDelegate; }
-
-    public void setConfirmPage(WOComponent confirmPage) { setNextPage(confirmPage); }
-    public WOComponent confirmPage() { return nextPage(); }
-
-    public void setConfirmDelegate(NextPageDelegate confirmPageDelegate) { setNextPageDelegate(confirmPageDelegate); }
-    public NextPageDelegate confirmDelegate() { return nextPageDelegate(); }
-
-    public void setNextPageDelegate(NextPageDelegate nextDelegate) { _nextDelegate = nextDelegate; }
-    public NextPageDelegate nextPageDelegate() { return _nextDelegate; }    
+	public void setCancelPage(WOComponent cancelPage) {
+		_cancelPage = cancelPage;
+	}
+	public WOComponent cancelPage() {
+		return _cancelPage;
+	}
+	public void setCancelDelegate(NextPageDelegate cancelDelegate) {
+		_cancelDelegate = cancelDelegate;
+	}
+	public NextPageDelegate cancelDelegate() {
+		return _cancelDelegate;
+	}
+	public void setConfirmPage(WOComponent confirmPage) {
+		setNextPage(confirmPage);
+	}
+	public WOComponent confirmPage() {
+		return nextPage();
+	}
+	public void setConfirmDelegate(NextPageDelegate confirmPageDelegate) {
+		setNextPageDelegate(confirmPageDelegate);
+	}
+	public NextPageDelegate confirmDelegate() {
+		return nextPageDelegate();
+	}
+	public void setNextPageDelegate(NextPageDelegate nextDelegate) {
+		_nextDelegate = nextDelegate;
+	}
+	public NextPageDelegate nextPageDelegate() {
+		return _nextDelegate;
+	}
+	public void setNextPage(WOComponent nextPage) {
+		_nextPage = nextPage;
+	}
+	public WOComponent nextPage() {
+		return _nextPage;
+	}
     
-    public void setNextPage(WOComponent nextPage) { _nextPage = nextPage; }
-    public WOComponent nextPage() { return _nextPage; }
-
     // CHECKME ak: do we really need this? It's never referenced in the templates? 
     public String titleForPage() {
-        return title() != null ? title() : (String)d2wContext().valueForKey("messageTitleForPage");
+    	String title = (String)d2wContext().valueForKey("messageTitleForPage");
+    	return title != null ? title : title();
     }
 
     public boolean hasNextPage() {
@@ -94,4 +136,13 @@ public abstract class ERD2WMessagePage extends ERD2WPage implements ERDMessagePa
     public boolean hasCancelPage() {
         return !(cancelPage() == null && cancelDelegate() == null);
     }
+    
+    public boolean showExplanationComponent() {
+    	// AK: this is needed because RuleEditor won't save NULL keys anymore
+    	String name = (String)d2wContext().valueForKey("explanationComponentName");
+    	boolean result = name != null && name.length() > 0;
+    	// CHECKME: AK could be extended to check if object() or dataSource() are bound...
+    	return result;
+    }
+    
 }

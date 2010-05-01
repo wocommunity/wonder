@@ -1,0 +1,250 @@
+{
+  "rules" = (
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.BooleanAssignment"; 
+        "keyPath" = "showTopBatchCount"; 
+        "value" = "true"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.BooleanAssignment"; 
+        "keyPath" = "showTopActionBlock"; 
+        "value" = "false"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.BooleanAssignment"; 
+        "keyPath" = "showTopBatchNavBar"; 
+        "value" = "false"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.BooleanAssignment"; 
+        "keyPath" = "showBottomBatchCount"; 
+        "value" = "false"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.BooleanAssignment"; 
+        "keyPath" = "showBottomBatchNavBar"; 
+        "value" = "true"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "lhs" = {
+        "class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; 
+        "key" = "pageConfiguration"; 
+        "selectorName" = "isLike"; 
+        "value" = "*Embedded*"; 
+      }; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.BooleanAssignment"; 
+        "keyPath" = "showHeader"; 
+        "value" = "false"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "lhs" = {
+        "class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; 
+        "key" = "pageConfiguration"; 
+        "selectorName" = "isLike"; 
+        "value" = "*Embedded*"; 
+      }; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.BooleanAssignment"; 
+        "keyPath" = "showTopBatchCount"; 
+        "value" = "false"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "lhs" = {
+        "class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; 
+        "key" = "pageConfiguration"; 
+        "selectorName" = "isLike"; 
+        "value" = "*Embedded*"; 
+      }; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.BooleanAssignment"; 
+        "keyPath" = "showTopBatchNavBar"; 
+        "value" = "false"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "lhs" = {
+        "class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; 
+        "key" = "pageConfiguration"; 
+        "selectorName" = "isLike"; 
+        "value" = "*Embedded*"; 
+      }; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.BooleanAssignment"; 
+        "keyPath" = "showBottomBatchNavBar"; 
+        "value" = "true"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "lhs" = {
+        "class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; 
+        "key" = "pageConfiguration"; 
+        "selectorName" = "isLike"; 
+        "value" = "*Embedded*"; 
+      }; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.BooleanAssignment"; 
+        "keyPath" = "showBottomActionBlock"; 
+        "value" = "false"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "lhs" = {
+        "class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; 
+        "key" = "pageConfiguration"; 
+        "selectorName" = "isLike"; 
+        "value" = "*Embedded*"; 
+      }; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "printerButtonComponentName"; 
+        "value" = "ERXEmptyComponent"; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "datepickerStylesheet"; 
+        "value" = {
+          "filename" = "datepicker.css"; 
+          "media" = "screen"; 
+        }; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "defaultMainPrintStylesheet"; 
+        "value" = {
+          "filename" = "default_print_stylesheet.css"; 
+          "media" = "print"; 
+        }; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "defaultMainScreenStylesheet"; 
+        "value" = {
+          "filename" = "default_screen_stylesheet.css"; 
+          "media" = "screen"; 
+        }; 
+      }; 
+    }, 
+    {
+      "author" = "20"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "lhs" = {
+        "class" = "com.webobjects.eocontrol.EOAndQualifier"; 
+        "qualifiers" = (
+          {
+            "class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; 
+            "key" = "pageConfiguration"; 
+            "selectorName" = "isLike"; 
+            "value" = "*Embedded*"; 
+          }, 
+          {
+            "class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; 
+            "key" = "task"; 
+            "selectorName" = "isNotEqualTo"; 
+            "value" = "editRelationship"; 
+          }, 
+          {
+            "class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; 
+            "key" = "task"; 
+            "selectorName" = "isNotEqualTo"; 
+            "value" = "list"; 
+          }
+        ); 
+      }; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.BooleanAssignment"; 
+        "keyPath" = "showHeader"; 
+        "value" = "true"; 
+      }; 
+    }, 
+    {
+      "author" = "30"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "lhs" = {
+        "class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; 
+        "key" = "pageConfiguration"; 
+        "selectorName" = "isLike"; 
+        "value" = "*Embedded*"; 
+      }; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.BooleanAssignment"; 
+        "keyPath" = "showBottomBatchCount"; 
+        "value" = "true"; 
+      }; 
+    }, 
+    {
+      "author" = "30"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "lhs" = {
+        "class" = "com.webobjects.eocontrol.EOAndQualifier"; 
+        "qualifiers" = (
+          {
+            "class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; 
+            "key" = "pageConfiguration"; 
+            "selectorName" = "isLike"; 
+            "value" = "*Embedded*"; 
+          }, 
+          {
+            "class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; 
+            "key" = "parentPageConfiguration"; 
+            "selectorName" = "isNotEqualTo"; 
+            "value" = {
+              "class" = "com.webobjects.foundation.NSKeyValueCoding$Null"; 
+            }; 
+          }
+        ); 
+      }; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.BooleanAssignment"; 
+        "keyPath" = "showBottomActionBlock"; 
+        "value" = "true"; 
+      }; 
+    }
+  ); 
+}

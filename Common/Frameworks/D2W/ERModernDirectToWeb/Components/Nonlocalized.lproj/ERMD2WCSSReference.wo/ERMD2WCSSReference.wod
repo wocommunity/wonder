@@ -1,0 +1,21 @@
+ResetStyleSheet : ERXStyleSheet {
+	filename = "reset_base_fonts.css";
+	framework = "ERModernDirectToWeb";
+}
+
+StyleSheetRepetition : WORepetition {
+	list = d2wContext.stylesheets;
+	item = stylesheetName;
+}
+
+StyleSheet : ERXStyleSheet {
+	filename = stylesheet.filename;
+	framework = resourceFrameworkName; 
+	media = stylesheet.media;
+}
+
+IncludeStylesheetsConditional : WOConditional {
+	condition = ^includeRuleStylesheets;
+}
+
+AdditionalReferences : WOComponentContent {}

@@ -28,7 +28,7 @@ public class AjaxSortOrder extends ERXSortOrder {
 	}
 	
 	public String updateContainerID() {
-        String updateContainerID = (String)valueForBinding("updateContainerID");
+        	String updateContainerID = (String)valueForBinding("updateContainerID");
 		return updateContainerID != null ? updateContainerID : AjaxUpdateContainer.currentUpdateContainerID();
 	}
 }

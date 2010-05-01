@@ -1,0 +1,36 @@
+DebuggingEnabled: WOConditional {
+	condition = d2wDebuggingEnabled;
+}
+
+DisplayMandatory: WOConditional {
+	condition = displayRequiredMarker;
+}
+
+HasPropertyName: WOConditional {
+	condition = hasPropertyName;
+}
+
+PropertyName: WOString {
+    value=displayNameForProperty;
+	escapeHTML = d2wContext.escapeHTML;
+}
+
+ContextDictionaryRepetition : WORepetition {
+	list = contextDictionaryForPropertyKey.allKeys.@sortAsc.toString; //VALID
+	item = currentKey;
+}
+
+CurrentKey : WOString {
+	value = currentKey;
+}
+
+CurrentValue : WOString {
+	value = currentValue;
+}
+
+FieldLabel : WOGenericContainer {
+	elementName = fieldLabelElement;
+	class = fieldLabelClass;
+	for = fieldLabelForValue;
+}
+

@@ -1,0 +1,47 @@
+CompletionBar: WOCompletionBar {
+	value = percentCompleted;
+}
+
+ShouldShowProgressBar: WOConditional {
+	condition = shouldShowProgressBar;
+}
+
+Help: ERDDebuggingHelp {
+	d2wContext = d2wContext;
+}
+
+ActionBar: ERDActionBar {
+	d2wContext = d2wContext;
+}
+
+LongResponseTask: ERXLongResponse {
+	task = longResponseTask;
+}
+
+Header: WOSwitchComponent {
+	WOComponentName = d2wContext.headerComponentName;
+	d2wContext = d2wContext;
+}
+
+HeaderDiv : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForHeader;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = d2wContext.pageWrapperName;
+}
+
+WrapperDiv : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForWrapper;
+}
+
+ShowTopActionBlock : WOConditional {
+	condition = d2wContext.showTopActionBlock;
+}
+
+TopActionBlock : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForTopActionBlock;
+}

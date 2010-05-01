@@ -819,37 +819,21 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     }
     
     /**
-     * Overrides the EOGenericRecord's implementation to
-     * provide a slightly less verbose output. A typical
-     * output for an object mapped to the class com.foo.User
-     * with a primary key of 50 would look like:
-     * <com.foo.User pk:"50">
-     * EOGenericRecord's implementation is preserved in the
-     * method <code>toLongString</code>. To restore the original
-     * verbose logging in your subclasses override this method and
-     * return toLongString.
-     * @return much less verbose description of an enterprise
-     *		object.
+	 * Overrides the EOGenericRecord's implementation to provide a slightly less
+	 * verbose output. A typical output for an object mapped to the class
+	 * com.foo.User with a primary key of 50 would look like: <com.foo.User
+	 * pk:"50"> EOGenericRecord's implementation is preserved in the method
+	 * <code>toLongString</code>. To restore the original verbose logging in
+	 * your subclasses override this method and return toLongString.
+	 * 
+	 * @return much less verbose description of an enterprise object.
      */
+	@Override
     public String toString() {
         String pk = primaryKey();
         pk = (pk == null) ? "null" : pk;
-        return "<" + getClass().getName() + " pk:\""+ pk + "\">";
+        return "<" + getClass().getName() + " pk:\"" + pk + "\">";
     }
-
-    /**
-     * Cover method to return <code>toString</code>.
-     * @return the results of calling toString.
-     */
-    public String description() { return toString(); }
-    /**
-     * Returns the super classes implementation of toString
-     * which prints out the current key-value pairs for all
-     * of the attributes and relationships for the current
-     * object. Very verbose.
-     * @return super's implementation of <code>toString</code>.
-     */
-    public String toLongString() { return super.toString(); }
 
     /** Caches the string attribute keys on a per entity name basis */
     private static NSMutableDictionary _attributeKeysPerEntityName=new NSMutableDictionary();
@@ -881,24 +865,32 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         return result;
     }
 
-    /**
-     * This method will trim the leading and trailing white
-     * space from any attributes that are mapped to a String
-     * object. This method is called before the object is saved
-     * to the database. Override this method to do nothing if
-     * you wish to preserve your leading and trailing white space.
-     */
-    public void trimSpaces() {
-        for (Enumeration e=stringAttributeListForEntityNamed(entityName()).objectEnumerator(); e.hasMoreElements();) {
-            String key=(String)e.nextElement();
-            String value=(String)storedValueForKey(key);
-            if (value!=null) {
-                String trimmedValue=value.trim();
-                if (trimmedValue.length()!=value.length())
-                    takeStoredValueForKey(trimmedValue,key);
-            }
-        }
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see er.extensions.ERXEnterpriseObject#description()
+	 */
+	public String description() {
+		return toString();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see er.extensions.ERXEnterpriseObject#toLongString()
+	 */
+	public String toLongString() {
+		return super.toString();
+	}
+
+     	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see er.extensions.ERXEnterpriseObject#trimSpaces()
+	 */
+    	public void trimSpaces() {
+		ERXEOControlUtilities.trimSpaces(this);
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -944,6 +936,34 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 		NSDictionary snapshot = snapshot();
 		NSDictionary originalSnapshot = __originalSnapshot();
 		return originalSnapshot != null && !originalSnapshot.equals(snapshot);
+	}
+
+	private boolean _validatedWhenNested = true;
+	
+	/**
+	 * If false, when this object is committed into a nested editingContext and it exists
+	 * in the parent editing context, validation will be skipped. This supports nested
+	 * UI workflows where you want to create a new to-one relationship for an object that
+	 * isn't fully configured by localInstancing it into a nested editing context. In
+	 * that scenario, the localInstance'd EO would attempt to validate when the nested
+	 * editing context is committed, throwing a validation exception that should be
+	 * deferred to the parent editing context. This defaults to true, which maintains
+	 * the current behavior.
+	 * 
+	 * @param validatedWhenNested
+	 */
+	public void setValidatedWhenNested(boolean validatedWhenNested) {
+		_validatedWhenNested = validatedWhenNested;
+	}
+
+	/**
+	 * Returns whether or not this object is validated when it is committed in a 
+	 * nested editing context.
+	 * 
+	 * @return whether or not this object is validated when it is committed in a  nested editing context.
+	 */
+	public boolean isValidatedWhenNested() {
+		return _validatedWhenNested;
 	}
     
     
@@ -1026,16 +1046,24 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     }
 
     /**
-     * This method performs a few checks before invoking
-     * super's implementation. If the property key:
-     * <b>ERDebuggingEnabled</b> is set to true then the method
-     * <code>checkConsistency</code> will be called on this object.
-     * @throws NSValidation.ValidationException if the object does not
-     *		pass validation for saving to the database.
+	 * This method performs a few checks before invoking super's implementation.
+	 * If the property key: <b>ERDebuggingEnabled</b> is set to true then the
+	 * method <code>checkConsistency</code> will be called on this object.
+	 * 
+	 * @throws NSValidation.ValidationException
+	 *             if the object does not pass validation for saving to the
+	 *             database.
      */
-    public void validateForSave( )  throws NSValidation.ValidationException {
+	@Override
+	public void validateForSave() throws NSValidation.ValidationException {
+		// Support for skipping validation when _validatedWhenNested is false and this EO is localInstanced from a parent EC
+		if (!_validatedWhenNested && editingContext().parentObjectStore() instanceof EOEditingContext && ((EOEditingContext)editingContext().parentObjectStore()).objectForGlobalID(editingContext().globalIDForObject(this)) != null) {
+			return;
+		}
+		
         // This condition shouldn't ever happen, but it does ;)
-        // CHECKME: This was a 4.5 issue, not sure if this one has been fixed yet.
+		// CHECKME: This was a 4.5 issue, not sure if this one has been fixed
+		// yet.
         if (editingContext() != null && editingContext().deletedObjects().containsObject(this)) {
             validation.warn("Calling validate for save on an eo: " + this + " that has been marked for deletion!");
         }
@@ -1044,8 +1072,10 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         }
         
         super.validateForSave();
-        // FIXME: Should move all of the keys into on central place for easier management.
-        // 	  Also might want to have a flag off of ERXApplication is debugging is enabled.
+		// FIXME: Should move all of the keys into on central place for easier
+		// management.
+		// Also might want to have a flag off of ERXApplication is debugging is
+		// enabled.
         // FIXME: Should have a better flag than just ERDebuggingEnabled
         if (ERXProperties.booleanForKey("ERDebuggingEnabled"))
             checkConsistency();

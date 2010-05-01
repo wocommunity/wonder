@@ -44,6 +44,19 @@ import java.util.Enumeration;
  * restore the initial query bindings by supplying a NS(Mutable)Dictionary which
  * contains the keys "queryMin", "queryMax" etc from the respective fields of
  * the WODisplayGroup.
+ * @d2wKey fetchSpecificationName
+ * @d2wKey enableQueryForNullValues
+ * @d2wKey isDeep
+ * @d2wKey usesDistinct
+ * @d2wKey refrehRefetchedObjects
+ * @d2wKey fetchLimit
+ * @d2wKey prefetchingRelationshipKeyPaths
+ * @d2wKey showListInSamePage
+ * @d2wKey listConfigurationName
+ * @d2wKey queryDataSourceDelegate
+ * @d2wKey queryValidationDelegate
+ * @d2wKey enableQueryForNullValues
+ * @d2wKey canQueryPropertyForNullValues
  */
 public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
 
@@ -444,7 +457,9 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
             for (Enumeration keysEnum = displayPropertyKeys().objectEnumerator(); keysEnum.hasMoreElements();) {
                 String key = (String)keysEnum.nextElement();
                 setPropertyKey(key);
-                if (!ERXValueUtilities.booleanValueWithDefault(d2wContext.valueForKey("isMandatory"), false)) {
+
+                Object isMandatory = d2wContext.valueForKey("isMandatory");
+                if (isMandatory != null && !ERXValueUtilities.booleanValue(isMandatory)) {
                     array.addObject(key);
                 }
             }
@@ -493,9 +508,9 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
             if (Boolean.TRUE.equals(value)) {
                 displayGroup.queryOperator().takeValueForKey(EOQualifier.stringForOperatorSelector(EOQualifier.QualifierOperatorEqual), key);
                 if (displayGroup.queryBindings().valueForKey(key) != null) {
-                    displayGroup.queryBindings().takeValueForKey(NullValue, key);
+                    displayGroup.queryBindings().takeValueForKey(NSKeyValueCoding.NullValue, key);
                 } else {
-                    displayGroup.queryMatch().takeValueForKey(NullValue, key);
+                    displayGroup.queryMatch().takeValueForKey(NSKeyValueCoding.NullValue, key);
                 }
             }
         }

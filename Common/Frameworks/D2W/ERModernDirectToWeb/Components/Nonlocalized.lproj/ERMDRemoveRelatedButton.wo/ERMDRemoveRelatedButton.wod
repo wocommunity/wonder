@@ -1,0 +1,85 @@
+ShowDialogButton : AjaxUpdateLink {
+  action = buttonAction;
+  updateContainerID = localUpdateContainer;
+  class = buttonClass;
+}
+
+RemoveButton : AjaxUpdateLink {
+  action = removeAction;
+  updateContainerID = updateContainer;
+  class = removeButtonClass;
+}
+
+DeleteButton : AjaxUpdateLink {
+  action = deleteAction;
+  updateContainerID = updateContainer;
+  class = deleteButtonClass;
+}
+
+CancelButton : AjaxUpdateLink {
+  action = cancelAction;
+  updateContainerID = localUpdateContainer;
+  class = cancelButtonClass;
+}
+
+DeleteButtonLabel : WOString {
+    value = deleteButtonLabel;
+    escapeHTML = false;
+}
+
+RemoveButtonLabel : WOString {
+  value = removeButtonLabel;
+  escapeHTML = false;
+}
+
+CancelButtonLabel : WOString {
+  value = cancelButtonLabel;
+  escapeHTML = false;
+}
+
+ButtonUpdateContainer : AjaxUpdateContainer {
+  id = localUpdateContainer;
+  class = "ERMDRelatedRemoveButton";
+}
+
+NotShowDialog : WOConditional {
+  condition = showDialog;
+  negate = true;
+}
+
+ShowDialog : WOConditional {
+  condition = showDialog;
+}
+
+DialogMessage : WOString {
+  value = dialogMessage;
+  escapeHTML = false;
+}
+
+ShowRemoveButton : WOConditional {
+  condition = showRemoveButton;
+}
+
+ShowDeleteButton : WOConditional {
+  condition = showDeleteButton;
+}
+
+NotUseAjax : WOConditional {
+  condition = useAjax;
+  negate = true;
+}
+
+UseAjax : WOConditional {
+  condition = useAjax;
+}
+
+StandardRemoveButton: WOHyperlink {
+    action = buttonAction;
+    title = ^displayNameForConfirmDeleteConfiguration;
+    class = buttonClass;
+}
+
+DisabledRemoveButton : WOGenericContainer {
+  elementName = "span";
+  class = buttonClass;
+}

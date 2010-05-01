@@ -1,0 +1,45 @@
+Help: ERDDebuggingHelp {
+	d2wContext = d2wContext;
+	condition = showHelp;
+}
+
+WrapperDiv : AjaxUpdateContainer {
+	id = d2wContext.idForMainContainer;
+	class = d2wContext.classForWrapper;
+}
+ Content : WOComponentContent {}
+ 
+ BusyIndicator : AjaxBusyIndicator {
+	busyImage = d2wContext.busyIndicatorImageName;
+	busyImageFramework = d2wContext.busyIndicatorImageFramework;
+	id = d2wContext.idForMainBusyIndicator;
+	watchContainerID = watchedContainerID;
+	class = "GlobalBusyIndicator";
+}
+
+OptionalForm: ERXOptionalForm {
+	enctype = d2wContext.formEncoding;
+	showForm = showForm;
+	multipleSubmit = true;
+	name = formName;
+}
+
+HeaderDiv : WOGenericContainer {
+	elementName = "div";
+	class = d2wContext.classForHeader;
+}
+
+Header: WOSwitchComponent {
+	WOComponentName = d2wContext.headerComponentName;
+	d2wContext = d2wContext;
+	object = ^object;
+	key = ^key;
+}
+
+ShowHeader : WOConditional {
+	condition = d2wContext.showHeader;
+}
+
+IncludeBusyIndictator : WOConditional {
+  condition = d2wContext.includeBusyIndicator;
+}

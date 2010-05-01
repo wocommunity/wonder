@@ -1,0 +1,10 @@
+D2wContextKeysWhenRelationship : WORepetition {
+  list = d2wContext.keysWhenRelationship;
+  item = d2wContext.propertyKey;
+}
+
+WOSwitchComponent : WOSwitchComponent {
+  WOComponentName = d2wContext.componentName;
+  object = relatedItem;
+  localContext = d2wContext;
+}

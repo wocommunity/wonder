@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERMD2WRelatedList" wocomponentcontent="false">    <binding name="pageConfiguration"/>
+        <binding name="entityName"/>
+        <binding name="settings"/>
+        <binding name="list"/>
+        <binding name="datasource"/>
+        <binding name="displayKeys"/>
+        <binding name="nextPage"/>
+        <binding name="nextPageDelegate"/>
+        <binding name="masterObject"/>
+        <binding name="relationshipKey"/>
+    </wo>
+</wodefinitions>

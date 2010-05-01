@@ -290,6 +290,12 @@ There are many ways to use this script:
             <frameworks dir="${wonder.lib.root}" if="use.wonder.ajax">
                 <include name="Ajax.framework" />
             </frameworks>
+			<frameworks dir="${wonder.lib.root}" if="use.wonder.modern.d2w">
+                <include name="Ajax.framework" />
+				<include name="ERModernDirectToWeb.all" />
+				<include name="ERModernLook.all" />
+				<include name="ERModernDefaultSkin.all" />
+            </frameworks>
            <frameworks dir="${wo.localroot}/Library/Frameworks" if="use.reporting">
                 <include name="WOComponentElements.framework"/>
            </frameworks>
@@ -488,6 +494,15 @@ There are many ways to use this script:
                 <include name="DRGrouping.framework" />
                 <include name="WRReporting.framework" />
                 <include name="WOOgnl.framework" />
+            </frameworks>
+			<frameworks dir="${wonder.lib.root}" if="use.wonder.ajax">
+                <include name="Ajax.framework" />
+            </frameworks>
+			<frameworks dir="${wonder.lib.root}" if="use.wonder.modern.d2w">
+                <include name="Ajax.framework" />
+				<include name="ERModernDirectToWeb.all" />
+				<include name="ERModernLook.all" />
+				<include name="ERModernDefaultSkin.all" />
             </frameworks>
            <frameworks dir="${wo.localroot}/Library/Frameworks" if="use.reporting">
                 <include name="WOComponentElements.framework"/>
@@ -1090,7 +1105,7 @@ There are many ways to use this script:
             <param name="use.wonder.ajax" value="true" />
         </antcall>
     </target>
-    <target name="Ajax.framework.all">
+    <target name="Ajax.all">
         <antcall target="global.framework" >
             <param name="project.principal.class" value="er.ajax.Ajax" />
             <param name="project.name" value="Ajax" />
@@ -1104,6 +1119,48 @@ There are many ways to use this script:
             <param name="project.principal.class" value="com.webobjects.jdbcadaptor.PostgresqlPlugIn" />
             <param name="project.name" value="PostgresqlPlugIn" />
             <param name="project.dir" value="PlugIns/PostgresqlPlugIn" />
+        </antcall>
+    </target>
+
+	<target name="ERModernLook.all">
+        <antcall target="global.framework" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="ERModernLook" />
+            <param name="project.dir" value="Common/Frameworks/D2W/ERModernLook" />
+			
+			<param name="use.wonder.core" value="true" />
+			<param name="use.webobjects.d2w" value="true" />
+            <param name="use.wonder.d2w" value="true" />
+			<param name="use.wonder.ajax" value="true" />
+			<param name="use.additional.framework.1" value="ERModernDirectToWeb.framework" />
+        </antcall>
+    </target>
+    
+    <target name="ERModernDirectToWeb.all">
+        <antcall target="global.framework" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="ERModernDirectToWeb" />
+            <param name="project.dir" value="Common/Frameworks/D2W/ERModernDirectToWeb" />
+
+			<param name="use.wonder.core" value="true" />
+			<param name="use.webobjects.d2w" value="true" />
+            <param name="use.wonder.d2w" value="true" />
+			<param name="use.wonder.ajax" value="true" />
+        </antcall>
+    </target>
+    
+    <target name="ERModernDefaultSkin.all">
+        <antcall target="global.framework" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="ERModernDefaultSkin" />
+            <param name="project.dir" value="Common/Frameworks/D2W/ERModernDefaultSkin" />
+
+			<param name="use.wonder.core" value="true" />
+			<param name="use.webobjects.d2w" value="true" />
+            <param name="use.wonder.d2w" value="true" />
+			<param name="use.wonder.ajax" value="true" />
+			<param name="use.additional.framework.1" value="ERModernDirectToWeb.framework" />
+			<param name="use.additional.framework.2" value="ERModernLook.framework" />
         </antcall>
     </target>
 
@@ -1130,7 +1187,8 @@ There are many ways to use this script:
     
     <target name="ExcelGeneration.all" depends="ExcelGenerator.all, EGSampleApp.all" />
 
-    <target name="Ajax.all" depends=" Ajax.framework.all, AjaxExample.all" />
+	<target name="ajax.frameworks.all" depends="Ajax.all, ERModernDirectToWeb.all, ERModernLook.all, ERModernDefaultSkin.all" />
+	<target name="ajax.examples.all" depends="AjaxExample.all" />
 
     <target name="SVGObjects.example.all" depends="SVGObjects.ComponentTour.all, SVGObjects.eCards.all, SVGObjects.EZForms.all, SVGObjects.Hello.all, SVGObjects.PopIdol.all" />
     <target name="SVGObjects.all" depends="SVGObjects.framework.all , SVGObjects.example.all" />
@@ -1140,9 +1198,9 @@ There are many ways to use this script:
 
     <target name="experimental.all" depends="DevStudio.all" />
 
-    <target name="frameworks.all" depends="common.frameworks.all, BTBusinessLogic.all, ERMiniUglyLook.all, ExcelGenerator.all, Ajax.framework.all, Validity.framework.all, SVGObjects.framework.all, PostgresqlPlugIn.all, WOPayPal.all, DRGrouping.all, WRReporting.all"/>
+    <target name="frameworks.all" depends="common.frameworks.all, BTBusinessLogic.all, ERMiniUglyLook.all, ExcelGenerator.all, ajax.frameworks.all, Validity.framework.all, SVGObjects.framework.all, PostgresqlPlugIn.all, WOPayPal.all, DRGrouping.all, WRReporting.all"/>
     <target name="applications.all" depends="DevStudio.all, BugTracker.all, ERMailer.all, Validity.application.all"/>
-    <target name="examples.all" depends="NetStruxrCaseStudy.all, ERMovies.all, D2WListExample.all, D2WInspectExample.all, EGSampleApp.all, Validity.example.all, DocsByExample.all, DynaReporter.all, DRGroupingTest.all, SVGObjects.example.all , AjaxExample.all "/>
+    <target name="examples.all" depends="NetStruxrCaseStudy.all, ERMovies.all, D2WListExample.all, D2WInspectExample.all, EGSampleApp.all, Validity.example.all, DocsByExample.all, DynaReporter.all, DRGroupingTest.all, SVGObjects.example.all , ajax.examples.all "/>
 
     <target name="all.compile" depends="common.all, subprojects.all, experimental.all" />
 

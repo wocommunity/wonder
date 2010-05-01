@@ -1,0 +1,53 @@
+<webobject name = "PageWrapper">
+  <webobject name = "RequiredWrapper">
+    <webobject name = "AboveDisplayPropertyKeys" />
+    <webobject name = "InnerWrapper">
+    <webobject name = "ListNotEmpty">
+      <webobject name = "IsToMany">
+      <div class="ToManyObjList">
+        <webobject name = "RepetitionUpdateContainer">
+          <webobject name = "ShowTopBatchNavBar">
+            <webobject name = "TopNavBar"> <webobject name = "NavigationBar" /> </webobject>
+          </webobject>
+          <webobject name = "ShowTopBatchCount">
+            <webobject name = "TopNavBatchSize"><webobject name = "BatchSizeControl" /></webobject>
+          </webobject>
+          <webobject name = "ToManyListRepetition" />
+          <webobject name = "ShowBottomBatchNavBar">
+            <webobject name = "BottomNavBar"> <webobject name = "NavigationBar" /> </webobject>
+          </webobject>
+          <webobject name = "ShowBottomBatchCount">
+            <webobject name = "BottomNavBatchSize"><webobject name = "BatchSizeControl" /></webobject>
+          </webobject>
+        </webobject>
+      </div>
+      </webobject>
+      <webobject name = "IsToOne">
+      <div class="ToOneObjList">
+        <webobject name = "ToOneListRepetition" />
+      </div>
+      </webobject>
+      </webobject>
+      <webobject name = "ListEmpty"> <webobject name = "EmptyMessageComponent" /> </webobject>
+    <webobject name = "ShowBottomActionBlock">
+      <webobject name = "BottomActionBlock">
+      <ul class = "ActionList">
+        <webobject name = "ShowCancel">
+          <li><webobject name = "ReturnButton" /></li>
+        </webobject>
+        <li><webobject name = "QueryButton" /></li>
+        <webobject name = "IsEntityWritable">
+          <li><webobject name = "NewButton" /></li>
+        </webobject>
+      </ul>
+    </webobject>
+    </webobject>
+    </webobject>
+    <div class="EmbeddedBlocks">
+    <webobject name = "DisplayQuery"><webobject name = "QueryBlock"><webobject name = "QueryComponent" /></webobject></webobject>
+    <webobject name = "DisplayList"><webobject name = "ListBlock"><webobject name = "ListComponent" /></webobject></webobject>
+    <webobject name = "DisplayNew"><webobject name = "InspectBlock"><webobject name = "InspectComponent" /></webobject></webobject>
+    </div>
+    <webobject name = "BelowDisplayPropertyKeys" />
+</webobject>
+</webobject>

@@ -1,0 +1,1398 @@
+body {
+	color: #333;
+	margin: 0;
+	font: 80% Helvetica, Arial, Geneva, sans-serif;
+}
+
+h1, h2 {
+	padding: 0;
+	margin: 0;
+}
+
+ul, li {
+	padding: 0;
+	margin: 0;
+}
+
+a {
+	color: #4262a1;
+	text-decoration: none;
+}
+
+label {
+	padding: 0;
+	margin: 0;
+}
+
+table, th, td{
+}
+
+input, textarea, select {
+	font-size: 90%;
+	border: 1px solid #aaa;
+}
+
+textarea {
+	height: 140px;
+}
+
+
+#ContentWrapper {
+	margin: 0;
+}
+
+#MenuHeader {
+	margin-bottom: 20px;
+	background-color: #414b5e;
+	padding-top: 30px;	
+}
+
+.MenuHeaderWrapper {
+	overflow: hidden;
+}
+
+.MenuHeaderHeading {
+	float: left;
+}
+
+/* USER MENU */
+
+.UserMenu {
+	float: right;
+	margin: 5px 30px 30px 0;
+	padding: 0;
+}
+
+.UserMenu a {
+	font-size: 85%;
+}
+
+.UserMenu li {
+	float: left;
+	line-height: 1.6;
+	padding: 0 8px;
+	background: url(dot.png) no-repeat left;
+}
+
+.UserMenu li.last {
+	border-right: none;
+	background: url(opt_controls.png) no-repeat left;
+	padding-left: 22px;
+	margin-left: 10px;
+}
+
+.UserMenu li.first {
+	background: url(user_icon.png) no-repeat left;
+	padding-left: 23px;
+}
+
+#MainContent {
+	margin-bottom: 50px;
+}
+
+.Wrapper {
+	position: relative;
+	width: auto;
+	padding: 0 50px;
+	/*overflow:hidden;*/
+}
+
+.EmbeddedWrapper {
+	padding: 0;
+}
+
+.Heading {
+	padding-left: 50px;
+}
+
+.Heading h1 {
+	color: #f5e4aa;
+	font: normal 180% "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	text-shadow: #20252f 0 1px 0;
+}
+
+.Section {
+	padding-bottom: 10px;
+}
+
+.SectionHeading {
+	padding-bottom: 5px;
+}
+
+.Block {
+	overflow: hidden;
+	width: 100%;
+}
+
+.ErrBlock {
+	border: 2px solid #f37657;
+	border-left: none;
+	border-right: none;
+	padding: 7px 42px;
+	color: #741b03;
+	font-weight: bold;
+	font-size: 110%;
+	margin-bottom: 20px;
+	background: #ffd5bd url(icon_err.png) no-repeat 10px 11px;
+}
+
+.ErrBlock ul,
+.ErrBlock li {
+	list-style-type: disc;
+	list-style-image: none;
+	padding: 0;
+	margin: 0;
+	list-style-position: inside;
+}
+
+.ErrBlock li {
+	padding: 3px 0 4px 0;
+}
+
+.Banner,
+.ERMDEmptyList {
+	border-left: none;
+	border-right: none;
+	padding: 10px 42px;
+	color: #554433;
+	font-weight: bold;
+	font-size: 110%;
+	margin: 20px 0;
+}
+
+.EmbeddedInnerWrapper .ERMDEmptyList {
+	margin: 0;
+}
+
+.BannerCurrentStep {
+	color: #fff;
+	background: url(banner_step.png) no-repeat;
+	padding: 4px 8px;
+}
+
+.ConfirmDeleteBanner {
+	border-top: 2px solid #ddcc99;
+	border-bottom: 2px solid #ddcc99;
+	color: #554433;
+	background: #ffc url(icon_warn.png) no-repeat 10px 8px;
+}
+
+.ConfirmCancelBanner,
+.ERMDEmptyList {
+	border-top: 2px solid #ddcc99;
+	border-bottom: 2px solid #ddcc99;
+	color: #554433;
+	background: #ffc url(icon_warn.png) no-repeat 10px 8px;
+}
+
+.CreateBanner {
+	border: none;
+	padding: 0;
+	margin-top: 0;
+	font-weight: normal;
+}
+
+.CreateBanner ul,
+.CreateBanner li {
+	list-style-type: none;
+}
+
+.CreateBanner ul {
+	background-color: #e0e3ea;
+	overflow: hidden;
+	margin: 0px;
+	width: auto;
+}
+
+.CreateBanner li {
+	float: left;
+	padding: 0 0px 0 42px;
+	color: #666;
+	margin-left: -24px;
+	background: url(status_unsel.png) no-repeat left;
+	line-height: 39px;
+}
+
+.CreateBanner li .BannerItem {
+	display: block;
+	line-height: 39px;
+	padding-right: 46px;
+}
+
+.CreateBanner li.First {
+	padding-left: 44px;
+	background-image: none;
+	background-color: #e0e3ea;
+}
+
+.CreateBanner li.Last .BannerItem {
+	background: url(status_endcap.png) no-repeat right;
+}
+
+.CreateBanner .BannerStepNumber {
+	font-weight: bold;
+	padding-right: 5px;
+}
+
+.CreateBanner li.CurrentStep {
+	color: #fff;
+	background: url(status_sel.png) no-repeat left;
+}
+
+
+/* MENUS */
+
+/*ERXNavigation (MAIN MENU)*/
+
+.ERXNavigationMenu a {
+	color:  #aaa;
+	text-decoration: none;
+	margin-top: 15px;
+}
+
+.ERXNavigationMenu a:hover {
+	color: #fff;
+}
+
+.ERXNavigationMenu {
+	overflow: hidden;
+}
+
+ul.Level1Items {
+	overflow: hidden;
+	margin: 0;
+	padding: 0 50px;
+	background-image: url(mh_bkgrnd.png);
+	background-repeat: repeat-x 0;
+	background-position: bottom;
+}
+
+.Nav1, .Nav1Selected {
+	float: left;
+}
+
+.Nav1 a,
+.Nav1Selected a {
+	float: left;
+	background-image: url(tab.png);
+	background-repeat: no-repeat;
+	background-position: left bottom;
+	margin-right: 0px;
+	color: #fff;
+	text-shadow: #2e333c 0 -1px 0;
+}
+
+.Nav1Selected a {
+	background-image: url(tab_wht.png);
+	color: #333;
+	text-shadow: none;
+	font-weight: bold;
+}
+
+.L1WithChildren .Nav1Selected a {
+	background-image: url(tab_sel.png);
+}
+
+.Nav1Selected a:hover {
+	color:  #333;;
+}
+
+.Nav1 a span,
+.Nav1Selected a span {
+	float: left;
+	margin-right: -1px;
+	background-image: url(tab.png);
+	background-repeat: no-repeat;
+	background-position: right bottom;
+	padding: 0px 25px 0 20px;
+	line-height: 37px;
+	height: 37px;
+	margin-left: 5px;
+}
+
+.Nav1Selected a span {
+	background-image: url(tab_wht.png);
+}
+
+.L1WithChildren .Nav1Selected a span {
+	background-image: url(tab_sel.png);
+}
+
+
+ul.Level2Items,
+ul.Level3Items {
+	background: url(tab2_bak.png) repeat-x 0 bottom;
+	margin: 0;
+	padding: 0;
+	height: 32px;
+	text-align: center;
+}
+
+
+.Level2Items li,
+.Level3Items li {
+	display:  inline;
+	line-height: 32px;
+	padding: 5px 20px 7px 20px;
+}
+
+.Level2Items li a,
+.Level3Items li a {
+	color: #666;
+	text-shadow: #e4e4e4 0 1px 0;
+	font-weight: bold;
+}
+
+.Level2Items li a:hover,
+.Level3Items li a:hover {
+	color: #333;
+}
+
+li.Nav2Selected a,
+li.Nav3Selected a {
+	color: #333;
+	
+}
+
+li.Nav2Selected,
+li.Nav3Selected {
+	background: url(tab2_alt_sel.png) no-repeat center bottom;
+	padding-bottom: 9px;
+}
+
+ul.L2WithChildren li.Nav2Selected {
+	background: url(tab2_sel.png) no-repeat center bottom;
+}
+
+.QuickNav {
+	position: absolute;
+	right: 0;
+	top:  35px;
+}
+
+.QuickNav label{
+	font-size: 85%;
+	color: #a8abb4;
+}
+.QuickNav select {
+	margin: 0 8px;
+	width: 100px;
+}
+
+.QuickNav input {
+	width: 100px;
+}
+/*DEFAULTS*/
+
+.Menu {
+	overflow: hidden;
+}
+
+.Menu a {
+	color: #fff;
+	text-decoration: none;
+}
+
+.Menu a:hover {
+	color: #fff;
+}
+
+.Menu ul,
+.Menu li,
+.ERXNavigationMenu ul,
+.ERXNavigationMenu li,
+.ActionList ul,
+.ActionList li,
+.RelatedItems,
+.RelatedItems li {
+	list-style: none;
+	list-style-type: none;
+}
+
+.Menu ul,
+.ActionList ul {
+	margin: 0;
+	padding: 0;
+}
+
+.Menu li,
+.ActionList li {
+	float: left;
+}
+
+
+
+
+/* ACTION LIST */
+
+.ActionList {
+	float:right;
+	padding: 0;
+	margin: 0;
+}
+
+/* ROOT BUTTON STYLES */
+
+.ObjActionList {
+	padding: 0;
+	margin: 0;
+	display: inline;
+	list-style-type: none;
+}
+
+.ObjActionList li {
+	display: inline;
+	padding-top: 5px;
+	list-style-type: none;
+}
+
+.Button {
+	float: left;
+	background-image: url(btn_gry.png);
+	background-repeat: no-repeat;
+	background-position: left bottom;
+	margin-left: 15px;
+	font-size: 95%;
+	color: #373737;
+	font-weight: bold;
+}
+
+.Button span {
+	float: left;
+	background-image: url(btn_gry.png);
+	background-repeat: no-repeat;
+	background-position: right bottom;
+	background-color: #fff;
+	padding: 0;
+	line-height: 26px;
+	margin-left: 23px;
+	padding-right: 23px;
+	text-shadow: #e9e9e9 0px 1px 0px;
+}
+
+.EditPageButton,
+.NextPageButton,
+.SubmitPageButton,
+.QueryPageButton {
+	background-image: url(btn_blu.png);
+	color: #fff;
+}
+
+.EditPageButton span,
+.NextPageButton span,
+.SubmitPageButton span,
+.QueryPageButton span {
+	background-image: url(btn_blu.png);
+	background-color: #fff;
+	text-shadow: #405882 0px -1px 0px;
+}
+
+.ObjButton,
+.DialogButton,
+.EmbeddedEditRelationshipBtmActions .PageButton {
+	background-image: url(btn_gry_sm.png);
+	margin-left: 0;
+	margin-right: 10px;
+	font-size: 11px;
+}
+
+.ObjButton span,
+.DialogButton span,
+.EmbeddedEditRelationshipBtmActions .PageButton span {
+	background-image: url(btn_gry_sm.png);
+	margin-left: 16px;
+	padding-right: 16px;
+	line-height: 22px;
+}
+
+.ERMDRelatedRemoveButton {
+	position: relative;
+	float: left;
+}
+
+.DeleteObjButton,
+.RemoveObjButton,
+.DisabledDeleteObjButton {
+	background-image: url(btn_del.png);
+	margin: 0;
+	width: 21px;
+	height: 22px;
+}
+
+.DisabledDeleteObjButton {
+	background-image: url(btn_del_disabled.png);
+}
+
+.DeleteObjButton span,
+.RemoveObjButton span,
+.DisabledDeleteObjButton span {
+	display: none;
+}
+
+.DialogButton {
+	background-image: url(btn_gry_sm.png);
+	margin-left: 0;
+	margin-right: 10px;
+	font-size: 11px;
+	width: auto;
+	height: auto;
+}
+
+.DialogButton span {
+	display: inline;
+	background-image: url(btn_gry_sm.png);
+	margin-left: 16px;
+	padding-right: 16px;
+	line-height: 22px;
+}
+
+.EditObjButton,
+.QueryObjButton,
+.EmbeddedEditRelationshipBtmActions .QueryPageButton {
+	background-image: url(btn_blu_sm.png);
+	color: #fff;
+}
+
+.EditObjButton span,
+.QueryObjButton span,
+.EmbeddedEditRelationshipBtmActions .QueryPageButton span {
+	background-image: url(btn_blu_sm.png);
+	text-shadow: #405882 0px -1px 0px;
+}
+
+.LftActionCell {
+	width: 145px;
+	padding-left: 10px;
+}
+
+.RtActionCell {
+	width: 35px;
+}
+
+.EmbeddedObjTable .RtActionCell,
+.EditRelationshipObjTable .RtActionCell {
+	width: 170px;
+}
+
+.ERDControllerButton {
+	display: none;
+}
+.ERDPrinterButton {
+	display: none;
+}
+
+.GlobalBusyIndicator {
+	position: absolute;
+	top: 40%;
+	left: 40%;
+	z-index: 99;
+	border: none;
+}
+
+.Header .PageHeader {
+	padding-bottom: 5px;
+}
+
+.InnerWrapper {
+	padding-top:  20px;
+	border-top: 1px solid #f5f5f5;
+}
+
+.EmbeddedEditRelationshipInnerWrapper,
+.EmbeddedListInnerWrapper {
+	padding-top: 0;
+}
+
+.CreateInnerWrapper {
+	padding-top: 10px;
+}
+
+.Line {
+	background-image: url(label_bak.png);
+	background-repeat: repeat-y;
+	background-position: left;
+	background-color: #f5f5f5;
+	width: auto;
+	/*overflow: auto;*/
+}
+
+.FirstLine {
+	border-top: 1px solid #e5e5e5;
+}
+
+.Line input,
+.Line textarea {
+	/*border: 1px solid #a9a9a9;*/
+	padding: 3px;
+	width:  300px;
+}
+
+.QueryLine {
+	overflow: hidden;
+}
+
+.QueryAllLine {
+	overflow: hidden;
+}
+
+.QueryAllLine .LineInner {
+	overflow: hidden;
+}
+
+.QueryLine input, .QueryAllLine input,
+.QueryLine textArea, .QueryAllLine textArea,
+.QueryAllLine input {
+	width: 165px;
+	margin-left: 5px;
+}
+
+a.date-picker-control {
+	display: none;
+	visibility: hidden;
+	width: 0;
+	margin: 0;
+	padding: 0;
+}
+
+.QueryLine .DateReleasedAttrVal input,
+.QueryLine .RevenueAttrVal input,
+.QueryLine .BudgetAttrVal input,
+.QueryLine .NumberOfVotesAttrVal input,
+.QueryLine .RunningAverageAttrVal input {
+	width: 100px;
+}
+
+.ObjActionList input{
+	width: auto;
+	border: none;
+	/*padding: 0;*/
+}
+
+.Line .LabelWrapper {
+	float:left;
+	padding: 10px 20px;
+	text-align: right;
+	width: 167px;
+}
+
+.Line label,
+.Line .Label {
+	position: relative;
+	color: #666;
+	font-weight: bold;
+}
+
+.Line label abbr,
+.Line .Label abbr {
+	position: absolute;
+	left: -10px;
+	border-bottom: none;
+	color: #d60000;
+}
+
+label.ErrorLabel,
+span.ErrorLabel {
+	/*color: #d60000;*/
+}
+
+.LineInner {
+	background-image: url(line_border.png);
+	background-position: left bottom;
+	background-repeat: no-repeat;
+	/*overflow: auto;*/
+	width: auto;
+}
+
+.AttrVal {
+	display: block;
+	padding: 10px 10px 10px 220px;
+	font-weight: bold;
+}
+
+.EditAttrVal textarea {
+	width: 480px;
+	height: 200px;
+}
+
+.ErrorLine .AttrVal span {
+	display: inline-table;
+	border: 2px solid #d60000;
+}
+
+.EditAttrVal,
+.QueryAllAttrVal,
+.QueryAttrVal {
+	padding-top: 7px;
+	padding-bottom: 7px;
+}
+
+.QueryAllQuery {
+	float: left;
+	width: 700px;
+}
+
+.QueryAllActions {
+	float: left;
+	margin-top: 7px;
+}
+
+
+.DirectorsAttrVal input {
+	/*width: auto;*/
+}
+
+.DirectorsAttrVal select {
+	width: 200px;
+}
+
+.Line .InspectAttributeValue {
+	margin-top: 5px;
+	float: left;
+}
+
+.ERD2WExample {
+	font-size: 80%;
+	font-style: italic;
+	color: #999;
+}
+
+.TopActions {
+	margin-bottom: 10px;
+	overflow: auto;
+}
+
+.BtmActions {
+	margin-top: 20px;
+	overflow: auto;
+}
+
+.CreateBtmActions {
+	overflow: visible;
+}
+
+.ObjTable,
+.EmbeddedObjTable {
+	width: 100%;
+}
+
+.ObjTable td,
+.ObjTable th,
+.EmbeddedObjTable td,
+.EmbeddedObjTable th {
+	border: none;
+	font-weight: bold;
+}
+
+.ObjTable th {
+	background-color: #414b5e;
+	color: #c2c6cf;
+	text-align: left;
+	font-weight: normal;
+	height: 23px;
+}
+
+.EmbeddedObjTable tbody {
+	border: 3px solid #d5d5d5;
+}
+
+.EmbeddedSelectObjTable tbody {
+	border: none;
+}
+
+.ObjectRow {
+	background-color: #f5f5f5;
+	padding: 3px;
+}
+
+.LastObjRow {
+	border-bottom: 1px solid #e6e9ef;
+}
+
+.OddObjRow td {
+	background-color: #e6e9ef;
+}
+
+.OddObjRow .Button span {
+	background-color: #e6e9ef;
+}
+
+.ComboTHLink .Label{
+	text-decoration: none;
+	color: #c2c6cf;
+	padding: 0;
+	float: none;
+	text-align: left;
+}
+
+.ComboTHLink .Label {
+}
+
+.ComboTHLinkDes,
+.ComboTHLinkAsc {
+	padding-right: 15px;
+	color: #fff;
+}
+
+.ComboTHLinkAsc {
+	background: url(sort_asc.png) no-repeat right;
+}
+
+.ComboTHLinkDes {
+	background: url(sort_dsc.png) no-repeat right;
+}
+
+.ComboTHLink:hover {
+	border-bottom: 1px solid #fff;
+}
+
+.EvenLine {
+	
+}
+
+.LftActionCell {
+
+}
+
+
+.Attributes {
+	/*overflow: hidden;*/
+}
+
+
+.CurrentRelatedBlock {
+	width: 480px;
+	margin: 10px auto;
+	padding: 20px;
+}
+
+.CurrentRelatedBlock label {
+	float: left;
+	margin-right: 10px;
+}
+
+.CurrentRelatedBlock select {
+	width: 200px;
+	height: 8em;
+}
+
+.RelatedObj {
+	float: left;
+}
+.RelatedObjControls .ActionList {
+	float: none;
+}
+
+.RelatedActionBlock {
+	border-top: 1px solid #e4e4e4;
+}
+
+.RelatedActionBlock .ActionList {
+	float: none;
+	width: 300px;
+	margin: 20px auto;
+}
+
+/* TABS */
+.Tab,
+.TabItemsList {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}
+
+.TabItemsList {
+	position: relative;
+	top:  1px;
+	width: 100%;
+	overflow: hidden;
+}
+
+.Tab {
+	padding-right: 30px;
+	float: left;
+}
+
+.Tab span {
+	display: block;
+	padding-bottom: 12px;
+	padding-top: 8px;
+	font-weight: bold;
+}
+
+.TPTab_Selected span {
+	background-image: url(pag_tab_sel.png);
+	background-position: center bottom;
+	background-repeat: no-repeat;
+}
+
+.TabPanelContent .InnerWrapper {
+	border-top: 1px solid #e1e1e1;
+}
+
+/*.ConfirmDeleteInnerWrapper .EmbeddedWrapper {
+	border-top: 2px solid #ddcc99;
+	border-bottom: 2px solid #ddcc99;
+}*/
+
+.EditToOneWrapper {
+	position: relative;
+	overflow: hidden;
+	/*left: 150px;*/
+	/*z-index: 1000;*/
+	border: 1px solid #ddd;
+	background-color: #eee;
+	width: 500px;
+	padding: 10px;
+}
+
+.ActionCell input {
+	width: auto;
+}
+
+.EditToOneWrapper .LftActionCell {
+	width: 15px;
+}
+
+.EditToOneWrapper input {
+	float:left;
+}
+
+.InplaceSearchBar {
+	overflow: hidden;
+	margin-bottom: 10px;
+}
+
+.EmbListObjTable {
+	width: auto;
+}
+
+.EmbListObjTable th {
+	height: auto;
+	padding: .1em;
+}
+
+/* PAGINATOR */
+
+.BatchNav {
+	padding-bottom: 10px;
+	text-align: right;
+	overflow: hidden;
+}
+
+.BottomBatchNav {
+	padding-top: 10px;
+	width: 570px;
+	overflow: auto;
+	margin: 0 auto;
+}
+
+.paginator {
+	float: left;
+	margin-right: 10px;
+}
+
+.paginator a,
+.paginator span {
+	background: url(pag_step_shad.png) no-repeat;
+	float: left;
+	height: 25px;
+	line-height: 25px;
+	text-align: center;
+	width: 25px;
+	color: #666;
+	font-weight: bold;
+	margin-right: 5px;
+}
+
+.EmbeddedBottomBatchNav .paginator a,
+.EmbeddedBottomBatchNav .paginator span {
+	background: url(pag_step.png) no-repeat;
+}
+
+.paginator .paginatorCurrentPage {
+	background: url(pag_current_shad.png) no-repeat;
+	color: #fff;
+}
+
+.EmbeddedBottomBatchNav .paginator .paginatorCurrentPage {
+	background: url(pag_current.png) no-repeat;
+}
+
+.paginator .paginatorAtStart,
+.paginator .paginatorPrev {
+	background: url(pag_prev_shad.png) no-repeat;
+	width: 57px;
+	padding-left: 10px;
+}
+
+.EmbeddedBottomBatchNav .paginator .paginatorAtStart,
+.EmbeddedBottomBatchNav .paginator .paginatorPrev {
+	background: url(pag_prev.png) no-repeat;
+}
+
+.paginator .paginatorNext,
+.paginator .paginatorAtEnd {
+	background: url(pag_next_shad.png) no-repeat;
+	width: 57px;
+	padding-right: 10px;
+}
+
+.EmbeddedBottomBatchNav .paginator .paginatorNext,
+.EmbeddedBottomBatchNav .paginator .paginatorAtEnd {
+	background: url(pag_next.png) no-repeat;
+}
+
+.paginator .paginatorAtStart,
+.paginator .paginatorAtEnd {
+	color: #bbb;
+}
+
+.paginatorResults,
+.BottomBatchSize,
+.TopBatchNav,
+.EmbeddedTopBatchSize {
+	display: none;
+}
+
+.EmbeddedBottomBatchSize {
+	display: inherit;
+}
+
+.EmbeddedBottomBatchNav {
+	float: right;
+	padding: 0;
+	margin: 0;
+	width: inherit;
+}
+
+.EmbeddedBottomBatchNav .paginator {
+	margin-right: 0;
+}
+
+.BatchSize {
+	color: #666;
+	font-weight: bold;
+}
+
+.TopBatchSize {
+	position: absolute;
+	top: 4px;
+	right: 50px;
+}
+
+.ERDBatchSize_Wrapper {
+	border: 1px solid red;
+}
+
+
+.Line .ERMDBatchSize_BatchValue,
+.ERMDBatchSize_BatchValue {
+	display: inline;
+	width: 20px;
+	line-height: 20px;
+	padding: 3px 5px;
+	border: 1px solid #aaa;
+	background-color: #fff;
+}
+
+.ERMDBatchSize_BatchForm {
+	display:  inline;
+	padding: 0;
+	margin: 0;
+}
+
+.ERMDBatchSize_BatchForm input {
+	width: 20px;
+	line-height: 20px;
+	padding: 0 3px;
+	border: 1px solid #aaa;
+	text-align: right;
+}
+
+.ERMDBatchSize_Separator {
+	
+}
+
+/* EDIT RELATIONSHIP COMPONENTS */
+
+/* OBJECT LIST */
+
+.ObjList,
+.ObjList li,
+.ObjAttributeList,
+.ObjAttributeList li {
+	list-style-type: none;
+}
+
+.ObjList {
+	position: relative;
+	margin-bottom: 10px;
+	height: 120px;
+	overflow: auto;
+	border: 1px solid #aaa;
+	width: auto;
+}
+
+.ToOneObjList .ObjList {
+	height: 30px;
+	overflow: visible;
+}
+
+.ObjAttributeList {
+	float: left;
+}
+
+li.ObjRow {
+	padding-left: 5px;
+	background-color: #f5f5f5;
+	line-height: 30px;
+}
+
+li.OddObjRow {
+	background-color: #e6e9ef;
+}
+
+li.OddObjRow .Button span {
+	background-color: #e6e9ef;
+}
+
+li.EvenObjRow .Button span {
+	background-color: #f5f5f5;
+}
+
+.ObjAttributeList li {
+	display: inline;
+	margin-right: 10px;
+}
+
+div.RtActionCell {
+	float: right;
+	width: 170px;
+	padding-top: 4px;
+	z-index: 1;
+}
+
+div.RtActionCell li {
+	margin-top: 4px;
+	line-height: 26px;
+}
+
+
+.ERMD2WEditToManyFault {
+	padding-bottom: 5px;
+	width: auto;
+	overflow: hidden;
+}
+
+.RelatedItems {
+	margin-bottom: 10px;
+	height: 120px;
+	overflow: auto;
+	border: 1px solid #aaa;
+}
+
+.RelatedItems li {
+	padding-left: 5px;
+	background-color: #f5f5f5;
+	position: relative;
+	line-height: 30px;
+}
+
+.RelatedItems .OddRow {
+	background-color: #e6e9ef;
+}
+
+.RelatedItems .OddRow .Button span {
+	background-color: #e6e9ef;
+}
+
+.RelatedItems .EvenRow .Button span {
+	background-color: #f5f5f5;
+}
+
+.RelatedObjActionList {
+	float: right;
+	margin-top: 4px;
+	line-height: 26px;
+}
+
+.RelatedItems .RelatedObjActionList li {
+	line-height: inherit;
+	overflow: hidden;
+}
+
+.RelatedObjActionList .Button {
+	margin-right: 0;
+	margin-left: 10px;
+}
+
+/* DIALOG */
+
+.Dialog {
+	border: 1px solid red;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	-moz-box-shadow: #777 2px 2px 3px;
+	-webkit-box-shadow:#777 2px 2px 3px;
+	background-color: #eee;
+	padding: 10px;
+	position: absolute;
+	top: 2px;
+	right: 40px;
+	z-index: 2000;
+	width: 300px;
+}
+
+.CancelDialog {
+	top: auto;
+	bottom: 10px;
+}
+
+.DialogActionList {
+	float: right;
+	margin-top: 4px;
+}
+
+.DialogActionList .Button {
+	margin-right: 0;
+	margin-left: 10px;
+}
+
+.DialogMessage {
+	float: left;
+	margin-left:10px;
+}
+
+/* ERMDEditRelationship */
+
+.ERMDEditRelationship {
+	width: auto;
+	position: relative;
+}
+
+.ERMDEditRelationship .ERMDEditRelationship {
+	position: static;
+}
+
+.ERMDEditRelationship .Wrapper {
+	position: static;
+}
+
+.EditBlock,
+.ListBlock,
+.QueryBlock {
+	position: absolute;
+	top: 10px;
+	left: 15%;
+	z-index: 1000;
+	background-color: #fff;
+	border: 3px solid #d5d5d5;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	-moz-box-shadow: #777 3px 3px 3px;
+	-webkit-box-shadow:#777 3px 3px 3px;
+	padding: 10px;
+	padding-bottom: 20px;
+	padding-top: 20px;
+	width:  80%;
+}
+
+.EditBlock {
+	left: 10px;
+	width: 98%;
+}
+
+.ListBlock {
+	-moz-opacity: 0.9 !important; 
+	-webkit-opacity: 0.9 !important; 
+	filter: alpha(opacity=90) !important; 
+	opacity: 0.9 !important;
+}
+
+/* AUTO COMPLETE */
+
+.ToOneTypeAheadFieldWrapper {
+	float: left;
+	padding-right: 15px;
+}
+
+.auto_complete {
+  position:absolute;
+  border:1px solid #888;
+  margin:0px;
+  padding:0px;
+  width: 350px;
+  background-color: #fff;
+  z-index: 100;
+}
+.auto_complete ul {
+    /*border:1px solid #888;*/
+    margin:0;
+    padding:0;
+    width:100%;
+    list-style-type:none;
+}
+.auto_complete ul li {
+    margin:0;
+    padding:3px;
+    list-style-type: none;
+}
+.auto_complete ul li.selected { 
+    background-color: #e6e9ef; 
+}
+.auto_complete ul strong.highlight { 
+    color: #800; 
+    margin:0;
+    padding:0;
+}
+
+/* CLEAR */
+
+.AttributeClear,
+.HeaderClear,
+.ObjRowClear {
+	position: relative;
+	padding: 0; 
+	margin:0;  
+	clear: both;
+}
+
+/* DEBUG FLAGS */
+
+.DebugFlags {
+	color: #aaa;
+	font-size: 80%;
+}
+
+.DebugFlags a {
+	color: #666;
+	text-decoration: none;
+}
+
+.DebugFlags a:hover {
+	color: #000;
+}
+
+.D2WPropertyDebugInfo {
+	z-index: 100;
+	background-color: #ddd;
+}
+
+.ERMDebugText {
+	display: none;
+}
+
+.D2WPropertyDebugInfo {}
+#ERD2WDebugFlags {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	z-index: 1000;
+	padding: 5px;
+	border: 1px solid #ddd;
+	background-color: #fff;
+	-moz-border-radius-topright: 8px;
+	-webkit-border-top-right-radius: 8px;
+	opacity: 0.5;
+	-moz-opacity:0.5;
+}

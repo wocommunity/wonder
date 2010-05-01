@@ -16,7 +16,10 @@ import com.webobjects.directtoweb.NextPageDelegate;
  * Similiar to the message page, except this one has the choice Yes or No.<br />
  * As this functionality is already integrated in ERD2WMessagePage, you should use this instead.
  * @deprecated subclass ERD2WMessagePage instead, also, the name is wrong
+ * @d2wKey pageWrapperName
  */
+//DELETEME
+
 public class ERDQuestionPage extends ERD2WMessagePage implements ConfirmPageInterface {
 
     public ERDQuestionPage(WOContext context) {
@@ -28,12 +31,12 @@ public class ERDQuestionPage extends ERD2WMessagePage implements ConfirmPageInte
     public void setOkNextPage(WOComponent page) { setNextPage(page); }
     public void setCancelNextPage(WOComponent page) { setCancelPage(page); }
 
-    /** @deprecated, use confirmAction() */
+    /** @deprecated use confirmAction() */
     public WOComponent okClicked() {
         return confirmAction();        
     }
 
-    /** @deprecated, use cancelAction() */
+    /** @deprecated use cancelAction() */
     public WOComponent cancelClicked() {
         return cancelAction();        
     }

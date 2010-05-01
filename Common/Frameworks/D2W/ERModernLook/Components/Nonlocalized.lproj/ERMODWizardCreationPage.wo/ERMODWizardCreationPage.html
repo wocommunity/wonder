@@ -1,0 +1,44 @@
+<webobject name = "PageWrapper">
+  <webobject name = "RequiredWrapper">
+    <webobject name = "InnerWrapper">
+      <webobject name = "BannerDiv"> <webobject name = "BannerComponent" /> </webobject>
+      <webobject name = "ErrorBlock" />
+      <webobject name = "InspectPageRepetition" />
+    </webobject>
+    <webobject name = "BottomActionBlock">
+      <ul class = "ActionList">
+        <webobject name = "ShowCancel">
+          <li>
+            <webobject name = "CancelButton" />
+            <webobject name = "ShowCancelDialog">
+              <div class = "Dialog CancelDialog">
+                <p><webobject name = "D2wContextInlineCancelMessage"/></p>
+                <ul class = "ActionList DialogActionList">
+                  <li><webobject name = "CancelLink"><span><webobject name = "CancelButtonLabel"/></span></webobject></li>
+                  <li><webobject name = "OKLink"><span><webobject name = "OKButtonLabel"/></span></webobject></li>
+                </ul>
+              </div>
+            </webobject>
+          </li>
+        </webobject>
+        <webobject name = "ShowPrevious">
+          <li>
+            <webobject name = "PreviousButton">
+              <span><webobject name = "PreviousButtonLabel" /></span>
+            </webobject>
+          </li>
+        </webobject>
+        <webobject name = "ShowNext">
+          <li>
+            <webobject name = "NextButton">
+              <span><webobject name = "NextButtonLabel" /></span>
+            </webobject>
+          </li>
+        </webobject>
+        <webobject name = "ShowSave">
+          <li><webobject name = "SaveButton" /></li>
+        </webobject>
+      </ul>
+    </webobject>
+  </webobject>
+</webobject>
