@@ -2,6 +2,8 @@ package er.wojrebel;
 
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.zeroturnaround.javarebel.webobjects.WebObjectsPlugin;
+
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
@@ -10,12 +12,13 @@ import com.webobjects.foundation.NSSelector;
 /**
  * WOJRebelSupport loads the ClassReloadHandler once the app has started
  * 
- * @author q
+ * @author qdolan
  *
  */
 public class WOJRebelSupport {
 	public static final Observer observer = new Observer();
   private static final ReentrantLock lock = new ReentrantLock();
+  private static final Class<?>[] NotificationClassArray = new Class[] { NSNotification.class };
   
   private static final long MIN_ELAPSED_TIME = 2000;
   private static long lastRunTimestamp = System.currentTimeMillis();
@@ -43,18 +46,22 @@ public class WOJRebelSupport {
 			try {
 				WOJRebelClassReloadHandler.getInstance().initialize();
 				WOJRebelEOModelReloadHandler.getInstance().initialize();
+				NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("run", NotificationClassArray), WebObjectsPlugin.JREBEL_EVENT, null);
 			} catch (NoClassDefFoundError e) {
 				/* JRebel isn't in the classpath so we do nothing */
 				return;
 			}
 		}
+		
+	  public static void run(NSNotification notification) {
+	    WOJRebelSupport.run();
+	  }
 	}
 	
 	static {
 		try {
 			NSNotificationCenter.defaultCenter().addObserver(observer,
-				new NSSelector("finishedLaunchingApp", new Class[] { com.webobjects.foundation.NSNotification.class }),
-				WOApplication.ApplicationWillFinishLaunchingNotification, null);
+				new NSSelector("finishedLaunchingApp", NotificationClassArray), WOApplication.ApplicationWillFinishLaunchingNotification, null);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}	

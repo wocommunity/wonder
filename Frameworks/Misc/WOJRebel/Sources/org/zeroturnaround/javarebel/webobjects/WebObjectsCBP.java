@@ -1,4 +1,4 @@
-package er.wojrebel;
+package org.zeroturnaround.javarebel.webobjects;
 
 import java.util.Collection;
 
@@ -8,13 +8,13 @@ import org.zeroturnaround.bundled.javassist.CtMethod;
 import org.zeroturnaround.javarebel.integration.support.JavassistClassBytecodeProcessor;
 
 /**
- * WOJRebelBytecodeProcessor injects support for WOLips projects into
- * com.webobjects._ideservices._WOProject if support doesn't already exist
+ * WebObjectCBP injects support for WOLips projects into
+ * com.webobjects._ideservices._WOProject if support doesn't already exist (ie. pre WO 5.4)
  * 
- * @author q
+ * @author qdolan
  *
  */
-public class WOJRebelBytecodeProcessor extends JavassistClassBytecodeProcessor {
+public class WebObjectsCBP extends JavassistClassBytecodeProcessor {
 	public static final String IDEPATCH_CLASS = "com.webobjects._ideservices._WOProject";
 	private static final String IDESUPPORT_CLASS = "com.webobjects._ideservices._IDEProjectWOLips";
 	private static final String IDEPATCH_METHODNAME = "ideProjectAtPath";
@@ -29,12 +29,11 @@ public class WOJRebelBytecodeProcessor extends JavassistClassBytecodeProcessor {
 		"}";
 	
 	public static final String WORKERTHREAD_CLASS = "com.webobjects.appserver._private.WOWorkerThread";
-	private static final String WOJREBEL_SUPPORT = "er.wojrebel.WOJRebelSupport";
 	private static final String WORKERPATCH_METHODNAME = "runOnce";
 	private static final String WORKERPATCH_SIGNATURE = "()V";
 	private static final String WORKERPATCH_CODE = 
 	  "try {" +
-	    WOJREBEL_SUPPORT + ".run();" +
+	    "com.webobjects.foundation.NSNotificationCenter.defaultCenter().postNotification(\"" + WebObjectsPlugin.JREBEL_EVENT + "\", null);" +
 	  "} catch (Exception e) {" +
 	  "  e.printStackTrace();" +
 	  "}";

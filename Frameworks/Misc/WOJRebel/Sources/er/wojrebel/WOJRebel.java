@@ -1,6 +1,7 @@
 package er.wojrebel;
 
 import org.zeroturnaround.javarebel.ReloaderFactory;
+import org.zeroturnaround.javarebel.webobjects.WebObjectsPlugin;
 
 /**
  * WOJRebel framework principal class. Initialises WOJRebelSupport if
@@ -9,7 +10,7 @@ import org.zeroturnaround.javarebel.ReloaderFactory;
  * Note: This is a separate class with minimal dependencies to help isolate class 
  * loading failures when the framework is present but JRebel is not running.
  * 
- * @author q
+ * @author qdolan
  *
  */
 public class WOJRebel {	
@@ -19,7 +20,7 @@ public class WOJRebel {
 	
 	static {
 		try {
-			if (ReloaderFactory.getInstance().isReloadEnabled() && WOJRebelIntegrationPlugin.isEnabled()) {
+			if (ReloaderFactory.getInstance().isReloadEnabled() && WebObjectsPlugin.isEnabled()) {
 				new WOJRebelSupport();
 			}
 		} catch (NoClassDefFoundError e) {
