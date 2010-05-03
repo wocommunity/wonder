@@ -11,7 +11,7 @@ import com.webobjects.foundation._NSUtilities;
  * WOClassCacheAccessor provides direct access to _NSUtilities private class 
  * lookup cache and a mechanism for the direct retrieval and removal of entries.  
  * 
- * @author q
+ * @author qdolan
  *
  */
 public class WOClassCacheAccessor {

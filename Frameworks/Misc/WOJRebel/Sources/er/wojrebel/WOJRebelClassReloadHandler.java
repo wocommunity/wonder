@@ -21,7 +21,7 @@ import com.webobjects.foundation.NSValidation;
  * WOJRebelClassReloadHandler manages the clearing of KVC, component definition and class caches
  * when a class is reloaded by JRebel. Any cached ClassNotFound entries are also removed.
  * 
- * @author q
+ * @author qdolan
  *
  */
 public class WOJRebelClassReloadHandler {

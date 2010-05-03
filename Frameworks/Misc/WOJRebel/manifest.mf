@@ -1,2 +1,2 @@
-JavaRebel-Plugin: er.wojrebel.WOJRebelIntegrationPlugin
+JavaRebel-Plugin: org.zeroturnaround.javarebel.webobjects.WebObjectsPlugin
 
