@@ -34,7 +34,7 @@ public class ERDConfirmObjectDelegate implements NextPageDelegate {
         _confirmPageName = confirmPageName;
         _confirmDelegate = confirmDelegate;
         _cancelDelegate = cancelDelegate;
-        if (_eo == null) {
+        if (_eo != null) {
             _ec = _eo.editingContext();
             if (_confirmPageName == null)
                 _confirmPageName = "Confirm" + _eo.entityName();

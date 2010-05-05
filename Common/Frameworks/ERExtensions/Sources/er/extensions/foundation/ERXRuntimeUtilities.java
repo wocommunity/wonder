@@ -34,7 +34,7 @@ import java.util.TimerTask;
 public class ERXRuntimeUtilities {
 
     /** logging support */
-    public static Logger log = Logger
+    public static final Logger log = Logger
             .getLogger(ERXRuntimeUtilities.class);
     
     /**

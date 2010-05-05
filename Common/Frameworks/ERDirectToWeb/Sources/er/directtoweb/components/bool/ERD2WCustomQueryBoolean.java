@@ -75,11 +75,13 @@ public class ERD2WCustomQueryBoolean extends D2WQueryBoolean {
         if(choicesNames == null) {
             result = super.displayString();
         }
-        int choicesIndex = index == 0 ? 2 : index - 1;
-        if(choicesIndex >= choicesNames.count()) {
-            result = super.displayString();
-        } else {
-        	result = (String)choicesNames.objectAtIndex(choicesIndex);
+        else {
+	        int choicesIndex = index == 0 ? 2 : index - 1;
+	        if(choicesIndex >= choicesNames.count()) {
+	            result = super.displayString();
+	        } else {
+	        	result = (String)choicesNames.objectAtIndex(choicesIndex);
+	        }
         }
         return ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(result);
     }

@@ -2248,9 +2248,10 @@ public class ERXEOControlUtilities {
 		if (restrictingQualifier != null && !restrictingQualifier.evaluateWithObject(eo)) {
  			return;
  		}
-		if(entityName==null) {
-			entityName=eo.entityName();
-		}
+// why does this take an entityName and an EO?
+//		if(entityName==null) {
+//			entityName=eo.entityName();
+//		}
                 NSArray keyPaths = new NSArray(keys);
  		NSDictionary dict = ERXDictionaryUtilities.dictionaryFromObjectWithKeys(eo, keyPaths);
  		EOQualifier qualifier = EOKeyValueQualifier.qualifierToMatchAllValues(dict);

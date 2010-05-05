@@ -22,7 +22,7 @@ public class ERXTimestampFormatter extends NSTimestampFormatter {
 	protected static final String DefaultKey = "ERXTimestampFormatter.DefaultKey";
     
     /** The default pattern used in the UI */
-    public static String DEFAULT_PATTERN = "%m/%d/%Y";
+    public static final String DEFAULT_PATTERN = "%m/%d/%Y";
 	
 	static {
 		_repository.put(DefaultKey, new ERXTimestampFormatter());

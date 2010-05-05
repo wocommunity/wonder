@@ -28,9 +28,7 @@ import er.extensions.eof.ERXEC;
 public class ERD2WQueryRelationshipPage extends D2WEditRelationshipPage {
 
     protected String _displayKey;
-    public EODataSource selectDataSource = null;
 
-    protected EOEditingContext _editingContext;
     protected EOEnterpriseObject _eoToUse;
     protected EOEnterpriseObject _selectedEO;
 

@@ -36,13 +36,13 @@ Most of this code is derived from Jonathan "Wolf" Rentzsch's JAssert, which can 
     http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/redshed/JAssert/
  **/
 public class ERXAssert {
-    private static NSMutableDictionary _instances = new NSMutableDictionary();
-    private static NSMutableDictionary _handlersForKey = new NSMutableDictionary();
-    private static Logger log = Logger.getLogger(ERXAssert.class);
+    private static final NSMutableDictionary _instances = new NSMutableDictionary();
+    private static final NSMutableDictionary _handlersForKey = new NSMutableDictionary();
+    private static final Logger log = Logger.getLogger(ERXAssert.class);
 
-    public static ERXAssert DURING;
-    public static ERXAssert PRE;
-    public static ERXAssert POST;
+    public static final ERXAssert DURING;
+    public static final ERXAssert PRE;
+    public static final ERXAssert POST;
 
     //-------------------------------------------
     // Public assertion failure handler interface

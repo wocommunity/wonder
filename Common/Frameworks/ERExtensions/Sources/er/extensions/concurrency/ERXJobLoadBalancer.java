@@ -304,7 +304,9 @@ public class ERXJobLoadBalancer {
             try { 
             		Thread.sleep(5000);
             		
-            	} catch (Exception e) {}
+            	} catch (Exception e) {
+            		System.out.println("ERXJobLoadBalancer.processJobs: " + e);
+            	}
         }
     }   
 

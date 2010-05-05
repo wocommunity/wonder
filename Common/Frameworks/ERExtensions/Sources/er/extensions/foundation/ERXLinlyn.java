@@ -137,7 +137,7 @@ import org.apache.log4j.Logger;
 public class ERXLinlyn {
 
     /** logging support */
-    public static Logger log = Logger.getLogger(ERXLinlyn.class);
+    public static final Logger log = Logger.getLogger(ERXLinlyn.class);
     
     // FOR DEBUGGING: set the variable to "true"
     private boolean DEBUG = false;

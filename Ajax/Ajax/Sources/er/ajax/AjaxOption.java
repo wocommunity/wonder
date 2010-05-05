@@ -9,18 +9,18 @@ import com.webobjects.foundation.NSMutableDictionary;
 import java.util.Enumeration;
 
 public class AjaxOption {
-  public static AjaxOption.Type DEFAULT = new AjaxOption.Type(0);
-  public static AjaxOption.Type STRING = new AjaxOption.Type(1);
-  public static AjaxOption.Type SCRIPT = new AjaxOption.Type(2);
-  public static AjaxOption.Type NUMBER = new AjaxOption.Type(3);
-  public static AjaxOption.Type ARRAY = new AjaxOption.Type(4);
-  public static AjaxOption.Type STRING_ARRAY = new AjaxOption.Type(5);
-  public static AjaxOption.Type BOOLEAN = new AjaxOption.Type(6);
-  public static AjaxOption.Type STRING_OR_ARRAY = new AjaxOption.Type(7);
-  public static AjaxOption.Type DICTIONARY = new AjaxOption.Type(8);
-  public static AjaxOption.Type FUNCTION = new AjaxOption.Type(9);	// Function with no args
-  public static AjaxOption.Type FUNCTION_1 = new AjaxOption.Type(9);// Function with one arg
-  public static AjaxOption.Type FUNCTION_2 = new AjaxOption.Type(9);// Function with two args
+  public static final AjaxOption.Type DEFAULT = new AjaxOption.Type(0);
+  public static final AjaxOption.Type STRING = new AjaxOption.Type(1);
+  public static final AjaxOption.Type SCRIPT = new AjaxOption.Type(2);
+  public static final AjaxOption.Type NUMBER = new AjaxOption.Type(3);
+  public static final AjaxOption.Type ARRAY = new AjaxOption.Type(4);
+  public static final AjaxOption.Type STRING_ARRAY = new AjaxOption.Type(5);
+  public static final AjaxOption.Type BOOLEAN = new AjaxOption.Type(6);
+  public static final AjaxOption.Type STRING_OR_ARRAY = new AjaxOption.Type(7);
+  public static final AjaxOption.Type DICTIONARY = new AjaxOption.Type(8);
+  public static final AjaxOption.Type FUNCTION = new AjaxOption.Type(9);	// Function with no args
+  public static final AjaxOption.Type FUNCTION_1 = new AjaxOption.Type(9);// Function with one arg
+  public static final AjaxOption.Type FUNCTION_2 = new AjaxOption.Type(9);// Function with two args
   
   public static class Type {
     private int _number;

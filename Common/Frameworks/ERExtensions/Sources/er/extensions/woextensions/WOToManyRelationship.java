@@ -334,20 +334,23 @@ public class WOToManyRelationship extends WOComponent {
         EOEnterpriseObject _eo = !(isDictionary) ? (EOEnterpriseObject)aSourceObject : null;
         String masterKey = _localRelationshipKey();
         NSMutableArray currentValues = (NSMutableArray)NSKeyValueCodingAdditions.Utility.valueForKeyPath(aSourceObject, masterKey);
-        int count = currentValues.count();
+        int count = 0;
         EOEnterpriseObject o;
-        for (int i = count - 1; i >= 0; i--) {
-            o = (EOEnterpriseObject)currentValues.objectAtIndex(i);
-            if ((null==newValues) || (newValues.indexOfIdenticalObject(o) == NSArray.NotFound)) { // not found
-                if (isDictionary) {
-                    currentValues.removeObject(o);
-                }
-                else {
-                    _eo.removeObjectFromBothSidesOfRelationshipWithKey(o, masterKey);
-                }
-            }
+        if (currentValues != null) {
+	        count = currentValues.count();
+	        for (int i = count - 1; i >= 0; i--) {
+	            o = (EOEnterpriseObject)currentValues.objectAtIndex(i);
+	            if ((null==newValues) || (newValues.indexOfIdenticalObject(o) == NSArray.NotFound)) { // not found
+	                if (isDictionary) {
+	                    currentValues.removeObject(o);
+	                }
+	                else {
+	                    _eo.removeObjectFromBothSidesOfRelationshipWithKey(o, masterKey);
+	                }
+	            }
+	        }
         }
-        count = newValues.count();
+        count = (newValues == null) ? 0 : newValues.count();
         if ((isDictionary) && (currentValues==null)) {
             // WO 5
             //currentValues = new NSMutableArray(count);

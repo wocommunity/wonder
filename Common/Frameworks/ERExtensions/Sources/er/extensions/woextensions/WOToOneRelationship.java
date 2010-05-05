@@ -33,6 +33,7 @@ import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
@@ -428,7 +429,7 @@ public class WOToOneRelationship extends WOComponent {
             //catch (NSComparator.ComparisonException e)
             //    throw new NSForwardException(e);
             } catch (Exception e) {
-                new RuntimeException("Exception: " + e.getMessage());
+            	throw NSForwardException._runtimeExceptionForThrowable(e);
             }
 
             if (!_localIsMandatory()) {

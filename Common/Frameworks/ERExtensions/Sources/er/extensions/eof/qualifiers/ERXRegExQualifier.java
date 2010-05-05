@@ -22,8 +22,8 @@ import er.extensions.qualifiers.ERXKeyValueQualifier;
  */
 public class ERXRegExQualifier extends ERXKeyValueQualifier {
 
-	public static String MatchesSelectorName = "matches";
-	public static NSSelector MatchesSelector = new NSSelector("matches", new Class[] {String.class});
+	public static final String MatchesSelectorName = "matches";
+	public static final NSSelector MatchesSelector = new NSSelector("matches", new Class[] {String.class});
 
 	static {
 		EOQualifierSQLGeneration.Support.setSupportForClass(new ERXRegExQualifier.Support(), ERXRegExQualifier.class);

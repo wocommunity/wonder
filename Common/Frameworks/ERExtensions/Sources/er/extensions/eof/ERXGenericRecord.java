@@ -111,7 +111,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     private static Boolean useValidity;
     
     /** holds all subclass related ERXLogger's */
-    public static NSMutableDictionary classLogs = new NSMutableDictionary();
+    public static final NSMutableDictionary classLogs = new NSMutableDictionary();
     public static final Object lock = new Object();
     
     public static boolean shouldTrimSpaces(){
@@ -1158,21 +1158,22 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     }
 
     private Method[] validityMethods() {
-        if (validityMethods == null) {
-            validityMethods = new Method[4];
+        if (ERXGenericRecord.validityMethods == null) {
+            Method[] tempValidityMethods = new Method[4];
             Method m = methodInSharedGSVEngineInstanceWithName("validateEOObjectOnSave");
-            validityMethods[0] = m;
+            tempValidityMethods[0] = m;
             
             m = methodInSharedGSVEngineInstanceWithName("validateEOObjectOnDelete");
-            validityMethods[1] = m;
+            tempValidityMethods[1] = m;
             
             m = methodInSharedGSVEngineInstanceWithName("validateEOObjectOnInsert");
-            validityMethods[2] = m;
+            tempValidityMethods[2] = m;
             
             m = methodInSharedGSVEngineInstanceWithName("validateEOObjectOnUpdate");
-            validityMethods[3] = m;
+            tempValidityMethods[3] = m;
+            ERXGenericRecord.validityMethods = tempValidityMethods;
         }
-        return validityMethods;
+        return ERXGenericRecord.validityMethods;
     }
     
     private static Method methodInSharedGSVEngineInstanceWithName(String name) {

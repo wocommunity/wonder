@@ -57,8 +57,8 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
     protected Object extraBindings;
 
     //CHECKME ak: who needs this?
-    protected static Integer TRUE = ERXConstant.OneInteger;
-    protected static Integer FALSE = ERXConstant.ZeroInteger;
+    protected static final Integer TRUE = ERXConstant.OneInteger;
+    protected static final Integer FALSE = ERXConstant.ZeroInteger;
 
     /** Sets the {@link D2WContext}. Applies when used inside a D2WCustomComponent.*/
     public void setLocalContext(D2WContext value) {

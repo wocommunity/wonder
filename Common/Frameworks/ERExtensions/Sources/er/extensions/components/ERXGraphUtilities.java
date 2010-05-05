@@ -29,25 +29,25 @@ public class ERXGraphUtilities {
 
     public final static Logger log = Logger.getLogger(ERXGraphUtilities.class);
 
-    public static Integer fiftyOne = ERXConstant.integerForInt(51);
-    public static Integer oneHundredTwo = ERXConstant.integerForInt(102);
-    public static Integer oneHundredFiftyThree = ERXConstant.integerForInt(153);
-    public static Integer oneHundredSixtySix = ERXConstant.integerForInt(166);
-    public static Integer twoHundredFour = ERXConstant.integerForInt(204);
-    public static Integer twoHundredFiftyFour = ERXConstant.integerForInt(254);
-    public static Integer twoHundredFiftyFive = ERXConstant.integerForInt(255);
+    public static final Integer fiftyOne = ERXConstant.integerForInt(51);
+    public static final Integer oneHundredTwo = ERXConstant.integerForInt(102);
+    public static final Integer oneHundredFiftyThree = ERXConstant.integerForInt(153);
+    public static final Integer oneHundredSixtySix = ERXConstant.integerForInt(166);
+    public static final Integer twoHundredFour = ERXConstant.integerForInt(204);
+    public static final Integer twoHundredFiftyFour = ERXConstant.integerForInt(254);
+    public static final Integer twoHundredFiftyFive = ERXConstant.integerForInt(255);
 
-    public static NSArray orange = new NSArray(new Object[]{twoHundredFiftyFive,oneHundredTwo, ERXConstant.ZeroInteger});
-    public static NSArray yellow = new NSArray(new Object[]{twoHundredFiftyFive,oneHundredFiftyThree,ERXConstant.ZeroInteger });
-    public static NSArray blue = new NSArray(new Object[]{fiftyOne,oneHundredTwo,oneHundredFiftyThree});
-    public static NSArray green = new NSArray(new Object[]{oneHundredTwo, oneHundredTwo, fiftyOne});
-    public static NSArray grey = new NSArray(new Object[]{twoHundredFour,twoHundredFour,twoHundredFour});
+    public static final NSArray orange = new NSArray(new Object[]{twoHundredFiftyFive,oneHundredTwo, ERXConstant.ZeroInteger});
+    public static final NSArray yellow = new NSArray(new Object[]{twoHundredFiftyFive,oneHundredFiftyThree,ERXConstant.ZeroInteger });
+    public static final NSArray blue = new NSArray(new Object[]{fiftyOne,oneHundredTwo,oneHundredFiftyThree});
+    public static final NSArray green = new NSArray(new Object[]{oneHundredTwo, oneHundredTwo, fiftyOne});
+    public static final NSArray grey = new NSArray(new Object[]{twoHundredFour,twoHundredFour,twoHundredFour});
 
-    public static Color awtOrange = new Color(255, 102, 0);
-    public static Color awtYellow = new Color(255, 153, 0);
-    public static Color awtBlue = new Color(51, 102, 153);
-    public static Color awtGreen = new Color(102, 102, 51);
-    public static Color awtGrey = new Color(204, 204, 204);
+    public static final Color awtOrange = new Color(255, 102, 0);
+    public static final Color awtYellow = new Color(255, 153, 0);
+    public static final Color awtBlue = new Color(51, 102, 153);
+    public static final Color awtGreen = new Color(102, 102, 51);
+    public static final Color awtGrey = new Color(204, 204, 204);
 
     public static int computeSumForKey(NSArray values, String key) {
         int sum = 0;

@@ -212,7 +212,7 @@ public  class ERXRequest extends WORequest {
    		stringbuffer.append(serverName);
    		if(portStr != null && ((secure && !"443".equals(portStr)) || (!secure && !"80".equals(portStr)))) {
    			stringbuffer.append(':');
-   			stringbuffer = stringbuffer.append(portStr);
+   			stringbuffer.append(portStr);
         }
     }
     

@@ -14,6 +14,16 @@ import er.extensions.foundation.ERXProperties;
  * @property er.extensions.ERXBlowfishCipherKey the blowfish key to use
  */
 public class ERXBlowfishCrypter extends ERXAbstractBlowfishCrypter {
+	private String _blowfishKey;
+	
+	public ERXBlowfishCrypter(String blowfishKey) {
+		_blowfishKey = blowfishKey;
+	}
+	
+	public ERXBlowfishCrypter() {
+		this(null);
+	}
+	
 	/**
 	 * Generates a secret key from the System property
 	 * <b>er.extensions.ERXBlowfishCipherKey</b>. This secret key is used when
@@ -23,15 +33,18 @@ public class ERXBlowfishCrypter extends ERXAbstractBlowfishCrypter {
 	 */
 	@Override
 	protected Key secretBlowfishKey() throws NoSuchAlgorithmException {
-		String blowfishKey = ERXProperties.stringForKey("er.extensions.ERXBlowfishCipherKey");
+		String blowfishKey = _blowfishKey;
 		if (blowfishKey == null) {
-			log.warn("er.extensions.ERXBlowfishCipherKey not set in defaults.  Should be set before using the cipher.");
-			blowfishKey = ERXProperties.stringForKey("ERBlowfishCipherKey");
+			blowfishKey = ERXProperties.stringForKey("er.extensions.ERXBlowfishCipherKey");
 			if (blowfishKey == null) {
-				blowfishKey = "DefaultCipherKey";
-			}
-			else {
-				log.warn("ERBlowfishCipherKey is deprecated, please use er.extensions.ERXBlowfishCipherKey");
+				log.warn("er.extensions.ERXBlowfishCipherKey not set in defaults.  Should be set before using the cipher.");
+				blowfishKey = ERXProperties.stringForKey("ERBlowfishCipherKey");
+				if (blowfishKey == null) {
+					blowfishKey = "DefaultCipherKey";
+				}
+				else {
+					log.warn("ERBlowfishCipherKey is deprecated, please use er.extensions.ERXBlowfishCipherKey");
+				}
 			}
 		}
 		return new SecretKeySpec(blowfishKey.getBytes(), "Blowfish");

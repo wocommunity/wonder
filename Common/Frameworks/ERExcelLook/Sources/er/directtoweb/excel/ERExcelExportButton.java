@@ -27,12 +27,12 @@ import java.lang.reflect.InvocationTargetException;
 
 public class ERExcelExportButton extends ERDCustomQueryComponent {
 
-    public static NSSelector DisplayedObjectsForExcelSelector = new NSSelector("displayedObjectsForExcelExport");
-    public static NSSelector AllObjectsForExcelSelector = new NSSelector("allObjectsForExcelExport");
+    public static final NSSelector DisplayedObjectsForExcelSelector = new NSSelector("displayedObjectsForExcelExport");
+    public static final NSSelector AllObjectsForExcelSelector = new NSSelector("allObjectsForExcelExport");
 
     public ERExcelExportButton(WOContext context) { super(context); }
 
-    private final static ERXLogger log = ERXLogger.getERXLogger(ERExcelExportButton.class);
+    private static final ERXLogger log = ERXLogger.getERXLogger(ERExcelExportButton.class);
 
     public boolean isStateless() { return true; }
     public boolean synchronizesVariablesWithBindings() { return false; }
