@@ -4,21 +4,15 @@ import java.text.SimpleDateFormat;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WOResourceManager;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSLog;
-import com.webobjects.foundation.NSPathUtilities;
 import com.webobjects.foundation.NSTimestamp;
 
-import er.extensions.appserver.ERXRequest;
-import er.extensions.appserver.ERXResourceManager;
 import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.components.ERXStatelessComponent;
 import er.extensions.formatters.ERXTimestampFormatter;
-import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
 
@@ -68,8 +62,6 @@ public class ERMDatePicker extends ERXStatelessComponent {
 	private String _elementID;
 	private String _openScript;
 	private String _createScript;
-	
-	private static final String SECURE_RESOURCES_KEY = "er.ajax.secureResources";
 	
     public ERMDatePicker(WOContext context) {
         super(context);
