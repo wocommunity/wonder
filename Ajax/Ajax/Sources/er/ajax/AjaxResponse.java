@@ -61,12 +61,14 @@ public class AjaxResponse extends ERXResponse {
 			_context._setSenderID("");
 			try {
 				CharSequence content;
-				//AK: don't ask...
-				if (((Object)_content) instanceof StringBuffer) {
-					content = (StringBuffer)(Object)_content;
+				// AK: don't ask...
+				// MS: 5.3 vs 5.4 field type of _content
+				Object womessageContent = _content;
+				if (womessageContent instanceof StringBuffer) {
+					content = (StringBuffer)womessageContent;
 					ERXKeyValueCodingUtilities.takePrivateValueForKey(this, new StringBuffer(),  "_content");
 				} else {
-					content = (StringBuilder)(Object) _content;
+					content = (StringBuilder)womessageContent;
 					ERXKeyValueCodingUtilities.takePrivateValueForKey(this, new StringBuilder(),  "_content");
 				}
 				NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(_request);
@@ -81,11 +83,11 @@ public class AjaxResponse extends ERXResponse {
 					}
 				}
 				int length;
-				if (((Object)_content) instanceof StringBuffer) {
-					StringBuffer buffer = (StringBuffer)(Object)_content;
+				if (womessageContent instanceof StringBuffer) {
+					StringBuffer buffer = (StringBuffer)womessageContent;
 					length = buffer.length();
 				} else {
-					StringBuilder builder = (StringBuilder)(Object) _content;
+					StringBuilder builder = (StringBuilder)womessageContent;
 					length = builder.length();
 				}
 				if (length == 0) {

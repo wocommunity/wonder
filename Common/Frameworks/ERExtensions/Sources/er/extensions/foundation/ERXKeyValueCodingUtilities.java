@@ -180,7 +180,7 @@ public class ERXKeyValueCodingUtilities {
          * @see com.webobjects.foundation.NSKeyValueCoding#takeValueForKey(java.lang.Object, java.lang.String)
          */
         public void takeValueForKey(Object arg0, String arg1) {
-            takeValueForKey(arg0, arg1);
+            takeValueForKeyPath(arg0, arg1);
         }
     };
 

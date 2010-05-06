@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 
 // This class tries to strip out all the HTML in subcomponents so that it can be generically exported using the Excel libs
 public class ERExcelEscapeForXMLWrapper extends WOComponent {
-    public static ERXLogger log = ERXLogger.getERXLogger(ERExcelEscapeForXMLWrapper.class);
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERExcelEscapeForXMLWrapper.class);
 
     public ERExcelEscapeForXMLWrapper(WOContext context) {
         super(context);

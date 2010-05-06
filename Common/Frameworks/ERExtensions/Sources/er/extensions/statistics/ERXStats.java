@@ -282,7 +282,7 @@ public class ERXStats {
 	 * @param key the key to log under
 	 */
 	public static void markEnd(String key) {
-		markEnd(Group.Default);
+		markEnd(Group.Default, key);
 	}
 
 	/**

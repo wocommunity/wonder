@@ -98,7 +98,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 
     private static boolean _initialized;
 
-	public static Observer observer;
+	public static final Observer observer;
 	/**
      * This public observer is used to perform basic functions in
      * response to notifications. Specifically it handles

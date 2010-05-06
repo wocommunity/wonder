@@ -31,7 +31,11 @@ public class ERXForwardingAdaptorContext extends EOAdaptorContext {
 
     public ERXForwardingAdaptorContext(EOAdaptor adaptor, EOAdaptorContext forwardedContext) {
 	super(adaptor);
+	Object delegate = delegate();
         _forwardedContext = forwardedContext;
+        if (delegate != null) {
+        	_forwardedContext.setDelegate(delegate);
+        }
         _registerForAdaptorContextNotifications();
     }
 
@@ -127,11 +131,16 @@ public class ERXForwardingAdaptorContext extends EOAdaptorContext {
     }
 
     public Object delegate() {
-        return _forwardedContext.delegate();
+        return _forwardedContext == null ? super.delegate() : _forwardedContext.delegate();
     }
 
     public void setDelegate(Object delegate) {
-        _forwardedContext.setDelegate(delegate);
+    	if (_forwardedContext != null) {
+    		_forwardedContext.setDelegate(delegate);
+    	}
+    	else {
+    		super.setDelegate(delegate);
+    	}
     }
 
     public void _registerAdaptorChannel(EOAdaptorChannel channel) {

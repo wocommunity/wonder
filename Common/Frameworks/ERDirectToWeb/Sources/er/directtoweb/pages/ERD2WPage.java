@@ -627,7 +627,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         return result;
     }
 
-    protected static NSMutableSet _allConfigurations = new NSMutableSet();
+    protected static final NSMutableSet _allConfigurations = new NSMutableSet();
 
     /**
      * Collects the names of all page configurations as you walk through your

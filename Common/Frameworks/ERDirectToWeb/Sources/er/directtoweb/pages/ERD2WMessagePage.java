@@ -33,9 +33,7 @@ public abstract class ERD2WMessagePage extends ERD2WPage implements ERDMessagePa
     protected String _message;
     protected String _title;
     protected WOComponent _cancelPage;
-    protected WOComponent _nextPage;
     protected NextPageDelegate _cancelDelegate;
-    protected NextPageDelegate _nextDelegate;
     protected Exception _exception;
 
     /**
@@ -110,18 +108,6 @@ public abstract class ERD2WMessagePage extends ERD2WPage implements ERDMessagePa
 	}
 	public NextPageDelegate confirmDelegate() {
 		return nextPageDelegate();
-	}
-	public void setNextPageDelegate(NextPageDelegate nextDelegate) {
-		_nextDelegate = nextDelegate;
-	}
-	public NextPageDelegate nextPageDelegate() {
-		return _nextDelegate;
-	}
-	public void setNextPage(WOComponent nextPage) {
-		_nextPage = nextPage;
-	}
-	public WOComponent nextPage() {
-		return _nextPage;
 	}
     
     // CHECKME ak: do we really need this? It's never referenced in the templates? 

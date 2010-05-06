@@ -70,7 +70,7 @@ public abstract class ERMailDelivery {
     public static String callBackClassName = null;
     public static String callBackMethodName = null;
 
-    public static String DefaultCharset = System.getProperty ("er.javamail.defaultEncoding");
+    public static final String DefaultCharset = System.getProperty ("er.javamail.defaultEncoding");
     public String _charset = DefaultCharset;
 
     /** callbackObject to refer to in the calling program */

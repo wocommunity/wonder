@@ -15,7 +15,7 @@ import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.logging.ERXLogger;
 
 public class ERExcelListGenericPage extends ERExcelListPage {
-    public static ERXLogger log = ERXLogger.getERXLogger(ERExcelListGenericPage.class);
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERExcelListGenericPage.class);
 
     public ERExcelListGenericPage(WOContext context) {
         super(context);

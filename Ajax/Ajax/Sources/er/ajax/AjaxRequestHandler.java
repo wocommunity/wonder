@@ -8,8 +8,12 @@ public class AjaxRequestHandler extends WOComponentRequestHandler {
 	public static final String AjaxRequestHandlerKey = "ajax";
 	private static boolean _useAjaxRequestHandler = false;
 	
+	public static void setUseAjaxRequestHandler(boolean useAjaxRequestHandler) {
+		_useAjaxRequestHandler = useAjaxRequestHandler;
+	}
+	
 	public AjaxRequestHandler() {
-		AjaxRequestHandler._useAjaxRequestHandler = true;
+		AjaxRequestHandler.setUseAjaxRequestHandler(true);
 	}
 	
 	public WOResponse handleRequest(WORequest request) {

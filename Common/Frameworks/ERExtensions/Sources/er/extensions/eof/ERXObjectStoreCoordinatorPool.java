@@ -39,7 +39,7 @@ This class implements EOF stack pooling including EOF stack synchronizing. It pr
  @author David Teran, Frank Caputo @ cluster9
  */
 public class ERXObjectStoreCoordinatorPool {
-    private static Logger log = Logger.getLogger(ERXObjectStoreCoordinatorPool.class);
+    private static final Logger log = Logger.getLogger(ERXObjectStoreCoordinatorPool.class);
 
     private Hashtable oscForSession;
     private int maxOS;

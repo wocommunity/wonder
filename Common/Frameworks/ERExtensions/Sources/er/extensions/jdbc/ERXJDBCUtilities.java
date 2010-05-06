@@ -49,9 +49,9 @@ import er.extensions.foundation.ERXStringUtilities;
 
 public class ERXJDBCUtilities {
 
-	public static Logger log = Logger.getLogger(ERXJDBCUtilities.class);
+	public static final Logger log = Logger.getLogger(ERXJDBCUtilities.class);
 
-	public static NSTimestampFormatter TIMESTAMP_FORMATTER = new NSTimestampFormatter("%Y-%m-%d %H:%M:%S.%F");
+	public static final NSTimestampFormatter TIMESTAMP_FORMATTER = new NSTimestampFormatter("%Y-%m-%d %H:%M:%S.%F");
 
 	public static class CopyTask {
 		protected NSDictionary _sourceDictionary;

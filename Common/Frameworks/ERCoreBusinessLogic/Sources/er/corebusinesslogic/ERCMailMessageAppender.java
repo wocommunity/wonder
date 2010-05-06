@@ -22,7 +22,7 @@ import org.apache.log4j.helpers.LogLog;
 public class ERCMailMessageAppender extends ERXMailAppender {
 
     /** caches the no-op editing context delegate */
-    protected static ERXEditingContextDelegate _delegate=new ERXEditingContextDelegate();
+    protected static final ERXEditingContextDelegate _delegate=new ERXEditingContextDelegate();
 
     /** holds the editing context */
     protected EOEditingContext editingContext;    

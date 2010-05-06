@@ -25,7 +25,7 @@ import er.extensions.formatters.ERXTimestampFormatter;
  */
 public class ERXWOString extends WODynamicElement {
 	
-    public static Logger log = Logger.getLogger(ERXWOString.class);
+    public static final Logger log = Logger.getLogger(ERXWOString.class);
     
     protected WOAssociation _dateFormat;
     protected WOAssociation _numberFormat;

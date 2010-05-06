@@ -28,7 +28,7 @@ import com.webobjects.foundation.NSRange;
 public class ERXNavigation {
 
     /** logging support */
-    public static Logger log = Logger.getLogger("er.navigation.extensions.ERXNavigation");
+    public static final Logger log = Logger.getLogger("er.navigation.extensions.ERXNavigation");
 
     protected NSArray _additionalNavigationState, _navigationState;
     protected boolean isDisabled;

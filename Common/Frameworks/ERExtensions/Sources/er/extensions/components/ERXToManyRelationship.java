@@ -241,20 +241,23 @@ public class ERXToManyRelationship extends WOToManyRelationship {
             mutableCurrentValues = currentValues.mutableClone();
             NSKeyValueCodingAdditions.Utility.takeValueForKeyPath(_eo, mutableCurrentValues, masterKey);
         }
-        int count = mutableCurrentValues.count();
+        int count = 0;
         EOEnterpriseObject o;
-        for (int i = count - 1; i >= 0; i--) {
-            o = (EOEnterpriseObject)mutableCurrentValues.objectAtIndex(i);
-            if ((null==newValues) || (newValues.indexOfIdenticalObject(o) == NSArray.NotFound)) { // not found
-                if (isDictionary) {
-                    mutableCurrentValues.removeObject(o);
-                }
-                else {
-                    _eo.removeObjectFromBothSidesOfRelationshipWithKey(o, masterKey);
-                }
-            }
+        if (mutableCurrentValues != null) {
+	        count = mutableCurrentValues.count();
+	        for (int i = count - 1; i >= 0; i--) {
+	            o = (EOEnterpriseObject)mutableCurrentValues.objectAtIndex(i);
+	            if ((null==newValues) || (newValues.indexOfIdenticalObject(o) == NSArray.NotFound)) { // not found
+	                if (isDictionary) {
+	                    mutableCurrentValues.removeObject(o);
+	                }
+	                else {
+	                    _eo.removeObjectFromBothSidesOfRelationshipWithKey(o, masterKey);
+	                }
+	            }
+	        }
         }
-        count = newValues.count();
+        count = (newValues == null) ? 0 : newValues.count();
         if ((isDictionary) && (mutableCurrentValues==null)) {
             mutableCurrentValues = new NSMutableArray(count);
             _dictionary.setObjectForKey(currentValues, masterKey);
