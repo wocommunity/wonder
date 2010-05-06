@@ -7,7 +7,6 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.appserver.ERXRequest;
@@ -125,7 +124,6 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	public String ajaxUploadScript() {
 		String result = "AFU.create('" + id() + "', '" + uploadButtonId() + "', {" + ajaxUploadOptions() + "});";
 		if (log.isDebugEnabled()) log.debug("AFU Create Script: " + result);
-		NSLog.out.appendln("AFU Create Script: " + result);
 		return result;
 	}
 	
