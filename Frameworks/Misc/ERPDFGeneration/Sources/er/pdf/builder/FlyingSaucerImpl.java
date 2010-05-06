@@ -11,6 +11,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
+import org.xhtmlrenderer.extend.ReplacedElementFactory;
 import org.xhtmlrenderer.pdf.ITextFontResolver;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 import org.xml.sax.ErrorHandler;
@@ -48,13 +49,15 @@ public class FlyingSaucerImpl implements PDFBuilder {
 
       public void fatalError(SAXParseException e) throws SAXException {
         exception = e;
-}
+      }
 
       public void warning(SAXParseException e) throws SAXException {
         exception = e;
       }
-      
     };
+    
+    ReplacedElementFactory ref = new ERPDFReplacedElementFactory(renderer.getOutputDevice());
+    renderer.getSharedContext().setReplacedElementFactory(ref);
   }
   
   public void createDocument(OutputStream os) {
