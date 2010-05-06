@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import com.webobjects.appserver.WOSession;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
+
 import er.extensions.formatters.ERXUnitAwareDecimalFormat;
 
 /**
@@ -297,5 +301,56 @@ public class AjaxProgress {
 			setFailure(e);
 			throw e;
 		}
+	}
+	
+
+	/**
+	 * Register a progress object in the registry.
+	 * 
+	 * @param session
+	 *            the session
+	 * @param progress
+	 *            the progress object to register
+	 */
+	public static void registerProgress(WOSession session, AjaxProgress progress) {
+		NSMutableDictionary progresses = (NSMutableDictionary) session.objectForKey(AjaxProgressBar.AJAX_PROGRESSES_KEY);
+		if (progresses == null) {
+			progresses = new NSMutableDictionary();
+			session.setObjectForKey(progresses, AjaxProgressBar.AJAX_PROGRESSES_KEY);
+		}
+		progresses.setObjectForKey(progress, progress.id());
+	}
+
+	/**
+	 * Unregister a progress object from the registry.
+	 * 
+	 * @param session
+	 *            the session
+	 * @param progress
+	 *            the progress object to unregister
+	 */
+	public static void unregisterProgress(WOSession session, AjaxProgress progress) {
+		NSMutableDictionary progresses = (NSMutableDictionary) session.objectForKey(AjaxProgressBar.AJAX_PROGRESSES_KEY);
+		if (progresses != null && progress.id() != null) {
+			progresses.removeObjectForKey(progress.id());
+		}
+	}
+
+	/**
+	 * Returns the progress object with the given id (or null if one does not exist).
+	 * 
+	 * @param session
+	 *            the session
+	 * @param id
+	 *            the id of the progress to retrieve
+	 * @return the matching progess object (or null)
+	 */
+	public static AjaxProgress progress(WOSession session, String id) {
+		AjaxProgress progress = null;
+		NSDictionary progresses = (NSDictionary) session.objectForKey(AjaxProgressBar.AJAX_PROGRESSES_KEY);
+		if (progresses != null) {
+			progress = (AjaxProgress) progresses.objectForKey(id);
+		}
+		return progress;
 	}
 }
