@@ -29,6 +29,10 @@ import er.extensions.foundation.ERXValueUtilities;
  * @binding asynchronous set to false to force a synchronous refresh of the container. Defaults to true.
  * @binding optional set to true if you want the container tags to be skipped if this is already in an update container (similar to ERXOptionalForm). 
  *                   If optional is true and there is a container, it's as if this AUC doesn't exist, and only its children will render to the page. 
+ * 
+ * @binding frequency the frequency (in seconds) of a periodic update
+ * @binding decay a multiplier (default is one) applied to the frequency if the response of the update is unchanged
+ * @binding stopped determines whether a periodic update container loads as stopped.
  */
 public class AjaxUpdateContainer extends AjaxDynamicElement {
 	private static final String CURRENT_UPDATE_CONTAINER_ID_KEY = "er.ajax.AjaxUpdateContainer.currentID";
