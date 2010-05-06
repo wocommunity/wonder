@@ -1031,6 +1031,46 @@ var AjaxModalDialog = {
 };
 var AMD = AjaxModalDialog;
 
+var AjaxFlexibleUpload = {
+
+	uploaders: {},
+	
+	create: function(id, uploadButtonId, options) {
+		this.uploaders[id] = new AjaxUpload(uploadButtonId, options);
+	},
+	
+	cancelIFrame: function(iframeId, cancelUrl) {
+		setTimeout(function(e) { $(iframeId).src = cancelUrl; }, 1000);
+	},
+	
+	progressUpdate: function(uploaderId, fileNameId, additionalFunction, finalFunction) {
+		var uploader = this.uploaders[uploaderId];
+		if (uploader) {
+			var fileName = uploader._input.value; 
+			if ($(fileNameId) != null && fileName) { 
+				$(fileNameId).update(fileName); 
+			} 
+		}
+		this.executeCallbacks(uploaderId, additionalFunction, finalFunction);
+	},
+	
+	executeCallbacks: function(uploaderId, additionalFunction, finalFunction) {
+		if (additionalFunction) {
+			additionalFunction(uploaderId);
+		}
+		if (finalFunction) {
+			finalFunction(uploaderId);
+		}
+	},
+	
+	submit: function(uploaderId, updateContainerId) {
+		var uploader = this.uploaders[uploaderId];
+		uploader.submit();
+	}
+};
+
+var AFU = AjaxFlexibleUpload;
+
 var WonderJSON = {
 	eoStub: function(eo) {
 		var eoStub = new Object();

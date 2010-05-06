@@ -1,0 +1,80 @@
+.AjaxFlexibleFileUpload {
+	overflow: hidden;
+	width: auto;
+}
+
+.AFUProgressBar {
+	float: left;
+	width: 200px;
+	height: 20px;
+	border: 1px solid #aaa;
+	margin-top: 3px;
+	margin-right: 5px;
+	
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+
+.AFUProgressAmount {
+	height: 20px;
+	background-color: #6482b8;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+}
+
+.AFUProgressAmountIndeterminate {
+	background-color: #c0c0c0;
+}
+
+.AjaxFlexibleFileUpload .Button {
+	float: left;
+	background-image: url(btn_blu_sm.png);
+	background-repeat: no-repeat;
+	background-position: left bottom;
+	color: #fff;
+	font-weight: bold;
+	font-size: 12px;
+	margin: 3px 0;
+}
+
+.AjaxFlexibleFileUpload .Button span {
+	float: left;
+	background-image: url(btn_blu_sm.png);
+	background-repeat: no-repeat;
+	background-position: right bottom;
+	background-color: #fff;
+	padding: 0;
+	line-height: 23px;
+	margin-left: 23px;
+	padding-right: 23px;
+	text-shadow: #405882 0px -1px 0px;
+}
+
+.AjaxFlexibleFileUpload .ClearUploadObjButton {
+	background-image: url(btn_del.png);
+	height: 23px;
+	width: 25px;
+}
+
+.AjaxFlexibleFileUpload .ClearUploadObjButton span {
+	display: none;
+}
+
+.AjaxFlexibleFileUpload .UploadFileObjButton {
+	margin-right: 5px;
+}
+
+.AFUFileObject {
+	
+}
+
+.AFUProgressBarWrapper {
+	width: 100%;
+	float: left;
+}
+
+.AFUFileNameWrapper {
+	float: left;
+	line-height: 29px;
+	margin-right: 5px;
+}

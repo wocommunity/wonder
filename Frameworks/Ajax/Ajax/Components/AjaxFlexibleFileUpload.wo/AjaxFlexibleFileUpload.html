@@ -1,0 +1,39 @@
+<webobject name = "OuterUpdateContainer">
+  <webobject name = "InnerUpdateContainer">
+    <webobject name = "ShowFileSelect">
+      <webobject name = "SelectFileLink">
+        <span><webobject name = "SelectFileLabel" /></span>
+      </webobject>
+    </webobject>
+    <webobject name = "NotShowFileSelect">
+      <div class = "AFUFileObject">
+        <webobject name = "FileNameWrapper">
+          <webobject name = "IsUploadStarting"><webobject name = "StartingText" /></webobject>
+          <webobject name = "IsNotUploadStarting"><webobject name = "FileName" /></webobject>
+        </webobject>
+        <webobject name = "ShowUploadButton">
+          <webobject name = "SubmitUploadLink">
+            <span><webobject name = "UploadLabel" /></span>
+          </webobject>
+        </webobject>
+        <webobject name = "ShowClearButton">
+          <webobject name = "ClearLink">
+            <span><webobject name = "ClearLabel" /></span>
+          </webobject>
+        </webobject>
+        <webobject name = "ShowProgressBar">
+          <div class = "AFUProgressBarWrapper">
+            <div class = "AFUProgressBar"><webobject name = "ProgressAmount" /></div>
+            <webobject name = "AllowCancel">
+              <webobject name = "CancelLink">
+                <span><webobject name = "CancelLabel" /></span>
+              </webobject>
+            </webobject>
+          </div>
+        </webobject>
+      </div>
+    </webobject>
+  </webobject>
+  <script type = "text/javascript"><webobject name = "UploadScript" />
+  </script>
+</webobject>
