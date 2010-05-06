@@ -1,0 +1,114 @@
+UploadScript : WOString {
+	value = ajaxUploadScript;
+}
+
+OuterUpdateContainer : AjaxUpdateContainer {
+  id = outerUpdateContainerId;
+  action = containerRefreshed;
+  class="AjaxFlexibleFileUpload";
+  onRefreshComplete = outerContainerRefreshCompleteFunction;
+}
+
+InnerUpdateContainer : AjaxUpdateContainer {
+  id = innerUpdateContainerId;
+  frequency = refreshTime;
+  stopped = true;
+  action = containerRefreshed;
+  onRefreshComplete = innerContainerRefreshFunction;
+}
+
+ShowFileSelect : WOConditional {
+  condition = showFileSelect;
+}
+
+SelectFileLink : WOHyperlink {
+  href = "javascript:void();";
+  id = uploadButtonId;
+  class = selectFileButtonClass;
+}
+
+NotShowFileSelect : WOConditional {
+  condition = showFileSelect;
+  negate = true;
+}
+
+IsUploadStarting : WOConditional {
+  condition = showUploadStarting;
+}
+
+IsNotUploadStarting : WOConditional {
+  condition = showUploadStarting;
+  negate = true;
+}
+
+FileNameWrapper : WOGenericContainer {
+  elementName = "div";
+  class = "AFUFileNameWrapper";
+  id = fileNameId;
+}
+
+ShowProgressBar : WOConditional {
+  condition = showProgressBar;
+}
+
+ProgressAmount : WOGenericContainer {
+  elementName = "div";
+  class = progressClass;
+  style = progressStyle;
+}
+
+AllowCancel : WOConditional {
+  condition = ^allowCancel;
+}
+
+CancelLink : AjaxUpdateLink {
+  action = cancelUpload;
+  onComplete = cancelFunction;
+  updateContainerID = outerUpdateContainerId;
+  class = cancelButtonClass;
+  onClick = stopFunction;
+}
+
+FileName : WOString {
+  value = fileName;
+}
+
+ShowClearButton : WOConditional {
+  condition = showClearButton;
+}
+
+ClearLink : AjaxUpdateLink {
+  action = clearFileResults;
+  updateContainerID = outerUpdateContainerId;
+  class = clearButtonClass;
+}
+
+ShowUploadButton : WOConditional {
+  condition = showUploadButton;
+}
+
+SubmitUploadLink : WOHyperlink {
+  href = "javascript:void();";
+  onclick = submitUploadFunction;
+  class = uploadButtonClass;
+}
+
+UploadLabel : ERXLocalizedString {
+  value = uploadLabel;
+}
+
+StartingText : ERXLocalizedString {
+  value = startingText;
+}
+
+SelectFileLabel : ERXLocalizedString {
+  value = selectFileLabel;
+}
+
+ClearLabel : ERXLocalizedString {
+  value = clearLabel;
+}
+
+CancelLabel : ERXLocalizedString {
+  value = cancelLabel;
+}
