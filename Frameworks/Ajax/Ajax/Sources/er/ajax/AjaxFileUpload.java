@@ -61,9 +61,9 @@ public class AjaxFileUpload extends WOComponent {
 	private static boolean _requestHandlerRegistered = false;
 
 	private String _id;
-	private boolean _uploadStarted;
-	private AjaxUploadProgress _progress;
-	private boolean _triggerUploadStart;
+	protected boolean _uploadStarted;
+	protected AjaxUploadProgress _progress;
+	protected boolean _triggerUploadStart;
 	private String _requestHandlerKey;
 
 	public AjaxFileUpload(WOContext context) {
