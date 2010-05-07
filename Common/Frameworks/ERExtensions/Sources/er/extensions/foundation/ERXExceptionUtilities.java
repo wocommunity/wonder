@@ -264,7 +264,7 @@ public class ERXExceptionUtilities {
 
 			if (ERXProperties.booleanForKeyWithDefault("er.extensions.stackTrace.cachePatterns", true)) {
 				if (skipPatterns == null) {
-					ERXExceptionUtilities._skipPatterns = NSArray.<Pattern> emptyArray();
+					ERXExceptionUtilities._skipPatterns = NSArray.emptyArray();
 				}
 				else {
 					ERXExceptionUtilities._skipPatterns = skipPatterns;
@@ -298,8 +298,8 @@ public class ERXExceptionUtilities {
 
 			if (stackDepth > 0 && cleanupStackTrace && skipPatterns != null && skipPatterns.count() > 0) {
 				String elementName = element.getClassName() + "." + element.getMethodName();
-				for (Enumeration<Pattern> skipPatternsEnum = skipPatterns.objectEnumerator(); skipPatternsEnum.hasMoreElements();) {
-					Pattern skipPattern = skipPatternsEnum.nextElement();
+				for (Enumeration skipPatternsEnum = skipPatterns.objectEnumerator(); skipPatternsEnum.hasMoreElements();) {
+					Pattern skipPattern = (Pattern)skipPatternsEnum.nextElement();
 					if (skipPattern.matcher(elementName).matches()) {
 						showElement = false;
 						break;
