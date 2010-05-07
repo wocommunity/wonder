@@ -26,7 +26,8 @@
 	background-color: #c0c0c0;
 }
 
-.AjaxFlexibleFileUpload .Button {
+.AjaxFlexibleFileUpload .Button,
+.ERAttachmentFlexibleEditor .Button {
 	float: left;
 	background-image: url(btn_blu_sm.png);
 	background-repeat: no-repeat;
@@ -37,7 +38,8 @@
 	margin: 3px 0;
 }
 
-.AjaxFlexibleFileUpload .Button span {
+.AjaxFlexibleFileUpload .Button span,
+.ERAttachmentFlexibleEditor .Button span {
 	float: left;
 	background-image: url(btn_blu_sm.png);
 	background-repeat: no-repeat;
@@ -77,4 +79,20 @@
 	float: left;
 	line-height: 29px;
 	margin-right: 5px;
+}
+
+.ERAttachmentFlexibleEditor .AEEdit {
+	padding: 10px;
+	border: 1px solid #666;
+	width: 350px;
+	overflow: hidden;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	-moz-box-shadow: #777 2px 2px 3px;
+	-webkit-box-shadow:#777 2px 2px 3px;
+}
+
+.AEEditHeader {
+	margin: 0;
+	margin-bottom: 10px;
 }
