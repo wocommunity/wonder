@@ -34,5 +34,6 @@
         <binding name="selectFileLabel"/>
         <binding name="cancelButtonClass"/>
         <binding name="clearButtonClass"/>
+    <binding name="id"/>
     </wo>
 </wodefinitions>

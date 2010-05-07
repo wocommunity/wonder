@@ -1,0 +1,31 @@
+<webobject name = "MainUpdateContainer">
+  <webobject name = "NotShowUpload">
+    <div class = "AEView">
+      <webobject name = "ERAttachmentViewer" />
+      <webobject name = "ShowFileName">
+        <div class = "AEFileName">
+          <webobject name = "ShowLink">
+            <webobject name = "ERAttachmentLink"><webobject name = "OriginalFileName" /></webobject>
+          </webobject>
+          <webobject name = "NotShowLink"> <webobject name = "OriginalFileName" /> </webobject>
+        </div>
+      </webobject>
+      <div class = "AEEditButton">
+        <webobject name = "EditButton">
+          <span><webobject name = "EditorEditButtonLabel"/></span>
+        </webobject>
+      </div>
+    </div>
+  </webobject>
+  <webobject name = "ShowUpload">
+    <div class = "AEEdit">
+      <h4 class = "AEEditHeader"><webobject name = "EditHeader"/></h4>
+      <webobject name = "ERAttachmentFlexibleUpload" />
+      <webobject name = "CancelButtonDiv">
+        <webobject name = "CancelButton">
+          <span><webobject name = "EditorCancelButtonLabel"/></span>
+        </webobject>
+      </webobject>
+    </div>
+  </webobject>
+</webobject>
