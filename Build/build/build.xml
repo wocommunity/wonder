@@ -949,7 +949,7 @@
         to add your own, add a target definition above and choose the correct group below
      -->
 
-    <target name="common.frameworks.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, ERDirectToWeb.all, ERNeutralLook.all, ERSelenium.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERIndexing.all, ERChronic.all, ERCaching.all, ERCaptcha.all, ERProfiling.all, EROpenID.all, ERPDFGeneration.all, ERJGroupsSynchronizer.all, ERRest.all, ERDirectToRest.all, ERAttachment.all, ERTaggable.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all, ERWorkerChannel.all, BTBusinessLogic.all, JavaMemoryAdaptor.all, JavaRESTAdaptor.all, JavaFSAdaptor.all, JavaERJDBCAdaptor.all, WOLips.all, WOJRebel.all, ERMoviesLogic.all, SnapshotExplorer.all, ERDivaliteLook.all" />
+    <target name="common.frameworks.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, Ajax.all, ERDirectToWeb.all, ERNeutralLook.all, ERSelenium.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERIndexing.all, ERChronic.all, ERCaching.all, ERCaptcha.all, ERProfiling.all, EROpenID.all, ERPDFGeneration.all, ERJGroupsSynchronizer.all, ERRest.all, ERDirectToRest.all, ERAttachment.all, ERTaggable.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all, ERWorkerChannel.all, BTBusinessLogic.all, JavaMemoryAdaptor.all, JavaRESTAdaptor.all, JavaFSAdaptor.all, JavaERJDBCAdaptor.all, WOLips.all, WOJRebel.all, ERMoviesLogic.all, SnapshotExplorer.all, ERDivaliteLook.all" />
 
     <target name="common.applications.all" depends="BugTracker.all, ERMailer.all, Uber.all, ERXTest.all" />
 
@@ -960,7 +960,7 @@
 
     <target name="excelgeneration.frameworks.all" depends="ExcelGenerator.all" />
 
-    <target name="ajax.frameworks.all" depends="Ajax.all, YUI.all, AjaxLook.all, ERIUI.all, GoogleChart.all, ERJQuery.all, ERPrototaculous.all, ERDivaLook.all, ERModernDirectToWeb.all, ERModernLook.all, ERModernDefaultSkin.all" />
+    <target name="ajax.frameworks.all" depends="YUI.all, AjaxLook.all, ERIUI.all, GoogleChart.all, ERJQuery.all, ERPrototaculous.all, ERDivaLook.all, ERModernDirectToWeb.all, ERModernLook.all, ERModernDefaultSkin.all" />
     <target name="ajax.examples.all" depends="AjaxExample.all, AjaxExample2.all, YUIExample.all, AjaxLookExample.all, ERIUIExample.all, ERDivaLookExample.all, ERModernMoviesDemo.all" />
 
     <target name="plugins.all" depends="PostgresqlPlugIn.all,FrontBasePlugIn.all,DerbyPlugIn.all,EROraclePlugIn.all,H2PlugIn.all" />
