@@ -90,6 +90,18 @@ public class ERXExceptionUtilities {
 	 * @return the paragraph string
 	 */
 	public static String toParagraph(Throwable t) {
+		return ERXExceptionUtilities.toParagraph(t, true);
+	}
+
+	/**
+	 * Returns a paragraph form of the given throwable.
+	 * 
+	 * @param t
+	 *            the throwable to convert to paragraph form
+	 * @param removeHtmlTags if true, html tags will be filtered from the error messages (to remove, for instance, bold tags from validation messages)
+	 * @return the paragraph string
+	 */
+	public static String toParagraph(Throwable t, boolean removeHtmlTags) {
 		StringBuffer messageBuffer = new StringBuffer();
 		boolean foundInternalError = false;
 		Throwable throwable = t;
@@ -105,7 +117,9 @@ public class ERXExceptionUtilities {
 					message = "";
 				}
 			}
-			message = message.replaceAll("<[^>]+>", "");
+			if (removeHtmlTags) {
+				message = message.replaceAll("<[^>]+>", "");
+			}
 			message = message.trim();
 			messageBuffer.append(message);
 			if (!message.endsWith(".")) {
@@ -220,16 +234,16 @@ public class ERXExceptionUtilities {
 			if (skipPatternsFile != null) {
 				NSMutableArray mutableSkipPatterns = new NSMutableArray();
 
-				Enumeration<String> frameworksEnum = ERXLocalizer.frameworkSearchPath().reverseObjectEnumerator();
+				Enumeration frameworksEnum = ERXLocalizer.frameworkSearchPath().reverseObjectEnumerator();
 				while (frameworksEnum.hasMoreElements()) {
-					String framework = frameworksEnum.nextElement();
+					String framework = (String)frameworksEnum.nextElement();
 					URL path = ERXFileUtilities.pathURLForResourceNamed(skipPatternsFile, framework, null);
 					if (path != null) {
 						try {
 							NSArray skipPatternStrings = (NSArray) ERXExtensions.readPropertyListFromFileInFramework(skipPatternsFile, framework, null);
 							if (skipPatternStrings != null) {
-								for (Enumeration<String> patternsEnum = skipPatternStrings.objectEnumerator(); patternsEnum.hasMoreElements();) {
-									String skipPatternString = patternsEnum.nextElement();
+								for (Enumeration patternsEnum = skipPatternStrings.objectEnumerator(); patternsEnum.hasMoreElements();) {
+									String skipPatternString = (String)patternsEnum.nextElement();
 									try {
 										mutableSkipPatterns.addObject(Pattern.compile(skipPatternString));
 									}
@@ -250,7 +264,7 @@ public class ERXExceptionUtilities {
 
 			if (ERXProperties.booleanForKeyWithDefault("er.extensions.stackTrace.cachePatterns", true)) {
 				if (skipPatterns == null) {
-					ERXExceptionUtilities._skipPatterns = NSArray.EmptyArray;
+					ERXExceptionUtilities._skipPatterns = NSArray.<Pattern> emptyArray();
 				}
 				else {
 					ERXExceptionUtilities._skipPatterns = skipPatterns;
