@@ -22,4 +22,5 @@ AjaxFlexibleFileUpload : WOSwitchComponent {
 	selectFileLabel = ^selectFileLabel;
 	cancelButtonClass = ^cancelButtonClass;
 	clearButtonClass = ^clearButtonClass;
+	id = ^id;
 }

@@ -10,7 +10,7 @@ import er.attachment.components.ERAttachmentUpload;
  * unlike {@link ERAttachmentUpload}, this component always uses ajax behaviour.
  * 
  * When the upload is successfully completed, this component will automatically
- * process the attachment.  See the notes in ERAttachmentUpload for details on how to 
+ * process the attachment.  See the notes in {@link ERAttachmentUpload} for details on how to 
  * process an attachment in your own components.
  * 
  * <p>
