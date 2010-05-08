@@ -709,7 +709,8 @@ span.ErrorLabel {
 	font-weight: bold;
 }
 
-.EditAttrVal textarea {
+.EditAttrVal textarea,
+.CreateAttrVal textarea {
 	width: 480px;
 	height: 200px;
 }
@@ -1344,6 +1345,100 @@ div.RtActionCell li {
     color: #800; 
     margin:0;
     padding:0;
+}
+
+/* ATTACHMENT */
+
+.AjaxFlexibleFileUpload {
+	overflow: hidden;
+	width: auto;
+}
+
+.AFUProgressBar {
+	float: left;
+	width: 200px;
+	height: 20px;
+	border: 1px solid #aaa;
+	margin-top: 3px;
+	margin-right: 5px;
+	
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+
+.AFUProgressAmount {
+	height: 20px;
+	background-color: #6482b8;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+}
+
+.AFUProgressAmountIndeterminate {
+	background-color: #c0c0c0;
+}
+
+.AjaxFlexibleFileUpload .ClearUploadObjButton {
+	background-image: url(btn_del.png);
+	height: 23px;
+	width: 25px;
+}
+
+.AjaxFlexibleFileUpload .ClearUploadObjButton span {
+	display: none;
+}
+
+.AjaxFlexibleFileUpload .UploadFileObjButton {
+	margin-right: 5px;
+}
+
+.AFUFileObject {
+	
+}
+
+.AFUProgressBarWrapper {
+	width: 100%;
+	float: left;
+}
+
+.AFUFileNameWrapper {
+	float: left;
+	line-height: 29px;
+	margin-right: 5px;
+}
+
+.ERAttachmentFlexibleEditor {
+	overflow: hidden;
+	width: auto;
+	padding-bottom: 5px;
+}
+
+.ERAttachmentFlexibleEditor .AEEdit {
+	padding: 10px;
+	border: 1px solid #666;
+	width: 350px;
+	overflow: hidden;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	-moz-box-shadow: #777 2px 2px 3px;
+	-webkit-box-shadow:#777 2px 2px 3px;
+}
+
+.AjaxFlexibleFileUpload .ObjButton,
+.ERAttachmentFlexibleEditor .ObjButton {
+	background-image: url(btn_blu_sm.png);
+	color: #fff;
+	margin: 3px 0;
+}
+
+.AjaxFlexibleFileUpload .ObjButton span,
+.ERAttachmentFlexibleEditor .ObjButton span {
+	background-image: url(btn_blu_sm.png);
+	text-shadow: #405882 0px -1px 0px;
+}
+
+.AEEditHeader {
+	margin: 0;
+	margin-bottom: 10px;
 }
 
 /* CLEAR */
