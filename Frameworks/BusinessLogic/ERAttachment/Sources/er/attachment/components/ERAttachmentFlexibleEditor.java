@@ -7,7 +7,6 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
-import com.webobjects.foundation.NSLog;
 
 import er.ajax.AjaxUtils;
 import er.attachment.model.ERAttachment;
@@ -130,6 +129,10 @@ public class ERAttachmentFlexibleEditor extends ERXNonSynchronizingComponent {
     	if (ERXComponentUtilities.booleanValueForBinding(this, Keys.injectDefaultCSS, true)) {
     		AjaxUtils.addStylesheetResourceInHead(context, response, "default_ajaxupload.css");
     	}
+    	AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
+    	AjaxUtils.addScriptResourceInHead(context, response, "effects.js");
+    	AjaxUtils.addScriptResourceInHead(context, response, "wonder.js");
+    	AjaxUtils.addScriptResourceInHead(context, response, "ajaxupload.js");
     }
 
     // ACTIONS
@@ -179,7 +182,6 @@ public class ERAttachmentFlexibleEditor extends ERXNonSynchronizingComponent {
 	}
 
 	public WOActionResults finishedAction() {
-		NSLog.out.appendln("ERAttachmentFlexibleEditor.finishedAction " );
 		return null;
 	}
 	
