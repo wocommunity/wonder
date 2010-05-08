@@ -7,6 +7,7 @@ OuterUpdateContainer : AjaxUpdateContainer {
   action = containerRefreshed;
   class="AjaxFlexibleFileUpload";
   onRefreshComplete = outerContainerRefreshCompleteFunction;
+  asynchronous = false;
 }
 
 InnerUpdateContainer : AjaxUpdateContainer {
@@ -15,6 +16,7 @@ InnerUpdateContainer : AjaxUpdateContainer {
   stopped = true;
   action = containerRefreshed;
   onRefreshComplete = innerContainerRefreshFunction;
+  asynchronous = false;
 }
 
 ShowFileSelect : WOConditional {
