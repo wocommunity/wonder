@@ -9,6 +9,7 @@ import ognl.Ognl;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOGeneralAdaptorException;
+import com.webobjects.eocontrol.EOAndQualifier;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOSortOrdering;
@@ -72,6 +73,14 @@ public abstract class EREntityStore {
       sortOrderings = fetchSpecification.sortOrderings();
     }
 
+		if (entity.restrictingQualifier() != null) {
+			if (qualifier != null) {
+				qualifier = new EOAndQualifier(new NSArray(new EOQualifier[] { qualifier, entity.restrictingQualifier() }));
+			} else {
+				qualifier = entity.restrictingQualifier();
+			}
+		}
+    
 //    int count = 0;
     NSMutableArray<NSMutableDictionary<String, Object>> fetchedRows = new NSMutableArray<NSMutableDictionary<String, Object>>();
     Iterator<NSMutableDictionary<String, Object>> i = iterator();
