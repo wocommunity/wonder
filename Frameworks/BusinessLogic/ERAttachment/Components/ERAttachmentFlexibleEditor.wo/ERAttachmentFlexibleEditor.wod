@@ -26,6 +26,7 @@ ERAttachmentFlexibleUpload : ERAttachmentFlexibleUpload {
   selectFileLabel = ^uploadSelectFileLabel;
   storageType = ^storageType;
   id = id;
+  clearUploadProgressOnSuccess = true;
 }
 
 MainUpdateContainer : AjaxUpdateContainer {
