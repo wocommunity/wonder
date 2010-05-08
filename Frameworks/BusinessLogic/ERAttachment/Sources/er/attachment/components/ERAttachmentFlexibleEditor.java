@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 
@@ -15,6 +16,7 @@ import er.extensions.components.ERXComponentUtilities;
 import er.extensions.components.ERXNonSynchronizingComponent;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.eof.ERXGenericRecord;
 
 /**
  * <p>
@@ -103,9 +105,6 @@ public class ERAttachmentFlexibleEditor extends ERXNonSynchronizingComponent {
 		public static final String uploadDialogHeaderText = "uploadDialogHeaderText";
 	};
 	
-	private EOEnterpriseObject _masterObject;
-	private String _relationshipKey;
-	
 	private String _id;
 	private EOEditingContext _workingEC;
 	private EOEditingContext _attachmentEC;
@@ -166,17 +165,24 @@ public class ERAttachmentFlexibleEditor extends ERXNonSynchronizingComponent {
 	public WOActionResults uploadSucceededAction() {
 		
 		attachmentEC().saveChanges();
-		
-		ERAttachment existing = (ERAttachment)localParent().valueForKey(relationshipKey());
-		if (existing != null) {
-			workingEC().deleteObject(existing);
-		}
-		// CHECKME ^^^^ Should I be doing this?
-		
-		ERAttachment newLocalAttachment = newAttachment().localInstanceIn(workingEC());
-		localParent().addObjectToBothSidesOfRelationshipWithKey(newLocalAttachment, relationshipKey());
 
+		EOEnterpriseObject localObj = (EOEnterpriseObject)EOUtilities.localInstanceOfObject(workingEC(), masterObject());
+		if (localObj instanceof ERXGenericRecord) {
+			((ERXGenericRecord)localObj).setValidatedWhenNested(false);
+		}
+		
+		ERAttachment existing = (ERAttachment)localObj.valueForKey(relationshipKey());
+		
+		if (existing != null) {
+			workingEC().deleteObject(existing.localInstanceIn(workingEC()));
+		}
+		
+		EOEnterpriseObject localAttachment = (EOEnterpriseObject)EOUtilities.localInstanceOfObject(workingEC(), newAttachment());
+		
+		localObj.addObjectToBothSidesOfRelationshipWithKey(localAttachment, relationshipKey());
+		
 		workingEC().saveChanges();
+		
 		_showUpload = false;
 		return (WOActionResults)valueForBinding(Keys.uploadSucceededAction);
 	}
@@ -373,20 +379,9 @@ public class ERAttachmentFlexibleEditor extends ERXNonSynchronizingComponent {
 	 * @return the masterObject
 	 */
 	public EOEnterpriseObject masterObject() {
-		if (_masterObject == null) {
-			_masterObject = (EOEnterpriseObject)valueForBinding(Keys.masterObject);
-		}
-		return _masterObject;
+		return (EOEnterpriseObject)valueForBinding(Keys.masterObject);
 	}
 	
-	/**
-	 * Setter for the masterObject
-	 * 
-	 * @param new masterObject
-	 */
-	public void setMasterObject(EOEnterpriseObject obj) {
-		_masterObject = obj;
-	}
 
 	/**
 	 * Getter for the relationhipKey
@@ -394,19 +389,7 @@ public class ERAttachmentFlexibleEditor extends ERXNonSynchronizingComponent {
 	 * @return the relationshipKey
 	 */
 	public String relationshipKey() {
-		if (_relationshipKey == null) {
-			_relationshipKey = stringValueForBinding(Keys.relationshipKey);
-		}
-		return _relationshipKey;
-	}
-
-	/**
-	 * Setter for the relationshipKey
-	 * 
-	 * @param the new relationshipKey
-	 */
-	public void setRelationshipKey(String rk) {
-		_relationshipKey = rk;
+		return stringValueForBinding(Keys.relationshipKey);
 	}
 	
 	/**
@@ -456,7 +439,7 @@ public class ERAttachmentFlexibleEditor extends ERXNonSynchronizingComponent {
 	 * @return String
 	 */
 	public String refreshContainerFunction() {
-		return updateContainerID() + "Update()";
+		return updateContainerID() + "Update();";
 	}
 	
 	/**
