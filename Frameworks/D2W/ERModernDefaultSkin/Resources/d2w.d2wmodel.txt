@@ -4,6 +4,7 @@
     20 : *true* => showTopBatchNavBar = false [com.webobjects.directtoweb.BooleanAssignment],
     20 : *true* => showBottomBatchCount = false [com.webobjects.directtoweb.BooleanAssignment],
     20 : *true* => showBottomBatchNavBar = true [com.webobjects.directtoweb.BooleanAssignment],
+    20 : *true* => attachmentInjectDefaultCSS = false [com.webobjects.directtoweb.BooleanAssignment],
     20 : pageConfiguration like '*Embedded*' => showHeader = false [com.webobjects.directtoweb.BooleanAssignment],
     20 : pageConfiguration like '*Embedded*' => showTopBatchCount = false [com.webobjects.directtoweb.BooleanAssignment],
     20 : pageConfiguration like '*Embedded*' => showTopBatchNavBar = false [com.webobjects.directtoweb.BooleanAssignment],
