@@ -112,3 +112,6 @@ ClearLabel : ERXLocalizedString {
 CancelLabel : ERXLocalizedString {
   value = cancelLabel;
 }
+
+CreateAjaxUploadScript : ERXJavaScript {
+}
