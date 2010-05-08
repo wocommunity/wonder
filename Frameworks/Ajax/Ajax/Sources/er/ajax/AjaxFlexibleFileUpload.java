@@ -52,6 +52,7 @@ import er.extensions.foundation.ERXValueUtilities;
  * @binding uploadButtonClass class for the select file button (defaults to "Button ObjButton UploadFileObjButton")
  * @binding cancelButtonClass class for the select file button (defaults to "Button ObjButton CancelUploadObjButton")
  * @binding clearButtonClass class for the select file button (defaults to "Button ObjButton ClearUploadObjButton")
+ * @binding clearUploadProgressOnSuccess if true, displays the select file button instead of the uploaded file name on completion of a successful upload
  * 
  * @author dleber
  * @author mschrag
@@ -79,6 +80,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 		public static final String cancelButtonClass = "cancelButtonClass";
 		public static final String clearButtonClass = "clearButtonClass";
 		public static final String injectDefaultCSS = "injectDefaultCSS";
+		public static final String clearUploadProgressOnSuccess = "clearUploadProgressOnSuccess";
 	}
 	
 	private String _fileName;
@@ -491,6 +493,14 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	public WOActionResults uploadFailed() {
 		clearUploadProgress();
 		return super.uploadFailed();
+	}
+	
+	public WOActionResults uploadSucceeded() {
+		WOActionResults result = super.uploadSucceeded();
+		if (ERXComponentUtilities.booleanValueForBinding(this, Keys.clearUploadProgressOnSuccess, false)) {
+			clearUploadProgress();
+		}
+		return result;
 	}
 	
 	/**
