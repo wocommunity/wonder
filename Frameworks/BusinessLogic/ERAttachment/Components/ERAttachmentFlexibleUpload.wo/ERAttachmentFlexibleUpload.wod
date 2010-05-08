@@ -23,4 +23,5 @@ AjaxFlexibleFileUpload : WOSwitchComponent {
 	cancelButtonClass = ^cancelButtonClass;
 	clearButtonClass = ^clearButtonClass;
 	id = ^id;
+	clearUploadProgressOnSuccess = ^clearUploadProgressOnSuccess;
 }

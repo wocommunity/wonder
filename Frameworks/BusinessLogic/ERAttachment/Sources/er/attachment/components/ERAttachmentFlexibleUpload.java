@@ -53,6 +53,7 @@ import er.attachment.components.ERAttachmentUpload;
  * @binding succeededAction
  * @binding cancelButtonClass
  * @binding clearButtonClass
+ * @binding clearUploadProgressOnSuccess
  * 
  * @property er.attachment.[configurationName].tempFolder (optional) the temp folder to use for WOFileUploads
  * @property er.attachment.tempFolder (optional) the temp folder to use for WOFileUploads

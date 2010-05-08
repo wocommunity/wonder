@@ -35,5 +35,6 @@
         <binding name="cancelButtonClass"/>
         <binding name="clearButtonClass"/>
     <binding name="id"/>
+    <binding defaults="Boolean" name="clearUploadProgressOnSuccess"/>
     </wo>
 </wodefinitions>
