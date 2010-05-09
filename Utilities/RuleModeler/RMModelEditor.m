@@ -191,6 +191,95 @@
     [bindingInfo release];
 }
 
+- (void)beginMergeInsertUndos
+{
+    if(mergedRemoveIndexes == nil)
+        mergedRemoveIndexes = [[NSMutableIndexSet indexSet] retain];
+}
+
+- (void)endMergeInsertUndos
+{
+    if(mergedRemoveIndexes == nil)
+        return;
+
+    // Issue the single undo message that will remove all inserted objects.
+    [[[[self model] undoManager] prepareWithInvocationTarget:[self document]] removeRulesAtIndexes:mergedRemoveIndexes];
+    [[[self model] undoManager] setActionName:[self actionNameWhenInserting:YES ruleCount:[mergedRemoveIndexes count]]];
+
+    // Now that that's done, nullify the coalesced insert list.
+    [mergedRemoveIndexes release];
+    mergedRemoveIndexes = nil;
+}
+
+/*! @function   EnumerateRangesOfIndexSet
+    @abstract   Returns the next contiguous range of the index set within the range *indexRangePointer.
+    @discussion
+    Provides a simple way to enumerate ranges of an NSIndexSet.  Enumeration has finished when the returned
+    NSRange's length == 0.
+ 
+    Note that this function works best when the indexes are expected to be adjacent thus forming ranges.
+    When the indexes are more likely to be non-adjacent several ranges of length 1 will need to be output.
+    Due to the desire to simplify the context (i.e. requiring only indexRangePointer for context) the
+    algorithm is necessarily degenerate for this case.
+ 
+    To fix this the API would have to accept a buffer of multiple NSRange structs that can be filled in.
+    In that case there would be no degenerate case but the API would also be harder to use.
+ */
+static NSRange EnumerateRangesOfIndexSet(NSIndexSet *self, NSRangePointer indexRangePointer)
+{
+    // currentRange is what we're going to return.
+    // Note that the initial location of the range really doesn't matter because a range of length 0
+    // represents nothing regardless of where it starts.  That said, we reasonably expect upon second
+    // and further calls that the start of indexRangePointer->location is going to be the first index
+    // we find so it's a slight optimization so we hit the index == currentRange.location + currentRange.length
+    // test by virtue of index == currentRange.location and currentRange.length == 0.
+    NSRange currentRange = NSMakeRange(indexRangePointer != NULL ? indexRangePointer->location : 0, 0);
+
+    NSUInteger rawIndexCount;
+    static size_t const rawIndexBufferSize = 16;
+    // Iterate over blocks of indexes.
+    do {
+        NSUInteger rawIndexBuffer[rawIndexBufferSize];
+        rawIndexCount = [self getIndexes:rawIndexBuffer maxCount:rawIndexBufferSize inIndexRange:indexRangePointer];
+        int i;
+        // Iterate over indexes within a block.
+        for(i=0; i < rawIndexCount; ++i)
+        {
+            NSUInteger const index = rawIndexBuffer[i];
+            // If the index would logically extend the existing range then do so.
+            if(index == currentRange.location + currentRange.length)
+                ++currentRange.length;
+            // If the index would not extend the current range and we have some items in the current
+            // range then we need to stop iterating.  This is the degenerate case.
+            else if(currentRange.length != 0)
+            {
+                if(indexRangePointer != NULL)
+                {
+                    // In most cases index (the new location) is going to be less than the ranges location
+                    // because we have actually iterated too far and need to backtrack some.
+                    // Extend the length by how much we're backtracking.
+                    // Do this by first incrementing the range by location (thus making it an "end"
+                    // rather than a location) then decrementing it by the new location.
+                    indexRangePointer->length += indexRangePointer->location;
+                    indexRangePointer->length -= index;
+                    indexRangePointer->location = index;
+                }
+                return currentRange;
+            }
+            // Otherwise we hit the corner case where we started with the wrong range.
+            else
+            {
+                currentRange.location = index;
+                currentRange.length = 1;
+            }
+        } // end for loop over indexes within the block.
+    } while(rawIndexCount >= rawIndexBufferSize);
+    // If we get here we have finished iterating everything.  That does not mean currentRange.length == 0
+    // however if you call again with the same context (the *indexRangePointer) there should be nothing
+    // to iterate and currentRange.length will wind up staying == 0.
+    return currentRange;
+}
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if (object == [lhsFormatCheckbox cell]) {
         [self updateLHSFormatting:[[lhsFormatCheckbox cell] state] == NSOnState];
@@ -210,9 +299,38 @@
             
             if (aChangeKind == NSKeyValueChangeInsertion) {
                 NSIndexSet  *indexes = [change objectForKey:NSKeyValueChangeIndexesKey];
-                
-                [[[[self model] undoManager] prepareWithInvocationTarget:[self document]] removeRulesAtIndexes:indexes];
-                [[[self model] undoManager] setActionName:[self actionNameWhenInserting:YES ruleCount:[indexes count]]];
+                if(mergedRemoveIndexes == nil)
+                {
+                    [[[[self model] undoManager] prepareWithInvocationTarget:[self document]] removeRulesAtIndexes:indexes];
+                    [[[self model] undoManager] setActionName:[self actionNameWhenInserting:YES ruleCount:[indexes count]]];
+                }
+                else
+                {
+                    // Don't immediately issue the undo message to remove the objects.  Instead, keep track of what has
+                    // been inserted.  We do that by merging all removeRulesAtIndexes: messages into one single message.
+                    
+                    // indexRange is context for the enumerator
+                    NSRange indexRange = NSMakeRange(0, NSUIntegerMax);
+                    
+                    // currentRange is what we actually need to operate on.
+                    NSRange currentRange;
+                    
+                    // Expectations:
+                    // On older OS X releases we will supposedly see several individual inserts.  That means we'll be called
+                    // several times each time only being able to enumerate a single range with a length of 1.
+                    
+                    // On newer OS X releases a block of objects will usually be inserted as one.  In this case we'll only
+                    // be called once with a single range having a length of however many items were inserted.
+
+                    // NOTE WELL: Due to the way we enumerate the index set (forming a single range for adjacent indexes
+                    // but only being able to enumerate one range at a time) it is a supremely bad idea for this code
+                    // to be called with an index set whose indexes are non-adjacent.
+                    while( (currentRange = EnumerateRangesOfIndexSet(indexes, &indexRange)).length != 0)
+                    {
+                        [mergedRemoveIndexes shiftIndexesStartingAtIndex:currentRange.location by:currentRange.length];
+                        [mergedRemoveIndexes addIndexesInRange:currentRange];
+                    }
+                }
             }
             else if(aChangeKind == NSKeyValueChangeRemoval){
                 NSArray     *removedRules = [change objectForKey:NSKeyValueChangeOldKey];
@@ -506,21 +624,24 @@
 {
     // Paste optimization: insertion was fast, but undo was slow, because insertion was done one rule after the other
     // (that's Apple implementation of -[NSArrayController addObjects:]), thus removal undo was registered once per rule
-    // (and undo/redo message was wrong). By disabling observation during paste, 
-    // and manually creating the undo here, we get much faster undo (and correct undo/redo message).
-    // We can't use -[RMModel insertRules:atIndexes:], because index is different than array controller's.
-    // If we wanted to perform insertion in one go, unlike NSArrayController, then we'd need to modify -arrangeObjects: to
-    // move the newly inserted objects to the end of the list, like the original implementation.
-    NSIndexSet  *indexes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange([[rulesController arrangedObjects] count], [rules count])];
-    
-    [[self document] removeObserver:[[[self document] windowControllers] objectAtIndex:0] forKeyPath:@"rules"];
-    
+    // (and undo/redo message was wrong).
+
+    // Unfortunately it's not safe to do what this code was originally doing which is to turn off all observation of changes
+    // to the document's rules array and fake an undo message.  The undo message must know the indexes of objects that will
+    // be added to the underlying rules array and it's not possible to reliably calculate that because the array controller
+    // can (and does) choose insertion points on its own.  The end result was that undoing something you added via this
+    // method (i.e. paste or duplicate) would delete other rules.
+
+    // As of at least 10.6 (and I suspect earlier than that) this is kind of a moot point because -[NSArrayController addObjects:]
+    // does do only one insert.  So we really don't need to do this at all anymore except on older OS X versions.
+
+    // Still, it can't hurt to at least attempt to support older versions.  With that in mind we change the API here to
+    // notify the observer that we're about to potentially do a pile of inserts then notify the observer that we have finished
+    // doing a pile of inserts.  The observer can then decide how it wishes to handle that.
+
+    [(RMModelEditor *)[[[self document] windowControllers] objectAtIndex:0] beginMergeInsertUndos];
     [rulesController addObjects:rules];
-    
-    // WARNING Code copied from observeValueForKeyPath:ofObject:change:context:
-    [[[[self model] undoManager] prepareWithInvocationTarget:[self document]] removeRulesAtIndexes:indexes];
-    [[[self model] undoManager] setActionName:[self actionNameWhenInserting:YES ruleCount:[indexes count]]];
-    [[self document] addObserver:[[[self document] windowControllers] objectAtIndex:0] forKeyPath:@"rules" options:NSKeyValueObservingOptionOld context:NULL];
+    [(RMModelEditor *)[[[self document] windowControllers] objectAtIndex:0] endMergeInsertUndos];
 }
 
 - (IBAction)paste:(id)sender {

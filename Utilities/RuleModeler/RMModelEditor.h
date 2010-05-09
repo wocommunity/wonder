@@ -66,6 +66,10 @@ typedef enum {
     
     NSMutableDictionary		*toolbarItems;
     IBOutlet NSView         *cornerView;
+
+    // mergedRemovedIndexes contains all indexes that need to be removed in the undo message
+    // we'll ultimately create in response to one or more "optimized" inserts.
+    NSMutableIndexSet *mergedRemoveIndexes;
 }
 
 - (void)prepareToolbar;
