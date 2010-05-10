@@ -268,10 +268,20 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
             s.append(" **** Caught: "+exception + "\n");
             s.append("      Actor: " + (actor() != null ? actor().toString() : "No Actor") + "\n");
             if (extraInfo != null && extraInfo.count() > 0) {
-                s.append("         Extra Information: \n");
+                s.append("      Extra Information: \n");
                 for (Enumeration keyEnumerator = extraInfo.keyEnumerator(); keyEnumerator.hasMoreElements();) {
                     String key = (String)keyEnumerator.nextElement();
-                    s.append("         " + key + " = " + extraInfo.objectForKey(key) + "\n");
+                    Object value = extraInfo.objectForKey(key);
+                    if (value instanceof NSDictionary) {
+	                    String valueStr = String.valueOf(value);
+	                    StringBuffer indent = new StringBuffer();
+	                    indent.append("\n               ");
+	                    for (int i = 0; i < key.length(); i ++) {
+	                    	indent.append(" ");
+	                    }
+	                    value = valueStr.replaceAll("\n", indent.toString());
+                    }
+                    s.append("          " + key + " = " + value + "\n");
                 }
             }
             
