@@ -117,8 +117,10 @@ public class ERD2RestDefaultEntityDelegate extends ERXAbstractRestEntityDelegate
 		if (reverses == null) {
 			NSMutableDictionary mutableReverses = new NSMutableDictionary<String, String>();
 			NSDictionary<String, String> aliases = (NSDictionary<String, String>) d2wContext().valueForKey("restPropertyAliases");
-			for (Map.Entry<String, String> entry : aliases.entrySet()) {
-				mutableReverses.setObjectForKey(entry.getKey(), entry.getValue());
+			if (aliases != null) {
+				for (Map.Entry<String, String> entry : aliases.entrySet()) {
+					mutableReverses.setObjectForKey(entry.getKey(), entry.getValue());
+				}
 			}
 			d2wContext().takeValueForKey(mutableReverses, "restPropertyAliasesReverse");
 			reverses = mutableReverses;
