@@ -66,10 +66,15 @@ public class ERCStatic extends _ERCStatic {
             if (_privateEditingContext == null) {
                 if (ERXProperties.booleanForKeyWithDefault("er.corebusinesslogic.ERCStatic.UseSeparateChannel", true)) {
                     _privateEditingContext = ERXEC.newEditingContext(new EOObjectStoreCoordinator());
-                    _privateEditingContext.setSharedEditingContext(null);
+                    _privateEditingContext.lock();
+                    try {
+                        _privateEditingContext.setSharedEditingContext(null);
+                    } finally {
+                        _privateEditingContext.unlock();
+                    }
                 } else {
                     _privateEditingContext = ERXEC.newEditingContext();
-                }                
+                }
             }
             return _privateEditingContext;
         }
