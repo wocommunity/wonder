@@ -119,7 +119,9 @@ public class ERXPatcher {
 		ERXPatcher.setClassForName(WOToOneRelationship.class, "WOToOneRelationship");
 
 		ERXPatcher.setClassForName(ERXHyperlink.class, "WOHyperlink");
-		ERXPatcher.setClassForName(ERXSwitchComponent.class, "WOSwitchComponent");
+		if (ERXProperties.booleanForKeyWithDefault("er.extensions.WOSwitchComponent.patch", true)) {
+			ERXPatcher.setClassForName(ERXSwitchComponent.class, "WOSwitchComponent");
+		}
 		if (!ERXApplication.isWO54() || ERXProperties.booleanForKey("er.extensions.WOConditional.patch")) {
 			ERXPatcher.setClassForName(ERXWOConditional.class, "WOConditional");
 		}
