@@ -53,6 +53,7 @@ import er.extensions.foundation.ERXValueUtilities;
  * @binding cancelButtonClass class for the select file button (defaults to "Button ObjButton CancelUploadObjButton")
  * @binding clearButtonClass class for the select file button (defaults to "Button ObjButton ClearUploadObjButton")
  * @binding clearUploadProgressOnSuccess if true, displays the select file button instead of the uploaded file name on completion of a successful upload
+ * @binding mimeType set from the content-type of the upload header if available
  * 
  * @author dleber
  * @author mschrag
