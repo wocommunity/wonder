@@ -14,6 +14,7 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WORequestHandler;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
+import com.webobjects.foundation.NSArray;
 
 import er.extensions.formatters.ERXUnitAwareDecimalFormat;
 import er.extensions.foundation.ERXProperties;
@@ -88,7 +89,6 @@ public class AjaxFileUploadRequestHandler extends WORequestHandler {
 					if (context._requestSessionID() != null) {
 						session = WOApplication.application().restoreSessionWithID(wosid, context);
 					}
-
 					File tempFile = File.createTempFile("AjaxFileUpload", ".tmp", _tempFileFolder);
 					tempFile.deleteOnExit();
 					AjaxUploadProgress progress = new AjaxUploadProgress(uploadIdentifier, tempFile, uploadFileName, streamLength);
@@ -101,6 +101,11 @@ public class AjaxFileUploadRequestHandler extends WORequestHandler {
 						}
 					}
 
+					NSArray<String> contentType = (NSArray<String>)formData.headers().valueForKey("content-type");
+					if (contentType != null) {
+						progress.setContentType(contentType.objectAtIndex(0));
+					}
+					
 					try {
 						if (_maxUploadSize >= 0 && streamLength > _maxUploadSize) {
 							IOException e = new IOException("You attempted to upload a file larger than the maximum allowed size of " + new ERXUnitAwareDecimalFormat(ERXUnitAwareDecimalFormat.BYTE).format(_maxUploadSize) + ".");
