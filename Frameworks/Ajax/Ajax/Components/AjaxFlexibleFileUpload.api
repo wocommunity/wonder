@@ -32,5 +32,6 @@
         <binding name="failedFunction"/>
         <binding name="finishedFunction"/>
     <binding defaults="Boolean" name="clearUploadProgressOnSuccess"/>
+    <binding name="mimeType"/>
     </wo>
 </wodefinitions>

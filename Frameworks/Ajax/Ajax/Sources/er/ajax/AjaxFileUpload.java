@@ -11,6 +11,7 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSData;
+import com.webobjects.foundation.NSLog;
 
 import er.extensions.appserver.ERXRequest;
 import er.extensions.appserver.ERXWOContext;
@@ -52,6 +53,7 @@ import er.extensions.foundation.ERXFileUtilities;
  * @binding uploadLabel the label to display on the Upload button ("Upload" by default)
  * @binding uploadFunctionName the upload button will instead be a function with the given name
  * @binding progressOfText the text to display for the word "of" in the "[size] of [totalsize]" string during upload
+ * @binding mimeType set from the content-type of the upload header if available
  * @binding class the class attribute of the file input
  * @binding style the style attribute of the file input
  * 
@@ -282,6 +284,13 @@ public class AjaxFileUpload extends WOComponent {
 			if (hasBinding("data")) {
 				NSData data = new NSData(progress.tempFile().toURL());
 				setValueForBinding(data, "data");
+			}
+			
+			if (hasBinding("mimeType")) {
+				String contentType = progress.contentType();
+				if (contentType != null) {
+					setValueForBinding(contentType, "mimeType");
+				}
 			}
 
 			if (hasBinding("inputStream")) {
