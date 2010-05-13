@@ -28,8 +28,9 @@ er.extensions.ERXEnterpriseObject.updateInverseRelationships=true
 #er.extensions.ERXWORepetition.checkHashCodes=true
 #er.extensions.ERXWORepetition.raiseOnUnmatchedObject=true
 #er.extensions.ERXWORepetition.eoSupport=true
-#er.component.clickToOpen=true
-#wolips.password=wo
+
+er.component.clickToOpen=true
+wolips.password=my_password
 
 # ERJavaMail
 er.javamail.centralize=true

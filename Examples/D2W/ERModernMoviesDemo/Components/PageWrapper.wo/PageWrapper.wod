@@ -27,3 +27,7 @@ StyleSheets : ERMD2WCSSReference {
 ERMD2WStyleSheetInjector : ERMD2WStyleSheetInjector {
   localContext = d2wContext;
 }
+
+WOLToolBar : WOLToolBar {
+  expanded = true;
+}

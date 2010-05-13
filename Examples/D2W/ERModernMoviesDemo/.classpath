@@ -22,5 +22,6 @@
 	<classpathentry kind="con" path="WOFramework/JavaEOProject"/>
 	<classpathentry kind="con" path="WOFramework/Ajax"/>
 	<classpathentry kind="con" path="WOFramework/H2PlugIn"/>
+	<classpathentry kind="con" path="WOFramework/WOLips"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
