@@ -19,3 +19,11 @@ Stylesheet : ERXStyleSheet {
 	filename = "default_login_page.css";
 	framework = "ERModernDefaultSkin";
 }
+
+HasErrorMessage : WOConditional {
+  condition = errorMessage;
+}
+
+ErrorMessage : WOString {
+  value = errorMessage;
+}
