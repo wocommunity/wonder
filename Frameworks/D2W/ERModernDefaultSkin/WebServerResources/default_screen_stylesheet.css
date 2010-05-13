@@ -1480,7 +1480,7 @@ div.RtActionCell li {
 .D2WPropertyDebugInfo {}
 #ERD2WDebugFlags {
 	position: fixed;
-	bottom: 0;
+	bottom: 24px;
 	left: 0;
 	z-index: 1000;
 	padding: 5px;
@@ -1488,6 +1488,8 @@ div.RtActionCell li {
 	background-color: #fff;
 	-moz-border-radius-topright: 8px;
 	-webkit-border-top-right-radius: 8px;
+	-moz-border-radius-bottomright: 8px;
+	-webkit-border-top-bottom-radius: 8px;
 	opacity: 0.5;
 	-moz-opacity:0.5;
 }
