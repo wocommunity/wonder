@@ -1795,6 +1795,19 @@ public class ERXSQLHelper {
 		protected boolean canReliablyPerformDistinctWithSortOrderings() {
 			return false;
 		}
+		
+		/**
+		 * For Oracle, it seems the right thing to do for varcharLarge is to use a CLOB column.
+		 * CLOB is limited to 8TB where as VARCHAR is limited to 4000 bytes.
+		 */
+		@Override
+		public int varcharLargeJDBCType() {
+			return Types.CLOB;
+		}
+		@Override
+		public int varcharLargeColumnWidth() {
+			return -1;
+		}
 	}
 
 	public static class OpenBaseSQLHelper extends ERXSQLHelper {
