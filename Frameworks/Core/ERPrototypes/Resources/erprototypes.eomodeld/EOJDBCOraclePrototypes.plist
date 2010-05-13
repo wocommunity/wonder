@@ -68,6 +68,13 @@
             valueType = d; 
         }, 
         {
+            columnName = eofKey; 
+            externalType = RAW; 
+            name = eofKey; 
+            valueClassName = NSData; 
+            width = 24; 
+        }, 
+        {
             columnName = ""; 
             externalType = NUMBER; 
             name = flag; 
@@ -303,5 +310,5 @@
     }; 
     isAbstractEntity = Y; 
     name = EOJDBCOraclePrototypes; 
-    primaryKeyAttributes = (id); 
+    primaryKeyAttributes = (eofKey, id); 
 }
