@@ -9,6 +9,10 @@ import er.directtoweb.components.repetitions.ERDListPageRepetition;
  * {@link ERMSimpleListPageRepetition} this is included for backwards compatibility.
  *
  * @project ERModernDirectToWeb
+ * 
+ * @binding displayGroup
+ * @binding d2wContext
+ * 
  * @d2wKey componentName
  * @d2wKey object
  * @d2wKey extraListComponentName

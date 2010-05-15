@@ -7,6 +7,10 @@ import com.webobjects.appserver.WOContext;
  * additions from ERMDListPageRepetition.
  *
  * @project ERModernDirectToWeb
+ * 
+ * @binding displayGroup
+ * @binding d2wContext
+ * 
  * @d2wKey componentName
  * @d2wKey object
  * @d2wKey displayNameForProperty
