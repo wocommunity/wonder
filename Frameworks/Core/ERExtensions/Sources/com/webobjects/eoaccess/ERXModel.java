@@ -135,7 +135,7 @@ public class ERXModel extends EOModel {
 		NSArray<EOAttribute> result = NSArray.emptyArray();
 		if (entity != null) {
 			result = entity.attributes();
-			log.info("Attributes from " + entity.name() + ": " + result);
+			log.debug("Attributes from " + entity.name() + ": " + result);
 		}
 		return result;
 	}
