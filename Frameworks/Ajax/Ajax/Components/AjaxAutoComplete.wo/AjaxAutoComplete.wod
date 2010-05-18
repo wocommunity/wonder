@@ -39,4 +39,6 @@ TextField: WOTextField {
 	tabindex = ^tabindex;
 	default = ^default;
 	style = ^style;
+	type = ^type;
+	results = ^results;
 }
