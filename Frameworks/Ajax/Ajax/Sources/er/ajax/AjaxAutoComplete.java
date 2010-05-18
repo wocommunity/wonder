@@ -91,6 +91,7 @@ public class AjaxAutoComplete extends AjaxComponent {
 
     public String divName;
     public String fieldName;
+    public String indicatorName;
 
     public AjaxAutoComplete(WOContext context) {
         super(context);
@@ -103,6 +104,14 @@ public class AjaxAutoComplete extends AjaxComponent {
         super.awake();
         divName = safeElementID() + "_div";
         fieldName = safeElementID() + "_field";
+        indicatorName = safeElementID() + "_indicator";
+    }
+    
+    public void sleep() {
+    	divName = null;
+    	fieldName = null;
+    	indicatorName = null;
+    	super.sleep();
     }
 
     /**
@@ -118,13 +127,21 @@ public class AjaxAutoComplete extends AjaxComponent {
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }
-   
+
+    public String indicator() {
+    	String indicator = (String)valueForBinding("indicator");
+    	if (indicator == null && valueForBinding("indicatorFilename") != null) {
+    		indicator = "'" + indicatorName + "'";
+    	}
+    	return indicator;
+    }
+    
     protected NSDictionary createAjaxOptions() {
       NSMutableArray ajaxOptionsArray = new NSMutableArray();
       ajaxOptionsArray.addObject(new AjaxOption("tokens", AjaxOption.STRING_ARRAY));
       ajaxOptionsArray.addObject(new AjaxOption("frequency", AjaxOption.NUMBER));
       ajaxOptionsArray.addObject(new AjaxOption("minChars", AjaxOption.NUMBER));
-      ajaxOptionsArray.addObject(new AjaxOption("indicator", AjaxOption.SCRIPT));
+      ajaxOptionsArray.addObject(new AjaxOption("indicator", indicator(), AjaxOption.SCRIPT));
       ajaxOptionsArray.addObject(new AjaxOption("updateElement", AjaxOption.SCRIPT));
       ajaxOptionsArray.addObject(new AjaxOption("afterUpdateElement", AjaxOption.SCRIPT));
 	  ajaxOptionsArray.addObject(new AjaxOption("fullSearch", AjaxOption.BOOLEAN));
@@ -280,6 +297,22 @@ public class AjaxAutoComplete extends AjaxComponent {
     	super.takeValuesFromRequest(request, context);
     }
 
+    protected void appendItemToResponse(Object value, WOElement child, boolean hasItem, WOResponse response, WOContext context) {
+        response.appendContentString("<li>");
+        if(hasItem && child != null) {
+            setValueForBinding(value, "item");
+            context._setCurrentComponent(parent());
+            child.appendToResponse(response, context);
+            context._setCurrentComponent(this);
+        } else {
+        	if(hasItem) {
+                setValueForBinding(value, "item");
+         	}
+            response.appendContentString(displayStringForValue(value));
+        }
+        response.appendContentString("</li>");
+    }
+    
     /**
      * Handles the Ajax request. Checks for the form value in the edit field,
      * pushes it up to the parent and pulls the "list" binding. The parent is
@@ -295,24 +328,18 @@ public class AjaxAutoComplete extends AjaxComponent {
         
         int maxItems = maxItems();
         int itemsCount = 0;
-        List values = (List) valueForBinding("list");
+        Object values = valueForBinding("list");
         WOElement child = _childTemplate();
         boolean hasItem = hasBinding("item");
-        for(Iterator iter = values.iterator(); iter.hasNext() && itemsCount++ < maxItems;) {
-            response.appendContentString("<li>");
-            Object value = iter.next();
-            if(hasItem && child != null) {
-                setValueForBinding(value, "item");
-                context._setCurrentComponent(parent());
-                child.appendToResponse(response, context);
-                context._setCurrentComponent(this);
-            } else {
-            	if(hasItem) {
-                    setValueForBinding(value, "item");
-             	}
-                response.appendContentString(displayStringForValue(value));
-            }
-            response.appendContentString("</li>");
+        if (values instanceof NSArray) {
+	        for(Enumeration valueEnum = ((NSArray)values).objectEnumerator(); valueEnum.hasMoreElements() && itemsCount++ < maxItems;) {
+	        	appendItemToResponse(valueEnum.nextElement(), child, hasItem, response, context);
+	        }
+        }
+        else if (values instanceof List) {
+	        for(Iterator iter = ((List)values).iterator(); iter.hasNext() && itemsCount++ < maxItems;) {
+	        	appendItemToResponse(iter.next(), child, hasItem, response, context);
+	        }
         }
         response.appendContentString("</ul>");
         return response;
