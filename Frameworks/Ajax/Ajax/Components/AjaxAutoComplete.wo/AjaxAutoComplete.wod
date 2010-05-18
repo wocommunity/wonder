@@ -42,3 +42,15 @@ TextField: WOTextField {
 	type = ^type;
 	results = ^results;
 }
+
+HasIndicator : WOConditional {
+	condition = ^indicatorFilename;
+}
+
+Indicator : WOImage {
+	id = indicatorName;
+	class = "autocomplete_indicator";
+	framework = ^indicatorFramework;
+	filename = ^indicatorFilename;
+	style = "display: none";
+}
