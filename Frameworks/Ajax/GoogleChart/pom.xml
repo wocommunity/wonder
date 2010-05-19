@@ -21,6 +21,7 @@
 		<dependency>
 			<groupId>wonder.ajax</groupId>
 			<artifactId>Ajax</artifactId>
+			<classifier>${woClassifier}</classifier>
 		</dependency>
 		<dependency>
 			<groupId>com.webobjects</groupId>

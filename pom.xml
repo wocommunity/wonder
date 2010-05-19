@@ -70,7 +70,7 @@
 				<plugin>
 					<groupId>org.objectstyle.woproject.maven2</groupId>
 					<artifactId>maven-wolifecycle-plugin</artifactId>
-					<version>2.0.17</version>
+					<version>2.1</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -213,6 +213,12 @@
 				<groupId>wonder.ajax</groupId>
 				<artifactId>Ajax</artifactId>
 				<version>${project.version}</version>
+				<classifier>${woClassifier}</classifier>
+				<!--
+					Using the provided scope to avoid problems with profiles and
+					variables substitution
+				-->
+				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>wonder.ajax</groupId>
