@@ -371,7 +371,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			lowMemBuffer = new byte[lowMemBufferSize];
 		}
 		registerRequestHandler(new ERXDirectActionRequestHandler(), directActionRequestHandlerKey());
-		if (isDirectConnectEnabled()) {
+		if (_rapidTurnaroundActiveForAnyProject() && isDirectConnectEnabled()) {
 			registerRequestHandler(new ERXStaticResourceRequestHandler(), "_wr_");
 		}
 		registerRequestHandler(new ERXDirectActionRequestHandler(ERXDirectAction.class.getName(), "stats", false), "erxadm");
