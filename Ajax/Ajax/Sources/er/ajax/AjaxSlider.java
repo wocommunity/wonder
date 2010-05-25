@@ -9,6 +9,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNumberFormatter;
 
 import er.extensions.components.ERXComponentUtilities;
+import org.apache.log4j.Logger;
 
 // PROTOTYPE FUNCTIONS (WRAPPER)
 /**
@@ -20,6 +21,8 @@ import er.extensions.components.ERXComponentUtilities;
  * @binding snap if true, and min/max is set, this will set "values" to be the list of integer values
  */
 public class AjaxSlider extends AjaxComponent {
+
+    private static final Logger log = Logger.getLogger(AjaxSlider.class);
 
     private String _trackerId;
     private String _handleId;

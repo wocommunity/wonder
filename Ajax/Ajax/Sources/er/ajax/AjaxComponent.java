@@ -1,14 +1,10 @@
 package er.ajax;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSKeyValueCoding;
 
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.appserver.ajax.ERXAjaxApplication;
@@ -24,8 +20,6 @@ import er.extensions.foundation.ERXValueUtilities;
  */
 
 public abstract class AjaxComponent extends WOComponent implements IAjaxElement {
-    /** logging */
-    protected Logger log = Logger.getLogger(getClass());
 
     public AjaxComponent(WOContext context) {
         super(context);

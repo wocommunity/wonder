@@ -252,6 +252,33 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
         _problemEmailDomain = value;
     }
     
+    public synchronized String extraInfoString(NSDictionary extraInfo, int indent) {
+    	StringBuffer s = new StringBuffer();
+    	ERXStringUtilities.indent(s, indent);
+        s.append("Extra Information: \n");
+    	ERXStringUtilities.indent(s, indent);
+        s.append("    Actor = " + (actor() != null ? actor().toString() : "No Actor") + "\n");
+        if (extraInfo != null && extraInfo.count() > 0) {
+            for (Enumeration keyEnumerator = extraInfo.keyEnumerator(); keyEnumerator.hasMoreElements();) {
+                String key = (String)keyEnumerator.nextElement();
+                Object value = extraInfo.objectForKey(key);
+                if (value instanceof NSDictionary) {
+                    String valueStr = String.valueOf(value);
+                    StringBuffer valueIndent = new StringBuffer();
+                    valueIndent.append("\n         ");
+                	ERXStringUtilities.indent(valueIndent, indent);
+                    for (int i = 0; i < key.length(); i ++) {
+                    	valueIndent.append(" ");
+                    }
+                    value = valueStr.replaceAll("\n", valueIndent.toString());
+                }
+            	ERXStringUtilities.indent(s, indent);
+                s.append("    " + key + " = " + value + "\n");
+            }
+        }
+        return s.toString();
+    }
+    
     /**
      * Reports an exception. If caching is enabled then the exception
      * will also be emailed to the problem mail recipients.
@@ -266,24 +293,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
         StringBuffer s = new StringBuffer();
         try {
             s.append(" **** Caught: "+exception + "\n");
-            s.append("      Actor: " + (actor() != null ? actor().toString() : "No Actor") + "\n");
-            if (extraInfo != null && extraInfo.count() > 0) {
-                s.append("      Extra Information: \n");
-                for (Enumeration keyEnumerator = extraInfo.keyEnumerator(); keyEnumerator.hasMoreElements();) {
-                    String key = (String)keyEnumerator.nextElement();
-                    Object value = extraInfo.objectForKey(key);
-                    if (value instanceof NSDictionary) {
-	                    String valueStr = String.valueOf(value);
-	                    StringBuffer indent = new StringBuffer();
-	                    indent.append("\n               ");
-	                    for (int i = 0; i < key.length(); i ++) {
-	                    	indent.append(" ");
-	                    }
-	                    value = valueStr.replaceAll("\n", indent.toString());
-                    }
-                    s.append("          " + key + " = " + value + "\n");
-                }
-            }
+            s.append(extraInfoString(extraInfo, 3));
             
             if (exception instanceof EOGeneralAdaptorException) {
                 EOGeneralAdaptorException  e= (EOGeneralAdaptorException)exception;

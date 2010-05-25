@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -179,6 +180,15 @@ public class ERXLog4JConfiguration extends WOComponent {
         return ERXStringUtilities.numberOfOccurrencesOfCharInString('.',logger().getName());
     }
 
+    public void appendToResponse(WOResponse r, WOContext c) {
+        if (session().objectForKey("ERXLog4JConfiguration.enabled") != null) {
+                super.appendToResponse(r, c);
+        }
+        else {
+                r.appendContentString("please use the ERXDirectAction log4jAction to login first!");
+        }
+    }
+    
     //* this assumes you use ERXPatternLayout
     public String conversionPattern() {
         return ERXPatternLayout.instance().getConversionPattern();
