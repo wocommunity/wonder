@@ -140,7 +140,8 @@ public class ERXResourceManager extends WOResourceManager {
 
 	public String urlForResourceNamed(String name, String bundleName, NSArray languages, WORequest request) {
 		String completeURL = null;
-		if (request == null || request.isUsingWebServer() && !WOApplication.application()._rapidTurnaroundActiveForAnyProject()) {
+		boolean isUsingWebServer = request == null || request.isUsingWebServer() || ERXProperties.booleanForKeyWithDefault("er.extensions.ERXResourceManager.isUsingWebServerOverride", false);
+		if (isUsingWebServer && !WOApplication.application()._rapidTurnaroundActiveForAnyProject()) {
 			completeURL = _cachedURLForResource(name, bundleName, languages, request);
 		}
 		else {
