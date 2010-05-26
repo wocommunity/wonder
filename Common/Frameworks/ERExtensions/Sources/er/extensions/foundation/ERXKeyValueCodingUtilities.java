@@ -93,7 +93,7 @@ public class ERXKeyValueCodingUtilities {
                     throw new NSKeyValueCoding.UnknownKeyException("Key + " + key + " not found in class " + clazz.getName(), clazz, key);
                 }
             } catch (Exception e) {
-                throw new NSForwardException(e);
+                throw NSForwardException._runtimeExceptionForThrowable(e);
             }
             if(result != null) {
                 if(result.getClass().getComponentType() != null) {
