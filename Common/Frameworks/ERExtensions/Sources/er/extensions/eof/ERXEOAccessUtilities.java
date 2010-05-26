@@ -51,10 +51,12 @@ import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSSet;
+import com.webobjects.foundation._NSDelegate;
 import com.webobjects.jdbcadaptor.JDBCPlugIn;
 
 import er.extensions.appserver.ERXSession;
@@ -2093,4 +2095,137 @@ public class ERXEOAccessUtilities {
 		return relationship;
 	}
 
+    /**
+     * Executes the given database context operation within a database context lock, retrying up to maxRetryCount times if the database connection dropped.
+     * 
+     * @param <T> the type of the results of this operation
+     * @param databaseContext the (possibly unlocked) database context to operate on
+     * @param maxAttempts the maximum number of times to reattempt the operation before failing
+     * @param operation the database context operation to perform
+     */
+    public static <T> T executeDatabaseContextOperation(final EODatabaseContext databaseContext, final int maxAttempts, final DatabaseContextOperation<T> operation) {
+    	T results = null;
+    	boolean succeeded = false;
+    	for (int attempt = 0; !succeeded && attempt < maxAttempts; attempt ++) {
+        	databaseContext.lock();
+	    	try {
+	    		results = operation.execute(databaseContext);
+	    		succeeded = true;
+	        }
+	        catch (Exception e) {
+	            boolean didHandleException = false;
+	            Object delegate = databaseContext.delegate();
+	            if (delegate instanceof _NSDelegate) {
+	                if (((_NSDelegate)delegate).respondsTo("databaseContextShouldHandleDatabaseException")) {
+	                    didHandleException = ((Boolean) ((_NSDelegate)delegate).perform("databaseContextShouldHandleDatabaseException", new Object[] { databaseContext, e })).booleanValue() == false;
+	                }
+	            } else if (delegate instanceof ERXDatabaseContextDelegate) {
+	                try {
+	                    didHandleException = (((ERXDatabaseContextDelegate)delegate).databaseContextShouldHandleDatabaseException(databaseContext, e) == false);
+	                } catch (Throwable t) {
+	                    // fucking pointless.
+	                    ERXEOAccessUtilities.log.error("caught an exception while trying to handle a database exception.", t);
+	                }
+	            }
+	            if (didHandleException) {
+	                // delegate handled exception and clean up, just try again
+                    succeeded = false;
+	            }
+	            else if (databaseContext._isDroppedConnectionException(e)) {
+	                // start clean up at the database and let it work down the stack, then try again
+	                try {
+	                    databaseContext.database().handleDroppedConnection();
+	                    succeeded = false;
+	                } catch (Exception ex) {
+	                    throw NSForwardException._runtimeExceptionForThrowable(ex);
+	                }
+	            }
+	            else {
+	                throw NSForwardException._runtimeExceptionForThrowable(e);
+	            }
+	            NSLog._conditionallyLogPrivateException(e);
+	        }
+	        finally {
+	            databaseContext.unlock();
+	        }
+    	}
+    	return results;
+    }
+    
+    /**
+     * Executes the given adaptor channel operation within a database context lock and with a requested open channel, retrying up to maxRetryCount times if the database connection dropped.
+     * 
+     * @param <T> the type of the results of this operation
+     * @param databaseContext the (possibly unlocked) database context to operate on
+     * @param maxAttempts the maximum number of times to reattempt the operation before failing
+     * @param operation the adaptor channel operation to perform
+     */
+    public static <T> T executeAdaptorChannelOperation(final EODatabaseContext databaseContext, final int maxAttempts, final AdaptorChannelOperation<T> operation) {
+    	return ERXEOAccessUtilities.executeDatabaseContextOperation(databaseContext, maxAttempts, new DatabaseContextOperation<T>() {
+    		public T execute(EODatabaseContext databaseContext) throws Exception {
+    	        EOAdaptorChannel adaptorChannel = databaseContext.availableChannel().adaptorChannel();
+    	        if (!adaptorChannel.isOpen()) {
+    	            adaptorChannel.openChannel();
+    	        }
+    			return operation.execute(databaseContext, adaptorChannel);
+    		}
+    	});
+    }
+    
+    /**
+     * Executes the given adaptor channel operation within a database context lock and with a requested open channel, retrying up to maxRetryCount times if the database connection dropped.
+     * 
+     * @param <T> the type of the results of this operation
+     * @param modelName the name of the model to lookup a database context for
+     * @param maxAttempts the maximum number of times to reattempt the operation before failing
+     * @param operation the adaptor channel operation to perform
+     */
+    public static <T> T executeAdaptorChannelOperation(final String modelName, final int maxAttempts, final AdaptorChannelOperation<T> operation) {
+		EOEditingContext editingContext = ERXEC.newEditingContext();
+		EODatabaseContext databaseContext;
+		try {
+			databaseContext = EOUtilities.databaseContextForModelNamed(editingContext, modelName);
+		}
+		finally {
+			editingContext.dispose();
+		}
+		return ERXEOAccessUtilities.executeAdaptorChannelOperation(databaseContext, maxAttempts, operation);
+    }
+    
+    /**
+     * Implemented by any database operation that needs to run inside of a database context lock.
+     * 
+     * @author mschrag
+     *
+     * @param <T> the type of the results of this operation
+     */
+    public static interface DatabaseContextOperation<T> {
+    	/**
+    	 * Executes the given operation.
+    	 * 
+    	 * @param <T> the type of the results of this operation
+    	 * @param databaseContext the database context to operate on
+    	 * @throws Exception if anything goes wrong
+    	 */
+    	public T execute(EODatabaseContext databaseContext) throws Exception;
+    }
+
+    /**
+     * Implemented by any adaptor channel operation that needs to run with an open adaptor channel.
+     * 
+     * @author mschrag
+     *
+     * @param <T> the type of the results of this operation
+     */
+    public static interface AdaptorChannelOperation<T> {
+    	/**
+    	 * Executes the given operation with the given channel.
+    	 * 
+    	 * @param <T> the type of the results of this operation
+    	 * @param databaseContext the locked database context to operate on
+    	 * @param channel the open adaptor channel to operate on
+    	 * @throws Exception if anything goes wrong
+    	 */
+    	public T execute(EODatabaseContext databaseContext, EOAdaptorChannel channel) throws Exception;
+    }
 }
