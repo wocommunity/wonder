@@ -14,19 +14,15 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.Map.Entry;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
 
 import org.apache.log4j.Logger;
-import org.apache.mina.common.ByteBuffer;
-import org.apache.mina.common.IdleStatus;
-import org.apache.mina.common.IoAcceptor;
-import org.apache.mina.common.IoHandler;
-import org.apache.mina.common.IoSession;
-import org.apache.mina.common.ThreadModel;
-import org.apache.mina.filter.LoggingFilter;
+import org.apache.mina.core.buffer.IoBuffer;
+import org.apache.mina.core.service.IoAcceptor;
+import org.apache.mina.core.service.IoHandlerAdapter;
+import org.apache.mina.core.session.IdleStatus;
+import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 import org.apache.mina.filter.codec.ProtocolEncoderOutput;
@@ -34,9 +30,8 @@ import org.apache.mina.filter.codec.demux.DemuxingProtocolCodecFactory;
 import org.apache.mina.filter.codec.demux.MessageDecoder;
 import org.apache.mina.filter.codec.demux.MessageDecoderResult;
 import org.apache.mina.filter.codec.demux.MessageEncoder;
-import org.apache.mina.transport.socket.nio.SocketAcceptor;
-import org.apache.mina.transport.socket.nio.SocketAcceptorConfig;
-import org.apache.mina.util.SessionUtil;
+import org.apache.mina.filter.logging.LoggingFilter;
+import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
 
 import com.webobjects.appserver.WOAdaptor;
 import com.webobjects.appserver.WOApplication;
@@ -44,6 +39,7 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WOProperties;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDelayedCallbackCenter;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
@@ -98,17 +94,21 @@ public class ERWOAdaptor extends WOAdaptor {
         _host = (String) config.objectForKey(WOProperties._HostKey);
         _app._setHost(_host);
     }
+    
+    @Override
+	public int port() {
+		return _port;
+	}
 
     @Override
     public void registerForEvents() {
         try {
-            acceptor = new SocketAcceptor(Runtime.getRuntime().availableProcessors() + 1, Executors.newCachedThreadPool());
-            SocketAcceptorConfig cfg = new SocketAcceptorConfig();
-            cfg.setThreadModel(ThreadModel.MANUAL);
-
-            cfg.getFilterChain().addLast("logger", new LoggingFilter());
-            cfg.getFilterChain().addLast("protocolFilter", new ProtocolCodecFilter(new CodecFactory()));
-            acceptor.bind(new InetSocketAddress(_host, _port), new Handler(), cfg);
+            acceptor = new NioSocketAcceptor();
+	        acceptor.getFilterChain().addLast("logger", new LoggingFilter());
+	        acceptor.getFilterChain().addLast("protocolFilter", new ProtocolCodecFilter(new CodecFactory()));
+	        acceptor.setHandler(new Handler());
+	        acceptor.getSessionConfig().setIdleTime(IdleStatus.BOTH_IDLE, 60);
+	        acceptor.bind(new InetSocketAddress(_host, _port));
             log.info("Started adaptor");
         } catch (IOException ex) {
             log.error(ex, ex);
@@ -118,7 +118,7 @@ public class ERWOAdaptor extends WOAdaptor {
     @Override
     public void unregisterForEvents() {
         if (acceptor != null) {
-            acceptor.unbindAll();
+            acceptor.unbind();
             acceptor = null;
         }
     }
@@ -129,8 +129,8 @@ public class ERWOAdaptor extends WOAdaptor {
 
     public static class CodecFactory extends DemuxingProtocolCodecFactory {
         public CodecFactory() {
-            super.register(RequestDecoder.class);
-            super.register(ResponseEncoder.class);
+            addMessageDecoder(RequestDecoder.class);
+            addMessageEncoder(ResponseWrapper.class, ResponseEncoder.class);
         }
     }
 
@@ -143,7 +143,7 @@ public class ERWOAdaptor extends WOAdaptor {
         public RequestDecoder() {
         }
 
-        public MessageDecoderResult decodable(IoSession session, ByteBuffer in) {
+        public MessageDecoderResult decodable(IoSession session, IoBuffer in) {
             try {
                 return headerComplete(in) ? MessageDecoderResult.OK : MessageDecoderResult.NEED_DATA;
             } catch (Exception ex) {
@@ -153,7 +153,7 @@ public class ERWOAdaptor extends WOAdaptor {
             return MessageDecoderResult.NOT_OK;
         }
 
-        public MessageDecoderResult decode(IoSession session, ByteBuffer in, ProtocolDecoderOutput out) throws Exception {
+        public MessageDecoderResult decode(IoSession session, IoBuffer in, ProtocolDecoderOutput out) throws Exception {
             // Try to decode body
             WORequest request = parseRequest(new StringReader(in.getString(decoder)));
 
@@ -165,7 +165,7 @@ public class ERWOAdaptor extends WOAdaptor {
             return MessageDecoderResult.OK;
         }
 
-        private boolean headerComplete(ByteBuffer in) throws Exception {
+        private boolean headerComplete(IoBuffer in) throws Exception {
 
             int last = in.remaining() - 1;
             if (in.remaining() < 4)
@@ -242,14 +242,16 @@ public class ERWOAdaptor extends WOAdaptor {
                 items.addObject(value);
             }
 
+            NSData content = null;
             if (headers.objectForKey("Content-Length") != null) {
                 int len = Integer.parseInt(headers.objectForKey("Content-Length").lastObject());
                 char[] buf = new char[len];
                 if (rdr.read(buf) == len) {
                     line = String.copyValueOf(buf);
+                    content = new NSData(line);
                 }
             }
-            WORequest request = WOApplication.application().createRequest(method, url, version, headers, null, null);
+            WORequest request = WOApplication.application().createRequest(method, url, version, headers, content, null);	// TODO add form content data parsing
 
             return request;
         }
@@ -291,7 +293,7 @@ public class ERWOAdaptor extends WOAdaptor {
 
         public void encode(IoSession session, Object message, ProtocolEncoderOutput out) throws Exception {
             WOResponse msg = (WOResponse) ((ResponseWrapper) message).response();
-            ByteBuffer buf = ByteBuffer.allocate(256);
+            IoBuffer buf = IoBuffer.allocate(256);
             // Enable auto-expand for easier encoding
             buf.setAutoExpand(true);
 
@@ -313,8 +315,8 @@ public class ERWOAdaptor extends WOAdaptor {
                 }
                 buf.put(CRLF);
                 if (msg.headers() != null) {
-                    for (Iterator<Entry<Object, NSArray>> it = msg.headers().entrySet().iterator(); it.hasNext();) {
-                        Entry<Object, NSArray> entry = it.next();
+                    for (Iterator<Entry<String, NSArray<String>>> it = msg.headers().entrySet().iterator(); it.hasNext();) {
+                        Entry<String, NSArray<String>> entry = it.next();
                         for (Object item : entry.getValue()) {
                             buf.putString(entry.getKey().toString(), encoder);
                             buf.putString(": ", encoder);
@@ -343,7 +345,7 @@ public class ERWOAdaptor extends WOAdaptor {
         }
     }
 
-    public static class Handler implements IoHandler {
+    public static class Handler extends IoHandlerAdapter {
 
         private final class Runner implements Runnable {
 
@@ -383,14 +385,6 @@ public class ERWOAdaptor extends WOAdaptor {
             }
         }
 
-        public void sessionCreated(IoSession session) throws Exception {
-            SessionUtil.initialize(session);
-        }
-
-        public void sessionOpened(IoSession session) {
-            session.setIdleTime(IdleStatus.BOTH_IDLE, 60);
-        }
-
         public void sessionClosed(IoSession session) {
             log.info("closed");
         }
@@ -398,10 +392,6 @@ public class ERWOAdaptor extends WOAdaptor {
         public void messageReceived(IoSession session, Object message) {
             Runnable callable = new Runner(session, (WORequest) message);
             _executor.submit(callable);
-        }
-
-        public void messageSent(IoSession session, Object message) {
-            // session.close();
         }
 
         public void sessionIdle(IoSession session, IdleStatus status) {
@@ -412,6 +402,5 @@ public class ERWOAdaptor extends WOAdaptor {
             log.info("exceptionCaught: " + cause, cause);
             session.close();
         }
-
     }
 }
