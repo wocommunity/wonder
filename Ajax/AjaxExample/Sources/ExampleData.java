@@ -8,7 +8,7 @@ import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.ERXFileUtilities;
+import er.extensions.foundation.ERXFileUtilities;
 
 /**
  * Just some example data.

@@ -1,4 +1,4 @@
-import er.extensions.ERXSession;
+import er.extensions.appserver.ERXSession;
 
 /**
  * Everything related to saving pages is handled now in ERXSession.
