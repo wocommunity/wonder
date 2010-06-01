@@ -187,6 +187,9 @@ public class ERXFile extends File {
 
     public File getParentFile() {
         File f = super.getParentFile();
+        if (f == null) {
+        	return null;
+        }
         ERXFile f1 = new ERXFile(f.getAbsolutePath());
         return f1;
     }
