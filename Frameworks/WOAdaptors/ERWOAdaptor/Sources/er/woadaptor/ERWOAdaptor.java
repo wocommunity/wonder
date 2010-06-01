@@ -379,7 +379,7 @@ public class ERWOAdaptor extends WOAdaptor {
                 WOResponse response = runOnce();
 
                 if (response != null) {
-                    session.write(new ResponseWrapper(response)).join();
+                    session.write(new ResponseWrapper(response));
                 }
                 // session.close();
             }
@@ -394,13 +394,8 @@ public class ERWOAdaptor extends WOAdaptor {
             _executor.submit(callable);
         }
 
-        public void sessionIdle(IoSession session, IdleStatus status) {
-            session.close();
-        }
-
         public void exceptionCaught(IoSession session, Throwable cause) {
             log.info("exceptionCaught: " + cause, cause);
-            session.close();
         }
     }
 }
