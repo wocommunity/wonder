@@ -1030,8 +1030,13 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				// We first log just in case the log4j call puts us in a bad
 				// state.
 				if (shouldQuit) {
-					NSLog.err.appendln("Ran out of memory, killing this instance");
-					log.fatal("Ran out of memory, killing this instance");
+					try {
+						NSLog.err.appendln("Ran out of memory, killing this instance");
+						log.fatal("Ran out of memory, killing this instance");
+					}
+					catch (Throwable t) {
+						System.err.println("ERXApplication.handlePotentiallyFatalException: We're so low on memory, we can't even log right now.");
+					}
 				}
 			}
 			else {

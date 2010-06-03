@@ -7,6 +7,7 @@
 package er.extensions;
 
 import com.webobjects.appserver.WOSession;
+import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabase;
 import com.webobjects.eoaccess.EODatabaseContext;
@@ -258,6 +259,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     	ERXJDBCAdaptor.registerJDBCAdaptor();
         ERXConfigurationManager.defaultManager().loadOptionalConfigurationFiles();
         ERXProperties.populateSystemProperties();
+        ERXProperties.systemPropertiesChanged();
         
         ERXConfigurationManager.defaultManager().configureRapidTurnAround();
         ERXLocalizer.initialize();
@@ -481,6 +483,13 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     		adaptorLogger.info("Adaptor debug off");
     	}
     	adaptorEnabled = targetState;
+    	Class<EOAdaptor> eoAdaptorClass = EOAdaptor.class;
+    	try {
+    		eoAdaptorClass.getMethod("setDebugEnabled", boolean.class).invoke(null, Boolean.valueOf(onOff));
+    	}
+    	catch (Throwable t) {
+    		adaptorLogger.info("The method 'EOAdaptor.setDebugEnabled' is not available in this version of WebObjects.");
+    	}
    }
 
     /**
