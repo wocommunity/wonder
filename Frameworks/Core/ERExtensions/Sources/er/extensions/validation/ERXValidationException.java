@@ -391,25 +391,32 @@ public class ERXValidationException extends NSValidation.ValidationException imp
 
     /**
      * Creates a localized display name for a given key
-     * using the class description's <code>displayNameForKey</code>
-     * and then using a localizer for the current "targetLanguage" or
-     * the current localizer to translate the string.
+     * trying to localize it with the current "targetLanguage" or the
+     * current localizer. If there is an eoObject first try to
+     * localize "entityName.key" then "key" if nothing found.
      * @param key to be translated
-     * @return localized and display version of the given key.
+     * @return localized display version of the given key.
      */
     protected String localizedDisplayNameForKey(String key) {
         String displayName = key;
-        if (eoObject() != null) {
-            displayName = eoObject().classDescription().displayNameForKey(key);
-        }
         ERXLocalizer localizer = null;
+        
         if (targetLanguage() != null) {
             localizer = ERXLocalizer.localizerForLanguage(targetLanguage());
-        } else if (ERXLocalizer.currentLocalizer() != null) {
-            localizer = ERXLocalizer.currentLocalizer();
+        } else {
+        	localizer = ERXLocalizer.currentLocalizer();
         }
+
         if (localizer != null) {
-            displayName = localizer.localizedStringForKeyWithDefault(displayName);
+        	if (eoObject() != null) {
+        		displayName = localizer.localizedDisplayNameForKey(eoObject().entityName(), key);
+        	} else {
+        		displayName = localizer.localizedStringForKeyWithDefault(key);
+        	}
+        } else {
+            if (eoObject() != null) {
+                displayName = eoObject().classDescription().displayNameForKey(key);
+            }        	
         }
         return displayName;
     }
