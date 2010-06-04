@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
@@ -164,10 +165,8 @@ public class ERXValidation {
             key = keyPath;
         }
         if (key != null && newErrorMessage != null) {
-            String niceDisplay = entity != null ?
-            entity.classDescriptionForInstances().displayNameForKey(key) : ERXStringUtilities.displayNameForKey(key);
-            String localDisplayName =  (localizer != null ? (String)localizer.valueForKey(niceDisplay) : niceDisplay);
-            errorMessages.setObjectForKey(newErrorMessage, localDisplayName != null ? localDisplayName : niceDisplay);
+        	  String displayName = localizedDisplayNameForKey(entity != null ? entity.classDescriptionForInstances() : null, key, localizer);
+            errorMessages.setObjectForKey(newErrorMessage, displayName);
         } else {
             if(key != null) {
                 //log.warn("NULL message for key:'"+key+"': " + ((EOGeneralAdaptorException)e).userInfo() , e);
@@ -178,4 +177,29 @@ public class ERXValidation {
             }
         }
     }
+    
+    /**
+     * Calculates a localized display name for a given entity and key using the supplied localizer
+     * @param ecd class description the key belongs to
+     * @param key to localize
+     * @param localizer to use for localizing the content
+     * @return the localized display name
+     */
+	public static String localizedDisplayNameForKey(EOClassDescription ecd, String key, ERXLocalizer localizer) {
+		String displayName;
+		if (localizer != null) {
+			if (ecd != null) {
+				displayName = localizer.localizedDisplayNameForKey(ecd.entityName(), key);
+			} else {
+				displayName = localizer.localizedStringForKeyWithDefault(key);
+			}
+		} else {
+		    if (ecd != null) {
+		        displayName = ecd.displayNameForKey(key);
+		    } else {
+		    	displayName = ERXStringUtilities.displayNameForKey(key);
+		    }
+		}
+		return displayName;
+	}
 }

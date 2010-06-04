@@ -398,7 +398,6 @@ public class ERXValidationException extends NSValidation.ValidationException imp
      * @return localized display version of the given key.
      */
     protected String localizedDisplayNameForKey(String key) {
-        String displayName = key;
         ERXLocalizer localizer = null;
         
         if (targetLanguage() != null) {
@@ -406,19 +405,7 @@ public class ERXValidationException extends NSValidation.ValidationException imp
         } else {
         	localizer = ERXLocalizer.currentLocalizer();
         }
-
-        if (localizer != null) {
-        	if (eoObject() != null) {
-        		displayName = localizer.localizedDisplayNameForKey(eoObject().entityName(), key);
-        	} else {
-        		displayName = localizer.localizedStringForKeyWithDefault(key);
-        	}
-        } else {
-            if (eoObject() != null) {
-                displayName = eoObject().classDescription().displayNameForKey(key);
-            }        	
-        }
-        return displayName;
+        return ERXValidation.localizedDisplayNameForKey(eoObject() != null ? eoObject().classDescription() : null, key, localizer);
     }
 
     /**
