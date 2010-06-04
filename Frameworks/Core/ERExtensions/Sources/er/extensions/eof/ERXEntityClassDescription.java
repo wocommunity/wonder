@@ -791,7 +791,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
     
     /**
      * This method is called to validate a value
-     * for a particular key. Typcial validation
+     * for a particular key. Typical validation
      * exceptions that might occur are non-null
      * constraints or string is greater in length
      * than is allowed. If a validation
@@ -944,12 +944,16 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
     
     /**
      * Calculates a display name for a key using
-     * an improved method.
+     * localization of entityname.key if found 
+     * otherwise an improved method.
      * @param key to be converted
      * @return pretty display name
      */
     public String displayNameForKey(String key) {
-        return ERXStringUtilities.displayNameForKey(key);
+    	if (ERXLocalizer.isLocalizationEnabled()) {
+    		return ERXLocalizer.currentLocalizer().localizedDisplayNameForKey(entityName(), key);
+    	}
+    	return ERXStringUtilities.displayNameForKey(key);
     }
 
 
