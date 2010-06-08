@@ -69,7 +69,7 @@ GenericContainerTR: WOGenericContainer {
 
 Hyperlink1: WOHyperlink {
 	?wosid = false;
-	actionClass = "er.extensions.ERXDirectAction";
+	actionClass = "er.extensions.appserver.ERXDirectAction";
 	directActionName = "log4j";
 }
 
