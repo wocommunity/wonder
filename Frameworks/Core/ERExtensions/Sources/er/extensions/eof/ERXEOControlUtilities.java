@@ -1456,7 +1456,7 @@ public class ERXEOControlUtilities {
           }
           else {
             NSMutableArray newMatchingObjects = matchingObjects.mutableClone();
-            newMatchingObjects.addObjectsFromArray(newMatchingObjects);
+            newMatchingObjects.addObjectsFromArray(objects);
             matchingObjects = newMatchingObjects;
           }
         }
