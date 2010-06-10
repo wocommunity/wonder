@@ -33,7 +33,7 @@ SubmitChanges: WOSubmitButton {
 	class = "save";
 }
 
-Errors: ERXErrorDictionaryPanel {
+Errors: ERLITErrorDictionaryPanel {
 	errorMessages = errorMessages;
 	extraErrorMessage = errorMessage;
 	errorKeyOrder = errorKeyOrder;
