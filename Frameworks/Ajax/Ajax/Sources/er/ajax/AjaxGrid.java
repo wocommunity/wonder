@@ -386,6 +386,7 @@ public class AjaxGrid extends WOComponent {
 			newSortOrder.setObjectForKey(currentSortPath(), KEY_PATH);
 			newSortOrder.setObjectForKey(SORT_ASCENDING, SORT_DIRECTION);
 
+			// Keep hidden, mandatory sort as the least important
 			if (hasMandatorySort() &&
 				((NSMutableDictionary) sortOrdersByKeypath().objectForKey(manadatorySortKeyPath())).valueForKey(MANDATORY_SORT_ORDER_FLAG) != null) {
 				sortOrders().insertObjectAtIndex(newSortOrder, sortOrders().count() - 1);
@@ -591,7 +592,21 @@ public class AjaxGrid extends WOComponent {
 	 * @return list of sort orders controlling display of data in the grid
 	 */
 	protected NSMutableArray sortOrders() {
-		return (NSMutableArray) configurationData().valueForKey(SORT_ORDER);
+		NSMutableArray sortOrders = (NSMutableArray) configurationData().valueForKey(SORT_ORDER);
+		
+		// Add the mandatory sort if it is not present
+		if (hasMandatorySort()) {
+			boolean includesMandatorySort = false;
+			for (int i = 0; i < sortOrders.count() && ! includesMandatorySort; i++) {
+				if (((NSKeyValueCoding) sortOrders.objectAtIndex(i)).valueForKey(KEY_PATH).equals(manadatorySortKeyPath())) {
+					includesMandatorySort = true;
+				}
+			}
+			if ( ! includesMandatorySort) {
+				sortOrders.addObject(manadatorySortDictionary());
+			}
+		}
+		return sortOrders;
 	}
 
 	/**
