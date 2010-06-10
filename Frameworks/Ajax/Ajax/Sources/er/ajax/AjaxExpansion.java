@@ -6,6 +6,7 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 
 import er.extensions.appserver.ERXWOContext;
+import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * AjaxExpansion provides an easy way to make expansion areas that
@@ -90,12 +91,16 @@ public class AjaxExpansion extends AjaxComponent {
         String string = (String) valueForBinding("string");
         if (null == string) {
             if (isExpanded()) {
-                string = (String)valueForBinding("openedLabel", "Close");
+                string = (String)valueForBinding("openedLabel");
             } else {
-                string = (String)valueForBinding("closedLabel", "Open");
+                string = (String)valueForBinding("closedLabel");
             }
         }
         return string;
+    }
+
+    public String jsEscapedString() {
+        return ERXStringUtilities.escapeJavascriptApostrophes(string());
     }
 
 	protected void addRequiredWebResources(WOResponse response) {
