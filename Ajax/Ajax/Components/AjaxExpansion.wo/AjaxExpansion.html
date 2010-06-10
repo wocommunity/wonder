@@ -4,8 +4,8 @@
   <script type="text/javascript">
       AjaxUtils.toggleClassName('<webobject name = "LinkID" />', 'expanded', <webobject name = "ExpandedValue" />);
       var linkEl = $('<webobject name = "LinkID" />');
-      if (linkEl.childElements().length == 0) { // If there are no children, we're dealing with a straight string.
-        linkEl.update('<webobject name = "ToggleLinkString" />');
+      if ('<webobject name = "EscapedLinkString" />'.length > 0) {
+        linkEl.update('<webobject name = "EscapedLinkString" />');
       }
   </script>
 </webobject>
