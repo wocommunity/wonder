@@ -3,12 +3,12 @@ IsApplicationDevelopmentMode : WOConditional {
 }
 
 SimpleName :WOString {
-	value = context.page.class.simpleName;
+	value = pageSimpleName;
 }
 
 
 WOLComponentLink : WOLComponentLink {
-  component = context.page.class.name;
+  component = pageClassName;
 }
 
 WOLClickToOpen : WOLClickToOpen {
