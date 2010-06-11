@@ -42,6 +42,14 @@ public class WOLToolBar extends WOComponent {
     return _debugEnabled;
   }
   
+  public String pageClassName() {
+	  return context().page().getClass().getName();
+  }
+  
+  public String pageSimpleName() {
+	  return context().page().getClass().getSimpleName();
+  }
+  
   public WOActionResults toggleDebugEnabled() {
     try {
       WOApplication application = WOApplication.application();
