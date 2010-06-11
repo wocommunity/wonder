@@ -555,11 +555,7 @@ Modalbox.Methods = {
 		var width = this.__computeWidth(); // TC - Changed to use __computeWidth.
 		var heightStyle = (this.options.height == -1) ? "auto" : (this.__computeHeight() + "px");
 		this.MBwindow.setStyle({width: width + "px", height: heightStyle});
-		
-		// TC: Add check for content height > MBwindow height
-		if (this.options.height != -1 && this.MBcontent.getHeight() > this.MBwindow.getHeight()) {
-			this.MBcontent.setStyle({height: this.__computeContentHeight() + 'px', 'overflow-y': 'scroll'});
-		}
+		this.__adjustContentHeightIfNecessary(); // TC added
 	},
 	
 	_setPosition: function() {
@@ -576,10 +572,7 @@ Modalbox.Methods = {
 		}
 		// CH: Done adding vertical centering
 		
-		// TC: Add check for content height > MBwindow height
-		if (this.options.height != -1 && this.MBcontent.getHeight() > this.MBwindow.getHeight()) {
-			this.MBcontent.setStyle({height: this.__computeContentHeight() + 'px', 'overflow-y': 'scroll'});
-		}
+		this.__adjustContentHeightIfNecessary(); // TC added
 	},
 	
 	_setWidthAndPosition: function() {
@@ -589,6 +582,22 @@ Modalbox.Methods = {
 			left: ((this.MBoverlay.getWidth() - this.options.width) / 2 ) + "px"
 		});
 		this._setPosition();
+	},
+	
+	/**
+	 * Checks the content height is greater than the dialog height, and adjusts the content area dimensions as necessary.
+	 */
+	// Added by TC.
+	__adjustContentHeightIfNecessary: function() {
+		// Check for content height > MBwindow height
+		if (this.options.height != -1 && this.MBcontent.getHeight() > this.MBwindow.getHeight()) {
+			this.MBcontent.setStyle({height: this.__computeContentHeight() + 'px', 'overflow-y': 'scroll'});
+			// Try to widen the content area to allow for a vertical scrollbar.
+			var scrollbarWidth = 16;
+			if ((this.MBwindow.getWidth() + scrollbarWidth) < (document.viewport.getWidth() - 40)) {
+				this.MBwindow.setStyle({width: (this.MBwindow.getWidth() + scrollbarWidth) + 'px'});
+			}
+		}
 	},
 	
 	/**
@@ -623,11 +632,11 @@ Modalbox.Methods = {
 		if (this._initOptions.height && this._initOptions.height != -1) { // If there's an explicit height set, respect the value.
 			newHeight = this.options.height;
 		} else { // If there's no explicit height, calculate it.
-			var cHeight = this.MBcontent.getHeight();
+			var cHeight = this.MBheader.getHeight() + this.MBcontent.getHeight();
 			var pageHeight = document.viewport.getHeight();
 			var minMargin = (this.options.centerVertically === true) ? 40 : 20;
 			if (cHeight < (pageHeight - minMargin)) { // Allow at least 20px margin on the bottom of the dialog.
-				newWidth = (cHeight < this.options.height) ? this.options.height : cHeight;
+				newHeight = (cHeight < this.options.height) ? this.options.height : cHeight;
 			} else { // Too big to fit in window.
 				newHeight = pageHeight - 20;
 			}
