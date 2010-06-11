@@ -48,6 +48,9 @@ var iBox = function() {
 		// url for including images/external files
 		base_url: '',
 		
+		// MS added params to _pub
+		params: {},
+		
 		/**
 		 * Updates the base_url variable.
 		 * @param {String} path Relative or absolute path to this file.
