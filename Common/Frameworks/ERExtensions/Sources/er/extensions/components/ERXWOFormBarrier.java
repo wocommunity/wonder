@@ -24,7 +24,7 @@ public class ERXWOFormBarrier extends WODynamicGroup {
 		super(aName, someAssociations, template);
 	}
 
-	public ERXWOFormBarrier(String aName, NSDictionary<String, WOAssociation> someAssociations, NSMutableArray<WOElement> children) {
+	public ERXWOFormBarrier(String aName, NSDictionary someAssociations, NSMutableArray children) {
 		super(aName, someAssociations, children);
 	}
 
