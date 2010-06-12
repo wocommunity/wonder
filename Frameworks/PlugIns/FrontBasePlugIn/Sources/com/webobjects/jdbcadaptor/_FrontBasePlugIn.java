@@ -1767,7 +1767,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			return super.formatValueForAttribute(obj, eoattribute);
 		}
 
-		String escapedString(Object obj) {
+		public String escapedString(Object obj) {
 			String escapedStr;
 			String value = obj.toString();
 			if (value.indexOf("'") == -1) {
@@ -1779,7 +1779,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			return escapedStr;
 		}
 
-		String addEscapeChars(String value) {
+		public String addEscapeChars(String value) {
 			StringBuffer sb = new StringBuffer(value);
 			int index = 0;
 
