@@ -175,32 +175,29 @@ static int defaultRulePriority = 0;
 - (void)encodeWithKeyValueArchiver:(EOKeyValueArchiver *)archiver {
     EOQualifier *lhs = _lhs;
     if (_enabled == NO) {
-        EOKeyValueQualifier *kvq = [[EOKeyValueQualifier alloc] initWithKey:@"RuleIsDisabled" operatorSelector:@selector(isEqual:) value:@"YES"];
+        EOKeyValueQualifier *kvq = [[[EOKeyValueQualifier alloc] initWithKey:@"RuleIsDisabled" operatorSelector:@selector(isEqual:) value:@"YES"] autorelease];
         BOOL useRuleEditorRuleOrdering = [[NSUserDefaults standardUserDefaults] boolForKey:@"useRuleEditorRuleOrdering"];
         if (useRuleEditorRuleOrdering) {
             if (_lhs) {
-                lhs = [[EOAndQualifier alloc] initWithQualifierArray: [[[NSArray alloc] initWithObjects:_lhs, kvq, nil] autorelease]]; // _lhs might be nil
+                lhs = [[[EOAndQualifier alloc] initWithQualifierArray:[NSArray arrayWithObjects:_lhs, kvq, nil]] autorelease]; // _lhs might be nil
             }
             else {
                 lhs = kvq;
             }
         }
         else {
-            lhs = [[EOAndQualifier alloc] initWithQualifierArray: [[[NSArray alloc] initWithObjects:kvq, _lhs, nil] autorelease]]; // _lhs might be nil
+            lhs = [[[EOAndQualifier alloc] initWithQualifierArray:[NSArray arrayWithObjects:kvq, _lhs, nil]] autorelease]; // _lhs might be nil
         }
-        [kvq release];
     }
     
     [archiver encodeInt:_author forKey:@"author"];
-    if(lhs != nil) // RuleEditor does it like this
+    if(lhs) { // RuleEditor does it like this
         [archiver encodeObject:lhs forKey:@"lhs"];
+	}
     [archiver encodeObject:_rhs forKey:@"rhs"];
     [archiver encodeObject:@"com.webobjects.directtoweb.Rule" forKey:@"class"];
     if (_documentation) {
         [archiver encodeObject:_documentation forKey:@"documentation"];
-    }
-    if (lhs != _lhs) {
-        [lhs release];
     }
 }
 
