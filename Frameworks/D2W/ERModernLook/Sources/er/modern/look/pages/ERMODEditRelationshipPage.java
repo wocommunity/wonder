@@ -13,13 +13,19 @@ import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSSelector;
 
 import er.directtoweb.pages.ERD2WEditRelationshipPage;
 import er.directtoweb.pages.ERD2WPage;
 import er.extensions.ERXExtensions;
+import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.eof.ERXGenericRecord;
+import er.modern.directtoweb.components.buttons.ERMDActionButton;
 import er.modern.directtoweb.interfaces.ERMEditRelationshipPageInterface;
 
 /**
@@ -61,7 +67,13 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
     @Override
     public void awake() {
     	_dataSource = null;
+    	NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("relatedObjectDidChange", ERXConstant.NotificationClassArray), ERMDActionButton.BUTTON_PERFORMED_DELETE_ACTION, null);
     	super.awake();
+    }
+    
+    public void sleep() {
+    	NSNotificationCenter.defaultCenter().removeObserver(this, ERMDActionButton.BUTTON_PERFORMED_DELETE_ACTION, null);
+    	super.sleep();
     }
 	
 	// ACTIONS
@@ -158,6 +170,22 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 		result = (WOComponent)D2W.factory().editPageForEntityNamed(masterObject().entityName(), session());
 		((EditPageInterface)result).setObject(masterObject());
 		return result;
+	}
+	
+	/**
+	 * Called when an {@link ERMDActionButton} changes the related object. 
+	 * Forces the displayGroup to fetch.
+	 */
+	@SuppressWarnings("unchecked")
+	public void relatedObjectDidChange(NSNotification notif) {
+		NSDictionary<String, Object>userInfo = notif.userInfo();
+		if (userInfo != null) {
+			Object key = userInfo.valueForKey("propertyKey");
+			EOEnterpriseObject obj = (EOEnterpriseObject)userInfo.valueForKey("object");
+			if (relationshipKey() != null && relationshipKey().equals(key) && ERXEOControlUtilities.eoEquals(masterObject(), obj)) {
+				relationshipDisplayGroup().fetch();
+			}
+		}
 	}
 	
 	// COMPONENT DISPLAY CONTROLS
@@ -265,7 +293,6 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 		        relationshipDisplayGroup().setDataSource(dataSource());
 		        relationshipDisplayGroup().fetch();
 		        setPropertyKey(keyWhenRelationship());
-
 			}
 		}
 	}

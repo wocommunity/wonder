@@ -103,19 +103,39 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
 	
 	public EOEnterpriseObject item;
 	
-	@SuppressWarnings("unchecked")
     public ERMD2WEditToOneTypeAhead(WOContext context) {
         super(context);
-        NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("relatedObjectWasChanged", ERXConstant.NotificationClassArray), ERMDActionButton.BUTTON_PERFORMED_DELETE_ACTION, null);
     }
 	
+    @Override
+    public void awake() {
+    	NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("relatedObjectDidChange", ERXConstant.NotificationClassArray), ERMDActionButton.BUTTON_PERFORMED_DELETE_ACTION, null);
+    	super.awake();
+    }
+    
+    @Override
+    public void sleep() {
+    	NSNotificationCenter.defaultCenter().removeObserver(this, ERMDActionButton.BUTTON_PERFORMED_DELETE_ACTION, null);
+    	super.sleep();
+    }
+    
 	/**
 	 * Called when an {@link ERMDActionButton} changes the related object. Nulls
 	 * {@link #_searchValue} which in turn lets it rebuild on the next display
 	 */
-	public void relatedObjectWasChanged(NSNotification notif) {
-	        _searchValue = null;
+	@SuppressWarnings("unchecked")
+	public void relatedObjectDidChange(NSNotification notif) {
+		NSDictionary<String, Object>userInfo = notif.userInfo();
+		if (userInfo != null) {
+			Object key = userInfo.valueForKey("propertyKey");
+			EOEnterpriseObject obj = (EOEnterpriseObject)userInfo.valueForKey("object");
+			if (propertyKey() != null && propertyKey().equals(key) && ERXEOControlUtilities.eoEquals(object(), obj)) {
+				_searchValue = null;
+				_currentSelection = null;
+			}
+		}
 	}
+	
     
     @Override
     public boolean synchronizesVariablesWithBindings() {
