@@ -53,3 +53,8 @@ UsingTablesConditional:WOConditional {
 NotUsingTablesConditional:WOConditional {
 condition=true;
 }
+
+Span1 : WOGenericContainer {
+  elementName = "span";
+  omitTags = omitLabelSpanTag;
+}
