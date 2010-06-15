@@ -75,3 +75,4 @@ log4j.logger.er.extensions.ERXConfigurationManager=INFO
 #ERXNavigation
 
 er.extensions.ERXNavigationManager.localizeDisplayKeys=true
+er.extensions.ERXNavigationManager.includeLabelSpanTag=true
