@@ -39,6 +39,7 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
     protected Boolean _meetsDisplayConditions;
     protected Boolean _isSelected;
     protected Boolean _hasActivity;
+    protected Boolean _omitLabelSpanTag;
     protected WOComponent _redirect;
     
     public ERXNavigationMenuItem(WOContext context) {
@@ -67,6 +68,7 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
         _hasActivity=null;
         _isDisabled=null;
         _isSelected=null;
+        _omitLabelSpanTag=null;
         super.reset();
     }
 
@@ -244,6 +246,13 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
     		}
     	}
 		return name;
+	}
+
+	public boolean omitLabelSpanTag() {
+		if (_omitLabelSpanTag == null) {
+			_omitLabelSpanTag = new Boolean(!ERXProperties.booleanForKeyWithDefault("er.extensions.ERXNavigationManager.includeLabelSpanTag", false));
+		}
+		return _omitLabelSpanTag;
 	}
     
 }
