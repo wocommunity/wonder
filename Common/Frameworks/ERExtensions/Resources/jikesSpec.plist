@@ -29,5 +29,5 @@ OutputFormat = {
 	"^/usr/bin/javac .* (.*\.java)$"
     );
    Operation = "Compiling";
-   }
+   };
 }

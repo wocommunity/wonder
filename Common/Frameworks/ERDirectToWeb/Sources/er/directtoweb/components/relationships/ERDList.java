@@ -232,7 +232,7 @@ public class ERDList extends ERDCustomEditComponent {
      * and no valid createObjectDelegate is present, then this class will be
      * used.
      * 
-     * @author rajaram
+     * @author santoash
      */
     public class DefaultCreateObjectDelegate implements CreateObjectDelegate {
         /**

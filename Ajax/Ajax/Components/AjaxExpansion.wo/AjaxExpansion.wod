@@ -18,6 +18,10 @@ AjaxUpdateContainer : AjaxUpdateContainer {
   class = ^class;
 }
 
+EscapedLinkString: WOString {
+    value = jsEscapedString;
+}
+
 Expanded : WOConditional {
   condition = expanded;
 }

@@ -308,7 +308,7 @@ Modalbox.Methods = {
 		// Prepare and resize modal box for content
 		// MS: check for a -1 height ... I'm only doing this because the "else" tries to make it scrollable
 		if(this.options.height == this._options.height || this.options.height == -1) {
-			this.resizeTo(this.__computeWidth(), this.MBheader.getHeight() + this.MBcontent.getHeight(), { // TC - Changed to use __computeWidth.
+			this.resizeTo(this.__computeWidth(), this.__computeHeight(), { // TC - Changed to use __computeWidth and __computeHeight.
 				'afterResize': (function() {
 					this._putContent.bind(this, callback).defer(); // MSIE fix
 					this._setWidthAndPosition.bind(this, callback).defer(); // CH: Set position (and width) after the content loads so that dialog is centered when width = - 1
@@ -553,8 +553,9 @@ Modalbox.Methods = {
 	_setSize: function() { // Set size
 		// MS: Add support for -1 width/height
 		var width = this.__computeWidth(); // TC - Changed to use __computeWidth.
-		var heightStyle = (this.options.height == -1) ? "auto" : (this.options.height + "px");
+		var heightStyle = (this.options.height == -1) ? "auto" : (this.__computeHeight() + "px");
 		this.MBwindow.setStyle({width: width + "px", height: heightStyle});
+		this.__adjustContentHeightIfNecessary(); // TC added
 	},
 	
 	_setPosition: function() {
@@ -570,6 +571,8 @@ Modalbox.Methods = {
 			elem.style.top = y+'px';
 		}
 		// CH: Done adding vertical centering
+		
+		this.__adjustContentHeightIfNecessary(); // TC added
 	},
 	
 	_setWidthAndPosition: function() {
@@ -579,6 +582,22 @@ Modalbox.Methods = {
 			left: ((this.MBoverlay.getWidth() - this.options.width) / 2 ) + "px"
 		});
 		this._setPosition();
+	},
+	
+	/**
+	 * Checks the content height is greater than the dialog height, and adjusts the content area dimensions as necessary.
+	 */
+	// Added by TC.
+	__adjustContentHeightIfNecessary: function() {
+		// Check for content height > MBwindow height
+		if (this.options.height != -1 && this.MBcontent.getHeight() > this.MBwindow.getHeight()) {
+			this.MBcontent.setStyle({height: this.__computeContentHeight() + 'px', 'overflow-y': 'scroll'});
+			// Try to widen the content area to allow for a vertical scrollbar.
+			var scrollbarWidth = 16;
+			if ((this.MBwindow.getWidth() + scrollbarWidth) < (document.viewport.getWidth() - 40)) {
+				this.MBwindow.setStyle({width: (this.MBwindow.getWidth() + scrollbarWidth) + 'px'});
+			}
+		}
 	},
 	
 	/**
@@ -601,6 +620,45 @@ Modalbox.Methods = {
 			newWidth = (newWidth > 200) ? newWidth : 200; // Enforce a minimum width of at least 200px.
 		}
 		return newWidth;
+	},
+	
+	/**
+	 * Computes the necessary height of the dialog, optionally making sure the dialog height fits within the viewport.
+	 * @return the height in px for the MBwindow element
+	 */
+	// Added by TC.
+	__computeHeight: function() {
+		var newHeight;
+		if (this._initOptions.height && this._initOptions.height != -1) { // If there's an explicit height set, respect the value.
+			newHeight = this.options.height;
+		} else { // If there's no explicit height, calculate it.
+			var cHeight = this.MBheader.getHeight() + this.MBcontent.getHeight();
+			var pageHeight = document.viewport.getHeight();
+			var minMargin = (this.options.centerVertically === true) ? 40 : 20;
+			if (cHeight < (pageHeight - minMargin)) { // Allow at least 20px margin on the bottom of the dialog.
+				newHeight = (cHeight < this.options.height) ? this.options.height : cHeight;
+			} else { // Too big to fit in window.
+				newHeight = pageHeight - 20;
+			}
+			newHeight = (newHeight > 90) ? newHeight : 90; // Enforce a minimum height of at least 90px.
+		}
+		return newHeight;
+	},
+	
+	/**
+	 * Computes the necessary height of the dialog's content area, making sure the content height fits within the dialog.
+	 * @return the height in px for the MBcontent element
+	 */
+	// Added by TC.
+	__computeContentHeight: function() {
+		var newHeight = -1;
+		var wHeight = this.__computeHeight();
+		var cHeight = this.MBcontent.getHeight();
+		var wHeight = this.MBwindow.getHeight();
+		if (cHeight > (wHeight - this.MBheader.getHeight())) { // Too big to fit in window.
+			newHeight = wHeight - this.MBheader.getHeight() - 13;
+		}
+		return newHeight;
 	},
 
 	_prepareIEHtml: function(height, overflow) { // IE requires width and height set to 100% and overflow hidden
