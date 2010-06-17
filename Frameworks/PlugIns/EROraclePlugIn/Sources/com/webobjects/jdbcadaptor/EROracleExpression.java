@@ -264,6 +264,7 @@ public class EROracleExpression extends OracleExpression {
             for (int i = 0; i < columns.length; i++) {
                 String column = columns[i].replaceFirst("\\s+(ASC|DESC)\\s*",
                                                         "");
+                column = column.replaceFirst("(NULLS\\sFIRST|NULLS\\sLAST)","");
                 if (columnList.indexOf(column) == -1) {
                     sb.append(", ");
                     sb.append(column);
