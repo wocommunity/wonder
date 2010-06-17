@@ -1200,15 +1200,13 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
-	public NSArray objectsWithFetchSpecification(EOFetchSpecification eofetchspecification, EOEditingContext eoeditingcontext) {
+	public NSArray objectsWithFetchSpecification(EOFetchSpecification fs, EOEditingContext eoeditingcontext) {
 		boolean wasAutoLocked = autoLock("objectsWithFetchSpecification");
 		try {
-			NSArray objects;
-			if (eofetchspecification instanceof ERXFetchSpecification && ((ERXFetchSpecification)eofetchspecification).includeEditingContextChanges()) {
-				objects = ERXEOControlUtilities.objectsWithQualifier(this, eofetchspecification.entityName(), eofetchspecification.qualifier(), eofetchspecification.prefetchingRelationshipKeyPaths(), eofetchspecification.sortOrderings(), eofetchspecification.fetchLimit(), eofetchspecification.usesDistinct(), eofetchspecification.isDeep(), eofetchspecification.hints(), true, true, true, true);
-			}
-			else {
-				objects = super.objectsWithFetchSpecification(eofetchspecification, eoeditingcontext);
+			NSArray objects = super.objectsWithFetchSpecification(fs, eoeditingcontext);
+
+			if (fs instanceof ERXFetchSpecification && ((ERXFetchSpecification)fs).includeEditingContextChanges()) {
+				objects = ERXEOControlUtilities.filteredObjectsWithQualifier(this, objects, fs.entityName(), fs.qualifier(), fs.sortOrderings(), fs.usesDistinct(), fs.isDeep(), true, true, true, true);
 			}
 			return objects;
 		}

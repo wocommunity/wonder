@@ -1339,7 +1339,7 @@ public class ERXEOControlUtilities {
     
     /**
      * Utility method used to fetch an array of objects given a qualifier. Also
-     * has support for filtering the newly inserted, updateed, and deleted objects in the 
+     * has support for filtering the newly inserted, updated, and deleted objects in the 
      * passed editing context or any parent editing contexts as well as specifying prefetching 
      * key paths.  Note that only NEW objects are supported in parent editing contexts.
      * 
@@ -1369,6 +1369,48 @@ public class ERXEOControlUtilities {
     	if (objectsMayGetAdded) {
     		fetchSortOrderings = null;
     	}
+        EOFetchSpecification fs = new EOFetchSpecification(entityName, qualifier, fetchSortOrderings);
+        fs.setFetchLimit(fetchLimit);
+        fs.setPrefetchingRelationshipKeyPaths(prefetchKeyPaths);
+        fs.setIsDeep(isDeep);
+        fs.setUsesDistinct(usesDistinct);
+        fs.setHints(hints);
+        NSArray matchingObjects = editingContext.objectsWithFetchSpecification(fs);
+        
+        matchingObjects = filteredObjectsWithQualifier(editingContext, matchingObjects, entityName, qualifier, sortOrderings, usesDistinct, isDeep, includeNewObjects, includeNewObjectsInParentEditingContext, filterUpdatedObjects, removeDeletedObjects);
+      
+      return matchingObjects;
+    }
+
+    /**
+     * Utility method used to filter an array of objects given a qualifier. Also
+     * has support for filtering the newly inserted, updated, and deleted objects in the 
+     * passed editing context or any parent editing contexts as well as specifying prefetching 
+     * key paths.  Note that only NEW objects are supported in parent editing contexts.
+     * 
+     * @param editingContext editing context to fetch it into
+     * @param objectsToFilter objects to filter
+     * @param entityName name of the entity
+     * @param qualifier qualifier
+     * @param prefetchKeyPaths prefetching key paths
+     * @param sortOrderings the sort orderings to use on the results
+     * @param fetchLimit the fetch limit to use
+     * @param usesDistinct whether or not to distinct the results
+     * @param isDeep whether or not to fetch deeply
+     * @param hints fetch hints to apply
+     * @param includeNewObjects option to include newly inserted objects in the result set
+     * @param includeNewObjectsInParentEditingContext option to include newly inserted objects in parent editing
+     *        contexts.  if true, the editing context lineage is explored, any newly-inserted objects matching the
+     *        qualifier are collected and faulted down through all parent editing contexts of ec.
+     * @param filterUpdatedObjects option to include updated objects that now match the qualifier or remove updated
+     *         objects thats no longer match the qualifier
+     * @param removeDeletedObjects option to remove objects that have been deleted
+     *
+     * @return array of objects matching the constructed qualifier
+     */
+	public static NSArray filteredObjectsWithQualifier(EOEditingContext editingContext, NSArray objectsToFilter, String entityName, EOQualifier qualifier, NSArray sortOrderings, boolean usesDistinct, boolean isDeep, boolean includeNewObjects, boolean includeNewObjectsInParentEditingContext, boolean filterUpdatedObjects, boolean removeDeletedObjects) {
+    	boolean objectsMayGetAdded = includeNewObjects || includeNewObjectsInParentEditingContext || filterUpdatedObjects;
+		NSMutableArray cloneMatchingObjects = null;
     	NSMutableArray<String> entityNames = new NSMutableArray<String>();
 		entityNames.addObject(entityName);
     	if (isDeep) {
@@ -1378,19 +1420,11 @@ public class ERXEOControlUtilities {
     			entityNames.addObject(subEntity.name());
     		}
     	}
-      EOFetchSpecification fs = new EOFetchSpecification(entityName, qualifier, fetchSortOrderings);
-      fs.setFetchLimit(fetchLimit);
-      fs.setPrefetchingRelationshipKeyPaths(prefetchKeyPaths);
-      fs.setIsDeep(isDeep);
-      fs.setUsesDistinct(usesDistinct);
-      fs.setHints(hints);
-      NSMutableArray cloneMatchingObjects = null;
-      NSArray matchingObjects = editingContext.objectsWithFetchSpecification(fs);
       // Filter again, because the in-memory versions may have been modified and no longer may match the qualifier
       if (filterUpdatedObjects) {
         // remove any old objects that now no longer match the qualifier (the version we get THIS time is the in-memory one, because
         // it's already been faulted in if it's updated)
-        matchingObjects = EOQualifier.filteredArrayWithQualifier(matchingObjects, qualifier);
+        objectsToFilter = EOQualifier.filteredArrayWithQualifier(objectsToFilter, qualifier);
 
         // and then we need to add back in any updated objects that now DO match the qualifier that didn't originally match the qualifier
         NSArray updatedObjects = ERXEOControlUtilities.updatedObjects(editingContext, entityNames, qualifier);
@@ -1398,15 +1432,15 @@ public class ERXEOControlUtilities {
           Enumeration updatedObjectsEnum = updatedObjects.objectEnumerator();
           while (updatedObjectsEnum.hasMoreElements()) {
             Object obj = updatedObjectsEnum.nextElement();
-            if (!matchingObjects.containsObject(obj)) {
+            if (!objectsToFilter.containsObject(obj)) {
               if (cloneMatchingObjects == null) {
-                cloneMatchingObjects = matchingObjects.mutableClone();
+                cloneMatchingObjects = objectsToFilter.mutableClone();
               }
               cloneMatchingObjects.addObject(obj);
             }
           }
           if (cloneMatchingObjects != null) {
-            matchingObjects = cloneMatchingObjects;
+            objectsToFilter = cloneMatchingObjects;
           }
         }
       }
@@ -1418,8 +1452,8 @@ public class ERXEOControlUtilities {
             cloneMatchingObjects.addObjectsFromArray(insertedObjects);
           }
           else {
-            insertedObjects.addObjectsFromArray(matchingObjects);
-            matchingObjects = insertedObjects;
+            insertedObjects.addObjectsFromArray(objectsToFilter);
+            objectsToFilter = insertedObjects;
           }
         }
       }
@@ -1455,9 +1489,9 @@ public class ERXEOControlUtilities {
             cloneMatchingObjects.addObjectsFromArray(objects);
           }
           else {
-            NSMutableArray newMatchingObjects = matchingObjects.mutableClone();
+            NSMutableArray newMatchingObjects = objectsToFilter.mutableClone();
             newMatchingObjects.addObjectsFromArray(objects);
-            matchingObjects = newMatchingObjects;
+            objectsToFilter = newMatchingObjects;
           }
         }
       }
@@ -1466,8 +1500,8 @@ public class ERXEOControlUtilities {
         NSArray deletedObjects = ERXEOControlUtilities.deletedObjects(editingContext, entityNames, qualifier);
         if (deletedObjects != null) {
           if (cloneMatchingObjects == null) {
-            cloneMatchingObjects = matchingObjects.mutableClone();
-            matchingObjects = cloneMatchingObjects;
+            cloneMatchingObjects = objectsToFilter.mutableClone();
+            objectsToFilter = cloneMatchingObjects;
           }
           cloneMatchingObjects.removeObjectsInArray(deletedObjects);
         }
@@ -1475,7 +1509,7 @@ public class ERXEOControlUtilities {
       
       // MS: We need an arrayWithoutDuplicates that can work in-place for NSMutable ...
       if (objectsMayGetAdded && usesDistinct) {
-		  matchingObjects = ERXArrayUtilities.arrayWithoutDuplicates(matchingObjects);
+		  objectsToFilter = ERXArrayUtilities.arrayWithoutDuplicates(objectsToFilter);
       }
 
       if (objectsMayGetAdded && sortOrderings != null && sortOrderings.count() > 0) {
@@ -1483,12 +1517,11 @@ public class ERXEOControlUtilities {
     		  ERXS.sort(cloneMatchingObjects, sortOrderings);
     	  }
     	  else {
-    		  matchingObjects = ERXS.sorted(matchingObjects, sortOrderings);
+    		  objectsToFilter = ERXS.sorted(objectsToFilter, sortOrderings);
     	  }
       }
-      
-      return matchingObjects;
-    }
+		return objectsToFilter;
+	}
     
     /**
      * Returns the single object of the given type matching the qualifier.
