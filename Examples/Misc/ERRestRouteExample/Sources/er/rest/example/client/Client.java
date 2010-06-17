@@ -11,6 +11,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import er.extensions.eof.ERXKeyFilter;
 import er.rest.ERXNoOpRestDelegate;
 import er.rest.ERXRestNameRegistry;
+import er.rest.ERXRestRequestNode;
 import er.rest.IERXRestDelegate;
 import er.rest.format.ERXRestFormat;
 
@@ -52,5 +53,9 @@ public class Client {
 		String arrayJSON = ERXRestFormat.JSON.toString(list);
 		System.out.println("Client.main: array as JSON " + arrayJSON);
 
+		ClientCompany newCompany = new ClientCompany();
+		newCompany.setName("Peters Pickles");
+		ERXRestRequestNode node = client.createObjectWithPath(newCompany, ERXKeyFilter.filterWithAllRecursive(), "Company.json", ERXRestFormat.JSON);
+		System.out.println("Client.main: The newly created company is: " + node.toString(ERXRestFormat.JSON));
 	}
 }
