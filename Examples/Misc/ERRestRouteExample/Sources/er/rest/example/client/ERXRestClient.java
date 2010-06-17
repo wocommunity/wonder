@@ -25,6 +25,7 @@ public class ERXRestClient {
 	private String _baseURL;
 	private IERXRestDelegate _delegate;
 	private boolean _classDescriptionRequired;
+	private HttpClient _httpClient = null;
 
 	public ERXRestClient(String baseURL, IERXRestDelegate delegate, boolean classDescriptionRequired) {
 		_baseURL = baseURL;
@@ -111,9 +112,20 @@ public class ERXRestClient {
 		return (T) objectWithPath(path(entityName, id, action, format));
 	}
 
+	/* Returns the instance of HttpClient that's used for communcation with the server.
+	 * Handy if you want direct access to the object which manages communication.
+	 * For example, HttpClient will collect cookies and send them on subsequent requests for you.
+	 */
+	public HttpClient httpClient() {
+		if(_httpClient == null){
+			_httpClient = new HttpClient();
+		}
+		return _httpClient;
+	}
+
 	@SuppressWarnings("unchecked")
 	public <T> T objectWithPath(String path, String entityName) throws HttpException, IOException {
-		HttpClient client = new HttpClient();
+		HttpClient client = httpClient();
 		GetMethod fetchObjectMethod = new GetMethod(new ERXMutableURL(_baseURL).appendPath(path).toExternalForm());
 		client.executeMethod(fetchObjectMethod);
 		ERXRestRequestNode node = requestNodeWithMethod(fetchObjectMethod);
@@ -122,7 +134,7 @@ public class ERXRestClient {
 
 	@SuppressWarnings("unchecked")
 	public <T> T objectWithPath(String path) throws HttpException, IOException {
-		HttpClient client = new HttpClient();
+		HttpClient client = httpClient();
 		GetMethod fetchObjectMethod = new GetMethod(new ERXMutableURL(_baseURL).appendPath(path).toExternalForm());
 		client.executeMethod(fetchObjectMethod);
 		ERXRestRequestNode node = requestNodeWithMethod(fetchObjectMethod);
@@ -139,7 +151,7 @@ public class ERXRestClient {
 		ERXStringBufferRestResponse response = new ERXStringBufferRestResponse();
 		format.writer().appendToResponse(node, response, format.delegate());
 
-		HttpClient client = new HttpClient();
+		HttpClient client = httpClient();
 		PutMethod updateObjectMethod = new PutMethod(new ERXMutableURL(_baseURL).appendPath(path).toExternalForm());
 		updateObjectMethod.setRequestEntity(new StringRequestEntity(response.toString()));
 		client.executeMethod(updateObjectMethod);
@@ -155,7 +167,7 @@ public class ERXRestClient {
 		ERXStringBufferRestResponse response = new ERXStringBufferRestResponse();
 		format.writer().appendToResponse(node, response, format.delegate());
 
-		HttpClient client = new HttpClient();
+		HttpClient client = httpClient();
 		PostMethod updateObjectMethod = new PostMethod(new ERXMutableURL(_baseURL).appendPath(path).toExternalForm());
 		updateObjectMethod.setRequestEntity(new StringRequestEntity(response.toString()));
 		client.executeMethod(updateObjectMethod);
@@ -169,7 +181,7 @@ public class ERXRestClient {
 	public ERXRestRequestNode deleteObjectWithPath(Object obj, String path, ERXRestFormat format) throws HttpException, IOException {
 		ERXRestRequestNode node = ERXRestRequestNode.requestNodeWithObjectAndFilter(obj, ERXKeyFilter.filterWithNone(), _delegate);
 
-		HttpClient client = new HttpClient();
+		HttpClient client = httpClient();
 		DeleteMethod deleteObjectMethod = new DeleteMethod(new ERXMutableURL(_baseURL).appendPath(path).toExternalForm());
 		client.executeMethod(deleteObjectMethod);
 		return requestNodeWithMethod(deleteObjectMethod);
