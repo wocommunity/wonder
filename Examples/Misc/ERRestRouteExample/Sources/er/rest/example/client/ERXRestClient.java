@@ -61,8 +61,17 @@ public class ERXRestClient {
 		return _classDescriptionRequired;
 	}
 
+	/* Extract the requestNode from the given method. The method will be asked for it's Content-Type header to determine the format.
+	 * This is known to fail if the method doesn't have a Content-Type header.
+	 */
 	protected ERXRestRequestNode requestNodeWithMethod(HttpMethodBase method) throws IOException {
 		ERXRestFormat format = ERXRestFormat.formatNamed(method.getResponseHeader("Content-Type").getValue());
+		return requestNodeWithMethod(method, format);
+	}
+
+	/* Extract the requestNode from the given method using the given format.
+	 */
+	protected ERXRestRequestNode requestNodeWithMethod(HttpMethodBase method, ERXRestFormat format) throws IOException {
 		ERXRestRequestNode responseNode = format.parser().parseRestRequest(method.getResponseBodyAsString(), format.delegate());
 		return responseNode;
 	}
@@ -171,7 +180,7 @@ public class ERXRestClient {
 		PostMethod updateObjectMethod = new PostMethod(new ERXMutableURL(_baseURL).appendPath(path).toExternalForm());
 		updateObjectMethod.setRequestEntity(new StringRequestEntity(response.toString()));
 		client.executeMethod(updateObjectMethod);
-		return requestNodeWithMethod(updateObjectMethod);
+		return requestNodeWithMethod(updateObjectMethod, format);
 	}
 
 	public ERXRestRequestNode delete(Object obj, String entityName, String id, String action, ERXRestFormat format) throws HttpException, IOException {
