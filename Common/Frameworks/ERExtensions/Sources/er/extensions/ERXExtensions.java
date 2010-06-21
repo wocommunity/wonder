@@ -269,12 +269,16 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         
         _log = Logger.getLogger(ERXExtensions.class);
 
-        registerSQLSupportForSelector(new NSSelector(ERXPrimaryKeyListQualifier.IsContainedInArraySelectorName), 
-                EOQualifierSQLGeneration.Support.supportForClass(ERXPrimaryKeyListQualifier.class));
-            registerSQLSupportForSelector(new NSSelector(ERXToManyQualifier.MatchesAllInArraySelectorName),
-                EOQualifierSQLGeneration.Support.supportForClass(ERXToManyQualifier.class));
-            registerSQLSupportForSelector(new NSSelector(ERXToManyQualifier.MatchesAnyInArraySelectorName),
-                EOQualifierSQLGeneration.Support.supportForClass(ERXToManyQualifier.class));
+        try {
+        	// MS: initialize these with Class.forName(Whatever.class.getName()) because the .class class literal does not trigger static initializers to run in 1.5,
+        	// which means that the sql generation support classes are not registered
+	        registerSQLSupportForSelector(new NSSelector(ERXPrimaryKeyListQualifier.IsContainedInArraySelectorName), EOQualifierSQLGeneration.Support.supportForClass(Class.forName(ERXPrimaryKeyListQualifier.class.getName())));
+	        registerSQLSupportForSelector(new NSSelector(ERXToManyQualifier.MatchesAllInArraySelectorName), EOQualifierSQLGeneration.Support.supportForClass(Class.forName(ERXToManyQualifier.class.getName())));
+	        registerSQLSupportForSelector(new NSSelector(ERXToManyQualifier.MatchesAnyInArraySelectorName), EOQualifierSQLGeneration.Support.supportForClass(Class.forName(ERXToManyQualifier.class.getName())));
+        }
+        catch (Throwable t) {
+        	throw NSForwardException._runtimeExceptionForThrowable(t);
+        }
                 
         //ERXObjectStoreCoordinatorPool.initializeIfNecessary();
     }
