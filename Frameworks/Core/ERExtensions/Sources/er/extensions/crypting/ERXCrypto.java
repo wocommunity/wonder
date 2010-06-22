@@ -51,6 +51,12 @@ public class ERXCrypto {
 	 */
 	public static final String BLOWFISH = "Blowfish";
 
+	/**
+	 * The constant for the AES encryption algorithm.
+	 */
+	public static final String AES = "AES";
+
+	
 	private static NSMutableDictionary<String, ERXCrypterInterface> _crypters;
 
 	private static synchronized NSMutableDictionary<String, ERXCrypterInterface> crypters() {
@@ -58,6 +64,7 @@ public class ERXCrypto {
 			_crypters = new NSMutableDictionary<String, ERXCrypterInterface>();
 			_crypters.setObjectForKey(new ERXDESCrypter(), ERXCrypto.DES);
 			_crypters.setObjectForKey(new ERXBlowfishCrypter(), ERXCrypto.BLOWFISH);
+			_crypters.setObjectForKey(new ERXAESCrypter(), ERXCrypto.AES);
 
 			NSArray<String> crypterAlgorithms = ERXProperties.componentsSeparatedByString("er.extensions.ERXCrypto.crypters", ",");
 			if (crypterAlgorithms != null) {
@@ -198,6 +205,27 @@ public class ERXCrypto {
 		String base64String = enc.encode(byteArray);
 		return base64String;
 	}
+	
+	/**
+	 * Base64url encodes the passed in byte[]
+	 */
+	public static String base64urlEncode(byte[] byteArray) {
+		String base64String = base64Encode(byteArray);
+		StringBuffer sb = new StringBuffer(base64String.length());
+		for (int i = 0; i < base64String.length(); i++) {
+			char ch = base64String.charAt(i);
+			if (ch == '+') {
+				sb.append('-');
+			}
+			else if (ch == '/') {
+				sb.append('_');
+			}
+			else if (ch != '=') {
+				sb.append(ch);
+			}
+		}
+		return sb.toString();
+	}
 
 	/**
 	 * Base64 decodes the passed in String
@@ -206,6 +234,33 @@ public class ERXCrypto {
 		sun.misc.BASE64Decoder enc = new sun.misc.BASE64Decoder();
 		byte[] raw = enc.decodeBuffer(s);
 		return raw;
+	}
+	
+	/**
+	 * Base64url decodes the passed in String
+	 */
+	public static byte[] base64urlDecode(String s) throws IOException {
+		int length = s.length();
+		StringBuffer sb = new StringBuffer(length);
+		int i = 0;
+		while (i < length || (i & 2) != 0) {
+			if (i >= length) {
+				sb.append('=');
+			} else {
+				char ch = s.charAt(i);
+				if (ch == '-') {
+					sb.append('+');
+				}
+				else if (ch == '_') {
+					sb.append('/');
+				}
+				else {
+					sb.append(ch);
+				}
+			}
+			i++;
+		}
+		return base64Decode(sb.toString());
 	}
 
 	/**
