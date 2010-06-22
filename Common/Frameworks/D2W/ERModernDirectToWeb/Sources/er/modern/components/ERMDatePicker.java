@@ -7,12 +7,14 @@ import org.apache.log4j.Logger;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSTimestamp;
 
 import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.components.ERXStatelessComponent;
 import er.extensions.formatters.ERXTimestampFormatter;
 import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.localization.ERXLocalizer;
 
 /**
  * Wrapper around http://www.frequency-decoder.com/2009/09/09/unobtrusive-date-picker-widget-v5/
@@ -101,6 +103,8 @@ public class ERMDatePicker extends ERXStatelessComponent {
     		ERXResponseRewriter.addStylesheetResourceInHead(response, context, framework, cssFilename);
     	}
         ERXResponseRewriter.addScriptResourceInHead(response, context, FRAMEWORK_NAME, "datepicker.js");
+        String langScript = ERXLocalizer.currentLocalizer().languageCode() + ".js";
+        ERXResponseRewriter.addScriptResourceInHead(response, context, FRAMEWORK_NAME, "lang/" + langScript);
         super.appendToResponse(response, context);
     }
     
@@ -158,13 +162,13 @@ public class ERMDatePicker extends ERXStatelessComponent {
 		if (_createScript == null) {
 			_createScript = "datePickerController.destroyDatePicker('"+elementID()+"'); datePickerController.createDatePicker("+datePickerOptions() + ")";
 		}
+		NSLog.out.appendln(_createScript);
 		return _createScript;
 	}
 	
 	private String datePickerOptions() {
 		String opts = "{";
 		opts += "formElements:{'" + elementID() + "':'" + dateFormatString() + "'}";
-		
 		String highlightDays = stringValueForBinding("highlightDays");
 		if (ne(highlightDays)) 
 			opts += ",highlightDays:" + highlightDays;
@@ -270,4 +274,5 @@ public class ERMDatePicker extends ERXStatelessComponent {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
 		return formatter.format(ts);
 	}
+
 }

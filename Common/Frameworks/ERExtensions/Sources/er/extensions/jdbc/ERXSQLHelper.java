@@ -19,11 +19,13 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorChannel;
+import com.webobjects.eoaccess.EOAdaptorOperation;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabase;
 import com.webobjects.eoaccess.EODatabaseChannel;
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOGeneralAdaptorException;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOQualifierSQLGeneration;
 import com.webobjects.eoaccess.EORelationship;
@@ -36,6 +38,7 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
@@ -43,8 +46,10 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSValidation;
 import com.webobjects.foundation._NSUtilities;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
+import com.webobjects.jdbcadaptor.JDBCAdaptorException;
 import com.webobjects.jdbcadaptor.JDBCPlugIn;
 
 import er.extensions.eof.ERXConstant;
@@ -54,6 +59,7 @@ import er.extensions.eof.ERXModelGroup;
 import er.extensions.eof.qualifiers.ERXFullTextQualifier;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.validation.ERXValidationFactory;
 
 /**
  * ERXSQLHelper provides support for additional database-vender-specific
@@ -1467,7 +1473,19 @@ public class ERXSQLHelper {
 //	        		}
 	        	}
 		}
-	        return shouldPerformDistinctInMemory;
+        return shouldPerformDistinctInMemory;
+	}
+
+	/**
+	 * Returns true if the SQL helper can handle the exception. Typical uses are
+	 * morphing unique constraints to NSValidation exceptions.
+	 * 
+	 * @param databaseContext
+	 * @param throwable
+	 * @return whether or not the SQL helper can handl this exception
+	 */
+	public boolean handleDatabaseException(EODatabaseContext databaseContext, Throwable throwable) {
+		return false;
 	}
 
 	public static ERXSQLHelper newSQLHelper(EOSQLExpression expression) {
@@ -1498,17 +1516,26 @@ public class ERXSQLHelper {
 	}
 
 	public static ERXSQLHelper newSQLHelper(EODatabaseContext databaseContext) {
-		JDBCAdaptor adaptor = (JDBCAdaptor) databaseContext.database().adaptor();
+		EOAdaptor adaptor = databaseContext.database().adaptor();
 		return ERXSQLHelper.newSQLHelper(adaptor);
 	}
 
 	public static ERXSQLHelper newSQLHelper(EODatabaseChannel databaseChannel) {
-		JDBCAdaptor adaptor = (JDBCAdaptor) databaseChannel.adaptorChannel().adaptorContext().adaptor();
+		EOAdaptor adaptor = databaseChannel.adaptorChannel().adaptorContext().adaptor();
 		return ERXSQLHelper.newSQLHelper(adaptor);
 	}
 
+	public static ERXSQLHelper newSQLHelper(EOAdaptor adaptor) {
+		if (adaptor instanceof JDBCAdaptor) {
+			return ERXSQLHelper.newSQLHelper((JDBCAdaptor)adaptor);
+		}
+			
+		// MS: Hack to support non JDBC adaptor migrations
+		return new NoSQLHelper();
+	}
+
 	public static ERXSQLHelper newSQLHelper(EOAdaptorChannel adaptorChannel) {
-		JDBCAdaptor adaptor = (JDBCAdaptor) adaptorChannel.adaptorContext().adaptor();
+		EOAdaptor adaptor = adaptorChannel.adaptorContext().adaptor();
 		return ERXSQLHelper.newSQLHelper(adaptor);
 	}
 
@@ -1527,13 +1554,8 @@ public class ERXSQLHelper {
 	}
 
 	public static ERXSQLHelper newSQLHelper(EOModel model) {
-		ERXSQLHelper helper = null;
 		EOAdaptor adaptor = EOAdaptor.adaptorWithModel(model);
-		if (adaptor instanceof JDBCAdaptor) {
-			JDBCAdaptor jdbc = (JDBCAdaptor) adaptor;
-			helper = ERXSQLHelper.newSQLHelper(jdbc);
-		}
-		return helper;
+		return ERXSQLHelper.newSQLHelper(adaptor);
 	}
 
 	public static ERXSQLHelper newSQLHelper(String databaseProductName) {
@@ -1543,7 +1565,11 @@ public class ERXSQLHelper {
 				try {
 					String sqlHelperClassName = ERXProperties.stringForKey(databaseProductName + ".SQLHelper");
 					if (sqlHelperClassName == null) {
-						if (databaseProductName.equalsIgnoreCase("frontbase")) {
+						if (databaseProductName == null) {
+							// If there is no plugin then product name will be null
+							sqlHelper = new ERXSQLHelper();
+						}
+						else if (databaseProductName.equalsIgnoreCase("frontbase")) {
 							sqlHelper = new FrontBaseSQLHelper();
 						}
 						else if (databaseProductName.equalsIgnoreCase("mysql")) {
@@ -1563,6 +1589,10 @@ public class ERXSQLHelper {
 						}
 						else if (databaseProductName.equalsIgnoreCase("microsoft")) {
 							sqlHelper = new MicrosoftSQLHelper();
+						}
+						else if (databaseProductName.equalsIgnoreCase("h2")) {
+							log.warn("H2Helper");
+							sqlHelper = new H2SQLHelper();
 						}
 						else {
 							try {
@@ -1770,6 +1800,19 @@ public class ERXSQLHelper {
 		protected boolean canReliablyPerformDistinctWithSortOrderings() {
 			return false;
 		}
+		
+		/**
+		 * For Oracle, it seems the right thing to do for varcharLarge is to use a CLOB column.
+		 * CLOB is limited to 8TB where as VARCHAR is limited to 4000 bytes.
+		 */
+		@Override
+		public int varcharLargeJDBCType() {
+			return Types.CLOB;
+		}
+		@Override
+		public int varcharLargeColumnWidth() {
+			return -1;
+		}
 	}
 
 	public static class OpenBaseSQLHelper extends ERXSQLHelper {
@@ -1780,10 +1823,61 @@ public class ERXSQLHelper {
 		}
 	}
 
+	public static class H2SQLHelper extends ERXSQLHelper {
+		
+		@Override
+		public String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
+			return sql + " LIMIT " + (end - start) + " OFFSET " + start;
+		}
+		
+		@Override
+		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
+			NSMutableArray columnNames = columnNamesFromColumnIndexes(columnIndexes);
+			return "ALTER TABLE " + tableName + " ADD CONSTRAINT \"" + indexName + "\" UNIQUE(" + new NSArray(columnNames).componentsJoinedByString(", ") + ")";
+		}
+		
+		@Override
+		public String sqlForCreateIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
+			NSMutableArray columnNames = columnNamesFromColumnIndexes(columnIndexes);
+			return "CREATE INDEX \""+indexName+"\" ON "+tableName+" ("+new NSArray(columnNames).componentsJoinedByString(", ")+")";
+		}
+
+		/**
+		 * @see er.extensions.jdbc.ERXSQLHelper#sqlForGetNextValFromSequencedNamed(java.lang.String)
+		 */
+		@Override
+		protected String sqlForGetNextValFromSequencedNamed(String sequenceName) {
+			return "select NEXTVAL('" + sequenceName + "') as key"; 
+		}
+
+		@Override
+		public String sqlForRegularExpressionQuery(String key, String value) {
+			return key + " REGEXP " + value + "";
+		}
+		
+		@Override
+		public int varcharLargeJDBCType() {
+			return Types.LONGVARCHAR;
+		}
+		
+		@Override
+		public int varcharLargeColumnWidth() {
+			return -1;
+		}
+	}
+
 	public static class DerbySQLHelper extends ERXSQLHelper {
 		@Override
 		public boolean shouldExecute(String sql) {
 			return sql != null && !sql.startsWith("--");
+		}
+
+		public int varcharLargeJDBCType() {
+			return Types.CLOB;
+		}
+
+		public int varcharLargeColumnWidth() {
+			return 0;
 		}
 
 		@Override
@@ -1798,6 +1892,18 @@ public class ERXSQLHelper {
 		@Override
 		public String migrationTableName() {
 			return "dbupdater";
+		}
+		
+		@Override
+		public String externalTypeForJDBCType(JDBCAdaptor adaptor, int jdbcType) {
+			String externalType;
+			if (jdbcType == Types.TIMESTAMP) {
+				externalType = "DATE";
+			}
+			else {
+				externalType = super.externalTypeForJDBCType(adaptor, jdbcType);
+			}
+			return externalType;
 		}
 	}
 
@@ -1988,6 +2094,16 @@ public class ERXSQLHelper {
 	public static class MySQLSQLHelper extends ERXSQLHelper {
 		
 		/** 
+		 * Returns a pattern than matches lines that start with "--".
+		 * 
+		 * @return regex pattern that indicates this line is an SQL comment
+		 */
+		@Override
+		protected Pattern commentPattern() {
+			return Pattern.compile("^--");
+		}
+
+		/** 
 		 * We know better than EOF.
 		 * 
 		 * For any other case, we pass it up to the default impl.
@@ -2063,6 +2179,41 @@ public class ERXSQLHelper {
 		public int varcharLargeColumnWidth() {
 			return -1;
 		}
+		
+		@Override
+		public boolean handleDatabaseException(EODatabaseContext databaseContext, Throwable throwable) {
+			if(throwable instanceof EOGeneralAdaptorException) {
+				EOGeneralAdaptorException e = (EOGeneralAdaptorException)throwable;
+				NSDictionary userInfo = e.userInfo();
+				EOAdaptorOperation failedOp = userInfo==null?null:(EOAdaptorOperation)userInfo.objectForKey(EOAdaptorChannel.FailedAdaptorOperationKey);
+				if(failedOp != null && failedOp.exception() instanceof JDBCAdaptorException) {
+					JDBCAdaptorException ae = (JDBCAdaptorException)failedOp.exception();
+					
+					// MySQL error codes: http://dev.mysql.com/doc/refman/5.0/en/error-messages-server.html
+					switch(ae.sqlException().getErrorCode()) {
+					
+					case 1062: //Violates unique constraint
+						handleUniqueConstraintAdaptorException(databaseContext, failedOp);
+						break;
+						
+					default:
+						
+					}
+				}
+			}
+			return false;
+		}
+	
+		/**
+		 * Throws a validation exception for a unique constraint failure.
+		 * @param context The database context
+		 * @param failedOp The operation that failed
+		 * @throws NSValidation.ValidationException The exception thrown. The key for the validation template strings file is <code>UniqueConstraintException</code>
+		 */
+		protected void handleUniqueConstraintAdaptorException(EODatabaseContext context, EOAdaptorOperation failedOp) throws NSValidation.ValidationException {
+			NSValidation.ValidationException ve = ERXValidationFactory.defaultFactory().createCustomException(null, "UniqueConstraintException");
+			throw ve;
+		}
 	}
 
 	public static class PostgresqlSQLHelper extends ERXSQLHelper {
@@ -2137,7 +2288,7 @@ public class ERXSQLHelper {
 			else if (jdbcType == CustomTypes.INET) {
 				externalType = "inet";
 			}
-			else if (jdbcType == Types.LONGVARCHAR) {
+			else if (jdbcType == Types.LONGVARCHAR || jdbcType == Types.CLOB) {
 				externalType = "text";
 			}
 			else {
@@ -2150,7 +2301,7 @@ public class ERXSQLHelper {
 		 * Creates unique index; stolen from the derby helper
 		 * 
 		 * @author cug - Jun 24, 2008
-		 * @see ERXSQLHelper#sqlForCreateUniqueIndex(java.lang.String, java.lang.String, ERXSQLHelper.ColumnIndex[])
+		 * @see er.extensions.jdbc.ERXSQLHelper#sqlForCreateUniqueIndex(String, String, er.extensions.jdbc.ERXSQLHelper.ColumnIndex...) 
 		 */
 		@Override
 		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
@@ -2246,4 +2397,10 @@ public class ERXSQLHelper {
 		}
 	}
 
+	public static class NoSQLHelper extends ERXSQLHelper {
+		@Override
+		public String sqlForCreateIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
+			return null;
+		}
+	}
 }
