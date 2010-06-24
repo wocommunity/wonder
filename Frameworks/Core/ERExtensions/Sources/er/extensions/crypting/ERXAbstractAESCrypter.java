@@ -3,7 +3,6 @@ package er.extensions.crypting;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.Key;
-import java.util.Arrays;
 
 import javax.crypto.Cipher;
 
@@ -216,7 +215,9 @@ public abstract class ERXAbstractAESCrypter implements ERXCrypterInterface {
 		int pos = 0, length = clearTextBytes.length;
 		byte[] encryptedBytes;
 		while (pos < length) {
-			byte[] bytesToEncrypt = Arrays.copyOfRange(clearTextBytes, pos, pos + _blockSize);
+			byte[] bytesToEncrypt = new byte[_blockSize];
+	        System.arraycopy(clearTextBytes, pos, bytesToEncrypt, 0,
+	                         Math.min(clearTextBytes.length - pos, _blockSize));
 			try {
 				encryptedBytes = encryptCipher().doFinal(bytesToEncrypt);
 				result.write(encryptedBytes);
