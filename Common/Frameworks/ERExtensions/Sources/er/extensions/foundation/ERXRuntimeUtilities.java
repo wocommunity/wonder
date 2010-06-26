@@ -38,22 +38,6 @@ public class ERXRuntimeUtilities {
             .getLogger(ERXRuntimeUtilities.class);
     
     /**
-     * Hack to create a bundle after the app is loaded. Useful for the insistence of EOF on JavaXXXAdaptor bundles. 
-     * @param name
-     */
-    public static NSBundle createBundleIfNeeded(String name) {
-    	String path = "/tmp/" + name + ".framework/Resources/Java";
-    	new File(path).mkdirs();
-    	try {
-			ERXFileUtilities.stringToFile("{Has_WOComponents=NO;}", new File("/tmp/" + name + ".framework/Resources/Info.plist"));
-		}
-		catch (IOException e) {
-			NSForwardException._runtimeExceptionForThrowable(e);
-		}
-    	return NSBundle._bundleWithPathShouldCreateIsJar(path, true, false);
-    }
-    
-    /**
      * Returns a dictionary with useful stuff.
      * @param e
      */
