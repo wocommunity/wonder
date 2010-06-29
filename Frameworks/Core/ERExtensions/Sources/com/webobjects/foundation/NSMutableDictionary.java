@@ -113,6 +113,7 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 			_objectsCache = null;
 			_entrySetCache = null;
 			_keysCache = null;
+			_keySetCache = null;
 			_deletionLimit = _NSCollectionPrimitives.deletionLimitForTableBuckets(_hashtableBuckets);
 		}
 	}
