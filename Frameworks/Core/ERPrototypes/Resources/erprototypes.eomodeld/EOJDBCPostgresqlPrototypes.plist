@@ -146,7 +146,6 @@
             externalType = text; 
             name = longText; 
             valueClassName = NSString; 
-            valueType = c; 
         }, 
         {
             adaptorValueConversionMethodName = toBlob; 
