@@ -7,8 +7,11 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.ConfirmPageInterface;
 import com.webobjects.directtoweb.D2W;
 import com.webobjects.directtoweb.D2WPage;
+import com.webobjects.eocontrol.EODetailDataSource;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSNotificationCenter;
 
 import er.directtoweb.delegates.ERDDeletionDelegate;
 import er.directtoweb.delegates.ERDPageDelegate;
@@ -92,7 +95,6 @@ public class ERMDDeleteButton extends ERMDActionButton {
     		d2wPage.setObject(object());
     		result = (WOActionResults)nextPage;
     	}
-    	postNotification(BUTTON_PERFORMED_DELETE_ACTION);
         return result;
     }
     
@@ -122,6 +124,7 @@ public class ERMDDeleteButton extends ERMDActionButton {
     		object().editingContext().saveChanges();
     	}
     	d2wContext().takeValueForKey(null, Keys.objectPendingDeletion);
+    	postDeleteNotification();
     	return null;
     }
     
@@ -136,6 +139,21 @@ public class ERMDDeleteButton extends ERMDActionButton {
     	obj.editingContext().revert();
     	d2wContext().takeValueForKey(null, Keys.objectPendingDeletion);
     	return null;
+    }
+    
+    /**
+     * Utility method to post the delete notification to the parent component
+     */
+    public void postDeleteNotification() {
+    	Object obj = this.parentD2WPage();
+    	String OBJECT_KEY = "object";
+    	NSMutableDictionary userInfo = new NSMutableDictionary(obj, OBJECT_KEY);
+		if (dataSource() instanceof EODetailDataSource) {
+			EODetailDataSource dds = (EODetailDataSource)dataSource();
+			userInfo.setObjectForKey(dds.masterObject(), OBJECT_KEY);
+			userInfo.setObjectForKey(dds.detailKey(), "propertyKey");
+		}
+    	NSNotificationCenter.defaultCenter().postNotification(BUTTON_PERFORMED_DELETE_ACTION, obj, userInfo);
     }
 	
     // OTHERS
@@ -294,6 +312,5 @@ public class ERMDDeleteButton extends ERMDActionButton {
     	}
     	return _dialogMessage;
     }
-
 
 }

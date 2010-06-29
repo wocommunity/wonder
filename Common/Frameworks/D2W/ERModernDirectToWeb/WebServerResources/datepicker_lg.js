@@ -62,8 +62,8 @@ var datePickerController = (function datePickerController() {
                 if(typeof json === "object" && !("err" in json)) {                          
                         affectJSON(json);
                 };
-       
-                if(typeof(fdLocale) != "object") {
+
+                if(typeof(fdLocale) != "object" && false ) {
                         var head   = document.getElementsByTagName("head")[0] || document.documentElement,
                             /*loc    = scriptFiles[scriptFiles.length - 1].src.substr(0, scriptFiles[scriptFiles.length - 1].src.lastIndexOf("/")) + "/lang/",
                             script;*/

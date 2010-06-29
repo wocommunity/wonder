@@ -19,6 +19,19 @@ a {
 	-webkit-border-radius: 8px;
 }
 
+.ErrBlock {
+    border: 2px solid #f37657;
+    border-left: none;
+    border-right: none;
+    padding: 7px 42px;
+    color: #741b03;
+    font-weight: bold;
+    font-size: 110%;
+    background: #ffd5bd url(icon_err.png) no-repeat 10px 11px;
+    width: 250px;
+    margin: 0 auto 20px auto;
+}
+
 label {
 	float: left;
 	width: 80px;
