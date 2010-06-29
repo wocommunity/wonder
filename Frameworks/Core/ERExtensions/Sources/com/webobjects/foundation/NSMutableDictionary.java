@@ -78,6 +78,7 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 		if (_NSCollectionPrimitives.addValueInHashTable(key, object, _keys, _objects, _flags)) {
 			_count = count;
 			_keysCache = null;
+			_keySetCache = null;
 		}
 		_entrySetCache = null;
 		_objectsCache = null;
@@ -99,6 +100,7 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 				_objectsCache = null;
 				_entrySetCache = null;
 				_keysCache = null;
+				_keySetCache = null;
 			}
 		}
 		return (V) result;
