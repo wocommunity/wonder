@@ -32,9 +32,15 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.apache.log4j.Appender;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Logger;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.webobjects.appserver.WOAction;
 import com.webobjects.appserver.WOActionResults;
@@ -445,6 +451,35 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 								bundle = (String) dict.objectForKey("CFBundleExecutable");
 								allFrameworks.add(bundle);
 								// System.out.println("Jar bundle: " + bundle);
+							}
+						}
+						// MS: This is totally hacked in to make Wonder startup properly with the new rapid turnaround. It's duplicating (poorly)
+						// code from NSProjectBundle. I'm not sure we actually need this anymore, because NSBundle now fires an "all bundles loaded" event.
+						else if (ERXProperties.booleanForKey("NSProjectBundleEnabled")) {
+							for (File classpathFolder = new File(bundle); classpathFolder != null && classpathFolder.exists(); classpathFolder = classpathFolder.getParentFile()) {
+								File projectFile = new File(classpathFolder, ".project");
+								if (projectFile.exists()) {
+									try {
+										boolean isBundle = false;
+										Document projectDocument = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(projectFile);
+										projectDocument.normalize();
+										NodeList natureNodeList = projectDocument.getElementsByTagName("nature");
+										for (int natureNodeNum = 0; !isBundle && natureNodeNum < natureNodeList.getLength(); natureNodeNum ++) {
+											Element natureContainerNode = (Element)natureNodeList.item(natureNodeNum);
+											Node natureNode = natureContainerNode.getFirstChild();
+											String nodeValue = natureNode.getNodeValue();
+											if (nodeValue != null && nodeValue.startsWith("org.objectstyle.wolips.")) {
+												isBundle = true;
+											}
+										}
+										if (isBundle) {
+											allFrameworks.add(classpathFolder.getName());
+										}
+									}
+									catch (Throwable t) {
+										System.err.println("Skipping '" + projectFile + "': " + t);
+									}
+								}
 							}
 						}
 					}
@@ -2105,6 +2140,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			String ide = ERXProperties.stringForKey("WOIDE");
 			if ("WOLips".equals(ide) || "Xcode".equals(ide)) {
 				developmentMode = true;
+			}
+			if (!developmentMode) {
+				developmentMode = ERXProperties.booleanForKey("NSProjectBundleEnabled");
 			}
 		}
 		// AK: these are for quickly uncommenting while testing
