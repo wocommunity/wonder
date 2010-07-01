@@ -17,7 +17,7 @@
 		<binding name="chart"/>
 		<binding name="configuration"/>
 		
-		<validation message="Either items, nameKey, categoryKey and valueKey or dataset must be bound">
+		<validation message="Either (items, nameKey, categoryKey and valueKey) or (dataset or chart) must be bound">
 			<and>
 				<or>
 					<unbound name="items"/>
@@ -26,6 +26,7 @@
 					<unbound name="categoryKey"/>
 				</or>
 				<unbound name="dataset"/>
+				<unbound name="chart"/>
 			</and>
 		</validation>
 	</wo>
