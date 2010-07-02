@@ -415,6 +415,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 					String frameworkPattern = ".*?/(\\w+)\\.framework/Resources/Java/\\1.jar".toLowerCase();
 					String appPattern = ".*?/(\\w+)\\.woa/Contents/Resources/Java/\\1.jar".toLowerCase();
 					String folderPattern = ".*?/Resources/Java/?$".toLowerCase();
+					String projectPattern = ".*?/(\\w+)/bin$".toLowerCase();
 					for (int i = 0; i < parts.length; i++) {
 						String jar = parts[i];
 						// Windows has \, we need to normalize
@@ -425,6 +426,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 							systemLibs += jar + File.pathSeparator;
 						}
 						else if (fixedJar.matches(frameworkPattern) || fixedJar.matches(appPattern) || fixedJar.matches(folderPattern)) {
+							normalLibs += jar + File.pathSeparator;
+						}
+						else if (fixedJar.matches(projectPattern) || fixedJar.matches(".*?/WORapidTurnaround.jar")) {
 							normalLibs += jar + File.pathSeparator;
 						}
 						else {
@@ -455,7 +459,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 						}
 						// MS: This is totally hacked in to make Wonder startup properly with the new rapid turnaround. It's duplicating (poorly)
 						// code from NSProjectBundle. I'm not sure we actually need this anymore, because NSBundle now fires an "all bundles loaded" event.
-						else if (ERXProperties.booleanForKey("NSProjectBundleEnabled")) {
+						else if (jar.endsWith("/bin") && new File(new File(jar).getParentFile(), ".project").exists()) {
+							// AK: I have no idea if this is checked anywhere else, but this keeps is from having to set it in the VM args.
+							System.setProperty("NSProjectBundleEnabled", "true");
 							for (File classpathFolder = new File(bundle); classpathFolder != null && classpathFolder.exists(); classpathFolder = classpathFolder.getParentFile()) {
 								File projectFile = new File(classpathFolder, ".project");
 								if (projectFile.exists()) {
