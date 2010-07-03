@@ -276,7 +276,7 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
 	public NSArray<EOEnterpriseObject> destinationObjectsWithQualifier(EOQualifier qual) {
 		NSArray<EOEnterpriseObject> result = null;
 		NSArray<EOSortOrdering> orderings = null;
-		if (ERXStringUtilities.stringIsNullOrEmpty(sortKey())) {
+		if (!ERXStringUtilities.stringIsNullOrEmpty(sortKey())) {
 			orderings = ERXS.ascs(sortKey());
 		}
 		if (extraQualifier() != null) {
