@@ -19,6 +19,11 @@ public class ERXMissingRouteController extends ERXRouteController {
 	public ERXMissingRouteController(WORequest request) {
 		super(request);
 	}
+	
+	@Override
+	protected String entityName() {
+		return "Unknown";
+	}
 
 	/**
 	 * Returns an error response of 404.
