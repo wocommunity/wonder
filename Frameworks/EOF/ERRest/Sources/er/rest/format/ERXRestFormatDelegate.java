@@ -1,6 +1,8 @@
 package er.rest.format;
 
+import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.localization.ERXLocalizer;
 import er.rest.ERXRestNameRegistry;
 import er.rest.ERXRestRequestNode;
 
@@ -19,17 +21,19 @@ public class ERXRestFormatDelegate implements ERXRestFormat.Delegate {
 	private String _nilKey;
 	private boolean _arrayTypes;
 	private boolean _writeNilKey;
+	private boolean _pluralNames;
 	private boolean _underscoreNames;
 
 	public ERXRestFormatDelegate() {
-		this(ERXRestFormatDelegate.ID_KEY, ERXRestFormatDelegate.TYPE_KEY, ERXRestFormatDelegate.NIL_KEY, true, false, false);
+		this(ERXRestFormatDelegate.ID_KEY, ERXRestFormatDelegate.TYPE_KEY, ERXRestFormatDelegate.NIL_KEY, true, ERXProperties.booleanForKeyWithDefault("ERXRest.pluralEntityNames", true), false, false);
 	}
 
-	public ERXRestFormatDelegate(String idKey, String typeKey, String nilKey, boolean writeNilKey, boolean underscoreNames, boolean arrayTypes) {
+	public ERXRestFormatDelegate(String idKey, String typeKey, String nilKey, boolean writeNilKey, boolean pluralNames, boolean underscoreNames, boolean arrayTypes) {
 		_idKey = idKey;
 		_typeKey = typeKey;
 		_nilKey = nilKey;
 		_writeNilKey = writeNilKey;
+		_pluralNames = pluralNames;
 		_underscoreNames = underscoreNames;
 		_arrayTypes = arrayTypes;
 	}
@@ -72,7 +76,12 @@ public class ERXRestFormatDelegate implements ERXRestFormat.Delegate {
 
 	public void nodeWillWrite(ERXRestRequestNode node) {
 		if (node.isRootNode()) {
-			node.setName(ERXRestNameRegistry.registry().externalNameForInternalName(node.name()));
+			if (_pluralNames) {
+				node.setName(ERXRestNameRegistry.registry().externalNameForInternalName(ERXLocalizer.englishLocalizer().plurifiedString(node.name(), 2)));
+			}
+			else {
+				node.setName(ERXRestNameRegistry.registry().externalNameForInternalName(node.name()));
+			}
 		}
 
 		Object id = node.id();
