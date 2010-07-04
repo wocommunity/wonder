@@ -1160,7 +1160,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 */
 	public static ERXRestRequestNode requestNodeWithObjectAndFilter(EOClassDescription classDescription, List<?> objects, ERXKeyFilter keyFilter, IERXRestDelegate delegate) {
 		String entityName = classDescription.entityName();
-		ERXRestRequestNode requestNode = new ERXRestRequestNode(ERXLocalizer.englishLocalizer().plurifiedString(entityName, 2), true);
+		ERXRestRequestNode requestNode = new ERXRestRequestNode(entityName, true);
 		requestNode.setType(entityName);
 		requestNode._fillInWithObjectAndFilter(objects, classDescription, keyFilter, delegate, new HashSet<Object>());
 		return requestNode;
