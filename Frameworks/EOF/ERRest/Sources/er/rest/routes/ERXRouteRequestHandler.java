@@ -341,11 +341,14 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	 * @return the corresponding route controller
 	 */
 	public Class<? extends ERXRouteController> routeControllerClassForEntityNamed(String entityName) {
-		String controllerEntityName = _entityNameFormat.pluralControllerName() ? ERXLocalizer.englishLocalizer().plurifiedString(entityName, 2) : entityName;
-		String controllerName = controllerEntityName + "Controller";
+		String controllerName = entityName + "Controller";
 		Class<?> controllerClass = _NSUtilities.classWithName(controllerName);
 		if (controllerClass == null) {
-			throw new IllegalArgumentException("There is no controller named '" + controllerName + "'.");
+			String pluralControllerName = ERXLocalizer.englishLocalizer().plurifiedString(entityName, 2) + "Controller";
+			controllerClass = _NSUtilities.classWithName(pluralControllerName);
+			if (controllerClass == null) {
+				throw new IllegalArgumentException("There is no controller named '" + controllerName + "' or '" + pluralControllerName + "'.");
+			}
 		}
 		return controllerClass.asSubclass(ERXRouteController.class);
 	}
@@ -536,8 +539,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	 *            the controller class
 	 */
 	public void addDefaultRoutes(String entityName, String entityType, boolean numericPKs, Class<? extends ERXRouteController> controllerClass) {
-		String variableName = ERXStringUtilities.uncapitalize(entityName); // MS: We want this to always be Java
-																			// variable-style "lowerFirstLetter"
+		String variableName = ERXStringUtilities.uncapitalize(entityName); // MS: We want this to always be Java variable-style "lowerFirstLetter"
 
 		String externalName = ERXRestNameRegistry.registry().externalNameForInternalName(entityName);
 		String singularExternalName = _entityNameFormat.formatEntityNamed(externalName, false);
@@ -674,7 +676,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 
 		ERXRoute matchingRoute = routeForMethodAndPath(method, path, mutableUserInfo);
 
-		if (matchingRoute != null && mutableUserInfo != userInfo) {
+		if (/*matchingRoute != null && */mutableUserInfo != userInfo) {
 			request.setUserInfo(mutableUserInfo);
 		}
 
@@ -798,6 +800,12 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 		catch (Exception e) {
 			throw NSForwardException._runtimeExceptionForThrowable(e);
 		}
+	}
+	
+	@Override
+	public void _putComponentsToSleepInContext(WOContext wocontext) {
+		super._putComponentsToSleepInContext(wocontext);
+		ERXRouteController._disposeControllersForRequest(wocontext.request());
 	}
 
 	/**

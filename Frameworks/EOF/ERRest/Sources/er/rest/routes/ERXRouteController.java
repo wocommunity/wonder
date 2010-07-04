@@ -26,6 +26,8 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation._NSUtilities;
@@ -77,6 +79,7 @@ public class ERXRouteController extends WODirectAction {
 	 */
 	public ERXRouteController(WORequest request) {
 		super(request);
+		ERXRouteController._registerControllerForRequest(this, request);
 	}
 
 	/**
@@ -88,7 +91,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to include into
 	 * @return the nested filter (or null if the key was not requested)
 	 */
-	protected ERXKeyFilter includeOptional(ERXKey key, ERXKeyFilter filter) {
+	protected ERXKeyFilter includeOptional(ERXKey<?> key, ERXKeyFilter filter) {
 		if (isKeyPathRequested(key)) {
 			return filter.include(key);
 		}
@@ -351,12 +354,29 @@ public class ERXRouteController extends WODirectAction {
 	public ERXRestFormat format() {
 		ERXRestFormat format = _format;
 		if (format == null) {
-			String type = (String) request().userInfo().objectForKey(ERXRouteRequestHandler.TypeKey);
+			String type = null;
+			@SuppressWarnings("unchecked")
+			NSDictionary<String, Object> userInfo = request().userInfo();
+			if (userInfo != null) {
+				type = (String) request().userInfo().objectForKey(ERXRouteRequestHandler.TypeKey);
+			}
+			
 			/*
-			 * if (type == null) { List<String> acceptTypesList = new LinkedList<String>(); String accept =
-			 * request().headerForKey("Accept"); if (accept != null) { String[] acceptTypes = accept.split(","); for (String
-			 * acceptType : acceptTypes) { int semiIndex = acceptType.indexOf(";"); if (semiIndex == -1) {
-			 * acceptTypesList.add(acceptType); } else { acceptTypesList.add(acceptType.substring(0, semiIndex)); } } } }
+			 * if (type == null) {
+			 *   List<String> acceptTypesList = new LinkedList<String>();
+			 *   String accept = request().headerForKey("Accept");
+			 *   if (accept != null) {
+			 *     String[] acceptTypes = accept.split(",");
+			 *     for (String acceptType : acceptTypes) {
+			 *       int semiIndex = acceptType.indexOf(";");
+			 *       if (semiIndex == -1) {
+			 *         acceptTypesList.add(acceptType);
+			 *       } else { 
+			 *         acceptTypesList.add(acceptType.substring(0, semiIndex));
+			 *       }
+			 *     }
+			 *   }
+			 * }
 			 */
 	
 			if (type == null) {
@@ -1316,6 +1336,72 @@ public class ERXRouteController extends WODirectAction {
 		}
 		catch (Exception e) {
 			throw NSForwardException._runtimeExceptionForThrowable(e);
+		}
+	}
+	
+	/**
+	 * Disposes any resources the route controller may be holding onto (like its editing context).
+	 */
+	public void dispose() {
+		if (_editingContext != null) {
+			_editingContext.dispose();
+			_editingContext = null;
+		}
+	}
+	
+	@Override
+	public String toString() {
+		return "[" + getClass().getSimpleName() + ": " + request().uri() + "]";
+	}
+	
+	private static final String REQUEST_CONTROLLERS_KEY = "ERRest.controllersForRequest";
+	
+	/**
+	 * Registers the given controller with the given request, so it can be later disposed. This can be a
+	 * very useful performance optimization for apps that gets a large number of requests.
+	 * 
+	 * @param controller the controller to register
+	 * @param request the request to register with
+	 */
+	@SuppressWarnings("unchecked")
+	protected static void _registerControllerForRequest(ERXRouteController controller, WORequest request) {
+		NSMutableArray<ERXRouteController> controllers = _controllersForRequest(request);
+		if (controllers == null) {
+			controllers = new NSMutableArray<ERXRouteController>();
+			NSMutableDictionary<String, Object> userInfo = (NSMutableDictionary<String, Object>)request.userInfo();
+			if (userInfo != null) {
+				userInfo.setObjectForKey(controllers, ERXRouteController.REQUEST_CONTROLLERS_KEY);
+			}
+		}
+		controllers.addObject(controller);
+	}
+	
+	/**
+	 * Returns the controllers that have been used on the given request.
+	 * 
+	 * @param request the request
+	 */
+	@SuppressWarnings("unchecked")
+	public static NSMutableArray<ERXRouteController> _controllersForRequest(WORequest request) {
+		NSDictionary<String, Object> userInfo = request.userInfo();
+		NSMutableArray<ERXRouteController> controllers = null;
+		if (userInfo != null) {
+			controllers = (NSMutableArray<ERXRouteController>)userInfo.objectForKey(ERXRouteController.REQUEST_CONTROLLERS_KEY);
+		}
+		return controllers;
+	}
+	
+	/**
+	 * Disposes all of the controllers that were used on the given request.
+	 * 
+	 * @param request the request
+	 */
+	public static void _disposeControllersForRequest(WORequest request) {
+		NSArray<ERXRouteController> controllers = ERXRouteController._controllersForRequest(request);
+		if (controllers != null) {
+			for (ERXRouteController controller : controllers) {
+				controller.dispose();
+			}
 		}
 	}
 }
