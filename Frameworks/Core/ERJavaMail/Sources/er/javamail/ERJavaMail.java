@@ -1,7 +1,8 @@
 package er.javamail;
 
-import java.util.Enumeration;
+import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -49,7 +50,7 @@ import er.extensions.validation.ERXValidationFactory;
  */
 public class ERJavaMail extends ERXFrameworkPrincipal {
 
-	public final static Class REQUIRES[] = new Class[] { ERXExtensions.class };
+	public final static Class<?> REQUIRES[] = new Class[] { ERXExtensions.class };
 
 	/** Class logger */
 	private static final Logger log = Logger.getLogger(ERJavaMail.class);
@@ -97,6 +98,12 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * The compiled form of the <code>EMAIL_VALIDATION_PATTERN</code> pattern.
 	 */
 	protected Pattern _pattern = null;
+
+	private Delegate _delegate;
+	
+	public void setDelegate(Delegate delegate) {
+		_delegate = delegate;
+	}
 
 	/**
 	 * Specialized implementation of the method from ERXPrincipalClass.
@@ -166,64 +173,73 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 *             <code>WOSMTPHost</code> is set.
 	 */
 	protected void setupSmtpHostSafely() {
+		setupSmtpProperties(System.getProperties(), null);
+	}
+	
+	protected void setupSmtpProperties(Properties properties, String contextString) {
+		String contextSuffix = contextString == null ? "" : ("." + contextString);
+		
 		// Smtp host
-		String smtpProtocol = System.getProperty("er.javamail.smtpProtocol", "smtp");
-		setSMTPProtocol(smtpProtocol);
+		String smtpProtocol = smtpProtocolForContext(contextString);
 
-		String smtpHost = System.getProperty("er.javamail.smtpHost");
+		String smtpHost = ERXProperties.stringForKeyWithDefault("er.javamail.smtpHost" + contextSuffix, ERXProperties.stringForKey("er.javamail.smtpHost"));
 		if ((smtpHost == null) || (smtpHost.length() == 0)) {
 			// Try to fail back to default java config
-			smtpHost = System.getProperty("mail." + smtpProtocol + ".host");
+			smtpHost = ERXProperties.stringForKey("mail." + smtpProtocol + ".host");
 
 			if ((smtpHost == null) || (smtpHost.length() == 0)) {
 				// use the standard WO host
-				smtpHost = System.getProperty("WOSMTPHost");
+				smtpHost = ERXProperties.stringForKey("WOSMTPHost");
 				if ((smtpHost == null) || (smtpHost.length() == 0)) {
 					throw new RuntimeException("ERJavaMail: You must specify a SMTP host for outgoing mail with the property 'er.javamail.smtpHost'");
 				}
+                // ... and then maybe actually do what the docs say this method is supposed to do
+				properties.setProperty("mail." + smtpProtocol + ".host", smtpHost);
+				properties.setProperty("er.javamail.smtpHost", smtpHost);
 			}
 			else {
-				System.setProperty("er.javamail.smtpHost", smtpHost);
+				properties.setProperty("er.javamail.smtpHost", smtpHost);
 			}
 		}
 		else {
-			System.setProperty("mail." + smtpProtocol + ".host", smtpHost);
+			properties.setProperty("mail." + smtpProtocol + ".host", smtpHost);
 		}
 		log.debug("er.javamail.smtpHost: " + smtpHost);
 		
-		String port = System.getProperty("er.javamail.smtpPort");
+		String port = ERXProperties.stringForKeyWithDefault("er.javamail.smtpPort" + contextSuffix, ERXProperties.stringForKey("er.javamail.smtpPost"));
 		if (port != null && port.length() > 0) {
-			System.setProperty("mail." + smtpProtocol + ".port" , port);
+			properties.setProperty("mail." + smtpProtocol + ".port" , port);
 			log.debug("ERJavaMail will use smtp port: " + port);
 		}
 		
-		boolean smtpAuth = ERXProperties.booleanForKey("er.javamail.smtpAuth");
+		boolean smtpAuth = ERXProperties.booleanForKeyWithDefault("er.javamail.smtpAuth" + contextSuffix, ERXProperties.booleanForKey("er.javamail.smtpAuth"));
 		log.debug("ERJavaMail will use authenticated SMTP connections.");
 		if (smtpAuth) {
-			System.setProperty("mail." + smtpProtocol + ".auth", String.valueOf(smtpAuth));
-			String user = ERXProperties.stringForKey("er.javamail.smtpUser");
+			properties.setProperty("mail." + smtpProtocol + ".auth", String.valueOf(smtpAuth));
+			String user = ERXProperties.stringForKeyWithDefault("er.javamail.smtpUser" + contextSuffix, ERXProperties.stringForKey("er.javamail.smtpUser"));
 			if (user == null || user.length() == 0) {
 				throw new RuntimeException("You specified er.javamail.smtpAuth=true, but you didn't specify an er.javamail.smtpUser to use as the login name.");
 			}
-			System.setProperty("mail." + smtpProtocol + ".user", user);
-			String password = ERXProperties.stringForKey("er.javamail.smtpPassword");
+			properties.setProperty("mail." + smtpProtocol + ".user", user);
+			String password = ERXProperties.stringForKeyWithDefault("er.javamail.smtpPassword" + contextSuffix, ERXProperties.stringForKey("er.javamail.smtpPassword"));
 			if (password == null || password.length() == 0) {
 				log.warn("You specified er.javamail.smtpAuth=true, but you didn't set er.javamail.smtpPassword for the " + user + " mail user.");
 			}
 			if (password != null) {
-				System.setProperty("mail." + smtpProtocol + ".password", password);
+				properties.setProperty("mail." + smtpProtocol + ".password", password);
 			}
 		}
 		if ("smtps".equals(smtpProtocol)) {
-			System.setProperty("mail.smtps.socketFactory.fallback", "false");
+			properties.setProperty("mail.smtps.socketFactory.fallback", "false");
 		}
 	}
 
 	/**
-	 * This is the deafult JavaMail Session. It is shared among all deliverers for immediate deliveries. Deferred
+	 * This is the default JavaMail Session. It is shared among all deliverers for immediate deliveries. Deferred
 	 * deliverers, use their own JavaMail session.
 	 */
 	protected javax.mail.Session _defaultSession;
+	private Map<String, javax.mail.Session> _sessions = new ConcurrentHashMap<String, javax.mail.Session>();
 
 	/**
 	 * Sets the default JavaMail session to a particular value. This value is set by default at initialization of the
@@ -247,7 +263,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	public javax.mail.Session defaultSession() {
 		return _defaultSession;
 	}
-
+	
 	/**
 	 * Returns a newly allocated Session object from the given Properties
 	 * 
@@ -256,9 +272,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * @return a <code>javax.mail.Session</code> value initialized from the given properties
 	 */
 	public javax.mail.Session newSession(Properties props) {
-		javax.mail.Session session = javax.mail.Session.getInstance(props);
-		session.setDebug(this.debugEnabled());
-		return session;
+		return newSessionForContext(props, null);
 	}
 
 	/**
@@ -270,6 +284,85 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 		return newSession(System.getProperties());
 	}
 
+	/**
+	 * Returns a newly allocated Session object for the given message.
+	 * 
+	 * @param message the message
+	 * @return a new <code>javax.mail.Session</code> value
+	 */
+	public javax.mail.Session newSessionForMessage(ERMessage message) {
+		return newSessionForContext(message.contextString());
+	}
+	 
+	/**
+	 * Returns the Session object that is appropriate for the given message.
+	 * 
+	 * @return a <code>javax.mail.Session</code> value
+	 */
+	public javax.mail.Session sessionForMessage(ERMessage message) {
+		return sessionForContext(message.contextString());
+	}
+	
+	/**
+	 * Returns a new Session object that is appropriate for the given context.
+	 * 
+	 * @param contextString the message context
+	 * @return a new <code>javax.mail.Session</code> value
+	 */
+	protected javax.mail.Session newSessionForContext(String contextString) {
+		javax.mail.Session session;
+		if (contextString == null || contextString.length() == 0) {
+			session = newSessionForContext(System.getProperties(), contextString);
+		}
+		else {
+			Properties sessionProperties = new Properties();
+			sessionProperties.putAll(System.getProperties());
+			setupSmtpProperties(sessionProperties, contextString);
+			session = newSessionForContext(sessionProperties, contextString);
+		}
+		return session;
+	}
+
+	/**
+	 * Returns a newly allocated Session object from the given Properties
+	 * 
+	 * @param properties
+	 *            a <code>Properties</code> value
+	 * @return a <code>javax.mail.Session</code> value initialized from the given properties
+	 */
+	public javax.mail.Session newSessionForContext(Properties properties, String contextString) {
+		if (_delegate != null) {
+			_delegate.willCreateSessionWithPropertiesForContext(properties, contextString);
+		}
+		javax.mail.Session session = javax.mail.Session.getInstance(properties);
+		if (_delegate != null) {
+			_delegate.didCreateSession(session);
+		}
+		session.setDebug(this.debugEnabled());
+		return session;
+	}
+
+	/**
+	 * Returns the Session object that is appropriate for the given context.
+	 * 
+	 * @param contextString the message context
+	 * @return a <code>javax.mail.Session</code> value
+	 */
+	protected javax.mail.Session sessionForContext(String contextString) {
+		javax.mail.Session session;
+		if (contextString == null || contextString.length() == 0) {
+			session = defaultSession();
+		}
+		else {
+			session = _sessions.get(contextString);
+			if (session == null) {
+				session = newSessionForContext(contextString);
+				_sessions.put(contextString, session);
+			}
+		}
+		return session;
+	}
+	
 	/**
 	 * email address used when centralizeMails == true <BR>
 	 * Needed when debugging application so that mails are always sent to only one destination.
@@ -344,8 +437,6 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 		_defaultXMailerHeader = header;
 	}
 
-	protected String _smtpProtocol;
-
 	/** Used to send mail to adminEmail only. Useful for debugging issues */
 	protected boolean _centralize = true;
 
@@ -372,18 +463,9 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	/**
 	 * Returns the SMTP protocol to use for connections.
 	 */
-	public String smtpProtocol() {
-		return _smtpProtocol;
-	}
-
-	/**
-	 * Sets the SMTP protocol to use for connections (smtp or smtps)
-	 * 
-	 * @param smtpProtocol
-	 *            the SMTP protocol name
-	 */
-	public void setSMTPProtocol(String smtpProtocol) {
-		_smtpProtocol = smtpProtocol;
+	public String smtpProtocolForContext(String contextString) {
+		String contextSuffix = (contextString == null) ? "" : ("." + contextString);
+		return ERXProperties.stringForKeyWithDefault("er.javamail.smtpProtocol" + contextSuffix, ERXProperties.stringForKeyWithDefault("er.javamail.smtpProtocol", ERXProperties.stringForKeyWithDefault("mail.smtp.protocol", "smtp")));
 	}
 
 	/**
@@ -566,8 +648,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 */
 	protected EOOrQualifier qualifierArrayForEmailPatterns(NSArray<String> emailPatterns) {
 		NSMutableArray<EOQualifier> patternQualifiers = new NSMutableArray<EOQualifier>();
-		for (Enumeration patternEnumerator = emailPatterns.objectEnumerator(); patternEnumerator.hasMoreElements();) {
-			String pattern = (String) patternEnumerator.nextElement();
+		for (String pattern : emailPatterns) {
 			patternQualifiers.addObject(EOQualifier.qualifierWithQualifierFormat("toString caseInsensitiveLike '" + pattern + "'", null));
 		}
 		return new EOOrQualifier(patternQualifiers);
@@ -597,7 +678,8 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 			}
 
 			if (this.hasBlackList()) {
-				NSArray filteredOutAddresses = EOQualifier.filteredArrayWithQualifier(filteredAddresses, blackListQualifier());
+				@SuppressWarnings("unchecked")
+				NSArray<String> filteredOutAddresses = EOQualifier.filteredArrayWithQualifier(filteredAddresses, blackListQualifier());
 				if (filteredOutAddresses.count() > 0)
 					filteredAddresses.removeObjectsInArray(filteredOutAddresses);
 				if (log.isDebugEnabled()) {
@@ -607,5 +689,11 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 		}
 
 		return (filteredAddresses != null) ? filteredAddresses.immutableClone() : emailAddresses;
+	}
+	
+	public static interface Delegate {
+		public void willCreateSessionWithPropertiesForContext(Properties properties, String contextString);
+		
+		public void didCreateSession(javax.mail.Session session);
 	}
 }

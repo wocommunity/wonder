@@ -40,7 +40,7 @@ public class ERMessage extends Object {
 		 * @param message the message that was not delivered
 		 * @param invalidRecipientAddresses the array of invalid email addresses
 		 */
-		public void invalidRecipients(ERMessage message, NSArray invalidRecipientAddresses);
+		public void invalidRecipients(ERMessage message, NSArray<String> invalidRecipientAddresses);
 		
 		/**
 		 * Called when a message fails to deliver.
@@ -53,18 +53,27 @@ public class ERMessage extends Object {
 
 	private ERMessage.Delegate _delegate;
 	private MimeMessage _message;
-	private NSDictionary _userInfo;
+	private NSDictionary<String, Object> _userInfo;
+	private String _contextString;
 
 	public void setDelegate(ERMessage.Delegate delegate) {
 		_delegate = delegate;
 	}
 	
-	public void setUserInfo(NSDictionary userInfo) {
+	public void setUserInfo(NSDictionary<String, Object> userInfo) {
 		_userInfo = userInfo;
 	}
 	
-	public NSDictionary userInfo() {
+	public NSDictionary<String, Object> userInfo() {
 		return _userInfo;
+	}
+	
+	public void setContextString(String contextString) {
+		_contextString = contextString;
+	}
+	
+	public String contextString() {
+		return _contextString;
 	}
 
 	public void setMimeMessage(MimeMessage m) {
@@ -180,7 +189,7 @@ public class ERMessage extends Object {
 	/**
 	 * Called by ERMailSender
 	 */
-	public void _invalidRecipients(NSArray invalidRecipientAddresses) {
+	public void _invalidRecipients(NSArray<String> invalidRecipientAddresses) {
 		if (_delegate != null) {
 			_delegate.invalidRecipients(this, invalidRecipientAddresses);
 		}

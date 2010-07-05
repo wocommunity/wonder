@@ -40,7 +40,15 @@ public class ERMailDeliveryPlainText extends ERMailDelivery {
 	 */
 	@Override
 	protected DataHandler prepareMail() {
-		return new DataHandler(textContent, "text/plain; charset=\"" + charset() + "\"");
+		String charset = charset();
+		DataHandler dataHandler;
+		if (charset != null) {
+			dataHandler = new DataHandler (textContent, "text/plain; charset=\""  + charset () + "\"");
+		}
+		else {
+			dataHandler = new DataHandler (textContent, "text/plain");
+		}
+		return dataHandler;
 	}
 
 }

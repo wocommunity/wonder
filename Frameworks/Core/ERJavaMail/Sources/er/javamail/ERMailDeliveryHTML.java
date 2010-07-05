@@ -7,7 +7,6 @@
 package er.javamail;
 
 import java.util.Date;
-import java.util.Enumeration;
 
 import javax.activation.DataHandler;
 import javax.mail.BodyPart;
@@ -141,9 +140,7 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased {
 			relatedMultiparts.addBodyPart(htmlPart);
 
 			// add each inline attachments to the message
-			Enumeration en = this.inlineAttachments().objectEnumerator();
-			while (en.hasMoreElements()) {
-				ERMailAttachment attachment = (ERMailAttachment) en.nextElement();
+			for (ERMailAttachment attachment : this.inlineAttachments()) {
 				BodyPart bp = attachment.getBodyPart();
 				relatedMultiparts.addBodyPart(bp);
 			}
