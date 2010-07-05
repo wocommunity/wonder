@@ -177,6 +177,9 @@ public class ERXModel extends EOModel {
 				if (plugin == null) {
 					plugin = ERXEOAccessUtilities.guessPluginName(model);
 				} //~ if (plugin == null)
+				if (plugin != null && plugin.toLowerCase().endsWith("plugin")) {
+					plugin = plugin.substring(0, plugin.length() - "plugin".length());
+				}
 				if (log.isDebugEnabled()) debugInfo.append("; plugin = " + plugin);
 			}
 
