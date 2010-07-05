@@ -7,7 +7,6 @@
 package er.javamail;
 
 import java.util.Date;
-import java.util.Enumeration;
 
 import javax.activation.DataHandler;
 import javax.mail.Address;
@@ -19,8 +18,8 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeMessage.RecipientType;
+import javax.mail.internet.MimeMultipart;
 
 import org.apache.log4j.Logger;
 
@@ -77,7 +76,8 @@ public abstract class ERMailDelivery {
 	protected NSMutableArray<ERMailAttachment> _inlineAttachments;
 
 	private ERMessage.Delegate _delegate;
-	private NSDictionary _userInfo;
+	private NSDictionary<String, Object> _userInfo;
+	private String _contextString;
 
 	public static String DefaultCharset = System.getProperty("er.javamail.defaultEncoding");
 	public String _charset = DefaultCharset;
@@ -112,7 +112,7 @@ public abstract class ERMailDelivery {
 	 * @param userInfo
 	 *            the userInfo dictionary
 	 */
-	public void setUserInfo(NSDictionary userInfo) {
+	public void setUserInfo(NSDictionary<String, Object> userInfo) {
 		_userInfo = userInfo;
 	}
 
@@ -121,8 +121,16 @@ public abstract class ERMailDelivery {
 	 * 
 	 * @return the userInfo dictionary
 	 */
-	public NSDictionary userInfo() {
+	public NSDictionary<String, Object> userInfo() {
 		return _userInfo;
+	}
+	
+	public void setContextString(String contextString) {
+		_contextString = contextString;
+	}
+	
+	public String contextString() {
+		return _contextString;
 	}
 
 	public String charset() {
@@ -312,6 +320,7 @@ public abstract class ERMailDelivery {
 		ERMessage message = new ERMessage();
 		message.setDelegate(_delegate);
 		message.setUserInfo(_userInfo);
+		message.setContextString(_contextString);
 		MimeMessage mimeMessage = this.mimeMessage();
 		try {
 			Address[] bccRecipients = mimeMessage.getRecipients(RecipientType.BCC);
@@ -420,9 +429,7 @@ public abstract class ERMailDelivery {
 			multipart.addBodyPart(mainBodyPart);
 
 			// add each attachments to the former multipart
-			Enumeration en = this.attachments().objectEnumerator();
-			while (en.hasMoreElements()) {
-				ERMailAttachment attachment = (ERMailAttachment) en.nextElement();
+			for (ERMailAttachment attachment : this.attachments()) {
 				BodyPart bp = attachment.getBodyPart();
 				bp.setDisposition(Part.ATTACHMENT);
 				multipart.addBodyPart(bp);
@@ -447,7 +454,7 @@ public abstract class ERMailDelivery {
 	/**
 	 * Sets addresses using an NSArray of InternetAddress objects.
 	 */
-	public void setInternetAddresses(NSArray addresses, Message.RecipientType type) throws MessagingException {
+	public void setInternetAddresses(NSArray<InternetAddress> addresses, Message.RecipientType type) throws MessagingException {
 		if ((type == null) || (addresses == null) || (addresses.count() == 0)) {
 			// don't do anything.
 			return;

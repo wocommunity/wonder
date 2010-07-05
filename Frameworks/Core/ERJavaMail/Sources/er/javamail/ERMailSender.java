@@ -9,6 +9,8 @@ package er.javamail;
 import java.net.ConnectException;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.mail.AuthenticationFailedException;
 import javax.mail.MessagingException;
@@ -19,6 +21,7 @@ import javax.mail.internet.MimeMessage;
 
 import org.apache.log4j.Logger;
 
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSNotification;
@@ -51,8 +54,7 @@ public class ERMailSender implements Runnable {
 	// er.javamail.senderQueue.size property
 	private ERQueue<ERMessage> _messages;
 	// For thread management
-
-	private int _milliSecondsWaitRunLoop = 30000;
+	private int _milliSecondsWaitRunLoop = 5000;
 	
 	private Thread _senderThread;
 
@@ -60,6 +62,8 @@ public class ERMailSender implements Runnable {
 	 * Exception class for alerting about a stack overflow
 	 */
 	public static class SizeOverflowException extends Exception {
+		private static final long serialVersionUID = 1L;
+
 		public SizeOverflowException(Exception e) {
 			super(e);
 		}
@@ -69,6 +73,10 @@ public class ERMailSender implements Runnable {
 		_stats = new Stats();
 		_messages = new ERQueue<ERMessage>(ERJavaMail.sharedInstance().senderQueueSize());
 
+        if (WOApplication.application() == null || WOApplication.application ().isDebuggingEnabled()) {
+            _milliSecondsWaitRunLoop = 2000;
+        }
+        
 		if (log.isDebugEnabled()) {
 			log.debug("ERMailSender initialized (JVM heap size: " + _stats.formattedUsedMemory() + ")");
 		}
@@ -136,7 +144,7 @@ public class ERMailSender implements Runnable {
 	public void sendMessageNow(ERMessage message) {
 		Transport transport = null;
 		try {
-			transport = this._connectedTransportForSession(ERJavaMail.sharedInstance().defaultSession(), ERJavaMail.sharedInstance().smtpProtocol(), false);
+			transport = this._connectedTransportForSession(ERJavaMail.sharedInstance().sessionForContext(message.contextString()), ERJavaMail.sharedInstance().smtpProtocolForContext(message.contextString()), false);
 			this._sendMessageNow(message, transport);
 		}
 		catch (MessagingException e) {
@@ -184,9 +192,9 @@ public class ERMailSender implements Runnable {
 
 				if (debug) {
 					log.debug("Sending a message ... " + aMessage);
-					Enumeration e = aMessage.getAllHeaderLines();
+					Enumeration<String> e = aMessage.getAllHeaderLines();
 					while (e.hasMoreElements()) {
-						String header = (String) e.nextElement();
+						String header = e.nextElement();
 						log.debug(header);
 					}
 				}
@@ -212,7 +220,7 @@ public class ERMailSender implements Runnable {
 					log.debug("Failed to send message: \n" + message.allRecipientsAsString() + e.getMessage());
 				_stats.incrementErrorCount();
 
-				NSArray invalidEmails = ERMailUtils.convertInternetAddressesToNSArray(e.getInvalidAddresses());
+				NSArray<String> invalidEmails = ERMailUtils.convertInternetAddressesToNSArray(e.getInvalidAddresses());
 				this.notifyInvalidEmails(invalidEmails);
 				message._invalidRecipients(invalidEmails);
 
@@ -283,16 +291,33 @@ public class ERMailSender implements Runnable {
 
 				// If there are still messages pending ...
 				if (!_messages.empty()) {
-					Session session = ERJavaMail.sharedInstance().newSession();
-					String smtpProtocol = ERJavaMail.sharedInstance().smtpProtocol();
+					Map<String, Transport> transports = new HashMap<String, Transport>();
+					
 					try {
-						Transport transport = this._connectedTransportForSession(session, smtpProtocol, true);
-						if (!transport.isConnected()) {
-							transport.connect();
-						}
-
 						while (!_messages.empty()) {
 							ERMessage message = _messages.pop();
+		                    String contextString = message.contextString();
+		                    String smtpProtocol = ERJavaMail.sharedInstance().smtpProtocolForContext(contextString);
+		                    if (contextString == null) {
+		                        contextString = "___DEFAULT___";
+		                    }
+		                    Transport transport = transports.get(contextString);
+		                    if (transport == null) {
+		                        Session session = ERJavaMail.sharedInstance().newSessionForMessage(message);
+		                        transport = this._connectedTransportForSession(session, smtpProtocol, true);
+		                        transports.put(contextString, transport);
+		                    }
+		                    try {
+		                        if (!transport.isConnected()) {
+		                            transport.connect();
+		                        }
+		                    } catch (MessagingException e) {
+		                        // Notify error in logs
+		                        log.error ("Unable to connect transport.", e);
+
+		                        // Exit run loop
+		                        throw new RuntimeException ("Unable to connect transport.");
+		                    }
 							try {
 								this._sendMessageNow(message, transport);
 							} catch(SendFailedException ex) {
@@ -304,10 +329,6 @@ public class ERMailSender implements Runnable {
 							// Here we get all the exceptions that are
 							// not 'SendFailedException's.
 							// All we can do is warn the admin.
-						}
-
-						if (transport != null) {
-							transport.close();
 						}
 					}
 					catch (AuthenticationFailedException e) {
@@ -325,7 +346,17 @@ public class ERMailSender implements Runnable {
 							log.error("General mail error: " + e, e);
 						}
 					}
-
+					finally {
+						for (Transport transport : transports.values()) {
+							try {
+								if (transport != null) {
+									transport.close();
+								}
+							} catch (MessagingException e) /* once again ... */ {
+								log.warn ("Unable to close transport.  Perhaps it has already been closed?", e);
+							}
+						}
+					}
 				}
 			}
 		}
@@ -337,10 +368,14 @@ public class ERMailSender implements Runnable {
 		_senderThread = null;
 	}
 
+	public ERQueue<ERMessage> messages() {
+		return _messages;
+	}
+	
 	/**
 	 * Executes the callback method to notify the calling application of any invalid emails.
 	 */
-	protected void notifyInvalidEmails(NSArray invalidEmails) {
+	protected void notifyInvalidEmails(NSArray<String> invalidEmails) {
 		NSNotification notification = new NSNotification(InvalidEmailNotification, invalidEmails);
 		NSNotificationCenter.defaultCenter().postNotification(notification);
 	}

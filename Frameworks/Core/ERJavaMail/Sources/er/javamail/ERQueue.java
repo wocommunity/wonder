@@ -36,11 +36,12 @@ public class ERQueue<T> extends Vector<T> {
 	}
 
 	public T push(T item) throws SizeOverflowException {
-		if ((_maxSize == 0) || (this.size() < _maxSize))
+		if ((_maxSize == 0) || (this.size() < _maxSize)) {
 			this.addElement(item);
-		else
+		}
+		else {
 			throw new SizeOverflowException();
-
+		}
 		return item;
 	}
 
