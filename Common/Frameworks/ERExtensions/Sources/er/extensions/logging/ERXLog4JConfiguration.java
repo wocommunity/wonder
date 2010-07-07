@@ -160,7 +160,7 @@ public class ERXLog4JConfiguration extends WOComponent {
     
     private final static NSDictionary BG_COLORS=new NSDictionary(
                                                                  new Object[] {
-                                                                     "#ffdddd",
+                                                                     "#ffaaaa",
                                                                      "#ffbbbb",
                                                                      "#eeccbb",
                                                                      "#ddddbb",
