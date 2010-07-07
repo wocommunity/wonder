@@ -1,0 +1,20 @@
+BranchButtonRepetition: WORepetition {
+	item = branch;
+	list = branchChoices;
+	checkHashCodes = false;
+}
+
+BranchButton: ERMSubmitLinkButton {
+	action = performAction;
+	value = branchButtonLabel;
+	class = buttonCssClass;
+}
+
+HasChoices: WOConditional {
+	condition = hasBranchChoices;
+}
+
+ActionListUL : WOGenericContainer {
+	elementName = "ul";
+	class = actionListCssClass;
+}
