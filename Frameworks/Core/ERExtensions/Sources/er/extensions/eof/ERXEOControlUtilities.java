@@ -2315,7 +2315,9 @@ public class ERXEOControlUtilities {
 		fs.setFetchesRawRows(true);
 		fs.setRawRowKeyPaths(new NSArray<String>(keyPath));
 		NSArray<NSDictionary<String, T>> rawRows = editingContext.objectsWithFetchSpecification(fs);
-		NSArray<T> values = (NSArray<T>) rawRows.valueForKeyPath(keyPath);
+		// Note that the raw row keyPath becomes a key in the raw row dictionary having the value derived from the schema keyPath
+		NSArray<T> values = (NSArray<T>) rawRows.valueForKey(keyPath);
+		values = ERXArrayUtilities.arrayWithoutDuplicates(values);
 		return values;
 	}
 
