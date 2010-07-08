@@ -448,7 +448,7 @@ public  class ERXRequest extends WORequest {
     	return UNKNOWN_HOST;
     }
 
-	public NSMutableDictionary mutableUserInfo() {
+	public NSMutableDictionary<String, Object> mutableUserInfo() {
 		NSDictionary userInfo = userInfo();
 		NSMutableDictionary mutableUserInfo;
 		if (userInfo == null) {
