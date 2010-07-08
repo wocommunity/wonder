@@ -32,6 +32,7 @@ import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation._NSUtilities;
 
+import er.extensions.appserver.ERXRequest;
 import er.extensions.eof.ERXDatabaseContextDelegate.ObjectNotAvailableException;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXKey;
@@ -1363,15 +1364,12 @@ public class ERXRouteController extends WODirectAction {
 	 * @param controller the controller to register
 	 * @param request the request to register with
 	 */
-	@SuppressWarnings("unchecked")
 	protected static void _registerControllerForRequest(ERXRouteController controller, WORequest request) {
 		NSMutableArray<ERXRouteController> controllers = _controllersForRequest(request);
 		if (controllers == null) {
 			controllers = new NSMutableArray<ERXRouteController>();
-			NSMutableDictionary<String, Object> userInfo = (NSMutableDictionary<String, Object>)request.userInfo();
-			if (userInfo != null) {
-				userInfo.setObjectForKey(controllers, ERXRouteController.REQUEST_CONTROLLERS_KEY);
-			}
+			NSMutableDictionary<String, Object> userInfo = ((ERXRequest)request).mutableUserInfo();
+			userInfo.setObjectForKey(controllers, ERXRouteController.REQUEST_CONTROLLERS_KEY);
 		}
 		controllers.addObject(controller);
 	}
