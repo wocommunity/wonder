@@ -120,7 +120,7 @@ public class ERXLog4JConfiguration extends WOComponent {
     }
 
 
-    
+    public Integer traceLevel() { return ERXConstant.integerForInt(Level.TRACE.toInt()); }
     public Integer debugLevel() { return ERXConstant.integerForInt(Level.DEBUG.toInt()); }
     public Integer infoLevel() { return ERXConstant.integerForInt(Level.INFO.toInt()); }
     public Integer warnLevel() { return ERXConstant.integerForInt(Level.WARN.toInt()); }
@@ -133,6 +133,7 @@ public class ERXLog4JConfiguration extends WOComponent {
         ERXConstant.integerForInt(logger().getLevel().toInt()) : ERXConstant.MinusOneInteger;
     }
 
+    public boolean loggerIsNotTrace() { return logger()!=null && logger().getLevel()!=Level.TRACE; }
     public boolean loggerIsNotDebug() { return logger()!=null && logger().getLevel()!=Level.DEBUG; }
     public boolean loggerIsNotInfo() { return logger()!=null && logger().getLevel()!=Level.INFO; }
     public boolean loggerIsNotWarn() { return logger()!=null && logger().getLevel()!=Level.WARN; }
@@ -159,6 +160,7 @@ public class ERXLog4JConfiguration extends WOComponent {
     
     private final static NSDictionary BG_COLORS=new NSDictionary(
                                                                  new Object[] {
+                                                                     "#ffaaaa",
                                                                      "#ffbbbb",
                                                                      "#eeccbb",
                                                                      "#ddddbb",
@@ -166,6 +168,7 @@ public class ERXLog4JConfiguration extends WOComponent {
                                                                      "#bbffbb"
                                                                  },
                                                                  new Object[] {
+                                                                     ERXConstant.integerForInt(Level.TRACE.toInt()),
                                                                      ERXConstant.integerForInt(Level.DEBUG.toInt()),
                                                                      ERXConstant.integerForInt(Level.INFO.toInt()),
                                                                      ERXConstant.integerForInt(Level.WARN.toInt()),
