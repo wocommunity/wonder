@@ -890,7 +890,7 @@ public class ERXFileUtilities {
                                 		array.add("-s");
 
                                 	if (!followSymbolicLinks)
-                                		array.add("-h");
+                                		array.add("-n");
 
                                 	array.add(source.getPath());
                                 	array.add(destination.getPath());
