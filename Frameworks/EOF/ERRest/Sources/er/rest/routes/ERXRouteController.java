@@ -1368,7 +1368,7 @@ public class ERXRouteController extends WODirectAction {
 		NSMutableArray<ERXRouteController> controllers = _controllersForRequest(request);
 		if (controllers == null) {
 			controllers = new NSMutableArray<ERXRouteController>();
-			NSMutableDictionary<String, Object> userInfo = ((ERXRequest)request).mutableUserInfo();
+			NSMutableDictionary<String, Object> userInfo = request != null ? ((ERXRequest)request).mutableUserInfo() : new NSMutableDictionary<String, Object>();
 			userInfo.setObjectForKey(controllers, ERXRouteController.REQUEST_CONTROLLERS_KEY);
 		}
 		controllers.addObject(controller);
@@ -1381,7 +1381,7 @@ public class ERXRouteController extends WODirectAction {
 	 */
 	@SuppressWarnings("unchecked")
 	public static NSMutableArray<ERXRouteController> _controllersForRequest(WORequest request) {
-		NSDictionary<String, Object> userInfo = request.userInfo();
+		NSDictionary<String, Object> userInfo = request != null ? request.userInfo() : null;
 		NSMutableArray<ERXRouteController> controllers = null;
 		if (userInfo != null) {
 			controllers = (NSMutableArray<ERXRouteController>)userInfo.objectForKey(ERXRouteController.REQUEST_CONTROLLERS_KEY);
