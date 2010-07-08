@@ -863,7 +863,7 @@ public class ERXFileUtilities {
     }
     
     /**
-        * Creates a symlink for a given file. Note this only works on
+     * Creates a symlink for a given file. Note this only works on
      * civilized OSs which support symbolic linking.
      * @param source to create the link to
      * @param destination file to create the link to
@@ -883,7 +883,7 @@ public class ERXFileUtilities {
                                      cmd[i++] = "ln";
                                      if (allowUnlink         ) cmd[i++] = "-f";
                                      if (symbolic            ) cmd[i++] = "-s";
-                                     if (!followSymbolicLinks) cmd[i++] = "-h";
+                                     if (!followSymbolicLinks) cmd[i++] = "-n";
                                      cmd[i++] = source.getPath();
                                      cmd[i++] = destination.getPath();
 
