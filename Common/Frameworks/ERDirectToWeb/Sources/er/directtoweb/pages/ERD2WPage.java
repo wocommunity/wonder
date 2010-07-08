@@ -1276,6 +1276,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
 
     /**
      * Gets the CSS class(es) that should be applied to the current container element.
+     * @param cssKey from the d2wContext that defines the CSS for this element
      * @return the css classes
      */
     private String _cssClassForTemplateForCurrentPropertyKey(String cssKey) {
