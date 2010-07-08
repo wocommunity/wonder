@@ -267,10 +267,10 @@ PageWrapper: WOSwitchComponent {
 }
 
 PropertyNameComponentGenericContainer: WOGenericContainer {
-	class = cssClassForPropertyKey;
+	class = cssClassForPropertyName;
 	elementName = "th";
 	nowrap = "nowrap";
-	style = inlineStyleDeclarationForPropertyKey;
+	style = inlineStyleDeclarationForPropertyName;
 	valign = "bottom";
 }
 
