@@ -100,9 +100,9 @@ PropertyKeyComponentGenericContainer: WOGenericContainer {
 
 PropertyNameComponentGenericContainer: WOGenericContainer {
 	align = "right";
-	class = cssClassForPropertyKey;
+	class = cssClassForPropertyName;
 	elementName = "th";
-	style = inlineStyleDeclarationForPropertyKey;
+	style = inlineStyleDeclarationForPropertyName;
 }
 
 PropertyNameSwitchComponent: WOSwitchComponent {

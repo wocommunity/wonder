@@ -682,13 +682,16 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     }
 
     /**
-     * Sets the user choosen branch.
+     * Sets the user chosen branch.
      * 
      * @param branch
-     *            choosen by user.
+     *            chosen by user.
      */
     public void setBranch(NSDictionary branch) {
         _branch = branch;
+        // Propagate the branchName to the D2WContext.
+        Object branchValue = _branch != null ? _branch.valueForKey(ERDBranchDelegate.BRANCH_NAME) : NSKeyValueCoding.NullValue;
+        d2wContext().takeValueForKey(branchValue, ERDBranchDelegate.BRANCH_NAME);
     }
 
     /**
@@ -700,7 +703,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     // ENHANCEME: Should be localized
     public String branchName() {
         if (branch() != null) {
-            return (String) branch().valueForKey("branchName");
+            return (String) branch().valueForKey(ERDBranchDelegate.BRANCH_NAME);
         }
         return null;
     }
@@ -1256,10 +1259,27 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     }
 
     /**
+     * Gets the CSS class(es) that should be applied to the current property name container element.
+     * @return the css classes
+     */
+    public String cssClassForPropertyName() {
+        return _cssClassForTemplateForCurrentPropertyKey("cssClassForPropertyName");
+    }
+
+    /**
      * Gets the CSS class(es) that should be applied to the current property key container element.
      * @return the css classes
      */
     public String cssClassForPropertyKey() {
+        return _cssClassForTemplateForCurrentPropertyKey("cssClass");
+    }
+
+    /**
+     * Gets the CSS class(es) that should be applied to the current container element.
+     * @param cssKey from the d2wContext that defines the CSS for this element
+     * @return the css classes
+     */
+    private String _cssClassForTemplateForCurrentPropertyKey(String cssKey) {
         NSMutableArray classes = new NSMutableArray();
         D2WContext d2wContext = d2wContext();
         String propertyKey = d2wContext.propertyKey();
@@ -1277,12 +1297,20 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
             }
 
             // Explicitly defined class(es).
-            NSArray explicitClasses = ERXValueUtilities.arrayValueWithDefault(d2wContext.valueForKey("cssClass"), NSArray.EmptyArray);
+            NSArray explicitClasses = ERXValueUtilities.arrayValueWithDefault(d2wContext.valueForKey(cssKey), NSArray.EmptyArray);
             if (explicitClasses.count() > 0) {
                 classes.addObjectsFromArray(explicitClasses);
             }
         }
         return classes.componentsJoinedByString(" ");
+    }
+
+    /**
+     * Gets any inline style declarations for the current property name container element.
+     * @return the inline style declarations
+     */
+    public String inlineStyleDeclarationForPropertyName() {
+        return (String)d2wContext().valueForKey("inlineStyleForPropertyName");
     }
 
     /**
