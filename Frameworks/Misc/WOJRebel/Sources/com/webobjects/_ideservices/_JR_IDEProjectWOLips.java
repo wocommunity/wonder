@@ -445,4 +445,8 @@ public class _JR_IDEProjectWOLips implements _IDEProject {
     }
     return urls;
   }
+
+  public boolean shouldPreloadResources() {
+    return false;
+  }
 }
