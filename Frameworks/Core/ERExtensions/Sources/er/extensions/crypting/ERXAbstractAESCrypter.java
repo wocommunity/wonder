@@ -165,7 +165,6 @@ public abstract class ERXAbstractAESCrypter implements ERXCrypterInterface {
 		ByteArrayOutputStream result = new ByteArrayOutputStream();
 		byte[] clearText = null;
 		byte[] decodedBytes = null;
-		byte[] encryptedBytes = new byte[_blockSize];
 
 		try {
 			decodedBytes = ERXCrypto.base64urlDecode(cryptedText);
@@ -175,8 +174,10 @@ public abstract class ERXAbstractAESCrypter implements ERXCrypterInterface {
 			return null;
 		}
 
-		for (int j = 0; j < decodedBytes.length;) {
-			System.arraycopy(decodedBytes, j, encryptedBytes, 0, _blockSize);
+		int length = decodedBytes.length;
+		for (int j = 0; j < length;) {
+			byte[] encryptedBytes = new byte[_blockSize];
+			System.arraycopy(decodedBytes, j, encryptedBytes, 0, Math.min(length - j, _blockSize));
 			try {
 				clearText = decryptCipher().doFinal(encryptedBytes);
 			}
@@ -217,7 +218,7 @@ public abstract class ERXAbstractAESCrypter implements ERXCrypterInterface {
 		while (pos < length) {
 			byte[] bytesToEncrypt = new byte[_blockSize];
 	        System.arraycopy(clearTextBytes, pos, bytesToEncrypt, 0,
-	                         Math.min(clearTextBytes.length - pos, _blockSize));
+	                         Math.min(length - pos, _blockSize));
 			try {
 				encryptedBytes = encryptCipher().doFinal(bytesToEncrypt);
 				result.write(encryptedBytes);
