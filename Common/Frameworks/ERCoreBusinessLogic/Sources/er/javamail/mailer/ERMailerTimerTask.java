@@ -8,7 +8,7 @@ package er.javamail.mailer;
 
 import java.util.TimerTask;
 
-import er.extensions.logging.ERXLogger;
+import org.apache.log4j.Logger;
 
 /**
  * Timer task used when running the ERMailer
@@ -17,7 +17,7 @@ import er.extensions.logging.ERXLogger;
 public class ERMailerTimerTask extends TimerTask {
 
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERMailerTimerTask.class);
+    public final static Logger log = Logger.getLogger(ERMailerTimerTask.class);
 
     /**
      * Processes the outgoing mail.

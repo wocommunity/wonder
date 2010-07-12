@@ -6,6 +6,10 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.components;
 
+import java.util.Enumeration;
+
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.eoaccess.EODatabaseDataSource;
@@ -22,15 +26,13 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSValidation;
+
 import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXUtilities;
-import er.extensions.logging.ERXLogger;
 import er.extensions.woextensions.WOToOneRelationship;
-
-import java.util.Enumeration;
 
 /**
  * description forthcoming!<br />
@@ -60,7 +62,7 @@ public class ERXToOneRelationship extends WOToOneRelationship {
     }
     
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERXToOneRelationship.class);
+    public final static Logger log = Logger.getLogger(ERXToOneRelationship.class);
 
     // ** passed-in (optional)
     protected String _destinationSortKey;

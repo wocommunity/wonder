@@ -5,15 +5,26 @@
 //
 package er.filecachingadaptor;
 
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
-import com.webobjects.eoaccess.*;
+import org.apache.log4j.Logger;
+
+import com.webobjects.eoaccess.EOAdaptorChannel;
+import com.webobjects.eoaccess.EOAdaptorContext;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOKeyComparisonQualifier;
+import com.webobjects.eocontrol.EOKeyValueQualifier;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSPropertyListSerialization;
+
 import er.extensions.eof.ERXForwardingAdaptorChannel;
 import er.extensions.foundation.ERXProperties;
-import er.extensions.logging.ERXLogger;
 
 public class ERFileCachingAdaptorChannel extends ERXForwardingAdaptorChannel {
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERFileCachingAdaptorChannel.class);
+    public static final Logger log = Logger.getLogger(ERFileCachingAdaptorChannel.class);
 
     public ERFileCachingAdaptorChannel(EOAdaptorContext context, EOAdaptorChannel channel) {
         super(context, channel);

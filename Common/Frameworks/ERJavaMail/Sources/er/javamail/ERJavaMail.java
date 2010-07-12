@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.log4j.Logger;
 import org.apache.oro.text.regex.MalformedPatternException;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
@@ -18,7 +19,6 @@ import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.ERXFrameworkPrincipal;
 import er.extensions.foundation.ERXProperties;
-import er.extensions.logging.ERXLogger;
 import er.extensions.validation.ERXValidationFactory;
 
 /**
@@ -31,7 +31,7 @@ import er.extensions.validation.ERXValidationFactory;
 public class ERJavaMail extends ERXFrameworkPrincipal {
 
     /** Class logger */
-    private static final ERXLogger log = ERXLogger.getERXLogger (ERJavaMail.class);
+    private static final Logger log = Logger.getLogger (ERJavaMail.class);
 
     static {
 	setUpFrameworkPrincipalClass (ERJavaMail.class);

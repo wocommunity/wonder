@@ -6,17 +6,16 @@
  */
 package er.excel;
 
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSData;
-import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSForwardException;
-import com.webobjects.foundation.NSKeyValueCoding;
-import com.webobjects.foundation.NSMutableDictionary;
-import com.webobjects.foundation.NSNumberFormatter;
-import er.extensions.formatters.ERXNumberFormatter;
-import er.extensions.foundation.ERXDictionaryUtilities;
-import er.extensions.foundation.ERXKeyValueCodingUtilities;
-import er.extensions.logging.ERXLogger;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.text.ParseException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFDataFormat;
@@ -29,13 +28,17 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.text.ParseException;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSData;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSNumberFormatter;
+
+import er.extensions.formatters.ERXNumberFormatter;
+import er.extensions.foundation.ERXDictionaryUtilities;
+import er.extensions.foundation.ERXKeyValueCodingUtilities;
 
 
 /**
@@ -66,7 +69,7 @@ import java.text.ParseException;
 public class EGSimpleTableParser {
 	
 	/** logging support */
-	protected final ERXLogger log = ERXLogger.getLogger(EGSimpleTableParser.class,"excel");
+	protected final Logger log = Logger.getLogger(EGSimpleTableParser.class + ".excel");
 	
 	private InputStream _contentStream;
 	private HSSFWorkbook _workbook;

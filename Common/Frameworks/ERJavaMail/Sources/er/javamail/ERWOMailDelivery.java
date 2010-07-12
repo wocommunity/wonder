@@ -9,16 +9,18 @@ package er.javamail;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.util.*;
-import java.util.Properties;
-import javax.mail.*;
-import javax.activation.*;
-import javax.mail.internet.*;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
+import javax.activation.DataHandler;
+import javax.mail.Message;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
-import er.extensions.logging.ERXLogger;
+import org.apache.log4j.Logger;
+
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOSession;
+import com.webobjects.foundation.NSArray;
 
 /** Drop-in replacement for WOMailDelivery.
 
@@ -147,7 +149,7 @@ public class ERWOMailDelivery {
     }
     
     // Private Implementation.
-    private static ERXLogger log = ERXLogger.getERXLogger( ERWOMailDelivery.class );
+    private static Logger log = Logger.getLogger( ERWOMailDelivery.class );
     private static ERWOMailDelivery _sharedInstance = null;
     
         private

@@ -6,19 +6,26 @@
 
 package er.javamail;
 
-import er.extensions.foundation.ERXProperties;
-import er.extensions.logging.ERXLogger;
+import java.lang.reflect.Method;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.webobjects.foundation.NSForwardException;
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSTimestamp;
+import javax.mail.MessagingException;
+import javax.mail.SendFailedException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.MimeMessage;
+
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOApplication;
-import er.extensions.formatters.ERXUnitAwareDecimalFormat;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSTimestamp;
 
-import javax.mail.*;
-import javax.mail.internet.*;
-import java.lang.reflect.*;
-import java.util.*;
+import er.extensions.formatters.ERXUnitAwareDecimalFormat;
+import er.extensions.foundation.ERXProperties;
 
 /** This class is used to send mails in a threaded way.<BR> This is
 needed in WebObjects because if sending 20 mails takes 40 seconds,
@@ -29,7 +36,7 @@ the application.
 @author Max Muller <maxmuller@mac.com> */
 public class ERMailSender extends Thread {
 
-    static ERXLogger log = ERXLogger.getERXLogger (ERMailSender.class);
+    static Logger log = Logger.getLogger (ERMailSender.class);
 
     private static ERMailSender _sharedMailSender;
     private static boolean useSenderDelay =

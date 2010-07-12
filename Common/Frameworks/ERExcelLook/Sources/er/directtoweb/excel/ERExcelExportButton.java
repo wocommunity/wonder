@@ -3,6 +3,10 @@
 */
 package er.directtoweb.excel;
 
+import java.lang.reflect.InvocationTargetException;
+
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -13,10 +17,8 @@ import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSSelector;
-import er.directtoweb.components.ERDCustomQueryComponent;
-import er.extensions.logging.ERXLogger;
 
-import java.lang.reflect.InvocationTargetException;
+import er.directtoweb.components.ERDCustomQueryComponent;
 
 /**
  * Component used in the List page to provide a generic excel export.<br />
@@ -32,7 +34,7 @@ public class ERExcelExportButton extends ERDCustomQueryComponent {
 
     public ERExcelExportButton(WOContext context) { super(context); }
 
-    private static final ERXLogger log = ERXLogger.getERXLogger(ERExcelExportButton.class);
+    private static final Logger log = Logger.getLogger(ERExcelExportButton.class);
 
     public boolean isStateless() { return true; }
     public boolean synchronizesVariablesWithBindings() { return false; }

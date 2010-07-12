@@ -6,17 +6,19 @@
 //
 package er.directtoweb.excel;
 
+import java.util.regex.Pattern;
+
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
-import er.extensions.foundation.ERXProperties;
-import er.extensions.logging.ERXLogger;
 
-import java.util.regex.Pattern;
+import er.extensions.foundation.ERXProperties;
 
 // This class tries to strip out all the HTML in subcomponents so that it can be generically exported using the Excel libs
 public class ERExcelEscapeForXMLWrapper extends WOComponent {
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERExcelEscapeForXMLWrapper.class);
+    public static final Logger log = Logger.getLogger(ERExcelEscapeForXMLWrapper.class);
 
     public ERExcelEscapeForXMLWrapper(WOContext context) {
         super(context);

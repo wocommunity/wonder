@@ -6,14 +6,20 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.corebusinesslogic;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.appserver.*;
-import java.util.*;
+import java.util.Enumeration;
+
+import org.apache.log4j.Logger;
+
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOPageNotFoundException;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOKeyValueCodingAdditions;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 
 import er.extensions.appserver.ERXApplication;
 import er.extensions.foundation.ERXProperties;
-import er.extensions.logging.ERXLogger;
 
 /**
 * Utility class used for sending mails via the
@@ -27,7 +33,7 @@ public class ERCMailDelivery {
     //	---------------------------------------------------------------------------
 
     /** logging supprt */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERCMailDelivery.class);
+    public static final Logger log = Logger.getLogger(ERCMailDelivery.class);
 
     //	===========================================================================
     //	Class Variable(s)

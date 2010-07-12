@@ -6,24 +6,33 @@
 //
 package er.javamail.mailer;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+import java.io.File;
+import java.util.Enumeration;
 
-import er.extensions.concurrency.ERXJobLoadBalancer.*;
+import javax.mail.MessagingException;
 
+import org.apache.log4j.Logger;
+
+import com.webobjects.eoaccess.EOGeneralAdaptorException;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSTimestamp;
+
+import er.corebusinesslogic.ERCMailMessage;
+import er.corebusinesslogic.ERCMailState;
+import er.corebusinesslogic.ERCMessageAttachment;
+import er.corebusinesslogic.ERCoreBusinessLogic;
 import er.extensions.concurrency.ERXJobLoadBalancer;
+import er.extensions.concurrency.ERXJobLoadBalancer.JobSet;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXFetchSpecificationBatchIterator;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXUtilities;
-import er.extensions.logging.ERXLogger;
-import er.javamail.*;
-import er.corebusinesslogic.*;
-
-import java.util.Enumeration;
-import java.io.File;
-import javax.mail.*;
+import er.javamail.ERMailDelivery;
+import er.javamail.ERMailDeliveryHTML;
+import er.javamail.ERMailFileAttachment;
 
 /**
  * Mailer bridge class. Used to pull mail out of the
@@ -37,7 +46,7 @@ public class ERMailer {
     //	---------------------------------------------------------------------------    
 
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERMailer.class);
+    public final static Logger log = Logger.getLogger(ERMailer.class);
     public final static String MAIL_WORKER_IDENTIFICATION = "ERMailer";
 
     //	===========================================================================

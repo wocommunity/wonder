@@ -6,14 +6,15 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.testrunner;
 
-import er.extensions.logging.ERXLogger;
+import java.io.PrintStream;
+import java.util.Enumeration;
+
 import junit.framework.AssertionFailedError;
 import junit.framework.Test;
 import junit.framework.TestFailure;
 import junit.runner.BaseTestRunner;
 
-import java.io.PrintStream;
-import java.util.Enumeration;
+import org.apache.log4j.Logger;
 
 /**
  * Used for running a batch of tests.<br />
@@ -23,12 +24,12 @@ import java.util.Enumeration;
 public class ERXBatchTestInterface extends Object implements ERXTestListener {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXBatchTestInterface.class);
+    public static final Logger log = Logger.getLogger(ERXBatchTestInterface.class);
 
     public static final boolean SHOW_EXCEPTIONS=true;
     public static final boolean HIDE_EXCEPTIONS=false;
     
-    private ERXLogger _userLog;
+    private Logger _userLog;
 
     protected String _test;
     protected boolean _showExceptions;
@@ -56,7 +57,7 @@ public class ERXBatchTestInterface extends Object implements ERXTestListener {
     }
 
     // ACTION METHOD
-    public void performTest(ERXLogger userLogger, boolean showExceptions) {
+    public void performTest(Logger userLogger, boolean showExceptions) {
         _showExceptions = showExceptions;
         _userLog = userLogger;
         resetInterface();
@@ -92,7 +93,7 @@ public class ERXBatchTestInterface extends Object implements ERXTestListener {
         return testResult;
     }
 
-    private ERXLogger userLog() {
+    private Logger userLog() {
         if (_userLog == null) {
             return log;
         } else {

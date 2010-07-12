@@ -1,18 +1,23 @@
 // ERCStatic.java
 // (c) by Anjo Krank (ak@kcmedia.ag)
 package er.corebusinesslogic;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
+import org.apache.log4j.Logger;
+
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOObjectStoreCoordinator;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableDictionary;
+
 import er.extensions.eof.EOEnterpriseObjectClazz;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.foundation.ERXProperties;
-import er.extensions.logging.ERXLogger;
 
 public class ERCStatic extends _ERCStatic {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERCStatic.class);
+    public static final Logger log = Logger.getLogger(ERCStatic.class);
         
     // Class methods go here
     

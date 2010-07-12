@@ -6,17 +6,23 @@
 
 package er.javamail;
 
-import java.util.*;
-import java.io.*;
-import javax.mail.*;
-import javax.activation.*;
-import javax.mail.internet.*;
+import java.util.Date;
+import java.util.Enumeration;
 
-import er.extensions.foundation.ERXUtilities;
-import er.extensions.logging.ERXLogger;
+import javax.activation.DataHandler;
+import javax.mail.BodyPart;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Part;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+
+import org.apache.log4j.Logger;
 
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 
@@ -49,7 +55,7 @@ try {
 */
 public abstract class ERMailDelivery {
 
-    private static ERXLogger log = ERXLogger.getERXLogger (ERMailDelivery.class);
+    private static Logger log = Logger.getLogger (ERMailDelivery.class);
 
     /** JavaMail session */
     private javax.mail.Session _session;

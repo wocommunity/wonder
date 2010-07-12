@@ -5,22 +5,37 @@
 //
 package er.filecachingadaptor;
 
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
-import com.webobjects.eoaccess.*;
-
+import java.io.File;
 import java.math.BigDecimal;
-import java.io.*;
 import java.text.ParseException;
+
+import org.apache.log4j.Logger;
+
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EODatabase;
+import com.webobjects.eoaccess.EODatabaseContext;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModel;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSData;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation.NSSet;
+import com.webobjects.foundation.NSTimestampFormatter;
 
 import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXProperties;
-import er.extensions.logging.ERXLogger;
 
 public class ERFileCachingAdaptorUtilities {
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERFileCachingAdaptorUtilities.class);
+    public static final Logger log = Logger.getLogger(ERFileCachingAdaptorUtilities.class);
     public static final String FileCacheLocationKey = "ERFileCachingAdaptor.FileCache";
     public static final String GeneratePListKey="ERFileCachingAdaptor.generatePListFile";
     public static final String GeneratePListGZippedKey="ERFileCachingAdaptor.generatePListGZippedFile";
