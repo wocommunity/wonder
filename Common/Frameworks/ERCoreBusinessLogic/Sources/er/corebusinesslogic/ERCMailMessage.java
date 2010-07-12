@@ -2,10 +2,18 @@
 // (c) by Anjo Krank (ak@kcmedia.ag)
 package er.corebusinesslogic;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-
 import java.io.File;
+
+import org.apache.log4j.Logger;
+
+import com.webobjects.eocontrol.EOAndQualifier;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSValidation;
 
 import er.extensions.concurrency.ERXJobLoadBalancer;
 import er.extensions.eof.EOEnterpriseObjectClazz;
@@ -15,7 +23,6 @@ import er.extensions.eof.ERXFetchSpecificationBatchIterator;
 import er.extensions.eof.ERXModuloQualifier;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXValueUtilities;
-import er.extensions.logging.ERXLogger;
 import er.extensions.validation.ERXValidationFactory;
 
 public class ERCMailMessage extends _ERCMailMessage {
@@ -25,7 +32,7 @@ public class ERCMailMessage extends _ERCMailMessage {
     //	---------------------------------------------------------------------------
         
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERCMailMessage.class);
+    public static final Logger log = Logger.getLogger(ERCMailMessage.class);
 
     /** holds the address separator */
     public static final String AddressSeparator = ",";

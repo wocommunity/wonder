@@ -6,11 +6,25 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.corebusinesslogic;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
-import er.extensions.*;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Enumeration;
+
+import org.apache.log4j.Logger;
+
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOGeneralAdaptorException;
+import com.webobjects.eoaccess.EOJoin;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSLog;
+
+import er.extensions.ERXFrameworkPrincipal;
 import er.extensions.appserver.ERXApplication;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOControlUtilities;
@@ -19,10 +33,6 @@ import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXThreadStorage;
 import er.extensions.foundation.ERXUtilities;
-import er.extensions.logging.ERXLogger;
-
-import java.util.*;
-import java.lang.reflect.*;
 
 public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
 
@@ -31,7 +41,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
     //	---------------------------------------------------------------------------    
     
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERCoreBusinessLogic.class);
+    public static final Logger log = Logger.getLogger(ERCoreBusinessLogic.class);
     
     /** property key that holds the email domain of the generated from email */
     public static final String ProblemEmailDomainPropertyKey = "er.corebusinesslogic.ERCoreBusinessLogic.ProblemEmailDomain";

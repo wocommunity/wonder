@@ -6,12 +6,14 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.components.javascript;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
+
 import er.extensions.components.ERXComponentUtilities;
 import er.extensions.foundation.ERXMutableUserInfoHolderInterface;
-import er.extensions.logging.ERXLogger;
 
 /**
  * Nice guy for performing actions when a popup item is selected.<br />
@@ -26,7 +28,7 @@ import er.extensions.logging.ERXLogger;
 public class ERXJSPopupSelector extends WOComponent {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXJSPopupSelector.class);
+    public static final Logger log = Logger.getLogger(ERXJSPopupSelector.class);
     
     
     public ERXJSPopupSelector(WOContext aContext) {

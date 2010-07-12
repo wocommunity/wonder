@@ -6,16 +6,18 @@
 //
 package er.directtoweb.excel;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eocontrol.EOArrayDataSource;
 import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.foundation.NSArray;
+
 import er.extensions.foundation.ERXValueUtilities;
-import er.extensions.logging.ERXLogger;
 
 public class ERExcelListGenericPage extends ERExcelListPage {
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERExcelListGenericPage.class);
+    public static final Logger log = Logger.getLogger(ERExcelListGenericPage.class);
 
     public ERExcelListGenericPage(WOContext context) {
         super(context);

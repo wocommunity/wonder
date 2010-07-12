@@ -2,14 +2,16 @@
 // (c) by Anjo Krank (ak@kcmedia.ag)
 package er.corebusinesslogic;
 
-import com.webobjects.eocontrol.*;
-import er.extensions.eof.EOEnterpriseObjectClazz;
-import er.extensions.logging.ERXLogger;
+import java.io.File;
 
-import java.io.*;
+import org.apache.log4j.Logger;
+
+import com.webobjects.eocontrol.EOEditingContext;
+
+import er.extensions.eof.EOEnterpriseObjectClazz;
 
 public class ERCMessageAttachment extends _ERCMessageAttachment {
-    static final ERXLogger log = ERXLogger.getERXLogger(ERCMessageAttachment.class);
+    static final Logger log = Logger.getLogger(ERCMessageAttachment.class);
 
     public ERCMessageAttachment() {
         super();

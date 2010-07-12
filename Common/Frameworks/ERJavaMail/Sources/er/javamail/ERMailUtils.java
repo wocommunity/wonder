@@ -7,18 +7,21 @@
 package er.javamail;
 
 import java.util.Enumeration;
-import javax.mail.internet.AddressException;
+
 import javax.mail.Address;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeUtility;
+
+import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
+
 import er.extensions.appserver.ERXApplication;
-import er.extensions.logging.ERXLogger;
 
 /**
  * <code>ERMailUtils</code> contains various utility method related
@@ -30,7 +33,7 @@ import er.extensions.logging.ERXLogger;
 public class ERMailUtils extends Object {
 
     /** The class logger. */
-    private static ERXLogger log = ERXLogger.getERXLogger (ERMailUtils.class);
+    private static Logger log = Logger.getLogger (ERMailUtils.class);
 
     /** The shared mail deliverer */
     private static ERMailDeliveryHTML sharedDeliverer;

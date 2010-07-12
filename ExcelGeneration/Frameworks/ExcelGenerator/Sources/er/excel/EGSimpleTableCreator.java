@@ -6,13 +6,12 @@
  */
 package er.excel;
 
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSKeyValueCoding;
-import com.webobjects.foundation.NSMutableDictionary;
-import er.extensions.foundation.ERXFileUtilities;
-import er.extensions.foundation.ERXKeyValueCodingUtilities;
-import er.extensions.logging.ERXLogger;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Enumeration;
+
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
@@ -22,10 +21,13 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Enumeration;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableDictionary;
+
+import er.extensions.foundation.ERXFileUtilities;
+import er.extensions.foundation.ERXKeyValueCodingUtilities;
 
 /**
  * Dumps a workbook into the "HTML" needed to re-create it by the EGSimpleTableParser.
@@ -35,7 +37,7 @@ import java.util.Enumeration;
  */
 public class EGSimpleTableCreator {
 	/** logging support */
-	protected final ERXLogger log = ERXLogger.getLogger(EGSimpleTableParser.class,"excel");
+	protected final Logger log = Logger.getLogger(EGSimpleTableParser.class + ".excel");
 	
 	private static NSDictionary _fontDef;
 

@@ -1,17 +1,19 @@
 package er.excel;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
+
 import er.extensions.components.ERXNonSynchronizingComponent;
 import er.extensions.foundation.ERXValueUtilities;
-import er.extensions.logging.ERXLogger;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 
 /**
  * Class for Excel Component EGWrapper.
@@ -25,7 +27,7 @@ import java.io.UnsupportedEncodingException;
 public class EGWrapper extends ERXNonSynchronizingComponent {
 
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getLogger(EGWrapper.class,"components,excel");
+    private static final Logger log = Logger.getLogger(EGWrapper.class + ".components,excel");
 	private String _fileName;
 	private NSDictionary _styles;
     private NSDictionary _fonts;

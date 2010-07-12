@@ -1,14 +1,16 @@
 package er.extensions.components.javascript;
 
+import java.util.Enumeration;
+
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
-import er.extensions.foundation.ERXValueUtilities;
-import er.extensions.logging.ERXLogger;
 
-import java.util.Enumeration;
+import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * JavaScript remote execution.
@@ -22,7 +24,7 @@ import java.util.Enumeration;
 public class ERXJSRemoteCall extends WOComponent {
 
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getLogger(ERXJSRemoteCall.class,"components");
+    private static final Logger log = Logger.getLogger(ERXJSRemoteCall.class + ".components");
 
     protected NSDictionary _arguments;
     protected NSArray _parameters;
