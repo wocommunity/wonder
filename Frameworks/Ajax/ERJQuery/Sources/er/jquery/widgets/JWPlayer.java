@@ -7,7 +7,7 @@ import com.webobjects.foundation.NSKeyValueCoding;
 
 import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.foundation.ERXProperties;
-import er.extensions.appserver.ERXWOContext;
+import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * Component encapsulating HTML5 jwplayer
@@ -41,7 +41,7 @@ public class JWPlayer extends WOComponent {
 	// accessors
 	public String id() {
 		String id = (String) valueForBinding("id");
-		return (!"".equals(id)) ? id : ERXWOContext.toSafeElementID(context().elementID());
+		return (!"".equals(id)) ? id : ERXStringUtilities.safeIdentifierName(context().elementID());
 	}
 	
 	// R&R
