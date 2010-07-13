@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="JWPlayer" wocomponentcontent="false">    <binding name="sources"/>
+        <validation message="'sources' is a required binding.">
+            <unbound name="sources"/>
+        </validation>
+        <binding name="poster"/>
+        <validation message="'poster' is a required binding.">
+            <unbound name="poster"/>
+        </validation>
+    <binding name="width"/>
+        <binding name="height"/>
+    <binding name="id"/>
+    </wo>
+</wodefinitions>
