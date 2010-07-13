@@ -1,0 +1,33 @@
+Video: WOGenericContainer {
+	elementName = "video";
+	id = id;
+	height = ^height;
+	width = ^width;
+	poster = ^poster.webPath;
+	tabindex = "0";
+}
+
+SourceRepetition: WORepetition {
+	list = ^sources;
+	item = source;
+}
+
+Source: WOGenericContainer {
+	elementName = "source";
+	src = source.webPath;
+	type = source.mimeType;
+}
+
+JWFlashPlayer: WOResourceURL {
+	filename = "player.swf";
+	framework = "ERJQuery";
+}
+
+JWSkin: WOResourceURL {
+	filename = "five/five.xml";
+	framework = "ERJQuery";
+}
+
+ID: WOString {
+	value = id;
+}
