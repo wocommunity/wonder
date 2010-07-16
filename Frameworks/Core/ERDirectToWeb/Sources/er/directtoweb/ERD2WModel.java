@@ -88,21 +88,21 @@ public class ERD2WModel extends D2WModel {
 
     //	===========================================================================
     //	Notification Title(s)
-    //	---------------------------------------------------------------------------    
-    
+    //	---------------------------------------------------------------------------
+
     // Register for this notification to have the hook in place to load non-d2wmodel based rules
     public static final String WillSortRules = "WillSortRules";
     public static final String ModelWillReset = "ModelWillReset";
 
     /** null refernced used to represent null in the caching system */
     private final static Object NULL_VALUE="<NULL>";
-    
+
     private Hashtable _cache=new Hashtable(10000);
     private Hashtable _systemCache=new Hashtable(10000);
     private Hashtable _significantKeysPerKey=new Hashtable(500);
 
     private static D2WModel _defaultModel;
-    
+
     // put here the keys than can either provided as input or computed
     // FIXME should add API from clients to add to this array
     static NSMutableArray BACKSTOP_KEYS=new NSMutableArray(new Object[] { "pageConfiguration", "entity", "task" });
@@ -141,11 +141,11 @@ public class ERD2WModel extends D2WModel {
      */
     protected ERD2WModel(NSArray rules) {
     	super(rules);
-    	NSNotificationCenter.defaultCenter().addObserver(this, 
-    			ERXSelectorUtilities.notificationSelector("applicationDidFinishLaunching"), 
+    	NSNotificationCenter.defaultCenter().addObserver(this,
+    			ERXSelectorUtilities.notificationSelector("applicationDidFinishLaunching"),
     			WOApplication.ApplicationDidFinishLaunchingNotification, null);
     }
-    
+
     protected ERD2WModel(File file) {
         super(file);
     }
@@ -160,15 +160,15 @@ public class ERD2WModel extends D2WModel {
         invalidateCaches();
         sortRules();
     }
-    
+
     public NSArray availableTasks() {
     	return new NSArray(taskVector().toArray());
     }
-    
+
     public NSArray availablePageConfigurations() {
     	return new NSArray(dynamicPages().toArray());
     }
-    
+
     protected void sortRules() {
         // This allows other non-d2wmodel file based rules to be loaded.
         // but we only post for the main model
@@ -191,26 +191,26 @@ public class ERD2WModel extends D2WModel {
         */
         if (rules() !=null && rules().count() > 0) prepareDataStructures();
     }
-    
+
     public void applicationWillDispatchRequest(NSNotification n) {
     	checkRules();
     }
 
     public void applicationDidFinishLaunching(NSNotification n) {
     	if(!WOApplication.application().isCachingEnabled()) {
-    		NSNotificationCenter.defaultCenter().addObserver(this, 
-    				ERXSelectorUtilities.notificationSelector("applicationWillDispatchRequest"), 
+    		NSNotificationCenter.defaultCenter().addObserver(this,
+    				ERXSelectorUtilities.notificationSelector("applicationWillDispatchRequest"),
     				WOApplication.ApplicationWillDispatchRequestNotification, null);
-        NSNotificationCenter.defaultCenter().addObserver(this, 
-            ERXSelectorUtilities.notificationSelector("clearD2WRuleCache"), 
+        NSNotificationCenter.defaultCenter().addObserver(this,
+            ERXSelectorUtilities.notificationSelector("clearD2WRuleCache"),
             "clearD2WRuleCache", null);
     	}
     }
-    
+
     public void clearD2WRuleCache(NSNotification n) {
       clearD2WRuleCache();
     }
-    
+
     public NSArray rules() {
         return super.rules();
     }
@@ -222,7 +222,7 @@ public class ERD2WModel extends D2WModel {
     public void removeRule(Rule rule) {
         super.removeRule(rule);
     }
-    
+
     protected String descriptionForRuleSet(NSArray set) {
         StringBuffer buffer = new StringBuffer();
         for (Enumeration e = set.objectEnumerator(); e.hasMoreElements();)
@@ -264,17 +264,17 @@ public class ERD2WModel extends D2WModel {
     protected Object fireRuleForKeyPathInContext(String keyPath, D2WContext context) {
         return fireRuleForKeyPathInContext(_cache, keyPath, context);
     }
-    
+
     protected boolean _shouldUseCacheForFiringRuleForKeyPathInContext(final String keyPath, final D2WContext context) {
         return true;
     }
-    
+
     private Object fireRuleForKeyPathInContext(Map cache, String keyPath, D2WContext context) {
         final boolean useCache = _shouldUseCacheForFiringRuleForKeyPathInContext(keyPath, context);
 
         if ( ! useCache && ruleTraceEnabledLog.isDebugEnabled() )
             ruleTraceEnabledLog.debug("CACHE DISABLED for keyPath: " + keyPath);
-        
+
         String[] significantKeys=(String[])_significantKeysPerKey.get(keyPath);
         if (significantKeys==null) return null;
         short s=(short)significantKeys.length;
@@ -282,10 +282,10 @@ public class ERD2WModel extends D2WModel {
         for (short i=0; i<s; i++) {
             //lhsKeys[i]=context.valueForKeyPathNoInference(significantKeys[i]);
             lhsKeys[i]=ERD2WUtilities.contextValueForKeyNoInferenceNoException(context, significantKeys[i]);
-        } 
+        }
         lhsKeys[s]=keyPath;
         ERXMultiKey k=new ERXMultiKey(lhsKeys);
-        
+
         Object result=useCache ? cache.get(k) : null;
         if (result==null) {
             boolean resetTraceRuleFiring = false;
@@ -357,7 +357,7 @@ public class ERD2WModel extends D2WModel {
             }
         }
     }
-    
+
     public NSArray canidateRuleSetForRHSInContext(String rhs, D2WContext context) {
         NSMutableSet canidateSet = new NSMutableSet();
         for (Enumeration e = rules().objectEnumerator(); e.hasMoreElements();) {
@@ -387,9 +387,9 @@ public class ERD2WModel extends D2WModel {
     }
 
     private static final NSSet _addKeyToVectorDefaultKeysToTakeLiterally = new NSSet(new Object[] { "object", "session" });
-    
+
     protected NSSet _addKeyToVectorKeysToTakeLiterally() {
-        return _addKeyToVectorDefaultKeysToTakeLiterally;        
+        return _addKeyToVectorDefaultKeysToTakeLiterally;
     }
 
     protected void _addKeyToVector(String key, Vector vector) {
@@ -426,7 +426,7 @@ public class ERD2WModel extends D2WModel {
         dependendKeysPerKey.put(D2WModel.PropertyTypeKey,v.clone());
         dependendKeysPerKey.put(D2WModel.PropertyKeyPortionInModelKey,v.clone());
 
-        // then enumerate through all the rules; h 
+        // then enumerate through all the rules; h
         for (Enumeration e=rules().objectEnumerator(); e.hasMoreElements();) {
             Rule r=(Rule)e.nextElement();
             String rhsKey=r.rhs().keyPath();
@@ -452,7 +452,7 @@ public class ERD2WModel extends D2WModel {
                     if (recipientForNewKeys ==null) {
                         recipientForNewKeys =new Vector();
                         delayedDependendKeysPerKey.put(rhsKey, recipientForNewKeys);
-                    }                    
+                    }
                 }
                 NSArray extraKeys=((ERDComputingAssignmentInterface)r.rhs()).dependentKeys(rhsKey);
                 if (extraKeys!=null) {
@@ -487,7 +487,7 @@ public class ERD2WModel extends D2WModel {
                     String k=(String)e4.nextElement();
                     if (!BACKSTOP_KEYS.containsObject(k)) {
                         Vector newKeys=(Vector)dependendKeysPerKey.get(k);
-                        Vector keyFromDelayedAssignment=(Vector)delayedDependendKeysPerKey.get(k);                        
+                        Vector keyFromDelayedAssignment=(Vector)delayedDependendKeysPerKey.get(k);
                         if (newKeys!=null || keyFromDelayedAssignment!=null) {
                             keys.removeElement(k);
                             touched=true;
@@ -502,7 +502,7 @@ public class ERD2WModel extends D2WModel {
                                     String s=(String)e5.nextElement();
                                     _addKeyToVector(s, keys);
                                 }
-                            }                            
+                            }
                         }
                     }
                 }
@@ -576,7 +576,7 @@ public class ERD2WModel extends D2WModel {
         }
         return model;
     }
-   
+
     protected void mergePathURL(URL modelURL) {
         if(modelURL != null) {
 
@@ -594,7 +594,8 @@ public class ERD2WModel extends D2WModel {
                         try {
                             addRule((Rule)archiver.decodeObjectForKey("rule"));
                         } catch (Exception ex) {
-                            ruleDecodeLog.error("Bad rule: " + aRule);
+                            ruleDecodeLog.error("Bad rule: " + aRule, ex);
+                            ruleDecodeLog.error("Decoded rule: " + archiver.decodeObjectForKey("rule"));
                         }
                     }
                 } else {
@@ -613,7 +614,7 @@ public class ERD2WModel extends D2WModel {
     protected void mergeFile(File modelFile) {
         mergePathURL(ERXFileUtilities.URLFromFile(modelFile));
     }
-    
+
     protected Hashtable _uniqueAssignments = new Hashtable();
     protected void uniqueRuleAssignments(NSArray rules) {
         if (rules != null && rules.count() > 0) {
@@ -717,9 +718,9 @@ public class ERD2WModel extends D2WModel {
     private boolean _hasAddedExtraModelFiles=false;
 
     /**
-     * Overridden to support additional d2wmodel files. 
-     * Provide an array of filenames (including extension) in the property 
-     * 'er.directtoweb.ERD2WModel.additionalModelNames', these files should get 
+     * Overridden to support additional d2wmodel files.
+     * Provide an array of filenames (including extension) in the property
+     * 'er.directtoweb.ERD2WModel.additionalModelNames', these files should get
      * loaded and added to the rules set during application startup.
      */
 	@Override
@@ -767,7 +768,7 @@ public class ERD2WModel extends D2WModel {
 		}
 		return result;
 	}
-    
+
     protected EOQualifier qualifierContainedInEnumeration(EOQualifierEvaluation q1, Enumeration e) {
         EOQualifier containedQualifier = null;
         while (e.hasMoreElements()) {
@@ -881,7 +882,7 @@ public class ERD2WModel extends D2WModel {
         }
         return cachedQualifier;
     }
-    
+
     protected Hashtable _uniqueNotQualifiers = new Hashtable();
     protected EONotQualifier notQualifierInCache(EONotQualifier q) {
         EONotQualifier cachedQualifier = null;
@@ -900,19 +901,19 @@ public class ERD2WModel extends D2WModel {
             if (cache != null) {
                 if (cache == q.qualifier()) {
                     log.warn("Found sub-qualifier in cache: " + cache + " when qualifier not in cache?!?! " + q);
-                    v.addElement(q);                    
+                    v.addElement(q);
                 } else {
                     // Need to construct a new EONotQualifier with the cached value..
                     cachedQualifier = new EONotQualifier(cache);
                     v.addElement(cachedQualifier);
                 }
             } else {
-                v.addElement(q);                
+                v.addElement(q);
             }
         }
         return cachedQualifier;
     }
-    
+
     protected Hashtable _uniqueKeyValueQualifiers = new Hashtable();
     protected EOKeyValueQualifier keyValueQualifierInCache(EOKeyValueQualifier q) {
         EOKeyValueQualifier cachedQualifier = null;
@@ -927,7 +928,7 @@ public class ERD2WModel extends D2WModel {
             _uniqueKeyValueQualifiers.put(q.key(), v);
         }
         if (cachedQualifier == null)
-            v.addElement(q);            
+            v.addElement(q);
         return cachedQualifier;
     }
 
@@ -937,8 +938,8 @@ public class ERD2WModel extends D2WModel {
         _uniqueOrQualifiers = new Hashtable();
         _uniqueNotQualifiers = new Hashtable();
     }
-    
-    // FIXME: Must be a better way of doing 
+
+    // FIXME: Must be a better way of doing
     public String nameForSet(NSSet set) {
         NSMutableArray stringObjects = new NSMutableArray();
         stringObjects.addObjectsFromArray(set.allObjects());
@@ -1067,14 +1068,14 @@ public class ERD2WModel extends D2WModel {
         }
         return null;
     }
-    
+
     public void _diagnoseCache() {
         final Map cache = _cache;
         final Set keySet = cache.keySet();
         final Iterator keySetIterator = keySet.iterator();
 
         System.out.println("Cache size is: " + cache.size());
-        
+
         while ( keySetIterator.hasNext() ) {
             final Object theKey = keySetIterator.next();
             final Object theValue = cache.get(theKey);
