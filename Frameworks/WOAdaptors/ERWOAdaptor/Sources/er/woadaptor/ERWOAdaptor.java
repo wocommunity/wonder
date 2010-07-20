@@ -13,7 +13,7 @@ import com.webobjects.foundation.NSDictionary;
 
 /**
  * @author anjo (Original) Apache Mina version
- * @author ravim ERWOAdaptor version
+ * @author ravim JBoss Netty version
  */
 public class ERWOAdaptor extends WOAdaptor {
 
@@ -45,7 +45,7 @@ public class ERWOAdaptor extends WOAdaptor {
 						Executors.newCachedThreadPool()));
 
 		// Set up the event pipeline factory.
-		bootstrap.setPipelineFactory(new WONettyAdaptorPipelineFactory());
+		bootstrap.setPipelineFactory(new ERWOAdaptorPipelineFactory());
 
 		// Bind and start to accept incoming connections.
 		bootstrap.bind(new InetSocketAddress(_port));
