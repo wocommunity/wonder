@@ -10,7 +10,6 @@
 	<classpathentry kind="con" path="WOFramework/JavaWebObjects"/>
 	<classpathentry kind="con" path="WOFramework/JavaXML"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="Libraries/tomcat-ajp-5.5.12.jar"/>
-	<classpathentry kind="lib" path="Libraries/mina-core-2.0.0-RC1.jar"/>
+	<classpathentry kind="lib" path="Libraries/netty-3.2.1.Final.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
