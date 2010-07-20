@@ -43,7 +43,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 *
 * @author ravim ERWOAdaptor version
 */
-public class WONettyAdaptorRequestHandler extends SimpleChannelUpstreamHandler {
+public class ERWOAdaptorRequestHandler extends SimpleChannelUpstreamHandler {
 
 	private HttpRequest request;
 	/** Buffer that stores the response content */
