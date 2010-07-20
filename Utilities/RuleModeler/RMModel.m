@@ -38,6 +38,11 @@
 
 static NSString *ruleModelType = @"Apple D2WModel File";
 
+@interface NSArray(RuleModelerDescription)
+- (NSString *)_rm_descriptionWithLocale:(id)locale indent:(NSUInteger)level;
+- (NSString *)_rm_description;
+@end
+
 @implementation RMModel
 
 - (id)init {
@@ -153,7 +158,7 @@ static NSArray * _sortDescriptors = nil;
         
         [rules sortUsingDescriptors:[RMModel sortDescriptors]];
         NSError *errorDesc = nil;
-        NSString *description = [rules description];
+        NSString *description = [rules _rm_description];
         NSURL *url = absoluteURL;
         url = (url == nil ? [self fileURL] : url);
         if(url != nil) {
@@ -332,6 +337,79 @@ static NSArray * _sortDescriptors = nil;
 
 - (void)setDisplayName:(NSString *)ignored {
     // This method is implemented just to avoid KVO warning due to model list tableView
+}
+
+@end
+
+@implementation NSArray(RuleModelerDescription)
+
+- (NSString *)_rm_descriptionWithLocale:(id)locale indent:(NSUInteger)level
+{
+    NSMutableArray *descriptionArray = [NSMutableArray arrayWithCapacity:[self count]];
+    for(id obj in self) {
+        NSString *description;
+        if([obj isKindOfClass:[NSString class]]) {
+            // HACK: This is WRONG.  Even before Snow Leopard the value would be quoted if needed.
+            // Fortunately this code path won't be reached unless we start replacing more of the
+            // plist generation (descriptionWithLocale:indent:) code.
+            // Unfortunately none of the methods to properly quote a string for a plist are
+            // public.  Bummer huh?
+            description = obj;
+        }
+        else if([obj isKindOfClass:[NSArray class]] || [obj isKindOfClass:[NSDictionary class]]) {
+            // This is basically right although this code path itself won't be reached.
+            if([obj respondsToSelector:@selector(_rm_descriptionWithLocale:indent:)])
+                description = [obj _rm_descriptionWithLocale:locale indent:level+1];
+            else
+                description = [obj descriptionWithLocale:locale indent:level+1];
+        }
+        else if([obj isKindOfClass:[NSData class]]) {
+            description = [obj description];
+        }
+        else {
+            // This is the critcial difference between our description and the Snow Leopard description.
+            // On SL the string is quoted if it contains anything which should be quoted.  I believe
+            // the change was made to guarantee the output could always be read back in as a plist
+            // but when you are describing non-primitive objects (such as in our case a Rule object)
+            // there is some argument to be made that the pre-Snow behavior of allowing the object
+            // to write its own format, without extra quoting, was a better API.
+            description = [obj description];
+        }
+        [descriptionArray addObject:description];
+    }
+    
+    NSMutableString *indentString = [NSMutableString stringWithCapacity:4 * level];
+    NSUInteger levelI;
+    for(levelI = 0 ; levelI < level; ++levelI)
+        [indentString appendString:@"    "];
+    
+    NSMutableString *result = [NSMutableString string];
+    [result appendString:indentString];
+    [result appendString:@"(\n"];
+    
+    NSUInteger i = 0;
+    NSUInteger count = [self count];
+    for(NSString *description in descriptionArray) {
+        [result appendString:indentString];
+        [result appendString:@"    "];
+        [result appendString:description];
+        
+        // If we are outputting something other than the last item we need a comma.
+        if(i < count - 1)
+            [result appendString:@",\n"];
+        else
+            [result appendString:@"\n"];
+
+        ++i;
+    }
+    [result appendString:indentString];
+    [result appendString:@")"];
+    return result;
+}
+
+- (NSString *)_rm_description
+{
+    return [self _rm_descriptionWithLocale:nil indent:0];
 }
 
 @end
