@@ -8,6 +8,8 @@ import org.jboss.netty.handler.codec.http.HttpContentCompressor;
 import org.jboss.netty.handler.codec.http.HttpRequestDecoder;
 import org.jboss.netty.handler.codec.http.HttpResponseEncoder;
 
+import com.webobjects.appserver.WONettyAdaptorRequestHandler;
+
 /**
   * @author <a href="http://www.jboss.org/netty/">The Netty Project</a>
   * @author Andy Taylor (andy.taylor@jboss.org)
@@ -33,7 +35,7 @@ public class ERWOAdaptorPipelineFactory implements ChannelPipelineFactory {
 		pipeline.addLast("encoder", new HttpResponseEncoder());
 		// Remove the following line if you don't want automatic content compression.
 		pipeline.addLast("deflater", new HttpContentCompressor());
-		pipeline.addLast("handler", new ERWOAdaptorRequestHandler());
+		pipeline.addLast("handler", new WONettyAdaptorRequestHandler());
 		return pipeline;
 	}
 }

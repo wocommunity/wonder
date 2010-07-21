@@ -1,4 +1,4 @@
-package er.woadaptor;
+package com.webobjects.appserver;
 
 import static org.jboss.netty.handler.codec.http.HttpHeaders.isKeepAlive;
 import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.CONTENT_LENGTH;
@@ -48,9 +48,9 @@ import com.webobjects.foundation.NSMutableDictionary;
 *
 * @author ravim ERWOAdaptor version
 */
-public class ERWOAdaptorRequestHandler extends SimpleChannelUpstreamHandler {
+public class WONettyAdaptorRequestHandler extends SimpleChannelUpstreamHandler {
 	
-	private static InternalLogger log = CommonsLoggerFactory.getDefaultFactory().newInstance(ERWOAdaptorRequestHandler.class.getName());
+	private static InternalLogger log = CommonsLoggerFactory.getDefaultFactory().newInstance(WONettyAdaptorRequestHandler.class.getName());
 
 
 	private HttpRequest request;
@@ -131,9 +131,12 @@ public class ERWOAdaptorRequestHandler extends SimpleChannelUpstreamHandler {
 
 		// Build the response object.
 		HttpResponse response = new DefaultHttpResponse(HTTP_1_1, OK);
-		int length = woresponse.content().length();
+		int length = woresponse._contentLength();
 		if (length > 0) {
-			response.setContent(ChannelBuffers.copiedBuffer(woresponse.content()._bytesNoCopy()));
+			if (woresponse._content != null) {
+				response.setContent(ChannelBuffers.copiedBuffer(woresponse._content.toString(), woresponse.contentEncoding()));
+			} else
+				response.setContent(ChannelBuffers.copiedBuffer(woresponse._contentData._bytesNoCopy()));
 		} else {
 			try {
 				ByteBuffer buffer = ByteBuffer.allocate(woresponse.contentInputStreamBufferSize());
