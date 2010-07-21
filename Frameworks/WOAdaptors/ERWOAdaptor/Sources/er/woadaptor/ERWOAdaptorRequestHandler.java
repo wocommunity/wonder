@@ -9,9 +9,12 @@ import static org.jboss.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SER
 import static org.jboss.netty.handler.codec.http.HttpResponseStatus.OK;
 import static org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.ChannelFutureListener;
@@ -45,6 +48,9 @@ import com.webobjects.foundation.NSMutableDictionary;
 * @author ravim ERWOAdaptor version
 */
 public class ERWOAdaptorRequestHandler extends SimpleChannelUpstreamHandler {
+	
+	private static Logger log = Logger.getLogger(ERWOAdaptorRequestHandler.class);
+
 
 	private HttpRequest request;
     private static WOResponse _lastDitchErrorResponse;
@@ -89,7 +95,7 @@ public class ERWOAdaptorRequestHandler extends SimpleChannelUpstreamHandler {
 		                NSDelayedCallbackCenter.defaultCenter().eventEnded();
 		            }
 		        } catch (Exception ex) {
-		            ex.printStackTrace();
+		            log.error("Couldn't dispatch Request", ex);
 		        }
 		        writeResponse(e);
 			}
@@ -124,13 +130,25 @@ public class ERWOAdaptorRequestHandler extends SimpleChannelUpstreamHandler {
 
 		// Build the response object.
 		HttpResponse response = new DefaultHttpResponse(HTTP_1_1, OK);
-		response.setContent(ChannelBuffers.copiedBuffer(woresponse.contentString(), woresponse.contentEncoding()));
+		int length = 0;
+		if (woresponse.content().length() > 0) {
+			response.setContent(ChannelBuffers.copiedBuffer(woresponse.content()._bytesNoCopy()));
+			length = woresponse.content().length();
+		} else {
+			try {
+				ByteBuffer buffer = ByteBuffer.allocate(woresponse.contentInputStreamBufferSize());
+				length = woresponse.contentInputStream().read(buffer.array());
+				response.setContent(ChannelBuffers.copiedBuffer(buffer));
+			} catch (IOException ex) {
+				log.error("Couldn't write content input stream to response", ex);
+			}
+		}
 		String contentType = woresponse.headerForKey(CONTENT_TYPE);
 		if (contentType != null) response.setHeader(CONTENT_TYPE, contentType);
 
 		if (keepAlive) {
 			// Add 'Content-Length' header only for a keep-alive connection.
-			response.setHeader(CONTENT_LENGTH, woresponse.content().bytes().length);
+			response.setHeader(CONTENT_LENGTH, length);
 		}
 
 		// Encode the cookie.
