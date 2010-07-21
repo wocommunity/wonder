@@ -4,6 +4,8 @@ import java.util.concurrent.Executors;
 
 import org.apache.log4j.Logger;
 import org.jboss.netty.bootstrap.ServerBootstrap;
+import org.jboss.netty.channel.ChannelFactory;
+import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 
 import com.webobjects.appserver.WOAdaptor;
@@ -22,6 +24,9 @@ public class ERWOAdaptor extends WOAdaptor {
     private int _port;
 
     private String _host;
+    
+    private ChannelFactory channelFactory;
+    private ServerBootstrap bootstrap;
 
 	public ERWOAdaptor(String name, NSDictionary config) {
         super(name, config);
@@ -39,10 +44,10 @@ public class ERWOAdaptor extends WOAdaptor {
 	@Override
 	public void registerForEvents() {
 		// Configure the server.
-		ServerBootstrap bootstrap = new ServerBootstrap(
-				new NioServerSocketChannelFactory(
-						Executors.newCachedThreadPool(),
-						Executors.newCachedThreadPool()));
+		channelFactory = new NioServerSocketChannelFactory(
+				Executors.newCachedThreadPool(),
+				Executors.newCachedThreadPool());
+		bootstrap = new ServerBootstrap(channelFactory);
 
 		// Set up the event pipeline factory.
 		bootstrap.setPipelineFactory(new ERWOAdaptorPipelineFactory());
@@ -53,7 +58,9 @@ public class ERWOAdaptor extends WOAdaptor {
 
 	@Override
 	public void unregisterForEvents() {
-		// TODO Auto-generated method stub
+		ChannelFuture future = bootstrap.getPipeline().getChannel().close();
+		future.awaitUninterruptibly();
+		channelFactory.releaseExternalResources();
 	}
 	
 	@Override
