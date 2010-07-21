@@ -55,4 +55,9 @@ public class ERWOAdaptor extends WOAdaptor {
 	public void unregisterForEvents() {
 		// TODO Auto-generated method stub
 	}
+	
+	@Override
+	public int port() {
+		return _port;
+	}
 }
