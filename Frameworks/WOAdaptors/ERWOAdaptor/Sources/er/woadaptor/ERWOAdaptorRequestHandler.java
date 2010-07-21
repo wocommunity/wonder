@@ -14,7 +14,8 @@ import java.nio.ByteBuffer;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.jboss.netty.logging.CommonsLoggerFactory;
+import org.jboss.netty.logging.InternalLogger;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.ChannelFutureListener;
@@ -49,7 +50,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 */
 public class ERWOAdaptorRequestHandler extends SimpleChannelUpstreamHandler {
 	
-	private static Logger log = Logger.getLogger(ERWOAdaptorRequestHandler.class);
+	private static InternalLogger log = CommonsLoggerFactory.getDefaultFactory().newInstance(ERWOAdaptorRequestHandler.class.getName());
 
 
 	private HttpRequest request;
