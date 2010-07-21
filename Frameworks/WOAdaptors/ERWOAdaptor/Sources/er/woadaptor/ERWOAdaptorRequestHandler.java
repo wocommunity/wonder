@@ -75,7 +75,7 @@ public class ERWOAdaptorRequestHandler extends SimpleChannelUpstreamHandler {
 			} else {
 		        NSMutableDictionary<String, NSArray<String>> headers = new NSMutableDictionary<String, NSArray<String>>();
 		        for (Map.Entry<String, String> header: request.getHeaders()) {
-		        	headers.setObjectForKey(NSArray.componentsSeparatedByString(header.getValue(), ","), header.getKey());
+		        	headers.setObjectForKey(new NSArray<String>(header.getValue().split(",")), header.getKey());
 		        }
 		        WORequest worequest = WOApplication.application().createRequest(
 		        		request.getMethod().getName(), 
