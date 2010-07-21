@@ -5,6 +5,7 @@ import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.CONTENT_LENGT
 import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.CONTENT_TYPE;
 import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.COOKIE;
 import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.SET_COOKIE;
+import static org.jboss.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERROR;
 import static org.jboss.netty.handler.codec.http.HttpResponseStatus.OK;
 import static org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
@@ -28,10 +29,10 @@ import org.jboss.netty.handler.codec.http.HttpResponse;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDelayedCallbackCenter;
 import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 /**
@@ -46,45 +47,75 @@ import com.webobjects.foundation.NSMutableDictionary;
 public class ERWOAdaptorRequestHandler extends SimpleChannelUpstreamHandler {
 
 	private HttpRequest request;
-	/** Buffer that stores the response content */
     private static WOResponse _lastDitchErrorResponse;
     private WOResponse woresponse = _lastDitchErrorResponse;
+    private boolean readingChunks;
 	
 	static {
         _lastDitchErrorResponse = new WOResponse();
-        _lastDitchErrorResponse.setStatus(500);
-        _lastDitchErrorResponse.setContent("An error occured");
+        _lastDitchErrorResponse.setStatus(INTERNAL_SERVER_ERROR.getCode());
+        _lastDitchErrorResponse.setContent(INTERNAL_SERVER_ERROR.getReasonPhrase());
         _lastDitchErrorResponse.setHeaders(NSDictionary.EmptyDictionary);
 	}
 
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
-        request = (HttpRequest) e.getMessage();
-        NSMutableDictionary<String, NSMutableArray<String>> headers = new NSMutableDictionary<String, NSMutableArray<String>>();
-        for (Map.Entry<String, String> header: request.getHeaders()) {
-        	headers.setObjectForKey(new NSMutableArray<String>(header.getValue()), header.getKey());
-        }
-        WORequest worequest = WOApplication.application().createRequest(
-        		request.getMethod().getName(), 
-        		request.getUri(), 
-        		request.getProtocolVersion().getText(), 
-        		headers,
-        		new NSData(request.getContent().array()), 
-        		null);
-        
-        try {
-            boolean process = request != null;
-            process &= !(!WOApplication.application().isDirectConnectEnabled() && !worequest.isUsingWebServer());
-            process &= !"womp".equals(worequest.requestHandlerKey());
 
-            if (process) {
-                woresponse = WOApplication.application().dispatchRequest(worequest);
-                NSDelayedCallbackCenter.defaultCenter().eventEnded();
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        writeResponse(e);
+		if (!readingChunks) {
+			HttpRequest request = this.request = (HttpRequest) e.getMessage();
+
+			if (request.isChunked()) {
+				readingChunks = true;
+			} else {
+		        NSMutableDictionary<String, NSArray<String>> headers = new NSMutableDictionary<String, NSArray<String>>();
+		        for (Map.Entry<String, String> header: request.getHeaders()) {
+		        	headers.setObjectForKey(NSArray.componentsSeparatedByString(header.getValue(), ","), header.getKey());
+		        }
+		        WORequest worequest = WOApplication.application().createRequest(
+		        		request.getMethod().getName(), 
+		        		request.getUri(), 
+		        		request.getProtocolVersion().getText(), 
+		        		headers,
+		        		new NSData(request.getContent().array()), 
+		        		null);
+		        
+		        try {
+		            boolean process = request != null;
+		            process &= !(!WOApplication.application().isDirectConnectEnabled() && !worequest.isUsingWebServer());
+		            process &= !"womp".equals(worequest.requestHandlerKey());
+
+		            if (process) {
+		                woresponse = WOApplication.application().dispatchRequest(worequest);
+		                NSDelayedCallbackCenter.defaultCenter().eventEnded();
+		            }
+		        } catch (Exception ex) {
+		            ex.printStackTrace();
+		        }
+		        writeResponse(e);
+			}
+		} else {
+			/* TODO multipart form iteration
+			HttpChunk chunk = (HttpChunk) e.getMessage();
+			if (chunk.isLast()) {
+				readingChunks = false;
+				//buf.append("END OF CONTENT\r\n");
+
+				HttpChunkTrailer trailer = (HttpChunkTrailer) chunk;
+				if (!trailer.getHeaderNames().isEmpty()) {
+					//buf.append("\r\n");
+					for (String name: trailer.getHeaderNames()) {
+						for (String value: trailer.getHeaders(name)) {
+							//buf.append("TRAILING HEADER: " + name + " = " + value + "\r\n");
+						}
+					}
+					//buf.append("\r\n");
+				}
+
+				writeResponse(e);
+			} else {
+				//buf.append("CHUNK: " + chunk.getContent().toString(CharsetUtil.UTF_8) + "\r\n");
+			} */
+		}
 	}
 
 	private void writeResponse(MessageEvent e) {
