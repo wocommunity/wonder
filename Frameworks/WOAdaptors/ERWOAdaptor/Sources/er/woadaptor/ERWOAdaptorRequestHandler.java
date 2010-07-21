@@ -176,9 +176,8 @@ public class ERWOAdaptorRequestHandler extends SimpleChannelUpstreamHandler {
 	}
 
 	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e)
-	throws Exception {
-		e.getCause().printStackTrace();
+	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
+		log.error("Exception caught", e.getCause());
 		e.getChannel().close();
 	}
 }
