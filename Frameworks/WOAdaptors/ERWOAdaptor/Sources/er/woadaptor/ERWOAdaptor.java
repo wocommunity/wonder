@@ -67,4 +67,9 @@ public class ERWOAdaptor extends WOAdaptor {
 	public int port() {
 		return _port;
 	}
+	
+	@Override
+	public boolean dispatchesRequestsConcurrently() {
+		return true;
+	}
 }
