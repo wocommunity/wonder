@@ -130,10 +130,9 @@ public class ERWOAdaptorRequestHandler extends SimpleChannelUpstreamHandler {
 
 		// Build the response object.
 		HttpResponse response = new DefaultHttpResponse(HTTP_1_1, OK);
-		int length = 0;
-		if (woresponse.content().length() > 0) {
+		int length = woresponse.content().length();
+		if (length > 0) {
 			response.setContent(ChannelBuffers.copiedBuffer(woresponse.content()._bytesNoCopy()));
-			length = woresponse.content().length();
 		} else {
 			try {
 				ByteBuffer buffer = ByteBuffer.allocate(woresponse.contentInputStreamBufferSize());
