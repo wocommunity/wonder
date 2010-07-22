@@ -4,7 +4,6 @@ Video: WOGenericContainer {
 	height = ^height;
 	width = ^width;
 	poster = ^poster.webPath;
-	tabindex = "0";
 }
 
 SourceRepetition: WORepetition {
@@ -12,7 +11,7 @@ SourceRepetition: WORepetition {
 	item = source;
 }
 
-Source: WOGenericContainer {
+Source: WOGenericElement {
 	elementName = "source";
 	src = source.webPath;
 	type = source.mimeType;
