@@ -505,7 +505,7 @@ public class ERXKeyFilter {
 		public void didTakeValueForKey(Object target, Object value, String key) throws SecurityException;
 		
 		/**
-		 * Called after skipping a key. You chould choose to enforce more strict security and
+		 * Called after skipping a key. You could choose to enforce more strict security and
 		 * throw an exception in this case (rather than a silent skip default behavior).
 		 * 
 		 * @param target the target object 
