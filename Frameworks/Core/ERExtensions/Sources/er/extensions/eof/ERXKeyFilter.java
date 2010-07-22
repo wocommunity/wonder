@@ -8,10 +8,10 @@ import com.webobjects.foundation.NSSet;
 /**
  * <p>
  * ERXKeyFilter provides a way to specify hierarchical rules for 
- * including and exluding ERXKeys. This is useful if you need
+ * including and excluding ERXKeys. This is useful if you need
  * to perform operations on a set of EO's and optional relationships
  * and attributes within those EO's. As an example, ERXRest uses
- * ERXKeyFilter to programmatically specify which attribtues and
+ * ERXKeyFilter to programmatically specify which attributes and
  * relationships will be rendered for a particular root EO.
  * </p>
  * 
@@ -468,7 +468,7 @@ public class ERXKeyFilter {
 			sb.append("; excludes=" + _excludes);
 		}
 		if (!_lockedRelationships.isEmpty()) {
-			sb.append("; excludesReplacement=" + _lockedRelationships);
+			sb.append("; excludesRelationships=" + _lockedRelationships);
 		}
 		sb.append("]");
 		return sb.toString();
