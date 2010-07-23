@@ -89,7 +89,7 @@ public class WONettyAdaptorRequestHandler extends SimpleChannelUpstreamHandler {
 		        try {
 		            boolean process = request != null;
 		            process &= !(!WOApplication.application().isDirectConnectEnabled() && !worequest.isUsingWebServer());
-		            process &= !"womp".equals(worequest.requestHandlerKey());
+		            //process &= !"womp".equals(worequest.requestHandlerKey()); CHECKME Any reason to not allow WOMonitor admin actions?
 
 		            if (process) {
 		                woresponse = WOApplication.application().dispatchRequest(worequest);
