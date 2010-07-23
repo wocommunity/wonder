@@ -87,11 +87,11 @@ public class WONettyAdaptorRequestHandler extends SimpleChannelUpstreamHandler {
 		        		null);
 		        
 		        try {
-		            boolean process = request != null;
-		            process &= !(!WOApplication.application().isDirectConnectEnabled() && !worequest.isUsingWebServer());
-		            //process &= !"womp".equals(worequest.requestHandlerKey()); CHECKME Any reason to not allow WOMonitor admin actions?
+		            //boolean process = worequest != null;
+		            //process &= !(!WOApplication.application().isDirectConnectEnabled() && !worequest.isUsingWebServer());
+		            //process &= !"womp".equals(worequest.requestHandlerKey()); RM CHECKME I have no idea why we wouldn't process a request?!
 
-		            if (process) {
+		            if (worequest != null) {
 		                woresponse = WOApplication.application().dispatchRequest(worequest);
 		                NSDelayedCallbackCenter.defaultCenter().eventEnded();
 		            }
