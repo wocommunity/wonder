@@ -133,7 +133,7 @@ public class WONettyAdaptorRequestHandler extends SimpleChannelUpstreamHandler {
 		HttpResponse response = new DefaultHttpResponse(HTTP_1_1, OK);
 		int length = woresponse._contentLength();
 		if (length > 0) {
-			if (woresponse._content != null) {
+			if (!"".equals(woresponse._content.toString())) {
 				response.setContent(ChannelBuffers.copiedBuffer(woresponse._content.toString(), woresponse.contentEncoding()));
 			} else
 				response.setContent(ChannelBuffers.copiedBuffer(woresponse._contentData._bytesNoCopy()));
