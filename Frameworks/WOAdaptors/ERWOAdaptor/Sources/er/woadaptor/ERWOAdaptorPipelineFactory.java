@@ -15,11 +15,18 @@ import com.webobjects.appserver.WONettyAdaptorRequestHandler;
   * @author Andy Taylor (andy.taylor@jboss.org)
   * @author <a href="http://gleamynode.net/">Trustin Lee</a>
   * 
-  * {@link} http://docs.jboss.org/netty/3.2/xref/org/jboss/netty/example/http/snoop/HttpServerPipelineFactory.html
+  * @see <a href="http://docs.jboss.org/netty/3.2/xref/org/jboss/netty/example/http/snoop/HttpServerPipelineFactory.html">HttpServerPipelineFactory</a>
   * 
   * @author ravim ERWOAdaptor version
+  * 
+  * @property WOMaxIOBufferSize 	Max http chunking size. Defaults to WO default 8196 
+  * 								@see <a href="http://docs.jboss.org/netty/3.2/xref/org/jboss/netty/handler/codec/http/HttpMessageDecoder.html">HttpMessageDecoder</a>
+  * 								{@link org.jboss.netty.handler.codec.http.HttpRequestDecoder}
   */
 public class ERWOAdaptorPipelineFactory implements ChannelPipelineFactory {
+	
+	public static final Integer maxChunkSize = Integer.getInteger("WOMaxIOBufferSize", 8196);		// TODO ravi: CHECKME Netty default is 8192; WO default is 8196(!?)
+	
 	public ChannelPipeline getPipeline() throws Exception {
 		// Create a default pipeline implementation.
 		ChannelPipeline pipeline = pipeline();
@@ -29,7 +36,7 @@ public class ERWOAdaptorPipelineFactory implements ChannelPipelineFactory {
 		//engine.setUseClientMode(false);
 		//pipeline.addLast("ssl", new SslHandler(engine));
 
-		pipeline.addLast("decoder", new HttpRequestDecoder());
+		pipeline.addLast("decoder", new HttpRequestDecoder(4096, 8192, maxChunkSize));
 		// Uncomment the following line if you don't want to handle HttpChunks.
 		//pipeline.addLast("aggregator", new HttpChunkAggregator(1048576));
 		pipeline.addLast("encoder", new HttpResponseEncoder());
