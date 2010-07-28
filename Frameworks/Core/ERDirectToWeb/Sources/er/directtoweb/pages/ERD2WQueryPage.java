@@ -422,21 +422,32 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
     /**
      * Set a search value for the display group query match. When the value is null is gets removed from the 
      * dict, when the operator is null and the value isn't, "=" is chosen.
+     * When operator is "&lt;" is uses <code>queryMatch()</code>, if it is "&gt;" is uses <code>queryMin()</code>,
+     * so you can use it with the various date range components.
      * @param value to assign to the queryMatch dictionary for the given key
      * @param operator used for comparing the value
      * @param key to use
      */
     public void setQueryMatchForKey(Object value, String operator, String key) {
+        NSMutableDictionary queryDict = displayGroup().queryMatch();
+        NSMutableDictionary operatorDict = displayGroup().queryOperator();
+        if(">".equals(operator)) {
+            queryDict = displayGroup().queryMin();
+            operatorDict = new NSMutableDictionary();
+        } else if ("<".equals(operator)) {
+            queryDict = displayGroup().queryMax();
+            operatorDict = new NSMutableDictionary();
+        }
         if(value != null) {
-            displayGroup().queryMatch().setObjectForKey(value, key);
+            queryDict.setObjectForKey(value, key);
             if(operator != null) {
-                displayGroup().queryOperator().setObjectForKey(operator, key);
+                operatorDict.setObjectForKey(operator, key);
             } else {
-                displayGroup().queryOperator().removeObjectForKey(key);
+                operatorDict.removeObjectForKey(key);
             }
         } else {
-            displayGroup().queryMatch().removeObjectForKey(key);
-            displayGroup().queryOperator().removeObjectForKey(key);
+            queryDict.removeObjectForKey(key);
+            operatorDict.removeObjectForKey(key);
         }
     }
 
