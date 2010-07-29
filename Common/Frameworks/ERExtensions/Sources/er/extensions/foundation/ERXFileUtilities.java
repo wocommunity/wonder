@@ -896,7 +896,7 @@ public class ERXFileUtilities {
                                      array.add(source.getPath());
                                      array.add(destination.getPath());
 
-                                     String[] cmd = array.toString(new String[array.size()]);
+                                     String[] cmd = array.toArray(new String[array.size()]);
 
                                      Process task = null;
                                      try {
