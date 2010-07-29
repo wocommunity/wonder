@@ -6,6 +6,7 @@ import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
+import er.extensions.batching.ERXBatchingDisplayGroup;
 import er.extensions.batching.IBatchingList;
 
 /**
@@ -45,7 +46,7 @@ public class ERXListDisplayGroup<T> extends WODisplayGroup {
 			((IBatchingList) objectList).setPageIndex(currentBatchIndex());
 			((IBatchingList) objectList).setPageSize(numberOfObjectsPerBatch());
 		}
-		FakeArray fa = new FakeArray(size());
+		ERXBatchingDisplayGroup.FakeArray fa = new ERXBatchingDisplayGroup.FakeArray(size());
 		setObjectArray(fa);
 	}
 
@@ -105,26 +106,5 @@ public class ERXListDisplayGroup<T> extends WODisplayGroup {
 			((IBatchingList) _objectList).setSortOrderings(sortOrderings());
 		}
 		super.setSortOrderings(sortOrderings);
-	}
-
-	protected class FakeArray extends NSMutableArray<Object> {
-		private int _count;
-
-		public FakeArray(int count) {
-			super(count);
-			_count = count;
-			Object obj = new Object();
-			for (int i = 0; i < count; i++) {
-				addObject(obj);
-			}
-		}
-
-		public int count() {
-			return _count;
-		}
-
-		public int size() {
-			return _count;
-		}
 	}
 }
