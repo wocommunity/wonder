@@ -491,7 +491,7 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	 * just fake that we an array with the number of objects the display group
 	 * should display.
 	 */
-	protected class FakeArray extends NSMutableArray<Object> {
+	public static class FakeArray extends NSMutableArray<Object> {
 		public FakeArray(int count) {
 			super(count);
 			Object fakeObject = new NSKeyValueCoding.ErrorHandling() {
