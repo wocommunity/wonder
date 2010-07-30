@@ -10,6 +10,7 @@ import static org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.Set;
 
@@ -118,7 +119,8 @@ public class WONettyAdaptorRequestHandler extends SimpleChannelUpstreamHandler {
 		int length = woresponse._contentLength();
 		if (length > 0) {
 			if (!"".equals(woresponse._content.toString())) {
-				response.setContent(ChannelBuffers.copiedBuffer(woresponse._content.toString(), woresponse.contentEncoding()));
+				Charset charset = Charset.forName(woresponse.contentEncoding());
+				response.setContent(ChannelBuffers.copiedBuffer(woresponse._content.toString(), charset));
 			} else
 				response.setContent(ChannelBuffers.copiedBuffer(woresponse._contentData._bytesNoCopy()));
 		} else if (woresponse.contentInputStream() != null) {
