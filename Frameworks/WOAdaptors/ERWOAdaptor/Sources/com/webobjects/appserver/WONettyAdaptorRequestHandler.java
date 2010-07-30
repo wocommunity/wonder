@@ -42,6 +42,11 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @author <a href="http://gleamynode.net/">Trustin Lee</a>
  *
  * @version $Rev: 2288 $, $Date: 2010-05-27 21:40:50 +0900 (Thu, 27 May 2010) $
+ * 
+ * @see <a href="http://docs.jboss.org/netty/3.2/xref/org/jboss/netty/example/http/snoop/HttpRequestHandler.html">HttpRequestHandler</a>
+ * 
+ * @author anjo (Original) Mina version
+ * @author ravim JBoss Netty version
  */
 public class WONettyAdaptorRequestHandler extends SimpleChannelUpstreamHandler {
 	
