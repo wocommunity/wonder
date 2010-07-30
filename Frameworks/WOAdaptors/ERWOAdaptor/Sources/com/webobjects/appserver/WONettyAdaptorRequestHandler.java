@@ -45,8 +45,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * 
  * @see <a href="http://docs.jboss.org/netty/3.2/xref/org/jboss/netty/example/http/snoop/HttpRequestHandler.html">HttpRequestHandler</a>
  * 
- * @author anjo (Original) Mina version
- * @author ravim JBoss Netty version
+ * @author ravim ERWOAdaptor version
  */
 public class WONettyAdaptorRequestHandler extends SimpleChannelUpstreamHandler {
 	
@@ -70,7 +69,7 @@ public class WONettyAdaptorRequestHandler extends SimpleChannelUpstreamHandler {
 				ChannelBuffer content = request.getContent();
 				NSData contentData = NSData.EmptyData;
 				if (content.readable()) {
-					contentData = new NSData(ChannelBuffers.copiedBuffer(content).array());
+					contentData = new NSData(ChannelBuffers.copiedBuffer(content).array());		// TODO ravim checkme Do we really need to copy the request content buffer? 
 				}
 		        WORequest worequest = WOApplication.application().createRequest(
 		        		request.getMethod().getName(), 
