@@ -133,7 +133,7 @@ public class WONettyAdaptorRequestHandler extends SimpleChannelUpstreamHandler {
 			response.setContent(ChannelBuffers.copiedBuffer(buffer));
 		}
 		String contentType = woresponse.headerForKey(CONTENT_TYPE);
-		response.setHeader(CONTENT_TYPE, contentType);
+		if (contentType != null) response.setHeader(CONTENT_TYPE, contentType);
 
 		if (keepAlive) {
 			// Add 'Content-Length' header only for a keep-alive connection.
