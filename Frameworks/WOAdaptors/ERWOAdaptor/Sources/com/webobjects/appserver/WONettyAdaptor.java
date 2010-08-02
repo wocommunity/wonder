@@ -184,7 +184,7 @@ public class WONettyAdaptor extends WOAdaptor {
 		private boolean readingChunks;
 
 		@Override
-		public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws IOException {
+		public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
 			if (!readingChunks) {
 				HttpRequest request = this.request = (HttpRequest) e.getMessage();
 		        NSMutableDictionary<String, NSArray<String>> headers = new NSMutableDictionary<String, NSArray<String>>();
@@ -208,12 +208,10 @@ public class WONettyAdaptor extends WOAdaptor {
 			        		contentData, 
 			        		null);
 			        
-		            if (worequest != null) {
-		                WOResponse woresponse = WOApplication.application().dispatchRequest(worequest);
-		                NSDelayedCallbackCenter.defaultCenter().eventEnded();
-		                
-						writeResponse(woresponse, e);
-		            }
+			        WOResponse woresponse = WOApplication.application().dispatchRequest(worequest);
+			        NSDelayedCallbackCenter.defaultCenter().eventEnded();
+
+			        writeResponse(woresponse, e);
 				}
 			} 
 			// TODO form data
