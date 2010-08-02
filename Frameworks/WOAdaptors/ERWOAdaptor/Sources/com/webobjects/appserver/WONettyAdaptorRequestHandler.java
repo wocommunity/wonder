@@ -63,7 +63,7 @@ public class WONettyAdaptorRequestHandler extends SimpleChannelUpstreamHandler {
     private static HttpResponse _internalServerErrorResponse;
 	static {
         _internalServerErrorResponse = new DefaultHttpResponse(HTTP_1_1, INTERNAL_SERVER_ERROR);
-        _internalServerErrorResponse.setContent(ChannelBuffers.copiedBuffer("Failure: " + INTERNAL_SERVER_ERROR.getReasonPhrase() + "\r\n", CharsetUtil.UTF_8));
+        _internalServerErrorResponse.setContent(ChannelBuffers.copiedBuffer(INTERNAL_SERVER_ERROR.getReasonPhrase(), CharsetUtil.UTF_8));
         _internalServerErrorResponse.setHeader(CONTENT_TYPE, "text/plain; charset=UTF-8");
         
         _badRequestResponse = new DefaultHttpResponse(HTTP_1_1, BAD_REQUEST);
