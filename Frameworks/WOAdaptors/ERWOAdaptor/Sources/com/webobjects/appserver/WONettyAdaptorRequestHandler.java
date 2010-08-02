@@ -7,6 +7,7 @@ import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.COOKIE;
 import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.SET_COOKIE;
 import static org.jboss.netty.handler.codec.http.HttpResponseStatus.OK;
 import static org.jboss.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERROR;
+import static org.jboss.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
 import java.io.IOException;
@@ -23,6 +24,7 @@ import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
+import org.jboss.netty.handler.codec.frame.TooLongFrameException;
 import org.jboss.netty.handler.codec.http.Cookie;
 import org.jboss.netty.handler.codec.http.CookieDecoder;
 import org.jboss.netty.handler.codec.http.CookieEncoder;
@@ -56,13 +58,19 @@ public class WONettyAdaptorRequestHandler extends SimpleChannelUpstreamHandler {
 	private HttpRequest request;
 	private boolean readingChunks;
 	
-	// error response
-    private static WOResponse _lastDitchErrorResponse;
+	// error responses
+	private static WOResponse _badRequestResponse;
+    private static WOResponse _internalServerErrorResponse;
 	static {
-        _lastDitchErrorResponse = new WOResponse();
-        _lastDitchErrorResponse.setStatus(INTERNAL_SERVER_ERROR.getCode());
-        _lastDitchErrorResponse.setContent(INTERNAL_SERVER_ERROR.getReasonPhrase());
-        _lastDitchErrorResponse.setHeaders(NSDictionary.EmptyDictionary);
+        _internalServerErrorResponse = new WOResponse();
+        _internalServerErrorResponse.setStatus(INTERNAL_SERVER_ERROR.getCode());
+        _internalServerErrorResponse.setContent(INTERNAL_SERVER_ERROR.getReasonPhrase());
+        _internalServerErrorResponse.setHeaders(NSDictionary.EmptyDictionary);
+        
+        _badRequestResponse =  new WOResponse();
+        _internalServerErrorResponse.setStatus(BAD_REQUEST.getCode());
+        _internalServerErrorResponse.setContent(BAD_REQUEST.getReasonPhrase());
+        _internalServerErrorResponse.setHeaders(NSDictionary.EmptyDictionary);
 	}
 
 	@Override
@@ -89,7 +97,7 @@ public class WONettyAdaptorRequestHandler extends SimpleChannelUpstreamHandler {
 		        		headers,
 		        		contentData, 
 		        		null);
-		        WOResponse woresponse = _lastDitchErrorResponse;
+		        WOResponse woresponse = _internalServerErrorResponse;
 		        
 	            if (worequest != null) {
 	                woresponse = WOApplication.application().dispatchRequest(worequest);
@@ -178,7 +186,15 @@ public class WONettyAdaptorRequestHandler extends SimpleChannelUpstreamHandler {
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
+        Throwable cause = e.getCause();
+        if (cause instanceof TooLongFrameException) {
+            ctx.getChannel().write(_badRequestResponse).addListener(ChannelFutureListener.CLOSE);
+            return;
+        }
+
 		log.error("Exception caught", e.getCause());
-		e.getChannel().close();
+        if (ctx.getChannel().isConnected()) {
+            ctx.getChannel().write(_internalServerErrorResponse).addListener(ChannelFutureListener.CLOSE);
+        }
 	}
 }
