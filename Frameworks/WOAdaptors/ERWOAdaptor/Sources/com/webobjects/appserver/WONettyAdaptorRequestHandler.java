@@ -5,9 +5,9 @@ import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.CONTENT_LENGT
 import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.CONTENT_TYPE;
 import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.COOKIE;
 import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.SET_COOKIE;
-import static org.jboss.netty.handler.codec.http.HttpResponseStatus.OK;
-import static org.jboss.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERROR;
 import static org.jboss.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
+import static org.jboss.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERROR;
+import static org.jboss.netty.handler.codec.http.HttpResponseStatus.OK;
 import static org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
 import java.io.IOException;
@@ -33,11 +33,11 @@ import org.jboss.netty.handler.codec.http.HttpRequest;
 import org.jboss.netty.handler.codec.http.HttpResponse;
 import org.jboss.netty.logging.CommonsLoggerFactory;
 import org.jboss.netty.logging.InternalLogger;
+import org.jboss.netty.util.CharsetUtil;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDelayedCallbackCenter;
-import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
 /**
@@ -59,18 +59,16 @@ public class WONettyAdaptorRequestHandler extends SimpleChannelUpstreamHandler {
 	private boolean readingChunks;
 	
 	// error responses
-	private static WOResponse _badRequestResponse;
-    private static WOResponse _internalServerErrorResponse;
+	private static HttpResponse _badRequestResponse;
+    private static HttpResponse _internalServerErrorResponse;
 	static {
-        _internalServerErrorResponse = new WOResponse();
-        _internalServerErrorResponse.setStatus(INTERNAL_SERVER_ERROR.getCode());
-        _internalServerErrorResponse.setContent(INTERNAL_SERVER_ERROR.getReasonPhrase());
-        _internalServerErrorResponse.setHeaders(NSDictionary.EmptyDictionary);
+        _internalServerErrorResponse = new DefaultHttpResponse(HTTP_1_1, INTERNAL_SERVER_ERROR);
+        _internalServerErrorResponse.setContent(ChannelBuffers.copiedBuffer("Failure: " + INTERNAL_SERVER_ERROR.getReasonPhrase() + "\r\n", CharsetUtil.UTF_8));
+        _internalServerErrorResponse.setHeader(CONTENT_TYPE, "text/plain; charset=UTF-8");
         
-        _badRequestResponse =  new WOResponse();
-        _internalServerErrorResponse.setStatus(BAD_REQUEST.getCode());
-        _internalServerErrorResponse.setContent(BAD_REQUEST.getReasonPhrase());
-        _internalServerErrorResponse.setHeaders(NSDictionary.EmptyDictionary);
+        _badRequestResponse = new DefaultHttpResponse(HTTP_1_1, BAD_REQUEST);
+        _badRequestResponse.setContent(ChannelBuffers.copiedBuffer("Failure: " + BAD_REQUEST.toString() + "\r\n", CharsetUtil.UTF_8));
+        _badRequestResponse.setHeader(CONTENT_TYPE, "text/plain; charset=UTF-8");
 	}
 
 	@Override
@@ -97,14 +95,13 @@ public class WONettyAdaptorRequestHandler extends SimpleChannelUpstreamHandler {
 		        		headers,
 		        		contentData, 
 		        		null);
-		        WOResponse woresponse = _internalServerErrorResponse;
 		        
 	            if (worequest != null) {
-	                woresponse = WOApplication.application().dispatchRequest(worequest);
+	                WOResponse woresponse = WOApplication.application().dispatchRequest(worequest);
 	                NSDelayedCallbackCenter.defaultCenter().eventEnded();
+	                
+					writeResponse(woresponse, e);
 	            }
-                
-				writeResponse(woresponse, e);
 			}
 		} 
 		// TODO form data
