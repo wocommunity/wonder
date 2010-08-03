@@ -165,7 +165,7 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	@SuppressWarnings("unchecked")
 	public void setSelectedObjects(NSArray nsarray) {
 		if(log.isDebugEnabled()) {
-			log.debug("setSelectedObjects@" + hashCode()  + ":" + nsarray.count());
+			log.debug("setSelectedObjects@" + hashCode()  + ":" + (nsarray != null ? nsarray.count() : "0"));
 		}
 		super.setSelectedObjects(nsarray);
 	}
@@ -177,7 +177,8 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	@SuppressWarnings("unchecked")
 	public boolean setSelectionIndexes(NSArray nsarray) {
 		if(log.isDebugEnabled()) {
-			log.debug("setSelectionIndexes@" + hashCode()  + ":" + nsarray.count(), new RuntimeException("Dummy for Stacktrace"));
+			log.debug("setSelectionIndexes@" + hashCode()  + ":" + (nsarray != null ? nsarray.count() : "0"),
+					new RuntimeException("Dummy for Stacktrace"));
 		}
 		return super.setSelectionIndexes(nsarray);
 	}
