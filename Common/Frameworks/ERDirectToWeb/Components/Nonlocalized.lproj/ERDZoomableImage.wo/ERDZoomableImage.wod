@@ -1,0 +1,17 @@
+Thumbnail : WOImage {
+    src = thumnailSrc;
+    height = ^height;
+    width = ^width;
+    title = ^title;
+}
+
+ZoomImageLink : WOHyperlink {
+    href = "javascript:void(0)";
+    onClick = jsToZoomImage;
+}
+
+
+Once : ERXOncePerRequestConditional {
+    keyName = "ERDZoomableImage";
+}
+
