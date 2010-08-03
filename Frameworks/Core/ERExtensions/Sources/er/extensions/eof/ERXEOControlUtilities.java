@@ -1102,7 +1102,7 @@ public class ERXEOControlUtilities {
      */
     public static String primaryKeyStringForGlobalID(EOKeyGlobalID gid) {
     	if(gid.keyValuesArray().count() > 1) {
-    		_stringForPrimaryKey(gid.keyValuesArray());
+    		return _stringForPrimaryKey(gid.keyValuesArray());
     	}
         return _stringForPrimaryKey(gid.keyValuesArray().lastObject());
     }
