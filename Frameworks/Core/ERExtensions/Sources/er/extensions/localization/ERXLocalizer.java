@@ -927,7 +927,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 
 	protected String plurify(String str, int howMany) {
 		String plurifiedString;
-		if (howMany == 1) {
+		if (howMany == 1 || howMany == -1) {
 			plurifiedString = str;
 		}
 		else {
