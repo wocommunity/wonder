@@ -590,7 +590,7 @@ static NSRange EnumerateRangesOfIndexSet(NSIndexSet *self, NSRangePointer indexR
 			NSArray *rules = [rulesController arrangedObjects];
 			Rule *rule;
 			
-			unsigned int idx = [rowIdx firstIndex];
+			NSUInteger idx = [rowIdx firstIndex];
 			
 			while (idx != NSNotFound) {
 				rule = [rules objectAtIndex:idx];
@@ -670,7 +670,7 @@ static NSRange EnumerateRangesOfIndexSet(NSIndexSet *self, NSRangePointer indexR
     NSArray *rules = [rulesController arrangedObjects];
 	Rule *rule;
 	
-	unsigned int idx = [rowIdx firstIndex];
+	NSUInteger idx = [rowIdx firstIndex];
 	
 	while (idx != NSNotFound) {
 	    rule = [rules objectAtIndex:idx];
@@ -784,7 +784,7 @@ static NSRange EnumerateRangesOfIndexSet(NSIndexSet *self, NSRangePointer indexR
 - (NSIndexSet *)duplicateRulesIndexes {
     NSMutableIndexSet   *duplicateRuleIndexes = [[NSMutableIndexSet alloc] init];
     NSArray             *allRules = [self rules];
-    unsigned int        i, j, count = [allRules count];
+    NSUInteger        i, j, count = [allRules count];
     
     for (i = 0; i < count; i++) {
         if (![duplicateRuleIndexes containsIndex:i]) {
