@@ -34,7 +34,7 @@ public abstract class jQueryGet extends WOComponent {
     	public static final String directActionName = "directActionName";
     	public static final String name = "name";
     	public static final String callback = "callback";
-    	public static final String data = "onComplete";
+    	public static final String data = "data";
     	public static final String dataType = "dataType";
     }
 
