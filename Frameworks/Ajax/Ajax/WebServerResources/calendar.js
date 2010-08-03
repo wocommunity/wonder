@@ -154,6 +154,8 @@ function pad_left(value, pad_char, width) {
 function date_to_string(date, format) {
   if (!format) format = '%d %b %Y';  // Set default format.
   var result = format;
+  
+  
   result = result.replace('%e',date.getDate());
   result = result.replace('%d',pad_left(date.getDate(),'0',2));
   result = result.replace('%m',pad_left(date.getMonth()+1,'0',2));
@@ -161,8 +163,10 @@ function date_to_string(date, format) {
   result = result.replace('%b',calendar.month_names[date.getMonth()].substr(0,3));
   result = result.replace('%Y',date.getFullYear());
   result = result.replace('%y',(date.getFullYear()+'').substr(2));
+  result = result.replace('%A',calendar.day_names[date.getDay()]);
   return result;
 }
+
 
 // CH this method is a total rewrite for Wonder
 /*
@@ -172,6 +176,7 @@ function date_to_string(date, format) {
 function string_to_date(s) {
   var dateOrder = calendar.format;
   if (!dateOrder) dateOrder = '%d %b %Y';  // Set default format.
+  dateOrder = dateOrder.replace(/%A/,'');
   dateOrder = dateOrder.replace(/%[ed]/,'d');
   dateOrder = dateOrder.replace(/%[mbB]/,'M');
   dateOrder = dateOrder.replace(/%[yY]/,'yyyy');
@@ -301,6 +306,12 @@ function calendar_show() {
 
 function calendar_hide() {
   calendar.element.style.display = 'none';
+  
+  // Hide the ieShim iframe if defined
+  if ($('ieShim'))
+  {
+    $('ieShim').style.display = 'none';  
+  }
 }
 
 // Refresh the calendar table dates to month of calendar.month_date and
@@ -410,6 +421,18 @@ function calendar_open(input_element, options) {
   images[3].src = images_dir + '/' + NEXT_YEAR_IMAGE;
   add_event('click', calendar_hide_check);
   input_element.onkeydown = input_keypress;  // CH use onkeydown instead of onkeypress to trap Tab key too
+  
+  // If a ieShim has been written to the page, determine the dimensions before display
+  if ($('ieShim'))
+  {
+    var calDim = $('calendar_control').getDimensions();
+    $('ieShim').style.left = left(input_element) + 'px';
+    $('ieShim').style.top = (top(input_element) + input_element.offsetHeight) + 'px';
+    $('ieShim').style.height = (calDim.height) + 'px';
+    $('ieShim').style.width = (calDim.width) + 'px';
+    $('ieShim').style.display = 'block';
+  }
+  
   // Position calendar by input element.
   calendar.element.style.left = left(input_element) + 'px';
   calendar.element.style.top = (top(input_element) + input_element.offsetHeight) + 'px';
@@ -437,10 +460,16 @@ function build_calendar(input_element) {
 	if (get_element('calendar_control') == null) {  // CH only do this once per page or FireFox gets confused
 		var firstRow;
 		var tbody;
+		
+		// create shim to stop select boxes breaking into calendar display in IE6
+		var ieShimControl = new Element("iframe", {id: "ieShim", style: "position:absolute; top:0; left:0; z-index:1; width:0px; height:0px; filter:mask();"});
+				
 		//create a table tag containing a tbody for IE
 		var calendarControl = new Element("table",
 				{id: "calendar_control", style: "position: absolute; display:none; z-index: 10001;"}
 			).update(tbody = new Element("tbody", {}));
+			
+	
 		firstRow = new Element("tr", {});
 		firstRow.appendChild(new Element("td", {id: "calendar_prev_year", title: "Previous year"}));
 		firstRow.appendChild(new Element("td", {id: "calendar_prev_month", title: "Previous month"}));
@@ -464,8 +493,16 @@ function build_calendar(input_element) {
 	  	  }
 	  	}
 	  	
+	  	// Stick in a shim behind the calendar for IE6
+	  	if (!(window.XMLHttpRequest))
+	  	{  
+	  	  $(document.body).insert({'top': ieShimControl});
+	  	}
+	  	
    		$(document.body).insert({'top': calendarControl});
 		calendar.element = get_element('calendar_control');
+		
+		
 	}
 }
 
