@@ -3,23 +3,21 @@
         {
             columnName = "MOVIE_ID"; 
             externalType = integer; 
-            name = movieID;  
-            valueClassName = NSNumber; 
-            valueType = i; 
+            name = movieID; 
+            prototypeName = id; 
         }, 
         {
             columnName = "RENTAL_TERMS_ID"; 
             externalType = integer; 
             name = rentalTermsID; 
-            valueClassName = NSNumber; 
-            valueType = i; 
+            prototypeName = id; 
         }, 
         {
+            allowsNull = N; 
             columnName = "VIDEO_ID"; 
             externalType = integer; 
-            name = videoID;  
-            valueClassName = NSNumber; 
-            valueType = i; 
+            name = videoID; 
+            prototypeName = id; 
         }
     ); 
     attributesUsedForLocking = (videoID, rentalTermsID, movieID); 

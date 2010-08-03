@@ -4,45 +4,41 @@
             columnName = "AUTHORIZATION_DATE"; 
             externalType = timestamp; 
             name = authorizationDate; 
-            valueClassName = NSCalendarDate;
-            valueType = T;
+            prototypeName = dateTime; 
+            valueType = T; 
         }, 
         {
             columnName = "AUTHORIZATION_NUM"; 
             externalType = char; 
             name = authorizationNum; 
-            valueClassName = NSString;
-            valueType = c;
-            width = 10; 
+            prototypeName = varchar10; 
         }, 
         {
             columnName = "CARD_NUMBER"; 
             externalType = char; 
             name = cardNumber; 
-            valueClassName = NSString; 
+            prototypeName = varchar16; 
             width = 25; 
         }, 
         {
+            allowsNull = N; 
             columnName = "CUSTOMER_ID"; 
             externalType = integer; 
             name = customerID; 
-            valueClassName = NSNumber; 
-            valueType = i; 
+            prototypeName = id; 
         }, 
         {
             columnName = "EXPIRATION_DATE"; 
             externalType = timestamp; 
             name = expirationDate; 
-            valueClassName = NSCalendarDate; 
+            prototypeName = dateTime; 
         }, 
         {
             columnName = CLIMIT; 
             externalType = decimal; 
             name = limit; 
             precision = 10; 
-            scale = 2; 
-            valueClassName = NSDecimalNumber; 
-            valueType = B; 
+            prototypeName = amount; 
         }
     ); 
     attributesUsedForLocking = (

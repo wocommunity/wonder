@@ -1,4 +1,4 @@
-// $LastChangedRevision: 5810 $ DO NOT EDIT.  Make changes to Voting.java instead.
+// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to Voting.java instead.
 package webobjectsexamples.businesslogic.movies.common;
 
 import com.webobjects.eoaccess.*;
@@ -8,16 +8,22 @@ import java.math.*;
 import java.util.*;
 import org.apache.log4j.Logger;
 
+import er.extensions.eof.*;
+import er.extensions.foundation.*;
+
 @SuppressWarnings("all")
 public abstract class _Voting extends er.extensions.eof.ERXGenericRecord {
 	public static final String ENTITY_NAME = "Voting";
 
 	// Attributes
 	public static final String NUMBER_OF_VOTES_KEY = "numberOfVotes";
+	public static final ERXKey<Integer> NUMBER_OF_VOTES = new ERXKey<Integer>(NUMBER_OF_VOTES_KEY);
 	public static final String RUNNING_AVERAGE_KEY = "runningAverage";
+	public static final ERXKey<Double> RUNNING_AVERAGE = new ERXKey<Double>(RUNNING_AVERAGE_KEY);
 
 	// Relationships
 	public static final String MOVIE_KEY = "movie";
+	public static final ERXKey<webobjectsexamples.businesslogic.movies.common.Movie> MOVIE = new ERXKey<webobjectsexamples.businesslogic.movies.common.Movie>(MOVIE_KEY);
 
   private static Logger LOG = Logger.getLogger(_Voting.class);
 
@@ -51,16 +57,23 @@ public abstract class _Voting extends er.extensions.eof.ERXGenericRecord {
     takeStoredValueForKey(value, "runningAverage");
   }
 
-  public EOGenericRecord movie() {
-    return (EOGenericRecord)storedValueForKey("movie");
+  public webobjectsexamples.businesslogic.movies.common.Movie movie() {
+    return (webobjectsexamples.businesslogic.movies.common.Movie)storedValueForKey("movie");
+  }
+  
+  public void setMovie(webobjectsexamples.businesslogic.movies.common.Movie value) {
+    takeStoredValueForKey(value, "movie");
   }
 
-  public void setMovieRelationship(EOGenericRecord value) {
+  public void setMovieRelationship(webobjectsexamples.businesslogic.movies.common.Movie value) {
     if (_Voting.LOG.isDebugEnabled()) {
       _Voting.LOG.debug("updating movie from " + movie() + " to " + value);
     }
-    if (value == null) {
-    	EOGenericRecord oldValue = movie();
+    if (er.extensions.eof.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    	setMovie(value);
+    }
+    else if (value == null) {
+    	webobjectsexamples.businesslogic.movies.common.Movie oldValue = movie();
     	if (oldValue != null) {
     		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, "movie");
       }
@@ -70,7 +83,7 @@ public abstract class _Voting extends er.extensions.eof.ERXGenericRecord {
   }
   
 
-  public static Voting createVoting(EOEditingContext editingContext, EOGenericRecord movie) {
+  public static Voting createVoting(EOEditingContext editingContext, webobjectsexamples.businesslogic.movies.common.Movie movie) {
     Voting eo = (Voting) EOUtilities.createAndInsertInstance(editingContext, _Voting.ENTITY_NAME);    
     eo.setMovieRelationship(movie);
     return eo;

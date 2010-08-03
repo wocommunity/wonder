@@ -1,25 +1,25 @@
 {
     attributes = (
         {
+            allowsNull = N; 
             columnName = "MOVIE_ID"; 
             externalType = integer; 
             name = movieID; 
             precision = 9; 
-            valueClassName = NSNumber; 
-            valueType = i; 
+            prototypeName = id; 
         }, 
         {
             allowsNull = Y; 
             columnName = SUMMARY; 
             externalType = varchar; 
             name = summary; 
-            valueClassName = NSString; 
+            prototypeName = varcharLarge; 
         }
     ); 
     attributesUsedForLocking = (movieID); 
-    className = EOGenericRecord; 
+    className = "webobjectsexamples.businesslogic.movies.common.PlotSummary"; 
     classProperties = (summary, movie); 
-    externalName = plotsummary; 
+    externalName = PlotSummary; 
     fetchSpecificationDictionary = {}; 
     internalInfo = {
         "_clientClassPropertyNames" = (summary, movie); 

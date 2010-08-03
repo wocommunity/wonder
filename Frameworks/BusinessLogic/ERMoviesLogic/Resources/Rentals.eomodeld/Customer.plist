@@ -4,31 +4,28 @@
             columnName = CITY; 
             externalType = char; 
             name = city; 
-            valueClassName = NSString; 
-            valueType = c; 
+            prototypeName = varchar16; 
             width = 20; 
         }, 
         {
+            allowsNull = N; 
             columnName = "CUSTOMER_ID"; 
             externalType = integer; 
             name = customerID; 
-            valueClassName = NSNumber; 
-            valueType = i; 
+            prototypeName = id; 
         }, 
         {
             columnName = "FIRST_NAME"; 
             externalType = char; 
             name = firstName; 
-            valueClassName = NSString; 
-            valueType = c; 
+            prototypeName = varchar16; 
             width = 20; 
         }, 
         {
             columnName = "LAST_NAME"; 
             externalType = char; 
             name = lastName; 
-            valueClassName = NSString; 
-            valueType = c; 
+            prototypeName = varchar16; 
             width = 30; 
         }, 
         {
@@ -36,24 +33,21 @@
             columnName = "MEMBER_SINCE"; 
             externalType = timestamp; 
             name = memberSince; 
-            valueClassName = NSCalendarDate; 
+            prototypeName = dateTime; 
         }, 
         {
             allowsNull = Y; 
             columnName = PHONE; 
             externalType = char; 
             name = phone; 
-            valueClassName = NSString; 
-            valueType = c; 
-            width = 10; 
+            prototypeName = varchar10; 
         }, 
         {
             allowsNull = Y; 
             columnName = STATE; 
             externalType = char; 
             name = state; 
-            valueClassName = NSString; 
-            valueType = c; 
+            prototypeName = varchar10; 
             width = 2; 
         }, 
         {
@@ -61,18 +55,14 @@
             columnName = "STREET_ADDRESS"; 
             externalType = char; 
             name = streetAddress; 
-            valueClassName = NSString; 
-            valueType = c; 
-            width = 50; 
+            prototypeName = varchar50; 
         }, 
         {
             allowsNull = Y; 
             columnName = ZIP; 
             externalType = char; 
             name = zip; 
-            valueClassName = NSString; 
-            valueType = c; 
-            width = 10; 
+            prototypeName = varchar10; 
         }
     ); 
     attributesUsedForLocking = (

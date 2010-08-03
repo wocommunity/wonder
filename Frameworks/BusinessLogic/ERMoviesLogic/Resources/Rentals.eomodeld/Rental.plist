@@ -3,36 +3,34 @@
         {
             columnName = "CUSTOMER_ID"; 
             externalType = integer; 
-            name = customerID;  
-            valueClassName = NSNumber; 
-            valueType = i; 
+            name = customerID; 
+            prototypeName = id; 
         }, 
         {
             columnName = "DATE_OUT"; 
             externalType = timestamp; 
             name = dateOut; 
-            valueClassName = NSCalendarDate; 
+            prototypeName = dateTime; 
         }, 
         {
             allowsNull = Y; 
             columnName = "DATE_RETURNED"; 
             externalType = timestamp; 
             name = dateReturned; 
-            valueClassName = NSCalendarDate; 
+            prototypeName = dateTime; 
         }, 
         {
+            allowsNull = N; 
             columnName = "RENTAL_ID"; 
             externalType = integer; 
-            name = rentalID;  
-            valueClassName = NSNumber; 
-            valueType = i; 
+            name = rentalID; 
+            prototypeName = id; 
         }, 
         {
             columnName = "UNIT_ID"; 
             externalType = integer; 
-            name = unitID;  
-            valueClassName = NSNumber; 
-            valueType = i; 
+            name = unitID; 
+            prototypeName = id; 
         }
     ); 
     attributesUsedForLocking = (rentalID, customerID, unitID, dateOut, dateReturned); 

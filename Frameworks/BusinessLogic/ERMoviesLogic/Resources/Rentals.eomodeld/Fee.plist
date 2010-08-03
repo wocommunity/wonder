@@ -5,37 +5,33 @@
             externalType = decimal; 
             name = amount; 
             precision = 10; 
-            scale = 2; 
-            valueClassName = NSDecimalNumber; 
-            valueType = B; 
+            prototypeName = amount; 
         }, 
         {
             allowsNull = Y; 
             columnName = "DATE_PAID"; 
             externalType = timestamp; 
             name = datePaid; 
-            valueClassName = NSCalendarDate; 
+            prototypeName = dateTime; 
         }, 
         {
+            allowsNull = N; 
             columnName = "FEE_ID"; 
             externalType = integer; 
             name = feeID; 
-            valueClassName = NSNumber; 
-            valueType = i; 
+            prototypeName = id; 
         }, 
         {
             columnName = "FEE_TYPE_ID"; 
             externalType = integer; 
             name = feeTypeID; 
-            valueClassName = NSNumber; 
-            valueType = i; 
+            prototypeName = intNumber; 
         }, 
         {
             columnName = "RENTAL_ID"; 
             externalType = integer; 
             name = rentalID; 
-            valueClassName = NSNumber; 
-            valueType = i; 
+            prototypeName = id; 
         }
     ); 
     attributesUsedForLocking = (feeID, rentalID, feeTypeID, datePaid, amount); 

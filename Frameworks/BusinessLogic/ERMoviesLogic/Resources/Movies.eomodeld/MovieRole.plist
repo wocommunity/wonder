@@ -1,26 +1,26 @@
 {
     attributes = (
         {
+            allowsNull = N; 
             columnName = "MOVIE_ID"; 
             externalType = integer; 
-            name = movieID;  
-            valueClassName = NSNumber; 
-            valueType = i; 
+            name = movieID; 
+            prototypeName = id; 
         }, 
         {
             allowsNull = Y; 
             columnName = "ROLE_NAME"; 
             externalType = char; 
             name = roleName; 
-            valueClassName = NSString; 
+            prototypeName = varchar16; 
             width = 30; 
         }, 
         {
+            allowsNull = N; 
             columnName = "TALENT_ID"; 
             externalType = integer; 
             name = talentID; 
-            valueClassName = NSNumber; 
-            valueType = i; 
+            prototypeName = id; 
         }
     ); 
     attributesUsedForLocking = (talentID, movieID, roleName); 

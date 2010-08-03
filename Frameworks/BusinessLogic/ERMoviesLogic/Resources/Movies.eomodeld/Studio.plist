@@ -5,24 +5,21 @@
             externalType = decimal; 
             name = budget; 
             precision = 15; 
-            scale = 2; 
-            valueClassName = NSDecimalNumber; 
-            valueType = B; 
+            prototypeName = amount; 
         }, 
         {
             columnName = NAME; 
             externalType = char; 
             name = name; 
-            valueClassName = NSString;
-            valueType = c; 
+            prototypeName = varchar50; 
             width = 40; 
         }, 
         {
+            allowsNull = N; 
             columnName = "STUDIO_ID"; 
             externalType = integer; 
-            name = studioID;  
-            valueClassName = NSNumber; 
-            valueType = i; 
+            name = studioID; 
+            prototypeName = id; 
         }
     ); 
     attributesUsedForLocking = (budget, name, studioID); 
