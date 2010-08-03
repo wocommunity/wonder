@@ -200,9 +200,20 @@ public class AdminApplicationsPage extends ApplicationsPage {
     }
 
     public void bounce(NSArray<MApplication> applications) {
+    	bounceGraceful(applications);
+    }
+    
+    public void bounceGraceful(NSArray<MApplication> applications) {
         for (MApplication application : applications) {
             AppDetailPage page = AppDetailPage.create(context(), application);
-            page = (AppDetailPage) page.bounceClicked();
+            page = (AppDetailPage) page.bounceClickedWithGracefulBouncer();
+        }
+    }
+    
+    public void bounceShutdown(NSArray<MApplication> applications, int maxwait) {
+        for (MApplication application : applications) {
+            AppDetailPage page = AppDetailPage.create(context(), application);
+            page = (AppDetailPage) page.bounceClickedWithShutdownBouncer(maxwait);
         }
     }
 

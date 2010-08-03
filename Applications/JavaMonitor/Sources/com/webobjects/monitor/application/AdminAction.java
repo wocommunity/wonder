@@ -163,6 +163,30 @@ import com.webobjects.monitor._private.MSiteConfig;
  * </table>
  * </p>
  * <p>
+ * The direct action 'bounce' can be invoked with additional arguments:
+ * <table cellspacing="0" cellpadding="5" border="1">
+ * <tr>
+ * <th>Argument</th>
+ * <th>Value</th>
+ * <th>Description</th>
+ * </tr>
+ * <tr>
+ * <td>bouncetype</td>
+ * <td>graceful | shutdown</td>
+ * <td>graceful bounces the application by starting a few instances per host and setting the rest to refusing sessions<br />
+ * shutdown bounces the application by stopping all instances and then restarting them (use this if your<br />
+ * application will migrate the database so the old application will crash)<br />
+ * The default bouncetype is graceful.</td>
+ * </tr>
+ * <tr>
+ * <td>maxwait</td>
+ * <td><i>secs</i></td>
+ * <td>number of seconds to wait for applications to shut down themselves before force quitting the instances.<br />
+ * The default is 30 seconds.</td>
+ * </tr>
+ * </table>
+ * </p>
+ * <p>
  * Possible status codes:
  * <table cellspacing="0" cellpadding="5" border="1">
  * <tr>
@@ -390,8 +414,29 @@ public class AdminAction extends WODirectAction {
         return woresponse;
     }
 
-    public void bounceAction() {
-        applicationsPage().bounce(applications);
+    public WOActionResults bounceAction() {
+        WOResponse woresponse = new WOResponse();
+        woresponse.setContent("OK");
+        woresponse.setStatus(200);
+        String bouncetype = (String) context().request().formValueForKey("bouncetype");
+        String maxwaitString = (String) context().request().formValueForKey("maxwait");
+        if (bouncetype == null || bouncetype == "" || bouncetype.equalsIgnoreCase("graceful")) {
+        	applicationsPage().bounceGraceful(applications);
+        } else if (bouncetype.equalsIgnoreCase("shutdown")) {
+        	int maxwait = 30;
+        	if (maxwaitString != null) {
+        		try {
+        			maxwait = Integer.valueOf(maxwaitString).intValue();
+        		} catch (NumberFormatException e) {
+					// ignore
+				}
+        	}
+        	applicationsPage().bounceShutdown(applications, maxwait);
+        } else {
+        	woresponse.setContent("Unknown bouncetype");
+            woresponse.setStatus(406);
+        }
+        return woresponse;
     }
 
     public void clearDeathsAction() {

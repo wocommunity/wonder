@@ -70,11 +70,22 @@ public class AppDetailPage extends MonitorComponent {
     }
 
     public WOComponent bounceClicked() {
+       return bounceClickedWithGracefulBouncer();
+    }
+    
+    public WOComponent bounceClickedWithGracefulBouncer() {
+        return bounceClickedWithBouncer(new GracefulBouncer(myApplication()));
+    }
+    
+    public WOComponent bounceClickedWithShutdownBouncer(int maxwait) {
+        return bounceClickedWithBouncer(new ShutdownBouncer(myApplication(), maxwait));
+    }
+    
+    private WOComponent bounceClickedWithBouncer(ApplicationStarter bouncer) {
         ApplicationStarter old = currentBouncer();
         if (old != null) {
             old.interrupt();
         }
-        ApplicationStarter bouncer = new GracefulBouncer(myApplication());
         session().setObjectForKey(bouncer, bouncerName());
         bouncer.start();
         return newDetailPage();
