@@ -1,4 +1,4 @@
-// $LastChangedRevision: 5810 $ DO NOT EDIT.  Make changes to MovieRole.java instead.
+// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to MovieRole.java instead.
 package webobjectsexamples.businesslogic.movies.common;
 
 import com.webobjects.eoaccess.*;
@@ -8,16 +8,22 @@ import java.math.*;
 import java.util.*;
 import org.apache.log4j.Logger;
 
+import er.extensions.eof.*;
+import er.extensions.foundation.*;
+
 @SuppressWarnings("all")
 public abstract class _MovieRole extends er.extensions.eof.ERXGenericRecord {
 	public static final String ENTITY_NAME = "MovieRole";
 
 	// Attributes
 	public static final String ROLE_NAME_KEY = "roleName";
+	public static final ERXKey<String> ROLE_NAME = new ERXKey<String>(ROLE_NAME_KEY);
 
 	// Relationships
 	public static final String MOVIE_KEY = "movie";
+	public static final ERXKey<webobjectsexamples.businesslogic.movies.common.Movie> MOVIE = new ERXKey<webobjectsexamples.businesslogic.movies.common.Movie>(MOVIE_KEY);
 	public static final String TALENT_KEY = "talent";
+	public static final ERXKey<webobjectsexamples.businesslogic.movies.common.Talent> TALENT = new ERXKey<webobjectsexamples.businesslogic.movies.common.Talent>(TALENT_KEY);
 
   private static Logger LOG = Logger.getLogger(_MovieRole.class);
 
@@ -40,16 +46,23 @@ public abstract class _MovieRole extends er.extensions.eof.ERXGenericRecord {
     takeStoredValueForKey(value, "roleName");
   }
 
-  public EOGenericRecord movie() {
-    return (EOGenericRecord)storedValueForKey("movie");
+  public webobjectsexamples.businesslogic.movies.common.Movie movie() {
+    return (webobjectsexamples.businesslogic.movies.common.Movie)storedValueForKey("movie");
+  }
+  
+  public void setMovie(webobjectsexamples.businesslogic.movies.common.Movie value) {
+    takeStoredValueForKey(value, "movie");
   }
 
-  public void setMovieRelationship(EOGenericRecord value) {
+  public void setMovieRelationship(webobjectsexamples.businesslogic.movies.common.Movie value) {
     if (_MovieRole.LOG.isDebugEnabled()) {
       _MovieRole.LOG.debug("updating movie from " + movie() + " to " + value);
     }
-    if (value == null) {
-    	EOGenericRecord oldValue = movie();
+    if (er.extensions.eof.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    	setMovie(value);
+    }
+    else if (value == null) {
+    	webobjectsexamples.businesslogic.movies.common.Movie oldValue = movie();
     	if (oldValue != null) {
     		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, "movie");
       }
@@ -61,12 +74,19 @@ public abstract class _MovieRole extends er.extensions.eof.ERXGenericRecord {
   public webobjectsexamples.businesslogic.movies.common.Talent talent() {
     return (webobjectsexamples.businesslogic.movies.common.Talent)storedValueForKey("talent");
   }
+  
+  public void setTalent(webobjectsexamples.businesslogic.movies.common.Talent value) {
+    takeStoredValueForKey(value, "talent");
+  }
 
   public void setTalentRelationship(webobjectsexamples.businesslogic.movies.common.Talent value) {
     if (_MovieRole.LOG.isDebugEnabled()) {
       _MovieRole.LOG.debug("updating talent from " + talent() + " to " + value);
     }
-    if (value == null) {
+    if (er.extensions.eof.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    	setTalent(value);
+    }
+    else if (value == null) {
     	webobjectsexamples.businesslogic.movies.common.Talent oldValue = talent();
     	if (oldValue != null) {
     		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, "talent");
@@ -77,7 +97,7 @@ public abstract class _MovieRole extends er.extensions.eof.ERXGenericRecord {
   }
   
 
-  public static MovieRole createMovieRole(EOEditingContext editingContext, EOGenericRecord movie, webobjectsexamples.businesslogic.movies.common.Talent talent) {
+  public static MovieRole createMovieRole(EOEditingContext editingContext, webobjectsexamples.businesslogic.movies.common.Movie movie, webobjectsexamples.businesslogic.movies.common.Talent talent) {
     MovieRole eo = (MovieRole) EOUtilities.createAndInsertInstance(editingContext, _MovieRole.ENTITY_NAME);    
     eo.setMovieRelationship(movie);
     eo.setTalentRelationship(talent);

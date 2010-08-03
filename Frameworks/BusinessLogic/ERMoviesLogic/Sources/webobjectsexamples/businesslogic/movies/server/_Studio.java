@@ -1,4 +1,4 @@
-// $LastChangedRevision: 5810 $ DO NOT EDIT.  Make changes to Studio.java instead.
+// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to Studio.java instead.
 package webobjectsexamples.businesslogic.movies.server;
 
 import com.webobjects.eoaccess.*;
@@ -8,16 +8,22 @@ import java.math.*;
 import java.util.*;
 import org.apache.log4j.Logger;
 
+import er.extensions.eof.*;
+import er.extensions.foundation.*;
+
 @SuppressWarnings("all")
 public abstract class _Studio extends er.extensions.eof.ERXGenericRecord {
 	public static final String ENTITY_NAME = "Studio";
 
 	// Attributes
 	public static final String BUDGET_KEY = "budget";
+	public static final ERXKey<java.math.BigDecimal> BUDGET = new ERXKey<java.math.BigDecimal>(BUDGET_KEY);
 	public static final String NAME_KEY = "name";
+	public static final ERXKey<String> NAME = new ERXKey<String>(NAME_KEY);
 
 	// Relationships
 	public static final String MOVIES_KEY = "movies";
+	public static final ERXKey<webobjectsexamples.businesslogic.movies.common.Movie> MOVIES = new ERXKey<webobjectsexamples.businesslogic.movies.common.Movie>(MOVIES_KEY);
 
   private static Logger LOG = Logger.getLogger(_Studio.class);
 
@@ -51,23 +57,23 @@ public abstract class _Studio extends er.extensions.eof.ERXGenericRecord {
     takeStoredValueForKey(value, "name");
   }
 
-  public NSArray<EOGenericRecord> movies() {
-    return (NSArray<EOGenericRecord>)storedValueForKey("movies");
+  public NSArray<webobjectsexamples.businesslogic.movies.common.Movie> movies() {
+    return (NSArray<webobjectsexamples.businesslogic.movies.common.Movie>)storedValueForKey("movies");
   }
 
-  public NSArray<EOGenericRecord> movies(EOQualifier qualifier) {
+  public NSArray<webobjectsexamples.businesslogic.movies.common.Movie> movies(EOQualifier qualifier) {
     return movies(qualifier, null, false);
   }
 
-  public NSArray<EOGenericRecord> movies(EOQualifier qualifier, boolean fetch) {
+  public NSArray<webobjectsexamples.businesslogic.movies.common.Movie> movies(EOQualifier qualifier, boolean fetch) {
     return movies(qualifier, null, fetch);
   }
 
-  public NSArray<EOGenericRecord> movies(EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings, boolean fetch) {
-    NSArray<EOGenericRecord> results;
+  public NSArray<webobjectsexamples.businesslogic.movies.common.Movie> movies(EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings, boolean fetch) {
+    NSArray<webobjectsexamples.businesslogic.movies.common.Movie> results;
     if (fetch) {
       EOQualifier fullQualifier;
-      EOQualifier inverseQualifier = new EOKeyValueQualifier("studio", EOQualifier.QualifierOperatorEqual, this);
+      EOQualifier inverseQualifier = new EOKeyValueQualifier(webobjectsexamples.businesslogic.movies.common.Movie.STUDIO_KEY, EOQualifier.QualifierOperatorEqual, this);
     	
       if (qualifier == null) {
         fullQualifier = inverseQualifier;
@@ -79,45 +85,61 @@ public abstract class _Studio extends er.extensions.eof.ERXGenericRecord {
         fullQualifier = new EOAndQualifier(qualifiers);
       }
 
-      EOFetchSpecification fetchSpec = new EOFetchSpecification("Movie", qualifier, sortOrderings);
-      fetchSpec.setIsDeep(true);
-      results = (NSArray<EOGenericRecord>)editingContext().objectsWithFetchSpecification(fetchSpec);
+      results = webobjectsexamples.businesslogic.movies.common.Movie.fetchMovies(editingContext(), fullQualifier, sortOrderings);
     }
     else {
       results = movies();
       if (qualifier != null) {
-        results = (NSArray<EOGenericRecord>)EOQualifier.filteredArrayWithQualifier(results, qualifier);
+        results = (NSArray<webobjectsexamples.businesslogic.movies.common.Movie>)EOQualifier.filteredArrayWithQualifier(results, qualifier);
       }
       if (sortOrderings != null) {
-        results = (NSArray<EOGenericRecord>)EOSortOrdering.sortedArrayUsingKeyOrderArray(results, sortOrderings);
+        results = (NSArray<webobjectsexamples.businesslogic.movies.common.Movie>)EOSortOrdering.sortedArrayUsingKeyOrderArray(results, sortOrderings);
       }
     }
     return results;
   }
   
-  public void addToMoviesRelationship(EOGenericRecord object) {
+  public void addToMovies(webobjectsexamples.businesslogic.movies.common.Movie object) {
+    includeObjectIntoPropertyWithKey(object, "movies");
+  }
+
+  public void removeFromMovies(webobjectsexamples.businesslogic.movies.common.Movie object) {
+    excludeObjectFromPropertyWithKey(object, "movies");
+  }
+
+  public void addToMoviesRelationship(webobjectsexamples.businesslogic.movies.common.Movie object) {
     if (_Studio.LOG.isDebugEnabled()) {
       _Studio.LOG.debug("adding " + object + " to movies relationship");
     }
-    addObjectToBothSidesOfRelationshipWithKey(object, "movies");
+    if (er.extensions.eof.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    	addToMovies(object);
+    }
+    else {
+    	addObjectToBothSidesOfRelationshipWithKey(object, "movies");
+    }
   }
 
-  public void removeFromMoviesRelationship(EOGenericRecord object) {
+  public void removeFromMoviesRelationship(webobjectsexamples.businesslogic.movies.common.Movie object) {
     if (_Studio.LOG.isDebugEnabled()) {
       _Studio.LOG.debug("removing " + object + " from movies relationship");
     }
-    removeObjectFromBothSidesOfRelationshipWithKey(object, "movies");
+    if (er.extensions.eof.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    	removeFromMovies(object);
+    }
+    else {
+    	removeObjectFromBothSidesOfRelationshipWithKey(object, "movies");
+    }
   }
 
-  public EOGenericRecord createMoviesRelationship() {
+  public webobjectsexamples.businesslogic.movies.common.Movie createMoviesRelationship() {
     EOClassDescription eoClassDesc = EOClassDescription.classDescriptionForEntityName("Movie");
     EOEnterpriseObject eo = eoClassDesc.createInstanceWithEditingContext(editingContext(), null);
     editingContext().insertObject(eo);
     addObjectToBothSidesOfRelationshipWithKey(eo, "movies");
-    return (EOGenericRecord) eo;
+    return (webobjectsexamples.businesslogic.movies.common.Movie) eo;
   }
 
-  public void deleteMoviesRelationship(EOGenericRecord object) {
+  public void deleteMoviesRelationship(webobjectsexamples.businesslogic.movies.common.Movie object) {
     removeObjectFromBothSidesOfRelationshipWithKey(object, "movies");
     editingContext().deleteObject(object);
   }
@@ -125,7 +147,7 @@ public abstract class _Studio extends er.extensions.eof.ERXGenericRecord {
   public void deleteAllMoviesRelationships() {
     Enumeration objects = movies().immutableClone().objectEnumerator();
     while (objects.hasMoreElements()) {
-      deleteMoviesRelationship((EOGenericRecord)objects.nextElement());
+      deleteMoviesRelationship((webobjectsexamples.businesslogic.movies.common.Movie)objects.nextElement());
     }
   }
 
@@ -196,13 +218,13 @@ public abstract class _Studio extends er.extensions.eof.ERXGenericRecord {
   public static NSArray<NSDictionary> fetchRawFetchAllStudios(EOEditingContext editingContext, NSDictionary<String, Object> bindings) {
     EOFetchSpecification fetchSpec = EOFetchSpecification.fetchSpecificationNamed("RawFetchAllStudios", "Studio");
     fetchSpec = fetchSpec.fetchSpecificationWithQualifierBindings(bindings);
-    return (NSArray<NSDictionary>)editingContext.objectsWithFetchSpecification(fetchSpec);
+    return editingContext.objectsWithFetchSpecification(fetchSpec);
   }
   
   public static NSArray<NSDictionary> fetchRawFetchAllStudios(EOEditingContext editingContext)
   {
     EOFetchSpecification fetchSpec = EOFetchSpecification.fetchSpecificationNamed("RawFetchAllStudios", "Studio");
-    return (NSArray<NSDictionary>)editingContext.objectsWithFetchSpecification(fetchSpec);
+    return editingContext.objectsWithFetchSpecification(fetchSpec);
   }
   
 }

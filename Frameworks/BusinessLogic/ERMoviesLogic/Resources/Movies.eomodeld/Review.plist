@@ -3,36 +3,33 @@
         {
             columnName = "MOVIE_ID"; 
             externalType = integer; 
-            name = movieID;  
-            valueClassName = NSNumber; 
-            valueType = i; 
+            name = movieID; 
+            prototypeName = id; 
         }, 
         {
             allowsNull = Y; 
             columnName = REVIEW; 
             externalType = blob; 
             name = review; 
-            valueClassName = NSString; 
+            prototypeName = varcharLarge; 
         }, 
         {
+            allowsNull = N; 
             columnName = "REVIEW_ID"; 
             externalType = integer; 
             name = reviewID; 
-            valueClassName = NSNumber; 
-            valueType = i; 
+            prototypeName = id; 
         }, 
         {
             allowsNull = Y; 
             columnName = REVIEWER; 
             externalType = char; 
             name = reviewer; 
-            valueClassName = NSString;
-            valueType = c; 
-            width = 50; 
+            prototypeName = varchar50; 
         }
     ); 
     attributesUsedForLocking = (reviewID, movieID, reviewer); 
-    className = EOGenericRecord; 
+    className = "webobjectsexamples.businesslogic.movies.common.Review"; 
     classProperties = (reviewer, review, movie); 
     externalName = review; 
     fetchSpecificationDictionary = {}; 

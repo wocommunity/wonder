@@ -4,23 +4,23 @@
             columnName = "FIRST_NAME"; 
             externalType = char; 
             name = firstName; 
-            valueClassName = NSString; 
+            prototypeName = varchar16; 
             width = 20; 
         }, 
         {
             columnName = "LAST_NAME"; 
             externalType = char; 
             name = lastName; 
-            valueClassName = NSString; 
+            prototypeName = varchar16; 
             width = 30; 
         }, 
         {
+            allowsNull = N; 
             columnName = "TALENT_ID"; 
             externalType = integer; 
             name = talentID; 
             precision = 9; 
-            valueClassName = NSNumber; 
-            valueType = i; 
+            prototypeName = id; 
         }
     ); 
     attributesUsedForLocking = (talentID, firstName, lastName); 

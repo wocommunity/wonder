@@ -4,29 +4,27 @@
             columnName = "DATE_ACQUIRED"; 
             externalType = timestamp; 
             name = dateAcquired; 
-            valueClassName = NSCalendarDate; 
+            prototypeName = dateTime; 
         }, 
         {
             allowsNull = Y; 
             columnName = NOTES; 
             externalType = char; 
             name = notes; 
-            valueClassName = NSString; 
-            width = 100; 
+            prototypeName = varchar100; 
         }, 
         {
+            allowsNull = N; 
             columnName = "UNIT_ID"; 
             externalType = integer; 
             name = unitID; 
-            valueClassName = NSNumber; 
-            valueType = i; 
+            prototypeName = id; 
         }, 
         {
             columnName = "VIDEO_ID"; 
             externalType = integer; 
-            name = videoID;  
-            valueClassName = NSNumber; 
-            valueType = i; 
+            name = videoID; 
+            prototypeName = id; 
         }
     ); 
     attributesUsedForLocking = (unitID, videoID, notes, dateAcquired); 

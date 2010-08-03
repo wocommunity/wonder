@@ -1,29 +1,25 @@
 {
     attributes = (
         {
+            allowsNull = N; 
             columnName = "MOVIE_ID"; 
             externalType = integer; 
             name = movieID; 
-            valueClassName = NSNumber; 
-            valueType = i; 
+            prototypeName = id; 
         }, 
         {
             allowsNull = Y; 
             columnName = "NUMBER_OF_VOTES"; 
             externalType = integer; 
             name = numberOfVotes; 
-            valueClassName = NSNumber; 
-            valueType = i; 
+            prototypeName = intNumber; 
         }, 
         {
             allowsNull = Y; 
             columnName = "RUNNING_AVERAGE"; 
             externalType = float; 
             name = runningAverage; 
-            precision = 9; 
-            scale = 20; 
-            valueClassName = NSNumber; 
-            valueType = d; 
+            prototypeName = doubleNumber; 
         }
     ); 
     attributesUsedForLocking = (movieID, numberOfVotes); 

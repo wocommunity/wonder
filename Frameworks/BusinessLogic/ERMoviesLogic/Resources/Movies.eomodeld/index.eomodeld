@@ -1,21 +1,24 @@
 {
     EOModelVersion = "2.1"; 
     adaptorName = JDBC; 
-    connectionDictionary = {
-        "LC_ALL" = "iso_1"; 
-        URL = "jdbc:h2:file:/Resources/Movies"; 
-        databaseEncoding = "ISO Latin-1"; 
-        driver = "org.h2.Driver"; 
-    }; 
     entities = (
         {className = EOGenericRecord; name = Director; }, 
-        {className = EOGenericRecord; name = Movie; }, 
+        {
+            className = "webobjectsexamples.businesslogic.movies.common.Movie"; 
+            name = Movie; 
+        }, 
         {
             className = "webobjectsexamples.businesslogic.movies.common.MovieRole"; 
             name = MovieRole; 
         }, 
-        {className = EOGenericRecord; name = PlotSummary; }, 
-        {className = EOGenericRecord; name = Review; }, 
+        {
+            className = "webobjectsexamples.businesslogic.movies.common.PlotSummary"; 
+            name = PlotSummary; 
+        }, 
+        {
+            className = "webobjectsexamples.businesslogic.movies.common.Review"; 
+            name = Review; 
+        }, 
         {
             className = "webobjectsexamples.businesslogic.movies.server.Studio"; 
             name = Studio; 

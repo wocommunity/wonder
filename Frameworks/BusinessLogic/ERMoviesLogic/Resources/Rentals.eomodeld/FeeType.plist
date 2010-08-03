@@ -4,31 +4,28 @@
             columnName = ENABLED; 
             externalType = integer; 
             name = enabled; 
-            valueClassName = NSNumber; 
-            valueType = i; 
+            prototypeName = intNumber; 
         }, 
         {
             columnName = "FEE_TYPE"; 
             externalType = char; 
             name = feeType; 
-            valueClassName = NSString;
-            valueType = c; 
+            prototypeName = varchar16; 
             width = 15; 
         }, 
         {
+            allowsNull = N; 
             columnName = "FEE_TYPE_ID"; 
             externalType = integer; 
             name = feeTypeID; 
-            valueClassName = NSNumber; 
-            valueType = i; 
+            prototypeName = id; 
         }, 
         {
             columnName = "ORDER_BY"; 
             externalType = integer; 
             name = orderBy; 
             precision = 9; 
-            valueClassName = NSNumber; 
-            valueType = i; 
+            prototypeName = intNumber; 
         }
     ); 
     attributesUsedForLocking = (feeTypeID, feeType, enabled, orderBy); 

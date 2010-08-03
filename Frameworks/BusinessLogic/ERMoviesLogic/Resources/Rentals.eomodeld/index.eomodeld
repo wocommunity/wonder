@@ -1,12 +1,6 @@
 {
     EOModelVersion = "2.1"; 
     adaptorName = JDBC; 
-    connectionDictionary = {
-        "LC_ALL" = "iso_1"; 
-        URL = "jdbc:h2:file:/Resources/Movies"; 
-        databaseEncoding = "ISO Latin-1"; 
-        driver = "org.h2.Driver"; 
-    }; 
     entities = (
         {
             className = "webobjectsexamples.businesslogic.rentals.common.CreditCard"; 

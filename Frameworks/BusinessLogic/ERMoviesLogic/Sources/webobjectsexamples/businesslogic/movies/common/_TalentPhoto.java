@@ -1,4 +1,4 @@
-// $LastChangedRevision: 5810 $ DO NOT EDIT.  Make changes to TalentPhoto.java instead.
+// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to TalentPhoto.java instead.
 package webobjectsexamples.businesslogic.movies.common;
 
 import com.webobjects.eoaccess.*;
@@ -8,15 +8,20 @@ import java.math.*;
 import java.util.*;
 import org.apache.log4j.Logger;
 
+import er.extensions.eof.*;
+import er.extensions.foundation.*;
+
 @SuppressWarnings("all")
 public abstract class _TalentPhoto extends er.extensions.eof.ERXGenericRecord {
 	public static final String ENTITY_NAME = "TalentPhoto";
 
 	// Attributes
 	public static final String PHOTO_KEY = "photo";
+	public static final ERXKey<NSData> PHOTO = new ERXKey<NSData>(PHOTO_KEY);
 
 	// Relationships
 	public static final String TALENT_KEY = "talent";
+	public static final ERXKey<webobjectsexamples.businesslogic.movies.common.Talent> TALENT = new ERXKey<webobjectsexamples.businesslogic.movies.common.Talent>(TALENT_KEY);
 
   private static Logger LOG = Logger.getLogger(_TalentPhoto.class);
 
@@ -42,12 +47,19 @@ public abstract class _TalentPhoto extends er.extensions.eof.ERXGenericRecord {
   public webobjectsexamples.businesslogic.movies.common.Talent talent() {
     return (webobjectsexamples.businesslogic.movies.common.Talent)storedValueForKey("talent");
   }
+  
+  public void setTalent(webobjectsexamples.businesslogic.movies.common.Talent value) {
+    takeStoredValueForKey(value, "talent");
+  }
 
   public void setTalentRelationship(webobjectsexamples.businesslogic.movies.common.Talent value) {
     if (_TalentPhoto.LOG.isDebugEnabled()) {
       _TalentPhoto.LOG.debug("updating talent from " + talent() + " to " + value);
     }
-    if (value == null) {
+    if (er.extensions.eof.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    	setTalent(value);
+    }
+    else if (value == null) {
     	webobjectsexamples.businesslogic.movies.common.Talent oldValue = talent();
     	if (oldValue != null) {
     		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, "talent");

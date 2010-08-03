@@ -5,14 +5,14 @@
             columnName = PHOTO; 
             externalType = blob; 
             name = photo; 
-            valueClassName = NSData; 
+            prototypeName = blob; 
         }, 
         {
+            allowsNull = N; 
             columnName = "TALENT_ID"; 
             externalType = integer; 
-            name = talentID;  
-            valueClassName = NSNumber; 
-            valueType = i; 
+            name = talentID; 
+            prototypeName = id; 
         }
     ); 
     attributesUsedForLocking = (talentID); 

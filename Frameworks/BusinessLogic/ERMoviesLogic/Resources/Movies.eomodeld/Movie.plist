@@ -5,7 +5,7 @@
             columnName = CATEGORY; 
             externalType = char; 
             name = category; 
-            valueClassName = NSString; 
+            prototypeName = varchar16; 
             width = 20; 
         }, 
         {
@@ -13,32 +13,34 @@
             columnName = "DATE_RELEASED"; 
             externalType = timestamp; 
             name = dateReleased; 
-            valueClassName = NSCalendarDate; 
+            prototypeName = dateTime; 
         }, 
         {
+            allowsNull = N; 
             columnName = "MOVIE_ID"; 
             externalType = integer; 
             name = movieID; 
-            valueClassName = NSNumber; 
-            valueType = i; 
+            prototypeName = id; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = "poster_AttachmentID"; 
+            name = posterAttachmentID; 
+            prototypeName = id; 
         }, 
         {
             allowsNull = Y; 
             columnName = "POSTER_NAME"; 
             externalType = char; 
             name = posterName; 
-            valueClassName = NSString;
-            valueType = c; 
-            width = 255; 
+            prototypeName = varchar255; 
         }, 
         {
             allowsNull = Y; 
             columnName = RATED; 
             externalType = char; 
             name = rated; 
-            valueClassName = NSString;
-            valueType = c; 
-            width = 10; 
+            prototypeName = varchar10; 
         }, 
         {
             allowsNull = Y; 
@@ -46,33 +48,27 @@
             externalType = decimal; 
             name = revenue; 
             precision = 10; 
-            scale = 2; 
-            valueClassName = NSDecimalNumber; 
-            valueType = B; 
+            prototypeName = amount; 
         }, 
         {
             allowsNull = Y; 
             columnName = "STUDIO_ID"; 
             externalType = integer; 
             name = studioID; 
-            valueClassName = NSNumber; 
-            valueType = i; 
+            prototypeName = id; 
         }, 
         {
             columnName = TITLE; 
             externalType = char; 
             name = title; 
-            valueClassName = NSString;
-            valueType = c; 
-            width = 255; 
+            prototypeName = varchar255; 
         }, 
         {
             allowsNull = Y; 
             columnName = "TRAILER_NAME"; 
             externalType = char; 
             name = trailerName; 
-            valueClassName = NSString; 
-            width = 255; 
+            prototypeName = varchar255; 
         }
     ); 
     attributesUsedForLocking = (
@@ -84,9 +80,10 @@
         studioID, 
         posterName, 
         trailerName, 
-        rated
+        rated, 
+        posterAttachmentID
     ); 
-    className = EOGenericRecord; 
+    className = "webobjectsexamples.businesslogic.movies.common.Movie"; 
     classProperties = (
         category, 
         dateReleased, 
@@ -100,14 +97,14 @@
         trailerName, 
         reviews, 
         voting, 
-        rated
+        rated, 
+        poster
     ); 
     externalName = movie; 
     internalInfo = {
         "_clientClassPropertyNames" = (
             category, 
             dateReleased, 
-            language, 
             title, 
             directors, 
             revenue, 
@@ -142,6 +139,13 @@
             name = plotSummary; 
             ownsDestination = Y; 
             propagatesPrimaryKey = Y; 
+        }, 
+        {
+            destination = ERAttachment; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = posterAttachmentID; }); 
+            name = poster; 
         }, 
         {
             deleteRule = EODeleteRuleCascade; 
