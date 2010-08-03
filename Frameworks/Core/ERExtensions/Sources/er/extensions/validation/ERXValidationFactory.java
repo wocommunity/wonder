@@ -551,7 +551,7 @@ public class ERXValidationFactory {
             template = templateForKeyPath(type, targetLanguage);
         if (template == null) {
             template = UNDEFINED_VALIDATION_TEMPLATE + " entity \"" + entityName + "\" property \"" + property + "\" type \"" + type + "\" target language \"" + targetLanguage + "\"";
-            log.error(template);
+            log.error(template, new Throwable());
         }
         return template;
     }
