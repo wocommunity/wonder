@@ -3,6 +3,8 @@ package er.captcha;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 
+import javax.imageio.ImageIO;
+
 import org.apache.log4j.Logger;
 
 import com.octo.captcha.engine.CaptchaEngine;
@@ -10,8 +12,6 @@ import com.octo.captcha.service.CaptchaServiceException;
 import com.octo.captcha.service.captchastore.FastHashMapCaptchaStore;
 import com.octo.captcha.service.image.DefaultManageableImageCaptchaService;
 import com.octo.captcha.service.image.ImageCaptchaService;
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -102,11 +102,10 @@ public class ERCaptcha extends WOComponent {
 			ByteArrayOutputStream captchaOutputStream = new ByteArrayOutputStream();
 			try {
 				BufferedImage challenge = ERCaptcha.captchaService().getImageChallengeForID(context.elementID());
-				JPEGImageEncoder captchaEncoder = JPEGCodec.createJPEGEncoder(captchaOutputStream);
-				captchaEncoder.encode(challenge);
-				_captcha = new NSData(captchaOutputStream.toByteArray());
-			}
-			catch (Throwable e) {
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				ImageIO.write(challenge, "jpg", baos);
+				_captcha = new NSData(baos.toByteArray());
+			} catch (Throwable e) {
 				log.error("Failed to create JPEG for Captcha.", e);
 			}
 		}
