@@ -21,9 +21,11 @@ public class WOHelperFunctionHTMLParser {
 	private static final String JS_START_TAG = "<script";
 	private static final String JS_END_TAG = "</script";
 	private static final String WO_END_TAG = "</wo";
-	private static final String WO_START_TAG = "<wo";
+	private static final String WO_START_TAG = "<wo ";
 	private static final String WEBOBJECT_END_TAG = "</webobject";
 	private static final String WEBOBJECT_START_TAG = "<webobject";
+	private static final String WO_COLON_END_TAG = "</wo:";
+	private static final String WO_COLON_START_TAG = "<wo:";
 	private static final String WO_REPLACEMENT_MARKER = "__REPL__";
 
 	private static boolean _parseStandardTags = false;
@@ -77,7 +79,7 @@ public class WOHelperFunctionHTMLParser {
 					}
 
 					String tagLowerCase = token.toLowerCase();
-					if (tagLowerCase.startsWith(WOHelperFunctionHTMLParser.WEBOBJECT_START_TAG) || tagLowerCase.startsWith(WOHelperFunctionHTMLParser.WO_START_TAG)) {
+					if ( tagLowerCase.startsWith(WEBOBJECT_START_TAG) || tagLowerCase.startsWith(WO_COLON_START_TAG) || tagLowerCase.startsWith(WO_START_TAG) ) {
 						if (token.endsWith("/")) {
 							startOfWebObjectTag(token.substring(0, token.length() - 1));
 							endOfWebObjectTag("/");
@@ -86,7 +88,7 @@ public class WOHelperFunctionHTMLParser {
 							startOfWebObjectTag(token);
 						}
 					}
-					else if ((tagIndex = tagLowerCase.indexOf(WOHelperFunctionHTMLParser.WEBOBJECT_START_TAG)) > 1 || (tagIndex = tagLowerCase.indexOf(WOHelperFunctionHTMLParser.WO_START_TAG)) > 1) {
+					else if ((tagIndex = tagLowerCase.indexOf(WEBOBJECT_START_TAG)) > 1 || (tagIndex = tagLowerCase.indexOf(WO_COLON_START_TAG)) > 1 || (tagIndex = tagLowerCase.indexOf(WO_START_TAG)) > 1) {
 						_contentText.append(token.substring(0, token.lastIndexOf("<")));
 						if (token.endsWith("/")) {
 							startOfWebObjectTag(token.substring(tagIndex, token.length() - 1));
@@ -96,7 +98,7 @@ public class WOHelperFunctionHTMLParser {
 							startOfWebObjectTag(token.substring(tagIndex, token.length()));
 						}
 					}
-					else if (tagLowerCase.startsWith(WOHelperFunctionHTMLParser.WEBOBJECT_END_TAG) || tagLowerCase.startsWith(WOHelperFunctionHTMLParser.WO_END_TAG)) {
+					else if (tagLowerCase.startsWith(WEBOBJECT_END_TAG) || tagLowerCase.startsWith(WO_COLON_END_TAG) || tagLowerCase.equals(WO_END_TAG)) {
 						endOfWebObjectTag(token);
 					}
 					else if (tagLowerCase.startsWith(WOHelperFunctionHTMLParser.JS_START_TAG)) {
@@ -173,7 +175,7 @@ public class WOHelperFunctionHTMLParser {
 	private String checkToken(String token) {
 		String original = new String(token);
 		try {
-			if (token == null || token.toLowerCase().startsWith(WOHelperFunctionHTMLParser.WEBOBJECT_START_TAG) || token.toLowerCase().startsWith(WOHelperFunctionHTMLParser.WO_START_TAG)) {
+			if (token == null || token.toLowerCase().startsWith(WEBOBJECT_START_TAG) || token.toLowerCase().startsWith(WO_COLON_START_TAG) || token.toLowerCase().startsWith(WO_START_TAG) ) {
 				// we return immediately, if it is a webobject token
 				return token;
 			}
