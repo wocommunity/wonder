@@ -1,0 +1,16 @@
+A: WOGenericContainer {
+	elementName = "a";
+	href = href;
+	onclick = onClick;
+	class = ^class;
+	id = ^id;
+	style = ^style;
+	invokeAction = invokeAction;
+}
+
+Content: WOComponentContent {
+}
+
+String: WOString {
+	value = ^string;
+}
