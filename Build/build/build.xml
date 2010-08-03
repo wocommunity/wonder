@@ -101,7 +101,7 @@
             <param name="project.principal.class" value="webobjectsexamples.businesslogic.ERMoviesLogic" />
             <param name="project.name" value="ERMoviesLogic" />
             <param name="project.dir" value="Frameworks/BusinessLogic/ERMoviesLogic" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERAttachment/ERTaggable" />
        </antcall>
     </target>
 
@@ -414,7 +414,7 @@
             <param name="project.name" value="ERMovies" />
             <param name="project.dir" value="Examples/D2W/ERMovies" />
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/DerbyPlugIn/ERMoviesLogic/ERSelenium" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/DerbyPlugIn/ERMoviesLogic/ERSelenium/ERAttachment/ERTaggable" />
        </antcall>
     </target>
 
@@ -475,7 +475,7 @@
             <param name="project.dir" value="Examples/Reporting/DocsByExample" />
 
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/WOOgnl/DRGrouping/WRReporting/DerbyPlugIn/ERMoviesLogic" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/WOOgnl/DRGrouping/WRReporting/DerbyPlugIn/ERMoviesLogic/ERAttachment/ERTaggable" />
         </antcall>
     </target>
 
@@ -487,7 +487,7 @@
             <param name="project.dir" value="Examples/Reporting/DynaReporter" />
 
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/WOOgnl/DRGrouping/WRReporting/DerbyPlugIn/ERMoviesLogic" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/WOOgnl/DRGrouping/WRReporting/DerbyPlugIn/ERMoviesLogic/ERAttachment/ERTaggable" />
         </antcall>
     </target>
 
@@ -499,7 +499,7 @@
             <param name="project.dir" value="Examples/Reporting/DRGroupingTest" />
 
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/WOOgnl/DRGrouping/WRReporting/DerbyPlugIn/ERMoviesLogic" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/WOOgnl/DRGrouping/WRReporting/DerbyPlugIn/ERMoviesLogic/ERAttachment/ERTaggable" />
         </antcall>
     </target>
 
@@ -716,7 +716,7 @@
             <param name="project.dir" value="Examples/Ajax/ERDivaLookExample" />
 
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax/ERDivaLook/ERPrototaculous/H2PlugIn/ERMoviesLogic" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax/ERDivaLook/ERPrototaculous/H2PlugIn/ERMoviesLogic/ERAttachment/ERTaggable" />
         </antcall>
     </target>
 
@@ -738,7 +738,7 @@
             <param name="project.dir" value="Examples/D2W/ERDivaliteExample" />
 
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/ERDivaliteLook/H2PlugIn/ERMoviesLogic" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/ERDivaliteLook/H2PlugIn/ERMoviesLogic/ERAttachment/ERTaggable" />
         </antcall>
     </target>
     
@@ -750,7 +750,7 @@
             <param name="project.dir" value="Examples/D2W/ERModernMoviesDemo" />
 
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax/ERModernLook/ERModernDirectToWeb/ERModernDefaultSkin/H2PlugIn/ERMoviesLogic" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax/ERModernLook/ERModernDirectToWeb/ERModernDefaultSkin/H2PlugIn/ERMoviesLogic/ERAttachment/ERTaggable" />
         </antcall>
     </target>
 
