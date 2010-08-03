@@ -168,6 +168,7 @@ public abstract class ERXBrowser implements NSKeyValueCoding {
     public abstract boolean isMozilla45Compatible();
     public abstract boolean isMozilla40Compatible();
 
+    public abstract boolean isVersion8();
     public abstract boolean isVersion7();
     public abstract boolean isVersion6();
     public abstract boolean isVersion5();
