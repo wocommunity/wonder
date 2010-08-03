@@ -2,6 +2,7 @@ package er.extensions.foundation;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -1024,10 +1025,28 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-     * The core class of {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator}, which adds support for keyPaths.<br/>
+     * The BaseOperator is Wonder's core class of 
+     * {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator}. 
+     * This class adds support for chaining multiple array operators in a single 
+     * keypath via its 
+     * {@link er.extensions.foundation.ERXArrayUtilities.BaseOperator#contents(NSArray, String) contents} 
+     * method.<br/>
      */
-
     static abstract class BaseOperator implements NSArray.Operator {
+    	
+    	/**
+    	 * Rather than iterating through the array argument calling
+    	 * {@link com.webobjects.foundation.NSKeyValueCodingAdditions.Utility#valueForKeyPath(Object, String) valueForKeyPath}
+    	 * on each array object, this method operates by calling
+    	 * {@link com.webobjects.foundation.NSArray#valueForKeyPath(String) valueForKeyPath}
+    	 * on the array argument instead.  This method is used by Wonder operators to chain 
+    	 * multiple array operators in a single key path.
+    	 * 
+    	 * @param array the array value for the operator
+    	 * @param keypath the keypath to call on the array argument 
+    	 * @return the object value produced by valueForKeyPath, or the array itself
+    	 * if the keypath is empty
+    	 */
         public Object contents(NSArray<?> array, String keypath) {
             if(array != null && array.count() > 0  && keypath != null && keypath.length() > 0) {
                 return NSKeyValueCodingAdditions.Utility.valueForKeyPath(array, keypath);
@@ -1037,15 +1056,18 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} for the key <b>sort</b>.<br/>
+     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} 
+     * for the key <b>sort</b>.<br/>
      * <br/>
      * This allows for key value paths like:<br/>
-     * <br/>
-     * <code>myArray.valueForKey("@sort.firstName");</code><br/>
-     * <code>myArray.valueForKey("@sort.lastName,firstName.length");</code><br/>
-     * <br/>
-     * Which in the first case would return myArray sorted ascending by first name and the second case
-     * by lastName and then by the length() of the firstName.
+     * <ol>
+     * <li><code>myArray.valueForKey("@sort.firstName");</code></li>
+     * <li><code>myArray.valueForKey("@sort.lastName,firstName.length");</code></li>
+     * </ol>
+     * Which in the first case would return myArray sorted ascending by first name 
+     * and the second case by lastName and then by the length() of the firstName. Due
+     * to the way the sort key arguments are written, this key cannot occur anywhere
+     * except at the very end of the keypath.
      */
     public static class SortOperator implements NSArray.Operator
     {
@@ -1076,15 +1098,18 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} for the key <b>fetchSpec</b>.<br/>
+     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} 
+     * for the key <b>fetchSpec</b>.<br/>
      * <br/>
      * This allows for key value paths like:<br/>
      * <br/>
      * <code>myArray.valueForKey("@fetchSpec.fetchUsers");</code><br/>
      * <br/>
      * Which in this case would return myArray filtered and sorted by the
-     * EOFetchSpecification named "fetchUsers" which must be a model-based fetchspec in the
-     * first object's entity.
+     * EOFetchSpecification named "fetchUsers" which must be a model-based fetchspec 
+     * in the first object's entity.
+     * 
+     * @see BaseOperator
      */
     public static class FetchSpecOperator extends BaseOperator
     {
@@ -1113,13 +1138,17 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} for the key <b>flatten</b>.<br/>
+     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} 
+     * for the key <b>flatten</b>.<br/>
      * <br/>
      * This allows for key value paths like:<br/>
      * <br/>
-     * <code>myArray.valueForKey("@flatten");</code><br/>
+     * <code>myArray.valueForKey("@flatten.someOtherPath");</code><br/>
      * <br/>
-     * Which in this case would return myArray flattened if myArray is an NSArray of NSArrays (of NSArrays etc).
+     * Which in this case would return myArray flattened if myArray is an NSArray 
+     * of NSArrays (of NSArrays etc) before continuing to process someOtherPath.
+     * 
+     * @see BaseOperator
      */
     public static class FlattenOperator extends BaseOperator {
         /** public empty constructor */
@@ -1127,9 +1156,9 @@ public class ERXArrayUtilities extends Object {
 
         /**
         * Flattens the given array.
-         * @param array array to be filtered.
-         * @param keypath name of fetch specification.
-         * @return immutable filtered array.
+         * @param array array to be flattened.
+         * @param keypath additional keypath
+         * @return value following keypath for flattened array
          */
         public Object compute(NSArray<?> array, String keypath) {
             array = flatten(array);
@@ -1138,12 +1167,17 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} for the key <b>isEmpty</b>.<br/>
+     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} 
+     * for the key <b>isEmpty</b>.<br/>
      * <br/>
      * This allows for key value paths like:<br/>
      * <br/>
      * <code>myArray.valueForKey("@isEmpty");</code><br/>
      * <br/>
+     * Which in this case would return {@link java.lang.Boolean#TRUE true} if the
+     * myArray.count() == 0, or {@link java.lang.Boolean#FALSE false} if it is not.
+     * This operator always ends computation.  Any keypath following the isEmpty
+     * operator is simply ignored.
      * 
      */
     public static class IsEmptyOperator implements NSArray.Operator {
@@ -1153,7 +1187,7 @@ public class ERXArrayUtilities extends Object {
         /**
         * returns true if the given array is empty, usefull for WOHyperlink disabled binding.
          * @param array array to be checked.
-         * @param keypath name of fetch specification.
+         * @param keypath the keypath. This value is ignored.
          * @return <code>Boolean.TRUE</code> if array is empty, <code>Boolean.FALSE</code> otherwise.
          */
         public Object compute(NSArray<?> array, String keypath) {
@@ -1163,24 +1197,29 @@ public class ERXArrayUtilities extends Object {
 
 
     /**
-     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} for the key <b>subarrayWithRange</b>.<br/>
+     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} 
+     * for the key <b>subarrayWithRange</b>.<br/>
      * <br/>
      * This allows for key value paths like:<br/>
      * <br/>
-     * <code>myArray.valueForKeyPath("@subarrayWithRange.20-3.name");</code><br/>
+     * <code>myArray.valueForKeyPath("@subarrayWithRange.20-3.someOtherPath");</code><br/>
      * <br/>
-     * Note that the syntax is slightly misleading, implying that you provide a start and end index.  In fact, the
-     * API matches NSRange and you must provide a start index and a length.  Unfortunately changing this either
-     * syntax or implementation will break backwards compatibility (and subtly), so we have to suck it up for now.
+     * Which in this case would return the three objects from <code>myArray</code>, starting 
+     * at the index of 20, before continuing to process <code>someOtherPath</code>.
+     * <br/><br/>
+     * Note that the syntax for the range argument is <b>not</b> startIndex-endIndex. The API 
+     * matches that of NSRange.  You must provide a start index and an array length.
+     *  
+     * @see BaseOperator
      */
     public static class SubarrayWithRangeOperator extends BaseOperator {
         /** public empty constructor */
         public SubarrayWithRangeOperator() {}
 
         /**
-         * @param array array to be checked.
-         * @param keypath name of fetch specification.
-         * @return <code>Boolean.TRUE</code> if array is empty, <code>Boolean.FALSE</code> otherwise.
+         * @param array array to truncate
+         * @param keypath the key path to follow after truncation
+         * @return the value produced by the keypath after truncating the array
          */
         public Object compute(NSArray<?> array, String keypath) {
         	if(ERXStringUtilities.stringIsNullOrEmpty(keypath)) {
@@ -1207,14 +1246,20 @@ public class ERXArrayUtilities extends Object {
 
 
     /**
-     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} for the key <b>limit</b>, which
-     * is similar to subarrayWithRange except that it is always from 0 to the limit value.  If the limit
-     * specified is larger than the size of the array, the entire array will be returned.
+     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} 
+     * for the key <b>limit</b>, which is similar to subarrayWithRange except it is 
+     * always from 0 to the limit value.  If the limit specified is larger than the 
+     * size of the array, the entire array will be returned.
+     * 
      * <br/>
      * This allows for key value paths like:<br/>
      * <br/>
-     * <code>myArray.valueForKeyPath("@limit.10.name");</code><br/>
+     * <code>myArray.valueForKeyPath("@limit.10.someOtherPath");</code><br/>
      * <br/>
+     * Which in this case would return the first 10 objects in <code>myArray</code> 
+     * before continuing to process <code>someOtherPath</code>.
+     * 
+     * @see BaseOperator
      */
     public static class LimitOperator extends BaseOperator {
         /**
@@ -1227,9 +1272,9 @@ public class ERXArrayUtilities extends Object {
         /**
          * Computes the subarray of the given array.
          * 
-         * @param array array to be checked.
-         * @param keypath name of fetch specification.
-         * @return the subarray for the given limit
+         * @param array array to be truncated.
+         * @param keypath the key path to follow after truncation.
+         * @return the value produced by following the keypath after truncation.
          */
         public Object compute(NSArray<?> array, String keypath) {
             int dotIndex = keypath.indexOf(".");
@@ -1252,13 +1297,17 @@ public class ERXArrayUtilities extends Object {
 
 
     /**
-     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} for the key <b>unique</b>.<br/>
+     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} 
+     * for the key <b>unique</b>.<br/>
      * <br/>
      * This allows for key value paths like:<br/>
      * <br/>
      * <code>myArray.valueForKeyPath("@unique.someOtherPath");</code><br/>
      * <br/>
-     * Which in this case would return only those objects which are unique in myArray.
+     * Which in this case would return only those objects which are unique in myArray 
+     * before continuing to process someOtherPath.
+     * 
+     * @see BaseOperator
      */
     public static class UniqueOperator extends BaseOperator {
         /** public empty constructor */
@@ -1269,10 +1318,10 @@ public class ERXArrayUtilities extends Object {
          * Removes duplicates.
          * 
          * @param array
-         *            array to be filtered.
+         *            array to be uniqued.
          * @param keypath
-         *            name of fetch specification.
-         * @return immutable filtered array.
+         *            the key path after removing duplicates from the array
+         * @return the value produced by following the keypath after removing duplicates
          */
         public Object compute(NSArray<?> array, String keypath) {
             if (array != null) array = arrayWithoutDuplicates(array);
@@ -1282,13 +1331,17 @@ public class ERXArrayUtilities extends Object {
 
 
     /**
-     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} for the key <b>removeNullValues</b>.<br/>
+     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} 
+     * for the key <b>removeNullValues</b>.<br/>
      * <br/>
      * This allows for key value paths like:<br/>
      * <br/>
      * <code>myArray.valueForKeyPath("@removeNullValues.someOtherPath");</code><br/>
      * <br/>
-     * Which in this case would remove the occurrences of NSKeyValueCoding.Null from myArray.
+     * Which in this case would remove the occurrences of NSKeyValueCoding.Null from myArray
+     * before continuing to process someOtherPath.
+     * 
+     * @see BaseOperator
      */
     public static class RemoveNullValuesOperator extends BaseOperator {
         /** public empty constructor */
@@ -1301,8 +1354,8 @@ public class ERXArrayUtilities extends Object {
          * @param array
          *            array to be filtered.
          * @param keypath
-         *            name of fetch specification.
-         * @return immutable filtered array.
+         *            the key path to follow after filtering
+         * @return the value produced by following keypath after filtering nulls from the array
          */
         public Object compute(NSArray<?> array, String keypath) {
         	array = removeNullValues(array);
@@ -1327,7 +1380,7 @@ public class ERXArrayUtilities extends Object {
          * returns the keypath value for n-ths object.
          * @param array array to be checked.
          * @param keypath integer value of index (zero based).
-         * @return <code>null</code> if array is empty or value is not in index, <code>keypath</code> value otherwise.
+         * @return <code>null</code> if array is empty or value is not in index, <code>keypath</code> value for the object at index otherwise.
          */
         public Object compute(NSArray<?> array, String keypath) {
             int end = keypath.indexOf(".");
@@ -1343,13 +1396,26 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} for the key <b>avgNonNull</b>.<br/>
+     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} 
+     * for the key <b>avgNonNull</b>.<br/>
      * <br/>
      * This allows for key value paths like:<br/>
-     * <br/>
-     * <code>myArray.valueForKey("@avgNonNull.revenue");</code><br/>
-     * <br/>
-     * which will sum up all values and divide by the number of nun-null entries. 
+     * <ul>
+     * <li><code>myArray.valueForKey("@avgNonNull.payment.amount");</code></li>
+     * <li><code>myArray.valueForKey("payment.@avgNonNull.amount");</code></li>
+     * <li><code>myArray.valueForKey("payment.amount.@avgNonNull");</code></li>
+     * </ul>
+     * which will sum up all values for the key amount and divide by the number 
+     * of nun-null entries. @avgNonNull applies to the array of objects to its 
+     * left if it is the last key in the path.  Otherwise it applies to the end 
+     * of the keypath to its right.  It should not be followed by an array or 
+     * any other array operators.  This is because it does not call 
+     * {@link com.webobjects.foundation.NSArray#valueForKeyPath() valueForKeyPath} on 
+     * the array to its left, but instead loops through the values of the array 
+     * to its left, calling 
+     * {@link com.webobjects.foundation.NSKeyValueCodingAdditions.Utility#valueForKeyPath(Object, String) valueForKeyPath}
+     * on the individual array values instead. This behavior is consistent with 
+     * Apple's standard NSArray operators.
      */
     public static class AvgNonNullOperator implements NSArray.Operator {
         /** public empty constructor */
@@ -1358,35 +1424,44 @@ public class ERXArrayUtilities extends Object {
         /**
          * returns the average value for over all non-null values.
          * @param array array to be checked.
-         * @param keypath value of average.
-         * @return computed average as double or <code>NULL</code>.
+         * @param keypath path to numeric values
+         * @return computed average as BigDecimal or <code>NULL</code>.
          */
         public Object compute(NSArray<?> array, String keypath) {
-            BigDecimal result = new BigDecimal(0L);
+            BigDecimal sum = new BigDecimal(0L);
             int count = 0;
+            Object obj, tmp;
+            BigDecimal val;
+            final boolean noKeypath = keypath == null || keypath.length() <= 0;
             
             for(Enumeration<?> e = array.objectEnumerator(); e.hasMoreElements();) {
-                Object value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(e.nextElement(), keypath);
-                if(value != null && value != NSKeyValueCoding.NullValue) {
-                    count = count+1;
-                    result = result.add(ERXValueUtilities.bigDecimalValue(value));
+            	tmp = e.nextElement();
+            	obj = noKeypath?tmp:NSKeyValueCodingAdditions.Utility.valueForKeyPath(tmp, keypath);
+                if(!ERXValueUtilities.isNull(obj)) {
+                    count += 1;
+                    val = ERXValueUtilities.bigDecimalValue(obj);
+                    sum = sum.add(val);
                 }
             }
             if(count == 0) {
                 return null;
             }
-            return result.divide(BigDecimal.valueOf(count), result.scale() + 4, 6);
+            return sum.divide(BigDecimal.valueOf(count), sum.scale() + 4, BigDecimal.ROUND_HALF_EVEN);
         }
     }
 
     /**
-     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} for the key <b>reverse</b>.<br/>
+     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} 
+     * for the key <b>reverse</b>.<br/>
      * <br/>
      * This allows for key value paths like:<br/>
      * <br/>
-     * <code>myArray.valueForKey("@reverse.someMorePath");</code><br/>
+     * <code>myArray.valueForKey("@reverse.someOtherPath");</code><br/>
      * <br/>
-     * which return a reversed result as to you would normally get.
+     * which would reverse the order of the array myArray before continuing to
+     * process someOtherPath.
+     * 
+     * @see BaseOperator
      */
     public static class ReverseOperator extends BaseOperator {
         /** public empty constructor */
@@ -1395,39 +1470,100 @@ public class ERXArrayUtilities extends Object {
         /**
          * returns the reverse value for the values of the keypath.
          * @param array array to be checked.
-         * @param keypath value of reverse.
-         * @return reversed array for keypath.
+         * @param keypath additional keypath
+         * @return value produced following keypath after array is reversed
          */
         public Object compute(NSArray<?> array, String keypath) {
             array = reverse(array);
             return contents(array, keypath);
         }
     }
+    
     /**
-     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} for the key <b>median</b>.<br/>
+     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} 
+     * for the key <b>median</b>.<br/>
      * <br/>
      * This allows for key value paths like:<br/>
-     * <br/>
-     * <code>myArray.valueForKey("@median.someMorePath");</code><br/>
-     * <br/>
-     * which return the median of the array elements at the given key path.
-     * The median is the value for which half of the elements are above and half the elements are below.
-     * As such, an array sort is needed and this might be very costly depending of the size of the array.
+     * <ul>
+     * <li><code>myArray.valueForKey("@median.payment.amount");</code></li>
+     * <li><code>myArray.valueForKey("payment.@median.amount");</code></li>
+     * <li><code>myArray.valueForKey("payment.amount.@median");</code></li>
+     * </ul>
+     * which return the median of the array elements at the given key path. The 
+     * median is the value for which half of the elements are above and half the 
+     * elements are below. As such, an array sort is needed and this might be 
+     * very costly depending of the size of the array. 
+     * <br/><br/>
+     * The @median operator applies to the array of objects to its 
+     * left if it is the last key in the path.  Otherwise it applies to the end 
+     * of the keypath to its right.  It should not be followed by an array or 
+     * any other array operators.  This is because it does not call 
+     * {@link com.webobjects.foundation.NSArray#valueForKeyPath() valueForKeyPath} on 
+     * the array to its left, but instead loops through the values of the array 
+     * to its left, calling 
+     * {@link com.webobjects.foundation.NSKeyValueCodingAdditions.Utility#valueForKeyPath(Object, String) valueForKeyPath}
+     * on the individual array values instead. This behavior is consistent with 
+     * Apple's standard NSArray operators.
      */
-    public static class MedianOperator extends BaseOperator {
+    public static class MedianOperator implements NSArray.Operator {
         /** public empty constructor */
         public MedianOperator() {}
 
         /**
          * returns the median value for the values of the keypath.
          * @param array array to be checked.
-         * @param keypath value of reverse.
-         * @return reversed array for keypath.
+         * @param keypath path to numeric values
+         * @return median value
          */
         public Object compute(NSArray<?> array, String keypath) {
             return median(array, keypath);
         }
     }
+    
+    /**
+     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} 
+     * for the key <b>stdDev</b> and <b>popStdDev</b>.<br/>
+     * <br/>
+     * This allows for key value paths like:<br/>
+     * <ul>
+     * <li><code>myArray.valueForKey("@stdDev.payment.amount");</code></li>
+     * <li><code>myArray.valueForKey("payment.@stdDev.amount");</code></li>
+     * <li><code>myArray.valueForKey("payment.amount.@stdDev");</code></li>
+     * </ul>
+     * All three of these examples will return the same value, which in this case 
+     * is the standard deviation of the amounts. The standard deviation is a 
+     * measure of the dispersion of a sample of numbers. The population standard 
+     * deviation is used if you have the values for an entire population.
+     * <br/><br/>
+     * The standard deviation operator applies to the array of objects to its 
+     * left if it is the last key in the path.  Otherwise it applies to the end 
+     * of the keypath to its right.  It should not be followed by an array or 
+     * any other array operators.  This is because it does not call 
+     * {@link com.webobjects.foundation.NSArray#valueForKeyPath() valueForKeyPath} on 
+     * the array to its left, but instead loops through the values of the array 
+     * to its left, calling 
+     * {@link com.webobjects.foundation.NSKeyValueCodingAdditions.Utility#valueForKeyPath(Object, String) valueForKeyPath}
+     * on the individual array values instead. This behavior is consistent with 
+     * Apple's standard NSArray operators.
+     */
+    public static class StandardDeviationOperator implements NSArray.Operator {
+    	private boolean isPop;
+    	
+    	public StandardDeviationOperator(boolean isPopulation) {
+    		this.isPop = isPopulation;
+    	}
+    	
+        /**
+         * returns the standard deviation value for the values of the keypath.
+         * @param array array to be checked.
+         * @param keypath path to numeric values
+         * @return standard deviation value
+         */
+    	public Object compute(NSArray<?> array, String keypath) {
+    		return stdDev(array, keypath, isPop);
+    	}
+    }
+    
     /** 
      * Will register new NSArray operators
      * <b>sort</b>, <b>sortAsc</b>, <b>sortDesc</b>, <b>sortInsensitiveAsc</b>,
@@ -1456,6 +1592,8 @@ public class ERXArrayUtilities extends Object {
             NSArray.setOperatorForKey("removeNullValues", new RemoveNullValuesOperator());
             NSArray.setOperatorForKey("median", new MedianOperator());
             NSArray.setOperatorForKey("limit", new LimitOperator());
+            NSArray.setOperatorForKey("stdDev", new StandardDeviationOperator(false));
+            NSArray.setOperatorForKey("popStdDev", new StandardDeviationOperator(true));
         }
     }
     
@@ -1466,32 +1604,91 @@ public class ERXArrayUtilities extends Object {
      * As such, an array sort is needed and this might be very costly depending of the size of the array.
      * @param array array of objects
      * @param keypath key path for the median
+     * 
+     * @return the median value
      */
     public static Number median(NSArray<?> array, String keypath) {
-        int count = array.count();
+        final int count = array.count();
+        final boolean noKeypath = keypath == null || keypath.length() <= 0;
+        Object obj, tmp;
         Number value;
+        
         if(count == 0) {
             value = null;
+        
         } else if(count == 1) {
-            value = (Number) array.valueForKeyPath(keypath);
+            obj = noKeypath?array.objectAtIndex(0):array.valueForKeyPath(keypath);
+            value = ERXValueUtilities.bigDecimalValue(obj);
+        
         } else {
-            // array = (NSArray) array.valueForKeyPath(keypath);
-            // array = ERXArrayUtilities.sortedArraySortedWithKey(array, "doubleValue");
-            array = sortedArraySortedWithKey(array, keypath);
+        	//Sort the array
+        	NSArray sortedArray;
+        	if(noKeypath) {
+        		NSMutableArray sortlist = array.mutableClone();
+        		Collections.sort(sortlist);
+        		sortedArray = sortlist;
+        	} else {
+        		sortedArray = sortedArraySortedWithKey(array, keypath);
+        	}
+        	
+        	//Find the midpoint
             int mid = count / 2;
+            obj = sortedArray.objectAtIndex(mid);
+            
+            //If the count is even, average the two midpoints
             if(count % 2 == 0) {
-                Object o = array.objectAtIndex(mid-1);
-                Number a = (Number)NSKeyValueCodingAdditions.Utility.valueForKeyPath(o, keypath);
-                o = array.objectAtIndex(mid);
-                Number b = (Number)NSKeyValueCodingAdditions.Utility.valueForKeyPath(o, keypath);
-                value = new Double((a.doubleValue()+b.doubleValue())/2);
+            	tmp = noKeypath?obj:NSKeyValueCodingAdditions.Utility.valueForKeyPath(obj, keypath);
+            	BigDecimal a = ERXValueUtilities.bigDecimalValue(tmp);
+            	obj = sortedArray.objectAtIndex(mid - 1);
+            	tmp = noKeypath?obj:NSKeyValueCodingAdditions.Utility.valueForKeyPath(obj, keypath);
+            	BigDecimal b = ERXValueUtilities.bigDecimalValue(tmp);
+            	BigDecimal sum = a.add(b);
+            	value = sum.divide(BigDecimal.valueOf(2), sum.scale() + 4, BigDecimal.ROUND_HALF_EVEN);
+            	
             } else {
-                value = (Number) NSKeyValueCodingAdditions.Utility.valueForKeyPath(array.objectAtIndex(mid), keypath);
+            	tmp = noKeypath?obj:NSKeyValueCodingAdditions.Utility.valueForKeyPath(obj, keypath);
+            	value = ERXValueUtilities.bigDecimalValue(tmp);
             }
         }
         return value;
     }
-    
+        
+    /**
+     * Finds the standard deviation of the numeric values found in the array at the
+     * specified keypath. If the keypath is null or empty, then the array values are
+     * used instead. If the array has fewer than two objects, null is returned. If
+     * isPopulation is true, the population standard deviation is calculated. If
+     * isPopulation is false, the sample standard deviation is calculated. Use a 
+     * true value for isPopulation if you know the values for an entire population 
+     * and false if you are dealing with a sample.
+     * 
+     * @param array an array of objects
+     * @param keypath a key path to a numeric value on each object
+     * @param isPopulation 
+     * @return the standard deviation for the numeric values
+     */
+    public static Number stdDev(NSArray<?> array, String keypath, boolean isPopulation) {
+    	final int count = array.count();
+    	if(count < 2) {return null;}
+    	final boolean noKeypath = keypath == null || keypath.length() <= 0;
+    	Object val = noKeypath?array.valueForKey("@avg"):array.valueForKeyPath(keypath + ".@avg");
+    	BigDecimal mean = ERXValueUtilities.bigDecimalValue(val);
+    	BigDecimal sum = BigDecimal.valueOf(0);
+    	BigDecimal divisor = BigDecimal.valueOf(isPopulation?count:count-1);
+    	BigDecimal diff;
+    	Object obj;
+    	
+    	for(Object tmp: array) {
+    		obj = noKeypath?tmp:NSKeyValueCodingAdditions.Utility.valueForKeyPath(tmp, keypath);
+    		diff = ERXValueUtilities.bigDecimalValue(obj).subtract(mean);
+    		diff = diff.multiply(diff);
+    		sum = sum.add(diff);
+    	}
+    	
+    	sum = sum.divide(divisor, sum.scale() + 4, BigDecimal.ROUND_HALF_EVEN);
+    	return BigDecimal.valueOf(Math.sqrt(sum.doubleValue()));
+    }
+        
     /**
      * Shorter name for arrayWithoutDuplicates, which I always forget the name of.
      * 

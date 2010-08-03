@@ -56,6 +56,7 @@ public class ERXKey<T> {
 	private static final ERXKey<?> LIMIT = new ERXKey<Object>("@limit");
 	private static final ERXKey<BigDecimal> MEDIAN = new ERXKey<BigDecimal>("@median");
 	private static final ERXKey<?> OBJECT_AT_INDEX = new ERXKey<Object>("@objectAtIndex");
+	private static final ERXKey<BigDecimal> POP_STD_DEV = new ERXKey<BigDecimal>("@popStdDev");
 	private static final ERXKey<?> REMOVE_NULL_VALUES = new ERXKey<Object>("@removeNullValues");
 	private static final ERXKey<?> REVERSE = new ERXKey<Object>("@reverse");
 	private static final ERXKey<?> SORT = new ERXKey<Object>("@sort");
@@ -63,6 +64,7 @@ public class ERXKey<T> {
 	private static final ERXKey<?> SORT_DESC = new ERXKey<Object>("@sortDesc");
 	private static final ERXKey<?> SORT_INSENSITIVE_ASC = new ERXKey<Object>("@sortInsensitiveAsc");
 	private static final ERXKey<?> SORT_INSENSITIVE_DESC = new ERXKey<Object>("@sortInsensitiveDesc");
+	private static final ERXKey<BigDecimal> STD_DEV = new ERXKey<BigDecimal>("@stdDev");
 	private static final ERXKey<?> SUBARRAY_WITH_RANGE = new ERXKey<Object>("@subarrayWithRange");
 	private static final ERXKey<?> UNIQUE = new ERXKey<Object>("@unique");
 
@@ -73,9 +75,22 @@ public class ERXKey<T> {
 	 * @param key
 	 *            the key to use for this aggregate keypath
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.AvgNonNullOperator AvgNonNullOperator
 	 */
 	public static ERXKey<BigDecimal> avgNonNull(ERXKey<?> key) {
-		return (ERXKey<BigDecimal>) AVG_NON_NULL.append(key);
+		return (ERXKey<BigDecimal>) avgNonNull().append(key);
+	}
+	
+	/**
+	 * Returns ERXArrayUtilities' avgNonNull aggregate operator @avgNonNull.
+	 * 
+	 * @return the avgNonNull key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.AvgNonNullOperator AvgNonNullOperator
+	 */
+	public static ERXKey<BigDecimal> avgNonNull() {
+		return AVG_NON_NULL;
 	}
 	
 	/**
@@ -85,9 +100,22 @@ public class ERXKey<T> {
 	 * @param key
 	 *            the key to use for this aggregate keypath
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.AvgNonNullOperator AvgNonNullOperator
 	 */
 	public ERXKey<BigDecimal> atAvgNonNull(ERXKey<?> key) {
 		return append(ERXKey.avgNonNull(key));
+	}
+
+	/**
+	 * Returns a new ERXKey that appends ERXArrayUtilities' avgNonNull aggregate operator @avgNonNull.
+	 * 
+	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.AvgNonNullOperator AvgNonNullOperator
+	 */
+	public ERXKey<BigDecimal> atAvgNonNull() {
+		return append(ERXKey.avgNonNull());
 	}
 	
 	/**
@@ -100,6 +128,8 @@ public class ERXKey<T> {
 	 * @param key
 	 *            the key to use for this keypath
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.FetchSpecOperator FetchSpecOperator
 	 */
 	public static <U> ERXKey<NSArray<U>> fetchSpec(String fetchSpecName, ERXKey<U> key) {
 		return FETCH_SPEC.append(fetchSpecName).appendAsArray(key);
@@ -115,6 +145,8 @@ public class ERXKey<T> {
 	 * @param key
 	 *            the key to use for this keypath
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.FetchSpecOperator FetchSpecOperator
 	 */
 	public <U> ERXKey<NSArray<U>> atFetchSpec(String fetchSpecName, ERXKey<U> key) {
 		return append(ERXKey.fetchSpec(fetchSpecName, key));
@@ -128,6 +160,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.FetchSpecOperator FetchSpecOperator
 	 */
 	public static <U> ERXKey<U> fetchSpec(String fetchSpecName) {
 		return FETCH_SPEC.append(fetchSpecName);
@@ -141,6 +175,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.FetchSpecOperator FetchSpecOperator
 	 */
 	public <U> ERXKey<U> atFetchSpec(String fetchSpecName) {
 		return (ERXKey<U>) append(ERXKey.fetchSpec(fetchSpecName));
@@ -154,6 +190,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.FlattenOperator FlattenOperator
 	 */
 	public static <U> ERXKey<NSArray<U>> flatten(ERXKey<U> key) {
 		return FLATTEN.appendAsArray(key);
@@ -167,6 +205,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.FlattenOperator FlattenOperator
 	 */
 	public <U> ERXKey<NSArray<U>> atFlatten(ERXKey<U> key) {
 		return append(ERXKey.flatten(key));
@@ -178,6 +218,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.FlattenOperator FlattenOperator
 	 */
 	public static <U> ERXKey<U> flatten() {
 		return (ERXKey<U>) FLATTEN;
@@ -189,6 +231,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.FlattenOperator FlattenOperator
 	 */
 	public <U> ERXKey<U> atFlatten() {
 		return (ERXKey<U>) append(ERXKey.flatten());
@@ -196,9 +240,12 @@ public class ERXKey<T> {
 
 	/**
 	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * isEmpty operator @isEmpty.
+	 * isEmpty operator @isEmpty. Since any keypath beyond @isEmpty is ignored, 
+	 * only a no arg method is available.
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.IsEmptyOperator IsEmptyOperator
 	 */
 	public static ERXKey<Boolean> isEmpty() {
 		return IS_EMPTY;
@@ -206,9 +253,12 @@ public class ERXKey<T> {
 	
 	/**
 	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * isEmpty operator @isEmpty.
+	 * isEmpty operator @isEmpty. Since any keypath beyond @isEmpty is ignored, 
+	 * only a no arg method is available.
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.IsEmptyOperator IsEmptyOperator
 	 */
 	public ERXKey<Boolean> atIsEmpty() {
 		return append(ERXKey.isEmpty());
@@ -224,6 +274,8 @@ public class ERXKey<T> {
 	 * @param key
 	 *            the key to use for this keypath
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.LimitOperator LimitOperator
 	 */
 	public static <U> ERXKey<NSArray<U>> limit(Integer limit, ERXKey<U> key) {
 		return LIMIT.append(limit.toString()).appendAsArray(key);
@@ -239,6 +291,8 @@ public class ERXKey<T> {
 	 * @param key
 	 *            the key to use for this keypath
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.LimitOperator LimitOperator
 	 */
 	public <U> ERXKey<NSArray<U>> atLimit(Integer limit, ERXKey<U> key) {
 		return append(ERXKey.limit(limit , key));
@@ -253,6 +307,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.LimitOperator LimitOperator
 	 */
 	public static <U> ERXKey<U> limit(Integer limit) {
 		return LIMIT.append(limit.toString());
@@ -267,21 +323,51 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.LimitOperator LimitOperator
 	 */
 	public <U> ERXKey<U> atLimit(Integer limit) {
 		return (ERXKey<U>) append(ERXKey.limit(limit));
 	}
 	
 	/**
+	 * Returns ERXArrayUtilities' median aggregate operator @median.
+	 * 
+	 * @param key
+	 *            the key to use for this aggregate keypath
+	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.MedianOperator MedianOperator
+	 */
+	public static ERXKey<BigDecimal> median() {
+		return MEDIAN;
+	}
+
+	/**
 	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' median aggregate operator @median. For
 	 * instance, if the key is "price" this will return a new ERXKey "@median.price".
 	 * 
 	 * @param key
 	 *            the key to use for this aggregate keypath
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.MedianOperator MedianOperator
 	 */
 	public static ERXKey<BigDecimal> median(ERXKey<?> key) {
 		return (ERXKey<BigDecimal>) MEDIAN.append(key);
+	}
+	
+	/**
+	 * Returns a new ERXKey that appends the given key with ERXArrayUtilities' median aggregate operator @median.
+	 * 
+	 * @param key
+	 *            the key to use for this aggregate keypath
+	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.MedianOperator MedianOperator
+	 */
+	public ERXKey<BigDecimal> atMedian() {
+		return append(ERXKey.median());
 	}
 	
 	/**
@@ -291,6 +377,8 @@ public class ERXKey<T> {
 	 * @param key
 	 *            the key to use for this aggregate keypath
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.MedianOperator MedianOperator
 	 */
 	public ERXKey<BigDecimal> atMedian(ERXKey<?> key) {
 		return append(ERXKey.median(key));
@@ -305,6 +393,8 @@ public class ERXKey<T> {
 	 * @param index The index of the object to return from the array
 	 * @param key the key following the operator
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.ObjectAtIndexOperator ObjectAtIndexOperator
 	 */
 	public static <U> ERXKey<U> objectAtIndex(Integer index, ERXKey<U> key) {
 		return OBJECT_AT_INDEX.append(index.toString()).append(key);
@@ -319,6 +409,8 @@ public class ERXKey<T> {
 	 * @param index The index of the object to return from the array
 	 * @param key the key following the operator
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.ObjectAtIndexOperator ObjectAtIndexOperator
 	 */
 	public <U> ERXKey<U> atObjectAtIndex(Integer index, ERXKey<U> key) {
 		return append(ERXKey.objectAtIndex(index , key));
@@ -332,6 +424,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * @param index The index of the object to return from the array
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.ObjectAtIndexOperator ObjectAtIndexOperator
 	 */
 	public static <U> ERXKey<U> objectAtIndex(Integer index) {
 		return OBJECT_AT_INDEX.append(index.toString());
@@ -345,6 +439,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * @param index The index of the object to return from the array
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.ObjectAtIndexOperator ObjectAtIndexOperator
 	 */
 	public <U> ERXKey<U> atObjectAtIndex(Integer index) {
 		return (ERXKey<U>) append(ERXKey.objectAtIndex(index));
@@ -358,6 +454,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.RemoveNullValuesOperator RemoveNullValuesOperator
 	 */
 	public static <U> ERXKey<U> removeNullValues(ERXKey<U> key) {
 		return REMOVE_NULL_VALUES.append(key);
@@ -371,6 +469,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.RemoveNullValuesOperator RemoveNullValuesOperator
 	 */
 	public <U> ERXKey<U> atRemoveNullValues(ERXKey<U> key) {
 		return append(ERXKey.removeNullValues(key));
@@ -383,6 +483,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.RemoveNullValuesOperator RemoveNullValuesOperator
 	 */
 	public static <U> ERXKey<U> removeNullValues() {
 		return (ERXKey<U>) REMOVE_NULL_VALUES;
@@ -395,6 +497,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.RemoveNullValuesOperator RemoveNullValuesOperator
 	 */
 	public <U> ERXKey<U> atRemoveNullValues() {
 		return (ERXKey<U>) append(ERXKey.removeNullValues());
@@ -408,6 +512,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.ReverseOperator ReverseOperator
 	 */
 	public static <U> ERXKey<NSArray<U>> reverse(ERXKey<U> key) {
 		return REVERSE.appendAsArray(key);
@@ -421,6 +527,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.ReverseOperator ReverseOperator
 	 */
 	public <U> ERXKey<NSArray<U>> atReverse(ERXKey<U> key) {
 		return append(ERXKey.reverse(key));
@@ -433,6 +541,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.ReverseOperator ReverseOperator
 	 */
 	public static <U> ERXKey<U> reverse() {
 		return (ERXKey<U>) REVERSE;
@@ -445,6 +555,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.ReverseOperator ReverseOperator
 	 */
 	public <U> ERXKey<U> atReverse() {
 		return (ERXKey<U>) append(ERXKey.reverse());
@@ -460,6 +572,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.SortOperator SortOperator
 	 */
 	public static <U> ERXKey<U> sort(ERXKey<?> ... sortKeys) {
 		NSArray<String> keyArray = (NSArray<String>) new NSArray<ERXKey<?>>(sortKeys).valueForKey("key");
@@ -476,6 +590,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.SortOperator SortOperator
 	 */
 	public <U> ERXKey<U> atSort(ERXKey<?> ... sortKeys) {
 		return (ERXKey<U>) append(ERXKey.sort(sortKeys));
@@ -491,6 +607,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.SortOperator SortOperator
 	 */
 	public static <U> ERXKey<U> sortAsc(ERXKey<?> ... sortKeys) {
 		NSArray<String> keyArray = (NSArray<String>) new NSArray<ERXKey<?>>(sortKeys).valueForKey("key");
@@ -507,6 +625,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.SortOperator SortOperator
 	 */
 	public <U> ERXKey<U> atSortAsc(ERXKey<?> ... sortKeys) {
 		return (ERXKey<U>) append(ERXKey.sortAsc(sortKeys));
@@ -522,6 +642,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.SortOperator SortOperator
 	 */
 	public static <U> ERXKey<U> sortDesc(ERXKey<?> ... sortKeys) {
 		NSArray<String> keyArray = (NSArray<String>) new NSArray<ERXKey<?>>(sortKeys).valueForKey("key");
@@ -538,6 +660,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.SortOperator SortOperator
 	 */
 	public <U> ERXKey<U> atSortDesc(ERXKey<?> ... sortKeys) {
 		return (ERXKey<U>) append(ERXKey.sortDesc(sortKeys));
@@ -553,6 +677,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.SortOperator SortOperator
 	 */
 	public static <U> ERXKey<U> sortInsensitiveAsc(ERXKey<?> ... sortKeys) {
 		NSArray<String> keyArray = (NSArray<String>) new NSArray<ERXKey<?>>(sortKeys).valueForKey("key");
@@ -569,6 +695,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.SortOperator SortOperator
 	 */
 	public <U> ERXKey<U> atSortInsensitiveAsc(ERXKey<?> ... sortKeys) {
 		return (ERXKey<U>) append(ERXKey.sortInsensitiveAsc(sortKeys));
@@ -585,6 +713,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.SortOperator SortOperator
 	 */
 	public static <U> ERXKey<U> sortInsensitiveDesc(ERXKey<?> ... sortKeys) {
 		NSArray<String> keyArray = (NSArray<String>) new NSArray<ERXKey<?>>(sortKeys).valueForKey("key");
@@ -601,6 +731,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.SortOperator SortOperator
 	 */
 	public <U> ERXKey<U> atSortInsensitiveDesc(ERXKey<?> ... sortKeys) {
 		return (ERXKey<U>) append(ERXKey.sortInsensitiveDesc(sortKeys));
@@ -615,6 +747,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.SubarrayWithRangeOperator SubarrayWithRangeOperator
 	 */
 	public static <U> ERXKey<NSArray<U>> subarrayWithRange(NSRange range, ERXKey<U> key) {
 		return SUBARRAY_WITH_RANGE.append(range.location() + "-" + range.length()).appendAsArray(key);
@@ -629,6 +763,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.SubarrayWithRangeOperator SubarrayWithRangeOperator
 	 */
 	public <U> ERXKey<NSArray<U>> atSubarrayWithRange(NSRange range, ERXKey<U> key) {
 		return append(ERXKey.subarrayWithRange(range , key));
@@ -644,6 +780,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.SubarrayWithRangeOperator SubarrayWithRangeOperator
 	 */
 	public static <U> ERXKey<U> subarrayWithRange(NSRange range) {
 		return SUBARRAY_WITH_RANGE.append(range.location() + "-" + range.length());
@@ -659,6 +797,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.SubarrayWithRangeOperator SubarrayWithRangeOperator
 	 */
 	public <U> ERXKey<U> atSubarrayWithRange(NSRange range) {
 		return (ERXKey<U>) append(ERXKey.subarrayWithRange(range));
@@ -672,6 +812,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.UniqueOperator UniqueOperator
 	 */
 	public static <U> ERXKey<NSArray<U>> unique(ERXKey<U> key) {
 		return UNIQUE.appendAsArray(key);
@@ -685,6 +827,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.UniqueOperator UniqueOperator
 	 */
 	public <U> ERXKey<NSArray<U>> atUnique(ERXKey<U> key) {
 		return append(ERXKey.unique(key));
@@ -697,6 +841,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.UniqueOperator UniqueOperator
 	 */
 	public static <U> ERXKey<U> unique() {
 		return (ERXKey<U>) UNIQUE;
@@ -709,6 +855,8 @@ public class ERXKey<T> {
 	 * @param <U> the type of the next key
 	 * 
 	 * @return the new appended key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.UniqueOperator UniqueOperator
 	 */
 	public <U> ERXKey<U> atUnique() {
 		return (ERXKey<U>) append(ERXKey.unique());
@@ -754,6 +902,98 @@ public class ERXKey<T> {
 	 */
 	public static ERXKey<BigDecimal> sum() {
 		return SUM;
+	}
+	
+	/**
+	 * Returns a new ERXKey that uses Wonder's standard deviation operator @popStdDev
+	 * 
+	 * @return the new key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.StandardDeviationOperator StandardDeviationOperator
+	 */
+	public static ERXKey<BigDecimal> popStdDev() {
+		return POP_STD_DEV;
+	}
+	
+	/**
+	 * Returns a new ERXKey that uses Wonder's standard deviation operator @popStdDev
+	 * 
+	 * @return the new key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.StandardDeviationOperator StandardDeviationOperator
+	 */
+	public ERXKey<BigDecimal> atPopStdDev() {
+		return append(ERXKey.popStdDev());
+	}
+	
+	/**
+	 * Returns a new ERXKey that uses Wonder's standard deviation operator @popStdDev
+	 * @param key the key to append
+	 * 
+	 * @return the new key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.StandardDeviationOperator StandardDeviationOperator
+	 */
+	public static ERXKey<BigDecimal> popStdDev(ERXKey<?> key) {
+		return (ERXKey<BigDecimal>)popStdDev().append(key);
+	}
+	
+	/**
+	 * Returns a new ERXKey that uses Wonder's standard deviation operator @popStdDev
+	 * @param key the key to append
+	 * 
+	 * @return the new key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.StandardDeviationOperator StandardDeviationOperator
+	 */
+	public ERXKey<BigDecimal> atPopStdDev(ERXKey<?> key) {
+		return append(ERXKey.popStdDev(key));
+	}
+	
+	/**
+	 * Returns a new ERXKey that uses Wonder's standard deviation operator @stdDev
+	 * 
+	 * @return the new key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.StandardDeviationOperator StandardDeviationOperator
+	 */
+	public static ERXKey<BigDecimal> stdDev() {
+		return STD_DEV;
+	}
+	
+	/**
+	 * Returns a new ERXKey that uses Wonder's standard deviation operator @stdDev
+	 * 
+	 * @return the new key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.StandardDeviationOperator StandardDeviationOperator
+	 */
+	public ERXKey<BigDecimal> atStdDev() {
+		return append(ERXKey.stdDev());
+	}
+	
+	/**
+	 * Returns a new ERXKey that uses Wonder's standard deviation operator @stdDev
+	 * @param key the key to append
+	 * 
+	 * @return the new key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.StandardDeviationOperator StandardDeviationOperator
+	 */
+	public static ERXKey<BigDecimal> stdDev(ERXKey<?> key) {
+		return (ERXKey<BigDecimal>)stdDev().append(key);
+	}
+	
+	/**
+	 * Returns a new ERXKey that uses Wonder's standard deviation operator @stdDev
+	 * @param key the key to append
+	 * 
+	 * @return the new key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.StandardDeviationOperator StandardDeviationOperator
+	 */
+	public ERXKey<BigDecimal> atStdDev(ERXKey<?> key) {
+		return append(ERXKey.stdDev(key));
 	}
 	
 	/**
@@ -899,7 +1139,8 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns a new ERXKey that uses NSArray's COUNT operator @count.
+	 * Returns a new ERXKey that uses NSArray's COUNT operator @count. Since any
+	 * keypath beyond @count is ignored, only a no arg method is available.
 	 * 
 	 * @return the new key
 	 */
@@ -908,7 +1149,8 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that uses NSArray's COUNT operator @count.
+	 * Returns a new ERXKey that uses NSArray's COUNT operator @count. Since any
+	 * keypath beyond @count is ignored, only a no arg method is available.
 	 * 
 	 * @return the new key
 	 */
