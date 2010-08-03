@@ -14,6 +14,7 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.ajax.json.JSONBridge;
+import er.extensions.appserver.ERXResponseRewriter;
 
 /**
  * Handles javascript-java communication (client-server) between the javascript world running in a web browser and the
@@ -124,7 +125,7 @@ public class AjaxProxy extends AjaxComponent {
 			// add the javascript variable 'name' only if not already in the
 			// response
 			userInfo.setObjectForKey(bridge, key);
-			AjaxUtils.addScriptCodeInHead(res, context(), "var " + name + " = new JSONRpcClient(\"" + AjaxUtils.ajaxComponentActionUrl(context()) + "\");");
+			ERXResponseRewriter.addScriptCodeInHead(res, context(), "var " + name + " = new JSONRpcClient(\"" + AjaxUtils.ajaxComponentActionUrl(context()) + "\");", key);
 		}
 		else {
 			// ok, the javascript variable 'name' is already in the response,
