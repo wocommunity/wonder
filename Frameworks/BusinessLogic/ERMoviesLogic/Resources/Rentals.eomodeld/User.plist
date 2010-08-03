@@ -3,7 +3,7 @@
         {
             columnName = "ACCESS_LEVEL"; 
             externalType = integer; 
-            name = accessLevel;  
+            name = accessLevel; 
             valueClassName = NSNumber; 
             valueType = i; 
         }, 
@@ -19,14 +19,14 @@
             columnName = PASSWORD; 
             externalType = char; 
             name = password; 
-            valueClassName = NSString;
+            valueClassName = NSString; 
             valueType = c; 
             width = 20; 
         }, 
         {
             columnName = "USER_ID"; 
             externalType = integer; 
-            name = userID;  
+            name = userID; 
             valueClassName = NSNumber; 
             valueType = i; 
         }, 
@@ -34,7 +34,7 @@
             columnName = LOGIN; 
             externalType = char; 
             name = username; 
-            valueClassName = NSString;
+            valueClassName = NSString; 
             valueType = c; 
             width = 20; 
         }
@@ -42,7 +42,7 @@
     attributesUsedForLocking = (userID, username, password, accessLevel, customerID); 
     className = "webobjectsexamples.businesslogic.rentals.common.User"; 
     classProperties = (username, password, accessLevel, customer); 
-    externalName = rentalsuser; 
+    externalName = rentaluser; 
     internalInfo = {
         "_clientClassPropertyNames" = (username, password, accessLevel, customer); 
         "_javaClientClassName" = "webobjectsexamples.businesslogic.rentals.common.User"; 
