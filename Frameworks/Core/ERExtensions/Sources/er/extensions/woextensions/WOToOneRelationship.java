@@ -9,6 +9,7 @@ import com.webobjects.foundation.NSMutableArray;
 import er.extensions.ERXExtensions;
 import er.extensions.components.ERXArrayChooser;
 import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * Back port from WO 5 WOExtensions. This component is binding compatible, but not source compatible.<br />
@@ -61,7 +62,7 @@ public class WOToOneRelationship extends ERXArrayChooser {
     
     public void setSelection(Object value) {
         if ((value!=null) && (value instanceof NSArray)) {
-            log.warn("We were passed an array but expected an EO. Compensating by choosing first element");
+            log.warn("We were passed an array but expected an EO. Compensating by choosing first element");                	
             NSArray array = (NSArray)value;
             if (array.count() == 0) {
                 value = null;
@@ -105,7 +106,20 @@ public class WOToOneRelationship extends ERXArrayChooser {
         if ((_selection==null) && !isMandatory()) {
             setSelection(NO_SELECTION_STRING);
         }
-        return _selection;
+        //If using a browser, we have to return an array. Be sure we don't stick null into an array.
+        Object selection;
+        if (isBrowser()) {
+        	if (_selection == null) {
+        		selection = NSArray.EmptyArray;
+        	}
+        	else {
+        		selection = new NSArray(_selection);
+        	}
+        }
+        else {
+        	selection = _selection;
+        }
+        return selection;
     }
     
     public NSArray theList() {
