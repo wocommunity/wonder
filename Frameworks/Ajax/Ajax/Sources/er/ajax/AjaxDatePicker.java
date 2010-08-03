@@ -17,7 +17,7 @@ import er.extensions.appserver.ERXResponseRewriter;
 
 /**
  * Shameless port and adoption of Rails Date Kit.  This input understands the format symbols
- * %d, %e, %b, %m, %B, %y, and %Y. See the NSTimestampFormatter for 
+ * %A, %d, %e, %b, %m, %B, %y, and %Y. See the NSTimestampFormatter for 
  * what these symbols do. This component can also understand the corresponding symbols from 
  * java.text.SimpleDateFormat.  The translation from SimpleDateFormat symbols to NSTimestampFormatter
  * symbols may have some defects.
