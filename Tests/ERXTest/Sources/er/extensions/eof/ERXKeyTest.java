@@ -11,6 +11,7 @@ import org.junit.Test;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSRange;
 import com.webobjects.foundation.NSTimestamp;
 
@@ -59,6 +60,17 @@ public class ERXKeyTest extends ERXTestCase {
 	private NSArray<String> shinraNonManagerNames;
 	private NSArray<Employee> tyrellEmployees;
 	private NSArray<Paycheck> paychecks;
+	
+	private static final String numKey = "num";
+	private static final ERXKey<Integer> num = new ERXKey<Integer>(numKey);
+	private static final NSDictionary<String, Integer> uno = new NSDictionary<String, Integer>(Integer.valueOf(1), numKey);
+	private static final NSDictionary<String, Integer> dos = new NSDictionary<String, Integer>(Integer.valueOf(2), numKey);
+	private static final NSDictionary<String, Integer> tres = new NSDictionary<String, Integer>(Integer.valueOf(3), numKey);
+	private static final NSDictionary<String, Integer> quatro = new NSDictionary<String, Integer>(Integer.valueOf(4), numKey);
+	private static final NSDictionary<String, Integer> cinco = new NSDictionary<String, Integer>(Integer.valueOf(5), numKey);
+	private static final NSArray<NSDictionary<String, Integer>> numbers = new NSArray<NSDictionary<String,Integer>>(uno, dos, tres, quatro, cinco);
+	private static final NSArray<Integer> simpleNumbers = new NSArray<Integer>(Integer.valueOf(1),Integer.valueOf(2),Integer.valueOf(3),Integer.valueOf(4),Integer.valueOf(5));
+
 	
 	@Before
 	public void setUp() throws Exception {
@@ -165,10 +177,22 @@ public class ERXKeyTest extends ERXTestCase {
 		BigDecimal d = Company.EMPLOYEES.dot(ERXKey.avgNonNull(Employee.BEST_SALES_TOTAL)).valueInObject(shinraInc);
 		assertTrue(BigDecimal.valueOf(7500L).compareTo(d) == 0);
 	}
+	
+	@Test
+	public void testAvgNonNull() {
+		BigDecimal d = Company.EMPLOYEES.dot(Employee.BEST_SALES_TOTAL).dot(ERXKey.avgNonNull()).valueInObject(shinraInc);
+		assertTrue(BigDecimal.valueOf(7500L).compareTo(d) == 0);
+	}
 
 	@Test
 	public void testAtAvgNonNullERXKeyOfQ() {
 		BigDecimal d = Company.EMPLOYEES.atAvgNonNull(Employee.BEST_SALES_TOTAL).valueInObject(shinraInc);
+		assertTrue(BigDecimal.valueOf(7500L).compareTo(d) == 0);
+	}
+	
+	@Test
+	public void testAtAvgNonNull() {
+		BigDecimal d = Company.EMPLOYEES.dot(Employee.BEST_SALES_TOTAL).atAvgNonNull().valueInObject(shinraInc);
 		assertTrue(BigDecimal.valueOf(7500L).compareTo(d) == 0);
 	}
 
@@ -259,6 +283,34 @@ public class ERXKeyTest extends ERXTestCase {
 	public void testAtLimitInteger() {
 		NSArray<Employee> employees = (NSArray<Employee>) Company.EMPLOYEES.atLimit(Integer.valueOf(2)).valueInObject(shinraInc);
 		assertTrue(employees.count() == 2);
+	}
+	
+	@Test
+	public void testMedian() {
+		BigDecimal d = Employee.PAYCHECKS.dot(Paycheck.AMOUNT).dot(ERXKey.median()).valueInObject(rufus);
+		assertTrue(BigDecimal.valueOf(10000L).compareTo(d) == 0);
+		d = ERXKey.median().valueInObject(new NSArray(Integer.valueOf(1000), Integer.valueOf(2000), Integer.valueOf(3000), Integer.valueOf(4000) ));
+		assertTrue(BigDecimal.valueOf(2500L).compareTo(d) == 0);
+		d = ERXKey.median().valueInObject(new NSArray(Integer.valueOf(2000)));
+		assertTrue(BigDecimal.valueOf(2000L).compareTo(d) == 0);
+		
+		//Should work with strings too
+		d = ERXKey.median().valueInObject(new NSArray("1000", "2000", "3000", "4000"));
+		assertTrue(BigDecimal.valueOf(2500L).compareTo(d) == 0);
+		d = ERXKey.median().valueInObject(new NSArray("1000", "2000", "3000"));
+		assertTrue(BigDecimal.valueOf(2000L).compareTo(d) == 0);
+		d = ERXKey.median().valueInObject(new NSArray("2000"));
+		assertTrue(BigDecimal.valueOf(2000L).compareTo(d) == 0);
+		
+		//Return null on empty arrays
+		d = ERXKey.median().valueInObject(NSArray.EmptyArray);
+		assertTrue(d == null);
+	}
+	
+	@Test
+	public void testAtMedian() {
+		BigDecimal d = Employee.PAYCHECKS.dot(Paycheck.AMOUNT).atMedian().valueInObject(rufus);
+		assertTrue(BigDecimal.valueOf(10000L).compareTo(d) == 0);
 	}
 
 	@Test
@@ -670,6 +722,50 @@ public class ERXKeyTest extends ERXTestCase {
 		assertEquals(Integer.valueOf(3), count);
 		count = Company.EMPLOYEES.atCount().valueInObject(shinraInc);
 		assertEquals(Integer.valueOf(4), count);
+		count = Company.EMPLOYEES.dot(Employee.ROLES).atCount().valueInObject(shinraInc);
+		assertEquals(Integer.valueOf(4), count);
+	}
+
+	public void testPopStdDev() {
+		BigDecimal yuri = ERXKey.popStdDev().valueInObject(simpleNumbers);
+		assertTrue(BigDecimal.valueOf(Math.sqrt(2)).compareTo(yuri) == 0);
+	}
+
+	public void testAtPopStdDev() {
+		BigDecimal yuri = num.atPopStdDev().valueInObject(numbers);
+		assertTrue(BigDecimal.valueOf(Math.sqrt(2)).compareTo(yuri) == 0);
+	}
+
+	public void testPopStdDevERXKeyOfQ() {
+		BigDecimal yuri = ERXKey.popStdDev(num).valueInObject(numbers);
+		assertTrue(BigDecimal.valueOf(Math.sqrt(2)).compareTo(yuri) == 0);
+	}
+
+	public void testAtPopStdDevERXKeyOfQ() {
+		//Normally wouldn't need to do this, but works with strings as well as numbers
+		BigDecimal yuri = num.atPopStdDev(new ERXKey<String>("toString")).valueInObject(numbers);
+		assertTrue(BigDecimal.valueOf(Math.sqrt(2)).compareTo(yuri) == 0);
+	}
+
+	public void testStdDev() {
+		BigDecimal yuri = ERXKey.stdDev().valueInObject(simpleNumbers);
+		assertTrue(BigDecimal.valueOf(Math.sqrt(2.5)).compareTo(yuri) == 0);
+	}
+
+	public void testAtStdDev() {
+		BigDecimal yuri = num.atStdDev().valueInObject(numbers);
+		assertTrue(BigDecimal.valueOf(Math.sqrt(2.5)).compareTo(yuri) == 0);
+	}
+
+	public void testStdDevERXKeyOfQ() {
+		BigDecimal yuri = ERXKey.stdDev(num).valueInObject(numbers);
+		assertTrue(BigDecimal.valueOf(Math.sqrt(2.5)).compareTo(yuri) == 0);
+	}
+
+	public void testAtStdDevERXKeyOfQ() {
+		//Normally wouldn't need to do this, but works with strings as well as numbers
+		BigDecimal yuri = num.atStdDev(new ERXKey<String>("toString")).valueInObject(numbers);
+		assertTrue(BigDecimal.valueOf(Math.sqrt(2.5)).compareTo(yuri) == 0);
 	}
 
 }

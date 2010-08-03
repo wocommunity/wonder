@@ -1,6 +1,8 @@
 
 package er.extensions.foundation;
 
+import java.math.BigDecimal;
+
 import junit.framework.Assert;
 
 import com.webobjects.eocontrol.EOSortOrdering;
@@ -1064,5 +1066,19 @@ public class ERXArrayUtilitiesTest extends ERXTestCase {
 
     public void testdeepCloneNSSet() {
         // public static com.webobjects.foundation.NSSet deepClone(com.webobjects.foundation.NSSet, boolean);
+    }
+    
+    public void testStdDev() {
+    	String numKey = "num";
+    	NSDictionary<String, Integer> uno = new NSDictionary<String, Integer>(Integer.valueOf(1), numKey);
+    	NSDictionary<String, Integer> dos = new NSDictionary<String, Integer>(Integer.valueOf(2), numKey);
+    	NSDictionary<String, Integer> tres = new NSDictionary<String, Integer>(Integer.valueOf(3), numKey);
+    	NSDictionary<String, Integer> quatro = new NSDictionary<String, Integer>(Integer.valueOf(4), numKey);
+    	NSDictionary<String, Integer> cinco = new NSDictionary<String, Integer>(Integer.valueOf(5), numKey);
+    	NSArray<NSDictionary<String, Integer>> numbers = new NSArray<NSDictionary<String,Integer>>(uno, dos, tres, quatro, cinco);
+    	BigDecimal pop = ERXValueUtilities.bigDecimalValue(ERXArrayUtilities.stdDev(numbers, numKey, true));
+    	assertTrue(BigDecimal.valueOf(Math.sqrt(2)).compareTo(pop) == 0);
+    	BigDecimal samp = ERXValueUtilities.bigDecimalValue(ERXArrayUtilities.stdDev(numbers, numKey, false));
+    	assertTrue(BigDecimal.valueOf(Math.sqrt(2.5)).compareTo(samp) == 0);
     }
 }
