@@ -16,6 +16,7 @@ ToggleLink : AjaxUpdateLink {
 AjaxUpdateContainer : AjaxUpdateContainer {
   id = id;
   class = ^class;
+  onRefreshComplete = onExpansionComplete;
 }
 
 EscapedLinkString: WOString {
