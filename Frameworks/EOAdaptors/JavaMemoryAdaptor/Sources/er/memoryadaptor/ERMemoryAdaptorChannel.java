@@ -24,6 +24,12 @@ public class ERMemoryAdaptorChannel extends EOAdaptorChannel {
   private NSMutableArray<NSMutableDictionary<String, Object>> _fetchedRows;
   private int _fetchIndex;
   private boolean _open;
+  // During a fetch, the adaptor channel is called:
+  //   1) selectAttributes
+  //   2) Multiple calls to fetchRow()
+  // We need a variable for the "is fetch in progress" because it should be true from 1) to the last call in 2).
+  // Of course, it become false if there is an exception during this process (cancelFetch is called in such case).
+  private boolean _fetchInProgress = false;
 
   public ERMemoryAdaptorChannel(ERMemoryAdaptorContext context) {
     super(context);
@@ -47,6 +53,7 @@ public class ERMemoryAdaptorChannel extends EOAdaptorChannel {
 
   @Override
   public void cancelFetch() {
+	_fetchInProgress = false;
     _fetchedRows = null;
     _fetchIndex = -1;
   }
@@ -83,16 +90,24 @@ public class ERMemoryAdaptorChannel extends EOAdaptorChannel {
 
   @Override
   public NSMutableDictionary fetchRow() {
+	if (!_fetchInProgress) {
+		return null;
+	}
     NSMutableDictionary row = null;
-    if (_fetchedRows != null && _fetchIndex < _fetchedRows.count()) {
+    if (hasMoreRowsToReturn()) {
       row = _fetchedRows.objectAtIndex(_fetchIndex++);
     }
+    _fetchInProgress = hasMoreRowsToReturn();
     return row;
+  }
+  
+  private boolean hasMoreRowsToReturn() {
+	  return _fetchedRows != null && _fetchIndex < _fetchedRows.count();
   }
 
   @Override
   public boolean isFetchInProgress() {
-    return _fetchedRows != null && _fetchIndex < _fetchedRows.count();
+    return _fetchInProgress;
   }
 
   @Override
@@ -120,6 +135,7 @@ public class ERMemoryAdaptorChannel extends EOAdaptorChannel {
     if (attributesToFetch == null) {
       throw new IllegalArgumentException("null attributes.");
     }
+    _fetchInProgress = true;
     setAttributesToFetch(attributesToFetch);
 
     EREntityStore store = adaptorContext()._entityStoreForEntity(entity);
