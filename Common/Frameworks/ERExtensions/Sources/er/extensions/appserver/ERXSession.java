@@ -351,10 +351,20 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    */
   public EOEditingContext defaultEditingContext() {
     if (!_editingContextWasCreated) {
-      setDefaultEditingContext(ERXEC.newEditingContext());
+      setDefaultEditingContext(newDefaultEditingContext());
       _editingContextWasCreated = true;
     }
     return super.defaultEditingContext();
+  }
+
+
+  /**
+   * Create a new editing context. Sub classes can override this method to customize the editing context created. If the session locks teh default editing context this context must be returned unlocked.
+   *
+   * @return editing context.
+   */
+  public EOEditingContext newDefaultEditingContext() {
+    return ERXEC.newEditingContext();
   }
 
   public void setDefaultEditingContext(EOEditingContext ec) {
