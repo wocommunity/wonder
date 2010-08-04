@@ -90,3 +90,9 @@ ERDivaLook pref
 
 er.extensions.ERXLocalizer.frameworkSearchPath = (app,ERDivaLook,ERDirectToWeb,ERExtensions)
 er.prototaculous.useUnobtrusively=true
+
+#################
+ERMoviesLogic 
+#################
+
+dbConnectPluginGLOBAL = H2PlugIn
