@@ -119,3 +119,9 @@ ERDivaLook pref
 #################
 
 er.extensions.ERXLocalizer.frameworkSearchPath = (app,ERDivaliteLook,ERDirectToWeb,ERExtensions)
+
+#################
+ERMoviesLogic 
+#################
+
+dbConnectPluginGLOBAL = H2PlugIn
