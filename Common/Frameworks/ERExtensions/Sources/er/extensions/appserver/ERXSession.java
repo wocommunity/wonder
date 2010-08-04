@@ -357,6 +357,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
     return super.defaultEditingContext();
   }
 
+
   public void setDefaultEditingContext(EOEditingContext ec) {
     _editingContextWasCreated = true;
     super.setDefaultEditingContext(ec);
