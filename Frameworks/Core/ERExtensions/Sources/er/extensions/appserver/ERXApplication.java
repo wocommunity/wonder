@@ -126,6 +126,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	/** statistic logging support */
 	public static final Logger statsLog = Logger.getLogger("er.extensions.ERXApplication.Statistics");
 
+	/** startup logging support */
+	public static final Logger startupLog = Logger.getLogger("er.extensions.ERXApplication.Startup");
+
 	private static boolean wasERXApplicationMainInvoked = false;
 
 	/**
@@ -525,7 +528,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		}
 		
 		private void debugMsg(String msg) {
-			System.out.println(msg);
+			// System.out.println(msg);
 		}
 		
 		public boolean didLoad() {
@@ -857,8 +860,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				}
 			}
 			catch (IOException e) {
-				// AK AK TODO: Auto-generated catch block
-				log.error("Error in processing jar: "+ jar, e);
+				startupLog.error("Error in processing jar: "+ jar, e);
 			}
 		}
 
@@ -875,7 +877,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			}
 			message = sb.toString();
 			if (message.length() > 0) {
-				log.info("The following packages appear multiple times:\n" + message);
+				startupLog.debug("The following packages appear multiple times:\n" + message);
 			}
 			sb = new StringBuffer();
 			NSMutableSet<String> classPackages = new NSMutableSet<String>();
@@ -891,7 +893,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			}
 			message = sb.toString();
 			if (message.length() > 0) {
-				log.warn("The following packages have different versions, you should remove the version you don't want:\n" + message);
+				startupLog.debug("The following packages have different versions, you should remove the version you don't want:\n" + message);
 			}
 		}
 	}
