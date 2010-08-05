@@ -16,7 +16,7 @@ public class WOEventSetupPage extends WOEventPage {
     public String	currentEventDescription;
     public int		currentIndex;
 
-    protected static _ClassNameComparator _classNameAscendingComparator = new _ClassNameComparator(EOSortOrdering.CompareAscending);
+    protected static final _ClassNameComparator _classNameAscendingComparator = new _ClassNameComparator(EOSortOrdering.CompareAscending);
     
     public WOEventSetupPage(WOContext aContext) {
         super(aContext);
