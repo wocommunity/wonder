@@ -12,8 +12,8 @@ import com.webobjects.eoaccess.*;
 import java.text.ParseException;
 
 public class WOAnyField extends WOComponent {
-    protected static String DEFAULT_DATE_FORMAT = "YYYY/MM/DD";
-    protected static String DEFAULT_NUMBER_FORMAT = "0";
+    protected static final String DEFAULT_DATE_FORMAT = "YYYY/MM/DD";
+    protected static final String DEFAULT_NUMBER_FORMAT = "0";
 
     private String _relationshipKey;
     private String _selectedKey;
