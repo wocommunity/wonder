@@ -570,7 +570,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				// deliberately randomize this so that not all instances restart at
 				// the same time
 				// adding up to 1 hour
-				s += (new Random()).nextFloat() * 3600;
+				s += (Math.random() * 3600);
 	
 				NSTimestamp stopDate = now.timestampByAddingGregorianUnits(0, 0, 0, 0, 0, s);
 				WOTimer t = new WOTimer(stopDate, 0, this, "startRefusingSessions", null, null, false);
