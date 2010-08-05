@@ -232,20 +232,24 @@ public class ERXWORepetition extends WODynamicGroup {
 			}
 			// If the EO isn't in an EC, or it has a null GID, then just fall back to the hash code
 			if (gid == null) {
-				hashCode = Math.abs(System.identityHashCode(object));
+				hashCode = System.identityHashCode(object);
 			}
 			else {
 				hashCode = gid.hashCode();
 			}
 		}
 		else {
-			hashCode = Math.abs(System.identityHashCode(object));
+			hashCode = System.identityHashCode(object);
 		}
+		// @see java.lang.Math#abs for an explanation of this
+		if (hashCode == Integer.MIN_VALUE) {
+			hashCode = 37; // MS: random prime number
+		}
+		hashCode = Math.abs(hashCode);
 		if (_debugHashCodes != null && _debugHashCodes.booleanValueInComponent(component)) {
 			log.info("debugHashCodes for '" + _list.keyPath() + "', " + object + " = " + hashCode);
 		}
 		return hashCode;
-		// return (object == null ? 0 : Math.abs(object.hashCode()));
 	}
 	
 	private String keyForObject(WOComponent component, Object object) {
