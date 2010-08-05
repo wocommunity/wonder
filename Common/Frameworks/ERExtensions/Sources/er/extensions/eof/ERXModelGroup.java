@@ -1122,7 +1122,6 @@ public class ERXModelGroup extends EOModelGroup {
 			return;
 		}
 		String prototypesFixedKey = "_EOPrototypesFixed";
-		NSMutableDictionary prototypeReplacement = new NSMutableDictionary();
 		for (Enumeration modelsEnum = models().objectEnumerator(); modelsEnum.hasMoreElements();) {
 			EOModel model = (EOModel) modelsEnum.nextElement();
 			if(_prototypeModelNames.containsObject(model.name())) {
