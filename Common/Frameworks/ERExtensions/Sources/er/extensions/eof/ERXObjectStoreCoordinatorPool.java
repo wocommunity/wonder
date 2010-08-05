@@ -47,7 +47,7 @@ public class ERXObjectStoreCoordinatorPool {
     private ObjectStoreCoordinator[] objectStores;
     private Observer observer;
     private Object lock = new Object();
-    protected static ERXObjectStoreCoordinatorPool defaultPool;
+    protected static final ERXObjectStoreCoordinatorPool defaultPool;
 
     static {
         defaultPool = new ERXObjectStoreCoordinatorPool();
