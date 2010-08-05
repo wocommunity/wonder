@@ -420,7 +420,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 						String jar = parts[i];
 						// Windows has \, we need to normalize
 						String fixedJar = jar.replace(File.separatorChar, '/').toLowerCase();
-						// System.out.println("Checking: " + jar);
+						debugMsg("Checking: " + jar);
 						// all patched frameworks here
 						if (isSystemJar(jar)) {
 							systemLibs += jar + File.pathSeparator;
@@ -443,9 +443,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 							String info = jar.replaceAll("(.*?[/\\\\]\\w+\\.framework/Resources/).*", "$1Info.plist");
 							if (new File(info).exists()) {
 								allFrameworks.add(bundle);
+								debugMsg("Added Real Bundle: " + bundle);
 							}
 							else {
-								// System.out.println("Omitted: " + info);
+								debugMsg("Omitted: " + info);
 							}
 						}
 						else if (jar.endsWith(".jar")) {
@@ -454,14 +455,14 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 								NSDictionary dict = (NSDictionary) NSPropertyListSerialization.propertyListFromString(info);
 								bundle = (String) dict.objectForKey("CFBundleExecutable");
 								allFrameworks.add(bundle);
-								// System.out.println("Jar bundle: " + bundle);
+								debugMsg("Added Jar bundle: " + bundle);
 							}
 						}
 						// MS: This is totally hacked in to make Wonder startup properly with the new rapid turnaround. It's duplicating (poorly)
 						// code from NSProjectBundle. I'm not sure we actually need this anymore, because NSBundle now fires an "all bundles loaded" event.
 						else if (jar.endsWith("/bin") && new File(new File(jar).getParentFile(), ".project").exists()) {
 							// AK: I have no idea if this is checked anywhere else, but this keeps is from having to set it in the VM args.
-							System.setProperty("NSProjectBundleEnabled", "true");
+							debugMsg("Plain bundle: " + jar);
 							for (File classpathFolder = new File(bundle); classpathFolder != null && classpathFolder.exists(); classpathFolder = classpathFolder.getParentFile()) {
 								File projectFile = new File(classpathFolder, ".project");
 								if (projectFile.exists()) {
@@ -474,17 +475,25 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 											Element natureContainerNode = (Element)natureNodeList.item(natureNodeNum);
 											Node natureNode = natureContainerNode.getFirstChild();
 											String nodeValue = natureNode.getNodeValue();
-											if (nodeValue != null && nodeValue.startsWith("org.objectstyle.wolips.")) {
+											// AK: we don't actually add apps to the bundle process (Mike, why not!?)
+											if (nodeValue != null && nodeValue.startsWith("org.objectstyle.wolips.") && !nodeValue.contains("application")) {
 												isBundle = true;
 											}
 										}
 										if (isBundle) {
+											System.setProperty("NSProjectBundleEnabled", "true");
 											allFrameworks.add(classpathFolder.getName());
+											debugMsg("Added Binary Bundle: " + allFrameworks);
+										} else {
+											debugMsg("Skipping binary bundle: " + jar);
 										}
 									}
 									catch (Throwable t) {
 										System.err.println("Skipping '" + projectFile + "': " + t);
 									}
+									break;
+								} else {
+									debugMsg("Skipping, no project: " + projectFile);
 								}
 							}
 						}
@@ -513,6 +522,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				}
 			}
 			NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("bundleDidLoad", new Class[] { NSNotification.class }), "NSBundleDidLoadNotification", null);
+		}
+		
+		private void debugMsg(String msg) {
+			System.out.println(msg);
 		}
 		
 		public boolean didLoad() {
