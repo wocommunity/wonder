@@ -14,6 +14,7 @@ import org.w3c.dom.Document;
 import org.xhtmlrenderer.extend.ReplacedElementFactory;
 import org.xhtmlrenderer.pdf.ITextFontResolver;
 import org.xhtmlrenderer.pdf.ITextRenderer;
+import org.xhtmlrenderer.resource.FSEntityResolver;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -35,9 +36,9 @@ public class FlyingSaucerImpl implements PDFBuilder {
 
   static {
     _builderFactory = DocumentBuilderFactory.newInstance();
-    _builderFactory.setValidating(false);
-    _builderFactory.setNamespaceAware(false);
-    _builderFactory.setAttribute("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+    _builderFactory.setValidating(true);
+    _builderFactory.setNamespaceAware(true);
+    _builderFactory.setAttribute("http://apache.org/xml/features/nonvalidating/load-external-dtd", true);
   }
 
   public FlyingSaucerImpl() {
@@ -73,6 +74,7 @@ public class FlyingSaucerImpl implements PDFBuilder {
     try {
       exception = null;
       builder = _builderFactory.newDocumentBuilder();
+      builder.setEntityResolver(FSEntityResolver.instance());
       builder.setErrorHandler(errorHandler);
     } catch (ParserConfigurationException e) {
       throw NSForwardException._runtimeExceptionForThrowable(e);
