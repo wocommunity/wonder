@@ -5,8 +5,6 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.D2WEditRelationshipPage;
 import com.webobjects.eoaccess.EOUtilities;
-import com.webobjects.eocontrol.EODataSource;
-import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import er.extensions.eof.ERXEC;
 
@@ -23,13 +21,13 @@ import er.extensions.eof.ERXEC;
  *
  * <p>If you access this component via the {@link er.directtoweb.components.relationships.ERD2WQueryToOneFault} component, these things are all done for you.</p>
  *
- * @author Travis Cripps 
+ * @author Travis Cripps
  */
 public class ERD2WQueryRelationshipPage extends D2WEditRelationshipPage {
 
     protected String _displayKey;
 
-    protected EOEnterpriseObject _eoToUse;
+    public EOEnterpriseObject eoToUse;
     protected EOEnterpriseObject _selectedEO;
 
     private PageState _pageState = PageState.Query;
@@ -108,7 +106,7 @@ public class ERD2WQueryRelationshipPage extends D2WEditRelationshipPage {
      */
     @Override
     public WOComponent selectAction() {
-        EOEnterpriseObject eoToUse = _eoToUse != null ? EOUtilities.localInstanceOfObject(_editingContext, _eoToUse) : null;
+        EOEnterpriseObject eoToUse = this.eoToUse != null ? EOUtilities.localInstanceOfObject(_editingContext, this.eoToUse) : null;
         if (eoToUse != null) {
             _selectedEO = eoToUse;
         } else {
