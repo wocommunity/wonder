@@ -519,7 +519,7 @@ public abstract class ERDSavedQueriesComponent extends WOComponent {
             return ERXArrayUtilities.arrayGroupedByKeyPath(savedQueries, "name", false, null);
         }
         else {
-            return NSDictionary.emptyDictionary();
+            return NSDictionary.EmptyDictionary;
         }
     }
     
