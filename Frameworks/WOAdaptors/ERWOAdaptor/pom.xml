@@ -7,8 +7,8 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>wonder.woadaptors</groupId>
-	<artifactId>ERIMAdaptor</artifactId>
-	<name>ERIMAdaptor Framework</name>
+	<artifactId>ERWOAdaptor</artifactId>
+	<name>ERWOAdaptor Framework</name>
 	<packaging>woframework</packaging>
 
 	<build>
@@ -16,11 +16,6 @@
 	</build>
 
 	<dependencies>
-		<dependency>
-			<groupId>wonder.core</groupId>
-			<artifactId>ERExtensions</artifactId>
-			<classifier>${woClassifier}</classifier>
-		</dependency>
 		<dependency>
 			<groupId>com.webobjects</groupId>
 			<artifactId>JavaFoundation</artifactId>
@@ -30,9 +25,12 @@
 			<artifactId>JavaWebObjects</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.intellij</groupId>
-			<artifactId>annotations</artifactId>
-			<version>7.0.3</version>
+			<groupId>org.jboss.netty</groupId>
+			<artifactId>netty</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
 		</dependency>
 	</dependencies>
 </project>

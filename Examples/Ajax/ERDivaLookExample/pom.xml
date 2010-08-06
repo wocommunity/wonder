@@ -29,6 +29,10 @@
 			<artifactId>ERDivaLook</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>wonder.businesslogic</groupId>
+			<artifactId>ERMoviesLogic</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.webobjects</groupId>
 			<artifactId>JavaDirectToWeb</artifactId>
 		</dependency>
