@@ -1,11 +1,18 @@
 package er.directtoweb.components.misc;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.ParseException;
 import java.util.Enumeration;
 
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WODisplayGroup;
+import com.webobjects.appserver.WOSession;
+import com.webobjects.appserver._private.WODirectActionRequestHandler;
+import com.webobjects.appserver._private.WODynamicURL;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.D2WModel;
 import com.webobjects.eoaccess.EOAttribute;
@@ -68,30 +75,37 @@ public abstract class ERDSavedQueriesComponent extends WOComponent {
 
     protected NSKeyValueCoding userPreferences() {
         if (_userPreferences == null) {
-            Class prefClass = ERXPatcher.classForName("ERCoreUserPreferences");
-
-            if (prefClass == null) {
-                _userPreferences = (NSKeyValueCoding) session().objectForKey("ERCoreUserPreferences");
-                if (_userPreferences == null) {
-                    _userPreferences = new NSMutableDictionary();
-                    session().setObjectForKey(_userPreferences, "ERCoreUserPreferences");
-                }
-            } else {
-                NSSelector s = new NSSelector("userPreferences", new Class[] {});
-                _userPreferences = (NSKeyValueCoding) ERXSelectorUtilities.invoke(s, prefClass);
-            }
+            _userPreferences = userPreferences(session());
         }
         return _userPreferences;
+    }
+    
+    static NSKeyValueCoding userPreferences(WOSession session) {
+        NSKeyValueCoding result = null;
+        Class prefClass = ERXPatcher.classForName("ERCoreUserPreferences");
+
+        if (prefClass == null) {
+            result = (NSKeyValueCoding) session.objectForKey("ERCoreUserPreferences");
+            if (result == null) {
+                result = new NSMutableDictionary();
+                session.setObjectForKey(result, "ERCoreUserPreferences");
+            }
+        } else {
+            NSSelector s = new NSSelector("userPreferences", new Class[] {});
+            result = (NSKeyValueCoding) ERXSelectorUtilities.invoke(s, prefClass);
+        }
+        
+        return result;
     }
 
     public static class SavedQuery implements NSKeyValueCoding, EOKeyValueArchiving {
         private NSMutableDictionary dict = null;
-        public final String NAME_KEY = "name";
-        public final String QUERY_MIN_KEY = "queryMin";
-        public final String QUERY_MAX_KEY = "queryMax";
-        public final String QUERY_MATCH_KEY = "queryMatch";
-        public final String QUERY_OPERATOR_KEY = "queryOperator";
-        public final String QUERY_BINDINGS_KEY = "queryBindings";
+        public static final String NAME_KEY = "name";
+        public static final String QUERY_MIN_KEY = "queryMin";
+        public static final String QUERY_MAX_KEY = "queryMax";
+        public static final String QUERY_MATCH_KEY = "queryMatch";
+        public static final String QUERY_OPERATOR_KEY = "queryOperator";
+        public static final String QUERY_BINDINGS_KEY = "queryBindings";
 
         public static interface SerializationKeys {
             public static final String EncodedEO = "encodedEO";
@@ -113,7 +127,7 @@ public abstract class ERDSavedQueriesComponent extends WOComponent {
             getValuesFromDisplayGroup(displayGroup);
         }
 
-        protected String logDictionary(String title, NSDictionary dictionary, String indentStr) {
+        protected static String logDictionary(String title, NSDictionary dictionary, String indentStr) {
             StringBuffer buf = new StringBuffer();
 
             buf.append("\r\n" + indentStr + "==========" + ((title != null) ? title : "") + "==================\r\n");
@@ -135,8 +149,21 @@ public abstract class ERDSavedQueriesComponent extends WOComponent {
             return buf.toString();
         }
 
-        private NSMutableDictionary _updateDisplayGroupForKey(WODisplayGroup displayGroup, String key, boolean clearFormFirst) {
-            NSDictionary source = (NSDictionary) valueForKey(key);
+        public void sendValuesToDisplayGroup(WODisplayGroup displayGroup, boolean clearFormFirst) {
+            sendValuesToDisplayGroup(this, displayGroup, clearFormFirst);
+        }
+        
+        public static void sendValuesToDisplayGroup(SavedQuery savedQuery, WODisplayGroup displayGroup, boolean clearFormFirst) {
+            updateDisplayGroupForKey(savedQuery, displayGroup, QUERY_MIN_KEY, clearFormFirst);
+            updateDisplayGroupForKey(savedQuery, displayGroup, QUERY_MAX_KEY, clearFormFirst);
+            updateDisplayGroupForKey(savedQuery, displayGroup, QUERY_MATCH_KEY, clearFormFirst);
+            updateDisplayGroupForKey(savedQuery, displayGroup, QUERY_OPERATOR_KEY, clearFormFirst);
+            updateDisplayGroupForKey(savedQuery, displayGroup, QUERY_BINDINGS_KEY, clearFormFirst);
+        }
+        
+        static NSMutableDictionary updateDisplayGroupForKey(SavedQuery savedQuery, WODisplayGroup displayGroup, String key, boolean clearFormFirst) {
+            
+            NSDictionary source = (NSDictionary) savedQuery.valueForKey(key);
 
             NSMutableDictionary destination = (NSMutableDictionary) displayGroup.valueForKey(key);
 
@@ -162,14 +189,6 @@ public abstract class ERDSavedQueriesComponent extends WOComponent {
             }
 
             return destination;
-        }
-
-        public void sendValuesToDisplayGroup(WODisplayGroup displayGroup, boolean clearFormFirst) {
-            _updateDisplayGroupForKey(displayGroup, QUERY_MIN_KEY, clearFormFirst);
-            _updateDisplayGroupForKey(displayGroup, QUERY_MAX_KEY, clearFormFirst);
-            _updateDisplayGroupForKey(displayGroup, QUERY_MATCH_KEY, clearFormFirst);
-            _updateDisplayGroupForKey(displayGroup, QUERY_OPERATOR_KEY, clearFormFirst);
-            _updateDisplayGroupForKey(displayGroup, QUERY_BINDINGS_KEY, clearFormFirst);
         }
 
         public void getValuesFromDisplayGroup(WODisplayGroup displayGroup) {
@@ -437,15 +456,15 @@ public abstract class ERDSavedQueriesComponent extends WOComponent {
     public final String DEFAULT_QUERY_NONE = "";
     public boolean needsAutoSubmit = false;
 
-    public String userPreferenceNameForPageConfiguration(String pageConfiguration) {
+    public static String userPreferenceNameForPageConfiguration(String pageConfiguration) {
         return "SavedQueryFor:" + pageConfiguration;
     }
 
-    public String userPreferenceNameForDefaultQueryWithPageConfiguration(String pageConfiguration) {
+    public static String userPreferenceNameForDefaultQueryWithPageConfiguration(String pageConfiguration) {
         return "DefaultQueryNameFor:" + pageConfiguration;
     }
 
-    public String userPreferenceNameForAutoSubmitWithPageConfiguration(String pageConfiguration) {
+    public static String userPreferenceNameForAutoSubmitWithPageConfiguration(String pageConfiguration) {
         return "AutoSubmitQueryFor:" + pageConfiguration;
     }
 
@@ -465,7 +484,45 @@ public abstract class ERDSavedQueriesComponent extends WOComponent {
 
         return savedQueries == null ? new NSMutableArray() : savedQueries.mutableClone();
     }
+    
+    /**
+     * retrieves the saved queries for the given pageConfiguration and returns a
+     * dictionary where the key is the name of the savedQuery and value is the
+     * savedQuery itself.
+     * 
+     * @param session
+     *            {@link WOSession} - to check if there is a session level
+     *            ERCoreUserPreferences set
+     * @param pageConfigurationName
+     *            {@link String}
+     * @return {@link NSDictionary} <br/>
+     *         key - {@link String} name of savedQuery <br/>
+     *         value - {@link SavedQuery}
+     */
+    public static NSDictionary savedQueriesForPageConfigurationNamed(WOSession session, String pageConfigurationName) {
+        NSArray savedQueries = null;
+        
+        NSKeyValueCoding userPreferences = userPreferences(session);
+        
+        EOKeyValueArchiving.Support.setSupportForClass(newEOKVArchivingTimestampSupport, NSTimestamp._CLASS);
 
+        try {
+            savedQueries = (NSArray) userPreferences.valueForKey(userPreferenceNameForPageConfiguration(pageConfigurationName));
+        } finally {
+            EOKeyValueArchiving.Support.setSupportForClass(originalEOKVArchivingTimestampSupport, NSTimestamp._CLASS);
+        }
+
+        if (log.isDebugEnabled())
+            log.debug("loadSavedQueriesForPageConfigurationNamed(" + pageConfigurationName + "): queries = " + savedQueries);
+        
+        if(savedQueries != null) {
+            return ERXArrayUtilities.arrayGroupedByKeyPath(savedQueries, "name", false, null);
+        }
+        else {
+            return NSDictionary.emptyDictionary();
+        }
+    }
+    
     public void saveQueriesForPageConfigurationNamed(NSArray queries, String pageConfigurationName) {
         if (log.isDebugEnabled())
             log.debug("saveQueriesForPageConfigurationNamed(" + pageConfigurationName + "): queries = " + queries);
@@ -670,5 +727,65 @@ public abstract class ERDSavedQueriesComponent extends WOComponent {
         String queryName = (aQuery != null) ? aQuery.name() : DEFAULT_QUERY_NONE;
         return queryName.equals(defaultQueryNameForPageConfiguration(pageConfiguration()));
     }
+    
+    public NSDictionary queryParamsToFetchSavedQueryResults() {
+        NSMutableDictionary dict = new NSMutableDictionary();
+        dict.setObjectForKey(pageConfiguration(), RequestParams.PageConfiguration);
+        dict.setObjectForKey(selectedSavedQuery.name(), RequestParams.SavedQueryName);
+        dict.setObjectForKey(d2wContext().entity().name(), RequestParams.EntityName);
+        
+        return dict.immutableClone();
+    }
+    
+    /**
+     * For this method to work properly, a valid action should be passed in as a binding for key: directActionNameToFetchSavedQueryResults
+     * @return {@link String} - link to the DA which knows how to fetch the query results given the saved query name
+     */
+    public String fetchSavedQueryResultsLink() {
+        StringBuffer url = new StringBuffer();
+        // make a dummy context and nullify the appNumber.
+        // there is no other easy way to generate a url with no appNumber and sessionID
+        WOContext newContext = new WOContext(context().request());
+        newContext._url().setApplicationNumber("-1");
+        
+        // 1) get protocol + servername + port 
+        newContext.request()._completeURLPrefix(url, false, 0);
+        
+        // 2) prepare request params
+        NSMutableDictionary requestParams = new NSMutableDictionary();
+        requestParams.setObjectForKey(pageConfiguration(), RequestParams.PageConfiguration);
+        requestParams.setObjectForKey(d2wContext().entity().name(), RequestParams.EntityName);
+        try {
+            requestParams.setObjectForKey(URLEncoder.encode(selectedSavedQuery.name(), "UTF-8"), RequestParams.SavedQueryName);
+        } catch(UnsupportedEncodingException e) {
+            log.warn("error generating bookmarkable url", e);
+        }
+        
+        // 3) generate the rest of the url directActionName + request params 
+        String directActionName = (String) d2wContext().valueForKey("directActionNameToFetchSavedQueryResults");
+        url.append(newContext.directActionURLForActionNamed(directActionName, requestParams));
+        
+        return url.toString();
+    }
+    
+    /**
+     * @return {@link Boolean}
+     * <br>true, only if valid named query has been selected and the binding to the key: 'directActionNameToFetchSavedQueryResults' points to a valid
+     * directAction  <br>
+     * false, otherwise
+     */
+    public boolean showBookmarkableQueryResultsLink() {
+        return selectedSavedQuery != null && d2wContext().valueForKey("directActionNameToFetchSavedQueryResults") != null;
+    }
 
+    /**
+     * interface to organize the request params used in this class
+     * 
+     * @author rajaram
+     */
+    public interface RequestParams {
+        public static final String PageConfiguration = "pconfig";
+        public static final String EntityName = "ename";
+        public static final String SavedQueryName = "qname";
+    }
 }
