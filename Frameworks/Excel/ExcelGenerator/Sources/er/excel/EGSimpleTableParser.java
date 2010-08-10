@@ -24,6 +24,9 @@ import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -223,6 +226,14 @@ public class EGSimpleTableParser {
 			NSKeyValueCoding.Utility.takeValueForKey(target, number, key);
     	}
     }
+    
+    private void takeClassValueForKey(NSDictionary dict, String key, Object target, Class source, String defaultValue) {
+    	String value = dictValueForKey(dict, key, defaultValue);
+    	if(value != null) {
+   			Number number = (Number)ERXKeyValueCodingUtilities.classValueForKey(source, value);
+			NSKeyValueCoding.Utility.takeValueForKey(target, number, key);
+    	}
+    }
 
     private void parse() {
     	try {
@@ -370,7 +381,7 @@ public class EGSimpleTableParser {
     					if(log.isDebugEnabled()) {
     						log.debug(value + ": " + cellFormatName + "-" + cellTypeName);
     					}
-    					Integer cellType = (Integer)ERXKeyValueCodingUtilities.classValueForKey(HSSFCell.class, cellTypeName);
+    					Integer cellType = (Integer)ERXKeyValueCodingUtilities.classValueForKey(Cell.class, cellTypeName);
     					
     					switch(cellType.intValue()) {
     						case HSSFCell.CELL_TYPE_FORMULA:
@@ -474,9 +485,9 @@ public class EGSimpleTableParser {
     		takeBooleanValueForKey(dict, "italic", font, null);
     		takeBooleanValueForKey(dict, "strikeout", font, null);
     		
-    		takeClassValueForKey(dict, "underline", font, null);
-    		takeClassValueForKey(dict, "typeOffset", font, null);
-    		takeClassValueForKey(dict, "boldweight", font, null);
+    		takeClassValueForKey(dict, "underline", font, Font.class, null);
+    		takeClassValueForKey(dict, "typeOffset", font, Font.class, null);
+    		takeClassValueForKey(dict, "boldweight", font, Font.class, null);
     		
     		_fonts.setObjectForKey(font, id);
     	}
@@ -547,14 +558,14 @@ public class EGSimpleTableParser {
     		takeNumberValueForKey(dict, "indention", cellStyle, null);
     		takeNumberValueForKey(dict, "rotation", cellStyle, null);
     		
-    		takeClassValueForKey(dict, "borderLeft", cellStyle, null);
-    		takeClassValueForKey(dict, "borderRight", cellStyle, null);
-    		takeClassValueForKey(dict, "borderTop", cellStyle, null);
-    		takeClassValueForKey(dict, "borderBottom", cellStyle, null);
+    		takeClassValueForKey(dict, "borderLeft", cellStyle, CellStyle.class, null);
+    		takeClassValueForKey(dict, "borderRight", cellStyle, CellStyle.class, null);
+    		takeClassValueForKey(dict, "borderTop", cellStyle, CellStyle.class, null);
+    		takeClassValueForKey(dict, "borderBottom", cellStyle, CellStyle.class, null);
     		
-    		takeClassValueForKey(dict, "fillPattern", cellStyle, null);
-    		takeClassValueForKey(dict, "alignment", cellStyle, null);
-    		takeClassValueForKey(dict, "verticalAlignment", cellStyle, null);
+    		takeClassValueForKey(dict, "fillPattern", cellStyle, CellStyle.class, null);
+    		takeClassValueForKey(dict, "alignment", cellStyle, CellStyle.class, null);
+    		takeClassValueForKey(dict, "verticalAlignment", cellStyle, CellStyle.class, null);
     		
     		String formatString = dictValueForKey(dict, "format", null);
     		if(formatString != null) {
