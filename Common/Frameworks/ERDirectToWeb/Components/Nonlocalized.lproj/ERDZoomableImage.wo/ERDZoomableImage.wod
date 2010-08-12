@@ -10,8 +10,19 @@ ZoomImageLink : WOHyperlink {
     onClick = jsToZoomImage;
 }
 
+ValidThumbnailSrcExist : WOConditional {
+    condition = thumbnailSrcNullOrEmpty;
+    negate = true;
+}
+
+ValidThumbnailSrcDoesntExist : WOConditional {
+    condition = thumbnailSrcNullOrEmpty;
+}  
 
 Once : ERXOncePerRequestConditional {
     keyName = "ERDZoomableImage";
 }
 
+NoImageString : WOString {
+    value = noImageString;
+}
