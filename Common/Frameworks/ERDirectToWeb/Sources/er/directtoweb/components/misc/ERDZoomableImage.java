@@ -96,14 +96,6 @@ public class ERDZoomableImage extends ERXStatelessComponent {
     }
     
     /**
-     * @return {@link Boolean} true, if {@link ERDZoomableImage#thumnailSrc()} returns an empty or null string
-     *                         false, otherwise
-     */
-    public boolean isThumbnailSrcNullOrEmpty() {
-        return ERXStringUtilities.stringIsNullOrEmpty(thumnailSrc());
-    }
-    
-    /**
      * controlled by key: enableZoomForImage
      * and if either thumbnailSrc or height or width is present (there is no point zooming without these properties passed in)
      * @return {@link Boolean} - true, if zooming is allowed. false, otherwise.
@@ -133,13 +125,6 @@ public class ERDZoomableImage extends ERXStatelessComponent {
         }
         
         return sb.toString();
-    }
-    
-    /**
-     * @return String to use when imageSrc() turns out to be null
-     */
-    public String noImageString() {
-        return (String) valueForBinding("noImageString");
     }
     
     /**
