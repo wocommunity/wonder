@@ -96,11 +96,30 @@ public class ERDZoomableImage extends ERXStatelessComponent {
     }
     
     /**
+     * @return {@link Boolean} true, if {@link ERDZoomableImage#thumnailSrc()} returns an empty or null string
+     *                         false, otherwise
+     */
+    public boolean isThumbnailSrcNullOrEmpty() {
+        return ERXStringUtilities.stringIsNullOrEmpty(thumnailSrc());
+    }
+    
+    /**
      * controlled by key: enableZoomForImage
+     * and if either thumbnailSrc or height or width is present (there is no point zooming without these properties passed in)
      * @return {@link Boolean} - true, if zooming is allowed. false, otherwise.
      */
     public Boolean enableZoom() {
-        return ERXValueUtilities.booleanValue(valueForBinding("enableZoomForImage"));
+        String thumbnailSrc = thumbnailSrcNoFallBack();
+        boolean isThumbnailSrcOrHeightOrWidthPresent =  (thumbnailSrc != null && thumbnailSrc.length() >0) || valueForBinding("height") != null || valueForBinding("width") != null;
+        return ERXValueUtilities.booleanValue(valueForBinding("enableZoomForImage")) && isThumbnailSrcOrHeightOrWidthPresent;
+    }
+    
+    String thumbnailSrcNoFallBack() {
+        return (String) valueForBinding("thumbnailSrc");
+    }
+    
+    public Boolean disableZoom() {
+        return !enableZoom();
     }
 
     public String jsToZoomImage() {
@@ -114,6 +133,13 @@ public class ERDZoomableImage extends ERXStatelessComponent {
         }
         
         return sb.toString();
+    }
+    
+    /**
+     * @return String to use when imageSrc() turns out to be null
+     */
+    public String noImageString() {
+        return (String) valueForBinding("noImageString");
     }
     
     /**

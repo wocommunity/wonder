@@ -26,3 +26,12 @@ Once : ERXOncePerRequestConditional {
 NoImageString : WOString {
     value = noImageString;
 }
+
+EnableZoom : WOConditional {
+    condition = enableZoom;
+}
+
+DisableZoom : WOConditional {
+    condition = enableZoom;
+    negate = true;
+}

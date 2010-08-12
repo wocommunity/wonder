@@ -2,44 +2,53 @@
 <script>  
   var ZoomableImage = {
       openImageFromURL: function(url, height, width)
-	  {
-	      var myWidth = (screen.availWidth > 800) ? (screen.availWidth - 100) : screen.availWidth; // if 800x600 or less, take up
-	      var myHeight = (screen.availHeight > 600) ? (screen.availHeight - 100) : (screen.availHeight - 70); // the whole screen.
-	      var myLeft = Math.round((screen.availWidth - myWidth) / 2);
-	      var myTop = Math.round((screen.availHeight - myHeight) / 2)-25;
-	      
-	
-	      if (myTop < 0) { myTop = 0; } // bugfix for Opera
-	      if (screen.availHeight < 600) { myTop-=20; }
-	      var horizontalScrollbar = true;
-	      var verticalScrollbar = true;
-	
-	      if(width > 0 && width < myWidth) {
-	          myWidth = width;
-	          //horizontalScrollbar = false;
-	      }
-	
-	      if(height > 0 && height < myHeight) {
-	          myHeight = height;
-	          //verticalScrollbar = false;
-	      }
-	
-	      var scrollbars = "yes";
-	      //if(!horizontalScrollbar && !verticalScrollbar) scrollbars = "no";
+      {
+          var myWidth = (screen.availWidth > 800) ? (screen.availWidth - 100) : screen.availWidth; // if 800x600 or less, take up
+          var myHeight = (screen.availHeight > 600) ? (screen.availHeight - 100) : (screen.availHeight - 70); // the whole screen.
+          var myLeft = Math.round((screen.availWidth - myWidth) / 2);
+          var myTop = Math.round((screen.availHeight - myHeight) / 2)-25;
+          
+    
+          if (myTop < 0) { myTop = 0; } // bugfix for Opera
+          if (screen.availHeight < 600) { myTop-=20; }
+          var horizontalScrollbar = true;
+          var verticalScrollbar = true;
+    
+          if(width > 0 && width < myWidth) {
+              myWidth = width;
+              //horizontalScrollbar = false;
+          }
+    
+          if(height > 0 && height < myHeight) {
+              myHeight = height;
+              //verticalScrollbar = false;
+          }
+    
+          var scrollbars = "yes";
+          //if(!horizontalScrollbar && !verticalScrollbar) scrollbars = "no";
           console.info("myheight:" + myHeight);
-          console.info("mywidth:" +  myWidth);	
+          console.info("mywidth:" +  myWidth);  
           console.info("screen.width:" +  screen.availWidth);  
-	      var openCurrentImageWindow = window.open(url, 'FullSizeImage', 'scrollbars='+scrollbars+',titlebar=no,location=no,status=no,toolbar=no,resizable=yes,width='+ myWidth +',height='+ myHeight +',top='+myTop+',left='+myLeft);
-	      openCurrentImageWindow.focus();
-	      return false;
-	  }
+          var openCurrentImageWindow = window.open(url, 'FullSizeImage', 'scrollbars='+scrollbars+',titlebar=no,location=no,status=no,toolbar=no,resizable=yes,width='+ myWidth +',height='+ myHeight +',top='+myTop+',left='+myLeft);
+          openCurrentImageWindow.focus();
+          return false;
+      }
   };
 </script>
 
 </webobject>
 <webobject name = "ValidThumbnailSrcExist">
-<webobject name="ZoomImageLink">
-    <webobject name="Thumbnail"></webobject>
+    <!-- zoom case -->
+    <webobject name = "EnableZoom">
+        <webobject name="ZoomImageLink">
+            <webobject name="Thumbnail"></webobject>
+        </webobject>
+    </webobject>
+    <!-- no zoom case -->
+    <webobject name = "DisableZoom">
+        <webobject name="Thumbnail"></webobject>
+    </webobject>
 </webobject>
-</webobject>
+
+<!-- no image case -->
 <webobject name = "ValidThumbnailSrcDoesntExist"><webobject name="NoImageString"></webobject></webobject>
