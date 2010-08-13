@@ -16,6 +16,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.ERXExtensions;
 import er.extensions.eof.ERXEOAccessUtilities;
+import er.extensions.eof.ERXS;
 
 /**
  * Extends {@link WODisplayGroup}
@@ -144,6 +145,13 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 			result=allObjects();
 		}
 		return result;
+	}
+
+	/**
+	 * Returns allObjects(), first filtered by the qualifier(), then sorted by the sortOrderings().
+	 */
+	public NSArray<T> sortedObjects() {
+		return ERXS.sorted(filteredObjects(), sortOrderings());
 	}
 
 	/**
