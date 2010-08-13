@@ -152,7 +152,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	@Override
 	public void _generateCompleteURLs() {
 		super._generateCompleteURLs();
-		_generateCompleteURLs = true;
+		_generateCompleteURLs = true; 
 	}
 
 	@Override
@@ -217,7 +217,10 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	}
 
 	protected String _postprocessURL(String url) {
-		return ERXApplication.erxApplication()._rewriteURL(url);
+		if (WOApplication.application() instanceof ERXApplication) {
+			return ERXApplication.erxApplication()._rewriteURL(url);
+		}
+		return url;
 	}
 	
 	@Override
