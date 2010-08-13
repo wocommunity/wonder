@@ -405,30 +405,37 @@ public class ERXEOControlUtilities {
     }
 
     /**
-     * Clears snapshot the relaationship of a given enterprise so it will be read again when next accessed.
+     * Clears snapshot the relationship of a given enterprise so it will be read again when next accessed.
      * @param eo enterprise object
      * @param relationshipName relationship name
      */
     public static void clearSnapshotForRelationshipNamedInDatabase(EOEnterpriseObject eo, String relationshipName, EODatabase database) {
         EOEditingContext ec = eo.editingContext();
-        EOGlobalID gid = ec.globalIDForObject(eo);
-        database.recordSnapshotForSourceGlobalID(null, gid, relationshipName);
-        Object o = eo.storedValueForKey(relationshipName);
-        boolean needRefresh = false;
-        if(o instanceof EOFaulting) {
-        	EOFaulting toManyArray = (EOFaulting)o;
-            if (!toManyArray.isFault()) {
-            	EOFaulting tmpToManyArray = (EOFaulting)((EOObjectStoreCoordinator)ec.rootObjectStore()).arrayFaultWithSourceGlobalID(gid, relationshipName, ec);
-            	toManyArray.turnIntoFault(tmpToManyArray.faultHandler());
-            	needRefresh = true;
-            }
-        } else {
-        	EOFaulting tmpToManyArray = (EOFaulting)((EOObjectStoreCoordinator)ec.rootObjectStore()).arrayFaultWithSourceGlobalID(gid, relationshipName, ec);
-        	eo.takeStoredValueForKey(tmpToManyArray, relationshipName);
-        	needRefresh = true;
+        EOObjectStoreCoordinator osc = (EOObjectStoreCoordinator) ec.rootObjectStore();
+        osc.lock();
+        try {
+	        EOGlobalID gid = ec.globalIDForObject(eo);
+	        database.recordSnapshotForSourceGlobalID(null, gid, relationshipName);
+	        Object o = eo.storedValueForKey(relationshipName);
+	        boolean needRefresh = false;
+	        if(o instanceof EOFaulting) {
+	        	EOFaulting toManyArray = (EOFaulting)o;
+	            if (!toManyArray.isFault()) {
+	            	EOFaulting tmpToManyArray = (EOFaulting)((EOObjectStoreCoordinator)ec.rootObjectStore()).arrayFaultWithSourceGlobalID(gid, relationshipName, ec);
+	            	toManyArray.turnIntoFault(tmpToManyArray.faultHandler());
+	            	needRefresh = true;
+	            }
+	        } else {
+	        	EOFaulting tmpToManyArray = (EOFaulting)((EOObjectStoreCoordinator)ec.rootObjectStore()).arrayFaultWithSourceGlobalID(gid, relationshipName, ec);
+	        	eo.takeStoredValueForKey(tmpToManyArray, relationshipName);
+	        	needRefresh = true;
+	        }
+	        if(needRefresh && (eo instanceof ERXEnterpriseObject)) {
+	        	((ERXEnterpriseObject)eo).flushCaches();
+	        }
         }
-        if(needRefresh && (eo instanceof ERXEnterpriseObject)) {
-        	((ERXEnterpriseObject)eo).flushCaches();
+        finally {
+        	osc.unlock();
         }
     }
 
