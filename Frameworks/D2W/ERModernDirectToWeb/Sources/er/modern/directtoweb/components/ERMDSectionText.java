@@ -28,7 +28,7 @@ public class ERMDSectionText extends ERDSectionText {
     	if (value == null || value.length() == 0) {
     		value = "span";
     	}
-    	return null;
+    	return value;
     }
     
 }
