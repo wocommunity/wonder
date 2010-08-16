@@ -1148,7 +1148,7 @@ public class ERXSQLHelper {
 			if (sql.endsWith(";")) {
 				sql = sql.substring(0, sql.length() - 1);
 			}
-			sql = "select count(*) from (" + sql + ") as result_count_temp_table;";
+			sql = "select count(*) from " + sqlForSubquery(sql, "result_count_temp_table");
 			result = EOUtilities.rawRowsForSQL(ec, model.name(), sql, null);
 		}
 
@@ -1176,6 +1176,17 @@ public class ERXSQLHelper {
 			throw new IllegalStateException("sql " + sql + " returned no result!");
 		}
 		return rowCount;
+	}
+	
+	/**
+	 * Returns the syntax for using the given query as an aliased subquery in a from-clause.
+	 * 
+	 * @param subquery the subquery to wrap
+	 * @param alias the alias to use
+	 * @return the formatted subquery expression
+	 */
+	protected String sqlForSubquery(String subquery, String alias) {
+		return "(" + subquery + ") as " + alias;
 	}
 
 	/**
@@ -1621,6 +1632,11 @@ public class ERXSQLHelper {
 
 	public static class OracleSQLHelper extends ERXSQLHelper {
 		@Override
+		protected String sqlForSubquery(String subquery, String alias) {
+			return "(" + subquery + ") " + alias;
+		}
+
+		@Override
 		protected String sqlForGetNextValFromSequencedNamed(String sequenceName) {
 			String sqlString = "select " + sequenceName + ".nextVal from dual";
 			return sqlString;
@@ -1720,7 +1736,12 @@ public class ERXSQLHelper {
 			}
 			else if (debug == 3) {
 				// this works, but breaks with horizontal inheritance
-				limitSQL = "select * from (" + "select " + expression.listString().replaceAll("[Tt]\\d\\.", "") + ", rownum eo_rownum from (" + sql + ")) where eo_rownum between " + (start + 1) + " and " + end;
+				if (expression != null) {
+					limitSQL = "select * from (" + "select " + expression.listString().replaceAll("[Tt]\\d\\.", "") + ", rownum eo_rownum from (" + sql + ")) where eo_rownum between " + (start + 1) + " and " + end;
+				}
+				else {
+					limitSQL = "select * from (select rownum eo_rownum, a.* from (" + sql + ") a where rownum <= " + end + ") where eo_rownum >= " + (start + 1);
+				}
 			}
 			else {
 				// this might work, too, but only if we have an ORDER BY
