@@ -1740,7 +1740,7 @@ public class ERXSQLHelper {
 					limitSQL = "select * from (" + "select " + expression.listString().replaceAll("[Tt]\\d\\.", "") + ", rownum eo_rownum from (" + sql + ")) where eo_rownum between " + (start + 1) + " and " + end;
 				}
 				else {
-					limitSQL = "select * from (select rownum eo_rownum, a.* from (" + sql + ") a where rownum <= " + end + ") where eo_rownum >= " + (start + 1);
+					limitSQL = "select * from (select a.*, rownum eo_rownum from (" + sql + ") a where rownum <= " + end + ") where eo_rownum >= " + (start + 1);
 				}
 			}
 			else {
