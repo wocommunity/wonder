@@ -1015,6 +1015,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 					try {
 						lowMemBuffer = null;
 						System.gc();
+						log.error("Ran out of memory, sending notification to clear caches");
 						log.error("Ran out of memory, sending notification to clear caches", throwable);
 						NSNotificationCenter.defaultCenter().postNotification(new NSNotification(LowMemoryNotification, this));
 						shouldQuit = false;
@@ -1033,6 +1034,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				if (shouldQuit) {
 					try {
 						NSLog.err.appendln("Ran out of memory, killing this instance");
+						log.fatal("Ran out of memory, killing this instance");
 						log.fatal("Ran out of memory, killing this instance", throwable);
 					}
 					catch (Throwable t) {
