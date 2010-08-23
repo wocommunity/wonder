@@ -30,12 +30,8 @@ public class ERMD2WCombinedTableHeader extends AjaxSortOrder {
         super(context);
     }
     
-    public D2WContext localContext() {
-    	return (D2WContext)valueForBinding("localContext");
-    }
-    
     public D2WContext d2wContext() {
-    	return localContext();
+    	return (D2WContext)valueForBinding("d2wContext");
     }
     
 	public String toggleLinkClass() {

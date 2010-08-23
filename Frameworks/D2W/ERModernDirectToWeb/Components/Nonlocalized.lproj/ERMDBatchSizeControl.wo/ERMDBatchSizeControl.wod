@@ -17,7 +17,7 @@ ShowString : ERXLocalizedString {
 }
 
 BatchNumberField : AjaxInPlaceEditor {
-  value = ^displayGroup.numberOfObjectsPerBatch;
+  value = numberOfObjectsPerBatch;
   width = "4";
   numberformat = "0";
   class = "ERMDBatchSize_BatchValue";
