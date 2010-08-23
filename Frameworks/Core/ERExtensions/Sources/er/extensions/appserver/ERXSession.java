@@ -698,10 +698,17 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
   /**
    * Override and return true, or set er.extensions.ERXSession.useSecureSessionCookies if you want 
    * secure-only session and instance cookies.  This prevents cookie hijacking man-in-the-middle 
-   * attacks.  Note that to make this effective (and for sessions to work at all), your site must 
-   * be behind HTTPS at all times.  In development mode, you can disable secure mode 
-   * (@see er.extensions.ERXRequest.isSecureDisabled) for running in direct-connect with this 
-   * mode enabled.
+   * attacks.  If the cookies aren't set as secure only and an HTTP request is made, the cookies 
+   * will be sent over HTTP.  So if someone manages to do an HTTP injection that causes an HTTP 
+   * request to be made, they can compromise your session id. For example, if you have a CMS on 
+   * https://www.mycms.com and you set a session id, and I hack in and trick your site and manage to 
+   * do an injection where i do an <img src="http://www.mycms.com/whatever"/> in the content, like I post 
+   * in a comment and you don't strip out HTML tags.  secure-only just gives you peace-of-mind.  If you 
+   * intended the cookies to only be behind HTTPS, secure-only makes it actually true and enforced.
+   * 
+   * Note that to make this effective (and for sessions to work at all), your site must be behind HTTPS at all times.  
+   * In development mode, you can disable secure mode (@see er.extensions.ERXRequest.isSecureDisabled) for running in 
+   * direct-connect with this mode enabled.
    *  
    * @return whether or not secure cookies are enabled
    */
