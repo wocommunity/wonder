@@ -51,7 +51,7 @@ ListTableRow: WOGenericContainer {
 TableHeaderSwitchComponent : WOSwitchComponent {
 	WOComponentName = d2wContext.tableHeaderComponentName;
 	displayGroup = displayGroup;
-	localContext = d2wContext;
+	d2wContext = d2wContext;
 	updateContainerID = ^updateContainerID;
 }
 
