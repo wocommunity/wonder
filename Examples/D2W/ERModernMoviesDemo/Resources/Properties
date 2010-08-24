@@ -17,6 +17,10 @@ er.extensions.ERXEnterpriseObject.updateInverseRelationships=true
 #dbConnectDriverGLOBAL=com.mysql.jdbc.Driver
 #Movies.URL=jdbc:mysql://localhost/movies?capitalizeTypenames=true&zeroDateTimeBehavior=convertToNull&characterEncoding=UTF-8
 
+# Embedded H2 Database
+
+# Disable if you are using something else
+webobjectsexamples.ERMoviesLogic.useEmbeddedH2Database=true
 
 # Migrations
 #er.migration.migrateAtStartup=true
