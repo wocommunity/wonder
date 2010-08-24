@@ -1,0 +1,7 @@
+
+# Embedded H2 Database
+#
+# Set to true to re-write the model connection dictionaries
+# url to use the embedded H2 database.
+
+#webobjectsexamples.ERMoviesLogic.useEmbeddedH2Database=true
