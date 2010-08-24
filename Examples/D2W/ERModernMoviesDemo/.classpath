@@ -23,5 +23,7 @@
 	<classpathentry kind="con" path="WOFramework/Ajax"/>
 	<classpathentry kind="con" path="WOFramework/H2PlugIn"/>
 	<classpathentry kind="con" path="WOFramework/WOLips"/>
+	<classpathentry kind="con" path="WOFramework/ERTaggable"/>
+	<classpathentry kind="con" path="WOFramework/ERAttachment"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
