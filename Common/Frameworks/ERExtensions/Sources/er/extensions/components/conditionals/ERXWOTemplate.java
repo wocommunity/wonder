@@ -44,15 +44,25 @@ public class ERXWOTemplate extends WODynamicElement {
     }
     
     public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
-    	_template.takeValuesFromRequest(worequest, wocontext);
     }
     
     public WOActionResults invokeAction(WORequest worequest, WOContext wocontext) {
+    	return null;
+    }
+    
+    public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
+    }
+    
+    public void _takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
+    	_template.takeValuesFromRequest(worequest, wocontext);
+    }
+    
+    public WOActionResults _invokeAction(WORequest worequest, WOContext wocontext) {
     	WOActionResults results = _template.invokeAction(worequest, wocontext);
     	return results;
     }
     
-    public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
+    public void _appendToResponse(WOResponse woresponse, WOContext wocontext) {
     	_template.appendToResponse(woresponse, wocontext);
     }
     
