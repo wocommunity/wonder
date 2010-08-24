@@ -19,5 +19,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="WOFramework/JavaWOExtensions"/>
 	<classpathentry kind="con" path="WOFramework/ERSelenium"/>
+	<classpathentry kind="con" path="WOFramework/ERTaggable"/>
+	<classpathentry kind="con" path="WOFramework/ERAttachment"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
