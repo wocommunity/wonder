@@ -303,10 +303,15 @@ public class ERD2WModel extends D2WModel {
                                       descriptionForRuleSet(canidateRuleSetForRHSInContext(keyPath, context)));
                 }
             }
-            if(cache == _systemCache) {
-                result=super.fireSystemRuleForKeyPathInContext(keyPath,context);
-            } else {
-                result=super.fireRuleForKeyPathInContext(keyPath,context);
+            try {
+                if (cache == _systemCache) {
+                    result = super.fireSystemRuleForKeyPathInContext(keyPath, context);
+                } else {
+                    result = super.fireRuleForKeyPathInContext(keyPath, context);
+                }
+            } catch (StackOverflowError ex) {
+                log.error("Problem with this key: " + keyPath + " depends: " + new NSArray(significantKeys) + " values: " + k + " context: " + context + " values: " + context._localValues() + " map: " + cache);
+                throw NSForwardException._runtimeExceptionForThrowable(ex);
             }
             if ( useCache )
                 cache.put(k,result==null ? NULL_VALUE : result);
