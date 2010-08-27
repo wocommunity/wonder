@@ -22,7 +22,7 @@ public class ERXRestFormat {
 	public static ERXRestFormat PLIST = ERXRestFormat.registerFormatNamed(new ERXPListRestParser(), new ERXPListRestWriter(), new ERXRestFormatDelegate(), "plist", "text/plist");
 	public static ERXRestFormat RAILS = ERXRestFormat.registerFormatNamed(new ERXXmlRestParser(), new ERXXmlRestWriter(), new ERXRestFormatDelegate("id", "type", "nil", true, true, true, true), "rails", "application/xml", "text/xml");
 	public static ERXRestFormat XML = ERXRestFormat.registerFormatNamed(new ERXXmlRestParser(), new ERXXmlRestWriter(), new ERXRestFormatDelegate(), "xml", "application/xml", "text/xml");
-	public static ERXRestFormat HTML = ERXRestFormat.registerFormatNamed(null, null, new ERXRestFormatDelegate(), "html", "text/html");
+	public static ERXRestFormat HTML = ERXRestFormat.registerFormatNamed(null, new ERXSimpleRestWriter(), new ERXRestFormatDelegate(), "html", "text/html");
 	public static ERXRestFormat GIANDUIA_JSON = ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXGianduiaRestWriter(false), new ERXRestFormatDelegate(), "gndj", "application/gndj");
 	public static ERXRestFormat GIANDUIA_PERSISTENT_STORE = ERXRestFormat.registerFormatNamed(new ERXGianduiaRestParser(), new ERXGianduiaRestWriter(true), new ERXRestFormatDelegate(), "gndp", "application/gndp");
 	public static ERXRestFormat SPROUTCORE = ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXSproutCoreRestWriter(), new ERXRestFormatDelegate("guid", "type", "nil", true, true, true, false), "sc", "application/sc");
