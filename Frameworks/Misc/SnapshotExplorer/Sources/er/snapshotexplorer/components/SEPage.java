@@ -7,6 +7,7 @@ import er.extensions.appserver.ERXApplication;
 public class SEPage extends SEComponent {
   public SEPage(WOContext context) {
     super(context);
+    session(); // MS: Hack to just force a session on all SESnapshotExplorer pages to fix a funky Ajax issue (I'll revisit this after WOWODC)
   }
 
   @Override
