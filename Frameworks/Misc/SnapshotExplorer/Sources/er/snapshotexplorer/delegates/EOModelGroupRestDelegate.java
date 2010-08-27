@@ -18,7 +18,7 @@ public class EOModelGroupRestDelegate extends ERXAbstractRestDelegate {
 
 	@Override
 	protected boolean _isDelegateForEntity(EOClassDescription entity) {
-		return "EOModelGroup".equals(entity.entityName());
+		return "EOModelGroup".equals(entity.entityName()) || "ERXModelGroup".equals(entity.entityName());
 	}
 
 	@Override
