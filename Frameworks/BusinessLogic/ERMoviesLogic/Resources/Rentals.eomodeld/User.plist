@@ -42,7 +42,7 @@
     attributesUsedForLocking = (userID, username, password, accessLevel, customerID); 
     className = "webobjectsexamples.businesslogic.rentals.common.User"; 
     classProperties = (username, password, accessLevel, customer); 
-    externalName = rentaluser; 
+    externalName = rentalsuser; 
     internalInfo = {
         "_clientClassPropertyNames" = (username, password, accessLevel, customer); 
         "_javaClientClassName" = "webobjectsexamples.businesslogic.rentals.common.User"; 
