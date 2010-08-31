@@ -72,6 +72,7 @@
     20 : (smartRelationship != null and propertyKey != null and task = 'inspect') => inspectConfigurationName = inspectEmbeddedConfigurationName [er.directtoweb.ERDKeyValueAssignment],
     20 : (task = 'edit' and session.javaScriptEnabled = 1 and smartAttribute.className = 'com.webobjects.foundation.NSTimestamp') => componentName = ERMDDatePicker [com.webobjects.directtoweb.Assignment],
     30 : *true* => propertyNameComponentName = ERMD2WPropertyName [com.webobjects.directtoweb.Assignment],
+    40 : *true* => formatter = %Y-%m-%d [com.webobjects.directtoweb.Assignment],
     60 : pageConfiguration like '*Embedded*' => defaultBatchSize = 5 [com.webobjects.directtoweb.Assignment],
     100 : *true* => showEditControls = true [com.webobjects.directtoweb.BooleanAssignment],
     100 : *true* => isEntityRemoveable = true [com.webobjects.directtoweb.BooleanAssignment],
