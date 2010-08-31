@@ -14,16 +14,15 @@ package webobjectsexamples.businesslogic.movies.common;
 
 import java.math.BigDecimal;
 
-import webobjectsexamples.businesslogic.movies.server._Studio;
-
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
-import com.webobjects.eocontrol.EOGenericRecord;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSValidation;
 
-public abstract class Studio extends EOGenericRecord {
+import er.extensions.eof.ERXGenericRecord;
+
+public abstract class Studio extends ERXGenericRecord {
 	public static final String		BudgetKey		= "budget";
 
 	public static final String		MovieKey		= "movies";
