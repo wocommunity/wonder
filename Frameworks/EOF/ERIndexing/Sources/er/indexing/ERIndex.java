@@ -16,13 +16,13 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.PerFieldAnalyzerWrapper;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.DateTools;
+import org.apache.lucene.document.DateTools.Resolution;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.NumberTools;
-import org.apache.lucene.document.DateTools.Resolution;
 import org.apache.lucene.document.Field.Index;
 import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.document.Field.TermVector;
+import org.apache.lucene.document.NumberTools;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
@@ -30,20 +30,24 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.index.TermEnum;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Filter;
 import org.apache.lucene.search.Hit;
 import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.PrefixTermEnum;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.Searcher;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopFieldDocs;
-import org.apache.lucene.search.BooleanClause.Occur;
+import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Parameter;
+import org.apache.lucene.util.Version;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -153,7 +157,7 @@ public class ERIndex {
             _name = name;
             _termVector = (TermVector) classValue(dict, "termVector", TermVector.class, "YES");
             _store = (Store) classValue(dict, "store", Store.class, "NO");
-            _index = (Index) classValue(dict, "index", Index.class, "TOKENIZED");
+            _index = (Index) classValue(dict, "index", Index.class, "ANALYZED");
             String analyzerClass = (String) dict.objectForKey("analyzer");
             if (analyzerClass == null) {
                 analyzerClass = StandardAnalyzer.class.getName();
@@ -370,7 +374,7 @@ public class ERIndex {
                     log.error("segments did not exist but create wasn't called");
                     create = true;
                 }
-                IndexWriter writer = new IndexWriter(indexDirectory(), analyzer(), create);
+                IndexWriter writer = new IndexWriter(indexDirectory(), analyzer(), create, IndexWriter.MaxFieldLength.UNLIMITED);
                 for (Job job : transaction.jobs()) {
                     log.info("Indexing: " + job.command() + " " + job.objects().count());
                     if (job.command() == Command.DELETE) {
@@ -471,7 +475,7 @@ public class ERIndex {
             try {
                 if (_store.startsWith("file://")) {
                     File indexDirectory = new File(new URL(_store).getFile());
-                    _indexDirectory = FSDirectory.getDirectory(indexDirectory);
+                    _indexDirectory = FSDirectory.open(indexDirectory);
                 } else {
                     EOEditingContext ec = ERXEC.newEditingContext();
 
@@ -495,7 +499,8 @@ public class ERIndex {
     
     private IndexReader indexReader() throws CorruptIndexException, IOException {
         if (_reader == null) {
-            _reader = IndexReader.open(indexDirectory());
+            _reader = IndexReader.open(indexDirectory(), true);
+            //											  ^^^ readOnly
             _searcher = new IndexSearcher(_reader);
         }
         if (!_reader.isCurrent()) {
@@ -505,7 +510,7 @@ public class ERIndex {
         return _reader;
     }
     
-    private IndexSearcher indexSearcher() throws CorruptIndexException, IOException {
+    public IndexSearcher indexSearcher() throws CorruptIndexException, IOException {
         IndexReader indexReader = indexReader();
         return _searcher;
     }
@@ -610,7 +615,7 @@ public class ERIndex {
 
     private Query queryForString(String fieldName, String queryString) throws ParseException {
         Analyzer analyzer = attributeNamed(fieldName).analyzer();
-        QueryParser parser = new QueryParser(fieldName, analyzer);
+        QueryParser parser = new QueryParser(Version.LUCENE_29, fieldName, analyzer);
         Query query = parser.parse(queryString);
 
         return query;
@@ -687,7 +692,24 @@ public class ERIndex {
         }
     }
     
+    public ScoreDoc[] findScoreDocs(Query query, int hitsPerPage) {
+    	ScoreDoc[] hits = null;
+    	long start = System.currentTimeMillis();
+        try {
+        	
+        	Searcher searcher = indexSearcher();
+        	TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage, true);
+        	searcher.search(query, collector);
+        	hits = collector.topDocs().scoreDocs;
+        	
+            log.debug("Returning " + hits.length + " after " + (System.currentTimeMillis() - start) + " ms");
+            return hits;
+        } catch (IOException e) {
+        	throw NSForwardException._runtimeExceptionForThrowable(e);
+        }
+    }
     
+    @Deprecated
     public Hits findHits(Query query) {
     	Hits hits = null;
     	long start = System.currentTimeMillis();
@@ -701,6 +723,24 @@ public class ERIndex {
         }
     }
     
+    public NSArray<String> findTermStringsForPrefix(String field, String prefix) {
+    	NSMutableArray<String> terms = new NSMutableArray<String>();
+    	try {
+    		IndexReader reader = indexReader(); 
+    		TermEnum tenum = new PrefixTermEnum(reader, new Term(field, prefix));
+    		do {
+    			if (tenum.term() == null) break;
+    			final String termText = tenum.term().text();
+    			terms.addObject(termText);
+    		} while (tenum.next());
+
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	return terms;
+    }
+    
+    @Deprecated
     public NSArray<Term> findTerms(Query q) {
     	NSMutableArray<Term> terms = new NSMutableArray<Term>();
     	try {
@@ -718,6 +758,7 @@ public class ERIndex {
     	return terms.immutableClone();
     }
     
+    @Deprecated
     public NSArray<String> findTermStrings(Query q) {
     	NSMutableArray<String> terms = new NSMutableArray<String>();
     	try {
@@ -755,6 +796,17 @@ public class ERIndex {
             throw NSForwardException._runtimeExceptionForThrowable(e);
         }
         return new IndexDocument(result.lastObject());
+    }
+    
+    public ERDocument documentForId(int docId, float score) {
+    	ERDocument doc = null;
+    	try {
+    		Document _doc = this.indexSearcher().doc(docId);
+    		doc = new ERDocument(_doc, score);
+    	} catch (IOException e) {
+    		throw NSForwardException._runtimeExceptionForThrowable(e);
+    	}
+    	return doc;
     }
 
     public NSArray<? extends EOEnterpriseObject> findObjects(EOEditingContext ec, EOQualifier qualifier) {
@@ -810,7 +862,7 @@ public class ERIndex {
     public IndexDocument createDocumentForGlobalID(EOKeyGlobalID globalID) {
         Document doc = new Document();
         String pk = ERXKeyGlobalID.globalIDForGID(globalID).asString();
-        doc.add(new Field(GID, pk, Field.Store.YES, Field.Index.UN_TOKENIZED));
+        doc.add(new Field(GID, pk, Field.Store.YES, Field.Index.NOT_ANALYZED));
         return new IndexDocument(doc);
     }
 
