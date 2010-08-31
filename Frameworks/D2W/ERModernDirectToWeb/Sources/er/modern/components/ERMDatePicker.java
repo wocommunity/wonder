@@ -10,6 +10,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSTimestamp;
 
+import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.components.ERXStatelessComponent;
 import er.extensions.formatters.ERXTimestampFormatter;
@@ -102,7 +103,8 @@ public class ERMDatePicker extends ERXStatelessComponent {
     		String cssFilename = stringValueForBinding("cssFile", CSS_FILENAME);
     		ERXResponseRewriter.addStylesheetResourceInHead(response, context, framework, cssFilename);
     	}
-        ERXResponseRewriter.addScriptResourceInHead(response, context, FRAMEWORK_NAME, "datepicker.js");
+    	String datepickerjsName = ERXApplication.isDevelopmentModeSafe() ? "datepicker_lg.js" : "datepicker.js";
+        ERXResponseRewriter.addScriptResourceInHead(response, context, FRAMEWORK_NAME, datepickerjsName);
         String langScript = ERXLocalizer.currentLocalizer().languageCode() + ".js";
         ERXResponseRewriter.addScriptResourceInHead(response, context, FRAMEWORK_NAME, "lang/" + langScript);
         super.appendToResponse(response, context);
