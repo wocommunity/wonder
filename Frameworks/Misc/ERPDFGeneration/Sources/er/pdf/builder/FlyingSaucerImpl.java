@@ -26,6 +26,8 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 
+import er.extensions.foundation.ERXProperties;
+
 public class FlyingSaucerImpl implements PDFBuilder {
   private static final DocumentBuilderFactory _builderFactory;
 
@@ -36,7 +38,7 @@ public class FlyingSaucerImpl implements PDFBuilder {
 
   static {
     _builderFactory = DocumentBuilderFactory.newInstance();
-    _builderFactory.setValidating(true);
+    _builderFactory.setValidating(ERXProperties.booleanForKeyWithDefault("er.pdf.validation", false));
     _builderFactory.setNamespaceAware(true);
     _builderFactory.setAttribute("http://apache.org/xml/features/nonvalidating/load-external-dtd", true);
   }
