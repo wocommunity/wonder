@@ -1289,6 +1289,15 @@
       }; 
     }, 
     {
+      "author" = "40"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "formatter"; 
+        "value" = "%Y-%m-%d"; 
+      }; 
+    }, 
+    {
       "author" = "60"; 
       "class" = "com.webobjects.directtoweb.Rule"; 
       "lhs" = {
