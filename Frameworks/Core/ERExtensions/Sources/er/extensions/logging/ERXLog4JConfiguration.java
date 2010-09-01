@@ -232,7 +232,7 @@ public class ERXLog4JConfiguration extends WOComponent {
 	}
 
 	private final static NSDictionary BG_COLORS = new NSDictionary(
-			new Object[] { "#ffdddd", "#ffbbbb", "#eeccbb", "#ddddbb", "#cceebb", "#bbffbb"}, 
+			new Object[] { "#ffaaaa", "#ffbbbb", "#eeccbb", "#ddddbb", "#cceebb", "#bbffbb"}, 
 			new Object[] {
 					ERXConstant.integerForInt(Level.TRACE.toInt()),
 					ERXConstant.integerForInt(Level.DEBUG.toInt()), 
