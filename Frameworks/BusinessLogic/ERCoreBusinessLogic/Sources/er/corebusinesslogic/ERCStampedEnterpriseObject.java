@@ -42,7 +42,7 @@ public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
 	}
     
     /** logging support */
-    public static Logger log = Logger.getLogger(ERCStampedEnterpriseObject.class);
+    public static final Logger log = Logger.getLogger(ERCStampedEnterpriseObject.class);
 
     public static String [] TimestampAttributeKeys = new String[] { Keys.CREATED, Keys.LAST_MODIFIED};
     

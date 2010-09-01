@@ -17,12 +17,12 @@ import er.extensions.localization.ERXLocalizer;
 public class ERXTimestampFormatter extends NSTimestampFormatter {
 
 	/** holds a reference to the repository */
-	private static Hashtable _repository = new Hashtable();
+	private static final Hashtable _repository = new Hashtable();
     
 	protected static final String DefaultKey = "ERXTimestampFormatter.DefaultKey";
     
     /** The default pattern used in the UI */
-    public static String DEFAULT_PATTERN = "%m/%d/%Y";
+    public static final String DEFAULT_PATTERN = "%m/%d/%Y";
 	
 	static {
 		_repository.put(DefaultKey, new ERXTimestampFormatter());

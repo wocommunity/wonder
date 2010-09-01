@@ -67,7 +67,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     public static final Logger log = Logger.getLogger(ERD2WInspectPage.class);
     public static final Logger validationCat = Logger.getLogger(ERD2WInspectPage.class+".validation");
 
-	protected static String firstResponderContainerName = "FirstResponderContainer";
+	protected static final String firstResponderContainerName = "FirstResponderContainer";
 
     public String urlForCurrentState() {
     	NSDictionary dict = null;

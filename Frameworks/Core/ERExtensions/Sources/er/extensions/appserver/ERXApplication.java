@@ -1271,7 +1271,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				log.info("Instance will live " + timeToLive + " seconds.");
 				NSLog.out.appendln("Instance will live " + timeToLive + " seconds.");
 				// add a fudge factor of around 10 minutes
-				timeToLive += (new Random()).nextFloat() * 600;
+				timeToLive += Math.random() * 600;
 				NSTimestamp exitDate = (new NSTimestamp()).timestampByAddingGregorianUnits(0, 0, 0, 0, 0, timeToLive);
 				WOTimer t = new WOTimer(exitDate, 0, this, "killInstance", null, null, false);
 				t.schedule();

@@ -35,7 +35,11 @@ public class ERXBooleanSelector extends ERXStatelessComponent {
        	public String toString() {
             return _value != null ? _value.toString() : null;
     	}
-    	
+       	
+       	public int hashCode() {
+       		return _value == null ? 0 : _value.hashCode();
+       	}
+
     	public boolean equals(Object other) {
             return other == _value || (other != null && ((BooleanProxy)other).value() == _value);
     	}

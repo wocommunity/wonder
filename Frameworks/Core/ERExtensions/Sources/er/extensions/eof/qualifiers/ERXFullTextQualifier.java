@@ -24,8 +24,8 @@ import com.webobjects.foundation.NSSelector;
  * @author mschrag
  */
 public class ERXFullTextQualifier extends EOQualifier implements Cloneable, EOQualifierEvaluation {
-	public static String FullTextContainsSelectorName = "fulltextContains";
-	public static NSSelector FullTextContainsSelector = new NSSelector(ERXFullTextQualifier.FullTextContainsSelectorName, new Class[] { String.class });
+	public static final String FullTextContainsSelectorName = "fulltextContains";
+	public static final NSSelector FullTextContainsSelector = new NSSelector(ERXFullTextQualifier.FullTextContainsSelectorName, new Class[] { String.class });
 
 	public static enum MatchType {
 		/**

@@ -49,11 +49,11 @@ public class ERXModernNavigationMenuItem extends ERXStatelessComponent {
     public ERXNavigationItem aChildItem; // used in WORepetition
 
 
-    private static String EMPTY_STRING = "";
+    private static final String EMPTY_STRING = "";
 
-    protected static String STYLE_CLASS_SELECTED = "selected";
-    protected static String STYLE_CLASS_DISABLED = "disabled";
-    protected static String STYLE_CLASS_SUB = "sub";
+    protected static final String STYLE_CLASS_SELECTED = "selected";
+    protected static final String STYLE_CLASS_DISABLED = "disabled";
+    protected static final String STYLE_CLASS_SUB = "sub";
 
     public static final String SHOULD_DISPLAY_DISABLED_MENU_ITEMS = "ERXModernNavigationMenuItem.shouldDisplayDisabledMenuItems";
 

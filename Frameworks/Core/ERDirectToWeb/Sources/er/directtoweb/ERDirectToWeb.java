@@ -501,7 +501,7 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
             String componentName = (String)d2wContext.valueForKey("componentName");
             info.setObjectForKey(componentName != null ? componentName : "null", "D2W-ComponentName");
 
-            if (componentName.indexOf("CustomComponent") > 0) {
+            if (componentName != null && componentName.indexOf("CustomComponent") > 0) {
                 String customComponentName = (String)d2wContext.valueForKey("customComponentName");
                 info.setObjectForKey(customComponentName != null ? customComponentName : "null", "D2W-ComponentName");
             }

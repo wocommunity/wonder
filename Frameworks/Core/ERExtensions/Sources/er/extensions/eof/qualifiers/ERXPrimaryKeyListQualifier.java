@@ -37,7 +37,7 @@ public class ERXPrimaryKeyListQualifier extends ERXInQualifier {
     /** logging support */
     protected static final Logger log = Logger.getLogger(ERXPrimaryKeyListQualifier.class);
 
-    public static String IsContainedInArraySelectorName = "isContainedInArray";
+    public static final String IsContainedInArraySelectorName = "isContainedInArray";
     
     static {
         EOQualifierSQLGeneration.Support.setSupportForClass(new ERXPrimaryKeyListQualifier.Support(), ERXPrimaryKeyListQualifier.class);

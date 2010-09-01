@@ -1080,7 +1080,6 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             _initialDefaultValues = new NSMutableDictionary();
 
             EOEntity entity = entity();
-            NSMutableDictionary dict = new NSMutableDictionary();
             NSDictionary entityInfo = (NSDictionary)entity.userInfo().objectForKey("ERXDefaultValues");
 
             for( Enumeration e = entity.attributes().objectEnumerator(); e.hasMoreElements();) {

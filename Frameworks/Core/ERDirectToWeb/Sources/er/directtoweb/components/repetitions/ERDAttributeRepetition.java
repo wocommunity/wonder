@@ -97,7 +97,7 @@ public class ERDAttributeRepetition extends ERDCustomComponent {
     }
 
     public NSArray sectionsContents() {
-        if (_sectionsContents == null || true) {
+        //if (_sectionsContents == null || true) {
             NSArray sectionsContentsFromRule=(NSArray)d2wContext().valueForKey("sectionsContents");
             if (sectionsContentsFromRule==null) {
                 sectionsContentsFromRule=(NSArray)displayPropertyKeys();
@@ -109,7 +109,7 @@ public class ERDAttributeRepetition extends ERDCustomComponent {
             else
                 _sectionsContents = sectionsContentsFromRule.mutableClone();
 
-        }
+        //}
         return _sectionsContents;
     }
     public void appendToResponse(WOResponse r, WOContext c) {

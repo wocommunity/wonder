@@ -150,7 +150,7 @@ public class ERXComponentActionRedirector {
     protected String url;
 
     /** static cache to hold the responses. They are stored on a by-session basis. */
-    protected static NSMutableDictionary responses = new NSMutableDictionary();
+    protected static final NSMutableDictionary responses = new NSMutableDictionary();
 
     /** stores the redirector in the cache. 
      * @param redirector The redirector to store. */

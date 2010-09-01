@@ -133,7 +133,7 @@ import er.extensions.jdbc.ERXSQLHelper;
 public class ERXModelGroup extends EOModelGroup {
 
 	/** logging support */
-	public static Logger log = Logger.getLogger(ERXModelGroup.class);
+	public static final Logger log = Logger.getLogger(ERXModelGroup.class);
 	
 	private Hashtable cache;
 
@@ -146,13 +146,13 @@ public class ERXModelGroup extends EOModelGroup {
 	 * <code>er.extensions.ERXModelGroup.patchModelsOnLoad</code> is a boolean that defines is the created should be a {@link Model} not a EOModel. 
 	 * Default is false.
 	 */
-	protected static boolean patchModelsOnLoad = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXModelGroup.patchModelsOnLoad", false);
+	protected static final boolean patchModelsOnLoad = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXModelGroup.patchModelsOnLoad", false);
 	
 	/**
 	 * <code>er.extensions.ERXModelGroup.flattenPrototypes</code> defines if the prototypes should get flattened. Default is true.
 	 * <p>Note: the default of true may be incompatible with {@link ERXModel#isUseExtendedPrototypesEnabled}.</p>
 	 */
-	protected static boolean flattenPrototypes = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXModelGroup.flattenPrototypes", true);
+	protected static final boolean flattenPrototypes = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXModelGroup.flattenPrototypes", true);
 	
 	/**
 	 * <code>er.extensions.ERXModelGroup.prototypeModelNames</code> defines the names of the models that are prototypes. They

@@ -27,7 +27,11 @@ public abstract class ERXForwardingAdaptor extends EOAdaptor {
 
 	public ERXForwardingAdaptor(String name) {
 		super(name);
+		Object delegate = delegate();
 		_forwardedAdaptor = EOAdaptor.adaptorWithName(forwardedAdaptorName());
+		if (delegate != null) {
+			_forwardedAdaptor.setDelegate(delegate);
+		}
 	}
 
 	@Override
@@ -141,12 +145,17 @@ public abstract class ERXForwardingAdaptor extends EOAdaptor {
 
 	@Override
 	public Object delegate() {
-		return _forwardedAdaptor.delegate();
+		return (_forwardedAdaptor == null) ? super.delegate() : _forwardedAdaptor.delegate();
 	}
 
 	@Override
 	public void setDelegate(Object delegate) {
-		_forwardedAdaptor.setDelegate(delegate);
+		if (_forwardedAdaptor != null) {
+			_forwardedAdaptor.setDelegate(delegate);
+		}
+		else {
+			super.setDelegate(delegate);
+		}
 	}
 
 	@Override

@@ -24,7 +24,7 @@ import er.extensions.localization.ERXLocalizer;
  * @author mschrag
  */
 public class ERXExceptionUtilities {
-	public static Logger log = Logger.getLogger(ERXExceptionUtilities.class);
+	public static final Logger log = Logger.getLogger(ERXExceptionUtilities.class);
 
 	/**
 	 * Implemented by any exception that you explicitly want to not appear in

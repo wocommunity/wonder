@@ -19,7 +19,7 @@ import com.webobjects.foundation.NSForwardException;
  * @author ak
  */
 public class ERXKeepAliveResponse extends ERXResponse {
-	protected static Logger log = Logger.getLogger(ERXKeepAliveResponse.class);
+	protected static final Logger log = Logger.getLogger(ERXKeepAliveResponse.class);
 
 	/**
 	 * Queue to push the items into.
