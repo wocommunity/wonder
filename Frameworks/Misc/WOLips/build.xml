@@ -1,0 +1,32 @@
+<project name="FrameworkBuild" default="all" basedir=".">
+    <xmlproperty file=".project"/>
+    <property name="project.name" value="${projectDescription.name}" />
+    <property file="build.properties" />
+
+    <target name="clean">
+        <ant antFile="Build/build/build.xml" target="${project.name}.all" dir="../../../">
+            <property name="build.action" value="clean" />
+        </ant>
+    </target>
+    <target name="build">
+        <ant antFile="Build/build/build.xml" target="${project.name}.all" dir="../../../">
+            <property name="build.action" value="build" />
+        </ant>
+    </target>
+    <target name="install">
+        <ant antFile="Build/build/build.xml" target="${project.name}.all" dir="../../../">
+            <property name="build.action" value="install" />
+        </ant>
+    </target>
+    <target name="web">
+        <ant antFile="Build/build/build.xml" target="${project.name}.all" dir="../../../">
+            <property name="build.action" value="web" />
+        </ant>
+    </target>
+    <target name="test">
+        <ant antFile="Build/build/build.xml" target="${project.name}.all" dir="../../../">
+            <property name="build.action" value="test" />
+        </ant>
+    </target>
+    <target name="all" depends="clean, build, install, web" />
+</project>

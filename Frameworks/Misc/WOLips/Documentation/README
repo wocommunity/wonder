@@ -1,0 +1,63 @@
+To fully utilize WOLips.framework, you must add support for click-to-open and you must provide 
+a prototype.js implementation.  Note that click-to-open support is expensive, because it has to dig around
+your component HTML quite a bit, so you will take a performance hit in development to have it enabled.
+
+1) If your components extends ERXComponent, all you need to do is set:
+
+	er.component.clickToOpen=true
+
+in your Properties file.
+
+If you do not use ERXComponent and instead have a custom component base class, you must add 
+clickToOpen support to your components on your own. You should ONLY have clickToOpen execute in your 
+component if you are in development mode.  To include it into your component base class, you can use 
+the sample implementation from ERXComponent:
+
+	@Override
+	public void appendToResponse(WOResponse response, WOContext context) {
+		...
+		boolean clickToOpenEnabled = ...; 
+		ERXClickToOpenSupport.preProcessResponse(response, context, clickToOpenEnabled);
+		super.appendToResponse(response, context);
+		ERXClickToOpenSupport.postProcessResponse(getClass(), response, context, clickToOpenEnabled);
+		...
+	}
+
+Note that when clickToOpenEnabled is false, the ERXClickToOpenSupport methods are no-ops.
+
+2) If your Application.java class does not extend ERXApplication, add a method like this:
+
+private Boolean isDevelopmentMode;
+public boolean developmentMode() {
+    if (isDevelopmentMode == null) {
+    	isDevelopmentMode = new Boolean(ERXProperties.booleanForKey("developmentMode", false));
+    }
+    return isDevelopmentMode.booleanValue();
+}
+
+And add this to the launch arguments:
+-DdevelopmentMode=true
+
+3) You must be using a recent version of WOLips that supports the WOLips Server.  In
+your WOLips preferences, you must enable the WOLips Server, set the port number and the communication
+password.  Turning on the WOLips Server requires a restart of Eclipse.
+
+In your application preferences, you can then set:
+
+	wolips.host=localhost
+	wolips.port=9485
+	wolips.password=yourpassword
+	
+Only 'wolips.password' is strictly required as long as you use the default port of 9485.
+
+4) WOLips.framework needs a prototype.js.  If you are using Ajax framework, you don't need to do
+anything, because it will default to use Ajax.framework's prototype.js.  However, if you are not,
+you must set (as an example):
+
+	wolips.prototype.framework=app
+	wolips.prototype.fileName=prototype.js
+
+5) In your page wrapper, add a <wo:WOLToolBar/> component, and you're good to go.  Look in the lower
+left hand corner of the browser window for the link.
+
+For more detail see: http://wiki.objectstyle.org/confluence/display/WOL/Click+to+Open
