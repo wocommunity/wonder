@@ -497,8 +497,8 @@ public class AjaxModalDialog extends AjaxComponent {
 			logger.warn("The AjaxModalDialog should not be used inside of a WOForm (" + ERXWOForm.formName(context, "- not specified -") +
 					") if it contains any form inputs or buttons.  Remove this AMD from this form, add a form of its own. Replace it with " +
 					"an AjaxModalDialogOpener with a dialogID that matches the ID of this dialog.");
-					log.warn("    page: " + context.page());
-					log.warn("    component: " + context.component());
+					logger.warn("    page: " + context.page());
+					logger.warn("    component: " + context.component());
 		}
 		
 		if( ! booleanValueForBinding("enabled", true)) {

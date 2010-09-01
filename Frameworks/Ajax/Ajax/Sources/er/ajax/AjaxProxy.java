@@ -2,6 +2,7 @@ package er.ajax;
 
 import java.util.NoSuchElementException;
 
+import org.apache.log4j.Logger;
 import org.jabsorb.JSONRPCBridge;
 import org.jabsorb.JSONRPCResult;
 import org.json.JSONObject;
@@ -85,6 +86,7 @@ import er.extensions.appserver.ERXResponseRewriter;
  *          Tous droits réservés.
  */
 public class AjaxProxy extends AjaxComponent {
+	private static final Logger log = Logger.getLogger(AjaxProxy.class);
 
 	public AjaxProxy(WOContext context) {
 		super(context);
