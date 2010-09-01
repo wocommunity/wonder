@@ -66,17 +66,12 @@ public class ERCStatic extends _ERCStatic {
 
         public void invalidateCache() { _staticsPerKey.removeAllObjects(); }
 
-        private EOEditingContext _privateEditingContext;
-        private EOEditingContext privateEditingContext() {
+        private static EOEditingContext _privateEditingContext;
+        private static synchronized EOEditingContext privateEditingContext() {
             if (_privateEditingContext == null) {
                 if (ERXProperties.booleanForKeyWithDefault("er.corebusinesslogic.ERCStatic.UseSeparateChannel", true)) {
                     _privateEditingContext = ERXEC.newEditingContext(ERXObjectStoreCoordinator.create());
-                    _privateEditingContext.lock();
-                    try {
-                        _privateEditingContext.setSharedEditingContext(null);
-                    } finally {
-                        _privateEditingContext.unlock();
-                    }
+                    _privateEditingContext.setSharedEditingContext(null);
                 } else {
                     _privateEditingContext = ERXEC.newEditingContext();
                 }                
