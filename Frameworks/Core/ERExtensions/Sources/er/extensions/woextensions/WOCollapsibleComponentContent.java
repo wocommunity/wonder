@@ -47,7 +47,7 @@ public class WOCollapsibleComponentContent extends WOComponent {
     private boolean _isFrameworkSet;
     private int _anchor;
 
-    private static String _undefinedMarker="UNDEFINED";
+    private static final String _undefinedMarker="UNDEFINED";
     private static int _counter = 0;
 
     public WOCollapsibleComponentContent(WOContext aContext)  {
