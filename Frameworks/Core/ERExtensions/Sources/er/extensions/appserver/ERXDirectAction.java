@@ -96,6 +96,7 @@ public class ERXDirectAction extends WODirectAction {
         if (canPerformActionWithPasswordKey("er.extensions.ERXJUnitPassword")) {
             
             result=pageWithName("ERXWOTestInterface");
+            session().setObjectForKey(Boolean.TRUE, "ERXWOTestInterface.enabled");
             String testCase = request().stringFormValueForKey("case");
             if(testCase != null) {
                 result.takeValueForKey(testCase, "theTest");

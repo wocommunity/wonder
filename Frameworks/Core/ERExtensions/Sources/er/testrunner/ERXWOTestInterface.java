@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSComparator;
@@ -188,5 +189,14 @@ public class ERXWOTestInterface extends WOComponent implements ERXTestListener {
     public void clearStatus() {
         log.debug ("-------------------------- clearStatus() --------------------------");
         errorMessage = "";
+    }
+
+    public void appendToResponse(WOResponse r, WOContext c) {
+    	if (session().objectForKey("ERXLog4JConfiguration.enabled") != null) {
+    		super.appendToResponse(r, c);
+    	}
+    	else {
+    		r.appendContentString("please use the ERXDirectAction log4jAction to login first!");
+    	}
     }
 }
