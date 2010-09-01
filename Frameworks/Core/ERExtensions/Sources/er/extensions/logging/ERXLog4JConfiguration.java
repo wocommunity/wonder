@@ -153,6 +153,10 @@ public class ERXLog4JConfiguration extends WOComponent {
 		return ERXConstant.integerForInt(Level.OFF.toInt());
 	}
 
+	public Integer traceLevel() {
+		return ERXConstant.integerForInt(Level.TRACE.toInt());
+	}
+
 	public Integer debugLevel() {
 		return ERXConstant.integerForInt(Level.DEBUG.toInt());
 	}
@@ -183,6 +187,10 @@ public class ERXLog4JConfiguration extends WOComponent {
 
 	public boolean loggerIsNotOff() {
 		return logger() != null && logger().getLevel() != Level.OFF;
+	}
+
+	public boolean loggerIsNotTrace() {
+		return logger() != null && logger().getLevel() != Level.TRACE;
 	}
 
 	public boolean loggerIsNotDebug() {
@@ -224,8 +232,9 @@ public class ERXLog4JConfiguration extends WOComponent {
 	}
 
 	private final static NSDictionary BG_COLORS = new NSDictionary(
-			new Object[] { "#ffbbbb", "#eeccbb", "#ddddbb", "#cceebb", "#bbffbb"}, 
-			new Object[] { 
+			new Object[] { "#ffdddd", "#ffbbbb", "#eeccbb", "#ddddbb", "#cceebb", "#bbffbb"}, 
+			new Object[] {
+					ERXConstant.integerForInt(Level.TRACE.toInt()),
 					ERXConstant.integerForInt(Level.DEBUG.toInt()), 
 					ERXConstant.integerForInt(Level.WARN.toInt()), 
 					ERXConstant.integerForInt(Level.ERROR.toInt()), 
