@@ -9,6 +9,8 @@ import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.foundation.ERXProperties;
+
 /**
  * Rule class that works around two problems:
  * <ul>
@@ -16,7 +18,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * then the model will not load, making for very strange errors. We replace the
  * missing class with the normal assignment class and log the error.
  * <li>when evaluating rule priorities, the default is to place rules containing <code>pageConfiguration</code>
- * keys so high up that they will get prefered over rules without such a condition, but with a higher author setting.
+ * keys so high up that they will get preferred over rules without such a condition, but with a higher author setting.
  * This is pretty ridiculous and leads to having to set <code>... AND (pageConfiguration like '*')</code> 
  * in all the conditions.<br>
  * We place rules with a <code>pageConfiguration</code> so high that they will be higher than rules with the same author setting
@@ -29,6 +31,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 public class ERD2WRule extends Rule {
     private int _priority = -1;
     private String _assignmentClassName;
+    private boolean patchRulePriority = ERXProperties.booleanForKeyWithDefault("er.directtoweb.ERD2WRule.patchRulePriority", true);
 
     public ERD2WRule() {
         super();
@@ -80,6 +83,10 @@ public class ERD2WRule extends Rule {
      * @see com.webobjects.directtoweb.Rule#priority()
      */
     public int priority() {
+    	if (!patchRulePriority) {
+    		// TC - Added for MZ because we have thousands of rules and don't want to comb through all of them to change their priorities.
+    		return super.priority();
+    	}
         if(_priority == -1) {
             
             EOQualifier lhs = lhs();
