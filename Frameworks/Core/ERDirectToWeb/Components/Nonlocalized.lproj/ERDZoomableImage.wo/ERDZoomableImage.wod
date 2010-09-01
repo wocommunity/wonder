@@ -1,0 +1,37 @@
+Thumbnail : WOImage {
+    src = thumnailSrc;
+    height = ^height;
+    width = ^width;
+    title = ^title;
+}
+
+ZoomImageLink : WOHyperlink {
+    href = "javascript:void(0)";
+    onClick = jsToZoomImage;
+}
+
+ValidThumbnailSrcExist : WOConditional {
+    condition = thumbnailSrcNullOrEmpty;
+    negate = true;
+}
+
+ValidThumbnailSrcDoesntExist : WOConditional {
+    condition = thumbnailSrcNullOrEmpty;
+}  
+
+Once : ERXOncePerRequestConditional {
+    keyName = "ERDZoomableImage";
+}
+
+NoImageString : WOString {
+    value = noImageString;
+}
+
+EnableZoom : WOConditional {
+    condition = enableZoom;
+}
+
+DisableZoom : WOConditional {
+    condition = enableZoom;
+    negate = true;
+}
