@@ -37,7 +37,7 @@ import er.extensions.foundation.ERXThreadStorage;
  * @author David Teran, Frank Caputo @ cluster9
  */
 public class ERXObjectStoreCoordinatorPool {
-    private static Logger log = Logger.getLogger(ERXObjectStoreCoordinatorPool.class);
+    private static final Logger log = Logger.getLogger(ERXObjectStoreCoordinatorPool.class);
     
     private static final String THREAD_OSC_KEY = "er.extensions.ERXObjectStoreCoordinatorPool.threadOSC";
     private Hashtable _oscForSession;

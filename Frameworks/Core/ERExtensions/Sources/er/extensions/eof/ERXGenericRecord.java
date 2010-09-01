@@ -80,7 +80,7 @@ import er.extensions.validation.ERXValidationFactory;
 public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjectInterface, ERXGeneratesPrimaryKeyInterface, ERXEnterpriseObject, ERXKey.ValueCoding, AutoBatchFaultingEnterpriseObject {
 
 	/** holds all subclass related Logger's */
-	private static NSMutableDictionary<Class, Logger> classLogs = new NSMutableDictionary<Class, Logger>();
+	private static final NSMutableDictionary<Class, Logger> classLogs = new NSMutableDictionary<Class, Logger>();
 
 	public static boolean shouldTrimSpaces() {
 		return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXGenericRecord.shouldTrimSpaces", false);

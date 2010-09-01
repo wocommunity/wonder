@@ -408,6 +408,10 @@ public class ERXValidationException extends NSValidation.ValidationException imp
         return ERXValidation.localizedDisplayNameForKey(eoObject() != null ? eoObject().classDescription() : null, key, localizer);
     }
 
+    public int hashCode() {
+    	return (type() == null ? 1 : type().hashCode()) * (key() == null ? 1 : key().hashCode()) * (object() == null ? 1 : object().hashCode()) * (value() == null ? 1 : value().hashCode()) * (additionalExceptions() == null ? 1 : additionalExceptions().hashCode()); 
+    }
+
     /**
      * Compares this exception to anything else.
      * @return description of the validation exception

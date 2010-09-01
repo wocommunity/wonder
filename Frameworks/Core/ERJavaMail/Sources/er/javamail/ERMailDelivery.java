@@ -58,7 +58,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @author ak fixes
  */
 public abstract class ERMailDelivery {
-	private static Logger log = Logger.getLogger(ERMailDelivery.class);
+	private static final Logger log = Logger.getLogger(ERMailDelivery.class);
 
 	/** JavaMail session */
 	private javax.mail.Session _session;
@@ -79,7 +79,7 @@ public abstract class ERMailDelivery {
 	private NSDictionary<String, Object> _userInfo;
 	private String _contextString;
 
-	public static String DefaultCharset = System.getProperty("er.javamail.defaultEncoding");
+	public static final String DefaultCharset = System.getProperty("er.javamail.defaultEncoding");
 	public String _charset = DefaultCharset;
 
 	/** Designated constructor */

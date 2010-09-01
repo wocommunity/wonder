@@ -62,6 +62,7 @@ public class AjaxResponse extends ERXResponse {
 			try {
 				CharSequence content;
 				//AK: don't ask...
+				// MS: 5.3 vs 5.4 field type of _content
 				if (((Object)_content) instanceof StringBuffer) {
 					content = (StringBuffer)(Object)_content;
 					ERXKeyValueCodingUtilities.takePrivateValueForKey(this, new StringBuffer(),  "_content");

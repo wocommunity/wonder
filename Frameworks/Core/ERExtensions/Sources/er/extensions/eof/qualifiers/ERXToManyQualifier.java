@@ -53,7 +53,7 @@ public class ERXToManyQualifier extends ERXKeyValueQualifier implements Cloneabl
         EOQualifierSQLGeneration.Support.setSupportForClass(new ToManyQualifierSQLGenerationSupport(), ERXToManyQualifier.class);
     }
     
-    public static String MatchesAllInArraySelectorName = "matchesAllInArray";
+    public static final String MatchesAllInArraySelectorName = "matchesAllInArray";
 
     /** logging support */
     public static final Logger log = Logger.getLogger(ERXToManyQualifier.class);

@@ -21,7 +21,7 @@ public class WOCollapsibleComponentContent extends WOComponent
     protected boolean _isFrameworkSet;
     protected int _anchor;
 
-    protected static String _undefinedMarker="UNDEFINED";
+    protected static final String _undefinedMarker="UNDEFINED";
     protected static int _counter = 0;
     
     public WOCollapsibleComponentContent(WOContext aContext)  {

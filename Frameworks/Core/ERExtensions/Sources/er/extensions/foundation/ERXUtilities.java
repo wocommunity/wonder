@@ -47,7 +47,7 @@ import er.extensions.eof.ERXReplicableInterface;
 public class ERXUtilities {
 
     /** logging support */
-    public static Logger log = Logger.getLogger(ERXUtilities.class);
+    public static final Logger log = Logger.getLogger(ERXUtilities.class);
 
     /**
      * @deprecated use ERXEOControlUtilities.addObjectToObjectOnBothSidesOfRelationshipWithKey(EOEnterpriseObject,EOEnterpriseObject,String)

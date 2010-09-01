@@ -47,9 +47,9 @@ import er.extensions.foundation.ERXStringUtilities;
  * @author <a href="mailto:jfveillette@os.ca">Jean-François Veillette</a>
  */
 public class EOEnterpriseObjectSerializer extends AbstractSerializer {
-	protected static NSMutableDictionary<String, NSArray<String>> readableAttributeNames = new NSMutableDictionary<String, NSArray<String>>();
-	protected static NSMutableDictionary<String, NSArray<String>> writableAttributeNames = new NSMutableDictionary<String, NSArray<String>>();
-	protected static NSMutableDictionary<String, NSArray<String>> includedRelationshipNames = new NSMutableDictionary<String, NSArray<String>>();
+	protected static final NSMutableDictionary<String, NSArray<String>> readableAttributeNames = new NSMutableDictionary<String, NSArray<String>>();
+	protected static final NSMutableDictionary<String, NSArray<String>> writableAttributeNames = new NSMutableDictionary<String, NSArray<String>>();
+	protected static final NSMutableDictionary<String, NSArray<String>> includedRelationshipNames = new NSMutableDictionary<String, NSArray<String>>();
 
 	private static Class[] _serializableClasses = new Class[] { EOEnterpriseObject.class };
 

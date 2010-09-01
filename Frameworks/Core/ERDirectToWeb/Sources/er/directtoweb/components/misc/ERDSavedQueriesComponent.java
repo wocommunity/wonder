@@ -52,13 +52,13 @@ import org.apache.log4j.Logger;
 public abstract class ERDSavedQueriesComponent extends WOComponent {
 	public static final Logger log = Logger.getLogger(ERDSavedQueriesComponent.class);
 
-    public static EOKeyValueArchiving.Support originalEOKVArchivingTimestampSupport = new EOKeyValueArchiving._TimestampSupport();
-    public static EOKeyValueArchiving.Support newEOKVArchivingTimestampSupport = new ERDSavedQueriesComponent._TimestampSupport();
+    public static final EOKeyValueArchiving.Support originalEOKVArchivingTimestampSupport = new EOKeyValueArchiving._TimestampSupport();
+    public static final EOKeyValueArchiving.Support newEOKVArchivingTimestampSupport = new ERDSavedQueriesComponent._TimestampSupport();
 
     /** @deprecated  use {@link #originalEOKVArchivingTimestampSupport} */
-    public static EOKeyValueArchiving.Support originalEOKVArchiningTimestampSupport = originalEOKVArchivingTimestampSupport;
+    public static final EOKeyValueArchiving.Support originalEOKVArchiningTimestampSupport = originalEOKVArchivingTimestampSupport;
     /** @deprecated  use {@link #newEOKVArchivingTimestampSupport} */
-    public static EOKeyValueArchiving.Support newEOKVArchiningTimestampSupport = newEOKVArchivingTimestampSupport;
+    public static final EOKeyValueArchiving.Support newEOKVArchiningTimestampSupport = newEOKVArchivingTimestampSupport;
 
 	public ERDSavedQueriesComponent(WOContext context) {
 		super(context);

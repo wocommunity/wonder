@@ -19,8 +19,8 @@ import er.extensions.foundation.ERXValueUtilities;
 
 public class ERNEUTabInspectPage extends ERD2WTabInspectPage {
 
-    public static String IMAGE_TAB_COMPONENT_NAME = "ERXImageTabPanel";
-    public static String TEXT_TAB_COMPONENT_NAME = "ERXTabPanel";
+    public static final String IMAGE_TAB_COMPONENT_NAME = "ERXImageTabPanel";
+    public static final String TEXT_TAB_COMPONENT_NAME = "ERXTabPanel";
 
     public ERNEUTabInspectPage(WOContext context) {
         super(context);

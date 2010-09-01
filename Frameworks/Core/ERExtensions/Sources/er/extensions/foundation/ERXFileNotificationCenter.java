@@ -274,6 +274,10 @@ public class ERXFileNotificationCenter {
             selector = sel;            
         }
 
+        public int hashCode() {
+        	return (observer == null ? 1 : observer.hashCode()) * (selector == null ? 1 : selector.hashCode()); 
+        }
+
         /**
          * Overridden to return true if the object being compared has the same observer-selector pair.
          * @param osh object to be compared

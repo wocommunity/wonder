@@ -44,9 +44,9 @@ public D2WPick(WOContext context) { super(context); }
             sender.takeValueForKey(new NSMutableArray(), "selectedObjects");
             return nextPage;
         }
-        public EODataSource dataSource() {
-            return dataSource();
-        }
+//        public EODataSource dataSource() {
+//            return dataSource();
+//        }
     }
 
     static  {
