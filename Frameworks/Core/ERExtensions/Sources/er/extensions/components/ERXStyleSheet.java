@@ -248,9 +248,9 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 			}
 
 			if( ERXStyleSheet.shouldCloseLinkTags() ) {
-				response._appendContentAsciiString( "></link>" );
+				response._appendContentAsciiString( "/>" );
 			} else {
-				response._appendContentAsciiString( " />" );
+				response._appendContentAsciiString( ">" );
 			}
 			response.appendContentString("\n");
 			boolean inserted = true;
