@@ -60,6 +60,8 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	
 	protected int _rowCount = -1;
 	
+	private boolean _rawRowsForCustomQueries = true;
+
 	protected boolean _shouldRememberRowCount = true;
 	
 	/**
@@ -68,6 +70,24 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	public ERXBatchingDisplayGroup() {
 	}
 	
+ 	/**
+	* Sets whether or not fetch specification with custom queries should use raw rows. Defaults to true for backwards compatibility.
+	* 
+	* @param rawRowsForCustomQueries whether or not fetch specification with custom queries should use raw rows
+	*/
+	public void setRawRowsForCustomQueries(boolean rawRowsForCustomQueries) {
+		_rawRowsForCustomQueries = rawRowsForCustomQueries;
+	}
+	
+	/**
+	* Returns whether or not fetch specification with custom queries should use raw rows.
+	* 
+	* @return whether or not fetch specification with custom queries should use raw rows
+	*/
+	public boolean isRawRowsForCustomQueries() {
+		return _rawRowsForCustomQueries;
+	}
+
 	/**
 	 * Decodes an ERXBatchingDisplayGroup from the given unarchiver.
 	 * 
@@ -285,7 +305,7 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	/**
 	 * Utility to get at the number of rows when batching.
 	 */
-	protected int rowCount() {
+	public int rowCount() {
 		int rowCount = _rowCount;
 		if (rowCount == -1) {
 			if (isBatching()) {
@@ -345,7 +365,7 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 			spec.setPrefetchingRelationshipKeyPaths(_prefetchingRelationshipKeyPaths);
 		}
 		
-		NSArray result = ERXEOControlUtilities.objectsInRange(ec, spec, start, end);
+		NSArray result = ERXEOControlUtilities.objectsInRange(ec, spec, start, end, _rawRowsForCustomQueries);
 		// WAS: fetch the primary keys, turn them into faults, then batch-fetch all
 		// the non-resident objects
 		//NSArray primKeys = ERXEOControlUtilities.primaryKeyValuesInRange(ec, spec, start, end);

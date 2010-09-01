@@ -571,8 +571,24 @@ public class ERXEOControlUtilities {
      *
      * @return objects in the given range
      */
-
     public static <T extends EOEnterpriseObject> NSArray<T> objectsInRange(EOEditingContext ec, EOFetchSpecification spec, int start, int end) {
+    	return objectsInRange(ec, spec, start, end, true);
+    }
+    
+    /**
+     * Returns an {@link com.webobjects.foundation.NSArray NSArray} containing the objects from the resulting rows starting
+     * at start and stopping at end using a custom SQL, derived from the SQL
+     * which the {@link com.webobjects.eocontrol.EOFetchSpecification EOFetchSpecification} would use normally {@link com.webobjects.eocontrol.EOFetchSpecification#setHints(NSDictionary) setHints()}
+     *
+     * @param ec editingcontext to fetch objects into
+     * @param spec fetch specification for the fetch
+     * @param start
+     * @param end
+     * @param rawRowsForCustomQueries if true, raw rows will be returned from the fetch when there is a custom query
+     *
+     * @return objects in the given range
+     */
+    public static <T extends EOEnterpriseObject> NSArray<T> objectsInRange(EOEditingContext ec, EOFetchSpecification spec, int start, int end, boolean rawRowsForCustomQueries) {
 		NSArray result;
 		if (spec.hints() == null || spec.hints().isEmpty() || spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey) == null) {
 			// no hints on the fs
@@ -607,7 +623,15 @@ public class ERXEOControlUtilities {
 			Object hint = spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey);
 			String sql = sqlHelper.customQueryExpressionHintAsString(hint);
 			sql = sqlHelper.limitExpressionForSQL(null, spec, sql, start, end);
-			result = EOUtilities.rawRowsForSQL(ec, model.name(), sql, null);
+			
+			if (rawRowsForCustomQueries) {
+				result = EOUtilities.rawRowsForSQL(ec, model.name(), sql, null);
+			}
+			else {
+				EOFetchSpecification fs = new EOFetchSpecification(spec.entityName(), null, null);
+				fs.setHints(new NSDictionary(sql, EODatabaseContext.CustomQueryExpressionHintKey));
+				result = ec.objectsWithFetchSpecification(fs);
+			}
 		}
 		return result;
 	}
