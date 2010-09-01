@@ -12,6 +12,14 @@ AutosubmitCB: WOCheckBox {
 	onChange = "return document.getElementById('SavedQueryHiddenRefreshButton').click();";
 }
 
+QueryResultsLink : WOHyperlink {
+    href = fetchSavedQueryResultsLink;
+}
+
+CanShowBookarmarkableQueryResultsLink : WOConditional {
+	condition = showBookmarkableQueryResultsLink;
+}
+
 ClearForm: WOSubmitButton {
 	action = clearForm;
 	value = "Clear Form";
