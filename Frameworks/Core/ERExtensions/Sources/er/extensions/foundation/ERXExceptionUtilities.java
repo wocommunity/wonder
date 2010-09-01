@@ -263,7 +263,7 @@ public class ERXExceptionUtilities {
 
 			if (ERXProperties.booleanForKeyWithDefault("er.extensions.stackTrace.cachePatterns", true)) {
 				if (skipPatterns == null) {
-					ERXExceptionUtilities._skipPatterns = NSArray.<Pattern> emptyArray();
+					ERXExceptionUtilities._skipPatterns = NSArray.EmptyArray;
 				}
 				else {
 					ERXExceptionUtilities._skipPatterns = skipPatterns;
