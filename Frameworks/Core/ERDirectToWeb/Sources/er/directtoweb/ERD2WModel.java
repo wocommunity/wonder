@@ -317,7 +317,7 @@ public class ERD2WModel extends D2WModel {
                 cache.put(k,result==null ? NULL_VALUE : result);
             if (ruleTraceEnabledLog.isDebugEnabled()) {
                 if (ruleFireLog.isDebugEnabled())
-                ruleFireLog.debug("FIRE: " +keyPath +  " depends on: "  + new NSArray(significantKeys) + " = " + k
+                	ruleFireLog.debug("FIRE: " +keyPath + " for propertyKey: " + context.propertyKey() + " depends on: "  + new NSArray(significantKeys) + " = " + k
                               + " value: " + (result==null ? "<NULL>" : (result instanceof EOEntity ? ((EOEntity)result).name() : result)));
             }
             if (resetTraceRuleFiring) {
@@ -327,7 +327,7 @@ public class ERD2WModel extends D2WModel {
             if (ruleTraceEnabledLog.isDebugEnabled()) {
                 Logger ruleLog = Logger.getLogger("er.directtoweb.rules." + keyPath + ".cache");
                 if (ruleLog.isDebugEnabled())
-                    ruleLog.debug("CACHE: " + keyPath +  " depends on: "  + new NSArray(significantKeys) + " = " + k
+                	ruleLog.debug("CACHE: " + keyPath + " for propertyKey: " + context.propertyKey() + " depends on: "  + new NSArray(significantKeys) + " = " + k
                                   + " value: " + (result==NULL_VALUE ? "<NULL>" : (result instanceof EOEntity ? ((EOEntity)result).name() : result)));
             }
             if (result==NULL_VALUE)
