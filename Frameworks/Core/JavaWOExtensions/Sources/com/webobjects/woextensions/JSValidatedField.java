@@ -13,7 +13,9 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
 public class JSValidatedField extends WOComponent {
-    public String uniqueID;
+	private static Random _random = new Random();
+
+	public String uniqueID;
 
     public JSValidatedField(WOContext aContext)  {
         super(aContext);
@@ -23,7 +25,7 @@ public class JSValidatedField extends WOComponent {
         // We need to give each image a unique name, with considerations that there might be
         // more than ImageFlyover per page.
         if (uniqueID == null) {
-            uniqueID = "Image"+(new Random()).nextInt();
+        	uniqueID = "Image"+_random.nextInt();
         }
     }
 
