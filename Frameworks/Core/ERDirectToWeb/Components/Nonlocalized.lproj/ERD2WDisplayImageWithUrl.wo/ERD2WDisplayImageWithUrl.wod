@@ -2,6 +2,6 @@ Image: ERDZoomableImage {
   src=objectPropertyValue;
 	width = d2wContext.imageWidth;
 	height = d2wContext.imageHeight;
-	zoomWidth = localContext.zoomWidth;
-	zoomHeight = 777;
+	zoomWidth = d2wContext.zoomWidth;
+	zoomHeight = d2wContext.zoomHeight;
 }
