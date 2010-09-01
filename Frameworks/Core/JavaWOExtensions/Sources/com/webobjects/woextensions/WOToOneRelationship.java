@@ -41,7 +41,7 @@ public class WOToOneRelationship extends WOComponent {
     protected NSArray _privateList;
     protected Object _privateSelection;
 
-    public static String _noneString = "- none -";
+    public static final String _noneString = "- none -";
 
 
     public WOToOneRelationship(WOContext aContext)  {
