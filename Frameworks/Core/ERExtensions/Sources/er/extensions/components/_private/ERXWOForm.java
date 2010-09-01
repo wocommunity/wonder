@@ -209,7 +209,6 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 			boolean wasFormSubmitted = context._wasFormSubmitted();
 			_enterFormInContext(context);
 			boolean wasMultipleSubmitForm = context._isMultipleSubmitForm();
-	
 			String enctype = _enctype(context);
 			if (enctype != null) {
 				_setEnctype(enctype);
@@ -218,19 +217,23 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 			context._setActionInvoked(false);
 			context._setIsMultipleSubmitForm(_multipleSubmit == null ? false : _multipleSubmit.booleanValueInComponent(context.component()));
 			String previousFormName = _setFormName(context, wasInForm);
-			result = super.invokeAction(worequest, context);
-			if (!wasInForm && !context._wasActionInvoked() && context._wasFormSubmitted()) {
-				if (_action != null) {
-					result = (WOActionResults) _action.valueInComponent(context.component());
-				}
-				if (result == null && !ERXAjaxApplication.isAjaxSubmit(worequest)) {
-					result = context.page();
+			try {
+				result = super.invokeAction(worequest, context);
+				if (!wasInForm && !context._wasActionInvoked() && context._wasFormSubmitted()) {
+					if (_action != null) {
+						result = (WOActionResults) _action.valueInComponent(context.component());
+					}
+					if (result == null && !ERXAjaxApplication.isAjaxSubmit(worequest)) {
+						result = context.page();
+					}
 				}
 			}
-			context._setIsMultipleSubmitForm(wasMultipleSubmitForm);
-			_exitFormInContext(context, wasInForm, wasFormSubmitted);
-			_clearFormName(context, previousFormName, wasInForm);
-			_clearEnctype();
+			finally {
+				context._setIsMultipleSubmitForm(wasMultipleSubmitForm);
+				_exitFormInContext(context, wasInForm, wasFormSubmitted);
+				_clearFormName(context, previousFormName, wasInForm);
+				_clearEnctype();
+			}
 		}
 		else {
 			result = super.invokeAction(worequest, context);
@@ -303,15 +306,18 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		if (_shouldAppendFormTags(context, wasInForm)) {
 			boolean wasFormSubmitted = context._wasFormSubmitted();
 			_enterFormInContext(context);
-	
 			// log.info(this._formName + "->" +
 			// this.toString().replaceAll(".*(keyPath=\\w+).*", "$1"));
 			String previousFormName = _setFormName(context, wasInForm);
-			super.takeValuesFromRequest(request, context);
-			// log.info(context.elementID() + "->" + context.senderID() + "->" +
-			// context._wasFormSubmitted());
-			_exitFormInContext(context, wasInForm, wasFormSubmitted);
-			_clearFormName(context, previousFormName, wasInForm);
+			try {
+				super.takeValuesFromRequest(request, context);
+			}
+			finally {
+				// log.info(context.elementID() + "->" + context.senderID() + "->" +
+				// context._wasFormSubmitted());
+				_exitFormInContext(context, wasInForm, wasFormSubmitted);
+				_clearFormName(context, previousFormName, wasInForm);
+			}
 		}
 		else {
 			super.takeValuesFromRequest(request, context);
@@ -441,23 +447,27 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		if (_shouldAppendFormTags(context, wasInForm)) {
 			context.setInForm(true);
 			String previousFormName = _setFormName(context, wasInForm);
-			_appendOpenTagToResponse(response, context);
-			if (_multipleSubmit != null && _multipleSubmit.booleanValueInComponent(context.component())) {
-				if (_addDefaultSubmitButton != null && _addDefaultSubmitButton.booleanValueInComponent(context.component()) || (_addDefaultSubmitButton == null && addDefaultSubmitButtonDefault)) {
-					ERXBrowser browser = ERXBrowserFactory.factory().browserMatchingRequest(context.request());
-					boolean useDisplayNone = !(browser.isSafari() && browser.version().compareTo("522") > 0);
-					if(useDisplayNone) {
-						response._appendContentAsciiString("<div style=\"position: absolute; left: -10000px; display: none;\"><input type=\"submit\" name=\"WOFormDummySubmit\" value=\"WOFormDummySubmit\" /></div>");
-					} else {
-						response._appendContentAsciiString("<div style=\"position: absolute; left: -10000px; \"><input type=\"submit\" name=\"WOFormDummySubmit\" value=\"WOFormDummySubmit\" /></div>");
+			try {
+				_appendOpenTagToResponse(response, context);
+				if (_multipleSubmit != null && _multipleSubmit.booleanValueInComponent(context.component())) {
+					if (_addDefaultSubmitButton != null && _addDefaultSubmitButton.booleanValueInComponent(context.component()) || (_addDefaultSubmitButton == null && addDefaultSubmitButtonDefault)) {
+						ERXBrowser browser = ERXBrowserFactory.factory().browserMatchingRequest(context.request());
+						boolean useDisplayNone = !(browser.isSafari() && browser.version().compareTo("522") > 0);
+						if(useDisplayNone) {
+							response._appendContentAsciiString("<div style=\"position: absolute; left: -10000px; display: none;\"><input type=\"submit\" name=\"WOFormDummySubmit\" value=\"WOFormDummySubmit\" /></div>");
+						} else {
+							response._appendContentAsciiString("<div style=\"position: absolute; left: -10000px; \"><input type=\"submit\" name=\"WOFormDummySubmit\" value=\"WOFormDummySubmit\" /></div>");
+						}
 					}
 				}
+				appendChildrenToResponse(response, context);
+				_appendCloseTagToResponse(response, context);
 			}
-			appendChildrenToResponse(response, context);
-			_appendCloseTagToResponse(response, context);
-			_clearFormName(context, previousFormName, wasInForm);
-			_clearEnctype();
-			context.setInForm(wasInForm);
+			finally {
+				_clearFormName(context, previousFormName, wasInForm);
+				_clearEnctype();
+				context.setInForm(wasInForm);
+			}
 		}
 		else {
 			if (!_disabled(context)) {
