@@ -33,7 +33,7 @@ import com.webobjects.foundation.NSKeyValueCodingAdditions;
 
 public class WOTabPanel extends WOComponent
 {
-    protected static String  _undefinedMarker="UNDEFINED";
+    protected static final String  _undefinedMarker="UNDEFINED";
 
     public Object  currentTab;
     protected Object  _selectedTab;
