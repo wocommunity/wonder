@@ -140,6 +140,7 @@ public class ERD2WRule extends Rule {
                 " => " +
                 (rhs() == null ? "<NULL>" : rhs().keyPath() + " = " + rhs().value() +
                         ( rhsClass.equals(Assignment.class.getName()) ? "" : " [" + rhsClass + "]")
-                ));
+                ) +
+                " (" + priority() + ")");
     }
 }
