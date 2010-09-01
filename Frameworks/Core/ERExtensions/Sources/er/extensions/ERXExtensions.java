@@ -263,14 +263,17 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         _log = Logger.getLogger(ERXExtensions.class);
 		ERXProperties.pathsForUserAndBundleProperties(true);
 
-        registerSQLSupportForSelector(new NSSelector(ERXPrimaryKeyListQualifier.IsContainedInArraySelectorName), 
-                EOQualifierSQLGeneration.Support.supportForClass(ERXPrimaryKeyListQualifier.class));
-        registerSQLSupportForSelector(new NSSelector(ERXToManyQualifier.MatchesAllInArraySelectorName), 
-                EOQualifierSQLGeneration.Support.supportForClass(ERXToManyQualifier.class));
-        registerSQLSupportForSelector(new NSSelector(ERXRegExQualifier.MatchesSelectorName), 
-                EOQualifierSQLGeneration.Support.supportForClass(ERXRegExQualifier.class));
-        registerSQLSupportForSelector(new NSSelector(ERXFullTextQualifier.FullTextContainsSelectorName), 
-                EOQualifierSQLGeneration.Support.supportForClass(ERXFullTextQualifier.class));
+		try {
+			// MS: initialize these with Class.forName(Whatever.class.getName()) because the .class class literal does not trigger static initializers to run in 1.5,
+			// which means that the sql generation support classes are not registered
+			registerSQLSupportForSelector(new NSSelector(ERXPrimaryKeyListQualifier.IsContainedInArraySelectorName), EOQualifierSQLGeneration.Support.supportForClass(Class.forName(ERXPrimaryKeyListQualifier.class.getName())));
+			registerSQLSupportForSelector(new NSSelector(ERXToManyQualifier.MatchesAllInArraySelectorName), EOQualifierSQLGeneration.Support.supportForClass(Class.forName(ERXToManyQualifier.class.getName())));
+	        registerSQLSupportForSelector(new NSSelector(ERXRegExQualifier.MatchesSelectorName), EOQualifierSQLGeneration.Support.supportForClass(Class.forName(ERXRegExQualifier.class.getName())));
+	        registerSQLSupportForSelector(new NSSelector(ERXFullTextQualifier.FullTextContainsSelectorName), EOQualifierSQLGeneration.Support.supportForClass(Class.forName(ERXFullTextQualifier.class.getName())));
+		}
+		catch (Throwable t) {
+			throw NSForwardException._runtimeExceptionForThrowable(t);
+		}
 
 		EOQualifierSQLGeneration.Support.setSupportForClass(new ERXFullTextQualifierSupport(), ERXFullTextQualifier.class);
 		EOQualifierSQLGeneration.Support.setSupportForClass(new ERXFalseQualifierSupport(), ERXFalseQualifier.class);
