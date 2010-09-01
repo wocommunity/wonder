@@ -1,3 +1,8 @@
+B0: WOGenericContainer {
+	elementName = "B";
+	omitTags = loggerIsNotTrace;
+}
+
 B1: WOGenericContainer {
 	elementName = "B";
 	omitTags = loggerIsNotDebug;
@@ -67,6 +72,12 @@ Hyperlink1: WOHyperlink {
 ShowLoggerString: WOCollapsibleComponentContent {
 	openedLabel = "Hide Properties String";
 	closedLabel = "Show Properties String";
+}
+
+RadioButtonTraceLevel: WORadioButton {
+	name = logger.name;
+	selection = loggerLevelValue;
+	value = traceLevel;
 }
 
 RadioButtonDebugLevel: WORadioButton {
