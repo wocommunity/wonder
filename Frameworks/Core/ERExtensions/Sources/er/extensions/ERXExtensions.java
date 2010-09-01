@@ -1228,7 +1228,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 	    					woaFolder = distFolder;
 	    				}
 	    				else {
-	    		    		throw new IllegalArgumentException("You must run your application from a .woa folder to call this method.");
+	    					//Bundle-less builds. Yay!
+	    		    		//throw new IllegalArgumentException("You must run your application from a .woa folder to call this method.");
 	    				}
 	    			}
 	    		}
