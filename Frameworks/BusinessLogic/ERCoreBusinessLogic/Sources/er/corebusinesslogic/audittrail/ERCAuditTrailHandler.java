@@ -67,7 +67,7 @@ public class ERCAuditTrailHandler {
         }
     }
 
-    private NSMutableDictionary<String, Configuration> configuration = new NSMutableDictionary<String, Configuration>();
+    protected NSMutableDictionary<String, Configuration> configuration = new NSMutableDictionary<String, Configuration>();
 
     public void modelGroupDidLoad(NSNotification n) {
         configuration.removeAllObjects();
@@ -149,6 +149,7 @@ public class ERCAuditTrailHandler {
                     ec.deleteObject(eo);
                 }
             }
+            ec.processRecentChanges();
             NSArray updatedObjects = (NSArray) ec.updatedObjects();
             NSArray deletedObjects = (NSArray) ec.deletedObjects();
             handleSave(ec, EOEditingContext.InsertedKey, insertedObjects);
