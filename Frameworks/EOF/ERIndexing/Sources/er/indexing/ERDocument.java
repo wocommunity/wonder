@@ -38,7 +38,6 @@ public class ERDocument implements NSKeyValueCoding {
 	
 	// KVC
 	
-	@Override
 	public Object valueForKey(String key) {
 		Object result =  _doc.get(key);
 		if (result == null) {
@@ -47,7 +46,6 @@ public class ERDocument implements NSKeyValueCoding {
 		return result;
 	}
 	
-	@Override
 	public void takeValueForKey(Object obj, String key) {
 		// do nuttin'
 	}
