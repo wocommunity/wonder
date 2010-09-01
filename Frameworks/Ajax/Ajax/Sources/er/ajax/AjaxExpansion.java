@@ -92,9 +92,9 @@ public class AjaxExpansion extends AjaxComponent {
         String string = (String) valueForBinding("string");
         if (null == string) {
             if (isExpanded()) {
-                string = (String)valueForBinding("openedLabel");
+                string = (String)valueForBinding("openedLabel", "Close");
             } else {
-                string = (String)valueForBinding("closedLabel");
+                string = (String)valueForBinding("closedLabel", "Open");
             }
         }
         return string;
