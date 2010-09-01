@@ -45,9 +45,9 @@ public class ERXDebugTimer extends WODynamicGroup {
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		if (ERXStats.isTrackingStatistics()) {
 			String key = keyInContext(context, "takeValuesFromRequest");
-			ERXStats.markStart(Group.Component, key);
+			ERXStats.markStart(Group.ComponentTakeValuesFromRequest, key);
 			super.takeValuesFromRequest(request, context);
-			ERXStats.markEnd(Group.Component, key);
+			ERXStats.markEnd(Group.ComponentTakeValuesFromRequest, key);
 		}
 		else {
 			super.takeValuesFromRequest(request, context);
@@ -59,8 +59,8 @@ public class ERXDebugTimer extends WODynamicGroup {
 		WOActionResults result;
 		if (ERXStats.isTrackingStatistics()) {
 			String key = keyInContext(context, "invokeAction");
-			ERXStats.markStart(Group.Component, key);
-			ERXStats.markEnd(Group.Component, key);
+			ERXStats.markStart(Group.ComponentInvokeAction, key);
+			ERXStats.markEnd(Group.ComponentInvokeAction, key);
 			result = super.invokeAction(request, context);
 		}
 		else {
