@@ -1,4 +1,4 @@
-// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to Talent.java instead.
+// DO NOT EDIT.  Make changes to Talent.java instead.
 package webobjectsexamples.businesslogic.movies.common;
 
 import com.webobjects.eoaccess.*;
@@ -13,21 +13,23 @@ import er.extensions.foundation.*;
 
 @SuppressWarnings("all")
 public abstract class _Talent extends er.extensions.eof.ERXGenericRecord {
-	public static final String ENTITY_NAME = "Talent";
+  public static final String ENTITY_NAME = "Talent";
 
-	// Attributes
-	public static final String FIRST_NAME_KEY = "firstName";
-	public static final ERXKey<String> FIRST_NAME = new ERXKey<String>(FIRST_NAME_KEY);
-	public static final String LAST_NAME_KEY = "lastName";
-	public static final ERXKey<String> LAST_NAME = new ERXKey<String>(LAST_NAME_KEY);
+  // Attribute Keys
+  public static final ERXKey<String> FIRST_NAME = new ERXKey<String>("firstName");
+  public static final ERXKey<String> LAST_NAME = new ERXKey<String>("lastName");
+  // Relationship Keys
+  public static final ERXKey<webobjectsexamples.businesslogic.movies.common.Movie> MOVIES_DIRECTED = new ERXKey<webobjectsexamples.businesslogic.movies.common.Movie>("moviesDirected");
+  public static final ERXKey<webobjectsexamples.businesslogic.movies.common.TalentPhoto> PHOTO = new ERXKey<webobjectsexamples.businesslogic.movies.common.TalentPhoto>("photo");
+  public static final ERXKey<webobjectsexamples.businesslogic.movies.common.MovieRole> ROLES = new ERXKey<webobjectsexamples.businesslogic.movies.common.MovieRole>("roles");
 
-	// Relationships
-	public static final String MOVIES_DIRECTED_KEY = "moviesDirected";
-	public static final ERXKey<webobjectsexamples.businesslogic.movies.common.Movie> MOVIES_DIRECTED = new ERXKey<webobjectsexamples.businesslogic.movies.common.Movie>(MOVIES_DIRECTED_KEY);
-	public static final String PHOTO_KEY = "photo";
-	public static final ERXKey<webobjectsexamples.businesslogic.movies.common.TalentPhoto> PHOTO = new ERXKey<webobjectsexamples.businesslogic.movies.common.TalentPhoto>(PHOTO_KEY);
-	public static final String ROLES_KEY = "roles";
-	public static final ERXKey<webobjectsexamples.businesslogic.movies.common.MovieRole> ROLES = new ERXKey<webobjectsexamples.businesslogic.movies.common.MovieRole>(ROLES_KEY);
+  // Attributes
+  public static final String FIRST_NAME_KEY = FIRST_NAME.key();
+  public static final String LAST_NAME_KEY = LAST_NAME.key();
+  // Relationships
+  public static final String MOVIES_DIRECTED_KEY = MOVIES_DIRECTED.key();
+  public static final String PHOTO_KEY = PHOTO.key();
+  public static final String ROLES_KEY = ROLES.key();
 
   private static Logger LOG = Logger.getLogger(_Talent.class);
 
@@ -40,33 +42,33 @@ public abstract class _Talent extends er.extensions.eof.ERXGenericRecord {
   }
 
   public String firstName() {
-    return (String) storedValueForKey("firstName");
+    return (String) storedValueForKey(_Talent.FIRST_NAME_KEY);
   }
 
   public void setFirstName(String value) {
     if (_Talent.LOG.isDebugEnabled()) {
     	_Talent.LOG.debug( "updating firstName from " + firstName() + " to " + value);
     }
-    takeStoredValueForKey(value, "firstName");
+    takeStoredValueForKey(value, _Talent.FIRST_NAME_KEY);
   }
 
   public String lastName() {
-    return (String) storedValueForKey("lastName");
+    return (String) storedValueForKey(_Talent.LAST_NAME_KEY);
   }
 
   public void setLastName(String value) {
     if (_Talent.LOG.isDebugEnabled()) {
     	_Talent.LOG.debug( "updating lastName from " + lastName() + " to " + value);
     }
-    takeStoredValueForKey(value, "lastName");
+    takeStoredValueForKey(value, _Talent.LAST_NAME_KEY);
   }
 
   public webobjectsexamples.businesslogic.movies.common.TalentPhoto photo() {
-    return (webobjectsexamples.businesslogic.movies.common.TalentPhoto)storedValueForKey("photo");
+    return (webobjectsexamples.businesslogic.movies.common.TalentPhoto)storedValueForKey(_Talent.PHOTO_KEY);
   }
   
   public void setPhoto(webobjectsexamples.businesslogic.movies.common.TalentPhoto value) {
-    takeStoredValueForKey(value, "photo");
+    takeStoredValueForKey(value, _Talent.PHOTO_KEY);
   }
 
   public void setPhotoRelationship(webobjectsexamples.businesslogic.movies.common.TalentPhoto value) {
@@ -79,15 +81,15 @@ public abstract class _Talent extends er.extensions.eof.ERXGenericRecord {
     else if (value == null) {
     	webobjectsexamples.businesslogic.movies.common.TalentPhoto oldValue = photo();
     	if (oldValue != null) {
-    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, "photo");
+    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, _Talent.PHOTO_KEY);
       }
     } else {
-    	addObjectToBothSidesOfRelationshipWithKey(value, "photo");
+    	addObjectToBothSidesOfRelationshipWithKey(value, _Talent.PHOTO_KEY);
     }
   }
   
   public NSArray<webobjectsexamples.businesslogic.movies.common.Movie> moviesDirected() {
-    return (NSArray<webobjectsexamples.businesslogic.movies.common.Movie>)storedValueForKey("moviesDirected");
+    return (NSArray<webobjectsexamples.businesslogic.movies.common.Movie>)storedValueForKey(_Talent.MOVIES_DIRECTED_KEY);
   }
 
   public NSArray<webobjectsexamples.businesslogic.movies.common.Movie> moviesDirected(EOQualifier qualifier) {
@@ -107,11 +109,11 @@ public abstract class _Talent extends er.extensions.eof.ERXGenericRecord {
   }
   
   public void addToMoviesDirected(webobjectsexamples.businesslogic.movies.common.Movie object) {
-    includeObjectIntoPropertyWithKey(object, "moviesDirected");
+    includeObjectIntoPropertyWithKey(object, _Talent.MOVIES_DIRECTED_KEY);
   }
 
   public void removeFromMoviesDirected(webobjectsexamples.businesslogic.movies.common.Movie object) {
-    excludeObjectFromPropertyWithKey(object, "moviesDirected");
+    excludeObjectFromPropertyWithKey(object, _Talent.MOVIES_DIRECTED_KEY);
   }
 
   public void addToMoviesDirectedRelationship(webobjectsexamples.businesslogic.movies.common.Movie object) {
@@ -122,7 +124,7 @@ public abstract class _Talent extends er.extensions.eof.ERXGenericRecord {
     	addToMoviesDirected(object);
     }
     else {
-    	addObjectToBothSidesOfRelationshipWithKey(object, "moviesDirected");
+    	addObjectToBothSidesOfRelationshipWithKey(object, _Talent.MOVIES_DIRECTED_KEY);
     }
   }
 
@@ -134,32 +136,32 @@ public abstract class _Talent extends er.extensions.eof.ERXGenericRecord {
     	removeFromMoviesDirected(object);
     }
     else {
-    	removeObjectFromBothSidesOfRelationshipWithKey(object, "moviesDirected");
+    	removeObjectFromBothSidesOfRelationshipWithKey(object, _Talent.MOVIES_DIRECTED_KEY);
     }
   }
 
   public webobjectsexamples.businesslogic.movies.common.Movie createMoviesDirectedRelationship() {
-    EOClassDescription eoClassDesc = EOClassDescription.classDescriptionForEntityName("Movie");
+    EOClassDescription eoClassDesc = EOClassDescription.classDescriptionForEntityName( webobjectsexamples.businesslogic.movies.common.Movie.ENTITY_NAME );
     EOEnterpriseObject eo = eoClassDesc.createInstanceWithEditingContext(editingContext(), null);
     editingContext().insertObject(eo);
-    addObjectToBothSidesOfRelationshipWithKey(eo, "moviesDirected");
+    addObjectToBothSidesOfRelationshipWithKey(eo, _Talent.MOVIES_DIRECTED_KEY);
     return (webobjectsexamples.businesslogic.movies.common.Movie) eo;
   }
 
   public void deleteMoviesDirectedRelationship(webobjectsexamples.businesslogic.movies.common.Movie object) {
-    removeObjectFromBothSidesOfRelationshipWithKey(object, "moviesDirected");
+    removeObjectFromBothSidesOfRelationshipWithKey(object, _Talent.MOVIES_DIRECTED_KEY);
     editingContext().deleteObject(object);
   }
 
   public void deleteAllMoviesDirectedRelationships() {
-    Enumeration objects = moviesDirected().immutableClone().objectEnumerator();
+    Enumeration<webobjectsexamples.businesslogic.movies.common.Movie> objects = moviesDirected().immutableClone().objectEnumerator();
     while (objects.hasMoreElements()) {
-      deleteMoviesDirectedRelationship((webobjectsexamples.businesslogic.movies.common.Movie)objects.nextElement());
+      deleteMoviesDirectedRelationship(objects.nextElement());
     }
   }
 
   public NSArray<webobjectsexamples.businesslogic.movies.common.MovieRole> roles() {
-    return (NSArray<webobjectsexamples.businesslogic.movies.common.MovieRole>)storedValueForKey("roles");
+    return (NSArray<webobjectsexamples.businesslogic.movies.common.MovieRole>)storedValueForKey(_Talent.ROLES_KEY);
   }
 
   public NSArray<webobjectsexamples.businesslogic.movies.common.MovieRole> roles(EOQualifier qualifier) {
@@ -180,7 +182,7 @@ public abstract class _Talent extends er.extensions.eof.ERXGenericRecord {
         fullQualifier = inverseQualifier;
       }
       else {
-        NSMutableArray qualifiers = new NSMutableArray();
+        NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
         qualifiers.addObject(qualifier);
         qualifiers.addObject(inverseQualifier);
         fullQualifier = new EOAndQualifier(qualifiers);
@@ -201,11 +203,11 @@ public abstract class _Talent extends er.extensions.eof.ERXGenericRecord {
   }
   
   public void addToRoles(webobjectsexamples.businesslogic.movies.common.MovieRole object) {
-    includeObjectIntoPropertyWithKey(object, "roles");
+    includeObjectIntoPropertyWithKey(object, _Talent.ROLES_KEY);
   }
 
   public void removeFromRoles(webobjectsexamples.businesslogic.movies.common.MovieRole object) {
-    excludeObjectFromPropertyWithKey(object, "roles");
+    excludeObjectFromPropertyWithKey(object, _Talent.ROLES_KEY);
   }
 
   public void addToRolesRelationship(webobjectsexamples.businesslogic.movies.common.MovieRole object) {
@@ -216,7 +218,7 @@ public abstract class _Talent extends er.extensions.eof.ERXGenericRecord {
     	addToRoles(object);
     }
     else {
-    	addObjectToBothSidesOfRelationshipWithKey(object, "roles");
+    	addObjectToBothSidesOfRelationshipWithKey(object, _Talent.ROLES_KEY);
     }
   }
 
@@ -228,27 +230,27 @@ public abstract class _Talent extends er.extensions.eof.ERXGenericRecord {
     	removeFromRoles(object);
     }
     else {
-    	removeObjectFromBothSidesOfRelationshipWithKey(object, "roles");
+    	removeObjectFromBothSidesOfRelationshipWithKey(object, _Talent.ROLES_KEY);
     }
   }
 
   public webobjectsexamples.businesslogic.movies.common.MovieRole createRolesRelationship() {
-    EOClassDescription eoClassDesc = EOClassDescription.classDescriptionForEntityName("MovieRole");
+    EOClassDescription eoClassDesc = EOClassDescription.classDescriptionForEntityName( webobjectsexamples.businesslogic.movies.common.MovieRole.ENTITY_NAME );
     EOEnterpriseObject eo = eoClassDesc.createInstanceWithEditingContext(editingContext(), null);
     editingContext().insertObject(eo);
-    addObjectToBothSidesOfRelationshipWithKey(eo, "roles");
+    addObjectToBothSidesOfRelationshipWithKey(eo, _Talent.ROLES_KEY);
     return (webobjectsexamples.businesslogic.movies.common.MovieRole) eo;
   }
 
   public void deleteRolesRelationship(webobjectsexamples.businesslogic.movies.common.MovieRole object) {
-    removeObjectFromBothSidesOfRelationshipWithKey(object, "roles");
+    removeObjectFromBothSidesOfRelationshipWithKey(object, _Talent.ROLES_KEY);
     editingContext().deleteObject(object);
   }
 
   public void deleteAllRolesRelationships() {
-    Enumeration objects = roles().immutableClone().objectEnumerator();
+    Enumeration<webobjectsexamples.businesslogic.movies.common.MovieRole> objects = roles().immutableClone().objectEnumerator();
     while (objects.hasMoreElements()) {
-      deleteRolesRelationship((webobjectsexamples.businesslogic.movies.common.MovieRole)objects.nextElement());
+      deleteRolesRelationship(objects.nextElement());
     }
   }
 
@@ -271,9 +273,9 @@ public abstract class _Talent extends er.extensions.eof.ERXGenericRecord {
   }
 
   public static NSArray<Talent> fetchTalents(EOEditingContext editingContext, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings) {
-    EOFetchSpecification fetchSpec = new EOFetchSpecification(_Talent.ENTITY_NAME, qualifier, sortOrderings);
+    ERXFetchSpecification<Talent> fetchSpec = new ERXFetchSpecification<Talent>(_Talent.ENTITY_NAME, qualifier, sortOrderings);
     fetchSpec.setIsDeep(true);
-    NSArray<Talent> eoObjects = (NSArray<Talent>)editingContext.objectsWithFetchSpecification(fetchSpec);
+    NSArray<Talent> eoObjects = fetchSpec.fetchObjects(editingContext);
     return eoObjects;
   }
 
@@ -289,7 +291,7 @@ public abstract class _Talent extends er.extensions.eof.ERXGenericRecord {
       eoObject = null;
     }
     else if (count == 1) {
-      eoObject = (Talent)eoObjects.objectAtIndex(0);
+      eoObject = eoObjects.objectAtIndex(0);
     }
     else {
       throw new IllegalStateException("There was more than one Talent that matched the qualifier '" + qualifier + "'.");
@@ -310,7 +312,7 @@ public abstract class _Talent extends er.extensions.eof.ERXGenericRecord {
   }
 
   public static Talent localInstanceIn(EOEditingContext editingContext, Talent eo) {
-    Talent localInstance = (eo == null) ? null : (Talent)EOUtilities.localInstanceOfObject(editingContext, eo);
+    Talent localInstance = (eo == null) ? null : ERXEOControlUtilities.localInstanceOfObject(editingContext, eo);
     if (localInstance == null && eo != null) {
       throw new IllegalStateException("You attempted to localInstance " + eo + ", which has not yet committed.");
     }

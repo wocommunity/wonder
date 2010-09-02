@@ -1,4 +1,4 @@
-// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to Voting.java instead.
+// DO NOT EDIT.  Make changes to Voting.java instead.
 package webobjectsexamples.businesslogic.movies.common;
 
 import com.webobjects.eoaccess.*;
@@ -13,17 +13,19 @@ import er.extensions.foundation.*;
 
 @SuppressWarnings("all")
 public abstract class _Voting extends er.extensions.eof.ERXGenericRecord {
-	public static final String ENTITY_NAME = "Voting";
+  public static final String ENTITY_NAME = "Voting";
 
-	// Attributes
-	public static final String NUMBER_OF_VOTES_KEY = "numberOfVotes";
-	public static final ERXKey<Integer> NUMBER_OF_VOTES = new ERXKey<Integer>(NUMBER_OF_VOTES_KEY);
-	public static final String RUNNING_AVERAGE_KEY = "runningAverage";
-	public static final ERXKey<Double> RUNNING_AVERAGE = new ERXKey<Double>(RUNNING_AVERAGE_KEY);
+  // Attribute Keys
+  public static final ERXKey<Integer> NUMBER_OF_VOTES = new ERXKey<Integer>("numberOfVotes");
+  public static final ERXKey<Double> RUNNING_AVERAGE = new ERXKey<Double>("runningAverage");
+  // Relationship Keys
+  public static final ERXKey<webobjectsexamples.businesslogic.movies.common.Movie> MOVIE = new ERXKey<webobjectsexamples.businesslogic.movies.common.Movie>("movie");
 
-	// Relationships
-	public static final String MOVIE_KEY = "movie";
-	public static final ERXKey<webobjectsexamples.businesslogic.movies.common.Movie> MOVIE = new ERXKey<webobjectsexamples.businesslogic.movies.common.Movie>(MOVIE_KEY);
+  // Attributes
+  public static final String NUMBER_OF_VOTES_KEY = NUMBER_OF_VOTES.key();
+  public static final String RUNNING_AVERAGE_KEY = RUNNING_AVERAGE.key();
+  // Relationships
+  public static final String MOVIE_KEY = MOVIE.key();
 
   private static Logger LOG = Logger.getLogger(_Voting.class);
 
@@ -36,33 +38,33 @@ public abstract class _Voting extends er.extensions.eof.ERXGenericRecord {
   }
 
   public Integer numberOfVotes() {
-    return (Integer) storedValueForKey("numberOfVotes");
+    return (Integer) storedValueForKey(_Voting.NUMBER_OF_VOTES_KEY);
   }
 
   public void setNumberOfVotes(Integer value) {
     if (_Voting.LOG.isDebugEnabled()) {
     	_Voting.LOG.debug( "updating numberOfVotes from " + numberOfVotes() + " to " + value);
     }
-    takeStoredValueForKey(value, "numberOfVotes");
+    takeStoredValueForKey(value, _Voting.NUMBER_OF_VOTES_KEY);
   }
 
   public Double runningAverage() {
-    return (Double) storedValueForKey("runningAverage");
+    return (Double) storedValueForKey(_Voting.RUNNING_AVERAGE_KEY);
   }
 
   public void setRunningAverage(Double value) {
     if (_Voting.LOG.isDebugEnabled()) {
     	_Voting.LOG.debug( "updating runningAverage from " + runningAverage() + " to " + value);
     }
-    takeStoredValueForKey(value, "runningAverage");
+    takeStoredValueForKey(value, _Voting.RUNNING_AVERAGE_KEY);
   }
 
   public webobjectsexamples.businesslogic.movies.common.Movie movie() {
-    return (webobjectsexamples.businesslogic.movies.common.Movie)storedValueForKey("movie");
+    return (webobjectsexamples.businesslogic.movies.common.Movie)storedValueForKey(_Voting.MOVIE_KEY);
   }
   
   public void setMovie(webobjectsexamples.businesslogic.movies.common.Movie value) {
-    takeStoredValueForKey(value, "movie");
+    takeStoredValueForKey(value, _Voting.MOVIE_KEY);
   }
 
   public void setMovieRelationship(webobjectsexamples.businesslogic.movies.common.Movie value) {
@@ -75,10 +77,10 @@ public abstract class _Voting extends er.extensions.eof.ERXGenericRecord {
     else if (value == null) {
     	webobjectsexamples.businesslogic.movies.common.Movie oldValue = movie();
     	if (oldValue != null) {
-    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, "movie");
+    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, _Voting.MOVIE_KEY);
       }
     } else {
-    	addObjectToBothSidesOfRelationshipWithKey(value, "movie");
+    	addObjectToBothSidesOfRelationshipWithKey(value, _Voting.MOVIE_KEY);
     }
   }
   
@@ -98,9 +100,9 @@ public abstract class _Voting extends er.extensions.eof.ERXGenericRecord {
   }
 
   public static NSArray<Voting> fetchVotings(EOEditingContext editingContext, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings) {
-    EOFetchSpecification fetchSpec = new EOFetchSpecification(_Voting.ENTITY_NAME, qualifier, sortOrderings);
+    ERXFetchSpecification<Voting> fetchSpec = new ERXFetchSpecification<Voting>(_Voting.ENTITY_NAME, qualifier, sortOrderings);
     fetchSpec.setIsDeep(true);
-    NSArray<Voting> eoObjects = (NSArray<Voting>)editingContext.objectsWithFetchSpecification(fetchSpec);
+    NSArray<Voting> eoObjects = fetchSpec.fetchObjects(editingContext);
     return eoObjects;
   }
 
@@ -116,7 +118,7 @@ public abstract class _Voting extends er.extensions.eof.ERXGenericRecord {
       eoObject = null;
     }
     else if (count == 1) {
-      eoObject = (Voting)eoObjects.objectAtIndex(0);
+      eoObject = eoObjects.objectAtIndex(0);
     }
     else {
       throw new IllegalStateException("There was more than one Voting that matched the qualifier '" + qualifier + "'.");
@@ -137,7 +139,7 @@ public abstract class _Voting extends er.extensions.eof.ERXGenericRecord {
   }
 
   public static Voting localInstanceIn(EOEditingContext editingContext, Voting eo) {
-    Voting localInstance = (eo == null) ? null : (Voting)EOUtilities.localInstanceOfObject(editingContext, eo);
+    Voting localInstance = (eo == null) ? null : ERXEOControlUtilities.localInstanceOfObject(editingContext, eo);
     if (localInstance == null && eo != null) {
       throw new IllegalStateException("You attempted to localInstance " + eo + ", which has not yet committed.");
     }

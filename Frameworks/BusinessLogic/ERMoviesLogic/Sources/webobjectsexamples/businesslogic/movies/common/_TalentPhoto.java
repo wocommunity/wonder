@@ -1,4 +1,4 @@
-// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to TalentPhoto.java instead.
+// DO NOT EDIT.  Make changes to TalentPhoto.java instead.
 package webobjectsexamples.businesslogic.movies.common;
 
 import com.webobjects.eoaccess.*;
@@ -13,15 +13,17 @@ import er.extensions.foundation.*;
 
 @SuppressWarnings("all")
 public abstract class _TalentPhoto extends er.extensions.eof.ERXGenericRecord {
-	public static final String ENTITY_NAME = "TalentPhoto";
+  public static final String ENTITY_NAME = "TalentPhoto";
 
-	// Attributes
-	public static final String PHOTO_KEY = "photo";
-	public static final ERXKey<NSData> PHOTO = new ERXKey<NSData>(PHOTO_KEY);
+  // Attribute Keys
+  public static final ERXKey<NSData> PHOTO = new ERXKey<NSData>("photo");
+  // Relationship Keys
+  public static final ERXKey<webobjectsexamples.businesslogic.movies.common.Talent> TALENT = new ERXKey<webobjectsexamples.businesslogic.movies.common.Talent>("talent");
 
-	// Relationships
-	public static final String TALENT_KEY = "talent";
-	public static final ERXKey<webobjectsexamples.businesslogic.movies.common.Talent> TALENT = new ERXKey<webobjectsexamples.businesslogic.movies.common.Talent>(TALENT_KEY);
+  // Attributes
+  public static final String PHOTO_KEY = PHOTO.key();
+  // Relationships
+  public static final String TALENT_KEY = TALENT.key();
 
   private static Logger LOG = Logger.getLogger(_TalentPhoto.class);
 
@@ -34,22 +36,22 @@ public abstract class _TalentPhoto extends er.extensions.eof.ERXGenericRecord {
   }
 
   public NSData photo() {
-    return (NSData) storedValueForKey("photo");
+    return (NSData) storedValueForKey(_TalentPhoto.PHOTO_KEY);
   }
 
   public void setPhoto(NSData value) {
     if (_TalentPhoto.LOG.isDebugEnabled()) {
     	_TalentPhoto.LOG.debug( "updating photo from " + photo() + " to " + value);
     }
-    takeStoredValueForKey(value, "photo");
+    takeStoredValueForKey(value, _TalentPhoto.PHOTO_KEY);
   }
 
   public webobjectsexamples.businesslogic.movies.common.Talent talent() {
-    return (webobjectsexamples.businesslogic.movies.common.Talent)storedValueForKey("talent");
+    return (webobjectsexamples.businesslogic.movies.common.Talent)storedValueForKey(_TalentPhoto.TALENT_KEY);
   }
   
   public void setTalent(webobjectsexamples.businesslogic.movies.common.Talent value) {
-    takeStoredValueForKey(value, "talent");
+    takeStoredValueForKey(value, _TalentPhoto.TALENT_KEY);
   }
 
   public void setTalentRelationship(webobjectsexamples.businesslogic.movies.common.Talent value) {
@@ -62,10 +64,10 @@ public abstract class _TalentPhoto extends er.extensions.eof.ERXGenericRecord {
     else if (value == null) {
     	webobjectsexamples.businesslogic.movies.common.Talent oldValue = talent();
     	if (oldValue != null) {
-    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, "talent");
+    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, _TalentPhoto.TALENT_KEY);
       }
     } else {
-    	addObjectToBothSidesOfRelationshipWithKey(value, "talent");
+    	addObjectToBothSidesOfRelationshipWithKey(value, _TalentPhoto.TALENT_KEY);
     }
   }
   
@@ -85,9 +87,9 @@ public abstract class _TalentPhoto extends er.extensions.eof.ERXGenericRecord {
   }
 
   public static NSArray<TalentPhoto> fetchTalentPhotos(EOEditingContext editingContext, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings) {
-    EOFetchSpecification fetchSpec = new EOFetchSpecification(_TalentPhoto.ENTITY_NAME, qualifier, sortOrderings);
+    ERXFetchSpecification<TalentPhoto> fetchSpec = new ERXFetchSpecification<TalentPhoto>(_TalentPhoto.ENTITY_NAME, qualifier, sortOrderings);
     fetchSpec.setIsDeep(true);
-    NSArray<TalentPhoto> eoObjects = (NSArray<TalentPhoto>)editingContext.objectsWithFetchSpecification(fetchSpec);
+    NSArray<TalentPhoto> eoObjects = fetchSpec.fetchObjects(editingContext);
     return eoObjects;
   }
 
@@ -103,7 +105,7 @@ public abstract class _TalentPhoto extends er.extensions.eof.ERXGenericRecord {
       eoObject = null;
     }
     else if (count == 1) {
-      eoObject = (TalentPhoto)eoObjects.objectAtIndex(0);
+      eoObject = eoObjects.objectAtIndex(0);
     }
     else {
       throw new IllegalStateException("There was more than one TalentPhoto that matched the qualifier '" + qualifier + "'.");
@@ -124,7 +126,7 @@ public abstract class _TalentPhoto extends er.extensions.eof.ERXGenericRecord {
   }
 
   public static TalentPhoto localInstanceIn(EOEditingContext editingContext, TalentPhoto eo) {
-    TalentPhoto localInstance = (eo == null) ? null : (TalentPhoto)EOUtilities.localInstanceOfObject(editingContext, eo);
+    TalentPhoto localInstance = (eo == null) ? null : ERXEOControlUtilities.localInstanceOfObject(editingContext, eo);
     if (localInstance == null && eo != null) {
       throw new IllegalStateException("You attempted to localInstance " + eo + ", which has not yet committed.");
     }
