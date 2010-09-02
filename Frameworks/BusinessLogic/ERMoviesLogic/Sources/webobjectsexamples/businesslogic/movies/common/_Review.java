@@ -1,4 +1,4 @@
-// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to Review.java instead.
+// DO NOT EDIT.  Make changes to Review.java instead.
 package webobjectsexamples.businesslogic.movies.common;
 
 import com.webobjects.eoaccess.*;
@@ -13,17 +13,19 @@ import er.extensions.foundation.*;
 
 @SuppressWarnings("all")
 public abstract class _Review extends er.extensions.eof.ERXGenericRecord {
-	public static final String ENTITY_NAME = "Review";
+  public static final String ENTITY_NAME = "Review";
 
-	// Attributes
-	public static final String REVIEW_KEY = "review";
-	public static final ERXKey<String> REVIEW = new ERXKey<String>(REVIEW_KEY);
-	public static final String REVIEWER_KEY = "reviewer";
-	public static final ERXKey<String> REVIEWER = new ERXKey<String>(REVIEWER_KEY);
+  // Attribute Keys
+  public static final ERXKey<String> REVIEW = new ERXKey<String>("review");
+  public static final ERXKey<String> REVIEWER = new ERXKey<String>("reviewer");
+  // Relationship Keys
+  public static final ERXKey<webobjectsexamples.businesslogic.movies.common.Movie> MOVIE = new ERXKey<webobjectsexamples.businesslogic.movies.common.Movie>("movie");
 
-	// Relationships
-	public static final String MOVIE_KEY = "movie";
-	public static final ERXKey<webobjectsexamples.businesslogic.movies.common.Movie> MOVIE = new ERXKey<webobjectsexamples.businesslogic.movies.common.Movie>(MOVIE_KEY);
+  // Attributes
+  public static final String REVIEW_KEY = REVIEW.key();
+  public static final String REVIEWER_KEY = REVIEWER.key();
+  // Relationships
+  public static final String MOVIE_KEY = MOVIE.key();
 
   private static Logger LOG = Logger.getLogger(_Review.class);
 
@@ -36,33 +38,33 @@ public abstract class _Review extends er.extensions.eof.ERXGenericRecord {
   }
 
   public String review() {
-    return (String) storedValueForKey("review");
+    return (String) storedValueForKey(_Review.REVIEW_KEY);
   }
 
   public void setReview(String value) {
     if (_Review.LOG.isDebugEnabled()) {
     	_Review.LOG.debug( "updating review from " + review() + " to " + value);
     }
-    takeStoredValueForKey(value, "review");
+    takeStoredValueForKey(value, _Review.REVIEW_KEY);
   }
 
   public String reviewer() {
-    return (String) storedValueForKey("reviewer");
+    return (String) storedValueForKey(_Review.REVIEWER_KEY);
   }
 
   public void setReviewer(String value) {
     if (_Review.LOG.isDebugEnabled()) {
     	_Review.LOG.debug( "updating reviewer from " + reviewer() + " to " + value);
     }
-    takeStoredValueForKey(value, "reviewer");
+    takeStoredValueForKey(value, _Review.REVIEWER_KEY);
   }
 
   public webobjectsexamples.businesslogic.movies.common.Movie movie() {
-    return (webobjectsexamples.businesslogic.movies.common.Movie)storedValueForKey("movie");
+    return (webobjectsexamples.businesslogic.movies.common.Movie)storedValueForKey(_Review.MOVIE_KEY);
   }
   
   public void setMovie(webobjectsexamples.businesslogic.movies.common.Movie value) {
-    takeStoredValueForKey(value, "movie");
+    takeStoredValueForKey(value, _Review.MOVIE_KEY);
   }
 
   public void setMovieRelationship(webobjectsexamples.businesslogic.movies.common.Movie value) {
@@ -75,10 +77,10 @@ public abstract class _Review extends er.extensions.eof.ERXGenericRecord {
     else if (value == null) {
     	webobjectsexamples.businesslogic.movies.common.Movie oldValue = movie();
     	if (oldValue != null) {
-    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, "movie");
+    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, _Review.MOVIE_KEY);
       }
     } else {
-    	addObjectToBothSidesOfRelationshipWithKey(value, "movie");
+    	addObjectToBothSidesOfRelationshipWithKey(value, _Review.MOVIE_KEY);
     }
   }
   
@@ -98,9 +100,9 @@ public abstract class _Review extends er.extensions.eof.ERXGenericRecord {
   }
 
   public static NSArray<Review> fetchReviews(EOEditingContext editingContext, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings) {
-    EOFetchSpecification fetchSpec = new EOFetchSpecification(_Review.ENTITY_NAME, qualifier, sortOrderings);
+    ERXFetchSpecification<Review> fetchSpec = new ERXFetchSpecification<Review>(_Review.ENTITY_NAME, qualifier, sortOrderings);
     fetchSpec.setIsDeep(true);
-    NSArray<Review> eoObjects = (NSArray<Review>)editingContext.objectsWithFetchSpecification(fetchSpec);
+    NSArray<Review> eoObjects = fetchSpec.fetchObjects(editingContext);
     return eoObjects;
   }
 
@@ -116,7 +118,7 @@ public abstract class _Review extends er.extensions.eof.ERXGenericRecord {
       eoObject = null;
     }
     else if (count == 1) {
-      eoObject = (Review)eoObjects.objectAtIndex(0);
+      eoObject = eoObjects.objectAtIndex(0);
     }
     else {
       throw new IllegalStateException("There was more than one Review that matched the qualifier '" + qualifier + "'.");
@@ -137,7 +139,7 @@ public abstract class _Review extends er.extensions.eof.ERXGenericRecord {
   }
 
   public static Review localInstanceIn(EOEditingContext editingContext, Review eo) {
-    Review localInstance = (eo == null) ? null : (Review)EOUtilities.localInstanceOfObject(editingContext, eo);
+    Review localInstance = (eo == null) ? null : ERXEOControlUtilities.localInstanceOfObject(editingContext, eo);
     if (localInstance == null && eo != null) {
       throw new IllegalStateException("You attempted to localInstance " + eo + ", which has not yet committed.");
     }

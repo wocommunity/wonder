@@ -1,4 +1,4 @@
-// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to PlotSummary.java instead.
+// DO NOT EDIT.  Make changes to PlotSummary.java instead.
 package webobjectsexamples.businesslogic.movies.common;
 
 import com.webobjects.eoaccess.*;
@@ -13,15 +13,17 @@ import er.extensions.foundation.*;
 
 @SuppressWarnings("all")
 public abstract class _PlotSummary extends er.extensions.eof.ERXGenericRecord {
-	public static final String ENTITY_NAME = "PlotSummary";
+  public static final String ENTITY_NAME = "PlotSummary";
 
-	// Attributes
-	public static final String SUMMARY_KEY = "summary";
-	public static final ERXKey<String> SUMMARY = new ERXKey<String>(SUMMARY_KEY);
+  // Attribute Keys
+  public static final ERXKey<String> SUMMARY = new ERXKey<String>("summary");
+  // Relationship Keys
+  public static final ERXKey<webobjectsexamples.businesslogic.movies.common.Movie> MOVIE = new ERXKey<webobjectsexamples.businesslogic.movies.common.Movie>("movie");
 
-	// Relationships
-	public static final String MOVIE_KEY = "movie";
-	public static final ERXKey<webobjectsexamples.businesslogic.movies.common.Movie> MOVIE = new ERXKey<webobjectsexamples.businesslogic.movies.common.Movie>(MOVIE_KEY);
+  // Attributes
+  public static final String SUMMARY_KEY = SUMMARY.key();
+  // Relationships
+  public static final String MOVIE_KEY = MOVIE.key();
 
   private static Logger LOG = Logger.getLogger(_PlotSummary.class);
 
@@ -34,22 +36,22 @@ public abstract class _PlotSummary extends er.extensions.eof.ERXGenericRecord {
   }
 
   public String summary() {
-    return (String) storedValueForKey("summary");
+    return (String) storedValueForKey(_PlotSummary.SUMMARY_KEY);
   }
 
   public void setSummary(String value) {
     if (_PlotSummary.LOG.isDebugEnabled()) {
     	_PlotSummary.LOG.debug( "updating summary from " + summary() + " to " + value);
     }
-    takeStoredValueForKey(value, "summary");
+    takeStoredValueForKey(value, _PlotSummary.SUMMARY_KEY);
   }
 
   public webobjectsexamples.businesslogic.movies.common.Movie movie() {
-    return (webobjectsexamples.businesslogic.movies.common.Movie)storedValueForKey("movie");
+    return (webobjectsexamples.businesslogic.movies.common.Movie)storedValueForKey(_PlotSummary.MOVIE_KEY);
   }
   
   public void setMovie(webobjectsexamples.businesslogic.movies.common.Movie value) {
-    takeStoredValueForKey(value, "movie");
+    takeStoredValueForKey(value, _PlotSummary.MOVIE_KEY);
   }
 
   public void setMovieRelationship(webobjectsexamples.businesslogic.movies.common.Movie value) {
@@ -62,10 +64,10 @@ public abstract class _PlotSummary extends er.extensions.eof.ERXGenericRecord {
     else if (value == null) {
     	webobjectsexamples.businesslogic.movies.common.Movie oldValue = movie();
     	if (oldValue != null) {
-    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, "movie");
+    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, _PlotSummary.MOVIE_KEY);
       }
     } else {
-    	addObjectToBothSidesOfRelationshipWithKey(value, "movie");
+    	addObjectToBothSidesOfRelationshipWithKey(value, _PlotSummary.MOVIE_KEY);
     }
   }
   
@@ -85,9 +87,9 @@ public abstract class _PlotSummary extends er.extensions.eof.ERXGenericRecord {
   }
 
   public static NSArray<PlotSummary> fetchPlotSummaries(EOEditingContext editingContext, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings) {
-    EOFetchSpecification fetchSpec = new EOFetchSpecification(_PlotSummary.ENTITY_NAME, qualifier, sortOrderings);
+    ERXFetchSpecification<PlotSummary> fetchSpec = new ERXFetchSpecification<PlotSummary>(_PlotSummary.ENTITY_NAME, qualifier, sortOrderings);
     fetchSpec.setIsDeep(true);
-    NSArray<PlotSummary> eoObjects = (NSArray<PlotSummary>)editingContext.objectsWithFetchSpecification(fetchSpec);
+    NSArray<PlotSummary> eoObjects = fetchSpec.fetchObjects(editingContext);
     return eoObjects;
   }
 
@@ -103,7 +105,7 @@ public abstract class _PlotSummary extends er.extensions.eof.ERXGenericRecord {
       eoObject = null;
     }
     else if (count == 1) {
-      eoObject = (PlotSummary)eoObjects.objectAtIndex(0);
+      eoObject = eoObjects.objectAtIndex(0);
     }
     else {
       throw new IllegalStateException("There was more than one PlotSummary that matched the qualifier '" + qualifier + "'.");
@@ -124,7 +126,7 @@ public abstract class _PlotSummary extends er.extensions.eof.ERXGenericRecord {
   }
 
   public static PlotSummary localInstanceIn(EOEditingContext editingContext, PlotSummary eo) {
-    PlotSummary localInstance = (eo == null) ? null : (PlotSummary)EOUtilities.localInstanceOfObject(editingContext, eo);
+    PlotSummary localInstance = (eo == null) ? null : ERXEOControlUtilities.localInstanceOfObject(editingContext, eo);
     if (localInstance == null && eo != null) {
       throw new IllegalStateException("You attempted to localInstance " + eo + ", which has not yet committed.");
     }

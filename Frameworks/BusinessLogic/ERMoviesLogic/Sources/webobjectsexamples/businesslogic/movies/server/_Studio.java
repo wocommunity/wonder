@@ -1,4 +1,4 @@
-// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to Studio.java instead.
+// DO NOT EDIT.  Make changes to Studio.java instead.
 package webobjectsexamples.businesslogic.movies.server;
 
 import com.webobjects.eoaccess.*;
@@ -13,17 +13,19 @@ import er.extensions.foundation.*;
 
 @SuppressWarnings("all")
 public abstract class _Studio extends er.extensions.eof.ERXGenericRecord {
-	public static final String ENTITY_NAME = "Studio";
+  public static final String ENTITY_NAME = "Studio";
 
-	// Attributes
-	public static final String BUDGET_KEY = "budget";
-	public static final ERXKey<java.math.BigDecimal> BUDGET = new ERXKey<java.math.BigDecimal>(BUDGET_KEY);
-	public static final String NAME_KEY = "name";
-	public static final ERXKey<String> NAME = new ERXKey<String>(NAME_KEY);
+  // Attribute Keys
+  public static final ERXKey<java.math.BigDecimal> BUDGET = new ERXKey<java.math.BigDecimal>("budget");
+  public static final ERXKey<String> NAME = new ERXKey<String>("name");
+  // Relationship Keys
+  public static final ERXKey<webobjectsexamples.businesslogic.movies.common.Movie> MOVIES = new ERXKey<webobjectsexamples.businesslogic.movies.common.Movie>("movies");
 
-	// Relationships
-	public static final String MOVIES_KEY = "movies";
-	public static final ERXKey<webobjectsexamples.businesslogic.movies.common.Movie> MOVIES = new ERXKey<webobjectsexamples.businesslogic.movies.common.Movie>(MOVIES_KEY);
+  // Attributes
+  public static final String BUDGET_KEY = BUDGET.key();
+  public static final String NAME_KEY = NAME.key();
+  // Relationships
+  public static final String MOVIES_KEY = MOVIES.key();
 
   private static Logger LOG = Logger.getLogger(_Studio.class);
 
@@ -36,29 +38,29 @@ public abstract class _Studio extends er.extensions.eof.ERXGenericRecord {
   }
 
   public java.math.BigDecimal budget() {
-    return (java.math.BigDecimal) storedValueForKey("budget");
+    return (java.math.BigDecimal) storedValueForKey(_Studio.BUDGET_KEY);
   }
 
   public void setBudget(java.math.BigDecimal value) {
     if (_Studio.LOG.isDebugEnabled()) {
     	_Studio.LOG.debug( "updating budget from " + budget() + " to " + value);
     }
-    takeStoredValueForKey(value, "budget");
+    takeStoredValueForKey(value, _Studio.BUDGET_KEY);
   }
 
   public String name() {
-    return (String) storedValueForKey("name");
+    return (String) storedValueForKey(_Studio.NAME_KEY);
   }
 
   public void setName(String value) {
     if (_Studio.LOG.isDebugEnabled()) {
     	_Studio.LOG.debug( "updating name from " + name() + " to " + value);
     }
-    takeStoredValueForKey(value, "name");
+    takeStoredValueForKey(value, _Studio.NAME_KEY);
   }
 
   public NSArray<webobjectsexamples.businesslogic.movies.common.Movie> movies() {
-    return (NSArray<webobjectsexamples.businesslogic.movies.common.Movie>)storedValueForKey("movies");
+    return (NSArray<webobjectsexamples.businesslogic.movies.common.Movie>)storedValueForKey(_Studio.MOVIES_KEY);
   }
 
   public NSArray<webobjectsexamples.businesslogic.movies.common.Movie> movies(EOQualifier qualifier) {
@@ -79,7 +81,7 @@ public abstract class _Studio extends er.extensions.eof.ERXGenericRecord {
         fullQualifier = inverseQualifier;
       }
       else {
-        NSMutableArray qualifiers = new NSMutableArray();
+        NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
         qualifiers.addObject(qualifier);
         qualifiers.addObject(inverseQualifier);
         fullQualifier = new EOAndQualifier(qualifiers);
@@ -100,11 +102,11 @@ public abstract class _Studio extends er.extensions.eof.ERXGenericRecord {
   }
   
   public void addToMovies(webobjectsexamples.businesslogic.movies.common.Movie object) {
-    includeObjectIntoPropertyWithKey(object, "movies");
+    includeObjectIntoPropertyWithKey(object, _Studio.MOVIES_KEY);
   }
 
   public void removeFromMovies(webobjectsexamples.businesslogic.movies.common.Movie object) {
-    excludeObjectFromPropertyWithKey(object, "movies");
+    excludeObjectFromPropertyWithKey(object, _Studio.MOVIES_KEY);
   }
 
   public void addToMoviesRelationship(webobjectsexamples.businesslogic.movies.common.Movie object) {
@@ -115,7 +117,7 @@ public abstract class _Studio extends er.extensions.eof.ERXGenericRecord {
     	addToMovies(object);
     }
     else {
-    	addObjectToBothSidesOfRelationshipWithKey(object, "movies");
+    	addObjectToBothSidesOfRelationshipWithKey(object, _Studio.MOVIES_KEY);
     }
   }
 
@@ -127,27 +129,27 @@ public abstract class _Studio extends er.extensions.eof.ERXGenericRecord {
     	removeFromMovies(object);
     }
     else {
-    	removeObjectFromBothSidesOfRelationshipWithKey(object, "movies");
+    	removeObjectFromBothSidesOfRelationshipWithKey(object, _Studio.MOVIES_KEY);
     }
   }
 
   public webobjectsexamples.businesslogic.movies.common.Movie createMoviesRelationship() {
-    EOClassDescription eoClassDesc = EOClassDescription.classDescriptionForEntityName("Movie");
+    EOClassDescription eoClassDesc = EOClassDescription.classDescriptionForEntityName( webobjectsexamples.businesslogic.movies.common.Movie.ENTITY_NAME );
     EOEnterpriseObject eo = eoClassDesc.createInstanceWithEditingContext(editingContext(), null);
     editingContext().insertObject(eo);
-    addObjectToBothSidesOfRelationshipWithKey(eo, "movies");
+    addObjectToBothSidesOfRelationshipWithKey(eo, _Studio.MOVIES_KEY);
     return (webobjectsexamples.businesslogic.movies.common.Movie) eo;
   }
 
   public void deleteMoviesRelationship(webobjectsexamples.businesslogic.movies.common.Movie object) {
-    removeObjectFromBothSidesOfRelationshipWithKey(object, "movies");
+    removeObjectFromBothSidesOfRelationshipWithKey(object, _Studio.MOVIES_KEY);
     editingContext().deleteObject(object);
   }
 
   public void deleteAllMoviesRelationships() {
-    Enumeration objects = movies().immutableClone().objectEnumerator();
+    Enumeration<webobjectsexamples.businesslogic.movies.common.Movie> objects = movies().immutableClone().objectEnumerator();
     while (objects.hasMoreElements()) {
-      deleteMoviesRelationship((webobjectsexamples.businesslogic.movies.common.Movie)objects.nextElement());
+      deleteMoviesRelationship(objects.nextElement());
     }
   }
 
@@ -170,9 +172,9 @@ public abstract class _Studio extends er.extensions.eof.ERXGenericRecord {
   }
 
   public static NSArray<Studio> fetchStudios(EOEditingContext editingContext, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings) {
-    EOFetchSpecification fetchSpec = new EOFetchSpecification(_Studio.ENTITY_NAME, qualifier, sortOrderings);
+    ERXFetchSpecification<Studio> fetchSpec = new ERXFetchSpecification<Studio>(_Studio.ENTITY_NAME, qualifier, sortOrderings);
     fetchSpec.setIsDeep(true);
-    NSArray<Studio> eoObjects = (NSArray<Studio>)editingContext.objectsWithFetchSpecification(fetchSpec);
+    NSArray<Studio> eoObjects = fetchSpec.fetchObjects(editingContext);
     return eoObjects;
   }
 
@@ -188,7 +190,7 @@ public abstract class _Studio extends er.extensions.eof.ERXGenericRecord {
       eoObject = null;
     }
     else if (count == 1) {
-      eoObject = (Studio)eoObjects.objectAtIndex(0);
+      eoObject = eoObjects.objectAtIndex(0);
     }
     else {
       throw new IllegalStateException("There was more than one Studio that matched the qualifier '" + qualifier + "'.");
@@ -209,22 +211,22 @@ public abstract class _Studio extends er.extensions.eof.ERXGenericRecord {
   }
 
   public static Studio localInstanceIn(EOEditingContext editingContext, Studio eo) {
-    Studio localInstance = (eo == null) ? null : (Studio)EOUtilities.localInstanceOfObject(editingContext, eo);
+    Studio localInstance = (eo == null) ? null : ERXEOControlUtilities.localInstanceOfObject(editingContext, eo);
     if (localInstance == null && eo != null) {
       throw new IllegalStateException("You attempted to localInstance " + eo + ", which has not yet committed.");
     }
     return localInstance;
   }
   public static NSArray<NSDictionary> fetchRawFetchAllStudios(EOEditingContext editingContext, NSDictionary<String, Object> bindings) {
-    EOFetchSpecification fetchSpec = EOFetchSpecification.fetchSpecificationNamed("RawFetchAllStudios", "Studio");
+    EOFetchSpecification fetchSpec = EOFetchSpecification.fetchSpecificationNamed("RawFetchAllStudios", _Studio.ENTITY_NAME);
     fetchSpec = fetchSpec.fetchSpecificationWithQualifierBindings(bindings);
-    return editingContext.objectsWithFetchSpecification(fetchSpec);
+    return (NSArray<NSDictionary>)editingContext.objectsWithFetchSpecification(fetchSpec);
   }
   
   public static NSArray<NSDictionary> fetchRawFetchAllStudios(EOEditingContext editingContext)
   {
-    EOFetchSpecification fetchSpec = EOFetchSpecification.fetchSpecificationNamed("RawFetchAllStudios", "Studio");
-    return editingContext.objectsWithFetchSpecification(fetchSpec);
+    EOFetchSpecification fetchSpec = EOFetchSpecification.fetchSpecificationNamed("RawFetchAllStudios", _Studio.ENTITY_NAME);
+    return (NSArray<NSDictionary>)editingContext.objectsWithFetchSpecification(fetchSpec);
   }
   
 }

@@ -1,4 +1,4 @@
-// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to MovieRole.java instead.
+// DO NOT EDIT.  Make changes to MovieRole.java instead.
 package webobjectsexamples.businesslogic.movies.common;
 
 import com.webobjects.eoaccess.*;
@@ -13,17 +13,19 @@ import er.extensions.foundation.*;
 
 @SuppressWarnings("all")
 public abstract class _MovieRole extends er.extensions.eof.ERXGenericRecord {
-	public static final String ENTITY_NAME = "MovieRole";
+  public static final String ENTITY_NAME = "MovieRole";
 
-	// Attributes
-	public static final String ROLE_NAME_KEY = "roleName";
-	public static final ERXKey<String> ROLE_NAME = new ERXKey<String>(ROLE_NAME_KEY);
+  // Attribute Keys
+  public static final ERXKey<String> ROLE_NAME = new ERXKey<String>("roleName");
+  // Relationship Keys
+  public static final ERXKey<webobjectsexamples.businesslogic.movies.common.Movie> MOVIE = new ERXKey<webobjectsexamples.businesslogic.movies.common.Movie>("movie");
+  public static final ERXKey<webobjectsexamples.businesslogic.movies.common.Talent> TALENT = new ERXKey<webobjectsexamples.businesslogic.movies.common.Talent>("talent");
 
-	// Relationships
-	public static final String MOVIE_KEY = "movie";
-	public static final ERXKey<webobjectsexamples.businesslogic.movies.common.Movie> MOVIE = new ERXKey<webobjectsexamples.businesslogic.movies.common.Movie>(MOVIE_KEY);
-	public static final String TALENT_KEY = "talent";
-	public static final ERXKey<webobjectsexamples.businesslogic.movies.common.Talent> TALENT = new ERXKey<webobjectsexamples.businesslogic.movies.common.Talent>(TALENT_KEY);
+  // Attributes
+  public static final String ROLE_NAME_KEY = ROLE_NAME.key();
+  // Relationships
+  public static final String MOVIE_KEY = MOVIE.key();
+  public static final String TALENT_KEY = TALENT.key();
 
   private static Logger LOG = Logger.getLogger(_MovieRole.class);
 
@@ -36,22 +38,22 @@ public abstract class _MovieRole extends er.extensions.eof.ERXGenericRecord {
   }
 
   public String roleName() {
-    return (String) storedValueForKey("roleName");
+    return (String) storedValueForKey(_MovieRole.ROLE_NAME_KEY);
   }
 
   public void setRoleName(String value) {
     if (_MovieRole.LOG.isDebugEnabled()) {
     	_MovieRole.LOG.debug( "updating roleName from " + roleName() + " to " + value);
     }
-    takeStoredValueForKey(value, "roleName");
+    takeStoredValueForKey(value, _MovieRole.ROLE_NAME_KEY);
   }
 
   public webobjectsexamples.businesslogic.movies.common.Movie movie() {
-    return (webobjectsexamples.businesslogic.movies.common.Movie)storedValueForKey("movie");
+    return (webobjectsexamples.businesslogic.movies.common.Movie)storedValueForKey(_MovieRole.MOVIE_KEY);
   }
   
   public void setMovie(webobjectsexamples.businesslogic.movies.common.Movie value) {
-    takeStoredValueForKey(value, "movie");
+    takeStoredValueForKey(value, _MovieRole.MOVIE_KEY);
   }
 
   public void setMovieRelationship(webobjectsexamples.businesslogic.movies.common.Movie value) {
@@ -64,19 +66,19 @@ public abstract class _MovieRole extends er.extensions.eof.ERXGenericRecord {
     else if (value == null) {
     	webobjectsexamples.businesslogic.movies.common.Movie oldValue = movie();
     	if (oldValue != null) {
-    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, "movie");
+    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, _MovieRole.MOVIE_KEY);
       }
     } else {
-    	addObjectToBothSidesOfRelationshipWithKey(value, "movie");
+    	addObjectToBothSidesOfRelationshipWithKey(value, _MovieRole.MOVIE_KEY);
     }
   }
   
   public webobjectsexamples.businesslogic.movies.common.Talent talent() {
-    return (webobjectsexamples.businesslogic.movies.common.Talent)storedValueForKey("talent");
+    return (webobjectsexamples.businesslogic.movies.common.Talent)storedValueForKey(_MovieRole.TALENT_KEY);
   }
   
   public void setTalent(webobjectsexamples.businesslogic.movies.common.Talent value) {
-    takeStoredValueForKey(value, "talent");
+    takeStoredValueForKey(value, _MovieRole.TALENT_KEY);
   }
 
   public void setTalentRelationship(webobjectsexamples.businesslogic.movies.common.Talent value) {
@@ -89,10 +91,10 @@ public abstract class _MovieRole extends er.extensions.eof.ERXGenericRecord {
     else if (value == null) {
     	webobjectsexamples.businesslogic.movies.common.Talent oldValue = talent();
     	if (oldValue != null) {
-    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, "talent");
+    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, _MovieRole.TALENT_KEY);
       }
     } else {
-    	addObjectToBothSidesOfRelationshipWithKey(value, "talent");
+    	addObjectToBothSidesOfRelationshipWithKey(value, _MovieRole.TALENT_KEY);
     }
   }
   
@@ -113,9 +115,9 @@ public abstract class _MovieRole extends er.extensions.eof.ERXGenericRecord {
   }
 
   public static NSArray<MovieRole> fetchMovieRoles(EOEditingContext editingContext, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings) {
-    EOFetchSpecification fetchSpec = new EOFetchSpecification(_MovieRole.ENTITY_NAME, qualifier, sortOrderings);
+    ERXFetchSpecification<MovieRole> fetchSpec = new ERXFetchSpecification<MovieRole>(_MovieRole.ENTITY_NAME, qualifier, sortOrderings);
     fetchSpec.setIsDeep(true);
-    NSArray<MovieRole> eoObjects = (NSArray<MovieRole>)editingContext.objectsWithFetchSpecification(fetchSpec);
+    NSArray<MovieRole> eoObjects = fetchSpec.fetchObjects(editingContext);
     return eoObjects;
   }
 
@@ -131,7 +133,7 @@ public abstract class _MovieRole extends er.extensions.eof.ERXGenericRecord {
       eoObject = null;
     }
     else if (count == 1) {
-      eoObject = (MovieRole)eoObjects.objectAtIndex(0);
+      eoObject = eoObjects.objectAtIndex(0);
     }
     else {
       throw new IllegalStateException("There was more than one MovieRole that matched the qualifier '" + qualifier + "'.");
@@ -152,7 +154,7 @@ public abstract class _MovieRole extends er.extensions.eof.ERXGenericRecord {
   }
 
   public static MovieRole localInstanceIn(EOEditingContext editingContext, MovieRole eo) {
-    MovieRole localInstance = (eo == null) ? null : (MovieRole)EOUtilities.localInstanceOfObject(editingContext, eo);
+    MovieRole localInstance = (eo == null) ? null : ERXEOControlUtilities.localInstanceOfObject(editingContext, eo);
     if (localInstance == null && eo != null) {
       throw new IllegalStateException("You attempted to localInstance " + eo + ", which has not yet committed.");
     }
