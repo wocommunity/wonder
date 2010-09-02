@@ -60,12 +60,6 @@ public class WOLClickToOpen extends WOComponent {
       return "http://broken";
     }
   }
-
-  public String clickToDebugUrl() throws MalformedURLException {
-    ERXMutableURL url = new ERXMutableURL(context().componentActionURL());
-    url.addQueryParameter("component", "REPLACEME");
-    return url.toExternalForm();
-  }
   
   @Override
   public WOActionResults invokeAction(WORequest worequest, WOContext wocontext) {
