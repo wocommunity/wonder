@@ -8,20 +8,45 @@ import java.util.concurrent.TimeUnit;
 
 
 /**
+ * User-presentable time duration format as days, hours, minutes and seconds.
+ * 
  * @author kieran
  *
  */
 public class ERXTimeDurationFormatter extends NumberFormat {
-	private TimeUnit timeUnit = TimeUnit.SECONDS;
-	private boolean showLargestUnitOnly = false;
-	private boolean omitSecondsPart = false;
+	private final TimeUnit _timeUnit;
+	private final boolean _showLargestUnitOnly;
+	private final boolean _omitSecondsPart;
 	
+	
+	
+	/**
+	 * Defaults to TimeUnit.SECONDS, showing all time units and showing seconds part of the time description.
+	 */
+	public ERXTimeDurationFormatter() {
+		this(TimeUnit.SECONDS, false, false);
+	}
+	
+	/**
+	 * Defaults to showing all time units and showing seconds part of the time description.
+	 * 
+	 * @param timeUnit the unit of time which is milliseconds, seconds, etc.
+	 */
+	public ERXTimeDurationFormatter(TimeUnit timeUnit) {
+		this(timeUnit, false, false);
+	}
+	
+	/**
+	 * @param timeUnit the unit of time which is milliseconds, seconds, etc.
+	 * @param showLargestUnitOnly display the largest time unit (days, hours, minutes or seconds) that the time value rounds down to
+	 * @param omitSecondsPart imit the seconds unit from the format.
+	 */
 	public ERXTimeDurationFormatter(TimeUnit timeUnit, boolean showLargestUnitOnly, boolean omitSecondsPart) {
 		super();
 		
-		this.timeUnit = timeUnit;
-		this.showLargestUnitOnly = showLargestUnitOnly;
-		this.omitSecondsPart = false;
+		this._timeUnit = timeUnit;
+		this._showLargestUnitOnly = showLargestUnitOnly;
+		this._omitSecondsPart = omitSecondsPart;
 	}
 	
 
@@ -33,8 +58,8 @@ public class ERXTimeDurationFormatter extends NumberFormat {
     
     @Override
 	public StringBuffer format(long number, StringBuffer toAppendTo, FieldPosition fieldPosition) {
-       long seconds = TimeUnit.SECONDS.convert(number, timeUnit);
-       return toAppendTo.append(timePeriodDescription(seconds, showLargestUnitOnly, omitSecondsPart));
+       long seconds = TimeUnit.SECONDS.convert(number, _timeUnit);
+       return toAppendTo.append(timePeriodDescription(seconds, _showLargestUnitOnly, _omitSecondsPart));
     }
 
     
