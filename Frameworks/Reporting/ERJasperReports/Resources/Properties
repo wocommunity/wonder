@@ -1,0 +1,15 @@
+# Since the standard WebObjects keypath separator character ( . ) is invalid for jasper report field name definitions
+# we must use a different character when specifying datasource fields as keypaths in the report template. Default is underscore.
+#er.jasperreports.keyPathSeparator=_
+
+# Sometimes we want might want a reference to the current row, perhaps to pass to a custom function in a scriptlet.
+# This functionality allows us to specify a field name that returns the current row object itself
+# rather than an attribute of the current row.
+# The default fieldname is "_currentRow", however this can be overridden in system properties using: 
+#er.jasperreports.currentRow.fieldName=_currentRow
+
+# File.getCanonicalPath() caches. that can SCREW you if you don't realize that. sun.io.useCanonCaches=false to turn it off.
+sun.io.useCanonCaches=false
+
+# You need this to prevent Jasper launching some awt thread that shows up as a dummy ghost java app in OS X
+java.awt.headless=true
