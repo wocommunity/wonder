@@ -49,6 +49,18 @@ public class WOLClickToOpen extends WOComponent {
     return WOLipsUtilities.wolipsUrl("openComponent", params);
   }
 
+  public String clickToDebugUrl() {
+    try {
+      ERXMutableURL url = new ERXMutableURL(context().componentActionURL());
+      url.addQueryParameter("component", "REPLACEME");
+      return url.toExternalForm();
+    }
+    catch (MalformedURLException e) {
+      System.err.println("WOLClickToOpen.clickToDebugUrl failed to generate a URL: " + e.getMessage());
+      return "http://broken";
+    }
+  }
+
   public String clickToDebugUrl() throws MalformedURLException {
     ERXMutableURL url = new ERXMutableURL(context().componentActionURL());
     url.addQueryParameter("component", "REPLACEME");
