@@ -6,6 +6,9 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.pages;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
@@ -44,6 +47,7 @@ import com.webobjects.foundation.NSSelector;
 
 import er.directtoweb.ERD2WFactory;
 import er.directtoweb.delegates.ERDDeletionDelegate;
+import er.directtoweb.interfaces.ERDEditObjectDelegate;
 import er.directtoweb.interfaces.ERDListPageInterface;
 import er.extensions.ERXExtensions;
 import er.extensions.appserver.ERXComponentActionRedirector;
@@ -615,18 +619,28 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	}
 
 	public WOComponent editObjectAction() {
+	    WOComponent result = null;
 		EditPageInterface epi;
+		ERDEditObjectDelegate editObjectDelegate = null;
 		String editConfigurationName = (String) d2wContext().valueForKey("editConfigurationName");
-		log.debug("editConfigurationName: " + editConfigurationName);
-		if (editConfigurationName != null) {
-			epi = (EditPageInterface) D2W.factory().pageForConfigurationNamed(editConfigurationName, session());
-		} else {
-			epi = D2W.factory().editPageForEntityNamed(object().entityName(), session());
-		}
 		EOEnterpriseObject leo = localInstanceOfObject();
-		epi.setObject(leo);
-		epi.setNextPage(context().page());
-		return (WOComponent) epi;
+		log.debug("editConfigurationName: " + editConfigurationName);
+		if ((editObjectDelegate  = editObjectDelegateInstance()) != null) {
+            result = editObjectDelegate.editObject(leo, context().page());
+        }
+		else {
+    		if (editConfigurationName != null) {
+    			epi = (EditPageInterface) D2W.factory().pageForConfigurationNamed(editConfigurationName, session());
+    		} 
+    		else {
+    			epi = D2W.factory().editPageForEntityNamed(object().entityName(), session());
+    		}
+    		
+    		epi.setObject(leo);
+    		epi.setNextPage(context().page());
+    		result = (WOComponent) epi;
+		}
+		return result;
 	}
 
 	public WOComponent inspectObjectAction() {
@@ -740,5 +754,41 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	public boolean shouldShowBatchNavigation() {
 		return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("showBatchNavigation"), true);
 	}
+	
+    /**
+     * Attempts to instantiate the custom edit object delegate subclass, if one has been specified.
+     */
+    private ERDEditObjectDelegate editObjectDelegateInstance() {
+        ERDEditObjectDelegate delegate = null;
+        String delegateClassName = (String)d2wContext().valueForKey("editObjectDelegateClass");
+        if (delegateClassName != null) { 
+            try {
+                Class delegateClass = Class.forName(delegateClassName);
+                Constructor delegateClassConstructor = delegateClass.getConstructor(WOContext.class);
+                delegate = (ERDEditObjectDelegate)delegateClassConstructor.newInstance(context());
+            } catch (LinkageError le) {
+                if (le instanceof ExceptionInInitializerError) {
+                    log.warn("Could not initialize edit object delegate class: " + delegateClassName);
+                } else {
+                    log.warn("Could not load  delegate class: " + delegateClassName + " due to: " + le.getMessage());
+                }
+            } catch (ClassNotFoundException cnfe) {
+                log.warn("Could not find class for edit object delegate: " + delegateClassName);
+            } catch (NoSuchMethodException nsme) {
+                log.warn("Could not find constructor for edit object delegate class: " + delegateClassName);
+            } catch (SecurityException se) {
+                log.warn("Insufficient privileges to access edit object delegate constructor: " + delegateClassName);
+            } catch (IllegalAccessException iae) {
+                log.warn("Insufficient access to create edit object delegate instance: " + iae.getMessage());
+            } catch (IllegalArgumentException iae) {
+                log.warn("Used an illegal argument when creating edit object delegate instance: " + iae.getMessage());
+            } catch (InstantiationException ie) {
+                log.warn("Could not instantiate edit object delegate instance: " + ie.getMessage());
+            } catch (InvocationTargetException ite) {
+                log.warn("Exception while invoking edit object delegate constructor: " + ite.getMessage());
+            }
+        }
 
+        return delegate;
+    }
 }
