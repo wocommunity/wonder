@@ -46,7 +46,11 @@ import er.selenium.io.SeleniumTestExporter;
 public class SeleniumTestSuitePage extends ERXStatelessComponent {	
 	private static final Logger log = Logger.getLogger(SeleniumTestSuitePage.class);
 	
-	private static final String DEFAULT_SELENIUM_TESTS_ROOT = "./Contents/Resources/Selenium";
+	// NSProjectBundleEnabled is true if we have the newer "bundle-less builds" WOLips feature in use
+	// and that expects the FBL project layout, so the default location is different to a built runtime bundle
+	private static final String DEFAULT_SELENIUM_TESTS_ROOT = 
+		ERXProperties.booleanForKeyWithDefault("NSProjectBundleEnabled", false) ? "./Resources/Selenium" : "./Contents/Resources/Selenium";
+
 	private static final String DEFAULT_EXPORTER_NAME = "xhtml";
 
 	private SeleniumCompositeTestFilter testFilter;
