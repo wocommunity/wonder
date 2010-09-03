@@ -1,0 +1,153 @@
+<html>
+<head>
+</head>
+<body>
+<style>
+p {
+	color: rgb(80, 80, 80);
+}
+
+h1,h2,h3,h4 {
+	font-family: Helvetica;
+	margin-top: 20px;
+}
+
+dl dt {
+	font-family: Helvetica;
+	font-weight: bold;
+}
+
+dl dd {
+	margin-bottom: 10px;
+}
+
+code.block {
+	display: block;
+	margin-left: 20px;
+	margin-right: 20px;
+	white-space: pre;
+}
+
+</style>
+
+<h1>ERJasperReports</h1>
+
+<h2>Overview</h2>
+<p>
+ERJasperReports is a framework wrapper around the JasperReports library and its dependent libraries.
+You can learn
+</p>
+
+<h2>Installation and Setup</h2>
+<p>
+Include the ERJasperReports framework in your classpath.
+</p>
+
+
+<h2>Quick Start Guide</h2>
+<h3>Designing Reports</h3>
+
+<p>
+Place your jasper report xml templates (those having the .jrxml extensions) into your application, or framework
+Resources folder. Edit the jasper xml design template in place by hand, or by using the convenient 
+<a href = "http://sourceforge.net/projects/ireport/files/">iReport&nbsp;application</a>, which can be downloaded from SourceForge. Compile your jrxml design template while you work which will result in a binary template with the
+file extensions .jasper in the same directory as the jrxml design template. Image resources may also be
+placed in the same Resources directory and referenced by relative path in the report template. At runtime
+they will be found by the jasper report engine.
+</p>
+<p>You will need the iReport application version that
+corresponds to the version of JasperReports that is included in this framework to ensure template
+compatability. Check the current JasperReports version by looking at the name of the JasperReports jar
+in the built framework or in the Libraries directory of the source project. It is also possible
+to use a newer version of iReport and to set the JasperReports version compatability in the iReport application
+preferences.
+</p>
+<p><strong>Important:</strong> Use keyPaths that are relative to the detail object as Field names, however since JasperReports will not
+	allow us to use the period character in Field names, we use an underscore character instead. If you already
+	use underscore in your object attributes, you can define your own JasperReports keyPath separator
+	using the property <code>er.jasperreports.keyPathSeparator</code>. For example if Movie (from the ERMoviesLogic
+	Movies EOModel) is the detail object of a report, then to make a field that represents the Studio's name,
+	we would simply define a Field in the jasper design template as <code>&quot;studio_name&quot;</code> which during report generation
+	is the equivalent of executing <code>movie.valueForKeyPath(&quot;studio.name&quot;)</code>
+	
+	</p>
+
+
+<p>You can implement the report generation and download logic in your application to test your report while you
+are designing it. You can leave your WebObjects app running while you simply switch between the browser to test
+the report and iReport application to make changes and compile your changes. Remember that the JasperReports
+engine works directly with the compiled .jasper file, not your .jrxml design template, so make sure you compile
+using the convenient toolbar button (the one with the hammer icon) after making changes to validate your changes
+and to regenerate the .jasper compiled template.</p>
+
+<h3>Report Generation Logic</h3>
+<p>ERJasperReports needs three things to generate a report:</p>
+<ul>
+	<li>The compiled .jasper binary template file in your Resources folder</li>
+	<li>A JRDataSource concrete implementation that defines the report <em>detail</em> objects.</li>
+	<li>Optionally a HashMap&lt;String,Object&gt; object containing miscellaneous report parameters that you want to use in your report logic.</li>
+</ul>
+
+<p>Report generation time is proportional to the number of detail objects in the data source. So in general we
+must always plan for reports to be generated in a background task.
+ERJasperReports provides a convenient java.util.concurrent.Callable class that does the report generation
+and returns a pdf java.io.File result</p>
+<p>However you can implement your own background tasks with similar logic as ERJRFetchSpecificationReportTask
+if you wish</p>
+<p>Here is an example of business logic that creates a report task ready for execution in a background thread:</p>
+<code class = "block">
+	/**
+	 * @return a {@link Callable} task that creates and returns a StudioRevenueReport PDF file
+	 */
+	public static Callable&lt;File&gt; createStudioRevenueReportTask() {
+		// SortOrderings
+		// Sort by studio name alphabetical sort
+		ERXSortOrderings sortOrderings = Movie.STUDIO.dot(_Studio.NAME).ascs();
+		
+		// Then sort by Movie Title
+		sortOrderings = sortOrderings.then(Movie.TITLE.asc());
+		
+		// EOQualifier, null for this demo
+		EOQualifier qualifier = null;
+		
+		ERXFetchSpecification&lt;Movie&gt; fs = 
+			new ERXFetchSpecification&lt;Movie&gt;(Movie.ENTITY_NAME, qualifier, sortOrderings);
+		
+		String reportDescription = "A report that subtotals revenue by Studio"
+			+ " and lists the Movie revenue detail for each Studio";
+		
+		HashMap&lt;String, Object&gt; parameters = new HashMap&lt;String, Object&gt;();
+		parameters.put("reportDescription", reportDescription);
+		parameters.put("userName", "WOWODC Demo");
+		
+		ERJRFetchSpecificationReportTask reportTask = 
+			new ERJRFetchSpecificationReportTask(fs, "StudioRevenueReport.jasper", parameters);
+		
+		return reportTask;
+	}
+</code>
+
+<h3>Properties</h3>
+<p>The properties below allow you to change the behaviour of ERJasperReports:</p>
+<dl>
+	<dt>er.jasperreports.keyPathSeparator</dt>
+	<dd>Defaults to underscore character. Since the standard WebObjects keypath separator character ( . ) is invalid for jasper report field name definitions
+we must use a different character when specifying datasource fields as keypaths in the report template.</dd>
+
+	<dt>er.jasperreports.currentRow.fieldName</dt>
+	<dd>Defaults to &quot;_currentRow&quot;. Sometimes we want might want a reference to the current row, perhaps to pass to a custom function in a scriptlet.
+This functionality allows us to specify a jasper template field name that returns the current row object itself
+rather than an attribute of the current row.</dd>
+
+</dl>
+
+<h2>Getting More Information</h2>
+<p>Get your hands on the 90 minutes &quot;Integrating JasperReports with WebObjects&guot; presentation from
+WOWODC 2010 in Montreal. The presentation will be available beginning October 2010 from 
+<a href = "http://www.wocommunity.org">http://www.wocommunity.org</a>
+</p>
+
+<p>An example application, ERJasperReportsExample, will be committed to Wonder during September 2010 which
+will give you everything you need to understand how to make your own reports</p>
+</body>
+</html>
