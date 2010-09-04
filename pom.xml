@@ -11,6 +11,7 @@
 		<module>Frameworks</module>
 		<module>Examples</module>
 		<module>Applications</module>
+		<module>Utilities</module>
 		<!-- Tests module configuration not finished yet -->
 		<!-- <module>Tests</module> -->
 	</modules>
