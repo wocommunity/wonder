@@ -132,6 +132,15 @@
      </antcall>
   </target>
 
+    <target name="ERCoolComponents.all">
+      <antcall target="global.framework.${build.action}" >
+          <param name="project.principal.class" value="er.coolcomponents.ERCoolComponents" />
+          <param name="project.name" value="ERCoolComponents" />
+          <param name="project.dir" value="Frameworks/Ajax/ERCoolComponents" />
+          <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax" />
+     </antcall>
+    </target>
+
     <target name="EROpenID.all">
         <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="" />
@@ -969,7 +978,7 @@
 
     <target name="excelgeneration.frameworks.all" depends="ExcelGenerator.all" />
 
-    <target name="ajax.frameworks.all" depends="YUI.all, AjaxLook.all, ERIUI.all, GoogleChart.all, ERJQuery.all, ERPrototaculous.all, ERDivaLook.all, ERModernDirectToWeb.all, ERModernLook.all, ERModernDefaultSkin.all" />
+    <target name="ajax.frameworks.all" depends="YUI.all, AjaxLook.all, ERIUI.all, GoogleChart.all, ERCoolComponents.all, ERJQuery.all, ERPrototaculous.all, ERDivaLook.all, ERModernDirectToWeb.all, ERModernLook.all, ERModernDefaultSkin.all" />
     <target name="ajax.examples.all" depends="AjaxExample.all, AjaxExample2.all, YUIExample.all, AjaxLookExample.all, ERIUIExample.all, ERDivaLookExample.all, ERModernMoviesDemo.all" />
 
     <target name="plugins.all" depends="PostgresqlPlugIn.all,FrontBasePlugIn.all,DerbyPlugIn.all,EROraclePlugIn.all,H2PlugIn.all" />
