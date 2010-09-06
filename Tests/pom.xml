@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>wonder</groupId>
 		<artifactId>wonder</artifactId>
-		<version>5.0.0-r10331</version>
+		<version>5.0.0-SNAPSHOT</version>
 	</parent>
 
 	<groupId>wonder.tests</groupId>
