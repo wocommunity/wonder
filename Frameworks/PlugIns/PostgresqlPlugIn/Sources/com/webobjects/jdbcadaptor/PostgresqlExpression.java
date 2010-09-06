@@ -120,7 +120,13 @@ public class PostgresqlExpression extends JDBCExpression {
     	if (this.useLowercaseForCaseInsensitiveLike()) {
     		_upperFunctionName = "LOWER";
     	}
-}
+    	
+    	String customFunctionName = customFunctionForStringComparison();
+
+		if(customFunctionName != null) {
+			_upperFunctionName = customFunctionName;
+		}
+	}
     
 	/**
      * Checks the system property
@@ -1023,5 +1029,20 @@ public class PostgresqlExpression extends JDBCExpression {
 			_useLowercaseForCaseInsensitiveLike = Boolean.getBoolean(getClass().getName() + ".useLowercaseForCaseInsensitiveLike") ? Boolean.TRUE : Boolean.FALSE;
 		}
 		return _useLowercaseForCaseInsensitiveLike.booleanValue();
+	}
+	
+	/**
+	 * Checks the system property
+	 * <code>com.webobjects.jdbcadaptor.PostgresqlExpression.customFunctionForStringComparison</code>
+	 * to use a custom function for caseInsensitive compares and order by
+	 * clauses.
+	 * <p>
+	 * This property overrides the useLowercaseForCaseInsensitiveLike definition.
+	 * 
+	 * @return The name of the custom function to be used for comparison or <code>null</code> to use
+	 * the default function
+	 */
+	private String customFunctionForStringComparison() {
+		return System.getProperty(this.getClass().getName() + ".customFunctionForStringComparison");
 	}
 }
