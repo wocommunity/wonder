@@ -22,7 +22,6 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.eof.ERXKey;
 import er.extensions.eof.ERXKeyFilter;
-import er.extensions.localization.ERXLocalizer;
 import er.rest.format.ERXRestFormat;
 import er.rest.format.ERXWORestResponse;
 import er.rest.format.IERXRestWriter;
