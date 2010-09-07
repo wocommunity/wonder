@@ -102,7 +102,7 @@ public class ERXUnsafeReadOnlyRouteController<T extends EOEnterpriseObject> exte
 	@Override
 	public WOActionResults indexAction() {
 		if (isSchemaRequest()) {
-			return schemaResponse(queryFilter());
+			return schemaResponse(showFilter());
 		}
 		
 		ERXRestFetchSpecification<T> fetchSpec = new ERXRestFetchSpecification<T>(entityName(), null, null, queryFilter(), null, 25);
