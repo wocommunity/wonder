@@ -32,6 +32,16 @@ public class BeanInfoClassDescription extends EOClassDescription {
 	public String entityName() {
 		return _beanInfo.getBeanDescriptor().getBeanClass().getSimpleName();
 	}
+	
+	@Override
+	public Class classForAttributeKey(String key) {
+		for (PropertyDescriptor descriptor : _beanInfo.getPropertyDescriptors()) {
+			if (descriptor.getName().equals(key) && isAttribute(descriptor)) {
+				return descriptor.getPropertyType();
+			}
+		}
+		return null;
+	}
 
 	protected boolean isAttribute(PropertyDescriptor descriptor) {
 		return isAttribute(descriptor.getPropertyType());
