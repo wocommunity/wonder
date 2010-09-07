@@ -43,6 +43,7 @@ public class Application extends ERXApplication {
 
 		// This is showing what addDefaultRoutes actually does and that you add your own custom routes this way as well.
 		// routeRequestHandler.addDefaultRoutes(Person.ENTITY_NAME);
+		routeRequestHandler.addRoute(new ERXRoute(Person.ENTITY_NAME, "/Person", ERXRoute.Method.Options, PersonController.class, "options"));
 		routeRequestHandler.addRoute(new ERXRoute(Person.ENTITY_NAME, "/Person", ERXRoute.Method.Head, PersonController.class, "head"));
 		routeRequestHandler.addRoute(new ERXRoute(Person.ENTITY_NAME, "/Person", ERXRoute.Method.Post, PersonController.class, "create"));
 		routeRequestHandler.addRoute(new ERXRoute(Person.ENTITY_NAME, "/Person", ERXRoute.Method.All, PersonController.class, "index"));
