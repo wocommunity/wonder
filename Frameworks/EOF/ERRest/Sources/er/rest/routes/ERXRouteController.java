@@ -780,6 +780,35 @@ public class ERXRouteController extends WODirectAction {
 	}
 
 	/**
+	 * Returns whether or not headers can be added to the given action results.
+	 * 
+	 * @param results the results to test
+	 * @return whether or not headers can be added to the given action results
+	 */
+	protected boolean _canSetHeaderForActionResults(WOActionResults results) {
+		return results instanceof WOResponse || results instanceof ERXRouteResults;
+	}
+	
+	/**
+	 * Attempt to set the header for the given results object.
+	 * 
+	 * @param value the value
+	 * @param key the key
+	 * @param results the results object
+	 */
+	protected void _setHeaderForActionResults(String value, String key, WOActionResults results) {
+		if (results instanceof WOResponse) {
+			((WOResponse)results).setHeader(value, key);
+		}
+		else if (results instanceof ERXRouteResults) {
+			((ERXRouteResults)results).setHeaderForKey(value, key);
+		}
+		else {
+			ERXRouteController.log.info("Unable to set a header on an action results of type '" + results.getClass().getName() + "'.");
+		}
+	}
+	
+	/**
 	 * Returns the results of the rest fetch spec as an response in the format returned from the format() method. 
 	 * This uses the editing context returned by editingContext().
 	 * 
@@ -790,15 +819,20 @@ public class ERXRouteController extends WODirectAction {
 	 * @return a WOResponse of the format returned from the format() method
 	 */
 	public WOActionResults response(ERXRestFetchSpecification<?> fetchSpec, ERXKeyFilter filter) {
-		WOActionResults response;
+		WOActionResults results;
 		if (fetchSpec == null) {
 			// MS: you probably meant to call response(Object, filter) in this case -- just proxy through
-			response = response(format(), null, filter);
+			results = response(format(), null, filter);
 		}
 		else {
-			response = response(format(), editingContext(), fetchSpec.entityName(), fetchSpec.objects(editingContext(), options()), filter);
+			ERXRestFetchSpecification.Results<?> fetchResults = fetchSpec.results(editingContext(), options());
+			results = response(format(), editingContext(), fetchSpec.entityName(), fetchResults.objects(), filter);
+			if (fetchResults.batchSize() > 0 && options().valueForKey("Range") != null && _canSetHeaderForActionResults(results)) {
+				String contentRangeValue = "items " + fetchResults.startIndex() + "-" + (fetchResults.startIndex() + fetchResults.batchSize() - 1) + "/" + fetchResults.totalCount();
+				_setHeaderForActionResults(contentRangeValue, "Content-Range", results);
+			}
 		}
-		return response;
+		return results;
 	}
 
 	/**
@@ -1326,28 +1360,33 @@ public class ERXRouteController extends WODirectAction {
 
 		WOContext context = context();
 		WOSession session = context._session();
+		// MS: This is sketchy -- should this be done in the request handler after we generate the response?
 		if (results instanceof WOResponse) {
 			WOResponse response = (WOResponse)results;
 			if (session != null && session.storesIDsInCookies()) {
 				session._appendCookieToResponse(response);
 			}
-			
+		}
+		
+		if (_canSetHeaderForActionResults(results)) {
 			String allowOrigin = accessControlAllowOrigin();
 			if (allowOrigin != null) {
-				response.setHeader(allowOrigin, "Access-Control-Allow-Origin");
+				_setHeaderForActionResults(allowOrigin, "Access-Control-Allow-Origin", results);
 			}
+		}
 		
-			if (allowWindowNameCrossDomainTransport()) {
-				String windowNameCrossDomainTransport = request().stringFormValueForKey("windowname");
-				if ("true".equals(windowNameCrossDomainTransport)) {
-					String content = response.contentString();
-					if (content != null) {
-						content = content.replaceAll("\n", "");
-						content = ERXStringUtilities.escapeJavascriptApostrophes(content);
-					}
-					response.setContent("<html><script type=\"text/javascript\">window.name='" + content + "';</script></html>");
-					response.setHeader("text/html", "Content-Type");
+		if (allowWindowNameCrossDomainTransport()) {
+			String windowNameCrossDomainTransport = request().stringFormValueForKey("windowname");
+			if ("true".equals(windowNameCrossDomainTransport)) {
+				WOResponse response = results.generateResponse();
+				String content = response.contentString();
+				if (content != null) {
+					content = content.replaceAll("\n", "");
+					content = ERXStringUtilities.escapeJavascriptApostrophes(content);
 				}
+				response.setContent("<html><script type=\"text/javascript\">window.name='" + content + "';</script></html>");
+				response.setHeader("text/html", "Content-Type");
+				results = response;
 			}
 		}
 		
@@ -1422,7 +1461,7 @@ public class ERXRouteController extends WODirectAction {
 	 * 
 	 * @return the response
 	 */
-	public WOActionResults optionsAction() {
+	public WOActionResults optionsAction() throws Throwable {
 		WOResponse response = new WOResponse();
 		String accessControlAllowOrigin = accessControlAllowOrigin();
 		if (accessControlAllowOrigin != null) {
