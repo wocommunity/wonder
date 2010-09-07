@@ -98,6 +98,9 @@ public class AnimalController extends ERXDefaultRouteController {
 	 */
 	@Override
 	public WOActionResults indexAction() {
+		if (isSchemaRequest()) {
+			return schemaResponse(showFilter());
+		}
 		ERXRestFetchSpecification<Animal> fetchSpec = new ERXRestFetchSpecification<Animal>(Animal.ENTITY_NAME, null, null, queryFilter(), Animal.NAME.ascs(), 25);
 		return response(fetchSpec, showFilter());
 	}

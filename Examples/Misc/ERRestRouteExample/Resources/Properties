@@ -1,3 +1,6 @@
+ERXRest.transactionsEnabled=true
+ERXRest.defaultFormat=js
+
 # OGNL
 ognl.helperFunctions=true
 ognl.inlineBindings=true
