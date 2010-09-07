@@ -6,12 +6,15 @@
 		<artifactId>examples</artifactId>
 		<version>5.0.0-SNAPSHOT</version>
 	</parent>
+
 	<artifactId>d2w</artifactId>
 	<packaging>pom</packaging>
 	<name>D2W Examples</name>
+
 	<modules>
 		<module>D2WComponentTour</module>
 		<module>ERDivaliteExample</module>
+		<module>ERModernMoviesDemo</module>
 		<module>ERMovies</module>
 	</modules>
 </project>

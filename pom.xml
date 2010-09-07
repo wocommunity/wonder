@@ -8,12 +8,12 @@
 	<name>Project Wonder</name>
 	<url>http://wonder.sf.net/</url>
 	<modules>
-		<module>Frameworks</module>
-		<module>Examples</module>
 		<module>Applications</module>
-		<module>Utilities</module>
+		<module>Examples</module>
+		<module>Frameworks</module>
 		<!-- Tests module configuration not finished yet -->
 		<!-- <module>Tests</module> -->
+		<module>Utilities</module>
 	</modules>
 
 	<properties>
@@ -223,6 +223,11 @@
 				<classifier>${woClassifier}</classifier>
 				<!-- Using the provided scope to avoid problems with profiles and variables substitution -->
 				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>wonder.d2w</groupId>
+				<artifactId>ERModernDirectToWeb</artifactId>
+				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>wonder.businesslogic</groupId>
@@ -645,6 +650,31 @@
 				<groupId>glounj</groupId>
 				<artifactId>glounj</artifactId>
 				<version>1.5-beta</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi</artifactId>
+				<version>3.6</version>
+			</dependency>
+			<dependency>
+				<groupId>com.intellij</groupId>
+				<artifactId>annotations</artifactId>
+				<version>7.0.3</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openid4java</groupId>
+				<artifactId>openid4java</artifactId>
+				<version>0.9.5</version>
+			</dependency>
+			<dependency>
+				<groupId>xml-apis</groupId>
+				<artifactId>xml-apis</artifactId>
+				<version>1.3.04</version>
+			</dependency>
+			<dependency>
+				<groupId>net.sf.jasperreports</groupId>
+				<artifactId>jasperreports</artifactId>
+				<version>3.7.4</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

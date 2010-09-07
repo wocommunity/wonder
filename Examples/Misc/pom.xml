@@ -6,16 +6,21 @@
 		<artifactId>examples</artifactId>
 		<version>5.0.0-SNAPSHOT</version>
 	</parent>
+
 	<artifactId>miscexamples</artifactId>
 	<packaging>pom</packaging>
 	<name>Misc Examples</name>
+
 	<modules>
 		<module>DevStudio</module>
+		<module>ERComponentTour</module>
 		<module>ERIndexingExample</module>
-		<!--  <module>EROpenIDExample</module> won't build because of dependency issues -->
+		<module>EROpenIDExample</module>
+		<module>ERRestRouteExample</module>
 		<module>ERSeleniumExample</module>
 		<module>JavaRESTAdaptorExample</module>
 		<module>RestExample</module>
+		<module>TickTockMan</module>
 		<module>ValidityExample</module>
 	</modules>
 </project>

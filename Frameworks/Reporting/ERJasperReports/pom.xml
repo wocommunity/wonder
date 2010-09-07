@@ -1,13 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
 		<groupId>wonder.frameworks</groupId>
-		<artifactId>excel</artifactId>
+		<artifactId>reporting</artifactId>
 		<version>5.0.0-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>wonder.excel</groupId>
-	<artifactId>ExcelGenerator</artifactId>
-	<name>ExcelGenerator Framework</name>
+	<groupId>wonder.reporting</groupId>
+	<artifactId>ERJasperReports</artifactId>
+	<name>ERJasperReports Framework</name>
 	<packaging>woframework</packaging>
 	<dependencies>
 		<dependency>
@@ -21,19 +21,23 @@
 		</dependency>
 		<dependency>
 			<groupId>com.webobjects</groupId>
-			<artifactId>JavaWebObjects</artifactId>
+			<artifactId>JavaEOAccess</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.webobjects</groupId>
-			<artifactId>JavaXML</artifactId>
+			<artifactId>JavaEOControl</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.poi</groupId>
-			<artifactId>poi</artifactId>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
 		</dependency>
 	</dependencies>
 	<build>

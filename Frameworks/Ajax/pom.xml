@@ -12,6 +12,7 @@
 	<modules>
 		<module>Ajax</module>
 		<module>AjaxLook</module>
+		<module>ERCoolComponents</module>
 		<module>ERDivaLook</module>
 		<module>ERIUI</module>
 		<module>ERJQuery</module>

@@ -5,13 +5,16 @@
 		<artifactId>miscexamples</artifactId>
 		<version>5.0.0-SNAPSHOT</version>
 	</parent>
+
 	<groupId>wonder.misc</groupId>
 	<artifactId>ERIndexingExample</artifactId>
 	<name>ERIndexing Example Application</name>
 	<packaging>woapplication</packaging>
+
 	<build>
 		<sourceDirectory>Sources</sourceDirectory>
 	</build>
+
 	<dependencies>
 		<dependency>
 			<groupId>wonder.core</groupId>
@@ -21,6 +24,10 @@
 		<dependency>
 			<groupId>wonder.core</groupId>
 			<artifactId>ERDirectToWeb</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>wonder.eof</groupId>
+			<artifactId>ERIndexing</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.webobjects</groupId>
@@ -43,12 +50,8 @@
 			<artifactId>JavaEOControl</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaXML</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>wonder.eof</groupId>
-			<artifactId>ERIndexing</artifactId>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
 		</dependency>
 	</dependencies>
 </project>
