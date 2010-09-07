@@ -546,6 +546,11 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 		String pluralExternalName = _entityNameFormat.formatEntityNamed(externalName, true);
 
 		if (_entityNameFormat.pluralRouteName()) {
+			addRoute(new ERXRoute(entityName, "/" + pluralExternalName, ERXRoute.Method.Options, controllerClass, "options"));
+		}
+		addRoute(new ERXRoute(entityName, "/" + singularExternalName, ERXRoute.Method.Options, controllerClass, "options"));
+
+		if (_entityNameFormat.pluralRouteName()) {
 			addRoute(new ERXRoute(entityName, "/" + pluralExternalName, ERXRoute.Method.Head, controllerClass, "head"));
 		}
 		addRoute(new ERXRoute(entityName, "/" + singularExternalName, ERXRoute.Method.Head, controllerClass, "head"));
