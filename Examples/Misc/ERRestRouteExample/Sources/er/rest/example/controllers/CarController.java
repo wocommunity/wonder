@@ -29,6 +29,9 @@ public class CarController extends ERXRouteController {
 	}
 
 	public WOActionResults indexAction() throws Throwable {
+		if (isSchemaRequest()) {
+			return schemaResponse(showFilter());
+		}
 		return response(Car.cars(), showFilter());
 	}
 

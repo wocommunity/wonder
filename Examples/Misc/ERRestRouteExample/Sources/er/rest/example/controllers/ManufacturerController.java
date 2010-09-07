@@ -21,6 +21,9 @@ public class ManufacturerController extends ERXRouteController {
 	}
 
 	public WOActionResults indexAction() throws Throwable {
+		if (isSchemaRequest()) {
+			return schemaResponse(ERXKeyFilter.filterWithAttributes());
+		}
 		return response(Manufacturer.manufacturers(), ERXKeyFilter.filterWithAttributes());
 	}
 
