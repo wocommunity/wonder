@@ -63,10 +63,30 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	
 	protected int _rowCount = -1;
 	
+	private boolean _rawRowsForCustomQueries = true;
+	
 	/**
 	 * Creates a new ERXBatchingDisplayGroup.
 	 */
 	public ERXBatchingDisplayGroup() {
+	}
+	
+	/**
+	 * Sets whether or not fetch specification with custom queries should use raw rows. Defaults to true for backwards compatibility.
+	 * 
+	 * @param rawRowsForCustomQueries whether or not fetch specification with custom queries should use raw rows
+	 */
+	public void setRawRowsForCustomQueries(boolean rawRowsForCustomQueries) {
+		_rawRowsForCustomQueries = rawRowsForCustomQueries;
+	}
+	
+	/**
+	 * Returns whether or not fetch specification with custom queries should use raw rows.
+	 * 
+	 * @return whether or not fetch specification with custom queries should use raw rows
+	 */
+	public boolean isRawRowsForCustomQueries() {
+		return _rawRowsForCustomQueries;
 	}
 	
 	/**
@@ -284,7 +304,7 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	/**
 	 * Utility to get at the number of rows when batching.
 	 */
-	protected int rowCount() {
+	public int rowCount() {
 		EOEditingContext ec = dataSource().editingContext();
 		EOFetchSpecification spec = fetchSpecification();
 
@@ -341,7 +361,15 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 			Object hint = spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey);
 			String sql = sqlHelper.customQueryExpressionHintAsString(hint);
 			sql = sqlHelper.limitExpressionForSQL(null, spec, sql, start, end);
-			result = EOUtilities.rawRowsForSQL(ec, model.name(), sql, null);
+			
+			if (_rawRowsForCustomQueries) {
+				result = EOUtilities.rawRowsForSQL(ec, model.name(), sql, null);
+			}
+			else {
+				EOFetchSpecification fs = new EOFetchSpecification(spec.entityName(), null, null);
+				fs.setHints(new NSDictionary(sql, EODatabaseContext.CustomQueryExpressionHintKey));
+				result = ec.objectsWithFetchSpecification(fs);
+			}
 		}
 		// fetch the primary keys, turn them into faults, then batch-fetch all
 		// the non-resident objects

@@ -465,7 +465,7 @@ public class ERXDatabaseContextDelegate {
      * Batching thread key
      */
     
-    public static String THREAD_KEY = "ERXBatching";
+    public static final String THREAD_KEY = "ERXBatching";
 
     /**
      * Interface to provide auto-magic batch fetching. For an implementation (and the hack needed for to-one handling), see {@link ERXGenericRecord}.

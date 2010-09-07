@@ -131,7 +131,11 @@ Template2: ERXWOTemplate {
  * @binding templateName The templateName of the ERXWOTemplate which should be rendered
  *          in place of this element. If not set, this element will behave like
  *          a regular WOComponentContent, but filter out all ERXWOTemplates.
- *          
+ * @binding scope "parent" or "this" -- where to look for the templates. The default is "parent,"
+ *                which will look in the children of the component that contains this ERXWOComponentContent
+ *                to resolve the bound templates. If scope is "this," templates will be found in the
+ *                same component that defines the ERXWOComponentContent. This allows you to reuse a block
+ *                of HTML multiple times in a single component. I know this is confusing :)
  * @author ak (Java port)
  * @author Charles Lloyd
  */
@@ -142,16 +146,58 @@ public class ERXWOComponentContent extends WODynamicElement {
     public static String WOHTMLTemplateNameAttribute = "templateName";
 
     private WOAssociation _templateName;
+    private WOAssociation _scope;
     protected WOElement _defaultTemplate;
     
     public ERXWOComponentContent(String name, NSDictionary associations, WOElement woelement) {
         super(name, associations, woelement);
         _templateName = (WOAssociation) associations.objectForKey("templateName");
+        _scope = (WOAssociation) associations.objectForKey("scope");
         _defaultTemplate = woelement == null ? new WOHTMLBareString("") : woelement;
     }
     
-    private WOElement template(WOComponent component) {
-    	WOElement content =  component._childTemplate();
+    private static class TemplateContext {
+    	private WOComponent _currentComponent;
+    	private WOElement _template;
+    	
+    	public TemplateContext(WOComponent currentComponent, WOElement template) {
+    		_currentComponent = currentComponent;
+    		_template = template;
+    	}
+    	
+    	public WOComponent currentComponent() {
+    		return _currentComponent;
+    	}
+    	
+    	public WOElement template() {
+    		return _template;
+    	}
+    }
+    
+    private TemplateContext template(WOComponent component) {
+    	String defaultScope = "parent";
+    	String scope = defaultScope;
+    	if (_scope != null) {
+    		scope = (String)_scope.valueInComponent(component);
+    		if (scope == null) {
+    			scope = defaultScope;
+    		}
+    	}
+
+    	WOElement content;
+    	WOComponent currentComponent;
+		if ("parent".equals(scope)) {
+			currentComponent = component.parent();
+			content = component._childTemplate();
+		}
+		else if ("this".equals(scope)) {
+			currentComponent = component;
+			content = component.template();
+		}
+		else {
+			throw new IllegalArgumentException("Unknown scope: '" + scope + "'");
+		}
+
     	WOElement result = null;
     	String templateName = (_templateName == null) ? null : (String) _templateName.valueInComponent(component);
     	if (content instanceof WODynamicGroup) {
@@ -174,16 +220,16 @@ public class ERXWOComponentContent extends WODynamicElement {
 				}
 			}
 			else {
-	        for(Enumeration e = group.childrenElements().objectEnumerator(); e.hasMoreElements() && result == null ; ) {
-	        	WOElement current = (WOElement) e.nextElement();
-	        	if(current instanceof ERXWOTemplate) {
-	        		ERXWOTemplate template = (ERXWOTemplate)current;
-	        		String name = template.templateName(component);
-		        		if(name.equals(templateName)) {
-	        			result = template;
-	        		}
-	        	}
-	        }
+		        for(Enumeration e = group.childrenElements().objectEnumerator(); e.hasMoreElements() && result == null ; ) {
+		        	WOElement current = (WOElement) e.nextElement();
+		        	if(current instanceof ERXWOTemplate) {
+		        		ERXWOTemplate template = (ERXWOTemplate)current;
+		        		String name = template.templateName(component);
+			        	if(name.equals(templateName)) {
+		        			result = template;
+		        		}
+		        	}
+		        }
 			}
 		} else if (content instanceof ERXWOTemplate) {
 			ERXWOTemplate template = (ERXWOTemplate) content;
@@ -192,17 +238,23 @@ public class ERXWOComponentContent extends WODynamicElement {
     			result = template;
     		}
 		} else if (content instanceof WOHTMLBareString && templateName == null) {
-			result=content;
+			result = content;
 		}
-    	return result;
+    	return result == null ? null : new TemplateContext(currentComponent, result);
     }
 
     public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
     	WOComponent component = wocontext.component();
-    	WOElement template = template(component);
-    	if(template != null) {
-    		wocontext._setCurrentComponent(component.parent());
-    		template.takeValuesFromRequest(worequest, wocontext);
+    	TemplateContext templateContext = template(component);
+    	if(templateContext != null) {
+    		wocontext._setCurrentComponent(templateContext.currentComponent());
+    		WOElement template = templateContext.template();
+    		if (template instanceof ERXWOTemplate) {
+    			((ERXWOTemplate)template)._takeValuesFromRequest(worequest, wocontext);
+    		}
+    		else {
+    			template.takeValuesFromRequest(worequest, wocontext);
+    		}
     		wocontext._setCurrentComponent(component);
     	} else {
     		_defaultTemplate.takeValuesFromRequest(worequest, wocontext);
@@ -211,11 +263,17 @@ public class ERXWOComponentContent extends WODynamicElement {
 
     public WOActionResults invokeAction(WORequest worequest, WOContext wocontext) {
     	WOComponent component = wocontext.component();
-    	WOElement template = template(component);
+    	TemplateContext templateContext = template(component);
     	WOActionResults result;
-    	if(template != null) {
-    		wocontext._setCurrentComponent(component.parent());
-    		result = template.invokeAction(worequest, wocontext);
+    	if(templateContext != null) {
+    		wocontext._setCurrentComponent(templateContext.currentComponent());
+    		WOElement template = templateContext.template();
+    		if (template instanceof ERXWOTemplate) {
+    			result = ((ERXWOTemplate)template)._invokeAction(worequest, wocontext);
+    		}
+    		else {
+    			result = template.invokeAction(worequest, wocontext);
+    		}
     		wocontext._setCurrentComponent(component);
     	} else {
     		result = _defaultTemplate.invokeAction(worequest, wocontext);
@@ -225,10 +283,16 @@ public class ERXWOComponentContent extends WODynamicElement {
     
     public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
         WOComponent component = wocontext.component();
-        WOElement template = template(component);
-        if(template != null) {
-        	wocontext._setCurrentComponent(component.parent());
-        	template.appendToResponse(woresponse, wocontext);
+    	TemplateContext templateContext = template(component);
+        if(templateContext != null) {
+        	wocontext._setCurrentComponent(templateContext.currentComponent());
+    		WOElement template = templateContext.template();
+    		if (template instanceof ERXWOTemplate) {
+    			((ERXWOTemplate)template)._appendToResponse(woresponse, wocontext);
+    		}
+    		else {
+    			template.appendToResponse(woresponse, wocontext);
+    		}
         	wocontext._setCurrentComponent(component);
         } else {
         	_defaultTemplate.appendToResponse(woresponse, wocontext);
