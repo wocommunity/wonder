@@ -11,5 +11,5 @@ Specifically these additions include:
 Firstly you must be using JRebel, it can be obtained from www.zeroturnaround.com.
 
 Next follow the instructions here since JRebel is integrated into current release of WOLips
-and you might not need to include this frameeork at all.
+and you might not need to include this framework at all.
 http://wiki.objectstyle.org/confluence/display/WO/Using+JRebel+%28previously+called+JavaRebel%29+with+WOLips
