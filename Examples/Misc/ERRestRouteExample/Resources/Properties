@@ -1,5 +1,6 @@
 ERXRest.transactionsEnabled=true
 ERXRest.defaultFormat=js
+ERXRest.accessControlAllowOrigin=*
 
 # OGNL
 ognl.helperFunctions=true
