@@ -612,7 +612,10 @@ public class ERXEOControlUtilities {
 				ERXBatchFetchUtilities.batchFetch(objects, spec.prefetchingRelationshipKeyPaths(), ! spec.refreshesRefetchedObjects());
 			}
 
-			ERXS.sort(objects, spec.sortOrderings());
+			// HP: There is no guarantee that the array of objects has the same order of the array of
+			// globalIDs. We must ensure the array of objects is ordered as expected.
+			ensureSortOrdering(ec, gids, objects);
+			
 			result = objects.immutableClone();
 		}
 		else {
@@ -2399,5 +2402,36 @@ public class ERXEOControlUtilities {
 			}
 		}
 		return counts;
+	}
+	
+	/**
+	 * Ensures the array of objects follow the same order than the array of globalIDs
+	 * returned by the first fetch.
+	 *
+	 * @param ec
+	 *            an editingContext
+	 * @param gids
+	 *            the array of globalIDs ordered as expected
+	 * @param objects
+	 *            the array of objects to be ordered based on the array of gids
+	 */
+	private static void ensureSortOrdering(EOEditingContext ec, NSArray<? extends EOGlobalID> gids, NSMutableArray<? extends EOEnterpriseObject> objects) {
+		for (int i = 0; i < objects.size(); i++) {
+			EOEnterpriseObject object = (EOEnterpriseObject) objects.objectAtIndex(i);
+
+			EOGlobalID gid = gids.objectAtIndex(i);
+
+			if (gid.equals(ec.globalIDForObject(object))) {
+				continue;
+			}
+
+			for (int j = i + 1; j < objects.size(); j++) {
+				if (gid.equals(ec.globalIDForObject((EOEnterpriseObject) objects.objectAtIndex(j)))) {
+					ERXArrayUtilities.swapObjectsAtIndexesInArray(objects, i, j);
+
+					break;
+				}
+			}
+		}
 	}
 }
