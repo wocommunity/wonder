@@ -26,6 +26,10 @@ public class ERXRequestFormValues implements NSKeyValueCoding {
 	}
 
 	public Object valueForKey(String key) {
-		return _request.stringFormValueForKey(key);
+		Object value = _request.stringFormValueForKey(key);
+		if (value == null) {
+			value = _request.headerForKey(key);
+		}
+		return value;
 	}
 }
