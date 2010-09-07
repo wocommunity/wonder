@@ -11,9 +11,10 @@
 	<packaging>pom</packaging>
 	<name>Frameworks</name>
 	<modules>
-		<module>Core</module>
 		<module>Ajax</module>
 		<module>BusinessLogic</module>
+		<module>Core</module>
+		<module>D2W</module>
 		<module>EOAdaptors</module>
 		<module>EOF</module>
 		<module>Excel</module>

@@ -1,14 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>wonder.frameworks</groupId>
-		<artifactId>woadaptors</artifactId>
+		<artifactId>ajax</artifactId>
 		<version>5.0.0-SNAPSHOT</version>
 	</parent>
 
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>wonder.woadaptors</groupId>
-	<artifactId>ERIMAdaptor</artifactId>
-	<name>ERIMAdaptor Framework</name>
+	<groupId>wonder.ajax</groupId>
+	<artifactId>ERCoolComponents</artifactId>
+	<name>ERCoolComponents Framework</name>
 	<packaging>woframework</packaging>
 
 	<build>
@@ -23,15 +23,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.webobjects</groupId>
-			<artifactId>JavaFoundation</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.webobjects</groupId>
 			<artifactId>JavaWebObjects</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.intellij</groupId>
-			<artifactId>annotations</artifactId>
 		</dependency>
 	</dependencies>
 </project>
