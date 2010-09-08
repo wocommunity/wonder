@@ -2477,17 +2477,15 @@ public class ERXEOControlUtilities {
 	 *         
 	 */
 	public static EOQualifier schemaBasedQualifier(EOEditingContext ec, String entityName, EOQualifier qualifier) {
-		EOQualifier result;
-	
+
 		EOEntity entity = ERXEOAccessUtilities.entityMatchingString(ec, entityName);
 		// Convert the qualifier to a schema-based qualifier
 		ec.rootObjectStore().lock();
 		try {
-			result = entity.schemaBasedQualifier(qualifier);
+			return entity.schemaBasedQualifier(qualifier);
 		} finally {
 			ec.rootObjectStore().unlock();
 		}
-	
-		return result;
+
 	}
 }
