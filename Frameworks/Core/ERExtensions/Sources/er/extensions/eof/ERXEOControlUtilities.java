@@ -2434,4 +2434,60 @@ public class ERXEOControlUtilities {
 			}
 		}
 	}
+
+	/**
+	 * Useful for ensuring a fetch specification is safe to pass around between
+	 * threads and not having to be concerned about references to EOs in the
+	 * qualifier.
+	 * 
+	 * @param a locked EOEditingContext that can be used for getting the entity
+	 * @param fetchSpecification
+	 * 
+	 * @return a clone of the fetchSpecification with the EOQualifier converted
+	 *         to a schema-based qualifier, or the original fetchSpec if the fetchSpec has
+	 *         no qualifier
+	 */
+	public static EOFetchSpecification schemaBasedFetchSpecification(EOEditingContext ec, EOFetchSpecification fetchSpecification) {
+	
+		EOQualifier q = fetchSpecification.qualifier();
+		if (q != null) {
+	
+			// Clone the fetchSpec
+			fetchSpecification = (EOFetchSpecification) fetchSpecification.clone();
+			q = schemaBasedQualifier(ec, fetchSpecification.entityName(), q);
+			fetchSpecification.setQualifier(q);
+	
+		} // ~ if (q != null)
+		return fetchSpecification;
+	}
+
+	/**
+	 * Useful for ensuring a qualifier is safe to pass around between threads and not having to be
+	 * concerned about references to EOs in it. Also handy to verify that an EOQualifier can be used in
+	 * a database fetch.
+	 * 
+	 * @param ec
+	 *            a locked EOEditingContext that can be used for getting the entity
+	 * @param entityName
+	 *            the entity being qualified
+	 * @param qualifier
+	 *            original qualifier
+	 * @return a schema based qualifier that contains no references to
+	 *         EOEnterpriseObjects
+	 *         
+	 */
+	public static EOQualifier schemaBasedQualifier(EOEditingContext ec, String entityName, EOQualifier qualifier) {
+		EOQualifier result;
+	
+		EOEntity entity = ERXEOAccessUtilities.entityMatchingString(ec, entityName);
+		// Convert the qualifier to a schema-based qualifier
+		ec.rootObjectStore().lock();
+		try {
+			result = entity.schemaBasedQualifier(qualifier);
+		} finally {
+			ec.rootObjectStore().unlock();
+		}
+	
+		return result;
+	}
 }
