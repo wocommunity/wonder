@@ -2440,12 +2440,14 @@ public class ERXEOControlUtilities {
 	 * threads and not having to be concerned about references to EOs in the
 	 * qualifier.
 	 * 
-	 * @param a locked EOEditingContext that can be used for getting the entity
+	 * @param ec
+	 *            a locked EOEditingContext that can be used for getting the
+	 *            entity
 	 * @param fetchSpecification
 	 * 
 	 * @return a clone of the fetchSpecification with the EOQualifier converted
-	 *         to a schema-based qualifier, or the original fetchSpec if the fetchSpec has
-	 *         no qualifier
+	 *         to a schema-based qualifier, or the original fetchSpec if the
+	 *         fetchSpec has no qualifier
 	 */
 	public static EOFetchSpecification schemaBasedFetchSpecification(EOEditingContext ec, EOFetchSpecification fetchSpecification) {
 	
