@@ -8,6 +8,7 @@ import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSValidation;
 import er.directtoweb.pages.ERD2WQueryPage;
 import er.extensions.foundation.ERXStringUtilities;
@@ -273,6 +274,8 @@ public abstract class ERDQueryValidationDelegate {
          * @throws NSValidation.ValidationException when the validation fails
          */
         public void validateValueForQueryKey(Object value, String key) throws NSValidation.ValidationException {
+            if( value instanceof NSKeyValueCoding.Null) { value = null; }
+
             D2WContext d2wContext = d2wContext();
             String propertyKey = propertyKeyFromDisplayGroupKey(key);
             d2wContext().setPropertyKey(propertyKey);
