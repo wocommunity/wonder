@@ -1,9 +1,12 @@
 package er.rest.routes;
 
+import java.util.Enumeration;
+
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSMutableDictionary;
 
 import er.rest.ERXRestRequestNode;
 import er.rest.format.ERXRestFormat;
@@ -20,6 +23,7 @@ public class ERXRouteResults implements WOActionResults {
 	private WOContext _context;
 	private ERXRestFormat _format;
 	private ERXRestRequestNode _responseNode;
+	private NSMutableDictionary/*<String, String>*/ _headers;
 
 	/**
 	 * Constructs an ERXRouteResults.
@@ -35,6 +39,17 @@ public class ERXRouteResults implements WOActionResults {
 		_context = context;
 		_format = format;
 		_responseNode = responseNode;
+		_headers = new NSMutableDictionary/*<String, String>*/();
+	}
+	
+	/**
+	 * Adds a header for the resulting WOResponse.
+	 * 
+	 * @param header the header to add
+	 * @param key the key to add
+	 */
+	public void setHeaderForKey(String header, String key) {
+		_headers.setObjectForKey(header, key);
 	}
 
 	/**
@@ -62,6 +77,13 @@ public class ERXRouteResults implements WOActionResults {
 	 */
 	public WOResponse generateResponse() {
 		WOResponse response = WOApplication.application().createResponseInContext(_context);
+		if (_headers.count() > 0) {
+			/*for (String key : _headers.keySet()) {*/
+			for (Enumeration keyEnum = _headers.keyEnumerator(); keyEnum.hasMoreElements(); ) {
+				String key = (String)keyEnum.nextElement();
+				response.setHeader((String)_headers.objectForKey(key), key);
+			}
+		}
 		IERXRestWriter writer = _format.writer();
 		if (writer == null) {
 			throw new IllegalStateException("There is no writer for the format '" + _format.name() + "'.");
