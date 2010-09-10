@@ -23,6 +23,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOObjectStore;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
@@ -39,6 +40,7 @@ import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXKey;
 import er.extensions.eof.ERXKeyFilter;
 import er.extensions.foundation.ERXExceptionUtilities;
+import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
 import er.rest.ERXRequestFormValues;
@@ -50,6 +52,8 @@ import er.rest.format.ERXRestFormat;
 import er.rest.format.ERXWORestResponse;
 import er.rest.format.IERXRestParser;
 import er.rest.routes.jsr311.PathParam;
+import er.rest.util.ERXRestSchema;
+import er.rest.util.ERXRestTransactionRequestAdaptor;
 
 /**
  * ERXRouteController is equivalent to a Rails controller class. It's actually a direct action, and has the same naming
@@ -212,9 +216,34 @@ public class ERXRouteController extends WODirectAction {
 	 */
 	public EOEditingContext editingContext() {
 		if (_editingContext == null) {
-			_editingContext = ERXEC.newEditingContext();
+			ERXRestTransactionRequestAdaptor transactionAdaptor = ERXRestTransactionRequestAdaptor.defaultAdaptor();
+			if (transactionAdaptor.transactionsEnabled() && transactionAdaptor.isExecutingTransaction(context(), request())) {
+				_editingContext = newEditingContext(transactionAdaptor.executingTransaction(context(), request()).editingContext());
+			}
+			else {
+				_editingContext = newEditingContext();
+			}
 		}
 		return _editingContext;
+	}
+	
+	/**
+	 * Creates a new editing context.
+	 * 
+	 * @return a new editing context
+	 */
+	protected EOEditingContext newEditingContext() {
+		return ERXEC.newEditingContext();
+	}
+	
+	/**
+	 * Creates a new editing context with a parent object store.
+	 * 
+	 * @param objectStore the parent object store
+	 * @return a new editing context
+	 */
+	protected EOEditingContext newEditingContext(EOObjectStore objectStore) {
+		return ERXEC.newEditingContext(objectStore);
 	}
 
 	/**
@@ -336,7 +365,8 @@ public class ERXRouteController extends WODirectAction {
 	 * @return the default format to use if no other format is found, or if the requested format is invalid
 	 */
 	protected ERXRestFormat defaultFormat() {
-		return ERXRestFormat.XML;
+		String defaultFormatName = ERXProperties.stringForKeyWithDefault("ERXRest.defaultFormat", ERXRestFormat.XML.name());
+		return ERXRestFormat.formatNamed(defaultFormatName);
 	}
 
 	/**
@@ -1183,11 +1213,26 @@ public class ERXRouteController extends WODirectAction {
 	 * @throws RuntimeException if a failure occurs
 	 */
 	public WOActionResults performActionNamed(String actionName, boolean throwExceptions) throws RuntimeException {
+		WOActionResults results = null;
+		
 		try {
-			checkAccess();
+			ERXRestTransactionRequestAdaptor transactionAdaptor = ERXRestTransactionRequestAdaptor.defaultAdaptor();
+			if (transactionAdaptor.transactionsEnabled() && !transactionAdaptor.isExecutingTransaction(context(), request())) {
+				if (!transactionAdaptor.willHandleRequest(context(), request())) {
+					if (transactionAdaptor.didHandleRequest(context(), request())) {
+						results = stringResponse("Transaction request enqueued.");
+					}
+					else {
+						results = stringResponse("Transaction executed.");
+					}
+				}
+			}
+			
+			if (results == null) {
+				checkAccess();
+			}
 
-			WOActionResults results = null;
-			if (isAutomaticHtmlRoutingEnabled() && format() == ERXRestFormat.HTML) {
+			if (results == null && isAutomaticHtmlRoutingEnabled() && format() == ERXRestFormat.HTML) {
 				String pageName = pageNameForAction(actionName);
 				if (_NSUtilities.classWithName(pageName) != null) {
 					try {
@@ -1264,15 +1309,6 @@ public class ERXRouteController extends WODirectAction {
 			else if (results instanceof IERXRouteComponent) {
 				_takeRouteParametersFromRequest(results);
 			}
-
-			WOContext context = context();
-			WOSession session = context._session();
-			if (session != null && session.storesIDsInCookies() && results instanceof WOResponse) {
-				WOResponse response = (WOResponse) results;
-				session._appendCookieToResponse(response);
-			}
-
-			return results;
 		}
 		catch (Throwable t) {
 			if (throwExceptions) {
@@ -1280,15 +1316,25 @@ public class ERXRouteController extends WODirectAction {
 			}
 			Throwable meaningfulThrowble = ERXExceptionUtilities.getMeaningfulThrowable(t);
 			if (meaningfulThrowble instanceof ObjectNotAvailableException) {
-				return errorResponse(meaningfulThrowble, WOMessage.HTTP_STATUS_NOT_FOUND);
+				results = errorResponse(meaningfulThrowble, WOMessage.HTTP_STATUS_NOT_FOUND);
 			}
 			else if (meaningfulThrowble instanceof SecurityException) {
-				return errorResponse(meaningfulThrowble, WOMessage.HTTP_STATUS_FORBIDDEN);
+				results = errorResponse(meaningfulThrowble, WOMessage.HTTP_STATUS_FORBIDDEN);
 			}
 			else {
-				return errorResponse(meaningfulThrowble, WOMessage.HTTP_STATUS_INTERNAL_ERROR);
+				results = errorResponse(meaningfulThrowble, WOMessage.HTTP_STATUS_INTERNAL_ERROR);
 			}
+			// MS: Should we jam the exception in the response userInfo so the transaction adaptor can rethrow the real exception?
 		}
+
+		WOContext context = context();
+		WOSession session = context._session();
+		if (session != null && session.storesIDsInCookies() && results instanceof WOResponse) {
+			WOResponse response = (WOResponse) results;
+			session._appendCookieToResponse(response);
+		}
+		
+		return results;
 	}
 
 	/**
@@ -1351,6 +1397,37 @@ public class ERXRouteController extends WODirectAction {
 			_editingContext.dispose();
 			_editingContext = null;
 		}
+	}
+	
+	/**
+	 * Returns whether or not this request is for a schema.
+	 * 
+	 * @return whether or not this request is for a schema
+	 */
+	protected boolean isSchemaRequest() {
+		return request().stringFormValueForKey("schema") != null;
+	}
+	
+	/**
+	 * Returns the schema response for the current entity with the given filter.
+	 * 
+	 * @param filter the filter to apply
+	 * @return the schema response for the current entity with the given filter
+	 */
+	protected WOActionResults schemaResponse(ERXKeyFilter filter) {
+		return schemaResponseForEntityNamed(entityName(), filter);
+	}
+	
+	/**
+	 * Returns the schema response for the given entity with the given filter.
+	 * 
+	 * @param entityName the entity name
+	 * @param filter the filter to apply
+	 * @return the schema response for the given entity with the given filter
+	 */
+	protected WOActionResults schemaResponseForEntityNamed(String entityName, ERXKeyFilter filter) {
+		NSDictionary/*<String, Object>*/ properties = ERXRestSchema.schemaForEntityNamed(entityName, filter);
+		return response(properties, ERXKeyFilter.filterWithAllRecursive());
 	}
 	
 	@Override
