@@ -1329,12 +1329,126 @@ public class ERXRouteController extends WODirectAction {
 
 		WOContext context = context();
 		WOSession session = context._session();
-		if (session != null && session.storesIDsInCookies() && results instanceof WOResponse) {
-			WOResponse response = (WOResponse) results;
-			session._appendCookieToResponse(response);
+		if (results instanceof WOResponse) {
+			WOResponse response = (WOResponse)results;
+			if (session != null && session.storesIDsInCookies()) {
+				session._appendCookieToResponse(response);
+			}
+			
+			String allowOrigin = accessControlAllowOrigin();
+			if (allowOrigin != null) {
+				response.setHeader(allowOrigin, "Access-Control-Allow-Origin");
+			}
+		
+			if (allowWindowNameCrossDomainTransport()) {
+				String windowNameCrossDomainTransport = request().stringFormValueForKey("windowname");
+				if ("true".equals(windowNameCrossDomainTransport)) {
+					String content = response.contentString();
+					if (content != null) {
+						content = content.replaceAll("\n", "");
+						content = ERXStringUtilities.escapeJavascriptApostrophes(content);
+					}
+					response.setContent("<html><script type=\"text/javascript\">window.name='" + content + "';</script></html>");
+					response.setHeader("text/html", "Content-Type");
+				}
+			}
 		}
 		
 		return results;
+	}
+	
+	/**
+	 * Returns whether or not the window.name cross-domain transport is allowed.
+	 * 
+	 * @return whether or not the window.name cross-domain transport is allowed
+	 */
+	protected boolean allowWindowNameCrossDomainTransport() {
+		return ERXProperties.booleanForKeyWithDefault("ERXRest.allowWindowNameCrossDomainTransport", false);
+	}
+	
+	/**
+	 * Returns the allowed origin for cross-site requests. Set the property ERXRest.accessControlAllowOrigin=* to enable all origins.
+	 * 
+	 * @return the allowed origin for cross-site requests
+	 */
+	protected String accessControlAllowOrigin() {
+		return ERXProperties.stringForKeyWithDefault("ERXRest.accessControlAllowOrigin", null);
+	}
+
+	/**
+	 * Returns the allowed request methods given the requested method. Set the property ERXRest.accessControlAllowRequestMethods to override
+	 * the default of returning OPTIONS,GET,HEAD,POST,PUT,DELETE,TRACE,CONNECT.
+	 * 
+	 * @param requestMethod the requested method
+	 * @return the array of allowed request methods
+	 */
+	protected NSArray/*<String>*/ accessControlAllowRequestMethods(String requestMethod) {
+		String accessControlAllowRequestMethodsStr = ERXProperties.stringForKeyWithDefault("ERXRest.accessControlAllowRequestMethods", "OPTIONS,GET,HEAD,POST,PUT,DELETE,TRACE,CONNECT");
+		if (accessControlAllowRequestMethodsStr == null || accessControlAllowRequestMethodsStr.length() == 0) {
+			accessControlAllowRequestMethodsStr = requestMethod;
+		}
+		NSArray/*<String>*/ accessControlAllowRequestMethods = null;
+		if (accessControlAllowRequestMethodsStr != null) {
+			accessControlAllowRequestMethods = new NSArray/*<String>*/(accessControlAllowRequestMethodsStr.split(","));
+		}
+		return accessControlAllowRequestMethods;
+	}
+
+	/**
+	 * Returns the allowed request headers given the requested headers.Set the property ERXRest.accessControlAllowRequestHeaders to override
+	 * the default of just returning the requested headers.
+	 * 
+	 * @param requestHeaders the requested headers
+	 * @return the array of allowed request headers
+	 */
+	protected NSArray/*<String>*/ accessControlAllowRequestHeaders(NSArray/*<String>*/ requestHeaders) {
+		String requestHeadersStr = requestHeaders == null ? null : requestHeaders.componentsJoinedByString(",");
+		String accessControlAllowRequestHeadersStr = ERXProperties.stringForKeyWithDefault("ERXRest.accessControlAllowRequestHeaders", requestHeadersStr);
+		NSArray/*<String>*/ accessControlAllowRequestHeaders = null;
+		if (accessControlAllowRequestHeadersStr != null) {
+			accessControlAllowRequestHeaders = new NSArray/*<String>*/(accessControlAllowRequestHeadersStr.split(","));
+		}
+		return accessControlAllowRequestHeaders;
+	}
+	
+	/**
+	 * Returns the maximum age in seconds for the preflight options cache.
+	 * 
+	 * @return the maximum age for the preflight options cache
+	 */
+	protected long accessControlMaxAage() {
+		return ERXProperties.longForKeyWithDefault("ERXRest.accessControlMaxAge", 1728000);
+	}
+	
+	/**
+	 * A default options action that implements access control policy.
+	 * 
+	 * @return the response
+	 */
+	public WOActionResults optionsAction() {
+		WOResponse response = new WOResponse();
+		String accessControlAllowOrigin = accessControlAllowOrigin();
+		if (accessControlAllowOrigin != null) {
+			response.setHeader(accessControlAllowOrigin, "Access-Control-Allow-Origin");
+			
+			NSArray/*<String>*/ accessControlAllowRequestMethods = accessControlAllowRequestMethods(request().headerForKey("Access-Control-Request-Method"));
+			if (accessControlAllowRequestMethods != null) {
+				response.setHeader(accessControlAllowRequestMethods.componentsJoinedByString(","), "Access-Control-Allow-Methods");
+			}
+			
+			String requestHeadersStr = request().headerForKey("Access-Control-Request-Headers");
+			NSArray/*<String>*/ requestHeaders = (requestHeadersStr == null) ? null : NSArray.componentsSeparatedByString(requestHeadersStr, ","); 
+			NSArray/*<String>*/ accessControlAllowRequestHeaders = accessControlAllowRequestHeaders(requestHeaders);
+			if (accessControlAllowRequestHeaders != null) {
+				response.setHeader(accessControlAllowRequestHeaders.componentsJoinedByString(","), "Access-Control-Allow-Headers");
+			}
+			
+			long accessControlMaxAge = accessControlMaxAage();
+			if (accessControlMaxAge >= 0) {
+				response.setHeader(String.valueOf(accessControlMaxAge), "Access-Control-Max-Age");
+			}
+		}
+		return response;
 	}
 
 	/**
