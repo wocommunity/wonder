@@ -23,6 +23,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOObjectStore;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
@@ -39,6 +40,7 @@ import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXKey;
 import er.extensions.eof.ERXKeyFilter;
 import er.extensions.foundation.ERXExceptionUtilities;
+import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
 import er.rest.ERXRequestFormValues;
@@ -50,6 +52,8 @@ import er.rest.format.ERXRestFormat;
 import er.rest.format.ERXWORestResponse;
 import er.rest.format.IERXRestParser;
 import er.rest.routes.jsr311.PathParam;
+import er.rest.util.ERXRestSchema;
+import er.rest.util.ERXRestTransactionRequestAdaptor;
 
 /**
  * ERXRouteController is equivalent to a Rails controller class. It's actually a direct action, and has the same naming
@@ -212,9 +216,34 @@ public class ERXRouteController extends WODirectAction {
 	 */
 	public EOEditingContext editingContext() {
 		if (_editingContext == null) {
-			_editingContext = ERXEC.newEditingContext();
+			ERXRestTransactionRequestAdaptor transactionAdaptor = ERXRestTransactionRequestAdaptor.defaultAdaptor();
+			if (transactionAdaptor.transactionsEnabled() && transactionAdaptor.isExecutingTransaction(context(), request())) {
+				_editingContext = newEditingContext(transactionAdaptor.executingTransaction(context(), request()).editingContext());
+			}
+			else {
+				_editingContext = newEditingContext();
+			}
 		}
 		return _editingContext;
+	}
+	
+	/**
+	 * Creates a new editing context.
+	 * 
+	 * @return a new editing context
+	 */
+	protected EOEditingContext newEditingContext() {
+		return ERXEC.newEditingContext();
+	}
+	
+	/**
+	 * Creates a new editing context with a parent object store.
+	 * 
+	 * @param objectStore the parent object store
+	 * @return a new editing context
+	 */
+	protected EOEditingContext newEditingContext(EOObjectStore objectStore) {
+		return ERXEC.newEditingContext(objectStore);
 	}
 
 	/**
@@ -336,7 +365,8 @@ public class ERXRouteController extends WODirectAction {
 	 * @return the default format to use if no other format is found, or if the requested format is invalid
 	 */
 	protected ERXRestFormat defaultFormat() {
-		return ERXRestFormat.XML;
+		String defaultFormatName = ERXProperties.stringForKeyWithDefault("ERXRest.defaultFormat", ERXRestFormat.XML.name());
+		return ERXRestFormat.formatNamed(defaultFormatName);
 	}
 
 	/**
@@ -751,6 +781,35 @@ public class ERXRouteController extends WODirectAction {
 	}
 
 	/**
+	 * Returns whether or not headers can be added to the given action results.
+	 * 
+	 * @param results the results to test
+	 * @return whether or not headers can be added to the given action results
+	 */
+	protected boolean _canSetHeaderForActionResults(WOActionResults results) {
+		return results instanceof WOResponse || results instanceof ERXRouteResults;
+	}
+	
+	/**
+	 * Attempt to set the header for the given results object.
+	 * 
+	 * @param value the value
+	 * @param key the key
+	 * @param results the results object
+	 */
+	protected void _setHeaderForActionResults(String value, String key, WOActionResults results) {
+		if (results instanceof WOResponse) {
+			((WOResponse)results).setHeader(value, key);
+		}
+		else if (results instanceof ERXRouteResults) {
+			((ERXRouteResults)results).setHeaderForKey(value, key);
+		}
+		else {
+			ERXRouteController.log.info("Unable to set a header on an action results of type '" + results.getClass().getName() + "'.");
+		}
+	}
+	
+	/**
 	 * Returns the results of the rest fetch spec as an response in the format returned from the format() method. 
 	 * This uses the editing context returned by editingContext().
 	 * 
@@ -761,15 +820,20 @@ public class ERXRouteController extends WODirectAction {
 	 * @return a WOResponse of the format returned from the format() method
 	 */
 	public WOActionResults response(ERXRestFetchSpecification<?> fetchSpec, ERXKeyFilter filter) {
-		WOActionResults response;
+		WOActionResults results;
 		if (fetchSpec == null) {
 			// MS: you probably meant to call response(Object, filter) in this case -- just proxy through
-			response = response(format(), null, filter);
+			results = response(format(), null, filter);
 		}
 		else {
-			response = response(format(), editingContext(), fetchSpec.entityName(), fetchSpec.objects(editingContext(), options()), filter);
+			ERXRestFetchSpecification.Results<?> fetchResults = fetchSpec.results(editingContext(), options());
+			results = response(format(), editingContext(), fetchSpec.entityName(), fetchResults.objects(), filter);
+			if (fetchResults.batchSize() > 0 && options().valueForKey("Range") != null && _canSetHeaderForActionResults(results)) {
+				String contentRangeValue = "items " + fetchResults.startIndex() + "-" + (fetchResults.startIndex() + fetchResults.batchSize() - 1) + "/" + fetchResults.totalCount();
+				_setHeaderForActionResults(contentRangeValue, "Content-Range", results);
+			}
 		}
-		return response;
+		return results;
 	}
 
 	/**
@@ -1183,11 +1247,26 @@ public class ERXRouteController extends WODirectAction {
 	 * @throws RuntimeException if a failure occurs
 	 */
 	public WOActionResults performActionNamed(String actionName, boolean throwExceptions) throws RuntimeException {
+		WOActionResults results = null;
+		
 		try {
-			checkAccess();
+			ERXRestTransactionRequestAdaptor transactionAdaptor = ERXRestTransactionRequestAdaptor.defaultAdaptor();
+			if (transactionAdaptor.transactionsEnabled() && !transactionAdaptor.isExecutingTransaction(context(), request())) {
+				if (!transactionAdaptor.willHandleRequest(context(), request())) {
+					if (transactionAdaptor.didHandleRequest(context(), request())) {
+						results = stringResponse("Transaction request enqueued.");
+					}
+					else {
+						results = stringResponse("Transaction executed.");
+					}
+				}
+			}
+			
+			if (results == null) {
+				checkAccess();
+			}
 
-			WOActionResults results = null;
-			if (isAutomaticHtmlRoutingEnabled() && format() == ERXRestFormat.HTML) {
+			if (results == null && isAutomaticHtmlRoutingEnabled() && format() == ERXRestFormat.HTML) {
 				String pageName = pageNameForAction(actionName);
 				if (_NSUtilities.classWithName(pageName) != null) {
 					try {
@@ -1264,15 +1343,6 @@ public class ERXRouteController extends WODirectAction {
 			else if (results instanceof IERXRouteComponent) {
 				_takeRouteParametersFromRequest(results);
 			}
-
-			WOContext context = context();
-			WOSession session = context._session();
-			if (session != null && session.storesIDsInCookies() && results instanceof WOResponse) {
-				WOResponse response = (WOResponse) results;
-				session._appendCookieToResponse(response);
-			}
-
-			return results;
 		}
 		catch (Throwable t) {
 			if (throwExceptions) {
@@ -1280,15 +1350,144 @@ public class ERXRouteController extends WODirectAction {
 			}
 			Throwable meaningfulThrowble = ERXExceptionUtilities.getMeaningfulThrowable(t);
 			if (meaningfulThrowble instanceof ObjectNotAvailableException) {
-				return errorResponse(meaningfulThrowble, WOMessage.HTTP_STATUS_NOT_FOUND);
+				results = errorResponse(meaningfulThrowble, WOMessage.HTTP_STATUS_NOT_FOUND);
 			}
 			else if (meaningfulThrowble instanceof SecurityException) {
-				return errorResponse(meaningfulThrowble, WOMessage.HTTP_STATUS_FORBIDDEN);
+				results = errorResponse(meaningfulThrowble, WOMessage.HTTP_STATUS_FORBIDDEN);
 			}
 			else {
-				return errorResponse(meaningfulThrowble, WOMessage.HTTP_STATUS_INTERNAL_ERROR);
+				results = errorResponse(meaningfulThrowble, WOMessage.HTTP_STATUS_INTERNAL_ERROR);
+			}
+			// MS: Should we jam the exception in the response userInfo so the transaction adaptor can rethrow the real exception?
+		}
+
+		WOContext context = context();
+		WOSession session = context._session();
+		// MS: This is sketchy -- should this be done in the request handler after we generate the response?
+		if (results instanceof WOResponse) {
+			WOResponse response = (WOResponse)results;
+			if (session != null && session.storesIDsInCookies()) {
+				session._appendCookieToResponse(response);
 			}
 		}
+		
+		if (_canSetHeaderForActionResults(results)) {
+			String allowOrigin = accessControlAllowOrigin();
+			if (allowOrigin != null) {
+				_setHeaderForActionResults(allowOrigin, "Access-Control-Allow-Origin", results);
+			}
+		}
+		
+		if (allowWindowNameCrossDomainTransport()) {
+			String windowNameCrossDomainTransport = request().stringFormValueForKey("windowname");
+			if ("true".equals(windowNameCrossDomainTransport)) {
+				WOResponse response = results.generateResponse();
+				String content = response.contentString();
+				if (content != null) {
+					content = content.replaceAll("\n", "");
+					content = ERXStringUtilities.escapeJavascriptApostrophes(content);
+				}
+				response.setContent("<html><script type=\"text/javascript\">window.name='" + content + "';</script></html>");
+				response.setHeader("text/html", "Content-Type");
+				results = response;
+			}
+		}
+		
+		return results;
+	}
+	
+	/**
+	 * Returns whether or not the window.name cross-domain transport is allowed.
+	 * 
+	 * @return whether or not the window.name cross-domain transport is allowed
+	 */
+	protected boolean allowWindowNameCrossDomainTransport() {
+		return ERXProperties.booleanForKeyWithDefault("ERXRest.allowWindowNameCrossDomainTransport", false);
+	}
+	
+	/**
+	 * Returns the allowed origin for cross-site requests. Set the property ERXRest.accessControlAllowOrigin=* to enable all origins.
+	 * 
+	 * @return the allowed origin for cross-site requests
+	 */
+	protected String accessControlAllowOrigin() {
+		return ERXProperties.stringForKeyWithDefault("ERXRest.accessControlAllowOrigin", null);
+	}
+
+	/**
+	 * Returns the allowed request methods given the requested method. Set the property ERXRest.accessControlAllowRequestMethods to override
+	 * the default of returning OPTIONS,GET,HEAD,POST,PUT,DELETE,TRACE,CONNECT.
+	 * 
+	 * @param requestMethod the requested method
+	 * @return the array of allowed request methods
+	 */
+	protected NSArray/*<String>*/ accessControlAllowRequestMethods(String requestMethod) {
+		String accessControlAllowRequestMethodsStr = ERXProperties.stringForKeyWithDefault("ERXRest.accessControlAllowRequestMethods", "OPTIONS,GET,HEAD,POST,PUT,DELETE,TRACE,CONNECT");
+		if (accessControlAllowRequestMethodsStr == null || accessControlAllowRequestMethodsStr.length() == 0) {
+			accessControlAllowRequestMethodsStr = requestMethod;
+		}
+		NSArray/*<String>*/ accessControlAllowRequestMethods = null;
+		if (accessControlAllowRequestMethodsStr != null) {
+			accessControlAllowRequestMethods = new NSArray/*<String>*/(accessControlAllowRequestMethodsStr.split(","));
+		}
+		return accessControlAllowRequestMethods;
+	}
+
+	/**
+	 * Returns the allowed request headers given the requested headers.Set the property ERXRest.accessControlAllowRequestHeaders to override
+	 * the default of just returning the requested headers.
+	 * 
+	 * @param requestHeaders the requested headers
+	 * @return the array of allowed request headers
+	 */
+	protected NSArray/*<String>*/ accessControlAllowRequestHeaders(NSArray/*<String>*/ requestHeaders) {
+		String requestHeadersStr = requestHeaders == null ? null : requestHeaders.componentsJoinedByString(",");
+		String accessControlAllowRequestHeadersStr = ERXProperties.stringForKeyWithDefault("ERXRest.accessControlAllowRequestHeaders", requestHeadersStr);
+		NSArray/*<String>*/ accessControlAllowRequestHeaders = null;
+		if (accessControlAllowRequestHeadersStr != null) {
+			accessControlAllowRequestHeaders = new NSArray/*<String>*/(accessControlAllowRequestHeadersStr.split(","));
+		}
+		return accessControlAllowRequestHeaders;
+	}
+	
+	/**
+	 * Returns the maximum age in seconds for the preflight options cache.
+	 * 
+	 * @return the maximum age for the preflight options cache
+	 */
+	protected long accessControlMaxAage() {
+		return ERXProperties.longForKeyWithDefault("ERXRest.accessControlMaxAge", 1728000);
+	}
+	
+	/**
+	 * A default options action that implements access control policy.
+	 * 
+	 * @return the response
+	 */
+	public WOActionResults optionsAction() throws Throwable {
+		WOResponse response = new WOResponse();
+		String accessControlAllowOrigin = accessControlAllowOrigin();
+		if (accessControlAllowOrigin != null) {
+			response.setHeader(accessControlAllowOrigin, "Access-Control-Allow-Origin");
+			
+			NSArray/*<String>*/ accessControlAllowRequestMethods = accessControlAllowRequestMethods(request().headerForKey("Access-Control-Request-Method"));
+			if (accessControlAllowRequestMethods != null) {
+				response.setHeader(accessControlAllowRequestMethods.componentsJoinedByString(","), "Access-Control-Allow-Methods");
+			}
+			
+			String requestHeadersStr = request().headerForKey("Access-Control-Request-Headers");
+			NSArray/*<String>*/ requestHeaders = (requestHeadersStr == null) ? null : NSArray.componentsSeparatedByString(requestHeadersStr, ","); 
+			NSArray/*<String>*/ accessControlAllowRequestHeaders = accessControlAllowRequestHeaders(requestHeaders);
+			if (accessControlAllowRequestHeaders != null) {
+				response.setHeader(accessControlAllowRequestHeaders.componentsJoinedByString(","), "Access-Control-Allow-Headers");
+			}
+			
+			long accessControlMaxAge = accessControlMaxAage();
+			if (accessControlMaxAge >= 0) {
+				response.setHeader(String.valueOf(accessControlMaxAge), "Access-Control-Max-Age");
+			}
+		}
+		return response;
 	}
 
 	/**
@@ -1351,6 +1550,37 @@ public class ERXRouteController extends WODirectAction {
 			_editingContext.dispose();
 			_editingContext = null;
 		}
+	}
+	
+	/**
+	 * Returns whether or not this request is for a schema.
+	 * 
+	 * @return whether or not this request is for a schema
+	 */
+	protected boolean isSchemaRequest() {
+		return request().stringFormValueForKey("schema") != null;
+	}
+	
+	/**
+	 * Returns the schema response for the current entity with the given filter.
+	 * 
+	 * @param filter the filter to apply
+	 * @return the schema response for the current entity with the given filter
+	 */
+	protected WOActionResults schemaResponse(ERXKeyFilter filter) {
+		return schemaResponseForEntityNamed(entityName(), filter);
+	}
+	
+	/**
+	 * Returns the schema response for the given entity with the given filter.
+	 * 
+	 * @param entityName the entity name
+	 * @param filter the filter to apply
+	 * @return the schema response for the given entity with the given filter
+	 */
+	protected WOActionResults schemaResponseForEntityNamed(String entityName, ERXKeyFilter filter) {
+		NSDictionary/*<String, Object>*/ properties = ERXRestSchema.schemaForEntityNamed(entityName, filter);
+		return response(properties, ERXKeyFilter.filterWithAllRecursive());
 	}
 	
 	@Override

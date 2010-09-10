@@ -1,5 +1,6 @@
 package er.rest.format;
 
+import java.util.Enumeration;
 import java.util.Set;
 
 import net.sf.json.JSONSerializer;
@@ -7,6 +8,7 @@ import net.sf.json.JsonConfig;
 import net.sf.json.processors.JsonValueProcessor;
 import net.sf.json.processors.JsonValueProcessorMatcher;
 
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSTimestamp;
 
 import er.rest.ERXRestRequestNode;
@@ -43,6 +45,22 @@ public class ERXJSONRestWriter implements IERXRestWriter {
 		}
 	}
 
+	// MS: Totally debatable .... I may take this back out, but it makes things look prettier.
+	protected void removeDictionaryTypes(ERXRestRequestNode node) {
+		String type = node.type();
+		if ("NSDictionary".equals(type) || "NSMutableDictionary".equals(type)) {
+			node.setType(null);
+		}
+		NSArray children = node.children();
+		if (children != null) {
+			/*for (ERXRestRequestNode child : children) {*/
+			for (Enumeration childEnum = children.objectEnumerator(); childEnum.hasMoreElements(); ) {
+				ERXRestRequestNode child = (ERXRestRequestNode)childEnum.nextElement();
+				removeDictionaryTypes(child);
+			}
+		}
+	}
+	
 	protected ERXRestRequestNode processNode(ERXRestRequestNode node) {
 		return node;
 	}
@@ -53,6 +71,8 @@ public class ERXJSONRestWriter implements IERXRestWriter {
 
 	public void appendToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestFormat.Delegate delegate) {
 		node = processNode(node);
+		removeDictionaryTypes(node);
+		
 		appendHeadersToResponse(node, response);
 		Object object = node.toJavaCollection(delegate);
 		if (object == null) {
