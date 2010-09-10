@@ -24,6 +24,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * @binding displayString the string to show on the segment (defaults to the item toString)
  * @binding initialSelection if false, there will be no default selection on the control
  * @binding toggleSelection if true, selections can be toggled on and off
+ * @binding enableDragSupport if true, the selector is draggable
  * @binding value the value of the current selection (optional)
  * 
  * @author mschrag
@@ -67,6 +68,10 @@ public class CCSegmentedSlider extends ERXComponent {
 		if (hasBinding("toggleSelection")) {
 			options.setObjectForKey(Boolean.valueOf(booleanValueForBinding("toggleSelection", false)), "toggleSelection");
 		}
+		if (hasBinding("enableDragSupport")) {
+			options.setObjectForKey(Boolean.valueOf(booleanValueForBinding("enableDragSupport", false)), "enableDragSupport");
+		}
+
 		return options;
 	}
 
