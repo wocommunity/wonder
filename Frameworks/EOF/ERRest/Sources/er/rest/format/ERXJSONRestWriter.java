@@ -1,5 +1,6 @@
 package er.rest.format;
 
+import java.util.Enumeration;
 import java.util.Set;
 
 import net.sf.json.JSONSerializer;
@@ -50,9 +51,11 @@ public class ERXJSONRestWriter implements IERXRestWriter {
 		if ("NSDictionary".equals(type) || "NSMutableDictionary".equals(type)) {
 			node.setType(null);
 		}
-		NSArray<ERXRestRequestNode> children = node.children();
+		NSArray children = node.children();
 		if (children != null) {
-			for (ERXRestRequestNode child : children) {
+			/*for (ERXRestRequestNode child : children) {*/
+			for (Enumeration childEnum = children.objectEnumerator(); childEnum.hasMoreElements(); ) {
+				ERXRestRequestNode child = (ERXRestRequestNode)childEnum.nextElement();
 				removeDictionaryTypes(child);
 			}
 		}
