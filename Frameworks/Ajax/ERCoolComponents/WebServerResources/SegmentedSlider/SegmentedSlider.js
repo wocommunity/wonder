@@ -9,12 +9,18 @@ var SegmentedSlider = Class.create({
 	 * @param name the form name of the radio button tags
 	 */
 	initialize: function(sliderElement, name, options) {
-		this._sliderElement = sliderElement;
-		this._initialSelection = !options || options['initialSelection'];
+		this._sliderElement = $(sliderElement);
+		this._initialSelection = !(options && options['initialSelection'] === false);
 		this._toggleSelection = options && options['toggleSelection'];
 		this._name = name;
 		this._applyStyles();
 		this._resetSlider();
+
+		SegmentedSlider.sliders.set(this._sliderElement.identify(), this);
+		
+		if (options && options['enableDragSupport'] === true) {
+			this.enableDragSupport();
+		}
 	},
 	
 	/**
@@ -73,14 +79,29 @@ var SegmentedSlider = Class.create({
 			selector.style.width = itemElement.getWidth();
 			if (animate) {
 				new Effect.Morph(selector, { 
-					style: 'left: ' + itemElementOffset[0] + 'px',
+					style: 'left: ' + itemElementOffset.left + 'px',
 					duration: 0.1,
 					transition: Effect.Transitions.sinoidal,
-					afterFinish: function() { this._beforeSelectStart(previousSelectedItemElement, itemElement, animate); this._afterSelectFinish(previousSelectedItemElement, itemElement, animate); }.bind(this)
+					afterFinish: function() {
+						if (this.isDragSupportEnabled()) {
+							var selectorDragElement = this._selectorDragElement();
+							selectorDragElement.style.left = itemElementOffset.left + 'px';
+							selectorDragElement.style.width = itemElement.getWidth();
+							this._currentDropTargetEl = itemElement;
+						}
+						this._beforeSelectStart(previousSelectedItemElement, itemElement, animate); 
+						this._afterSelectFinish(previousSelectedItemElement, itemElement, animate); 
+					}.bind(this)
 				});
 			}
 			else {
-				selector.style.left = itemElementOffset[0] + 'px';
+				selector.style.left = itemElementOffset.left + 'px';
+				if (this.isDragSupportEnabled()) {
+					var selectorDragElement = this._selectorDragElement();
+					selectorDragElement.style.left = itemElementOffset.left + 'px';
+					selectorDragElement.style.width = itemElement.getWidth();
+					this._currentDropTargetEl = itemElement;
+				}
 				this._beforeSelectStart(previousSelectedItemElement, itemElement, animate);
 				this._afterSelectFinish(previousSelectedItemElement, itemElement, animate);
 			}
@@ -118,6 +139,13 @@ var SegmentedSlider = Class.create({
 	 */
 	selectedItemValue: function() {
 		return this._itemValue(this.selectedItemElement());
+	},
+
+	/**
+	 * Returns the drag element.
+	 */
+	_selectorDragElement: function() {
+		return this._sliderElement.down('div.selectorDrag');
 	},
 
 	/**
@@ -222,6 +250,13 @@ var SegmentedSlider = Class.create({
 	_attachListener: function(sliderItemElement) {
 		var sliderController = this;
 		sliderItemElement.observe('click', function(event) { sliderController.select(sliderItemElement, true); });
+		if (this.isDragSupportEnabled()) {
+			Droppables.add(sliderItemElement, { 
+				accept: 'selectorDrag', 
+				overlap: 'horizontal',
+				onHover: this._dragHover.bind(this)
+			});
+		}
 	},
 	
 	_resetSlider: function() {
@@ -243,6 +278,132 @@ var SegmentedSlider = Class.create({
 		separatorElement.style.width = sliderItemElement.getWidth();
 		separatorElement.style.paddingLeft = '0px';
 		separatorElement.style.paddingRight = '0px';
-		separatorListElement.insert(separatorElement);		
+
+		separatorListElement.insert(separatorElement);
+	},
+	
+	isDragSupportEnabled: function() {
+		return this._isDragSupportEnabled || false;
+	},
+	
+	/**
+	 * Enables drag support for the slider.
+	 */
+	enableDragSupport: function() {
+		if (!this.isDragSupportEnabled()) {
+			var sliderItemElements = this.sliderItemElements();
+			for (var i = 0; i < sliderItemElements.length; i++) {
+				var sliderItemElement = sliderItemElements[i];
+				Droppables.add(sliderItemElement, { 
+					accept: 'selectorDrag', 
+					overlap: 'horizontal',
+					onHover: this._dragHover.bind(this)
+				});
+			}
+		
+			var selectedItemElement = this.selectedItemElement()
+			var selectorDragElement = document.createElement('div');
+			selectorDragElement.id = 'selectorDragElement';
+			selectorDragElement.addClassName('selectorDrag');
+			this._sliderElement.appendChild(selectorDragElement);
+			
+			if (selectedItemElement !== undefined) {
+				var offset = selectedItemElement.positionedOffset();
+				selectorDragElement.style.left = offset.left + 'px';
+				selectorDragElement.style.width = selectedItemElement.getWidth();
+				this._currentDropTargetEl = selectedItemElement;
+			}
+			
+			new Draggable(selectorDragElement, { 
+				constraint: 'horizontal', 
+				onDrag: this._drag.bind(this), 
+				onEnd: this._dragEnd.bind(this), 
+				snap: function(x, y, eventInfo) {
+					var posX = eventInfo.element.positionedOffset().left;
+					var targetEl = this._currentDropTargetEl || this._findItemElementWithCoordinates(posX, y);
+					if (targetEl !== undefined) {
+						return targetEl.positionedOffset();
+					} else {
+						return [x, y];
+					}
+				}.bind(this)
+			});
+		
+			selectorDragElement.observe('mousedown', function() {
+				this._selectorElement().addClassName("selector_active");
+			}.bind(this));
+		
+			selectorDragElement.observe('mouseup', function() {
+				this._selectorElement().removeClassName("selector_active");
+				
+				// Toggle selection support.
+				var currentTarget = this._currentDropTargetEl;
+				var selectedItemElement = this.selectedItemElement();
+				if (selectedItemElement === undefined || (currentTarget !== undefined && currentTarget == this.selectedItemElement())) {
+					this.select(currentTarget, true);
+				}
+			}.bind(this));
+		
+			this._isDragSupportEnabled = true;
+		}
+	},
+	
+	/**
+	 * Removes drag support from the slider.
+	 */
+	removeDragSupport: function() {
+		if (this.isDragSupportEnabled()) {
+			this._isDragSupportEnabled = false;
+		
+			var sliderItemElements = this.sliderItemElements();
+			for (var i = 0; i < sliderItemElements.length; i++) {
+				var sliderItemElement = sliderItemElements[i];
+				Droppables.remove(sliderItemElement);
+			}
+		
+			var selectorDragElement = this._selectorDragElement();
+			var drags = $A(Draggables.drags);
+			var selectorDrag = drags.detect(function(n) { return n.element == selectorDragElement; });
+			if (selectorDrag !== undefined) {
+				selectorDrag.destroy();
+			}
+			this.sliderElement().removeChild(selectorDragElement);
+		}
+	},
+	
+	_findItemElementWithCoordinates: function(x, y) {
+		return this.sliderItemElements().detect(function(el) {
+			var offset = el.positionedOffset();
+			return (x >= offset.left && x <= offset.left + el.getWidth() - 2);
+		});
+	},
+	
+	_dragHover: function(draggable, droppable, percentOverlap) {
+		this._currentDropTargetEl = droppable;
+	},
+	
+	_drag: function(eventInfo) {
+		var draggedEl = eventInfo.element;
+		var offset = draggedEl.positionedOffset();
+		var selectorElement = this._selectorElement();
+		
+		// Keep the drag element and the selector elements' positions in sync.
+		draggedEl.style.left = offset.left + 'px';
+		selectorElement.style.left = offset.left + 'px';
+		
+		// Adjust the width of the slider to match the width of the item over which the drag element is currently held.
+		var currentlyHoveredOverElement = this._currentDropTargetEl || this._findItemElementWithCoordinates(offset.left, 0);
+		if (currentlyHoveredOverElement !== undefined) {
+			var width = currentlyHoveredOverElement.getWidth();
+			draggedEl.style.width = width + 'px';
+			selectorElement.style.width = width + 'px';
+		}
+	},
+	
+	_dragEnd: function(evt) {
+		this._selectorElement().removeClassName("selector_active");
+		this.select(this._currentDropTargetEl, false);
 	}
 });
+
+SegmentedSlider.sliders = new Hash(); // It's pretty useful to hang onto the sliders for later reference.
