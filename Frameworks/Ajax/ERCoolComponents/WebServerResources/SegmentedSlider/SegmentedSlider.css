@@ -56,6 +56,7 @@ div.slider ol.items li input[type='radio'] {
 }
 
 div.slider ol.items li.selected {
+	cursor: default;
 	/*color: rgb(150, 18, 23);*/
 	/*text-shadow: rgba(0, 0, 0, 0.20) 0px -1px 1px;*/
 }
@@ -123,4 +124,18 @@ div.slider div.selector {
 
 div.slider ol li {
 	width: 5em;
+}
+
+div.slider div.selector_active {
+	background-color: rgb(210, 210, 210) !important;
+	background-image: -moz-linear-gradient(top, rgb(210, 210, 210), rgb(252, 252, 252)) !important;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(rgb(210, 210, 210)), to(rgb(252, 252, 252))) !important;
+}
+
+div.slider div.selectorDrag {
+	cursor: move;
+	position: absolute;
+	height: 1.75em;
+	top: 0;
+	z-index: 10000;
 }
