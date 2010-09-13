@@ -63,6 +63,18 @@
 				<woversion>[5.4,5.5)</woversion>
 			</properties>
 		</profile>
+		<profile>
+			<id>hudson</id>
+			<distributionManagement>
+				<snapshotRepository>
+					<id>wocommunity.deployment</id>
+					<uniqueVersion>false</uniqueVersion>
+					<name>WOCommunity Maven2 Snapshots Repository</name>
+					<!-- Saving some bandwidth -->
+					<url>http://wo-repository.moleque.com.br/nexus/content/repositories/snapshots/</url>
+				</snapshotRepository>
+			</distributionManagement>
+		</profile>
 	</profiles>
 	<build>
 		<testSourceDirectory>${project.basedir}/Tests</testSourceDirectory>
