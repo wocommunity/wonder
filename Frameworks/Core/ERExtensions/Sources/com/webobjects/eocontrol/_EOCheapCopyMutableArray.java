@@ -114,7 +114,7 @@ public class _EOCheapCopyMutableArray extends NSMutableArray implements EOFaulti
 		_immutableCopy = null;
 	}
 
-	public void addObjects(Object objects[]) {
+	public void addObjects(Object... objects) {
 		willRead();
 		super.addObjects(objects);
 		_immutableCopy = null;
