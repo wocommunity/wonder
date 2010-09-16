@@ -109,7 +109,7 @@ function input_keypress(evt) {
 
 // Gets the [x,y] position on the page of the element.
 function get_xy(el) {
-  var result = [document.viewport.getScrollOffsets().left - el.cumulativeScrollOffset().left, document.viewport.getScrollOffsets().top - el.cumulativeScrollOffset().top];
+  var result = [document.viewport.getScrollOffsets().left - $(el).cumulativeScrollOffset().left, document.viewport.getScrollOffsets().top - $(el).cumulativeScrollOffset().top]; 
   while (el) {
     result[0] += el.offsetLeft;
 	result[1] += el.offsetTop;
