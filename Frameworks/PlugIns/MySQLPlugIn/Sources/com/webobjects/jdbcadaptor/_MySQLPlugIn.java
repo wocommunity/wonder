@@ -245,7 +245,7 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 					);
 			
 			// Write a fresh copy of JDBCInfo.plist to /tmp
-			writeJDBCInfo(mutableInfo);
+			//writeJDBCInfo(mutableInfo);
 			
 			jdbcInfo = mutableInfo.immutableClone();
 	    }
