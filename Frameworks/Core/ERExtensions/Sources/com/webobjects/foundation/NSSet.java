@@ -329,7 +329,7 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 	}
 
 	public boolean isEmpty() {
-		return _count == 0;
+		return count() == 0;
 	}
 
 	public boolean isEqualToSet(NSSet<?> otherSet) {
@@ -425,7 +425,7 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		return set;
 	}
 	public int size() {
-		return _count;
+		return count();
 	}
 	public Object[] toArray() {
 		Object[] currObjects = objectsNoCopy();
