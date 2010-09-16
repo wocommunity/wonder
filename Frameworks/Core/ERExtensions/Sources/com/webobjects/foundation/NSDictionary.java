@@ -584,11 +584,11 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 	}
 
 	public int size() {
-		return _count;
+		return count();
 	}
 
 	public boolean isEmpty() {
-		return _count <= 0;
+		return count() <= 0;
 	}
 
 	public boolean containsKey(Object key) {
