@@ -11,6 +11,7 @@ import java.util.Enumeration;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.directtoweb.D2WComponent;
@@ -83,6 +84,11 @@ public class ERD2WSwitchComponent extends D2WSwitchComponent {
     public void appendToResponse(WOResponse r, WOContext c) {
         maybeResetCaches();
         super.appendToResponse(r, c);
+    }
+
+    public void takeValuesFromRequest(WORequest r, WOContext c) {
+        maybeResetCaches();
+        super.takeValuesFromRequest(r, c);
     }
 
     private D2WContext _context;
