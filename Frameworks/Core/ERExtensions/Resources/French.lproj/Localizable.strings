@@ -1,0 +1,18 @@
+{
+	"Could not save your changes: " = "Vos changements n'ont pas &eacute;t&eacute; sauvegard&eacute;s : ";
+	"ERXArrayChooser.noneString" = "- aucun -";
+	"ERXBatchNavigationBar.items_per_page" = "&eacute;l&eacute;ments/page";
+	"ERXBatchNavigationBar.of" = "de";
+	"ERXBatchNavigationBar.page" = "Page";
+	"ERXBatchNavigationBar.show" = "Afficher";
+	"ERXCheckboxMatrix.deselectAll" = "Aucun";
+	"ERXCheckboxMatrix.selectAll" = "Tous";
+	"ERXSortOrder.sortBy" = "S&eacute;lectionn&eacute; pour ordonnancer cette colonne";
+	"WOToOneRelationship.noneString" = "- aucun -";
+   	"ERXFlickrBatchNavigation.previous" = " Pr&eacute;c";
+   	"ERXFlickrBatchNavigation.next" = "Suiv ";
+   	"ERXFlickrBatchNavigation.item" = "&eacute;l&eacute;ment";
+	"ERXFlickrBatchNavigation.page" = "par Page";
+	"ERXFlickrBatchNavigation.show" = "Afficher: ";
+	"ERXFlickrBatchNavigation.all" = "Tous";
+}

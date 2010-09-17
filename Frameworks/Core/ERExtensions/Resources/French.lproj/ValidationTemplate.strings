@@ -1,0 +1,16 @@
+{
+	"EOObjectNotAvailableException" = "Cet objet n'a pas &eacute;t&eacute; retrouv&eacute; dans la base de donn&eacute;es. Il a peut-&ecirc;tre &eacute;t&eacute; supprim&eacute; par quelqu'un d'autre.";
+	"ExceedsMaximumLengthException" = "La valeur entr&eacute;e pour <b>@@displayNameForProperty@@</b> exc&egrave;de la longueur permise de <b>@@attribute.width@@</b>.";
+	"InvalidNumberException" = "Cette valeur n'est pas num&eacute;rique.";
+	"InvalidValueException" = "La valeur entr&eacute;e pour <b>@@displayNameForEntity@@</b> n'est pas valide.";
+	"MandatoryToManyRelationshipException" = "Un <b>@@displayNameForEntity@@</b> doit poss&eacute;der au-moins une <b>@@displayNameForProperty@@</b>.";
+	"MandatoryToOneRelationshipException" = "Un <b>@@displayNameForEntity@@</b> doit poss&eacute;der un <b>@@displayNameForProperty@@</b>.";
+	"NullPropertyException" = "La valeur <b>@@displayNameForProperty@@</b> est requise.";
+	"ObjectRemovalException" = "Ne peut supprimer <b>@@displayNameForEntity@@</b>. Vous devez supprimer cet &eacute;l&eacute;ment dans <b>@@displayNameForProperty@@</b>";
+	"ObjectsRemovalException" = "Ne peut supprimer <b>@@displayNameForEntity@@</b>. Vous devez supprimer ces &eacute;l&eacute;ments dans <b>@@displayNameForProperty@@</b>.";
+	"Test validation message for unit test" = "&Eacute;CHEC - Le ERD arrive avant ceci";
+	"Test validation message for unit test in ERX" = "SUCCES - Le ERD arrive avant ceci";
+	"ValueConversionException" = "La valeur entr&eacute;e pour <b>@@displayNameForProperty@@</b> n'est pas du type <b>@@attribute.valueClass@@</b>.";
+	"UniquenessViolationNewObject" = "<b>@@displayNameForEntity@@</b> avec <b>@@displayNameForProperty@@</b> existe d&eacute;j&agrave;.";
+	"UniquenessViolationExistingObject" = "<b>@@displayNameForEntity@@</b> avec <b>@@displayNameForProperty@@</b> existe d&eacute;j&agrave;.";
+}
