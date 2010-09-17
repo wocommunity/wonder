@@ -106,6 +106,36 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 		    return new NSArray/*<EOSQLExpression>*/(_expressionForString((new StringBuilder()).append("ALTER TABLE ").append(formatTableName(tableName)).append(" CHANGE ").append(formatColumnName(columnName)).append(" ").append(formatColumnName(newName)).append(" ").append(attribute.externalType()).append(nullStatement).toString()));
 		}
 		
+        private String statementToCreateDataTypeClause(ColumnTypes columntypes) {
+            int size = columntypes.precision();
+            if (size == 0) {
+               size = columntypes.width();
+            }
+
+            if (size == 0) {
+                return columntypes.name();
+            }
+
+            int scale = columntypes.scale();
+            if (scale == 0) {
+                return columntypes.name() + "(" + size + ")";
+            }
+
+            return columntypes.name() + "(" + size + "," + scale + ")";
+        }
+
+		@Override
+        public NSArray statementsToConvertColumnType(String columnName, String tableName, ColumnTypes oldType, ColumnTypes newType, NSDictionary options) {
+
+			String columnTypeString = statementToCreateDataTypeClause(newType);
+            StringBuffer sb = new StringBuffer();
+            sb.append("ALTER TABLE ").append(formatTableName(tableName));
+            sb.append(" MODIFY ").append(formatColumnName(columnName));
+            sb.append(' ').append(columnTypeString);
+            NSArray statements = new NSArray(_expressionForString(sb.toString()));
+            return statements;
+        }
+
 		@Override
 		public boolean supportsDirectColumnRenaming() {
 		    return true;
@@ -159,6 +189,8 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 			return new NSArray/*<EOSQLExpression>*/(_expressionForString((new StringBuilder()).append("rename table ").append(tableName).append(" to ").append(newName).toString()));
 		}
 
+		
+		
 		@Override
 		public boolean supportsSchemaSynchronization() {
 			return true;
