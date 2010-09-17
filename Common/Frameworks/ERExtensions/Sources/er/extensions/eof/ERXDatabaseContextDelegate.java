@@ -180,8 +180,13 @@ public class ERXDatabaseContextDelegate {
 				NSArray models = databaseContext.database().models();
 				for(Enumeration e = models.objectEnumerator(); e.hasMoreElements(); ) {
 					EOModel model = (EOModel)e.nextElement();
-					NSDictionary dict = model.connectionDictionary();
-					log.info(model.name() + ": " + (dict == null ? "No connection dictionary!" : dict.toString()));
+					NSDictionary connectionDictionary = model.connectionDictionary();
+					if (connectionDictionary != null) {
+						NSMutableDictionary mutableConnectionDictionary = connectionDictionary.mutableClone();
+						mutableConnectionDictionary.setObjectForKey("<password deleted for log>", "password");
+						connectionDictionary = mutableConnectionDictionary;
+					}
+					log.info(model.name() + ": " + (connectionDictionary == null ? "No connection dictionary!" : connectionDictionary.toString()));
 				}
 				if ("JDBC".equals(databaseContext.adaptorContext().adaptor().name())) {
 					new ERXJDBCConnectionAnalyzer(databaseContext.database().adaptor().connectionDictionary());
