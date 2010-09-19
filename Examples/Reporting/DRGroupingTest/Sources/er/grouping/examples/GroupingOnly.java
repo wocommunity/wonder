@@ -6,9 +6,10 @@
 //
 package er.grouping.examples;
 
+import webobjectsexamples.businesslogic.movies.common.Movie;
+
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
-import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 
 import er.grouping.DRGroup;
@@ -28,7 +29,7 @@ public class GroupingOnly extends WOComponent {
     }
 
     /** @TypeInfo Movie */
-    public EOEnterpriseObject aMovie;
+    public Movie aMovie;
     public DRRecordGroup aDRRecordGroup;
 
     public String criteriaForRow() {
