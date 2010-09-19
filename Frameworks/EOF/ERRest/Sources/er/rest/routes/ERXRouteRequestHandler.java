@@ -311,6 +311,9 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	 *            the route to add
 	 */
 	public void addRoute(ERXRoute route) {
+		if (log.isDebugEnabled()) {
+			log.debug("adding route " + route);
+		}
 		_routes.addObject(route);
 	}
 
@@ -331,6 +334,22 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	 */
 	public NSArray<ERXRoute> routes() {
 		return _routes.immutableClone();
+	}
+	
+	/**
+	 * Returns the routes for the given controller class.
+	 * 
+	 * @param routeController the controller class
+	 * @return the routes for the given controller class
+	 */
+	public NSArray<ERXRoute> routesForControllerClass(Class<? extends ERXRouteController> routeController) {
+		NSMutableArray<ERXRoute> routes = new NSMutableArray<ERXRoute>();
+		for (ERXRoute route : _routes) {
+			if (route.controller() == routeController) {
+				routes.add(route);
+			}
+		}
+		return routes;
 	}
 
 	/**
@@ -381,13 +400,18 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	 *            the name of the route controller
 	 */
 	public void addRoutes(String entityName, Class<? extends ERXRouteController> routeControllerClass) {
-		boolean addDefaultRoutes = false;
+		addDeclaredRoutes(entityName, routeControllerClass, true);
+	}
+	
+	protected void addDeclaredRoutes(String entityName, Class<? extends ERXRouteController> routeControllerClass, boolean addDefaultRoutesIfNoDeclaredRoutesFound) {
+		boolean declaredRoutesFound = false;
 		try {
 			Method addRoutesMethod = routeControllerClass.getMethod("addRoutes", String.class, ERXRouteRequestHandler.class);
 			addRoutesMethod.invoke(null, entityName, this);
+			declaredRoutesFound = true;
 		}
 		catch (NoSuchMethodException e) {
-			addDefaultRoutes = true;
+			// ignore
 		}
 		catch (Throwable t) {
 			throw new RuntimeException("Failed to add routes for " + routeControllerClass + ".", t);
@@ -401,7 +425,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 				Path pathAnnotation = routeMethod.getAnnotation(Path.class);
 				Paths pathsAnnotation = routeMethod.getAnnotation(Paths.class);
 				if (pathAnnotation != null || pathsAnnotation != null) {
-					addDefaultRoutes = false;
+					declaredRoutesFound = false;
 
 					ERXRoute.Method method = null;
 					for (Annotation annotation : routeMethod.getAnnotations()) {
@@ -434,17 +458,19 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 					}
 					if (pathAnnotation != null) {
 						addRoute(new ERXRoute(entityName, pathAnnotation.value(), method, routeControllerClass, actionName));
+						declaredRoutesFound = true;
 					}
 					if (pathsAnnotation != null) {
 						for (Path path : pathsAnnotation.value()) {
 							addRoute(new ERXRoute(entityName, path.value(), method, routeControllerClass, actionName));
 						}
+						declaredRoutesFound = true;
 					}
 				}
 			}
 		}
 
-		if (addDefaultRoutes) {
+		if (addDefaultRoutesIfNoDeclaredRoutesFound && !declaredRoutesFound) {
 			ERXRouteRequestHandler.log.warn("No 'addRoutes(entityName, routeRequetHandler)' method and no @Path designations found on '" + routeControllerClass.getSimpleName() + "'. Registering default routes instead.");
 			addDefaultRoutes(entityName, routeControllerClass);
 		}
@@ -539,6 +565,12 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	 *            the controller class
 	 */
 	public void addDefaultRoutes(String entityName, String entityType, boolean numericPKs, Class<? extends ERXRouteController> controllerClass) {
+		NSArray<ERXRoute> existingRoutes = routesForControllerClass(controllerClass);
+		
+		if (existingRoutes.isEmpty()) {
+			addDeclaredRoutes(entityName, controllerClass, false);
+		}
+		
 		String variableName = ERXStringUtilities.uncapitalize(entityName); // MS: We want this to always be Java variable-style "lowerFirstLetter"
 
 		String externalName = ERXRestNameRegistry.registry().externalNameForInternalName(entityName);

@@ -2,7 +2,6 @@ package er.rest.routes;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
@@ -1105,44 +1104,44 @@ public class ERXRouteController extends WODirectAction {
 	protected void _takeRouteParametersFromRequest(WOActionResults results) {
 		Class<?> resultsClass = results.getClass();
 		for (ERXRoute.Key key : _routeKeys.allKeys()) {
-			String setMethodName = "set" + ERXStringUtilities.capitalize(key.key());
-			try {
-				Method setStringMethod = resultsClass.getMethod(setMethodName, String.class);
-				ERXRouteParameter routeParameter = setStringMethod.getAnnotation(ERXRouteParameter.class);
-				if (routeParameter != null) {
-					setStringMethod.invoke(results, routeStringForKey(key.key()));
+			ERXRoute.RouteParameterMethod routeParameterMethod = key._routeParameterMethodForClass(resultsClass);
+			String keyName = key.key();
+			
+			if (routeParameterMethod == null) {
+				// MS: because we lowercase SPPerson into spPerson, the default capitalization would be SpPerson.
+				// We want to do a first pass where we check for entities that equalsIgnoreCase match the
+				// keyName and guess that as the capitalization first. If that fails, THEN we fall back to a
+				// simple capitalization.
+				String capitalizedKeyName = ERXRestClassDescriptionFactory._guessMismatchedCaseEntityName(keyName);
+				if (capitalizedKeyName == null) {
+					capitalizedKeyName = ERXStringUtilities.capitalize(keyName);
 				}
-			}
-			catch (NoSuchMethodException e) {
-				try {
-					Class<?> valueType = _NSUtilities.classWithName(key.valueType());
-					Method setObjectMethod = resultsClass.getMethod(setMethodName, valueType);
-					ERXRouteParameter routeParameter = setObjectMethod.getAnnotation(ERXRouteParameter.class);
-					if (routeParameter != null) {
-						setObjectMethod.invoke(results, routeObjectForKey(key.key()));
+				String setMethodName = "set" + capitalizedKeyName;
+				Method matchingMethod = null;
+				Method[] possibleMethods = resultsClass.getMethods();
+				for (Method possibleMethod : possibleMethods) {
+					ERXRouteParameter routeParameter = possibleMethod.getAnnotation(ERXRouteParameter.class);
+					if (routeParameter != null && (keyName.equals(routeParameter.value()) || possibleMethod.getName().equals(setMethodName))) {
+						matchingMethod = possibleMethod;
+						break;
 					}
 				}
-				catch (NoSuchMethodException e2) {
-					// SKIP
-				}
-				catch (IllegalArgumentException e2) {
-					e2.printStackTrace();
-				}
-				catch (IllegalAccessException e2) {
-					e2.printStackTrace();
-				}
-				catch (InvocationTargetException e2) {
-					e2.printStackTrace();
-				}
+				routeParameterMethod = new ERXRoute.RouteParameterMethod(matchingMethod);
+				key._setRouteParameterMethodForClass(routeParameterMethod, resultsClass);
 			}
-			catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			}
-			catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-			catch (InvocationTargetException e) {
-				e.printStackTrace();
+			
+			if (routeParameterMethod.hasMethod()) {
+				try {
+					if (routeParameterMethod.isStringParameter()) {
+						routeParameterMethod.method().invoke(results, routeStringForKey(keyName));
+					}
+					else {
+						routeParameterMethod.method().invoke(results, routeObjectForKey(keyName));
+					}
+				}
+				catch (Throwable t) {
+					throw NSForwardException._runtimeExceptionForThrowable(t);
+				}
 			}
 		}
 	}
