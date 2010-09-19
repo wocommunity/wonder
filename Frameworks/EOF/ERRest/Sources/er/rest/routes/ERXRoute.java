@@ -282,6 +282,17 @@ public class ERXRoute {
 	}
 
 	/**
+	 * Clears any caches that may exist on ERXRoutes (probably only useful to JRebel, to clear the route parameter method cache).
+	 */
+	public void _clearCaches() {
+		for (ERXRoute.Key key : _keys) {
+			key._clearRouteParameterMethodCache();
+		}
+		ERXRoute.ControllerKey._clearRouteParameterMethodCache();
+		ERXRoute.ActionKey._clearRouteParameterMethodCache();
+	}
+	
+	/**
 	 * Returns the route keys for the given URL.
 	 * 
 	 * @param url
@@ -424,6 +435,10 @@ public class ERXRoute {
 
 		public String valueType() {
 			return _valueType;
+		}
+		
+		public void _clearRouteParameterMethodCache() {
+			_routeParameterMethodCache.clear();
 		}
 		
 		public RouteParameterMethod _routeParameterMethodForClass(Class<?> resultsClass) {
