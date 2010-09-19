@@ -21,6 +21,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOObjectStore;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -74,6 +75,7 @@ public class ERXRouteController extends WODirectAction {
 	private ERXRestRequestNode _requestNode;
 	private NSKeyValueCoding _options;
 	private NSSet<String> _prefetchingKeyPaths;
+	private boolean _shouldDisposeEditingContext;
 
 	/**
 	 * Constructs a new ERXRouteController.
@@ -83,6 +85,7 @@ public class ERXRouteController extends WODirectAction {
 	 */
 	public ERXRouteController(WORequest request) {
 		super(request);
+		_shouldDisposeEditingContext = true;
 		ERXRouteController._registerControllerForRequest(this, request);
 	}
 
@@ -1136,7 +1139,11 @@ public class ERXRouteController extends WODirectAction {
 						routeParameterMethod.method().invoke(results, routeStringForKey(keyName));
 					}
 					else {
-						routeParameterMethod.method().invoke(results, routeObjectForKey(keyName));
+						Object routeObject = routeObjectForKey(keyName);
+						if (routeObject instanceof EOEnterpriseObject && ((EOEnterpriseObject)routeObject).editingContext() == _editingContext) {
+							_shouldDisposeEditingContext = false;
+						}
+						routeParameterMethod.method().invoke(results, routeObject);
 					}
 				}
 				catch (Throwable t) {
@@ -1542,7 +1549,7 @@ public class ERXRouteController extends WODirectAction {
 	 * Disposes any resources the route controller may be holding onto (like its editing context).
 	 */
 	public void dispose() {
-		if (_editingContext != null) {
+		if (_shouldDisposeEditingContext && _editingContext != null) {
 			_editingContext.dispose();
 			_editingContext = null;
 		}
