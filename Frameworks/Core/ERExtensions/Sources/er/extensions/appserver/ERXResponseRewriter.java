@@ -10,15 +10,19 @@ import org.apache.log4j.Logger;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequestHandler;
 import com.webobjects.appserver.WOResourceManager;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
 
 import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.components.ERXStyleSheet;
 import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXSelectorUtilities;
 import er.extensions.foundation.ERXStringUtilities;
 
 /**
@@ -44,12 +48,14 @@ public class ERXResponseRewriter {
 
 	private static final String TOP_INDEX_KEY = "ERXResponseRewriter.topIndex";
 
+	private static final String CONTEXT_OBSERVER_KEY = "ERXResponseRewriter.contextObserver";
+
 	private static Map<WOComponent, NSMutableDictionary<String, Object>> _ajaxPageUserInfos;
 
 	private static Map<WOComponent, NSMutableDictionary<String, Object>> _pageUserInfos;
 
 	private static Delegate _delagate;
-
+	
 	/**
 	 * Represents a resource in a framework, or a fully-qualified URL if
 	 * fileName starts with a / or contains :// .
@@ -81,6 +87,20 @@ public class ERXResponseRewriter {
 		@Override
 		public String toString() {
 			return "[Resource: framework = " + _framework + "; name = " + _fileName + "]";
+		}
+	}
+	
+	/**
+	 * ERXResponseRewriter uses the ContextObserver to reset the topIndex value at the end 
+	 * of the request.  You should not need to invoke this class directly.
+	 */
+	public static class ContextObserver {
+		public void didHandleRequest(NSNotification n) {
+			WOContext context = (WOContext)n.object();
+			NSMutableDictionary<String, Object> pageInfo = ERXResponseRewriter.ajaxPageUserInfo(context);
+			pageInfo.removeObjectForKey(TOP_INDEX_KEY);
+			pageInfo.removeObjectForKey(CONTEXT_OBSERVER_KEY);
+			NSNotificationCenter.defaultCenter().removeObserver(this, WORequestHandler.DidHandleRequestNotification, context);
 		}
 	}
 
@@ -336,6 +356,15 @@ public class ERXResponseRewriter {
 			Integer topIndex = (Integer) pageInfo.objectForKey(ERXResponseRewriter.TOP_INDEX_KEY);
 			if (topIndex == null) {
 				topIndex = Integer.valueOf(0);
+				//Create an observer to reset the topIndex at the end of the request
+				ContextObserver contextObserver = new ContextObserver();
+				NSNotificationCenter.defaultCenter().addObserver(
+						contextObserver, 
+						ERXSelectorUtilities.notificationSelector("didHandleRequest"), 
+						WORequestHandler.DidHandleRequestNotification, 
+						context);
+				//Stick the observer in the pageInfo dictionary so it isn't garbage collected
+				pageInfo.setObjectForKey(contextObserver, CONTEXT_OBSERVER_KEY);
 			}
 			response.setContent(ERXStringUtilities.insertString(responseContent, content, topIndex));
 			pageInfo.setObjectForKey(Integer.valueOf(topIndex.intValue() + content.length()), ERXResponseRewriter.TOP_INDEX_KEY);
@@ -352,7 +381,7 @@ public class ERXResponseRewriter {
 		}
 		return inserted;
 	}
-
+	
 	/**
 	 * Adds a script tag with a correct resource url into the html head tag if
 	 * it isn't already present in the response, or inserts an Ajax OnDemand tag
