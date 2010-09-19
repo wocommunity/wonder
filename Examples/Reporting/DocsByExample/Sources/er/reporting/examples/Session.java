@@ -151,6 +151,61 @@ public class Session extends ERXSession {
         */
 
     }
+	public DRReportModel getReportModel() {
+		return reportModel;
+	}
+	public void setReportModel(DRReportModel reportModel) {
+		this.reportModel = reportModel;
+	}
+	public DRReportModel getReportModel2() {
+		return reportModel2;
+	}
+	public void setReportModel2(DRReportModel reportModel2) {
+		this.reportModel2 = reportModel2;
+	}
+	public NSMutableArray getAttribArray() {
+		return attribArray;
+	}
+	public void setAttribArray(NSMutableArray attribArray) {
+		this.attribArray = attribArray;
+	}
+	public NSMutableArray getCritArray() {
+		return critArray;
+	}
+	public void setCritArray(NSMutableArray critArray) {
+		this.critArray = critArray;
+	}
+	public NSArray getAttribArray2() {
+		return attribArray2;
+	}
+	public void setAttribArray2(NSArray attribArray2) {
+		this.attribArray2 = attribArray2;
+	}
+	public NSArray getCritArray2() {
+		return critArray2;
+	}
+	public void setCritArray2(NSArray critArray2) {
+		this.critArray2 = critArray2;
+	}
+	public NSArray getAttribArray3() {
+		return attribArray3;
+	}
+	public void setAttribArray3(NSArray attribArray3) {
+		this.attribArray3 = attribArray3;
+	}
+	public NSArray getCritArray3() {
+		return critArray3;
+	}
+	public void setCritArray3(NSArray critArray3) {
+		this.critArray3 = critArray3;
+	}
+	public String getSelectedGroupingCriteriaString() {
+		return selectedGroupingCriteriaString;
+	}
+	public void setSelectedGroupingCriteriaString(
+			String selectedGroupingCriteriaString) {
+		this.selectedGroupingCriteriaString = selectedGroupingCriteriaString;
+	}
 
 
 }
