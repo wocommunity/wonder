@@ -8,6 +8,7 @@ import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation._NSUtilities;
 
 public class ERXRestClassDescriptionFactory {
@@ -16,8 +17,8 @@ public class ERXRestClassDescriptionFactory {
 
 	public static String _guessMismatchedCaseEntityName(String mismatchedCaseEntityName) {
 		String guessedEntityName = null;
-		for (EOModel model : EOModelGroup.defaultGroup().models()) {
-			for (EOEntity entity : model.entities()) {
+		for (EOModel model : (NSArray<EOModel>)EOModelGroup.defaultGroup().models()) {
+			for (EOEntity entity : (NSArray<EOEntity>)model.entities()) {
 				if (entity.name().equalsIgnoreCase(mismatchedCaseEntityName)) {
 					guessedEntityName = entity.name();
 					break;
