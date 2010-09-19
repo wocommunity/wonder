@@ -88,6 +88,7 @@
     0 : *true* => emptyListMessage = ERDEmptyListMessage.emptyListMessage [er.directtoweb.ERDDelayedLocalizedAssignment],
     0 : *true* => templateNameForGroupingListPage = ERD2WGroupingListPageTemplate [com.webobjects.directtoweb.Assignment],
     0 : subTask = 'printerFriendly' => pageWrapperName = ERDPrinterFriendlyWrapper [com.webobjects.directtoweb.Assignment],
+    0 : *true* => displayNameForEntity = <ERDDefaultDisplayNameAssignment> [er.directtoweb.ERDDefaultDisplayNameAssignment],
     0 : *true* => templateNameForCompactInspectPage = ERD2WCompactInspectPageTemplate [com.webobjects.directtoweb.Assignment],
     0 : *true* => templateNameForWizardCreationPage = ERD2WWizardCreationPageTemplate [com.webobjects.directtoweb.Assignment],
     0 : *true* => templateNameForCSVGroupingListPage = ERD2WCSVGroupingListPageTemplate [com.webobjects.directtoweb.Assignment],
