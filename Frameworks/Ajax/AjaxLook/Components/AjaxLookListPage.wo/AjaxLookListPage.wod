@@ -2,8 +2,9 @@ Wrapper : WOSwitchComponent {
 	WOComponentName = d2wContext.pageWrapperName;
 }
 
-PageName : WOString {
-	value = d2wContext.pageConfiguration;
+PageName : WOGenericContainer {
+	elementName = "div";
+	id = containerID;
 }
 
 Properties : ERXListDisplay {
