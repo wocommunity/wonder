@@ -50,8 +50,10 @@ CheckBox2: WOSwitchComponent {
 	checked = checked;
 }
 
-ColSpanNumber: WOString {
-	value = colSpan;
+ColSpanTD: WOGenericContainer {
+	elementName = "td";
+	bgcolor = "#ffffff";
+	colspan = colSpan;
 }
 
 ColumnLabelRepetition: WORepetition {

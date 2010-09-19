@@ -57,8 +57,10 @@ BelowDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
 	extraPropertiesKey = "belowDisplayPropertyKeys";
 }
 
-ColSpanNumber: WOString {
-	value = colSpan;
+ColSpanTD: WOGenericContainer {
+	elementName = "td";
+	bgcolor = "#ffffff";
+	colspan = colSpan;
 }
 
 ColumnLabelRepetition: WORepetition {
@@ -122,12 +124,12 @@ FilterDisplayGroupButton2: ERDFilterDisplayGroupButton {
 }
 
 Generic1: WOGenericContainer {
-	BGCOLOR = referenceEO.backgroundColor;
+	BGCOLOR = referenceEO.backgroundColor; //VALID
 	elementName = "td";
 }
 
 Generic2: WOGenericContainer {
-	BGCOLOR = referenceEO.backgroundColor;
+	BGCOLOR = referenceEO.backgroundColor; //VALID
 	elementName = "td";
 }
 
@@ -345,11 +347,11 @@ SortOrder: ERXSortOrder {
 }
 
 String1: WOString {
-	value = referenceEO.name;
+	value = referenceEO.name; //VALID
 }
 
 String2: WOString {
-	value = referenceEO.name;
+	value = referenceEO.name; //VALID
 }
 
 SwitchComponent2: WOSwitchComponent {
