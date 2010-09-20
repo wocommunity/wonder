@@ -13,6 +13,7 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORedirect;
@@ -105,6 +106,20 @@ public class ERXDirectAction extends WODirectAction {
             }
         }             
         return result;
+    }
+    
+    /**
+     * Flushes the component cache to allow reloading components even when WOCachingEnabled=true.
+     * 
+     * @return "OK"
+     */
+    public WOActionResults flushComponentCacheAction() {
+    	WOResponse response = new WOResponse();
+    	if (canPerformActionWithPasswordKey("er.extensions.ERXFlushComponentCachePassword")) {
+    		WOApplication.application()._removeComponentDefinitionCacheContents();
+    		response.setContent("OK");
+    	}
+    	return response;
     }
 
     /**
