@@ -59,20 +59,25 @@ public class ERXEORestDelegate extends ERXAbstractRestDelegate {
 	@Override
 	protected Object _primaryKeyForObject(EOClassDescription entity, Object obj) {
 		Object pkValue;
-		EOEnterpriseObject eo = (EOEnterpriseObject) obj;
-		EOEditingContext editingContext = editingContext();
-		editingContext.lock();
-		try {
-			NSDictionary pkDict = EOUtilities.primaryKeyForObject(editingContext, eo);
-			if (pkDict != null && pkDict.count() == 1) {
-				pkValue = pkDict.allValues().lastObject();
-			}
-			else {
-				pkValue = pkDict;
-			}
+		if (obj == null) {
+			pkValue = null;
 		}
-		finally {
-			editingContext.unlock();
+		else {
+			EOEnterpriseObject eo = (EOEnterpriseObject) obj;
+			EOEditingContext editingContext = eo.editingContext();
+			editingContext.lock();
+			try {
+				NSDictionary pkDict = EOUtilities.primaryKeyForObject(editingContext, eo);
+				if (pkDict != null && pkDict.count() == 1) {
+					pkValue = pkDict.allValues().lastObject();
+				}
+				else {
+					pkValue = pkDict;
+				}
+			}
+			finally {
+				editingContext.unlock();
+			}
 		}
 		return pkValue;
 	}

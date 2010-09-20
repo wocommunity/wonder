@@ -31,6 +31,16 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
     public PostgresqlSynchronizationFactory(EOAdaptor adaptor) {
         super(adaptor);
     }
+    
+	public String _columnCreationClauseForAttribute(EOAttribute attribute) {
+		return addCreateClauseForAttribute(attribute).toString();
+	}
+
+	public StringBuffer addCreateClauseForAttribute(EOAttribute eoattribute) {
+		EOSQLExpression expression = _expressionForEntity(eoattribute.entity());
+		expression.addCreateClauseForAttribute(eoattribute);
+		return new StringBuffer(expression.listString());
+	}
 
     private boolean enableIdentifierQuoting() {
         if(_enableIdentifierQuoting == null) {
