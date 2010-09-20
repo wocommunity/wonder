@@ -60,6 +60,9 @@ public class ERD2WEditRelationshipPage extends D2WEditRelationshipPage {
      */
     public WOComponent selectAction() {
         WOComponent nextPage = super.selectAction();
+        if (ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("returnOnSelect"), false)) {
+        	nextPage = returnAction();
+        }
         if(nextPage == null) {
             nextPage = context().page();
         }
