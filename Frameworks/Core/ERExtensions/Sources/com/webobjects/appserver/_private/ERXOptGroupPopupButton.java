@@ -20,18 +20,24 @@ import er.extensions.foundation.ERXKeyValueCodingUtilities;
  * 
  * @binding group Object, required - keyPath to value that changes when the group of options changes
  * @binding label String, optional - String used as label for an option group
+ * @binding itemClass, optional - String CSS class name for this item, browser support is inconsistent
+ * @binding itemStyle, optional - String CSS style for this item, browser support is inconsistent
  */
 public class ERXOptGroupPopupButton extends WOPopUpButton
 {
     
     protected WOAssociation group;
     protected WOAssociation label;
+    protected WOAssociation itemStyle;
+    protected WOAssociation itemClass;
     
     public ERXOptGroupPopupButton(String name, NSDictionary associations, WOElement template)
     {
         super(name, associations, template);
         group = (WOAssociation)_associations.removeObjectForKey("group");
         label = (WOAssociation)_associations.removeObjectForKey("label");
+        itemStyle = (WOAssociation)_associations.removeObjectForKey("itemStyle");
+        itemClass = (WOAssociation)_associations.removeObjectForKey("itemClass");
         
         if (group == null)
         {
@@ -106,6 +112,19 @@ public class ERXOptGroupPopupButton extends WOPopUpButton
              }
  
              response._appendContentAsciiString("\n<option");
+             
+             if (itemStyle != null) {
+                 String style = (String) itemStyle.valueInComponent(parent);
+                 if (style != null) {
+                	 response._appendTagAttributeAndValue("style", style, true);
+                 }
+             }
+             if (itemClass != null) {
+                 String cssClass = (String) itemClass.valueInComponent(parent);
+                 if (cssClass != null) {
+                	 response._appendTagAttributeAndValue("class", cssClass, true);
+                 }
+             }
              
              String valueAsString = null;
              String displayStringAsString = null;
