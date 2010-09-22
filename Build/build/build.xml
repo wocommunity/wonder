@@ -400,7 +400,7 @@
             <param name="project.dir" value="Applications/Uber" />
 
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.logic}/WOOgnl/Ajax/ERRest/ERTaggable/ERChronic/ERJavaMail/ERAttachment/JavaMemoryAdaptor" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.logic}/WOOgnl/Ajax/ERRest/ERTaggable/ERChronic/ERJavaMail/ERAttachment/JavaMemoryAdaptor/H2PlugIn/WOLips" />
        </antcall>
     </target>
 
@@ -924,7 +924,7 @@
             <param name="project.principal.class" value="com.webobjects.monitor.application.Application" />
             <param name="project.name" value="JavaMonitor" />
             <param name="project.dir" value="Applications/JavaMonitor" />
-      		<param name="wo.external.root.bundles" value="ERJars/ERExtensions/JavaWOExtensions/JavaMonitorFramework/Ajax" />
+      		<param name="wo.external.root.bundles" value="ERJars/ERExtensions/ERRest/JavaWOExtensions/JavaMonitorFramework/Ajax" />
       		<param name="wo.external.root.bundles.embed" value="${wonder.deployment.embed.jars}" />
       		<param name="wo.system.root.bundles.embed" value="${wonder.deployment.embed.jars}" />
         </antcall>
