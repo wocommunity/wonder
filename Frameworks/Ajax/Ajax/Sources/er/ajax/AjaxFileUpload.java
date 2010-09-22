@@ -11,7 +11,6 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSData;
-import com.webobjects.foundation.NSLog;
 
 import er.extensions.appserver.ERXRequest;
 import er.extensions.appserver.ERXWOContext;
@@ -56,6 +55,10 @@ import er.extensions.foundation.ERXFileUtilities;
  * @binding mimeType set from the content-type of the upload header if available
  * @binding class the class attribute of the file input
  * @binding style the style attribute of the file input
+ * @binding id the id attribute of the file input
+ * @binding onFileSelected optional JS code that is called when the file selection changes. To auto-start the upload when 
+ * 			a file is selected, set uploadFunctionName to e.g. "startUpload" and onFileSelected to "startUpload()"
+ * @binding uploadProgress access to the underlying AjaxUploadProgress object
  * 
  * @author mschrag
  */
