@@ -1,8 +1,15 @@
 # Connection Dictionary
-dbConnectURLGLOBAL=jdbc:FrontBase://127.0.0.1/Uber
-dbConnectUserGLOBAL=Uber
+#dbConnectURLGLOBAL=jdbc:FrontBase://127.0.0.1/Uber
+#dbConnectUserGLOBAL=Uber
+#dbConnectPasswordGLOBAL=
+#dbConnectDriverGLOBAL=
+
+# H2 Connection Dictionary
+dbConnectURLGLOBAL=jdbc:h2:file:/tmp/Uber
+dbConnectUserGLOBAL=
 dbConnectPasswordGLOBAL=
-dbConnectDriverGLOBAL=
+dbConnectDriverGLOBAL=org.h2.Driver
+dbConnectPluginGLOBAL=H2PlugIn
 
 # REST
 ERXRest.allowUnsafeDelegates=true
