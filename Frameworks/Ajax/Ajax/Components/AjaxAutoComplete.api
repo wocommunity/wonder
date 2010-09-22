@@ -38,5 +38,6 @@
         <binding name="onchange"/>
     <binding name="style"/>
     <binding name="onfocus"/>
+    <binding defaults="Boolean" name="activateOnFocus"/>
     </wo>
 </wodefinitions>

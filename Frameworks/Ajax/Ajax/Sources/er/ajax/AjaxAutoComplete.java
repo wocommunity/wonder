@@ -85,6 +85,7 @@ import er.extensions.foundation.ERXValueUtilities;
  * @binding onblur onblur attribute of the text field
  * @binding onfocus onfocus attribute of the text field
  * @binding onchange onchange attribute of the text field
+ * @binding activateOnFocus activate when text field gets focus
  * @author ak
  */
 public class AjaxAutoComplete extends AjaxComponent {
