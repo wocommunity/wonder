@@ -30,5 +30,11 @@
     <binding name="class"/>
         <binding name="style"/>
     <binding name="mimeType"/>
+    <binding name="onFileSelected"/>
+    <binding name="id"/>
+    <binding name="uploadProgress"/>
+        <validation message="'progress' must be bound to a settable value">
+            <unsettable name="uploadProgress"/>
+        </validation>
     </wo>
 </wodefinitions>
