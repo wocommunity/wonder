@@ -6,6 +6,8 @@
 //
 package ag.kcmedia;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.eocontrol.EOEventCenter;
 import com.webobjects.foundation.NSNotification;
@@ -14,14 +16,13 @@ import com.webobjects.foundation.NSSelector;
 
 import er.extensions.appserver.ERXApplication;
 import er.extensions.eof.ERXConstant;
-import er.extensions.logging.ERXLogger;
 
 public class Application extends ERXApplication {
 
-    static ERXLogger log = ERXLogger.getERXLogger(Application.class);
+    static Logger log = Logger.getLogger(Application.class);
     
     public static void main(String argv[]) {
-        WOApplication.main(argv, Application.class);
+        ERXApplication.main(argv, Application.class);
     }
 
     public void didFinishedLaunching(NSNotification n) {

@@ -6,6 +6,8 @@
 //
 package ag.kcmedia;
 
+import org.apache.log4j.Logger;
+
 import ag.kcmedia.Jode.ClassProxy;
 import ag.kcmedia.Jode.PackageProxy;
 
@@ -15,10 +17,8 @@ import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
-
-import er.extensions.logging.ERXLogger;
 public class JavaBrowser extends WOComponent {
-    static final ERXLogger log = ERXLogger.getERXLogger(JavaBrowser.class,"components");
+    static final Logger log = Logger.getLogger(JavaBrowser.class);
 
     public PackageProxy currentPackage;
     public ClassProxy currentClass;

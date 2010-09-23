@@ -1,4 +1,6 @@
 package ag.kcmedia;
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.eoaccess.EOAdaptor;
@@ -11,8 +13,6 @@ import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSchemaGeneration;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
-
-import er.extensions.logging.ERXLogger;
 /**
 * Class for Component EOModeler.
  *
@@ -23,7 +23,7 @@ import er.extensions.logging.ERXLogger;
  */
 public class EOModeler extends WOComponent {
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getERXLogger(EOModeler.class,"components");
+    private static final Logger log = Logger.getLogger(EOModeler.class);
 
     /**
      * Public constructor.

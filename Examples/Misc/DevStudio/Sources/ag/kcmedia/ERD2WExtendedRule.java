@@ -6,6 +6,8 @@
 //
 package ag.kcmedia;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.directtoweb.Assignment;
 import com.webobjects.directtoweb.Rule;
 import com.webobjects.eocontrol.EOKeyValueArchiver;
@@ -16,10 +18,9 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.foundation.ERXMutableUserInfoHolderInterface;
-import er.extensions.logging.ERXLogger;
 
 public class ERD2WExtendedRule extends Rule implements ERXMutableUserInfoHolderInterface {
-    private static ERXLogger log = ERXLogger.getERXLogger(DirectAction.class);
+    private static Logger log = Logger.getLogger(DirectAction.class);
 
     public ERD2WExtendedRule() {
         super();
