@@ -20,6 +20,8 @@ import jode.bytecode.TypeSignature;
 import jode.decompiler.Decompiler;
 import jode.type.Type;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
@@ -28,10 +30,9 @@ import com.webobjects.foundation.NSSelector;
 
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
-import er.extensions.logging.ERXLogger;
 
 public class Jode extends Object {
-    static final ERXLogger log = ERXLogger.getERXLogger(JavaBrowser.class,"components");
+    static final Logger log = Logger.getLogger(JavaBrowser.class);
 
     public static NSMutableArray documentationPaths = new NSMutableArray();
     public static NSMutableDictionary allClasses = new NSMutableDictionary();
