@@ -17,11 +17,6 @@ ERXSortOrder1: ERXSortOrder {
 	key = "author";
 }
 
-ERXSortOrder2: ERXSortOrder {
-	displayGroup = group;
-	key = "lhs";
-}
-
 ERXSortOrder3: ERXSortOrder {
 	displayGroup = group;
 	key = "rhsKeyPath";
@@ -68,14 +63,14 @@ Hyperlink5: WOHyperlink {
 PopUpButton1: WOPopUpButton {
 	list = modelKeys;
 	noSelectionString = "None";
-	selection = group.queryMatch.rhsKeyPath;
+	selection = group.queryMatch.rhsKeyPath; //VALID
 	onchange = "keyForm.submit();";
 	style = "width:120px;";
 }
 
 PopUpButton2: WOPopUpButton {
-	list = model.publicRules.assignmentClassName.@unique;
-	selection = selectedRule.assignmentClassName;
+	list = model.publicRules.assignmentClassName.@unique; //VALID
+	selection = selectedRule.assignmentClassName; //VALID
 	style = "width:180px;";
 }
 
@@ -105,7 +100,7 @@ String3: WOString {
 }
 
 String7: WOString {
-	value = group.selectedObject.mutableUserInfo;
+	value = group.selectedObject.mutableUserInfo; //VALID
 }
 
 String8: WOString {
@@ -135,7 +130,7 @@ Text2: WOText {
 }
 
 Text3: WOText {
-	value = group.selectedObject.mutableUserInfo.comment;
+	value = group.selectedObject.mutableUserInfo.comment; //VALID
 	cols = 50;
 	rows = 3;
 }
