@@ -9,6 +9,8 @@ package ag.kcmedia;
 import java.io.File;
 import java.util.Enumeration;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -25,10 +27,9 @@ import com.webobjects.foundation.NSSet;
 
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXStringUtilities;
-import er.extensions.logging.ERXLogger;
 
 public class RuleEditor extends WOComponent {
-    static final ERXLogger log = ERXLogger.getERXLogger(RuleEditor.class,"components");
+    static final Logger log = Logger.getLogger(RuleEditor.class);
 
     public WODisplayGroup group;
     public String qualifierString;

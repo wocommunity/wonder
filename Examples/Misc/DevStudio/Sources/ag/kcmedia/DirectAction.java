@@ -8,6 +8,8 @@ package ag.kcmedia;
 
 import java.io.File;
 
+import org.apache.log4j.Logger;
+
 import ag.kcmedia.Jode.ClassProxy;
 
 import com.webobjects.appserver.WOActionResults;
@@ -17,10 +19,9 @@ import com.webobjects.directtoweb.ERD2WRuleEditorModel;
 import com.webobjects.foundation.NSArray;
 
 import er.extensions.appserver.ERXDirectAction;
-import er.extensions.logging.ERXLogger;
 
 public class DirectAction extends ERXDirectAction {
-    static ERXLogger log = ERXLogger.getERXLogger(DirectAction.class);
+    static Logger log = Logger.getLogger(DirectAction.class);
 
     public DirectAction(WORequest aRequest) {
         super(aRequest);

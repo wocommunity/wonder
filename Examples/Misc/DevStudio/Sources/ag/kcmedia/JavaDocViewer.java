@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
 import org.w3c.tidy.Node;
 import org.w3c.tidy.TagTable;
 import org.w3c.tidy.Tidy;
@@ -13,8 +14,6 @@ import ag.kcmedia.Jode.ClassProxy;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSMutableArray;
-
-import er.extensions.logging.ERXLogger;
 
 /**
  * Class for Component JavaDocViewer.
@@ -31,7 +30,7 @@ public class JavaDocViewer extends WOComponent {
     public ClassProxy selectedClass;
     public TagTable tt;
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getERXLogger(JavaDocViewer.class,"components");
+    private static final Logger log = Logger.getLogger(JavaDocViewer.class);
 	
     /**
      * Public constructor.
