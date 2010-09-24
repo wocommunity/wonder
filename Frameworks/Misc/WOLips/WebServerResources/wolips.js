@@ -29,7 +29,7 @@ var WOLipsClickToOpen = {
   	WOLipsClickToOpen.reload = reload;
     if (!WOLipsClickToOpen.active) {
       WOLipsClickToOpen.hideComponentList();
-      $(id).innerHTML = '<span class = "_wolUnimportant">' + verb + '</span> <span id = "_componentBreadCrumb" class = "_wolImportant">&nbsp;</span>';
+      $(id).innerHTML = '<span class = "_wolUnimportant">' + verb + '</span> <span id = "_componentBreadCrumb" class = "_wolImportant">&#160;</span>';
       WOLipsClickToOpen.oldClickHandler = document.onclick;
       WOLipsClickToOpen.oldMoveHandler = document.onmousemove;
       WOLipsClickToOpen.oldSelectHandler = document.onselectstart;
