@@ -431,7 +431,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 						else if (fixedJar.matches(frameworkPattern) || fixedJar.matches(appPattern) || fixedJar.matches(folderPattern)) {
 							normalLibs += jar + File.pathSeparator;
 						}
-						else if (fixedJar.matches(projectPattern) || fixedJar.matches(".*?/WORapidTurnaround.jar")) {
+						else if (fixedJar.matches(projectPattern) || fixedJar.matches(".*?/ERFoundation.jar") || fixedJar.matches(".*?/ERWebObjects.jar")) {
 							normalLibs += jar + File.pathSeparator;
 						}
 						else {
