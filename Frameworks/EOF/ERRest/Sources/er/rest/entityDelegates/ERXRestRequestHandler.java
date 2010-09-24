@@ -15,6 +15,7 @@ import er.extensions.appserver.ERXApplication;
 import er.extensions.eof.ERXEC;
 import er.rest.ERXRestRequestNode;
 import er.rest.format.ERXRestFormatDelegate;
+import er.rest.format.ERXWORestRequest;
 import er.rest.format.ERXWORestResponse;
 import er.rest.format.ERXXmlRestParser;
 import er.rest.format.IERXRestParser;
@@ -390,6 +391,7 @@ public class ERXRestRequestHandler extends WORequestHandler {
 	 */
 	@Override
 	public WOResponse handleRequest(WORequest request) {
+
 		WOApplication application = WOApplication.application();
 		WOContext woContext = application.createContextForRequest(request);
 		WOResponse response = application.createResponseInContext(woContext);
@@ -443,7 +445,8 @@ public class ERXRestRequestHandler extends WORequestHandler {
 				}
 
 				IERXRestParser requestParser = requestParserForType(type);
-				ERXRestRequestNode rootNode = requestParser.parseRestRequest(request, new ERXRestFormatDelegate());
+				ERXWORestRequest woRestRequest = new ERXWORestRequest(request);
+				ERXRestRequestNode rootNode = requestParser.parseRestRequest(woRestRequest, new ERXRestFormatDelegate());
 				ERXRestRequest restRequest = new ERXRestRequest(restContext, rootNode, path);
 				String method = request.method();
 				if ("GET".equalsIgnoreCase(method)) {
