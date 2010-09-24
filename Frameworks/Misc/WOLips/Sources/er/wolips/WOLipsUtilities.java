@@ -50,7 +50,7 @@ public class WOLipsUtilities {
       urlBuffer.append(URLEncoder.encode(password, "UTF-8"));
       if (params != null && !params.isEmpty()) {
         for (Object key : params.allKeys()) {
-          urlBuffer.append("&");
+          urlBuffer.append("&amp;");
           urlBuffer.append(URLEncoder.encode(key.toString(), "UTF-8"));
           urlBuffer.append("=");
           Object value = params.objectForKey(key);
