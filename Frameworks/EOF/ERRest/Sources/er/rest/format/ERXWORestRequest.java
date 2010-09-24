@@ -1,6 +1,5 @@
 package er.rest.format;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 import com.webobjects.appserver.WORequest;
@@ -18,7 +17,11 @@ public class ERXWORestRequest implements IERXRestRequest {
 	}
 
 	public InputStream streamContent() {
-		return new ByteArrayInputStream(_request.content().bytes());
+		InputStream is = _request.contentInputStream();
+		if (is == null) {
+			is = _request.content().stream();
+		}
+		return is;
 	}
 
 }
