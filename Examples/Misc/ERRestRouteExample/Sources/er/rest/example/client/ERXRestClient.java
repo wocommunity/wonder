@@ -20,6 +20,7 @@ import er.rest.ERXRestRequestNode;
 import er.rest.IERXRestDelegate;
 import er.rest.format.ERXRestFormat;
 import er.rest.format.ERXStringBufferRestResponse;
+import er.rest.format.ERXStringRestRequest;
 
 public class ERXRestClient {
 	private String _baseURL;
@@ -72,7 +73,7 @@ public class ERXRestClient {
 	/* Extract the requestNode from the given method using the given format.
 	 */
 	protected ERXRestRequestNode requestNodeWithMethod(HttpMethodBase method, ERXRestFormat format) throws IOException {
-		ERXRestRequestNode responseNode = format.parser().parseRestRequest(method.getResponseBodyAsString(), format.delegate());
+		ERXRestRequestNode responseNode = format.parser().parseRestRequest(new ERXStringRestRequest(method.getResponseBodyAsString()), format.delegate());
 		return responseNode;
 	}
 
