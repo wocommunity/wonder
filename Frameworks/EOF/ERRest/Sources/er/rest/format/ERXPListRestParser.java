@@ -52,29 +52,35 @@ public class ERXPListRestParser implements IERXRestParser {
 			}
 		}
 		else {
-			throw new IllegalArgumentException("Unknown JSON value '" + object + "'.");
+			throw new IllegalArgumentException("Unknown PLIST value '" + object + "'.");
 		}
 
 		delegate.nodeDidParse(requestNode);
 
 		return requestNode;
 	}
-
+	
+	@Deprecated
 	public ERXRestRequestNode parseRestRequest(WORequest request, ERXRestFormat.Delegate delegate) {
 		return parseRestRequest(request.contentString(), delegate);
 	}
 
+	@Deprecated
 	public ERXRestRequestNode parseRestRequest(String contentStr, ERXRestFormat.Delegate delegate) {
-		ERXRestRequestNode rootRequestNode = null;
+		return parseRestRequest(new ERXStringRestRequest(contentStr), delegate);
+	}
 
-		if (contentStr != null && contentStr.length() > 0) {
+	public ERXRestRequestNode parseRestRequest(IERXRestRequest request, ERXRestFormat.Delegate delegate) {
+		ERXRestRequestNode rootRequestNode = null;
+		String contentString = request.stringContent();
+		if (contentString != null && contentString.length() > 0) {
 			// MS: Support direct updating of primitive type keys -- so if you don't want to
 			// wrap your request in XML, this will allow it
 			// if (!contentStr.trim().startsWith("<")) {
 			// contentStr = "<FakeWrapper>" + contentStr.trim() + "</FakeWrapper>";
 			// }
 
-			Object rootObj = NSPropertyListSerialization.propertyListFromString(contentStr);
+			Object rootObj = NSPropertyListSerialization.propertyListFromString(contentString);
 			rootRequestNode = createRequestNodeForObject(null, rootObj, true, delegate);
 		}
 		else {

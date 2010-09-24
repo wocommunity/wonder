@@ -67,7 +67,7 @@ public class ERXRestFormat {
 	 * @return the parsed request node
 	 */
 	public ERXRestRequestNode parse(String str) {
-		return parser().parseRestRequest(str, _delegate);
+		return parser().parseRestRequest(new ERXStringRestRequest(str), _delegate);
 	}
 	
 	/**

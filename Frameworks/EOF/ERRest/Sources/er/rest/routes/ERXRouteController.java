@@ -49,6 +49,7 @@ import er.rest.ERXRestFetchSpecification;
 import er.rest.ERXRestRequestNode;
 import er.rest.IERXRestDelegate;
 import er.rest.format.ERXRestFormat;
+import er.rest.format.ERXWORestRequest;
 import er.rest.format.ERXWORestResponse;
 import er.rest.format.IERXRestParser;
 import er.rest.routes.jsr311.PathParam;
@@ -474,7 +475,7 @@ public class ERXRouteController extends WODirectAction {
 				if (parser == null) {
 					throw new IllegalStateException("There is no parser for the format '" + format.name() + "'.");
 				}
-				_requestNode = parser.parseRestRequest(request(), format().delegate());
+				_requestNode = parser.parseRestRequest(new ERXWORestRequest(request()), format().delegate());
 			}
 			catch (Throwable t) {
 				throw new RuntimeException("Failed to parse a " + format() + " request.", t);
