@@ -1,10 +1,12 @@
 package er.rest.format;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
-import com.webobjects.appserver.WORequest;
+import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation.NSPropertyListSerialization.PListFormat;
 
 import er.rest.ERXRestRequestNode;
 import er.rest.ERXRestUtils;
@@ -15,7 +17,9 @@ import er.rest.ERXRestUtils;
  * 
  * @author mschrag
  */
-public class ERXPListRestParser implements IERXRestParser {
+public class ERXBinaryPListRestParser implements IERXRestParser {
+	
+	
 	protected ERXRestRequestNode createRequestNodeForObject(String name, Object object, boolean rootNode, ERXRestFormat.Delegate delegate) {
 		ERXRestRequestNode requestNode = new ERXRestRequestNode(name, rootNode);
 
@@ -52,35 +56,20 @@ public class ERXPListRestParser implements IERXRestParser {
 			}
 		}
 		else {
-			throw new IllegalArgumentException("Unknown PLIST value '" + object + "'.");
+			throw new IllegalArgumentException("Unknown Binary PLIST value '" + object + "'.");
 		}
 
 		delegate.nodeDidParse(requestNode);
 
 		return requestNode;
 	}
-	
-	@Deprecated
-	public ERXRestRequestNode parseRestRequest(WORequest request, ERXRestFormat.Delegate delegate) {
-		return parseRestRequest(request.contentString(), delegate);
-	}
-
-	@Deprecated
-	public ERXRestRequestNode parseRestRequest(String contentStr, ERXRestFormat.Delegate delegate) {
-		return parseRestRequest(new ERXStringRestRequest(contentStr), delegate);
-	}
 
 	public ERXRestRequestNode parseRestRequest(IERXRestRequest request, ERXRestFormat.Delegate delegate) {
 		ERXRestRequestNode rootRequestNode = null;
-		String contentString = request.stringContent();
-		if (contentString != null && contentString.length() > 0) {
-			// MS: Support direct updating of primitive type keys -- so if you don't want to
-			// wrap your request in XML, this will allow it
-			// if (!contentStr.trim().startsWith("<")) {
-			// contentStr = "<FakeWrapper>" + contentStr.trim() + "</FakeWrapper>";
-			// }
 
-			Object rootObj = NSPropertyListSerialization.propertyListFromString(contentString);
+		if (request != null) {
+			InputStream in = request.streamContent();
+			Object rootObj = NSPropertyListSerialization.propertyListWithStream(in, PListFormat.NSPropertyListBinaryFormat_v1_0, "UTF-8");
 			rootRequestNode = createRequestNodeForObject(null, rootObj, true, delegate);
 		}
 		else {
