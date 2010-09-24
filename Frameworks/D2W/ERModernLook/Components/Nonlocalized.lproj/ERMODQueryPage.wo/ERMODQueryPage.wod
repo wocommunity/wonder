@@ -28,7 +28,7 @@ QueryPageRepetition: WOSwitchComponent {
 	displayGroup = displayGroup;
 }
 
-ClearButton: ERMSmartAjaxButton {
+ClearButton: CCSmartAjaxButton {
 	alt = "Clear Form";
 	value = d2wContext.clearButtonLabel;
 	action = clearAction;
@@ -37,7 +37,7 @@ ClearButton: ERMSmartAjaxButton {
     updateContainerID = d2wContext.idForParentMainContainer;
 }
 
-QueryButton: ERMSmartAjaxButton {
+QueryButton: CCSmartAjaxButton {
 	action = queryAction;
 	alt = "Find objects matching the query";
 	value = d2wContext.findButtonLabel;
@@ -46,7 +46,7 @@ QueryButton: ERMSmartAjaxButton {
     updateContainerID = d2wContext.idForParentMainContainer;
 }
 
-ReturnButton: ERMSmartAjaxButton {
+ReturnButton: CCSmartAjaxButton {
 	action = returnAction;
 	alt = "Returns to the previous page";
 	value = d2wContext.returnButtonLabel;

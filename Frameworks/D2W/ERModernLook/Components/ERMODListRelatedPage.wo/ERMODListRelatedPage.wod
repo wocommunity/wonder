@@ -37,14 +37,14 @@ PageWrapper: WOSwitchComponent {
 	_unroll = true;
 }
 
-ReturnButton: ERMSubmitLinkButton {
+ReturnButton: CCSubmitLinkButton {
 	alt = "Returns to the previous page";
 	value = d2wContext.returnButtonLabel;
 	action = backAction;
 	class = "Button PageButton ReturnPageButton";
 }
 
-AddNewButton : ERMSubmitLinkButton {
+AddNewButton : CCSubmitLinkButton {
   action = createItemAction;
   value = d2wContext.createButtonLabel;
   class = "Button PageButton CreatePageButton";
@@ -191,7 +191,7 @@ AddExistingButtonLabel : WOString {
   value = d2wContext.addExistingButtonLabel;
 }
 
-EditRelationshipButton : ERMSubmitLinkButton {
+EditRelationshipButton : CCSubmitLinkButton {
   action = editRelationshipAction;
   value = d2wContext.editRelationshipButtonLabel;
   class = "Button PageButton EditRelationshipButton";

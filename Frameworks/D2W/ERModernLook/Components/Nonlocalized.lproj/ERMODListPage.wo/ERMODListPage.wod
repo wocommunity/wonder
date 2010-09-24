@@ -38,7 +38,7 @@ PageWrapper: WOSwitchComponent {
 	_unroll = true;
 }
 
-ReturnButton: ERMSmartAjaxButton {
+ReturnButton: CCSmartAjaxButton {
 	alt = "Returns to the previous page";
 	value = d2wContext.returnButtonLabel;
 	action = backAction;

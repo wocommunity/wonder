@@ -1,4 +1,4 @@
-ReturnButton: ERMSubmitLinkButton {
+ReturnButton: CCSubmitLinkButton {
 	alt = "Returns to the previous page";
 	action = backAction;
 	value = "Return";
@@ -82,31 +82,31 @@ ShowActions: WOConditional {
 	condition = d2wContext.showActions;
 }
 
-BackActionButton: ERMSubmitLinkButton {
+BackActionButton: CCSubmitLinkButton {
 	action = backAction;
 	value = d2wContext.pickButtonLabel;
 	class = "Button PageButton BackPageButton";
 }
 
-CancelPageButton: ERMSubmitLinkButton {
+CancelPageButton: CCSubmitLinkButton {
 	action = nextPage;
 	value = "Cancel";
 	class = "Button PageButton CancelPageButton";
 }
 
-BranchActionButton: ERMSubmitLinkButton {
+BranchActionButton: CCSubmitLinkButton {
 	action = backAction;
 	value = branch.branchButtonLabel;
 	class = "Button PageButton BranchPageButton";
 }
 
-SelectAllButton: ERMSubmitLinkButton {
+SelectAllButton: CCSubmitLinkButton {
 	action = selectAll;
 	value = "Select All";
 	class = "Button PageButton SelectAllPageButton";
 }
 
-UnselectAllButton: ERMSubmitLinkButton {
+UnselectAllButton: CCSubmitLinkButton {
 	action = unselectAll;
 	value = "Select None";
 	class = "Button PageButton DeselectAllPageButton";

@@ -54,7 +54,7 @@ ListComponent: ERXD2WSelect {
 	_settings = settings;
 }
 
-NewButton: ERMSmartAjaxButton {
+NewButton: CCSmartAjaxButton {
 	alt = "Creates a new Object to add to the relationship";
 	action = newObjectAction;
 	class = "Button PageButton CreatePageButton";
@@ -78,7 +78,7 @@ QueryComponent: ERMD2WQuery {
 	settings = settings;
 }
 
-QueryButton: ERMSmartAjaxButton {
+QueryButton: CCSmartAjaxButton {
 	alt = "Find new objects to add to the relationship";
 	action = displayQueryAction;
 	class = "Button PageButton QueryPageButton";
@@ -88,7 +88,7 @@ QueryButton: ERMSmartAjaxButton {
 	dontSubmitForm = true;
 }
 
-ReturnButton : ERMSmartAjaxButton {
+ReturnButton : CCSmartAjaxButton {
 	alt = "Returns to the inspect page";
 	action = returnAction;
 	class = "Button PageButton ReturnPageButton";
