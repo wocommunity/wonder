@@ -1,4 +1,3 @@
-//NSPropertyListSerialization.java
 //Copyright (c) 1999, Apple Computer, Inc. All rights reserved.
 
 package com.webobjects.foundation;
@@ -14,6 +13,7 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.nio.LongBuffer;
 import java.nio.charset.Charset;
@@ -3433,7 +3433,7 @@ public class NSPropertyListSerialization {
 		 *            either 4 or 8
 		 * @return byte array
 		 */
-		public static byte[] doubleToByteArray(double d, int size) {
+		protected static byte[] doubleToByteArray(double d, int size) {
 			long i = Double.doubleToRawLongBits(d);
 			return longToByteArray2(i, size);
 		}
@@ -3446,7 +3446,7 @@ public class NSPropertyListSerialization {
 		 *            either 4 or 8
 		 * @return byte array
 		 */
-		public static byte[] floatToByteArray(float f, int size) {
+		protected static byte[] floatToByteArray(float f, int size) {
 			int i = Float.floatToRawIntBits(f);
 			return intToByteArray(i, size);
 		}
@@ -3459,7 +3459,7 @@ public class NSPropertyListSerialization {
 		 *            either 4 or 8
 		 * @return byte array
 		 */
-		public static byte[] intToByteArray(int param, int size) {
+		protected static byte[] intToByteArray(int param, int size) {
 			byte b[] = null;
 			if (size == 4) {
 				b = new byte[4];
@@ -3647,17 +3647,17 @@ public class NSPropertyListSerialization {
 		/**
 		 *
 		 */
-		public static final long	ByteMaxValue	= 0x00000000000000ffL;
+		protected static final long	ByteMaxValue	= 0x00000000000000ffL;
 
 		/**
 		 *
 		 */
-		public static final long	ShortMaxValue	= 0x000000000000ffffL;
+		protected static final long	ShortMaxValue	= 0x000000000000ffffL;
 
 		/**
 		 *
 		 */
-		public static final long	IntegerMaxValue	= 0x00000000ffffffffL;
+		protected static final long	IntegerMaxValue	= 0x00000000ffffffffL;
 
 		/**
 		 * Write binary plist to stream
@@ -3666,7 +3666,7 @@ public class NSPropertyListSerialization {
 		 * @param out
 		 * @see PListFormat
 		 */
-		protected void _propertyListWriteToStream(Object plist, OutputStream out) {
+		public void writePropertyListToStream(Object plist, OutputStream out) {
 			if (plist == null || out == null) {
 				logger.warn("Encountered empty plist or null outputstream, returning");
 				return;
@@ -3733,123 +3733,138 @@ public class NSPropertyListSerialization {
 		}
 
 		/**
-		 * Write binary plist to stream
-		 *
-		 * @param plist
-		 * @param out
-		 * @see PListFormat
+		 * Returns the object represented by the given property list object loaded from the given URL.
+		 * 
+		 * @param url the URL to load
+		 * @return the object represented by the given property list
+		 * @throws IOException if the loading fails
 		 */
-		public void propertyListWriteToStream(Map<?, ?> plist, OutputStream out) {
-			this._propertyListWriteToStream(plist, out);
+		public Object propertyListWithURL(URL url) {
+			try {
+				 URLConnection conn = url.openConnection();
+				 InputStream is = conn.getInputStream();
+				 try {
+					 return _propertyListWithStream(is);
+				 }
+				 finally {
+					 is.close();
+				 }
+			} catch (RuntimeException e) {
+				throw new NSForwardException("Failed to decode binary plist at " + url, e);
+			} catch (IOException e) {
+				throw new NSForwardException("Failed to decode binary plist at " + url, e);
+			}
+		}
+		
+		/**
+		 * Returns the object represented by the given property list object loaded from the given stream.
+		 * 
+		 * @param is the InputStream to load
+		 * @return the object represented by the given property list
+		 * @throws IOException if the loading fails
+		 */
+		public Object propertyListWithStream(InputStream is) {
+			try {
+				return _propertyListWithStream(is);
+			} catch (RuntimeException e) {
+				throw new NSForwardException("Failed to decode binary plist from the provided stream.", e);
+			} catch (IOException e) {
+				throw new NSForwardException("Failed to decode binary plist from the provided stream.", e);
+			}
+		}
+		
+		/**
+		 * Returns the object represented by the given property list object loaded from the given stream.
+		 * 
+		 * @param is the InputStream to load
+		 * @return the object represented by the given property list
+		 * @throws IOException if the loading fails
+		 */
+		protected Object _propertyListWithStream(InputStream is) throws IOException {
+			if (is == null) {
+				logger.error("The stream paramenter cannot be null.");
+				return null;
+			}
+
+			// parse the binary data into object table
+			_parseBinaryStream(is);
+
+			Object binaryObject = objectTable.get(0);
+			Object propertyListObject = null;
+			if (binaryObject instanceof BinaryDict) {
+				BinaryDict bDict = (BinaryDict)binaryObject; 
+				propertyListObject = bDict.toNSDictionary();
+			}
+			else if (binaryObject instanceof BinaryArray) {
+				BinaryArray barray = (BinaryArray) binaryObject;
+				propertyListObject = barray.toNSArray();	
+			}
+			else if (binaryObject instanceof BinarySet) {
+				BinarySet bset = (BinarySet) binaryObject;
+				propertyListObject = bset.toNSSet();	
+			}
+			else {
+				propertyListObject = binaryObject;
+			}
+			return propertyListObject;
 		}
 
-		/**
-		 * @param plist
-		 * @param out
-		 */
-		public void propertyListWriteToStream(List<?> plist, OutputStream out) {
-			this._propertyListWriteToStream(plist, out);
-		}
-
-		/**
-		 * Return parsed binary plist as xml document.
-		 *
-		 * @param url
-		 * @return xml document for plist
-		 * @throws IOException
-		 */
-		public Document binaryPlistFromXMLPlist(URL url) throws IOException {
-
+		public Document propertyListDocumentWithURL(URL url) {
 			if (url == null) {
 				logger.error("URL paramenter cannot be null");
 				return null;
 			}
 
-			// parse the binary data into object table
-			_parseBinaryFile(url);
+			try {
+				 URLConnection conn = url.openConnection();
+				 InputStream is = conn.getInputStream();
+				 try {
+					 return propertyListDocumentWithStream(is);
+				 }
+				 finally {
+					 is.close();
+				 }
+			} catch (RuntimeException e) {
+				throw new NSForwardException("Failed to decode binary plist at " + url, e);
+			} catch (IOException e) {
+				throw new NSForwardException("Failed to decode binary plist at " + url, e);
+			}
+		}
+		
+		public Document propertyListDocumentWithStream(InputStream is) {
+			if (is == null) {
+				logger.error("InputStream paramenter cannot be null");
+				return null;
+			}
 
+			try {
+				// parse the binary data into object table
+				_parseBinaryStream(is);
+				
+				return toPropertyListDocument();
+			}
+			catch (ParserConfigurationException e) {
+				throw new NSForwardException("Failed to parse binary plist.", e);
+			}
+			catch (IOException e) {
+				throw new NSForwardException("Failed to parse binary plist.", e);
+			}
+		}
+		
+		protected Document toPropertyListDocument() throws ParserConfigurationException {
 			// Convert the object table to XML and return it
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder;
 			Document root = null;
-			try {
-				builder = factory.newDocumentBuilder();
-				root = builder.newDocument();
-				root.setXmlStandalone(true);
-				// TODO: Java 1.5/DOM level 3 does not support doctype node editing, add plist dtd when we can
-				Element elem = root.createElement("plist");
-				elem.setAttribute("version", "1.0");
-				root.appendChild(elem);
-				convertObjectTableToXML(elem, root, objectTable.get(0));
-			} catch (ParserConfigurationException e) {
-				logger.error("Failed to parse binary plist at " + url.toString(), e);
-				throw new NSForwardException("Failed to parse binary plist at " + url.toString(), e);
-			}
-
+			builder = factory.newDocumentBuilder();
+			root = builder.newDocument();
+			root.setXmlStandalone(true);
+			// TODO: Java 1.5/DOM level 3 does not support doctype node editing, add plist dtd when we can
+			Element elem = root.createElement("plist");
+			elem.setAttribute("version", "1.0");
+			root.appendChild(elem);
+			convertObjectTableToXML(elem, root, objectTable.get(0));
 			return root;
-		}
-
-		/**
-		 * @param url
-		 * @return Return parsed dictionary, null for invalid url
-		 * @throws IOException
-		 */
-		public NSDictionary<?, ?> parseDict(URL url) throws IOException {
-
-			if (url == null) {
-				logger.error("URL paramenter cannot be null");
-				return null;
-			}
-
-			// parse the binary data into object table
-			_parseBinaryFile(url);
-
-			// Convert the object table to NSDictionary
-			BinaryDict bDict = (BinaryDict) objectTable.get(0);
-			NSDictionary<?, ?> ret = bDict.toNSDictionary();
-			return ret;
-		}
-
-		/**
-		 * @param is
-		 * @return NSArray
-		 * @throws IOException
-		 */
-		public NSArray<?> parseArray(InputStream is) throws IOException {
-
-			if (is == null) {
-				logger.error("InputStream paramenter cannot be null");
-				return null;
-			}
-
-			// parse the binary data into object table
-			_parseBinaryFile(is);
-
-			// Convert the object table to NSDictionary
-			BinaryArray barray = (BinaryArray) objectTable.get((int) topObject);
-			NSArray<?> ret = barray.toNSArray();
-			return ret;
-		}
-
-		/**
-		 * @param is
-		 * @return dictionary for input stream, null if for invalid input stream
-		 * @throws IOException
-		 */
-		public NSDictionary<?, ?> parseDict(InputStream is) throws IOException {
-
-			if (is == null) {
-				logger.error("InputStream paramenter cannot be null");
-				return null;
-			}
-
-			// parse the binary data into object table
-			_parseBinaryFile(is);
-
-			// Convert the object table to NSDictionary
-			BinaryDict bDict = (BinaryDict) objectTable.get((int) topObject);
-			NSDictionary<?, ?> ret = bDict.toNSDictionary();
-			return ret;
 		}
 
 		/**
@@ -3874,14 +3889,7 @@ public class NSPropertyListSerialization {
 			return true;
 		}
 
-		protected boolean _parseBinaryFile(URL url) throws IOException {
-			if (url == null) {
-				throw new IOException("Property list url cannot be null");
-			}
-			return _parseBinaryFile(url.openConnection().getInputStream());
-		}
-
-		protected boolean _parseBinaryFile(InputStream is) throws IOException {
+		protected boolean _parseBinaryStream(InputStream is) throws IOException {
 			if (is == null) {
 				throw new IOException("Property list input stream cannot be null");
 			}
@@ -5063,7 +5071,7 @@ public class NSPropertyListSerialization {
 	 */
 	@Deprecated
 	public static NSData dataFromPropertyList(Object plist) {
-		return dataFromPropertyList(plist, null);
+		return dataFromPropertyList(plist, (String)null);
 	}
 
 	/**
@@ -5081,6 +5089,25 @@ public class NSPropertyListSerialization {
 			return null;
 		return new NSData(_NSStringUtilities.bytesForString(stringFromPropertyList(plist), encoding));
 	}
+	
+	/**
+	 * For a specified property list format, create an NSData from an object.
+	 *  
+	 * @param plist the object to write
+	 * @param type type of plist to generate
+	 * @param encoding the string encoding of the bytes in the stream (ignored for binary plist format)
+	 * @see PListFormat#NSPropertyListJsonFormat_v1_0
+	 * @see PListFormat#NSPropertyListBinaryFormat_v1_0
+	 * @see PListFormat#NSPropertyListXMLFormat_v1_0
+	 * @see PListFormat#NSPropertyListOpenStepFormat
+	 * @return an NSData containing the property list output
+	 * @since 5.5.3
+	 */
+	public static NSData dataFromPropertyList(Object plist, PListFormat type, String encoding) {
+		_NSStreamingOutputData data = new _NSStreamingOutputData();
+		writePropertyListToStream(plist, data, type, encoding);
+		return data.dataNoCopy();
+	}
 
 	/**
 	 * Converts an NSData into a property list and returns it.
@@ -5095,7 +5122,7 @@ public class NSPropertyListSerialization {
 	 */
 	@Deprecated
 	public static Object propertyListFromData(NSData data) {
-		return propertyListFromData(data, null);
+		return propertyListFromData(data, (String)null);
 	}
 
 	/**
@@ -5112,6 +5139,27 @@ public class NSPropertyListSerialization {
 		if (data == null)
 			return null;
 		return propertyListFromString(_NSStringUtilities.stringForBytes(data.bytes(), encoding));
+	}
+	
+	/**
+	 * Converts an NSData into a property list and returns it.
+	 *
+	 * @param data
+	 *            the byte array to be converted to a property list
+	 * @param type type of plist to generate
+	 * @param encoding the string encoding of the bytes in the stream (ignored for binary plist format)
+	 * @see PListFormat#NSPropertyListJsonFormat_v1_0
+	 * @see PListFormat#NSPropertyListBinaryFormat_v1_0
+	 * @see PListFormat#NSPropertyListXMLFormat_v1_0
+	 * @see PListFormat#NSPropertyListOpenStepFormat
+	 * @return <code>data</code> as a property list
+	 * @since 5.5.3
+	 */
+	public static Object propertyListFromData(NSData data, PListFormat type, String encoding) {
+		if (data == null) {
+			return null;
+		}
+		return propertyListWithStream(data.stream(), type, encoding);
 	}
 
 	// For now we assume that this only handles ASCII plists, not XML
@@ -5314,21 +5362,11 @@ public class NSPropertyListSerialization {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <K, V> NSDictionary<K, V> dictionaryWithBinaryPropertyListPathURL(URL url) {
-		NSDictionary<K, V> ret = null;
-
 		if (url == null) {
 			return NSDictionary.<K, V> emptyDictionary();
 		}
-
-		try {
-			_BinaryPListParser parser = new _BinaryPListParser();
-			ret = (NSDictionary<K, V>) parser.parseDict(url);
-		} catch (RuntimeException e) {
-			throw new NSForwardException(" Failed to decode binary plist at " + url, e);
-		} catch (IOException e) {
-			throw new NSForwardException(" Failed to decode binary plist at " + url, e);
-		}
-
+		_BinaryPListParser parser = new _BinaryPListParser();
+		NSDictionary<K, V> ret = (NSDictionary<K, V>) parser.propertyListWithURL(url);
 		return (ret != null) ? ret : NSDictionary.<K, V> emptyDictionary();
 	}
 
@@ -5341,23 +5379,27 @@ public class NSPropertyListSerialization {
 	 * @return binary plists dictionary decoded as an NSDictionary or empty dictionary if invalid.
 	 * @since 5.5
 	 */
-	@SuppressWarnings("unchecked")
+	@Deprecated
 	public static <K, V> NSDictionary<K, V> dictionaryForBinaryStream(InputStream is) {
-		NSDictionary<K, V> ret = null;
-
+		return dictionaryWithBinaryStream(is);
+	}
+	
+	/**
+	 * Return NSDictionary for a valid plist when passed a binary plist stream.
+	 *
+	 * @param <K>
+	 * @param <V>
+	 * @param is
+	 * @return binary plists dictionary decoded as an NSDictionary or empty dictionary if invalid.
+	 * @since 5.5.3
+	 */
+	@SuppressWarnings("unchecked")
+	public static <K, V> NSDictionary<K, V> dictionaryWithBinaryStream(InputStream is) {
 		if (is == null) {
 			return NSDictionary.<K, V> emptyDictionary();
 		}
-
-		try {
-			_BinaryPListParser parser = new _BinaryPListParser();
-			ret = (NSDictionary<K, V>) parser.parseDict(is);
-		} catch (RuntimeException e) {
-			throw new NSForwardException(" Failed to decode binary plist.", e);
-		} catch (IOException e) {
-			throw new NSForwardException(" Failed to decode binary plist.", e);
-		}
-
+		_BinaryPListParser parser = new _BinaryPListParser();
+		NSDictionary<K, V> ret = (NSDictionary<K, V>) parser.propertyListWithStream(is);
 		return (ret != null) ? ret : NSDictionary.<K, V> emptyDictionary();
 	}
 
@@ -5369,22 +5411,25 @@ public class NSPropertyListSerialization {
 	 * @see Document
 	 * @since 5.5
 	 */
+	@Deprecated
 	public static Document documentForBinaryPropertyListURL(URL url) {
-		Document doc = null;
-
+		return documentWithBinaryPropertyListURL(url);
+	}
+	
+	/**
+	 * Parse binary plist to XML Document
+	 *
+	 * @param url the url to read from
+	 * @return Document for binary plist
+	 * @see Document
+	 * @since 5.5.3
+	 */
+	public static Document documentWithBinaryPropertyListURL(URL url) {
 		if (url == null) {
-			return doc;
+			return null;
 		}
-
-		try {
-			_BinaryPListParser parser = new _BinaryPListParser();
-			doc = parser.binaryPlistFromXMLPlist(url);
-		} catch (RuntimeException e) {
-			logger.error("Failed to decode binary plist at " + url, e);
-		} catch (IOException e) {
-			logger.error("Failed to decode binary plist at " + url, e);
-		}
-
+		_BinaryPListParser parser = new _BinaryPListParser();
+		Document doc = parser.propertyListDocumentWithURL(url);
 		return doc;
 	}
 
@@ -5394,21 +5439,11 @@ public class NSPropertyListSerialization {
 	 * @since 5.5.3-SNAPSHOT
 	 */
 	public static NSArray<?> arrayForBinaryStream(InputStream is) {
-		NSArray<?> ret = null;
-
 		if (is == null) {
 			return NSArray.emptyArray();
 		}
-
-		try {
-			_BinaryPListParser parser = new _BinaryPListParser();
-			ret = parser.parseArray(is);
-		} catch (RuntimeException e) {
-			throw new NSForwardException(" Failed to decode binary plist.", e);
-		} catch (IOException e) {
-			throw new NSForwardException(" Failed to decode binary plist.", e);
-		}
-
+		_BinaryPListParser parser = new _BinaryPListParser();
+		NSArray<?> ret = (NSArray<?>)parser.propertyListWithStream(is);
 		return (ret != null) ? ret : NSArray.emptyArray();
 	}
 
@@ -5420,30 +5455,148 @@ public class NSPropertyListSerialization {
 	 * @see Document
 	 * @since 5.5
 	 */
+	@Deprecated
 	public static String xmlStringForBinaryPropertyListURL(URL url) {
+		return xmlStringWithBinaryPropertyListURL(url);
+	}
+		
+	/**
+	 * Parse binary plist to XML Document
+	 *
+	 * @param url the url to read from
+	 * @return Document for binary plist
+	 * @see Document
+	 * @since 5.5.3
+	 */
+	public static String xmlStringWithBinaryPropertyListURL(URL url) {
 		String ret = "";
 
 		if (url == null) {
 			return ret;
 		}
 
-		return _NSStringUtilities.convertDOMToString(documentForBinaryPropertyListURL(url));
+		return _NSStringUtilities.convertDOMToString(documentWithBinaryPropertyListURL(url));
+	}
+	
+	/**
+	 * Reads a plist from the given URL using the specified format.
+	 * 
+	 * @param url the URL to read from
+	 * @param type type of plist to generate
+	 * @param encoding the string encoding of the bytes in the stream (ignored for binary plist format)
+	 * @see PListFormat#NSPropertyListJsonFormat_v1_0
+	 * @see PListFormat#NSPropertyListBinaryFormat_v1_0
+	 * @see PListFormat#NSPropertyListXMLFormat_v1_0
+	 * @see PListFormat#NSPropertyListOpenStepFormat
+	 * @since 5.5.3
+	 */
+	public static Object propertyListWithURL(URL url, PListFormat type, String encoding) {
+		try {
+			 URLConnection conn = url.openConnection();
+			 InputStream is = conn.getInputStream();
+			 try {
+				 return propertyListWithStream(is, type, encoding);
+			 }
+			 finally {
+				 is.close();
+			 }
+		} catch (RuntimeException e) {
+			throw new NSForwardException("Failed to decode plist at " + url, e);
+		} catch (IOException e) {
+			throw new NSForwardException("Failed to decode plist at " + url, e);
+		}
+	}
+	
+	/**
+	 * Reads a plist from the given inputstream using the specified format.
+	 * 
+	 * @param is the InputStream to read from
+	 * @param type type of plist to generate
+	 * @param encoding the string encoding of the bytes in the stream (ignored for binary plist format)
+	 * @see PListFormat#NSPropertyListJsonFormat_v1_0
+	 * @see PListFormat#NSPropertyListBinaryFormat_v1_0
+	 * @see PListFormat#NSPropertyListXMLFormat_v1_0
+	 * @see PListFormat#NSPropertyListOpenStepFormat
+	 * @since 5.5.3
+	 */
+	public static Object propertyListWithStream(InputStream is, PListFormat type, String encoding) {
+		if (is == null) {
+			return null;
+		}
+		
+		Object obj;
+		switch (type) {
+			case NSPropertyListBinaryFormat_v1_0:
+				obj = new _BinaryPListParser().propertyListWithStream(is);
+				break;
+	
+			case NSPropertyListXMLFormat_v1_0:
+				obj = propertyListFromString(_NSStringUtilities.stringFromInputStream(is, encoding), true);
+				break;
+	
+			case NSPropertyListOpenStepFormat:
+				obj = propertyListFromString(_NSStringUtilities.stringFromInputStream(is, encoding), false);
+				break;
+	
+			case NSPropertyListJsonFormat_v1_0:
+				obj = propertyListFromJSONString(_NSStringUtilities.stringFromInputStream(is, encoding));
+				break;
+	
+			default:
+				obj = propertyListFromString(_NSStringUtilities.stringFromInputStream(is, encoding));
+				break;
+		}
+		return obj;
+	}
+	
+	/**
+	 * Reads a plist from the given NSData using the specified format.
+	 * 
+	 * @param data the NSData to read from
+	 * @param type type of plist to generate
+	 * @param encoding the string encoding of the bytes in the stream (ignored for binary plist format)
+	 * @see PListFormat#NSPropertyListJsonFormat_v1_0
+	 * @see PListFormat#NSPropertyListBinaryFormat_v1_0
+	 * @see PListFormat#NSPropertyListXMLFormat_v1_0
+	 * @see PListFormat#NSPropertyListOpenStepFormat
+	 * @since 5.5.3
+	 */
+	public static Object propertyListWithData(NSData data, PListFormat type, String encoding) {
+		return propertyListWithStream(data.stream(), type, encoding);
 	}
 
 	/**
 	 * For a specified property list format, write a plist to the provided outputstream.
 	 *
-	 * @param plist
-	 * @param out
-	 *            output stream for plist
-	 * @param type
-	 *            - type of plist to generate
+	 * @param plist the object to write
+	 * @param out output stream for plist
+	 * @param type type of plist to generate
+	 * @param encoding the string encoding of the bytes in the stream (ignored for binary plist format)
 	 * @see PListFormat#NSPropertyListJsonFormat_v1_0
 	 * @see PListFormat#NSPropertyListBinaryFormat_v1_0
 	 * @see PListFormat#NSPropertyListXMLFormat_v1_0
 	 * @see PListFormat#NSPropertyListOpenStepFormat
+	 * @since 5.5
 	 */
+	@Deprecated
 	public static void propertyListWriteToStream(Object plist, OutputStream out, PListFormat type) {
+		writePropertyListToStream(plist, out, type, _NSStringUtilities.defaultEncoding());
+	}
+	
+	/**
+	 * For a specified property list format, write a plist to the provided outputstream.
+	 *
+	 * @param plist the object to write
+	 * @param out output stream for plist
+	 * @param type type of plist to generate
+	 * @param encoding the string encoding of the bytes in the stream (ignored for binary plist format)
+	 * @see PListFormat#NSPropertyListJsonFormat_v1_0
+	 * @see PListFormat#NSPropertyListBinaryFormat_v1_0
+	 * @see PListFormat#NSPropertyListXMLFormat_v1_0
+	 * @see PListFormat#NSPropertyListOpenStepFormat
+	 * @since 5.5.3
+	 */
+	public static void writePropertyListToStream(Object plist, OutputStream out, PListFormat type, String encoding) {
 
 		if (plist == null || out == null) {
 			return;
@@ -5453,9 +5606,9 @@ public class NSPropertyListSerialization {
 			case NSPropertyListBinaryFormat_v1_0:
 				_BinaryPListParser parser = new _BinaryPListParser();
 				if (plist instanceof Map<?, ?>) {
-					parser.propertyListWriteToStream(new NSDictionary<Object, Object>((Map<?, ?>) plist), out);
+					parser.writePropertyListToStream(new NSDictionary<Object, Object>((Map<?, ?>) plist), out);
 				} else if (plist instanceof List<?>) {
-					parser.propertyListWriteToStream(new NSArray<Object>((List<?>) plist), out);
+					parser.writePropertyListToStream(new NSArray<Object>((List<?>) plist), out);
 				}
 				break;
 
@@ -5463,7 +5616,7 @@ public class NSPropertyListSerialization {
 				plistString = xmlStringFromPropertyList(plist, false);
 				if (plistString != null) {
 					try {
-						out.write(plistString.getBytes());
+						out.write(plistString.getBytes(encoding));
 					} catch (IOException e) {
 						throw new NSForwardException("Error writing xml formatted plist to outputstream.", e);
 					}
@@ -5474,7 +5627,7 @@ public class NSPropertyListSerialization {
 				plistString = stringFromPropertyList(plist, false);
 				if (plistString != null) {
 					try {
-						out.write(plistString.getBytes());
+						out.write(plistString.getBytes(encoding));
 					} catch (IOException e) {
 						throw new NSForwardException("Error writing ascii formatted plist to outputstream.", e);
 					}
@@ -5485,7 +5638,7 @@ public class NSPropertyListSerialization {
 				plistString = jsonStringFromPropertyList(plist, false);
 				if (plistString != null) {
 					try {
-						out.write(plistString.getBytes());
+						out.write(plistString.getBytes(encoding));
 					} catch (IOException e) {
 						throw new NSForwardException("Error writing jsons formatted plist to outputstream.", e);
 					}
@@ -5497,7 +5650,7 @@ public class NSPropertyListSerialization {
 				plistString = xmlStringFromPropertyList(plist, false);
 				if (plistString != null) {
 					try {
-						out.write(plistString.getBytes());
+						out.write(plistString.getBytes(encoding));
 					} catch (IOException e) {
 						throw new NSForwardException("Error writing xml formatted plist to outputstream.", e);
 					}
@@ -5516,25 +5669,40 @@ public class NSPropertyListSerialization {
 	 * @return dictionary or null if there is an error with parsing
 	 * @since 5.5
 	 */
+	@Deprecated
 	public static <K, V> NSDictionary<K, V> dictionaryForInputStream(InputStream is) {
+		return dictionaryWithInputStream(is);
+	}
+	
+	/**
+	 * Read a plist from an InputStream and return NSDictionary of values.
+	 *
+	 * @param <K>
+	 * @param <V>
+	 * @param is
+	 * @return dictionary or null if there is an error with parsing
+	 * @since 5.5
+	 */
+	@Deprecated
+	public static <K, V> NSDictionary<K, V> dictionaryWithInputStream(InputStream is) {
+		return dictionaryWithInputStream(is, "UTF-8");
+	}
+	
+	/**
+	 * Read a plist from an InputStream and return NSDictionary of values.
+	 *
+	 * @param <K>
+	 * @param <V>
+	 * @param is the input stream to read from
+	 * @param encoding the string encoding of the bytes in the stream (ignored for binary plist format)
+	 * @return dictionary or null if there is an error with parsing
+	 * @since 5.5.3
+	 */
+	public static <K, V> NSDictionary<K, V> dictionaryWithInputStream(InputStream is, String encoding) {
 		if (is == null) {
 			return NSDictionary.<K, V> emptyDictionary();
 		}
-		return dictionaryForString(stringForInputStream(is));
-	}
-
-	private static String stringForInputStream(InputStream is) {
-		try {
-			ByteArrayOutputStream bout = new ByteArrayOutputStream();
-			int read = -1;
-			byte[] buf = new byte[1024 * 50];
-			while ((read = is.read(buf)) != -1) {
-				bout.write(buf, 0, read);
-			}
-			return bout.toString("UTF-8");
-		} catch (Exception e) {
-			return "";
-		}
+		return dictionaryForString(_NSStringUtilities.stringFromInputStream(is, encoding));
 	}
 
 	/**
@@ -5573,5 +5741,4 @@ public class NSPropertyListSerialization {
 		Object result = propertyListFromJSONString(value);
 		return (result instanceof NSDictionary ? (NSDictionary<K, V>) result : NSDictionary.<K, V> emptyDictionary());
 	}
-
 }
