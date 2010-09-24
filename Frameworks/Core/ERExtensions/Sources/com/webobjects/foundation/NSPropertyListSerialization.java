@@ -145,6 +145,8 @@ public class NSPropertyListSerialization {
 
 	/** yyyy-MM-dd'T'HH:mm:ss'Z' */
 	protected static final String	DefaultSimpleDateFormatPattern	= "yyyy-MM-dd'T'HH:mm:ss'Z'";
+	
+	protected static final double kCFAbsoluteTimeIntervalSince1970 = 978307200L;
 
 	/**
 	 * Types of property lists (as specified in CoreFoundation)
@@ -4592,7 +4594,7 @@ public class NSPropertyListSerialization {
 		private void parseDate(byte[] bytes, int startIndex, int marker) throws IOException {
 			long longbits = readLong(bytes, startIndex);
 			double date = Double.longBitsToDouble(longbits);
-			NSTimestamp ts = new NSTimestamp(date);
+			NSTimestamp ts = new NSTimestamp((long)((date + kCFAbsoluteTimeIntervalSince1970) * 1000));
 			// objectTable.add(new Date(ts.getTime()));
 			objectTable.add(ts);
 			if (logger.isDebugEnabled()) {
@@ -4660,7 +4662,7 @@ public class NSPropertyListSerialization {
 				ts = new NSTimestamp(date);
 			}
 
-			return ts.gregorianDateGetAbsoluteTime(null, true);
+      return (ts.getTime() / 1000) - kCFAbsoluteTimeIntervalSince1970;
 		}
 
 		/**
