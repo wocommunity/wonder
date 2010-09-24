@@ -1,4 +1,4 @@
-InspectEOButton : ERMSmartAjaxButton {
+InspectEOButton : CCSmartAjaxButton {
   value = buttonLabel;
   action = inspectObjectAction;
   alt = ^displayNameForInspectConfiguration;

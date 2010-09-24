@@ -1,4 +1,4 @@
-var ERMSubmitLink = {
+var CCSubmitLink = {
 	submit: function (fieldName, additionalFunction) {
 		var hf = window.document.getElementById(fieldName);
 		hf.value = fieldName;
@@ -9,4 +9,4 @@ var ERMSubmitLink = {
 	}
 };
 
-var ERMSL = ERMSubmitLink;
+var CCSL = CCSubmitLink;
