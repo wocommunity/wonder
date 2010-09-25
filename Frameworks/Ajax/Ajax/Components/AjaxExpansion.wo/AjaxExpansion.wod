@@ -23,6 +23,14 @@ EscapedLinkString: WOString {
     value = jsEscapedString;
 }
 
+IsAjaxRequest : WOConditional {
+	condition = isAjaxRequest;
+}
+
+HasEscapedLinkString: WOConditional {
+    condition = jsEscapedString.length;
+}
+
 Expanded : WOConditional {
   condition = expanded;
 }

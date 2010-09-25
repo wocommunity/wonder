@@ -100,6 +100,10 @@ public class AjaxExpansion extends AjaxComponent {
         return string;
     }
 
+	public boolean isAjaxRequest() {
+		return AjaxUtils.isAjaxRequest(context().request());
+	}
+	
     public String jsEscapedString() {
         return ERXStringUtilities.escapeJavascriptApostrophes(string());
     }
