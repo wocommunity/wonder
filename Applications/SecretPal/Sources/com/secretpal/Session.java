@@ -33,4 +33,9 @@ public class Session extends ERXSession {
 	public SPPerson currentPerson() {
 		return _currentPerson;
 	}
+	
+	@Override
+	public String domainForIDCookies() {
+		return "/";
+	}
 }
