@@ -1,0 +1,30 @@
+<wo:PageWrapper title="$event.name">
+	<wo:ERXWOTemplate templateName="breadcrumb">
+		<li><wo:ERXDataHyperlink pageName="SPHomePage">Home</wo:ERXDataHyperlink></li>
+		<li class="separator"></li>
+		<li><wo:ERXDataHyperlink pageName="SPGroupPage" group="$event.group"><wo:str value="$event.group.name"/></wo:ERXDataHyperlink></li>
+	</wo:ERXWOTemplate>
+	
+	<div class="separatorSections">	
+		<div class="section title callout">
+			<wo:if condition="$secretPals.count">
+				<wo:WORepetition list="$secretPals" item="$secretPal">
+					Your Secret Pal for this event is <wo:WOHyperlink action="$expandSecretPals"><wo:str value="$secretPal.name"/></wo:WOHyperlink>.
+				</wo:WORepetition>
+			</wo:if>
+			<wo:else>
+				You haven't been assigned a secret pal yet. Check back soon to see if you have a pal!
+			</wo:else>
+		</div>
+		
+		<wo:WORepetition list="$event.group.memberships.@sortAsc.personName" item="$membership">
+			<wo:SPMembershipWishes membership="$membership" expanded="$expanded" secretPal="$isMembershipSecretPal"/>
+		</wo:WORepetition>
+
+		<wo:if condition="$canEdit">
+			<div class="section callout">
+				Since you own this event, you can <wo:ERXDataHyperlink pageName="SPEventEditPage" event="$event">edit</wo:ERXDataHyperlink> it.
+			</div>
+		</wo:if> 
+	</div>
+</wo:PageWrapper>

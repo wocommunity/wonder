@@ -1,0 +1,68 @@
+<wo:PageWrapper title="Edit Event">
+	<wo:ERXWOTemplate templateName="breadcrumb">
+		<li><wo:ERXDataHyperlink pageName="SPHomePage">Home</wo:ERXDataHyperlink></li>
+		<li class="separator"></li>
+		<li><wo:ERXDataHyperlink pageName="SPGroupPage" group="$event.group"><wo:str value="$event.group.name"/></wo:ERXDataHyperlink></li>
+	</wo:ERXWOTemplate>
+	
+	<div class="panel">
+		<div class="title">Edit Event</div>
+		
+		<div class="contents">
+			<wo:form>
+				<div class="row">
+					<span class="label">Event Name</span>
+					<wo:textfield value="$event.name"/>
+				</div>
+				
+				<div class="row">
+					<span class="label">Description</span>
+					<wo:textfield value="$event.description"/>
+				</div>
+
+				<div class="row">
+					<wo:submit action="$saveEvent" value="Save Your Changes"/>
+				</div>
+			</wo:form>
+		</div>
+	</div>
+
+	<div class="separatorSections advanced" style="margin-top: 2em">
+		<div class="section">
+			<wo:AjaxExpansion linkClass="toggle" insertion="Effect.blind" insertionDuration="0.05" string="Assign Secret Pals" initiallyExpanded="$event.hasNotAssignedSecretPals">
+				<div class="contents">
+					<p style="margin-top: 1em">
+					<wo:if condition="$event.hasAssignedSecretPals">
+						You've already assigned secret pals for this event. If you do it again, you will <b>replaces</b> and <b>reassign</b> all existing pals!
+					</wo:if>
+					<wo:else>
+						You haven't assigned secret pals for this event. Make sure you've invited everyone before assigning pals or people will be left out of your event. 
+					</wo:else>
+					</p>
+					<p>
+						<wo:WOHyperlink action="$reassignSecretPals" onclick="return confirm('You are about to replace all secret pal assignments. This can not be undone.')">
+							<wo:WOImage filename="icon_warn.png" style="vertical-align: middle"/> Assign secret pals!
+						</wo:WOHyperlink>
+					</p>
+				</div>
+			</wo:AjaxExpansion>
+		</div>
+	</div>
+
+	<div class="separatorSections advanced" style="margin-top: 2em">
+		<div class="section">
+			<wo:AjaxExpansion linkClass="toggle" insertion="Effect.blind" insertionDuration="0.05" string="Delete">
+				<div class="contents">
+					<p style="margin-top: 1em">
+						Deleting an event <b>can not</b> be undone.
+					</p>
+					<p>
+						<wo:WOHyperlink action="$deleteEvent" onclick="return confirm('You are about to delete this event. This can not be undone.')">
+							<wo:WOImage filename="btn_del.png" style="vertical-align: middle"/> Delete this event!
+						</wo:WOHyperlink>
+					</p>
+				</div>
+			</wo:AjaxExpansion>
+		</div>
+	</div>
+</wo:PageWrapper>

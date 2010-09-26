@@ -1,0 +1,53 @@
+{
+    attributes = (
+        {
+            allowsNull = Y; 
+            columnName = description; 
+            name = description; 
+            prototypeName = varchar1000; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = groupPassword; 
+            name = groupPassword; 
+            prototypeName = varchar100; 
+        }, 
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {allowsNull = N; columnName = name; name = name; prototypeName = varchar255; }, 
+        {allowsNull = N; columnName = ownerID; name = ownerID; prototypeName = id; }
+    ); 
+    attributesUsedForLocking = (description, groupPassword, id, name, ownerID); 
+    className = "com.secretpal.model.SPGroup"; 
+    classProperties = (description, events, groupPassword, memberships, name, owner); 
+    externalName = SPGroup; 
+    fetchSpecificationDictionary = {}; 
+    name = SPGroup; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = SPEvent; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = groupID; sourceAttribute = id; }); 
+            name = events; 
+        }, 
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = SPMembership; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = groupID; sourceAttribute = id; }); 
+            name = memberships; 
+            propagatesPrimaryKey = Y; 
+        }, 
+        {
+            destination = SPPerson; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = ownerID; }); 
+            name = owner; 
+        }
+    ); 
+}

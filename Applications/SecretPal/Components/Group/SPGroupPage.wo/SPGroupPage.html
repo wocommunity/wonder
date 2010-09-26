@@ -1,0 +1,32 @@
+<wo:PageWrapper title="$group.name">
+	<wo:ERXWOTemplate templateName="breadcrumb">
+		<li><wo:ERXDataHyperlink pageName="SPHomePage">Home</wo:ERXDataHyperlink></li>
+	</wo:ERXWOTemplate>
+	
+	<div class="separatorSections">
+		<div class="section">
+			<wo:if condition="$group.description">
+				<p><wo:str value="$group.description"/></p>
+			</wo:if>
+			<p>
+			All the events in the <wo:str value="$group.name"/> group are listed below. Select one to see your secret pals.
+			</p>
+		</div>
+		
+		<wo:WORepetition list="$group.events" item="$event">
+			<div class="section">
+				<wo:ERXDataHyperlink pageName="SPEventPage" event="$event"><wo:str value="$event.name"/></wo:ERXDataHyperlink>
+				<wo:if condition="$event.description">
+					<p><wo:str value="$event.description"/></p>
+				</wo:if>
+			</div>
+		</wo:WORepetition>
+
+		<wo:if condition="$canEdit">
+			<div class="section callout">
+				Since you own this group, you can <wo:ERXDataHyperlink pageName="SPGroupEditPage" group="$group">edit</wo:ERXDataHyperlink> it.
+				You can also <wo:ERXDataHyperlink pageName="SPEventNewPage" group="$group">make a new event</wo:ERXDataHyperlink>.
+			</div>
+		</wo:if> 
+	</div>
+</wo:PageWrapper>

@@ -1,0 +1,39 @@
+{
+    attributes = (
+        {allowsNull = N; columnName = active; name = active; prototypeName = boolean; }, 
+        {
+            allowsNull = Y; 
+            columnName = description; 
+            name = description; 
+            prototypeName = varchar1000; 
+        }, 
+        {allowsNull = N; columnName = groupID; name = groupID; prototypeName = id; }, 
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {allowsNull = N; columnName = name; name = name; prototypeName = varchar255; }
+    ); 
+    attributesUsedForLocking = (active, description, groupID, id, name); 
+    className = "com.secretpal.model.SPEvent"; 
+    classProperties = (active, description, group, name, secretPals); 
+    externalName = SPEvent; 
+    fetchSpecificationDictionary = {}; 
+    name = SPEvent; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = SPGroup; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = groupID; }); 
+            name = group; 
+        }, 
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = SPSecretPal; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = eventID; sourceAttribute = id; }); 
+            name = secretPals; 
+        }
+    ); 
+}

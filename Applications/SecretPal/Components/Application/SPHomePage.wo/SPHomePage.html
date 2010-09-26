@@ -1,0 +1,45 @@
+<wo:PageWrapper title="Home">
+	<div class="separatorSections">
+		<div class="section">
+			All your groups and events are listed below. Select one to see your secret pals and get gift ideas.
+		</div>
+		
+		<wo:WORepetition list="$session.currentPerson.memberships" item="$membership">
+			<wo:WOGenericContainer elementName="div" class="$sectionClass">
+				<wo:not condition="$membership.confirmed">
+					<h1><wo:str value="$membership.group.name"/></h1>
+					<wo:if condition="$membership.group.description">
+						<p><wo:str value="$membership.group.description"/></p>
+					</wo:if>
+					You have not accepted this invitation from <wo:str value="$membership.group.owner.name"/>. Would you like to <wo:WOHyperlink action="$acceptInvitation">accept</wo:WOHyperlink> or <wo:WOHyperlink action="$declineInvitation">decline</wo:WOHyperlink>?
+				</wo:not>
+				<wo:else>
+					<h1><wo:ERXDataHyperlink pageName="SPGroupPage" group="$membership.group"><wo:str value="$membership.group.name"/></wo:ERXDataHyperlink></h1>
+					<wo:if condition="$membership.group.description">
+						<p><wo:str value="$membership.group.description"/></p>
+					</wo:if>
+					<wo:if condition="$canEdit">
+					<p>
+						You are the owner of this group, so you can <wo:ERXDataHyperlink pageName="SPGroupEditPage" group="$membership.group">edit it</wo:ERXDataHyperlink>
+						to change its name and manage members.
+					</p>
+					</wo:if>
+					<ul>
+						<wo:WORepetition list="$membership.group.events" item="$event">
+							<li>
+								<wo:ERXDataHyperlink pageName="SPEventPage" event="$event"><wo:str value="$event.name"/></wo:ERXDataHyperlink>
+								<wo:if condition="$event.description">
+									<p><wo:str value="$event.description"/></p>
+								</wo:if>
+							</li>
+						</wo:WORepetition>
+					</ul>
+				</wo:else>
+			</wo:WOGenericContainer>
+		</wo:WORepetition>
+		
+		<div class="section callout">
+			You can <wo:WOHyperlink pageName="SPProfilePage">update your profile</wo:WOHyperlink>, or even <wo:ERXDataHyperlink pageName="SPGroupNewPage">make your own groups</wo:ERXDataHyperlink>.
+		</div>
+	</div>
+</wo:PageWrapper>

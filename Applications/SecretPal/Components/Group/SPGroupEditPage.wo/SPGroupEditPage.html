@@ -1,0 +1,112 @@
+<wo:PageWrapper title="Edit Group">
+	<wo:ERXWOTemplate templateName="breadcrumb">
+		<li><wo:ERXDataHyperlink pageName="SPHomePage">Home</wo:ERXDataHyperlink></li>
+	</wo:ERXWOTemplate>
+	
+	<div class="panel">
+		<div class="title">Edit Group</div>
+		
+		<div class="contents">
+			<wo:form>
+				<div class="row">
+					<span class="label">Group Name</span>
+					<wo:textfield value="$group.name"/>
+				</div>
+				
+				<div class="row">
+					<span class="label">Description</span>
+					<wo:textfield value="$group.description"/>
+				</div>
+				
+				<!-- 
+				<div class="row">
+					<span class="label">Join Code</span>
+					<wo:textfield value="$group.groupPassword"/>
+					<div class="explanation">a join code is a code you can give out to your friends so they can join your group</div>
+				</div>
+				-->
+				
+				<div class="row">
+					<wo:submit action="$saveGroup" value="Save Your Changes"/>
+				</div>
+			</wo:form>
+		</div>
+	</div>
+
+	<div class="panel" style="margin-top: 2em">
+		<div class="title">
+			Events
+		</div>
+		<div class="contents">
+			<table>
+			<wo:WORepetition list="$group.events" item="$event">
+				<tr>
+					<td class="status">
+						<wo:if condition="$event.hasAssignedSecretPals"><wo:WOImage filename="icon_ok.png" title="Everything's ready to go!"/></wo:if>
+						<wo:else><wo:WOImage filename="icon_warn.png" title="You haven't assigned secret pals yet."/></wo:else>
+					</td>
+					<td>
+						<wo:ERXDataHyperlink pageName="SPEventEditPage" event="$event"><wo:str value="$event.name"/></wo:ERXDataHyperlink>
+					</td>
+				</tr>
+			</wo:WORepetition>
+			</table>
+			<p>
+			Do you want to <wo:ERXDataHyperlink pageName="SPEventNewPage" group="$group">add a new event</wo:ERXDataHyperlink>?
+			</p>
+		</div>
+	</div>
+
+	<div class="panel" style="margin-top: 2em">
+		<div class="title">
+			Members
+		</div>
+		<div class="contents">
+			<table>
+			<wo:WORepetition list="$group.memberships" item="$membership">
+				<tr>
+					<td class="actions">
+						<wo:if condition="$canDeleteMembership"><wo:WOHyperlink action="$deleteMembership" onclick="return confirm('Are you sure you want to remove this person from your group?')"><wo:WOImage filename="btn_del.png"/></wo:WOHyperlink></wo:if>
+						<wo:else><wo:WOImage filename="btn_del_disabled.png"/></wo:else>
+					</td>
+					<td class="status">
+						<wo:WOImage filename="$statusImage" title="$statusMessage"/>
+					</td>
+					<td>
+						<wo:str value="$membership.personName"/>
+						<wo:not condition="$membership.confirmed">
+						 (<wo:WOHyperlink action="$resendInvitation">resend invitation</wo:WOHyperlink><wo:if condition="$membership.confirmationCode">, <wo:WOHyperlink href="$confirmationUrl" target="_blank">confirmation link</wo:WOHyperlink></wo:if>)
+						</wo:not>
+					</td>
+				</tr>
+			</wo:WORepetition>
+			</table>
+			
+			<p>
+				To invite new people to your group, just list their emails below.
+				<wo:form>
+					<wo:WOText value="$inviteEmailAddresses" rows="5" cols="100"/>
+					<br/>
+					<wo:submit action="$sendMembershipInvites" value="Send Invites"/>
+				</wo:form>
+			</p>
+		</div>
+	</div>
+
+	<div class="separatorSections advanced" style="margin-top: 2em">
+		<div class="section">
+			<wo:AjaxExpansion linkClass="toggle" insertion="Effect.blind" insertionDuration="0.05" string="Delete">
+				<div class="contents">
+					<p style="margin-top: 1em">
+						Deleting a group will delete all the events and memberships associated with it. This can not be undone.
+					</p>
+					<p>
+						<wo:WOHyperlink action="$deleteGroup" onclick="return confirm('You are about to delete this group and all the events and memberships associated with it. This can not be undone.')">
+							<wo:WOImage filename="btn_del.png" style="vertical-align: middle"/> Delete this group!
+						</wo:WOHyperlink>
+					</p>
+				</div>
+			</wo:AjaxExpansion>
+		</div>
+	</div>
+</wo:PageWrapper>

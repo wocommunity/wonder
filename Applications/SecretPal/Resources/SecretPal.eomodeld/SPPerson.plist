@@ -1,0 +1,105 @@
+{
+    attributes = (
+        {allowsNull = N; columnName = admin; name = admin; prototypeName = boolean; }, 
+        {allowsNull = Y; columnName = avatarID; name = avatarID; prototypeName = id; }, 
+        {
+            allowsNull = N; 
+            columnName = emailAddress; 
+            name = emailAddress; 
+            prototypeName = varchar255; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = emailDeliveryFailure; 
+            name = emailDeliveryFailure; 
+            prototypeName = boolean; 
+        }, 
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {allowsNull = N; columnName = name; name = name; prototypeName = varchar255; }, 
+        {
+            allowsNull = Y; 
+            columnName = password; 
+            name = password; 
+            prototypeName = varchar100; 
+        }
+    ); 
+    attributesUsedForLocking = (admin, avatarID, emailAddress, emailDeliveryFailure, id, name, password); 
+    className = "com.secretpal.model.SPPerson"; 
+    classProperties = (
+        admin, 
+        avatar, 
+        emailAddress, 
+        emailDeliveryFailure, 
+        giverSecretPals, 
+        memberships, 
+        name, 
+        ownedGroups, 
+        password, 
+        receiverSecretPals, 
+        suggestions, 
+        wishes
+    ); 
+    externalName = SPPerson; 
+    fetchSpecificationDictionary = {}; 
+    name = SPPerson; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = ERAttachment; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = avatarID; }); 
+            name = avatar; 
+        }, 
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = SPSecretPal; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = giverID; sourceAttribute = id; }); 
+            name = giverSecretPals; 
+        }, 
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = SPMembership; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = personID; sourceAttribute = id; }); 
+            name = memberships; 
+            propagatesPrimaryKey = Y; 
+        }, 
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = SPGroup; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = ownerID; sourceAttribute = id; }); 
+            name = ownedGroups; 
+        }, 
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = SPSecretPal; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = receiverID; sourceAttribute = id; }); 
+            name = receiverSecretPals; 
+        }, 
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = SPWish; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = suggestedByID; sourceAttribute = id; }); 
+            name = suggestions; 
+        }, 
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = SPWish; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = suggestedForID; sourceAttribute = id; }); 
+            name = wishes; 
+        }
+    ); 
+}

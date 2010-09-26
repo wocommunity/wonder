@@ -1,0 +1,33 @@
+<wo:PageWrapper title="Accept Your Invitation" hideBreadcrumb="$true">
+	<div class="panel">
+		<div class="title">Accept Your Invitation to <wo:str value="$membership.group.name"/></div>
+		
+		<div class="contents">
+			<wo:form>
+				<wo:not condition="$membership.person.anyMembershipsConfirmed">
+					<div class="row">
+						<span class="label">Your Name</span>
+						<wo:textfield value="$membership.person.name"/>
+					</div>
+				</wo:not>
+
+				<wo:not condition="$membership.person.password">
+					<div class="row">
+						<span class="label">Password</span>
+						<wo:password value="$password"/>
+					</div>
+
+					<div class="row">
+						<span class="label">Confirm</span>
+						<wo:password value="$confirmPassword"/>
+					</div>
+				</wo:not>
+
+				<div class="row">
+					<wo:submit action="$accept" value="Accept Invitation"/>
+					<wo:submit action="$decline" value="Decline Invitation" onclick="return confirm('Are you sure you want to decline this invitation?')"/>
+				</div>
+			</wo:form>
+		</div>
+	</div>
+</wo:PageWrapper>

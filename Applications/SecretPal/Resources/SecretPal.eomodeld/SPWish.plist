@@ -1,0 +1,60 @@
+{
+    attributes = (
+        {
+            allowsNull = Y; 
+            columnName = cost; 
+            name = cost; 
+            prototypeName = currencyAmount; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = description; 
+            name = description; 
+            prototypeName = varchar1000; 
+        }, 
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {
+            allowsNull = N; 
+            columnName = purchased; 
+            name = purchased; 
+            prototypeName = boolean; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = suggestedByID; 
+            name = suggestedByID; 
+            prototypeName = id; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = suggestedForID; 
+            name = suggestedForID; 
+            prototypeName = id; 
+        }
+    ); 
+    attributesUsedForLocking = (cost, description, id, purchased, suggestedByID, suggestedForID); 
+    className = "com.secretpal.model.SPWish"; 
+    classProperties = (cost, description, purchased, suggestedBy, suggestedFor); 
+    externalName = SPWish; 
+    fetchSpecificationDictionary = {}; 
+    name = SPWish; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = SPPerson; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = suggestedByID; }); 
+            name = suggestedBy; 
+        }, 
+        {
+            destination = SPPerson; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = suggestedForID; }); 
+            name = suggestedFor; 
+        }
+    ); 
+}

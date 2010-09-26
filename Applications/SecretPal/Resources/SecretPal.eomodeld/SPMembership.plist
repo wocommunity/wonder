@@ -1,0 +1,44 @@
+{
+    attributes = (
+        {allowsNull = N; columnName = admin; name = admin; prototypeName = boolean; }, 
+        {
+            allowsNull = Y; 
+            columnName = confirmationCode; 
+            name = confirmationCode; 
+            prototypeName = varchar100; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = confirmed; 
+            name = confirmed; 
+            prototypeName = boolean; 
+        }, 
+        {allowsNull = N; columnName = groupID; name = groupID; prototypeName = id; }, 
+        {allowsNull = N; columnName = personID; name = personID; prototypeName = id; }
+    ); 
+    attributesUsedForLocking = (admin, confirmationCode, confirmed, groupID, personID); 
+    className = "com.secretpal.model.SPMembership"; 
+    classProperties = (admin, confirmationCode, confirmed, group, person); 
+    externalName = SPMembership; 
+    fetchSpecificationDictionary = {}; 
+    name = SPMembership; 
+    primaryKeyAttributes = (groupID, personID); 
+    relationships = (
+        {
+            destination = SPGroup; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = groupID; }); 
+            name = group; 
+        }, 
+        {
+            destination = SPPerson; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = personID; }); 
+            name = person; 
+        }
+    ); 
+}

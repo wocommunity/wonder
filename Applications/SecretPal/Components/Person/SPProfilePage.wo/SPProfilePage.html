@@ -1,0 +1,38 @@
+<wo:PageWrapper title="Profile" hideBreadcrumb="$true">
+	<div class="panel">
+		<div class="title">Profile</div>
+		
+		<div class="contents">
+			<wo:form>
+				<div class="row">
+					<span class="label">Your Name</span>
+					<wo:textfield value="$person.name"/>
+				</div>
+
+				<div class="row">
+					<span class="label">Your Email</span>
+					<wo:textfield value="$person.emailAddress"/>
+				</div>
+
+				<div class="row">
+					<span class="label">Old Password</span>
+					<wo:password value="$currentPassword"/>
+				</div>
+
+				<div class="row">
+					<span class="label">New Password</span>
+					<wo:password value="$password"/>
+				</div>
+
+				<div class="row">
+					<span class="label">Confirm</span>
+					<wo:password value="$confirmPassword"/>
+				</div>
+
+				<div class="row">
+					<wo:submit action="$updateProfile" value="Update Profile"/> or <wo:WOHyperlink pageName="SPHomePage">cancel</wo:WOHyperlink>
+				</div>
+			</wo:form>
+		</div>
+	</div>
+</wo:PageWrapper>

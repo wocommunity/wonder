@@ -1,0 +1,14 @@
+<wo:PageWrapper title="Oh No!" hideBreadcrumb="$true">
+	<div class="panel">
+		<div class="title">Oh No! An Error Occurred!</div>
+		<div class="contents">
+			<p>
+				Hopefully this was just a temporary error. You can try to <wo:WOHyperlink directActionName="default">go back</wo:WOHyperlink> and try again. We have been
+				notified of the problem.
+			</p>
+			<p class="unimportant">
+				<wo:str value="$exception.message"/>
+			</p>
+		</div>
+	</div>
+</wo:PageWrapper>

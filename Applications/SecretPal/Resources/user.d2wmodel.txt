@@ -1,0 +1,5 @@
+(
+    100 : *true* => isEntityDeletable = true [com.webobjects.directtoweb.BooleanAssignment],
+    100 : *true* => isEntityEditable = true [com.webobjects.directtoweb.BooleanAssignment],
+    100 : *true* => look = ERModernLook [com.webobjects.directtoweb.Assignment]
+)

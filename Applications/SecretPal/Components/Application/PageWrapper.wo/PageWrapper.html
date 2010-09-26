@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+	<head>
+		<title>SecretPal | <wo:str value="$^title"/></title>
+		<wo:ERMD2WCSSReference localContext="$d2wContext"/>
+		<wo:ERXStyleSheet framework="app" filename="SecretPal.css"/>
+	</head>
+	<body>
+
+	<div class="page">
+		<div class="top">
+			<div class="header">
+				<wo:if condition="$session.currentPerson"><h3><wo:WOHyperlink directActionName="logout">logout</wo:WOHyperlink></h3></wo:if>
+				<h1>
+				<wo:if condition="$session.currentPerson"><wo:WOHyperlink pageName="SPHomePage">SecretPal</wo:WOHyperlink></wo:if>
+				<wo:else>SecretPal</wo:else>
+				</h1>
+			</div>
+			
+			<wo:not condition="$^hideBreadcrumb">
+				<div class="breadcrumb">
+					<ol>
+					<wo:ERXWOComponentContent templateName="breadcrumb"/>
+					<wo:if condition="$^title">
+						<li class="separator"></li>
+						<li><wo:str value="$^title"/></li>
+					</wo:if>
+					&nbsp;
+					</ol>
+				</div>
+			</wo:not>
+		
+			<wo:AjaxUpdateContainer id="notices">
+				<wo:SPNotices noticeList="$session.errors" class="errors" />
+				<wo:SPNotices noticeList="$session.notifications" class="notifications" />
+			</wo:AjaxUpdateContainer>
+		</div>
+		
+		<div class="body">
+			<wo:ERXWOComponentContent/>
+			<wo:WOLToolBar/>
+			<wo:ERMD2WStyleSheetInjector localContext="$d2wContext"/>
+		</div>
+	</div>
+
+	</body>
+</html>

@@ -1,0 +1,31 @@
+<wo:PageWrapper title="Make a New Event">
+	<wo:ERXWOTemplate templateName="breadcrumb">
+		<li><wo:ERXDataHyperlink pageName="SPHomePage">Home</wo:ERXDataHyperlink></li>
+		<li class="separator"></li>
+		<li><wo:ERXDataHyperlink pageName="SPGroupPage" group="$event.group"><wo:str value="$event.group.name"/></wo:ERXDataHyperlink></li>
+	</wo:ERXWOTemplate>
+	
+	<div class="panel">
+		<div class="title">
+			Make a New Event
+		</div>
+		
+		<div class="contents">
+			<wo:form>
+				<div class="row">
+					<span class="label">Event Name</span>
+					<wo:textfield value="$event.name"/>
+				</div>
+				
+				<div class="row">
+					<span class="label">Description</span>
+					<wo:textfield value="$event.description"/>
+				</div>
+
+				<div class="row">
+					<wo:submit action="$addEvent" value="Do It"/> or <wo:ERXDataHyperlink pageName="SPGroupPage" group="$group">cancel</wo:ERXDataHyperlink>
+				</div>
+			</wo:form>
+		</div>
+	</div>
+</wo:PageWrapper>

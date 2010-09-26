@@ -1,0 +1,22 @@
+<wo:PageWrapper title="Login" hideBreadcrumb="$true">
+<div class="login panel">
+	<div class="title">SecretPal Login</div>
+	<div class="contents">
+		<wo:form directActionName="login" secure="$true">
+			<div class="row">
+				<span class="label">email</span>
+				<input type="text" name="emailAddress"/>
+			</div>
+
+			<div class="row">
+				<span class="label">password</span>
+				<input type="password" name="password"/>
+			</div>
+
+			<div class="row">
+				<input type="submit" value="login" /> or did you <wo:WOHyperlink directActionName="forgotPassword">forget your password</wo:WOHyperlink>?
+			</div>
+		</wo:form>
+	</div>
+</div>
+</wo:PageWrapper>

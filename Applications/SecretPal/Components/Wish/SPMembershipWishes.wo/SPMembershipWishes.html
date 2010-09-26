@@ -1,0 +1,43 @@
+<wo:WOGenericContainer elementName="div" class="$sectionClass">
+	<wo:AjaxExpansion class="member" linkClass="toggle" insertion="Effect.blind" insertionDuration="0.05" string="$personName" expanded="$^expanded">
+		<div class="contents">
+			<wo:if condition="$me">
+				<wo:not condition="$membership.person.desires.count">
+					<h1>You need to add some wishes so your secret pal knows what to get you!</h1>
+					<p>
+					You can add wishes for specific items ("an iPod", "Harry Potter Book 5"), or just add wishes for types of things you like ("candy bars", "things that are blue", "stuff about turtles"). 
+					</p>
+					
+					<p>
+					When you buy something for your secret pal, you can press the <wo:WOImage filename="buy.png" style="vertical-align: middle"/> button to mark it off. Don't worry, your Secret Pal can't see that.
+					</p>
+					
+					<p>
+					If you have ideas for the secret pals of your friends, go add suggestions under their name. Your friends can't see suggestions from other people, so help surprise them!
+					</p>
+				</wo:not>
+				<wo:else>
+					<wo:SPWishList divClass="wishes" list="$membership.person.desires" me="$me" itemName="Wishes"/>
+				</wo:else>
+			</wo:if>
+			<wo:else>
+				<wo:SPWishList divClass="wishes" list="$membership.person.desires" me="$me" itemName="Wishes"/>
+			</wo:else>
+			
+			<wo:not condition="$isMe">
+				<wo:SPWishList divClass="suggestions" list="$membership.person.suggestions" me="$me" itemName="Suggestions"/>
+			</wo:not>
+			
+			<wo:form onsubmit="return false">
+				<wo:AjaxSubmitButton functionName="$addSuggestionFunctionName" updateContainerID="_parent" action="$addSuggestion" />
+				<wo:FocusTextField value="$suggestion" class="suggestion" focus="$false" onEnter="$addSuggestionFunctionCall" />
+				<wo:if condition="$isMe">
+					<wo:AjaxFunctionButton onclick="$addSuggestionFunctionCall" value="wish for"/>
+				</wo:if>
+				<wo:else>
+					<wo:AjaxFunctionButton onclick="$addSuggestionFunctionCall" value="suggest"/>
+				</wo:else>
+			</wo:form>
+		</div>
+	</wo:AjaxExpansion>
+</wo:WOGenericContainer>

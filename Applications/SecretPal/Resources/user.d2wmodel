@@ -1,0 +1,7 @@
+{
+  "rules" = (
+    {"author" = "100"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "com.webobjects.directtoweb.BooleanAssignment"; "keyPath" = "isEntityDeletable"; "value" = "true"; }; }, 
+    {"author" = "100"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "com.webobjects.directtoweb.BooleanAssignment"; "keyPath" = "isEntityEditable"; "value" = "true"; }; }, 
+    {"author" = "100"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "com.webobjects.directtoweb.Assignment"; "keyPath" = "look"; "value" = "ERModernLook"; }; }
+  ); 
+}
