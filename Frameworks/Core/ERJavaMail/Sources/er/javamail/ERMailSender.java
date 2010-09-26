@@ -304,7 +304,13 @@ public class ERMailSender implements Runnable {
 		                    Transport transport = transports.get(contextString);
 		                    if (transport == null) {
 		                        Session session = ERJavaMail.sharedInstance().newSessionForMessage(message);
-		                        transport = this._connectedTransportForSession(session, smtpProtocol, true);
+		                    	try {
+		                    		transport = this._connectedTransportForSession(session, smtpProtocol, true);
+		                    	}
+		                    	catch (MessagingException e) {
+			        				message._deliveryFailed(e);
+		                    		throw e;
+		                    	}
 		                        transports.put(contextString, transport);
 		                    }
 		                    try {
@@ -314,9 +320,11 @@ public class ERMailSender implements Runnable {
 		                    } catch (MessagingException e) {
 		                        // Notify error in logs
 		                        log.error ("Unable to connect transport.", e);
+		                        
+		        				message._deliveryFailed(e);
 
 		                        // Exit run loop
-		                        throw new RuntimeException ("Unable to connect transport.");
+		                        throw new RuntimeException ("Unable to connect transport.", e);
 		                    }
 							try {
 								this._sendMessageNow(message, transport);
