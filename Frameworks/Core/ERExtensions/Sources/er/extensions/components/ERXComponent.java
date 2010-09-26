@@ -69,9 +69,19 @@ public abstract class ERXComponent extends WOComponent {
 		if (!isPageAccessAllowed() && _isPage()) {
 			throw new SecurityException("You are not allowed to directly access the component '" + name() + "'.");
 		}
-		if (_isPage()) {
+		if (shouldCheckAccess()) {
 			checkAccess();
 		}
+	}
+	
+	/**
+	 * Returns whether or not this component should check access before processing any of the request-response loop.
+	 * The default implementation just returns _isPage().
+	 * 
+	 * @return whether or not this component should check access
+	 */
+	protected boolean shouldCheckAccess() {
+		return _isPage();
 	}
 
 	/**
