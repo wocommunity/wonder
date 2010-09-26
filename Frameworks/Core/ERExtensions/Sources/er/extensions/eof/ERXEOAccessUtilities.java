@@ -2196,7 +2196,14 @@ public class ERXEOAccessUtilities {
      * false removes it.
      */
     public static void setIsClassProperty(EOProperty property, boolean isClassProperty) {
-    	EOEntity entity = property.entity();
+    	EOEntity entity = null;
+    	if(property instanceof EOAttribute) {
+    		entity = ((EOAttribute)property).entity();
+    	} else if(property instanceof EORelationship) {
+    		entity = ((EORelationship)property).entity();
+    	} else {
+    		throw new IllegalArgumentException("property must be an EOAttribute or an EORelationship.");
+    	}
     	NSArray<EOProperty> classProperties = entity.classProperties();
     	if(isClassProperty && !classProperties.contains(property)) {
     		classProperties = classProperties.arrayByAddingObject(property);
