@@ -1224,8 +1224,8 @@ public class ERXRouteController extends WODirectAction {
 	 * @param actionName the unknown action name
 	 * @return WOActionResults
 	 */
-	protected WOActionResults performUnknownAction(String actionName) {
-		throw new RuntimeException("There is no action named '" + actionName + "' on '" + getClass().getSimpleName() + ".");
+	protected WOActionResults performUnknownAction(String actionName) throws Throwable {
+		throw new FileNotFoundException("There is no action named '" + actionName + "' on '" + getClass().getSimpleName() + "'.");
 	}
 	
 	@Override
@@ -1302,7 +1302,7 @@ public class ERXRouteController extends WODirectAction {
 				}
 				
 				if (results == null && shouldFailOnMissingHtmlPage()) {
-					throw new FileNotFoundException("There is no '" + actionName + "' page for the entity '" + entityName() + "'.");
+					results = performUnknownAction(actionName);
 				}
 			}
 
