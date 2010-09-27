@@ -143,7 +143,6 @@ public class SPUtilities {
 			_errorNoticeList = errorNoticeList;
 		}
 
-		@Override
 		public void invalidRecipients(ERMessage message, NSArray<String> invalidRecipientAddresses) {
 			EOEditingContext editingContext = ERXEC.newEditingContext();
 			editingContext.lock();
@@ -156,7 +155,6 @@ public class SPUtilities {
 			}
 		}
 
-		@Override
 		public void deliverySucceeded(ERMessage message) {
 			EOEditingContext editingContext = ERXEC.newEditingContext();
 			editingContext.lock();
@@ -170,7 +168,6 @@ public class SPUtilities {
 			}
 		}
 
-		@Override
 		public void deliveryFailed(ERMessage message, Throwable failure) {
 			EOEditingContext editingContext = ERXEC.newEditingContext();
 			editingContext.lock();

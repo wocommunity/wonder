@@ -100,7 +100,6 @@ public class SecretPal0 extends ERXMigrationDatabase.Migration implements IERXPo
 		sPSecretPalTable.addUniqueIndex("uniqueSecretPal", sPSecretPalTable.existingColumnNamed("eventID"), sPSecretPalTable.existingColumnNamed("giverID"), sPSecretPalTable.existingColumnNamed("receiverID"));
 	}
 
-	@Override
 	public void postUpgrade(EOEditingContext editingContext, EOModel model) throws Throwable {
 		SPPerson admin = SPPerson.createSPPerson(editingContext, Boolean.TRUE, "admin@secretpal.com", Boolean.FALSE, "John Administrator");
 		admin.setPlainTextPassword("adminadmin");
