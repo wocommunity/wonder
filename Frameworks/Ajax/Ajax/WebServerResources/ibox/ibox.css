@@ -1,10 +1,10 @@
-#ibox {z-index:1000000;} 
-#ibox_overlay {position:absolute;top:0;left:0;right:0;z-index:1000000;} 
-#ibox_loading {position:absolute;z-index:1000001;} 
-#ibox_wrapper {position:absolute;top:0;left:0;z-index:1000001;padding:8px 5px 0px 5px;}
+#ibox {z-index:1000;} 
+#ibox_overlay {position:absolute;top:0;left:0;right:0;z-index:1000;} 
+#ibox_loading {position:absolute;z-index:1001;} 
+#ibox_wrapper {position:absolute;top:0;left:0;z-index:1001;padding:8px 5px 0px 5px;}
 #ibox_wrapper.locked { padding: 10px; }
 #ibox_wrapper.locked #ibox_footer_wrapper {display: none; }
-#ibox_content {z-index:1000002;overflow:auto;height:100%;position:relative;padding:2px;text-align:left;} 
+#ibox_content {z-index:1002;overflow:auto;height:100%;position:relative;padding:2px;text-align:left;} 
 #ibox_content {background-color:#fff;}
 #ibox_content object { display:block;} 
 #ibox_content .ibox_image {width:100%;height:100%;margin:0;padding:0;border:0;display:block;} 

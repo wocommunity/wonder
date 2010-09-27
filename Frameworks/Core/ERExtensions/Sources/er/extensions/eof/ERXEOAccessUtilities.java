@@ -2188,4 +2188,46 @@ public class ERXEOAccessUtilities {
     	 */
     	public T execute(EODatabaseContext databaseContext, EOAdaptorChannel channel) throws Exception;
     }
+    
+    /**
+     * Add or remove a class property from its entity.
+     * @param property The property to add or remove from the class properties array
+     * @param isClassProperty true adds the property to the list of class properties,
+     * false removes it.
+     */
+    public static void setIsClassProperty(EOProperty property, boolean isClassProperty) {
+    	EOEntity entity = null;
+    	if(property instanceof EOAttribute) {
+    		entity = ((EOAttribute)property).entity();
+    	} else if(property instanceof EORelationship) {
+    		entity = ((EORelationship)property).entity();
+    	} else {
+    		throw new IllegalArgumentException("property must be an EOAttribute or an EORelationship.");
+    	}
+    	NSArray<EOProperty> classProperties = entity.classProperties();
+    	if(isClassProperty && !classProperties.contains(property)) {
+    		classProperties = classProperties.arrayByAddingObject(property);
+    		entity.setClassProperties(classProperties);
+    	} else if(!isClassProperty && classProperties.contains(property)) {
+    		classProperties = ERXArrayUtilities.arrayMinusObject(classProperties, property);
+    		entity.setClassProperties(classProperties);
+    	}
+    }
+    
+    /**
+     * Add or remove an attribute from the entities list of attributes used for locking
+     * @param attr the attribute to add or remove
+     * @param isUsedForLocking true adds the attribute, false removes it
+     */
+    public static void setIsAttributeUsedForLocking(EOAttribute attr, boolean isUsedForLocking) {
+    	EOEntity entity = attr.entity();
+    	NSArray<EOAttribute> atts = entity.attributesUsedForLocking();
+    	if(isUsedForLocking && !atts.contains(attr)) {
+    		atts = atts.arrayByAddingObject(attr);
+    		entity.setAttributesUsedForLocking(atts);
+    	} else if(!isUsedForLocking && atts.contains(attr)) {
+    		atts = ERXArrayUtilities.arrayMinusObject(atts, attr);
+    		entity.setAttributesUsedForLocking(atts);
+    	}
+    }
 }
