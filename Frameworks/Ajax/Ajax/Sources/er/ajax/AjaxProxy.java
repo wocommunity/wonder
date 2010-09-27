@@ -127,7 +127,7 @@ public class AjaxProxy extends AjaxComponent {
 			// add the javascript variable 'name' only if not already in the
 			// response
 			userInfo.setObjectForKey(bridge, key);
-			ERXResponseRewriter.addScriptCodeInHead(res, context(), "var " + name + " = new JSONRpcClient(\"" + AjaxUtils.ajaxComponentActionUrl(context()) + "\");", key);
+			ERXResponseRewriter.addScriptCodeInHead(res, context(), name + " = new JSONRpcClient(\"" + AjaxUtils.ajaxComponentActionUrl(context()) + "\");", key);
 		}
 		else {
 			// ok, the javascript variable 'name' is already in the response,
