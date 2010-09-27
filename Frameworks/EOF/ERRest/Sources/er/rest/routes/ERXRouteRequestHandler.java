@@ -329,6 +329,16 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	}
 
 	/**
+	 * Clears any caches that may exist on ERXRoutes (probably only useful to JRebel, to clear the route parameter method cache).
+	 */
+	public void _clearCaches() {
+		for (Enumeration routesEnum = _routes.objectEnumerator(); routesEnum.hasMoreElements(); ) {
+			ERXRoute route = (ERXRoute)routesEnum.nextElement();
+			route._clearCaches();
+		}
+	}
+	
+	/**
 	 * Returns the routes for this request handler.
 	 * 
 	 * @return the routes for this request handler.
