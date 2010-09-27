@@ -52,7 +52,7 @@ import er.extensions.foundation.ERXValueUtilities;
  *
  * @author dscheck
  */
-public abstract class ERDSavedQueriesComponent extends WOComponent {
+public class ERDSavedQueriesComponent extends WOComponent {
 	public static final Logger log = Logger.getLogger(ERDSavedQueriesComponent.class);
 
     public static final EOKeyValueArchiving.Support originalEOKVArchivingTimestampSupport = new EOKeyValueArchiving._TimestampSupport();
