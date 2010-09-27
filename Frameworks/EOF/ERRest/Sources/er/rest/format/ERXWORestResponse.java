@@ -1,6 +1,7 @@
 package er.rest.format;
 
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSData;
 
 public class ERXWORestResponse implements IERXRestResponse {
 	private WOResponse _response;
@@ -19,5 +20,9 @@ public class ERXWORestResponse implements IERXRestResponse {
 
 	public void appendContentString(String str) {
 		_response._appendContentAsciiString(str);
+	}
+	
+	public void appendContentData(NSData data) {
+		_response.appendContentData(data);
 	}
 }

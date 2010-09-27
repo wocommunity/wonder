@@ -79,23 +79,29 @@ public class ERXXmlRestParser implements IERXRestParser {
 		return requestNode;
 	}
 
+	@Deprecated
 	public ERXRestRequestNode parseRestRequest(WORequest request, ERXRestFormat.Delegate delegate) {
 		return parseRestRequest(request.contentString(), delegate);
 	}
 
+	@Deprecated
 	public ERXRestRequestNode parseRestRequest(String contentStr, ERXRestFormat.Delegate delegate) {
+		return parseRestRequest(new ERXStringRestRequest(contentStr), delegate);
+	}
+	
+	public ERXRestRequestNode parseRestRequest(IERXRestRequest request, ERXRestFormat.Delegate delegate) {
 		ERXRestRequestNode rootRequestNode = null;
-
-		if (contentStr != null && contentStr.length() > 0) {
+		String contentString = request.stringContent();
+		if (contentString != null && contentString.length() > 0) {
 			// MS: Support direct updating of primitive type keys -- so if you don't want to
 			// wrap your request in XML, this will allow it
-			if (!contentStr.trim().startsWith("<")) {
-				contentStr = "<FakeWrapper>" + contentStr.trim() + "</FakeWrapper>";
+			if (!contentString.trim().startsWith("<")) {
+				contentString = "<FakeWrapper>" + contentString.trim() + "</FakeWrapper>";
 			}
 
 			Document document;
 			try {
-				document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(contentStr)));
+				document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(contentString)));
 				document.normalize();
 				Element rootElement = document.getDocumentElement();
 				rootRequestNode = createRequestNodeForElement(rootElement, true, delegate);
@@ -111,15 +117,17 @@ public class ERXXmlRestParser implements IERXRestParser {
 
 		return rootRequestNode;
 	}
+	
 
 	public static void main(String[] args) {
 		String str = "<Company><id>100</id><type>Company</type><name>mDT</name><firstName nil=\"true\"/><employees><Employee id=\"101\" type=\"Employee\"/><Employee id=\"102\"><name>Mike</name></Employee></employees></Company>";
 		//String str = "<Employees><Employee id=\"101\" type=\"Employee\"/><Employee id=\"102\"><name>Mike</name></Employee></Employees>";
 		ERXRestNameRegistry.registry().setExternalNameForInternalName("Super", "Company");
 		ERXRestNameRegistry.registry().setExternalNameForInternalName("Super2", "Employee");
-		ERXRestRequestNode n = new ERXXmlRestParser().parseRestRequest(str, new ERXRestFormatDelegate());
+		ERXRestRequestNode n = new ERXXmlRestParser().parseRestRequest(new ERXStringRestRequest(str), new ERXRestFormatDelegate());
 		ERXStringBufferRestResponse response = new ERXStringBufferRestResponse();
 		new ERXXmlRestWriter().appendToResponse(n, response, new ERXRestFormatDelegate());
 		System.out.println("ERXXmlRestParser.main: " + response);
 	}
+
 }
