@@ -4,7 +4,6 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
-import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSPropertyListSerialization.PListFormat;
 
