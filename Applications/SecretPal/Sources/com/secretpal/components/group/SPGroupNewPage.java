@@ -30,6 +30,10 @@ public class SPGroupNewPage extends SPPage {
 	}
 
 	public WOActionResults addGroup() {
+		if (session().errors().hasNotices()) {
+			return null;
+		}
+		
 		_group.editingContext().saveChanges();
 		SPGroupEditPage groupPage = pageWithName(SPGroupEditPage.class);
 		groupPage.setGroup(_group);

@@ -38,4 +38,10 @@ public class Session extends ERXSession {
 	public String domainForIDCookies() {
 		return "/";
 	}
+	
+	public void logout() {
+		setCurrentPerson(null);
+		_errors.clearNotices();
+		_notifications.clearNotices();
+	}
 }

@@ -46,6 +46,10 @@ public class SPEventNewPage extends SPPage {
 	}
 
 	public WOActionResults addEvent() {
+		if (session().errors().hasNotices()) {
+			return null;
+		}
+		
 		_event.editingContext().saveChanges();
 		SPEventPage eventPage = pageWithName(SPEventPage.class);
 		eventPage.setEvent(_event);

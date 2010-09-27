@@ -5,7 +5,9 @@ import java.util.UUID;
 import org.apache.log4j.Logger;
 
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSValidation;
 
+import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.foundation.ERXStringUtilities;
 
 public class SPPerson extends _SPPerson {
@@ -41,5 +43,13 @@ public class SPPerson extends _SPPerson {
 
 	public NSArray<SPWish> suggestions() {
 		return wishes(SPWish.SUGGESTED_BY.isNot(SPWish.SUGGESTED_FOR));
+	}
+	
+	public String validateEmailAddress(String emailAddress) {
+		SPPerson existingPerson = SPPerson.fetchSPPerson(editingContext(), SPPerson.EMAIL_ADDRESS.likeInsensitive(emailAddress));
+		if (existingPerson != null && !ERXEOControlUtilities.eoEquals(existingPerson, this)) {
+			throw new NSValidation.ValidationException("There is already a user with the email address '" + existingPerson.emailAddress() + "'.");
+		}
+		return emailAddress;
 	}
 }

@@ -36,6 +36,10 @@ public class SPConfirmationPage extends SPPage {
 	}
 
 	public WOActionResults accept() {
+		if (session().errors().hasNotices()) {
+			return null;
+		}
+		
 		WOActionResults nextPage;
 
 		// MS: This password checking is some repetitive bullshit ... It needs to be somewhere more centralized, but
@@ -52,12 +56,6 @@ public class SPConfirmationPage extends SPPage {
 			_membership.person().setPlainTextPassword(_password);
 		}
 
-		if (ERXStringUtilities.nullForEmptyString(_membership.person().name()) == null) {
-			session().errors().addNotice("You must set your name before accepting this invitation.");
-			return null;
-			
-		}
-		
 		if (ERXStringUtilities.nullForEmptyString(_membership.person().password()) == null) {
 			session().errors().addNotice("You must set your password before accepting this invitation.");
 			return null;

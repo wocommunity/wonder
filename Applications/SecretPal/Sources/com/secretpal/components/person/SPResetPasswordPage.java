@@ -35,6 +35,10 @@ public class SPResetPasswordPage extends SPPage {
 	}
 
 	public WOActionResults resetPassword() {
+		if (session().errors().hasNotices()) {
+			return null;
+		}
+		
 		// MS: This password checking is some repetitive bullshit ... It needs to be somewhere more centralized, but
 		// they're all just SLLIIGGHTTLY different. They also can't quite be in EO validation because we actually
 		// ALLOW a null password, but just not when entered by a user.
@@ -42,11 +46,6 @@ public class SPResetPasswordPage extends SPPage {
 			_password = null;
 			_confirmPassword = null;
 			session().errors().addNotice("Your password confirmation didn't match.");
-			return null;
-		}
-
-		if (ERXStringUtilities.nullForEmptyString(_person.name()) == null) {
-			session().errors().addNotice("You must set a name before logging in.");
 			return null;
 		}
 		

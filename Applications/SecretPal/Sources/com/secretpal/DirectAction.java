@@ -1,6 +1,7 @@
 package com.secretpal;
 
 import com.secretpal.components.application.Main;
+import com.secretpal.components.application.SPBacktrackErrorPage;
 import com.secretpal.components.application.SPErrorPage;
 import com.secretpal.components.application.SPSessionExpiredPage;
 import com.secretpal.components.group.SPHomePage;
@@ -49,11 +50,17 @@ public class DirectAction extends ERXDirectAction {
 		return pageWithName(SPErrorPage.class);
 	}
 
+	public WOActionResults backtrackErrorAction() {
+		return pageWithName(SPBacktrackErrorPage.class);
+	}
+	
 	public WOActionResults sessionExpiredAction() {
 		return pageWithName(SPSessionExpiredPage.class);
 	}
 
 	public WOActionResults loginAction() {
+		session().logout();
+		
 		String emailAddress = request().stringFormValueForKey("emailAddress");
 		String password = request().stringFormValueForKey("password");
 		SPPerson person = SPPerson.fetchSPPerson(ERXEC.newEditingContext(), SPPerson.EMAIL_ADDRESS.is(emailAddress).and(SPPerson.PASSWORD.is(SPPerson.hashPassword(password))).and(SPPerson.PASSWORD.isNotNull()));
@@ -69,6 +76,8 @@ public class DirectAction extends ERXDirectAction {
 	}
 
 	public WOActionResults confirmAction() {
+		session().logout();
+
 		WOActionResults nextPage;
 		EOEditingContext editingContext = ERXEC.newEditingContext();
 		String confirmationCode = request().stringFormValueForKey(SPUtilities.CONFIRMATION_CODE_KEY);
@@ -88,8 +97,16 @@ public class DirectAction extends ERXDirectAction {
 		}
 		return nextPage;
 	}
+	
+	@Override
+	public WOActionResults logoutAction() {
+		session().logout();
+		return super.logoutAction();
+	}
 
 	public WOActionResults resetPasswordAction() {
+		session().logout();
+		
 		WOActionResults nextPage;
 		EOEditingContext editingContext = ERXEC.newEditingContext();
 		String resetPasswordCode = request().stringFormValueForKey(SPUtilities.RESET_PASSWORD_CODE_KEY);

@@ -1,5 +1,6 @@
 package com.secretpal;
 
+import com.secretpal.components.application.SPBacktrackErrorPage;
 import com.secretpal.components.application.SPErrorPage;
 import com.secretpal.components.application.SPSessionExpiredPage;
 import com.webobjects.appserver.WOContext;
@@ -17,6 +18,19 @@ public class Application extends ERXApplication {
 	public Application() {
 		setDefaultRequestHandler(requestHandlerForKey(directActionRequestHandlerKey()));
 		setAllowsConcurrentRequestHandling(true);
+	}
+	
+	@Override
+	public WOResponse handlePageRestorationErrorInContext(WOContext context) {
+		WOResponse response;
+		if (context != null && AjaxUtils.isAjaxRequest(context.request())) {
+			ERXRedirect redirect = pageWithName(ERXRedirect.class, context);
+			redirect.setDirectActionName("backtrackError");
+			response = redirect.generateResponse();
+		} else {
+			response = pageWithName(SPBacktrackErrorPage.class, context).generateResponse();
+		}
+		return response;
 	}
 
 	@Override

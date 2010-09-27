@@ -2,7 +2,7 @@
 	<wo:WOGenericContainer elementName="div" class="$^class">
 		<ul>
 			<wo:WORepetition list="$noticeList.notices" item="$notice">
-			<li><wo:str value="$notice"/></li>
+			<li><wo:str value="$notice" escapeHTML = "$false"/></li>
 			</wo:WORepetition>
 		</ul>
 	</wo:WOGenericContainer>

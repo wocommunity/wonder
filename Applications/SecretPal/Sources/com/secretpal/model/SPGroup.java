@@ -21,7 +21,7 @@ public class SPGroup extends _SPGroup {
 
 	public SPMembership invite(String emailAddress) {
 		EOEditingContext editingContext = editingContext();
-		SPPerson person = SPPerson.fetchSPPerson(editingContext, SPPerson.EMAIL_ADDRESS.is(emailAddress));
+		SPPerson person = SPPerson.fetchSPPerson(editingContext, SPPerson.EMAIL_ADDRESS.likeInsensitive(emailAddress));
 		if (person == null) {
 			int atIndex = emailAddress.indexOf('@');
 			String name = atIndex == -1 ? emailAddress : emailAddress.substring(0, atIndex);

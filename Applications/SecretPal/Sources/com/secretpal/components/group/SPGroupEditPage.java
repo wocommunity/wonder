@@ -104,6 +104,10 @@ public class SPGroupEditPage extends SPPage {
 	}
 
 	public WOActionResults saveGroup() {
+		if (session().errors().hasNotices()) {
+			return null;
+		}
+		
 		_group.editingContext().saveChanges();
 		SPGroupPage groupPage = pageWithName(SPGroupPage.class);
 		groupPage.setGroup(_group);

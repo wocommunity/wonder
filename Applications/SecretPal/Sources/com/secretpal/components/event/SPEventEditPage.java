@@ -53,6 +53,10 @@ public class SPEventEditPage extends SPPage {
 	}
 	
 	public WOActionResults saveEvent() {
+		if (session().errors().hasNotices()) {
+			return null;
+		}
+		
 		_event.editingContext().saveChanges();
 		SPEventPage eventPage = pageWithName(SPEventPage.class);
 		eventPage.setEvent(_event);

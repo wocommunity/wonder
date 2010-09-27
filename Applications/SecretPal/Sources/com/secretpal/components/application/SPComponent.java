@@ -10,6 +10,12 @@ public class SPComponent extends ERXComponent {
 	public SPComponent(WOContext context) {
 		super(context);
 	}
+	
+	@Override
+	public void validationFailedWithException(Throwable t, Object value, String keyPath) {
+		super.validationFailedWithException(t, value, keyPath);
+		session().errors().addNotice(t.getMessage());
+	}
 
 	@Override
 	protected boolean isPageAccessAllowed() {

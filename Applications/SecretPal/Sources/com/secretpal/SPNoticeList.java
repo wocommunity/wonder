@@ -9,6 +9,10 @@ public class SPNoticeList {
 	public SPNoticeList() {
 		_notices = new NSMutableArray<String>();
 	}
+	
+	public synchronized boolean hasNotices() {
+		return _notices.count() > 0;
+	}
 
 	public synchronized void addNotice(String error) {
 		_notices.addObject(error);
