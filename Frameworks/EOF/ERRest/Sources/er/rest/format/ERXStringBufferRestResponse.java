@@ -34,11 +34,11 @@ public class ERXStringBufferRestResponse implements IERXRestResponse {
 	}
 	
 	/**
-	 * This method is a nop, currently here for interface completeness only
+	 * Currently here for interface completeness only
 	 * If you have a need, suggest an implementation
 	 */
 	public void appendContentData(NSData d) {
-		//
+		throw new IllegalArgumentException("Attempting to append raw data content to a response object that only understands strings.");
 	}
 
 	@Override
