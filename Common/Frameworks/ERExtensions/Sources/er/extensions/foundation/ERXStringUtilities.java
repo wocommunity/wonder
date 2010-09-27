@@ -963,15 +963,25 @@ public class ERXStringUtilities {
      */
     public static String uncapitalize(String value) {
         String capital = null;
-        if (value != null && value.length() > 0) {
-            StringBuffer buffer = new StringBuffer(value);
-
-            buffer.setCharAt(0, Character.toLowerCase(value.charAt(0)));
-            capital = buffer.toString();            
+        if (value != null) {
+        	int length = value.length();
+        	if (length > 0) {
+	            StringBuffer buffer = new StringBuffer(value);
+	            for (int i = 0; i < length; i ++) {
+	            	char ch = value.charAt(i);
+	            	if (i == 0 || i == length - 1 || (i < length - 1 && Character.isUpperCase(value.charAt(i + 1)))) {
+	                    buffer.setCharAt(i, Character.toLowerCase(ch));
+	            	}
+	            	else {
+	            		break;
+	            	}
+	            }
+	            capital = buffer.toString();
+        	}
         }
         return capital != null ? capital : value;
     }
-
+    
     /**
      * Capitalizes all the strings in a given string.
      * @param value to be capitalized
