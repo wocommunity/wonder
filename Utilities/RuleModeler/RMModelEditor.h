@@ -97,6 +97,7 @@ typedef enum {
 
 - (IBAction) focus:(id)sender;
 - (IBAction) unfocus:(id)sender;
+- (IBAction)copyForDocumenting:(id)sender;
 - (void) showRules:(NSArray *)rules;
 
 - (void) setFirstResponderInPart:(RMWindowPart)part;

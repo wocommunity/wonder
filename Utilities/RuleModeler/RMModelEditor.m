@@ -376,6 +376,13 @@ static NSRange EnumerateRangesOfIndexSet(NSIndexSet *self, NSRangePointer indexR
 - (void)addToolbarItems {
     NSToolbarItem   *anItem;
     
+	
+//    addToolbarItem(toolbarItems, @"CopyForDocs", 
+//                   NSLocalizedString(@"CopyForDocs", @"Toolbar item label"), 
+//                   NSLocalizedString(@"Copy for Docs", @"Toolbar item palette label"), 
+//                   NSLocalizedString(@"Copy in documentation form", @"Toolbar item tooltip"), 
+//                   self, @selector(setImage:), [NSImage imageNamed:@"copyForDocumenting"], @selector(duplicate:), nil);
+//	
     addToolbarItem(toolbarItems, @"NewRule", 
                    NSLocalizedString(@"New", @"Toolbar item label"), 
                    NSLocalizedString(@"New Rule", @"Toolbar item palette label"), 
@@ -615,10 +622,42 @@ static NSRange EnumerateRangesOfIndexSet(NSIndexSet *self, NSRangePointer indexR
     }
 }
 
+- (IBAction)copyForDocumenting:(id)sender;
+{
+    NSResponder *firstResponder = [[self window] firstResponder];
+    if (firstResponder == rulesTableView) {
+		if ([rulesTableView numberOfSelectedRows] > 0) {
+			NSIndexSet *rowIdx = [rulesTableView selectedRowIndexes];
+			NSMutableArray *rows = [NSMutableArray arrayWithCapacity:[rulesTableView numberOfSelectedRows]];
+			
+			NSArray *rules = [rulesController arrangedObjects];
+			Rule *rule;
+			
+			unsigned int idx = [rowIdx firstIndex];
+			
+			NSPasteboard *pb = [NSPasteboard generalPasteboard];
+			[pb declareTypes:[NSArray arrayWithObject:NSStringPboardType] owner:nil];
+			NSMutableString *result = [NSMutableString stringWithCapacity:0];
+			while (idx != NSNotFound) {
+				if ([result length] > 0) {
+					[result appendString:@"\n"];
+				}
+				rule = [rules objectAtIndex:idx];
+				[result appendString:[rule description]];
+				[pb setString:result forType:NSStringPboardType];
+				
+				idx = [rowIdx indexGreaterThanIndex:idx];
+			}
+			
+		}
+    }
+}
+
 - (IBAction)cut:(id)sender {
     [self copy:sender];
     [self remove:sender];
 }
+
 
 - (void)_optimizedAddRules:(NSArray *)rules
 {
@@ -711,7 +750,7 @@ static NSRange EnumerateRangesOfIndexSet(NSIndexSet *self, NSRangePointer indexR
 }
 
 - (BOOL)validateAction:(SEL)action {
-    if ((action == @selector(copy:) || action == @selector(cut:) || action == @selector(duplicate:) || action == @selector(showSelectedRule:)) && [rulesTableView numberOfSelectedRows] == 0) {
+    if ((action == @selector(copy:) || action == @selector(copyForDocumenting:) ||action == @selector(cut:) || action == @selector(duplicate:) || action == @selector(showSelectedRule:)) && [rulesTableView numberOfSelectedRows] == 0) {
 	return NO;
     } else if (action == @selector(paste:)) {
 	NSPasteboard *pb = [NSPasteboard generalPasteboard];
