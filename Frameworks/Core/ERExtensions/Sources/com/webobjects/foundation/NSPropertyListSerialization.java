@@ -3,7 +3,6 @@
 package com.webobjects.foundation;
 
 import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,6 +43,8 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
+
+import com.webobjects.foundation.NSPropertyListSerialization.PListFormat;
 
 /**
  * <p>
@@ -1032,7 +1033,12 @@ public class NSPropertyListSerialization {
 		private void _appendDataToStringBuffer(NSData s, StringBuffer stringbuffer, int i) {
 			this._appendIndentationToStringBuffer(stringbuffer, i);
 			stringbuffer.append(DictionaryParser.XMLNode.Type.DATA.openTag());
-			stringbuffer.append(new String(_NSBase64.encode(s.bytes()), _NSStringUtilities.UTF8_CHARSET));
+			try {
+				stringbuffer.append(new String(_NSBase64.encode(s.bytes()), _NSStringUtilities.UTF8_ENCODING));
+			}
+			catch (UnsupportedEncodingException e) {
+				throw NSForwardException._runtimeExceptionForThrowable(e);
+			}
 			stringbuffer.append(DictionaryParser.XMLNode.Type.DATA.closeTag());
 			this._appendNewLineToStringBuffer(stringbuffer, i);
 		}
@@ -4522,11 +4528,11 @@ public class NSPropertyListSerialization {
 		 * @throws IOException
 		 */
 		private void parseAsciiString(byte[] bytes, int index, int count) throws IOException {
-			Charset charSet = Charset.forName("UTF-8");
+			String encoding = "UTF-8";
 			if (Charset.isSupported("ASCII")) {
-				charSet = Charset.forName("ASCII");
+				encoding = "ASCII";
 			}
-			objectTable.add(new String(bytes, index, count, charSet));
+			objectTable.add(new String(bytes, index, count, encoding));
 		}
 
 		/**
@@ -4645,12 +4651,12 @@ public class NSPropertyListSerialization {
 		 * @throws IOException
 		 */
 		private void parseUnicodeString(byte[] bytes, int index, int count) throws IOException {
-			Charset charSet = Charset.forName("UTF-8");
+			String encoding = "UTF-8";
 			if (Charset.isSupported("UTF-16BE")) {
-				charSet = Charset.forName("UTF-16BE");
+				encoding = "UTF-16BE";
 			}
 			// The count is teh number of char not the number of bytes. With UTF-16BE there is 2 bytes per char.
-			objectTable.add(new String(bytes, index, count * 2, charSet));
+			objectTable.add(new String(bytes, index, count * 2, encoding));
 		}
 
 		private static double _convertDate(Date date) {
@@ -4839,23 +4845,28 @@ public class NSPropertyListSerialization {
 		 */
 
 		private byte[] encodeString(String value) {
-			NSMutableData data = new NSMutableData(value.length() * 2);
-			Charset charSet = Charset.forName("UTF-8");
-			// This is kind of funky we do a first encoding to see if we can get away with ASCII encoding
-			// This is true if UTF-8 encoding yield the same length as the char count.
-			byte[] theBytes = value.getBytes(charSet);
-
-			if (theBytes.length == value.length()) {
-				data.appendBytes(this.encodeCount(value.length(), Type.kCFBinaryPlistMarkerASCIIString));
-			} else {
-				if (Charset.isSupported("UTF-16BE")) {
-					charSet = Charset.forName("UTF-16BE");
+			try {
+				NSMutableData data = new NSMutableData(value.length() * 2);
+				String encoding = "UTF-8";
+				// This is kind of funky we do a first encoding to see if we can get away with ASCII encoding
+				// This is true if UTF-8 encoding yield the same length as the char count.
+				byte[] theBytes = value.getBytes(encoding);
+	
+				if (theBytes.length == value.length()) {
+					data.appendBytes(this.encodeCount(value.length(), Type.kCFBinaryPlistMarkerASCIIString));
+				} else {
+					if (Charset.isSupported("UTF-16BE")) {
+						encoding = "UTF-16BE";
+					}
+					theBytes = value.getBytes(encoding);
+					data.appendBytes(this.encodeCount(value.length(), Type.kCFBinaryPlistMarkerUnicode16String));
 				}
-				theBytes = value.getBytes(charSet);
-				data.appendBytes(this.encodeCount(value.length(), Type.kCFBinaryPlistMarkerUnicode16String));
+				data.appendBytes(theBytes);
+				return data.bytes();
 			}
-			data.appendBytes(theBytes);
-			return data.bytes();
+			catch (UnsupportedEncodingException e) {
+				throw NSForwardException._runtimeExceptionForThrowable(e);
+			}
 		}
 
 		/**
