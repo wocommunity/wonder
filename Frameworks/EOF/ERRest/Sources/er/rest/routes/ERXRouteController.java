@@ -1,5 +1,6 @@
 package er.rest.routes;
 
+import java.io.FileNotFoundException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -1166,6 +1167,16 @@ public class ERXRouteController extends WODirectAction {
 	}
 
 	/**
+	 * If automatic html routing is enabled and there is no page component found that matches the current route,
+	 * should that result in a 404?
+	 * 
+	 * @return whether or not a missing page is a failure
+	 */
+	protected boolean shouldFailOnMissingHtmlPage() {
+		return false;
+	}
+	
+	/**
 	 * Sets the entity name for this controller.
 	 * 
 	 * @param entityName this controller's entity name
@@ -1289,6 +1300,10 @@ public class ERXRouteController extends WODirectAction {
 				else {
 					log.info(pageName + " does not exist, falling back to route controller.");
 				}
+				
+				if (results == null && shouldFailOnMissingHtmlPage()) {
+					throw new FileNotFoundException("There is no '" + actionName + "' page for the entity '" + entityName() + "'.");
+				}
 			}
 
 			if (results == null) {
@@ -1354,7 +1369,7 @@ public class ERXRouteController extends WODirectAction {
 				throw NSForwardException._runtimeExceptionForThrowable(t);
 			}
 			Throwable meaningfulThrowble = ERXExceptionUtilities.getMeaningfulThrowable(t);
-			if (meaningfulThrowble instanceof ObjectNotAvailableException) {
+			if (meaningfulThrowble instanceof ObjectNotAvailableException || meaningfulThrowble instanceof FileNotFoundException) {
 				results = errorResponse(meaningfulThrowble, WOMessage.HTTP_STATUS_NOT_FOUND);
 			}
 			else if (meaningfulThrowble instanceof SecurityException) {
