@@ -2,6 +2,7 @@ package er.rest.routes;
 
 import java.util.Enumeration;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -245,6 +246,15 @@ public class ERXRoute {
 	}
 	
 	/**
+	 * Returns the controller class for this route.
+	 * 
+	 * @return the controller class for this route
+	 */
+	public Class<? extends ERXRouteController> controller() {
+		return _controller;
+	}
+	
+	/**
 	 * Returns the Pattern used to match this route.
 	 * 
 	 * @return the Pattern used to match this route
@@ -392,7 +402,7 @@ public class ERXRoute {
 
 	@Override
 	public String toString() {
-		return "[ERXRoute: pattern=" + _routePattern + "; method=" + _method + "]";
+		return "[ERXRoute: pattern=" + _routePattern + "; method=" + _method + "; keys=" + _keys.valueForKey("key") + "]";
 	}
 
 	/**
@@ -403,17 +413,20 @@ public class ERXRoute {
 	public static class Key {
 		protected String _valueType;
 		protected String _key;
-
-		protected Key() {
-		}
+		private Map<Class<?>, RouteParameterMethod> _routeParameterMethodCache;
 
 		public Key(String key) {
 			this(key, String.class.getName());
 		}
 
 		public Key(String key, String valueType) {
+			this();
 			_key = key;
 			_valueType = valueType;
+		}
+
+		protected Key() {
+			_routeParameterMethodCache = new ConcurrentHashMap<Class<?>, RouteParameterMethod>();
 		}
 
 		public String key() {
@@ -422,6 +435,14 @@ public class ERXRoute {
 
 		public String valueType() {
 			return _valueType;
+		}
+		
+		public RouteParameterMethod _routeParameterMethodForClass(Class<?> resultsClass) {
+			return _routeParameterMethodCache.get(resultsClass);
+		}
+		
+		public void _setRouteParameterMethodForClass(RouteParameterMethod routeParameter, Class<?> resultsClass) {
+			_routeParameterMethodCache.put(resultsClass, routeParameter);
 		}
 
 		@Override
@@ -437,6 +458,38 @@ public class ERXRoute {
 		@Override
 		public String toString() {
 			return "[ERXRoute.Key: " + _key + "]";
+		}
+	}
+	
+	public static class RouteParameterMethod {
+		private java.lang.reflect.Method _method;
+		private boolean _stringParameter;
+		
+		public RouteParameterMethod(java.lang.reflect.Method method) {
+			_method = method;
+			if (_method != null) {
+				Class<?>[] parameterTypes = _method.getParameterTypes();
+				if (parameterTypes.length != 1) {
+					throw new IllegalArgumentException("The route parameter method '" + method + "' must take a single parameter.");
+				}
+				_stringParameter = String.class.isAssignableFrom(parameterTypes[0]);
+			}
+		}
+		
+		public boolean isStringParameter() {
+			return _stringParameter;
+		}
+		
+		public boolean hasMethod() {
+			return _method != null;
+		}
+		
+		public java.lang.reflect.Method method() {
+			return _method;
+		}
+		
+		public String toString() {
+			return "[ERXRoute.RouteParameterMethod: method=" + (_method == null ? "(none)" : _method.toString()) + "]";
 		}
 	}
 }

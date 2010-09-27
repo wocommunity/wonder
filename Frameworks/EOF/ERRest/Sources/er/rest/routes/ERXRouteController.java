@@ -2,7 +2,6 @@ package er.rest.routes;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Enumeration;
 import java.util.LinkedList;
@@ -23,6 +22,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOObjectStore;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -76,6 +76,7 @@ public class ERXRouteController extends WODirectAction {
 	private ERXRestRequestNode _requestNode;
 	private NSKeyValueCoding _options;
 	private NSSet/*<String>*/ _prefetchingKeyPaths;
+	private boolean _shouldDisposeEditingContext;
 
 	/**
 	 * Constructs a new ERXRouteController.
@@ -85,6 +86,7 @@ public class ERXRouteController extends WODirectAction {
 	 */
 	public ERXRouteController(WORequest request) {
 		super(request);
+        _shouldDisposeEditingContext = true;
 		ERXRouteController._registerControllerForRequest(this, request);
 	}
 
@@ -1099,53 +1101,56 @@ public class ERXRouteController extends WODirectAction {
 	/**
 	 * Enumerates the route keys, looks for @ERXRouteParameter annotated methods, and sets the value of the routeKey
 	 * with the corresponding method if it exists.
-	 * 
+	 *
 	 * @param results
-	 *            the results to apply route parameter to
+	 *	    the results to apply route parameter to
 	 */
 	protected void _takeRouteParametersFromRequest(WOActionResults results) {
 		Class<?> resultsClass = results.getClass();
-		/*for (ERXRoute.Key key : _routeKeys.allKeys()) {*/
-		for (Enumeration keyEnum = _routeKeys.keyEnumerator(); keyEnum.hasMoreElements(); ) {
-			ERXRoute.Key key = (ERXRoute.Key)keyEnum.nextElement();
-			String setMethodName = "set" + ERXStringUtilities.capitalize(key.key());
-			try {
-				Method setStringMethod = resultsClass.getMethod(setMethodName, String.class);
-				ERXRouteParameter routeParameter = setStringMethod.getAnnotation(ERXRouteParameter.class);
-				if (routeParameter != null) {
-					setStringMethod.invoke(results, routeStringForKey(key.key()));
+		for (Enumeration routeKeysEnum = _routeKeys.keyEnumerator(); routeKeysEnum.hasMoreElements();) {
+			ERXRoute.Key key = (ERXRoute.Key)routeKeysEnum.nextElement();
+			ERXRoute.RouteParameterMethod routeParameterMethod = key._routeParameterMethodForClass(resultsClass);
+			String keyName = key.key();
+
+			if (routeParameterMethod == null) {
+				// MS: because we lowercase SPPerson into spPerson, the default capitalization would be SpPerson.
+				// We want to do a first pass where we check for entities that equalsIgnoreCase match the
+				// keyName and guess that as the capitalization first. If that fails, THEN we fall back to a
+				// simple capitalization.
+				String capitalizedKeyName = ERXRestClassDescriptionFactory._guessMismatchedCaseEntityName(keyName);
+				if (capitalizedKeyName == null) {
+					capitalizedKeyName = ERXStringUtilities.capitalize(keyName);
 				}
-			}
-			catch (NoSuchMethodException e) {
-				try {
-					Class<?> valueType = _NSUtilities.classWithName(key.valueType());
-					Method setObjectMethod = resultsClass.getMethod(setMethodName, valueType);
-					ERXRouteParameter routeParameter = setObjectMethod.getAnnotation(ERXRouteParameter.class);
-					if (routeParameter != null) {
-						setObjectMethod.invoke(results, routeObjectForKey(key.key()));
+				String setMethodName = "set" + capitalizedKeyName;
+				Method matchingMethod = null;
+				Method[] possibleMethods = resultsClass.getMethods();
+				for (Method possibleMethod : possibleMethods) {
+					ERXRouteParameter routeParameter = possibleMethod.getAnnotation(ERXRouteParameter.class);
+					if (routeParameter != null && (keyName.equals(routeParameter.value()) || possibleMethod.getName().equals(setMethodName))) {
+						matchingMethod = possibleMethod;
+						break;
 					}
 				}
-				catch (NoSuchMethodException e2) {
-					// SKIP
-				}
-				catch (IllegalArgumentException e2) {
-					e2.printStackTrace();
-				}
-				catch (IllegalAccessException e2) {
-					e2.printStackTrace();
-				}
-				catch (InvocationTargetException e2) {
-					e2.printStackTrace();
-				}
+				routeParameterMethod = new ERXRoute.RouteParameterMethod(matchingMethod);
+				key._setRouteParameterMethodForClass(routeParameterMethod, resultsClass);
 			}
-			catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			}
-			catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-			catch (InvocationTargetException e) {
-				e.printStackTrace();
+
+			if (routeParameterMethod.hasMethod()) {
+				try {
+					if (routeParameterMethod.isStringParameter()) {
+						routeParameterMethod.method().invoke(results, routeStringForKey(keyName));
+					}
+					else {
+						Object routeObject = routeObjectForKey(keyName);
+						if (routeObject instanceof EOEnterpriseObject && ((EOEnterpriseObject)routeObject).editingContext() == _editingContext) {
+							_shouldDisposeEditingContext = false;
+						}
+						routeParameterMethod.method().invoke(results, routeObject);
+					}
+				}
+				catch (Throwable t) {
+					throw NSForwardException._runtimeExceptionForThrowable(t);
+				}
 			}
 		}
 	}
@@ -1546,7 +1551,7 @@ public class ERXRouteController extends WODirectAction {
 	 * Disposes any resources the route controller may be holding onto (like its editing context).
 	 */
 	public void dispose() {
-		if (_editingContext != null) {
+		if (_shouldDisposeEditingContext && _editingContext != null) {
 			_editingContext.dispose();
 			_editingContext = null;
 		}
