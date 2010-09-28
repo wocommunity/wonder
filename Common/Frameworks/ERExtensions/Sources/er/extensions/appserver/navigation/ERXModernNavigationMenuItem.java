@@ -13,6 +13,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.appserver.ERXDirectAction;
 import er.extensions.components.ERXStatelessComponent;
+import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
@@ -150,6 +151,22 @@ public class ERXModernNavigationMenuItem extends ERXStatelessComponent {
 
         if ((navigationItem().action() != null) && (!navigationItem().action().equals(EMPTY_STRING))) {
             anActionResult = (WOComponent)valueForKeyPath(navigationItem().action());
+            
+            // it would be nice to have the navigation state to be associated with the 
+            // ERXNavigationItem during loadNavigationMenu(). But, with the current model
+            // this menu system allows the same ERXNavigationItem to be a child of more than one parent items.
+            // So we have to loop onItemClick until we hit the root node to 
+            // get the navigationState.  --santoash
+            // Note: The parent() on an item is only set when you ask for a children of a particular item.
+            // @see ERXNavigationItem.childItemsInContext()
+            NSMutableArray state = new NSMutableArray();
+            ERXNavigationItem currentNavItem = navigationItem(); 
+            do {
+                state.addObject(currentNavItem.name());
+                currentNavItem = currentNavItem.parent();
+            } while (!currentNavItem.isRootNode());
+            
+            ERXNavigationManager.manager().navigationStateForSession(session()).setState(ERXArrayUtilities.reverse(state));
         } else if ((navigationItem().pageName() != null) && (!navigationItem().pageName().equals(EMPTY_STRING))) {
             anActionResult = pageWithName(navigationItem().pageName());
         } else if ((navigationItem().directActionName() != null) && (!navigationItem().directActionName().equals(EMPTY_STRING))) {
