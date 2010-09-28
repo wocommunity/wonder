@@ -23,11 +23,11 @@ import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 
 /**
- * Encapsulation of http://valums.com/ajax-upload/
- * @binding			name				@see http://valums.com/ajax-upload/
- * @binding			onChange			@see http://valums.com/ajax-upload/
- * @binding			onSubmit			@see http://valums.com/ajax-upload/
- * @binding			onComplete			@see http://valums.com/ajax-upload/
+ * Encapsulation of @see <a href="http://github.com/valums/ajax-upload">Ajax Upload</a>
+ * @binding			name				
+ * @binding			onChange			
+ * @binding			onSubmit			
+ * @binding			onComplete			
  * 
  * @property		useUnobtrusively			For Unobtrusive Javascript programming. Default it is ON.
  * 
