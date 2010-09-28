@@ -72,7 +72,7 @@ public abstract class jQueryLoad extends WOComponent {
     @Override
     public void appendToResponse(WOResponse response, WOContext context) {
     	if (!useUnobtrusively) {
-    		ERXResponseRewriter.addScriptResourceInHead(response, context, "ERJQuery", "jquery-1.4.js");
+    		ERXResponseRewriter.addScriptResourceInHead(response, context, "ERJQuery", "jquery-1.4.2.min.js");
     	} super.appendToResponse(response, context);
     }
 }

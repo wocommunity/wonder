@@ -50,7 +50,7 @@ public class JWPlayer extends WOComponent {
     	super.appendToResponse(response, context);
     	
     	if (!useUnobtrusively) {
-    		ERXResponseRewriter.addScriptResourceInHead(response, context, "ERJQuery", "jquery-1.4.js");
+    		ERXResponseRewriter.addScriptResourceInHead(response, context, "ERJQuery", "jquery-1.4.2.min.js");
     		ERXResponseRewriter.addScriptResourceInHead(response, context, "ERJQuery", "jquery.jwplayer.js");
     	}
     }
