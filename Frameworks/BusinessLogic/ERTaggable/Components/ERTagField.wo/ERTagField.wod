@@ -15,6 +15,7 @@ TagField : WOTextField {
   size = size;
   id = id;
   style = ^style;
+  class = ^class;
 }
 
 AvailableTags : WOGenericContainer {
