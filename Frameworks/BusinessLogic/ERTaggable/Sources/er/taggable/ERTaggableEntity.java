@@ -750,7 +750,21 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
    * @return a dictionary of tags and their occurrence count
    */
   public NSDictionary<String, Integer> tagCount(EOEditingContext editingContext) {
-    return tagCount(editingContext, -1);
+	  return tagCount(editingContext, null);
+  }
+  
+  /**
+   * This method counts the number of times the tags have been applied to your objects
+   * and, by default, returns a dictionary in the form of { 'tag_name' => count, ... }.  This
+   * does not include any restriction on the count required for results to be returned nor
+   * does it limit the number of results returned.
+   *
+   * @param editingContext the editing context to fetch into
+   * @param additionalQualifier an optional restrictingQualifier
+   * @return a dictionary of tags and their occurrence count
+   */
+  public NSDictionary<String, Integer> tagCount(EOEditingContext editingContext, EOQualifier additionalQualifier) {
+    return tagCount(editingContext, -1, additionalQualifier);
   }
 
   /**
@@ -763,7 +777,21 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
    * @return a dictionary of tags and their occurrence count
    */
   public NSDictionary<String, Integer> tagCount(EOEditingContext editingContext, int limit) {
-    return tagCount(editingContext, null, -1, limit);
+	  return tagCount(editingContext, limit, null);
+  }
+  
+  /**
+   * This method counts the number of times the tags have been applied to your objects
+   * and, by default, returns a dictionary in the form of { 'tag_name' => count, ... }.  This
+   * does not include any restriction on the count required for results to be returned.
+   *
+   * @param editingContext the editing context to fetch into
+   * @param limit the limit of the number of results to return (ordered by count DESC)
+   * @param additionalQualifier an optional restrictingQualifier
+   * @return a dictionary of tags and their occurrence count
+   */
+  public NSDictionary<String, Integer> tagCount(EOEditingContext editingContext, int limit, EOQualifier additionalQualifier) {
+    return tagCount(editingContext, null, -1, limit, additionalQualifier);
   }
 
   /**
@@ -780,8 +808,27 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
    * @param limit the limit of the number of results to return (ordered by count DESC)
    * @return a dictionary of tags and their occurrence count
    */
-  @SuppressWarnings("unchecked")
   public NSDictionary<String, Integer> tagCount(EOEditingContext editingContext, NSSelector selector, int count, int limit) {
+	  return tagCount(editingContext, selector, count, limit, null);
+  }
+  
+  /**
+   * This method counts the number of times the tags have been applied to your objects
+   * and, by default, returns a dictionary in the form of { 'tag_name' => count, ... }. Providing
+   * a selector and count allows you to add a restriction on, for instance, the minimum number of
+   * occurrences required for a result to appear. As an example, you might have 
+   * selector = EOQualifier.QualifierOperatorGreaterThan, count = 1 to only return tags with more 
+   * than one occurrence.
+   *
+   * @param editingContext the editing context to fetch into
+   * @param selector a selector for the count restriction (see EOQualifier.QualifierOperators)
+   * @param count the count restriction required for the result to be returned
+   * @param limit the limit of the number of results to return (ordered by count DESC)
+   * @param additionalQualifier an optional restrictingQualifier. This is combined with the qualifier returned by additionalTagCountQualifier()
+   * @return a dictionary of tags and their occurrence count
+   */
+  @SuppressWarnings("unchecked")
+  public NSDictionary<String, Integer> tagCount(EOEditingContext editingContext, NSSelector selector, int count, int limit, EOQualifier additionalQualifier) {
     NSMutableArray<EOAttribute> fetchAttributes = new NSMutableArray<EOAttribute>();
     ERXEOAttribute tagNameAttribute = new ERXEOAttribute(_entity, _tagsRelationship.name() + "." + ERTag.NAME_KEY);
     tagNameAttribute.setName("tagName");
@@ -791,7 +838,12 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
     fetchAttributes.addObject(countAttribute);
 
     ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(_entity.model());
-    EOFetchSpecification fetchSpec = new EOFetchSpecification(_entity.name(), additionalTagCountQualifier(), null);
+	EOQualifier combinedAdditionalQualifier = null;
+	EOQualifier additionalTagCountQualifier = additionalTagCountQualifier();
+	if (additionalTagCountQualifier != null || additionalQualifier != null) {
+		combinedAdditionalQualifier = ERXQ.and(additionalQualifier, additionalTagCountQualifier);
+	}
+	EOFetchSpecification fetchSpec = new EOFetchSpecification(_entity.name(), combinedAdditionalQualifier, null);
     EOSQLExpression sqlExpression = sqlHelper.sqlExpressionForFetchSpecification(editingContext, fetchSpec, 0, limit, fetchAttributes);
     NSMutableArray<EOAttribute> groupByAttributes = new NSMutableArray<EOAttribute>(tagNameAttribute);
     sqlHelper.addGroupByClauseToExpression(groupByAttributes, sqlExpression);
