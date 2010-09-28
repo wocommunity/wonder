@@ -3,6 +3,7 @@ package er.taggable.components;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSComparator;
 import com.webobjects.foundation.NSDictionary;
@@ -37,6 +38,7 @@ import er.taggable.ERTaggableEntity;
  * @binding categoryCount the number of categories to split into (default 5)
  * @binding tagClassPrefix the prefix to prepend to the tag cloud class name ("tagCloud" by default)
  * @binding cache if false, the computation of the tag cloud is not cached (this is EXPENSIVE) 
+ * @binding additionalQualifier an optional restricting qualifier 
  * 
  * @binding shouldResetTagCloud forces recalculation of the tag cloud when the binding evaluates to true. 
  * 			After recalculation, the binding will be set to false again.
@@ -87,7 +89,11 @@ public class ERTagCloud extends ERXComponent {
   }
 
   public int categoryCount() {
-    return intValueForBinding("categoryCount", 5);
+	  return intValueForBinding("categoryCount", 5);
+  }
+
+  public EOQualifier additionalQualifier() {
+    return (EOQualifier) valueForBinding("additionalQualifier");
   }
 
   @SuppressWarnings("unchecked")
@@ -107,13 +113,13 @@ public class ERTagCloud extends ERXComponent {
       int limit = limit();
       int minimum = minimum();
       if (limit == -1 && minimum == -1) {
-        tagCount = taggableEntity.tagCount(editingContext, -1);
+        tagCount = taggableEntity.tagCount(editingContext, -1, additionalQualifier());
       }
       else if (minimum == -1) {
-        tagCount = taggableEntity.tagCount(editingContext, limit);
+        tagCount = taggableEntity.tagCount(editingContext, limit, additionalQualifier());
       }
       else {
-        tagCount = taggableEntity.tagCount(editingContext, ERXQ.GTEQ, minimum, limit);
+        tagCount = taggableEntity.tagCount(editingContext, ERXQ.GTEQ, minimum, limit, additionalQualifier());
       }
       NSArray<String> categories = categories();
       if (categories == null) {
