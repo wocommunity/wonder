@@ -159,14 +159,16 @@ public class ERXModernNavigationMenuItem extends ERXStatelessComponent {
             // get the navigationState.  --santoash
             // Note: The parent() on an item is only set when you ask for a children of a particular item.
             // @see ERXNavigationItem.childItemsInContext()
-            NSMutableArray state = new NSMutableArray();
-            ERXNavigationItem currentNavItem = navigationItem(); 
-            do {
-                state.addObject(currentNavItem.name());
-                currentNavItem = currentNavItem.parent();
-            } while (!currentNavItem.isRootNode());
-            
-            ERXNavigationManager.manager().navigationStateForSession(session()).setState(ERXArrayUtilities.reverse(state));
+            if(ERXProperties.booleanForKeyWithDefault("er.extensions.appserver.navigation.ERXNavigationItem.setNavigationStateOnMenuItemClick", true)) {
+                NSMutableArray state = new NSMutableArray();
+                ERXNavigationItem currentNavItem = navigationItem(); 
+                do {
+                    state.addObject(currentNavItem.name());
+                    currentNavItem = currentNavItem.parent();
+                } while (!currentNavItem.isRootNode());
+                
+                ERXNavigationManager.manager().navigationStateForSession(session()).setState(ERXArrayUtilities.reverse(state));
+            }
         } else if ((navigationItem().pageName() != null) && (!navigationItem().pageName().equals(EMPTY_STRING))) {
             anActionResult = pageWithName(navigationItem().pageName());
         } else if ((navigationItem().directActionName() != null) && (!navigationItem().directActionName().equals(EMPTY_STRING))) {
