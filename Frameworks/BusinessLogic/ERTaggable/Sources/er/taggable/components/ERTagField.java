@@ -3,6 +3,7 @@ package er.taggable.components;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSComparator;
 import com.webobjects.foundation.NSDictionary;
@@ -27,6 +28,10 @@ import er.taggable.model.ERTag;
  * @binding limit the maximum number of tags to show
  * @binding minimum the minimum tag count required for a tag to be shown
  * @binding size the size of the text field. Defaults to 60.
+ * @binding class the css class of the text field
+ * @binding style the css style of the text field
+ * @binding id the dom ID of the text field
+ * @binding additionalQualifier an optional restricting qualifier
  */
 public class ERTagField extends er.extensions.components.ERXComponent {
   private String _id;
@@ -69,8 +74,11 @@ public class ERTagField extends er.extensions.components.ERXComponent {
   public int limit() {
     return intValueForBinding("limit", -1);
   }
+  
+  public EOQualifier additionalQualifier() {
+    return (EOQualifier) valueForBinding("additionalQualifier");
+  }
 
-  @SuppressWarnings("unchecked")
   public NSArray<String> availableTags() {
     clearCacheIfNecessary();
     if (_availableTags == null) {
@@ -79,11 +87,11 @@ public class ERTagField extends er.extensions.components.ERXComponent {
       int limit = limit();
       NSArray<String> availableTags;
       if (minimum == -1) {
-        NSDictionary<String, Integer> tagCount = taggable().taggableEntity().tagCount(editingContext, limit);
+        NSDictionary<String, Integer> tagCount = taggable().taggableEntity().tagCount(editingContext, limit, additionalQualifier());
         availableTags = tagCount.allKeys();
       }
       else {
-        NSDictionary<String, Integer> tagCount = taggable().taggableEntity().tagCount(editingContext, ERXQ.GTEQ, minimum, limit);
+        NSDictionary<String, Integer> tagCount = taggable().taggableEntity().tagCount(editingContext, ERXQ.GTEQ, minimum, limit, additionalQualifier());
         availableTags = tagCount.allKeys();
       }
       _availableTags = ERXArrayUtilities.sortedArrayUsingComparator(availableTags, NSComparator.AscendingStringComparator);
