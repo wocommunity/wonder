@@ -19,6 +19,7 @@ import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXResponseRewriter;
+import er.extensions.appserver.ERXWOContext;
 import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXProperties;
@@ -134,7 +135,7 @@ public abstract class FileUploader extends WOComponent {
 	}
 	
 	private String href() {
-		return context().componentActionURL(ERXApplication.erAjaxRequestHandlerKey());
+		return ERXWOContext.ajaxActionUrl(context());
 	}
 	
 	// R&R
