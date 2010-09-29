@@ -12,9 +12,7 @@ er.extensions.ERXEnterpriseObject.applyRestrictingQualifierOnInsert=true
 er.extensions.ERXEnterpriseObject.updateInverseRelationships=true
 dbConnectUserGLOBAL=
 dbConnectPasswordGLOBAL=
-dbConnectDriverGLOBAL=org.h2.Driver
-dbConnectPluginGLOBAL=H2PlugIn
-dbConnectURLGLOBAL=jdbc:h2:/Resources/SecretPal
+dbConnectURLGLOBAL=jdbc:h2:Resources/SecretPal
 
 # Migrations
 er.migration.migrateAtStartup=true
