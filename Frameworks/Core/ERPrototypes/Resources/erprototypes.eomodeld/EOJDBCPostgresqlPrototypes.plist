@@ -35,7 +35,7 @@
             externalType = varchar; 
             factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
             name = cryptoString; 
-            valueClassName = ERXCryptoString; 
+            valueClassName = "er.extensions.crypting.ERXCryptoString"; 
             valueFactoryMethodName = createInstanceFromCryptoString; 
             width = 100; 
         }, 
