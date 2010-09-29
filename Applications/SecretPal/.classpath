@@ -27,5 +27,6 @@
 	<classpathentry kind="con" path="WOFramework/ERJavaMail"/>
 	<classpathentry kind="con" path="WOFramework/ERModernDirectToWeb"/>
 	<classpathentry kind="con" path="WOFramework/ERCoolComponents"/>
+	<classpathentry kind="con" path="WOFramework/H2PlugIn"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

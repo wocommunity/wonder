@@ -10,9 +10,11 @@ er.extensions.ERXEC.safeLocking=true
 er.extensions.ERXEC.useSharedEditingContext=false
 er.extensions.ERXEnterpriseObject.applyRestrictingQualifierOnInsert=true
 er.extensions.ERXEnterpriseObject.updateInverseRelationships=true
-dbConnectURLGLOBAL=jdbc:FrontBase://127.0.0.1/SecretPal
-dbConnectUserGLOBAL=SecretPal
+dbConnectUserGLOBAL=
 dbConnectPasswordGLOBAL=
+dbConnectDriverGLOBAL=org.h2.Driver
+dbConnectPluginGLOBAL=H2PlugIn
+dbConnectURLGLOBAL=jdbc:h2:/Resources/SecretPal
 
 # Migrations
 er.migration.migrateAtStartup=true
