@@ -36,7 +36,7 @@
             externalType = TEXT; 
             factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
             name = cryptoString; 
-            valueClassName = "er.extensions.ERXCryptoString"; 
+            valueClassName = "er.extensions.crypting.ERXCryptoString"; 
             valueFactoryMethodName = createInstanceFromCryptoString; 
             width = 100; 
         }, 
