@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+        <wo class="FileUploaderContainer.java" wocomponentcontent="true">
+
+        <binding name="id"/>
+        <validation message="'id' is a required binding.">
+            <unbound name="id"/>
+        </validation>
+    <binding name="filePath"/>
+    <binding name="streamToFilePath"/>
+    <binding name="finalFilePath"/>
+    <validation message="'filePath' must be bound to a settable value">
+            <unsettable name="filePath"/>
+        </validation>
+    <validation message="'finalFilePath' must be bound to a settable value">
+            <unsettable name="finalFilePath"/>
+        </validation>
+    </wo>
+</wodefinitions>
