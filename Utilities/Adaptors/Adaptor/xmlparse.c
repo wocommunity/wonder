@@ -35,7 +35,9 @@ and limitations under the License.
 #include <stdlib.h>
 #include <sys/types.h>
 #ifdef WIN32
+#ifndef _MSC_VER // SWK old // SWK old WO4.5 headerfile
 #include <winnt-pdo.h>
+#endif
 #ifndef strncasecmp
 #define strncasecmp _strnicmp
 #endif
@@ -313,8 +315,12 @@ static void endElementNamed(XMLCDocument *document, const XMLCCharacter *name, c
    } else if (length == 7 && strncasecmp(name, "adaptor", 7) == 0) {
       config->current_element = NULL;
    } else {
+#ifdef _MSC_VER // SWK VC can't allocate dynamic char buffer[length + 1]
+      char *buffer = (char *)alloca((length+1) * sizeof(char));
+#else
       char buffer[length+1];
-      strncpy(buffer,name,length);
+#endif
+	  strncpy(buffer,name,length);
       buffer[length] = '\0';
       WOLog(WO_WARN,"Unknown end tag in XML: %s",buffer);
       if (config->current_element != NULL)	/* only an error if we were parsing something we know about */

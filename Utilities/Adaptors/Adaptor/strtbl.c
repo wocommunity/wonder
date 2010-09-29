@@ -195,7 +195,13 @@ void st_removeKey(strtbl *st, const char *key)
          WOFREE((void *)el->key);
       if (el->flags & STR_FREEVALUE)
          WOFREE((void *)el->value);
-      *el = STRTBL_NULLELEM;	/* clear the element */
+#ifndef _MSC_VER // SWK clear the element changed
+	 *el = STRTBL_NULLELEM;	/* clear the element */
+#else
+	  el->key = NULL;	/* clear the element */
+	  el->value = NULL;	/* clear the element */
+	  el->flags = 0;	/* clear the element */
+#endif
       if (st->firstNull > index)
          st->firstNull = index;
       st->count--;

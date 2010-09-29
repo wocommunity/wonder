@@ -131,7 +131,11 @@ int init_adaptor(struct _strtbl *options)
           WOLog(WO_ERR, "init_adaptor(): str_init failed");
     }
 
+#ifdef _MSC_VER // SWK adding more information to log string
+    WOLog(WO_DBG, "init_adaptor(): beginning initialization. Adaptor version " ADAPTOR_VERSION " (Windows Apache Module).");
+#else
     WOLog(WO_DBG, "init_adaptor(): beginning initialization. Adaptor version " ADAPTOR_VERSION ".");
+#endif
     if (options) {
         char *optionsDescription = st_description(options);
         WOLog(WO_INFO, "init_adaptor(): config options are: %s", optionsDescription);

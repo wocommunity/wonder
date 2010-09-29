@@ -47,7 +47,9 @@ and limitations under the License.
 #include <sys/stat.h>		/* umask() */
 #include <time.h>
 #if defined(WIN32)
+#ifndef _MSC_VER // SWK old // SWK old WO4.5 headerfile
 #include <winnt-pdo.h>
+#endif
 #include <windows.h>
 #include <io.h>
 #else

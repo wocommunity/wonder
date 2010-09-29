@@ -655,9 +655,12 @@ int WebObjects_translate(request_rec *r) {
 
     WOLog(WO_DBG, "<WebObjects Apache Module> new translate: %s", r->uri);
     if (strncmp(wc->WebObjects_alias, r->uri, strlen(wc->WebObjects_alias)) == 0) {
-
+#ifndef _MSC_VER // SWK changed url = WOURLComponents_Initializer; to memset(&url,0,sizeof(WOURLComponents));
         url = WOURLComponents_Initializer;
-        urlerr = WOParseApplicationName(&url, r->uri);
+#else
+		memset(&url,0,sizeof(WOURLComponents));
+#endif
+		urlerr = WOParseApplicationName(&url, r->uri);
         if (urlerr != WOURLOK && !((urlerr == WOURLInvalidApplicationName) && ac_authorizeAppListing(&url))) {
             WOLog(WO_DBG, "<WebObjects Apache Module> translate - DECLINED: %s", r->uri);
             return DECLINED;
@@ -693,12 +696,18 @@ static int WebObjects_handler (request_rec *r)
     WebObjects_config *conf;
     HTTPRequest *req;
     HTTPResponse *resp = NULL;
+#ifndef _MSC_VER // SWK changed url = WOURLComponents_Initializer;
     WOURLComponents wc = WOURLComponents_Initializer;
+#else
+    WOURLComponents wc;
+#endif
     const char *reqerr;
     int retval;
     const char *docroot;
     WOURLError urlerr;
-
+#ifdef _MSC_VER // SWK changed url = WOURLComponents_Initializer;
+	memset(&wc,0,sizeof(WOURLComponents));
+#endif
     /* 	We have to do a check here to see if our handler should process the request.
 	The WebObjects_translate phase should  have marked the request to be handled
 	by WebObjects if it matched the Adaptor's WebObjects alias.

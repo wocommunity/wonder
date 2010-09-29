@@ -482,6 +482,9 @@ static HTTPResponse *_collectRequestInformation(WOAppReq *app, WOURLComponents *
              }
 
 			 // remove any quotes from the instance number
+#ifdef _MSC_VER // SWK Start VC can't define attributes here using '{' fixed it
+			 {
+#endif
 			 char *before, *after;
 			 before = after = app->instance;
 			 while(*before){
@@ -489,9 +492,11 @@ static HTTPResponse *_collectRequestInformation(WOAppReq *app, WOURLComponents *
 					before++;
 				}
 				*after++ = *before++;
-			}
-			*after = 0;
-
+			 }
+			 *after = 0;
+#ifdef _MSC_VER // SWK End
+			 }
+#endif
              WOLog(WO_INFO,"Cookie instance %s from %s",app->instance,cookie);
           }
        }

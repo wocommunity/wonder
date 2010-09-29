@@ -30,7 +30,10 @@ and limitations under the License.
 #include "Platform.h"
 
 /* #define	inline	*/	/* ... if compiler doesn't support 'inline' */
-
+#ifdef _MSC_VER // SWK used for Visual Studio
+#define	inline _inline
+#define alloca _alloca
+#endif
 /* Possibly useful if you want to wait at a particular point for the debugger to attach. */
 #ifndef WIN32
 #define DEBUGWAIT \
@@ -63,7 +66,11 @@ and limitations under the License.
 #define WA_MAX_ADDITIONAL_ARGS_LENGTH	0	/* maximum length of the additional args, including the null */
 #define WA_LB_MAX_NAME_LENGTH		16	/* maximum length of a load balancing routine's name, including the null */
 #define WA_APP_LB_INFO_SIZE		4	/* size in bytes to reserve for load balancing info in WOApp */
+#ifdef _MSC_VER // SWK changed from 8 to 16 cause VS2005 uses _time_t_64
+#define WA_INST_LB_INFO_SIZE		16	/* size in bytes to reserve for load balancing info in WOInstance */
+#else
 #define WA_INST_LB_INFO_SIZE		8	/* size in bytes to reserve for load balancing info in WOInstance */
+#endif
 #define WA_MAX_HOST_NAME_LENGTH		64	/* maximum length of a host name, including the null */
 #define WA_MAX_INSTANCE_NUMBER_LENGTH	8	/* maximum length of an instance number, including the null */
 
