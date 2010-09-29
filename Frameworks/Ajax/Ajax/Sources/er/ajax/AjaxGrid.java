@@ -276,6 +276,8 @@ import er.extensions.foundation.ERXValueUtilities;
  *          content
  * @binding afterUpdate optional, JavaScript to execute client-side after the
  *          grid has updated
+ * @binding updateContainerParameters optional, passed as parameters binding to
+ *          the AjaxUpdateContainer wrapping the grid
  * 
  * @author chill
  */
@@ -468,7 +470,7 @@ public class AjaxGrid extends WOComponent {
 
 		updateBatchSize();
 	}
-
+	
 	/**
 	 * Script that goes on this page to initialize drag and drop on the grid
 	 * when the page loads / re-loads

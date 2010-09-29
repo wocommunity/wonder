@@ -104,6 +104,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 		ajaxOptionsArray.addObject(new AjaxOption("asynchronous", Boolean.TRUE, AjaxOption.BOOLEAN));
 		ajaxOptionsArray.addObject(new AjaxOption("method", "get", AjaxOption.STRING));
 		ajaxOptionsArray.addObject(new AjaxOption("evalScripts", Boolean.TRUE, AjaxOption.BOOLEAN));
+		ajaxOptionsArray.addObject(new AjaxOption("parameters", AjaxOption.STRING));
 		NSMutableDictionary<String, String> options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
 		AjaxUpdateContainer.expandInsertionFromOptions(options, this, component);
 		return options;
