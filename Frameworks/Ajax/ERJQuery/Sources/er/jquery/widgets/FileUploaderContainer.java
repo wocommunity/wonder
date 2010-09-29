@@ -17,7 +17,7 @@ public class FileUploaderContainer extends FileUploader {
 	/*
 	 * Bindings/API
 	 */
-	public static interface Bindings extends AjaxUpload.Bindings {
+	public static interface Bindings extends FileUploader.Bindings {
 		public static final String elementName = "elementName";
 	}
 	
