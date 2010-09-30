@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="317"/>
+			<integer value="29"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -396,6 +396,15 @@
 									<reference key="NSOnImage" ref="238490166"/>
 									<reference key="NSMixedImage" ref="1064121029"/>
 								</object>
+								<object class="NSMenuItem" id="344978183">
+									<reference key="NSMenu" ref="551635544"/>
+									<string key="NSTitle">Copy Simplified</string>
+									<string key="NSKeyEquiv">C</string>
+									<int key="NSKeyEquivModMask">1048576</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="238490166"/>
+									<reference key="NSMixedImage" ref="1064121029"/>
+								</object>
 								<object class="NSMenuItem" id="869529844">
 									<reference key="NSMenu" ref="551635544"/>
 									<string key="NSTitle">Paste</string>
@@ -662,25 +671,6 @@
 									<string key="NSTitle">Show Duplicate Rules</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
-									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="238490166"/>
-									<reference key="NSMixedImage" ref="1064121029"/>
-								</object>
-								<object class="NSMenuItem" id="799027241">
-									<reference key="NSMenu" ref="904683033"/>
-									<bool key="NSIsDisabled">YES</bool>
-									<bool key="NSIsSeparator">YES</bool>
-									<string key="NSTitle"/>
-									<string key="NSKeyEquiv"/>
-									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="238490166"/>
-									<reference key="NSMixedImage" ref="1064121029"/>
-								</object>
-								<object class="NSMenuItem" id="301274747">
-									<reference key="NSMenu" ref="904683033"/>
-									<string key="NSTitle">Copy Rule Synopsis</string>
-									<string key="NSKeyEquiv">c</string>
-									<int key="NSKeyEquivModMask">1572864</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="238490166"/>
 									<reference key="NSMixedImage" ref="1064121029"/>
@@ -1233,9 +1223,9 @@
 					<object class="IBActionConnection" key="connection">
 						<string key="label">copyForDocumenting:</string>
 						<reference key="source" ref="428570001"/>
-						<reference key="destination" ref="301274747"/>
+						<reference key="destination" ref="344978183"/>
 					</object>
-					<int key="connectionID">462</int>
+					<int key="connectionID">464</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -1478,6 +1468,7 @@
 							<reference ref="588495500"/>
 							<reference ref="729585480"/>
 							<reference ref="272283591"/>
+							<reference ref="344978183"/>
 						</object>
 						<reference key="parent" ref="76658"/>
 					</object>
@@ -1744,8 +1735,6 @@
 							<reference ref="1001669386"/>
 							<reference ref="44589147"/>
 							<reference ref="1011171029"/>
-							<reference ref="799027241"/>
-							<reference ref="301274747"/>
 						</object>
 						<reference key="parent" ref="628278143"/>
 					</object>
@@ -1834,14 +1823,9 @@
 						<string key="objectName">Application</string>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">460</int>
-						<reference key="object" ref="799027241"/>
-						<reference key="parent" ref="904683033"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">461</int>
-						<reference key="object" ref="301274747"/>
-						<reference key="parent" ref="904683033"/>
+						<int key="objectID">463</int>
+						<reference key="object" ref="344978183"/>
+						<reference key="parent" ref="551635544"/>
 					</object>
 				</object>
 			</object>
@@ -1887,6 +1871,7 @@
 					<string>163.ImportedFromIB2</string>
 					<string>164.IBPluginDependency</string>
 					<string>164.ImportedFromIB2</string>
+					<string>169.IBEditorWindowLastContentRect</string>
 					<string>169.IBPluginDependency</string>
 					<string>169.ImportedFromIB2</string>
 					<string>171.IBPluginDependency</string>
@@ -2008,8 +1993,7 @@
 					<string>453.ImportedFromIB2</string>
 					<string>457.IBPluginDependency</string>
 					<string>457.ImportedFromIB2</string>
-					<string>460.IBPluginDependency</string>
-					<string>461.IBPluginDependency</string>
+					<string>463.IBPluginDependency</string>
 					<string>5.IBPluginDependency</string>
 					<string>5.ImportedFromIB2</string>
 					<string>56.IBPluginDependency</string>
@@ -2061,6 +2045,7 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
+					<string>{{211, 702}, {196, 273}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2138,7 +2123,7 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<string>{{255, 732}, {272, 243}}</string>
+					<string>{{255, 762}, {272, 213}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2182,7 +2167,6 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
@@ -2212,13 +2196,14 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">462</int>
+			<int key="maxID">464</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
 				<bool key="EncodedWithXMLCoder">YES</bool>
 				<object class="IBPartialClassDescription">
 					<string key="className">FirstResponder</string>
+					<string key="superclassName">NSObject</string>
 					<object class="NSMutableDictionary" key="actions">
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
@@ -3505,7 +3490,7 @@
 			<integer value="3000" key="NS.object.0"/>
 		</object>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
-		<nil key="IBDocument.LastKnownRelativeProjectPath"/>
+		<string key="IBDocument.LastKnownRelativeProjectPath">../RuleModeler.xcodeproj</string>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<object class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
 			<bool key="EncodedWithXMLCoder">YES</bool>
