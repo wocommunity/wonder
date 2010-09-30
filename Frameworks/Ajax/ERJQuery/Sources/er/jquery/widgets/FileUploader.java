@@ -1,6 +1,5 @@
 package er.jquery.widgets;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,7 +16,6 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.appserver.ajax.ERXAjaxApplication;
@@ -64,7 +62,7 @@ public abstract class FileUploader extends WOComponent {
 	}
 	
 	/*
-	 * Headers of url encoded data
+	 * Form keys
 	 */
 	public static interface FormValueKeys {
 		public static final String qqfile = "qqfile";
@@ -101,7 +99,7 @@ public abstract class FileUploader extends WOComponent {
 	}
 	
     /*
-     * An array of options for Ajax.Updater
+     * An array of options for File Uploader
      */
     protected NSArray<String> _options() {
     	NSMutableArray _options = new NSMutableArray("action:'" + href() + "'");
