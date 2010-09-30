@@ -14,6 +14,8 @@
 
     @private
     RMPreferencesWindow     *preferencesWindow;
+	
+	NSString *requestedFileName;
     
 }
 

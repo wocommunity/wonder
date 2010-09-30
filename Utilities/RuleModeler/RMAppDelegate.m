@@ -90,6 +90,14 @@
     return [[NSUserDefaults standardUserDefaults] boolForKey:@"openNewDocumentAtStartup"];
 }
 
+- (BOOL)application:(NSApplication *)theApplication openFile:(NSString *)filename;
+{
+	NSURL *fileURL = [NSURL fileURLWithPath:filename];
+	[[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:fileURL display:YES error:NULL];
+	requestedFileName = filename;
+	return YES;
+}
+
 - (NSError *)application:(NSApplication *)application willPresentError:(NSError *)error {
     if (![[error userInfo] objectForKey:NSRecoveryAttempterErrorKey]) {
         NSError *underlyingError = [[error userInfo] objectForKey:NSUnderlyingErrorKey];
@@ -176,16 +184,22 @@
     // -[NSApplication currentEvent] returns nil; the only way to get the Shift info is to use a Carbon call
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"restoreOpenDocuments"] && (GetCurrentEventKeyModifiers() & shiftKey) != shiftKey) {
         NSEnumerator    *anEnum = [[[NSUserDefaults standardUserDefaults] arrayForKey:@"restoredDocumentURLs"] objectEnumerator];
-        NSString        *eachURLString;
-        
+        NSString        *eachURLString = nil;
+        NSURL			*anURL = nil;
         while (eachURLString = [anEnum nextObject]) {
-            NSURL   *anURL = [NSURL URLWithString:eachURLString];
+            anURL = [NSURL URLWithString:eachURLString];
             
             if (anURL != nil) {
                 [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:anURL display:YES error:NULL];
             }
         }
+		if (requestedFileName) {
+			anURL = [NSURL URLWithString:requestedFileName];
+			[[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:anURL display:YES error:NULL];
+		}
     }
+
+	
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification
