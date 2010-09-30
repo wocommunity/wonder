@@ -52,6 +52,8 @@
 + (int)defaultRulePriority;
 
 + (NSArray *)rulesFromMutablePropertyList:(id)plist;
++ (NSArray *)rulesFromHumanlyReadableString:(NSString *)theString;
++ (Rule *)ruleFromHumanlyReadableString:(NSString *)theString;
 
 - (id)initWithKeyValueUnarchiver:(EOKeyValueUnarchiver *)unarchiver;
 - (void)encodeWithKeyValueArchiver:(EOKeyValueArchiver *)archiver;
@@ -65,6 +67,7 @@
 - (void)setLhs:(EOQualifier *)lhs;
 - (BOOL)hasLHS;
 - (NSString *)lhsDescription;
+- (void) setLhsDescription:(NSString *)description;
 - (NSString *)lhsFormattedDescription;
 
 - (int)author;

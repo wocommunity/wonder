@@ -589,39 +589,43 @@ static NSRange EnumerateRangesOfIndexSet(NSIndexSet *self, NSRangePointer indexR
     }
 }
 
+//- (IBAction)copy:(id)sender {
+//    NSResponder *firstResponder = [[self window] firstResponder];
+//    if (firstResponder == rulesTableView) {
+//		if ([rulesTableView numberOfSelectedRows] > 0) {
+//			NSIndexSet *rowIdx = [rulesTableView selectedRowIndexes];
+//			NSMutableArray *rows = [NSMutableArray arrayWithCapacity:[rulesTableView numberOfSelectedRows]];
+//			
+//			NSArray *rules = [rulesController arrangedObjects];
+//			Rule *rule;
+//			
+//			NSUInteger idx = [rowIdx firstIndex];
+//			
+//			while (idx != NSNotFound) {
+//				rule = [rules objectAtIndex:idx];
+//				[rows addObject:rule];
+//				
+//				idx = [rowIdx indexGreaterThanIndex:idx];
+//			}
+//			
+//			EOKeyValueArchiver *archiver = [[EOKeyValueArchiver alloc] init];
+//			
+//			[archiver encodeObject:rows forKey:@"rules"];
+//			
+//			NSDictionary *plist = [archiver dictionary];
+//			
+//			NSPasteboard *pb = [NSPasteboard generalPasteboard];
+//			
+//			[pb declareTypes:[NSArray arrayWithObjects:@"D2WRules", NSStringPboardType, nil] owner:nil];
+//			NSAssert1([pb setPropertyList:plist forType:@"D2WRules"], @"Unable to set plist for D2WRules pboard type:\n%@", plist);
+//			NSAssert1([pb setString:[plist description] forType:NSStringPboardType], @"Unable to set string for NSStringPboardType pboard type:\n%@", [plist description]);
+//            [archiver release];
+//		}
+//    }
+//}
+
 - (IBAction)copy:(id)sender {
-    NSResponder *firstResponder = [[self window] firstResponder];
-    if (firstResponder == rulesTableView) {
-		if ([rulesTableView numberOfSelectedRows] > 0) {
-			NSIndexSet *rowIdx = [rulesTableView selectedRowIndexes];
-			NSMutableArray *rows = [NSMutableArray arrayWithCapacity:[rulesTableView numberOfSelectedRows]];
-			
-			NSArray *rules = [rulesController arrangedObjects];
-			Rule *rule;
-			
-			NSUInteger idx = [rowIdx firstIndex];
-			
-			while (idx != NSNotFound) {
-				rule = [rules objectAtIndex:idx];
-				[rows addObject:rule];
-				
-				idx = [rowIdx indexGreaterThanIndex:idx];
-			}
-			
-			EOKeyValueArchiver *archiver = [[EOKeyValueArchiver alloc] init];
-			
-			[archiver encodeObject:rows forKey:@"rules"];
-			
-			NSDictionary *plist = [archiver dictionary];
-			
-			NSPasteboard *pb = [NSPasteboard generalPasteboard];
-			
-			[pb declareTypes:[NSArray arrayWithObjects:@"D2WRules", NSStringPboardType, nil] owner:nil];
-			NSAssert1([pb setPropertyList:plist forType:@"D2WRules"], @"Unable to set plist for D2WRules pboard type:\n%@", plist);
-			NSAssert1([pb setString:[plist description] forType:NSStringPboardType], @"Unable to set string for NSStringPboardType pboard type:\n%@", [plist description]);
-            [archiver release];
-		}
-    }
+    [self copyForDocumenting:sender];
 }
 
 - (IBAction)copyForDocumenting:(id)sender;
@@ -685,19 +689,36 @@ static NSRange EnumerateRangesOfIndexSet(NSIndexSet *self, NSRangePointer indexR
     [(RMModelEditor *)[[[self document] windowControllers] objectAtIndex:0] endMergeInsertUndos];
 }
 
+//- (IBAction)paste:(id)sender {
+//    NSResponder *firstResponder = [[self window] firstResponder];
+//    
+//    if (firstResponder == rulesTableView) {
+//        NSPasteboard    *pb = [NSPasteboard generalPasteboard];
+//        NSString        *type = [pb availableTypeFromArray:[NSArray arrayWithObject:@"D2WRules"]];
+//        
+//        if (type) {
+//            NSDictionary    *plist = [pb propertyListForType:@"D2WRules"];	    
+//            NSArray         *rules = [Rule rulesFromMutablePropertyList:plist];
+//            
+//            [self _optimizedAddRules:rules];
+//        }
+//    }
+//}
+
 - (IBAction)paste:(id)sender {
     NSResponder *firstResponder = [[self window] firstResponder];
-    
     if (firstResponder == rulesTableView) {
         NSPasteboard    *pb = [NSPasteboard generalPasteboard];
-        NSString        *type = [pb availableTypeFromArray:[NSArray arrayWithObject:@"D2WRules"]];
+        NSString        *type = [pb availableTypeFromArray:[NSArray arrayWithObject:NSStringPboardType]];
         
         if (type) {
-            NSDictionary    *plist = [pb propertyListForType:@"D2WRules"];	    
-            NSArray         *rules = [Rule rulesFromMutablePropertyList:plist];
-            
+			NSString		*rulesString = [pb stringForType:NSStringPboardType];
+            NSArray         *rules = [Rule rulesFromHumanlyReadableString:rulesString];
+
             [self _optimizedAddRules:rules];
         }
+		// scroll to the last added row
+		[rulesTableView scrollRowToVisible:[rulesTableView selectedRow]];
     }
 }
 
@@ -756,8 +777,8 @@ static NSRange EnumerateRangesOfIndexSet(NSIndexSet *self, NSRangePointer indexR
 	return NO;
     } else if (action == @selector(paste:)) {
 	NSPasteboard *pb = [NSPasteboard generalPasteboard];
-	NSString *type = [pb availableTypeFromArray:[NSArray arrayWithObject:@"D2WRules"]];
-	//NSString *type = [pb availableTypeFromArray:[NSArray arrayWithObject:NSStringPboardType]];
+	//NSString *type = [pb availableTypeFromArray:[NSArray arrayWithObject:@"D2WRules"]];
+	NSString *type = [pb availableTypeFromArray:[NSArray arrayWithObject:NSStringPboardType]];
 	if (!type) {
 	    return NO;
 	}
@@ -905,6 +926,11 @@ static NSRange EnumerateRangesOfIndexSet(NSIndexSet *self, NSRangePointer indexR
 
 - (IBAction)openInNewWindow:(id)sender {
     [[(RMModel *)[self document] makeNewWindowController] showWindow:sender]; // Cast is not exact, but both RMModel and RMModelGroup have the same method
+}
+
+- (NSTableView	*) rulesTableView;
+{
+	return rulesTableView;
 }
 
 #pragma mark Completion for textView/textField

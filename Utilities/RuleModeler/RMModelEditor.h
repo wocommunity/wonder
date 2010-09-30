@@ -104,4 +104,6 @@ typedef enum {
 
 - (IBAction)openInNewWindow:(id)sender;
 
+- (NSTableView	*) rulesTableView;
+
 @end

@@ -38,6 +38,7 @@
 - (id)value;
 - (void)setValue:(id)value;
 - (NSString *)valueDescription;
+- (void)setValueDescription:(NSString *)value;
 
 - (void)setRule:(Rule *)rule;
 

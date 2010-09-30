@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="29"/>
+			<integer value="169"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -391,15 +391,6 @@
 									<reference key="NSMenu" ref="551635544"/>
 									<string key="NSTitle">Copy</string>
 									<string key="NSKeyEquiv">c</string>
-									<int key="NSKeyEquivModMask">1048576</int>
-									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="238490166"/>
-									<reference key="NSMixedImage" ref="1064121029"/>
-								</object>
-								<object class="NSMenuItem" id="344978183">
-									<reference key="NSMenu" ref="551635544"/>
-									<string key="NSTitle">Copy Simplified</string>
-									<string key="NSKeyEquiv">C</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="238490166"/>
@@ -1219,14 +1210,6 @@
 					</object>
 					<int key="connectionID">458</int>
 				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">copyForDocumenting:</string>
-						<reference key="source" ref="428570001"/>
-						<reference key="destination" ref="344978183"/>
-					</object>
-					<int key="connectionID">464</int>
-				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -1468,7 +1451,6 @@
 							<reference ref="588495500"/>
 							<reference ref="729585480"/>
 							<reference ref="272283591"/>
-							<reference ref="344978183"/>
 						</object>
 						<reference key="parent" ref="76658"/>
 					</object>
@@ -1822,11 +1804,6 @@
 						<reference key="parent" ref="0"/>
 						<string key="objectName">Application</string>
 					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">463</int>
-						<reference key="object" ref="344978183"/>
-						<reference key="parent" ref="551635544"/>
-					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -1993,7 +1970,6 @@
 					<string>453.ImportedFromIB2</string>
 					<string>457.IBPluginDependency</string>
 					<string>457.ImportedFromIB2</string>
-					<string>463.IBPluginDependency</string>
 					<string>5.IBPluginDependency</string>
 					<string>5.ImportedFromIB2</string>
 					<string>56.IBPluginDependency</string>
@@ -2045,7 +2021,7 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<string>{{211, 702}, {196, 273}}</string>
+					<string>{{211, 722}, {194, 253}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2167,7 +2143,6 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>

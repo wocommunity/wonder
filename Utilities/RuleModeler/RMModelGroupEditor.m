@@ -252,7 +252,9 @@
         editor = [[eachModel windowControllers] lastObject]; // Call that AFTER having called showWindows
         [[editor rulesController] setValue:nil forKey:@"filterPredicate"];
         [[editor rulesController] setValue:rules forKey:@"selectedObjects"];
+		[[editor rulesTableView] scrollRowToVisible:[[editor rulesTableView] selectedRow]];
         [editor unfocus:sender];
+		
         if(aPart != -1)
             [editor setFirstResponderInPart:aPart];
     }

@@ -32,6 +32,7 @@
 #import "RMModel.h"
 #import "EOControl.h"
 #import "EOQualifier+RuleModeler.h"
+#import "NSStringAdditions.h"
 
 @implementation Rule
 
@@ -109,6 +110,93 @@ static int defaultRulePriority = 0;
     return decodedRules;
 }
 
++ (NSArray *)rulesFromHumanlyReadableString:(NSString *)theString;
+{
+
+	NSMutableArray *decodedRules = [NSMutableArray array];
+	NSUInteger length = [theString length];
+	NSUInteger paraStart = 0, paraEnd = 0, contentsEnd = 0;
+
+	NSRange currentRange;
+	while (paraEnd < length)
+	{
+		[theString getParagraphStart:&paraStart 
+								 end:&paraEnd 
+						 contentsEnd:&contentsEnd 
+							forRange:NSMakeRange(paraEnd, 0)];
+		
+		currentRange = NSMakeRange(paraStart, contentsEnd - paraStart);
+		NSString *ruleAsString = [theString substringWithRange:currentRange];
+		Rule *rule = [Rule ruleFromHumanlyReadableString:ruleAsString];
+		if (rule)
+		{
+			[decodedRules addObject:rule];
+		}
+	}
+
+	return decodedRules;
+}
+
++ (Rule *)ruleFromHumanlyReadableString:(NSString *)theString;
+{
+	NSArray  *sides = [theString componentsSeparatedByString:@"=>"];
+
+	// no '=>' then assume it's not a valid rule
+	if ([sides count] < 2) {
+		return nil;
+	}
+	
+	NSString *rawLhs = [sides objectAtIndex:0];
+	NSString *rawRhs = [sides objectAtIndex:1];
+	
+	NSArray  *lhsParts = [rawLhs componentsSeparatedByString:@":"];
+	NSString *actor = [lhsParts objectAtIndex:0];
+	NSString *qualifier = [lhsParts objectAtIndex:1];
+	
+	NSMutableArray *rhsParts = [[rawRhs componentsSeparatedByString:@"="] mutableCopy];
+	NSString *rhsKey = [rhsParts objectAtIndex:0];
+	[rhsParts removeObjectAtIndex:0];
+	rawRhs = [rhsParts componentsJoinedByString:@"="];
+	[rhsParts release];
+	
+	NSArray *rhsParts2 = [rawRhs componentsSeparatedByString:@"["];
+	NSString *rhsValue = [rhsParts2 objectAtIndex:0];
+
+	// rhsValue may be empty
+	if ([@"(null)" isEqualToString:[rhsValue trim]]) {
+		rhsValue = nil;
+	}
+	
+	// rhsKey may be empty
+	if ([@"(null)" isEqualToString:[rhsKey trim]]) {
+		rhsKey = nil;
+	}
+	
+	NSString *assignmentObject = [rhsParts2 objectAtIndex:1];
+	assignmentObject = [[assignmentObject componentsSeparatedByString:@"]"] objectAtIndex:0];
+	
+	// assignmentObject may be empty
+	if ([@"(null)" isEqualToString:[assignmentObject trim]]) {
+		assignmentObject = nil;
+	}
+	  
+	Rule *rule = [[[Rule alloc] init] autorelease];
+	[rule setAuthor:[[actor trim] intValue]];
+	[rule setLhsDescription:[qualifier trim]];
+	
+	Assignment *rhs = [[Assignment alloc] init];
+	[rhs setKeyPath:[rhsKey trim]];
+	[rhs setValueDescription:[rhsValue trim]];
+	[rhs setAssignmentClass:[assignmentObject trim]];
+	
+	[rule setRhs:rhs];
+	[rhs setRule:rule];
+	
+	[rhs release];
+	
+	return rule;
+}
+
 - (void) dealloc {
     [_lhsDescription release];
     [_lhsFormattedDescription release];
@@ -165,9 +253,8 @@ static int defaultRulePriority = 0;
             }
             [innerQuals release];
         }
+		_documentation = [[unarchiver decodeObjectForKey:@"documentation"] retain];
     }
-    
-    _documentation = [[unarchiver decodeObjectForKey:@"documentation"] retain];
     
     return self;
 }
@@ -322,7 +409,6 @@ static int defaultRulePriority = 0;
             if (qual) {
                 [[[self undoManager] prepareWithInvocationTarget:self] setLhsDescription:[_lhs description]];
                 [[self undoManager] setActionName:NSLocalizedString(@"Set Left-Hand Side", @"Undo-redo action name")];
-                
                 [self setLhs:qual];
             }
         } else {
@@ -422,10 +508,13 @@ static int defaultRulePriority = 0;
     else {
         rhsValue = [[[rhsValueObject description] mutableCopy] autorelease];
     }
-	
-    [rhsValue replaceOccurrencesOfString:@"\n    " withString:@"" options:0 range:NSMakeRange(0,[rhsValue length])];
-    return [NSString stringWithFormat:@"%d : %@ => %@ = %@ [%@]", 
-        [self priority], [self lhsDescription] ? [self lhsDescription]:@"*true*", [[self rhs] keyPath], rhsValue, [[self rhs] assignmentClass]];
+    [rhsValue replaceOccurrencesOfString:@"\n" withString:@"" options:0 range:NSMakeRange(0,[rhsValue length])];
+
+    return [NSString stringWithFormat:@"%d : %@ => %@ = %@ [%@]",
+			[self priority], 
+			[self lhsDescription] ? [self lhsDescription]:@"*true*", 
+			[[self rhs] keyPath], rhsValue, 
+			[[self rhs] assignmentClass]];
 }
 
 
