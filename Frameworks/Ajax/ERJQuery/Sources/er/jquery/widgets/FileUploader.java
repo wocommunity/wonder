@@ -66,8 +66,9 @@ public abstract class FileUploader extends WOComponent {
 	/*
 	 * Headers of url encoded data
 	 */
-	public static interface Headers {
+	public static interface FormValueKeys {
 		public static final String qqfile = "qqfile";
+		public static final String woelementID = "id";
 	}
 	
 	@Override
@@ -115,6 +116,7 @@ public abstract class FileUploader extends WOComponent {
     	
     	// add options
     	_options.add("element: $('#" + id() + "')[0]");
+    	_options.add("params: { " + FormValueKeys.woelementID + ": '" + id()+ "' }");
     	if (hasBinding(Bindings.onChange)) _options.add("onChange:" + valueForBinding(Bindings.onChange));
     	if (hasBinding(Bindings.onComplete)) _options.add("onComplete:" + valueForBinding(Bindings.onComplete));
     	if (hasBinding(Bindings.onSubmit)) _options.add("onChange:" + valueForBinding(Bindings.onSubmit));
@@ -151,21 +153,25 @@ public abstract class FileUploader extends WOComponent {
     
     @Override
     public WOActionResults invokeAction(WORequest request, WOContext context) {
-    	WOResponse response = new WOResponse();
+    	String woelementID = (String) request.formValueForKey(FormValueKeys.woelementID);
     	
-    	if (exception != null) {
-    		response.appendContentString("{\"error\":" + exception.getMessage() + "}");
-    	} else {
-    		response.appendContentString("{\"success\":true}");
-    	} return response;
+    	if (woelementID != null && woelementID.equals(id())) {
+        	WOResponse response = new WOResponse();
+
+    		if (exception != null) {
+    			response.appendContentString("{\"error\":" + exception.getMessage() + "}");
+    		} else {
+    			response.appendContentString("{\"success\":true}");
+    		} return response;
+    	} else return super.invokeAction(request, context);
     }
     
 	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		super.takeValuesFromRequest(request, context);
 
-		if (request.formValueForKey(Headers.qqfile) != null) {
-			String aFileName = (String) request.formValueForKey(Headers.qqfile);
+		if (request.formValueForKey(FormValueKeys.qqfile) != null) {
+			String aFileName = (String) request.formValueForKey(FormValueKeys.qqfile);
 			InputStream anInputStream = (request.contentInputStream() != null) ? request.contentInputStream() : new ByteArrayInputStream(request.content().bytes());
 
 			// filepath
