@@ -161,7 +161,7 @@ public abstract class FileUploader extends WOComponent {
 
 		if (context.senderID().equals(context.elementID()) && request.formValueForKey(FormValueKeys.qqfile) != null) {
 			String aFileName = (String) request.formValueForKey(FormValueKeys.qqfile);
-			InputStream anInputStream = (request.contentInputStream() != null) ? request.contentInputStream() : new ByteArrayInputStream(request.content().bytes());
+			InputStream anInputStream = (request.contentInputStream() != null) ? request.contentInputStream() : request.content().stream();
 
 			// filepath
 			if (hasBinding(Bindings.filePath)) {
