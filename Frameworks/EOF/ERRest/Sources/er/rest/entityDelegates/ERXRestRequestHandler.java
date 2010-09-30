@@ -32,6 +32,11 @@ import er.rest.format.IERXRestParser;
  * wide-open access to developers who are interested in exploring the features of the ERRest framework.
  * </p>
  * 
+ * <p>
+ * Please note that the stock Apache adaptor shipped with WebObjects 5.3 is not capable of handling the PUT and 
+ * DELETE HTTP methods, you will have to use the adaptor from WebObjects 5.4 or the one from Project Wonder.
+ * </p>
+ * 
  * <h2>Unsafe Development Setup Example</h2>
  * <p>
  * To use the unsafe development example delegates, you can add the following code to your application constructor:
