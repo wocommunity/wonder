@@ -1,160 +1,274 @@
-B0: WOGenericContainer {
-	elementName = "B";
-	omitTags = loggerIsNotTrace;
+ActiveSectionHiddenField: WOHiddenField {
+    id = "ActiveSectionHiddenField";
+    value = activeSection;
 }
 
-B1: WOGenericContainer {
-	elementName = "B";
-	omitTags = loggerIsNotDebug;
-}
-
-Form7: WOForm {
-	multipleSubmit = true;
-}
-
-B2: WOGenericContainer {
-	elementName = "B";
-	omitTags = loggerIsNotInfo;
-}
-
-TextFieldFilterString2: WOTextField {
-	value = conversionPattern;
-	size = 70;
-}
-
-B3: WOGenericContainer {
-	elementName = "B";
-	omitTags = loggerIsNotWarn;
-}
-
-SubmitButtonFilter2: WOSubmitButton {
-	action = updateConversionPattern;
-	value = "Update";
-}
-
-B4: WOGenericContainer {
-	elementName = "B";
-	omitTags = loggerIsNotError;
-}
-
-B5: WOGenericContainer {
-	elementName = "B";
-	omitTags = loggerIsNotFatal;
-}
-
-Form1: WOForm {
-	action = filter;
-	multipleSubmit = true;
-}
-
-Form2: WOForm {
-	action = updateCategories;
-	multipleSubmit = true;
-}
-
-Form3: WOForm {
+AddLoggerForm: WOForm {
 	action = addCategory;
+	embedded = true;
 	multipleSubmit = true;
 }
 
-Form4: WOForm {
+AddRuleLoggerForm: WOForm {
 	action = addRuleKey;
+	embedded = true;
 	multipleSubmit = true;
+}
+
+AppenderClassName: WOString {
+    value = anAppender.class.name;
+}
+
+AppenderGenericContainer: WOGenericContainer {
+    elementName = "tr";
+    class = classForAppenderRow;
+}
+
+AppenderName: WOString {
+    value = anAppender.name;
+}
+
+AppenderThresholdRadioButtonMatrix: ERXRadioButtonMatrix {
+    goingVertically = false;
+    item = aLevel;
+    list = levelsWithoutUnset;
+    maxColumns = 8;
+    selection = currentAppenderLevel;
+    uniqueID = anAppender.class.name;
+}
+
+AppenderThresholdSettingGenericContainer: WOGenericContainer {
+    class = classNameForAppenderThresholdName;
+    elementName = "span";
+    omitTags = omitAppenderThresholdSettingDecoration;
+}
+
+AppendersDiv: WOGenericContainer {
+    class = classForAppendersDiv;
+    elementName = "div";
+    id = "Appenders";
+}
+
+AppendersRepetition: WORepetition {
+    index = rowIndex;
+    item = anAppender;
+    list = appenders;
 }
 
 GenericContainerTD: WOGenericContainer {
-	bgcolor = bgColor;
-	elementName = "TD";
+	class = "LoggingItemLevelSettings";
+	elementName = "td";
 }
 
 GenericContainerTR: WOGenericContainer {
-	bgcolor = bgColor;
-	elementName = "TR";
+	class = classForLoggerRow;
+	elementName = "tr";
 }
 
-Hyperlink1: WOHyperlink {
-	?wosid = false;
-	actionClass = "er.extensions.ERXDirectAction";
-	directActionName = "log4j";
+HiddenLogFilterInput: WOHiddenField {
+    id = "HiddenLogFilterInput";
+	value = filterString;
+}
+
+IfEqualsCurrentAppenderThreshold: ERXEqualConditional {
+    value1 = currentAppenderLevel;
+    value2 = aLevel;
+}
+
+IfEqualsCurrentLoggerRepositoryThreshold: ERXEqualConditional {
+    value1 = loggerRepository.threshold;
+    value2 = aLevel;
+}
+
+IfNotEqualsCurrentAppenderThreshold: ERXEqualConditional {
+    value1 = currentAppenderLevel;
+    value2 = aLevel;
+    negate = true;
+}
+
+IfNotEqualsCurrentLoggerRepositoryThreshold: ERXEqualConditional {
+    value1 = loggerRepository.threshold;
+    value2 = aLevel;
+    negate = true;
+}
+
+LevelIndicator: WOGenericContainer {
+    class = "LevelIndicator";
+    elementName = "div";
+}
+
+LevelName: WOString {
+    value = aLevel;
+}
+
+LevelSettingGenericContainer: WOGenericContainer {
+    class = classNameForLoggerLevelName;
+    elementName = "span";
+    omitTags = omitLoggerLevelSettingDecoration;
+}
+
+LoggerConfigurationControlBarDiv: WOGenericContainer {
+    class = classForLoggerConfigurationControlBar;
+    elementName = "div";
+    id = "LoggerConfigurationControlBar";
+}
+
+LoggerDisplayShowAllRadioButton: WORadioButton {
+    name = "LoggerListShowAllOrOnlyExplicit";
+    selection = showAllLoggersSelection;
+    value = "all";
+}
+
+LoggerDisplayShowAllRadioButtonBottom: WORadioButton {
+    name = "LoggerListShowAllOrOnlyExplicit2";
+    selection = showAllLoggersSelection;
+    value = "all";
+}
+
+LoggerDisplayShowExplicitRadioButton: WORadioButton {
+    name = "LoggerListShowAllOrOnlyExplicit";
+    selection = showAllLoggersSelection;
+    value = "explicit";
+}
+
+LoggerDisplayShowExplicitRadioButtonBottom: WORadioButton {
+    name = "LoggerListShowAllOrOnlyExplicit2";
+    selection = showAllLoggersSelection;
+    value = "explicit";
+}
+
+LoggerLevelName: WOString {
+    value = aLoggerLevel.displayName;
+}
+
+LoggerLevelRadioButtonMatrix: ERXRadioButtonMatrix {
+    goingVertically = false;
+    item = aLoggerLevel;
+    list = loggerLevels;
+    maxColumns = 9;
+    selection = currentLoggerLevel;
+    uniqueID = logger.name;
+}
+
+LoggerLevelsPopup: WOPopUpButton {
+    displayString = aLoggerLevel.displayName;
+    id = "FilterLevel";
+    item = aLoggerLevel;
+    list = loggerLevels;
+    noSelectionString = "Level...";
+    selection = filterLevel;
+    value = aLoggerLevel.displayName;
+}
+
+LoggerRepositoryClassName: WOString {
+    value = loggerRepository.class.name;
+}
+
+LoggerRepositoryGenericContainer: WOGenericContainer {
+    class = loggerRepository.threshold;
+    elementName = "tr";
+}
+
+LoggerRepositoryThresholdRadioButtonMatrix: ERXRadioButtonMatrix {
+    goingVertically = false;
+    item = aLevel;
+    list = levelsWithoutUnset;
+    maxColumns = 8;
+    selection = loggerRepository.threshold;
+    uniqueID = "loggerRepository";
+}
+
+LoggerRepositoryThresholdSettingGenericContainer: WOGenericContainer {
+    class = classNameForLoggerRepositoryThresholdName;
+    elementName = "span";
+    omitTags = omitLoggerRepositoryThresholdSettingDecoration;
+}
+
+LoggersDiv: WOGenericContainer {
+    class = classForLoggersDiv;
+    elementName = "div";
+    id = "Loggers";
+}
+
+LoggersFilterForm: WOForm {
+	action = filter;
+	embedded = true;
+	multipleSubmit = true;
+}
+
+LoggerString: WOString {
+	value = loggerPropertiesString;
+}
+
+NavItemLink: WOHyperlink {
+    href = "javascript:void(0);";
+    string = aPageSection.displayName;
+}
+
+NavListItem: WOGenericContainer {
+    class = classForNavItem;
+    elementName = "li";
+    title = aPageSection.id;
+}
+
+OtherSettingsDiv: WOGenericContainer {
+    class = classForOtherSettingsDiv;
+    elementName = "div";
+    id = "Other";
+}
+
+RepetitionLoggers: WORepetition {
+    index = rowIndex;
+	item = logger;
+	list = loggers;
+}
+
+RepetitionNav: WORepetition {
+    item = aPageSection;
+    list = pageSections;
+}
+
+RepositoryDiv: WOGenericContainer {
+    class = classForRepositoryDiv;
+    elementName = "div";
+    id = "Repository";
+}
+
+Scripts: ERXJavaScript {
+    filename = "log4j_config.js";
+    framework = "ERExtensions";
+}
+
+SegmentedSliderScript: ERXJavaScript {
+    filename = "SegmentedSlider.js";
+    framework = "ERExtensions";
+}
+
+SettingsForm: WOForm {
+    multipleSubmit = true;
 }
 
 ShowLoggerString: WOCollapsibleComponentContent {
 	openedLabel = "Hide Properties String";
 	closedLabel = "Show Properties String";
+	submitActionName = "updateConversionPattern";
 }
 
-RadioButtonTraceLevel: WORadioButton {
-	name = logger.name;
-	selection = loggerLevelValue;
-	value = traceLevel;
-}
-
-RadioButtonDebugLevel: WORadioButton {
-	name = logger.name;
-	selection = loggerLevelValue;
-	value = debugLevel;
-}
-
-RadioButtonErrorLevel: WORadioButton {
-	name = logger.name;
-	selection = loggerLevelValue;
-	value = errorLevel;
-}
-
-RadioButtonFatalLevel: WORadioButton {
-	name = logger.name;
-	selection = loggerLevelValue;
-	value = fatalLevel;
-}
-
-RadioButtonInfoLevel: WORadioButton {
-	name = logger.name;
-	selection = loggerLevelValue;
-	value = infoLevel;
-}
-
-RadioButtonUnsetLevel: WORadioButton {
-	name = logger.name;
-	selection = loggerLevelValue;
-	value = unsetLevel;
-}
-
-RadioButtonWarnLevel: WORadioButton {
-	name = logger.name;
-	selection = loggerLevelValue;
-	value = warnLevel;
-}
-
-RepetitionLoggers: WORepetition {
-	item = logger;
-	list = loggers;
-}
-
-String1: WOString {
+StringApplicationName: WOString {
 	value = application.name;
-}
-
-StringLoggerLevel: WOString {
-	value = logger.level.toString;
 }
 
 StringLoggerName: WOString {
 	value = logger.name;
 }
 
-SubmitButton2: WOSubmitButton {
-	action = update;
-	value = "Update";
+StringLoggerNumber: WOString {
+    value = rowIndex;
 }
 
-SubmitButton4: WOSubmitButton {
-	action = showAll;
-	value = "Show All";
-}
-
-SubmitButton5: WOSubmitButton {
-	action = showExplicitlySet;
-	value = "Show Explicit Levels";
+Stylesheet: ERXStyleSheet {
+    filename = "log4j_config.css";
+    framework = "ERExtensions";
 }
 
 SubmitButtonAddLogger: WOSubmitButton {
@@ -174,37 +288,48 @@ SubmitButtonFilter: WOSubmitButton {
 
 SubmitButtonResetFilter: WOSubmitButton {
 	action = resetFilter;
-	value = "Reset Filter";
+	value = "Reset";
 }
 
-SubmitButtonShowAll2: WOSubmitButton {
-	action = showAll;
-	value = "Show All";
-}
-
-SubmitButtonShowExplicitLevels2: WOSubmitButton {
-	action = showExplicitlySet;
-	value = "Show Explicit Levels";
-}
-
-SubmitButtonUpdate2: WOSubmitButton {
+SubmitButtonUpdateLoggerSettings: WOSubmitButton {
 	action = update;
+	style = "margin: auto 20em;";
 	value = "Update";
 }
 
-LoggerString: WOString {
-	value = loggerPropertiesString;
+SubmitButtonUpdateConversionPattern: WOSubmitButton {
+	action = updateConversionPattern;
+	value = "Update";
+}
+
+TextFieldConversionPattern: WOTextField {
+	value = conversionPattern;
+	size = 70;
 }
 
 TextFieldFilterString: WOTextField {
+    id = "LogFilterInput";
+    size = 40;
 	value = filterString;
 }
 
 TextFieldLoggerName: WOTextField {
+    size = 40;
 	value = loggerName;
 }
 
 TextFieldRuleKey: WOTextField {
+    size = 40;
 	value = ruleKey;
 }
 
+UpdateAppenderSettingsButton: WOSubmitButton {
+    action = updateAppenderSettings;
+    value = "Update Appender Settings";
+}
+
+
+UpdateRepositorySettingsButton: WOSubmitButton {
+    action = updateRepositorySettings;
+    value = "Update Repository Settings";
+}
