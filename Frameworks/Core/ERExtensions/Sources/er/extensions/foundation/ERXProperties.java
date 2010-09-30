@@ -896,6 +896,12 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         	String propertyPath = ERXFileUtilities.pathForResourceNamed("Properties", frameworkName, null);
         	addIfPresent(frameworkName + ".framework", propertyPath, propertiesPaths, projectsInfo);
 
+        	/** Properties.dev -- per-Framework-dev properties 
+        	 * This adds support for Properties.dev in your Frameworks new load order will be
+        	 */
+        	String devPropertiesPath = ERXProperties.variantPropertiesInBundle("dev", frameworkName);
+        	addIfPresent(frameworkName + ".framework.dev", devPropertiesPath, propertiesPaths, projectsInfo);
+        	
         	/** Properties.<userName> -- per-Framework-per-User properties */
         	String userPropertiesPath = ERXProperties.variantPropertiesInBundle(ERXSystem.getProperty("user.name"), frameworkName);
         	addIfPresent(frameworkName + ".framework.user", userPropertiesPath, propertiesPaths, projectsInfo);
@@ -949,7 +955,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         String applicationMachinePropertiesPath = ERXProperties.applicationMachinePropertiesPath("Properties");
     	addIfPresent("Application-Machine Properties", applicationMachinePropertiesPath, propertiesPaths, projectsInfo);
 
-        /** Properties.<userName> -- per-Application-per-User properties */
+        /** Properties.dev -- per-Application-dev properties */
         String applicationDeveloperPropertiesPath = ERXProperties.applicationDeveloperProperties();
     	addIfPresent("Application-Developer Properties", applicationDeveloperPropertiesPath, propertiesPaths, projectsInfo);
 
