@@ -56,6 +56,7 @@ HTTPRequest *req_new(const char *method, char *uri)
    req->method_str = (method ? method : "");
    req->method = get_http_method(method);
    req->request_str = uri;		/* no strdup(), but we free */
+   req->shouldProcessUrl = 1;
    return req;
 }
 
@@ -125,7 +126,13 @@ void req_reformatRequest(HTTPRequest *req, WOAppReq *app, WOURLComponents *wc, c
    strcat(req->request_str," ");
    req_addHeader(req, REQUEST_METHOD_HEADER, req->method_str, 0);
    
-   ComposeURL(req->request_str + strlen(req->request_str), wc);
+   if (req->shouldProcessUrl) {
+     ComposeURL(req->request_str + strlen(req->request_str), wc);
+   }
+   else {
+     strncat(req->request_str, req->request_uri, strlen(req->request_uri));
+   }
+
    strcat(req->request_str," ");
    if (http_version) {
       strcat(req->request_str,http_version);

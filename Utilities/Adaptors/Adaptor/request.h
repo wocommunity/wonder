@@ -48,6 +48,7 @@ typedef int (*req_getMoreContentCallback)(void *handle, void *buffer, int buffer
 typedef struct _HTTPRequest {
 	RequestMethod	method;		/* get/put/post/... */
 	const char *method_str;			/* the http request (includes CRLF) */
+	const char *request_uri;		/* the original request uri */
 	char *request_str;			/* the http request (includes CRLF) */
 	void *headers;				/* (strtbl *) but you don't need to know */
 	void *api_handle;			/* api specific pointer */
@@ -56,6 +57,7 @@ typedef struct _HTTPRequest {
         unsigned content_buffer_size;
         req_getMoreContentCallback getMoreContent;
         int haveReadStreamedData;
+        int shouldProcessUrl;
 #ifdef IIS
         /* for IIS we have to keep track of how much we have read */
         int total_len_read;

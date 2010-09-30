@@ -1,6 +1,6 @@
 /*
 
- Copyright © 2000 - 2007 Apple, Inc. All Rights Reserved.
+ Copyright ï¿½ 2000 - 2007 Apple, Inc. All Rights Reserved.
 
  The contents of this file constitute Original Code as defined in and are
  subject to the Apple Public Source License Version 1.1 (the 'License').
@@ -654,13 +654,14 @@ int WebObjects_translate(request_rec *r) {
     wc = ap_get_module_config(r->server->module_config, &WebObjects_module);
 
     WOLog(WO_DBG, "<WebObjects Apache Module> new translate: %s", r->uri);
-    if (strncmp(wc->WebObjects_alias, r->uri, strlen(wc->WebObjects_alias)) == 0) {
+    if (strncmp(wc->WebObjects_alias, r->uri, strlen(wc->WebObjects_alias)) == 0 || (r->handler != NULL && strcasecmp(r->handler, WEBOBJECTS) == 0)) {
 #ifndef _MSC_VER // SWK changed url = WOURLComponents_Initializer; to memset(&url,0,sizeof(WOURLComponents));
         url = WOURLComponents_Initializer;
 #else
 		memset(&url,0,sizeof(WOURLComponents));
 #endif
-		urlerr = WOParseApplicationName(&url, r->uri);
+        urlerr = WOParseApplicationName(&url, r->uri);
+printf("translate %s, %d\n", r->uri, urlerr);
         if (urlerr != WOURLOK && !((urlerr == WOURLInvalidApplicationName) && ac_authorizeAppListing(&url))) {
             WOLog(WO_DBG, "<WebObjects Apache Module> translate - DECLINED: %s", r->uri);
             return DECLINED;
@@ -676,7 +677,7 @@ int WebObjects_translate(request_rec *r) {
          *	we'll take it - mark our handler...
          */
         r->handler = (char *)apr_pstrdup(r->pool, WEBOBJECTS);
-		r->filename = (char *)apr_pstrdup(r->pool, r->uri);
+        r->filename = (char *)apr_pstrdup(r->pool, r->uri);
 
         return OK;
     }
@@ -713,8 +714,9 @@ static int WebObjects_handler (request_rec *r)
 	by WebObjects if it matched the Adaptor's WebObjects alias.
 	Is this the best way to do this?  Can another module override our r->handler setting?
 	*/
-    if (NULL == r->handler || strcmp(r->handler, WEBOBJECTS) != 0) {
-	return DECLINED;
+	if (NULL == r->handler || strcasecmp(r->handler, WEBOBJECTS) != 0) {
+		WOLog(WO_DBG, "WebObjects_handler declined! %s", r->uri);
+		return DECLINED;
     }
 
     _webobjects_server = r->server;
@@ -725,7 +727,19 @@ static int WebObjects_handler (request_rec *r)
         return DECLINED;
     }
 
-    urlerr = WOParseApplicationName(&wc, r->uri);
+    int shouldProcessUrl = 1;
+    const char *envApplicationName = apr_table_get(r->subprocess_env, "WOApplicationName");
+    if (NULL != envApplicationName) {
+        wc.prefix.start = 0;
+        wc.prefix.length = 0;
+        wc.applicationName.start = envApplicationName;
+        wc.applicationName.length = strlen(envApplicationName);
+        shouldProcessUrl = 0;
+        urlerr = WOURLOK;
+    }
+    else {
+        urlerr = WOParseApplicationName(&wc, r->uri);
+    }
     if (urlerr == WOURLOK) {
         WOLog(WO_DBG, "App Name: %s (%d)", wc.applicationName.start, wc.applicationName.length);
     } else {
@@ -758,6 +772,8 @@ static int WebObjects_handler (request_rec *r)
      *	build the request ....
      */
     req = req_new(r->method, NULL);
+    req->shouldProcessUrl = shouldProcessUrl;
+    req->request_uri = r->uri;
     req->api_handle = r;				/* stash this in case it's needed */
 
     /*
