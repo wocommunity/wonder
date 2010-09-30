@@ -30,4 +30,10 @@
 // keyboard by using option or shift+option are also encoded. Some of these have
 // two bytes of unicode to encode, for example %C2%A4 for 0xC2A4
 
+#pragma mark -
+#pragma mark Trim
+
++ (NSString *)trim:(NSString *)original;
+- (NSString *)trim;
+
 @end

@@ -71,4 +71,24 @@
 	return (NSString*)[(NSString*) CFURLCreateStringByReplacingPercentEscapes(kCFAllocatorDefault, (CFStringRef)self, CFSTR("")) autorelease] ;
 }
 
+#pragma mark -
+#pragma mark Trim
+
++ (NSString *)trim:(NSString *)original;
+{
+	if (!original) 
+	{
+		return nil;
+	}
+	NSMutableString * copy = [original mutableCopy];
+	NSString *result = [NSString stringWithString:[copy stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+	[copy release];
+	return result;
+}
+
+- (NSString *)trim;
+{
+    return [NSString trim:self];
+}
+
 @end
