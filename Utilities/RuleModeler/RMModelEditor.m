@@ -73,7 +73,9 @@
 @implementation RMModelEditor
 
 + (void)initialize {
-    [NSValueTransformer setValueTransformer:[[RMEnabledColorTransformer alloc] init] forName:@"RMEnabledColorTransformer"];
+	NSValueTransformer *colorTransformer = [[RMEnabledColorTransformer alloc] init];
+    [NSValueTransformer setValueTransformer:colorTransformer forName:@"RMEnabledColorTransformer"];
+	[colorTransformer release];
 }
 
 - (id)init {
@@ -628,16 +630,16 @@ static NSRange EnumerateRangesOfIndexSet(NSIndexSet *self, NSRangePointer indexR
     if (firstResponder == rulesTableView) {
 		if ([rulesTableView numberOfSelectedRows] > 0) {
 			NSIndexSet *rowIdx = [rulesTableView selectedRowIndexes];
-			NSMutableArray *rows = [NSMutableArray arrayWithCapacity:[rulesTableView numberOfSelectedRows]];
 			
 			NSArray *rules = [rulesController arrangedObjects];
-			Rule *rule;
+			Rule *rule = nil;
 			
-			unsigned int idx = [rowIdx firstIndex];
+			NSUInteger idx = [rowIdx firstIndex];
 			
 			NSPasteboard *pb = [NSPasteboard generalPasteboard];
 			[pb declareTypes:[NSArray arrayWithObject:NSStringPboardType] owner:nil];
 			NSMutableString *result = [NSMutableString stringWithCapacity:0];
+			
 			while (idx != NSNotFound) {
 				if ([result length] > 0) {
 					[result appendString:@"\n"];
@@ -755,7 +757,7 @@ static NSRange EnumerateRangesOfIndexSet(NSIndexSet *self, NSRangePointer indexR
     } else if (action == @selector(paste:)) {
 	NSPasteboard *pb = [NSPasteboard generalPasteboard];
 	NSString *type = [pb availableTypeFromArray:[NSArray arrayWithObject:@"D2WRules"]];
-	
+	//NSString *type = [pb availableTypeFromArray:[NSArray arrayWithObject:NSStringPboardType]];
 	if (!type) {
 	    return NO;
 	}
