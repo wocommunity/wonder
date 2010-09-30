@@ -1,11 +1,1 @@
-Container: WOGenericContainer {
-	elementName = elementName;
-	id = id;
-}
-
-Content: WOComponentContent {
-}
-
-Script: WOString {
-	value = script;
-}
+Content: WOComponentContent {}

@@ -68,7 +68,6 @@ public abstract class FileUploader extends WOComponent {
 	 */
 	public static interface FormValueKeys {
 		public static final String qqfile = "qqfile";
-		public static final String woelementID = "id";
 	}
 	
 	@Override
@@ -78,14 +77,7 @@ public abstract class FileUploader extends WOComponent {
 
 	// accessors	
 	public String id() {
-		return _id() == null ? "fu" + ERXStringUtilities.safeIdentifierName(elementID()) : _id();
-	}
-	
-	private String elementID;
-	
-	private String elementID() {
-		if (elementID == null) elementID = context().elementID();
-		return elementID;
+		return _id() == null ? "fu" + ERXStringUtilities.safeIdentifierName(context().elementID()) : _id();
 	}
 	
 	private String _id() {
@@ -116,7 +108,6 @@ public abstract class FileUploader extends WOComponent {
     	
     	// add options
     	_options.add("element: $('#" + id() + "')[0]");
-    	_options.add("params: { " + FormValueKeys.woelementID + ": '" + id()+ "' }");
     	if (hasBinding(Bindings.onChange)) _options.add("onChange:" + valueForBinding(Bindings.onChange));
     	if (hasBinding(Bindings.onComplete)) _options.add("onComplete:" + valueForBinding(Bindings.onComplete));
     	if (hasBinding(Bindings.onSubmit)) _options.add("onChange:" + valueForBinding(Bindings.onSubmit));
@@ -152,10 +143,8 @@ public abstract class FileUploader extends WOComponent {
     }
     
     @Override
-    public WOActionResults invokeAction(WORequest request, WOContext context) {
-    	String woelementID = (String) request.formValueForKey(FormValueKeys.woelementID);
-    	
-    	if (woelementID != null && woelementID.equals(id())) {
+    public WOActionResults invokeAction(WORequest request, WOContext context) {    	
+    	if (context.senderID().equals(context.elementID())) {
         	WOResponse response = new WOResponse();
 
     		if (exception != null) {
