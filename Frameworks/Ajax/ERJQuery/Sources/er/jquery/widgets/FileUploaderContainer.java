@@ -3,8 +3,6 @@ package er.jquery.widgets;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 
-import er.extensions.appserver.ERXResponseRewriter;
-
 /**
  * @see FileUploader
  * 
