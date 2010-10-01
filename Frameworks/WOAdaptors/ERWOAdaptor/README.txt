@@ -12,7 +12,11 @@ How to Use
    OR alternatively:
    
 	-WOAdaptor WONettyAdaptor
+	
+4. You need to set:
 
-4. (Optionally) To run the adaptor via the web server, use: 
+	-WOHost <hostname>
+
+5. (Optionally) To run the adaptor via the web server, use: 
 
 	-WODirectConnectEnabled false
