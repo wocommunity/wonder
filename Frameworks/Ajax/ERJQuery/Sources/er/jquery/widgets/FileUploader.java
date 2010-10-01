@@ -67,7 +67,7 @@ public abstract class FileUploader extends WOComponent {
 	/*
 	 * Form keys
 	 */
-	public static interface FormValueKeys {
+	public static interface FormKeys {
 		public static final String qqfile = "qqfile";
 	}
 	
@@ -160,8 +160,8 @@ public abstract class FileUploader extends WOComponent {
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		super.takeValuesFromRequest(request, context);
 
-		if (context.senderID().equals(context.elementID()) && request.formValueForKey(FormValueKeys.qqfile) != null) {
-			String aFileName = (String) request.formValueForKey(FormValueKeys.qqfile);
+		if (context.senderID().equals(context.elementID()) && request.formValueForKey(FormKeys.qqfile) != null) {
+			String aFileName = (String) request.formValueForKey(FormKeys.qqfile);
 			InputStream anInputStream = (request.contentInputStream() != null) ? request.contentInputStream() : request.content().stream();
 
 			// filepath
