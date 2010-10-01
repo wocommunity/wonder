@@ -236,13 +236,15 @@ public class WONettyAdaptor extends WOAdaptor {
 		}
 		
 		private WORequest _worequest(NSDictionary<String, NSArray<String>> headers, NSData contentData) {
-			return WOApplication.application().createRequest(
+			WORequest _worequest = WOApplication.application().createRequest(
 	        		_request.getMethod().getName(), 
 	        		_request.getUri(), 
 	        		_request.getProtocolVersion().getText(), 
 	        		headers,
 	        		contentData, 
 	        		null);
+			_worequest._setOriginatingAddress(((InetSocketAddress) channel.getRemoteAddress()).getAddress());
+			return _worequest;
 		}
 
 		private void writeResponse(WOResponse woresponse, MessageEvent e) throws IOException {
