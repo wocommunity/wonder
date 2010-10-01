@@ -84,7 +84,7 @@ RemoveHostLink: WOHyperlink {
 }
 
 HostType: WOString {
-	value = currentHost.type;
+	value = currentHost.osType;
 }
 wotaskdLink: WOHyperlink {
 	action = displayWotaskdInfoClicked;

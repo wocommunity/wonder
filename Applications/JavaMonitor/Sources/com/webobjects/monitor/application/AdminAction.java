@@ -353,7 +353,8 @@ public class AdminAction extends WODirectAction {
             result += "\"transactions\": \"" + minstance.transactions() + "\", ";
             result += "\"activeSessions\": \"" + minstance.activeSessions() + "\", ";
             result += "\"averageIdlePeriod\": \"" + minstance.averageIdlePeriod() + "\", ";
-            result += "\"avgTransactionTime\": \"" + minstance.avgTransactionTime() + "\"";
+            result += "\"avgTransactionTime\": \"" + minstance.avgTransactionTime() + "\",";
+            result += "\"autoRecover\": \"" + minstance.isAutoRecovering() + "\"";
             
             String infoMode = (String) context().request().formValueForKey("info");
             if ("full".equalsIgnoreCase(infoMode)) {

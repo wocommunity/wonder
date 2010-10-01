@@ -35,6 +35,7 @@ public class ERPublishCalendarPage extends WOComponent {
     protected String calendarName;
     protected String calendarTimeZone;
     protected final int maxLineLength = 75;
+    public static String newline = System.getProperty("line.separator");
 
     /** @TypeInfo er.calendar.ERCalendarEvent */
     protected NSMutableArray events;
@@ -399,7 +400,7 @@ public class ERPublishCalendarPage extends WOComponent {
      * @return	folded content, with no line longer than 75 characters
      */
     protected String foldLongLinesInString (String content) {
-	Enumeration enumerator = NSArray.componentsSeparatedByString (content, "\r\n").objectEnumerator();
+	Enumeration enumerator = NSArray.componentsSeparatedByString (content, newline).objectEnumerator();
 	NSMutableArray foldedContent = new NSMutableArray();
 	String line;
 
@@ -412,6 +413,6 @@ public class ERPublishCalendarPage extends WOComponent {
 	    foldedContent.addObject (line);
 	}
 
-	return foldedContent.componentsJoinedByString ("\r\n");
+	return foldedContent.componentsJoinedByString (newline);
     }
 }
