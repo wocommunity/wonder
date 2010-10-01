@@ -49,9 +49,8 @@
 			<webobject name="LoggerConfigurationControlBarDiv">
                 <table border="0" cellpadding="0" cellspacing="0" align="center">
                     <tr>
-                        <td class="LoggersFilter"><webobject name="LoggersFilterForm">Filter: <webobject name="LoggerLevelsPopup" /> | <input type="hidden" id="HiddenLogFilterInput" /><webobject name="TextFieldFilterString" /><webobject name="SubmitButtonFilter" /><webobject name="SubmitButtonResetFilter" /></webobject></td>
-                        <td class="AddLogger"><webobject name="AddLoggerForm">Logger:&nbsp;<webobject name="TextFieldLoggerName" /><webobject name="SubmitButtonAddLogger"></webobject></webobject></td>
-                        <td class="AddRuleLogger"><webobject name="AddRuleLoggerForm">Rule Rhs:&nbsp;<webobject name="TextFieldRuleKey" /><webobject name="SubmitButtonAddRuleKey"></webobject></webobject></td>
+                        <td class="LoggersFilter"><webobject name="LoggersFilterForm">Filter:&nbsp;<webobject name="LoggerLevelsPopup" />&nbsp;|&nbsp;<input type="hidden" id="HiddenLogFilterInput" /><webobject name="TextFieldFilterString" /><webobject name="SubmitButtonFilter" /><webobject name="SubmitButtonResetFilter" /></webobject></td>
+                        <td class="AddLogger"><webobject name="AddLoggerForm">Add:&nbsp;<webobject name="TextFieldLoggerName" />&nbsp;<webobject name="NewLoggerLevelsPopup" />&nbsp;<label><webobject name="IsRuleLoggerCheckbox"/>D2W Rule logger?</label>&nbsp;<webobject name="SubmitButtonAddLogger" /></webobject></td>
                     </tr>
                 </table>
 			</webobject>
@@ -161,12 +160,15 @@
                     <h3>Logger Repository</h3>
                     <a class="HelpLink" href="http://logging.apache.org/log4j/docs/api/org/apache/log4j/spi/LoggerRepository.html" target="LoggerRepositoryDocs">?</a>
                 </caption>
+                <thead>
                 <tr>
                     <th scope="col">Name</th>
                     <th scope="col">Repository Class Name</th>
                     <th scope="col">Threshold</th>
                     <th scope="col">Settings</th>
                 </tr>
+                </thead>
+                <tbody>
                 <webobject name="LoggerRepositoryGenericContainer">
                     <td class="LoggingItemName">Logger Repository</td>
                     <td class="LoggingItemClassName"><webobject name="LoggerRepositoryClassName" /></td>
@@ -177,9 +179,12 @@
                         </webobject>
                     </td>
                 </webobject>
+                </tbody>
+                <tfoot>
                 <tr>
                     <td colspan="4" class="ActionButtonContainer"><webobject name="UpdateRepositorySettingsButton" /></td>
                 </tr>
+                </tfoot>
             </table>
         </webobject>
 
@@ -191,12 +196,15 @@
                     <a class="HelpLink" href="http://logging.apache.org/log4j/docs/api/org/apache/log4j/Appender.html" target="AppenderDocs">?</a>
 
                 </caption>
+                <thead>
                 <tr>
                     <th scope="col">Name</th>
                     <th scope="col">Class Name</th>
                     <th scope="col">Threshold</th>
                     <th scope="col">Settings</th>
                 </tr>
+                </thead>
+                <tbody>
                 <webobject name="AppendersRepetition">
                     <webobject name="AppenderGenericContainer">
                     <td class="LoggingItemName"><webobject name="AppenderName" /></td>
@@ -209,9 +217,12 @@
                     </td>
                     </webobject>
                 </webobject>
+                </tbody>
+                <tfoot>
                 <tr>
                     <td colspan="4" class="ActionButtonContainer"><webobject name="UpdateAppenderSettingsButton" /></td>
                 </tr>
+                </tfoot>
             </table>
 
         </webobject>
@@ -224,6 +235,7 @@
                 <caption>
                     <h3>Other Settings</h3>
                 </caption>
+                <tbody>
                 <tr>
                     <th scope="row">Conversion Pattern <a class="HelpLink" href="http://logging.apache.org/log4j/docs/api/org/apache/log4j/PatternLayout.html" target="AppenderDocs">?</a></th>
                     <td>
@@ -236,6 +248,7 @@
                         <webobject name="ShowLoggerString"><br /><textarea cols="80" rows="20" wrap="off"><webobject name="LoggerString"></webobject></textarea></webobject>
                     </td>
                 </tr>
+                </tbody>
             </table>
 
         </webobject>

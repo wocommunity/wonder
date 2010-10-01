@@ -31,16 +31,18 @@ table {
 	margin: .5em;
 }
 
-.LoggingInfo > tbody > tr > td,
-.LoggingInfo > thead > tr > th,
-.LoggingInfo > tbody > tr > th {
+table.LoggingInfo tr:nth-child(even) { background-color: #fafafa; }
+
+table.LoggingInfo > tbody > tr > td,
+table.LoggingInfo > thead > tr > th,
+table.LoggingInfo > tbody > tr > th {
 	border: 1px solid #999;
 	padding: .25em .5em;
 	text-align: left;
 }
 
-.LoggingInfo > thead > tr > th
-.LoggingInfo > tbody > tr > th {
+table.LoggingInfo > thead > tr > th,
+table.LoggingInfo > tbody > tr > th {
 	background-color: #eaeaea;
 	color: #323b48;
 	font-size: 1.15em;
@@ -99,7 +101,6 @@ tr.FATAL { background-color: #efcbcd; }
 tr.OFF { background-color: #efe3e4; }
 */
 
-table.LoggingInfo tr:nth-child(even) { background-color: #fafafa; }
 
 td.LoggingItemLevelSettings span.selected { font-weight: bold; }
 td.LoggingItemLevelSettings span.unset { font-weight: normal !important; font-style: italic; }
@@ -158,7 +159,7 @@ th a.HelpLink {
 	position: fixed;
 	top: 0;
 	width: 100%;
-             z-index: 100;
+	z-index: 100;
 }
 
 #Header {
@@ -174,10 +175,10 @@ th a.HelpLink {
 #Header h2 {
 	color: #fff;
 	padding: .5em 1em;
-             font-size: 1.35em;
+	font-size: 1.35em;
 	margin-top: 0;
 	margin-bottom: 0;
-             text-align: left;
+	text-align: left;
 	text-shadow: rgba(0, 0, 0, 0.5) 0px -1px 0px;
 }
 
@@ -270,10 +271,10 @@ th a.HelpLink {
 
 #LoggerConfigurationControlBar.active {
 	margin-top: 0;
-	-webkit-transition:all 0.35s ease-in-out;
-	-moz-transition:all 0.3s ease-in-out;
-	-o-transition:all 0.3s ease-in-out;
-	-transition:all 0.35s ease-in-out;
+	-webkit-transition: all 0.35s ease-in-out;
+	-moz-transition: all 0.3s ease-in-out;
+	-o-transition: all 0.3s ease-in-out;
+	-transition: all 0.35s ease-in-out;
 }
 
 #LoggerConfigurationControlBar form {
@@ -395,8 +396,6 @@ div.slider ol.items li input[type='radio'] {
 
 div.slider ol.items li.selected {
 	cursor: default;
-	/*color: rgb(150, 18, 23);*/
-	/*text-shadow: rgba(0, 0, 0, 0.20) 0px -1px 1px;*/
 }
 
 div.slider ol.separators {
@@ -442,15 +441,15 @@ div.slider div.selector {
 	height: 1.75em;
 	background-color: rgb(251, 251, 251);
 	background-image: -webkit-gradient(
-	linear,
-	left top,
-	left bottom,
-	from(rgba(0, 0, 0, 0.0)),
-	to(rgba(0, 0, 0, 0.15)));
+		linear,
+		left top,
+		left bottom,
+		from(rgba(0, 0, 0, 0.0)),
+		to(rgba(0, 0, 0, 0.15)));
 	background-image: -moz-linear-gradient(
-	top,
-	rgba(0, 0, 0, 0.0) 0%,
-	rgba(0, 0, 0, 0.15) 100%);
+		top,
+		rgba(0, 0, 0, 0.0) 0%,
+		rgba(0, 0, 0, 0.15) 100%);
 	z-index: -1;
 	margin-top: -1px;
 	margin-left: -2px;

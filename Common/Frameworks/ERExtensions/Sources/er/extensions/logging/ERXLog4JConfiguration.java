@@ -109,11 +109,14 @@ public class ERXLog4JConfiguration extends WOComponent {
     private String _loggerName;
     public LoggerLevel filterLevel;
 
+    public LoggerLevel newLoggerLevel = null;
+
     private NSArray _appenders;
     public AppenderSkeleton anAppender;
     public Level aLevel;
     public LoggerLevel aLoggerLevel;
 
+    public boolean isNewLoggerARuleLogger = false;
     public boolean showAll = false;
     public int rowIndex = 0;
 
@@ -249,6 +252,10 @@ public class ERXLog4JConfiguration extends WOComponent {
         return new NSArray(LoggerLevel.values());
     }
 
+    public NSArray loggerLevelsWithoutUnset() {
+        return ERXArrayUtilities.arrayMinusObject(new NSArray(LoggerLevel.values()), LoggerLevel.UNSET);
+    }
+
     public LoggerRepository loggerRepository() {
         return LogManager.getLoggerRepository();
     }
@@ -329,23 +336,43 @@ public class ERXLog4JConfiguration extends WOComponent {
     public void setShowAllLoggersSelection(String value) { showAll = "all".equals(value); }
 
     public WOComponent addLogger() {
-        Logger.getLogger(loggerName());
-        setFilterString(loggerName());
-        showAll = true;
-        filterLevel = null;
+        if (isNewLoggerARuleLogger) {
+            _addRuleKeyLogger();
+        } else {
+            _addLogger();
+        }
         return null;
+    }
+
+    private void _addLogger() {
+        final Logger log = Logger.getLogger(loggerName());
+        if (newLoggerLevel != null) {
+            filterLevel = newLoggerLevel;
+            log.setLevel(newLoggerLevel.level());
+        } else {
+            showAll = true;
+            filterLevel = null;
+        }
+        setFilterString(loggerName());
     }
     
     // This functionality depends on ERDirectToWeb's presence..    
-    public WOComponent addRuleKey() {
-    	String prefix = "er.directtoweb.rules." + ruleKey();
-    	Logger.getLogger(prefix + ".fire");
-    	Logger.getLogger(prefix + ".cache");
-    	Logger.getLogger(prefix + ".candidates");
-    	showAll = true;
+    private void _addRuleKeyLogger() {
+    	final String prefix = "er.directtoweb.rules." + loggerName();
+    	final Logger ruleFireLog = Logger.getLogger(prefix + ".fire");
+    	final Logger ruleCacheHitLog = Logger.getLogger(prefix + ".cache");
+    	final Logger ruleCandidatesLog = Logger.getLogger(prefix + ".candidates");
+        if (newLoggerLevel != null) {
+            filterLevel = newLoggerLevel;
+            Level level = newLoggerLevel.level();
+            ruleFireLog.setLevel(level);
+            ruleCacheHitLog.setLevel(level);
+            ruleCandidatesLog.setLevel(level);
+        } else {
+            showAll = true;
+            filterLevel = null;
+        }
     	setFilterString(prefix);
-        filterLevel = null;
-        return null;
     }
 
     public String loggerPropertiesString() {
