@@ -33,11 +33,6 @@ and limitations under the License.
 /*
  *	fudge the version indicator here
  */
-static const char * const wo_versions = "34";
-#define	v4_url	wo_versions+1
-#define	v3_url	wo_versions
-#define	URLVersionLen	1
-
 #define	WebObjects_STR	"/"WEBOBJECTS
 #define	WEBOBJECTS_STR	"/WEBOBJECTS"
 #define	WebObjects_LEN	strlen(WebObjects_STR)	/* assume both same length */
@@ -152,12 +147,12 @@ WOURLError WOParseApplicationName(WOURLComponents *wc, const char *url) {
 /*
  *	cover functions for the different versions...
  */
-void ComposeURL(char *string, WOURLComponents *wc) {
+void ComposeURL(char *string, WOURLComponents *wc, int shouldProcessUrl) {
     if (wc->webObjectsVersion.length) {
         switch (*(wc->webObjectsVersion.start)) {
             case '4':
 #if defined(SUPPORT_V4_URLS)
-                WOComposeURL_40(string, wc);
+                WOComposeURL_40(string, wc, shouldProcessUrl);
 #else /* SUPPORT_V4_URLS */
                 WOLog(WO_ERR,"Unknown URL version");
 #endif /* SUPPORT_V4_URLS */
@@ -212,17 +207,19 @@ unsigned int SizeURL(WOURLComponents *wc) {
  *	Here, though, we want to provide a little more functionality to
  *	allow cleaner interface and support different URL syntax's.
  */
-const char *WOParseAndCheckURL(WOURLComponents *wc, const char *url, int version) {
+const char *WOParseAndCheckURL(WOURLComponents *wc, const char *url, int version, int shouldProcessUrl) {
     WOURLError result = WOURLOK;
 
     switch (version) {
         case 4:
 #ifdef	SUPPORT_V4_URLS
-            WOParseURL_40(wc, url);		/* parse a V4 syntax URL */
-            result = WOCheckURL_40(wc);
+            if (shouldProcessUrl) {
+                WOParseURL_40(wc, url);		/* parse a V4 syntax URL */
+                result = WOCheckURL_40(wc);
+            }
             if (result == WOURLOK) {
                 wc->webObjectsVersion.start = v4_url;
-                wc->webObjectsVersion.length = 	URLVersionLen;
+                wc->webObjectsVersion.length = URLVersionLen;
                 WOLog(WO_INFO,"V4 URL: %s",url);
                 return NULL;
             }
@@ -230,8 +227,10 @@ const char *WOParseAndCheckURL(WOURLComponents *wc, const char *url, int version
             break;
         case 3:
 #ifdef	SUPPORT_V3_URLS
-            WOParseURL(wc, url);		/* parse a V3 syntax URL */
-            result = WOCheckURL(wc);
+            if (shouldProcessUrl) {
+                WOParseURL(wc, url);		/* parse a V3 syntax URL */
+                result = WOCheckURL(wc);
+            }
             if (result == WOURLOK) {
                 wc->webObjectsVersion.start = v3_url;
                 wc->webObjectsVersion.length = 	URLVersionLen;

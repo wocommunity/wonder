@@ -280,7 +280,7 @@ unsigned int WOSizeURL_40(WOURLComponents *components) {
     return length;
 }
 
-void WOComposeURL_40(char *string, WOURLComponents *components) {
+void WOComposeURL_40(char *string, WOURLComponents *components, int shouldProcessUrl) {
 
     WOURLComponent *c[11] = { &(components->prefix), &(components->webObjectsVersion), &(components->applicationName),  &(components->applicationNumber), &(components->requestHandlerKey), &(components->requestHandlerPath), &(components->queryString) };
 
@@ -288,9 +288,10 @@ void WOComposeURL_40(char *string, WOURLComponents *components) {
 
     s = string;
 
-    /* prefix */
-    strncpy(s, c[0]->start, c[0]->length);
-    s += c[0]->length;
+    if (shouldProcessUrl) {
+        /* prefix */
+        strncpy(s, c[0]->start, c[0]->length);
+        s += c[0]->length;
 
 #if 0 /* webobjects version should not be added as it is in the prefix */
         if (c[1]->length) {
@@ -300,34 +301,36 @@ void WOComposeURL_40(char *string, WOURLComponents *components) {
         }
 #endif
 
-    /* application name */
-    *s++ = '/';
-    strncpy(s, c[2]->start, c[2]->length);
-    s += c[2]->length;
-    strncpy(s, WOADAPTOR_APP_EXTENSION, 4);
-    s += 4;
-
-    /* instance number */
-    if (c[3]->length) {
+        /* application name */
         *s++ = '/';
-        strncpy(s, c[3]->start, c[3]->length);
-        s += c[3]->length;
-    }
+        strncpy(s, c[2]->start, c[2]->length);
+        s += c[2]->length;
+        strncpy(s, WOADAPTOR_APP_EXTENSION, 4);
+        s += 4;
 
-    /* request handler key */
-    if (c[4]->length) {
-        *s++ = '/';
-        strncpy(s, c[4]->start, c[4]->length);
-        s += c[4]->length;
+        /* instance number */
+        if (c[3]->length) {
+            *s++ = '/';
+            strncpy(s, c[3]->start, c[3]->length);
+            s += c[3]->length;
+        }
+    
+        /* request handler key */
+        if (c[4]->length) {
+            *s++ = '/';
+            strncpy(s, c[4]->start, c[4]->length);
+            s += c[4]->length;
+        }
     }
 
     /* request handler path */
     if (c[5]->length) {
-        *s++ = '/';
+        if (shouldProcessUrl) {
+            *s++ = '/';
+        }
         strncpy(s, c[5]->start, c[5]->length);
         s += c[5]->length;
     }
-
 
     /* query string */
     if (c[6]->length) {

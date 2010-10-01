@@ -55,7 +55,7 @@ and limitations under the License.
  */
  
 unsigned int SizeURL(WOURLComponents *wc);
-void ComposeURL(char *string, WOURLComponents *wc);
+void ComposeURL(char *string, WOURLComponents *wc, int shouldProcessUrl);
 
 /*
  *	parses just the application name from the url, returns 0 on 
@@ -67,7 +67,7 @@ WOURLError WOParseApplicationName(WOURLComponents *wc, const char *url);
 /*
  *	calls WOParseURL and then WOCheckURL
  */
-const char *WOParseAndCheckURL(WOURLComponents *wc, const char *url, int version);
+const char *WOParseAndCheckURL(WOURLComponents *wc, const char *url, int version, int shouldProcessUrl);
 
 /*
  *	err code to string

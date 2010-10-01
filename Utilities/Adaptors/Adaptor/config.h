@@ -265,4 +265,9 @@ int strcasecmp(const char *, const char *);
 #define	REFUSING_SESSIONS_HEADER "x-webobjects-refusenewsessions"
 #define REQUEST_ID_HEADER        "x-webobjects-request-id"
 
+static const char * const wo_versions = "34";
+#define v4_url  wo_versions+1
+#define v3_url  wo_versions
+#define URLVersionLen   1
+
 #endif

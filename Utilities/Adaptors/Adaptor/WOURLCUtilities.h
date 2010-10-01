@@ -18,6 +18,8 @@ and limitations under the License.
 
 
 */
+#include "request.h"
+
 /*
  *    The utilities defined in this file help with the manipulation of WOF dynamic URLs.
  *    WOF dynamic URLs are composed of the following components:
@@ -100,7 +102,7 @@ WOURLError WOCheckURL_40(WOURLComponents *components);
 unsigned int WOSizeURL_40(WOURLComponents *components);
     /* ... */
 
-void WOComposeURL_40(char *string, WOURLComponents *components);
+void WOComposeURL_40(char *string, WOURLComponents *components, int shouldProcessUrl);
     /* ... */
 
 #endif /* _WOF_URL_C_UTILITIES_H */

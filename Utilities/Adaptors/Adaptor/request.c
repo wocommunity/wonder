@@ -126,12 +126,7 @@ void req_reformatRequest(HTTPRequest *req, WOAppReq *app, WOURLComponents *wc, c
    strcat(req->request_str," ");
    req_addHeader(req, REQUEST_METHOD_HEADER, req->method_str, 0);
    
-   if (req->shouldProcessUrl) {
-     ComposeURL(req->request_str + strlen(req->request_str), wc);
-   }
-   else {
-     strncat(req->request_str, req->request_uri, strlen(req->request_uri));
-   }
+   ComposeURL(req->request_str + strlen(req->request_str), wc, req->shouldProcessUrl);
 
    strcat(req->request_str," ");
    if (http_version) {

@@ -661,7 +661,6 @@ int WebObjects_translate(request_rec *r) {
 		memset(&url,0,sizeof(WOURLComponents));
 #endif
         urlerr = WOParseApplicationName(&url, r->uri);
-printf("translate %s, %d\n", r->uri, urlerr);
         if (urlerr != WOURLOK && !((urlerr == WOURLInvalidApplicationName) && ac_authorizeAppListing(&url))) {
             WOLog(WO_DBG, "<WebObjects Apache Module> translate - DECLINED: %s", r->uri);
             return DECLINED;
@@ -734,6 +733,11 @@ static int WebObjects_handler (request_rec *r)
         wc.prefix.length = 0;
         wc.applicationName.start = envApplicationName;
         wc.applicationName.length = strlen(envApplicationName);
+        wc.requestHandlerPath.start = r->uri;
+        wc.requestHandlerPath.length = strlen(r->uri);
+        wc.webObjectsVersion.start = v4_url;
+        wc.webObjectsVersion.length = URLVersionLen;
+
         shouldProcessUrl = 0;
         urlerr = WOURLOK;
     }
@@ -773,7 +777,6 @@ static int WebObjects_handler (request_rec *r)
      */
     req = req_new(r->method, NULL);
     req->shouldProcessUrl = shouldProcessUrl;
-    req->request_uri = r->uri;
     req->api_handle = r;				/* stash this in case it's needed */
 
     /*
@@ -811,7 +814,6 @@ static int WebObjects_handler (request_rec *r)
     /* Always get the query string */
     wc.queryString.start = r->args;
     wc.queryString.length = r->args ? strlen(r->args) : 0;
-
 
     /*
      *	find path to webobjects apps

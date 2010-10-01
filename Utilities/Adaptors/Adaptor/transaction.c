@@ -423,21 +423,19 @@ HTTPResponse *tr_handleRequest(HTTPRequest *req, const char *url, WOURLComponent
  */
 static HTTPResponse *_collectRequestInformation(WOAppReq *app, WOURLComponents *wc, const char *url, int urlVersion, HTTPRequest *req)
 {
-   if (req->shouldProcessUrl) {
-      const char *urlerr;
-      /*
-       *	we need to complete the URL parsing...
-       */
-      if ((urlVersion == 4) || (urlVersion == 3)) {
-         urlerr = WOParseAndCheckURL(wc, url, urlVersion);
-      } else {
-         urlerr = "Unsupported URL version";
-         WOLog(WO_WARN, "Unsupported URL version (%d) on %s", urlVersion, app->name);
-      }
-
-      if (urlerr != NULL)
-          return resp_errorResponse(urlerr, HTTP_BAD_REQUEST);
+   const char *urlerr;
+   /*
+    *	we need to complete the URL parsing...
+    */
+   if ((urlVersion == 4) || (urlVersion == 3)) {
+      urlerr = WOParseAndCheckURL(wc, url, urlVersion, req->shouldProcessUrl);
+   } else {
+      urlerr = "Unsupported URL version";
+      WOLog(WO_WARN, "Unsupported URL version (%d) on %s", urlVersion, app->name);
    }
+
+   if (urlerr != NULL)
+      return resp_errorResponse(urlerr, HTTP_BAD_REQUEST);
 
    /*
     *	pick up the app name & host (if any) & instance
