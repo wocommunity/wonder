@@ -243,7 +243,7 @@ public class WONettyAdaptor extends WOAdaptor {
 	        		headers,
 	        		contentData, 
 	        		null);
-			_worequest._setOriginatingAddress(((InetSocketAddress) channel.getRemoteAddress()).getAddress());
+			//_worequest._setOriginatingAddress(((InetSocketAddress) channel.getRemoteAddress()).getAddress());
 			return _worequest;
 		}
 
