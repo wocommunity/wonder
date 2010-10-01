@@ -209,7 +209,7 @@ public class WONettyAdaptor extends WOAdaptor {
 				if (chunk.isLast()) {
 					readingChunks = false;
 
-					NSData contentData = (_content.readable()) ? new WOInputStreamData(new NSData(ChannelBuffers.copiedBuffer(_content).array())) : NSData.EmptyData;
+					NSData contentData = (_content.readable()) ? new WOInputStreamData(new NSData(_content.array())) : NSData.EmptyData;
 					HttpChunkTrailer trailer = (HttpChunkTrailer) chunk;
 					NSMutableDictionary<String, NSArray<String>> headers = _headers();
 					if (!trailer.getHeaderNames().isEmpty()) {
