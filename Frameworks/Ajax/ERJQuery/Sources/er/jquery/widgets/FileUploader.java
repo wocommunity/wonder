@@ -32,6 +32,9 @@ import er.extensions.foundation.ERXStringUtilities;
  * @property		useUnobtrusively			For Unobtrusive Javascript programming. Default it is ON.
  * 
  * @author mendis
+ * 
+ * NOTE: The progress indicator doesn't work properly with WODefaultAdaptor. If you want a progress % indicator, you may 
+ * need to use an alternative WOAdaptor. e.g: ERWOAdaptor
  *
  */
 public abstract class FileUploader extends WOComponent {
