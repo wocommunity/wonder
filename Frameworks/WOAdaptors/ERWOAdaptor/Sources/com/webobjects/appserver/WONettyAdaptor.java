@@ -253,9 +253,10 @@ public class WONettyAdaptor extends WOAdaptor {
 			// get content from woresponse
 			int length = woresponse._contentLength();
 			if (length > 0) {
-				if (!"".equals(woresponse._content.toString())) {
+				String contentString = woresponse._content.toString();
+				if (contentString!= null && contentString != "") {
 					Charset charset = Charset.forName(woresponse.contentEncoding());
-					response.setContent(ChannelBuffers.copiedBuffer(woresponse._content.toString(), charset));
+					response.setContent(ChannelBuffers.copiedBuffer(contentString, charset));
 				} else
 					response.setContent(ChannelBuffers.copiedBuffer(woresponse._contentData._bytesNoCopy()));
 			} else if (woresponse.contentInputStream() != null) {
@@ -266,10 +267,7 @@ public class WONettyAdaptor extends WOAdaptor {
 			String contentType = woresponse.headerForKey(CONTENT_TYPE);
 			if (contentType != null) response.setHeader(CONTENT_TYPE, contentType);
 
-			if (keepAlive) {
-				// Add 'Content-Length' header only for a keep-alive connection.
-				response.setHeader(CONTENT_LENGTH, length);
-			}
+			response.setHeader(CONTENT_LENGTH, length);
 
 			// Encode the cookie.
 			String cookieString = _request.getHeader(COOKIE);
@@ -303,7 +301,7 @@ public class WONettyAdaptor extends WOAdaptor {
 	            return;
 	        }
 
-			log.error("Exception caught", e.getCause());
+			log.warn("Exception caught", e.getCause());
 	        if (ctx.getChannel().isConnected()) {
 	            ctx.getChannel().write(_internalServerErrorResponse).addListener(ChannelFutureListener.CLOSE);
 	        }
