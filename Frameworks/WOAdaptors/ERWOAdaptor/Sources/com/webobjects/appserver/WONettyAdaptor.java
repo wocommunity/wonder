@@ -23,6 +23,7 @@ import org.apache.log4j.Logger;
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
+import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFactory;
 import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.ChannelFutureListener;
@@ -69,7 +70,7 @@ public class WONettyAdaptor extends WOAdaptor {
     private String _host;
     
     private ChannelFactory channelFactory;
-    private ServerBootstrap bootstrap;
+    private Channel channel;
 
 	public WONettyAdaptor(String name, NSDictionary config) {
         super(name, config);
@@ -90,18 +91,18 @@ public class WONettyAdaptor extends WOAdaptor {
 		channelFactory = new NioServerSocketChannelFactory(
 				Executors.newCachedThreadPool(),
 				Executors.newCachedThreadPool());
-		bootstrap = new ServerBootstrap(channelFactory);
+		ServerBootstrap bootstrap = new ServerBootstrap(channelFactory);
 
 		// Set up the event pipeline factory.
 		bootstrap.setPipelineFactory(new PipelineFactory());
 
 		// Bind and start to accept incoming connections.
-		bootstrap.bind(new InetSocketAddress(_port));
+		channel = bootstrap.bind(new InetSocketAddress(_port));
 	}
 
 	@Override
 	public void unregisterForEvents() {
-		ChannelFuture future = bootstrap.getPipeline().getChannel().close();
+		ChannelFuture future = channel.close();
 		future.awaitUninterruptibly();
 		channelFactory.releaseExternalResources();
 	}
