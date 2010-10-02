@@ -84,7 +84,14 @@ public class ERDDeletionDelegate implements NextPageDelegate {
                         ec.dispose();
                     }
                 } else {
-                    editingContext.deleteObject(_object);
+                	//Place the EO into a nested ec and try to delete there
+                	//to prevent the appearance of a successful delete if
+                	//validation fails.
+                	EOEnterpriseObject eo = ERXEOControlUtilities.editableInstanceOfObject(_object, true);
+                	EOEditingContext childEC = eo.editingContext();
+                	childEC.deleteObject(eo);
+                	childEC.saveChanges();
+                	
                     if (ERXEOControlUtilities.isNewObject(_object)) {
                         // This is necessary to force state synching, e.g., for display groups, etc.
                         editingContext.processRecentChanges();
