@@ -58,11 +58,16 @@ import er.extensions.localization.ERXLocalizer;
  *          maximum number of menu items to display.
  * @binding style (optional) the html style attribute string
  * @binding title (optional) the html title attribute string
+ * @binding uiStyle (optional) Determines UI style. Can be "list" or "popup". Default is "popup"
  * 
  */
 public class ERXLanguageMenu extends ERXStatelessComponent {
 	private static NSDictionary<String, String> displayStringForLanguages;
 	private static final String localizeDisplayStringsKey = "localizeDisplayStrings";
+	private static final String uiStyleKey = "uiStyle";
+	private static final String popupStyleKey = "popup";
+	private static final String listStyleKey = "list";
+	private static final String uiStyleDefault = popupStyleKey;
 	
 	private String _languageOption;
 
@@ -75,6 +80,18 @@ public class ERXLanguageMenu extends ERXStatelessComponent {
 		_languageOption = null;
 	}
 
+	public String uiStyle() {
+		return stringValueForBinding(uiStyleKey, uiStyleDefault);
+	}
+	
+	public boolean isPopup() {
+		return popupStyleKey.equals(uiStyle());
+	}
+	
+	public boolean isList() {
+		return listStyleKey.equals(uiStyle());
+	}
+	
 	public NSArray availableLanguages() {
 		return ERXLocalizer.availableLanguages();
 	}
@@ -93,7 +110,18 @@ public class ERXLanguageMenu extends ERXStatelessComponent {
 	public void setLanguageOption(String languageOption) {
 		this._languageOption = languageOption;
 	}
+	
+	/**
+	 * @return The language code for the localizer
+	 */
+	public String languageCode() {
+		return ERXLocalizer.localizerForLanguage(languageOption()).languageCode();
+	}
 
+	public void languageAction() {
+		setValueForBinding(languageOption(), "language");
+	}
+	
 	/**
 	 * @return the displayString value for the language
 	 */
