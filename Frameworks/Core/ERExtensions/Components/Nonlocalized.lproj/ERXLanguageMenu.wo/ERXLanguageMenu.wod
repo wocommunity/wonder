@@ -13,31 +13,3 @@ LanguagePopup: WOPopUpButton {
 	style = ^style;
 	title = ^title;
 }
-
-UnorderedList: WOGenericContainer {
-	elementName = "ul";
-	class = ^class;
-	dir = ^dir;
-	id = ^id;
-	style = ^style;
-	title = ^title;
-}
-
-isPopup: WOConditional {
-	condition = isPopup;
-}
-
-isList: WOConditional {
-	condition = isList;
-}
-
-Languages: WORepetition {
-	item = languageOption;
-	list = availableLanguages;
-}
-
-LanguageLink: WOHyperlink {
-	action = languageAction;
-	hreflang = languageCode;
-	string = displayStringForLanguage;
-}
