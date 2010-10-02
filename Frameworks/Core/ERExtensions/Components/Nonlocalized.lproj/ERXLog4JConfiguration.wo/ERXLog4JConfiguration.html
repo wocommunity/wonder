@@ -1,30 +1,261 @@
 <html>
 	<head>
 		<title>Log4J Configuration</title>
+
+        <webobject name="Stylesheet" />
+        <webobject name="Scripts" />
+
+		<script type="text/javascript">
+
+			document.observe('dom:loaded', function(evt) {
+				$('Nav').select('li > a').each(function(el) {
+                    el.observe('click', window.LoggingConfigurator.switchActiveView.bind(window.LoggingConfigurator));
+			    });
+
+				var logFilterEl = $('LogFilterInput');
+				new Form.Element.Observer(logFilterEl, 0.5, function(evt) {
+					$('HiddenLogFilterInput').value = $F('LogFilterInput');
+					window.LoggingConfigurator.filterLoggers(evt);
+				});
+
+				$('HiddenLogFilterInput').value = $F(logFilterEl);
+
+                Element.observe('FilterLevel', 'change', LoggingConfigurator.filterLoggers.bind(window.LoggingConfigurator));
+			});
+
+		</script>
+
 	</head>
-	<body bgcolor=#FFFFFF>
-		<h2 align=CENTER><webobject name=Hyperlink1>Log4J Configuration for
-				<webobject name=String1></webobject></webobject></h2>
-		<p></p>
-		<table cellpadding=0 cellspacing=0 border=0>
-			<tr>
-				<td><webobject name=Form1><webobject name=TextFieldFilterString></webobject><webobject name=SubmitButtonFilter></webobject>&nbsp;<webobject name=SubmitButtonResetFilter></webobject></webobject></td>
-				<td>&nbsp;&nbsp;&nbsp;</td>
-				<td><webobject name=Form3>Logger:&nbsp;<webobject name=TextFieldLoggerName></webobject><webobject name=SubmitButtonAddLogger></webobject></webobject></td>
-				<td>&nbsp;&nbsp;</td>
-				<td><webobject name=Form4>Rule Rhs:&nbsp;<webobject name=TextFieldRuleKey></webobject><webobject name=SubmitButtonAddRuleKey></webobject></webobject></td>
-			</tr>
-		</table>
-		<webobject name=Form2><webobject name=SubmitButton2></webobject>&nbsp;<webobject name=SubmitButton4></webobject>&nbsp;<webobject name=SubmitButton5></webobject><br>
-			<br/>
-			<table cellpadding=0 cellspacing=0 border=0>
-				<webobject name=RepetitionLoggers><webobject name=GenericContainerTR>
-						<td><webobject name=StringLoggerName></webobject></td>
-						<td><webobject name=StringLoggerLevel></webobject></td>
-						<webobject name=GenericContainerTD>&nbsp;&nbsp;&nbsp;<webobject name=RadioButtonTraceLevel></webobject><webobject name=B0>Trace</webobject>&nbsp;&nbsp;<webobject name=RadioButtonDebugLevel></webobject><webobject name=B1>Debug</webobject>&nbsp;&nbsp;<webobject name=RadioButtonInfoLevel></webobject><webobject name=B2>Info</webobject>&nbsp;&nbsp;<webobject name=RadioButtonWarnLevel></webobject><webobject name=B3>Warn</webobject>&nbsp;&nbsp;<webobject name=RadioButtonErrorLevel></webobject><webobject name=B4>Error</webobject>&nbsp;&nbsp;<webobject name=RadioButtonFatalLevel></webobject><webobject name=B5>Fatal</webobject>&nbsp;&nbsp;<webobject name=RadioButtonOffLevel></webobject><webobject name=B6>Off</webobject>&nbsp;&nbsp;<webobject name=RadioButtonUnsetLevel></webobject><i>Unset</i></webobject></webobject></webobject>
+	<body>
+        <webobject name="SettingsForm">
+        
+        <div id="HeaderWrapper">
+			<div id="Header">
+		        <h2 align="center">Log4J Configuration for <webobject name="StringApplicationName" /></h2>
+
+                <div id="Nav">
+					<ul class="nav">
+                        <webobject name="RepetitionNav">
+                            <webobject name="NavListItem"><webobject name="NavItemLink" /></webobject>
+                        </webobject>
+                    </ul>
+				</div>
+
+                <webobject name="ActiveSectionHiddenField" />
+
+			</div>
+
+			<div id="LoggerConfigurationControlBarContainer">
+			<webobject name="LoggerConfigurationControlBarDiv">
+                <table border="0" cellpadding="0" cellspacing="0" align="center">
+                    <tr>
+                        <td class="LoggersFilter"><webobject name="LoggersFilterForm">Filter:&nbsp;<webobject name="LoggerLevelsPopup" />&nbsp;|&nbsp;<input type="hidden" id="HiddenLogFilterInput" /><webobject name="TextFieldFilterString" /><webobject name="SubmitButtonFilter" /><webobject name="SubmitButtonResetFilter" /></webobject></td>
+                        <td class="AddLogger"><webobject name="AddLoggerForm">Add:&nbsp;<webobject name="TextFieldLoggerName" />&nbsp;<webobject name="NewLoggerLevelsPopup" />&nbsp;<label><webobject name="IsRuleLoggerCheckbox"/>D2W Rule logger?</label>&nbsp;<webobject name="SubmitButtonAddLogger" /></webobject></td>
+                    </tr>
+                </table>
+			</webobject>
+			</div>
+		</div>
+
+		<div id="Main">
+
+
+		<webobject name="LoggersDiv">
+
+			<table id="LoggersTable" class="LoggingInfo" border="0" cellpadding="2" cellspacing="0">
+                <caption>
+                    <h3>Loggers</h3>
+                    <a class="HelpLink" href="http://logging.apache.org/log4j/docs/api/org/apache/log4j/Logger.html" target="LoggerDocs">?</a>
+                </caption>
+                <thead>
+                <tr>
+                    <td colspan="3" class="ActionButtonContainer">
+                        <div class="ActionButtonContainer" style="position: relative;">
+                        <webobject name="SubmitButtonUpdateLoggerSettings" />
+
+                        <div id="LoggerDisplaySliderDiv" style="position: absolute; right: 0; top: 0;">
+                            <ol class="items">
+                                <li><webobject name="LoggerDisplayShowAllRadioButton"/>Show All</li>
+                                <li><webobject name="LoggerDisplayShowExplicitRadioButton"/>Show Explicit</li>
+                            </ol>
+                        </div>
+                        <script type="text/javascript">
+                            Event.observe(document, 'dom:loaded', function() { new SegmentedSlider($('LoggerDisplaySliderDiv'), 'LoggerListShowAllOrOnlyExplicit') });
+                            Event.observe('LoggerDisplaySliderDiv', 'slider:itemSelected', function(evt) {
+                                var slider = SegmentedSlider.sliders.get('LoggerDisplaySliderDiv2');
+                                if (slider !== undefined) {
+                                    var name = evt.memo.name;
+                                    var radioButtons = slider.sliderElement().select("input[type=radio]");
+                                    var el = radioButtons.detect(function(n) {
+                                        return n.value == name;
+                                    });
+                                    if (el && !el.checked) {
+                                        slider._select(name, false, true);
+                                    }
+                                }
+                            });
+                        </script>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col" align="center">Level</th>
+                    <th scope="col">Settings</th>
+                </tr>
+                </thead>
+                <tbody>
+				<webobject name="RepetitionLoggers">
+                    <webobject name="GenericContainerTR">
+						<td class="LoggingItemName"><webobject name="StringLoggerName" /></td>
+						<td class="LoggingItemLevel"><webobject name="LevelIndicator" /></td>
+						<td class="LoggingItemLevelSettings">
+                             <webobject name="LoggerLevelRadioButtonMatrix">
+                                 <webobject name="LevelSettingGenericContainer"><webobject name="LoggerLevelName" /></webobject>
+                            </webobject>
+                        </td>
+                    </webobject>
+                </webobject>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="3" class="ActionButtonContainer">
+                        <div class="ActionButtonContainer" style="position: relative;">
+                        <webobject name="SubmitButtonUpdateLoggerSettings" />
+                        <div id="LoggerDisplaySliderDiv2" style="position: absolute; right: 0; top: 0;">
+                            <ol class="items">
+                                <li><webobject name="LoggerDisplayShowAllRadioButtonBottom"/>Show All</li>
+                                <li><webobject name="LoggerDisplayShowExplicitRadioButtonBottom"/>Show Explicit</li>
+                            </ol>
+                        </div>
+                        <script type="text/javascript">
+                            Event.observe(window, 'load', function() { new SegmentedSlider($('LoggerDisplaySliderDiv2'), 'LoggerListShowAllOrOnlyExplicit2') });
+                            Event.observe('LoggerDisplaySliderDiv2', 'slider:itemSelected', function(evt) {
+                                var slider = SegmentedSlider.sliders.get('LoggerDisplaySliderDiv');
+                                if (slider !== undefined) {
+                                    var name = evt.memo.name;
+                                    var radioButtons = slider.sliderElement().select("input[type=radio]");
+                                    var el = radioButtons.detect(function(n) {
+                                        return n.value == name;
+                                    });
+                                    if (el && !el.checked) {
+                                        slider._select(name, false, true);
+                                    }
+                                }
+                            });
+                        </script>
+                        </div>
+                    </td>
+                </tr>
+                </tfoot>
 			</table>
-			<br/>
-			<webobject name=SubmitButtonUpdate2></webobject>&nbsp;<webobject name=SubmitButtonShowAll2></webobject>&nbsp;<webobject name=SubmitButtonShowExplicitLevels2></webobject></webobject>
-<TABLE CELLSPACING=0 CELLPADDING=0 BORDER=0><TR><TD><WEBOBJECT NAME=Form7><A TARGET="_new" HREF="http://logging.apache.org/log4j/docs/api/org/apache/log4j/PatternLayout.html">Conversion Pattern</A>: <WEBOBJECT NAME=TextFieldFilterString2></WEBOBJECT><WEBOBJECT NAME=SubmitButtonFilter2></WEBOBJECT>&nbsp;</WEBOBJECT></TD><TD>&nbsp;&nbsp;&nbsp;</TD></TR></TABLE><hr><webobject name=ShowLoggerString><br><textarea cols="60" rows="20" wrap="off"><webobject name=LoggerString></webobject></textarea></webobject>
+
+        </webobject>
+
+
+		<webobject name="RepositoryDiv">
+
+            <table id="RepositoryTable" class="LoggingInfo" border="0" cellpadding="2" cellspacing="0">
+                <caption>
+                    <h3>Logger Repository</h3>
+                    <a class="HelpLink" href="http://logging.apache.org/log4j/docs/api/org/apache/log4j/spi/LoggerRepository.html" target="LoggerRepositoryDocs">?</a>
+                </caption>
+                <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Repository Class Name</th>
+                    <th scope="col">Threshold</th>
+                    <th scope="col">Settings</th>
+                </tr>
+                </thead>
+                <tbody>
+                <webobject name="LoggerRepositoryGenericContainer">
+                    <td class="LoggingItemName">Logger Repository</td>
+                    <td class="LoggingItemClassName"><webobject name="LoggerRepositoryClassName" /></td>
+                    <td class="LoggingItemLevel"><webobject name="LevelIndicator" /></td>
+                    <td class="LoggingItemLevelSettings">
+                        <webobject name="LoggerRepositoryThresholdRadioButtonMatrix">
+                            <webobject name="LoggerRepositoryThresholdSettingGenericContainer"><webobject name="LevelName" /></webobject>
+                        </webobject>
+                    </td>
+                </webobject>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="4" class="ActionButtonContainer"><webobject name="UpdateRepositorySettingsButton" /></td>
+                </tr>
+                </tfoot>
+            </table>
+        </webobject>
+
+		<webobject name="AppendersDiv">
+
+            <table id="AppendersTable" class="LoggingInfo" border="0" cellpadding="2" cellspacing="0">
+                <caption>
+                    <h3>Appenders</h3>
+                    <a class="HelpLink" href="http://logging.apache.org/log4j/docs/api/org/apache/log4j/Appender.html" target="AppenderDocs">?</a>
+
+                </caption>
+                <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Class Name</th>
+                    <th scope="col">Threshold</th>
+                    <th scope="col">Settings</th>
+                </tr>
+                </thead>
+                <tbody>
+                <webobject name="AppendersRepetition">
+                    <webobject name="AppenderGenericContainer">
+                    <td class="LoggingItemName"><webobject name="AppenderName" /></td>
+                    <td class="LoggingItemClassName"><webobject name="AppenderClassName" /></td>
+                    <td class="LoggingItemLevel"><webobject name="LevelIndicator" /></td>
+                    <td class="LoggingItemLevelSettings">
+                        <webobject name="AppenderThresholdRadioButtonMatrix">
+                            <webobject name="AppenderThresholdSettingGenericContainer"><webobject name="LevelName" /></webobject>
+                        </webobject>
+                    </td>
+                    </webobject>
+                </webobject>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="4" class="ActionButtonContainer"><webobject name="UpdateAppenderSettingsButton" /></td>
+                </tr>
+                </tfoot>
+            </table>
+
+        </webobject>
+
+
+
+		<webobject name="OtherSettingsDiv">
+
+            <table id="OtherSettingsTable" class="LoggingInfo" border="0" cellpadding="2" cellspacing="0">
+                <caption>
+                    <h3>Other Settings</h3>
+                </caption>
+                <tbody>
+                <tr>
+                    <th scope="row">Conversion Pattern <a class="HelpLink" href="http://logging.apache.org/log4j/docs/api/org/apache/log4j/PatternLayout.html" target="AppenderDocs">?</a></th>
+                    <td>
+                        <webobject name="TextFieldConversionPattern"></webobject><webobject name="SubmitButtonUpdateConversionPattern"></webobject>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Properties</th>
+                    <td>
+                        <webobject name="ShowLoggerString"><br /><textarea cols="80" rows="20" wrap="off"><webobject name="LoggerString"></webobject></textarea></webobject>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </webobject>
+
+    </div>
+
+    </webobject>
+
 	</body>
 </html>
