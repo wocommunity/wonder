@@ -309,4 +309,7 @@
     isAbstractEntity = Y; 
     name = EOJDBCFrontBasePrototypes; 
     primaryKeyAttributes = (eofKey, id); 
+    userInfo = {
+        exampleConnectionDictionary = {URL = "jdbc:FrontBase://127.0.0.1/DatabaseName"; }; 
+    }; 
 }
