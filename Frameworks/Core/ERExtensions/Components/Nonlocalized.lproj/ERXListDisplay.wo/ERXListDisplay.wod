@@ -1,27 +1,40 @@
 ComponentContent1: WOComponentContent {
 }
 
-Conditional1: WOConditional {
+NotUseContent: WOConditional {
 	condition = useContent;
 	negate = true;
 }
 
-Conditional2: WOConditional {
+UseContent: WOConditional {
 	condition = useContent;
 }
 
-Repetition1: WORepetition {
+List: WORepetition {
 	index = index;
 	item = item;
 	list = list;
 }
 
-String1: WOString {
+DisplayString: WOString {
 	value = displayString;
     escapeHTML = escapeHTML;
 }
 
-String2: WOString {
+CurrentSeparator: WOString {
 	value = currentSeparator;
+}
+
+IsEmptyList: WOConditional {
+	condition = isEmptyList;
+}
+
+EmptyListDisplayString : WOString {
+	value = emptyArrayDisplay;
+}
+
+NotIsEmptyList : WOConditional {
+	condition = isEmptyList;
+	negate = true;
 }
 
