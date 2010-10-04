@@ -47,6 +47,7 @@ import org.jboss.netty.handler.codec.http.HttpRequest;
 import org.jboss.netty.handler.codec.http.HttpRequestDecoder;
 import org.jboss.netty.handler.codec.http.HttpResponse;
 import org.jboss.netty.handler.codec.http.HttpResponseEncoder;
+import org.jboss.netty.handler.codec.http.HttpResponseStatus;
 import org.jboss.netty.logging.CommonsLoggerFactory;
 import org.jboss.netty.logging.InternalLogger;
 import org.jboss.netty.util.CharsetUtil;
@@ -322,6 +323,7 @@ public class WONettyAdaptor extends WOAdaptor {
 					} else response.setHeader(headerKey, value);
 				}
 			}
+			response.setStatus(HttpResponseStatus.valueOf(woresponse.status()));
 			//response.setHeader(CONTENT_LENGTH, length);
 
 			// Encode the cookie.
