@@ -38,6 +38,7 @@ import org.jboss.netty.handler.codec.frame.TooLongFrameException;
 import org.jboss.netty.handler.codec.http.Cookie;
 import org.jboss.netty.handler.codec.http.CookieDecoder;
 import org.jboss.netty.handler.codec.http.CookieEncoder;
+import org.jboss.netty.handler.codec.http.DefaultCookie;
 import org.jboss.netty.handler.codec.http.DefaultHttpResponse;
 import org.jboss.netty.handler.codec.http.HttpChunk;
 import org.jboss.netty.handler.codec.http.HttpChunkTrailer;
@@ -240,8 +241,32 @@ public class WONettyAdaptor extends WOAdaptor {
 	        		headers,
 	        		contentData, 
 	        		null);
-			// TODO set cookies
+			
+			// cookies
+			String cookieString = _request.getHeader(COOKIE);
+			if (cookieString != null) {
+				CookieDecoder cookieDecoder = new CookieDecoder();
+				Set<Cookie> cookies = cookieDecoder.decode(cookieString);
+				if(!cookies.isEmpty()) {
+					for (Cookie cookie : cookies) {
+						WOCookie wocookie = _convertCookieToWOCookie(cookie);
+						_worequest.addCookie(wocookie);
+					}
+				}
+			} 
+			
 			return _worequest;
+		}
+		
+		private WOCookie _convertCookieToWOCookie(Cookie cookie) {
+			WOCookie wocookie = new WOCookie(
+					cookie.getName(),
+					cookie.getValue(),
+					cookie.getPath(),
+					cookie.getDomain(),
+					cookie.getMaxAge(),
+					cookie.isSecure());
+			return wocookie;
 		}
 		
 		private WORequest _convertHttpChunkTrailerToWORequest(HttpChunkTrailer trailer) {
@@ -264,7 +289,7 @@ public class WONettyAdaptor extends WOAdaptor {
 	        		headers,
 	        		contentData, 
 	        		null);
-			// TODO set cookies (is this really necessary here?!)
+			// TODO set cookies (CHECKME is this really necessary here?!)
 			return _worequest;
 		}
 		
@@ -299,23 +324,27 @@ public class WONettyAdaptor extends WOAdaptor {
 			}
 			//response.setHeader(CONTENT_LENGTH, length);
 
-			/*
-			// TODO cookies
 			// Encode the cookie.
-			String cookieString = _request.getHeader(COOKIE);
-			if (cookieString != null) {
-				CookieDecoder cookieDecoder = new CookieDecoder();
-				Set<Cookie> cookies = cookieDecoder.decode(cookieString);
-				if(!cookies.isEmpty()) {
-					// Reset the cookies if necessary.
-					CookieEncoder cookieEncoder = new CookieEncoder(true);
-					for (Cookie cookie : cookies) {
-						cookieEncoder.addCookie(cookie);
-					}
-					response.addHeader(SET_COOKIE, cookieEncoder.encode());
+			NSArray<WOCookie> wocookies = woresponse.cookies();
+			if(!wocookies.isEmpty()) {
+				// Reset the cookies if necessary.
+				CookieEncoder cookieEncoder = new CookieEncoder(true);
+				for (WOCookie wocookie : wocookies) {
+					Cookie cookie = _convertWOCookieToCookie(wocookie);
+					cookieEncoder.addCookie(cookie);
 				}
-			} */
+				response.addHeader(SET_COOKIE, cookieEncoder.encode());
+			}
 			return response;
+		}
+		
+		private Cookie _convertWOCookieToCookie(WOCookie wocookie) {
+			Cookie cookie = new DefaultCookie(wocookie.name(), wocookie.value());
+			cookie.setPath(wocookie.path());
+			cookie.setDomain(wocookie.domain());
+			cookie.setMaxAge(wocookie.timeOut());
+			cookie.setSecure(wocookie.isSecure());
+			return cookie;
 		}
 
 		private void writeResponse(WOResponse woresponse, MessageEvent e) throws IOException {
