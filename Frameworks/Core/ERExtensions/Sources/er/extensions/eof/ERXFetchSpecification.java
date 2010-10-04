@@ -56,6 +56,15 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 		this((EOFetchSpecification)spec);
 		_userInfo = spec.userInfo().count() > 0 ? null : spec.userInfo().mutableClone();
 	}
+
+	/**
+	 * Constructs a new fetch specification for the given entity with isDeep = true.
+	 * 
+	 * @param entityName the name of the entity 
+	 */
+	public ERXFetchSpecification(String entityName) {
+		super(entityName, null, null, false, true, null);
+	}
 	
 	/**
 	 * When true, objectsWithFetchSpecification will include newly inserted objects, newly removed objects, and newly updated
@@ -139,6 +148,39 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	@Override
 	public Object clone() {
 		return fetchSpec((EOFetchSpecification) super.clone());
+	}
+	
+	/**
+	 * Sets the qualifier on this fetch specification and returns "this" for chaining.
+	 * 
+	 * @param qualifier the qualifier to set
+	 * @return this
+	 */
+	public ERXFetchSpecification<T> qualify(EOQualifier qualifier) {
+		setQualifier(qualifier);
+		return this;
+	}
+	
+	/**
+	 * Sets the sort orderings on this fetch specification and returns "this" for chaining.
+	 * 
+	 * @param sortOrderings the sort orderings to set
+	 * @return this
+	 */
+	public ERXFetchSpecification<T> sort(NSArray<EOSortOrdering> sortOrderings) {
+		setSortOrderings(sortOrderings);
+		return this;
+	}
+	
+	/**
+	 * Sets the sort orderings on this fetch specification and returns "this" for chaining.
+	 * 
+	 * @param sortOrdering the sort ordering to set
+	 * @return this
+	 */
+	public ERXFetchSpecification<T> sort(EOSortOrdering sortOrdering) {
+		setSortOrderings(new NSArray<EOSortOrdering>(sortOrdering));
+		return this;
 	}
 	
 	/**
