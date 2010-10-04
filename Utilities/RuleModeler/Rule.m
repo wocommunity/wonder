@@ -498,22 +498,26 @@ static int defaultRulePriority = 0;
 }
 
 - (NSString *)description {
-    NSMutableString *rhsValue = nil;    
-	id              rhsValueObject = [[self rhs] value];
-    
-    if ([rhsValueObject isKindOfClass:[NSDictionary class]]) {
-        rhsValue = [NSMutableString stringWithCapacity:1024];
-        [NSPropertyListSerialization _appendDictionary:rhsValueObject toMutableString:rhsValue level:0 maxLevel:0 escapeNonASCII:YES];
-    }
-    else {
-        rhsValue = [[[rhsValueObject description] mutableCopy] autorelease];
-    }
-    [rhsValue replaceOccurrencesOfString:@"\n" withString:@"" options:0 range:NSMakeRange(0,[rhsValue length])];
 
+//	Not needed, use the valueDescription from assignment instead.
+//  Oct/2010 davidleber
+
+//    NSMutableString *rhsValue = nil;    
+//	id              rhsValueObject = [[self rhs] value];
+//    
+//    if ([rhsValueObject isKindOfClass:[NSDictionary class]]) {
+//        rhsValue = [NSMutableString stringWithCapacity:1024];
+//        [NSPropertyListSerialization _appendDictionary:rhsValueObject toMutableString:rhsValue level:0 maxLevel:0 escapeNonASCII:YES];
+//    }
+//    else {
+//        rhsValue = [[[rhsValueObject description] mutableCopy] autorelease];
+//    }
+//    [rhsValue replaceOccurrencesOfString:@"\n" withString:@"" options:0 range:NSMakeRange(0,[rhsValue length])];
+	
     return [NSString stringWithFormat:@"%d : %@ => %@ = %@ [%@]",
 			[self priority], 
 			[self lhsDescription] ? [self lhsDescription]:@"*true*", 
-			[[self rhs] keyPath], rhsValue, 
+			[[self rhs] keyPath], [[self rhs] valueDescription], 
 			[[self rhs] assignmentClass]];
 }
 
