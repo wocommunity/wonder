@@ -12,7 +12,9 @@ import static org.jboss.netty.handler.codec.http.HttpResponseStatus.OK;
 import static org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.Map;
@@ -68,11 +70,22 @@ public class WONettyAdaptor extends WOAdaptor {
     private static final Logger log = Logger.getLogger(WONettyAdaptor.class);
 
     private int _port;
-
-    private String _host;
+    private String _hostname;
     
     private ChannelFactory channelFactory;
     private Channel channel;
+    
+    private String hostname() {
+    	if (_hostname == null) {
+    		try {
+    			InetAddress _host = InetAddress.getLocalHost();
+				_hostname = _host.getHostName();
+			} catch (UnknownHostException exception) {
+				log.error("Failed to get localhost address");
+			}
+    	}
+    	return _hostname;
+    }
 
 	public WONettyAdaptor(String name, NSDictionary config) {
         super(name, config);
@@ -82,9 +95,9 @@ public class WONettyAdaptor extends WOAdaptor {
             _port = number.intValue();
         if (_port < 0)
             _port = 0;
-        WOApplication.application().setPort(_port);
-        _host = (String) config.objectForKey(WOProperties._HostKey);
-        WOApplication.application()._setHost(_host);
+        
+        _hostname = (String) config.objectForKey(WOProperties._HostKey);
+        WOApplication.application()._setHost(hostname());
 	}
 
 	@Override
@@ -99,7 +112,11 @@ public class WONettyAdaptor extends WOAdaptor {
 		bootstrap.setPipelineFactory(new PipelineFactory());
 
 		// Bind and start to accept incoming connections.
-		channel = bootstrap.bind(new InetSocketAddress(_port));
+		channel = bootstrap.bind(new InetSocketAddress(hostname(), _port));
+		
+		log.debug("Binding adaptor to address: " + channel.getLocalAddress());
+		_port = ((InetSocketAddress) channel.getLocalAddress()).getPort();
+		System.setProperty(WOProperties._PortKey, Integer.toString(_port));
 	}
 
 	@Override
@@ -108,7 +125,7 @@ public class WONettyAdaptor extends WOAdaptor {
 		future.awaitUninterruptibly();
 		channelFactory.releaseExternalResources();
 	}
-	
+		
 	@Override
 	public int port() {
 		return _port;
