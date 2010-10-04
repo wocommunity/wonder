@@ -289,9 +289,16 @@ public class WONettyAdaptor extends WOAdaptor {
 			}
 			
 			// set headers
-			String contentType = woresponse.headerForKey(CONTENT_TYPE);
-			if (contentType != null) response.setHeader(CONTENT_TYPE, contentType);
-			response.setHeader(CONTENT_LENGTH, length);
+			for (String headerKey: woresponse.headerKeys()) {
+				String value = woresponse.headerForKey(headerKey);
+				if (value != null) {
+					if (value.contains(",")) {
+						String[] values = value.split(",");
+						response.setHeader(headerKey, values);
+					} else response.setHeader(headerKey, value);
+				}
+			}
+			//response.setHeader(CONTENT_LENGTH, length);
 
 			/*
 			// TODO cookies
