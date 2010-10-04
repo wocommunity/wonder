@@ -197,6 +197,7 @@ public class WONettyAdaptor extends WOAdaptor {
 				} else {
 					_content = request.getContent();
 					WORequest worequest = _convertHttpRequestToWORequest(_request);
+					worequest._setOriginatingAddress(((InetSocketAddress) ctx.getChannel().getRemoteAddress()).getAddress());
 			        WOResponse woresponse = WOApplication.application().dispatchRequest(worequest);
 			        
 			        // send a response
@@ -239,7 +240,6 @@ public class WONettyAdaptor extends WOAdaptor {
 	        		headers,
 	        		contentData, 
 	        		null);
-			//_worequest._setOriginatingAddress(((InetSocketAddress) channel.getRemoteAddress()).getAddress());
 			// TODO set cookies
 			return _worequest;
 		}
@@ -264,7 +264,6 @@ public class WONettyAdaptor extends WOAdaptor {
 	        		headers,
 	        		contentData, 
 	        		null);
-			//_worequest._setOriginatingAddress(((InetSocketAddress) channel.getRemoteAddress()).getAddress());
 			// TODO set cookies (is this really necessary here?!)
 			return _worequest;
 		}
