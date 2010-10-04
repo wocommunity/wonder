@@ -176,10 +176,9 @@ static NSArray * _sortDescriptors = nil;
 			}
 										
             NSString *path = [urlPath stringByAppendingPathExtension:@"txt"];
-            result = [description writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:&errorDesc];
+            result = [description writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:outError];
             if(!result) {
-                *outError = errorDesc;
-                NSLog(@"Save failed: %@ %@", path, errorDesc);
+                NSLog(@"Save failed: %@ %@", path, outError);
             }
         }
     }
