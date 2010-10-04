@@ -1,5 +1,5 @@
-How to Use
-==========
+Deployment with WONettyAdaptor
+==============================
 
 1. Build/Install ERWOAdaptor framework
 
