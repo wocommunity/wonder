@@ -70,17 +70,17 @@ public abstract class _ERCAuditTrailEntry extends ERXGenericRecord {
     takeStoredValueForKey(value, Key.TYPE);
   }
 
-  public ERXKeyGlobalID userGlobalID() {
-    return (ERXKeyGlobalID) storedValueForKey(Key.USER_GLOBAL_ID);
+  public er.extensions.eof.ERXKeyGlobalID userGlobalID() {
+    return (er.extensions.eof.ERXKeyGlobalID) storedValueForKey(Key.USER_GLOBAL_ID);
   }
-  public void setUserGlobalID(ERXKeyGlobalID value) {
+  public void setUserGlobalID(er.extensions.eof.ERXKeyGlobalID value) {
     takeStoredValueForKey(value, Key.USER_GLOBAL_ID);
   }
 
-  public ERXMutableDictionary userInfo() {
-    return (ERXMutableDictionary) storedValueForKey(Key.USER_INFO);
+  public er.extensions.foundation.ERXMutableDictionary userInfo() {
+    return (er.extensions.foundation.ERXMutableDictionary) storedValueForKey(Key.USER_INFO);
   }
-  public void setUserInfo(ERXMutableDictionary value) {
+  public void setUserInfo(er.extensions.foundation.ERXMutableDictionary value) {
     takeStoredValueForKey(value, Key.USER_INFO);
   }
 

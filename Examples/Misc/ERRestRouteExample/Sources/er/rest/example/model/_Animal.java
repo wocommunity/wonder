@@ -1,4 +1,4 @@
-// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to Animal.java instead.
+// DO NOT EDIT.  Make changes to Animal.java instead.
 package er.rest.example.model;
 
 import com.webobjects.eoaccess.*;
@@ -36,22 +36,22 @@ public abstract class _Animal extends  ERXGenericRecord {
   }
 
   public String name() {
-    return (String) storedValueForKey("name");
+    return (String) storedValueForKey(_Animal.NAME_KEY);
   }
 
   public void setName(String value) {
     if (_Animal.LOG.isDebugEnabled()) {
     	_Animal.LOG.debug( "updating name from " + name() + " to " + value);
     }
-    takeStoredValueForKey(value, "name");
+    takeStoredValueForKey(value, _Animal.NAME_KEY);
   }
 
   public er.rest.example.model.Person owner() {
-    return (er.rest.example.model.Person)storedValueForKey("owner");
+    return (er.rest.example.model.Person)storedValueForKey(_Animal.OWNER_KEY);
   }
   
   public void setOwner(er.rest.example.model.Person value) {
-    takeStoredValueForKey(value, "owner");
+    takeStoredValueForKey(value, _Animal.OWNER_KEY);
   }
 
   public void setOwnerRelationship(er.rest.example.model.Person value) {
@@ -64,10 +64,10 @@ public abstract class _Animal extends  ERXGenericRecord {
     else if (value == null) {
     	er.rest.example.model.Person oldValue = owner();
     	if (oldValue != null) {
-    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, "owner");
+    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, _Animal.OWNER_KEY);
       }
     } else {
-    	addObjectToBothSidesOfRelationshipWithKey(value, "owner");
+    	addObjectToBothSidesOfRelationshipWithKey(value, _Animal.OWNER_KEY);
     }
   }
   
@@ -89,9 +89,9 @@ public abstract class _Animal extends  ERXGenericRecord {
   }
 
   public static NSArray<Animal> fetchAnimals(EOEditingContext editingContext, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings) {
-    EOFetchSpecification fetchSpec = new EOFetchSpecification(_Animal.ENTITY_NAME, qualifier, sortOrderings);
+    ERXFetchSpecification<Animal> fetchSpec = new ERXFetchSpecification<Animal>(_Animal.ENTITY_NAME, qualifier, sortOrderings);
     fetchSpec.setIsDeep(true);
-    NSArray<Animal> eoObjects = (NSArray<Animal>)editingContext.objectsWithFetchSpecification(fetchSpec);
+    NSArray<Animal> eoObjects = fetchSpec.fetchObjects(editingContext);
     return eoObjects;
   }
 
@@ -107,7 +107,7 @@ public abstract class _Animal extends  ERXGenericRecord {
       eoObject = null;
     }
     else if (count == 1) {
-      eoObject = (Animal)eoObjects.objectAtIndex(0);
+      eoObject = eoObjects.objectAtIndex(0);
     }
     else {
       throw new IllegalStateException("There was more than one Animal that matched the qualifier '" + qualifier + "'.");
@@ -128,7 +128,7 @@ public abstract class _Animal extends  ERXGenericRecord {
   }
 
   public static Animal localInstanceIn(EOEditingContext editingContext, Animal eo) {
-    Animal localInstance = (eo == null) ? null : (Animal)EOUtilities.localInstanceOfObject(editingContext, eo);
+    Animal localInstance = (eo == null) ? null : ERXEOControlUtilities.localInstanceOfObject(editingContext, eo);
     if (localInstance == null && eo != null) {
       throw new IllegalStateException("You attempted to localInstance " + eo + ", which has not yet committed.");
     }

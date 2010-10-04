@@ -1,4 +1,4 @@
-// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to Employee.java instead.
+// DO NOT EDIT.  Make changes to Employee.java instead.
 package er.erxtest.model;
 
 import com.webobjects.eoaccess.*;
@@ -56,110 +56,110 @@ public abstract class _Employee extends er.extensions.eof.ERXGenericRecord {
   }
 
   public String address1() {
-    return (String) storedValueForKey("address1");
+    return (String) storedValueForKey(_Employee.ADDRESS1_KEY);
   }
 
   public void setAddress1(String value) {
     if (_Employee.LOG.isDebugEnabled()) {
     	_Employee.LOG.debug( "updating address1 from " + address1() + " to " + value);
     }
-    takeStoredValueForKey(value, "address1");
+    takeStoredValueForKey(value, _Employee.ADDRESS1_KEY);
   }
 
   public String address2() {
-    return (String) storedValueForKey("address2");
+    return (String) storedValueForKey(_Employee.ADDRESS2_KEY);
   }
 
   public void setAddress2(String value) {
     if (_Employee.LOG.isDebugEnabled()) {
     	_Employee.LOG.debug( "updating address2 from " + address2() + " to " + value);
     }
-    takeStoredValueForKey(value, "address2");
+    takeStoredValueForKey(value, _Employee.ADDRESS2_KEY);
   }
 
   public java.math.BigDecimal bestSalesTotal() {
-    return (java.math.BigDecimal) storedValueForKey("bestSalesTotal");
+    return (java.math.BigDecimal) storedValueForKey(_Employee.BEST_SALES_TOTAL_KEY);
   }
 
   public void setBestSalesTotal(java.math.BigDecimal value) {
     if (_Employee.LOG.isDebugEnabled()) {
     	_Employee.LOG.debug( "updating bestSalesTotal from " + bestSalesTotal() + " to " + value);
     }
-    takeStoredValueForKey(value, "bestSalesTotal");
+    takeStoredValueForKey(value, _Employee.BEST_SALES_TOTAL_KEY);
   }
 
   public String city() {
-    return (String) storedValueForKey("city");
+    return (String) storedValueForKey(_Employee.CITY_KEY);
   }
 
   public void setCity(String value) {
     if (_Employee.LOG.isDebugEnabled()) {
     	_Employee.LOG.debug( "updating city from " + city() + " to " + value);
     }
-    takeStoredValueForKey(value, "city");
+    takeStoredValueForKey(value, _Employee.CITY_KEY);
   }
 
   public String firstName() {
-    return (String) storedValueForKey("firstName");
+    return (String) storedValueForKey(_Employee.FIRST_NAME_KEY);
   }
 
   public void setFirstName(String value) {
     if (_Employee.LOG.isDebugEnabled()) {
     	_Employee.LOG.debug( "updating firstName from " + firstName() + " to " + value);
     }
-    takeStoredValueForKey(value, "firstName");
+    takeStoredValueForKey(value, _Employee.FIRST_NAME_KEY);
   }
 
   public String lastName() {
-    return (String) storedValueForKey("lastName");
+    return (String) storedValueForKey(_Employee.LAST_NAME_KEY);
   }
 
   public void setLastName(String value) {
     if (_Employee.LOG.isDebugEnabled()) {
     	_Employee.LOG.debug( "updating lastName from " + lastName() + " to " + value);
     }
-    takeStoredValueForKey(value, "lastName");
+    takeStoredValueForKey(value, _Employee.LAST_NAME_KEY);
   }
 
   public Boolean manager() {
-    return (Boolean) storedValueForKey("manager");
+    return (Boolean) storedValueForKey(_Employee.MANAGER_KEY);
   }
 
   public void setManager(Boolean value) {
     if (_Employee.LOG.isDebugEnabled()) {
     	_Employee.LOG.debug( "updating manager from " + manager() + " to " + value);
     }
-    takeStoredValueForKey(value, "manager");
+    takeStoredValueForKey(value, _Employee.MANAGER_KEY);
   }
 
   public String state() {
-    return (String) storedValueForKey("state");
+    return (String) storedValueForKey(_Employee.STATE_KEY);
   }
 
   public void setState(String value) {
     if (_Employee.LOG.isDebugEnabled()) {
     	_Employee.LOG.debug( "updating state from " + state() + " to " + value);
     }
-    takeStoredValueForKey(value, "state");
+    takeStoredValueForKey(value, _Employee.STATE_KEY);
   }
 
   public String zipcode() {
-    return (String) storedValueForKey("zipcode");
+    return (String) storedValueForKey(_Employee.ZIPCODE_KEY);
   }
 
   public void setZipcode(String value) {
     if (_Employee.LOG.isDebugEnabled()) {
     	_Employee.LOG.debug( "updating zipcode from " + zipcode() + " to " + value);
     }
-    takeStoredValueForKey(value, "zipcode");
+    takeStoredValueForKey(value, _Employee.ZIPCODE_KEY);
   }
 
   public er.erxtest.model.Company company() {
-    return (er.erxtest.model.Company)storedValueForKey("company");
+    return (er.erxtest.model.Company)storedValueForKey(_Employee.COMPANY_KEY);
   }
   
   public void setCompany(er.erxtest.model.Company value) {
-    takeStoredValueForKey(value, "company");
+    takeStoredValueForKey(value, _Employee.COMPANY_KEY);
   }
 
   public void setCompanyRelationship(er.erxtest.model.Company value) {
@@ -172,15 +172,15 @@ public abstract class _Employee extends er.extensions.eof.ERXGenericRecord {
     else if (value == null) {
     	er.erxtest.model.Company oldValue = company();
     	if (oldValue != null) {
-    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, "company");
+    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, _Employee.COMPANY_KEY);
       }
     } else {
-    	addObjectToBothSidesOfRelationshipWithKey(value, "company");
+    	addObjectToBothSidesOfRelationshipWithKey(value, _Employee.COMPANY_KEY);
     }
   }
   
   public NSArray<er.erxtest.model.Paycheck> paychecks() {
-    return (NSArray<er.erxtest.model.Paycheck>)storedValueForKey("paychecks");
+    return (NSArray<er.erxtest.model.Paycheck>)storedValueForKey(_Employee.PAYCHECKS_KEY);
   }
 
   public NSArray<er.erxtest.model.Paycheck> paychecks(EOQualifier qualifier) {
@@ -201,7 +201,7 @@ public abstract class _Employee extends er.extensions.eof.ERXGenericRecord {
         fullQualifier = inverseQualifier;
       }
       else {
-        NSMutableArray qualifiers = new NSMutableArray();
+        NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
         qualifiers.addObject(qualifier);
         qualifiers.addObject(inverseQualifier);
         fullQualifier = new EOAndQualifier(qualifiers);
@@ -222,11 +222,11 @@ public abstract class _Employee extends er.extensions.eof.ERXGenericRecord {
   }
   
   public void addToPaychecks(er.erxtest.model.Paycheck object) {
-    includeObjectIntoPropertyWithKey(object, "paychecks");
+    includeObjectIntoPropertyWithKey(object, _Employee.PAYCHECKS_KEY);
   }
 
   public void removeFromPaychecks(er.erxtest.model.Paycheck object) {
-    excludeObjectFromPropertyWithKey(object, "paychecks");
+    excludeObjectFromPropertyWithKey(object, _Employee.PAYCHECKS_KEY);
   }
 
   public void addToPaychecksRelationship(er.erxtest.model.Paycheck object) {
@@ -237,7 +237,7 @@ public abstract class _Employee extends er.extensions.eof.ERXGenericRecord {
     	addToPaychecks(object);
     }
     else {
-    	addObjectToBothSidesOfRelationshipWithKey(object, "paychecks");
+    	addObjectToBothSidesOfRelationshipWithKey(object, _Employee.PAYCHECKS_KEY);
     }
   }
 
@@ -249,32 +249,32 @@ public abstract class _Employee extends er.extensions.eof.ERXGenericRecord {
     	removeFromPaychecks(object);
     }
     else {
-    	removeObjectFromBothSidesOfRelationshipWithKey(object, "paychecks");
+    	removeObjectFromBothSidesOfRelationshipWithKey(object, _Employee.PAYCHECKS_KEY);
     }
   }
 
   public er.erxtest.model.Paycheck createPaychecksRelationship() {
-    EOClassDescription eoClassDesc = EOClassDescription.classDescriptionForEntityName("Paycheck");
+    EOClassDescription eoClassDesc = EOClassDescription.classDescriptionForEntityName( er.erxtest.model.Paycheck.ENTITY_NAME );
     EOEnterpriseObject eo = eoClassDesc.createInstanceWithEditingContext(editingContext(), null);
     editingContext().insertObject(eo);
-    addObjectToBothSidesOfRelationshipWithKey(eo, "paychecks");
+    addObjectToBothSidesOfRelationshipWithKey(eo, _Employee.PAYCHECKS_KEY);
     return (er.erxtest.model.Paycheck) eo;
   }
 
   public void deletePaychecksRelationship(er.erxtest.model.Paycheck object) {
-    removeObjectFromBothSidesOfRelationshipWithKey(object, "paychecks");
+    removeObjectFromBothSidesOfRelationshipWithKey(object, _Employee.PAYCHECKS_KEY);
     editingContext().deleteObject(object);
   }
 
   public void deleteAllPaychecksRelationships() {
-    Enumeration objects = paychecks().immutableClone().objectEnumerator();
+    Enumeration<er.erxtest.model.Paycheck> objects = paychecks().immutableClone().objectEnumerator();
     while (objects.hasMoreElements()) {
-      deletePaychecksRelationship((er.erxtest.model.Paycheck)objects.nextElement());
+      deletePaychecksRelationship(objects.nextElement());
     }
   }
 
   public NSArray<er.erxtest.model.Role> roles() {
-    return (NSArray<er.erxtest.model.Role>)storedValueForKey("roles");
+    return (NSArray<er.erxtest.model.Role>)storedValueForKey(_Employee.ROLES_KEY);
   }
 
   public NSArray<er.erxtest.model.Role> roles(EOQualifier qualifier) {
@@ -294,11 +294,11 @@ public abstract class _Employee extends er.extensions.eof.ERXGenericRecord {
   }
   
   public void addToRoles(er.erxtest.model.Role object) {
-    includeObjectIntoPropertyWithKey(object, "roles");
+    includeObjectIntoPropertyWithKey(object, _Employee.ROLES_KEY);
   }
 
   public void removeFromRoles(er.erxtest.model.Role object) {
-    excludeObjectFromPropertyWithKey(object, "roles");
+    excludeObjectFromPropertyWithKey(object, _Employee.ROLES_KEY);
   }
 
   public void addToRolesRelationship(er.erxtest.model.Role object) {
@@ -309,7 +309,7 @@ public abstract class _Employee extends er.extensions.eof.ERXGenericRecord {
     	addToRoles(object);
     }
     else {
-    	addObjectToBothSidesOfRelationshipWithKey(object, "roles");
+    	addObjectToBothSidesOfRelationshipWithKey(object, _Employee.ROLES_KEY);
     }
   }
 
@@ -321,27 +321,27 @@ public abstract class _Employee extends er.extensions.eof.ERXGenericRecord {
     	removeFromRoles(object);
     }
     else {
-    	removeObjectFromBothSidesOfRelationshipWithKey(object, "roles");
+    	removeObjectFromBothSidesOfRelationshipWithKey(object, _Employee.ROLES_KEY);
     }
   }
 
   public er.erxtest.model.Role createRolesRelationship() {
-    EOClassDescription eoClassDesc = EOClassDescription.classDescriptionForEntityName("Role");
+    EOClassDescription eoClassDesc = EOClassDescription.classDescriptionForEntityName( er.erxtest.model.Role.ENTITY_NAME );
     EOEnterpriseObject eo = eoClassDesc.createInstanceWithEditingContext(editingContext(), null);
     editingContext().insertObject(eo);
-    addObjectToBothSidesOfRelationshipWithKey(eo, "roles");
+    addObjectToBothSidesOfRelationshipWithKey(eo, _Employee.ROLES_KEY);
     return (er.erxtest.model.Role) eo;
   }
 
   public void deleteRolesRelationship(er.erxtest.model.Role object) {
-    removeObjectFromBothSidesOfRelationshipWithKey(object, "roles");
+    removeObjectFromBothSidesOfRelationshipWithKey(object, _Employee.ROLES_KEY);
     editingContext().deleteObject(object);
   }
 
   public void deleteAllRolesRelationships() {
-    Enumeration objects = roles().immutableClone().objectEnumerator();
+    Enumeration<er.erxtest.model.Role> objects = roles().immutableClone().objectEnumerator();
     while (objects.hasMoreElements()) {
-      deleteRolesRelationship((er.erxtest.model.Role)objects.nextElement());
+      deleteRolesRelationship(objects.nextElement());
     }
   }
 
@@ -367,9 +367,9 @@ public abstract class _Employee extends er.extensions.eof.ERXGenericRecord {
   }
 
   public static NSArray<Employee> fetchEmployees(EOEditingContext editingContext, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings) {
-    EOFetchSpecification fetchSpec = new EOFetchSpecification(_Employee.ENTITY_NAME, qualifier, sortOrderings);
+    ERXFetchSpecification<Employee> fetchSpec = new ERXFetchSpecification<Employee>(_Employee.ENTITY_NAME, qualifier, sortOrderings);
     fetchSpec.setIsDeep(true);
-    NSArray<Employee> eoObjects = (NSArray<Employee>)editingContext.objectsWithFetchSpecification(fetchSpec);
+    NSArray<Employee> eoObjects = fetchSpec.fetchObjects(editingContext);
     return eoObjects;
   }
 
@@ -385,7 +385,7 @@ public abstract class _Employee extends er.extensions.eof.ERXGenericRecord {
       eoObject = null;
     }
     else if (count == 1) {
-      eoObject = (Employee)eoObjects.objectAtIndex(0);
+      eoObject = eoObjects.objectAtIndex(0);
     }
     else {
       throw new IllegalStateException("There was more than one Employee that matched the qualifier '" + qualifier + "'.");
@@ -406,21 +406,21 @@ public abstract class _Employee extends er.extensions.eof.ERXGenericRecord {
   }
 
   public static Employee localInstanceIn(EOEditingContext editingContext, Employee eo) {
-    Employee localInstance = (eo == null) ? null : (Employee)EOUtilities.localInstanceOfObject(editingContext, eo);
+    Employee localInstance = (eo == null) ? null : ERXEOControlUtilities.localInstanceOfObject(editingContext, eo);
     if (localInstance == null && eo != null) {
       throw new IllegalStateException("You attempted to localInstance " + eo + ", which has not yet committed.");
     }
     return localInstance;
   }
   public static NSArray<er.erxtest.model.Employee> fetchPlebs(EOEditingContext editingContext, NSDictionary<String, Object> bindings) {
-    EOFetchSpecification fetchSpec = EOFetchSpecification.fetchSpecificationNamed("plebs", "Employee");
+    EOFetchSpecification fetchSpec = EOFetchSpecification.fetchSpecificationNamed("plebs", _Employee.ENTITY_NAME);
     fetchSpec = fetchSpec.fetchSpecificationWithQualifierBindings(bindings);
     return (NSArray<er.erxtest.model.Employee>)editingContext.objectsWithFetchSpecification(fetchSpec);
   }
   
   public static NSArray<er.erxtest.model.Employee> fetchPlebs(EOEditingContext editingContext)
   {
-    EOFetchSpecification fetchSpec = EOFetchSpecification.fetchSpecificationNamed("plebs", "Employee");
+    EOFetchSpecification fetchSpec = EOFetchSpecification.fetchSpecificationNamed("plebs", _Employee.ENTITY_NAME);
     return (NSArray<er.erxtest.model.Employee>)editingContext.objectsWithFetchSpecification(fetchSpec);
   }
   

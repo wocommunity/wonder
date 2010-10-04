@@ -1,4 +1,4 @@
-// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to ServerTopic.java instead.
+// DO NOT EDIT.  Make changes to ServerTopic.java instead.
 package er.restexample.server;
 
 import com.webobjects.eoaccess.*;
@@ -13,19 +13,21 @@ import er.extensions.foundation.*;
 
 @SuppressWarnings("all")
 public abstract class _ServerTopic extends  ERXGenericRecord {
-	public static final String ENTITY_NAME = "ServerTopic";
+  public static final String ENTITY_NAME = "ServerTopic";
 
-	// Attributes
-	public static final String TITLE_KEY = "title";
-	public static final ERXKey<String> TITLE = new ERXKey<String>(TITLE_KEY);
+  // Attribute Keys
+  public static final ERXKey<String> TITLE = new ERXKey<String>("title");
+  // Relationship Keys
+  public static final ERXKey<er.restexample.server.ServerForum> FORUM = new ERXKey<er.restexample.server.ServerForum>("forum");
+  public static final ERXKey<er.restexample.server.ServerPost> POSTS = new ERXKey<er.restexample.server.ServerPost>("posts");
+  public static final ERXKey<er.restexample.server.ServerUser> USER = new ERXKey<er.restexample.server.ServerUser>("user");
 
-	// Relationships
-	public static final String FORUM_KEY = "forum";
-	public static final ERXKey<er.restexample.server.ServerForum> FORUM = new ERXKey<er.restexample.server.ServerForum>(FORUM_KEY);
-	public static final String POSTS_KEY = "posts";
-	public static final ERXKey<er.restexample.server.ServerPost> POSTS = new ERXKey<er.restexample.server.ServerPost>(POSTS_KEY);
-	public static final String USER_KEY = "user";
-	public static final ERXKey<er.restexample.server.ServerUser> USER = new ERXKey<er.restexample.server.ServerUser>(USER_KEY);
+  // Attributes
+  public static final String TITLE_KEY = TITLE.key();
+  // Relationships
+  public static final String FORUM_KEY = FORUM.key();
+  public static final String POSTS_KEY = POSTS.key();
+  public static final String USER_KEY = USER.key();
 
   private static Logger LOG = Logger.getLogger(_ServerTopic.class);
 
@@ -38,22 +40,22 @@ public abstract class _ServerTopic extends  ERXGenericRecord {
   }
 
   public String title() {
-    return (String) storedValueForKey("title");
+    return (String) storedValueForKey(_ServerTopic.TITLE_KEY);
   }
 
   public void setTitle(String value) {
     if (_ServerTopic.LOG.isDebugEnabled()) {
     	_ServerTopic.LOG.debug( "updating title from " + title() + " to " + value);
     }
-    takeStoredValueForKey(value, "title");
+    takeStoredValueForKey(value, _ServerTopic.TITLE_KEY);
   }
 
   public er.restexample.server.ServerForum forum() {
-    return (er.restexample.server.ServerForum)storedValueForKey("forum");
+    return (er.restexample.server.ServerForum)storedValueForKey(_ServerTopic.FORUM_KEY);
   }
   
   public void setForum(er.restexample.server.ServerForum value) {
-    takeStoredValueForKey(value, "forum");
+    takeStoredValueForKey(value, _ServerTopic.FORUM_KEY);
   }
 
   public void setForumRelationship(er.restexample.server.ServerForum value) {
@@ -66,19 +68,19 @@ public abstract class _ServerTopic extends  ERXGenericRecord {
     else if (value == null) {
     	er.restexample.server.ServerForum oldValue = forum();
     	if (oldValue != null) {
-    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, "forum");
+    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, _ServerTopic.FORUM_KEY);
       }
     } else {
-    	addObjectToBothSidesOfRelationshipWithKey(value, "forum");
+    	addObjectToBothSidesOfRelationshipWithKey(value, _ServerTopic.FORUM_KEY);
     }
   }
   
   public er.restexample.server.ServerUser user() {
-    return (er.restexample.server.ServerUser)storedValueForKey("user");
+    return (er.restexample.server.ServerUser)storedValueForKey(_ServerTopic.USER_KEY);
   }
   
   public void setUser(er.restexample.server.ServerUser value) {
-    takeStoredValueForKey(value, "user");
+    takeStoredValueForKey(value, _ServerTopic.USER_KEY);
   }
 
   public void setUserRelationship(er.restexample.server.ServerUser value) {
@@ -91,15 +93,15 @@ public abstract class _ServerTopic extends  ERXGenericRecord {
     else if (value == null) {
     	er.restexample.server.ServerUser oldValue = user();
     	if (oldValue != null) {
-    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, "user");
+    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, _ServerTopic.USER_KEY);
       }
     } else {
-    	addObjectToBothSidesOfRelationshipWithKey(value, "user");
+    	addObjectToBothSidesOfRelationshipWithKey(value, _ServerTopic.USER_KEY);
     }
   }
   
   public NSArray<er.restexample.server.ServerPost> posts() {
-    return (NSArray<er.restexample.server.ServerPost>)storedValueForKey("posts");
+    return (NSArray<er.restexample.server.ServerPost>)storedValueForKey(_ServerTopic.POSTS_KEY);
   }
 
   public NSArray<er.restexample.server.ServerPost> posts(EOQualifier qualifier) {
@@ -119,11 +121,11 @@ public abstract class _ServerTopic extends  ERXGenericRecord {
   }
   
   public void addToPosts(er.restexample.server.ServerPost object) {
-    includeObjectIntoPropertyWithKey(object, "posts");
+    includeObjectIntoPropertyWithKey(object, _ServerTopic.POSTS_KEY);
   }
 
   public void removeFromPosts(er.restexample.server.ServerPost object) {
-    excludeObjectFromPropertyWithKey(object, "posts");
+    excludeObjectFromPropertyWithKey(object, _ServerTopic.POSTS_KEY);
   }
 
   public void addToPostsRelationship(er.restexample.server.ServerPost object) {
@@ -134,7 +136,7 @@ public abstract class _ServerTopic extends  ERXGenericRecord {
     	addToPosts(object);
     }
     else {
-    	addObjectToBothSidesOfRelationshipWithKey(object, "posts");
+    	addObjectToBothSidesOfRelationshipWithKey(object, _ServerTopic.POSTS_KEY);
     }
   }
 
@@ -146,27 +148,27 @@ public abstract class _ServerTopic extends  ERXGenericRecord {
     	removeFromPosts(object);
     }
     else {
-    	removeObjectFromBothSidesOfRelationshipWithKey(object, "posts");
+    	removeObjectFromBothSidesOfRelationshipWithKey(object, _ServerTopic.POSTS_KEY);
     }
   }
 
   public er.restexample.server.ServerPost createPostsRelationship() {
-    EOClassDescription eoClassDesc = EOClassDescription.classDescriptionForEntityName("ServerPost");
+    EOClassDescription eoClassDesc = EOClassDescription.classDescriptionForEntityName( er.restexample.server.ServerPost.ENTITY_NAME );
     EOEnterpriseObject eo = eoClassDesc.createInstanceWithEditingContext(editingContext(), null);
     editingContext().insertObject(eo);
-    addObjectToBothSidesOfRelationshipWithKey(eo, "posts");
+    addObjectToBothSidesOfRelationshipWithKey(eo, _ServerTopic.POSTS_KEY);
     return (er.restexample.server.ServerPost) eo;
   }
 
   public void deletePostsRelationship(er.restexample.server.ServerPost object) {
-    removeObjectFromBothSidesOfRelationshipWithKey(object, "posts");
+    removeObjectFromBothSidesOfRelationshipWithKey(object, _ServerTopic.POSTS_KEY);
     editingContext().deleteObject(object);
   }
 
   public void deleteAllPostsRelationships() {
-    Enumeration objects = posts().immutableClone().objectEnumerator();
+    Enumeration<er.restexample.server.ServerPost> objects = posts().immutableClone().objectEnumerator();
     while (objects.hasMoreElements()) {
-      deletePostsRelationship((er.restexample.server.ServerPost)objects.nextElement());
+      deletePostsRelationship(objects.nextElement());
     }
   }
 
@@ -189,9 +191,9 @@ public abstract class _ServerTopic extends  ERXGenericRecord {
   }
 
   public static NSArray<ServerTopic> fetchServerTopics(EOEditingContext editingContext, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings) {
-    EOFetchSpecification fetchSpec = new EOFetchSpecification(_ServerTopic.ENTITY_NAME, qualifier, sortOrderings);
+    ERXFetchSpecification<ServerTopic> fetchSpec = new ERXFetchSpecification<ServerTopic>(_ServerTopic.ENTITY_NAME, qualifier, sortOrderings);
     fetchSpec.setIsDeep(true);
-    NSArray<ServerTopic> eoObjects = (NSArray<ServerTopic>)editingContext.objectsWithFetchSpecification(fetchSpec);
+    NSArray<ServerTopic> eoObjects = fetchSpec.fetchObjects(editingContext);
     return eoObjects;
   }
 
@@ -207,7 +209,7 @@ public abstract class _ServerTopic extends  ERXGenericRecord {
       eoObject = null;
     }
     else if (count == 1) {
-      eoObject = (ServerTopic)eoObjects.objectAtIndex(0);
+      eoObject = eoObjects.objectAtIndex(0);
     }
     else {
       throw new IllegalStateException("There was more than one ServerTopic that matched the qualifier '" + qualifier + "'.");
@@ -228,7 +230,7 @@ public abstract class _ServerTopic extends  ERXGenericRecord {
   }
 
   public static ServerTopic localInstanceIn(EOEditingContext editingContext, ServerTopic eo) {
-    ServerTopic localInstance = (eo == null) ? null : (ServerTopic)EOUtilities.localInstanceOfObject(editingContext, eo);
+    ServerTopic localInstance = (eo == null) ? null : ERXEOControlUtilities.localInstanceOfObject(editingContext, eo);
     if (localInstance == null && eo != null) {
       throw new IllegalStateException("You attempted to localInstance " + eo + ", which has not yet committed.");
     }

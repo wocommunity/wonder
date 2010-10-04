@@ -1,4 +1,4 @@
-// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to Paycheck.java instead.
+// DO NOT EDIT.  Make changes to Paycheck.java instead.
 package er.erxtest.model;
 
 import com.webobjects.eoaccess.*;
@@ -40,44 +40,44 @@ public abstract class _Paycheck extends er.extensions.eof.ERXGenericRecord {
   }
 
   public java.math.BigDecimal amount() {
-    return (java.math.BigDecimal) storedValueForKey("amount");
+    return (java.math.BigDecimal) storedValueForKey(_Paycheck.AMOUNT_KEY);
   }
 
   public void setAmount(java.math.BigDecimal value) {
     if (_Paycheck.LOG.isDebugEnabled()) {
     	_Paycheck.LOG.debug( "updating amount from " + amount() + " to " + value);
     }
-    takeStoredValueForKey(value, "amount");
+    takeStoredValueForKey(value, _Paycheck.AMOUNT_KEY);
   }
 
   public Boolean cashed() {
-    return (Boolean) storedValueForKey("cashed");
+    return (Boolean) storedValueForKey(_Paycheck.CASHED_KEY);
   }
 
   public void setCashed(Boolean value) {
     if (_Paycheck.LOG.isDebugEnabled()) {
     	_Paycheck.LOG.debug( "updating cashed from " + cashed() + " to " + value);
     }
-    takeStoredValueForKey(value, "cashed");
+    takeStoredValueForKey(value, _Paycheck.CASHED_KEY);
   }
 
   public NSTimestamp paymentDate() {
-    return (NSTimestamp) storedValueForKey("paymentDate");
+    return (NSTimestamp) storedValueForKey(_Paycheck.PAYMENT_DATE_KEY);
   }
 
   public void setPaymentDate(NSTimestamp value) {
     if (_Paycheck.LOG.isDebugEnabled()) {
     	_Paycheck.LOG.debug( "updating paymentDate from " + paymentDate() + " to " + value);
     }
-    takeStoredValueForKey(value, "paymentDate");
+    takeStoredValueForKey(value, _Paycheck.PAYMENT_DATE_KEY);
   }
 
   public er.erxtest.model.Employee employee() {
-    return (er.erxtest.model.Employee)storedValueForKey("employee");
+    return (er.erxtest.model.Employee)storedValueForKey(_Paycheck.EMPLOYEE_KEY);
   }
   
   public void setEmployee(er.erxtest.model.Employee value) {
-    takeStoredValueForKey(value, "employee");
+    takeStoredValueForKey(value, _Paycheck.EMPLOYEE_KEY);
   }
 
   public void setEmployeeRelationship(er.erxtest.model.Employee value) {
@@ -90,10 +90,10 @@ public abstract class _Paycheck extends er.extensions.eof.ERXGenericRecord {
     else if (value == null) {
     	er.erxtest.model.Employee oldValue = employee();
     	if (oldValue != null) {
-    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, "employee");
+    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, _Paycheck.EMPLOYEE_KEY);
       }
     } else {
-    	addObjectToBothSidesOfRelationshipWithKey(value, "employee");
+    	addObjectToBothSidesOfRelationshipWithKey(value, _Paycheck.EMPLOYEE_KEY);
     }
   }
   
@@ -119,9 +119,9 @@ public abstract class _Paycheck extends er.extensions.eof.ERXGenericRecord {
   }
 
   public static NSArray<Paycheck> fetchPaychecks(EOEditingContext editingContext, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings) {
-    EOFetchSpecification fetchSpec = new EOFetchSpecification(_Paycheck.ENTITY_NAME, qualifier, sortOrderings);
+    ERXFetchSpecification<Paycheck> fetchSpec = new ERXFetchSpecification<Paycheck>(_Paycheck.ENTITY_NAME, qualifier, sortOrderings);
     fetchSpec.setIsDeep(true);
-    NSArray<Paycheck> eoObjects = (NSArray<Paycheck>)editingContext.objectsWithFetchSpecification(fetchSpec);
+    NSArray<Paycheck> eoObjects = fetchSpec.fetchObjects(editingContext);
     return eoObjects;
   }
 
@@ -137,7 +137,7 @@ public abstract class _Paycheck extends er.extensions.eof.ERXGenericRecord {
       eoObject = null;
     }
     else if (count == 1) {
-      eoObject = (Paycheck)eoObjects.objectAtIndex(0);
+      eoObject = eoObjects.objectAtIndex(0);
     }
     else {
       throw new IllegalStateException("There was more than one Paycheck that matched the qualifier '" + qualifier + "'.");
@@ -158,7 +158,7 @@ public abstract class _Paycheck extends er.extensions.eof.ERXGenericRecord {
   }
 
   public static Paycheck localInstanceIn(EOEditingContext editingContext, Paycheck eo) {
-    Paycheck localInstance = (eo == null) ? null : (Paycheck)EOUtilities.localInstanceOfObject(editingContext, eo);
+    Paycheck localInstance = (eo == null) ? null : ERXEOControlUtilities.localInstanceOfObject(editingContext, eo);
     if (localInstance == null && eo != null) {
       throw new IllegalStateException("You attempted to localInstance " + eo + ", which has not yet committed.");
     }

@@ -1,4 +1,4 @@
-// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to Role.java instead.
+// DO NOT EDIT.  Make changes to Role.java instead.
 package er.erxtest.model;
 
 import com.webobjects.eoaccess.*;
@@ -34,7 +34,7 @@ public abstract class _Role extends er.extensions.eof.ERXGenericRecord {
   }
 
   public NSArray<er.erxtest.model.Employee> employees() {
-    return (NSArray<er.erxtest.model.Employee>)storedValueForKey("employees");
+    return (NSArray<er.erxtest.model.Employee>)storedValueForKey(_Role.EMPLOYEES_KEY);
   }
 
   public NSArray<er.erxtest.model.Employee> employees(EOQualifier qualifier) {
@@ -54,11 +54,11 @@ public abstract class _Role extends er.extensions.eof.ERXGenericRecord {
   }
   
   public void addToEmployees(er.erxtest.model.Employee object) {
-    includeObjectIntoPropertyWithKey(object, "employees");
+    includeObjectIntoPropertyWithKey(object, _Role.EMPLOYEES_KEY);
   }
 
   public void removeFromEmployees(er.erxtest.model.Employee object) {
-    excludeObjectFromPropertyWithKey(object, "employees");
+    excludeObjectFromPropertyWithKey(object, _Role.EMPLOYEES_KEY);
   }
 
   public void addToEmployeesRelationship(er.erxtest.model.Employee object) {
@@ -69,7 +69,7 @@ public abstract class _Role extends er.extensions.eof.ERXGenericRecord {
     	addToEmployees(object);
     }
     else {
-    	addObjectToBothSidesOfRelationshipWithKey(object, "employees");
+    	addObjectToBothSidesOfRelationshipWithKey(object, _Role.EMPLOYEES_KEY);
     }
   }
 
@@ -81,27 +81,27 @@ public abstract class _Role extends er.extensions.eof.ERXGenericRecord {
     	removeFromEmployees(object);
     }
     else {
-    	removeObjectFromBothSidesOfRelationshipWithKey(object, "employees");
+    	removeObjectFromBothSidesOfRelationshipWithKey(object, _Role.EMPLOYEES_KEY);
     }
   }
 
   public er.erxtest.model.Employee createEmployeesRelationship() {
-    EOClassDescription eoClassDesc = EOClassDescription.classDescriptionForEntityName("Employee");
+    EOClassDescription eoClassDesc = EOClassDescription.classDescriptionForEntityName( er.erxtest.model.Employee.ENTITY_NAME );
     EOEnterpriseObject eo = eoClassDesc.createInstanceWithEditingContext(editingContext(), null);
     editingContext().insertObject(eo);
-    addObjectToBothSidesOfRelationshipWithKey(eo, "employees");
+    addObjectToBothSidesOfRelationshipWithKey(eo, _Role.EMPLOYEES_KEY);
     return (er.erxtest.model.Employee) eo;
   }
 
   public void deleteEmployeesRelationship(er.erxtest.model.Employee object) {
-    removeObjectFromBothSidesOfRelationshipWithKey(object, "employees");
+    removeObjectFromBothSidesOfRelationshipWithKey(object, _Role.EMPLOYEES_KEY);
     editingContext().deleteObject(object);
   }
 
   public void deleteAllEmployeesRelationships() {
-    Enumeration objects = employees().immutableClone().objectEnumerator();
+    Enumeration<er.erxtest.model.Employee> objects = employees().immutableClone().objectEnumerator();
     while (objects.hasMoreElements()) {
-      deleteEmployeesRelationship((er.erxtest.model.Employee)objects.nextElement());
+      deleteEmployeesRelationship(objects.nextElement());
     }
   }
 
@@ -120,9 +120,9 @@ public abstract class _Role extends er.extensions.eof.ERXGenericRecord {
   }
 
   public static NSArray<Role> fetchRoles(EOEditingContext editingContext, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings) {
-    EOFetchSpecification fetchSpec = new EOFetchSpecification(_Role.ENTITY_NAME, qualifier, sortOrderings);
+    ERXFetchSpecification<Role> fetchSpec = new ERXFetchSpecification<Role>(_Role.ENTITY_NAME, qualifier, sortOrderings);
     fetchSpec.setIsDeep(true);
-    NSArray<Role> eoObjects = (NSArray<Role>)editingContext.objectsWithFetchSpecification(fetchSpec);
+    NSArray<Role> eoObjects = fetchSpec.fetchObjects(editingContext);
     return eoObjects;
   }
 
@@ -138,7 +138,7 @@ public abstract class _Role extends er.extensions.eof.ERXGenericRecord {
       eoObject = null;
     }
     else if (count == 1) {
-      eoObject = (Role)eoObjects.objectAtIndex(0);
+      eoObject = eoObjects.objectAtIndex(0);
     }
     else {
       throw new IllegalStateException("There was more than one Role that matched the qualifier '" + qualifier + "'.");
@@ -159,7 +159,7 @@ public abstract class _Role extends er.extensions.eof.ERXGenericRecord {
   }
 
   public static Role localInstanceIn(EOEditingContext editingContext, Role eo) {
-    Role localInstance = (eo == null) ? null : (Role)EOUtilities.localInstanceOfObject(editingContext, eo);
+    Role localInstance = (eo == null) ? null : ERXEOControlUtilities.localInstanceOfObject(editingContext, eo);
     if (localInstance == null && eo != null) {
       throw new IllegalStateException("You attempted to localInstance " + eo + ", which has not yet committed.");
     }

@@ -1,4 +1,4 @@
-// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to ERTag.java instead.
+// DO NOT EDIT.  Make changes to ERTag.java instead.
 package er.taggable.model;
 
 import com.webobjects.eoaccess.*;
@@ -34,14 +34,14 @@ public abstract class _ERTag extends er.extensions.eof.ERXGenericRecord {
   }
 
   public String name() {
-    return (String) storedValueForKey("name");
+    return (String) storedValueForKey(_ERTag.NAME_KEY);
   }
 
   public void setName(String value) {
     if (_ERTag.LOG.isDebugEnabled()) {
     	_ERTag.LOG.debug( "updating name from " + name() + " to " + value);
     }
-    takeStoredValueForKey(value, "name");
+    takeStoredValueForKey(value, _ERTag.NAME_KEY);
   }
 
 
@@ -59,9 +59,9 @@ public abstract class _ERTag extends er.extensions.eof.ERXGenericRecord {
   }
 
   public static NSArray<ERTag> fetchERTags(EOEditingContext editingContext, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings) {
-    EOFetchSpecification fetchSpec = new EOFetchSpecification(_ERTag.ENTITY_NAME, qualifier, sortOrderings);
+    ERXFetchSpecification<ERTag> fetchSpec = new ERXFetchSpecification<ERTag>(_ERTag.ENTITY_NAME, qualifier, sortOrderings);
     fetchSpec.setIsDeep(true);
-    NSArray<ERTag> eoObjects = (NSArray<ERTag>)editingContext.objectsWithFetchSpecification(fetchSpec);
+    NSArray<ERTag> eoObjects = fetchSpec.fetchObjects(editingContext);
     return eoObjects;
   }
 
@@ -77,7 +77,7 @@ public abstract class _ERTag extends er.extensions.eof.ERXGenericRecord {
       eoObject = null;
     }
     else if (count == 1) {
-      eoObject = (ERTag)eoObjects.objectAtIndex(0);
+      eoObject = eoObjects.objectAtIndex(0);
     }
     else {
       throw new IllegalStateException("There was more than one ERTag that matched the qualifier '" + qualifier + "'.");
@@ -98,7 +98,7 @@ public abstract class _ERTag extends er.extensions.eof.ERXGenericRecord {
   }
 
   public static ERTag localInstanceIn(EOEditingContext editingContext, ERTag eo) {
-    ERTag localInstance = (eo == null) ? null : (ERTag)EOUtilities.localInstanceOfObject(editingContext, eo);
+    ERTag localInstance = (eo == null) ? null : ERXEOControlUtilities.localInstanceOfObject(editingContext, eo);
     if (localInstance == null && eo != null) {
       throw new IllegalStateException("You attempted to localInstance " + eo + ", which has not yet committed.");
     }

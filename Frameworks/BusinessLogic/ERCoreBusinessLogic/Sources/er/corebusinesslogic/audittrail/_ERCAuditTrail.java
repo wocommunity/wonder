@@ -28,10 +28,10 @@ public abstract class _ERCAuditTrail extends ERXGenericRecord {
         /* more clazz methods here */
     }
 
-  public ERXKeyGlobalID gid() {
-    return (ERXKeyGlobalID) storedValueForKey(Key.GID);
+  public er.extensions.eof.ERXKeyGlobalID gid() {
+    return (er.extensions.eof.ERXKeyGlobalID) storedValueForKey(Key.GID);
   }
-  public void setGid(ERXKeyGlobalID value) {
+  public void setGid(er.extensions.eof.ERXKeyGlobalID value) {
     takeStoredValueForKey(value, Key.GID);
   }
 

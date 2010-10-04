@@ -12,7 +12,9 @@ import static org.jboss.netty.handler.codec.http.HttpResponseStatus.OK;
 import static org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.Map;
@@ -38,6 +40,7 @@ import org.jboss.netty.handler.codec.frame.TooLongFrameException;
 import org.jboss.netty.handler.codec.http.Cookie;
 import org.jboss.netty.handler.codec.http.CookieDecoder;
 import org.jboss.netty.handler.codec.http.CookieEncoder;
+import org.jboss.netty.handler.codec.http.DefaultCookie;
 import org.jboss.netty.handler.codec.http.DefaultHttpResponse;
 import org.jboss.netty.handler.codec.http.HttpChunk;
 import org.jboss.netty.handler.codec.http.HttpChunkTrailer;
@@ -46,6 +49,7 @@ import org.jboss.netty.handler.codec.http.HttpRequest;
 import org.jboss.netty.handler.codec.http.HttpRequestDecoder;
 import org.jboss.netty.handler.codec.http.HttpResponse;
 import org.jboss.netty.handler.codec.http.HttpResponseEncoder;
+import org.jboss.netty.handler.codec.http.HttpResponseStatus;
 import org.jboss.netty.logging.CommonsLoggerFactory;
 import org.jboss.netty.logging.InternalLogger;
 import org.jboss.netty.util.CharsetUtil;
@@ -66,11 +70,22 @@ public class WONettyAdaptor extends WOAdaptor {
     private static final Logger log = Logger.getLogger(WONettyAdaptor.class);
 
     private int _port;
-
-    private String _host;
+    private String _hostname;
     
     private ChannelFactory channelFactory;
     private Channel channel;
+    
+    private String hostname() {
+    	if (_hostname == null) {
+    		try {
+    			InetAddress _host = InetAddress.getLocalHost();
+				_hostname = _host.getHostName();
+			} catch (UnknownHostException exception) {
+				log.error("Failed to get localhost address");
+			}
+    	}
+    	return _hostname;
+    }
 
 	public WONettyAdaptor(String name, NSDictionary config) {
         super(name, config);
@@ -80,9 +95,9 @@ public class WONettyAdaptor extends WOAdaptor {
             _port = number.intValue();
         if (_port < 0)
             _port = 0;
-        WOApplication.application().setPort(_port);
-        _host = (String) config.objectForKey(WOProperties._HostKey);
-        WOApplication.application()._setHost(_host);
+        
+        _hostname = (String) config.objectForKey(WOProperties._HostKey);
+        WOApplication.application()._setHost(hostname());
 	}
 
 	@Override
@@ -97,7 +112,11 @@ public class WONettyAdaptor extends WOAdaptor {
 		bootstrap.setPipelineFactory(new PipelineFactory());
 
 		// Bind and start to accept incoming connections.
-		channel = bootstrap.bind(new InetSocketAddress(_port));
+		channel = bootstrap.bind(new InetSocketAddress(hostname(), _port));
+		
+		log.debug("Binding adaptor to address: " + channel.getLocalAddress());
+		_port = ((InetSocketAddress) channel.getLocalAddress()).getPort();
+		System.setProperty(WOProperties._PortKey, Integer.toString(_port));
 	}
 
 	@Override
@@ -106,7 +125,7 @@ public class WONettyAdaptor extends WOAdaptor {
 		future.awaitUninterruptibly();
 		channelFactory.releaseExternalResources();
 	}
-	
+		
 	@Override
 	public int port() {
 		return _port;
@@ -196,8 +215,9 @@ public class WONettyAdaptor extends WOAdaptor {
 					_content = ChannelBuffers.EMPTY_BUFFER;
 				} else {
 					_content = request.getContent();
-					NSData contentData = (_content.readable()) ? new NSData(ChannelBuffers.copiedBuffer(_content).array()) : NSData.EmptyData;	        
-			        WOResponse woresponse = WOApplication.application().dispatchRequest(_worequest(_headers(), contentData));
+					WORequest worequest = _convertHttpRequestToWORequest(_request);
+					worequest._setOriginatingAddress(((InetSocketAddress) ctx.getChannel().getRemoteAddress()).getAddress());
+			        WOResponse woresponse = WOApplication.application().dispatchRequest(worequest);
 			        
 			        // send a response
 			        NSDelayedCallbackCenter.defaultCenter().eventEnded();
@@ -210,15 +230,9 @@ public class WONettyAdaptor extends WOAdaptor {
 				if (chunk.isLast()) {
 					readingChunks = false;
 
-					NSData contentData = (_content.readable()) ? new WOInputStreamData(new NSData(_content.array())) : NSData.EmptyData;
 					HttpChunkTrailer trailer = (HttpChunkTrailer) chunk;
-					NSMutableDictionary<String, NSArray<String>> headers = _headers();
-					if (!trailer.getHeaderNames().isEmpty()) {
-						for (Map.Entry<String, String> header: trailer.getHeaders()) {
-							headers.setObjectForKey(new NSArray<String>(header.getValue().split(",")), header.getKey());
-						}
-					}
-			        WOResponse woresponse = WOApplication.application().dispatchRequest(_worequest(_headers(), contentData));
+					WORequest woreqest = _convertHttpChunkTrailerToWORequest(trailer);
+			        WOResponse woresponse = WOApplication.application().dispatchRequest(woreqest);
 			        
 			        // send a response
 			        NSDelayedCallbackCenter.defaultCenter().eventEnded();
@@ -227,30 +241,77 @@ public class WONettyAdaptor extends WOAdaptor {
 			}
 		}
 		
-		private NSMutableDictionary<String, NSArray<String>> _headers() {
+		private WORequest _convertHttpRequestToWORequest(HttpRequest request) {
+			// headers
 	        NSMutableDictionary<String, NSArray<String>> headers = new NSMutableDictionary<String, NSArray<String>>();
-	        for (Map.Entry<String, String> header: _request.getHeaders()) {
+	        for (Map.Entry<String, String> header: request.getHeaders()) {
 	        	headers.setObjectForKey(new NSArray<String>(header.getValue().split(",")), header.getKey());
 	        }
-	        return headers;
-		}
-		
-		private WORequest _worequest(NSDictionary<String, NSArray<String>> headers, NSData contentData) {
+	        
+	        // content
+			NSData contentData = (_content.readable()) ? new NSData(ChannelBuffers.copiedBuffer(_content).array()) : NSData.EmptyData;	        
+			
+			// create request
 			WORequest _worequest = WOApplication.application().createRequest(
-	        		_request.getMethod().getName(), 
-	        		_request.getUri(), 
-	        		_request.getProtocolVersion().getText(), 
+					request.getMethod().getName(), 
+					request.getUri(), 
+					request.getProtocolVersion().getText(), 
 	        		headers,
 	        		contentData, 
 	        		null);
-			//_worequest._setOriginatingAddress(((InetSocketAddress) channel.getRemoteAddress()).getAddress());
+			
+			// cookies
+			String cookieString = _request.getHeader(COOKIE);
+			if (cookieString != null) {
+				CookieDecoder cookieDecoder = new CookieDecoder();
+				Set<Cookie> cookies = cookieDecoder.decode(cookieString);
+				if(!cookies.isEmpty()) {
+					for (Cookie cookie : cookies) {
+						WOCookie wocookie = _convertCookieToWOCookie(cookie);
+						_worequest.addCookie(wocookie);
+					}
+				}
+			} 
+			
 			return _worequest;
 		}
+		
+		private WOCookie _convertCookieToWOCookie(Cookie cookie) {
+			WOCookie wocookie = new WOCookie(
+					cookie.getName(),
+					cookie.getValue(),
+					cookie.getPath(),
+					cookie.getDomain(),
+					cookie.getMaxAge(),
+					cookie.isSecure());
+			return wocookie;
+		}
+		
+		private WORequest _convertHttpChunkTrailerToWORequest(HttpChunkTrailer trailer) {
+			// headers
+	        NSMutableDictionary<String, NSArray<String>> headers = new NSMutableDictionary<String, NSArray<String>>();
+			if (!trailer.getHeaderNames().isEmpty()) {
+				for (Map.Entry<String, String> header: trailer.getHeaders()) {
+					headers.setObjectForKey(new NSArray<String>(header.getValue().split(",")), header.getKey());
+				}
+			}
 
-		private void writeResponse(WOResponse woresponse, MessageEvent e) throws IOException {
-			// Decide whether to close the connection or not.
-			boolean keepAlive = isKeepAlive(_request);
+			// content
+			NSData contentData = (_content.readable()) ? new WOInputStreamData(new NSData(_content.array())) : NSData.EmptyData;
 
+			// create request
+			WORequest _worequest = WOApplication.application().createRequest(
+	        		_request.getMethod().getName(), 			// FIXME should be trailer.getMethod().getName()
+	        		_request.getUri(), 							// FIXME should be trailer.getUri()
+	        		_request.getProtocolVersion().getText(), 	// FIXME should be trailer.getProtocolVersion().getText()
+	        		headers,
+	        		contentData, 
+	        		null);
+			// TODO set cookies (CHECKME is this really necessary here?!)
+			return _worequest;
+		}
+		
+		private HttpResponse _convertWOResponseToHttpResponse(WOResponse woresponse) throws IOException {
 			// Build the response object.
 			HttpResponse response = new DefaultHttpResponse(HTTP_1_1, OK);
 			
@@ -268,25 +329,49 @@ public class WONettyAdaptor extends WOAdaptor {
 				length = woresponse.contentInputStream().read(buffer.array());
 				response.setContent(ChannelBuffers.copiedBuffer(buffer));
 			}
-			String contentType = woresponse.headerForKey(CONTENT_TYPE);
-			if (contentType != null) response.setHeader(CONTENT_TYPE, contentType);
-
-			response.setHeader(CONTENT_LENGTH, length);
-
-			// Encode the cookie.
-			String cookieString = _request.getHeader(COOKIE);
-			if (cookieString != null) {
-				CookieDecoder cookieDecoder = new CookieDecoder();
-				Set<Cookie> cookies = cookieDecoder.decode(cookieString);
-				if(!cookies.isEmpty()) {
-					// Reset the cookies if necessary.
-					CookieEncoder cookieEncoder = new CookieEncoder(true);
-					for (Cookie cookie : cookies) {
-						cookieEncoder.addCookie(cookie);
-					}
-					response.addHeader(SET_COOKIE, cookieEncoder.encode());
+			
+			// set headers
+			for (String headerKey: woresponse.headerKeys()) {
+				String value = woresponse.headerForKey(headerKey);
+				if (value != null) {
+					if (value.contains(",")) {
+						String[] values = value.split(",");
+						response.setHeader(headerKey, values);
+					} else response.setHeader(headerKey, value);
 				}
 			}
+			response.setStatus(HttpResponseStatus.valueOf(woresponse.status()));
+			//response.setHeader(CONTENT_LENGTH, length);
+
+			// Encode the cookie.
+			NSArray<WOCookie> wocookies = woresponse.cookies();
+			if(!wocookies.isEmpty()) {
+				// Reset the cookies if necessary.
+				CookieEncoder cookieEncoder = new CookieEncoder(true);
+				for (WOCookie wocookie : wocookies) {
+					Cookie cookie = _convertWOCookieToCookie(wocookie);
+					cookieEncoder.addCookie(cookie);
+				}
+				response.addHeader(SET_COOKIE, cookieEncoder.encode());
+			}
+			return response;
+		}
+		
+		private Cookie _convertWOCookieToCookie(WOCookie wocookie) {
+			Cookie cookie = new DefaultCookie(wocookie.name(), wocookie.value());
+			cookie.setPath(wocookie.path());
+			cookie.setDomain(wocookie.domain());
+			cookie.setMaxAge(wocookie.timeOut());
+			cookie.setSecure(wocookie.isSecure());
+			return cookie;
+		}
+
+		private void writeResponse(WOResponse woresponse, MessageEvent e) throws IOException {
+			// Decide whether to close the connection or not.
+			boolean keepAlive = isKeepAlive(_request);
+
+			// Build the response object.
+			HttpResponse response = _convertWOResponseToHttpResponse(woresponse);
 
 			// Write the response.
 			ChannelFuture future = e.getChannel().write(response);

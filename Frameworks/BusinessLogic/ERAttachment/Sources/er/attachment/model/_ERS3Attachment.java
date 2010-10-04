@@ -1,4 +1,4 @@
-// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to ERS3Attachment.java instead.
+// DO NOT EDIT.  Make changes to ERS3Attachment.java instead.
 package er.attachment.model;
 
 import com.webobjects.eoaccess.*;
@@ -64,14 +64,14 @@ public abstract class _ERS3Attachment extends er.attachment.model.ERAttachment {
   }
 
   public String s3Path() {
-    return (String) storedValueForKey("s3Path");
+    return (String) storedValueForKey(_ERS3Attachment.S3_PATH_KEY);
   }
 
   public void setS3Path(String value) {
     if (_ERS3Attachment.LOG.isDebugEnabled()) {
     	_ERS3Attachment.LOG.debug( "updating s3Path from " + s3Path() + " to " + value);
     }
-    takeStoredValueForKey(value, "s3Path");
+    takeStoredValueForKey(value, _ERS3Attachment.S3_PATH_KEY);
   }
 
 
@@ -103,9 +103,9 @@ public abstract class _ERS3Attachment extends er.attachment.model.ERAttachment {
   }
 
   public static NSArray<ERS3Attachment> fetchERS3Attachments(EOEditingContext editingContext, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings) {
-    EOFetchSpecification fetchSpec = new EOFetchSpecification(_ERS3Attachment.ENTITY_NAME, qualifier, sortOrderings);
+    ERXFetchSpecification<ERS3Attachment> fetchSpec = new ERXFetchSpecification<ERS3Attachment>(_ERS3Attachment.ENTITY_NAME, qualifier, sortOrderings);
     fetchSpec.setIsDeep(true);
-    NSArray<ERS3Attachment> eoObjects = (NSArray<ERS3Attachment>)editingContext.objectsWithFetchSpecification(fetchSpec);
+    NSArray<ERS3Attachment> eoObjects = fetchSpec.fetchObjects(editingContext);
     return eoObjects;
   }
 
@@ -121,7 +121,7 @@ public abstract class _ERS3Attachment extends er.attachment.model.ERAttachment {
       eoObject = null;
     }
     else if (count == 1) {
-      eoObject = (ERS3Attachment)eoObjects.objectAtIndex(0);
+      eoObject = eoObjects.objectAtIndex(0);
     }
     else {
       throw new IllegalStateException("There was more than one ERS3Attachment that matched the qualifier '" + qualifier + "'.");
@@ -142,7 +142,7 @@ public abstract class _ERS3Attachment extends er.attachment.model.ERAttachment {
   }
 
   public static ERS3Attachment localInstanceIn(EOEditingContext editingContext, ERS3Attachment eo) {
-    ERS3Attachment localInstance = (eo == null) ? null : (ERS3Attachment)EOUtilities.localInstanceOfObject(editingContext, eo);
+    ERS3Attachment localInstance = (eo == null) ? null : ERXEOControlUtilities.localInstanceOfObject(editingContext, eo);
     if (localInstance == null && eo != null) {
       throw new IllegalStateException("You attempted to localInstance " + eo + ", which has not yet committed.");
     }

@@ -7,7 +7,14 @@
 package er.extensions.logging;
 
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
+import er.extensions.foundation.ERXArrayUtilities;
+import org.apache.log4j.Appender;
+import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -17,260 +24,417 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.ERXExtensions;
-import er.extensions.eof.ERXConstant;
-import er.extensions.foundation.ERXStringUtilities;
+//import er.extensions.eof.ERXConstant;
+import org.apache.log4j.spi.LoggerRepository;
 
 /**
- * Configures and manages the log4j logging system. Will also configure the
- * system for rapid turn around, ie when WOCaching is disabled when the conf
- * file changes it will get reloaded.<br />
- * 
+ * Configures and manages the log4j logging system. Will also configure the system for rapid turn around, i.e. when
+ * WOCaching is disabled when the conf file changes it will get reloaded.
  */
-
 public class ERXLog4JConfiguration extends WOComponent {
 
-	public ERXLog4JConfiguration(WOContext aContext) {
-		super(aContext);
-	}
+    /**
+     * A representation of the various Logger levels.
+     */
+    private enum LoggerLevel {
+        ALL(Level.ALL, "All"),
+        TRACE(Level.TRACE, "Trace"),
+        DEBUG(Level.DEBUG, "Debug"),
+        INFO(Level.INFO, "Info"),
+        WARN(Level.WARN, "Warn"),
+        ERROR(Level.ERROR, "Error"),
+        FATAL(Level.FATAL, "Fatal"),
+        OFF(Level.OFF, "Off"),
+        UNSET(null, "Unset"); // Unset is a "fake" level that doesn't correspond to an actual Log4J Level.
 
-	private Logger _logger;
-	private String _filterString;
-	private String _ruleKey;
-	private String _loggerName;
+        private Level level;
+        private String displayName;
 
-	public boolean showAll = false;
+        private static Map<Level, LoggerLevel> levelsByLog4JLevel;
 
-	public Logger logger() {
-		return _logger;
-	}
+        static {
+            levelsByLog4JLevel = new HashMap<Level, LoggerLevel>(8);
+            for (LoggerLevel level : LoggerLevel.values()) {
+                levelsByLog4JLevel.put(level.level(), level);
+            }
+        }
 
-	public void setLogger(Logger newValue) {
-		_logger = newValue;
-	}
+        LoggerLevel(Level level, String displayName) {
+            this.level = level;
+            this.displayName = displayName;
+        }
 
-	public String filterString() {
-		return _filterString;
-	}
+        public Level level() { return level; }
+        public String displayName() { return displayName; }
+        
+        public static LoggerLevel loggerLevelForLog4JLevel(Level level) { return levelsByLog4JLevel.get(level); }
+    }
 
-	public void setFilterString(String newValue) {
-		_filterString = newValue;
-	}
+    /**
+     * A representation of the available page sections/views.
+     */
+    public enum PageSection {
+        LOGGERS("Loggers", "Loggers"),
+        REPOSITORY("Repository", "Repository"),
+        APPENDERS("Appenders", "Appenders"),
+        OTHER("Other", "Other Settings");
 
-	public String loggerName() {
-		return _loggerName;
-	}
+        private String displayName;
+        private String id;
+        private static Map<String, PageSection> sectionsById;
+        static {
+            sectionsById = new HashMap<String, PageSection>(4);
+            for (PageSection section : PageSection.values()) {
+                sectionsById.put(section.id(), section);
+            }
+        }
 
-	public void setLoggerName(String newValue) {
-		_loggerName = newValue;
-	}
+        PageSection(String id, String displayName) {
+            this.displayName = displayName;
+            this.id = id;
+        }
 
-	public String ruleKey() {
-		return _ruleKey;
-	}
+        public String displayName() { return displayName; }
+        public String id() { return id; }
+        public static PageSection sectionWithId(String name) { return sectionsById.get(name); }
+    }
 
-	public void setRuleKey(String newValue) {
-		_ruleKey = newValue;
-	}
 
-	public final static EOSortOrdering NAME_SORT_ORDERING = new EOSortOrdering("name", EOSortOrdering.CompareAscending);
-	public final static NSMutableArray SORT_BY_NAME = new NSMutableArray(NAME_SORT_ORDERING);
+    private Logger _logger;
+    private String _filterString;
+    private String _ruleKey;
+    private String _loggerName;
+    public LoggerLevel filterLevel;
 
-	public Logger parentForLogger(Logger l) {
-		Logger result = (Logger) l.getParent();
-		/*
-		 * String name=l.getName(); int i=name.lastIndexOf('.'); if (i!=-1) {
-		 * String parentName=name.substring(0,i);
-		 * result=Logger.getLogger(parentName); }
-		 */
-		return result;
-	}
+    public LoggerLevel newLoggerLevel = null;
 
-	public NSArray loggers() {
-		NSMutableArray result = new NSMutableArray();
-		for (Enumeration e = LogManager.getCurrentLoggers(); e.hasMoreElements();) {
-			Logger log = (Logger) e.nextElement();
-			while (log != null) {
-				addLogger(log, result);
-				log = parentForLogger(log);
-			}
-		}
-		EOSortOrdering.sortArrayUsingKeyOrderArray(result, SORT_BY_NAME);
-		return result;
-	}
+    private NSArray _appenders;
+    public AppenderSkeleton anAppender;
+    public Level aLevel;
+    public LoggerLevel aLoggerLevel;
 
-	public void addLogger(Logger log, NSMutableArray result) {
-		if ((filterString() == null || filterString().length() == 0 || log.getName().toLowerCase().indexOf(filterString().toLowerCase()) != -1) && (showAll || log.getLevel() != null) && !result.containsObject(log)) {
-			result.addObject(log);
-		}
-	}
+    public boolean isNewLoggerARuleLogger = false;
+    public boolean showAll = false;
+    public int rowIndex = 0;
 
-	public WOComponent filter() {
-		return null;
-	}
+    private static final NSArray _pageSections = new NSArray(PageSection.values());
+    public PageSection aPageSection;
+    private PageSection _activeSection = PageSection.LOGGERS;
 
-	public WOComponent resetFilter() {
-		_filterString = null;
-		return null;
-	}
+    public final static EOSortOrdering NAME_SORT_ORDERING=new EOSortOrdering("name", EOSortOrdering.CompareAscending);
+    public final static NSMutableArray SORT_BY_NAME=new NSMutableArray(NAME_SORT_ORDERING);
 
-	public WOComponent update() {
-		ERXExtensions.configureAdaptorContext();
-		return null;
-	}
+    public ERXLog4JConfiguration(WOContext aContext) {
+        super(aContext);
+    }
 
-	public WOComponent showAll() {
-		showAll = true;
-		return null;
-	}
+    public Logger logger() { return _logger; }
+    public void setLogger(Logger newValue) { _logger = newValue; }
 
-	public WOComponent showExplicitlySet() {
-		showAll = false;
-		return null;
-	}
+    public String filterString() { return _filterString; }
+    public void setFilterString(String newValue) { _filterString = newValue; }
 
-	public WOComponent addLogger() {
-		Logger.getLogger(loggerName());
-		setFilterString(loggerName());
-		return null;
-	}
+    public String loggerName() { return _loggerName; }
+    public void setLoggerName(String newValue) { _loggerName = newValue; }
 
-	// This functionality depends on ERDirectToWeb's presence..
-	public WOComponent addRuleKey() {
-		String prefix = "er.directtoweb.rules." + ruleKey();
-		Logger.getLogger(prefix + ".fire");
-		Logger.getLogger(prefix + ".cache");
-		Logger.getLogger(prefix + ".candidates");
-		showAll = true;
-		setFilterString(prefix);
-		return null;
-	}
+    public String ruleKey() { return _ruleKey; }
+    public void setRuleKey(String newValue) { _ruleKey = newValue; }
 
-	public Integer offLevel() {
-		return ERXConstant.integerForInt(Level.OFF.toInt());
-	}
+    public NSArray pageSections() { return _pageSections; }
+    public String activeSection() { return _activeSection.displayName(); }
+    public void setActiveSection(String name) {
+        _activeSection = PageSection.sectionWithId(name);
+        if (null == _activeSection) {
+            _activeSection = PageSection.LOGGERS;
+        }
+    }
 
-	public Integer traceLevel() {
-		return ERXConstant.integerForInt(Level.TRACE.toInt());
-	}
+    /**
+     * Gets all of the configured {@link Logger loggers} that pass the filters for logger name and level.
+     * @return the loggers
+     */
+    public NSArray loggers() {
+        NSMutableArray result = new NSMutableArray();
+        for (Enumeration e = allLoggers().objectEnumerator(); e.hasMoreElements();) {
+            Logger log = (Logger)e.nextElement();
+            while (log != null) {
+                addLogger(log, result);
+                log = (Logger)log.getParent();
+            }
+        }
+        return result;
+    }
 
-	public Integer debugLevel() {
-		return ERXConstant.integerForInt(Level.DEBUG.toInt());
-	}
+    private NSArray allLoggers() {
+        NSMutableArray result = new NSMutableArray();
+        Logger rootLogger = LogManager.getRootLogger(); // Float the root logger to the top.
+        addLogger(rootLogger, result);
 
-	public Integer infoLevel() {
-		return ERXConstant.integerForInt(Level.INFO.toInt());
-	}
+        NSMutableArray otherLoggers = new NSMutableArray();
+        for (Enumeration e = LogManager.getCurrentLoggers(); e.hasMoreElements();) {
+            Logger log = (Logger)e.nextElement();
+            while (log != null) {
+                if (log != rootLogger) {
+                    otherLoggers.addObject(log);
+                }
+                log = (Logger)log.getParent();
+            }
+        }
+        EOSortOrdering.sortArrayUsingKeyOrderArray(otherLoggers, SORT_BY_NAME);
+        result.addObjectsFromArray(otherLoggers);
 
-	public Integer warnLevel() {
-		return ERXConstant.integerForInt(Level.WARN.toInt());
-	}
+        return result;
+    }
 
-	public Integer errorLevel() {
-		return ERXConstant.integerForInt(Level.ERROR.toInt());
-	}
+    /**
+     * Adds a logger instance to the provided array, filtering those that don't fit the filter string / filter level.
+     * @param log to add
+     * @param result array to which the logger will be added if it passes the filter constraint
+     */
+    public void addLogger(Logger log, NSMutableArray result) {
+        if (!result.containsObject(log)) {
+            boolean passesFilterString = false;
+            boolean passesFilterLevel = false;
+            if ((filterString() == null || filterString().length() == 0 || log.getName().toLowerCase().indexOf(filterString().toLowerCase()) != -1) &&
+                (showAll || log.getLevel() != null)) {
+                passesFilterString = true;
+            }
 
-	public Integer fatalLevel() {
-		return ERXConstant.integerForInt(Level.FATAL.toInt());
-	}
+            if (null == filterLevel || LoggerLevel.loggerLevelForLog4JLevel(log.getLevel()) == filterLevel) {
+                passesFilterLevel = true;
+            }
 
-	public Integer unsetLevel() {
-		return ERXConstant.MinusOneInteger;
-	}
+            if (passesFilterString && passesFilterLevel) {
+                result.addObject(log);
+            }
+        }
+    }
 
-	public Integer loggerLevelValue() {
-		return logger() != null && logger().getLevel() != null ? ERXConstant.integerForInt(logger().getLevel().toInt()) : ERXConstant.MinusOneInteger;
-	}
+    public LoggerLevel currentLoggerLevel() {
+        return _logger != null ? LoggerLevel.loggerLevelForLog4JLevel(_logger.getLevel()) : LoggerLevel.UNSET;
+    }
 
-	public boolean loggerIsNotOff() {
-		return logger() != null && logger().getLevel() != Level.OFF;
-	}
+    public void setCurrentLoggerLevel(LoggerLevel loggerLevel) {
+        _logger.setLevel(loggerLevel.level());
+    }
 
-	public boolean loggerIsNotTrace() {
-		return logger() != null && logger().getLevel() != Level.TRACE;
-	}
+    public String classNameForLoggerLevelName() {
+        NSMutableArray classes = new NSMutableArray();
+        if (aLoggerLevel == LoggerLevel.UNSET) {
+            classes.addObject("unset");
+        }
+        if (currentLoggerLevel() == aLoggerLevel) {
+            classes.addObject("selected");
+        }
+        return classes.componentsJoinedByString(" ");
+    }
 
-	public boolean loggerIsNotDebug() {
-		return logger() != null && logger().getLevel() != Level.DEBUG;
-	}
+    public String classForLoggerRow() {
+        NSMutableArray array = new NSMutableArray();
+        Level level = logger().getLevel();
+        if (level != null) {
+            array.addObject(level.toString().toLowerCase());
+        }
+        if (rowIndex % 2 == 0) {
+            array.addObject("alt");
+        }
+        return array.componentsJoinedByString(" ");
+    }
 
-	public boolean loggerIsNotInfo() {
-		return logger() != null && logger().getLevel() != Level.INFO;
-	}
+    public boolean omitLoggerLevelSettingDecoration() {
+        return classNameForLoggerLevelName().length() == 0;
+    }
 
-	public boolean loggerIsNotWarn() {
-		return logger() != null && logger().getLevel() != Level.WARN;
-	}
+    public NSArray loggerLevels() {
+        return new NSArray(LoggerLevel.values());
+    }
 
-	public boolean loggerIsNotError() {
-		return logger() != null && logger().getLevel() != Level.ERROR;
-	}
+    public NSArray loggerLevelsWithoutUnset() {
+        return ERXArrayUtilities.arrayMinusObject(new NSArray(LoggerLevel.values()), LoggerLevel.UNSET);
+    }
 
-	public boolean loggerIsNotFatal() {
-		return logger() != null && logger().getLevel() != Level.FATAL;
-	}
+    public LoggerRepository loggerRepository() {
+        return LogManager.getLoggerRepository();
+    }
 
-	public String loggerPropertiesString() {
-		String result = "";
-		for (Enumeration e = loggers().objectEnumerator(); e.hasMoreElements();) {
-			Logger log = (Logger) e.nextElement();
-			String name = log.getName();
-			Level level = log.getLevel();
-			if (level != null && !"root".equals(name)) {
-				result += "log4j.category." + log.getName() + "=" + log.getLevel() + "\n";
-			}
-		}
-		return result;
-	}
+    public String classNameForLoggerRepositoryThresholdName() {
+        return loggerRepository().getThreshold() == aLevel ? "selected" : null;
+    }
 
-	public void setLoggerLevelValue(Integer newValue) {
-		int lvl = newValue != null ? newValue.intValue() : -1;
-		logger().setLevel(lvl != -1 ? Level.toLevel(lvl) : null);
-	}
+    public boolean omitLoggerRepositoryThresholdSettingDecoration() {
+        return null == classNameForLoggerRepositoryThresholdName();
+    }
 
-	private final static NSDictionary BG_COLORS = new NSDictionary(
-			new Object[] { "#ffaaaa", "#ffbbbb", "#eeccbb", "#ddddbb", "#cceebb", "#bbffbb"}, 
-			new Object[] {
-					ERXConstant.integerForInt(Level.TRACE.toInt()),
-					ERXConstant.integerForInt(Level.DEBUG.toInt()), 
-					ERXConstant.integerForInt(Level.WARN.toInt()), 
-					ERXConstant.integerForInt(Level.ERROR.toInt()), 
-					ERXConstant.integerForInt(Level.FATAL.toInt()), 
-					ERXConstant.integerForInt(Level.OFF.toInt())
-			}
-	);
+    /**
+     * Gets the attached to the loggers.  This class currently only knows how to work with appenders that subclass
+     * {@link AppenderSkeleton}.
+     * @return the array of appenders
+     */
+    public NSArray appenders() {
+        if (null == _appenders) {
+            Set<AppenderSkeleton> appenders = new TreeSet<AppenderSkeleton>();
+            Enumeration loggersEnum = LogManager.getCurrentLoggers();
+            while (loggersEnum.hasMoreElements()) {
+                Logger logger = (Logger)loggersEnum.nextElement();
+                Enumeration appendersEnum = logger.getAllAppenders();
+                while (appendersEnum.hasMoreElements()) {
+                    Appender appender = (Appender)appendersEnum.nextElement();
+                    if (appender instanceof AppenderSkeleton) {
+                        appenders.add((AppenderSkeleton)appender);
+                    }
+                }
+            }
+            _appenders = new NSArray(appenders.toArray());
+        }
+        return _appenders;
+    }
 
-	public String bgColor() {
-		return (String) BG_COLORS.objectForKey(loggerLevelValue());
-	}
+    public NSArray levelsWithoutUnset() {
+        NSArray applicableLevels = ERXArrayUtilities.arrayMinusObject(new NSArray(LoggerLevel.values()), LoggerLevel.UNSET);
+        return (NSArray)applicableLevels.valueForKey("level");
+    }
 
-	public int indentLevel() {
-		return ERXStringUtilities.numberOfOccurrencesOfCharInString('.', logger().getName());
-	}
+    public Level currentAppenderLevel() {
+        return Level.toLevel(anAppender.getThreshold().toInt());
+    }
 
-	public void appendToResponse(WOResponse r, WOContext c) {
-		if (session().objectForKey("ERXLog4JConfiguration.enabled") != null) {
-			super.appendToResponse(r, c);
-		}
-		else {
-			r.appendContentString("please use the ERXDirectAction log4jAction to login first!");
-		}
-	}
+    public void setCurrentAppenderLevel(Level level) {
+        anAppender.setThreshold(level);
+    }
 
-	// * this assumes you use ERXPatternLayout
-	public String conversionPattern() {
-		return ERXPatternLayout.instance().getConversionPattern();
-	}
+    public String classForAppenderRow() {
+        NSMutableArray array = new NSMutableArray();
+        array.addObject(Level.toLevel(anAppender.getThreshold().toInt()));
+        if (rowIndex % 2 == 0) {
+            array.addObject("alt");
+        }
+        return array.componentsJoinedByString(" ");
+    }
 
-	public void setConversionPattern(String newPattern) {
-		ERXPatternLayout.instance().setConversionPattern(newPattern);
-	}
+    public String classNameForAppenderThresholdName() {
+        return currentAppenderLevel() == aLevel ? "selected" : null;
+    }
 
-	public WOComponent updateConversionPattern() {
-		return null;
-	}
+    public boolean omitAppenderThresholdSettingDecoration() {
+        return null == classNameForAppenderThresholdName();
+    }
+
+    public WOComponent updateAppenderSettings() { return null; }
+    public WOComponent updateRepositorySettings() { return null; }
+    
+    public WOComponent filter() { return null; }
+    public WOComponent resetFilter() { _filterString = null; filterLevel = null; return null; }
+    public WOComponent update() {
+        ERXExtensions.configureAdaptorContext();
+        return null;
+    }
+
+    public String showAllLoggersSelection() { return showAll ? "all" : "explicit"; }
+    public void setShowAllLoggersSelection(String value) { showAll = "all".equals(value); }
+
+    public WOComponent addLogger() {
+        if (isNewLoggerARuleLogger) {
+            _addRuleKeyLogger();
+        } else {
+            _addLogger();
+        }
+        return null;
+    }
+
+    private void _addLogger() {
+        final Logger log = Logger.getLogger(loggerName());
+        if (newLoggerLevel != null) {
+            filterLevel = newLoggerLevel;
+            log.setLevel(newLoggerLevel.level());
+        } else {
+            showAll = true;
+            filterLevel = null;
+        }
+        setFilterString(loggerName());
+    }
+    
+    // This functionality depends on ERDirectToWeb's presence..    
+    private void _addRuleKeyLogger() {
+    	final String prefix = "er.directtoweb.rules." + loggerName();
+    	final Logger ruleFireLog = Logger.getLogger(prefix + ".fire");
+    	final Logger ruleCacheHitLog = Logger.getLogger(prefix + ".cache");
+    	final Logger ruleCandidatesLog = Logger.getLogger(prefix + ".candidates");
+        if (newLoggerLevel != null) {
+            filterLevel = newLoggerLevel;
+            Level level = newLoggerLevel.level();
+            ruleFireLog.setLevel(level);
+            ruleCacheHitLog.setLevel(level);
+            ruleCandidatesLog.setLevel(level);
+        } else {
+            showAll = true;
+            filterLevel = null;
+        }
+    	setFilterString(prefix);
+    }
+
+    public String loggerPropertiesString() {
+    	String result = "";
+    	for (Enumeration e = allLoggers().objectEnumerator(); e.hasMoreElements();) {
+    		Logger log = (Logger)e.nextElement();
+    		String name = log.getName();
+    		Level level = log.getLevel();
+    		if (level != null && !"root".equals(name)) {
+    			result += "log4j.logger." + log.getName() + "=" + log.getLevel() + "\n";
+    		}
+    	}
+    	return result;
+    }
+
+    public void appendToResponse(WOResponse response, WOContext context) {
+        if (session().objectForKey("ERXLog4JConfiguration.enabled") != null) {
+            super.appendToResponse(response, context);
+        } else {
+            response.appendContentString("please use the ERXDirectAction log4jAction to login first!");
+        }
+    }
+    
+    //* this assumes you use ERXPatternLayout
+    public String conversionPattern() {
+        return ERXPatternLayout.instance().getConversionPattern();
+    }
+
+    public void setConversionPattern(String newPattern) {
+        ERXPatternLayout.instance().setConversionPattern(newPattern);
+    }
+    
+    public WOComponent updateConversionPattern() { return null; }
+
+    public String classForNavItem() {
+        return aPageSection == _activeSection ? "active" : null;
+    }
+
+    public String classForLoggersDiv() {
+        return PageSection.LOGGERS == _activeSection ? "active" : null;
+    }
+
+    public String classForRepositoryDiv() {
+        return PageSection.REPOSITORY == _activeSection ? "active" : null;
+    }
+
+    public String classForAppendersDiv() {
+        return PageSection.APPENDERS == _activeSection ? "active" : null;
+    }
+
+    public String classForOtherSettingsDiv() {
+        return PageSection.OTHER == _activeSection ? "active" : null;
+    }
+
+    public String classForLoggerConfigurationControlBar() {
+        return PageSection.LOGGERS == _activeSection ? "active" : null;
+    }
+
+    public void awake() {
+        super.awake();
+
+        _appenders = null;
+    }
 
 }

@@ -1,5 +1,5 @@
-How to Use
-==========
+Deployment with WONettyAdaptor
+==============================
 
 1. Build/Install ERWOAdaptor framework
 
@@ -12,11 +12,7 @@ How to Use
    OR alternatively:
    
 	-WOAdaptor WONettyAdaptor
-	
-4. You need to set:
 
-	-WOHost <hostname>
-
-5. (Optionally) To run the adaptor via the web server, use: 
+4. (Optionally for development) You need to run the adaptor via the web server, so §use: 
 
 	-WODirectConnectEnabled false

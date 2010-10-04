@@ -1,4 +1,4 @@
-// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to Person.java instead.
+// DO NOT EDIT.  Make changes to Person.java instead.
 package er.rest.example.model;
 
 import com.webobjects.eoaccess.*;
@@ -38,22 +38,22 @@ public abstract class _Person extends  ERXGenericRecord {
   }
 
   public String name() {
-    return (String) storedValueForKey("name");
+    return (String) storedValueForKey(_Person.NAME_KEY);
   }
 
   public void setName(String value) {
     if (_Person.LOG.isDebugEnabled()) {
     	_Person.LOG.debug( "updating name from " + name() + " to " + value);
     }
-    takeStoredValueForKey(value, "name");
+    takeStoredValueForKey(value, _Person.NAME_KEY);
   }
 
   public er.rest.example.model.Company company() {
-    return (er.rest.example.model.Company)storedValueForKey("company");
+    return (er.rest.example.model.Company)storedValueForKey(_Person.COMPANY_KEY);
   }
   
   public void setCompany(er.rest.example.model.Company value) {
-    takeStoredValueForKey(value, "company");
+    takeStoredValueForKey(value, _Person.COMPANY_KEY);
   }
 
   public void setCompanyRelationship(er.rest.example.model.Company value) {
@@ -66,15 +66,15 @@ public abstract class _Person extends  ERXGenericRecord {
     else if (value == null) {
     	er.rest.example.model.Company oldValue = company();
     	if (oldValue != null) {
-    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, "company");
+    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, _Person.COMPANY_KEY);
       }
     } else {
-    	addObjectToBothSidesOfRelationshipWithKey(value, "company");
+    	addObjectToBothSidesOfRelationshipWithKey(value, _Person.COMPANY_KEY);
     }
   }
   
   public NSArray<er.rest.example.model.Animal> pets() {
-    return (NSArray<er.rest.example.model.Animal>)storedValueForKey("pets");
+    return (NSArray<er.rest.example.model.Animal>)storedValueForKey(_Person.PETS_KEY);
   }
 
   public NSArray<er.rest.example.model.Animal> pets(EOQualifier qualifier) {
@@ -95,7 +95,7 @@ public abstract class _Person extends  ERXGenericRecord {
         fullQualifier = inverseQualifier;
       }
       else {
-        NSMutableArray qualifiers = new NSMutableArray();
+        NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
         qualifiers.addObject(qualifier);
         qualifiers.addObject(inverseQualifier);
         fullQualifier = new EOAndQualifier(qualifiers);
@@ -116,11 +116,11 @@ public abstract class _Person extends  ERXGenericRecord {
   }
   
   public void addToPets(er.rest.example.model.Animal object) {
-    includeObjectIntoPropertyWithKey(object, "pets");
+    includeObjectIntoPropertyWithKey(object, _Person.PETS_KEY);
   }
 
   public void removeFromPets(er.rest.example.model.Animal object) {
-    excludeObjectFromPropertyWithKey(object, "pets");
+    excludeObjectFromPropertyWithKey(object, _Person.PETS_KEY);
   }
 
   public void addToPetsRelationship(er.rest.example.model.Animal object) {
@@ -131,7 +131,7 @@ public abstract class _Person extends  ERXGenericRecord {
     	addToPets(object);
     }
     else {
-    	addObjectToBothSidesOfRelationshipWithKey(object, "pets");
+    	addObjectToBothSidesOfRelationshipWithKey(object, _Person.PETS_KEY);
     }
   }
 
@@ -143,27 +143,27 @@ public abstract class _Person extends  ERXGenericRecord {
     	removeFromPets(object);
     }
     else {
-    	removeObjectFromBothSidesOfRelationshipWithKey(object, "pets");
+    	removeObjectFromBothSidesOfRelationshipWithKey(object, _Person.PETS_KEY);
     }
   }
 
   public er.rest.example.model.Animal createPetsRelationship() {
-    EOClassDescription eoClassDesc = EOClassDescription.classDescriptionForEntityName("Animal");
+    EOClassDescription eoClassDesc = EOClassDescription.classDescriptionForEntityName( er.rest.example.model.Animal.ENTITY_NAME );
     EOEnterpriseObject eo = eoClassDesc.createInstanceWithEditingContext(editingContext(), null);
     editingContext().insertObject(eo);
-    addObjectToBothSidesOfRelationshipWithKey(eo, "pets");
+    addObjectToBothSidesOfRelationshipWithKey(eo, _Person.PETS_KEY);
     return (er.rest.example.model.Animal) eo;
   }
 
   public void deletePetsRelationship(er.rest.example.model.Animal object) {
-    removeObjectFromBothSidesOfRelationshipWithKey(object, "pets");
+    removeObjectFromBothSidesOfRelationshipWithKey(object, _Person.PETS_KEY);
     editingContext().deleteObject(object);
   }
 
   public void deleteAllPetsRelationships() {
-    Enumeration objects = pets().immutableClone().objectEnumerator();
+    Enumeration<er.rest.example.model.Animal> objects = pets().immutableClone().objectEnumerator();
     while (objects.hasMoreElements()) {
-      deletePetsRelationship((er.rest.example.model.Animal)objects.nextElement());
+      deletePetsRelationship(objects.nextElement());
     }
   }
 
@@ -184,9 +184,9 @@ public abstract class _Person extends  ERXGenericRecord {
   }
 
   public static NSArray<Person> fetchPersons(EOEditingContext editingContext, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings) {
-    EOFetchSpecification fetchSpec = new EOFetchSpecification(_Person.ENTITY_NAME, qualifier, sortOrderings);
+    ERXFetchSpecification<Person> fetchSpec = new ERXFetchSpecification<Person>(_Person.ENTITY_NAME, qualifier, sortOrderings);
     fetchSpec.setIsDeep(true);
-    NSArray<Person> eoObjects = (NSArray<Person>)editingContext.objectsWithFetchSpecification(fetchSpec);
+    NSArray<Person> eoObjects = fetchSpec.fetchObjects(editingContext);
     return eoObjects;
   }
 
@@ -202,7 +202,7 @@ public abstract class _Person extends  ERXGenericRecord {
       eoObject = null;
     }
     else if (count == 1) {
-      eoObject = (Person)eoObjects.objectAtIndex(0);
+      eoObject = eoObjects.objectAtIndex(0);
     }
     else {
       throw new IllegalStateException("There was more than one Person that matched the qualifier '" + qualifier + "'.");
@@ -223,7 +223,7 @@ public abstract class _Person extends  ERXGenericRecord {
   }
 
   public static Person localInstanceIn(EOEditingContext editingContext, Person eo) {
-    Person localInstance = (eo == null) ? null : (Person)EOUtilities.localInstanceOfObject(editingContext, eo);
+    Person localInstance = (eo == null) ? null : ERXEOControlUtilities.localInstanceOfObject(editingContext, eo);
     if (localInstance == null && eo != null) {
       throw new IllegalStateException("You attempted to localInstance " + eo + ", which has not yet committed.");
     }

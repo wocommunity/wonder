@@ -1,4 +1,4 @@
-// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to Forum.java instead.
+// DO NOT EDIT.  Make changes to Forum.java instead.
 package se.caboo.beast.model;
 
 import com.webobjects.eoaccess.*;
@@ -48,73 +48,73 @@ public abstract class _Forum extends  ERXGenericRecord {
   }
 
   public String description() {
-    return (String) storedValueForKey("description");
+    return (String) storedValueForKey(_Forum.DESCRIPTION_KEY);
   }
 
   public void setDescription(String value) {
     if (_Forum.LOG.isDebugEnabled()) {
     	_Forum.LOG.debug( "updating description from " + description() + " to " + value);
     }
-    takeStoredValueForKey(value, "description");
+    takeStoredValueForKey(value, _Forum.DESCRIPTION_KEY);
   }
 
   public String descriptionHtml() {
-    return (String) storedValueForKey("descriptionHtml");
+    return (String) storedValueForKey(_Forum.DESCRIPTION_HTML_KEY);
   }
 
   public void setDescriptionHtml(String value) {
     if (_Forum.LOG.isDebugEnabled()) {
     	_Forum.LOG.debug( "updating descriptionHtml from " + descriptionHtml() + " to " + value);
     }
-    takeStoredValueForKey(value, "descriptionHtml");
+    takeStoredValueForKey(value, _Forum.DESCRIPTION_HTML_KEY);
   }
 
   public String name() {
-    return (String) storedValueForKey("name");
+    return (String) storedValueForKey(_Forum.NAME_KEY);
   }
 
   public void setName(String value) {
     if (_Forum.LOG.isDebugEnabled()) {
     	_Forum.LOG.debug( "updating name from " + name() + " to " + value);
     }
-    takeStoredValueForKey(value, "name");
+    takeStoredValueForKey(value, _Forum.NAME_KEY);
   }
 
   public Integer position() {
-    return (Integer) storedValueForKey("position");
+    return (Integer) storedValueForKey(_Forum.POSITION_KEY);
   }
 
   public void setPosition(Integer value) {
     if (_Forum.LOG.isDebugEnabled()) {
     	_Forum.LOG.debug( "updating position from " + position() + " to " + value);
     }
-    takeStoredValueForKey(value, "position");
+    takeStoredValueForKey(value, _Forum.POSITION_KEY);
   }
 
   public Integer postsCount() {
-    return (Integer) storedValueForKey("postsCount");
+    return (Integer) storedValueForKey(_Forum.POSTS_COUNT_KEY);
   }
 
   public void setPostsCount(Integer value) {
     if (_Forum.LOG.isDebugEnabled()) {
     	_Forum.LOG.debug( "updating postsCount from " + postsCount() + " to " + value);
     }
-    takeStoredValueForKey(value, "postsCount");
+    takeStoredValueForKey(value, _Forum.POSTS_COUNT_KEY);
   }
 
   public Integer topicsCount() {
-    return (Integer) storedValueForKey("topicsCount");
+    return (Integer) storedValueForKey(_Forum.TOPICS_COUNT_KEY);
   }
 
   public void setTopicsCount(Integer value) {
     if (_Forum.LOG.isDebugEnabled()) {
     	_Forum.LOG.debug( "updating topicsCount from " + topicsCount() + " to " + value);
     }
-    takeStoredValueForKey(value, "topicsCount");
+    takeStoredValueForKey(value, _Forum.TOPICS_COUNT_KEY);
   }
 
   public NSArray<se.caboo.beast.model.Post> posts() {
-    return (NSArray<se.caboo.beast.model.Post>)storedValueForKey("posts");
+    return (NSArray<se.caboo.beast.model.Post>)storedValueForKey(_Forum.POSTS_KEY);
   }
 
   public NSArray<se.caboo.beast.model.Post> posts(EOQualifier qualifier) {
@@ -135,7 +135,7 @@ public abstract class _Forum extends  ERXGenericRecord {
         fullQualifier = inverseQualifier;
       }
       else {
-        NSMutableArray qualifiers = new NSMutableArray();
+        NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
         qualifiers.addObject(qualifier);
         qualifiers.addObject(inverseQualifier);
         fullQualifier = new EOAndQualifier(qualifiers);
@@ -156,11 +156,11 @@ public abstract class _Forum extends  ERXGenericRecord {
   }
   
   public void addToPosts(se.caboo.beast.model.Post object) {
-    includeObjectIntoPropertyWithKey(object, "posts");
+    includeObjectIntoPropertyWithKey(object, _Forum.POSTS_KEY);
   }
 
   public void removeFromPosts(se.caboo.beast.model.Post object) {
-    excludeObjectFromPropertyWithKey(object, "posts");
+    excludeObjectFromPropertyWithKey(object, _Forum.POSTS_KEY);
   }
 
   public void addToPostsRelationship(se.caboo.beast.model.Post object) {
@@ -171,7 +171,7 @@ public abstract class _Forum extends  ERXGenericRecord {
     	addToPosts(object);
     }
     else {
-    	addObjectToBothSidesOfRelationshipWithKey(object, "posts");
+    	addObjectToBothSidesOfRelationshipWithKey(object, _Forum.POSTS_KEY);
     }
   }
 
@@ -183,32 +183,32 @@ public abstract class _Forum extends  ERXGenericRecord {
     	removeFromPosts(object);
     }
     else {
-    	removeObjectFromBothSidesOfRelationshipWithKey(object, "posts");
+    	removeObjectFromBothSidesOfRelationshipWithKey(object, _Forum.POSTS_KEY);
     }
   }
 
   public se.caboo.beast.model.Post createPostsRelationship() {
-    EOClassDescription eoClassDesc = EOClassDescription.classDescriptionForEntityName("Post");
+    EOClassDescription eoClassDesc = EOClassDescription.classDescriptionForEntityName( se.caboo.beast.model.Post.ENTITY_NAME );
     EOEnterpriseObject eo = eoClassDesc.createInstanceWithEditingContext(editingContext(), null);
     editingContext().insertObject(eo);
-    addObjectToBothSidesOfRelationshipWithKey(eo, "posts");
+    addObjectToBothSidesOfRelationshipWithKey(eo, _Forum.POSTS_KEY);
     return (se.caboo.beast.model.Post) eo;
   }
 
   public void deletePostsRelationship(se.caboo.beast.model.Post object) {
-    removeObjectFromBothSidesOfRelationshipWithKey(object, "posts");
+    removeObjectFromBothSidesOfRelationshipWithKey(object, _Forum.POSTS_KEY);
     editingContext().deleteObject(object);
   }
 
   public void deleteAllPostsRelationships() {
-    Enumeration objects = posts().immutableClone().objectEnumerator();
+    Enumeration<se.caboo.beast.model.Post> objects = posts().immutableClone().objectEnumerator();
     while (objects.hasMoreElements()) {
-      deletePostsRelationship((se.caboo.beast.model.Post)objects.nextElement());
+      deletePostsRelationship(objects.nextElement());
     }
   }
 
   public NSArray<se.caboo.beast.model.Topic> topics() {
-    return (NSArray<se.caboo.beast.model.Topic>)storedValueForKey("topics");
+    return (NSArray<se.caboo.beast.model.Topic>)storedValueForKey(_Forum.TOPICS_KEY);
   }
 
   public NSArray<se.caboo.beast.model.Topic> topics(EOQualifier qualifier) {
@@ -229,7 +229,7 @@ public abstract class _Forum extends  ERXGenericRecord {
         fullQualifier = inverseQualifier;
       }
       else {
-        NSMutableArray qualifiers = new NSMutableArray();
+        NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
         qualifiers.addObject(qualifier);
         qualifiers.addObject(inverseQualifier);
         fullQualifier = new EOAndQualifier(qualifiers);
@@ -250,11 +250,11 @@ public abstract class _Forum extends  ERXGenericRecord {
   }
   
   public void addToTopics(se.caboo.beast.model.Topic object) {
-    includeObjectIntoPropertyWithKey(object, "topics");
+    includeObjectIntoPropertyWithKey(object, _Forum.TOPICS_KEY);
   }
 
   public void removeFromTopics(se.caboo.beast.model.Topic object) {
-    excludeObjectFromPropertyWithKey(object, "topics");
+    excludeObjectFromPropertyWithKey(object, _Forum.TOPICS_KEY);
   }
 
   public void addToTopicsRelationship(se.caboo.beast.model.Topic object) {
@@ -265,7 +265,7 @@ public abstract class _Forum extends  ERXGenericRecord {
     	addToTopics(object);
     }
     else {
-    	addObjectToBothSidesOfRelationshipWithKey(object, "topics");
+    	addObjectToBothSidesOfRelationshipWithKey(object, _Forum.TOPICS_KEY);
     }
   }
 
@@ -277,27 +277,27 @@ public abstract class _Forum extends  ERXGenericRecord {
     	removeFromTopics(object);
     }
     else {
-    	removeObjectFromBothSidesOfRelationshipWithKey(object, "topics");
+    	removeObjectFromBothSidesOfRelationshipWithKey(object, _Forum.TOPICS_KEY);
     }
   }
 
   public se.caboo.beast.model.Topic createTopicsRelationship() {
-    EOClassDescription eoClassDesc = EOClassDescription.classDescriptionForEntityName("Topic");
+    EOClassDescription eoClassDesc = EOClassDescription.classDescriptionForEntityName( se.caboo.beast.model.Topic.ENTITY_NAME );
     EOEnterpriseObject eo = eoClassDesc.createInstanceWithEditingContext(editingContext(), null);
     editingContext().insertObject(eo);
-    addObjectToBothSidesOfRelationshipWithKey(eo, "topics");
+    addObjectToBothSidesOfRelationshipWithKey(eo, _Forum.TOPICS_KEY);
     return (se.caboo.beast.model.Topic) eo;
   }
 
   public void deleteTopicsRelationship(se.caboo.beast.model.Topic object) {
-    removeObjectFromBothSidesOfRelationshipWithKey(object, "topics");
+    removeObjectFromBothSidesOfRelationshipWithKey(object, _Forum.TOPICS_KEY);
     editingContext().deleteObject(object);
   }
 
   public void deleteAllTopicsRelationships() {
-    Enumeration objects = topics().immutableClone().objectEnumerator();
+    Enumeration<se.caboo.beast.model.Topic> objects = topics().immutableClone().objectEnumerator();
     while (objects.hasMoreElements()) {
-      deleteTopicsRelationship((se.caboo.beast.model.Topic)objects.nextElement());
+      deleteTopicsRelationship(objects.nextElement());
     }
   }
 
@@ -328,9 +328,9 @@ public abstract class _Forum extends  ERXGenericRecord {
   }
 
   public static NSArray<Forum> fetchForums(EOEditingContext editingContext, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings) {
-    EOFetchSpecification fetchSpec = new EOFetchSpecification(_Forum.ENTITY_NAME, qualifier, sortOrderings);
+    ERXFetchSpecification<Forum> fetchSpec = new ERXFetchSpecification<Forum>(_Forum.ENTITY_NAME, qualifier, sortOrderings);
     fetchSpec.setIsDeep(true);
-    NSArray<Forum> eoObjects = (NSArray<Forum>)editingContext.objectsWithFetchSpecification(fetchSpec);
+    NSArray<Forum> eoObjects = fetchSpec.fetchObjects(editingContext);
     return eoObjects;
   }
 
@@ -346,7 +346,7 @@ public abstract class _Forum extends  ERXGenericRecord {
       eoObject = null;
     }
     else if (count == 1) {
-      eoObject = (Forum)eoObjects.objectAtIndex(0);
+      eoObject = eoObjects.objectAtIndex(0);
     }
     else {
       throw new IllegalStateException("There was more than one Forum that matched the qualifier '" + qualifier + "'.");
@@ -367,7 +367,7 @@ public abstract class _Forum extends  ERXGenericRecord {
   }
 
   public static Forum localInstanceIn(EOEditingContext editingContext, Forum eo) {
-    Forum localInstance = (eo == null) ? null : (Forum)EOUtilities.localInstanceOfObject(editingContext, eo);
+    Forum localInstance = (eo == null) ? null : ERXEOControlUtilities.localInstanceOfObject(editingContext, eo);
     if (localInstance == null && eo != null) {
       throw new IllegalStateException("You attempted to localInstance " + eo + ", which has not yet committed.");
     }

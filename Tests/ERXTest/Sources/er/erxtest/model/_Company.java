@@ -1,4 +1,4 @@
-// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to Company.java instead.
+// DO NOT EDIT.  Make changes to Company.java instead.
 package er.erxtest.model;
 
 import com.webobjects.eoaccess.*;
@@ -46,73 +46,73 @@ public abstract class _Company extends er.extensions.eof.ERXGenericRecord {
   }
 
   public String address1() {
-    return (String) storedValueForKey("address1");
+    return (String) storedValueForKey(_Company.ADDRESS1_KEY);
   }
 
   public void setAddress1(String value) {
     if (_Company.LOG.isDebugEnabled()) {
     	_Company.LOG.debug( "updating address1 from " + address1() + " to " + value);
     }
-    takeStoredValueForKey(value, "address1");
+    takeStoredValueForKey(value, _Company.ADDRESS1_KEY);
   }
 
   public String address2() {
-    return (String) storedValueForKey("address2");
+    return (String) storedValueForKey(_Company.ADDRESS2_KEY);
   }
 
   public void setAddress2(String value) {
     if (_Company.LOG.isDebugEnabled()) {
     	_Company.LOG.debug( "updating address2 from " + address2() + " to " + value);
     }
-    takeStoredValueForKey(value, "address2");
+    takeStoredValueForKey(value, _Company.ADDRESS2_KEY);
   }
 
   public String city() {
-    return (String) storedValueForKey("city");
+    return (String) storedValueForKey(_Company.CITY_KEY);
   }
 
   public void setCity(String value) {
     if (_Company.LOG.isDebugEnabled()) {
     	_Company.LOG.debug( "updating city from " + city() + " to " + value);
     }
-    takeStoredValueForKey(value, "city");
+    takeStoredValueForKey(value, _Company.CITY_KEY);
   }
 
   public String name() {
-    return (String) storedValueForKey("name");
+    return (String) storedValueForKey(_Company.NAME_KEY);
   }
 
   public void setName(String value) {
     if (_Company.LOG.isDebugEnabled()) {
     	_Company.LOG.debug( "updating name from " + name() + " to " + value);
     }
-    takeStoredValueForKey(value, "name");
+    takeStoredValueForKey(value, _Company.NAME_KEY);
   }
 
   public String state() {
-    return (String) storedValueForKey("state");
+    return (String) storedValueForKey(_Company.STATE_KEY);
   }
 
   public void setState(String value) {
     if (_Company.LOG.isDebugEnabled()) {
     	_Company.LOG.debug( "updating state from " + state() + " to " + value);
     }
-    takeStoredValueForKey(value, "state");
+    takeStoredValueForKey(value, _Company.STATE_KEY);
   }
 
   public String zipcode() {
-    return (String) storedValueForKey("zipcode");
+    return (String) storedValueForKey(_Company.ZIPCODE_KEY);
   }
 
   public void setZipcode(String value) {
     if (_Company.LOG.isDebugEnabled()) {
     	_Company.LOG.debug( "updating zipcode from " + zipcode() + " to " + value);
     }
-    takeStoredValueForKey(value, "zipcode");
+    takeStoredValueForKey(value, _Company.ZIPCODE_KEY);
   }
 
   public NSArray<er.erxtest.model.Employee> employees() {
-    return (NSArray<er.erxtest.model.Employee>)storedValueForKey("employees");
+    return (NSArray<er.erxtest.model.Employee>)storedValueForKey(_Company.EMPLOYEES_KEY);
   }
 
   public NSArray<er.erxtest.model.Employee> employees(EOQualifier qualifier) {
@@ -133,7 +133,7 @@ public abstract class _Company extends er.extensions.eof.ERXGenericRecord {
         fullQualifier = inverseQualifier;
       }
       else {
-        NSMutableArray qualifiers = new NSMutableArray();
+        NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
         qualifiers.addObject(qualifier);
         qualifiers.addObject(inverseQualifier);
         fullQualifier = new EOAndQualifier(qualifiers);
@@ -154,11 +154,11 @@ public abstract class _Company extends er.extensions.eof.ERXGenericRecord {
   }
   
   public void addToEmployees(er.erxtest.model.Employee object) {
-    includeObjectIntoPropertyWithKey(object, "employees");
+    includeObjectIntoPropertyWithKey(object, _Company.EMPLOYEES_KEY);
   }
 
   public void removeFromEmployees(er.erxtest.model.Employee object) {
-    excludeObjectFromPropertyWithKey(object, "employees");
+    excludeObjectFromPropertyWithKey(object, _Company.EMPLOYEES_KEY);
   }
 
   public void addToEmployeesRelationship(er.erxtest.model.Employee object) {
@@ -169,7 +169,7 @@ public abstract class _Company extends er.extensions.eof.ERXGenericRecord {
     	addToEmployees(object);
     }
     else {
-    	addObjectToBothSidesOfRelationshipWithKey(object, "employees");
+    	addObjectToBothSidesOfRelationshipWithKey(object, _Company.EMPLOYEES_KEY);
     }
   }
 
@@ -181,27 +181,27 @@ public abstract class _Company extends er.extensions.eof.ERXGenericRecord {
     	removeFromEmployees(object);
     }
     else {
-    	removeObjectFromBothSidesOfRelationshipWithKey(object, "employees");
+    	removeObjectFromBothSidesOfRelationshipWithKey(object, _Company.EMPLOYEES_KEY);
     }
   }
 
   public er.erxtest.model.Employee createEmployeesRelationship() {
-    EOClassDescription eoClassDesc = EOClassDescription.classDescriptionForEntityName("Employee");
+    EOClassDescription eoClassDesc = EOClassDescription.classDescriptionForEntityName( er.erxtest.model.Employee.ENTITY_NAME );
     EOEnterpriseObject eo = eoClassDesc.createInstanceWithEditingContext(editingContext(), null);
     editingContext().insertObject(eo);
-    addObjectToBothSidesOfRelationshipWithKey(eo, "employees");
+    addObjectToBothSidesOfRelationshipWithKey(eo, _Company.EMPLOYEES_KEY);
     return (er.erxtest.model.Employee) eo;
   }
 
   public void deleteEmployeesRelationship(er.erxtest.model.Employee object) {
-    removeObjectFromBothSidesOfRelationshipWithKey(object, "employees");
+    removeObjectFromBothSidesOfRelationshipWithKey(object, _Company.EMPLOYEES_KEY);
     editingContext().deleteObject(object);
   }
 
   public void deleteAllEmployeesRelationships() {
-    Enumeration objects = employees().immutableClone().objectEnumerator();
+    Enumeration<er.erxtest.model.Employee> objects = employees().immutableClone().objectEnumerator();
     while (objects.hasMoreElements()) {
-      deleteEmployeesRelationship((er.erxtest.model.Employee)objects.nextElement());
+      deleteEmployeesRelationship(objects.nextElement());
     }
   }
 
@@ -222,9 +222,9 @@ public abstract class _Company extends er.extensions.eof.ERXGenericRecord {
   }
 
   public static NSArray<Company> fetchCompanies(EOEditingContext editingContext, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings) {
-    EOFetchSpecification fetchSpec = new EOFetchSpecification(_Company.ENTITY_NAME, qualifier, sortOrderings);
+    ERXFetchSpecification<Company> fetchSpec = new ERXFetchSpecification<Company>(_Company.ENTITY_NAME, qualifier, sortOrderings);
     fetchSpec.setIsDeep(true);
-    NSArray<Company> eoObjects = (NSArray<Company>)editingContext.objectsWithFetchSpecification(fetchSpec);
+    NSArray<Company> eoObjects = fetchSpec.fetchObjects(editingContext);
     return eoObjects;
   }
 
@@ -240,7 +240,7 @@ public abstract class _Company extends er.extensions.eof.ERXGenericRecord {
       eoObject = null;
     }
     else if (count == 1) {
-      eoObject = (Company)eoObjects.objectAtIndex(0);
+      eoObject = eoObjects.objectAtIndex(0);
     }
     else {
       throw new IllegalStateException("There was more than one Company that matched the qualifier '" + qualifier + "'.");
@@ -261,7 +261,7 @@ public abstract class _Company extends er.extensions.eof.ERXGenericRecord {
   }
 
   public static Company localInstanceIn(EOEditingContext editingContext, Company eo) {
-    Company localInstance = (eo == null) ? null : (Company)EOUtilities.localInstanceOfObject(editingContext, eo);
+    Company localInstance = (eo == null) ? null : ERXEOControlUtilities.localInstanceOfObject(editingContext, eo);
     if (localInstance == null && eo != null) {
       throw new IllegalStateException("You attempted to localInstance " + eo + ", which has not yet committed.");
     }

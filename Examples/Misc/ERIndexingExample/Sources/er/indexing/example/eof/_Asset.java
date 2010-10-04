@@ -1,4 +1,4 @@
-// $LastChangedRevision: 7719 $ DO NOT EDIT.  Make changes to Asset.java instead.
+// $LastChangedRevision: 7683 $ DO NOT EDIT.  Make changes to Asset.java instead.
 package er.indexing.example.eof;
 
 import er.extensions.foundation.*;
@@ -45,10 +45,10 @@ public abstract class _Asset extends ERXGenericRecord {
     takeStoredValueForKey(value, Key.CREATION_DATE);
   }
 
-  public BigDecimal price() {
-    return (BigDecimal) storedValueForKey(Key.PRICE);
+  public java.math.BigDecimal price() {
+    return (java.math.BigDecimal) storedValueForKey(Key.PRICE);
   }
-  public void setPrice(BigDecimal value) {
+  public void setPrice(java.math.BigDecimal value) {
     takeStoredValueForKey(value, Key.PRICE);
   }
 

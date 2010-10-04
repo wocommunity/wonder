@@ -1,4 +1,4 @@
-// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to Post.java instead.
+// DO NOT EDIT.  Make changes to Post.java instead.
 package se.caboo.beast.model;
 
 import com.webobjects.eoaccess.*;
@@ -46,55 +46,55 @@ public abstract class _Post extends  ERXGenericRecord {
   }
 
   public String body() {
-    return (String) storedValueForKey("body");
+    return (String) storedValueForKey(_Post.BODY_KEY);
   }
 
   public void setBody(String value) {
     if (_Post.LOG.isDebugEnabled()) {
     	_Post.LOG.debug( "updating body from " + body() + " to " + value);
     }
-    takeStoredValueForKey(value, "body");
+    takeStoredValueForKey(value, _Post.BODY_KEY);
   }
 
   public String bodyHtml() {
-    return (String) storedValueForKey("bodyHtml");
+    return (String) storedValueForKey(_Post.BODY_HTML_KEY);
   }
 
   public void setBodyHtml(String value) {
     if (_Post.LOG.isDebugEnabled()) {
     	_Post.LOG.debug( "updating bodyHtml from " + bodyHtml() + " to " + value);
     }
-    takeStoredValueForKey(value, "bodyHtml");
+    takeStoredValueForKey(value, _Post.BODY_HTML_KEY);
   }
 
   public NSTimestamp createdAt() {
-    return (NSTimestamp) storedValueForKey("createdAt");
+    return (NSTimestamp) storedValueForKey(_Post.CREATED_AT_KEY);
   }
 
   public void setCreatedAt(NSTimestamp value) {
     if (_Post.LOG.isDebugEnabled()) {
     	_Post.LOG.debug( "updating createdAt from " + createdAt() + " to " + value);
     }
-    takeStoredValueForKey(value, "createdAt");
+    takeStoredValueForKey(value, _Post.CREATED_AT_KEY);
   }
 
   public NSTimestamp updatedAt() {
-    return (NSTimestamp) storedValueForKey("updatedAt");
+    return (NSTimestamp) storedValueForKey(_Post.UPDATED_AT_KEY);
   }
 
   public void setUpdatedAt(NSTimestamp value) {
     if (_Post.LOG.isDebugEnabled()) {
     	_Post.LOG.debug( "updating updatedAt from " + updatedAt() + " to " + value);
     }
-    takeStoredValueForKey(value, "updatedAt");
+    takeStoredValueForKey(value, _Post.UPDATED_AT_KEY);
   }
 
   public se.caboo.beast.model.Forum forum() {
-    return (se.caboo.beast.model.Forum)storedValueForKey("forum");
+    return (se.caboo.beast.model.Forum)storedValueForKey(_Post.FORUM_KEY);
   }
   
   public void setForum(se.caboo.beast.model.Forum value) {
-    takeStoredValueForKey(value, "forum");
+    takeStoredValueForKey(value, _Post.FORUM_KEY);
   }
 
   public void setForumRelationship(se.caboo.beast.model.Forum value) {
@@ -107,19 +107,19 @@ public abstract class _Post extends  ERXGenericRecord {
     else if (value == null) {
     	se.caboo.beast.model.Forum oldValue = forum();
     	if (oldValue != null) {
-    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, "forum");
+    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, _Post.FORUM_KEY);
       }
     } else {
-    	addObjectToBothSidesOfRelationshipWithKey(value, "forum");
+    	addObjectToBothSidesOfRelationshipWithKey(value, _Post.FORUM_KEY);
     }
   }
   
   public se.caboo.beast.model.Topic topic() {
-    return (se.caboo.beast.model.Topic)storedValueForKey("topic");
+    return (se.caboo.beast.model.Topic)storedValueForKey(_Post.TOPIC_KEY);
   }
   
   public void setTopic(se.caboo.beast.model.Topic value) {
-    takeStoredValueForKey(value, "topic");
+    takeStoredValueForKey(value, _Post.TOPIC_KEY);
   }
 
   public void setTopicRelationship(se.caboo.beast.model.Topic value) {
@@ -132,19 +132,19 @@ public abstract class _Post extends  ERXGenericRecord {
     else if (value == null) {
     	se.caboo.beast.model.Topic oldValue = topic();
     	if (oldValue != null) {
-    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, "topic");
+    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, _Post.TOPIC_KEY);
       }
     } else {
-    	addObjectToBothSidesOfRelationshipWithKey(value, "topic");
+    	addObjectToBothSidesOfRelationshipWithKey(value, _Post.TOPIC_KEY);
     }
   }
   
   public se.caboo.beast.model.User user() {
-    return (se.caboo.beast.model.User)storedValueForKey("user");
+    return (se.caboo.beast.model.User)storedValueForKey(_Post.USER_KEY);
   }
   
   public void setUser(se.caboo.beast.model.User value) {
-    takeStoredValueForKey(value, "user");
+    takeStoredValueForKey(value, _Post.USER_KEY);
   }
 
   public void setUserRelationship(se.caboo.beast.model.User value) {
@@ -157,10 +157,10 @@ public abstract class _Post extends  ERXGenericRecord {
     else if (value == null) {
     	se.caboo.beast.model.User oldValue = user();
     	if (oldValue != null) {
-    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, "user");
+    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, _Post.USER_KEY);
       }
     } else {
-    	addObjectToBothSidesOfRelationshipWithKey(value, "user");
+    	addObjectToBothSidesOfRelationshipWithKey(value, _Post.USER_KEY);
     }
   }
   
@@ -190,9 +190,9 @@ public abstract class _Post extends  ERXGenericRecord {
   }
 
   public static NSArray<Post> fetchPosts(EOEditingContext editingContext, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings) {
-    EOFetchSpecification fetchSpec = new EOFetchSpecification(_Post.ENTITY_NAME, qualifier, sortOrderings);
+    ERXFetchSpecification<Post> fetchSpec = new ERXFetchSpecification<Post>(_Post.ENTITY_NAME, qualifier, sortOrderings);
     fetchSpec.setIsDeep(true);
-    NSArray<Post> eoObjects = (NSArray<Post>)editingContext.objectsWithFetchSpecification(fetchSpec);
+    NSArray<Post> eoObjects = fetchSpec.fetchObjects(editingContext);
     return eoObjects;
   }
 
@@ -208,7 +208,7 @@ public abstract class _Post extends  ERXGenericRecord {
       eoObject = null;
     }
     else if (count == 1) {
-      eoObject = (Post)eoObjects.objectAtIndex(0);
+      eoObject = eoObjects.objectAtIndex(0);
     }
     else {
       throw new IllegalStateException("There was more than one Post that matched the qualifier '" + qualifier + "'.");
@@ -229,7 +229,7 @@ public abstract class _Post extends  ERXGenericRecord {
   }
 
   public static Post localInstanceIn(EOEditingContext editingContext, Post eo) {
-    Post localInstance = (eo == null) ? null : (Post)EOUtilities.localInstanceOfObject(editingContext, eo);
+    Post localInstance = (eo == null) ? null : ERXEOControlUtilities.localInstanceOfObject(editingContext, eo);
     if (localInstance == null && eo != null) {
       throw new IllegalStateException("You attempted to localInstance " + eo + ", which has not yet committed.");
     }

@@ -1,4 +1,4 @@
-// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to Employee.java instead.
+// DO NOT EDIT.  Make changes to Employee.java instead.
 package er.uber.model;
 
 import com.webobjects.eoaccess.*;
@@ -52,99 +52,99 @@ public abstract class _Employee extends  ERXGenericRecord {
   }
 
   public Boolean admin() {
-    return (Boolean) storedValueForKey("admin");
+    return (Boolean) storedValueForKey(_Employee.ADMIN_KEY);
   }
 
   public void setAdmin(Boolean value) {
     if (_Employee.LOG.isDebugEnabled()) {
     	_Employee.LOG.debug( "updating admin from " + admin() + " to " + value);
     }
-    takeStoredValueForKey(value, "admin");
+    takeStoredValueForKey(value, _Employee.ADMIN_KEY);
   }
 
   public Integer exemptions() {
-    return (Integer) storedValueForKey("exemptions");
+    return (Integer) storedValueForKey(_Employee.EXEMPTIONS_KEY);
   }
 
   public void setExemptions(Integer value) {
     if (_Employee.LOG.isDebugEnabled()) {
     	_Employee.LOG.debug( "updating exemptions from " + exemptions() + " to " + value);
     }
-    takeStoredValueForKey(value, "exemptions");
+    takeStoredValueForKey(value, _Employee.EXEMPTIONS_KEY);
   }
 
   public String firstName() {
-    return (String) storedValueForKey("firstName");
+    return (String) storedValueForKey(_Employee.FIRST_NAME_KEY);
   }
 
   public void setFirstName(String value) {
     if (_Employee.LOG.isDebugEnabled()) {
     	_Employee.LOG.debug( "updating firstName from " + firstName() + " to " + value);
     }
-    takeStoredValueForKey(value, "firstName");
+    takeStoredValueForKey(value, _Employee.FIRST_NAME_KEY);
   }
 
   public NSTimestamp hireDate() {
-    return (NSTimestamp) storedValueForKey("hireDate");
+    return (NSTimestamp) storedValueForKey(_Employee.HIRE_DATE_KEY);
   }
 
   public void setHireDate(NSTimestamp value) {
     if (_Employee.LOG.isDebugEnabled()) {
     	_Employee.LOG.debug( "updating hireDate from " + hireDate() + " to " + value);
     }
-    takeStoredValueForKey(value, "hireDate");
+    takeStoredValueForKey(value, _Employee.HIRE_DATE_KEY);
   }
 
   public Boolean insured() {
-    return (Boolean) storedValueForKey("insured");
+    return (Boolean) storedValueForKey(_Employee.INSURED_KEY);
   }
 
   public void setInsured(Boolean value) {
     if (_Employee.LOG.isDebugEnabled()) {
     	_Employee.LOG.debug( "updating insured from " + insured() + " to " + value);
     }
-    takeStoredValueForKey(value, "insured");
+    takeStoredValueForKey(value, _Employee.INSURED_KEY);
   }
 
   public String lastName() {
-    return (String) storedValueForKey("lastName");
+    return (String) storedValueForKey(_Employee.LAST_NAME_KEY);
   }
 
   public void setLastName(String value) {
     if (_Employee.LOG.isDebugEnabled()) {
     	_Employee.LOG.debug( "updating lastName from " + lastName() + " to " + value);
     }
-    takeStoredValueForKey(value, "lastName");
+    takeStoredValueForKey(value, _Employee.LAST_NAME_KEY);
   }
 
   public java.math.BigDecimal salary() {
-    return (java.math.BigDecimal) storedValueForKey("salary");
+    return (java.math.BigDecimal) storedValueForKey(_Employee.SALARY_KEY);
   }
 
   public void setSalary(java.math.BigDecimal value) {
     if (_Employee.LOG.isDebugEnabled()) {
     	_Employee.LOG.debug( "updating salary from " + salary() + " to " + value);
     }
-    takeStoredValueForKey(value, "salary");
+    takeStoredValueForKey(value, _Employee.SALARY_KEY);
   }
 
   public er.uber.model.EmployeeStatus status() {
-    return (er.uber.model.EmployeeStatus) storedValueForKey("status");
+    return (er.uber.model.EmployeeStatus) storedValueForKey(_Employee.STATUS_KEY);
   }
 
   public void setStatus(er.uber.model.EmployeeStatus value) {
     if (_Employee.LOG.isDebugEnabled()) {
     	_Employee.LOG.debug( "updating status from " + status() + " to " + value);
     }
-    takeStoredValueForKey(value, "status");
+    takeStoredValueForKey(value, _Employee.STATUS_KEY);
   }
 
   public er.uber.model.Company company() {
-    return (er.uber.model.Company)storedValueForKey("company");
+    return (er.uber.model.Company)storedValueForKey(_Employee.COMPANY_KEY);
   }
   
   public void setCompany(er.uber.model.Company value) {
-    takeStoredValueForKey(value, "company");
+    takeStoredValueForKey(value, _Employee.COMPANY_KEY);
   }
 
   public void setCompanyRelationship(er.uber.model.Company value) {
@@ -157,19 +157,19 @@ public abstract class _Employee extends  ERXGenericRecord {
     else if (value == null) {
     	er.uber.model.Company oldValue = company();
     	if (oldValue != null) {
-    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, "company");
+    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, _Employee.COMPANY_KEY);
       }
     } else {
-    	addObjectToBothSidesOfRelationshipWithKey(value, "company");
+    	addObjectToBothSidesOfRelationshipWithKey(value, _Employee.COMPANY_KEY);
     }
   }
   
   public er.attachment.model.ERAttachment photo() {
-    return (er.attachment.model.ERAttachment)storedValueForKey("photo");
+    return (er.attachment.model.ERAttachment)storedValueForKey(_Employee.PHOTO_KEY);
   }
   
   public void setPhoto(er.attachment.model.ERAttachment value) {
-    takeStoredValueForKey(value, "photo");
+    takeStoredValueForKey(value, _Employee.PHOTO_KEY);
   }
 
   public void setPhotoRelationship(er.attachment.model.ERAttachment value) {
@@ -182,10 +182,10 @@ public abstract class _Employee extends  ERXGenericRecord {
     else if (value == null) {
     	er.attachment.model.ERAttachment oldValue = photo();
     	if (oldValue != null) {
-    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, "photo");
+    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, _Employee.PHOTO_KEY);
       }
     } else {
-    	addObjectToBothSidesOfRelationshipWithKey(value, "photo");
+    	addObjectToBothSidesOfRelationshipWithKey(value, _Employee.PHOTO_KEY);
     }
   }
   
@@ -217,9 +217,9 @@ public abstract class _Employee extends  ERXGenericRecord {
   }
 
   public static NSArray<Employee> fetchEmployees(EOEditingContext editingContext, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings) {
-    EOFetchSpecification fetchSpec = new EOFetchSpecification(_Employee.ENTITY_NAME, qualifier, sortOrderings);
+    ERXFetchSpecification<Employee> fetchSpec = new ERXFetchSpecification<Employee>(_Employee.ENTITY_NAME, qualifier, sortOrderings);
     fetchSpec.setIsDeep(true);
-    NSArray<Employee> eoObjects = (NSArray<Employee>)editingContext.objectsWithFetchSpecification(fetchSpec);
+    NSArray<Employee> eoObjects = fetchSpec.fetchObjects(editingContext);
     return eoObjects;
   }
 
@@ -235,7 +235,7 @@ public abstract class _Employee extends  ERXGenericRecord {
       eoObject = null;
     }
     else if (count == 1) {
-      eoObject = (Employee)eoObjects.objectAtIndex(0);
+      eoObject = eoObjects.objectAtIndex(0);
     }
     else {
       throw new IllegalStateException("There was more than one Employee that matched the qualifier '" + qualifier + "'.");
@@ -256,7 +256,7 @@ public abstract class _Employee extends  ERXGenericRecord {
   }
 
   public static Employee localInstanceIn(EOEditingContext editingContext, Employee eo) {
-    Employee localInstance = (eo == null) ? null : (Employee)EOUtilities.localInstanceOfObject(editingContext, eo);
+    Employee localInstance = (eo == null) ? null : ERXEOControlUtilities.localInstanceOfObject(editingContext, eo);
     if (localInstance == null && eo != null) {
       throw new IllegalStateException("You attempted to localInstance " + eo + ", which has not yet committed.");
     }

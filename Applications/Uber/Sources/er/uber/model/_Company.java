@@ -1,4 +1,4 @@
-// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to Company.java instead.
+// DO NOT EDIT.  Make changes to Company.java instead.
 package er.uber.model;
 
 import com.webobjects.eoaccess.*;
@@ -40,33 +40,33 @@ public abstract class _Company extends  ERXGenericRecord {
   }
 
   public String location() {
-    return (String) storedValueForKey("location");
+    return (String) storedValueForKey(_Company.LOCATION_KEY);
   }
 
   public void setLocation(String value) {
     if (_Company.LOG.isDebugEnabled()) {
     	_Company.LOG.debug( "updating location from " + location() + " to " + value);
     }
-    takeStoredValueForKey(value, "location");
+    takeStoredValueForKey(value, _Company.LOCATION_KEY);
   }
 
   public String name() {
-    return (String) storedValueForKey("name");
+    return (String) storedValueForKey(_Company.NAME_KEY);
   }
 
   public void setName(String value) {
     if (_Company.LOG.isDebugEnabled()) {
     	_Company.LOG.debug( "updating name from " + name() + " to " + value);
     }
-    takeStoredValueForKey(value, "name");
+    takeStoredValueForKey(value, _Company.NAME_KEY);
   }
 
   public er.attachment.model.ERAttachment logo() {
-    return (er.attachment.model.ERAttachment)storedValueForKey("logo");
+    return (er.attachment.model.ERAttachment)storedValueForKey(_Company.LOGO_KEY);
   }
   
   public void setLogo(er.attachment.model.ERAttachment value) {
-    takeStoredValueForKey(value, "logo");
+    takeStoredValueForKey(value, _Company.LOGO_KEY);
   }
 
   public void setLogoRelationship(er.attachment.model.ERAttachment value) {
@@ -79,15 +79,15 @@ public abstract class _Company extends  ERXGenericRecord {
     else if (value == null) {
     	er.attachment.model.ERAttachment oldValue = logo();
     	if (oldValue != null) {
-    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, "logo");
+    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, _Company.LOGO_KEY);
       }
     } else {
-    	addObjectToBothSidesOfRelationshipWithKey(value, "logo");
+    	addObjectToBothSidesOfRelationshipWithKey(value, _Company.LOGO_KEY);
     }
   }
   
   public NSArray<er.uber.model.Employee> employees() {
-    return (NSArray<er.uber.model.Employee>)storedValueForKey("employees");
+    return (NSArray<er.uber.model.Employee>)storedValueForKey(_Company.EMPLOYEES_KEY);
   }
 
   public NSArray<er.uber.model.Employee> employees(EOQualifier qualifier) {
@@ -108,7 +108,7 @@ public abstract class _Company extends  ERXGenericRecord {
         fullQualifier = inverseQualifier;
       }
       else {
-        NSMutableArray qualifiers = new NSMutableArray();
+        NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
         qualifiers.addObject(qualifier);
         qualifiers.addObject(inverseQualifier);
         fullQualifier = new EOAndQualifier(qualifiers);
@@ -129,11 +129,11 @@ public abstract class _Company extends  ERXGenericRecord {
   }
   
   public void addToEmployees(er.uber.model.Employee object) {
-    includeObjectIntoPropertyWithKey(object, "employees");
+    includeObjectIntoPropertyWithKey(object, _Company.EMPLOYEES_KEY);
   }
 
   public void removeFromEmployees(er.uber.model.Employee object) {
-    excludeObjectFromPropertyWithKey(object, "employees");
+    excludeObjectFromPropertyWithKey(object, _Company.EMPLOYEES_KEY);
   }
 
   public void addToEmployeesRelationship(er.uber.model.Employee object) {
@@ -144,7 +144,7 @@ public abstract class _Company extends  ERXGenericRecord {
     	addToEmployees(object);
     }
     else {
-    	addObjectToBothSidesOfRelationshipWithKey(object, "employees");
+    	addObjectToBothSidesOfRelationshipWithKey(object, _Company.EMPLOYEES_KEY);
     }
   }
 
@@ -156,27 +156,27 @@ public abstract class _Company extends  ERXGenericRecord {
     	removeFromEmployees(object);
     }
     else {
-    	removeObjectFromBothSidesOfRelationshipWithKey(object, "employees");
+    	removeObjectFromBothSidesOfRelationshipWithKey(object, _Company.EMPLOYEES_KEY);
     }
   }
 
   public er.uber.model.Employee createEmployeesRelationship() {
-    EOClassDescription eoClassDesc = EOClassDescription.classDescriptionForEntityName("Employee");
+    EOClassDescription eoClassDesc = EOClassDescription.classDescriptionForEntityName( er.uber.model.Employee.ENTITY_NAME );
     EOEnterpriseObject eo = eoClassDesc.createInstanceWithEditingContext(editingContext(), null);
     editingContext().insertObject(eo);
-    addObjectToBothSidesOfRelationshipWithKey(eo, "employees");
+    addObjectToBothSidesOfRelationshipWithKey(eo, _Company.EMPLOYEES_KEY);
     return (er.uber.model.Employee) eo;
   }
 
   public void deleteEmployeesRelationship(er.uber.model.Employee object) {
-    removeObjectFromBothSidesOfRelationshipWithKey(object, "employees");
+    removeObjectFromBothSidesOfRelationshipWithKey(object, _Company.EMPLOYEES_KEY);
     editingContext().deleteObject(object);
   }
 
   public void deleteAllEmployeesRelationships() {
-    Enumeration objects = employees().immutableClone().objectEnumerator();
+    Enumeration<er.uber.model.Employee> objects = employees().immutableClone().objectEnumerator();
     while (objects.hasMoreElements()) {
-      deleteEmployeesRelationship((er.uber.model.Employee)objects.nextElement());
+      deleteEmployeesRelationship(objects.nextElement());
     }
   }
 
@@ -197,9 +197,9 @@ public abstract class _Company extends  ERXGenericRecord {
   }
 
   public static NSArray<Company> fetchCompanies(EOEditingContext editingContext, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings) {
-    EOFetchSpecification fetchSpec = new EOFetchSpecification(_Company.ENTITY_NAME, qualifier, sortOrderings);
+    ERXFetchSpecification<Company> fetchSpec = new ERXFetchSpecification<Company>(_Company.ENTITY_NAME, qualifier, sortOrderings);
     fetchSpec.setIsDeep(true);
-    NSArray<Company> eoObjects = (NSArray<Company>)editingContext.objectsWithFetchSpecification(fetchSpec);
+    NSArray<Company> eoObjects = fetchSpec.fetchObjects(editingContext);
     return eoObjects;
   }
 
@@ -215,7 +215,7 @@ public abstract class _Company extends  ERXGenericRecord {
       eoObject = null;
     }
     else if (count == 1) {
-      eoObject = (Company)eoObjects.objectAtIndex(0);
+      eoObject = eoObjects.objectAtIndex(0);
     }
     else {
       throw new IllegalStateException("There was more than one Company that matched the qualifier '" + qualifier + "'.");
@@ -236,7 +236,7 @@ public abstract class _Company extends  ERXGenericRecord {
   }
 
   public static Company localInstanceIn(EOEditingContext editingContext, Company eo) {
-    Company localInstance = (eo == null) ? null : (Company)EOUtilities.localInstanceOfObject(editingContext, eo);
+    Company localInstance = (eo == null) ? null : ERXEOControlUtilities.localInstanceOfObject(editingContext, eo);
     if (localInstance == null && eo != null) {
       throw new IllegalStateException("You attempted to localInstance " + eo + ", which has not yet committed.");
     }

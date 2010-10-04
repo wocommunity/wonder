@@ -1,4 +1,4 @@
-// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to Employee.java instead.
+// DO NOT EDIT.  Make changes to Employee.java instead.
 package er.ajax.example;
 
 import com.webobjects.eoaccess.*;
@@ -38,33 +38,33 @@ public abstract class _Employee extends  ERXGenericRecord {
   }
 
   public String firstName() {
-    return (String) storedValueForKey("firstName");
+    return (String) storedValueForKey(_Employee.FIRST_NAME_KEY);
   }
 
   public void setFirstName(String value) {
     if (_Employee.LOG.isDebugEnabled()) {
     	_Employee.LOG.debug( "updating firstName from " + firstName() + " to " + value);
     }
-    takeStoredValueForKey(value, "firstName");
+    takeStoredValueForKey(value, _Employee.FIRST_NAME_KEY);
   }
 
   public String lastName() {
-    return (String) storedValueForKey("lastName");
+    return (String) storedValueForKey(_Employee.LAST_NAME_KEY);
   }
 
   public void setLastName(String value) {
     if (_Employee.LOG.isDebugEnabled()) {
     	_Employee.LOG.debug( "updating lastName from " + lastName() + " to " + value);
     }
-    takeStoredValueForKey(value, "lastName");
+    takeStoredValueForKey(value, _Employee.LAST_NAME_KEY);
   }
 
   public er.ajax.example.Company company() {
-    return (er.ajax.example.Company)storedValueForKey("company");
+    return (er.ajax.example.Company)storedValueForKey(_Employee.COMPANY_KEY);
   }
   
   public void setCompany(er.ajax.example.Company value) {
-    takeStoredValueForKey(value, "company");
+    takeStoredValueForKey(value, _Employee.COMPANY_KEY);
   }
 
   public void setCompanyRelationship(er.ajax.example.Company value) {
@@ -77,10 +77,10 @@ public abstract class _Employee extends  ERXGenericRecord {
     else if (value == null) {
     	er.ajax.example.Company oldValue = company();
     	if (oldValue != null) {
-    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, "company");
+    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, _Employee.COMPANY_KEY);
       }
     } else {
-    	addObjectToBothSidesOfRelationshipWithKey(value, "company");
+    	addObjectToBothSidesOfRelationshipWithKey(value, _Employee.COMPANY_KEY);
     }
   }
   
@@ -104,9 +104,9 @@ public abstract class _Employee extends  ERXGenericRecord {
   }
 
   public static NSArray<Employee> fetchEmployees(EOEditingContext editingContext, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings) {
-    EOFetchSpecification fetchSpec = new EOFetchSpecification(_Employee.ENTITY_NAME, qualifier, sortOrderings);
+    ERXFetchSpecification<Employee> fetchSpec = new ERXFetchSpecification<Employee>(_Employee.ENTITY_NAME, qualifier, sortOrderings);
     fetchSpec.setIsDeep(true);
-    NSArray<Employee> eoObjects = (NSArray<Employee>)editingContext.objectsWithFetchSpecification(fetchSpec);
+    NSArray<Employee> eoObjects = fetchSpec.fetchObjects(editingContext);
     return eoObjects;
   }
 
@@ -122,7 +122,7 @@ public abstract class _Employee extends  ERXGenericRecord {
       eoObject = null;
     }
     else if (count == 1) {
-      eoObject = (Employee)eoObjects.objectAtIndex(0);
+      eoObject = eoObjects.objectAtIndex(0);
     }
     else {
       throw new IllegalStateException("There was more than one Employee that matched the qualifier '" + qualifier + "'.");
@@ -143,7 +143,7 @@ public abstract class _Employee extends  ERXGenericRecord {
   }
 
   public static Employee localInstanceIn(EOEditingContext editingContext, Employee eo) {
-    Employee localInstance = (eo == null) ? null : (Employee)EOUtilities.localInstanceOfObject(editingContext, eo);
+    Employee localInstance = (eo == null) ? null : ERXEOControlUtilities.localInstanceOfObject(editingContext, eo);
     if (localInstance == null && eo != null) {
       throw new IllegalStateException("You attempted to localInstance " + eo + ", which has not yet committed.");
     }
