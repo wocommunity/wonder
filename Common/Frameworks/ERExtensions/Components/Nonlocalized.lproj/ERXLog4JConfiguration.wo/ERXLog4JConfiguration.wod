@@ -92,6 +92,10 @@ IfNotEqualsCurrentLoggerRepositoryThreshold: ERXEqualConditional {
     negate = true;
 }
 
+IsRuleLoggerCheckbox: WOCheckBox {
+    checked = isNewLoggerARuleLogger;
+}
+
 LevelIndicator: WOGenericContainer {
     class = "LevelIndicator";
     elementName = "div";
@@ -211,6 +215,16 @@ NavListItem: WOGenericContainer {
     title = aPageSection.id;
 }
 
+NewLoggerLevelsPopup: WOPopUpButton {
+    displayString = aLoggerLevel.displayName;
+    id = "NewLoggerLevel";
+    item = aLoggerLevel;
+    list = loggerLevelsWithoutUnset;
+    noSelectionString = "Level...";
+    selection = newLoggerLevel;
+    value = aLoggerLevel.displayName;
+}
+
 OtherSettingsDiv: WOGenericContainer {
     class = classForOtherSettingsDiv;
     elementName = "div";
@@ -276,11 +290,6 @@ SubmitButtonAddLogger: WOSubmitButton {
 	value = "Add";
 }
 
-SubmitButtonAddRuleKey: WOSubmitButton {
-	action = addRuleKey;
-	value = "Add";
-}
-
 SubmitButtonFilter: WOSubmitButton {
 	action = filter;
 	value = "Filter";
@@ -316,11 +325,6 @@ TextFieldFilterString: WOTextField {
 TextFieldLoggerName: WOTextField {
     size = 40;
 	value = loggerName;
-}
-
-TextFieldRuleKey: WOTextField {
-    size = 40;
-	value = ruleKey;
 }
 
 UpdateAppenderSettingsButton: WOSubmitButton {
