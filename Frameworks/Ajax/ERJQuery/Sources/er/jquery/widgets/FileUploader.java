@@ -111,7 +111,7 @@ public abstract class FileUploader extends WOComponent {
     	_options.add("element: $('#" + id() + "')[0]");
     	if (hasBinding(Bindings.onChange)) _options.add("onChange:" + valueForBinding(Bindings.onChange));
     	if (hasBinding(Bindings.onComplete)) _options.add("onComplete:" + valueForBinding(Bindings.onComplete));
-    	if (hasBinding(Bindings.onSubmit)) _options.add("onChange:" + valueForBinding(Bindings.onSubmit));
+    	if (hasBinding(Bindings.onSubmit)) _options.add("onSubmit:" + valueForBinding(Bindings.onSubmit));
 
     	return _options.immutableClone();
     }
