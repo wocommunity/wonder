@@ -390,10 +390,12 @@ public class WONettyAdaptor extends WOAdaptor {
 	            return;
 	        }
 
-			log.warn("Exception caught", e.getCause());
+			log.warn(cause.getMessage());
+			e.getChannel().close();
+			/*
 	        if (ctx.getChannel().isConnected()) {
 	            ctx.getChannel().write(_internalServerErrorResponse).addListener(ChannelFutureListener.CLOSE);
-	        }
+	        } */
 		}
 	}
 }
