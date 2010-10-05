@@ -137,13 +137,15 @@ public class WONettyAdaptor extends WOAdaptor {
 	}
 	
 	/**
+	  * Originally inspired by: 
+	  * 
 	  * @author <a href="http://www.jboss.org/netty/">The Netty Project</a>
 	  * @author Andy Taylor (andy.taylor@jboss.org)
 	  * @author <a href="http://gleamynode.net/">Trustin Lee</a>
 	  * 
 	  * @see <a href="http://docs.jboss.org/netty/3.2/xref/org/jboss/netty/example/http/snoop/HttpServerPipelineFactory.html">HttpServerPipelineFactory</a>
 	  * 
-	  * @author ravim ERWOAdaptor version
+	  * @author ravim 	ERWOAdaptor/WONettyAdaptor
 	  * 
 	  * @property WOMaxIOBufferSize 	Max http chunking size. Defaults to WO default 8196 
 	  * 								@see <a href="http://docs.jboss.org/netty/3.2/xref/org/jboss/netty/handler/codec/http/HttpMessageDecoder.html">HttpMessageDecoder</a>
@@ -163,8 +165,6 @@ public class WONettyAdaptor extends WOAdaptor {
 			//pipeline.addLast("ssl", new SslHandler(engine));
 
 			pipeline.addLast("decoder", new HttpRequestDecoder(4096, 8192, maxChunkSize));
-			// Uncomment the following line if you don't want to handle HttpChunks.
-			//pipeline.addLast("aggregator", new HttpChunkAggregator(1048576));
 			pipeline.addLast("encoder", new HttpResponseEncoder());
 			// Remove the following line if you don't want automatic content compression.
 			pipeline.addLast("deflater", new HttpContentCompressor());
@@ -187,19 +187,19 @@ public class WONettyAdaptor extends WOAdaptor {
 	}
 
 	/**
+	 * Originally inspired by:
+	 * 
 	 * @author <a href="http://www.jboss.org/netty/">The Netty Project</a>
 	 * @author Andy Taylor (andy.taylor@jboss.org)
 	 * @author <a href="http://gleamynode.net/">Trustin Lee</a>
-	 *
-	 * @version $Rev: 2288 $, $Date: 2010-05-27 21:40:50 +0900 (Thu, 27 May 2010) $
 	 * 
 	 * @see <a href="http://docs.jboss.org/netty/3.2/xref/org/jboss/netty/example/http/snoop/HttpRequestHandler.html">HttpRequestHandler</a>
 	 * 
-	 * @author ravim ERWOAdaptor version
+	 * @author ravim 	ERWOAdaptor/WONettyAdaptor version
 	 */
 	protected class RequestHandler extends SimpleChannelUpstreamHandler {
 		
-		private InternalLogger log = CommonsLoggerFactory.getDefaultFactory().newInstance(WONettyAdaptor.RequestHandler.class.getName());
+		private InternalLogger log = CommonsLoggerFactory.getDefaultFactory().newInstance(this.getClass().getName());
 
 		private HttpRequest _request;
 		private boolean readingChunks;
