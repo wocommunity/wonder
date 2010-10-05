@@ -1,5 +1,6 @@
 package com.webobjects.appserver;
 
+import static org.jboss.netty.buffer.ChannelBuffers.dynamicBuffer;
 import static org.jboss.netty.channel.Channels.pipeline;
 import static org.jboss.netty.handler.codec.http.HttpHeaders.isKeepAlive;
 import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.CONTENT_LENGTH;
@@ -224,7 +225,7 @@ public class WONettyAdaptor extends WOAdaptor {
 
 				if (request.isChunked()) {
 					readingChunks = true;
-					_content = ChannelBuffers.EMPTY_BUFFER;
+					_content = dynamicBuffer();
 				} else {
 					_content = request.getContent();
 					WORequest worequest = _convertHttpRequestToWORequest(_request);
@@ -237,7 +238,7 @@ public class WONettyAdaptor extends WOAdaptor {
 				}
 			} else {
 				HttpChunk chunk = (HttpChunk) e.getMessage();
-				_content = ChannelBuffers.copiedBuffer(_content, chunk.getContent());
+				_content.writeBytes(chunk.getContent());
 				
 				if (chunk.isLast()) {
 					readingChunks = false;
