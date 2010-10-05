@@ -63,6 +63,18 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
 /**
+ * How to use the WONettyAdaptor:
+ *
+ * 1. Build/Install ERWOAdaptor framework
+ * 2. Include ERWOAdaptor framework in your app/project
+ * 3. Run your app with the property:
+ *	
+ *	 -WOAdaptor er.woadaptor.ERWOAdaptor 
+ *
+ *  OR:
+ *  
+ *	 -WOAdaptor WONettyAdaptor
+ * 
  * @author ravim
  */
 public class WONettyAdaptor extends WOAdaptor {
