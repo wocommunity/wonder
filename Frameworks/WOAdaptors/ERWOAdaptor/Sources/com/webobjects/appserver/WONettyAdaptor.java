@@ -76,6 +76,11 @@ import com.webobjects.foundation.NSMutableDictionary;
  *  OR:
  *  
  *	 -WOAdaptor WONettyAdaptor
+ *
+ * 4. (Optional) If developing with the WONettyAdaptor set the following properties as well:
+ * 
+ *   -WOAllowRapidTurnaround false
+ *   -WODirectConnectEnabled false
  * 
  * @author ravim
  */
