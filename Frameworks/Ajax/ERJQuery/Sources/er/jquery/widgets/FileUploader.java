@@ -110,7 +110,7 @@ public abstract class FileUploader extends WOComponent {
     	
     	// add options
     	_options.add("element: $('#" + id() + "')[0]");
-    	_options.add("params: { " + FormKeys._forceFormSubmitted + ": '" + context().elementID() + "'}"); 	// TODO params binding
+    	_options.add("params: { " + FormKeys._forceFormSubmitted + ": '" + id() + "'}"); 	// TODO params binding
     	if (hasBinding(Bindings.onChange)) _options.add("onChange:" + valueForBinding(Bindings.onChange));
     	if (hasBinding(Bindings.onComplete)) _options.add("onComplete:" + valueForBinding(Bindings.onComplete));
     	if (hasBinding(Bindings.onSubmit)) _options.add("onSubmit:" + valueForBinding(Bindings.onSubmit));
@@ -148,7 +148,7 @@ public abstract class FileUploader extends WOComponent {
     @Override
     public WOActionResults invokeAction(WORequest request, WOContext context) {  
         String forceFormSubmittedElementID = (String) request.formValueForKey(FormKeys._forceFormSubmitted);
-        boolean forceFormSubmitted = forceFormSubmittedElementID != null && forceFormSubmittedElementID.equals(context.elementID());
+        boolean forceFormSubmitted = forceFormSubmittedElementID != null && forceFormSubmittedElementID.equals(id());
         
     	if (forceFormSubmitted) {
         	WOResponse response = new WOResponse();
@@ -166,7 +166,7 @@ public abstract class FileUploader extends WOComponent {
 		super.takeValuesFromRequest(request, context);
 		
         String forceFormSubmittedElementID = (String) request.formValueForKey(FormKeys._forceFormSubmitted);
-        boolean forceFormSubmitted = forceFormSubmittedElementID != null && forceFormSubmittedElementID.equals(context.elementID());
+        boolean forceFormSubmitted = forceFormSubmittedElementID != null && forceFormSubmittedElementID.equals(id());
 
 		if (forceFormSubmitted && request.formValueForKey(FormKeys.qqfile) != null) {
 			String aFileName = (String) request.formValueForKey(FormKeys.qqfile);
