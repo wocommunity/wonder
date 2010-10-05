@@ -39,7 +39,7 @@ public class ERXLog4JConfiguration extends WOComponent {
     /**
      * A representation of the various Logger levels.
      */
-    private enum LoggerLevel {
+    protected enum LoggerLevel {
         ALL(Level.ALL, "All"),
         TRACE(Level.TRACE, "Trace"),
         DEBUG(Level.DEBUG, "Debug"),
@@ -76,7 +76,7 @@ public class ERXLog4JConfiguration extends WOComponent {
     /**
      * A representation of the available page sections/views.
      */
-    public enum PageSection {
+    protected enum PageSection {
         LOGGERS("Loggers", "Loggers"),
         REPOSITORY("Repository", "Repository"),
         APPENDERS("Appenders", "Appenders"),
@@ -124,8 +124,8 @@ public class ERXLog4JConfiguration extends WOComponent {
     public PageSection aPageSection;
     private PageSection _activeSection = PageSection.LOGGERS;
 
-    public final static EOSortOrdering NAME_SORT_ORDERING=new EOSortOrdering("name", EOSortOrdering.CompareAscending);
-    public final static NSMutableArray SORT_BY_NAME=new NSMutableArray(NAME_SORT_ORDERING);
+    public final static EOSortOrdering NAME_SORT_ORDERING = new EOSortOrdering("name", EOSortOrdering.CompareAscending);
+    public final static NSMutableArray SORT_BY_NAME = new NSMutableArray(NAME_SORT_ORDERING);
 
     public ERXLog4JConfiguration(WOContext aContext) {
         super(aContext);
