@@ -1,5 +1,6 @@
 package com.webobjects.appserver;
 
+import static org.jboss.netty.buffer.ChannelBuffers.buffer;
 import static org.jboss.netty.buffer.ChannelBuffers.dynamicBuffer;
 import static org.jboss.netty.channel.Channels.pipeline;
 import static org.jboss.netty.handler.codec.http.HttpHeaders.isKeepAlive;
@@ -16,7 +17,6 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
-import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.Set;
@@ -339,9 +339,9 @@ public class WONettyAdaptor extends WOAdaptor {
 					response.setHeader(CONTENT_LENGTH, length);
 				}
 			} else if (woresponse.contentInputStream() != null) {
-				ByteBuffer buffer = ByteBuffer.allocate(woresponse.contentInputStreamBufferSize());
+				ChannelBuffer buffer = buffer(woresponse.contentInputStreamBufferSize());
 				woresponse.contentInputStream().read(buffer.array());
-				response.setContent(ChannelBuffers.copiedBuffer(buffer));
+				response.setContent(buffer);
 			}
 			
 			// set headers
