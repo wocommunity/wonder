@@ -316,17 +316,18 @@ public class WONettyAdaptor extends WOAdaptor {
 			HttpResponse response = new DefaultHttpResponse(HTTP_1_1, OK);
 			
 			// get content from woresponse
-			int length = woresponse._contentLength();
-			if (length > 0) {
-				String contentString = woresponse._content.toString();
-				if (contentString!= null && contentString != "") {
+			if (woresponse._contentLength() > 0) {
+				if (woresponse._content.length() > 0) {
 					Charset charset = Charset.forName(woresponse.contentEncoding());
-					response.setContent(ChannelBuffers.copiedBuffer(contentString, charset));
-				} else
+					response.setContent(ChannelBuffers.copiedBuffer(woresponse._content.toString(), charset));
+				} else {
+					int length = woresponse._contentData.length();
 					response.setContent(ChannelBuffers.copiedBuffer(woresponse._contentData._bytesNoCopy()));
+					response.setHeader(CONTENT_LENGTH, length);
+				}
 			} else if (woresponse.contentInputStream() != null) {
 				ByteBuffer buffer = ByteBuffer.allocate(woresponse.contentInputStreamBufferSize());
-				length = woresponse.contentInputStream().read(buffer.array());
+				woresponse.contentInputStream().read(buffer.array());
 				response.setContent(ChannelBuffers.copiedBuffer(buffer));
 			}
 			
@@ -341,7 +342,6 @@ public class WONettyAdaptor extends WOAdaptor {
 				}
 			}
 			response.setStatus(HttpResponseStatus.valueOf(woresponse.status()));
-			//response.setHeader(CONTENT_LENGTH, length);
 
 			// Encode the cookie.
 			NSArray<WOCookie> wocookies = woresponse.cookies();
