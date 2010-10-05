@@ -25,6 +25,7 @@ import java.util.concurrent.Executors;
 import org.apache.log4j.Logger;
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.buffer.ChannelBuffer;
+import org.jboss.netty.buffer.ChannelBufferInputStream;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFactory;
@@ -310,7 +311,7 @@ public class WONettyAdaptor extends WOAdaptor {
 			}
 
 			// content
-			NSData contentData = (_content.readable()) ? new WOInputStreamData(new NSData(_content.array())) : NSData.EmptyData;
+			NSData contentData = (_content.readable()) ? new WOInputStreamData(new ChannelBufferInputStream(_content), 0) : NSData.EmptyData;
 
 			// create request
 			WORequest _worequest = WOApplication.application().createRequest(
