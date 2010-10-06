@@ -1,16 +1,16 @@
 
-Conditional1: WOConditional {
+TargetNotXML: WOConditional {
 	condition = isTargetXML;
 	negate = true;
 }
 
-Conditional2: WOConditional {
+TargetIsXML: WOConditional {
 	condition = isTargetXML;
 }
 
 Content2: WOComponentContent {}
 
-GenericContainer1: WOGenericContainer {
+CenterWrapper: WOGenericContainer {
 	elementName = "CENTER";
 	omitTags = erD2WListOmitCenterTag;
 }
@@ -27,19 +27,19 @@ NoEmptyListMessage: ERXNonNullConditional {
 	negate = true;
 }
 
-NonNullConditional1: ERXNonNullConditional {
+HasEmptyListMessage: ERXNonNullConditional {
 	condition = ^emptyListMessage;
 }
 
-NonNullConditional2: ERXNonNullConditional {
+HasEmptyListComponent: ERXNonNullConditional {
 	condition = ^emptyListComponentName;
 }
 
-NonZeroConditional1: ERXNonZeroConditional {
+HasList: ERXNonZeroConditional {
 	condition = list.count;
 }
 
-NonZeroConditional2: ERXNonZeroConditional {
+HasEmptyList: ERXNonZeroConditional {
 	condition = list.count;
 	negate = true;
 }
@@ -49,7 +49,7 @@ String1: WOString {
 	escapeHTML = false;
 }
 
-SwitchComponent2: WOSwitchComponent {
+EmptyListComponent: WOSwitchComponent {
 	WOComponentName = ^emptyListComponentName;
 	d2wContext = ^d2wContext;
 }

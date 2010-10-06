@@ -38,7 +38,7 @@ String1: WOString {
 
 SubmitButton1: WOSubmitButton {
 	action = nextPageAction;
-	value = branch.branchButtonLabel;
+	value = branch.branchButtonLabel; //VALID
 }
 
 Wrapper: WOSwitchComponent {

@@ -6,7 +6,7 @@ EmbeddedComponent1: WOSwitchComponent {
     _unroll=true;
 }
 
-String2: WOString {
+ComponentName: WOString {
 	value = nonCachingContext.customComponentName; //VALID
 }
 

@@ -5,7 +5,7 @@ D2WPick1: ERXD2WPick {
 	pageConfiguration = ^listConfigurationName;
 }
 
-GenericContainer1: WOGenericContainer {
+CenterWrapper: WOGenericContainer {
 	elementName = "CENTER";
 	omitTags = erD2WListOmitCenterTag;
 }
@@ -15,19 +15,19 @@ NoEmptyListMessage: ERXNonNullConditional {
 	negate = YES;
 }
 
-NonNullConditional1: ERXNonNullConditional {
+HasEmptyListMessage: ERXNonNullConditional {
 	condition = ^emptyListMessage;
 }
 
-NonNullConditional2: ERXNonNullConditional {
+HasEmptyListComponent: ERXNonNullConditional {
 	condition = ^emptyListComponentName;
 }
 
-NonZeroConditional1: ERXNonZeroConditional {
+HasListContents: ERXNonZeroConditional {
 	condition = list.count;
 }
 
-NonZeroConditional2: ERXNonZeroConditional {
+HasEmptyList: ERXNonZeroConditional {
 	condition = list.count;
 	negate = YES;
 }
@@ -36,7 +36,7 @@ String1: WOString {
 	value = ^emptyListMessage;
 }
 
-SwitchComponent2: WOSwitchComponent {
+EmptyListComponent: WOSwitchComponent {
 	WOComponentName = ^emptyListComponentName;
 	d2wContext = d2wContext;
 }
