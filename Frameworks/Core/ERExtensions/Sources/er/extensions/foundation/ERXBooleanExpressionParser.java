@@ -19,8 +19,8 @@ import com.webobjects.foundation.NSKeyValueCodingAdditions;
  * Variable symbols in the boolean expression can use characters and formatting of typical keys or keyPaths.
  * 
  * All other words besides AND, OR and NOT are assumed to be variables (aka keyPaths) which resolve to Boolean values when
- * valueForKeyPath is invoked on the variableLookupObject (which can be a NSDictionary of values or any object that
- * implements {@link NSKeyValueCodingAdditions}
+ * valueForKeyPath is invoked on the valueProvider object (which can be a NSDictionary of variable values or any object that
+ * implements {@link NSKeyValueCodingAdditions})
  * 
  * For example
  * 	Expression: <code>(canViewPerson AND canEditPerson) OR (isTheBoss AND NOT account.isAccountDisabled)</code>
