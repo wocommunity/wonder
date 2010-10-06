@@ -4,19 +4,12 @@ ActiveSectionHiddenField: WOHiddenField {
 }
 
 AddLoggerForm: WOForm {
-	action = addCategory;
-	embedded = true;
-	multipleSubmit = true;
-}
-
-AddRuleLoggerForm: WOForm {
-	action = addRuleKey;
 	embedded = true;
 	multipleSubmit = true;
 }
 
 AppenderClassName: WOString {
-    value = anAppender.class.name;
+    value = anAppender.class.name; //VALID
 }
 
 AppenderGenericContainer: WOGenericContainer {
@@ -34,7 +27,7 @@ AppenderThresholdRadioButtonMatrix: ERXRadioButtonMatrix {
     list = levelsWithoutUnset;
     maxColumns = 8;
     selection = currentAppenderLevel;
-    uniqueID = anAppender.class.name;
+    uniqueID = anAppender.class.name; //VALID
 }
 
 AppenderThresholdSettingGenericContainer: WOGenericContainer {
@@ -55,41 +48,9 @@ AppendersRepetition: WORepetition {
     list = appenders;
 }
 
-GenericContainerTD: WOGenericContainer {
-	class = "LoggingItemLevelSettings";
-	elementName = "td";
-}
-
 GenericContainerTR: WOGenericContainer {
 	class = classForLoggerRow;
 	elementName = "tr";
-}
-
-HiddenLogFilterInput: WOHiddenField {
-    id = "HiddenLogFilterInput";
-	value = filterString;
-}
-
-IfEqualsCurrentAppenderThreshold: ERXEqualConditional {
-    value1 = currentAppenderLevel;
-    value2 = aLevel;
-}
-
-IfEqualsCurrentLoggerRepositoryThreshold: ERXEqualConditional {
-    value1 = loggerRepository.threshold;
-    value2 = aLevel;
-}
-
-IfNotEqualsCurrentAppenderThreshold: ERXEqualConditional {
-    value1 = currentAppenderLevel;
-    value2 = aLevel;
-    negate = true;
-}
-
-IfNotEqualsCurrentLoggerRepositoryThreshold: ERXEqualConditional {
-    value1 = loggerRepository.threshold;
-    value2 = aLevel;
-    negate = true;
 }
 
 IsRuleLoggerCheckbox: WOCheckBox {
@@ -165,7 +126,7 @@ LoggerLevelsPopup: WOPopUpButton {
 }
 
 LoggerRepositoryClassName: WOString {
-    value = loggerRepository.class.name;
+    value = loggerRepository.class.name; //VALID
 }
 
 LoggerRepositoryGenericContainer: WOGenericContainer {
@@ -253,11 +214,6 @@ Scripts: ERXJavaScript {
     framework = "ERExtensions";
 }
 
-SegmentedSliderScript: ERXJavaScript {
-    filename = "SegmentedSlider.js";
-    framework = "ERExtensions";
-}
-
 SettingsForm: WOForm {
     multipleSubmit = true;
 }
@@ -274,10 +230,6 @@ StringApplicationName: WOString {
 
 StringLoggerName: WOString {
 	value = logger.name;
-}
-
-StringLoggerNumber: WOString {
-    value = rowIndex;
 }
 
 Stylesheet: ERXStyleSheet {
