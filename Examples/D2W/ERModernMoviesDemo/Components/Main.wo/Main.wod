@@ -27,3 +27,9 @@ HasErrorMessage : WOConditional {
 ErrorMessage : WOString {
   value = errorMessage;
 }
+
+DefaultSubmit : WOImageButton {
+  filename = "s.gif";
+  framework = "ERExtensions";
+  directActionName = "login";
+}
