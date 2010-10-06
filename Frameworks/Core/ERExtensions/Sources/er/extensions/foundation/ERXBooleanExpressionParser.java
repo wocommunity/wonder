@@ -28,13 +28,13 @@ import com.webobjects.foundation.NSKeyValueCodingAdditions;
  * @author kieran
  *
  */
-public class ERBooleanExpressionParser {
+public class ERXBooleanExpressionParser {
 	private static Pattern KEYPATH_TOKEN_PATTERN = Pattern.compile("\\w+([.]\\w*)*");
 	private final static String[] BOOLEAN_WORDS = new String[] { "AND", "OR", "NOT" };
 	
 	private final String expression;
 	
-	public ERBooleanExpressionParser(String expression) {
+	public ERXBooleanExpressionParser(String expression) {
 		this.expression = expression;
 	}
 	
