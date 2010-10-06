@@ -136,6 +136,10 @@ public abstract class _SPMembership extends  ERXGenericRecord {
     return eo;
   }
 
+  public static ERXFetchSpecification<SPMembership> fetchSpec() {
+    return new ERXFetchSpecification<SPMembership>(_SPMembership.ENTITY_NAME, null, null, false, true, null);
+  }
+
   public static NSArray<SPMembership> fetchAllSPMemberships(EOEditingContext editingContext) {
     return _SPMembership.fetchAllSPMemberships(editingContext, null);
   }

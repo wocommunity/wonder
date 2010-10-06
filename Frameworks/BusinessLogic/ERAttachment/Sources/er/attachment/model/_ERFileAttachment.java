@@ -94,6 +94,10 @@ public abstract class _ERFileAttachment extends er.attachment.model.ERAttachment
     return eo;
   }
 
+  public static ERXFetchSpecification<ERFileAttachment> fetchSpec() {
+    return new ERXFetchSpecification<ERFileAttachment>(_ERFileAttachment.ENTITY_NAME, null, null, false, true, null);
+  }
+
   public static NSArray<ERFileAttachment> fetchAllERFileAttachments(EOEditingContext editingContext) {
     return _ERFileAttachment.fetchAllERFileAttachments(editingContext, null);
   }

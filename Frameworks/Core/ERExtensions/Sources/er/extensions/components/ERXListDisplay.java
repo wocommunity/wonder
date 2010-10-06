@@ -19,11 +19,14 @@ import er.extensions.localization.ERXLocalizer;
  * If you give the "item" binding, then the content is used to render. Otherwise the "attribute" binding will get used.
  * @binding list
  * @binding attribute
- * @binding nullArrayDisplay
+ * @binding emptyArrayDisplay the string to display when the array is null or empty
  * @binding item current item if in content mode
  * @binding separator separator to use for the first items (default ", ")
  * @binding finalSeparator separator for the last items (default localized " and ")
  * @binding escapeHTML
+ * 
+ * @author NetStruxr
+ * @author kieran - I noticed nullArrayDisplay binding was not implemented. Implemented more useful emptyArrayDisplay with fallback to nullArrayDisplay binding for backwards compatibility.
  */
 
 public class ERXListDisplay extends WOComponent {
@@ -54,6 +57,16 @@ public class ERXListDisplay extends WOComponent {
         }
         return list;
     }
+    
+    private Boolean isEmptyList;
+
+	/** @return true if the array is null or empty */
+	public boolean isEmptyList() {
+		if (isEmptyList == null) {
+			isEmptyList = Boolean.valueOf(list() == null || list().isEmpty());
+		}
+		return isEmptyList.booleanValue();
+	}
     
     public Object item() {
       return valueForBinding("item");
@@ -95,6 +108,8 @@ public class ERXListDisplay extends WOComponent {
         list = null;
         separator = null;
         finalSeparator = null;
+        isEmptyList = null;
+        emptyArrayDisplay = null;
     }
     
     public String displayString() {
@@ -103,4 +118,26 @@ public class ERXListDisplay extends WOComponent {
         String empty = (String)valueForBinding("nullArrayDisplay");
         return ERXArrayUtilities.friendlyDisplayForKeyPath(list(), attribute, empty, separator(), finalSeparator());
     }
+    
+    private String emptyArrayDisplay;
+	
+	/**
+	 * @return what to display when the list is null or empty. Supporting null or
+	 *         empty makes sense since an empty relationship will return an
+	 *         empty array, not a null array.
+	 */
+	public String emptyArrayDisplay() {
+		if (emptyArrayDisplay == null) {
+			emptyArrayDisplay = (String) valueForBinding("emptyArrayDisplay");
+			// Backward compatibility for the previous version's
+			// "nullArrayDisplay" binding which was never implemented anyway,
+			// but let's implement it in case someone has bound to it in their
+			// app expecting it to work in the future.
+			if (emptyArrayDisplay == null) {
+				emptyArrayDisplay = (String) valueForBinding("nullArrayDisplay");
+			}
+
+		}
+		return emptyArrayDisplay;
+	}
 }

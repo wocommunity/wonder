@@ -134,6 +134,10 @@ public abstract class _SPWish extends  ERXGenericRecord {
     return eo;
   }
 
+  public static ERXFetchSpecification<SPWish> fetchSpec() {
+    return new ERXFetchSpecification<SPWish>(_SPWish.ENTITY_NAME, null, null, false, true, null);
+  }
+
   public static NSArray<SPWish> fetchAllSPWishs(EOEditingContext editingContext) {
     return _SPWish.fetchAllSPWishs(editingContext, null);
   }

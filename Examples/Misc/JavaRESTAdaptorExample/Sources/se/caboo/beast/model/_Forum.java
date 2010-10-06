@@ -319,6 +319,10 @@ public abstract class _Forum extends  ERXGenericRecord {
     return eo;
   }
 
+  public static ERXFetchSpecification<Forum> fetchSpec() {
+    return new ERXFetchSpecification<Forum>(_Forum.ENTITY_NAME, null, null, false, true, null);
+  }
+
   public static NSArray<Forum> fetchAllForums(EOEditingContext editingContext) {
     return _Forum.fetchAllForums(editingContext, null);
   }

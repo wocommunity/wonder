@@ -80,6 +80,10 @@ public abstract class _Animal extends  ERXGenericRecord {
     return eo;
   }
 
+  public static ERXFetchSpecification<Animal> fetchSpec() {
+    return new ERXFetchSpecification<Animal>(_Animal.ENTITY_NAME, null, null, false, true, null);
+  }
+
   public static NSArray<Animal> fetchAllAnimals(EOEditingContext editingContext) {
     return _Animal.fetchAllAnimals(editingContext, null);
   }

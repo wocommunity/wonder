@@ -181,6 +181,10 @@ public abstract class _Post extends  ERXGenericRecord {
     return eo;
   }
 
+  public static ERXFetchSpecification<Post> fetchSpec() {
+    return new ERXFetchSpecification<Post>(_Post.ENTITY_NAME, null, null, false, true, null);
+  }
+
   public static NSArray<Post> fetchAllPosts(EOEditingContext editingContext) {
     return _Post.fetchAllPosts(editingContext, null);
   }

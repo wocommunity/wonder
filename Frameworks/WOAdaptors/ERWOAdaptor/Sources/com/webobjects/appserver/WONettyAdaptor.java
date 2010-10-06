@@ -1,5 +1,7 @@
 package com.webobjects.appserver;
 
+import static org.jboss.netty.buffer.ChannelBuffers.buffer;
+import static org.jboss.netty.buffer.ChannelBuffers.dynamicBuffer;
 import static org.jboss.netty.channel.Channels.pipeline;
 import static org.jboss.netty.handler.codec.http.HttpHeaders.isKeepAlive;
 import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.CONTENT_LENGTH;
@@ -15,7 +17,6 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
-import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.Set;
@@ -24,6 +25,7 @@ import java.util.concurrent.Executors;
 import org.apache.log4j.Logger;
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.buffer.ChannelBuffer;
+import org.jboss.netty.buffer.ChannelBufferInputStream;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFactory;
@@ -63,6 +65,23 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
 /**
+ * How to use the WONettyAdaptor:
+ *
+ * 1. Build/Install ERWOAdaptor framework
+ * 2. Include ERWOAdaptor framework in your app/project
+ * 3. Run your app with the property:
+ *	
+ *	 -WOAdaptor er.woadaptor.ERWOAdaptor 
+ *
+ *  OR:
+ *  
+ *	 -WOAdaptor WONettyAdaptor
+ *
+ * 4. (Optional) If developing with the WONettyAdaptor set the following properties as well:
+ * 
+ *   -WOAllowRapidTurnaround false
+ *   -WODirectConnectEnabled false
+ * 
  * @author ravim
  */
 public class WONettyAdaptor extends WOAdaptor {
@@ -137,13 +156,15 @@ public class WONettyAdaptor extends WOAdaptor {
 	}
 	
 	/**
+	  * Originally inspired by: 
+	  * 
 	  * @author <a href="http://www.jboss.org/netty/">The Netty Project</a>
 	  * @author Andy Taylor (andy.taylor@jboss.org)
 	  * @author <a href="http://gleamynode.net/">Trustin Lee</a>
 	  * 
 	  * @see <a href="http://docs.jboss.org/netty/3.2/xref/org/jboss/netty/example/http/snoop/HttpServerPipelineFactory.html">HttpServerPipelineFactory</a>
 	  * 
-	  * @author ravim ERWOAdaptor version
+	  * @author ravim 	ERWOAdaptor/WONettyAdaptor
 	  * 
 	  * @property WOMaxIOBufferSize 	Max http chunking size. Defaults to WO default 8196 
 	  * 								@see <a href="http://docs.jboss.org/netty/3.2/xref/org/jboss/netty/handler/codec/http/HttpMessageDecoder.html">HttpMessageDecoder</a>
@@ -163,8 +184,6 @@ public class WONettyAdaptor extends WOAdaptor {
 			//pipeline.addLast("ssl", new SslHandler(engine));
 
 			pipeline.addLast("decoder", new HttpRequestDecoder(4096, 8192, maxChunkSize));
-			// Uncomment the following line if you don't want to handle HttpChunks.
-			//pipeline.addLast("aggregator", new HttpChunkAggregator(1048576));
 			pipeline.addLast("encoder", new HttpResponseEncoder());
 			// Remove the following line if you don't want automatic content compression.
 			pipeline.addLast("deflater", new HttpContentCompressor());
@@ -187,19 +206,19 @@ public class WONettyAdaptor extends WOAdaptor {
 	}
 
 	/**
+	 * Originally inspired by:
+	 * 
 	 * @author <a href="http://www.jboss.org/netty/">The Netty Project</a>
 	 * @author Andy Taylor (andy.taylor@jboss.org)
 	 * @author <a href="http://gleamynode.net/">Trustin Lee</a>
-	 *
-	 * @version $Rev: 2288 $, $Date: 2010-05-27 21:40:50 +0900 (Thu, 27 May 2010) $
 	 * 
 	 * @see <a href="http://docs.jboss.org/netty/3.2/xref/org/jboss/netty/example/http/snoop/HttpRequestHandler.html">HttpRequestHandler</a>
 	 * 
-	 * @author ravim ERWOAdaptor version
+	 * @author ravim 	ERWOAdaptor/WONettyAdaptor version
 	 */
 	protected class RequestHandler extends SimpleChannelUpstreamHandler {
 		
-		private InternalLogger log = CommonsLoggerFactory.getDefaultFactory().newInstance(WONettyAdaptor.RequestHandler.class.getName());
+		private InternalLogger log = CommonsLoggerFactory.getDefaultFactory().newInstance(this.getClass().getName());
 
 		private HttpRequest _request;
 		private boolean readingChunks;
@@ -212,7 +231,7 @@ public class WONettyAdaptor extends WOAdaptor {
 
 				if (request.isChunked()) {
 					readingChunks = true;
-					_content = ChannelBuffers.EMPTY_BUFFER;
+					_content = dynamicBuffer();
 				} else {
 					_content = request.getContent();
 					WORequest worequest = _convertHttpRequestToWORequest(_request);
@@ -225,7 +244,7 @@ public class WONettyAdaptor extends WOAdaptor {
 				}
 			} else {
 				HttpChunk chunk = (HttpChunk) e.getMessage();
-				_content = ChannelBuffers.copiedBuffer(_content, chunk.getContent());
+				_content.writeBytes(chunk.getContent());
 				
 				if (chunk.isLast()) {
 					readingChunks = false;
@@ -297,7 +316,7 @@ public class WONettyAdaptor extends WOAdaptor {
 			}
 
 			// content
-			NSData contentData = (_content.readable()) ? new WOInputStreamData(new NSData(_content.array())) : NSData.EmptyData;
+			NSData contentData = (_content.readable()) ? new WOInputStreamData(new ChannelBufferInputStream(_content), 0) : NSData.EmptyData;
 
 			// create request
 			WORequest _worequest = WOApplication.application().createRequest(
@@ -316,18 +335,19 @@ public class WONettyAdaptor extends WOAdaptor {
 			HttpResponse response = new DefaultHttpResponse(HTTP_1_1, OK);
 			
 			// get content from woresponse
-			int length = woresponse._contentLength();
-			if (length > 0) {
-				String contentString = woresponse._content.toString();
-				if (contentString!= null && contentString != "") {
+			if (woresponse._contentLength() > 0) {
+				if (woresponse._content.length() > 0) {
 					Charset charset = Charset.forName(woresponse.contentEncoding());
-					response.setContent(ChannelBuffers.copiedBuffer(contentString, charset));
-				} else
+					response.setContent(ChannelBuffers.copiedBuffer(woresponse._content.toString(), charset));
+				} else {
+					int length = woresponse._contentData.length();
 					response.setContent(ChannelBuffers.copiedBuffer(woresponse._contentData._bytesNoCopy()));
+					response.setHeader(CONTENT_LENGTH, length);
+				}
 			} else if (woresponse.contentInputStream() != null) {
-				ByteBuffer buffer = ByteBuffer.allocate(woresponse.contentInputStreamBufferSize());
-				length = woresponse.contentInputStream().read(buffer.array());
-				response.setContent(ChannelBuffers.copiedBuffer(buffer));
+				ChannelBuffer buffer = buffer(woresponse.contentInputStreamBufferSize());
+				woresponse.contentInputStream().read(buffer.array());
+				response.setContent(buffer);
 			}
 			
 			// set headers
@@ -341,7 +361,6 @@ public class WONettyAdaptor extends WOAdaptor {
 				}
 			}
 			response.setStatus(HttpResponseStatus.valueOf(woresponse.status()));
-			//response.setHeader(CONTENT_LENGTH, length);
 
 			// Encode the cookie.
 			NSArray<WOCookie> wocookies = woresponse.cookies();
@@ -390,10 +409,12 @@ public class WONettyAdaptor extends WOAdaptor {
 	            return;
 	        }
 
-			log.warn("Exception caught", e.getCause());
+			log.warn(cause.getMessage());
+			e.getChannel().close();
+			/*
 	        if (ctx.getChannel().isConnected()) {
 	            ctx.getChannel().write(_internalServerErrorResponse).addListener(ChannelFutureListener.CLOSE);
-	        }
+	        } */
 		}
 	}
 }

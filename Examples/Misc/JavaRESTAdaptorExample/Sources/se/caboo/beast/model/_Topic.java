@@ -315,6 +315,10 @@ public abstract class _Topic extends  ERXGenericRecord {
     return eo;
   }
 
+  public static ERXFetchSpecification<Topic> fetchSpec() {
+    return new ERXFetchSpecification<Topic>(_Topic.ENTITY_NAME, null, null, false, true, null);
+  }
+
   public static NSArray<Topic> fetchAllTopics(EOEditingContext editingContext) {
     return _Topic.fetchAllTopics(editingContext, null);
   }

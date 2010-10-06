@@ -121,6 +121,10 @@ public abstract class _SPSecretPal extends  ERXGenericRecord {
     return eo;
   }
 
+  public static ERXFetchSpecification<SPSecretPal> fetchSpec() {
+    return new ERXFetchSpecification<SPSecretPal>(_SPSecretPal.ENTITY_NAME, null, null, false, true, null);
+  }
+
   public static NSArray<SPSecretPal> fetchAllSPSecretPals(EOEditingContext editingContext) {
     return _SPSecretPal.fetchAllSPSecretPals(editingContext, null);
   }

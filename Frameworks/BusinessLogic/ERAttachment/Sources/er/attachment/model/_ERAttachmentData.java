@@ -50,6 +50,10 @@ public abstract class _ERAttachmentData extends er.extensions.eof.ERXGenericReco
     return eo;
   }
 
+  public static ERXFetchSpecification<ERAttachmentData> fetchSpec() {
+    return new ERXFetchSpecification<ERAttachmentData>(_ERAttachmentData.ENTITY_NAME, null, null, false, true, null);
+  }
+
   public static NSArray<ERAttachmentData> fetchAllERAttachmentDatas(EOEditingContext editingContext) {
     return _ERAttachmentData.fetchAllERAttachmentDatas(editingContext, null);
   }

@@ -182,6 +182,10 @@ public abstract class _ServerTopic extends  ERXGenericRecord {
     return eo;
   }
 
+  public static ERXFetchSpecification<ServerTopic> fetchSpec() {
+    return new ERXFetchSpecification<ServerTopic>(_ServerTopic.ENTITY_NAME, null, null, false, true, null);
+  }
+
   public static NSArray<ServerTopic> fetchAllServerTopics(EOEditingContext editingContext) {
     return _ServerTopic.fetchAllServerTopics(editingContext, null);
   }

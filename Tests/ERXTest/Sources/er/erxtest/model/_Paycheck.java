@@ -110,6 +110,10 @@ public abstract class _Paycheck extends er.extensions.eof.ERXGenericRecord {
     return eo;
   }
 
+  public static ERXFetchSpecification<Paycheck> fetchSpec() {
+    return new ERXFetchSpecification<Paycheck>(_Paycheck.ENTITY_NAME, null, null, false, true, null);
+  }
+
   public static NSArray<Paycheck> fetchAllPaychecks(EOEditingContext editingContext) {
     return _Paycheck.fetchAllPaychecks(editingContext, null);
   }

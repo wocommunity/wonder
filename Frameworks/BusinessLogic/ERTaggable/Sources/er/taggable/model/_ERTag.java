@@ -50,6 +50,10 @@ public abstract class _ERTag extends er.extensions.eof.ERXGenericRecord {
     return eo;
   }
 
+  public static ERXFetchSpecification<ERTag> fetchSpec() {
+    return new ERXFetchSpecification<ERTag>(_ERTag.ENTITY_NAME, null, null, false, true, null);
+  }
+
   public static NSArray<ERTag> fetchAllERTags(EOEditingContext editingContext) {
     return _ERTag.fetchAllERTags(editingContext, null);
   }

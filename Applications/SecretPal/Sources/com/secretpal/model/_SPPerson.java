@@ -713,6 +713,10 @@ public abstract class _SPPerson extends  ERXGenericRecord {
     return eo;
   }
 
+  public static ERXFetchSpecification<SPPerson> fetchSpec() {
+    return new ERXFetchSpecification<SPPerson>(_SPPerson.ENTITY_NAME, null, null, false, true, null);
+  }
+
   public static NSArray<SPPerson> fetchAllSPPersons(EOEditingContext editingContext) {
     return _SPPerson.fetchAllSPPersons(editingContext, null);
   }

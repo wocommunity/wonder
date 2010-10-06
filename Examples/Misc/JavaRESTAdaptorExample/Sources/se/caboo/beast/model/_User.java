@@ -475,6 +475,10 @@ public abstract class _User extends  ERXGenericRecord {
     return eo;
   }
 
+  public static ERXFetchSpecification<User> fetchSpec() {
+    return new ERXFetchSpecification<User>(_User.ENTITY_NAME, null, null, false, true, null);
+  }
+
   public static NSArray<User> fetchAllUsers(EOEditingContext editingContext) {
     return _User.fetchAllUsers(editingContext, null);
   }

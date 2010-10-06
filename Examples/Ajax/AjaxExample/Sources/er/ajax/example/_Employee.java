@@ -95,6 +95,10 @@ public abstract class _Employee extends  ERXGenericRecord {
     return eo;
   }
 
+  public static ERXFetchSpecification<Employee> fetchSpec() {
+    return new ERXFetchSpecification<Employee>(_Employee.ENTITY_NAME, null, null, false, true, null);
+  }
+
   public static NSArray<Employee> fetchAllEmployees(EOEditingContext editingContext) {
     return _Employee.fetchAllEmployees(editingContext, null);
   }

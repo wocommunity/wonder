@@ -343,6 +343,10 @@ public abstract class _ERAttachment extends er.extensions.eof.ERXGenericRecord {
     return eo;
   }
 
+  public static ERXFetchSpecification<ERAttachment> fetchSpec() {
+    return new ERXFetchSpecification<ERAttachment>(_ERAttachment.ENTITY_NAME, null, null, false, true, null);
+  }
+
   public static NSArray<ERAttachment> fetchAllERAttachments(EOEditingContext editingContext) {
     return _ERAttachment.fetchAllERAttachments(editingContext, null);
   }

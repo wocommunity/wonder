@@ -111,6 +111,10 @@ public abstract class _Role extends er.extensions.eof.ERXGenericRecord {
     return eo;
   }
 
+  public static ERXFetchSpecification<Role> fetchSpec() {
+    return new ERXFetchSpecification<Role>(_Role.ENTITY_NAME, null, null, false, true, null);
+  }
+
   public static NSArray<Role> fetchAllRoles(EOEditingContext editingContext) {
     return _Role.fetchAllRoles(editingContext, null);
   }

@@ -204,6 +204,10 @@ public abstract class _SPEvent extends  ERXGenericRecord {
     return eo;
   }
 
+  public static ERXFetchSpecification<SPEvent> fetchSpec() {
+    return new ERXFetchSpecification<SPEvent>(_SPEvent.ENTITY_NAME, null, null, false, true, null);
+  }
+
   public static NSArray<SPEvent> fetchAllSPEvents(EOEditingContext editingContext) {
     return _SPEvent.fetchAllSPEvents(editingContext, null);
   }

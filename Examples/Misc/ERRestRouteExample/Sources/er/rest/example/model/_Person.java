@@ -175,6 +175,10 @@ public abstract class _Person extends  ERXGenericRecord {
     return eo;
   }
 
+  public static ERXFetchSpecification<Person> fetchSpec() {
+    return new ERXFetchSpecification<Person>(_Person.ENTITY_NAME, null, null, false, true, null);
+  }
+
   public static NSArray<Person> fetchAllPersons(EOEditingContext editingContext) {
     return _Person.fetchAllPersons(editingContext, null);
   }

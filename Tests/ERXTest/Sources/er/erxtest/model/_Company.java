@@ -213,6 +213,10 @@ public abstract class _Company extends er.extensions.eof.ERXGenericRecord {
     return eo;
   }
 
+  public static ERXFetchSpecification<Company> fetchSpec() {
+    return new ERXFetchSpecification<Company>(_Company.ENTITY_NAME, null, null, false, true, null);
+  }
+
   public static NSArray<Company> fetchAllCompanies(EOEditingContext editingContext) {
     return _Company.fetchAllCompanies(editingContext, null);
   }

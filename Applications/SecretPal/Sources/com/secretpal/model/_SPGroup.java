@@ -298,6 +298,10 @@ public abstract class _SPGroup extends  ERXGenericRecord {
     return eo;
   }
 
+  public static ERXFetchSpecification<SPGroup> fetchSpec() {
+    return new ERXFetchSpecification<SPGroup>(_SPGroup.ENTITY_NAME, null, null, false, true, null);
+  }
+
   public static NSArray<SPGroup> fetchAllSPGroups(EOEditingContext editingContext) {
     return _SPGroup.fetchAllSPGroups(editingContext, null);
   }
