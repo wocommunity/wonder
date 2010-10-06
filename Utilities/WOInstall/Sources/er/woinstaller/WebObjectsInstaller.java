@@ -12,13 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
+import er.woinstaller.archiver.CPIO;
 import er.woinstaller.archiver.XarFile;
 import er.woinstaller.io.BlockEntry;
 import er.woinstaller.io.FileUtilities;
 import er.woinstaller.io.MultiBlockInputStream;
-import er.woinstaller.ui.ConsoleProgressMonitor;
+import er.woinstaller.ui.IWOInstallerProgressMonitor;
 
-public abstract class WebObjectsRuntime {
+public abstract class WebObjectsInstaller {
   private static URL WO533_URL;
   private static URL WO533DEV_URL;
   private static URL WO543_URL;
@@ -37,33 +38,33 @@ public abstract class WebObjectsRuntime {
     }
   }
 
-  public static WebObjectsRuntime newRuntime(String version) {
-    WebObjectsRuntime runtime;
+  public static WebObjectsInstaller newInstaller(String version) {
+    WebObjectsInstaller installer;
     if ("5.3.3".equals(version)) {
-      runtime = wo533Runtime();
+      installer = wo533Installer();
     } 
     else if ("5.4.3".equals(version)) {
-      runtime = wo543Runtime();
+      installer = wo543Installer();
     }
     else if ("5.5".equals(version)) {
-      runtime = wo55Runtime();
+      installer = wo55Installer();
     }
     else if ("dev53".equals(version)) {
-      runtime = wo533Runtime();
-      runtime.woDmgUrl = WO533DEV_URL;
+      installer = wo533Installer();
+      installer.woDmgUrl = WO533DEV_URL;
     }
     else if ("dev54".equals(version)) {
-      runtime = wo543Runtime();
-      runtime.woDmgUrl = WO543DEV_URL;
+      installer = wo543Installer();
+      installer.woDmgUrl = WO543DEV_URL;
     }
     else {
       throw new IllegalArgumentException("Unknown WebObjects version '" + version + "'.");
     }
-    return runtime;
+    return installer;
   }
   
-  private static WebObjectsRuntime wo533Runtime() {
-    return new WebObjectsRuntime() {
+  private static WebObjectsInstaller wo533Installer() {
+    return new WebObjectsInstaller() {
       {
         BlockEntry entry = new BlockEntry();
         entry.offset = 11608064L;
@@ -77,8 +78,8 @@ public abstract class WebObjectsRuntime {
     };
   }
   
-  private static WebObjectsRuntime wo543Runtime() {
-    return new WebObjectsRuntime() {
+  private static WebObjectsInstaller wo543Installer() {
+    return new WebObjectsInstaller() {
       {
         BlockEntry entry = new BlockEntry();
         entry.offset = 58556928L;
@@ -92,8 +93,8 @@ public abstract class WebObjectsRuntime {
     };
   }
 
-  private static WebObjectsRuntime wo55Runtime() {
-    return new WebObjectsRuntime() {
+  private static WebObjectsInstaller wo55Installer() {
+    return new WebObjectsInstaller() {
       {
         BlockEntry entry = new BlockEntry();
         entry.offset = 70230528L;
@@ -110,14 +111,33 @@ public abstract class WebObjectsRuntime {
       } 
     };
   }
-  
+
   protected List<BlockEntry> blockList = new ArrayList<BlockEntry>();
   protected long fileLength;
   protected long rawLength;
   protected URL woDmgUrl;
   protected int woVersion;
   
-  public InputStream getInputStream() throws IOException {
+  public WebObjectsInstallation installToFolder(File destinationFolder, IWOInstallerProgressMonitor progressMonitor) throws IOException, InterruptedException {
+    if (destinationFolder.exists()) {
+      if (!destinationFolder.canWrite()) {
+        throw new IOException("You do not have permission to write to the folder '" + destinationFolder + "'.");
+      }
+    }
+    else if (!destinationFolder.mkdirs()) {
+      throw new IOException("Failed to create the directory '" + destinationFolder + "'.");
+    }
+
+    CPIO cpio = new CPIO(getInputStream(progressMonitor));
+    cpio.setLength(getLength());
+    cpio.extractTo(destinationFolder, !WebObjectsInstallation.isWindows(), progressMonitor);     
+    
+    WebObjectsInstallation installation = new WebObjectsInstallation(destinationFolder);
+    progressMonitor.done();
+    return installation;
+  }
+
+  protected InputStream getInputStream(IWOInstallerProgressMonitor progressMonitor) throws IOException {
     File woDmgFile = null;
     if ("file".equals(woDmgUrl.getProtocol())) {
       try {
@@ -132,7 +152,8 @@ public abstract class WebObjectsRuntime {
     if (woDmgFile == null || !woDmgFile.exists() || woDmgFile.length() != fileLength) {
       woDmgFile = File.createTempFile("WebObjects.", ".dmg");
       woDmgFile.deleteOnExit();
-      FileUtilities.writeUrlToFile(woDmgUrl, woDmgFile, new ConsoleProgressMonitor("Downloading WebObjects"));
+      progressMonitor.beginTask("Downloading WebObjects ...", (int)fileLength);
+      FileUtilities.writeUrlToFile(woDmgUrl, woDmgFile, progressMonitor);
     }
 
     InputStream woPaxGZIs;
@@ -147,7 +168,7 @@ public abstract class WebObjectsRuntime {
     return new GZIPInputStream(woPaxGZIs);
   }
   
-  public long getLength() {
+  protected long getLength() {
     return rawLength;
   }
   

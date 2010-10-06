@@ -16,7 +16,7 @@ import java.util.List;
 
 import er.woinstaller.io.BoundedInputStream;
 import er.woinstaller.io.FileUtilities;
-import er.woinstaller.ui.IProgressMonitor;
+import er.woinstaller.ui.IWOInstallerProgressMonitor;
 import er.woinstaller.ui.NullProgressMonitor;
 
 public class CPIO {
@@ -44,7 +44,9 @@ public class CPIO {
 	  this.fileLength = length;
   }
 
-  public void extractTo(File destinationFolder, boolean symbolicLinksSupported, IProgressMonitor progressMonitor) throws IOException, InterruptedException {
+  public void extractTo(File destinationFolder, boolean symbolicLinksSupported, IWOInstallerProgressMonitor progressMonitor) throws IOException, InterruptedException {
+    progressMonitor.beginTask("Extracting WebObjects ...", (int)fileLength);
+    
     long amount = 0;
     List<Link> links = new LinkedList<Link>();
 
@@ -112,9 +114,14 @@ public class CPIO {
               throw new IOException("Unknown mode " + modeStr + " for " + name + ".");
             }
 
-            amount += 70 + nameSize + fileSize;
-            progressMonitor.progress(amount, fileLength);
+            int relativeAmount = 70 + nameSize + fileSize;
+            amount += relativeAmount;
+            progressMonitor.worked(relativeAmount);
           }
+        }
+        
+        if (progressMonitor.isCanceled()) {
+          throw new IOException("Operation canceled.");
         }
       } while (!done);
     }
@@ -123,13 +130,13 @@ public class CPIO {
   	  paxStream.close();
     }
 
+    progressMonitor.beginTask("Linking WebObjects ...", links.size());
     Collections.sort(links, new LinkNameLengthComparator());
     int linkNum = 0;
     for (Link link : links) {
       link.create(symbolicLinksSupported);
-      progressMonitor.progress(linkNum++, links.size());
+      progressMonitor.worked(linkNum++);
     }
-    progressMonitor.done();
   }
 
   protected File toFile(File workingDir, String path) {

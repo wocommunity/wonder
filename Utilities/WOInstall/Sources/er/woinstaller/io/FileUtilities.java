@@ -10,7 +10,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
-import er.woinstaller.ui.IProgressMonitor;
+import er.woinstaller.ui.IWOInstallerProgressMonitor;
 
 public class FileUtilities {
 
@@ -21,7 +21,7 @@ public class FileUtilities {
    * @param file the File to write to 
    * @throws IOException if the copy fails
    */
-  public static void writeUrlToFile(URL url, File file, IProgressMonitor progressMonitor) throws IOException {
+  public static void writeUrlToFile(URL url, File file, IWOInstallerProgressMonitor progressMonitor) throws IOException {
     URLConnection conn = url.openConnection();
     int totalSize = conn.getContentLength();
     FileUtilities.writeInputStreamToFile(conn.getInputStream(), file, totalSize, progressMonitor);
@@ -32,7 +32,7 @@ public class FileUtilities {
    * @param file to write to
    * @param stream to pull data from
    */
-  public static void writeInputStreamToFile(InputStream stream, File file, int totalSize, IProgressMonitor progressMonitor) throws IOException {
+  public static void writeInputStreamToFile(InputStream stream, File file, int totalSize, IWOInstallerProgressMonitor progressMonitor) throws IOException {
     OutputStream out;
     try {
       if (file == null)
@@ -62,7 +62,7 @@ public class FileUtilities {
    * @param out the output stream to copy to
    * @throws IOException if there is any failure
    */
-  public static void writeInputStreamToOutputStream(InputStream in, OutputStream out, int totalSize, IProgressMonitor progressMonitor) throws IOException {
+  public static void writeInputStreamToOutputStream(InputStream in, OutputStream out, int totalSize, IWOInstallerProgressMonitor progressMonitor) throws IOException {
     try {
       BufferedInputStream bis = new BufferedInputStream(in);
       try {
@@ -72,7 +72,10 @@ public class FileUtilities {
         while ((read = bis.read(buf, 0, buf.length)) != -1) {
           out.write(buf, 0, read);
           totalRead += read;
-          progressMonitor.progress(totalRead, totalSize);
+          progressMonitor.worked((int)read);
+          if (progressMonitor.isCanceled()) {
+            throw new IOException("Operation canceled");
+          }
         }
       }
       finally {
@@ -83,7 +86,6 @@ public class FileUtilities {
     finally {
       out.close();
     }
-    progressMonitor.done();
   }
 
 }
