@@ -121,7 +121,7 @@ public abstract class _ERDatabaseAttachment extends er.attachment.model.ERAttach
     return eo;
   }
 
-  public static ERXFetchSpecification<ERDatabaseAttachment> fetchSpec() {
+  public static ERXFetchSpecification<ERDatabaseAttachment> fetchSpecForERDatabaseAttachment() {
     return new ERXFetchSpecification<ERDatabaseAttachment>(_ERDatabaseAttachment.ENTITY_NAME, null, null, false, true, null);
   }
 

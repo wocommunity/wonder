@@ -94,7 +94,7 @@ public abstract class _ERS3Attachment extends er.attachment.model.ERAttachment {
     return eo;
   }
 
-  public static ERXFetchSpecification<ERS3Attachment> fetchSpec() {
+  public static ERXFetchSpecification<ERS3Attachment> fetchSpecForERS3Attachment() {
     return new ERXFetchSpecification<ERS3Attachment>(_ERS3Attachment.ENTITY_NAME, null, null, false, true, null);
   }
 
