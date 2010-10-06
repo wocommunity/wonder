@@ -163,6 +163,10 @@ public abstract class _Studio extends er.extensions.eof.ERXGenericRecord {
     return eo;
   }
 
+  public static ERXFetchSpecification<Studio> fetchSpec() {
+    return new ERXFetchSpecification<Studio>(_Studio.ENTITY_NAME, null, null, false, true, null);
+  }
+
   public static NSArray<Studio> fetchAllStudios(EOEditingContext editingContext) {
     return _Studio.fetchAllStudios(editingContext, null);
   }

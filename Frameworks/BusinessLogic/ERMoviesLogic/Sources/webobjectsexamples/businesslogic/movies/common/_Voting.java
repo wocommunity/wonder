@@ -91,6 +91,10 @@ public abstract class _Voting extends er.extensions.eof.ERXGenericRecord {
     return eo;
   }
 
+  public static ERXFetchSpecification<Voting> fetchSpec() {
+    return new ERXFetchSpecification<Voting>(_Voting.ENTITY_NAME, null, null, false, true, null);
+  }
+
   public static NSArray<Voting> fetchAllVotings(EOEditingContext editingContext) {
     return _Voting.fetchAllVotings(editingContext, null);
   }

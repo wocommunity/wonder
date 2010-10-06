@@ -106,6 +106,10 @@ public abstract class _MovieRole extends er.extensions.eof.ERXGenericRecord {
     return eo;
   }
 
+  public static ERXFetchSpecification<MovieRole> fetchSpec() {
+    return new ERXFetchSpecification<MovieRole>(_MovieRole.ENTITY_NAME, null, null, false, true, null);
+  }
+
   public static NSArray<MovieRole> fetchAllMovieRoles(EOEditingContext editingContext) {
     return _MovieRole.fetchAllMovieRoles(editingContext, null);
   }

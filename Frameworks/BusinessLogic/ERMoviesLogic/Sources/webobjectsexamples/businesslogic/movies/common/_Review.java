@@ -91,6 +91,10 @@ public abstract class _Review extends er.extensions.eof.ERXGenericRecord {
     return eo;
   }
 
+  public static ERXFetchSpecification<Review> fetchSpec() {
+    return new ERXFetchSpecification<Review>(_Review.ENTITY_NAME, null, null, false, true, null);
+  }
+
   public static NSArray<Review> fetchAllReviews(EOEditingContext editingContext) {
     return _Review.fetchAllReviews(editingContext, null);
   }

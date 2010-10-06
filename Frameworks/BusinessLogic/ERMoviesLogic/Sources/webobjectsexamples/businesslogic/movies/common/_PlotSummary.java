@@ -78,6 +78,10 @@ public abstract class _PlotSummary extends er.extensions.eof.ERXGenericRecord {
     return eo;
   }
 
+  public static ERXFetchSpecification<PlotSummary> fetchSpec() {
+    return new ERXFetchSpecification<PlotSummary>(_PlotSummary.ENTITY_NAME, null, null, false, true, null);
+  }
+
   public static NSArray<PlotSummary> fetchAllPlotSummaries(EOEditingContext editingContext) {
     return _PlotSummary.fetchAllPlotSummaries(editingContext, null);
   }

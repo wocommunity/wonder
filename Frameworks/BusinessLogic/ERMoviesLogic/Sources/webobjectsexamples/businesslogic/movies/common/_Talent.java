@@ -264,6 +264,10 @@ public abstract class _Talent extends er.extensions.eof.ERXGenericRecord {
     return eo;
   }
 
+  public static ERXFetchSpecification<Talent> fetchSpec() {
+    return new ERXFetchSpecification<Talent>(_Talent.ENTITY_NAME, null, null, false, true, null);
+  }
+
   public static NSArray<Talent> fetchAllTalents(EOEditingContext editingContext) {
     return _Talent.fetchAllTalents(editingContext, null);
   }

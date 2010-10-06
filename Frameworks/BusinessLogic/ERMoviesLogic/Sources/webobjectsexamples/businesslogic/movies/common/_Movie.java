@@ -502,6 +502,10 @@ public abstract class _Movie extends er.extensions.eof.ERXGenericRecord {
     return eo;
   }
 
+  public static ERXFetchSpecification<Movie> fetchSpec() {
+    return new ERXFetchSpecification<Movie>(_Movie.ENTITY_NAME, null, null, false, true, null);
+  }
+
   public static NSArray<Movie> fetchAllMovies(EOEditingContext editingContext) {
     return _Movie.fetchAllMovies(editingContext, null);
   }

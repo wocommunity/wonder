@@ -78,6 +78,10 @@ public abstract class _TalentPhoto extends er.extensions.eof.ERXGenericRecord {
     return eo;
   }
 
+  public static ERXFetchSpecification<TalentPhoto> fetchSpec() {
+    return new ERXFetchSpecification<TalentPhoto>(_TalentPhoto.ENTITY_NAME, null, null, false, true, null);
+  }
+
   public static NSArray<TalentPhoto> fetchAllTalentPhotos(EOEditingContext editingContext) {
     return _TalentPhoto.fetchAllTalentPhotos(editingContext, null);
   }

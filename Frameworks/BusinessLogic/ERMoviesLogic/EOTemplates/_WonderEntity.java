@@ -264,6 +264,16 @@ public abstract class ${entity.prefixClassNameWithoutPackage} extends #if ($enti
   }
 #if (!$entity.partialEntitySet)
 
+#if ($entity.parentSet)
+  public static ERXFetchSpecification<${entity.classNameWithOptionalPackage}> fetchSpecFor${entity.name}() {
+    return new ERXFetchSpecification<${entity.classNameWithOptionalPackage}>(${entity.prefixClassNameWithoutPackage}.ENTITY_NAME, null, null, false, true, null);
+  }
+#else
+  public static ERXFetchSpecification<${entity.classNameWithOptionalPackage}> fetchSpec() {
+    return new ERXFetchSpecification<${entity.classNameWithOptionalPackage}>(${entity.prefixClassNameWithoutPackage}.ENTITY_NAME, null, null, false, true, null);
+  }
+#end
+
   public static NSArray<${entity.classNameWithOptionalPackage}> fetchAll${entity.pluralName}(EOEditingContext editingContext) {
     return ${entity.prefixClassNameWithoutPackage}.fetchAll${entity.pluralName}(editingContext, null);
   }
