@@ -1,0 +1,19 @@
+(
+    10 : *true* => excelCellFormatForSheet = "0" [com.webobjects.directtoweb.Assignment],
+    10 : *true* => excelClassForSheet = "default" [com.webobjects.directtoweb.Assignment],
+    10 : *true* => excelSheetName = "Default Sheet" [com.webobjects.directtoweb.Assignment],
+    10 : *true* => excelClassForProperty = "default" [com.webobjects.directtoweb.Assignment],
+    10 : *true* => excelClassForPropertyName = "bold" [com.webobjects.directtoweb.Assignment],
+    10 : *true* => excelStyleFileName = "Styles.plist" [com.webobjects.directtoweb.Assignment],
+    10 : *true* => excelStyleFrameworkName = "ERExcelLook" [com.webobjects.directtoweb.Assignment],
+    10 : *true* => excelCellTypeForSheet = "CELL_TYPE_NUMERIC" [com.webobjects.directtoweb.Assignment],
+    10 : *true* => excelCellTypeForProperty = "CELL_TYPE_STRING" [com.webobjects.directtoweb.Assignment],
+    10 : subTask = 'excel' => excelPageWrapperName = "EGWrapper" [com.webobjects.directtoweb.Assignment],
+    10 : *true* => templateNameForExcelListPage = "ERExcelListPage" [com.webobjects.directtoweb.Assignment],
+    10 : *true* => excelCellTypeForPropertyName = "CELL_TYPE_STRING" [com.webobjects.directtoweb.Assignment],
+    10 : pageConfiguration like '*Excel*' => clickToOpenEnabled = "false" [com.webobjects.directtoweb.BooleanAssignment],
+    20 : (subTask = 'excel' and sectionKey != null) => excelSheetName = "displayNameForSectionKey" [er.directtoweb.ERDDelayedKeyValueAssignment],
+    30 : subTask = 'excel' => propertyNameComponentName = "ERExcelPropertyName" [com.webobjects.directtoweb.Assignment],
+    50 : pageConfiguration like 'ListExcel*' => subTask = "excel" [com.webobjects.directtoweb.Assignment],
+    55 : (task = 'list' and subTask = 'excel') => pageName = "templateNameForExcelListPage" [er.directtoweb.ERDKeyValueAssignment]
+)
