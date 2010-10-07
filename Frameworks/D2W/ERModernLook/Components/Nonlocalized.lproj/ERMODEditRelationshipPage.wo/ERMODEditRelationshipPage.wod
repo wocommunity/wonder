@@ -161,6 +161,7 @@ NavigationBar: WOSwitchComponent {
 BatchSizeControl : ERMDBatchSizeControl {
   displayGroup = relationshipDisplayGroup;
   updateContainerID = d2wContext.idForRepetitionContainer;
+  d2wContext = d2wContext;
 }
 
 BottomActionBlock : WOGenericContainer {
