@@ -19,6 +19,7 @@ import com.webobjects.foundation.NSValidation;
 
 import er.extensions.eof.ERXConstant;
 import er.extensions.formatters.ERXNumberFormatter;
+import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.validation.ERXValidationFactory;
 
 /**
@@ -104,6 +105,11 @@ public class ERD2WEditNumber extends D2WEditNumber {
         if (anObject!=null && anObject instanceof Number) {
             newValue=(Number)anObject;
             if (newValue instanceof BigDecimal && !isDecimalNumber() && attribute().valueType() != null && attribute().valueType().equals("i")) {
+              // If failOnPrecisionLoss is true, then throw an exception if there's a loss of precision on the conversion to an int
+              if (ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("failOnPrecisionLoss"), false)) {
+                 ((BigDecimal)newValue).toBigIntegerExact();
+              }
+                
                 // we are getting a BigDecimal from WOTextField even though we asked for an Integer!
                 newValue= ERXConstant.integerForInt(newValue.intValue());
             }
