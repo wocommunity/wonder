@@ -46,12 +46,12 @@ public class WOResponseWrapper implements HttpResponse {
 			if (wrapping._content.length() > 0) {
 				Charset charset = Charset.forName(wrapping.contentEncoding());
 				_content = ChannelBuffers.copiedBuffer(wrapping._content.toString(), charset);
-				wrapping._content = new StringBuilder(0);
+				wrapping._content = null;
 			} else {
 				int _length = wrapping._contentData.length();
 				this.setHeader(CONTENT_LENGTH, _length);
 				_content = ChannelBuffers.copiedBuffer(wrapping._contentData._bytesNoCopy());
-				wrapping._contentData = new NSMutableData(0);
+				wrapping._contentData = null;
 			}
 		} else if (wrapping.contentInputStream() != null) {
 			try {
