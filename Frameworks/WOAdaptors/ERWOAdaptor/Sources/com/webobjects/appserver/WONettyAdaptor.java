@@ -1,23 +1,18 @@
 package com.webobjects.appserver;
 
-import static org.jboss.netty.buffer.ChannelBuffers.buffer;
 import static org.jboss.netty.buffer.ChannelBuffers.dynamicBuffer;
 import static org.jboss.netty.channel.Channels.pipeline;
 import static org.jboss.netty.handler.codec.http.HttpHeaders.isKeepAlive;
-import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.CONTENT_LENGTH;
 import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.CONTENT_TYPE;
 import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.COOKIE;
-import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.SET_COOKIE;
 import static org.jboss.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static org.jboss.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERROR;
-import static org.jboss.netty.handler.codec.http.HttpResponseStatus.OK;
 import static org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
-import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Executors;
@@ -41,8 +36,6 @@ import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 import org.jboss.netty.handler.codec.frame.TooLongFrameException;
 import org.jboss.netty.handler.codec.http.Cookie;
 import org.jboss.netty.handler.codec.http.CookieDecoder;
-import org.jboss.netty.handler.codec.http.CookieEncoder;
-import org.jboss.netty.handler.codec.http.DefaultCookie;
 import org.jboss.netty.handler.codec.http.DefaultHttpResponse;
 import org.jboss.netty.handler.codec.http.HttpChunk;
 import org.jboss.netty.handler.codec.http.HttpChunkTrailer;
@@ -51,7 +44,6 @@ import org.jboss.netty.handler.codec.http.HttpRequest;
 import org.jboss.netty.handler.codec.http.HttpRequestDecoder;
 import org.jboss.netty.handler.codec.http.HttpResponse;
 import org.jboss.netty.handler.codec.http.HttpResponseEncoder;
-import org.jboss.netty.handler.codec.http.HttpResponseStatus;
 import org.jboss.netty.logging.CommonsLoggerFactory;
 import org.jboss.netty.logging.InternalLogger;
 import org.jboss.netty.util.CharsetUtil;
@@ -83,6 +75,8 @@ import com.webobjects.foundation.NSMutableDictionary;
  *   -WODirectConnectEnabled false
  * 
  * @author ravim
+ * 
+ * @version 1.0
  */
 public class WONettyAdaptor extends WOAdaptor {
 
@@ -240,7 +234,7 @@ public class WONettyAdaptor extends WOAdaptor {
 			        
 			        // send a response
 			        NSDelayedCallbackCenter.defaultCenter().eventEnded();
-			        writeResponse(woresponse, e);
+			        writeResponse(new WOResponseWrapper(woresponse), e);
 				}
 			} else {
 				HttpChunk chunk = (HttpChunk) e.getMessage();
@@ -255,7 +249,7 @@ public class WONettyAdaptor extends WOAdaptor {
 			        
 			        // send a response
 			        NSDelayedCallbackCenter.defaultCenter().eventEnded();
-					writeResponse(woresponse, e);
+					writeResponse(new WOResponseWrapper(woresponse), e);
 				}
 			}
 		}
@@ -329,68 +323,10 @@ public class WONettyAdaptor extends WOAdaptor {
 			// TODO set cookies (CHECKME is this really necessary here?!)
 			return _worequest;
 		}
-		
-		private HttpResponse _convertWOResponseToHttpResponse(WOResponse woresponse) throws IOException {
-			// Build the response object.
-			HttpResponse response = new DefaultHttpResponse(HTTP_1_1, OK);
-			
-			// get content from woresponse
-			if (woresponse._contentLength() > 0) {
-				if (woresponse._content.length() > 0) {
-					Charset charset = Charset.forName(woresponse.contentEncoding());
-					response.setContent(ChannelBuffers.copiedBuffer(woresponse._content.toString(), charset));
-				} else {
-					int length = woresponse._contentData.length();
-					response.setContent(ChannelBuffers.copiedBuffer(woresponse._contentData._bytesNoCopy()));
-					response.setHeader(CONTENT_LENGTH, length);
-				}
-			} else if (woresponse.contentInputStream() != null) {
-				ChannelBuffer buffer = buffer(woresponse.contentInputStreamBufferSize());
-				woresponse.contentInputStream().read(buffer.array());
-				response.setContent(buffer);
-			}
-			
-			// set headers
-			for (String headerKey: woresponse.headerKeys()) {
-				String value = woresponse.headerForKey(headerKey);
-				if (value != null) {
-					if (value.contains(",")) {
-						String[] values = value.split(",");
-						response.setHeader(headerKey, values);
-					} else response.setHeader(headerKey, value);
-				}
-			}
-			response.setStatus(HttpResponseStatus.valueOf(woresponse.status()));
 
-			// Encode the cookie.
-			NSArray<WOCookie> wocookies = woresponse.cookies();
-			if(!wocookies.isEmpty()) {
-				// Reset the cookies if necessary.
-				CookieEncoder cookieEncoder = new CookieEncoder(true);
-				for (WOCookie wocookie : wocookies) {
-					Cookie cookie = _convertWOCookieToCookie(wocookie);
-					cookieEncoder.addCookie(cookie);
-				}
-				response.addHeader(SET_COOKIE, cookieEncoder.encode());
-			}
-			return response;
-		}
-		
-		private Cookie _convertWOCookieToCookie(WOCookie wocookie) {
-			Cookie cookie = new DefaultCookie(wocookie.name(), wocookie.value());
-			cookie.setPath(wocookie.path());
-			cookie.setDomain(wocookie.domain());
-			cookie.setMaxAge(wocookie.timeOut());
-			cookie.setSecure(wocookie.isSecure());
-			return cookie;
-		}
-
-		private void writeResponse(WOResponse woresponse, MessageEvent e) throws IOException {
+		private void writeResponse(HttpResponse response, MessageEvent e) throws IOException {
 			// Decide whether to close the connection or not.
 			boolean keepAlive = isKeepAlive(_request);
-
-			// Build the response object.
-			HttpResponse response = _convertWOResponseToHttpResponse(woresponse);
 
 			// Write the response.
 			ChannelFuture future = e.getChannel().write(response);
