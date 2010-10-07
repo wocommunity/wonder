@@ -121,13 +121,8 @@ InnerWrapper : WOGenericContainer {
 	class = d2wContext.classForInnerWrapper;
 }
 
-ERMDBatchSizeControl : ERMDBatchSizeControl {
+BatchSizeControl : ERMDBatchSizeControl {
   displayGroup = displayGroup;
   updateContainerID = d2wContext.idForRepetitionContainer;
   d2wContext = d2wContext;
-}
-
-ERMDBatchSizeControl1 : ERMDBatchSizeControl {
-  displayGroup = displayGroup;
-  updateContainerID = d2wContext.idForRepetitionContainer;
 }
