@@ -23,7 +23,6 @@ import org.jboss.netty.handler.codec.http.HttpResponseStatus;
 import org.jboss.netty.handler.codec.http.HttpVersion;
 
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSMutableData;
 import com.webobjects.foundation.NSSet;
 
 /**
