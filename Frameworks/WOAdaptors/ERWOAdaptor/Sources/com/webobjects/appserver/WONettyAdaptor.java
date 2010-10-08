@@ -1,6 +1,5 @@
 package com.webobjects.appserver;
 
-import static org.jboss.netty.buffer.ChannelBuffers.dynamicBuffer;
 import static org.jboss.netty.channel.Channels.pipeline;
 import static org.jboss.netty.handler.codec.http.HttpHeaders.isKeepAlive;
 import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.CONTENT_TYPE;
@@ -20,7 +19,6 @@ import java.util.concurrent.Executors;
 import org.apache.log4j.Logger;
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.buffer.ChannelBufferInputStream;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFactory;
@@ -33,12 +31,10 @@ import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
-import org.jboss.netty.handler.codec.frame.TooLongFrameException;
 import org.jboss.netty.handler.codec.http.Cookie;
 import org.jboss.netty.handler.codec.http.CookieDecoder;
 import org.jboss.netty.handler.codec.http.DefaultHttpResponse;
-import org.jboss.netty.handler.codec.http.HttpChunk;
-import org.jboss.netty.handler.codec.http.HttpChunkTrailer;
+import org.jboss.netty.handler.codec.http.HttpChunkAggregator;
 import org.jboss.netty.handler.codec.http.HttpContentCompressor;
 import org.jboss.netty.handler.codec.http.HttpRequest;
 import org.jboss.netty.handler.codec.http.HttpRequestDecoder;
@@ -48,7 +44,6 @@ import org.jboss.netty.logging.CommonsLoggerFactory;
 import org.jboss.netty.logging.InternalLogger;
 import org.jboss.netty.util.CharsetUtil;
 
-import com.webobjects.appserver._private.WOInputStreamData;
 import com.webobjects.appserver._private.WOProperties;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
@@ -178,6 +173,7 @@ public class WONettyAdaptor extends WOAdaptor {
 			//pipeline.addLast("ssl", new SslHandler(engine));
 
 			pipeline.addLast("decoder", new HttpRequestDecoder(4096, 8192, maxChunkSize));
+			pipeline.addLast("aggregator", new HttpChunkAggregator(1024*1024*100));		//TODO turn into property
 			pipeline.addLast("encoder", new HttpResponseEncoder());
 			// Remove the following line if you don't want automatic content compression.
 			pipeline.addLast("deflater", new HttpContentCompressor());
@@ -223,34 +219,14 @@ public class WONettyAdaptor extends WOAdaptor {
 			if (!readingChunks) {
 				HttpRequest request = this._request = (HttpRequest) e.getMessage();
 
-				if (request.isChunked()) {
-					readingChunks = true;
-					_content = dynamicBuffer();
-				} else {
-					_content = request.getContent();
-					WORequest worequest = _convertHttpRequestToWORequest(_request);
-					worequest._setOriginatingAddress(((InetSocketAddress) ctx.getChannel().getRemoteAddress()).getAddress());
-			        WOResponse woresponse = WOApplication.application().dispatchRequest(worequest);
-			        
-			        // send a response
-			        NSDelayedCallbackCenter.defaultCenter().eventEnded();
-			        writeResponse(new WOResponseWrapper(woresponse), e);
-				}
-			} else {
-				HttpChunk chunk = (HttpChunk) e.getMessage();
-				_content.writeBytes(chunk.getContent());
-				
-				if (chunk.isLast()) {
-					readingChunks = false;
+				_content = request.getContent();
+				WORequest worequest = _convertHttpRequestToWORequest(_request);
+				worequest._setOriginatingAddress(((InetSocketAddress) ctx.getChannel().getRemoteAddress()).getAddress());
+				WOResponse woresponse = WOApplication.application().dispatchRequest(worequest);
 
-					HttpChunkTrailer trailer = (HttpChunkTrailer) chunk;
-					WORequest woreqest = _convertHttpChunkTrailerToWORequest(trailer);
-			        WOResponse woresponse = WOApplication.application().dispatchRequest(woreqest);
-			        
-			        // send a response
-			        NSDelayedCallbackCenter.defaultCenter().eventEnded();
-					writeResponse(new WOResponseWrapper(woresponse), e);
-				}
+				// send a response
+				NSDelayedCallbackCenter.defaultCenter().eventEnded();
+				writeResponse(new WOResponseWrapper(woresponse), e);
 			}
 		}
 		
@@ -299,30 +275,6 @@ public class WONettyAdaptor extends WOAdaptor {
 					cookie.isSecure());
 			return wocookie;
 		}
-		
-		private WORequest _convertHttpChunkTrailerToWORequest(HttpChunkTrailer trailer) {
-			// headers
-	        NSMutableDictionary<String, NSArray<String>> headers = new NSMutableDictionary<String, NSArray<String>>();
-			if (!trailer.getHeaderNames().isEmpty()) {
-				for (Map.Entry<String, String> header: trailer.getHeaders()) {
-					headers.setObjectForKey(new NSArray<String>(header.getValue().split(",")), header.getKey());
-				}
-			}
-
-			// content
-			NSData contentData = (_content.readable()) ? new WOInputStreamData(new ChannelBufferInputStream(_content), 0) : NSData.EmptyData;
-
-			// create request
-			WORequest _worequest = WOApplication.application().createRequest(
-	        		_request.getMethod().getName(), 			// FIXME should be trailer.getMethod().getName()
-	        		_request.getUri(), 							// FIXME should be trailer.getUri()
-	        		_request.getProtocolVersion().getText(), 	// FIXME should be trailer.getProtocolVersion().getText()
-	        		headers,
-	        		contentData, 
-	        		null);
-			// TODO set cookies (CHECKME is this really necessary here?!)
-			return _worequest;
-		}
 
 		private void writeResponse(HttpResponse response, MessageEvent e) throws IOException {
 			// Decide whether to close the connection or not.
@@ -340,10 +292,11 @@ public class WONettyAdaptor extends WOAdaptor {
 		@Override
 		public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
 	        Throwable cause = e.getCause();
+	        /*
 	        if (cause instanceof TooLongFrameException) {
 	            ctx.getChannel().write(_badRequestResponse).addListener(ChannelFutureListener.CLOSE);
 	            return;
-	        }
+	        } */
 
 			log.warn(cause.getMessage());
 			e.getChannel().close();
