@@ -12,10 +12,8 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.appserver._private.WOCGIFormValues;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
-import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.appserver.ERXResponseRewriter;
@@ -141,11 +139,13 @@ public abstract class FileUploader extends WOComponent {
 	 * TODO - hack alert - work around bug where the param is url encoded when sending data form encoded
 	 */
 	private String forceFormSubmittedElementID() {
+		/*
 		String urlEncoding = WOCGIFormValues.getInstance().getWOURLEncoding(context().request().queryString());
 		NSDictionary formValues = WOCGIFormValues.getInstance().decodeCGIFormValues(context().request().queryString(), urlEncoding);
 		NSArray forceFormSubmittedValues = (NSArray) formValues.objectForKey(FormKeys._forceFormSubmitted);
 		
-        return (forceFormSubmittedValues != null && !forceFormSubmittedValues.isEmpty()) ? (String) forceFormSubmittedValues.get(0) : null;
+        return (forceFormSubmittedValues != null && !forceFormSubmittedValues.isEmpty()) ? (String) forceFormSubmittedValues.get(0) : null; */
+		return context().request().stringFormValueForKey(FormKeys._forceFormSubmitted);
 	}
 	
 	private boolean isForceFormSubmitted() {
