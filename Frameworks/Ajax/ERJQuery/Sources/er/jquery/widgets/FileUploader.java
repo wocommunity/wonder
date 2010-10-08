@@ -12,8 +12,10 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver._private.WOCGIFormValues;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
+import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.appserver.ERXResponseRewriter;
@@ -69,6 +71,7 @@ public abstract class FileUploader extends WOComponent {
 	 */
 	public static interface FormKeys {
 		public static final String qqfile = "qqfile";
+		public static final String qqfilename = "qqfile.filename";
 		public static final String _forceFormSubmitted = "_forceFormSubmitted";
 	}
 	
@@ -134,6 +137,22 @@ public abstract class FileUploader extends WOComponent {
 		return ERXWOContext.ajaxActionUrl(context());
 	}
 	
+	/*
+	 * TODO - hack alert - work around bug where the param is url encoded when sending data form encoded
+	 */
+	private String forceFormSubmittedElementID() {
+		String urlEncoding = WOCGIFormValues.getInstance().getWOURLEncoding(context().request().queryString());
+		NSDictionary formValues = WOCGIFormValues.getInstance().decodeCGIFormValues(context().request().queryString(), urlEncoding);
+		NSArray forceFormSubmittedValues = (NSArray) formValues.objectForKey(FormKeys._forceFormSubmitted);
+		
+        return (forceFormSubmittedValues != null && !forceFormSubmittedValues.isEmpty()) ? (String) forceFormSubmittedValues.get(0) : null;
+	}
+	
+	private boolean isForceFormSubmitted() {
+        String forceFormSubmittedElementID = forceFormSubmittedElementID();
+        return forceFormSubmittedElementID != null && forceFormSubmittedElementID.equals(id());
+	}
+	
 	// R&R
     @Override
 	public void appendToResponse(WOResponse response, WOContext context) {
@@ -146,11 +165,8 @@ public abstract class FileUploader extends WOComponent {
     }
     
     @Override
-    public WOActionResults invokeAction(WORequest request, WOContext context) {  
-        String forceFormSubmittedElementID = (String) request.formValueForKey(FormKeys._forceFormSubmitted);
-        boolean forceFormSubmitted = forceFormSubmittedElementID != null && forceFormSubmittedElementID.equals(id());
-        
-    	if (forceFormSubmitted) {
+    public WOActionResults invokeAction(WORequest request, WOContext context) {         
+    	if (isForceFormSubmitted()) {
         	WOResponse response = new WOResponse();
 
     		if (exception != null) {
@@ -164,13 +180,19 @@ public abstract class FileUploader extends WOComponent {
 	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		super.takeValuesFromRequest(request, context);
-		
-        String forceFormSubmittedElementID = (String) request.formValueForKey(FormKeys._forceFormSubmitted);
-        boolean forceFormSubmitted = forceFormSubmittedElementID != null && forceFormSubmittedElementID.equals(id());
-
-		if (forceFormSubmitted && request.formValueForKey(FormKeys.qqfile) != null) {
-			String aFileName = (String) request.formValueForKey(FormKeys.qqfile);
-			InputStream anInputStream = (request.contentInputStream() != null) ? request.contentInputStream() : request.content().stream();
+        
+		if (isForceFormSubmitted()) {
+			String aFileName;
+			InputStream anInputStream;
+			
+	        if (request.formValueForKey(FormKeys.qqfilename) != null) {
+	        	aFileName = (String) request.formValueForKey(FormKeys.qqfilename);
+	        	NSData data = (NSData) request.formValueForKey(FormKeys.qqfile);
+	        	anInputStream = data.stream();
+	        } else if (request.formValueForKey(FormKeys.qqfile) != null) {
+				aFileName = (String) request.formValueForKey(FormKeys.qqfile);
+				anInputStream = (request.contentInputStream() != null) ? request.contentInputStream() : request.content().stream();
+	        } else return;
 
 			// filepath
 			if (hasBinding(Bindings.filePath)) {
