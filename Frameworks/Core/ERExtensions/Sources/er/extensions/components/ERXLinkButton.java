@@ -104,7 +104,7 @@ import er.extensions.foundation.ERXValueUtilities;
  *
  */
 public class ERXLinkButton extends WOHTMLDynamicElement {
-	
+		
 	/**
 	 * Defines if the hyperlink adds a default <code>rel="nofollow"</code> if an action is bound.
 	 */
@@ -140,21 +140,21 @@ public class ERXLinkButton extends WOHTMLDynamicElement {
 		_otherQueryAssociations = _NSDictionaryUtilities.extractObjectsForKeysWithPrefix(_associations, "?", true);
 		_otherQueryAssociations = _otherQueryAssociations == null || _otherQueryAssociations.count() <= 0 ? null : _otherQueryAssociations;
 		
-		_action = (WOAssociation)_associations.removeObjectForKey("action");
-		_actionClass = (WOAssociation)_associations.removeObjectForKey("actionClass");
-		_directActionName = (WOAssociation)_associations.removeObjectForKey("directActionName");
-		_disabled = (WOAssociation)_associations.removeObjectForKey("disabled");
-		_escapeHTML = (WOAssociation)_associations.removeObjectForKey("escapeHTML");
-		_fragmentIdentifier = (WOAssociation)_associations.removeObjectForKey("fragmentIdentifier");
-		_href = (WOAssociation)_associations.removeObjectForKey("href");
-		_name = (WOAssociation)_associations.removeObjectForKey("name");
-		_pageName = (WOAssociation)_associations.removeObjectForKey("pageName");
-		_queryDictionary = (WOAssociation)_associations.removeObjectForKey("queryDictionary");
-		_rel = (WOAssociation)_associations.removeObjectForKey("rel");
-		_string = (WOAssociation)_associations.removeObjectForKey("string");
-		_submit = (WOAssociation)_associations.removeObjectForKey("submit");
-		_useIEConditionals = (WOAssociation)_associations.removeObjectForKey("useIEConditionals");
-		_value = (WOAssociation)_associations.removeObjectForKey("value");
+		_action = _associations.removeObjectForKey("action");
+		_actionClass = _associations.removeObjectForKey("actionClass");
+		_directActionName = _associations.removeObjectForKey("directActionName");
+		_disabled = _associations.removeObjectForKey("disabled");
+		_escapeHTML = _associations.removeObjectForKey("escapeHTML");
+		_fragmentIdentifier = _associations.removeObjectForKey("fragmentIdentifier");
+		_href = _associations.removeObjectForKey("href");
+		_name = _associations.removeObjectForKey("name");
+		_pageName = _associations.removeObjectForKey("pageName");
+		_queryDictionary = _associations.removeObjectForKey("queryDictionary");
+		_rel = _associations.removeObjectForKey("rel");
+		_string = _associations.removeObjectForKey("string");
+		_submit = _associations.removeObjectForKey("submit");
+		_useIEConditionals = _associations.removeObjectForKey("useIEConditionals");
+		_value = _associations.removeObjectForKey("value");
 		
 		if(_action == null && _href == null && _pageName == null && _directActionName == null && _actionClass == null) {
 			throw new WODynamicElementCreationException((new StringBuilder()).append("<").append(getClass().getName()).append("> Missing required attribute: 'action' or 'href' or 'pageName' or 'directActionName' or 'actionClass'").toString());
@@ -164,8 +164,6 @@ public class ERXLinkButton extends WOHTMLDynamicElement {
 		}
 		if(_action != null && _action.isValueConstant()) {
 			throw new WODynamicElementCreationException((new StringBuilder()).append("<").append(getClass().getName()).append("> 'action' is a constant.").toString());
-		} else {
-			return;
 		}	
 	}
 	
@@ -542,9 +540,8 @@ public class ERXLinkButton extends WOHTMLDynamicElement {
 		Object elementID = context.elementID();
 		if(elementID != null) {
 			return elementID.toString();
-		} else {
-			throw new IllegalStateException((new StringBuilder()).append("<").append(getClass().getName()).append("> Cannot evaluate 'name' attribute, and context element ID is null.").toString());
 		}
+		throw new IllegalStateException((new StringBuilder()).append("<").append(getClass().getName()).append("> Cannot evaluate 'name' attribute, and context element ID is null.").toString());
 	}
 	
 	protected String hrefInContext(WOContext context) {
@@ -582,7 +579,7 @@ public class ERXLinkButton extends WOHTMLDynamicElement {
 		if(submitInContext(context)) {
 			value = valueVal == null?stringVal == null?"Submit":stringVal:valueVal;
 		} else {
-			value = stringVal == null?valueVal == null?"Link":valueVal:stringVal;
+			value = stringVal == null?valueVal == null?"":valueVal:stringVal;
 		}
 		return value.toString();
 	}
