@@ -1999,7 +1999,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 					if (contentInputStream != null) {
 						inputBytesLength = response.contentInputStreamLength();
 						NSData compressedNSData = ERXCompressionUtilities.gzipInputStreamAsNSData(contentInputStream, (int)inputBytesLength);
-						compressedData = compressedNSData._bytesNoCopy();
+						//compressedData = compressedNSData._bytesNoCopy();
+						compressedData = compressedNSData.bytes();
 						response.setContentStream(null, 0, 0);
 					}
 					else {
