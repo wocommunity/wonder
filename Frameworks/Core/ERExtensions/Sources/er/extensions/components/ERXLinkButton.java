@@ -582,7 +582,7 @@ public class ERXLinkButton extends WOHTMLDynamicElement {
 		if(submitInContext(context)) {
 			value = valueVal == null?stringVal == null?"Submit":stringVal:valueVal;
 		} else {
-			value = stringVal == null?valueVal:stringVal;
+			value = stringVal == null?valueVal == null?"Link":valueVal:stringVal;
 		}
 		return value.toString();
 	}
