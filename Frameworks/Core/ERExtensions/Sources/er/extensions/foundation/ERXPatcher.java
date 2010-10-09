@@ -2,6 +2,7 @@ package er.extensions.foundation;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
@@ -34,6 +35,7 @@ import com.webobjects.appserver._private.WOSubmitButton;
 import com.webobjects.appserver._private.WOText;
 import com.webobjects.appserver._private.WOTextField;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation._NSUtilities;
@@ -430,6 +432,27 @@ public class ERXPatcher {
 					woresponse.appendContentString(newResponse.contentString());
 				}
 			}
+			
+			//Overriden to stop swallowed exceptions. Isn't actually used by the WOPopupButton, but just in case...
+			protected void setSelectionListInContext(WOContext context, List selections) {
+				if(_selections != null && _selections.isValueSettable()) {
+					try {
+						Class resultClass = listClassInContext(context);
+						Object result = resultClass.newInstance();
+						if(result instanceof NSMutableArray) {
+							((NSMutableArray)result).addObjects(selections.toArray());
+						} else { 
+							if(result instanceof List) {
+								((List)result).addAll(selections);
+							}
+						}
+						_selections.setValue(result, context.component());
+                    } catch(Exception exception) {
+                    	throw NSForwardException._runtimeExceptionForThrowable(exception);
+                    }
+				}
+			}
+
 		}
 
 		public static class Browser extends WOBrowser {
@@ -450,6 +473,26 @@ public class ERXPatcher {
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
 				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
 					woresponse.appendContentString(newResponse.contentString());
+				}
+			}
+			
+			//Overriden to stop swallowed exceptions.
+			protected void setSelectionListInContext(WOContext context, List selections) {
+				if(_selections != null && _selections.isValueSettable()) {
+					try {
+						Class resultClass = listClassInContext(context);
+						Object result = resultClass.newInstance();
+						if(result instanceof NSMutableArray) {
+							((NSMutableArray)result).addObjects(selections.toArray());
+						} else { 
+							if(result instanceof List) {
+								((List)result).addAll(selections);
+							}
+						}
+						_selections.setValue(result, context.component());
+                    } catch(Exception exception) {
+                    	throw NSForwardException._runtimeExceptionForThrowable(exception);
+                    }
 				}
 			}
 		}
@@ -496,6 +539,27 @@ public class ERXPatcher {
 					woresponse.appendContentString(newResponse.contentString());
 				}
 			}
+			
+			//Overriden to stop swallowed exceptions. 
+			protected void setSelectionListInContext(WOContext context, List selections) {
+				if(_selections != null && _selections.isValueSettable()) {
+					try {
+						Class resultClass = listClassInContext(context);
+						Object result = resultClass.newInstance();
+						if(result instanceof NSMutableArray) {
+							((NSMutableArray)result).addObjects(selections.toArray());
+						} else { 
+							if(result instanceof List) {
+								((List)result).addAll(selections);
+							}
+						}
+						_selections.setValue(result, context.component());
+                    } catch(Exception exception) {
+                    	throw NSForwardException._runtimeExceptionForThrowable(exception);
+                    }
+				}
+			}
+
 		}
 
 		public static class FileUpload extends ERXWOFileUpload {
@@ -628,6 +692,27 @@ public class ERXPatcher {
 					woresponse.appendContentString(newResponse.contentString());
 				}
 			}
+			
+			//Overriden to stop swallowed exceptions. 
+			protected void setSelectionListInContext(WOContext context, List selections) {
+				if(_selections != null && _selections.isValueSettable()) {
+					try {
+						Class resultClass = listClassInContext(context);
+						Object result = resultClass.newInstance();
+						if(result instanceof NSMutableArray) {
+							((NSMutableArray)result).addObjects(selections.toArray());
+						} else { 
+							if(result instanceof List) {
+								((List)result).addAll(selections);
+							}
+						}
+						_selections.setValue(result, context.component());
+                    } catch(Exception exception) {
+                    	throw NSForwardException._runtimeExceptionForThrowable(exception);
+                    }
+				}
+			}
+
 		}
 		
 		public static class JavaScript extends WOJavaScript {
