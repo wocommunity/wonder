@@ -16,7 +16,6 @@ public class MHostController extends JavaMonitorController {
 		checkPassword();
 		MHost host = create(ERXKeyFilter.filterWithAttributes());
         siteConfig().addHost_M(host);
-        handler().sendOverwriteToWotaskd(host);
         if (siteConfig().hostArray().count() != 0) {
             handler().sendAddHostToWotaskds(host, siteConfig().hostArray());
         }
