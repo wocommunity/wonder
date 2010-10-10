@@ -45,12 +45,12 @@ import org.jboss.netty.logging.CommonsLoggerFactory;
 import org.jboss.netty.logging.InternalLogger;
 import org.jboss.netty.util.CharsetUtil;
 
-import com.webobjects.appserver._private.WOInputStreamData;
 import com.webobjects.appserver._private.WOProperties;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDelayedCallbackCenter;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableData;
 import com.webobjects.foundation.NSMutableDictionary;
 
 /**
@@ -232,7 +232,7 @@ public class WONettyAdaptor extends WOAdaptor {
 			}
 		}
 		
-		private WORequest _convertHttpRequestToWORequest(HttpRequest request) {
+		private WORequest _convertHttpRequestToWORequest(HttpRequest request) throws IOException {
 			// headers
 	        NSMutableDictionary<String, NSArray<String>> headers = new NSMutableDictionary<String, NSArray<String>>();
 	        for (Map.Entry<String, String> header: request.getHeaders()) {
@@ -240,7 +240,7 @@ public class WONettyAdaptor extends WOAdaptor {
 	        }
 	        
 	        // content
-			NSData contentData = (_content.readable()) ? new WOInputStreamData(new ChannelBufferInputStream(_content), 0) : NSData.EmptyData;	        
+			NSData contentData = (_content.readable()) ? new NSMutableData(new ChannelBufferInputStream(_content), 4096) : NSData.EmptyData;	        
 			
 			// create request
 			WORequest _worequest = WOApplication.application().createRequest(
