@@ -33,8 +33,12 @@ import er.extensions.foundation.ERXStringUtilities;
  * 
  * @author mendis
  * 
- * NOTE: The progress indicator doesn't work properly with WODefaultAdaptor. If you want a progress % indicator, you may 
+ * NOTES: 
+ * 
+ * 1. The progress indicator doesn't work properly with WODefaultAdaptor. If you want a progress % indicator, you may 
  * need to use an alternative WOAdaptor. e.g: ERWOAdaptor
+ * 
+ * 2. Use of ERXSession breaks IE6-8 compatibility. Use WOSession instead.
  *
  */
 public abstract class FileUploader extends WOComponent {
@@ -135,24 +139,6 @@ public abstract class FileUploader extends WOComponent {
 		return ERXWOContext.ajaxActionUrl(context());
 	}
 	
-	/*
-	 * TODO - hack alert - work around bug where the param is url encoded when sending data form encoded
-	 */
-	private String forceFormSubmittedElementID() {
-		/*
-		String urlEncoding = WOCGIFormValues.getInstance().getWOURLEncoding(context().request().queryString());
-		NSDictionary formValues = WOCGIFormValues.getInstance().decodeCGIFormValues(context().request().queryString(), urlEncoding);
-		NSArray forceFormSubmittedValues = (NSArray) formValues.objectForKey(FormKeys._forceFormSubmitted);
-		
-        return (forceFormSubmittedValues != null && !forceFormSubmittedValues.isEmpty()) ? (String) forceFormSubmittedValues.get(0) : null; */
-		return context().request().stringFormValueForKey(FormKeys._forceFormSubmitted);
-	}
-	
-	private boolean isForceFormSubmitted() {
-        String forceFormSubmittedElementID = forceFormSubmittedElementID();
-        return forceFormSubmittedElementID != null && forceFormSubmittedElementID.equals(id());
-	}
-	
 	// R&R
     @Override
 	public void appendToResponse(WOResponse response, WOContext context) {
@@ -166,7 +152,7 @@ public abstract class FileUploader extends WOComponent {
     
     @Override
     public WOActionResults invokeAction(WORequest request, WOContext context) {         
-    	if (isForceFormSubmitted()) {
+    	if (context.senderID().equals(context.elementID())) {
         	WOResponse response = new WOResponse();
 
     		if (exception != null) {
@@ -181,7 +167,7 @@ public abstract class FileUploader extends WOComponent {
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		super.takeValuesFromRequest(request, context);
         
-		if (isForceFormSubmitted()) {
+		if (context.senderID().equals(context.elementID())) {
 			String aFileName;
 			InputStream anInputStream;
 			
@@ -192,7 +178,10 @@ public abstract class FileUploader extends WOComponent {
 	        } else if (request.formValueForKey(FormKeys.qqfile) != null) {
 				aFileName = (String) request.formValueForKey(FormKeys.qqfile);
 				anInputStream = (request.contentInputStream() != null) ? request.contentInputStream() : request.content().stream();
-	        } else return;
+	        } else {
+	        	log.error("Unable to obtain filename from form values: " + request.formValueKeys());
+	        	return;
+	        }
 
 			// filepath
 			if (hasBinding(Bindings.filePath)) {
