@@ -68,8 +68,11 @@ import com.webobjects.foundation.NSMutableDictionary;
  *
  * 4. (Optional) If developing with the WONettyAdaptor set the following properties as well:
  * 
- *   -WOAllowRapidTurnaround false
  *   -WODirectConnectEnabled false
+ *   
+ *  AND (maybe) 
+ *   
+ *   -WOAllowRapidTurnaround false
  * 
  * @author ravim
  * 
@@ -169,11 +172,6 @@ public class WONettyAdaptor extends WOAdaptor {
 			// Create a default pipeline implementation.
 			ChannelPipeline pipeline = pipeline();
 
-			// Uncomment the following line if you want HTTPS
-			//SSLEngine engine = SecureChatSslContextFactory.getServerContext().createSSLEngine();
-			//engine.setUseClientMode(false);
-			//pipeline.addLast("ssl", new SslHandler(engine));
-
 			pipeline.addLast("decoder", new HttpRequestDecoder(4096, 8192, maxChunkSize));
 			pipeline.addLast("aggregator", new HttpChunkAggregator(1024*1024*100));		//TODO turn into property
 			pipeline.addLast("encoder", new HttpResponseEncoder());
@@ -213,23 +211,20 @@ public class WONettyAdaptor extends WOAdaptor {
 		private InternalLogger log = CommonsLoggerFactory.getDefaultFactory().newInstance(this.getClass().getName());
 
 		private HttpRequest _request;
-		private boolean readingChunks;
 		private ChannelBuffer _content;
 
 		@Override
 		public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
-			if (!readingChunks) {
-				HttpRequest request = this._request = (HttpRequest) e.getMessage();
+			HttpRequest request = this._request = (HttpRequest) e.getMessage();
 
-				_content = request.getContent();
-				WORequest worequest = _convertHttpRequestToWORequest(_request);
-				worequest._setOriginatingAddress(((InetSocketAddress) ctx.getChannel().getRemoteAddress()).getAddress());
-				WOResponse woresponse = WOApplication.application().dispatchRequest(worequest);
+			_content = request.getContent();
+			WORequest worequest = _convertHttpRequestToWORequest(_request);
+			worequest._setOriginatingAddress(((InetSocketAddress) ctx.getChannel().getRemoteAddress()).getAddress());
+			WOResponse woresponse = WOApplication.application().dispatchRequest(worequest);
 
-				// send a response
-				NSDelayedCallbackCenter.defaultCenter().eventEnded();
-				writeResponse(new WOResponseWrapper(woresponse), e);
-			}
+			// send a response
+			NSDelayedCallbackCenter.defaultCenter().eventEnded();
+			writeResponse(new WOResponseWrapper(woresponse), e);
 		}
 		
 		private WORequest _convertHttpRequestToWORequest(HttpRequest request) throws IOException {
@@ -294,11 +289,6 @@ public class WONettyAdaptor extends WOAdaptor {
 		@Override
 		public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
 	        Throwable cause = e.getCause();
-	        /*
-	        if (cause instanceof TooLongFrameException) {
-	            ctx.getChannel().write(_badRequestResponse).addListener(ChannelFutureListener.CLOSE);
-	            return;
-	        } */
 
 			log.warn(cause.getMessage());
 			e.getChannel().close();
