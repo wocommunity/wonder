@@ -105,7 +105,7 @@ public class ERD2WUtilities {
     
     /**
      * This method is similar to enclosingPageOfClass. It differs in that it is generic
-     * and it inspects the sender argument as well as all of its parents.
+     * and it inspects the sender argument as well as its parents.
      * @param <T> The class type
      * @param sender the sender component
      * @param c the class
