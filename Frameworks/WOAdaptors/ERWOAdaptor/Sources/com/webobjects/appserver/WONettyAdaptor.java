@@ -194,6 +194,66 @@ public class WONettyAdaptor extends WOAdaptor {
         _badRequestResponse.setContent(ChannelBuffers.copiedBuffer("Failure: " + BAD_REQUEST.toString() + "\r\n", CharsetUtil.UTF_8));
         _badRequestResponse.setHeader(CONTENT_TYPE, "text/plain; charset=UTF-8");
 	}
+	
+	/**
+	 * Converts a Netty HttpRequest to a WORequest
+	 * 
+	 * @param request	Netty HttpRequest
+	 * @return	a WORequest
+	 * @throws IOException
+	 */
+	private static WORequest asWORequest(HttpRequest request) throws IOException {
+		// headers
+        NSMutableDictionary<String, NSArray<String>> headers = new NSMutableDictionary<String, NSArray<String>>();
+        for (Map.Entry<String, String> header: request.getHeaders()) {
+        	headers.setObjectForKey(new NSArray<String>(header.getValue().split(",")), header.getKey());
+        }
+        
+        // content
+        ChannelBuffer _content = request.getContent();
+		NSData contentData = (_content.readable()) ? new WOInputStreamData(new NSData(new ChannelBufferInputStream(_content), 4096)) : NSData.EmptyData;	        
+		
+		// create request
+		WORequest _worequest = WOApplication.application().createRequest(
+				request.getMethod().getName(), 
+				request.getUri(), 
+				request.getProtocolVersion().getText(), 
+        		headers,
+        		contentData, 
+        		null);
+		
+		// cookies
+		String cookieString = request.getHeader(COOKIE);
+		if (cookieString != null) {
+			CookieDecoder cookieDecoder = new CookieDecoder();
+			Set<Cookie> cookies = cookieDecoder.decode(cookieString);
+			if(!cookies.isEmpty()) {
+				for (Cookie cookie : cookies) {
+					WOCookie wocookie = asWOCookie(cookie);
+					_worequest.addCookie(wocookie);
+				}
+			}
+		} 
+		
+		return _worequest;
+	}
+	
+	/**
+	 * Converts a Netty Cookie to a WOCookie
+	 * 
+	 * @param cookie	Netty Cookie
+	 * @return	A WOCookie
+	 */
+	private static WOCookie asWOCookie(Cookie cookie) {
+		WOCookie wocookie = new WOCookie(
+				cookie.getName(),
+				cookie.getValue(),
+				cookie.getPath(),
+				cookie.getDomain(),
+				cookie.getMaxAge(),
+				cookie.isSecure());
+		return wocookie;
+	}
 
 	/**
 	 * Originally inspired by:
@@ -211,14 +271,12 @@ public class WONettyAdaptor extends WOAdaptor {
 		private InternalLogger log = CommonsLoggerFactory.getDefaultFactory().newInstance(this.getClass().getName());
 
 		private HttpRequest _request;
-		private ChannelBuffer _content;
 
 		@Override
 		public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
-			HttpRequest request = this._request = (HttpRequest) e.getMessage();
+			this._request = (HttpRequest) e.getMessage();
 
-			_content = request.getContent();
-			WORequest worequest = _convertHttpRequestToWORequest(_request);
+			WORequest worequest = asWORequest(_request);
 			worequest._setOriginatingAddress(((InetSocketAddress) ctx.getChannel().getRemoteAddress()).getAddress());
 			WOResponse woresponse = WOApplication.application().dispatchRequest(worequest);
 
@@ -227,52 +285,6 @@ public class WONettyAdaptor extends WOAdaptor {
 			writeResponse(new WOResponseWrapper(woresponse), e);
 		}
 		
-		private WORequest _convertHttpRequestToWORequest(HttpRequest request) throws IOException {
-			// headers
-	        NSMutableDictionary<String, NSArray<String>> headers = new NSMutableDictionary<String, NSArray<String>>();
-	        for (Map.Entry<String, String> header: request.getHeaders()) {
-	        	headers.setObjectForKey(new NSArray<String>(header.getValue().split(",")), header.getKey());
-	        }
-	        
-	        // content
-			NSData contentData = (_content.readable()) ? new WOInputStreamData(new NSData(new ChannelBufferInputStream(_content), 4096)) : NSData.EmptyData;	        
-			
-			// create request
-			WORequest _worequest = WOApplication.application().createRequest(
-					request.getMethod().getName(), 
-					request.getUri(), 
-					request.getProtocolVersion().getText(), 
-	        		headers,
-	        		contentData, 
-	        		null);
-			
-			// cookies
-			String cookieString = _request.getHeader(COOKIE);
-			if (cookieString != null) {
-				CookieDecoder cookieDecoder = new CookieDecoder();
-				Set<Cookie> cookies = cookieDecoder.decode(cookieString);
-				if(!cookies.isEmpty()) {
-					for (Cookie cookie : cookies) {
-						WOCookie wocookie = _convertCookieToWOCookie(cookie);
-						_worequest.addCookie(wocookie);
-					}
-				}
-			} 
-			
-			return _worequest;
-		}
-		
-		private WOCookie _convertCookieToWOCookie(Cookie cookie) {
-			WOCookie wocookie = new WOCookie(
-					cookie.getName(),
-					cookie.getValue(),
-					cookie.getPath(),
-					cookie.getDomain(),
-					cookie.getMaxAge(),
-					cookie.isSecure());
-			return wocookie;
-		}
-
 		private void writeResponse(HttpResponse response, MessageEvent e) throws IOException {
 			// Decide whether to close the connection or not.
 			boolean keepAlive = isKeepAlive(_request);
