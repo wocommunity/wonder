@@ -30,6 +30,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * @binding			onComplete			
  * 
  * @property		useUnobtrusively			For Unobtrusive Javascript programming. Default it is ON.
+ * @property 		WOFileUpload.sizeLimit		Max file upload size permitted
  * 
  * @author mendis
  * 
@@ -107,15 +108,20 @@ public abstract class FileUploader extends WOComponent {
 		return (String) valueForBinding(Bindings.finalFilePath);
 	}
 	
+	public static Integer maxFileSize() {
+		 return Integer.getInteger("WOFileUpload.sizeLimit", 1024*1024*100);
+	}
+	
     /*
      * An array of options for File Uploader
      */
     protected NSArray<String> _options() {
-    	NSMutableArray _options = new NSMutableArray("action:'" + href() + "'");
+    	NSMutableArray<String> _options = new NSMutableArray<String>("action:'" + href() + "'");
     	
     	// add options
     	_options.add("element: $('#" + id() + "')[0]");
     	_options.add("params: { " + FormKeys._forceFormSubmitted + ": '" + id() + "'}"); 	// TODO params binding
+    	_options.add("sizeLimit: " + maxFileSize());
     	if (hasBinding(Bindings.onChange)) _options.add("onChange:" + valueForBinding(Bindings.onChange));
     	if (hasBinding(Bindings.onComplete)) _options.add("onComplete:" + valueForBinding(Bindings.onComplete));
     	if (hasBinding(Bindings.onSubmit)) _options.add("onSubmit:" + valueForBinding(Bindings.onSubmit));
