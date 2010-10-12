@@ -256,6 +256,16 @@ public class WONettyAdaptor extends WOAdaptor {
 				cookie.isSecure());
 		return wocookie;
 	}
+	
+	/**
+	 * Converts a WOResponse to a Netty HttpResponse
+	 * 
+	 * @param woresponse	A WOResponse
+	 * @return	HttpResponse
+	 */
+	private static HttpResponse asHttpResponse(WOResponse woresponse) {
+		return new WOResponseWrapper(woresponse);
+	}
 
 	/**
 	 * Originally inspired by:
@@ -284,7 +294,7 @@ public class WONettyAdaptor extends WOAdaptor {
 
 			// send a response
 			NSDelayedCallbackCenter.defaultCenter().eventEnded();
-			writeResponse(new WOResponseWrapper(woresponse), e);
+			writeResponse(asHttpResponse(woresponse), e);
 		}
 		
 		private void writeResponse(HttpResponse response, MessageEvent e) throws IOException {

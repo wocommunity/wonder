@@ -36,6 +36,16 @@ public class WOResponseWrapper implements HttpResponse {
 	private WOResponse wrapping;
 	private ChannelBuffer _content = ChannelBuffers.EMPTY_BUFFER;
 	
+	/**
+	 * Converts a WOCookie to a Netty cookie
+	 * 
+	 * @param wocookie
+	 * @return A Netty cookie
+	 */
+	private static Cookie asCookie(WOCookie wocookie) {
+		return new WOCookieWrapper(wocookie);
+	}
+	
 	public WOResponseWrapper(WOResponse response) {
 		super();
 		wrapping = response;
@@ -117,7 +127,7 @@ public class WOResponseWrapper implements HttpResponse {
 			if(!wocookies.isEmpty()) {
 				CookieEncoder cookieEncoder = new CookieEncoder(true);
 				for (WOCookie wocookie : wocookies) {
-					Cookie cookie = new WOCookieWrapper(wocookie);
+					Cookie cookie = asCookie(wocookie);
 					cookieEncoder.addCookie(cookie);
 				} return cookieEncoder.encode();
 			} else return null;
