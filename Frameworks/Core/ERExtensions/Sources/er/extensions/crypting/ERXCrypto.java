@@ -220,6 +220,9 @@ public class ERXCrypto {
 			else if (ch == '/') {
 				sb.append('_');
 			}
+			else if (ch == '\r' || ch == '\n') {
+				// Do nothing
+			}
 			else if (ch != '=') {
 				sb.append(ch);
 			}
