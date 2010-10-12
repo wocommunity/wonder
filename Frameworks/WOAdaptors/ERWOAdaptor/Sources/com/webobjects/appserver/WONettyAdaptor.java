@@ -160,20 +160,22 @@ public class WONettyAdaptor extends WOAdaptor {
 	  * 
 	  * @author ravim 	ERWOAdaptor/WONettyAdaptor
 	  * 
-	  * @property WOMaxIOBufferSize 	Max http chunking size. Defaults to WO default 8196 
-	  * 								@see <a href="http://docs.jboss.org/netty/3.2/xref/org/jboss/netty/handler/codec/http/HttpMessageDecoder.html">HttpMessageDecoder</a>
-	  * 								{@link org.jboss.netty.handler.codec.http.HttpRequestDecoder}
+	  * @property WOMaxIOBufferSize 		Max http chunking size. Defaults to WO default 8196 
+	  * 									@see <a href="http://docs.jboss.org/netty/3.2/xref/org/jboss/netty/handler/codec/http/HttpMessageDecoder.html">HttpMessageDecoder</a>
+	  * 
+	  * @property WOFileUpload.sizeLimit	Max file upload size permitted
 	  */
 	protected class PipelineFactory implements ChannelPipelineFactory {
 		
 		public final Integer maxChunkSize = Integer.getInteger("WOMaxIOBufferSize", 8196);		// TODO ravi: CHECKME Netty default is 8192; WO default is 8196(!?)
+		public final Integer maxFileSize = Integer.getInteger("WOFileUpload.sizeLimit", 1024*1024*100);
 		
 		public ChannelPipeline getPipeline() throws Exception {
 			// Create a default pipeline implementation.
 			ChannelPipeline pipeline = pipeline();
 
 			pipeline.addLast("decoder", new HttpRequestDecoder(4096, 8192, maxChunkSize));
-			pipeline.addLast("aggregator", new HttpChunkAggregator(1024*1024*100));		//TODO turn into property
+			pipeline.addLast("aggregator", new HttpChunkAggregator(maxFileSize));
 			pipeline.addLast("encoder", new HttpResponseEncoder());
 			// Remove the following line if you don't want automatic content compression.
 			pipeline.addLast("deflater", new HttpContentCompressor());
