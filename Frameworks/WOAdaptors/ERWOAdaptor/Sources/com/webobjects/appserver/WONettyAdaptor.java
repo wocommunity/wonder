@@ -100,7 +100,7 @@ public class WONettyAdaptor extends WOAdaptor {
     	return _hostname;
     }
 
-	public WONettyAdaptor(String name, NSDictionary config) {
+	public WONettyAdaptor(String name, NSDictionary<String, Object> config) {
         super(name, config);
 
         Number number = (Number) config.objectForKey(WOProperties._PortKey);
