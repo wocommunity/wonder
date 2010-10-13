@@ -1,8 +1,12 @@
 package er.rest;
 
+import java.util.Enumeration;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModel;
+import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSDictionary;
@@ -12,6 +16,31 @@ public class ERXRestClassDescriptionFactory {
 	private static Map<Class<?>, EOClassDescription> _classDescriptionByClass = new ConcurrentHashMap<Class<?>, EOClassDescription>();
 	private static Map<String, Class<?>> _classByName = new ConcurrentHashMap<String, Class<?>>();
 
+	public static String _guessMismatchedCaseEntityName(String mismatchedCaseEntityName) {
+		String guessedEntityName = null;
+		for (Enumeration modelsEnum = EOModelGroup.defaultGroup().models().objectEnumerator(); modelsEnum.hasMoreElements();) {
+			EOModel model = (EOModel)modelsEnum.nextElement();
+			for (Enumeration entitiesEnum = model.entities().objectEnumerator(); entitiesEnum.hasMoreElements(); ) {
+				EOEntity entity = (EOEntity)entitiesEnum.nextElement();
+				if (entity.name().equalsIgnoreCase(mismatchedCaseEntityName)) {
+					guessedEntityName = entity.name();
+					break;
+				}
+			}
+			if (guessedEntityName != null) {
+				break;
+			}
+		}
+		if (guessedEntityName != null) {
+			for (String entityName : _classByName.keySet()) {
+				if (entityName.equalsIgnoreCase(mismatchedCaseEntityName)) {
+					guessedEntityName = entityName;
+				}
+			}
+		}
+		return guessedEntityName;
+	}
+	
 	public static void registerClassDescription(EOClassDescription classDescription, Class<?> clazz) {
 		_classDescriptionByClass.put(clazz, classDescription);
 	}

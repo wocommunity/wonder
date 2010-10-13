@@ -61,25 +61,31 @@ public class ERXJSONRestParser implements IERXRestParser {
 
 		return requestNode;
 	}
-
+	
+	@Deprecated
 	public ERXRestRequestNode parseRestRequest(WORequest request, ERXRestFormat.Delegate delegate) {
 		return parseRestRequest(request.contentString(), delegate);
 	}
 
+	@Deprecated
 	public ERXRestRequestNode parseRestRequest(String contentStr, ERXRestFormat.Delegate delegate) {
+		return parseRestRequest(new ERXStringRestRequest(contentStr), delegate);
+	}
+
+	public ERXRestRequestNode parseRestRequest(IERXRestRequest request, ERXRestFormat.Delegate delegate) {
 		ERXRestRequestNode rootRequestNode = null;
-		
-		if (contentStr != null) {
-			contentStr = contentStr.trim();
+		String contentString = request.stringContent();
+		if (contentString != null) {
+			contentString = contentString.trim();
 		}
-		if (contentStr != null && contentStr.length() > 0 && !"undefined".equals(contentStr)) {
+		if (contentString != null && contentString.length() > 0 && !"undefined".equals(contentString)) {
 			
 			// MS: Support direct updating of primitive type keys -- so if you don't want to
 			// wrap your request in XML, this will allow it
 			// if (!contentStr.trim().startsWith("<")) {
 			// contentStr = "<FakeWrapper>" + contentStr.trim() + "</FakeWrapper>";
 			// }
-			JSON rootJSON = JSONSerializer.toJSON(contentStr, ERXJSONRestWriter._config);
+			JSON rootJSON = JSONSerializer.toJSON(contentString, ERXJSONRestWriter._config);
 			rootRequestNode = createRequestNodeForJSON(null, rootJSON, true, delegate);
 		}
 		else {

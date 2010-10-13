@@ -1,0 +1,498 @@
+body {
+	background-color: #fff;
+	font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
+	font-size: .85em;
+	margin: 0;
+	padding: 0;
+}
+
+table {
+	font-size: 1em;
+}
+
+.LoggingInfo {
+	border: 1px solid #aaa;
+	border-collapse: collapse;
+	font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
+	font-size: .85em;
+	margin: 1em auto;
+}
+
+.LoggingInfo > caption {
+	font-size: 1.3em;
+	margin: 0;
+	padding: .25em;
+	text-align: center;
+}
+
+.LoggingInfo > caption > h3 {
+	color: #222;
+	font-size: 1.7em;
+	margin: .5em;
+}
+
+table.LoggingInfo tr:nth-child(even) { background-color: #fafafa; }
+
+table.LoggingInfo > tbody > tr > td,
+table.LoggingInfo > thead > tr > th,
+table.LoggingInfo > tbody > tr > th {
+	border: 1px solid #999;
+	padding: .25em .5em;
+	text-align: left;
+}
+
+table.LoggingInfo > thead > tr > th,
+table.LoggingInfo > tbody > tr > th {
+	background-color: #eaeaea;
+	color: #323b48;
+	font-size: 1.15em;
+	padding: .5em;
+}
+
+.LoggingInfo form {
+	margin: 0;
+}
+
+.LoggingInfo td.LoggingItemLevel {
+	text-align: center;
+}
+
+.LoggingInfo td.LoggingItemLevelSettings {
+	text-transform: lowercase;
+}
+
+/* Embedded logger level settings */
+.LoggingInfo td.LoggingItemLevelSettings table table {
+	padding-right: .5em;
+}
+
+.LoggingInfo td.ActionButtonContainer {
+	background-color: #fafafa;
+	background-color: #ececec;
+	background: -moz-linear-gradient(top, #ededed, #fcfcfc);
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ededed), to(#fcfcfc));
+	padding: .5em;
+	text-align: center;
+}
+
+.LoggingInfo a {
+	color: #475D77;
+}
+
+/* ORIG
+tr.ALL { background-color: #e38384; }
+tr.TRACE { background-color: #ffaaaa; }
+tr.DEBUG { background-color: #ffbbbb; }
+tr.INFO { background-color: #eeccbb; }
+tr.WARN { background-color: #ddddbb; }
+tr.ERROR { background-color: #cceebb; }
+tr.FATAL { background-color: #bbffbb; }
+tr.OFF { background-color: #eee; }
+*/
+
+/* RED
+tr.ALL { background-color: #ef3b44; }
+tr.TRACE { background-color: #ef6b72; }
+tr.DEBUG { background-color: #ef6b72; }
+tr.INFO { background-color: #ef8389; }
+tr.WARN { background-color: #ef9b9f; }
+tr.ERROR { background-color: #efb3b6; }
+tr.FATAL { background-color: #efcbcd; }
+tr.OFF { background-color: #efe3e4; }
+*/
+
+
+td.LoggingItemLevelSettings span.selected { font-weight: bold; }
+td.LoggingItemLevelSettings span.unset { font-weight: normal !important; font-style: italic; }
+
+a.HelpLink {
+	background-color: #3185ad;
+	background: -moz-linear-gradient(-45deg, #5babcb, #0c6596);
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#5babcb), to(#0c6596));
+	color: #fff;
+	display: block;
+	font-size: .95em;
+	font-weight: bold;
+	height: 1.4em;
+	line-height: 1.4em;
+	text-align: center;
+	text-decoration: none;
+	text-shadow: rgba(0, 0, 0, 0.5) 0px -1px 0px;
+	width: 1.4em;
+
+	-moz-box-shadow:0 0 2px rgba(0,0,0,0.35);
+	-webkit-box-shadow: 0 0 2px rgba(0, 0, 0, 0.35);
+	box-shadow:0 0 2px rgba(0,0,0,0.35);
+
+	-moz-border-radius: .7em;
+	-webkit-border-radius: .7em;
+	border-radius: .7em;
+}
+
+caption a.HelpLink {
+	float: right;
+	margin: .5em;
+	margin-top: -1.8em;
+}
+
+th a.HelpLink {
+	display: inline-block;
+	font-size: 1em;
+}
+
+#Loggers td.LoggersFilter {
+	border-right: 1px solid #aaa;
+	padding-right: 2em;
+}
+
+#Loggers td.AddLogger {
+	padding-left: 2em;
+	padding-right: 2em;
+}
+
+#Loggers td.AddRuleLogger {
+	border-left: 1px solid #aaa;
+	padding-left: 2em;
+}
+
+#HeaderWrapper {
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 100;
+}
+
+#Header {
+	background-color: #323b48;
+	background: -moz-linear-gradient(top, #5d718a, #323b48);
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#5d718a), to(#323b48));
+	border-bottom: 2px solid #bbb;
+	height: 2.5em;
+	line-height: 1em;
+	padding: .5em;
+}
+
+#Header h2 {
+	color: #fff;
+	padding: .5em 1em;
+	font-size: 1.35em;
+	margin-top: 0;
+	margin-bottom: 0;
+	text-align: left;
+	text-shadow: rgba(0, 0, 0, 0.5) 0px -1px 0px;
+}
+
+#Header h2 a {
+	color: #fff;
+	text-decoration: none;
+}
+
+#Main {
+	margin-top: 6em;
+}
+
+#Nav {
+	position: absolute;
+	right: 0;
+	top: 1em;
+}
+
+#Nav ul.nav {
+	margin: 0;
+	margin-right: 2em;
+	padding: 0;
+	font-size: .9em;
+	list-style: none;
+}
+
+#Nav ul.nav li {
+	border-left: 1px solid #bcc6d0;
+	display: inline-block;
+	line-height: 1.5em;
+	padding: 0 1em;
+}
+
+#Nav ul.nav li:first-child {
+	border-left: none;
+}
+
+#Nav ul.nav li a {
+	color: #bcc6d0;
+	text-decoration: none;
+}
+
+#Nav ul.nav li a:hover {
+	color: #ebebeb;
+}
+
+#Nav ul.nav li.active a {
+	color: #eee;
+	cursor: default;
+}
+
+#Nav ul.nav li a:hover {
+	color: #fff;
+}
+
+
+#Loggers,
+#Repository,
+#Appenders,
+#Other {
+	display: none;
+}
+
+
+#Loggers.active,
+#Repository.active,
+#Appenders.active,
+#Other.active {
+	display: block;
+}
+
+#LoggerConfigurationControlBarContainer {
+	overflow: hidden;
+}
+
+#LoggerConfigurationControlBar {
+	background-color: #ececec;
+	background: -moz-linear-gradient(top, #dadada, #fafafa);
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#dadada), to(#fafafa));
+	border-bottom: 1px solid #bbb;
+	padding: .25em;
+	margin-top: -3em;
+	position: relative;
+
+	-webkit-transition: all 0.15s ease-in-out;
+	-moz-transition: all 0.15s ease-in-out;
+	-o-transition: all 0.15s ease-in-out;
+	-transition: all 0.15s ease-in-out;
+}
+
+#LoggerConfigurationControlBar.active {
+	margin-top: 0;
+	-webkit-transition: all 0.35s ease-in-out;
+	-moz-transition: all 0.3s ease-in-out;
+	-o-transition: all 0.3s ease-in-out;
+	-transition: all 0.35s ease-in-out;
+}
+
+#LoggerConfigurationControlBar form {
+	margin: 0;
+}
+
+input[type="submit"] {
+	border: 1px solid #bbb;
+	background-color: #ddd;
+	background: -moz-linear-gradient(top, #f3f3f3, #d1d1d1);
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#f3f3f3), to(#d1d1d1));
+	color: #333;
+	margin: 0 .25em;
+	padding: .25em .75em;
+	-moz-border-radius: 1em;
+	-webkit-border-radius: 1em;
+	border-radius: 1em;
+}
+
+input[type="submit"]:hover {
+	background-color: #eee;
+	background: -moz-linear-gradient(top, #d1d1d1, #f3f3f3);
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#d1d1d1), to(#f3f3f3));
+}
+
+#LoggerConfigurationControlBar table {
+	border: none;
+	font-size: .85em;
+	margin: 0 auto;
+}
+
+#LoggerConfigurationControlBar table td {
+	border-left: 1px solid #ccc;
+	padding: .25em 2em;
+	white-space: nowrap;
+}
+
+#LoggerConfigurationControlBar table td:first-child {
+	border-left: none;
+}
+
+.LoggingInfo .LevelIndicator {
+	background-image: url('levels.png');
+	background-position: -9000px 0;
+	background-repeat: no-repeat;
+	display: inline-block;
+	height: 16px;
+	margin: 0 .5em;
+	overflow: hidden;
+	width: 16px;
+}
+
+.LoggingInfo tr.ALL .LevelIndicator { background-position: left -80px; }
+.LoggingInfo tr.TRACE .LevelIndicator { background-position: left -96px; }
+.LoggingInfo tr.DEBUG .LevelIndicator { background-position: left 0; }
+.LoggingInfo tr.INFO .LevelIndicator { background-position: left -16px; }
+.LoggingInfo tr.WARN .LevelIndicator { background-position: left -32px; }
+.LoggingInfo tr.ERROR .LevelIndicator { background-position: left -48px; }
+.LoggingInfo tr.FATAL .LevelIndicator { background-position: left -64px; }
+.LoggingInfo tr.OFF .LevelIndicator { background-position: left -112px; }
+
+
+/* SegmentedSlider
+-------------------------------------- */
+
+div.slider {
+	font-family: Lucida Grande;
+	font-size: 0.8em;
+	color: rgb(50, 50, 50);
+	text-shadow: rgba(255, 255, 255, 0.50) 0px 1px 1px;
+	-moz-text-shadow: rgba(255, 255, 255, 0.50) 0px 1px 1px;
+	border: 1px solid rgb(100, 100, 100);
+	border-radius: 0.25em;
+	-moz-border-radius: 0.25em;
+	display: inline-block;
+	position: relative;
+	padding: 0em;
+	margin: 0em;
+	background-color: rgb(200, 200, 200);
+	background-image: -webkit-gradient(linear, left top, left bottom,
+		color-stop(0, rgba(0, 0, 0, 0.3)),
+		color-stop(0.30, rgba(0, 0, 0, 0.1)),
+		color-stop(1, rgba(0, 0, 0, 0.0))
+	);
+	background-image: -moz-linear-gradient(
+		top,
+		rgba(0, 0, 0, 0.3) 0%,
+		rgba(0, 0, 0, 0.1) 30%,
+		rgba(0, 0, 0, 0.0) 100%
+	);
+	z-index: 0;
+	height: 1.75em;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+}
+
+div.slider ol.items {
+	list-style: none;
+	margin: 0em;
+	padding: 0.25em 0em;
+	margin-right: -1px;
+	white-space: nowrap;
+}
+
+div.slider ol.items li {
+	display: inline-block;
+	text-align: center;
+	padding: 0em .5em;
+	margin: 0em;
+	margin-top: 0.05em;
+	cursor: pointer;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+div.slider ol.items li input[type='radio'] {
+	display: none;
+}
+
+div.slider ol.items li.selected {
+	cursor: default;
+}
+
+div.slider ol.separators {
+	list-style: none;
+	margin: 0em;
+	padding: 0.25em 0em;
+	margin-right: -1px;
+	position: absolute;
+	z-index: -2;
+	white-space: no-wrap;
+}
+
+div.slider ol.separators li {
+	display: inline-block;
+	text-align: center;
+	padding: 0em;
+	margin: 0em;
+	margin-top: 0.05em;
+	cursor: pointer;
+	overflow: hidden;
+	white-space: no-wrap;
+	border-left: 1px solid rgba(127, 127, 127, 0.2);
+	margin-left: -1px;
+	margin-top: -0.3em;
+	padding-bottom: 0.6em;
+}
+
+div.slider ol.separators li:first-child {
+	border-left: none;
+	margin-left: 0px;
+}
+
+div.slider div.selector {
+	border: 1px solid rgb(100, 100, 100);
+	-webkit-box-shadow: 0em 0em 0.5em rgba(100, 100, 100, 0.2);
+	-moz-box-shadow: 0em 0em 0.5em rgba(100, 100, 100, 0.2);
+	border-radius: 0.25em;
+	-moz-border-radius: 0.25em;
+	padding: 0em;
+	margin: 0em;
+	position: absolute;
+	top: 0em;
+	height: 1.75em;
+	background-color: rgb(251, 251, 251);
+	background-image: -webkit-gradient(
+		linear,
+		left top,
+		left bottom,
+		from(rgba(0, 0, 0, 0.0)),
+		to(rgba(0, 0, 0, 0.15)));
+	background-image: -moz-linear-gradient(
+		top,
+		rgba(0, 0, 0, 0.0) 0%,
+		rgba(0, 0, 0, 0.15) 100%);
+	z-index: -1;
+	margin-top: -1px;
+	margin-left: -2px;
+	margin-right: 0px;
+	padding-bottom: 0px;
+	padding-right: 0px;
+	left: 0px;
+}
+
+div.slider ol li {
+	padding: 0;
+	width: auto;
+}
+
+div.slider div.selector_active {
+	background-color: rgb(210, 210, 210) !important;
+	background-image: -moz-linear-gradient(top, rgb(210, 210, 210), rgb(252, 252, 252)) !important;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(rgb(210, 210, 210)), to(rgb(252, 252, 252))) !important;
+}
+
+div.slider div.selectorDrag {
+	cursor: move;
+	position: absolute;
+	height: 1.75em;
+	top: 0;
+	z-index: 10000;
+}
+
+/* End SegmentedSlider
+-------------------------------------- */
+
+td.LoggingItemLevelSettings div.slider {
+	font-size: 1em;
+}
+
+#LoggerDisplaySliderDiv ol.items,
+#LoggerDisplaySliderDiv2 ol.items {
+	list-style-type: none;
+	padding-left: 0;
+	white-space: nowrap;
+}
+
+#LoggerDisplaySliderDiv ol.items li,
+#LoggerDisplaySliderDiv2 ol.items li {
+	display: inline-block;
+}

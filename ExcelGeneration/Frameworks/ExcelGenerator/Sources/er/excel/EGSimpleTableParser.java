@@ -257,7 +257,7 @@ public class EGSimpleTableParser {
     	NSMutableDictionary sheetDict = new NSMutableDictionary();
     	addEntriesFromNode(sheetDict, tableNode);
     	
-    	HSSFSheet sheet = _workbook.createSheet(sheetName);
+    	HSSFSheet sheet = _workbook.createSheet(sheetName.length() > 31 ? sheetName.substring(0, 31) : sheetName);
     	NodeList rowNodes = tableNode.getChildNodes();
     	
     	//takeNumberValueForKey(tableNode, "defaultColumnWidthInPoints", workbook, null);

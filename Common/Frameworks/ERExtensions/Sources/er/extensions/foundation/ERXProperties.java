@@ -698,14 +698,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         }
 
         File file = new File(path);
-        if (! file.exists()  ||  ! file.isFile()  ||  ! file.canRead()) {
-        	if (ERXProperties.shouldValidateProperties()) {
-        		throw new RuntimeException("File " + path + " doesn't exist or can't be read.");
-        	}
-       		log.warn("File " + path + " doesn't exist or can't be read.");
-            return prop;
-        }
-
         try {
         	prop.load(file, requireSymlink);
             log.debug("Loaded configuration file at path: "+ path);
@@ -1687,6 +1679,14 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 			else {
 				canonicalPropsFile = propsFile.getCanonicalFile();
 			}
+
+	        if (!canonicalPropsFile.exists() || !canonicalPropsFile.isFile() || !canonicalPropsFile.canRead()) {
+	            if (ERXProperties.shouldValidateProperties()) {
+	                throw new RuntimeException("File " + propsFile.getPath() + " (resolved to " + canonicalPropsFile.getPath() + ") doesn't exist or can't be read.");
+	            }
+	            log.warn("File " + propsFile.getPath() + " doesn't exist or can't be read.");
+	            return;
+	        }
 
 			_files.push(canonicalPropsFile.getParentFile());
 			try {

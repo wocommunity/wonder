@@ -27,6 +27,8 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSTimestamp;
 
+import er.extensions.jdbc.ERXSQLHelper;
+
 /**
 * The between qualifier allows qualification on an
 * attribute that is between two values. This qualifier
@@ -74,25 +76,40 @@ public class ERXBetweenQualifier extends EOKeyValueQualifier implements EOQualif
 
     /** holds the maximum value */
     private Object	_maximumValue = null;
+    
+    private boolean _numericComparison;
 
     //	===========================================================================
     //	Constructor method(s)
     //	---------------------------------------------------------------------------
 
     /**
-        * Creates a qualifier for a given key with a
-        * min and max value specified.
-        * @param aKey key to qualify against
-        * @param aMinimumValue minimum value of the key
-        * @param aMaximumValue maximum value of the key
-        */
+     * Creates a qualifier for a given key with a
+     * min and max value specified.
+     * @param aKey key to qualify against
+     * @param aMinimumValue minimum value of the key
+     * @param aMaximumValue maximum value of the key
+     */
     public ERXBetweenQualifier(String aKey, Object aMinimumValue, Object aMaximumValue) {
+    	this(aKey, aMinimumValue, aMaximumValue, false);
+    }
+    
+    /**
+     * Creates a qualifier for a given key with a
+     * min and max value specified.
+     * @param aKey key to qualify against
+     * @param aMinimumValue minimum value of the key
+     * @param aMaximumValue maximum value of the key
+     * @param numericComparison if true, a numeric comparison will be forced regardless of the attribute type
+     */
+    public ERXBetweenQualifier(String aKey, Object aMinimumValue, Object aMaximumValue, boolean numericComparison) {
         // Just to make EOKeyValueQualifier happy
         super(aKey, EOQualifier.QualifierOperatorEqual, aMinimumValue);
         
         this.setKey( aKey );
         this.setMinimumValue( aMinimumValue );
         this.setMaximumValue( aMaximumValue );
+        this.setNumericComparison(numericComparison);
     }
 
     //	===========================================================================
@@ -150,6 +167,24 @@ public class ERXBetweenQualifier extends EOKeyValueQualifier implements EOQualif
     public void setMaximumValue(Object aValue) {
         _maximumValue = aValue;
     }
+    
+    /**
+     * Sets whether a numeric comparison will be forced regardless of value type.
+     * 
+     * @param numericComparison whether a numeric comparison will be forced regardless of value type
+     */
+    public void setNumericComparison(boolean numericComparison) {
+		_numericComparison = numericComparison;
+	}
+    
+    /**
+     * Returns whether a numeric comparison will be forced regardless of value type.
+     * 
+     * @return whether a numeric comparison will be forced regardless of value type
+     */
+    public boolean isNumericComparison() {
+		return _numericComparison;
+	}
 
     //	===========================================================================
     //	EOQualifier method(s)
@@ -230,7 +265,12 @@ public class ERXBetweenQualifier extends EOKeyValueQualifier implements EOQualif
                     aMinimumQualifier = (EOKeyValueQualifier) anEntity.schemaBasedQualifier( aMinimumQualifier );
                     aMaximumQualifier = (EOKeyValueQualifier) anEntity.schemaBasedQualifier( aMaximumQualifier );
 
-                    aBuffer.append( aSQLExpression.sqlStringForAttributeNamed( aMinimumQualifier.key() ) );
+                    if (betweenQualifier.isNumericComparison()) {
+                    	aBuffer.append(ERXSQLHelper.newSQLHelper(aSQLExpression).sqlForCastingAttributeToType(aSQLExpression, aMinimumQualifier.key(), Number.class));
+                    }
+                    else {
+                    	aBuffer.append( aSQLExpression.sqlStringForAttributeNamed(aMinimumQualifier.key()) );
+                    }
 
                     aBuffer.append( ERXBetweenQualifier.BetweenStatement );
 
@@ -349,6 +389,6 @@ public class ERXBetweenQualifier extends EOKeyValueQualifier implements EOQualif
         * @return clone of the qualifier
         */
     public Object clone() {
-        return new ERXBetweenQualifier(this.key(), this.minimumValue(), this.maximumValue());
+        return new ERXBetweenQualifier(this.key(), this.minimumValue(), this.maximumValue(), this.isNumericComparison());
     }
 }

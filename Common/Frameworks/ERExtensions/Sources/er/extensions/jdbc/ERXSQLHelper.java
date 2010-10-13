@@ -845,6 +845,17 @@ public class ERXSQLHelper {
 	public String sqlForFullTextQuery(ERXFullTextQualifier qualifier, EOSQLExpression expression) {
 		throw new UnsupportedOperationException("There is no " + getClass().getSimpleName() + " implementation for generating full text expressions.");
 	}
+	
+	/**
+	 * Returns the SQL expression for casting a column name to a target type. The default implementation of this class does nothing.
+	 * 
+	 * @param attributeName the attribute to cast
+	 * @param targetType the target type to cast to
+	 * @return the SQL expression for casting
+	 */
+	public String sqlForCastingAttributeToType(EOSQLExpression expression, String attributeName, Class<?> targetType) {
+		return expression.sqlStringForAttributeNamed(attributeName);
+	}
 
 	/**
 	 * Returns the SQL expression for creating a unique index on the given set
@@ -1794,6 +1805,19 @@ public class ERXSQLHelper {
 		@Override
 		public String sqlForRegularExpressionQuery(String key, String value) {
 			return "REGEXP_LIKE(" + key + ", " + value + ")";
+		}
+
+		@Override
+		public String sqlForCastingAttributeToType(EOSQLExpression expression, String attributeName, Class<?> targetType) {
+			String sqlForCastingAttributeToType;
+			EOAttribute attr = expression.entity().anyAttributeNamed(attributeName);
+			if (attr != null && String.class.getName().equals(attr.className()) && Number.class.isAssignableFrom(targetType)) {
+				sqlForCastingAttributeToType = "to_number(" + super.sqlForCastingAttributeToType(expression, attributeName, targetType) + ")";
+			}
+			else {
+				sqlForCastingAttributeToType = super.sqlForCastingAttributeToType(expression, attributeName, targetType);
+			}
+			return sqlForCastingAttributeToType;
 		}
 
 		@Override
