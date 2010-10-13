@@ -5,30 +5,166 @@
 </HEAD>
 <BODY BGCOLOR="white">
 <H1>Introduction</H1>
-<li>how does a .plist for the navigation look like?</li>
+<li>What does a .plist for the navigation look like?</li>
 
 <code><pre>(
+	/*
+	Using the ERXNavigationMenu:
+	
+	(This sample and its excelent comments come from Ramsey Gurley's
+	HelloD2W sample application from WOWODC 2010)
+	
+	In order to enable a navigation menu, you must/should:
+	
+	1. Add to your properties file:
+	er.extensions.ERXNavigationManager.localizeDisplayKeys=true
+	
+	2. When your app finishes initializing, call:
+	ERXNavigationManager.manager().configureNavigation();
+	
+	3. Create a NavigationMenu.plist file (like this one)
+	
+	4. Set the navigation context (see the navigationContext() method in MenuHeader)
+	
+	5. Set the navigationState on the navigation context... more on that in a bit.
+		
+	*/
 	{
+		/*
+		This defines the root level of the menu. If you add any new level one
+		menu items, you must include the name in the list of children for
+		root. ERXNavigationMenu is limited to three levels of menu items.
+		*/
 		name = Root;
-		children = ("First Level Item");
+		children = (Home,Movie,Customer);
 	},
-        {
-		name = "First Level Item";
-		pageName = "FirstPage";
+	{
+		/*
+		The name of your navigation item is used to identify your navigation
+		state as well.  So in your context, if you want the named item to
+		appear selected, you need to have a navigation state that matches.
+		
+		For example, let us say in your menu hierarchy you want a second 
+		level item to appear selected. Your navigation state should look 
+		something like "Parent.Child" where "Parent" is the name of the 
+		level one menu item, and "Child" is the name of the level two menu 
+		item.
+		*/
+		name = Home;
 
-		children = ("Second Level Item");
-
-		height = 19;
-		width = 90;
+		/*
+		The action here does not have to be a component action.
+		In order of precedence, it can be:
+		
+		href
+		action
+		pageName
+		directActionName
+		
+		*/
+		action = "session.navController.homeAction";
+		children = ("Graph","Logout");
 	},
-        {
-		name = "Second Level Item";
-		displayName = "^session.secondLevelDisplayName";
-                action = "session.createSomething";
-
-		height = 19;
-		width = 90;
+	{
+		/* an example using a direct action */
+		name = Graph;
+		directActionName = "graph";
+		/*
+		A query dictionary may be specified with the queryBindings key. In
+		this case, the graphviz page requires a binding for format and it
+		may only be either "pdf" or "svg"
+		*/
+		queryBindings = {format="pdf";};
+	},
+	{
+		name = Movie;
+		action = "session.navController.listMovieAction";
+		
+		/*
+		displayName takes precedence over name for display purposes.
+		If no displayName is provided, name is used.  Localized keys are
+		"Nav.<displayName>" and "Nav.<name>" respectively.
+		*/
+		displayName = "MovieKey";
+		children = ("CreateMovie");
+		/*
+		Oddly, instead of specifying an array for childrenConditions, 
+		a comma separated string of keyPaths is expected instead. All 
+		children conditions must be met or no children will be shown 
+		for the menu item.
+		*/
+		childrenConditions = "session.user.hasAdministratorAccessLevel,session.user.hasEmployeeAccessLevel";
+	},
+	{
+		name = CreateMovie;
+		action = "session.navController.createMovieAction";
+	},
+	{
+		name = Logout;
+		directActionName = "logout";
+		/*
+		You may specify the direct action class using the
+		directActionClass binding.
+		*/
+		directActionClass = "ERXDirectAction";
+	},
+	{
+		name = Customer;
+		action = "session.navController.inspectTabCustomerAction";
+		/*
+		If children is a keyPath instead of an array, then the value for the
+		keyPath is used to determine the children choices shown. 
+		If the keypath evaluates to an NSArray, then the resultant array is 
+		used as the children array.
+		If the array evaluates to a String, then that String is used as a key
+		to find the array of children in the 'childrenChoices' dictionary.
+		*/
+		children = "session.user.accessLevel.toString";
+		childrenChoices = {
+			1 = (Choice1);
+			2 = (Choice2);
+			3 = (RentalHistory,RentMovies);
+		};
+	},
+	{
+		name = Choice1;
+		action = "session.navController.homeAction";
+	},
+	{
+		name = Choice2;
+		action = "session.navController.homeAction";
+	},
+	{
+		name = RentalHistory;
+		action = "session.navController.rentalHistoryAction";
+		/*
+		hasActivity evaluates the value supplied directly, so truthy
+		values like 1 or true evaluate true and falsey values evaluate
+		false. To specify a keyPath, you need to start the keypath with
+		a '^' character.
+		*/
+		hasActivity = "^session.user.customer.hasOverdueRentals";
+	},
+	{
+		name = RentMovies;
+		action = "session.navController.rentMoviesAction";
+		/*
+		If the keyPaths for 'conditions' evaluate to false, then the menu
+		item is omitted. A single array of conditions are ANDed together,
+		where a nested array like ((condition1, condition2)) are ORed
+		instead. The following example is ANDed, so all conditions must
+		be true or RentMovies will be omitted.
+		*/
+		conditions = ("session.user.hasCustomerAccessLevel","session.user.customer.isAllowedToRent");
+		/*
+		The qualifier is only evaluated if there are conditions and the 
+		conditions have been met. Also it is evaluated against the 
+		ERXNavigationItem itself, so I'm not really sure what problem
+		it was intended to solve.
+		*/
+		qualifier = "name = 'RentMovies'";
 	}
+
 )
 </pre></code>
 <li>what do I do with it?<br>
