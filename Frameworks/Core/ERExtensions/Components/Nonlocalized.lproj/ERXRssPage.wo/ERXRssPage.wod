@@ -52,3 +52,7 @@ hasNoGuid : WOConditional {
 	condition = itemGuid;
 	negate = true;
 }
+
+Link : WOGenericContainer {
+	elementName = "link";
+}
