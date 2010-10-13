@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
@@ -159,7 +160,7 @@ public abstract class FileUploader extends WOComponent {
     @Override
     public WOActionResults invokeAction(WORequest request, WOContext context) {         
     	if (context.senderID().equals(context.elementID())) {
-        	WOResponse response = new WOResponse();
+        	WOResponse response = WOApplication.application().createResponseInContext(context);
 
     		if (exception != null) {
     			response.appendContentString("{\"error\":" + exception.getMessage() + "}");
