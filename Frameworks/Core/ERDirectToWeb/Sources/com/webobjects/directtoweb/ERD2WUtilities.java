@@ -102,6 +102,24 @@ public class ERD2WUtilities {
         }
         return null;
     }
+    
+    /**
+     * This method is similar to enclosingPageOfClass. It differs in that it is generic
+     * and it inspects the sender argument as well as its parents.
+     * @param <T> The class type
+     * @param sender the sender component
+     * @param c the class
+     * @return sender or the first of sender's parents that is assignable from class c
+     */
+    public static <T extends WOComponent> T enclosingComponentOfClass(WOComponent sender, Class<T> c) {
+        WOComponent p = sender;
+        while(p != null) {
+            if(c.isAssignableFrom(p.getClass()))
+                return (T)p;
+            p = p.parent();
+        }
+        return null;
+    }
 
     /** Utility to return the outermost page that is a D2W page. This is needed because this component might be embedded inside a plain page. */
     public static D2WPage topLevelD2WPage(WOComponent sender) {

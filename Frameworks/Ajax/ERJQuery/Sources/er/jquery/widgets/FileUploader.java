@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
@@ -30,11 +31,16 @@ import er.extensions.foundation.ERXStringUtilities;
  * @binding			onComplete			
  * 
  * @property		useUnobtrusively			For Unobtrusive Javascript programming. Default it is ON.
+ * @property 		WOFileUpload.sizeLimit		Max file upload size permitted
  * 
  * @author mendis
  * 
- * NOTE: The progress indicator doesn't work properly with WODefaultAdaptor. If you want a progress % indicator, you may 
+ * NOTES: 
+ * 
+ * 1. The progress indicator doesn't work properly with WODefaultAdaptor. If you want a progress % indicator, you may 
  * need to use an alternative WOAdaptor. e.g: ERWOAdaptor
+ * 
+ * 2. Use of ERXSession breaks IE6-8 compatibility. Use WOSession instead.
  *
  */
 public abstract class FileUploader extends WOComponent {
@@ -69,6 +75,7 @@ public abstract class FileUploader extends WOComponent {
 	 */
 	public static interface FormKeys {
 		public static final String qqfile = "qqfile";
+		public static final String qqfilename = "qqfile.filename";
 		public static final String _forceFormSubmitted = "_forceFormSubmitted";
 	}
 	
@@ -102,15 +109,20 @@ public abstract class FileUploader extends WOComponent {
 		return (String) valueForBinding(Bindings.finalFilePath);
 	}
 	
+	public static Integer maxFileSize() {
+		 return Integer.getInteger("WOFileUpload.sizeLimit", 1024*1024*100);
+	}
+	
     /*
      * An array of options for File Uploader
      */
     protected NSArray<String> _options() {
-    	NSMutableArray _options = new NSMutableArray("action:'" + href() + "'");
+    	NSMutableArray<String> _options = new NSMutableArray<String>("action:'" + href() + "'");
     	
     	// add options
     	_options.add("element: $('#" + id() + "')[0]");
     	_options.add("params: { " + FormKeys._forceFormSubmitted + ": '" + id() + "'}"); 	// TODO params binding
+    	_options.add("sizeLimit: " + maxFileSize());
     	if (hasBinding(Bindings.onChange)) _options.add("onChange:" + valueForBinding(Bindings.onChange));
     	if (hasBinding(Bindings.onComplete)) _options.add("onComplete:" + valueForBinding(Bindings.onComplete));
     	if (hasBinding(Bindings.onSubmit)) _options.add("onSubmit:" + valueForBinding(Bindings.onSubmit));
@@ -146,12 +158,9 @@ public abstract class FileUploader extends WOComponent {
     }
     
     @Override
-    public WOActionResults invokeAction(WORequest request, WOContext context) {  
-        String forceFormSubmittedElementID = (String) request.formValueForKey(FormKeys._forceFormSubmitted);
-        boolean forceFormSubmitted = forceFormSubmittedElementID != null && forceFormSubmittedElementID.equals(id());
-        
-    	if (forceFormSubmitted) {
-        	WOResponse response = new WOResponse();
+    public WOActionResults invokeAction(WORequest request, WOContext context) {         
+    	if (context.senderID().equals(context.elementID())) {
+        	WOResponse response = WOApplication.application().createResponseInContext(context);
 
     		if (exception != null) {
     			response.appendContentString("{\"error\":" + exception.getMessage() + "}");
@@ -164,13 +173,22 @@ public abstract class FileUploader extends WOComponent {
 	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		super.takeValuesFromRequest(request, context);
-		
-        String forceFormSubmittedElementID = (String) request.formValueForKey(FormKeys._forceFormSubmitted);
-        boolean forceFormSubmitted = forceFormSubmittedElementID != null && forceFormSubmittedElementID.equals(id());
-
-		if (forceFormSubmitted && request.formValueForKey(FormKeys.qqfile) != null) {
-			String aFileName = (String) request.formValueForKey(FormKeys.qqfile);
-			InputStream anInputStream = (request.contentInputStream() != null) ? request.contentInputStream() : request.content().stream();
+        
+		if (context.senderID().equals(context.elementID())) {
+			String aFileName;
+			InputStream anInputStream;
+			
+	        if (request.formValueForKey(FormKeys.qqfilename) != null) {
+	        	aFileName = (String) request.formValueForKey(FormKeys.qqfilename);
+	        	NSData data = (NSData) request.formValueForKey(FormKeys.qqfile);
+	        	anInputStream = data.stream();
+	        } else if (request.formValueForKey(FormKeys.qqfile) != null) {
+				aFileName = (String) request.formValueForKey(FormKeys.qqfile);
+				anInputStream = (request.contentInputStream() != null) ? request.contentInputStream() : request.content().stream();
+	        } else {
+	        	log.error("Unable to obtain filename from form values: " + request.formValueKeys());
+	        	return;
+	        }
 
 			// filepath
 			if (hasBinding(Bindings.filePath)) {
