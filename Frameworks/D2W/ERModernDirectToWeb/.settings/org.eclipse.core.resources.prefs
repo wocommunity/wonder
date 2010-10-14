@@ -1,2 +1,10 @@
+#Thu Oct 14 11:18:10 EDT 2010
 eclipse.preferences.version=1
-encoding//Components=UTF-8
+encoding//Resources/Dutch.lproj=UTF-16LE
+encoding//Resources/English.lproj=UTF-16LE
+encoding//Resources/French.lproj=UTF-16LE
+encoding//Resources/German.lproj=UTF-16LE
+encoding//Resources/Italian.lproj=UTF-16LE
+encoding//Resources/Japanese.lproj=UTF-16LE
+encoding//Resources/Norwegian.lproj=UTF-16LE
+encoding/Components=UTF-8
