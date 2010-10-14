@@ -25,6 +25,7 @@ import er.extensions.eof.ERXEntityOrder;
  */
 public class ERXEntityDependencyOrderingDelegate {
 
+	public static final String ERXEntityDependencyOrderingDelegateActiveKey = "com.webobjects.eoaccess.ERXEntityDependencyOrderingDelegate.active";
     protected NSComparator adaptorOpComparator;
     private static Logger logger = Logger.getLogger(ERXEntityDependencyOrderingDelegate.class);
 
