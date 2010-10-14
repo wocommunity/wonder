@@ -26,6 +26,7 @@ public class ERXRedirect extends WOComponent {
 	private String _requestHandlerKey;
 	private String _requestHandlerPath;
 	private Boolean _secure;
+	private boolean _javascriptRedirectEnabled;
 
 	private String _directActionClass;
 	private String _directActionName;
@@ -36,7 +37,26 @@ public class ERXRedirect extends WOComponent {
 	public ERXRedirect(WOContext context) {
 		super(context);
 		_originalComponent = context.page();
+		_javascriptRedirectEnabled = true;
 	}
+
+	/**
+	 * Sets whether or not ERXRedirect produces a document.location href when redirecting under during an Ajax request.
+	 * 
+	 * @param javascriptRedirectEnabled whether or not ERXRedirect produces a document.location href when redirecting under during an Ajax request
+	 */
+	public void setJavascriptRedirectEnabled(boolean javascriptRedirectEnabled) {
+        _javascriptRedirectEnabled = javascriptRedirectEnabled;
+    }
+	
+	/**
+	 * Returns whether or not ERXRedirect produces a document.location href when redirecting under during an Ajax request.
+	 * 
+	 * @return whether or not ERXRedirect produces a document.location href when redirecting under during an Ajax request
+	 */
+	public boolean isJavascriptRedirectEnabled() {
+        return _javascriptRedirectEnabled;
+    }
 
 	/**
 	 * Sets whether or not a secure URL should be generated. This does not apply
@@ -216,7 +236,7 @@ public class ERXRedirect extends WOComponent {
 			throw new IllegalStateException("You must provide a component, url, requestHandlerKey, or directActionName to this ERXRedirect.");
 		}
 
-		if (ERXAjaxApplication.isAjaxRequest(context.request())) {
+		if (ERXAjaxApplication.isAjaxRequest(context.request()) && isJavascriptRedirectEnabled()) {
 			boolean hasUpdateContainer = context.request().stringFormValueForKey(ERXAjaxApplication.KEY_UPDATE_CONTAINER_ID) != null;
 			if (hasUpdateContainer) {
 				response.appendContentString("<script type=\"text/javascript\">");
