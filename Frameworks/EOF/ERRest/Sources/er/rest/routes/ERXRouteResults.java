@@ -75,16 +75,16 @@ public class ERXRouteResults implements WOActionResults {
 	 */
 	public WOResponse generateResponse() {
 		WOResponse response = WOApplication.application().createResponseInContext(_context);
+		if (writer == null) {
+			throw new IllegalStateException("There is no writer for the format '" + _format.name() + "'.");
+		}
+		writer.appendToResponse(_responseNode, new ERXWORestResponse(response), _format.delegate());
 		if (_headers.count() > 0) {
 			for (String key : _headers.keySet()) {
 				response.setHeader(_headers.objectForKey(key), key);
 			}
 		}
 		IERXRestWriter writer = _format.writer();
-		if (writer == null) {
-			throw new IllegalStateException("There is no writer for the format '" + _format.name() + "'.");
-		}
-		writer.appendToResponse(_responseNode, new ERXWORestResponse(response), _format.delegate());
 		return response;
 	}
 
