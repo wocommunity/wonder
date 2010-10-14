@@ -17,10 +17,8 @@
 	<classpathentry kind="con" path="WOFramework/JavaWebObjects"/>
 	<classpathentry kind="con" path="WOFramework/JavaXML"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ERDivaLook"/>
 	<classpathentry kind="con" path="WOFramework/H2PlugIn"/>
 	<classpathentry kind="con" path="WOFramework/ERMoviesLogic"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ERPrototaculous"/>
 	<classpathentry kind="con" path="WOFramework/ERPrototaculous"/>
 	<classpathentry kind="con" path="WOFramework/ERSelenium"/>
 	<classpathentry kind="con" path="WOFramework/ERTaggable"/>
