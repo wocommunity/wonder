@@ -24,5 +24,7 @@
         <binding name="onFailure"/>
         <binding name="onSuccess"/>
     <binding name="onExpansionComplete"/>
+    <binding name="openedLabel"/>
+        <binding name="closedLabel"/>
     </wo>
 </wodefinitions>
