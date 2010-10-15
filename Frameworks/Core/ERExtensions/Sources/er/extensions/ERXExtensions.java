@@ -210,14 +210,19 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     		// False by default
     		if (ERXValueUtilities.booleanValue(System.getProperty(ERXSharedEOLoader.PatchSharedEOLoadingPropertyKey))) {
     			ERXSharedEOLoader.patchSharedEOLoading();
-    		}            
-    		ERXExtensions.configureAdaptorContextRapidTurnAround(this);
-    		ERXJDBCAdaptor.registerJDBCAdaptor();
-    		
-    		if (ERXValueUtilities.booleanValue(System.getProperty(ERXEntityDependencyOrderingDelegate.ERXEntityDependencyOrderingDelegateActiveKey))) {
-    			ERXDatabaseContextMulticastingDelegate.addDefaultDelegate(new ERXEntityDependencyOrderingDelegate());
-    		}
-    		ERXDatabaseContextMulticastingDelegate.addDefaultDelegate(ERXDatabaseContextDelegate.defaultDelegate()); 
+			}
+			ERXExtensions.configureAdaptorContextRapidTurnAround(this);
+			ERXJDBCAdaptor.registerJDBCAdaptor();
+
+			if (EODatabaseContext.defaultDelegate() == null) {
+				if (ERXProperties.booleanForKey(ERXEntityDependencyOrderingDelegate.ERXEntityDependencyOrderingDelegateActiveKey)) {
+					ERXDatabaseContextMulticastingDelegate.addDefaultDelegate(new ERXEntityDependencyOrderingDelegate());
+					ERXDatabaseContextMulticastingDelegate.addDefaultDelegate(ERXDatabaseContextDelegate.defaultDelegate());
+				}
+				else {
+					EODatabaseContext.setDefaultDelegate(ERXDatabaseContextDelegate.defaultDelegate());
+				}
+			}
     		
     		ERXAdaptorChannelDelegate.setupDelegate();
     		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("sharedEditingContextWasInitialized", ERXConstant.NotificationClassArray), EOSharedEditingContext.DefaultSharedEditingContextWasInitializedNotification, null);
