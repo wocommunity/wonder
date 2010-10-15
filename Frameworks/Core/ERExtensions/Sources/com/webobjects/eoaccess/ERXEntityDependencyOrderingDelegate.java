@@ -20,11 +20,16 @@ import er.extensions.eof.ERXEntityOrder;
  * <pre>
  * ERXDatabaseContextMulticastingDelegate.addDefaultDelegate(new ERXEntityDependencyOrderingDelegate());
  * </pre>
- *
+ * To turn this on for a Wonder application, just set this property:
+ * <pre>
+ * com.webobjects.eoaccess.ERXEntityDependencyOrderingDelegate.active = true
+ * </pre>
+ * 
  * @author chill
  */
 public class ERXEntityDependencyOrderingDelegate {
 
+	public static final String ERXEntityDependencyOrderingDelegateActiveKey = "com.webobjects.eoaccess.ERXEntityDependencyOrderingDelegate.active";
     protected NSComparator adaptorOpComparator;
     private static Logger logger = Logger.getLogger(ERXEntityDependencyOrderingDelegate.class);
 

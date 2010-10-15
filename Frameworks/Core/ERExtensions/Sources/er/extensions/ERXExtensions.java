@@ -32,6 +32,7 @@ import com.webobjects.eoaccess.EOQualifierSQLGeneration;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eoaccess.ERXEntityDependencyOrderingDelegate;
 import com.webobjects.eoaccess.ERXModel;
 import com.webobjects.eoaccess.EOQualifierSQLGeneration.Support;
 import com.webobjects.eocontrol.EOEditingContext;
@@ -59,6 +60,7 @@ import er.extensions.eof.ERXAdaptorChannelDelegate;
 import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXDatabaseContext;
 import er.extensions.eof.ERXDatabaseContextDelegate;
+import er.extensions.eof.ERXDatabaseContextMulticastingDelegate;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.eof.ERXEntityClassDescription;
@@ -208,10 +210,20 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     		// False by default
     		if (ERXValueUtilities.booleanValue(System.getProperty(ERXSharedEOLoader.PatchSharedEOLoadingPropertyKey))) {
     			ERXSharedEOLoader.patchSharedEOLoading();
-    		}            
-    		ERXExtensions.configureAdaptorContextRapidTurnAround(this);
-    		ERXJDBCAdaptor.registerJDBCAdaptor();
-    		EODatabaseContext.setDefaultDelegate(ERXDatabaseContextDelegate.defaultDelegate());
+			}
+			ERXExtensions.configureAdaptorContextRapidTurnAround(this);
+			ERXJDBCAdaptor.registerJDBCAdaptor();
+
+			if (EODatabaseContext.defaultDelegate() == null) {
+				if (ERXProperties.booleanForKey(ERXEntityDependencyOrderingDelegate.ERXEntityDependencyOrderingDelegateActiveKey)) {
+					ERXDatabaseContextMulticastingDelegate.addDefaultDelegate(new ERXEntityDependencyOrderingDelegate());
+					ERXDatabaseContextMulticastingDelegate.addDefaultDelegate(ERXDatabaseContextDelegate.defaultDelegate());
+				}
+				else {
+					EODatabaseContext.setDefaultDelegate(ERXDatabaseContextDelegate.defaultDelegate());
+				}
+			}
+    		
     		ERXAdaptorChannelDelegate.setupDelegate();
     		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("sharedEditingContextWasInitialized", ERXConstant.NotificationClassArray), EOSharedEditingContext.DefaultSharedEditingContextWasInitializedNotification, null);
 

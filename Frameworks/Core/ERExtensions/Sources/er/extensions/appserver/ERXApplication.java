@@ -2005,19 +2005,20 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 					}
 					else {
 						NSData input = response.content();
-						byte[] inputBytes = input._bytesNoCopy();
-						inputBytesLength = inputBytes.length;
-						compressedData = ERXCompressionUtilities.gzipByteArray(inputBytes);
+						inputBytesLength = input.length();
+						compressedData = (inputBytesLength > 0) ? ERXCompressionUtilities.gzipByteArray(input._bytesNoCopy()) : null;
 					}
-					if (compressedData == null) {
-						// something went wrong
-					}
-					else {
-						response.setContent(new NSData(compressedData, new NSRange(0, compressedData.length), true));
-						response.setHeader(String.valueOf(compressedData.length), "content-length");
-						response.setHeader("gzip", "content-encoding");
-						if (log.isDebugEnabled()) {
-							log.debug("before: " + inputBytesLength + ", after " + compressedData.length + ", time: " + (System.currentTimeMillis() - start));
+					if ( inputBytesLength > 0 ) {
+						if (compressedData == null) {
+							// something went wrong
+						}
+						else {
+							response.setContent(new NSData(compressedData, new NSRange(0, compressedData.length), true));
+							response.setHeader(String.valueOf(compressedData.length), "content-length");
+							response.setHeader("gzip", "content-encoding");
+							if (log.isDebugEnabled()) {
+								log.debug("before: " + inputBytesLength + ", after " + compressedData.length + ", time: " + (System.currentTimeMillis() - start));
+							}
 						}
 					}
 				}

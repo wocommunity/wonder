@@ -279,6 +279,9 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 ## but only if it is activated or remote syncing is on
 # er.extensions.ERXDatabaseContext.activate = true
 
+# Set to true to have this delegate order the operations (e.g. or MS SQL Server)
+com.webobjects.eoaccess.ERXEntityDependencyOrderingDelegate.active = false
+
 #########################################################################
 # ERXDatabaseContextDelegate 
 #########################################################################
