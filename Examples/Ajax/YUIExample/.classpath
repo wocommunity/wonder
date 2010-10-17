@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="Sources"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/AjaxExample"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/ERExtensions"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/YUI"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/Ajax"/>
