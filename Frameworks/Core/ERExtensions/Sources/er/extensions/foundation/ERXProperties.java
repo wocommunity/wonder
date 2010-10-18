@@ -899,7 +899,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         	/** Properties.dev -- per-Framework-dev properties 
         	 * This adds support for Properties.dev in your Frameworks new load order will be
         	 */
-        	String devPropertiesPath = ERXProperties.variantPropertiesInBundle("dev", frameworkName);
+        	String devPropertiesPath = ERXApplication.isDevelopmentModeSafe() ? ERXProperties.variantPropertiesInBundle("dev", frameworkName) : null;
         	addIfPresent(frameworkName + ".framework.dev", devPropertiesPath, propertiesPaths, projectsInfo);
         	
         	/** Properties.<userName> -- per-Framework-per-User properties */
