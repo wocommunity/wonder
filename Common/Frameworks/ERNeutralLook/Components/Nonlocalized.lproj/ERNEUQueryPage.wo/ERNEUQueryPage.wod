@@ -1,5 +1,5 @@
 AboveDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
-    localContext = d2wContext;
+	localContext = d2wContext;
 	extraPropertiesKey = "aboveDisplayPropertyKeys";
 }
 
@@ -27,12 +27,16 @@ BelowDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
 	extraPropertiesKey = "belowDisplayPropertyKeys";
 }
 
+CacheBuster: WOHiddenField {
+	value = displayGroupCacheBuster;
+}
+
 CanQueryForNullValues: WOConditional {
-    condition = d2wContext.enableQueryForNullValues;
+	condition = d2wContext.enableQueryForNullValues;
 }
 
 CanQueryPropertyForNullValue: WOConditional {
-    condition = canQueryCurrentPropertyForNullValue;
+	condition = canQueryCurrentPropertyForNullValue;
 }
 
 Conditional1: WOConditional {
@@ -101,8 +105,8 @@ MainTable: WOGenericContainer {
 }
 
 NoValueString: ERXLocalizedString {
-    value = "ERD2WQueryPage.noValueLabel";
-    escapeHTML = false;
+	value = "ERD2WQueryPage.noValueLabel";
+	escapeHTML = false;
 }
 
 PageMetricsSummary: ERXStatsSummary {
@@ -116,8 +120,8 @@ PageWrapper: WOSwitchComponent {
 }
 
 PropertyHasNullValueCheckBox: WOCheckBox {
-    checked = isNullQueryCheckedForCurrentProperty;
-    onclick = "ERD2WQueryPage.toggleFormFieldsCorrespondingToNullQueryCheckbox(event);";
+	checked = isNullQueryCheckedForCurrentProperty;
+	onclick = "ERD2WQueryPage.toggleFormFieldsCorrespondingToNullQueryCheckbox(event);";
 }
 
 QueryForm: WOForm {
