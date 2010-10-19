@@ -24,6 +24,7 @@ import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation._NSStringUtilities;
 
 public class _MySQLPlugIn extends JDBCPlugIn {
 
@@ -102,10 +103,11 @@ public class _MySQLPlugIn extends JDBCPlugIn {
         }
 		
 		@Override
-        public NSArray<EOSQLExpression> statementsToModifyColumnNullRule(String columnName, String tableName, boolean allowsNull, EOSchemaGenerationOptions options) {
+    public NSArray<EOSQLExpression> statementsToModifyColumnNullRule(String columnName, String tableName, boolean allowsNull, EOSchemaGenerationOptions options) {
 		    String nullStatement = allowsNull ? " NULL" : " NOT NULL";
 		    EOAttribute attribute = attributeInEntityWithColumnName(entityForTableName(tableName), columnName);
-		    return new NSArray<EOSQLExpression>(_expressionForString((new StringBuilder()).append("ALTER TABLE ").append(formatTableName(tableName)).append(" MODIFY ").append(formatColumnName(columnName)).append(" ").append(attribute.externalType()).append(nullStatement).toString()));
+		    String externalType = columnTypeStringForAttribute(attribute);
+		    return new NSArray<EOSQLExpression>(_expressionForString((new StringBuilder()).append("ALTER TABLE ").append(formatTableName(tableName)).append(" MODIFY ").append(formatColumnName(columnName)).append(" ").append(externalType).append(nullStatement).toString()));
 		}
 		
 		@Override
@@ -117,7 +119,8 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 		public NSArray<EOSQLExpression> statementsToRenameColumnNamed(String columnName, String tableName, String newName, EOSchemaGenerationOptions options) {
 		    EOAttribute attribute = attributeInEntityWithColumnName(entityForTableName(tableName), newName);
 		    String nullStatement = attribute.allowsNull() ? " NULL" : " NOT NULL";
-		    return new NSArray<EOSQLExpression>(_expressionForString((new StringBuilder()).append("ALTER TABLE ").append(formatTableName(tableName)).append(" CHANGE ").append(formatColumnName(columnName)).append(" ").append(formatColumnName(newName)).append(" ").append(attribute.externalType()).append(nullStatement).toString()));
+		    String externalType = columnTypeStringForAttribute(attribute);
+		    return new NSArray<EOSQLExpression>(_expressionForString((new StringBuilder()).append("ALTER TABLE ").append(formatTableName(tableName)).append(" CHANGE ").append(formatColumnName(columnName)).append(" ").append(formatColumnName(newName)).append(" ").append(externalType).append(nullStatement).toString()));
 		}
 		
 		@Override
@@ -129,7 +132,7 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 		    EOModelGroup modelGroup = EOModelGroup.globalModelGroup();
             for (EOModel model : modelGroup.models()) {
                 for (EOEntity entity : model.entities()) {
-                    if (entity.externalName().equalsIgnoreCase(tableName)) {
+                    if (entity.externalName() != null && entity.externalName().equalsIgnoreCase(tableName)) {
                         return entity;
                     }
                 }
@@ -162,23 +165,40 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 			return true;
 		}
 		
+		// Shameless stolen from PostresqlSynchronizationFactory - davidleber
+		//
+    // I blame statementstToConvertColumnType for not taking a damn EOAttribute for
+    // having to steal this from EOSQLExpression
+    public String columnTypeStringForAttribute(EOAttribute attribute) {
+      if (attribute.precision() != 0) {
+        String precision = String.valueOf(attribute.precision());
+        String scale = String.valueOf(attribute.scale());
+        return _NSStringUtilities.concat(attribute.externalType(), "(", precision, ",", scale, ")");
+      }
+      if (attribute.width() != 0) {
+        String width = String.valueOf(attribute.width());
+        return _NSStringUtilities.concat(attribute.externalType(), "(", width, ")");
+      }
+      return attribute.externalType();
+    }
+    
 		private String statementToCreateDataTypeClause(ColumnTypes columntypes) {
-            int size = columntypes.precision();
-            if (size == 0) {
-               size = columntypes.width();
-            }
+			int size = columntypes.precision();
+			if (size == 0) {
+				size = columntypes.width();
+			}
 
-            if (size == 0) {
-                return columntypes.name();
-            }
+			if (size == 0) {
+				return columntypes.name();
+			}
 
-            int scale = columntypes.scale();
-            if (scale == 0) {
-                return columntypes.name() + "(" + size + ")";
-            }
+			int scale = columntypes.scale();
+			if (scale == 0) {
+				return columntypes.name() + "(" + size + ")";
+			}
 
-            return columntypes.name() + "(" + size + "," + scale + ")";
-        }
+			return columntypes.name() + "(" + size + "," + scale + ")";
+		}
 
 	}
 
