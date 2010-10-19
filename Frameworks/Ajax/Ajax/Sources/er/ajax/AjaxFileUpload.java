@@ -131,7 +131,9 @@ public class AjaxFileUpload extends WOComponent {
 
 	public void setUploadProgress(AjaxUploadProgress progress) {
 		_progress = progress;
-		setValueForBinding(progress, "uploadProgress");
+		if (hasBinding("uploadProgress")) {
+			setValueForBinding(progress, "uploadProgress");
+		}
 		if (progress == null && !hasBinding("uploadStarted")) {
 			_uploadStarted = false;
 		}
@@ -238,10 +240,14 @@ public class AjaxFileUpload extends WOComponent {
 			_progress.reset();
 		}
 		_progress = null;
-		setValueForBinding(null, "uploadProgress");
+		if (hasBinding("uploadProgress")) {
+			setValueForBinding(null, "uploadProgress");
+		}
 
 		_uploadStarted = true;
-		setValueForBinding(Boolean.TRUE, "uploadStarted");
+		if (hasBinding("uploadStarted")) {
+			setValueForBinding(Boolean.TRUE, "uploadStarted");
+		}
 		
 		AjaxResponse response = AjaxUtils.createResponse(context().request(), context());
 		AjaxUtils.appendScriptHeaderIfNecessary(context().request(), response);

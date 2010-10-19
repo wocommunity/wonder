@@ -9,8 +9,19 @@
 	<artifactId>woadaptors</artifactId>
 	<packaging>pom</packaging>
 	<name>WOAdaptors Frameworks</name>
+
+	<profiles>
+		<profile>
+			<id>wo54</id>
+			<modules>
+				<!-- <module>ERIMAdaptor</module> -->
+				<!-- ERWOAdaptor requires WO 5.4 -->
+				<module>ERWOAdaptor</module>
+			</modules>
+		</profile>
+	</profiles>
+
 	<modules>
 		<!-- <module>ERIMAdaptor</module> -->
-		<module>ERWOAdaptor</module>
 	</modules>
 </project>
