@@ -282,11 +282,12 @@ public class WONettyAdaptor extends WOAdaptor {
 		
 		private InternalLogger log = CommonsLoggerFactory.getDefaultFactory().newInstance(this.getClass().getName());
 
-		private HttpRequest _request;
-
+		/**
+		 * @see <a href="http://docs.jboss.org/netty/3.2/api/org/jboss/netty/channel/SimpleChannelUpstreamHandler.html#messageReceived(org.jboss.netty.channel.ChannelHandlerContext,%20org.jboss.netty.channel.MessageEvent)">SimpleChannelUpstreamHandler</a>
+		 */
 		@Override
 		public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
-			this._request = (HttpRequest) e.getMessage();
+			HttpRequest _request = (HttpRequest) e.getMessage();
 
 			WORequest worequest = asWORequest(_request);
 			worequest._setOriginatingAddress(((InetSocketAddress) ctx.getChannel().getRemoteAddress()).getAddress());
@@ -294,15 +295,12 @@ public class WONettyAdaptor extends WOAdaptor {
 
 			// send a response
 			NSDelayedCallbackCenter.defaultCenter().eventEnded();
-			writeResponse(asHttpResponse(woresponse), e);
-		}
-		
-		private void writeResponse(HttpResponse response, MessageEvent e) throws IOException {
+
 			// Decide whether to close the connection or not.
 			boolean keepAlive = isKeepAlive(_request);
 
 			// Write the response.
-			ChannelFuture future = e.getChannel().write(response);
+			ChannelFuture future = e.getChannel().write(asHttpResponse(woresponse));
 
 			// Close the non-keep-alive connection after the write operation is done.
 			if (!keepAlive) {
@@ -310,6 +308,9 @@ public class WONettyAdaptor extends WOAdaptor {
 			}
 		}
 
+		/**
+		 * @see <a href="http://docs.jboss.org/netty/3.2/api/org/jboss/netty/channel/SimpleChannelUpstreamHandler.html#exceptionCaught(org.jboss.netty.channel.ChannelHandlerContext,%20org.jboss.netty.channel.ExceptionEvent)">SimpleChannelUpstreamHandler</a>
+		 */
 		@Override
 		public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
 	        Throwable cause = e.getCause();
