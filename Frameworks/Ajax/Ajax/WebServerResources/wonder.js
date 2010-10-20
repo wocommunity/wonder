@@ -302,7 +302,7 @@ var AjaxUpdateContainer = {
 		if (!options) {
 			options = {};
 		}
-		eval(id + "Update = function() { AjaxUpdateContainer.update(id, options) }");
+		eval(id + "Update = function() {AjaxUpdateContainer.update(id, options) }");
 	},
 	
 	update: function(id, options) {
@@ -1068,7 +1068,25 @@ var AjaxFlexibleUpload = {
 		uploader.submit();
 	}
 };
-
+var WonderRemoteLogging = {
+	install: function(options) {
+	    try{ 
+			window.console = window.console || {};
+	    } catch(e) {}
+		window.console.oldlog = window.console.log || function(msg) {};
+		window.console.filter = options.filter || function(msg) {return true};
+		window.console.log = function(msg) {
+			if(window.console.filter(msg)) {
+			    var parts = options.url.split("\?", 2)
+				var finalUrl = parts[0] + "/" + options.logger + "?l=" + escape(options.level) + "&m=" + escape(msg) + "&" + (parts.length > 1? parts[1]: "");
+				var request = new Ajax.Request(finalUrl, {method: 'GET'});
+			}
+			if(window.console.oldlog) {
+				window.console.oldlog(msg);
+			}
+		}
+	},
+}
 var AFU = AjaxFlexibleUpload;
 
 var WonderJSON = {
