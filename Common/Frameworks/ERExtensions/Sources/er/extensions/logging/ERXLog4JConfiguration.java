@@ -40,7 +40,7 @@ public class ERXLog4JConfiguration extends WOComponent {
     /**
      * A representation of the various Logger levels.
      */
-    protected enum LoggerLevel {
+    private enum LoggerLevel {
         ALL(Level.ALL, "All"),
         TRACE(Level.TRACE, "Trace"),
         DEBUG(Level.DEBUG, "Debug"),
@@ -77,7 +77,7 @@ public class ERXLog4JConfiguration extends WOComponent {
     /**
      * A representation of the available page sections/views.
      */
-    protected enum PageSection {
+    public enum PageSection {
         LOGGERS("Loggers", "Loggers"),
         REPOSITORY("Repository", "Repository"),
         APPENDERS("Appenders", "Appenders"),
