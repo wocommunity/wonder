@@ -6,6 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.logging;
 
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -275,7 +276,35 @@ public class ERXLog4JConfiguration extends WOComponent {
      */
     public NSArray appenders() {
         if (null == _appenders) {
-            Set<AppenderSkeleton> appenders = new TreeSet<AppenderSkeleton>();
+            Set<AppenderSkeleton> appenders = new TreeSet<AppenderSkeleton>(new Comparator<AppenderSkeleton>() {
+                public int compare(AppenderSkeleton o1, AppenderSkeleton o2) {
+                    int result = 0;
+                    if (o1 == o2)  {
+                        result = 0;
+                    } else {
+                        String name1 = o1.getName();
+                        String name2 = o2.getName();
+                        if (name1.equals(name2)) { // Two appenders share the same name.  Probably a misconfiguration...
+                            name1 = o1.getName() + "_" + o1.hashCode();
+                            name2 = o2.getName() + "_" + o2.hashCode();
+                        }
+                        result = name1.compareTo(name2);
+                    }
+                    return result;
+                }
+            });
+
+            // Gather appenders attached to the root logger.
+            Logger rootLogger = LogManager.getRootLogger();
+            Enumeration rootAppendersEnum = rootLogger.getAllAppenders();
+            while (rootAppendersEnum.hasMoreElements()) {
+                Appender appender = (Appender)rootAppendersEnum.nextElement();
+                if (appender instanceof AppenderSkeleton) {
+                    appenders.add((AppenderSkeleton)appender);
+                }
+            }
+
+            // Gather appenders attached to other loggers.
             Enumeration loggersEnum = LogManager.getCurrentLoggers();
             while (loggersEnum.hasMoreElements()) {
                 Logger logger = (Logger)loggersEnum.nextElement();
