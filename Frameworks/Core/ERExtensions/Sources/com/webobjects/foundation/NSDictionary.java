@@ -78,17 +78,33 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 	}
 
 	void _copyMutableDictionary(NSDictionary<? extends K, ? extends V> otherDictionary) {
-		_capacity = otherDictionary._capacity;
-		_count = otherDictionary._count;
-		_hashtableBuckets = otherDictionary._hashtableBuckets;
-		_hashCache = otherDictionary._hashCache;
-		_objects = _NSCollectionPrimitives.copyArray(otherDictionary._objects);
-		_objectsCache = null;
-		_entrySetCache = null;
-		_flags = _NSCollectionPrimitives.copyArray(otherDictionary._flags);
-		_keys = _NSCollectionPrimitives.copyArray(otherDictionary._keys);
-		_keysCache = null;
-		_deletionLimit = otherDictionary._deletionLimit;
+        if (otherDictionary.getClass() == NSMutableDictionary._CLASS || otherDictionary.getClass() == NSDictionary._CLASS) {
+    		this._capacity = otherDictionary._capacity;
+    		this._count = otherDictionary._count;
+    		this._hashtableBuckets = otherDictionary._hashtableBuckets;
+    		this._hashCache = otherDictionary._hashCache;
+    		this._objects = _NSCollectionPrimitives.copyArray(otherDictionary._objects);
+    		this._objectsCache = null;
+    		this._entrySetCache = null;
+    		this._flags = _NSCollectionPrimitives.copyArray(otherDictionary._flags);
+    		this._keys = _NSCollectionPrimitives.copyArray(otherDictionary._keys);
+    		this._keysCache = null;
+    		this._keySetCache = null;
+    		this._deletionLimit = otherDictionary._deletionLimit;
+        }
+        else {
+            _initializeDictionary();
+            _ensureCapacity(otherDictionary.count());
+            
+            Enumeration<? extends K> keyEnum = otherDictionary.keyEnumerator();
+            while (keyEnum.hasMoreElements()) {
+                K key = keyEnum.nextElement();
+                V object = otherDictionary.objectForKey(key);
+                if (_NSCollectionPrimitives.addValueInHashTable(key, object, this._keys, this._objects, this._flags)) {
+                    this._count++;
+                }
+            }
+        }
 	}
 
 	protected void _initializeDictionary() {
