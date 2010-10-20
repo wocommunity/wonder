@@ -7,9 +7,9 @@
 	<classpathentry kind="lib" path="Libraries/openxri-syntax.jar"/>
 	<classpathentry kind="lib" path="Libraries/openxri-client.jar"/>
 	<classpathentry kind="lib" path="Libraries/commons-logging-1.03.jar"/>
-	<classpathentry kind="lib" path="Libraries/xmlsec-1.1.jar"/>
 	<classpathentry kind="lib" path="Libraries/jug-1.1.jar"/>
 	<classpathentry kind="lib" path="Libraries/java-openid-sxip.jar"/>
+	<classpathentry kind="lib" path="Libraries/xmlsec-1.4.3.jar"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/ERExtensions"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/ERJars"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaEOAccess"/>

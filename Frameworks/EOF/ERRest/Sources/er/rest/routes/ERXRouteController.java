@@ -1224,7 +1224,7 @@ public class ERXRouteController extends WODirectAction {
 	 * @return WOActionResults
 	 */
 	protected WOActionResults performUnknownAction(String actionName) throws Throwable {
-		throw new FileNotFoundException("There is no action named '" + actionName + "' on '" + getClass().getSimpleName() + "'.");
+		throw new FileNotFoundException("There is no action named '" + actionName + "Action' on '" + getClass().getSimpleName() + "'.");
 	}
 	
 	@Override
