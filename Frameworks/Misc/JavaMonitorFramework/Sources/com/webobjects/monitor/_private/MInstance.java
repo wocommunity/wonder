@@ -12,7 +12,10 @@ SUCH DAMAGE.
  */
 package com.webobjects.monitor._private;
 
+
 import java.util.TimeZone;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOMailDelivery;
@@ -1137,4 +1140,63 @@ public class MInstance extends MObject {
     public float avgTransactionTimeValue() {
         return floatStatisticsValueForKey("avgTransactionTime", 0);
     }
+    
+
+    /** ******** Force quit task ********* */
+    
+    private Timer _taskTimer;
+    private TimerTask _forceQuitTask;
+    
+    public Timer taskTimer() {
+    	if (_taskTimer == null)
+    		_taskTimer = new Timer();
+    	return _taskTimer;
+    }
+    
+    /**
+     * Cancel the forceQuit task if any
+     */
+    public void cancelForceQuitTask() {
+    	if (_taskTimer != null) {
+    		_taskTimer.cancel();
+	    	_forceQuitTask = null;
+	    	_taskTimer = null;
+    	}
+    }
+    
+    public void setForceQuitTask(TimerTask task) {
+    	_forceQuitTask = task;
+    }
+    
+    public TimerTask forceQuitTask() {
+    	return _forceQuitTask;
+    }
+    
+    /**
+     * only one force quit task can be scheduled 
+     * @param task - task to schedule
+     * @param delay - delay before the task is fired (milliseconds)
+     */
+    public void scheduleForceQuit(TimerTask task, int delay) {
+    	if (_forceQuitTask == null) {
+    		_forceQuitTask = task;
+    		taskTimer().schedule(_forceQuitTask, delay);
+    	}
+    }
+    
+    /**
+     * Schedule a task to repeatedly run
+     * @param task - task to schedule
+     * @param delay - delay before the task runs (milliseconds)
+     * @param period - interval when the task is ran (milliseconds)
+     */
+    public void scheduleRefuseTask(TimerTask task, int delay, int period) {
+    	if (_forceQuitTask == null) {
+    		_forceQuitTask = task;
+    		taskTimer().schedule(_forceQuitTask, delay, period);
+    	}
+    }
+    
+    /** ******* */
+    
 }

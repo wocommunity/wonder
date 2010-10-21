@@ -266,6 +266,8 @@ public class MSiteConfig extends MObject {
         _addInstance(newInstance);
     }
     public void _removeInstance(MInstance anInstance) {
+    	//cancel all tasks
+    	anInstance.cancelForceQuitTask();
         anInstance._host._removeInstancePrimitive(anInstance);
         anInstance._application._removeInstancePrimitive(anInstance);
         _instanceArray.removeObject(anInstance);
