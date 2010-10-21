@@ -31,9 +31,13 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation._NSThreadsafeMutableArray;
 
+import er.extensions.foundation.ERXProperties;
+
 public class MHost extends MObject {
     
     private static final Logger log = Logger.getLogger(MHost.class);
+    
+    private final int _receiveTimeout = ERXProperties.intForKeyWithDefault("JavaMonitor.receiveTimeout", 10000);
 
     /*
      * NSString name; NSString type; // WINDOWS | UNIX | MACOSX
@@ -355,7 +359,7 @@ public class MHost extends MObject {
 
         try {
             WOHTTPConnection anHTTPConnection = new WOHTTPConnection(name(), WOApplication.application().lifebeatDestinationPort());
-            anHTTPConnection.setReceiveTimeout(10000);
+            anHTTPConnection.setReceiveTimeout(_receiveTimeout);
 
             boolean requestSucceeded = anHTTPConnection.sendRequest(aRequest);
 
