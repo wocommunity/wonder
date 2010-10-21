@@ -1152,8 +1152,9 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
             AppSpecificPropertyNames.clear();
         }
         _cache.clear();
+        // MS: We do this in ERXConfigurationManager.updateSystemProperties so logging config has reloaded before we try to process any related config 
         //NSNotificationCenter.defaultCenter().postNotification(NSProperties.PropertiesDidChange, null);
-        NSNotificationCenter.defaultCenter().postNotification("PropertiesDidChange", null, null);
+        //NSNotificationCenter.defaultCenter().postNotification("PropertiesDidChange", null, null);
     }
 
     //	===========================================================================
