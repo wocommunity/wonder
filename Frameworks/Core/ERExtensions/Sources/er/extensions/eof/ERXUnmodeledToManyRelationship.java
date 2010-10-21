@@ -230,10 +230,8 @@ public class ERXUnmodeledToManyRelationship<S extends ERXEnterpriseObject, D ext
 	 *         are inserted into this editing context, but not yet saved.
 	 */
 	private NSMutableArray<D> insertedObjects() {
-		@SuppressWarnings("unchecked")
-		NSMutableArray<D> insertedObjects = ERXEOControlUtilities.insertedObjects(sourceObject.editingContext(), destinationEntityNames(),
+		return ERXEOControlUtilities.insertedObjects(sourceObject.editingContext(), destinationEntityNames(),
 						qualifierForObjects());
-		return (insertedObjects == null ? new NSMutableArray<D>() : insertedObjects);
 	}
 
 	public void addToObjectsRelationship(D object) {
