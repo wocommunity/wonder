@@ -69,6 +69,8 @@ import er.extensions.validation.ERXValidationFactory;
 /**
  * Collection of EOF utility method centered around
  * EOControl.
+ * 
+ * EOControl provides infrastructure for creating and managing enterprise objects.
  */
 public class ERXEOControlUtilities {
 
