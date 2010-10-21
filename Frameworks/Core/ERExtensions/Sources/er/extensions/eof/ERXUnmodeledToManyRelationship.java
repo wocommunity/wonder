@@ -292,7 +292,6 @@ public class ERXUnmodeledToManyRelationship<S extends ERXEnterpriseObject, D ext
 		if (cachedResult == null) {
 			cachedResult = ERXEOAccessUtilities.entityHierarchyNamesForEntityNamed(ec, rootEntityName);
 			_entityHierarchies.put(rootEntityName, cachedResult);
-			System.err.println("ERXUnmodeledToManyRelationship.entityHierarchyNamesForEntityNamed(): cached: " + rootEntityName + " = " + cachedResult);
 		}
 		return cachedResult;
 	}
