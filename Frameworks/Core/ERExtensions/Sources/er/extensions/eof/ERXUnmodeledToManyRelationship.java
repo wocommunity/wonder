@@ -87,7 +87,7 @@ import er.extensions.eof.ERXS;
 	}
 
 	public void deleteAllMessagesRelationships() {
-		messagesRelationship().deleteAllObjectssRelationships();
+		messagesRelationship().deleteAllObjectsRelationships();
 	}
 	</code>
  * 
@@ -261,7 +261,7 @@ public class ERXUnmodeledToManyRelationship<S extends ERXEnterpriseObject, D ext
 		sourceObject.editingContext().deleteObject(object);
 	}
 
-	public void deleteAllObjectssRelationships() {
+	public void deleteAllObjectsRelationships() {
 		NSArray<D> objects = objects().immutableClone();
 		for (D object : objects) {
 			deleteObjectRelationship(object);
