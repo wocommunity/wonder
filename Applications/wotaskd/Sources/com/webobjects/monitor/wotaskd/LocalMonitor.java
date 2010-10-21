@@ -1,10 +1,10 @@
 package com.webobjects.monitor.wotaskd;
 /*
-© Copyright 2006 - 2007 Apple Computer, Inc. All rights reserved.
+ï¿½ Copyright 2006 - 2007 Apple Computer, Inc. All rights reserved.
 
-IMPORTANT:  This Apple software is supplied to you by Apple Computer, Inc. (ÒAppleÓ) in consideration of your agreement to the following terms, and your use, installation, modification or redistribution of this Apple software constitutes acceptance of these terms.  If you do not agree with these terms, please do not use, install, modify or redistribute this Apple software.
+IMPORTANT:  This Apple software is supplied to you by Apple Computer, Inc. (ï¿½Appleï¿½) in consideration of your agreement to the following terms, and your use, installation, modification or redistribution of this Apple software constitutes acceptance of these terms.  If you do not agree with these terms, please do not use, install, modify or redistribute this Apple software.
 
-In consideration of your agreement to abide by the following terms, and subject to these terms, Apple grants you a personal, non-exclusive license, under AppleÕs copyrights in this original Apple software (the ÒApple SoftwareÓ), to use, reproduce, modify and redistribute the Apple Software, with or without modifications, in source and/or binary forms; provided that if you redistribute the Apple Software in its entirety and without modifications, you must retain this notice and the following text and disclaimers in all such redistributions of the Apple Software.  Neither the name, trademarks, service marks or logos of Apple Computer, Inc. may be used to endorse or promote products derived from the Apple Software without specific prior written permission from Apple.  Except as expressly stated in this notice, no other rights or licenses, express or implied, are granted by Apple herein, including but not limited to any patent rights that may be infringed by your derivative works or by other works in which the Apple Software may be incorporated.
+In consideration of your agreement to abide by the following terms, and subject to these terms, Apple grants you a personal, non-exclusive license, under Appleï¿½s copyrights in this original Apple software (the ï¿½Apple Softwareï¿½), to use, reproduce, modify and redistribute the Apple Software, with or without modifications, in source and/or binary forms; provided that if you redistribute the Apple Software in its entirety and without modifications, you must retain this notice and the following text and disclaimers in all such redistributions of the Apple Software.  Neither the name, trademarks, service marks or logos of Apple Computer, Inc. may be used to endorse or promote products derived from the Apple Software without specific prior written permission from Apple.  Except as expressly stated in this notice, no other rights or licenses, express or implied, are granted by Apple herein, including but not limited to any patent rights that may be infringed by your derivative works or by other works in which the Apple Software may be incorporated.
 
 The Apple Software is provided by Apple on an "AS IS" basis.  APPLE MAKES NO WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, REGARDING THE APPLE SOFTWARE OR ITS USE AND OPERATION ALONE OR IN COMBINATION WITH YOUR PRODUCTS. 
 
@@ -45,6 +45,8 @@ import com.webobjects.monitor._private.MonitorException;
 import com.webobjects.monitor._private.ProtoLocalMonitor;
 import com.webobjects.monitor._private.String_Extensions;
 
+import er.extensions.foundation.ERXProperties;
+
 public class LocalMonitor extends ProtoLocalMonitor  {
     WOTimer aScheduleTimer;
     WOTimer anAutoRecoverTimer;
@@ -54,6 +56,9 @@ public class LocalMonitor extends ProtoLocalMonitor  {
     boolean _shouldUseSpawn = true;
     String spawningGrounds = null;
     Application theApplication = (Application )WOApplication.application();
+    final int _forceQuitDelay = ERXProperties.intForKeyWithDefault("WOTaskd.killTimeout", 120000);
+    final int _receiveTimeout = ERXProperties.intForKeyWithDefault("WOTaskd.receiveTimeout", 5000);
+    final boolean _forceQuitTaskEnabled = ERXProperties.booleanForKeyWithDefault("WOTaskd.forceQuitTaskEnabled", false);
 
 
     public LocalMonitor() {
@@ -442,6 +447,19 @@ public class LocalMonitor extends ProtoLocalMonitor  {
 
     public WOResponse terminateInstance(MInstance anInstance) throws MonitorException {
         if (!anInstance.isRunning_W()) return null;
+        
+        //if WOTaskd.forceQuitTaskEnabled is true, setup a task to check
+        //the instance, if it still doesn't die, then force a QUIT command when
+        //the timer elapses, minimum is 60 seconds, default 120 seconds
+        if (_forceQuitTaskEnabled) {
+            if (_forceQuitDelay >= 60000) {
+               	anInstance.scheduleForceQuit(new MInstanceTask.ForceQuit(anInstance), _forceQuitDelay);
+            }
+            else {
+            	NSLog.err.appendln("WOtaskd.killTimeout: " + _forceQuitDelay + " is too small. 60000 milliseconds is the minimum");
+            }
+        }
+        
         catchInstanceErrors(anInstance);
         NSDictionary xmlDict = createInstanceRequestDictionary("TERMINATE", null, anInstance);
         return sendInstanceRequest(anInstance, xmlDict);
@@ -449,6 +467,20 @@ public class LocalMonitor extends ProtoLocalMonitor  {
 
     public WOResponse stopInstance(MInstance anInstance) throws MonitorException {
         if (!anInstance.isRunning_W()) return null;
+        
+        //if WOTaskd.forceQuitTaskEnabled is true, setup a task to check the instance, this will retry WOTaskd.refuseNumRetries times
+        //the timer elapses minimum is 60 seconds, default 3600 seconds (the default session timeout)
+        //a force quit if WOTaskd.refuseNumRetries is reached and the instance is still alive
+        //an ACCEPT will cancel the monitoring
+        if (_forceQuitTaskEnabled) {
+            if (_forceQuitDelay >= 60000) {
+               	anInstance.scheduleRefuseTask(new MInstanceTask.Refuse(anInstance, ERXProperties.intForKeyWithDefault("WOTaskd.refuseNumRetries", 3)), _forceQuitDelay, _forceQuitDelay);
+            }
+            else {
+            	NSLog.err.appendln("WOtaskd.killTimeout: " + _forceQuitDelay + " is too small. 60000 milliseconds is the minimum");
+            }
+        }
+        
         catchInstanceErrors(anInstance);
         NSDictionary xmlDict = createInstanceRequestDictionary("REFUSE", null, anInstance);
         return sendInstanceRequest(anInstance, xmlDict);
@@ -490,7 +522,7 @@ public class LocalMonitor extends ProtoLocalMonitor  {
 
         try {
             WOHTTPConnection anHTTPConnection = new WOHTTPConnection(anInstance.host().name(), anInstance.port().intValue());
-            anHTTPConnection.setReceiveTimeout(5000);
+            anHTTPConnection.setReceiveTimeout(_receiveTimeout);
 
             boolean requestSucceeded = anHTTPConnection.sendRequest(aRequest);
 
