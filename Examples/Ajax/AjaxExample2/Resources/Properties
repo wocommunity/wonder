@@ -75,3 +75,4 @@ log4j.logger.er.extensions.ERXConfigurationManager=INFO
 
 SeleniumTestsEnabled=true
 
+er.extensions.ERXApplication.DefaultEncoding=UTF-8
