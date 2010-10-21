@@ -74,6 +74,8 @@ import er.extensions.statistics.ERXStats.Group;
 
 /**
  * Collection of EOAccess related utilities.
+ * 
+ * EOAccess provides the data access mechanisms for the Enterprise Objects technology.
  */
 public class ERXEOAccessUtilities {
     /** logging support */
@@ -2230,4 +2232,42 @@ public class ERXEOAccessUtilities {
     		entity.setAttributesUsedForLocking(atts);
     	}
     }
+
+	/**
+	 * @param rootEntityName
+	 * @return a list of all concrete entity names that inherit from
+	 *         rootEntityName, including rootEntityName itself if it is
+	 *         concrete.
+	 */
+	public static NSArray<String> entityHierarchyNamesForEntityNamed(EOEditingContext ec, String rootEntityName) {
+	
+		NSMutableArray<String> names = new NSMutableArray<String>();
+		EOEntity rootEntity = entityNamed(ec, rootEntityName);
+		NSArray<EOEntity> entities = entityHierarchyForEntity(ec, rootEntity);
+	
+		for (EOEntity entity : entities) {
+			names.add(entity.name());
+		}
+		return names.immutableClone();
+	
+	}
+
+	/**
+	 * @param rootEntity
+	 * @return a list of all concrete entities that inherit from rootEntity,
+	 *         including rootEntity itself if it is concrete.
+	 */
+	public static NSArray<EOEntity> entityHierarchyForEntity(EOEditingContext ec, EOEntity rootEntity) {
+		NSMutableArray<EOEntity> entities = new NSMutableArray<EOEntity>();
+	
+		if (!rootEntity.isAbstractEntity()) {
+			entities.add(rootEntity);
+		}
+		@SuppressWarnings("unchecked")
+		NSArray<EOEntity> subEntities = rootEntity.subEntities();
+		for (EOEntity subEntity : subEntities) {
+			entities.addAll(entityHierarchyForEntity(ec, subEntity));
+		}
+		return entities.immutableClone();
+	}
 }
