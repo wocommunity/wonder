@@ -41,6 +41,7 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 	protected WOAssociation _numberFormat;
 	protected WOAssociation _useDecimalNumber;
 	protected WOAssociation _blankIsNull;
+	protected WOAssociation _readonly;
 
 	public ERXWOTextField(String tagname, NSDictionary nsdictionary, WOElement woelement) {
 		super("input", nsdictionary, woelement);
@@ -52,6 +53,7 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 		_numberFormat = (WOAssociation)_associations.removeObjectForKey("numberformat");
 		_useDecimalNumber = (WOAssociation)_associations.removeObjectForKey("useDecimalNumber");
 		_blankIsNull = (WOAssociation)_associations.removeObjectForKey("blankIsNull");
+		_readonly = (WOAssociation)_associations.removeObjectForKey("readonly");
 		
 		if(_dateFormat != null && _numberFormat != null) {
 			throw new WODynamicElementCreationException("<" + getClass().getName() + "> Cannot have 'dateFormat' and 'numberFormat' attributes at the same time.");
@@ -66,10 +68,14 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
     	WOAssociation disabled = (WOAssociation) ERXKeyValueCodingUtilities.privateValueForKey(this, "_disabled");
     	return disabled != null && disabled.booleanValueInComponent(context.component());
     }
+	   
+    protected boolean isReadonlyInContext(WOContext context) {
+    	return _readonly != null && _readonly.booleanValueInComponent(context.component());
+    }
 
 	public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
 		WOComponent component = wocontext.component();
-		if(!isDisabledInContext(wocontext) && wocontext._wasFormSubmitted()) {
+		if(!isDisabledInContext(wocontext) && wocontext._wasFormSubmitted() && !isReadonlyInContext(wocontext)) {
 			String name = nameInContext(wocontext, component);
 			if(name != null) {
 				String stringValue;
@@ -163,6 +169,9 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 					stringValue = valueInComponent.toString();
 				}
 				woresponse._appendTagAttributeAndValue("value", stringValue, true);
+		}
+		if (isReadonlyInContext(wocontext)) {
+			woresponse._appendTagAttributeAndValue("readonly", "readonly", false);
 		}
 	}
 
