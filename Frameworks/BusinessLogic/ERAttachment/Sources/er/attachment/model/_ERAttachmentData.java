@@ -1,4 +1,4 @@
-// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to ERAttachmentData.java instead.
+// DO NOT EDIT.  Make changes to ERAttachmentData.java instead.
 package er.attachment.model;
 
 import com.webobjects.eoaccess.*;
@@ -34,14 +34,14 @@ public abstract class _ERAttachmentData extends er.extensions.eof.ERXGenericReco
   }
 
   public NSData data() {
-    return (NSData) storedValueForKey("data");
+    return (NSData) storedValueForKey(_ERAttachmentData.DATA_KEY);
   }
 
   public void setData(NSData value) {
     if (_ERAttachmentData.LOG.isDebugEnabled()) {
     	_ERAttachmentData.LOG.debug( "updating data from " + data() + " to " + value);
     }
-    takeStoredValueForKey(value, "data");
+    takeStoredValueForKey(value, _ERAttachmentData.DATA_KEY);
   }
 
 
@@ -59,9 +59,9 @@ public abstract class _ERAttachmentData extends er.extensions.eof.ERXGenericReco
   }
 
   public static NSArray<ERAttachmentData> fetchERAttachmentDatas(EOEditingContext editingContext, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings) {
-    EOFetchSpecification fetchSpec = new EOFetchSpecification(_ERAttachmentData.ENTITY_NAME, qualifier, sortOrderings);
+    ERXFetchSpecification<ERAttachmentData> fetchSpec = new ERXFetchSpecification<ERAttachmentData>(_ERAttachmentData.ENTITY_NAME, qualifier, sortOrderings);
     fetchSpec.setIsDeep(true);
-    NSArray<ERAttachmentData> eoObjects = (NSArray<ERAttachmentData>)editingContext.objectsWithFetchSpecification(fetchSpec);
+    NSArray<ERAttachmentData> eoObjects = fetchSpec.fetchObjects(editingContext);
     return eoObjects;
   }
 
@@ -77,7 +77,7 @@ public abstract class _ERAttachmentData extends er.extensions.eof.ERXGenericReco
       eoObject = null;
     }
     else if (count == 1) {
-      eoObject = (ERAttachmentData)eoObjects.objectAtIndex(0);
+      eoObject = eoObjects.objectAtIndex(0);
     }
     else {
       throw new IllegalStateException("There was more than one ERAttachmentData that matched the qualifier '" + qualifier + "'.");
@@ -98,7 +98,7 @@ public abstract class _ERAttachmentData extends er.extensions.eof.ERXGenericReco
   }
 
   public static ERAttachmentData localInstanceIn(EOEditingContext editingContext, ERAttachmentData eo) {
-    ERAttachmentData localInstance = (eo == null) ? null : (ERAttachmentData)EOUtilities.localInstanceOfObject(editingContext, eo);
+    ERAttachmentData localInstance = (eo == null) ? null : ERXEOControlUtilities.localInstanceOfObject(editingContext, eo);
     if (localInstance == null && eo != null) {
       throw new IllegalStateException("You attempted to localInstance " + eo + ", which has not yet committed.");
     }
