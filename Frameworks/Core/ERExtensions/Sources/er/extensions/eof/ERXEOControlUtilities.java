@@ -69,6 +69,8 @@ import er.extensions.validation.ERXValidationFactory;
 /**
  * Collection of EOF utility method centered around
  * EOControl.
+ * 
+ * EOControl provides infrastructure for creating and managing enterprise objects.
  */
 public class ERXEOControlUtilities {
 
@@ -1462,7 +1464,7 @@ public class ERXEOControlUtilities {
 
         // and then we need to add back in any updated objects that now DO match the qualifier that didn't originally match the qualifier
         NSArray updatedObjects = ERXEOControlUtilities.updatedObjects(editingContext, entityNames, qualifier);
-        if (updatedObjects != null) {
+        if (updatedObjects.count() > 0) {
           Enumeration updatedObjectsEnum = updatedObjects.objectEnumerator();
           while (updatedObjectsEnum.hasMoreElements()) {
             Object obj = updatedObjectsEnum.nextElement();
@@ -1481,7 +1483,7 @@ public class ERXEOControlUtilities {
 
       if (includeNewObjects) {
         NSMutableArray insertedObjects = ERXEOControlUtilities.insertedObjects(editingContext, entityNames, qualifier);
-        if (insertedObjects != null) {
+        if (insertedObjects.count() > 0) {
           if (cloneMatchingObjects != null) {
             cloneMatchingObjects.addObjectsFromArray(insertedObjects);
           }
@@ -1507,7 +1509,7 @@ public class ERXEOControlUtilities {
         while (i-- > 0) {
           EOEditingContext theEC = (EOEditingContext)parentEditingContexts.objectAtIndex(i);
           NSArray objectsMatchingQualifier = ERXEOControlUtilities.insertedObjects(theEC, entityNames, qualifier);
-          if (objectsMatchingQualifier != null) {
+          if (objectsMatchingQualifier.count() > 0) {
 	          // fault the previous batch down
 	          objects = EOUtilities.localInstancesOfObjects(theEC, objects);
 	
@@ -1532,7 +1534,7 @@ public class ERXEOControlUtilities {
 
       if (removeDeletedObjects) {
         NSArray deletedObjects = ERXEOControlUtilities.deletedObjects(editingContext, entityNames, qualifier);
-        if (deletedObjects != null) {
+        if (deletedObjects.count() > 0) {
           if (cloneMatchingObjects == null) {
             cloneMatchingObjects = objectsToFilter.mutableClone();
             objectsToFilter = cloneMatchingObjects;
@@ -1596,28 +1598,24 @@ public class ERXEOControlUtilities {
     }
     
     /**
-     * Returns the array of objects of the given type that have been inserted into 
+     * @return the array of objects of the given type that have been inserted into 
      * the editing context and match the given qualifier.  Yes, it's odd that it
      * returns NSMutableArray -- it's an optimization specifically for objectsWithQualifier.
+     * Returns an empty array if no objects match.
      * 
      * @param editingContext the editing context to look in
      * @param entityNames the names of the entity to look for
      * @param qualifier the qualifier to restrict by
      */
     public static NSMutableArray insertedObjects(EOEditingContext editingContext, NSArray<String> entityNames, EOQualifier qualifier) {
-      NSMutableArray result = null;
+      NSMutableArray result = new NSMutableArray();
       NSDictionary insertedObjects = ERXArrayUtilities.arrayGroupedByKeyPath(editingContext.insertedObjects(), "entityName");
       for (String entityName : entityNames) {
 	      NSArray insertedObjectsForEntity = (NSArray) insertedObjects.objectForKey(entityName);
 	      if (insertedObjectsForEntity != null && insertedObjectsForEntity.count() > 0) {
 	        NSArray inMemory = EOQualifier.filteredArrayWithQualifier(insertedObjectsForEntity, qualifier);
 	        if (inMemory.count() > 0) {
-	        	if (result == null) {
-	        		result = inMemory.mutableClone();
-	        	}
-	        	else {
-	        		result.addObjectsFromArray(inMemory);
-	        	}
+	        	result.addObjectsFromArray(inMemory);
 	        }
 	      }
       }
@@ -1625,27 +1623,22 @@ public class ERXEOControlUtilities {
     }
 
     /**
-     * Returns the array of objects of the given type that have been updated in
-     * the editing context and match the given qualifier.
+     * @return the array of objects of the given type that have been updated in
+     * the editing context and match the given qualifier. Returns an empty array if no objects match.
      * 
      * @param editingContext the editing context to look in
      * @param entityNames the names of the entity to look for
      * @param qualifier the qualifier to restrict by
      */
     public static NSMutableArray updatedObjects(EOEditingContext editingContext, NSArray<String> entityNames, EOQualifier qualifier) {
-      NSMutableArray result = null;
+      NSMutableArray result = new NSMutableArray();
       NSDictionary updatedObjects = ERXArrayUtilities.arrayGroupedByKeyPath(editingContext.updatedObjects(), "entityName");
       for (String entityName : entityNames) {
 	      NSArray updatedObjectsForEntity = (NSArray) updatedObjects.objectForKey(entityName);
 	      if (updatedObjectsForEntity != null && updatedObjectsForEntity.count() > 0) {
 	        NSArray inMemory = EOQualifier.filteredArrayWithQualifier(updatedObjectsForEntity, qualifier);
 	        if (inMemory.count() > 0) {
-	        	if (result == null) {
-	        		result = inMemory.mutableClone();
-	        	}
-	        	else {
-	        		result.addObjectsFromArray(inMemory);
-	        	}
+	        	result.addObjectsFromArray(inMemory);
 	        }
 	      }
       }
@@ -1653,15 +1646,15 @@ public class ERXEOControlUtilities {
     }
 
     /**
-     * Returns the array of objects of the given type that have been deleted from
-     * the editing context and match the given qualifier.
+     * @return the array of objects of the given type that have been deleted from
+     * the editing context and match the given qualifier. Returns an empty array if no objects match.
      * 
      * @param editingContext the editing context to look in
      * @param entityNames the names of the entity to look for
      * @param qualifier the qualifier to restrict by
      */
     public static NSMutableArray deletedObjects(EOEditingContext editingContext, NSArray<String> entityNames, EOQualifier qualifier) {
-      NSMutableArray result = null;
+      NSMutableArray result = new NSMutableArray();
       NSDictionary deletedObjects = ERXArrayUtilities.arrayGroupedByKeyPath(editingContext.deletedObjects(), "entityName");
       for (String entityName : entityNames) {
 	      NSArray deletedObjectsForEntity = (NSArray) deletedObjects.objectForKey(entityName);
@@ -1669,12 +1662,7 @@ public class ERXEOControlUtilities {
 	        NSArray inMemory = EOQualifier.filteredArrayWithQualifier(deletedObjectsForEntity, qualifier);
 	        if (inMemory.count() > 0) {
 		        if (inMemory.count() > 0) {
-		        	if (result == null) {
-		        		result = inMemory.mutableClone();
-		        	}
-		        	else {
-		        		result.addObjectsFromArray(inMemory);
-		        	}
+		        	result.addObjectsFromArray(inMemory);
 		        }
 	        }
 	      }

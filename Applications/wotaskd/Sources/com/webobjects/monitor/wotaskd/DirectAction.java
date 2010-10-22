@@ -1,16 +1,17 @@
 package com.webobjects.monitor.wotaskd;
 /*
-© Copyright 2006 - 2007 Apple Computer, Inc. All rights reserved.
+ï¿½ Copyright 2006 - 2007 Apple Computer, Inc. All rights reserved.
 
-IMPORTANT:  This Apple software is supplied to you by Apple Computer, Inc. (ÒAppleÓ) in consideration of your agreement to the following terms, and your use, installation, modification or redistribution of this Apple software constitutes acceptance of these terms.  If you do not agree with these terms, please do not use, install, modify or redistribute this Apple software.
+IMPORTANT:  This Apple software is supplied to you by Apple Computer, Inc. (ï¿½Appleï¿½) in consideration of your agreement to the following terms, and your use, installation, modification or redistribution of this Apple software constitutes acceptance of these terms.  If you do not agree with these terms, please do not use, install, modify or redistribute this Apple software.
 
-In consideration of your agreement to abide by the following terms, and subject to these terms, Apple grants you a personal, non-exclusive license, under AppleÕs copyrights in this original Apple software (the ÒApple SoftwareÓ), to use, reproduce, modify and redistribute the Apple Software, with or without modifications, in source and/or binary forms; provided that if you redistribute the Apple Software in its entirety and without modifications, you must retain this notice and the following text and disclaimers in all such redistributions of the Apple Software.  Neither the name, trademarks, service marks or logos of Apple Computer, Inc. may be used to endorse or promote products derived from the Apple Software without specific prior written permission from Apple.  Except as expressly stated in this notice, no other rights or licenses, express or implied, are granted by Apple herein, including but not limited to any patent rights that may be infringed by your derivative works or by other works in which the Apple Software may be incorporated.
+In consideration of your agreement to abide by the following terms, and subject to these terms, Apple grants you a personal, non-exclusive license, under Appleï¿½s copyrights in this original Apple software (the ï¿½Apple Softwareï¿½), to use, reproduce, modify and redistribute the Apple Software, with or without modifications, in source and/or binary forms; provided that if you redistribute the Apple Software in its entirety and without modifications, you must retain this notice and the following text and disclaimers in all such redistributions of the Apple Software.  Neither the name, trademarks, service marks or logos of Apple Computer, Inc. may be used to endorse or promote products derived from the Apple Software without specific prior written permission from Apple.  Except as expressly stated in this notice, no other rights or licenses, express or implied, are granted by Apple herein, including but not limited to any patent rights that may be infringed by your derivative works or by other works in which the Apple Software may be incorporated.
 
 The Apple Software is provided by Apple on an "AS IS" basis.  APPLE MAKES NO WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, REGARDING THE APPLE SOFTWARE OR ITS USE AND OPERATION ALONE OR IN COMBINATION WITH YOUR PRODUCTS. 
 
 IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION, MODIFICATION AND/OR DISTRIBUTION OF THE APPLE SOFTWARE, HOWEVER CAUSED AND WHETHER UNDER THEORY OF CONTRACT, TORT (INCLUDING NEGLIGENCE), STRICT LIABILITY OR OTHERWISE, EVEN IF APPLE HAS BEEN  ADVISED OF THE POSSIBILITY OF 
 SUCH DAMAGE.
  */
+
 
 import java.util.Enumeration;
 
@@ -413,11 +414,18 @@ public class DirectAction extends WODirectAction  {
                                 } else {
                                     try {
                                         if (command.equals("STOP")) {
-                                            theApplication.localMonitor().terminateInstance(anInstance);
+                                        	//we need to expect a response here
+                                            if (theApplication.localMonitor().terminateInstance(anInstance) == null)
+                                            	throw new MonitorException("No response to STOP " + anInstance.displayName());
                                         } else if (command.equals("REFUSE")) {
-                                            theApplication.localMonitor().stopInstance(anInstance);
+                                        	//we need to expect a response here
+                                            if (theApplication.localMonitor().stopInstance(anInstance) == null)
+                                            	throw new MonitorException("No response to REFUSE " + anInstance.displayName());
                                         } else if (command.equals("ACCEPT")) {
-                                            theApplication.localMonitor().setAcceptInstance(anInstance);
+                                            if (theApplication.localMonitor().setAcceptInstance(anInstance) == null)
+                                            	throw new MonitorException("No response to ACCEPT " + anInstance.displayName());
+                                            //we got a response, cancel any force quit task
+                                            anInstance.cancelForceQuitTask();
                                         } else if (command.equals("QUIT")) {
                                             anInstance.setShouldDie(true);
                                         }
@@ -538,6 +546,8 @@ public class DirectAction extends WODirectAction  {
                         String error = anInstance.statisticsError();
                         if (error != null) {
                             errorResponse.addObject(error);
+                            //reset the error
+                        	anInstance.resetStatisticsError();
                         }
                         // Continue, because wotaskd is expecting a response here.
 
@@ -606,6 +616,11 @@ public class DirectAction extends WODirectAction  {
                              (NSLog.debugLoggingAllowedForLevelAndGroups(NSLog.DebugLevelCritical, NSLog.DebugGroupDeployment)) ) {
                             NSLog.debug.appendln("Exception getting Statistics for instance: " + ((MInstance) instanceArray.objectAtIndex(j)).displayName());
                         }
+                        //if we get an exception and the instance state is running, that could mean the app may have been too 
+                        //busy to respond of may have locked up in either case, we need to notify 
+                    	//java monitor which instance its having problems with
+                        if (badInstance.isRunning_W())
+                        	badInstance.setStatisticsError(me.getMessage());
                         responses[j] =  null;
                     }
                 }
@@ -622,8 +637,8 @@ public class DirectAction extends WODirectAction  {
 
         for (int i=0; i<theCount; i++) {
             WOResponse aResponse = responses[i];
+            MInstance anInstance = (MInstance) instArray.objectAtIndex(i);
             if (aResponse != null) {
-                MInstance anInstance = (MInstance) instArray.objectAtIndex(i);
                 anInstance.updateRegistration(new NSTimestamp());
                 if (aResponse.headerForKey("x-webobjects-refusenewsessions") != null) {
                     anInstance.setRefusingNewSessions(true);
@@ -678,6 +693,10 @@ public class DirectAction extends WODirectAction  {
                     // Do nothing - assume we died trying to parse the plist
                     NSLog.err.appendln("Wotaskd getStatisticsForInstanceArray: Error parsing PList: " + queryInstanceResponse + " from " + anInstance.displayName());
                 }
+            }
+            else if (anInstance.isRunning_M()) {
+            	//display a hint that this instance is running but did not respond to a query statistics request
+            	anInstance.setStatisticsError("No statistics for " + anInstance.displayName());
             }
         }
     }
@@ -923,4 +942,5 @@ public class DirectAction extends WODirectAction  {
         aResponse.appendContentString(portString);
         return aResponse;
     }
+    
 }

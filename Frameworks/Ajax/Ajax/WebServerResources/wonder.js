@@ -1068,8 +1068,26 @@ var AjaxFlexibleUpload = {
 		uploader.submit();
 	}
 };
+var AFU = AjaxFlexibleUpload;
+
 var WonderRemoteLogging = {
+	options: {},
+	sendTimer: 0,
+	messages: [],
+
+	sendLog: function() {
+		var parts = WonderRemoteLogging.options.url.split("\?", 2)
+		var finalUrl = parts[0] + "/" + WonderRemoteLogging.options.logger + "?" + (parts.length > 1? parts[1]: "");
+		var request = new Ajax.Request(finalUrl, {method: 'POST', parameters: {
+			l: WonderRemoteLogging.options.level,
+			m: WonderRemoteLogging.messages.join("\n")
+		}});
+		WonderRemoteLogging.messages = [];
+		WonderRemoteLogging.sendTimer = null;
+	},
+
 	install: function(options) {
+		WonderRemoteLogging.options = options;
 	    try{ 
 			window.console = window.console || {};
 	    } catch(e) {}
@@ -1077,17 +1095,19 @@ var WonderRemoteLogging = {
 		window.console.filter = options.filter || function(msg) {return true};
 		window.console.log = function(msg) {
 			if(window.console.filter(msg)) {
-			    var parts = options.url.split("\?", 2)
-				var finalUrl = parts[0] + "/" + options.logger + "?l=" + escape(options.level) + "&m=" + escape(msg) + "&" + (parts.length > 1? parts[1]: "");
-				var request = new Ajax.Request(finalUrl, {method: 'GET'});
+				if(WonderRemoteLogging.sendTimer) {
+					clearTimeout(WonderRemoteLogging.sendTimer);
+					WonderRemoteLogging.sendTimer = null;
+				}
+				WonderRemoteLogging.messages.push(msg);
+				WonderRemoteLogging.sendTimer = setTimeout(WonderRemoteLogging.sendLog, options.throttle);
 			}
 			if(window.console.oldlog) {
 				window.console.oldlog(msg);
 			}
 		}
-	},
+	}
 }
-var AFU = AjaxFlexibleUpload;
 
 var WonderJSON = {
 	eoStub: function(eo) {

@@ -121,6 +121,20 @@ There are some properties that apply to all attachment types.
 	Content-Disposition header.  This will typically cause the browser to download the attachment versus displaying inline. Defaults false.</dd>
 </dl>
 
+<h2>Image Processing Properties</h2>
+<p>
+While ERAttachment will try and automatically figure out a library for image processing operations such as thumbnailing and resizing, you can configure it yourself using
+appropriate properties. Here are some properties that apply to image processing libraries configuration.
+</p>
+
+<dl>
+	<dt>er.attachment.thumbnail.imageProcessor</dt>
+	<dd>Values for this property can be one of sips, imageio, imagemagick or java</dd>
+
+	<dt>er.attachment.ImageProcessor.imageMagickBinFolder</dt>
+	<dd>Indicates the directory path of the ImageMagick binaries.</dd>
+</dl>
+
 <h2>Path Templates</h2>
 <p>
 Several attachment types define filesystem and webserver paths for storing and accessing attachments.  A very simple set of 

@@ -16,13 +16,14 @@ import er.extensions.appserver.ERXDirectAction;
 /**
  * Allows you to log <code>window.console</code> JS messages from the browser to
  * a logger on the server. Pretty helpful when trying to debug JS problems that
- * do not occur on your machine. As you will to a roundtrip to the server on
- * each message, it's pretty costly and should be used with care.
+ * do not occur on your machine. As you will to a round trip to the server on
+ * each message, it's pretty costly and should be used with care. 
  * 
  * @author ak
  * 
  * @binding logger the log4j logger to append to (default: "AjaxRemoteLogging")
  * @binding level the log4j logging level to use (default: "info")
+ * @binding throttle the number of milliseconds to collect statements before actually sending (default: 100)
  * @binding filter a javascript function that returns true on a single argument
  *          msg when the logging should go to the server
  * 
@@ -32,12 +33,14 @@ public class AjaxRemoteLogging extends AjaxDynamicElement {
 	private WOAssociation _logger;
 	private WOAssociation _filter;
 	private WOAssociation _level;
+	private WOAssociation _throttle;
 
 	public AjaxRemoteLogging(String arg0, NSDictionary arg1, WOElement arg2) {
 		super(arg0, arg1, arg2);
 		_filter = (WOAssociation) arg1.objectForKey("filter");
 		_logger = (WOAssociation) arg1.objectForKey("logger");
 		_level = (WOAssociation) arg1.objectForKey("level");
+		_throttle = (WOAssociation) arg1.objectForKey("throttle");
 	}
 
 	@Override
@@ -45,6 +48,7 @@ public class AjaxRemoteLogging extends AjaxDynamicElement {
 		String level = "info";
 		String logger = getClass().getSimpleName();
 		String filter = null;
+		Object throttle = "100";
 
 		if (_filter != null) {
 			filter = (String) _filter.valueInComponent(context.component());
@@ -55,13 +59,17 @@ public class AjaxRemoteLogging extends AjaxDynamicElement {
 		if (_level != null) {
 			level = (String) _level.valueInComponent(context.component());
 		}
+		if (_throttle != null) {
+			throttle =  _throttle.valueInComponent(context.component());
+		}
 		String url = context.directActionURLForActionNamed(Log.class.getName(), null);
 		StringBuffer buf = new StringBuffer();
 		buf.append("<script type='text/javascript'>\n");
 		buf.append("WonderRemoteLogging.install({url: '").append(url);
 		buf.append("', level: '").append(level);
 		buf.append("', logger: '").append(logger);
-		buf.append("', filter: ").append(filter);
+		buf.append("', throttle: ").append(throttle);
+		buf.append(" , filter: ").append(filter);
 		buf.append("});\n");
 		buf.append("</script>");
 		response.appendContentString(buf.toString());
