@@ -61,13 +61,10 @@ public class ERDList extends ERDCustomEditComponent {
     	// if creationDelegate binding is provided then just call the delegate with the right params.
     	// delegate is responsible for making sure the right page is returned after creating hte object.
         if (useCreationDelegate ()) {
-            EOEnterpriseObject obj = masterObjectKeyPathForCreationDelegate ();
-            // defaults to object(), if masterObjectKeyPath is not provided
-            obj = (obj == null) ? object () : obj;
             String relationshipName = relationshipName ();
             // defaults to key(), if the relationshipName binding is not provided
             relationshipName = relationshipName == null ? key () : relationshipName;
-            nextPage = createObjectDelegate ().create (obj, (String) valueForBinding ("destinationEntityName"), relationshipName);
+            nextPage = createObjectDelegate ().create (object(), (String) valueForBinding ("destinationEntityName"), relationshipName);
         }
         else {
         	String editRelationshipConfigurationName = (String)valueForBinding("editRelationshipConfigurationName");
@@ -207,15 +204,6 @@ public class ERDList extends ERDCustomEditComponent {
      */
     public Boolean useCreationDelegate () {
         return ERXValueUtilities.booleanValue (valueForBinding ("useCreationDelegate"));
-    }
-
-    /**
-     * @return the keyPath to be used to compute the master object used by
-     *         {@link CreateObjectDelegate}. whatever this keypath resolves to
-     *         will be used to attach the newly created object.
-     */
-    public EOEnterpriseObject masterObjectKeyPathForCreationDelegate () {
-        return (EOEnterpriseObject) valueForBinding ("masterObjectKeyPathForCreationDelegate");
     }
 
     /**
