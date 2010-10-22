@@ -1,4 +1,4 @@
-// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to ERFileAttachment.java instead.
+// DO NOT EDIT.  Make changes to ERFileAttachment.java instead.
 package er.attachment.model;
 
 import com.webobjects.eoaccess.*;
@@ -64,14 +64,14 @@ public abstract class _ERFileAttachment extends er.attachment.model.ERAttachment
   }
 
   public String filesystemPath() {
-    return (String) storedValueForKey("filesystemPath");
+    return (String) storedValueForKey(_ERFileAttachment.FILESYSTEM_PATH_KEY);
   }
 
   public void setFilesystemPath(String value) {
     if (_ERFileAttachment.LOG.isDebugEnabled()) {
     	_ERFileAttachment.LOG.debug( "updating filesystemPath from " + filesystemPath() + " to " + value);
     }
-    takeStoredValueForKey(value, "filesystemPath");
+    takeStoredValueForKey(value, _ERFileAttachment.FILESYSTEM_PATH_KEY);
   }
 
 
@@ -103,9 +103,9 @@ public abstract class _ERFileAttachment extends er.attachment.model.ERAttachment
   }
 
   public static NSArray<ERFileAttachment> fetchERFileAttachments(EOEditingContext editingContext, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings) {
-    EOFetchSpecification fetchSpec = new EOFetchSpecification(_ERFileAttachment.ENTITY_NAME, qualifier, sortOrderings);
+    ERXFetchSpecification<ERFileAttachment> fetchSpec = new ERXFetchSpecification<ERFileAttachment>(_ERFileAttachment.ENTITY_NAME, qualifier, sortOrderings);
     fetchSpec.setIsDeep(true);
-    NSArray<ERFileAttachment> eoObjects = (NSArray<ERFileAttachment>)editingContext.objectsWithFetchSpecification(fetchSpec);
+    NSArray<ERFileAttachment> eoObjects = fetchSpec.fetchObjects(editingContext);
     return eoObjects;
   }
 
@@ -121,7 +121,7 @@ public abstract class _ERFileAttachment extends er.attachment.model.ERAttachment
       eoObject = null;
     }
     else if (count == 1) {
-      eoObject = (ERFileAttachment)eoObjects.objectAtIndex(0);
+      eoObject = eoObjects.objectAtIndex(0);
     }
     else {
       throw new IllegalStateException("There was more than one ERFileAttachment that matched the qualifier '" + qualifier + "'.");
@@ -142,7 +142,7 @@ public abstract class _ERFileAttachment extends er.attachment.model.ERAttachment
   }
 
   public static ERFileAttachment localInstanceIn(EOEditingContext editingContext, ERFileAttachment eo) {
-    ERFileAttachment localInstance = (eo == null) ? null : (ERFileAttachment)EOUtilities.localInstanceOfObject(editingContext, eo);
+    ERFileAttachment localInstance = (eo == null) ? null : ERXEOControlUtilities.localInstanceOfObject(editingContext, eo);
     if (localInstance == null && eo != null) {
       throw new IllegalStateException("You attempted to localInstance " + eo + ", which has not yet committed.");
     }

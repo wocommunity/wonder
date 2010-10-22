@@ -1,4 +1,4 @@
-// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to ERAttachment.java instead.
+// DO NOT EDIT.  Make changes to ERAttachment.java instead.
 package er.attachment.model;
 
 import com.webobjects.eoaccess.*;
@@ -62,154 +62,154 @@ public abstract class _ERAttachment extends er.extensions.eof.ERXGenericRecord {
   }
 
   public Boolean available() {
-    return (Boolean) storedValueForKey("available");
+    return (Boolean) storedValueForKey(_ERAttachment.AVAILABLE_KEY);
   }
 
   public void setAvailable(Boolean value) {
     if (_ERAttachment.LOG.isDebugEnabled()) {
     	_ERAttachment.LOG.debug( "updating available from " + available() + " to " + value);
     }
-    takeStoredValueForKey(value, "available");
+    takeStoredValueForKey(value, _ERAttachment.AVAILABLE_KEY);
   }
 
   public String configurationName() {
-    return (String) storedValueForKey("configurationName");
+    return (String) storedValueForKey(_ERAttachment.CONFIGURATION_NAME_KEY);
   }
 
   public void setConfigurationName(String value) {
     if (_ERAttachment.LOG.isDebugEnabled()) {
     	_ERAttachment.LOG.debug( "updating configurationName from " + configurationName() + " to " + value);
     }
-    takeStoredValueForKey(value, "configurationName");
+    takeStoredValueForKey(value, _ERAttachment.CONFIGURATION_NAME_KEY);
   }
 
   public NSTimestamp creationDate() {
-    return (NSTimestamp) storedValueForKey("creationDate");
+    return (NSTimestamp) storedValueForKey(_ERAttachment.CREATION_DATE_KEY);
   }
 
   public void setCreationDate(NSTimestamp value) {
     if (_ERAttachment.LOG.isDebugEnabled()) {
     	_ERAttachment.LOG.debug( "updating creationDate from " + creationDate() + " to " + value);
     }
-    takeStoredValueForKey(value, "creationDate");
+    takeStoredValueForKey(value, _ERAttachment.CREATION_DATE_KEY);
   }
 
   public Integer height() {
-    return (Integer) storedValueForKey("height");
+    return (Integer) storedValueForKey(_ERAttachment.HEIGHT_KEY);
   }
 
   public void setHeight(Integer value) {
     if (_ERAttachment.LOG.isDebugEnabled()) {
     	_ERAttachment.LOG.debug( "updating height from " + height() + " to " + value);
     }
-    takeStoredValueForKey(value, "height");
+    takeStoredValueForKey(value, _ERAttachment.HEIGHT_KEY);
   }
 
   public String mimeType() {
-    return (String) storedValueForKey("mimeType");
+    return (String) storedValueForKey(_ERAttachment.MIME_TYPE_KEY);
   }
 
   public void setMimeType(String value) {
     if (_ERAttachment.LOG.isDebugEnabled()) {
     	_ERAttachment.LOG.debug( "updating mimeType from " + mimeType() + " to " + value);
     }
-    takeStoredValueForKey(value, "mimeType");
+    takeStoredValueForKey(value, _ERAttachment.MIME_TYPE_KEY);
   }
 
   public String originalFileName() {
-    return (String) storedValueForKey("originalFileName");
+    return (String) storedValueForKey(_ERAttachment.ORIGINAL_FILE_NAME_KEY);
   }
 
   public void setOriginalFileName(String value) {
     if (_ERAttachment.LOG.isDebugEnabled()) {
     	_ERAttachment.LOG.debug( "updating originalFileName from " + originalFileName() + " to " + value);
     }
-    takeStoredValueForKey(value, "originalFileName");
+    takeStoredValueForKey(value, _ERAttachment.ORIGINAL_FILE_NAME_KEY);
   }
 
   public String ownerID() {
-    return (String) storedValueForKey("ownerID");
+    return (String) storedValueForKey(_ERAttachment.OWNER_ID_KEY);
   }
 
   public void setOwnerID(String value) {
     if (_ERAttachment.LOG.isDebugEnabled()) {
     	_ERAttachment.LOG.debug( "updating ownerID from " + ownerID() + " to " + value);
     }
-    takeStoredValueForKey(value, "ownerID");
+    takeStoredValueForKey(value, _ERAttachment.OWNER_ID_KEY);
   }
 
   public Boolean proxied() {
-    return (Boolean) storedValueForKey("proxied");
+    return (Boolean) storedValueForKey(_ERAttachment.PROXIED_KEY);
   }
 
   public void setProxied(Boolean value) {
     if (_ERAttachment.LOG.isDebugEnabled()) {
     	_ERAttachment.LOG.debug( "updating proxied from " + proxied() + " to " + value);
     }
-    takeStoredValueForKey(value, "proxied");
+    takeStoredValueForKey(value, _ERAttachment.PROXIED_KEY);
   }
 
   public Integer size() {
-    return (Integer) storedValueForKey("size");
+    return (Integer) storedValueForKey(_ERAttachment.SIZE_KEY);
   }
 
   public void setSize(Integer value) {
     if (_ERAttachment.LOG.isDebugEnabled()) {
     	_ERAttachment.LOG.debug( "updating size from " + size() + " to " + value);
     }
-    takeStoredValueForKey(value, "size");
+    takeStoredValueForKey(value, _ERAttachment.SIZE_KEY);
   }
 
   public String storageType() {
-    return (String) storedValueForKey("storageType");
+    return (String) storedValueForKey(_ERAttachment.STORAGE_TYPE_KEY);
   }
 
   public void setStorageType(String value) {
     if (_ERAttachment.LOG.isDebugEnabled()) {
     	_ERAttachment.LOG.debug( "updating storageType from " + storageType() + " to " + value);
     }
-    takeStoredValueForKey(value, "storageType");
+    takeStoredValueForKey(value, _ERAttachment.STORAGE_TYPE_KEY);
   }
 
   public String thumbnail() {
-    return (String) storedValueForKey("thumbnail");
+    return (String) storedValueForKey(_ERAttachment.THUMBNAIL_KEY);
   }
 
   public void setThumbnail(String value) {
     if (_ERAttachment.LOG.isDebugEnabled()) {
     	_ERAttachment.LOG.debug( "updating thumbnail from " + thumbnail() + " to " + value);
     }
-    takeStoredValueForKey(value, "thumbnail");
+    takeStoredValueForKey(value, _ERAttachment.THUMBNAIL_KEY);
   }
 
   public String webPath() {
-    return (String) storedValueForKey("webPath");
+    return (String) storedValueForKey(_ERAttachment.WEB_PATH_KEY);
   }
 
   public void setWebPath(String value) {
     if (_ERAttachment.LOG.isDebugEnabled()) {
     	_ERAttachment.LOG.debug( "updating webPath from " + webPath() + " to " + value);
     }
-    takeStoredValueForKey(value, "webPath");
+    takeStoredValueForKey(value, _ERAttachment.WEB_PATH_KEY);
   }
 
   public Integer width() {
-    return (Integer) storedValueForKey("width");
+    return (Integer) storedValueForKey(_ERAttachment.WIDTH_KEY);
   }
 
   public void setWidth(Integer value) {
     if (_ERAttachment.LOG.isDebugEnabled()) {
     	_ERAttachment.LOG.debug( "updating width from " + width() + " to " + value);
     }
-    takeStoredValueForKey(value, "width");
+    takeStoredValueForKey(value, _ERAttachment.WIDTH_KEY);
   }
 
   public er.attachment.model.ERAttachment parentAttachment() {
-    return (er.attachment.model.ERAttachment)storedValueForKey("parentAttachment");
+    return (er.attachment.model.ERAttachment)storedValueForKey(_ERAttachment.PARENT_ATTACHMENT_KEY);
   }
   
   public void setParentAttachment(er.attachment.model.ERAttachment value) {
-    takeStoredValueForKey(value, "parentAttachment");
+    takeStoredValueForKey(value, _ERAttachment.PARENT_ATTACHMENT_KEY);
   }
 
   public void setParentAttachmentRelationship(er.attachment.model.ERAttachment value) {
@@ -222,15 +222,15 @@ public abstract class _ERAttachment extends er.extensions.eof.ERXGenericRecord {
     else if (value == null) {
     	er.attachment.model.ERAttachment oldValue = parentAttachment();
     	if (oldValue != null) {
-    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, "parentAttachment");
+    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, _ERAttachment.PARENT_ATTACHMENT_KEY);
       }
     } else {
-    	addObjectToBothSidesOfRelationshipWithKey(value, "parentAttachment");
+    	addObjectToBothSidesOfRelationshipWithKey(value, _ERAttachment.PARENT_ATTACHMENT_KEY);
     }
   }
   
   public NSArray<er.attachment.model.ERAttachment> childrenAttachments() {
-    return (NSArray<er.attachment.model.ERAttachment>)storedValueForKey("childrenAttachments");
+    return (NSArray<er.attachment.model.ERAttachment>)storedValueForKey(_ERAttachment.CHILDREN_ATTACHMENTS_KEY);
   }
 
   public NSArray<er.attachment.model.ERAttachment> childrenAttachments(EOQualifier qualifier) {
@@ -251,7 +251,7 @@ public abstract class _ERAttachment extends er.extensions.eof.ERXGenericRecord {
         fullQualifier = inverseQualifier;
       }
       else {
-        NSMutableArray qualifiers = new NSMutableArray();
+        NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
         qualifiers.addObject(qualifier);
         qualifiers.addObject(inverseQualifier);
         fullQualifier = new EOAndQualifier(qualifiers);
@@ -272,11 +272,11 @@ public abstract class _ERAttachment extends er.extensions.eof.ERXGenericRecord {
   }
   
   public void addToChildrenAttachments(er.attachment.model.ERAttachment object) {
-    includeObjectIntoPropertyWithKey(object, "childrenAttachments");
+    includeObjectIntoPropertyWithKey(object, _ERAttachment.CHILDREN_ATTACHMENTS_KEY);
   }
 
   public void removeFromChildrenAttachments(er.attachment.model.ERAttachment object) {
-    excludeObjectFromPropertyWithKey(object, "childrenAttachments");
+    excludeObjectFromPropertyWithKey(object, _ERAttachment.CHILDREN_ATTACHMENTS_KEY);
   }
 
   public void addToChildrenAttachmentsRelationship(er.attachment.model.ERAttachment object) {
@@ -287,7 +287,7 @@ public abstract class _ERAttachment extends er.extensions.eof.ERXGenericRecord {
     	addToChildrenAttachments(object);
     }
     else {
-    	addObjectToBothSidesOfRelationshipWithKey(object, "childrenAttachments");
+    	addObjectToBothSidesOfRelationshipWithKey(object, _ERAttachment.CHILDREN_ATTACHMENTS_KEY);
     }
   }
 
@@ -299,27 +299,27 @@ public abstract class _ERAttachment extends er.extensions.eof.ERXGenericRecord {
     	removeFromChildrenAttachments(object);
     }
     else {
-    	removeObjectFromBothSidesOfRelationshipWithKey(object, "childrenAttachments");
+    	removeObjectFromBothSidesOfRelationshipWithKey(object, _ERAttachment.CHILDREN_ATTACHMENTS_KEY);
     }
   }
 
   public er.attachment.model.ERAttachment createChildrenAttachmentsRelationship() {
-    EOClassDescription eoClassDesc = EOClassDescription.classDescriptionForEntityName("ERAttachment");
+    EOClassDescription eoClassDesc = EOClassDescription.classDescriptionForEntityName( er.attachment.model.ERAttachment.ENTITY_NAME );
     EOEnterpriseObject eo = eoClassDesc.createInstanceWithEditingContext(editingContext(), null);
     editingContext().insertObject(eo);
-    addObjectToBothSidesOfRelationshipWithKey(eo, "childrenAttachments");
+    addObjectToBothSidesOfRelationshipWithKey(eo, _ERAttachment.CHILDREN_ATTACHMENTS_KEY);
     return (er.attachment.model.ERAttachment) eo;
   }
 
   public void deleteChildrenAttachmentsRelationship(er.attachment.model.ERAttachment object) {
-    removeObjectFromBothSidesOfRelationshipWithKey(object, "childrenAttachments");
+    removeObjectFromBothSidesOfRelationshipWithKey(object, _ERAttachment.CHILDREN_ATTACHMENTS_KEY);
     editingContext().deleteObject(object);
   }
 
   public void deleteAllChildrenAttachmentsRelationships() {
-    Enumeration objects = childrenAttachments().immutableClone().objectEnumerator();
+    Enumeration<er.attachment.model.ERAttachment> objects = childrenAttachments().immutableClone().objectEnumerator();
     while (objects.hasMoreElements()) {
-      deleteChildrenAttachmentsRelationship((er.attachment.model.ERAttachment)objects.nextElement());
+      deleteChildrenAttachmentsRelationship(objects.nextElement());
     }
   }
 
@@ -352,9 +352,9 @@ public abstract class _ERAttachment extends er.extensions.eof.ERXGenericRecord {
   }
 
   public static NSArray<ERAttachment> fetchERAttachments(EOEditingContext editingContext, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings) {
-    EOFetchSpecification fetchSpec = new EOFetchSpecification(_ERAttachment.ENTITY_NAME, qualifier, sortOrderings);
+    ERXFetchSpecification<ERAttachment> fetchSpec = new ERXFetchSpecification<ERAttachment>(_ERAttachment.ENTITY_NAME, qualifier, sortOrderings);
     fetchSpec.setIsDeep(true);
-    NSArray<ERAttachment> eoObjects = (NSArray<ERAttachment>)editingContext.objectsWithFetchSpecification(fetchSpec);
+    NSArray<ERAttachment> eoObjects = fetchSpec.fetchObjects(editingContext);
     return eoObjects;
   }
 
@@ -370,7 +370,7 @@ public abstract class _ERAttachment extends er.extensions.eof.ERXGenericRecord {
       eoObject = null;
     }
     else if (count == 1) {
-      eoObject = (ERAttachment)eoObjects.objectAtIndex(0);
+      eoObject = eoObjects.objectAtIndex(0);
     }
     else {
       throw new IllegalStateException("There was more than one ERAttachment that matched the qualifier '" + qualifier + "'.");
@@ -391,7 +391,7 @@ public abstract class _ERAttachment extends er.extensions.eof.ERXGenericRecord {
   }
 
   public static ERAttachment localInstanceIn(EOEditingContext editingContext, ERAttachment eo) {
-    ERAttachment localInstance = (eo == null) ? null : (ERAttachment)EOUtilities.localInstanceOfObject(editingContext, eo);
+    ERAttachment localInstance = (eo == null) ? null : ERXEOControlUtilities.localInstanceOfObject(editingContext, eo);
     if (localInstance == null && eo != null) {
       throw new IllegalStateException("You attempted to localInstance " + eo + ", which has not yet committed.");
     }

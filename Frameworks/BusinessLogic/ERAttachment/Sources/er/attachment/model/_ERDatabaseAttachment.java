@@ -1,4 +1,4 @@
-// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to ERDatabaseAttachment.java instead.
+// DO NOT EDIT.  Make changes to ERDatabaseAttachment.java instead.
 package er.attachment.model;
 
 import com.webobjects.eoaccess.*;
@@ -66,22 +66,22 @@ public abstract class _ERDatabaseAttachment extends er.attachment.model.ERAttach
   }
 
   public NSData smallData() {
-    return (NSData) storedValueForKey("smallData");
+    return (NSData) storedValueForKey(_ERDatabaseAttachment.SMALL_DATA_KEY);
   }
 
   public void setSmallData(NSData value) {
     if (_ERDatabaseAttachment.LOG.isDebugEnabled()) {
     	_ERDatabaseAttachment.LOG.debug( "updating smallData from " + smallData() + " to " + value);
     }
-    takeStoredValueForKey(value, "smallData");
+    takeStoredValueForKey(value, _ERDatabaseAttachment.SMALL_DATA_KEY);
   }
 
   public er.attachment.model.ERAttachmentData attachmentData() {
-    return (er.attachment.model.ERAttachmentData)storedValueForKey("attachmentData");
+    return (er.attachment.model.ERAttachmentData)storedValueForKey(_ERDatabaseAttachment.ATTACHMENT_DATA_KEY);
   }
   
   public void setAttachmentData(er.attachment.model.ERAttachmentData value) {
-    takeStoredValueForKey(value, "attachmentData");
+    takeStoredValueForKey(value, _ERDatabaseAttachment.ATTACHMENT_DATA_KEY);
   }
 
   public void setAttachmentDataRelationship(er.attachment.model.ERAttachmentData value) {
@@ -94,10 +94,10 @@ public abstract class _ERDatabaseAttachment extends er.attachment.model.ERAttach
     else if (value == null) {
     	er.attachment.model.ERAttachmentData oldValue = attachmentData();
     	if (oldValue != null) {
-    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, "attachmentData");
+    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, _ERDatabaseAttachment.ATTACHMENT_DATA_KEY);
       }
     } else {
-    	addObjectToBothSidesOfRelationshipWithKey(value, "attachmentData");
+    	addObjectToBothSidesOfRelationshipWithKey(value, _ERDatabaseAttachment.ATTACHMENT_DATA_KEY);
     }
   }
   
@@ -130,9 +130,9 @@ public abstract class _ERDatabaseAttachment extends er.attachment.model.ERAttach
   }
 
   public static NSArray<ERDatabaseAttachment> fetchERDatabaseAttachments(EOEditingContext editingContext, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings) {
-    EOFetchSpecification fetchSpec = new EOFetchSpecification(_ERDatabaseAttachment.ENTITY_NAME, qualifier, sortOrderings);
+    ERXFetchSpecification<ERDatabaseAttachment> fetchSpec = new ERXFetchSpecification<ERDatabaseAttachment>(_ERDatabaseAttachment.ENTITY_NAME, qualifier, sortOrderings);
     fetchSpec.setIsDeep(true);
-    NSArray<ERDatabaseAttachment> eoObjects = (NSArray<ERDatabaseAttachment>)editingContext.objectsWithFetchSpecification(fetchSpec);
+    NSArray<ERDatabaseAttachment> eoObjects = fetchSpec.fetchObjects(editingContext);
     return eoObjects;
   }
 
@@ -148,7 +148,7 @@ public abstract class _ERDatabaseAttachment extends er.attachment.model.ERAttach
       eoObject = null;
     }
     else if (count == 1) {
-      eoObject = (ERDatabaseAttachment)eoObjects.objectAtIndex(0);
+      eoObject = eoObjects.objectAtIndex(0);
     }
     else {
       throw new IllegalStateException("There was more than one ERDatabaseAttachment that matched the qualifier '" + qualifier + "'.");
@@ -169,7 +169,7 @@ public abstract class _ERDatabaseAttachment extends er.attachment.model.ERAttach
   }
 
   public static ERDatabaseAttachment localInstanceIn(EOEditingContext editingContext, ERDatabaseAttachment eo) {
-    ERDatabaseAttachment localInstance = (eo == null) ? null : (ERDatabaseAttachment)EOUtilities.localInstanceOfObject(editingContext, eo);
+    ERDatabaseAttachment localInstance = (eo == null) ? null : ERXEOControlUtilities.localInstanceOfObject(editingContext, eo);
     if (localInstance == null && eo != null) {
       throw new IllegalStateException("You attempted to localInstance " + eo + ", which has not yet committed.");
     }
