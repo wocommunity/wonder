@@ -1068,6 +1068,8 @@ var AjaxFlexibleUpload = {
 		uploader.submit();
 	}
 };
+var AFU = AjaxFlexibleUpload;
+
 var WonderRemoteLogging = {
 	options: {},
 	sendTimer: 0,
@@ -1078,7 +1080,7 @@ var WonderRemoteLogging = {
 		var finalUrl = parts[0] + "/" + WonderRemoteLogging.options.logger + "?" + (parts.length > 1? parts[1]: "");
 		var request = new Ajax.Request(finalUrl, {method: 'POST', parameters: {
 			l: WonderRemoteLogging.options.level,
-			m: WonderRemoteLogging.messages.join("\n"),
+			m: WonderRemoteLogging.messages.join("\n")
 		}});
 		WonderRemoteLogging.messages = [];
 		WonderRemoteLogging.sendTimer = null;
@@ -1104,9 +1106,8 @@ var WonderRemoteLogging = {
 				window.console.oldlog(msg);
 			}
 		}
-	},
+	}
 }
-var AFU = AjaxFlexibleUpload;
 
 var WonderJSON = {
 	eoStub: function(eo) {
