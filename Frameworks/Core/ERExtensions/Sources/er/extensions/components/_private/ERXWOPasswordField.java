@@ -30,6 +30,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * @binding hiddenValue the string to display when hidden (optional)
  * @binding disabled whether or not the input field is disabled (optional)
  * @binding name the name of the input field (optional) 
+ * @binding readonly whether or not the input field is readonly (optional)
  * 
  * @author mschrag
  */
@@ -38,6 +39,7 @@ public class ERXWOPasswordField extends WOInput {
 
   private WOAssociation _hiddenValue;
   private WOAssociation _hashValue;
+  private WOAssociation _readonly;
 
   public ERXWOPasswordField(String name, NSDictionary associations, WOElement template) {
     super("input", associations, null);
@@ -46,6 +48,7 @@ public class ERXWOPasswordField extends WOInput {
     }
     _hiddenValue = (WOAssociation) _associations.removeObjectForKey("hiddenValue");
     _hashValue = (WOAssociation) _associations.removeObjectForKey("hashValue");
+	_readonly = (WOAssociation) _associations.removeObjectForKey("readonly");
   }
 
   protected String type() {
@@ -56,10 +59,14 @@ public class ERXWOPasswordField extends WOInput {
   	WOAssociation disabled = (WOAssociation) ERXKeyValueCodingUtilities.privateValueForKey(this, "_disabled");
   	return disabled != null && disabled.booleanValueInComponent(context.component());
   }
+  
+  protected boolean isReadonlyInContext(WOContext context) {
+  	return _readonly != null && _readonly.booleanValueInComponent(context.component());
+  }
 
   public void takeValuesFromRequest(WORequest request, WOContext context) {
     WOComponent component = context.component();
-    if (!isDisabledInContext(context) && context._wasFormSubmitted()) {
+    if (!isDisabledInContext(context) && context._wasFormSubmitted() && !isReadonlyInContext(context)) {
       String name = nameInContext(context, component);
       if (name != null) {
         String value = request.stringFormValueForKey(name);
@@ -96,6 +103,9 @@ public class ERXWOPasswordField extends WOInput {
     String hiddenValue = hiddenValueInContext(context, component);
     if (hiddenValue != null) {
       response._appendTagAttributeAndValue("value", hiddenValue, true);
+    }
+    if (isReadonlyInContext(context)) {
+      response._appendTagAttributeAndValue("readonly", "readonly", false);
     }
   }
 

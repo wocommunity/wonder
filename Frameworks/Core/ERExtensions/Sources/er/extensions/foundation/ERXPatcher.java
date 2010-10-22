@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOAssociation;
+import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODynamicElement;
 import com.webobjects.appserver.WOElement;
@@ -376,15 +377,20 @@ public class ERXPatcher {
 
 		public static class TextField extends WOTextField {
 			protected WOAssociation _id;
+			protected WOAssociation _readonly;
 
 			public TextField(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) super._associations.removeObjectForKey("id");
+				_id = (WOAssociation) _associations.removeObjectForKey("id");
+				_readonly = (WOAssociation) _associations.removeObjectForKey("readonly");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
 				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
+				if (_readonly != null && _readonly.booleanValueInComponent(wocontext.component())) {
+					woresponse._appendTagAttributeAndValue("readonly", "readonly", false);
+				}
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -396,19 +402,39 @@ public class ERXPatcher {
 					woresponse.appendContentString(newResponse.contentString());
 				}
 			}
+			
+			/**
+			 * If readonly attribute is set to <code>true</code> prevent the takeValuesFromRequest.
+			 */
+			@Override
+			public void takeValuesFromRequest(WORequest aRequest, WOContext wocontext) {
+				WOComponent aComponent = wocontext.component();
+				Boolean readOnly = false;
+				if (_readonly != null) {
+					readOnly = _readonly.booleanValueInComponent(aComponent);
+				}
+				if (!readOnly) {
+					super.takeValuesFromRequest(aRequest, wocontext);
+				}
+			}
 		}
 
 		public static class Text extends WOText {
 			protected WOAssociation _id;
+			protected WOAssociation _readonly;
 
 			public Text(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) super._associations.removeObjectForKey("id");
+				_id = (WOAssociation) _associations.removeObjectForKey("id");
+				_readonly = (WOAssociation) _associations.removeObjectForKey("readonly");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
 				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
+				if (_readonly != null && _readonly.booleanValueInComponent(wocontext.component())) {
+					woresponse._appendTagAttributeAndValue("readonly", "readonly", false);
+				}
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -418,6 +444,21 @@ public class ERXPatcher {
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
 				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
 					woresponse.appendContentString(newResponse.contentString());
+				}
+			}
+			
+			/**
+			 * If readonly attribute is set to <code>true</code> prevent the takeValuesFromRequest.
+			 */
+			@Override
+			public void takeValuesFromRequest(WORequest aRequest, WOContext wocontext) {
+				WOComponent aComponent = wocontext.component();
+				Boolean readOnly = false;
+				if (_readonly != null) {
+					readOnly = _readonly.booleanValueInComponent(aComponent);
+				}
+				if (!readOnly) {
+					super.takeValuesFromRequest(aRequest, wocontext);
 				}
 			}
 		}
@@ -549,15 +590,20 @@ public class ERXPatcher {
 
 		public static class HiddenField extends WOHiddenField {
 			protected WOAssociation _id;
+			protected WOAssociation _readonly;
 
 			public HiddenField(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) super._associations.removeObjectForKey("id");
+				_id = (WOAssociation) _associations.removeObjectForKey("id");
+				_readonly = (WOAssociation) _associations.removeObjectForKey("readonly");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
 				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
+				if (_readonly != null && _readonly.booleanValueInComponent(wocontext.component())) {
+					woresponse._appendTagAttributeAndValue("readonly", "readonly", false);
+				}
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -567,6 +613,21 @@ public class ERXPatcher {
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
 				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
 					woresponse.appendContentString(newResponse.contentString());
+				}
+			}
+			
+			/**
+			 * If readonly attribute is set to <code>true</code> prevent the takeValuesFromRequest.
+			 */
+			@Override
+			public void takeValuesFromRequest(WORequest aRequest, WOContext wocontext) {
+				WOComponent aComponent = wocontext.component();
+				Boolean readOnly = false;
+				if (_readonly != null) {
+					readOnly = _readonly.booleanValueInComponent(aComponent);
+				}
+				if (!readOnly) {
+					super.takeValuesFromRequest(aRequest, wocontext);
 				}
 			}
 		}
@@ -597,15 +658,20 @@ public class ERXPatcher {
 
 		public static class PasswordField extends WOPasswordField {
 			protected WOAssociation _id;
+			protected WOAssociation _readonly;
 
 			public PasswordField(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) super._associations.removeObjectForKey("id");
+				_id = (WOAssociation) _associations.removeObjectForKey("id");
+				_readonly = (WOAssociation) _associations.removeObjectForKey("readonly");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
 				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
+				if (_readonly != null && _readonly.booleanValueInComponent(wocontext.component())) {
+					woresponse._appendTagAttributeAndValue("readonly", "readonly", false);
+				}
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -615,6 +681,21 @@ public class ERXPatcher {
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
 				if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
 					woresponse.appendContentString(newResponse.contentString());
+				}
+			}
+			
+			/**
+			 * If readonly attribute is set to <code>true</code> prevent the takeValuesFromRequest.
+			 */
+			@Override
+			public void takeValuesFromRequest(WORequest aRequest, WOContext wocontext) {
+				WOComponent aComponent = wocontext.component();
+				Boolean readOnly = false;
+				if (_readonly != null) {
+					readOnly = _readonly.booleanValueInComponent(aComponent);
+				}
+				if (!readOnly) {
+					super.takeValuesFromRequest(aRequest, wocontext);
 				}
 			}
 		}
