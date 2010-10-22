@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <wodefinitions>
     <wo class="AjaxModalDialogComponent.java" wocomponentcontent="false">
 	    <binding defaults="Actions" name="action"/>
@@ -48,5 +48,7 @@
             <bound name="pageName"/>
           </and>
         </validation> 
+    <binding defaults="Resources" name="modalboxCSS"/>
+    <binding defaults="Frameworks" name="modalboxCSSFramework"/>
     </wo>
 </wodefinitions>
