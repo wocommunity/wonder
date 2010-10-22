@@ -108,13 +108,15 @@ public class PFProfiler {
 
     public static void didAppendToResponse(WOElement element, WOResponse response, WOContext context) {
         PFStatsNode stats = PFProfiler._currentStats.get();
-        stats.end();
+        if (stats != null) {
+          stats.end();
+        }
 
         for (PFProfiler.Delegate delegate : _delegates) {
             delegate.didAppendToResponse(element, response, context);
         }
 
-        if (stats.parentStats().isRoot()) {
+        if (stats != null && stats.parentStats().isRoot()) {
             for (PFProfiler.Delegate delegate : _delegates) {
                 delegate.responseEnded(response, context);
             }
