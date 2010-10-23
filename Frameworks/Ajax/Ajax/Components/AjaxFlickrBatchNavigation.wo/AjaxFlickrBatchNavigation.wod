@@ -19,6 +19,7 @@ HasNoPreviousPageConditional : WOConditional {
 PreviousPageAction : AjaxUpdateLink {
 	action = previousPage;
 	class = "paginatorPrev";
+	onClick = ^onClick;
 	updateContainerID = updateContainerID;
 }
 
@@ -34,11 +35,13 @@ HasNoNextPageConditional : WOConditional {
 NextPageAction : AjaxUpdateLink {
 	action = nextPage;
 	class = "paginatorNext";
+	onClick = ^onClick;
 	updateContainerID = updateContainerID;
 }
 
 SelectPageAction : AjaxUpdateLink {
 	action = selectPage;
+	onClick = ^onClick;
 	updateContainerID = updateContainerID;
 }
 
