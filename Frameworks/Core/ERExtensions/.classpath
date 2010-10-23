@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" output="bin_JavaFoundation" path="Sources_JavaFoundation"/>
-	<classpathentry kind="src" output="bin_JavaWebObjects" path="Sources_JavaWebObjects"/>
 	<classpathentry kind="src" path="Sources"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/ERJars"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaWOExtensions"/>
