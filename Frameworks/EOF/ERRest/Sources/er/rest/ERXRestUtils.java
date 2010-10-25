@@ -96,7 +96,13 @@ public class ERXRestUtils {
 		}
 		else if (value instanceof NSTimestamp) {
 			NSTimestamp timestamp = (NSTimestamp) value;
-			formattedValue = new NSTimestampFormatter(ERXRestUtils.timestampFormat(false)).format(timestamp);
+			String rfcFormat = ERXProperties.stringForKeyWithDefault("er.rest.rfcDateFormat", "rfc822");
+			if ("rfc3339".equals(rfcFormat)) {
+				formattedValue = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date(timestamp.getTime()));
+				formattedValue = formattedValue.substring(0, formattedValue.length()-2) + ":" + formattedValue.substring(formattedValue.length()-2);  				
+			} else {
+				formattedValue = new NSTimestampFormatter(ERXRestUtils.timestampFormat(false)).format(timestamp);
+			}
 		}
 		else if (value instanceof Date) {
 			Date date = (Date) value;
@@ -179,19 +185,45 @@ public class ERXRestUtils {
 			}
 			else {
 				String strValue = (String) value;
-				NSTimestampFormatter formatter = null;
-				try {
-					boolean spaces = strValue.indexOf(' ') != -1;
-					formatter = new NSTimestampFormatter(ERXRestUtils.timestampFormat(spaces));
-					parsedValue = formatter.parseObject(strValue);
-				}
-				catch (Throwable t) {
-					String msg = "Failed to parse '" + strValue + "' as a timestamp";
-					if (formatter != null) {
-						msg += " (example: " + formatter.format(new NSTimestamp()) + ")";
+				boolean spaces = strValue.indexOf(' ') != -1;
+				String rfcFormat = ERXProperties.stringForKeyWithDefault("er.rest.rfcDateFormat", "rfc822");					
+				if ("rfc3339".equals(rfcFormat)) {
+					SimpleDateFormat formatter = null;
+					java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("(.*[\\-,\\+]{1}[0-9]{1,2}):([0-9]{1,2})");
+					java.util.regex.Matcher matcher = pattern.matcher(strValue);
+					if (matcher.matches()) {
+						try {
+							strValue = matcher.group(1) + matcher.group(2);
+							parsedValue = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parseObject(strValue);
+							if (parsedValue instanceof java.util.Date) {
+								parsedValue = new NSTimestamp((Date)parsedValue);
+							} 
+						} catch (Throwable t) {
+							String msg = "Failed to parse '" + strValue + "' as a timestamp";
+							if (formatter != null) {
+								msg += " (example: " + formatter.format(new NSTimestamp()) + ")";
+							}
+							msg += ".";
+							throw new IllegalArgumentException(msg, t);
+						}
+					} else {
+						strValue  = null;
+						throw new IllegalArgumentException(strValue + " didn't match the " + pattern.pattern() + " pattern", new Throwable());
 					}
-					msg += ".";
-					throw new IllegalArgumentException(msg, t);
+				} else {
+					NSTimestampFormatter formatter = null;
+					try {
+						formatter = new NSTimestampFormatter(ERXRestUtils.timestampFormat(spaces));
+						parsedValue = formatter.parseObject(strValue);		
+					}
+					catch (Throwable t) {
+						String msg = "Failed to parse '" + strValue + "' as a timestamp";
+						if (formatter != null) {
+							msg += " (example: " + formatter.format(new NSTimestamp()) + ")";
+						}
+						msg += ".";
+						throw new IllegalArgumentException(msg, t);
+					}
 				}
 			}
 		}
