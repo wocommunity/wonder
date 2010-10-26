@@ -1,0 +1,35 @@
+<h1>Movies</h1>
+<wo:AjaxUpdateContainer id = "moviesListContainer">
+	<table>
+		<tr>
+			<th>Title</th>
+			<th class = "center">Poster</th>
+			<th class = "center">Rating</th>
+			<th>Release Date</th>
+			<th>Genre</th>
+		</tr>
+		<wo:loop item = "$movieItem" list = "$session.movieDisplayGroup.displayedObjects" index = "$loopIndex">
+		<wo:WOGenericContainer elementName = "tr" class = "$alternateRowClass">
+			<td><wo:link action = "$selectMovie"><wo:str value = "$movieItem.title" /></wo:link></td>
+			<td class = "center"><wo:ERAttachmentIcon attachment = "$movieItem.poster" /></td>
+			<td class = "center"><wo:str value = "$movieItem.rated" /></td>
+			<td><wo:str value = "$movieItem.dateReleased" formatter = "$session.releaseDateFormatter" /></td>
+			<td><wo:str value = "$movieItem.category" /></td>
+		</wo:WOGenericContainer>
+		</wo:loop>
+	</table>
+	<wo:AjaxFlickrBatchNavigation displayGroup = "$session.movieDisplayGroup" updateContainerID = "moviesListContainer" displayName = "Movies" />
+	
+	
+	
+
+	<wo:ERTagCloud cache = "$false" entityName = "Movie" tag = "$tag" tagClass = "$tagClass">
+		<wo:WOGenericContainer elementName = "span" class = "$tagClass">
+			<wo:str value = "$tag"/>
+		</wo:WOGenericContainer>
+	</wo:ERTagCloud>
+
+
+
+
+</wo:AjaxUpdateContainer>
