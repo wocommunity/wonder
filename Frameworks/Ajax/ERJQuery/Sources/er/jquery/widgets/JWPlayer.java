@@ -12,12 +12,15 @@ import er.extensions.foundation.ERXStringUtilities;
 /**
  * Component encapsulating HTML5 jwplayer
  * 
- * @see http://www.longtailvideo.com/support/jw-player/jw-player-for-html5
+ * @see <a href="http://www.longtailvideo.com/support/jw-player/jw-player-for-flash-v5">JW Player</a>
+ * @see <a href="http://www.longtailvideo.com/support/jw-player/jw-player-for-flash-v5/14625/html5-support">JW Player HTML5 support</a>
  * 
  * You will need to include the script jwplayer.js in your page if using Unobtrusively
  * 
  * @binding poster		ERAttachment for the video poster
  * @binding sources		An array of ERAttachments comprising the video sources
+ * @binding skin		(optional) A zip of the skin for the video player that you bundle in your WO app.
+ * 						See <a href="http://www.longtailvideo.com/support/jw-player/jw-player-for-flash-v5/12538/supported-player-embed-methods#skins">Skins</a>
  *
  * @author ravim
  *
