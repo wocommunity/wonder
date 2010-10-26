@@ -2,9 +2,6 @@ package er.movies;
 
 
 import webobjectsexamples.businesslogic.movies.common.Movie;
-
-import com.webobjects.appserver.WOStatisticsStore;
-
 import er.extensions.appserver.ERXApplication;
 import er.movies.rest.MoviesController;
 import er.rest.routes.ERXRoute;
@@ -26,7 +23,5 @@ public class Application extends ERXApplication {
 		restReqHandler.insertRoute(new ERXRoute(Movie.ENTITY_NAME,"/movies", ERXRoute.Method.Options,MoviesController.class, "options"));
 		
 		ERXRouteRequestHandler.register(restReqHandler);
-		
-	    registerMBean((Object)statisticsStore(), getJMXDomain(), WOStatisticsStore.class.getName());
 	}
 }
