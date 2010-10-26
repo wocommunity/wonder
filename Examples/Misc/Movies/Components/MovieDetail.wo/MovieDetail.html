@@ -1,0 +1,77 @@
+
+<h1>
+	<wo:link action = "$returnToList"><wo:img filename = "back.png" width = "32" /></wo:link> <wo:str value = "$movie.title" />
+</h1>
+
+<wo:AjaxUpdateContainer id = "detailTable">
+	<wo:form>
+	
+	<div class = "buttons">
+		<wo:AjaxSubmitButton functionName = "saveChanges" action = "$saveChanges" updateContainerID = "detailTable" />
+		<wo:submit class = "button" action = "$saveChanges" value  = "Save Changes" /> &nbsp;
+		<wo:submit class = "button" action = "$discardChanges" value  = "Discard Changes" /> 
+	</div>
+	<table>
+		<tr>
+			<td class = "dataLabel">Tags:</td>
+			<td>
+				<wo:ERTagField taggable = "$movieTaggable" />
+			</td>
+		</tr>
+		<tr>
+			<td class = "dataLabel">Release Date:</td>
+			<td>
+				<wo:AjaxInPlaceEditor onComplete = "function() {detailTableUpdate()}" formatter = "$session.releaseDateFormatter" value = "$movie.dateReleased" />
+			</td>
+		</tr>
+		<tr>
+			<td class = "dataLabel">Genre:</td>
+			<td><wo:str value = "$movie.category" valueWhenEmpty = "N/A" /></td>
+		</tr>
+		<tr>
+			<td class = "dataLabel">Rating:</td>
+			<td><wo:str value = "$movie.rated" valueWhenEmpty = "N/A" /></td>
+		</tr>
+		<tr>
+			<td class = "dataLabel">Director:</td>
+			<td>
+				<wo:not condition = "$movie.directors.count">
+					N/A
+				</wo:not>
+				<wo:loop list = "$movie.directors" item = "$directorItem">
+					<wo:str value = "$directorItem.firstName" /> <wo:str value = "$directorItem.lastName" /><br/>
+				</wo:loop>
+			</td>
+		</tr>
+		<tr>
+			<td class = "dataLabel">Cast:</td>
+			<td>
+				<wo:not condition = "$movie.roles.count">
+					N/A
+				</wo:not>
+				<wo:loop list = "$movieRolesSorted" item = "$movieRoleItem">
+					<wo:str value = "$movieRoleItem.talent.firstName" /> <wo:str value = "$movieRoleItem.talent.lastName" /> (<wo:str value = "$movieRoleItem.roleName" valueWhenEmpty = "N/A" />)<br/>
+				</wo:loop>
+			</td>
+		</tr>
+		<tr>
+			<td class = "dataLabel">Poster:</td>
+			<td>
+				<wo:if condition = "$movie.poster">
+					<wo:ERAttachmentViewer attachment = "$movie.poster" width = "150" />
+				</wo:if>
+				<wo:else>
+					N/A
+				</wo:else>
+			</td>
+		</tr>
+	</table>
+	</wo:form>
+	
+	<div id = "posterControls">
+		<h3>Add/Change Poster</h3>
+		<wo:ERXJSOpenWindowHyperlink action = "$imageBrowser" scrollbars = "yes" width = "750" height = "400">Search for images</wo:ERXJSOpenWindowHyperlink>
+		<wo:ERAttachmentUpload editingContext = "$movie.editingContext" ajax = "$true" attachment = "$movie.poster" succeededFunction = "saveChanges();"  />
+	</div>
+	
+</wo:AjaxUpdateContainer>

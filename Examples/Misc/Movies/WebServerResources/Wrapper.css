@@ -1,0 +1,106 @@
+
+body, input, td, th {
+	font-family: sans-serif;
+	font-size: 9pt;
+	color: #444;
+}
+
+body {
+	background: #eee;
+}
+
+img {
+	vertical-align: middle;
+}
+
+div#contentBox {
+	margin-left: 40px;
+	margin-right: 50px;
+	padding: 15px;
+	background: white;
+	border: 2px solid #ccc;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+}
+
+td.dataLabel {
+	text-align: right;
+}
+
+input {
+	background: white;
+}
+
+input.button {
+	background: #3d4966;
+	font-weight: normal;
+	padding: 5px;
+	padding-left: 10px;
+	padding-right: 10px;
+	color: #eee;
+	border: 0;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+}
+
+input.button:hover {
+	background: #6073a1;
+}
+
+h1 {
+	font-weight: normal;
+	font-size: 14pt;
+	color: #7185b3;
+	padding: 0;
+	margin: 0;
+	margin-bottom: .5em;
+}
+
+.error {
+	text-align: center;
+	color: rgb(255, 103, 100);
+	font-weight: bold;
+	margin-left: auto;
+	margin-right: auto;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	padding: 10px;
+}
+
+
+
+
+div#header {
+}
+
+div#header div#headerPart1 {
+	background-image: url(Header-1.png);
+	background-repeat: no-repeat;
+	position: absolute;
+	left: 40px;
+	top: 20px;
+	width: 246px;
+	height: 100px;
+}
+
+div#header div#headerPart2 {
+	background-image: url(Header-2.png);
+	background-repeat: repeat-x;
+	position: absolute;
+	left: 286px;
+	right: 80px;
+	top: 20px;
+	height: 100px;
+}
+
+div#header div#headerPart3 {
+	background-image: url(Header-3.png);
+	background-repeat: no-repeat;
+	position: absolute;
+	right: 40px;
+	top: 20px;
+	width: 40px;
+	height: 100px;
+}

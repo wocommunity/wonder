@@ -1,0 +1,25 @@
+
+table {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+table tr.alternate td {
+	background: #e1e6fd;
+}
+
+table tr td, table tr th {
+	padding-top: 4px;
+	padding-bottom: 4px;
+	padding-right: 2em;
+	padding-left: 2em;
+}
+
+table tr td.center, table tr th.center {
+	text-align: center;
+}
+
+table tr th {
+	text-align: left;
+	border-bottom: #ccc 1px solid;
+}
