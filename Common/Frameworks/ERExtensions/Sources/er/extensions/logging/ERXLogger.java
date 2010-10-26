@@ -240,6 +240,8 @@ public class ERXLogger extends org.apache.log4j.Logger {
         }
         
         NSNotificationCenter.defaultCenter().postNotification(ERXConfigurationManager.ConfigurationDidChangeNotification, null);
+        // MS: Force fire PropertiesDidChange here since the logger's configuration gets reset on a second call
+        NSNotificationCenter.defaultCenter().postNotification("PropertiesDidChange", null, null);
     }
 
     /**
