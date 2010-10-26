@@ -22,9 +22,13 @@ JWFlashPlayer: WOResourceURL {
 	framework = "ERJQuery";
 }
 
+HasSkin: WOConditional {
+	condition = hasSkin;
+}
+
 JWSkin: WOResourceURL {
-	filename = "five/five.xml";
-	framework = "ERJQuery";
+	filename = skin;
+	framework = "app";
 }
 
 ID: WOString {
