@@ -11,5 +11,6 @@
     <binding name="width"/>
         <binding name="height"/>
     <binding name="id"/>
+    <binding name="skin"/>
     </wo>
 </wodefinitions>

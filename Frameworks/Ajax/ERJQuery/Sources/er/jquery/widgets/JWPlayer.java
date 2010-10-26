@@ -14,7 +14,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * 
  * @see http://www.longtailvideo.com/support/jw-player/jw-player-for-html5
  * 
- * You will need to include the script jquery.jwplayer.js in your page if using Unobtrusively
+ * You will need to include the script jwplayer.js in your page if using Unobtrusively
  * 
  * @binding poster		ERAttachment for the video poster
  * @binding sources		An array of ERAttachments comprising the video sources
@@ -44,6 +44,14 @@ public class JWPlayer extends WOComponent {
 		return (!"".equals(id)) ? id : ERXStringUtilities.safeIdentifierName(context().elementID());
 	}
 	
+	public boolean hasSkin() {
+		return hasBinding("skin");
+	}
+	
+	public String skin() {
+		return hasSkin() ? (String) valueForBinding("skin") : null;
+	}
+	
 	// R&R
     @Override
 	public void appendToResponse(WOResponse response, WOContext context) {
@@ -51,7 +59,7 @@ public class JWPlayer extends WOComponent {
     	
     	if (!useUnobtrusively) {
     		ERXResponseRewriter.addScriptResourceInHead(response, context, "ERJQuery", "jquery-1.4.2.min.js");
-    		ERXResponseRewriter.addScriptResourceInHead(response, context, "ERJQuery", "jquery.jwplayer.js");
+    		ERXResponseRewriter.addScriptResourceInHead(response, context, "ERJQuery", "jwplayer.js");
     	}
     }
 }
