@@ -1,6 +1,7 @@
 package er.extensions.eof;
 
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -15,6 +16,7 @@ import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.eocontrol.EOSharedEditingContext;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSSelector;
 
 import er.extensions.appserver.ERXSession;
@@ -71,7 +73,7 @@ public class ERXObjectStoreCoordinatorPool {
             ERXObjectStoreCoordinatorSynchronizer.initialize();
             _pool = new ERXObjectStoreCoordinatorPool();
             log.info("setting ERXEC.factory to MultiOSCFactory");
-            ERXEC.setFactory(new MultiOSCFactory());
+            ERXEC.setFactory(new MultiOSCFactory(ERXEC.factory()));
         }
     }
     
@@ -192,14 +194,50 @@ public class ERXObjectStoreCoordinatorPool {
     /** 
      * This class uses different EOF stack when creating new EOEditingContexts.
      */
-    public static class MultiOSCFactory extends ERXEC.DefaultFactory {
-        public MultiOSCFactory() {
-            super();
+    public static class MultiOSCFactory implements ERXEC.Factory {
+        private Boolean _useSharedEditingContext;
+        private ERXEC.Factory _backingFactory;
+        
+        public MultiOSCFactory(ERXEC.Factory backingFactory) {
+            _backingFactory = backingFactory;
         }
+        
+        public Object defaultEditingContextDelegate() {
+            return _backingFactory.defaultEditingContextDelegate();
+        }
+        
+        public void setDefaultEditingContextDelegate(Object delegate) {
+            _backingFactory.setDefaultEditingContextDelegate(delegate);
+        }
+        
+        public Object defaultNoValidationDelegate() {
+            return _backingFactory.defaultNoValidationDelegate();
+        }
+        
+        public void setDefaultNoValidationDelegate(Object delegate) {
+            _backingFactory.setDefaultNoValidationDelegate(delegate);
+        }
+        
+        public void setDefaultDelegateOnEditingContext(EOEditingContext ec) {
+            _backingFactory.setDefaultDelegateOnEditingContext(ec);
+        }
+        
+        public void setDefaultDelegateOnEditingContext(EOEditingContext ec, boolean validation) {
+            _backingFactory.setDefaultDelegateOnEditingContext(ec, validation);
+        }
+        
+        public EOEditingContext _newEditingContext(EOObjectStore objectStore) {
+            return _backingFactory._newEditingContext(objectStore);
+        }
+        
+        public EOEditingContext _newEditingContext(EOObjectStore objectStore, boolean validationEnabled) {
+            return _backingFactory._newEditingContext(objectStore, validationEnabled);
+        }
+
         public EOEditingContext _newEditingContext() {
             return _newEditingContext(true);
         }
-        
+
         public EOEditingContext _newEditingContext(boolean validationEnabled) {
             EOObjectStore os = _pool.currentRootObjectStore();
             EOEditingContext ec = _newEditingContext(os, validationEnabled);
@@ -212,8 +250,20 @@ public class ERXObjectStoreCoordinatorPool {
             }
             return ec;
         }
+
+        public boolean useSharedEditingContext() {
+            if (_backingFactory instanceof ERXEC.DefaultFactory) {
+                return ((ERXEC.DefaultFactory)_backingFactory).useSharedEditingContext();
+            }
+            if (_useSharedEditingContext == null) {
+                _useSharedEditingContext = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXEC.useSharedEditingContext", true) ? Boolean.TRUE : Boolean.FALSE;
+                log.debug("setting useSharedEditingContext to "+ _useSharedEditingContext);
+            }
+            return _useSharedEditingContext.booleanValue();
+        }
+
     }
- 
+    
     private void _initObjectStores() {
         log.info("initializing Pool...");
         _objectStores = new ArrayList(_maxOS);
