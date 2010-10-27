@@ -6,6 +6,17 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOSession;
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAttribute;
@@ -35,15 +46,18 @@ import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.jdbcadaptor.JDBCAdaptorException;
+
 import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXSession;
 import er.extensions.eof.ERXConstant;
+import er.extensions.eof.ERXDatabaseContext;
 import er.extensions.eof.ERXDatabaseContextDelegate;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.eof.ERXEntityClassDescription;
 import er.extensions.eof.ERXGenericRecord;
 import er.extensions.eof.ERXModelGroup;
+import er.extensions.eof.ERXObjectStoreCoordinatorPool;
 import er.extensions.eof.ERXSharedEOLoader;
 import er.extensions.eof.qualifiers.ERXPrimaryKeyListQualifier;
 import er.extensions.eof.qualifiers.ERXToManyQualifier;
@@ -51,6 +65,7 @@ import er.extensions.formatters.ERXSimpleHTMLFormatter;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXConfigurationManager;
 import er.extensions.foundation.ERXFileUtilities;
+import er.extensions.foundation.ERXPatcher;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXSystem;
@@ -58,17 +73,8 @@ import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.jdbc.ERXJDBCAdaptor;
 import er.extensions.localization.ERXLocalizer;
 import er.extensions.logging.ERXLogger;
+import er.extensions.remoteSynchronizer.ERXRemoteSynchronizer;
 import er.extensions.validation.ERXValidationFactory;
-import org.apache.log4j.Logger;
-
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
 
 /**
  * Principal class of the ERExtensions framework. This class
@@ -84,6 +90,10 @@ import java.util.Random;
  */
 public class ERXExtensions extends ERXFrameworkPrincipal {
     
+    static {
+    	setUpFrameworkPrincipalClass (ERXExtensions.class);
+    }
+
     /** Notification name, posted before object will change in an editing context */
     public final static String objectsWillChangeInEditingContext= "ObjectsWillChangeInEditingContext";
 
@@ -106,7 +116,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * Handling call all of the <code>did*</code> methods on
      * {@link ERXGenericRecord} subclasses after an editing context
      * has been saved. This delegate is also responsible for configuring
-     * the {@link ERXCompilerProxy} and {@link er.extensions.validation.ERXValidationFactory}.
+     * the {@link ERXValidationFactory}.
      * This delegate is configured when this framework is loaded.
      */
     public static class Observer {
@@ -164,7 +174,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * Handling call all of the <code>did*</code> methods on
      * {@link ERXGenericRecord} subclasses after an editing context
      * has been saved. This delegate is also responsible for configuring
-     * the {@link ERXCompilerProxy} and {@link ERXValidationFactory}.
+     * the {@link ERXValidationFactory}.
      * This delegate is configured when this framework is loaded.
      */
 
@@ -204,8 +214,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         		ERXLogger.configureLoggingWithSystemProperties();
         	}
         	
-                ERXLogger.setLoggingConfigurationReloadAllowed(ERXProperties.booleanForKeyWithDefault("er.extensions.ERXLogger.loggingConfigurationReloadAllowed", true));
-
+    		ERXLogger.setLoggingConfigurationReloadAllowed(ERXProperties.booleanForKeyWithDefault("er.extensions.ERXLogger.loggingConfigurationReloadAllowed", true));
+        	
             ERXArrayUtilities.initialize();
             
     		// False by default
@@ -280,7 +290,17 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         	throw NSForwardException._runtimeExceptionForThrowable(t);
         }
                 
-        //ERXObjectStoreCoordinatorPool.initializeIfNecessary();
+        // ERXObjectStoreCoordinatorPool has a static initializer, so just load the class if
+        // the configuration setting exists
+        if (ERXRemoteSynchronizer.remoteSynchronizerEnabled() || ERXProperties.booleanForKey("er.extensions.ERXDatabaseContext.activate")) {
+            String className = ERXProperties.stringForKeyWithDefault("er.extensions.ERXDatabaseContext.className", ERXDatabaseContext.class.getName());
+            Class c = ERXPatcher.classForName(className);
+            if(c == null) {
+                throw new IllegalStateException("er.extensions.ERXDatabaseContext.className not found: " + className);
+            }
+            EODatabaseContext.setContextClassToRegister(c);
+        }
+        ERXObjectStoreCoordinatorPool.initializeIfNecessary();
     }
 
     private static Map _qualifierKeys;
