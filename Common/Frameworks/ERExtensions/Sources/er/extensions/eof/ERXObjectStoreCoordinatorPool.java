@@ -236,8 +236,6 @@ public class ERXObjectStoreCoordinatorPool {
             throw new IllegalStateException("Unable to create defaultSharedEditingContext with className = " + className, e);
         }
         
-        System.out.println("ERXObjectStoreCoordinatorPool._initObjectStores: " + className);
-        
         log.info("initializing Pool finished");
      }
 }
