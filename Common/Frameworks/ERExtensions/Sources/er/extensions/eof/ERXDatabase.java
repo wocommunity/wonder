@@ -33,7 +33,7 @@ public class ERXDatabase extends EODatabase {
 		super(adaptor);
 
 		// AK: huge performance optimization when you use badly distributed LONG keys
-
+/*
 		if(_snapshots instanceof NSMutableDictionary) {
 			_snapshots = new NSMutableDictionary() {
 				Map hashMap = new HashMap();
@@ -64,6 +64,7 @@ public class ERXDatabase extends EODatabase {
 				}
 			};
 		}
+*/
 	}
 
 	public ERXDatabase(EOModel model) {

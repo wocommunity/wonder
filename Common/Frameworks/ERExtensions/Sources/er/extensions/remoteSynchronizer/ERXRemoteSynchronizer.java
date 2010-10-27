@@ -76,12 +76,12 @@ public abstract class ERXRemoteSynchronizer {
 		String includeEntityNames = ERXProperties.stringForKey("er.extensions.remoteSynchronizer.includeEntities");
 		NSArray includeEntityNamesArray = null;
 		if (includeEntityNames != null) {
-			_includeEntityNames = new NSSet(NSArray.componentsSeparatedByString(includeEntityNames, ",").toArray());
+			_includeEntityNames = new NSSet(NSArray.componentsSeparatedByString(includeEntityNames, ","));
 		}
 		NSArray excludeEntityNamesArray = null;
 		String excludeEntityNames = ERXProperties.stringForKey("er.extensions.remoteSynchronizer.excludeEntities");
 		if (excludeEntityNames != null) {
-			_excludeEntityNames = new NSSet(NSArray.componentsSeparatedByString(excludeEntityNames, ",").toArray());
+			_excludeEntityNames = new NSSet(NSArray.componentsSeparatedByString(excludeEntityNames, ","));
 		}
 	}
 
