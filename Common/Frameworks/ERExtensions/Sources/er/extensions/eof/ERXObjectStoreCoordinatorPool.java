@@ -16,7 +16,6 @@ import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.eocontrol.EOSharedEditingContext;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
-import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSSelector;
 
 import er.extensions.appserver.ERXSession;
@@ -269,7 +268,7 @@ public class ERXObjectStoreCoordinatorPool {
         _objectStores = new ArrayList(_maxOS);
         _sharedEditingContexts = new ArrayList(_maxOS);
         
-        String className = NSProperties.stringForKeyWithDefault("EOSharedEditingContext.defaultSharedEditingContextClassName", EOSharedEditingContext.class.getName()); //should really be "...defaultDefault..."
+        String className = ERXProperties.stringForKeyWithDefault("EOSharedEditingContext.defaultSharedEditingContextClassName", EOSharedEditingContext.class.getName()); //should really be "...defaultDefault..."
         try {
             Constructor<?> sharedEditingContextConstructor = Class.forName(className).getConstructor(EOObjectStore.class);
             for (int i = 0; i < _maxOS; i++) {
