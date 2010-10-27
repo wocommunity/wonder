@@ -213,19 +213,31 @@ public class ERXObjectStoreCoordinatorPool {
             return ec;
         }
     }
-    
+ 
     private void _initObjectStores() {
         log.info("initializing Pool...");
         _objectStores = new ArrayList(_maxOS);
         _sharedEditingContexts = new ArrayList(_maxOS);
-        for (int i = 0; i < _maxOS; i++) {
-            EOObjectStore os = ERXObjectStoreCoordinator.create();
-            _objectStores.add(os);
-            _sharedEditingContexts.add(new EOSharedEditingContext(os));
+        
+        String className = NSProperties.stringForKeyWithDefault("EOSharedEditingContext.defaultSharedEditingContextClassName", EOSharedEditingContext.class.getName()); //should really be "...defaultDefault..."
+        try {
+            Constructor<?> sharedEditingContextConstructor = Class.forName(className).getConstructor(EOObjectStore.class);
+            for (int i = 0; i < _maxOS; i++) {
+                EOObjectStore os = ERXObjectStoreCoordinator.create();
+                _objectStores.add(os);
+    
+                _sharedEditingContexts.add(sharedEditingContextConstructor.newInstance(os));
+            }
+            if(_maxOS > 0) {
+                EOObjectStoreCoordinator.setDefaultCoordinator((EOObjectStoreCoordinator)_objectStores.get(0));
+            }
         }
-        if(_maxOS > 0) {
-            EOObjectStoreCoordinator.setDefaultCoordinator((EOObjectStoreCoordinator)_objectStores.get(0));
+        catch (Exception e) {
+            throw new IllegalStateException("Unable to create defaultSharedEditingContext with className = " + className, e);
         }
+        
+        System.out.println("ERXObjectStoreCoordinatorPool._initObjectStores: " + className);
+        
         log.info("initializing Pool finished");
      }
 }
