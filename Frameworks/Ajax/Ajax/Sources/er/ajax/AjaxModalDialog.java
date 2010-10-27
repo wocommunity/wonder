@@ -740,9 +740,24 @@ public class AjaxModalDialog extends AjaxComponent {
 		addScriptResourceInHead(response, "wonder.js");
 		addScriptResourceInHead(response, "effects.js");
 		addScriptResourceInHead(response, "modalbox.js");
-		addStylesheetResourceInHead(response, "modalbox.css");
+		ERXResponseRewriter.addStylesheetResourceInHead(response, context(), cssFileFrameworkName(), cssFileName());
 	}
 	
+    
+    /**
+     * @return value for modalboxCSS binding, or default of "modalbox.css"
+     */
+    protected String cssFileName() {
+    	return (String)valueForBinding("modalboxCSS", "modalbox.css");
+    }
+    
+    /**
+     * @return value for modalboxCSSFramework binding, or default of "Ajax"
+     */
+    protected String cssFileFrameworkName() {
+    	return (String)valueForBinding("modalboxCSSFramework", "Ajax");
+    }
+
 	/**
 	 * Stash this dialog instance in the context so we can access it from the static methods.  If there is one AMD 
 	 * nested in another (a rather dubious thing to do that we warn about but it may have its uses), we need to remember 

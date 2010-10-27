@@ -280,7 +280,7 @@
 
     <target name="ERIndexingExample.all">
         <antcall target="global.application.${build.action}" >
-            <param name="project.principal.class" value="" />
+            <param name="project.principal.class" value="er.indexing.example.Application" />
             <param name="project.name" value="ERIndexingExample" />
             <param name="project.dir" value="Examples/Misc/ERIndexingExample" />
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
@@ -290,7 +290,7 @@
 
     <target name="ERRestRouteExample.all">
         <antcall target="global.application.${build.action}" >
-            <param name="project.principal.class" value="" />
+            <param name="project.principal.class" value="er.rest.example.Application" />
             <param name="project.name" value="ERRestRouteExample" />
             <param name="project.dir" value="Examples/Misc/ERRestRouteExample" />
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
@@ -436,6 +436,16 @@
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/WOOgnl" />
         </antcall>
     </target>
+	
+    <target name="Movies.all">
+        <antcall target="global.application.${build.action}" >
+            <param name="project.type" value="application" />
+            <param name="project.principal.class" value="er.movies.Application" />
+            <param name="project.name" value="Movies" />
+            <param name="project.dir" value="Examples/Misc/Movies" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/WOOgnl/Ajax/ERRest/ERTaggable/ERChronic/ERMoviesLogic/ERAttachment/H2PlugIn" />
+        </antcall>
+    </target>	
 
     <target name="ERMovies.all">
         <antcall target="global.application.${build.action}" >
@@ -612,7 +622,7 @@
     <target name="JavaRESTAdaptorExample.all">
         <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
-            <param name="project.principal.class" value="Application" />
+            <param name="project.principal.class" value="er.restadaptorexample.Application" />
             <param name="project.name" value="JavaRESTAdaptorExample" />
             <param name="project.dir" value="Examples/Misc/JavaRESTAdaptorExample" />
 
@@ -763,7 +773,7 @@
         <target name="ERDivaliteExample.all">
         <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
-            <param name="project.principal.class" value="Application" />
+            <param name="project.principal.class" value="er.divalite.example.Application" />
             <param name="project.name" value="ERDivaliteExample" />
             <param name="project.dir" value="Examples/D2W/ERDivaliteExample" />
 
@@ -775,7 +785,7 @@
     <target name="ERModernMoviesDemo.all">
         <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
-            <param name="project.principal.class" value="Application" />
+            <param name="project.principal.class" value="er.modern.movies.demo.Application" />
             <param name="project.name" value="ERModernMoviesDemo" />
             <param name="project.dir" value="Examples/D2W/ERModernMoviesDemo" />
 
@@ -990,7 +1000,7 @@
 
     <target name="common.applications.all" depends="BugTracker.all, ERMailer.all, Uber.all, SecretPal.all, ERXTest.all" />
 
-    <target name="common.examples.all" depends="ERSeleniumExample.all, ERIndexingExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, AjaxExample2.all, YUIExample.all, EROpenIDExample.all, JavaRESTAdaptorExample.all, ERDivaliteExample.all, TickTockMan.all, ERComponentTour.all, ERRestRouteExample.all" />
+    <target name="common.examples.all" depends="ERSeleniumExample.all, ERIndexingExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, AjaxExample2.all, YUIExample.all, EROpenIDExample.all, JavaRESTAdaptorExample.all, ERDivaliteExample.all, TickTockMan.all, ERComponentTour.all, ERRestRouteExample.all, Movies.all" />
 
     <target name="dynareporting.frameworks.all" depends="DRGrouping.all, WRReporting.all" />
     <target name="dynareporting.examples.all" depends="DocsByExample.all, DynaReporter.all, DRGroupingTest.all" />

@@ -1,0 +1,53 @@
+
+table {
+}
+
+.dataLabel {
+	font-weight: bold;
+}
+
+table tr td.dataLabel {
+	text-align: right;
+	vertical-align: top;
+}
+
+div.buttons {
+	margin: 10px;
+}
+
+div#posterControls {
+	width: 400px;
+}
+
+h3 {
+	margin: 0;
+	margin-top: 1.5em;
+	margin-bottom: .5em;
+	padding: 0;
+}
+
+input[type=file] {
+	background: #ccc;
+	font-weight: normal;
+	padding: 4px;
+	padding-left: 10px;
+	padding-right: 10px;
+	color: #666;
+	border: 0;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+}
+
+input[type=button] {
+	background: #3d4966;
+	font-weight: normal;
+	padding: 5px;
+	padding-left: 10px;
+	padding-right: 10px;
+	color: #eee;
+	border: 0;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+}

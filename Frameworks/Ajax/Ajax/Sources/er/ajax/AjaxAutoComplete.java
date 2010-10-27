@@ -71,6 +71,8 @@ import er.extensions.foundation.ERXValueUtilities;
  * @binding indicator Look at the scriptaculous documentation.
  * @binding updateElement Look at the scriptaculous documentation.
  * @binding afterUpdateElement Look at the scriptaculous documentation.
+ * @binding select Look at the scriptaculous documentation.
+ * @binding onShow Look at the scriptaculous documentation.
  * @binding fullSearch Look at the scriptaculous documentation.
  * @binding partialSearch Look at the scriptaculous documentation.
  * @binding choices Look at the scriptaculous documentation (Local only)
@@ -86,6 +88,7 @@ import er.extensions.foundation.ERXValueUtilities;
  * @binding onfocus onfocus attribute of the text field
  * @binding onchange onchange attribute of the text field
  * @binding activateOnFocus activate when text field gets focus
+ * @binding containerId tag id for the container of the popup div (default is body)
  * @author ak
  */
 public class AjaxAutoComplete extends AjaxComponent {
@@ -145,14 +148,16 @@ public class AjaxAutoComplete extends AjaxComponent {
       ajaxOptionsArray.addObject(new AjaxOption("indicator", indicator(), AjaxOption.SCRIPT));
       ajaxOptionsArray.addObject(new AjaxOption("updateElement", AjaxOption.SCRIPT));
       ajaxOptionsArray.addObject(new AjaxOption("afterUpdateElement", AjaxOption.SCRIPT));
-	  ajaxOptionsArray.addObject(new AjaxOption("fullSearch", AjaxOption.BOOLEAN));
-	  ajaxOptionsArray.addObject(new AjaxOption("partialSearch", AjaxOption.BOOLEAN));
-	  ajaxOptionsArray.addObject(new AjaxOption("defaultValue", AjaxOption.STRING));
-	  ajaxOptionsArray.addObject(new AjaxOption("autoSelect", AjaxOption.BOOLEAN));
-	  ajaxOptionsArray.addObject(new AjaxOption("choices", AjaxOption.NUMBER));
-	  ajaxOptionsArray.addObject(new AjaxOption("partialChars", AjaxOption.NUMBER));
-	  ajaxOptionsArray.addObject(new AjaxOption("ignoreCase", AjaxOption.BOOLEAN));
-	  ajaxOptionsArray.addObject(new AjaxOption("activateOnFocus", AjaxOption.BOOLEAN));
+      ajaxOptionsArray.addObject(new AjaxOption("onShow", AjaxOption.SCRIPT));
+      ajaxOptionsArray.addObject(new AjaxOption("fullSearch", AjaxOption.BOOLEAN));
+      ajaxOptionsArray.addObject(new AjaxOption("partialSearch", AjaxOption.BOOLEAN));
+      ajaxOptionsArray.addObject(new AjaxOption("defaultValue", AjaxOption.STRING));
+      ajaxOptionsArray.addObject(new AjaxOption("select", AjaxOption.STRING));
+      ajaxOptionsArray.addObject(new AjaxOption("autoSelect", AjaxOption.BOOLEAN));
+      ajaxOptionsArray.addObject(new AjaxOption("choices", AjaxOption.NUMBER));
+      ajaxOptionsArray.addObject(new AjaxOption("partialChars", AjaxOption.NUMBER));
+      ajaxOptionsArray.addObject(new AjaxOption("ignoreCase", AjaxOption.BOOLEAN));
+      ajaxOptionsArray.addObject(new AjaxOption("activateOnFocus", AjaxOption.BOOLEAN));
       NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
       return options;
     }
@@ -345,4 +350,8 @@ public class AjaxAutoComplete extends AjaxComponent {
         response.appendContentString("</ul>");
         return response;
      }
+
+	public String zcontainerName() {
+		return "ZContainer" + divName;
+	}
 }

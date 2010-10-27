@@ -902,7 +902,8 @@ var iBox = function() {
 			}
 		}
 	}();
-	_pub.plugins.register(iBoxPlugin_External);
+	// RB schould be placed at the end of the plugin queue.  Otherwise it brakes the YouTube plugin.
+	_pub.plugins.register(iBoxPlugin_External, true);
 
 	var iBoxPlugin_Document = function() {
 		return {

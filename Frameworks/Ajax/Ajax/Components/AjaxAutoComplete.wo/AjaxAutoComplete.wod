@@ -10,12 +10,6 @@ Disabled: WOConditional {
 Content: WOComponentContent {
 }
 
-Div: WOGenericContainer {
-	class = "auto_complete";
-	id = divName;
-	elementName = "div";
-}
-
 ShowItem: WOConditional {
 	condition = true;
 }
@@ -53,4 +47,33 @@ Indicator : WOImage {
 	framework = ^indicatorFramework;
 	filename = ^indicatorFilename;
 	style = "display: none";
+}
+
+ZIndexContainer : WOGenericContainer {
+	elementName = "div";
+	id = zcontainerName;
+	style = "position: absolute; top: 0px; left: 0px; z-index: 1000;";
+}
+
+AutoCompleteContainer : WOGenericContainer {
+	elementName = "div";
+	class = "auto_complete";
+	id = divName;
+}
+
+ZIndexContainerName: WOString {
+	value = zcontainerName;
+}
+
+hasContainerId : WOConditional {
+	condition = ^containerId;
+}
+
+containerId : WOString {
+	value = ^containerId;
+}
+
+else : WOConditional {
+    condition = ^containerId;
+    negate = true;
 }

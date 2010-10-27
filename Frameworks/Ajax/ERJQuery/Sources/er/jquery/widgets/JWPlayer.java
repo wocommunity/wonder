@@ -12,12 +12,15 @@ import er.extensions.foundation.ERXStringUtilities;
 /**
  * Component encapsulating HTML5 jwplayer
  * 
- * @see http://www.longtailvideo.com/support/jw-player/jw-player-for-html5
+ * @see <a href="http://www.longtailvideo.com/support/jw-player/jw-player-for-flash-v5">JW Player</a>
+ * @see <a href="http://www.longtailvideo.com/support/jw-player/jw-player-for-flash-v5/14625/html5-support">JW Player HTML5 support</a>
  * 
- * You will need to include the script jquery.jwplayer.js in your page if using Unobtrusively
+ * You will need to include the script jwplayer.js in your page if using Unobtrusively
  * 
  * @binding poster		ERAttachment for the video poster
  * @binding sources		An array of ERAttachments comprising the video sources
+ * @binding skin		(optional) A zip of the skin for the video player that you bundle in your WO app.
+ * 						See <a href="http://www.longtailvideo.com/support/jw-player/jw-player-for-flash-v5/12538/supported-player-embed-methods#skins">Skins</a>
  *
  * @author ravim
  *
@@ -44,6 +47,14 @@ public class JWPlayer extends WOComponent {
 		return (!"".equals(id)) ? id : ERXStringUtilities.safeIdentifierName(context().elementID());
 	}
 	
+	public boolean hasSkin() {
+		return hasBinding("skin");
+	}
+	
+	public String skin() {
+		return hasSkin() ? (String) valueForBinding("skin") : null;
+	}
+	
 	// R&R
     @Override
 	public void appendToResponse(WOResponse response, WOContext context) {
@@ -51,7 +62,7 @@ public class JWPlayer extends WOComponent {
     	
     	if (!useUnobtrusively) {
     		ERXResponseRewriter.addScriptResourceInHead(response, context, "ERJQuery", "jquery-1.4.2.min.js");
-    		ERXResponseRewriter.addScriptResourceInHead(response, context, "ERJQuery", "jquery.jwplayer.js");
+    		ERXResponseRewriter.addScriptResourceInHead(response, context, "ERJQuery", "jwplayer.js");
     	}
     }
 }
