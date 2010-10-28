@@ -718,20 +718,19 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 
 	protected void addEntriesToCache(NSDictionary dict) {
 		try {
-			// try-catch to prevent potential CCE when the value for the key
-			// localizerExcepions is not an NSDictionary
-			NSDictionary cacheLE = (NSDictionary) cache.valueForKey(KEY_LOCALIZER_EXCEPTIONS);
-			NSDictionary dictLE = (NSDictionary) dict.valueForKey(KEY_LOCALIZER_EXCEPTIONS);
-			if (cacheLE != null && dictLE != null) {
+			// try-catch to prevent potential CCE when the value for the key localizerExcepions is not an NSDictionary
+			NSDictionary currentLEs = (NSDictionary) cache.valueForKey(KEY_LOCALIZER_EXCEPTIONS);
+			NSDictionary newLEs = (NSDictionary) dict.valueForKey(KEY_LOCALIZER_EXCEPTIONS);
+			if (currentLEs != null && newLEs != null) {
 				if (log.isDebugEnabled())
-					log.debug("Merging localizerExceptions " + cacheLE + " with " + dictLE);
-				NSMutableDictionary mutableDictLE = dictLE.mutableClone();
-				mutableDictLE.addEntriesFromDictionary(cacheLE);
-				NSMutableDictionary mutableDict = dict.mutableClone();
-				mutableDict.takeValueForKey(mutableDictLE, KEY_LOCALIZER_EXCEPTIONS);
-				dict = mutableDict;
+					log.debug("Merging localizerExceptions " + currentLEs + " with " + newLEs);
+				NSMutableDictionary combinedLEs = currentLEs.mutableClone();
+				combinedLEs.addEntriesFromDictionary(newLEs);
+				NSMutableDictionary replacementDict = dict.mutableClone();
+				replacementDict.takeValueForKey(combinedLEs, KEY_LOCALIZER_EXCEPTIONS);
+				dict = replacementDict;
 				if (log.isDebugEnabled())
-					log.debug("Result of merge: " + mutableDictLE);
+					log.debug("Result of merge: " + combinedLEs);
 			}
 		}
 		catch (RuntimeException e) {
