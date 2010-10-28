@@ -20,7 +20,9 @@ import er.extensions.foundation.ERXStringUtilities;
  * @binding poster		ERAttachment for the video poster
  * @binding sources		An array of ERAttachments comprising the video sources
  * @binding skin		(optional) A zip of the skin for the video player that you bundle in your WO app.
+ * 						If you include your own JW video player skin be sure to copy the player.swf into your WO app WebServerResources.
  * 						See <a href="http://www.longtailvideo.com/support/jw-player/jw-player-for-flash-v5/12538/supported-player-embed-methods#skins">Skins</a>
+ * @binding framework	Set to "app" if you're including your own skin or licensed copy of the JW video player (.swf)
  *
  * @author ravim
  *
@@ -34,6 +36,15 @@ public class JWPlayer extends WOComponent {
 	public JWPlayer(WOContext aContext) {
 		super(aContext);
 	}
+	
+	/*
+	 * Bindings
+	 */
+	public static interface Bindings {
+		public static final String skin = "skin";
+		public static final String id = "id";
+		public static final String framework = "framework";
+	}
 
 	// non-synching component
 	@Override
@@ -43,16 +54,20 @@ public class JWPlayer extends WOComponent {
 	
 	// accessors
 	public String id() {
-		String id = (String) valueForBinding("id");
+		String id = (String) valueForBinding(Bindings.id);
 		return (!"".equals(id)) ? id : ERXStringUtilities.safeIdentifierName(context().elementID());
 	}
 	
 	public boolean hasSkin() {
-		return hasBinding("skin");
+		return hasBinding(Bindings.skin);
+	}
+	
+	public String framework() {
+		return hasBinding(Bindings.framework) ? (String) valueForBinding(Bindings.framework) : hasSkin() ? "app" : "ERJQuery";
 	}
 	
 	public String skin() {
-		return hasSkin() ? (String) valueForBinding("skin") : null;
+		return hasSkin() ? (String) valueForBinding(Bindings.skin) : null;
 	}
 	
 	// R&R
@@ -61,7 +76,7 @@ public class JWPlayer extends WOComponent {
     	super.appendToResponse(response, context);
     	
     	if (!useUnobtrusively) {
-    		ERXResponseRewriter.addScriptResourceInHead(response, context, "ERJQuery", "jquery-1.4.2.min.js");
+    		//ERXResponseRewriter.addScriptResourceInHead(response, context, "ERJQuery", "jquery-1.4.2.min.js");
     		ERXResponseRewriter.addScriptResourceInHead(response, context, "ERJQuery", "jwplayer.js");
     	}
     }
