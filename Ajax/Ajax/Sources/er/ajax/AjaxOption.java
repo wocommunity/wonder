@@ -114,7 +114,7 @@ public class AjaxOption {
   }
 
   public static NSMutableDictionary/*<String, String>*/ createAjaxOptionsDictionary(NSArray/*<AjaxOption>*/ ajaxOptions, WOComponent component) {
-	NSMutableDictionary<String, String> optionsDictionary = new NSMutableDictionary/*<String, String>*/();
+	NSMutableDictionary/*<String, String>*/ optionsDictionary = new NSMutableDictionary/*<String, String>*/();
     /*for (AjaxOption ajaxOption : ajaxOptions) {*/
     for (Enumeration optionsEnum = ajaxOptions.objectEnumerator(); optionsEnum.hasMoreElements();) {
         AjaxOption ajaxOption = (AjaxOption)optionsEnum.nextElement();
@@ -123,7 +123,7 @@ public class AjaxOption {
     return optionsDictionary;
   }
 
-  public static NSMutableDictionary<String, String> createAjaxOptionsDictionary(NSArray/*<AjaxOption>*/ ajaxOptions, WOComponent component, NSDictionary/*<String, ? extends WOAssociation>*/ associations) {
+  public static NSMutableDictionary/*<String, String>*/ createAjaxOptionsDictionary(NSArray/*<AjaxOption>*/ ajaxOptions, WOComponent component, NSDictionary/*<String, ? extends WOAssociation>*/ associations) {
     NSMutableDictionary/*<String, String>*/ optionsDictionary = new NSMutableDictionary/*<String, String>*/();
     /*for (AjaxOption ajaxOption : ajaxOptions) {*/
     for (Enumeration optionsEnum = ajaxOptions.objectEnumerator(); optionsEnum.hasMoreElements();) {

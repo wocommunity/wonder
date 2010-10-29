@@ -137,8 +137,8 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 * 
 	 * @return array of required additional AjaxUpload data items (wosid, id).
 	 */
-	protected NSArray<String> _ajaxUploadData() {
-		NSMutableArray<String> _data = new NSMutableArray<String>("wosid:'" + this.session().sessionID() + "'");
+	protected NSArray/*<String>*/ _ajaxUploadData() {
+		NSMutableArray/*<String>*/ _data = new NSMutableArray/*<String>*/("wosid:'" + this.session().sessionID() + "'");
 		
 		_data.addObject("id:'" + id() + "'");
 		
@@ -159,8 +159,8 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 * 
 	 * @return array of AjaxUpload options
 	 */
-    protected NSArray<String> _ajaxUploadOptions() {
-    	NSMutableArray<String> _options = new NSMutableArray<String>("action:'" + uploadUrl() + "'");
+    protected NSArray/*<String>*/ _ajaxUploadOptions() {
+    	NSMutableArray/*<String>*/ _options = new NSMutableArray/*<String>*/("action:'" + uploadUrl() + "'");
     	
     	// add options
     	_options.addObject("data:{" + ajaxUploadData() + "}");
