@@ -165,13 +165,13 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
     	// add options
     	_options.addObject("data:{" + ajaxUploadData() + "}");
     	_options.addObject("name:'" + uploadName() + "'");
-    	_options.add("iframeId:'"+ iframeId() +"'");
+    	_options.addObject("iframeId:'"+ iframeId() +"'");
     	if ( !autoSubmit().booleanValue() ) {
-    		_options.add("onChange:" + onChangeFunction());
-    		_options.add("autoSubmit:false");
+    		_options.addObject("onChange:" + onChangeFunction());
+    		_options.addObject("autoSubmit:false");
     	}
-    	_options.add("onSubmit:" + onSubmitFunction());
-    	_options.add("onComplete:" + onCompleteFunction());
+    	_options.addObject("onSubmit:" + onSubmitFunction());
+    	_options.addObject("onComplete:" + onCompleteFunction());
     	return _options.immutableClone();
     }
     
