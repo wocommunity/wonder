@@ -42,6 +42,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * @binding onFailure JavaScript function to evaluate when the update request has failed.
  * @binding onException JavaScript function to evaluate when the update request had errors.
  * @binding accesskey hot key that should toggle the expansion (optional)
+ * @binding onExpansionComplete value for the AjaxUpdateContainer onRefreshComplete binding when the contents are expanded
  */
 public class AjaxExpansion extends AjaxComponent {
 	private String _id;
@@ -99,6 +100,10 @@ public class AjaxExpansion extends AjaxComponent {
         return string;
     }
 
+	public boolean isAjaxRequest() {
+		return AjaxUtils.isAjaxRequest(context().request());
+	}
+	
     public String jsEscapedString() {
         return ERXStringUtilities.escapeJavascriptApostrophes(string());
     }
@@ -142,6 +147,14 @@ public class AjaxExpansion extends AjaxComponent {
 		if (hasBinding("action")) {
 			valueForBinding("action");
 		}
+		return null;
+	}
+	
+	public String onExpansionComplete() {
+		if (hasBinding("onExpansionComplete") && isExpanded()) {
+			return (String) valueForBinding("onExpansionComplete");
+		}
+	
 		return null;
 	}
 }

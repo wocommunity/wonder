@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <wodefinitions>
     <wo class="AjaxFileUpload.java" wocomponentcontent="false">
         <binding name="cancelText"/>
@@ -29,5 +29,12 @@
     	<binding name="progressOfText"/>
     <binding name="class"/>
         <binding name="style"/>
+    <binding name="mimeType"/>
+    <binding name="onFileSelected"/>
+    <binding name="id"/>
+    <binding name="uploadProgress"/>
+        <validation message="'progress' must be bound to a settable value">
+            <unsettable name="uploadProgress"/>
+        </validation>
     </wo>
 </wodefinitions>

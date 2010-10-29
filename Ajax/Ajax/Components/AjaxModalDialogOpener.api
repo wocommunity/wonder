@@ -15,5 +15,6 @@
         </validation>
     <binding defaults="Actions" name="action"/>
     <binding defaults="Boolean" name="enabled"/>
+    <binding name="elementName"/>
     </wo>
 </wodefinitions>

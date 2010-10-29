@@ -621,7 +621,7 @@ Modalbox.Methods = {
 		}
 		return newWidth;
 	},
-	
+
 	/**
 	 * Computes the necessary height of the dialog, optionally making sure the dialog height fits within the viewport.
 	 * @return the height in px for the MBwindow element

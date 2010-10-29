@@ -15,9 +15,9 @@ import er.extensions.foundation.ERXStringUtilities;
  * @author mschrag
  */
 public abstract class AjaxSocialNetwork {
-	private static NSMutableDictionary _socialNetworks;
+	private static NSMutableDictionary/*<String, AjaxSocialNetwork>*/ _socialNetworks;
 	static {
-		_socialNetworks = new NSMutableDictionary();
+		_socialNetworks = new NSMutableDictionary/*<String, AjaxSocialNetwork>*/();
 		_socialNetworks.setObjectForKey(new AjaxSocialNetwork.Delicious(), "delicious");
 		_socialNetworks.setObjectForKey(new AjaxSocialNetwork.Digg(), "digg");
 		_socialNetworks.setObjectForKey(new AjaxSocialNetwork.Facebook(), "facebook");
@@ -66,7 +66,7 @@ public abstract class AjaxSocialNetwork {
 		AjaxSocialNetwork._socialNetworks.setObjectForKey(socialNetwork, name);
 	}
 	
-	protected String _submissionUrl(String baseUrl, String urlKey, String targetUrl, String titleKey, String title, NSDictionary additionalParams) {
+	protected String _submissionUrl(String baseUrl, String urlKey, String targetUrl, String titleKey, String title, NSDictionary/*<String, String>*/ additionalParams) {
 		try {
 			ERXMutableURL url = new ERXMutableURL(baseUrl);
 			url.setQueryParameter(urlKey, targetUrl);
@@ -126,7 +126,7 @@ public abstract class AjaxSocialNetwork {
 
 	public static class Digg extends AjaxSocialNetwork {
 		public String submissionUrl(String url, String title) {
-			return _submissionUrl("http://digg.com/submit", "url", url, "title", title, new NSDictionary("2", "phase"));
+			return _submissionUrl("http://digg.com/submit", "url", url, "title", title, new NSDictionary/*<String, String>*/("2", "phase"));
 		}
 	}
 
@@ -136,7 +136,7 @@ public abstract class AjaxSocialNetwork {
 		}
 
 		public String submissionUrl(String url, String title) {
-			return _submissionUrl("http://www.furl.net/store", "u", url, "ti", title, new NSDictionary(new String[] { "f", "0" }, new String[] { "s", "to" }));
+			return _submissionUrl("http://www.furl.net/store", "u", url, "ti", title, new NSDictionary/*<String, String>*/(new String[] { "f", "0" }, new String[] { "s", "to" }));
 		}
 	}
 
@@ -200,7 +200,7 @@ public abstract class AjaxSocialNetwork {
 
 	public static class WindowsLive extends AjaxSocialNetwork {
 		public String submissionUrl(String url, String title) {
-			return _submissionUrl("https://favorites.live.com/quickadd.aspx", "url", url, "title", title, new NSDictionary(new String[] { "1", "en-us", "1" }, new String[] { "marklet", "mkt", "top" }));
+			return _submissionUrl("https://favorites.live.com/quickadd.aspx", "url", url, "title", title, new NSDictionary/*<String, String>*/(new String[] { "1", "en-us", "1" }, new String[] { "marklet", "mkt", "top" }));
 		}
 
 	}
@@ -211,21 +211,21 @@ public abstract class AjaxSocialNetwork {
 		}
 
 		public String submissionUrl(String url, String title) {
-			return _submissionUrl("http://myweb.yahoo.com/myresults/bookmarklet", "u", url, "t", title, new NSDictionary("UTF", "ei"));
+			return _submissionUrl("http://myweb.yahoo.com/myresults/bookmarklet", "u", url, "t", title, new NSDictionary/*<String, String>*/("UTF", "ei"));
 		}
 
 	}
 
 	public static class Ask extends AjaxSocialNetwork {
 		public String submissionUrl(String url, String title) {
-			return _submissionUrl("http://myjeeves.ask.com/mysearch/BookmarkIt", "url", url, "title", title, new NSDictionary(new String[] { "1.2", "webpages" }, new String[] { "v", "t" }));
+			return _submissionUrl("http://myjeeves.ask.com/mysearch/BookmarkIt", "url", url, "title", title, new NSDictionary/*<String, String>*/(new String[] { "1.2", "webpages" }, new String[] { "v", "t" }));
 		}
 
 	}
 
 	public static class Google extends AjaxSocialNetwork {
 		public String submissionUrl(String url, String title) {
-			return _submissionUrl("http://www.google.com/bookmarks/mark", "bkmk", url, "title", title, new NSDictionary(new String[] { "edit", "popup" }, new String[] { "op", "output" }));
+			return _submissionUrl("http://www.google.com/bookmarks/mark", "bkmk", url, "title", title, new NSDictionary/*<String, String>*/(new String[] { "edit", "popup" }, new String[] { "op", "output" }));
 		}
 
 	}
@@ -260,7 +260,7 @@ public abstract class AjaxSocialNetwork {
 
 	public static class Tagtooga extends AjaxSocialNetwork {
 		public String submissionUrl(String url, String title) {
-			return _submissionUrl("http://www.tagtooga.com/tapp/db.exe", "url", url, "title", title, new NSDictionary(new String[] { "jsEntryForm", "fx" }, new String[] { "c", "b" }));
+			return _submissionUrl("http://www.tagtooga.com/tapp/db.exe", "url", url, "title", title, new NSDictionary/*<String, String>*/(new String[] { "jsEntryForm", "fx" }, new String[] { "c", "b" }));
 		}
 	}
 }

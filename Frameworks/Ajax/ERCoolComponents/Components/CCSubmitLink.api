@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="CCSubmitLink.java" wocomponentcontent="true">
+		<binding name="action"/>
+		<binding name="string"/>
+		<binding name="onClick"/>
+		<binding name="class"/>
+		<binding name="disabled"/>
+		<binding name="fieldName"/>
+		<binding name="target"/>
+		<binding name="additionalFunction"/>
+		<binding name="name"/>
+
+		<validation message="'action' is a required binding">
+			<unbound name="action"/>
+		</validation>
+		<binding name="title"/>
+        <binding name="dontSubmitForm"/>
+        </wo>
+</wodefinitions>

@@ -20,7 +20,6 @@ import er.extensions.foundation.ERXValueUtilities;
  */
 
 public abstract class AjaxComponent extends WOComponent implements IAjaxElement {
-
     public AjaxComponent(WOContext context) {
         super(context);
     }

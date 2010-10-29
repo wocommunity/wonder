@@ -14,7 +14,7 @@ import com.webobjects.foundation.NSNumberFormatter;
 import er.extensions.appserver.ERXWOContext;
 
 /**
- *
+ * 
  * @binding minWidth
  * @binding minHeight
  * @binding minLeft

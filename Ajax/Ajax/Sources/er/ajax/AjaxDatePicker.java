@@ -17,7 +17,7 @@ import er.extensions.appserver.ERXResponseRewriter;
 
 /**
  * Shameless port and adoption of Rails Date Kit.  This input understands the format symbols
- * %d, %e, %b, %m, %B, %y, and %Y. See the NSTimestampFormatter for 
+ * %A, %d, %e, %b, %m, %B, %y, and %Y. See the NSTimestampFormatter for 
  * what these symbols do. This component can also understand the corresponding symbols from 
  * java.text.SimpleDateFormat.  The translation from SimpleDateFormat symbols to NSTimestampFormatter
  * symbols may have some defects.
@@ -48,7 +48,7 @@ import er.extensions.appserver.ERXResponseRewriter;
  * @binding style CSS style passed to the input field 
  * @binding size size attribute passed to the input field 
  * @binding maxlength maxlength attribute passed to the input field 
- * @binding name name attribute passed to the input field 
+ * @binding name name attribute passed to the input field
  * @binding disabled passed to the input field
  * @binding onDateSelect JavaScript to execute when a date is selected from the calendar
  * @binding fireEvent false if the onChange event for the input should NOT be fired when a date is selected in the calendar, defaults to true
@@ -71,7 +71,7 @@ public class AjaxDatePicker extends AjaxComponent {
 	
 	private static String defaultImagesDir;
 	
-	private NSMutableDictionary options;
+	private NSMutableDictionary/*<String, String>*/ options;
 	private Format formatter;
 	private String format;
 	
@@ -146,16 +146,16 @@ public class AjaxDatePicker extends AjaxComponent {
      */
     public void appendToResponse(WOResponse res, WOContext ctx) {
 		
-		NSMutableArray ajaxOptionsArray = new NSMutableArray();
+		NSMutableArray/*<AjaxOption>*/ ajaxOptionsArray = new NSMutableArray/*<AjaxOption>*/();
 		
 		// The "constant" form of AjaxOption is used so that we can rename the bindings or convert the values
 		ajaxOptionsArray.addObject(new AjaxConstantOption("format", "format", format(), AjaxOption.STRING));
 		ajaxOptionsArray.addObject(new AjaxOption("month_names", "monthNames", null, AjaxOption.ARRAY));
 		ajaxOptionsArray.addObject(new AjaxOption("day_names", "dayNames", null, AjaxOption.ARRAY));
-		
+
 		ajaxOptionsArray.addObject(new AjaxOption("onDateSelect", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("fireEvent", AjaxOption.BOOLEAN));
-		
+
 		ajaxOptionsArray.addObject(new AjaxOption("images_dir", "imagesDir", defaultImagesDir, AjaxOption.STRING));
 		
 		options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
@@ -273,7 +273,7 @@ public class AjaxDatePicker extends AjaxComponent {
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		return null;
 	}
-	
+    	
     /**
      * Overridden so that parent will handle in the same manner as if this were a dynamic element. 
      */

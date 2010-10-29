@@ -12,6 +12,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.webobjects.eocontrol._EOCheapCopyArray;
+import com.webobjects.eocontrol._EOCheapCopyMutableArray;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
@@ -30,7 +32,7 @@ public class NSArraySerializer extends AbstractSerializer {
 	/**
 	 * Classes that this can serialise.
 	 */
-	private static Class[] _serializableClasses = new Class[] { NSArray.class, NSMutableArray.class };
+	private static Class[] _serializableClasses = new Class[] { NSArray.class, NSMutableArray.class, _EOCheapCopyArray.class, _EOCheapCopyMutableArray.class };
 
 	/**
 	 * Classes that this can serialise to.
@@ -111,9 +113,17 @@ public class NSArraySerializer extends AbstractSerializer {
 		if (java_class == null) {
 			throw new UnmarshallException("no type hint");
 		}
-		if (!(java_class.equals("com.webobjects.foundation.NSArray") || java_class.equals("com.webobjects.foundation.NSMutableArray"))) {
+		
+		Class klass;
+		try {
+			klass = Class.forName(java_class);
+		} catch (ClassNotFoundException cnfe) {
+			throw new UnmarshallException("Could not find class named: " + java_class);
+		}
+		if (!NSArray.class.isAssignableFrom(klass)) {
 			throw new UnmarshallException("not an NSArray");
 		}
+		
 		JSONArray jsonNSArray;
 		try {
 			jsonNSArray = jso.getJSONArray("nsarray");
@@ -153,16 +163,19 @@ public class NSArraySerializer extends AbstractSerializer {
 		if (java_class == null) {
 			throw new UnmarshallException("no type hint");
 		}
-		NSMutableArray al;
-		boolean immutableClone = false;
-		if (java_class.equals("com.webobjects.foundation.NSArray")) {
-			al = new NSMutableArray(); // we have to be able to add to it
-			immutableClone = true;
+		NSMutableArray al = new NSMutableArray();
+		boolean immutableClone = true;
+		
+		Class klass;
+		try {
+			klass = Class.forName(java_class);
+		} catch (ClassNotFoundException cnfe) {
+			throw new UnmarshallException("Could not find class named: " + java_class);
 		}
-		else if (java_class.equals("com.webobjects.foundation.NSMutableArray")) {
-			al = new NSMutableArray();
-		}
-		else {
+
+		if (NSMutableArray.class.isAssignableFrom(klass)){
+			immutableClone = false;
+		} else if (!NSArray.class.isAssignableFrom(klass)) {
 			throw new UnmarshallException("not an NSArray");
 		}
 

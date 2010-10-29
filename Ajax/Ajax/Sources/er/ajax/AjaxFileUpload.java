@@ -52,8 +52,13 @@ import er.extensions.foundation.ERXFileUtilities;
  * @binding uploadLabel the label to display on the Upload button ("Upload" by default)
  * @binding uploadFunctionName the upload button will instead be a function with the given name
  * @binding progressOfText the text to display for the word "of" in the "[size] of [totalsize]" string during upload
+ * @binding mimeType set from the content-type of the upload header if available
  * @binding class the class attribute of the file input
  * @binding style the style attribute of the file input
+ * @binding id the id attribute of the file input
+ * @binding onFileSelected optional JS code that is called when the file selection changes. To auto-start the upload when 
+ * 			a file is selected, set uploadFunctionName to e.g. "startUpload" and onFileSelected to "startUpload()"
+ * @binding uploadProgress access to the underlying AjaxUploadProgress object
  * 
  * @author mschrag
  */
@@ -61,9 +66,9 @@ public class AjaxFileUpload extends WOComponent {
 	private static boolean _requestHandlerRegistered = false;
 
 	private String _id;
-	private boolean _uploadStarted;
-	private AjaxUploadProgress _progress;
-	private boolean _triggerUploadStart;
+	protected boolean _uploadStarted;
+	protected AjaxUploadProgress _progress;
+	protected boolean _triggerUploadStart;
 	private String _requestHandlerKey;
 
 	public AjaxFileUpload(WOContext context) {
@@ -126,7 +131,9 @@ public class AjaxFileUpload extends WOComponent {
 
 	public void setUploadProgress(AjaxUploadProgress progress) {
 		_progress = progress;
-		setValueForBinding(progress, "uploadProgress");
+		if (hasBinding("uploadProgress")) {
+			setValueForBinding(progress, "uploadProgress");
+		}
 		if (progress == null && !hasBinding("uploadStarted")) {
 			_uploadStarted = false;
 		}
@@ -233,10 +240,14 @@ public class AjaxFileUpload extends WOComponent {
 			_progress.reset();
 		}
 		_progress = null;
-		setValueForBinding(null, "uploadProgress");
+		if (hasBinding("uploadProgress")) {
+			setValueForBinding(null, "uploadProgress");
+		}
 
 		_uploadStarted = true;
-		setValueForBinding(Boolean.TRUE, "uploadStarted");
+		if (hasBinding("uploadStarted")) {
+			setValueForBinding(Boolean.TRUE, "uploadStarted");
+		}
 		
 		AjaxResponse response = AjaxUtils.createResponse(context().request(), context());
 		AjaxUtils.appendScriptHeaderIfNecessary(context().request(), response);
@@ -282,6 +293,13 @@ public class AjaxFileUpload extends WOComponent {
 			if (hasBinding("data")) {
 				NSData data = new NSData(progress.tempFile().toURL());
 				setValueForBinding(data, "data");
+			}
+			
+			if (hasBinding("mimeType")) {
+				String contentType = progress.contentType();
+				if (contentType != null) {
+					setValueForBinding(contentType, "mimeType");
+				}
 			}
 
 			if (hasBinding("inputStream")) {

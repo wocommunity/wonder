@@ -7,8 +7,6 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
-import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.components.ERXComponentUtilities;
@@ -339,22 +337,23 @@ public class AjaxProgressBar extends WOComponent {
 	/**
 	 * Register a progress object in the registry.
 	 * 
+	 * Cover method that calls through to the AjaxProgress implementation to maintain
+	 * backwards compatibility.
+	 * 
 	 * @param session
 	 *            the session
 	 * @param progress
 	 *            the progress object to register
 	 */
 	public static void registerProgress(WOSession session, AjaxProgress progress) {
-		NSMutableDictionary progresses = (NSMutableDictionary) session.objectForKey(AjaxProgressBar.AJAX_PROGRESSES_KEY);
-		if (progresses == null) {
-			progresses = new NSMutableDictionary();
-			session.setObjectForKey(progresses, AjaxProgressBar.AJAX_PROGRESSES_KEY);
-		}
-		progresses.setObjectForKey(progress, progress.id());
+		AjaxProgress.registerProgress(session, progress);
 	}
 
 	/**
 	 * Unregister a progress object from the registry.
+	 * 
+	 * Cover method that calls through to the AjaxProgress implementation to maintain
+	 * backwards compatibility.
 	 * 
 	 * @param session
 	 *            the session
@@ -362,14 +361,14 @@ public class AjaxProgressBar extends WOComponent {
 	 *            the progress object to unregister
 	 */
 	public static void unregisterProgress(WOSession session, AjaxProgress progress) {
-		NSMutableDictionary progresses = (NSMutableDictionary) session.objectForKey(AjaxProgressBar.AJAX_PROGRESSES_KEY);
-		if (progresses != null && progress.id() != null) {
-			progresses.removeObjectForKey(progress.id());
-		}
+		AjaxProgress.unregisterProgress(session, progress);
 	}
 
 	/**
 	 * Returns the progress object with the given id (or null if one does not exist).
+	 * 
+	 * Cover method that calls through to the AjaxProgress implementation to maintain
+	 * backwards compatibility.
 	 * 
 	 * @param session
 	 *            the session
@@ -378,11 +377,6 @@ public class AjaxProgressBar extends WOComponent {
 	 * @return the matching progess object (or null)
 	 */
 	public static AjaxProgress progress(WOSession session, String id) {
-		AjaxProgress progress = null;
-		NSDictionary progresses = (NSDictionary) session.objectForKey(AjaxProgressBar.AJAX_PROGRESSES_KEY);
-		if (progresses != null) {
-			progress = (AjaxProgress) progresses.objectForKey(id);
-		}
-		return progress;
+		return AjaxProgress.progress(session, id);
 	}
 }

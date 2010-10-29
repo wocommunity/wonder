@@ -21,6 +21,7 @@ GridUpdater: AjaxUpdateContainer {
 	evalScripts = true;
 	action = containerUpdated;
 	frequency = configurationData.updateFrequency;  // VALID
+	parameters = ^updateContainerParameters;
 }
 
 InitScript: WOString {

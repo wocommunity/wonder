@@ -61,7 +61,7 @@ public class AjaxResponse extends ERXResponse {
 			_context._setSenderID("");
 			try {
 				CharSequence content;
-				// AK: don't ask...
+				//AK: don't ask...
 				// MS: 5.3 vs 5.4 field type of _content
 				if (((Object)_content) instanceof StringBuffer) {
 					content = (StringBuffer)(Object)_content;
