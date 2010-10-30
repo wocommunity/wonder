@@ -92,7 +92,8 @@ public class ERXPatcher {
 	public static synchronized void installPatches() {
 		DynamicElementsPatches.cleanupXHTML = ERXValueUtilities.booleanValueWithDefault(System.getProperty("er.extensions.ERXPatcher.cleanupXHTML"), false);
 		DynamicElementsPatches.useButtonTag = ERXProperties.booleanForKeyWithDefault("er.extensions.foundation.ERXPatcher.DynamicElementsPatches.SubmitButton.useButtonTag", false);
-		
+		DynamicElementsPatches.suppressValueBindingSlow = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXPatcher.supressValueBindingSlow", false);
+
 		if (DynamicElementsPatches.useButtonTag) {
 			ERXPatcher.setClassForName(ERXSubmitButton.class, "WOSubmitButton");
 		} else ERXPatcher.setClassForName(DynamicElementsPatches.SubmitButton.class, "WOSubmitButton");
@@ -141,7 +142,8 @@ public class ERXPatcher {
 	public static class DynamicElementsPatches {
 		public static boolean cleanupXHTML = false;
 		private static boolean useButtonTag = false;
-
+		public static boolean suppressValueBindingSlow = false;
+		
 		private DynamicElementsPatches() {
 		}
 
@@ -469,6 +471,7 @@ public class ERXPatcher {
 			public PopUpButton(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
 				_id = (WOAssociation) super._associations.removeObjectForKey("id");
+				_loggedSlow = suppressValueBindingSlow;
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -498,6 +501,7 @@ public class ERXPatcher {
 			public Browser(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
 				_id = (WOAssociation) super._associations.removeObjectForKey("id");
+				_loggedSlow = suppressValueBindingSlow;
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
