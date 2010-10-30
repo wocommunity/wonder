@@ -469,7 +469,6 @@ public class ERXPatcher {
 			public PopUpButton(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
 				_id = (WOAssociation) super._associations.removeObjectForKey("id");
-				System.out.println(aName + " " + _loggedSlow);
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -499,8 +498,6 @@ public class ERXPatcher {
 			public Browser(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
 				_id = (WOAssociation) super._associations.removeObjectForKey("id");
-				System.out.println(aName + " " + _loggedSlow);
-
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
