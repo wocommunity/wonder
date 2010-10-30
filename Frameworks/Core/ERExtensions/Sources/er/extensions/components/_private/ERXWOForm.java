@@ -114,7 +114,6 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 	WOAssociation _fragmentIdentifier;
 	WOAssociation _secure;
 	WOAssociation _disabled;
-	WOAssociation _id;
 
 	protected WOAssociation _action;
 	protected WOAssociation _href;
@@ -147,7 +146,6 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		_queryDictionary = (WOAssociation) _associations.removeObjectForKey("queryDictionary");
 		_directActionName = (WOAssociation) _associations.removeObjectForKey("directActionName");
 		_formName = (WOAssociation) _associations.removeObjectForKey("name");
-		_id = (WOAssociation) associations.objectForKey("id");
 		if (ERXWOForm.useIdInsteadOfNameTag && _id != null) {
 			_formName = _id;	// id takes precedence over name - then subsequently written as id
 			_id = null;
