@@ -247,6 +247,7 @@
     10 : *true* => editRelationshipConfigurationName = <ERDDefaultConfigurationNameAssignment> [er.directtoweb.ERDDefaultConfigurationNameAssignment],
     10 : (propertyType = 'r' and propertyKey != null) => listConfigurationName = listEmbeddedConfigurationName [er.directtoweb.ERDKeyValueAssignment],
     10 : (task = 'edit' and propertyKey = 'passwordConfirmation') => componentName = ERDEditPasswordConfirmation [com.webobjects.directtoweb.Assignment],
+    10 : *true* => editRelationshipEmbeddedConfigurationName = <ERDDefaultConfigurationNameAssignment> [er.directtoweb.ERDDefaultConfigurationNameAssignment],
     10 : (task = 'query' and smartAttribute.className = 'java.lang.String') => componentName = ERD2WQueryStringOperator [com.webobjects.directtoweb.Assignment],
     10 : ((task = 'list' or task = 'select' or task = 'inspect') and smartRelationship != null) => disabled = true [com.webobjects.directtoweb.BooleanAssignment],
     10 : (propertyType = 'r' and propertyKey != null and task = 'edit') => inspectConfigurationName = editEmbeddedConfigurationName [er.directtoweb.ERDKeyValueAssignment],

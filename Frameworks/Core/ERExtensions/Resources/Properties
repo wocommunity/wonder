@@ -474,6 +474,19 @@ com.webobjects.eoaccess.ERXEntityDependencyOrderingDelegate.active = false
 # er.extensions.ERXApplication.replaceApplicationPath.replace=/yourapp
 
 #########################################################################
+# ERXSession
+#########################################################################
+
+# If you want to automatically adjust the time zone on WOTextField and
+# WOString dateFormat to use the session's time zone, set this to true
+#
+# er.extensions.ERXSession.autoAdjustTimeZone=false
+
+# If you are using SSL and want to use secure session cookies, set to true
+#
+# er.extensions.ERXSession.useSecureSessionCookies=false
+
+#########################################################################
 # ERXJDBCConnectionBroker 
 #########################################################################
 # the minimum number of JDBC connections to use

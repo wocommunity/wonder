@@ -16,7 +16,10 @@ import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.appserver._private.WOInput;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSTimeZone;
+import com.webobjects.foundation.NSTimestampFormatter;
 
+import er.extensions.appserver.ERXSession;
 import er.extensions.formatters.ERXNumberFormatter;
 import er.extensions.formatters.ERXTimestampFormatter;
 import er.extensions.foundation.ERXKeyValueCodingUtilities;
@@ -90,6 +93,7 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 				Object result = stringValue;
 				if(stringValue != null) {
 					Format format = null;
+					boolean hasFormatter = false;
 					if(stringValue.length() != 0) {
 						if(_formatter != null) {
 							format = (Format)_formatter.valueInComponent(component);
@@ -106,18 +110,49 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 									format = ERXNumberFormatter.numberFormatterForPattern(formatString);
 								}
 							}
+						} else {
+							hasFormatter = true;
 						}
 					}
 					if(format != null) {
-						try {
-							Object parsedObject = format.parseObject(stringValue);
-							String reformatedObject = format.format(parsedObject);
-							result = format.parseObject(reformatedObject);
-						} catch(ParseException parseexception) {
-							String keyPath = _value.keyPath();
-							ERXValidationException validationexception = new ERXValidationException(parseexception.getMessage(), stringValue, keyPath);
-							component.validationFailedWithException(validationexception, stringValue, keyPath);
-							return;
+						if(ERXSession.autoAdjustTimeZone() &&
+								!hasFormatter && 
+        						format instanceof NSTimestampFormatter && 
+        						wocontext.hasSession() && 
+        						ERXSession.class.isAssignableFrom(wocontext.session().getClass())
+                				) {
+								
+							synchronized(format) {
+								ERXSession session = (ERXSession)wocontext.session();
+								NSTimeZone zone = NSTimeZone._nstimeZoneWithTimeZone(session.timeZone());
+								NSTimestampFormatter tsFormat = (NSTimestampFormatter)format;
+								NSTimeZone parseZone = tsFormat.defaultParseTimeZone();
+								NSTimeZone formatZone = tsFormat.defaultFormatTimeZone();
+								tsFormat.setDefaultFormatTimeZone(zone);
+								tsFormat.setDefaultParseTimeZone(zone);
+								try {
+									Object parsedObject = format.parseObject(stringValue);
+									String reformatedObject = format.format(parsedObject);
+									result = format.parseObject(reformatedObject);
+								} catch(ParseException parseexception) {
+									String keyPath = _value.keyPath();
+									ERXValidationException validationexception = new ERXValidationException(parseexception.getMessage(), stringValue, keyPath);									component.validationFailedWithException(validationexception, stringValue, keyPath);
+									return;
+								} finally {
+									tsFormat.setDefaultFormatTimeZone(formatZone);
+									tsFormat.setDefaultParseTimeZone(parseZone);
+								}
+							}
+						} else {
+							try {
+								Object parsedObject = format.parseObject(stringValue);
+								String reformatedObject = format.format(parsedObject);
+								result = format.parseObject(reformatedObject);
+							} catch(ParseException parseexception) {
+								String keyPath = _value.keyPath();
+								ERXValidationException validationexception = new ERXValidationException(parseexception.getMessage(), stringValue, keyPath);								component.validationFailedWithException(validationexception, stringValue, keyPath);
+								return;
+							}
 						}
 						if(result != null && _useDecimalNumber != null && _useDecimalNumber.booleanValueInComponent(component)) {
 							result = new BigDecimal(result.toString());
@@ -137,6 +172,7 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 		if(valueInComponent != null) {
 			String stringValue = null;
 			Format format = null;
+			boolean hasFormatter = false;
 			if(_formatter != null) {
 				format = (Format)_formatter.valueInComponent(component);
 			}
@@ -152,23 +188,58 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 						format = ERXNumberFormatter.numberFormatterForPattern(formatString);
 					}
 				}
+			} else {
+				hasFormatter = true;
 			}
-			if(format != null)
-				try {
-					String formatedValue = format.format(valueInComponent);
-					Object reparsedObject = format.parseObject(formatedValue);
-					stringValue = format.format(reparsedObject);
-				} catch(IllegalArgumentException illegalargumentexception) {
-					NSLog._conditionallyLogPrivateException(illegalargumentexception);
-					stringValue = null;
-				} catch(ParseException parseexception) {
-					NSLog._conditionallyLogPrivateException(parseexception);
-					stringValue = null;
+			if(format != null) {
+				if(ERXSession.autoAdjustTimeZone() &&
+						!hasFormatter && 
+						format instanceof NSTimestampFormatter && 
+						wocontext.hasSession() && 
+						ERXSession.class.isAssignableFrom(wocontext.session().getClass())
+        				) {
+						
+					synchronized(format) {
+						ERXSession session = (ERXSession)wocontext.session();
+						NSTimeZone zone = NSTimeZone._nstimeZoneWithTimeZone(session.timeZone());
+						NSTimestampFormatter tsFormat = (NSTimestampFormatter)format;
+						NSTimeZone parseZone = tsFormat.defaultParseTimeZone();
+						NSTimeZone formatZone = tsFormat.defaultFormatTimeZone();
+						tsFormat.setDefaultFormatTimeZone(zone);
+						tsFormat.setDefaultParseTimeZone(zone);
+						try {
+							String formatedValue = format.format(valueInComponent);
+							Object reparsedObject = format.parseObject(formatedValue);
+							stringValue = format.format(reparsedObject);
+						} catch(IllegalArgumentException illegalargumentexception) {
+							NSLog._conditionallyLogPrivateException(illegalargumentexception);
+							stringValue = null;
+						} catch(ParseException parseexception) {
+							NSLog._conditionallyLogPrivateException(parseexception);
+							stringValue = null;
+						} finally {
+							tsFormat.setDefaultFormatTimeZone(formatZone);
+							tsFormat.setDefaultParseTimeZone(parseZone);
+						}
+					}
+				} else {
+					try {
+						String formatedValue = format.format(valueInComponent);
+						Object reparsedObject = format.parseObject(formatedValue);
+						stringValue = format.format(reparsedObject);
+					} catch(IllegalArgumentException illegalargumentexception) {
+						NSLog._conditionallyLogPrivateException(illegalargumentexception);
+						stringValue = null;
+					} catch(ParseException parseexception) {
+						NSLog._conditionallyLogPrivateException(parseexception);
+						stringValue = null;
+					}
 				}
-				if(stringValue == null) {
-					stringValue = valueInComponent.toString();
-				}
-				woresponse._appendTagAttributeAndValue("value", stringValue, true);
+			}
+			if(stringValue == null) {
+				stringValue = valueInComponent.toString();
+			}
+			woresponse._appendTagAttributeAndValue("value", stringValue, true);
 		}
 		if (isReadonlyInContext(wocontext)) {
 			woresponse._appendTagAttributeAndValue("readonly", "readonly", false);

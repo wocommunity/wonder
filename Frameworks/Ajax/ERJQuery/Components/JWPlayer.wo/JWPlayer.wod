@@ -19,7 +19,7 @@ Source: WOGenericElement {
 
 JWFlashPlayer: WOResourceURL {
 	filename = "player.swf";
-	framework = "ERJQuery";
+	framework = framework;
 }
 
 HasSkin: WOConditional {
@@ -28,7 +28,7 @@ HasSkin: WOConditional {
 
 JWSkin: WOResourceURL {
 	filename = skin;
-	framework = "app";
+	framework = framework;
 }
 
 ID: WOString {

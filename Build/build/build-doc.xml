@@ -44,6 +44,11 @@
         <fileset dir="${build.root}">
             <include name="*.framework/Resources/Java/*.jar" />
         </fileset>
+        <!-- Take jar files from these locations if the 
+             frameworks are not built.   -->
+        <fileset dir="${wonder.root}">
+            <include name="**/Libraries/*.jar" />
+        </fileset>
     </path>
     
     <!-- ==================================================== -->

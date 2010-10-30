@@ -1,0 +1,7 @@
+EmbeddedEditRelationship: ERXD2WEditRelationship {
+	pageConfiguration = ^editRelationshipEmbeddedConfigurationName;
+	entityName = destinationEntityName;
+	settings = settings;
+	masterObject = object;
+	relationshipKey = key;
+}

@@ -92,7 +92,7 @@ public class ERXPatcher {
 	public static synchronized void installPatches() {
 		DynamicElementsPatches.cleanupXHTML = ERXValueUtilities.booleanValueWithDefault(System.getProperty("er.extensions.ERXPatcher.cleanupXHTML"), false);
 		DynamicElementsPatches.useButtonTag = ERXProperties.booleanForKeyWithDefault("er.extensions.foundation.ERXPatcher.DynamicElementsPatches.SubmitButton.useButtonTag", false);
-		
+
 		if (DynamicElementsPatches.useButtonTag) {
 			ERXPatcher.setClassForName(ERXSubmitButton.class, "WOSubmitButton");
 		} else ERXPatcher.setClassForName(DynamicElementsPatches.SubmitButton.class, "WOSubmitButton");
@@ -141,7 +141,7 @@ public class ERXPatcher {
 	public static class DynamicElementsPatches {
 		public static boolean cleanupXHTML = false;
 		private static boolean useButtonTag = false;
-
+		
 		private DynamicElementsPatches() {
 		}
 

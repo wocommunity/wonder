@@ -36,7 +36,7 @@ import er.extensions.localization.ERXLocalizer;
  * The validation factory controls creating validation
  * exceptions, both from model thrown exceptions and 
  * custom validation exceptions. The factory is responsible
- * for resolving validation remplates for validation
+ * for resolving validation templates for validation
  * exceptions and generating validation messages.
  */
 public class ERXValidationFactory {
@@ -252,8 +252,8 @@ public class ERXValidationFactory {
     /**
      * Creates a custom validation exception for a given
      * enterprise object and method. This method is just
-     * a cover method for calling the four arguement method
-     * specifying <code>null</code> for proptery and value.
+     * a cover method for calling the four argument method
+     * specifying <code>null</code> for property and value.
      * @param eo enterprise object failing validation
      * @param method name of the method to use to look up the validation
      *		exception template, for instance "FirstNameCanNotMatchLastNameValidationException"
@@ -264,7 +264,7 @@ public class ERXValidationFactory {
     }
 
     /**
-     * Creates a custom validation exception. This is the prefered 
+     * Creates a custom validation exception. This is the preferred 
      * way of creating custom validation exceptions.
      * @param eo enterprise object failing validation
      * @param property attribute that failed validation
