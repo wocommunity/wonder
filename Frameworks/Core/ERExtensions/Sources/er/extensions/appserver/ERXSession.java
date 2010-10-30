@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
 
@@ -94,6 +95,9 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
 
   /** the receiver of the various notifications */
   transient private Observer _observer;
+  
+  /** the default session timeZone */
+  private TimeZone _timeZone = TimeZone.getDefault();
 
   /**
    * _originalThreadName holds the original name from the WorkerThread which
@@ -757,5 +761,28 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
 			_convertSessionCookiesToSecure(response);
 		}
 	}
-  
+  	  	
+  	public TimeZone timeZone() {
+  		return _timeZone;
+  	}
+  	
+  	public void setTimeZone(TimeZone timeZone) {
+  		if(timeZone == null) { throw new NullPointerException("timeZone must not be set to null"); }
+  		_timeZone = timeZone;
+  	}
+  	
+  	private static Boolean autoAdjustTimeZone;
+  	
+  	/**
+  	 * If the property er.extensions.ERXSession.autoAdjustTimeZone=true then
+  	 * WOStrings and WOTextFields with dateFormat bindings will be have their
+  	 * formatter automatically adjusted for the selected session time zone.
+  	 * @return value of er.extensions.ERXSession.autoAdjustTimeZone property. Default is false.
+  	 */
+  	public static boolean autoAdjustTimeZone() {
+  		if(autoAdjustTimeZone == null) {
+  			autoAdjustTimeZone = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXSession.autoAdjustTimeZone", false);
+  		}
+  		return autoAdjustTimeZone;
+  	}
 }
