@@ -2,6 +2,7 @@ package er.extensions.foundation;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
@@ -35,6 +36,7 @@ import com.webobjects.appserver._private.WOSubmitButton;
 import com.webobjects.appserver._private.WOText;
 import com.webobjects.appserver._private.WOTextField;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation._NSUtilities;
@@ -141,16 +143,15 @@ public class ERXPatcher {
 	public static class DynamicElementsPatches {
 		public static boolean cleanupXHTML = false;
 		private static boolean useButtonTag = false;
+		private static Boolean appendComponentIdentifier;
 		
 		private DynamicElementsPatches() {
 		}
 
 		public static class SubmitButton extends WOSubmitButton {
-			protected WOAssociation _id;
 
 			public SubmitButton(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) super._associations.removeObjectForKey("id");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -205,11 +206,9 @@ public class ERXPatcher {
 		}
 
 		public static class ResetButton extends WOResetButton {
-			protected WOAssociation _id;
 
 			public ResetButton(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) super._associations.removeObjectForKey("id");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -224,7 +223,6 @@ public class ERXPatcher {
 			protected void _appendValueAttributeToResponse(WOResponse response, WOContext context) {
 				if (_value != null) {
 					Object object = _value.valueInComponent(context.component());
-					Object object1 = null;
 					if (object != null) {
 						String string = object.toString();
 						// string = ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(string);
@@ -245,11 +243,9 @@ public class ERXPatcher {
 		}
 
 		public static class GenericContainer extends WOGenericContainer {
-			protected WOAssociation _id;
 
 			public GenericContainer(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) super._associations.removeObjectForKey("id");
 			}
 
 			public void appendAttributesToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -269,11 +265,9 @@ public class ERXPatcher {
 		}
 
 		public static class GenericElement extends WOGenericElement {
-			protected WOAssociation _id;
 
 			public GenericElement(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) super._associations.removeObjectForKey("id");
 			}
 
 			public void appendAttributesToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -293,11 +287,9 @@ public class ERXPatcher {
 		}
 
 		public static class Image extends WOImage {
-			protected WOAssociation _id;
 
 			public Image(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) super._associations.removeObjectForKey("id");
 			}
 
 			public void appendAttributesToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -334,11 +326,9 @@ public class ERXPatcher {
 		}
 
 		public static class ActiveImage extends WOActiveImage {
-			protected WOAssociation _id;
 
 			public ActiveImage(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) super._associations.removeObjectForKey("id");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -352,7 +342,6 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				int offset = woresponse.contentString().length();
 				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
@@ -376,12 +365,10 @@ public class ERXPatcher {
 		}
 
 		public static class TextField extends WOTextField {
-			protected WOAssociation _id;
 			protected WOAssociation _readonly;
 
 			public TextField(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) _associations.removeObjectForKey("id");
 				_readonly = (WOAssociation) _associations.removeObjectForKey("readonly");
 			}
 
@@ -420,12 +407,10 @@ public class ERXPatcher {
 		}
 
 		public static class Text extends WOText {
-			protected WOAssociation _id;
 			protected WOAssociation _readonly;
 
 			public Text(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) _associations.removeObjectForKey("id");
 				_readonly = (WOAssociation) _associations.removeObjectForKey("readonly");
 			}
 
@@ -464,11 +449,9 @@ public class ERXPatcher {
 		}
 
 		public static class PopUpButton extends WOPopUpButton {
-			protected WOAssociation _id;
 
 			public PopUpButton(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) super._associations.removeObjectForKey("id");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -490,14 +473,32 @@ public class ERXPatcher {
 					woresponse.appendContentString(newResponse.contentString());
 				}
 			}
+			
+			//Overriden to stop swallowed exceptions. Isn't actually used by the WOPopupButton, but just in case...
+			protected void setSelectionListInContext(WOContext context, List selections) {
+				if(_selections != null && _selections.isValueSettable()) {
+					try {
+						Class resultClass = listClassInContext(context);
+						Object result = resultClass.newInstance();
+						if(result instanceof NSMutableArray) {
+							((NSMutableArray)result).addObjects(selections.toArray());
+						} else { 
+							if(result instanceof List) {
+								((List)result).addAll(selections);
+							}
+						}
+						_selections.setValue(result, context.component());
+                    } catch(Exception exception) {
+                    	throw NSForwardException._runtimeExceptionForThrowable(exception);
+                    }
+				}
+			}
 		}
 
 		public static class Browser extends WOBrowser {
-			protected WOAssociation _id;
 
 			public Browser(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) super._associations.removeObjectForKey("id");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -514,14 +515,33 @@ public class ERXPatcher {
 					woresponse.appendContentString(newResponse.contentString());
 				}
 			}
+			
+			//Overriden to stop swallowed exceptions.
+			protected void setSelectionListInContext(WOContext context, List selections) {
+				if(_selections != null && _selections.isValueSettable()) {
+					try {
+						Class resultClass = listClassInContext(context);
+						Object result = resultClass.newInstance();
+						if(result instanceof NSMutableArray) {
+							((NSMutableArray)result).addObjects(selections.toArray());
+						} else { 
+							if(result instanceof List) {
+								((List)result).addAll(selections);
+							}
+						}
+						_selections.setValue(result, context.component());
+                    } catch(Exception exception) {
+                    	throw NSForwardException._runtimeExceptionForThrowable(exception);
+                    }
+				}
+			}
+
 		}
 
 		public static class CheckBox extends WOCheckBox {
-			protected WOAssociation _id;
 
 			public CheckBox(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) super._associations.removeObjectForKey("id");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -541,11 +561,9 @@ public class ERXPatcher {
 		}
 
 		public static class CheckBoxList extends WOCheckBoxList {
-			protected WOAssociation _id;
 
 			public CheckBoxList(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) super._associations.removeObjectForKey("id");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -562,14 +580,33 @@ public class ERXPatcher {
 					woresponse.appendContentString(newResponse.contentString());
 				}
 			}
+			
+			//Overriden to stop swallowed exceptions.
+			protected void setSelectionListInContext(WOContext context, List selections) {
+				if(_selections != null && _selections.isValueSettable()) {
+					try {
+						Class resultClass = listClassInContext(context);
+						Object result = resultClass.newInstance();
+						if(result instanceof NSMutableArray) {
+							((NSMutableArray)result).addObjects(selections.toArray());
+						} else { 
+							if(result instanceof List) {
+								((List)result).addAll(selections);
+							}
+						}
+						_selections.setValue(result, context.component());
+                    } catch(Exception exception) {
+                    	throw NSForwardException._runtimeExceptionForThrowable(exception);
+                    }
+				}
+			}
+
 		}
 
 		public static class FileUpload extends ERXWOFileUpload {
-			protected WOAssociation _id;
 
 			public FileUpload(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) super._associations.removeObjectForKey("id");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -589,12 +626,10 @@ public class ERXPatcher {
 		}
 
 		public static class HiddenField extends WOHiddenField {
-			protected WOAssociation _id;
 			protected WOAssociation _readonly;
 
 			public HiddenField(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) _associations.removeObjectForKey("id");
 				_readonly = (WOAssociation) _associations.removeObjectForKey("readonly");
 			}
 
@@ -633,11 +668,9 @@ public class ERXPatcher {
 		}
 
 		public static class ImageButton extends WOImageButton {
-			protected WOAssociation _id;
 
 			public ImageButton(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) super._associations.removeObjectForKey("id");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -657,12 +690,10 @@ public class ERXPatcher {
 		}
 
 		public static class PasswordField extends WOPasswordField {
-			protected WOAssociation _id;
 			protected WOAssociation _readonly;
 
 			public PasswordField(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) _associations.removeObjectForKey("id");
 				_readonly = (WOAssociation) _associations.removeObjectForKey("readonly");
 			}
 
@@ -701,11 +732,9 @@ public class ERXPatcher {
 		}
 
 		public static class RadioButton extends WORadioButton {
-			protected WOAssociation _id;
 
 			public RadioButton(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) super._associations.removeObjectForKey("id");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -725,11 +754,9 @@ public class ERXPatcher {
 		}
 
 		public static class RadioButtonList extends WORadioButtonList {
-			protected WOAssociation _id;
 
 			public RadioButtonList(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) super._associations.removeObjectForKey("id");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -746,6 +773,27 @@ public class ERXPatcher {
 					woresponse.appendContentString(newResponse.contentString());
 				}
 			}
+			
+			//Overriden to stop swallowed exceptions.
+			protected void setSelectionListInContext(WOContext context, List selections) {
+				if(_selections != null && _selections.isValueSettable()) {
+					try {
+						Class resultClass = listClassInContext(context);
+						Object result = resultClass.newInstance();
+						if(result instanceof NSMutableArray) {
+							((NSMutableArray)result).addObjects(selections.toArray());
+						} else { 
+							if(result instanceof List) {
+								((List)result).addAll(selections);
+							}
+						}
+						_selections.setValue(result, context.component());
+                    } catch(Exception exception) {
+                    	throw NSForwardException._runtimeExceptionForThrowable(exception);
+                    }
+				}
+			}
+
 		}
 		
 		public static class JavaScript extends WOJavaScript {
@@ -797,20 +845,23 @@ public class ERXPatcher {
 		 * entries you don't have to code for.
 		 */
 		public static void appendIdentifierTagAndValue(WODynamicElement element, WOAssociation id, WOResponse response, WOContext context) {
-			if (id != null) {
-				Object idValue = id.valueInComponent(context.component());
-				if (idValue != null)
-					response._appendTagAttributeAndValue("id", idValue.toString(), true);
-			}
-			else {
+			if (id == null && appendComponentIdentifier()) {
 				NSMutableDictionary dict = ERXWOContext.contextDictionary();
 				String componentIdentifier = (String) dict.objectForKey("componentIdentifier");
 				if (componentIdentifier != null) {
 					response._appendTagAttributeAndValue("id", componentIdentifier, true);
+					dict.removeObjectForKey("componentIdentifier");
 				}
 			}
 		}
 
+		public static boolean appendComponentIdentifier() {
+			if(appendComponentIdentifier == null) {
+				appendComponentIdentifier = Boolean.valueOf(ERXProperties.booleanForKeyWithDefault("er.extensions.foundation.ERXPatcher.DynamicElementsPatches.appendComponentIdentifier", true));
+			}
+			return appendComponentIdentifier.booleanValue();
+		}
+		
 		/**
 		 * Fixing up the response for XHTML and adding the element to the array of generated element IDs, so we can use
 		 * JavaScript later on. If the given element is an input element, it adds a dictionary {type=element.class,
