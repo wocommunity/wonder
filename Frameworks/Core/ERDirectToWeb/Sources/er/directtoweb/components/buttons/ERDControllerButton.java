@@ -48,14 +48,15 @@ public class ERDControllerButton extends ERDActionButton implements ERDBranchInt
     	return css;
     }
     
-    /** find the next non-null NextPageDelegate in the component tree, break if there is a D2WPage found beforehand */
+    /** find the page controller of the closest D2WPage in the component tree */
     public ERDBranchDelegateInterface branchDelegate() {
         if(branchDelegate == null) {
             WOComponent current = parent();
-            while(current != null && branchDelegate == null) {
+            while(current != null) {
                 if(current instanceof ERD2WPage) {
                     ERD2WPage page = (ERD2WPage)current;
                     branchDelegate = page.pageController();
+                    return branchDelegate;
                 }
                 current = current.parent();
             }
