@@ -111,7 +111,7 @@ public class ERD2WUtilities {
      * @param c the class
      * @return sender or the first of sender's parents that is assignable from class c
      */
-    public static <T extends WOComponent> T enclosingComponentOfClass(WOComponent sender, Class<T> c) {
+    public static <T> T enclosingComponentOfClass(WOComponent sender, Class<T> c) {
         WOComponent p = sender;
         while(p != null) {
             if(c.isAssignableFrom(p.getClass()))
