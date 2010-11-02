@@ -137,6 +137,21 @@ public class BeanInfoClassDescription extends EOClassDescription {
 				}
 			}
 		}
+		
+		// If we didn't find a getMethod, fall back and look for any method with that name
+		for (MethodDescriptor descriptor : _beanInfo.getMethodDescriptors()) {
+			Method descriptorMethod = descriptor.getMethod();
+			Class descriptorReturnType = descriptorMethod.getReturnType();
+			if (descriptor.getName().equals(detailKey) && descriptorReturnType != void.class && descriptorMethod.getParameterTypes().length == 0) {
+				if (isToMany(descriptorReturnType)) {
+					return ERXRestClassDescriptionFactory.classDescriptionForClass(Object.class, true);
+				}
+				else {
+					return ERXRestClassDescriptionFactory.classDescriptionForClass(descriptorReturnType, false);
+				}
+			}
+		}
+		
 		return null;
 	}
 
