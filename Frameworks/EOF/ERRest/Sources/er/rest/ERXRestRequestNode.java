@@ -913,7 +913,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 				if (id != null) {
 					setID(id);
 				}
-				if (!visitedObjects.contains(obj)) {
+				if (!visitedObjects.contains(obj) || !keyFilter.isDeduplicationEnabled()) {
 					visitedObjects.add(obj);
 					_addAttributesAndRelationshipsForObjectOfEntity(obj, classDescription, keyFilter, delegate, visitedObjects);
 				}
