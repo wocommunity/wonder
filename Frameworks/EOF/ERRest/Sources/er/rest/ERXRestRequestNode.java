@@ -804,12 +804,12 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 		}
 
 		/*Set<ERXKey> includeKeys = keyFilter.includes().keySet();*/
-		NSDictionary includes = keyFilter.includes();
+		Map<ERXKey, ERXKeyFilter> includes = keyFilter.includes();
 		/*if (includeKeys != null && !includeKeys.isEmpty()) {*/
-		if (includes != null && includes.count() > 0) {
+		if (includes != null && includes.size() > 0) {
 			Set<ERXKey> remainingKeys = new HashSet<ERXKey>(/*includeKeys*/);
-			for (Enumeration keyEnum = includes.keyEnumerator(); keyEnum.hasMoreElements(); ) {
-				remainingKeys.add((ERXKey)keyEnum.nextElement());
+			for (ERXKey key : includes.keySet()) {
+				remainingKeys.add(key);
 			}
 			remainingKeys.removeAll(visitedKeys);
 			if (!remainingKeys.isEmpty()) {
