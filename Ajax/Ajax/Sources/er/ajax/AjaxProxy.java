@@ -127,7 +127,15 @@ public class AjaxProxy extends AjaxComponent {
 			// add the javascript variable 'name' only if not already in the
 			// response
 			userInfo.setObjectForKey(bridge, key);
-			ERXResponseRewriter.addScriptCodeInHead(res, context(), name + " = new JSONRpcClient(\"" + AjaxUtils.ajaxComponentActionUrl(context()) + "\");", key);
+			String jsonRpcJavascript;
+			if (booleanValueForBinding("lazy", false)) {
+			    String varName = "_" + name;
+			    jsonRpcJavascript = "function " + name + "(callback) { if (typeof " + varName + " == 'undefined') { " + varName + "=new JSONRpcClient(callback, '" + AjaxUtils.ajaxComponentActionUrl(context()) + "'); } else { callback(); } }";
+			}
+			else {
+			    jsonRpcJavascript = name + "=new JSONRpcClient('" + AjaxUtils.ajaxComponentActionUrl(context()) + "');";
+			}
+			ERXResponseRewriter.addScriptCodeInHead(res, context(), jsonRpcJavascript, key);
 		}
 		else {
 			// ok, the javascript variable 'name' is already in the response,
