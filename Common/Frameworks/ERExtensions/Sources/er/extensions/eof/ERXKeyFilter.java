@@ -1,6 +1,8 @@
 package er.extensions.eof;
 
-import com.webobjects.foundation.NSDictionary;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSSet;
@@ -47,7 +49,7 @@ public class ERXKeyFilter {
 	}
 
 	private ERXKeyFilter.Base _base;
-	private NSMutableDictionary _includes;
+	private LinkedHashMap<ERXKey, ERXKeyFilter> _includes;
 	private NSMutableSet _excludes;
 	private NSMutableSet _lockedRelationships;
 	private NSMutableDictionary _map;
@@ -73,7 +75,7 @@ public class ERXKeyFilter {
 	public ERXKeyFilter(ERXKeyFilter.Base base, ERXKeyFilter.Base nextBase) {
 		_base = base;
 		_nextBase = nextBase;
-		_includes = new NSMutableDictionary();
+		_includes = new LinkedHashMap<ERXKey, ERXKeyFilter>();
 		_excludes = new NSMutableSet();
 		_lockedRelationships = new NSMutableSet();
 		_map = new NSMutableDictionary();
@@ -257,7 +259,7 @@ public class ERXKeyFilter {
 	 * @return the key filter
 	 */
 	public ERXKeyFilter _filterForKey(ERXKey key) {
-		ERXKeyFilter filter = (ERXKeyFilter)_includes.objectForKey(key);
+		ERXKeyFilter filter = (ERXKeyFilter)_includes.get(key);
 		if (filter == null) {
 			filter = new ERXKeyFilter(_nextBase);
 			filter.setDelegate(_delegate);
@@ -271,7 +273,7 @@ public class ERXKeyFilter {
 	 * 
 	 * @return the included keys and the next filters they map to
 	 */
-	public NSDictionary includes() {
+	public Map<ERXKey, ERXKeyFilter> includes() {
 		return _includes;
 	}
 
@@ -311,7 +313,7 @@ public class ERXKeyFilter {
 	 * @return whether or not the given key is included in this filter
 	 */
 	public boolean includes(ERXKey key) {
-		return _includes.allKeys().containsObject(key);
+		return _includes.containsKey(key);
 	}
 
 	/**
@@ -325,12 +327,12 @@ public class ERXKeyFilter {
 		String keyPath = key.key();
 		int dotIndex = keyPath.indexOf('.');
 		if (dotIndex == -1) {
-			filter = (ERXKeyFilter)_includes.objectForKey(key);
+			filter = (ERXKeyFilter)_includes.get(key);
 			if (filter == null) {
 				filter = new ERXKeyFilter(_nextBase);
 				filter.setDelegate(_delegate);
 				filter.setNextBase(_nextBase);
-				_includes.setObjectForKey(filter, key);
+				_includes.put(key, filter);
 				_excludes.removeObject(key);
 			}
 		}
@@ -392,7 +394,7 @@ public class ERXKeyFilter {
 			int dotIndex = keyPath.indexOf('.');
 			if (dotIndex == -1) {
 				_excludes.addObject(key);
-				_includes.removeObjectForKey(key);
+				_includes.remove(key);
 			}
 			else {
 				ERXKeyFilter subFilter = include(new ERXKey(keyPath.substring(0, dotIndex)));
@@ -408,7 +410,7 @@ public class ERXKeyFilter {
 	 */
 	public void only(ERXKey... keys) {
 		_base = ERXKeyFilter.Base.None;
-		_includes.removeAllObjects();
+		_includes.clear();
 		_excludes.removeAllObjects();
 		for (ERXKey key : keys) {
 			include(key);
@@ -423,7 +425,7 @@ public class ERXKeyFilter {
 	 */
 	public ERXKeyFilter only(ERXKey key) {
 		_base = ERXKeyFilter.Base.None;
-		_includes.removeAllObjects();
+		_includes.clear();
 		_excludes.removeAllObjects();
 		return include(key);
 	}
@@ -466,7 +468,7 @@ public class ERXKeyFilter {
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("[ERXKeyFilter: base=" + _base);
-		if (_includes.count() > 0) {
+		if (_includes.size() > 0) {
 			sb.append("; includes=" + _includes + "");
 		}
 		if (_excludes.count() > 0) {
