@@ -69,6 +69,7 @@ public class ERD2WSwitchComponent extends D2WSwitchComponent {
         D2WContext subContext = (D2WContext) valueForKey("subContext");
         ERD2WUtilities.resetContextCache(subContext);
         subContext.setDynamicPage((String) valueForBinding("_dynamicPage"));
+        subContext.takeValueForKey(D2WModel.One, "frame");
     }
 
     private String _pageConfiguration;
