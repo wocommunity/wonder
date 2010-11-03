@@ -411,6 +411,18 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	public void addRoutes(String entityName, Class<? extends ERXRouteController> routeControllerClass) {
 		addDeclaredRoutes(entityName, routeControllerClass, true);
 	}
+
+	/**
+	 * This method looks for all methods annotated with @Path or @Paths annotations and adds the corresponding routes. 
+	 * If no addRoutes method is found and no @Path annotated methods exist, it will log a warning and add default routes instead.
+	 * This is the variant to use if you have a controller that has no logical entity associated with it.
+	 * 
+	 * @param routeControllerClass
+	 *            the name of the route controller
+	 */
+	public void addRoutes(Class<? extends ERXRouteController> routeControllerClass) {
+		addDeclaredRoutes(null, routeControllerClass, true);
+	}
 	
 	protected void addDeclaredRoutes(String entityName, Class<? extends ERXRouteController> routeControllerClass, boolean addDefaultRoutesIfNoDeclaredRoutesFound) {
 		boolean declaredRoutesFound = false;
