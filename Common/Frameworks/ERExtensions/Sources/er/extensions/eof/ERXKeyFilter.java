@@ -264,6 +264,7 @@ public class ERXKeyFilter {
 			filter = new ERXKeyFilter(_nextBase);
 			filter.setDelegate(_delegate);
 			filter.setNextBase(_nextBase);
+			filter.setDeduplicationEnabled(_deduplicationEnabled);
 		}
 		return filter;
 	}
@@ -296,6 +297,28 @@ public class ERXKeyFilter {
 	}
 
 	/**
+	 * Includes the given set of keys in this filter, wrapping them in ERXKey objects for you.
+	 * 
+	 * @param keyNames the names of the keys to include
+	 */
+	public void include(String... keyNames) {
+	    for (String keyName : keyNames) {
+	        include(new ERXKey<Object>(keyName));
+	    }
+	}
+
+    /**
+     * Includes the given key in this filter, wrapping it in an ERXKey object for you.
+     * 
+     * @param key the key to include
+     * @param existingFilter the existing filter to use for this key
+     * @return the next filter
+     */
+    public ERXKeyFilter include(String keyName, ERXKeyFilter existingFilter) {
+        return include(new ERXKey<Object>(keyName), existingFilter);
+    }
+	
+	/**
 	 * Includes the given set of keys in this filter.
 	 * 
 	 * @param keys the keys to include
@@ -316,29 +339,48 @@ public class ERXKeyFilter {
 		return _includes.containsKey(key);
 	}
 
+    /**
+     * Includes the given key in this filter.
+     * 
+     * @param key the key to include
+     * @return the next filter
+     */
+    public ERXKeyFilter include(ERXKey key) {
+        return include(key, null);
+    }
+    
 	/**
 	 * Includes the given key in this filter.
 	 * 
 	 * @param key the key to include
+	 * @param existingFilter the existing filter to use for this key
 	 * @return the next filter
 	 */
-	public ERXKeyFilter include(ERXKey key) {
+	public ERXKeyFilter include(ERXKey key, ERXKeyFilter existingFilter) {
 		ERXKeyFilter filter;
 		String keyPath = key.key();
 		int dotIndex = keyPath.indexOf('.');
 		if (dotIndex == -1) {
-			filter = (ERXKeyFilter)_includes.get(key);
-			if (filter == null) {
-				filter = new ERXKeyFilter(_nextBase);
-				filter.setDelegate(_delegate);
-				filter.setNextBase(_nextBase);
-				_includes.put(key, filter);
-				_excludes.removeObject(key);
-			}
+		    if (existingFilter != null) {
+		        _includes.put(key, existingFilter);
+		        _excludes.removeObject(key);
+		        filter = existingFilter;
+		    }
+		    else {
+    			filter = (ERXKeyFilter)_includes.get(key);
+    			if (filter == null) {
+    				filter = new ERXKeyFilter(_nextBase);
+    				filter.setDelegate(_delegate);
+    				filter.setNextBase(_nextBase);
+    	            filter.setDeduplicationEnabled(_deduplicationEnabled);
+    				_includes.put(key, filter);
+    				_excludes.removeObject(key);
+    			}
+		    }
 		}
 		else {
-			ERXKeyFilter subFilter = include(new ERXKey(keyPath.substring(0, dotIndex)));
-			filter = subFilter.include(new ERXKey(keyPath.substring(dotIndex + 1)));
+			ERXKeyFilter subFilter = include(new ERXKey(keyPath.substring(0, dotIndex)), null);
+			filter = subFilter.include(new ERXKey(keyPath.substring(dotIndex + 1)), existingFilter);
 		}
 		return filter;
 	}
