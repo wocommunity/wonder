@@ -52,7 +52,9 @@ import er.rest.format.ERXRestFormat;
 import er.rest.format.ERXWORestRequest;
 import er.rest.format.ERXWORestResponse;
 import er.rest.format.IERXRestParser;
+import er.rest.routes.jsr311.Path;
 import er.rest.routes.jsr311.PathParam;
+import er.rest.routes.jsr311.Paths;
 import er.rest.util.ERXRestSchema;
 import er.rest.util.ERXRestTransactionRequestAdaptor;
 
@@ -1306,14 +1308,25 @@ public class ERXRouteController extends WODirectAction {
 			}
 
 			if (results == null) {
-		        Method actionMethod = _methodForAction(actionName, WODirectAction.actionText);
+				String actionMethodName = actionName + WODirectAction.actionText;
+		        Method actionMethod = _methodForAction(actionMethodName, "");
+		        if (actionMethod == null) {
+			        actionMethod = _methodForAction(actionName, "");
+			        if (actionMethod == null || (actionMethod.getAnnotation(Path.class) == null && actionMethod.getAnnotation(Paths.class) == null)) {
+			        	actionMethod = null;
+			        }
+		        }
 		        if (actionMethod == null || actionMethod.getParameterTypes().length > 0) {
-		        	String actionMethodName = actionName + WODirectAction.actionText;
 		        	int bestParameterCount = 0;
 		        	Method bestMethod = null;
         			List<PathParam> bestParams = null;
 		        	for (Method method : getClass().getDeclaredMethods()) {
-		        		if (method.getName().equals(actionMethodName)) {
+		        		String methodName = method.getName();
+		        		boolean nameMatches = methodName.equals(actionMethodName);
+		        		if (!nameMatches && methodName.equals(actionName) && (method.getAnnotation(Path.class) != null || method.getAnnotation(Paths.class) != null)) {
+		        			nameMatches = true;
+		        		}
+		        		if (nameMatches) {
 		        			int parameterCount = 0;
 				        	List<PathParam> params = new LinkedList<PathParam>();
 		        			for (Annotation[] parameterAnnotations : method.getParameterAnnotations()) {

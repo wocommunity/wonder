@@ -428,53 +428,55 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 
 		for (Method routeMethod : routeControllerClass.getDeclaredMethods()) {
 			String routeMethodName = routeMethod.getName();
-			if (routeMethodName.endsWith("Action")) {
-				String actionName = routeMethodName.substring(0, routeMethodName.length() - "Action".length());
+			Path pathAnnotation = routeMethod.getAnnotation(Path.class);
+			Paths pathsAnnotation = routeMethod.getAnnotation(Paths.class);
+			if (pathAnnotation != null || pathsAnnotation != null) {
+				String actionName;
+				if (routeMethodName.endsWith("Action")) {
+					actionName = routeMethodName.substring(0, routeMethodName.length() - "Action".length());
+				}
+				else {
+					actionName = routeMethodName;
+				}
 
-				Path pathAnnotation = routeMethod.getAnnotation(Path.class);
-				Paths pathsAnnotation = routeMethod.getAnnotation(Paths.class);
-				if (pathAnnotation != null || pathsAnnotation != null) {
-					declaredRoutesFound = false;
-
-					ERXRoute.Method method = null;
-					for (Annotation annotation : routeMethod.getAnnotations()) {
-						HttpMethod httpMethod = annotation.annotationType().getAnnotation(HttpMethod.class);
-						if (httpMethod != null) {
-							if (method == null) {
-								method = httpMethod.value();
-							}
-							else {
-								throw new IllegalArgumentException(routeControllerClass.getSimpleName() + "." + routeMethod.getName() + " is annotated as more than one http method.");
-							}
+				ERXRoute.Method method = null;
+				for (Annotation annotation : routeMethod.getAnnotations()) {
+					HttpMethod httpMethod = annotation.annotationType().getAnnotation(HttpMethod.class);
+					if (httpMethod != null) {
+						if (method == null) {
+							method = httpMethod.value();
+						}
+						else {
+							throw new IllegalArgumentException(routeControllerClass.getSimpleName() + "." + routeMethod.getName() + " is annotated as more than one http method.");
 						}
 					}
-					if (method == null) {
-						method = ERXRoute.Method.Get;
-					}
+				}
+				if (method == null) {
+					method = ERXRoute.Method.Get;
+				}
 
-					Annotation methodAnnotation = routeMethod.getAnnotation(GET.class);
+				Annotation methodAnnotation = routeMethod.getAnnotation(GET.class);
+				if (methodAnnotation == null) {
+					methodAnnotation = routeMethod.getAnnotation(POST.class);
 					if (methodAnnotation == null) {
-						methodAnnotation = routeMethod.getAnnotation(POST.class);
+						methodAnnotation = routeMethod.getAnnotation(PUT.class);
 						if (methodAnnotation == null) {
-							methodAnnotation = routeMethod.getAnnotation(PUT.class);
-							if (methodAnnotation == null) {
-								methodAnnotation = routeMethod.getAnnotation(DELETE.class);
-							}
+							methodAnnotation = routeMethod.getAnnotation(DELETE.class);
 						}
 					}
-					if (methodAnnotation != null) {
-						method = methodAnnotation.annotationType().getAnnotation(HttpMethod.class).value();
+				}
+				if (methodAnnotation != null) {
+					method = methodAnnotation.annotationType().getAnnotation(HttpMethod.class).value();
+				}
+				if (pathAnnotation != null) {
+					addRoute(new ERXRoute(entityName, pathAnnotation.value(), method, routeControllerClass, actionName));
+					declaredRoutesFound = true;
+				}
+				if (pathsAnnotation != null) {
+					for (Path path : pathsAnnotation.value()) {
+						addRoute(new ERXRoute(entityName, path.value(), method, routeControllerClass, actionName));
 					}
-					if (pathAnnotation != null) {
-						addRoute(new ERXRoute(entityName, pathAnnotation.value(), method, routeControllerClass, actionName));
-						declaredRoutesFound = true;
-					}
-					if (pathsAnnotation != null) {
-						for (Path path : pathsAnnotation.value()) {
-							addRoute(new ERXRoute(entityName, path.value(), method, routeControllerClass, actionName));
-						}
-						declaredRoutesFound = true;
-					}
+					declaredRoutesFound = true;
 				}
 			}
 		}
