@@ -72,13 +72,12 @@ public class ERXXmlRestWriter implements IERXRestWriter {
 		/*for (Map.Entry<String, Object> attribute : node.attributes().entrySet()) {
 			String key = attribute.getKey();
 			*/
-		NSDictionary attributes = node.attributes();
-		for (Enumeration keyEnum = attributes.keyEnumerator(); keyEnum.hasMoreElements(); ) {
-			String key = (String)keyEnum.nextElement();
-			String formattedValue = coerceValueToString(/*attribute.getValue()*/attributes.objectForKey(key));
+		Map attributes = node.attributes();
+		for (Object key : attributes.keySet()) {
+			String formattedValue = coerceValueToString(/*attribute.getValue()*/attributes.get(key));
 			if (formattedValue != null) {
 				response.appendContentString(" ");
-				response.appendContentString(key);
+				response.appendContentString((String)key);
 				response.appendContentString("=\"");
 				response.appendContentString(ERXStringUtilities.escapeNonXMLChars(formattedValue));
 				response.appendContentString("\"");
