@@ -9,6 +9,8 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
+import er.extensions.foundation.ERXPatcher.DynamicElementsPatches.Browser;
+
 
 /**
  * Quick hack at extending WOBrowser to use HTML 4 optgroups.  It adds two bindings:
@@ -21,7 +23,7 @@ import com.webobjects.foundation.NSMutableArray;
  * @binding itemClass, optional - String CSS class name for this item, browser support is inconsistent
  * @binding itemStyle, optional - String CSS style for this item, browser support is inconsistent
  */
-public class ERXOptGroupBrowser extends WOBrowser {
+public class ERXOptGroupBrowser extends Browser {
 
 	
     protected WOAssociation group;
