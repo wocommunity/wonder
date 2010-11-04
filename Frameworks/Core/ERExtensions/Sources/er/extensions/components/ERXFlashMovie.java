@@ -30,7 +30,8 @@ public class ERXFlashMovie extends ERXStatelessComponent {
 					String url =  context().componentActionURL();
 					url = ERXStringUtilities.keyPathWithoutLastProperty(url);
 					flashKey = key.substring(2);
-					value = url + "." + flashKey;
+					//ak: flag for keys containing "." like JWPlayer 
+					value = url + ".@" + flashKey;
 				} else {
 					value = valueForBinding(key);
 				}
@@ -45,9 +46,9 @@ public class ERXFlashMovie extends ERXStatelessComponent {
 	@Override
 	public WOActionResults invokeAction(WORequest request, WOContext context) {
 		WOActionResults result = null;
-		String url = ERXStringUtilities.keyPathWithoutLastProperty(context.senderID());
-		if(context.elementID().equals(url)) {
-			String last =  ERXStringUtilities.lastPropertyKeyInKeyPath(context.senderID());
+		String url = context.senderID();
+		if(url.startsWith(context.elementID() + ".@")) {
+			String last = context.senderID().substring(context.elementID().length()+2);
 			result = (WOActionResults) valueForBinding("??" + last);
 		} else {
 			result = super.invokeAction(request, context);
