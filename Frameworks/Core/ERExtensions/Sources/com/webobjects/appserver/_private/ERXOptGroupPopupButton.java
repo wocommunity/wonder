@@ -10,6 +10,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
 import er.extensions.foundation.ERXKeyValueCodingUtilities;
+import er.extensions.foundation.ERXPatcher.DynamicElementsPatches.PopUpButton;
 
 
 /**
@@ -23,7 +24,7 @@ import er.extensions.foundation.ERXKeyValueCodingUtilities;
  * @binding itemClass, optional - String CSS class name for this item, browser support is inconsistent
  * @binding itemStyle, optional - String CSS style for this item, browser support is inconsistent
  */
-public class ERXOptGroupPopupButton extends WOPopUpButton
+public class ERXOptGroupPopupButton extends PopUpButton
 {
     
     protected WOAssociation group;

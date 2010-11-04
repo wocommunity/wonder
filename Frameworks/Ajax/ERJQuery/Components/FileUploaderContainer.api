@@ -15,5 +15,6 @@
     <validation message="'finalFilePath' must be bound to a settable value">
             <unsettable name="finalFilePath"/>
         </validation>
+    <binding name="allowedExtensions"/>
     </wo>
 </wodefinitions>
