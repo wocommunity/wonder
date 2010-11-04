@@ -28,7 +28,8 @@ import er.extensions.foundation.ERXStringUtilities;
  * Encapsulation of @see <a href="http://valums.com/ajax-upload/">Ajax Upload</a>			
  * @binding			onChange			
  * @binding			onSubmit			
- * @binding			onComplete			
+ * @binding			onComplete		
+ * @binding			allowedExtensions           E.g: "['jpg', 'jpeg', 'png', 'gif']"	
  * 
  * @property		useUnobtrusively			For Unobtrusive Javascript programming. Default it is ON.
  * @property 		WOFileUpload.sizeLimit		Max file upload size permitted
@@ -68,6 +69,7 @@ public abstract class FileUploader extends WOComponent {
 		public static final String outputStream = "outputStream";
 		public static final String finalFilePath = "finalFilePath";
 		public static final String streamToFilePath = "streamToFilePath";
+		public static final String allowedExtensions = "allowedExtensions";
 	}
 	
 	/*
@@ -126,7 +128,8 @@ public abstract class FileUploader extends WOComponent {
     	if (hasBinding(Bindings.onChange)) _options.add("onChange:" + valueForBinding(Bindings.onChange));
     	if (hasBinding(Bindings.onComplete)) _options.add("onComplete:" + valueForBinding(Bindings.onComplete));
     	if (hasBinding(Bindings.onSubmit)) _options.add("onSubmit:" + valueForBinding(Bindings.onSubmit));
-
+    	if (hasBinding(Bindings.allowedExtensions)) _options.add("allowedExtensions:" + valueForBinding(Bindings.allowedExtensions));
+    	
     	return _options.immutableClone();
     }
     
