@@ -50,5 +50,6 @@
         </validation> 
     <binding defaults="Resources" name="modalboxCSS"/>
     <binding defaults="Frameworks" name="modalboxCSSFramework"/>
+    <binding defaults="Boolean" name="ignoreNesting"/>
     </wo>
 </wodefinitions>

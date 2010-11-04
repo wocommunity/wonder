@@ -15,6 +15,7 @@ import com.webobjects.foundation.NSPathUtilities;
 import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.appserver.ajax.ERXAjaxApplication;
+import er.extensions.components.ERXComponentUtilities;
 import er.extensions.components._private.ERXWOForm;
 
 /**
@@ -74,6 +75,7 @@ import er.extensions.components._private.ERXWOForm;
  * 			custom  JavaScript (see below).  The default is true
  * @binding enabled if false, nothing is rendered for this component.  This can be used instead of wrapping this in a WOConditional.
  *          The default is true.
+ * @binding ignoreNesting optional, if true and this dialog is nested inside another, no warning will be output
  *
  * @binding onOpen server side method that runs before the dialog is opened, the return value is discarded
  * @binding onClose server side method that runs before the dialog is closed, the return value is discarded.
@@ -769,7 +771,10 @@ public class AjaxModalDialog extends AjaxComponent {
 		ERXWOContext.contextDictionary().setObjectForKey(this, AjaxModalDialog.class.getName());
 		if ( ! hasWarnedOnNesting && outerDialog != null) {
 			hasWarnedOnNesting = true;
-			logger.warn("AjaxModalDialog " + id() + " is nested inside of " + outerDialog.id() + ". Are you sure you want to do this?");
+			if (! ERXComponentUtilities.booleanValueForBinding(this, "ignoreNesting", false))
+			{
+				logger.warn("AjaxModalDialog " + id() + " is nested inside of " + outerDialog.id() + ". Are you sure you want to do this?");
+			}
 		}		
 	}
 	
