@@ -221,6 +221,11 @@ er.extensions.ERXSharedEOLoader.PatchSharedEOLoading=false
 ## slow down your app
 er.extensions.ERXPatcher.cleanupXHTML=false
 
+## Set to true to suppress warning message from inputs:
+## takeValuesFromRequest() Warning: Avoid using the 'value' binding as it 
+## is much slower than omitting it, and it is just cosmetic.
+er.extensions.ERXPatcher.suppressValueBindingSlow=false
+
 #########################################################################
 # ERXComponentActionRedirector 
 #########################################################################
