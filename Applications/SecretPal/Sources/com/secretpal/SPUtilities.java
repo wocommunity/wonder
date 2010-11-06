@@ -116,7 +116,7 @@ public class SPUtilities {
 							invitationsSent++;
 						}
 						else {
-							failedEmailAddresses.addObject(trimmedEmailAddress);
+							failedEmailAddresses.addObject(membership.person().emailAddress());
 						}
 					} else {
 						invitationsSent++;
