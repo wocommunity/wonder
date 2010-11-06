@@ -104,10 +104,10 @@ public class SPUtilities {
 			String[] emailAddresses = emailAddressesStr.split("[\\n;, ]");
 			int invitationsSent = 0;
 			for (String emailAddress : emailAddresses) {
-				String trimmedEmailAddress = emailAddress.trim();
-				if (trimmedEmailAddress.length() > 0) {
+				String cleansedEmailAddress = SPUtilities.cleanseEmailAddress(emailAddress);
+				if (cleansedEmailAddress.length() > 0) {
 					EOEditingContext editingContext = ERXEC.newEditingContext();
-					SPMembership membership = group.localInstanceIn(editingContext).invite(trimmedEmailAddress);
+					SPMembership membership = group.localInstanceIn(editingContext).invite(cleansedEmailAddress);
 					editingContext.saveChanges();
 
 					if (!membership.confirmed().booleanValue()) {
@@ -132,6 +132,10 @@ public class SPUtilities {
 				notificationNoticeList.addNotice("Processing " + invitationsSent + " invitation(s) ...");
 			}
 		}
+	}
+	
+	public static String cleanseEmailAddress(String emailAddress) {
+	   return emailAddress.replaceAll("[()'\\[\\]<> ]", "").trim();
 	}
 
 	public static class SPPersonEmailDelegate implements ERMessage.Delegate {

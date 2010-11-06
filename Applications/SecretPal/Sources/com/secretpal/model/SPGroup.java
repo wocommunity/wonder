@@ -20,13 +20,12 @@ public class SPGroup extends _SPGroup {
 	}
 
 	public SPMembership invite(String emailAddress) {
-	  String cleanedEmailAddress = emailAddress.replaceAll("[()'\\[\\]<> ]", "");
 		EOEditingContext editingContext = editingContext();
-		SPPerson person = SPPerson.fetchSPPerson(editingContext, SPPerson.EMAIL_ADDRESS.likeInsensitive(cleanedEmailAddress));
+		SPPerson person = SPPerson.fetchSPPerson(editingContext, SPPerson.EMAIL_ADDRESS.likeInsensitive(emailAddress));
 		if (person == null) {
-			int atIndex = cleanedEmailAddress.indexOf('@');
-			String name = atIndex == -1 ? cleanedEmailAddress : cleanedEmailAddress.substring(0, atIndex);
-			person = SPPerson.createSPPerson(editingContext, Boolean.FALSE, cleanedEmailAddress, Boolean.FALSE, name);
+			int atIndex = emailAddress.indexOf('@');
+			String name = atIndex == -1 ? emailAddress : emailAddress.substring(0, atIndex);
+			person = SPPerson.createSPPerson(editingContext, Boolean.FALSE, emailAddress, Boolean.FALSE, name);
 		}
 		SPMembership membership = membershipForPerson(person);
 		if (membership == null) {
