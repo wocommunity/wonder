@@ -1,10 +1,8 @@
 package er.directtoweb.components.relationships;
 
 import com.webobjects.appserver.WOContext;
-import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSMutableDictionary;
 
 import er.directtoweb.components.ERDCustomEditComponent;
 
@@ -26,15 +24,10 @@ public class ERDEditRelationship extends ERDCustomEditComponent {
 	}
 
 	public NSDictionary<String, Object> settings() {
-		NSMutableDictionary<String, Object> settings = new NSMutableDictionary<String, Object>();
 		String pageConfiguration = d2wContext().dynamicPage();
-		EORelationship smartRelationship = (EORelationship)d2wContext().valueForKey("smartRelationship");
 		if(pageConfiguration != null) {
-			settings.setObjectForKey(pageConfiguration, "parentPageConfiguration");
+			return new NSDictionary<String, Object>(pageConfiguration, "parentPageConfiguration");
 		}
-		if(smartRelationship != null) {
-			settings.setObjectForKey(smartRelationship, "parentRelationship");
-		}
-		return settings.isEmpty()?null:settings;
+		return null;
 	}
 }
