@@ -25,7 +25,6 @@ import er.directtoweb.assignments.ERDAssignment;
 import er.directtoweb.assignments.ERDComputingAssignmentInterface;
 import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXEOAccessUtilities;
-import er.extensions.eof.ERXS;
 import er.extensions.foundation.ERXDictionaryUtilities;
 
 /**
@@ -251,7 +250,7 @@ public class ERDDefaultModelAssignment extends ERDAssignment {
     protected Object entityForKey(D2WContext c, String key) {
         Object result = null;
         if(key != null) {
-            result = ERXEOAccessUtilities.entityMatchingString((EOEditingContext)c.valueForKey("session.defaultEditingContext"), (String)c.valueForKey(key));
+            result = ERXEOAccessUtilities.entityMatchingString((EOEditingContext)c.valueForKeyPath("session.defaultEditingContext"), (String)c.valueForKey(key));
         }
         if(result == null && isTaskWithoutEntity(c.task())) {
             result = dummyEntity();
