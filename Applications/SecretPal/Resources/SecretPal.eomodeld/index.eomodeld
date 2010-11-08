@@ -6,6 +6,7 @@
         {className = "com.secretpal.model.SPEvent"; name = SPEvent; }, 
         {className = "com.secretpal.model.SPGroup"; name = SPGroup; }, 
         {className = "com.secretpal.model.SPMembership"; name = SPMembership; }, 
+        {className = "com.secretpal.model.SPNoNoPal"; name = SPNoNoPal; }, 
         {className = "com.secretpal.model.SPPerson"; name = SPPerson; }, 
         {className = "com.secretpal.model.SPSecretPal"; name = SPSecretPal; }, 
         {className = "com.secretpal.model.SPWish"; name = SPWish; }

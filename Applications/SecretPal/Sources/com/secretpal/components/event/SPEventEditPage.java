@@ -4,14 +4,22 @@ import com.secretpal.components.application.SPPage;
 import com.secretpal.components.group.SPGroupPage;
 import com.secretpal.model.SPEvent;
 import com.secretpal.model.SPGroup;
+import com.secretpal.model.SPMembership;
+import com.secretpal.model.SPNoNoPal;
+import com.secretpal.model.SPPerson;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.foundation.NSArray;
 
 import er.extensions.eof.ERXEC;
 
 public class SPEventEditPage extends SPPage {
 	private SPEvent _event;
+  public SPMembership _membership;
+  public SPNoNoPal _noNoPal;
+  public SPPerson _noNoPerson;
+  public SPPerson _selectedNoNoPerson;
 
 	public SPEventEditPage(WOContext context) {
 		super(context);
@@ -33,6 +41,18 @@ public class SPEventEditPage extends SPPage {
 	public SPEvent event() {
 		return _event;
 	}
+
+  public NSArray<SPPerson> noNoPersonPossibilities() {
+    return _event.noNoPersonPossibilitiesForPerson(_membership.person());
+  }
+
+  public NSArray<SPNoNoPal> noNoPals() {
+    return _event.noNoPalsForPerson(_membership.person());
+  }
+
+  public SPMembership noNoPersonMembership() {
+    return _event.group().membershipForPerson(_noNoPerson);
+  }
 
 	public WOActionResults reassignSecretPals() {
 		try {
@@ -71,4 +91,19 @@ public class SPEventEditPage extends SPPage {
 		groupPage.setGroup(group);
 		return groupPage;
 	}
+
+  public WOActionResults removeNoNoPal() {
+    EOEditingContext editingContext = ERXEC.newEditingContext();
+    _noNoPal.localInstanceIn(editingContext).delete();
+    editingContext.saveChanges();
+    return this;
+  }
+
+  public WOActionResults addNoNoPal() {
+    EOEditingContext editingContext = ERXEC.newEditingContext();
+    SPNoNoPal.createSPNoNoPal(editingContext, _event.localInstanceIn(editingContext), _membership.person().localInstanceIn(editingContext), _selectedNoNoPerson.localInstanceIn(editingContext));
+    editingContext.saveChanges();
+    _selectedNoNoPerson = null;
+    return this;
+  }
 }

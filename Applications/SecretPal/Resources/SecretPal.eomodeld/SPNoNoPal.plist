@@ -1,0 +1,46 @@
+{
+    attributes = (
+        {allowsNull = N; columnName = eventID; name = eventID; prototypeName = id; }, 
+        {allowsNull = N; columnName = giverID; name = giverID; prototypeName = id; }, 
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {
+            allowsNull = N; 
+            columnName = receiverID; 
+            name = receiverID; 
+            prototypeName = id; 
+        }
+    ); 
+    attributesUsedForLocking = (eventID, giverID, id, receiverID); 
+    className = "com.secretpal.model.SPNoNoPal"; 
+    classProperties = (event, giver, receiver); 
+    externalName = SPNoNoPal; 
+    fetchSpecificationDictionary = {}; 
+    name = SPNoNoPal; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = SPEvent; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = eventID; }); 
+            name = event; 
+        }, 
+        {
+            destination = SPPerson; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = giverID; }); 
+            name = giver; 
+        }, 
+        {
+            destination = SPPerson; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = receiverID; }); 
+            name = receiver; 
+        }
+    ); 
+}

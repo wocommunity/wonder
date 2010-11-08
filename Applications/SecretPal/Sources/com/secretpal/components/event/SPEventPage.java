@@ -40,7 +40,7 @@ public class SPEventPage extends SPPage {
 	public void setEvent(SPEvent event) {
 		_event = event;
 		_currentPerson = session().currentPerson().localInstanceIn(_event.editingContext());
-		_secretPals = SPSecretPal.RECEIVER.arrayValueInObject(_currentPerson.secretPalsForEvent(event));
+		_secretPals = SPSecretPal.RECEIVER.arrayValueInObject(event.secretPalsForPerson(_currentPerson));
 		_expandSecretPals();
 	}
 

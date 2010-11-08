@@ -63,7 +63,7 @@
 		</div>
 		<div class="contents">
 			<table>
-			<wo:WORepetition list="$group.memberships" item="$membership">
+			<wo:WORepetition list="$group.memberships.@sortAsc.personName" item="$membership">
 				<tr>
 					<td class="actions">
 						<wo:if condition="$canDeleteMembership"><wo:WOHyperlink action="$deleteMembership" onclick="return confirm('Are you sure you want to remove this person from your group?')"><wo:WOImage filename="btn_del.png"/></wo:WOHyperlink></wo:if>

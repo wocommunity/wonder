@@ -23,6 +23,8 @@ public abstract class _SPPerson extends  ERXGenericRecord {
   public static final ERXKey<String> PASSWORD = new ERXKey<String>("password");
   // Relationship Keys
   public static final ERXKey<er.attachment.model.ERAttachment> AVATAR = new ERXKey<er.attachment.model.ERAttachment>("avatar");
+  public static final ERXKey<com.secretpal.model.SPNoNoPal> CANNOT_GIVE_PALS = new ERXKey<com.secretpal.model.SPNoNoPal>("cannotGivePals");
+  public static final ERXKey<com.secretpal.model.SPNoNoPal> CANNOT_RECEIVE_PALS = new ERXKey<com.secretpal.model.SPNoNoPal>("cannotReceivePals");
   public static final ERXKey<com.secretpal.model.SPSecretPal> GIVER_SECRET_PALS = new ERXKey<com.secretpal.model.SPSecretPal>("giverSecretPals");
   public static final ERXKey<com.secretpal.model.SPMembership> MEMBERSHIPS = new ERXKey<com.secretpal.model.SPMembership>("memberships");
   public static final ERXKey<com.secretpal.model.SPGroup> OWNED_GROUPS = new ERXKey<com.secretpal.model.SPGroup>("ownedGroups");
@@ -38,6 +40,8 @@ public abstract class _SPPerson extends  ERXGenericRecord {
   public static final String PASSWORD_KEY = PASSWORD.key();
   // Relationships
   public static final String AVATAR_KEY = AVATAR.key();
+  public static final String CANNOT_GIVE_PALS_KEY = CANNOT_GIVE_PALS.key();
+  public static final String CANNOT_RECEIVE_PALS_KEY = CANNOT_RECEIVE_PALS.key();
   public static final String GIVER_SECRET_PALS_KEY = GIVER_SECRET_PALS.key();
   public static final String MEMBERSHIPS_KEY = MEMBERSHIPS.key();
   public static final String OWNED_GROUPS_KEY = OWNED_GROUPS.key();
@@ -135,6 +139,194 @@ public abstract class _SPPerson extends  ERXGenericRecord {
     }
   }
   
+  public NSArray<com.secretpal.model.SPNoNoPal> cannotGivePals() {
+    return (NSArray<com.secretpal.model.SPNoNoPal>)storedValueForKey(_SPPerson.CANNOT_GIVE_PALS_KEY);
+  }
+
+  public NSArray<com.secretpal.model.SPNoNoPal> cannotGivePals(EOQualifier qualifier) {
+    return cannotGivePals(qualifier, null, false);
+  }
+
+  public NSArray<com.secretpal.model.SPNoNoPal> cannotGivePals(EOQualifier qualifier, boolean fetch) {
+    return cannotGivePals(qualifier, null, fetch);
+  }
+
+  public NSArray<com.secretpal.model.SPNoNoPal> cannotGivePals(EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings, boolean fetch) {
+    NSArray<com.secretpal.model.SPNoNoPal> results;
+    if (fetch) {
+      EOQualifier fullQualifier;
+      EOQualifier inverseQualifier = new EOKeyValueQualifier(com.secretpal.model.SPNoNoPal.GIVER_KEY, EOQualifier.QualifierOperatorEqual, this);
+    	
+      if (qualifier == null) {
+        fullQualifier = inverseQualifier;
+      }
+      else {
+        NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
+        qualifiers.addObject(qualifier);
+        qualifiers.addObject(inverseQualifier);
+        fullQualifier = new EOAndQualifier(qualifiers);
+      }
+
+      results = com.secretpal.model.SPNoNoPal.fetchSPNoNoPals(editingContext(), fullQualifier, sortOrderings);
+    }
+    else {
+      results = cannotGivePals();
+      if (qualifier != null) {
+        results = (NSArray<com.secretpal.model.SPNoNoPal>)EOQualifier.filteredArrayWithQualifier(results, qualifier);
+      }
+      if (sortOrderings != null) {
+        results = (NSArray<com.secretpal.model.SPNoNoPal>)EOSortOrdering.sortedArrayUsingKeyOrderArray(results, sortOrderings);
+      }
+    }
+    return results;
+  }
+  
+  public void addToCannotGivePals(com.secretpal.model.SPNoNoPal object) {
+    includeObjectIntoPropertyWithKey(object, _SPPerson.CANNOT_GIVE_PALS_KEY);
+  }
+
+  public void removeFromCannotGivePals(com.secretpal.model.SPNoNoPal object) {
+    excludeObjectFromPropertyWithKey(object, _SPPerson.CANNOT_GIVE_PALS_KEY);
+  }
+
+  public void addToCannotGivePalsRelationship(com.secretpal.model.SPNoNoPal object) {
+    if (_SPPerson.LOG.isDebugEnabled()) {
+      _SPPerson.LOG.debug("adding " + object + " to cannotGivePals relationship");
+    }
+    if (er.extensions.eof.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    	addToCannotGivePals(object);
+    }
+    else {
+    	addObjectToBothSidesOfRelationshipWithKey(object, _SPPerson.CANNOT_GIVE_PALS_KEY);
+    }
+  }
+
+  public void removeFromCannotGivePalsRelationship(com.secretpal.model.SPNoNoPal object) {
+    if (_SPPerson.LOG.isDebugEnabled()) {
+      _SPPerson.LOG.debug("removing " + object + " from cannotGivePals relationship");
+    }
+    if (er.extensions.eof.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    	removeFromCannotGivePals(object);
+    }
+    else {
+    	removeObjectFromBothSidesOfRelationshipWithKey(object, _SPPerson.CANNOT_GIVE_PALS_KEY);
+    }
+  }
+
+  public com.secretpal.model.SPNoNoPal createCannotGivePalsRelationship() {
+    EOClassDescription eoClassDesc = EOClassDescription.classDescriptionForEntityName( com.secretpal.model.SPNoNoPal.ENTITY_NAME );
+    EOEnterpriseObject eo = eoClassDesc.createInstanceWithEditingContext(editingContext(), null);
+    editingContext().insertObject(eo);
+    addObjectToBothSidesOfRelationshipWithKey(eo, _SPPerson.CANNOT_GIVE_PALS_KEY);
+    return (com.secretpal.model.SPNoNoPal) eo;
+  }
+
+  public void deleteCannotGivePalsRelationship(com.secretpal.model.SPNoNoPal object) {
+    removeObjectFromBothSidesOfRelationshipWithKey(object, _SPPerson.CANNOT_GIVE_PALS_KEY);
+    editingContext().deleteObject(object);
+  }
+
+  public void deleteAllCannotGivePalsRelationships() {
+    Enumeration<com.secretpal.model.SPNoNoPal> objects = cannotGivePals().immutableClone().objectEnumerator();
+    while (objects.hasMoreElements()) {
+      deleteCannotGivePalsRelationship(objects.nextElement());
+    }
+  }
+
+  public NSArray<com.secretpal.model.SPNoNoPal> cannotReceivePals() {
+    return (NSArray<com.secretpal.model.SPNoNoPal>)storedValueForKey(_SPPerson.CANNOT_RECEIVE_PALS_KEY);
+  }
+
+  public NSArray<com.secretpal.model.SPNoNoPal> cannotReceivePals(EOQualifier qualifier) {
+    return cannotReceivePals(qualifier, null, false);
+  }
+
+  public NSArray<com.secretpal.model.SPNoNoPal> cannotReceivePals(EOQualifier qualifier, boolean fetch) {
+    return cannotReceivePals(qualifier, null, fetch);
+  }
+
+  public NSArray<com.secretpal.model.SPNoNoPal> cannotReceivePals(EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings, boolean fetch) {
+    NSArray<com.secretpal.model.SPNoNoPal> results;
+    if (fetch) {
+      EOQualifier fullQualifier;
+      EOQualifier inverseQualifier = new EOKeyValueQualifier(com.secretpal.model.SPNoNoPal.RECEIVER_KEY, EOQualifier.QualifierOperatorEqual, this);
+    	
+      if (qualifier == null) {
+        fullQualifier = inverseQualifier;
+      }
+      else {
+        NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
+        qualifiers.addObject(qualifier);
+        qualifiers.addObject(inverseQualifier);
+        fullQualifier = new EOAndQualifier(qualifiers);
+      }
+
+      results = com.secretpal.model.SPNoNoPal.fetchSPNoNoPals(editingContext(), fullQualifier, sortOrderings);
+    }
+    else {
+      results = cannotReceivePals();
+      if (qualifier != null) {
+        results = (NSArray<com.secretpal.model.SPNoNoPal>)EOQualifier.filteredArrayWithQualifier(results, qualifier);
+      }
+      if (sortOrderings != null) {
+        results = (NSArray<com.secretpal.model.SPNoNoPal>)EOSortOrdering.sortedArrayUsingKeyOrderArray(results, sortOrderings);
+      }
+    }
+    return results;
+  }
+  
+  public void addToCannotReceivePals(com.secretpal.model.SPNoNoPal object) {
+    includeObjectIntoPropertyWithKey(object, _SPPerson.CANNOT_RECEIVE_PALS_KEY);
+  }
+
+  public void removeFromCannotReceivePals(com.secretpal.model.SPNoNoPal object) {
+    excludeObjectFromPropertyWithKey(object, _SPPerson.CANNOT_RECEIVE_PALS_KEY);
+  }
+
+  public void addToCannotReceivePalsRelationship(com.secretpal.model.SPNoNoPal object) {
+    if (_SPPerson.LOG.isDebugEnabled()) {
+      _SPPerson.LOG.debug("adding " + object + " to cannotReceivePals relationship");
+    }
+    if (er.extensions.eof.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    	addToCannotReceivePals(object);
+    }
+    else {
+    	addObjectToBothSidesOfRelationshipWithKey(object, _SPPerson.CANNOT_RECEIVE_PALS_KEY);
+    }
+  }
+
+  public void removeFromCannotReceivePalsRelationship(com.secretpal.model.SPNoNoPal object) {
+    if (_SPPerson.LOG.isDebugEnabled()) {
+      _SPPerson.LOG.debug("removing " + object + " from cannotReceivePals relationship");
+    }
+    if (er.extensions.eof.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    	removeFromCannotReceivePals(object);
+    }
+    else {
+    	removeObjectFromBothSidesOfRelationshipWithKey(object, _SPPerson.CANNOT_RECEIVE_PALS_KEY);
+    }
+  }
+
+  public com.secretpal.model.SPNoNoPal createCannotReceivePalsRelationship() {
+    EOClassDescription eoClassDesc = EOClassDescription.classDescriptionForEntityName( com.secretpal.model.SPNoNoPal.ENTITY_NAME );
+    EOEnterpriseObject eo = eoClassDesc.createInstanceWithEditingContext(editingContext(), null);
+    editingContext().insertObject(eo);
+    addObjectToBothSidesOfRelationshipWithKey(eo, _SPPerson.CANNOT_RECEIVE_PALS_KEY);
+    return (com.secretpal.model.SPNoNoPal) eo;
+  }
+
+  public void deleteCannotReceivePalsRelationship(com.secretpal.model.SPNoNoPal object) {
+    removeObjectFromBothSidesOfRelationshipWithKey(object, _SPPerson.CANNOT_RECEIVE_PALS_KEY);
+    editingContext().deleteObject(object);
+  }
+
+  public void deleteAllCannotReceivePalsRelationships() {
+    Enumeration<com.secretpal.model.SPNoNoPal> objects = cannotReceivePals().immutableClone().objectEnumerator();
+    while (objects.hasMoreElements()) {
+      deleteCannotReceivePalsRelationship(objects.nextElement());
+    }
+  }
+
   public NSArray<com.secretpal.model.SPSecretPal> giverSecretPals() {
     return (NSArray<com.secretpal.model.SPSecretPal>)storedValueForKey(_SPPerson.GIVER_SECRET_PALS_KEY);
   }

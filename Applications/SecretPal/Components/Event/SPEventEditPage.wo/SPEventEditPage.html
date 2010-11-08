@@ -27,6 +27,39 @@
 		</div>
 	</div>
 
+	<div class="panel" style="margin-top: 2em">
+		<div class="title">
+			No-No Receipients
+		</div>
+		<div class="contents">
+			<ul>
+			<wo:WORepetition list="$event.group.memberships.@sortAsc.personName" item="$membership">
+				<li>
+					<wo:form>
+					<h3>
+					<wo:str value="$membership.personName"/> cannot give to
+					<wo:WOPopUpButton list="$noNoPersonPossibilities.@sortAsc.name" item="$noNoPerson" selection="$selectedNoNoPerson" displayString="$noNoPersonMembership.personName" noSelectionString="-- Pick a Person --"/>
+					<wo:WOSubmitButton action="$addNoNoPal" value="Add" class="mini"/>
+					</h3>
+					
+					<wo:if condition="$noNoPals.count">
+						<table>
+							<wo:WORepetition list="$noNoPals" item="$noNoPal">
+								<tr>
+									<td class="actions"><wo:WOHyperlink action="$removeNoNoPal" onclick="return confirm('Are you sure you want to remove this No-No recipient?')"><wo:WOImage filename="btn_del.png"/></wo:WOHyperlink></td>
+									<td><wo:str value="$noNoPal.receiverMembership.personName"/></td>
+								</tr>
+							</wo:WORepetition>
+						</table>
+					</wo:if>
+					
+					</wo:form>
+				</li>
+			</wo:WORepetition>
+			</ul>
+		</div>
+	</div>
+
 	<div class="separatorSections advanced" style="margin-top: 2em">
 		<div class="section">
 			<wo:AjaxExpansion linkClass="toggle" insertion="Effect.blind" insertionDuration="0.05" string="Assign Secret Pals" initiallyExpanded="$event.hasNotAssignedSecretPals">

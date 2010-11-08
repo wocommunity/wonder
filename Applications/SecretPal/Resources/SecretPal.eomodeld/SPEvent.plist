@@ -13,7 +13,7 @@
     ); 
     attributesUsedForLocking = (active, description, groupID, id, name); 
     className = "com.secretpal.model.SPEvent"; 
-    classProperties = (active, description, group, name, secretPals); 
+    classProperties = (active, description, group, name, noNoPals, secretPals); 
     externalName = SPEvent; 
     fetchSpecificationDictionary = {}; 
     name = SPEvent; 
@@ -26,6 +26,14 @@
             joinSemantic = EOInnerJoin; 
             joins = ({destinationAttribute = id; sourceAttribute = groupID; }); 
             name = group; 
+        }, 
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = SPNoNoPal; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = eventID; sourceAttribute = id; }); 
+            name = noNoPals; 
         }, 
         {
             deleteRule = EODeleteRuleCascade; 

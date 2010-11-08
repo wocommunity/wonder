@@ -28,6 +28,8 @@
     classProperties = (
         admin, 
         avatar, 
+        cannotGivePals, 
+        cannotReceivePals, 
         emailAddress, 
         emailDeliveryFailure, 
         giverSecretPals, 
@@ -51,6 +53,22 @@
             joinSemantic = EOInnerJoin; 
             joins = ({destinationAttribute = id; sourceAttribute = avatarID; }); 
             name = avatar; 
+        }, 
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = SPNoNoPal; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = giverID; sourceAttribute = id; }); 
+            name = cannotGivePals; 
+        }, 
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = SPNoNoPal; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = receiverID; sourceAttribute = id; }); 
+            name = cannotReceivePals; 
         }, 
         {
             deleteRule = EODeleteRuleCascade; 

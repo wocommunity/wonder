@@ -27,49 +27,34 @@ public class SPEvent extends _SPEvent {
 		// written to NOT do this, which is why it's so weird and non-deterministic.
 		deleteAllSecretPalsRelationships();
 
-		NSArray<SPSecretPal> secretPals = secretPals();
-		NSArray<SPPerson> existingGivers = SPSecretPal.GIVER.arrayValueInObject(secretPals);
-		NSArray<SPPerson> existingReceivers = SPSecretPal.RECEIVER.arrayValueInObject(secretPals);
+    NSArray<SPPerson> allPeople = SPMembership.PERSON.arrayValueInObject(group().memberships());
+		NSArray<SPPerson> eligibleGivers = _eligibleGivers(allPeople);
+		NSMutableArray<SPPerson> consumedReceivers = new NSMutableArray<SPPerson>();
 		
-		NSMutableArray<SPPerson> availableGivers = SPMembership.PERSON.arrayValueInObject(group().memberships()).mutableClone();
-		NSMutableArray<SPPerson> availableReceivers = availableGivers.mutableClone();
-		availableGivers.removeObjectsInArray(existingGivers);
-		availableReceivers.removeObjectsInArray(existingReceivers);
-		
-		log.info(availableGivers.count() + " givers");
-		log.info(availableReceivers.count() + " receivers");
+		log.info(eligibleGivers.count() + " eligible givers out of " + allPeople.count() + " people");
 
+    SecureRandom random = new SecureRandom();
 		long a = System.currentTimeMillis();
 		int numberOfAttempts = 0;
 		int maxNumberOfAttempts = 100;
 		boolean doneWithSecretPals = false;
 		while (!doneWithSecretPals && numberOfAttempts < maxNumberOfAttempts) {
-			log.info("attempt #" + numberOfAttempts);
+			log.info("attempt #" + numberOfAttempts + " of " + maxNumberOfAttempts);
 			EOEditingContext nestedEditingContext = ERXEC.newEditingContext(editingContext());
 			nestedEditingContext.lock();
 			SPEvent localEvent = localInstanceIn(nestedEditingContext);
 			try {
-				SecureRandom random = new SecureRandom();
-				for (SPPerson selectedGiver : availableGivers) {
-					log.info(selectedGiver.name());
-					boolean doneWithSecretPal = false;
-					while (!doneWithSecretPal) {
-						int selectedGiverNum = Math.abs(random.nextInt()) % availableReceivers.count();
-						SPPerson selectedReceiver = availableReceivers.objectAtIndex(selectedGiverNum);
-						if (ERXEOControlUtilities.eoEquals(selectedGiver, selectedReceiver)) {
-							log.info("   can't assign " + selectedGiver.name() + " to self");
-							if (availableReceivers.count() == 1) {
-								throw new IllegalStateException("Try again");
-							}
-						}
-						else {
-							log.info("   " + selectedGiver.name() + "=>" + selectedReceiver.name());
-							SPSecretPal.createSPSecretPal(nestedEditingContext, localEvent, selectedGiver.localInstanceIn(nestedEditingContext), selectedReceiver.localInstanceIn(nestedEditingContext));
-							availableReceivers.removeObject(selectedReceiver);
-							doneWithSecretPal = true;
-						}
-					}
-				}
+			  for (SPPerson selectedGiver : eligibleGivers) {
+	        NSArray<SPPerson> eligibleReceivers = _eligibleReceiversForPerson(selectedGiver, allPeople, consumedReceivers);
+	        if (eligibleReceivers.count() == 0) {
+            throw new IllegalStateException("  Try again -- no receivers for " + selectedGiver.name());
+	        }
+          int selectedReceiverNum = Math.abs(random.nextInt()) % eligibleReceivers.count();
+          SPPerson selectedReceiver = eligibleReceivers.objectAtIndex(selectedReceiverNum);
+          log.info("   " + selectedGiver.name() + "=>" + selectedReceiver.name() + ", " +selectedGiver + "," + selectedReceiver);
+          SPSecretPal.createSPSecretPal(nestedEditingContext, localEvent, selectedGiver.localInstanceIn(nestedEditingContext), selectedReceiver.localInstanceIn(nestedEditingContext));
+          consumedReceivers.addObject(selectedReceiver);
+			  }
 				nestedEditingContext.saveChanges();
 				doneWithSecretPals = true;
 			}
@@ -90,4 +75,48 @@ public class SPEvent extends _SPEvent {
 	public boolean canEdit(SPPerson currentPerson) {
 		return currentPerson.admin().booleanValue() || ERXEOControlUtilities.eoEquals(group().owner(), currentPerson);
 	}
+
+	public NSArray<SPPerson> _eligibleGivers(NSArray<SPPerson> allPeople) {
+    NSMutableArray<SPPerson> eligibleGivers = new NSMutableArray<SPPerson>();
+    for (SPPerson possibleGiver : allPeople) {
+      NSArray<SPPerson> noNoPeople = SPNoNoPal.RECEIVER.arrayValueInObject(noNoPalsForPerson(possibleGiver));
+      // If someone has NO possible receivers right at the start, just leave them out ... This is to support
+      // defining babies that can't buy for anyone
+      if (noNoPeople.count() != allPeople.count() - 1) {
+        eligibleGivers.addObject(possibleGiver);
+      }
+    }
+    return eligibleGivers;
+	}
+	
+	public NSArray<SPPerson> _eligibleReceiversForPerson(SPPerson giver, NSArray<SPPerson> allPeople, NSArray<SPPerson> consumedReceivers) {
+	  NSMutableArray<SPPerson> eligibleReceivers = new NSMutableArray<SPPerson>();
+    NSArray<SPPerson> noNoPeople = SPNoNoPal.RECEIVER.arrayValueInObject(noNoPalsForPerson(giver));
+	  for (SPPerson possibleReceiver : allPeople) {
+	    if (!giver.equals(possibleReceiver) && !consumedReceivers.containsObject(possibleReceiver) && !noNoPeople.containsObject(possibleReceiver)) {
+	      eligibleReceivers.addObject(possibleReceiver);
+	    }
+	  }
+	  return eligibleReceivers;
+	}
+	
+  public NSArray<SPSecretPal> secretPalsForPerson(SPPerson person) {
+    return SPSecretPal.GIVER.is(person).filtered(secretPals());
+  }
+  
+  public NSArray<SPNoNoPal> noNoPalsForPerson(SPPerson person) {
+    return SPNoNoPal.GIVER.is(person).filtered(noNoPals());
+  }
+  
+  public NSArray<SPPerson> noNoPersonPossibilitiesForPerson(SPPerson person) {
+    NSMutableArray<SPPerson> noNoPalPossibilities = new NSMutableArray<SPPerson>();
+    NSArray<SPPerson> noNoPals = SPNoNoPal.RECEIVER.arrayValueInObject(noNoPalsForPerson(person));
+    for (SPMembership membership : group().memberships()) {
+      if (!membership.person().equals(person) && !noNoPals.containsObject(membership.person())) {
+        noNoPalPossibilities.addObject(membership.person());
+      }
+    }
+    return noNoPalPossibilities;
+  }
+
 }

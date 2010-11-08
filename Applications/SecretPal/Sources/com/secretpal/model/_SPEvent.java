@@ -21,6 +21,7 @@ public abstract class _SPEvent extends  ERXGenericRecord {
   public static final ERXKey<String> NAME = new ERXKey<String>("name");
   // Relationship Keys
   public static final ERXKey<com.secretpal.model.SPGroup> GROUP = new ERXKey<com.secretpal.model.SPGroup>("group");
+  public static final ERXKey<com.secretpal.model.SPNoNoPal> NO_NO_PALS = new ERXKey<com.secretpal.model.SPNoNoPal>("noNoPals");
   public static final ERXKey<com.secretpal.model.SPSecretPal> SECRET_PALS = new ERXKey<com.secretpal.model.SPSecretPal>("secretPals");
 
   // Attributes
@@ -29,6 +30,7 @@ public abstract class _SPEvent extends  ERXGenericRecord {
   public static final String NAME_KEY = NAME.key();
   // Relationships
   public static final String GROUP_KEY = GROUP.key();
+  public static final String NO_NO_PALS_KEY = NO_NO_PALS.key();
   public static final String SECRET_PALS_KEY = SECRET_PALS.key();
 
   private static Logger LOG = Logger.getLogger(_SPEvent.class);
@@ -99,6 +101,100 @@ public abstract class _SPEvent extends  ERXGenericRecord {
     }
   }
   
+  public NSArray<com.secretpal.model.SPNoNoPal> noNoPals() {
+    return (NSArray<com.secretpal.model.SPNoNoPal>)storedValueForKey(_SPEvent.NO_NO_PALS_KEY);
+  }
+
+  public NSArray<com.secretpal.model.SPNoNoPal> noNoPals(EOQualifier qualifier) {
+    return noNoPals(qualifier, null, false);
+  }
+
+  public NSArray<com.secretpal.model.SPNoNoPal> noNoPals(EOQualifier qualifier, boolean fetch) {
+    return noNoPals(qualifier, null, fetch);
+  }
+
+  public NSArray<com.secretpal.model.SPNoNoPal> noNoPals(EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings, boolean fetch) {
+    NSArray<com.secretpal.model.SPNoNoPal> results;
+    if (fetch) {
+      EOQualifier fullQualifier;
+      EOQualifier inverseQualifier = new EOKeyValueQualifier(com.secretpal.model.SPNoNoPal.EVENT_KEY, EOQualifier.QualifierOperatorEqual, this);
+    	
+      if (qualifier == null) {
+        fullQualifier = inverseQualifier;
+      }
+      else {
+        NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
+        qualifiers.addObject(qualifier);
+        qualifiers.addObject(inverseQualifier);
+        fullQualifier = new EOAndQualifier(qualifiers);
+      }
+
+      results = com.secretpal.model.SPNoNoPal.fetchSPNoNoPals(editingContext(), fullQualifier, sortOrderings);
+    }
+    else {
+      results = noNoPals();
+      if (qualifier != null) {
+        results = (NSArray<com.secretpal.model.SPNoNoPal>)EOQualifier.filteredArrayWithQualifier(results, qualifier);
+      }
+      if (sortOrderings != null) {
+        results = (NSArray<com.secretpal.model.SPNoNoPal>)EOSortOrdering.sortedArrayUsingKeyOrderArray(results, sortOrderings);
+      }
+    }
+    return results;
+  }
+  
+  public void addToNoNoPals(com.secretpal.model.SPNoNoPal object) {
+    includeObjectIntoPropertyWithKey(object, _SPEvent.NO_NO_PALS_KEY);
+  }
+
+  public void removeFromNoNoPals(com.secretpal.model.SPNoNoPal object) {
+    excludeObjectFromPropertyWithKey(object, _SPEvent.NO_NO_PALS_KEY);
+  }
+
+  public void addToNoNoPalsRelationship(com.secretpal.model.SPNoNoPal object) {
+    if (_SPEvent.LOG.isDebugEnabled()) {
+      _SPEvent.LOG.debug("adding " + object + " to noNoPals relationship");
+    }
+    if (er.extensions.eof.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    	addToNoNoPals(object);
+    }
+    else {
+    	addObjectToBothSidesOfRelationshipWithKey(object, _SPEvent.NO_NO_PALS_KEY);
+    }
+  }
+
+  public void removeFromNoNoPalsRelationship(com.secretpal.model.SPNoNoPal object) {
+    if (_SPEvent.LOG.isDebugEnabled()) {
+      _SPEvent.LOG.debug("removing " + object + " from noNoPals relationship");
+    }
+    if (er.extensions.eof.ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships()) {
+    	removeFromNoNoPals(object);
+    }
+    else {
+    	removeObjectFromBothSidesOfRelationshipWithKey(object, _SPEvent.NO_NO_PALS_KEY);
+    }
+  }
+
+  public com.secretpal.model.SPNoNoPal createNoNoPalsRelationship() {
+    EOClassDescription eoClassDesc = EOClassDescription.classDescriptionForEntityName( com.secretpal.model.SPNoNoPal.ENTITY_NAME );
+    EOEnterpriseObject eo = eoClassDesc.createInstanceWithEditingContext(editingContext(), null);
+    editingContext().insertObject(eo);
+    addObjectToBothSidesOfRelationshipWithKey(eo, _SPEvent.NO_NO_PALS_KEY);
+    return (com.secretpal.model.SPNoNoPal) eo;
+  }
+
+  public void deleteNoNoPalsRelationship(com.secretpal.model.SPNoNoPal object) {
+    removeObjectFromBothSidesOfRelationshipWithKey(object, _SPEvent.NO_NO_PALS_KEY);
+    editingContext().deleteObject(object);
+  }
+
+  public void deleteAllNoNoPalsRelationships() {
+    Enumeration<com.secretpal.model.SPNoNoPal> objects = noNoPals().immutableClone().objectEnumerator();
+    while (objects.hasMoreElements()) {
+      deleteNoNoPalsRelationship(objects.nextElement());
+    }
+  }
+
   public NSArray<com.secretpal.model.SPSecretPal> secretPals() {
     return (NSArray<com.secretpal.model.SPSecretPal>)storedValueForKey(_SPEvent.SECRET_PALS_KEY);
   }

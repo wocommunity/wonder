@@ -33,10 +33,6 @@ public class SPPerson extends _SPPerson {
 		return password();
 	}
 	
-	public NSArray<SPSecretPal> secretPalsForEvent(SPEvent event) {
-		return SPSecretPal.GIVER.is(this).filtered(event.secretPals());
-	}
-
 	public NSArray<SPWish> desires() {
 		return wishes(SPWish.SUGGESTED_BY.is(SPWish.SUGGESTED_FOR));
 	}
