@@ -36,6 +36,7 @@ public class ERXMigrationTable {
 	private ERXMigrationDatabase _database;
 	private NSMutableArray<ERXMigrationColumn> _columns;
 	private NSMutableArray<ERXMigrationIndex> _indexes;
+	private NSMutableArray<ERXMigrationForeignKey> _foreignKeys;
 	private String _name;
 	private boolean _new;
 
@@ -49,6 +50,7 @@ public class ERXMigrationTable {
 		_database = database;
 		_columns = new NSMutableArray<ERXMigrationColumn>();
 		_indexes = new NSMutableArray<ERXMigrationIndex>();
+		_foreignKeys = new NSMutableArray<ERXMigrationForeignKey>();
 		_name = name;
 		_new = true;
 	}
@@ -177,24 +179,35 @@ public class ERXMigrationTable {
 	 * Returns a simple single-attribute-mapping EORelationship between two columns.  This
 	 * is called by the foreign key generator.
 	 *  
-	 * @param sourceColumn the source attribute of the relationship 
-	 * @param destinationColumn the destination attribute of the relationship
+	 * @param sourceColumns the source attributes of the relationship 
+	 * @param destinationColumns the destination attributes of the relationship
 	 * @return the EORelationship that joins the two given columns
 	 */
-	public EORelationship _newRelationship(ERXMigrationColumn sourceColumn, ERXMigrationColumn destinationColumn) {
-		EOAttribute sourceAttribute = sourceColumn._newAttribute();
-		EOEntity entity = sourceAttribute.entity();
-
-		EOAttribute destinationAttribute = destinationColumn._newAttribute();
-		EOEntity destinationEntity = destinationAttribute.entity();
-		destinationEntity.setPrimaryKeyAttributes(new NSArray<EOAttribute>(destinationAttribute));
+	public EORelationship _newRelationship(ERXMigrationColumn[] sourceColumns, ERXMigrationColumn[] destinationColumns) {
+		NSMutableArray<EOAttribute> sourceAttributes = new NSMutableArray<EOAttribute>();
+		NSMutableArray<EOAttribute> destinationAttributes = new NSMutableArray<EOAttribute>();
+		
+		if (sourceColumns.length != destinationColumns.length) {
+			throw new IllegalArgumentException("The number of source columns must match the number of destination columns.");
+		}
+		EOEntity sourceEntity = sourceColumns[0].table()._blankEntity();
+		EOEntity destinationEntity = destinationColumns[0].table()._blankEntity();
+		for (int columnNum = 0; columnNum < sourceColumns.length; columnNum ++) {
+			EOAttribute sourceAttribute = sourceColumns[columnNum]._newAttribute(sourceEntity);
+			sourceAttributes.addObject(sourceAttribute);
+			EOAttribute destinationAttribute = destinationColumns[columnNum]._newAttribute(destinationEntity);
+			destinationAttributes.addObject(destinationAttribute);
+		}
+		destinationEntity.setPrimaryKeyAttributes(destinationAttributes);
 
 		EORelationship relationship = new EORelationship();
-		relationship.setName(sourceAttribute.name() + "_" + destinationAttribute.name());
-		relationship.setEntity(entity);
+		relationship.setName(sourceAttributes.objectAtIndex(0).name() + "_" + sourceAttributes.objectAtIndex(0).name());
+		relationship.setEntity(sourceEntity);
 		
-		EOJoin join = new EOJoin(sourceAttribute, destinationAttribute);
-		relationship.addJoin(join);
+		for (int attributeNum = 0; attributeNum < sourceAttributes.count(); attributeNum ++) {
+			EOJoin join = new EOJoin(sourceAttributes.objectAtIndex(attributeNum), destinationAttributes.objectAtIndex(attributeNum));
+			relationship.addJoin(join);
+		}
 		
 		return relationship;
 	}
@@ -855,11 +868,8 @@ public class ERXMigrationTable {
 			if (primaryKeys.count() > 0) {
 				setPrimaryKey(true, primaryKeys.toArray(new ERXMigrationColumn[primaryKeys.count()]));
 			}
-			for (ERXMigrationColumn column : _columns) {
-				ERXMigrationColumn foreignKeyDestination = column.foreignKeyDestination();
-				if (foreignKeyDestination != null) {
-					addForeignKey(true, column, foreignKeyDestination);
-				}
+			for (ERXMigrationForeignKey foreignKey : _foreignKeys) {
+				addForeignKey(true, foreignKey.sourceColumns(), foreignKey.destinationColumns());
 			}
 			for (ERXMigrationIndex index : _indexes) {
 				addIndex(true, index);
@@ -1186,16 +1196,43 @@ public class ERXMigrationTable {
 			ERXJDBCUtilities.executeUpdateScript(_database.adaptorChannel(), ERXMigrationDatabase._stringsForExpressions(_setPrimaryKeyExpressions(columns)));
 		}
 	}
+	
+	/**
+	 * Adds a pending foreign key to this table.
+	 * 
+	 * @param foreignKey the new foreign key
+	 */
+	public void _addForeignKey(ERXMigrationForeignKey foreignKey) {
+		_foreignKeys.addObject(foreignKey);
+	}
 
 	/**
-	 * Returns an array of EOSQLExpressions for adding a foreign key constraint to this table (only supports single attribute FK's right now).
+	 * Returns an array of EOSQLExpressions for adding a foreign key constraint to this table.
 	 * 
+	 * @param sourceColumn the source column of the relationship
+	 * @param destinationColumn the destination columns of the relationship (should be the PK of the destination table)
 	 * @return an array of EOSQLExpressions for adding a foreign key constraint to this table
 	 */
 	@SuppressWarnings("unchecked")
 	public NSArray<EOSQLExpression> _addForeignKeyExpressions(ERXMigrationColumn sourceColumn, ERXMigrationColumn destinationColumn) {
 		EOSchemaGeneration schemaGeneration = _database.synchronizationFactory();
-		NSArray<EOSQLExpression> expressions = schemaGeneration.foreignKeyConstraintStatementsForRelationship(_newRelationship(sourceColumn, destinationColumn));
+		NSArray<EOSQLExpression> expressions = schemaGeneration.foreignKeyConstraintStatementsForRelationship(_newRelationship(new ERXMigrationColumn[] { sourceColumn }, new ERXMigrationColumn[] { destinationColumn }));
+		ERXMigrationDatabase._ensureNotEmpty(expressions, "add foreign key", false);
+		return expressions;
+	}
+
+	/**
+	 * Returns an array of EOSQLExpressions for adding a foreign key constraint to this table. The source and destination
+	 * arrays should be ordered so that corresponding indexes in the source and destination arrays match up.
+	 * 
+	 * @param sourceColumns the source columns of the relationship
+	 * @param destinationColumns the destination columns of the relationship (should be the PKs of the destination table)
+	 * @return an array of EOSQLExpressions for adding a foreign key constraint to this table
+	 */
+	@SuppressWarnings("unchecked")
+	public NSArray<EOSQLExpression> _addForeignKeyExpressions(ERXMigrationColumn[] sourceColumns, ERXMigrationColumn[] destinationColumns) {
+		EOSchemaGeneration schemaGeneration = _database.synchronizationFactory();
+		NSArray<EOSQLExpression> expressions = schemaGeneration.foreignKeyConstraintStatementsForRelationship(_newRelationship(sourceColumns, destinationColumns));
 		ERXMigrationDatabase._ensureNotEmpty(expressions, "add foreign key", false);
 		return expressions;
 	}
@@ -1213,7 +1250,7 @@ public class ERXMigrationTable {
 	}
 
 	/**
-	 * Executes the SQL operations to add this foreign key constraint (only supports single attribute FK's right now).
+	 * Executes the SQL operations to add this foreign key constraint.
 	 * 
 	 * @param sourceColumnName the source column name of the relationship
 	 * @param destinationColumn the destination column of the relationship (should be the PK of the destination table)
@@ -1224,7 +1261,7 @@ public class ERXMigrationTable {
 	}
 
 	/**
-	 * Executes the SQL operations to add this foreign key constraint (only supports single attribute FK's right now).
+	 * Executes the SQL operations to add this foreign key constraint.
 	 * 
 	 * @param sourceColumn the source column of the relationship
 	 * @param destinationColumn the destination column of the relationship (should be the PK of the destination table)
@@ -1235,19 +1272,45 @@ public class ERXMigrationTable {
 	}
 
 	/**
-	 * Executes the SQL operations to add this foreign key constraint (only supports single attribute FK's right now).
+	 * Executes the SQL operations to add this foreign key constraint.
 	 * 
+	 * @param sourceColumns the source columns of the relationship
+	 * @param destinationColumns the destination columns of the relationship (should be the PKs of the destination table)
+	 * @throws SQLException if the add fails
+	 */
+	public void addForeignKey(ERXMigrationColumn[] sourceColumns, ERXMigrationColumn[] destinationColumns) throws SQLException {
+		addForeignKey(!_new, sourceColumns, destinationColumns);
+	}
+
+	/**
+	 * Executes the SQL operations to add this foreign key constraint.
+	 * 
+	 * @param create if create is true, execute this now (vs just flag the ERXMigrationColumn)
 	 * @param sourceColumn the source column of the relationship
 	 * @param destinationColumn the destination column of the relationship (should be the PK of the destination table)
 	 * @throws SQLException if the add fails
 	 */
 	public void addForeignKey(boolean create, ERXMigrationColumn sourceColumn, ERXMigrationColumn destinationColumn) throws SQLException {
-		sourceColumn._setForeignKeyDestination(destinationColumn);
+		addForeignKey(create, new ERXMigrationColumn[] { sourceColumn }, new ERXMigrationColumn[] { destinationColumn });
+	}
+
+	/**
+	 * Executes the SQL operations to add this foreign key constraint.
+	 * 
+	 * @param create if create is true, execute this now (vs just flag the ERXMigrationColumn)
+	 * @param sourceColumns the source columns of the relationship
+	 * @param destinationColumns the destination columns of the relationship (should be the PKs of the destination table)
+	 * @throws SQLException if the add fails
+	 */
+	public void addForeignKey(boolean create, ERXMigrationColumn[] sourceColumns, ERXMigrationColumn[] destinationColumns) throws SQLException {
 		if (create) {
-			NSArray<EOSQLExpression> expressions = _addForeignKeyExpressions(sourceColumn, destinationColumn);
+			NSArray<EOSQLExpression> expressions = _addForeignKeyExpressions(sourceColumns, destinationColumns);
 			if (expressions != null) {
 				ERXJDBCUtilities.executeUpdateScript(_database.adaptorChannel(), ERXMigrationDatabase._stringsForExpressions(expressions));
 			}
+		}
+		else {
+			_addForeignKey(new ERXMigrationForeignKey(sourceColumns, destinationColumns));
 		}
 	}
 
