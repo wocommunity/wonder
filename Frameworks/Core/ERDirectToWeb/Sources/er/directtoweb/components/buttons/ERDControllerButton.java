@@ -89,7 +89,7 @@ public class ERDControllerButton extends ERDActionButton implements ERDBranchInt
     protected ERDBranchDelegateInterface branchDelegate;
  
     /**
-        * Cover method for getting the choosen branch.
+     * Cover method for getting the choosen branch.
      * @return user choosen branch.
      */
     public NSDictionary branch() {
@@ -97,8 +97,8 @@ public class ERDControllerButton extends ERDActionButton implements ERDBranchInt
     }
 
     /**
-     * Sets the user choosen branch.
-     * @param value branch choosen by user.
+     * Sets the user chosen branch.
+     * @param value branch chosen by user.
      */
     public void setBranch(NSDictionary value) {
         branch = value;
@@ -120,7 +120,7 @@ public class ERDControllerButton extends ERDActionButton implements ERDBranchInt
 
     /**
      * Calculates the branch choices for the current
-     * poage. This method is just a cover for calling
+     * page. This method is just a cover for calling
      * the method <code>branchChoicesForContext</code>
      * on the current {@link ERDBranchDelegate ERDBranchDelegate}.
      * @return array of branch choices
@@ -136,7 +136,7 @@ public class ERDControllerButton extends ERDActionButton implements ERDBranchInt
     }
 
     /**
-        * Determines if this message page should display branch choices.
+     * Determines if this message page should display branch choices.
      * @return if the current delegate supports branch choices.
      */
     public boolean hasBranchChoices() {
