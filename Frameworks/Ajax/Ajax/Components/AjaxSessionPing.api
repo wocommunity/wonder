@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+    <wo class="AjaxSessionPing" wocomponentcontent="false">    <binding name="frequency"/>
+        <binding defaults="Boolean" name="keepSessionAlive"/>
+        <binding name="parameters"/>
+        <binding name="onFailure"/>
+        <binding name="asynchronous"/>
+        <binding name="evalScripts"/>
+        <binding name="method"/>
+    </wo>
+</wodefinitions>
