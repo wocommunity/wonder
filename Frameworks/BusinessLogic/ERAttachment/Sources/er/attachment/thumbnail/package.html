@@ -1,0 +1,62 @@
+<html>
+<head>
+</head>
+<body>
+<style>
+p {
+	color: rgb(80, 80, 80);
+}
+
+h1,h2,h3,h4 {
+	font-family: Helvetica;
+	margin-top: 20px;
+}
+
+dl dt {
+	font-family: Helvetica;
+	font-weight: bold;
+}
+
+dl dd {
+	margin-bottom: 10px;
+}
+
+code.block {
+	display: block;
+	margin-left: 20px;
+	margin-right: 20px;
+	white-space: pre;
+}
+
+</style>
+
+<h1>ERAttachment Thumbnail (Image Processing Integration)</h1>
+
+<h2>Overview</h2>
+<p>
+This package provides classes that wrap or integrate a number of popular image processing libraries. ERAttachment will just try and pick a suitable default, however you can specifically determine which image processing library is used with the property <code>er.attachment.thumbnail.imageProcessor</code>. Supported values for this property and corresponding libraries include:
+</p>
+
+<dl>
+	<dt>sips</dt>
+		<dd>Commandline image processor available on Mac OS X</dd>
+	<dt>imageio</dt>
+		<dd>Mac OS X ImageIO and CoreImage libaries. Very fast.</dd>
+	<dt>imagemagick</dt>
+		<dd>The popular open source <a href="http://www.imagemagick.org/">ImageMagick</a> library. Probably the best option if you app is being deployed on a platform other than Mac OS X.</dd>
+	<dt>java</dt>
+		<dd>Java 2D. Probably the most compatible but the slowest option.</dd>
+</dl>
+
+<h2>Usage</h2>
+<p>You can use these utilities directly yourself to resize image files:</p>
+<pre>
+	ERImageProcessor.imageProcessor().thumbnail( .... );
+
+</pre>
+
+
+
+
+</body>
+</html>
