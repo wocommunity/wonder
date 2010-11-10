@@ -6,6 +6,18 @@ import java.io.File;
  * A class to encapsulate a file reference and related information in the
  * context of web application usage.
  * 
+ * Very commonly, you want a user friendly name for a download file or you want
+ * to grab the filename of a file that the client uploaded, yet you might
+ * have the file data streamed to or from a temporary file with a long meaningless unique name in
+ * temp directory. This class just makes it convenient to have a real file, a client upload or download filename
+ * and a mimetype bundled together in one class.
+ * 
+ * Useful for custom components that wrap FileUpload allowing you to bind a single ERXFileContext instead
+ * of 3 bindings. You can bind the attributes of this class to any of the standard file upload WOComponent bindings
+ * that match the 3 attributes encapsulated by this class.
+ * 
+ * Useful for passing around file download information as a single object rather than fiddling with 3 pieces of information.
+ * 
  * @author kieran
  * 
  */
@@ -16,6 +28,12 @@ public class ERXFileContext {
 
 	public ERXFileContext(File file) {
 		_file = file;
+	}
+	
+	public ERXFileContext(File file, String clientFileName, String mimeType) {
+		_file = file;
+		_clientFileName = clientFileName;
+		_mimeType = mimeType;
 	}
 
 	public ERXFileContext(String path) {
