@@ -141,6 +141,20 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
     	}
     }
 
+    public static void setAllD2wDebuggingEnabled(WOSession s, boolean enabled) {
+        setD2wDebuggingEnabled(s, enabled);
+        setD2wComponentNameDebuggingEnabled(s, enabled);
+        setD2wPropertyKeyDebuggingEnabled(s, enabled);
+    }
+
+    public static boolean allD2wDebuggingEnabled(WOSession s) {
+        return d2wDebuggingEnabled(s) && d2wComponentNameDebuggingEnabled(s) && d2wPropertyKeyDebuggingEnabled(s);
+    }
+
+    public static boolean anyD2wDebuggingEnabled(WOSession s) {
+        return d2wDebuggingEnabled(s) || d2wComponentNameDebuggingEnabled(s) || d2wPropertyKeyDebuggingEnabled(s);
+    }
+
     public static void setD2wDebuggingEnabled(WOSession s, boolean enabled) {
         ERXExtensions.setBooleanFlagOnSessionForKey(s, D2WDEBUGGING_ENABLED_KEY, enabled);
         if (!enabled) {
