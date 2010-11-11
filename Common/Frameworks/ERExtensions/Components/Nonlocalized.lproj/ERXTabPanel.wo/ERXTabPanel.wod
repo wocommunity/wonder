@@ -236,3 +236,7 @@ td2: WOGenericContainer {
    bgcolor = ^borderColor;
    width = 1;
 }
+
+Wrapper: ERXUniquingWrapper {
+	id = selectedTabIdentifier;
+}
