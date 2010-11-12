@@ -18,7 +18,6 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.appserver.WOSession;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.D2WModel;
 import com.webobjects.directtoweb.D2WPage;
@@ -27,18 +26,12 @@ import com.webobjects.directtoweb.NextPageDelegate;
 import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
-import com.webobjects.eocontrol.EOKeyValueQualifier;
-import com.webobjects.eocontrol.EOQualifier;
-import com.webobjects.eocontrol.EOAndQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
-import com.webobjects.foundation.NSNotification;
-import com.webobjects.foundation.NSNotificationCenter;
-import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestamp;
 
 import er.directtoweb.ERD2WContainer;
@@ -50,12 +43,9 @@ import er.directtoweb.delegates.ERDBranchInterface;
 import er.directtoweb.interfaces.ERDUserInfoInterface;
 import er.extensions.ERXExtensions;
 import er.extensions.appserver.ERXComponentActionRedirector;
-import er.extensions.appserver.ERXSession;
 import er.extensions.components.ERXClickToOpenSupport;
 import er.extensions.components.ERXComponentUtilities;
-import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXGuardedObjectInterface;
-
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
@@ -147,6 +137,10 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         public static final String sectionsContents = "sectionsContents";
 
         public static final String tabKey = "tabKey";
+
+        public static final String tabIndex = "tabIndex";
+        
+        public static final String tabCount = "tabCount";
 
         public static final String displayNameForTabKey = "displayNameForTabKey";
 
@@ -875,9 +869,17 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     public void setCurrentTab(ERD2WContainer value) {
         _currentTab = value;
         if (value != null && value.name != null && !value.name.equals("")) {
+        	NSArray<ERD2WContainer> tabs = tabSectionsContents();
+        	Integer count = Integer.valueOf(tabs.count());
+        	Integer index = Integer.valueOf(tabs.indexOf(value));
             d2wContext().takeValueForKey(value.name, Keys.tabKey);
-            if (log.isDebugEnabled())
+            d2wContext().takeValueForKey(count, Keys.tabCount);
+            d2wContext().takeValueForKey(index, Keys.tabIndex);
+            if (log.isDebugEnabled()) {
                 log.debug("Setting tabKey: " + value.name);
+                log.debug("Setting tabCount: " + count);
+            	log.debug("Setting tabIndex: " + index);
+            }
         }
     }
 
