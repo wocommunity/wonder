@@ -179,7 +179,7 @@ public class ERXPatcher {
 					String valueString = _valueStringInContext(context);
 					if (valueString != null) {
 						// stringValue = ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(stringValue);
-						response._appendTagAttributeAndValue("value", valueString, true);
+						response._appendTagAttributeAndValue("value", valueString, escapeHTMLInContext(context));
 					}
 				}
 			}
@@ -228,7 +228,7 @@ public class ERXPatcher {
 					if (object != null) {
 						String string = object.toString();
 						// string = ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(string);
-						response._appendTagAttributeAndValue("value", string, true);
+						response._appendTagAttributeAndValue("value", string, escapeHTMLInContext(context));
 					}
 				}
 			}
