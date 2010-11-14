@@ -129,6 +129,10 @@ D2wContextInlineCancelMessage : WOString {
   escapeHTML = false;
 }
 
+ShowBanner: WOConditional {
+	condition = d2wContext.showBanner;
+}
+
 ShowCancelDialog : WOConditional {
   condition = showCancelDialog;
 }
