@@ -29,6 +29,9 @@ public class ERXTestSuite {
     suite.addTestSuite(er.extensions.eof.ERXEOAccessUtilitiesTest.class);
     suite.addTestSuite(er.extensions.eof.ERXEOControlUtilitiesTest.class);    
     suite.addTestSuite(er.extensions.eof.ERXKeyGlobalIDTest.class);
+    suite.addTestSuite(er.extensions.eof.ERXKeyTest.class);
+
+    suite.addTestSuite(er.extensions.eof.qualifiers.ERXToManyQualifierTest.class);
 
     suite.addTestSuite(er.extensions.foundation.ERXArrayUtilitiesTest.class);
     suite.addTestSuite(er.extensions.foundation.ERXMutableArrayTest.class);
@@ -38,19 +41,21 @@ public class ERXTestSuite {
     suite.addTestSuite(er.extensions.foundation.ERXValueUtilitiesTest.class);
 
     suite.addTestSuite(er.extensions.formatters.ERXOrdinalFormatterTests.class);
-
     suite.addTestSuite(er.extensions.formatters.ERXOrdinalDateFormatterTests.class);
     
     suite.addTestSuite(er.extensions.jdbc.MicrosoftSQLHelperTest.class);
+
+    suite.addTestSuite(er.memoryadaptor.ERMemoryAdaptorTest.class);
 
     suite.addTestSuite(er.extensions.appserver.ERXApplicationTest.class);
     
     suite.addTestSuite(er.directtoweb.ERD2WModelTest.class);
 
     suite.addTestSuite(er.erxtest.tests.ERXECLockingTestCase.class);
-
+    suite.addTestSuite(er.erxtest.tests.ERXEnterpriseObjectCacheTestCase.class);
     suite.addTestSuite(er.erxtest.tests.ERXGenericRecordUpdateInverseRelationshipsTest.class);
-    
+    //suite.addTestSuite(er.erxtest.tests.ERXObjectStoreCoordinatorSynchronizerTestCase.class);
+
     // TODO - How long is this supposed to take to run? Is it hanging?
     //
     //suite.addTestSuite(ERXExpiringCacheTestCase.class);
