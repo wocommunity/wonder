@@ -173,6 +173,13 @@ public class ERXKeyTest extends ERXTestCase {
 	}
 
 	@Test
+	public void testAppendString() {
+		assertEquals("one", new ERXKey(null).append("one").key());
+		assertEquals("one", new ERXKey("").append("one").key());
+		assertEquals("one.two", new ERXKey("one").append("two").key());
+	}
+	
+	@Test
 	public void testAvgNonNullERXKeyOfQ() {
 		BigDecimal d = Company.EMPLOYEES.dot(ERXKey.avgNonNull(Employee.BEST_SALES_TOTAL)).valueInObject(shinraInc);
 		assertTrue(BigDecimal.valueOf(7500L).compareTo(d) == 0);

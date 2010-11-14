@@ -1928,7 +1928,7 @@ public class ERXKey<T> {
 	 * @return the new appended key
 	 */
 	public <U> ERXKey<U> append(String key) {
-		return new ERXKey<U>(_key + NSKeyValueCodingAdditions.KeyPathSeparator + key);
+		return new ERXKey<U>((_key != null && _key.length() != 0) ? _key + NSKeyValueCodingAdditions.KeyPathSeparator + key : key);
 	}
 
 	/**
