@@ -8,10 +8,6 @@ public class AjaxRequestHandler extends WOComponentRequestHandler {
 	public static final String AjaxRequestHandlerKey = "ajax";
 	private static boolean _useAjaxRequestHandler = false;
 	
-	public static void setUseAjaxRequestHandler(boolean useAjaxRequestHandler) {
-		_useAjaxRequestHandler = useAjaxRequestHandler;
-	}
-	
 	public AjaxRequestHandler() {
 		AjaxRequestHandler.setUseAjaxRequestHandler(true);
 	}
@@ -22,6 +18,10 @@ public class AjaxRequestHandler extends WOComponentRequestHandler {
 		return response;
 	}
 	
+	public static void setUseAjaxRequestHandler(boolean useAjaxRequestHandler) {
+		_useAjaxRequestHandler = useAjaxRequestHandler;
+	}
+
 	public static boolean useAjaxRequestHandler() {
 		return _useAjaxRequestHandler;
 	}

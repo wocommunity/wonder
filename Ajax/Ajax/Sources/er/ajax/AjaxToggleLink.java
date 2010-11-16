@@ -27,7 +27,7 @@ public class AjaxToggleLink extends WOHTMLDynamicElement {
 	private WOAssociation _toggleID;
 	private WOAssociation _duration;
 
-	public AjaxToggleLink(String aName, NSDictionary associations, WOElement template) {
+	public AjaxToggleLink(String aName, NSDictionary/*<String, WOAssociation>*/ associations, WOElement template) {
 		super("a", AjaxToggleLink.processAssociations(associations), template);
 		_effect = (WOAssociation) _associations.removeObjectForKey("effect");
 		_duration = (WOAssociation) _associations.removeObjectForKey("duration");
@@ -85,7 +85,7 @@ public class AjaxToggleLink extends WOHTMLDynamicElement {
 		response.appendContentString(effect);
 		response.appendContentString("', ");
 		
-		NSMutableDictionary options = new NSMutableDictionary();
+		NSMutableDictionary/*<String, WOAssociation>*/ options = new NSMutableDictionary/*<String, WOAssociation>*/();
 		if (durationAssociation != null) {
 			options.setObjectForKey(durationAssociation, "duration");
 		}
@@ -94,8 +94,8 @@ public class AjaxToggleLink extends WOHTMLDynamicElement {
 		response.appendContentString(")\"");
 	}
 
-	protected static NSDictionary processAssociations(NSDictionary associations) {
-		NSMutableDictionary mutableAssociations = (NSMutableDictionary) associations;
+	protected static NSDictionary/*<String, WOAssociation>*/ processAssociations(NSDictionary/*<String, WOAssociation>*/ associations) {
+		NSMutableDictionary/*<String, WOAssociation>*/ mutableAssociations = (NSMutableDictionary/*<String, WOAssociation>*/) associations;
 		mutableAssociations.setObjectForKey(new WOConstantValueAssociation("javascript:void(0)"), "href");
 		return mutableAssociations;
 	}

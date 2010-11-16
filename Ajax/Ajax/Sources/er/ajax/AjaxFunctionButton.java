@@ -47,6 +47,10 @@ public class AjaxFunctionButton extends WOHTMLDynamicElement {
 			throw new WODynamicElementCreationException("If you bind 'updateContainerID', you must also bind 'action'.");
 		}
 	}
+	
+	protected boolean hasContent() {
+		return false;
+	}
 
 	private boolean isDisabled(WOContext context) {
 		return _disabled != null && _disabled.booleanValueInComponent(context.component());

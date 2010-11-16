@@ -1,0 +1,36 @@
+ElementID : WOString {
+	value = radioButtonGroupName;
+}
+
+ID : WOString {
+	value = id;
+}
+
+Options : AjaxOptions {
+	options = options;
+}
+
+SliderDiv : WOGenericContainer {
+	elementName = "div";
+	id = id;
+	class = ^class;
+	style = ^style;
+}
+
+RadioButton : WORadioButton {
+	name = radioButtonGroupName;
+	checked = checked;
+}
+
+DisplayString : WOString {
+	value = displayString;
+}
+
+SegmentRepetition : WORepetition {
+	list = ^list;
+	item = ^item;
+}
+
+Segment : WOGenericContainer {
+	elementName = "li";
+}

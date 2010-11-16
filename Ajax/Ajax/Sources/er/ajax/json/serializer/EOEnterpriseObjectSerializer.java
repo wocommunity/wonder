@@ -47,9 +47,9 @@ import er.extensions.foundation.ERXStringUtilities;
  * @author <a href="mailto:jfveillette@os.ca">Jean-François Veillette</a>
  */
 public class EOEnterpriseObjectSerializer extends AbstractSerializer {
-	protected static final NSMutableDictionary readableAttributeNames = new NSMutableDictionary();
-	protected static final NSMutableDictionary writableAttributeNames = new NSMutableDictionary();
-	protected static final NSMutableDictionary includedRelationshipNames = new NSMutableDictionary();
+	protected static final NSMutableDictionary/*<String, NSArray<String>>*/ readableAttributeNames = new NSMutableDictionary/*<String, NSArray<String>>*/();
+	protected static final NSMutableDictionary/*<String, NSArray<String>>*/ writableAttributeNames = new NSMutableDictionary/*<String, NSArray<String>>*/();
+	protected static final NSMutableDictionary/*<String, NSArray<String>>*/ includedRelationshipNames = new NSMutableDictionary/*<String, NSArray<String>>*/();
 
 	private static Class[] _serializableClasses = new Class[] { EOEnterpriseObject.class };
 
@@ -148,8 +148,8 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 					eo = null;
 				}
 				if (eo != null) {
-					NSArray attributeNames = _writableAttributeNames(eo);
-					NSArray relationshipNames = _includedRelationshipNames(eo);
+					NSArray/*<String>*/ attributeNames = _writableAttributeNames(eo);
+					NSArray/*<String>*/ relationshipNames = _includedRelationshipNames(eo);
 					for (Iterator iterator = eoDict.keys(); iterator.hasNext();) {
 						String key = (String) iterator.next();
 						if(!("javaClass".equals(key) || "gid".equals(key))) {
@@ -231,8 +231,8 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 				state.push(source, eoData, "eo");
 			}
 			EOClassDescription cd = source.classDescription();
-			NSArray attributeNames = _readableAttributeNames(source);
-			NSArray relationshipNames = _includedRelationshipNames(source);
+			NSArray/*<String>*/ attributeNames = _readableAttributeNames(source);
+			NSArray/*<String>*/ relationshipNames = _includedRelationshipNames(source);
 			
 			for (Enumeration e = attributeNames.objectEnumerator(); e.hasMoreElements();) {
 				String key = (String) e.nextElement();
@@ -302,7 +302,7 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 	 * Override to return the appropriate attribute names.
 	 * @param eo
 	 */
-	protected NSArray _readableAttributeNames(EOEnterpriseObject eo) {
+	protected NSArray/*<String>*/ _readableAttributeNames(EOEnterpriseObject eo) {
 		return EOEnterpriseObjectSerializer.readableAttributeNames(eo);
 	}
 
@@ -310,7 +310,7 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 	 * Override to return the appropriate attribute names.
 	 * @param eo
 	 */
-	protected NSArray _writableAttributeNames(EOEnterpriseObject eo) {
+	protected NSArray/*<String>*/ _writableAttributeNames(EOEnterpriseObject eo) {
 		return EOEnterpriseObjectSerializer.writableAttributeNames(eo);
 	}
 
@@ -318,7 +318,7 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 	 * Override to return the appropriate relationship names.
 	 * @param eo
 	 */
-	protected NSArray _includedRelationshipNames(EOEnterpriseObject eo) {
+	protected NSArray/*<String>*/ _includedRelationshipNames(EOEnterpriseObject eo) {
 		return EOEnterpriseObjectSerializer.includedRelationshipNames(eo);
 	}
 	
@@ -330,16 +330,16 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 	 * @return an array of attribute names from the EOEntity of source that should be marshalled
 	 */
 	@SuppressWarnings({ "unchecked", "cast" })
-	public static NSArray readableAttributeNames(EOEnterpriseObject source) {
+	public static NSArray/*<String>*/ readableAttributeNames(EOEnterpriseObject source) {
 		// These are cached on EOEntity name as an optimization.
 
 		EOEntity entity = EOUtilities.entityForObject(source.editingContext(), source);
-		NSArray attributeNames = (NSArray)EOEnterpriseObjectSerializer.readableAttributeNames.objectForKey(entity.name());
+		NSArray/*<String>*/ attributeNames = (NSArray)EOEnterpriseObjectSerializer.readableAttributeNames.objectForKey(entity.name());
 		//AK: should use clientProperties from EM
 		if (attributeNames == null) {
 			EOEntity currentEntity = entity;
 			while (attributeNames == null && currentEntity != null) {
-				attributeNames = (NSArray) ERXProperties.arrayForKey("er.ajax.json." + currentEntity.name() + ".attributes");
+				attributeNames = (NSArray/*<String>*/)ERXProperties.arrayForKey("er.ajax.json." + currentEntity.name() + ".attributes");
 				currentEntity = currentEntity.parentEntity();
 			}
 			if (attributeNames == null) {
@@ -363,16 +363,16 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 	 * @return an array of attribute names from the EOEntity of source that should be unmarshalled
 	 */
 	@SuppressWarnings({ "unchecked", "cast" })
-	public static NSArray writableAttributeNames(EOEnterpriseObject source) {
+	public static NSArray/*<String>*/ writableAttributeNames(EOEnterpriseObject source) {
 		// These are cached on EOEntity name as an optimization.
 
 		EOEntity entity = EOUtilities.entityForObject(source.editingContext(), source);
-		NSArray writableNames = (NSArray)EOEnterpriseObjectSerializer.writableAttributeNames.objectForKey(entity.name());
+		NSArray/*<String>*/ writableNames = (NSArray)EOEnterpriseObjectSerializer.writableAttributeNames.objectForKey(entity.name());
 		//AK: should use clientProperties from EM
 		if (writableNames == null) {
 			EOEntity currentEntity = entity;
 			while (writableNames == null && currentEntity != null) {
-				writableNames = (NSArray)ERXProperties.arrayForKey("er.ajax.json." + currentEntity.name() + ".writableAttributes");
+				writableNames = (NSArray/*<String>*/)ERXProperties.arrayForKey("er.ajax.json." + currentEntity.name() + ".writableAttributes");
 				currentEntity = currentEntity.parentEntity();
 			}
 			if (writableNames == null) {
@@ -397,15 +397,15 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 	 * @return an array of relationships that should be included in the marshalling
 	 */
 	@SuppressWarnings({ "unchecked", "cast" })
-	public static NSArray includedRelationshipNames(EOEnterpriseObject source) {
+	public static NSArray/*<String>*/ includedRelationshipNames(EOEnterpriseObject source) {
 		// These are cached on EOEntity name as an optimization.
 
 		EOEntity entity = EOUtilities.entityForObject(source.editingContext(), source);
-		NSArray relationshipNames = (NSArray)EOEnterpriseObjectSerializer.includedRelationshipNames.objectForKey(entity.name());
+		NSArray/*<String>*/ relationshipNames = (NSArray)EOEnterpriseObjectSerializer.includedRelationshipNames.objectForKey(entity.name());
 		if (relationshipNames == null) {
 			EOEntity currentEntity = entity;
 			while (relationshipNames == null && currentEntity != null) {
-				relationshipNames = (NSArray)ERXProperties.arrayForKey("er.ajax.json." + currentEntity.name() + ".relationships");
+				relationshipNames = (NSArray/*<String>*/)ERXProperties.arrayForKey("er.ajax.json." + currentEntity.name() + ".relationships");
 				currentEntity = currentEntity.parentEntity();
 			}
 			if (relationshipNames == null) {

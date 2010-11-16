@@ -73,6 +73,8 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
     protected NSArray _nullablePropertyKeys;
     protected NSMutableDictionary keysToQueryForNull = new NSMutableDictionary();
 
+    private String _displayGroupCacheBuster = "cache";
+
     public ERD2WQueryPage(WOContext context) {
         super(context);
         createDisplayGroup();
@@ -94,11 +96,7 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
     }
     
     public WOComponent clearAction() {
-        displayGroup().queryBindings().removeAllObjects();
-        displayGroup().queryMin().removeAllObjects();
-        displayGroup().queryMax().removeAllObjects();
-        displayGroup().queryOperator().removeAllObjects();
-        displayGroup().queryMatch().removeAllObjects();
+       clearQueryBindings();
        if (displayGroup() instanceof ERXDisplayGroup) {
             ERXDisplayGroup dg = (ERXDisplayGroup) displayGroup();
             dg.clearExtraQualifiers();
@@ -152,18 +150,29 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
     }
 
     public void takeValuesFromRequest(WORequest request, WOContext context) {
+        _displayGroupCacheBuster = "bust"; // Force the cache buster setter to be called.
         super.takeValuesFromRequest(request, context);
         substituteValueForNullableQueryKeys();
         saveQueryBindings();
     }
 
     public void appendToResponse(WOResponse response, WOContext context) {
+        _displayGroupCacheBuster = "cache";
         loadQueryBindings();
         super.appendToResponse(response, context);
         
         if (ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("enableQueryForNullValues"), false)) {
             ERXResponseRewriter.addScriptResourceInHead(response, context, "ERDirectToWeb", "ERD2WQueryPage.js");
         }
+    }
+
+    protected void clearQueryBindings() {
+        WODisplayGroup dg = displayGroup();
+        dg.queryBindings().removeAllObjects();
+        dg.queryMin().removeAllObjects();
+        dg.queryMax().removeAllObjects();
+        dg.queryOperator().removeAllObjects();
+        dg.queryMatch().removeAllObjects();
     }
 
     protected void saveQueryBindings() {
@@ -193,6 +202,28 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
 
     public void awake() {
         super.awake();
+    }
+
+    /**
+     * <p>Gets the displayGroup cache buster value.</p>
+     *
+     * <p>Using preferences to restore query values or a queryDataSourceDelegate to modify the data in the
+     * displayGroup's query... dictionaries can leave the displayGroup in a state that isn't reflected by the UI when
+     * the user uses the back/return button.  The cache buster guarantees that the displayGroup has only
+     * current data for creating the qualifiers from the query data.</p>
+     *
+     * @return the cache buster value
+     */
+    public String displayGroupCacheBuster() {
+        return _displayGroupCacheBuster;
+    }
+
+    /**
+     * Clears the displayGroup's query binding dictionaries.
+     * @param value (ignored)
+     */
+    public void setDisplayGroupCacheBuster(String value) {
+        clearQueryBindings();
     }
 
     public boolean isDeep() {

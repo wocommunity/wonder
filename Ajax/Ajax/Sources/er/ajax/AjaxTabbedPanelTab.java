@@ -10,6 +10,8 @@ import com.webobjects.appserver.WOResponse;
 
 import com.webobjects.foundation.NSDictionary;
 
+import er.extensions.foundation.ERXValueUtilities;
+
 /**
  * This implements the tab contents of a tabbed panel display as an unordered
  * list (UL and LI elements). This is to be used inside of a AjaxTabbedPanel.
@@ -126,7 +128,8 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
      * @return <code>true</code> if this pane is the selected one
      */
     public boolean isSelected(WOComponent component) {
-        return (isSelected != null) ? ((Boolean)isSelected.valueInComponent(component)).booleanValue() : false;
+    	/*return (isSelected != null) ? isSelected.booleanValueInComponent(component) : false;*/
+        return (isSelected != null) ? ERXValueUtilities.booleanValue(isSelected.valueInComponent(component)) : false;
     }
 
     /**
@@ -218,7 +221,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
     public boolean isVisble(WOComponent component) {
         return (isVisible != null) ? ((Boolean)isVisible.valueInComponent(component)).booleanValue() : true;
     }
-
+    
     /**
      * @return WOAssociation for the accesskey binding
      */

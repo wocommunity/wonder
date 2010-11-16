@@ -9,6 +9,7 @@ package er.directtoweb.pages;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
 
+import er.extensions.foundation.ERXThreadStorage;
 import org.apache.log4j.Logger;
 import org.apache.log4j.NDC;
 
@@ -162,6 +163,8 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
 
 		// The propertyKey whose form widget gets the focus upon loading an edit page.
 		public static final String firstResponderKey = "firstResponderKey";
+
+        public static final String exceptionD2WContextInfo = "exceptionD2WContextInfo";
 
     }
 
@@ -610,6 +613,9 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         NDC.push("Page: " + getClass().getName() + (d2wContext() != null ? (" - Configuration: " + d2wContext().valueForKey(Keys.pageConfiguration)) : ""));
         try {
             super.takeValuesFromRequest(r, c);
+        } catch (RuntimeException e) {
+            _recordExceptionContextInfo();
+            throw e;
         } finally {
             NDC.pop();
         }
@@ -621,6 +627,9 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         NDC.push("Page: " + getClass().getName() + (d2wContext() != null ? (" - Configuration: " + d2wContext().valueForKey(Keys.pageConfiguration)) : ""));
         try {
             result = super.invokeAction(r, c);
+        } catch (RuntimeException e) {
+            _recordExceptionContextInfo();
+            throw e;
         } finally {
             NDC.pop();
         }
@@ -656,13 +665,46 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
                 // log.info("" + NSPropertyListSerialization.stringFromPropertyList(_allConfigurations));
             }
         }
-        
-        boolean clickToOpenEnabled = clickToOpenEnabled(response, context); 
-        ERXClickToOpenSupport.preProcessResponse(response, context, clickToOpenEnabled);
-        super.appendToResponse(response, context);
-        ERXClickToOpenSupport.postProcessResponse(getClass(), response, context, clickToOpenEnabled);
 
-        NDC.pop();
+        try {
+            boolean clickToOpenEnabled = clickToOpenEnabled(response, context);
+            ERXClickToOpenSupport.preProcessResponse(response, context, clickToOpenEnabled);
+            super.appendToResponse(response, context);
+            ERXClickToOpenSupport.postProcessResponse(getClass(), response, context, clickToOpenEnabled);
+        } catch (RuntimeException e) {
+            _recordExceptionContextInfo();
+            throw e;
+        } finally {
+            NDC.pop();
+        }
+    }
+
+    /**
+     * Records information about the page's D2WContext.
+     */
+    private void _recordExceptionContextInfo() {
+        NSMutableArray d2wPageStack;
+        NSMutableDictionary contextInfoDict = (NSMutableDictionary)ERXThreadStorage.valueForKey(Keys.exceptionD2WContextInfo);
+        if (null == contextInfoDict) {
+            contextInfoDict = new NSMutableDictionary();
+            d2wPageStack = new NSMutableArray();
+            contextInfoDict.takeValueForKey(d2wPageStack, "D2W Page Stack");
+            ERXThreadStorage.takeValueForKey(contextInfoDict, Keys.exceptionD2WContextInfo);
+        } else {
+            d2wPageStack = (NSMutableArray)contextInfoDict.valueForKey("D2W Page Stack");
+        }
+
+        // Gather the details of the D2WContext from the current page and stash them on the thread.
+        NSMutableDictionary d2wInfo = ERDirectToWeb.informationForD2WContext(d2wContext());
+        d2wInfo.takeValueForKey(name(), "D2W Page Component");
+        String subTask = (String)d2wContext().valueForKey("subTask");
+        if ("tab".equals(subTask) || "wizard".equals("subTask")) {
+            // If the page has tab sections, focus on the current tab or it's just too much information which is mostly not relevant.
+            NSArray sections = sectionsForCurrentTab();
+            d2wInfo.setObjectForKey(sections != null ? sections : "null", "D2W-SectionsContentsForCurrentTab");
+            d2wInfo.removeObjectForKey("D2W-TabSectionsContents");
+        }
+        d2wPageStack.insertObjectAtIndex(d2wInfo, 0);
     }
 
     // **************************************************************************
@@ -673,9 +715,9 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     protected NSDictionary _branch;
 
     /**
-     * Cover method for getting the choosen branch.
+     * Cover method for getting the chosen branch.
      * 
-     * @return user choosen branch.
+     * @return user chosen branch.
      */
     public NSDictionary branch() {
         return _branch;

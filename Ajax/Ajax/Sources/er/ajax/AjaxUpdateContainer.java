@@ -29,6 +29,10 @@ import er.extensions.foundation.ERXValueUtilities;
  * @binding asynchronous set to false to force a synchronous refresh of the container. Defaults to true.
  * @binding optional set to true if you want the container tags to be skipped if this is already in an update container (similar to ERXOptionalForm). 
  *                   If optional is true and there is a container, it's as if this AUC doesn't exist, and only its children will render to the page. 
+ * 
+ * @binding frequency the frequency (in seconds) of a periodic update
+ * @binding decay a multiplier (default is one) applied to the frequency if the response of the update is unchanged
+ * @binding stopped determines whether a periodic update container loads as stopped.
  */
 public class AjaxUpdateContainer extends AjaxDynamicElement {
 	private static final String CURRENT_UPDATE_CONTAINER_ID_KEY = "er.ajax.AjaxUpdateContainer.currentID";
@@ -87,7 +91,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 
 	public NSDictionary createAjaxOptions(WOComponent component) {
 		// PROTOTYPE OPTIONS
-		NSMutableArray ajaxOptionsArray = new NSMutableArray();
+		NSMutableArray/*<AjaxOption>*/ ajaxOptionsArray = new NSMutableArray/*<AjaxOption>*/();
 		ajaxOptionsArray.addObject(new AjaxOption("frequency", AjaxOption.NUMBER));
 		ajaxOptionsArray.addObject(new AjaxOption("decay", AjaxOption.NUMBER));
 		ajaxOptionsArray.addObject(new AjaxOption("onLoading", AjaxOption.SCRIPT));
@@ -100,12 +104,13 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 		ajaxOptionsArray.addObject(new AjaxOption("asynchronous", Boolean.TRUE, AjaxOption.BOOLEAN));
 		ajaxOptionsArray.addObject(new AjaxOption("method", "get", AjaxOption.STRING));
 		ajaxOptionsArray.addObject(new AjaxOption("evalScripts", Boolean.TRUE, AjaxOption.BOOLEAN));
-		NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
+		ajaxOptionsArray.addObject(new AjaxOption("parameters", AjaxOption.STRING));
+		NSMutableDictionary/*<String, String>*/ options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
 		AjaxUpdateContainer.expandInsertionFromOptions(options, this, component);
 		return options;
 	}
 
-	public static void expandInsertionFromOptions(NSMutableDictionary options, IAjaxElement element, WOComponent component) {
+	public static void expandInsertionFromOptions(NSMutableDictionary/*<String, String>*/ options, IAjaxElement element, WOComponent component) {
 		// PROTOTYPE EFFECTS
 		String insertionDuration = (String) element.valueForBinding("insertionDuration", component);
 		String beforeInsertionDuration = (String) element.valueForBinding("beforeInsertionDuration", component);
@@ -116,7 +121,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 		if (afterInsertionDuration == null) {
 			afterInsertionDuration = insertionDuration;
 		}
-		String insertion = (String) options.objectForKey("insertion");
+		String insertion = (String)options.objectForKey("insertion");
 		String expandedInsertion = AjaxUpdateContainer.expandInsertion(insertion, beforeInsertionDuration, afterInsertionDuration);
 		if (expandedInsertion != null) {
 			options.setObjectForKey(expandedInsertion, "insertion");

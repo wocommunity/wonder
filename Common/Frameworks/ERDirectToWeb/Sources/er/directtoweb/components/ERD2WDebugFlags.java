@@ -44,8 +44,9 @@ public class ERD2WDebugFlags extends WOComponent {
     }
     
     public WOComponent toggleD2WInfo() {
-        boolean currentState=ERDirectToWeb.d2wDebuggingEnabled(session());
-        ERDirectToWeb.setD2wDebuggingEnabled(session(), !currentState);
+        boolean currentState=ERDirectToWeb.anyD2wDebuggingEnabled(session());
+        //Note: We check if any are on, and set all. That way, you can turn on debugging, turn on and off various components, and then turn all off.
+        ERDirectToWeb.setAllD2wDebuggingEnabled(session(), !currentState);
         return null;
     }
     

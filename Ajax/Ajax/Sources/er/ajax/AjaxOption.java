@@ -1,12 +1,12 @@
 package er.ajax;
 
+import java.util.Enumeration;
+
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
-
-import java.util.Enumeration;
 
 public class AjaxOption {
   public static final AjaxOption.Type DEFAULT = new AjaxOption.Type(0);
@@ -82,7 +82,7 @@ public class AjaxOption {
     return value;
   }
   
-  protected Object valueInComponent(WOComponent component, NSDictionary associations) {
+  protected Object valueInComponent(WOComponent component, NSDictionary/*<String, ? extends WOAssociation>*/ associations) {
 	Object value = null;
 	if (associations != null) {
 		value = associations.objectForKey(_bindingName);
@@ -97,7 +97,7 @@ public class AjaxOption {
     return value;
   }
   
-  public void addToDictionary(WOComponent component, NSMutableDictionary dictionary) {
+  public void addToDictionary(WOComponent component, NSMutableDictionary/*<String, String>*/ dictionary) {
     Object value = valueInComponent(component);
     String strValue = valueForObject(value).javascriptValue();
     if (strValue != null) {
@@ -105,7 +105,7 @@ public class AjaxOption {
     }
   }
 
-  protected void addToDictionary(WOComponent component, NSDictionary associations, NSMutableDictionary dictionary) {
+  protected void addToDictionary(WOComponent component, NSDictionary/*<String, ? extends WOAssociation>*/ associations, NSMutableDictionary/*<String, String>*/ dictionary) {
 	Object value = valueInComponent(component, associations);
     String strValue = valueForObject(value).javascriptValue();
     if (strValue != null) {
@@ -113,20 +113,22 @@ public class AjaxOption {
     }
   }
 
-  public static NSMutableDictionary createAjaxOptionsDictionary(NSArray ajaxOptions, WOComponent component) {
-	NSMutableDictionary optionsDictionary = new NSMutableDictionary();
+  public static NSMutableDictionary/*<String, String>*/ createAjaxOptionsDictionary(NSArray/*<AjaxOption>*/ ajaxOptions, WOComponent component) {
+	NSMutableDictionary/*<String, String>*/ optionsDictionary = new NSMutableDictionary/*<String, String>*/();
+    /*for (AjaxOption ajaxOption : ajaxOptions) {*/
     for (Enumeration optionsEnum = ajaxOptions.objectEnumerator(); optionsEnum.hasMoreElements();) {
         AjaxOption ajaxOption = (AjaxOption)optionsEnum.nextElement();
-        ajaxOption.addToDictionary(component, optionsDictionary);
+      ajaxOption.addToDictionary(component, optionsDictionary);
     }
     return optionsDictionary;
   }
 
-  public static NSMutableDictionary createAjaxOptionsDictionary(NSArray ajaxOptions, WOComponent component, NSDictionary associations) {
-    NSMutableDictionary optionsDictionary = new NSMutableDictionary();
+  public static NSMutableDictionary/*<String, String>*/ createAjaxOptionsDictionary(NSArray/*<AjaxOption>*/ ajaxOptions, WOComponent component, NSDictionary/*<String, ? extends WOAssociation>*/ associations) {
+    NSMutableDictionary/*<String, String>*/ optionsDictionary = new NSMutableDictionary/*<String, String>*/();
+    /*for (AjaxOption ajaxOption : ajaxOptions) {*/
     for (Enumeration optionsEnum = ajaxOptions.objectEnumerator(); optionsEnum.hasMoreElements();) {
         AjaxOption ajaxOption = (AjaxOption)optionsEnum.nextElement();
-        ajaxOption.addToDictionary(component, associations, optionsDictionary);
+      ajaxOption.addToDictionary(component, associations, optionsDictionary);
     }
     return optionsDictionary;
   }

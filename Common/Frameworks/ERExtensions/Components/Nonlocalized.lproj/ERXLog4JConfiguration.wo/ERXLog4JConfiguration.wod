@@ -23,9 +23,9 @@ AppenderName: WOString {
 
 AppenderThresholdRadioButtonMatrix: ERXRadioButtonMatrix {
     goingVertically = false;
-    item = aLevel;
-    list = levelsWithoutUnset;
-    maxColumns = 8;
+    item = aLoggerLevel;
+    list = loggerLevels;
+    maxColumns = 9;
     selection = currentAppenderLevel;
     uniqueID = anAppender.class.name; //VALID
 }

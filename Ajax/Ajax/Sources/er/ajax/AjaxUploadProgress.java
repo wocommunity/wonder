@@ -14,6 +14,7 @@ public class AjaxUploadProgress extends AjaxProgress {
 	
 	private File _tempFile;
 	private String _fileName;
+	private String _contentType;
 
 	/**
 	 * Construct an AjaxUploadProgress.
@@ -46,6 +47,14 @@ public class AjaxUploadProgress extends AjaxProgress {
 	public File tempFile() {
 		return _tempFile;
 	}
+	
+	public String contentType() {
+		return _contentType;
+	}
+	
+	public void setContentType(String type) {
+		_contentType = type;
+	}
 
 	/**
 	 * Deletes the temporary file.
@@ -54,4 +63,6 @@ public class AjaxUploadProgress extends AjaxProgress {
 		_tempFile.delete();
 		super.dispose();
 	}
+
+
 }

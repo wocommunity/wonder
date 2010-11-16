@@ -199,6 +199,13 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     public static double webObjectsVersionAsDouble() {
         if (_webObjectsVersionDouble == 0.0d) {
             String woVersionString = ERXStringUtilities.removeExtraDotsFromVersionString(webObjectsVersion());
+            int cutoffIndex = woVersionString.indexOf(' ');
+            if (cutoffIndex == -1) {
+                cutoffIndex = woVersionString.indexOf('-');
+            }
+            if (cutoffIndex != -1) {
+                woVersionString = woVersionString.substring(0, cutoffIndex);
+            }
             try {
                 _webObjectsVersionDouble = Double.parseDouble(woVersionString);
             } catch (NumberFormatException ex) {
@@ -1152,8 +1159,9 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
             AppSpecificPropertyNames.clear();
         }
         _cache.clear();
+        // MS: We do this in ERXConfigurationManager.updateSystemProperties so logging config has reloaded before we try to process any related config 
         //NSNotificationCenter.defaultCenter().postNotification(NSProperties.PropertiesDidChange, null);
-        NSNotificationCenter.defaultCenter().postNotification("PropertiesDidChange", null, null);
+        //NSNotificationCenter.defaultCenter().postNotification("PropertiesDidChange", null, null);
     }
 
     //	===========================================================================

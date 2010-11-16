@@ -4,6 +4,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,6 @@ import com.webobjects.eoaccess.EOEntityClassDescription;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
@@ -22,7 +22,6 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.eof.ERXKey;
 import er.extensions.eof.ERXKeyFilter;
-import er.extensions.localization.ERXLocalizer;
 import er.rest.format.ERXRestFormat;
 import er.rest.format.ERXWORestResponse;
 import er.rest.format.IERXRestWriter;
@@ -39,7 +38,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	private String _name;
 	private boolean _rootNode;
 	private Object _value;
-	private NSMutableDictionary/*<String, Object>*/ _attributes;
+	private LinkedHashMap/*<String, Object>*/ _attributes;
 	private NSMutableArray/*<ERXRestRequestNode>*/ _children;
 	private Object _associatedObject;
 
@@ -58,7 +57,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	public ERXRestRequestNode(String name, boolean rootNode) {
 		_name = name;
 		_rootNode = rootNode;
-		_attributes = new NSMutableDictionary/*<String, Object>*/();
+		_attributes = new LinkedHashMap/*<String, Object>*/();
 		_children = new NSMutableArray/*<ERXRestRequestNode>*/();
 		guessNull();
 	}
@@ -86,7 +85,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 */
 	public ERXRestRequestNode cloneNode() {
 		ERXRestRequestNode cloneNode = new ERXRestRequestNode(_name, _rootNode);
-		cloneNode._attributes.addEntriesFromDictionary(_attributes);
+		cloneNode._attributes.putAll(_attributes);
 		cloneNode._children.addObjectsFromArray(_children);
 		cloneNode._value = _value;
 		cloneNode._associatedObject = _associatedObject;
@@ -182,9 +181,8 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 					String key = attribute.getKey();
 					Object value = attribute.getValue();
 				*/
-				for (Enumeration keyEnum = _attributes.keyEnumerator(); keyEnum.hasMoreElements(); ) {
-					String key = (String)keyEnum.nextElement();
-					Object value = _attributes.objectForKey(key);
+				for (Object key : _attributes.keySet()) {
+					Object value = _attributes.get(key);
 					// if (value != null) {
 					dict.put(key, value);
 					// }
@@ -260,9 +258,8 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 					String key = attribute.getKey();
 					Object value = attribute.getValue();
 				*/
-				for (Enumeration keyEnum = _attributes.keyEnumerator(); keyEnum.hasMoreElements(); ) {
-					String key = (String)keyEnum.nextElement();
-					Object value = _attributes.objectForKey(key);
+				for (Object key : _attributes.keySet()) {
+					Object value = _attributes.get(key);
 					if (value == null) {
 						value = NSKeyValueCoding.NullValue;
 					}
@@ -338,8 +335,8 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 
 	public void takeValueForKey(Object value, String key) {
 		/*if (_attributes.containsKey(key)) {*/
-		if (_attributes.objectForKey(key) != null) {
-			_attributes.setObjectForKey(value, key);
+		if (_attributes.get(key) != null) {
+			_attributes.put(key, value);
 		}
 		else {
 			ERXRestRequestNode child = childNamed(key);
@@ -358,8 +355,8 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	public Object valueForKey(String key) {
 		Object value;
 		/*if (_attributes.containsKey(key)) {*/
-		if (_attributes.objectForKey(key) != null) {
-			value = _attributes.objectForKey(key);
+		if (_attributes.get(key) != null) {
+			value = _attributes.get(key);
 		}
 		else {
 			ERXRestRequestNode child = childNamed(key);
@@ -562,7 +559,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 *            the key
 	 */
 	public void setAttributeForKey(Object attribute, String key) {
-		_attributes.setObjectForKey(attribute, key);
+		_attributes.put(key, attribute);
 		// if (!"nil".equals(key)) {
 		guessNull();
 		// }
@@ -576,7 +573,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 * @return the attribute value
 	 */
 	public Object removeAttributeForKey(String key) {
-		Object attribute = _attributes.removeObjectForKey(key);
+		Object attribute = _attributes.remove(key);
 		return attribute;
 	}
 
@@ -588,7 +585,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 * @return the attribute value
 	 */
 	public Object attributeForKey(String key) {
-		return _attributes.objectForKey(key);
+		return _attributes.get(key);
 	}
 
 	/**
@@ -596,7 +593,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 * 
 	 * @return the attributes dictionary
 	 */
-	public NSDictionary/*<String, Object>*/ attributes() {
+	public Map/*<String, Object>*/ attributes() {
 		return _attributes;
 	}
 
@@ -642,7 +639,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 			}
 		}
 		/*if (!_attributes.isEmpty()) {*/
-		if (_attributes.count() != 0) {
+		if (_attributes.size() != 0) {
 			sb.append(" ");
 			sb.append(_attributes);
 		}
@@ -804,12 +801,12 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 		}
 
 		/*Set<ERXKey> includeKeys = keyFilter.includes().keySet();*/
-		NSDictionary includes = keyFilter.includes();
+		Map<ERXKey, ERXKeyFilter> includes = keyFilter.includes();
 		/*if (includeKeys != null && !includeKeys.isEmpty()) {*/
-		if (includes != null && includes.count() > 0) {
-			Set<ERXKey> remainingKeys = new HashSet<ERXKey>(/*includeKeys*/);
-			for (Enumeration keyEnum = includes.keyEnumerator(); keyEnum.hasMoreElements(); ) {
-				remainingKeys.add((ERXKey)keyEnum.nextElement());
+		if (includes != null && includes.size() > 0) {
+			Set<ERXKey> remainingKeys = new LinkedHashSet<ERXKey>(/*includeKeys*/);
+			for (ERXKey key : includes.keySet()) {
+				remainingKeys.add(key);
 			}
 			remainingKeys.removeAll(visitedKeys);
 			if (!remainingKeys.isEmpty()) {
@@ -913,7 +910,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 				if (id != null) {
 					setID(id);
 				}
-				if (!visitedObjects.contains(obj)) {
+				if (!visitedObjects.contains(obj) || !keyFilter.isDeduplicationEnabled()) {
 					visitedObjects.add(obj);
 					_addAttributesAndRelationshipsForObjectOfEntity(obj, classDescription, keyFilter, delegate, visitedObjects);
 				}
@@ -998,11 +995,11 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 
 		EOClassDescription classDescription = ERXRestClassDescriptionFactory.classDescriptionForObject(obj);
 		/*for (Map.Entry<String, Object> attribute : _attributes.entrySet()) {*/
-		for (Enumeration keyEnum = _attributes.keyEnumerator(); keyEnum.hasMoreElements(); ) {
-			ERXKey<Object> key = keyFilter.keyMap(new ERXKey<Object>(/*attribute.getKey()*/(String)keyEnum.nextElement()));
+		for (Object keyStr : _attributes.keySet()) {
+			ERXKey<Object> key = keyFilter.keyMap(new ERXKey<Object>(/*attribute.getKey()*/(String)keyStr));
 			String keyName = key.key();
 			if (keyFilter.matches(key, ERXKey.Type.Attribute) && isClassProperty(classDescription, keyName)) {
-				Object value = ERXRestUtils.coerceValueToAttributeType(/*attribute.getValue()*/_attributes.objectForKey(key), null, obj, keyName);
+				Object value = ERXRestUtils.coerceValueToAttributeType(/*attribute.getValue()*/_attributes.get(key), null, obj, keyName);
 				if (value instanceof NSKeyValueCoding.Null) {
 					value = null;
 				}
@@ -1011,7 +1008,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 				_safeDidTakeValueForKey(keyFilter, obj, value, keyName);
 			}
 			else {
-				_safeDidSkipValueForKey(keyFilter, obj, /*attribute.getValue()*/_attributes.objectForKey(key), keyName); // MS: we didn't coerce the
+				_safeDidSkipValueForKey(keyFilter, obj, /*attribute.getValue()*/_attributes.get(key), keyName); // MS: we didn't coerce the
 				// value .. i think that's ok
 			}
 		}

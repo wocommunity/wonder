@@ -323,6 +323,7 @@ public class ERXConfigurationManager {
         ERXLogger.configureLogging(System.getProperties());
         
         NSNotificationCenter.defaultCenter().postNotification(ConfigurationDidChangeNotification, null);
+        NSNotificationCenter.defaultCenter().postNotification("PropertiesDidChange", null, null);
     }
     
     public synchronized void updateAllSystemProperties(NSNotification notification) {

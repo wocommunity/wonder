@@ -15,6 +15,7 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.ajax.json.JSONBridge;
+import er.extensions.appserver.ERXResponseRewriter;
 
 /**
  * Handles javascript-java communication (client-server) between the javascript world running in a web browser and the
@@ -85,8 +86,7 @@ import er.ajax.json.JSONBridge;
  *          Tous droits réservés.
  */
 public class AjaxProxy extends AjaxComponent {
-
-    private static final Logger log = Logger.getLogger(AjaxProxy.class);
+	private static final Logger log = Logger.getLogger(AjaxProxy.class);
 
 	public AjaxProxy(WOContext context) {
 		super(context);
@@ -127,7 +127,15 @@ public class AjaxProxy extends AjaxComponent {
 			// add the javascript variable 'name' only if not already in the
 			// response
 			userInfo.setObjectForKey(bridge, key);
-			AjaxUtils.addScriptCodeInHead(res, context(), "var " + name + " = new JSONRpcClient(\"" + AjaxUtils.ajaxComponentActionUrl(context()) + "\");");
+			String jsonRpcJavascript;
+			if (booleanValueForBinding("lazy", false)) {
+			    String varName = "_" + name;
+			    jsonRpcJavascript = "function " + name + "(callback) { if (typeof " + varName + " == 'undefined') { " + varName + "=new JSONRpcClient(callback, '" + AjaxUtils.ajaxComponentActionUrl(context()) + "'); } else { callback(); } }";
+			}
+			else {
+			    jsonRpcJavascript = name + "=new JSONRpcClient('" + AjaxUtils.ajaxComponentActionUrl(context()) + "');";
+			}
+			ERXResponseRewriter.addScriptCodeInHead(res, context(), jsonRpcJavascript, key);
 		}
 		else {
 			// ok, the javascript variable 'name' is already in the response,

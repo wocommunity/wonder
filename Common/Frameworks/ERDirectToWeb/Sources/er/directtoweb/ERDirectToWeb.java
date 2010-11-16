@@ -9,6 +9,7 @@ package er.directtoweb;
 import java.net.URL;
 import java.util.Enumeration;
 
+import er.extensions.foundation.ERXThreadStorage;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOComponent;
@@ -138,6 +139,20 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
     		URL url = ERXFileUtilities.pathURLForResourceNamed("d2wClient.d2wmodel", "ERDirectToWeb", null);
     		model.mergePathURL(url);
     	}
+    }
+
+    public static void setAllD2wDebuggingEnabled(WOSession s, boolean enabled) {
+        setD2wDebuggingEnabled(s, enabled);
+        setD2wComponentNameDebuggingEnabled(s, enabled);
+        setD2wPropertyKeyDebuggingEnabled(s, enabled);
+    }
+
+    public static boolean allD2wDebuggingEnabled(WOSession s) {
+        return d2wDebuggingEnabled(s) && d2wComponentNameDebuggingEnabled(s) && d2wPropertyKeyDebuggingEnabled(s);
+    }
+
+    public static boolean anyD2wDebuggingEnabled(WOSession s) {
+        return d2wDebuggingEnabled(s) || d2wComponentNameDebuggingEnabled(s) || d2wPropertyKeyDebuggingEnabled(s);
     }
 
     public static void setD2wDebuggingEnabled(WOSession s, boolean enabled) {
@@ -440,28 +455,19 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
             component = context.page();
         }
 
-        try {
-            d2wContext = (D2WContext)component.valueForKey("d2wContext");
-        } catch (NSKeyValueCoding.UnknownKeyException uke) {
-            if (log.isInfoEnabled()) {
-                log.info("Could not retrieve D2WContext from component context; it is probably not a D2W component.");
+        NSMutableDictionary d2wInfo = (NSMutableDictionary)ERXThreadStorage.valueForKey(ERD2WPage.Keys.exceptionD2WContextInfo);
+        if (null == d2wInfo) { // Not a ERD2WPage subclass; get info directly from the D2WContext.
+            try {
+                d2wContext = (D2WContext)component.valueForKey("d2wContext");
+                d2wInfo = informationForD2WContext(d2wContext);
+            } catch (NSKeyValueCoding.UnknownKeyException uke) {
+                if (log.isInfoEnabled()) {
+                    log.info("Could not retrieve D2WContext from component context; it is probably not a D2W component.");
+                }
             }
         }
 
-        if (d2wContext != null) {
-            NSMutableDictionary d2wInfo = informationForD2WContext(d2wContext);
-            if (component instanceof ERD2WPage) {
-                ERD2WPage currentPage = (ERD2WPage)component;
-                String subTask = (String)d2wContext.valueForKey("subTask");
-                if ("tab".equals(subTask) || "wizard".equals("subTask")) {
-                    NSArray sections = currentPage.sectionsForCurrentTab();
-                    d2wInfo.setObjectForKey(sections != null ? sections : "null", "D2W-SectionsContentsForCurrentTab");
-                    d2wInfo.removeObjectForKey("D2W-TabSectionsContents");
-                }
-            }
-            info.addEntriesFromDictionary(d2wInfo);
-        }
-        
+        info.takeValueForKey(d2wInfo != null ? d2wInfo : "Not available", "D2W Context Info");
         return info;
     }
 

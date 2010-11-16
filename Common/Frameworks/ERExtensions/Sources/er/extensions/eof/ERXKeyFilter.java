@@ -1,6 +1,8 @@
 package er.extensions.eof;
 
-import com.webobjects.foundation.NSDictionary;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSSet;
@@ -47,12 +49,13 @@ public class ERXKeyFilter {
 	}
 
 	private ERXKeyFilter.Base _base;
-	private NSMutableDictionary _includes;
+	private LinkedHashMap<ERXKey, ERXKeyFilter> _includes;
 	private NSMutableSet _excludes;
 	private NSMutableSet _lockedRelationships;
 	private NSMutableDictionary _map;
 	private ERXKeyFilter.Base _nextBase;
 	private ERXKeyFilter.Delegate _delegate;
+	private boolean _deduplicationEnabled;
 
 	/**
 	 * Creates a new ERXKeyFilter.
@@ -72,10 +75,11 @@ public class ERXKeyFilter {
 	public ERXKeyFilter(ERXKeyFilter.Base base, ERXKeyFilter.Base nextBase) {
 		_base = base;
 		_nextBase = nextBase;
-		_includes = new NSMutableDictionary();
+		_includes = new LinkedHashMap<ERXKey, ERXKeyFilter>();
 		_excludes = new NSMutableSet();
 		_lockedRelationships = new NSMutableSet();
 		_map = new NSMutableDictionary();
+		_deduplicationEnabled = true;
 	}
 	
 	/**
@@ -225,6 +229,25 @@ public class ERXKeyFilter {
 		_nextBase = nextBase;
 		return this;
 	}
+	
+	/**
+	 * Sets whether or not duplicate objects are collapsed to just an id in the filtered graph.
+	 * This only applies to filters used to render object graphs.
+	 * 
+	 * @param deduplicationEnabled if true, duplicate objects are collapsed into ids
+	 */
+	public void setDeduplicationEnabled(boolean deduplicationEnabled) {
+        _deduplicationEnabled = deduplicationEnabled;
+    }
+	
+	/**
+	 * Returns whether or not duplicate objects are collapsed to just an id.
+	 * 
+	 * @return whether or not duplicate objects are collapsed to just an id
+	 */
+	public boolean isDeduplicationEnabled() {
+        return _deduplicationEnabled;
+    }
 
 	/**
 	 * Returns the filter for the given key, or creates a "nextBase" filter
@@ -236,11 +259,12 @@ public class ERXKeyFilter {
 	 * @return the key filter
 	 */
 	public ERXKeyFilter _filterForKey(ERXKey key) {
-		ERXKeyFilter filter = (ERXKeyFilter)_includes.objectForKey(key);
+		ERXKeyFilter filter = (ERXKeyFilter)_includes.get(key);
 		if (filter == null) {
 			filter = new ERXKeyFilter(_nextBase);
 			filter.setDelegate(_delegate);
 			filter.setNextBase(_nextBase);
+			filter.setDeduplicationEnabled(_deduplicationEnabled);
 		}
 		return filter;
 	}
@@ -250,7 +274,7 @@ public class ERXKeyFilter {
 	 * 
 	 * @return the included keys and the next filters they map to
 	 */
-	public NSDictionary includes() {
+	public Map<ERXKey, ERXKeyFilter> includes() {
 		return _includes;
 	}
 
@@ -273,6 +297,28 @@ public class ERXKeyFilter {
 	}
 
 	/**
+	 * Includes the given set of keys in this filter, wrapping them in ERXKey objects for you.
+	 * 
+	 * @param keyNames the names of the keys to include
+	 */
+	public void include(String... keyNames) {
+	    for (String keyName : keyNames) {
+	        include(new ERXKey<Object>(keyName));
+	    }
+	}
+
+    /**
+     * Includes the given key in this filter, wrapping it in an ERXKey object for you.
+     * 
+     * @param key the key to include
+     * @param existingFilter the existing filter to use for this key
+     * @return the next filter
+     */
+    public ERXKeyFilter include(String keyName, ERXKeyFilter existingFilter) {
+        return include(new ERXKey<Object>(keyName), existingFilter);
+    }
+	
+	/**
 	 * Includes the given set of keys in this filter.
 	 * 
 	 * @param keys the keys to include
@@ -290,32 +336,51 @@ public class ERXKeyFilter {
 	 * @return whether or not the given key is included in this filter
 	 */
 	public boolean includes(ERXKey key) {
-		return _includes.allKeys().containsObject(key);
+		return _includes.containsKey(key);
 	}
 
+    /**
+     * Includes the given key in this filter.
+     * 
+     * @param key the key to include
+     * @return the next filter
+     */
+    public ERXKeyFilter include(ERXKey key) {
+        return include(key, null);
+    }
+    
 	/**
 	 * Includes the given key in this filter.
 	 * 
 	 * @param key the key to include
+	 * @param existingFilter the existing filter to use for this key
 	 * @return the next filter
 	 */
-	public ERXKeyFilter include(ERXKey key) {
+	public ERXKeyFilter include(ERXKey key, ERXKeyFilter existingFilter) {
 		ERXKeyFilter filter;
 		String keyPath = key.key();
 		int dotIndex = keyPath.indexOf('.');
 		if (dotIndex == -1) {
-			filter = (ERXKeyFilter)_includes.objectForKey(key);
-			if (filter == null) {
-				filter = new ERXKeyFilter(_nextBase);
-				filter.setDelegate(_delegate);
-				filter.setNextBase(_nextBase);
-				_includes.setObjectForKey(filter, key);
-				_excludes.removeObject(key);
-			}
+		    if (existingFilter != null) {
+		        _includes.put(key, existingFilter);
+		        _excludes.removeObject(key);
+		        filter = existingFilter;
+		    }
+		    else {
+    			filter = (ERXKeyFilter)_includes.get(key);
+    			if (filter == null) {
+    				filter = new ERXKeyFilter(_nextBase);
+    				filter.setDelegate(_delegate);
+    				filter.setNextBase(_nextBase);
+    	            filter.setDeduplicationEnabled(_deduplicationEnabled);
+    				_includes.put(key, filter);
+    				_excludes.removeObject(key);
+    			}
+		    }
 		}
 		else {
-			ERXKeyFilter subFilter = include(new ERXKey(keyPath.substring(0, dotIndex)));
-			filter = subFilter.include(new ERXKey(keyPath.substring(dotIndex + 1)));
+			ERXKeyFilter subFilter = include(new ERXKey(keyPath.substring(0, dotIndex)), null);
+			filter = subFilter.include(new ERXKey(keyPath.substring(dotIndex + 1)), existingFilter);
 		}
 		return filter;
 	}
@@ -371,7 +436,7 @@ public class ERXKeyFilter {
 			int dotIndex = keyPath.indexOf('.');
 			if (dotIndex == -1) {
 				_excludes.addObject(key);
-				_includes.removeObjectForKey(key);
+				_includes.remove(key);
 			}
 			else {
 				ERXKeyFilter subFilter = include(new ERXKey(keyPath.substring(0, dotIndex)));
@@ -387,7 +452,7 @@ public class ERXKeyFilter {
 	 */
 	public void only(ERXKey... keys) {
 		_base = ERXKeyFilter.Base.None;
-		_includes.removeAllObjects();
+		_includes.clear();
 		_excludes.removeAllObjects();
 		for (ERXKey key : keys) {
 			include(key);
@@ -402,7 +467,7 @@ public class ERXKeyFilter {
 	 */
 	public ERXKeyFilter only(ERXKey key) {
 		_base = ERXKeyFilter.Base.None;
-		_includes.removeAllObjects();
+		_includes.clear();
 		_excludes.removeAllObjects();
 		return include(key);
 	}
@@ -445,7 +510,7 @@ public class ERXKeyFilter {
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("[ERXKeyFilter: base=" + _base);
-		if (_includes.count() > 0) {
+		if (_includes.size() > 0) {
 			sb.append("; includes=" + _includes + "");
 		}
 		if (_excludes.count() > 0) {

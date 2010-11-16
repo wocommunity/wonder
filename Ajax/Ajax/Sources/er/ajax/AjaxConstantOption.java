@@ -28,7 +28,7 @@ public class AjaxConstantOption extends AjaxOption {
 	}
 	
 	@Override
-	protected Object valueInComponent(WOComponent component, NSDictionary associations) {
+	protected Object valueInComponent(WOComponent component, NSDictionary/*<String, ? extends WOAssociation>*/ associations) {
 		return _constantValue;
 	}
 }

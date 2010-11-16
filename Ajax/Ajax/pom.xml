@@ -9,9 +9,22 @@
 	<artifactId>Ajax</artifactId>
 	<name>Ajax Framework</name>
 	<packaging>woframework</packaging>
+
 	<build>
 		<sourceDirectory>Sources</sourceDirectory>
+		<plugins>
+			<plugin>
+				<groupId>org.objectstyle.woproject.maven2</groupId>
+				<artifactId>maven-wolifecycle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<skipAppleProvidedFrameworks>true</skipAppleProvidedFrameworks>
+					<classifier>${woClassifier}</classifier>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
+
 	<dependencies>
 		<dependency>
 			<groupId>wonder.core</groupId>

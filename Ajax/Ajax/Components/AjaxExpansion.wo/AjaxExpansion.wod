@@ -16,10 +16,19 @@ ToggleLink : AjaxUpdateLink {
 AjaxUpdateContainer : AjaxUpdateContainer {
   id = id;
   class = ^class;
+  onRefreshComplete = onExpansionComplete;
 }
 
 EscapedLinkString: WOString {
     value = jsEscapedString;
+}
+
+IsAjaxRequest : WOConditional {
+	condition = isAjaxRequest;
+}
+
+HasEscapedLinkString: WOConditional {
+    condition = jsEscapedString.length;
 }
 
 Expanded : WOConditional {

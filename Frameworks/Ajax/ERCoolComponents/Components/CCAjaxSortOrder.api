@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+        <wo wocomponentcontent="false" class="CCAjaxSortOrder.java">
+		<binding name="d2wContext"/>
+		<binding name="displayGroup"/>
+		<binding name="key"/>
+		<binding name="updateContainerID"/>
+        </wo>
+</wodefinitions>

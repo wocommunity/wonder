@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+        <wo wocomponentcontent="false" class="CCSmartAjaxButton.java">
+		<binding name="useAjax"/>
+        <binding name="action"/>
+        <validation message="'action' is a required binding.">
+            <unbound name="action"/>
+        </validation>
+        <binding name="class"/>
+        <binding name="dontSubmitForm"/>
+        <binding name="value"/>
+        <validation message="'value' is a required binding.">
+            <unbound name="value"/>
+        </validation>
+        <binding name="alt"/>
+        <binding name="updateContainerID"/>
+        </wo>
+</wodefinitions>

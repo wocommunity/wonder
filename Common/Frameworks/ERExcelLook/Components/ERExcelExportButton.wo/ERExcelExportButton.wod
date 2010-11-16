@@ -1,4 +1,4 @@
-Conditional1: WOConditional {
+AllowsExcelExportConditional: WOConditional {
 	condition = ^allowsExcelExport;
 }
 
@@ -11,16 +11,12 @@ HasNoBatches: WOConditional {
 	negate = true;
 }
 
-Hyperlink1: WOHyperlink {
+ExcelExportAllHyperlink: WOHyperlink {
 	action = excelExportAll;
 }
 
-Hyperlink2: WOHyperlink {
+ExcelExportDisplayedHyperlink: WOHyperlink {
 	action = excelExportDisplayed;
-}
-
-Hyperlink3: WOHyperlink {
-	action = excelExportAll;
 }
 
 IsTaskEqualList: ERXEqualConditional {

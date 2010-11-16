@@ -330,12 +330,13 @@ public class AjaxUtils {
 	/**
 	 * Returns the array bound to the given association.
 	 * 
+	 * @param <T> the array type
 	 * @param component the component to resolve against
 	 * @param association the association to retrieve a value for
 	 * @return an array (or null)
 	 */
-	public static NSArray arrayValueForAssociation(WOComponent component, WOAssociation association) {
-		NSArray array = null;
+	public static /*<T>*/ NSArray/*<T>*/ arrayValueForAssociation(WOComponent component, WOAssociation association) {
+		NSArray/*<T>*/ array = null;
 		if (association != null) {
 			array = AjaxUtils.arrayValueForObject(association.valueInComponent(component));
 		}
@@ -345,11 +346,12 @@ public class AjaxUtils {
 	/**
 	 * Returns the array bound to the given binding name.
 	 * 
+	 * @param <T> the array type
 	 * @param component the component to resolve against
 	 * @param bindingName the name of the binding
 	 * @return an array (or null)
 	 */
-	public static NSArray arrayValueForBinding(WOComponent component, String bindingName) {
+	public static /*<T>*/ NSArray/*<T>*/ arrayValueForBinding(WOComponent component, String bindingName) {
 		return AjaxUtils.arrayValueForObject(component.valueForBinding(bindingName));
 	}
 
@@ -357,17 +359,18 @@ public class AjaxUtils {
 	 * Returns the array for the given object.  If the object is a string, it will be parsed as a
 	 * JSON value.
 	 * 
+	 * @param <T> the array type
 	 * @param value the object value
 	 * @return an array (or null)
 	 */
 	@SuppressWarnings("unchecked")
-	public static NSArray arrayValueForObject(Object value) {
+	public static /*<T>*/ NSArray/*<T>*/ arrayValueForObject(Object value) {
 		NSArray arrayValue;
 		if (value == null) {
 			arrayValue = null;
 		}
 		else if (value instanceof NSArray) {
-			arrayValue = (NSArray) value;
+			arrayValue = (NSArray/*<T>*/) value;
 		}
 		else if (value instanceof String) {
 			try {

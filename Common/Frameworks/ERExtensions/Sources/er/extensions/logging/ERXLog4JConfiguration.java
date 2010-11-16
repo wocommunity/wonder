@@ -6,18 +6,20 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.logging;
 
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import er.extensions.foundation.ERXArrayUtilities;
 import org.apache.log4j.Appender;
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.apache.log4j.Priority;
+import org.apache.log4j.spi.LoggerRepository;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -27,8 +29,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.ERXExtensions;
-//import er.extensions.eof.ERXConstant;
-import org.apache.log4j.spi.LoggerRepository;
+import er.extensions.foundation.ERXArrayUtilities;
 
 /**
  * Configures and manages the log4j logging system. Will also configure the system for rapid turn around, i.e. when
@@ -76,7 +77,7 @@ public class ERXLog4JConfiguration extends WOComponent {
     /**
      * A representation of the available page sections/views.
      */
-    protected enum PageSection {
+    public enum PageSection {
         LOGGERS("Loggers", "Loggers"),
         REPOSITORY("Repository", "Repository"),
         APPENDERS("Appenders", "Appenders"),
@@ -275,7 +276,35 @@ public class ERXLog4JConfiguration extends WOComponent {
      */
     public NSArray appenders() {
         if (null == _appenders) {
-            Set<AppenderSkeleton> appenders = new TreeSet<AppenderSkeleton>();
+            Set<AppenderSkeleton> appenders = new TreeSet<AppenderSkeleton>(new Comparator<AppenderSkeleton>() {
+                public int compare(AppenderSkeleton o1, AppenderSkeleton o2) {
+                    int result = 0;
+                    if (o1 == o2)  {
+                        result = 0;
+                    } else {
+                        String name1 = o1.getName();
+                        String name2 = o2.getName();
+                        if (name1.equals(name2)) { // Two appenders share the same name.  Probably a misconfiguration...
+                            name1 = o1.getName() + "_" + o1.hashCode();
+                            name2 = o2.getName() + "_" + o2.hashCode();
+                        }
+                        result = name1.compareTo(name2);
+                    }
+                    return result;
+                }
+            });
+
+            // Gather appenders attached to the root logger.
+            Logger rootLogger = LogManager.getRootLogger();
+            Enumeration rootAppendersEnum = rootLogger.getAllAppenders();
+            while (rootAppendersEnum.hasMoreElements()) {
+                Appender appender = (Appender)rootAppendersEnum.nextElement();
+                if (appender instanceof AppenderSkeleton) {
+                    appenders.add((AppenderSkeleton)appender);
+                }
+            }
+
+            // Gather appenders attached to other loggers.
             Enumeration loggersEnum = LogManager.getCurrentLoggers();
             while (loggersEnum.hasMoreElements()) {
                 Logger logger = (Logger)loggersEnum.nextElement();
@@ -297,17 +326,21 @@ public class ERXLog4JConfiguration extends WOComponent {
         return (NSArray)applicableLevels.valueForKey("level");
     }
 
-    public Level currentAppenderLevel() {
-        return Level.toLevel(anAppender.getThreshold().toInt());
+    public LoggerLevel currentAppenderLevel() {
+        Priority threshold = anAppender.getThreshold();
+        return LoggerLevel.loggerLevelForLog4JLevel(threshold != null ? Level.toLevel(threshold.toInt()) : null);
     }
 
-    public void setCurrentAppenderLevel(Level level) {
-        anAppender.setThreshold(level);
+    public void setCurrentAppenderLevel(LoggerLevel loggerLevel) {
+        anAppender.setThreshold(loggerLevel.level());
     }
 
     public String classForAppenderRow() {
         NSMutableArray array = new NSMutableArray();
-        array.addObject(Level.toLevel(anAppender.getThreshold().toInt()));
+        Level level = currentAppenderLevel().level();
+        if (level != null) {
+            array.addObject(level);
+        }
         if (rowIndex % 2 == 0) {
             array.addObject("alt");
         }
@@ -315,7 +348,14 @@ public class ERXLog4JConfiguration extends WOComponent {
     }
 
     public String classNameForAppenderThresholdName() {
-        return currentAppenderLevel() == aLevel ? "selected" : null;
+        NSMutableArray classes = new NSMutableArray();
+        if (aLoggerLevel == LoggerLevel.UNSET) {
+            classes.addObject("unset");
+        }
+        if (currentAppenderLevel() == aLoggerLevel) {
+            classes.addObject("selected");
+        }
+        return  classes.componentsJoinedByString(" ");
     }
 
     public boolean omitAppenderThresholdSettingDecoration() {

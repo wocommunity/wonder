@@ -16,8 +16,12 @@ import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.components._private.ERXWORepetition;
+import er.extensions.eof.ERXSortOrdering;
+import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
+
 
 
 /**
@@ -66,6 +70,7 @@ import er.extensions.foundation.ERXValueUtilities;
  *        batchSize = 10;                                       // Controls size of batch in display group, use zero for no batching
  *        rowIdentifier = adKey;                                // Optional, key path into row returning a unique identifier for the row 
  *                                                              // rowIdentifier is used to build HTML ID attributes, so a String or Number works best
+ *        er.extensions.ERXWORepetition.checkHashCodes = true;  // Optional override for global ERXWORepetition setting
  *        
  *  
  *        columns = (                                           // List of columns to display, controls the initial display order
@@ -122,8 +127,12 @@ import er.extensions.foundation.ERXValueUtilities;
  *                keyPath = &quot;daysVacation&quot;;
  *                direction = &quot;ascending&quot;;
  *            }
- *      );
- *  
+ *        );													// This sort is always present so that if the grid is sorted with some ordering where
+ *        mandatorySort = {										// identical values span multiple batches, batch membership will not be indeterminate. 
+ *   	      keyPath = "masterAdKey";						    // This will only function if this sorting is quite unique (e.g. like a PK).
+ *   	      direction = "ascending";							// If this sort is also present in sortOrder (above), it will not be duplicated
+ *        };													// but will still always be present. If the user has not manually selected it,
+ *        														// it will not be indicated in the UI.
  *  }
  * </pre>
  * 
@@ -267,6 +276,8 @@ import er.extensions.foundation.ERXValueUtilities;
  *          content
  * @binding afterUpdate optional, JavaScript to execute client-side after the
  *          grid has updated
+ * @binding updateContainerParameters optional, passed as parameters binding to
+ *          the AjaxUpdateContainer wrapping the grid
  * 
  * @author chill
  */
@@ -321,8 +332,12 @@ public class AjaxGrid extends WOComponent {
 	public static final String SELECTED_OBJECTS_BINDING = "selectedObjects";
 	public static final String WILL_UPDATE_BINDING = "willUpdate";
 	public static final String AFTER_UPDATE_BINDING = "afterUpdate";
-
-
+	public static final String MANDATORY_SORT_ORDER_FLAG = "isMandatorySortOrder";
+	public static final String MANDATORY_SORT = "mandatorySort";
+	
+	public static final String CHECK_HASH_CODES = "er.extensions.ERXWORepetition.checkHashCodes";
+	
+	
 	public AjaxGrid(WOContext context) {
 		super(context);
 	}
@@ -367,14 +382,29 @@ public class AjaxGrid extends WOComponent {
 		}
 
 		NSMutableDictionary sortOrder = currentColumnSortOrder();
+		// Adding a new sort
 		if (sortOrder == null) {
 			NSMutableDictionary newSortOrder = new NSMutableDictionary(2);
 			newSortOrder.setObjectForKey(currentSortPath(), KEY_PATH);
 			newSortOrder.setObjectForKey(SORT_ASCENDING, SORT_DIRECTION);
 
-			sortOrders().addObject(newSortOrder);
+			// Keep hidden, mandatory sort as the least important
+			if (hasMandatorySort() &&
+				((NSMutableDictionary) sortOrdersByKeypath().objectForKey(manadatorySortKeyPath())).valueForKey(MANDATORY_SORT_ORDER_FLAG) != null) {
+				sortOrders().insertObjectAtIndex(newSortOrder, sortOrders().count() - 1);
+			}
+			else {
+				sortOrders().addObject(newSortOrder);
+			}
+
 			clearCachedConfiguration();
 		}
+		// Making the mandatory sort into an explicit sort
+		else if (sortOrder.valueForKey(MANDATORY_SORT_ORDER_FLAG) != null) {
+			sortOrder.removeObjectForKey(MANDATORY_SORT_ORDER_FLAG);
+			sortOrder.setObjectForKey(SORT_ASCENDING, SORT_DIRECTION);
+		}
+		// Changing sort direction
 		else {
 			String direction = (String) sortOrder.objectForKey(SORT_DIRECTION);
 			sortOrder.setObjectForKey(SORT_ASCENDING.equals(direction) ? SORT_DESCENDING : SORT_ASCENDING, SORT_DIRECTION);
@@ -389,7 +419,7 @@ public class AjaxGrid extends WOComponent {
 	 */
 	public void removeSorting() {
 		if (canResort()) {
-			configurationData().setObjectForKey(new NSMutableArray(), SORT_ORDER);
+			configurationData().setObjectForKey(hasMandatorySort() ? new NSMutableArray(manadatorySortDictionary()) : new NSMutableArray(), SORT_ORDER);
 			clearCachedConfiguration();
 			updateDisplayGroupSort();
 		}
@@ -402,6 +432,32 @@ public class AjaxGrid extends WOComponent {
 		return tableID() + "_RemoveSorting";
 	}
 
+	/** @return <code>true</code> if the configuration has anything under the MANDATORY_SORT key */
+	public boolean hasMandatorySort() {
+		return configurationData().objectForKey(MANDATORY_SORT) != null;
+	}
+
+	/** 
+	 * Returns a copy of the mandatory sort configuration with an
+	 * additional (dummy) value for the MANDATORY_SORT_ORDER_FLAG.
+	 *
+	 * @see #sortOrders()
+	 * @return a dictionary of the mandatory sort
+	 */
+	public NSDictionary manadatorySortDictionary() {
+		NSMutableDictionary manadatorySortDictionary = (NSMutableDictionary) configurationData().objectForKey(MANDATORY_SORT);
+		manadatorySortDictionary = manadatorySortDictionary.mutableClone();
+		manadatorySortDictionary.setObjectForKey(Boolean.TRUE, MANDATORY_SORT_ORDER_FLAG);
+
+		return manadatorySortDictionary;
+	}
+
+	/** @return value for KEY_PATH under MANDATORY_SORT, the path of the mandatory sort */
+	public String manadatorySortKeyPath() {
+		NSMutableDictionary manadatorySortDictionary = (NSMutableDictionary) configurationData().objectForKey(MANDATORY_SORT);
+		return (String) manadatorySortDictionary.objectForKey(KEY_PATH);
+	}
+	
 	/**
 	 * This method is called when the AjaxUpdateContainer is about to update. It
 	 * invokes the willUpdate action binding, if set, and discards the result.
@@ -412,11 +468,9 @@ public class AjaxGrid extends WOComponent {
 			valueForBinding(WILL_UPDATE_BINDING);
 		}
 
-		if (batchSize() != displayGroup().numberOfObjectsPerBatch()) {
-			displayGroup().setNumberOfObjectsPerBatch(batchSize());
-		}
+		updateBatchSize();
 	}
-
+	
 	/**
 	 * Script that goes on this page to initialize drag and drop on the grid
 	 * when the page loads / re-loads
@@ -522,7 +576,6 @@ public class AjaxGrid extends WOComponent {
 	 * @return an optional key path into row that will return a value that uniquely identifies this row
 	 */
 	public String rowIdentifier() {
-		
 		return (String) configurationData().valueForKey(ROW_IDENTIFIER);
 	}
 	
@@ -541,7 +594,21 @@ public class AjaxGrid extends WOComponent {
 	 * @return list of sort orders controlling display of data in the grid
 	 */
 	protected NSMutableArray sortOrders() {
-		return (NSMutableArray) configurationData().valueForKey(SORT_ORDER);
+		NSMutableArray sortOrders = (NSMutableArray) configurationData().valueForKey(SORT_ORDER);
+		
+		// Add the mandatory sort if it is not present
+		if (hasMandatorySort()) {
+			boolean includesMandatorySort = false;
+			for (int i = 0; i < sortOrders.count() && ! includesMandatorySort; i++) {
+				if (((NSKeyValueCoding) sortOrders.objectAtIndex(i)).valueForKey(KEY_PATH).equals(manadatorySortKeyPath())) {
+					includesMandatorySort = true;
+				}
+			}
+			if ( ! includesMandatorySort) {
+				sortOrders.addObject(manadatorySortDictionary());
+			}
+		}
+		return sortOrders;
 	}
 
 	/**
@@ -614,6 +681,15 @@ public class AjaxGrid extends WOComponent {
 		} 
 		return "row_" + String.valueOf(rowIndex());
 	}
+
+	/**
+	 * Returns a key into this row that produces a unique value for this row.
+	 * 
+	 * @return a key into this row that produces a unique value for this row
+	 */
+	public String rowIdentifierKey() {
+		return rowIdentifier() != null ? rowIdentifier() : "hashCode";
+	}
 	
 	/**
 	 * @return dictionary of columns() keyed on KEY_PATH of column
@@ -638,7 +714,6 @@ public class AjaxGrid extends WOComponent {
 			NSArray sortOrders = sortOrders();
 			sortOrdersByKeypath = new NSMutableDictionary(sortOrders.count());
 			for (int i = 0; i < sortOrders.count(); i++) {
-				
 				sortOrdersByKeypath.setObjectForKey(sortOrders.objectAtIndex(i), ((NSKeyValueCoding) sortOrders.objectAtIndex(i)).valueForKey(KEY_PATH));
 			}
 		}
@@ -676,18 +751,52 @@ public class AjaxGrid extends WOComponent {
 	}
 
 	/**
-	 * Updates sort orders on the display group
+	 * Updates sort orders on the display group.  This is public and static so that a display group can be pre-configured
+	 * for the AjaxGrid to avoid re-fetching (happens if there is a nav bar that gets rendered before the grid).
+	 * 
+	 * @param dg the WODisplayGroup to set the sortOrderings of
+	 * @param sortConfig NSArray of sorts from grid configuration (not EOSortOrderings)
 	 */
-	protected void updateDisplayGroupSort() {
-		NSArray sort = sortOrders();
-		NSMutableArray sortOrders = new NSMutableArray(sort.count());
-		for (int i = 0; i < sort.count(); i++) {
-			NSDictionary column = (NSDictionary) sort.objectAtIndex(i);
-			sortOrders.addObject(new EOSortOrdering((String) column.objectForKey(KEY_PATH), (SORT_ASCENDING.equals(column.objectForKey(SORT_DIRECTION)) ? EOSortOrdering.CompareCaseInsensitiveAscending : EOSortOrdering.CompareCaseInsensitiveDescending)));
+	public static void updateDisplayGroupSort(WODisplayGroup dg, NSArray sortConfig) {
+		NSMutableArray sortOrders = new NSMutableArray(sortConfig.count());
+		for (int i = 0; i < sortConfig.count(); i++) {
+			NSDictionary column = (NSDictionary) sortConfig.objectAtIndex(i);
+			sortOrders.addObject(new ERXSortOrdering((String) column.objectForKey(KEY_PATH), (SORT_ASCENDING.equals(column.objectForKey(SORT_DIRECTION)) ? EOSortOrdering.CompareCaseInsensitiveAscending : EOSortOrdering.CompareCaseInsensitiveDescending)));
 		}
 
-		displayGroup().setSortOrderings(sortOrders);
-		displayGroup().updateDisplayedObjects();
+		// Only set this if there has been an actual change to avoid discarding fetched objects
+		if (! sortOrders.equals(dg.sortOrderings()) ) {
+			dg.setSortOrderings(sortOrders);
+			dg.updateDisplayedObjects();
+		}
+	}
+	
+	/**
+	 * Updates sort orders on the display group.
+	 */
+	protected void updateDisplayGroupSort() {
+		updateDisplayGroupSort(displayGroup(), sortOrders());
+	}
+	
+	
+	/**
+	 * Updates numberOfObjectsPerBatch on the display group.   This is public and static so that a display group can be pre-configured
+	 * for the AjaxGrid to avoid re-fetching (happens if there is a nav bar that gets rendered before the grid).
+	 * 
+	 * @param dg the WODisplayGroup to set the sortOrderings of
+	 * @param batchSize batch size from grid configuration (not EOSortOrderings)
+	 */
+	public static void updateBatchSize(WODisplayGroup dg, int batchSize) {
+		if (dg.numberOfObjectsPerBatch() != batchSize) {
+			dg.setNumberOfObjectsPerBatch(batchSize);
+		}
+	}
+	
+	/**
+	 * Updates numberOfObjectsPerBatch on the display group
+	 */
+	protected void updateBatchSize() {
+		updateBatchSize(displayGroup(), batchSize());
 	}
 
 	/**
@@ -698,10 +807,7 @@ public class AjaxGrid extends WOComponent {
 		if (displayGroup == null) {
 			displayGroup = (WODisplayGroup) valueForBinding(DISPLAY_GROUP_BINDING);
 			updateDisplayGroupSort();
-
-			if (displayGroup().numberOfObjectsPerBatch() != batchSize()) {
-				displayGroup().setNumberOfObjectsPerBatch(batchSize());
-			}
+			updateBatchSize();
 		}
 
 		return displayGroup;
@@ -720,10 +826,10 @@ public class AjaxGrid extends WOComponent {
 	
 	/**
 	 * @return <code>true</code> if currentColumn() is part of the sort
-	 *         ordering
+	 *         ordering but is not the mandatory sort
 	 */
 	public boolean isCurrentColumnSorted() {
-		return currentColumnSortOrder() != null;
+		return currentColumnSortOrder() != null && currentColumnSortOrder().objectForKey(MANDATORY_SORT_ORDER_FLAG) == null;
 	}
 
 	/**
@@ -942,4 +1048,17 @@ public class AjaxGrid extends WOComponent {
 		return this;
 	}
 
+	/**
+	 * Allows configuration data to override ERXWORepetition default for checkHashCodes. 
+	 * 
+	 * @return boolean value for CHECK_HASH_CODES if set in config data, otherwise the default from ERXWORepetition
+	 */
+	public boolean checkHashCodes() {
+		if (configurationData().objectForKey(CHECK_HASH_CODES) == null) {
+			configurationData().setObjectForKey(Boolean.toString(ERXProperties.booleanForKeyWithDefault("er.extensions.ERXWORepetition.checkHashCodes", 
+																 ERXProperties.booleanForKey(ERXWORepetition.class.getName() + ".checkHashCodes"))),
+												CHECK_HASH_CODES);
+		}
+		return Boolean.parseBoolean((String)configurationData().objectForKey(CHECK_HASH_CODES));
+	}
 }
