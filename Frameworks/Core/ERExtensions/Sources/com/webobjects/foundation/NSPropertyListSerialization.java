@@ -2884,7 +2884,7 @@ public class NSPropertyListSerialization {
 	 *                                       // unless 0b1111 then a int
 	 *                                       // variable-sized object follows
 	 *                                       // to indicate the number of objref
-	 * dict ::= 0b1010 0bnnnn [int] keyref* objref*
+	 * dict ::= 0b1110 0bnnnn [int] keyref* objref*
 	 *                                       // nnnn is number of keyref and
 	 *                                       // objref pairs
 	 *                                       // unless 0b1111 then a int
@@ -2906,11 +2906,14 @@ public class NSPropertyListSerialization {
 	 *                                       // these are the byte offsets into
 	 *                                       // the file
 	 *                                       // number of these is in the trailer
-	 * trailer ::= refCount offsetCount objectCount topLevelOffset
-	 * refCount ::= byte*8                  // unsigned big-endian long
-	 * offsetCount ::= byte*8               // unsigned big-endian long
-	 * objectCount ::= byte*8               // unsigned big-endian long
-	 * topLevelOffset ::= byte*8            // unsigned big-endian long
+	 * trailer ::= trailerUnused trailerSortVersion offsetIntSize objectRefSize objectCount theTopObject offsetTableOffset
+     * trailerUnused ::= byte*5             // 5 unused bytes
+     * trailerSortVersion ::= byte          // sortVersion 0x0, apparently not used in CF
+     * offsetIntSize ::= byte               // Size (in bytes) of the ints in the offsetTable
+     * objectRefSize ::= byte               // Size (in bytes) of the total number of objects references
+     * offsetCount ::= byte*8               // Object count, unsigned big-endian long
+     * theTopObject ::= byte*8              // Appears to be 0 in CF, unsigned big-endian long
+     * offsetTableOffset ::= byte*8         // Offset of the offset table, unsigned big-endian long
 	 * </pre>
 	 */
 	public static class _BinaryPListParser {
@@ -3705,9 +3708,10 @@ public class NSPropertyListSerialization {
 				object.appendToData(theData, refsize);
 			}
 			int offsetTableStart = theData.length();
-			//
-			long lastOffset = objectOffsets.get((int) numberOfObjects - 1).longValue();
-			int intsize = EncodedObject.refSizeForValue(lastOffset);
+			
+			// CF expects intsize to be calculated based on the offset table start position
+            // and not on the offset of the last object.
+            int intsize = EncodedObject.refSizeForValue(offsetTableStart);
 
 			for (Long offset : objectOffsets) {
 				theData.appendBytes(EncodedObject.encodeRef(offset, intsize));
