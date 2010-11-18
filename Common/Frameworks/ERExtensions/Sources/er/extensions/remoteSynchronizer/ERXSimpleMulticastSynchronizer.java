@@ -174,10 +174,11 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 							int transactionID = dis.readInt();
 							short transactionNum = dis.readShort();
 							short transactionSize = dis.readShort();
-							String transactionIdentifierStr = identifier + "-" + transactionID;
+							String identifierHex = ERXStringUtilities.byteArrayToHexString(identifier);
+							String transactionIdentifierStr = identifierHex + "-" + transactionID;
 							RemoteChange remoteChange = (RemoteChange) _incomingCacheChanges.objectForKey(transactionIdentifierStr);
 							if (remoteChange == null) {
-								remoteChange = new RemoteChange(ERXStringUtilities.byteArrayToHexString(identifier), transactionID, transactionSize);
+								remoteChange = new RemoteChange(identifierHex, transactionID, transactionSize);
 								_incomingCacheChanges.setObjectForKey(remoteChange, transactionIdentifierStr);
 							}
 

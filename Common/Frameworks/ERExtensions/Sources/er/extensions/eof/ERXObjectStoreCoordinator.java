@@ -20,7 +20,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  */
 public class ERXObjectStoreCoordinator extends EOObjectStoreCoordinator {
 
-	public static Logger log = Logger.getLogger(ERXObjectStoreCoordinator.class);
+	public static final Logger log = Logger.getLogger(ERXObjectStoreCoordinator.class);
 
 	NSMutableDictionary/*<Thread, NSMutableArray<Exception>>*/ openLockTraces;
 
