@@ -17,6 +17,7 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOKeyValueCodingAdditions;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.appserver.ERXApplication;
 import er.extensions.foundation.ERXProperties;
@@ -34,6 +35,8 @@ public class ERCMailDelivery {
 
     /** logging supprt */
     public static final Logger log = Logger.getLogger(ERCMailDelivery.class);
+
+    private static final int MAX_TO_ADDRESS_SIZE = 1000;
 
     //	===========================================================================
     //	Class Variable(s)
@@ -59,7 +62,7 @@ public class ERCMailDelivery {
     }
 
     /**
-        * Utilitiy method used to break an array of email addresses
+     * Utilitiy method used to break an array of email addresses
      * down into a comma separated list. Performs a bit of search
      * and replace to clean up the email addresses a bit.
      * @param a array of email addresses
@@ -86,6 +89,43 @@ public class ERCMailDelivery {
         }
         return result.toString();
     }
+    
+    /**
+     * Utility method to break down an array of addresses into an
+     * array of several strings, each one with several addresses.
+     * Each string length is lower than {@link #MAX_TO_ADDRESS_SIZE}.
+     * 
+     * @param a array of addresses
+     * @return array of comma separated and cleaned up lists of email addresses
+     */
+    public static NSArray commaSeparatedListArrayFromArray(NSArray a) {
+        int currentSize = 0;
+        final int maxSizePerArray = MAX_TO_ADDRESS_SIZE; //FIXME Find this by peeking into model
+        NSMutableArray partialArray = new NSMutableArray();
+        NSMutableArray result = new NSMutableArray();
+      
+        for( Enumeration addressEnumerator = a.objectEnumerator(); addressEnumerator.hasMoreElements(); ) {
+            String address = (String) addressEnumerator.nextElement();
+            if( address.length() > maxSizePerArray ) {
+                throw new RuntimeException( "Address " + address + " is too long." );
+            }
+            
+            if( currentSize + address.length() > maxSizePerArray ) {
+                result.addObject( commaSeparatedListFromArray(partialArray) );
+                partialArray = new NSMutableArray();
+                currentSize = 0;
+            }
+            
+            partialArray.addObject( address );
+            currentSize += address.length() + 2; // Consider the address and ", "
+        }
+        
+        if( partialArray.count() > 0 ) {
+          result.addObject( commaSeparatedListFromArray(partialArray) );
+        }
+        
+        return result;
+    }
 
     /**
         * Is  Mail turned on
@@ -101,7 +141,7 @@ public class ERCMailDelivery {
     //	---------------------------------------------------------------------------
 
     /**
-     * Composes a mail message.
+     * Composes a mail messages.
      *
      * @param from email address
      * @param to email addresses
@@ -111,9 +151,9 @@ public class ERCMailDelivery {
      * @param message text of the message
      * @param ec editing context to create the mail
      *		message in.
-     * @return created mail message for the given parameters
+     * @return created mail messages for the given parameters
      */
-    public ERCMailMessage composeEmail(String from,
+    public NSArray composeEmail(String from,
                                        NSArray to,
                                        NSArray cc,
                                        NSArray bcc,
@@ -124,7 +164,7 @@ public class ERCMailDelivery {
     }
     
     /**
-     * Composes a mail message.
+     * Composes mail messages.
      *
      * @param contextString the message context 
      * @param from email address
@@ -135,9 +175,9 @@ public class ERCMailDelivery {
      * @param message text of the message
      * @param ec editing context to create the mail
      *		message in.
-     * @return created mail message for the given parameters
+     * @return created mail messages for the given parameters
      */
-    public ERCMailMessage composeEmail(String contextString,
+    public NSArray composeEmail(String contextString,
     		                           String from,
                                        NSArray to,
                                        NSArray cc,
@@ -145,32 +185,50 @@ public class ERCMailDelivery {
                                        String title,
                                        String message,
                                        EOEditingContext ec) {
-        ERCMailMessage mailMessage = null;
-
+      
+        NSMutableArray messages = new NSMutableArray( to.count() );
+      
         if (log.isDebugEnabled()) {
             log.debug("Sending email title \"" + title + "\" from \"" + from + "\" to \"" + to + "\" cc \""
                       + cc + "\" bcc \"" + bcc + "\"");
             log.debug("Email message: " + message);
         }
         if (usesMail()) {
-            mailMessage = (ERCMailMessage)ERCMailMessage.mailMessageClazz().createAndInsertObject(ec);
+            boolean firstMessage = true;
             String safeTitle = title != null ? ( title.length() > 200 ? title.substring(0,198) : title ) : null;
-            mailMessage.setTitle(safeTitle);
-            mailMessage.setFromAddress(from);
-            mailMessage.setToAddresses(commaSeparatedListFromArray(to));
-            mailMessage.setCcAddresses(commaSeparatedListFromArray(cc));
-            mailMessage.setBccAddresses(commaSeparatedListFromArray(bcc));
-            mailMessage.setText(message);
+            NSArray toLists = commaSeparatedListArrayFromArray( to );
+            
+            for( Enumeration toListsEnumerator = toLists.objectEnumerator(); toListsEnumerator.hasMoreElements(); ) {
+                String toAddresses = (String) toListsEnumerator.nextElement();
+                ERCMailMessage mailMessage = (ERCMailMessage)ERCMailMessage.mailMessageClazz().createAndInsertObject(ec);
+                mailMessage.setTitle(safeTitle);
+                mailMessage.setFromAddress(from);
+                mailMessage.setToAddresses(toAddresses);
+                mailMessage.setText(message);
+                
+                // CCers and BCCers should receive only one copy of the email, so we include them only on one of the messages
+                if( firstMessage ) {
+                    mailMessage.setCcAddresses(commaSeparatedListFromArray(cc));
+                    mailMessage.setBccAddresses(commaSeparatedListFromArray(bcc));
+                    firstMessage = false;
+                }
+                
+                messages.addObject( mailMessage );
+                
+                if( toLists.count() > 1 ) {
+                    mailMessage.setHasClones( true );
+                }
+            }
         } else {
             throw new RuntimeException("The application doesn't use the ERCUseMailFacility."+
                                        "You can either set er.corebusinesslogic.ERCUseMailFacility in your properties or better check for that property before trying to compose the email");
         }
 
-        return mailMessage;
+        return messages;
     }
 
     /**
-     * Composes a mail message with attachments.
+     * Composes mail messages with attachments.
      *
      * @param from email address
      * @param to email addresses
@@ -182,9 +240,9 @@ public class ERCMailDelivery {
      * @param deleteOnSent should the attachment files be deleted when the message is sent
      * @param ec editing context to create the mail
      *		message in.
-     * @return created mail message for the given parameters
+     * @return created mail messages for the given parameters
      */
-    public ERCMailMessage composeEmailWithAttachments (String from,
+    public NSArray composeEmailWithAttachments (String from,
                                                        NSArray to,
                                                        NSArray cc,
                                                        NSArray bcc,
@@ -197,7 +255,7 @@ public class ERCMailDelivery {
     }
     
     /**
-     * Composes a mail message with attachments.
+     * Composes mail messages with attachments.
      *
      * @param contextString the message context 
      * @param from email address
@@ -210,9 +268,9 @@ public class ERCMailDelivery {
      * @param deleteOnSent should the attachment files be deleted when the message is sent
      * @param ec editing context to create the mail
      *		message in.
-     * @return created mail message for the given parameters
+     * @return created mail messages for the given parameters
      */
-    public ERCMailMessage composeEmailWithAttachments (String contextString,
+    public NSArray composeEmailWithAttachments (String contextString,
                                                        String from,
                                                        NSArray to,
                                                        NSArray cc,
@@ -222,21 +280,26 @@ public class ERCMailDelivery {
                                                        NSArray filePaths,
                                                        boolean deleteOnSent,
                                                        EOEditingContext ec) {
-        ERCMailMessage mailMessage = this.composeEmail(contextString, from, to, cc, bcc, title, message, ec);
+        NSArray messages = this.composeEmail(contextString, from, to, cc, bcc, title, message, ec);
 
-        for (Enumeration filePathEnumerator = filePaths.objectEnumerator();
-             filePathEnumerator.hasMoreElements();) {
-            String filePath = (String)filePathEnumerator.nextElement();
-            ERCMessageAttachment attachment = (ERCMessageAttachment)ERCMessageAttachment.messageAttachmentClazz().createAndInsertObject(ec);
-            attachment.setFilePath(filePath);
-            attachment.setDeleteOnSent(Boolean.valueOf(deleteOnSent));
-            mailMessage.addToBothSidesOfAttachments(attachment);
+        for(Enumeration messageEnumerator = messages.objectEnumerator(); messageEnumerator.hasMoreElements(); ) {
+            ERCMailMessage mailMessage = (ERCMailMessage) messageEnumerator.nextElement();
+            
+            for (Enumeration filePathEnumerator = filePaths.objectEnumerator();
+              filePathEnumerator.hasMoreElements();) {
+                String filePath = (String)filePathEnumerator.nextElement();
+                ERCMessageAttachment attachment = (ERCMessageAttachment)ERCMessageAttachment.messageAttachmentClazz().createAndInsertObject(ec);
+                attachment.setFilePath(filePath);
+                attachment.setDeleteOnSent(Boolean.valueOf(deleteOnSent));
+                mailMessage.addToBothSidesOfAttachments(attachment);
+            }
         }
-        return mailMessage;
+      
+        return messages;
     }
 
     /**
-     * Composes a mail message from a given component.
+     * Composes mail messages from a given component.
      *
      * @param from email address
      * @param to email addresses
@@ -246,9 +309,9 @@ public class ERCMailDelivery {
      * @param component to render to get the message
      * @param ec editing context to create the mail
      *		message in.
-     * @return created mail message for the given parameters
+     * @return created mail messages for the given parameters
      */
-    public ERCMailMessage composeComponentEmail (String from,
+    public NSArray composeComponentEmail (String from,
                                                  NSArray to,
                                                  NSArray cc,
                                                  NSArray bcc,
@@ -259,7 +322,7 @@ public class ERCMailDelivery {
     }
     
     /**
-     * Composes a mail message from a given component.
+     * Composes mail messages from a given component.
      *
      * @param contextString the message context 
      * @param from email address
@@ -270,9 +333,9 @@ public class ERCMailDelivery {
      * @param component to render to get the message
      * @param ec editing context to create the mail
      *		message in.
-     * @return created mail message for the given parameters
+     * @return created mail messages for the given parameters
      */
-    public ERCMailMessage composeComponentEmail (String contextString,
+    public NSArray composeComponentEmail (String contextString,
                                                  String from,
                                                  NSArray to,
                                                  NSArray cc,
@@ -294,7 +357,7 @@ public class ERCMailDelivery {
     }
 
     /**
-     * Composes a mail message from a given component.
+     * Composes mail messages from a given component.
      *
      * @param from email address
      * @param to email addresses
@@ -304,9 +367,9 @@ public class ERCMailDelivery {
      * @param componentName name of the component to render
      * @param ec editing context to create the mail
      *		message in.
-     * @return created mail message for the given parameters
+     * @return created mail messages for the given parameters
      */
-    public ERCMailMessage composeComponentEmail (String from,
+    public NSArray composeComponentEmail (String from,
                                                  NSArray to,
                                                  NSArray cc,
                                                  NSArray bcc,
@@ -318,7 +381,7 @@ public class ERCMailDelivery {
     }
     
     /**
-     * Composes a mail message from a given component.
+     * Composes mail messages from a given component.
      *
      * @param contextString the message context 
      * @param from email address
@@ -329,9 +392,9 @@ public class ERCMailDelivery {
      * @param componentName name of the component to render
      * @param ec editing context to create the mail
      *		message in.
-     * @return created mail message for the given parameters
+     * @return created mail messages for the given parameters
      */
-    public ERCMailMessage composeComponentEmail (String contextString,
+    public NSArray composeComponentEmail (String contextString,
                                                  String from,
                                                  NSArray to,
                                                  NSArray cc,
@@ -355,7 +418,7 @@ public class ERCMailDelivery {
     }
 
     /**
-     * Composes a mail message from a given component.
+     * Composes mail messages from a given component.
      *
      * @param from email address
      * @param to email addresses
@@ -367,9 +430,9 @@ public class ERCMailDelivery {
      * @param bindings bindings dictionary to use for the components that are instantiated
      * @param ec editing context to create the mail
      *		message in.
-     * @return created mail message for the given parameters
+     * @return created mail messages for the given parameters
      */
-    public ERCMailMessage composeComponentEmail (String from,
+    public NSArray composeComponentEmail (String from,
                                                  NSArray to,
                                                  NSArray cc,
                                                  NSArray bcc,
@@ -382,7 +445,7 @@ public class ERCMailDelivery {
     }
     
     /**
-     * Composes a mail message from a given component.
+     * Composes mail messages from a given component.
      *
      * @param contextString the message context 
      * @param from email address
@@ -395,9 +458,9 @@ public class ERCMailDelivery {
      * @param bindings bindings dictionary to use for the components that are instantiated
      * @param ec editing context to create the mail
      *		message in.
-     * @return created mail message for the given parameters
+     * @return created mail messages for the given parameters
      */
-    public ERCMailMessage composeComponentEmail (String contextString,
+    public NSArray composeComponentEmail (String contextString,
                                                  String from,
                                                  NSArray to,
                                                  NSArray cc,
@@ -407,7 +470,7 @@ public class ERCMailDelivery {
                                                  String plainTextComponentName,
                                                  NSDictionary bindings,
                                                  EOEditingContext ec) {
-        ERCMailMessage result = composeComponentEmail(contextString, from, to, cc, bcc, title, componentName, bindings, ec);
+        NSArray result = composeComponentEmail(contextString, from, to, cc, bcc, title, componentName, bindings, ec);
         WOComponent plainTextComponent = ERXApplication.instantiatePage(plainTextComponentName);
         try{
             plainTextComponent = ERXApplication.instantiatePage(plainTextComponentName);
@@ -418,13 +481,17 @@ public class ERCMailDelivery {
             EOKeyValueCodingAdditions.DefaultImplementation.takeValuesFromDictionary(plainTextComponent, bindings);
             WOContext context = plainTextComponent.context();
             context._generateCompleteURLs ();
-            result.setPlainText(plainTextComponent.generateResponse().contentString());
+            for ( Enumeration messageEnumerator = result.objectEnumerator(); messageEnumerator.hasMoreElements(); ) {
+                ERCMailMessage message = (ERCMailMessage) messageEnumerator.nextElement();
+                message.setPlainText(plainTextComponent.generateResponse().contentString());
+            }
+            
         }
         return result;
     }
     
     /**
-     * Composes a mail message from previously instantiated components.
+     * Composes mail message from previously instantiated components.
      *
      * @param from email address
      * @param to email addresses
@@ -435,9 +502,9 @@ public class ERCMailDelivery {
      * @param plainTextComponent plain-text component to render
      * @param ec editing context to create the mail
      *		message in.
-     * @return created mail message for the given parameters
+     * @return created mail messages for the given parameters
      */
-     public ERCMailMessage composeComponentEmail (String from,
+     public NSArray composeComponentEmail (String from,
                                                  NSArray to,
                                                  NSArray cc,
                                                  NSArray bcc,
@@ -449,7 +516,7 @@ public class ERCMailDelivery {
      }
      
     /**
-     * Composes a mail message from previously instantiated components.
+     * Composes mail message from previously instantiated components.
      *
      * @param contextString the message context 
      * @param from email address
@@ -461,9 +528,9 @@ public class ERCMailDelivery {
      * @param plainTextComponent plain-text component to render
      * @param ec editing context to create the mail
      *		message in.
-     * @return created mail message for the given parameters
+     * @return created mail messages for the given parameters
      */
-     public ERCMailMessage composeComponentEmail (String contextString,
+     public NSArray composeComponentEmail (String contextString,
                                                  String from,
                                                  NSArray to,
                                                  NSArray cc,
@@ -472,13 +539,16 @@ public class ERCMailDelivery {
                                                  WOComponent component,
                                                  WOComponent plainTextComponent,
                                                  EOEditingContext ec) {
-        ERCMailMessage result = composeComponentEmail(contextString, from, to, cc, bcc, title, component, ec);
+        NSArray result = composeComponentEmail(contextString, from, to, cc, bcc, title, component, ec);
         
         if ( plainTextComponent != null ) {
             WOContext context = plainTextComponent.context();
             
             context._generateCompleteURLs();
-            result.setPlainText(plainTextComponent.generateResponse().contentString());
+            for ( Enumeration messageEnumerator = result.objectEnumerator(); messageEnumerator.hasMoreElements(); ) {
+              ERCMailMessage message = (ERCMailMessage) messageEnumerator.nextElement();
+              message.setPlainText(plainTextComponent.generateResponse().contentString());
+            }
         }
         
         return result;
