@@ -13,16 +13,16 @@ import com.webobjects.foundation.NSArray;
  *
  */
 public class ERXRoundRobinCollection<E> {
-	private final NSArray<E> collection;
-	private volatile Iterator<E> iterator;
-	private E singleItem;
+	private final NSArray<E> _collection;
+	private volatile Iterator<E> _iterator;
+	private E _singleItem;
 	
-	public ERXRoundRobinCollection(@SuppressWarnings("hiding") final NSArray<E> collection) {
-		this.collection = collection.immutableClone();
+	public ERXRoundRobinCollection(final NSArray<E> collection) {
+		this._collection = collection.immutableClone();
 		if (collection.count() == 1) {
-			this.singleItem = collection.objectAtIndex(0);
+			this._singleItem = collection.objectAtIndex(0);
 		} else {
-			this.iterator = collection.iterator();
+			this._iterator = collection.iterator();
 		} //~ if (collection.count() == 1)
 		
 	}
@@ -31,20 +31,20 @@ public class ERXRoundRobinCollection<E> {
 	 * @return the array of objects in the pool
 	 */
 	public NSArray<E> array() {
-		return collection;
+		return _collection;
 	}
 	
 	/**
 	 * @return the next item in the pool infinitely. When end of the list is reached, the first item in the list is returned.
 	 */
 	public synchronized E next() {
-		if (iterator == null) {
-			return singleItem;
+		if (_iterator == null) {
+			return _singleItem;
 		}
-		if (!iterator.hasNext()) {
-			iterator = collection.iterator();
+		if (!_iterator.hasNext()) {
+			_iterator = _collection.iterator();
 		}
-		return iterator.next();
+		return _iterator.next();
 	}
 
 }
