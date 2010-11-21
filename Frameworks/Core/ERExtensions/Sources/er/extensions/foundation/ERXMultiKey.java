@@ -107,7 +107,7 @@ public class ERXMultiKey {
 
             if ( theKey != null ) {
                 result ^= theKey.hashCode();
-                result = ( result << 1 ) | ( result >> 31 );
+                result = ( result << 1 ) | ( result >>> 31 );
             }
         }
 

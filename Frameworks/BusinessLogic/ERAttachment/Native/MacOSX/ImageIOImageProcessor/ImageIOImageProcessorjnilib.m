@@ -93,6 +93,7 @@ JNIEXPORT jboolean JNICALL Java_er_attachment_thumbnail_ImageIOImageProcessor_pr
 	if (thumbnailCreated) {
 		NSURL *imageURL = [NSURL fileURLWithPath:path];
 		CGImageSourceRef source = CGImageSourceCreateWithURL((CFURLRef)imageURL, NULL);
+
 		if (source != nil) {
 			int maxPixelSize;
 			if (_resizeWidth == -1 && _resizeHeight == -1) {
@@ -116,8 +117,24 @@ JNIEXPORT jboolean JNICALL Java_er_attachment_thumbnail_ImageIOImageProcessor_pr
 			}
 			
 			if (maxPixelSize != -1) {
+				
+				originalImage = CGImageSourceCreateThumbnailAtIndex(source, 0, (CFDictionaryRef)thumbnailOpts);
+				NSInteger oWidth = CGImageGetWidth(originalImage);
+				NSInteger oHeight = CGImageGetHeight(originalImage);
+
+				if (_resizeWidth > _resizeHeight) {
+					if (oHeight > oWidth) {
+						maxPixelSize = (oHeight * maxPixelSize) / oWidth;
+					}
+				} else {
+					if (oWidth > oHeight) {
+						maxPixelSize = (oWidth * maxPixelSize) / oHeight;
+					}
+				}
+								
 				[thumbnailOpts setObject:[NSNumber numberWithInt:maxPixelSize] forKey:(id)kCGImageSourceThumbnailMaxPixelSize];
 				originalImage = CGImageSourceCreateThumbnailAtIndex(source, 0, (CFDictionaryRef)thumbnailOpts);
+
 			}
 			else {
 				originalImage = CGImageSourceCreateImageAtIndex(source, 0, (CFDictionaryRef)thumbnailOpts);
