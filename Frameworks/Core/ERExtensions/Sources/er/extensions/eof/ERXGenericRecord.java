@@ -77,7 +77,7 @@ import er.extensions.validation.ERXValidationFactory;
  * on, you must set the system default
  * <code>er.extensions.ERXEnterpriseObject.updateInverseRelationships=true</code>.
  */
-public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjectInterface, ERXGeneratesPrimaryKeyInterface, ERXEnterpriseObject, ERXKey.ValueCoding, AutoBatchFaultingEnterpriseObject {
+public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjectInterface, ERXGeneratesPrimaryKeyInterface, ERXEnterpriseObject, ERXKey.ValueCoding, AutoBatchFaultingEnterpriseObject, ERXNonNullObjectInterface {
 
 	/** holds all subclass related Logger's */
 	private static final NSMutableDictionary<Class, Logger> classLogs = new NSMutableDictionary<Class, Logger>();
@@ -1721,5 +1721,9 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      */
     public void setBatchFaultingTimestamp(long timestamp) {
         _fetchTime = timestamp;
+    }
+    
+    public final Boolean isNonNull() {
+    	return Boolean.TRUE;
     }
 }
