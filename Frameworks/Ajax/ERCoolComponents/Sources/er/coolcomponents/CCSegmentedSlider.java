@@ -1,4 +1,6 @@
+
 package er.coolcomponents;
+
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
@@ -7,15 +9,17 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.ajax.AjaxUtils;
 import er.extensions.ERXExtensions;
 import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.components.ERXComponent;
 import er.extensions.foundation.ERXStringUtilities;
 
+
 /**
- * CCSegmentedSlider provides a picker for an enumerated type inspired by the iPhone on/off slider. The bindings are similar
- * to a WOPopUpButton. For a bunch of example uses and example CSS modifications, check out 
- * <a href="http://mschrag.github.com/segmented_slider/example/">the SegmentedSlider example page<a>.
+ * CCSegmentedSlider provides a picker for an enumerated type inspired by the iPhone on/off slider. The bindings are
+ * similar to a WOPopUpButton. For a bunch of example uses and example CSS modifications, check out <a
+ * href="http://mschrag.github.com/segmented_slider/example/">the SegmentedSlider example page<a>.
  * 
  * @binding id the id of the segmented slider (or one will be generated)
  * @binding list the list of options
@@ -30,18 +34,24 @@ import er.extensions.foundation.ERXStringUtilities;
  * @author mschrag
  */
 public class CCSegmentedSlider extends ERXComponent {
+
 	private String _id;
+
 	public String _radioButtonGroupName;
+
 	private Object _selection;
+
 
 	public CCSegmentedSlider(WOContext context) {
 		super(context);
 	}
 
+
 	@Override
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}
+
 
 	public String id() {
 		if (_id == null) {
@@ -49,6 +59,7 @@ public class CCSegmentedSlider extends ERXComponent {
 		}
 		return _id;
 	}
+
 
 	public String displayString() {
 		String displayName;
@@ -60,20 +71,25 @@ public class CCSegmentedSlider extends ERXComponent {
 		return displayName;
 	}
 
+
 	public NSDictionary<String, Object> options() {
 		NSMutableDictionary<String, Object> options = new NSMutableDictionary<String, Object>();
 		if (hasBinding("initialSelection")) {
-			options.setObjectForKey(Boolean.valueOf(booleanValueForBinding("initialSelection", true)), "initialSelection");
+			options.setObjectForKey(Boolean.valueOf(booleanValueForBinding("initialSelection", true)),
+					"initialSelection");
 		}
 		if (hasBinding("toggleSelection")) {
-			options.setObjectForKey(Boolean.valueOf(booleanValueForBinding("toggleSelection", false)), "toggleSelection");
+			options.setObjectForKey(Boolean.valueOf(booleanValueForBinding("toggleSelection", false)),
+					"toggleSelection");
 		}
 		if (hasBinding("enableDragSupport")) {
-			options.setObjectForKey(Boolean.valueOf(booleanValueForBinding("enableDragSupport", false)), "enableDragSupport");
+			options.setObjectForKey(Boolean.valueOf(booleanValueForBinding("enableDragSupport", false)),
+					"enableDragSupport");
 		}
 
 		return options;
 	}
+
 
 	public String value() {
 		String value;
@@ -85,17 +101,20 @@ public class CCSegmentedSlider extends ERXComponent {
 		return value;
 	}
 
+
 	public boolean isChecked() {
 		Object selection = valueForBinding("selection");
 		Object item = valueForBinding("item");
 		return ERXExtensions.safeEquals(selection, item);
 	}
 
+
 	public void setChecked(boolean checked) {
 		if (checked) {
 			_selection = valueForBinding("item");
 		}
 	}
+
 
 	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
@@ -105,19 +124,31 @@ public class CCSegmentedSlider extends ERXComponent {
 		setValueForBinding(_selection, "selection");
 	}
 
+
 	@Override
 	public WOActionResults invokeAction(WORequest request, WOContext context) {
 		_radioButtonGroupName = context.elementID();
 		return super.invokeAction(request, context);
 	}
 
+
 	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		_radioButtonGroupName = context.elementID();
 		ERXResponseRewriter.addScriptResourceInHead(response, context, "Ajax", "prototype.js");
 		ERXResponseRewriter.addScriptResourceInHead(response, context, "Ajax", "effects.js");
-		ERXResponseRewriter.addScriptResourceInHead(response, context, "ERCoolComponents", "SegmentedSlider/SegmentedSlider.js");
-		ERXResponseRewriter.addStylesheetResourceInHead(response, context, "ERCoolComponents", "SegmentedSlider/SegmentedSlider.css");
+		ERXResponseRewriter.addScriptResourceInHead(response, context, "ERCoolComponents",
+				"SegmentedSlider/SegmentedSlider.js");
+		ERXResponseRewriter.addStylesheetResourceInHead(response, context, "ERCoolComponents",
+				"SegmentedSlider/SegmentedSlider.css");
+
+		if (AjaxUtils.isAjaxRequest(context.request()))
+			response.appendContentString("<script>new SegmentedSlider($('" + id() + "'), '" + _radioButtonGroupName
+					+ "', '')</script>");
+		else
+			response.appendContentString("<script>Event.observe(window, 'load', function() { new SegmentedSlider($('"
+					+ id() + "'), '" + _radioButtonGroupName + "', '') })</script>");
+
 		super.appendToResponse(response, context);
 	}
 }
