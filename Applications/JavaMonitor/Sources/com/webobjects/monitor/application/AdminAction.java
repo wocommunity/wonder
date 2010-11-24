@@ -517,7 +517,9 @@ public class AdminAction extends WODirectAction {
     protected void refreshInformation() {
         for (Enumeration enumeration = (new NSSet((NSArray) instances.valueForKey("application"))).objectEnumerator(); enumeration.hasMoreElements();) {
             MApplication mapplication = (MApplication) enumeration.nextElement();
-            AppDetailPage dummy = AppDetailPage.create(context(), mapplication);
+            
+            @SuppressWarnings("unused")
+						AppDetailPage dummy = AppDetailPage.create(context(), mapplication);
         }
     }
 

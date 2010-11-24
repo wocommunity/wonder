@@ -28,6 +28,8 @@ Form2: WOForm {
 
 NavPage: NavigationPage {
 	currentPage = MIGRATION_PAGE;
+	title = "Migrations";
+	pageId = "Migrations";
 }
 
 ResetButton1: WOResetButton {

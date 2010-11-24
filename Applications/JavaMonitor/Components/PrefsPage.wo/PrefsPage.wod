@@ -32,14 +32,10 @@ DetailViewSubmitButton: WOSubmitButton {
     value = "Update Settings";
 }
 
-ErrorMsg: WOString {
-      value = session.message;
-      escapeHTML = NO;
-}
-
 NavPage: NavigationPage {
 	currentPage = PREF_PAGE;
 	title = "Preferences";
+	pageId = "Preferences";
 }
 
 PasswordChangeForm: WOForm {

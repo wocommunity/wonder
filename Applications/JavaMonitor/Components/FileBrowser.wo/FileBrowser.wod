@@ -17,11 +17,11 @@ DirectoryLink : WOHyperlink {
 }
 
 FileSizeString : WOString {
-    value = aCurrentFile.fileSize;
+    value = aCurrentFile.fileSize;//VALID
 }
 
 FileString : WOString {
-    value = aCurrentFile.file;
+    value = aCurrentFile.file;//VALID
 }
 
 IsDirectory : WOConditional {
@@ -39,6 +39,7 @@ JumpToForm : WOForm {
 
 JumpToTextField : WOTextField {
     value = startingPath;
+    class = "JumpToField";
 }
 
 RowRepetition : WORepetition {
@@ -48,10 +49,12 @@ RowRepetition : WORepetition {
 
 SelectCurrentDirectoryLink : WOHyperlink {
     action = selectCurrentDirClicked;
+    class = "Button SelectDirectoryButton";
 }
 
 SelectThisLink : WOHyperlink {
     action = selectClicked;
+    class = "Button SelectDirectoryButton";
 }
 
 SpacerImage : WOImage {

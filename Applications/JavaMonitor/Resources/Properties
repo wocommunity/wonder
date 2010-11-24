@@ -29,3 +29,6 @@ log4j.appender.A1.layout=er.extensions.logging.ERXPatternLayout
 log4j.appender.A1.layout.ConversionPattern=%d %-5p %V{u/f} [%t] %C{2} (%F:%L) - %m%n
 
 ERXRest.MHost.type.alias = osType
+
+# Hide the Migrations tab.
+er.javamonitor.showMigrationsTab=false

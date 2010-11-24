@@ -1,11 +1,11 @@
 package com.webobjects.monitor.application;
 
 /*
- © Copyright 2006- 2007 Apple Computer, Inc. All rights reserved.
+ ï¿½ Copyright 2006- 2007 Apple Computer, Inc. All rights reserved.
 
- IMPORTANT:  This Apple software is supplied to you by Apple Computer, Inc. (ÒAppleÓ) in consideration of your agreement to the following terms, and your use, installation, modification or redistribution of this Apple software constitutes acceptance of these terms.  If you do not agree with these terms, please do not use, install, modify or redistribute this Apple software.
+ IMPORTANT:  This Apple software is supplied to you by Apple Computer, Inc. (ï¿½Appleï¿½) in consideration of your agreement to the following terms, and your use, installation, modification or redistribution of this Apple software constitutes acceptance of these terms.  If you do not agree with these terms, please do not use, install, modify or redistribute this Apple software.
 
- In consideration of your agreement to abide by the following terms, and subject to these terms, Apple grants you a personal, non-exclusive license, under AppleÕs copyrights in this original Apple software (the ÒApple SoftwareÓ), to use, reproduce, modify and redistribute the Apple Software, with or without modifications, in source and/or binary forms; provided that if you redistribute the Apple Software in its entirety and without modifications, you must retain this notice and the following text and disclaimers in all such redistributions of the Apple Software.  Neither the name, trademarks, service marks or logos of Apple Computer, Inc. may be used to endorse or promote products derived from the Apple Software without specific prior written permission from Apple.  Except as expressly stated in this notice, no other rights or licenses, express or implied, are granted by Apple herein, including but not limited to any patent rights that may be infringed by your derivative works or by other works in which the Apple Software may be incorporated.
+ In consideration of your agreement to abide by the following terms, and subject to these terms, Apple grants you a personal, non-exclusive license, under Appleï¿½s copyrights in this original Apple software (the ï¿½Apple Softwareï¿½), to use, reproduce, modify and redistribute the Apple Software, with or without modifications, in source and/or binary forms; provided that if you redistribute the Apple Software in its entirety and without modifications, you must retain this notice and the following text and disclaimers in all such redistributions of the Apple Software.  Neither the name, trademarks, service marks or logos of Apple Computer, Inc. may be used to endorse or promote products derived from the Apple Software without specific prior written permission from Apple.  Except as expressly stated in this notice, no other rights or licenses, express or implied, are granted by Apple herein, including but not limited to any patent rights that may be infringed by your derivative works or by other works in which the Apple Software may be incorporated.
 
  The Apple Software is provided by Apple on an "AS IS" basis.  APPLE MAKES NO WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, REGARDING THE APPLE SOFTWARE OR ITS USE AND OPERATION ALONE OR IN COMBINATION WITH YOUR PRODUCTS.
 
@@ -14,6 +14,7 @@ package com.webobjects.monitor.application;
  */
 import java.util.Enumeration;
 
+import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -95,15 +96,22 @@ public class AppDetailPage extends MonitorComponent {
         return currentInstance;
     }
 
-    public void awake() {
-    }
-
     public void selectAll() {
         if ("on".equals(context().request().stringFormValueForKey("deselectall"))) {
             displayGroup.setSelectedObjects(new NSMutableArray());
         } else {
             displayGroup.setSelectedObjects(displayGroup.allObjects());
         }
+    }
+    
+    public WOActionResults selectAllAction() {
+    		displayGroup.setSelectedObjects(displayGroup.allObjects());
+    		return null;
+    }
+    
+    public WOActionResults selectNoneAction() {
+    		displayGroup.setSelectedObjects(new NSMutableArray());
+    		return null;
     }
 
     public void selectRunning() {
@@ -165,13 +173,13 @@ public class AppDetailPage extends MonitorComponent {
     }
 
     public WOComponent configureApplicationClicked() {
-        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context(), myApplication());
+        AppConfigurePage aPage = AppConfigurePage.create(context(), myApplication());
         aPage.isNewInstanceSectionVisible = true;
         return aPage;
     }
 
     public WOComponent configureInstanceClicked() {
-        InstConfigurePage aPage = (InstConfigurePage) InstConfigurePage.create(context(), currentInstance);
+        InstConfigurePage aPage = InstConfigurePage.create(context(), currentInstance);
         return aPage;
     }
 
@@ -256,7 +264,7 @@ public class AppDetailPage extends MonitorComponent {
         return "http://" + currentInstance.hostName() + ":" + currentInstance.port();
     }
 
-    /** ******** Deaths ********* */
+    /* ******** Deaths ********* */
     public boolean shouldDisplayDeathDetailLink() {
         if (currentInstance.deathCount() > 0) {
             return true;
@@ -265,7 +273,7 @@ public class AppDetailPage extends MonitorComponent {
     }
 
     public WOComponent instanceDeathDetailClicked() {
-        AppDeathPage aPage = (AppDeathPage) AppDeathPage.create(context(), currentInstance);
+        AppDeathPage aPage = AppDeathPage.create(context(), currentInstance);
         return aPage;
     }
 
@@ -282,9 +290,9 @@ public class AppDetailPage extends MonitorComponent {
         return newDetailPage();
     }
 
-    /** ******* */
+    /* ******* */
 
-    /** ******** Individual Controls ********* */
+    /* ******** Individual Controls ********* */
     public WOComponent startInstance() {
         if ((currentInstance.state == MObject.DEAD) || (currentInstance.state == MObject.STOPPING) || (currentInstance.state == MObject.CRASHING)
                 || (currentInstance.state == MObject.UNKNOWN)) {
@@ -344,7 +352,7 @@ public class AppDetailPage extends MonitorComponent {
         return newDetailPage();
     }
 
-    /** ******* */
+    /* ******* */
 
     public NSArray<MInstance> selectedInstances() {
         return displayGroup.selectedObjects();
@@ -354,7 +362,7 @@ public class AppDetailPage extends MonitorComponent {
         return myApplication().runningInstances_M();
     }
 
-    /** ******** Group Controls ********* */
+    /* ******** Group Controls ********* */
     public WOComponent startAllClicked() {
         handler().startReading();
         try {
@@ -368,18 +376,18 @@ public class AppDetailPage extends MonitorComponent {
 
     private void startInstances(NSArray<MInstance> possibleInstances) {
         NSMutableArray<MInstance> instances = new NSMutableArray<MInstance>();
-        for (MInstance currentInstance : possibleInstances) {
-            if ((currentInstance.state == MObject.DEAD) || (currentInstance.state == MObject.STOPPING) || (currentInstance.state == MObject.CRASHING)
-                    || (currentInstance.state == MObject.UNKNOWN)) {
+        for (MInstance anInstance : possibleInstances) {
+            if ((anInstance.state == MObject.DEAD) || (anInstance.state == MObject.STOPPING) || (anInstance.state == MObject.CRASHING)
+                    || (anInstance.state == MObject.UNKNOWN)) {
 
-                instances.addObject(currentInstance);
+                instances.addObject(anInstance);
             }
         }
         if (instances.count() != 0) {
             handler().sendStartInstancesToWotaskds(instances, myApplication().hostArray());
-            for (MInstance currentInstance : instances) {
-                if (currentInstance.state != MObject.ALIVE) {
-                    currentInstance.state = MObject.STARTING;
+            for (MInstance anInstance : instances) {
+                if (anInstance.state != MObject.ALIVE) {
+                	anInstance.state = MObject.STARTING;
                 }
             }
         }
@@ -516,7 +524,9 @@ public class AppDetailPage extends MonitorComponent {
         handler().startReading();
         try {
             handler().sendRefuseSessionToWotaskds(selectedInstances(), myApplication().hostArray(), true);
-            NSArray instancesArray = selectedInstances();
+            
+            @SuppressWarnings("unused")
+						NSArray instancesArray = selectedInstances();
         } finally {
             handler().endReading();
         }
@@ -542,7 +552,7 @@ public class AppDetailPage extends MonitorComponent {
     }
 
     private WOComponent newDetailPage() {
-        AppDetailPage nextPage = (AppDetailPage) AppDetailPage.create(context(), myApplication());
+        AppDetailPage nextPage = AppDetailPage.create(context(), myApplication());
         nextPage.displayGroup.setSelectedObjects(displayGroup.selectedObjects());
         return nextPage;
     }
@@ -563,9 +573,9 @@ public class AppDetailPage extends MonitorComponent {
         return newDetailPage();
     }
 
-    /** ******* */
+    /* ******* */
 
-    /** ******** Display Methods ********* */
+    /* ******** Display Methods ********* */
     public String instanceStatusImage() {
         if (currentInstance.state == MObject.DEAD)
             return "PowerSwitch_Off.gif";
@@ -597,72 +607,134 @@ public class AppDetailPage extends MonitorComponent {
     }
 
     public String autoRecoverImage() {
+    		String result = "Panel_Off.gif";
         if ((currentInstance.autoRecover() != null) && (currentInstance.autoRecover().booleanValue())) {
-            return "Panel_On_Green.gif";
-        } else {
-            return "Panel_Off.gif";
-        }
+            result = "Panel_On_Green.gif";
+        } 
+        return result;
     }
 
     public String autoRecoverImageText() {
+    		String result = "AutoRecover OFF";
         if ((currentInstance.autoRecover() != null) && (currentInstance.autoRecover().booleanValue())) {
-            return "AutoRecover ON";
-        } else {
-            return "AutoRecover OFF";
-        }
+            result = "AutoRecover ON";
+        } 
+    		return result;
     }
+    
+    public String autoRecoverLabel() {
+    	String results = "Off";
+      if ((currentInstance.autoRecover() != null) && (currentInstance.autoRecover().booleanValue())) {
+          results = "On";
+      } 
+      return results;
+    }
+    
+    public String autoRecoverDivClass() {
+    	String base = "AppControl";
+    	String results = base + " " + base+"AutoRecoverOff";
+      if ((currentInstance.autoRecover() != null) && (currentInstance.autoRecover().booleanValue())) {
+          results = base + " " + base+"AutoRecoverOn";
+      } 
+      return results;
+  }
 
+    public String refuseNewSessionsClass() {
+    	String base = "AppControl";
+    	String result = base + " " + base+"NotRefusingNewSessions";
+    	if ((currentInstance.schedulingEnabled() != null) && (currentInstance.schedulingEnabled().booleanValue())) {
+    		if (currentInstance.isRefusingNewSessions()) {
+    			result = base + " " + base+"ScheduleEnabledRefusingNewSessions";
+    		} else {
+    			result = base + " " + base+"ScheduleEnabledNotRefusingNewSessions";
+    		}
+    	} else {
+    		if (currentInstance.isRefusingNewSessions()) {
+    			result = base + " " + base+"RefusingNewSessions";
+    		} 
+    	}
+    	return result;
+    }
+    
+    public String refuseNewSessionsLabel() {
+    	String results = "Off";
+      if (currentInstance.isRefusingNewSessions()) {
+          results = "On";
+      } 
+      return results;
+  }
+    
     public String refuseNewSessionsImage() {
+    		String result = null;
         if ((currentInstance.schedulingEnabled() != null) && (currentInstance.schedulingEnabled().booleanValue())) {
             if (currentInstance.isRefusingNewSessions()) {
-                return "Panel_On_Yellow.gif";
+                result = "Panel_On_Yellow.gif";
             } else {
-                return "Panel_Off_Yellow.gif";
+            	result =  "Panel_Off_Yellow.gif";
             }
         } else {
             if (currentInstance.isRefusingNewSessions()) {
-                return "Panel_On_Green.gif";
+            	result =  "Panel_On_Green.gif";
             } else {
-                return "Panel_Off.gif";
+            	result =  "Panel_Off.gif";
             }
         }
+        return result;
     }
 
     public String refuseNewSessionsImageText() {
+    		String result = "Accepting New Sessions";
         if (currentInstance.isRefusingNewSessions()) {
-            return "Refusing New Sessions";
-        } else {
-            return "Accepting New Sessions";
-        }
+            result = "Refusing New Sessions";
+        } 
+        return result;
     }
 
     public String schedulingImage() {
+    		String result = "Panel_Off.gif";
         if ((currentInstance.schedulingEnabled() != null) && (currentInstance.schedulingEnabled().booleanValue())) {
-            return "Panel_On_Green.gif";
-        } else {
-            return "Panel_Off.gif";
-        }
+            result = "Panel_On_Green.gif";
+        } 
+        return result;
     }
 
     public String schedulingImageText() {
+    		String result = "Scheduling OFF";
         if ((currentInstance.schedulingEnabled() != null) && (currentInstance.schedulingEnabled().booleanValue())) {
-            return "Scheduling ON";
-        } else {
-            return "Scheduling OFF";
-        }
+            result = "Scheduling ON";
+        } 
+        return result;
     }
+    
+    public String schedulingLabel() {
+    	String result = "Off";
+      if ((currentInstance.schedulingEnabled() != null) && (currentInstance.schedulingEnabled().booleanValue())) {
+         result = "On";
+      } 
+      return result;
+    }
+    
+    public String schedulingDivClass() {
+    	String base = "AppControl";
+    	String result = base + " " + base+"ScheduleOff";
+      if ((currentInstance.schedulingEnabled() != null) && (currentInstance.schedulingEnabled().booleanValue())) {
+         result = base + " " + base+"ScheduleOn";
+      } 
+      return result;
+    }
+    
 
     public String nextShutdown() {
+    		String result = "N/A";
         if ((currentInstance.schedulingEnabled() != null) && (currentInstance.schedulingEnabled().booleanValue())) {
-            return currentInstance.nextScheduledShutdownString();
-        } else {
-            return "-";
-        }
+            result = currentInstance.nextScheduledShutdownString();
+        } 
+        return result;
     }
 
-    /** ******* */
+    /* ******* */
 
-    /** ******** Statistics Display ********* */
+    /* ******** Statistics Display ********* */
     public Integer totalTransactions() {
         return StatsUtilities.totalTransactionsForApplication(myApplication());
     }

@@ -35,14 +35,6 @@ DebuggingEnabled: WOCheckBox {
     checked = myInstance.debuggingEnabled;
 }
 
-DetailViewButton: WOImage {
-    filename = "ButtonDetailView.gif";
-    height = "28";
-    width = "66";
-    alt = "Detail View";
-    border = "0";
-}
-
 InstName: WOString {
     value = myInstance.id;
     numberformat = "0";
@@ -51,6 +43,7 @@ InstName: WOString {
 NavPage: NavigationPage {
 	currentPage = APP_PAGE;
 	title = displayName;
+	pageId = "Applications";
 }
 
 Path: WOTextField {
@@ -60,26 +53,12 @@ Path: WOTextField {
 
 PathPickerWizardLink : WOHyperlink {
     action = pathPickerWizardClicked;
+    class="Button PickPathButton";
 }
 
 PathPickerWizardLink2 : WOHyperlink {
     action = pathPickerWizardClickedOutput;
-}
-
-PathWizardImage : WOImage {
-    filename = "PathWizard.gif";
-    height = "24";
-    width = "46";
-    border = "0";
-    align = "ABSMIDDLE";
-}
-
-PathWizardImage2 : WOImage {
-    filename = "PathWizard.gif";
-    height = 24;
-    width = 46;
-    border = 0;
-    align = "ABSMIDDLE";
+    class="Button PickPathButton";
 }
 
 PoolsizeField : WOTextField {
@@ -103,6 +82,7 @@ ReceiveTimeoutField : WOTextField {
 
 ReturnLink: WOHyperlink {
     action = returnClicked;
+    class = "Button DetailButton";
 }
 
 SendTimeoutField : WOTextField {
@@ -144,10 +124,6 @@ TextField4: WOTextField {
 UpdateAdaptorButton: WOSubmitButton {
     action = adaptorSettingsUpdateClicked;
     value = "Update Adaptor Settings";
-}
-
-WarningMessage: WOString {
-    value = session.message;
 }
 
 OutputPath: WOTextField {

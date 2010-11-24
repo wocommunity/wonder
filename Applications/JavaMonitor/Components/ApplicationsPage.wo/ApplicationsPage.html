@@ -1,10 +1,8 @@
 <webobject name = "NavPage">
-<h2>Applications</h2>
-<span class = "error">
-  <webobject name = "MessageString" />
-</span>
-<table border = "1" cellpadding = "6" cellspacing = "1" bgcolor = "#E0E0F8">
-  <tr bgcolor = "#C0C0D8">
+<div class="Box ApplicationsListBox">
+<h2 class="SectionHeading">Applications</h2>
+<table>
+  <tr>
     <th>Application</th>
     <th>Instances Running</th>
     <th>Instances Configured</th>
@@ -17,66 +15,35 @@
     <tr>
       <td>
         <webobject name = "AppIsRunning">
-          <b>
-            <webobject name = "ApplicationNameLink" />
-          </b>
+          <webobject name = "ApplicationNameLink" />
         </webobject>
         <webobject name = "AppIsNOTRunning">
           <webobject name = "ApplicationName" />
         </webobject>
       </td>
-      <td>
-        <webobject name = "RunningInstancesCount" />
-      </td>
-      <td>
-        <webobject name = "TotalInstancesCount" />
-      </td>
-      <td>
-        <webobject name = "AppDetailsLink">
-          <webobject name = "DetailViewButton" />
-        </webobject>
-      </td>
-      <td>
-        <webobject name = "ConfigureLink">
-          <webobject name = "ConfigButton" />
-        </webobject>
-      </td>
-      <td>
-        <webobject name = "DeleteLink">
-          <webobject name = "DeleteButton" />
-        </webobject>
-      </td>
-      <td>
-        <webobject name = "BounceLink">
-          Bounce
-        </webobject>
-      </td>
+      <td><webobject name = "RunningInstancesCount" /></td>
+      <td><webobject name = "TotalInstancesCount" /></td>
+      <td><webobject name = "AppDetailsLink"><span>View Details</span></webobject></td>
+      <td><webobject name = "ConfigureLink"><span>Configure</span></webobject></td>
+      <td><webobject name = "DeleteLink"><span>Delete</span></webobject></td>
+      <td><webobject name = "BounceLink"><span>Bounce</span></webobject></td>
     </tr>
   </webobject>
 </table>
-<hr />
+</div>
+<div class="Box AddApplicationBox">
 <webobject name = "AddApplicationForm">
   Add Application Named:
   <webobject name = "ApplicationNameTextField" />
   <webobject name = "AddApplicationSubmitButton" />
-  <br />
-  <font size = "-1">
-    Note: Application names may only contain alpha-numeric or '-'.
-    <br />
-    <br />
-    Application names do not need to match the Application executable's filename.
-    <br />
-    Application names are used by the adaptor for load-balancing.
-  </font>
 </webobject>
-<webobject name = "ShouldOfferLogout">
-  <center>
-    <br />
-    <br />
-    <font size = "-1">
-      <webobject name = "LogoutLink">Log Out</webobject>
-    </font>
-    <br />
-  </center>
-</webobject>
+<div class="Notes">
+	<h4>Notes:</h4>
+	<ul>
+		<li>Application names may only contain alpha-numeric or '-'.</li>
+    	<li>Application names do not need to match the Application executable's filename.</li>
+    	<li>Application names are used by the adaptor for load-balancing.</li>
+    </ul>
+</div>
+</div>
 </webobject>

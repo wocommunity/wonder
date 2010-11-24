@@ -26,11 +26,6 @@ ConnectTimeoutField3: WOTextField {
 
 EmailForm: WOForm {}
 
-ErrorMsg: WOString {
-      value = session.message;
-      escapeHTML = NO;
-}
-
 LoadBalancingScheme: WOPopUpButton {
 	item = loadSchedulerItem;
 	list = loadSchedulerList;
@@ -40,6 +35,7 @@ LoadBalancingScheme: WOPopUpButton {
 NavPage: NavigationPage {
 	currentPage = SITE_PAGE;
 	title = "Configure";
+	pageId = "Site";
 }
 
 PoolsizeField: WOTextField {

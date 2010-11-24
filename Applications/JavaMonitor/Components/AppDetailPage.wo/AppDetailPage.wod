@@ -3,23 +3,6 @@ ActualRatePerMinute: WOString {
 	value = actualRatePerMinute;
 }
 
-ActualRatePerSecond: WOString {
-	numberformat = "0.00";
-	value = actualRatePerSecond;
-}
-
-AddInstanceButton: WOImage {
-	alt = "Add instance";
-	border = "0";
-	filename = "ButtonAddInstance.gif";
-	height = "28";
-	width = "88";
-}
-
-AddInstanceLink: WOHyperlink {
-	action = addInstanceClicked;
-}
-
 AppLink: WOHyperlink {
 	href = hrefToApp;
 	target = "new";
@@ -38,38 +21,14 @@ AppIsRunning: WOConditional {
 	condition = myApplication.isRunning_M;
 }
 
-AutoRecoverImage: WOImage {
-	alt = autoRecoverImageText;
-	border = "0";
-	filename = autoRecoverImage;
-	height = "24";
-	width = "34";
-}
-
 ClearDeathsLink: WOHyperlink {
 	action = clearAllDeathsClicked;
 }
 
-ConfigButton: WOImage {
-	alt = "Configure";
-	border = "0";
-	filename = "ButtonConfig.gif";
-	height = "28";
-	width = "67";
-}
-
 ConfigureLink: WOHyperlink {
     action = configureApplicationClicked;
+    class="Button ConfigureButton";
 }
-
-DeleteButton: WOImage {
-	alt = "Delete";
-	border = "0";
-	filename = "ButtonDelete.gif";
-	height = "17";
-	width = "55";
-}
-
 
 StartAllLink: WOHyperlink {
 	action = startAllClicked;
@@ -124,20 +83,12 @@ InstAverageTransaction: WOString {
 
 InstConfigureLink: WOHyperlink {
 	action = configureInstanceClicked;
+	class="Button ConfigureButton";
 }
 
 InstDeathCount: WOString {
 	numberformat = "0";
 	value = currentInstance.deathCount;
-}
-
-InstDeathDetailImage: WOImage {
-	alt = "View times/dates for Deaths";
-	border = "0";
-	filename = "RightTriangle.gif";
-	framework = "WOExtensions";
-	height = "12";
-	width = "7";
 }
 
 InstDeathDetailLink: WOHyperlink {
@@ -146,10 +97,12 @@ InstDeathDetailLink: WOHyperlink {
 
 InstDeleteLink: WOHyperlink {
 	action = deleteInstanceClicked;
+	class="Button DeleteButton";
 }
 
 InstDeleteAllLink: WOHyperlink {
 	action = deleteAllInstancesClicked;
+	class="Button DeleteButton";
 }
 
 InstIndex: WOString {
@@ -203,6 +156,7 @@ IsRefreshEnabled: WOConditional {
 LinkToWOStats: WOHyperlink {
 	href = linkToWOStats;
 	target = "_blank";
+	class="Button WOStatsButton";
 }
 
 MessageString: WOString {
@@ -212,6 +166,7 @@ MessageString: WOString {
 NavPage: NavigationPage {
 	currentPage = APP_PAGE;
 	title = myApplication.name;
+	pageId = "Applications";
 }
 
 NextShutdown: WOString {
@@ -232,22 +187,25 @@ RefreshRate: WOString {
 	value = theApplication.siteConfig.viewRefreshRate;
 }
 
-RefuseNewSessionsImage: WOImage {
-	alt = refuseNewSessionsImageText;
-	border = "0";
-	filename = refuseNewSessionsImage;
-	height = "24";
-	width = "34";
+RefuseNewSessionsDiv : WOGenericContainer {
+	elementName = "div";
+	class = refuseNewSessionsClass;
 }
 
-SchedulingImage: WOImage {
-	alt = schedulingImageText;
-	border = "0";
-	filename = schedulingImage;
-	height = "24";
-	width = "34";
+RefuseNewSessionsLabel : WOString {
+	value = refuseNewSessionsLabel;
+	escapeHTML = false;
 }
 
+ScheduleDiv : WOGenericContainer {
+	elementName = "div";
+	class = schedulingDivClass;
+}
+
+ScheduleLabel : WOString {
+	value = schedulingLabel;
+	escapeHTML = false;
+}
 
 ShouldDisplayDeathDetailLink: WOConditional {
 	condition = shouldDisplayDeathDetailLink;
@@ -258,16 +216,12 @@ ShouldNOTDisplayDeathDetailLink: WOConditional {
 	negate = true;
 }
 
-
-
 StartInstanceLink: WOHyperlink {
 	action = startInstance;
 }
 StopInstanceLink: WOHyperlink {
 	action = stopInstance;
 }
-
-
 
 StartImage: WOImage {
 	alt = "Start";
@@ -284,35 +238,28 @@ StopImage: WOImage {
 	width = "13";
 }
 
-
-YellowOnImage: WOImage {
-	alt = "ON";
-	border = "0";
-	filename = "Panel_On_Yellow.gif";
-	height = "24";
-	width = "34";
-}
-OffImage: WOImage {
-	alt = "OFF";
-	border = "0";
-	filename = "Panel_Off.gif";
-	height = "24";
-	width = "34";
+AutoRecoverLabel : WOString {
+	value = autoRecoverLabel;
 }
 
-
-
-
+AutoRecoverDiv : WOGenericContainer {
+	elementName = "div";
+	class = autoRecoverDivClass;
+}
 
 ToggleAutoRecoverLink: WOHyperlink {
 	action = toggleAutoRecover;
+	class = "AppControlLink";
 }
 
 ToggleRefuseNewSessionsLink: WOHyperlink {
 	action = toggleRefuseNewSessions;
+	class = "AppControlLink";
 }
+
 ToggleSchedulingLink: WOHyperlink {
 	action = toggleScheduling;
+	class = "AppControlLink";
 }
 
 TotalActiveSessions: WOString {
@@ -334,23 +281,6 @@ TotalTransactions: WOString {
 	numberformat = "0";
 	value = totalTransactions;
 }
-
-WOStatsButton: WOImage {
-	alt = "Jump to WOStats";
-	border = "0";
-	filename = "ButtonWOStats.gif";
-	height = "28";
-	width = "76";
-}
-
-WOStatsOffButton: WOImage {
-	alt = "WOStats";
-	border = "0";
-	filename = "ButtonWOStatsOff.gif";
-	height = "28";
-	width = "76";
-}
-
 
 // Start of Add Instance Stuff
 
@@ -385,10 +315,6 @@ AddNumInstances: WOTextField {
     value = numberToAdd;
     size = "3";
     numberformat = "0";
-}
-
-SelectAllForm : WOForm {
-	action = selectAll;
 } 
 
 SelectOneForm : WOForm {
@@ -406,8 +332,14 @@ SelectNotRunning : WOHyperlink {
 SelectRunning : WOHyperlink {
 	action = selectRunning;
 }
+
 ShowStatistics : WOConditional {
   condition = showDetailStatistics;
+}
+
+NotShowStatistics : WOConditional {
+  condition = showDetailStatistics;
+  negate = true;
 }
 
 ShowWOStats : WOConditional {
@@ -430,4 +362,12 @@ Bouncer : WOString {
 
 Observer : AjaxObserveField {
 	action = selectOne;
+}
+
+SelectAllLink : WOHyperlink {
+  action = selectAllAction;
+}
+
+SelectNoneLink : WOHyperlink {
+  action = selectNoneAction;
 }

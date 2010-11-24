@@ -7,27 +7,7 @@ AddHostSubmitButton: WOSubmitButton {
 
 ConfigureHostLink: WOHyperlink {
     action = configureHostClicked;
-}
-
-ConfigureButton: WOImage {
-	alt = "Configure";
-	border = "0";
-	filename = "ButtonConfig.gif";
-	height = "28";
-	width = "67";
-}
-
-DeleteButton: WOImage {
-    filename = "ButtonDelete.gif";
-    height = "17";
-    width = "55";
-    alt = "Delete";
-    border = "0";
-}
-
-ErrorMsg: WOString {
-	value = session.message;
-	escapeHTML = false;
+    class = "Button ConfigureButton";
 }
 
 HostAddress: WOString {
@@ -68,6 +48,7 @@ InstanceCount: WOString {
 NavPage: NavigationPage {
 	currentPage = HOST_PAGE;
 	title = "Hosts";
+	pageId = "Hosts";
 }
 
 PopUpButton1: WOPopUpButton {
@@ -81,6 +62,7 @@ ProcessorDescription: WOString {
 
 RemoveHostLink: WOHyperlink {
     action = removeHostClicked;
+    class = "Button DeleteButton";
 }
 
 HostType: WOString {

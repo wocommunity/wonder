@@ -1,36 +1,29 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
-"http://www.w3.org/TR/html4/loose.dtd">
-<html>
-    <head>
-        <meta name="generator" content="WebObjects 5.3.1">
-        <title>Apache Migration</title>
-    </head>
-	<webobject name=NavPage></webobject>
-<body>
-WebObjects Applications Deployment Migration
-<br/>
-
-Preview your http-webobjects.conf file for your Apache 2.x WebServer: 
-<br/><pre><p align="left"><webobject name="adaptorConfigContent"></webobject></p></pre>
-<br/>
+<webobject name=NavPage>
+<p class="Warning" style="text-align: center;">WARNING - MYSTERY FORM: I don't know what this stuff does. If you do, please add a blurb here describing its function.</p>
+<div class="Box MigrationBox">
+<h2 class="SectionHeader">WebObjects Applications Deployment Migration</h2>
+<p>Preview your http-webobjects.conf file for your Apache 2.x WebServer:</p> 
+<pre><code><webobject name="adaptorConfigContent"></webobject></code></pre>
+</div>
+<div class="Box MigrationBox">
+<h2 class="SectionHeader">Provide your Apache 2.x WebServer configuration</h2>
+<p></p>
 <webobject name="Form2">
-	<table border="1" width="100%">
-		<tr><td><b>Provide your Apache 2.x WebServer configuration</b></td></tr>
-		<tr><td>Host:</td><td><webobject name="TextField3"></webobject></td><td></td></tr>
-		<tr><td>Username:</td><td><webobject name="TextField1"></webobject></td><td></td></tr>
-		<tr><td>SSH identify file:</td><td><webobject name="FileUpload1"></webobject></td>
-			<td>Please provide a valid SSH identity file for JavaMonitor to scp the http-webobjects.conf into your Apache 2.x WebServer host.
-				<br/><a href="">Get help with generating SSH&nbsp;identity file</a></td></tr>
-		<tr><td>http-webobjects.conf filepath</td><td><webobject name="TextField4"></webobject></td>
-			<td>Please provide a location on the WebServer where JavaMonitor should transfer the http-webobjects.conf file to.</td></tr>
-		<tr><td></td><td><webobject name="CheckBox1"></webobject>Restart Apache WebServer</td></tr>
-		<tr><td></td><td><webobject name="ResetButton1"></webobject><webobject name="MigrateButton"></webobject></td><td></td></tr>
+	<table class="FormFieldTable">
+		<tr><th>Host:</th><td colspan="2"><webobject name="TextField3"></webobject></td></tr>
+		<tr><th>Username:</th><td colspan="2"><webobject name="TextField1"></webobject></td></tr>
+		<tr><th>SSH identify file:</th><td><webobject name="FileUpload1"></webobject></td>
+			<td><p class="Comment">Please provide a valid SSH identity file for JavaMonitor to scp the http-webobjects.conf into your Apache 2.x WebServer host. <a href="">Get help with generating SSH&nbsp;identity file</a></p></td></tr>
+		<tr><th>http-webobjects.conf filepath</th><td><webobject name="TextField4"></webobject></td>
+			<td><p class="Comment">Please provide a location on the WebServer where JavaMonitor should transfer the http-webobjects.conf file to.</p></td></tr>
+		<tr><th>Restart Apache WebServer</th><td colspan="2"><webobject name="CheckBox1"></webobject></td></tr>
 	</table>
+	<p><webobject name="ResetButton1"></webobject> | <webobject name="MigrateButton"></webobject></p>
 </webobject>
 <br/>
 <webobject name="IsMigrationCompleted"><b>JavaMonitor has migrated your WebObjects Applications deployment successfully.</b></webobject>
 <webobject name="NotIsMigrationCompleted">
 	<webobject name="IsFailed">JavaMonitor could not migrate your WebObjects Applications deployment. <webobject name="Text2"></webobject></webobject>
 </webobject>
-</body>
-</html>
+</div>
+</webobject>
