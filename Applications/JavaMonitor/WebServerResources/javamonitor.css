@@ -1,0 +1,376 @@
+body {
+	font-family: Helvetica, Arial, Geneva, sans-serif;
+	font-size: 90%;
+}
+
+table {
+	width: 100%;
+}
+
+h1, h2, h3, h4 {
+	margin: 0;
+	padding: 0;
+}
+
+ul {
+	margin:  5px;
+	padding: 0 0 0 20px;	
+}
+
+table, td, tr, th {
+	border-collapse: collapse;
+	font-size: 100%;
+}
+
+td, th {
+	padding: 4px;
+	border: 1px solid #666;
+}
+
+th {
+	background-color: #ccc;
+	color: #000;
+	
+}
+
+td {
+	background-color: #fff;
+}
+
+.FormFieldTable td {
+	background-color: inherit;
+}
+
+.FormFieldTable th {
+	text-align: right;
+	width: 250px;
+}
+
+.FileBrowseTable td {
+	font-size: 80%;
+}
+
+.error {
+	text-align: center;
+	color: red;
+	margin: 10px;
+	display: block;
+	font-weight: bold;
+}
+
+#ContentWrapper {
+
+}
+
+#LoginPage {
+	margin-top: 50px;
+}
+
+.Box {
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	background-color: #eee;
+	padding: 10px 20px;
+	margin: 10px 0 20px 0;
+	overflow: hidden;
+}
+
+.PathWizardPage2Box {
+	margin: 50px auto;
+	width: 600px;
+}
+
+.LoginBox {
+	margin: 10px auto;
+	width: 350px;
+}
+
+.ConfirmationBox {
+	margin: 50px auto;
+	width: 600px;	
+}
+
+.ConfirmationBox td {
+	border: none;
+	background-color: inherit;
+}
+
+.ErrorBox {
+	margin: 10px auto;
+	background-color: red;
+	color: #fff;
+	font-weight: bold;
+	padding: 10px 20px;
+}
+
+.LoginErrorBox {
+	width: 350px;
+}
+
+.SectionHeading {
+	margin-bottom: 10px;
+}
+
+label {
+	float: left;
+	width: 80px;
+	text-align: right;
+	line-height: 20px;
+	padding-right: 10px;
+}
+
+.button_bar {
+	padding-top: 10px;
+	padding-left: 290px;
+	overflow: hidden;
+}
+
+.NavigationBox {
+	overflow: hidden;
+	padding-bottom: 0;
+}
+
+.NavigationBox h1 {
+	float: left;
+	margin: 0;
+	padding: 0;
+}
+
+.NavigationBox ul {
+	float: left;
+	margin: 15px 20px 0px 20px;
+	padding: 0;
+}
+
+.NavigationBox li {
+	list-style-type: none;
+	float: left;
+	text-align: center;
+}
+
+.NavigationTabs {
+}
+
+.NavigationTabs a,
+.LogoutButton {
+	float: left;
+	padding: 5px 10px 5px 10px;
+	margin: 0 2px;
+	border: 1px solid #666;
+	border-bottom: none;
+	color: #fff;
+	background-color: #666;
+	text-decoration: none;
+	font-weight: bold;
+	-moz-border-radius-topright: 6px;
+	-webkit-border-top-right-radius: 6px;
+	-moz-border-radius-topleft: 6px;
+	-webkit-border-top-left-radius: 6px;
+}
+
+.LogoutButton {
+}
+
+.Logout {
+	overflow: hidden;
+	margin-left: 20px;
+}
+
+.ApplicationNameBox h1 {
+	float: left;
+}
+
+#Applications li.Applications a,
+#Hosts li.Hosts a,
+#Site li.Site a,
+#Preferences li.Preferences a,
+#Help li.Help a,
+#Migrations li.Migrations a {
+	background-color: #fff;
+	color: #333;
+}
+
+#NavigationLogo {
+	position: relative;
+	bottom: 3px;
+	float: right;
+}
+
+.Notes {
+	margin-top: 10px;
+}
+
+.Notes li {
+	color: #666;
+	font-size: 90%;
+}
+
+.DetailViewButtonWrapper {
+	float: right;
+	margin-top: 5px;
+}
+
+.Button {
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	display: block;
+	padding: 4px 6px;
+	border: 1px solid #666;
+	text-decoration: none;
+	color: #fff;
+	font-size: 80%;
+	background-color: #999;
+	text-align: center;
+}
+
+.DeleteButton {
+	background-color: red;
+}
+
+.BounceButton {
+	background-color: purple;
+}
+
+.PickPathButton {
+	float: left;
+}
+
+.SelectDirectoryButton {
+	float: right;
+	font-size: 12px;
+}
+
+.HelpContent {
+	padding: 20px;
+}
+
+.SpacerTableRow td {
+	background-color: inherit;
+	border-left: none;
+	border-right: none;
+}
+
+.WOStatsOff {
+	text-align: center;
+}
+
+.expansion {
+	font-weight: bold;
+	text-decoration: none;
+	font-size: 140%;
+	padding-left: 20px;
+	color: #333;
+	background-image: url(ToggleRight.png);
+	background-repeat: no-repeat;
+	background-position: 0 3px;
+}
+
+.expanded {
+	background-image: url(ToggleDown.png);
+}
+
+/* INSTANCE LIST */
+
+.Balls {
+	width: 40px;
+	margin: 0 auto;
+}
+
+
+.InstanceSelect {
+	text-align: center;
+	width: 70px;
+	padding-top: 8px;
+}
+
+.InstanceSelect form {
+	padding: 0;
+	margin: 0;
+}
+
+.AllSelect,
+.AllFilter {
+	text-align: center;
+}
+
+.AppControlLink {
+	text-decoration: none;
+}
+.AppControl {
+	text-transform: uppercase;
+	background-color: #666;
+	padding: 4px 8px;
+	text-align: center;
+	font-weight: bold;
+	color: #fff;
+}
+.AppControlAutoRecoverSchedulingOn,
+.AppControlScheduleEnabledNotRefusingNewSessions,
+.AppControlScheduleEnabledRefusingNewSessions {
+	color: yellow;
+}
+
+.AppControlScheduleOn,
+.AppControlAutoRecoverOn {
+	color: #00eb29;
+}
+
+.PathPickWrapper label {
+	width: 75px;
+	text-align: right;
+	padding-top: 2px;
+}
+
+.PathPicker {
+	float: left;
+	width: 100%;
+	padding: 3px 0;
+}
+
+.PathPickInner {
+	float: left;
+	margin-right: 5px;
+}
+
+.PathPickInner input {
+	width: 350px;
+}
+
+td.PushButtonWrapper {
+	text-align: right;
+	background-color: #ccc;
+}
+
+.Comment {
+	font-size: 85%;
+	font-style: oblique;
+}
+
+.ControlColOne,
+.ControlColTwo {
+	float: left;
+	margin-right: 10px;
+	text-align: center;
+}
+
+.ControlColOne {
+	padding-top: 15px;
+}
+
+.TextBox {
+	float: left;
+	width: 100%;
+}
+
+.CurrentParameters {
+	background-color: #fff;
+	padding: 10px;
+}
+
+.Warning {
+	color: red;
+}
+
+.JumpToField {
+	width: 250px;
+}

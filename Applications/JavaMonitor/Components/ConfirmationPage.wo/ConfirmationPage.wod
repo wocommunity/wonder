@@ -10,12 +10,16 @@ Explaination: WOString {
 
 CancelClicked: WOHyperlink {
     action = delegate.cancel;
+    class = "Button CancelButton";
 }
 
 ConfirmClicked: WOHyperlink {
     action = delegate.confirm;
+    class = "Button ConfirmButton";
 }
+
 NavPage: NavigationPage {
 	currentPage = delegate.pageType;
+	title = "Confirmation Request";
 }
 

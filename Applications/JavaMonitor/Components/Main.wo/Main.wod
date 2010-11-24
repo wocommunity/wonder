@@ -1,5 +1,5 @@
 ErrorMsg: WOString {
-      value = session.message;
+      value = message;
       escapeHTML = NO;
 }
 
@@ -14,8 +14,6 @@ LoginSucceeded: WOConditional {
     negate = YES;
 }
 
-ApplicationsPage: ApplicationsPage {}
-
 PasswordField: WOPasswordField {
     value = password;
 }
@@ -29,4 +27,13 @@ Refresh: WOMetaRefresh {
 SubmitPasswordButton: WOSubmitButton {
     action = loginClicked;
     value = "Login";
+}
+
+HasLoginError : WOConditional {
+  condition = message;
+}
+
+ERXStyleSheet : ERXStyleSheet {
+  filename = "javamonitor.css";
+  framework = "app";
 }

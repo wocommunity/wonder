@@ -9,6 +9,7 @@ AddApplicationSubmitButton: WOSubmitButton {
 
 AppDetailsLink: WOHyperlink {
     action = appDetailsClicked;
+    class = "Button ViewDetailsButton";
 }
 
 AppIsNOTRunning: WOConditional {
@@ -40,49 +41,25 @@ ApplicationsRepetition: WORepetition {
     item = currentApplication;
 }
 
-ConfigButton: WOImage {
-    filename = "ButtonConfig.gif";
-    height = "28";
-    width = "67";
-    alt = "Configure";
-    border = "0";
-}
-
 ConfigureLink: WOHyperlink {
     action = configureClicked;
-}
-
-DeleteButton: WOImage {
-    filename = "ButtonDelete.gif";
-    height = "17";
-    width = "55";
-    alt = "Delete";
-    border = "0";
+    class = "Button ConfigureButton";
 }
 
 DeleteLink: WOHyperlink {
     action = deleteClicked;
+    class = "Button DeleteButton";
 }
 
 BounceLink: WOHyperlink {
     action = bounceClicked;
-}
-
-DetailViewButton: WOImage {
-    filename = "ButtonDetailView.gif";
-    height = "28";
-    width = "66";
-    alt = "Detail View";
-    border = "0";
-}
-
-MessageString: WOString {
-	value = session.message;
+    class = "Button BounceButton";
 }
 
 NavPage: NavigationPage {
 	currentPage = APP_PAGE;
 	title = "Applications";
+	pageId="Applications";
 }
 
 RunningInstancesCount: WOString {
@@ -91,14 +68,4 @@ RunningInstancesCount: WOString {
 
 TotalInstancesCount: WOString {
     value = currentApplication.instanceArray.count;
-}
-
-
-
-ShouldOfferLogout: WOConditional {
-	condition = logoutRequired;
-}
-
-LogoutLink: WOHyperlink {
-	action = logoutClicked;
 }

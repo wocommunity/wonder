@@ -12,6 +12,12 @@ import er.extensions.foundation.ERXStringUtilities;
  * "?" for simple values and "??" for actions on your page (which should return a WOActionResults).
  * @author ak
  * 
+ * @binding movieUrl optional, the full url of the movie file's location
+ * @binding movieName optional, the filename of the movie relative to your WebServerResources (e.g. movies/mymovie.swf). Must provide a framework binding when using movieName
+ * @binding framework optional, the framework in which the file specified by movieName resides. Must provide a movieName when using framework
+ * @binding ? binding for simple FlashVars
+ * @binding ?? binding to tie actions on your page to FlashVars (should return a WOActionResults)
+ * 
  */
 
 public class ERXFlashMovie extends ERXStatelessComponent {
