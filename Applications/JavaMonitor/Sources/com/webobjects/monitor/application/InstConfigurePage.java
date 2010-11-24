@@ -26,7 +26,7 @@ public class InstConfigurePage extends MonitorComponent {
         super(aWocontext);
     }
 
-    /**
+    /*
      * serialVersionUID
      */
     private static final long serialVersionUID = 2930097368474314793L;
@@ -40,14 +40,14 @@ public class InstConfigurePage extends MonitorComponent {
     }
 
     public WOComponent appConfigLinkClicked() {
-        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context(), myApplication());
+        AppConfigurePage aPage = AppConfigurePage.create(context(), myApplication());
         aPage.isNewInstanceSectionVisible = true;
         return aPage;
     }
 
-    /** ******** Startup Section ********* */
+    /* ******** Startup Section ********* */
     private WOComponent _pathPickerWizardClicked(String callbackKeyPath) {
-        PathWizardPage1 aPage = (PathWizardPage1) PathWizardPage1.create(context());
+        PathWizardPage1 aPage = PathWizardPage1.create(context());
         aPage.setCallbackKeypath(callbackKeyPath);
         aPage.setCallbackPage(this);
         aPage.setShowFiles(true);
@@ -55,11 +55,11 @@ public class InstConfigurePage extends MonitorComponent {
     }
 
     public WOComponent pathPickerWizardClicked() {
-        return _pathPickerWizardClicked("mySession.mInstance.path");
+        return _pathPickerWizardClicked("myInstance.path");
     }
 
     public WOComponent pathPickerWizardClickedOutput() {
-        return _pathPickerWizardClicked("mySession.mInstance.outputPath");
+        return _pathPickerWizardClicked("myInstance.outputPath");
     }
 
     public Integer port() {
@@ -116,9 +116,9 @@ public class InstConfigurePage extends MonitorComponent {
         return null;
     }
 
-    /** ******* */
+    /* ******* */
 
-    /** ******** Adaptor Settings Section ********* */
+    /* ******** Adaptor Settings Section ********* */
     public WOComponent adaptorSettingsUpdateClicked() {
         handler().startReading();
         try {
@@ -130,10 +130,10 @@ public class InstConfigurePage extends MonitorComponent {
         return null;
     }
 
-    /** ******* */
+    /* ******* */
 
-    /** ******** Diff returns ********* */
-    private static String _diffString = "<FONT COLOR=#FF0000>**</FONT>";
+    /* ******** Diff returns ********* */
+    private static String _diffString = "<span class=\"Warning\">**</span>";
 
     private static String _emptyString = "";
 
@@ -145,7 +145,7 @@ public class InstConfigurePage extends MonitorComponent {
         }
         // only 1 of the 2 is null
         if ((a instanceof String) || (b instanceof String)) {
-            if (((a == null) && ((String) b).length() == 0) || ((b == null) && ((String) a).length() == 0)) {
+            if ( (a == null && b != null && ((String) b).length() == 0) || (b == null && a != null && ((String) a).length() == 0) ) {
                 return true;
             }
         }
@@ -246,9 +246,9 @@ public class InstConfigurePage extends MonitorComponent {
         return _emptyString;
     }
 
-    /** ******* */
+    /* ******* */
 
-    /** ******** Force Quit support ********* */
+    /* ******** Force Quit support ********* */
     public WOComponent forceQuitClicked() {
         handler().sendQuitInstancesToWotaskds(new NSArray(myInstance()), new NSArray(myInstance().host()));
         return null;
@@ -257,7 +257,7 @@ public class InstConfigurePage extends MonitorComponent {
     public String instanceLifebeatInterval() {
         return myInstance().lifebeatInterval().toString();
     }
-    /**
+    /*
      * @param instance TODO ******* */
 
 	public static InstConfigurePage create(WOContext context, MInstance instance) {

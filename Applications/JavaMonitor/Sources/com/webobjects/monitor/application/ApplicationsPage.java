@@ -68,7 +68,7 @@ public class ApplicationsPage extends MonitorComponent {
                         handler().sendAddApplicationToWotaskds(newApplication, siteConfig().hostArray());
                     }
 
-                    AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context(), newApplication);
+                    AppConfigurePage aPage = AppConfigurePage.create(context(), newApplication);
                     aPage.isNewInstanceSectionVisible = true;
 
                     // endReading in the finally block below
@@ -82,8 +82,8 @@ public class ApplicationsPage extends MonitorComponent {
         return ApplicationsPage.create(context());
     }
 
-    public static WOComponent create(WOContext context) {
-		return (ApplicationsPage) context.page().pageWithName(ApplicationsPage.class.getName());
+  public static WOComponent create(WOContext context) {
+		return context.page().pageWithName(ApplicationsPage.class.getName());
 	}
 
 	public WOComponent deleteClicked() {
@@ -133,22 +133,9 @@ public class ApplicationsPage extends MonitorComponent {
     }
 
     public WOComponent configureClicked() {
-        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context(), currentApplication);
+        AppConfigurePage aPage = AppConfigurePage.create(context(), currentApplication);
         aPage.isNewInstanceSectionVisible = true;
         return aPage;
-    }
-
-    public boolean logoutRequired() {
-        if (siteConfig() == null) {
-            return false;
-        } else {
-            return (mySession().isLoggedIn() && siteConfig().isPasswordRequired());
-        }
-    }
-
-    public WOComponent logoutClicked() {
-        mySession().setIsLoggedIn(false);
-        return pageWithName("Main");
     }
 
 }

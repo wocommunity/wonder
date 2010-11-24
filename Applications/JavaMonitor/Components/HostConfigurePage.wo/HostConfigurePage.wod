@@ -19,16 +19,10 @@ HostTypePopup: WOPopUpButton {
 	selection = hostTypeSelection;
 }
 
-ErrorMsg: WOString {
-	value = session.message;
-	escapeHTML = false;
-}
-
-
 NavPage: NavigationPage {
 	currentPage = HOST_PAGE;
 	title = myHost.name;
-
+	pageId = "Hosts";
 }
 
 

@@ -25,33 +25,33 @@ public class ConfigurePage extends MonitorComponent {
         super(aWocontext);
     }
 
-    /**
+    /*
      * serialVersionUID
      */
     private static final long serialVersionUID = -3447899695208425947L;
 
-    /** ******** HTTP Server Section ********* */
+    /* ******** HTTP Server Section ********* */
     public WOComponent HTTPServerUpdateClicked() {
         handler().sendUpdateSiteToWotaskds();
 
-        ConfigurePage aPage = (ConfigurePage) ConfigurePage.create(context());
+        ConfigurePage aPage = ConfigurePage.create(context());
         return aPage;
     }
 
-    /** ******* */
+    /* ******* */
 
-    /** ******** Email Section ********* */
+    /* ******** Email Section ********* */
     public WOComponent emailUpdateClicked() {
         handler().sendUpdateSiteToWotaskds();
 
-        ConfigurePage aPage = (ConfigurePage) ConfigurePage.create(context());
+        ConfigurePage aPage = ConfigurePage.create(context());
         return aPage;
     }
 
-    /** ******* */
+    /* ******* */
 
-    /** ******** Adaptor Section ********* */
-    public String _loadSchedulerSelection = null;;
+    /* ******** Adaptor Section ********* */
+    public String _loadSchedulerSelection = null;
 
     public String loadSchedulerItem;
 
@@ -110,7 +110,7 @@ public class ConfigurePage extends MonitorComponent {
 
         handler().sendUpdateSiteToWotaskds();
 
-        ConfigurePage aPage = (ConfigurePage) ConfigurePage.create(context());
+        ConfigurePage aPage = ConfigurePage.create(context());
         return aPage;
     }
     
@@ -119,7 +119,7 @@ public class ConfigurePage extends MonitorComponent {
         return context().page();
     }
     
-    /** ******* */
+    /* ******* */
 
 	public static ConfigurePage create(WOContext context) {
 		return (ConfigurePage) context.page().pageWithName(ConfigurePage.class.getName());

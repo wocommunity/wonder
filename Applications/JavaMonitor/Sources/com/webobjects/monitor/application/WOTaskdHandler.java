@@ -118,7 +118,7 @@ public class WOTaskdHandler {
         }
     }
 
-    /** ******** Common Functionality ********* */
+    /* ******** Common Functionality ********* */
     private static NSMutableDictionary createUpdateRequestDictionary(MSiteConfig _Config, MHost _Host,
             MApplication _Application, NSArray _InstanceArray, String requestType) {
         NSMutableDictionary monitorRequest = new NSMutableDictionary(1);
@@ -160,9 +160,9 @@ public class WOTaskdHandler {
         return MHost.sendRequestToWotaskdArray(content, wotaskdArray, willChange);
     }
 
-    /** ******* */
+    /* ******* */
 
-    /** ******** ADDING (UPDATE) ********* */
+    /* ******** ADDING (UPDATE) ********* */
     public void sendAddInstancesToWotaskds(NSArray newInstancesArray, NSArray wotaskdArray) {
         WOResponse[] responses = sendRequest(createUpdateRequestDictionary(null, null, null, newInstancesArray, "add"),
                 wotaskdArray, true);
@@ -184,9 +184,9 @@ public class WOTaskdHandler {
         getUpdateErrors(responseDicts, "add", true, false, false, false);
     }
 
-    /** ******* */
+    /* ******* */
 
-    /** ******** REMOVING (UPDATE) ********* */
+    /* ******** REMOVING (UPDATE) ********* */
     protected void sendRemoveInstancesToWotaskds(NSArray exInstanceArray, NSArray wotaskdArray) {
         WOResponse[] responses = sendRequest(
                 createUpdateRequestDictionary(null, null, null, exInstanceArray, "remove"), wotaskdArray, true);
@@ -208,9 +208,9 @@ public class WOTaskdHandler {
         getUpdateErrors(responseDicts, "remove", true, false, false, false);
     }
 
-    /** ******* */
+    /* ******* */
 
-    /** ******** CONFIGURE (UPDATE) ********* */
+    /* ******** CONFIGURE (UPDATE) ********* */
     public void sendUpdateInstancesToWotaskds(NSArray<MInstance> changedInstanceArray, NSArray wotaskdArray) {
         if (wotaskdArray.count() != 0 && changedInstanceArray.count() != 0) {
             WOResponse[] responses = sendRequest(createUpdateRequestDictionary(null, null, null, changedInstanceArray,
@@ -259,9 +259,9 @@ public class WOTaskdHandler {
         }
     }
 
-    /** ******* */
+    /* ******* */
 
-    /** ******** OVERWRITE / CLEAR (UPDATE) ********* */
+    /* ******** OVERWRITE / CLEAR (UPDATE) ********* */
     public void sendOverwriteToWotaskd(MHost aHost) {
         NSDictionary SiteConfig = siteConfig().dictionaryForArchive();
         NSMutableDictionary data = new NSMutableDictionary(SiteConfig, "SiteConfig");
@@ -282,9 +282,9 @@ public class WOTaskdHandler {
         getUpdateErrors(responseDicts, type, false, false, false, false);
     }
 
-    /** ******* */
+    /* ******* */
 
-    /** ******** COMMANDING ********* */
+    /* ******** COMMANDING ********* */
     private static Object[] commandInstanceKeys = new Object[] { "applicationName", "id", "hostName", "port" };
 
     public static void sendCommandInstancesToWotaskds(String command, NSArray instanceArray, NSArray wotaskdArray,
@@ -297,7 +297,6 @@ public class WOTaskdHandler {
 
             commandWotaskd.addObject(command);
 
-            NSMutableArray instanceValueArray = new NSMutableArray(instanceCount);
             for (int i = 0; i < instanceCount; i++) {
                 MInstance anInst = (MInstance) instanceArray.objectAtIndex(i);
                 commandWotaskd.addObject(new NSDictionary(new Object[] { anInst.applicationName(), anInst.id(),
@@ -343,9 +342,9 @@ public class WOTaskdHandler {
         sendCommandInstancesToWotaskds((doRefuse ? "REFUSE" : "ACCEPT"), instanceArray, wotaskdArray);
     }
 
-    /** ******* */
+    /* ******* */
 
-    /** ******** QUERIES ********* */
+    /* ******** QUERIES ********* */
     private NSMutableDictionary createQuery(String queryString) {
         NSMutableDictionary monitorRequest = new NSMutableDictionary(queryString, "queryWotaskd");
         return monitorRequest;
@@ -355,9 +354,9 @@ public class WOTaskdHandler {
         return sendRequest(createQuery(queryString), wotaskdArray, false);
     }
 
-    /** ******* */
+    /* ******* */
 
-    /** ******** Response Handling ********* */
+    /* ******** Response Handling ********* */
     public static NSDictionary responseParsingFailed = new NSDictionary(new NSDictionary(new NSArray(
             "INTERNAL ERROR: Failed to parse response XML"), "errorResponse"), "monitorResponse");
 
@@ -381,9 +380,9 @@ public class WOTaskdHandler {
         return responseDicts;
     }
 
-    /** ******* */
+    /* ******* */
 
-    /** ******** Error Handling ********* */
+    /* ******** Error Handling ********* */
     public NSMutableArray getUpdateErrors(NSDictionary[] responseDicts, String updateType, boolean hasHosts,
             boolean hasApplications, boolean hasInstances, boolean hasSite) {
         NSMutableArray errorArray = new NSMutableArray();
@@ -584,7 +583,7 @@ public class WOTaskdHandler {
         NSMutableArray errorArray = new NSMutableArray();
         NSDictionary responseDict = null;
         for (int i = 0; i < responses.length; i++) {
-            MHost aHost = (MHost) siteConfig().hostArray().objectAtIndex(i);
+            MHost aHost = siteConfig().hostArray().objectAtIndex(i);
 
             if ((responses[i] == null) || (responses[i].content() == null)) {
                 responseDict = emptyResponse;
@@ -648,7 +647,7 @@ public class WOTaskdHandler {
                         Integer runningInstances = (Integer) responseDictionary.valueForKey("runningInstances");
                         MApplication anApplication = siteConfig().applicationWithName(appName);
                         if (anApplication != null) {
-                            anApplication.setRunningInstancesCount(anApplication.runningInstancesCount() + runningInstances);
+                            anApplication.setRunningInstancesCount(anApplication.runningInstancesCount() + runningInstances.intValue());
                         }
                     }
                 }

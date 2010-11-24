@@ -50,11 +50,11 @@ public class AppConfigurePage extends MonitorComponent {
     }
 
     public WOComponent configurePageClicked() {
-        ConfigurePage aPage = (ConfigurePage) ConfigurePage.create(context());
+        ConfigurePage aPage = ConfigurePage.create(context());
         return aPage;
     }
 
-    /** ******** New Instance Defaults ******** */
+    /* ******** New Instance Defaults ******** */
     public WOComponent defaultsUpdateClicked() {
         handler().startReading();
         try {
@@ -64,7 +64,7 @@ public class AppConfigurePage extends MonitorComponent {
             handler().endReading();
         }
 
-        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context(), myApplication());
+        AppConfigurePage aPage =  AppConfigurePage.create(context(), myApplication());
         aPage.isNewInstanceSectionVisible = true;
         return aPage;
     }
@@ -112,7 +112,7 @@ public class AppConfigurePage extends MonitorComponent {
             handler().endReading();
         }
 
-        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context(), myApplication());
+        AppConfigurePage aPage =  AppConfigurePage.create(context(), myApplication());
         aPage.isAppConfigureSectionVisible = true;
         return aPage;
     }
@@ -124,7 +124,7 @@ public class AppConfigurePage extends MonitorComponent {
     }
 
     private WOComponent _defaultPage() {
-        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context(), myApplication());
+        AppConfigurePage aPage = AppConfigurePage.create(context(), myApplication());
         aPage.isNewInstanceSectionVisible = true;
         return aPage;
     }
@@ -307,9 +307,9 @@ public class AppConfigurePage extends MonitorComponent {
         return _defaultPage();
     }
 
-    /** ******** Path Wizard ******** */
+    /* ******** Path Wizard ******** */
     private WOComponent _pathPickerWizardClicked(String callbackKeyPath, boolean showFiles) {
-        PathWizardPage1 aPage = (PathWizardPage1) PathWizardPage1.create(context());
+        PathWizardPage1 aPage = PathWizardPage1.create(context());
         aPage.setCallbackKeypath(callbackKeyPath);
         aPage.setCallbackExpand("isNewInstanceSectionVisible");
         aPage.setCallbackPage(this);
@@ -341,9 +341,9 @@ public class AppConfigurePage extends MonitorComponent {
         return _pathPickerWizardClicked("appDefaults.macOutputPath", false);
     }
 
-    /** ******* */
+    /* ******* */
 
-    /** ******** Email Section ******** */
+    /* ******** Email Section ******** */
     public boolean isMailingConfigured() {
         String aHost = siteConfig().SMTPhost();
         String anAddress = siteConfig().emailReturnAddr();
@@ -361,14 +361,14 @@ public class AppConfigurePage extends MonitorComponent {
             handler().endReading();
         }
 
-        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context(), myApplication());
+        AppConfigurePage aPage = AppConfigurePage.create(context(), myApplication());
         aPage.isEmailSectionVisible = true;
         return aPage;
     }
 
-    /** ******* */
+    /* ******* */
 
-    /** ******** Scheduling Section ******** */
+    /* ******** Scheduling Section ******** */
     public boolean shouldSchedule() {
         if (myApplication().instanceArray().count() != 0)
             return true;
@@ -427,7 +427,7 @@ public class AppConfigurePage extends MonitorComponent {
             handler().endReading();
         }
 
-        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context(), myApplication());
+        AppConfigurePage aPage = AppConfigurePage.create(context(), myApplication());
         aPage.isSchedulingSectionVisible = true;
         return aPage;
     }
@@ -495,12 +495,18 @@ public class AppConfigurePage extends MonitorComponent {
             handler().endReading();
         }
 
-        AppConfigurePage aPage = (AppConfigurePage) AppConfigurePage.create(context(), myApplication());
+        AppConfigurePage aPage = AppConfigurePage.create(context(), myApplication());
         aPage.isAdaptorSettingsSectionVisible = true;
         return aPage;
     }
+
     /**
-     * @param application TODO ******* */
+     * Create an ApplicationConfigurePage instance for the given MApplication
+     * 
+     * @param context
+     * @param application
+     * @return ApplicationConfigurePage
+     */
 
 	public static AppConfigurePage create(WOContext context, MApplication application) {
 		AppConfigurePage page = (AppConfigurePage) context.page().pageWithName(AppConfigurePage.class.getName());

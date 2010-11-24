@@ -51,12 +51,20 @@ public class MonitorComponent extends ERXComponent {
     private MApplication myApplication;
     private MInstance myInstance;
     private MHost myHost;
+    
+    private String _message;
 
     public MonitorComponent(WOContext aWocontext) {
         super(aWocontext);
         _handler = new WOTaskdHandler(mySession());
     }
 
+    @Override
+    public void awake() {
+    	super.awake();
+    	_message = null;
+    }
+    
     protected NSMutableArray allHosts() {
         return siteConfig().hostArray();
     }
@@ -99,6 +107,13 @@ public class MonitorComponent extends ERXComponent {
 
 	public void setMyHost(MHost host) {
 		myHost = host;
+	}
+	
+	public String message() {
+		if (_message == null) {
+			_message = ((Session)session()).message();
+		}
+		return _message;
 	}
 	
 	/*

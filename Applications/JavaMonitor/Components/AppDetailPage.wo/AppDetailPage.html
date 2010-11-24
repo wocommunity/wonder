@@ -2,7 +2,14 @@
   <webobject name = "Refresh"></webobject>
 </webobject>
 <webobject name = "NavPage">
-  <h1>
+<webobject name = "AddHasNOHostsConditional">
+<div class="Box ErrorBox">
+  <h3>There are no hosts configured.</h3>
+  <p>Please <webobject name = "AddHostsLink">add hosts</webobject> before adding instances.</p>
+</div>
+</webobject>
+<div class="Box ApplicationDetailsBox">
+  <h2 class="SectionHeading">
     <webobject name = "AppIsRunning">
       <webobject name = "AppLink">
         <webobject name = "AppName"></webobject>
@@ -11,24 +18,22 @@
     <webobject name = "AppIsNOTRunning">
       <webobject name = "AppName"></webobject>
     </webobject>
-  </h1>
-  <div>Bouncer: <webobject name = "HasBouncer"><webobject name = "Bouncer"/></webobject></div>
-  <font size = "-1">
+  </h2>
 <webobject name = "IsRefreshEnabled">
-    This page automatically updates every
-    <webobject name = "RefreshRate"></webobject>
-    seconds.
-  <br />
+    <p>This page automatically updates every <webobject name = "RefreshRate"></webobject> seconds.</p>
 </webobject>
-<webobject name = "RefreshLink">Refresh Now</webobject>
-<webobject name = "ShowDetailStatistics">Detailed Statistics</webobject>
-</font>
-<br />
+<webobject name = "HasBouncer"><div>Bouncer: <webobject name = "Bouncer"/></div></webobject>
+<p><webobject name = "RefreshLink">Refresh Now</webobject> | 
+	<webobject name = "ShowDetailStatistics">
+		<webobject name="ShowStatistics">Hide Details</webobject>
+		<webobject name="NotShowStatistics">Show Details</webobject>
+    </webobject></p>
+
 <span class="error"><webobject name = "MessageString"></webobject>
 </span>
-<table border = "1" cellpadding = "2" cellspacing = "0" bgcolor = "#E8E8E8">
+<table>
   <tr>
-    <th>Selected</th>
+    <th>Select</th>
     <th>Name</th>
     <th>Host: Port</th>
     <th>Status</th>
@@ -54,7 +59,7 @@
   <webobject name = "InstanceRepetition">
     <tr>
 <!-- Selection -->
-<td><webobject name = "SelectOneForm"><webobject name = "Observer"><webobject name = "IsSelected"/></webobject></webobject></td>
+	<td class="InstanceSelect"><webobject name = "SelectOneForm"><webobject name = "Observer"><webobject name = "IsSelected"/></webobject></webobject></td>
 
 <!--       Instance Number       -->
       <td>
@@ -68,8 +73,7 @@
         </webobject>
       </td>
 <!--       Host - Port       -->
-      <td>
-        <font size = "-1">
+      <td class="InstanceHostPort">
           <webobject name = "InstanceRunningConditional">
             <webobject name = "InstDirectLink">
               <webobject name = "InstRunningOnHost"></webobject>
@@ -78,53 +82,52 @@
           <webobject name = "InstanceNOTRunningConditional">
             <webobject name = "InstRunningOnHost"></webobject>
           </webobject>
-        </font>
       </td>
 <!--       Status (On/Off/Starting/Stopping)       -->
-      <td>
+      <td class="InstanceStatusColumn">
         <webobject name = "InstStatusImage"></webobject>
       </td>
 <!--       Start/Stop Buttons       -->
-      <td align="center">
+      <td class="InstanceStartStop">
+      	<div class="Balls">
         <webobject name = "StartInstanceLink"><webobject name = "StartImage"></webobject></webobject>
         &nbsp;
         <webobject name = "StopInstanceLink"><webobject name = "StopImage"></webobject></webobject>
+        </div>
       </td>
 <!--       Auto-Recover       -->
-      <td align="center">
+      <td class="InstanceAutoRecover">
         <webobject name = "IFSchedulingIsOn">
-          <webobject name = "YellowOnImage"></webobject>
+          <div class="AppControl AppControlAutoRecoverSchedulingOn">On</div>
         </webobject>
         <webobject name = "IFSchedulingIsOff">
-          <webobject name = "ToggleAutoRecoverLink">
-            <webobject name = "AutoRecoverImage"></webobject>
-          </webobject>
+          <webobject name = "ToggleAutoRecoverLink"><webobject name="AutoRecoverDiv"><webobject name="AutoRecoverLabel"/></webobject></webobject>
         </webobject>
       </td>
 <!--       Refuse New Sessions       -->
-      <td align="center">
+      <td class="InstanceRefuseNewSessions">
         <webobject name = "IFSchedulingIsOn">
-          <webobject name = "RefuseNewSessionsImage"></webobject>
+          <webobject name="RefuseNewSessionsDiv"><webobject name="RefuseNewSessionsLabel"/></webobject>
         </webobject>
         <webobject name = "IFSchedulingIsOff">
           <webobject name = "InstanceRunningConditional">
             <webobject name = "ToggleRefuseNewSessionsLink">
-              <webobject name = "RefuseNewSessionsImage"></webobject>
+              <webobject name="RefuseNewSessionsDiv"><webobject name="RefuseNewSessionsLabel"/></webobject>
             </webobject>
           </webobject>
           <webobject name = "InstanceNOTRunningConditional">
-            <webobject name = "OffImage"></webobject>
+            <div class="AppControl AppControlOff">Off</div>
           </webobject>
         </webobject>
       </td>
 <!--       Schedule       -->
-      <td align="center">
+      <td class="InstanceSchedule">
         <webobject name = "ToggleSchedulingLink">
-          <webobject name = "SchedulingImage"></webobject>
+        	<webobject name="ScheduleDiv"><webobject name="ScheduleLabel"/></webobject>
         </webobject>
       </td>
 <!--       Next Scheduled Shutdown       -->
-      <td>
+      <td class="NextShutDown">
         <webobject name = "NextShutdown"></webobject>
       </td>
       <td>
@@ -150,82 +153,77 @@
       </td>
     </webobject>
     <webobject name = "ShowWOStats">
-      <td>
+      <td class="InstanceWOStats">
         <webobject name = "InstanceRunningConditional">
-          <webobject name = "LinkToWOStats">
-            <webobject name = "WOStatsButton"></webobject>
-          </webobject>
+          <webobject name = "LinkToWOStats"><span>WOStats</span></webobject>
         </webobject>
-        <webobject name = "InstanceNOTRunningConditional">
-          <webobject name = "WOStatsOffButton"></webobject>
-        </webobject>
+        <webobject name = "InstanceNOTRunningConditional"><div class="WOStatsOff">Off</div></webobject>
       </td>
       </webobject>
 <!--       Configure       -->
       <td>
-        <webobject name = "InstConfigureLink">
-          <webobject name = "ConfigButton"></webobject>
-        </webobject>
+        <webobject name = "InstConfigureLink">Configure</webobject>
       </td>
 <!--       Delete       -->
       <td>
-        <webobject name = "InstDeleteLink">
-          <webobject name = "DeleteButton"></webobject>
-        </webobject>
+        <webobject name = "InstDeleteLink">Delete</webobject>
       </td>
     </tr>
   </webobject>
   <webobject name = "HasInstancesConditional">
     <webobject name = "ShowStatistics">
-    <tr>
-      <td colSpan = "16" bgColor = "#ffffff">&nbsp</td>
+    <tr class="SpacerTableRow">
+      <td colSpan = "16">&nbsp</td>
     </tr>
     </webobject>
  	<webobject name = "ShowWOStats">
-    <tr>
-      <td colSpan = "13" bgColor = "#ffffff">&nbsp</td>
+    <tr class="SpacerTableRow">
+      <td colSpan = "13">&nbsp</td>
     </tr>
     </webobject>
-    <tr bgcolor = "#D4D4D4">
-	<td><webobject name = "SelectAllForm">
-	<input type="checkbox" name="selectall" onclick="this.form.submit()" checked="checked"> /
-	<input type="checkbox" name="deselectall" onclick="this.form.submit()" value="on" ></webobject></td>
-      <td vAlign = "center" align = "middle" colSpan = "3">
-         <b>Select all instances that are:</b><br /><webobject name = "SelectRunning">Running</webobject> <webobject name = "SelectNotRunning">Not Running</webobject>
+    <tr>
+	<td class="AllSelect">
+		<strong>Select</strong><br />
+		<webobject name = "SelectAllLink">All</webobject> | <webobject name = "SelectNoneLink">None</webobject>
+	</td>
+      <td class="AllFilter" colSpan = "3">
+         <b>Select all instances that are:</b><br /><webobject name = "SelectRunning">Running</webobject> | <webobject name = "SelectNotRunning">Not Running</webobject>
       </td>
 <!--       Start / Stop All       -->
-      <td align="center">
+      <td class="AllStartStop">
+      	<div class="Balls">
         <webobject name = "StartAllLink"><webobject name = "StartImage"/></webobject>
         &nbsp;
         <webobject name = "StopAllLink"><webobject name = "StopImage"/></webobject>
+        </div>
       </td>
 <!--       AutoRecover All      -->
-      <td align="center">
+      <td class="AllAutoRecover">
+      	<div class="Balls">
         <webobject name = "AutoRecoverEnableAllLink"><webobject name = "StartImage"/></webobject>
         &nbsp;
         <webobject name = "AutoRecoverDisableAllLink"><webobject name = "StopImage"/></webobject>
+      	</div>
       </td>
 <!--       Refuse New Sessions All       -->
-      <td align="center">
+      <td class="AllRefuseNewSessions">
+      	<div class="Balls">
         <webobject name = "RefuseNewSessionsAllLink"><webobject name = "StartImage"/></webobject>
         &nbsp;
         <webobject name = "AcceptNewSessionsAllLink"><webobject name = "StopImage"/></webobject>
+        </div>
       </td>
 <!--       Scheduling All       -->
-      <td align="center">
+      <td class="AllScheduling">
+      	<div class="Balls">
         <webobject name = "SchedulingEnableAllLink"><webobject name = "StartImage"/></webobject>
         &nbsp;
         <webobject name = "SchedulingDisableAllLink"><webobject name = "StopImage"/></webobject>
+        </div>
       </td>
 <!--       Next Scheduled Shutdown       -->
-      <td><webobject name = "BounceLink">Bounce</webobject></td>
-      <td>
-        <webobject name = "ClearDeathsLink">
-          Clear
-          <br />
-          Deaths
-        </webobject>
-      </td>
+      <td class="AllBounce"><webobject name = "BounceLink">Bounce</webobject></td>
+      <td class="AllClearDeaths"><webobject name = "ClearDeathsLink">Clear Deaths</webobject></td>
 <!--       Statistics All       -->
    <webobject name = "ShowStatistics">
       <td>
@@ -248,31 +246,17 @@
    </webobject>
 <!--       Configure       -->
       <td>
-        <webobject name = "ConfigureLink">
-          <webobject name = "ConfigButton"></webobject>
-        </webobject>
-      </td>
-      <td><webobject name = "InstDeleteAllLink">
-          <webobject name = "DeleteButton"></webobject>
-        </webobject>
-       </td>
+        <webobject name = "ConfigureLink"><span>Configure</span></webobject></td>
+      <td><webobject name = "InstDeleteAllLink"><span>Delete</span></webobject></td>
     </tr>
   </webobject>
 </table>
-<hr />
+</div>
 <webobject name = "AddHasHostsConditional">
+<div class="Box AddInstanceBox">
   <webobject name = "AddInstanceForm">
-    <webobject name = "AddInstanceSubmitButton"></webobject>
-    <webobject name = "AddNumInstances"></webobject>
-    instance(s) on host:
-    <webobject name = "AddHostPopUp"></webobject>
+   	Add: <webobject name = "AddNumInstances"></webobject> instance(s) on host: <webobject name = "AddHostPopUp"/> <webobject name = "AddInstanceSubmitButton"/>
   </webobject>
+</div>
 </webobject>
-<webobject name = "AddHasNOHostsConditional">
-  There are no hosts configured.
-  <br />
-  <br />
-  Please
-  <webobject name = "AddHostsLink">add hosts</webobject>
-  before adding instances.
-</webobject></webobject>
+</webobject>

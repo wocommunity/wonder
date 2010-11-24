@@ -307,6 +307,7 @@ public class AdminApplicationsPage extends ApplicationsPage {
 
     public WOComponent addApplicationClicked() {
         String s = null;
+        WOComponent result = null;
         if (!String_Extensions.isValidXMLString(newApplicationName))
             s = "\"" + newApplicationName
                     + "\" is an invalid application name.";
@@ -314,14 +315,15 @@ public class AdminApplicationsPage extends ApplicationsPage {
             s = "An application with the name \"" + newApplicationName
                     + "\" does already exist.";
         if (s != null) {
-            return AdminApplicationsPage.create(context());
+            result = AdminApplicationsPage.create(context());
         } else {
-            return super.addApplicationClicked();
+            result = super.addApplicationClicked();
         }
+        return result;
     }
     
 
     public static WOComponent create(WOContext context) {
-        return (AdminApplicationsPage) WOApplication.application().pageWithName(AdminApplicationsPage.class.getName(), context);
+        return WOApplication.application().pageWithName(AdminApplicationsPage.class.getName(), context);
     }
 }
