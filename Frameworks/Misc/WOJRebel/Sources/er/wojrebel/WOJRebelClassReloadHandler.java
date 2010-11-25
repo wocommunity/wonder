@@ -91,7 +91,6 @@ public class WOJRebelClassReloadHandler {
 		WOEventClassListener listener = new WOEventClassListener();
 		Reloader reloader = ReloaderFactory.getInstance();
 		reloader.addClassReloadListener(listener);
-		reloader.addClassLoadListener(listener);
 	}
 
 	@SuppressWarnings("all")
@@ -148,13 +147,14 @@ public class WOJRebelClassReloadHandler {
 	}
 
 	private class WOEventClassListener implements ClassEventListener {
-		@SuppressWarnings("unchecked")
-		public void onClassEvent(int eventType, Class clazz) {
+		@Override
+    public void onClassEvent(int eventType, Class clazz) {
 			if (eventType == ClassEventListener.EVENT_RELOADED) {
 				reloaded(clazz);
 			}
 		}
 
+    @Override
     public int priority() {
       return 0;
     }
