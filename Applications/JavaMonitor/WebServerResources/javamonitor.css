@@ -311,7 +311,8 @@ label {
 }
 
 .AppControlScheduleOn,
-.AppControlAutoRecoverOn {
+.AppControlAutoRecoverOn,
+.AppControlRefusingNewSessions {
 	color: #00eb29;
 }
 
