@@ -10,7 +10,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="Libraries/wojrebel-plugin.jar"/>
 	<classpathentry kind="lib" path="Libraries/jr-javassist-3.11.0.GA.jar"/>
-	<classpathentry kind="lib" path="Libraries/jr-sdk-3.0.jar"/>
-	<classpathentry kind="lib" path="Libraries/jr-utils-3.0.jar"/>
+	<classpathentry kind="lib" path="Libraries/jr-sdk-3.5.jar"/>
+	<classpathentry kind="lib" path="Libraries/jr-utils-3.5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
