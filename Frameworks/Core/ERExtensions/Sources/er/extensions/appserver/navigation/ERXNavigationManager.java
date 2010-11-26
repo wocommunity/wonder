@@ -132,7 +132,7 @@ public class ERXNavigationManager {
 
     public void registerObserverForFramework(String frameworkName) {
         if (!WOApplication.application().isCachingEnabled() && !hasRegistered) {
-            String filePath = ERXFileUtilities.pathForResourceNamed(navigationMenuFileName(),                                                                                                 frameworkName, null);
+            String filePath = ERXFileUtilities.pathForResourceNamed(navigationMenuFileName(), frameworkName, null);
             if (log.isDebugEnabled())
                 log.debug("Registering observer for filePath: " + filePath);
             ERXFileNotificationCenter.defaultCenter().addObserver(this,
