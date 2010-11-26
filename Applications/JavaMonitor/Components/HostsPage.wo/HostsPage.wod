@@ -28,7 +28,7 @@ HostName: WOString {
 }
 
 HostNameTextField: WOTextField {
-    size = "20";
+    size = "40";
     value = newHostName;
 }
 
