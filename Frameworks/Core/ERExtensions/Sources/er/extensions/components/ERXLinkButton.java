@@ -598,4 +598,46 @@ public class ERXLinkButton extends WOHTMLDynamicElement {
 				ERXValueUtilities.booleanValueWithDefault(_escapeHTML.valueInComponent(context.component()),defaultEscapeHTML());
 	}
 	
+	/**
+	 * Overriding to prevent exceptions when actionClass or directActionName 
+	 * are bound, but resolve to null.
+	 */
+	protected String computeActionStringInContext(WOAssociation actionClass, WOAssociation directActionName, WOContext aContext) {
+
+		WOComponent aComponent = aContext.component();
+		Object anActionClassName = null;
+		Object anActionName = null;
+		Object anActionString = null;
+
+		if (actionClass != null) {
+			anActionClassName = actionClass.valueInComponent(aComponent);
+			if (!(anActionClassName == null || anActionClassName instanceof String)) {
+				throw new IllegalArgumentException((new StringBuilder()).append("<").append(getClass().getName()).append("> Value for attribute named \"actionClass\" must be a string.  Received ").append(anActionClassName).toString());
+			}
+		}
+
+		if (directActionName != null) {
+			anActionName = directActionName.valueInComponent(aComponent);
+			if (!(anActionName == null || anActionName instanceof String)) {
+				throw new IllegalArgumentException((new StringBuilder()).append("<").append(getClass().getName()).append("> Value for attribute named \"directActionName\" must be a string.  Received ").append(anActionName).toString());
+			}
+		}
+
+		if (anActionClassName != null && anActionName != null) {
+			if (anActionClassName.equals("DirectAction")) {
+				anActionString = anActionName;
+			} else {
+				anActionString = (new StringBuilder()).append(anActionClassName).append("/").append(anActionName).toString();
+			}
+		} else if (anActionClassName != null) {
+			anActionString = anActionClassName;
+		} else if (anActionName != null) {
+			anActionString = anActionName;
+		} else {
+			throw new IllegalStateException((new StringBuilder()).append("<").append(getClass().getName()).append("> Both 'actionClass' and 'directActionName' are either absent or evaluated to null. Cannot generate dynamic url without an actionClass or directActionName.").toString());
+		}
+
+		return (String) anActionString;
+	}
+
 }
