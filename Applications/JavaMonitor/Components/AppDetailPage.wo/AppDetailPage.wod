@@ -226,16 +226,16 @@ StopInstanceLink: WOHyperlink {
 StartImage: WOImage {
 	alt = "Start";
 	border = "0";
-	filename = "start.gif";
-	height = "15";
-	width = "13";
+	filename = "start.png";
+	height = "19";
+	width = "19";
 }
 StopImage: WOImage {
 	alt = "Stop";
 	border = "0";
-	filename = "stop.gif";
-	height = "15";
-	width = "13";
+	filename = "stop.png";
+	height = "19";
+	width = "19";
 }
 
 AutoRecoverLabel : WOString {
