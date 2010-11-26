@@ -8,81 +8,84 @@
 </webobject>
 </div>
 <div class="Box AdaptorSettingsBox">
-	<h2 class="SectionHEading">HTTP Adaptor Settings</h2>
-          <webobject name="AdaptorSettingsForm">
-            <table class="FormFieldTable">
-              <tr>
-                <th>Load balancing scheme:</th>
-                <td><webobject name="LoadBalancingScheme" /><br />
+  <webobject name="AdaptorSettingsAjaxExpansion">
+    <webobject name="AdaptorSettingsForm">
+      <table class="FormFieldTable">
+        <tr>
+          <th>Load balancing scheme:</th>
+          <td><webobject name="LoadBalancingScheme" /><br />
                   Custom Scheduler Name: <webobject name="TextField8" /> (Optional)</td>
-              </tr>
-              <tr>
-                <th>Retries:</th>
-                <td><webobject name="RetriesField" /></td>
-              </tr>
-              <tr>
-                <th>Redirection URL:</th>
-                <td><webobject name="RedirectionURLField" /></td>
-              </tr>
-              <tr>
-                <th>Dormant:</th>
-                <td><webobject name="TimeoutField" /></td>
-              </tr>
-              <tr>
-                <th>Send Timeout:</th>
-                <td><webobject name="SendTimeoutField" /></td>
-              </tr>
-              <tr>
-                <th>Receive Timeout:</th>
-                <td><webobject name="ReceiveTimeoutField" /></td>
-              </tr>
-              <tr>
-                <th>Connect Timeout:</th>
-                <td><webobject name="ConnectTimeoutField" /></td>
-              </tr>
-              <tr>
-                <th>Send Buffer Size:</th>
-                <td><webobject name="ConnectTimeoutField2" /></td>
-              </tr>
-              <tr>
-                <th>Receive Buffer Size:</th>
-                <td><webobject name="ConnectTimeoutField3" /></td>
-              </tr>
-              <tr>
-                <th>Connection Pool Size:</th>
-                <td><webobject name="PoolsizeField" /></td>
-              </tr>
-              <tr>
-                <th>URL Version:</th>
-                <td><webobject name="PopUpButton1" /></td>
-              </tr>
-            </table>
-	<p><webobject name="UpdateAdaptorButton" /></p>
+        </tr>
+        <tr>
+          <th>Retries:</th>
+          <td><webobject name="RetriesField" /></td>
+        </tr>
+        <tr>
+          <th>Redirection URL:</th>
+          <td><webobject name="RedirectionURLField" /></td>
+        </tr>
+        <tr>
+          <th>Dormant:</th>
+          <td><webobject name="TimeoutField" /></td>
+        </tr>
+        <tr>
+          <th>Send Timeout:</th>
+          <td><webobject name="SendTimeoutField" /></td>
+        </tr>
+        <tr>
+          <th>Receive Timeout:</th>
+          <td><webobject name="ReceiveTimeoutField" /></td>
+        </tr>
+        <tr>
+          <th>Connect Timeout:</th>
+          <td><webobject name="ConnectTimeoutField" /></td>
+        </tr>
+        <tr>
+          <th>Send Buffer Size:</th>
+          <td><webobject name="ConnectTimeoutField2" /></td>
+        </tr>
+        <tr>
+          <th>Receive Buffer Size:</th>
+          <td><webobject name="ConnectTimeoutField3" /></td>
+        </tr>
+        <tr>
+          <th>Connection Pool Size:</th>
+          <td><webobject name="PoolsizeField" /></td>
+        </tr>
+        <tr>
+          <th>URL Version:</th>
+          <td><webobject name="PopUpButton1" /></td>
+        </tr>
+      </table>
+	  <p><webobject name="UpdateAdaptorButton" /></p>
 	</webobject>
+  </webobject>
 </div>
 <div class="Box EmailNotificationBox">
-	<h2 class="SectionHeading">Email Notifications</h2>
+  <webobject name="EmailNotificationAjaxExpansion">
 	<p>Monitor can send email notifications if an SMTP host is supplied.<br />
 	To use email notifications, go to the application configuration page to set email addresses for each of your applications.</p>
-  <webobject name="EmailForm">
-    <table class="FormFieldTable">
-      <tr>
-        <th>SMTP host:</th>
-        <td> <webobject name="SMTPHostField3" /></td>
-      </tr>
-      <tr>
-        <th>Return address:</th>
-        <td><webobject name="SMTPHostField4" /></td>
-      </tr>
-    </table>
-    <p><webobject name="UpdateEmailButton" /></p>
+    <webobject name="EmailForm">
+      <table class="FormFieldTable">
+        <tr>
+          <th>SMTP host:</th>
+          <td> <webobject name="SMTPHostField3" /></td>
+        </tr>
+        <tr>
+          <th>Return address:</th>
+          <td><webobject name="SMTPHostField4" /></td>
+        </tr>
+      </table>
+      <p><webobject name="UpdateEmailButton" /></p>
+    </webobject>
   </webobject>
 </div>
 <div class="Box BackupBox">
-	<h2 class="SectionHeading">Backup Site Configuration</h2>
+  <webobject name="BackupAjaxExpansion">
 	<p>Makes a timestamped backup of SiteConfig.xml and appends an optional short note to the file name.</p>
-      <webobject name="BackupForm">
-        <p>Note: <webobject name="BackupNote" /> (optional) <webobject name="BackupButton" /></p>
-      </webobject>
+    <webobject name="BackupForm">
+      <p>Note: <webobject name="BackupNote" /> (optional) <webobject name="BackupButton" /></p>
+    </webobject>
+  </webobject>
 </div>
 </webobject>

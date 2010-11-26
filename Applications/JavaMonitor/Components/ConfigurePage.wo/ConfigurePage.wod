@@ -1,9 +1,17 @@
+AdaptorSettingsAjaxExpansion : AjaxExpansion {
+	id = "AdaptorSettingsExpansion";
+	insertion = "Effect.blind";
+	insertionDuration = "0.1";
+	string = "HTTP Adaptor Settings";
+	expanded = isAdaptorSettingsSectionVisible; 
+}
+
 AdaptorSettingsForm: WOForm {
 }
 
 AdaptorURLField: WOTextField {
     value = theApplication.siteConfig.woAdaptor;
-    size = "50";
+    size = "60";
 }
 
 ConnectTimeoutField: WOTextField {
@@ -22,6 +30,14 @@ ConnectTimeoutField3: WOTextField {
 	numberformat = "0";
 	size = 4;
 	value = theApplication.siteConfig.recvBufSize;
+}
+
+EmailNotificationAjaxExpansion : AjaxExpansion {
+	id = "EmailNotificationExpansion";
+	insertion = "Effect.blind";
+	insertionDuration = "0.1";
+	string = "Email Notifications";
+	expanded = isEmailSectionVisible; 
 }
 
 EmailForm: WOForm {}
@@ -68,10 +84,12 @@ RetriesField : WOTextField {
 }
 
 SMTPHostField3: WOTextField {
+	size = "40";
     value = theApplication.siteConfig.SMTPhost;
 }
 
 SMTPHostField4: WOTextField {
+	size = "40";
     value = theApplication.siteConfig.emailReturnAddr;
 }
 
@@ -104,6 +122,14 @@ UpdateAdaptorButton: WOSubmitButton {
 UpdateEmailButton: WOSubmitButton {
     action = emailUpdateClicked;
     value = "Update Email Notification Settings";
+}
+
+BackupAjaxExpansion : AjaxExpansion {
+	id = "BackupExpansion";
+	insertion = "Effect.blind";
+	insertionDuration = "0.1";
+	string = "Backup Site Configuration";
+	expanded = isBackupSectionVisible; 
 }
 
 BackupForm: WOForm {}

@@ -20,6 +20,9 @@ import com.webobjects.monitor._private.String_Extensions;
 
 public class ConfigurePage extends MonitorComponent {
     public String backupNote;
+    public boolean isAdaptorSettingsSectionVisible = false;
+    public boolean isEmailSectionVisible = false;
+    public boolean isBackupSectionVisible = false;
     
     public ConfigurePage(WOContext aWocontext) {
         super(aWocontext);
@@ -41,6 +44,7 @@ public class ConfigurePage extends MonitorComponent {
     /* ******* */
 
     /* ******** Email Section ********* */
+    
     public WOComponent emailUpdateClicked() {
         handler().sendUpdateSiteToWotaskds();
 

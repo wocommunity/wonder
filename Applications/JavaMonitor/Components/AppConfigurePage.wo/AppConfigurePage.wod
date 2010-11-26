@@ -38,7 +38,7 @@ AppName: WOString {
 }
 
 ArgsField: WOText {
-	cols = "50";
+	cols = "65";
 	rows = "3";
 	value = appDefaults.additionalArgs;
 	wrap = "virtual";
@@ -118,7 +118,7 @@ EmailForm: WOForm {
 ListenQueueSizeField: WOTextField {
 	size = "5";
 	value = appDefaults.listenQueueSize;
-        numberformat = "0";
+	numberformat = "0";
 }
 
 LoadBalancingScheme: WOPopUpButton {
@@ -289,7 +289,7 @@ RadioButton3: WORadioButton {
 }
 
 RealNameField: WOTextField {
-	size = "20";
+	size = "25";
 	value = appDefaults.name;
 }
 
@@ -332,9 +332,9 @@ SendTimeoutField: WOTextField {
 }
 
 SessionTimeOutField: WOTextField {
-	size = "20";
+	size = "5";
 	value = appDefaults.sessionTimeOut;
-        numberformat = "0";
+	numberformat = "0";
 }
 
 SmtpHostConfigured: WOConditional {
@@ -385,11 +385,13 @@ TextField3: WOTextField {
 }
 
 TextField4: WOTextField {
+	size = "5";
 	value = appDefaults.startingPort;
 	numberformat = "0";
 }
 
 TextField5: WOTextField {
+	size = "5";
 	value = appDefaults.timeForStartup;
 	numberformat = "0";
 }

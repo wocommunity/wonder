@@ -32,7 +32,7 @@ ApplicationNameLink: WOHyperlink {
 }
 
 ApplicationNameTextField: WOTextField {
-    size = "20";
+    size = "40";
     value = newApplicationName;
 }
 
