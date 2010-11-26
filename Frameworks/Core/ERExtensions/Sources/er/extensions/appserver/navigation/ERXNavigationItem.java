@@ -262,6 +262,10 @@ public class ERXNavigationItem {
 	public String directActionName() {
 		return directActionClass() == null ? _directActionName : directActionClass() + "/" + _directActionName;
 	}
+	
+	public String uneditedDirectActionName() {
+		return _directActionName;
+	}
 
 	public String directActionClass() {
 		return _directActionClass;
