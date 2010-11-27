@@ -941,8 +941,8 @@
     </target>
 
      <target name="wotaskd.post.build">
-     	<chmod file="${dist.dir}/Applications/${application.name}/${project.name}/Contents/Resources/SpawnOfWotaskd.sh" perm="ugo+rx"/>
-     	<chmod file="${dist.dir}/Applications/${application.name}/${project.name}/Contents/Resources/javawoservice.sh" perm="ugo+rx"/>
+        <chmod file="${build.root}/${project.name}.woa/Contents/Resources/SpawnOfWotaskd.sh" perm="ugo+rx"/>
+        <chmod file="${build.root}/${project.name}.woa/Contents/Resources/javawoservice.sh" perm="ugo+rx"/>
     </target>
 
     <target name="wotaskd.all" depends="deployment.embed.check">
