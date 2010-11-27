@@ -237,6 +237,8 @@ There are many ways to use this script:
         </copy>
         
         <chmod file="${dist.dir}/Applications/${application.name}/${project.name}" perm="ugo+rx"/>
+        <chmod file="${dist.dir}/Applications/${application.name}/Contents/Resources/SpawnOfWotaskd.sh" perm="ugo+rx"/>
+        <chmod file="${dist.dir}/Applications/${application.name}/Contents/Resources/javawoservice.sh" perm="ugo+rx"/>
 
         <mkdir dir="${build.root}/${application.name}/Contents/WebServerResources" />
         <copy todir="${dist.dir}/WebServerResources/${application.name}/Contents/WebServerResources" includeEmptyDirs="false">
