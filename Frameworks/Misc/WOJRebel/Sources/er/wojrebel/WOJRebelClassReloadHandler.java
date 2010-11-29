@@ -147,14 +147,12 @@ public class WOJRebelClassReloadHandler {
 	}
 
 	private class WOEventClassListener implements ClassEventListener {
-		@Override
     public void onClassEvent(int eventType, Class clazz) {
 			if (eventType == ClassEventListener.EVENT_RELOADED) {
 				reloaded(clazz);
 			}
 		}
 
-    @Override
     public int priority() {
       return 0;
     }
