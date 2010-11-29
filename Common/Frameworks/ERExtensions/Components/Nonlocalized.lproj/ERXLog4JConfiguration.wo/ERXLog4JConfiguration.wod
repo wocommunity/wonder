@@ -224,6 +224,14 @@ ShowLoggerString: WOCollapsibleComponentContent {
 	submitActionName = "updateConversionPattern";
 }
 
+KnowsInstanceNumberConditional: WOConditional {
+	condition = knowsAppNumber;
+}
+
+InstanceNumber: WOString {
+	value = instanceNumber;
+}
+
 StringApplicationName: WOString {
 	value = application.name;
 }
