@@ -134,6 +134,38 @@ Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
 }
 
+IfIsDeleteWidgetPropertyKey: ERXEqualConditional {
+	value1 = d2wContext.propertyKey;
+	value2 = d2wContext.deleteWidgetPropertyKey;
+}
+
+IfIsInspectActionsWidgetPropertyKey: ERXEqualConditional {
+	value1 = d2wContext.propertyKey;
+	value2 = d2wContext.inspectActionsWidgetPropertyKey;
+}
+
+IfIsNotDeleteWidgetPropertyKey: ERXEqualConditional {
+	negate = true;
+	value1 = d2wContext.propertyKey;
+	value2 = d2wContext.deleteWidgetPropertyKey;
+}
+
+IfIsNotInspectActionsWidgetPropertyKey: ERXEqualConditional {
+	negate = true;
+	value1 = d2wContext.propertyKey;
+	value2 = d2wContext.inspectActionsWidgetPropertyKey;
+}
+
+IfNotHasDeleteWidgetPropertyKey: ERXNonNullConditional {
+	condition = d2wContext.deleteWidgetPropertyKey;
+	negate = true;
+}
+
+IfNotHasInspectActionsWidgetPropertyKey: ERXNonNullConditional {
+	condition = d2wContext.inspectActionsWidgetPropertyKey;
+	negate = true;
+}
+
 IfPropertyKeyIsNotOmitted: WOConditional {
 	condition = isKeyOmitted;
 	negate = true;
@@ -160,7 +192,7 @@ IsEntityWritable: WOConditional {
 	negate = true;
 }
 
-IsEntityWritable2: WOConditional {
+IsEntityDeletable: WOConditional {
 	_unroll = true;
 	condition = d2wContext.isEntityDeletable;
 }
@@ -174,12 +206,6 @@ IsGenericExportButtonKnown2: WOConditional {
 }
 
 IsListing: WOConditional {
-	_unroll = true;
-	condition = isSelecting;
-	negate = true;
-}
-
-IsListing2: WOConditional {
 	_unroll = true;
 	condition = isSelecting;
 	negate = true;

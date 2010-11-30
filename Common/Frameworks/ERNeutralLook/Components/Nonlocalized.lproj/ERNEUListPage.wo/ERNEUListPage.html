@@ -38,26 +38,31 @@
 		<br />
 		<webobject name="ListTable">
 			<webobject name="ListTableHeaderRow">
-				<th>&nbsp;</th>
+				<webobject name="IfNotHasInspectActionsWidgetPropertyKey"><th>&nbsp;</th></webobject>
 				<webobject name="ColumnLabelRepetition">
 				<webobject name="IfPropertyKeyIsNotOmitted">
 				<webobject name="PropertyNameComponentGenericContainer">
-					<table>
-						<tr>
-							<th><webobject name="PropertyNameSwitchComponent"></webobject></th>
-							<td><webobject name="IsPropertySortable"><webobject name="SortOrder"></webobject></webobject></td>
-						</tr>
-					</table>
+					<webobject name="IfIsInspectActionsWidgetPropertyKey">&nbsp;</webobject>
+					<webobject name="IfIsNotInspectActionsWidgetPropertyKey">
+						<webobject name="IfIsDeleteWidgetPropertyKey">&nbsp;</webobject>
+						<webobject name="IfIsNotDeleteWidgetPropertyKey">
+						<table>
+							<tr>
+								<th><webobject name="PropertyNameSwitchComponent"></webobject></th>
+								<td><webobject name="IsPropertySortable"><webobject name="SortOrder"></webobject></webobject></td>
+							</tr>
+						</table>
+						</webobject>
+					</webobject>
 				</webobject>
-				<webobject name="ShouldDisplayDetailedPageMetrics">
-				<th scope="col" class="InlineMetrics">&nbsp;</th>
+				<webobject name="ShouldDisplayDetailedPageMetrics"><th scope="col" class="InlineMetrics">&nbsp;</th></webobject>
 				</webobject>
 				</webobject>
-				</webobject>
-				<th>&nbsp;</th>
+				<webobject name="IfNotHasDeleteWidgetPropertyKey"><th>&nbsp;</th></webobject>
 			</webobject>
 			<webobject name="EntityRepetition">
 			<webobject name="ListTableRow">
+				<webobject name="IfNotHasInspectActionsWidgetPropertyKey">
 				<td>
 					<webobject name="IsSelecting">
 						<webobject name="SelectEO"><webobject name="SelectImage"></webobject></webobject>
@@ -78,21 +83,56 @@
 						</webobject>
 					</webobject>
 				</td>
+				</webobject>
 				<webobject name="AttributeRepetition">
 				<webobject name="IfPropertyKeyIsNotOmitted">
-				<webobject name="AttributeCell"><webobject name="AttributeDisplay"></webobject></webobject>
-				<webobject name="ShouldDisplayDetailedPageMetrics">
-				<td class="InlineMetrics"><webobject name="InlineMetricsForPropertyKey"></webobject></td>
+				<webobject name="IfIsInspectActionsWidgetPropertyKey">
+					<td>
+						<webobject name="IsSelecting">
+							<webobject name="SelectEO"><webobject name="SelectImage"></webobject></webobject>
+						</webobject>
+						<webobject name="IsListing">
+							<webobject name="IsEntityWritable">
+								<webobject name="Conditional1">
+									<webobject name="ERXNonNullConditional2">
+										<webobject name="SwitchComponent2"></webobject>
+									</webobject>
+									<webobject name="ERXNonNullConditional1">
+										<webobject name="EditButton"></webobject>
+									</webobject>
+								</webobject>
+							</webobject>
+							<webobject name="IsEntityNotWritable">
+								<webobject name="InspectButton"></webobject>
+							</webobject>
+						</webobject>
+					</td>
+				</webobject>
+				<webobject name="IfIsNotInspectActionsWidgetPropertyKey">
+					<webobject name="IfIsDeleteWidgetPropertyKey">
+						<webobject name="IsListing">
+							<webobject name="IsEntityDeletable">
+								<webobject name="TrashSwitchComponent"></webobject>
+							</webobject>
+						</webobject>
+					</webobject>
+					<webobject name="IfIsNotDeleteWidgetPropertyKey">
+						<webobject name="AttributeCell"><webobject name="AttributeDisplay"></webobject></webobject>
+						<webobject name="ShouldDisplayDetailedPageMetrics">
+							<td class="InlineMetrics"><webobject name="InlineMetricsForPropertyKey"></webobject></td>
+						</webobject>
+					</webobject>
 				</webobject>
 				</webobject>
-				</webobject>
+				<webobject name="IfNotHasDeleteWidgetPropertyKey">
 				<td>
-					<webobject name="IsListing2">
-					<webobject name="IsEntityWritable2">
+					<webobject name="IsListing">
+					<webobject name="IsEntityDeletable">
 						<webobject name="TrashSwitchComponent"></webobject>
 					</webobject>
 					</webobject>
 				</td>
+				</webobject>
 			</webobject>
 			<tr>
 				<td bgcolor="#ffffff" colspan='<webobject name="ColSpanNumber"></webobject>'><img border="0" height="2" width="1" /></td>
