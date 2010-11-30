@@ -1,0 +1,9 @@
+TweetButton: WOGenericContainer {
+	elementName = "a";
+	href = "http://twitter.com/share";
+	class = "twitter-share-button";
+	data-url = dataURL;
+	data-text = ^dataText;
+	data-count = dataCount;
+	data-via = ^dataVia;
+}

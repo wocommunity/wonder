@@ -287,6 +287,7 @@ static void copyHeaders(request_rec *r, HTTPRequest *req) {
 
     /* extra headers from http://httpd.apache.org/dev/apidoc/apidoc_request_rec.html */
     apr_table_t *proc_env = r->subprocess_env;
+    apr_table_t *nts = r->notes;
 
     char *port;
     const char *rem_logname;
@@ -298,6 +299,7 @@ static void copyHeaders(request_rec *r, HTTPRequest *req) {
 
     /* copy extra headers */
     apr_table_do(copyTableEntries, (void *)req, proc_env, NULL);
+    apr_table_do(copyTableEntries, (void *)req, nts, NULL);
 
 
 #ifdef APACHE_SECURITY_ENABLED

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+        <wo class="TweetButton.java" wocomponentcontent="false">
+
+        <binding defaults="Direct Actions" name="directAction"/>
+        <validation message="'directAction' is a required binding.">
+            <unbound name="directAction"/>
+        </validation>
+    <binding name="queryDictionary"/>
+        <binding name="dataVia"/>
+        
+        <binding name="dataTitle"/>
+        
+    <validation message="'dataTitle' is a required binding.">
+            <unbound name="dataTitle"/>
+        </validation>
+    <binding name="dataCount"/>
+    </wo>
+</wodefinitions>
