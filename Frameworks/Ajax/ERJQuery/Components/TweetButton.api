@@ -8,9 +8,7 @@
         </validation>
     <binding name="queryDictionary"/>
         <binding name="dataVia"/>
-        <validation message="'dataVia' is a required binding.">
-            <unbound name="dataVia"/>
-        </validation>
+        
         <binding name="dataTitle"/>
         
     <validation message="'dataTitle' is a required binding.">
