@@ -243,7 +243,7 @@ public class WOTaskdHandler {
         getUpdateErrors(responseDicts, "configure", true, false, false, false);
     }
 
-    protected void sendUpdateSiteToWotaskds() {
+    public void sendUpdateSiteToWotaskds() {
         startReading();
         try {
             NSMutableArray hostArray = siteConfig().hostArray();

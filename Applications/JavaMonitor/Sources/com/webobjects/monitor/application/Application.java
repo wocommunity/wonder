@@ -20,6 +20,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.monitor._private.MSiteConfig;
 import com.webobjects.monitor.rest.MApplicationController;
 import com.webobjects.monitor.rest.MHostController;
+import com.webobjects.monitor.rest.MSiteConfigController;
 
 import er.extensions.appserver.ERXApplication;
 import er.rest.routes.ERXRoute;
@@ -56,6 +57,8 @@ public class Application extends ERXApplication {
         restHandler.insertRoute(new ERXRoute("MApplication","/mApplications/{name:MApplication}/addInstance/{host:MHost}", ERXRoute.Method.Get, MApplicationController.class, "addInstance"));
         restHandler.insertRoute(new ERXRoute("MApplication","/mApplications/{name:MApplication}/deleteInstance", ERXRoute.Method.Get, MApplicationController.class, "deleteInstance"));
         restHandler.addDefaultRoutes("MHost", false, MHostController.class);
+        restHandler.addDefaultRoutes("MSiteConfig", false, MSiteConfigController.class);
+        restHandler.insertRoute(new ERXRoute("MSiteConfig","/mSiteConfig", ERXRoute.Method.Put, MSiteConfigController.class, "update"));
 
         ERXRouteRequestHandler.register(restHandler);
     }
