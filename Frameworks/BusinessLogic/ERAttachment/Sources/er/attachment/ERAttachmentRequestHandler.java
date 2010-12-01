@@ -146,7 +146,7 @@ public class ERAttachmentRequestHandler extends WORequestHandler {
           response.setHeader(String.valueOf(length), "Content-Length");
 
           if (proxyAsAttachment) {
-            response.setHeader("attachment; filename=" + fileName, "Content-Disposition");
+            response.setHeader("attachment; filename=\"" + fileName+"\"", "Content-Disposition");
           }
 
           response.setStatus(200);
