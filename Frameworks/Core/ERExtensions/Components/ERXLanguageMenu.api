@@ -18,5 +18,6 @@
         <binding name="size"/>
         <binding name="style"/>
         <binding name="title"/>
+        <binding name="name"/>
     </wo>
 </wodefinitions>
