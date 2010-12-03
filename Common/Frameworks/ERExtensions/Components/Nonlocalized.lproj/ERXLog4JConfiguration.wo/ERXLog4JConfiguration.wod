@@ -27,7 +27,7 @@ AppenderThresholdRadioButtonMatrix: ERXRadioButtonMatrix {
     list = loggerLevels;
     maxColumns = 9;
     selection = currentAppenderLevel;
-    uniqueID = anAppender.class.name; //VALID
+    uniqueID = anAppender.name;
 }
 
 AppenderThresholdSettingGenericContainer: WOGenericContainer {
