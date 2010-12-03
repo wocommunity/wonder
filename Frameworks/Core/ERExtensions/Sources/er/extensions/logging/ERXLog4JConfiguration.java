@@ -436,6 +436,14 @@ public class ERXLog4JConfiguration extends WOComponent {
         }
     }
     
+    public int instanceNumber() {
+        return context().request().applicationNumber();
+    }
+    
+    public boolean knowsAppNumber() {
+        return context().request().applicationNumber() != -1;
+    }
+    
     //* this assumes you use ERXPatternLayout
     public String conversionPattern() {
         return ERXPatternLayout.instance().getConversionPattern();

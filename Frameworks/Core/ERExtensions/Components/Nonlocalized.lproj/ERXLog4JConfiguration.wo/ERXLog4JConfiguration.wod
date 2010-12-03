@@ -27,7 +27,7 @@ AppenderThresholdRadioButtonMatrix: ERXRadioButtonMatrix {
     list = loggerLevels;
     maxColumns = 9;
     selection = currentAppenderLevel;
-    uniqueID = anAppender.class.name; //VALID
+    uniqueID = anAppender.name;
 }
 
 AppenderThresholdSettingGenericContainer: WOGenericContainer {
@@ -222,6 +222,14 @@ ShowLoggerString: WOCollapsibleComponentContent {
 	openedLabel = "Hide Properties String";
 	closedLabel = "Show Properties String";
 	submitActionName = "updateConversionPattern";
+}
+
+KnowsInstanceNumberConditional: WOConditional {
+	condition = knowsAppNumber;
+}
+
+InstanceNumber: WOString {
+	value = instanceNumber;
 }
 
 StringApplicationName: WOString {
