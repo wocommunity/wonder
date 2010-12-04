@@ -91,8 +91,8 @@ public class ERXObjectStoreCoordinatorPool {
         }
         _oscForSession = new HashMap<String, EOObjectStore>();
         
-        NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector<Void>("sessionDidCreate", ERXConstant.NotificationClassArray), WOSession.SessionDidCreateNotification, null);
-        NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector<Void>("sessionDidTimeout", ERXConstant.NotificationClassArray), WOSession.SessionDidTimeOutNotification, null);
+        NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector/*<Void>*/("sessionDidCreate", ERXConstant.NotificationClassArray), WOSession.SessionDidCreateNotification, null);
+        NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector/*<Void>*/("sessionDidTimeout", ERXConstant.NotificationClassArray), WOSession.SessionDidTimeOutNotification, null);
     }
     
     /** 
