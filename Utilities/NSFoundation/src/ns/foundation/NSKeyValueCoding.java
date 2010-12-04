@@ -11,7 +11,6 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import ns.foundation._private._NSPropertyAccessor;
 
 public interface NSKeyValueCoding {
   public static final Null<?> NullValue = new Null<Object>();
@@ -21,7 +20,7 @@ public interface NSKeyValueCoding {
   public void takeValueForKey(Object value, String key);
 
   public interface _KeyBindingCreation {
-    public static Creator defaultCreator = new _GeneratedKeyBindingCreation();
+    public static _KeyBindingFactory defaultFactory = new _GeneratedKeyBindingCreation();
 
     public _KeyBinding _createKeyGetBindingForKey(String key);
 
@@ -31,7 +30,7 @@ public interface NSKeyValueCoding {
 
     public _KeyBinding _keySetBindingForKey(String s);
     
-    public interface Creator {
+    public interface _KeyBindingFactory {
       public static final int MethodLookup = 0;
       public static final int UnderbarMethodLookup = 1;
       public static final int FieldLookup = 2;
@@ -44,17 +43,27 @@ public interface NSKeyValueCoding {
 
       public _KeyBinding _createKeySetBindingForKey(Object object, String key, int lookupOrder[]);
       
-    }
-    
-    public interface Callback {
+      public static class _BindingStorage {
+        NSKeyValueCoding._KeyBinding  _keyGetBindings[];
+      
+        NSKeyValueCoding._KeyBinding  _keySetBindings[];
+      
+        public _BindingStorage() {
+          _keyGetBindings = new NSKeyValueCoding._KeyBinding[UnderbarFieldLookup + 1];
+          _keySetBindings = new NSKeyValueCoding._KeyBinding[UnderbarFieldLookup + 1];
+        }
+      }
 
-      public abstract _KeyBinding _fieldKeyBinding(String s, String s1);
+      public static interface Callback {
 
-      public abstract _KeyBinding _methodKeyGetBinding(String s, String s1);
+        public abstract _KeyBinding _fieldKeyBinding(String s, String s1);
 
-      public abstract _KeyBinding _methodKeySetBinding(String s, String s1);
+        public abstract _KeyBinding _methodKeyGetBinding(String s, String s1);
 
-      public abstract _KeyBinding _otherStorageBinding(String s);
+        public abstract _KeyBinding _methodKeySetBinding(String s, String s1);
+
+        public abstract _KeyBinding _otherStorageBinding(String s);
+      }
     }
   }
   
@@ -174,10 +183,14 @@ public interface NSKeyValueCoding {
     protected String _key;
     private int _hashCode;
 
+    public static final int _hash(Class<?> targetClass, String key) {
+      return  (targetClass == null || key == null) ? 0 : 31 * targetClass.hashCode() ^ key.hashCode();
+    }
+    
     public _KeyBinding(Class<?> targetClass, String key) {
       _targetClass = targetClass;
       _key = key;
-      _hashCode = (((targetClass != null) && (this._key != null)) ? this._targetClass.hashCode() ^ this._key.hashCode() : 0);
+      _hashCode = _hash(targetClass, key);
     }
 
     public final Class<?> targetClass() {
@@ -203,6 +216,13 @@ public interface NSKeyValueCoding {
       return ((_targetClass == otherKeyBinding._targetClass) && (((_key == otherKeyBinding._key) || (_key.equals(otherKeyBinding._key)))));
     }
 
+    public final boolean equals(Class<?> targetClass, String key) {
+      if (targetClass == null || key == null) {
+        return false;
+      }
+      return ((_targetClass == targetClass) && ((_key == key) || _key.equals(key)));
+    }
+    
     @Override
     public final boolean equals(Object object) {
       return ((object instanceof _KeyBinding) ? isEqualToKeyBinding((_KeyBinding) object) : false);
@@ -231,7 +251,55 @@ public interface NSKeyValueCoding {
     }
   }
   
-  public static class _GeneratedKeyBindingCreation implements _KeyBindingCreation.Creator {
+  public static class _KeyBindingCache {
+    private Map<_KeyBinding, _KeyBinding> _store;
+    private _KeyBinding[] _storeCache = new _KeyBinding[4096];
+
+    public _KeyBindingCache() {
+      this(256);
+    }
+
+    public _KeyBindingCache(int size) {
+      _store = new ConcurrentHashMap<_KeyBinding, _KeyBinding>(size);
+    }
+
+    public void clear() {
+      _store.clear();
+      _storeCache = new _KeyBinding[4096];
+    }
+
+    public _KeyBinding get(_KeyBinding binding) {
+      return _store.get(binding);
+    }
+
+    public _KeyBinding get(Class<?> targetClass, String key) {
+      _KeyBinding binding = _storeCache[_KeyBinding._hash(targetClass, key) & 0xfff]; 
+      if (binding != null && binding.equals(targetClass, key)) {
+        return binding;
+      }
+      binding = _store.get(new _KeyBinding(targetClass, key));
+      if (binding != null) {
+        _storeCache[binding.hashCode() & 0xfff] =  binding;
+      }
+      return binding;
+    }
+
+    public void put(_KeyBinding binding) {
+      _store.put(binding, binding);
+      _storeCache[binding.hashCode() & 0xfff] = binding;
+    }
+
+    public int size() {
+      return _store.size();
+    }
+
+    public void remove(_KeyBinding binding) {
+      _store.remove(binding);
+      _storeCache[binding.hashCode() & 0xfff] = null;
+    }
+  }
+  
+  public static class _GeneratedKeyBindingCreation implements _KeyBindingCreation._KeyBindingFactory {
 
     @Override
     public _KeyBinding _createKeyGetBindingForKey(Object object, String key, int lookupOrder[]) {
@@ -299,8 +367,8 @@ public interface NSKeyValueCoding {
   }
   
   public static abstract class DefaultImplementation {
-    private static final NSMutableDictionary<Object, NSMutableDictionary<String, _KeyBinding>> _keyGetBindings = new NSMutableDictionary<Object, NSMutableDictionary<String, _KeyBinding>>(256);
-    private static final NSMutableDictionary<Object, NSMutableDictionary<String, _KeyBinding>> _keySetBindings = new NSMutableDictionary<Object, NSMutableDictionary<String, _KeyBinding>>(256);
+    private static final _KeyBindingCache _keyGetBindings = new _KeyBindingCache(256);
+    private static final _KeyBindingCache _keySetBindings = new _KeyBindingCache(256);
 
     public static void _flushCaches() {
       _keyGetBindings.clear();
@@ -359,21 +427,13 @@ public interface NSKeyValueCoding {
     public static _KeyBinding _keyGetBindingForKey(Object object, String key) {
       Class<?> objectClass = object.getClass();
       
-      NSMutableDictionary<String, _KeyBinding> bindings = _keyGetBindings.objectForKey(objectClass);
-      _KeyBinding keyBinding = null;
-      if (bindings == null) {
-        bindings = new NSMutableDictionary<String, _KeyBinding>();
-        _keyGetBindings.setObjectForKey(bindings, objectClass);
-      } else {
-        keyBinding = bindings.objectForKey(key);
-      }
+      _KeyBinding keyBinding = _keyGetBindings.get(objectClass, key);
       if (keyBinding == null) {
         keyBinding = (object instanceof _KeyBindingCreation) ? ((_KeyBindingCreation)object)._createKeyGetBindingForKey(key) : _createKeyGetBindingForKey(object, key);
-
-        if (keyBinding == null)
+        if (keyBinding == null) {
           keyBinding = new _KeyBinding(objectClass, key);
-
-        bindings.setObjectForKey(keyBinding, key);
+        }
+        _keyGetBindings.put(keyBinding);
       }
       return keyBinding;
     }
@@ -381,66 +441,65 @@ public interface NSKeyValueCoding {
     public static _KeyBinding _keySetBindingForKey(Object object, String key) {
       Class<?> objectClass = object.getClass();
       
-      NSMutableDictionary<String, _KeyBinding> bindings = _keySetBindings.objectForKey(objectClass);
-      _KeyBinding keyBinding = null;
-      if (bindings == null) {
-        bindings = new NSMutableDictionary<String, _KeyBinding>();
-        _keySetBindings.setObjectForKey(bindings, objectClass);
-      } else {
-        keyBinding = bindings.objectForKey(key);
-      }
+      _KeyBinding keyBinding = _keySetBindings.get(objectClass, key);
       if (keyBinding == null) {
-        keyBinding = _createKeyGetBindingForKey(object, key);
+        keyBinding = (object instanceof _KeyBindingCreation) ? ((_KeyBindingCreation)object)._createKeySetBindingForKey(key) : _createKeySetBindingForKey(object, key);
 
-        if (keyBinding == null)
+        if (keyBinding == null) {
           keyBinding = new _KeyBinding(objectClass, key);
-
-        bindings.setObjectForKey(keyBinding, key);
+        }
+        _keySetBindings.put(keyBinding);
       }
       return keyBinding;
     }
     
     public static void _addKVOAdditionsForKey(Object object, final String key) {
-      NSMutableDictionary<String, _KeyBinding> bindings = _keySetBindings.objectForKey(object);
-      if (bindings == null) {
-        bindings = new NSMutableDictionary<String, _KeyBinding>();
-        _keySetBindings.setObjectForKey(bindings, object);
-      }
-      final _KeyBinding keyBinding = _createKeySetBindingForKey(object, key);
-      _KeyBinding kvoKeyBinding = new _KeyBinding(object.getClass(), key) {
-        @Override
-        public void setValueInObject(Object _value, Object _object) {
-          if (NSKeyValueObserving.Utility.automaticallyNotifiesObserversForKey(_object, key)) {
-            NSKeyValueObserving.Utility.willChangeValueForKey(_object, key);
-            keyBinding.setValueInObject(_value, _object);
-            NSKeyValueObserving.Utility.didChangeValueForKey(_object, key);
-          } else {
-            keyBinding.setValueInObject(_value, _object);            
+      Class<?> objectClass = object.getClass();
+      final _KeyBinding keyBinding = _keySetBindings.get(objectClass, key);
+      if (keyBinding != null) {
+        _KeyBinding kvoKeyBinding = new _KeyBinding(object.getClass(), key) {
+          @Override
+          public void setValueInObject(Object _value, Object _object) {
+            if (NSKeyValueObserving.Utility.automaticallyNotifiesObserversForKey(_object, key)) {
+              NSKeyValueObserving.Utility.willChangeValueForKey(_object, key);
+              keyBinding.setValueInObject(_value, _object);
+              NSKeyValueObserving.Utility.didChangeValueForKey(_object, key);
+            } else {
+              keyBinding.setValueInObject(_value, _object);            
+            }
           }
-        }
-        @Override
-        public Class<?> valueType() {
-          return keyBinding.valueType();
-        }
-      };
-      bindings.setObjectForKey(kvoKeyBinding, key);
+          @Override
+          public Class<?> valueType() {
+            return keyBinding.valueType();
+          }
+        };
+        _keySetBindings.put(kvoKeyBinding);
+      }
     }
     
     public static void _removeKVOAdditionsForKey(Object object, String key) {
-      NSMutableDictionary<String, _KeyBinding> bindings = _keySetBindings.objectForKey(object);
-      if (bindings == null)
+      Class<?> objectClass = object.getClass();
+      _KeyBinding keyBinding = _keySetBindings.get(objectClass, key);
+      if (keyBinding == null) {
         return;
-      bindings.removeObjectForKey(object);
-      if (bindings.isEmpty())
-        _keySetBindings.removeObjectForKey(object);
+      }
+      _keySetBindings.remove(keyBinding);
     }
 
     public static _KeyBinding _createKeyGetBindingForKey(Object object, String key) {
-      return _KeyBindingCreation.defaultCreator._createKeyGetBindingForKey(object, key, _KeyBindingCreation.Creator._ValueForKeyLookupOrder);
+      return _KeyBindingCreation.defaultFactory._createKeyGetBindingForKey(object, key, _KeyBindingCreation._KeyBindingFactory._ValueForKeyLookupOrder);
     }
 
     public static _KeyBinding _createKeySetBindingForKey(Object object, String key) {
-      return _KeyBindingCreation.defaultCreator._createKeySetBindingForKey(object, key, _KeyBindingCreation.Creator._ValueForKeyLookupOrder);
+      return _KeyBindingCreation.defaultFactory._createKeySetBindingForKey(object, key, _KeyBindingCreation._KeyBindingFactory._ValueForKeyLookupOrder);
+    }
+    
+    public static NSKeyValueCoding._KeyBinding _createKeyGetBindingForKey(Object object, String key, int[] lookupOrder) {
+      return _KeyBindingCreation.defaultFactory._createKeyGetBindingForKey(object, key, lookupOrder);
+    }
+
+    public static NSKeyValueCoding._KeyBinding _createKeySetBindingForKey(Object object, String key, int[] lookupOrder) {
+      return _KeyBindingCreation.defaultFactory._createKeySetBindingForKey(object, key, lookupOrder);
     }
   }
 

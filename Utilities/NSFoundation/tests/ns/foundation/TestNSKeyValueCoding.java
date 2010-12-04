@@ -11,10 +11,13 @@ import ns.foundation.NSKeyValueCoding.UnknownKeyException;
 import ns.foundation.NSKeyValueCoding.Utility;
 import ns.foundation.NSKeyValueCoding._KeyBinding;
 import ns.foundation.NSKeyValueCoding._KeyBindingCreation;
-import ns.foundation.NSKeyValueCoding._KeyBindingCreation.Callback;
+import ns.foundation.NSKeyValueCoding._KeyBindingCreation._KeyBindingFactory;
+import ns.foundation.NSKeyValueCoding._KeyBindingCreation._KeyBindingFactory.Callback;
 import ns.foundation.noaccess.NoAccessClass;
 import ns.foundation.overriddenaccess.OverriddenAccessClass;
 import ns.foundation.protectedaccess.RestrictedClass;
+import ns.foundation.protectedaccess.SubclassOfNoAccessClass;
+
 
 @SuppressWarnings("unused")
 public class TestNSKeyValueCoding extends BaseTestCase {
@@ -135,21 +138,52 @@ public class TestNSKeyValueCoding extends BaseTestCase {
     assertEquals(NSKeyValueCoding.NullValue, Utility.nullValue());
   }
   
+  public static class ValueForKey$knownMethod {
+    public Object knownMethod() { return FORTY_TWO; }
+  }
+  
   public void testUtility$valueForKey$knownMethod() {
+    Object obj = new ValueForKey$knownMethod();
+    assertEquals(FORTY_TWO, Utility.valueForKey(obj, "knownMethod"));
+  }
+  
+  public void testUtility$valueForKey$anonInnerClassKnownMethod() {
     Object obj = new Object() {
       public Object knownMethod() { return FORTY_TWO; }
     };
     assertEquals(FORTY_TWO, Utility.valueForKey(obj, "knownMethod"));
   }
 
+  public static class ValueForKey$knownField {
+    public Integer knownField = FORTY_TWO;
+  }
+  
   public void testUtility$valueForKey$knownField() {
+    Object obj = new ValueForKey$knownField();
+    assertEquals(FORTY_TWO, Utility.valueForKey(obj, "knownField"));
+  }
+  
+
+  public void testUtility$valueForKey$anonInnerClassKnownField() {
     Object obj = new Object() {
       public Integer knownField = FORTY_TWO;
     };
     assertEquals(FORTY_TWO, Utility.valueForKey(obj, "knownField"));
   }
 
+  public static class TakeValueForKey$knownMethod {
+    private Integer _value;
+    public Integer knownMethod() { return _value; };
+    public void setKnownMethod(Integer value) { _value = value; };
+  }
+  
   public void testUtility$takeValueForKey$knownMethod() {
+    Object obj = new TakeValueForKey$knownMethod();
+    Utility.takeValueForKey(obj, FORTY_TWO, "knownMethod");
+    assertEquals(FORTY_TWO, Utility.valueForKey(obj, "knownMethod"));
+  }
+  
+  public void testUtility$takeValueForKey$anonInnerClassKnownMethod() {
     Object obj = new Object() {
       private Integer _value;
       public Integer knownMethod() { return _value; };
@@ -159,7 +193,17 @@ public class TestNSKeyValueCoding extends BaseTestCase {
     assertEquals(FORTY_TWO, Utility.valueForKey(obj, "knownMethod"));
   }
 
+  public static class TakeValueForKey$knownField {
+    public Integer knownField;
+  }
+
   public void testUtility$takeValueForKey$knownField() {
+    Object obj = new TakeValueForKey$knownField();
+    Utility.takeValueForKey(obj, FORTY_TWO, "knownField");
+    assertEquals(FORTY_TWO, Utility.valueForKey(obj, "knownField"));
+  }
+  
+  public void testUtility$takeValueForKey$anonInnerClassKnownField() {
     Object obj = new Object() {
       public Integer knownField;
     };
@@ -608,7 +652,7 @@ public class TestNSKeyValueCoding extends BaseTestCase {
     assertEquals(FORTY_TWO_SHORT, kb.valueInObject(obj));
     
     kb = DefaultImplementation._keyGetBindingForKey(obj, "shortField");
-    assertEquals(Short.TYPE, kb.valueType());
+    assertEquals(Short.class, kb.valueType());
     assertTrue(kb.isScalarProperty());
     obj.shortField = FORTY_TWO_SHORT;
     assertEquals(FORTY_TWO_SHORT, kb.valueInObject(obj));
@@ -624,7 +668,7 @@ public class TestNSKeyValueCoding extends BaseTestCase {
     assertEquals(FORTY_TWO, kb.valueInObject(obj));
     
     kb = DefaultImplementation._keyGetBindingForKey(obj, "intField");
-    assertEquals(Integer.TYPE, kb.valueType());
+    assertEquals(Integer.class, kb.valueType());
     assertTrue(kb.isScalarProperty());
     obj.intField = FORTY_TWO;
     assertEquals(FORTY_TWO, kb.valueInObject(obj));
@@ -640,7 +684,7 @@ public class TestNSKeyValueCoding extends BaseTestCase {
     assertEquals(FORTY_TWO_LONG, kb.valueInObject(obj));
     
     kb = DefaultImplementation._keyGetBindingForKey(obj, "longField");
-    assertEquals(Long.TYPE, kb.valueType());
+    assertEquals(Long.class, kb.valueType());
     assertTrue(kb.isScalarProperty());
     obj.longField = FORTY_TWO_LONG;
     assertEquals(FORTY_TWO_LONG, kb.valueInObject(obj));
@@ -656,7 +700,7 @@ public class TestNSKeyValueCoding extends BaseTestCase {
     assertEquals(FORTY_TWO_FLOAT, kb.valueInObject(obj));
     
     kb = DefaultImplementation._keyGetBindingForKey(obj, "floatField");
-    assertEquals(Float.TYPE, kb.valueType());
+    assertEquals(Float.class, kb.valueType());
     assertTrue(kb.isScalarProperty());
     obj.floatField = FORTY_TWO_FLOAT;
     assertEquals(FORTY_TWO_FLOAT, kb.valueInObject(obj));
@@ -672,7 +716,7 @@ public class TestNSKeyValueCoding extends BaseTestCase {
     assertEquals(FORTY_TWO_DOUBLE, kb.valueInObject(obj));
     
     kb = DefaultImplementation._keyGetBindingForKey(obj, "doubleField");
-    assertEquals(Double.TYPE, kb.valueType());
+    assertEquals(Double.class, kb.valueType());
     assertTrue(kb.isScalarProperty());
     obj.doubleField = FORTY_TWO_DOUBLE;
     assertEquals(FORTY_TWO_DOUBLE, kb.valueInObject(obj));
@@ -688,7 +732,7 @@ public class TestNSKeyValueCoding extends BaseTestCase {
     assertEquals(Boolean.TRUE, kb.valueInObject(obj));
     
     kb = DefaultImplementation._keyGetBindingForKey(obj, "booleanField");
-    assertEquals(Boolean.TYPE, kb.valueType());
+    assertEquals(Boolean.class, kb.valueType());
     assertTrue(kb.isScalarProperty());
     obj.booleanField = true;
     assertEquals(Boolean.TRUE, kb.valueInObject(obj));
@@ -746,7 +790,7 @@ public class TestNSKeyValueCoding extends BaseTestCase {
     assertEquals(FORTY_TWO, obj.integerField);
     
     kb = DefaultImplementation._keySetBindingForKey(obj, "intField");
-    assertEquals(Integer.TYPE, kb.valueType());
+    assertEquals(Integer.class, kb.valueType());
     assertTrue(kb.isScalarProperty());
 
     kb.setValueInObject(FORTY_TWO, obj);
@@ -764,7 +808,7 @@ public class TestNSKeyValueCoding extends BaseTestCase {
     assertEquals(FORTY_TWO_LONG, obj.longObjectField);
     
     kb = DefaultImplementation._keySetBindingForKey(obj, "longField");
-    assertEquals(Long.TYPE, kb.valueType());
+    assertEquals(Long.class, kb.valueType());
     assertTrue(kb.isScalarProperty());
 
     kb.setValueInObject(FORTY_TWO_LONG, obj);
@@ -782,7 +826,7 @@ public class TestNSKeyValueCoding extends BaseTestCase {
     assertEquals(FORTY_TWO_FLOAT, obj.floatObjectField);
     
     kb = DefaultImplementation._keySetBindingForKey(obj, "floatField");
-    assertEquals(Float.TYPE, kb.valueType());
+    assertEquals(Float.class, kb.valueType());
     assertTrue(kb.isScalarProperty());
 
     kb.setValueInObject(FORTY_TWO_FLOAT, obj);
@@ -800,7 +844,7 @@ public class TestNSKeyValueCoding extends BaseTestCase {
     assertEquals(FORTY_TWO_DOUBLE, obj.doubleObjectField);
     
     kb = DefaultImplementation._keySetBindingForKey(obj, "doubleField");
-    assertEquals(Double.TYPE, kb.valueType());
+    assertEquals(Double.class, kb.valueType());
     assertTrue(kb.isScalarProperty());
 
     kb.setValueInObject(FORTY_TWO_DOUBLE, obj);
@@ -818,7 +862,7 @@ public class TestNSKeyValueCoding extends BaseTestCase {
     assertTrue(obj.booleanObjectField);
     
     kb = DefaultImplementation._keySetBindingForKey(obj, "booleanField");
-    assertEquals(Boolean.TYPE, kb.valueType());
+    assertEquals(Boolean.class, kb.valueType());
     assertTrue(kb.isScalarProperty());
 
     kb.setValueInObject(true, obj);
@@ -869,7 +913,7 @@ public class TestNSKeyValueCoding extends BaseTestCase {
     
     kb = DefaultImplementation._keyGetBindingForKey(obj, "byteMethod");
     assertEquals(Byte.TYPE, kb.valueType());
-    assertTrue(kb.isScalarProperty());
+    assertFalse(kb.isScalarProperty());
     obj.byteField = FORTY_TWO_BYTE;
     assertEquals(FORTY_TWO_BYTE, kb.valueInObject(obj));
   }
@@ -885,7 +929,7 @@ public class TestNSKeyValueCoding extends BaseTestCase {
     
     kb = DefaultImplementation._keyGetBindingForKey(obj, "charMethod");
     assertEquals(Character.TYPE, kb.valueType());
-    assertTrue(kb.isScalarProperty());
+    assertFalse(kb.isScalarProperty());
     obj.charField = FORTY_TWO_CHAR;
     assertEquals(FORTY_TWO_CHAR, kb.valueInObject(obj));
   }
@@ -900,8 +944,8 @@ public class TestNSKeyValueCoding extends BaseTestCase {
     assertEquals(FORTY_TWO_SHORT, kb.valueInObject(obj));
     
     kb = DefaultImplementation._keyGetBindingForKey(obj, "shortMethod");
-    assertEquals(Short.TYPE, kb.valueType());
-    assertTrue(kb.isScalarProperty());
+    assertEquals(Short.class, kb.valueType());
+    assertFalse(kb.isScalarProperty());
     obj.shortField = FORTY_TWO_SHORT;
     assertEquals(FORTY_TWO_SHORT, kb.valueInObject(obj));
   }
@@ -916,8 +960,8 @@ public class TestNSKeyValueCoding extends BaseTestCase {
     assertEquals(FORTY_TWO, kb.valueInObject(obj));
     
     kb = DefaultImplementation._keyGetBindingForKey(obj, "intMethod");
-    assertEquals(Integer.TYPE, kb.valueType());
-    assertTrue(kb.isScalarProperty());
+    assertEquals(Integer.class, kb.valueType());
+    assertFalse(kb.isScalarProperty());
     obj.intField = FORTY_TWO;
     assertEquals(FORTY_TWO, kb.valueInObject(obj));
 
@@ -933,8 +977,8 @@ public class TestNSKeyValueCoding extends BaseTestCase {
     assertEquals(FORTY_TWO_LONG, kb.valueInObject(obj));
     
     kb = DefaultImplementation._keyGetBindingForKey(obj, "longMethod");
-    assertEquals(Long.TYPE, kb.valueType());
-    assertTrue(kb.isScalarProperty());
+    assertEquals(Long.class, kb.valueType());
+    assertFalse(kb.isScalarProperty());
     obj.longField = FORTY_TWO_LONG;
     assertEquals(FORTY_TWO_LONG, kb.valueInObject(obj));
   }
@@ -949,8 +993,8 @@ public class TestNSKeyValueCoding extends BaseTestCase {
     assertEquals(FORTY_TWO_FLOAT, kb.valueInObject(obj));
     
     kb = DefaultImplementation._keyGetBindingForKey(obj, "floatMethod");
-    assertEquals(Float.TYPE, kb.valueType());
-    assertTrue(kb.isScalarProperty());
+    assertEquals(Float.class, kb.valueType());
+    assertFalse(kb.isScalarProperty());
     obj.floatField = FORTY_TWO_FLOAT;
     assertEquals(FORTY_TWO_FLOAT, kb.valueInObject(obj));
   }
@@ -965,8 +1009,8 @@ public class TestNSKeyValueCoding extends BaseTestCase {
     assertEquals(FORTY_TWO_DOUBLE, kb.valueInObject(obj));
     
     kb = DefaultImplementation._keyGetBindingForKey(obj, "doubleMethod");
-    assertEquals(Double.TYPE, kb.valueType());
-    assertTrue(kb.isScalarProperty());
+    assertEquals(Double.class, kb.valueType());
+    assertFalse(kb.isScalarProperty());
     obj.doubleField = FORTY_TWO_DOUBLE;
     assertEquals(FORTY_TWO_DOUBLE, kb.valueInObject(obj));
   }
@@ -981,8 +1025,8 @@ public class TestNSKeyValueCoding extends BaseTestCase {
     assertEquals(Boolean.TRUE, kb.valueInObject(obj));
     
     kb = DefaultImplementation._keyGetBindingForKey(obj, "booleanMethod");
-    assertEquals(Boolean.TYPE, kb.valueType());
-    assertTrue(kb.isScalarProperty());
+    assertEquals(Boolean.class, kb.valueType());
+    assertFalse(kb.isScalarProperty());
     obj.booleanField = Boolean.TRUE;
     assertEquals(Boolean.TRUE, kb.valueInObject(obj));
   }
@@ -1048,7 +1092,7 @@ public class TestNSKeyValueCoding extends BaseTestCase {
     assertEquals(FORTY_TWO_SHORT, obj.shortObjectField);
     
     kb = DefaultImplementation._keySetBindingForKey(obj, "shortMethod");
-    assertEquals(Short.TYPE, kb.valueType());
+    assertEquals(Short.class, kb.valueType());
     assertTrue(kb.isScalarProperty());
 
     kb.setValueInObject(FORTY_TWO_SHORT, obj);
@@ -1067,7 +1111,7 @@ public class TestNSKeyValueCoding extends BaseTestCase {
     assertEquals(FORTY_TWO, obj.integerField);
 
     kb = DefaultImplementation._keySetBindingForKey(obj, "intMethod");
-    assertEquals(Integer.TYPE, kb.valueType());
+    assertEquals(Integer.class, kb.valueType());
     assertTrue(kb.isScalarProperty());
 
     kb.setValueInObject(FORTY_TWO, obj);
@@ -1085,7 +1129,7 @@ public class TestNSKeyValueCoding extends BaseTestCase {
     assertEquals(FORTY_TWO_LONG, obj.longObjectField);
 
     kb = DefaultImplementation._keySetBindingForKey(obj, "longMethod");
-    assertEquals(Long.TYPE, kb.valueType());
+    assertEquals(Long.class, kb.valueType());
     assertTrue(kb.isScalarProperty());
 
     kb.setValueInObject(FORTY_TWO_LONG, obj);
@@ -1104,7 +1148,7 @@ public class TestNSKeyValueCoding extends BaseTestCase {
     assertEquals(FORTY_TWO_FLOAT, obj.floatObjectField);
     
     kb = DefaultImplementation._keySetBindingForKey(obj, "floatMethod");
-    assertEquals(Float.TYPE, kb.valueType());
+    assertEquals(Float.class, kb.valueType());
     assertTrue(kb.isScalarProperty());
 
     kb.setValueInObject(FORTY_TWO_FLOAT, obj);
@@ -1122,7 +1166,7 @@ public class TestNSKeyValueCoding extends BaseTestCase {
     assertEquals(FORTY_TWO_DOUBLE, obj.doubleObjectField);
     
     kb = DefaultImplementation._keySetBindingForKey(obj, "doubleMethod");
-    assertEquals(Double.TYPE, kb.valueType());
+    assertEquals(Double.class, kb.valueType());
     assertTrue(kb.isScalarProperty());
 
     kb.setValueInObject(FORTY_TWO_DOUBLE, obj);
@@ -1140,7 +1184,7 @@ public class TestNSKeyValueCoding extends BaseTestCase {
     assertTrue(obj.booleanObjectField);
     
     kb = DefaultImplementation._keySetBindingForKey(obj, "booleanMethod");
-    assertEquals(Boolean.TYPE, kb.valueType());
+    assertEquals(Boolean.class, kb.valueType());
     assertTrue(kb.isScalarProperty());
 
     kb.setValueInObject(true, obj);
@@ -1716,227 +1760,253 @@ public class TestNSKeyValueCoding extends BaseTestCase {
    * Tests for _KeyBinding creation search order.
    */
   
+  public static class GetMethod$GetPrefix {
+    public Integer getKnownKey() { return FORTY_TWO; }
+    public Integer knownKey() { fail("this method should not be called"); return null; }
+    public Integer isKnownKey() { fail("this method should not be called"); return null; };
+    public Integer _getKnownKey() { fail("this method should not be called"); return null; }
+    public Integer _knownKey() { fail("this method should not be called"); return null; }
+    public Integer _isKnownKey() { fail("this method should not be called"); return null; };
+    public Integer _knownKey = 1;
+    public Integer _isKnownKey = 2;
+    public Integer knownKey = 3;
+    public Integer isKnownKey = 4;
+  }
   public void testKeyBindingSearchOrder$GetMethod$GetPrefix() {
-    Object obj = new Object() {
-      public Integer getKnownKey() { return FORTY_TWO; }
-      public Integer knownKey() { fail("this method should not be called"); return null; }
-      public Integer isKnownKey() { fail("this method should not be called"); return null; };
-      public Integer _getKnownKey() { fail("this method should not be called"); return null; }
-      public Integer _knownKey() { fail("this method should not be called"); return null; }
-      public Integer _isKnownKey() { fail("this method should not be called"); return null; };
-      public Integer _knownKey = 1;
-      public Integer _isKnownKey = 2;
-      public Integer knownKey = 3;
-      public Integer isKnownKey = 4;
-    };
+    Object obj = new GetMethod$GetPrefix();
     assertEquals(FORTY_TWO, Utility.valueForKey(obj, "knownKey"));
   }
 
+  public static class GetMethod$NoPrefix {
+    protected Integer getKnownKey() { fail("this method should not be called"); return null; }
+    public Integer knownKey() { return FORTY_TWO; }
+    public Integer isKnownKey() { fail("this method should not be called"); return null; };
+    public Integer _getKnownKey() { fail("this method should not be called"); return null; }
+    public Integer _knownKey() { fail("this method should not be called"); return null; }
+    public Integer _isKnownKey() { fail("this method should not be called"); return null; };
+    public Integer _knownKey = 1;
+    public Integer _isKnownKey = 2;
+    public Integer knownKey = 3;
+    public Integer isKnownKey = 4;
+  };
   public void testKeyBindingSearchOrder$GetMethod$NoPrefix() {
-    Object obj = new Object() {
-      protected Integer getKnownKey() { fail("this method should not be called"); return null; }
-      public Integer knownKey() { return FORTY_TWO; }
-      public Integer isKnownKey() { fail("this method should not be called"); return null; };
-      public Integer _getKnownKey() { fail("this method should not be called"); return null; }
-      public Integer _knownKey() { fail("this method should not be called"); return null; }
-      public Integer _isKnownKey() { fail("this method should not be called"); return null; };
-      public Integer _knownKey = 1;
-      public Integer _isKnownKey = 2;
-      public Integer knownKey = 3;
-      public Integer isKnownKey = 4;
-
-    };
+    Object obj = new GetMethod$NoPrefix();
     assertEquals(FORTY_TWO, Utility.valueForKey(obj, "knownKey"));
   }
 
+  public static class GetMethod$IsPrefix {
+    protected Integer getKnownKey() { fail("this method should not be called"); return null; }
+    protected Integer knownKey() { fail("this method should not be called"); return null; }
+    public Integer isKnownKey() { return FORTY_TWO; };
+    public Integer _getKnownKey() { fail("this method should not be called"); return null; }
+    public Integer _knownKey() { fail("this method should not be called"); return null; }
+    public Integer _isKnownKey() { fail("this method should not be called"); return null; };
+    public Integer _knownKey = 1;
+    public Integer _isKnownKey = 2;
+    public Integer knownKey = 3;
+    public Integer isKnownKey = 4;
+  }
+  
   public void testKeyBindingSearchOrder$GetMethod$IsPrefix() {
-    Object obj = new Object() {
-      protected Integer getKnownKey() { fail("this method should not be called"); return null; }
-      protected Integer knownKey() { fail("this method should not be called"); return null; }
-      public Integer isKnownKey() { return FORTY_TWO; };
-      public Integer _getKnownKey() { fail("this method should not be called"); return null; }
-      public Integer _knownKey() { fail("this method should not be called"); return null; }
-      public Integer _isKnownKey() { fail("this method should not be called"); return null; };
-      public Integer _knownKey = 1;
-      public Integer _isKnownKey = 2;
-      public Integer knownKey = 3;
-      public Integer isKnownKey = 4;
-    };
+    Object obj = new GetMethod$IsPrefix();
     assertEquals(FORTY_TWO, Utility.valueForKey(obj, "knownKey"));
   }
 
+  public static class GetMethod$UnderscoreGetPrefix {      
+    protected Integer getKnownKey() { fail("this method should not be called"); return null; }
+    protected Integer knownKey() { fail("this method should not be called"); return null; }
+    protected Integer isKnownKey() { fail("this method should not be called"); return null; };
+    public Integer _getKnownKey() { return FORTY_TWO; }
+    public Integer _knownKey() { fail("this method should not be called"); return null; }
+    public Integer _isKnownKey() { fail("this method should not be called"); return null; };
+    public Integer _knownKey = 1;
+    public Integer _isKnownKey = 2;
+    public Integer knownKey = 3;
+    public Integer isKnownKey = 4;
+  }
+  
   public void testKeyBindingSearchOrder$GetMethod$UnderscoreGetPrefix() {
-    Object obj = new Object() {      
-      protected Integer getKnownKey() { fail("this method should not be called"); return null; }
-      protected Integer knownKey() { fail("this method should not be called"); return null; }
-      protected Integer isKnownKey() { fail("this method should not be called"); return null; };
-      public Integer _getKnownKey() { return FORTY_TWO; }
-      public Integer _knownKey() { fail("this method should not be called"); return null; }
-      public Integer _isKnownKey() { fail("this method should not be called"); return null; };
-      public Integer _knownKey = 1;
-      public Integer _isKnownKey = 2;
-      public Integer knownKey = 3;
-      public Integer isKnownKey = 4;
-    };
+    Object obj = new GetMethod$UnderscoreGetPrefix();
     assertEquals(FORTY_TWO, Utility.valueForKey(obj, "knownKey"));
   }
 
+  public static class GetMethod$UnderscoreNoPrefix {
+    protected Integer getKnownKey() { fail("this method should not be called"); return null; }
+    protected Integer knownKey() { fail("this method should not be called"); return null; }
+    protected Integer isKnownKey() { fail("this method should not be called"); return null; };
+    protected Integer _getKnownKey() { fail("this method should not be called"); return null; }
+    public Integer _knownKey() { return FORTY_TWO; }
+    public Integer _isKnownKey() { fail("this method should not be called"); return null; };
+    public Integer _knownKey = 1;
+    public Integer _isKnownKey = 2;
+    public Integer knownKey = 3;
+    public Integer isKnownKey = 4;
+  }
+  
   public void testKeyBindingSearchOrder$GetMethod$UnderscoreNoPrefix() {
-    Object obj = new Object() {
-      protected Integer getKnownKey() { fail("this method should not be called"); return null; }
-      protected Integer knownKey() { fail("this method should not be called"); return null; }
-      protected Integer isKnownKey() { fail("this method should not be called"); return null; };
-      protected Integer _getKnownKey() { fail("this method should not be called"); return null; }
-      public Integer _knownKey() { return FORTY_TWO; }
-      public Integer _isKnownKey() { fail("this method should not be called"); return null; };
-      public Integer _knownKey = 1;
-      public Integer _isKnownKey = 2;
-      public Integer knownKey = 3;
-      public Integer isKnownKey = 4;
-    };
+    Object obj = new GetMethod$UnderscoreNoPrefix();
     assertEquals(FORTY_TWO, Utility.valueForKey(obj, "knownKey"));
   }
   
+  public static class GetMethod$UnderscoreIsPrefix {
+    protected Integer getKnownKey() { fail("this method should not be called"); return null; }
+    protected Integer knownKey() { fail("this method should not be called"); return null; }
+    protected Integer isKnownKey() { fail("this method should not be called"); return null; };
+    protected Integer _getKnownKey() { fail("this method should not be called"); return null; }
+    protected Integer _knownKey() { fail("this method should not be called"); return null; }
+    public Integer _isKnownKey() { return FORTY_TWO; };
+    public Integer _knownKey = 1;
+    public Integer _isKnownKey = 2;
+    public Integer knownKey = 3;
+    public Integer isKnownKey = 4;
+  };
+  
   public void testKeyBindingSearchOrder$GetMethod$UnderscoreIsPrefix() {
-    Object obj = new Object() {
-      protected Integer getKnownKey() { fail("this method should not be called"); return null; }
-      protected Integer knownKey() { fail("this method should not be called"); return null; }
-      protected Integer isKnownKey() { fail("this method should not be called"); return null; };
-      protected Integer _getKnownKey() { fail("this method should not be called"); return null; }
-      protected Integer _knownKey() { fail("this method should not be called"); return null; }
-      public Integer _isKnownKey() { return FORTY_TWO; };
-      public Integer _knownKey = 1;
-      public Integer _isKnownKey = 2;
-      public Integer knownKey = 3;
-      public Integer isKnownKey = 4;
-    };
+    Object obj = new GetMethod$UnderscoreIsPrefix();
     assertEquals(FORTY_TWO, Utility.valueForKey(obj, "knownKey"));
   }
 
+  public static class GetField$UnderscoreNoPrefix {
+    protected Integer getKnownKey() { fail("this method should not be called"); return null; }
+    protected Integer knownKey() { fail("this method should not be called"); return null; }
+    protected Integer isKnownKey() { fail("this method should not be called"); return null; };
+    protected Integer _getKnownKey() { fail("this method should not be called"); return null; }
+    protected Integer _knownKey() { fail("this method should not be called"); return null; }
+    protected Integer _isKnownKey() { fail("this method should not be called"); return null; };
+    public Integer _knownKey = FORTY_TWO;
+    public Integer _isKnownKey = 1;
+    public Integer knownKey = 2;
+    public Integer isKnownKey = 3;
+  }
+  
   public void testKeyBindingSearchOrder$GetField$UnderscoreNoPrefix() {
-    Object obj = new Object() {
-      protected Integer getKnownKey() { fail("this method should not be called"); return null; }
-      protected Integer knownKey() { fail("this method should not be called"); return null; }
-      protected Integer isKnownKey() { fail("this method should not be called"); return null; };
-      protected Integer _getKnownKey() { fail("this method should not be called"); return null; }
-      protected Integer _knownKey() { fail("this method should not be called"); return null; }
-      protected Integer _isKnownKey() { fail("this method should not be called"); return null; };
-      public Integer _knownKey = FORTY_TWO;
-      public Integer _isKnownKey = 1;
-      public Integer knownKey = 2;
-      public Integer isKnownKey = 3;
-    };
+    Object obj = new GetField$UnderscoreNoPrefix();
     assertEquals(FORTY_TWO, Utility.valueForKey(obj, "knownKey"));
   }
 
+  public static class GetField$UnderscoreIsPrefix {
+    protected Integer getKnownKey() { fail("this method should not be called"); return null; }
+    protected Integer knownKey() { fail("this method should not be called"); return null; }
+    protected Integer isKnownKey() { fail("this method should not be called"); return null; };
+    protected Integer _getKnownKey() { fail("this method should not be called"); return null; }
+    protected Integer _knownKey() { fail("this method should not be called"); return null; }
+    protected Integer _isKnownKey() { fail("this method should not be called"); return null; };
+    protected Integer _knownKey = 1;
+    public Integer _isKnownKey = FORTY_TWO;
+    public Integer knownKey = 3;
+    public Integer isKnownKey = 4;
+  }
+  
   public void testKeyBindingSearchOrder$GetField$UnderscoreIsPrefix() {
-    Object obj = new Object() {
-      protected Integer getKnownKey() { fail("this method should not be called"); return null; }
-      protected Integer knownKey() { fail("this method should not be called"); return null; }
-      protected Integer isKnownKey() { fail("this method should not be called"); return null; };
-      protected Integer _getKnownKey() { fail("this method should not be called"); return null; }
-      protected Integer _knownKey() { fail("this method should not be called"); return null; }
-      protected Integer _isKnownKey() { fail("this method should not be called"); return null; };
-      protected Integer _knownKey = 1;
-      public Integer _isKnownKey = FORTY_TWO;
-      public Integer knownKey = 3;
-      public Integer isKnownKey = 4;
-    };
+    Object obj = new GetField$UnderscoreIsPrefix();
     assertEquals(FORTY_TWO, Utility.valueForKey(obj, "knownKey"));
   }
 
+  
+  public static class GetField$NoPrefix {
+    protected Integer getKnownKey() { fail("this method should not be called"); return null; }
+    protected Integer knownKey() { fail("this method should not be called"); return null; }
+    protected Integer isKnownKey() { fail("this method should not be called"); return null; };
+    protected Integer _getKnownKey() { fail("this method should not be called"); return null; }
+    protected Integer _knownKey() { fail("this method should not be called"); return null; }
+    protected Integer _isKnownKey() { fail("this method should not be called"); return null; };
+    protected Integer _knownKey = 1;
+    protected Integer _isKnownKey = 2;
+    public Integer knownKey = FORTY_TWO;
+    public Integer isKnownKey = 4;
+  };
+  
   public void testKeyBindingSearchOrder$GetField$NoPrefix() {
-    Object obj = new Object() {
-      protected Integer getKnownKey() { fail("this method should not be called"); return null; }
-      protected Integer knownKey() { fail("this method should not be called"); return null; }
-      protected Integer isKnownKey() { fail("this method should not be called"); return null; };
-      protected Integer _getKnownKey() { fail("this method should not be called"); return null; }
-      protected Integer _knownKey() { fail("this method should not be called"); return null; }
-      protected Integer _isKnownKey() { fail("this method should not be called"); return null; };
-      protected Integer _knownKey = 1;
-      protected Integer _isKnownKey = 2;
-      public Integer knownKey = FORTY_TWO;
-      public Integer isKnownKey = 4;
-    };
+    Object obj = new GetField$NoPrefix();
     assertEquals(FORTY_TWO, Utility.valueForKey(obj, "knownKey"));
   }
 
+  public static class GetField$IsPrefix {
+    protected Integer getKnownKey() { fail("this method should not be called"); return null; }
+    protected Integer knownKey() { fail("this method should not be called"); return null; }
+    protected Integer isKnownKey() { fail("this method should not be called"); return null; };
+    protected Integer _getKnownKey() { fail("this method should not be called"); return null; }
+    protected Integer _knownKey() { fail("this method should not be called"); return null; }
+    protected Integer _isKnownKey() { fail("this method should not be called"); return null; };
+    protected Integer _knownKey = 1;
+    protected Integer _isKnownKey = 2;
+    protected Integer knownKey = 3;
+    public Integer isKnownKey = FORTY_TWO;
+  }
+  
   public void testKeyBindingSearchOrder$GetField$IsPrefix() {
-    Object obj = new Object() {
-      protected Integer getKnownKey() { fail("this method should not be called"); return null; }
-      protected Integer knownKey() { fail("this method should not be called"); return null; }
-      protected Integer isKnownKey() { fail("this method should not be called"); return null; };
-      protected Integer _getKnownKey() { fail("this method should not be called"); return null; }
-      protected Integer _knownKey() { fail("this method should not be called"); return null; }
-      protected Integer _isKnownKey() { fail("this method should not be called"); return null; };
-      protected Integer _knownKey = 1;
-      protected Integer _isKnownKey = 2;
-      protected Integer knownKey = 3;
-      public Integer isKnownKey = FORTY_TWO;
-    };
+    Object obj = new GetField$IsPrefix();
     assertEquals(FORTY_TWO, Utility.valueForKey(obj, "knownKey"));
+  }
+  
+  public static class SetMethod$SetPrefix {
+    public Integer _value;
+    public void setKnownKey(Integer value) { _value = value; }
+    public void _setKnownKey(Integer value) { fail("this method should not be called"); }
+    public void setIsKnownKey(Integer value) { fail("this method should not be called"); }
+    public void _setIsKnownKey(Integer value) { fail("this method should not be called"); }
+    public Integer _knownKey = 1;
+    public Integer _isKnownKey = 2;
+    public Integer knownKey = 3;
+    public Integer isKnownKey = 4;
   }
   
   public void testKeyBindingSearchOrder$SetMethod$SetPrefix() {
-    Object obj = new Object() {
-      public Integer _value;
-      public void setKnownKey(Integer value) { _value = value; }
-      public void _setKnownKey(Integer value) { fail("this method should not be called"); }
-      public void setIsKnownKey(Integer value) { fail("this method should not be called"); }
-      public void _setIsKnownKey(Integer value) { fail("this method should not be called"); }
-      public Integer _knownKey = 1;
-      public Integer _isKnownKey = 2;
-      public Integer knownKey = 3;
-      public Integer isKnownKey = 4;
-    };
+    Object obj = new SetMethod$SetPrefix();
     Utility.takeValueForKey(obj, FORTY_TWO, "knownKey");
     assertEquals(FORTY_TWO, Utility.valueForKey(obj, "value"));
   }
 
+  public static class SetMethod$UserscoreSetPrefix {
+    public Integer _value;
+    protected void setKnownKey(Integer value) { fail("this method should not be called"); }
+    public void _setKnownKey(Integer value) { _value = value; }
+    public void setIsKnownKey(Integer value) { fail("this method should not be called"); }
+    public void _setIsKnownKey(Integer value) { fail("this method should not be called"); }
+    public Integer _knownKey = 1;
+    public Integer _isKnownKey = 2;
+    public Integer knownKey = 3;
+    public Integer isKnownKey = 4;
+  }
+  
   public void testKeyBindingSearchOrder$SetMethod$UserscoreSetPrefix() {
-    Object obj = new Object() {
-      public Integer _value;
-      protected void setKnownKey(Integer value) { fail("this method should not be called"); }
-      public void _setKnownKey(Integer value) { _value = value; }
-      public void setIsKnownKey(Integer value) { fail("this method should not be called"); }
-      public void _setIsKnownKey(Integer value) { fail("this method should not be called"); }
-      public Integer _knownKey = 1;
-      public Integer _isKnownKey = 2;
-      public Integer knownKey = 3;
-      public Integer isKnownKey = 4;
-    };
+    Object obj = new SetMethod$UserscoreSetPrefix();
     Utility.takeValueForKey(obj, FORTY_TWO, "knownKey");
     assertEquals(FORTY_TWO, Utility.valueForKey(obj, "value"));
   }
 
+  public static class SetMethod$SetIsPrefix {
+    public Integer _value;
+    protected void setKnownKey(Integer value) { fail("this method should not be called"); }
+    protected void _setKnownKey(Integer value) { fail("this method should not be called"); }
+    public void setIsKnownKey(Integer value) { fail("this method should not be called"); }
+    public void _setIsKnownKey(Integer value) { fail("this method should not be called"); }
+    public Integer _knownKey = 1;
+    public Integer _isKnownKey = 2;
+    public Integer knownKey = 3;
+    public Integer isKnownKey = 4;
+  }
+  
   public void testKeyBindingSearchOrder$SetMethod$SetIsPrefix() {
-    Object obj = new Object() {
-      public Integer _value;
-      protected void setKnownKey(Integer value) { fail("this method should not be called"); }
-      protected void _setKnownKey(Integer value) { fail("this method should not be called"); }
-      public void setIsKnownKey(Integer value) { fail("this method should not be called"); }
-      public void _setIsKnownKey(Integer value) { fail("this method should not be called"); }
-      public Integer _knownKey = 1;
-      public Integer _isKnownKey = 2;
-      public Integer knownKey = 3;
-      public Integer isKnownKey = 4;
-    };
+    Object obj = new SetMethod$SetIsPrefix();
     Utility.takeValueForKey(obj, FORTY_TWO, "knownKey");
     assertEquals(null, Utility.valueForKey(obj, "value"));
   }
+
+  public static class SetMethod$UserscoreSetIsPrefix {
+    public Integer _value;
+    protected void setKnownKey(Integer value) { fail("this method should not be called"); }
+    protected void _setKnownKey(Integer value) { fail("this method should not be called"); }
+    protected void setIsKnownKey(Integer value) { fail("this method should not be called"); }
+    public void _setIsKnownKey(Integer value) { fail("this method should not be called"); }
+    public Integer _knownKey = 1;
+    public Integer _isKnownKey = 2;
+    public Integer knownKey = 3;
+    public Integer isKnownKey = 4;
+  }
   
   public void testKeyBindingSearchOrder$SetMethod$UserscoreSetIsPrefix() {
-    Object obj = new Object() {
-      public Integer _value;
-      protected void setKnownKey(Integer value) { fail("this method should not be called"); }
-      protected void _setKnownKey(Integer value) { fail("this method should not be called"); }
-      protected void setIsKnownKey(Integer value) { fail("this method should not be called"); }
-      public void _setIsKnownKey(Integer value) { fail("this method should not be called"); }
-      public Integer _knownKey = 1;
-      public Integer _isKnownKey = 2;
-      public Integer knownKey = 3;
-      public Integer isKnownKey = 4;
-    };
+    Object obj = new SetMethod$UserscoreSetIsPrefix();
     Utility.takeValueForKey(obj, FORTY_TWO, "knownKey");
     assertEquals(null, Utility.valueForKey(obj, "value"));
   }
@@ -1967,7 +2037,7 @@ public class TestNSKeyValueCoding extends BaseTestCase {
     assertEquals(FORTY_TWO, obj._isKnownKey);
   }
 
-  public static class SearchOrderSetFieldNoPrefix {
+  public static class SearchOrderSetField$NoPrefix {
     protected Integer _knownKey = 1;
     protected Integer _isKnownKey = 2;
     public Integer knownKey = 3;
@@ -1975,7 +2045,7 @@ public class TestNSKeyValueCoding extends BaseTestCase {
   };
   
   public void testKeyBindingSearchOrder$SetField$NoPrefix() {
-    SearchOrderSetFieldNoPrefix obj = new SearchOrderSetFieldNoPrefix();
+    SearchOrderSetField$NoPrefix obj = new SearchOrderSetField$NoPrefix();
     Utility.takeValueForKey(obj, FORTY_TWO, "knownKey");
     assertEquals(FORTY_TWO, obj.knownKey);
   }
@@ -1993,30 +2063,70 @@ public class TestNSKeyValueCoding extends BaseTestCase {
     assertEquals(FORTY_TWO, obj.isKnownKey);
   }
   
+  public static class BindingSearch$multipleSetters {
+    public Integer getKnownKey() { return FORTY_TWO; }
+    public void setKnownKey(Object value) { fail("This method should not be called"); }
+    public void setKnownKey(Integer value) { }
+  }
+  
   public void testKeyBindingSearch$multipleSetters() {
-    Object obj = new Object() {
-      public Integer getKnownKey() { return FORTY_TWO; }
-      public void setKnownKey(Object value) { fail("This method should not be called"); }
-      public void setKnownKey(Integer value) { }
-    };
+    Object obj = new BindingSearch$multipleSetters();
     Utility.takeValueForKey(obj, FORTY_TWO, "knownKey");
+  }
+  
+  public static class BindingSearch$mixedObjectPrimitiveSetGet {
+    private Object _value;
+    public int getKnownKey() { return (Integer)_value; }
+    public void setKnownKey(Integer value) { fail("This method should not be called"); }
+    public void setKnownKey(int value) { _value = value; }
+    public void setKnownKey(Boolean value) { fail("This method should not be called"); }
+
+  }
+  
+  public void testKeyBindingSearch$mixedObjectPrimitiveSetGet() {
+    Object obj = new BindingSearch$mixedObjectPrimitiveSetGet();
+    Utility.takeValueForKey(obj, FORTY_TWO, "knownKey");
+    assertEquals(FORTY_TWO, Utility.valueForKey(obj, "knownKey"));
+  }
+  
+  public static class BindingSearch$singleArgumentGetter {
+    public Integer knownKey;
+    public Integer getKnownKey(Integer value) { fail("This method should not be called"); return null; }
   }
   
   public void testKeyBindingSearch$singleArgumentGetter() {
-    Object obj = new Object() {
-      public Integer knownKey;
-      public Integer getKnownKey(Integer value) { fail("This method should not be called"); return null; }
-    };
+    Object obj = new BindingSearch$singleArgumentGetter();
     Utility.valueForKey(obj, "knownKey");
   }
   
+  public static class BindingSearchOrder$SetMethod$multipleArgumentSetter {
+    public Integer knownKey;
+    public Integer getKnownKey() { return FORTY_TWO; }
+    public void setKnownKey(Integer value, Integer value2) { fail("This method should not be called"); }
+  }
+  
   public void testKeyBindingSearchOrder$SetMethod$multipleArgumentSetter() {
-    Object obj = new Object() {
-      public Integer knownKey;
-      public Integer getKnownKey() { return FORTY_TWO; }
-      public void setKnownKey(Integer value, Integer value2) { fail("This method should not be called"); }
-    };
+    Object obj = new BindingSearchOrder$SetMethod$multipleArgumentSetter();
     Utility.takeValueForKey(obj, FORTY_TWO, "knownKey");
+  }
+
+  public static class CustomFieldSearchOrder {
+    public Integer _knownKey = 1;
+    public Integer _isKnownKey = 2;
+    public Integer knownKey = 4;
+    public Integer isKnownKey = 3;
+  }
+
+  public void testKeyBindingCustomFieldSearchOrder() {
+    CustomFieldSearchOrder obj = new CustomFieldSearchOrder();
+    int[] lookupOrder = new int[] {
+        _KeyBindingFactory.FieldLookup,
+        _KeyBindingFactory.MethodLookup,
+        _KeyBindingFactory.UnderbarMethodLookup,
+        _KeyBindingFactory.UnderbarFieldLookup,
+        _KeyBindingFactory.OtherStorageLookup };
+    _KeyBinding binding = NSKeyValueCoding.DefaultImplementation._createKeyGetBindingForKey(obj, "knownKey", lookupOrder);
+    assertEquals(4, binding.valueInObject(obj));
   }
   
   public void testKeyBindingRestrictedAccess$withProtectedAccessor() {
@@ -2051,23 +2161,28 @@ public class TestNSKeyValueCoding extends BaseTestCase {
     }  
   }
   
-  public void testKeyBindingRestrictedAccess$OverriddenAccessor() {
-    OverriddenAccessClass obj = new OverriddenAccessClass();
-    assertEquals(FORTY_TWO, Utility.valueForKey(obj, "knownMethod"));
-    assertEquals(FORTY_TWO, Utility.valueForKey(obj, "knownField"));
-    assertEquals(FORTY_TWO, Utility.valueForKey(obj, "knownMethod2"));
-    assertEquals(FORTY_TWO, Utility.valueForKey(obj, "knownField2"));
-    
-    obj = new OverriddenAccessClass();
-    Utility.takeValueForKey(obj, null, "knownField");
-    Utility.takeValueForKey(obj, null, "knownField2");
-    assertEquals(24, Utility.valueForKey(obj, "knownField"));
-    assertEquals(24, Utility.valueForKey(obj, "knownField2"));
-    
-    obj = new OverriddenAccessClass();
-    Utility.takeValueForKey(obj, null, "knownMethod");
-    Utility.takeValueForKey(obj, null, "knownMethod2");
-    assertEquals(24, Utility.valueForKey(obj, "knownMethod"));
-    assertEquals(24, Utility.valueForKey(obj, "knownMethod2"));
+//  public void testKeyBindingRestrictedAccess$overriddenProtectedAccessor() {
+//    OverriddenAccessClass obj = new OverriddenAccessClass();
+//    assertEquals(FORTY_TWO, Utility.valueForKey(obj, "knownMethod"));
+//    assertEquals(FORTY_TWO, Utility.valueForKey(obj, "knownField"));
+//    assertEquals(FORTY_TWO, Utility.valueForKey(obj, "knownMethod2"));
+//    assertEquals(FORTY_TWO, Utility.valueForKey(obj, "knownField2"));
+//    
+//    obj = new OverriddenAccessClass();
+//    Utility.takeValueForKey(obj, null, "knownField");
+//    Utility.takeValueForKey(obj, null, "knownField2");
+//    assertEquals(24, Utility.valueForKey(obj, "knownField"));
+//    assertEquals(24, Utility.valueForKey(obj, "knownField2"));
+//    
+//    obj = new OverriddenAccessClass();
+//    Utility.takeValueForKey(obj, null, "knownMethod");
+//    Utility.takeValueForKey(obj, null, "knownMethod2");
+//    assertEquals(24, Utility.valueForKey(obj, "knownMethod"));
+//    assertEquals(24, Utility.valueForKey(obj, "knownMethod2"));
+//  }
+  
+  public void testKeyBindingRestrictedAccess$NoAccessSuperclass() {
+    SubclassOfNoAccessClass obj = new SubclassOfNoAccessClass();
+    assertEquals(42, Utility.valueForKey(obj, "knownField"));
   }
 }

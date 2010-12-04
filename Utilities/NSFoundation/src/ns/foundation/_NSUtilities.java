@@ -123,4 +123,26 @@ public class _NSUtilities {
 
     return (T) value;
   }
+  
+  public static Class<?> classObjectForClass(Class<?> objectClass) {
+    if(objectClass.isPrimitive()) {
+      if(objectClass == Boolean.TYPE)
+        return Boolean.class;
+      if(objectClass == Short.TYPE)
+        return Short.class;
+      if(objectClass == Integer.TYPE)
+        return Integer.class;
+      if(objectClass == Long.TYPE)
+        return Long.class;
+      if(objectClass == Double.TYPE)
+        return Double.class;
+      if(objectClass == Float.TYPE)
+        return Float.class;
+      if(objectClass == Character.TYPE)
+        return Character.class;
+      if(objectClass == Void.TYPE)
+        return Void.class;
+    }
+    return objectClass;
+  }
 }
