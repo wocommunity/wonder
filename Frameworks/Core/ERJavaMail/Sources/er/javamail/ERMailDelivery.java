@@ -310,6 +310,18 @@ public abstract class ERMailDelivery {
 		String[] headers = this.mimeMessage().getHeader("X-Mailer");
 		return headers != null && headers.length > 0 ? headers[0] : null;
 	}
+	
+	/**
+	 * Sets an additional custom header element for the message.
+	 * 
+	 * @param header
+	 *            header key
+	 * @param value
+	 *            value to set
+	 */
+	public void setAdditionalHeader(String headerKey, String value) throws MessagingException {
+		this.mimeMessage().setHeader(headerKey, value);
+	}
 
 	/**
 	 * Builds an ERMessage for the current MimeMessage.
