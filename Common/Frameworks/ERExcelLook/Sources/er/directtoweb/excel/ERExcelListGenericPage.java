@@ -40,9 +40,7 @@ public class ERExcelListGenericPage extends ERExcelListPage {
                       "customComponent <" +  d2wContext().valueForKey("customComponentName") + ">");
         }
 
-        String skipPropertyDuringExcelExport=(String) d2wContext.valueForKey("skipPropertyDuringExcelExport");
-
-        return !ERXValueUtilities.booleanValue(skipPropertyDuringExcelExport);
+        return !ERXValueUtilities.booleanValue(d2wContext.valueForKey("skipPropertyDuringExcelExport")) && !"omit".equals(d2wContext.valueForKey("displayVariant"));
     }
 
     public String switchedComponentName() {
