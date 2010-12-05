@@ -19,6 +19,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 /** Subclass of WORequest that fixes several Bugs.
@@ -27,11 +28,15 @@ import er.extensions.localization.ERXLocalizer;
  * The request is created via {@link ERXApplication#createRequest(String,String,String, NSDictionary,NSData,NSDictionary)}.
  */
 public  class ERXRequest extends WORequest {
+	
+	
 
 	/** logging support */
     public static final Logger log = Logger.getLogger(ERXRequest.class);
 
     public static final String UNKNOWN_HOST = "UNKNOWN";
+
+    public static final String X_FORWARDED_PROTO_FOR_SSL = ERXProperties.stringForKeyWithDefault("er.extensions.appserver.ERXRequest.xForwardedProtoForSsl", "https");
 
     protected static Boolean isBrowserFormValueEncodingOverrideEnabled;
 
@@ -53,6 +58,8 @@ public  class ERXRequest extends WORequest {
      * Defaults to false, set er.extensions.ERXRequest.secureDisabled=true to turn it off.
      */
     protected boolean _secureDisabled;
+    
+    
     
      /** Simply call superclass constructor */
     public ERXRequest(String string, String string0, String string1,
@@ -226,10 +233,11 @@ public  class ERXRequest extends WORequest {
      */
     public static boolean isRequestSecure(WORequest request) {
         boolean isRequestSecure = false;
-
+        
         // Depending on the adaptor the incoming port can be found in one of two
         // places.
         if (request != null) {
+        	
 	        String serverPort = request.headerForKey("SERVER_PORT");
 	        if (serverPort == null) {
 	          serverPort = request.headerForKey("x-webobjects-server-port");
@@ -257,6 +265,12 @@ public  class ERXRequest extends WORequest {
 	        	if (hostHeader != null && WOApplication.application() instanceof ERXApplication && hostHeader.endsWith(":" + ERXApplication.erxApplication().sslPort())) {
 	        		isRequestSecure = true;
 	        	}
+	        }
+	        
+	        // Check if we've got an x-forwarded-proto header which is typically sent by a load balancer that is 
+	        // implementing ssl termination to indicate the request on the public side of the load balancer is secure.
+	        else if (X_FORWARDED_PROTO_FOR_SSL.equals(request.headerForKey("x-forwarded-proto"))) {
+	    		isRequestSecure = true;
 	        }
         }
 
@@ -359,6 +373,8 @@ public  class ERXRequest extends WORequest {
             return super.isSessionIDInRequest();
         }
     }
+    
+ 
 
     /**
      * Overridden because the super implementation would pull in all 
