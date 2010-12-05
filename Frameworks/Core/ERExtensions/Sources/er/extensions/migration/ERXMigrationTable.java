@@ -201,7 +201,7 @@ public class ERXMigrationTable {
 		destinationEntity.setPrimaryKeyAttributes(destinationAttributes);
 
 		EORelationship relationship = new EORelationship();
-		relationship.setName(sourceAttributes.objectAtIndex(0).name() + "_" + sourceAttributes.objectAtIndex(0).name());
+		relationship.setName(sourceAttributes.objectAtIndex(0).name() + "_" + destinationAttributes.objectAtIndex(0).name());
 		relationship.setEntity(sourceEntity);
 		
 		for (int attributeNum = 0; attributeNum < sourceAttributes.count(); attributeNum ++) {
