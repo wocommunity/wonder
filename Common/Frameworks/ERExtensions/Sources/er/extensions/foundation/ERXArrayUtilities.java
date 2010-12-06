@@ -2009,4 +2009,17 @@ public class ERXArrayUtilities extends Object {
 		return clonedSet;
     }
 	
+	  /**
+	   * Returns the only object from the given array. Throws if the array count is not 1.
+	   * 
+	   * @param array The array with the single object
+	   * @return The object on the array
+	   */
+	  public static Object onlyObject( NSArray array ) {
+	      if( array.count() != 1 ) {
+	          throw new RuntimeException("Array must contain only one item, currently contains " + array.count() );
+	      }
+	      return array.lastObject();
+	  }
+	
 }

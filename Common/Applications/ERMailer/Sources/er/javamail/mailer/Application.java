@@ -71,13 +71,13 @@ public class Application extends ERXApplication {
         try {
             EOEditingContext ec = ERXEC.newEditingContext();
             
-            ERCMailMessage message = ERCMailDelivery.sharedInstance().composeEmail(ERJavaMail.sharedInstance().adminEmail(),
-                                                          new NSArray(ERJavaMail.sharedInstance().adminEmail()),
-                                                          new NSArray(ERJavaMail.sharedInstance().adminEmail()),
-                                                          null,
-                                                          "This is a test",
-                                                          "This is the body",
-                                                          ec);
+            ERCMailDelivery.sharedInstance().composeEmail(ERJavaMail.sharedInstance().adminEmail(),
+                new NSArray(ERJavaMail.sharedInstance().adminEmail()),
+                new NSArray(ERJavaMail.sharedInstance().adminEmail()),
+                null,
+                "This is a test",
+                "This is the body",
+                ec);
             ec.saveChanges();
         } catch (Exception e) {
             log.error("Caught exception: " + e.getMessage() + " stack: " + ERXUtilities.stackTrace(e));

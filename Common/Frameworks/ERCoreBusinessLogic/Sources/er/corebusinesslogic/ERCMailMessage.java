@@ -3,6 +3,7 @@
 package er.corebusinesslogic;
 
 import java.io.File;
+import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
@@ -36,7 +37,7 @@ public class ERCMailMessage extends _ERCMailMessage {
 
     /** holds the address separator */
     public static final String AddressSeparator = ",";
-
+    
     //	===========================================================================
     //	Clazz Object(s)
     //	---------------------------------------------------------------------------    
@@ -85,6 +86,44 @@ public class ERCMailMessage extends _ERCMailMessage {
     public static ERCMailMessageClazz mailMessageClazz() {
         return (ERCMailMessageClazz) EOEnterpriseObjectClazz.clazzForEntityNamed("ERCMailMessage");
     }
+    
+    /**
+     * Attaches a file to an array of messages.
+     * 
+     * @param filePath path of file to attach
+     * @param mimeType MIME type of the file
+     * @param messages array of messages
+     */
+    public static void attachFileWithMimeTypeToMessages( String filePath, String mimeType, NSArray messages ) {
+        attachFileWithMimeTypeToMessages(filePath, mimeType, false, messages);
+    }
+    
+    /**
+     * Attaches a file to an array of messages.
+     *
+     * @param filePath path of file to attach
+     * @param mimeType MIME type of the file
+     * @param deleteOnSent if true, the file is deleted when email is sent
+     * @param messages array of messages
+     */
+    public static void attachFileWithMimeTypeToMessages( String filePath, String mimeType, boolean deleteOnSent, NSArray messages ) {
+        for( Enumeration messageEnumeration = messages.objectEnumerator(); messageEnumeration.hasMoreElements(); ) {
+            ERCMailMessage message = (ERCMailMessage) messageEnumeration.nextElement();
+            message.attachFileWithMimeType(filePath, mimeType, deleteOnSent);
+        }
+    }
+    
+//  ===========================================================================
+    //  Instance iVar(s)
+    //  ---------------------------------------------------------------------------    
+   
+    /**
+     * The "to" addresses field is limited to 1K. So, when a message is created with
+     * a "to" value too large, the addresses are split, and more than one message is
+     * created. In that case, we consider those messages to me clones of each other,
+     * and we set this flag to true. Why? Check {@link #verifyAttachementValidity()}.
+     */
+    private boolean hasClones;
 
     //	===========================================================================
     //	Instance Constructor(s)
@@ -122,7 +161,34 @@ public class ERCMailMessage extends _ERCMailMessage {
             setShouldArchiveSentMail(Boolean.FALSE);            
         }
     }
+    
+    @Override
+    public void validateForSave() throws ValidationException {
+        super.validateForSave();
+        verifyAttachementValidity();
+    }
         
+    /**
+     * Verifies if a clone message has attachments that are set to delete when sent. If so,
+     * an exception is thrown.
+     * 
+     * The reason for this is all clone messages point to the same file path, but are
+     * different email messages. If delete on sent is activated, the first clone to be sent
+     * would delete the attachments, invalidating the other clones.
+     * 
+     * More info on what a clone message is in {@link #hasClones}.
+     */
+    public void verifyAttachementValidity() {
+        if( hasClones() ) {
+            for( Enumeration attachementEnumeration = attachments().objectEnumerator(); attachementEnumeration.hasMoreElements(); ) {
+                ERCMessageAttachment attachment = (ERCMessageAttachment) attachementEnumeration.nextElement();
+                if( attachment.deleteOnSent() ) {
+                    throw new RuntimeException( "Attachments that deleteOnSent on messages with clones is not supported." );
+                }
+            }
+        }
+    }
+
     // State Methods
     public boolean isReadyToSendState() 	{ return state() == ERCMailState.READY_TO_BE_SENT_STATE; }
     public boolean isSentState() 		{ return state() == ERCMailState.SENT_STATE; }
@@ -324,5 +390,13 @@ public class ERCMailMessage extends _ERCMailMessage {
             if(!file.delete())
                 log.debug("failed to delete "+ file);
         }
+    }
+
+    public void setHasClones(boolean hasClones) {
+      this.hasClones = hasClones;
+    }
+
+    public boolean hasClones() {
+      return hasClones;
     }
 }

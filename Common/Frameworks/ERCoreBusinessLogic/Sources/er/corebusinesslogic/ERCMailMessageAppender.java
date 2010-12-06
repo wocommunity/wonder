@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.corebusinesslogic;
 
+import java.util.Enumeration;
+
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import er.extensions.eof.ERXEditingContextDelegate;
@@ -92,16 +94,19 @@ public class ERCMailMessageAppender extends ERXMailAppender {
         } else {
             String title = composeTitle(event);
             String content = composeMessage(event);
-            ERCMailMessage message = ERCMailDelivery.sharedInstance().composeEmail(contextString(),
-                                                                                   computedFromAddress(),
-                                                                                   toAddressesAsArray(),
-                                                                                   toAddressesAsArray(),
-                                                                                   bccAddressesAsArray(),
-                                                                                   title,
-                                                                                   content,
-                                                                                   editingContext());
+            NSArray messages = ERCMailDelivery.sharedInstance().composeEmail(contextString(),
+                                                                             computedFromAddress(),
+                                                                             toAddressesAsArray(),
+                                                                             toAddressesAsArray(),
+                                                                             bccAddressesAsArray(),
+                                                                             title,
+                                                                             content,
+                                                                             editingContext());
             if (getReplyTo() != null) {
-                message.setReplyToAddress(getReplyTo());
+                for( Enumeration messageEnumerator = messages.objectEnumerator(); messageEnumerator.hasMoreElements(); ) {
+                    ERCMailMessage message = (ERCMailMessage) messageEnumerator.nextElement();
+                    message.setReplyToAddress(getReplyTo());
+                }
             }
             try {
                 editingContext().saveChanges();

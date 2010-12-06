@@ -34,7 +34,7 @@ import er.extensions.foundation.ERXProperties;
  * @author mschrag
  */
 public abstract class ERXRemoteSynchronizer {
-	public static Logger log = Logger.getLogger(ERXRemoteSynchronizer.class);
+	public static final Logger log = Logger.getLogger(ERXRemoteSynchronizer.class);
 
 	public static boolean remoteSynchronizerEnabled() {
 		return ERXProperties.booleanForKeyWithDefault("er.extensions.remoteSynchronizer.enabled", false);

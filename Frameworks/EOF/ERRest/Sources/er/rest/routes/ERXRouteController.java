@@ -68,7 +68,7 @@ import er.rest.util.ERXRestTransactionRequestAdaptor;
  * @author mschrag
  */
 public class ERXRouteController extends WODirectAction {
-	protected static Logger log = Logger.getLogger(ERXRouteController.class);
+	protected static final Logger log = Logger.getLogger(ERXRouteController.class);
 
 	private ERXRouteRequestHandler _requestHandler;
 	private ERXRoute _route;

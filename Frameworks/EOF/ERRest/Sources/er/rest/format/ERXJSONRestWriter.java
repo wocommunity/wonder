@@ -15,10 +15,9 @@ import er.rest.ERXRestRequestNode;
 import er.rest.ERXRestUtils;
 
 public class ERXJSONRestWriter implements IERXRestWriter {
-	public static JsonConfig _config;
+	public static final JsonConfig _config = new JsonConfig();
 
 	static {
-		ERXJSONRestWriter._config = new JsonConfig();
 		_config.registerJsonValueProcessor(NSTimestamp.class, new NSTimestampProcessor());
 		_config.setJsonValueProcessorMatcher(new ERXRestValueProcessorMatcher());
 	}

@@ -45,11 +45,6 @@ BelowDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
 	extraPropertiesKey = "belowDisplayPropertyKeys";
 }
 
-CheckBox2: WOSwitchComponent {
-    WOComponentName = selectionWidgetName;
-	checked = checked;
-}
-
 ColSpanNumber: WOString {
 	value = colSpan;
 }
@@ -141,6 +136,38 @@ HideReturnOnSelect2: WOConditional {
 HideReturnOnSelect3: WOConditional {
 	_unroll = true;
 	condition = isSelecting;
+	negate = true;
+}
+
+IfIsInspectActionsWidgetPropertyKey: ERXEqualConditional {
+	value1 = d2wContext.propertyKey;
+	value2 = d2wContext.inspectActionsWidgetPropertyKey;
+}
+
+IfIsNotInspectActionsWidgetPropertyKey: ERXEqualConditional {
+	negate = true;
+	value1 = d2wContext.propertyKey;
+	value2 = d2wContext.inspectActionsWidgetPropertyKey;
+}
+
+IfIsNotPickWidgetPropertyKey: ERXEqualConditional {
+	negate = true;
+	value1 = d2wContext.propertyKey;
+	value2 = d2wContext.pickWidgetPropertyKey;
+}
+
+IfIsPickWidgetPropertyKey: ERXEqualConditional {
+	value1 = d2wContext.propertyKey;
+	value2 = d2wContext.pickWidgetPropertyKey;
+}
+
+IfNotHasInspectActionsWidgetPropertyKey: ERXNonNullConditional {
+	condition = d2wContext.inspectActionsWidgetPropertyKey;
+	negate = true;
+}
+
+IfNotHasPickWidgetPropertyKey: ERXNonNullConditional {
+	condition = d2wContext.pickWidgetPropertyKey;
 	negate = true;
 }
 
@@ -277,6 +304,11 @@ ReturnButton2: WOImage {
 	filename = "ReturnMetalBtn.gif";
 	framework = "JavaDirectToWeb";
 	name = "Returns to the previous page";
+}
+
+SelectionWidgetSwitchComponent: WOSwitchComponent {
+	WOComponentName = selectionWidgetName;
+	checked = checked;
 }
 
 ShouldDisplayDetailedPageMetrics: WOConditional {
