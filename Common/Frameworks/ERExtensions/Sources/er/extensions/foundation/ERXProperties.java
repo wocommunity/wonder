@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Stack;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
@@ -37,9 +36,9 @@ import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
-import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation.NSValueUtilities;
 import com.webobjects.foundation._NSFileUtilities;
 
 import er.extensions.crypting.ERXCrypto;
@@ -72,6 +71,36 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 
     /** Internal cache of type converted values to avoid reconverting attributes that are asked for frequently */
     private static Map _cache = Collections.synchronizedMap(new HashMap());
+    
+    /**
+     * This boolean controls the behavior of application specific properties. Setting this to
+     * false makes the old behavior active, true activates the new behavior. The value of this
+     * boolean is controlled by the property "NSProperties.useLoadtimeAppSpecifics" and defaults
+     * to true. Please note this property MUST be defined with a -D argument on the application
+     * launch command.
+     * <p>
+     * The old behavior will retain the original property names (including the application name),
+     * and will search for an application specific version of each property every time someone
+     * reads a property.
+     * </p>
+     * <p>
+     * The new behavior will analyze all properties after being loaded from their source, and create
+     * (or update) generic properties for each application specific one. So, if we are MyApp,
+     * foo.bar.MyApp=4 will originate a new property foo.bar=4 (or, is foo.bar already exists,
+     * update its value to 4). foo.bar.MyApp is also kept, because we cannot be sure foo.bar.MyApp
+     * is an app specific property or a regular property with an ambiguous name.
+     * </p>
+     * <p>
+     * The advantage of the new method is getting rid of the performance hit each time an app
+     * accesses a property, and making application specific properties work for code that uses
+     * the native Java System.getProperty call.
+     * </p> 
+     */
+    public static final boolean _useLoadtimeAppSpecifics;
+    
+    static {
+        _useLoadtimeAppSpecifics = NSValueUtilities.booleanValueWithDefault( System.getProperty("NSProperties.useLoadtimeAppSpecifics"), true );
+    }
 
     private static boolean retainDefaultsEnabled() {
         if (RetainDefaultsEnabled == null) {
@@ -258,7 +287,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     public static NSArray arrayForKey(String s) {
         return arrayForKeyWithDefault(s, null);
     }
-
+    
     /**
      * Converts the standard propertyName into one with a .&lt;AppName> on the end, if the property is defined with
      * that suffix.  If not, then this caches the standard propertyName.  A cache is maintained to avoid concatenating
@@ -266,6 +295,10 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @param propertyName
      */
     public static String getApplicationSpecificPropertyName(final String propertyName) {
+        if( _useLoadtimeAppSpecifics ) {
+            return propertyName;
+        }
+        
         synchronized(AppSpecificPropertyNames) {
             // only keep 128 of these around
             if (AppSpecificPropertyNames.size() > 128) {
@@ -301,7 +334,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      */
     public static NSArray arrayForKeyWithDefault(final String s, final NSArray defaultValue) {
         final String propertyName = getApplicationSpecificPropertyName(s);
-
+        
         Object value = _cache.get(propertyName);
         if (value == UndefinedMarker) {
             return defaultValue;
@@ -344,7 +377,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      */
     public static boolean booleanForKeyWithDefault(final String s, final boolean defaultValue) {
         final String propertyName = getApplicationSpecificPropertyName(s);
-        
+
         Object value = _cache.get(propertyName);
         if (value == UndefinedMarker) {
             return defaultValue;
@@ -447,7 +480,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      */
     public static BigDecimal bigDecimalForKeyWithDefault(String s, BigDecimal defaultValue) {
         final String propertyName = getApplicationSpecificPropertyName(s);
-
+        
         Object value = _cache.get(propertyName);
         if (value == UndefinedMarker) {
             return defaultValue;
@@ -1413,7 +1446,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 		 *            the instance number of this application
 		 */
 		public InRangeOperator(int value) {
-			_instanceNumber = value;
+		    _instanceNumber = value;
 		}
 
 		public InRangeOperator() {
@@ -1515,7 +1548,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 	}
 
 	/**
-	 * For each property in originalProperties, process the keys and avlues with
+	 * For each property in originalProperties, process the keys and values with
 	 * the registered property operators and stores the converted value into
 	 * destinationProperties.
 	 * 
@@ -1583,6 +1616,41 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * For every application specific property, this method generates a similar property without
+	 * the application name in the property key. The original property is not removed.
+	 * <p>
+	 * Ex: if current application is MyApp, for a property foo.bar.MyApp=true a new property
+	 * foo.bar=true is generated.
+	 * </p>
+	 * 
+	 * @param properties Properties to update
+	 */
+	public static void flattenPropertyNames(Properties properties) {
+	    if( _useLoadtimeAppSpecifics == false ) {
+	        return;
+	    }
+	    
+	    WOApplication application = WOApplication.application();
+	    if( application == null ) {
+	        return;
+	    }
+	    String applicationName = application.name();
+	    for( Object keyObj: new TreeSet<Object>(properties.keySet()) ) {
+	        String key = (String) keyObj;
+	        if (key != null && key.length() > 0) {
+	            String value = properties.getProperty(key);
+	            int lastDotPosition = key.lastIndexOf(".");
+	            if( lastDotPosition != -1 ) {
+	                String lastElement = key.substring(lastDotPosition + 1);
+	                if( lastElement.equals( applicationName ) ) {
+	                    properties.put(key.substring(0, lastDotPosition), value);
+	                }
+	            }
+	        }
+	    }
 	}
 	
 	/**

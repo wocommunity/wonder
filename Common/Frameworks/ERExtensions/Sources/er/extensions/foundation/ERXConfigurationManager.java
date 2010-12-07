@@ -378,8 +378,14 @@ public class ERXConfigurationManager {
 	        		throw e;
 	        	}
 	        }
-            ERXProperties.transferPropertiesFromSourceToDest(systemPropertiesCopy, System.getProperties());
-            ERXSystem.updateProperties();
+	        
+	        if( ERXProperties._useLoadtimeAppSpecifics ) {
+	            ERXSystem.updateProperties(systemPropertiesCopy);
+	            ERXProperties.transferPropertiesFromSourceToDest(systemPropertiesCopy, System.getProperties());
+	        } else {
+	            ERXProperties.transferPropertiesFromSourceToDest(systemPropertiesCopy, System.getProperties());
+	            ERXSystem.updateProperties();
+	        }
         }
         else {
             Properties systemProperties = System.getProperties();
@@ -390,8 +396,14 @@ public class ERXConfigurationManager {
 	            boolean requireSymlink = ERXProperties._shouldRequireSymlinkedGlobalAndIncludeProperties() && monitoredPropertiesPath.equals(ERXProperties._globalPropertiesPath());
 
                 Properties loadedProperty = ERXProperties.propertiesFromPath(monitoredPropertiesPath, requireSymlink);
-                ERXProperties.transferPropertiesFromSourceToDest(loadedProperty, systemProperties);
-                ERXSystem.updateProperties();
+                
+                if( ERXProperties._useLoadtimeAppSpecifics ) {
+                    ERXSystem.updateProperties(loadedProperty);
+                    ERXProperties.transferPropertiesFromSourceToDest(loadedProperty, systemProperties);
+                } else {
+                    ERXProperties.transferPropertiesFromSourceToDest(loadedProperty, systemProperties);
+                    ERXSystem.updateProperties();
+                }
             }
         }
     }
