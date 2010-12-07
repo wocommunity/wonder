@@ -38,7 +38,6 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSPropertyListSerialization;
-import com.webobjects.foundation.NSValueUtilities;
 import com.webobjects.foundation._NSFileUtilities;
 
 import er.extensions.crypting.ERXCrypto;
@@ -99,7 +98,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     public static final boolean _useLoadtimeAppSpecifics;
     
     static {
-        _useLoadtimeAppSpecifics = NSValueUtilities.booleanValueWithDefault( System.getProperty("NSProperties.useLoadtimeAppSpecifics"), true );
+        _useLoadtimeAppSpecifics = ERXValueUtilities.booleanValueWithDefault( System.getProperty("NSProperties.useLoadtimeAppSpecifics"), true );
     }
 
     private static boolean retainDefaultsEnabled() {
