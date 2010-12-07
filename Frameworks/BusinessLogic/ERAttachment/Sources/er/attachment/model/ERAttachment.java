@@ -22,13 +22,22 @@ import er.extensions.foundation.ERXFileUtilities;
 public abstract class ERAttachment extends _ERAttachment {
   private static Logger log = Logger.getLogger(ERAttachment.class);
 
+  private boolean isInNestedEditingContext() {
+	  EOEditingContext attachmentEc = editingContext();
+	  // NOTE: (code snippet borrowed from ERXGenericRecord)
+	  return (attachmentEc.parentObjectStore() instanceof EOEditingContext && 
+			  ((EOEditingContext)attachmentEc.parentObjectStore()).objectForGlobalID(attachmentEc.globalIDForObject(this)) != null);
+  }
+  
   public ERAttachment() {
   }
   
   @Override
   public void didInsert() {
     super.didInsert();
-    ERAttachmentProcessor.processorForType(this).attachmentInserted(this);
+    if (!isInNestedEditingContext()) {
+    	ERAttachmentProcessor.processorForType(this).attachmentInserted(this);
+    }
   }
 
   /**
@@ -83,11 +92,13 @@ public abstract class ERAttachment extends _ERAttachment {
   @Override
   public void didDelete(EOEditingContext ec) {
     super.didDelete(ec);
-    try {
-      ERAttachmentProcessor.processorForType(this).deleteAttachment(this);
-    }
-    catch (Throwable e) {
-      ERAttachment.log.error("Failed to delete attachment '" + primaryKey() + "'.", e);
+    if (!isInNestedEditingContext()) {
+    	try {
+    		ERAttachmentProcessor.processorForType(this).deleteAttachment(this);
+    	}
+    	catch (Throwable e) {
+    		ERAttachment.log.error("Failed to delete attachment '" + primaryKey() + "'.", e);
+    	}
     }
   }
 }
