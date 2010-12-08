@@ -157,7 +157,9 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	protected Object toJavaCollection(ERXRestFormat.Delegate delegate, Map<Object, ERXRestRequestNode> conversionMap, Map<Object, Object> associatedObjects) {
 		Object result = associatedObjects.get(_associatedObject);
 		if (result == null) {
-			delegate.nodeWillWrite(this);
+			if (delegate != null) {
+				delegate.nodeWillWrite(this);
+			}
 
 			if (isArray()) {
 				List<Object> array = new LinkedList<Object>();
@@ -235,7 +237,9 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	protected Object toNSCollection(ERXRestFormat.Delegate delegate, NSMutableDictionary/*<Object, Object>*/ associatedObjects) {
 		Object result = associatedObjects./*get*/objectForKey(_associatedObject);
 		if (result == null) {
-			delegate.nodeWillWrite(this);
+			if (delegate != null) {
+				delegate.nodeWillWrite(this);
+			}
 
 			if (isArray()) {
 				NSMutableArray/*<Object>*/ array = new NSMutableArray/*<Object>*/();
@@ -335,13 +339,19 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 
 	public void takeValueForKey(Object value, String key) {
 		/*if (_attributes.containsKey(key)) {*/
-		if (_attributes.get(key) != null) {
+		if (value instanceof ERXRestRequestNode) {
+			removeAttributeForKey(key);
+			removeChildNamed(key);
+			addChild((ERXRestRequestNode)value);
+		}
+		else if (_attributes.get(key) != null) {
 			_attributes.put(key, value);
 		}
 		else {
 			ERXRestRequestNode child = childNamed(key);
 			if (child == null) {
-				throw new NSKeyValueCoding.UnknownKeyException("There is no key named '" + key + "' on this node.", this, key);
+				addChild(new ERXRestRequestNode(key, value, false));
+				//throw new NSKeyValueCoding.UnknownKeyException("There is no key named '" + key + "' on this node.", this, key);
 			}
 			else if (child.children()./*size*/count() == 0) {
 				child.setValue(value);
@@ -378,7 +388,23 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	}
 
 	public void takeValueForKeyPath(Object value, String keyPath) {
-		NSKeyValueCodingAdditions.DefaultImplementation.takeValueForKeyPath(this, value, keyPath);
+        if (keyPath == null) {
+            throw new IllegalArgumentException("Key path cannot be null");
+        }
+
+        int index = keyPath.indexOf(NSKeyValueCodingAdditions._KeyPathSeparatorChar);
+        if (index != -1) {
+        	String key = keyPath.substring(0, index);
+			ERXRestRequestNode child = childNamed(key);
+			if (child == null) {
+				child = new ERXRestRequestNode(key, false); 
+				addChild(child);
+			}
+			child.takeValueForKeyPath(value, keyPath.substring(index + 1));
+        }
+        else {
+        	takeValueForKey(value, keyPath);
+        }
 	}
 
 	/**
@@ -660,7 +686,9 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 			}
 		}
 		sb.append("]");
-		sb.append("\n");
+		if (depth > 0) {
+			sb.append("\n");
+		}
 	}
 
 	/**
