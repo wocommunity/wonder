@@ -22,11 +22,12 @@ import er.extensions.foundation.ERXFileUtilities;
 public abstract class ERAttachment extends _ERAttachment {
   private static Logger log = Logger.getLogger(ERAttachment.class);
 
+  private boolean isInNestedEditingContext(EOEditingContext attachmentEc) {
+	  return (attachmentEc.parentObjectStore() instanceof EOEditingContext); 
+  }
+  
   private boolean isInNestedEditingContext() {
-	  EOEditingContext attachmentEc = editingContext();
-	  // NOTE: (code snippet borrowed from ERXGenericRecord)
-	  return (attachmentEc.parentObjectStore() instanceof EOEditingContext && 
-			  ((EOEditingContext)attachmentEc.parentObjectStore()).objectForGlobalID(attachmentEc.globalIDForObject(this)) != null);
+	  return isInNestedEditingContext(editingContext());
   }
   
   public ERAttachment() {
@@ -92,7 +93,7 @@ public abstract class ERAttachment extends _ERAttachment {
   @Override
   public void didDelete(EOEditingContext ec) {
     super.didDelete(ec);
-    if (!isInNestedEditingContext()) {
+    if (!isInNestedEditingContext(ec)) {
     	try {
     		ERAttachmentProcessor.processorForType(this).deleteAttachment(this);
     	}
