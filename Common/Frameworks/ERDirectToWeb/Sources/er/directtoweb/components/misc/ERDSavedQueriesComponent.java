@@ -33,6 +33,8 @@ import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
 
+import er.directtoweb.embed.ERD2WQuery;
+import er.directtoweb.pages.ERD2WQueryPage;
 import er.extensions.appserver.ERXSession;
 import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXEOAccessUtilities;
@@ -149,8 +151,22 @@ public abstract class ERDSavedQueriesComponent extends WOComponent {
             return buf.toString();
         }
 
-        public void sendValuesToDisplayGroup(WODisplayGroup displayGroup, boolean clearFormFirst) {
+        public void sendValuesToDisplayGroup(WODisplayGroup displayGroup, ERD2WQueryPage queryPage, boolean clearFormFirst) {
             sendValuesToDisplayGroup(this, displayGroup, clearFormFirst);
+            handleKeysToQueryNull(this, queryPage);
+        }
+        
+        public static void handleKeysToQueryNull(SavedQuery savedQuery, ERD2WQueryPage queryPage) {
+            NSDictionary source = (NSDictionary) savedQuery.valueForKey(QUERY_MATCH_KEY);
+            NSMutableDictionary tmp = new NSMutableDictionary();
+            for(Enumeration ee = source.keyEnumerator(); ee.hasMoreElements();) {
+                String key = (String) ee.nextElement();
+                if(source.objectForKey(key) == NSKeyValueCoding.NullValue) {
+                    tmp.setObjectForKey(Boolean.TRUE, key);
+                }
+            }
+            
+            queryPage.setKeysToQueryNull(tmp);
         }
         
         public static void sendValuesToDisplayGroup(SavedQuery savedQuery, WODisplayGroup displayGroup, boolean clearFormFirst) {
@@ -159,6 +175,7 @@ public abstract class ERDSavedQueriesComponent extends WOComponent {
             updateDisplayGroupForKey(savedQuery, displayGroup, QUERY_MATCH_KEY, clearFormFirst);
             updateDisplayGroupForKey(savedQuery, displayGroup, QUERY_OPERATOR_KEY, clearFormFirst);
             updateDisplayGroupForKey(savedQuery, displayGroup, QUERY_BINDINGS_KEY, clearFormFirst);
+            
         }
         
         static NSMutableDictionary updateDisplayGroupForKey(SavedQuery savedQuery, WODisplayGroup displayGroup, String key, boolean clearFormFirst) {
@@ -584,7 +601,7 @@ public abstract class ERDSavedQueriesComponent extends WOComponent {
                         // since this is the inital population dont loose
                         // anything that is already set there from the query
                         // setup code
-                        selectedSavedQuery.sendValuesToDisplayGroup(displayGroup(), false);
+                        selectedSavedQuery.sendValuesToDisplayGroup(displayGroup(), (ERD2WQueryPage) context().page(), false);
 
                         newQueryName = selectedSavedQuery.name();
 
@@ -602,7 +619,7 @@ public abstract class ERDSavedQueriesComponent extends WOComponent {
 
     public WOComponent popupChangedSelection() {
         if (selectedSavedQuery != null) {
-            selectedSavedQuery.sendValuesToDisplayGroup(displayGroup(), true);
+            selectedSavedQuery.sendValuesToDisplayGroup(displayGroup(), (ERD2WQueryPage) context().page(), true);
             newQueryName = selectedSavedQuery.name();
 
             needsAutoSubmit = autoSubmitEnabled();
@@ -682,7 +699,7 @@ public abstract class ERDSavedQueriesComponent extends WOComponent {
         selectedSavedQuery = null;
         newQueryName = null;
 
-        emptySavedQueryForDeletes.sendValuesToDisplayGroup(displayGroup(), true);
+        emptySavedQueryForDeletes.sendValuesToDisplayGroup(displayGroup(), queryPage(), true);
 
         return null;
     }
@@ -787,5 +804,9 @@ public abstract class ERDSavedQueriesComponent extends WOComponent {
         public static final String PageConfiguration = "pconfig";
         public static final String EntityName = "ename";
         public static final String SavedQueryName = "qname";
+    }
+    
+    public ERD2WQueryPage queryPage() {
+        return (ERD2WQueryPage)context().page();
     }
 }

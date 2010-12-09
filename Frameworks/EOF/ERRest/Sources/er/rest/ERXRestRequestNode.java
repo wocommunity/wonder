@@ -47,6 +47,13 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	private boolean _null;
 
 	/**
+	 * Constructs a new root node with no name.
+	 */
+	public ERXRestRequestNode() {
+		this(null, true);
+	}
+	
+	/**
 	 * Construct a node with the given name
 	 * 
 	 * @param name

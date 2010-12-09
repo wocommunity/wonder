@@ -41,6 +41,21 @@ public class ERXSystem implements NSKeyValueCoding, NSKeyValueCodingAdditions {
 		String originalValue = (String) ERXSystem.sharedInstance.valueForKey(key);
 		return ERXSimpleTemplateParser.parseTemplatedStringWithObject(originalValue, ERXSystem.sharedInstance);
 	}
+	
+	/**
+     * Looks up the given key in the given properties, converts any property
+     * variables, and returns the converted value.
+     * 
+     * @param key
+     *            the key to lookup
+     * @param properties
+     *            The given properties
+     * @return the converted value
+     */
+    public static String getProperty(String key, Properties properties) {
+        String originalValue = (String) properties.getProperty(key);
+        return ERXSimpleTemplateParser.parseTemplatedStringWithObject(originalValue, properties);
+    }
 
 	/**
 	 * Retrieves the value of the given key from the ERXSystem properties store,
@@ -71,7 +86,12 @@ public class ERXSystem implements NSKeyValueCoding, NSKeyValueCodingAdditions {
 		for (Enumeration e = originalProperties.propertyNames(); e.hasMoreElements();) {
 			String key = (String) e.nextElement();
 			if (key != null && key.length() > 0) {
-				String value = ERXSystem.getProperty(key);
+			    String value;
+			    if( ERXProperties._useLoadtimeAppSpecifics ) {
+			        value = ERXSystem.getProperty(key, originalProperties);
+			    } else {
+			        value = ERXSystem.getProperty(key);
+			    }
 				destinationProperties.put(key, value);
 			}
 		}
@@ -107,6 +127,7 @@ public class ERXSystem implements NSKeyValueCoding, NSKeyValueCodingAdditions {
 		ERXSystem.convertProperties(properties, properties);
 		// bhenry: Comment this out for now, causing NoSuchMethodError; // uncommented by cripps
 		ERXProperties.evaluatePropertyOperators(properties, properties);
+		ERXProperties.flattenPropertyNames( properties );
 	}
 
 	/*

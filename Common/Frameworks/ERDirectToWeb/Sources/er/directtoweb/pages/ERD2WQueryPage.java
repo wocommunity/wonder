@@ -505,7 +505,7 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
      * @return true if the checkbox should be checked
      */
     public boolean isNullQueryCheckedForCurrentProperty() {
-        return Boolean.TRUE.equals(keysToQueryForNull.valueForKey(propertyKey()));
+        return Boolean.TRUE.equals(keysToQueryForNull.valueForKey(propertyKey())) || (displayGroup().queryMatch().valueForKey(propertyKey()) != null && displayGroup().queryMatch().valueForKey(propertyKey()).equals(NSKeyValueCoding.NullValue));
     }
 
     /**
@@ -546,5 +546,12 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
             }
         }
     }
-
+    
+    public void setKeysToQueryNull(NSMutableDictionary keysToNull) {
+        keysToQueryForNull = keysToNull;
+    }
+    
+    public NSMutableDictionary keysToQueryNull() {
+        return keysToQueryForNull;
+    }
 }
