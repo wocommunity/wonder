@@ -8,6 +8,7 @@ import com.amazon.s3.AWSAuthConnection;
 import com.amazon.s3.QueryStringAuthGenerator;
 import com.webobjects.eocontrol.EOEditingContext;
 
+import er.extensions.eof.ERXGenericRecord;
 import er.extensions.foundation.ERXProperties;
 
 /**
@@ -22,13 +23,6 @@ public class ERS3Attachment extends _ERS3Attachment {
 	private File _pendingUploadFile;
 	private boolean _pendingDelete;
 	
-	private boolean isInNestedEditingContext() {
-		// NOTE: (code snippet borrowed from ERXGenericRecord)
-		EOEditingContext attachmentEc = editingContext(); 
-		return (attachmentEc.parentObjectStore() instanceof EOEditingContext && 
-				((EOEditingContext)attachmentEc.parentObjectStore()).objectForGlobalID(attachmentEc.globalIDForObject(this)) != null);
-	}	
-
 	public ERS3Attachment() {
 	}
 
@@ -43,16 +37,11 @@ public class ERS3Attachment extends _ERS3Attachment {
 	public boolean _isPendingDelete() {
 		return _pendingDelete;
 	}
-
+	
 	@Override
-	public void didInsert() {
-		/* It's ok to set _pendingUploadFile before calling super.didInsert(), because it
-		 * doesn't do anything inside nested contexts */
-		super.didInsert();
-		if (isInNestedEditingContext()) {
-			EOEditingContext parentEditingContext = (EOEditingContext) editingContext().parentObjectStore();
-			((ERS3Attachment) parentEditingContext.objectForGlobalID(editingContext().globalIDForObject(this)))._setPendingUploadFile(_pendingUploadFile(), false);
-		}
+	public void didCopyFromChildInEditingContext(ERXGenericRecord originalEO, EOEditingContext childEditingContext) {
+		super.didCopyFromChildInEditingContext(originalEO, childEditingContext);
+		_setPendingUploadFile(((ERS3Attachment) originalEO)._pendingUploadFile(), false);
 	}
 	
 	@Override
