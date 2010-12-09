@@ -21,6 +21,13 @@ public class ERS3Attachment extends _ERS3Attachment {
 
 	private File _pendingUploadFile;
 	private boolean _pendingDelete;
+	
+	private boolean isInNestedEditingContext() {
+		// NOTE: (code snippet borrowed from ERXGenericRecord)
+		EOEditingContext attachmentEc = editingContext(); 
+		return (attachmentEc.parentObjectStore() instanceof EOEditingContext && 
+				((EOEditingContext)attachmentEc.parentObjectStore()).objectForGlobalID(attachmentEc.globalIDForObject(this)) != null);
+	}	
 
 	public ERS3Attachment() {
 	}
@@ -37,6 +44,17 @@ public class ERS3Attachment extends _ERS3Attachment {
 		return _pendingDelete;
 	}
 
+	@Override
+	public void didInsert() {
+		/* It's ok to set _pendingUploadFile before calling super.didInsert(), because it
+		 * doesn't do anything inside nested contexts */
+		super.didInsert();
+		if (isInNestedEditingContext()) {
+			EOEditingContext parentEditingContext = (EOEditingContext) editingContext().parentObjectStore();
+			((ERS3Attachment) parentEditingContext.objectForGlobalID(editingContext().globalIDForObject(this)))._setPendingUploadFile(_pendingUploadFile(), false);
+		}
+	}
+	
 	@Override
 	public void awakeFromInsertion(EOEditingContext ec) {
 		super.awakeFromInsertion(ec);
