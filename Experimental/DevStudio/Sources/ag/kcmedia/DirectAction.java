@@ -10,7 +10,8 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.eocontrol.*;
-import er.extensions.*;
+import er.extensions.appserver.ERXDirectAction;
+import er.extensions.logging.ERXLogger;
 import ag.kcmedia.Jode.*;
 import java.io.*;
 

@@ -10,7 +10,8 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.directtoweb.*;
-import er.extensions.*;
+import er.extensions.foundation.ERXMutableUserInfoHolderInterface;
+import er.extensions.logging.ERXLogger;
 
 public class ERD2WExtendedRule extends Rule implements ERXMutableUserInfoHolderInterface {
     private static ERXLogger log = ERXLogger.getERXLogger(DirectAction.class);
