@@ -54,6 +54,10 @@ public class ERFileCachingAdaptor extends ERXForwardingAdaptor {
         return "JDBC";
     }
 
+//    public EOSchemaSynchronizationFactory schemaSynchronizationFactory() {
+//    	throw new UnsupportedOperationException("You cannot request a schemaSynchronizationFactory for ERFileCachingAdaptor.");
+//    }
+
     public EOAdaptorContext createAdaptorContext() {
         EOAdaptorContext raw = super.createAdaptorContext();
         EOAdaptorContext cooked = new ERFileCachingAdaptorContext(this,raw);

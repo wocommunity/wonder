@@ -78,6 +78,12 @@ LoggerConfigurationControlBarDiv: WOGenericContainer {
     id = "LoggerConfigurationControlBar";
 }
 
+Hyperlink1: WOHyperlink {
+	?wosid = false;
+	actionClass = "er.extensions.appserver.ERXDirectAction";
+	directActionName = "log4j";
+}
+
 LoggerDisplayShowAllRadioButton: WORadioButton {
     name = "LoggerListShowAllOrOnlyExplicit";
     selection = showAllLoggersSelection;

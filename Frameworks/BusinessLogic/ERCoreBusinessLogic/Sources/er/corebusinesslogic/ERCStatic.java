@@ -23,7 +23,6 @@ public class ERCStatic extends _ERCStatic {
     // Class methods go here
     
     public static class ERCStaticClazz extends _ERCStaticClazz {
-
         private NSMutableDictionary _staticsPerKey = new NSMutableDictionary();
 
         public ERCStatic objectMatchingKey(EOEditingContext ec, String key) {
@@ -34,30 +33,36 @@ public class ERCStatic extends _ERCStatic {
             // If noCache is true we always go to the database
             Object result = noCache ? null : _staticsPerKey.objectForKey(key);
             if (result == null) {
-                NSArray arr = preferencesWithKey(ec, key);
+            	NSArray arr;
+            	EOEditingContext privateEditingContext = privateEditingContext();
+            	privateEditingContext.lock();
+            	try {
+            		arr = preferencesWithKey(privateEditingContext, key);
+            	}
+            	finally {
+            		privateEditingContext.unlock();
+            	}
                 if (arr.count() > 1)
                     throw new IllegalStateException("Found " + arr.count() + " rows for key " + key);
                 result = arr.count() == 1 ? arr.objectAtIndex(0) : NSKeyValueCoding.NullValue;
-                if (result instanceof EOEnterpriseObject) {
-                    privateEditingContext().lock();
-                    try {
-                        _staticsPerKey.setObjectForKey(ERXEOControlUtilities.localInstanceOfObject(privateEditingContext(), (ERCStatic) result), key);
-                    } finally {
-                        privateEditingContext().unlock();
-                    }
-                }
+                _staticsPerKey.setObjectForKey(result, key);
                 result = result == NSKeyValueCoding.NullValue ? null : result;
-            } else if (result instanceof EOEnterpriseObject) {
-                privateEditingContext().lock();
-                try {
-                    result = ERXEOControlUtilities.localInstanceOfObject(ec, (ERCStatic) result);
-                } finally {
-                    privateEditingContext().unlock();
-                }
-            } else if (result.equals(NSKeyValueCoding.NullValue)) {
-                result = null;
             }
-            return (ERCStatic) result;
+            if (result != null && !result.equals(NSKeyValueCoding.NullValue)) {
+            	ERCStatic staticResult = (ERCStatic)result;
+            	EOEditingContext editingContext = staticResult.editingContext();
+            	editingContext.lock();
+            	try {
+            		result = ERXEOControlUtilities.localInstanceOfObject(ec, staticResult);
+            	}
+            	finally {
+            		editingContext.unlock();
+            	}
+            }
+            else {
+            	result = null;
+            }
+            return (ERCStatic)result;
         }
 
         public void invalidateCache() { _staticsPerKey.removeAllObjects(); }

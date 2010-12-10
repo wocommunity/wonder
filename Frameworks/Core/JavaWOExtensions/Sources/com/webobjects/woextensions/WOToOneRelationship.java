@@ -1,6 +1,6 @@
 /*
  * WOToOneRelationship.java
- * © Copyright 2001 Apple Computer, Inc. All rights reserved.
+ * ï¿½ Copyright 2001 Apple Computer, Inc. All rights reserved.
  * This a modified version.
  * Original license: http://www.opensource.apple.com/apsl/
  */
@@ -13,6 +13,7 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 
 import java.util.Enumeration;
+import java.util.List;
 
 public class WOToOneRelationship extends WOComponent {
     // ** passed-in (required)
@@ -317,6 +318,14 @@ public class WOToOneRelationship extends WOComponent {
 ////////////////////////////////////
 //  Accessed through HTML and WOD
 ////////////////////////////////////
+	public void setSelections(List<? extends Object> array) {
+		this.setSelection(array);
+	}
+
+	public List<Object> selections() {
+		Object selection = this.selection();
+		return (selection instanceof List ? (List<Object> ) selection : new NSArray<Object>(selection));	
+	}
 
 /*
  *  -selection and -setSelection: are called by WOF when

@@ -46,6 +46,7 @@ import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 import java.util.Enumeration;
+import java.util.List;
 
 /**
  * (Back port from WO 5 WOExtensions)<br />
@@ -364,6 +365,17 @@ public class WOToOneRelationship extends WOComponent {
 ////////////////////////////////////
 //  Accessed through HTML and WOD
 ////////////////////////////////////
+    public void setSelections(List<? extends Object> array) {
+		this.setSelection(array);
+	}
+
+	public List<Object> selections() {
+		Object selection = this.selection();
+		if (selection == null) {
+			return NSArray.emptyArray();
+		}
+		return (selection instanceof List ? (List<Object>) selection : new NSArray<Object>(selection));
+	}
     
 /*
  *  -selection and -setSelection: are called by WOF when

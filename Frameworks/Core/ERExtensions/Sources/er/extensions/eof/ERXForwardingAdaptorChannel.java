@@ -8,6 +8,7 @@ package er.extensions.eof;
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOAdaptorContext;
 import com.webobjects.eoaccess.EOAdaptorOperation;
+import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOSQLExpression;
@@ -70,7 +71,8 @@ public class ERXForwardingAdaptorChannel extends EOAdaptorChannel {
         return _forwardedChannel.deleteRowsDescribedByQualifier(qualifier,entity);
     }
 
-    public void selectAttributes(NSArray attributes, EOFetchSpecification fetchSpecification, boolean yn, EOEntity entity) {
+    @Override
+    public void selectAttributes(NSArray<EOAttribute> attributes, EOFetchSpecification fetchSpecification, boolean yn, EOEntity entity) {
         _forwardedChannel.selectAttributes(attributes,fetchSpecification, yn, entity);
     }
 

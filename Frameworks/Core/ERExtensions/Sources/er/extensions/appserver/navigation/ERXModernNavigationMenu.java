@@ -52,6 +52,7 @@ public class ERXModernNavigationMenu extends ERXStatelessComponent {
         _navigationState = null;
         _navigationContext = null;
 		_renderCompleteMenuTree = null;
+		navItem = null;
         super.reset();
     }
 
