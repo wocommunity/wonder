@@ -3,7 +3,7 @@ package ag.kcmedia;
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
-import er.extensions.*;
+import er.extensions.logging.ERXLogger;
 import ag.kcmedia.Jode.*;
 import org.w3c.tidy.*;
 import java.io.*;

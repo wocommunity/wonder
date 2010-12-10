@@ -13,7 +13,9 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.ERD2WRuleEditorModel;
 import com.webobjects.directtoweb.*;
 import java.io.File;
-import er.extensions.*;
+import er.extensions.foundation.ERXArrayUtilities;
+import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.logging.ERXLogger;
 import java.util.*;
 
 public class RuleEditor extends WOComponent {
@@ -87,7 +89,7 @@ public class RuleEditor extends WOComponent {
     }
     public String fixString(Object o) {
         String fix = "'" + o + "'";
-        return ERXExtensions.replaceStringByStringInString("*", "[*]", fix);
+        return ERXStringUtilities.replaceStringByStringInString("*", "[*]", fix);
     }
     public NSArray modelPages() {
         Enumeration e = model.publicDynamicPages().elements();

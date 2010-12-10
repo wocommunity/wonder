@@ -7,7 +7,9 @@
 package ag.kcmedia;
 
 import com.webobjects.foundation.*;
-import er.extensions.*;
+import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.localization.ERXLocalizer;
+import er.extensions.logging.ERXLogger;
 
 import java.util.*;
 import java.io.*;
@@ -257,7 +259,7 @@ public class Jode extends Object {
             } catch (Exception ex) {
                 log.error(ex);
             }
-            sourceCode = ERXExtensions.replaceStringByStringInString("\n\n", "<br>", sourceCode);
+            sourceCode = ERXStringUtilities.replaceStringByStringInString("\n\n", "<br>", sourceCode);
             return sourceCode;
         }
 

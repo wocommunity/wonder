@@ -9,7 +9,8 @@ package ag.kcmedia;
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
-import er.extensions.*;
+import er.extensions.components.ERXStatelessComponent;
+import er.extensions.logging.ERXLogger;
 
 public class StringHolder extends ERXStatelessComponent {
     static final ERXLogger log = ERXLogger.getERXLogger(StringHolder.class,"components");

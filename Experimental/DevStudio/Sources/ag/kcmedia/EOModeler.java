@@ -3,7 +3,7 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import er.extensions.*;
+import er.extensions.logging.ERXLogger;
 /**
 * Class for Component EOModeler.
  *
