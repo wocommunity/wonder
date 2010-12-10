@@ -55,6 +55,10 @@ import er.taggable.model.ERTag;
  * @param <T> the java class of the entity that this ERTaggableEntity is associated with 
  */
 public class ERTaggableEntity<T extends ERXGenericRecord> {
+
+  /**
+   * Default is white-space and/or comma(s). Multiple string of separators treated as one. 
+   */
   private static final String DEFAULT_SEPARATOR = "[\\s,]+";
 
   /**
@@ -79,12 +83,12 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
 
   private static final NSMutableDictionary<String, Class<? extends ERTaggableEntity<?>>> _taggableEntities = new NSMutableDictionary<String, Class<? extends ERTaggableEntity<?>>>();
 
-  private EOEntity _tagEntity;
+  private final EOEntity _tagEntity;
 
-  private EOEntity _entity;
-  private EORelationship _tagsRelationship;
+  private final EOEntity _entity;
+  private final EORelationship _tagsRelationship;
 
-  private String _separator = ERTaggableEntity.DEFAULT_SEPARATOR;
+  private final String _separator = ERTaggableEntity.DEFAULT_SEPARATOR;
   private ERTagNormalizer _normalizer = new ERDefaultTagNormalizer();
 
   /**
