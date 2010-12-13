@@ -149,14 +149,14 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 			super._moveObjectAtIndexToIndex(sourceIndex, destIndex);
 		}
 
-		@Override
-		public synchronized void addObject(V object) {
-			super.addObject(object);
+		//@Override
+		public synchronized void addObject(Object object) {
+			super.addObject((V) object);
 		}
 
-		@Override
-		public synchronized void addObjects(V... objects) {
-			super.addObjects(objects);
+		//@Override
+		public synchronized void addObjects(Object... objects) {
+			super.addObjects((V[])objects);
 		}
 
 		@Override
@@ -196,7 +196,7 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 
 		@Override
 		public synchronized V removeLastObject() {
-			return super.removeLastObject();
+			return (V)super.removeLastObject();
 		}
 
 		@Override
@@ -231,12 +231,12 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 
 		@Override
 		public synchronized V replaceObjectAtIndex(V object, int index) {
-			return super.replaceObjectAtIndex(object, index);
+			return (V)super.replaceObjectAtIndex(object, index);
 		}
 
 		@Override
-		public synchronized void replaceObjectsInRange(NSRange range, NSArray<? extends V> otherArray, NSRange otherRange) {
-			super.replaceObjectsInRange(range, otherArray, otherRange);
+		public synchronized void replaceObjectsInRange(NSRange range, NSArray otherArray, NSRange otherRange) {
+			super.replaceObjectsInRange(range, (NSArray)otherArray, otherRange);
 		}
 
 		@Override
@@ -306,7 +306,7 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 		}
 
 		@Override
-		public synchronized V firstObjectCommonWithArray(NSArray<? extends V> otherArray) {
+		public synchronized V firstObjectCommonWithArray(NSArray<?> otherArray) {
 			return super.firstObjectCommonWithArray(otherArray);
 		}
 
@@ -336,7 +336,7 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 		}
 
 		@Override
-		public synchronized boolean isEqualToArray(NSArray<?> otherArray) {
+		public synchronized boolean isEqualToArray(NSArray otherArray) {
 			return super.isEqualToArray(otherArray);
 		}
 
@@ -360,9 +360,9 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 			return super.objectEnumerator();
 		}
 
-		@Override
-		public synchronized Object[] objects() {
-			return super.objects();
+		//@Override
+		public synchronized V[] objects() {
+			return (V[])super.objects();
 		}
 
 		@Override
@@ -370,9 +370,9 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 			return super.objects(range);
 		}
 
-		@Override
-		protected synchronized Object[] objectsNoCopy() {
-			return super.objectsNoCopy();
+		//@Override
+		protected synchronized V[] objectsNoCopy() {
+			return (V[]) super.objectsNoCopy();
 		}
 
 		@Override

@@ -168,7 +168,7 @@ public class ERXFaultArray<T extends EOEnterpriseObject> extends NSArray<T> {
 		};
 	}
 	
-	@Override
+	//@Override
 	protected Object[] _objects() {
 		Object[] result = new Object[count()];
 		for (int i = 0; i < count(); i++) {
