@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
+import er.extensions.foundation.ERXPropertyListSerialization;
 import er.rest.ERXRestRequestNode;
 
 public class ERXBinaryPListRestWriter implements IERXRestWriter {
@@ -19,7 +20,7 @@ public class ERXBinaryPListRestWriter implements IERXRestWriter {
 		appendHeadersToResponse(node, response);
 		Object object = node.toNSCollection(delegate);
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		NSPropertyListSerialization.writePropertyListToStream(object, out, NSPropertyListSerialization.PListFormat.NSPropertyListBinaryFormat_v1_0, "UTF-8");
+		ERXPropertyListSerialization.writePropertyListToStream(object, out, ERXPropertyListSerialization.PListFormat.NSPropertyListBinaryFormat_v1_0, "UTF-8");
 		response.appendContentData(new NSData(out.toByteArray()));
 	}
 }

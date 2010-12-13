@@ -4,9 +4,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
-import com.webobjects.foundation.NSPropertyListSerialization;
-import com.webobjects.foundation.NSPropertyListSerialization.PListFormat;
-
+import er.extensions.foundation.ERXPropertyListSerialization;
 import er.rest.ERXRestRequestNode;
 import er.rest.ERXRestUtils;
 
@@ -68,7 +66,7 @@ public class ERXBinaryPListRestParser implements IERXRestParser {
 
 		if (request != null) {
 			InputStream in = request.streamContent();
-			Object rootObj = NSPropertyListSerialization.propertyListWithStream(in, PListFormat.NSPropertyListBinaryFormat_v1_0, "UTF-8");
+			Object rootObj = ERXPropertyListSerialization.propertyListWithStream(in, ERXPropertyListSerialization.PListFormat.NSPropertyListBinaryFormat_v1_0, "UTF-8");
 			rootRequestNode = createRequestNodeForObject(null, rootObj, true, delegate);
 		}
 		else {

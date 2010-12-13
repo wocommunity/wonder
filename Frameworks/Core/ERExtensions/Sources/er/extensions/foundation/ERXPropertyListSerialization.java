@@ -1,6 +1,6 @@
 //Copyright (c) 1999, Apple Computer, Inc. All rights reserved.
 
-package com.webobjects.foundation;
+package er.extensions.foundation;
 
 import java.io.BufferedInputStream;
 import java.io.EOFException;
@@ -44,7 +44,19 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import com.webobjects.foundation.NSPropertyListSerialization.PListFormat;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSData;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableData;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSSet;
+import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation._NSBase64;
+import com.webobjects.foundation._NSStreamingOutputData;
+import com.webobjects.foundation._NSStringUtilities;
+import com.webobjects.foundation._NSUtilities;
 
 /**
  * <p>
@@ -114,8 +126,8 @@ import com.webobjects.foundation.NSPropertyListSerialization.PListFormat;
  * @see PListFormat#NSPropertyListBinaryFormat_v1_0
  * @see PListFormat#NSPropertyListXMLFormat_v1_0
  */
-public class NSPropertyListSerialization {
-	static org.apache.log4j.Logger	logger							= org.apache.log4j.Logger.getLogger(NSPropertyListSerialization.class);
+public class ERXPropertyListSerialization {
+	static org.apache.log4j.Logger	logger							= org.apache.log4j.Logger.getLogger(ERXPropertyListSerialization.class);
 
 	/**
 	 *
@@ -4905,7 +4917,7 @@ public class NSPropertyListSerialization {
 
 	}
 
-	private NSPropertyListSerialization() {
+	private ERXPropertyListSerialization() {
 		throw new IllegalStateException("Can't instantiate an instance of class " + getClass().getName());
 	}
 
@@ -5036,6 +5048,8 @@ public class NSPropertyListSerialization {
 			if (url == null)
 				return null;
 			return propertyListFromString(_NSStringUtilities.stringFromPathURL(url), forceXML);
+		} catch (NSForwardException e) {
+			throw e;
 		} catch (RuntimeException e) {
 			throw new RuntimeException("Failed to parse a property list from the URL '" + url + "'.", e);
 		}
