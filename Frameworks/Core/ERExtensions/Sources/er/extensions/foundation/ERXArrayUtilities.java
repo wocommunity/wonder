@@ -1084,7 +1084,7 @@ public class ERXArrayUtilities extends Object {
          * @param keypath sort key.
          * @return immutable sorted array.
          */
-        public Object compute(NSArray<?> array, String keypath) {
+        public Object compute(NSArray array, String keypath) {
             if (array.count() < 2)
                 return array;
             if (keypath != null && keypath.indexOf(",") != -1) {
@@ -1122,7 +1122,7 @@ public class ERXArrayUtilities extends Object {
          * @param keypath name of fetch specification.
          * @return immutable filtered array.
          */
-        public Object compute(NSArray<?> array, String keypath) {
+        public Object compute(NSArray array, String keypath) {
             if(array.count() == 0) {
                 return array;
             }
@@ -1160,7 +1160,7 @@ public class ERXArrayUtilities extends Object {
          * @param keypath additional keypath
          * @return value following keypath for flattened array
          */
-        public Object compute(NSArray<?> array, String keypath) {
+        public Object compute(NSArray array, String keypath) {
             array = flatten(array);
             return contents(array, keypath);
         }
@@ -1190,7 +1190,7 @@ public class ERXArrayUtilities extends Object {
          * @param keypath the keypath. This value is ignored.
          * @return <code>Boolean.TRUE</code> if array is empty, <code>Boolean.FALSE</code> otherwise.
          */
-        public Object compute(NSArray<?> array, String keypath) {
+        public Object compute(NSArray array, String keypath) {
             return array.count() == 0 ? Boolean.TRUE : Boolean.FALSE;
         }
     }
@@ -1221,7 +1221,7 @@ public class ERXArrayUtilities extends Object {
          * @param keypath the key path to follow after truncation
          * @return the value produced by the keypath after truncating the array
          */
-        public Object compute(NSArray<?> array, String keypath) {
+        public Object compute(NSArray array, String keypath) {
         	if(ERXStringUtilities.stringIsNullOrEmpty(keypath)) {
         		throw new IllegalArgumentException("subarrayWithRange must be used " +
         				"like '@subarrayWithRange.start-length'");
@@ -1276,7 +1276,7 @@ public class ERXArrayUtilities extends Object {
          * @param keypath the key path to follow after truncation.
          * @return the value produced by following the keypath after truncation.
          */
-        public Object compute(NSArray<?> array, String keypath) {
+        public Object compute(NSArray array, String keypath) {
             int dotIndex = keypath.indexOf(".");
             String limitStr;
             String rest;
@@ -1323,7 +1323,7 @@ public class ERXArrayUtilities extends Object {
          *            the key path after removing duplicates from the array
          * @return the value produced by following the keypath after removing duplicates
          */
-        public Object compute(NSArray<?> array, String keypath) {
+        public Object compute(NSArray array, String keypath) {
             if (array != null) array = arrayWithoutDuplicates(array);
             return contents(array, keypath);
         }
@@ -1357,7 +1357,7 @@ public class ERXArrayUtilities extends Object {
          *            the key path to follow after filtering
          * @return the value produced by following keypath after filtering nulls from the array
          */
-        public Object compute(NSArray<?> array, String keypath) {
+        public Object compute(NSArray array, String keypath) {
         	array = removeNullValues(array);
             return contents(array, keypath);
         }
@@ -1382,7 +1382,7 @@ public class ERXArrayUtilities extends Object {
          * @param keypath integer value of index (zero based).
          * @return <code>null</code> if array is empty or value is not in index, <code>keypath</code> value for the object at index otherwise.
          */
-        public Object compute(NSArray<?> array, String keypath) {
+        public Object compute(NSArray array, String keypath) {
             int end = keypath.indexOf(".");
             int index = Integer.parseInt(keypath.substring(0, end == -1 ? keypath.length() : end));
             Object value = null;
@@ -1427,7 +1427,7 @@ public class ERXArrayUtilities extends Object {
          * @param keypath path to numeric values
          * @return computed average as BigDecimal or <code>NULL</code>.
          */
-        public Object compute(NSArray<?> array, String keypath) {
+        public Object compute(NSArray array, String keypath) {
             BigDecimal sum = new BigDecimal(0L);
             int count = 0;
             Object obj, tmp;
@@ -1473,7 +1473,7 @@ public class ERXArrayUtilities extends Object {
          * @param keypath additional keypath
          * @return value produced following keypath after array is reversed
          */
-        public Object compute(NSArray<?> array, String keypath) {
+        public Object compute(NSArray array, String keypath) {
             array = reverse(array);
             return contents(array, keypath);
         }
@@ -1515,7 +1515,7 @@ public class ERXArrayUtilities extends Object {
          * @param keypath path to numeric values
          * @return median value
          */
-        public Object compute(NSArray<?> array, String keypath) {
+        public Object compute(NSArray array, String keypath) {
             return median(array, keypath);
         }
     }
@@ -1559,7 +1559,7 @@ public class ERXArrayUtilities extends Object {
          * @param keypath path to numeric values
          * @return standard deviation value
          */
-    	public Object compute(NSArray<?> array, String keypath) {
+    	public Object compute(NSArray array, String keypath) {
     		return stdDev(array, keypath, isPop);
     	}
     }
@@ -2279,7 +2279,7 @@ public class ERXArrayUtilities extends Object {
 	 */
 	public static <T> void swapObjectsAtIndexesInArray (NSMutableArray<T> array, int indexOfA, int indexOfB) {
 		try {
-			T tmp = array.replaceObjectAtIndex(array.objectAtIndex(indexOfA), indexOfB);
+			T tmp = (T)array.replaceObjectAtIndex(array.objectAtIndex(indexOfA), indexOfB);
 			array.replaceObjectAtIndex(tmp, indexOfA);
 		}
 		catch (Exception e) {
