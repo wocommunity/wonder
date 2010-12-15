@@ -84,10 +84,11 @@ public class _EOIntegralKeyGlobalID extends EOKeyGlobalID {
 	private static int _hashCode(String entityName, Number value) {
 		int hashCode = entityName.hashCode();
 		if (value != null) {
-			hashCode ^= value.longValue();
-			hashCode ^= (value.longValue() >> 16L);
-			hashCode ^= (value.longValue() >> 32L);
-			hashCode ^= (value.longValue() >> 48L);
+			long longValue = value.longValue();
+			hashCode ^= longValue;
+			hashCode ^= (longValue >> 16L);
+			hashCode ^= (longValue >> 32L);
+			hashCode ^= (longValue >> 48L);
 		}
 		return hashCode == 0 ? 42 : hashCode;
 	}
