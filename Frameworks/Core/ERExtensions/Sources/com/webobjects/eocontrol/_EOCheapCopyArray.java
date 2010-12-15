@@ -64,6 +64,15 @@ public class _EOCheapCopyArray extends NSArray implements EOFaulting {
 			return super.mutableClone();
 		}
 	}
+	
+    public NSArray immutableClone() {
+        if (_faultHandler != null) {
+            return _faultHandler._immutableCloneForArray(this);
+        }
+
+        return new _EOCheapCopyArray(this);
+    }
+        
 
 	public Object get(int index) {
 		willRead();

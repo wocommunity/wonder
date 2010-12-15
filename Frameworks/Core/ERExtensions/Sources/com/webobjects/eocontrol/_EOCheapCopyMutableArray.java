@@ -67,6 +67,14 @@ public class _EOCheapCopyMutableArray extends NSMutableArray implements EOFaulti
 			return new _EOCheapCopyMutableArray(this);
 	}
 
+	public NSMutableArray mutableClone() {
+		if (_faultHandler != null) {
+			return _faultHandler._mutableCloneForArray(this);
+		} else {
+			return new _EOCheapCopyMutableArray(this);
+		}
+	}
+	
 	public NSArray immutableClone() {
 		if (_faultHandler != null)
 			return _faultHandler._immutableCloneForArray(this);
