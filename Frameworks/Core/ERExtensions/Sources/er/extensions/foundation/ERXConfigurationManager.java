@@ -434,8 +434,8 @@ public class ERXConfigurationManager {
         return property;
     }
 
-    private static <K, V> NSMutableDictionary<K, V> safeMutableDictionary(NSDictionary<K, V> originalDictionary) {
-    	return originalDictionary == null ? new NSMutableDictionary<K, V>() : new NSMutableDictionary<K, V>(originalDictionary);
+    private static NSMutableDictionary safeMutableDictionary(NSDictionary originalDictionary) {
+    	return originalDictionary == null ? new NSMutableDictionary() : new NSMutableDictionary(originalDictionary);
     }
     
     /**
