@@ -3,6 +3,8 @@ package com.webobjects.eocontrol;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.ListIterator;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSComparator;
@@ -164,4 +166,19 @@ public class _EOCheapCopyMutableArray extends NSMutableArray implements EOFaulti
 		s.defaultWriteObject();
 	}
 
+    public Iterator iterator() {
+    	willRead();
+    	return super.iterator();
+    }
+
+	public ListIterator listIterator() {
+		willRead();
+		return super.listIterator();
+	}
+
+	public ListIterator listIterator(int index) {
+		willRead();
+		return super.listIterator(index);
+	}
+	
 }
