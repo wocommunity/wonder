@@ -30,6 +30,7 @@ import com.webobjects.eocontrol.EOSharedEditingContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSKeyValueCoding._KeyBinding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSValidation;
@@ -190,15 +191,18 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * @author ak
      *
      */
-    public static class TouchingBinding extends _LazyDictionaryBinding {
+    public static class TouchingBinding extends NSKeyValueCoding._KeyBinding {
 
-        public TouchingBinding(String key) {
-            super(key);
+        private _KeyBinding _other;
+
+		public TouchingBinding(String key, _KeyBinding other) {
+            super(null, key);
+            _other = other;
         }
         
         @Override
         public Object valueInObject(Object object) {
-             Object result = super.valueInObject(object);
+             Object result = _other.valueInObject(object);
              if(result instanceof AutoBatchFaultingEnterpriseObject && EOFaultHandler.isFault(result)) {
                  AutoBatchFaultingEnterpriseObject eo = (AutoBatchFaultingEnterpriseObject)object;
                  AutoBatchFaultingEnterpriseObject target = (AutoBatchFaultingEnterpriseObject)result;
@@ -206,19 +210,24 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
              }
              return result;
         }
+        
+        @Override
+        public void setValueInObject(Object value, Object object) {
+        	_other.setValueInObject(value, object);
+        }
     }
     
 
     @Override
     public NSKeyValueCoding._KeyBinding _otherStorageBinding(String key) {
-    	NSKeyValueCoding._KeyBinding result;
+    	NSKeyValueCoding._KeyBinding result = null;
+
     	String localizedKey = localizedKey(key);
     	if (classDescription().toOneRelationshipKeys().containsObject(key)) {
-    		result = new TouchingBinding(key);
+    		result = new TouchingBinding(key, super._otherStorageBinding(key));
     	} else if (localizedKey != null) {
     		result = new LocalizedBinding(key);
-    	}
-    	else {
+    	} else {
     		result = super._otherStorageBinding(key);
     	}
     	return result;
