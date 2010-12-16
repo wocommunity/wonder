@@ -21,6 +21,8 @@ public class ERXRestFormat {
 	public static final String PLIST_KEY = "plist";
 	public static final String SPROUTCORE_KEY = "sc";
 	public static final String XML_KEY = "xml";
+	
+	private static Map<String, ERXRestFormat> _formats = new ConcurrentHashMap<String, ERXRestFormat>();
 
 	static {
 		// MS: The whole naming thing is stupid, I know ... we need to separate mime type from extensions from the name 
@@ -35,8 +37,6 @@ public class ERXRestFormat {
 		ERXRestFormat.registerFormatNamed(new ERXGianduiaRestParser(), new ERXGianduiaRestWriter(true), new ERXRestFormatDelegate(), "gndp", "application/gndp");
 		ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXSproutCoreRestWriter(), new ERXRestFormatDelegate("guid", "type", "nil", true, true, true, false), ERXRestFormat.SPROUTCORE_KEY, "application/sc");
 	}
-	
-	private static Map<String, ERXRestFormat> _formats = new ConcurrentHashMap<String, ERXRestFormat>();
 
 	private String _name;
 	private IERXRestParser _parser;

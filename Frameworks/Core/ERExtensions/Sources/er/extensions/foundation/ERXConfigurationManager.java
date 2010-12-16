@@ -434,6 +434,10 @@ public class ERXConfigurationManager {
         return property;
     }
 
+    private static NSMutableDictionary safeMutableDictionary(NSDictionary originalDictionary) {
+    	return originalDictionary == null ? new NSMutableDictionary() : new NSMutableDictionary(originalDictionary);
+    }
+    
     /**
      * Resets the connection dictionary to the specified values that are in the defaults.
      * This method will look for defaults in the form 
@@ -468,7 +472,7 @@ public class ERXConfigurationManager {
                 passwd= passwd ==null ? System.getProperty(ERXConfigurationManager.dbConnectPasswordGLOBAL) : passwd;
 
                 if((serverName!=null) || (userName!=null) || (passwd!=null)) {
-                    newConnectionDictionary=new NSMutableDictionary(aModel.connectionDictionary());
+                    newConnectionDictionary=ERXConfigurationManager.safeMutableDictionary(aModel.connectionDictionary());
                     if (serverName!=null) newConnectionDictionary.setObjectForKey(serverName,"serverId");
                     if (userName!=null) newConnectionDictionary.setObjectForKey(userName,"userName");
                     if (passwd!=null) newConnectionDictionary.setObjectForKey(passwd,"password");
@@ -491,7 +495,7 @@ public class ERXConfigurationManager {
                     path=NSPathUtilities.stringByDeletingLastPathComponent(path);
                     path=NSPathUtilities.stringByAppendingPathComponent(path,aModel.name()+".db");                    
                 }
-                newConnectionDictionary=new NSMutableDictionary(aModel.connectionDictionary());
+                newConnectionDictionary=ERXConfigurationManager.safeMutableDictionary(aModel.connectionDictionary());
                 if (path!=null) newConnectionDictionary.setObjectForKey(path,"path");
                 if (operatingSystem()==WindowsOperatingSystem)
                     newConnectionDictionary.setObjectForKey("\r\n","rowSeparator");
@@ -502,7 +506,7 @@ public class ERXConfigurationManager {
                 String h= System.getProperty(aModelName + ".DBHostName");
                 h = h ==null ? System.getProperty(ERXConfigurationManager.dbConnectHostNameGLOBAL) : h;
                 if (h!=null || db!=null) {
-                    newConnectionDictionary=new NSMutableDictionary(aModel.connectionDictionary());
+                    newConnectionDictionary=ERXConfigurationManager.safeMutableDictionary(aModel.connectionDictionary());
                     if (db!=null) newConnectionDictionary.setObjectForKey(db, "databaseName");
                     if (h!=null) newConnectionDictionary.setObjectForKey(h, "hostName");
                     aModel.setConnectionDictionary(newConnectionDictionary);
@@ -538,7 +542,7 @@ public class ERXConfigurationManager {
                 String plugin= System.getProperty(aModelName + ".DBPlugin");
                 plugin = plugin == null ? _getProperty(ERXConfigurationManager.dbConnectPluginGLOBAL, applicationName) : plugin;
                 if (url!=null || userName!=null || passwd!=null || driver!=null || jdbcInfo!=null || plugin!=null) {
-                    newConnectionDictionary=new NSMutableDictionary(aModel.connectionDictionary());
+                    newConnectionDictionary=ERXConfigurationManager.safeMutableDictionary(aModel.connectionDictionary());
                     if (url!=null) newConnectionDictionary.setObjectForKey(url, "URL");
                     if (userName!=null) newConnectionDictionary.setObjectForKey(userName,"username");
                     if (passwd!=null) newConnectionDictionary.setObjectForKey(passwd,"password");
