@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<project name="gluonj" default="jar" basedir=".">
+  <target name="jar">
+    <taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask"
+        classpath="Libraries/jarjar-1.0.jar"/>
+    <jarjar jarfile="Libraries/gluonj-1.5beta.jar">
+        <zipfileset src="gluonj.jar"/>
+        <rule pattern="javassist.gluonj.**" result="javassist.gluonj.@1"/>
+        <rule pattern="javassist.**" result="javassist.gluonj.embedded.@1"/>
+        <manifest>
+        	<attribute name="Created-By" value="Shigeru Chiba, Tokyo Institute of Technology"/>
+            <attribute name="Main-Class" value="javassist.gluonj.GluonJ"/>
+            <attribute name="Premain-Class" value="javassist.gluonj.weave.HotSwapper"/>
+        </manifest>
+    </jarjar>
+  </target>
+</project>
