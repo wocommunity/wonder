@@ -32,18 +32,26 @@ import com.webobjects.foundation.NSMutableDictionary;
 import er.extensions.foundation.ERXPatcher;
 
 /**
- * Adds class-level inheritance to EOF.<br />
- * Use subclasses of EOEnterpriseObjectClazz as inner classes in your EO subclasses
- * to work around the missing class object inheritance of java. They <b>must</b>
- * be named XXX.XXXClazz to work.<br />
- * Every subclass of this class will get their own "ClazzObject" instance, so it's
+ * <h4>Adds class-level inheritance to EOF.</h4>
+ * <p>In Java, static methods are similar to class methods in Objective-C, but
+ * one cannot use static methods in interfaces and static methods cannot be overridden 
+ * by a subclass. Using the clazz pattern removes those limitations.</p>
+ * <p>Instead of using a static method, we can use a static inner class (a clazz) 
+ * instead. This allows for the methods on the clazz to be available statically to 
+ * the class. The advantage is that static utility methods don't need to be 
+ * generated for every subclass of an EOEnterpriseObject. It is generally sufficient to
+ * simply use the utility methods available on the EOEnterpriseObjectClazz.</p>
+ * <p>Every subclass of this class will get their own "ClazzObject" instance, so it's
  * OK to store things which might be different in superclasses. That is, the "User"'s
  * implementation can override the "Person"'s and because Person.clazz() will get
- * it's own instance, it will do only "Person" things.<br />
- * The methods from EOUtilities are mirrored here so you don't have to import EOAccess
+ * it's own instance, it will do only "Person" things.</p>
+ * <p>Use subclasses of EOEnterpriseObjectClazz as inner classes in your EO subclasses
+ * to work around the missing class object inheritance of java. They <b>must</b>
+ * be named XXX.XXXClazz to work.</p>
+ * <p>The methods from EOUtilities are mirrored here so you don't have to import EOAccess
  * in your subclasses, which is not legal for client-side classes. The implementation
  * for a client-side class could then be easily switched to use the server-side EOUtilites
- * implementation.
+ * implementation.</p>
  */
 public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
     /**
