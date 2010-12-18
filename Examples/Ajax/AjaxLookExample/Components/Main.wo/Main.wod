@@ -1,3 +1,7 @@
 Hyperlink1: WOHyperlink {
 	action = showList;
 }
+
+DependentPopups: WOHyperlink {
+	action = dependentPopups;
+}

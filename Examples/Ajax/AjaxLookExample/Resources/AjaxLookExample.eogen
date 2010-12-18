@@ -1,0 +1,1 @@
+ -destination Sources -extension java -java -javaTemplate _WonderEntity.java -model Resources/AjaxLookExample.eomodeld -packagedirs -subclassDestination Sources -subclassJavaTemplate WonderEntity.java -templatedir Templates -verbose -loadModelGroup -superclassPackage gen -define-EOGenericRecord ERXGenericRecord

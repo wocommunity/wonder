@@ -1,0 +1,45 @@
+{
+    attributes = (
+        {
+            allowsNull = N; 
+            columnName = city; 
+            name = city; 
+            prototypeName = javaEnum; 
+            valueClassName = "com.ajaxlook.enums.City"; 
+        }, 
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {
+            allowsNull = N; 
+            columnName = nation; 
+            name = nation; 
+            prototypeName = javaEnum; 
+            valueClassName = "com.ajaxlook.enums.Nation"; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = state; 
+            name = state; 
+            prototypeName = javaEnum; 
+            valueClassName = "com.ajaxlook.enums.State"; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = streetAddress; 
+            name = streetAddress; 
+            prototypeName = varchar255; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = zipCode; 
+            name = zipCode; 
+            prototypeName = varchar16; 
+        }
+    ); 
+    attributesUsedForLocking = (city, id, nation, state, streetAddress, zipCode); 
+    className = "com.ajaxlook.model.Address"; 
+    classProperties = (city, nation, state, streetAddress, zipCode); 
+    externalName = Address; 
+    fetchSpecificationDictionary = {}; 
+    name = Address; 
+    primaryKeyAttributes = (id); 
+}
