@@ -1,8 +1,3 @@
-dbConnectAdaptorGLOBAL=Memory
-dbConnectURLGLOBAL=none
-dbConnectUserGLOBAL=none
-dbConnectPasswordGLOBAL=
-
 er.javamail.adminEmail=admin@yourhost.com
 er.javamail.centralize=false
 er.javamail.debugEnabled=false
