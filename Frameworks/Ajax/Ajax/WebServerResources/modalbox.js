@@ -193,7 +193,22 @@ Modalbox.Methods = {
 	},
 	
 	resizeTo: function(newWidth, newHeight, options) { // Change size of MB without content reloading
-		var o = this.MBoverlay.getDimensions();
+		var o = this.MBoverlay.getDimensions();		
+		// SWK: Check for window height > viewport
+		var minMargin = (this.options.centerVertically === true) ? 40 : 20;
+		if (newHeight >= (o.height - minMargin) ) {
+			var h = this.MBheader.getDimensions();
+			var pageHeight = o.height - minMargin;
+			var ch = pageHeight - h.height - 13;
+			this.MBcontent.setStyle({height: ch + 'px', 'overflow-y': 'scroll'});
+			// Try to widen the content area to allow for a vertical scrollbar.
+			var scrollbarWidth = 16;
+			if ((this.MBwindow.getWidth() + scrollbarWidth) < (document.viewport.getWidth() - 40)) {
+				this.MBwindow.setStyle({width: (this.MBwindow.getWidth() + scrollbarWidth) + 'px'});
+			}
+			newHeight = pageHeight;
+		}	
+		
 		var newStyle = {width: newWidth + "px", height: newHeight + "px", left: (o.width - newWidth)/2 + "px"};
 		this.options.width = newWidth;
 		if (options) this.setOptions(options); // Passing callbacks
@@ -230,7 +245,6 @@ Modalbox.Methods = {
 	resizeToContent: function(options){
 		// Resizes the modalbox window to the actual content height.
 		// This might be useful to resize modalbox after some content modifications which were changed content height.
-		
 		var byHeight = this.options.height - this.MBwindow.getHeight();
 		if (byHeight != 0) {
 			this.resize(0, byHeight, options);
