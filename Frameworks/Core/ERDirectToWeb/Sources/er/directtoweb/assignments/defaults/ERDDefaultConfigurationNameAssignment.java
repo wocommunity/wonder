@@ -117,6 +117,17 @@ public class ERDDefaultConfigurationNameAssignment extends ERDAssignment {
     }
 
     /**
+     * Generates a default embedded create page configuration
+     * based on the current entity name. Default format
+     * is 'CreateEmbedded' + entity name.
+     * @param c current D2W context
+     * @return default embedded edit page configuration name
+     */
+    public Object createEmbeddedConfigurationName(D2WContext c) {
+        return "CreateEmbedded" + entityNameForContext(c);
+    }
+    
+    /**
         * Generates a default edit page configuration
      * based on the current entity name. Default format
      * is 'Edit' + entity name.
