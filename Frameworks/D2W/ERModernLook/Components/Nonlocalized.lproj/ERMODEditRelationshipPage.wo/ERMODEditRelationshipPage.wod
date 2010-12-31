@@ -58,7 +58,7 @@ NewButton: CCSmartAjaxButton {
 	alt = "Creates a new Object to add to the relationship";
 	action = newObjectAction;
 	class = "Button PageButton CreatePageButton";
-	value = "New";
+	value = d2wContext.newRelationshipButtonLabel;
 	useAjax = d2wContext.useAjaxControls;
     updateContainerID = d2wContext.idForMainContainer;
     dontSubmitForm = true;
@@ -82,7 +82,7 @@ QueryButton: CCSmartAjaxButton {
 	alt = "Find new objects to add to the relationship";
 	action = displayQueryAction;
 	class = "Button PageButton QueryPageButton";
-	value = "Search";
+	value = d2wContext.queryRelationshipButtonLabel;
 	useAjax = d2wContext.useAjaxControls;
 	updateContainerID = d2wContext.idForMainContainer;
 	dontSubmitForm = true;
@@ -92,7 +92,7 @@ ReturnButton : CCSmartAjaxButton {
 	alt = "Returns to the inspect page";
 	action = returnAction;
 	class = "Button PageButton ReturnPageButton";
-	value = "Return";
+	value = d2wContext.returnButtonLabel;
 	useAjax = d2wContext.useAjaxControlsWhenEmbedded;
 	updateContainerID = d2wContext.idForParentMainContainer;
 	dontSubmitForm = true;
