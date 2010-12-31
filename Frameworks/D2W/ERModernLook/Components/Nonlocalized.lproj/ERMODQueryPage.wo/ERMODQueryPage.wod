@@ -22,6 +22,12 @@ RequiredWrapper : ERMODRequiredWrapper {
 	d2wContext = d2wContext;
 }
 
+ErrorBlock : ERMODErrorBlock {
+  d2wContext = d2wContext;
+  errorMessage = errorMessage;
+  errorMessages = errorMessages;
+}
+
 QueryPageRepetition: WOSwitchComponent {
 	WOComponentName = d2wContext.repetitionComponentName;
 	d2wContext = localContext;
