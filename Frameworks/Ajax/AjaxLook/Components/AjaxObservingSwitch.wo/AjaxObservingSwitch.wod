@@ -1,0 +1,14 @@
+AjaxObserveField: AjaxObserveField {
+	action = postChangeNotification;
+	updateContainerID = d2wContext.ajaxNotificationCenterID;
+}
+
+AjaxUpdateContainer: AjaxUpdateContainer {
+	id = id;
+}
+
+Switch: WOSwitchComponent {
+	WOComponentName = d2wContext.customComponentName;
+	localContext = d2wContext;
+	object = object;
+}

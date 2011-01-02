@@ -6,8 +6,8 @@
 	"ERD2W.cancelCreationMessage" = "<b>Wilt u  het toevoegen van @@displayNameForEntity@@ afbreken?</b><br /><br />Met <b>OK</b> verwijdert u alle veranderingen, met <b>Afbreken</b> kunt u verder bewerken.";
 	"ERD2W.cancelButtonLabel" = "Afbreken";
 	"ERD2W.createButtonLabel" = "Toevoegen";
-	"ERD2W.clearButtonLabel" = "Verwijderen";
-	"ERD2W.editButtonLabel" = "Edit";
+	"ERD2W.clearButtonLabel" = "Wissen";
+	"ERD2W.editButtonLabel" = "Wijzig";
 	"ERD2W.okButtonLabel" = "OK";
 	"ERD2W.pickButtonLabel" = "Kiezen";
 	"ERD2W.saveButtonLabel" = "Opslaan";
@@ -18,17 +18,15 @@
 	"ERD2W.addButtonLabel" = "Toevoegen";
 	"ERD2W.yesButtonLabel" = "Ja";
 	"ERD2W.noButtonLabel" = "Nee";
-	"ERD2W.removeButtonLabel" = "verwijder";
-	"ERD2W.deleteButtonLabel" = "verwijderen";
-	"ERD2W.deleteSelectedButtonLabel" = "gekozene verwijderen";
+	"ERD2W.removeButtonLabel" = "Verwijder";
+	"ERD2W.deleteButtonLabel" = "Weggooien";
+	"ERD2W.deleteSelectedButtonLabel" = "Gekozene weggooien";
 	"ERD2W.pickButtonLabel" = "Kiezen";
 	"ERD2W.noSelectionString" = "- geen keuze gemaakt -";
-
-  "ERD2WBoolean.DontCare" = "Maakt niet uit"; 
-  "ERD2WBoolean.Unset" = "Maakt niet uit"; 
-  "ERD2WBoolean.Yes" = "Ja"; 
-  "ERD2WBoolean.No" = "Nee";
-
+	"ERD2WBoolean.DontCare" = "Maakt niet uit"; 
+    "ERD2WBoolean.Unset" = "Maakt niet uit"; 
+    "ERD2WBoolean.Yes" = "Ja"; 
+    "ERD2WBoolean.No" = "Nee";
 	"ERD2W.tasks.inspect" = "@@displayNameForEntity@@ bekijken";
 	"ERD2W.tasks.edit" = "@@displayNameForEntity@@ bewerken";
 	"ERD2W.tasks.query" = "@@displayNameForEntity@@ zoeken";
@@ -36,7 +34,6 @@
 	"ERD2W.tasks.list" = "Lijst: @@displayNameForEntity@@";
 	"ERD2W.tasks.select" = "@@displayNameForEntity@@ kiezen";
 	"ERD2W.tasks.confirm" = "Werkelijk @@displayNameForEntity@@";
-
 	"ERD2WEditToManyRelationship.noChoiceAvailable" = "Geen @@displayNameForEntity@@ beschikbaar";
 	"ERD2WInspect.alreadyAborted" = "<b>U heeft deze handeling al afgebroken.</b> druk op <b>Afbreken</b> en doe de handeling opnieuw.";
 	"ERD2WList.confirmDeletionMessage" = "<b>@@displayNameForEntity@@ werkelijk verwijderen?</b><br />@@object.userPresentableDescription@@";

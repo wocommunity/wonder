@@ -7,6 +7,7 @@
 package er.javamail;
 
 import javax.mail.Address;
+import javax.mail.Flags;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
@@ -202,5 +203,12 @@ public class ERMessage extends Object {
 		if (_delegate != null) {
 			_delegate.deliveryFailed(this, failure);
 		}
+	}
+	
+	/*
+	 * Set the DELETED flag on the message, so that you can expunge it when you close a IMAP folder.
+	 */
+	public void setDeleteFlag() throws MessagingException {
+		mimeMessage().setFlag(Flags.Flag.DELETED,true);
 	}
 }
