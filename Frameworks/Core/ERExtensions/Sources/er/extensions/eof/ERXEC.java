@@ -10,9 +10,9 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 import java.util.WeakHashMap;
 
 import org.apache.log4j.Logger;
@@ -29,6 +29,7 @@ import com.webobjects.eocontrol.EOObjectStore;
 import com.webobjects.eocontrol.EOSharedEditingContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSLocking;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotification;
@@ -235,10 +236,10 @@ public class ERXEC extends EOEditingContext {
 		markOpenLocks = value;
 	}
 
-	private static ThreadLocal<List> locks = new ThreadLocal() {
+	private static ThreadLocal<List<NSLocking>> locks = new ThreadLocal() {
 		@Override
 		protected Object initialValue() {
-			return new Vector();
+			return new LinkedList<NSLocking>();
 		}
 	};
 
@@ -249,7 +250,7 @@ public class ERXEC extends EOEditingContext {
 	 * @param ec
 	 *            locked EOEditingContext
 	 */
-	public static void pushLockedContextForCurrentThread(EOEditingContext ec) {
+	public static void pushLockedContextForCurrentThread(NSLocking ec) {
 		if (useUnlocker() && ec != null) {
 			List ecs = locks.get();
 			ecs.add(ec);
@@ -266,7 +267,7 @@ public class ERXEC extends EOEditingContext {
 	 * @param ec
 	 *            unlocked EOEditingContext
 	 */
-	public static void popLockedContextForCurrentThread(EOEditingContext ec) {
+	public static void popLockedContextForCurrentThread(NSLocking ec) {
 		if (useUnlocker() && ec != null) {
 			List ecs = locks.get();
 			if (ecs != null) {
@@ -289,7 +290,7 @@ public class ERXEC extends EOEditingContext {
 	 * shouldn't call this yourself, but let the Unlocker handle it for you.
 	 */
 	public static void unlockAllContextsForCurrentThread() {
-		List ecs = locks.get();
+		List<NSLocking> ecs = locks.get();
 		if (useUnlocker() && ecs != null && ecs.size() > 0) {
 			if (log.isDebugEnabled()) {
 				log.debug("Unlock remaining: " + ecs);
@@ -297,7 +298,7 @@ public class ERXEC extends EOEditingContext {
 			// we can't use an iterator, because calling unlock() will remove
 			// the EC from end of the vector
 			for (int i = ecs.size() - 1; i >= 0; i--) {
-				EOEditingContext ec = (EOEditingContext) ecs.get(i);
+				NSLocking ec = ecs.get(i);
 				boolean openAutoLocks = (ec instanceof ERXEC && ((ERXEC) ec).isAutoLocked());
 				if (openAutoLocks) {
 					log.debug("Unlocking autolocked editing context: " + ec);
@@ -310,9 +311,8 @@ public class ERXEC extends EOEditingContext {
 					ec.unlock();
 				}
 				catch (IllegalStateException ex) {
-					log.error("Could not unlock EC: " + ec, ex);
+					log.error("Could not unlock: " + ec, ex);
 				}
-				
 			}
 		}
 	}

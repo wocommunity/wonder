@@ -15,6 +15,7 @@ import com.webobjects.eocontrol.EOCooperatingObjectStore;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSNotificationCenter;
 
 
 /**
@@ -26,6 +27,8 @@ public class ERXObjectStoreCoordinator extends EOObjectStoreCoordinator {
 
 	public static Logger log = Logger.getLogger(ERXObjectStoreCoordinator.class);
 
+	public static final String ERXSevereLockingError = "ERXSevereLockingError";
+	
 	NSMutableDictionary<Thread, NSMutableArray<Exception>> openLockTraces;
 
 	Thread lockingThread;
@@ -117,6 +120,7 @@ public class ERXObjectStoreCoordinator extends EOObjectStoreCoordinator {
 		lockingThread = Thread.currentThread();
 		lockingThreadName = lockingThread.getName();
 		//log.error("locked: " + lockingThread);
+		ERXEC.pushLockedContextForCurrentThread(this);
 	}
 
 	/**
@@ -124,6 +128,7 @@ public class ERXObjectStoreCoordinator extends EOObjectStoreCoordinator {
 	 * editing contexts in this thread.
 	 */
 	public void unlock() {
+		ERXEC.popLockedContextForCurrentThread(this);
 		boolean tracing = ERXEC.markOpenLocks();
 		if (lockingThread != null && lockingThread != Thread.currentThread()) {
 			log.fatal("Unlocking thread is not locking thread: LOCKING " + lockingThread + " vs UNLOCKING " + Thread.currentThread(), new RuntimeException("UnlockingTrace"));
@@ -138,6 +143,8 @@ public class ERXObjectStoreCoordinator extends EOObjectStoreCoordinator {
 					log.fatal("Trace for locking thread is MISSING");
 				}
 			}
+			//AK: unless you auto-unlock, I suggest you do a System.exit() when you receive this.
+			NSNotificationCenter.defaultCenter().postNotification(ERXSevereLockingError, this);
 		}
 		lockCount--;
 		if (tracing) {
