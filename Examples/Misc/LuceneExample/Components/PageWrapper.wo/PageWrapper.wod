@@ -1,0 +1,33 @@
+MainContent : WOComponentContent {
+    _unroll = YES;
+}
+
+BodyTag : WOBody {
+    class = bodyClass;
+}
+
+HeadTag : ERD2WHead {
+}
+
+EntitiesMenu : MenuHeader {
+}
+
+ERD2WDebugFlags : ERD2WDebugFlags {
+    context = d2wContext;
+}
+
+IsDebug : WOConditional {
+    condition = application.isDevelopmentMode;
+}
+
+StyleSheets : ERMD2WCSSReference {
+    localContext = d2wContext;
+}
+
+ERMD2WStyleSheetInjector : ERMD2WStyleSheetInjector {
+  localContext = d2wContext;
+}
+
+WOLToolBar : WOLToolBar {
+  expanded = true;
+}

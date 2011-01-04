@@ -1,0 +1,31 @@
+{
+    attributes = (
+        {
+            allowsNull = N; 
+            columnName = contents; 
+            name = contents; 
+            prototypeName = varchar1000; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = creationDate; 
+            name = creationDate; 
+            prototypeName = dateTime; 
+        }, 
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {allowsNull = N; columnName = price; name = price; prototypeName = amount; }, 
+        {
+            allowsNull = N; 
+            columnName = userCount; 
+            name = userCount; 
+            prototypeName = longNumber; 
+        }
+    ); 
+    attributesUsedForLocking = (contents, creationDate, id, price, userCount); 
+    className = EOGenericRecord; 
+    classProperties = (contents, creationDate, price, userCount); 
+    externalName = LuceneAsset; 
+    fetchSpecificationDictionary = {}; 
+    name = LuceneAsset; 
+    primaryKeyAttributes = (id); 
+}

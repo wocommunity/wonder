@@ -1,0 +1,10 @@
+{
+    EOModelVersion = "2.1"; 
+    adaptorName = Lucene; 
+    connectionDictionary = {URL = "file:///tmp/test"; }; 
+    entities = (
+        {className = EOGenericRecord; name = EOLucenePrototypes; }, 
+        {className = EOGenericRecord; name = LuceneAsset; }, 
+        {className = EOGenericRecord; name = Simple; }
+    ); 
+}
