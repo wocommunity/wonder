@@ -1031,6 +1031,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		}
 		if(_loader != null) {
 			_loader._checker.reportErrors();
+			_loader._checker = null;
 		}
 		NSNotificationCenter.defaultCenter().postNotification(new NSNotification(ApplicationDidCreateNotification, this));
 		installPatches();
