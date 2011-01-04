@@ -1,0 +1,19 @@
+(
+	{
+		name = Root;
+		children = ("Home","Tab1","Tab2");
+	},
+	{
+		name = "Home";
+		action = "session.navController.homeAction";
+	},
+	{
+		name = Tab1;
+		action = "session.navController.homeAction";
+	},
+	{
+		name = Tab2;
+		action = "session.navController.homeAction";
+	}
+
+)
