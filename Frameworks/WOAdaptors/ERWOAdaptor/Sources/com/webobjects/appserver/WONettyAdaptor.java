@@ -2,11 +2,7 @@ package com.webobjects.appserver;
 
 import static org.jboss.netty.channel.Channels.pipeline;
 import static org.jboss.netty.handler.codec.http.HttpHeaders.isKeepAlive;
-import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.CONTENT_TYPE;
 import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.COOKIE;
-import static org.jboss.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
-import static org.jboss.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERROR;
-import static org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -20,7 +16,6 @@ import org.apache.log4j.Logger;
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBufferInputStream;
-import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFactory;
 import org.jboss.netty.channel.ChannelFuture;
@@ -34,7 +29,6 @@ import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 import org.jboss.netty.handler.codec.http.Cookie;
 import org.jboss.netty.handler.codec.http.CookieDecoder;
-import org.jboss.netty.handler.codec.http.DefaultHttpResponse;
 import org.jboss.netty.handler.codec.http.HttpChunkAggregator;
 import org.jboss.netty.handler.codec.http.HttpContentCompressor;
 import org.jboss.netty.handler.codec.http.HttpRequest;
@@ -43,7 +37,6 @@ import org.jboss.netty.handler.codec.http.HttpResponse;
 import org.jboss.netty.handler.codec.http.HttpResponseEncoder;
 import org.jboss.netty.logging.CommonsLoggerFactory;
 import org.jboss.netty.logging.InternalLogger;
-import org.jboss.netty.util.CharsetUtil;
 
 import com.webobjects.appserver._private.WOInputStreamData;
 import com.webobjects.appserver._private.WOProperties;
@@ -184,19 +177,6 @@ public class WONettyAdaptor extends WOAdaptor {
 		}
 	}
 	
-	// error responses
-	private static HttpResponse _badRequestResponse;
-    private static HttpResponse _internalServerErrorResponse;
-	static {
-        _internalServerErrorResponse = new DefaultHttpResponse(HTTP_1_1, INTERNAL_SERVER_ERROR);
-        _internalServerErrorResponse.setContent(ChannelBuffers.copiedBuffer(INTERNAL_SERVER_ERROR.getReasonPhrase(), CharsetUtil.UTF_8));
-        _internalServerErrorResponse.setHeader(CONTENT_TYPE, "text/plain; charset=UTF-8");
-        
-        _badRequestResponse = new DefaultHttpResponse(HTTP_1_1, BAD_REQUEST);
-        _badRequestResponse.setContent(ChannelBuffers.copiedBuffer("Failure: " + BAD_REQUEST.toString() + "\r\n", CharsetUtil.UTF_8));
-        _badRequestResponse.setHeader(CONTENT_TYPE, "text/plain; charset=UTF-8");
-	}
-	
 	/**
 	 * Converts a Netty HttpRequest to a WORequest
 	 * 
@@ -317,10 +297,6 @@ public class WONettyAdaptor extends WOAdaptor {
 
 			log.warn(cause.getMessage());
 			e.getChannel().close();
-			/*
-	        if (ctx.getChannel().isConnected()) {
-	            ctx.getChannel().write(_internalServerErrorResponse).addListener(ChannelFutureListener.CLOSE);
-	        } */
 		}
 	}
 }
