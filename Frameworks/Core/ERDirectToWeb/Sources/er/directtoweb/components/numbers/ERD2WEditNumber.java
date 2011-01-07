@@ -107,7 +107,13 @@ public class ERD2WEditNumber extends D2WEditNumber {
             if (newValue instanceof BigDecimal && !isDecimalNumber() && attribute().valueType() != null && attribute().valueType().equals("i")) {
               // If failOnPrecisionLoss is true, then throw an exception if there's a loss of precision on the conversion to an int
               if (ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("failOnPrecisionLoss"), false)) {
-                 ((BigDecimal)newValue).toBigIntegerExact();
+            	  try {
+            		  ((BigDecimal)newValue).toBigIntegerExact();
+            	  }
+            	  catch (ArithmeticException e) {
+                      log.debug("Unable to parse number: " + newValue + " in " + propertyKey(), e);
+                      throw ERXValidationFactory.defaultFactory().createException(object(), propertyKey(), newValue, "IllegalCharacterInNumberException");
+            	  }
               }
                 
                 // we are getting a BigDecimal from WOTextField even though we asked for an Integer!
