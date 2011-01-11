@@ -72,7 +72,7 @@
     10 : *true* => idForParentPageConfiguration = <ERMDDefaultCSSAssignment> [er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment],
     10 : *true* => classForAttributeRepetitionWrapper = <ERMDDefaultCSSAssignment> [er.modern.directtoweb.assignments.defaults.ERMDDefaultCSSAssignment],
     20 : *true* => sectionElementName = h2 [com.webobjects.directtoweb.Assignment],
-    20 : *true* => sortOrderComponentName = ERMSortOrder [com.webobjects.directtoweb.Assignment],
+    20 : *true* => sortOrderComponentName = CCSortOrder [com.webobjects.directtoweb.Assignment],
     20 : *true* => sectionComponentName = ERMDSectionText [com.webobjects.directtoweb.Assignment],
     20 : *true* => templateNameForListPage = ERMODListPage [com.webobjects.directtoweb.Assignment],
     20 : *true* => headerComponentName = ERMD2WSimpleHeader [com.webobjects.directtoweb.Assignment],

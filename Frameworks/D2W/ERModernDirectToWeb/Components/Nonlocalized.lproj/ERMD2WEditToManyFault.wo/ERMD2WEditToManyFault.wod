@@ -28,7 +28,7 @@ ItemString : WOString {
   value = browserStringForItem;
 }
 
-EditButton : ERMSubmitLinkButton {
+EditButton : CCSubmitLinkButton {
   action = editRelatedItem;
   value = editButtonLabel;
   class = "Button PageButton EditPageButton";
@@ -77,19 +77,19 @@ EmptyListMessage : ERMDEmptyListMessage {
   d2wContext = d2wContext;
 }
 
-AddExistingButton : ERMSubmitLinkButton {
+AddExistingButton : CCSubmitLinkButton {
   action = searchValues;
   value = searchButtonLabel;
   class = "Button OptionButton SearchButton";
 }
 
-AddNewButton : ERMSubmitLinkButton {
+AddNewButton : CCSubmitLinkButton {
   action = createItem;
   value = createButtonLabel;
   class = "Button OptionButton CreateButton";
 }
 
-EditRelationshipButton : ERMSubmitLinkButton {
+EditRelationshipButton : CCSubmitLinkButton {
   action = editValues;
   value = editAllButtonLabel;
   class = "Button PageButton EditPageButton";

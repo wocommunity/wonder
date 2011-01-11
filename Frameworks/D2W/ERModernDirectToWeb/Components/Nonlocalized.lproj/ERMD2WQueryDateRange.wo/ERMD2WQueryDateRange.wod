@@ -1,4 +1,4 @@
-DateMaxField: ERMDatePicker {
+DateMaxField: CCDatePicker {
 	dateformat = formatter;
 	value = maxValue;
 	dragDisabled = dragDisabled;
@@ -19,7 +19,7 @@ DateMaxField: ERMDatePicker {
 	hideControl = hideControl;
 }
 
-DateMinField: ERMDatePicker {
+DateMinField: CCDatePicker {
 	dateformat = formatter;
 	value = minValue;
 	dragDisabled = dragDisabled;

@@ -1,4 +1,4 @@
-ReturnButton: ERMSubmitLinkButton {
+ReturnButton: CCSubmitLinkButton {
 	alt = "Returns to the previous page";
 	value = d2wContext.returnButtonLabel;
 	action = backAction;

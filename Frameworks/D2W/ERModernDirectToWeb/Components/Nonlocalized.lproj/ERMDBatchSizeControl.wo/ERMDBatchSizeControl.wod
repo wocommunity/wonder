@@ -2,6 +2,12 @@ DisplayGroupAllObjectsCount : WOString {
   value = ^displayGroup.allObjects.count;
 }
 
+ItemsString2 : ERXPluralString {
+  value = itemsString;
+  count = numberOfObjectsPerBatch;
+  showNumber = false;
+}
+
 ItemsString : ERXPluralString {
   value = itemsString;
   count = ^displayGroup.allObjects.count;
@@ -17,7 +23,7 @@ ShowString : ERXLocalizedString {
 }
 
 BatchNumberField : AjaxInPlaceEditor {
-  value = ^displayGroup.numberOfObjectsPerBatch;
+  value = numberOfObjectsPerBatch;
   width = "4";
   numberformat = "0";
   class = "ERMDBatchSize_BatchValue";

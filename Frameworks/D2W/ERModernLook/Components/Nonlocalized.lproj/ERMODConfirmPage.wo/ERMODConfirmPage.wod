@@ -1,4 +1,4 @@
-BranchButton: ERMSubmitLinkButton {
+BranchButton: CCSubmitLinkButton {
 	action = nextPageAction;
 	value = branch.branchButtonLabel; //VALID
 	class = "Button OptionButton";
@@ -43,13 +43,13 @@ Message: WOString {
 	escapeHTML = false;
 }
 
-OKButton: ERMSubmitLinkButton {
+OKButton: CCSubmitLinkButton {
 	action = nextPageAction;
 	value = d2wContext.okButtonLabel;
 	class = "Button PageButton OKPageButton";
 }
 
-CancelButton: ERMSubmitLinkButton {
+CancelButton: CCSubmitLinkButton {
 	action = cancelAction;
 	value = d2wContext.cancelButtonLabel;
 	class = "Button PageButton CancelPageButton";

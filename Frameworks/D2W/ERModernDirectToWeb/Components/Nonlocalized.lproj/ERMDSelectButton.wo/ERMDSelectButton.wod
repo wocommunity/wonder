@@ -1,4 +1,4 @@
-SelectEOButton : ERMSmartAjaxButton {
+SelectEOButton : CCSmartAjaxButton {
   value = buttonLabel;
   action = selectObjectAction;
   alt = "Select this Item";

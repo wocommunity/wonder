@@ -7,7 +7,7 @@ ErrorBlockDiv : WOGenericContainer {
 	class = d2wContext.classForErrorBlock;
 }
 
-Errors: ERMErrorDictionaryPanel {
+Errors: CCErrorDictionaryPanel {
 	errorMessages = errorMessages;
 	extraErrorMessage = errorMessage;
 }

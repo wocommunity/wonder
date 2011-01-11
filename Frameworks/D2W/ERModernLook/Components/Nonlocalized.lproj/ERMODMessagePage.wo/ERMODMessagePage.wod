@@ -1,4 +1,4 @@
-BranchButton: ERMSubmitLinkButton {
+BranchButton: CCSubmitLinkButton {
 	action = nextPageAction;
 	value = branch.branchButtonLabel;
 	class = "Button PageButton BranchPageButton";
@@ -29,7 +29,7 @@ Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
 }
 
-OKButton: ERMSubmitLinkButton {
+OKButton: CCSubmitLinkButton {
 	action = nextPageAction;
 	value = d2wContext.okButtonLabel;
 	class = "Button PageButton OKPageButton";

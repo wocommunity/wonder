@@ -17,5 +17,6 @@
 	<classpathentry kind="con" path="WOFramework/JavaDirectToWeb"/>
 	<classpathentry kind="con" path="WOFramework/ERDirectToWeb"/>
 	<classpathentry kind="con" path="WOFramework/Ajax"/>
+	<classpathentry kind="con" path="WOFramework/ERCoolComponents"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

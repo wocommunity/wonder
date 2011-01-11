@@ -1,9 +1,14 @@
 package er.modern.directtoweb.components;
 
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODisplayGroup;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSNotificationCenter;
 
 import er.ajax.AjaxUpdateContainer;
 import er.directtoweb.components.ERDCustomComponent;
+import er.extensions.batching.ERXBatchNavigationBar;
+import er.extensions.eof.ERXConstant;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
 
@@ -156,4 +161,19 @@ public class ERMDBatchSizeControl extends ERDCustomComponent {
 		return "function(e) { " + updateContainerID() + "Update() }";
 	}
 	
+	public WODisplayGroup displayGroup() {
+		return (WODisplayGroup)valueForBinding("displayGroup");
+	}
+	
+	public int numberOfObjectsPerBatch() {
+		return displayGroup().numberOfObjectsPerBatch();
+	}
+	
+	public void setNumberOfObjectsPerBatch(Integer number) {
+		displayGroup().setNumberOfObjectsPerBatch(number);
+		NSNotificationCenter.defaultCenter().postNotification(
+				ERXBatchNavigationBar.BatchSizeChanged,
+				ERXConstant.integerForInt(number.intValue()),
+                new NSDictionary(d2wContext(),"d2wContext") );
+	}
 }

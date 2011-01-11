@@ -1,14 +1,3 @@
-ElementID : WOString {
-	value = radioButtonGroupName;
-}
-
-ID : WOString {
-	value = id;
-}
-
-Options : AjaxOptions {
-	options = options;
-}
 
 SliderDiv : WOGenericContainer {
 	elementName = "div";
