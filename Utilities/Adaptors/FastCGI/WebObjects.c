@@ -435,18 +435,6 @@ int main() {
          }
       }
 
-      WOLog(WO_INFO, "Content length: %d",req->content_length);
-      WOLog(WO_INFO, "--------Content: %s---",req->content);
-      if (req->content) {
-         content_buffer = (char *)WOMALLOC(req->content_length+1);
-         strncpy(content_buffer,req->content,req->content_length);
-         content_buffer[req->content_length] = '\0';
-         WOLog(WO_INFO, "---content buffer: %s",content_buffer);
-         strncpy(req->content,content_buffer,req->content_length+1);
-         WOFREE(content_buffer);
-      }
-      //WOLog ( WO_INFO, "Content_length: %d, real: %d", req->content_length,strlen (req->content) );
-
       /* Always get the query string */
       qs = FCGX_GetParam("QUERY_STRING", hdrp);
       if (qs) {
