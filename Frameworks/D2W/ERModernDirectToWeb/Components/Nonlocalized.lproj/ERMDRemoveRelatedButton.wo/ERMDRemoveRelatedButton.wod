@@ -83,3 +83,12 @@ DisabledRemoveButton : WOGenericContainer {
   elementName = "span";
   class = buttonClass;
 }
+
+NotHasAnyAction : WOConditional {
+  condition = hasAnyAction;
+  negate = true;
+}
+
+HasAnyAction : WOConditional {
+  condition = hasAnyAction;
+}

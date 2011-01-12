@@ -1,4 +1,4 @@
-CancelButton: ERMSmartAjaxButton {
+CancelButton: CCSmartAjaxButton {
 	action = cancelAction;
 	alt = "Reverts your changes";
 	value = d2wContext.cancelButtonLabel;
@@ -54,7 +54,7 @@ ShowSave: WOConditional {
     negate=true;
 }
 
-SaveButton: ERMSmartAjaxButton {
+SaveButton: CCSmartAjaxButton {
 	action = submitAction;
 	alt = "Saves your changes";
 	value = d2wContext.saveButtonLabel;
@@ -127,6 +127,10 @@ OKButtonLabel : WOString {
 D2wContextInlineCancelMessage : WOString {
   value = d2wContext.inlineCancelMessage;
   escapeHTML = false;
+}
+
+ShowBanner: WOConditional {
+	condition = d2wContext.showBanner;
 }
 
 ShowCancelDialog : WOConditional {

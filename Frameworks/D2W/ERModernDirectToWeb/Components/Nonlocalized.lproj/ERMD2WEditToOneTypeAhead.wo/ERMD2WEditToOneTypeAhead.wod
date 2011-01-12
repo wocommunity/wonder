@@ -14,7 +14,7 @@ AjaxAutoComplete : AjaxAutoComplete {
   minChars = minimumCharacterCount;
 }
 
-NewObjectButton : ERMSubmitLinkButton {
+NewObjectButton : CCSubmitLinkButton {
   action = addObject;
   value = "New";
   class = newButtonClass;

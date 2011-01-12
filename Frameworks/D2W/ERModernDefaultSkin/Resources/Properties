@@ -1,1 +1,5 @@
 er.modern.look.skinframework = ERModernDefaultSkin
+
+# This enables rendering of the span tag inside the ERXNavigationMenuItem list elements
+# thus ensuring that the ERModernDefaultSkin looks the way it was intended 'out of the box' by default.
+er.extensions.ERXNavigationManager.includeLabelSpanTag=true

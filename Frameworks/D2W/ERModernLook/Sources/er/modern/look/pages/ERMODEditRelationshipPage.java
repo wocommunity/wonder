@@ -12,6 +12,7 @@ import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSNotification;
@@ -34,6 +35,9 @@ import er.modern.directtoweb.interfaces.ERMEditRelationshipPageInterface;
  * @d2wKey editConfigurationName
  * @d2wKey isEntityEditable
  * @d2wKey readOnly
+ * @d2wKey relationshipRestrictingQualifier - An additional qualifier that can be used to restrict the objects 
+ * 									   		  shown in the relationship (see: ERDDelayedExtraQualifierAssignment).
+ * 									          Useful if you have a value like: isDeleted that you wish to respect.
  * 
  * @author davidleber
  */
@@ -47,6 +51,7 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 		public static String createEmbeddedConfigurationName = "createEmbeddedConfigurationName";
 		public static String queryEmbeddedConfigurationName = "queryEmbeddedConfigurationName";
 		public static String localContext = "localContext";
+		public static String relationshipRestrictingQualifier ="relationshipRestrictingQualifier";
 	}
 	
 	private EOEnterpriseObject _masterObject;
@@ -178,7 +183,7 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	 */
 	@SuppressWarnings("unchecked")
 	public void relatedObjectDidChange(NSNotification notif) {
-		NSDictionary userInfo = notif.userInfo();
+		NSDictionary/*<String, Object>*/userInfo = notif.userInfo();
 		if (userInfo != null) {
 			Object key = userInfo.valueForKey("propertyKey");
 			EOEnterpriseObject obj = (EOEnterpriseObject)userInfo.valueForKey("object");
@@ -251,26 +256,26 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	 * 
 	 * @return NSArray containing the master object (index 0) and relationship key (index 1).
 	 */
-	public NSArray masterObjectAndRelationshipKey() {
-		return new NSArray(new Object[] { masterObject(), relationshipKey() });
+	public NSArray/*<?>*/ masterObjectAndRelationshipKey() {
+		return new NSArray/*<Object>*/(new Object[] { masterObject(), relationshipKey() });
 	}
 
 	/**
 	 * Sets the master object and relationship key.
 	 * Takes an NSArray containing the master object (index 0) and relationship key (index 1).
-	 * Required by the {@link ERMEditRelationshipPageInterface}
+	 * Required by the {@link ERMEditRelationhsipPageInterface}
 	 * 
-	 * @param a NSArray containing the master object (index 0) and relationship key (index 1).
+	 * @param NSArray containing the master object (index 0) and relationship key (index 1).
 	 */
-	public void setMasterObjectAndRelationshipKey(NSArray a) {
+	public void setMasterObjectAndRelationshipKey(NSArray/*<?>*/ a) {
 		setMasterObjectAndRelationshipKey((EOEnterpriseObject)a.objectAtIndex(0), (String)a.objectAtIndex(1));
 	}
 	
 	/**
 	 * Set the master object and relationship key.
 	 * 
-	 * @param eo EOEnterpriseObject the master object
-	 * @param relationshipKey String the relationship key
+	 * @param EOEnterpriseObject the master object
+	 * @param String the relationship key
 	 */
 	public void setMasterObjectAndRelationshipKey(EOEnterpriseObject eo, String relationshipKey) {
 		// only do this if the eo and relationshipKey have changed;
@@ -292,6 +297,11 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 		        
 		        relationshipDisplayGroup().setDataSource(dataSource());
 		        relationshipDisplayGroup().fetch();
+		        EOQualifier extraQualifier = (EOQualifier)d2wContext().valueForKey(Keys.relationshipRestrictingQualifier);
+		        if (extraQualifier != null) {
+		        	relationshipDisplayGroup().setQualifier(extraQualifier);
+		        	relationshipDisplayGroup().qualifyDataSource();
+		        }
 		        setPropertyKey(keyWhenRelationship());
 			}
 		}
@@ -388,7 +398,7 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 
 	/** The number of objects in the list. */
 	public int listSize() {
-		return relationshipDisplayGroup().allObjects().count();
+		return relationshipDisplayGroup().displayedObjects().count();
 	}
 	
 }

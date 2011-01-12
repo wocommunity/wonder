@@ -3,7 +3,7 @@ StylesheetRepetition : WORepetition {
   item = stylesheetName;
 }
 
-StylesheetInjector : ERMResourceInjector {
+StylesheetInjector : CCResourceInjector {
   filename = stylesheet.filename;
   framework = resourceFrameworkName;
   media = stylesheet.media;

@@ -147,7 +147,7 @@ public class ERMDDeleteButton extends ERMDActionButton {
     public void postDeleteNotification() {
     	Object obj = this.parentD2WPage();
     	String OBJECT_KEY = "object";
-    	NSMutableDictionary userInfo = new NSMutableDictionary(obj, OBJECT_KEY);
+    	NSMutableDictionary/*<String, Object>*/ userInfo = new NSMutableDictionary/*<String, Object>*/(obj, OBJECT_KEY);
 		if (dataSource() instanceof EODetailDataSource) {
 			EODetailDataSource dds = (EODetailDataSource)dataSource();
 			userInfo.setObjectForKey(dds.masterObject(), OBJECT_KEY);

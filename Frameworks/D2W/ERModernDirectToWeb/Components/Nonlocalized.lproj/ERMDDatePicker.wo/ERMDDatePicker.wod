@@ -1,4 +1,4 @@
-DatePicker : ERMDatePicker {
+DatePicker : CCDatePicker {
   value = objectPropertyValue;
   dateformat = formatter;
   dragDisabled = dragDisabled;

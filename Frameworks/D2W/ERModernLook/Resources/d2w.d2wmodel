@@ -663,7 +663,7 @@
       "rhs" = {
         "class" = "com.webobjects.directtoweb.Assignment"; 
         "keyPath" = "sortOrderComponentName"; 
-        "value" = "ERMSortOrder"; 
+        "value" = "CCSortOrder"; 
       }; 
     }, 
     {

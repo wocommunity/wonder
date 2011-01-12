@@ -73,3 +73,14 @@ LabelWrapper : WOGenericContainer {
 	elementName = "span";
 	class = d2wContext.classForLabelSpan;
 }
+SavedQueryComponentDefined: WOConditional {
+	condition = d2wContext.savedQueryComponentName;
+}
+
+SavedQuerySwitchedComponent:  WOSwitchComponent {
+	WOComponentName = d2wContext.savedQueryComponentName;
+	_componentUnroll = true;
+	_unroll = true;
+	displayGroup = displayGroup;
+	localContext = localContext;
+}

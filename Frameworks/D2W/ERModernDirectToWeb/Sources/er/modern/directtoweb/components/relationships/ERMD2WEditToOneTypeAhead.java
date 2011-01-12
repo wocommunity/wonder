@@ -93,7 +93,7 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
 	private EOFetchSpecification _restrictingFetchSpec;
 	private String _restrictedChoiceKey;
 	private String _restrictingFetchSpecification;
-	private NSArray _allItems;
+	private NSArray/*<EOEnterpriseObject>*/ _allItems;
 	private String _template;
 	private EOQualifier _extraQualifier;
 	private Integer _minimumCharacterCount;
@@ -125,7 +125,7 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
 	 */
 	@SuppressWarnings("unchecked")
 	public void relatedObjectDidChange(NSNotification notif) {
-		NSDictionary userInfo = notif.userInfo();
+		NSDictionary/*<String, Object>*/userInfo = notif.userInfo();
 		if (userInfo != null) {
 			Object key = userInfo.valueForKey("propertyKey");
 			EOEnterpriseObject obj = (EOEnterpriseObject)userInfo.valueForKey("object");
@@ -183,8 +183,8 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
 	 * 
 	 * @return
 	 */
-    public NSArray currentObjects() {
-		NSArray result = null;
+    public NSArray/*<EOEnterpriseObject>*/ currentObjects() {
+		NSArray/*<EOEnterpriseObject>*/ result = null;
 		String value = searchValue();
     	if (value != null) {
     		if (searchTemplate() != null) {
@@ -214,7 +214,7 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
 	public WOActionResults selectObject() {
 //		log.debug("selectobject called: " + item);
 		EOQualifier qual = ERXQ.equals(keyWhenRelationship(), searchValue());
-		NSArray objs = destinationObjectsWithQualifier(qual);
+		NSArray/*<EOEnterpriseObject>*/ objs = destinationObjectsWithQualifier(qual);
 		if (objs != null && objs.count() > 0) {
 			EOEnterpriseObject localEO = ERXEOControlUtilities.localInstanceOfObject(object().editingContext(), (EOEnterpriseObject)objs.objectAtIndex(0));
 			object().addObjectToBothSidesOfRelationshipWithKey(localEO, propertyKey());
@@ -273,10 +273,10 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public NSArray destinationObjectsWithQualifier(EOQualifier qual) {
-		NSArray result = null;
-		NSArray orderings = null;
-		if (ERXStringUtilities.stringIsNullOrEmpty(sortKey())) {
+	public NSArray/*<EOEnterpriseObject>*/ destinationObjectsWithQualifier(EOQualifier qual) {
+		NSArray/*<EOEnterpriseObject>*/ result = null;
+		NSArray/*<EOSortOrdering>*/ orderings = null;
+		if (!ERXStringUtilities.stringIsNullOrEmpty(sortKey())) {
 			orderings = ERXS.ascs(sortKey());
 		}
 		if (extraQualifier() != null) {
@@ -329,12 +329,12 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
 	}
 	
 	@SuppressWarnings("unchecked")
-    public NSArray allItems() {
+    public NSArray/*<EOEnterpriseObject>*/ allItems() {
     	if (_allItems == null) {
-    		_allItems = (NSArray)restrictedChoiceList();
+    		_allItems = (NSArray/*<EOEnterpriseObject>*/)restrictedChoiceList();
     		if (_allItems == null) {
     			EOFetchSpecification fetchSpec = new EOFetchSpecification(destinationEntityName(), null, null);
-    			_allItems = (NSArray)ec().objectsWithFetchSpecification(fetchSpec);
+    			_allItems = (NSArray/*<EOEnterpriseObject>*/)ec().objectsWithFetchSpecification(fetchSpec);
     		}
 		}
 		return _allItems;

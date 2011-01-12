@@ -31,7 +31,7 @@ QueryForm: WOForm {
 	multipleSubmit = true;
 }
 
-AdvancedQuery: ERMSubmitLinkButton {
+AdvancedQuery: CCSubmitLinkButton {
 	action = showRegularQueryAction;
 	alt = "Search with more options";
 	value = d2wContext.advancedFindButtonLabel;
@@ -44,7 +44,7 @@ SectionsContents: WORepetition {
 	item = currentSection;
 }
 
-SearchButton: ERMSubmitLinkButton {
+SearchButton: CCSubmitLinkButton {
 	value = d2wContext.findButtonLabel;
 	class = "Button ObjButton QueryObjButton";
 	action = queryAction;

@@ -104,7 +104,7 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
      */
 	public String buttonClass() {
 		String result = null;
-		if (canDelete() && !showDialog()) {
+		if (  hasAnyAction() && !showDialog() ) {
 			result = activeButtonClass();
 		} else {
 			result = disabledButtonClass();
@@ -211,7 +211,7 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
      */
     public Boolean showDeleteButton() {
     	if (_showDeleteButton == null) {
-    		_showDeleteButton = new Boolean(ERXValueUtilities.booleanValue(valueForBinding("isEntityDeletable")));
+    		_showDeleteButton = new Boolean(canDelete() && ERXValueUtilities.booleanValue(valueForBinding("isEntityDeletable")));
     	}
     	return _showDeleteButton;
     }
@@ -230,7 +230,7 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
     public String dialogMessage() {
     	if (_dialogMessage == null) {
     		Object result = null;
-    		if (showDeleteButton().booleanValue() && showRemoveButton().booleanValue()) {
+    		if ( showDeleteButton().booleanValue() && showRemoveButton().booleanValue() ) {
     			result = d2wContextValueForBinding(Keys.confirmDeleteOrRemoveRelatedMessage);
     		} else if (showRemoveButton().booleanValue()) {
     			result = d2wContextValueForBinding(Keys.confirmRemoveRelatedMessage);
@@ -243,6 +243,9 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
     	}
     	return _dialogMessage;
     }
-
+    
+    public boolean hasAnyAction() {
+    	return showDeleteButton().booleanValue() || showRemoveButton().booleanValue();
+    }
 
 }

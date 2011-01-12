@@ -6,10 +6,9 @@ import com.webobjects.directtoweb.D2WUtils;
 import er.directtoweb.components.ERDCustomEditComponent;
 import er.extensions.formatters.ERXTimestampFormatter;
 import er.extensions.foundation.ERXValueUtilities;
-import er.modern.components.ERMDatePicker;
 
 /**
- * D2WEditComponent based on ERMDatePicker.
+ * D2WEditComponent based on CCDatePicker.
  * 
  * @d2wKey formatter - string - date format string
  * @d2wKey datePickerDragDisabled - boolean - disable dragging on date picker
@@ -75,7 +74,7 @@ public class ERMDDatePicker extends ERDCustomEditComponent {
 	// DatePicker options
 
 	/**
-	 * {@link ERMDatePicker} option: is drag disabled
+	 * {@link CCDatePicker} option: is drag disabled
 	 * 
 	 * @return
 	 */
@@ -84,7 +83,7 @@ public class ERMDDatePicker extends ERDCustomEditComponent {
 	}
 
 	/**
-	 * {@link ERMDatePicker} option: name of the custom css file
+	 * {@link CCDatePicker} option: name of the custom css file
 	 * 
 	 * @return
 	 */
@@ -93,7 +92,7 @@ public class ERMDDatePicker extends ERDCustomEditComponent {
 	}
 
 	/**
-	 * {@link ERMDatePicker} option: name of the custom css file framework
+	 * {@link CCDatePicker} option: name of the custom css file framework
 	 * 
 	 * @return
 	 */
@@ -102,7 +101,7 @@ public class ERMDDatePicker extends ERDCustomEditComponent {
 	}
 
 	/**
-	 * {@link ERMDatePicker} option: should selection be constrained to current month (if fill grid is true)
+	 * {@link CCDatePicker} option: should selection be constrained to current month (if fill grid is true)
 	 * 
 	 * @return
 	 */
@@ -111,7 +110,7 @@ public class ERMDDatePicker extends ERDCustomEditComponent {
 	}
 
 	/**
-	 * {@link ERMDatePicker} option: fill the entire grid, not just the current month
+	 * {@link CCDatePicker} option: fill the entire grid, not just the current month
 	 * 
 	 * @return
 	 */
@@ -120,7 +119,7 @@ public class ERMDDatePicker extends ERDCustomEditComponent {
 	}
 
 	/**
-	 * {@link ERMDatePicker} option: sets the final opacity
+	 * {@link CCDatePicker} option: sets the final opacity
 	 * 
 	 * @return
 	 */
@@ -129,7 +128,7 @@ public class ERMDDatePicker extends ERDCustomEditComponent {
 	}
 
 	/**
-	 * {@link ERMDatePicker} option: array (string in js format) of disabled days of the week (i.e: [0,0,0,0,0,1,1])
+	 * {@link CCDatePicker} option: array (string in js format) of disabled days of the week (i.e: [0,0,0,0,0,1,1])
 	 * 
 	 * @return
 	 */
@@ -138,7 +137,7 @@ public class ERMDDatePicker extends ERDCustomEditComponent {
 	}
 	
 	/**
-	 * {@link ERMDatePicker} option: date range of disabled dates
+	 * {@link CCDatePicker} option: date range of disabled dates
 	 * 
 	 * @return
 	 */
@@ -148,7 +147,7 @@ public class ERMDDatePicker extends ERDCustomEditComponent {
 
 
 	/**
-	 * {@link ERMDatePicker} option: date range of enabled dates
+	 * {@link CCDatePicker} option: date range of enabled dates
 	 * 
 	 * @return
 	 */
@@ -157,7 +156,7 @@ public class ERMDDatePicker extends ERDCustomEditComponent {
 	}
 
 	/**
-	 * {@link ERMDatePicker} option: array (string in js format) of highlighted days of the week
+	 * {@link CCDatePicker} option: array (string in js format) of highlighted days of the week
 	 * 
 	 * @return
 	 */
@@ -166,7 +165,7 @@ public class ERMDDatePicker extends ERDCustomEditComponent {
 	}
 
 	/**
-	 * {@link ERMDatePicker} option: disable fade effect
+	 * {@link CCDatePicker} option: disable fade effect
 	 * 
 	 * @return
 	 */
@@ -175,7 +174,7 @@ public class ERMDDatePicker extends ERDCustomEditComponent {
 	}
 
 	/**
-	 * {@link ERMDatePicker} option: don't show today button
+	 * {@link CCDatePicker} option: don't show today button
 	 * 
 	 * @return
 	 */
@@ -184,7 +183,7 @@ public class ERMDDatePicker extends ERDCustomEditComponent {
 	}
 
 	/**
-	 * {@link ERMDatePicker} option: lowest selectable date
+	 * {@link CCDatePicker} option: lowest selectable date
 	 * 
 	 * @return
 	 */
@@ -193,7 +192,7 @@ public class ERMDDatePicker extends ERDCustomEditComponent {
 	}
 
 	/**
-	 * {@link ERMDatePicker} option: highest selectable date
+	 * {@link CCDatePicker} option: highest selectable date
 	 * 
 	 * @return
 	 */
@@ -202,7 +201,7 @@ public class ERMDDatePicker extends ERDCustomEditComponent {
 	}
 	
 	/**
-	 * {@link ERMDatePicker} option: hide the input text field
+	 * {@link CCDatePicker} option: hide the input text field
 	 * 
 	 * @return
 	 */
@@ -211,7 +210,7 @@ public class ERMDDatePicker extends ERDCustomEditComponent {
 	}
 	
 	/**
-	 * {@link ERMDatePicker} option: hide the calendar control
+	 * {@link CCDatePicker} option: hide the calendar control
 	 * 
 	 * @return
 	 */
