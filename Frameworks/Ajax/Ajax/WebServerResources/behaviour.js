@@ -51,21 +51,24 @@ var Behaviour = {
 	},
 	
 	apply : function(){
-		for (h=0;sheet=Behaviour.list[h];h++){
-			for (selector in sheet){
-				list = document.getElementsBySelector(selector);
+		for (var h=0, l=Behaviour.list.length; h < l; h++) {
+			var sheet=Behaviour.list[h];
+			for (var selector in sheet){
+				var list = document.getElementsBySelector(selector);
 				
 				if (!list){
 					continue;
 				}
 
-				for (i=0;element=list[i];i++){
+				for (var i=0, ll=list.length; i < ll; i++){
+					var element=list[i];
 					sheet[selector](element);
 				}
 			}
 		}
 	},
 	
+	// AK: this implementation seems to break when a body onload="" is given
 	addLoadEvent : function(func){
 		var oldonload = window.onload;
 		
@@ -109,7 +112,7 @@ function getAllChildren(e) {
   return e.all ? e.all : e.getElementsByTagName('*');
 }
 
-document.getElementsBySelector = function(selector) {
+document.getElementsBySelector = document.getElementsBySelector || function(selector) {
   // Attempt to fail gracefully in lesser browsers
   if (!document.getElementsByTagName) {
     return new Array();
