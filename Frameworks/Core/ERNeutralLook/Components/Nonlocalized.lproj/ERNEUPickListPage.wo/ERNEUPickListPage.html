@@ -24,12 +24,18 @@
 					<webobject name="ColumnLabelRepetition">
 					<webobject name="IfPropertyKeyIsNotOmitted">
 					<webobject name="PropertyNameComponentGenericContainer">
-						<table>
-							<tr>
-								<th><span class="ERNEUPickListPageColumnLabel"><webobject name="PropertyNameSwitchComponent"></webobject></span></th>
-								<td><webobject name="IsPropertySortable"><webobject name="SortOrder"></webobject></webobject></td>
-							</tr>
-						</table>
+						<webobject name="IfIsInspectActionsWidgetPropertyKey">&nbsp;</webobject>
+						<webobject name="IfIsNotInspectActionsWidgetPropertyKey">
+							<webobject name="IfIsPickWidgetPropertyKey">&nbsp;</webobject>
+							<webobject name="IfIsNotPickWidgetPropertyKey">
+								<table>
+									<tr>
+										<th><span class="ERNEUPickListPageColumnLabel"><webobject name="PropertyNameSwitchComponent"></webobject></span></th>
+										<td><webobject name="IsPropertySortable"><webobject name="SortOrder"></webobject></webobject></td>
+									</tr>
+								</table>
+							</webobject>
+						</webobject>
 					</webobject>
 					<webobject name="ShouldDisplayDetailedPageMetrics">
 						<th scope="col" class="InlineMetrics">&nbsp;</th>
