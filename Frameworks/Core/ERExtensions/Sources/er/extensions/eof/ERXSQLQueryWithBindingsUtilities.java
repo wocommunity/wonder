@@ -10,7 +10,6 @@ import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
-import com.webobjects.eoaccess.EOModelSQLParser;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
@@ -42,10 +41,6 @@ import com.webobjects.foundation.NSMutableArray;
  * the '?' character could be replaced by '?::varchar(1000)'.
  * </p>
  * <p>
- * Queries may be written using tokens described in {@link EOModelSQLParser}. This simplifies writing SQL queries,
- * as entity, attribute and relationship names can be used instead of table and column names.
- * </p>
- * <p>
  * Here are some sample uses of this class:
  * </p>
  * <pre>
@@ -58,9 +53,9 @@ import com.webobjects.foundation.NSMutableArray;
  *   ERXSQLQueryWithBindingsUtilities.rawRowsForSqlWithBindings(editingContext(), Song.ENTITY_NAME,
  *     "SELECT t0.NAME, t0.DURATION FROM SONG t0 WHERE COMPOSER = ?", new ERXKeyValueBinding("composer", "Mozart"));
  *     
- *   // Runs a query that returns no objects, using EOModelSQLParser-style tokens
+ *   // Runs a query that returns no objects
  *   ERXSQLQueryWithBindingsUtilities.runSqlQueryWithBindings(editingContext(), "SongsModel",
- *     "DELETE FROM {Song} WHERE {favorite} = ?", new ERXKeyValueBinding("favorite", false));
+ *     "DELETE FROM SONG WHERE FAVORITE = ?", new ERXKeyValueBinding("favorite", false));
  *   
  *   // Obtains ERXFetchSpecificationBatchIterator
  *   // Note the query must obtain the primary key!
@@ -161,7 +156,7 @@ public class ERXSQLQueryWithBindingsUtilities {
 
         EOSQLExpression expression = context.adaptorContext().adaptor().expressionFactory().expressionForEntity( entity );
 
-        String proceccedQuery = processedQueryString(query, expression, ec, bindings);
+        String proceccedQuery = processedQueryString(query, expression, bindings);
         expression.setStatement(proceccedQuery);
 
         EOFetchSpecification spec = new EOFetchSpecification( entityName, null, null );
@@ -215,7 +210,7 @@ public class ERXSQLQueryWithBindingsUtilities {
         }
 
         EOSQLExpression expression = databaseContext.adaptorContext().adaptor().expressionFactory().expressionForEntity( entity );
-        expression.setStatement(processedQueryString(query, expression, ec, bindings));
+        expression.setStatement(processedQueryString(query, expression, bindings));
 
         EOFetchSpecification pkSpec = new EOFetchSpecification( entityName, null, null );
         pkSpec.setRefreshesRefetchedObjects(refreshesCache);
@@ -268,7 +263,7 @@ public class ERXSQLQueryWithBindingsUtilities {
 
             EOSQLExpression expression = adaptorChannel.adaptorContext().adaptor().expressionFactory().expressionForString( query );
 
-            String proceccedQuery = processedQueryString(query, expression, ec, bindings);
+            String proceccedQuery = processedQueryString(query, expression, bindings);
             expression.setStatement(proceccedQuery);
 
             try {
@@ -308,7 +303,7 @@ public class ERXSQLQueryWithBindingsUtilities {
         EOEntity entity = EOUtilities.entityNamed(ec, entityName);
 
         EOSQLExpression expression = adaptorChannel.adaptorContext().adaptor().expressionFactory().expressionForEntity( entity );
-        expression.setStatement( processedQueryString( query, expression, ec, bindings ) );
+        expression.setStatement( processedQueryString( query, expression, bindings ) );
 
         EOFetchSpecification spec = new EOFetchSpecification( entityName, null, null );
         spec.setFetchesRawRows(true);
@@ -335,12 +330,11 @@ public class ERXSQLQueryWithBindingsUtilities {
      *          The variable bindings, wrapped in {@link ERXSQLBinding} objects
      * @return The processed query
      */
-    protected static String processedQueryString(String query, EOSQLExpression expression, EOEditingContext ec, ERXSQLBinding... bindings) {
+    protected static String processedQueryString(String query, EOSQLExpression expression, ERXSQLBinding... bindings) {
         int currentOffset = 0;
         int bindingCount = 0;
         StringBuffer processedQueryBuffer = new StringBuffer();
-        String parsedQuery = EOModelSQLParser.sqlQueryForQuery(ec, query);
-        NSArray positions = varPositionsForQuery( parsedQuery );
+        NSArray positions = varPositionsForQuery( query );
 
         if( positions.count() != bindings.length ) {
             throw new RuntimeException("Binding placeholders count (" + positions.count() + ") does not match binding wrappers count (" + bindings.length + ").");
@@ -349,7 +343,7 @@ public class ERXSQLQueryWithBindingsUtilities {
         for ( Enumeration positionEnumerator = positions.objectEnumerator(); positionEnumerator.hasMoreElements(); ) {
             Integer position = (Integer) positionEnumerator.nextElement();
             if( position > currentOffset ) {
-                processedQueryBuffer.append( parsedQuery.substring( currentOffset, position ) );
+                processedQueryBuffer.append( query.substring( currentOffset, position ) );
             }
             ERXSQLBinding binding = bindings[bindingCount];
             // The call to sqlStringForValue adds a binding to the expression binding list...
@@ -358,8 +352,8 @@ public class ERXSQLQueryWithBindingsUtilities {
             bindingCount++;
         }
 
-        if( currentOffset < parsedQuery.length() ) {
-            processedQueryBuffer.append( parsedQuery.substring( currentOffset, parsedQuery.length() ) );
+        if( currentOffset < query.length() ) {
+            processedQueryBuffer.append( query.substring( currentOffset, query.length() ) );
         }
 
         String proceccedQuery = processedQueryBuffer.toString();
