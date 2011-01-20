@@ -918,6 +918,8 @@
             <param name="project.principal.class" value="com.frontbase.FrontBasePlugInPrincipal" />
             <param name="project.name" value="FrontBasePlugIn" />
             <param name="project.dir" value="Frameworks/PlugIns/FrontBasePlugIn" />
+        	
+        	<param name="wo.external.root.bundles" value="${frameworks.wonder.jars}" />
         </antcall>
     </target>
 	<target name="H2PlugIn.all">
