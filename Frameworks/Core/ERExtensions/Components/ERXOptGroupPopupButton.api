@@ -1,19 +1,19 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <wodefinitions>
   <wo class="com.webobjects.appserver._private.ERXOptGroupPopupButton">
     <binding name="selection" passthrough="NO" settable="YES"/>
     <binding name="list" passthrough="NO" required="YES"/>
     <binding name="displayString" passthrough="NO"/>
-    <binding name="disabled" passthrough="NO" defaults="YES/NO"/>
+    <binding defaults="YES/NO" name="disabled" passthrough="NO"/>
     <binding name="name"/>
     <binding name="value" passthrough="NO"/>
     <binding name="item" passthrough="NO"/>
     <binding name="otherTagString" passthrough="NO"/>
     <binding name="selectedValue" passthrough="NO"/>
     <binding name="noSelectionString" passthrough="NO"/>
-    <binding name="escapeHTML" passthrough="NO" defaults="YES/NO"/>
+    <binding defaults="YES/NO" name="escapeHTML" passthrough="NO"/>
     <binding name="group" required="YES"/>
-    <binding name="label" />
+    <binding name="label"/>
 
     <validation message="'list' must not be a constant">
       <and>
@@ -48,5 +48,9 @@
         <bound name="selectedValue"/>
       </and>
     </validation>
-  </wo>
+  <binding defaults="Boolean" name="itemDisabled"/>
+    
+    <binding name="itemStyle"/>
+        <binding name="itemClass"/>
+    </wo>
 </wodefinitions>
