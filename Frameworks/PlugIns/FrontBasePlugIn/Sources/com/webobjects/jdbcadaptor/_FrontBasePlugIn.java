@@ -13,6 +13,9 @@ import java.text.FieldPosition;
 import java.util.Enumeration;
 import java.util.Properties;
 
+import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
+
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorContext;
 import com.webobjects.eoaccess.EOAttribute;
@@ -39,7 +42,10 @@ import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimeZone;
+import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
+
+import er.extensions.jspservlet.ERXServletAdaptor;
 
 /**
  * This is the wo5 java runtime plugin for FrontBase.
@@ -1621,46 +1627,70 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 					}
 				}
 				case FB_Time: {
-					NSTimestampFormatter f = new NSTimestampFormatter("%H:%M:%S.%F");
-
 					StringBuffer time = new StringBuffer("TIME '");
-					f.format(obj, time, new FieldPosition(0));
+					if (obj instanceof NSTimestamp) {
+						NSTimestampFormatter f = new NSTimestampFormatter("%H:%M:%S.%F");
+
+						f.format(obj, time, new FieldPosition(0));
+					} else {
+						time.append(obj.toString());
+					}
 					time.append("'");
 					return time.toString();
 				}
 
 				case FB_TimeTZ: {
-					NSTimestampFormatter f = new NSTimestampFormatter("%H:%M:%S.%F");
-
 					StringBuffer time = new StringBuffer("TIME '");
-					f.format(obj, time, new FieldPosition(0));
-					time.append(getTimeZone(NSTimeZone.defaultTimeZone()));
+					if (obj instanceof NSTimestamp) {
+						NSTimestampFormatter f = new NSTimestampFormatter("%H:%M:%S.%F");
+
+						f.format(obj, time, new FieldPosition(0));
+						time.append(getTimeZone(NSTimeZone.defaultTimeZone()));
+					} else {
+						time.append(obj.toString());
+					}
 					time.append("'");
 					return time.toString();
 				}
 
 				case FB_Timestamp: {
-					NSTimestampFormatter f = new NSTimestampFormatter("%Y-%m-%d %H:%M:%S.%F");
-
 					StringBuffer time = new StringBuffer("TIMESTAMP '");
-					f.format(obj, time, new FieldPosition(0));
+					if (obj instanceof NSTimestamp) {
+						NSTimestampFormatter f = new NSTimestampFormatter("%Y-%m-%d %H:%M:%S.%F");
+
+						f.format(obj, time, new FieldPosition(0));
+					} else if (obj instanceof LocalDateTime) {
+						time.append(((LocalDateTime)obj).toString("yyyy-MM-dd HH:mm:ss.SSS"));
+					} else {
+						throw new RuntimeException("can't format object");
+					}
 					time.append("'");
 					return time.toString();
 				}
 				case FB_TimestampTZ: {
-					NSTimestampFormatter f = new NSTimestampFormatter("%Y-%m-%d %H:%M:%S.%F");
-
 					StringBuffer time = new StringBuffer("TIMESTAMP '");
-					f.format(obj, time, new FieldPosition(0));
-					time.append(getTimeZone(java.util.TimeZone.getDefault()));
+					if (obj instanceof NSTimestamp) {
+						NSTimestampFormatter f = new NSTimestampFormatter("%Y-%m-%d %H:%M:%S.%F");
+
+						f.format(obj, time, new FieldPosition(0));
+						time.append(getTimeZone(java.util.TimeZone.getDefault()));
+					} else if (obj instanceof DateTime) {
+						time.append(((DateTime)obj).toString("yyyy-MM-dd HH:mm:ss.SSSZZ"));
+					} else {
+						throw new RuntimeException("can't format object");
+					}
 					time.append("'");
 					return time.toString();
 				}
 				case FB_Date: {
-					NSTimestampFormatter f = new NSTimestampFormatter("%Y-%m-%d");
-
 					StringBuffer time = new StringBuffer("DATE '");
-					f.format(obj, time, new FieldPosition(0));
+					if (obj instanceof NSTimestamp) {
+						NSTimestampFormatter f = new NSTimestampFormatter("%Y-%m-%d");
+
+						f.format(obj, time, new FieldPosition(0));
+					} else {
+						time.append(obj.toString());
+					}
 					time.append("'");
 					return time.toString();
 				}
