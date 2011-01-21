@@ -3,10 +3,12 @@ package er.directtoweb.components.strings;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSArray;
 
 import er.directtoweb.components.ERDCustomEditComponent;
 import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * Very, very basic version of a TinyMCE integration. As it doesn't make much sense to load the the JS files
@@ -32,29 +34,54 @@ public class ERDEditHTML extends ERDCustomEditComponent {
 	public static final String FILE_NAME_PROPERTY = "er.directtoweb.ERDEditHTML.tinyMceSourceFileName";
 
 	public ERDEditHTML(WOContext context) {
-        super(context);
-    }
-    
-    public boolean isStateless() {
-        return true;
-    }
-    
-    public boolean synchronizesVariablesWithBindings() {
-        return false;
-    }
-    
-    @Override
-    public void appendToResponse(WOResponse response, WOContext context) {
-    	super.appendToResponse(response, context);
-    	String url = ERXProperties.stringForKeyWithDefault(SOURCE_URL_PROPERTY, DEFAULT_URL);
-    	String fileName = ERXProperties.stringForKeyWithDefault(FILE_NAME_PROPERTY, url);
-    	String framework = ERXProperties.stringForKeyWithDefault(FRAMEWORK_NAME_PROPERTY, "app");
-    	ERXResponseRewriter.addScriptResourceInHead(response, context, framework, fileName);
-    	ERXResponseRewriter.addScriptCodeInHead(response, context, String.format("tinyMCE.init({%s});", richTextMode()), "tinyMCEInit");
-    }
-    
-	private String richTextMode() {
-		return stringValueForBinding("richTextMode");
+		super(context);
 	}
-    
+
+	public boolean isStateless() {
+		return true;
+	}
+
+	public boolean synchronizesVariablesWithBindings() {
+		return false;
+	}
+
+	@Override
+	public void appendToResponse(WOResponse response, WOContext context) {
+		super.appendToResponse(response, context);
+		String url = ERXProperties.stringForKeyWithDefault(SOURCE_URL_PROPERTY, DEFAULT_URL);
+		String fileName = ERXProperties.stringForKeyWithDefault(FILE_NAME_PROPERTY, url);
+		String framework = ERXProperties.stringForKeyWithDefault(FRAMEWORK_NAME_PROPERTY, "app");
+		ERXResponseRewriter.addScriptResourceInHead(response, context, framework, fileName);
+	}
+
+	public String initScript() {
+		return String.format("tinyMCE.init({%s});", richTextMode());
+	}
+	
+	public String textAreaClass() {
+		return stringValueForBinding("textareaClass", defaultTextAreaClass());
+	}
+	
+	public String defaultTextAreaClass() {
+		String defaultClass = "";
+		if (key() != null) {
+			String temp = "";
+			if (key().indexOf(".") != -1) {
+				NSArray<String> components = NSArray.componentsSeparatedByString(key(), ".");
+				for (String string : components) {
+					string = ERXStringUtilities.capitalize(string);
+					temp = temp + string;
+				}
+			} else {
+				temp = ERXStringUtilities.capitalize(key());
+			}
+			defaultClass = temp + "RichTextArea";
+		}
+		return defaultClass;
+	}
+
+	private String richTextMode() {
+		return stringValueForBinding("richTextMode") + ", editor_selector : '" + textAreaClass() + "'";
+	}
+
 }
