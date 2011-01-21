@@ -26,7 +26,7 @@ import er.extensions.foundation.ERXProperties;
  */
 public class ERDEditHTML extends ERDCustomEditComponent {
 
-	public static final String DEFAULT_URL = "http://tinymce.moxiecode.com/tinymce/jscripts/tiny_mce/tiny_mce.js";
+	public static final String DEFAULT_URL = "http://tinymce.moxiecode.com/js/tinymce/jscripts/tiny_mce/tiny_mce.js";
 	public static final String SOURCE_URL_PROPERTY = "er.directtoweb.ERDEditHTML.tinyMceSourceUrl";
 	public static final String FRAMEWORK_NAME_PROPERTY = "er.directtoweb.ERDEditHTML.tinyMceSourceFrameworkName";
 	public static final String FILE_NAME_PROPERTY = "er.directtoweb.ERDEditHTML.tinyMceSourceFileName";
