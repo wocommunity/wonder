@@ -529,6 +529,30 @@ public class ERXEOControlUtilities {
                                                                String entityName,
                                                                Object primaryKeyValue,
                                                                NSArray prefetchingKeyPaths, boolean refreshRefetchedObjects) {
+    	return objectWithPrimaryKeyValue(ec, entityName, primaryKeyValue, prefetchingKeyPaths, refreshRefetchedObjects, false);
+    }
+
+    /**
+     * Fetches an enterprise object based on a given primary key value.
+     * This method has an advantage over the standard EOUtilities method
+     * in that you can specify prefetching key paths as well as refreshing
+     * the snapshot of the given object
+     * @param ec editing context to fetch into
+     * @param entityName name of the entity
+     * @param primaryKeyValue primary key value. Compound primary keys are given as NSDictionaries.
+     * @param prefetchingKeyPaths key paths to fetch off of the eo
+     * @param refreshRefetchedObjects if true, the object will be refetched and refreshed
+     * @param throwIfMissing if true, an exception is thrown for a missing object
+     * @return enterprise object matching the given value or null if none is foudn
+     * @throws IllegalStateException if the entity has a compound key and only one key is provided or 
+     * if more than one object is found matching the value.
+     * @throws EOObjectNotAvailableException if throwIfMissing is true and 
+     */    
+    @SuppressWarnings("unchecked")
+    public static EOEnterpriseObject objectWithPrimaryKeyValue(EOEditingContext ec,
+                                                               String entityName,
+                                                               Object primaryKeyValue,
+                                                               NSArray prefetchingKeyPaths, boolean refreshRefetchedObjects, boolean throwIfMissing) {
         EOEntity entity = EOUtilities.entityNamed(ec, entityName);
         NSDictionary<String, Object> values;
         if(primaryKeyValue instanceof NSDictionary) {
@@ -543,7 +567,11 @@ public class ERXEOControlUtilities {
         NSArray eos;
         if (prefetchingKeyPaths == null && !refreshRefetchedObjects) {
         	EOGlobalID gid = entity.globalIDForRow(values);
-        	eos = new NSArray<EOEnterpriseObject>(ec.faultForGlobalID(gid, ec));
+        	EOEnterpriseObject eo = ec.faultForGlobalID(gid, ec);
+        	if (throwIfMissing) {
+        		eo.willRead();
+        	}
+        	eos = new NSArray<EOEnterpriseObject>(eo);
         }
         else {
 	        EOQualifier qualfier = EOQualifier.qualifierToMatchAllValues(values);
@@ -556,9 +584,15 @@ public class ERXEOControlUtilities {
 	        eos = ec.objectsWithFetchSpecification(fs);
         }
         if (eos.count() > 1) {
-            throw new IllegalStateException("Found multiple objects for the entity '" + entity.name() + "' with primary key value: " + primaryKeyValue);
+        	throw new MoreThanOneException("Found multiple objects for the entity '" + entity.name() + "' with primary key value: " + primaryKeyValue);
         }
-        return eos.count() == 1 ? (EOEnterpriseObject)eos.lastObject() : null;
+        if (eos.count() == 0) {
+        	if (throwIfMissing) {
+        		throw new EOObjectNotAvailableException("There was no '" + entity.name() + "' found with the id '" + primaryKeyValue + "'.");
+        	}
+        	return null;
+        }
+        return (EOEnterpriseObject)eos.lastObject();
     }
     
     /**
