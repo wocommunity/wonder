@@ -1192,13 +1192,13 @@ public class ERXModelGroup extends EOModelGroup {
 		}
 	}
 
-	private static final NSArray _prototypeKeys = new NSArray(new Object[] { "externalType", "columnName", "readOnly", "valueClassName", "valueType", "width", "precision", "scale", "writeFormat", "readFormat", "userInfo", "serverTimeZone", "valueFactoryMethodName", "adaptorValueConversionMethodName", "factoryMethodArgumentType", "allowsNull", "parameterDirection", "_internalInfo" });
+	private static final NSArray<String> _prototypeKeys = new NSArray<String>(new String[] { "externalType", "columnName", "readOnly", "valueClassName", "valueType", "width", "precision", "scale", "writeFormat", "readFormat", "userInfo", "serverTimeZone", "valueFactoryMethodName", "adaptorValueConversionMethodName", "factoryMethodArgumentType", "allowsNull", "parameterDirection", "_internalInfo" });
 
-	public static NSArray _prototypeKeys() {
+	public static NSArray<String> _prototypeKeys() {
 		return _prototypeKeys;
 	}
 
-	public static Object _keyForEnum(int key) {
+	public static String _keyForEnum(int key) {
 		return _prototypeKeys().objectAtIndex(key);
 	}
 
@@ -1207,31 +1207,8 @@ public class ERXModelGroup extends EOModelGroup {
 	}
 
 	public static boolean _isKeyEnumOverriden(EOAttribute att, int key) {
-		if (!ERXApplication.isWO54()) {
-			// 5.4 - API changed
-			try {
-				Method isKeyEnumOverriddenMethod = att.getClass().getMethod("_isKeyEnumOverriden", new Class[] { int.class });
-				Boolean isKeyEnumOverridden = (Boolean)isKeyEnumOverriddenMethod.invoke(att, new Object[] { new Integer(key) });
-				return isKeyEnumOverridden.booleanValue();
-			}
-			catch (Exception e) {
-				throw new RuntimeException("_isKeyEnumOverridden failed.", e);
-			}
-		}
-		
-		boolean result = false;
-		if(att.prototype() != null) {
-			Map characteristics = (Map) NSKeyValueCoding.Utility.valueForKey(att, "overwrittenCharacteristics");
-			for (Iterator iter = characteristics.entrySet().iterator(); iter.hasNext();) {
-				Map.Entry element = (Map.Entry) iter.next();
-				String charateristic = element.getKey().toString();
-				Boolean value =  ((Boolean)element.getValue());
-				if(charateristic.equalsIgnoreCase(_keyForEnum(key).toString())) {
-					return value.booleanValue();
-				}
-			}
-		}
-		return result;
+		boolean overrides = att.overridesPrototypeDefinitionForKey(_keyForEnum(key));
+		return overrides;
 	}
 
 	/**
