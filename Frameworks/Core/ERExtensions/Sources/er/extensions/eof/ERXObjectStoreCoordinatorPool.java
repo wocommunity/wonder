@@ -1,6 +1,7 @@
 package er.extensions.eof;
 
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -41,16 +42,15 @@ public class ERXObjectStoreCoordinatorPool {
     
     private static final String THREAD_OSC_KEY = "er.extensions.ERXObjectStoreCoordinatorPool.threadOSC";
     private Hashtable _oscForSession;
-    private int _maxOS;
+    private int _maxObjectStoreCoordinators;
     private int _currentObjectStoreIndex;
-    private List _objectStores;
-    private List _sharedEditingContexts;
-    private Observer _observer;
+    private List<EOObjectStoreCoordinator> _objectStores;
+    private List<EOSharedEditingContext> _sharedEditingContexts;
     private Object _lock = new Object();
-    protected static ERXObjectStoreCoordinatorPool _pool;
+    protected static ERXObjectStoreCoordinatorPool _sharedObjectStoreCoordinatorPool;
 
     public static ERXObjectStoreCoordinatorPool _pool() {
-    	return _pool;
+    	return _sharedObjectStoreCoordinatorPool;
     }
     
     /**
@@ -67,11 +67,11 @@ public class ERXObjectStoreCoordinatorPool {
      * Creates the singleton and registers the multi factory.
      */
     public static void initialize() {
-        if(_pool == null) {
+        if(_sharedObjectStoreCoordinatorPool == null) {
             ERXObjectStoreCoordinatorSynchronizer.initialize();
-            _pool = new ERXObjectStoreCoordinatorPool();
+            _sharedObjectStoreCoordinatorPool = new ERXObjectStoreCoordinatorPool();
             log.info("setting ERXEC.factory to MultiOSCFactory");
-            ERXEC.setFactory(new MultiOSCFactory());
+            ERXEC.setFactory(new MultiOSCFactory(_sharedObjectStoreCoordinatorPool, ERXEC.factory()));
         }
     }
     
@@ -83,11 +83,11 @@ public class ERXObjectStoreCoordinatorPool {
      * MultiOSCFactory is asked for a new EOEditingContext.
      */
     private ERXObjectStoreCoordinatorPool() {
-        _maxOS = ERXProperties.intForKey("er.extensions.ERXObjectStoreCoordinatorPool.maxCoordinators");
-        if (_maxOS == 0) {
+        _maxObjectStoreCoordinators = ERXProperties.intForKey("er.extensions.ERXObjectStoreCoordinatorPool.maxCoordinators");
+        if (_maxObjectStoreCoordinators == 0) {
             //this should work like the default implementation
             log.warn("Registering the pool with only one coordinator doesn't make a lot of sense.");
-            _maxOS = 1;
+            _maxObjectStoreCoordinators = 1;
         }
         _oscForSession = new Hashtable();
         
@@ -172,10 +172,10 @@ public class ERXObjectStoreCoordinatorPool {
             if (_objectStores == null) {
                 _initObjectStores();
             }
-            if (_currentObjectStoreIndex == _maxOS) {
+            if (_currentObjectStoreIndex == _maxObjectStoreCoordinators) {
                 _currentObjectStoreIndex = 0;
             }
-            EOObjectStore os = (EOObjectStore) _objectStores.get(_currentObjectStoreIndex++);
+            EOObjectStore os = _objectStores.get(_currentObjectStoreIndex++);
         	return os;
         }
     }
@@ -183,49 +183,112 @@ public class ERXObjectStoreCoordinatorPool {
     public EOSharedEditingContext sharedEditingContextForObjectStore(EOObjectStore os) {
         int index = _objectStores.indexOf(os);
         EOSharedEditingContext ec = null;
-        if(index >= 0) {
-            ec = (EOSharedEditingContext)_sharedEditingContexts.get(index);
+        if (index >= 0) {
+            ec = _sharedEditingContexts.get(index);
         }
         return ec;
     }
     
-    /** 
+    /**
      * This class uses different EOF stack when creating new EOEditingContexts.
      */
-    public static class MultiOSCFactory extends ERXEC.DefaultFactory {
-        public MultiOSCFactory() {
-            super();
+    public static class MultiOSCFactory implements ERXEC.Factory {
+        private ERXObjectStoreCoordinatorPool _pool;
+        private boolean _useSharedEditingContext;
+        private ERXEC.Factory _backingFactory;
+
+        public MultiOSCFactory(ERXObjectStoreCoordinatorPool pool, ERXEC.Factory backingFactory) {
+            _pool = pool;
+            _backingFactory = backingFactory;
+            _useSharedEditingContext = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXEC.useSharedEditingContext", true);
         }
+
+        public Object defaultEditingContextDelegate() {
+            return _backingFactory.defaultEditingContextDelegate();
+        }
+
+        public void setDefaultEditingContextDelegate(Object delegate) {
+            _backingFactory.setDefaultEditingContextDelegate(delegate);
+        }
+
+        public Object defaultNoValidationDelegate() {
+            return _backingFactory.defaultNoValidationDelegate();
+        }
+
+        public void setDefaultNoValidationDelegate(Object delegate) {
+            _backingFactory.setDefaultNoValidationDelegate(delegate);
+        }
+
+        public void setDefaultDelegateOnEditingContext(EOEditingContext ec) {
+            _backingFactory.setDefaultDelegateOnEditingContext(ec);
+        }
+
+        public void setDefaultDelegateOnEditingContext(EOEditingContext ec, boolean validation) {
+            _backingFactory.setDefaultDelegateOnEditingContext(ec, validation);
+        }
+
+        public EOEditingContext _newEditingContext(EOObjectStore objectStore) {
+            return _backingFactory._newEditingContext(objectStore);
+        }
+
+        public EOEditingContext _newEditingContext(EOObjectStore objectStore, boolean validationEnabled) {
+            return _backingFactory._newEditingContext(objectStore, validationEnabled);
+        }
+
         public EOEditingContext _newEditingContext() {
             return _newEditingContext(true);
         }
-        
+
         public EOEditingContext _newEditingContext(boolean validationEnabled) {
             EOObjectStore os = _pool.currentRootObjectStore();
             EOEditingContext ec = _newEditingContext(os, validationEnabled);
             ec.lock();
             try {
-            	EOSharedEditingContext sec = (useSharedEditingContext()) ? _pool.sharedEditingContextForObjectStore(os) : null;
-            	ec.setSharedEditingContext(sec);
+                EOSharedEditingContext sec = (useSharedEditingContext()) ? _pool.sharedEditingContextForObjectStore(os) : null;
+                ec.setSharedEditingContext(sec);
             } finally {
                 ec.unlock();
             }
             return ec;
         }
+
+        public boolean useSharedEditingContext() {
+            if (_backingFactory instanceof ERXEC.DefaultFactory) {
+                return ((ERXEC.DefaultFactory)_backingFactory).useSharedEditingContext();
+            }
+            return _useSharedEditingContext;
+        }
+
+		public void setUseSharedEditingContext(boolean value) {
+            if (_backingFactory instanceof ERXEC.DefaultFactory) {
+                ((ERXEC.DefaultFactory)_backingFactory).setUseSharedEditingContext(value);
+            }
+			_useSharedEditingContext = value;
+		}
+
     }
-    
+
     private void _initObjectStores() {
         log.info("initializing Pool...");
-        _objectStores = new ArrayList(_maxOS);
-        _sharedEditingContexts = new ArrayList(_maxOS);
-        for (int i = 0; i < _maxOS; i++) {
-            EOObjectStore os = ERXObjectStoreCoordinator.create();
-            _objectStores.add(os);
-            _sharedEditingContexts.add(new EOSharedEditingContext(os));
+        _objectStores = new ArrayList<EOObjectStoreCoordinator>(_maxObjectStoreCoordinators);
+        _sharedEditingContexts = new ArrayList<EOSharedEditingContext>(_maxObjectStoreCoordinators);
+
+        String className = ERXProperties.stringForKeyWithDefault("EOSharedEditingContext.defaultSharedEditingContextClassName", EOSharedEditingContext.class.getName()); //should really be "...defaultDefault..."
+        try {
+            Constructor<? extends EOSharedEditingContext> sharedEditingContextConstructor = Class.forName(className).asSubclass(EOSharedEditingContext.class).getConstructor(EOObjectStore.class);
+            for (int i = 0; i < _maxObjectStoreCoordinators; i++) {
+                EOObjectStoreCoordinator os = ERXObjectStoreCoordinator.create();
+                _objectStores.add(os);
+                _sharedEditingContexts.add(sharedEditingContextConstructor.newInstance(os));
+            }
+            if(_maxObjectStoreCoordinators > 0) {
+                EOObjectStoreCoordinator.setDefaultCoordinator(_objectStores.get(0));
+            }
         }
-        if(_maxOS > 0) {
-            EOObjectStoreCoordinator.setDefaultCoordinator((EOObjectStoreCoordinator)_objectStores.get(0));
+        catch (Exception e) {
+            throw new IllegalStateException("Unable to create defaultSharedEditingContext with className = " + className, e);
         }
+
         log.info("initializing Pool finished");
      }
 }
