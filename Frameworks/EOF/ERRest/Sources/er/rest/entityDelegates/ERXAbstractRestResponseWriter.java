@@ -188,7 +188,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 					filter = filter._filterForKey(new ERXKey(pathKey.key()));
 				}
 			}
-			displayDetails = (filter.base() != ERXKeyFilter.Base.None || filter.includes().count() > 0);
+			displayDetails = (filter.base() != ERXKeyFilter.Base.None || filter.includes().size() > 0);
 		}
 		return displayDetails;
 	}
@@ -241,7 +241,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 				}
 			}
 
-			for (ERXKey includeKey : filter.includes().allKeys()) {
+			for (ERXKey includeKey : filter.includes().keySet()) {
 				displayPropertySet.addObject(includeKey.key());
 			}
 
