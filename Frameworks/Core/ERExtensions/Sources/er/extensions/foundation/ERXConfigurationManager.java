@@ -287,8 +287,16 @@ public class ERXConfigurationManager {
     public void loadConfiguration() {
     	Properties systemProperties = System.getProperties();
     	systemProperties = applyConfiguration(systemProperties);
-		ERXProperties.transferPropertiesFromSourceToDest(systemProperties, System.getProperties());
-    	ERXSystem.updateProperties();
+    	
+    	if (ERXProperties._useLoadtimeAppSpecifics) {
+    		ERXSystem.updateProperties(systemProperties);
+    		ERXProperties.transferPropertiesFromSourceToDest(systemProperties, System.getProperties());
+    	}
+    	else {
+    		ERXProperties.transferPropertiesFromSourceToDest(systemProperties, System.getProperties());
+    		ERXSystem.updateProperties();
+    	}
+
     	ERXLogger.configureLoggingWithSystemProperties();
     }
     
