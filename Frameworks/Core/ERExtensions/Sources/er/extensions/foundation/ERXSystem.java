@@ -21,7 +21,7 @@ public class ERXSystem implements NSKeyValueCoding, NSKeyValueCodingAdditions {
 	 * The singleton instance to share.
 	 */
 	private static ERXSystem sharedInstance = new ERXSystem();
-
+	
 	/**
 	 * Constructs an ERXSystem
 	 */
@@ -38,6 +38,9 @@ public class ERXSystem implements NSKeyValueCoding, NSKeyValueCodingAdditions {
 	 * @return the converted value
 	 */
 	public static String getProperty(String key) {
+		if (!NSProperties._propertiesInitialized) {
+			new RuntimeException("Warning: You accessed '" + key + "' before properties were initialized (talk to schrag).").printStackTrace(System.out);
+		}
 		String originalValue = (String) ERXSystem.sharedInstance.valueForKey(key);
 		return ERXSimpleTemplateParser.parseTemplatedStringWithObject(originalValue, ERXSystem.sharedInstance);
 	}

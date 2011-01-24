@@ -38,6 +38,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation._NSFileUtilities;
 
 import er.extensions.crypting.ERXCrypto;
@@ -349,6 +350,55 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         }
         _cache.put(propertyName, propertyValue == null ? (Object)UndefinedMarker : array);
         return array;
+    }
+    
+    /**
+     * Cover method for returning an NSSet for a
+     * given system property.
+     * @param s system property
+     * @return set de-serialized from the string in
+     *      the system properties
+     */
+    public static NSSet setForKey(String s) {
+        return setForKeyWithDefault(s, null);
+    }
+    
+    /**
+     * Cover method for returning an NSSet for a
+     * given system property and set a default value if not given.
+     * @param s system property
+     * @param defaultValue default value
+     * @return set de-serialized from the string in
+     *      the system properties or default value
+     */
+    public static NSSet setForKeyWithDefault(final String s, final NSSet defaultValue) {
+        final String propertyName = getApplicationSpecificPropertyName(s);
+        
+        Object value = _cache.get(propertyName);
+        if (value == UndefinedMarker) {
+            return defaultValue;
+        }
+        if (value instanceof NSSet) {
+            return (NSSet)value;
+        }
+        
+        final String propertyValue = ERXSystem.getProperty(propertyName);
+        final NSSet array = ERXValueUtilities.setValueWithDefault(propertyValue, defaultValue);
+        if (retainDefaultsEnabled() && propertyValue == null && array != null) {
+            setSetForKey(array, propertyName);
+        }
+        _cache.put(propertyName, propertyValue == null ? (Object)UndefinedMarker : array);
+        return array;
+    }
+    
+    /**
+     * Sets a set in the System properties for
+     * a particular key.
+     * @param set to be set in the System properties
+     * @param key to be used to get the value
+     */
+    public static void setSetForKey(NSSet set, String key) {
+        setStringForKey(NSPropertyListSerialization.stringFromPropertyList(set.allObjects()), key);
     }
     
     /**
@@ -1789,5 +1839,9 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 	// the root Properties files loaded from frameworks.
 	public static boolean _shouldRequireSymlinkedGlobalAndIncludeProperties() {
 		return Boolean.valueOf(System.getProperty("NSRequireSymlinkedGlobalAndIncludeProperties", "false"));
+	}
+	
+	public static void registerForInstanceOperator() {
+	    ERXProperties.setOperatorForKey(new ERXProperties.InRangeOperator(), ERXProperties.InRangeOperator.ForInstanceKey);
 	}
 }
