@@ -53,6 +53,7 @@ public class ERXKeyFilter {
 	private NSMutableDictionary<ERXKey, ERXKey> _map;
 	private ERXKeyFilter.Base _nextBase;
 	private ERXKeyFilter.Delegate _delegate;
+	private boolean _deduplicationEnabled;
 
 	/**
 	 * Creates a new ERXKeyFilter.
@@ -76,6 +77,7 @@ public class ERXKeyFilter {
 		_excludes = new NSMutableSet<ERXKey>();
 		_lockedRelationships = new NSMutableSet<ERXKey>();
 		_map = new NSMutableDictionary<ERXKey, ERXKey>();
+		_deduplicationEnabled = true;
 	}
 	
 	/**
@@ -240,6 +242,25 @@ public class ERXKeyFilter {
 	public ERXKeyFilter setNextBase(ERXKeyFilter.Base nextBase) {
 		_nextBase = nextBase;
 		return this;
+	}
+
+	/**
+	 * Sets whether or not duplicate objects are collapsed to just an id in the filtered graph.
+	 * This only applies to filters used to render object graphs.
+	 * 
+	 * @param deduplicationEnabled if true, duplicate objects are collapsed into ids
+	 */
+	public void setDeduplicationEnabled(boolean deduplicationEnabled) {
+		_deduplicationEnabled = deduplicationEnabled;
+	}
+	
+	/**
+	 * Returns whether or not duplicate objects are collapsed to just an id.
+	 * 
+	 * @return whether or not duplicate objects are collapsed to just an id
+	 */
+	public boolean isDeduplicationEnabled() {
+		return _deduplicationEnabled;
 	}
 
 	/**
