@@ -6,18 +6,15 @@
 //
 package er.extensions.appserver.navigation;
 
-import java.util.Enumeration;
-
-import org.apache.log4j.Logger;
-
-import com.webobjects.appserver.WOComponent;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
-
 import er.extensions.foundation.ERXValueUtilities;
+import org.apache.log4j.Logger;
+
+import java.util.Enumeration;
 
 /**
  * A "backing store" for the properties of a single navigation item in the tree of navigation items.  Configured by the
@@ -25,16 +22,16 @@ import er.extensions.foundation.ERXValueUtilities;
  * 
  * Please read "Documentation/Navigation.html" to fnd out how to use the navigation components.
  * 
- * @see er.extensions.ERXNavigationManager
- * @see er.extensions.ERXNavigationMenuItem
+ * @see ERXNavigationManager
+ * @see ERXNavigationMenuItem
  */
 public class ERXNavigationItem {
 
     private static int counter = 0;
 
-    /** logging supprt */
+    /** logging support */
     public static final Logger log = Logger.getLogger(ERXNavigationItem.class);
-    
+
     public String _uniqueID;
 
     protected String _action;
@@ -51,10 +48,12 @@ public class ERXNavigationItem {
     protected NSDictionary _childrenChoices;
     protected NSDictionary _queryBindings;
     protected String _href;
+    protected ERXNavigationItem _parent;
+
 
     protected int _height;
     protected int _width;
-
+    
     public ERXNavigationItem(NSDictionary values) {
         //set uniqueID
         _uniqueID=new String("id" + counter);
@@ -121,9 +120,9 @@ public class ERXNavigationItem {
      * eg: conditions = ("session.user.canEditThisStuff", "session.user.isEditor")
      * will display the item only if the user can edit this stuff *and* is an editor. You can set OR conditions with
      * conditions = (("session.user.canEditThisStuff", "session.user.isEditor"))
-     * @param component context to evaluate visibility in
+     * @param context in which to evaluate visibility
      */
-    public boolean meetsDisplayConditionsInComponent(WOComponent component) {
+    public boolean meetsDisplayConditionsInComponent(NSKeyValueCodingAdditions context) {
     	Boolean meetsDisplayConditions = Boolean.TRUE;
     	if (conditions().count() != 0) {
     		Enumeration enumerator = conditions().objectEnumerator();
@@ -131,7 +130,7 @@ public class ERXNavigationItem {
     			Object possibleKey = enumerator.nextElement();
     			if (possibleKey instanceof String) {
     				String anObject = (String) possibleKey;
-    				Object value = component.valueForKeyPath(anObject);
+    				Object value = context.valueForKeyPath(anObject);
     				meetsDisplayConditions = ERXValueUtilities.booleanValue(value) ? Boolean.TRUE : Boolean.FALSE;
     				if (log.isDebugEnabled()) {
     					log.debug(name() + " testing display condition: " + anObject + " --> " + value + ":" + meetsDisplayConditions);
@@ -145,7 +144,7 @@ public class ERXNavigationItem {
     				Enumeration e2 = ((NSArray) possibleKey).objectEnumerator();
     				while (e2.hasMoreElements()) {
     					String key = (String) e2.nextElement();
-    					Object value = component.valueForKeyPath(key);
+    					Object value = context.valueForKeyPath(key);
     					temp |= ERXValueUtilities.booleanValue(value);
     					if (temp) {
     						break;
@@ -166,7 +165,7 @@ public class ERXNavigationItem {
     	}
     	return meetsDisplayConditions.booleanValue();
     }
-    
+
     public NSArray childItemsInContext(NSKeyValueCodingAdditions context) {
         NSArray children = null;
 
@@ -209,6 +208,10 @@ public class ERXNavigationItem {
                 String childName = (String)e.nextElement();
                 ERXNavigationItem item = ERXNavigationManager.manager().navigationItemForName(childName);
                 if (item != null) {
+	                //since same child node can be shared by multiple parents
+                    //setParent is differed until now. 
+                    //every time children are asked for, 'this' parent is set on them.
+                    item.setParent(this);
                     childNavItems.addObject(item);
                 } else {
                     log.warn("Unable to find navigation item for name: " + childName);
@@ -223,7 +226,7 @@ public class ERXNavigationItem {
         return this == ERXNavigationManager.manager().rootNavigationItem();
     }
 
-	public NSArray children() {
+  public NSArray children() {
 		return _children;
 	}
 
@@ -302,4 +305,35 @@ public class ERXNavigationItem {
 	public String toString() {
 		return "< " + name() + " >";
 	}
+	
+	public ERXNavigationItem parent() {
+	    return _parent;
+	}
+	
+	public void setParent(ERXNavigationItem item) {
+	    _parent = item;
+	}
+	
+	
+	
+	/**
+	 * Returns path of this navigationMenuItem starting from the top menu except the root navigation item separated by /.
+	 * ex: topMenuItem/secondlevelmenuitem/thirdlevelnavItem
+	 * NOTE: navigationPath doesn't include rootNavigationItem.
+	 * @return {@link String} navigationPath
+	 */
+	public String navigationPath(){
+        StringBuffer result = new StringBuffer();
+        
+	    //local variable to keep track of the navItem in the loop
+	    ERXNavigationItem navItem = this;
+        result.append(navItem.name());
+        while(navItem.parent() != null && navItem.parent() != ERXNavigationManager.manager().rootNavigationItem()) {
+            navItem = navItem.parent();
+            result.insert(0, navItem.name() + "/");
+                
+        }
+        
+        return result.toString();
+    }
 }
