@@ -45,7 +45,7 @@ import er.extensions.remoteSynchronizer.ERXRemoteSynchronizer;
  * manually.
  */
 public class ERXObjectStoreCoordinatorSynchronizer {
-	public static Logger log = Logger.getLogger(ERXObjectStoreCoordinatorSynchronizer.class);
+	public static final Logger log = Logger.getLogger(ERXObjectStoreCoordinatorSynchronizer.class);
 
 	public static final String SYNCHRONIZER_KEY = "_synchronizer";
 
