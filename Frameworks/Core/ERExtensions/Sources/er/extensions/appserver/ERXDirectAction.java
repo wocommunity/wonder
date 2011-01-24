@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.appserver;
 
+import java.util.Properties;
+
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
@@ -15,6 +17,8 @@ import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORedirect;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSProperties;
+
 import er.extensions.ERXExtensions;
 import er.extensions.components.ERXStringHolder;
 import er.extensions.formatters.ERXUnitAwareDecimalFormat;
@@ -290,10 +294,9 @@ public class ERXDirectAction extends WODirectAction {
             r.appendContentString("key cannot be null or empty old System properties:\n"+System.getProperties());
         } else {
             value = ERXStringUtilities.stringIsNullOrEmpty(value) ? "" : value;
-            java.util.Properties p = System.getProperties();
-            p.put(key, value);
-            System.setProperties(p);
-                ERXLogger.configureLoggingWithSystemProperties();
+            NSProperties.setStringForKey(value, key);
+            ERXLogger.configureLoggingWithSystemProperties();
+            Properties p = System.getProperties();    
             r.appendContentString("<html><body>New System properties:<br>");
             for (java.util.Enumeration e = p.keys(); e.hasMoreElements();) {
                 Object k = e.nextElement();

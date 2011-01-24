@@ -11,6 +11,8 @@ import javax.mail.Transport;
 import javax.mail.URLName;
 import javax.mail.internet.AddressException;
 
+import com.webobjects.foundation.NSProperties;
+
 import junit.framework.TestCase;
 import er.extensions.foundation.ERXProperties;
 
@@ -31,9 +33,9 @@ public class ERMailSenderTest extends TestCase {
 		super.setUp();
 		for (RelayInfo relay : relays()) {
 			if (relay.contextString == null) {
-				System.setProperty("er.javamail.smtpHost", relay.host);
+				NSProperties.setStringForKey(relay.host, "er.javamail.smtpHost");
 			} else {
-				System.setProperty("er.javamail.smtpHost." + relay.contextString, relay.host);
+				NSProperties.setStringForKey(relay.host, "er.javamail.smtpHost." + relay.contextString);
 			}
 		}
 		ERXProperties.setStringForKey("smtptest", "mail.smtp.protocol");

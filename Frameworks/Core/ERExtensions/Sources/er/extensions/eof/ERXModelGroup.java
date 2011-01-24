@@ -9,7 +9,6 @@ package er.extensions.eof;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.Enumeration;
@@ -37,10 +36,12 @@ import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSPathUtilities;
+import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation._NSArrayUtilities;
+import com.webobjects.foundation.properties.NSPropertiesCoordinator;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
 
 import er.extensions.appserver.ERXApplication;
@@ -49,7 +50,6 @@ import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXPatcher;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
-import er.extensions.foundation.ERXSystem;
 import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.jdbc.ERXJDBCAdaptor;
 import er.extensions.jdbc.ERXSQLHelper;
@@ -372,7 +372,7 @@ public class ERXModelGroup extends EOModelGroup {
 	}
 	
 	public static String sqlDumpDirectory() {
-		return ERXSystem.getProperty("er.extensions.ERXModelGroup.sqlDumpDirectory");
+		return NSProperties.stringForKey("er.extensions.ERXModelGroup.sqlDumpDirectory");
 	}
 	
 	private void dumpSchemaSQL(EOModel eomodel) {

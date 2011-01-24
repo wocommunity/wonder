@@ -15,6 +15,9 @@
 
 ## Allows you to specify more config files (good luck:)
 # er.extensions.ERXProperties.OptionalConfigurationFiles = (/more/files)
+#
+# NOTE: This property doesn't work any more. It was replaced by NSProperties.OptionalConfigurationFiles
+# and moved to WO
 
 #########################################################################
 # Localizer

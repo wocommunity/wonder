@@ -2,9 +2,7 @@ package er.extensions.jdbc;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Enumeration;
-import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
@@ -19,6 +17,8 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSProperties;
+import com.webobjects.foundation.properties.NSPropertiesCoordinator;
 import com.webobjects.jdbcadaptor.ERXJDBCColumn;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
 import com.webobjects.jdbcadaptor.JDBCAdaptorException;
@@ -29,7 +29,6 @@ import com.webobjects.jdbcadaptor.JDBCPlugIn;
 import er.extensions.eof.ERXAdaptorOperationWrapper;
 import er.extensions.foundation.ERXPatcher;
 import er.extensions.foundation.ERXProperties;
-import er.extensions.foundation.ERXSystem;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
@@ -63,7 +62,7 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 
 	private static boolean switchReadWrite() {
 		if (switchReadWrite == null) {
-			switchReadWrite = "false".equals(ERXSystem.getProperty("er.extensions.ERXJDBCAdaptor.switchReadWrite", "false")) ? Boolean.FALSE : Boolean.TRUE;
+			switchReadWrite = "false".equals(NSProperties.stringForKeyWithDefault("er.extensions.ERXJDBCAdaptor.switchReadWrite", "false")) ? Boolean.FALSE : Boolean.TRUE;
 		}
 		return switchReadWrite.booleanValue();
 	}

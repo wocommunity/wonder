@@ -21,13 +21,13 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSValidation;
 
 import er.extensions.eof.ERXConstant;
 import er.extensions.foundation.ERXMultiKey;
 import er.extensions.foundation.ERXSimpleTemplateParser;
-import er.extensions.foundation.ERXSystem;
 import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
 
@@ -506,7 +506,7 @@ public class ERXValidationFactory {
      */
     public void configureFactory() {
         // CHECKME: This might be better configured in a static init block of ERXValidationFactory.        
-        ERXValidation.setPushChangesDefault(ERXValueUtilities.booleanValueWithDefault(ERXSystem.getProperty("er.extensions.ERXValidationShouldPushChangesToObject"), ERXValidation.DO_NOT_PUSH_INCORRECT_VALUE_ON_EO));
+        ERXValidation.setPushChangesDefault(ERXValueUtilities.booleanValueWithDefault(NSProperties.stringForKey("er.extensions.ERXValidationShouldPushChangesToObject"), ERXValidation.DO_NOT_PUSH_INCORRECT_VALUE_ON_EO));
 
         if (WOApplication.application()!=null && WOApplication.application().isCachingEnabled()) {
             NSNotificationCenter center = NSNotificationCenter.defaultCenter();

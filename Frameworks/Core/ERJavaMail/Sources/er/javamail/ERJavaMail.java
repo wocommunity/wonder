@@ -16,6 +16,7 @@ import com.webobjects.eocontrol.EOOrQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSProperties;
 
 import er.extensions.ERXFrameworkPrincipal;
 import er.extensions.foundation.ERXProperties;
@@ -174,15 +175,15 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
                     throw new RuntimeException ("ERJavaMail: You must specify a SMTP host for outgoing mail with the property 'er.javamail.smtpHost'");
                 }
                 // ... and then maybe actually do what the docs say this method is supposed to do
-                System.setProperty ("mail.smtp.host", smtpHost);
-                System.setProperty ("er.javamail.smtpHost", smtpHost);
+                NSProperties.setStringForKey (smtpHost, "mail.smtp.host");
+                NSProperties.setStringForKey (smtpHost, "er.javamail.smtpHost");
             }
             else {
-                System.setProperty ("er.javamail.smtpHost", smtpHost);
+                NSProperties.setStringForKey (smtpHost, "er.javamail.smtpHost");
             }
         }
         else {
-            System.setProperty ("mail.smtp.host", smtpHost);
+            NSProperties.setStringForKey (smtpHost, "mail.smtp.host");
         }
 
         log.debug ("er.javamail.smtpHost: " + smtpHost);

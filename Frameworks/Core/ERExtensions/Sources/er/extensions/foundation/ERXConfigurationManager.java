@@ -23,8 +23,10 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSPathUtilities;
+import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.properties.NSPropertiesCoordinator;
 
 import er.extensions.eof.ERXConstant;
 import er.extensions.logging.ERXLogger;
@@ -33,54 +35,6 @@ import er.extensions.logging.ERXLogger;
  * <code>Configuration Manager</code> handles rapid turnaround for 
  * system configuration as well as swizzling of the EOModel connection 
  * dictionaries. 
- * <p>
- * <strong>Placing configuration parameters</strong>
- * <p> 
- * You can provide the system configuration by the following ways:<br/>
- * Note: This is the standard way for WebObjects 5.x applications.
- * <ul>
- *   <li><code>Properties</code> file under the Resources group of the  
- *       application and framework project. 
- *       It's a {@link java.util.Properties} file and Project Wonder's 
- *       standard project templates include it. (The templates won't 
- *       be available on some platforms at this moment.)</li>
- * 
- *   <li><code>WebObjects.properties</code> under the user home directory; 
- *       same format to Properties. <br/> 
- *       Note that the user home directory depends on the user who 
- *       launch the application. They may change between the 
- *       developent and deployment time.</li>
- * 
- *   <li>Command line arguments<br/>
- *       For example: <code>-WOCachingEnabled false -com.webobjects.pid $$</code></br>
- *       Don't forget to put a dash "-" before the key.</li> 
- * </ul>
- * <p>
- * <strong>Loading order of the configuration parameters</strong>
- * <p>
- * When the application launches, configuration parameters will 
- * be loaded by the following order. ERXConfigurationManager trys 
- * to reload them by the exactly same order when one of those 
- * configuration files changes. 
- * <p>
- * 1. Properties in frameworks that the application links to<br/>
- * 2. Properties in the application<br/>
- * 3. WebObjects.properties under the home directory<br/>
- * 4. Command line arguments<br/>
- * <p>
- * If there is a conflicting parameter between the files and 
- * arguments, the latter one overrides the earlier one. 
- * <p>
- * Note that the order between frameworks does not seems 
- * to be specified. You should not put conflicting parameters 
- * between framework Properties files. On the other hand, 
- * the application Properties should be always loaded after 
- * all framework Properties are loaded. You can safely 
- * override parameters on the frameworks from the applications
- * Properties. 
- * 
- * 
- * 
  * <p>
  * <strong>Changing the connection dictionary</strong>
  * <p>
@@ -131,7 +85,7 @@ public class ERXConfigurationManager {
     /** Configuration manager singleton */ 
     static ERXConfigurationManager defaultManager = null;
     
-    private String[] _commandLineArguments; 
+//    private String[] _commandLineArguments; 
     private NSArray _monitoredProperties;
     private boolean _isInitialized = false;
     private boolean _isRapidTurnAroundInitialized = false;
@@ -145,7 +99,7 @@ public class ERXConfigurationManager {
      * If set, touching this path will be used to signal a change to properties files.
      */
     private static String propertiesTouchFile() {
-        return ERXProperties.stringForKey("er.extensions.ERXConfigurationManager.PropertiesTouchFile");
+        return NSProperties.stringForKey("er.extensions.ERXConfigurationManager.PropertiesTouchFile");
     }
     
     /**
@@ -157,28 +111,6 @@ public class ERXConfigurationManager {
         if (defaultManager == null)
             defaultManager = new ERXConfigurationManager();
         return defaultManager;
-    }
-    
-    /** 
-     * Returns the command line arguments. 
-     * {@link er.extensions.appserver.ERXApplication#main} sets this value.
-     * 
-     * @return the command line arguments as a String[]
-     * @see #setCommandLineArguments
-     */
-    public String[] commandLineArguments() {
-        return _commandLineArguments;
-    }
-    
-    /** 
-     * Sets the command line arguments. 
-     * {@link er.extensions.appserver.ERXApplication#main} will call this method
-     * when the application starts up. 
-     * 
-     * @see #commandLineArguments
-     */
-    public void setCommandLineArguments(String [] newCommandLineArguments) {
-        _commandLineArguments = newCommandLineArguments;
     }
 
     /**
@@ -193,13 +125,12 @@ public class ERXConfigurationManager {
                     new NSSelector("modelAddedHandler", ERXConstant.NotificationClassArray),
                     EOModelGroup.ModelAddedNotification,
                     null);
-            loadOptionalConfigurationFiles();
         }
     }
 
     private NSArray monitoredProperties() {
         if( _monitoredProperties == null ) {
-            _monitoredProperties = ERXProperties.pathsForUserAndBundleProperties(/* logging */ true);
+            _monitoredProperties = NSPropertiesCoordinator.sharedInstance().monitoredFilePaths();
         }
         return _monitoredProperties;
     }
@@ -270,33 +201,6 @@ public class ERXConfigurationManager {
                       + ex.getClass().getName() + " " + ex.getMessage());
         }            
     }
-
-    /**
-     * This will overlay the current system config files. It will then
-     * re-load the command line args.
-     */
-    public void loadOptionalConfigurationFiles() {
-        if (ERXProperties.optionalConfigurationFiles() != null
-            && ERXProperties.optionalConfigurationFiles().count() > 0) {
-            Properties systemProperties = System.getProperties();
-            for (Enumeration configEnumerator = ERXProperties.optionalConfigurationFiles().objectEnumerator();
-                 configEnumerator.hasMoreElements();) {
-                String configFile = (String)configEnumerator.nextElement();
-                File file = new File(configFile);
-                if (file.exists()  &&  file.isFile()  &&  file.canRead()) {
-                    try {
-                        Properties props = ERXProperties.propertiesFromFile(file, false);
-                        ERXProperties.transferPropertiesFromSourceToDest(props, systemProperties);
-                        ERXSystem.updateProperties();
-                    } catch (java.io.IOException ex) {
-                        log.error("Unable to load optional configuration file: " + configFile, ex);
-                    }
-                }
-            }
-            if (_commandLineArguments != null  &&  _commandLineArguments.length > 0)
-                _reinsertCommandLineArgumentsToSystemProperties(_commandLineArguments);
-        }
-    }
     
     /** 
      * Updates the configuration from the current configuration and 
@@ -317,9 +221,7 @@ public class ERXConfigurationManager {
      * @param  n NSNotification object for the event (null means load all files)
      */
     public synchronized void updateSystemProperties(NSNotification n) {
-        _updateSystemPropertiesFromMonitoredProperties(n != null ? (File)n.object() : null);
-        if (_commandLineArguments != null  &&  _commandLineArguments.length > 0) 
-            _reinsertCommandLineArgumentsToSystemProperties(_commandLineArguments);
+        NSPropertiesCoordinator.loadProperties();
         ERXLogger.configureLogging(System.getProperties());
         
         NSNotificationCenter.defaultCenter().postNotification(ConfigurationDidChangeNotification, null);
@@ -328,92 +230,6 @@ public class ERXConfigurationManager {
     
     public synchronized void updateAllSystemProperties(NSNotification notification) {
         updateSystemProperties(null);
-    }
-    
-    /**
-     * If updatedFile is null, all files are reread.
-     */
-    private void _updateSystemPropertiesFromMonitoredProperties(File updatedFile) {
-        NSArray monitoredProperties = monitoredProperties();
-
-        if (monitoredProperties == null  ||  monitoredProperties.count() == 0)  return;
-        
-        int firstDirtyFile = 0;
-        
-        if (updatedFile != null) {
-            // Find the position of the updatedFile in the monitoredProperties list, 
-            // so that we can reload it and everything after it on the list.
-        	String updatedFilePath = ERXProperties.processedPropertiesPath(updatedFile);
-        	if (updatedFilePath != null) {
-	            firstDirtyFile = monitoredProperties.indexOfObject(updatedFilePath);
-	            if (firstDirtyFile < 0) {
-	                return;
-	            }
-        	}
-        	else {
-        		// MS: this would have resulted in a logged IOException and a return before -- processedPropertiesPath logs for us now
-        		return;
-        	}
-        }
-        
-        boolean atomicPropertiesReload = Boolean.valueOf(System.getProperty("er.extensions.ERXConfigurationManager.atomicPropertiesReload", "true"));
-        if (atomicPropertiesReload) {
-	        Properties systemPropertiesCopy = new Properties();
-	        systemPropertiesCopy.putAll(System.getProperties());
-	        for (int i = firstDirtyFile; i < monitoredProperties.count(); i++) {
-	            String monitoredPropertiesPath = (String) monitoredProperties.objectAtIndex(i);
-	        	try {
-		            log.info("Reloading properties from '" + monitoredPropertiesPath + "' ...");
-
-		            // If the current path is the global properties path and you required symlinked global properties, then block on the resolution of the link
-		            boolean requireSymlink = ERXProperties._shouldRequireSymlinkedGlobalAndIncludeProperties() && monitoredPropertiesPath.equals(ERXProperties._globalPropertiesPath());
-
-		            // MS: This can fail, so we don't want to add to system properties file-by-file -- we want to do 
-		            // a single push at the end.
-		           	Properties loadedProperties = ERXProperties.propertiesFromPath(monitoredPropertiesPath, requireSymlink);
-		           	systemPropertiesCopy.putAll(loadedProperties);
-	        	}
-	        	catch (RuntimeException e) {
-	        		log.error("Failed to load properties from '" + monitoredPropertiesPath + "', so all properties from this reload will be rolled back.");
-	        		throw e;
-	        	}
-	        }
-	        
-	        if( ERXProperties._useLoadtimeAppSpecifics ) {
-	            ERXSystem.updateProperties(systemPropertiesCopy);
-	            ERXProperties.transferPropertiesFromSourceToDest(systemPropertiesCopy, System.getProperties());
-	        } else {
-	            ERXProperties.transferPropertiesFromSourceToDest(systemPropertiesCopy, System.getProperties());
-	            ERXSystem.updateProperties();
-	        }
-        }
-        else {
-            Properties systemProperties = System.getProperties();
-            for (int i = firstDirtyFile; i < monitoredProperties.count(); i++) {
-                String monitoredPropertiesPath = (String) monitoredProperties.objectAtIndex(i);
-
-                // If the current path is the global properties path and you required symlinked global properties, then block on the resolution of the link
-	            boolean requireSymlink = ERXProperties._shouldRequireSymlinkedGlobalAndIncludeProperties() && monitoredPropertiesPath.equals(ERXProperties._globalPropertiesPath());
-
-                Properties loadedProperty = ERXProperties.propertiesFromPath(monitoredPropertiesPath, requireSymlink);
-                
-                if( ERXProperties._useLoadtimeAppSpecifics ) {
-                    ERXSystem.updateProperties(loadedProperty);
-                    ERXProperties.transferPropertiesFromSourceToDest(loadedProperty, systemProperties);
-                } else {
-                    ERXProperties.transferPropertiesFromSourceToDest(loadedProperty, systemProperties);
-                    ERXSystem.updateProperties();
-                }
-            }
-        }
-    }
-
-    private void _reinsertCommandLineArgumentsToSystemProperties(String[] commandLineArguments) {
-        Properties commandLineProperties = ERXProperties.propertiesFromArgv(commandLineArguments);
-        Properties systemProperties = System.getProperties(); 
-        ERXProperties.transferPropertiesFromSourceToDest(commandLineProperties, systemProperties);
-        ERXSystem.updateProperties();
-        log.debug("Reinserted the command line arguments to the system properties.");
     }
 
     /**
@@ -486,7 +302,7 @@ public class ERXConfigurationManager {
                     if (path.indexOf(" ")!=-1) {
                         NSArray a=NSArray.componentsSeparatedByString(path," ");
                         if (a.count()==2) {
-                            path = ERXFileUtilities.pathForResourceNamed((String)a.objectAtIndex(0),                                                                                                     (String)a.objectAtIndex(1), null);
+                            path = ERXFileUtilities.pathForResourceNamed((String)a.objectAtIndex(0), (String)a.objectAtIndex(1), null);
                         }
                     }
                 } else {

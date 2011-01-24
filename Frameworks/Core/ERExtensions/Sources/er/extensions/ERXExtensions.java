@@ -36,6 +36,7 @@ import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOSharedEditingContext;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
@@ -44,7 +45,9 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.properties.NSPropertiesCoordinator;
 import com.webobjects.jdbcadaptor.JDBCAdaptorException;
 
 import er.extensions.appserver.ERXApplication;
@@ -64,16 +67,18 @@ import er.extensions.eof.qualifiers.ERXToManyQualifier;
 import er.extensions.formatters.ERXSimpleHTMLFormatter;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXConfigurationManager;
+import er.extensions.foundation.ERXEncryptedProcessor;
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXPatcher;
 import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXPropertyTemplateProcessor;
 import er.extensions.foundation.ERXStringUtilities;
-import er.extensions.foundation.ERXSystem;
 import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.jdbc.ERXJDBCAdaptor;
 import er.extensions.localization.ERXLocalizer;
 import er.extensions.logging.ERXLogger;
 import er.extensions.remoteSynchronizer.ERXRemoteSynchronizer;
+import er.extensions.statistics.ERXStats;
 import er.extensions.validation.ERXValidationFactory;
 
 /**
@@ -134,10 +139,6 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 	}
 
 	static {
-		// Without this the blasted ERXLogger factory doesn't get initialized early enough.
-		// When we move everything to use plain Loggers, we should revisit this initializer. - TC
-		ERXConfigurationManager.defaultManager().initialize();
-		ERXLogger.configureLogging(System.getProperties());
 		observer = new Observer();
 	}
 
@@ -181,8 +182,11 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     protected void initialize() {
     	NSNotificationCenter.defaultCenter().addObserver(this,
     			new NSSelector("bundleDidLoad", ERXConstant.NotificationClassArray),
-    			ERXApplication.AllBundlesLoadedNotification,
+    			NSBundle.AllBundlesDidLoadNotification,
     			null);
+    	
+    	NSPropertiesCoordinator.registerProcessorClass(ERXEncryptedProcessor.class);
+    	NSPropertiesCoordinator.registerProcessorClass(ERXPropertyTemplateProcessor.class);
     }
     
     public void bundleDidLoad(NSNotification n) {
@@ -190,6 +194,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     	_initialized = true;
     	
     	try {
+    		ERXStats.initStatisticsIfNecessary();
     		// This will load any optional configuration files, 
     		// ensures that WOOutputPath's was processed with this @@
     		// variable substitution. WOApplication uses WOOutputPath in
@@ -197,8 +202,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     		// the constructor.
     		ERXConfigurationManager.defaultManager().initialize();
         	EOModelGroup.setClassDelegate(this);
-        	ERXSystem.updateProperties();
-
+        	//ERXSystem.updateProperties();
+        	NSPropertiesCoordinator.loadProperties();
+        	
     		// AK: enable this when we're ready
         	// WOEncodingDetector.sharedInstance().setFallbackEncoding("UTF-8");
         	
@@ -263,9 +269,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      */
     public void finishInitialization() {
     	ERXJDBCAdaptor.registerJDBCAdaptor();
-        ERXConfigurationManager.defaultManager().loadOptionalConfigurationFiles();
+    	
+    	//NSPropertiesCoordinator.loadProperties();
         ERXProperties.populateSystemProperties();
-        ERXProperties.systemPropertiesChanged();
         
         ERXConfigurationManager.defaultManager().configureRapidTurnAround();
         ERXLocalizer.initialize();
@@ -1297,7 +1303,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 		    	if (!currentFolder.getName().endsWith(".woa")) {
 		    		throw new IllegalArgumentException("You must run your application from the .woa folder to call this method.");
 		    	}
-		        System.setProperty("webobjects.user.dir", mainBundleFolder.getCanonicalPath());
+		        NSProperties.setStringForKey(mainBundleFolder.getCanonicalPath(), "webobjects.user.dir");
 	    	}
 	        ERXApplication.setup(args);
 	        ((ERXExtensions) ERXFrameworkPrincipal.sharedInstance(ERXExtensions.class)).bundleDidLoad(null);

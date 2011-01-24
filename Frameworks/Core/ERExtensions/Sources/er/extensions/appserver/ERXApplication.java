@@ -176,8 +176,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	private static ThreadLocal<Boolean> isInRequest = new ThreadLocal<Boolean>();
 
-	private static NSDictionary propertiesFromArgv;
-
 	/**
 	 * Time that garbage collection was last called when checking memory.
 	 */
@@ -214,38 +212,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	protected boolean _initializedAdaptors = false;
 
-	private static Properties readProperties(File file) {
-		Properties result = null;
-		if (file.exists()) {
-			result = new Properties();
-			try {
-				result.load(file.toURL().openStream());
-			}
-			catch (MalformedURLException e) {
-				e.printStackTrace();
-			}
-			catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return result;
-	}
-
-	/**
-	 * Copies the props from the command line to the static dict
-	 * propertiesFromArgv.
-	 * 
-	 */
-	private static void insertCommandLineArguments() {
-		NSArray keys = propertiesFromArgv.allKeys();
-		int count = keys.count();
-		for (int i = 0; i < count; i++) {
-			Object key = keys.objectAtIndex(i);
-			Object value = propertiesFromArgv.objectForKey(key);
-			NSProperties._setProperty((String) key, (String) value);
-		}
-	}
-
 	/**
 	 * Called when the application starts up and saves the command line
 	 * arguments for {@link ERXConfigurationManager}.
@@ -281,9 +247,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				e.printStackTrace();
 			}
 		}*/
-		ERXConfigurationManager.defaultManager().setCommandLineArguments(argv);
-		NSNotificationCenter.defaultCenter().postNotification(new NSNotification(AllBundlesLoadedNotification, NSKeyValueCoding.NullValue)); // This would normally done by the loader if it had been ported back.
-		ERXStats.initStatisticsIfNecessary();
 	}
 
 	/**
