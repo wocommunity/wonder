@@ -1,6 +1,8 @@
 package er.extensions.eof;
 
-import com.webobjects.foundation.NSDictionary;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSSet;
@@ -47,7 +49,7 @@ public class ERXKeyFilter {
 	}
 
 	private ERXKeyFilter.Base _base;
-	private NSMutableDictionary<ERXKey, ERXKeyFilter> _includes;
+	private LinkedHashMap<ERXKey, ERXKeyFilter> _includes;
 	private NSMutableSet<ERXKey> _excludes;
 	private NSMutableSet<ERXKey> _lockedRelationships;
 	private NSMutableDictionary<ERXKey, ERXKey> _map;
@@ -73,7 +75,7 @@ public class ERXKeyFilter {
 	public ERXKeyFilter(ERXKeyFilter.Base base, ERXKeyFilter.Base nextBase) {
 		_base = base;
 		_nextBase = nextBase;
-		_includes = new NSMutableDictionary<ERXKey, ERXKeyFilter>();
+		_includes = new LinkedHashMap<ERXKey, ERXKeyFilter>();
 		_excludes = new NSMutableSet<ERXKey>();
 		_lockedRelationships = new NSMutableSet<ERXKey>();
 		_map = new NSMutableDictionary<ERXKey, ERXKey>();
@@ -273,7 +275,7 @@ public class ERXKeyFilter {
 	 * @return the key filter
 	 */
 	public ERXKeyFilter _filterForKey(ERXKey key) {
-		ERXKeyFilter filter = _includes.objectForKey(key);
+		ERXKeyFilter filter = _includes.get(key);
 		if (filter == null) {
 			filter = new ERXKeyFilter(_nextBase);
 			filter.setDelegate(_delegate);
@@ -287,7 +289,7 @@ public class ERXKeyFilter {
 	 * 
 	 * @return the included keys and the next filters they map to
 	 */
-	public NSDictionary<ERXKey, ERXKeyFilter> includes() {
+	public Map<ERXKey, ERXKeyFilter> includes() {
 		return _includes;
 	}
 
@@ -341,12 +343,12 @@ public class ERXKeyFilter {
 		String keyPath = key.key();
 		int dotIndex = keyPath.indexOf('.');
 		if (dotIndex == -1) {
-			filter = _includes.objectForKey(key);
+			filter = _includes.get(key);
 			if (filter == null) {
 				filter = new ERXKeyFilter(_nextBase);
 				filter.setDelegate(_delegate);
 				filter.setNextBase(_nextBase);
-				_includes.setObjectForKey(filter, key);
+				_includes.put(key, filter);
 				_excludes.removeObject(key);
 			}
 		}
@@ -408,7 +410,7 @@ public class ERXKeyFilter {
 			int dotIndex = keyPath.indexOf('.');
 			if (dotIndex == -1) {
 				_excludes.addObject(key);
-				_includes.removeObjectForKey(key);
+				_includes.remove(key);
 			}
 			else {
 				ERXKeyFilter subFilter = include(new ERXKey(keyPath.substring(0, dotIndex)));
