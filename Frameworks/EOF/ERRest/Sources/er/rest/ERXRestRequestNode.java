@@ -4,6 +4,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,6 @@ import com.webobjects.eoaccess.EOEntityClassDescription;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
@@ -38,7 +38,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	private String _name;
 	private boolean _rootNode;
 	private Object _value;
-	private NSMutableDictionary<String, Object> _attributes;
+	private LinkedHashMap<String, Object> _attributes;
 	private NSMutableArray<ERXRestRequestNode> _children;
 	private Object _associatedObject;
 
@@ -57,7 +57,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	public ERXRestRequestNode(String name, boolean rootNode) {
 		_name = name;
 		_rootNode = rootNode;
-		_attributes = new NSMutableDictionary<String, Object>();
+		_attributes = new LinkedHashMap<String, Object>();
 		_children = new NSMutableArray<ERXRestRequestNode>();
 		guessNull();
 	}
@@ -85,7 +85,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 */
 	public ERXRestRequestNode cloneNode() {
 		ERXRestRequestNode cloneNode = new ERXRestRequestNode(_name, _rootNode);
-		cloneNode._attributes.addEntriesFromDictionary(_attributes);
+		cloneNode._attributes.putAll(_attributes);
 		cloneNode._children.addObjectsFromArray(_children);
 		cloneNode._value = _value;
 		cloneNode._associatedObject = _associatedObject;
@@ -317,7 +317,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 
 	public void takeValueForKey(Object value, String key) {
 		if (_attributes.containsKey(key)) {
-			_attributes.setObjectForKey(value, key);
+			_attributes.put(key, value);
 		}
 		else {
 			ERXRestRequestNode child = childNamed(key);
@@ -336,7 +336,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	public Object valueForKey(String key) {
 		Object value;
 		if (_attributes.containsKey(key)) {
-			value = _attributes.objectForKey(key);
+			value = _attributes.get(key);
 		}
 		else {
 			ERXRestRequestNode child = childNamed(key);
@@ -539,7 +539,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 *            the key
 	 */
 	public void setAttributeForKey(Object attribute, String key) {
-		_attributes.setObjectForKey(attribute, key);
+		_attributes.put(key, attribute);
 		// if (!"nil".equals(key)) {
 		guessNull();
 		// }
@@ -553,7 +553,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 * @return the attribute value
 	 */
 	public Object removeAttributeForKey(String key) {
-		Object attribute = _attributes.removeObjectForKey(key);
+		Object attribute = _attributes.remove(key);
 		return attribute;
 	}
 
@@ -565,7 +565,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 * @return the attribute value
 	 */
 	public Object attributeForKey(String key) {
-		return _attributes.objectForKey(key);
+		return _attributes.get(key);
 	}
 
 	/**
@@ -573,7 +573,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 * 
 	 * @return the attributes dictionary
 	 */
-	public NSDictionary<String, Object> attributes() {
+	public Map<String, Object> attributes() {
 		return _attributes;
 	}
 
@@ -770,7 +770,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 
 		Set<ERXKey> includeKeys = keyFilter.includes().keySet();
 		if (includeKeys != null && !includeKeys.isEmpty()) {
-			Set<ERXKey> remainingKeys = new HashSet<ERXKey>(includeKeys);
+			Set<ERXKey> remainingKeys = new LinkedHashSet<ERXKey>(includeKeys);
 			remainingKeys.removeAll(visitedKeys);
 			if (!remainingKeys.isEmpty()) {
 				// this is sort of expensive, but we want to support non-eomodel to-many relationships on EO's, so
