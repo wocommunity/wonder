@@ -11,6 +11,7 @@ import com.webobjects.foundation.NSDictionary;
 
 import er.extensions.foundation.ERXKeyValueCodingUtilities;
 import er.extensions.foundation.ERXPatcher.DynamicElementsPatches.PopUpButton;
+import er.extensions.foundation.ERXValueUtilities;
 
 
 /**
@@ -19,10 +20,15 @@ import er.extensions.foundation.ERXPatcher.DynamicElementsPatches.PopUpButton;
  * label is optional.  This is used as the label for an option group.  If label is not
  * bound, an empty string is used as the option group label. 
  * 
+ * Also adds bindings to style or disable individual items.
+ * 
  * @binding group Object, required - keyPath to value that changes when the group of options changes
  * @binding label String, optional - String used as label for an option group
  * @binding itemClass, optional - String CSS class name for this item, browser support is inconsistent
  * @binding itemStyle, optional - String CSS style for this item, browser support is inconsistent
+ * @binding itemDisabled, optional - boolean indicating if the current item should be disabled or not. 
+ *          Browser support is inconsistent. Be prepared to handle the case where the user selects 
+ *          a disabled option!
  */
 public class ERXOptGroupPopupButton extends PopUpButton
 {
@@ -31,6 +37,7 @@ public class ERXOptGroupPopupButton extends PopUpButton
     protected WOAssociation label;
     protected WOAssociation itemStyle;
     protected WOAssociation itemClass;
+    protected WOAssociation itemDisabled;
     
     public ERXOptGroupPopupButton(String name, NSDictionary associations, WOElement template)
     {
@@ -39,6 +46,7 @@ public class ERXOptGroupPopupButton extends PopUpButton
         label = (WOAssociation)_associations.removeObjectForKey("label");
         itemStyle = (WOAssociation)_associations.removeObjectForKey("itemStyle");
         itemClass = (WOAssociation)_associations.removeObjectForKey("itemClass");
+        itemDisabled = (WOAssociation) _associations.removeObjectForKey("itemDisabled");
         
         if (group == null)
         {
@@ -202,6 +210,12 @@ public class ERXOptGroupPopupButton extends PopUpButton
                 response._appendTagAttributeAndValue("value", indexAsValue, false);
             }
              
+            if(itemDisabled != null) {
+                if(ERXValueUtilities.booleanValue(itemDisabled.valueInComponent(parent))) {
+                    response._appendTagAttributeAndValue("disabled", "disabled", false);
+                }
+            }
+            
             response.appendContentCharacter('>');
              
             if (shouldEscapeHTML)

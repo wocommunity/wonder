@@ -29,6 +29,11 @@ import er.extensions.appserver.ajax.ERXAjaxApplication;
  * </p>
  * 
  * <p>
+ * If you set an observeFieldID you must place the AjaxObserveField tag after the field you would 
+ * like to observe.
+ * </p>
+ * 
+ * <p>
  * If you leave of observeFieldID, AjaxObserveField must generate an HTML container, so
  * that it can find the form fields that correspond to this component from the client
  * side, so you will get an extra dom element when used as a container.
