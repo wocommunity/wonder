@@ -1033,6 +1033,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			_loader._checker.reportErrors();
 			_loader._checker = null;
 		}
+		didCreateApplication();
 		NSNotificationCenter.defaultCenter().postNotification(new NSNotification(ApplicationDidCreateNotification, this));
 		installPatches();
 		lowMemBufferSize = ERXProperties.intForKeyWithDefault("er.extensions.ERXApplication.lowMemBufferSize", 0);
@@ -1228,6 +1229,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * Override this to perform application initialization. (optional)
 	 */
 	public void finishInitialization() {
+		// empty
+	}
+
+	protected void didCreateApplication() {
 		// empty
 	}
 
