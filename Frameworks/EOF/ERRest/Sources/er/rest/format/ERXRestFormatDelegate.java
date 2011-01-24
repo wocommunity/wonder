@@ -23,12 +23,17 @@ public class ERXRestFormatDelegate implements ERXRestFormat.Delegate {
 	private boolean _writeNilKey;
 	private boolean _pluralNames;
 	private boolean _underscoreNames;
+	private boolean _writeTypeKey;
 
 	public ERXRestFormatDelegate() {
 		this(ERXRestFormatDelegate.ID_KEY, ERXRestFormatDelegate.TYPE_KEY, ERXRestFormatDelegate.NIL_KEY, true, ERXProperties.booleanForKeyWithDefault("ERXRest.pluralEntityNames", true), false, false);
 	}
 
 	public ERXRestFormatDelegate(String idKey, String typeKey, String nilKey, boolean writeNilKey, boolean pluralNames, boolean underscoreNames, boolean arrayTypes) {
+		this(idKey, typeKey, nilKey, writeNilKey, pluralNames, underscoreNames, arrayTypes, ERXProperties.booleanForKeyWithDefault("ERXRest.writeTypeKey", true));
+	}
+	
+	public ERXRestFormatDelegate(String idKey, String typeKey, String nilKey, boolean writeNilKey, boolean pluralNames, boolean underscoreNames, boolean arrayTypes, boolean writeTypeKey) {
 		_idKey = idKey;
 		_typeKey = typeKey;
 		_nilKey = nilKey;
@@ -36,6 +41,7 @@ public class ERXRestFormatDelegate implements ERXRestFormat.Delegate {
 		_pluralNames = pluralNames;
 		_underscoreNames = underscoreNames;
 		_arrayTypes = arrayTypes;
+		_writeTypeKey = writeTypeKey;
 	}
 
 	public void nodeDidParse(ERXRestRequestNode node) {
@@ -89,17 +95,19 @@ public class ERXRestFormatDelegate implements ERXRestFormat.Delegate {
 			node.setAttributeForKey(id, _idKey);
 		}
 
-		String internalType = node.type();
-		if (internalType != null) {
-			if (_arrayTypes && node.isArray()) {
-				node.setAttributeForKey("array", _typeKey);
-			}
-			else {
-				String type = ERXRestNameRegistry.registry().externalNameForInternalName(internalType);
-				if (_underscoreNames) {
-					type = ERXStringUtilities.camelCaseToUnderscore(type, true);
+		if (_writeTypeKey) {
+			String internalType = node.type();
+			if (internalType != null) {
+				if (_arrayTypes && node.isArray()) {
+					node.setAttributeForKey("array", _typeKey);
 				}
-				node.setAttributeForKey(type, _typeKey);
+				else {
+					String type = ERXRestNameRegistry.registry().externalNameForInternalName(internalType);
+					if (_underscoreNames) {
+						type = ERXStringUtilities.camelCaseToUnderscore(type, true);
+					}
+					node.setAttributeForKey(type, _typeKey);
+				}
 			}
 		}
 

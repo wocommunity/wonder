@@ -370,7 +370,7 @@ public class ERXRouteController extends WODirectAction {
 	 * @return the default format to use if no other format is found, or if the requested format is invalid
 	 */
 	protected ERXRestFormat defaultFormat() {
-		String defaultFormatName = ERXProperties.stringForKeyWithDefault("ERXRest.defaultFormat", ERXRestFormat.XML.name());
+		String defaultFormatName = ERXProperties.stringForKeyWithDefault("ERXRest.defaultFormat", ERXRestFormat.xml().name());
 		return ERXRestFormat.formatNamed(defaultFormatName);
 	}
 
@@ -656,7 +656,7 @@ public class ERXRouteController extends WODirectAction {
 	 * @return a JSON WOResponse
 	 */
 	public WOActionResults json(String entityName, NSArray<?> values, ERXKeyFilter filter) {
-		return response(ERXRestFormat.JSON, editingContext(), entityName, values, filter);
+		return response(ERXRestFormat.json(), editingContext(), entityName, values, filter);
 	}
 
 	/**
@@ -673,7 +673,7 @@ public class ERXRouteController extends WODirectAction {
 	 * @return a JSON WOResponse
 	 */
 	public WOActionResults json(EOEditingContext editingContext, String entityName, NSArray<?> values, ERXKeyFilter filter) {
-		return response(ERXRestFormat.JSON, editingContext, entityName, values, filter);
+		return response(ERXRestFormat.json(), editingContext, entityName, values, filter);
 	}
 
 	/**
@@ -688,7 +688,7 @@ public class ERXRouteController extends WODirectAction {
 	 * @return a JSON WOResponse
 	 */
 	public WOActionResults json(EOClassDescription entity, NSArray<?> values, ERXKeyFilter filter) {
-		return response(ERXRestFormat.JSON, entity, values, filter);
+		return response(ERXRestFormat.json(), entity, values, filter);
 	}
 
 	/**
@@ -703,7 +703,7 @@ public class ERXRouteController extends WODirectAction {
 	 * @return a PList WOResponse
 	 */
 	public WOActionResults plist(String entityName, NSArray<?> values, ERXKeyFilter filter) {
-		return response(ERXRestFormat.PLIST, editingContext(), entityName, values, filter);
+		return response(ERXRestFormat.plist(), editingContext(), entityName, values, filter);
 	}
 
 	/**
@@ -720,7 +720,7 @@ public class ERXRouteController extends WODirectAction {
 	 * @return a JSON WOResponse
 	 */
 	public WOActionResults plist(EOEditingContext editingContext, String entityName, NSArray<?> values, ERXKeyFilter filter) {
-		return response(ERXRestFormat.PLIST, editingContext, entityName, values, filter);
+		return response(ERXRestFormat.plist(), editingContext, entityName, values, filter);
 	}
 
 	/**
@@ -735,7 +735,7 @@ public class ERXRouteController extends WODirectAction {
 	 * @return a JSON WOResponse
 	 */
 	public WOActionResults plist(EOClassDescription entity, NSArray<?> values, ERXKeyFilter filter) {
-		return response(ERXRestFormat.PLIST, entity, values, filter);
+		return response(ERXRestFormat.plist(), entity, values, filter);
 	}
 
 	/**
@@ -750,7 +750,7 @@ public class ERXRouteController extends WODirectAction {
 	 * @return an XML WOResponse
 	 */
 	public WOActionResults xml(String entityName, NSArray<?> values, ERXKeyFilter filter) {
-		return response(ERXRestFormat.XML, editingContext(), entityName, values, filter);
+		return response(ERXRestFormat.xml(), editingContext(), entityName, values, filter);
 	}
 
 	/**
@@ -767,7 +767,7 @@ public class ERXRouteController extends WODirectAction {
 	 * @return an XML WOResponse
 	 */
 	public WOActionResults xml(EOEditingContext editingContext, String entityName, NSArray<?> values, ERXKeyFilter filter) {
-		return response(ERXRestFormat.XML, editingContext, entityName, values, filter);
+		return response(ERXRestFormat.xml(), editingContext, entityName, values, filter);
 	}
 
 	/**
@@ -782,7 +782,7 @@ public class ERXRouteController extends WODirectAction {
 	 * @return an XML WOResponse
 	 */
 	public WOActionResults xml(EOClassDescription entity, NSArray<?> values, ERXKeyFilter filter) {
-		return response(ERXRestFormat.XML, entity, values, filter);
+		return response(ERXRestFormat.xml(), entity, values, filter);
 	}
 
 	/**
@@ -979,7 +979,7 @@ public class ERXRouteController extends WODirectAction {
 	 * @return a WOResponse in JSON format
 	 */
 	public WOActionResults json(Object value, ERXKeyFilter filter) {
-		return response(ERXRestFormat.JSON, value, filter);
+		return response(ERXRestFormat.json(), value, filter);
 	}
 
 	/**
@@ -992,7 +992,7 @@ public class ERXRouteController extends WODirectAction {
 	 * @return a WOResponse in PList format
 	 */
 	public WOActionResults plist(Object value, ERXKeyFilter filter) {
-		return response(ERXRestFormat.PLIST, value, filter);
+		return response(ERXRestFormat.plist(), value, filter);
 	}
 
 	/**
@@ -1005,7 +1005,7 @@ public class ERXRouteController extends WODirectAction {
 	 * @return a WOResponse in XML format
 	 */
 	public WOActionResults xml(Object value, ERXKeyFilter filter) {
-		return response(ERXRestFormat.XML, value, filter);
+		return response(ERXRestFormat.xml(), value, filter);
 	}
 
 	/**
@@ -1283,7 +1283,7 @@ public class ERXRouteController extends WODirectAction {
 				checkAccess();
 			}
 
-			if (results == null && isAutomaticHtmlRoutingEnabled() && format() == ERXRestFormat.HTML) {
+			if (results == null && isAutomaticHtmlRoutingEnabled() && format() == ERXRestFormat.html()) {
 				String pageName = pageNameForAction(actionName);
 				if (_NSUtilities.classWithName(pageName) != null) {
 					try {

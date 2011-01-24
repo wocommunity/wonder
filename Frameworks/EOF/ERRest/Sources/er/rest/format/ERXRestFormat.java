@@ -14,25 +14,99 @@ import er.rest.gianduia.ERXGianduiaRestParser;
 import er.rest.gianduia.ERXGianduiaRestWriter;
 
 public class ERXRestFormat {
+	public static final String HTML_KEY = "html";
+	public static final String JSON_KEY = "json";
+	public static final String JS_KEY = "js";
+	public static final String RAILS_KEY = "rails";
+	public static final String PLIST_KEY = "plist";
+	public static final String SPROUTCORE_KEY = "sc";
+	public static final String XML_KEY = "xml";
+	
+	static {
+		// MS: The whole naming thing is stupid, I know ... we need to separate mime type from extensions from the name 
+		ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXJSONRestWriter(), new ERXRestFormatDelegate(), ERXRestFormat.JSON_KEY, "application/json");
+		ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXJSONRestWriter(), new ERXRestFormatDelegate(), ERXRestFormat.JS_KEY, "text/js");
+		ERXRestFormat.registerFormatNamed(new ERXPListRestParser(), new ERXPListRestWriter(), new ERXRestFormatDelegate(), ERXRestFormat.PLIST_KEY, "text/plist");
+		ERXRestFormat.registerFormatNamed(new ERXBinaryPListRestParser(), new ERXBinaryPListRestWriter(), new ERXRestFormatDelegate(), "bplist", "application/x-plist");
+		ERXRestFormat.registerFormatNamed(new ERXXmlRestParser(), new ERXXmlRestWriter(), new ERXRestFormatDelegate("id", "type", "nil", true, true, true, true), ERXRestFormat.RAILS_KEY, "application/xml", "text/xml");
+		ERXRestFormat.registerFormatNamed(new ERXXmlRestParser(), new ERXXmlRestWriter(), new ERXRestFormatDelegate(), ERXRestFormat.XML_KEY, "application/xml", "text/xml");
+		ERXRestFormat.registerFormatNamed(null, new ERXSimpleRestWriter(), new ERXRestFormatDelegate(), ERXRestFormat.HTML_KEY, "text/html");
+		ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXGianduiaRestWriter(false), new ERXRestFormatDelegate(), "gndj", "application/gndj");
+		ERXRestFormat.registerFormatNamed(new ERXGianduiaRestParser(), new ERXGianduiaRestWriter(true), new ERXRestFormatDelegate(), "gndp", "application/gndp");
+		ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXSproutCoreRestWriter(), new ERXRestFormatDelegate("guid", "type", "nil", true, true, true, false), ERXRestFormat.SPROUTCORE_KEY, "application/sc");
+	}
+	
 	private static Map<String, ERXRestFormat> _formats = new ConcurrentHashMap<String, ERXRestFormat>();
-
-	// MS: The whole naming thing is stupid, I know ... we need to separate mime type from extensions from the name 
-	public static final ERXRestFormat JSON = ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXJSONRestWriter(), new ERXRestFormatDelegate(), "json", "application/json");
-	public static final ERXRestFormat JS = ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXJSONRestWriter(), new ERXRestFormatDelegate(), "js", "text/js");
-	public static final ERXRestFormat PLIST = ERXRestFormat.registerFormatNamed(new ERXPListRestParser(), new ERXPListRestWriter(), new ERXRestFormatDelegate(), "plist", "text/plist");
-	public static final ERXRestFormat BPLIST = ERXRestFormat.registerFormatNamed(new ERXBinaryPListRestParser(), new ERXBinaryPListRestWriter(), new ERXRestFormatDelegate(), "bplist", "application/x-plist");
-	public static final ERXRestFormat RAILS = ERXRestFormat.registerFormatNamed(new ERXXmlRestParser(), new ERXXmlRestWriter(), new ERXRestFormatDelegate("id", "type", "nil", true, true, true, true), "rails", "application/xml", "text/xml");
-	public static final ERXRestFormat XML = ERXRestFormat.registerFormatNamed(new ERXXmlRestParser(), new ERXXmlRestWriter(), new ERXRestFormatDelegate(), "xml", "application/xml", "text/xml");
-	public static final ERXRestFormat HTML = ERXRestFormat.registerFormatNamed(null, new ERXSimpleRestWriter(), new ERXRestFormatDelegate(), "html", "text/html");
-	public static final ERXRestFormat GIANDUIA_JSON = ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXGianduiaRestWriter(false), new ERXRestFormatDelegate(), "gndj", "application/gndj");
-	public static final ERXRestFormat GIANDUIA_PERSISTENT_STORE = ERXRestFormat.registerFormatNamed(new ERXGianduiaRestParser(), new ERXGianduiaRestWriter(true), new ERXRestFormatDelegate(), "gndp", "application/gndp");
-	public static final ERXRestFormat SPROUTCORE = ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXSproutCoreRestWriter(), new ERXRestFormatDelegate("guid", "type", "nil", true, true, true, false), "sc", "application/sc");
 
 	private String _name;
 	private IERXRestParser _parser;
 	private IERXRestWriter _writer;
 	private ERXRestFormat.Delegate _delegate;
 
+	// These are going to be killed soon ...
+	@Deprecated
+	public static final ERXRestFormat JSON = json();
+	@Deprecated
+	public static final ERXRestFormat JS = ERXRestFormat.formatNamed(ERXRestFormat.JS_KEY);
+	@Deprecated
+	public static final ERXRestFormat PLIST = plist();
+	@Deprecated
+	public static final ERXRestFormat RAILS = ERXRestFormat.formatNamed(ERXRestFormat.RAILS_KEY);
+	@Deprecated
+	public static final ERXRestFormat XML = xml();
+	@Deprecated
+	public static final ERXRestFormat HTML = html();
+	@Deprecated
+	public static final ERXRestFormat GIANDUIA_JSON = ERXRestFormat.formatNamed("gndj");
+	@Deprecated
+	public static final ERXRestFormat GIANDUIA_PERSISTENT_STORE = ERXRestFormat.formatNamed("gndp");
+	@Deprecated
+	public static final ERXRestFormat SPROUTCORE = ERXRestFormat.formatNamed(ERXRestFormat.SPROUTCORE_KEY);
+	
+	/**
+	 * Returns the registered html format.
+	 * 
+	 * @return the registered html format
+	 */
+	public static ERXRestFormat html() {
+		return formatNamed(ERXRestFormat.HTML_KEY);
+	}
+	
+	/**
+	 * Returns the registered json format.
+	 * 
+	 * @return the registered json format
+	 */
+	public static ERXRestFormat json() {
+		return formatNamed(ERXRestFormat.JSON_KEY);
+	}
+	
+	/**
+	 * Returns the registered plist format.
+	 * 
+	 * @return the registered plist format
+	 */
+	public static ERXRestFormat plist() {
+		return formatNamed(ERXRestFormat.PLIST_KEY);
+	}
+	
+	/**
+	 * Returns the registered xml format.
+	 * 
+	 * @return the registered xml format
+	 */
+	public static ERXRestFormat xml() {
+		return formatNamed(ERXRestFormat.XML_KEY);
+	}
+	
+	/**
+	 * Constructs a new ERXRestFormat.
+	 * 
+	 * @param name the name of the format
+	 * @param parser the parser
+	 * @param writer the writer
+	 * @param delegate the delegate to use while parsing and writing
+	 */
 	public ERXRestFormat(String name, IERXRestParser parser, IERXRestWriter writer, ERXRestFormat.Delegate delegate) {
 		_name = name;
 		_parser = parser;
