@@ -126,19 +126,19 @@ public class ERMDDefaultCSSAssignment extends ERDAssignment {
 	
 	public String classForLabelSpan(D2WContext c) {
 		String base = (String)c.valueForKey("baseClassForLabelSpan");
-		return base + " " + ERXStringUtilities.capitalize(c.propertyKey()) + base;
+		return base + " " + cssClassForPropertyKey(c.propertyKey()) + base;
 	}
 	
 	public String classForEmptyLabelSpan(D2WContext c) {
 		String base = (String)c.valueForKey("baseClassForEmptyLabelSpan");
-		return base + " " + ERXStringUtilities.capitalize(c.propertyKey()) + base;
+		return base + " " + cssClassForPropertyKey(c.propertyKey()) + base;
 	}
 	
 	// ATTRIBUTE VALUE
 	
 	public String classForAttributeValue(D2WContext c) {
 		String base = (String)c.valueForKey("baseClassForAttributeValue");
-		return base + " " + pageType(c) + base + " " + ERXStringUtilities.capitalize(c.propertyKey()) + base;
+		return base + " " + pageType(c) + base + " " + cssClassForPropertyKey(c.propertyKey()) + base;
 	}
 	
 	// SECTION
@@ -236,7 +236,7 @@ public class ERMDDefaultCSSAssignment extends ERDAssignment {
     
 	public String classForAttributeColumn(D2WContext c) {
 		String base = (String)c.valueForKey("baseClassForAttributeColumn");
-		return base + " " + ERXStringUtilities.capitalize(c.propertyKey()) + base;	
+		return base + " " + cssClassForPropertyKey(c.propertyKey()) + base;	
 	}
 	
 	// EMBEDDED 
@@ -276,7 +276,7 @@ public class ERMDDefaultCSSAssignment extends ERDAssignment {
 	}
 	
 	public String idForPropertyContainer(D2WContext c) {
-		return "PCUC_" + idForPageConfiguration(c) + "_" + c.propertyKey();
+		return "PCUC_" + idForPageConfiguration(c) + "_" + cssClassForPropertyKey(c.propertyKey());
 	}
 	
 	public String idForParentMainContainer(D2WContext c) {
@@ -382,6 +382,28 @@ public class ERMDDefaultCSSAssignment extends ERDAssignment {
 			result = result + " " + pageConfig + suffix;
 		}
 		return result;
+	}
+	
+	/**
+	 * Cleans the propertyKey, removing "." and capitalizing key path components
+	 * @param key
+	 * @return
+	 */
+	public String cssClassForPropertyKey(String key) {
+		if (key != null) {
+			String temp = "";
+			if (key.indexOf(".") != -1) {
+				NSArray<String> components = NSArray.componentsSeparatedByString(key, ".");
+				for (String string : components) {
+					string = ERXStringUtilities.capitalize(string);
+					temp = temp + string;
+				}
+			} else {
+				temp = ERXStringUtilities.capitalize(key);
+			}
+			key = temp;
+		}
+		return key;
 	}
 	
 }
