@@ -153,7 +153,7 @@ public class ERXEOAccessUtilities {
                     	// Prefer the parent entity as long as it is using the same table
                         EOEntity root = entity;
                         while (root.parentEntity() != null && 
-                        	   lowercaseTableName.equals(root.parentEntity().externalName().toLowerCase()))
+                        	   lowercaseTableName.equalsIgnoreCase(root.parentEntity().externalName()))
                             root = root.parentEntity();
                         if (! possibleEntities.containsObject(root))
                         	possibleEntities.addObject(root);
