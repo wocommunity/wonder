@@ -3,6 +3,7 @@ package er.extensions.foundation;
 
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.properties.NSPropertiesCoordinator;
 import com.webobjects.foundation.properties.NSPropertyProcessor;
 import com.webobjects.foundation.properties.NSPropertyValidationError;
@@ -21,12 +22,14 @@ import er.extensions.crypting.ERXCrypto;
  * <code>ERXEncryptedProcessor</code> will evaluate this as a new property with key <code>foo.bar</code>
  * and value <code>super-secret-password</code>.
  * </p>
+ * <p>
+ * The processor also supports encrytped properties using the legacy method:
+ * </p>
+ * <pre>
+ * foo.bar=0704ef92f72f23600a9b69e42870d10eaf89b66a3e2eaf0a
+ * foo.bar.encrypted=true</pre>
  */
 public class ERXEncryptedProcessor extends NSPropertyProcessor {
-
-//    public String valueForKeyValueAndParameters(String key, String value, String parameters) {
-//        return ERXCrypto.defaultCrypter().decrypt(value);
-//    }
 
     @Override
     public void preProcess(NSMutableArray<NSPropertyValue> values, NSMutableArray<NSPropertyValidationError> errors, NSPropertiesCoordinator container) {
@@ -40,8 +43,16 @@ public class ERXEncryptedProcessor extends NSPropertyProcessor {
     }
 
     @Override
-    public void postProcess(NSPropertiesCoordinator container, NSMutableArray<NSPropertyValidationError> errors) {
-        
+    public void postProcess(NSPropertiesCoordinator coordinator, NSMutableArray<NSPropertyValidationError> errors) {
+        for (String key: coordinator.allKeys()) {
+            if (key.endsWith(".encrypted") && coordinator.booleanForKey(key)) {
+                String encryptedPropertyKey = keyWithoutLastElement(key);
+                NSPropertyValue encryptedPropertyValue = coordinator._getPropertyValueForKey(encryptedPropertyKey);
+                if (encryptedPropertyValue != null) {
+                    encryptedPropertyValue.setProcessedValue(ERXCrypto.defaultCrypter().decrypt(encryptedPropertyValue.currentValue()));
+                }
+            }
+        }
     }
 
 }

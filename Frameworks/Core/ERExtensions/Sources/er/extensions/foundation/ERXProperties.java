@@ -400,10 +400,12 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * 
      * @param propertyName the property name to retrieve and optionally decrypt
      * @return the decrypted property value
+     * 
+     * @deprecated Encrypted properties should now have a key like "foo.bar.@encrypted"
+     * @see ERXEncryptedProcessor
      */
     @Deprecated
     public static String decryptedStringForKey(String propertyName) {
-        // Arroz: value is decrypted at properties load time
         return NSProperties.stringForKey(propertyName);
     }
     
@@ -417,11 +419,13 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @param propertyName the property name to retrieve and optionally decrypt
      * @param defaultValue the default value to return if there is no password
      * @return the decrypted property value
+     * 
+     * @deprecated Encrypted properties should now have a key like "foo.bar.@encrypted"
+     * @see ERXEncryptedProcessor
      */
     @Deprecated
     public static String decryptedStringForKeyWithDefault(String propertyName, String defaultValue) {
-        // Arroz: value is decrypted at properties load time
-		return NSProperties.stringForKeyWithDefault(propertyName, defaultValue);
+        return NSProperties.stringForKeyWithDefault(propertyName, defaultValue);
     }
 
     /**
@@ -432,10 +436,14 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @param propertyName the name of the property to decrypt
      * @param defaultValue the default encrypted value
      * @return the decrypted value
+     * 
+     * @deprecated Encrypted properties should now have a key like "foo.bar.@encrypted"
+     * @see ERXEncryptedProcessor
      */
+    @Deprecated
     public static String decryptedStringForKeyWithEncryptedDefault(String propertyName, String defaultValue) {
-        // Arroz: value is decrypted at properties load time
-        return NSProperties.stringForKeyWithDefault(propertyName, ERXCrypto.defaultCrypter().decrypt(defaultValue));
+        String decryptedDefault = ERXCrypto.defaultCrypter().decrypt(defaultValue);
+        return NSProperties.stringForKeyWithDefault(propertyName, decryptedDefault);
     }
 
     /**
