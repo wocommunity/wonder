@@ -41,6 +41,7 @@ import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimeZone;
+import com.webobjects.foundation.NSTimestampFormatter;
 
 /**
  * This is the wo5 java runtime plugin for FrontBase.
@@ -1680,46 +1681,46 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 					}
 				}
 				case FB_Time: {
+					NSTimestampFormatter f = new NSTimestampFormatter("%H:%M:%S.%F");
+
 					StringBuffer time = new StringBuffer("TIME '");
-					Date d = (Date)eoattribute.adaptorValueByConvertingAttributeValue(obj);
-					SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss.SSS");
-					format.format(d, time, new FieldPosition(0));
+					f.format(obj, time, new FieldPosition(0));
 					time.append("'");
 					return time.toString();
 				}
 
 				case FB_TimeTZ: {
+					NSTimestampFormatter f = new NSTimestampFormatter("%H:%M:%S.%F");
+
 					StringBuffer time = new StringBuffer("TIME '");
-					Date d = (Date)eoattribute.adaptorValueByConvertingAttributeValue(obj);
-					SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss.SSS");
-					format.format(d, time, new FieldPosition(0));
+					f.format(obj, time, new FieldPosition(0));
 					time.append(getTimeZone(NSTimeZone.defaultTimeZone()));
 					time.append("'");
 					return time.toString();
 				}
 
 				case FB_Timestamp: {
+					NSTimestampFormatter f = new NSTimestampFormatter("%Y-%m-%d %H:%M:%S.%F");
+
 					StringBuffer time = new StringBuffer("TIMESTAMP '");
-					Date d = (Date)eoattribute.adaptorValueByConvertingAttributeValue(obj);
-					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-					format.format(d, time, new FieldPosition(0));
+					f.format(obj, time, new FieldPosition(0));
 					time.append("'");
 					return time.toString();
 				}
 				case FB_TimestampTZ: {
+					NSTimestampFormatter f = new NSTimestampFormatter("%Y-%m-%d %H:%M:%S.%F");
+
 					StringBuffer time = new StringBuffer("TIMESTAMP '");
-					Date d = (Date)eoattribute.adaptorValueByConvertingAttributeValue(obj);
-					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-					format.format(d, time, new FieldPosition(0));
-					time.append(getTimeZone(NSTimeZone.defaultTimeZone()));
+					f.format(obj, time, new FieldPosition(0));
+					time.append(getTimeZone(java.util.TimeZone.getDefault()));
 					time.append("'");
 					return time.toString();
 				}
 				case FB_Date: {
+					NSTimestampFormatter f = new NSTimestampFormatter("%Y-%m-%d");
+
 					StringBuffer time = new StringBuffer("DATE '");
-					Date d = (Date)eoattribute.adaptorValueByConvertingAttributeValue(obj);
-					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-					format.format(d, time, new FieldPosition(0));
+					f.format(obj, time, new FieldPosition(0));
 					time.append("'");
 					return time.toString();
 				}

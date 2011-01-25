@@ -67,18 +67,6 @@
             valueType = d; 
         }, 
         {
-            adaptorValueConversionMethodName = toString; 
-            columnName = ""; 
-            externalType = VARCHAR; 
-            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
-            name = duration; 
-            userInfo = {modificationDate = "2002-08-21 22:42:33 +0200"; }; 
-            valueClassName = "javax.xml.datatype.Duration"; 
-            valueFactoryClassName = "er.prototypes.ValueFactory"; 
-            valueFactoryMethodName = duration; 
-            width = 28; 
-        }, 
-        {
             columnName = ""; 
             externalType = TINYINT; 
             name = flag; 
@@ -134,54 +122,6 @@
             valueClassName = "java.lang.Enum"; 
             valueFactoryMethodName = valueOf; 
             width = 50; 
-        }, 
-        {
-            adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
-            adaptorValueConversionMethodName = jodaDateTime; 
-            columnName = ""; 
-            externalType = TIMESTAMP; 
-            factoryMethodArgumentType = EOFactoryMethodArgumentIsDate; 
-            name = jodaDateTime; 
-            valueClassName = "org.joda.time.DateTime"; 
-            valueFactoryClassName = "er.prototypes.ValueFactory"; 
-            valueFactoryMethodName = jodaDateTime; 
-            valueType = T; 
-        }, 
-        {
-            adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
-            adaptorValueConversionMethodName = jodaLocalDate; 
-            externalType = TIMESTAMP; 
-            columnName = ""; 
-            factoryMethodArgumentType = EOFactoryMethodArgumentIsDate; 
-            name = jodaLocalDate; 
-            valueClassName = "org.joda.time.LocalDate"; 
-            valueFactoryClassName = "er.prototypes.ValueFactory"; 
-            valueFactoryMethodName = jodaLocalDate; 
-            valueType = D; 
-        }, 
-        {
-            adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
-            adaptorValueConversionMethodName = jodaLocalDateTime; 
-            columnName = ""; 
-            externalType = TIMESTAMP; 
-            factoryMethodArgumentType = EOFactoryMethodArgumentIsDate; 
-            name = jodaLocalDateTime; 
-            valueClassName = "org.joda.time.LocalDateTime"; 
-            valueFactoryClassName = "er.prototypes.ValueFactory"; 
-            valueFactoryMethodName = jodaLocalDateTime; 
-            valueType = T; 
-        }, 
-        {
-            adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
-            adaptorValueConversionMethodName = jodaLocalTime; 
-            columnName = ""; 
-            externalType = TIMESTAMP; 
-            factoryMethodArgumentType = EOFactoryMethodArgumentIsDate; 
-            name = jodaLocalTime; 
-            valueClassName = "org.joda.time.LocalTime"; 
-            valueFactoryClassName = "er.prototypes.ValueFactory"; 
-            valueFactoryMethodName = jodaLocalTime; 
-            valueType = t; 
         }, 
         {
             columnName = ""; 
@@ -294,7 +234,7 @@
             width = 10000000; 
         }
     ); 
-    attributesUsedForLocking = (boolean, id, jodaDateTime); 
+    attributesUsedForLocking = (boolean, id); 
     className = EOGenericRecord; 
     classProperties = (
         amount, 
@@ -306,17 +246,12 @@
         date, 
         dateTime, 
         doubleNumber, 
-        duration, 
         flag, 
         globalID, 
         intBoolean, 
         intNumber, 
         ipAddress, 
         javaEnum, 
-        jodaDateTime, 
-        jodaLocalDate, 
-        jodaLocalDateTime, 
-        jodaLocalTime, 
         longNumber, 
         longText, 
         mutableArray, 
@@ -343,13 +278,9 @@
             date, 
             dateTime, 
             doubleNumber, 
-            duration, 
             flag, 
             intBoolean, 
             intNumber, 
-            jodaLocalDate, 
-            jodaLocalDateTime, 
-            jodaLocalTime, 
             longNumber, 
             longText, 
             mutableArray, 
