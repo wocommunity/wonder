@@ -13,8 +13,11 @@ import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
@@ -24,8 +27,11 @@ import er.directtoweb.pages.ERD2WPage;
 import er.extensions.ERXExtensions;
 import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.eof.ERXGenericRecord;
+import er.extensions.foundation.ERXArrayUtilities;
+import er.extensions.foundation.ERXValueUtilities;
 import er.modern.directtoweb.components.buttons.ERMDActionButton;
 import er.modern.directtoweb.interfaces.ERMEditRelationshipPageInterface;
 
@@ -34,6 +40,8 @@ import er.modern.directtoweb.interfaces.ERMEditRelationshipPageInterface;
  * 
  * @d2wKey editConfigurationName
  * @d2wKey isEntityEditable
+ * @d2wKey checkSortOrderingKeys
+ * @d2wKey defaultSortOrdering
  * @d2wKey readOnly
  * @d2wKey relationshipRestrictingQualifier - An additional qualifier that can be used to restrict the objects 
  * 									   		  shown in the relationship (see: ERDDelayedExtraQualifierAssignment).
@@ -52,6 +60,12 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 		public static String queryEmbeddedConfigurationName = "queryEmbeddedConfigurationName";
 		public static String localContext = "localContext";
 		public static String relationshipRestrictingQualifier ="relationshipRestrictingQualifier";
+		public static String checkSortOrderingKeys = "checkSortOrderingKeys";
+		public static String defaultSortOrdering = "defaultSortOrdering";
+		public static String userPreferencesSortOrdering	= "sortOrdering";
+		public static String displayPropertyKeys = "displayPropertyKeys";
+		public static String subTask = "subTask";
+		
 	}
 	
 	private EOEnterpriseObject _masterObject;
@@ -296,6 +310,7 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 		            relationshipDisplayGroup().setSelectsFirstObjectAfterFetch(true);
 		        
 		        relationshipDisplayGroup().setDataSource(dataSource());
+		        relationshipDisplayGroup().setSortOrderings(sortOrderings());
 		        relationshipDisplayGroup().fetch();
 		        EOQualifier extraQualifier = (EOQualifier)d2wContext().valueForKey(Keys.relationshipRestrictingQualifier);
 		        if (extraQualifier != null) {
@@ -305,6 +320,79 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 		        setPropertyKey(keyWhenRelationship());
 			}
 		}
+	}
+	
+	// SORT ORDERING
+	
+	@SuppressWarnings("unchecked")
+  public NSArray<EOSortOrdering> sortOrderings() {
+		NSArray<EOSortOrdering> sortOrderings = null;
+		if (userPreferencesCanSpecifySorting()) {
+			sortOrderings = (NSArray<EOSortOrdering>) userPreferencesValueForPageConfigurationKey(Keys.userPreferencesSortOrdering);
+			if (log.isDebugEnabled()) {
+			  log.debug("Found sort Orderings in user prefs " + sortOrderings);
+			}
+		}
+		if (sortOrderings == null) {
+			NSArray<String> sortOrderingDefinition = (NSArray<String>) d2wContext().valueForKey(Keys.defaultSortOrdering);
+			if (sortOrderingDefinition != null) {
+				NSMutableArray<EOSortOrdering> validatedSortOrderings = new NSMutableArray<EOSortOrdering>();
+				NSArray<String> displayPropertyKeys = (NSArray<String>) d2wContext().valueForKey(Keys.displayPropertyKeys);
+				for (int i = 0; i < sortOrderingDefinition.count();) {
+					String sortKey = sortOrderingDefinition.objectAtIndex(i++);
+					String sortSelectorKey = sortOrderingDefinition.objectAtIndex(i++);
+					if (!checkSortOrderingKeys() || isValidSortKey(displayPropertyKeys, sortKey)) {
+					  EOSortOrdering sortOrdering = new EOSortOrdering(sortKey, ERXArrayUtilities.sortSelectorWithKey(sortSelectorKey));
+					  validatedSortOrderings.addObject(sortOrdering);
+					}
+				}
+				sortOrderings = validatedSortOrderings;
+				if (log.isDebugEnabled()) {
+					log.debug("Found sort Orderings in rules " + sortOrderings);
+				}
+			}
+		}
+		return sortOrderings;
+	}
+	
+	/**
+	 * Returns whether or not sort orderings should be validated (based on the checkSortOrderingKeys rule).
+	 * @return whether or not sort orderings should be validated
+	 */
+	public boolean checkSortOrderingKeys() {
+		return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey(Keys.checkSortOrderingKeys), false);
+	}
+	
+	/**
+	 * Validates the given sort key (is it a display key, an attribute, or a valid attribute path). 
+	 * 
+	 * @param displayPropertyKeys the current display properties
+	 * @param sortKey the sort key to validate
+	 * @return true if the sort key is valid, false if not
+	 */
+	protected boolean isValidSortKey(NSArray<String> displayPropertyKeys, String sortKey) {
+	  boolean validSortOrdering = false;
+	  try {
+	    if (displayPropertyKeys.containsObject(sortKey) || entity().anyAttributeNamed(sortKey) != null || ERXEOAccessUtilities.attributePathForKeyPath(entity(), sortKey).count() > 0) {
+	      validSortOrdering = true;
+	    }
+	  }
+	  catch (IllegalArgumentException e) {
+	    // MS: ERXEOAccessUtilities.attributePathForKeyPath throws IllegalArgumentException for a bogus key path
+	    validSortOrdering = false;
+	  }
+	  
+	  if (!validSortOrdering) {
+	    log.warn("Sort key '" + sortKey + "' is not in display keys, attributes or non-flattened key paths for the entity '" + entity().name() + "'.");
+	    validSortOrdering = false;
+	  }
+	  return validSortOrdering;
+  }
+	
+	// this can be overridden by subclasses for which sorting has to be fixed
+	// (i.e. Grouping Lists)
+	public boolean userPreferencesCanSpecifySorting() {
+		return !"printerFriendly".equals(d2wContext().valueForKey(Keys.subTask));
 	}
     
     // ACCESSORS
