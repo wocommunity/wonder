@@ -1246,7 +1246,7 @@ public class ERXModelGroup extends EOModelGroup {
 		}
 	}
 
-	private static final NSArray _prototypeKeys = new NSArray(new Object[] { "externalType", "columnName", "readOnly", "valueClassName", "valueType", "width", "precision", "scale", "writeFormat", "readFormat", "userInfo", "serverTimeZone", "valueFactoryMethodName", "adaptorValueConversionMethodName", "factoryMethodArgumentType", "allowsNull", "parameterDirection", "_internalInfo" });
+	private static final NSArray _prototypeKeys = new NSArray(new Object[] { "externalType", "columnName", "readOnly", ERXApplication.isWO54()?"className":"valueClassName", "valueType", "width", "precision", "scale", "writeFormat", "readFormat", "userInfo", "serverTimeZone", "valueFactoryMethodName", "adaptorValueConversionMethodName", "factoryMethodArgumentType", "allowsNull", "parameterDirection", "_internalInfo" });
 
 	public static NSArray _prototypeKeys() {
 		return _prototypeKeys;
