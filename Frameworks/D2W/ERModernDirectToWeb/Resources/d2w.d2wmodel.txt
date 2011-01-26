@@ -46,6 +46,8 @@
     10 : (task = 'list' or task = 'select' or (task = 'edit' and subTask = 'list')) => repetitionComponentName = "ERMDSimpleListPageRepetition" [com.webobjects.directtoweb.Assignment],
     10 : *true* => editRelationshipEmbeddedConfigurationName = "<ERMDDefaultConfigurationNameAssignment>" [er.modern.directtoweb.assignments.defaults.ERMDDefaultConfigurationNameAssignment],
     10 : (task = 'list' or task = 'select' or task = 'editRelationship') => displayPropertyKeys = "defaultPropertyKeysFromEntityWithoutRelationships" [com.webobjects.directtoweb.DefaultAssignment],
+    15 : (task = 'list' and parentPageConfiguration != null) => useAjaxControls = "false" [com.webobjects.directtoweb.BooleanAssignment],
+    15 : (task = 'list' and parentPageConfiguration != null) => allowInlineEditing = "false" [com.webobjects.directtoweb.BooleanAssignment],
     15 : (task = 'edit' or task = 'inspect' or task = 'select') => shouldShowCancelButton = "true" [com.webobjects.directtoweb.BooleanAssignment],
     20 : task != 'edit' => hasForm = "false" [com.webobjects.directtoweb.BooleanAssignment],
     20 : *true* => datePickerHideControl = "true" [com.webobjects.directtoweb.BooleanAssignment],
