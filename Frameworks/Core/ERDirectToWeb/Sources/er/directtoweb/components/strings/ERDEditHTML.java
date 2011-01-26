@@ -81,7 +81,7 @@ public class ERDEditHTML extends ERDCustomEditComponent {
 	}
 
 	private String richTextMode() {
-		return stringValueForBinding("richTextMode") + ", editor_selector : '" + textAreaClass() + "'";
+		return stringValueForBinding("richTextMode") + ", editor_selector : '" + textAreaClass() + "', setup : function(ed) { ed.onChange.add(function(ed) { tinyMCE.triggerSave(); } );}";
 	}
 
 }
