@@ -97,3 +97,7 @@ InnerWrapper : WOGenericContainer {
 	elementName = "div";
 	class = d2wContext.classForInnerWrapper;
 }
+
+ShouldShowDefaultPageButtons : WOConditional {
+	condition = d2wContext.shouldShowDefaultPageButtons;
+}

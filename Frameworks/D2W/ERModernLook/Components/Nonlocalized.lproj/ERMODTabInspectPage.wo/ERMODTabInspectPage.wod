@@ -129,3 +129,7 @@ SecondaryActionBlock : ERMODSecondaryActionButtons {
   d2wContext = d2wContext;
   object = object;
 }
+
+ShouldShowDefaultPageButtons : WOConditional {
+  condition = d2wContext.shouldShowDefaultPageButtons;
+}

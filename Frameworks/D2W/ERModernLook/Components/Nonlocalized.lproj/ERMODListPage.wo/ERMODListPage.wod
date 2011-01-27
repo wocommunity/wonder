@@ -126,3 +126,7 @@ BatchSizeControl : ERMDBatchSizeControl {
   updateContainerID = d2wContext.idForRepetitionContainer;
   d2wContext = d2wContext;
 }
+
+ShouldShowDefaultPageButtons : WOConditional {
+	condition = d2wContext.shouldShowDefaultPageButtons;
+}
