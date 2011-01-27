@@ -17,6 +17,7 @@ ul, li {
 a {
 	color: #4262a1;
 	text-decoration: none;
+	outline: none;
 }
 
 label {
