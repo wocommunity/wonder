@@ -4,9 +4,9 @@ import java.math.BigDecimal;
 
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOSQLExpression;
+import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSTimestamp;
 
 /**
@@ -87,10 +87,14 @@ public class ERXObjectBinding implements ERXSQLBinding {
         _attribute = attribute;
     }
 
-    public String sqlStringForBindingOnExpression(EOSQLExpression expression) {
+    public String sqlStringForBindingOnExpression(EOSQLExpression expression, EOEditingContext ec) {
         NSDictionary binding = expression.bindVariableDictionaryForAttribute( _attribute, _value );
         expression.addBindVariableDictionary(binding);
         return (String) binding.objectForKey(EOSQLExpression.BindVariablePlaceHolderKey);
+    }
+    
+    public boolean isModelAttribute() {
+        return false;
     }
 
 }
