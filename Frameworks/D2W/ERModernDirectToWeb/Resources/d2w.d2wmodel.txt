@@ -4,6 +4,7 @@
     0 : *true* => displayKeyForEntity = "entity.name" [com.webobjects.directtoweb.Assignment],
     0 : *true* => includeOptionalForm = "true" [com.webobjects.directtoweb.BooleanAssignment],
     0 : task = 'edit' => propertyTask = "editAttribute" [com.webobjects.directtoweb.Assignment],
+    0 : *true* => shouldShowDefaultPageButtons = "true" [com.webobjects.directtoweb.BooleanAssignment],
     0 : *true* => useAjaxControlsWhenEmbedded = "false" [com.webobjects.directtoweb.BooleanAssignment],
     0 : smartRelationship != null => propertyTask = "inspectRelationship" [com.webobjects.directtoweb.Assignment],
     0 : pageConfiguration like '*Embedded*' => useAjaxControls = "true" [com.webobjects.directtoweb.BooleanAssignment],
