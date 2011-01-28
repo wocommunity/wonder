@@ -1,11 +1,23 @@
 ERAttachment.MigrationClassPrefix=er.attachment.migrations.ERAttachment
 
-er.attachment.mimeTypes=image/bmp,image/eps,image/gif,image/jp2,image/jpeg,application/pdf,image/pict,image/png,image/psd,image/raw,image/tiff,image/x-pict,text/css,text/plain,text/html,text/xml,text/x-diff,application/zip,application/x-tar,application/x-gzip,application/x-octet-stream,video/quicktime,application/guitar-pro3,application/guitar-pro4,application/guitar-pro5
+er.attachment.mimeTypes=audio/mpeg,audio/mp4,audio/x-wav,image/bmp,image/eps,image/gif,image/jp2,image/jpeg,application/pdf,image/pict,image/png,image/psd,image/raw,image/tiff,image/x-pict,text/css,text/plain,text/html,text/xml,text/x-diff,application/zip,application/x-tar,application/x-gzip,application/x-octet-stream,video/quicktime,application/guitar-pro3,application/guitar-pro4,application/guitar-pro5
 
 er.attachment.mimeType.video/quicktime.viewer=er.attachment.components.viewers.ERAttachmentQuickTimeViewer
 er.attachment.mimeType.image/*.viewer=er.attachment.components.viewers.ERAttachmentImageViewer
 er.attachment.mimeType.default.viewer=er.attachment.components.viewers.ERAttachmentDefaultViewer
 er.attachment.mimeType.unavailable.viewer=er.attachment.components.viewers.ERAttachmentUnavailableViewer
+
+er.attachment.mimeType.audio/mpeg.name=MP3
+er.attachment.mimeType.audio/mpeg.uti=public.mp3
+er.attachment.mimeType.audio/mpeg.extensions=mp3
+
+er.attachment.mimeType.audio/mp4.name=M4A
+er.attachment.mimeType.audio/mp4.uti=public.mpeg-4-audio
+er.attachment.mimeType.audio/mp4.extensions=m4a
+
+er.attachment.mimeType.audio/x-wav.name=WAV
+er.attachment.mimeType.audio/x-wav.uti=com.microsoft.waveform-audio
+er.attachment.mimeType.audio/x-wav.extensions=wav
 
 er.attachment.mimeType.image/bmp.name=BMP
 er.attachment.mimeType.image/bmp.uti=public.bmp
