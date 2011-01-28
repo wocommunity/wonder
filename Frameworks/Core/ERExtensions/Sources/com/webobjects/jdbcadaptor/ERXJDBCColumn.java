@@ -78,51 +78,6 @@ public class ERXJDBCColumn extends JDBCColumn {
 				}
 			}
 		}
-		
-		/*
-		 * Added support for custom date types
-		 */
-		if(_adaptorValueType == EOAttribute.AdaptorDateType && _customType) {
-			
-			//Get the adaptor date value
-			Date d = null;
-			try {
-				switch(_valueType) {
-				case EOAttribute._VTDate:
-				case EOAttribute._VTCoerceDate:
-					d = _rs.getDate(_column);
-					break;
-				case EOAttribute._VTTime:
-					d = _rs.getTime(_column);
-					break;
-				case EOAttribute._VTTimestamp:
-					d = _rs.getTimestamp(_column);
-					break;
-				default:
-					throw new IllegalStateException("AdaptorValueType is AdaptorDateType but valueType is: " + _valueType);
-				}
-			} catch(SQLException e) {
-				throw new JDBCAdaptorException(e);
-			}
-			
-			//Call the custom factory method
-			try {
-				if(_attribute.valueFactoryClass() != null) {
-					Class<?> factoryClass = _attribute.valueFactoryClass();
-					return _attribute.valueFactoryMethod().invoke(factoryClass, d);
-				}
-				Class<?> c = _NSUtilities.classWithName(_attribute.className());
-				return _attribute.valueFactoryMethod().invoke(c, d);
-			} catch(IllegalAccessException e) {
-				throw NSForwardException._runtimeExceptionForThrowable(e);
-			} catch(IllegalArgumentException e) {
-				throw NSForwardException._runtimeExceptionForThrowable(e);
-			} catch(NoSuchMethodException e) {
-				throw NSForwardException._runtimeExceptionForThrowable(e);
-			} catch(InvocationTargetException e) {
-				throw NSForwardException._runtimeExceptionForThrowable(e);
-			}
-		}
 		try {
 			return super._fetchValue(flag);
 		} catch(NSForwardException ex) {
