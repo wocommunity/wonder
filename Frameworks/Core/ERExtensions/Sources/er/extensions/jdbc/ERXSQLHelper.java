@@ -2193,41 +2193,6 @@ public class ERXSQLHelper {
 		public int varcharLargeColumnWidth() {
 			return -1;
 		}
-		
-		@Override
-		public boolean handleDatabaseException(EODatabaseContext databaseContext, Throwable throwable) {
-			if(throwable instanceof EOGeneralAdaptorException) {
-				EOGeneralAdaptorException e = (EOGeneralAdaptorException)throwable;
-				NSDictionary userInfo = e.userInfo();
-				EOAdaptorOperation failedOp = userInfo==null?null:(EOAdaptorOperation)userInfo.objectForKey(EOAdaptorChannel.FailedAdaptorOperationKey);
-				if(failedOp != null && failedOp.exception() instanceof JDBCAdaptorException) {
-					JDBCAdaptorException ae = (JDBCAdaptorException)failedOp.exception();
-					
-					// MySQL error codes: http://dev.mysql.com/doc/refman/5.0/en/error-messages-server.html
-					switch(ae.sqlException().getErrorCode()) {
-					
-					case 1062: //Violates unique constraint
-						handleUniqueConstraintAdaptorException(databaseContext, failedOp);
-						break;
-						
-					default:
-						
-					}
-				}
-			}
-			return false;
-		}
-	
-		/**
-		 * Throws a validation exception for a unique constraint failure.
-		 * @param context The database context
-		 * @param failedOp The operation that failed
-		 * @throws NSValidation.ValidationException The exception thrown. The key for the validation template strings file is <code>UniqueConstraintException</code>
-		 */
-		protected void handleUniqueConstraintAdaptorException(EODatabaseContext context, EOAdaptorOperation failedOp) throws NSValidation.ValidationException {
-			NSValidation.ValidationException ve = ERXValidationFactory.defaultFactory().createCustomException(null, "UniqueConstraintException");
-			throw ve;
-		}
 	}
 
 	public static class PostgresqlSQLHelper extends ERXSQLHelper {
