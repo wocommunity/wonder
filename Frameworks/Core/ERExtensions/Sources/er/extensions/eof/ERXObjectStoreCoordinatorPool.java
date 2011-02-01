@@ -3,9 +3,9 @@ package er.extensions.eof;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Observer;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -41,13 +41,13 @@ public class ERXObjectStoreCoordinatorPool {
     private static final Logger log = Logger.getLogger(ERXObjectStoreCoordinatorPool.class);
     
     private static final String THREAD_OSC_KEY = "er.extensions.ERXObjectStoreCoordinatorPool.threadOSC";
-    private Hashtable _oscForSession;
+    private Map<String, EOObjectStore> _oscForSession;
     private int _maxObjectStoreCoordinators;
     private int _currentObjectStoreIndex;
     private List<EOObjectStoreCoordinator> _objectStores;
     private List<EOSharedEditingContext> _sharedEditingContexts;
     private Object _lock = new Object();
-    protected static ERXObjectStoreCoordinatorPool _sharedObjectStoreCoordinatorPool;
+    private static ERXObjectStoreCoordinatorPool _sharedObjectStoreCoordinatorPool;
 
     public static ERXObjectStoreCoordinatorPool _pool() {
     	return _sharedObjectStoreCoordinatorPool;
@@ -69,7 +69,7 @@ public class ERXObjectStoreCoordinatorPool {
     public static void initialize() {
         if(_sharedObjectStoreCoordinatorPool == null) {
             ERXObjectStoreCoordinatorSynchronizer.initialize();
-            _sharedObjectStoreCoordinatorPool = new ERXObjectStoreCoordinatorPool();
+            _sharedObjectStoreCoordinatorPool = new ERXObjectStoreCoordinatorPool(ERXProperties.intForKey("er.extensions.ERXObjectStoreCoordinatorPool.maxCoordinators"));
             log.info("setting ERXEC.factory to MultiOSCFactory");
             ERXEC.setFactory(new MultiOSCFactory(_sharedObjectStoreCoordinatorPool, ERXEC.factory()));
         }
@@ -82,19 +82,17 @@ public class ERXObjectStoreCoordinatorPool {
      * It is used by MultiOSCFactory to get a rootObjectStore if the 
      * MultiOSCFactory is asked for a new EOEditingContext.
      */
-    private ERXObjectStoreCoordinatorPool() {
-        _maxObjectStoreCoordinators = ERXProperties.intForKey("er.extensions.ERXObjectStoreCoordinatorPool.maxCoordinators");
+    public ERXObjectStoreCoordinatorPool(int maxObjectStoreCoordinators) {
+    	_maxObjectStoreCoordinators = maxObjectStoreCoordinators;
         if (_maxObjectStoreCoordinators == 0) {
             //this should work like the default implementation
             log.warn("Registering the pool with only one coordinator doesn't make a lot of sense.");
             _maxObjectStoreCoordinators = 1;
         }
-        _oscForSession = new Hashtable();
+        _oscForSession = new HashMap<String, EOObjectStore>();
         
-        NSSelector sel = new NSSelector("sessionDidCreate", ERXConstant.NotificationClassArray);
-        NSNotificationCenter.defaultCenter().addObserver(this, sel, WOSession.SessionDidCreateNotification, null);
-        sel = new NSSelector("sessionDidTimeout", ERXConstant.NotificationClassArray);
-        NSNotificationCenter.defaultCenter().addObserver(this, sel, WOSession.SessionDidTimeOutNotification, null);
+        NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector/*<Void>*/("sessionDidCreate", ERXConstant.NotificationClassArray), WOSession.SessionDidCreateNotification, null);
+        NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector/*<Void>*/("sessionDidTimeout", ERXConstant.NotificationClassArray), WOSession.SessionDidTimeOutNotification, null);
     }
     
     /** 
