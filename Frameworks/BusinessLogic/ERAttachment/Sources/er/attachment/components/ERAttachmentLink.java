@@ -52,7 +52,7 @@ public class ERAttachmentLink extends WODynamicGroup {
     String attachmentUrl = "#";
     if (attachment != null) {
       attachmentUrl = ERAttachmentProcessor.processorForType(attachment).attachmentUrl(attachment, context.request(), context);
-      if (!attachment.available().booleanValue()) {
+      if (!attachment.available().booleanValue() || attachment.isNewObject()) {
         response.appendContentString("<span");
         ERXComponentUtilities.appendHtmlAttributes(_associations, response, component);
         response.appendContentString(">");
