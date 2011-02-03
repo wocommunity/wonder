@@ -364,6 +364,7 @@ public class AjaxFileUpload extends WOComponent {
 
 		}
 		catch (Throwable t) {
+			t.printStackTrace();
 			progress.setFailure(t);
 			return this.uploadFailed();
 		}
