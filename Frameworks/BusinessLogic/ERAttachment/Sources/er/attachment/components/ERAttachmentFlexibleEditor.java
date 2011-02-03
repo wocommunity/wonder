@@ -5,7 +5,6 @@ import org.apache.log4j.Logger;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 
@@ -14,9 +13,6 @@ import er.attachment.model.ERAttachment;
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.components.ERXComponentUtilities;
 import er.extensions.components.ERXNonSynchronizingComponent;
-import er.extensions.eof.ERXEC;
-import er.extensions.eof.ERXEOControlUtilities;
-import er.extensions.eof.ERXGenericRecord;
 
 /**
  * <p>
@@ -106,8 +102,6 @@ public class ERAttachmentFlexibleEditor extends ERXNonSynchronizingComponent {
 	};
 	
 	private String _id;
-	private EOEditingContext _workingEC;
-	private EOEditingContext _attachmentEC;
 	private ERAttachment _newAttachment;
 	private String _uploadCancelLabel;
 	private String _editorCancelButtonClass;
@@ -152,7 +146,6 @@ public class ERAttachmentFlexibleEditor extends ERXNonSynchronizingComponent {
 	 * @return null
 	 */
 	public WOActionResults cancelEdit() {
-		_attachmentEC = null;
 		_showUpload = false;
 		return null;
 	}
@@ -163,25 +156,13 @@ public class ERAttachmentFlexibleEditor extends ERXNonSynchronizingComponent {
 	 * @return results of the 
 	 */
 	public WOActionResults uploadSucceededAction() {
-		
-		attachmentEC().saveChanges();
 
-		EOEnterpriseObject localObj = (EOEnterpriseObject)EOUtilities.localInstanceOfObject(workingEC(), masterObject());
-		if (localObj instanceof ERXGenericRecord) {
-			((ERXGenericRecord)localObj).setValidatedWhenNested(false);
-		}
-		
-		ERAttachment existing = (ERAttachment)localObj.valueForKey(relationshipKey());
-		
+		EOEditingContext workingEC = masterObject().editingContext();
+		ERAttachment existing = (ERAttachment)masterObject().valueForKey(relationshipKey());
 		if (existing != null) {
-			workingEC().deleteObject(existing.localInstanceIn(workingEC()));
+			workingEC.deleteObject(existing.localInstanceIn(workingEC));
 		}
-		
-		EOEnterpriseObject localAttachment = (EOEnterpriseObject)EOUtilities.localInstanceOfObject(workingEC(), newAttachment());
-		
-		localObj.addObjectToBothSidesOfRelationshipWithKey(localAttachment, relationshipKey());
-		
-		workingEC().saveChanges();
+		masterObject().addObjectToBothSidesOfRelationshipWithKey(newAttachment(), relationshipKey());
 		
 		_showUpload = false;
 		return (WOActionResults)valueForBinding(Keys.uploadSucceededAction);
@@ -214,36 +195,12 @@ public class ERAttachmentFlexibleEditor extends ERXNonSynchronizingComponent {
 	}
 	
 	/**
-	 * Local peer EOEditingContext for the uploaded attachment
+	 * EOEditingContext for the uploaded attachment
 	 * 
 	 * @return EOEditingContext
 	 */
 	public EOEditingContext attachmentEC() {
-		if (_attachmentEC == null) {
-			_attachmentEC = ERXEC.newEditingContext();
-		}
-		return _attachmentEC;
-	}
-	
-	/**
-	 * Local child editing context of the masterObject for building the relationship
-	 * 
-	 * @return EOEditingContext
-	 */
-	public EOEditingContext workingEC() {
-		if (_workingEC == null) {;	
-			_workingEC = ERXEC.newEditingContext(masterObject().editingContext());
-		}
-		return _workingEC;
-	}
-	
-	/**
-	 * Convenience accessor, returns a local instance of the masterObject in the workingEC
-	 * 
-	 * @return EOEnterpriseObject
-	 */
-	public EOEnterpriseObject localParent() {
-		return ERXEOControlUtilities.localInstanceOfObject(workingEC(), masterObject());
+		return masterObject().editingContext();
 	}
 	
 	public boolean allowCancel() {
@@ -294,7 +251,9 @@ public class ERAttachmentFlexibleEditor extends ERXNonSynchronizingComponent {
 	 * @return boolean
 	 */
 	public boolean showLink() {
-		return booleanValueForBinding(Keys.viewShowAttachmentLink, true);
+		boolean showAttachment = booleanValueForBinding(Keys.viewShowAttachmentLink, true);
+		boolean isNew = viewerAttachment().isNewObject();
+		return showAttachment && !isNew;
 	}
 	
 	public boolean allowDownload() {

@@ -105,3 +105,19 @@ EditorEditButtonLabel : ERXLocalizedString {
 EditorCancelButtonLabel : ERXLocalizedString {
   value = editorCancelLabel;
 }
+
+AttachmentIsNew : WOConditional {
+  condition = viewerAttachment.isNewObject;
+}
+
+AttachmentIsNotNew : WOConditional {
+  condition = viewerAttachment.isNewObject;
+  negate = true;
+}
+
+ERAttachmentDefaultViewer : ERAttachmentDefaultViewer {
+  attachment = viewerAttachment;
+  configurationName = ^configurationName;
+  height = ^viewHeight;
+  width = ^viewWidth;
+}

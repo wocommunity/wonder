@@ -1,7 +1,12 @@
 <webobject name = "MainUpdateContainer">
   <webobject name = "NotShowUpload">
     <div class = "AEView">
-      <webobject name = "ERAttachmentViewer" />
+      <webobject name = "AttachmentIsNew">
+      	<webobject name = "ERAttachmentDefaultViewer"/>
+      </webobject>
+      <webobject name = "AttachmentIsNotNew">
+      	<webobject name = "ERAttachmentViewer" />
+      </webobject>
       <webobject name = "ShowFileName">
         <div class = "AEFileName">
           <webobject name = "ShowLink">
