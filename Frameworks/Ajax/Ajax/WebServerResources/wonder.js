@@ -1070,6 +1070,162 @@ var AjaxFlexibleUpload = {
 };
 var AFU = AjaxFlexibleUpload;
 
+var AjaxUploadClient = Class.create({
+	initialize: function(theId, uploadButtonId, jsonrpc, labels, options, uploaderOptions) {
+		this.id = theId;
+		this.rpc = jsonrpc;
+		this.previousState;
+		this.stateChecker;
+		this.labels = labels;
+		this.options = options;
+		this.count = 0;
+		this.uploader = new AjaxUpload(uploadButtonId, uploaderOptions);
+	},
+	prepare: function(filename, extension) {
+		$('AFUSubmitUploadButton' + this.id).show();
+		$('AFUSelectFileButtonWrapper' + this.id).hide();
+    	$('AFUFileObject' + this.id).show();
+    	$('AFUFileNameWrapper' + this.id).update(filename);
+    	$('AFUProgressBarWrapper' + this.id).hide();
+    	$('AFUClearButton' + this.id).show();
+	},
+	submit: function() {
+		$('AFUSubmitUploadButton' + this.id).hide();
+		this.uploader.submit();
+	},
+	start: function() {
+	    $('AFUClearButton' + this.id).hide();
+		$('AFUSelectFileButtonWrapper' + this.id).hide();
+    	$('AFUFileObject' + this.id).show();
+    	$('AFUFileNameWrapper' + this.id).update(this.labels.upload_starting);
+    	$('AFUProgressBarWrapper' + this.id).show();
+    	if (this.options.allowcancel == true)
+    		$('AFUCancelButton' + this.id).show();
+    	$('AFUProgressBarValue' + this.id).setStyle({ width: '1%' });
+   		this.update();
+   		var self = this;
+   		this.stateChecker = setInterval(function() { self.update(); }, self.options.refreshtime);
+   		if (this.options.startedFunction)
+			this.options.startedFunction(this.id);
+	},
+	clear: function() {
+	    this.rpc.wopage.clearFileResults();
+		$('AFUSelectFileButtonWrapper' + this.id).show();
+		$('AFUClearButton' + this.id).hide();
+		$('AFUFileObject' + this.id).hide();
+	},
+	cancel: function() {
+		$('AFUFileNameWrapper' + this.id).update(this.labels.upload_canceling);
+		$('AFUCancelButton' + this.id).hide();
+		clearInterval(this.stateChecker);
+		this.rpc.wopage.cancelUpload();
+		var self = this;
+		this.stateChecker = setInterval(function() { self.update() }, 1000);
+	},
+	update: function() {
+		var rpcResult  = this.rpc.wopage.uploadState();
+		var stateObj = rpcResult.nsdictionary;
+		var state = stateObj.state;
+		var filename = stateObj.filename;
+		var progress = stateObj.progress;
+		this.count++;
+		if (this.previousState) {
+			switch(this.previousState) {
+			case AUP.STATE.CANCELED:
+		    	clearInterval(this.stateChecker);
+		    	$('AFUFileObject' + this.id).hide();
+		 		$('AFUSelectFileButtonWrapper' + this.id).show();
+		 		if (this.options.canceledFunction)
+		    		this.options.canceledFunction(this.id);
+		 		if (this.options.finishedFunction)
+					this.options.finishedFunction(this.id);
+				break;
+			}
+		}
+		switch(state) {
+		case AUP.STATE.DORMANT:
+		    this.previousState = AUP.STATE.DORMANT;
+			break;
+		case AUP.STATE.STARTED:
+		    this.previousState = AUP.STATE.STARTED;
+			break;
+		case AUP.STATE.INPROGRESS:
+			$('AFUFileNameWrapper' + this.id).update(filename);
+			$('AFUProgressBarValue' + this.id).setStyle({ width:progress + '%' });
+			this.previousState = AUP.STATE.INPROGRESS;
+			break;
+		case AUP.STATE.CANCELED:
+		 	$('AFUFileNameWrapper' + this.id).update(this.labels.upload_canceling);
+		 	$('AFUCancelButton' + this.id).hide();
+		 	this.previousState = AUP.STATE.CANCELED;
+		 	try {
+		 		var iFrameId = 'AFUIF' + this.id;
+		 		var cancelUrl = stateObj.cancelUrl;
+		 		$(iFrameId).src = cancelUrl;
+		 	} catch (e) { 
+		 		// if the iframe is gone already ignore this
+		 	}
+			break;
+		case AUP.STATE.FAILED:
+			clearInterval(this.stateChecker);
+		    $('AFUFileNameWrapper' + this.id).update(this.labels.upload_failed);
+			$('AFUProgressBarWrapper' + this.id).hide();
+			$('AFUClearButton' + this.id).show();
+			if (this.options.failedFunction)
+		    	this.options.failedFunction(this.id);
+			if (this.options.finishedFunction)
+				this.options.finishedFunction(this.id);
+		    this.previousState = AUP.STATE.FAILED;
+			break;
+		case AUP.STATE.SUCCEEDED:
+			clearInterval(this.stateChecker);
+			$('AFUFileNameWrapper' + this.id).update(filename);
+			$('AFUProgressBarValue' + this.id).setStyle({ width:'100%' });
+			$('AFUCancelButton' + this.id).hide();
+			$('AFUProgressBarWrapper' + this.id).hide();
+			if (this.options.succeededFunction)
+		    	this.options.succeededFunction(this.id);
+			if (this.options.finishedFunction)
+				this.options.finishedFunction(this.id);
+			$('AFUClearButton' + this.id).show();
+			this.previousState = AUP.STATE.SUCCEEDED;
+			break;
+		case AUP.STATE.FINISHED:
+			break;
+		}
+	}
+});
+var AUP = AjaxUploadClient;
+AUP.STATE = { DORMANT : 0, STARTED : 1, INPROGRESS : 2, CANCELED : 3, FAILED : 4, SUCCEEDED : 5, FINISHED : 6 };
+AUP.uploaders = {};
+AUP.uploader = function(id) {
+	return uploaders[id];
+};
+AUP.add = function(id, jsonrpc, labels, options, uploaderOptions) {
+	var uploadButtonId = 'AFUSelectFileButton' + id;
+	this.uploaders[id] = new AjaxUploadClient(id, uploadButtonId, jsonrpc, labels, options, uploaderOptions);
+};
+AUP.start = function(id) {
+	var uploader = AUP.uploaders[id];
+	uploader.start();
+};
+AUP.submit = function(id) {
+	var uploader = AUP.uploaders[id];
+	uploader.submit();
+};
+AUP.prepare = function(id, filename, extension) {
+	var uploader = AUP.uploaders[id];
+	uploader.prepare(filename, extension);
+};
+AUP.cancel = function(id) {
+	var uploader = AUP.uploaders[id];
+	uploader.cancel();
+};
+AUP.clear = function(id) {
+	var uploader = AUP.uploaders[id];
+	uploader.clear();
+};
+
 var WonderRemoteLogging = {
 	options: {},
 	sendTimer: 0,

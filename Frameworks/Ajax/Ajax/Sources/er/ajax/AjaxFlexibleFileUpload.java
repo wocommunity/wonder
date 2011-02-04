@@ -8,11 +8,16 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
+import er.ajax.AjaxFileUpload;
+import er.ajax.AjaxUploadProgress;
+import er.ajax.AjaxUtils;
 import er.extensions.appserver.ERXRequest;
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.components.ERXComponentUtilities;
 import er.extensions.foundation.ERXValueUtilities;
+import er.extensions.localization.ERXLocalizer;
 
 /**
  * AjaxFlexibleFileUpload is an enhanced file upload component that uses a call to a hidden iFrame to handle a file
@@ -69,8 +74,12 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 		public static final String cancelLabel = "cancelLabel";
 		public static final String clearLabel = "clearLabel";
 		public static final String uploadLabel = "uploadLabel";
+		public static final String cancelingText = "cancelingText";
+		public static final String startingText = "startingText";
+		public static final String failedText = "failedText";
 		public static final String refreshTime = "refreshTime";
 		public static final String autoSubmit = "autoSubmit";
+		public static final String allowCancel = "allowCancel";
 		public static final String startedFunction = "startedFunction";
 		public static final String canceledFunction = "canceledFunction";
 		public static final String finishedFunction = "finishedFunction";
@@ -84,7 +93,6 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 		public static final String clearUploadProgressOnSuccess = "clearUploadProgressOnSuccess";
 	}
 	
-	private String _fileName;
 	private String _refreshTime;
 	private String _clearLabel;
 	private String _cancelLabel;
@@ -94,10 +102,9 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	private String _uploadButtonClass;
 	private String _cancelButtonClass;
 	private String _clearButtonClass;
-	
-	private boolean _clearUpload;
-	private boolean _fileChosen;
+
 	private Boolean _autoSubmit;
+	private Boolean _allowCancel;
 	
 	public boolean testFlag = false;
 	public enum UploadState { DORMANT, STARTED, INPROGRESS, CANCELED, FAILED, SUCCEEDED, FINISHED }
@@ -127,7 +134,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
      * @return script to initialize a new AjaxUpload JS object
      */
 	public String ajaxUploadScript() {
-		String result = "AFU.create('" + id() + "', '" + uploadButtonId() + "', {" + ajaxUploadOptions() + "});";
+		String result = "AUP.add('" + id() + "', " + ajaxProxyName() +", {" + ajaxUploadLabels() + "}, {" + options() + "}, {" + ajaxUploadOptions() + "});";
 		if (log.isDebugEnabled()) log.debug("AFU Create Script: " + result);
 		return result;
 	}
@@ -171,7 +178,6 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
     		_options.add("autoSubmit:false");
     	}
     	_options.add("onSubmit:" + onSubmitFunction());
-    	_options.add("onComplete:" + onCompleteFunction());
     	return _options.immutableClone();
     }
     
@@ -181,46 +187,75 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
      * @return comma separated string of AjaxUpload options.
      */
     public String ajaxUploadOptions() {
-    	return _ajaxUploadOptions().componentsJoinedByString(", ");
+    	return _ajaxUploadOptions().componentsJoinedByString(",");
+    }
+    
+    /**
+     * Builds an array of localized label strings
+     * 
+     * @return array of label/text strings
+     */
+    protected NSArray<String> _ajaxUploadLabels() {
+    	NSMutableArray<String> _labels = new NSMutableArray<String>();
+    	_labels.addObject(String.format("upload_canceling:'%s'", cancelingText()));
+    	_labels.addObject(String.format("upload_starting:'%s'", startingText()));
+    	_labels.addObject(String.format("upload_failed:'%s'", localizedStringForBinding(Keys.failedText, "Upload Failed")));
+    	return _labels;
+    }
+    
+    /**
+     * Returns a comma separated string of the localized label strings.
+     * 
+     * @return comma separated string of labels/text strings
+     */
+    public String ajaxUploadLabels() {
+    	return _ajaxUploadLabels().componentsJoinedByString(",");
+    }
+    
+    /**
+     * Builds an array of AFU options
+     * @return array of AFU options
+     */
+    protected NSArray<String> _options() {
+    	NSMutableArray<String> _options = new NSMutableArray<String>(String.format("refreshtime:%s", refreshTime()));
+    	_options.addObject("autosubmit:" + autoSubmit());
+    	_options.addObject("allowcancel:" + valueForBinding(Keys.allowCancel));
+    	
+    	String startedFunction = (String)this.valueForBinding(Keys.startedFunction);
+    	if (startedFunction != null) _options.addObject(String.format("startedFunction:%s", startedFunction));
+    	
+    	String finishedFunction = (String)this.valueForBinding(Keys.finishedFunction);
+    	if (finishedFunction != null) _options.addObject(String.format("finishedFunction:%s", finishedFunction));
+    	
+    	String failedFunction = (String)this.valueForBinding(Keys.failedFunction);
+    	if (failedFunction != null) _options.addObject(String.format("failedFunction:%s", failedFunction));
+    	
+    	String canceledFunction = (String)this.valueForBinding(Keys.canceledFunction);
+    	if (canceledFunction != null) _options.addObject(String.format("canceledFunction:%s", canceledFunction));
+    	
+    	String succeededFunction = (String)this.valueForBinding(Keys.succeededFunction);
+    	if (succeededFunction != null) _options.addObject(String.format("succeededFunction:%s", succeededFunction));
+    	
+    	return _options;
+    }
+    
+    /**
+     * Return a comma separated string of the AFU options
+     * @return comma separated string of options
+     */
+    public String options() {
+    	return _options().componentsJoinedByString(",");
     }
 	
 	// INLINE JS FUNCTIONS
-	
-	/**
-	 * JS Function string to start the inner update container
-	 * 
-	 * @return string to start the inner update container
-	 */
-	public String startFunction() {
-		return innerUpdateContainerId() + "PeriodicalUpdater.start();";
-	}
-	
-	/**
-	 * JS Function string to stop the inner update container
-	 * 
-	 * @return string to stop the inner update container
-	 */
-	public String stopFunction() {
-		return innerUpdateContainerId() + "Stop();";
-	}
-	
+		
 	/**
 	 * JS Function called when the AjaxUpload registers a change
 	 * 
 	 * @return string JS Function called when the AjaxUpload registers a change
 	 */
 	public String onChangeFunction() {
-		String result = "function(file, extension) { " + innerUpdateContainerId() + "Update(); }";
-		return result;
-	}
-	
-	/**
-	 * JS Function called when the AjaxUploader is completes.
-	 * 
-	 * @return string JS Function called when the AjaxUploader is completes.
-	 */
-	public String onCompleteFunction() {
-		String result = "function(file, extension){ " + innerUpdateContainerId() + "Stop(); " + innerUpdateContainerId() + "Update(); }";
+		String result = "function(file, extension) { AUP.prepare('"+ id() +"', file, extension); }";
 		return result;
 	}
 	
@@ -230,92 +265,171 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 * @return string JS Function called when the AjaxUploader submits
 	 */
 	public String onSubmitFunction() {
-		String result = "function(file, extension){ " + startFunction() + " }";
+		String result = "function(){ AUP.start('" + id() + "'); }";
 		return result;
 	}
 	
 	/**
-	 * JS Function called when the inner container refreshes
+	 * Generate a dictionary containing the current state of the upload.
 	 * 
-	 * @return string JS Function called when the inner container refreshes
+	 * @return a dictionary containing the current state of the upload.
 	 */
-	public String innerContainerRefreshFunction() {
-		String additionalFunction = null;
-		String finalFunction = null;
-		switch (state) {
-			case DORMANT:
-				break;
-			case STARTED: 
-				additionalFunction = (String)this.valueForBinding(Keys.startedFunction);
-				break;
-			case INPROGRESS:
-				break;
-			case CANCELED: 
-				// FIXME I don't actually think this case ever occurs here
-				// rather it happens on the outerContainerRefresh below
-				additionalFunction = (String)this.valueForBinding(Keys.canceledFunction);
-				finalFunction = (String)this.valueForBinding(Keys.finishedFunction);
-				state = UploadState.DORMANT;
-				break;
-			case FAILED:
-				additionalFunction = (String)this.valueForBinding(Keys.failedFunction);
-				finalFunction = (String)this.valueForBinding(Keys.finishedFunction);
-				state = UploadState.DORMANT;
-				break;
-			case SUCCEEDED:
-				additionalFunction = (String)this.valueForBinding(Keys.succeededFunction);
-				finalFunction = (String)this.valueForBinding(Keys.finishedFunction);
-				state = UploadState.DORMANT;
-				break;
-			case FINISHED:
-				break;
+	public NSDictionary<String, ?> uploadState() {
+		NSMutableDictionary<String, ?> stateObj = new NSMutableDictionary<String, String>();
+		AjaxUploadProgress progress = this.uploadProgress();
+		if (progress != null) {
+			stateObj.takeValueForKey(this.progressAmount(), "progress");
+			stateObj.takeValueForKey(progress.fileName(), "filename");
 		}
-		String result = "AFU.progressUpdate( '" + id() + "', '" + fileNameId() + "', " + additionalFunction + ", " + finalFunction + ")";
-		if (log.isDebugEnabled()) log.debug("Function: " + result);
-		return result;
-	}
-	
-	/**
-	 * JS Function called when the outer container refreshes
-	 * 
-	 * @return string JS Function called when the outer container refreshes
-	 */
-	public String outerContainerRefreshCompleteFunction() {
-		String additionalFunction = null;
-		String finalFunction = null;
-		switch (state) {
-			case CANCELED:
-				additionalFunction = (String)this.valueForBinding(Keys.canceledFunction);
-				finalFunction = (String)this.valueForBinding(Keys.finishedFunction);
-				state = UploadState.DORMANT;
-				break;
+		this.refreshState();
+		stateObj.takeValueForKey(new Integer(state.ordinal()), "state");
+		if (state == UploadState.CANCELED) {
+			stateObj.takeValueForKey(cancelUrl(), "cancelUrl");
 		}
-		String result = "AFU.executeCallbacks( '" + id() + "', " + additionalFunction + ", " + finalFunction + ")";
-		if (log.isDebugEnabled()) log.debug("Function: " + result);
-		return result;
+		if (log.isDebugEnabled()) log.debug("AjaxFlexibleFileUpload2.uploadState: " + stateObj);
+		return stateObj.immutableClone();
 	}
 	
 	/**
-	 * JS Function called by the manual submit button.
-	 * 
-	 * @return string JS Function called by the manual submit button.
+	 * Refresh the current state, call the finished handlers if we are succeeded, failed, or canceled
 	 */
-	public String submitUploadFunction() {
-		String result = "AFU.submit( '" + id() + "', '" + innerUpdateContainerId() + "')";
-		return result;
+	private void refreshState() {
+		state = UploadState.DORMANT;
+		AjaxUploadProgress progress = this.uploadProgress();
+		if (progress != null) {
+			if (progress.isStarted()) {
+				state = UploadState.INPROGRESS;
+				if (progress.isDone()) {
+					state = UploadState.FINISHED;
+					if (progress.isSucceeded()) {
+						state = UploadState.SUCCEEDED;
+						uploadSucceeded();
+					}
+					if (progress.isFailed()) {
+						state = UploadState.FAILED;
+						uploadFailed();
+					}
+					if (progress.isCanceled()) {
+						state = UploadState.CANCELED;
+						uploadCanceled();
+					}
+				} 
+			} else {
+				state = UploadState.STARTED;
+			}
+		}
+		if (log.isDebugEnabled()) log.debug("AjaxFlexibleFileUpload.refreshState: " + state);
 	}
 	
 	/**
-	 * JS Function string to cancel the iframe upload (by changing it's src url).
+	 * JS function bound to the cancel button
 	 * 
-	 * @return string to cancel the iframe upload (by changing it's src url).
+	 * @return JS function bound to the cancel button
 	 */
-	public String cancelFunction() {
-		String script = "AFU.cancelIFrame('" + iframeId() + "', '" + cancelUrl() + "')";
-		return script;
+	public String cancelUploadFunction() {
+		return String.format("AUP.cancel('%s');", id());
+	}
+	
+	/**
+	 * JS function bound to the manual upload button
+	 * 
+	 * @return JS function bound to the manul upload button
+	 */
+	public String manualSubmitUploadFunction() {
+		return String.format("AUP.submit('%s');", id());
+	}
+	
+	/**
+	 * JS function bound to the clear button
+	 * 
+	 * @return JS function bound ot the clear button
+	 */
+	public String clearUploadFunction() {
+		return String.format("AUP.clear('%s');", id());
 	}
 	
 	// AJAX IDS
+	
+	/**
+	 * Element id for the cancel button
+	 * 
+	 * @return id for the cancel button
+	 */
+	public String cancelButtonId() {
+		return String.format("AFUCancelButton%s", id());
+	}
+	
+	/**
+	 * Element id for the clear button
+	 * 
+	 * @return id for the clear button
+	 */
+	public String clearUploadButtonId() {
+		return String.format("AFUClearButton%s", id());
+	}
+	
+	/**
+	 * Element id for the manual upload submit button
+	 * 
+	 * @return id for the upload button
+	 */
+	public String submitUploadButtonId() {
+		return String.format("AFUSubmitUploadButton%s", id());
+	}
+	
+	/**
+	 * Element id for the select file button
+	 * 
+	 * @return id for the select file button
+	 */
+	public String selectFileButtonId() {
+		return String.format("AFUSelectFileButton%s", id());
+	}
+	
+	/**
+	 * Element id for the select file button wrapper div
+	 * 
+	 * @return id for the select file button wrapper div
+	 */
+	public String selectFileButtonWrapperId() {
+		return String.format("AFUSelectFileButtonWrapper%s", id());
+	}
+	
+	/**
+	 * Element id for the file object wrapper div
+	 * 
+	 * @return id for the file object wrapper div
+	 */
+	public String fileObjectId() {
+		return String.format("AFUFileObject%s", id());
+	}
+	
+	/**
+	 * Element id for the progress bar wrapper div
+	 * 
+	 * @return id for the progress bar wrapper div
+	 */
+	public String progressWrapperId() {
+		return String.format("AFUProgressBarWrapper%s", id());
+	}
+	
+	/**
+	 * Element id for the progress bar value inner div
+	 * 
+	 * @return id for the progress bar value inner div
+	 */
+	public String progressBarValueId() {
+		return String.format("AFUProgressBarValue%s", id());
+	}
+	
+	/**
+	 * Unique identifier for the ajax proxy object for this upload component
+	 * 
+	 * @return identifier for the ajax proxy object for this upload component
+	 */
+	public String ajaxProxyName() {
+		return "jsonrpc" + id();
+	}
 	
 	/**
 	 * Unique identifier for the inner update container
@@ -359,7 +473,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 * @return identifier for the fileName container
 	 */
 	public String fileNameId() {
-		return "AFUFN" + id();
+		return "AFUFileNameWrapper" + id();
 	}
 	
 	/**
@@ -378,9 +492,8 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 * 
 	 * @return url sent to the iframe to cancel
 	 */
-	@SuppressWarnings("unchecked")
 	public String cancelUrl() {
-		NSDictionary queryParams = new NSDictionary(Boolean.FALSE, Keys.wosid);
+		NSDictionary<String,Boolean> queryParams = new NSDictionary<String,Boolean>(Boolean.FALSE, Keys.wosid);
 		String url = ERXWOContext._directActionURL(context(), "ERXDirectAction/closeHTTPSession", queryParams, ERXRequest.isRequestSecure(context().request()));
 		if (log.isDebugEnabled()) log.debug("URL: " + url);
 		return url;
@@ -389,89 +502,21 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	// ACTIONS
 	
 	/**
-	 * Action called when the either update container refreshes
-	 * 
-	 * @return results of action
-	 */
-	public WOActionResults containerRefreshed() {
-		if (log.isDebugEnabled()) log.debug("** START ***");
-		WOActionResults result = null;
-		AjaxUploadProgress progress = this.uploadProgress();
-		if (_fileName == null && progress != null) {
-//			NSLog.out.appendln("ERMAjaxFileUpload.containerRefreshed: " + _fileName);
-			_fileName = progress.fileName();
-		}
-		if (progress == null) {
-			if (!_clearUpload && (autoSubmit().booleanValue() || _fileChosen)) {
-				if (log.isDebugEnabled()) log.debug("Progress is null: " + autoSubmit());
-				_uploadStarted = true;
-				_triggerUploadStart = true;
-				state = UploadState.STARTED;
-			}
-			if (!_clearUpload && !autoSubmit().booleanValue()) {
-				if (log.isDebugEnabled()) log.debug("Setting file chosen flag - autoSubmit: " + autoSubmit());
-				_fileChosen = true;
-			}
-		}
-		if (_clearUpload) {
-			_clearUpload = false;
-		}
-		if (progress != null) {
-			_triggerUploadStart = false;
-			_fileChosen = false;
-			if (log.isDebugEnabled()) {
-				log.debug("***HAS PROGRESS***");
-				log.debug("Percentage: " + progress.percentage());
-				log.debug("isDone: " + progress.isDone());
-				log.debug("isStarted: " + progress.isStarted());
-				log.debug("isCanceled: " + progress.isCanceled());
-				log.debug("isFailed: " + progress.isFailed());
-				log.debug("isSucceeded: " + progress.isSucceeded());
-			}
-			if (progress.isStarted()) {
-				state = UploadState.INPROGRESS;
-			}
-			if (progress.isSucceeded()) {
-				state = UploadState.SUCCEEDED;
-				result = this.uploadSucceeded();
-			}
-			if (progress.isFailed()) {
-				state = UploadState.FAILED;
-				result = this.uploadFailed();
-			}
-			if (progress.isCanceled()) {
-				state = UploadState.CANCELED;
-				_fileName = null;
-				result  = this.uploadCanceled();
-			}
-		}
-		return result;
-	}
-	
-	/**
 	 * Action called by the cancel upload button
-	 * 
-	 * @return results of action
 	 */
-	public WOActionResults cancelUpload() {
+	public void cancelUpload() {
 		if (this.uploadProgress() != null) {
 			this.uploadProgress().cancel();
 		}
 		state = UploadState.CANCELED;
-		return null;
 	}
 	
 	/**
 	 * Action called by the clear button, resets the uploader for a new file selection
 	 * 
-	 * @return results of action
 	 */
-	public WOActionResults clearFileResults() {
+	public void clearFileResults() {
 		clearUploadProgress();
-		_fileName = null;
-		_clearUpload = true;
-		_fileChosen = false;
-		return null;
 	}
 	
 	/**
@@ -496,11 +541,12 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 		return super.uploadFailed();
 	}
 	
+	/**
+	 * Hook for add-in action called when an upload succeeds.
+	 */
 	public WOActionResults uploadSucceeded() {
 		WOActionResults result = super.uploadSucceeded();
-		if (ERXComponentUtilities.booleanValueForBinding(this, Keys.clearUploadProgressOnSuccess, false)) {
-			clearUploadProgress();
-		}
+		clearUploadProgress();
 		return result;
 	}
 	
@@ -512,83 +558,17 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 			AjaxUploadProgress.unregisterProgress(session(), _progress);
 		}
 		_progress = null;
-		_uploadStarted = false;
 	}
-	
-	
-	// CONTROL POINTS
-	
-	/**
-	 * Is there an upload currently in progress.
-	 * 
-	 * @return boolean if an upload currently in progress.
-	 */
-	public boolean showProgressBar() {
-		boolean result = _triggerUploadStart || (_progress != null && _progress.isStarted() && !_progress.isCanceled() && !_progress.isDone());
-		return result;
-	}
-
-	/**
-	 * Is there no file?
-	 * 
-	 * @return boolean true if there no file
-	 */
-	public boolean showFileSelect() {
-		boolean result = (_progress == null || _progress.isCanceled()) && !_triggerUploadStart && !_fileChosen;
-		return result;
-	}
-
-	/**
-	 * Is the upload completed.
-	 * 
-	 * @return boolean true if the upload is complete
-	 */
-	public boolean showClearButton() {
-		boolean result = _progress != null && _progress.isSucceeded();
-		if (!autoSubmit().booleanValue()) {
-			result = showUploadButton() || result;
-		}
-		return result;
-	}
-	
-	/**
-	 * Should the component show the upload starting text?
-	 * 
-	 * @return boolean should show the starting text
-	 */
-	public boolean showUploadStarting() {
-		boolean result = _progress == null && _triggerUploadStart;
-		return result;
-	}
-	
-	/**
-	 * Has a file been selected, but the upload not started.
-	 * 
-	 * @return boolean true if a file has been chosen
-	 */
-	public boolean fileChosen() {
-		return _fileChosen;
-	}
-	
-	/**
-	 * Controls whether the upload button is displayed (this only occurs when the autoSubmit binding is false)
-	 * 
-	 * @return boolean controls whether the upload button is displayed
-	 */
-	public boolean showUploadButton() {
-		return _progress == null && fileChosen() && !autoSubmit().booleanValue() && !showProgressBar();
-	}
-	
 	
 	// ACCESSORS
 	
 	/**
-	 * Returns the upload progress for this uploader
+	 * Returns the AjaxUploadProgress for this uploader
 	 */
 	@Override
 	public AjaxUploadProgress uploadProgress() {
 		if (_progress == null) {
-			_progress = (AjaxUploadProgress)AjaxUploadProgress.progress(session(), id()); 
+			_progress = (AjaxUploadProgress)AjaxUploadProgress.progress(session(), id());
 		}
 		return _progress;
 	}
@@ -606,33 +586,30 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 		return _autoSubmit;
 	}
 	
-	/**
-	 * Returns a style string containing the width of the progress element
-	 * 
-	 * @return string style applied to the progress element
-	 */
-	public String progressStyle() {
-		String style = null;
-		AjaxUploadProgress progress = this.uploadProgress();
-		if (progress != null) {
-			if (!progress.isSucceeded()) {
-				int width = (int)(progress.percentage() * 100);
-				style = "width:" + width + "%;";
-			} else {
-				style = "width:100%;";
-			}
+	public Boolean allowCancel() {
+		if (_allowCancel == null) {
+			_allowCancel = ERXValueUtilities.BooleanValueWithDefault(valueForBinding(Keys.allowCancel), Boolean.FALSE);
 		}
-		return style;
+		return _allowCancel;
 	}
 	
 	/**
-	 * Returns the css class for the progress bar ('AMFUProgressAmount' or 'AMFUProgressAmount AMFUProgressAmountIndeterminate')
+	 * Calculate the current progress amount ( 0-100 )
 	 * 
-	 * @return string class applied to the progress bar
+	 * @return current progress amount ( 0-100 )
 	 */
-	public String progressClass() {
-		String result = "AFUProgressAmount";
-		return showUploadStarting() ? result + " AFUProgressAmountIndeterminate" : result;
+	public Integer progressAmount() {
+		Integer amount = null;
+		AjaxUploadProgress progress = this.uploadProgress();
+		if (progress != null) {
+			if (!progress.isSucceeded()) {
+				int percent = (int)(progress.percentage() * 100);
+				amount = new Integer(percent);
+			} else {
+				amount = new Integer(100);
+			}
+		}
+		return amount;
 	}
 
 	/**
@@ -644,30 +621,46 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 */
 	public String refreshTime() {
 		if (_refreshTime == null) {
-			double tempValue = ERXValueUtilities.doubleValueWithDefault(valueForBinding(Keys.refreshTime), 2000);
-			_refreshTime = String.valueOf(tempValue / 1000);
+			double tempValue = ERXValueUtilities.intValueWithDefault(valueForBinding(Keys.refreshTime), 1000);
+			_refreshTime = String.valueOf(tempValue);
 		}
 		return _refreshTime;
 	}
-	
-	/**
-	 * Accessor for the local fileName
-	 * 
-	 * @return string value of fileName
-	 */
-	public String fileName() {
-		return _fileName;
-	}
-	
-	/**
-	 * Setter for the local fileName
-	 * 
-	 * @param fn
-	 */
-	public void setFileName(String fn) {
-		_fileName = fn;
-	}
 
+	/**
+	 * Utility to localize labels with current localizer
+	 * @param value
+	 * @return localized value
+	 */
+	private String localizedString(String value) {
+		return ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(value);
+	}
+	
+	/**
+	 * Utility to return string value for binding or default value if no value is found
+	 * only really needed to support < WO5.4
+	 * @param key
+	 * @param defaultValue
+	 * @return value for binding or defaultValue
+	 */
+	private String stringValueForBinding(String key, String defaultValue) {
+		String result = (String) valueForBinding(key);
+		if (result == null) {
+			result = defaultValue;
+		}
+		return result;
+	}
+	
+	/**
+	 * Utility to return localized value from stringValueForBinding
+	 * @param key
+	 * @param defaultValue
+	 * @return localized value of binding key or defaultValue
+	 */
+	private String localizedStringForBinding(String key, String defaultValue) {
+		return localizedString(stringValueForBinding(key, defaultValue));
+	}
+	
 	/**
 	 * Label for the upload button
 	 * 
@@ -675,10 +668,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 */
 	public String uploadLabel() {
 		if (_uploadLabel == null) {
-			_uploadLabel = (String) valueForBinding(Keys.uploadLabel);
-			if (_uploadLabel == null) {
-				_uploadLabel = "Upload";
-			}
+			_uploadLabel = localizedStringForBinding(Keys.uploadLabel, "Upload");
 		}
 		return _uploadLabel;
 	}
@@ -690,10 +680,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 */
 	public String clearLabel() {
 		if (_clearLabel == null) {
-			_clearLabel = (String) valueForBinding(Keys.clearLabel);
-			if (_clearLabel == null) {
-				_clearLabel = "Clear";
-			}
+			_clearLabel = localizedStringForBinding(Keys.clearLabel, "Clear");
 		}
 		return _clearLabel;
 	}
@@ -705,10 +692,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 */
 	public String cancelLabel() {
 		if (_cancelLabel == null) {
-			_cancelLabel = (String) valueForBinding(Keys.cancelLabel);
-			if (_cancelLabel == null) {
-				_cancelLabel = "Cancel";
-			}
+			_cancelLabel = localizedStringForBinding(Keys.cancelLabel, "Cancel");
 		}
 		return _cancelLabel;
 	}
@@ -720,10 +704,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 */
 	public String selectFileLabel() {
 		if (_selectFileLabel == null) {
-			_selectFileLabel = (String) valueForBinding(Keys.selectFileLabel);
-			if (_selectFileLabel == null) {
-				_selectFileLabel = "Select File...";
-			}
+			_selectFileLabel = localizedStringForBinding(Keys.selectFileLabel, "Select File...");
 		}
 		return _selectFileLabel;
 	}
@@ -735,10 +716,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 */
 	public String selectFileButtonClass() {
 		if (_selectFileButtonClass == null) {
-			_selectFileButtonClass = (String)valueForBinding(Keys.selectFileButtonClass);
-			if (_selectFileButtonClass == null) {
-				_selectFileButtonClass = "Button ObjButton SelectFileObjButton";
-			}
+			_selectFileButtonClass = stringValueForBinding(Keys.selectFileButtonClass, "Button ObjButton SelectFileObjButton");
 		}
 		return _selectFileButtonClass;
 	}
@@ -750,10 +728,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 */
 	public String uploadButtonClass() {
 		if (_uploadButtonClass == null) {
-			_uploadButtonClass = (String)valueForBinding(Keys.uploadButtonClass);
-			if (_uploadButtonClass == null) {
-				_uploadButtonClass = "Button ObjButton UploadFileObjButton";
-			}
+			_uploadButtonClass = stringValueForBinding(Keys.uploadButtonClass, "Button ObjButton UploadFileObjButton");
 		}
 		return _uploadButtonClass;
 	}
@@ -765,10 +740,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 */
 	public String cancelButtonClass() {
 		if (_cancelButtonClass == null) {
-			_cancelButtonClass = (String)valueForBinding(Keys.cancelButtonClass);
-			if (_cancelButtonClass == null) {
-				_cancelButtonClass = "Button ObjButton CancelUploadObjButton";
-			}
+			_cancelButtonClass = stringValueForBinding(Keys.cancelButtonClass, "Button ObjButton CancelUploadObjButton");
 		}
 		return _cancelButtonClass;
 	}
@@ -780,10 +752,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 */
 	public String clearButtonClass() {
 		if (_clearButtonClass == null) {
-			_clearButtonClass = (String)valueForBinding(Keys.clearButtonClass);
-			if (_clearButtonClass == null) {
-				_clearButtonClass = "Button ObjButton ClearUploadObjButton";
-			}
+			_clearButtonClass = stringValueForBinding(Keys.clearButtonClass, "Button ObjButton ClearUploadObjButton");
 		}
 		return _clearButtonClass;
 	}
