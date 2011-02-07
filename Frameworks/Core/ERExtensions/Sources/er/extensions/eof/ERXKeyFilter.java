@@ -259,7 +259,7 @@ public class ERXKeyFilter {
 	 * @return the key filter
 	 */
 	public ERXKeyFilter _filterForKey(ERXKey key) {
-		ERXKeyFilter filter = (ERXKeyFilter)_includes.get(key);
+		ERXKeyFilter filter = _includes.get(key);
 		if (filter == null) {
 			filter = new ERXKeyFilter(_nextBase);
 			filter.setDelegate(_delegate);
@@ -306,6 +306,16 @@ public class ERXKeyFilter {
 	        include(new ERXKey<Object>(keyName));
 	    }
 	}
+
+    /**
+     * Includes the given key in this filter, wrapping it in an ERXKey object for you.
+     * 
+     * @param key the key to include
+     * @return the next filter
+     */
+    public ERXKeyFilter include(String keyName) {
+        return include(new ERXKey<Object>(keyName));
+    }
 
     /**
      * Includes the given key in this filter, wrapping it in an ERXKey object for you.
@@ -367,7 +377,7 @@ public class ERXKeyFilter {
 		        filter = existingFilter;
 		    }
 		    else {
-    			filter = (ERXKeyFilter)_includes.get(key);
+    			filter = _includes.get(key);
     			if (filter == null) {
     				filter = new ERXKeyFilter(_nextBase);
     				filter.setDelegate(_delegate);
