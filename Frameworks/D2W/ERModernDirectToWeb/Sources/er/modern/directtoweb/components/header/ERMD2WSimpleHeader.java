@@ -21,10 +21,7 @@ public class ERMD2WSimpleHeader extends ERMD2WHeader {
     }
     
     public String headerString() {
-    	if (_headerString == null) {
-			_headerString = stringValueForBinding(Keys.displayNameForPageConfiguration);;
-		}
-		return _headerString;
+			return stringValueForBinding(Keys.displayNameForPageConfiguration);
     }
     
 }
