@@ -1072,6 +1072,7 @@ var AFU = AjaxFlexibleUpload;
 
 var AjaxUploadClient = Class.create({
 	initialize: function(theId, uploadButtonId, jsonrpc, labels, options, uploaderOptions) {
+		this.STATE = { DORMANT : 0, STARTED : 1, INPROGRESS : 2, CANCELED : 3, FAILED : 4, SUCCEEDED : 5, FINISHED : 6 };
 		this.id = theId;
 		this.rpc = jsonrpc;
 		this.previousState;
@@ -1131,7 +1132,7 @@ var AjaxUploadClient = Class.create({
 		this.count++;
 		if (this.previousState) {
 			switch(this.previousState) {
-			case AUP.STATE.CANCELED:
+			case this.STATE.CANCELED:
 		    	clearInterval(this.stateChecker);
 		    	$('AFUFileObject' + this.id).hide();
 		 		$('AFUSelectFileButtonWrapper' + this.id).show();
@@ -1143,21 +1144,21 @@ var AjaxUploadClient = Class.create({
 			}
 		}
 		switch(state) {
-		case AUP.STATE.DORMANT:
-		    this.previousState = AUP.STATE.DORMANT;
+		case this.STATE.DORMANT:
+		    this.previousState = this.STATE.DORMANT;
 			break;
-		case AUP.STATE.STARTED:
-		    this.previousState = AUP.STATE.STARTED;
+		case this.STATE.STARTED:
+		    this.previousState = this.STATE.STARTED;
 			break;
-		case AUP.STATE.INPROGRESS:
+		case this.STATE.INPROGRESS:
 			$('AFUFileNameWrapper' + this.id).update(filename);
 			$('AFUProgressBarValue' + this.id).setStyle({ width:progress + '%' });
-			this.previousState = AUP.STATE.INPROGRESS;
+			this.previousState = this.STATE.INPROGRESS;
 			break;
-		case AUP.STATE.CANCELED:
+		case this.STATE.CANCELED:
 		 	$('AFUFileNameWrapper' + this.id).update(this.labels.upload_canceling);
 		 	$('AFUCancelButton' + this.id).hide();
-		 	this.previousState = AUP.STATE.CANCELED;
+		 	this.previousState = this.STATE.CANCELED;
 		 	try {
 		 		var iFrameId = 'AFUIF' + this.id;
 		 		var cancelUrl = stateObj.cancelUrl;
@@ -1166,7 +1167,7 @@ var AjaxUploadClient = Class.create({
 		 		// if the iframe is gone already ignore this
 		 	}
 			break;
-		case AUP.STATE.FAILED:
+		case this.STATE.FAILED:
 			clearInterval(this.stateChecker);
 		    $('AFUFileNameWrapper' + this.id).update(this.labels.upload_failed);
 			$('AFUProgressBarWrapper' + this.id).hide();
@@ -1175,9 +1176,9 @@ var AjaxUploadClient = Class.create({
 		    	this.options.failedFunction(this.id);
 			if (this.options.finishedFunction)
 				this.options.finishedFunction(this.id);
-		    this.previousState = AUP.STATE.FAILED;
+		    this.previousState = this.STATE.FAILED;
 			break;
-		case AUP.STATE.SUCCEEDED:
+		case this.STATE.SUCCEEDED:
 			clearInterval(this.stateChecker);
 			$('AFUFileNameWrapper' + this.id).update(filename);
 			$('AFUProgressBarValue' + this.id).setStyle({ width:'100%' });
@@ -1188,15 +1189,14 @@ var AjaxUploadClient = Class.create({
 			if (this.options.finishedFunction)
 				this.options.finishedFunction(this.id);
 			$('AFUClearButton' + this.id).show();
-			this.previousState = AUP.STATE.SUCCEEDED;
+			this.previousState = this.STATE.SUCCEEDED;
 			break;
-		case AUP.STATE.FINISHED:
+		case this.STATE.FINISHED:
 			break;
 		}
 	}
 });
 var AUP = AjaxUploadClient;
-AUP.STATE = { DORMANT : 0, STARTED : 1, INPROGRESS : 2, CANCELED : 3, FAILED : 4, SUCCEEDED : 5, FINISHED : 6 };
 AUP.uploaders = {};
 AUP.uploader = function(id) {
 	return uploaders[id];
