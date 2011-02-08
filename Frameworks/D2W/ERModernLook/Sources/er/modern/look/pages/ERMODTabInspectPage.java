@@ -2,11 +2,13 @@ package er.modern.look.pages;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 
 import er.directtoweb.ERD2WContainer;
 import er.directtoweb.pages.templates.ERD2WTabInspectPageTemplate;
+import er.extensions.ERXExtensions;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.foundation.ERXValueUtilities;
@@ -112,5 +114,22 @@ public class ERMODTabInspectPage extends ERD2WTabInspectPageTemplate {
 		}
 		super.setObject(eoenterpriseobject);
 	}
+	
+	// Force the tabSectionsContents to regenerate
+	// if the task changes (i.e: ajax inline inspect -> edit)
+	private String _previousTaskContext;
+	
+	@Override
+	public D2WContext d2wContext() {
+		D2WContext result = super.d2wContext();
+		if (_previousTaskContext == null) {
+			_previousTaskContext = result.task();
+		} else if (ERXExtensions.safeDifferent(_previousTaskContext, result.task())) {
+			clearTabSectionsContents();
+			_previousTaskContext = result.task();
+		}
+		return super.d2wContext();
+	}
+
 
 }
