@@ -166,13 +166,24 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
         }
     }
 
+    /**
+     * Use this method to clear query bindings from the display group's query dictionaries.  This is especially useful
+     * in cases where a delegate has been used to transform the query values and there's no UI for the customized
+     * parameters.
+     */
     protected void clearQueryBindings() {
-        WODisplayGroup dg = displayGroup();
-        dg.queryBindings().removeAllObjects();
-        dg.queryMin().removeAllObjects();
-        dg.queryMax().removeAllObjects();
-        dg.queryOperator().removeAllObjects();
-        dg.queryMatch().removeAllObjects();
+        NSArray keysToClear = (NSArray)d2wContext().valueForKey("queryKeysToClear");
+        if (keysToClear != null && keysToClear.count() > 0) {
+            WODisplayGroup dg = displayGroup();
+            for (Enumeration keyEnum = keysToClear.objectEnumerator(); keyEnum.hasMoreElements();) {
+                String key = (String)keyEnum.nextElement();
+                dg.queryBindings().removeObjectForKey(key);
+                dg.queryMin().removeObjectForKey(key);
+                dg.queryMax().removeObjectForKey(key);
+                dg.queryOperator().removeObjectForKey(key);
+                dg.queryMatch().removeObjectForKey(key);
+            }
+        }
     }
 
     protected void saveQueryBindings() {
