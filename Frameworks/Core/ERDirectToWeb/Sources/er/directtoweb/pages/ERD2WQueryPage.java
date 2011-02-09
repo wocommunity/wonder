@@ -33,6 +33,7 @@ import er.directtoweb.delegates.ERDQueryValidationDelegate;
 import er.directtoweb.interfaces.ERDQueryPageInterface;
 import er.extensions.appserver.ERXDisplayGroup;
 import er.extensions.appserver.ERXResponseRewriter;
+import er.extensions.foundation.ERXDictionaryUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
 
@@ -172,9 +173,9 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
      * parameters.
      */
     protected void clearQueryBindings() {
+        WODisplayGroup dg = displayGroup();
         NSArray keysToClear = (NSArray)d2wContext().valueForKey("queryKeysToClear");
         if (keysToClear != null && keysToClear.count() > 0) {
-            WODisplayGroup dg = displayGroup();
             for (Enumeration keyEnum = keysToClear.objectEnumerator(); keyEnum.hasMoreElements();) {
                 String key = (String)keyEnum.nextElement();
                 dg.queryBindings().removeObjectForKey(key);
@@ -184,6 +185,14 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
                 dg.queryMatch().removeObjectForKey(key);
             }
         }
+        
+        // Remove keys being queried for null value
+        NSArray nullQueryKeys = keysToQueryForNull.allKeys();
+        dg.queryBindings().removeObjectsForKeys(nullQueryKeys);
+        dg.queryMin().removeObjectsForKeys(nullQueryKeys);
+        dg.queryMax().removeObjectsForKeys(nullQueryKeys);
+        dg.queryOperator().removeObjectsForKeys(nullQueryKeys);
+        dg.queryMatch().removeObjectsForKeys(nullQueryKeys);
     }
 
     protected void saveQueryBindings() {
