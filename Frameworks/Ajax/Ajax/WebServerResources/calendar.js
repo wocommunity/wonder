@@ -28,6 +28,13 @@
   WEBPAGE:
     http://www.methods.co.nz/rails_date_kit/rails_date_kit.html
 
+  AUTHOR:  
+    Stuart Rackham <srackham@methods.co.nz>
+    Chuck Hill: minor extensions and Wonder compatability
+
+  LICENSE: 
+    This source code is released under the MIT license.
+
   HISTORY
     See CHANGELOG
 
