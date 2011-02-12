@@ -27,6 +27,12 @@ import er.extensions.components._private.ERXWOForm;
  * nested in a form if it uses form input (needs a form), as it will be  rendered outside of the form.  If you want to have
  * such a dialog, place the AjaxModalDialog outside of the form and use an AjaxModalDialogOpener in the form.</p>
  * 
+ * <p>Don't use AjaxModalDialogs inside of a repetition.  That will create a set of identical dialogs and will likely cause 
+ * then to display the wrong data.  Instead, declare the dialogs outside of the repetition.  Then INSIDE the repetition use 
+ * an AjaxModalDialogOpener for the link to open the dialog.  The action method of the AjaxModalDialogOpener should cache the
+ * current item from the repetition in an instance variable.  The AjaxModalDialog should then look at that instance variable
+ * to determine what data it should show.</p>
+ * 
  * <p>The links shown to open the dialog can come from two sources:
  * <ul>
  * <li>the label binding</li>
