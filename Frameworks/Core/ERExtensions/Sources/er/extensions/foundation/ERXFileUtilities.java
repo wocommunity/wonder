@@ -759,21 +759,26 @@ public class ERXFileUtilities {
         try {
         	InputStream stream = inputStreamForResourceNamed(fileName, aFrameWorkName, languageList);
         	if(stream != null) {
-        		String stringFromFile;
-        		if(true) {
-        			stringFromFile = stringFromInputStream(stream, encoding);
-        		} else {
-        			byte bytes[] = bytesFromInputStream(stream);
-            		String guessed = WOEncodingDetector.sharedInstance().guessEncodingForData(new NSData(bytes));
-            		if(!guessed.equals(encoding) && !"ASCII".equals(guessed)) {
-        				stringFromFile = new String(bytes, guessed);
-        				log.info("Encoding differs, guessed: " + guessed + " wanted: " + encoding + " fileName:"  + aFrameWorkName + "/" + fileName +  languageList);
-        			} else {
-        				stringFromFile = new String(bytes, encoding);
-        			}
+        		try {
+            		String stringFromFile;
+            		if(true) {
+            			stringFromFile = stringFromInputStream(stream, encoding);
+            		} else {
+            			byte bytes[] = bytesFromInputStream(stream);
+                		String guessed = WOEncodingDetector.sharedInstance().guessEncodingForData(new NSData(bytes));
+                		if(!guessed.equals(encoding) && !"ASCII".equals(guessed)) {
+            				stringFromFile = new String(bytes, guessed);
+            				log.info("Encoding differs, guessed: " + guessed + " wanted: " + encoding + " fileName:"  + aFrameWorkName + "/" + fileName +  languageList);
+            			} else {
+            				stringFromFile = new String(bytes, encoding);
+            			}
+            		}
+            		result = NSPropertyListSerialization.propertyListFromString(stringFromFile);
+                }
+        		finally {
+        			stream.close();
         		}
-        		result = NSPropertyListSerialization.propertyListFromString(stringFromFile);
-            }
+        	}
         } catch (IOException ioe) {
             log.error("ConfigurationManager: Error reading file <"+fileName+"> from framework " + aFrameWorkName);
         }
