@@ -10,10 +10,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.eoaccess.EOEntityClassDescription;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
@@ -34,6 +37,8 @@ import er.rest.format.IERXRestWriter;
  * @author mschrag
  */
 public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdditions {
+	private static final Logger log = Logger.getLogger(ERXRestRequestNode.class);
+
 	private boolean _array;
 	private String _name;
 	private boolean _rootNode;
@@ -743,6 +748,15 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 		toManyRelationshipNode.setType(destinationEntity.entityName());
 
 		List childrenObjects = (List) key.valueInObject(obj);
+		NSArray sortOrderings = keyFilter.sortOrderings();
+		if (sortOrderings != null && sortOrderings.count() > 0) {
+			if (childrenObjects instanceof NSArray) {
+				childrenObjects = EOSortOrdering.sortedArrayUsingKeyOrderArray((NSArray)childrenObjects, sortOrderings);
+			}
+			else {
+				log.warn("Skipping sort orderings for '" + key + "' on " + obj + " because sort orderings are only supported for NSArrays.");
+			}
+		}
 		ERXKeyFilter childFilter = keyFilter._filterForKey(key);
 		for (Object childObj : childrenObjects) {
 			ERXRestRequestNode childNode = new ERXRestRequestNode(null, false);
