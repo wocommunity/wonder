@@ -748,7 +748,8 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 		toManyRelationshipNode.setType(destinationEntity.entityName());
 
 		List childrenObjects = (List) key.valueInObject(obj);
-		NSArray sortOrderings = keyFilter.sortOrderings();
+		ERXKeyFilter childFilter = keyFilter._filterForKey(key);
+		NSArray sortOrderings = childFilter.sortOrderings();
 		if (sortOrderings != null && sortOrderings.count() > 0) {
 			if (childrenObjects instanceof NSArray) {
 				// MS: this cast is stupid, but 5.2 NSArray doesn't impl List, so the compiler screams
@@ -758,7 +759,6 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 				log.warn("Skipping sort orderings for '" + key + "' on " + obj + " because sort orderings are only supported for NSArrays.");
 			}
 		}
-		ERXKeyFilter childFilter = keyFilter._filterForKey(key);
 		for (Object childObj : childrenObjects) {
 			ERXRestRequestNode childNode = new ERXRestRequestNode(null, false);
 			childNode._fillInWithObjectAndFilter(childObj, destinationEntity, childFilter, delegate, visitedObjects);
