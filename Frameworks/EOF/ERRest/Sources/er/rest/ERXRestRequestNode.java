@@ -752,7 +752,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 		if (sortOrderings != null && sortOrderings.count() > 0) {
 			if (childrenObjects instanceof NSArray) {
 				// MS: this cast is stupid, but 5.2 NSArray doesn't impl List, so the compiler screams
-				childrenObjects = EOSortOrdering.sortedArrayUsingKeyOrderArray((NSArray)((Object)childrenObjects), sortOrderings);
+				childrenObjects = (List)(Object)EOSortOrdering.sortedArrayUsingKeyOrderArray((NSArray)((Object)childrenObjects), sortOrderings);
 			}
 			else {
 				log.warn("Skipping sort orderings for '" + key + "' on " + obj + " because sort orderings are only supported for NSArrays.");
