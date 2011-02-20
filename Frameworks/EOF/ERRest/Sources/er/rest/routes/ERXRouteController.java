@@ -1126,7 +1126,11 @@ public class ERXRouteController extends WODirectAction {
 				Method[] possibleMethods = resultsClass.getMethods();
 				for (Method possibleMethod : possibleMethods) {
 					ERXRouteParameter routeParameter = possibleMethod.getAnnotation(ERXRouteParameter.class);
-					if (routeParameter != null && (keyName.equals(routeParameter.value()) || possibleMethod.getName().equals(setMethodName))) {
+					// IK : in SnapshotExplorer the er.snapshotexplorer.components.pages.setEOModelGroup get never called because
+					// setMethodName will be "setEoModelGroup" and with the equals compare never hits.
+					// Now with changeds to equalsIgnoreCase it works again. Also I belive there will be no Problme except somebody
+					// has two Methods with the same Name but different capitalizations.
+					if (routeParameter != null && (keyName.equals(routeParameter.value()) || possibleMethod.getName().equalsIgnoreCase(setMethodName))) {
 						matchingMethod = possibleMethod;
 						break;
 					}
