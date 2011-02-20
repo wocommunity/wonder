@@ -12,6 +12,7 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSValidation;
 
 import er.directtoweb.delegates.ERDDeletionDelegate;
 import er.directtoweb.delegates.ERDPageDelegate;
@@ -116,15 +117,20 @@ public class ERMDDeleteButton extends ERMDActionButton {
     	dataSource().deleteObject(object());
     	EOEnterpriseObject obj = (EOEnterpriseObject)d2wContext().valueForKey(Keys.objectPendingDeletion);
     	obj.editingContext().deleteObject(obj);
-    	obj.editingContext().saveChanges();
-    	if (displayGroup() != null && displayGroup().displayedObjects().count() == 0) {
-    		displayGroup().displayPreviousBatch();
+    	
+    	try {
+	    	obj.editingContext().saveChanges();
+	    	if (displayGroup() != null && displayGroup().displayedObjects().count() == 0) {
+	    		displayGroup().displayPreviousBatch();
+	    	}
+	    	if (finalCommit) { // if we are editing, then don't save the parent ec.
+	    		object().editingContext().saveChanges();
+	    	}
+	    	d2wContext().takeValueForKey(null, Keys.objectPendingDeletion);
+	    	postDeleteNotification();
+    	} catch(NSValidation.ValidationException e) {
+    		parent().validationFailedWithException(e, e.object(), e.key());
     	}
-    	if (finalCommit) { // if we are editing, then don't save the parent ec.
-    		object().editingContext().saveChanges();
-    	}
-    	d2wContext().takeValueForKey(null, Keys.objectPendingDeletion);
-    	postDeleteNotification();
     	return null;
     }
     
