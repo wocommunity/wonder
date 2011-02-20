@@ -1106,6 +1106,15 @@
           ); 
         }; 
       }; 
+    }, 
+    {
+      "author" = "100"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.BooleanAssignment"; 
+        "keyPath" = "shouldShowQueryRelatedButton"; 
+        "value" = "true"; 
+      }; 
     }
   ); 
 }
