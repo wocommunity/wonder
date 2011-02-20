@@ -756,8 +756,8 @@ public class ERXFileUtilities {
             NSArray languageList,
             String encoding) {
         Object result = null;
+        InputStream stream = inputStreamForResourceNamed(fileName, aFrameWorkName, languageList);
         try {
-        	InputStream stream = inputStreamForResourceNamed(fileName, aFrameWorkName, languageList);
         	if(stream != null) {
         		String stringFromFile;
         		if(true) {
@@ -776,6 +776,8 @@ public class ERXFileUtilities {
             }
         } catch (IOException ioe) {
             log.error("ConfigurationManager: Error reading file <"+fileName+"> from framework " + aFrameWorkName);
+        } finally {
+        	try {if(stream != null) {stream.close();}} catch(IOException e) { log.error("Failed attempt to close stream.");}
         }
         return result;
     }
