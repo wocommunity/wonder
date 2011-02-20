@@ -143,7 +143,7 @@ public class ERXCrypto {
 		for (Enumeration e = dict.allKeys().objectEnumerator(); e.hasMoreElements();) {
 			String key = (String) e.nextElement();
 			NSArray<String> objects = dict.objectForKey(key);
-			String value = ERXCrypto.defaultCrypter().encrypt(objects.lastObject()).trim();
+			String value = ERXCrypto.defaultCrypter().decrypt(objects.lastObject()).trim();
 			result.setObjectForKey(value, key);
 		}
 		return result;
