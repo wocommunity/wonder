@@ -74,10 +74,6 @@ LongResponseExample : WOHyperlink {
 	pageName = "LongResponseExample";
 }
 
-DragResizeLink : WOHyperlink {
-	pageName = "DragResizeExample";
-}
-
 BusyLink : WOHyperlink {
 	pageName = "AjaxBusyIndicatorExample";
 }
