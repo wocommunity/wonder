@@ -494,8 +494,8 @@ var iBox = function() {
 			 for (var i=0; i<pairs.length; i++) {
 					var keyval = pairs[i].split('=');
 					if (!keyval || keyval.length != 2) continue;
-					var key = unescape(keyval[0]);
-					var val = unescape(keyval[1]);
+					var key = decodeURIComponent(keyval[0]);
+					var val = decodeURIComponent(keyval[1]);
 					val = val.replace(/\+/g, ' ');
 					if (val[0] == '"') var token = '"';
 					else if (val[0] == "'") var token = "'";
