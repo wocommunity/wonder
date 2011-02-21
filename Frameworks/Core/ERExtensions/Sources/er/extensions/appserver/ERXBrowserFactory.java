@@ -18,6 +18,7 @@ import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSSet;
 
 import er.extensions.foundation.ERXMutableDictionary;
 import er.extensions.foundation.ERXMutableInteger;
@@ -45,7 +46,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * <p>
  * Note that <code>ERXSession</code> and <code>ERXDirectAction</code> 
  * call <code>ERXBrowserFactory</code>'s 
- * {@link #retainBrowser retailnBrowser} and {@link #releaseBrowser releaseBrowser}  
+ * {@link #retainBrowser retainBrowser} and {@link #releaseBrowser releaseBrowser}  
  * to put the browser object to the browser pool when it is 
  * created and to remove the browser object from the pool when 
  * it is no longer referred from sessions and direct actions. 
@@ -112,7 +113,7 @@ public class ERXBrowserFactory {
     private static ERXBrowserFactory _factory;
 
     /** Expressions that define a robot */
-    private static final NSMutableArray robotExpressions = new NSMutableArray();
+    private static final NSMutableArray<Pattern> robotExpressions = new NSMutableArray();
 
     /** Mapping of UAs to browsers */
     private static final NSMutableDictionary _cache = ERXMutableDictionary.synchronizedDictionary();
@@ -198,28 +199,30 @@ public class ERXBrowserFactory {
      * @return 		a shared browser object
      */
     public ERXBrowser browserMatchingRequest(WORequest request) {
-        if (request == null)   throw new IllegalArgumentException("Request can't be null.");
+        if (request == null) {
+        	throw new IllegalArgumentException("Request can't be null.");
+        }
 
-        String ua = (String)request.headerForKey("user-agent");
+        String ua = request.headerForKey("user-agent");
         if (ua == null) {
             return getBrowserInstance(ERXBrowser.UNKNOWN_BROWSER, ERXBrowser.UNKNOWN_VERSION, 
             		ERXBrowser.UNKNOWN_VERSION, ERXBrowser.UNKNOWN_PLATFORM, null);
-        } else {
-        	ERXBrowser result = (ERXBrowser) _cache.objectForKey(ua);
-        	if(result == null) {
-        		String browserName 		= parseBrowserName(ua);
-        		String version 			= parseVersion(ua);
-        		String mozillaVersion	= parseMozillaVersion(ua);
-        		String platform 		= parsePlatform(ua);
-        		NSDictionary userInfo 	= new NSDictionary(
-        				new Object[] {parseCPU(ua), parseGeckoVersion(ua)},
-        				new Object[] {"cpu", "geckoRevision"});
-
-        		result = getBrowserInstance(browserName, version, mozillaVersion, platform, userInfo);
-        		_cache.setObjectForKey(result, ua);
-        	}
-        	return result;
         }
+        
+       	ERXBrowser result = (ERXBrowser) _cache.objectForKey(ua);
+       	if (result == null) {
+       		String browserName 		= parseBrowserName(ua);
+       		String version 			= parseVersion(ua);
+       		String mozillaVersion	= parseMozillaVersion(ua);
+       		String platform 		= parsePlatform(ua);
+       		NSDictionary userInfo 	= new NSDictionary(
+       				new Object[] {parseCPU(ua), parseGeckoVersion(ua)},
+       				new Object[] {"cpu", "geckoRevision"});
+       		
+        	result = getBrowserInstance(browserName, version, mozillaVersion, platform, userInfo);
+        	_cache.setObjectForKey(result, ua);
+        }
+        return result;
     }
 
     /** 
@@ -229,6 +232,7 @@ public class ERXBrowserFactory {
      * 
      * @param browserName string
      * @param version string
+     * @param mozillaVersion string
      * @param platform string
      * @param userInfo dictionary
      * @return a shared browser object
@@ -310,7 +314,7 @@ public class ERXBrowserFactory {
      */
     public synchronized void retainBrowser(ERXBrowser browser) {
         String key = _computeKey(browser);
-	_browserPool().setObjectForKey(browser, key);
+        _browserPool().setObjectForKey(browser, key);
         _incrementReferenceCounterForKey(key);
     }
 
@@ -344,9 +348,11 @@ public class ERXBrowserFactory {
     public String parseBrowserName(String userAgent) {
         String browserString = _browserString(userAgent);
         String browser  = ERXBrowser.UNKNOWN_BROWSER;
-        if(isRobot(browserString)) 							browser  = ERXBrowser.ROBOT;
+        if (isRobot(browserString)) 						browser  = ERXBrowser.ROBOT;
+        else if (browserString.indexOf("Chrome") > -1) 		browser  = ERXBrowser.CHROME;
         else if (browserString.indexOf("MSIE") > -1) 		browser  = ERXBrowser.IE;
         else if (browserString.indexOf("Safari") > -1) 		browser  = ERXBrowser.SAFARI;
+        else if (browserString.indexOf("Firefox") > -1) 	browser  = ERXBrowser.FIREFOX;
         else if (browserString.indexOf("OmniWeb") > -1)		browser  = ERXBrowser.OMNIWEB;
         else if (browserString.indexOf("iCab") > -1)		browser  = ERXBrowser.ICAB;
         else if (browserString.indexOf("Opera") > -1)		browser  = ERXBrowser.OPERA;
@@ -364,17 +370,15 @@ public class ERXBrowserFactory {
     	synchronized (robotExpressions) {
 			if(robotExpressions.count()==0) {
 				String strings = ERXStringUtilities.stringFromResource("robots", "txt", NSBundle.bundleForName("ERExtensions"));
-				for (Enumeration iter = NSArray.componentsSeparatedByString(strings, "\n").objectEnumerator(); iter.hasMoreElements();) {
-					String item = (String) iter.nextElement();
+				for (String item : NSArray.componentsSeparatedByString(strings, "\n")) {
 					if(item.trim().length() > 0 && item.charAt(0) != '#') {
 						robotExpressions.addObject(Pattern.compile(item));
 					}
 				}
 			}
 			userAgent = userAgent.toLowerCase();
-			for (Enumeration iter = robotExpressions.objectEnumerator(); iter.hasMoreElements();) {
-				Pattern pattern = (Pattern) iter.nextElement();
-				if(pattern.matcher(userAgent).find()) {
+			for (Pattern pattern : robotExpressions) {
+				if (pattern.matcher(userAgent).find()) {
 					log.debug(pattern + " matches  " + userAgent);
 					return true;
 				}
@@ -386,9 +390,9 @@ public class ERXBrowserFactory {
     
     public String parseGeckoVersion(String userAgent) {
     	if (userAgent.indexOf("Gecko") >= 0) {
-    		int startPos = userAgent.indexOf("; rv:") + 5;
-            // TODO someone document why '4'
-            if (startPos >= 0 && startPos != 4) {
+    		final String revString = "; rv:";
+    		int startPos = userAgent.indexOf(revString) + revString.length();
+            if (startPos > revString.length()) {
             	
             	int endPos = userAgent.indexOf(")", startPos);
             	
@@ -401,22 +405,22 @@ public class ERXBrowserFactory {
     }
 
     public String parseVersion(String userAgent) {
-        String browserString = _browserString(userAgent);
+        String versionString = _versionString(userAgent);
         int startpos;
         String version = ERXBrowser.UNKNOWN_VERSION;
         
         // Remove "Netscape6" from string such as "Netscape6/6.2.3", 
         // otherwise this method will produce wrong result "6/6.2.3" as the version
         final String netscape6 = "Netscape6";
-        startpos = browserString.indexOf(netscape6);
+        startpos = versionString.indexOf(netscape6);
         if (startpos > -1) 
-            browserString = browserString.substring(startpos + netscape6.length());
+            versionString = versionString.substring(startpos + netscape6.length());
         
         // Find first numeric in the string such as "MSIE 5.21; Mac_PowerPC)"
-        startpos = ERXStringUtilities.indexOfNumericInString(browserString);
+        startpos = ERXStringUtilities.indexOfNumericInString(versionString);
 
         if (startpos > -1) {
-            StringTokenizer st = new StringTokenizer(browserString.substring(startpos), " ;"); 
+            StringTokenizer st = new StringTokenizer(versionString.substring(startpos), " ;"); 
             if (st.hasMoreTokens()) 
                 version = st.nextToken();  // Will return "5.21" portion of "5.21; Mac_PowerPC)"
         }
@@ -533,6 +537,19 @@ public class ERXBrowserFactory {
     private String _computeKey(String browserName, String version, String mozillaVersion, 
                                                                 String platform, NSDictionary userInfo) {
         return browserName + "." + version + "." + mozillaVersion + "." + platform + "." + userInfo;
+    }
+    
+    private String _versionString(String userAgent) {
+    	String versionString;
+
+    	int startpos = userAgent.indexOf("Version/");
+    	if (startpos > -1)  {
+    		versionString = userAgent.substring(startpos);
+    	} else {
+    		versionString = _browserString(userAgent);
+    	}
+
+    	return versionString;
     }
 
 }

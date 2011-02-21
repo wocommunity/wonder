@@ -89,7 +89,9 @@ public class ERXBasicBrowser extends ERXBrowser {
     private final boolean         _isOmniWeb;
     private final boolean         _isOpera;
     private final boolean         _isSafari;
+    private final boolean         _isFirefox;
     private final boolean         _isMozilla;
+    private final boolean         _isChrome;
     private final boolean         _isUnknownBrowser;
 
     private final boolean         _isMozillaVersion50;
@@ -139,7 +141,9 @@ public class ERXBasicBrowser extends ERXBrowser {
         _isOmniWeb = _browserName.equals(OMNIWEB);
         _isOpera = _browserName.equals(OPERA);
         _isSafari = _browserName.equals(SAFARI);
-        _isMozilla = _browserName.equals(MOZILLA);
+        _isFirefox = _browserName.equals(FIREFOX);
+        _isMozilla = (_browserName.equals(MOZILLA) || _browserName.equals(FIREFOX));
+        _isChrome = _browserName.equals(CHROME);
         _isUnknownBrowser = _browserName.equals(UNKNOWN_BROWSER);
 
         _isMozillaVersion50 = -1 < _mozillaVersion.indexOf("5.0");
@@ -237,6 +241,14 @@ public class ERXBasicBrowser extends ERXBrowser {
         return _isSafari;
     }
 
+    public boolean isFirefox() {
+        return _isFirefox;
+    }
+
+    public boolean isChrome() {
+        return _isChrome;
+    }
+
     public boolean isMozilla() {
         return _isMozilla;
     }
@@ -254,7 +266,7 @@ public class ERXBasicBrowser extends ERXBrowser {
     }
 
     public boolean isVersion9() {
-        return _isVersion8;
+        return _isVersion9;
     }
 
     public boolean isVersion8() {
@@ -278,7 +290,7 @@ public class ERXBasicBrowser extends ERXBrowser {
     }
 
     // Netscape 4.5 to 4.7 is very different from 4.0
-    // NOTE: 4.6 and 4.7 is fell into this group
+    // NOTE: 4.6 and 4.7 fell into this group
     public boolean isVersion45() {
         return _isVersion45;
     }
