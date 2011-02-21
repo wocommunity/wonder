@@ -31,7 +31,9 @@ public class ERXJSONRestParser implements IERXRestParser {
 				if (ERXRestUtils.isPrimitive(obj)) {
 					ERXRestRequestNode primitiveChild = new ERXRestRequestNode(null, obj, false);
 					requestNode.addChild(primitiveChild);
-					delegate.nodeDidParse(primitiveChild);
+					if (delegate != null) {
+						delegate.nodeDidParse(primitiveChild);
+					}
 				}
 				else {
 					requestNode.addChild(ERXJSONRestParser.createRequestNodeForJSON(null, (JSON) obj, true, delegate));
@@ -46,7 +48,9 @@ public class ERXJSONRestParser implements IERXRestParser {
 				if (ERXRestUtils.isPrimitive(value)) {
 					ERXRestRequestNode primitiveChild = new ERXRestRequestNode(strKey, value, false);
 					requestNode.addChild(primitiveChild);
-					delegate.nodeDidParse(primitiveChild);
+					if (delegate != null) {
+						delegate.nodeDidParse(primitiveChild);
+					}
 				}
 				else {
 					requestNode.addChild(ERXJSONRestParser.createRequestNodeForJSON(strKey, (JSON) value, false, delegate));
@@ -57,7 +61,9 @@ public class ERXJSONRestParser implements IERXRestParser {
 			throw new IllegalArgumentException("Unknown JSON value '" + json + "'.");
 		}
 
-		delegate.nodeDidParse(requestNode);
+		if (delegate != null) {
+			delegate.nodeDidParse(requestNode);
+		}
 
 		return requestNode;
 	}
