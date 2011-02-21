@@ -32,7 +32,9 @@ public class ERXPListRestParser implements IERXRestParser {
 				if (ERXRestUtils.isPrimitive(obj)) {
 					ERXRestRequestNode primitiveChild = new ERXRestRequestNode(null, object, false);
 					requestNode.addChild(primitiveChild);
-					delegate.nodeDidParse(primitiveChild);
+					if (delegate != null) {
+						delegate.nodeDidParse(primitiveChild);
+					}
 				}
 				else {
 					requestNode.addChild(createRequestNodeForObject(null, obj, true, delegate));
@@ -48,7 +50,9 @@ public class ERXPListRestParser implements IERXRestParser {
 				if (ERXRestUtils.isPrimitive(obj)) {
 					ERXRestRequestNode primitiveChild = new ERXRestRequestNode(null, object, false);
 					requestNode.addChild(primitiveChild);
-					delegate.nodeDidParse(primitiveChild);
+					if (delegate != null) {
+						delegate.nodeDidParse(primitiveChild);
+					}
 				}
 				else {
 					requestNode.addChild(createRequestNodeForObject(null, obj, true, delegate));
@@ -63,7 +67,9 @@ public class ERXPListRestParser implements IERXRestParser {
 				if (ERXRestUtils.isPrimitive(value)) {
 					ERXRestRequestNode primitiveChild = new ERXRestRequestNode(strKey, value, false);
 					requestNode.addChild(primitiveChild);
-					delegate.nodeDidParse(primitiveChild);
+					if (delegate != null) {
+						delegate.nodeDidParse(primitiveChild);
+					}
 				}
 				else {
 					requestNode.addChild(createRequestNodeForObject(strKey, value, false, delegate));
@@ -80,7 +86,9 @@ public class ERXPListRestParser implements IERXRestParser {
 				if (ERXRestUtils.isPrimitive(value)) {
 					ERXRestRequestNode primitiveChild = new ERXRestRequestNode(strKey, value, false);
 					requestNode.addChild(primitiveChild);
-					delegate.nodeDidParse(primitiveChild);
+					if (delegate != null) {
+						delegate.nodeDidParse(primitiveChild);
+					}
 				}
 				else {
 					requestNode.addChild(createRequestNodeForObject(strKey, value, false, delegate));
@@ -91,7 +99,9 @@ public class ERXPListRestParser implements IERXRestParser {
 			throw new IllegalArgumentException("Unknown PLIST value '" + object + "'.");
 		}
 
-		delegate.nodeDidParse(requestNode);
+		if (delegate != null) {
+			delegate.nodeDidParse(requestNode);
+		}
 
 		return requestNode;
 	}

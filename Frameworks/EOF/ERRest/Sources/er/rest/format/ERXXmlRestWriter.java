@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.Enumeration;
 import java.util.Map;
 
-import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSTimestamp;
 
 import er.extensions.foundation.ERXProperties;
@@ -28,7 +27,9 @@ public class ERXXmlRestWriter implements IERXRestWriter {
 	}
 
 	protected void appendNodeToResponse(ERXRestRequestNode node, IERXRestResponse response, int indent, ERXRestFormat.Delegate delegate) {
-		delegate.nodeWillWrite(node);
+		if (delegate != null) {
+			delegate.nodeWillWrite(node);
+		}
 		if (node.value() != null || node.isNull()) {
 			appendValueToResponse(node, response, indent);
 		}

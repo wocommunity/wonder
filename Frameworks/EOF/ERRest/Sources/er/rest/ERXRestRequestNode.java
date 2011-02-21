@@ -584,7 +584,12 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 *            the value for this node
 	 */
 	public void setValue(Object value) {
-		_value = value;
+		if (value instanceof NSKeyValueCoding.Null) {
+			_value = null;
+		}
+		else {
+			_value = value;
+		}
 		guessNull();
 	}
 
@@ -941,8 +946,14 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 			}
 		}
 		else if (ERXRestUtils.isPrimitive(obj)) {
-			setValue(obj);
-			setAssociatedObject(obj);
+			if (obj instanceof NSKeyValueCoding.Null) {
+				setValue(null);
+				setAssociatedObject(null);
+			}
+			else {
+				setValue(obj);
+				setAssociatedObject(obj);
+			}
 		}
 		else {
 			// in case we have a superclass class description passed in
@@ -1247,6 +1258,22 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 					_safeDidSkipValueForKey(keyFilter, obj, childNode, keyName); // MS: what is the value here? i'm just
 					// hanging in the node ...
 				}
+			}
+		}
+	}
+
+	// MS: Totally debatable .... I may take this back out, but it makes things look prettier.
+	public void _removeRedundantTypes() {
+		String type = type();
+		if ("NSDictionary".equals(type) || "NSMutableDictionary".equals(type)) {
+			setType(null);
+		}
+		NSArray children = children();
+		if (children != null) {
+			/*for (ERXRestRequestNode child : children) {*/
+			for (Enumeration childEnum = children.objectEnumerator(); childEnum.hasMoreElements(); ) {
+				ERXRestRequestNode child = (ERXRestRequestNode)childEnum.nextElement();
+				child._removeRedundantTypes();
 			}
 		}
 	}
