@@ -3,6 +3,7 @@ package er.extensions.eof;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSSet;
@@ -53,6 +54,7 @@ public class ERXKeyFilter {
 	private NSMutableSet _excludes;
 	private NSMutableSet _lockedRelationships;
 	private NSMutableDictionary _map;
+	private NSArray _sortOrderings;
 	private ERXKeyFilter.Base _nextBase;
 	private ERXKeyFilter.Delegate _delegate;
 	private boolean _deduplicationEnabled;
@@ -480,6 +482,27 @@ public class ERXKeyFilter {
 		_includes.clear();
 		_excludes.removeAllObjects();
 		return include(key);
+	}
+	
+	/**
+	 * Sets the sort orderings that will be applied by this key filter. The actual meaning of this
+	 * is up to the code that applies this key filter to an object graph. A common example would be
+	 * if you want to selectively sort the results of a to-many relationship that this filter
+	 * is applied to.
+	 * 
+	 * @param sortOrderings the sort orderings that will be applied by this key filter
+	 */
+	public void setSortOrderings(NSArray sortOrderings) {
+		_sortOrderings = sortOrderings;
+	}
+	
+	/**
+	 * Returns the sort orderings that will be applied by this key filter.
+	 * 
+	 * @return the sort orderings that will be applied by this key filter
+	 */
+	public NSArray sortOrderings() {
+		return _sortOrderings;
 	}
 
 	/**

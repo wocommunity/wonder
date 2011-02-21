@@ -10,10 +10,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.eoaccess.EOEntityClassDescription;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
@@ -34,6 +37,8 @@ import er.rest.format.IERXRestWriter;
  * @author mschrag
  */
 public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdditions {
+	private static final Logger log = Logger.getLogger(ERXRestRequestNode.class);
+
 	private boolean _array;
 	private String _name;
 	private boolean _rootNode;
@@ -772,6 +777,16 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 
 		List childrenObjects = (List) key.valueInObject(obj);
 		ERXKeyFilter childFilter = keyFilter._filterForKey(key);
+		NSArray sortOrderings = childFilter.sortOrderings();
+		if (sortOrderings != null && sortOrderings.count() > 0) {
+			if (childrenObjects instanceof NSArray) {
+				// MS: this cast is stupid, but 5.2 NSArray doesn't impl List, so the compiler screams
+				childrenObjects = (List)(Object)EOSortOrdering.sortedArrayUsingKeyOrderArray((NSArray)((Object)childrenObjects), sortOrderings);
+			}
+			else {
+				log.warn("Skipping sort orderings for '" + key + "' on " + obj + " because sort orderings are only supported for NSArrays.");
+			}
+		}
 		for (Object childObj : childrenObjects) {
 			ERXRestRequestNode childNode = new ERXRestRequestNode(null, false);
 			childNode._fillInWithObjectAndFilter(childObj, destinationEntity, childFilter, delegate, visitedObjects);
