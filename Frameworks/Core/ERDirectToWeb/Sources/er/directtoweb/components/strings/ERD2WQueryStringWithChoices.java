@@ -62,6 +62,9 @@ public class ERD2WQueryStringWithChoices extends ERD2WQueryStringOperator {
         
     public ERXKeyValuePair selectedChoice() {
         String value = (String)value();
+        if(value == null) {
+        	return null;
+        }
         String choice = (String) ERXLocalizer.currentLocalizer().valueForKey(value);
         if(choice == null) {
             choice = value;

@@ -208,7 +208,7 @@ public class AppDetailPage extends MonitorComponent {
             }
 
             public String explaination() {
-                return "Selecting 'Yes' will shutdown any running instances of this application, delete all instance configurations, and remove this application from the Application page.";
+                return "Selecting 'Yes' will shutdown the selected instance of this application and delete its instance configuration.";
             }
 
             public int pageType() {

@@ -41,7 +41,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
         
         public void editingContextWillSaveChanges(NSNotification n) {
             EOEditingContext ec = (EOEditingContext) n.object();
-                    boolean isNestedEditingContext = !(ec.parentObjectStore() instanceof EOObjectStoreCoordinator);
+                    boolean isNestedEditingContext = (ec.parentObjectStore() instanceof EOEditingContext);
 
                     ec.processRecentChanges(); // need to do this to make sure the updated objects list is current
 
@@ -86,7 +86,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
 
         public void editingContextDidSaveChanges(NSNotification n) {
             EOEditingContext ec = (EOEditingContext) n.object();
-            final boolean isNestedEditingContext = ! (ec.parentObjectStore() instanceof EOObjectStoreCoordinator);
+            final boolean isNestedEditingContext = (ec.parentObjectStore() instanceof EOEditingContext);
             
             NSArray insertedObjects = (NSArray)n.userInfo().objectForKey("inserted");
             NSArray updatedObjects = (NSArray)n.userInfo().objectForKey("updated");

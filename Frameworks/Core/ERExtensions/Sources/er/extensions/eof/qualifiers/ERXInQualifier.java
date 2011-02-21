@@ -18,11 +18,14 @@ import com.webobjects.eocontrol.EOAndQualifier;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOKeyValueArchiver;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOQualifierVariable;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSCoder;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
@@ -277,4 +280,34 @@ public class ERXInQualifier extends ERXKeyValueQualifier implements Cloneable {
             return new ERXInQualifier(newPath, inQualifier.values());
         }
     }
+    
+    @Override
+    public Class classForCoder() {
+    	return getClass();
+    }
+    
+	public static Object decodeObject(NSCoder coder) {
+		String key = (String) coder.decodeObject();
+		NSArray values = (NSArray)coder.decodeObject();
+		return new ERXInQualifier(key, values);
+	}
+
+	@Override
+	public void encodeWithCoder(NSCoder coder) {
+		coder.encodeObject(key());
+		coder.encodeObject(values());
+	}
+
+	@Override
+	public void encodeWithKeyValueArchiver(EOKeyValueArchiver archiver) {
+		archiver.encodeObject(key(), "key");
+		archiver.encodeObject(values(), "values");
+	}
+
+	public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver unarchiver) {
+		return new ERXInQualifier(
+				(String)unarchiver.decodeObjectForKey("key"),
+				(NSArray)unarchiver.decodeObjectForKey("values"));
+	}
+	
 }
