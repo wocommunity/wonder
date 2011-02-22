@@ -1374,7 +1374,9 @@ public class ERXEC extends EOEditingContext {
 	public void _objectsChangedInStore(NSNotification nsnotification) {
 		ERXEnterpriseObject.FlushCachesProcessor.perform(this, (NSArray) nsnotification.userInfo().objectForKey("objects"));
 		if (savingChanges) {
-			queuedNotifications.addObject(nsnotification);
+			synchronized (queuedNotifications) {
+				queuedNotifications.addObject(nsnotification);
+			}
 		}
 		else {
 			super._objectsChangedInStore(nsnotification);
