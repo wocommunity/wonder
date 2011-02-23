@@ -284,7 +284,9 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 			_setCount(validCount + offset);
 		} else {
 			_initializeWithCapacity(rangeLength + offset);
-			System.arraycopy(list.toArray(), rangeLocation, _objects(), offset, rangeLength);
+			if(rangeLength > 0) {
+				System.arraycopy(list.toArray(), rangeLocation, _objects(), offset, rangeLength);
+			}
 			_setCount(rangeLength + offset);
 		}
 	}
@@ -346,6 +348,9 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
     }
 
     protected void _setCount(int count) {
+    	if(count != 0 && _objects() != null && count != _objects().length) {
+    		throw new IllegalStateException();
+    	}
 //    	if(count != count() && count != 0) {
 //    		throw new IllegalStateException();
 //    	}
