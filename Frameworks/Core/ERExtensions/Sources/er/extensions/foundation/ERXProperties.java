@@ -221,7 +221,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @return array de-serialized from the string in
      *      the system properties
      */
-    @Deprecated
     public static NSArray arrayForKey(String s) {
         return NSProperties.arrayForKey(s);
     }
@@ -234,7 +233,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @return array de-serialized from the string in
      *      the system properties or default value
      */
-    @Deprecated
     public static NSArray arrayForKeyWithDefault(final String s, final NSArray defaultValue) {
         return NSProperties.arrayForKeyWithDefault(s, defaultValue);
     }
@@ -248,7 +246,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @return boolean value of the string in the
      *      system properties.
      */
-    @Deprecated
     public static boolean booleanForKey(String s) {
         return NSProperties.booleanForKey(s);
     }
@@ -263,7 +260,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @return boolean value of the string in the
      *      system properties.
      */
-    @Deprecated
     public static boolean booleanForKeyWithDefault(final String s, final boolean defaultValue) {
         return NSProperties.booleanForKeyWithDefault(s, defaultValue);
     }
@@ -275,7 +271,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @return dictionary de-serialized from the string in
      *      the system properties
      */    
-    @Deprecated
     public static NSDictionary dictionaryForKey(String s) {
         return NSProperties.dictionaryForKey(s);
     }
@@ -288,7 +283,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @return dictionary de-serialized from the string in
      *      the system properties
      */
-    @Deprecated
     public static NSDictionary dictionaryForKeyWithDefault(final String s, final NSDictionary defaultValue) {
         return NSProperties.dictionaryForKeyWithDefault(s, defaultValue);
     }
@@ -299,7 +293,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @param s system property
      * @return int value of the system property or 0
      */
-    @Deprecated
     public static int intForKey(String s) {
         return NSProperties.intForKey(s);
     }
@@ -310,7 +303,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @param s system property
      * @return long value of the system property or 0
      */
-    @Deprecated
     public static long longForKey(String s) {
         return NSProperties.longForKey(s);
     }
@@ -324,7 +316,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @return bigDecimal value of the string in the
      *      system properties.  Scale is controlled by the string, ie "4.400" will have a scale of 3.
      */
-    @Deprecated
     public static BigDecimal bigDecimalForKey(String s) {
         return NSProperties.bigDecimalForKey(s);
     }
@@ -339,7 +330,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @return BigDecimal value of the string in the
      *      system properties. Scale is controlled by the string, ie "4.400" will have a scale of 3.
      */
-    @Deprecated
     public static BigDecimal bigDecimalForKeyWithDefault(String s, BigDecimal defaultValue) {
         return NSProperties.bigDecimalForKeyWithDefault(s, defaultValue);
     }
@@ -351,7 +341,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @param defaultValue default value
      * @return int value of the system property or the default value
      */    
-    @Deprecated
     public static int intForKeyWithDefault(final String s, final int defaultValue) {
         return NSProperties.intForKeyWithDefault(s, defaultValue);
     }
@@ -363,7 +352,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @param defaultValue default value
      * @return long value of the system property or the default value
      */    
-    @Deprecated
     public static long longForKeyWithDefault(final String s, final long defaultValue) {
         return NSProperties.longForKeyWithDefault(s, defaultValue);
     }
@@ -375,7 +363,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @param s system property
      * @return string value of the system propery or null
      */
-    @Deprecated
     public static String stringForKey(String s) {
         return NSProperties.stringForKey(s);
     }
@@ -387,7 +374,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @param s system property
      * @return string value of the system propery or null
      */
-    @Deprecated
     public static String stringForKeyWithDefault(final String s, final String defaultValue) {
         return NSProperties.stringForKeyWithDefault(s, defaultValue);
     }
@@ -405,7 +391,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @deprecated Encrypted properties should now have a key like "foo.bar.@encrypted"
      * @see ERXEncryptedProcessor
      */
-    @Deprecated
     public static String decryptedStringForKey(String propertyName) {
         return NSProperties.stringForKey(propertyName);
     }
@@ -424,7 +409,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @deprecated Encrypted properties should now have a key like "foo.bar.@encrypted"
      * @see ERXEncryptedProcessor
      */
-    @Deprecated
     public static String decryptedStringForKeyWithDefault(String propertyName, String defaultValue) {
         return NSProperties.stringForKeyWithDefault(propertyName, defaultValue);
     }
@@ -441,7 +425,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @deprecated Encrypted properties should now have a key like "foo.bar.@encrypted"
      * @see ERXEncryptedProcessor
      */
-    @Deprecated
     public static String decryptedStringForKeyWithEncryptedDefault(String propertyName, String defaultValue) {
         String decryptedDefault = ERXCrypto.defaultCrypter().decrypt(defaultValue);
         return NSProperties.stringForKeyWithDefault(propertyName, decryptedDefault);
@@ -486,7 +469,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @param array to be set in the System properties
      * @param key to be used to get the value
      */
-    @Deprecated
     public static void setArrayForKey(NSArray array, String key) {
         NSProperties.setArrayForKey(array, key);
     }
@@ -497,17 +479,14 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @param dictionary to be set in the System properties
      * @param key to be used to get the value
      */    
-    @Deprecated
     public static void setDictionaryForKey(NSDictionary dictionary, String key) {
         NSProperties.setDictionaryForKey(dictionary, key);
     }
     
-    @Deprecated
     public static NSSet setForKeyWithDefault(String key, NSSet defaultValue) {
         return NSProperties.setForKeyWithDefault(key, defaultValue);
     }
     
-    @Deprecated
     public static NSSet setForKey(String aKey) {
         return NSProperties.setForKey(aKey);
     }
@@ -519,7 +498,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @param key to be used to get the value
      */
     // DELETEME: Really not needed anymore
-    @Deprecated
     public static void setStringForKey(String string, String key) {
         NSProperties.setStringForKey(string, key);
     }
@@ -537,7 +515,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      *      
      * @deprecated USe {@link NSPropertyFileSource#propertiesFromFile(File, boolean)}
      */
-    @Deprecated
     public static Properties propertiesFromPath(String path, boolean requireSymlink) {
     	if (path == null  ||  path.length() == 0) {
             log.warn("Attempting to read property file for null file path");
@@ -563,7 +540,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @param anObject
      * @param aKey
      */
-    @Deprecated
     public void takeValueForKey(Object anObject, String aKey) {
         NSPropertiesCoordinator.sharedInstance().takeValueForKey(anObject, aKey);
     }
@@ -573,7 +549,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      *
      * @param aKey
      */
-    @Deprecated
     public Object valueForKey(String aKey) {
         return NSPropertiesCoordinator.sharedInstance().valueForKey(aKey);
     }
