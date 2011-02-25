@@ -1,7 +1,7 @@
 package er.luceneadaptor;
 
 import java.io.IOException;
-import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.Format;
 import java.text.ParseException;
 import java.util.Date;
@@ -19,16 +19,24 @@ import org.apache.lucene.document.Field.TermVector;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.DisjunctionMaxQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.MatchAllDocsQuery;
-import org.apache.lucene.search.NumericRangeQuery;
+import org.apache.lucene.search.MultiPhraseQuery;
+import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.Query;
-import org.apache.lucene.search.QueryWrapperFilter;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
+import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.TermRangeQuery;
+import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.WildcardQuery;
 import org.apache.lucene.util.NumericUtils;
 import org.apache.lucene.util.Version;
 
+import com.ibm.icu.math.BigDecimal;
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
@@ -61,6 +69,7 @@ import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
 import com.webobjects.foundation._NSUtilities;
 
+import er.extensions.eof.qualifiers.ERXBetweenQualifier;
 import er.extensions.foundation.ERXKeyValueCodingUtilities;
 import er.extensions.foundation.ERXPatcher;
 import er.extensions.qualifiers.ERXQualifierTraversal;
@@ -72,33 +81,52 @@ import er.extensions.qualifiers.ERXQualifierTraversal;
  */
 public class ERLuceneAdaptorChannel extends EOAdaptorChannel {
 
+	private static final String EXTERNAL_NAME_KEY = "_e";
+	
 	static Logger log = Logger.getLogger(ERLuceneAdaptorChannel.class);
 
 	private static class LuceneQualifierTraversal extends ERXQualifierTraversal {
 
-		NSMutableArray _qualifiers = new NSMutableArray();
+		NSMutableArray _queries;
+		EOEntity _entity;
 
-		public LuceneQualifierTraversal() {
+		public LuceneQualifierTraversal(EOEntity entity) {
+			_entity = entity;
 		}
 
-		protected NSArray<EOQualifier> qualifiersForLast(NSArray original) {
-			NSRange range = new NSRange(_qualifiers.count() - original.count(), original.count());
-			NSArray<EOQualifier> result = _qualifiers.subarrayWithRange(range);
-			_qualifiers.removeObjectsInRange(range);
+		protected NSArray<Query> queriesForCurrent(int count) {
+			NSRange range = new NSRange(_queries.count() - count, count);
+			NSArray<Query> result = _queries.subarrayWithRange(range);
+			_queries.removeObjectsInRange(range);
 			return result;
 		}
 
 		@Override
 		protected boolean traverseAndQualifier(EOAndQualifier q) {
-			NSArray quals = qualifiersForLast(q.qualifiers());
-			_qualifiers.addObject(quals);
+			NSArray<Query> queries = queriesForCurrent(q.qualifiers().count());
+			BooleanQuery query = new BooleanQuery();
+			for (Query current : queries) {
+				query.add(current, BooleanClause.Occur.MUST);
+			}
+			_queries.addObject(query);
 			return true;
 		}
 
 		@Override
-		protected void visit(EOQualifierEvaluation q) {
-			_qualifiers = new NSMutableArray<EOQualifier>();
-			super.visit(q);
+		protected boolean traverseNotQualifier(EONotQualifier q) {
+			NSArray<Query> queries = queriesForCurrent(1);
+			BooleanQuery query = new BooleanQuery();
+			query.add(queries.lastObject(), BooleanClause.Occur.MUST_NOT);
+			_queries.addObject(query);
+			return true;
+		}
+
+		@Override
+		protected boolean traverseOrQualifier(EOOrQualifier q) {
+			NSArray<Query> queries = queriesForCurrent(q.qualifiers().count());
+			DisjunctionMaxQuery query = new DisjunctionMaxQuery(queries, 0);
+			_queries.addObject(query);
+			return true;
 		}
 
 		@Override
@@ -107,21 +135,50 @@ public class ERLuceneAdaptorChannel extends EOAdaptorChannel {
 		}
 
 		@Override
-		protected boolean traverseNotQualifier(EONotQualifier q) {
-			_qualifiers.addObject(q);
-			return super.traverseNotQualifier(q);
-		}
-
-		@Override
-		protected boolean traverseOrQualifier(EOOrQualifier q) {
-			NSArray quals = qualifiersForLast(q.qualifiers());
-			_qualifiers.addObject(quals);
-			return true;
-		}
-
-		@Override
 		protected boolean traverseKeyValueQualifier(EOKeyValueQualifier q) {
-			_qualifiers.addObject(q);
+			Query query = null;
+			String key = _entity.attributeNamed(q.key()).columnName();
+			IndexAttribute attr = new IndexAttribute(_entity.attributeNamed(key));
+			if (q instanceof ERXBetweenQualifier) {
+				ERXBetweenQualifier between = (ERXBetweenQualifier) q;
+				Object min = between.minimumValue();
+				Object max = between.maximumValue();
+				query = new TermRangeQuery(key, attr.asLuceneValue(min), attr.asLuceneValue(max), false, false);
+			} else if(q.selector().equals(EOQualifier.QualifierOperatorGreaterThan)) {
+				query = new TermRangeQuery(key, attr.asLuceneValue(q.value()), null, false, false);
+			} else if(q.selector().equals(EOQualifier.QualifierOperatorGreaterThanOrEqualTo)) {
+				query = new TermRangeQuery(key, attr.asLuceneValue(q.value()), null, true, false);
+			} else if(q.selector().equals(EOQualifier.QualifierOperatorLessThan)) {
+				query = new TermRangeQuery(key, null, attr.asLuceneValue(q.value()), false, false);
+			} else if(q.selector().equals(EOQualifier.QualifierOperatorLessThanOrEqualTo)) {
+				query = new TermRangeQuery(key, null, attr.asLuceneValue(q.value()), false, true);
+			} else if(q.selector().equals(EOQualifier.QualifierOperatorCaseInsensitiveLike) || q.selector().equals(EOQualifier.QualifierOperatorLike)) {
+				String value = q.value().toString();
+				if(q.selector().equals(EOQualifier.QualifierOperatorLike)) {
+					value = value.toLowerCase();
+				}
+				int star = value.indexOf('*');
+				if(star >= 0) {
+					if(star < value.length() - 1) {
+						query = new WildcardQuery(new Term(key, value));
+					} else {
+						query = new PrefixQuery(new Term(key, value.substring(0, star)));
+					}
+				} else if(value.contains(" ")) {
+					MultiPhraseQuery multi = new MultiPhraseQuery();
+					query = multi;
+					String parts[] = value.split(" +");
+					for (int i = 0; i < parts.length; i++) {
+						String part = parts[i];
+						multi.add(new Term(key, part));
+					}
+				} else {
+					query = new TermQuery(new Term(key, value));
+				}
+			} else {
+				query = new TermQuery(new Term(key, attr.asLuceneValue(q.value())));
+			}
+			_queries.addObjects(query);
 			return true;
 		}
 
@@ -130,11 +187,17 @@ public class ERLuceneAdaptorChannel extends EOAdaptorChannel {
 			throw new IllegalArgumentException("Unknown qualifier: " + q);
 		}
 
+		@Override
+		public void traverse(EOQualifierEvaluation q, boolean postOrder) {
+			_queries = new NSMutableArray<Query>();
+			super.traverse(q, true);
+		}
+
 		public Query query() {
-			//TermQuery query = new TermQuery(new Term("", "vessn*"));
-			NumericRangeQuery query = NumericRangeQuery.newIntRange("userCount", Integer.valueOf(300), Integer.valueOf(2000), true, true);
-			//query.add();
-			return query;
+			BooleanQuery q = new BooleanQuery();
+			q.add(new TermQuery(new Term(EXTERNAL_NAME_KEY, _entity.externalName())), BooleanClause.Occur.MUST);
+			q.add((Query) _queries.lastObject(), BooleanClause.Occur.MUST);
+			return q;
 		}
 	}
 
@@ -149,33 +212,34 @@ public class ERLuceneAdaptorChannel extends EOAdaptorChannel {
 		private static String[] CODES = new String[] { "ar", "br", "cjk", "cn", "cz", "de", "el", "fa", "fr", "nl", "ru", "th" };
 		private static NSDictionary<String, String> LOCALES = new NSDictionary<String, String>(NAMES, CODES);
 
-		String _name;
+		private String _columnName;
 
-		TermVector _termVector;
+		private TermVector _termVector;
 
-		Store _store;
+		private Store _store;
 
-		Index _index;
+		private Index _index;
 
-		Analyzer _analyzer;
+		private Analyzer _analyzer;
 
-		Format _format;
+		private Format _format;
 
-		EOAttribute _attribute;
+		private EOAttribute _attribute;
 
+		@SuppressWarnings("deprecation")
 		public IndexAttribute(EOAttribute attribute) {
 			_attribute = attribute;
 			NSDictionary dict = attribute.userInfo() != null ? attribute.userInfo() : NSDictionary.emptyDictionary();
-			_name = attribute.columnName();
+			_columnName = attribute.columnName();
 			boolean isClassProperty = _attribute.entity().classPropertyNames().contains(_attribute.name());
-			boolean isDataProperty = _attribute.className().contains("NSData");
-			boolean isStringProperty = _attribute.className().contains("String");
-			_termVector = (TermVector) classValue(dict, "termVector", TermVector.class, isClassProperty && !isDataProperty && isStringProperty? "YES" : "NO");
+			boolean isDataProperty = _attribute.className().endsWith("NSData");
+			boolean isStringProperty = _attribute.className().endsWith("String");
+			_termVector = (TermVector) classValue(dict, "termVector", TermVector.class, isClassProperty && !isDataProperty && isStringProperty ? "YES" : "NO");
 			_store = (Store) classValue(dict, "store", Store.class, "YES");
 			_index = (Index) classValue(dict, "index", Index.class, isClassProperty && !isDataProperty && isStringProperty ? "ANALYZED" : "NOT_ANALYZED");
 			String analyzerClass = (String) dict.objectForKey("analyzer");
-			if (analyzerClass == null && _name.matches("\\w+_(\\w+)")) {
-				String locale = _name.substring(_name.lastIndexOf('_') + 1).toLowerCase();
+			if (analyzerClass == null && _columnName.matches("\\w+_(\\w+)")) {
+				String locale = _columnName.substring(_columnName.lastIndexOf('_') + 1).toLowerCase();
 				analyzerClass = LOCALES.objectForKey(locale);
 				if (analyzerClass != null) {
 					analyzerClass = ERXPatcher.classForName("org.apache.lucene.analysis." + locale + "." + analyzerClass).getName();
@@ -234,8 +298,8 @@ public class ERLuceneAdaptorChannel extends EOAdaptorChannel {
 			return _store;
 		}
 
-		public String name() {
-			return _name;
+		public String columnName() {
+			return _columnName;
 		}
 
 		public Analyzer analyzer() {
@@ -246,23 +310,32 @@ public class ERLuceneAdaptorChannel extends EOAdaptorChannel {
 			if (_format != null) {
 				return _format.format(value);
 			}
-			if (value instanceof Number) {
-				if (value instanceof Double) {
-					return NumericUtils.doubleToPrefixCoded(((Number) value).doubleValue());
-				} else if (value instanceof Long) {
+			if(value == null) {
+				return null;
+			}
+			if (attribute().valueType() != null) {
+				char valueType = attribute().valueType().charAt(0);
+				switch (valueType) {
+				case 'i':
+					return NumericUtils.intToPrefixCoded(((Number) value).intValue());
+				case 'b':
 					return NumericUtils.longToPrefixCoded(((Number) value).longValue());
-				} else if (value instanceof BigDecimal) {
+				case 'l':
+					return NumericUtils.longToPrefixCoded(((Number) value).longValue());
+				case 'd':
+					return NumericUtils.doubleToPrefixCoded(((Number) value).doubleValue());
+				case 'B':
 					return NumericUtils.doubleToPrefixCoded(((Number) value).doubleValue());
 				}
-				return NumericUtils.intToPrefixCoded(((Number) value).intValue());
-			} else if (value instanceof Date) {
+			}
+			if (value instanceof Date) {
 				return DateTools.dateToString((Date) value, Resolution.MILLISECOND);
 			} else if (value instanceof NSData) {
 				return NSPropertyListSerialization.stringFromPropertyList(value);
 			} else if (value instanceof NSArray) {
 				return ((NSArray) value).componentsJoinedByString(" ");
 			}
-			return (value != null ? value.toString() : null);
+			return value.toString();
 		}
 
 		public Object asEOFValue(String value) {
@@ -270,40 +343,45 @@ public class ERLuceneAdaptorChannel extends EOAdaptorChannel {
 				if (_format != null) {
 					return _format.parseObject(value);
 				}
-
-				if (attribute().className().contains("NSTimestamp")) {
-					return new NSTimestamp(DateTools.stringToDate(value));
-				} else if (attribute().className().contains("NSData")) {
-					return new NSData((NSData)NSPropertyListSerialization.propertyListFromString(value));
-				} else if (attribute().className().contains("NSArray")) {
-					return NSArray.componentsSeparatedByString(value, " ");
-				} else {
-					String valueType = attribute().valueType();
-					if ("b".equals(valueType)) {
+				if(value == null) {
+					return null;
+				}
+				if (attribute().valueType() != null) {
+					char valueType = attribute().valueType().charAt(0);
+					switch (valueType) {
+					case 'i':
 						return Integer.valueOf(NumericUtils.prefixCodedToInt(value));
-					} else if ("i".equals(valueType)) {
-						return Integer.valueOf(NumericUtils.prefixCodedToInt(value));
-					} else if ("l".equals(valueType)) {
+					case 'b':
+						return BigInteger.valueOf(NumericUtils.prefixCodedToLong(value));
+					case 'l':
 						return Long.valueOf(NumericUtils.prefixCodedToLong(value));
-					} else if ("d".equals(valueType)) {
+					case 'd':
 						return Double.valueOf(NumericUtils.prefixCodedToDouble(value));
-					} else if ("B".equals(valueType)) {
+					case 'B':
 						return BigDecimal.valueOf(NumericUtils.prefixCodedToDouble(value));
 					}
 				}
-				return (value != null ? value.toString() : null);
+				if (attribute().className().contains("NSTimestamp")) {
+					return new NSTimestamp(DateTools.stringToDate(value));
+				} else if (attribute().className().contains("NSData")) {
+					return new NSData((NSData) NSPropertyListSerialization.propertyListFromString(value));
+				} else if (attribute().className().contains("NSArray")) {
+					return NSArray.componentsSeparatedByString(value, " ");
+				}
+				return value.toString();
 			} catch (ParseException ex) {
 				throw NSForwardException._runtimeExceptionForThrowable(ex);
 			}
 		}
 
-		public Field valueToField(Object value) {
+		public Field valueToField(Document doc,Object value) {
 			String stringValue = asLuceneValue(value);
-			if (stringValue != null) {
-				Field field = new Field(name(), stringValue, store(), index(), termVector());
-				return field;
+			Field field = doc.getField(columnName());
+			if(field == null) {
+				field = new Field(columnName(), stringValue, store(), index(), termVector());
 			}
-			return null;
+			field.setValue(stringValue);
+			return field;
 		}
 
 		public EOAttribute attribute() {
@@ -315,10 +393,10 @@ public class ERLuceneAdaptorChannel extends EOAdaptorChannel {
 	private NSArray<IndexAttribute> _indexAttributes;
 	private EOEntity _entity;
 	private int _fetchIndex;
-	private int _fetchCount;
 	private boolean _open;
 	private IndexSearcher _searcher;
 	private boolean _fetchInProgress = false;
+	private TopDocs _fetchedDocs;
 
 	public ERLuceneAdaptorChannel(ERLuceneAdaptorContext context) {
 		super(context);
@@ -342,7 +420,9 @@ public class ERLuceneAdaptorChannel extends EOAdaptorChannel {
 	}
 
 	public IndexSearcher searcher() throws CorruptIndexException, IOException {
-		if (_searcher == null/* || !adaptorContext().adaptor().indexReader().isCurrent()*/) {
+		if (_searcher == null/*
+							 * || !adaptorContext().adaptor().indexReader().isCurrent ()
+							 */) {
 			_searcher = new IndexSearcher(adaptorContext().adaptor().indexReader());
 		}
 		return _searcher;
@@ -370,7 +450,7 @@ public class ERLuceneAdaptorChannel extends EOAdaptorChannel {
 
 	private void reset() {
 		_fetchInProgress = false;
-		_fetchCount = -1;
+		_fetchedDocs = null;
 		_fetchIndex = -1;
 		_entity = null;
 		_searcher = null;
@@ -416,7 +496,8 @@ public class ERLuceneAdaptorChannel extends EOAdaptorChannel {
 		NSMutableDictionary row = null;
 		if (hasMoreRowsToReturn()) {
 			try {
-				Document doc = searcher().doc(_fetchIndex++);
+				int docId = _fetchedDocs.scoreDocs[_fetchIndex++].doc;
+				Document doc = searcher().doc(docId);
 				EOClassDescription cd = EOClassDescription.classDescriptionForEntityName(_entity.name());
 				NSMutableDictionary dict = cd._newDictionaryForProperties();
 				for (IndexAttribute attr : _indexAttributes) {
@@ -448,7 +529,7 @@ public class ERLuceneAdaptorChannel extends EOAdaptorChannel {
 	}
 
 	private boolean hasMoreRowsToReturn() {
-		return _fetchIndex < _fetchCount;
+		return _fetchIndex < _fetchedDocs.totalHits;
 	}
 
 	@Override
@@ -474,7 +555,7 @@ public class ERLuceneAdaptorChannel extends EOAdaptorChannel {
 	}
 
 	@Override
-	public void selectAttributes(NSArray attributesToFetch, EOFetchSpecification fetchSpecification, boolean shouldLock, EOEntity entity) {
+	public void selectAttributes(NSArray attributesToFetch, EOFetchSpecification fs, boolean shouldLock, EOEntity entity) {
 		if (entity == null) {
 			throw new IllegalArgumentException("null entity.");
 		}
@@ -489,38 +570,31 @@ public class ERLuceneAdaptorChannel extends EOAdaptorChannel {
 		try {
 			_fetchIndex = 0;
 			IndexSearcher searcher = searcher();
-			Query query = queryForQualifier(fetchSpecification.qualifier());
-			int fetchLimit = fetchSpecification.fetchLimit() > 0 ? fetchSpecification.fetchLimit() : Integer.MAX_VALUE;
-			fetchLimit = 5;
+			Query query = null;
 			Sort sort = null;
-			if (fetchSpecification.sortOrderings().count() > 0) {
-				NSMutableArray<SortField> fields = new NSMutableArray<SortField>(fetchSpecification.sortOrderings().count());
-				for (EOSortOrdering s : (NSArray<EOSortOrdering>) fetchSpecification.sortOrderings()) {
-					String name = s.key();
-					NSSelector sel = s.selector();
-					boolean reverse = sel.equals(EOSortOrdering.CompareDescending) || sel.equals(EOSortOrdering.CompareCaseInsensitiveDescending);
-					SortField sf = new SortField(name, 0, reverse);
-					fields.addObject(sf);
-				}
-				if(fields.count() > 0) {
-					sort = new Sort();
-					sort.setSort(fields.toArray(new SortField[]{}));
-				}
-			} else {
-				searcher.search(query, new QueryWrapperFilter(query), fetchLimit);
+			
+			if(fs.hints() != null) {
+				query = (Query) fs.hints().objectForKey(ERLuceneAdaptor.QUERY_HINTS);
+				sort = (Sort) fs.hints().objectForKey(ERLuceneAdaptor.SORT_HINTS);
 			}
-			if(sort != null) {
-				searcher.search(query, new QueryWrapperFilter(query), fetchLimit, sort);
-			} else {
-				searcher.search(query, new QueryWrapperFilter(query), fetchLimit);
+			if(query == null) {
+				query = queryForQualifier(fs.qualifier(), entity);
 			}
-			_fetchCount = searcher.maxDoc();
+			if(sort == null) {
+				sort = sortForSortOrderings(fs.sortOrderings());
+			}
+			int fetchLimit = fs.fetchLimit() > 0 ? fs.fetchLimit() : Integer.MAX_VALUE;
+			if (sort != null) {
+				_fetchedDocs = searcher.search(query, null, fetchLimit, sort);
+			} else {
+				_fetchedDocs = searcher.search(query, fetchLimit);
+			}
 		} catch (EOGeneralAdaptorException e) {
 			cancelFetch();
 			throw e;
 		} catch (Throwable e) {
 			cancelFetch();
-			throw new ERLuceneAdaptorException("Failed to fetch '" + entity.name() + "' with fetch specification '" + fetchSpecification + "': " + e.getMessage(), e);
+			throw new ERLuceneAdaptorException("Failed to fetch '" + entity.name() + "' with fetch specification '" + fs + "': " + e.getMessage(), e);
 		}
 	}
 
@@ -536,7 +610,7 @@ public class ERLuceneAdaptorChannel extends EOAdaptorChannel {
 
 	private Term termForDocument(Document doc, EOEntity entity) {
 		for (IndexAttribute info : attributesForAttributes(entity.primaryKeyAttributes())) {
-			String name = info.name();
+			String name = info.columnName();
 			String value = doc.get(name);
 			Term term = new Term(name);
 			term = term.createTerm(value);
@@ -545,30 +619,17 @@ public class ERLuceneAdaptorChannel extends EOAdaptorChannel {
 		return null;
 	}
 
-	private Query queryForQualifier(EOQualifier qualifier) {
-		if (qualifier == null && false) {
-			return new MatchAllDocsQuery();
-		}
-		/*
-		 * if(true) { FilteredQuery query = new FilteredQuery(null, new
-		 * Filter()); query.add(new Term("content", "vessn*")); return query;
-		 * 
-		 * }
-		 */
-
-		LuceneQualifierTraversal traverser = new LuceneQualifierTraversal();
-		traverser.traverse(qualifier);
-		Query query = traverser.query();
-		return query;
-	}
-
 	private void fillWithDictionary(Document doc, NSDictionary row, EOEntity entity) {
 		for (IndexAttribute info : attributesForEntity(entity)) {
-			Object value = row.objectForKey(info.attribute().name());
-
-			Field field = info.valueToField(value);
-			if (field != null) {
-				doc.add(field);
+			Object value = row.objectForKey(info.attribute().columnName());
+			if (value != null) {
+				if(value == NSKeyValueCoding.NullValue) {
+					value = null;
+				}
+				Field field = info.valueToField(doc, value);
+				if (field != null) {
+					doc.add(field);
+				}
 			}
 		}
 	}
@@ -577,11 +638,12 @@ public class ERLuceneAdaptorChannel extends EOAdaptorChannel {
 	public int updateValuesInRowsDescribedByQualifier(NSDictionary updatedRow, EOQualifier qualifier, EOEntity entity) {
 		try {
 			IndexSearcher searcher = searcher();
-			Query query = queryForQualifier(qualifier);
-			searcher.search(query, Integer.MAX_VALUE);
-			int count = searcher.maxDoc();
+			Query query = queryForQualifier(qualifier, entity);
+			TopDocs fetchedDocs = searcher.search(query, Integer.MAX_VALUE);
+			int count = fetchedDocs.totalHits;
 			for (int i = 0; i < count; i++) {
-				Document doc = searcher.doc(i);
+				int docId = fetchedDocs.scoreDocs[i].doc;
+				Document doc = searcher.doc(docId);
 				fillWithDictionary(doc, updatedRow, entity);
 				Term term = termForDocument(doc, entity);
 				writer().updateDocument(term, doc);
@@ -599,6 +661,7 @@ public class ERLuceneAdaptorChannel extends EOAdaptorChannel {
 		try {
 			Document doc = new Document();
 			fillWithDictionary(doc, row, entity);
+			doc.add(new Field(EXTERNAL_NAME_KEY, entity.externalName(), Store.NO, Index.NOT_ANALYZED));
 			writer().addDocument(doc);
 		} catch (EOGeneralAdaptorException e) {
 			throw e;
@@ -611,11 +674,12 @@ public class ERLuceneAdaptorChannel extends EOAdaptorChannel {
 	public int deleteRowsDescribedByQualifier(EOQualifier qualifier, EOEntity entity) {
 		try {
 			IndexSearcher searcher = searcher();
-			Query query = queryForQualifier(qualifier);
-			searcher.search(query, null, Integer.MAX_VALUE);
-			int count = searcher.maxDoc();
+			Query query = queryForQualifier(qualifier, entity);
+			TopDocs fetchedDocs = searcher.search(query, Integer.MAX_VALUE);
+			int count = fetchedDocs.totalHits;
 			for (int i = 0; i < count; i++) {
-				Document doc = searcher.doc(i);
+				int docId = fetchedDocs.scoreDocs[i].doc;
+				Document doc = searcher.doc(docId);
 				Term term = termForDocument(doc, entity);
 				writer().deleteDocuments(term);
 			}
@@ -625,5 +689,46 @@ public class ERLuceneAdaptorChannel extends EOAdaptorChannel {
 		} catch (Throwable e) {
 			throw new ERLuceneAdaptorException("Failed to delete '" + entity.name() + "' with qualifier " + qualifier + ": " + e.getMessage(), e);
 		}
+	}
+
+	/**
+	 * Convenience method to create a Lucene query from an EOF qualifier.
+	 * @param qualifier
+	 * @param entity
+	 * @return
+	 */
+	public static Query queryForQualifier(EOQualifier qualifier, EOEntity entity) {
+		if(qualifier == null) {
+			return new TermQuery(new Term(EXTERNAL_NAME_KEY, entity.externalName()));
+		}
+		LuceneQualifierTraversal traverser = new LuceneQualifierTraversal(entity);
+		traverser.traverse(qualifier, true);
+		Query query = traverser.query();
+		return query;
+	}
+
+
+	/**
+	 * Convenience method to create a Lucene sort from an EOF sort ordering array.
+	 * @param sortOrderings
+	 * @return
+	 */
+	public static Sort sortForSortOrderings(NSArray<EOSortOrdering> sortOrderings) {
+		Sort sort = null;
+		if (sortOrderings != null && sortOrderings.count() > 0) {
+			NSMutableArray<SortField> fields = new NSMutableArray<SortField>(sortOrderings.count());
+			for (EOSortOrdering s : sortOrderings) {
+				String name = s.key();
+				NSSelector sel = s.selector();
+				boolean reverse = sel.equals(EOSortOrdering.CompareDescending) || sel.equals(EOSortOrdering.CompareCaseInsensitiveDescending);
+				SortField sf = new SortField(name, SortField.DOC, reverse);
+				fields.addObject(sf);
+			}
+			if (fields.count() > 0) {
+				sort = new Sort();
+				sort.setSort(fields.toArray(new SortField[] {}));
+			}
+		}
+		return sort;
 	}
 }
