@@ -1,10 +1,13 @@
 package er.h2.jdbcadaptor;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -13,7 +16,6 @@ import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EORelationship;
-import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOSynchronizationFactory;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
@@ -29,9 +31,9 @@ import com.webobjects.jdbcadaptor.JDBCExpression;
 import com.webobjects.jdbcadaptor.JDBCPlugIn;
 
 public class ERH2PlugIn extends JDBCPlugIn {
-	
+
 	static final boolean USE_NAMED_CONSTRAINTS = true;
-	
+
 	protected static String quoteTableName(String name) {
 		String result = null;
 		if (name != null) {
@@ -40,7 +42,7 @@ public class ERH2PlugIn extends JDBCPlugIn {
 				result = new StringBuilder('"').append(name).append('"').toString();
 			} else {
 				result =
-				new StringBuilder(name.substring(0, i))
+					new StringBuilder(name.substring(0, i))
 				.append("\".\"")
 				.append(name.substring(i + 1, name.length()))
 				.append('"')
@@ -49,11 +51,11 @@ public class ERH2PlugIn extends JDBCPlugIn {
 		}
 		return result;
 	}
-	
+
 	static String singleQuotedString(Object value) {
 		return value == null ? null : singleQuotedString(value.toString());
 	}
-	
+
 	static String singleQuotedString(String string) {
 		if (string == null) {
 			return null;
@@ -61,8 +63,31 @@ public class ERH2PlugIn extends JDBCPlugIn {
 		return new StringBuilder("'").append(string).append("'").toString();
 	}
 
+	@Override
+	public Object fetchBLOB(ResultSet rs, int column, EOAttribute attribute, boolean materialize) throws SQLException {
+		final InputStream is = rs.getBinaryStream(column);
+		if (is == null)
+			return null;
+
+		final ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
+		int nextInput = 0;
+		try {
+			while ((nextInput = is.read()) != -1) {
+				byteArrayOS.write(nextInput);
+			}
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		if (NSData.class.getName().equals(attribute.className()))
+			return new NSData(byteArrayOS.toByteArray());
+
+		return byteArrayOS.toString();
+	}
+
 	public static class H2Expression extends JDBCExpression {
-		
+
 		public H2Expression(final EOEntity entity) {
 			super(entity);
 		}
@@ -73,7 +98,7 @@ public class ERH2PlugIn extends JDBCPlugIn {
 			sql.append(attribute.columnName());
 			sql.append(' ');
 			sql.append(columnTypeStringForAttribute(attribute));
-			
+
 			NSDictionary userInfo = attribute.userInfo();
 			if (userInfo != null) {
 				Object defaultValue = userInfo.valueForKey("er.extensions.eoattribute.default");
@@ -82,7 +107,7 @@ public class ERH2PlugIn extends JDBCPlugIn {
 					sql.append(formatValueForAttribute(defaultValue, attribute));
 				}
 			}
-			
+
 			sql.append(' ');
 			sql.append(allowsNullClauseForConstraint(attribute.allowsNull()));
 
@@ -172,10 +197,10 @@ public class ERH2PlugIn extends JDBCPlugIn {
 				try {
 					Object adaptorValue = eoattribute.adaptorValueByConvertingAttributeValue(value);
 					if (adaptorValue instanceof NSData
-					 || adaptorValue instanceof NSTimestamp
-					 || adaptorValue instanceof String
-					 || adaptorValue instanceof Number
-					 || adaptorValue instanceof Boolean)
+							|| adaptorValue instanceof NSTimestamp
+							|| adaptorValue instanceof String
+							|| adaptorValue instanceof Number
+							|| adaptorValue instanceof Boolean)
 					{
 						result = formatValueForAttribute(adaptorValue, eoattribute);
 					}
@@ -189,9 +214,9 @@ public class ERH2PlugIn extends JDBCPlugIn {
 						.append(adaptorValue)
 						.append(':')
 						.append(adaptorValue.getClass().getName());
-						
+
 						NSLog.err.appendln(buff.toString());
-						
+
 						result = value.toString();
 					}
 				}
@@ -199,10 +224,10 @@ public class ERH2PlugIn extends JDBCPlugIn {
 					StringBuilder buff = new StringBuilder(getClass().getName())
 					.append(": Exception while converting ")
 					.append(value.getClass().getName());
-					
+
 					NSLog.err.appendln(buff.toString());
 					NSLog.err.appendln(ex);
-					
+
 					result = value.toString();
 				}
 			}
@@ -231,7 +256,7 @@ public class ERH2PlugIn extends JDBCPlugIn {
 	}
 
 	public static class H2SynchronizationFactory extends EOSynchronizationFactory {
-		
+
 		public H2SynchronizationFactory(final EOAdaptor adaptor) {
 			super(adaptor);
 		}
@@ -240,7 +265,7 @@ public class ERH2PlugIn extends JDBCPlugIn {
 		public NSArray _statementsToDropPrimaryKeyConstraintsOnTableNamed(final String tableName) {
 			return new NSArray(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " DROP PRIMARY KEY"));
 		}
-		
+
 		public String columnTypeStringForAttribute(EOAttribute attribute) {
 			if (attribute.precision() != 0) {
 				String precision = String.valueOf(attribute.precision());
@@ -265,17 +290,19 @@ public class ERH2PlugIn extends JDBCPlugIn {
 			String tableName = ((EOEntity) entityGroup.objectAtIndex(0)).externalName();
 			return new NSArray(_expressionForString("DROP TABLE " + formatTableName(tableName)));
 		}
-		
+
 		//@Override WO5.4
+		@Override
 		public String formatColumnName(String columnName) {
 			return columnName;
 		}
-		
+
 		//@Override WO5.4
+		@Override
 		public String formatTableName(String tableName) {
 			return tableName;
 		}
-		
+
 		public String formatUpperString(String string) {
 			return string.toUpperCase();
 		}
@@ -296,8 +323,8 @@ public class ERH2PlugIn extends JDBCPlugIn {
 		@Override
 		public NSArray foreignKeyConstraintStatementsForRelationship(EORelationship relationship) {
 			if (relationship != null
-				&& !relationship.isToMany()
-				&& isPrimaryKeyAttributes(relationship.destinationEntity(), relationship.destinationAttributes()))
+					&& !relationship.isToMany()
+					&& isPrimaryKeyAttributes(relationship.destinationEntity(), relationship.destinationAttributes()))
 			{
 				StringBuffer sql = new StringBuffer();
 				String tableName = formatTableName(relationship.entity().externalName());
@@ -342,7 +369,7 @@ public class ERH2PlugIn extends JDBCPlugIn {
 					fkSql.append(referencedColumnName);
 					constraint.append(formatUpperString(referencedColumnName));
 				}
-				
+
 				// MS: did i write this code?  sorry about that everything. this is crazy. 
 				constraint.append('"');
 
@@ -367,7 +394,8 @@ public class ERH2PlugIn extends JDBCPlugIn {
 			String pkField = formatColumnName("pk") + " INT";
 			return new NSArray(_expressionForString("CREATE TABLE " + formatTableName(pkTable) + " (" + charField + ", " + pkField + ")"));
 		}
-		
+
+		@Override
 		public NSArray statementsToConvertColumnType(String columnName, String tableName, ColumnTypes oldType, ColumnTypes newType, NSDictionary options) {
 			EOAttribute attr = new EOAttribute();
 			attr.setName(columnName);
@@ -376,16 +404,17 @@ public class ERH2PlugIn extends JDBCPlugIn {
 			attr.setScale(newType.scale());
 			attr.setPrecision(newType.precision());
 			attr.setWidth(newType.width());
-			
+
 			String columnTypeString = columnTypeStringForAttribute(attr);
-			
+
 			NSArray statements = new NSArray(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " ALTER COLUMN " + formatColumnName(columnName) + " " + columnTypeString));
 			return statements;
 		}
-		
+
+		@Override
 		public NSArray statementsToDeleteColumnNamed(String columnName, String tableName, NSDictionary options) {
-	    	return new NSArray(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " DROP COLUMN " + formatTableName(columnName)));
-	    }
+			return new NSArray(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " DROP COLUMN " + formatTableName(columnName)));
+		}
 
 		@Override
 		public NSArray statementsToInsertColumnForAttribute(final EOAttribute attribute, final NSDictionary options) {
@@ -399,28 +428,30 @@ public class ERH2PlugIn extends JDBCPlugIn {
 
 			return result;
 		}
-		
+
 		/**
 		 * @see com.webobjects.eoaccess.EOSynchronizationFactory#statementsToModifyColumnNullRule(java.lang.String, java.lang.String, boolean, com.webobjects.foundation.NSDictionary)
 		 */
 		@Override
 		public NSArray statementsToModifyColumnNullRule(String columnName, String tableName, boolean allowsNull, NSDictionary options) {
 			NSArray statements;
-		      if (allowsNull) {
-		        statements = new NSArray(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " ALTER COLUMN " + formatColumnName(columnName) + " SET NULL"));
-		      } else {
-		        statements = new NSArray(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " ALTER COLUM " + formatColumnName(columnName) + " SET NOT NULL"));
-		      }
-		      return statements;
+			if (allowsNull) {
+				statements = new NSArray(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " ALTER COLUMN " + formatColumnName(columnName) + " SET NULL"));
+			} else {
+				statements = new NSArray(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " ALTER COLUM " + formatColumnName(columnName) + " SET NOT NULL"));
+			}
+			return statements;
 		}
-		
+
+		@Override
 		public NSArray statementsToRenameColumnNamed(String columnName, String tableName, String newName, NSDictionary nsdictionary) {
 			return new NSArray(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " ALTER COLUMN " + formatColumnName(columnName) + " RENAME TO " + formatColumnName(newName)));
 		}
-		
+
+		@Override
 		public NSArray statementsToRenameTableNamed(String tableName, String newName, NSDictionary options) {
-	    	return new NSArray(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " RENAME TO " + formatTableName(newName)));
-	    }
+			return new NSArray(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " RENAME TO " + formatTableName(newName)));
+		}
 
 		@Override
 		public boolean supportsSchemaSynchronization() {
@@ -445,7 +476,7 @@ public class ERH2PlugIn extends JDBCPlugIn {
 	private static Format timestampFormatter() {
 		return new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
 	}
-	
+
 	/**
 	 * flag for whether jdbcInfo should be written out has been tested.
 	 */
@@ -499,9 +530,9 @@ public class ERH2PlugIn extends JDBCPlugIn {
 					String jdbcInfoContent = NSPropertyListSerialization.stringFromPropertyList(super.jdbcInfo());
 					File tmpDir = new File(System.getProperty("java.io.tmpdir"));
 					File jdbcInfoFile = new File(tmpDir, "H2JDBCInfo.plist");
-					
+
 					NSLog.out.appendln("Writing H2JDBCInfo.plist to " + tmpDir.getAbsolutePath());
-					
+
 					FileOutputStream fos = new FileOutputStream(jdbcInfoFile);
 					fos.write(jdbcInfoContent.getBytes());
 					fos.close();
@@ -539,6 +570,7 @@ public class ERH2PlugIn extends JDBCPlugIn {
 		return jdbcInfo;
 	}
 
+	@Override
 	public String name() {
 		return DRIVER_NAME;
 	}
