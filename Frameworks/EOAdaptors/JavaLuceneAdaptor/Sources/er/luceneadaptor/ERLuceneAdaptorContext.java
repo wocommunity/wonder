@@ -45,14 +45,18 @@ public class ERLuceneAdaptorContext extends EOAdaptorContext {
 		String className = pkAttribute.className();
 		String valueType = pkAttribute.valueType();
 		if ("com.webobjects.foundation.NSData".equals(className)) {
-			ByteArrayBuffer buf = new ByteArrayBuffer();
-			try {
-				buf.write(entity.externalName().getBytes());
-				buf.write('.');
-				buf.write(new EOTemporaryGlobalID()._rawBytes());
-				pkValue = new NSData(buf.getRawData());
-			} catch (IOException e) {
-				throw NSForwardException._runtimeExceptionForThrowable(e);
+			if(true==false) {
+				ByteArrayBuffer buf = new ByteArrayBuffer();
+				try {
+					buf.write(entity.externalName().getBytes());
+					buf.write('.');
+					buf.write(new EOTemporaryGlobalID()._rawBytes());
+					pkValue = new NSData(buf.getRawData());
+				} catch (IOException e) {
+					throw NSForwardException._runtimeExceptionForThrowable(e);
+				}
+			} else {
+				pkValue = new NSData(new EOTemporaryGlobalID()._rawBytes());
 			}
 		} else {
 			throw new IllegalArgumentException("Unknown value type '" + valueType + "' for '" + object + "' of entity '" + entity.name() + "'.");
