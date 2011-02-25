@@ -8,17 +8,18 @@ import java.io.IOException;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
 
+import com.sun.xml.internal.ws.util.ByteArrayBuffer;
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOAdaptorContext;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
-import com.webobjects.eoaccess.EOGeneralAdaptorException;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOTemporaryGlobalID;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
 
 /**
  * ERLuceneAdaptorContext provides the transaction support for the adaptor.
@@ -27,7 +28,7 @@ import com.webobjects.foundation.NSDictionary;
  */
 public class ERLuceneAdaptorContext extends EOAdaptorContext {
 
-	IndexWriter _writer;
+	private IndexWriter _writer;
 
 	public ERLuceneAdaptorContext(EOAdaptor adaptor) {
 		super(adaptor);
@@ -40,11 +41,19 @@ public class ERLuceneAdaptorContext extends EOAdaptorContext {
 			throw new ERLuceneAdaptorException("Failed to generate primary key because " + entity.name() + " has a composite primary key.");
 		}
 		EOAttribute pkAttribute = (EOAttribute) pkAttributes.objectAtIndex(0);
-		Object pkValue;
+		Object pkValue = null;
 		String className = pkAttribute.className();
 		String valueType = pkAttribute.valueType();
 		if ("com.webobjects.foundation.NSData".equals(className)) {
-			pkValue = new NSData(new EOTemporaryGlobalID()._rawBytes());
+			ByteArrayBuffer buf = new ByteArrayBuffer();
+			try {
+				buf.write(entity.externalName().getBytes());
+				buf.write('.');
+				buf.write(new EOTemporaryGlobalID()._rawBytes());
+				pkValue = new NSData(buf.getRawData());
+			} catch (IOException e) {
+				throw NSForwardException._runtimeExceptionForThrowable(e);
+			}
 		} else {
 			throw new IllegalArgumentException("Unknown value type '" + valueType + "' for '" + object + "' of entity '" + entity.name() + "'.");
 		}

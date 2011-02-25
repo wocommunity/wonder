@@ -21,10 +21,10 @@
             prototypeName = longNumber; 
         }
     ); 
-    attributesUsedForLocking = (contents, creationDate, id, price, userCount); 
+    attributesUsedForLocking = (creationDate, id, userCount); 
     className = EOGenericRecord; 
     classProperties = (contents, creationDate, price, userCount); 
-    externalName = LuceneAsset; 
+    externalName = LA; 
     fetchSpecificationDictionary = {}; 
     name = LuceneAsset; 
     primaryKeyAttributes = (id); 

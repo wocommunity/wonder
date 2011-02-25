@@ -16,7 +16,6 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.LockObtainFailedException;
 import org.apache.lucene.util.Version;
 
-import com.sun.tools.javac.util.Log;
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorContext;
 import com.webobjects.eoaccess.EOModel;
@@ -33,6 +32,9 @@ import com.webobjects.foundation.NSDictionary;
  */
 public class ERLuceneAdaptor extends EOAdaptor {
 
+	public static final Object QUERY_HINTS = "query";
+	public static final Object SORT_HINTS = "sort";
+	
 	private Object _syncFactory;
 	public Directory _directory;
 	public Analyzer _analyzer;
