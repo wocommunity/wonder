@@ -24,6 +24,11 @@ public class AjaxValue {
 		String escapedValue = String.valueOf(obj);
 		escapedValue = escapedValue.replaceAll("\\\\", "\\\\\\\\");
 		escapedValue = escapedValue.replaceAll("'", "\\\\'");
+
+		// Handle line breaks
+        escapedValue = escapedValue.replaceAll("\\r\\n", "\\\\n");
+        escapedValue = escapedValue.replaceAll("\\n", "\\\\n");
+
 		escapedValue = "'" + escapedValue + "'";
 		return escapedValue;
 	}
