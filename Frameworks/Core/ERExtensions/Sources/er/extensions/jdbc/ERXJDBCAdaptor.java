@@ -1,7 +1,9 @@
 package er.extensions.jdbc;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Iterator;
 
@@ -19,8 +21,10 @@ import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation._NSUtilities;
 import com.webobjects.jdbcadaptor.ERXJDBCColumn;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
 import com.webobjects.jdbcadaptor.JDBCAdaptorException;
@@ -101,12 +105,54 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 	 */
 	public static class Channel extends JDBCChannel {
 
+		public static final String COLUMN_CLASS_NAME_KEY = "er.extensions.ERXJDBCAdaptor.columnClassName";
+		
+		private static Class columnClass;
+
+		/**
+		 * The class of the JDBCColumn. It must subclass ERXJDBCColumn and provide 
+		 * implementations for the same two constructors as ERXJDBCColumn. It is set
+		 * using the property <code>er.extensions.ERXJDBCAdaptor.columnClassName</code>
+		 * If no value is set, then the default class is ERXJDBCColumn.
+		 * 
+		 * @return The ERXJDBCColumn subclass
+		 */
+		public static Class columnClass() {
+			if(columnClass == null) {
+				String className = ERXProperties.stringForKey(COLUMN_CLASS_NAME_KEY);
+				if(className != null && className.length() > 0) {
+					columnClass = _NSUtilities.classWithName(className);
+				} else {
+					columnClass = ERXJDBCColumn.class;
+				}
+			}
+			return columnClass;
+		}
+		
+		public static ERXJDBCColumn newERXJDBCColumn(Channel channel) {
+			try {
+				Constructor<? extends ERXJDBCColumn> cstr = columnClass().getDeclaredConstructor(Channel.class);
+				return cstr.newInstance(channel);
+			} catch(Exception e) {
+				throw NSForwardException._runtimeExceptionForThrowable(e);
+			}
+		}
+		
+		public static ERXJDBCColumn newERXJDBCColumn(EOAttribute attribute, JDBCChannel channel, int column, ResultSet rs) {
+			try {
+				Constructor<? extends ERXJDBCColumn> cstr = columnClass().getDeclaredConstructor(EOAttribute.class, JDBCChannel.class, Integer.TYPE, ResultSet.class);
+				return cstr.newInstance(attribute, channel, column, rs);
+			} catch(Exception e) {
+				throw NSForwardException._runtimeExceptionForThrowable(e);
+			}
+		}
+		
 		public Channel(JDBCContext jdbccontext) {
 			super(jdbccontext);
 			try {
 				Field field = JDBCChannel.class.getDeclaredField("_inputColumn");
 				field.setAccessible(true);
-				field.set(this, new ERXJDBCColumn(this));
+				field.set(this, newERXJDBCColumn(this));
 			}
 			catch (Exception e) {
 				System.err.println(e);
@@ -122,7 +168,7 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 				return;
 			ERXJDBCColumn columns[] = new ERXJDBCColumn[j];
 			for (int i = 0; i < j; i++)
-				columns[i] = new ERXJDBCColumn((EOAttribute) _attributes.objectAtIndex(i), this, i + 1, _resultSet);
+				columns[i] = newERXJDBCColumn((EOAttribute) _attributes.objectAtIndex(i), this, i + 1, _resultSet);
 
 			_selectedColumns = new NSArray(columns);
 		}
