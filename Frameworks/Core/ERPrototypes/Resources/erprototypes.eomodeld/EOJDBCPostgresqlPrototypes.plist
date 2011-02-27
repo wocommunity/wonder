@@ -150,7 +150,7 @@
             adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
             adaptorValueConversionMethodName = jodaDateTime; 
             columnName = ""; 
-            externalType = timestamptz; 
+            externalType = timestamp; 
             factoryMethodArgumentType = EOFactoryMethodArgumentIsDate; 
             name = jodaDateTime; 
             valueClassName = "org.joda.time.DateTime"; 
