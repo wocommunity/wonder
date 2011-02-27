@@ -803,6 +803,18 @@ public class ERXMigrationTable {
 	}
 
 	/**
+	 * Returns a new time column.  See newColumn(..) for the full docs.
+	 * 
+	 * @param name the name of the column
+	 * @param allowsNull if true, the column will allow null values
+	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
+	 */
+	public ERXMigrationColumn newTimeColumn(String name, boolean allowsNull) throws SQLException {
+		return newColumn(name, Types.TIME, 0, 0, 0, allowsNull, ERXMigrationColumn.NULL_VALUE_TYPE);
+	}
+
+	/**
 	 * Returns a new ipaddress column.  See newColumn(..) for the full docs.
 	 * 
 	 * @param name the name of the column
