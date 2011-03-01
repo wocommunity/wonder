@@ -68,8 +68,8 @@ public class ERH2PlugIn extends JDBCPlugIn {
 	public Object fetchBLOB(ResultSet rs, int column, EOAttribute attribute, boolean materialize) throws SQLException {
 		NSData data = null;
 		Blob blob = rs.getBlob(column);
+		if(blob == null) { return null; }
 		if(!materialize) { return blob; }
-		if(blob == null) { return NSData.EmptyData; }
 		InputStream stream = blob.getBinaryStream();
 		try {
 			int chunkSize = (int)blob.length();
