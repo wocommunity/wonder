@@ -2196,6 +2196,19 @@ public class ERXSQLHelper {
 	}
 
 	public static class PostgresqlSQLHelper extends ERXSQLHelper {
+
+		/**
+		 * Overriden to prevent the external time types set in 
+		 * {@link #externalTypeForJDBCType(JDBCAdaptor, int)} from being reset.
+		 */
+		@Override
+		public boolean reassignExternalTypeForValueTypeOverride(EOAttribute attr) {
+			if(attr != null && attr.adaptorValueType() == EOAttribute.AdaptorDateType) {
+				return false;
+			}
+			return super.reassignExternalTypeForValueTypeOverride(attr);
+		}
+		
 		@Override
 		protected String sqlForGetNextValFromSequencedNamed(String sequenceName) {
 			return "select NEXTVAL('" + sequenceName + "') as key"; 
