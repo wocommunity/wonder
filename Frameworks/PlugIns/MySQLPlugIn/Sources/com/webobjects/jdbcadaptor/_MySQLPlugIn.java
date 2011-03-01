@@ -296,17 +296,18 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 		Blob blob = rs.getBlob(column);
 		if(blob == null) { return null; }
 		if(!materialize) { return blob; }
+		InputStream stream = blob.getBinaryStream();
 		try {
-			InputStream stream = blob.getBinaryStream();
 			int chunkSize = (int)blob.length();
 			if(chunkSize == 0) {
 				data = NSData.EmptyData;
 			} else {
 				data = new NSData(stream, chunkSize);
 			}
-			stream.close();
 		} catch(IOException e) {
 			throw new JDBCAdaptorException(e.getMessage(), null);
+		} finally {
+			try {if(stream != null) stream.close(); } catch(IOException e) { /* Nothing we can do */ };
 		}
 		return data;
 	}
