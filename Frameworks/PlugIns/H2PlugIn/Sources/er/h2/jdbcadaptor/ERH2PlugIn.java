@@ -1,11 +1,11 @@
 package er.h2.jdbcadaptor;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -27,6 +27,7 @@ import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation._NSStringUtilities;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
+import com.webobjects.jdbcadaptor.JDBCAdaptorException;
 import com.webobjects.jdbcadaptor.JDBCExpression;
 import com.webobjects.jdbcadaptor.JDBCPlugIn;
 
@@ -65,27 +66,26 @@ public class ERH2PlugIn extends JDBCPlugIn {
 
 	@Override
 	public Object fetchBLOB(ResultSet rs, int column, EOAttribute attribute, boolean materialize) throws SQLException {
-		final InputStream is = rs.getBinaryStream(column);
-		if (is == null)
-			return null;
-
-		final ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
-		int nextInput = 0;
+		NSData data = null;
+		Blob blob = rs.getBlob(column);
+		if(!materialize) { return blob; }
+		if(blob == null) { return NSData.EmptyData; }
+		InputStream stream = blob.getBinaryStream();
 		try {
-			while ((nextInput = is.read()) != -1) {
-				byteArrayOS.write(nextInput);
+			int chunkSize = (int)blob.length();
+			if(chunkSize == 0) {
+				data = NSData.EmptyData;
+			} else {
+				data = new NSData(stream, chunkSize);
 			}
+		} catch(IOException e) {
+			throw new JDBCAdaptorException(e.getMessage(), null);
+		} finally {
+			try {if(stream != null) stream.close(); } catch(IOException e) { /* Nothing we can do */ };
 		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		if (NSData.class.getName().equals(attribute.className()))
-			return new NSData(byteArrayOS.toByteArray());
-
-		return byteArrayOS.toString();
+		return data;
 	}
-
+	
 	public static class H2Expression extends JDBCExpression {
 
 		public H2Expression(final EOEntity entity) {
