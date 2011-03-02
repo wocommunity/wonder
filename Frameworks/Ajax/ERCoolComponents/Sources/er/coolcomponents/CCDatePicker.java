@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSTimestamp;
 
 import er.extensions.appserver.ERXApplication;
@@ -160,7 +159,7 @@ public class CCDatePicker extends ERXStatelessComponent {
 		if (_createScript == null) {
 			_createScript = "datePickerController.destroyDatePicker('"+elementID()+"'); datePickerController.createDatePicker("+datePickerOptions() + ")";
 		}
-		NSLog.out.appendln(_createScript);
+		log.debug(_createScript);
 		return _createScript;
 	}
 	
