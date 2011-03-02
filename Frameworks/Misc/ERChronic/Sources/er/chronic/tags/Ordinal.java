@@ -8,7 +8,7 @@ import er.chronic.Options;
 import er.chronic.utils.Token;
 
 public class Ordinal extends Tag<Integer> {
-  public static Pattern ORDINAL_PATTERN = Pattern.compile("^(\\d*)(st|nd|rd|th)$");
+  public static final Pattern ORDINAL_PATTERN = Pattern.compile("^(\\d*)(st|nd|rd|th)$");
 
   public Ordinal(Integer type) {
     super(type);

@@ -9,10 +9,10 @@ import er.chronic.utils.Span;
 import er.chronic.utils.Token;
 
 public class RepeaterSeasonName extends Repeater<Object> {
-  public static Pattern SPRING_PATTERN = Pattern.compile("^springs?$"); 
-  public static Pattern SUMMER_PATTERN = Pattern.compile("^summers?$"); 
-  public static Pattern AUTUMN_PATTERN = Pattern.compile("^(autumn|fall)s?$"); 
-  public static Pattern WINTER_PATTERN = Pattern.compile("^winters?$"); 
+  public static final Pattern SPRING_PATTERN = Pattern.compile("^springs?$"); 
+  public static final Pattern SUMMER_PATTERN = Pattern.compile("^summers?$"); 
+  public static final Pattern AUTUMN_PATTERN = Pattern.compile("^(autumn|fall)s?$"); 
+  public static final Pattern WINTER_PATTERN = Pattern.compile("^winters?$"); 
 
   public static enum SeasonName {
     SPRING, SUMMER, AUTUMN, WINTER
