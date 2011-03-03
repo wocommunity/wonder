@@ -18,6 +18,7 @@ import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
 
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 import er.extensions.appserver.ERXSession;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXThreadStorage;
@@ -66,7 +67,7 @@ public class ERXObjectStoreCoordinatorPool {
     /**
      * Creates the singleton and registers the multi factory.
      */
-    public static void initialize() {
+    public static synchronized void initialize() {
         if (_sharedObjectStoreCoordinatorPool == null) {
             ERXObjectStoreCoordinatorSynchronizer.initialize();
             log.info("setting ERXEC.factory to MultiOSCFactory");

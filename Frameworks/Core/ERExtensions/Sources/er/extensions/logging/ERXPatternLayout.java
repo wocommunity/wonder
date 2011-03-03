@@ -16,6 +16,7 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 import er.extensions.formatters.ERXUnitAwareDecimalFormat;
 import er.extensions.foundation.ERXDictionaryUtilities;
 import er.extensions.foundation.ERXSimpleTemplateParser;
@@ -81,6 +82,7 @@ public class ERXPatternLayout extends PatternLayout {
      * pattern.
      * @param pattern layout to be used.
      */
+    @SuppressWarnings(value="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD", justification="log4j will create one of these at runtime, and instance() will be used to find it from the log4j config page")
     public ERXPatternLayout(String pattern) {
         super(pattern);
 	_instance=this; // log4j will create one of these at runtime, and instance() will be used to find it from the log4j config page

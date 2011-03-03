@@ -37,8 +37,8 @@ public class FocusText extends ERXWOText {
 
   public String id(WOComponent component, WOContext context) {
     String id = null;
-    if (_id != null) {
-      id = (String) _id.valueInComponent(component);
+    if (_idLocal != null) {
+      id = (String) _idLocal.valueInComponent(component);
     }
     if (id == null) {
       id = ERXWOContext.safeIdentifierName(context, false);
@@ -52,7 +52,7 @@ public class FocusText extends ERXWOText {
 		String onKeyPress = (_onKeyPress != null) ? (String) _onKeyPress.valueInComponent(component) : null;
 		String onEnterScript = (_onEnter != null) ? (String) _onEnter.valueInComponent(component) : null;
 		String id = id(component, wocontext);
-    if (_id == null) {
+    if (_idLocal == null) {
       woresponse.appendContentString(" id = \"" + id + "\"");
     }
 		FocusTextField._appendAttributesFromAssociationsToResponse(woresponse, wocontext, id, onKeyPress, onEnterScript);

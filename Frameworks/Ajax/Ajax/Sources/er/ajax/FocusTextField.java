@@ -22,7 +22,7 @@ import er.extensions.components._private.ERXWOTextField;
  * @binding onEnter javascript to execute when the enter key is pressed
  */
 public class FocusTextField extends ERXWOTextField {
-	protected WOAssociation _id;
+	protected WOAssociation _idLocal;
 	protected WOAssociation _selectAll;
 	protected WOAssociation _focus;
 	protected WOAssociation _onEnter;
@@ -31,7 +31,7 @@ public class FocusTextField extends ERXWOTextField {
 	public FocusTextField(String tagname, NSDictionary nsdictionary, WOElement woelement) {
 		super(tagname, nsdictionary, woelement);
 
-		_id = (WOAssociation) nsdictionary.valueForKey("id");
+		_idLocal = (WOAssociation) nsdictionary.valueForKey("id");
 		_selectAll = (WOAssociation) _associations.removeObjectForKey("selectAll");
 		_focus = (WOAssociation) _associations.removeObjectForKey("focus");
 		_onEnter = (WOAssociation) _associations.removeObjectForKey("onEnter");
@@ -40,8 +40,8 @@ public class FocusTextField extends ERXWOTextField {
 
 	public String id(WOComponent component, WOContext context) {
     String id = null;
-    if (_id != null) {
-      id = (String) _id.valueInComponent(component);
+    if (_idLocal != null) {
+      id = (String) _idLocal.valueInComponent(component);
     }
 	  if (id == null) {
 	    id = ERXWOContext.safeIdentifierName(context, false);
@@ -68,7 +68,7 @@ public class FocusTextField extends ERXWOTextField {
 		String onKeyPress = (_onKeyPress != null) ? (String) _onKeyPress.valueInComponent(component) : null;
 		String onEnterScript = (_onEnter != null) ? (String) _onEnter.valueInComponent(component) : null;
     String id = id(component, wocontext);
-    if (_id == null) {
+    if (_idLocal == null) {
       response.appendContentString(" id = \"" + id + "\"");
     }
 		FocusTextField._appendAttributesFromAssociationsToResponse(response, wocontext, id, onKeyPress, onEnterScript);

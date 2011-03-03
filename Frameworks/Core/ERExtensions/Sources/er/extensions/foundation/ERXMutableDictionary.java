@@ -20,6 +20,8 @@ import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
+
 /**
  * Adds {@link java.util.Map} functionality to NSMutableDictionary and has
  * helpers to en- and decode from database field.
@@ -94,6 +96,7 @@ public class ERXMutableDictionary extends NSMutableDictionary implements Map {
 	}
 
 	@Override
+	@SuppressWarnings(value="CN_IDIOM_NO_SUPER_CALL")
 	public Object clone() {
 		return new ERXMutableDictionary(this);
 	}

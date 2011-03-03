@@ -50,6 +50,7 @@ import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.properties.NSPropertiesCoordinator;
 import com.webobjects.jdbcadaptor.JDBCAdaptorException;
 
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXSession;
 import er.extensions.eof.ERXConstant;
@@ -635,6 +636,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      *		collector to run until all free objects
      *		have been collected.
      */
+    @SuppressWarnings(value="DM_GC", justification="sort of the point of this method")
     public static void forceGC(int maxLoop) {
         if (_log.isDebugEnabled()) _log.debug("Forcing full Garbage Collection");
         Runtime runtime = Runtime.getRuntime();
