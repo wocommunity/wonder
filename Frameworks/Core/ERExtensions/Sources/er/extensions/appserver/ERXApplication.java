@@ -73,6 +73,7 @@ import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation.NSTimestamp;
 
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 import er.extensions.ERXExtensions;
 import er.extensions.ERXFrameworkPrincipal;
 import er.extensions.appserver.ajax.ERXAjaxApplication;
@@ -293,6 +294,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * Patches ERXWOForm, ERXWOFileUpload, ERXWOText to be used instead of
 	 * WOForm, WOFileUpload, WOText.
 	 */
+	@SuppressWarnings(value="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD", justification="only called during startup and there's no API to set this")
 	public void installPatches() {
 		ERXPatcher.installPatches();
 		if (contextClassName().equals("WOContext")) {
@@ -759,6 +761,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 
 	@Override
+	@SuppressWarnings(value="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD")
 	public synchronized void refuseNewSessions(boolean value) {
 		boolean old = isRefusingNewSessions();
 		boolean oldDirectConnect = isDirectConnectEnabled();
@@ -1004,6 +1007,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * @param exception
 	 *            to check if it is a fatal exception.
 	 */
+	@SuppressWarnings(value="DM_GC", justification="intentional to handle possible OOM")
 	public void handlePotentiallyFatalException(Exception exception) {
 		Throwable throwable = ERXRuntimeUtilities.originalThrowable(exception);
 		if (throwable instanceof Error) {

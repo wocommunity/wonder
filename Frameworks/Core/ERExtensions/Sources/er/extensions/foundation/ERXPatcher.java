@@ -321,16 +321,16 @@ public class ERXPatcher {
 		}
 
 		public static class ActiveImage extends WOActiveImage {
-			protected WOAssociation _id;
+			protected WOAssociation _idLocal;
 
 			public ActiveImage(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) super._associations.removeObjectForKey("id");
+				_idLocal = (WOAssociation) super._associations.removeObjectForKey("id");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
-				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
+				appendIdentifierTagAndValue(this, _idLocal, woresponse, wocontext);
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -356,16 +356,16 @@ public class ERXPatcher {
 		}
 
 		public static class TextField extends WOTextField {
-			protected WOAssociation _id;
+			protected WOAssociation _idLocal;
 
 			public TextField(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) super._associations.removeObjectForKey("id");
+				_idLocal = (WOAssociation) super._associations.removeObjectForKey("id");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
-				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
+				appendIdentifierTagAndValue(this, _idLocal, woresponse, wocontext);
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -378,16 +378,16 @@ public class ERXPatcher {
 		}
 
 		public static class Text extends WOText {
-			protected WOAssociation _id;
+			protected WOAssociation _idLocal;
 
 			public Text(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) super._associations.removeObjectForKey("id");
+				_idLocal = (WOAssociation) super._associations.removeObjectForKey("id");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
-				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
+				appendIdentifierTagAndValue(this, _idLocal, woresponse, wocontext);
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -400,16 +400,16 @@ public class ERXPatcher {
 		}
 
 		public static class PopUpButton extends WOPopUpButton {
-			protected WOAssociation _id;
+			protected WOAssociation _idLocal;
 
 			public PopUpButton(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) super._associations.removeObjectForKey("id");
+				_idLocal = (WOAssociation) super._associations.removeObjectForKey("id");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
-				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
+				appendIdentifierTagAndValue(this, _idLocal, woresponse, wocontext);
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -422,16 +422,16 @@ public class ERXPatcher {
 		}
 
 		public static class Browser extends WOBrowser {
-			protected WOAssociation _id;
+			protected WOAssociation _idLocal;
 
 			public Browser(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) super._associations.removeObjectForKey("id");
+				_idLocal = (WOAssociation) super._associations.removeObjectForKey("id");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
-				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
+				appendIdentifierTagAndValue(this, _idLocal, woresponse, wocontext);
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -444,16 +444,16 @@ public class ERXPatcher {
 		}
 
 		public static class CheckBox extends WOCheckBox {
-			protected WOAssociation _id;
+			protected WOAssociation _idLocal;
 
 			public CheckBox(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) super._associations.removeObjectForKey("id");
+				_idLocal = (WOAssociation) super._associations.removeObjectForKey("id");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
-				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
+				appendIdentifierTagAndValue(this, _idLocal, woresponse, wocontext);
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -466,16 +466,16 @@ public class ERXPatcher {
 		}
 
 		public static class CheckBoxList extends WOCheckBoxList {
-			protected WOAssociation _id;
+			protected WOAssociation _idLocal;
 
 			public CheckBoxList(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) super._associations.removeObjectForKey("id");
+				_idLocal = (WOAssociation) super._associations.removeObjectForKey("id");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
-				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
+				appendIdentifierTagAndValue(this, _idLocal, woresponse, wocontext);
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -488,16 +488,16 @@ public class ERXPatcher {
 		}
 
 		public static class FileUpload extends ERXWOFileUpload {
-			protected WOAssociation _id;
+			protected WOAssociation _idLocal;
 
 			public FileUpload(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) super._associations.removeObjectForKey("id");
+				_idLocal = (WOAssociation) super._associations.removeObjectForKey("id");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
-				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
+				appendIdentifierTagAndValue(this, _idLocal, woresponse, wocontext);
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -510,16 +510,16 @@ public class ERXPatcher {
 		}
 
 		public static class HiddenField extends WOHiddenField {
-			protected WOAssociation _id;
+			protected WOAssociation _idLocal;
 
 			public HiddenField(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) super._associations.removeObjectForKey("id");
+				_idLocal = (WOAssociation) super._associations.removeObjectForKey("id");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
-				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
+				appendIdentifierTagAndValue(this, _idLocal, woresponse, wocontext);
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -532,16 +532,16 @@ public class ERXPatcher {
 		}
 
 		public static class ImageButton extends WOImageButton {
-			protected WOAssociation _id;
+			protected WOAssociation _idLocal;
 
 			public ImageButton(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) super._associations.removeObjectForKey("id");
+				_idLocal = (WOAssociation) super._associations.removeObjectForKey("id");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
-				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
+				appendIdentifierTagAndValue(this, _idLocal, woresponse, wocontext);
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -554,16 +554,16 @@ public class ERXPatcher {
 		}
 
 		public static class PasswordField extends WOPasswordField {
-			protected WOAssociation _id;
+			protected WOAssociation _idLocal;
 
 			public PasswordField(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) super._associations.removeObjectForKey("id");
+				_idLocal = (WOAssociation) super._associations.removeObjectForKey("id");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
-				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
+				appendIdentifierTagAndValue(this, _idLocal, woresponse, wocontext);
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -576,16 +576,16 @@ public class ERXPatcher {
 		}
 
 		public static class RadioButton extends WORadioButton {
-			protected WOAssociation _id;
+			protected WOAssociation _idLocal;
 
 			public RadioButton(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) super._associations.removeObjectForKey("id");
+				_idLocal = (WOAssociation) super._associations.removeObjectForKey("id");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
-				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
+				appendIdentifierTagAndValue(this, _idLocal, woresponse, wocontext);
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -598,16 +598,16 @@ public class ERXPatcher {
 		}
 
 		public static class RadioButtonList extends WORadioButtonList {
-			protected WOAssociation _id;
+			protected WOAssociation _idLocal;
 
 			public RadioButtonList(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_id = (WOAssociation) super._associations.removeObjectForKey("id");
+				_idLocal = (WOAssociation) super._associations.removeObjectForKey("id");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
-				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
+				appendIdentifierTagAndValue(this, _idLocal, woresponse, wocontext);
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {

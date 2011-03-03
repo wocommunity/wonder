@@ -20,6 +20,7 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 import er.extensions.foundation.ERXArrayUtilities;
 
 /**
@@ -471,8 +472,11 @@ public abstract class ERXConstant {
     public static final BigDecimal ZeroBigDecimal = new BigDecimal(0.00);
     public static final BigDecimal OneBigDecimal = new BigDecimal(1.00); 
     public static final Class[] EmptyClassArray = new Class[0];
+    @SuppressWarnings(value="MS_MUTABLE_ARRAY", justification="if anyone touches this ... that's just evil")
     public static final Class[] NotificationClassArray = { com.webobjects.foundation.NSNotification.class };
+    @SuppressWarnings(value="MS_MUTABLE_ARRAY", justification="if anyone touches this ... that's just evil")
     public static final Class[] ObjectClassArray = { Object.class };
+    @SuppressWarnings(value="MS_MUTABLE_ARRAY", justification="if anyone touches this ... that's just evil")
     public static final Class[] StringClassArray = new Class[] { String.class };
     public static final Object[] EmptyObjectArray = new Object[] {};
     /** an empty gif image */

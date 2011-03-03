@@ -11,6 +11,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 import er.extensions.appserver.ERXResponse;
 import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.appserver.ajax.ERXAjaxApplication.ERXAjaxResponseDelegate;
@@ -55,6 +56,7 @@ public class AjaxResponse extends ERXResponse {
 		_context = context;
 	}
 
+	@SuppressWarnings(value="BC_IMPOSSIBLE_CAST", justification="5.2/5.4 API difference")
 	public WOResponse generateResponse() {
 		if (AjaxUpdateContainer.hasUpdateContainerID(_request)) {
 			String originalSenderID = _context.senderID();

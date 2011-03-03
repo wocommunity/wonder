@@ -38,8 +38,8 @@ public class ERXSubmitButton extends WOInput {
 
 	public static final String STYLE_PREFIX = "ERXSubmitButton-";
 	
-    protected WOAssociation _class;
-    protected WOAssociation _id;
+    protected WOAssociation _classLocal;
+    protected WOAssociation _idLocal;
     protected WOAssociation _action;
     protected WOAssociation _actionClass;
     protected WOAssociation _directActionName;
@@ -98,18 +98,18 @@ public class ERXSubmitButton extends WOInput {
         
         // hack for 5.4
         if (ERXApplication.isWO54()) {
-        	_class = (WOAssociation) nsdictionary.valueForKey("class");
+        	_classLocal = (WOAssociation) nsdictionary.valueForKey("class");
         }
         else {
-        	_class = (WOAssociation)_associations.removeObjectForKey("class");
+        	_classLocal = (WOAssociation)_associations.removeObjectForKey("class");
         }
 
         // hack for 5.4
         if (ERXApplication.isWO54()) {
-        	_id = (WOAssociation) nsdictionary.valueForKey("id");
+        	_idLocal = (WOAssociation) nsdictionary.valueForKey("id");
         }
         else {
-        	_id = (WOAssociation)_associations.removeObjectForKey("id");
+        	_idLocal = (WOAssociation)_associations.removeObjectForKey("id");
         }
 
         if(_action != null && _action.isValueConstant())
@@ -162,8 +162,8 @@ public class ERXSubmitButton extends WOInput {
     	appendURLAttributesToResponse(woresponse, wocontext);
        	String css = "";
        	
-   		if (_class != null) {
-			css = (String) _class.valueInComponent(wocontext.component());
+   		if (_classLocal != null) {
+			css = (String) _classLocal.valueInComponent(wocontext.component());
 		}
        	
     	WOAssociation assoc = _action;
@@ -177,8 +177,8 @@ public class ERXSubmitButton extends WOInput {
     	if(css.length() > 0) {
     		woresponse._appendTagAttributeAndValue("class", css, false);
     	}
-    	if (_id != null) {
-    		woresponse._appendTagAttributeAndValue("id", (String) _id.valueInComponent(wocontext.component()), false);
+    	if (_idLocal != null) {
+    		woresponse._appendTagAttributeAndValue("id", (String) _idLocal.valueInComponent(wocontext.component()), false);
     	}
     	boolean shouldSubmitForm = (_shouldSubmitForm != null ? _shouldSubmitForm.booleanValueInComponent(wocontext.component()) : true);
 

@@ -20,6 +20,7 @@ import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSNotificationCenter;
 
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 import er.extensions.foundation.ERXConfigurationManager;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXSystem;
@@ -36,6 +37,7 @@ public class ERXLogger extends org.apache.log4j.Logger {
 
     /** logging supprt */
     public static Logger log;
+    @SuppressWarnings(value="MS_SHOULD_BE_FINAL", justification="can't be final because it's set in the static block via some conditionals")
     public static Factory factory = null;
     static {
     	String factoryClassName = System.getProperty("log4j.loggerFactory");

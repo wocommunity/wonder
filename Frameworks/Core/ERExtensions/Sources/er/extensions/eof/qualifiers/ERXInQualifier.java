@@ -30,6 +30,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSSet;
 
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.jdbc.ERXSQLHelper;
@@ -159,6 +160,7 @@ public class ERXInQualifier extends ERXKeyValueQualifier implements Cloneable {
      * an EOKeyValueQualifier and the generated SQL is incorrect..
      * @return cloned primary key list qualifier.
      */
+    @SuppressWarnings(value="CN_IDIOM_NO_SUPER_CALL")
     public Object clone() {
         return new ERXInQualifier(key(), values());
     }
