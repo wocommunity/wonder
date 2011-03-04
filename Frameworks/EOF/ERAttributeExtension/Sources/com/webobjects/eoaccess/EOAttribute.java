@@ -1122,11 +1122,19 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 				throw NSForwardException._runtimeExceptionForThrowable(e);
 			}
 		int valueType = adaptorValueType();
+		
+		//To preserve the illusion of consistency, convert the byte[] to an NSData here
+		if(FactoryMethodArgumentIsBytes == factoryMethodArgumentType() && valueFactoryMethod() != null) {
+			byte[] bytes = (byte[])convertedValue;
+			convertedValue = new NSData(bytes);
+		}
+		
+		//Make an additional check here to support custom date types.
 		if(!(AdaptorDateType == valueType && conversionMethod != null && Date.class.isInstance(convertedValue))) {
 			if (!valueClasses[valueType].isInstance(convertedValue) && (valueClasses[valueType] != Number.class || !(convertedValue instanceof Boolean))) {
 				EOEntity parentEntity = (EOEntity) parent();
 				String entityName = parentEntity == null ? "<unspecified>" : parentEntity.name();
-				throw new IllegalArgumentException((new StringBuilder()).append("Unable to convert value of class ").append(convertedValue.getClass().getName()).append(" for attribute '").append(name()).append("' in entity '").append(entityName).append("' to adaptor type EOAttribute.Adaptor").append(valueTypeNames[valueType]).append("Type.  Check the signature of the conversion method ").append(className()).append(".").append(conversionMethod == null ? "NotFound" : conversionMethod.name()).append("().").toString());
+				throw new IllegalArgumentException((new StringBuilder()).append("EOAttribute adaptorValueByConvertingAttributeValue(Object): Unable to convert value of class ").append(convertedValue.getClass().getName()).append(" for attribute '").append(name()).append("' in entity '").append(entityName).append("' to adaptor type EOAttribute.Adaptor").append(valueTypeNames[valueType]).append("Type.  Check the signature of the conversion method ").append(className()).append(".").append(conversionMethod == null ? "NotFound" : conversionMethod.name()).append("().").toString());
 			}
 		}
 		return convertedValue;
