@@ -1363,7 +1363,7 @@ public class ERXEC extends EOEditingContext {
 	}
 
 	private boolean savingChanges;
-	private NSMutableArray queuedNotifications = new NSMutableArray();
+	private NSMutableArray<NSNotification> queuedNotifications = new NSMutableArray<NSNotification>();
 
 	protected static Map<ERXEC, String> activeEditingContexts = Collections.synchronizedMap(new WeakHashMap());
 
@@ -1448,15 +1448,13 @@ public class ERXEC extends EOEditingContext {
 	 * 
 	 */
 	private void processQueuedNotifications() {
+		NSMutableArray<NSNotification> queuedNotificationsClone;
 		synchronized (queuedNotifications) {
-			for (Enumeration e = queuedNotifications.objectEnumerator(); e.hasMoreElements();) {
-
-				NSNotification n = (NSNotification) e.nextElement();
-
-				_objectsChangedInStore(n);
-
-			}
+			queuedNotificationsClone = new NSMutableArray<NSNotification>(queuedNotifications);
 			queuedNotifications.removeAllObjects();
+		}
+		for (NSNotification notification : queuedNotificationsClone) {
+			_objectsChangedInStore(notification);
 		}
 	}
 
