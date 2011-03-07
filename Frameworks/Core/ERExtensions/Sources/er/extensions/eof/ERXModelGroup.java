@@ -44,6 +44,7 @@ import com.webobjects.foundation._NSArrayUtilities;
 import com.webobjects.foundation.properties.NSPropertiesCoordinator;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
 
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 import er.extensions.appserver.ERXApplication;
 import er.extensions.foundation.ERXConfigurationManager;
 import er.extensions.foundation.ERXFileUtilities;
@@ -471,6 +472,7 @@ public class ERXModelGroup extends EOModelGroup {
 		 * Create the prototype cache by walking a search order.
 		 * 
 		 */
+		@SuppressWarnings(value="JLM_JSR166_LOCK_MONITORENTER", justification="binary compatibility")
 		private void createPrototypes() {
 			log.info("Creating prototypes for model: " + name() + "->" + connectionDictionary());
 			synchronized (_EOGlobalModelLock) {
@@ -511,6 +513,7 @@ public class ERXModelGroup extends EOModelGroup {
 		 * Overridden to use our prototype creation method.
 		 */
 		@Override
+		@SuppressWarnings(value="JLM_JSR166_LOCK_MONITORENTER", justification="binary compatibility")
 		public EOAttribute prototypeAttributeNamed(String name) {
 			synchronized (_EOGlobalModelLock) {
 				if (_prototypesByName == null) {
@@ -524,6 +527,7 @@ public class ERXModelGroup extends EOModelGroup {
 		 * Overridden to use our prototype creation method.
 		 */
 		@Override
+		@SuppressWarnings(value="JLM_JSR166_LOCK_MONITORENTER", justification="binary compatibility")
 		public NSArray availablePrototypeAttributeNames() {
 			synchronized (_EOGlobalModelLock) {
 				if (_prototypesByName == null) {
