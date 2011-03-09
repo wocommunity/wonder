@@ -28,6 +28,7 @@ public class ERS3Attachment extends _ERS3Attachment {
 
 	public void _setPendingUploadFile(File pendingUploadFile, boolean pendingDelete) {
 		_pendingUploadFile = pendingUploadFile;
+		_pendingDelete = pendingDelete;
 	}
 
 	public File _pendingUploadFile() {
