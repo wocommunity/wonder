@@ -136,7 +136,8 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 									result = format.parseObject(reformatedObject);
 								} catch(ParseException parseexception) {
 									String keyPath = _value.keyPath();
-									ERXValidationException validationexception = new ERXValidationException(parseexception.getMessage(), stringValue, keyPath);									component.validationFailedWithException(validationexception, stringValue, keyPath);
+									ERXValidationException validationexception = new ERXValidationException(ERXValidationException.InvalidValueException, parseexception, keyPath, stringValue);
+									component.validationFailedWithException(validationexception, stringValue, keyPath);
 									return;
 								} finally {
 									tsFormat.setDefaultFormatTimeZone(formatZone);
@@ -150,7 +151,8 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 								result = format.parseObject(reformatedObject);
 							} catch(ParseException parseexception) {
 								String keyPath = _value.keyPath();
-								ERXValidationException validationexception = new ERXValidationException(parseexception.getMessage(), stringValue, keyPath);								component.validationFailedWithException(validationexception, stringValue, keyPath);
+								ERXValidationException validationexception = new ERXValidationException(ERXValidationException.InvalidValueException, parseexception, keyPath, stringValue);
+								component.validationFailedWithException(validationexception, stringValue, keyPath);
 								return;
 							}
 						}

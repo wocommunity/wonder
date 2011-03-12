@@ -10,6 +10,17 @@ import java.util.concurrent.TimeUnit;
 /**
  * User-presentable time duration format as days, hours, minutes and seconds.
  * 
+ * Usage example:
+ * <code>
+ * 	StopWatch w = new StopWatch();
+ * 	w.start();
+ * 	... perform long task ...
+ * 	w.stop();
+ * 	ERXTimeDurationFormatter f = new ERXTimeDurationFormatter(TimeUnit.MILLISECONDS);
+ * 	
+ * 	String message = "The task took " + f.format(w.getTime());
+ * </code>
+ * 
  * @author kieran
  *
  */
