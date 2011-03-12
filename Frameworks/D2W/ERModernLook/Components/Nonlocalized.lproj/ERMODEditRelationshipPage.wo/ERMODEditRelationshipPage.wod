@@ -32,8 +32,7 @@ InspectComponent: ERXD2WInspect {
 
 IsEntityWritable: WOConditional {
 	_unroll = true;
-	condition = isEntityReadOnly;
-	negate = true;
+	condition = isEntityCreatable;
 }
 
 IsToMany: WOConditional {

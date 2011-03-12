@@ -1,5 +1,6 @@
 {
   "rules" = (
+    {"author" = "0"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "com.webobjects.directtoweb.BooleanAssignment"; "keyPath" = "isEntityCreatable"; "value" = "true"; }; }, 
     {"author" = "9"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "com.webobjects.directtoweb.Assignment"; "keyPath" = "baseClassForLine"; "value" = "Line"; }; }, 
     {"author" = "9"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "com.webobjects.directtoweb.Assignment"; "keyPath" = "baseClassForBanner"; "value" = "Banner"; }; }, 
     {"author" = "9"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "com.webobjects.directtoweb.Assignment"; "keyPath" = "baseClassForHeader"; "value" = "Header"; }; }, 

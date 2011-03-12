@@ -64,6 +64,7 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 		public static String userPreferencesSortOrdering	= "sortOrdering";
 		public static String displayPropertyKeys = "displayPropertyKeys";
 		public static String subTask = "subTask";
+		public static String isEntityCreatable = "isEntityCreatable";
 		
 	}
 	
@@ -486,6 +487,11 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	/** The number of objects in the list. */
 	public int listSize() {
 		return relationshipDisplayGroup().displayedObjects().count();
+	}
+	
+	/** Should the 'new' button be displayed? */
+	public boolean isEntityCreatable() {
+		return ERXValueUtilities.booleanValue(d2wContext().valueForKey(Keys.isEntityCreatable)) && !isEntityReadOnly();
 	}
 	
 }

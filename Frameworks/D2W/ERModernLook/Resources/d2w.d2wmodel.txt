@@ -1,4 +1,5 @@
 (
+    0 : *true* => isEntityCreatable = "true" [com.webobjects.directtoweb.BooleanAssignment],
     9 : *true* => baseClassForLine = "Line" [com.webobjects.directtoweb.Assignment],
     9 : *true* => baseClassForBanner = "Banner" [com.webobjects.directtoweb.Assignment],
     9 : *true* => baseClassForHeader = "Header" [com.webobjects.directtoweb.Assignment],
