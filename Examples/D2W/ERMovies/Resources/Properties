@@ -9,6 +9,11 @@ er.extensions.ERXEC.useSharedEditingContext=false
 er.extensions.ERXEC.defaultCoalesceAutoLocks=true
 er.extensions.ERXEnterpriseObject.applyRestrictingQualifierOnInsert=true
 
+# Embedded H2 Database
+#
+# Disable if you are using something else
+webobjectsexamples.ERMoviesLogic.useEmbeddedH2Database=true
+
 # Repetition Fixes
 #er.extensions.ERXWORepetition.checkHashCodes=true
 #er.extensions.ERXWORepetition.raiseOnUnmatchedObject=true
