@@ -1,4 +1,5 @@
 (
+    10 : *true* => enctype = multipart/form-data [com.webobjects.directtoweb.Assignment],
     50 : (task = 'query' and propertyType = 'r' and smartRelationship.isToMany = 0) => componentName = ERD2WQueryToOneRelationship [com.webobjects.directtoweb.Assignment],
     75 : (entity.name = 'Customer' and (task = 'inspect' or task = 'edit') and not (pageConfiguration like '*Embedded*')) => subTask = tab [com.webobjects.directtoweb.Assignment],
     90 : entity.name = 'FeeType' => displayPropertyKeys = (feeType,enabled
@@ -22,7 +23,6 @@
     100 : entity.name = 'Customer' => isEntityEditable = 1 [com.webobjects.directtoweb.BooleanAssignment],
     100 : entity.name = 'MovieRole' => isEntityEditable = 1 [com.webobjects.directtoweb.BooleanAssignment],
     100 : (entity.name = 'Studio' and task = 'list') => subTask = simple [com.webobjects.directtoweb.Assignment],
-    100 : (entity.name = 'Customer' and task = 'list') => subTask = detail [com.webobjects.directtoweb.Assignment],
     100 : (entity.name = 'Movie' and propertyKey = 'studio') => keyWhenRelationship = name [com.webobjects.directtoweb.Assignment],
     100 : (entity.name = 'Movie' and session.theme = 'Neutral') => allowsFiltering = true [com.webobjects.directtoweb.BooleanAssignment],
     100 : (entity.name = 'Movie' and task = 'edit' and propertyKey = null) => isAjax = true [com.webobjects.directtoweb.BooleanAssignment],
@@ -34,6 +34,7 @@
 ) [com.webobjects.directtoweb.Assignment],
     100 : (entity.name = 'Studio' and task = 'list' and subTask = 'simple') => displayPropertyKeys = (name
 ) [com.webobjects.directtoweb.Assignment],
+    100 : (entity.name = 'Customer' and task = 'list' and not (session.theme = 'Modern')) => subTask = detail [com.webobjects.directtoweb.Assignment],
     100 : (entity.name = 'Talent' and task = 'list') => displayPropertyKeys = (firstName,lastName,isDirector
 ) [com.webobjects.directtoweb.Assignment],
     100 : (task = 'edit' and entity.name = 'Rental') => inspectConfirmConfigurationName = InspectConfirmRental [com.webobjects.directtoweb.Assignment],

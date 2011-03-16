@@ -1,0 +1,120 @@
+/* NeutralSortOrder2.css */
+
+.ERXSortOrder2_None, .ERXSortOrder2_Down, .ERXSortOrder2_Up {
+	text-indent: -5000px;
+	display: block;
+	border: 0px;
+	cursor: pointer;
+}
+
+.ERXSortOrder2_None {
+	height: 6px;
+	width: 6px;
+	background-color: #c2c6cf;
+}
+
+.ERXSortOrder2_Down {
+	width: 11px;
+	height: 6px;
+	background: url(/WebObjects/Frameworks/ERModernDefaultSkin.framework/WebServerResources/sort_dsc.png) no-repeat
+}
+
+.ERXSortOrder2_Up {
+	width: 11px;
+	height: 6px;
+	background: url(/WebObjects/Frameworks/ERModernDefaultSkin.framework/WebServerResources/sort_asc.png) no-repeat
+}
+
+/* table */
+
+div#a table#ListTable td,
+div#a table#ListTable th {
+	border: none;
+	font-weight: bold;
+}
+
+div#a table#ListTable th {
+	background-color: #414b5e;
+	color: #c2c6cf;
+	text-align: left;
+	font-weight: normal;
+	height: 23px;
+}
+
+div#a table#ListTable tbody tr:nth-child(odd),
+div#a div.list.simple ul.list li:nth-child(odd) {
+	background-color: #e6e9ef;
+}
+
+/* buttons */
+a.ERDEditButton2,
+a.ERDInspectButton2 {
+	display: inline-block;
+	font-size: 11px;
+	height: 20px;
+	padding: 0 16px;
+	border-radius: 11px;
+	-khtml-border-radius: 11px;
+	-moz-border-radius: 11px;
+	-opera-border-radius: 11px;
+	-webkit-border-radius: 11px;
+}
+
+a.ERDEditButton2 span,
+a.ERDInspectButton2 span {
+	padding-top: 4px;
+	padding-bottom: 6px;
+	display: inline-block;
+	height: 21px;
+}
+
+/* edit button */
+
+a.ERDEditButton2 {
+	color: #fff;
+	background-image: -webkit-gradient(
+	    linear,
+	    left bottom,
+	    left top,
+	    color-stop(0.28, rgb(66,98,161)),
+	    color-stop(0.64, rgb(103,133,185))
+	);
+	background-image: -moz-linear-gradient(
+	    center bottom,
+	    rgb(66,98,161) 28%,
+	    rgb(103,133,185) 64%
+	);
+	text-shadow: #405882 0px -1px 0px;
+	-webkit-box-shadow: 1px 1px 1px #022e65;
+	-moz-box-shadow: 1px 1px 1px #022e65;
+	box-shadow:1px 1px 1px #022e65;
+}
+
+a.ERDInspectButton2 {
+	color: #373737;
+	background-image: -webkit-gradient(
+	    linear,
+	    left bottom,
+	    left top,
+	    color-stop(0.26, rgb(184,184,184)),
+	    color-stop(0.63, rgb(236,236,236))
+	);
+	background-image: -moz-linear-gradient(
+	    center bottom,
+	    rgb(184,184,184) 26%,
+	    rgb(236,236,236) 63%
+	);
+	text-shadow: #E9E9E9 0px 1px 0px;
+	-webkit-box-shadow: 1px 1px 1px grey;
+	-moz-box-shadow: 1px 1px 1px grey;
+	box-shadow:1px 1px 1px grey;
+}
+
+a.ERDTrashcan2 {
+	display: inline-block;
+	text-indent: -5000px;
+	background-image: url(/WebObjects/Frameworks/ERModernDefaultSkin.framework/WebServerResources/btn_del.png);
+	height: 22px;
+	width: 21px;
+}
+

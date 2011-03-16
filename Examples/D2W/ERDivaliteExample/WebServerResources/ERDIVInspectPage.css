@@ -7,7 +7,7 @@ div#a div.button ul li {
 
 div#a div.accordion-content ul li.attribute h4.propertyKey {
 	margin-left: -10em; /*width of left column*/
-	display: inline;
+	display: inline-block;
 } 
 
 div#a div.accordion-content ul li.attribute {

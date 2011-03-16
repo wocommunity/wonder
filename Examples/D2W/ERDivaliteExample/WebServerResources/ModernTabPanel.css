@@ -1,0 +1,39 @@
+@import url("ERXAjaxTabPanel.css");
+
+div#a div.tab_panel ul.tab {
+	display: inline-block;
+	width: 100%;
+	border-bottom: 1px solid whitesmoke;
+	height: 100%;
+}
+
+div#a div.tab_panel ul.tab li {
+	display: inline-block;
+	padding: 0;
+	margin: 0;
+	list-style-type: none;
+	font-size: 13px;
+	font-weight: bold;
+	padding-right: 30px;
+}
+
+div#a div.tab_panel ul.tab li.selected span,
+div#a div.tab_panel ul.tab li a,
+div#a div.tab_panel ul.tab li button {
+	display: inline-block;
+	font-weight: bold;
+	padding-bottom: 12px;
+	padding-top: 8px;
+	text-align: center;
+}
+
+div#a div.tab_panel ul.tab li button {
+	cursor: pointer;
+	color: #4262A1;
+}
+
+div#a div.tab_panel ul.tab li.selected span {
+	background-image: url(/WebObjects/Frameworks/ERModernDefaultSkin.framework/WebServerResources/pag_tab_sel.png);
+	background-position: 50% 100%;
+	background-repeat: no-repeat;
+}

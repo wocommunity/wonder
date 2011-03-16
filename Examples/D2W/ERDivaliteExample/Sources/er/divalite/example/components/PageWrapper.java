@@ -28,6 +28,10 @@ public class PageWrapper extends WOComponent {
     // accessors
 
     public String stylesheet() {
-    	return ((Session) session()).isWebObjectsTheme() ? "WebObjects.css" : "Neutral.css";
+    	if (((Session) session()).isWebObjectsTheme()) 
+    		return "WebObjects.css";
+    	else if (((Session) session()).isModernTheme()) 
+    		return "Modern.css";
+    	else return "Neutral.css";		// default
     }
 }

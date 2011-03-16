@@ -1,0 +1,9 @@
+@import url("AjaxAccordion.css");
+
+div#a div.accordion-toggle:first-child {
+	padding-top: 0;
+}
+
+div#a div.accordion-toggle {
+	font-size: 16px;
+}

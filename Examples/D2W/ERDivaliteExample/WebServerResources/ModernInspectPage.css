@@ -1,0 +1,65 @@
+@import url("ERDIVInspectPage.css");
+@import url("ModernInspect.css");
+
+/* ERD2WDisplayToManyUnorderedList */
+
+div#a div.ERD2WDisplayToManyUnorderedList ul {
+	display: inline-block;
+	margin-top: auto;
+	margin-bottom: auto;
+}
+
+div#a div.ERD2WDisplayToManyUnorderedList ul li {
+	list-style-type: none;
+	line-height: 25px;
+}
+
+/* The following are styles for the inspect page */
+
+div#a h1.task.inspect {
+	display: none;
+}
+
+div#a h2.entity.inspect:before {
+	content: "Inspect ";
+}
+
+div#a div.button {
+	display: inline-block;
+	margin: 10px 0;
+}
+
+div#a div.button ul li {
+	list-style-type: none;
+	float: right;
+	margin-left: 15px;
+}
+
+div#a div.button a.edit {
+	display: inline-block;
+	border: 0;
+	padding: 5px 23px;
+	border-radius: 16px;
+	-khtml-border-radius: 16px;
+	-moz-border-radius: 16px;
+	-opera-border-radius: 16px;
+	-webkit-border-radius: 16px;
+	font-weight: bold;
+	color: #fff;
+	background-image: -webkit-gradient(
+	    linear,
+	    left bottom,
+	    left top,
+	    color-stop(0.28, rgb(66,98,161)),
+	    color-stop(0.64, rgb(103,133,185))
+	);
+	background-image: -moz-linear-gradient(
+	    center bottom,
+	    rgb(66,98,161) 28%,
+	    rgb(103,133,185) 64%
+	);
+	text-shadow: #405882 0px -1px 0px;
+	-webkit-box-shadow: 1px 1px 1px #022e65;
+	-moz-box-shadow: 1px 1px 1px #022e65;
+	box-shadow:1px 1px 1px #022e65;
+}
