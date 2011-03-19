@@ -438,7 +438,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
                 // without this fix here the ERD2WPropertyKey
                 // would not recognize that 'his' value failed.
                 if ("value".equals(keyPath)) {
-                    keyPath = d2wContext().propertyKey();
+                    keyPath = "" + d2wContext().propertyKey();
                 }
                 erv.setContext(d2wContext());
                 if (d2wContext().propertyKey() != null) {
