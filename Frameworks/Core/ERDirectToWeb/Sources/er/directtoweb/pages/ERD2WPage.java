@@ -355,19 +355,19 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     // Error handling extensions
     // **************************************************************************
 
-    protected NSMutableDictionary errorMessages = new NSMutableDictionary();
+    protected NSMutableDictionary<String,String> errorMessages = new NSMutableDictionary<String,String>();
 
-    protected NSMutableArray errorKeyOrder = new NSMutableArray();
+    protected NSMutableArray<String> errorKeyOrder = new NSMutableArray<String>();
 
-    protected NSMutableArray keyPathsWithValidationExceptions = new NSMutableArray();
+    protected NSMutableArray<String> keyPathsWithValidationExceptions = new NSMutableArray<String>();
 
     protected String errorMessage = "";
 
-    public NSMutableDictionary errorMessages() {
+    public NSMutableDictionary<String,String> errorMessages() {
         return errorMessages;
     }
 
-    public void setErrorMessages(NSMutableDictionary value) {
+    public void setErrorMessages(NSMutableDictionary<String,String> value) {
         errorMessages = value;
     }
 
@@ -383,7 +383,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         return (errorMessages != null && errorMessages.count() > 0) || (errorMessage != null && errorMessage.trim().length() > 0);
     }
 
-    public NSArray errorKeyOrder() {
+    public NSArray<String> errorKeyOrder() {
         return errorKeyOrder;
     }
 
@@ -419,7 +419,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     }
 
     /** Used to hold a cleaned-up validation key and message. */
-    private NSMutableDictionary _temp = new NSMutableDictionary();
+    private NSMutableDictionary<String,String> _temp = new NSMutableDictionary<String,String>();
 
     /** Handles validation errors. */
     public void validationFailedWithException(Throwable e, Object value, String keyPath) {
@@ -437,8 +437,8 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
                 // user <<-> person and are editing an user instance then
                 // without this fix here the ERD2WPropertyKey
                 // would not recognize that 'his' value failed.
-                if (keyPath.equals("value")) {
-                    keyPath = "" + d2wContext().valueForKey("propertyKey");
+                if ("value".equals(keyPath)) {
+                    keyPath = "" + d2wContext().propertyKey();
                 }
                 erv.setContext(d2wContext());
                 if (d2wContext().propertyKey() != null) {
@@ -623,14 +623,14 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         return result;
     }
 
-    protected static final NSMutableSet _allConfigurations = new NSMutableSet();
+    protected static final NSMutableSet<String> _allConfigurations = new NSMutableSet<String>();
 
     /**
      * Collects the names of all page configurations as you walk through your
      * application.
      * 
      */
-    public static NSArray allConfigurationNames() {
+    public static NSArray<String> allConfigurationNames() {
         synchronized (_allConfigurations) {
             return _allConfigurations.allObjects();
         }

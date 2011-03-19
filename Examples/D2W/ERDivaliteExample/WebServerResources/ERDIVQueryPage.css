@@ -2,6 +2,7 @@
 
 ul.WXRadioButtonList {
 	width: 10em;
+	display: inline-block;
 }
 
 ul.WXRadioButtonList li {
@@ -9,15 +10,24 @@ ul.WXRadioButtonList li {
 	float: left;
 }
 
+ul.WXRadioButtonList li label {
+	margin-left: 2px;
+}
+
 /* WXCheckboxList.css */
 
 ul.WXCheckboxList {
 	width: 20em;
+	display: inline-block;
 }
 
 ul.WXCheckboxList li {
 	width: 10em;
 	float: left;
+}
+
+ul.WXCheckboxList li label {
+	margin-left: 2px;
 }
 
 /* ERD2WAjaxQueryDateRange.css */
@@ -29,7 +39,6 @@ em.ERD2WAjaxQueryDateRange_Subscript {
 label.ERD2WAjaxQueryDateRange_label_from {
 	display: none;
 }
-
 
 /* ERDIVQueryPage.css */
 

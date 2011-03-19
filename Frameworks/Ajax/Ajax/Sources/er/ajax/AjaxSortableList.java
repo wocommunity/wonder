@@ -23,10 +23,9 @@ import com.webobjects.foundation.NSRange;
  * @binding list the list to allow reordering on (required)
  * @binding item the repetition item (required)
  * @binding listItemIDKeyPath the key path of the id of each item (required)
- * @binding id the id of the list
+ * @binding id the id of the list (required)
  * @binding listElementName the HTML element name of the list (defaults to 'ul')
  * @binding listItemElementName the HTML element name of the list item (defaults to 'li')
- * @binding listItemIDKeyPath the key path of the id of each item (required)
  * @binding listClass the CSS class of the list 
  * @binding listStyle the CSS style attribute of the list
  * @binding listItemClass the CSS class of the current list item

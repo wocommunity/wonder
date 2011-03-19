@@ -21,5 +21,6 @@
 	<classpathentry kind="con" path="WOFramework/ERSelenium"/>
 	<classpathentry kind="con" path="WOFramework/ERTaggable"/>
 	<classpathentry kind="con" path="WOFramework/ERAttachment"/>
+	<classpathentry kind="con" path="WOFramework/ERPrototypes"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

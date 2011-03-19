@@ -42,7 +42,7 @@ ItemsPerBatch: WOTextField {
 
 LeftArrow: WOSubmitButton {
     action = displayPreviousBatch;
-    value = "Previous";
+    value = "Prev";
     class = "previous";
 }
 

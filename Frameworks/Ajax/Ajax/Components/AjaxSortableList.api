@@ -1,38 +1,53 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
-	<wo wocomponentcontent="true" class="AjaxSortableList.java">
-		<binding name = "id"/>
-		<binding name = "list"/>
-		<binding name = "item"/>
-		<binding name = "listClass"/>
-		<binding name = "listStyle"/>
-		<binding name = "listElementName"/>
-		<binding name = "listItemClass"/>
-		<binding name = "listItemStyle"/>
-		<binding name = "listItemElementName"/>
-		<binding name = "listItemIDKeyPath"/>
-		<binding name = "startIndex"/>
-		<binding name = "action"/>
+	<wo class="AjaxSortableList.java" wocomponentcontent="true">
+		<binding name="id"/>
+		<binding name="list"/>
+		<binding name="item"/>
+		<binding name="listClass"/>
+		<binding name="listStyle"/>
+		<binding name="listElementName"/>
+		<binding name="listItemClass"/>
+		<binding name="listItemStyle"/>
+		<binding name="listItemElementName"/>
+		<binding name="listItemIDKeyPath"/>
+		<binding name="startIndex"/>
+		<binding name="action"/>
 		
-		<binding name = "tag"/>
-		<binding name = "only"/>
-		<binding name = "overlap"/>
-		<binding name = "constraint"/>
-		<binding name = "containment"/>
-		<binding name = "handle"/>
-		<binding name = "hoverclass"/>
-		<binding name = "ghosting"/>
-		<binding name = "dropOnEmpty"/>
-		<binding name = "scroll"/>
-		<binding name = "onChange"/>
-		<binding name = "onUpdate"/>
+		<binding name="tag"/>
+		<binding name="only"/>
+		<binding name="overlap"/>
+		<binding name="constraint"/>
+		<binding name="containment"/>
+		<binding name="handle"/>
+		<binding name="hoverclass"/>
+		<binding name="ghosting"/>
+		<binding name="dropOnEmpty"/>
+		<binding name="scroll"/>
+		<binding name="onChange"/>
+		<binding name="onUpdate"/>
 	
-    <validation message = "&apos;list&apos;, &apos;item&apos;, and &apos;listItemIDKeyPath&apos; are required bindings.">
+    <validation message="'list', 'item', and 'listItemIDKeyPath' are required bindings.">
     	<or>
-	      <unbound name = "list"/>
-	      <unbound name = "item"/>
-  	    <unbound name = "listItemIDKeyPath"/>
+	      <unbound name="list"/>
+	      <unbound name="item"/>
+  	    <unbound name="listItemIDKeyPath"/>
   	  </or>
     </validation>
-	</wo>
+	<validation message="'id' is a required binding.">
+            <unbound name="id"/>
+        </validation>
+        <validation message="'list' is a required binding.">
+            <unbound name="list"/>
+        </validation>
+        <validation message="'item' is a required binding.">
+            <unbound name="item"/>
+        </validation>
+        <validation message="'item' must be bound to a settable value">
+            <unsettable name="item"/>
+        </validation>
+        <validation message="'listItemIDKeyPath' is a required binding.">
+            <unbound name="listItemIDKeyPath"/>
+        </validation>
+    </wo>
 </wodefinitions>
