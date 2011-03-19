@@ -37,6 +37,7 @@ import com.webobjects.foundation.NSValidation;
 import er.extensions.ERXExtensions;
 import er.extensions.crypting.ERXCrypto;
 import er.extensions.eof.ERXDatabaseContextDelegate.AutoBatchFaultingEnterpriseObject;
+import er.extensions.eof.ERXNonNullObjectInterface;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXDictionaryUtilities;
 import er.extensions.foundation.ERXProperties;
