@@ -1,0 +1,142 @@
+@import url("ERDIVEditPage.css");
+
+/* ModernEditToManyFaultList.css */
+
+div#a div.ERD2WEditToManyFaultList ul li.D2WAjaxEditToManyFault a {
+	display: inline-block;
+	width: 200px;
+}
+
+div#a div.ERD2WEditToManyFaultList ul li.D2WAjaxEditToManyFault {
+	list-style-type: none;
+	width: 221px;
+}
+
+div#a div.ERD2WEditToManyFaultList ul li.D2WAjaxEditToManyFault:nth-child(even) {
+	background-color: #E6E9EF;
+}
+
+/* Edit page */
+
+div#a form.edit fieldset.attribute legend {
+	margin-left: -16em; /*width of left column*/
+	-webkit-transform: translate(0, 35px);
+}
+
+div#a form.edit fieldset.attribute {
+	padding-left: 16em; /*width of left column*/
+}
+
+div#a form.edit fieldset.attribute input,
+div#a form.edit fieldset.attribute textarea {
+	padding: 3px;
+	width: 300px;
+}
+
+div#a form.edit fieldset.attribute legend.mandatory:after {
+	content: "*";
+	color: #D60000;
+}
+
+/* buttons */
+
+div#a fieldset.button {
+	display: inline-block;
+	margin: 10px 0;
+	width: 100%;
+}
+
+div#a form.edit fieldset.button ul li {
+	list-style-type: none;
+	float: right;
+	margin-left: 15px;
+}
+
+button.D2WAjaxEditToManyFault_Delete {
+	text-indent: -5000px;
+	background-image: url(/WebObjects/Frameworks/ERModernDefaultSkin.framework/WebServerResources/btn_del.png);
+	margin: 0;
+	width: 21px;
+	height: 22px;
+}
+
+button.D2WAjaxEditToManyFault_Add {
+	font-weight: bold;
+	border: 0;
+	display: inline-block;
+	font-size: 11px;
+	height: 20px;
+	padding: 0 16px;
+	border-radius: 11px;
+	-khtml-border-radius: 11px;
+	-moz-border-radius: 11px;
+	-opera-border-radius: 11px;
+	-webkit-border-radius: 11px;
+	color: #373737;
+	background-image: -webkit-gradient(
+	    linear,
+	    left bottom,
+	    left top,
+	    color-stop(0.26, rgb(184,184,184)),
+	    color-stop(0.63, rgb(236,236,236))
+	);
+	background-image: -moz-linear-gradient(
+	    center bottom,
+	    rgb(184,184,184) 26%,
+	    rgb(236,236,236) 63%
+	);
+	text-shadow: #E9E9E9 0px 1px 0px;
+	-webkit-box-shadow: 1px 1px 1px grey;
+	-moz-box-shadow: 1px 1px 1px grey;
+	box-shadow:1px 1px 1px grey;
+}
+
+div#a form.edit fieldset.button button {
+	border: 0;
+	padding: 5px 23px;
+	border-radius: 16px;
+	-khtml-border-radius: 16px;
+	-moz-border-radius: 16px;
+	-opera-border-radius: 16px;
+	-webkit-border-radius: 16px;
+	font-weight: bold;
+	color: #fff;
+}
+
+div#a form.edit fieldset.button button.save {
+	background-image: -webkit-gradient(
+	    linear,
+	    left bottom,
+	    left top,
+	    color-stop(0.28, rgb(66,98,161)),
+	    color-stop(0.64, rgb(103,133,185))
+	);
+	background-image: -moz-linear-gradient(
+	    center bottom,
+	    rgb(66,98,161) 28%,
+	    rgb(103,133,185) 64%
+	);
+	-webkit-box-shadow: 1px 1px 1px #022e65;
+	-moz-box-shadow: 1px 1px 1px #022e65;
+	box-shadow:1px 1px 1px #022e65;
+}
+
+div#a form.edit fieldset.button button.cancel {
+	color: #373737;
+	background-image: -webkit-gradient(
+	    linear,
+	    left bottom,
+	    left top,
+	    color-stop(0.26, rgb(184,184,184)),
+	    color-stop(0.63, rgb(236,236,236))
+	);
+	background-image: -moz-linear-gradient(
+	    center bottom,
+	    rgb(184,184,184) 26%,
+	    rgb(236,236,236) 63%
+	);
+	text-shadow: #E9E9E9 0px 1px 0px;
+	-webkit-box-shadow: 1px 1px 1px grey;
+	-moz-box-shadow: 1px 1px 1px grey;
+	box-shadow:1px 1px 1px grey;
+}

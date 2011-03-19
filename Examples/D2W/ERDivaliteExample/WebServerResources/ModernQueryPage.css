@@ -1,0 +1,107 @@
+@import url("ERDIVQueryPage.css");
+
+/* checbox list */
+
+div#a form.query ul.WXCheckboxList {
+	width: 30em;
+}
+
+div#a form.query ul.WXCheckboxList li {
+	width: 15em;
+}
+
+/* The following are styles for the search page */
+
+div#a h2.entity.query:before {
+	content: "Query ";
+}
+
+div#a form.query fieldset.attribute {
+	margin-top: 20px;
+}
+
+div#a form.query fieldset.attribute ul#QueryList {
+	border-bottom: 1px solid #e5e5e5;
+}
+
+div#a form.query fieldset.attribute ul li.attribute {
+	line-height: 37px;
+	width: auto;
+	background-color: #e6e9ef;
+	border-top: 1px solid #e5e5e5;
+}
+
+div#a form.query fieldset.attribute ul li.attribute div.content {
+	background-color: #f5f5f5;
+	height: 100%;
+	margin-top: -37px;
+	padding: 0 20px;
+	font-weight: bold;
+
+}
+
+div#a form.query fieldset.attribute ul li.attribute div.content input,
+div#a form.query fieldset.attribute ul li.attribute div.content textarea {
+	padding: 3px;
+	margin-left: 5px;
+	width: 165;
+}
+
+div#a form.query fieldset.attribute ul li fieldset legend {
+	display: block;
+	-webkit-transform: translate(0, 37px);
+	width: 10em;
+	color: #666666;
+	font-weight: bold;
+	text-indent: 20px;
+	width: 167px;
+	margin-left: -12em;  /* left margin */
+}
+
+div#a form.query fieldset.attribute ul li fieldset {
+	padding-left: 12em;  /* left margin */
+}
+
+div#a ul#QueryList li {
+	list-style: none;
+}
+
+div#a form.query fieldset.button {
+	margin: 20px 0;
+}
+
+div#a form.query fieldset.button ul li {
+	float: right;
+}
+
+div#a form.query fieldset.button button {
+	border: 0;
+	padding: 5px 23px;
+	border-radius: 16px;
+	-khtml-border-radius: 16px;
+	-moz-border-radius: 16px;
+	-opera-border-radius: 16px;
+	-webkit-border-radius: 16px;
+	font-weight: bold;
+	color: #fff;
+}
+
+div#a form.query fieldset.button ul li button.search {
+	float: left;
+	background-image: -webkit-gradient(
+	    linear,
+	    left bottom,
+	    left top,
+	    color-stop(0.28, rgb(66,98,161)),
+	    color-stop(0.64, rgb(103,133,185))
+	);
+	background-image: -moz-linear-gradient(
+	    center bottom,
+	    rgb(66,98,161) 28%,
+	    rgb(103,133,185) 64%
+	);
+	-webkit-box-shadow: 1px 1px 1px #022e65;
+	-moz-box-shadow: 1px 1px 1px #022e65;
+	box-shadow:1px 1px 1px #022e65;
+}
+

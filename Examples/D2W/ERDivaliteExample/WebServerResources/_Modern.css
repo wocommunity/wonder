@@ -1,0 +1,219 @@
+body {
+	color: #333;
+	margin: 0;
+	font: 80% Helvetica, Arial, Geneva, sans-serif;
+}
+
+h1, h2 {
+	padding: 0;
+	margin: 0;
+}
+
+ul, li {
+	padding: 0;
+	margin: 0;
+}
+
+a {
+	color: #4262a1;
+	text-decoration: none;
+}
+
+label {
+	padding: 0;
+	margin: 0;
+}
+
+input, textarea, select {
+	font-size: 90%;
+	border: 1px solid #aaa;
+}
+
+textarea {
+	height: 140px;
+}
+
+
+fieldset {
+	margin-bottom: 0;
+}
+
+div#c {
+	position: absolute;
+	display: inline;
+}
+
+div#c h1 {
+	color: #f5e4aa;
+	font: normal 180% "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	text-shadow: #20252f 0 1px 0;
+	padding: 30px 50px;
+}
+
+div#b h2#webobjects_logo,
+div#b h3.section {
+	display: none;
+}
+
+div#b {
+	background-color: #414b5e;
+	padding-top: 30px;	
+	height: 106px;
+}
+
+div#vertical_divider {
+	height: 3px;
+	background: url(/WebObjects/Frameworks/ERModernDefaultSkin.framework/WebServerResources/tab2_bak.png) repeat;
+	margin-bottom: 20px;
+	cursor: pointer;
+}
+
+div#a {
+	margin: 0 50px;
+}
+
+div#a h1.task {
+	display: none;
+}
+
+div#a h2.entity {
+	font-size: 18px;
+	font-weight: bold;
+	border-bottom: 1px solid whiteSmoke;
+	padding-bottom: 5px;
+}
+
+
+/* menu links */
+
+div#b ul.action li {
+	list-style: none;
+}
+
+div#b ul.action li a.box_query {
+	display: none;
+}
+
+div#b ul.action {
+	margin-top: 70px;
+	margin-left: 50px;
+}
+
+div#b ul.action li {
+	float: left;
+}
+
+div#b ul.action li a {
+	display: inline-block;
+	color:  white;
+	text-decoration: none;
+	line-height: 37px;
+	height: 37px;
+	text-shadow: #2e333c 0 -1px 0;
+}
+
+div#b ul.action li a.text {
+	background-image: url(/WebObjects/Frameworks/ERModernDefaultSkin.framework/WebServerResources/tab.png);
+	background-repeat: no-repeat;
+	background-position: left bottom;
+	padding:0 12px 0 20px;
+}
+
+div#b ul.action li a.box_add {
+	padding-right: 13px;
+	background-image: url(/WebObjects/Frameworks/ERModernDefaultSkin.framework/WebServerResources/tab.png);
+	background-repeat: no-repeat;
+	background-position: right bottom;
+	margin-right: -1px;
+	margin-left: -4px;
+	font-weight: bold;
+}
+
+div#b ul.action li:hover a.text,
+div#b ul.action li:hover a.box_add {
+	color: #666;
+	text-shadow: #E4E4E4 0px 1px 0px;
+	background-image: url(/WebObjects/Frameworks/ERModernDefaultSkin.framework/WebServerResources/tab_sel.png);
+}
+
+div#b ul.action li:hover a:hover {
+	color: black;
+	text-shadow: #20252f 0 0 0;
+}
+
+
+div#b div.link {
+	display: inline-block;
+	clear: left;
+	margin-top: -16px;
+	float: right;
+}
+
+div#b div.link a {
+	color: white;
+	font-size: 85%;
+	padding: 0 8px;
+	background: url(/WebObjects/Frameworks/ERModernDefaultSkin.framework/WebServerResources/dot.png) no-repeat left;
+}
+
+div#b div.link a#toggle_look_link {
+	margin-right: 45px;
+}
+
+/* debug */
+
+ul.DebugFlags {
+	position: fixed;
+	bottom: 25px;
+	left: 0;
+	z-index: 1000;
+	padding: 5px;
+	border: 1px solid #aaa;
+	background-color: #fff;
+	-moz-border-radius-topright: 8px;
+	-webkit-border-top-right-radius: 8px;
+	-moz-border-radius-bottomright: 8px;
+	-webkit-border-bottom-right-radius: 8px;
+	opacity: 0.6;
+	-moz-opacity:0.6;
+}
+
+ul.DebugFlags a {
+	color: black;
+	font-size: 80%;
+}
+
+ul.DebugFlags a:hover {
+	font-weight: bold;
+}
+
+/* buttons */
+
+div#a a.return {
+	display: inline-block;
+	border: 0;
+	padding: 5px 23px;
+	border-radius: 16px;
+	-khtml-border-radius: 16px;
+	-moz-border-radius: 16px;
+	-opera-border-radius: 16px;
+	-webkit-border-radius: 16px;
+	font-weight: bold;
+	color: #373737;
+	background-image: -webkit-gradient(
+	    linear,
+	    left bottom,
+	    left top,
+	    color-stop(0.26, rgb(184,184,184)),
+	    color-stop(0.63, rgb(236,236,236))
+	);
+	background-image: -moz-linear-gradient(
+	    center bottom,
+	    rgb(184,184,184) 26%,
+	    rgb(236,236,236) 63%
+	);
+	text-shadow: #E9E9E9 0px 1px 0px;
+	-webkit-box-shadow: 1px 1px 1px grey;
+	-moz-box-shadow: 1px 1px 1px grey;
+	box-shadow:1px 1px 1px grey;
+}

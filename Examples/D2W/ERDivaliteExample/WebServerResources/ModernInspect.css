@@ -1,0 +1,46 @@
+
+div#a div.accordion-content ul li.attribute h4.propertyKey {
+	margin-left: -16em; /*width of left column*/
+} 
+
+div#a div.accordion-content ul li.attribute {
+	padding-left: 16em; /*width of left column*/
+}
+
+div#a ul.properties li.attribute {
+	line-height: 35px;
+	list-style-type: none;
+}
+
+div#a div.accordion-content ul li.attribute div.content {
+	margin-top: -35px;
+	padding-left: 1em;
+	min-height: 35px;
+}
+
+div#a div.accordion-content ul li.attribute .propertyKey {
+	text-indent: 20px;
+	color: #666;
+}
+
+div#a div.accordion {
+	font-size: 13px;
+	font-weight: bold;
+	margin: 20px 0;
+}
+
+div#a div.accordion-content ul.properties li.attribute:first-child {
+	border-top: 1px solid #E5E5E5;
+}
+
+div#a div.accordion-content ul.properties li.attribute {
+	background-image: url(/WebObjects/Frameworks/ERModernDefaultSkin.framework/WebServerResources/label_bak.png);
+	background-position: 0% 50%;
+	background-repeat: repeat-y;
+	width: auto;
+	border-bottom: 1px solid #E5E5E5;
+}
+
+div#a div.accordion-content ul li.attribute div.content {
+	background-color: whiteSmoke;
+}

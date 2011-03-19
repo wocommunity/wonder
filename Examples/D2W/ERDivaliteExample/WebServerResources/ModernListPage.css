@@ -1,0 +1,152 @@
+@import url("ERDIVListPage.css");
+@import url("ModernList.css");
+
+div#a h2.entity.list:before {
+	content: "List ";
+}
+
+div#a h2.entity.list {
+	font-size: 18px;
+	margin-bottom: -29px;
+}
+
+/* batch nav bar */
+
+div#a div.list fieldset#top_batch_nav {
+	margin-bottom: 20px;
+}
+
+div#a div.list fieldset#top_batch_nav li {
+	padding: 3px 0;
+}
+
+div#a fieldset.page_batch em {
+	font-style: normal;
+}
+
+div#a div.list ul.batch_nav_bar li {
+	list-style: none;
+}
+
+div#a div.list fieldset#top_batch_nav li.content,
+div#a div.list fieldset#top_batch_nav li.page_nav,
+div#a div.list fieldset#bottom_batch_nav li.page_batch {
+	display: none;
+	visibility: hidden;
+}
+
+div#a div.list fieldset#top_batch_nav li.entity_name h3 {
+	margin:  4px 0 3px 0;
+}
+
+div#a div.list fieldset#top_batch_nav li.entity_name h3,
+div#a div.list fieldset#top_batch_nav fieldset.page_batch {
+	font-size: 13px;
+}
+
+div#a div.list fieldset#top_batch_nav fieldset.page_batch em:after {
+	content: ":";
+}
+
+div#a div.list fieldset#top_batch_nav fieldset.page_batch label,
+div#a div.list fieldset#top_batch_nav li.entity_name h3 span.count {
+	padding-right: 2px;
+}
+
+div#a fieldset.batch_nav_bar ul.batch_nav_bar li.page_batch fieldset.page_batch {
+	width: 145px;
+}
+
+div#a div.list fieldset#top_batch_nav fieldset.page_batch input.batch_size {
+	padding: 3px 5px;
+}
+
+div#a div.list.simple ul.list li,
+table#ListTable {
+	border-bottom: 1px solid whiteSmoke;
+}
+
+table#ListTable {
+	width: 100%;
+}
+
+div#a table#ListTable tr td {
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+div#a div.list fieldset#bottom_batch_nav li,
+div#a div.list fieldset#top_batch_nav li {
+	float: right;
+}
+
+div#a div.list fieldset#top_batch_nav li {
+	width: auto;
+}
+
+fieldset.batch_nav_bar fieldset.page_nav button.previous {
+	background: url(/WebObjects/Frameworks/ERModernDefaultSkin.framework/WebServerResources/pag_prev_shad.png) no-repeat;
+	text-indent: 12px;
+}
+
+fieldset.batch_nav_bar fieldset.page_nav button.next {
+	background: url(/WebObjects/Frameworks/ERModernDefaultSkin.framework/WebServerResources/pag_next_shad.png) no-repeat;
+	text-indent: -12px;
+}
+
+fieldset.batch_nav_bar fieldset.page_nav button {
+	height: 25px;
+	width: 67px;
+	text-indent: 0;
+	display: block;
+	border: 0px;
+	cursor: pointer;
+	font-weight: bold;
+	color: #666;
+	vertical-align: top;
+}
+
+div#a div.list fieldset#bottom_batch_nav fieldset.page_nav li:nth-child(even) {
+	display: none;
+	visibility: hidden;
+}
+
+fieldset#bottom_batch_nav fieldset.page_nav {
+	float: none;
+	width: 200px;
+}
+
+fieldset#bottom_batch_nav {
+	margin-top: 20px;
+	margin-bottom: 50px;
+}
+
+fieldset#top_batch_nav {
+	color: #666;
+	font-weight: bold;
+}
+
+/* (simple) List Page */ 
+
+div#a div.list.simple {
+	width: 50%;
+}
+
+div#a div.list.simple fieldset#top_batch_nav ul.batch_nav_bar li.page_batch {
+	display: none;
+	visibility: hidden;
+}
+
+div#a h2.entity.list.simple {
+	margin-bottom: 0;
+}
+
+div#a div.list.simple fieldset#bottom_batch_nav fieldset.page_nav {
+	width: 150px;
+}
+
+div#a div.list.simple ul li {
+	list-style-type: none;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+}
