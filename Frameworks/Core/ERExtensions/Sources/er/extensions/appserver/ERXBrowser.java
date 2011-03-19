@@ -54,7 +54,7 @@ import com.webobjects.foundation.NSKeyValueCoding;
  */  
 public abstract class ERXBrowser implements NSKeyValueCoding {
 
-    public static final String UNKNOWN_BROWSER = "Unknown Broswer";
+    public static final String UNKNOWN_BROWSER = "Unknown Browser";
 
     public static final String ROBOT 	= "robot";
     public static final String ICAB 	= "iCab";
