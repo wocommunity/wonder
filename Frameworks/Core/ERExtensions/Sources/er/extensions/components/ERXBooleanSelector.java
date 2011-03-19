@@ -6,7 +6,7 @@ import com.webobjects.foundation.NSArray;
 import er.extensions.localization.ERXLocalizer;
 
 /**
- * A custom boolean seelctor (defaults to "Yes", "No", and "All") for use as, for instance, a boolean search filter.
+ * A custom boolean selector (defaults to "Yes", "No", and "All") for use as, for instance, a boolean search filter.
  * 
  * @author mschrag
  * @author ak
@@ -18,11 +18,11 @@ import er.extensions.localization.ERXLocalizer;
  */
 public class ERXBooleanSelector extends ERXStatelessComponent {
 
-	private NSArray<Boolean> _options = new NSArray<Boolean>(new Boolean[] { Boolean.TRUE, Boolean.FALSE });
+	private final NSArray<Boolean> _options = new NSArray<Boolean>(new Boolean[] { Boolean.TRUE, Boolean.FALSE });
 
     public static class BooleanProxy {
     	
-        private Boolean _value;
+        private final Boolean _value;
        
         BooleanProxy(Boolean value) {
             _value = value;
@@ -45,12 +45,12 @@ public class ERXBooleanSelector extends ERXStatelessComponent {
     	}
     }
     
-    private static BooleanProxy TRUE = new BooleanProxy(true);
-    private static BooleanProxy FALSE = new BooleanProxy(false);
-    private static BooleanProxy NULL = new BooleanProxy(null);
+    private static final BooleanProxy TRUE = new BooleanProxy(Boolean.TRUE);
+    private static final BooleanProxy FALSE = new BooleanProxy(Boolean.FALSE);
+    private static final BooleanProxy NULL = new BooleanProxy(null);
     
-	private NSArray<BooleanProxy> _proxyOptions = new NSArray<BooleanProxy>(new BooleanProxy[] { TRUE, FALSE });
-	private NSArray<BooleanProxy> _proxyOptionsWithNull = new NSArray<BooleanProxy>(new BooleanProxy[] { TRUE, FALSE, NULL});
+	private final NSArray<BooleanProxy> _proxyOptions = new NSArray<BooleanProxy>(new BooleanProxy[] { TRUE, FALSE });
+	private final NSArray<BooleanProxy> _proxyOptionsWithNull = new NSArray<BooleanProxy>(new BooleanProxy[] { TRUE, FALSE, NULL});
 	
 	public Boolean _option;
 	public BooleanProxy _proxy;
@@ -113,5 +113,12 @@ public class ERXBooleanSelector extends ERXStatelessComponent {
 
 	public NSArray<Boolean> options() {
 		return _options;
+	}
+	
+	@Override
+	public void reset() {
+		_option = null;
+		_proxy = null;
+		super.reset();
 	}
 }
