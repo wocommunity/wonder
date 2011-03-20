@@ -1,0 +1,98 @@
+<html>
+<head>
+<style>
+p {
+	color: rgb(80, 80, 80);
+}
+
+h1,h2,h3,h4 {
+	font-family: Helvetica;
+	margin-top: 20px;
+}
+
+dl dt {
+	font-family: Helvetica;
+	font-weight: bold;
+}
+
+dl dd {
+	margin-bottom: 10px;
+}
+
+code {
+	display: block;
+	margin-left: 20px;
+	margin-right: 20px;
+	white-space: pre;
+}
+
+kbd {
+	font-family: monospace;
+	color: #369;
+}
+
+</style>
+</head>
+<body>
+<h1>ERAttributeExtension</h1>
+
+<h2>Overview</h2>
+
+<p>
+The EOAttribute class allows you to model an attribute for a java object. In order
+to do this, the java class must implement a custom conversion method to write the
+value into the database and a value factory method to read the object back out. In
+some cases, you may want to use a java class as an attribute which does not
+implement a method appropriate for these operations. In some cases, the java class
+may even be <kbd>final</kbd> making it impossible to model the class as a custom
+attribute.
+</p>
+
+<p>
+The ERAttributeExtension framework is designed to solve this problem.  It does so
+by reimplementing EOAttribute.  The reimplemented EOAttribute fixes the broken
+implementation of WO 5.4.3's adaptorValueConversionClassName characteristic and 
+adds a new valueFactoryClassName characteristic to EOAttribute.  Therefore, any
+prototype attribute which uses one of these two attribute characteristics in
+ERPrototypes requires the inclusion of this framework to work properly.
+</p>
+
+<h2>Installation and Setup</h2>
+
+<p>
+To use ERAttributeExtension framework, simply include it in your classpath and
+make sure it is listed before/above the JavaEOAccess framework. Once that is done,
+you should be able to use any of the extended prototypes found in ERPrototype or
+create your own. Currently, the extended prototypes available are:
+</p>
+
+<dl>
+	<dt>jodaDateTime</dt>
+	<dd>Joda DateTime class</dd>
+	<dt>jodaLocalDateTime</dt>
+	<dd>Joda LocalDateTime class</dd>
+	<dt>jodaLocalDate</dt>
+	<dd>Joda LocalDate class</dd>
+	<dt>jodaLocalTime</dt>
+	<dd>Joda LocalTime class</dd>
+	<dt>duration</dt>
+	<dd>javax.xml.datatype.Duration class (Frequently used with JAX-WS web services)</dd>
+	<dt>serializable</dt>
+	<dd>
+	Any serializable java object. Usage is similar to the JavaEnum prototype. Set the 
+	prototype and override the value class in entity modeler. You should only use this 
+	with <strong>immutable</strong> classes. If you serialize a java collection, the
+	value factory method will call <kbd>Collections.unmodifiableCollection()</kbd> on
+	the object before returning it.
+	</dd>
+	<dt>blobArray</dt>
+	<dd>An NSArray stored externally as data.</dd>
+	<dt>blobDictionary</dt>
+	<dd>An NSDictionary stored externally as data.</dd>
+	<dt>stringArray</dt>
+	<dd>An NSArray stored externally as a string.</dd>
+	<dt>stringDictionary</dt>
+	<dd>An NSDictionary stored externally as a string.</dd>
+</dl>
+</body>
+</html>
