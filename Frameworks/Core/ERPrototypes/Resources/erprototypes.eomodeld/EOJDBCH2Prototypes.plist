@@ -150,8 +150,8 @@
         {
             adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
             adaptorValueConversionMethodName = jodaLocalDate; 
-            externalType = DATE; 
             columnName = ""; 
+            externalType = DATE; 
             factoryMethodArgumentType = EOFactoryMethodArgumentIsDate; 
             name = jodaLocalDate; 
             valueClassName = "org.joda.time.LocalDate"; 
@@ -204,6 +204,65 @@
             name = mutableArray; 
             valueClassName = "er.extensions.foundation.ERXMutableArray"; 
             valueFactoryMethodName = fromBlob; 
+        }, 
+        {
+            adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
+            adaptorValueConversionMethodName = serializable; 
+            columnName = ""; 
+            externalType = BLOB; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsBytes; 
+            name = serializable; 
+            valueClassName = "java.io.Serializable"; 
+            valueFactoryClassName = "er.prototypes.ValueFactory"; 
+            valueFactoryMethodName = serializable; 
+        }, 
+        {
+            adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
+            adaptorValueConversionMethodName = blobArray; 
+            columnName = ""; 
+            externalType = BLOB; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsData; 
+            name = blobArray; 
+            valueClassName = "com.webobjects.foundation.NSArray"; 
+            valueFactoryClassName = "er.prototypes.ValueFactory"; 
+            valueFactoryMethodName = blobArray; 
+        }, 
+        {
+            adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
+            adaptorValueConversionMethodName = blobDictionary; 
+            columnName = ""; 
+            externalType = BLOB; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsData; 
+            name = blobDictionary; 
+            valueClassName = "com.webobjects.foundation.NSDictionary"; 
+            valueFactoryClassName = "er.prototypes.ValueFactory"; 
+            valueFactoryMethodName = blobDictionary; 
+        }, 
+        {
+            adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
+            adaptorValueConversionMethodName = stringArray; 
+            columnName = ""; 
+            externalType = varchar; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
+            name = stringArray; 
+            valueClassName = "com.webobjects.foundation.NSArray"; 
+            valueFactoryClassName = "er.prototypes.ValueFactory"; 
+            valueFactoryMethodName = stringArray; 
+            valueType = c; 
+            width = 10000000; 
+        }, 
+        {
+            adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
+            adaptorValueConversionMethodName = stringDictionary; 
+            columnName = ""; 
+            externalType = varchar; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
+            name = stringDictionary; 
+            valueClassName = "com.webobjects.foundation.NSDictionary"; 
+            valueFactoryClassName = "er.prototypes.ValueFactory"; 
+            valueFactoryMethodName = stringDictionary; 
+            valueType = c; 
+            width = 10000000; 
         }, 
         {
             adaptorValueConversionMethodName = toBlob; 
@@ -299,6 +358,8 @@
     classProperties = (
         amount, 
         blob, 
+        blobArray, 
+        blobDictionary, 
         boolean, 
         charFlag, 
         cryptoString, 
@@ -313,6 +374,7 @@
         intNumber, 
         ipAddress, 
         javaEnum, 
+        jodaDateTime, 
         jodaLocalDate, 
         jodaLocalDateTime, 
         jodaLocalTime, 
@@ -321,7 +383,10 @@
         mutableArray, 
         mutableDictionary, 
         osType, 
+        serializable, 
         shortString, 
+        stringArray, 
+        stringDictionary, 
         type, 
         varchar10, 
         varchar100, 
