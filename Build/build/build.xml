@@ -1056,6 +1056,9 @@
                 includeEmptyDirs="false" preservelastmodified="true">
             <fileset dir=".">
                 <include name="**/*" />
+                <exclude name="**/Roots/**" />
+                <exclude name="**/null*" />
+                <exclude name="**/.git/**" />
                 <exclude name="**/CVS/*" />
              	<exclude name="**/dist/**"/>
              	<exclude name="**/bin/**"/>
