@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>wonder.frameworks</groupId>
 		<artifactId>core</artifactId>
-		<version>5.0.0-SNAPSHOT</version>
+		<version>5.4-SNAPSHOT</version>
 	</parent>
 
 	<groupId>wonder.d2w</groupId>
@@ -19,7 +19,6 @@
 		<dependency>
 			<groupId>wonder.core</groupId>
 			<artifactId>ERExtensions</artifactId>
-			<classifier>${woClassifier}</classifier>
 		</dependency>
 		<dependency>
 			<groupId>wonder.core</groupId>
@@ -28,7 +27,6 @@
 		<dependency>
 			<groupId>wonder.ajax</groupId>
 			<artifactId>Ajax</artifactId>
-			<classifier>${woClassifier}</classifier>
 		</dependency>
 		<dependency>
 			<groupId>com.webobjects</groupId>

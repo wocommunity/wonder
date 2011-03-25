@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>wonder.examples</groupId>
 		<artifactId>miscexamples</artifactId>
-		<version>5.0.0-SNAPSHOT</version>
+		<version>5.4-SNAPSHOT</version>
 	</parent>
 
 	<groupId>wonder.misc</groupId>
@@ -19,7 +19,6 @@
 		<dependency>
 			<groupId>wonder.core</groupId>
 			<artifactId>ERExtensions</artifactId>
-			<classifier>${woClassifier}</classifier>
 		</dependency>
 		<dependency>
 			<groupId>com.webobjects</groupId>

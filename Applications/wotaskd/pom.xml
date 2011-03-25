@@ -2,7 +2,7 @@
 	<parent>
 		<groupId>wonder.applications</groupId>
 		<artifactId>applications</artifactId>
-		<version>5.0.0-SNAPSHOT</version>
+		<version>5.4-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>wonder.applications</groupId>
@@ -13,7 +13,6 @@
 		<dependency>
 			<groupId>wonder.core</groupId>
 			<artifactId>ERExtensions</artifactId>
-			<classifier>${woClassifier}</classifier>
 		</dependency>
 		<dependency>
 			<groupId>wonder.misc</groupId>
