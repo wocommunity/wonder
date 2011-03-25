@@ -753,10 +753,10 @@
 			<url>http://maven.wocommunity.org/content/repositories/snapshots/</url>
 		</snapshotRepository>
 	</distributionManagement>
-	<scm>
-		<connection>scm:svn:https://wonder.svn.sourceforge.net/svnroot/wonder/trunk/Wonder
-		</connection>
-		<developerConnection>scm:svn:https://wonder.svn.sourceforge.net/svnroot/wonder/trunk/Wonder
-		</developerConnection>
-	</scm>
+
+    <scm>
+        <connection>scm:git:git@github.com:projectwonder/wonder.gitt</connection>
+        <url>scm:git:git@github.com:projectwonder/wonder.git</url>
+        <developerConnection>scm:git:git@github.com:projectwonder/wonder.git</developerConnection>
+    </scm>
 </project>
