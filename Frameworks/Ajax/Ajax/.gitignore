@@ -1,9 +1,6 @@
-bin
-.WOLips
-PB.project
-*.xcodeproj
-*.pxbproj
 target
+bin
 build
-CPFileList.txt
 *.xcodeproj
+*.pbxproj
+ant.*
