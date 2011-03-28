@@ -331,7 +331,9 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 				if (isATag) {
 					appendTagAttributeToResponse(response, "href", "javascript:void(0);");
 				}
-				appendTagAttributeToResponse(response, "onclick", onClick(context, false));
+				if (!disabled) {
+					appendTagAttributeToResponse(response, "onclick", onClick(context, false));
+				}
 				appendTagAttributeToResponse(response, "title", valueForBinding("title", component));
 				appendTagAttributeToResponse(response, "value", valueForBinding("value", component));
 				appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
@@ -378,9 +380,13 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		WOComponent component = context.component();
+		boolean disabled = booleanValueForBinding("disabled", false, component);
 		String updateContainerID = AjaxUpdateContainer.updateContainerID(this, component); 
 		AjaxUpdateContainer.setUpdateContainerID(request, updateContainerID);
-		WOActionResults results = (WOActionResults) valueForBinding("action", component);
+		WOActionResults results = null;
+		if (!disabled) {
+			results = (WOActionResults) valueForBinding("action", component);
+		}
 
 		if (ERXAjaxApplication.isAjaxReplacement(request)) {
 			AjaxUtils.setPageReplacementCacheKey(context, (String)valueForBinding("replaceID", component));

@@ -1,27 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>wonder.frameworks</groupId>
-		<artifactId>frameworks</artifactId>
-		<version>5.0.0-SNAPSHOT</version>
-	</parent>
-	<artifactId>woadaptors</artifactId>
-	<packaging>pom</packaging>
-	<name>WOAdaptors Frameworks</name>
+    <modelVersion>4.0.0</modelVersion>
 
-	<profiles>
-		<profile>
-			<id>wo54</id>
-			<modules>
-				<!-- <module>ERIMAdaptor</module> -->
-				<!-- ERWOAdaptor requires WO 5.4 -->
-				<module>ERWOAdaptor</module>
-			</modules>
-		</profile>
-	</profiles>
+    <parent>
+        <groupId>wonder.frameworks</groupId>
+        <artifactId>frameworks</artifactId>
+        <version>5.4-SNAPSHOT</version>
+    </parent>
 
-	<modules>
-		<!-- <module>ERIMAdaptor</module> -->
-	</modules>
+    <artifactId>woadaptors</artifactId>
+    <packaging>pom</packaging>
+    <name>WOAdaptors Frameworks</name>
+
+    <modules>
+        <!-- <module>ERIMAdaptor</module> -->
+        <module>ERWOAdaptor</module>
+    </modules>
 </project>
