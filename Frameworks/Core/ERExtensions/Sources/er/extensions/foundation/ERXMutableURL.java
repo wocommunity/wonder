@@ -593,11 +593,11 @@ public class ERXMutableURL {
 						sb.append(URLEncoder.encode(value, "UTF-8"));
 					}
 					if (valuesIter.hasNext()) {
-						sb.append("&amp;");
+						sb.append('&');
 					}
 				}
 				if (queryParameterIter.hasNext()) {
-					sb.append("&amp;");
+					sb.append('&');
 				}
 			}
 		}
