@@ -2307,6 +2307,7 @@ public class ERXSQLHelper {
 			for (ColumnIndex columnIndex : columnIndexes) {
 				columnNames.addObject(columnIndex.columnName());
 			}
+			indexName = indexName.replace('.', '_');
 			return "CREATE UNIQUE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
 		}
 
