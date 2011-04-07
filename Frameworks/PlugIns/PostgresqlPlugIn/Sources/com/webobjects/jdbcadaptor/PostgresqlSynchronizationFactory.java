@@ -53,7 +53,9 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
         if (!enableIdentifierQuoting()) {
             return name;
         }
-        return "\"" + name + "\"";
+    	//Needs to replicate functionality of EOSQLExpression.sqlStringForSchemaObjectName(String name).  For example MySchema.MyTable needs to be quoted "MySchema"."MyTable"
+        NSArray components = NSArray.componentsSeparatedByString(name, ".");
+        return "\"" + components.componentsJoinedByString("\".\"") + "\"";
     }
 
     protected String formatColumnName(String name) {
