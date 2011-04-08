@@ -68,7 +68,7 @@ public class ERMemoryAdaptorContext extends EOAdaptorContext {
   public EREntityStore _entityStoreForEntity(EOEntity entity, boolean transactional) {
     return _storeFactory._entityStoreForEntity(entity, transactional);
   }
-
+  
   @Override
   public NSDictionary _newPrimaryKey(EOEnterpriseObject object, EOEntity entity) {
     EREntityStore store = _entityStoreForEntity(entity, false);
