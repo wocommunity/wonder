@@ -53,7 +53,9 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
         if (!enableIdentifierQuoting()) {
             return name;
         }
-        return "\"" + name + "\"";
+    	//Needs to replicate functionality of EOSQLExpression.sqlStringForSchemaObjectName(String name).  For example MySchema.MyTable needs to be quoted "MySchema"."MyTable"
+        NSArray components = NSArray.componentsSeparatedByString(name, ".");
+        return "\"" + components.componentsJoinedByString("\".\"") + "\"";
     }
 
     protected String formatColumnName(String name) {
@@ -185,7 +187,10 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
             expression.setStatement(s);
             results.addObject(expression);
             // timc 2006-11-06 check for enableIdentifierQuoting
+            String tableNameWithoutSchemaName = externalNameForEntityWithoutSchema(relationship.entity());
             String tableName = expression.sqlStringForSchemaObjectName(expression.entity().externalName());
+            s = replaceStringByStringInString("ALTER TABLE " + tableNameWithoutSchemaName, "ALTER TABLE " + tableName, s);
+            expression.setStatement(s);
             NSArray columnNames = ((NSArray) relationship.sourceAttributes().valueForKey("columnName"));
             StringBuffer sbColumnNames = new StringBuffer();
             for (int j = 0; j < columnNames.count(); j++) {

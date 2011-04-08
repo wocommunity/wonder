@@ -647,7 +647,7 @@ public class PostgresqlExpression extends JDBCExpression {
 			tableName = tableName.substring(lastDot + 1);
 		}
 		
-		String constraintName = _NSStringUtilities.concat(tableName, "_", relationship.name(), "_FK");
+		String constraintName = _NSStringUtilities.concat(tableName, "_", relationship.name(), "_fk");
 		
 		// quotes the identifier in the array
 		
@@ -662,7 +662,7 @@ public class PostgresqlExpression extends JDBCExpression {
 		else {
 			setStatement((new StringBuilder())
 					.append("ALTER TABLE ")
-					.append(sqlStringForSchemaObjectName(tableName))
+					.append(sqlStringForSchemaObjectName(entity.externalName()))
 					.append(" ADD CONSTRAINT ")
 					.append(quoteIdentifier(constraintName))
 					.append(" FOREIGN KEY (")

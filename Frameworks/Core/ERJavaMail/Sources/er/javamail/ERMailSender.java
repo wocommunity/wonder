@@ -8,6 +8,7 @@ package er.javamail;
 
 import java.net.ConnectException;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -230,7 +231,8 @@ public class ERMailSender implements Runnable {
 				exception = e;
 			}
 			catch (Throwable t) {
-				log.error("An unexpected error occured while sending message: " + message + " mime message: " + aMessage + " sending to: " + aMessage.getAllRecipients() + " transport: " + transport, t);
+				log.error("An unexpected error occured while sending message: " + message + " mime message: " + aMessage
+						+ " sending to: " + Arrays.toString(aMessage.getAllRecipients()) + " transport: " + transport, t);
 				// Need to let someone know that something very, very bad happened
 				message._deliveryFailed(t);
 				throw NSForwardException._runtimeExceptionForThrowable(t);
@@ -418,7 +420,7 @@ public class ERMailSender implements Runnable {
 				log.debug(savedStatsString + " has been reset to initial value.");
 		}
 
-		/** @return the count of error that were encountered during mail seonding process */
+		/** @return the number of errors that were encountered during mail sending process */
 		public synchronized int errorCount() {
 			return errorCount;
 		}
@@ -439,11 +441,11 @@ public class ERMailSender implements Runnable {
 			return _messages.size();
 		}
 
-		private void incrementErrorCount() {
+		private synchronized void incrementErrorCount() {
 			errorCount++;
 		}
 
-		private void incrementMailCount() {
+		private synchronized void incrementMailCount() {
 			mailCount++;
 		}
 

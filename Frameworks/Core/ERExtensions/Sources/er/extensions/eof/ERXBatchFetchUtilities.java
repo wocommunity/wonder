@@ -132,10 +132,17 @@ public class ERXBatchFetchUtilities {
      */
     public static void batchFetch(NSArray sourceObjects, NSArray keypaths, boolean skipFaultedSourceObjects) {
         if (sourceObjects.count() == 0) return;
-        EOEnterpriseObject sample = (EOEnterpriseObject) sourceObjects.objectAtIndex(0);
+        
+        EOEditingContext ec = null;
+        for (Object sample : sourceObjects) {
+			if (((EOEnterpriseObject)sample).editingContext() != null) {
+				ec = ((EOEnterpriseObject)sample).editingContext();
+				break;
+			}
+		}
 
-        EOEditingContext ec = sample.editingContext();
-
+        if (ec == null) return;
+        
         EOObjectStoreCoordinator osc = (EOObjectStoreCoordinator) ec.rootObjectStore();
 
         osc.lock();

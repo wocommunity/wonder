@@ -220,7 +220,7 @@ public class ERWOMailDelivery {
 		return result;
 	}
 
-	private class MimeMessageMailDelivery extends ERMailDelivery {
+	private static class MimeMessageMailDelivery extends ERMailDelivery {
 		public MimeMessageMailDelivery(MimeMessage msg) {
 			super();
 			setMimeMessage(msg);
