@@ -19,7 +19,7 @@ ButtonAsInput: WOGenericElement {
     value = ^value;
     invokeAction = ^action;
     onClick=jsString;
-    name = context.elementID;
+    name=componentName;
     class = ^class;
     style = ^style;
 }
@@ -30,7 +30,7 @@ ButtonAsButton: WOGenericContainer {
     value = ^value;
     invokeAction = ^action;
     onClick=jsString;
-    name = context.elementID;
+    name=componentName;
     class = ^class;
     style = ^style;
 }
