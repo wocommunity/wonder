@@ -34,6 +34,7 @@ import er.extensions.foundation.ERXValueUtilities;
  * @binding shouldSubmitForm If <code>false</code>, will let the submit button
             use javascript code to set "document.location", which does not submit
             the form the button is in. The default value is <code>false</code>.
+ * @binding name If is null takes context.elementID
  */
 public class ERXSingleButton extends WOComponent {
 
@@ -85,6 +86,10 @@ public class ERXSingleButton extends WOComponent {
 
     public boolean shouldSubmitForm() {
         return hasBinding("shouldSubmitForm") ? ERXValueUtilities.booleanValue(valueForBinding("shouldSubmitForm")) : false;
+    }
+    
+    public String componentName() {
+        return hasBinding("name") ? String.valueOf(valueForBinding("name")) : context().elementID();
     }
 
     public boolean useSubmitButton() {
