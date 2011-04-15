@@ -1,0 +1,5 @@
+# H2 connection URL
+#dbConnectURLGLOBAL=jdbc:h2:file://tmp/Example
+
+# Because H2 doesn't have deferred fk constraints
+#com.webobjects.eoaccess.ERXEntityDependencyOrderingDelegate.active=true
