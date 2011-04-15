@@ -2,6 +2,7 @@ package com.webobjects.jdbcadaptor;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Enumeration;
 
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
@@ -24,11 +25,11 @@ import com.webobjects.foundation.NSPropertyListSerialization;
  */
 public class PostgresqlPlugIn extends JDBCPlugIn {
   private static final String QUERY_STRING_USE_BUNDLED_JDBC_INFO = "useBundledJdbcInfo";
-
+  
   static {
-    setPlugInNameForSubprotocol(PostgresqlPlugIn.class.getName(), "postgresql");
+      setPlugInNameForSubprotocol(PostgresqlPlugIn.class.getName(), "postgresql");
   }
-
+    
   /**
    * Designated constructor.
    */
@@ -39,7 +40,6 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
   /**
    * Name of the driver.
    */
-  @Override
   public String defaultDriverName() {
     return "org.postgresql.Driver";
   }
@@ -47,7 +47,6 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
   /**
    * Name of the database.
    */
-  @Override
   public String databaseProductName() {
     return "Postgresql";
   }
@@ -58,7 +57,6 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
    * it loads models.</P>
    * @return the name of the plugin.
    */
-  @Override
   public String name() {
     return "Postgresql";
   }
@@ -87,28 +85,27 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
    * framework and this can be used as a hard-coded equivalent.
    * </P> 
    */
-  @Override
   public NSDictionary jdbcInfo() {
     // you can swap this code out to write the property list out in order
     // to get a fresh copy of the JDBCInfo.plist.
-    //    try {
-    //      String jdbcInfoS = NSPropertyListSerialization.stringFromPropertyList(super.jdbcInfo());
-    //      FileOutputStream fos = new FileOutputStream("/tmp/JDBCInfo.plist");
-    //      fos.write(jdbcInfoS.getBytes());
-    //      fos.close();
-    //    }
-    //    catch(Exception e) {
-    //      throw new IllegalStateException("problem writing JDBCInfo.plist",e);
-    //    }
+//    try {
+//      String jdbcInfoS = NSPropertyListSerialization.stringFromPropertyList(super.jdbcInfo());
+//      FileOutputStream fos = new FileOutputStream("/tmp/JDBCInfo.plist");
+//      fos.write(jdbcInfoS.getBytes());
+//      fos.close();
+//    }
+//    catch(Exception e) {
+//      throw new IllegalStateException("problem writing JDBCInfo.plist",e);
+//    }
 
     NSDictionary jdbcInfo;
     // have a look at the JDBC connection URL to see if the flag has been set to
     // specify that the hard-coded jdbcInfo information should be used.
-    if (shouldUseBundledJdbcInfo()) {
+    if(shouldUseBundledJdbcInfo()) {
       if(NSLog.debugLoggingAllowedForLevel(NSLog.DebugLevelDetailed)) {
         NSLog.debug.appendln("Loading jdbcInfo from JDBCInfo.plist as opposed to using the JDBCPlugIn default implementation.");
       }
-
+      
       InputStream jdbcInfoStream = NSBundle.bundleForClass(getClass()).inputStreamForResourcePath("JDBCInfo.plist");
       if (jdbcInfoStream == null) {
         throw new IllegalStateException("Unable to find 'JDBCInfo.plist' in this plugin jar.");
@@ -119,12 +116,6 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
       }
       catch (IOException e) {
         throw new RuntimeException("Failed to load 'JDBCInfo.plist' from this plugin jar.", e);
-      } finally {
-        try {
-          jdbcInfoStream.close();
-        } catch (IOException e) {
-          throw new RuntimeException("Failed to close input stream for 'JDBCInfo.plist'.", e);
-        }
       }
     }
     else {
@@ -137,7 +128,6 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
    * Returns a "pure java" synchronization factory.
    * Useful for testing purposes.
    */
-  @Override
   public EOSynchronizationFactory createSynchronizationFactory() {
     try {
       return new PostgresqlSynchronizationFactory(adaptor());
@@ -150,7 +140,6 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
   /**                                                                                                                                                         
    * Expression class to create. We have custom code, so we need our own class.                                                                               
    */
-  @Override
   public Class defaultExpressionClass() {
     return PostgresqlExpression.class;
   }
@@ -164,20 +153,19 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
    * @param channel open JDBCChannel
    * @return NSArray of NSDictionary where each dictionary corresponds to a unique  primary key value
    */
-  @Override
   public NSArray newPrimaryKeys(int count, EOEntity entity, JDBCChannel channel) {
     if (isPrimaryKeyGenerationNotSupported(entity)) {
       return null;
     }
-
-    EOAttribute attribute = entity.primaryKeyAttributes().lastObject();
+    
+    EOAttribute attribute = (EOAttribute) entity.primaryKeyAttributes().lastObject();
     String attrName = attribute.name();
     boolean isIntType = "i".equals(attribute.valueType());
 
-    NSMutableArray<NSDictionary<String, Number>> results = new NSMutableArray<NSDictionary<String, Number>>(count);
+    NSMutableArray results = new NSMutableArray(count);
     String sequenceName = _sequenceNameForEntity(entity);
     PostgresqlExpression expression = new PostgresqlExpression(entity);
-
+    
     // MS: The original implementation of this did something like select setval('seq', nextval('seq') + count)
     // which apparently is not an atomic operation, which causes terrible problems under load with multiple
     // instances.  The new implementation does batch requests for keys.
@@ -186,7 +174,7 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
     for (int tries = 0; !succeeded && tries < 2; tries++) {
       while (results.count() < count) {
         try {
-          StringBuilder sql = new StringBuilder();
+          StringBuffer sql = new StringBuffer();
           sql.append("SELECT ");
           for (int keyBatchNum = Math.min(keysPerBatch, count - results.count()) - 1; keyBatchNum >= 0; keyBatchNum --) {
             sql.append("NEXTVAL('" + sequenceName + "') AS KEY" + keyBatchNum);
@@ -197,18 +185,19 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
           expression.setStatement(sql.toString());
           channel.evaluateExpression(expression);
           try {
-            NSDictionary<String, Object> row;
+            NSDictionary row;
             while ((row = channel.fetchRow()) != null) {
-              for (Object obj : row.allValues()) {
-                Number pkObj = (Number)obj;
+              Enumeration pksEnum = row.allValues().objectEnumerator();
+              while (pksEnum.hasMoreElements()) {
+                Number pkObj = (Number)pksEnum.nextElement();
                 Number pk;
                 if (isIntType) {
-                  pk = Integer.valueOf(pkObj.intValue());
+                  pk = new Integer(pkObj.intValue());
                 }
                 else {
-                  pk = Long.valueOf(pkObj.longValue());
+                  pk = new Long(pkObj.longValue());
                 }
-                results.addObject(new NSDictionary<String, Number>(pk, attrName));
+                results.addObject(new NSDictionary(pk, attrName));
               }            
             }
           }
@@ -229,7 +218,7 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
             expression.setStatement("select count(c.*) from pg_catalog.pg_class c, pg_catalog.pg_namespace n where c.relnamespace=n.oid AND c.relkind = 'S' AND c.relname='" + sequenceNameOnly + "' AND n.nspname='" + schemaName + "'");
           }
           channel.evaluateExpression(expression);
-          NSDictionary<String, Object> row;
+          NSDictionary row;
           try {
             row = channel.fetchRow();
           }
@@ -241,9 +230,10 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
           Number numCount = (Number) row.objectForKey("COUNT");
           if (numCount != null && numCount.longValue() == 0L) {
             EOSynchronizationFactory f = createSynchronizationFactory();
-            NSArray<EOSQLExpression> statements = f.primaryKeySupportStatementsForEntityGroup(new NSArray<EOEntity>(entity));
-            for (EOSQLExpression statement : statements) {
-              channel.evaluateExpression(statement);
+            NSArray statements = f.primaryKeySupportStatementsForEntityGroup(new NSArray(entity));
+            int stmCount = statements.count();
+            for (int i = 0; i < stmCount; i++) {
+              channel.evaluateExpression((EOSQLExpression) statements.objectAtIndex(i));
             }
           }
           else if (numCount == null) {
@@ -255,11 +245,11 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
         }
       }
     }
-
+    
     if (results.count() != count) {
       throw new IllegalStateException("Unable to generate primary keys from the sequence for " + entity + ".");
     }
-
+    
     return results;
   }
 
@@ -274,7 +264,7 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
     /* timc 2006-11-06 
      * This used to say ... + "_SEQ";
      * _SEQ would get converted to _seq because postgresql converts all unquoted identifiers to lower case.
-     * In the future we may use enableIdentifierQuoting for sequence names so we need to set the correct case here in the first place
+    * In the future we may use enableIdentifierQuoting for sequence names so we need to set the correct case here in the first place
      */
     return entity.primaryKeyRootName() + "_seq";
   }
@@ -286,7 +276,7 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
    * @return  yes/no
    */
   private boolean isPrimaryKeyGenerationNotSupported(EOEntity entity) {
-    return entity.primaryKeyAttributes().count() > 1 || (entity.primaryKeyAttributes().lastObject()).adaptorValueType() != EOAttribute.AdaptorNumberType;
+    return entity.primaryKeyAttributes().count() > 1 || ((EOAttribute) entity.primaryKeyAttributes().lastObject()).adaptorValueType() != EOAttribute.AdaptorNumberType;
   }
 
 }
