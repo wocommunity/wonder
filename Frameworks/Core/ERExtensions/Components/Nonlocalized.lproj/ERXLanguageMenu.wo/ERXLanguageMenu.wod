@@ -7,7 +7,6 @@ LanguagePopup: WOPopUpButton {
 	name = ^name;
 	item = languageOption;
 	list = availableLanguages;
-	localizeDisplayStrings = ^localizeDisplayStrings;
 	noSelectionString = ^noSelectionString;
 	size = ^size;
 	selection = ^language;

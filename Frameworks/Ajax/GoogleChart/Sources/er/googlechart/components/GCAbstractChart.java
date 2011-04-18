@@ -8,6 +8,7 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODynamicElement;
 import com.webobjects.appserver.WOElement;
+import com.webobjects.appserver.WOMessage;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -459,7 +460,8 @@ public abstract class GCAbstractChart extends WODynamicElement {
     if (_alt != null) {
       response._appendTagAttributeAndValue("alt", (String) _alt.valueInComponent(component), true);
     }
-    response._appendTagAttributeAndValue("src", chartUrl.toExternalForm(), false);
+    String chartSrc = WOMessage.stringByEscapingHTMLAttributeValue(chartUrl.toExternalForm());
+    response._appendTagAttributeAndValue("src", chartSrc, false);
     response._appendTagAttributeAndValue("width", String.valueOf(width), false);
     response._appendTagAttributeAndValue("height", String.valueOf(height), false);
     response.appendContentString("/>");
