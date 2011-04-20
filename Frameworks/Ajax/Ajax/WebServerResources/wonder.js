@@ -1114,6 +1114,8 @@ var AjaxUploadClient = Class.create({
 		$('AFUSelectFileButtonWrapper' + this.id).show();
 		$('AFUClearButton' + this.id).hide();
 		$('AFUFileObject' + this.id).hide();
+		if (this.options.clearedFunction)
+			this.options.clearedFunction(this.id);
 	},
 	cancel: function() {
 		$('AFUFileNameWrapper' + this.id).update(this.labels.upload_canceling);
