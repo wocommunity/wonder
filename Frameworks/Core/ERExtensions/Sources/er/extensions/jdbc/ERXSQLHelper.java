@@ -2268,6 +2268,12 @@ public class ERXSQLHelper {
 			else if (jdbcType == Types.BIGINT) {
 				externalType = "int8";
 			} 
+			else if (jdbcType == Types.FLOAT) {
+				externalType = "float4";
+			}
+			else if (jdbcType == Types.DOUBLE) {
+				externalType = "float8";
+			}
 			else if (jdbcType == Types.BLOB) {
 				externalType = "bytea";
 			}
@@ -2307,6 +2313,7 @@ public class ERXSQLHelper {
 			for (ColumnIndex columnIndex : columnIndexes) {
 				columnNames.addObject(columnIndex.columnName());
 			}
+			indexName = indexName.replace('.', '_');
 			return "CREATE UNIQUE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
 		}
 

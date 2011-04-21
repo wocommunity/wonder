@@ -7,7 +7,7 @@ public class ERXSproutCoreRestWriter extends ERXJSONRestWriter {
 	protected ERXRestRequestNode processNode(ERXRestRequestNode node) {
 		ERXRestRequestNode rootNode = new ERXRestRequestNode(null, true);
 
-		ERXRestRequestNode recordsNode = new ERXRestRequestNode("records", false);
+		ERXRestRequestNode recordsNode = new ERXRestRequestNode("content", false);
 		recordsNode.setArray(true);
 		rootNode.addChild(recordsNode);
 

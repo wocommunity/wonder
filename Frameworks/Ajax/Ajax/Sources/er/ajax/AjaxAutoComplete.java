@@ -248,23 +248,27 @@ public class AjaxAutoComplete extends AjaxComponent {
 		}
     }
     
-    public String stringValue() {
-    	String strValue = null;
-    	if (hasBinding("selection")) {
-   			Object selection = valueForBinding("selection");
-   			if (hasBinding("displayString")) {
-   	   			setValueForBinding(selection, "item");
-   	   			strValue = displayStringForValue(valueForBinding("value"));
-   			}
-   			else if (selection != null) {
-   				strValue = String.valueOf(selection);
-   			}
-    	}
-    	else if (hasBinding("value")) {
-    		strValue = (String)valueForBinding("value");
-    	}
-    	return strValue;
-    }
+	public String stringValue() {
+		String strValue = null;
+		if (hasBinding("selection")) {
+			Object selection = valueForBinding("selection");
+			if (selection != null) {
+				if (hasBinding("displayString")) {
+					setValueForBinding(selection, "item");
+					strValue = displayStringForValue(valueForBinding("value"));
+				}
+				else {
+					strValue = String.valueOf(selection);
+				}
+			}
+			else
+				strValue = (String) valueForBinding("value");
+		}
+		else if (hasBinding("value")) {
+			strValue = (String) valueForBinding("value");
+		}
+		return strValue;
+	}
     
     protected String displayStringForValue(Object value) {
     	Object displayValue = valueForBinding("displayString", valueForBinding("item", value));

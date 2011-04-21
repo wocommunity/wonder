@@ -69,7 +69,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * 
 	 * @return the one <code>ERJavaMail</code> instance
 	 */
-	public static ERJavaMail sharedInstance() {
+	public static synchronized ERJavaMail sharedInstance() {
 		if (sharedInstance == null) {
 			sharedInstance = ERXFrameworkPrincipal.sharedInstance(ERJavaMail.class);
 		}

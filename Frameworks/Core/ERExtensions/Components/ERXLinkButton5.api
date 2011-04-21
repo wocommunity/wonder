@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="R2DLinkButton.java" wocomponentcontent="false">
+
+        <binding name="action"/>
+        <binding name="actionClass"/>
+        <binding name="directActionName"/>
+        <binding name="disabled"/>
+        <binding name="escapeHTML"/>
+        <binding name="fragmentIdentifier"/>
+        <binding name="href"/>
+        <binding name="name"/>
+        <binding name="pageName"/>
+        <binding name="queryDictionary"/>
+        <binding name="rel"/>
+        <binding name="secure"/>
+        <binding name="string"/>
+        <binding name="submit"/>
+        <binding name="useIEConditionals"/>
+        <binding name="value"/>
+        <binding name="id"/>
+        <binding name="class"/>
+	<validation message="Either one of 'action', 'href', or 'pageName' may be bound, or either or both of 'actionClass' and 'directActionName' may be bound">
+		<count test="!=1">
+			<bound name="action"/>
+			<bound name="href"/>
+			<bound name="pageName"/>
+			<or>
+				<bound name="actionClass"/>
+				<bound name="directActionName"/>
+			</or>
+		</count>
+	</validation>
+	</wo>
+</wodefinitions>

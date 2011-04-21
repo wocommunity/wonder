@@ -9,5 +9,6 @@
 		<binding name="directActionName"/>
 		<binding name="target"/>
 		<binding name="shouldSubmitForm" defaults="Boolean"/>
-	</wo>
+		<binding name="name"/>
+    </wo>
 </wodefinitions>

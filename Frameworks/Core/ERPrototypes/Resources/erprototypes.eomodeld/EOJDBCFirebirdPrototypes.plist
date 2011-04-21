@@ -12,7 +12,7 @@
         }, 
         {
             columnName = blob; 
-            externalType = BLOB; 
+            externalType = "BLOB SUB_TYPE 0"; 
             name = blob; 
             valueClassName = NSData; 
         }, 
@@ -47,9 +47,9 @@
         }, 
         {
             columnName = currencyAmount; 
-            externalType = FLOAT; 
+            externalType = DECIMAL; 
             name = currencyAmount; 
-            precision = 38; 
+            precision = 18; 
             scale = 4; 
             valueClassName = NSDecimalNumber; 
             valueType = B; 
@@ -70,7 +70,7 @@
         }, 
         {
             columnName = doubleNumber; 
-            externalType = DOUBLE; 
+            externalType = "DOUBLE PRECISION"; 
             name = doubleNumber; 
             userInfo = {modificationDate = "2002-06-04 14:00:54 +0200"; }; 
             valueClassName = NSNumber; 
@@ -117,13 +117,11 @@
             valueType = i; 
         }, 
         {
-            adaptorValueConversionMethodName = toString; 
             columnName = intBoolean; 
-            externalType = INTEGER; 
+            externalType = SMALLINT; 
             factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
             name = intBoolean; 
             valueClassName = NSNumber; 
-            valueFactoryMethodName = valueOf; 
             valueType = c; 
         }, 
         {
@@ -209,17 +207,15 @@
         }, 
         {
             columnName = longText; 
-            externalType = BLOB; 
+            externalType = "BLOB SUB_TYPE 1"; 
             name = longText; 
             userInfo = {modificationDate = "2002-07-21 21:47:32 +0200"; }; 
             valueClassName = NSString; 
-            valueType = c; 
-            width = 10000000; 
         }, 
         {
             adaptorValueConversionMethodName = toBlob; 
             columnName = mutableArray; 
-            externalType = BLOB; 
+            externalType = "BLOB SUB_TYPE 0"; 
             name = mutableArray; 
             valueClassName = "er.extensions.ERXMutableArray"; 
             valueFactoryMethodName = fromBlob; 
@@ -227,7 +223,7 @@
         {
             adaptorValueConversionMethodName = toBlob; 
             columnName = mutableDictionary; 
-            externalType = BLOB; 
+            externalType = "BLOB SUB_TYPE 0"; 
             name = mutableDictionary; 
             valueClassName = "er.extensions.ERXMutableDictionary"; 
             valueFactoryMethodName = fromBlob; 
@@ -329,7 +325,6 @@
             columnName = varchar100; 
             externalType = VARCHAR; 
             name = varchar100; 
-            serverTimeZone = "Europe/Berlin"; 
             userInfo = {modificationDate = "2002-06-04 14:00:54 +0200"; }; 
             valueClassName = NSString; 
             valueType = c; 
@@ -348,7 +343,6 @@
             columnName = varchar16; 
             externalType = VARCHAR; 
             name = varchar16; 
-            serverTimeZone = "Europe/Berlin"; 
             userInfo = {modificationDate = "2002-06-04 14:00:54 +0200"; }; 
             valueClassName = NSString; 
             valueType = c; 
@@ -358,7 +352,6 @@
             columnName = varchar255; 
             externalType = VARCHAR; 
             name = varchar255; 
-            serverTimeZone = "Europe/Berlin"; 
             userInfo = {modificationDate = "2002-06-04 14:00:54 +0200"; }; 
             valueClassName = NSString; 
             valueType = c; 
@@ -368,7 +361,6 @@
             columnName = varchar50; 
             externalType = VARCHAR; 
             name = varchar50; 
-            serverTimeZone = "Europe/Berlin"; 
             userInfo = {modificationDate = "2002-08-21 22:42:33 +0200"; }; 
             valueClassName = NSString; 
             valueType = c; 

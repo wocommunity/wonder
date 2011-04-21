@@ -20,6 +20,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import com.lowagie.text.DocumentException;
+import com.lowagie.text.pdf.BaseFont;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -85,7 +86,7 @@ public class FlyingSaucerImpl implements PDFBuilder {
     ITextFontResolver resolver = renderer.getFontResolver();
     for (String font : fontsFromConfiguration(configuration)) {
       try {
-        resolver.addFont(font, true);
+        resolver.addFont(font, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
       } catch (Exception e) {
         e.printStackTrace();
       }

@@ -9,7 +9,6 @@ package er.extensions.crypting;
 import java.io.IOException;
 import java.security.Key;
 import java.security.MessageDigest;
-import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
@@ -140,8 +139,7 @@ public class ERXCrypto {
 	 */
 	public static NSMutableDictionary<String, String> decodedFormValuesDictionary(NSDictionary<String, NSArray<String>> dict) {
 		NSMutableDictionary<String, String> result = new NSMutableDictionary<String, String>();
-		for (Enumeration e = dict.allKeys().objectEnumerator(); e.hasMoreElements();) {
-			String key = (String) e.nextElement();
+		for (String key: dict.allKeys()) {
 			NSArray<String> objects = dict.objectForKey(key);
 			String value = ERXCrypto.defaultCrypter().decrypt(objects.lastObject()).trim();
 			result.setObjectForKey(value, key);
@@ -156,6 +154,9 @@ public class ERXCrypto {
 	/**
 	 * Uses the SHA hash algorithm found in the Sun JCE to hash the passed in
 	 * String. This String is then base64 encoded and returned.
+	 * 
+	 * @param v the string to encode
+	 * @return the encoded string
 	 */
 	public static String base64HashedString(String v) {
 		String base64HashedPassword = null;
@@ -173,32 +174,108 @@ public class ERXCrypto {
 	}
 
 	/**
-	 * Sha encodes a given string. The resulting string is safe to use in urls
+	 * SHA-1 encodes a given string. The resulting string is safe to use in urls
 	 * and cookies. From the digest of the string it is nearly impossible to
 	 * determine what the original string was. Running the same string through
-	 * the Sha digest multiple times will always produce the same hash.
+	 * the SHA-1 digest multiple times will always produce the same hash.
 	 * 
 	 * @param text
 	 *            to be put through the sha digest
 	 * @return hashed form of the given string
 	 */
 	public static String shaEncode(String text) {
-		if (text == null) {
+		return algorithmEncode(text, "SHA");
+	}
+	
+	/**
+	 * SHA-256 encodes a given string. The resulting string is safe to use in urls
+	 * and cookies. From the digest of the string it is nearly impossible to
+	 * determine what the original string was. Running the same string through
+	 * the SHA-256 digest multiple times will always produce the same hash.
+	 * 
+	 * @param text
+	 *            to be put through the sha digest
+	 * @return hashed form of the given string
+	 */
+	public static String sha256Encode(String text) {
+		return algorithmEncode(text, "SHA-256");
+	}
+	
+	/**
+	 * SHA-384 encodes a given string. The resulting string is safe to use in urls
+	 * and cookies. From the digest of the string it is nearly impossible to
+	 * determine what the original string was. Running the same string through
+	 * the SHA-384 digest multiple times will always produce the same hash.
+	 * 
+	 * @param text
+	 *            to be put through the sha digest
+	 * @return hashed form of the given string
+	 */
+	public static String sha384Encode(String text) {
+		return algorithmEncode(text, "SHA-384");
+	}
+	
+	/**
+	 * SHA-512 encodes a given string. The resulting string is safe to use in urls
+	 * and cookies. From the digest of the string it is nearly impossible to
+	 * determine what the original string was. Running the same string through
+	 * the SHA-512 digest multiple times will always produce the same hash.
+	 * 
+	 * @param text
+	 *            to be put through the sha digest
+	 * @return hashed form of the given string
+	 */
+	public static String sha512Encode(String text) {
+		return algorithmEncode(text, "SHA-512");
+	}
+	
+	/**
+	 * MD5 encodes a given string. The resulting string is safe to use in urls
+	 * and cookies. From the digest of the string it is nearly impossible to
+	 * determine what the original string was. Running the same string through
+	 * the MD5 digest multiple times will always produce the same hash.
+	 * 
+	 * @param text
+	 *            to be put through the sha digest
+	 * @return hashed form of the given string
+	 */
+	public static String md5Encode(String text) {
+		return algorithmEncode(text, "MD5");
+	}
+	
+	/**
+	 * Encodes a given string with a given algorithm. The resulting string is safe
+	 * to use in urls and cookies. From the digest of the string it is nearly
+	 * impossible to determine what the original string was. Running the same string
+	 * through the algorithm digest multiple times will always produce the same hash.
+	 * 
+	 * @param text
+	 *            to be put through the algorithm digest
+	 * @param algorithmName
+	 *            the algorithm to use (e.g. SHA, SHA-256, ...)
+	 * @return hashed form of the given string
+	 */
+	public static String algorithmEncode(String text, String algorithmName) {
+		if (text == null || algorithmName == null) {
 			return text;
 		}
 		byte[] buf = text.getBytes();
 		try {
-			MessageDigest md = MessageDigest.getInstance("SHA");
+			MessageDigest md = MessageDigest.getInstance(algorithmName);
 			md.update(buf);
 			return ERXStringUtilities.byteArrayToHexString(md.digest());
 		}
 		catch (java.security.NoSuchAlgorithmException ex) {
-			throw new NSForwardException(ex, "Couldn't find the SHA algorithm; perhaps you do not have the SunJCE security provider installed properly?");
+			throw new NSForwardException(ex, "Couldn't find the algorithm '" + algorithmName
+					+ "'; perhaps you do not have the SunJCE security provider installed properly?");
 		}
 	}
 
 	/**
 	 * Base64 encodes the passed in byte[]
+	 * 
+	 * @param byteArray the byte array to encode
+	 * @return the encoded string
 	 */
 	public static String base64Encode(byte[] byteArray) {
 		sun.misc.BASE64Encoder enc = new sun.misc.BASE64Encoder();
@@ -208,6 +285,9 @@ public class ERXCrypto {
 	
 	/**
 	 * Base64url encodes the passed in byte[]
+	 * 
+	 * @param byteArray the byte array to url encode
+	 * @return the encoded string
 	 */
 	public static String base64urlEncode(byte[] byteArray) {
 		String base64String = base64Encode(byteArray);
@@ -232,6 +312,10 @@ public class ERXCrypto {
 
 	/**
 	 * Base64 decodes the passed in String
+	 * 
+	 * @param s the string to decode
+	 * @return a byte array of the decoded string
+	 * @throws IOException if the decode fails
 	 */
 	public static byte[] base64Decode(String s) throws IOException {
 		sun.misc.BASE64Decoder enc = new sun.misc.BASE64Decoder();
@@ -241,6 +325,10 @@ public class ERXCrypto {
 	
 	/**
 	 * Base64url decodes the passed in String
+	 * 
+	 * @param s the string to url decode
+	 * @return a byte array of the decoded string
+	 * @throws IOException if the decode fails
 	 */
 	public static byte[] base64urlDecode(String s) throws IOException {
 		int length = s.length();
