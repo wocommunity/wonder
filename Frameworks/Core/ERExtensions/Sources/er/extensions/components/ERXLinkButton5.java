@@ -248,7 +248,7 @@ public class ERXLinkButton5 extends WOHTMLDynamicElement {
 	}
 	
 	public void appendToResponse(WOResponse response, WOContext context) {
-		if(submitInContext(context)) { _dyneltName = "button"; }
+		_dyneltName = submitInContext(context)?"button":"a";
 		super.appendToResponse(response, context);
 		if(submitInContext(context)) {
 			if(useIEConditionalsInContext(context)) {
