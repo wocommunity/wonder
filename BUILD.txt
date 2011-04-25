@@ -14,7 +14,7 @@ Ant should be found in /usr/share/ant/bin/ant
 
 0. Prerequisites:
 
-   ant 1.7: execute 'ant --version' to confirm that ant is properly installed
+   ant 1.7: execute 'ant -version' to confirm that ant is properly installed
             and that it is at version 1.7 or later.
 
 1. Open a terminal and cd into the Wonder root directory.
