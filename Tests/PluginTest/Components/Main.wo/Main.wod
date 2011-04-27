@@ -1,0 +1,9 @@
+Log4JDA : WOHyperlink {
+	actionClass = "er.extensions.appserver.ERXDirectAction";
+	directActionName = "log4j";
+}
+
+testDA : WOHyperlink {
+	actionClass = "er.extensions.appserver.ERXDirectAction";
+	directActionName = "test";
+}
