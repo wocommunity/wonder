@@ -956,7 +956,7 @@
 	<target name="DB2PlugIn.all">
         <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="com.webobjects.jdbcadaptor.DB2PlugIn" />
-            <param name="project.name" value="DB22PlugIn" />
+            <param name="project.name" value="DB2PlugIn" />
             <param name="project.dir" value="Frameworks/PlugIns/DB2PlugIn" />
         </antcall>
     </target>
