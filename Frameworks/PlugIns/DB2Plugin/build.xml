@@ -1,4 +1,4 @@
-<project name="DB2ForISeriesPlugin" default="build" basedir=".">
+<project name="DB2PlugIn" default="build" basedir=".">
 	<target name="build" depends="init.build,build.woframework,javaclient,package" />
 
 	<target name="install" depends="init.install,build.woframework,javaclient" />
