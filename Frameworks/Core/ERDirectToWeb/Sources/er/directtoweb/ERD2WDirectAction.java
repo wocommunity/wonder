@@ -114,12 +114,6 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
     public static final String primaryKeyKey = "__key";
 
     /**
-     * masterEntityKey is used to identify the entity name of the master object
-     * for editRelationship actions
-     */
-    public static final String masterEntityKey = "__masterEntity";
-    
-    /**
      * keyPathKey is used to get relationships of a given object.
      */
     public static final String keyPathKey = "__keypath";
@@ -317,10 +311,11 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
     
     protected void prepareEditRelationshipPage(D2WContext context, EditRelationshipPageInterface erpi, String entityName) {
     	EOEditingContext ec = ERXEC.newEditingContext(session().defaultEditingContext().parentObjectStore());
-    	String masterEntityName = request().stringFormValueForKey(masterEntityKey);
+    	String keypath = keyPathFromRequest();
+    	String masterEntityName = ERXStringUtilities.firstPropertyKeyInKeyPath(keypath);
+    	String relationshipKey = ERXStringUtilities.keyPathWithoutFirstProperty(keypath);
     	NSDictionary pk = primaryKeyFromRequest(ec, masterEntityName);
     	EOEnterpriseObject masterObject = ERXEOControlUtilities.objectWithPrimaryKeyValue(ec, masterEntityName, pk, null);
-    	String relationshipKey = keyPathFromRequest();
     	erpi.setMasterObjectAndRelationshipKey(masterObject, relationshipKey);
     	erpi.setNextPage(previousPageFromRequest());
     }
