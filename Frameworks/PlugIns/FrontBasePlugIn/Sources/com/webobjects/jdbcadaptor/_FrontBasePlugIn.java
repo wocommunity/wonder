@@ -359,7 +359,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			return blob;
 		else {
 			try {
-				return attribute.newValueForBytes(blob.getBytes(1, (int) blob.length()), 0);
+				return new NSData(blob.getBytes(1, (int) blob.length()));
 			}
 			catch (Exception ioexception) {
 				throw new JDBCAdaptorException(ioexception.getMessage(), null);
