@@ -1472,18 +1472,17 @@ public class ERXEOAccessUtilities {
 
         public int perform(EOEditingContext ec, String modelName) {
             boolean wasOpen = true;
-            EOAdaptorChannel channel = null;
+            EODatabaseChannel dbChannel = null;
             int rows = 0;
             ec.lock();
             try {
                 EODatabaseContext dbc = EOUtilities.databaseContextForModelNamed(ec, modelName);
                 dbc.lock();
                 try {
-                    channel = dbc.availableChannel().adaptorChannel();
-                    wasOpen = channel.isOpen();
-                    if(!wasOpen) {
-                        channel.openChannel();
-                    }
+                    wasOpen = dbc.adaptorContext().hasOpenChannels();
+                    dbChannel = dbc.availableChannel(); // will open the channel if closed
+                    EOAdaptorChannel channel = dbChannel.adaptorChannel();
+                    
                     channel.adaptorContext().beginTransaction();
                     try {
                         rows = doPerform(channel);
@@ -1493,8 +1492,8 @@ public class ERXEOAccessUtilities {
                         throw ex;
                     } 
                 } finally {
-                    if(!wasOpen) {
-                        channel.closeChannel();
+                    if (!wasOpen && dbChannel != null) {
+                    	dbChannel.adaptorChannel().closeChannel();
                     }
                     dbc.unlock();
                 }
