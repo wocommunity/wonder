@@ -10,7 +10,7 @@ import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
-import com.webobjects.eocontrol.EOObjectStoreCoordinator;
+import com.webobjects.eocontrol.EOObjectStore;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
@@ -143,7 +143,7 @@ public class ERXBatchFetchUtilities {
 
         if (ec == null) return;
         
-        EOObjectStoreCoordinator osc = (EOObjectStoreCoordinator) ec.rootObjectStore();
+        EOObjectStore osc = ec.rootObjectStore();
 
         osc.lock();
         try {
