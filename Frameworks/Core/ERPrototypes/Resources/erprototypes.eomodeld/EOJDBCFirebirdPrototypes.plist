@@ -4,7 +4,7 @@
             columnName = amount; 
             externalType = FLOAT; 
             name = amount; 
-            precision = 38; 
+            precision = 18; 
             scale = 2; 
             userInfo = {modificationDate = "2002-07-21 21:47:27 +0200"; }; 
             valueClassName = NSNumber; 
@@ -155,7 +155,7 @@
             adaptorValueConversionMethodName = jodaDateTime; 
             columnName = ""; 
             externalType = TIMESTAMP; 
-            factoryMethodArgumentType = EOFactoryMethodArgumentIsDate; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsData; 
             name = jodaDateTime; 
             valueClassName = "org.joda.time.DateTime"; 
             valueFactoryClassName = "er.prototypes.ValueFactory"; 
@@ -167,7 +167,7 @@
             adaptorValueConversionMethodName = jodaLocalDate; 
             columnName = ""; 
             externalType = DATE; 
-            factoryMethodArgumentType = EOFactoryMethodArgumentIsDate; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsData; 
             name = jodaLocalDate; 
             valueClassName = "org.joda.time.LocalDate"; 
             valueFactoryClassName = "er.prototypes.ValueFactory"; 
@@ -179,7 +179,7 @@
             adaptorValueConversionMethodName = jodaLocalDateTime; 
             columnName = ""; 
             externalType = TIMESTAMP; 
-            factoryMethodArgumentType = EOFactoryMethodArgumentIsDate; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsData; 
             name = jodaLocalDateTime; 
             valueClassName = "org.joda.time.LocalDateTime"; 
             valueFactoryClassName = "er.prototypes.ValueFactory"; 
@@ -191,7 +191,7 @@
             adaptorValueConversionMethodName = jodaLocalTime; 
             columnName = ""; 
             externalType = TIMESTAMP; 
-            factoryMethodArgumentType = EOFactoryMethodArgumentIsDate; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsData; 
             name = jodaLocalTime; 
             valueClassName = "org.joda.time.LocalTime"; 
             valueFactoryClassName = "er.prototypes.ValueFactory"; 
@@ -232,7 +232,7 @@
             adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
             adaptorValueConversionMethodName = serializable; 
             columnName = serializable; 
-            externalType = BLOB; 
+            externalType = "BLOB SUB_TYPE 0"; 
             factoryMethodArgumentType = EOFactoryMethodArgumentIsBytes; 
             name = serializable; 
             valueClassName = "java.io.Serializable"; 
@@ -243,7 +243,7 @@
             adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
             adaptorValueConversionMethodName = blobArray; 
             columnName = blobArray; 
-            externalType = BLOB; 
+            externalType = "BLOB SUB_TYPE 0"; 
             factoryMethodArgumentType = EOFactoryMethodArgumentIsData; 
             name = blobArray; 
             valueClassName = "com.webobjects.foundation.NSArray"; 
@@ -254,7 +254,7 @@
             adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
             adaptorValueConversionMethodName = blobDictionary; 
             columnName = blobDictionary; 
-            externalType = BLOB; 
+            externalType = "BLOB SUB_TYPE 0"; 
             factoryMethodArgumentType = EOFactoryMethodArgumentIsData; 
             name = blobDictionary; 
             valueClassName = "com.webobjects.foundation.NSDictionary"; 
@@ -265,7 +265,7 @@
             adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
             adaptorValueConversionMethodName = stringArray; 
             columnName = stringArray; 
-            externalType = BLOB; 
+            externalType = "BLOB SUB_TYPE 0"; 
             name = stringArray; 
             valueClassName = "com.webobjects.foundation.NSArray"; 
             valueFactoryClassName = "er.prototypes.ValueFactory"; 
@@ -277,7 +277,7 @@
             adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
             adaptorValueConversionMethodName = stringDictionary; 
             columnName = stringDictionary; 
-            externalType = BLOB; 
+            externalType = "BLOB SUB_TYPE 0"; 
             name = stringDictionary; 
             valueClassName = "com.webobjects.foundation.NSDictionary"; 
             valueFactoryClassName = "er.prototypes.ValueFactory"; 
@@ -373,7 +373,7 @@
             userInfo = {modificationDate = "2002-08-19 11:56:16 +0200"; }; 
             valueClassName = NSString; 
             valueType = c; 
-            width = 32765; 
+            width = 10921; 
         }
     ); 
     attributesUsedForLocking = (boolean, id); 
