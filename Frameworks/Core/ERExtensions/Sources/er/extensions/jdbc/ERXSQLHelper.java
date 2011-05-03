@@ -45,6 +45,7 @@ import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSValidation;
 import com.webobjects.foundation._NSUtilities;
@@ -1600,6 +1601,9 @@ public class ERXSQLHelper {
 							log.warn("H2Helper");
 							sqlHelper = new H2SQLHelper();
 						}
+						else if (databaseProductName.equalsIgnoreCase("firebird")) {
+							sqlHelper = new FirebirdSQLHelper();
+						}
 						else {
 							try {
 								sqlHelper = (ERXSQLHelper) Class.forName(ERXSQLHelper.class.getName() + "$" + databaseProductName + "SQLHelper").newInstance();
@@ -2338,6 +2342,69 @@ public class ERXSQLHelper {
 
 	}
 	
+	public static class FirebirdSQLHelper extends ERXSQLHelper {
+		
+		@Override
+		protected String sqlForGetNextValFromSequencedNamed(String sequenceName) {
+			return "select Gen_ID(" + sequenceName + ", 1) FROM RDB$Database"; 
+		}
+		
+		@Override
+		protected int maximumElementPerInClause(EOEntity entity) {
+			return 1500;
+		}
+		
+		@Override
+		public String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
+			return sql + " ROWS " + start + " TO " + end;
+		}
+		
+		private static final NSSet reservedWords = new NSSet(new String[] {
+			"active",
+			"password"
+		});
+		
+		@Override
+		public String quoteColumnName(String columnName){
+			if (columnName == null)
+				return null;
+			if (columnName.startsWith("\""))
+				return columnName;
+			if (!reservedWords.contains(columnName))
+				return columnName;
+			
+			int i = columnName.lastIndexOf(".");
+			
+			if (i == -1)
+				return "\"" + columnName + "\"";
+
+			return "\"" + columnName.substring(0, i) + "\".\"" + columnName.substring(i + 1, columnName.length()) + "\"";
+		}
+		
+		/** 
+		 * Creates unique index; stolen from the derby helper
+		 * @see er.extensions.ERXSQLHelper#sqlForCreateUniqueIndex(java.lang.String, java.lang.String, er.extensions.ERXSQLHelper.ColumnIndex[])
+		 */
+		@Override
+		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
+			NSMutableArray<String> columnNames = new NSMutableArray<String>();
+			for (ColumnIndex columnIndex : columnIndexes) {
+				columnNames.addObject(columnIndex.columnName());
+			}
+			indexName = indexName.replace('.', '_');
+			return "CREATE UNIQUE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
+		}
+
+		@Override
+		public String sqlForCreateIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
+			NSMutableArray<String> columnNames = new NSMutableArray<String>();
+			for (ColumnIndex columnIndex : columnIndexes) {
+				columnNames.addObject(columnIndex.columnName());
+			}
+			return "CREATE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
+		}
+		
+	}
 	
 	public static class MicrosoftSQLHelper extends ERXSQLHelper {
 
