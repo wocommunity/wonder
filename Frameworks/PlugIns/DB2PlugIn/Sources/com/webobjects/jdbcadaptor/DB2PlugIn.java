@@ -156,19 +156,13 @@ public class DB2PlugIn extends JDBCPlugIn {
     String sequenceName = sequenceNameForEntity(entity);
     DB2Expression expression = new DB2Expression(entity);
     
-    int keysPerBatch = 20;
     boolean succeeded = false;
     for (int tries = 0; !succeeded && tries < 2; tries++) {
       while (results.count() < count) {
         try {
           StringBuffer sql = new StringBuffer();
           sql.append("SELECT ");
-          for (int keyBatchNum = Math.min(keysPerBatch, count - results.count()) - 1; keyBatchNum >= 0; keyBatchNum --) {
-            sql.append("next value for " + sequenceName + " AS KEY" + keyBatchNum);
-            if (keyBatchNum > 0) {
-              sql.append(", ");
-            }
-          }
+          sql.append("next value for " + sequenceName + " AS KEY");
           sql.append(" from sysibm.sysdummy1");
           expression.setStatement(sql.toString());
           channel.evaluateExpression(expression);
