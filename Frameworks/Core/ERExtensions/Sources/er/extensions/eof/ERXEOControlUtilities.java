@@ -37,7 +37,6 @@ import com.webobjects.eocontrol.EOKeyGlobalID;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EONotQualifier;
 import com.webobjects.eocontrol.EOObjectStore;
-import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.eocontrol.EOOrQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOSharedEditingContext;
@@ -413,7 +412,7 @@ public class ERXEOControlUtilities {
      */
     public static void clearSnapshotForRelationshipNamedInDatabase(EOEnterpriseObject eo, String relationshipName, EODatabase database) {
         EOEditingContext ec = eo.editingContext();
-        EOObjectStoreCoordinator osc = (EOObjectStoreCoordinator) ec.rootObjectStore();
+        EOObjectStore osc = ec.rootObjectStore();
         osc.lock();
         try {
 	        EOGlobalID gid = ec.globalIDForObject(eo);
@@ -423,12 +422,12 @@ public class ERXEOControlUtilities {
 	        if(o instanceof EOFaulting) {
 	        	EOFaulting toManyArray = (EOFaulting)o;
 	            if (!toManyArray.isFault()) {
-	            	EOFaulting tmpToManyArray = (EOFaulting)((EOObjectStoreCoordinator)ec.rootObjectStore()).arrayFaultWithSourceGlobalID(gid, relationshipName, ec);
+	            	EOFaulting tmpToManyArray = (EOFaulting)ec.rootObjectStore().arrayFaultWithSourceGlobalID(gid, relationshipName, ec);
 	            	toManyArray.turnIntoFault(tmpToManyArray.faultHandler());
 	            	needRefresh = true;
 	            }
 	        } else {
-	        	EOFaulting tmpToManyArray = (EOFaulting)((EOObjectStoreCoordinator)ec.rootObjectStore()).arrayFaultWithSourceGlobalID(gid, relationshipName, ec);
+	        	EOFaulting tmpToManyArray = (EOFaulting)ec.rootObjectStore().arrayFaultWithSourceGlobalID(gid, relationshipName, ec);
 	        	eo.takeStoredValueForKey(tmpToManyArray, relationshipName);
 	        	needRefresh = true;
 	        }
@@ -1528,12 +1527,12 @@ public class ERXEOControlUtilities {
         }
       }
       
-      if (includeNewObjectsInParentEditingContext && ! (editingContext.parentObjectStore() instanceof EOObjectStoreCoordinator) ) {
+      if (includeNewObjectsInParentEditingContext && (editingContext.parentObjectStore() instanceof EOEditingContext) ) {
         final NSMutableArray parentEditingContexts = new NSMutableArray();
         EOObjectStore objectStore = editingContext.parentObjectStore();
         NSArray objects = NSArray.EmptyArray;
         int i;
-        while (!(objectStore instanceof EOObjectStoreCoordinator)) {
+        while (objectStore instanceof EOEditingContext) {
           final EOEditingContext theEC = (EOEditingContext)objectStore;
           parentEditingContexts.addObject(theEC);
           objectStore = theEC.parentObjectStore();

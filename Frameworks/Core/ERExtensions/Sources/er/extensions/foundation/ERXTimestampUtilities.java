@@ -7,12 +7,14 @@
 package er.extensions.foundation;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import com.webobjects.foundation.NSComparator;
 import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSTimestampFormatter;
 
 /**
  * Collection of {@link com.webobjects.foundation.NSTimestamp NSTimestamp} utilities.
@@ -21,13 +23,15 @@ public class ERXTimestampUtilities extends Object {
 
     /**
      * Calculates a timestamp given a string. Currently supports
-     * the strings: now, today, yesterday, tomorrow, distantPast
-     * and distantFuture.
+     * the strings: now, today, yesterday, tomorrow, distantPast,
+     * distantFuture, epoch, and strings with the formats: 
+     * "yyyy-MM-dd HH:mm:ss"
+     * "yyyy-MM-dd"
      * @param defaultValue string given above
      * @return timestamp equivalent to the string
      */
     public static NSTimestamp timestampForString(String defaultValue) {
-        NSTimestamp value =  null;
+        NSTimestamp value;
         if (defaultValue.equals("now")) {
             value = new NSTimestamp();
         } else if (defaultValue.equals("today")) {
@@ -40,6 +44,20 @@ public class ERXTimestampUtilities extends Object {
             value = ERXTimestampUtilities.distantPast();
         } else if (defaultValue.equals("distantFuture")) {
             value = ERXTimestampUtilities.distantFuture();
+        } else if (defaultValue.equals("epoch")) {
+            value = ERXTimestampUtilities.epoch();
+        } else {
+        	NSTimestampFormatter formatter = new NSTimestampFormatter("yyyy-MM-dd HH:mm:ss");
+        	try {
+				value = (NSTimestamp)formatter.parseObject(defaultValue);
+			} catch (ParseException e) {
+				formatter.setPattern("yyyy-MM-dd");
+				try {
+					value = (NSTimestamp)formatter.parseObject(defaultValue);
+				} catch (ParseException e1) {
+					value = null;
+				}
+			}
         }
         return value;
     }
