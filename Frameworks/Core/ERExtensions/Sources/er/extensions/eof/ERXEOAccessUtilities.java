@@ -68,6 +68,7 @@ import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXThreadStorage;
 import er.extensions.foundation.ERXUtilities;
+import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.jdbc.ERXSQLHelper;
 import er.extensions.statistics.ERXStats;
 import er.extensions.statistics.ERXStats.Group;
@@ -1426,6 +1427,9 @@ public class ERXEOAccessUtilities {
             EOAttribute attrib = entity.attributeNamed(key);
             if (attrib != null) {
                 Object val = changedValues.objectForKey(key);
+                if(ERXValueUtilities.isNull(val)) {
+                	val = null;
+                }
                 if (entity.classProperties().containsObject(attrib)) {
                     eo.takeValueForKey(val, key);
                 }
