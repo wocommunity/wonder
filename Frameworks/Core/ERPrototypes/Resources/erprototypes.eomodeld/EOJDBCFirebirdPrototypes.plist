@@ -155,7 +155,7 @@
             adaptorValueConversionMethodName = jodaDateTime; 
             columnName = ""; 
             externalType = TIMESTAMP; 
-            factoryMethodArgumentType = EOFactoryMethodArgumentIsData; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsDate; 
             name = jodaDateTime; 
             valueClassName = "org.joda.time.DateTime"; 
             valueFactoryClassName = "er.prototypes.ValueFactory"; 
@@ -167,7 +167,7 @@
             adaptorValueConversionMethodName = jodaLocalDate; 
             columnName = ""; 
             externalType = DATE; 
-            factoryMethodArgumentType = EOFactoryMethodArgumentIsData; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsDate; 
             name = jodaLocalDate; 
             valueClassName = "org.joda.time.LocalDate"; 
             valueFactoryClassName = "er.prototypes.ValueFactory"; 
@@ -179,7 +179,7 @@
             adaptorValueConversionMethodName = jodaLocalDateTime; 
             columnName = ""; 
             externalType = TIMESTAMP; 
-            factoryMethodArgumentType = EOFactoryMethodArgumentIsData; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsDate; 
             name = jodaLocalDateTime; 
             valueClassName = "org.joda.time.LocalDateTime"; 
             valueFactoryClassName = "er.prototypes.ValueFactory"; 
@@ -191,7 +191,7 @@
             adaptorValueConversionMethodName = jodaLocalTime; 
             columnName = ""; 
             externalType = TIMESTAMP; 
-            factoryMethodArgumentType = EOFactoryMethodArgumentIsData; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsDate; 
             name = jodaLocalTime; 
             valueClassName = "org.joda.time.LocalTime"; 
             valueFactoryClassName = "er.prototypes.ValueFactory"; 
