@@ -91,15 +91,18 @@ import er.extensions.eof.ERXS;
 	}
 	</code>
  * 
+ * @param <S> Relationship source EO object
+ * @param <D> Relationship destination EO class.
+ *
  * @author kieran
  * 
  */
 public class ERXUnmodeledToManyRelationship<S extends ERXEnterpriseObject, D extends ERXEnterpriseObject> {
 
-	private final S sourceObject;
-	private final String destinationEntityName;
-	private final ERXKey<S> reverseRelationshipKey;
-	private final boolean isDeep;
+	private final S _sourceObject;
+	private final String _destinationEntityName;
+	private final ERXKey<S> _reverseRelationshipKey;
+	private final boolean _isDeep;
 
 	// Cache the entityHierarchies rather than fiddle with EOEntities for every instance of this class (once per EO)
 	private static ConcurrentHashMap<String, NSArray<String>> _entityHierarchies = new ConcurrentHashMap<String, NSArray<String>>();
@@ -126,10 +129,10 @@ public class ERXUnmodeledToManyRelationship<S extends ERXEnterpriseObject, D ext
 	 * @param isDeep
 	 */
 	public ERXUnmodeledToManyRelationship(S sourceObject, String destinationEntityName, ERXKey<S> reverseRelationshipKey, boolean isDeep) {
-		this.sourceObject = sourceObject;
-		this.destinationEntityName = destinationEntityName;
-		this.reverseRelationshipKey = reverseRelationshipKey;
-		this.isDeep = isDeep;
+		this._sourceObject = sourceObject;
+		this._destinationEntityName = destinationEntityName;
+		this._reverseRelationshipKey = reverseRelationshipKey;
+		this._isDeep = isDeep;
 	}
 
 	/**
@@ -139,9 +142,9 @@ public class ERXUnmodeledToManyRelationship<S extends ERXEnterpriseObject, D ext
 		int count = 0;
 
 		// Can only do SQL count if not a new unsaved object
-		if (!sourceObject.isNewObject()) {
-			count += ERXEOControlUtilities.objectCountWithQualifier(sourceObject.editingContext(),
-							destinationEntityName, qualifierForObjects()).intValue();
+		if (!_sourceObject.isNewObject()) {
+			count += ERXEOControlUtilities.objectCountWithQualifier(_sourceObject.editingContext(),
+							_destinationEntityName, qualifierForObjects()).intValue();
 		}
 
 		// Add count of unsaved related objects
@@ -155,7 +158,7 @@ public class ERXUnmodeledToManyRelationship<S extends ERXEnterpriseObject, D ext
 	 *         objects
 	 */
 	public EOQualifier qualifierForObjects() {
-		return reverseRelationshipKey.eq(sourceObject);
+		return _reverseRelationshipKey.eq(_sourceObject);
 	}
 
 	/**
@@ -175,7 +178,7 @@ public class ERXUnmodeledToManyRelationship<S extends ERXEnterpriseObject, D ext
 	 *         toMany objects that have been persisted to the database
 	 */
 	public ERXFetchSpecification<D> fetchSpecificationForObjects() {
-		return new ERXFetchSpecification<D>(destinationEntityName, qualifierForObjects(), null, false, isDeep, null);
+		return new ERXFetchSpecification<D>(_destinationEntityName, qualifierForObjects(), null, false, _isDeep, null);
 	}
 
 	public NSArray<D> objects(EOQualifier qualifier) {
@@ -204,7 +207,7 @@ public class ERXUnmodeledToManyRelationship<S extends ERXEnterpriseObject, D ext
 			fs.setSortOrderings(sortOrderings);
 			fs.setQualifier(fullQualifier);
 			fs.setRefreshesRefetchedObjects(fetch);
-			results = fs.fetchObjects(sourceObject.editingContext());
+			results = fs.fetchObjects(_sourceObject.editingContext());
 		} else {
 			results = objects();
 			if (qualifier != null) {
@@ -222,7 +225,7 @@ public class ERXUnmodeledToManyRelationship<S extends ERXEnterpriseObject, D ext
 	 */
 	private NSArray<D> persistedObjects() {
 		ERXFetchSpecification<D> fs = fetchSpecificationForObjects();
-		return fs.fetchObjects(sourceObject.editingContext());
+		return fs.fetchObjects(_sourceObject.editingContext());
 	}
 
 	/**
@@ -230,33 +233,33 @@ public class ERXUnmodeledToManyRelationship<S extends ERXEnterpriseObject, D ext
 	 *         are inserted into this editing context, but not yet saved.
 	 */
 	private NSMutableArray<D> insertedObjects() {
-		return ERXEOControlUtilities.insertedObjects(sourceObject.editingContext(), destinationEntityNames(),
+		return ERXEOControlUtilities.insertedObjects(_sourceObject.editingContext(), destinationEntityNames(),
 						qualifierForObjects());
 	}
 
 	public void addToObjectsRelationship(D object) {
-		object.addObjectToBothSidesOfRelationshipWithKey(sourceObject, reverseRelationshipKey.toString());
+		object.addObjectToBothSidesOfRelationshipWithKey(_sourceObject, _reverseRelationshipKey.toString());
 	}
 
 	public void addToObjectsRelationship(NSArray<D> objects) {
 		for (D object : objects) {
-			object.addObjectToBothSidesOfRelationshipWithKey(sourceObject, reverseRelationshipKey.toString());
+			object.addObjectToBothSidesOfRelationshipWithKey(_sourceObject, _reverseRelationshipKey.toString());
 		}
 	}
 
 	public void removeFromObjectsRelationship(D object) {
-		object.removeObjectFromBothSidesOfRelationshipWithKey(sourceObject, reverseRelationshipKey.toString());
+		object.removeObjectFromBothSidesOfRelationshipWithKey(_sourceObject, _reverseRelationshipKey.toString());
 	}
 
 	public void removeFromObjectsRelationship(NSArray<D> objects) {
 		for (D object : objects) {
-			object.removeObjectFromBothSidesOfRelationshipWithKey(sourceObject, reverseRelationshipKey.toString());
+			object.removeObjectFromBothSidesOfRelationshipWithKey(_sourceObject, _reverseRelationshipKey.toString());
 		}
 	}
 
 	public void deleteObjectRelationship(D object) {
 		removeFromObjectsRelationship(object);
-		sourceObject.editingContext().deleteObject(object);
+		_sourceObject.editingContext().deleteObject(object);
 	}
 
 	public void deleteAllObjectsRelationships() {
@@ -271,11 +274,11 @@ public class ERXUnmodeledToManyRelationship<S extends ERXEnterpriseObject, D ext
 	/** @return the destination entity names. If this is an inheritance hierarchy, the subclass entities of the specified entity are included */
 	private NSArray<String> destinationEntityNames() {
 		if ( _destinationEntityNames == null ) {
-			if (isDeep) {
-				_destinationEntityNames = entityHierarchyNamesForEntityNamed(sourceObject.editingContext(), destinationEntityName);
+			if (_isDeep) {
+				_destinationEntityNames = entityHierarchyNamesForEntityNamed(_sourceObject.editingContext(), _destinationEntityName);
 				
 			} else {
-				_destinationEntityNames = new NSArray<String>(destinationEntityName);
+				_destinationEntityNames = new NSArray<String>(_destinationEntityName);
 			}
 		}
 		return _destinationEntityNames;
