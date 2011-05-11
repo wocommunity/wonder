@@ -319,19 +319,21 @@ public class ERXDictionaryUtilities {
 			separator = "&";
 		}
 		StringBuffer sb = new StringBuffer(100);
-		for (Enumeration<?> e = dict.allKeys().objectEnumerator(); e.hasMoreElements();) {
-			Object key = e.nextElement();
-			try {
-				sb.append(URLEncoder.encode(key.toString(), encoding));
-				sb.append("=");
-				sb.append(URLEncoder.encode(dict.objectForKey(key).toString(), encoding));
-				if (e.hasMoreElements()) {
-					sb.append(separator);
+		if (dict != null) {
+			for (Enumeration<?> e = dict.allKeys().objectEnumerator(); e.hasMoreElements();) {
+				Object key = e.nextElement();
+				try {
+					sb.append(URLEncoder.encode(key.toString(), encoding));
+					sb.append("=");
+					sb.append(URLEncoder.encode(dict.objectForKey(key).toString(), encoding));
+					if (e.hasMoreElements()) {
+						sb.append(separator);
+					}
 				}
-			}
-			catch (UnsupportedEncodingException ex) {
-				// yeah right...like this will ever happen
-				throw NSForwardException._runtimeExceptionForThrowable(ex);
+				catch (UnsupportedEncodingException ex) {
+					// yeah right...like this will ever happen
+					throw NSForwardException._runtimeExceptionForThrowable(ex);
+				}
 			}
 		}
 		return sb.toString();
