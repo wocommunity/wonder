@@ -102,6 +102,11 @@ import er.extensions.foundation.ERXStringUtilities;
  * @binding embedded when true, a form inside of a form will still render. this is
  * to support forms inside of ajax modal containers that are structually nested
  * forms, but appears as independent to the end-user
+ * @binding preventIncompleteSubmit If preventIncompleteSubmit evaluates to true, 
+ * the form will append a hidden field to the end of itself, which if not present 
+ * in the request will prevent takeValuesFromRequest from executing. By default, 
+ * the value is false unless the property 
+ * er.extensions.ERXWOForm.preventIncompleteSubmitDefault evaluates to true
  * 
  * @author ak
  * @author Mike Schrag (idea to secure binding)
@@ -124,10 +129,12 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 	protected WOAssociation _directActionName;
 	protected WOAssociation _addDefaultSubmitButton;
 	protected WOAssociation _embedded;
+	protected WOAssociation _preventIncompleteSubmit;
 
 	public static boolean multipleSubmitDefault = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXWOForm.multipleSubmitDefault", false);
 	public static boolean addDefaultSubmitButtonDefault = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXWOForm.addDefaultSubmitButtonDefault", false);
 	public static boolean useIdInsteadOfNameTag = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXWOForm.useIdInsteadOfNameTag", false);
+	public static boolean preventIncompleteSubmitDefault = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXWOForm.preventIncompleteSubmitDefault", false);
 
 	@SuppressWarnings("unchecked")
 	public ERXWOForm(String name, NSDictionary associations, WOElement element) {
@@ -154,6 +161,10 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		_fragmentIdentifier = (WOAssociation) _associations.removeObjectForKey("fragmentIdentifier");
 		_secure = (WOAssociation) _associations.removeObjectForKey("secure");
 		_disabled = (WOAssociation) _associations.removeObjectForKey("disabled");
+		_preventIncompleteSubmit = (WOAssociation) _associations.removeObjectForKey("preventIncompleteSubmit");
+		if (_preventIncompleteSubmit == null && ERXWOForm.preventIncompleteSubmitDefault) {
+			_preventIncompleteSubmit = new WOConstantValueAssociation(Boolean.valueOf(preventIncompleteSubmitDefault));
+		}
 		_addDefaultSubmitButton = (WOAssociation) _associations.removeObjectForKey("addDefaultSubmitButton");
 		_embedded = (WOAssociation) _associations.removeObjectForKey("embedded");
 		if (_associations.objectForKey("method") == null && _associations.objectForKey("Method") == null && _associations.objectForKey("METHOD") == null) {
@@ -308,7 +319,13 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 			// this.toString().replaceAll(".*(keyPath=\\w+).*", "$1"));
 			String previousFormName = _setFormName(context, wasInForm);
 			try {
-				super.takeValuesFromRequest(request, context);
+				if(ERXAjaxApplication.partialFormSenderID(request) == null && _preventIncompleteSubmit != null && _preventIncompleteSubmit.booleanValueInComponent(context.component())) 
+				{
+					if(request.formValueForKey("noIncomplete") != null)
+						super.takeValuesFromRequest(request, context);
+				}
+				else
+					super.takeValuesFromRequest(request, context);
 			}
 			finally {
 				// log.info(context.elementID() + "->" + context.senderID() + "->" +
@@ -459,6 +476,12 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 					}
 				}
 				appendChildrenToResponse(response, context);
+				if(_preventIncompleteSubmit != null && _preventIncompleteSubmit.booleanValueInComponent(context.component()))
+                {
+                    response._appendContentAsciiString("<input type=\"hidden\"");
+                    response._appendTagAttributeAndValue("name", "noIncomplete", false);
+                    response._appendContentAsciiString(" />\n");
+                }
 				_appendCloseTagToResponse(response, context);
 			}
 			finally {

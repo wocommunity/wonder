@@ -15,6 +15,7 @@
         <binding name="method"/>
         <binding name="disabled"/>
         <binding name="fragmentIdentifier"/>
+        <binding name="preventIncompleteSubmit"/>
 	<validation message="Either one of 'action' or 'href' may be bound, or either or both of 'actionClass' and 'directActionName' may be bound">
 		<count test=">1">
 			<bound name="action"/>
