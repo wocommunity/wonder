@@ -3,7 +3,7 @@ AppLink: WOHyperlink {
 }
 
 AppleImage: WOImage {
-	filename = appleImageName;
+	filename = "AppleLogo.gif";
 	height = 36;
 	width = 30;
 	align = "right";
