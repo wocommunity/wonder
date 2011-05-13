@@ -62,7 +62,6 @@ public class NavigationPage extends MonitorComponent {
 
 	private static final String _migrationInActiveImageName = "migration_tab_inactive.gif";
 
-	public String appleImageName = "AppleLogo.gif";
 
 	public String backgroundImageName = "background.gif";
 
