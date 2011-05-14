@@ -1932,7 +1932,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 		 * helps <code>FrontbaseExpression</code> to assemble
 		 * the correct join clause.
 		 */
-		public class JoinClause {
+		public static class JoinClause {
 			String table1;
 			String op;
 			String table2;
