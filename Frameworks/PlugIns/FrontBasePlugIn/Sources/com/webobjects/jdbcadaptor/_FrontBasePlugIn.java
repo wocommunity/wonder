@@ -649,7 +649,6 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 				result.addObjectsFromArray(primaryKeyConstraintStatementsForEntityGroups(nsarray5));
 			}
 			if (boolValueForKeyDefault(options, "foreignKeyConstraints", false)) {
-				NSMutableSet nsmutableset = new NSMutableSet();
 				NSArray nsarray6 = tableEntityGroupsForEntities(entities);
 				for (int i = 0; i < nsarray6.count(); i++)
 					result.addObjectsFromArray(_foreignKeyConstraintStatementsForEntityGroup((NSArray) nsarray6.objectAtIndex(i)));
@@ -873,7 +872,6 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			NSMutableArray result = new NSMutableArray();
 			EOSQLExpression eosqlexpression = null;
 			EOEntity eoentity = null;
-			NSMutableArray nsmutablearray = new NSMutableArray();
 			int j = nsarray != null ? nsarray.count() : 0;
 
 			if (j == 0)
