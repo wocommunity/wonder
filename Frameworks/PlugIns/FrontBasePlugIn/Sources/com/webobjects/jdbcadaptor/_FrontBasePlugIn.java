@@ -697,16 +697,17 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 		}
 
 		@Override
-		public NSArray primaryKeySupportStatementsForEntityGroup(NSArray entityGroup) {
+		public NSArray primaryKeySupportStatementsForEntityGroup(NSArray<EOEntity> entityGroup) {
 			if (entityGroup == null)
 				return NSArray.EmptyArray;
 
-			NSMutableArray result = new NSMutableArray();
+			NSMutableArray<EOSQLExpression> result = new NSMutableArray<EOSQLExpression>();
 			EOEntity eoentity = null;
 
 			for (int i = entityGroup.count() - 1; i >= 0; i--) {
-				eoentity = (EOEntity) entityGroup.objectAtIndex(i);
+				eoentity = entityGroup.objectAtIndex(i);
 				String externalName = eoentity.externalName();
+				NSArray<String> keys = eoentity.primaryKeyAttributeNames();
 
 				if (externalName != null && externalName.length() > 0) {
 					String unique = null;
@@ -723,6 +724,10 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 						unique = "1000000";
 					}
 					result.addObject(_expressionForString("SET UNIQUE = " + unique + " FOR " + quoteTableName(externalName)));
+					if (keys.count() == 1) {
+						result.addObject(_expressionForString("ALTER TABLE " + quoteTableName(externalName) + " ALTER "
+								+ quoteTableName(keys.objectAtIndex(0)) + " SET DEFAULT UNIQUE"));
+					}
 				}
 			}
 			return result;
