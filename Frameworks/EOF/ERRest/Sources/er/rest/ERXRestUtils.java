@@ -146,7 +146,32 @@ public class ERXRestUtils {
 	public static Object coerceValueToTypeNamed(Object value, String valueTypeName, IERXRestDelegate delegate) {
 		Object parsedValue;
 		Class<?> valueType = _NSUtilities.classWithName(valueTypeName);
-		if (ERXValueUtilities.isNull(value)) {
+		// test primitives first, since we can't return a null for them
+		if (valueType != null && int.class.isAssignableFrom(valueType)) {
+			parsedValue = ERXValueUtilities.intValueWithDefault(value, 0);
+		}
+		else if (valueType != null && boolean.class.isAssignableFrom(valueType)) {
+			parsedValue = ERXValueUtilities.booleanValueWithDefault(value, false);
+		}
+		else if (valueType != null && char.class.isAssignableFrom(valueType)) {
+			parsedValue = (char)ERXValueUtilities.intValueWithDefault(value, 0);
+		}
+		else if (valueType != null && byte.class.isAssignableFrom(valueType)) {
+			parsedValue = (byte)ERXValueUtilities.intValueWithDefault(value, 0);
+		}
+		else if (valueType != null && long.class.isAssignableFrom(valueType)) {
+			parsedValue = ERXValueUtilities.longValueWithDefault(value, 0);
+		}
+		else if (valueType != null && float.class.isAssignableFrom(valueType)) {
+			parsedValue = ERXValueUtilities.floatValueWithDefault(value, 0);
+		}
+		else if (valueType != null && double.class.isAssignableFrom(valueType)) {
+			parsedValue = ERXValueUtilities.doubleValueWithDefault(value, 0);
+		}
+		else if (valueType != null && short.class.isAssignableFrom(valueType)) {
+			parsedValue = (short)ERXValueUtilities.intValueWithDefault(value, 0);
+		}
+		else if (ERXValueUtilities.isNull(value)) {
 			parsedValue = null;
 		}
 		else if (valueType != null && String.class.isAssignableFrom(valueType)) {

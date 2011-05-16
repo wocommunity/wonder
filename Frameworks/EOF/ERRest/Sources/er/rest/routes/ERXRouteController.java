@@ -47,14 +47,18 @@ import er.rest.ERXRequestFormValues;
 import er.rest.ERXRestClassDescriptionFactory;
 import er.rest.ERXRestFetchSpecification;
 import er.rest.ERXRestRequestNode;
+import er.rest.ERXRestUtils;
 import er.rest.IERXRestDelegate;
 import er.rest.format.ERXRestFormat;
 import er.rest.format.ERXWORestRequest;
 import er.rest.format.ERXWORestResponse;
 import er.rest.format.IERXRestParser;
+import er.rest.routes.jsr311.CookieParam;
+import er.rest.routes.jsr311.HeaderParam;
 import er.rest.routes.jsr311.Path;
 import er.rest.routes.jsr311.PathParam;
 import er.rest.routes.jsr311.Paths;
+import er.rest.routes.jsr311.QueryParam;
 import er.rest.util.ERXRestSchema;
 import er.rest.util.ERXRestTransactionRequestAdaptor;
 
@@ -1323,7 +1327,7 @@ public class ERXRouteController extends WODirectAction {
 		        if (actionMethod == null || actionMethod.getParameterTypes().length > 0) {
 		        	int bestParameterCount = 0;
 		        	Method bestMethod = null;
-        			List<PathParam> bestParams = null;
+        			List<Annotation> bestParams = null;
 		        	for (Method method : getClass().getDeclaredMethods()) {
 		        		String methodName = method.getName();
 		        		boolean nameMatches = methodName.equals(actionMethodName);
@@ -1332,12 +1336,11 @@ public class ERXRouteController extends WODirectAction {
 		        		}
 		        		if (nameMatches) {
 		        			int parameterCount = 0;
-				        	List<PathParam> params = new LinkedList<PathParam>();
+				        	List<Annotation> params = new LinkedList<Annotation>();
 		        			for (Annotation[] parameterAnnotations : method.getParameterAnnotations()) {
 		        				for (Annotation parameterAnnotation : parameterAnnotations) {
-		        					if (parameterAnnotation instanceof PathParam) {
-		        						PathParam pathParam = (PathParam)parameterAnnotation;
-		        						params.add(pathParam);
+		        					if (parameterAnnotation instanceof PathParam || parameterAnnotation instanceof QueryParam || parameterAnnotation instanceof CookieParam || parameterAnnotation instanceof HeaderParam) {
+		        						params.add(parameterAnnotation);
 		        						parameterCount ++;
 		        					}
 		        					else {
@@ -1360,10 +1363,28 @@ public class ERXRouteController extends WODirectAction {
 		        		performUnknownAction(actionName);
 		        	}
 		        	else {
+						Class<?>[] parameterTypes = bestMethod.getParameterTypes();
 		        		Object[] params = new Object[bestParameterCount];
 		        		for (int paramNum = 0; paramNum < params.length; paramNum ++) {
-		        			PathParam param = bestParams.get(paramNum);
-		        			params[paramNum] = routeObjectForKey(param.value());
+		        			Annotation param = bestParams.get(paramNum);
+		        			if (param instanceof PathParam) {
+		        				params[paramNum] = routeObjectForKey(((PathParam)param).value());
+		        			}
+		        			else if (param instanceof QueryParam) {
+		        				String value = request().stringFormValueForKey(((QueryParam)param).value());
+		        				params[paramNum] = ERXRestUtils.coerceValueToTypeNamed(value, parameterTypes[paramNum].getName(), delegate());
+		        			}
+		        			else if (param instanceof CookieParam) {
+		        				String value = request().cookieValueForKey(((CookieParam)param).value());
+		        				params[paramNum] = ERXRestUtils.coerceValueToTypeNamed(value, parameterTypes[paramNum].getName(), delegate());
+		        			}
+		        			else if (param instanceof HeaderParam) {
+		        				String value = request().headerForKey(((HeaderParam)param).value());
+		        				params[paramNum] = ERXRestUtils.coerceValueToTypeNamed(value, parameterTypes[paramNum].getName(), delegate());
+		        			}
+		        			else {
+		        				throw new IllegalArgumentException("Unknown parameter #" + paramNum + " of " + bestMethod.getName() + ".");
+		        			}
 		        		}
 		        		results = (WOActionResults)bestMethod.invoke(this, params);
 		        	}
