@@ -1,5 +1,6 @@
 package er.rest.format;
 
+import java.util.Date;
 import java.util.Set;
 
 import net.sf.json.JSONSerializer;
@@ -18,6 +19,7 @@ public class ERXJSONRestWriter implements IERXRestWriter {
 
 	static {
 		_config.registerJsonValueProcessor(NSTimestamp.class, new NSTimestampProcessor());
+		_config.registerJsonValueProcessor(Date.class, new NSTimestampProcessor());
 		_config.setJsonValueProcessorMatcher(new ERXRestValueProcessorMatcher());
 	}
 

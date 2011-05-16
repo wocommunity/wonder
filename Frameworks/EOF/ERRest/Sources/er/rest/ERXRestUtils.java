@@ -133,10 +133,10 @@ public class ERXRestUtils {
 		String timestampFormat = ERXProperties.stringForKey("er.rest.dateFormat");
 		if (timestampFormat == null) {
 			if (spaces) {
-				timestampFormat = ERXProperties.stringForKeyWithDefault("er.rest.dateFormat.secondary", "YYYY-MM-dd HH:mm:ss z");
+				timestampFormat = ERXProperties.stringForKeyWithDefault("er.rest.dateFormat.secondary", "yyyy-MM-dd HH:mm:ss z");
 			}
 			else {
-				timestampFormat = ERXProperties.stringForKeyWithDefault("er.rest.dateFormat.primary", "YYYY-MM-dd\\THH:mm:ss\\Z");
+				timestampFormat = ERXProperties.stringForKeyWithDefault("er.rest.dateFormat.primary", "yyyy-MM-dd'T'HH:mm:ss'Z'");
 			}
 		}
 		return timestampFormat;
