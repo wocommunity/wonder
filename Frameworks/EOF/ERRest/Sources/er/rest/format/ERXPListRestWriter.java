@@ -10,6 +10,9 @@ public class ERXPListRestWriter implements IERXRestWriter {
 	}
 
 	public void appendToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestFormat.Delegate delegate) {
+		if (node != null) {
+			node._removeRedundantTypes();
+		}
 		appendHeadersToResponse(node, response);
 		Object object = node.toNSCollection(delegate);
 		response.appendContentString(NSPropertyListSerialization.stringFromPropertyList(object));

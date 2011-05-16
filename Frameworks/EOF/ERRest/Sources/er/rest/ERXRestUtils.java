@@ -80,6 +80,9 @@ public class ERXRestUtils {
 		else if (Enum.class.isAssignableFrom(valueType)) {
 			primitive = true;
 		}
+		else if (NSKeyValueCoding.Null.class.isAssignableFrom(valueType)) {
+			primitive = true;
+		}
 		return primitive;
 	}
 

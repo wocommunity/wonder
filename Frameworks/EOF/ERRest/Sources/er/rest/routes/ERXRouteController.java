@@ -468,6 +468,16 @@ public class ERXRouteController extends WODirectAction {
 	}
 	
 	/**
+	 * Returns the default format delegate to use for the given format (defaults to format.delegate()).
+	 * 
+	 * @param format the format to lookup
+	 * @return the delegate to use for this format
+	 */
+	protected ERXRestFormat.Delegate formatDelegateForFormat(ERXRestFormat format) {
+		return format.delegate();
+	}
+	
+	/**
 	 * Returns the request data in the form of an ERXRestRequestNode (which is a format-independent wrapper around
 	 * hierarchical data).
 	 * 
@@ -481,7 +491,7 @@ public class ERXRouteController extends WODirectAction {
 				if (parser == null) {
 					throw new IllegalStateException("There is no parser for the format '" + format.name() + "'.");
 				}
-				_requestNode = parser.parseRestRequest(new ERXWORestRequest(request()), format().delegate());
+				_requestNode = parser.parseRestRequest(new ERXWORestRequest(request()), formatDelegateForFormat(format));
 			}
 			catch (Throwable t) {
 				throw new RuntimeException("Failed to parse a " + format() + " request.", t);

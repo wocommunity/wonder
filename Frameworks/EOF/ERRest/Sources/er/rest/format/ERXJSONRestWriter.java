@@ -44,20 +44,6 @@ public class ERXJSONRestWriter implements IERXRestWriter {
 			return ERXRestUtils.coerceValueToString(obj);
 		}
 	}
-
-	// MS: Totally debatable .... I may take this back out, but it makes things look prettier.
-	protected void removeDictionaryTypes(ERXRestRequestNode node) {
-		String type = node.type();
-		if ("NSDictionary".equals(type) || "NSMutableDictionary".equals(type)) {
-			node.setType(null);
-		}
-		NSArray<ERXRestRequestNode> children = node.children();
-		if (children != null) {
-			for (ERXRestRequestNode child : children) {
-				removeDictionaryTypes(child);
-			}
-		}
-	}
 	
 	protected ERXRestRequestNode processNode(ERXRestRequestNode node) {
 		return node;
@@ -69,7 +55,9 @@ public class ERXJSONRestWriter implements IERXRestWriter {
 
 	public void appendToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestFormat.Delegate delegate) {
 		node = processNode(node);
-		removeDictionaryTypes(node);
+		if (node != null) {
+			node._removeRedundantTypes();
+		}
 		
 		appendHeadersToResponse(node, response);
 		Object object = node.toJavaCollection(delegate);
