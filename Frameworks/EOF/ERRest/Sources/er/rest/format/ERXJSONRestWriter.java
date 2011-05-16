@@ -1,5 +1,11 @@
 package er.rest.format;
 
+<<<<<<< HEAD
+=======
+import java.util.Date;
+import java.util.Set;
+
+>>>>>>> * new constructor for rest delegate that takes an EC
 import net.sf.json.JSONSerializer;
 import net.sf.json.JsonConfig;
 
@@ -11,7 +17,6 @@ import er.rest.ERXRestUtils;
 
 public class ERXJSONRestWriter implements IERXRestWriter {
 	public ERXJSONRestWriter() {
-		
 	}
 	
 	protected JsonConfig configWithContext(ERXRestContext context) {
