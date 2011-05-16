@@ -10,6 +10,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation._NSUtilities;
 
+import er.rest.ERXRestContext;
 import er.rest.ERXRestUtils;
 import er.rest.IERXRestDelegate;
 
@@ -334,8 +335,8 @@ public class ERXRoute {
 	 *            the delegate to use to, for instance, fault EO's with (or null to not fault EO's)
 	 * @return a dictionary mapping the route's keys to their resolved objects
 	 */
-	public NSDictionary<ERXRoute.Key, Object> keysWithObjects(String url, ERXRoute.Method method, IERXRestDelegate delegate) {
-		return keysWithObjects(keys(url, method), delegate);
+	public NSDictionary<ERXRoute.Key, Object> keysWithObjects(String url, ERXRoute.Method method, ERXRestContext context) {
+		return keysWithObjects(keys(url, method), context);
 	}
 
 	/**
@@ -347,8 +348,8 @@ public class ERXRoute {
 	 *            the delegate to use to, for instance, fault EO's with (or null to not fault EO's)
 	 * @return a dictionary mapping the route's key names to their resolved objects
 	 */
-	public NSDictionary<String, Object> objects(String url, ERXRoute.Method method, IERXRestDelegate delegate) {
-		return objects(keys(url, method), delegate);
+	public NSDictionary<String, Object> objects(String url, ERXRoute.Method method, ERXRestContext context) {
+		return objects(keys(url, method), context);
 	}
 
 	/**
@@ -360,14 +361,14 @@ public class ERXRoute {
 	 *            the delegate to use to, for instance, fault EO's with (or null to not fault EO's)
 	 * @return a dictionary mapping the route's keys to their resolved objects
 	 */
-	public static NSDictionary<ERXRoute.Key, Object> keysWithObjects(NSDictionary<ERXRoute.Key, String> keys, IERXRestDelegate delegate) {
+	public static NSDictionary<ERXRoute.Key, Object> keysWithObjects(NSDictionary<ERXRoute.Key, String> keys, ERXRestContext context) {
 		NSMutableDictionary<ERXRoute.Key, Object> objects = null;
 		if (keys != null) {
 			objects = new NSMutableDictionary<ERXRoute.Key, Object>();
 			for (Map.Entry<ERXRoute.Key, String> entry : keys.entrySet()) {
 				ERXRoute.Key key = entry.getKey();
 				String valueStr = entry.getValue();
-				Object value = ERXRestUtils.coerceValueToTypeNamed(valueStr, key.valueType(), delegate);
+				Object value = ERXRestUtils.coerceValueToTypeNamed(valueStr, key.valueType(), context, true);
 				objects.setObjectForKey(value, key);
 			}
 		}
@@ -386,14 +387,14 @@ public class ERXRoute {
 	 *            the delegate to use to, for instance, fault EO's with (or null to not fault EO's)
 	 * @return a dictionary mapping the route's key names to their resolved objects
 	 */
-	public NSDictionary<String, Object> objects(NSDictionary<ERXRoute.Key, String> keys, IERXRestDelegate delegate) {
+	public NSDictionary<String, Object> objects(NSDictionary<ERXRoute.Key, String> keys, ERXRestContext context) {
 		NSMutableDictionary<String, Object> objects = null;
 		if (keys != null) {
 			objects = new NSMutableDictionary<String, Object>();
 			for (Map.Entry<ERXRoute.Key, String> entry : keys.entrySet()) {
 				ERXRoute.Key key = entry.getKey();
 				String valueStr = entry.getValue();
-				Object value = ERXRestUtils.coerceValueToTypeNamed(valueStr, key.valueType(), delegate);
+				Object value = ERXRestUtils.coerceValueToTypeNamed(valueStr, key.valueType(), context, true);
 				objects.setObjectForKey(value, key._key);
 			}
 		}

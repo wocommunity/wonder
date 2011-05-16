@@ -13,7 +13,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 
-public class BeanInfoClassDescription extends EOClassDescription {
+public class BeanInfoClassDescription extends EOClassDescription implements IERXNonEOClassDescription {
 	private BeanInfo _beanInfo;
 
 	public BeanInfoClassDescription(Class clazz) {

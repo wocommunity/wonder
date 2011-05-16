@@ -362,7 +362,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 	}
 
 	public Object parseAttributeValue(EOEntity entity, Object object, String attributeName, String attributeValue) throws ParseException, ERXRestException {
-		return ERXRestUtils.coerceValueToAttributeType(attributeValue, entity.classDescriptionForInstances(), object, attributeName);
+		return ERXRestUtils.coerceValueToAttributeType(attributeValue, entity.classDescriptionForInstances(), object, attributeName, new er.rest.ERXRestContext());
 	}
 
 	public EOEnterpriseObject insertObjectFromDocument(EOEntity entity, ERXRestRequestNode insertNode, EOEntity parentEntity, EOEnterpriseObject parentObject, String parentKey, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {

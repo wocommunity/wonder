@@ -6,6 +6,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.rest.ERXRestContext;
 import er.rest.ERXRestRequestNode;
 import er.rest.format.ERXRestFormat;
 import er.rest.format.ERXWORestResponse;
@@ -19,6 +20,7 @@ import er.rest.format.IERXRestWriter;
  */
 public class ERXRouteResults implements WOActionResults {
 	private WOContext _context;
+	private ERXRestContext _restContext;
 	private ERXRestFormat _format;
 	private ERXRestRequestNode _responseNode;
 	private NSMutableDictionary<String, String> _headers;
@@ -33,8 +35,9 @@ public class ERXRouteResults implements WOActionResults {
 	 * @param responseNode
 	 *            the ERXRestRequestNode to render
 	 */
-	public ERXRouteResults(WOContext context, ERXRestFormat format, ERXRestRequestNode responseNode) {
+	public ERXRouteResults(WOContext context, ERXRestContext restContext, ERXRestFormat format, ERXRestRequestNode responseNode) {
 		_context = context;
+		_restContext = restContext;
 		_format = format;
 		_responseNode = responseNode;
 		_headers = new NSMutableDictionary<String, String>();
@@ -79,7 +82,7 @@ public class ERXRouteResults implements WOActionResults {
 		if (writer == null) {
 			throw new IllegalStateException("There is no writer for the format '" + _format.name() + "'.");
 		}
-		writer.appendToResponse(_responseNode, new ERXWORestResponse(response), _format.delegate());
+		writer.appendToResponse(_responseNode, new ERXWORestResponse(response), _format.delegate(), _restContext);
 		if (_headers.count() > 0) {
 			for (String key : _headers.keySet()) {
 				response.setHeader(_headers.objectForKey(key), key);

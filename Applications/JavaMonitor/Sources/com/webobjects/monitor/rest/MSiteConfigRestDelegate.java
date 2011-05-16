@@ -3,26 +3,18 @@ package com.webobjects.monitor.rest;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.monitor._private.MSiteConfig;
 
-
+import er.rest.ERXRestContext;
 
 public class MSiteConfigRestDelegate extends JavaMonitorRestDelegate {
-
-	protected Object _createObjectOfEntityWithID(EOClassDescription arg0,
-			Object arg1) {
+    public Object createObjectOfEntityWithID(EOClassDescription entity, Object id, ERXRestContext context) {
 		return new MSiteConfig(null);
 	}
-
-	protected Object _fetchObjectOfEntityWithID(EOClassDescription arg0,
-			Object arg1) {
+    
+    public Object objectOfEntityWithID(EOClassDescription entity, Object id, ERXRestContext context) {
 		return siteConfig();
 	}
-
-	protected boolean _isDelegateForEntity(EOClassDescription arg0) {
-		return "MSiteConfig".equals(arg0.entityName());
-	}
-
-	protected Object _primaryKeyForObject(EOClassDescription arg0, Object arg1) {
+    
+    public Object primaryKeyForObject(Object obj, ERXRestContext context) {
 		return siteConfig();
 	}
-
 }

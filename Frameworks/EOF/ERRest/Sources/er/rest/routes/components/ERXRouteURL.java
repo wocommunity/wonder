@@ -1,6 +1,7 @@
 package er.rest.routes.components;
 
 import com.webobjects.appserver.WOContext;
+import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
@@ -10,6 +11,8 @@ import er.extensions.components.ERXComponent;
 import er.extensions.components.ERXComponentUtilities;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEnterpriseObject;
+import er.rest.ERXRestClassDescriptionFactory;
+import er.rest.ERXRestContext;
 import er.rest.IERXRestDelegate;
 import er.rest.routes.ERXRouteUrlUtils;
 
@@ -94,9 +97,11 @@ public class ERXRouteURL extends ERXComponent {
 		if (record != null) {
 			String entityName = (String) valueForBinding("entityName");
 			if (entityName == null) {
-				entityName = IERXRestDelegate.Factory.entityNameForObject(record);
+				entityName = ERXRestClassDescriptionFactory.entityNameForObject(record);
 			}
-			Object entityID = IERXRestDelegate.Factory.delegateForEntityNamed(entityName, ERXEC.newEditingContext()).primaryKeyForObject(record);
+			EOEditingContext editingContext = ERXEC.newEditingContext();
+			Object entityID = IERXRestDelegate.Factory.delegateForEntityNamed(entityName).primaryKeyForObject(record, new ERXRestContext(editingContext));
+			editingContext.dispose();
 			linkUrl = ERXRouteUrlUtils.actionUrlForEntity(context(), entityName, entityID, action, format, queryParameters, secure, includeSessionID);
 		}
 		else {
