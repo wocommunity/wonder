@@ -1201,7 +1201,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 						else if ("_".equals(id)) {
 							childObj = NSKeyValueCoding.DefaultImplementation.valueForKey(obj, keyName);
 							if (!lockedRelationship && childObj == null) {
-								childObj = delegate.createObjectOfEntityWithID(destinationClassDescription, null);
+								childObj = IERXRestDelegate.Factory.delegateForClassDescription(destinationClassDescription).createObjectOfEntityWithID(destinationClassDescription, null, context);
 							}
 						}
 						else {

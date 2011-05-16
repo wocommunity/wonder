@@ -25,10 +25,6 @@ public class ERXEORestDelegate extends ERXAbstractRestDelegate {
 	public ERXEORestDelegate() {
 	}
 	
-	public ERXEORestDelegate(EOEditingContext editingContext) {
-		setEditingContext(editingContext);
-	}
-	
 	@Override
 	public boolean __hasNumericPrimaryKeys(EOClassDescription classDescription) {
 		boolean numericPKs = false;
