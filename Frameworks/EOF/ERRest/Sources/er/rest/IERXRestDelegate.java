@@ -1,7 +1,7 @@
 package er.rest;
 
+import com.webobjects.eoaccess.EOEntityClassDescription;
 import com.webobjects.eocontrol.EOClassDescription;
-import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation._NSUtilities;
@@ -13,21 +13,13 @@ import com.webobjects.foundation._NSUtilities;
  */
 public interface IERXRestDelegate {
 	/**
-	 * Sets the editing context fort his rest delegate (which might not be necessary, but EO delegates require it).
-	 * 
-	 * @param editingContext
-	 *            the editing context for this delegate
-	 */
-	public void setEditingContext(EOEditingContext editingContext);
-
-	/**
 	 * Returns the primary key for the specified object.
 	 * 
 	 * @param obj
 	 *            the object to return a pk for
 	 * @return the primary key of the object
 	 */
-	public Object primaryKeyForObject(Object obj);
+	public Object primaryKeyForObject(Object obj, ERXRestContext context);
 
 	/**
 	 * Creates a new instance of the entity.
@@ -36,7 +28,7 @@ public interface IERXRestDelegate {
 	 *            the entity
 	 * @return a new instance of the entity
 	 */
-	public Object createObjectOfEntityWithID(EOClassDescription entity, Object id);
+	public Object createObjectOfEntityWithID(EOClassDescription entity, Object id, ERXRestContext context);
 
 	/**
 	 * Returns the object with the given entity and ID.
@@ -47,7 +39,7 @@ public interface IERXRestDelegate {
 	 *            the ID of the object
 	 * @return the object with the given entity and ID
 	 */
-	public Object objectOfEntityWithID(EOClassDescription entity, Object id);
+	public Object objectOfEntityWithID(EOClassDescription entity, Object id, ERXRestContext context);
 
 	/**
 	 * This API will likely change. Override if you have to for now, but I'm not
@@ -56,9 +48,10 @@ public interface IERXRestDelegate {
 	 * return pk names, we could probably get rid of primaryKeyForObject, or
 	 * at least fully implement it in ERXAbstractRestDelegate, but I don't
 	 * want to fully commit to this API yet. In the meantime, this at least
-	 * provides a stapgap for automatic registration. 
-	 *  
-	 * @param classDescription the class description in question
+	 * provides a stapgap for automatic registration.
+	 * 
+	 * @param classDescription
+	 *            the class description in question
 	 * @return whether or not the given class description has numeric pks
 	 */
 	public boolean __hasNumericPrimaryKeys(EOClassDescription classDescription);
@@ -70,30 +63,43 @@ public interface IERXRestDelegate {
 	 * @author mschrag
 	 */
 	public static class Factory {
-		private static NSMutableDictionary<String, Class<? extends IERXRestDelegate>> _delegates = new NSMutableDictionary<String, Class<? extends IERXRestDelegate>>();
-		private static Class<? extends IERXRestDelegate> _defaultDelegate = ERXEORestDelegate.class;
-		
+		private static NSMutableDictionary<String, IERXRestDelegate> _delegates = new NSMutableDictionary<String, IERXRestDelegate>();
+		private static IERXRestDelegate _defaultDelegate = new ERXEORestDelegate();
+		private static IERXRestDelegate _defaultBeanDelegate = new ERXNoOpRestDelegate();
+
 		/**
-		 * Sets the default rest delegate to use when no other can be found. The default is ERXEORestDelegate. 
+		 * Sets the default rest delegate to use for EO's when no other can be found. The default is ERXEORestDelegate.
 		 * 
-		 * @param defaultDelegate the default delegate to use
+		 * @param defaultDelegate
+		 *            the default delegate to use
 		 */
-		public static void setDefaultDelegateClass(Class<? extends IERXRestDelegate> defaultDelegate) {
+		public static void setDefaultDelegate(IERXRestDelegate defaultDelegate) {
 			IERXRestDelegate.Factory._defaultDelegate = defaultDelegate;
 		}
-		
+
 		/**
-		 * Registers a rest delegate for the given entity name.
+		 * Sets the default rest delegate to use for non-EO's when no other can be found. The default is
+		 * ERXNoOpRestDelegate.
 		 * 
-		 * @param delegateClass
-		 *            the delegate class to register
-		 * @param entityName
-		 *            the entity name to register for
+		 * @param defaultDelegate
+		 *            the default delegate to use
 		 */
-		public static void setDelegateForEntityNamed(Class<? extends IERXRestDelegate> delegateClass, String entityName) {
-			_delegates.setObjectForKey(delegateClass, entityName);
+		public static void setDefaultBeanDelegate(IERXRestDelegate defaultDelegate) {
+			IERXRestDelegate.Factory._defaultBeanDelegate = defaultDelegate;
 		}
-		
+
+		/**
+		 * Registers a rest delegate for the given entity name.
+		 * 
+		 * @param delegate
+		 *            the delegate to register
+		 * @param entityName
+		 *            the entity name to register for
+		 */
+		public static void setDelegateForEntityNamed(IERXRestDelegate delegate, String entityName) {
+			_delegates.setObjectForKey(delegate, entityName);
+		}
+
 		/**
 		 * Registers a rest delegate for the given entity name.
 		 * 
@@ -102,8 +108,8 @@ public interface IERXRestDelegate {
 		 * @param entityName
 		 *            the entity name to register for
 		 */
-		public static void setDelegateForEntityNamed(Class<? extends IERXRestDelegate> delegateClass, String entityName, Class<?> clazz) {
-			_delegates.setObjectForKey(delegateClass, entityName);
+		public static void setDelegateForEntityNamed(IERXRestDelegate delegate, String entityName, Class<?> clazz) {
+			_delegates.setObjectForKey(delegate, entityName);
 			ERXRestClassDescriptionFactory.registerClass(clazz);
 		}
 
@@ -112,58 +118,55 @@ public interface IERXRestDelegate {
 		 * 
 		 * @param entityName
 		 *            the name o the entity to lookup
-		 * @param editingContext
-		 *            the current editingcontext
 		 * @return a rest delegate
 		 */
-		public static IERXRestDelegate delegateForEntityNamed(String entityName, EOEditingContext editingContext) {
-			IERXRestDelegate delegate;
-			Class<? extends IERXRestDelegate> delegateClass = _delegates.objectForKey(entityName);
-			if (delegateClass == null) {
+		public static IERXRestDelegate delegateForEntityNamed(String entityName) {
+			return IERXRestDelegate.Factory.delegateForClassDescription(ERXRestClassDescriptionFactory.classDescriptionForEntityName(entityName));
+		}
+
+		public static IERXRestDelegate delegateForObject(Object object) {
+			IERXRestDelegate delegate = null;
+			if (object instanceof EOEnterpriseObject) {
+				delegate = IERXRestDelegate.Factory.delegateForClassDescription(((EOEnterpriseObject) object).classDescription());
+			}
+			else if (object != null) {
+				delegate = IERXRestDelegate.Factory.delegateForClassDescription(ERXRestClassDescriptionFactory.classDescriptionForObject(object, false));
+			}
+			return delegate;
+		}
+
+		public static IERXRestDelegate delegateForClassDescription(EOClassDescription classDescription) {
+			String entityName = classDescription.entityName();
+			IERXRestDelegate delegate = (IERXRestDelegate) _delegates.objectForKey(entityName);
+			if (delegate == null) {
 				Class<?> possibleDelegateClass = _NSUtilities.classWithName(entityName + "RestDelegate");
 				if (possibleDelegateClass != null) {
-					delegateClass = possibleDelegateClass.asSubclass(IERXRestDelegate.class);
+					try {
+						delegate = possibleDelegateClass.asSubclass(IERXRestDelegate.class).newInstance();
+						setDelegateForEntityNamed(delegate, entityName);
+					}
+					catch (Throwable t) {
+						throw new RuntimeException("Failed to create a delegate for the entity '" + entityName + "'.", t);
+					}
 				}
 			}
 
-			if (delegateClass != null) {
+			if (delegate == null) {
 				try {
-					delegate = delegateClass.newInstance();
-				}
-				catch (Throwable t) {
-					throw new RuntimeException("Failed to create a delegate for the entity '" + entityName + "'.", t);
-				}
-			}
-			else {
-				try {
-					delegate = IERXRestDelegate.Factory._defaultDelegate.newInstance();
+					if (classDescription instanceof EOEntityClassDescription) {
+						delegate = IERXRestDelegate.Factory._defaultDelegate;
+					}
+					else {
+						delegate = IERXRestDelegate.Factory._defaultBeanDelegate;
+					}
+					setDelegateForEntityNamed(delegate, entityName);
 				}
 				catch (Exception e) {
 					throw new RuntimeException("Failed to create the rest delegate '" + _defaultDelegate + ".", e);
 				}
 			}
-			delegate.setEditingContext(editingContext);
-			return delegate;
-		}
 
-		/**
-		 * Returns the entity name for the given object.
-		 * 
-		 * @param obj the object to return an entity name for
-		 * @return the entity name for the given object
-		 */
-		public static String entityNameForObject(Object obj) {
-			String entityName;
-			EOEditingContext editingContext;
-			if (obj instanceof EOEnterpriseObject) {
-				entityName = ((EOEnterpriseObject)obj).entityName();
-				editingContext = ((EOEnterpriseObject)obj).editingContext();
-			}
-			else {
-				entityName = obj.getClass().getSimpleName();
-				editingContext = null;
-			}
-			return entityName;
+			return delegate;
 		}
 	}
 }

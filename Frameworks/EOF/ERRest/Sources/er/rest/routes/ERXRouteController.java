@@ -45,6 +45,7 @@ import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
 import er.rest.ERXRequestFormValues;
 import er.rest.ERXRestClassDescriptionFactory;
+import er.rest.ERXRestContext;
 import er.rest.ERXRestFetchSpecification;
 import er.rest.ERXRestRequestNode;
 import er.rest.ERXRestUtils;
@@ -349,7 +350,7 @@ public class ERXRouteController extends WODirectAction {
 	 */
 	public NSDictionary<ERXRoute.Key, Object> routeObjects() {
 		if (_objects == null) {
-			_objects = ERXRoute.keysWithObjects(_routeKeys, delegate());
+			_objects = ERXRoute.keysWithObjects(_routeKeys, restContext());
 		}
 		return _objects;
 	}
@@ -361,9 +362,9 @@ public class ERXRouteController extends WODirectAction {
 	 * @param delegate the delegate to fetch with
 	 * @return the processed objects from the route keys
 	 */
-	public NSDictionary<ERXRoute.Key, Object> routeObjects(IERXRestDelegate delegate) {
+	public NSDictionary<ERXRoute.Key, Object> routeObjects(ERXRestContext restContext) {
 		if (_route != null) {
-			_objects = ERXRoute.keysWithObjects(_routeKeys, delegate);
+			_objects = ERXRoute.keysWithObjects(_routeKeys, restContext);
 		}
 		return _objects;
 	}
@@ -424,21 +425,24 @@ public class ERXRouteController extends WODirectAction {
 				format = defaultFormat();
 			}
 			else {
-				format = ERXRestFormat.formatNamed(type);
+				format = formatNamed(type);
 			}
 		}
 		return format;
 	}
-
+	
 	/**
-	 * Returns the default rest delegate for this controller (an ERXRestRequestNode.EODelegate using the editing context
-	 * returned from editingContext()). Override this method to provide a custom delegate implementation for this
-	 * controller.
+	 * Returns the format to use for the given type (see ERXRestFormat constants).
 	 * 
-	 * @return a default rest delegate
+	 * @param type the type of format to use
+	 * @return the corresponding format
 	 */
-	protected IERXRestDelegate delegate() {
-		return IERXRestDelegate.Factory.delegateForEntityNamed(entityName(), editingContext());
+	protected ERXRestFormat formatNamed(String type) {
+		return ERXRestFormat.formatNamed(type);
+	}
+
+	protected ERXRestContext restContext() {
+		return new ERXRestContext(editingContext());
 	}
 
 	/**
@@ -491,7 +495,7 @@ public class ERXRouteController extends WODirectAction {
 				if (parser == null) {
 					throw new IllegalStateException("There is no parser for the format '" + format.name() + "'.");
 				}
-				_requestNode = parser.parseRestRequest(new ERXWORestRequest(request()), formatDelegateForFormat(format));
+				_requestNode = parser.parseRestRequest(new ERXWORestRequest(request()), formatDelegateForFormat(format), restContext());
 			}
 			catch (Throwable t) {
 				throw new RuntimeException("Failed to parse a " + format() + " request.", t);
@@ -510,7 +514,7 @@ public class ERXRouteController extends WODirectAction {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T object(ERXKeyFilter filter) {
-		return (T)object(entityName(), filter, delegate());
+		return (T)object(entityName(), filter, restContext());
 	}
 
 	/**
@@ -525,7 +529,7 @@ public class ERXRouteController extends WODirectAction {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T object(String entityName, ERXKeyFilter filter) {
-		return (T)object(entityName, filter, delegate());
+		return (T)object(entityName, filter, restContext());
 	}
 
 	/**
@@ -538,8 +542,8 @@ public class ERXRouteController extends WODirectAction {
 	 * @return the object from the request data
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> T object(ERXKeyFilter filter, IERXRestDelegate delegate) {
-		return (T)requestNode().objectWithFilter(entityName(), filter, delegate);
+	public <T> T object(ERXKeyFilter filter, ERXRestContext restContext) {
+		return (T)requestNode().objectWithFilter(entityName(), filter, restContext);
 	}
 
 	/**
@@ -554,8 +558,8 @@ public class ERXRouteController extends WODirectAction {
 	 * @return the object from the request data
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> T object(String entityName, ERXKeyFilter filter, IERXRestDelegate delegate) {
-		return (T)requestNode().objectWithFilter(entityName, filter, delegate);
+	public <T> T object(String entityName, ERXKeyFilter filter, ERXRestContext restContext) {
+		return (T)requestNode().objectWithFilter(entityName, filter, restContext);
 	}
 	
 	/**
@@ -583,7 +587,7 @@ public class ERXRouteController extends WODirectAction {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T create(String entityName, ERXKeyFilter filter) {
-		return (T)create(entityName, filter, delegate());
+		return (T)create(entityName, filter, restContext());
 	}
 
 	/**
@@ -597,8 +601,8 @@ public class ERXRouteController extends WODirectAction {
 	 * @return the object from the request data
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> T create(ERXKeyFilter filter, IERXRestDelegate delegate) {
-		return (T)requestNode().createObjectWithFilter(entityName(), filter, delegate);
+	public <T> T create(ERXKeyFilter filter, ERXRestContext restContext) {
+		return (T)requestNode().createObjectWithFilter(entityName(), filter, restContext);
 	}
 
 	/**
@@ -614,8 +618,8 @@ public class ERXRouteController extends WODirectAction {
 	 * @return the object from the request data
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> T create(String entityName, ERXKeyFilter filter, IERXRestDelegate delegate) {
-		return (T)requestNode().createObjectWithFilter(entityName, filter, delegate);
+	public <T> T create(String entityName, ERXKeyFilter filter, ERXRestContext restContext) {
+		return (T)requestNode().createObjectWithFilter(entityName, filter, restContext);
 	}
 
 	/**
@@ -628,7 +632,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the filter to apply to the object for the purposes of updating (or null to not update)
 	 */
 	public void update(Object obj, ERXKeyFilter filter) {
-		update(obj, filter, delegate());
+		update(obj, filter, restContext());
 	}
 
 	/**
@@ -641,8 +645,8 @@ public class ERXRouteController extends WODirectAction {
 	 * @param delegate
          *            delegate to use
 	 */
-	public void update(Object obj, ERXKeyFilter filter, IERXRestDelegate delegate) {
-		requestNode().updateObjectWithFilter(obj, filter, delegate);
+	public void update(Object obj, ERXKeyFilter filter, ERXRestContext restContext) {
+		requestNode().updateObjectWithFilter(obj, filter, restContext);
 	}
 
 	/**
@@ -955,7 +959,7 @@ public class ERXRouteController extends WODirectAction {
 	public WOActionResults response(ERXRestFormat format, EOClassDescription entity, NSArray<?> values, ERXKeyFilter filter) {
 		ERXRestRequestNode responseNode;
 		try {
-			responseNode = ERXRestRequestNode.requestNodeWithObjectAndFilter(entity, values, filter, delegate());
+			responseNode = ERXRestRequestNode.requestNodeWithObjectAndFilter(entity, values, filter, restContext());
 		}
 		catch (ObjectNotAvailableException e) {
 			return errorResponse(e, WOMessage.HTTP_STATUS_NOT_FOUND);
@@ -979,7 +983,7 @@ public class ERXRouteController extends WODirectAction {
 	 * @return a WOResponse in the given format
 	 */
 	public WOActionResults response(ERXRestFormat format, ERXRestRequestNode responseNode) {
-		ERXRouteResults results = new ERXRouteResults(context(), format, responseNode);
+		ERXRouteResults results = new ERXRouteResults(context(), restContext(), format, responseNode);
 		return results;
 	}
 
@@ -1049,7 +1053,7 @@ public class ERXRouteController extends WODirectAction {
 	public WOActionResults response(ERXRestFormat format, Object value, ERXKeyFilter filter) {
 		ERXRestRequestNode responseNode;
 		try {
-			responseNode = ERXRestRequestNode.requestNodeWithObjectAndFilter(value, filter, delegate());
+			responseNode = ERXRestRequestNode.requestNodeWithObjectAndFilter(value, filter, restContext());
 		}
 		catch (ObjectNotAvailableException e) {
 			return errorResponse(e, WOMessage.HTTP_STATUS_NOT_FOUND);
@@ -1111,7 +1115,7 @@ public class ERXRouteController extends WODirectAction {
 	 */
 	public WOActionResults headAction() {
 		WOResponse response = WOApplication.application().createResponseInContext(context());
-		format().writer().appendHeadersToResponse(null, new ERXWORestResponse(response));
+		format().writer().appendHeadersToResponse(null, new ERXWORestResponse(response), restContext());
 		return response;
 	}
 
@@ -1382,15 +1386,15 @@ public class ERXRouteController extends WODirectAction {
 		        			}
 		        			else if (param instanceof QueryParam) {
 		        				String value = request().stringFormValueForKey(((QueryParam)param).value());
-		        				params[paramNum] = ERXRestUtils.coerceValueToTypeNamed(value, parameterTypes[paramNum].getName(), delegate());
+		        				params[paramNum] = ERXRestUtils.coerceValueToTypeNamed(value, parameterTypes[paramNum].getName(), restContext(), true);
 		        			}
 		        			else if (param instanceof CookieParam) {
 		        				String value = request().cookieValueForKey(((CookieParam)param).value());
-		        				params[paramNum] = ERXRestUtils.coerceValueToTypeNamed(value, parameterTypes[paramNum].getName(), delegate());
+		        				params[paramNum] = ERXRestUtils.coerceValueToTypeNamed(value, parameterTypes[paramNum].getName(), restContext(), true);
 		        			}
 		        			else if (param instanceof HeaderParam) {
 		        				String value = request().headerForKey(((HeaderParam)param).value());
-		        				params[paramNum] = ERXRestUtils.coerceValueToTypeNamed(value, parameterTypes[paramNum].getName(), delegate());
+		        				params[paramNum] = ERXRestUtils.coerceValueToTypeNamed(value, parameterTypes[paramNum].getName(), restContext(), true);
 		        			}
 		        			else {
 		        				throw new IllegalArgumentException("Unknown parameter #" + paramNum + " of " + bestMethod.getName() + ".");

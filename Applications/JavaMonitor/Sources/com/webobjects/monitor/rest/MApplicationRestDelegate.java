@@ -5,26 +5,20 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.monitor._private.MApplication;
 
 import er.extensions.eof.ERXQ;
+import er.rest.ERXRestContext;
 
 public class MApplicationRestDelegate extends JavaMonitorRestDelegate {
+    public Object primaryKeyForObject(Object obj, ERXRestContext context) {
+        NSArray<MApplication> objects = ERXQ.filtered(siteConfig().applicationArray(), ERXQ.is("name", obj));
+        return objects.size() == 0 ? null : objects.objectAtIndex(0);
+    }
 
-	protected Object _createObjectOfEntityWithID(EOClassDescription arg0,
-			Object arg1) {
-		return new MApplication((String)arg1, siteConfig());
-	}
+    public Object createObjectOfEntityWithID(EOClassDescription entity, Object id, ERXRestContext context) {
+        return new MApplication((String)id, siteConfig());
+    }
 
-	protected Object _fetchObjectOfEntityWithID(EOClassDescription arg0,
-			Object arg1) {
-		return (siteConfig().applicationWithName((String)arg1));
-	}
-
-	protected boolean _isDelegateForEntity(EOClassDescription arg0) {
-		return "MApplication".equals(arg0.entityName());
-	}
-
-	protected Object _primaryKeyForObject(EOClassDescription arg0, Object arg1) {
-		NSArray<MApplication> objects = ERXQ.filtered(siteConfig().applicationArray(), ERXQ.is("name", arg1));
-		return objects.size() == 0 ? null : objects.objectAtIndex(0);
-	}
+    public Object objectOfEntityWithID(EOClassDescription entity, Object id, ERXRestContext context) {
+        return (siteConfig().applicationWithName((String)id));
+    }
 
 }

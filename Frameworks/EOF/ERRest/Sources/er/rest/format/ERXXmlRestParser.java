@@ -15,8 +15,10 @@ import org.xml.sax.InputSource;
 
 import com.webobjects.appserver.WORequest;
 
+import er.rest.ERXRestContext;
 import er.rest.ERXRestNameRegistry;
 import er.rest.ERXRestRequestNode;
+import er.rest.ERXRestUtils;
 
 /**
  * ERXXmlRestRequestParser is an implementation of the IERXRestRequestParser interface that supports XML document
@@ -25,11 +27,11 @@ import er.rest.ERXRestRequestNode;
  * @author mschrag
  */
 public class ERXXmlRestParser implements IERXRestParser {
-	protected ERXRestRequestNode createRequestNodeForElement(Element element, boolean rootNode, ERXRestFormat.Delegate delegate) {
+	protected ERXRestRequestNode createRequestNodeForElement(Element element, boolean rootNode, ERXRestFormat.Delegate delegate, ERXRestContext context) {
 		String name = element.getTagName();
 		ERXRestRequestNode requestNode = new ERXRestRequestNode(name, rootNode);
 
-		String value = element.getNodeValue();
+		String valueStr = element.getNodeValue();
 
 		NamedNodeMap attributeNodes = element.getAttributes();
 		for (int attributeNum = 0; attributeNum < attributeNodes.getLength(); attributeNum++) {
@@ -41,7 +43,7 @@ public class ERXXmlRestParser implements IERXRestParser {
 			Node childNode = childNodes.item(childNodeNum);
 			if (childNode instanceof Element) {
 				Element childElement = (Element) childNode;
-				ERXRestRequestNode childRequestNode = createRequestNodeForElement(childElement, false, delegate);
+				ERXRestRequestNode childRequestNode = createRequestNodeForElement(childElement, false, delegate, context);
 				if (childRequestNode != null) {
 					String childRequestNodeName = childRequestNode.name();
 					// MS: this is a huge hack, but it turns out that it's surprinsingly tricky to
@@ -62,34 +64,65 @@ public class ERXXmlRestParser implements IERXRestParser {
 					if (!(childNode instanceof CDATASection)) {
 						text = text.trim();
 					}
-					if (value == null) {
-						value = text;
+					if (valueStr == null) {
+						valueStr = text;
 					}
 					else {
-						value += text;
+						valueStr += text;
 					}
 				}
+				
+				// if there is a text node AND other sibling nodes, this is fake ...
+				if (childNodes.getLength() > 1) {
+					valueStr = null;
+				}
+			}
+			else {
+				// ???
 			}
 		}
 
-		requestNode.setValue(value);
+		requestNode.setValue(valueStr);
 
 		delegate.nodeDidParse(requestNode);
 
+		if (valueStr != null) {
+			String type = requestNode.type();
+			if (type != null) {
+				// MS: inverse the types we declare in ERXXmlRestWriter
+				if ("datetime".equals(type)) {
+					type = "NSTimestamp";
+				}
+				else if ("integer".equals(type)) {
+					type = "int";
+				}
+				else if ("bigint".equals(type)) {
+					type = "BigDecimal";
+				}
+				else if ("enum".equals(type)) {
+					type = "Enum";
+				}
+				Object coercedValue = ERXRestUtils.coerceValueToTypeNamed(valueStr, type, context, false);
+				if (coercedValue != null) {
+					requestNode.setValue(coercedValue);
+				}
+			}
+		}
+		
 		return requestNode;
 	}
 
 	@Deprecated
-	public ERXRestRequestNode parseRestRequest(WORequest request, ERXRestFormat.Delegate delegate) {
-		return parseRestRequest(request.contentString(), delegate);
+	public ERXRestRequestNode parseRestRequest(WORequest request, ERXRestFormat.Delegate delegate, ERXRestContext context) {
+		return parseRestRequest(request.contentString(), delegate, context);
 	}
 
 	@Deprecated
-	public ERXRestRequestNode parseRestRequest(String contentStr, ERXRestFormat.Delegate delegate) {
-		return parseRestRequest(new ERXStringRestRequest(contentStr), delegate);
+	public ERXRestRequestNode parseRestRequest(String contentStr, ERXRestFormat.Delegate delegate, ERXRestContext context) {
+		return parseRestRequest(new ERXStringRestRequest(contentStr), delegate, context);
 	}
 	
-	public ERXRestRequestNode parseRestRequest(IERXRestRequest request, ERXRestFormat.Delegate delegate) {
+	public ERXRestRequestNode parseRestRequest(IERXRestRequest request, ERXRestFormat.Delegate delegate, ERXRestContext context) {
 		ERXRestRequestNode rootRequestNode = null;
 		String contentString = request.stringContent();
 		if (contentString != null && contentString.length() > 0) {
@@ -104,7 +137,7 @@ public class ERXXmlRestParser implements IERXRestParser {
 				document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(contentString)));
 				document.normalize();
 				Element rootElement = document.getDocumentElement();
-				rootRequestNode = createRequestNodeForElement(rootElement, true, delegate);
+				rootRequestNode = createRequestNodeForElement(rootElement, true, delegate, context);
 			}
 			catch (Exception e) {
 				throw new IllegalArgumentException("Failed to parse request document.", e);
@@ -124,9 +157,10 @@ public class ERXXmlRestParser implements IERXRestParser {
 		//String str = "<Employees><Employee id=\"101\" type=\"Employee\"/><Employee id=\"102\"><name>Mike</name></Employee></Employees>";
 		ERXRestNameRegistry.registry().setExternalNameForInternalName("Super", "Company");
 		ERXRestNameRegistry.registry().setExternalNameForInternalName("Super2", "Employee");
-		ERXRestRequestNode n = new ERXXmlRestParser().parseRestRequest(new ERXStringRestRequest(str), new ERXRestFormatDelegate());
+		ERXRestContext context = new ERXRestContext();
+		ERXRestRequestNode n = new ERXXmlRestParser().parseRestRequest(new ERXStringRestRequest(str), new ERXRestFormatDelegate(), context);
 		ERXStringBufferRestResponse response = new ERXStringBufferRestResponse();
-		new ERXXmlRestWriter().appendToResponse(n, response, new ERXRestFormatDelegate());
+		new ERXXmlRestWriter().appendToResponse(n, response, new ERXRestFormatDelegate(), context);
 		System.out.println("ERXXmlRestParser.main: " + response);
 	}
 
