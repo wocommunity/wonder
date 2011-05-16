@@ -5,9 +5,8 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONNull;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
-
-import com.webobjects.appserver.WORequest;
-
+import net.sf.json.JsonConfig;
+import er.rest.ERXRestContext;
 import er.rest.ERXRestRequestNode;
 import er.rest.ERXRestUtils;
 
@@ -68,17 +67,14 @@ public class ERXJSONRestParser implements IERXRestParser {
 		return requestNode;
 	}
 	
-	@Deprecated
-	public ERXRestRequestNode parseRestRequest(WORequest request, ERXRestFormat.Delegate delegate) {
-		return parseRestRequest(request.contentString(), delegate);
+	public ERXJSONRestParser() {
+	}
+	
+	protected JsonConfig configWithContext(ERXRestContext context) {
+		return _ERXJSONConfig.createDefaultConfig(context);
 	}
 
-	@Deprecated
-	public ERXRestRequestNode parseRestRequest(String contentStr, ERXRestFormat.Delegate delegate) {
-		return parseRestRequest(new ERXStringRestRequest(contentStr), delegate);
-	}
-
-	public ERXRestRequestNode parseRestRequest(IERXRestRequest request, ERXRestFormat.Delegate delegate) {
+	public ERXRestRequestNode parseRestRequest(IERXRestRequest request, ERXRestFormat.Delegate delegate, ERXRestContext context) {
 		ERXRestRequestNode rootRequestNode = null;
 		String contentString = request.stringContent();
 		if (contentString != null) {
@@ -91,7 +87,7 @@ public class ERXJSONRestParser implements IERXRestParser {
 			// if (!contentStr.trim().startsWith("<")) {
 			// contentStr = "<FakeWrapper>" + contentStr.trim() + "</FakeWrapper>";
 			// }
-			JSON rootJSON = JSONSerializer.toJSON(contentString, ERXJSONRestWriter._config);
+			JSON rootJSON = JSONSerializer.toJSON(contentString, configWithContext(context));
 			rootRequestNode = createRequestNodeForJSON(null, rootJSON, true, delegate);
 		}
 		else {

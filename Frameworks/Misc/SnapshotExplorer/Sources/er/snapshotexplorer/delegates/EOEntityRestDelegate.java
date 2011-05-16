@@ -5,25 +5,18 @@ import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eocontrol.EOClassDescription;
 
 import er.rest.ERXAbstractRestDelegate;
+import er.rest.ERXRestContext;
 
 public class EOEntityRestDelegate extends ERXAbstractRestDelegate {
-	@Override
-	protected Object _createObjectOfEntityWithID(EOClassDescription entity, Object id) {
+    public Object createObjectOfEntityWithID(EOClassDescription entity, Object id, ERXRestContext context) {
 		throw new UnsupportedOperationException("Unable to create a new EOEntity");
 	}
-
-	@Override
-	protected Object _fetchObjectOfEntityWithID(EOClassDescription entity, Object id) {
+    
+    public Object objectOfEntityWithID(EOClassDescription entity, Object id, ERXRestContext context) {
 		return EOModelGroup.defaultGroup().entityNamed((String) id);
 	}
-
-	@Override
-	protected boolean _isDelegateForEntity(EOClassDescription entity) {
-		return "EOEntity".equals(entity.entityName()) || "ERXEntity".equals(entity.entityName());
-	}
-
-	@Override
-	protected Object _primaryKeyForObject(EOClassDescription entity, Object obj) {
+    
+    public Object primaryKeyForObject(Object obj, ERXRestContext context) {
 		return ((EOEntity) obj).name();
 	}
 }

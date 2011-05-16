@@ -16,26 +16,26 @@ import com.webobjects.eocontrol.EOClassDescription;
 import er.extensions.eof.ERXKeyFilter;
 import er.extensions.foundation.ERXMutableURL;
 import er.rest.ERXRestClassDescriptionFactory;
+import er.rest.ERXRestContext;
 import er.rest.ERXRestRequestNode;
-import er.rest.IERXRestDelegate;
 import er.rest.format.ERXRestFormat;
 import er.rest.format.ERXStringBufferRestResponse;
 import er.rest.format.ERXStringRestRequest;
 
 public class ERXRestClient {
 	private String _baseURL;
-	private IERXRestDelegate _delegate;
+	private ERXRestContext _context;
 	private boolean _classDescriptionRequired;
 	private HttpClient _httpClient = null;
 
-	public ERXRestClient(String baseURL, IERXRestDelegate delegate, boolean classDescriptionRequired) {
+	public ERXRestClient(String baseURL, ERXRestContext context, boolean classDescriptionRequired) {
 		_baseURL = baseURL;
-		_delegate = delegate;
+		_context = context;
 		setClassDescriptionRequired(classDescriptionRequired);
 	}
 
-	public ERXRestClient(String baseURL, IERXRestDelegate delegate) {
-		this(baseURL, delegate, true);
+	public ERXRestClient(String baseURL, ERXRestContext context) {
+		this(baseURL, context, true);
 	}
 
 	public void setBaseURL(String baseURL) {
@@ -45,14 +45,14 @@ public class ERXRestClient {
 	public String baseURL() {
 		return _baseURL;
 	}
-
-	public void setDelegate(IERXRestDelegate delegate) {
-		_delegate = delegate;
-	}
-
-	public IERXRestDelegate delegate() {
-		return _delegate;
-	}
+	
+	public void setContext(ERXRestContext context) {
+        _context = context;
+    }
+	
+	public ERXRestContext context() {
+        return _context;
+    }
 
 	public void setClassDescriptionRequired(boolean classDescriptionRequired) {
 		_classDescriptionRequired = classDescriptionRequired;
@@ -73,7 +73,7 @@ public class ERXRestClient {
 	/* Extract the requestNode from the given method using the given format.
 	 */
 	protected ERXRestRequestNode requestNodeWithMethod(HttpMethodBase method, ERXRestFormat format) throws IOException {
-		ERXRestRequestNode responseNode = format.parser().parseRestRequest(new ERXStringRestRequest(method.getResponseBodyAsString()), format.delegate());
+		ERXRestRequestNode responseNode = format.parser().parseRestRequest(new ERXStringRestRequest(method.getResponseBodyAsString()), format.delegate(), _context);
 		return responseNode;
 	}
 
@@ -84,7 +84,7 @@ public class ERXRestClient {
 			obj = node;
 		}
 		else {
-			obj = node.objectWithFilter(entityName, ERXKeyFilter.filterWithAllRecursive(), _delegate);
+			obj = node.objectWithFilter(entityName, ERXKeyFilter.filterWithAllRecursive(), _context);
 		}
 		return obj;
 	}
@@ -157,9 +157,9 @@ public class ERXRestClient {
 	}
 
 	public ERXRestRequestNode updateObjectWithPath(Object obj, ERXKeyFilter filter, String path, ERXRestFormat format) throws HttpException, IOException {
-		ERXRestRequestNode node = ERXRestRequestNode.requestNodeWithObjectAndFilter(obj, filter, _delegate);
+		ERXRestRequestNode node = ERXRestRequestNode.requestNodeWithObjectAndFilter(obj, filter, _context);
 		ERXStringBufferRestResponse response = new ERXStringBufferRestResponse();
-		format.writer().appendToResponse(node, response, format.delegate());
+		format.writer().appendToResponse(node, response, format.delegate(), _context);
 
 		HttpClient client = httpClient();
 		PutMethod updateObjectMethod = new PutMethod(new ERXMutableURL(_baseURL).appendPath(path).toExternalForm());
@@ -173,9 +173,9 @@ public class ERXRestClient {
 	}
 
 	public ERXRestRequestNode createObjectWithPath(Object obj, ERXKeyFilter filter, String path, ERXRestFormat format) throws HttpException, IOException {
-		ERXRestRequestNode node = ERXRestRequestNode.requestNodeWithObjectAndFilter(obj, filter, _delegate);
+		ERXRestRequestNode node = ERXRestRequestNode.requestNodeWithObjectAndFilter(obj, filter, _context);
 		ERXStringBufferRestResponse response = new ERXStringBufferRestResponse();
-		format.writer().appendToResponse(node, response, format.delegate());
+		format.writer().appendToResponse(node, response, format.delegate(), _context);
 
 		HttpClient client = httpClient();
 		PostMethod updateObjectMethod = new PostMethod(new ERXMutableURL(_baseURL).appendPath(path).toExternalForm());
@@ -189,7 +189,7 @@ public class ERXRestClient {
 	}
 
 	public ERXRestRequestNode deleteObjectWithPath(Object obj, String path, ERXRestFormat format) throws HttpException, IOException {
-		ERXRestRequestNode node = ERXRestRequestNode.requestNodeWithObjectAndFilter(obj, ERXKeyFilter.filterWithNone(), _delegate);
+		ERXRestRequestNode node = ERXRestRequestNode.requestNodeWithObjectAndFilter(obj, ERXKeyFilter.filterWithNone(), _context);
 
 		HttpClient client = httpClient();
 		DeleteMethod deleteObjectMethod = new DeleteMethod(new ERXMutableURL(_baseURL).appendPath(path).toExternalForm());

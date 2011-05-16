@@ -530,7 +530,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 		// MS: We should probably remove all of the "boolean numericPKs" attributes for registration, but I don't
 		// want to do that so soon after the initial screencast of using the APIs.
 		EOClassDescription classDescription = ERXRestClassDescriptionFactory.classDescriptionForEntityName(entityName);
-		boolean numericPKs = IERXRestDelegate.Factory.delegateForEntityNamed(entityName, null).__hasNumericPrimaryKeys(classDescription);
+		boolean numericPKs = IERXRestDelegate.Factory.delegateForClassDescription(classDescription).__hasNumericPrimaryKeys(classDescription);
 		addDefaultRoutes(entityName, numericPKs, controllerClass);
 	}
 

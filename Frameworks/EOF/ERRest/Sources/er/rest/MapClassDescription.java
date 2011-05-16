@@ -16,9 +16,13 @@ import com.webobjects.foundation.NSMutableArray;
  *  
  * @author mschrag
  */
-public class MapClassDescription extends EOClassDescription {
+public class MapClassDescription extends EOClassDescription implements IERXNonEOClassDescription {
 	private Map<String, ?> _map;
 
+	public MapClassDescription() {
+		this(new HashMap<String, Object>());
+	}
+	
 	public MapClassDescription(Map<String, ?> map) {
 		_map = map;
 	}
@@ -88,7 +92,9 @@ public class MapClassDescription extends EOClassDescription {
 				return ERXRestClassDescriptionFactory.classDescriptionForClass(type, false);
 			}
 		}
-		return null;
+		else {
+			return ERXRestClassDescriptionFactory.classDescriptionForClass(Object.class, true);
+		}
 	}
 
 	public Object createInstance() {

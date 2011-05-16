@@ -1,65 +1,38 @@
 package er.rest.format;
 
-import java.util.Date;
-import java.util.Set;
-
 import net.sf.json.JSONSerializer;
 import net.sf.json.JsonConfig;
-import net.sf.json.processors.JsonValueProcessor;
-import net.sf.json.processors.JsonValueProcessorMatcher;
 
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSTimestamp;
 
+import er.rest.ERXRestContext;
 import er.rest.ERXRestRequestNode;
 import er.rest.ERXRestUtils;
 
 public class ERXJSONRestWriter implements IERXRestWriter {
-	public static final JsonConfig _config = new JsonConfig();
-
-	static {
-		_config.registerJsonValueProcessor(NSTimestamp.class, new NSTimestampProcessor());
-		_config.registerJsonValueProcessor(Date.class, new NSTimestampProcessor());
-		_config.setJsonValueProcessorMatcher(new ERXRestValueProcessorMatcher());
+	public ERXJSONRestWriter() {
+		
 	}
-
-	public static final class ERXRestValueProcessorMatcher extends JsonValueProcessorMatcher {
-		@Override
-		public Object getMatch(Class target, Set set) {
-			if (target != null && set != null && set.contains(target)) {
-				return target;
-			}
-			else {
-				return null;
-			}
-		}
-	}
-
-	public static class NSTimestampProcessor implements JsonValueProcessor {
-		public Object processArrayValue(Object obj, JsonConfig jsonconfig) {
-			return ERXRestUtils.coerceValueToString(obj);
-		}
-
-		public Object processObjectValue(String s, Object obj, JsonConfig jsonconfig) {
-			return ERXRestUtils.coerceValueToString(obj);
-		}
+	
+	protected JsonConfig configWithContext(ERXRestContext context) {
+		return _ERXJSONConfig.createDefaultConfig(context);
 	}
 	
 	protected ERXRestRequestNode processNode(ERXRestRequestNode node) {
 		return node;
 	}
 
-	public void appendHeadersToResponse(ERXRestRequestNode node, IERXRestResponse response) {
+	public void appendHeadersToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestContext context) {
 		response.setHeader("application/json", "Content-Type");
 	}
 
-	public void appendToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestFormat.Delegate delegate) {
+	public void appendToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestFormat.Delegate delegate, ERXRestContext context) {
 		node = processNode(node);
 		if (node != null) {
 			node._removeRedundantTypes();
 		}
 		
-		appendHeadersToResponse(node, response);
+		appendHeadersToResponse(node, response, context);
 		Object object = node.toJavaCollection(delegate);
 		if (object == null) {
 			response.appendContentString("undefined");
@@ -68,7 +41,7 @@ public class ERXJSONRestWriter implements IERXRestWriter {
 			response.appendContentString(String.valueOf(object));
 		}
 		else {
-			response.appendContentString(JSONSerializer.toJSON(object, ERXJSONRestWriter._config).toString());
+			response.appendContentString(JSONSerializer.toJSON(object, configWithContext(context)).toString());
 		}
 		response.appendContentString("\n");
 	}

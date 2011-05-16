@@ -81,7 +81,7 @@ public class ERXRestFormatDelegate implements ERXRestFormat.Delegate {
 	}
 
 	public void nodeWillWrite(ERXRestRequestNode node) {
-		if (node.isRootNode()) {
+		if (node.isRootNode() && node.isArray()) {
 			if (_pluralNames) {
 				node.setName(ERXRestNameRegistry.registry().externalNameForInternalName(ERXLocalizer.englishLocalizer().plurifiedString(node.name(), 2)));
 			}
