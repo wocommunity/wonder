@@ -1089,14 +1089,21 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 					else {
 						Object id = childNode.id();
 
+						ERXKeyFilter childKeyFilter = keyFilter._filterForKey(key);
 						Object childObj;
 						if (id == null) {
 							if (lockedRelationship) {
 								childObj = null;
 							}
+							else if (childKeyFilter.isAnonymousUpdateEnabled()) {
+								childObj = NSKeyValueCoding.DefaultImplementation.valueForKey(obj, keyName);
+							}
 							else {
 								childObj = delegate.createObjectOfEntityWithID(destinationClassDescription, null);
 							}
+						}
+						else if ("_".equals(id)) {
+							childObj = NSKeyValueCoding.DefaultImplementation.valueForKey(obj, keyName);
 						}
 						else {
 							childObj = delegate.objectOfEntityWithID(destinationClassDescription, id);
@@ -1115,7 +1122,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 						}
 
 						if (updateChildObj) {
-							childNode.updateObjectWithFilter(childObj, keyFilter._filterForKey(key), delegate);
+							childNode.updateObjectWithFilter(childObj, childKeyFilter, delegate);
 							if (!lockedRelationship) {
 								_safeWillTakeValueForKey(keyFilter, obj, childObj, keyName);
 								if (obj instanceof EOEnterpriseObject && childObj instanceof EOEnterpriseObject) {

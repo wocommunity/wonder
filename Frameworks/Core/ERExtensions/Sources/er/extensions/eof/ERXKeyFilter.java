@@ -56,6 +56,7 @@ public class ERXKeyFilter {
 	private ERXKeyFilter.Base _nextBase;
 	private ERXKeyFilter.Delegate _delegate;
 	private boolean _deduplicationEnabled;
+	private boolean _anonymousUpdateEnabled;
 
 	/**
 	 * Creates a new ERXKeyFilter.
@@ -80,6 +81,7 @@ public class ERXKeyFilter {
 		_lockedRelationships = new NSMutableSet<ERXKey>();
 		_map = new NSMutableDictionary<ERXKey, ERXKey>();
 		_deduplicationEnabled = true;
+		_anonymousUpdateEnabled = false;
 	}
 	
 	/**
@@ -245,6 +247,26 @@ public class ERXKeyFilter {
 		_nextBase = nextBase;
 		return this;
 	}
+	
+ 	/**
+	 * Sets whether nodes without ids will result in an anonymous update or an object creation. An anonymous update
+	 * means that whatever object currently exists will remain, and the nested object graph will be applied as
+	 * a recursive update.
+	 * 
+	 * @param anonymousUpdateEnabled whether nodes without ids will result in an anonymous update or an object creation
+	 */
+	public void setAnonymousUpdateEnabled(boolean anonymousUpdateEnabled) {
+		_anonymousUpdateEnabled = anonymousUpdateEnabled;
+	}
+	
+	/**
+	 * Returns whether or not nodes without ids will result in an anonymous update or an object creation.
+	 * 
+	 * @return whether or not nodes without ids will result in an anonymous update or an object creation
+	 */
+	public boolean isAnonymousUpdateEnabled() {
+		return _anonymousUpdateEnabled;
+	}
 
 	/**
 	 * Sets whether or not duplicate objects are collapsed to just an id in the filtered graph.
@@ -281,6 +303,7 @@ public class ERXKeyFilter {
 			filter.setDelegate(_delegate);
 			filter.setNextBase(_nextBase);
 			filter.setDeduplicationEnabled(_deduplicationEnabled);
+			filter.setAnonymousUpdateEnabled(_anonymousUpdateEnabled);
 		}
 		return filter;
 	}
@@ -389,6 +412,7 @@ public class ERXKeyFilter {
 					filter.setDelegate(_delegate);
 					filter.setNextBase(_nextBase);
 					filter.setDeduplicationEnabled(_deduplicationEnabled);
+					filter.setAnonymousUpdateEnabled(_anonymousUpdateEnabled);
 					_includes.put(key, filter);
 					_excludes.removeObject(key);
 				}
