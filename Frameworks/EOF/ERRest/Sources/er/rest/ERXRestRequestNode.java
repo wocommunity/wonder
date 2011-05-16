@@ -1097,6 +1097,9 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 							}
 							else if (childKeyFilter.isAnonymousUpdateEnabled()) {
 								childObj = NSKeyValueCoding.DefaultImplementation.valueForKey(obj, keyName);
+								if (childObj == null) {
+									childObj = delegate.createObjectOfEntityWithID(destinationClassDescription, null);
+								}
 							}
 							else {
 								childObj = delegate.createObjectOfEntityWithID(destinationClassDescription, null);
@@ -1104,6 +1107,9 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 						}
 						else if ("_".equals(id)) {
 							childObj = NSKeyValueCoding.DefaultImplementation.valueForKey(obj, keyName);
+							if (!lockedRelationship && childObj == null) {
+								childObj = delegate.createObjectOfEntityWithID(destinationClassDescription, null);
+							}
 						}
 						else {
 							childObj = delegate.objectOfEntityWithID(destinationClassDescription, id);
