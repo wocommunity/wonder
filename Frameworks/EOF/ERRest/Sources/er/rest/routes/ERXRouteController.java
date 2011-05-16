@@ -49,7 +49,6 @@ import er.rest.ERXRestContext;
 import er.rest.ERXRestFetchSpecification;
 import er.rest.ERXRestRequestNode;
 import er.rest.ERXRestUtils;
-import er.rest.IERXRestDelegate;
 import er.rest.format.ERXRestFormat;
 import er.rest.format.ERXWORestRequest;
 import er.rest.format.ERXWORestResponse;
@@ -1247,7 +1246,7 @@ public class ERXRouteController extends WODirectAction {
 	 * @param actionName the unknown action name
 	 * @return WOActionResults
 	 */
-	protected WOActionResults performUnknownAction(String actionName) throws Throwable {
+	protected WOActionResults performUnknownAction(String actionName) throws Exception {
 		throw new FileNotFoundException("There is no action named '" + actionName + "Action' on '" + getClass().getSimpleName() + "'.");
 	}
 	
@@ -1276,7 +1275,7 @@ public class ERXRouteController extends WODirectAction {
 	public String responseContentForActionNamed(String actionName) {
 		return performActionNamed(actionName, true).generateResponse().contentString();
 	}
-	
+
 	/**
 	 * Performs the given action, optionally throwing exceptions instead of converting to http response codes.
 	 *  
@@ -1306,106 +1305,11 @@ public class ERXRouteController extends WODirectAction {
 			}
 
 			if (results == null && isAutomaticHtmlRoutingEnabled() && format() == ERXRestFormat.html()) {
-				String pageName = pageNameForAction(actionName);
-				if (_NSUtilities.classWithName(pageName) != null) {
-					try {
-						results = pageWithName(pageName);
-						if (!(results instanceof IERXRouteComponent)) {
-							log.error(pageName + " does not implement IERXRouteComponent, so it will be ignored.");
-							results = null;
-						}
-					}
-					catch (WOPageNotFoundException e) {
-						log.info(pageName + " does not exist, falling back to route controller.");
-						results = null;
-					}
-				}
-				else {
-					log.info(pageName + " does not exist, falling back to route controller.");
-				}
-				
-				if (results == null && shouldFailOnMissingHtmlPage()) {
-					results = performUnknownAction(actionName);
-				}
+				results = performHtmlActionNamed(actionName);
 			}
 
 			if (results == null) {
-				String actionMethodName = actionName + WODirectAction.actionText;
-		        Method actionMethod = _methodForAction(actionMethodName, "");
-		        if (actionMethod == null) {
-			        actionMethod = _methodForAction(actionName, "");
-			        if (actionMethod == null || (actionMethod.getAnnotation(Path.class) == null && actionMethod.getAnnotation(Paths.class) == null)) {
-			        	actionMethod = null;
-			        }
-		        }
-		        if (actionMethod == null || actionMethod.getParameterTypes().length > 0) {
-		        	int bestParameterCount = 0;
-		        	Method bestMethod = null;
-        			List<Annotation> bestParams = null;
-		        	for (Method method : getClass().getDeclaredMethods()) {
-		        		String methodName = method.getName();
-		        		boolean nameMatches = methodName.equals(actionMethodName);
-		        		if (!nameMatches && methodName.equals(actionName) && (method.getAnnotation(Path.class) != null || method.getAnnotation(Paths.class) != null)) {
-		        			nameMatches = true;
-		        		}
-		        		if (nameMatches) {
-		        			int parameterCount = 0;
-				        	List<Annotation> params = new LinkedList<Annotation>();
-		        			for (Annotation[] parameterAnnotations : method.getParameterAnnotations()) {
-		        				for (Annotation parameterAnnotation : parameterAnnotations) {
-		        					if (parameterAnnotation instanceof PathParam || parameterAnnotation instanceof QueryParam || parameterAnnotation instanceof CookieParam || parameterAnnotation instanceof HeaderParam) {
-		        						params.add(parameterAnnotation);
-		        						parameterCount ++;
-		        					}
-		        					else {
-		        						parameterCount = -1;
-		        						break;
-		        					}
-		        				}
-		        				if (parameterCount == -1) {
-		        					break;
-		        				}
-		        			}
-		        			if (parameterCount > bestParameterCount) {
-		        				bestMethod = method;
-		        				bestParameterCount = parameterCount;
-		        				bestParams = params;
-		        			}
-		        		}
-		        	}
-		        	if (bestMethod == null) {
-		        		performUnknownAction(actionName);
-		        	}
-		        	else {
-						Class<?>[] parameterTypes = bestMethod.getParameterTypes();
-		        		Object[] params = new Object[bestParameterCount];
-		        		for (int paramNum = 0; paramNum < params.length; paramNum ++) {
-		        			Annotation param = bestParams.get(paramNum);
-		        			if (param instanceof PathParam) {
-		        				params[paramNum] = routeObjectForKey(((PathParam)param).value());
-		        			}
-		        			else if (param instanceof QueryParam) {
-		        				String value = request().stringFormValueForKey(((QueryParam)param).value());
-		        				params[paramNum] = ERXRestUtils.coerceValueToTypeNamed(value, parameterTypes[paramNum].getName(), restContext(), true);
-		        			}
-		        			else if (param instanceof CookieParam) {
-		        				String value = request().cookieValueForKey(((CookieParam)param).value());
-		        				params[paramNum] = ERXRestUtils.coerceValueToTypeNamed(value, parameterTypes[paramNum].getName(), restContext(), true);
-		        			}
-		        			else if (param instanceof HeaderParam) {
-		        				String value = request().headerForKey(((HeaderParam)param).value());
-		        				params[paramNum] = ERXRestUtils.coerceValueToTypeNamed(value, parameterTypes[paramNum].getName(), restContext(), true);
-		        			}
-		        			else {
-		        				throw new IllegalArgumentException("Unknown parameter #" + paramNum + " of " + bestMethod.getName() + ".");
-		        			}
-		        		}
-		        		results = (WOActionResults)bestMethod.invoke(this, params);
-		        	}
-		        }
-		        else {
-	        		results = (WOActionResults)actionMethod.invoke(this, _NSUtilities._NoObjectArray);
-		        }
+				results = performRouteActionNamed(actionName);
 			}
 
 			if (results == null) {
@@ -1419,19 +1323,199 @@ public class ERXRouteController extends WODirectAction {
 			if (throwExceptions) {
 				throw NSForwardException._runtimeExceptionForThrowable(t);
 			}
-			Throwable meaningfulThrowble = ERXExceptionUtilities.getMeaningfulThrowable(t);
-			if (meaningfulThrowble instanceof ObjectNotAvailableException || meaningfulThrowble instanceof FileNotFoundException) {
-				results = errorResponse(meaningfulThrowble, WOMessage.HTTP_STATUS_NOT_FOUND);
-			}
-			else if (meaningfulThrowble instanceof SecurityException) {
-				results = errorResponse(meaningfulThrowble, WOMessage.HTTP_STATUS_FORBIDDEN);
-			}
-			else {
-				results = errorResponse(meaningfulThrowble, WOMessage.HTTP_STATUS_INTERNAL_ERROR);
-			}
-			// MS: Should we jam the exception in the response userInfo so the transaction adaptor can rethrow the real exception?
+			results = performActionNamedWithError(actionName, t);
 		}
 
+		results = processActionResults(results);
+		
+		return results;
+	}
+	
+	/**
+	 * If automatic HTML routing is enabled and this request used an HTML format, this method is called
+	 * to dispatch the HTML action.
+	 * 
+	 * @param actionName the name of the HTML action
+	 * @return the results of the action
+	 * @throws Exception if anything fails
+	 */
+	protected WOActionResults performHtmlActionNamed(String actionName) throws Exception {
+		WOActionResults results = null;
+		
+		String pageName = pageNameForAction(actionName);
+		if (_NSUtilities.classWithName(pageName) != null) {
+			try {
+				results = pageWithName(pageName);
+				if (!(results instanceof IERXRouteComponent)) {
+					log.error(pageName + " does not implement IERXRouteComponent, so it will be ignored.");
+					results = null;
+				}
+			}
+			catch (WOPageNotFoundException e) {
+				log.info(pageName + " does not exist, falling back to route controller.");
+				results = null;
+			}
+		}
+		else {
+			log.info(pageName + " does not exist, falling back to route controller.");
+		}
+		
+		if (results == null && shouldFailOnMissingHtmlPage()) {
+			results = performUnknownAction(actionName);
+		}
+		
+		return results;
+	}
+	
+	/**
+	 * If this request is for a normal route action, this method is called to dispatch it.
+	 * 
+	 * @param actionName the name of the action to perform
+	 * @return the results of the action
+	 * @throws Exception if anything fails
+	 */
+	protected WOActionResults performRouteActionNamed(String actionName) throws Exception {
+		WOActionResults results = null;
+		
+		String actionMethodName = actionName + WODirectAction.actionText;
+        Method actionMethod = _methodForAction(actionMethodName, "");
+        if (actionMethod == null) {
+	        actionMethod = _methodForAction(actionName, "");
+	        if (actionMethod == null || (actionMethod.getAnnotation(Path.class) == null && actionMethod.getAnnotation(Paths.class) == null)) {
+	        	actionMethod = null;
+	        }
+        }
+        
+        if (actionMethod == null || actionMethod.getParameterTypes().length > 0) {
+        	actionMethod = null;
+        	
+        	int bestMatchParameterCount = 0;
+			List<Annotation> bestMatchAnnotations = null;
+        	for (Method method : getClass().getDeclaredMethods()) {
+        		String methodName = method.getName();
+        		boolean nameMatches = methodName.equals(actionMethodName);
+        		if (!nameMatches && methodName.equals(actionName) && (method.getAnnotation(Path.class) != null || method.getAnnotation(Paths.class) != null)) {
+        			nameMatches = true;
+        		}
+        		if (nameMatches) {
+        			int parameterCount = 0;
+		        	List<Annotation> params = new LinkedList<Annotation>();
+        			for (Annotation[] parameterAnnotations : method.getParameterAnnotations()) {
+        				for (Annotation parameterAnnotation : parameterAnnotations) {
+        					if (parameterAnnotation instanceof PathParam || parameterAnnotation instanceof QueryParam || parameterAnnotation instanceof CookieParam || parameterAnnotation instanceof HeaderParam) {
+        						params.add(parameterAnnotation);
+        						parameterCount ++;
+        					}
+        					else {
+        						parameterCount = -1;
+        						break;
+        					}
+        				}
+        				if (parameterCount == -1) {
+        					break;
+        				}
+        			}
+        			if (parameterCount > bestMatchParameterCount) {
+        				actionMethod = method;
+        				bestMatchParameterCount = parameterCount;
+        				bestMatchAnnotations = params;
+        			}
+        		}
+        	}
+        	
+        	if (actionMethod == null) {
+        		results = performUnknownAction(actionName);
+        	}
+        	else if (bestMatchParameterCount == 0) {
+	    		results = performActionWithArguments(actionMethod, _NSUtilities._NoObjectArray);
+        	}
+        	else {
+        		results = performActionWithAnnotations(actionMethod, bestMatchAnnotations);
+        	}
+        }
+        else {
+    		results = performActionWithArguments(actionMethod, _NSUtilities._NoObjectArray);
+        }
+        return results;
+	}
+	
+	/**
+	 * Called when performRouteAction dispatches a method that uses parameter annotations.
+	 * 
+	 * @param actionMethod the action method to dispatch
+	 * @param parameterAnnotations the list of annotations
+	 * @return the results of the action
+	 * @throws Exception if anything fails
+	 */
+	protected WOActionResults performActionWithAnnotations(Method actionMethod, List<Annotation> parameterAnnotations) throws Exception {
+		Class<?>[] parameterTypes = actionMethod.getParameterTypes();
+		Object[] params = new Object[parameterAnnotations.size()];
+		for (int paramNum = 0; paramNum < params.length; paramNum ++) {
+			Annotation param = parameterAnnotations.get(paramNum);
+			if (param instanceof PathParam) {
+				params[paramNum] = routeObjectForKey(((PathParam)param).value());
+			}
+			else if (param instanceof QueryParam) {
+				String value = request().stringFormValueForKey(((QueryParam)param).value());
+				params[paramNum] = ERXRestUtils.coerceValueToTypeNamed(value, parameterTypes[paramNum].getName(), restContext(), true);
+			}
+			else if (param instanceof CookieParam) {
+				String value = request().cookieValueForKey(((CookieParam)param).value());
+				params[paramNum] = ERXRestUtils.coerceValueToTypeNamed(value, parameterTypes[paramNum].getName(), restContext(), true);
+			}
+			else if (param instanceof HeaderParam) {
+				String value = request().headerForKey(((HeaderParam)param).value());
+				params[paramNum] = ERXRestUtils.coerceValueToTypeNamed(value, parameterTypes[paramNum].getName(), restContext(), true);
+			}
+			else {
+				throw new IllegalArgumentException("Unknown parameter #" + paramNum + " of " + actionMethod.getName() + ".");
+			}
+		}
+		return performActionWithArguments(actionMethod, params);
+	}
+	
+	/**
+	 * Called when an action method is dispatched by performRouteAction in any form.
+	 *  
+	 * @param actionMethod the method to invoke
+	 * @param args the arguments to pass to the method
+	 * @return the results of the method
+	 * @throws Exception if anything fails
+	 */
+	protected WOActionResults performActionWithArguments(Method actionMethod, Object... args) throws Exception {
+		return (WOActionResults)actionMethod.invoke(this, args);
+	}
+	
+	/**
+	 * Called when performing an action fails, giving a chance to return an appropriate error result.
+	 * 
+	 * @param actionName the name of the action that attempted to perform
+	 * @param t the error that occurred
+	 * @return an appropriate error result
+	 */
+	protected WOActionResults performActionNamedWithError(String actionName, Throwable t) {
+		WOActionResults results = null;
+		Throwable meaningfulThrowble = ERXExceptionUtilities.getMeaningfulThrowable(t);
+		if (meaningfulThrowble instanceof ObjectNotAvailableException || meaningfulThrowble instanceof FileNotFoundException) {
+			results = errorResponse(meaningfulThrowble, WOMessage.HTTP_STATUS_NOT_FOUND);
+		}
+		else if (meaningfulThrowble instanceof SecurityException) {
+			results = errorResponse(meaningfulThrowble, WOMessage.HTTP_STATUS_FORBIDDEN);
+		}
+		else {
+			results = errorResponse(meaningfulThrowble, WOMessage.HTTP_STATUS_INTERNAL_ERROR);
+		}
+		// MS: Should we jam the exception in the response userInfo so the transaction adaptor can rethrow the real exception?
+		return results;
+	}
+	
+	/**
+	 * Before returning the action results, this method is called to perform any last minute processing.
+	 * 
+	 * @param results
+	 * @return
+	 */
+	protected WOActionResults processActionResults(WOActionResults results) {
 		WOContext context = context();
 		WOSession session = context._session();
 		// MS: This is sketchy -- should this be done in the request handler after we generate the response?
@@ -1449,6 +1533,7 @@ public class ERXRouteController extends WODirectAction {
 			}
 		}
 		
+		WOActionResults processedResults = results;
 		if (allowWindowNameCrossDomainTransport()) {
 			String windowNameCrossDomainTransport = request().stringFormValueForKey("windowname");
 			if ("true".equals(windowNameCrossDomainTransport)) {
@@ -1460,11 +1545,10 @@ public class ERXRouteController extends WODirectAction {
 				}
 				response.setContent("<html><script type=\"text/javascript\">window.name='" + content + "';</script></html>");
 				response.setHeader("text/html", "Content-Type");
-				results = response;
+				processedResults = response;
 			}
 		}
-		
-		return results;
+		return processedResults;
 	}
 	
 	/**
