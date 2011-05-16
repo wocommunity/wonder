@@ -103,7 +103,7 @@ public class ERXRestClassDescriptionFactory {
 
 	public static EOClassDescription classDescriptionForClass(Class clazz, boolean forceNonEntity) {
 		EOClassDescription classDescription = _classDescriptionByClass.get(clazz);
-		if (classDescription == null && !forceNonEntity) {
+		if (classDescription == null && !forceNonEntity && EOEnterpriseObject.class.isAssignableFrom(clazz)) {
 			classDescription = ERXRestClassDescriptionFactory.classDescriptionForEntityName(clazz.getSimpleName());
 		}
 		if (classDescription == null) {
