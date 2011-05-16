@@ -1,6 +1,7 @@
 package er.rest;
 
 import java.beans.BeanInfo;
+import java.beans.IndexedPropertyDescriptor;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.MethodDescriptor;
@@ -130,7 +131,12 @@ public class BeanInfoClassDescription extends EOClassDescription implements IERX
 		for (PropertyDescriptor descriptor : _beanInfo.getPropertyDescriptors()) {
 			if (descriptor.getName().equals(detailKey)) {
 				if (isToMany(descriptor)) {
-					return ERXRestClassDescriptionFactory.classDescriptionForClass(Object.class, true);
+					if (descriptor instanceof IndexedPropertyDescriptor) {
+						return ERXRestClassDescriptionFactory.classDescriptionForClass(((IndexedPropertyDescriptor)descriptor).getIndexedPropertyType(), true);
+					}
+					else {
+						return ERXRestClassDescriptionFactory.classDescriptionForClass(Object.class, true);
+					}
 				}
 				else {
 					return ERXRestClassDescriptionFactory.classDescriptionForClass(descriptor.getPropertyType(), false);
