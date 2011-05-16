@@ -14,7 +14,7 @@ Ant should be found in /usr/share/ant/bin/ant
 
 0. Prerequisites:
 
-   ant 1.7: execute 'ant --version' to confirm that ant is properly installed
+   ant 1.7: execute 'ant -version' to confirm that ant is properly installed
             and that it is at version 1.7 or later.
 
 1. Open a terminal and cd into the Wonder root directory.
@@ -25,9 +25,9 @@ Ant should be found in /usr/share/ant/bin/ant
    or its equivalent on a Windows system.
 
 3. A wobuild.properties file should be placed in, on Mac OS X, the ~/Library directory.
-   You can also symlink ~/Library/wobuild.properties to your existing 
+   You can also symlink ~/Library/wobuild.properties to your existing
    ~/Library/Application Support/WOLips/wolips.properties
-   
+
    On Windows, this should go into a Library folder in the directory pointed to
    by the 'user.home' Java system property. Usually, this may be at
    C:\Documents and Settings\<user name>\Library.
@@ -83,38 +83,14 @@ needed to make this work.
 
 3. Open a terminal and cd into the Wonder root directory.
 
-4.a. Build Wonder compatible with WO 5.3:
+4. Build Wonder:
 
-  mvn clean install -P wo53
-
-4.b Build Wonder compatible with WO 5.4:
-
-  mvn clean install -P wo54
-
-NOTE: Sometimes the Maven version range mechanism doesn't work as expected and
-you can experience the following problem:
-
-   [INFO] Failed to resolve artifact.
-
-   No versions are present in the repository for the artifact with a range [5.4,5.5)
-     com.webobjects:JavaFoundation:jar:null
-
-This problem usually occurs when your ~/.m2/settings.xml is missing the repository definition
-relevant for where you've previously deployed/retrieved the webobjects jars. It can also be
-caused by some wrong Maven metadata in your local repository.
-
-To avoid this problem, you can force the WebObjects version using the 'woversion' property, i.e.:
-
-  mvn clean install -P wo53 -Dwoversion=5.3.3
-
-  or
-
-  mvn clean install -P wo54 -Dwoversion=5.4.3
+  mvn clean install
 
 NOTE: Make sure you have your settings.xml properly configured.
 See the step 2 of Maven Quick Start Tutorial for more information:
 
-	http://wiki.objectstyle.org/confluence/display/WOL/Quick+Start
+    http://wiki.objectstyle.org/confluence/display/WOL/Quick+Start
 
 Deploying Releases with Maven:
 ==============================
@@ -139,4 +115,3 @@ Building with Eclipse:
 2. Install WOLips
 
 3. Open the projects you need, choose "WOLips>Install..." in the context menu
-

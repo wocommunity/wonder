@@ -7,7 +7,7 @@
     <packaging>pom</packaging>
     <name>Project Wonder</name>
     <url>http://wiki.objectstyle.org/confluence/display/WONDER/Home</url>
-    
+
     <modules>
         <module>Applications</module>
         <module>Examples</module>
@@ -39,7 +39,7 @@
             </distributionManagement>
         </profile>
     </profiles>
-    
+
     <build>
         <testSourceDirectory>${project.basedir}/Tests</testSourceDirectory>
         <pluginManagement>
@@ -122,7 +122,7 @@
             </plugin>
         </plugins>
     </build>
-    
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -420,7 +420,7 @@
             <dependency>
                 <groupId>org.jboss.netty</groupId>
                 <artifactId>netty</artifactId>
-                <version>3.2.2.Final</version>
+                <version>3.2.4.Final</version>
             </dependency>
             <dependency>
                 <groupId>commons-cli</groupId>
@@ -651,58 +651,35 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    
+
     <repositories>
         <repository>
-            <id>wocommunity.releases</id>
+            <id>wocommunity</id>
             <name>WOCommunity Maven 2 Releases Repository</name>
             <url>http://maven.wocommunity.org/content/groups/public</url>
             <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-        <repository>
-            <id>wocommunity.snapshots</id>
-            <name>WOCommunity Maven 2 Snapshots Repository</name>
-            <url>http://maven.wocommunity.org/content/groups/public-snapshots
-			</url>
-            <snapshots>
                 <enabled>true</enabled>
             </snapshots>
             <releases>
-                <enabled>false</enabled>
+                <enabled>true</enabled>
             </releases>
         </repository>
     </repositories>
-    
+
     <pluginRepositories>
         <pluginRepository>
-            <id>wocommunity.releases</id>
+            <id>wocommunity</id>
             <name>WOCommunity Maven 2 Releases Repository</name>
             <url>http://maven.wocommunity.org/content/groups/public</url>
             <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </pluginRepository>
-        <pluginRepository>
-            <id>wocommunity.snapshots</id>
-            <name>WOCommunity Maven 2 Snapshots Repository</name>
-            <url>http://maven.wocommunity.org/content/groups/public-snapshots
-			</url>
-            <snapshots>
                 <enabled>true</enabled>
             </snapshots>
             <releases>
-                <enabled>false</enabled>
+                <enabled>true</enabled>
             </releases>
         </pluginRepository>
     </pluginRepositories>
+
     <distributionManagement>
         <repository>
             <id>wocommunity.deployment</id>

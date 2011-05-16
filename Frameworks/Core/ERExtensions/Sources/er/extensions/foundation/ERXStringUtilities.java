@@ -2239,7 +2239,7 @@ public class ERXStringUtilities {
 			attrValueClass = Class.forName(attr.className());
 		} catch (ClassNotFoundException cnfe) {
 			//An attribute has a className that is not in the classpath
-			NSForwardException._runtimeExceptionForThrowable(cnfe);
+			throw NSForwardException._runtimeExceptionForThrowable(cnfe);
 		}
 		
     	// If value is a date, parse using the formatter.
@@ -2333,7 +2333,7 @@ public class ERXStringUtilities {
 	    			Constructor numberConstructor = numberClass.getConstructor(new Class[] {String.class});
 	    			val = (Number)numberConstructor.newInstance(strVal);
 	    		} catch(Exception e) {
-	    			NSForwardException._runtimeExceptionForThrowable(e);
+	    			throw NSForwardException._runtimeExceptionForThrowable(e);
 	    		}
 			}
 		}

@@ -605,22 +605,6 @@ public class AppDetailPage extends MonitorComponent {
         else
             return "UNKNOWN";
     }
-
-    public String autoRecoverImage() {
-    		String result = "Panel_Off.gif";
-        if ((currentInstance.autoRecover() != null) && (currentInstance.autoRecover().booleanValue())) {
-            result = "Panel_On_Green.gif";
-        } 
-        return result;
-    }
-
-    public String autoRecoverImageText() {
-    		String result = "AutoRecover OFF";
-        if ((currentInstance.autoRecover() != null) && (currentInstance.autoRecover().booleanValue())) {
-            result = "AutoRecover ON";
-        } 
-    		return result;
-    }
     
     public String autoRecoverLabel() {
     	String results = "Off";
@@ -663,48 +647,6 @@ public class AppDetailPage extends MonitorComponent {
       } 
       return results;
   }
-    
-    public String refuseNewSessionsImage() {
-    		String result = null;
-        if ((currentInstance.schedulingEnabled() != null) && (currentInstance.schedulingEnabled().booleanValue())) {
-            if (currentInstance.isRefusingNewSessions()) {
-                result = "Panel_On_Yellow.gif";
-            } else {
-            	result =  "Panel_Off_Yellow.gif";
-            }
-        } else {
-            if (currentInstance.isRefusingNewSessions()) {
-            	result =  "Panel_On_Green.gif";
-            } else {
-            	result =  "Panel_Off.gif";
-            }
-        }
-        return result;
-    }
-
-    public String refuseNewSessionsImageText() {
-    		String result = "Accepting New Sessions";
-        if (currentInstance.isRefusingNewSessions()) {
-            result = "Refusing New Sessions";
-        } 
-        return result;
-    }
-
-    public String schedulingImage() {
-    		String result = "Panel_Off.gif";
-        if ((currentInstance.schedulingEnabled() != null) && (currentInstance.schedulingEnabled().booleanValue())) {
-            result = "Panel_On_Green.gif";
-        } 
-        return result;
-    }
-
-    public String schedulingImageText() {
-    		String result = "Scheduling OFF";
-        if ((currentInstance.schedulingEnabled() != null) && (currentInstance.schedulingEnabled().booleanValue())) {
-            result = "Scheduling ON";
-        } 
-        return result;
-    }
     
     public String schedulingLabel() {
     	String result = "Off";

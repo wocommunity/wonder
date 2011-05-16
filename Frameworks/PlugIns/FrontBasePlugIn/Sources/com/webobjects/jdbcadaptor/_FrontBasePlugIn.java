@@ -39,6 +39,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation.NSRange;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimeZone;
 
@@ -359,7 +360,8 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			return blob;
 		else {
 			try {
-				return attribute.newValueForBytes(blob.getBytes(1, (int) blob.length()), 0);
+				byte[] bytes = blob.getBytes(1, (int) blob.length());
+				return new NSData(bytes, new NSRange(0, bytes.length), true);
 			}
 			catch (Exception ioexception) {
 				throw new JDBCAdaptorException(ioexception.getMessage(), null);

@@ -853,6 +853,14 @@
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
     </target>
+    
+    <target name="ERWOAdaptor.all">
+        <antcall target="global.framework.${build.action}" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="ERWOAdaptor" />
+            <param name="project.dir" value="Frameworks/WOAdaptors/ERWOAdaptor" />
+        </antcall>
+    </target>
 
     <target name="JavaMemoryAdaptor.all">
         <antcall target="global.framework.${build.action}" >
@@ -1033,7 +1041,7 @@
     <target name="validity.examples.all" depends="ValidityExample.all" />
 
     <target name="paypal.frameworks.all" depends="WOPayPal.all" />
-    <target name="woadaptors.all" depends="ERIMAdaptor.all" />
+    <target name="woadaptors.all" depends="ERIMAdaptor.all, ERWOAdaptor.all" />
     <target name="experimental.all" depends="DevStudio.all" />
 
     <target name="_frameworks.all" depends="common.frameworks.all, excelgeneration.frameworks.all, ajax.frameworks.all, woadaptors.all, validity.frameworks.all, plugins.all, paypal.frameworks.all, dynareporting.frameworks.all, woadaptors.all, JavaMonitorFramework.all">

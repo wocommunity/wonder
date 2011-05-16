@@ -19,6 +19,7 @@ import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.D2WPage;
 import com.webobjects.directtoweb.ERD2WContext;
 import com.webobjects.directtoweb.EditPageInterface;
+import com.webobjects.directtoweb.EditRelationshipPageInterface;
 import com.webobjects.directtoweb.ErrorPageInterface;
 import com.webobjects.directtoweb.InspectPageInterface;
 import com.webobjects.directtoweb.ListPageInterface;
@@ -110,33 +111,33 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
     /**
      * primaryKeyKey is used to identity a given object via it's primary key.
      */
-    static final String primaryKeyKey = "__key";
+    public static final String primaryKeyKey = "__key";
 
     /**
      * keyPathKey is used to get relationships of a given object.
      */
-    static final String keyPathKey = "__keypath";
+    public static final String keyPathKey = "__keypath";
 
     /**
-     * fetchSpecificationKey is used to get relationships of a given object.
+     * fetchSpecificationKey is used to get the named fetchspec of a given object.
      */
-    static final String fetchSpecificationKey = "__fs";
-
-    /**
-     * fetchLimit for the fetchSpec.
-     */
-    static final String fetchLimitKey = "__fs_fetchLimit";
+    public static final String fetchSpecificationKey = "__fs";
 
     /**
      * fetchLimit for the fetchSpec.
      */
-    static final String usesDistinctKey = "__fs_usesDistinct";
+    public static final String fetchLimitKey = "__fs_fetchLimit";
+
+    /**
+     * fetchLimit for the fetchSpec.
+     */
+    public static final String usesDistinctKey = "__fs_usesDistinct";
 
     /** denotes the context ID for the previous page */
-    static final String contextIDKey = "__cid";
+    public static final String contextIDKey = "__cid";
 
     
-    static final String createPrefix = "Create";
+    public static final String createPrefix = "Create";
 
     /** For edit pages, we always use a fresh editing context. */
     protected EOEditingContext newEditingContext() {
@@ -307,6 +308,17 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
                 ((ERD2WQueryPage)qpi).setFetchSpecification(fs);
         }
     }
+    
+    protected void prepareEditRelationshipPage(D2WContext context, EditRelationshipPageInterface erpi, String entityName) {
+    	EOEditingContext ec = ERXEC.newEditingContext(session().defaultEditingContext().parentObjectStore());
+    	String keypath = keyPathFromRequest();
+    	String masterEntityName = ERXStringUtilities.firstPropertyKeyInKeyPath(keypath);
+    	String relationshipKey = ERXStringUtilities.keyPathWithoutFirstProperty(keypath);
+    	NSDictionary pk = primaryKeyFromRequest(ec, masterEntityName);
+    	EOEnterpriseObject masterObject = ERXEOControlUtilities.objectWithPrimaryKeyValue(ec, masterEntityName, pk, null);
+    	erpi.setMasterObjectAndRelationshipKey(masterObject, relationshipKey);
+    	erpi.setNextPage(previousPageFromRequest());
+    }
 
     protected void prepareListPage(D2WContext context, ListPageInterface lpi, String entityName) {
         EOEditingContext ec = session().defaultEditingContext();
@@ -364,6 +376,8 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
                 prepareInspectPage(context, (InspectPageInterface)newPage, entityName);
             } else if(newPage instanceof QueryPageInterface) {
                 prepareQueryPage(context, (QueryPageInterface)newPage, entityName);
+            } else if(newPage instanceof EditRelationshipPageInterface) {
+            	prepareEditRelationshipPage(context, (EditRelationshipPageInterface)newPage, entityName);
             } else if(newPage instanceof ListPageInterface) {
                 prepareListPage(context, (ListPageInterface)newPage, entityName);
             } else if(newPage instanceof ErrorPageInterface) {
