@@ -3,6 +3,8 @@ package er.extensions.eof;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSSet;
@@ -53,10 +55,12 @@ public class ERXKeyFilter {
 	private NSMutableSet<ERXKey> _excludes;
 	private NSMutableSet<ERXKey> _lockedRelationships;
 	private NSMutableDictionary<ERXKey, ERXKey> _map;
+	private NSArray<EOSortOrdering> _sortOrderings;
 	private ERXKeyFilter.Base _nextBase;
 	private ERXKeyFilter.Delegate _delegate;
 	private boolean _deduplicationEnabled;
 	private boolean _anonymousUpdateEnabled;
+	private boolean _unknownKeyIgnored;
 
 	/**
 	 * Creates a new ERXKeyFilter.
@@ -238,6 +242,20 @@ public class ERXKeyFilter {
 		return _nextBase;
 	}
 	
+	protected ERXKeyFilter createFilter(ERXKeyFilter.Base base) {
+		return new ERXKeyFilter(base);
+	}
+	
+	protected ERXKeyFilter createNextFilter() {
+		ERXKeyFilter filter = createFilter(_nextBase);
+		filter.setDelegate(_delegate);
+		filter.setNextBase(_nextBase);
+		filter.setDeduplicationEnabled(_deduplicationEnabled);
+		filter.setAnonymousUpdateEnabled(_anonymousUpdateEnabled);
+		filter.setUnknownKeyIgnored(_unknownKeyIgnored);
+		return filter;
+	}
+
 	/**
 	 * Sets the base that is used for subkeys of this key by default.
 	 * @param nextBase the base that is used for subkeys of this key by default
@@ -299,11 +317,7 @@ public class ERXKeyFilter {
 	public ERXKeyFilter _filterForKey(ERXKey key) {
 		ERXKeyFilter filter = _includes.get(key);
 		if (filter == null) {
-			filter = new ERXKeyFilter(_nextBase);
-			filter.setDelegate(_delegate);
-			filter.setNextBase(_nextBase);
-			filter.setDeduplicationEnabled(_deduplicationEnabled);
-			filter.setAnonymousUpdateEnabled(_anonymousUpdateEnabled);
+			filter = createNextFilter();
 		}
 		return filter;
 	}
@@ -408,11 +422,7 @@ public class ERXKeyFilter {
 			else {
 				filter = _includes.get(key);
 				if (filter == null) {
-					filter = new ERXKeyFilter(_nextBase);
-					filter.setDelegate(_delegate);
-					filter.setNextBase(_nextBase);
-					filter.setDeduplicationEnabled(_deduplicationEnabled);
-					filter.setAnonymousUpdateEnabled(_anonymousUpdateEnabled);
+					filter = createNextFilter();
 					_includes.put(key, filter);
 					_excludes.removeObject(key);
 				}
@@ -510,6 +520,45 @@ public class ERXKeyFilter {
 		_includes.clear();
 		_excludes.clear();
 		return include(key);
+	}
+
+    /**
+     * Sets the sort orderings that will be applied by this key filter. The actual meaning of this
+     * is up to the code that applies this key filter to an object graph. A common example would be
+     * if you want to selectively sort the results of a to-many relationship that this filter
+     * is applied to.
+     *
+     * @param sortOrderings the sort orderings that will be applied by this key filter
+     */
+    public void setSortOrderings(NSArray sortOrderings) {
+    	_sortOrderings = sortOrderings;
+    }
+
+    /**
+     * Returns the sort orderings that will be applied by this key filter.
+     *
+     * @return the sort orderings that will be applied by this key filter
+     */
+    public NSArray sortOrderings() {
+    	return _sortOrderings;
+    }
+    
+    /**
+	 * Sets whether or not unknown keys are ignored rather than throwing an unknown key exception.
+	 * 
+	 * @param unknownKeyIgnored if true, unknown keys are ignored
+	 */
+	public void setUnknownKeyIgnored(boolean unknownKeyIgnored) {
+		_unknownKeyIgnored = unknownKeyIgnored;
+	}
+	
+	/**
+	 * Returns whether or not unknown keys are ignored rather than throwing an unknown key exception.
+	 * 
+	 * @return whether or not unknown keys are ignored rather than throwing an unknown key exception
+	 */
+	public boolean isUnknownKeyIgnored() {
+		return _unknownKeyIgnored;
 	}
 
 	/**

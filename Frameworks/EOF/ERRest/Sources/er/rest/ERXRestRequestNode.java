@@ -10,10 +10,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.eoaccess.EOEntityClassDescription;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
@@ -34,6 +37,8 @@ import er.rest.format.IERXRestWriter;
  * @author mschrag
  */
 public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdditions {
+    private static final Logger log = Logger.getLogger(ERXRestRequestNode.class);
+    
 	private boolean _array;
 	private String _name;
 	private boolean _rootNode;
@@ -774,7 +779,16 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 
 		List childrenObjects = (List) key.valueInObject(obj);
 		ERXKeyFilter childFilter = keyFilter._filterForKey(key);
-		for (Object childObj : childrenObjects) {
+        NSArray<EOSortOrdering> sortOrderings = childFilter.sortOrderings();
+        if (sortOrderings != null && sortOrderings.count() > 0) {
+                if (childrenObjects instanceof NSArray) {
+                        childrenObjects = EOSortOrdering.sortedArrayUsingKeyOrderArray((NSArray<?>)childrenObjects, sortOrderings);
+                }
+                else {
+                        log.warn("Skipping sort orderings for '" + key + "' on " + obj + " because sort orderings are only supported for NSArrays.");
+                }
+        }
+        for (Object childObj : childrenObjects) {
 			ERXRestRequestNode childNode = new ERXRestRequestNode(null, false);
 			childNode._fillInWithObjectAndFilter(childObj, destinationEntity, childFilter, context, visitedObjects);
 			toManyRelationshipNode.addChild(childNode);
@@ -1050,7 +1064,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 				}
 
 				if (List.class.isAssignableFrom(valueType) && keyFilter.matches(key, ERXKey.Type.ToManyRelationship)) {
-					EOClassDescription destinationEntity;
+					EOClassDescription destinationClassDescription;
 					// this is sort of expensive, but we want to support non-eomodel to-many relationships on EO's, so
 					// we fallback and lookup the class entity ...
 					if (!classDescription.toManyRelationshipKeys().containsObject(keyName) && classDescription instanceof EOEntityClassDescription) {
@@ -1058,10 +1072,18 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 						if (!nonModelClassDescription.toManyRelationshipKeys().containsObject(keyName)) {
 							throw new IllegalArgumentException("There is no to-many relationship named '" + key.key() + "' on '" + classDescription.entityName() + "'.");
 						}
-						destinationEntity = classDescription.classDescriptionForDestinationKey(keyName);
+						destinationClassDescription = classDescription.classDescriptionForDestinationKey(keyName);
 					}
 					else {
-						destinationEntity = classDescription.classDescriptionForDestinationKey(keyName);
+						destinationClassDescription = classDescription.classDescriptionForDestinationKey(keyName);
+					}
+					if (destinationClassDescription == null) {
+						if (keyFilter.isUnknownKeyIgnored()) {
+							continue;
+						}
+						else {
+							throw new NSKeyValueCoding.UnknownKeyException("There is no key '" + keyName + "' on this object.", obj, keyName);
+						}
 					}
 					boolean lockedRelationship = keyFilter.lockedRelationship(key);
 
@@ -1094,11 +1116,11 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 								childObj = null;
 							}
 							else {
-								childObj = IERXRestDelegate.Factory.delegateForClassDescription(destinationEntity).createObjectOfEntityWithID(destinationEntity, id, context);
+								childObj = IERXRestDelegate.Factory.delegateForClassDescription(destinationClassDescription).createObjectOfEntityWithID(destinationClassDescription, id, context);
 							}
 						}
 						else {
-							childObj = IERXRestDelegate.Factory.delegateForClassDescription(destinationEntity).objectOfEntityWithID(destinationEntity, id, context);
+							childObj = IERXRestDelegate.Factory.delegateForClassDescription(destinationClassDescription).objectOfEntityWithID(destinationClassDescription, id, context);
 						}
 
 						if (childObj != null) {
@@ -1150,6 +1172,14 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 					}
 					else {
 						destinationClassDescription = classDescription.classDescriptionForDestinationKey(keyName);
+					}
+					if (destinationClassDescription == null) {
+						if (keyFilter.isUnknownKeyIgnored()) {
+							continue;
+						}
+						else {
+							throw new NSKeyValueCoding.UnknownKeyException("There is no key '" + keyName + "' on this object.", obj, keyName);
+						}
 					}
 					boolean lockedRelationship = keyFilter.lockedRelationship(key);
 
@@ -1247,7 +1277,14 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 						value = null;
 					}
 					_safeWillTakeValueForKey(keyFilter, obj, value, keyName);
-					key.takeValueInObject(value, obj);
+					try {
+						key.takeValueInObject(value, obj);
+					}
+					catch (NSKeyValueCoding.UnknownKeyException e) {
+						if (!keyFilter.isUnknownKeyIgnored()) {
+							throw e;
+						}
+					}
 					_safeDidTakeValueForKey(keyFilter, obj, value, keyName);
 				}
 				else {
