@@ -2345,6 +2345,17 @@ public class ERXSQLHelper {
 	public static class FirebirdSQLHelper extends ERXSQLHelper {
 		
 		@Override
+		public String externalTypeForJDBCType(JDBCAdaptor adaptor, int jdbcType) {
+			String externalType;
+			if (jdbcType == Types.BOOLEAN) {
+				externalType = "SMALLINT";
+			} else {
+				externalType = super.externalTypeForJDBCType(adaptor, jdbcType);
+			}
+			return externalType;
+		}
+		
+		@Override
 		protected String sqlForGetNextValFromSequencedNamed(String sequenceName) {
 			return "select Gen_ID(" + sequenceName + ", 1) FROM RDB$Database"; 
 		}

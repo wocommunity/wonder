@@ -129,7 +129,7 @@ public class ERXMigrationDatabase {
 	 * @param model the model being migrated (necessary for more reliable sql generation)
 	 */
 	private ERXMigrationDatabase(EOAdaptorChannel adaptorChannel, EOModel model) {
-		this(adaptorChannel, model, ERXProperties.arrayForKey(ERXModelGroup.LANGUAGES_KEY));
+		this(adaptorChannel, model, null);
 	}
 
 	/**
@@ -145,9 +145,7 @@ public class ERXMigrationDatabase {
 		_model = model;
 		_tables = new NSMutableArray<ERXMigrationTable>();
 		_languages = languages;
-		if (model.userInfo().objectForKey(ERXModelGroup.LANGUAGES_KEY) != null) {
-			_languages = ERXProperties.arrayForKey(ERXModelGroup.LANGUAGES_KEY);
-		}
+		if(_languages == null) { _languages = NSArray.EmptyArray; }
 	}
 
 	/**
@@ -183,7 +181,7 @@ public class ERXMigrationDatabase {
 	 * @return the configured default languages for this migration. 
 	 */
 	public NSArray<String> languages() {
-		return _languages == null ? NSArray.EmptyArray : _languages;
+		return _languages;
 	}
 	
 	/**

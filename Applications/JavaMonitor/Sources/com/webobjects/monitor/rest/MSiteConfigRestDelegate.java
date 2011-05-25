@@ -1,7 +1,6 @@
 package com.webobjects.monitor.rest;
 
 import com.webobjects.eocontrol.EOClassDescription;
-import com.webobjects.foundation.NSDictionary;
 import com.webobjects.monitor._private.MSiteConfig;
 
 

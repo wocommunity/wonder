@@ -59,35 +59,37 @@ import com.webobjects.foundation._NSStringUtilities;
 import com.webobjects.foundation._NSUtilities;
 
 /**
- * <p>
- * This class provides static methods that convert between property lists and their string representations, which can be either strings or NSData objects. A property list is a structure that represents organized data. It can be built from a combination of NSArray, NSDictionary, String, and NSData
- * objects.
- * </p>
- * <p>
- * The string representation can be in XML or the ASCII plist format. To distinguish between the two formats, the parser that converts strings to property lists finds out whether the string starts with <code>&lt;?xml</code>. A discussion of the ASCII plist format,
- * <em>A Primer on ASCII Property Lists</em>, is available in the Mac OS X section of the Apple Developer Connection website. A discussion of XML property lists, <em>Property List Services</em>, is also available in the same area of the Apple Developer Connection website.
- * </p>
- * Some methods do not support XML property list representations, specifically <code>booleanForString</code> and <code>intForString</code>. Also note that XML property lists de-serialize 'integer' value types to java.math.BigInteger and 'real' value types ot java.math.BigDecimal.
- * <p>
- * The NSPropertyListSerialization class cannot be instantiated. There is an alternative Binary plist format.
- * </p></br>
- *JSON Serialization Example:
+ * This class provides static methods that convert between property lists and their string representations, which can be either strings or
+ * NSData objects. A property list is a structure that represents organized data. It can be built from a combination of NSArray, NSDictionary,
+ * String, and NSData objects.
+ *
+ * The string representation can be in XML or the ASCII plist format. To distinguish between the two formats, the parser that converts strings
+ * to property lists finds out whether the string starts with <code>&lt;?xml</code>. A discussion of the ASCII plist format, <em>A Primer on ASCII
+ * Property Lists</em>, is available in the Mac OS X section of the Apple Developer Connection website. A discussion of XML property lists,
+ * <em>Property List Services</em>, is also available in the same area of the Apple Developer Connection website.
+ *
+ * Some methods do not support XML property list representations, specifically <code>booleanForString</code> and <code>intForString</code>.
+ * Also note that XML property lists de-serialize 'integer' value types to java.math.BigInteger and 'real' value types ot java.math.BigDecimal.
+ *
+ * The ERXPropertyListSerialization class cannot be instantiated. There is an alternative Binary plist format.
+ *
+ * JSON Serialization Example:
  *
  * <pre>
  * NSDictionary dict<String,Object> = new NSDictionary<String,Object>(new String[] { "one", "two" }, new Object[] {new Integer(1), new Integer(2)});
- * String jsonString = NSPropertyListSerialization.jsonStringFromPropertyList(dict);
+ * String jsonString = ERXPropertyListSerialization.jsonStringFromPropertyList(dict);
  * </pre>
  *
  * JSON Deserialization Example:
  *
  * <pre>
- * NSDictionary&lt;String, Object&gt;	result	= NSPropertyListSerialization.&lt;String, Object&gt; dictionaryForJSONString(jsonString);
+ * NSDictionary&lt;String, Object&gt; result = ERXPropertyListSerialization.&lt;String, Object&gt; dictionaryForJSONString(jsonString);
  * </pre>
  *
  * If you know that you are recieving a JSON array, you can use the convenience API:
  *
  * <pre>
- * NSArray	result	= NSPropertyListSerialization.arrayForJSONString(jsonString);
+ * NSArray result = ERXPropertyListSerialization.arrayForJSONString(jsonString);
  * </pre>
  *
  * Binary PList Example:
@@ -96,7 +98,7 @@ import com.webobjects.foundation._NSUtilities;
  * try {
  * 	URLConnection conn = url.openConnection();
  * 	InputStream is = conn.getInputStream();
- * 	NSDictionary plist = NSPropertyListSerialization.dictionaryForBinaryStream(is);
+ * 	NSDictionary plist = ERXPropertyListSerialization.dictionaryForBinaryStream(is);
  * } catch (RuntimeException e) {
  * 	e.printStackTrace();
  * } catch (IOException e) {
@@ -111,7 +113,7 @@ import com.webobjects.foundation._NSUtilities;
  * FileOutputStream out = null;
  * try {
  * 	out = new FileOutputStream(tempFile);
- * 	NSPropertyListSerialization.propertyListWriteToStream(plist, out, NSPropertyListSerialization.PListFormat.NSPropertyListXMLFormat_v1_0);
+ * 	ERXPropertyListSerialization.propertyListWriteToStream(plist, out, NSPropertyListSerialization.PListFormat.NSPropertyListXMLFormat_v1_0);
  * } catch (Exception e) {
  * 	e.printStackTrace();
  * } finally {
@@ -127,38 +129,35 @@ import com.webobjects.foundation._NSUtilities;
  * @see PListFormat#NSPropertyListXMLFormat_v1_0
  */
 public class ERXPropertyListSerialization {
-	static org.apache.log4j.Logger	logger							= org.apache.log4j.Logger.getLogger(ERXPropertyListSerialization.class);
+	static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(ERXPropertyListSerialization.class);
 
-	/**
-	 *
-	 */
-	public static final Class<?>	_CLASS							= _NSUtilities._classWithFullySpecifiedName("com.webobjects.foundation.NSPropertyListSerialization");
+	public static final Class<?> _CLASS = _NSUtilities._classWithFullySpecifiedName("com.webobjects.foundation.NSPropertyListSerialization");
 
-	private final static int		EOT								= -1;
+	private final static int EOT = -1;
 
 	/**
 	 * Convenience for methods to convert to plist. Returns true..
 	 */
-	public static final boolean		Indents							= true;
+	public static final boolean Indents = true;
 
 	/**
 	 * Convenience for methods to convert to plist. Returns false.
 	 */
-	public static final boolean		NoIndents						= false;
+	public static final boolean NoIndents = false;
 
 	/**
 	 * Convenience for methods to convert to xml plist. Returns true..
 	 */
-	public static final boolean		ForceXML						= true;
+	public static final boolean ForceXML = true;
 
 	/**
 	 * Null value
 	 */
-	public static final String		NULL							= "NULL";
+	public static final String NULL = "NULL";
 
 	/** yyyy-MM-dd'T'HH:mm:ss'Z' */
-	protected static final String	DefaultSimpleDateFormatPattern	= "yyyy-MM-dd'T'HH:mm:ss'Z'";
-	
+	protected static final String DefaultSimpleDateFormatPattern = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+
 	protected static final double kCFAbsoluteTimeIntervalSince1970 = 978307200L;
 
 	/**
@@ -235,43 +234,43 @@ public class ERXPropertyListSerialization {
 		/**
 		 *
 		 */
-		protected static SAXParserFactory		_parserFactory;
+		protected static SAXParserFactory _parserFactory;
 
 		/**
 		 *
 		 */
-		protected SimpleDateFormat				_dateFormat;
+		protected SimpleDateFormat _dateFormat;
 
 		/**
 		 * This class is intentionally undocumented
 		 */
 		@SuppressWarnings("unqualified-field-access")
 		public static class DictionaryParser extends DefaultHandler {
-			private static org.apache.log4j.Logger	logger1							= org.apache.log4j.Logger.getLogger(DictionaryParser.class);
+			private static org.apache.log4j.Logger logger1 = org.apache.log4j.Logger.getLogger(DictionaryParser.class);
 
-			static String							PUBLIC_APPLE_COMPUTER_PLIST_1_0	= "-//Apple Computer//DTD PLIST 1.0//EN";
+			static String PUBLIC_APPLE_COMPUTER_PLIST_1_0 = "-//Apple Computer//DTD PLIST 1.0//EN";
 
-			static String							PUBLIC_APPLE_PLIST_1_0			= "-//Apple//DTD PLIST 1.0//EN";
-
-			/**
-			 *
-			 */
-			protected SimpleDateFormat				_dateFormat;
+			static String PUBLIC_APPLE_PLIST_1_0 = "-//Apple//DTD PLIST 1.0//EN";
 
 			/**
 			 *
 			 */
-			protected Stack<XMLNode>				_stack;
+			protected SimpleDateFormat _dateFormat;
 
 			/**
 			 *
 			 */
-			protected Object						_plist;
+			protected Stack<XMLNode> _stack;
 
 			/**
 			 *
 			 */
-			protected StringBuffer					_curChars;
+		 	protected Object _plist;
+
+			/**
+			 *
+			 */
+			protected StringBuffer _curChars;
 
 			/**
 			 * This class is intentionally undocumented
@@ -397,17 +396,17 @@ public class ERXPropertyListSerialization {
 				/**
 				 *
 				 */
-				protected Type		_type;
+				protected Type _type;
 
 				/**
 				 *
 				 */
-				protected Object	_value;
+				protected Object _value;
 
 				/**
 				 *
 				 */
-				protected boolean	_tag_open;
+				protected boolean _tag_open;
 
 				/**
 				 * @param type
@@ -4671,7 +4670,7 @@ public class ERXPropertyListSerialization {
 			if (Charset.isSupported("UTF-16BE")) {
 				encoding = "UTF-16BE";
 			}
-			// The count is teh number of char not the number of bytes. With UTF-16BE there is 2 bytes per char.
+			// The count is the number of char not the number of bytes. With UTF-16BE there is 2 bytes per char.
 			objectTable.add(new String(bytes, index, count * 2, encoding));
 		}
 

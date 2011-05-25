@@ -366,6 +366,25 @@ public class ERXMigrationTable {
 		return result;
 	}
 
+	/**
+	 * Returns a new localized String column (VARCHAR).  See newColumn(..) for the full docs.
+	 * 
+	 * @param name the name of the column
+	 * @param width the max width of the varchar
+	 * @param allowsNull if true, the column will allow null values
+	 * @param languages the languages [ex. ("en","ja","fr")]
+	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
+	 */
+	public NSArray<ERXMigrationColumn> newLocalizedStringColumns(String name, int width, boolean allowsNull, NSArray<String> languages) throws SQLException {
+		NSMutableArray<ERXMigrationColumn> result = new NSMutableArray<ERXMigrationColumn>();
+		for (String language : languages) {
+			ERXMigrationColumn column = newColumn(localizedColumnName(name, language), Types.VARCHAR, width, 0, 0, allowsNull, null);
+			result.addObject(column);
+		}
+		return result;
+	}
+
 	private String localizedColumnName(String name, String language) {
 		return name + "_" + language;
 	}
@@ -390,6 +409,26 @@ public class ERXMigrationTable {
 	}
 
 	/**
+	 * Returns a new localized String column (VARCHAR).  See newColumn(..) for the full docs.
+	 * 
+	 * @param name the name of the column
+	 * @param width the max width of the varchar
+	 * @param allowsNull if true, the column will allow null values
+	 * @param defaultValue the default value of this column
+	 * @param languages the languages [ex. ("en","ja","fr")]
+	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
+	 */
+	public  NSArray<ERXMigrationColumn> newLocalizedStringColumns(String name, int width, boolean allowsNull, String defaultValue, NSArray<String> languages) throws SQLException {
+		NSMutableArray<ERXMigrationColumn> result = new NSMutableArray<ERXMigrationColumn>();
+		for (String language : languages) {
+			ERXMigrationColumn column = newColumn(localizedColumnName(name, language), Types.VARCHAR, width, 0, 0, allowsNull, null, defaultValue);
+			result.addObject(column);
+		}
+		return result;
+	}
+
+	/**
 	 * Returns a new localized string blob column.  See newColumn(..) for the full docs.
 	 * 
 	 * @param name the name of the column
@@ -400,6 +439,24 @@ public class ERXMigrationTable {
 	public NSArray<ERXMigrationColumn> newLocalizedClobColumns(String name, boolean allowsNull) throws SQLException {
 		NSMutableArray<ERXMigrationColumn> result = new NSMutableArray<ERXMigrationColumn>();
 		for (String language : languages()) {
+			ERXMigrationColumn column = newColumn(localizedColumnName(name, language), Types.CLOB, 0, 0, 0, allowsNull, null);
+			result.addObject(column);
+		}
+		return result;
+	}
+
+	/**
+	 * Returns a new localized string blob column.  See newColumn(..) for the full docs.
+	 * 
+	 * @param name the name of the column
+	 * @param languages the languages [ex. ("en","ja","fr")]
+	 * @param allowsNull if true, the column will allow null values
+	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
+	 */
+	public NSArray<ERXMigrationColumn> newLocalizedClobColumns(String name, boolean allowsNull, NSArray<String> languages) throws SQLException {
+		NSMutableArray<ERXMigrationColumn> result = new NSMutableArray<ERXMigrationColumn>();
+		for (String language : languages) {
 			ERXMigrationColumn column = newColumn(localizedColumnName(name, language), Types.CLOB, 0, 0, 0, allowsNull, null);
 			result.addObject(column);
 		}
