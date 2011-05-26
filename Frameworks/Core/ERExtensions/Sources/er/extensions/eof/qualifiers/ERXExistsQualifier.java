@@ -15,9 +15,14 @@ import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOSQLExpressionFactory;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOKeyValueArchiver;
+import com.webobjects.eocontrol.EOKeyValueArchiving;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSCoder;
+import com.webobjects.foundation.NSCoding;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableSet;
@@ -34,7 +39,7 @@ import org.apache.log4j.Logger;
  *
  * @author Travis Cripps
  */
-public class ERXExistsQualifier extends EOQualifier implements Cloneable {
+public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCoding, EOKeyValueArchiving {
 
 	public static final Logger log = Logger.getLogger(ERXExistsQualifier.class);
 
@@ -308,4 +313,30 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable {
 		return new ERXExistsQualifier(subqualifier, baseKeyPath);
 	}
 
+    public Class classForCoder() {
+    	return getClass();
+    }
+    
+	public static Object decodeObject(NSCoder coder) {
+		EOQualifier subqualifier = (EOQualifier) coder.decodeObject();
+		String baseKeyPath = (String)coder.decodeObject();
+		return new ERXExistsQualifier(subqualifier, baseKeyPath);
+	}
+
+	public void encodeWithCoder(NSCoder coder) {
+		coder.encodeObject(subqualifier());
+		coder.encodeObject(baseKeyPath());
+	}
+
+	public void encodeWithKeyValueArchiver(EOKeyValueArchiver archiver) {
+		archiver.encodeObject(subqualifier(), "subqualifier");
+		archiver.encodeObject(baseKeyPath(), "baseKeyPath");
+	}
+
+	public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver unarchiver) {
+		return new ERXExistsQualifier(
+				(EOQualifier)unarchiver.decodeObjectForKey("subqualifier"),
+				(String)unarchiver.decodeObjectForKey("baseKeyPath"));
+	}
+	
 }

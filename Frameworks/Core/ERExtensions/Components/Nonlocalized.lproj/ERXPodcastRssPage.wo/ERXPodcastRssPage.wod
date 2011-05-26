@@ -79,3 +79,7 @@ ItemGuid : WOString {
 ItemPubDate : WOString {
   value = ^itemPubDate;
 }
+
+Link: WOGenericContainer {
+	elementName = "link";
+}

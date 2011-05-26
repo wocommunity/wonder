@@ -20,10 +20,13 @@ import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOQualifierSQLGeneration;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eocontrol.EOClassDescription;
+import com.webobjects.eocontrol.EOKeyValueArchiver;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOQualifierEvaluation;
 import com.webobjects.eocontrol.EOQualifierVariable;
+import com.webobjects.foundation.NSCoder;
 import com.webobjects.foundation.NSComparator;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
@@ -380,4 +383,34 @@ public class ERXBetweenQualifier extends ERXKeyValueQualifier implements EOQuali
         return  valueString;
     }
 
+    public Class classForCoder() {
+    	return getClass();
+    }
+    
+	public static Object decodeObject(NSCoder coder) {
+		String key = (String)coder.decodeObject();
+		Object minimumValue = coder.decodeObject();
+		Object maximumValue = coder.decodeObject();
+		return new ERXBetweenQualifier(key, minimumValue, maximumValue);
+	}
+
+	public void encodeWithCoder(NSCoder coder) {
+		coder.encodeObject(key());
+		coder.encodeObject(minimumValue());
+		coder.encodeObject(maximumValue());
+	}
+
+	public void encodeWithKeyValueArchiver(EOKeyValueArchiver archiver) {
+		archiver.encodeObject(key(), "key");
+		archiver.encodeObject(minimumValue(), "minimumValue");
+		archiver.encodeObject(maximumValue(), "maximumValue");
+	}
+
+	public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver unarchiver) {
+		return new ERXBetweenQualifier(
+				(String)unarchiver.decodeObjectForKey("key"),
+				unarchiver.decodeObjectForKey("minimumValue"),
+				unarchiver.decodeObjectForKey("maximumValue"));
+	}
+	
 }
