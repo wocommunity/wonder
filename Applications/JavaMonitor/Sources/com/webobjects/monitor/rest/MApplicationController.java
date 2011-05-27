@@ -3,7 +3,6 @@ package com.webobjects.monitor.rest;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.foundation.NSNumberFormatter;
 import com.webobjects.monitor._private.MApplication;
 import com.webobjects.monitor._private.MHost;
 import com.webobjects.monitor._private.MInstance;
