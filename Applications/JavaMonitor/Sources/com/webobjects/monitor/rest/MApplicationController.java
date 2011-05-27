@@ -3,6 +3,7 @@ package com.webobjects.monitor.rest;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSNumberFormatter;
 import com.webobjects.monitor._private.MApplication;
 import com.webobjects.monitor._private.MHost;
 import com.webobjects.monitor._private.MInstance;
@@ -63,7 +64,7 @@ public class MApplicationController extends JavaMonitorController {
 	public WOActionResults deleteInstanceAction() throws Throwable {
 		checkPassword();
 		MApplication application = (MApplication) routeObjectForKey("name");
-		deleteInstance(application, (Integer) routeObjectForKey("id"));
+		deleteInstance(application, Integer.valueOf(request().stringFormValueForKey("id")));
 		return response(application, ERXKeyFilter.filterWithNone());
 	}
 	
