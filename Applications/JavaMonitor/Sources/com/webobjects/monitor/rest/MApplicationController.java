@@ -63,7 +63,7 @@ public class MApplicationController extends JavaMonitorController {
 	public WOActionResults deleteInstanceAction() throws Throwable {
 		checkPassword();
 		MApplication application = (MApplication) routeObjectForKey("name");
-		deleteInstance(application, (Integer) routeObjectForKey("id"));
+		deleteInstance(application, Integer.valueOf(request().stringFormValueForKey("id")));
 		return response(application, ERXKeyFilter.filterWithNone());
 	}
 	
