@@ -14,6 +14,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 public class ERXJodaLocalDateFormatter extends Format {
+	private final String patternUsed;
 	private final DateTimeFormatter formatter;
 
 	public ERXJodaLocalDateFormatter(String pattern) {
@@ -33,6 +34,7 @@ public class ERXJodaLocalDateFormatter extends Format {
 	}
 	
 	public ERXJodaLocalDateFormatter(String pattern, Chronology chronology, Locale locale, DateTimeZone zone) {
+		patternUsed = pattern;
 		DateTimeFormatter f = DateTimeFormat.forPattern(pattern);
 		if(chronology != null) { f = f.withChronology(chronology); }
 		if(locale != null) { f = f.withLocale(locale); }
@@ -58,4 +60,7 @@ public class ERXJodaLocalDateFormatter extends Format {
 		return ld;
 	}
 
+	public String toPattern() {
+		return patternUsed;
+	}
 }
