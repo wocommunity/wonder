@@ -25,6 +25,7 @@ import er.attachment.utils.ERMimeTypeManager;
 import er.extensions.crypting.ERXCrypto;
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.validation.ERXValidationException;
 
 /**
@@ -139,6 +140,7 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
   protected static String _parsePathTemplate(ERAttachment attachment, String templatePath, String recommendedFileName) {
     String parsedPath = templatePath;
     String ext = ERMimeTypeManager.primaryExtension(attachment.mimeType());
+    recommendedFileName = ERXStringUtilities.urlEncode(recommendedFileName);
     if (ext == null) {
       ext = ERXFileUtilities.fileExtension(recommendedFileName);
     }
