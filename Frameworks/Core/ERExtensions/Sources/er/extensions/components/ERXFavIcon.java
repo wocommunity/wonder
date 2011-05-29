@@ -59,4 +59,6 @@ public class ERXFavIcon extends WOHTMLDynamicElement {
 		super.appendAttributesToResponse(response, context);
 	}
 	
+	protected boolean hasContent() { return false; }
+	
 }
