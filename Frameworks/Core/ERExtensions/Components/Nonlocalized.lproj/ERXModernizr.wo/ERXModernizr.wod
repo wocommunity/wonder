@@ -1,0 +1,12 @@
+Modernizr: ERXJavaScript {
+	filename = filename;
+	framework = framework;
+}
+
+ShouldPostData: WOConditional {
+	condition = shouldPostData;
+}
+
+URL: WOString {
+	value = postURL;
+}
