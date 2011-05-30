@@ -14,7 +14,7 @@ import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
- * ERXModernizr uses the Modernizr library to detect what javascript
+ * <p>ERXModernizr uses the Modernizr library to detect what javascript
  * capabilities a client browser has and then posts those values back
  * to the server to store them on the session. To use it, just drop it
  * in your page wrapper. For storage, this component relies on the
@@ -23,20 +23,20 @@ import er.extensions.foundation.ERXValueUtilities;
  * as the notification object. This is to permit logging of modernizr data
  * for later analysis. It also permits you to copy the modernizer data
  * elsewhere if the session's objectStore is not appropriate for your
- * needs.
+ * needs.</p>
  * 
- * It is recommended that in your ERXSession subclass, you set
+ * <p>It is recommended that in your ERXSession subclass, you set
  * <code>_javaScriptEnabled == Boolean.FALSE;</code> in the constructor.  
  * By default, it will be set to true when {@link ERXSession#javaScriptEnabled()} 
  * is called. This component will set the value to true whenever the 
  * modernizr data updates as a result of an ajax call... thus ensuring 
- * no false positives.
+ * no false positives.</p>
  * 
- * As a convenience, this component defines two properties for naming the
+ * <p>As a convenience, this component defines two properties for naming the
  * framework and filename for the modernizer script. This is to allow the
  * min.js for deployment while the full js can be used in development. The
  * component bindings are used as a default value should you prefer to use
- * bindings instead of properties.
+ * bindings instead of properties.</p>
  * 
  * @author Ramsey Gurley
  *
