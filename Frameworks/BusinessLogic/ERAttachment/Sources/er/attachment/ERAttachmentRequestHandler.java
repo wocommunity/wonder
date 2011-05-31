@@ -26,6 +26,7 @@ import er.attachment.processors.ERAttachmentProcessor;
 import er.extensions.components.ERXDynamicURL;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOGlobalIDUtilities;
+import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * ERAttachmentRequestHandler is the request handler that is used for loading 
@@ -101,6 +102,8 @@ public class ERAttachmentRequestHandler extends WORequestHandler {
           webPath = "/" + requestHandlerPath;
           idStr = null;
         }
+
+        webPath = ERXStringUtilities.urlDecode(webPath);
 
         try {
           InputStream attachmentInputStream;
