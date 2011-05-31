@@ -117,6 +117,7 @@ public class ERXModernizr extends ERXStatelessComponent {
 		if(shouldPostData()) {
 			NSArray<String> keys = request.formValueKeys();
 			keys = ERXQ.startsWith("toString", FORM_VALUE_PREFIX).filtered(keys);
+			if(keys.isEmpty()) { return; }
 			NSMutableDictionary<String, Boolean> modernizr = new NSMutableDictionary<String, Boolean>();
 			for(String key: keys) {
 				Boolean value = ERXValueUtilities.BooleanValueWithDefault(request.stringFormValueForKey(key), Boolean.FALSE);
