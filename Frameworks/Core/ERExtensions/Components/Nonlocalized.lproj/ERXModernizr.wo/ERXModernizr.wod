@@ -3,6 +3,10 @@ Modernizr: ERXJavaScript {
 	framework = framework;
 }
 
+Prefix: WOString {
+	value = formValuePrefix;
+}
+
 ShouldPostData: WOConditional {
 	condition = shouldPostData;
 }

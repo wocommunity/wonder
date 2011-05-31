@@ -5,8 +5,9 @@
 (function(){
 	var xhr = window.XMLHttpRequest?new XMLHttpRequest():new ActiveXObject("Microsoft.XMLHTTP"),
 		m = window.Modernizr,
-		url = '<webobject name="URL"/>',
+		url = '<webobject name = "URL"/>',
 		dat = '',
+		prefix = '<webobject name = "Prefix"/>',
 		i,
 		j,
 		t;
@@ -17,18 +18,18 @@
 				t=typeof m[i];
 				if(t==='function'){continue;}
 				if(t==='boolean') {
-					dat+= (dat?'&':'') + i + '=' + m[i];
+					dat+= (dat?'&':'') + prefix + i + '=' + m[i];
 				} else if(m[i] instanceof Boolean){
-					dat+= (dat?'&':'') + i + '=' + m[i];
+					dat+= (dat?'&':'') + prefix + i + '=' + m[i];
 					for(j in m[i]) {
 						if(m[i].hasOwnProperty(j)) {
-							dat += '&' + i + '.' + j + '=' + !!m[i][j];
+							dat += '&' + prefix + i + '.' + j + '=' + !!m[i][j];
 						}
 					}
 				} else {
 					for(j in m[i]) {
 						if(m[i].hasOwnProperty(j)) {
-							dat += (dat?'&':'') + i + '.' + j + '=' + !!m[i][j];
+							dat += (dat?'&':'') + prefix + i + '.' + j + '=' + !!m[i][j];
 						}
 					}
 				}

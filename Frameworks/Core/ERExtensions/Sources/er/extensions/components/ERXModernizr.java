@@ -10,6 +10,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotificationCenter;
 
 import er.extensions.appserver.ERXSession;
+import er.extensions.eof.ERXQ;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXValueUtilities;
 
@@ -49,6 +50,8 @@ public class ERXModernizr extends ERXStatelessComponent {
 	public static final String MODERNIZR_KEY = "modernizr";
 	public static final String MODERNIZR_UPDATED_NOTIFICATION = "ERXModernizrUpdatedNotification";
 
+	private static final String FORM_VALUE_PREFIX = "_modernizr.";
+	
 	public ERXModernizr(WOContext context) {
 		super(context);
 	}
@@ -86,6 +89,13 @@ public class ERXModernizr extends ERXStatelessComponent {
 		String key = WOApplication.application().ajaxRequestHandlerKey();
 		return context().componentActionURL(key);
 	}
+	
+	/**
+	 * @return prefix used to identify modernizr form values
+	 */
+	public String formValuePrefix() {
+		return FORM_VALUE_PREFIX;
+	}
 
 	/**
 	 * Returns true if the component should include a script to post modernizr
@@ -102,19 +112,22 @@ public class ERXModernizr extends ERXStatelessComponent {
 	/**
 	 * Overridden to capture the modernizr data being sent from the client.
 	 */
-	public WOActionResults invokeAction(WORequest request, WOContext context) {
-		WOActionResults result = super.invokeAction(request, context);
-		NSArray<String> keys = request.formValueKeys();
-		NSMutableDictionary<String, Boolean> modernizr = new NSMutableDictionary<String, Boolean>();
-		for(String key: keys) {
-			Boolean value = ERXValueUtilities.BooleanValueWithDefault(request.stringFormValueForKey(key), Boolean.FALSE);
-			modernizr.setObjectForKey(value, key);
+	public void takeValuesFromRequest(WORequest request, WOContext context) {
+		super.takeValuesFromRequest(request, context);
+		if(shouldPostData()) {
+			NSArray<String> keys = request.formValueKeys();
+			keys = ERXQ.startsWith("toString", FORM_VALUE_PREFIX).filtered(keys);
+			NSMutableDictionary<String, Boolean> modernizr = new NSMutableDictionary<String, Boolean>();
+			for(String key: keys) {
+				Boolean value = ERXValueUtilities.BooleanValueWithDefault(request.stringFormValueForKey(key), Boolean.FALSE);
+				key = key.substring(FORM_VALUE_PREFIX.length());
+				modernizr.setObjectForKey(value, key);
+			}
+			ERXSession session = ERXSession.session();
+			session.objectStore().takeValueForKey(modernizr.immutableClone(), MODERNIZR_KEY);
+			session.setJavaScriptEnabled(true);
+			postNotification(session);
 		}
-		ERXSession session = ERXSession.session();
-		session.objectStore().takeValueForKey(modernizr.immutableClone(), MODERNIZR_KEY);
-		session.setJavaScriptEnabled(true);
-		postNotification(session);
-		return result;
 	}
 
 	/**
