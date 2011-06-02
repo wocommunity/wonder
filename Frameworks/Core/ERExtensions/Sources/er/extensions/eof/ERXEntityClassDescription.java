@@ -1139,8 +1139,14 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         }
         for( Enumeration e = _initialDefaultValues.keyEnumerator(); e.hasMoreElements();) {
             String key = (String)e.nextElement();
-            defaultLog.debug("About to set <"+key+"> in EO");
-            ((Default)_initialDefaultValues.objectForKey(key)).setValueInObject(eo);
+            /* A value may have already been set if insertion was done after setting some values.
+             * For example, _EOSavingProxy.awakeInDistributionContext does this for Java Client apps. 
+             * If so, don't overwrite the existing values.
+             */
+            if (eo.valueForKey(key) == null) { 
+            	defaultLog.debug("About to set <"+key+"> in EO");
+            	((Default)_initialDefaultValues.objectForKey(key)).setValueInObject(eo);
+            }
         }
     }
 
