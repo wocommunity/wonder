@@ -26,7 +26,7 @@ public class ERXRestFormatDelegate implements ERXRestFormat.Delegate {
 	private boolean _writeTypeKey;
 
 	public ERXRestFormatDelegate() {
-		this(ERXProperties.stringForKeyWithDefault("ERXRest.idKey", ERXRestFormatDelegate.ID_KEY), ERXProperties.stringForKeyWithDefault("ERXRest.typeKey", ERXRestFormatDelegate.TYPE_KEY), ERXProperties.stringForKeyWithDefault("ERXRest.nilKey", ERXRestFormatDelegate.NIL_KEY), true, ERXProperties.booleanForKeyWithDefault("ERXRest.pluralEntityNames", true), false, false);
+		this(ERXProperties.stringForKeyWithDefault("ERXRest.idKey", ERXRestFormatDelegate.ID_KEY), ERXProperties.stringForKeyWithDefault("ERXRest.typeKey", ERXRestFormatDelegate.TYPE_KEY), ERXProperties.stringForKeyWithDefault("ERXRest.nilKey", ERXRestFormatDelegate.NIL_KEY), ERXProperties.booleanForKeyWithDefault("ERXRest.writeNilKey", true), ERXProperties.booleanForKeyWithDefault("ERXRest.pluralEntityNames", true), false, false);
 	}
 
 	public ERXRestFormatDelegate(String idKey, String typeKey, String nilKey, boolean writeNilKey, boolean pluralNames, boolean underscoreNames, boolean arrayTypes) {
