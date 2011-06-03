@@ -1329,12 +1329,15 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 							childObj = NSKeyValueCoding.DefaultImplementation.valueForKey(obj, keyName);
 							if (!lockedRelationship && childObj == null) {
 								childObj = IERXRestDelegate.Factory.delegateForClassDescription(destinationClassDescription).createObjectOfEntityWithID(destinationClassDescription, null, context);
+<<<<<<< HEAD
 							}
 						}
 						else if ("_".equals(id)) {
 							childObj = NSKeyValueCoding.DefaultImplementation.valueForKey(obj, keyName);
 							if (!lockedRelationship && childObj == null) {
 								childObj = IERXRestDelegate.Factory.delegateForClassDescription(destinationClassDescription).createObjectOfEntityWithID(destinationClassDescription, null, context);
+=======
+>>>>>>> c9da40c56b7e1a9a72a945ac04261b7d9931722b
 							}
 						}
 						else {
