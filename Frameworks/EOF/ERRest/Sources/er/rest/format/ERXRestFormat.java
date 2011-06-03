@@ -21,6 +21,7 @@ public class ERXRestFormat {
 	public static final String PLIST_KEY = "plist";
 	public static final String SPROUTCORE_KEY = "sc";
 	public static final String XML_KEY = "xml";
+	public static final String FORM_KEY = "form";
 
 	private static Map<String, ERXRestFormat> _formats = new ConcurrentHashMap<String, ERXRestFormat>();
 	
@@ -34,6 +35,7 @@ public class ERXRestFormat {
 		ERXRestFormat.registerFormatNamed(new ERXXmlRestParser(), new ERXXmlRestWriter(), new ERXRestFormatDelegate(), ERXRestFormat.XML_KEY, "application/xml", "text/xml");
 		ERXRestFormat.registerFormatNamed(null, new ERXSimpleRestWriter(), new ERXRestFormatDelegate(), ERXRestFormat.HTML_KEY, "text/html");
 		ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXSproutCoreRestWriter(), new ERXRestFormatDelegate("guid", "type", "nil", true, true, false, false), ERXRestFormat.SPROUTCORE_KEY, "application/sc");
+		ERXRestFormat.registerFormatNamed(new ERXFormRestParser(), new ERXJSONRestWriter(), new ERXRestFormatDelegate(), ERXRestFormat.FORM_KEY, "application/x-www-form-urlencoded");
 	}
 
 	private String _name;
@@ -61,6 +63,16 @@ public class ERXRestFormat {
 	@Deprecated
 	public static final ERXRestFormat SPROUTCORE = ERXRestFormat.formatNamed(ERXRestFormat.SPROUTCORE_KEY);
 	
+	    
+	/**
+	 * Returns the registered html form format.
+	 * 
+	 * @return the registered html form format
+	*/
+	public static ERXRestFormat form() {
+		return formatNamed(ERXRestFormat.FORM_KEY);
+	}
+
 	/**
 	 * Returns the registered html format.
 	 * 
@@ -161,6 +173,16 @@ public class ERXRestFormat {
 	}
 	
 	/**
+	 * Returns a parsed ERXRestRequestNode using this format's parser.
+	 * 
+	 * @param request the request
+	 * @return the parsed request node
+	*/
+	public ERXRestRequestNode parse(IERXRestRequest request, ERXRestContext context) {
+		return parser().parseRestRequest(request, _delegate, context);
+	}
+
+	/**
 	 * Returns the formatted version of the given object using a recursive "All" filter and the default rest delegate.
 	 * 
 	 * @param obj the object to render
@@ -224,6 +246,16 @@ public class ERXRestFormat {
 		return "[ERXRestFormat: " + _name + "]";
 	}
 
+	/**
+	 * Returns true if there is a format registered with the given name.
+	 * 
+	 * @param name the name to lookup
+	 * @return true if there is a format registered with the given name
+	 */
+	public static boolean hasFormatNamed(String name) {
+		return name != null && _formats.containsKey(name.toLowerCase());
+	}
+	
 	public static ERXRestFormat formatNamed(String name) {
 		ERXRestFormat format = _formats.get(name.toLowerCase());
 		if (format == null) {
