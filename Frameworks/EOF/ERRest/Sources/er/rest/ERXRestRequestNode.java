@@ -330,42 +330,99 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	public Object associatedObject() {
 		return _associatedObject;
 	}
+ 	
+ 	/**
+ 	 * A parsed keypath segment that can contain either a name or a name and an index 
+ 	 */
+ 	private static class Key {
+ 		public final String _name;
+ 		public final int _index;
+ 		
+ 		public Key(String name, int index) {
+ 			_name = name;
+ 			_index = index;
+ 		}
+ 		
+ 		/**
+ 		 * Parses "keyName" or "keyName[x]" format keys.
+ 		 * 
+ 		 * @param keySegment the segment of a keypath to parse
+ 		 * @return a Key object
+ 		 */
+ 		public static Key parse(String keySegment) {
+ 			String key = keySegment;
+			int keyIndex = -1;
+			int closeBracketIndex = key.lastIndexOf(']');
+			if (closeBracketIndex != -1) {
+				int openBracketIndex = key.lastIndexOf('[');
+				if (openBracketIndex != -1) {
+					keyIndex = Integer.valueOf(key.substring(openBracketIndex + 1, closeBracketIndex));
+					key = key.substring(0, openBracketIndex);
+				}
+			}
+			return new Key(key, keyIndex);
+ 		}
+ 	}
 
-	public void takeValueForKey(Object value, String key) {
+	public void takeValueForKey(Object value, String keyName) {
 		if (value instanceof ERXRestRequestNode) {
-			removeAttributeForKey(key);
-			removeChildNamed(key);
-			((ERXRestRequestNode)value).setName(key);
+			removeAttributeForKey(keyName);
+			removeChildNamed(keyName);
+			((ERXRestRequestNode)value).setName(keyName);
 			addChild((ERXRestRequestNode)value);
 		}
-		else if (_attributes.containsKey(key)) {
-			_attributes.put(key, value);
+		else if (_attributes.containsKey(keyName)) {
+			_attributes.put(keyName, value);
 		}
 		else {
-			ERXRestRequestNode child = childNamed(key);
+			Key key = Key.parse(keyName);
+			ERXRestRequestNode child = childNamed(key._name);
 			if (child == null) {
-				addChild(new ERXRestRequestNode(key, value, false));
+ 				if (key._index != -1) {
+ 					child = new ERXRestRequestNode(key._name, null, false);
+ 					addChild(child);
+ 					child.childAtIndex(key._index).setValue(value);
+ 				}
+ 				else {
+ 					addChild(new ERXRestRequestNode(key._name, value, false));
+ 				}
 				//throw new NSKeyValueCoding.UnknownKeyException("There is no key named '" + key + "' on this node.", this, key);
 			}
-			else if (child.children().size() == 0) {
-				child.setValue(value);
-			}
+ 			else if (key._index != -1) {
+	 	    		child.childAtIndex(key._index).setValue(value);
+ 			}
 			else {
-				throw new IllegalArgumentException("Unable to set the value of '" + key + "' to " + value + ".");
+				throw new IllegalArgumentException("Unable to set the value of '" + key._name + "' to " + value + ".");
 			}
 		}
 	}
 
-	public Object valueForKey(String key) {
+	public Object valueForKey(String keyName) {
 		Object value;
-		if (_attributes.containsKey(key)) {
-			value = _attributes.get(key);
+		if (_attributes.containsKey(keyName)) {
+			value = _attributes.get(keyName);
 		}
 		else {
-			ERXRestRequestNode child = childNamed(key);
+ 			Key key = Key.parse(keyName);
+ 			
+ 			ERXRestRequestNode child = childNamed(key._name);
 			if (child == null) {
-				throw new NSKeyValueCoding.UnknownKeyException("There is no key named '" + key + "' on this node.", this, key);
+				throw new NSKeyValueCoding.UnknownKeyException("There is no key named '" + key._name + "' on this node.", this, key);
 			}
+ 			else if (key._index != -1) {
+ 				if (child.children().count() <= key._index) {
+ 					throw new NSKeyValueCoding.UnknownKeyException("There is no key named '" + key._name + "' with a child index " + key._index + " on this node.", this, key._name);
+ 				}
+ 				else {
+ 					ERXRestRequestNode indexChild = (ERXRestRequestNode)child.children().objectAtIndex(key._index);
+ 					if (indexChild.children().count() == 0) {
+ 						value = indexChild.value();
+ 					}
+ 					else {
+ 						value = indexChild;
+ 					}
+ 				}
+ 			}
 			else if (child.children().size() == 0) {
 				value = child.value();
 			}
@@ -379,25 +436,42 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	public Object valueForKeyPath(String keyPath) {
 		return NSKeyValueCodingAdditions.DefaultImplementation.valueForKeyPath(this, keyPath);
 	}
-
+	
 	public void takeValueForKeyPath(Object value, String keyPath) {
         if (keyPath == null) {
             throw new IllegalArgumentException("Key path cannot be null");
         }
 
-        int index = keyPath.indexOf(NSKeyValueCodingAdditions._KeyPathSeparatorChar);
-        if (index != -1) {
-        	String key = keyPath.substring(0, index);
-			ERXRestRequestNode child = childNamed(key);
+        int separatorIndex = keyPath.indexOf(NSKeyValueCodingAdditions._KeyPathSeparatorChar);
+        if (separatorIndex != -1) {
+	    	Key key = Key.parse(keyPath.substring(0, separatorIndex));
+			ERXRestRequestNode child = childNamed(key._name);
 			if (child == null) {
-				child = new ERXRestRequestNode(key, false); 
+				child = new ERXRestRequestNode(key._name, false); 
 				addChild(child);
 			}
-			child.takeValueForKeyPath(value, keyPath.substring(index + 1));
+			String nextKeyPath = keyPath.substring(separatorIndex + 1);
+	    	if (key._index == -1) {
+				child.takeValueForKeyPath(value, nextKeyPath);
+	    	}
+	    	else {
+	    		child.childAtIndex(key._index).takeValueForKeyPath(value, nextKeyPath);
+	    	}
         }
         else {
-        	takeValueForKey(value, keyPath);
+    		takeValueForKey(value, keyPath);
         }
+	}
+	
+	public ERXRestRequestNode childAtIndex(int index) {
+		int childCount = _children.count();
+		if (childCount <= index) {
+			setArray(true);
+			for (int i = childCount; i <= index; i ++) {
+				addChild(new ERXRestRequestNode(null, false));
+			}
+		}
+		return (ERXRestRequestNode)_children.objectAtIndex(index);
 	}
 
 	/**
