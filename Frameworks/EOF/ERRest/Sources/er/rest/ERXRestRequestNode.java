@@ -335,6 +335,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 		if (value instanceof ERXRestRequestNode) {
 			removeAttributeForKey(key);
 			removeChildNamed(key);
+			((ERXRestRequestNode)value).setName(key);
 			addChild((ERXRestRequestNode)value);
 		}
 		else if (_attributes.containsKey(key)) {
