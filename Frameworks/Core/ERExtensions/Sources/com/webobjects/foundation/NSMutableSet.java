@@ -74,6 +74,23 @@ public class NSMutableSet<E> extends NSSet<E> {
 			_objectsCache = null;
 		}
 	}
+	
+	public void addObjects(E... objects) {
+		if (objects != null && objects.length > 0) {
+			int capacity = _capacity;
+			int count = _count;
+			if (count + objects.length > capacity) {
+				_ensureCapacity(count + objects.length);
+			}
+            for (int i = 0; i < objects.length; i++) {
+                if (objects[i] == null)
+                    throw new IllegalArgumentException("Attempt to insert null into an  " + getClass().getName() + ".");
+                if (_NSCollectionPrimitives.addValueToSet(objects[i], _objects, _flags)) {
+                	_count++;
+                }
+            }
+		}
+	}
 
 	public E removeObject(Object object) {
 		Object result = null;
