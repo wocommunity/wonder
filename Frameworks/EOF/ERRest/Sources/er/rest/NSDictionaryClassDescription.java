@@ -32,7 +32,7 @@ public class NSDictionaryClassDescription extends EOClassDescription implements 
 	public String entityName() {
 		String entityName = (String) _map.objectForKey("entityName");
 		if (entityName == null) {
-			entityName = _map.getClass().getSimpleName();
+			entityName = "NSDictionary";
 		}
 		return entityName;
 	}

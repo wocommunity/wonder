@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
 /**
@@ -31,7 +32,12 @@ public class MapClassDescription extends EOClassDescription implements IERXNonEO
 	public String entityName() {
 		String entityName = (String) _map.get("entityName");
 		if (entityName == null) {
-			entityName = "HashMap";
+		    if (_map instanceof NSDictionary) {
+		        entityName = "NSDictionary";
+		    }
+		    else {
+		        entityName = "HashMap";
+		    }
 		}
 		return entityName;
 	}
