@@ -29,6 +29,7 @@ public class Manufacturer {
     }
 
     private String _name;
+    private NSMutableArray<Car> _cars;
 
     public Manufacturer() {
     }
@@ -43,5 +44,22 @@ public class Manufacturer {
 
     public String getName() {
         return _name;
+    }
+    
+    public NSArray<Car> cars() {
+        return _cars;
+    }
+    
+    public void addCar(Car car) {
+        if (_cars == null) {
+            _cars = new NSMutableArray<Car>();
+        }
+        _cars.addObject(car);
+    }
+    
+    public void removeCar(Car car) {
+        if (_cars != null) {
+            _cars.removeObject(car);
+        }
     }
 }
