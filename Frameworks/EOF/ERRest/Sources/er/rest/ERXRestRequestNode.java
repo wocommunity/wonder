@@ -1300,7 +1300,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	// MS: Totally debatable .... I may take this back out, but it makes things look prettier.
 	public void _removeRedundantTypes() {
 		String type = type();
-		if ("NSDictionary".equals(type) || "NSMutableDictionary".equals(type)) {
+		if ("NSDictionary".equals(type) || "NSMutableDictionary".equals(type) || "HashMap".equals(type)) {
 			setType(null);
 		}
 		NSArray<ERXRestRequestNode> children = children();

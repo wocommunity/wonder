@@ -31,7 +31,7 @@ public class MapClassDescription extends EOClassDescription implements IERXNonEO
 	public String entityName() {
 		String entityName = (String) _map.get("entityName");
 		if (entityName == null) {
-			entityName = _map.getClass().getSimpleName();
+			entityName = "HashMap";
 		}
 		return entityName;
 	}
