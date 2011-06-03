@@ -3,9 +3,9 @@ package er.rest.format;
 import java.io.InputStream;
 
 import com.webobjects.appserver.WORequest;
+import com.webobjects.foundation.NSArray;
 
 public class ERXWORestRequest implements IERXRestRequest {
-
 	private WORequest _request;
 	
 	public ERXWORestRequest(WORequest request) {
@@ -23,5 +23,12 @@ public class ERXWORestRequest implements IERXRestRequest {
 		}
 		return is;
 	}
-
+	
+	public NSArray<String> keyNames() {
+		return _request.formValueKeys();
+	}
+	
+	public Object objectForKey(String key) {
+		return _request.formValueForKey(key);
+	}
 }
