@@ -84,6 +84,7 @@ public class ERXRouteController extends WODirectAction {
 	private NSKeyValueCoding _options;
 	private NSSet<String> _prefetchingKeyPaths;
 	private boolean _shouldDisposeEditingContext;
+	private ERXRestContext _restContext;
 
 	/**
 	 * Constructs a new ERXRouteController.
@@ -440,8 +441,35 @@ public class ERXRouteController extends WODirectAction {
 		return ERXRestFormat.formatNamed(type);
 	}
 
-	protected ERXRestContext restContext() {
+	/**
+ 	 * Creates a new rest context for the controller.
+	 * 
+	 * @return a new rest context for the controller
+	*/
+	protected ERXRestContext createRestContext() {
 		return new ERXRestContext(editingContext());
+	}
+    
+	/**
+	 * Returns the cached rest context for this controller. If a rest context doesn't yet
+	 * exist, this calls {{@link #createRestContext()} to create a new instance. 
+	 * 
+	 * @return the rest context for this controller
+	*/
+	public ERXRestContext restContext() {
+		if (_restContext == null) {
+			_restContext = createRestContext();
+		}
+		return _restContext;
+	}
+	
+	/**
+	 * Sets the rest context for this controller.
+	 * 
+	 * @param restContext the rest context for this controller
+	 */
+	public void setRestContext(ERXRestContext restContext) {
+		_restContext = restContext;
 	}
 
 	/**
