@@ -112,7 +112,7 @@ public class ERXRestFormatDelegate implements ERXRestFormat.Delegate {
 		}
 
 		if (node.isNull() && _writeNilKey) {
-			node.setAttributeForKey("true", _nilKey);
+			node.setAttributeForKey(Boolean.TRUE, _nilKey);
 		}
 		
 		if (_underscoreNames) {
