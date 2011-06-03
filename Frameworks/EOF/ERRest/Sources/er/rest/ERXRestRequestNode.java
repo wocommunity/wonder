@@ -697,6 +697,15 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	}
 
 	/**
+	 * Equivalent to objectWithFilter(null, ERXKeyFilter.filterWithAllRecursive(), new ERXRestContext());
+	 * 
+	 * @return the object that this request node represents
+	 */
+	public Object object() {
+		return objectWithFilter(null, ERXKeyFilter.filterWithAllRecursive(), new ERXRestContext());
+	}
+
+	/**
 	 * Returns the object that this request node represents.
 	 * 
 	 * @param entityName
@@ -733,6 +742,15 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 		return obj;
 	}
 
+	/**
+	 * Equivalent to createObjectWithFilter(null, ERXKeyFilter.filterWithAllRecursive(), new ERXRestContext());
+	 *  
+	 * @return a new instance of an object represented by this request node
+	 */
+	public Object createObject() {
+		return createObjectWithFilter(null, ERXKeyFilter.filterWithAllRecursive(), new ERXRestContext());
+	}
+	
 	/**
 	 * Creates a new instance of an object represented by this request node.
 	 * 
@@ -1010,6 +1028,16 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 		if (delegate != null) {
 			delegate.didSkipValueForKey(target, value, key);
 		}
+	}
+
+	/**
+	 * Equivalent to updateObjectWithFilter(obj, ERXKeyFilter.filterWithAllRecursive(), new ERXRestContext());
+	 * 
+	 * @param obj
+	 *            the object to update
+	 */
+	public void updateObject(Object obj) {
+		updateObjectWithFilter(obj, ERXKeyFilter.filterWithAllRecursive(), new ERXRestContext());
 	}
 
 	/**
