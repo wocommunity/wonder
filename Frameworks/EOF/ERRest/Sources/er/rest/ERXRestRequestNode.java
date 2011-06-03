@@ -894,7 +894,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 						else if (nonModelClassDescription instanceof BeanInfoClassDescription && ((BeanInfoClassDescription) nonModelClassDescription).isToOneMethod(keyName)) {
 							_addToOneRelationshipNodeForKeyInObject(remainingKey, obj, nonModelClassDescription.classDescriptionForDestinationKey(keyName), keyFilter, context, visitedObjects);
 						}
-						else {
+						else if (!keyFilter.isUnknownKeyIgnored()) {
 							throw new IllegalArgumentException("This key filter specified that the key '" + keyName + "' should be included on '" + nonModelClassDescription.entityName() + "', but it does not exist.");
 						}
 					}
@@ -912,12 +912,12 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 						else if (beanInfoClassDescription.isToOneMethod(keyName)) {
 							_addToOneRelationshipNodeForKeyInObject(remainingKey, obj, beanInfoClassDescription.classDescriptionForDestinationKey(keyName), keyFilter, context, visitedObjects);
 						}
-						else {
+						else if (!keyFilter.isUnknownKeyIgnored()) {
 							throw new IllegalArgumentException("This key filter specified that the key '" + keyName + "' should be included on '" + beanInfoClassDescription.entityName() + "', but it does not exist.");
 						}
 					}
 				}
-				else {
+				else if (!keyFilter.isUnknownKeyIgnored()) {
 					throw new IllegalArgumentException("This key filter specified that the keys '" + remainingKeys + "' should be included on '" + classDescription.entityName() + "', but they do not exist.");
 				}
 			}
