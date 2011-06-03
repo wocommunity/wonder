@@ -45,7 +45,13 @@ public class Car {
     }
 
     public void setManufacturer(Manufacturer manufacturer) {
+        if (_manufacturer != null) {
+            _manufacturer.removeCar(this);
+        }
         _manufacturer = manufacturer;
+        if (_manufacturer != null) {
+            _manufacturer.addCar(this);
+        }
     }
 
     public Manufacturer getManufacturer() {

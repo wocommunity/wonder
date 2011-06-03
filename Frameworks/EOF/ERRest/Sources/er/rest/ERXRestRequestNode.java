@@ -407,7 +407,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
  			
  			ERXRestRequestNode child = childNamed(key._name);
 			if (child == null) {
-				throw new NSKeyValueCoding.UnknownKeyException("There is no key named '" + key._name + "' on this node.", this, key);
+				throw new NSKeyValueCoding.UnknownKeyException("There is no key named '" + key._name + "' on this node.", this, key._name);
 			}
  			else if (key._index != -1) {
  				if (child.children().count() <= key._index) {
