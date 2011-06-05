@@ -361,6 +361,9 @@ public class ERXFlickrBatchNavigation extends ERXComponent {
 			int currentBatchIndex = currentBatchIndex();
 			int numberOfObjectsPerBatch = numberOfObjectsPerBatch();
 			lastIndex = currentBatchIndex * numberOfObjectsPerBatch;
+			if(lastIndex > maxNumberOfObjects()) {
+				lastIndex = maxNumberOfObjects();
+			}
 		}
 		return lastIndex;
 	}
