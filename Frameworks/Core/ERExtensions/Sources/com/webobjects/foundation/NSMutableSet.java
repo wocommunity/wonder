@@ -7,14 +7,14 @@ import java.util.Set;
  * NSSet reimplementation to support JDK 1.5 templates. Use with
  * 
  * <pre>
- * NSMutableSet&lt;T&gt; set = new NSMutableSet&lt;T&gt;();
- * set.put(new T())
+ * NSMutableSet&lt;E&gt; set = new NSMutableSet&lt;E&gt;();
+ * set.put(new E())
  * 
- * for (T t : set)
+ * for (E t : set)
  *     logger.debug(t);
  * </pre>
  * 
- * @param &lt;T&gt;
+ * @param <E>
  *            type of set contents
  */
 

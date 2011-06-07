@@ -16,12 +16,12 @@ import java.util.Set;
  * NSSet reimplementation to support JDK 1.5 templates. Use with
  * 
  * <pre>
- * NSSet&lt;T&gt; setA = new NSSet&lt;T&gt;(NSArray &lt; T &gt; listA);
- * NSSet&lt;T&gt; setB = new NSSet&lt;T&gt;(NSArray &lt; T &gt; listB);
+ * NSSet&lt;E&gt; setA = new NSSet&lt;E&gt;(NSArray&lt;E&gt; listA);
+ * NSSet&lt;E&gt; setB = new NSSet&lt;E&gt;(NSArray&lt;E&gt; listB);
  * logger.debug(&quot;intersection contains &quot; + setA.setByIntersectingSet(setB));
  * </pre>
  * 
- * @param &lt;T&gt;
+ * @param <E>
  *            type of set contents
  */
 public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundationCollection, Set<E> {
