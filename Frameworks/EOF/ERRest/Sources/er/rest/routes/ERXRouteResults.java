@@ -4,6 +4,7 @@ import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver.WOSession;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.rest.ERXRestContext;
@@ -87,6 +88,11 @@ public class ERXRouteResults implements WOActionResults {
 			for (String key : _headers.keySet()) {
 				response.setHeader(_headers.objectForKey(key), key);
 			}
+		}
+		// PR: ERXRouteResults is not extending from WOResponse, so this code can't be in ERXRouteController.processActionResults
+		WOSession session = _context.session();
+		if (session != null && session.storesIDsInCookies()) {
+			session._appendCookieToResponse(response);
 		}
 		return response;
 	}
