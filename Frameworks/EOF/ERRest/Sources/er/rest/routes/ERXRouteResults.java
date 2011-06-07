@@ -90,7 +90,7 @@ public class ERXRouteResults implements WOActionResults {
 			}
 		}
 		// PR: ERXRouteResults is not extending from WOResponse, so this code can't be in ERXRouteController.processActionResults
-		WOSession session = _context.session();
+		WOSession session = _context._session();
 		if (session != null && session.storesIDsInCookies()) {
 			session._appendCookieToResponse(response);
 		}
