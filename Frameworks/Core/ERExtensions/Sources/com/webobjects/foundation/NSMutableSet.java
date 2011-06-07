@@ -64,29 +64,26 @@ public class NSMutableSet<E> extends NSSet<E> {
 		if (object == null) {
 			throw new IllegalArgumentException("Attempt to insert null into an  " + getClass().getName() + ".");
 		}
-		int capacity = _capacity;
-		int count = _count;
-		if (++count > capacity) {
+		int count = count();
+		if (++count > capacity()) {
 			_ensureCapacity(count);
 		}
 		if (_NSCollectionPrimitives.addValueToSet(object, _objects, _flags)) {
-			_count = count;
+			_setCount(count);
 			_objectsCache = null;
 		}
 	}
 	
 	public void addObjects(E... objects) {
 		if (objects != null && objects.length > 0) {
-			int capacity = _capacity;
-			int count = _count;
-			if (count + objects.length > capacity) {
-				_ensureCapacity(count + objects.length);
+			if (count() + objects.length > capacity()) {
+				_ensureCapacity(count() + objects.length);
 			}
             for (int i = 0; i < objects.length; i++) {
                 if (objects[i] == null)
                     throw new IllegalArgumentException("Attempt to insert null into an  " + getClass().getName() + ".");
                 if (_NSCollectionPrimitives.addValueToSet(objects[i], _objects, _flags)) {
-                	_count++;
+                	_setCount(count() + 1);
                 }
             }
 		}
@@ -94,12 +91,12 @@ public class NSMutableSet<E> extends NSSet<E> {
 
 	public E removeObject(Object object) {
 		Object result = null;
-		if (object != null && _count != 0) {
+		if (object != null && count() != 0) {
 			result = _NSCollectionPrimitives.removeValueInHashTable(object, _objects, _objects, _flags);
 			if (result != null) {
-				_count--;
+				_setCount(count() - 1);
 				_deletionLimit--;
-				if (_count == 0 || _deletionLimit == 0) {
+				if (count() == 0 || _deletionLimit == 0) {
 					_clearDeletionsAndCollisions();
 				}
 				_objectsCache = null;
@@ -109,10 +106,10 @@ public class NSMutableSet<E> extends NSSet<E> {
 	}
 
 	public void removeAllObjects() {
-		if (_count != 0) {
+		if (count() != 0) {
 			_objects = new Object[_hashtableBuckets];
 			_flags = new byte[_hashtableBuckets];
-			_count = 0;
+			_setCount(0);
 			_objectsCache = null;
 			_deletionLimit = _NSCollectionPrimitives.deletionLimitForTableBuckets(_hashtableBuckets);
 		}
