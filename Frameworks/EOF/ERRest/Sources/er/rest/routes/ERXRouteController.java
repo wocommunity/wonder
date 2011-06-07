@@ -1147,6 +1147,19 @@ public class ERXRouteController extends WODirectAction {
 		log.error("Request failed: " + request().uri() + ", " + errorMessage);
 		return response;
 	}
+	
+	/**
+	 * Returns an error response with the given HTTP status and without any body content
+	 * @param status
+	 *            the HTTP status code
+	 * @return an error WOResponse
+	 */
+	public WOActionResults errorResponse(int status) {
+		WOResponse response = WOApplication.application().createResponseInContext(context());
+		response.setStatus(status);
+		log.error("Request failed: " + request().uri() + ", " + status);
+		return response;
+	}
 
 	/**
 	 * Returns the response from a HEAD call to this controller.
