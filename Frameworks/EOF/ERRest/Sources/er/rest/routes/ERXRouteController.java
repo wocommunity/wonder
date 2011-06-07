@@ -418,7 +418,22 @@ public class ERXRouteController extends WODirectAction {
 //					}
 //				}
 //			}
-	
+			
+			/*
+			 * To trap things like this: 
+			 *   Content-Type: application/json
+			 * JBoss's RestEasy use this header
+			 */
+			if (type == null) {
+				String contentType = request().headerForKey("Content-Type");
+				if (contentType != null) {
+					String[] types = contentType.split("/");
+					if (types.length == 2) {
+						type = types[1];
+					}
+				}
+			}
+
 			if (type == null) {
 				format = defaultFormat();
 			}
