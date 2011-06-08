@@ -1,4 +1,4 @@
-package er.rest;
+package er.extensions.appserver;
 
 import com.webobjects.appserver.WOMessage;
 
@@ -9,7 +9,7 @@ import com.webobjects.appserver.WOMessage;
  * @author probert
  *
  */
-public class ERXStatusCodes {
+public class ERXHttpStatusCodes {
 	
 	/** 
 	 * 200 OK 
