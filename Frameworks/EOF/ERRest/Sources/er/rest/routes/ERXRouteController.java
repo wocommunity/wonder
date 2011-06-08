@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.apache.log4j.Logger;
 
@@ -1550,7 +1551,7 @@ public class ERXRouteController extends WODirectAction {
 	protected WOActionResults performActionNamedWithError(String actionName, Throwable t) {
 		WOActionResults results = null;
 		Throwable meaningfulThrowble = ERXExceptionUtilities.getMeaningfulThrowable(t);
-		if (meaningfulThrowble instanceof ObjectNotAvailableException || meaningfulThrowble instanceof FileNotFoundException) {
+		if (meaningfulThrowble instanceof ObjectNotAvailableException || meaningfulThrowble instanceof FileNotFoundException || meaningfulThrowble instanceof NoSuchElementException) {
 			results = errorResponse(meaningfulThrowble, WOMessage.HTTP_STATUS_NOT_FOUND);
 		}
 		else if (meaningfulThrowble instanceof SecurityException) {
