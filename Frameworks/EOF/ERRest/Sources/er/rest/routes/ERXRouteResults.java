@@ -7,6 +7,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.foundation.ERXProperties;
 import er.rest.ERXRestContext;
 import er.rest.ERXRestRequestNode;
 import er.rest.format.ERXRestFormat;
@@ -78,6 +79,8 @@ public class ERXRouteResults implements WOActionResults {
 	 * @return a generated WOResponse
 	 */
 	public WOResponse generateResponse() {
+		boolean isStrictMode = ERXProperties.booleanForKeyWithDefault("ERXRest.strictMode", true);
+		
 		WOResponse response = WOApplication.application().createResponseInContext(_context);
 		IERXRestWriter writer = _format.writer();
 		if (writer == null) {
@@ -88,6 +91,9 @@ public class ERXRouteResults implements WOActionResults {
 			for (String key : _headers.keySet()) {
 				response.setHeader(_headers.objectForKey(key), key);
 			}
+		}
+		if (("POST".equals(_context.request().method())) && (isStrictMode)) {
+			response.setStatus(201);
 		}
 		// PR: ERXRouteResults is not extending from WOResponse, so this code can't be in ERXRouteController.processActionResults
 		WOSession session = _context._session();
