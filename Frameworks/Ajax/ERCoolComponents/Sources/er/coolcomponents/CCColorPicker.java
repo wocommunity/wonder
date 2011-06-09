@@ -11,6 +11,9 @@ import er.extensions.components.ERXComponent;
  * this is a first implementation of CCColorPicker that actually use JScolor
  * 
  * @binding value String
+ * @bindind id
+ * @binding style
+ * @binding class
  * 
  * @author amedeomantica
  *
