@@ -1,0 +1,11 @@
+WOTextField : WOTextField {
+  id = "^id";
+  style = "^style";
+  class = fieldClass;
+  value = value;
+}
+
+ERXJavaScript : ERXJavaScript {
+  framework = "ERCoolComponents";
+  filename = "CCColorPicker/jscolor.js";
+}
