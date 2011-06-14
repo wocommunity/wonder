@@ -825,9 +825,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			}
 		}
 
-		private static NSMutableDictionary<String, NSMutableArray<String>> packages = new NSMutableDictionary<String, NSMutableArray<String>>();
+		private NSMutableDictionary<String, NSMutableArray<String>> packages = new NSMutableDictionary<String, NSMutableArray<String>>();
 
-		private static NSMutableDictionary<String, NSMutableSet<Entry>> classes = new NSMutableDictionary<String, NSMutableSet<Entry>>();
+		private NSMutableDictionary<String, NSMutableSet<Entry>> classes = new NSMutableDictionary<String, NSMutableSet<Entry>>();
 
 		private void processJar(String jar) {
 
