@@ -60,6 +60,7 @@
         {
             adaptorValueConversionMethodName = value; 
             columnName = "MAIL_STATE_ID"; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
             name = state; 
             prototypeName = osType; 
             valueClassName = "er.corebusinesslogic.ERCMailState"; 
