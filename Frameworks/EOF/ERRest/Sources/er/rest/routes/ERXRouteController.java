@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.apache.log4j.Logger;
 
@@ -32,8 +33,10 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSSet;
+import com.webobjects.foundation.NSValidation;
 import com.webobjects.foundation._NSUtilities;
 
+import er.extensions.appserver.ERXHttpStatusCodes;
 import er.extensions.appserver.ERXRequest;
 import er.extensions.eof.ERXDatabaseContextDelegate.ObjectNotAvailableException;
 import er.extensions.eof.ERXEC;
@@ -43,6 +46,8 @@ import er.extensions.foundation.ERXExceptionUtilities;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
+import er.extensions.validation.ERXValidationException;
+import er.rest.ERXNotAllowedException;
 import er.rest.ERXRequestFormValues;
 import er.rest.ERXRestClassDescriptionFactory;
 import er.rest.ERXRestContext;
@@ -418,7 +423,22 @@ public class ERXRouteController extends WODirectAction {
 //					}
 //				}
 //			}
-	
+			
+			/*
+			 * To trap things like this: 
+			 *   Content-Type: application/json
+			 * JBoss's RestEasy use this header
+			 */
+			if (type == null) {
+				String contentType = request().headerForKey("Content-Type");
+				if (contentType != null) {
+					String[] types = contentType.split("/");
+					if (types.length == 2) {
+						type = types[1];
+					}
+				}
+			}
+
 			if (type == null) {
 				format = defaultFormat();
 			}
@@ -1132,6 +1152,19 @@ public class ERXRouteController extends WODirectAction {
 		log.error("Request failed: " + request().uri() + ", " + errorMessage);
 		return response;
 	}
+	
+	/**
+	 * Returns an error response with the given HTTP status and without any body content
+	 * @param status
+	 *            the HTTP status code
+	 * @return an error WOResponse
+	 */
+	public WOActionResults errorResponse(int status) {
+		WOResponse response = WOApplication.application().createResponseInContext(context());
+		response.setStatus(status);
+		log.error("Request failed: " + request().uri() + ", " + status);
+		return response;
+	}
 
 	/**
 	 * Returns the response from a HEAD call to this controller.
@@ -1273,7 +1306,12 @@ public class ERXRouteController extends WODirectAction {
 	 * @return WOActionResults
 	 */
 	protected WOActionResults performUnknownAction(String actionName) throws Exception {
-		throw new FileNotFoundException("There is no action named '" + actionName + "Action' on '" + getClass().getSimpleName() + "'.");
+		boolean isStrictMode = ERXProperties.booleanForKeyWithDefault("ERXRest.strictMode", true);
+		if (isStrictMode) {
+			throw new ERXNotAllowedException();
+		} else {
+			throw new FileNotFoundException("There is no action named '" + actionName + "Action' on '" + getClass().getSimpleName() + "'.");			
+		}
 	}
 	
 	@Override
@@ -1522,11 +1560,18 @@ public class ERXRouteController extends WODirectAction {
 	protected WOActionResults performActionNamedWithError(String actionName, Throwable t) {
 		WOActionResults results = null;
 		Throwable meaningfulThrowble = ERXExceptionUtilities.getMeaningfulThrowable(t);
-		if (meaningfulThrowble instanceof ObjectNotAvailableException || meaningfulThrowble instanceof FileNotFoundException) {
+		boolean isStrictMode = ERXProperties.booleanForKeyWithDefault("ERXRest.strictMode", true);
+		if (meaningfulThrowble instanceof ObjectNotAvailableException || meaningfulThrowble instanceof FileNotFoundException || meaningfulThrowble instanceof NoSuchElementException) {
 			results = errorResponse(meaningfulThrowble, WOMessage.HTTP_STATUS_NOT_FOUND);
 		}
 		else if (meaningfulThrowble instanceof SecurityException) {
 			results = errorResponse(meaningfulThrowble, WOMessage.HTTP_STATUS_FORBIDDEN);
+		}
+		else if (meaningfulThrowble instanceof ERXNotAllowedException) {
+			results = errorResponse(ERXHttpStatusCodes.METHOD_NOT_ALLOWED);
+		}
+		else if ((isStrictMode) && (meaningfulThrowble instanceof ERXValidationException || meaningfulThrowble instanceof NSValidation.ValidationException)) {
+			results = errorResponse(meaningfulThrowble, ERXHttpStatusCodes.BAD_REQUEST);
 		}
 		else {
 			results = errorResponse(meaningfulThrowble, WOMessage.HTTP_STATUS_INTERNAL_ERROR);
