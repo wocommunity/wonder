@@ -1,0 +1,24 @@
+AjaxTaskProgressBar : AjaxProgressBar {
+	allowCancel = false;
+	cancelingText = "Canceling...";
+	finishedFunction = "performNextPageAction();";
+	id = "GenericLongResponseProgressbar";
+	refreshTime = 2000;
+	progress = taskProgress;
+	started = true;
+}
+
+FinishedImage : WOResourceURL {
+	filename = "progress-bar.gif";
+	framework = frameworkName;
+}
+
+UnfinishedImage : WOResourceURL {
+	filename = "progress-remainder.gif";
+	framework = frameworkName;
+}
+
+NextPageActionURL: WOActionURL {
+	action = nextPage;
+}
+
