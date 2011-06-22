@@ -42,10 +42,16 @@ public class ERXFutureTask<V> extends FutureTask<V> implements ERXExecutionState
 		return _task;
 	}
 
+	/* (non-Javadoc)
+	 * @see er.extensions.foundation.ERXStatusInterface#status()
+	 */
 	public String status() {
 		return (hasStatus() && _task != null) ? ((ERXStatusInterface) _task).status() : null;
 	}
 
+	/* (non-Javadoc)
+	 * @see er.extensions.concurrency.ERXTaskPercentComplete#percentComplete()
+	 */
 	public Double percentComplete() {
 		return (hasPercentComplete() && _task != null) ? ((ERXTaskPercentComplete) _task).percentComplete() : null;
 	}
