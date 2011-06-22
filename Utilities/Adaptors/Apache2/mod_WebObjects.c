@@ -1,6 +1,6 @@
 /*
 
- Copyright © 2000 Apple Computer, Inc. All Rights Reserved.
+ Copyright ï¿½ 2000 Apple Computer, Inc. All Rights Reserved.
 
  The contents of this file constitute Original Code as defined in and are
  subject to the Apple Public Source License Version 1.1 (the 'License').
@@ -295,7 +295,7 @@ static void copyHeaders(request_rec *r, HTTPRequest *req) {
 #ifdef APACHE_SECURITY_ENABLED
     /******client cert support***** */
     /* note: look at apache_ssl.c from the Apache-SSL.org source for examples on getting more info about the cert's and ssl state which could be used here  */
-	
+
     // this is how we do it for mod_ssl
     sslConn = ((SSLConnRec *)myConnConfig(c));
 
@@ -360,7 +360,7 @@ static void copyHeaders(request_rec *r, HTTPRequest *req) {
         ap_snprintf(port, sizeof(port), "%u", s->port);
         req_addHeader(req, "SERVER_PORT", port, STR_FREEVALUE);
     }
-    
+
     req_addHeader(req, "REMOTE_HOST",
                   (const char *)ap_get_remote_host(c, r->per_dir_config, REMOTE_NAME, NULL), 0);
     req_addHeader(req, "REMOTE_ADDR", c->remote_ip, 0);
@@ -381,7 +381,7 @@ static void copyHeaders(request_rec *r, HTTPRequest *req) {
     if (r->ap_auth_type != NULL) {
 	req_addHeader(req, "AUTH_TYPE", r->ap_auth_type, 0);
     }
-        
+
     rem_logname = (char *)ap_get_remote_logname(r);
     if (rem_logname != NULL) {
 	req_addHeader(req, "REMOTE_IDENT", rem_logname, 0);
@@ -397,7 +397,7 @@ static void copyHeaders(request_rec *r, HTTPRequest *req) {
 
         if (r->prev->uri) {
 	    req_addHeader(req, "REDIRECT_URL", r->prev->uri, 0);
-	}     
+	}
     }
 
     return;
@@ -448,12 +448,15 @@ static void sendResponse(request_rec *r, HTTPResponse *resp) {
             if (r->connection->aborted) {
                 break;
             }
-            resp_getResponseContent(resp, 1);
+            if (resp_getResponseContent(resp, 1) == -1)
+            {
+                break;
+            }
         }
 
         ap_rwrite(resp->content, resp->content_valid, r);
     }
-    
+
     return;
 }
 
@@ -489,7 +492,7 @@ static int readContentData(HTTPRequest *req, void *dataBuffer, int dataSize, int
         if (len_read <= 0) {
             return -1;
         }
-	
+
         total_len_read += len_read;
         data += len_read;
         len_remaining -= len_read;
@@ -498,7 +501,7 @@ static int readContentData(HTTPRequest *req, void *dataBuffer, int dataSize, int
     if (total_len_read == 0) {
 	WOLog(WO_WARN, "readContentData(): returning zero bytes of content data");
     }
-        
+
     return total_len_read;
 }
 
@@ -623,7 +626,7 @@ static int WebObjects_post_config(apr_pool_t *pconf, apr_pool_t *plog,
 
         initCalled = 1;
     }
-    
+
     return OK;
 }
 
@@ -745,7 +748,7 @@ static int WebObjects_handler (request_rec *r)
     if (retval != 0) {
 	return retval;
     }
-        
+
 
     /*
      *	build the request ....
@@ -774,11 +777,11 @@ static int WebObjects_handler (request_rec *r)
     if ((req->content_length > 0) && ap_should_client_block(r) ) {
         req_allocateContent(req, req->content_length, 1);
         req->getMoreContent = (req_getMoreContentCallback)readContentData;
-	
+
         if (req->content_buffer_size == 0) {
 	    return die(r, ALLOCATION_FAILURE, HTTP_SERVER_ERROR);
 	}
-            
+
         if (readContentData(req, req->content, req->content_buffer_size, 1) == -1) {
             req_free(req);
             return die(r, WOURLstrerror(WOURLInvalidPostData), HTTP_BAD_REQUEST);

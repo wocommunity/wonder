@@ -1,19 +1,19 @@
 /*
 
-Copyright © 2000-2007 Apple, Inc. All Rights Reserved.
+Copyright ï¿½ 2000-2007 Apple, Inc. All Rights Reserved.
 
 The contents of this file constitute Original Code as defined in and are
 subject to the Apple Public Source License Version 1.1 (the 'License').
-You may not use this file except in compliance with the License. 
-Please obtain a copy of the License at http://www.apple.com/publicsource 
+You may not use this file except in compliance with the License.
+Please obtain a copy of the License at http://www.apple.com/publicsource
 and read it before usingthis file.
 
 This Original Code and all software distributed under the License are
 distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
 EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY, 
-FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT. 
-Please see the License for the specific language governing rights 
+INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT.
+Please see the License for the specific language governing rights
 and limitations under the License.
 
 
@@ -115,16 +115,16 @@ char *WA_adaptorName = "Apache";
 /* client cert support was added by kkazem@apple.com  on 5/22/01*/
 /* base 64 encoding support */
 static const char six2pr[64+1]=
-  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";  
- 
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
 static void uuencoden(unsigned char *szTo, const unsigned char *szFrom, int nLength)
     {
     const unsigned char *s;
     int nPad=0;
- 
+
     for(s=(const unsigned char *)szFrom ; nLength > 0 ; s+=3)
         {
-        *szTo++=six2pr[s[0] >> 2]; 
+        *szTo++=six2pr[s[0] >> 2];
         *szTo++=six2pr[(s[0] << 4 | s[1] >> 4)&0x3f];
         if(!--nLength)
             {
@@ -476,7 +476,10 @@ static void sendResponse(request_rec *r, HTTPResponse *resp) {
 		 if (r->connection->aborted) {
 			 break;
 		 }
-         resp_getResponseContent(resp, 1);
+         if (resp_getResponseContent(resp, 1) == -1)
+         {
+            break;
+         }
       }
       ap_soft_timeout("sending WebObjects response", r);
       ap_rwrite(resp->content, resp->content_valid, r);
