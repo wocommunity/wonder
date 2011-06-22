@@ -1,85 +1,85 @@
 <html>
   <head>
-  <title>Processing... Please Wait ...</title>
+    <title>Processing... Please Wait ...</title>
     <style>
-    body {
-    	text-align: center /* for IE */
-    }
+			body {
+      			text-align: center /* for IE */
+      		}
 
-           table.progressBarContainer {
-               width: 100%;
-               border-spacing: 0px;
-           }
+             table.progressBarContainer {
+                 width: 100%;
+                 border-spacing: 0px;
+             }
 
-           table.progressBarContainer td {
-               font-family: Helvetica;
-               font-size: 8pt;
-               padding: 2px;
-               color: rgb(100, 100, 100);
-           }
+             table.progressBarContainer td {
+                 font-family: Helvetica;
+                 font-size: 8pt;
+                 padding: 2px;
+                 color: rgb(100, 100, 100);
+             }
 
-           table.progressBarContainer td.progressValue {
-               white-space: nowrap;
-           }
+             table.progressBarContainer td.progressValue {
+                 white-space: nowrap;
+             }
 
-           table.progressBar {
-               border: 1px solid black;
-           }
+             table.progressBar {
+                 border: 1px solid black;
+             }
 
-           table.progressBar td.percentageFinished {
-               background-image: url(<webobject name = "FinishedImage" />);
-               background-repeat: repeat-x;
-           }
+             table.progressBar td.percentageFinished {
+                 background-image: url(<webobject name = "FinishedImage" />);
+                 background-repeat: repeat-x;
+             }
 
-           table.progressBar td.percentageFinished.done {
-               background-image: url(<webobject name = "UnfinishedImage" />);
-               background-repeat: repeat-x;
-           }
+             table.progressBar td.percentageFinished.done {
+                 background-image: url(<webobject name = "UnfinishedImage" />);
+                 background-repeat: repeat-x;
+             }
 
-           table.progressBar td.percentageUnfinished {
-               background-image: url(<webobject name = "UnfinishedImage" />);
-               background-repeat: repeat-x;
-           }
+             table.progressBar td.percentageUnfinished {
+                 background-image: url(<webobject name = "UnfinishedImage" />);
+                 background-repeat: repeat-x;
+             }
 
-           table.progressBarContainer td.progressMaximum {
-               white-space: nowrap;
-           }
+             table.progressBarContainer td.progressMaximum {
+                 white-space: nowrap;
+             }
 
-           td.progressSummary {
-               display: none;
-           }
+             td.progressSummary {
+                 display: none;
+             }
 
-           #MainContent {
-               width: 400px;
-               margin: 0 auto;
-               text-align: center;
-               padding: 50px 0 0 0;
-           }
+             #MainContent {
+                 width: 400px;
+                 margin: 0 auto;
+                 text-align: center;
+                 padding: 50px 0 0 0;
+             }
 
-           p {
-               font-family: Verdana;
-               font-size: 24pt;
+             p {
+                 font-family: Verdana;
+                 font-size: 24pt;
 
-           }
+             }
 
-           p.percentdisplay {
-           	font-size: 9px;
-           }
+             p.percentdisplay {
+             	font-size: 9px;
+             }
 
-           p.progress-display {
-               font-size: 16px;
-               padding: 0 0 12px 0;
-           }
+             p.progress-display {
+                 font-size: 16px;
+                 padding: 0 0 12px 0;
+             }
 
-           p.elapsed-time {
-               font-size: 10px;
-               }
+             p.elapsed-time {
+                 font-size: 10px;
+                 }
 
-          <wo:not condition = "$future.hasPercentComplete">
-           table.progressBarContainer {
-               display: none;
-           }
-           </wo:not>
+            <wo:not condition = "$future.hasPercentComplete">
+             table.progressBarContainer {
+                 display: none;
+             }
+             </wo:not>
     </style>
     <script>
       var performNextPageAction = function () {
@@ -89,35 +89,33 @@
   </head>
   <body>
     <div id = "MainContent">
-      <p class="please-wait-message">Please Wait...</p>
+      <p class = "please-wait-message">Please Wait...</p>
       <wo name = "AjaxTaskProgressBar">
         <wo:if condition = "$future.hasPercentComplete">
-          <p class="percentdisplay"><wo:str value = "$taskProgress.percentNominalDisplay//VALID" numberformat = "0" />% </p>
+          <p class = "percentdisplay"><wo:str value = "$taskProgress.percentNominalDisplay//VALID" numberformat = "0" />% </p>
         </wo:if>
-
         <wo:if condition = "$future.hasStatus">
-          <p class="progress-display"><wo:str value = "$taskProgress.status" /></p>
+          <p class = "progress-display"><wo:str value = "$taskProgress.status" /></p>
         </wo:if>
-        <p class="elapsed-time">Elapsed Time: <wo:str value = "$elapsedTime" /></p>
+        <p class = "elapsed-time">Elapsed Time: <wo:str value = "$elapsedTime" /></p>
         <wo:if condition = "$staticMessage">
-        <p class="elapsed-time"><wo:str value = "$staticMessage" /></p>
+          <p class = "elapsed-time"><wo:str value = "$staticMessage" /></p>
         </wo:if>
       </wo>
-      <wo:not condition = "$future.hasPercentComplete"> <wo:image filename = "ajax-spinner-large-66.gif" /> </wo:not>
+      <wo:not condition = "$future.hasPercentComplete"> <wo:image framework = "Ajax" filename = "ajax-spinner-large-66.gif" /> </wo:not>
       <wo:if condition = "$application.isDevelopmentMode">
-      <div><h4>Development Info</h4>
-      <ul>
-      <li>NextPageController: <wo:str value = "$nextPageForResultController.class.simpleName//VALID" /></li>
-      <wo:if condition = "$longRunningCallable">
-      <li>Callable Task: <wo:str value = "$longRunningCallable.class.simpleName//VALID" /></li>
-      </wo:if>
+        <div>
+          <h4>Development Info</h4>
+          <ul>
+            <li>NextPageController: <wo:str value = "$nextPageForResultController.class.simpleName//VALID" /></li>
+            <wo:if condition = "$longRunningCallable">
+              <li>Callable Task: <wo:str value = "$longRunningCallable.class.simpleName//VALID" /></li>
+            </wo:if>
             <wo:if condition = "$longRunningRunnable">
-      <li>Runnable Task: <wo:str value = "$longRunningRunnable.class.simpleName//VALID" /></li>
-      </wo:if>
-
-      </ul>
-
-      </div>
+              <li>Runnable Task: <wo:str value = "$longRunningRunnable.class.simpleName//VALID" /></li>
+            </wo:if>
+          </ul>
+        </div>
       </wo:if>
     </div>
   </body>
