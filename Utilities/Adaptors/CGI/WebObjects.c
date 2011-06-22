@@ -146,7 +146,10 @@ static void sendResponse(HTTPResponse *resp)
    if (resp->content_valid) {
       while (resp->content_read < resp->content_length) {
          fwrite(resp->content,sizeof(char),resp->content_valid,stdout);
-         resp_getResponseContent(resp, 1);
+         if (resp_getResponseContent(resp, 1) == -1)
+         {
+         	break;
+         }
       }
       fwrite(resp->content,sizeof(char),resp->content_valid,stdout);
    }
