@@ -173,9 +173,9 @@ public class CCAjaxLongResponsePage extends WOComponent {
 	public AjaxProgress taskProgress() {
 		if ( _taskProgress == null ) {
 			if (longRunningCallable() != null) {
-				_taskProgress = new WKLongResponseProgress(future(), longRunningCallable());
+				_taskProgress = new LongResponseTaskProgress(future(), longRunningCallable());
 			} else {
-				_taskProgress = new WKLongResponseProgress(future(), longRunningRunnable());
+				_taskProgress = new LongResponseTaskProgress(future(), longRunningRunnable());
 			}
 			
 		}
@@ -259,17 +259,17 @@ public class CCAjaxLongResponsePage extends WOComponent {
 		return _stopWatch;
 	}
 	
-	public static class WKLongResponseProgress extends AjaxProgress  {
+	public static class LongResponseTaskProgress extends AjaxProgress  {
 		private final Future<?> future;
 		private final Object task;
 
-		public WKLongResponseProgress(Future<?> future, Callable<?> task) {
+		public LongResponseTaskProgress(Future<?> future, Callable<?> task) {
 			super(100);
 			this.future = future;
 			this.task = task;
 		}
 		
-		public WKLongResponseProgress(Future<?> future, Runnable task) {
+		public LongResponseTaskProgress(Future<?> future, Runnable task) {
 			super(100);
 			this.future = future;
 			this.task = task;

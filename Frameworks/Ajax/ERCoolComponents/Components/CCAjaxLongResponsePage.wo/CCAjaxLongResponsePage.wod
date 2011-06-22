@@ -10,12 +10,12 @@ AjaxTaskProgressBar : AjaxProgressBar {
 
 FinishedImage : WOResourceURL {
 	filename = "progress-bar.gif";
-	framework = frameworkName;
+	framework = "Ajax";
 }
 
 UnfinishedImage : WOResourceURL {
 	filename = "progress-remainder.gif";
-	framework = frameworkName;
+	framework = "Ajax";
 }
 
 NextPageActionURL: WOActionURL {
