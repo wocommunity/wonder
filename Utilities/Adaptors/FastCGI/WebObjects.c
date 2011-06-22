@@ -1,19 +1,19 @@
 /*
 
-Copyright ï¿½ 2000-2007 Apple, Inc. All Rights Reserved.
+Copyright © 2000-2007 Apple, Inc. All Rights Reserved.
 
 The contents of this file constitute Original Code as defined in and are
 subject to the Apple Public Source License Version 1.1 (the 'License').
-You may not use this file except in compliance with the License.
-Please obtain a copy of the License at http://www.apple.com/publicsource
+You may not use this file except in compliance with the License. 
+Please obtain a copy of the License at http://www.apple.com/publicsource 
 and read it before usingthis file.
 
 This Original Code and all software distributed under the License are
 distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
 EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT.
-Please see the License for the specific language governing rights
+INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY, 
+FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT. 
+Please see the License for the specific language governing rights 
 and limitations under the License.
 
 
@@ -24,7 +24,7 @@ and limitations under the License.
  *
  *	Refer to FastCGI site for more informaion:
  *	http://www.fastcgi.com
- *
+ *	
  *	Credits / blames (in order of appearance):
  *	- Apple <webobjects@apple.com>
  *	- Wojtek Narczynski <wojtek@power.com.pl>
@@ -158,17 +158,14 @@ static void sendResponse(HTTPResponse *resp)
       while (resp->content_read < resp->content_length) {
          //fwrite(resp->content,sizeof(char),resp->content_valid,stdout);
 	      FCGX_PutStr(resp->content, resp->content_valid, out);
-		 if (resp_getResponseContent(resp, 1) == -1)
-         {
-            break;
-         }
+		 resp_getResponseContent(resp, 1);
       }
       //fwrite(resp->content,sizeof(char),resp->content_valid,stdout);
       FCGX_PutStr(resp->content, resp->content_valid, out);
    }
    FCGX_FFlush(out);
 #endif
-   return;
+   return;		
 }
 
 static void sendErrorResponse(HTTPResponse *resp)
@@ -279,7 +276,7 @@ int main() {
       }
 
     WOLog( WO_INFO,"<FastCGI> process started" );
-
+   
     while (!should_terminate) {
 
       HTTPRequest *req;
@@ -292,7 +289,7 @@ int main() {
       const char *reqerr;
       WOURLError urlerr;
       FCGX_ParamArray hdrp_org;
-
+     
       exit_status = FCGX_Accept(&in, &out, &err, &hdrp );
       if ( exit_status < 0 ) {
 	    break;
@@ -330,7 +327,7 @@ int main() {
       strcpy(url, script_name);
       strcat(url, path_info);
       WOLog(WO_INFO,"<FastCGI> new request: %s",url);
-
+      
       urlerr = WOParseApplicationName(&wc, url);
       if (urlerr != WOURLOK) {
          const char *_urlerr;
@@ -420,7 +417,7 @@ int main() {
        *	get form data if any
        *	assume that POSTs with content length will be reformatted to GETs later
        */
-
+	
       WOLog ( WO_INFO, "Getting request data, length: %d",req->content_length );
       if (req->content_length > 0) {
          req_allocateContent(req, req->content_length, 1);
