@@ -1,85 +1,17 @@
 <html>
   <head>
     <title>Processing... Please Wait ...</title>
+    <wo:ERXStyleSheet framework = "$styleSheetFramework" filename = "$styleSheetFilename" />
     <style>
-			body {
-      			text-align: center /* for IE */
-      		}
+                table.progressBar td.percentageFinished {
+                    background-image: url(<webobject name = "FinishedImage" />);
+                    background-repeat: repeat-x;
+                }
 
-             table.progressBarContainer {
-                 width: 100%;
-                 border-spacing: 0px;
-             }
-
-             table.progressBarContainer td {
-                 font-family: Helvetica;
-                 font-size: 8pt;
-                 padding: 2px;
-                 color: rgb(100, 100, 100);
-             }
-
-             table.progressBarContainer td.progressValue {
-                 white-space: nowrap;
-             }
-
-             table.progressBar {
-                 border: 1px solid black;
-             }
-
-             table.progressBar td.percentageFinished {
-                 background-image: url(<webobject name = "FinishedImage" />);
-                 background-repeat: repeat-x;
-             }
-
-             table.progressBar td.percentageFinished.done {
-                 background-image: url(<webobject name = "UnfinishedImage" />);
-                 background-repeat: repeat-x;
-             }
-
-             table.progressBar td.percentageUnfinished {
-                 background-image: url(<webobject name = "UnfinishedImage" />);
-                 background-repeat: repeat-x;
-             }
-
-             table.progressBarContainer td.progressMaximum {
-                 white-space: nowrap;
-             }
-
-             td.progressSummary {
-                 display: none;
-             }
-
-             #MainContent {
-                 width: 400px;
-                 margin: 0 auto;
-                 text-align: center;
-                 padding: 50px 0 0 0;
-             }
-
-             p {
-                 font-family: Verdana;
-                 font-size: 24pt;
-
-             }
-
-             p.percentdisplay {
-             	font-size: 9px;
-             }
-
-             p.progress-display {
-                 font-size: 16px;
-                 padding: 0 0 12px 0;
-             }
-
-             p.elapsed-time {
-                 font-size: 10px;
-                 }
-
-            <wo:not condition = "$future.hasPercentComplete">
-             table.progressBarContainer {
-                 display: none;
-             }
-             </wo:not>
+                table.progressBar td.percentageUnfinished {
+                    background-image: url(<webobject name = "UnfinishedImage" />);
+                    background-repeat: repeat-x;
+                }
     </style>
     <script>
       var performNextPageAction = function () {
@@ -89,33 +21,55 @@
   </head>
   <body>
     <div id = "MainContent">
-      <p class = "please-wait-message">Please Wait...</p>
-      <wo name = "AjaxTaskProgressBar">
-        <wo:if condition = "$future.hasPercentComplete">
-          <p class = "percentdisplay"><wo:str value = "$taskProgress.percentNominalDisplay//VALID" numberformat = "0" />% </p>
-        </wo:if>
-        <wo:if condition = "$future.hasStatus">
-          <p class = "progress-display"><wo:str value = "$taskProgress.status" /></p>
-        </wo:if>
-        <p class = "elapsed-time">Elapsed Time: <wo:str value = "$elapsedTime" /></p>
-        <wo:if condition = "$staticMessage">
-          <p class = "elapsed-time"><wo:str value = "$staticMessage" /></p>
-        </wo:if>
-      </wo>
-      <wo:not condition = "$future.hasPercentComplete"> <wo:image framework = "Ajax" filename = "ajax-spinner-large-66.gif" /> </wo:not>
-      <wo:if condition = "$application.isDevelopmentMode">
-        <div>
-          <h4>Development Info</h4>
-          <ul>
-            <li>NextPageController: <wo:str value = "$nextPageForResultController.class.simpleName//VALID" /></li>
-            <wo:if condition = "$longRunningCallable">
-              <li>Callable Task: <wo:str value = "$longRunningCallable.class.simpleName//VALID" /></li>
-            </wo:if>
-            <wo:if condition = "$longRunningRunnable">
-              <li>Runnable Task: <wo:str value = "$longRunningRunnable.class.simpleName//VALID" /></li>
-            </wo:if>
-          </ul>
+      <wo name = "TaskProgressRefresh">
+        <div id = "StatusArea">
+          <!-- We either show the task status, or fallback to user-defined default status, or fallback to global default status message -->
+          <wo:if condition = "$future.hasStatus">
+            <p class = "status-message"> <wo:str value = "$future.status" /> </p>
+          </wo:if>
+          <wo:else>
+            <p class = "status-message"><wo:str value = "$defaultStatus" /></p>
+          </wo:else>
         </div>
+        <div id = "ProgressArea">
+          <!-- We show a percentage based progress feedback, or fallback to an ajax busy indicator -->
+          <wo:if condition = "$future.hasPercentComplete">
+            <table class = "progressBar" width = "100%" cellspacing = "0">
+              <tr>
+                <webobject name = "Finished">&nbsp;</webobject>
+                <webobject name = "Unfinished"></webobject>
+              </tr>
+            </table>
+            <p class = "percentdisplay"> <wo:str value = "$finishedPercentage" valueWhenEmpty = "0%" /> </p>
+          </wo:if>
+          <wo:else>
+            <!-- Just show an ajax busy indicator -->
+            <wo:image framework = "Ajax" filename = "ajax-spinner-large-66.gif" />
+          </wo:else>
+        </div>
+        <div id = "ElapsedTimeArea">
+          <p class = "elapsed-time">Elapsed Time: <wo:str value = "$elapsedTime" /></p>
+        </div>
+        <!-- The content of this next javascript changes when the task is done so that the nextPage action is fired -->
+        <script>
+        <wo:str value = "$controlScriptContent" />
+        </script>
+      </wo>
+      <wo:if condition = "$application.isDevelopmentMode">
+        <wo:if condition = "$isDebugMode">
+          <div>
+            <h4>Development Info</h4>
+            <ul>
+              <li>NextPageController: <wo:str value = "$nextPageForResultController.class.simpleName//VALID" /></li>
+              <wo:if condition = "$longRunningCallable">
+                <li>Callable Task: <wo:str value = "$longRunningCallable.class.simpleName//VALID" /></li>
+              </wo:if>
+              <wo:if condition = "$longRunningRunnable">
+                <li>Runnable Task: <wo:str value = "$longRunningRunnable.class.simpleName//VALID" /></li>
+              </wo:if>
+            </ul>
+          </div>
+        </wo:if>
       </wo:if>
     </div>
   </body>
