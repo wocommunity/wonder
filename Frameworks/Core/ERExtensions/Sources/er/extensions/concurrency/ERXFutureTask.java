@@ -64,7 +64,7 @@ public class ERXFutureTask<V> extends FutureTask<V> implements ERXExecutionState
 		return NSKeyValueCoding.DefaultImplementation.valueForKey(this, key);
 	}
 
-	public Boolean _hasStatus;
+	private Boolean _hasStatus;
 
 	/**
 	 * @return whether the wrapped task has @link
