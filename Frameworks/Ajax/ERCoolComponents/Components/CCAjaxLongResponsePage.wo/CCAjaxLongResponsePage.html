@@ -40,7 +40,7 @@
                 <webobject name = "Unfinished"></webobject>
               </tr>
             </table>
-            <p class = "percentdisplay"> <wo:str value = "$finishedPercentage" valueWhenEmpty = "0%" /> </p>
+            <p class = "percent-display"> <wo:str value = "$finishedPercentage" valueWhenEmpty = "0%" /> </p>
           </wo:if>
           <wo:else>
             <!-- Just show an ajax busy indicator -->
@@ -50,14 +50,29 @@
         <div id = "ElapsedTimeArea">
           <p class = "elapsed-time">Elapsed Time: <wo:str value = "$elapsedTime" /></p>
         </div>
+
         <!-- The content of this next javascript changes when the task is done so that the nextPage action is fired -->
         <script>
         <wo:str value = "$controlScriptContent" />
         </script>
       </wo>
+		<wo:if condition = "$future.isStoppable">
+		<wo:AjaxUpdateContainer id = "StopControlArea">
+
+        <!-- We want the Stop control outside of the refresh area, otherwise a user click on Stop at the same time as a refresh request might not have any effect. -->
+        <wo:if condition = "$wasStoppedByUser">
+        	<p class = "stopping-message">Stopping...</p>
+        </wo:if>
+        <wo:else>
+        <wo:AjaxUpdateLink action = "$stopTask" updateContainerID = "StopControlArea">
+        	<wo:img framework = "ERExtensions" filename = "button_stop_cancel.png" />
+        </wo>
+        </wo:else>
+		</wo:AjaxUpdateContainer>
+        </wo:if>
       <wo:if condition = "$application.isDevelopmentMode">
         <wo:if condition = "$isDebugMode">
-          <div>
+          <div id = "development-info">
             <h4>Development Info</h4>
             <ul>
               <li>NextPageController: <wo:str value = "$nextPageForResultController.class.simpleName//VALID" /></li>

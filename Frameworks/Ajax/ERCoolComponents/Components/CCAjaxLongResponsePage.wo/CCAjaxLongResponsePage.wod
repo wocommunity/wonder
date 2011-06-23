@@ -32,6 +32,7 @@ Finished : WOGenericContainer {
 Unfinished : WOGenericContainer {
 	elementName = "td";
 	class = "percentageUnfinished";
+	omitTags = hideUnfinishedProgressTableCell;
 }
 
 TaskProgressRefresh : AjaxUpdateContainer {
