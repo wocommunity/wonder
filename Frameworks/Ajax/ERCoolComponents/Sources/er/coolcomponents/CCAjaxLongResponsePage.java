@@ -83,12 +83,14 @@ import er.extensions.foundation.ERXStopWatch;
 public class CCAjaxLongResponsePage extends WOComponent {
 	private static final Logger log = Logger.getLogger(CCAjaxLongResponsePage.class);
 	
+	// Constants to determine the CSS stylesheet used for the long response page for this app
 	private static final String STYLESHEET_FRAMEWORK = ERXProperties.stringForKeyWithDefault("er.coolcomponents.CCAjaxLongResponsePage.stylesheet.framework", "ERCoolComponents");
 	private static final String STYLESHEET_FILENAME = ERXProperties.stringForKeyWithDefault("er.coolcomponents.CCAjaxLongResponsePage.stylesheet.filename", "CCAjaxLongResponsePage.css");
 
-	// flag to indicate of the user stopped the task
+	// flag to indicate that the user stopped the task (if it was stoppable and the stop control was visible)
 	private boolean _wasStoppedByUser = false;
 	
+	// The page that instantiated this long response page
 	private final WOComponent _referringPage;
 	
 	public CCAjaxLongResponsePage(WOContext context) {
@@ -100,7 +102,8 @@ public class CCAjaxLongResponsePage extends WOComponent {
     private IERXPerformWOActionForResult _nextPageForResultController;
 
 	/** 
-	 * @return the page controllers that will be given the result of the long task 
+	 * @return the page controller that will be given the result of the long task and 
+	 * return the next page except for the case where the user stops the task.
 	 * 
 	 * */
 	public IERXPerformWOActionForResult nextPageForResultController() {
@@ -111,7 +114,8 @@ public class CCAjaxLongResponsePage extends WOComponent {
 	}
 
 	/** 
-	 * @param nextPageForResultController the page controllers that will be given the result of the long task 
+	 * @param nextPageForResultController the page controller that will be given the result of the long task and 
+	 * return the next page except for the case where the user stops the task.
 	 * 
 	 **/
 	public void setNextPageForResultController(IERXPerformWOActionForResult nextPageForResultController){
@@ -120,7 +124,7 @@ public class CCAjaxLongResponsePage extends WOComponent {
 	
 	private IERXPerformWOAction _nextPageForCancelController;
 	
-	/** @return the controller that handles scenario when the user stops a stoppable task */
+	/** @return the controller that handles the scenario where the user stops a stoppable task */
 	public IERXPerformWOAction nextPageForCancelController() {
 		if ( _nextPageForCancelController == null ) {
 			// By default, return the originating page
@@ -129,40 +133,30 @@ public class CCAjaxLongResponsePage extends WOComponent {
 		return _nextPageForCancelController;
 	}
 	
-	/** @param nextPageForCancelController the controller that handles scenario when the user stops a stoppable task */
+	/** @param nextPageForCancelController the controller that handles the scenario where the user stops a stoppable task */
 	public void setNextPageForCancelController(IERXPerformWOAction nextPageForCancelController){
 		_nextPageForCancelController = nextPageForCancelController;
 	}
+	
+	private Object _task;
 
-	private Callable<?> _longRunningCallable;
-
-	/** @return the long running {@link Callable} */
-	public Callable<?> longRunningCallable() {
-		return _longRunningCallable;
+	/** @return the Runnable and/or Callable task */
+	public Object task() {
+		return _task;
 	}
 
-	/** param longRunningCallable the long running {@link Callable} */
-	public void setLongRunningCallable(Callable<?> longRunningCallable){
-		_longRunningCallable = longRunningCallable;
+	/**
+	 * @param task
+	 *            the Runnable and/or Callable task
+	 */
+	public void setTask(Object task) {
+		if ( task instanceof Runnable || task instanceof Callable ) {
+			_task = task;
+		} else {
+			throw new IllegalArgumentException("The task must implement the Runnable or the Callable interface!");
+		}
 	}
 	
-	private Runnable _longRunningRunnable;
-	
-	/** 
-	 * @return the runnable 
-	 * 
-	 * */
-	public Runnable longRunningRunnable() {
-		return _longRunningRunnable;
-	}
-	
-	/** 
-	 * @param longRunningRunnable the runnable 
-	 * 
-	 * */
-	public void setLongRunningRunnable(Runnable longRunningRunnable){
-		_longRunningRunnable = longRunningRunnable;
-	}
 	
 	private String _defaultStatus;
 	
@@ -189,7 +183,7 @@ public class CCAjaxLongResponsePage extends WOComponent {
 		return _refreshInterval;
 	}
 	
-	/** @param refreshInterval the refresh interval in seconds. Defaults to value of er.coolcomponents.CCAjaxLongResponsePage.refreshInterval */
+	/** @param refreshInterval the refresh interval in seconds. Defaults to value of er.coolcomponents.CCAjaxLongResponsePage.refreshInterval or 2 seconds. */
 	public void setRefreshInterval(Integer refreshInterval){
 		_refreshInterval = refreshInterval;
 	}
@@ -199,21 +193,20 @@ public class CCAjaxLongResponsePage extends WOComponent {
 	/** 
 	 * @return the {@link Future} that is bound to the long running task.
 	 * 
-	 * The first time this is accessed, it is lazily initialized and
-	 * it kicks off the long running task. So it is important that the initial page response causes
-	 * this to be lazily initialized, otherwise the task will never get started. 
+	 * The first time this method is accessed, it is lazily initialized and
+	 * it starts the long running task.
 	 * 
 	 * */
+	@SuppressWarnings("unchecked")  // Unchecked cast
 	public ERXFutureTask<?> future() {
 		if ( _future == null ) {
-			if (longRunningCallable() == null && longRunningRunnable() == null) {
-				throw new IllegalArgumentException("Either the Callable or Runnable must be set before this page is returned");
-			}
-			
-			if (longRunningCallable() != null) {
-				_future = new ERXFutureTask(longRunningCallable());
+
+			Object task = task();
+			if (task instanceof Callable) {
+				_future = new ERXFutureTask<Object>((Callable<Object>)task);
 			} else {
-				_future = new ERXFutureTask(longRunningRunnable(), null);
+				// Runnable interface only
+				_future = new ERXFutureTask<Object>((Runnable)task, null);
 			}
 
 			// This is where we hand off the task to our executor service to run
@@ -227,7 +220,7 @@ public class CCAjaxLongResponsePage extends WOComponent {
 		if (log.isDebugEnabled()) log.debug("nextPage action fired");
 		WOActionResults results = null;
 		
-		// If user cancelled, we just call that controller
+		// If user canceled, we just call that controller
 		if (_wasStoppedByUser) {
 			if (log.isDebugEnabled())
 				log.debug("The task was canceled by the user, so now calling " + nextPageForCancelController());
@@ -250,7 +243,7 @@ public class CCAjaxLongResponsePage extends WOComponent {
 	private Object _result;
 
 	/** 
-	 * @return the result of the callable task 
+	 * @return the result of the task 
 	 * 
 	 **/
 	public Object result() {
@@ -298,16 +291,18 @@ public class CCAjaxLongResponsePage extends WOComponent {
 		return _stopWatch;
 	}
 	
-
-	
+	/**
+	 * @return the javascript snippet that will call the nextPage action when the task is done.
+	 */
 	public String controlScriptContent() {
 		String result = ";";
 		if (future().isDone()) {
 			// To avoid confusion and users saying it never reaches 100% (which can happen if we complete and return the result 
 			// before the last refresh that _would_ display 100% if we waited), we will wait for a period slightly longer than the
 			// refresh interval to get one more refresh and let the user visually see 100%.
-			// Wait one refresh interval plus 900 milliseconds
-			int delay = ((refreshInterval().intValue() * 1000) + 900);
+			// Wait one refresh interval plus 900 milliseconds as long as the refresh interval is not customized to some huge value by the
+			// developer
+			int delay = Math.min(((refreshInterval().intValue() * 1000) + 900), 2900);
 			result = "window.setTimeout(performNextPageAction, " + delay + ");";
 		}
 		if (log.isDebugEnabled())
@@ -315,9 +310,6 @@ public class CCAjaxLongResponsePage extends WOComponent {
 		return result;
 	}
 
-	
-	
-	
 	/**
 	 * @return the table cell width value for the finished part of the progress bar, for example "56%". 
 	 * The same string can be used to display user-friendly percentage complete value.
@@ -352,23 +344,37 @@ public class CCAjaxLongResponsePage extends WOComponent {
 		return log.isDebugEnabled();
 	}
 	
+	/**
+	 * @return the framework containing the CSS stylesheet for this page
+	 */
 	public String styleSheetFramework() {
 		return STYLESHEET_FRAMEWORK;
 	}
 	
+	/**
+	 * @return the filename of the CSS stylesheet webserver resource for this page
+	 */
 	public String styleSheetFilename() {
 		return STYLESHEET_FILENAME;
 	}
 
+	/**
+	 * User action to stop the task if it implements {@link IERXStoppable}. If the task is not
+	 * stoppable, this action has no effect.
+	 */
 	public WOActionResults stopTask() {
-		if (future().task() instanceof IERXStoppable) {
-			IERXStoppable stoppable = (IERXStoppable) (_longRunningRunnable == null ? _longRunningCallable : _longRunningRunnable);
+		Object task = future().task();
+		if (task instanceof IERXStoppable) {
+			IERXStoppable stoppable = (IERXStoppable)task;
 			stoppable.stop();
 			_wasStoppedByUser = true;
 		}
 		return null;
 	}
 	
+	/**
+	 * @return true if the user stopped the task while it was in progress.
+	 */
 	public boolean wasStoppedByUser() {
 		return _wasStoppedByUser;
 	}

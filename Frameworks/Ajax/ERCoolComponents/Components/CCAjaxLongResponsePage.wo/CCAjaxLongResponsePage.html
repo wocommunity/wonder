@@ -78,12 +78,7 @@
             <h4>Development Info</h4>
             <ul>
               <li>NextPageController: <wo:str value = "$nextPageForResultController.class.simpleName//VALID" /></li>
-              <wo:if condition = "$longRunningCallable">
-                <li>Callable Task: <wo:str value = "$longRunningCallable.class.simpleName//VALID" /></li>
-              </wo:if>
-              <wo:if condition = "$longRunningRunnable">
-                <li>Runnable Task: <wo:str value = "$longRunningRunnable.class.simpleName//VALID" /></li>
-              </wo:if>
+              <li>Task: <wo:str value = "$task.class.simpleName//VALID" /></li>
             </ul>
           </div>
         </wo:if>
