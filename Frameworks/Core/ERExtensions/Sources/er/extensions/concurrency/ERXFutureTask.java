@@ -76,6 +76,16 @@ public class ERXFutureTask<V> extends FutureTask<V> implements ERXExecutionState
 		} // ~ if (_hasStatus == null)
 		return _hasStatus.booleanValue();
 	}
+	
+	private Boolean _isStoppable;
+
+	/** @return true if the task bound to this Future implements the {@link IERXStoppable} interface */
+	public boolean isStoppable() {
+		if (_isStoppable == null) {
+			_isStoppable = Boolean.valueOf(_task instanceof IERXStoppable);
+		}
+		return _isStoppable.booleanValue();
+	}
 
 	private Boolean _hasPercentComplete;
 
@@ -90,32 +100,17 @@ public class ERXFutureTask<V> extends FutureTask<V> implements ERXExecutionState
 		return _hasPercentComplete;
 	}
 
-//	public String userPresentableDescription() {
-//		return (hasUserPresentableDescription() && _task != null) ? ((UserPresentableDescription) _task)
-//						.userPresentableDescription() : _task.toString();
-//	}
-//
-//	private Boolean _userPresentableDescription;
-//
-//	/** @return Callable has task description feature */
-//	public boolean hasUserPresentableDescription() {
-//		if (_userPresentableDescription == null) {
-//			_userPresentableDescription = Boolean.valueOf(_task instanceof UserPresentableDescription);
-//		}
-//		return _userPresentableDescription.booleanValue();
-//	}
-
 	public void afterExecute() {
 		if (_task instanceof ERXExecutionStateTransition) {
 			((ERXExecutionStateTransition) _task).afterExecute();
-		} // ~ if (_callable instanceof ERXExecutionStateTransition)
+		}
 
 	}
 
 	public void beforeExecute() {
 		if (_task instanceof ERXExecutionStateTransition) {
 			((ERXExecutionStateTransition) _task).beforeExecute();
-		} // ~ if (_callable instanceof ERXExecutionStateTransition)
+		}
 	}
 	
 	@Override
