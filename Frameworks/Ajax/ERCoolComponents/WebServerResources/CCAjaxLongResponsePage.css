@@ -2,6 +2,8 @@ body {
 	text-align: center /* for IE */;
 	font-family: "Lucida Grande", Lucida, Verdana, sans-serif;
 	font-size: 1em;
+	background-color: #d5d5d5;
+	margin: 0;
 }
 
 table.progressBar {
@@ -9,11 +11,22 @@ table.progressBar {
 }
 
 #MainContent {
-	width: 500px;
+	width: 540px;
 	margin: 0 auto;
 	text-align: center;
 	padding: 50px 0 0 0;
+}
+
+#status-panel {
 	border: 1px solid #424242;
+	padding: 50px;
+	background-color: white;
+	border-radius: 15px;
+	-moz-border-radius: 15px;
+}
+
+#progress-area {
+	padding-top: 20px;
 }
 
 p {
@@ -40,5 +53,5 @@ p.stopping-message {
 }
 
 #development-info {
-	border: 1px solid #424242;
+	padding-top: 50px;
 }
