@@ -21,8 +21,9 @@
   </head>
   <body>
     <div id = "MainContent">
+    <div id = "status-panel">
       <wo name = "TaskProgressRefresh">
-        <div id = "StatusArea">
+        <div id = "status-area">
           <!-- We either show the task status, or fallback to user-defined default status, or fallback to global default status message -->
           <wo:if condition = "$future.hasStatus">
             <p class = "status-message"> <wo:str value = "$future.status" /> </p>
@@ -31,7 +32,7 @@
             <p class = "status-message"><wo:str value = "$defaultStatus" /></p>
           </wo:else>
         </div>
-        <div id = "ProgressArea">
+        <div id = "progress-area">
           <!-- We show a percentage based progress feedback, or fallback to an ajax busy indicator -->
           <wo:if condition = "$future.hasPercentComplete">
             <table class = "progressBar" width = "100%" cellspacing = "0">
@@ -70,6 +71,7 @@
         </wo:else>
 		</wo:AjaxUpdateContainer>
         </wo:if>
+        </div>
       <wo:if condition = "$application.isDevelopmentMode">
         <wo:if condition = "$isDebugMode">
           <div id = "development-info">
