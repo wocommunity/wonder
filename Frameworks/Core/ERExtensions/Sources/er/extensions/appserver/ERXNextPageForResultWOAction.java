@@ -111,7 +111,7 @@ public class ERXNextPageForResultWOAction extends ERXAbstractPerformWOAction imp
 			((IERXRefreshPage)_nextPage).refresh();
 		}
 		
-		if (_result instanceof Throwable) {
+		if (_result != null && _result instanceof Throwable) {
 			log.error("Unexpected result in " + this, (Throwable) _result);
 			// TODO : Error handling interface here
 		}

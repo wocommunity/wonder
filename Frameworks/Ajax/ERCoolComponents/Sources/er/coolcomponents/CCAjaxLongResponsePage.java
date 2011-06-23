@@ -12,10 +12,12 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
 import er.extensions.appserver.ERXNextPageForResultWOAction;
+import er.extensions.appserver.IERXPerformWOAction;
 import er.extensions.appserver.IERXPerformWOActionForResult;
 import er.extensions.concurrency.ERXExecutorService;
 import er.extensions.concurrency.ERXFutureTask;
 import er.extensions.concurrency.ERXTaskPercentComplete;
+import er.extensions.concurrency.IERXStoppable;
 import er.extensions.foundation.ERXAssert;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXRuntimeUtilities;
@@ -84,6 +86,9 @@ public class CCAjaxLongResponsePage extends WOComponent {
 	private static final String STYLESHEET_FRAMEWORK = ERXProperties.stringForKeyWithDefault("er.coolcomponents.CCAjaxLongResponsePage.stylesheet.framework", "ERCoolComponents");
 	private static final String STYLESHEET_FILENAME = ERXProperties.stringForKeyWithDefault("er.coolcomponents.CCAjaxLongResponsePage.stylesheet.filename", "CCAjaxLongResponsePage.css");
 
+	// flag to indicate of the user stopped the task
+	private boolean _wasStoppedByUser = false;
+	
 	private final WOComponent _referringPage;
 	
 	public CCAjaxLongResponsePage(WOContext context) {
@@ -111,6 +116,22 @@ public class CCAjaxLongResponsePage extends WOComponent {
 	 **/
 	public void setNextPageForResultController(IERXPerformWOActionForResult nextPageForResultController){
 		_nextPageForResultController = nextPageForResultController;
+	}
+	
+	private IERXPerformWOAction _nextPageForCancelController;
+	
+	/** @return the controller that handles scenario when the user stops a stoppable task */
+	public IERXPerformWOAction nextPageForCancelController() {
+		if ( _nextPageForCancelController == null ) {
+			// By default, return the originating page
+			_nextPageForCancelController = new ERXNextPageForResultWOAction(_referringPage);;
+		}
+		return _nextPageForCancelController;
+	}
+	
+	/** @param nextPageForCancelController the controller that handles scenario when the user stops a stoppable task */
+	public void setNextPageForCancelController(IERXPerformWOAction nextPageForCancelController){
+		_nextPageForCancelController = nextPageForCancelController;
 	}
 
 	private Callable<?> _longRunningCallable;
@@ -204,8 +225,22 @@ public class CCAjaxLongResponsePage extends WOComponent {
 
 	public WOActionResults nextPage() {
 		if (log.isDebugEnabled()) log.debug("nextPage action fired");
-		nextPageForResultController().setResult(result());
-		WOActionResults results = nextPageForResultController().performAction();
+		WOActionResults results = null;
+		
+		// If user cancelled, we just call that controller
+		if (_wasStoppedByUser) {
+			if (log.isDebugEnabled())
+				log.debug("The task was canceled by the user, so now calling " + nextPageForCancelController());
+			results = nextPageForCancelController().performAction();
+		} else {
+			if (log.isDebugEnabled())
+				log.debug("The task completed normally. Now setting the result, " + result()
+						+ ", and calling " + nextPageForResultController());
+			nextPageForResultController().setResult(result());
+			results = nextPageForResultController().performAction();
+		}
+		
+
 		if (log.isDebugEnabled())
 			log.debug("results = " + (results == null ? "null" : results.toString()));
 
@@ -268,10 +303,15 @@ public class CCAjaxLongResponsePage extends WOComponent {
 	public String controlScriptContent() {
 		String result = ";";
 		if (future().isDone()) {
-			//result = "performNextPageAction();";
-			// Delay 1 second so that user can see the 100% complete progress message
-			result = "window.setTimeout(performNextPageAction, 1000);";
+			// To avoid confusion and users saying it never reaches 100% (which can happen if we complete and return the result 
+			// before the last refresh that _would_ display 100% if we waited), we will wait for a period slightly longer than the
+			// refresh interval to get one more refresh and let the user visually see 100%.
+			// Wait one refresh interval plus 900 milliseconds
+			int delay = ((refreshInterval().intValue() * 1000) + 900);
+			result = "window.setTimeout(performNextPageAction, " + delay + ");";
 		}
+		if (log.isDebugEnabled())
+			log.debug("controlScriptContent on refresh = " + result);
 		return result;
 	}
 
@@ -299,6 +339,13 @@ public class CCAjaxLongResponsePage extends WOComponent {
 	}
 	
 	/**
+	 * @return boolean to hide the unfinished table cell to avoid a tiny slice of unfinished when we are at 100%
+	 */
+	public boolean hideUnfinishedProgressTableCell() {
+		return future().isDone() && !wasStoppedByUser();
+	}
+	
+	/**
 	 * @return true if logging is Debug level. Used to display page config info in the long response page itself during development.
 	 */
 	public boolean isDebugMode() {
@@ -311,6 +358,19 @@ public class CCAjaxLongResponsePage extends WOComponent {
 	
 	public String styleSheetFilename() {
 		return STYLESHEET_FILENAME;
+	}
+
+	public WOActionResults stopTask() {
+		if (future().task() instanceof IERXStoppable) {
+			IERXStoppable stoppable = (IERXStoppable) (_longRunningRunnable == null ? _longRunningCallable : _longRunningRunnable);
+			stoppable.stop();
+			_wasStoppedByUser = true;
+		}
+		return null;
+	}
+	
+	public boolean wasStoppedByUser() {
+		return _wasStoppedByUser;
 	}
 
 	
