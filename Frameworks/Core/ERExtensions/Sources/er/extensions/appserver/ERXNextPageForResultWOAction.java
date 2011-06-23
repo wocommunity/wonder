@@ -85,14 +85,17 @@ public class ERXNextPageForResultWOAction extends ERXAbstractPerformWOAction imp
 
 	@Override
 	public WOActionResults performAction() {
+		log.debug("The result of the task was " + _result );
 		if (_nextPage != null && _nextPageResultKey != null) {
 			if (_result instanceof EOGlobalID) {
+				
 				// Inflate it to a fault
 				EOEditingContext ec = ERXEC.newEditingContext();
 				// Let's ensure fresh ec since we are likely coming out of a background task
 				ec.setFetchTimestamp(System.currentTimeMillis());
 				
 				_result = ec.faultForGlobalID((EOGlobalID) _result, ec);
+				
 			}
 			_nextPage.takeValueForKey(_result, _nextPageResultKey);
 		}

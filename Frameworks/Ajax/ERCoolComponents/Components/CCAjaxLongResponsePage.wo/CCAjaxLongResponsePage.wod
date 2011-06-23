@@ -22,3 +22,20 @@ NextPageActionURL: WOActionURL {
 	action = nextPage;
 }
 
+
+Finished : WOGenericContainer {
+	elementName = "td";
+	width = finishedPercentage;
+	class = "percentageFinished";
+}
+
+Unfinished : WOGenericContainer {
+	elementName = "td";
+	class = "percentageUnfinished";
+}
+
+TaskProgressRefresh : AjaxUpdateContainer {
+	elementName = "div";
+	frequency = refreshInterval;
+}
+

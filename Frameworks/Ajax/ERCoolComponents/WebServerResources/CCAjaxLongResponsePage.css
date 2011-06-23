@@ -1,0 +1,34 @@
+body {
+	text-align: center /* for IE */
+}
+
+table.progressBar {
+	border: none;
+}
+
+#MainContent {
+	width: 400px;
+	margin: 0 auto;
+	text-align: center;
+	padding: 50px 0 0 0;
+}
+
+p {
+	font-family: Verdana;
+	font-size: 24pt;
+}
+
+p.percentdisplay {
+	font-size: 9px;
+	text-align: center;
+	padding: 10px 0 10px 0;
+}
+
+p.progress-display {
+	font-size: 16px;
+	padding: 0 0 12px 0;
+}
+
+p.elapsed-time {
+	font-size: 10px;
+}

@@ -1,0 +1,11 @@
+# A default status message to display if the long running task does not implement ERXStatusInterface
+#er.coolcomponents.CCAjaxLongResponsePage.defaultStatus=Please wait...
+
+# Framework containing the stylesheet for CCAjaxLongResponsePage
+er.coolcomponents.CCAjaxLongResponsePage.stylesheet.framework = ERCoolComponents
+
+# Filename of the stylesheet for CCAjaxLongResponsePage
+er.coolcomponents.CCAjaxLongResponsePage.stylesheet.filename = CCAjaxLongResponsePage.css
+
+# Default refresh interval for CCAjaxLongResponsePage
+#er.coolcomponents.CCAjaxLongResponsePage.refreshInterval = 2
