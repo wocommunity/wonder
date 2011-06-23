@@ -53,8 +53,11 @@ public class Application extends ERXApplication {
         setAllowsConcurrentRequestHandling(true);
         ERXRouteRequestHandler restHandler = new ERXRouteRequestHandler();
         restHandler.addDefaultRoutes("MApplication", false, MApplicationController.class);
-        restHandler.insertRoute(new ERXRoute("MApplication","/mApplications/{name:MApplication}/addInstance", ERXRoute.Method.Get, MApplicationController.class, "addInstanceOnAllHosts"));
-        restHandler.insertRoute(new ERXRoute("MApplication","/mApplications/{name:MApplication}/addInstance/{host:MHost}", ERXRoute.Method.Get, MApplicationController.class, "addInstance"));
+        // Old code. The two lines below are replaced by the following line.  The addInstanceOnAllHosts action throws an exception if the host is not localhost. 
+        // The addInstance action now handles any missing host as well as a host passed in as a key/value pair. kib 20110622
+        //		restHandler.insertRoute(new ERXRoute("MApplication","/mApplications/{name:MApplication}/addInstance", ERXRoute.Method.Get, MApplicationController.class, "addInstanceOnAllHosts"));
+        //		restHandler.insertRoute(new ERXRoute("MApplication","/mApplications/{name:MApplication}/addInstance/{host:MHost}", ERXRoute.Method.Get, MApplicationController.class, "addInstance"));
+        restHandler.insertRoute(new ERXRoute("MApplication","/mApplications/{name:MApplication}/addInstance", ERXRoute.Method.Get, MApplicationController.class, "addInstance"));
         restHandler.insertRoute(new ERXRoute("MApplication","/mApplications/{name:MApplication}/deleteInstance", ERXRoute.Method.Get, MApplicationController.class, "deleteInstance"));
         restHandler.addDefaultRoutes("MHost", false, MHostController.class);
         restHandler.addDefaultRoutes("MSiteConfig", false, MSiteConfigController.class);
