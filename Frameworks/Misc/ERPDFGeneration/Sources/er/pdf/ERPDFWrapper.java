@@ -1,5 +1,11 @@
 package er.pdf;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.Map;
 
 import com.webobjects.appserver.WOActionResults;
@@ -9,6 +15,7 @@ import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODynamicGroup;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
@@ -28,6 +35,9 @@ import er.extensions.appserver.ERXWOContext;
  * @binding secure
  * @binding enabled
  * @binding filename
+ * @binding fonts
+ * @binding framework
+ * @binding additionalPDFs
  * 
  * @author sharpy
  * @author q
@@ -38,6 +48,7 @@ public class ERPDFWrapper extends WODynamicGroup implements WOActionResults {
   protected WOAssociation _secure;
   protected WOAssociation _enabled;
   protected WOAssociation _filename;
+  protected WOAssociation _additionalPDFs;
   protected WOElement _component;
 
   public ERPDFWrapper(String name, NSDictionary<String, WOAssociation> someAssociations, WOElement component) {
@@ -46,6 +57,7 @@ public class ERPDFWrapper extends WODynamicGroup implements WOActionResults {
     _secure = _associations.removeObjectForKey("secure");
     _enabled = _associations.removeObjectForKey("enabled");
     _filename = _associations.removeObjectForKey("filename");
+    _additionalPDFs = _associations.removeObjectForKey("additionalPDFs");
     _component = component;
   }
 
@@ -73,7 +85,21 @@ public class ERPDFWrapper extends WODynamicGroup implements WOActionResults {
     }
     
     NSData data = ERPDFUtilities.htmlAsPdf(response.contentString(), response.contentEncoding(), resourceUrlPrefix, config);
-
+    if (_additionalPDFs != null && _additionalPDFs.valueInComponent(context.component()) != null) {
+      NSArray<String> additionalPDFs = (NSArray<String>)_additionalPDFs.valueInComponent(context.component());
+      try {
+        List<InputStream> pdfs = new ArrayList<InputStream>();
+        pdfs.add(data.stream());
+        Enumeration<String> e = additionalPDFs.objectEnumerator();
+        while (e.hasMoreElements()) pdfs.add(new FileInputStream(e.nextElement()));
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ERPDFMerge.concatPDFs(pdfs, output, false);
+        data = new NSData(output.toByteArray());
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+    
     String filename = _filename != null ? (String)_filename.valueInComponent(context.component()) : "result.pdf";
 
     response.setHeader("inline; filename=\"" + filename + "\"", "content-disposition");
