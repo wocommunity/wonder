@@ -2,17 +2,6 @@
   <head>
     <title>Processing... Please Wait ...</title>
     <webobject name = "ERXStyleSheet" />
-    <style>
-      table.progressBar td.percentageFinished {
-          background-image: url(<webobject name = "FinishedImage" />);
-          background-repeat: repeat-x;
-      }
-
-      table.progressBar td.percentageUnfinished {
-          background-image: url(<webobject name = "UnfinishedImage" />);
-          background-repeat: repeat-x;
-      }
-    </style>
     <script>
       var performNextPageAction = function () {
           window.location='<webobject name = "NextPageActionURL" />';
@@ -20,19 +9,19 @@
     </script>
   </head>
   <body>
-    <div id = "MainContent">
-      <div id = "status-panel">
+    <div id = "content-wrapper">
+      <div id = "content-panel">
         <webobject name = "TaskProgressRefresh">
-          <div id = "status-area">
+          <div id = "status-area" class = "section">
             <!-- We either show the task status, or fallback to user-defined default status, or fallback to global default status message -->
             <webobject name = "FutureHasStatus">
               <p class = "status-message"> <webobject name = "FutureStatus" /> </p>
             </webobject>
-            <webobject name = "ERXElse">
+            <webobject name = "FutureDoesNotHaveStatus">
               <p class = "status-message"><webobject name = "DefaultStatus" /></p>
             </webobject>
           </div>
-          <div id = "progress-area">
+          <div id = "progress-area" class = "section">
             <!-- We show a percentage based progress feedback, or fallback to an ajax busy indicator -->
             <webobject name = "FutureHasPercentComplete">
               <table class = "progressBar" width = "100%" cellspacing = "0">
@@ -43,12 +32,14 @@
               </table>
               <p class = "percent-display"> <webobject name = "FinishedPercentage" /> </p>
             </webobject>
-            <webobject name = "ERXElse1">
-              <!-- Just show an ajax busy indicator -->
-              <webobject name = "AjaxBusyGifImage" />
+            <webobject name = "FutureDoesNotHavePercentComplete">
+              <!-- Just show an ajax busy indicator which is determined by CSS styling of this div -->
+              <div id = "busy-indicator">
+              &nbsp;
+              </div>
             </webobject>
           </div>
-          <div id = "ElapsedTimeArea">
+          <div id = "elapsed-time-area" class = "section">
             <p class = "elapsed-time">Elapsed Time: <webobject name = "ElapsedTime" /></p>
           </div>
           <!-- The content of this next javascript changes when the task is done so that the nextPage action is fired -->
@@ -63,7 +54,7 @@
               <p class = "stopping-message">Stopping...</p>
             </webobject>
             <webobject name = "ERXElse2">
-              <webobject name = "StopTaskUpdateHyperlink"> <webobject name = "StopImage" /> </webobject>
+            <webobject name = "StopTaskUpdateHyperlink"><span class = "stop-link-text">Stop Task</span></webobject>
             </webobject>
           </webobject>
         </webobject>
