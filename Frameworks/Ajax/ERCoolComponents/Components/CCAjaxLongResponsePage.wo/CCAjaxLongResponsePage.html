@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>Processing... Please Wait ...</title>
-    <wo:ERXStyleSheet framework = "$styleSheetFramework" filename = "$styleSheetFilename" />
+    <webobject name = "ERXStyleSheet"/>
     <style>
                 table.progressBar td.percentageFinished {
                     background-image: url(<webobject name = "FinishedImage" />);
@@ -15,74 +15,74 @@
     </style>
     <script>
       var performNextPageAction = function () {
-          window.location='<wo name = "NextPageActionURL" />';
+          window.location='<webobject name = "NextPageActionURL" />';
       }
     </script>
   </head>
   <body>
     <div id = "MainContent">
     <div id = "status-panel">
-      <wo name = "TaskProgressRefresh">
+      <webobject name = "TaskProgressRefresh">
         <div id = "status-area">
           <!-- We either show the task status, or fallback to user-defined default status, or fallback to global default status message -->
-          <wo:if condition = "$future.hasStatus">
-            <p class = "status-message"> <wo:str value = "$future.status" /> </p>
-          </wo:if>
-          <wo:else>
-            <p class = "status-message"><wo:str value = "$defaultStatus" /></p>
-          </wo:else>
+          <webobject name = "FutureHasStatus">
+            <p class = "status-message"> <webobject name = "FutureStatus"/> </p>
+          </webobject>
+          <webobject name = "ERXElse">
+            <p class = "status-message"><webobject name = "DefaultStatus"/></p>
+          </webobject>
         </div>
         <div id = "progress-area">
           <!-- We show a percentage based progress feedback, or fallback to an ajax busy indicator -->
-          <wo:if condition = "$future.hasPercentComplete">
+          <webobject name = "FutureHasPercentComplete">
             <table class = "progressBar" width = "100%" cellspacing = "0">
               <tr>
                 <webobject name = "Finished">&nbsp;</webobject>
                 <webobject name = "Unfinished"></webobject>
               </tr>
             </table>
-            <p class = "percent-display"> <wo:str value = "$finishedPercentage" valueWhenEmpty = "0%" /> </p>
-          </wo:if>
-          <wo:else>
+            <p class = "percent-display"> <webobject name = "FinishedPercentage"/> </p>
+          </webobject>
+          <webobject name = "ERXElse1">
             <!-- Just show an ajax busy indicator -->
-            <wo:image framework = "Ajax" filename = "ajax-spinner-large-66.gif" />
-          </wo:else>
+            <webobject name = "AjaxBusyGifImage"/>
+          </webobject>
         </div>
         <div id = "ElapsedTimeArea">
-          <p class = "elapsed-time">Elapsed Time: <wo:str value = "$elapsedTime" /></p>
+          <p class = "elapsed-time">Elapsed Time: <webobject name = "ElapsedTime"/></p>
         </div>
 
         <!-- The content of this next javascript changes when the task is done so that the nextPage action is fired -->
         <script>
-        <wo:str value = "$controlScriptContent" />
+        <webobject name = "ControlScriptContent" />
         </script>
-      </wo>
-		<wo:if condition = "$future.isStoppable">
-		<wo:AjaxUpdateContainer id = "StopControlArea">
+      </webobject>
+		<webobject name = "FutureIsStoppable">
+		<webobject name = "StopControlUpdateContainer">
 
         <!-- We want the Stop control outside of the refresh area, otherwise a user click on Stop at the same time as a refresh request might not have any effect. -->
-        <wo:if condition = "$wasStoppedByUser">
+        <webobject name = "WasStoppedByUser">
         	<p class = "stopping-message">Stopping...</p>
-        </wo:if>
-        <wo:else>
-        <wo:AjaxUpdateLink action = "$stopTask" updateContainerID = "StopControlArea">
-        	<wo:img framework = "ERExtensions" filename = "button_stop_cancel.png" />
-        </wo>
-        </wo:else>
-		</wo:AjaxUpdateContainer>
-        </wo:if>
+        </webobject>
+        <webobject name = "ERXElse2">
+        <webobject name = "StopTaskUpdateHyperlink">
+        	<webobject name = "StopImage"/>
+        </webobject>
+        </webobject>
+		</webobject>
+        </webobject>
         </div>
-      <wo:if condition = "$application.isDevelopmentMode">
-        <wo:if condition = "$isDebugMode">
+      <webobject name = "ApplicationIsDevelopmentMode">
+        <webobject name = "IsDebugMode">
           <div id = "development-info">
             <h4>Development Info</h4>
             <ul>
-              <li>NextPageController: <wo:str value = "$nextPageForResultController.class.simpleName//VALID" /></li>
-              <li>Task: <wo:str value = "$task.class.simpleName//VALID" /></li>
+              <li>NextPageController: <webobject name = "NextPageForResultControllerClassSimpleName"/></li>
+              <li>Task: <webobject name = "TaskClassSimpleName"/></li>
             </ul>
           </div>
-        </wo:if>
-      </wo:if>
+        </webobject>
+      </webobject>
     </div>
   </body>
 </html>
