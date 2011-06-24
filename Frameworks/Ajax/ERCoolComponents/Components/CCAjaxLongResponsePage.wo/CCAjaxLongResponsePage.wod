@@ -40,3 +40,94 @@ TaskProgressRefresh : AjaxUpdateContainer {
 	frequency = refreshInterval;
 }
 
+
+ERXStyleSheet : ERXStyleSheet {
+  framework = styleSheetFramework;
+  filename = styleSheetFilename;
+}
+
+FutureHasStatus : ERXWOConditional {
+  condition = future.hasStatus;
+}
+
+ERXElse : ERXElse {
+}
+
+FutureHasPercentComplete : ERXWOConditional {
+  condition = future.hasPercentComplete;
+}
+
+ERXElse1 : ERXElse {
+}
+
+AjaxBusyGifImage : WOImage {
+  framework = "Ajax";
+  filename = "ajax-spinner-large-66.gif";
+}
+
+ControlScriptContent : WOString {
+  value = controlScriptContent;
+}
+
+StopControlUpdateContainer : AjaxUpdateContainer {
+  id = "StopControlArea";
+}
+
+FutureIsStoppable : ERXWOConditional {
+  condition = future.isStoppable;
+}
+
+WasStoppedByUser : ERXWOConditional {
+  condition = wasStoppedByUser;
+}
+
+ERXElse2 : ERXElse {
+}
+
+AjaxUpdateLink : AjaxUpdateLink {
+  action = stopTask;
+  updateContainerID = "StopControlArea";
+}
+
+StopTaskUpdateHyperlink : AjaxUpdateLink {
+  action = stopTask;
+  updateContainerID = "StopControlArea";
+}
+
+ApplicationIsDevelopmentMode : ERXWOConditional {
+  condition = application.isDevelopmentMode;
+}
+
+IsDebugMode : ERXWOConditional {
+  condition = isDebugMode;
+}
+
+NextPageForResultControllerClassSimpleName : WOString {
+  value = nextPageForResultController.class.simpleName; //VALID
+}
+
+TaskClassSimpleName : WOString {
+  value = task.class.simpleName; //VALID
+}
+
+FutureStatus : WOString {
+  value = future.status;
+}
+
+DefaultStatus : WOString {
+  value = defaultStatus;
+}
+
+FinishedPercentage : WOString {
+  value = finishedPercentage;
+  valueWhenEmpty = "0%";
+}
+
+ElapsedTime : WOString {
+  value = elapsedTime;
+}
+
+StopImage : WOImage {
+  framework = "ERExtensions";
+  filename = "button_stop_cancel.png";
+}
