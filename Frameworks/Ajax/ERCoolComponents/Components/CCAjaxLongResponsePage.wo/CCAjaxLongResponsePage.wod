@@ -1,27 +1,13 @@
-AjaxTaskProgressBar : AjaxProgressBar {
-	allowCancel = false;
-	cancelingText = "Canceling...";
-	finishedFunction = "performNextPageAction();";
-	id = "GenericLongResponseProgressbar";
-	refreshTime = 2000;
-	progress = taskProgress;
-	started = true;
-}
-
-FinishedImage : WOResourceURL {
-	filename = "progress-bar.gif";
-	framework = "Ajax";
-}
-
-UnfinishedImage : WOResourceURL {
-	filename = "progress-remainder.gif";
-	framework = "Ajax";
+TaskProgressRefresh : AjaxUpdateContainer {
+	elementName = "div";
+	frequency = refreshInterval;
+	// stopped binding used for developing a custom CSS style-sheet
+	stopped = stayOnLongResponsePageIndefinitely;
 }
 
 NextPageActionURL: WOActionURL {
 	action = nextPage;
 }
-
 
 Finished : WOGenericContainer {
 	elementName = "td";
@@ -35,12 +21,6 @@ Unfinished : WOGenericContainer {
 	omitTags = hideUnfinishedProgressTableCell;
 }
 
-TaskProgressRefresh : AjaxUpdateContainer {
-	elementName = "div";
-	frequency = refreshInterval;
-}
-
-
 ERXStyleSheet : ERXStyleSheet {
   framework = styleSheetFramework;
   filename = styleSheetFilename;
@@ -50,19 +30,14 @@ FutureHasStatus : ERXWOConditional {
   condition = future.hasStatus;
 }
 
-ERXElse : ERXElse {
+FutureDoesNotHaveStatus : ERXElse {
 }
 
 FutureHasPercentComplete : ERXWOConditional {
   condition = future.hasPercentComplete;
 }
 
-ERXElse1 : ERXElse {
-}
-
-AjaxBusyGifImage : WOImage {
-  framework = "Ajax";
-  filename = "ajax-spinner-large-66.gif";
+FutureDoesNotHavePercentComplete : ERXElse {
 }
 
 ControlScriptContent : WOString {
@@ -70,7 +45,8 @@ ControlScriptContent : WOString {
 }
 
 StopControlUpdateContainer : AjaxUpdateContainer {
-  id = "StopControlArea";
+  id = "stop-control-area";
+  class = "section";
 }
 
 FutureIsStoppable : ERXWOConditional {
@@ -84,14 +60,10 @@ WasStoppedByUser : ERXWOConditional {
 ERXElse2 : ERXElse {
 }
 
-AjaxUpdateLink : AjaxUpdateLink {
-  action = stopTask;
-  updateContainerID = "StopControlArea";
-}
-
 StopTaskUpdateHyperlink : AjaxUpdateLink {
   action = stopTask;
-  updateContainerID = "StopControlArea";
+  class = "stop-link";
+  updateContainerID = "stop-control-area";
 }
 
 ApplicationIsDevelopmentMode : ERXWOConditional {
@@ -125,9 +97,4 @@ FinishedPercentage : WOString {
 
 ElapsedTime : WOString {
   value = elapsedTime;
-}
-
-StopImage : WOImage {
-  framework = "ERExtensions";
-  filename = "button_stop_cancel.png";
 }

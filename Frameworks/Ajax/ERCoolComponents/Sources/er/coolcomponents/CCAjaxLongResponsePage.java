@@ -11,6 +11,7 @@ import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
+import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXNextPageForResultWOAction;
 import er.extensions.appserver.IERXPerformWOAction;
 import er.extensions.appserver.IERXPerformWOActionForResult;
@@ -45,15 +46,16 @@ import er.extensions.foundation.ERXStopWatch;
  * </code>
  * </pre>
  * <p>
- * <strong>Usage:</strong>
+ * <h3>Usage:</h3>
  * <ol>
  * <li>
- * Create a {@link Runnable} task, or a {@link Callable} task that returns some result.
+ * Create a {@link Runnable} task, or a {@link Callable} task, that returns some result.
  * 	<ol>
  *    <li>Optionally implement the {@link ERXStatusInterface} interface (just one method to return status message) 
  *    to have the task's status displayed in the long response page.
  *    <li>Optionally implement the {@link ERXTaskPercentComplete} interface (just one method to return percentage complete)
  *    to have a progress bar and a percentage complete automatically displayed in the long response page.
+ *    <li>Optionally implement the {@link IERXStoppable} interface to allow stopping of the task by the user.
  *    </ol>
  * </li>
  * <li>If you don't just want the originating page to be returned (default behavior) then
@@ -76,7 +78,33 @@ import er.extensions.foundation.ERXStopWatch;
  * Just return the long response page in your action method
  * </li></ol>
  * 
+ * <h3>Customizing the CCAjaxLongResponsePage for your Application</h3>
+ * <p>This long response page can be easily customized using a custom CSS style sheet and a few system properties.
+ * <h4>Customizing the Appearance with CSS</h4>
+ * <p>You can create a custom CSS style sheet, place it in any framework (or your app) and set the following two properties to have it used instead of the default CSS style-sheet:
+ * <dl>
+ * <dt><code>er.coolcomponents.CCAjaxLongResponsePage.stylesheet.framework</code></dt>
+ * <dd>Set this the name of the framework that contains the custom css style sheet, 
+ * or set it to &quot;app&quot; if the style-sheet is in the application bundle.</dd>
+ * <dt><code>er.coolcomponents.CCAjaxLongResponsePage.stylesheet.filename</code></dt>
+ * <dd>Set this to the filename of the css style sheet.</dd>
+ * <dt><code>er.coolcomponents.CCAjaxLongResponsePage.stayOnLongResponsePageIndefinitely</code></dt>
+ * <dd>
+ * As a convenience for CSS style sheet development, you can <em>temporarily</em> set this 
+ * property to <code>true</code> to prevent ajax refresh on the long response page and to keep the page open indefinitely
+ * even after the task has completed. The property is ignored in deployment mode.
+ * </dd>
+ * </dl>
  * 
+ * 
+ * <h4>Further Configuration Options</h4>
+ * <p>The following properties can be used to implement additional custom behavior:
+ * <dl>
+ * <dt><code>er.coolcomponents.CCAjaxLongResponsePage.defaultStatus</code></dt>
+ * 	<dd>This determines the default status text when the task does not implement {@link ERXStatusInterface}</dd>
+ * <dt><code>er.coolcomponents.CCAjaxLongResponsePage.refreshInterval</code></dt>
+ * 	<dd>This value in seconds determines a custom refresh interval for the update container on the page. The default is 2 seconds</dd>
+ * </dl>
  * @author kieran
  *
  */
@@ -87,6 +115,10 @@ public class CCAjaxLongResponsePage extends WOComponent {
 	private static final String STYLESHEET_FRAMEWORK = ERXProperties.stringForKeyWithDefault("er.coolcomponents.CCAjaxLongResponsePage.stylesheet.framework", "ERCoolComponents");
 	private static final String STYLESHEET_FILENAME = ERXProperties.stringForKeyWithDefault("er.coolcomponents.CCAjaxLongResponsePage.stylesheet.filename", "CCAjaxLongResponsePage.css");
 
+	// Constant to stop all refresh activity on long response page so that it stays open indefinitely allowing the developer
+	// to develop a custom CSS stylesheet
+	private static final boolean CSS_STYLE_SHEET_DEVELOPMENT_MODE = ERXApplication.isDevelopmentModeSafe() && ERXProperties.booleanForKeyWithDefault("er.coolcomponents.CCAjaxLongResponsePage.stayOnLongResponsePageIndefinitely", false);
+	
 	// flag to indicate that the user stopped the task (if it was stoppable and the stop control was visible)
 	private boolean _wasStoppedByUser = false;
 	
@@ -296,7 +328,7 @@ public class CCAjaxLongResponsePage extends WOComponent {
 	 */
 	public String controlScriptContent() {
 		String result = ";";
-		if (future().isDone()) {
+		if (future().isDone() && !CSS_STYLE_SHEET_DEVELOPMENT_MODE) {
 			// To avoid confusion and users saying it never reaches 100% (which can happen if we complete and return the result 
 			// before the last refresh that _would_ display 100% if we waited), we will wait for a period slightly longer than the
 			// refresh interval to get one more refresh and let the user visually see 100%.
@@ -378,10 +410,12 @@ public class CCAjaxLongResponsePage extends WOComponent {
 	public boolean wasStoppedByUser() {
 		return _wasStoppedByUser;
 	}
+	
+	/**
+	 * @return flag to prevent update container refresh and thus keep the long response page displayed indefinitely for the purpose of developing a CS stylesheet.
+	 */
+	public boolean stayOnLongResponsePageIndefinitely() {
+		return CSS_STYLE_SHEET_DEVELOPMENT_MODE;
+	}
 
-	
-	
-	
-	
-	
 }
