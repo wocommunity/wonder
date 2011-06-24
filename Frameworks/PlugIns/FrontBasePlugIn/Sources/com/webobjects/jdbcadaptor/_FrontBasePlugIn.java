@@ -1095,14 +1095,16 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			}
 			else {
 				// Default values.
-				if (dictionary.valueForKey("Default") != null) {
+				Object defaultValue = dictionary.valueForKey("Default");
+		        if (defaultValue == null) {
+		            defaultValue = dictionary.valueForKey("er.extensions.eoattribute.default"); // deprecated key
+		        }
+		        if (defaultValue == null) {
+		            defaultValue = dictionary.valueForKey("default");
+		        }
+				if (defaultValue != null) {
 					sql.append(" DEFAULT ");
-					sql.append(dictionary.valueForKey("Default"));
-				}
-
-				if (dictionary.valueForKey("er.extensions.eoattribute.default") != null) {
-					sql.append(" DEFAULT ");
-					sql.append(formatValueForAttribute(dictionary.valueForKey("er.extensions.eoattribute.default"), attribute));
+					sql.append(formatValueForAttribute(defaultValue, attribute));
 				}
 
 				// Column constraints.

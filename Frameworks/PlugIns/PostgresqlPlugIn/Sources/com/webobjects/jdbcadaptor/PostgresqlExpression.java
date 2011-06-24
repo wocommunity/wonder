@@ -763,7 +763,10 @@ public class PostgresqlExpression extends JDBCExpression {
       NSDictionary userInfo = attribute.userInfo();
       Object defaultValue = null;
       if (userInfo != null) {
-        defaultValue = userInfo.valueForKey("er.extensions.eoattribute.default");
+          defaultValue = userInfo.valueForKey("er.extensions.eoattribute.default"); // deprecated key
+          if (defaultValue == null) {
+            defaultValue = userInfo.valueForKey("default");
+          }
       }
       String allowsNullClauseForConstraint = allowsNullClauseForConstraint(shouldAllowNull(attribute));
       String sql;

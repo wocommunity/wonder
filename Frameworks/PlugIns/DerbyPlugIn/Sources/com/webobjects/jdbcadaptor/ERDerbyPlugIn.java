@@ -51,7 +51,10 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 
 			NSDictionary userInfo = attribute.userInfo();
 			if (userInfo != null) {
-				Object defaultValue = userInfo.valueForKey("er.extensions.eoattribute.default");
+				Object defaultValue = userInfo.valueForKey("er.extensions.eoattribute.default"); // deprecated key
+		        if (defaultValue == null) {
+		            defaultValue = userInfo.valueForKey("default");
+		        }
 				if (defaultValue != null) {
 					sql.append(" DEFAULT ");
 					sql.append(formatValueForAttribute(defaultValue, attribute));

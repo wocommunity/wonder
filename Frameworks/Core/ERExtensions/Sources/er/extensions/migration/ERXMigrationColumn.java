@@ -342,7 +342,7 @@ public class ERXMigrationColumn {
 			else {
 				mutableUserInfo = userInfo.mutableClone();
 			}
-			mutableUserInfo.setObjectForKey(_defaultValue, "er.extensions.eoattribute.default");
+			mutableUserInfo.setObjectForKey(_defaultValue, "default");
 			attribute.setUserInfo(mutableUserInfo);
 		}
 
