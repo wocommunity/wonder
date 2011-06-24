@@ -476,7 +476,10 @@ static void sendResponse(request_rec *r, HTTPResponse *resp) {
 		 if (r->connection->aborted) {
 			 break;
 		 }
-         resp_getResponseContent(resp, 1);
+         if (resp_getResponseContent(resp, 1) == -1)
+         {
+         	break;
+         }
       }
       ap_soft_timeout("sending WebObjects response", r);
       ap_rwrite(resp->content, resp->content_valid, r);

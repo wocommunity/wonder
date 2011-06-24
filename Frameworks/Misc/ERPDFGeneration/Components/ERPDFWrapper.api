@@ -4,5 +4,8 @@
       <binding defaults="Boolean" name="isSecure"/>
       <binding defaults="Boolean" name="enabled"/>
       <binding name="filename"/>
+      <binding name="fonts"/>
+      <binding name="framework"/>
+      <binding name="additionalPDFs"/>
     </wo>
 </wodefinitions>

@@ -92,7 +92,7 @@ public class ERFileAttachmentProcessor extends ERAttachmentProcessor<ERFileAttac
       String desiredFileName = desiredFilesystemPath.getName();
       String actualFileName = actualFilesystemPath.getName();
       // in case the name was not unique and changed, we need to update webPath ...
-      webPath = webPath.replaceAll(desiredFileName + "$", actualFileName);
+      webPath = webPath.replaceAll("\\Q" + desiredFileName + "\\E$", actualFileName);
 
       attachment.setWebPath(webPath);
       attachment.setFilesystemPath(actualFilesystemPath.getAbsolutePath());
