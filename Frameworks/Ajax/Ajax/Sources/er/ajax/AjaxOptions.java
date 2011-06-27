@@ -9,8 +9,56 @@ import com.webobjects.appserver.WODynamicElement;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+/**
+ * AjaxOptions provides a mechanism to produce a JSON formatted dictionary from binding names and / or a dictionary. 
+ * This is intended to support the options parameter in Prototype, e.g. the second parameter here: 
+ * <pre>
+ * new Ajax.Request('/some_url', {
+ *     method: 'get',
+ *     parameters: {company: 'example', limit: 12}
+ *   });
+ * </pre>
+ * However, the functionality is not specific to Prototype and can be used anywhere a JSON formatted dictionary is needed.
+ *
+ * <p>
+ * AjaxOptions can be used either in a HTML/WOD setting, e.g.
+ * <pre>
+ * AjaxOptions : AjaxOptions {
+ *  method = "get";
+ *	options = createAjaxOptions;
+ * }
+ * </pre>
+ * with options bound to a dictionary produced by AjaxOption, or it can be used directly in Java, e.g.
+ * <pre>
+ *  AjaxOptions.appendToResponse(createAjaxOptions(), context.response(), context);
+ * </pre>
+ * </p>
+ * 
+ * <p>
+ * Example (and fictitious) usage code:
+ * <pre>
+ * 	public NSDictionary createAjaxOptions(WOComponent component) {
+ *		NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<AjaxOption>();
+ *		ajaxOptionsArray.addObject(new AjaxOption("frequency", AjaxOption.NUMBER));
+ *		ajaxOptionsArray.addObject(new AjaxOption("onLoading", AjaxOption.SCRIPT));
+ *		ajaxOptionsArray.addObject(new AjaxOption("evalScripts", Boolean.TRUE, AjaxOption.BOOLEAN));
+ *		ajaxOptionsArray.addObject(new AjaxOption("method", "get", AjaxOption.STRING));
+ *      ...
+ *		NSMutableDictionary<String, String> options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
+ *		return options;
+ *	}
+ *
+ * response.appendContentString("AUC.registerPeriodic('" + id + "'," + canStop + "," + stopped + ",");
+ * AjaxOptions.appendToResponse(options, response, context);
+ * response.appendContentString(");");
+ * </pre>
+ * 
+ * @see AjaxOption
+ * @see AjaxValue
+ */
 public class AjaxOptions extends WODynamicElement {
   private NSMutableDictionary _bindings;
   private WOElement _children;
@@ -39,12 +87,26 @@ public class AjaxOptions extends WODynamicElement {
     response.appendContentCharacter('}');
   }
 
+  /**
+   * Adds JSON formatted key-value pairs from options to end of response content.  Does not adds the surrounding "{" and "}" signifying a dictionary / object. 
+   *
+   * @param options dictionary of key-value pairs, intended to have come from AjaxOption
+   * @param response WOResponse to add JSON formatted key-value pairs to
+   * @param context WOContext to provide WOComponent to resolve binding values in
+   */
   public static void _appendToResponse(NSDictionary options, WOResponse response, WOContext context) {
     StringBuffer sb = new StringBuffer();
     AjaxOptions._appendToBuffer(options, sb, context);
     response.appendContentString(sb.toString());
   }
   
+  /**
+   * Adds JSON formatted key-value pairs from options to end of response content.  Does not adds the surrounding "{" and "}" signifying a dictionary / object. 
+   *
+   * @param options dictionary of key-value pairs, intended to have come from AjaxOption
+   * @param stringBuffer StringBuffer to add JSON formatted key-value pairs to
+   * @param context WOContext to provide WOComponent to resolve binding values in
+   */
   public static void _appendToBuffer(NSDictionary options, StringBuffer stringBuffer, WOContext context) {
     if (options != null) {
       WOComponent component = context.component();
@@ -54,6 +116,7 @@ public class AjaxOptions extends WODynamicElement {
         String bindingName = (String) bindingsEnum.nextElement();
         if (!"options".equals(bindingName)) {
           Object bindingValue = options.objectForKey(bindingName);
+  		  // This is needed for the double step to resolve the value for ^ notation
           if (bindingValue instanceof WOAssociation) {
             WOAssociation association = (WOAssociation) bindingValue;
             bindingValue = association.valueInComponent(component);
@@ -72,12 +135,26 @@ public class AjaxOptions extends WODynamicElement {
     }
   }
 
+  /**
+   * Adds JSON formatted key-value pairs from options to end of response content.  Adds the surrounding "{" and "}" signifying a dictionary / object. 
+   *
+   * @param options dictionary of key-value pairs, intended to have come from AjaxOption
+   * @param stringBuffer StringBuffer to add JSON formatted key-value pairs to
+   * @param context WOContext to provide WOComponent to resolve binding values in
+   */
   public static void appendToBuffer(NSDictionary options, StringBuffer stringBuffer, WOContext context) {
     stringBuffer.append('{');
     AjaxOptions._appendToBuffer(options, stringBuffer, context);
     stringBuffer.append('}');
   }
 
+  /**
+   * Adds JSON formatted key-value pairs from options to end of response content.  Adds the surrounding "{" and "}" signifying a dictionary / object. 
+   *
+   * @param options dictionary of key-value pairs, intended to have come from AjaxOption
+   * @param response WOResponse to add JSON formatted key-value pairs to
+   * @param context WOContext to provide WOComponent to resolve binding values in
+   */
   public static void appendToResponse(NSDictionary options, WOResponse response, WOContext context) {
     response.appendContentCharacter('{');
     AjaxOptions._appendToResponse(options, response, context);
