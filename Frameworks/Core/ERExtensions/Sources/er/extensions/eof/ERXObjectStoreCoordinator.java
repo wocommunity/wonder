@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.log4j.Logger;
 
 import sun.misc.Signal;
@@ -210,5 +211,24 @@ public class ERXObjectStoreCoordinator extends EOObjectStoreCoordinator {
 	
 	public static EOObjectStoreCoordinator create(boolean shouldClose) {
 		return new ERXObjectStoreCoordinator(shouldClose);
+	}
+	
+	protected String _name = "unnamed";
+	
+	/** @return a meaningful name for this OSC */
+	public String name() {
+		return _name;
+	}
+	
+	/** @param name a meaningful name for this OSC */
+	public void setName(String name) {
+		_name = name;
+	}
+	
+	@Override
+	public String toString() {
+		ToStringBuilder b = new ToStringBuilder(this);
+		b.append("name", name());
+		return b.toString();
 	}
 }
