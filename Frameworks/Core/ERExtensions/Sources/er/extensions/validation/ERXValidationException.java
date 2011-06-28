@@ -43,7 +43,7 @@ public class ERXValidationException extends NSValidation.ValidationException imp
     /** corresponds to a model thrown 'mandatory toOne relationship' exception */
     public static final String MandatoryToOneRelationshipException = "MandatoryToOneRelationshipException";
 
-    /** corresponds to a model thrown 'manditory toMany relationship' exception */
+    /** corresponds to a model thrown 'mandatory toMany relationship' exception */
     public static final String MandatoryToManyRelationshipException = "MandatoryToManyRelationshipException";
 
     /** corresponds to a model thrown 'object removal' exception */    
