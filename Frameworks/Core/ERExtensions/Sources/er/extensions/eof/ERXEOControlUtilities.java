@@ -392,6 +392,19 @@ public class ERXEOControlUtilities {
         }
     }
 
+	/**
+	 * Sets the fetch time stamp of the eo's ec to now to ensure fresh data. and
+	 * refreshes the EO (which merges latest database snapshots with current
+	 * unsaved changes if we have unsaved changes)
+	 *
+	 * @param eo
+	 *            EO to be refreshed
+	 */
+	public static void refreshObject(EOEnterpriseObject eo) {
+		eo.editingContext().setFetchTimestamp(System.currentTimeMillis());
+		eo.editingContext().refreshObject(eo);
+	}
+
     /**
      * Clears snapshot the relaationship of a given enterprise so it will be read again when next accessed.
      * @param eo enterprise object
@@ -2512,4 +2525,5 @@ public class ERXEOControlUtilities {
 		}
 
 	}
+
 }
