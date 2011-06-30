@@ -224,7 +224,7 @@ public class CCRating extends AjaxDynamicElement {
      * @return optional value for formValueName, or calculated value if unbound
      */
     protected String formValueName(WOContext context) {
-        return (String)valueForBinding("formValueName", ERXWOContext.safeIdentifierName(context, false) + "_value", context.component());
+        return (String)valueForBinding("formValueName", id(context) + "_value", context.component());
     }
 
     /**
