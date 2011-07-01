@@ -17,16 +17,32 @@ import java.util.concurrent.TimeUnit;
 import er.extensions.foundation.ERXProperties;
 
 /**
- * A simple class that provides a single general purpose executor service for a
- * single application. Resource efficient.
+ * <p>
+ * A simple class that provides a resource-efficient WebObjects-friendly {@link ExecutorService} for a
+ * single application. ExecutorService instances are used for running tasks in asynchronous threads. 
+ * Access the shared instance with:
+ * <p>
+ * <pre>
+ * ExecutorService es = ERXExecutorService.executorService();
+ * </pre>
  * 
- * Also provides a fixed size thread pool that rejects tasks when all threads are busy.
- *
+ * <p>
+ * This class also provides a factory method to create a fixed size thread pool ExecutorService 
+ * that rejects tasks when all threads are busy. This can be useful for parallel processing
+ * tasks.
+ * </p>
+ * 
+ * <p>
  * Implements custom Thread and ThreadPoolExecutor subclasses that cooperate to
  * maintain reference to currently executing task while executing and
  * to ensure locked editing contexts are unlocked at the end of a task.
+ * </p>
  * 
- *
+ * @see ERXTaskThreadPoolExecutor
+ * @see ERXTaskThreadFactory
+ * @see ERXTaskThread
+ * @see ERXExecutorService
+ * 
  */
 public class ERXExecutorService {
 	private static final ExecutorService _executorService = new ERXTaskThreadPoolExecutor(0, Integer.MAX_VALUE, 60L,
