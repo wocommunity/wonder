@@ -14,12 +14,13 @@ import er.extensions.foundation.ERXStatusInterface;
  * implemented in the wrapped task and if so the values are
  * passed thru from the task.
  * 
- * Usage: <code>
+ * Usage: 
+ * <pre>
 			// If null, then submit the callable task
 			ERXFutureTask _future = new ERXFutureTask(callable);
 
 			ERXExecutorService.executorService().execute(_future);
-			</code>
+	</pre>
  * 
  * @author kieran
  * 
