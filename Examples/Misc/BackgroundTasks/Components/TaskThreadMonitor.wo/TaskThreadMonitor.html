@@ -1,0 +1,31 @@
+<div class = "TaskThreadMonitor">
+  <wo name = "HasNoTasks">
+    <p class = "standard-margin center">There are currently no tasks running.</p>
+  </wo>
+  <wo name = "HasTasks">
+    <div width = "100%">
+      <table width = "100%">
+        <tr class = "bottom-border">
+          <th>Progress</th>
+          <th>Elapsed Time</th>
+          <th>Description and Status</th>
+        </tr>
+        <wo name = "ThreadLoop">
+          <tr class = "bottom-border">
+            <td> <wo:str value = "$taskPercentageComplete" numberformat = "0.0 %" /> </td>
+            <td><wo:str value = "$loopTaskItem.elapsedTime" /></td>
+            <td>
+              <wo:if condition = "$showCancel">
+                <wo:link action = "$stopTask">Stop This Task</wo:link>
+                <br />
+              </wo:if>
+              <wo:str value = "$taskDescription" />
+              <br />
+              <wo:str value = "$taskStatus" />
+            </td>
+          </tr>
+        </wo>
+      </table>
+    </div>
+  </wo>
+</div>

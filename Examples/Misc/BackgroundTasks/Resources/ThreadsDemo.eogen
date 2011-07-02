@@ -1,0 +1,1 @@
+ -destination Sources -extension java -java -javaTemplate _Entity.eotemplate -model Resources/ThreadsDemo.eomodeld -packagedirs -subclassDestination Sources -subclassJavaTemplate Entity.eotemplate -templatedir EOTemplates -verbose -loadModelGroup -define-EOGenericRecord er.extensions.eof.ERXGenericRecord
