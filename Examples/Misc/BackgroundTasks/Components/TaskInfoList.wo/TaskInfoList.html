@@ -1,6 +1,7 @@
 <wo:PageWrapper>
   <div class = "section">
     <h1>TaskInfo List</h1>
+    <wo:AjaxUpdateContainer id = "ListContainer">
     <table width = "100%" class = "list">
       <tr>
         <th class = "left">ID</th>
@@ -22,6 +23,9 @@
         </tr>
       </wo:loop>
     </table>
+    </wo:AjaxUpdateContainer>
   </div>
-
+<div class = "section prepend-top">
+<wo name = "Navigation" />
+</div>
 </wo:PageWrapper>
