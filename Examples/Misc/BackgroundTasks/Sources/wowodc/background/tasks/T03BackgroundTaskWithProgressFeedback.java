@@ -12,7 +12,7 @@ import er.extensions.concurrency.IERXStoppable;
 import er.extensions.foundation.ERXStatusInterface;
 
 /**
- * This task does practically the same as the previous example in {@link T01SimpleBackgroundTask}, but we have
+ * This task does practically the same as the previous example in {@link T01T02SimpleBackgroundTask}, but we have
  * added support for 3 interfaces indicating that the task provides a status message ({@link ERXStatusInterface}), 
  * a percent complete value ({@link ERXTaskPercentComplete}) and
  * that the task can be stopped by the user in a graceful way ({@link IERXStoppable}).

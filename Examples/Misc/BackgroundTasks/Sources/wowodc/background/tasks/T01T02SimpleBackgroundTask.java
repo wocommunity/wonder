@@ -10,9 +10,9 @@ import wowodc.background.utilities.Utilities;
  * @author kieran
  * 
  */
-public class T01SimpleBackgroundTask implements Runnable {
+public class T01T02SimpleBackgroundTask implements Runnable {
 	
-	private static final Logger log = Logger.getLogger(T01SimpleBackgroundTask.class);
+	private static final Logger log = Logger.getLogger(T01T02SimpleBackgroundTask.class);
 
 	public void run() {
 

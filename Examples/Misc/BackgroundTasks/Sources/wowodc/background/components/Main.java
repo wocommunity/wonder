@@ -2,7 +2,7 @@ package wowodc.background.components;
 
 import java.util.concurrent.Callable;
 
-import wowodc.background.tasks.T01SimpleBackgroundTask;
+import wowodc.background.tasks.T01T02SimpleBackgroundTask;
 import wowodc.background.tasks.T03BackgroundTaskWithProgressFeedback;
 import wowodc.background.tasks.T04SimpleEOFTask;
 import wowodc.background.tasks.T05MultiThreadedEOFTask;
@@ -32,7 +32,7 @@ public class Main extends ERXComponent {
 	 * @return the current page (null) after creating a task and starting it in another thread.
 	 */
 	public WOActionResults dispatchBackgroundTask() {
-		T01SimpleBackgroundTask task = new T01SimpleBackgroundTask();
+		T01T02SimpleBackgroundTask task = new T01T02SimpleBackgroundTask();
 		ERXExecutorService.executorService().execute(task);
 		return null;
 	}
@@ -46,7 +46,7 @@ public class Main extends ERXComponent {
 	 * @return long response page running the same task in a long response page allowing user to wait and know when it is complete.
 	 */
 	public WOActionResults dispatchBackgroundTaskInLongRsponsePage() {
-		Runnable task = new T01SimpleBackgroundTask();
+		Runnable task = new T01T02SimpleBackgroundTask();
 		
 		CCAjaxLongResponsePage nextPage = pageWithName(CCAjaxLongResponsePage.class);
 		nextPage.setTask(task);
