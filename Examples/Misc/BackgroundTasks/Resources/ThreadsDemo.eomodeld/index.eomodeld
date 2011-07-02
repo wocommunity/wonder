@@ -1,0 +1,31 @@
+{
+    EOModelVersion = "2.1"; 
+    adaptorName = JDBC; 
+    connectionDictionary = {
+        URL = "jdbc:mysql://localhost/threadsdemo?capitalizeTypenames=true&useUnicode=true&characterEncoding=UTF-8"; 
+        password = password; 
+        username = guest; 
+    }; 
+    entities = (
+        {className = "wowodc.eof.ResultItem"; name = ResultItem; }, 
+        {className = "wowodc.eof.TaskInfo"; name = TaskInfo; }
+    ); 
+    userInfo = {
+        "_EntityModeler" = {
+            activeDatabaseConfigName = Default; 
+            attributeNamingConvention = {case = Lower; separator = None; }; 
+            databaseConfigs = {
+                Default = {
+                    adaptorName = JDBC; 
+                    connectionDictionary = {
+                        URL = "jdbc:mysql://localhost/threadsdemo?capitalizeTypenames=true&useUnicode=true&characterEncoding=UTF-8"; 
+                        password = password; 
+                        username = guest; 
+                    }; 
+                    prototypeEntityName = EOJDBCMySQLPrototypes; 
+                }; 
+            }; 
+            entityNamingConvention = {case = Lower; separator = None; }; 
+        }; 
+    }; 
+}

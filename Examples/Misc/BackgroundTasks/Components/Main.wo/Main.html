@@ -1,0 +1,51 @@
+<wo:PageWrapper>
+  <div class = "section prepend-top">
+    <h1>WOWODC 2011</h1>
+    <ul class = "menu">
+      <li>
+        <wo:link action = "$dispatchBackgroundTask">Demo 1. Dispatch Simple Background Task (T01)</wo:link>
+        <p>Creates a Plain Old Runnable Object task and starts executing it in a background thread.</p>
+      </li>
+      <li>
+        <wo:link action = "$dispatchBackgroundTaskInLongRsponsePage">Demo 2. Run Background Task in Long Response Page (T01)</wo:link>
+        <p>Takes the same Plain Old Runnable Object task as in previous example and runs it using Wonder's easy-to-use CCAjaxLongResponsePage.
+          Note since the task does not implement any status or control interfaces, the long response page shows application default status
+          message and a busy indicator.</p>
+      </li>
+      <li>
+        <wo:link action = "$dispatchBackgroundTaskWithLongResponsePageFeedback">Demo 3. Dispatch Background Task with Long Response Page Feedback (T02)</wo:link>
+        <p>
+          This task does practically the same as the previous example, but we have
+          added support for 3 interfaces indicating that the task provides a status message (ERXStatusInterface), 
+          a percent complete value (ERXTaskPercentComplete) and
+          that the task can be stopped by the user in a graceful way (IERXStoppable).
+        </p>
+      </li>
+      <li>
+        <wo:link action = "$dispatchSimpleEOFTask">Demo 4. Dispatch Simple EOF Task (T03)</wo:link>
+        <p>
+          This example demonstrates basic EOF processing in a background thread. The task creates a new object (TaskInfo) whose attributes contain task related statistics
+          and many related items (ResultItem) where each ResultItem corresponds to a number that was checked for being a Prime or Composite number. Since we want to return a result from the task
+          we use a Callable instead of a Runnable. Concepts include
+          <ul class = "compact">
+            <li> Using a Callable instead of a Runnable to return a result. </li>
+            <li> Configuring the long response page to handle the result and pass the result to the next page. </li>
+            <li> Configuring the long response page to return a different page than the originating page. </li>
+          </ul>
+        </p>
+      </li>
+      <li>
+        <wo:link action = "$dispatchMultiThreadedTask">Demo 5. Dispatch Multi-threaded Task (T05)</wo:link>&nbsp;&nbsp;&nbsp;(
+        <wo:link action = "$dispatchMultiThreadedTaskWithoutLongResponse">See it run in App Monitor</wo:link>)
+        <p>
+          A task that uses a private pool of threads and child tasks to accomplish its work in a multi-threaded way. If you have a lot of CPU cores and a lot of work,
+          this can get a very long task done a lot quicker.
+        </p>
+      </li>
+      <li>
+        <wo:link action = "$dispatchComboTask">Dispatch Combo Task (T06)</wo:link>
+        <p> A task that runs two other tasks in sequence (T03 and T05). The result of the first task is used as the argument for the second. </p>
+      </li>
+    </ul>
+  </div>
+</wo:PageWrapper>

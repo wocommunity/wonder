@@ -1,0 +1,98 @@
+{
+    attributes = (
+        {
+            allowsNull = Y; 
+            columnName = closestfactorial; 
+            name = closestFactorial; 
+            prototypeName = longNumber; 
+            userInfo = {
+                "_EntityModeler" = {
+                    documentation = "The factorial result that is closest to <code>numberToChecl</code>"; 
+                }; 
+            }; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = factornumber; 
+            name = factorNumber; 
+            prototypeName = intNumber; 
+            userInfo = {
+                "_EntityModeler" = {
+                    documentation = "The integer used to calculate the <code>closestFactorial</code>"; 
+                }; 
+            }; 
+        }, 
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {
+            columnName = isfactorialprime; 
+            name = isFactorialPrime; 
+            prototypeName = intBoolean; 
+            userInfo = {
+                "_EntityModeler" = {documentation = "http://en.wikipedia.org/wiki/Factorial_prime"; }; 
+            }; 
+        }, 
+        {columnName = isprime; name = isPrime; prototypeName = intBoolean; }, 
+        {
+            columnName = modificationtime; 
+            name = modificationTime; 
+            prototypeName = dateTime; 
+            userInfo = {
+                "_EntityModeler" = {documentation = "The date and time that this record was last saved."; }; 
+            }; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = numbertocheck; 
+            name = numberToCheck; 
+            prototypeName = longNumber; 
+            userInfo = {
+                "_EntityModeler" = {
+                    documentation = "For the sake of demonstration, the primary key on this entity is a compund key made up of the FK from taskInfo and the numberToCheck attribute. This PK also serves as a constraint to avoid duplicate numberToCheck values per task."; 
+                }; 
+            }; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = taskinfoid; 
+            name = taskInfoID; 
+            prototypeName = id; 
+            userInfo = {
+                "_EntityModeler" = {
+                    documentation = "For the sake of demonstration, the primary key on this entity is a compund key made up of the FK from taskInfo and the numberToCheck attribute. This PK also serves as a constraint to avoid duplicate numberToCheck values per task."; 
+                }; 
+            }; 
+        }, 
+        {
+            columnName = workflowstate; 
+            name = workflowState; 
+            prototypeName = varchar255; 
+        }
+    ); 
+    attributesUsedForLocking = (id, numberToCheck, taskInfoID, workflowState); 
+    className = "wowodc.eof.ResultItem"; 
+    classProperties = (
+        closestFactorial, 
+        factorNumber, 
+        isFactorialPrime, 
+        isPrime, 
+        modificationTime, 
+        numberToCheck, 
+        taskInfo, 
+        workflowState
+    ); 
+    externalName = resultitem; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {"_javaClientClassName" = ResultItem; }; 
+    name = ResultItem; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = TaskInfo; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = taskInfoID; }); 
+            name = taskInfo; 
+        }
+    ); 
+}
