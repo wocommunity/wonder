@@ -8,11 +8,14 @@ import java.util.concurrent.Future;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation._NSUtilities;
 
 import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXNextPageForResultWOAction;
+import er.extensions.appserver.ERXWOContext;
 import er.extensions.appserver.IERXPerformWOAction;
 import er.extensions.appserver.IERXPerformWOActionForResult;
 import er.extensions.concurrency.ERXExecutorService;
@@ -104,6 +107,8 @@ import er.extensions.foundation.ERXStopWatch;
  * 	<dd>This determines the default status text when the task does not implement {@link ERXStatusInterface}</dd>
  * <dt><code>er.coolcomponents.CCAjaxLongResponsePage.refreshInterval</code></dt>
  * 	<dd>This value in seconds determines a custom refresh interval for the update container on the page. The default is 2 seconds</dd>
+ * <dt>er.coolcomponents.CCAjaxLongResponsePage.nextPageForErrorResultControllerClassName</dt>
+ * 	<dd>Defines a default controller class, other than the hard-coded default, for handling task errors for the application</dd>
  * </dl>
  * @author kieran
  *
@@ -114,7 +119,28 @@ public class CCAjaxLongResponsePage extends WOComponent {
 	// Constants to determine the CSS stylesheet used for the long response page for this app
 	private static final String STYLESHEET_FRAMEWORK = ERXProperties.stringForKeyWithDefault("er.coolcomponents.CCAjaxLongResponsePage.stylesheet.framework", "ERCoolComponents");
 	private static final String STYLESHEET_FILENAME = ERXProperties.stringForKeyWithDefault("er.coolcomponents.CCAjaxLongResponsePage.stylesheet.filename", "CCAjaxLongResponsePage.css");
-
+	
+	// Lazy initialization of errorController class 
+	private static class DEFAULT_CONTROLLER {
+		final static String KEY_FOR_CLASSNAME = "er.coolcomponents.CCAjaxLongResponsePage.nextPageForErrorResultControllerClassName";
+		final static Class<IERXPerformWOActionForResult> FOR_ERROR_RESULT = defaultErrorController();
+		
+		@SuppressWarnings("rawtypes")
+		private static Class<IERXPerformWOActionForResult> defaultErrorController() {
+			Class clazz = null;
+			String className = ERXProperties.stringForKey(KEY_FOR_CLASSNAME);
+			if (className != null) {
+				clazz = _NSUtilities.classWithName(className);
+			} else {
+				clazz = ErrorResultController.class;
+			}
+			if (log.isDebugEnabled())
+				log.debug("Default error controller class = " + clazz);
+			
+			return clazz;
+		}
+			
+	}
 	// Constant to stop all refresh activity on long response page so that it stays open indefinitely allowing the developer
 	// to develop a custom CSS stylesheet
 	private static final boolean CSS_STYLE_SHEET_DEVELOPMENT_MODE = ERXApplication.isDevelopmentModeSafe() && ERXProperties.booleanForKeyWithDefault("er.coolcomponents.CCAjaxLongResponsePage.stayOnLongResponsePageIndefinitely", false);
@@ -168,6 +194,28 @@ public class CCAjaxLongResponsePage extends WOComponent {
 	/** @param nextPageForCancelController the controller that handles the scenario where the user stops a stoppable task */
 	public void setNextPageForCancelController(IERXPerformWOAction nextPageForCancelController){
 		_nextPageForCancelController = nextPageForCancelController;
+	}
+
+	
+	private IERXPerformWOActionForResult _nextPageForErrorController;
+	
+	/** @return controller to handle an error result */
+	public IERXPerformWOActionForResult nextPageForErrorController() {
+		if ( _nextPageForErrorController == null ) {
+			// If user has not manually set one, we default to the class defined in system properties or our hard-coded default
+			try {
+				_nextPageForErrorController = DEFAULT_CONTROLLER.FOR_ERROR_RESULT.newInstance();
+			} catch (InstantiationException e1) {
+				throw new RuntimeException("Failed to instantiate an instance of " + DEFAULT_CONTROLLER.FOR_ERROR_RESULT.getName(), e1);
+			} catch (IllegalAccessException e2) {
+				throw new RuntimeException("Failed to instantiate an instance of " + DEFAULT_CONTROLLER.FOR_ERROR_RESULT.getName(), e2);
+			}
+		}
+		return _nextPageForErrorController;
+	}
+	
+	public void setNextPageForErrorController(IERXPerformWOActionForResult nextPageForErrorController) {
+		_nextPageForErrorController = nextPageForErrorController;
 	}
 	
 	private Object _task;
@@ -249,7 +297,9 @@ public class CCAjaxLongResponsePage extends WOComponent {
 	}
 
 	public WOActionResults nextPage() {
-		if (log.isDebugEnabled()) log.debug("nextPage action fired");
+		if (log.isDebugEnabled()) log.debug("nextPage action fired. task result is " + _result);
+		
+		// The response to be returned to the user after the task is done.
 		WOActionResults results = null;
 		
 		// If user canceled, we just call that controller
@@ -257,7 +307,17 @@ public class CCAjaxLongResponsePage extends WOComponent {
 			if (log.isDebugEnabled())
 				log.debug("The task was canceled by the user, so now calling " + nextPageForCancelController());
 			results = nextPageForCancelController().performAction();
+		} else if (_result instanceof Exception) {
+			// Invoke error controller
+			IERXPerformWOActionForResult errorController = nextPageForErrorController();
+			errorController.setResult(_result);
+			
+			if (log.isDebugEnabled())
+				log.debug("The task had an error, so now calling " + errorController);
+			
+			results = errorController.performAction();
 		} else {
+			// Invoke the expected result controller
 			if (log.isDebugEnabled())
 				log.debug("The task completed normally. Now setting the result, " + result()
 						+ ", and calling " + nextPageForResultController());
@@ -416,6 +476,24 @@ public class CCAjaxLongResponsePage extends WOComponent {
 	 */
 	public boolean stayOnLongResponsePageIndefinitely() {
 		return CSS_STYLE_SHEET_DEVELOPMENT_MODE;
+	}
+	
+	/**
+	 * Default behavior for error handling
+	 *
+	 */
+	static class ErrorResultController implements IERXPerformWOActionForResult {
+		private Exception _result;
+		
+		public WOActionResults performAction() {
+			return WOApplication.application().handleException(_result, ERXWOContext.currentContext());
+		}
+
+		public void setResult(Object result) {
+			_result = (Exception) result;
+			
+		}
+		
 	}
 
 }
