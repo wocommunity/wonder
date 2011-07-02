@@ -60,12 +60,15 @@ import er.extensions.appserver.*;
  * @binding multiple optional, <code>true</code> if the user can change a previous rating
  * @binding id optional, HTML ID for the div and Control.Rating widget
  * @binding capture optional, stops the click event on each rating from propagating
+ * @binding style optional CSS style for container element
+ * @binding class optional CSS class for container element in addition to the standard rating_container class
  * @binding classNames optional, dictionary of state names and CSS class names with state names of: off, half, on, selected
  * @binding rated optional, <code>true</code> if this has already been rated
  * @binding reverse optional, <code>true</code> if the links should be shown in reverse order
  * @binding updateOptions highly optional, Ajax Options for the request
  * @binding formValueName optional, the name of the form value that will contain the value
- *
+ * @binding elementName optional, defaults to div, the name of the HTML element to use to hold the rating UI
+ * 
  * @see <a href="http://livepipe.net/control/rating">Control.Rating</a>
  *
  * @author chill (WebObjects wrapper only, not LivePipe Rating)
@@ -101,14 +104,29 @@ public class CCRating extends AjaxDynamicElement {
         // We don't contain anything, but we need to call super so it calls addRequiredWebResources(WOResponse, WOContext)
         super.appendToResponse(response, context);
 
-        // Build div like <div  id="e_1_0_0_1_3_7" class="rating_container"></div>
+        // Build container element like <div id="e_1_0_0_1_3_7" class="rating_container"></div>
+        
         String id = id(context);
-        response.appendContentString("<div ");
+        String elementName = (String) valueForBinding("elementName", "div", context.component()); 
+        response.appendContentString("<");
+        response.appendContentString(elementName);
+        response.appendContentString(" ");
         appendTagAttributeToResponse(response, "id", id);
-        appendTagAttributeToResponse(response, "class", "rating_container");
-        response.appendContentString("></div>");
+        
+        String className = "rating_container";
+        if (hasBinding("class")) {
+            className += " " + stringValueForBinding("class", context.component());            
+        }
+        appendTagAttributeToResponse(response, "class", className);
 
-        // Build optional input like <input  id="e_1_0_0_1_3_7_input" name="e_1_0_0_1_3_7_value" value="5" type="hidden"/>
+        if (hasBinding("style")) {
+            appendTagAttributeToResponse(response, "style", stringValueForBinding("style", context.component()));            
+        }
+        response.appendContentString("></");
+        response.appendContentString(elementName);
+        response.appendContentString(">");
+
+        // Build optional input like <input id="e_1_0_0_1_3_7_input" name="e_1_0_0_1_3_7_value" value="5" type="hidden"/>
         if (actAsInput(context)) {
             response.appendContentString("<input ");
             appendTagAttributeToResponse(response, "id", id + "_input");
