@@ -13,5 +13,4 @@ There is a launch configuration included that increases memory
 
 TODO:
 ------
-Rename T01... to T01T02.....java
 Navigation bar for TaskInfoList
