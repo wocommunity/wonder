@@ -13,4 +13,3 @@ There is a launch configuration included that increases memory
 
 TODO:
 ------
-Navigation bar for TaskInfoList

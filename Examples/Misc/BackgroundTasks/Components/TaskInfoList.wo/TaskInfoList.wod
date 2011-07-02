@@ -1,0 +1,5 @@
+Navigation : AjaxFlickrBatchNavigation {
+	displayGroup = dg;
+	maxNumberOfObjects = 10;
+	updateContainerID = "ListContainer";
+}
