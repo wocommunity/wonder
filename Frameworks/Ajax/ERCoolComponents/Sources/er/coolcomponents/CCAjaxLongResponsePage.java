@@ -114,7 +114,7 @@ import er.extensions.foundation.ERXStopWatch;
  *
  */
 public class CCAjaxLongResponsePage extends WOComponent {
-	private static final Logger log = Logger.getLogger(CCAjaxLongResponsePage.class);
+    static final Logger log = Logger.getLogger(CCAjaxLongResponsePage.class);
 	
 	// Constants to determine the CSS stylesheet used for the long response page for this app
 	private static final String STYLESHEET_FRAMEWORK = ERXProperties.stringForKeyWithDefault("er.coolcomponents.CCAjaxLongResponsePage.stylesheet.framework", "ERCoolComponents");
@@ -258,7 +258,7 @@ public class CCAjaxLongResponsePage extends WOComponent {
 	/** @return the refresh interval in seconds. Defaults to value of er.coolcomponents.CCAjaxLongResponsePage.refreshInterval */
 	public Integer refreshInterval() {
 		if ( _refreshInterval == null ) {
-			_refreshInterval = ERXProperties.intForKeyWithDefault("er.coolcomponents.CCAjaxLongResponsePage.refreshInterval", 2);
+			_refreshInterval = Integer.valueOf(ERXProperties.intForKeyWithDefault("er.coolcomponents.CCAjaxLongResponsePage.refreshInterval", 2));
 		}
 		return _refreshInterval;
 	}
@@ -453,6 +453,8 @@ public class CCAjaxLongResponsePage extends WOComponent {
 	/**
 	 * User action to stop the task if it implements {@link IERXStoppable}. If the task is not
 	 * stoppable, this action has no effect.
+	 * 
+	 * @return null
 	 */
 	public WOActionResults stopTask() {
 		Object task = future().task();
