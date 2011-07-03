@@ -37,6 +37,9 @@ import er.javamail.ERMailFileAttachment;
  * Mailer bridge class. Used to pull mail out of the
  * ERMailMessage entity and send it via the ERJavaMail
  * framework for sending mail.
+ *
+ * @property er.javamail.mailer.ERMailer.WarnOnGeneralAdaptorExceptionLockingMessage
+ * @property er.javamail.mailer.ERMailer.ShouldDeleteSentMail
  */
 public class ERMailer {
 

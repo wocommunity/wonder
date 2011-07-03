@@ -39,8 +39,13 @@ import er.extensions.foundation.ERXValueUtilities;
  * component bindings are used as a default value should you prefer to use
  * bindings instead of properties.</p>
  * 
- * @author Ramsey Gurley
+ * @binding filename
+ * @binding framework
  *
+ * @property er.extensions.components.ERXModernizr.modernizrFileName (default is read from "filename" binding)
+ * @property er.extensions.components.ERXModernizr.modernizrFrameworkName (default is read from "framework" binding)
+ *
+ * @author Ramsey Gurley
  */
 public class ERXModernizr extends ERXStatelessComponent {
 	//TODO add support for additional tests

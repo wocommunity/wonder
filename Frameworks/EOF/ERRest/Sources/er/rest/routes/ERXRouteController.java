@@ -73,6 +73,14 @@ import er.rest.util.ERXRestTransactionRequestAdaptor;
  * methods for manipulating restful requests and responses (update(..), create(..), requestNode(), response(..), etc) ,
  * and it supports multiple formats for you.
  * 
+ * @property ERXRest.accessControlAllowRequestHeaders
+ * @property ERXRest.accessControlAllowRequestMethods
+ * @property ERXRest.defaultFormat
+ * @property ERXRest.strictMode
+ * @property ERXRest.allowWindowNameCrossDomainTransport
+ * @property ERXRest.accessControlMaxAge
+ * @property ERXRest.accessControlAllowOrigin
+ *
  * @author mschrag
  */
 public class ERXRouteController extends WODirectAction {
@@ -364,7 +372,7 @@ public class ERXRouteController extends WODirectAction {
 	 * Returns all the processed objects from the route keys. For instance, if your route specifies that you have a
 	 * {person:Person}, routeObjectForKey("person") will return a Person object. This method does NOT cache the results.
 	 * 
-	 * @param delegate the delegate to fetch with
+	 * @param restContext the delegate to fetch with
 	 * @return the processed objects from the route keys
 	 */
 	public NSDictionary<ERXRoute.Key, Object> routeObjects(ERXRestContext restContext) {
@@ -582,7 +590,7 @@ public class ERXRouteController extends WODirectAction {
 	 * 
 	 * @param filter
 	 *            the filter to apply to the object for the purposes of updating (or null to not update)
-	 * @param delegate
+	 * @param restContext
 	 *            the delegate to use
 	 * @return the object from the request data
 	 */
@@ -598,7 +606,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the entity name of the object in the request
 	 * @param filter
 	 *            the filter to apply to the object for the purposes of updating (or null to not update)
-	 * @param delegate
+	 * @param restContext
 	 *            the delegate to use
 	 * @return the object from the request data
 	 */
@@ -641,7 +649,7 @@ public class ERXRouteController extends WODirectAction {
 	 * 
 	 * @param filter
 	 *            the filter to apply to the object for the purposes of updating (or null to just create a blank one)
-	 * @param delegate
+	 * @param restContext
 	 *            the delegate to use
 	 * @return the object from the request data
 	 */
@@ -658,7 +666,7 @@ public class ERXRouteController extends WODirectAction {
 	 *            the entity name of the object in the request
 	 * @param filter
 	 *            the filter to apply to the object for the purposes of updating (or null to just create a blank one)
-	 * @param delegate
+	 * @param restContext
 	 *            the delegate to use
 	 * @return the object from the request data
 	 */
@@ -687,7 +695,7 @@ public class ERXRouteController extends WODirectAction {
          *            object to update
 	 * @param filter
          *            the filter to apply to the object for the purposes of updating (or null to not update)
-	 * @param delegate
+	 * @param restContext
          *            delegate to use
 	 */
 	public void update(Object obj, ERXKeyFilter filter, ERXRestContext restContext) {

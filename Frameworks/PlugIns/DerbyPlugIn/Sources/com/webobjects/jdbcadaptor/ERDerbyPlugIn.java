@@ -78,7 +78,6 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 		 *
 		 * @param value
 		 * @param eoattribute
-		 * @return
 		 * @author ak
 		 */
 		private String fixBigDecimal(final BigDecimal value, final EOAttribute eoattribute) {
@@ -201,7 +200,6 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 		 * Helper to check for timestamp columns that have a "D" value type.
 		 *
 		 * @param eoattribute
-		 * @return
 		 */
 		private boolean isDateAttribute(final EOAttribute eoattribute) {
 			return "D".equals(eoattribute.valueType());
@@ -211,7 +209,6 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 		 * Helper to check for timestamp columns that have a "T" value type.
 		 *
 		 * @param eoattribute
-		 * @return
 		 */
 		private boolean isTimestampAttribute(final EOAttribute eoattribute) {
 			return "T".equals(eoattribute.valueType());

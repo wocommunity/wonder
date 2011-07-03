@@ -26,6 +26,8 @@ import er.extensions.foundation.ERXProperties;
  * ERXPartialInitializer is registered at startup and is responsible for merging
  * partial entities together into a single entity.
  * 
+ * @property er.extensions.partials.enabled
+ *
  * @author mschrag
  */
 public class ERXPartialInitializer {

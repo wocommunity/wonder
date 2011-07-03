@@ -279,6 +279,8 @@ import er.extensions.foundation.ERXValueUtilities;
  * @binding updateContainerParameters optional, passed as parameters binding to
  *          the AjaxUpdateContainer wrapping the grid
  * 
+ * @property er.extensions.ERXWORepetition.checkHashCodes
+ *
  * @author chill
  */
 public class AjaxGrid extends WOComponent {

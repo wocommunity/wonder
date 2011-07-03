@@ -22,9 +22,11 @@ import er.extensions.appserver.ERXApplication;
 import er.extensions.foundation.ERXProperties;
 
 /**
-* Utility class used for sending mails via the
+ * Utility class used for sending mails via the
  * ERCMailMessage database tables. Actual emails
  * are then sent using the ERMailer application.
+ *
+ * @property er.corebusinesslogic.ERCUseMailFacility
  */
 public class ERCMailDelivery {
 

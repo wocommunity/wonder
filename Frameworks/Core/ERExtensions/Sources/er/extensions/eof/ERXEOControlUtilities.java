@@ -129,6 +129,8 @@ public class ERXEOControlUtilities {
      * Note that the datasource that is constructed uses the
      * class description and editing context of the first object
      * of the array.
+     * @param ec
+     * @param entityName 
      * @param array collection of objects to be turned into a
      *		datasource
      * @return an array datasource corresponding to the array
@@ -275,7 +277,6 @@ public class ERXEOControlUtilities {
      * of the entity to create the enterprise object.
      * The object is then inserted into the editing context
      * and returned.
-     * @param <T> The enterprise object type
      * @param ec editingContext to insert the created object into
      * @param eoClass class of the enterprise object to be created
      * @return created and inserted enterprise object of type T

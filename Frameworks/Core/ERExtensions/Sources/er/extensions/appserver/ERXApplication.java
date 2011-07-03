@@ -108,13 +108,50 @@ import er.extensions.statistics.ERXStats;
 
 /**
  * ERXApplication is the abstract superclass of WebObjects applications built
- * with the ER frameworks.<br/> <br/> Useful enhancements include the ability
- * to change the deployed name of the application, support for automatic
- * application restarting at given intervals and more context information when
- * handling exceptions.
+ * with the ER frameworks.
+ *
+ * Useful enhancements include the ability to change the deployed name of
+ * the application, support for automatic application restarting at given intervals
+ * and more context information when handling exceptions.
+ * 
+ * @property AppShouldExitOnOutOfMemoryError
+ * @property ERApplicationName
+ * @property ERApplicationNameSuffix
+ * @property ERTimeToDie
+ * @property ERTimeToKill
+ * @property ERTimeToLive
+ * @property NSProjectBundleEnabled
+ * @property WOIDE
+ * @property _DisableClasspathReorder
+ * @property er.extensions.ERXApplication.DefaultEncoding
+ * @property er.extensions.ERXApplication.DefaultMessageEncoding
+ * @property er.extensions.ERXApplication.StatisticsBaseLogPath
+ * @property er.extensions.ERXApplication.StatisticsLogRotationFrequency
+ * @property er.extensions.ERXApplication.developmentMode
+ * @property er.extensions.ERXApplication.developmentMode
+ * @property er.extensions.ERXApplication.fixCachingEnabled
+ * @property er.extensions.ERXApplication.lowMemBufferSize
+ * @property er.extensions.ERXApplication.memoryLowThreshold
+ * @property er.extensions.ERXApplication.memoryStarvedThreshold
+ * @property er.extensions.ERXApplication.memoryThreshold
+ * @property er.extensions.ERXApplication.redirectOnMissingObjects
+ * @property er.extensions.ERXApplication.replaceApplicationPath.pattern
+ * @property er.extensions.ERXApplication.replaceApplicationPath.replace
+ * @property er.extensions.ERXApplication.responseCompressionEnabled
+ * @property er.extensions.ERXApplication.responseCompressionTypes
+ * @property er.extensions.ERXApplication.rewriteDirectConnect
+ * @property er.extensions.ERXApplication.ssl.enabled
+ * @property er.extensions.ERXApplication.ssl.host
+ * @property er.extensions.ERXApplication.ssl.port
+ * @property er.extensions.ERXApplication.traceOpenEditingContextLocks
+ * @property er.extensions.ERXApplication.traceOpenEditingContextLocks
+ * @property er.extensions.ERXApplication.useEditingContextUnlocker
+ * @property er.extensions.ERXApplication.useEditingContextUnlocker
+ * @property er.extensions.ERXApplication.useSessionStoreDeadlockDetection
+ * @property er.extensions.ERXComponentActionRedirector.enabled
  */
-
 public abstract class ERXApplication extends ERXAjaxApplication implements ERXGracefulShutdown.GracefulApplication {
+
 	private static Boolean isWO54 = null;
 
 	/** logging support */
@@ -1117,7 +1154,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	public String _newLocationForRequest(WORequest aRequest) {
 		return _rewriteURL(super._newLocationForRequest(aRequest));
 	}
-	
 	/**
 	 * Decides whether to use editing context unlocking.
 	 * 

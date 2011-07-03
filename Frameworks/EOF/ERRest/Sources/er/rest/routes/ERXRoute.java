@@ -331,7 +331,8 @@ public class ERXRoute {
 	 * 
 	 * @param url
 	 *            the URL to process
-	 * @param delegate
+	 * @param method
+	 * @param context
 	 *            the delegate to use to, for instance, fault EO's with (or null to not fault EO's)
 	 * @return a dictionary mapping the route's keys to their resolved objects
 	 */
@@ -344,7 +345,7 @@ public class ERXRoute {
 	 * 
 	 * @param url
 	 *            the URL to process
-	 * @param delegate
+	 * @param context
 	 *            the delegate to use to, for instance, fault EO's with (or null to not fault EO's)
 	 * @return a dictionary mapping the route's key names to their resolved objects
 	 */
@@ -357,7 +358,7 @@ public class ERXRoute {
 	 * 
 	 * @param keys
 	 *            the parsed keys to process
-	 * @param delegate
+	 * @param context
 	 *            the delegate to use to, for instance, fault EO's with (or null to not fault EO's)
 	 * @return a dictionary mapping the route's keys to their resolved objects
 	 */
@@ -383,7 +384,7 @@ public class ERXRoute {
 	 * 
 	 * @param keys
 	 *            the parsed keys to process
-	 * @param delegate
+	 * @param context
 	 *            the delegate to use to, for instance, fault EO's with (or null to not fault EO's)
 	 * @return a dictionary mapping the route's key names to their resolved objects
 	 */

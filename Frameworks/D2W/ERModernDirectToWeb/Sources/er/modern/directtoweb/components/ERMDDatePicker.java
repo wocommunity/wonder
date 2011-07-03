@@ -42,8 +42,6 @@ public class ERMDDatePicker extends ERDCustomEditComponent {
 	
     /**
      * Format string for the date text fields
-     * 
-     * @return
      */
 	public String formatter() {
 		if(_formatter == null) {
@@ -61,8 +59,6 @@ public class ERMDDatePicker extends ERDCustomEditComponent {
 	
     /**
      * Convenience accessor for the readable date format description
-     * 
-     * @return
      */
 	public String dateReadableDescription() {
 		if (_dateReadableDescription == null) {
@@ -75,8 +71,6 @@ public class ERMDDatePicker extends ERDCustomEditComponent {
 
 	/**
 	 * {@link CCDatePicker} option: is drag disabled
-	 * 
-	 * @return
 	 */
 	public Boolean dragDisabled() {
 		return ERXValueUtilities.BooleanValueWithDefault(valueForBinding("datePickerDragDisabled"), null);
@@ -84,8 +78,6 @@ public class ERMDDatePicker extends ERDCustomEditComponent {
 
 	/**
 	 * {@link CCDatePicker} option: name of the custom css file
-	 * 
-	 * @return
 	 */
 	public String cssFile() {
 		return (String)valueForBinding("datePickerCssFile");
@@ -93,8 +85,6 @@ public class ERMDDatePicker extends ERDCustomEditComponent {
 
 	/**
 	 * {@link CCDatePicker} option: name of the custom css file framework
-	 * 
-	 * @return
 	 */
 	public String cssFramework() {
 		return (String)valueForBinding("datePickerCssFramework");
@@ -102,8 +92,6 @@ public class ERMDDatePicker extends ERDCustomEditComponent {
 
 	/**
 	 * {@link CCDatePicker} option: should selection be constrained to current month (if fill grid is true)
-	 * 
-	 * @return
 	 */
 	public Boolean constrainSelection() {
 		return ERXValueUtilities.BooleanValueWithDefault(valueForBinding("datePickerConstrainSelection"), null);
@@ -111,8 +99,6 @@ public class ERMDDatePicker extends ERDCustomEditComponent {
 
 	/**
 	 * {@link CCDatePicker} option: fill the entire grid, not just the current month
-	 * 
-	 * @return
 	 */
 	public Boolean fillGrid() {
 		return ERXValueUtilities.BooleanValueWithDefault(valueForBinding("datePickerFillGrid"), null);
@@ -120,8 +106,6 @@ public class ERMDDatePicker extends ERDCustomEditComponent {
 
 	/**
 	 * {@link CCDatePicker} option: sets the final opacity
-	 * 
-	 * @return
 	 */
 	public String finalOpacity() {
 		return (String)valueForBinding("datePickerFinalOpacity");
@@ -129,8 +113,6 @@ public class ERMDDatePicker extends ERDCustomEditComponent {
 
 	/**
 	 * {@link CCDatePicker} option: array (string in js format) of disabled days of the week (i.e: [0,0,0,0,0,1,1])
-	 * 
-	 * @return
 	 */
 	public String disabledDays() {
 		return (String)valueForBinding("datePickerDisabledDays");
@@ -138,8 +120,6 @@ public class ERMDDatePicker extends ERDCustomEditComponent {
 	
 	/**
 	 * {@link CCDatePicker} option: date range of disabled dates
-	 * 
-	 * @return
 	 */
 	public String disabledDates() {
 		return (String)valueForBinding("datePickerDisabledDates");
@@ -148,8 +128,6 @@ public class ERMDDatePicker extends ERDCustomEditComponent {
 
 	/**
 	 * {@link CCDatePicker} option: date range of enabled dates
-	 * 
-	 * @return
 	 */
 	public String enabledDates() {
 		return (String)valueForBinding("datePickerEnabledDates");
@@ -157,8 +135,6 @@ public class ERMDDatePicker extends ERDCustomEditComponent {
 
 	/**
 	 * {@link CCDatePicker} option: array (string in js format) of highlighted days of the week
-	 * 
-	 * @return
 	 */
 	public String highlightDays() {
 		return (String)valueForBinding("datePickerHighlightDays");
@@ -166,8 +142,6 @@ public class ERMDDatePicker extends ERDCustomEditComponent {
 
 	/**
 	 * {@link CCDatePicker} option: disable fade effect
-	 * 
-	 * @return
 	 */
 	public Boolean noFadeEffect() {
 		return ERXValueUtilities.BooleanValueWithDefault(valueForBinding("datePickerNoFadeEffect"), null);
@@ -175,8 +149,6 @@ public class ERMDDatePicker extends ERDCustomEditComponent {
 
 	/**
 	 * {@link CCDatePicker} option: don't show today button
-	 * 
-	 * @return
 	 */
 	public Boolean noTodayButton() {
 		return ERXValueUtilities.BooleanValueWithDefault(valueForBinding("datePickerNoTodayButton"), null);
@@ -184,8 +156,6 @@ public class ERMDDatePicker extends ERDCustomEditComponent {
 
 	/**
 	 * {@link CCDatePicker} option: lowest selectable date
-	 * 
-	 * @return
 	 */
 	public String rangeLow() {
 		return (String)valueForBinding("datePickerRangeLow");
@@ -193,8 +163,6 @@ public class ERMDDatePicker extends ERDCustomEditComponent {
 
 	/**
 	 * {@link CCDatePicker} option: highest selectable date
-	 * 
-	 * @return
 	 */
 	public String rangeHigh() {
 		return (String)valueForBinding("datePickerRangeHigh");
@@ -202,8 +170,6 @@ public class ERMDDatePicker extends ERDCustomEditComponent {
 	
 	/**
 	 * {@link CCDatePicker} option: hide the input text field
-	 * 
-	 * @return
 	 */
 	public Boolean hideInput() {
 		return ERXValueUtilities.BooleanValueWithDefault(valueForBinding("datePickerHideInput"), null);
@@ -211,8 +177,6 @@ public class ERMDDatePicker extends ERDCustomEditComponent {
 	
 	/**
 	 * {@link CCDatePicker} option: hide the calendar control
-	 * 
-	 * @return
 	 */
 	public Boolean hideControl() {
 		return ERXValueUtilities.BooleanValueWithDefault(valueForBinding("datePickerHideControl"), null);

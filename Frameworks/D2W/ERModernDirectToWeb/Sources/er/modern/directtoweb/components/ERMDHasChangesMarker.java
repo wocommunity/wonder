@@ -31,8 +31,6 @@ public class ERMDHasChangesMarker extends ERDHasChangesMarker {
      * Convenience getter for the indicator image framework name
      * <p>
      * Defaults to: "ERModernDirectToWeb"
-     * 
-     * @return
      */
 	public String indicatorFrameworkName() {
 		if (_indicatorFrameworkName == null) {
@@ -49,8 +47,6 @@ public class ERMDHasChangesMarker extends ERDHasChangesMarker {
      * Convenience getter for the indicator image name
      * <p>
      * Defaults to: "reddot.png"
-     * 
-     * @return
      */
 	public String indicatorFileName() {
 		if (_indicatorFileName == null) {

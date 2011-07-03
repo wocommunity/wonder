@@ -45,6 +45,12 @@ import er.extensions.jdbc.ERXJDBCUtilities;
 import er.extensions.jdbc.ERXSQLHelper;
 import er.javamail.ERJavaMail;
 
+/**
+ *
+ * @property er.corebusinesslogic.ERCoreBusinessLogic.ProblemEmailDomain
+ * @property er.corebusinesslogic.ERCoreBusinessLogic.ProblemEmailRecipients
+ * @property er.corebusinesslogic.ERCoreBusinessLogic.ShouldMailExceptions
+ */
 public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
 
     //	===========================================================================

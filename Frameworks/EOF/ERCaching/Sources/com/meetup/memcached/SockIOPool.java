@@ -497,7 +497,6 @@ public class SockIOPool {
 	 * UPDATE: This is dog slow under java
 	 * 
 	 * @param key 
-	 * @return 
 	 */
 	private static long newCompatHashingAlg( String key ) {
 		CRC32 checksum = new CRC32();
@@ -513,7 +512,6 @@ public class SockIOPool {
 	 * hashing approach.
 	 * 
 	 * @param key 
-	 * @return 
 	 */
 	private static long md5HashingAlg( String key ) {
 		MessageDigest md5 = MD5.get();
@@ -573,7 +571,6 @@ public class SockIOPool {
 	 * Gets the first available key equal or above the given one, if none found,
 	 * returns the first k in the bucket 
 	 * @param k key
-	 * @return
 	 */
 	private Long findPointFor( Long hv ) {
 		// this works in java 6, but still want to release support for java5
@@ -829,7 +826,6 @@ public class SockIOPool {
 
  	/** 
 	 * @param key 
-	 * @return 
 	 */
 	public String getHost( String key ) {
 		return getHost( key, null );
@@ -840,7 +836,6 @@ public class SockIOPool {
 	 * 
 	 * @param key 
 	 * @param hashcode 
-	 * @return 
 	 */
 	public String getHost( String key, Integer hashcode ) {
 		SockIO socket = getSock( key, hashcode );

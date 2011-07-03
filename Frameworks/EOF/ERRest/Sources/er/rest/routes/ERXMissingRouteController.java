@@ -13,6 +13,8 @@ import er.rest.ERXNotAllowedException;
 /**
  * ERXMissingRouteController is the controller that is used when no route can be found. It's "missing" action is loaded.
  * 
+ * @property ERXRest.strictMode
+ *
  * @author mschrag
  */
 public class ERXMissingRouteController extends ERXRouteController {

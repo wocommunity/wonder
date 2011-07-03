@@ -55,6 +55,15 @@ import er.extensions.foundation.ERXValueUtilities;
  * <code>ERXEC.newEditingContext()</code> You can also install your own
  * Factory classes. It is recommended to subclass ERXEC.DefaultFactory and
  * override <code>_createEditingContext()</code>
+ *
+ * @property er.extensions.ERXEC.useSharedEditingContext
+ * @property er.extensions.ERXEC.markOpenLocks
+ * @property er.extensions.ERXEC.traceOpenLocks
+ * @property er.extensions.ERXEC.useUnlocker
+ * @property er.extensions.ERXEC.denyMerges
+ * @property er.extensions.ERXEC.defaultAutomaticLockUnlock
+ * @property er.extensions.ERXEC.defaultCoalesceAutoLocks
+ * @property er.extensions.ERXEC.safeLocking
  */
 public class ERXEC extends EOEditingContext {
 

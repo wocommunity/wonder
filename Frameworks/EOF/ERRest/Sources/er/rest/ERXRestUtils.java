@@ -21,6 +21,10 @@ import er.extensions.foundation.ERXValueUtilities;
 /**
  * Miscellaneous rest-related utility methods.
  * 
+ * @property er.rest.dateFormat
+ * @property er.rest.timestampFormat
+ * @property er.rest.rfcDateFormat (default "rfc822")
+ *
  * @author mschrag
  */
 public class ERXRestUtils {

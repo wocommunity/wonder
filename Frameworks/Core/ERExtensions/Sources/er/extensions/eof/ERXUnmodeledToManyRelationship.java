@@ -21,21 +21,22 @@ import er.extensions.eof.ERXS;
  * A class than is composited into an EO to provide common toMany functionality
  * for the case where the toMany cannot be modeled in EOF due to the unusually
  * large size possibilities of the toMany relationship. 
- * 
+ * <p>
  * This class is for simple to many relationships, has not been tested on 
  * flattened toMany relationships having a join table, aka "many-to-many" relationships.
- * 
+ * <p>
  * Usage: Lazily create a private instance of this inside an EO passing in the
  * appropriate constructor parameters and then implement cover methods similar
  * to those that would have been available thru the normal Entity templates
  * calling the corresponding methods of this class.
- * 
+ * <p>
  * For example, you might do this in an entity named CTMediaTemplate that formerly had a 'messages'
  * relationship to CTMessage but due to the huge size of the toMany impacting performance, the toMany side of the
  * relationship had to be deleted from the EOModel:
  * 
  * <code>
- * 	private ERXUnmodeledToManyRelationship<CTMediaTemplate, CTMessage> _messagesRelationship;
+<pre>
+ 	private ERXUnmodeledToManyRelationship<CTMediaTemplate, CTMessage> _messagesRelationship;
 
 	// Lazily initialize the helper class
 	public ERXUnmodeledToManyRelationship<CTMediaTemplate, CTMessage> messagesRelationship() {
@@ -90,7 +91,7 @@ import er.extensions.eof.ERXS;
 		messagesRelationship().deleteAllObjectsRelationships();
 	}
 	</code>
- * 
+</pre>
  * @author kieran
  * 
  */

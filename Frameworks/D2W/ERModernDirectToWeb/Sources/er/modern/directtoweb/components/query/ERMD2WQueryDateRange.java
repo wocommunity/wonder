@@ -67,8 +67,6 @@ public class ERMD2WQueryDateRange extends ERDCustomQueryComponent {
     
     /**
      * Format string for the date text fields
-     * 
-     * @return
      */
 	public String formatter() {
 		if(_formatter == null) {
@@ -82,8 +80,6 @@ public class ERMD2WQueryDateRange extends ERDCustomQueryComponent {
 
 	/**
 	 * Convenience getter for the displayGroups queryMin value
-	 * 
-	 * @return
 	 */
 	public Object minValue() {
 		return displayGroup().queryMin().valueForKey(propertyKey());
@@ -104,8 +100,6 @@ public class ERMD2WQueryDateRange extends ERDCustomQueryComponent {
 
 	/**
 	 * Convenience getter for the displayGroups queryMax value
-	 * 
-	 * @return
 	 */
 	public Object maxValue() {
 		return displayGroup().queryMax().valueForKey(propertyKey());
@@ -126,8 +120,6 @@ public class ERMD2WQueryDateRange extends ERDCustomQueryComponent {
 	
 	/**
 	 * Convenience accessor for the current propertyKey
-	 * 
-	 * @return
 	 */
     public String propertyKey() {
         if(_key == null)
@@ -137,8 +129,6 @@ public class ERMD2WQueryDateRange extends ERDCustomQueryComponent {
 
     /**
      * Convenience accessor for the readable date format description
-     * 
-     * @return
      */
 	public String dateReadableDescription() {
 		if (_dateReadableDescription == null) {
@@ -151,8 +141,6 @@ public class ERMD2WQueryDateRange extends ERDCustomQueryComponent {
 	
 	/**
 	 * {@link CCDatePicker} option: is drag disabled
-	 * 
-	 * @return
 	 */
 	public Boolean dragDisabled() {
 		return ERXValueUtilities.BooleanValueWithDefault(valueForBinding(Keys.datePickerDragDisabled), null);
@@ -160,8 +148,6 @@ public class ERMD2WQueryDateRange extends ERDCustomQueryComponent {
 
 	/**
 	 * {@link CCDatePicker} option: name of the custom css file
-	 * 
-	 * @return
 	 */
 	public String cssFile() {
 		return (String)valueForBinding(Keys.datePickerCssFile);
@@ -169,8 +155,6 @@ public class ERMD2WQueryDateRange extends ERDCustomQueryComponent {
 
 	/**
 	 * {@link CCDatePicker} option: name of the custom css file framework
-	 * 
-	 * @return
 	 */
 	public String cssFramework() {
 		return (String)valueForBinding(Keys.datePickerCssFramework);
@@ -178,8 +162,6 @@ public class ERMD2WQueryDateRange extends ERDCustomQueryComponent {
 
 	/**
 	 * {@link CCDatePicker} option: should selection be constrained to current month (if fill grid is true)
-	 * 
-	 * @return
 	 */
 	public Boolean constrainSelection() {
 		return ERXValueUtilities.BooleanValueWithDefault(valueForBinding(Keys.datePickerConstrainSelection), null);
@@ -187,8 +169,6 @@ public class ERMD2WQueryDateRange extends ERDCustomQueryComponent {
 
 	/**
 	 * {@link CCDatePicker} option: fill the entire grid, not just the current month
-	 * 
-	 * @return
 	 */
 	public Boolean fillGrid() {
 		return ERXValueUtilities.BooleanValueWithDefault(valueForBinding(Keys.datePickerFillGrid), null);
@@ -196,8 +176,6 @@ public class ERMD2WQueryDateRange extends ERDCustomQueryComponent {
 
 	/**
 	 * {@link CCDatePicker} option: sets the final opacity
-	 * 
-	 * @return
 	 */
 	public String finalOpacity() {
 		return (String)valueForBinding(Keys.datePickerFinalOpacity);
@@ -205,8 +183,6 @@ public class ERMD2WQueryDateRange extends ERDCustomQueryComponent {
 
 	/**
 	 * {@link CCDatePicker} option: array (string in js format) of disabled days of the week (i.e: [0,0,0,0,0,1,1])
-	 * 
-	 * @return
 	 */
 	public String disabledDays() {
 		return (String)valueForBinding(Keys.datePickerDisabledDays);
@@ -214,8 +190,6 @@ public class ERMD2WQueryDateRange extends ERDCustomQueryComponent {
 	
 	/**
 	 * {@link CCDatePicker} option: date range of disabled dates
-	 * 
-	 * @return
 	 */
 	public String disabledDates() {
 		return (String)valueForBinding(Keys.datePickerDisabledDates);
@@ -223,8 +197,6 @@ public class ERMD2WQueryDateRange extends ERDCustomQueryComponent {
 
 	/**
 	 * {@link CCDatePicker} option: date range of enabled dates
-	 * 
-	 * @return
 	 */
 	public String enabledDates() {
 		return (String)valueForBinding(Keys.datePickerEnabledDates);
@@ -232,8 +204,6 @@ public class ERMD2WQueryDateRange extends ERDCustomQueryComponent {
 
 	/**
 	 * {@link CCDatePicker} option: array (string in js format) of highlighted days of the week
-	 * 
-	 * @return
 	 */
 	public String highlightDays() {
 		return (String)valueForBinding(Keys.datePickerHighlightDays);
@@ -241,8 +211,6 @@ public class ERMD2WQueryDateRange extends ERDCustomQueryComponent {
 
 	/**
 	 * {@link CCDatePicker} option: disable fade effect
-	 * 
-	 * @return
 	 */
 	public Boolean noFadeEffect() {
 		return ERXValueUtilities.BooleanValueWithDefault(valueForBinding(Keys.datePickerNoFadeEffect), null);
@@ -250,8 +218,6 @@ public class ERMD2WQueryDateRange extends ERDCustomQueryComponent {
 
 	/**
 	 * {@link CCDatePicker} option: don't show today button
-	 * 
-	 * @return
 	 */
 	public Boolean noTodayButton() {
 		return ERXValueUtilities.BooleanValueWithDefault(valueForBinding(Keys.datePickerNoTodayButton), null);
@@ -259,8 +225,6 @@ public class ERMD2WQueryDateRange extends ERDCustomQueryComponent {
 
 	/**
 	 * {@link CCDatePicker} option: lowest selectable date
-	 * 
-	 * @return
 	 */
 	public String rangeLow() {
 		return (String)valueForBinding(Keys.datePickerRangeLow);
@@ -268,8 +232,6 @@ public class ERMD2WQueryDateRange extends ERDCustomQueryComponent {
 
 	/**
 	 * {@link CCDatePicker} option: highest selectable date
-	 * 
-	 * @return
 	 */
 	public String rangeHigh() {
 		return (String)valueForBinding(Keys.datePickerRangeHigh);
@@ -277,8 +239,6 @@ public class ERMD2WQueryDateRange extends ERDCustomQueryComponent {
 	
 	/**
 	 * {@link CCDatePicker} option: hide the input text field
-	 * 
-	 * @return
 	 */
 	public Boolean hideInput() {
 		return ERXValueUtilities.BooleanValueWithDefault(valueForBinding(Keys.datePickerHideInput), null);
@@ -286,8 +246,6 @@ public class ERMD2WQueryDateRange extends ERDCustomQueryComponent {
 	
 	/**
 	 * {@link CCDatePicker} option: hide the calendar control
-	 * 
-	 * @return
 	 */
 	public Boolean hideControl() {
 		return ERXValueUtilities.BooleanValueWithDefault(valueForBinding(Keys.datePickerHideControl), null);

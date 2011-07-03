@@ -117,6 +117,12 @@ import er.rest.routes.jsr311.Paths;
  * http://localhost/cgi-bin/WebObjects/YourApp.woa/ra/person/100/edit.json
  * </pre>
  * 
+ * @property ERXRest.missingControllerName (default "ERXMissingRouteController")
+ * @property ERXRest.parseUnknownExtensions
+ * @property ERXRest.pluralEntityNames
+ * @property ERXRest.routeCase
+ * @property ERXRest.lowercaseEntityNames
+ *
  * @author mschrag
  */
 public class ERXRouteRequestHandler extends WODirectActionRequestHandler {

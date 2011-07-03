@@ -12,6 +12,10 @@ import er.rest.ERXRestContext;
 import er.rest.ERXRestRequestNode;
 import er.rest.ERXRestUtils;
 
+/**
+ *
+ * @property ERXRest.suppressTypeAttributesForSimpleTypes
+ */
 public class ERXXmlRestWriter implements IERXRestWriter {
 	public void appendHeadersToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestContext context) {
 		response.setHeader("text/xml", "Content-Type");

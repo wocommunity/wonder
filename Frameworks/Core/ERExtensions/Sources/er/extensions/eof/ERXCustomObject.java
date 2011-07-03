@@ -60,6 +60,9 @@ import er.extensions.validation.ERXValidationFactory;
  * This feature should greatly help readability and reduce the number errors you make when you
  * forget to update an inverse relationship. To turn this feature on, you must set the system default 
  * <code>er.extensions.ERXEnterpriseObject.updateInverseRelationships=true</code>.
+ *
+ * @property ERDebuggingEnabled
+ * @property er.extensions.ERXCustomObject.shouldTrimSpaces
  */
 
 public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectInterface, ERXGeneratesPrimaryKeyInterface, ERXEnterpriseObject {

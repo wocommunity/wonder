@@ -32,19 +32,23 @@ import er.extensions.remoteSynchronizer.ERXRemoteSynchronizer;
  * A multicast synchronizer built on top of the JGroups library.  This is a much
  * more robust implementation than the default synchronizer used by ERXObjectStoreCoordinatorSynchronizer.
  * 
- * @property er.extensions.ERXObjectStoreCoordinatorPool.maxCoordinators you should set this property to at least "1" to trigger ERXObjectStoreCoordinatorSynchronizer to turn on
- * @property er.extensions.jgroupsSynchronizer.properties an XML JGroups configuration file (defaults to jgroups-default.xml in this framework) 
- * @property er.extensions.remoteSynchronizer.enabled if true, remote synchronization is enabled
- * @property er.extensions.remoteSynchronizer "er.jgroups.ERJGroupsSynchronizer" for this implementation
- * @property er.extensions.jgroupsSynchronizer.multicastAddress the multicast address to use (defaults to 230.0.0.1, and only necessary if you are using multicast)
- * @property er.extensions.jgroupsSynchronizer.multicastPort the multicast port to use (defaults to 9753, and only necessary if you are using multicast)
- * @property er.extensions.jgroupsSynchronizer.groupName the JGroups group name to use (defaults to WOApplication.application.name)
- * @property er.extensions.remoteSynchronizer.includeEntities the list of entities to synchronize (all by default)
- * @property er.extensions.remoteSynchronizer.excludeEntities the list of entities to NOT synchronize (none by default)
+ * @property er.extensions.ERXObjectStoreCoordinatorPool.maxCoordinators you should set this property to at least "1" to trigger
+ *   ERXObjectStoreCoordinatorSynchronizer to turn on
+ * @property er.extensions.jgroupsSynchronizer.applicationWillTerminateNotificationName the name of the NSNotification that is sent when
+ *   the application is terminating. Leave blank to disable this feature.
  * @property er.extensions.jgroupsSynchronizer.autoReconnect whether to auto reconnect when shunned (defaults to false)
- * @property er.extensions.jgroupsSynchronizer.applicationWillTerminateNotificationName the name of the NSNotification that is sent when the application is terminating. Leave blank to disable this feature.
+ * @property er.extensions.jgroupsSynchronizer.groupName the JGroups group name to use (defaults to WOApplication.application.name)
+ * @property er.extensions.jgroupsSynchronizer.localBindAddress
+ * @property er.extensions.jgroupsSynchronizer.multicastAddress the multicast address to use (defaults to 230.0.0.1,
+     and only necessary if you are using multicast)
+ * @property er.extensions.jgroupsSynchronizer.multicastPort the multicast port to use (defaults to 9753, and only necessary if you are using multicast)
+ * @property er.extensions.jgroupsSynchronizer.properties an XML JGroups configuration file (defaults to jgroups-default.xml in this framework)
  * @property er.extensions.jgroupsSynchronizer.useShutdownHook whether to register a JVM shutdown hook to clean up the JChannel (defaults to true)
- * 
+ * @property er.extensions.remoteSynchronizer "er.jgroups.ERJGroupsSynchronizer" for this implementation
+ * @property er.extensions.remoteSynchronizer.enabled if true, remote synchronization is enabled
+ * @property er.extensions.remoteSynchronizer.excludeEntities the list of entities to NOT synchronize (none by default)
+ * @property er.extensions.remoteSynchronizer.includeEntities the list of entities to synchronize (all by default)
+ *
  * @author mschrag
  */
 public class ERJGroupsSynchronizer extends ERXRemoteSynchronizer {

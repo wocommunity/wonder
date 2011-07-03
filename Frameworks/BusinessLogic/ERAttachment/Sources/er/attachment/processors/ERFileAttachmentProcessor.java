@@ -23,9 +23,9 @@ import er.extensions.foundation.ERXProperties;
  * @property er.attachment.file.proxy
  * @property er.attachment.[configurationName].file.overwrite
  * @property er.attachment.file.overwrite
- * @property er.attachment.[configurationName].file.filesystemPath");
+ * @property er.attachment.[configurationName].file.filesystemPath
  * @property er.attachment.file.filesystemPath
- * @property er.attachment.[configurationName].file.webPath");
+ * @property er.attachment.[configurationName].file.webPath
  * @property er.attachment.file.webPath
  *
  * @author mschrag

@@ -20,6 +20,11 @@ import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.validation.ERXValidationFactory;
 
+/**
+ *
+ * @property er.corebusinesslogic.ERCMailMessage.ShouldArchive
+ * @property er.corebusinesslogic.ERCMailMessage.ShouldGzipContent
+ */
 public class ERCMailMessage extends _ERCMailMessage {
 
     //	===========================================================================

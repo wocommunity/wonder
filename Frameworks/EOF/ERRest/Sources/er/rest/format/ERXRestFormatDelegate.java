@@ -9,6 +9,13 @@ import er.rest.ERXRestRequestNode;
 /**
  * ERXRestFormatDelegate is the default implementation of the ERXRestFormat.Delegate interface.
  * 
+ * @property ERXRest.idKey
+ * @property ERXRest.nilKey
+ * @property ERXRest.writeNilKey
+ * @property ERXRest.pluralEntityNames
+ * @property ERXRest.typeKey
+ * @property ERXRest.writeTypeKey
+ *
  * @author mschrag
  */
 public class ERXRestFormatDelegate implements ERXRestFormat.Delegate {

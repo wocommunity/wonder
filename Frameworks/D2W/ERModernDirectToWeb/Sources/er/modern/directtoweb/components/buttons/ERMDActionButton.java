@@ -78,8 +78,6 @@ public abstract class ERMDActionButton extends ERDCustomComponent {
 	/**
 	 * ID of the update container for this button's ajax update.
 	 * Defaults to the idForMainContainer value
-	 * 
-	 * @return
 	 */
 	public String updateContainer() {
 		if (_updateContainer == null) {
@@ -116,7 +114,6 @@ public abstract class ERMDActionButton extends ERDCustomComponent {
     /**
      * Utility method to return the local instance of the object as determined by the 
      * useNestedEditingContext binding
-     * @return
      */
     protected EOEnterpriseObject localInstanceOfObject() {
     	boolean createNestedContext = ERXValueUtilities.booleanValue(d2wContext().valueForKey(Keys.useNestedEditingContext));
@@ -126,8 +123,6 @@ public abstract class ERMDActionButton extends ERDCustomComponent {
     /**
      * Utility method returns the boolean value for the allowInlineEditing binding.
      * Used to determine whether inline behaviour is used.
-     * 
-     * @return
      */
     public boolean shouldAllowInlineEditing() {
     	return ERXValueUtilities.booleanValue(d2wContextValueForBinding((Keys.allowInlineEditing)));
@@ -135,8 +130,6 @@ public abstract class ERMDActionButton extends ERDCustomComponent {
     
     /**
      * Utility method, returns the boolean value for the useAjax binding
-     * 
-     * @return
      */
     public boolean shouldUseAjax() {
     	return booleanValueForBinding(Keys.useAjax);
@@ -144,8 +137,6 @@ public abstract class ERMDActionButton extends ERDCustomComponent {
     
     /**
      * Utility method, returns whether shouldAllowInlineEditing and shouldUseAjax are true
-     * 
-     * @return
      */
 	public Boolean useAjax() {
 		if (_useAjax == null) {

@@ -8,6 +8,10 @@ import er.extensions.migration.ERXMigrationDatabase;
 import er.extensions.migration.ERXMigrationTable;
 import er.extensions.migration.ERXModelVersion;
 
+/**
+ *
+ * @property ERCoreBusinessLogic0.languages
+ */
 public class ERCoreBusinessLogic0 extends ERXMigrationDatabase.Migration {
     
     public ERCoreBusinessLogic0() {

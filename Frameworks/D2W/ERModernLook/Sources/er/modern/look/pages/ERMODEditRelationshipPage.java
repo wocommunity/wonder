@@ -108,7 +108,6 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	/**
 	 * Performs the newObjectAction. Creates a new object and sets the inline task
 	 * to 'create'
-	 * @return
 	 */
 	public WOComponent newObjectAction() {
 		EOEditingContext newEc = ERXEC.newEditingContext(masterObject().editingContext());
@@ -126,7 +125,6 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	
 	/**
 	 * Performs the queryAction. Sets the inline task to 'list'
-	 * @return
 	 */
 	public WOComponent queryAction() {
 		if (inlineTask() != null) {
@@ -137,7 +135,6 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 
 	/**
 	 * Performs the saveAction. Called by inline edit or create pages.
-	 * @return
 	 */
 	public WOComponent saveAction() {
 		if ("create".equals(inlineTask())) {
@@ -155,7 +152,6 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	
 	/** 
 	 * Perform the selectAction. Called by inline select page.
-	 * @return
 	 */
 	public WOComponent selectAction() {
 		EOEnterpriseObject selected = (objectToAddToRelationship() != null) ? EOUtilities.localInstanceOfObject(masterObject().editingContext(), objectToAddToRelationship()) : null;
@@ -175,7 +171,6 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	/** 
 	 * Perform the returnAction. Called when the page is a non embedded page is returning to the originating
 	 * edit page.
-	 * @return
 	 */
 	public WOComponent returnAction() {
 		
@@ -232,7 +227,6 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	
 	/**
 	 * Returns the name of the current inline page configuration
-	 * @return
 	 */
 	public String inspectConfiguration() {
 		String result = null;

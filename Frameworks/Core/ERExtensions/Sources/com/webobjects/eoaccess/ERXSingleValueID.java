@@ -18,8 +18,10 @@ import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * Gives up the means to plug into toString() and may or may not be a bit faster.
- * @author ak
  *
+ * @property er.extensions.ERXGlobalID.optimize
+ *
+ * @author ak
  */
 public class ERXSingleValueID extends EOKeyGlobalID {
 

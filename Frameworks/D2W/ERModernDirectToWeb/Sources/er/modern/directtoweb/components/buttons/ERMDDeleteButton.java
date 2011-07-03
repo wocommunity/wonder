@@ -101,7 +101,6 @@ public class ERMDDeleteButton extends ERMDActionButton {
     
     /**
      * Delete action for component button
-     * @return
      */
     public WOActionResults deleteAction() {
     	return deleteObjectWithFinalCommit(true);
@@ -110,8 +109,6 @@ public class ERMDDeleteButton extends ERMDActionButton {
     /** 
      * Performs the in-line delete and purges object pending deletion from the d2wContext to hide the 
      * in-line confirmation dialog. Calls saveChanges on the parent ec if the finalCommit flag is true.
-     * 
-     * @return
      */
     public WOActionResults deleteObjectWithFinalCommit(boolean finalCommit) {
     	dataSource().deleteObject(object());
@@ -137,8 +134,6 @@ public class ERMDDeleteButton extends ERMDActionButton {
     /**
      * Reverts the ec, and purges the objectPendingDeletion in the d2wContext to hide the in-line 
      * confirmation dialog.
-     * 
-     * @return
      */
     public WOActionResults cancelAction() {
     	EOEnterpriseObject obj = (EOEnterpriseObject)d2wContext().valueForKey(Keys.objectPendingDeletion);
@@ -174,9 +169,7 @@ public class ERMDDeleteButton extends ERMDActionButton {
 	/**
 	 * Label for the Delete button.
 	 * <p>
-     * Defaults to "Delete"
-     * 
-	 * @return
+         * Defaults to "Delete"
 	 */
 	public String buttonLabel() {
 		if (_buttonLabel == null) {
@@ -188,9 +181,7 @@ public class ERMDDeleteButton extends ERMDActionButton {
 	/**
 	 * Label for the Cancel button.
 	 * <p>
-     * Defaults to "Cancel"
-     * 
-	 * @return
+         * Defaults to "Cancel"
 	 */
     public String cancelButtonLabel() {
     	if (_cancelButtonLabel == null) {
@@ -201,7 +192,6 @@ public class ERMDDeleteButton extends ERMDActionButton {
     
     /**
      * CSS class for the Delete button.
-     * @return
      */
 	public String buttonClass() {
 		String result = null;
@@ -217,8 +207,6 @@ public class ERMDDeleteButton extends ERMDActionButton {
 	 * CSS class for the Delete button when active.
 	 * <p>
 	 * Defaults to "Button ObjButton DeleteObjButton"
-	 * 
-	 * @return
 	 */
 	public String activeButtonClass() {
 		if (_buttonClass == null) {
@@ -231,8 +219,6 @@ public class ERMDDeleteButton extends ERMDActionButton {
 	 * CSS class for the delete button when disabled.
 	 * <p>
 	 * Defaults to "Button ObjButton DisabledObjButton DisabledDeleteObjButton"
-	 * 
-	 * @return
 	 */
 	public String disabledButtonClass() {
 		if (_disabledButtonClass == null) {
@@ -245,8 +231,6 @@ public class ERMDDeleteButton extends ERMDActionButton {
 	 * CSS class for the in-line dialog's Cancel button.
 	 * <p>
 	 * Defaults to "Button DialogButton CancelDialogButton"
-	 * 
-	 * @return
 	 */
 	public String cancelButtonClass() {
 		if (_cancelButtonClass == null) {
@@ -259,8 +243,6 @@ public class ERMDDeleteButton extends ERMDActionButton {
 	 * CSS class for the in-line dialog's Delete button.
 	 * <p>
 	 * Defaults to "Button DialogButton DeleteDialogButton"
-	 * 
-	 * @return
 	 */
 	public String deleteButtonClass() {
 		if (_deleteButtonClass == null) {
@@ -271,7 +253,6 @@ public class ERMDDeleteButton extends ERMDActionButton {
 	
     /**
      * Used to show/hide the confirmation dialog
-     * @return
      */
     public boolean showDialog() {
     	boolean show = object() != null && ERXEOControlUtilities.eoEquals(object(), (EOEnterpriseObject)d2wContext().valueForKey(Keys.objectPendingDeletion));
@@ -309,8 +290,6 @@ public class ERMDDeleteButton extends ERMDActionButton {
      * Obtained from the bindings or d2wContext via this key:
      * 
      * 		confirmDeleteMessage
-     * 
-     * @return
      */
     public String dialogMessage() {
     	if (_dialogMessage == null) {

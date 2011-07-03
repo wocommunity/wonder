@@ -100,6 +100,9 @@ import er.extensions.foundation.ERXStringUtilities;
  * Opera 6.04       Mozilla/4.0 (compatible; MSIE 5.0; Windows 2000) Opera 6.04  [en]
  *
  * </pre>
+ *
+ * @property er.extensions.ERXBrowserFactory.FactoryClassName
+ * @property er.extensions.ERXBrowserFactory.BrowserClassName (default ERXBasicBrowser)
  */
 public class ERXBrowserFactory {
 
