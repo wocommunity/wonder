@@ -68,6 +68,8 @@ import er.extensions.appserver.*;
  * @binding updateOptions highly optional, Ajax Options for the request
  * @binding formValueName optional, the name of the form value that will contain the value
  * @binding elementName optional, defaults to div, the name of the HTML element to use to hold the rating UI
+ * @binding afterChange, optional, script to run client side after a change e.g. afterChange = "alert(v)";.  Receives one
+ *              parameter, v, the new value selected
  * 
  * @see <a href="http://livepipe.net/control/rating">Control.Rating</a>
  *
@@ -82,8 +84,9 @@ public class CCRating extends AjaxDynamicElement {
     @Override
     protected void addRequiredWebResources(WOResponse response, WOContext context) {
         // Common resources
-        addScriptResourceInHead(context, response, "Ajax", "controls.js");
         addScriptResourceInHead(context, response, "Ajax", "prototype.js");
+        addScriptResourceInHead(context, response, "Ajax", "effects.js");
+        addScriptResourceInHead(context, response, "Ajax", "controls.js");
 
         // Library specific resources
         addScriptResourceInHead(context, response, "ERCoolComponents", "Rating/livepipe.js");
@@ -169,7 +172,8 @@ public class CCRating extends AjaxDynamicElement {
         ajaxOptionsArray.addObject(new AjaxOption("multiple", AjaxOption.BOOLEAN));
         ajaxOptionsArray.addObject(new AjaxOption("rated", AjaxOption.BOOLEAN));
         ajaxOptionsArray.addObject(new AjaxOption("reverse", AjaxOption.BOOLEAN));
-
+        ajaxOptionsArray.addObject(new AjaxOption("afterChange", AjaxOption.FUNCTION_1));
+        
         // updateParameterName is renamed to formValueName to be more WO like
         ajaxOptionsArray.addObject(new AjaxConstantOption("updateParameterName", "formValueName", formValueName(context), AjaxOption.STRING));
 

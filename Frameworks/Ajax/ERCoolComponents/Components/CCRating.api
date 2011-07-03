@@ -23,5 +23,6 @@
     <binding name="elementName"/>
     <binding name="class"/>
         <binding name="style"/>
+    <binding name="afterChange"/>
     </wo>
 </wodefinitions>
