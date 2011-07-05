@@ -33,6 +33,8 @@ import org.jdom.input.SAXBuilder;
  * There is a test() method which, internally, checks the logic of the
  * extractions. An new problemmatic comments are found, they can be added to
  * that method.
+ * 
+ * @author kiddyr
  */
 public class PageGenerator {
 
@@ -252,14 +254,21 @@ public class PageGenerator {
         return foundPrefixes;
     }
 
-    static void findClassDocURLs(HashMap<String,HashMap<String,Object>> comps) {
+    static String classDocURL(String className) {
+    	return className.replace('.','/')+".html";
+    }
 
-        Iterator<String> keys = comps.keySet().iterator();
-        while (keys.hasNext()) {
-            String key = keys.next();
-            String path = key.replace('.','/');
-            comps.get(key).put("classDocURL",path+".html");
-        }
+	static void findClassDocURLs(HashMap<String, HashMap<String, Object>> comps) {
+		Iterator<String> keys = comps.keySet().iterator();
+		while (keys.hasNext()) {
+			String key = keys.next();
+			String path = key.replace('.', '/');
+			comps.get(key).put("classDocURL", path + ".html");
+		}
+	}
+
+    static String packageNameFromClassName(String className) {
+    	return className.substring(0,className.lastIndexOf("."));
     }
 
     static void findClassComments(HashMap<String,HashMap<String,Object>> comps) {
@@ -267,23 +276,32 @@ public class PageGenerator {
         Iterator<String> keys = comps.keySet().iterator();
         while (keys.hasNext()) {
             String key = keys.next();
-            String found = findClassComment((List<String>)comps.get(key).get("allComments"));
+            String found = findClassComment((HashMap<String,Object>)comps.get(key));
+            //String found = findClassComment((List<String>)comps.get(key).get("allComments"));
             if (found != null) comps.get(key).put("classComment", found);
         }
     }
 
-    /** Returns the first sentence of the javadoc for a component's
-     *  class. It is a shame that we cannot leverage javadoc for this, but
-     *  there are no hooks for this. We are looking for "end" strings from
-     *  the ends array, below. So far, this contains ". ", ".<", and ".\" ".
+    /**
+     * Returns the first sentence of the javadoc for a component's
+     * class. It is a shame that we cannot leverage javadoc for this, but
+     * there are no hooks for this. We are looking for "end" strings from
+     * the ends array, below. So far, this contains ". ", ".<", and ".\" ".
+     * 
+     * Because memory is a problem, we are going to remove the class comment
+     * from the allComments array as we locate it. 
      */
-    static String findClassComment(List<String> comments) {
+    static String findClassComment(HashMap<String,Object> comp) {
+    		//List<String> comments) {
 
         // System.out.println("start: comments: "+comments);
+
+    	List<String> comments = (List<String>)comp.get("allComments");
 
         if (comments == null || comments.size() == 0)
             return "";
 
+        
         boolean done = false;
 
         // Coalesce the lines of the comment into one string.
@@ -395,11 +413,11 @@ public class PageGenerator {
             else
                 name = line;
 
-            Character c = name.charAt(name.length()-1);
-            while (!Character.isJavaIdentifierPart(c)) {
-                name = name.substring(0,name.length()-1);
-                c = name.charAt(name.length()-1);
-            }
+//            Character c = name.charAt(name.length()-1);
+//            while (!Character.isJavaIdentifierPart(c)) {
+//                name = name.substring(0,name.length()-1);
+//                c = name.charAt(name.length()-1);
+//            }
 
             if (line.indexOf(" ") > 0)
                 line = line.substring(line.indexOf(" "));
@@ -415,6 +433,7 @@ public class PageGenerator {
         }
 
         comps.get(key).put("comments", finished);
+        comps.get(key).remove("allComments");
         }
     }
 }

@@ -33,6 +33,8 @@ import org.jdom.input.SAXBuilder;
  * There is a test() method which, internally, checks the logic of the
  * extractions. An new problemmatic comments are found, they can be added to
  * that method.
+ * 
+ * @author kiddyr
  */
 public class ComponentDoclet extends com.sun.javadoc.Doclet {
 
@@ -45,6 +47,10 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
                                               "ERPDF", "ERXJS", "Ajax", "SEEO", "UJAC", "D2W", "ERC", "ERD", "ERO", "ERP", "ERX",
                                               "GSV", "WOL", "YUI", "ER", "GC", "IM", "JS", "SC", "SE", "WO", "WR", "WX" };
 
+    /**
+     * Generate javadoc. This needs some explanations, comments and a bit of unwinding. It seems
+     * over-complicated to me and I wrote it.
+     */
     @SuppressWarnings("unchecked")
     public static boolean start(RootDoc root) {
 
@@ -53,72 +59,76 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
         ClassDoc[] classes = root.classes();
 
         comps = PageGenerator.findSubClassesFromAvailable(classes, "com.webobjects.appserver.WOElement");
+        //System.out.println("comps(01): "+comps);
 
         PageGenerator.findSourceFiles(comps, srcDirs);
+        //System.out.println("comps(02): "+comps);
 
         PageGenerator.gatherAllComments(comps);
-
-        PageGenerator.findClassDocURLs(comps);
+        //System.out.println("comps(03): "+comps);
 
         PageGenerator.findClassComments(comps);
+        //System.out.println("comps(04): "+comps);
 
-        TreeMap<String,TreeSet<String>> classNamePrefixes = PageGenerator.gatherClassesByPrefix(comps, prefixes);
-
-        PageGenerator.findApiFiles(comps, compDirs);
-
-        PageGenerator.findPackages(comps);
-
+        // Why do we need to do this? Perhaps we do not.
+//        TreeMap<String,TreeSet<String>> classNamePrefixes = PageGenerator.gatherClassesByPrefix(comps, prefixes);
+//
+        // Why do we need to do this? Perhaps we do not.
+//        PageGenerator.findApiFiles(comps, compDirs);
+//
+//        PageGenerator.findPackages(comps);
+//
         PageGenerator.findTagComments(comps, "@binding");
+//
+//        gatherBindingsFromApi(comps);
+//
+//        // Check the condition of the bindings documentation.
+//        //
+//        Iterator<String> keys = comps.keySet().iterator();
+//        while (keys.hasNext()) {
+//            String key = keys.next().toString();
+//
+//            HashMap<String,Object> map = comps.get(key);
+//
+//            if (!map.containsKey("apiBindings") && !map.containsKey("comments")) { comps.get(key).put("Ok", "YES"); }
+//
+//            if (map.containsKey("apiBindings") && !map.containsKey("comments")) { comps.get(key).put("Ok", "NO"); }
+//            if (!map.containsKey("apiBindings") && map.containsKey("comments")) { comps.get(key).put("Ok", "NO"); }
+//
+//            if (map.containsKey("apiBindings") && map.containsKey("comments")) {
+//
+//                ArrayList<String> apiBindings = (ArrayList<String>)comps.get(key).get("apiBindings");
+//                java.util.Set jdBindings = ((HashMap<String,String>)comps.get(key).get("comments")).keySet();
+//
+//                if (apiBindings == null && jdBindings == null) comps.get(key).put("Ok", "YES");
+//
+//                if (apiBindings == null && jdBindings != null) comps.get(key).put("Ok", "NO");
+//                if (apiBindings != null && jdBindings == null) comps.get(key).put("Ok", "NO");
+//
+//                if (apiBindings != null && jdBindings != null) {
+//
+//                    if (apiBindings.size() == 0 && jdBindings.size() == 0) { comps.get(key).put("Ok", "YES"); }
+//
+//                    if (apiBindings.size() != jdBindings.size()) { comps.get(key).put("Ok", "NO"); }
+//
+//                    if (apiBindings.size() != 0 && apiBindings.size() == jdBindings.size()) {
+//                        java.util.HashSet apiSet = new java.util.HashSet(apiBindings);
+//                        comps.get(key).put("Ok", (jdBindings.equals(apiSet)) ? "YES" : "NO");
+//                    }
+//                }
+//            }
+//        }
+//
+        TreeMap<String,ArrayList<String>> packageInfo = new TreeMap<String,ArrayList<String>>();
 
-        gatherBindingsFromApi(comps);
-
-        // Check the condition of the bindings documentation.
-        //
         Iterator<String> keys = comps.keySet().iterator();
         while (keys.hasNext()) {
             String key = keys.next().toString();
 
-            HashMap<String,Object> map = comps.get(key);
-
-            if (!map.containsKey("apiBindings") && !map.containsKey("comments")) { comps.get(key).put("Ok", "YES"); }
-
-            if (map.containsKey("apiBindings") && !map.containsKey("comments")) { comps.get(key).put("Ok", "NO"); }
-            if (!map.containsKey("apiBindings") && map.containsKey("comments")) { comps.get(key).put("Ok", "NO"); }
-
-            if (map.containsKey("apiBindings") && map.containsKey("comments")) {
-
-                ArrayList<String> apiBindings = (ArrayList<String>)comps.get(key).get("apiBindings");
-                java.util.Set jdBindings = ((HashMap<String,String>)comps.get(key).get("comments")).keySet();
-
-                if (apiBindings == null && jdBindings == null) comps.get(key).put("Ok", "YES");
-
-                if (apiBindings == null && jdBindings != null) comps.get(key).put("Ok", "NO");
-                if (apiBindings != null && jdBindings == null) comps.get(key).put("Ok", "NO");
-
-                if (apiBindings != null && jdBindings != null) {
-
-                    if (apiBindings.size() == 0 && jdBindings.size() == 0) { comps.get(key).put("Ok", "YES"); }
-
-                    if (apiBindings.size() != jdBindings.size()) { comps.get(key).put("Ok", "NO"); }
-
-                    if (apiBindings.size() != 0 && apiBindings.size() == jdBindings.size()) {
-                        java.util.HashSet apiSet = new java.util.HashSet(apiBindings);
-                        comps.get(key).put("Ok", (jdBindings.equals(apiSet)) ? "YES" : "NO");
-                    }
-                }
-            }
-        }
-
-        TreeMap<String,ArrayList<String>> packageInfo = new TreeMap<String,ArrayList<String>>();
-
-        keys = comps.keySet().iterator();
-        while (keys.hasNext()) {
-            String key = keys.next().toString();
-
-            ArrayList<String> aPackage = packageInfo.get((String)comps.get(key).get("package"));
+            ArrayList<String> aPackage = packageInfo.get(PageGenerator.packageNameFromClassName(key));
             if (aPackage == null) {
-                packageInfo.put((String)comps.get(key).get("package"), new ArrayList<String>());
-                aPackage = packageInfo.get((String)comps.get(key).get("package"));
+                packageInfo.put(PageGenerator.packageNameFromClassName(key), new ArrayList<String>());
+                aPackage = packageInfo.get(PageGenerator.packageNameFromClassName(key));
             }
             aPackage.add(key);
         }
@@ -135,38 +145,38 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
             PageGenerator.writeFileToWriter(System.getProperty("build.root")+"/Build/build/components-pageHead.html", out);
 
             out.write("<ul>\n");
-            out.write("<li><a href=\"#ListedByPrefix\">Prefixes</a></li>\n");
+            //out.write("<li><a href=\"#ListedByPrefix\">Prefixes</a></li>\n");
             out.write("<li><a href=\"#ListedByPackage\">Packages/Classnames</a></li>\n");
             out.write("<li><a href=\"#ComponentDetails\">Component Details</a></li>\n");
             out.write("</ul>\n");
 
-            Iterator<String> prefxs = classNamePrefixes.keySet().iterator();
+//            Iterator<String> prefxs = classNamePrefixes.keySet().iterator();
+//
+//            out.write("<a name=\"ListedByPrefix\"/>\n");
 
-            out.write("<a name=\"ListedByPrefix\"/>\n");
-
-            while (prefxs.hasNext()) {
-                String prefix = prefxs.next();
-
-                out.write(PageGenerator.TABLE_TOP_START);
-                out.write("<b>Prefix: "+prefix+"</b></font></th>\n");
-                out.write(PageGenerator.TABLE_TOP_END);
-
-                StringBuffer str = new StringBuffer();
-                Iterator<String> namesForPrefix = classNamePrefixes.get(prefix).iterator();
-                while (namesForPrefix.hasNext()) {
-                    String current = namesForPrefix.next();
-                    String[] parts = current.split("\\.");
-                    String lastName = parts[parts.length-1];
-
-                    str.append("<a href=\"#"+current+"\">"+lastName+"</a>, ");
-                }
-
-                String str2 = str.toString().substring(0,str.length()-2);
-                out.write("<tr bgcolor=\"white\" CLASS=\"TableRowColor\">\n");
-
-                out.write("<td>"+str2+"</td></tr>\n");
-                out.write("</table>\n&nbsp;<p>\n");
-            }
+//            while (prefxs.hasNext()) {
+//                String prefix = prefxs.next();
+//
+//                out.write(PageGenerator.TABLE_TOP_START);
+//                out.write("<b>Prefix: "+prefix+"</b></font></th>\n");
+//                out.write(PageGenerator.TABLE_TOP_END);
+//
+//                StringBuffer str = new StringBuffer();
+//                Iterator<String> namesForPrefix = classNamePrefixes.get(prefix).iterator();
+//                while (namesForPrefix.hasNext()) {
+//                    String current = namesForPrefix.next();
+//                    String[] parts = current.split("\\.");
+//                    String lastName = parts[parts.length-1];
+//
+//                    str.append("<a href=\"#"+current+"\">"+lastName+"</a>, ");
+//                }
+//
+//                String str2 = str.toString().substring(0,str.length()-2);
+//                out.write("<tr bgcolor=\"white\" CLASS=\"TableRowColor\">\n");
+//
+//                out.write("<td>"+str2+"</td></tr>\n");
+//                out.write("</table>\n&nbsp;<p>\n");
+//            }
 
             keys = packageInfo.keySet().iterator();
 
@@ -223,7 +233,7 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
                     out.write("<a name=\""+compKey+"\"><!-- --></a>\n");
                     out.write("<h3>"+comps.get(compKey).get("componentName")+"</h3>\n");
 
-                    if (!comps.get(compKey).get("package").equals("NONE")) {
+                    if (!PageGenerator.packageNameFromClassName(compKey).equals("NONE")) {
                         out.write("<p>From <a href=\""+comps.get(compKey).get("classDocURL")+"\">");
                         out.write(map.get("package")+"."+map.get("componentName"));
                         out.write("</a>:\n");
@@ -245,7 +255,8 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
 
                     Set<String> commentsSet = commentsMap.keySet();
 
-                    ArrayList<String> apiBindings = (ArrayList<String>)map.get("apiBindings");
+                    //ArrayList<String> apiBindings = (ArrayList<String>)map.get("apiBindings");
+                    ArrayList<String> apiBindings = new ArrayList<String>();
 
                     if (apiBindings.size() == 0 && commentsSet.size() == 0)
                         out.write("<i>No bindings for Component.</i>\n");
@@ -360,175 +371,175 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
 
     static void test() {
 
-        int result = 0;
-
-        ArrayList<String> tester = new ArrayList<String>();
-        HashMap<String,HashMap<String,String>> foundComment = null;
-        HashMap<String,HashMap<String,String>> expectedComment = null;
-        HashMap<String,String> oneComment = null;
-
-        tester.add("/**");
-        tester.add(" * Given an object displays a link to show information about the editing context of that object.*<br />");
-        tester.add(" *");
-        tester.add(" * @binding object");
-        tester.add(" */");
-        tester.add("");
-
-        expectedComment = new HashMap<String,HashMap<String,String>>();
-
-        oneComment = new HashMap<String,String>();
-        oneComment.put("name", "object");
-        oneComment.put("comment", "");
-        oneComment.put("order", "000");
-        expectedComment.put(oneComment.get("name"), oneComment);
-
-        //foundComment = PageGenerator.findTagComments(tester, "@binding");
-
-        //result += checkTest("test1", tester, expectedComment, foundComment);
-
-/* XXX - If I put a * at the start of a line, or multiple *'s, does it break things? */
-
-        tester = new ArrayList<String>();
-        tester.add("/**");
-        tester.add("  * AjaxSocialNetworkLink creates a link to the submission URL for ");
-        tester.add("  * a social network around the social network's icon.");
-        tester.add("  * ");
-        tester.add("  * @author mschrag");
-        tester.add("@binding name the name of the social network (@see er.ajax.AjaxSocialNetwork.socialNetworkNamed)");
-        tester.add("  * @binding url the URL to submit");
-        tester.add("  * @binding url2 the  ");
-        tester.add("  *    some exta stuff");
-        tester.add("");
-        tester.add("  * @binding title the title to submit");
-        tester.add("     ");
-        tester.add("  * @binding alt the alt tag (defaults to the name of the network)");
-        tester.add("  * @binding extra");
-        tester.add(" * @binding action, optional action to call before opening the modal dialog.");
-        tester.add("  * @binding target the target of the link");
-        tester.add("  */");
-
-        expectedComment = new HashMap<String,HashMap<String,String>>();
-
-        oneComment = new HashMap<String,String>();
-        oneComment.put("name", "url");
-        oneComment.put("comment", "the URL to submit");
-        oneComment.put("order", "001");
-        expectedComment.put(oneComment.get("name"), oneComment);
-
-        oneComment = new HashMap<String,String>();
-        oneComment.put("name", "url2");
-        oneComment.put("comment", "the some exta stuff");
-        oneComment.put("order", "002");
-        expectedComment.put(oneComment.get("name"), oneComment);
-
-        oneComment = new HashMap<String,String>();
-        oneComment.put("name", "title");
-        oneComment.put("comment", "the title to submit");
-        oneComment.put("order", "003");
-        expectedComment.put(oneComment.get("name"), oneComment);
-
-        oneComment = new HashMap<String,String>();
-        oneComment.put("name", "alt");
-        oneComment.put("comment", "the alt tag (defaults to the name of the network)");
-        oneComment.put("order", "004");
-        expectedComment.put(oneComment.get("name"), oneComment);
-
-        oneComment = new HashMap<String,String>();
-        oneComment.put("name", "extra");
-        oneComment.put("comment", "");
-        oneComment.put("order", "005");
-        expectedComment.put(oneComment.get("name"), oneComment);
-
-        oneComment = new HashMap<String,String>();
-        oneComment.put("name", "target");
-        oneComment.put("comment", "the target of the link");
-        oneComment.put("order", "007");
-        expectedComment.put(oneComment.get("name"), oneComment);
-
-        oneComment = new HashMap<String,String>();
-        oneComment.put("name", "name");
-        oneComment.put("comment", "the name of the social network (@see er.ajax.AjaxSocialNetwork.socialNetworkNamed)");
-        oneComment.put("order", "000");
-        expectedComment.put(oneComment.get("name"), oneComment);
-
-        oneComment = new HashMap<String,String>();
-        oneComment.put("name", "action");
-        oneComment.put("comment", "optional action to call before opening the modal dialog.");
-        oneComment.put("order", "006");
-        expectedComment.put(oneComment.get("name"), oneComment);
-
-        //foundComment = PageGenerator.findTagComments(tester, "@binding");
-
-        //result += checkTest("test2", tester, expectedComment, foundComment);
-
-        String expected = "AjaxSocialNetworkLink creates a link to the submission URL for a social network around the social network's icon.";
-        String found = PageGenerator.findClassComment(tester);
-
-        result += checkTest("test3", tester, expected, found);
-
-        tester = new ArrayList<String>();
-        tester.add("/**");
-        tester.add("* Component that generates a mailto href of the form: \"<a href=mailto:foo@bar.com>foo@bar.com</a>\".");
-        tester.add("* <br/>");
-        tester.add("* Synopsis:<br/>");
-        tester.add("* email=<i>anEmail</i>;");
-        tester.add("* <br/>");
-        tester.add("* Bindings:<br/>");
-        tester.add("* <b>email</b> email to generate href");
-        tester.add("* <br/>");
-        tester.add("*/");
-
-        expected = "Component that generates a mailto href of the form: \"<a href=mailto:foo@bar.com>foo@bar.com</a>\".";
-        found = PageGenerator.findClassComment(tester);
-
-        result += checkTest("test4", tester, expected, found);
-
-        tester = new ArrayList<String>();
-        tester.add("/**");
-        tester.add("* Component that generates a mailto href of the form: \"<a href=mailto:foo@bar.com>foo@bar.com</a>.\"");
-        tester.add("* <br/>");
-        tester.add("*/");
-
-        expected = "Component that generates a mailto href of the form: \"<a href=mailto:foo@bar.com>foo@bar.com</a>.\"";
-        found = PageGenerator.findClassComment(tester);
-
-        result += checkTest("test5", tester, expected, found);
-
-        tester = new ArrayList<String>();
-        tester.add("/**");
-        tester.add(" * @binding id the id of the update container");
-        tester.add(" * @binding progressID the id of the AjaxProgress");
-
-        expected = "";
-        found = PageGenerator.findClassComment(tester);
-
-        result += checkTest("test6", tester, expected, found);
-
-        tester = new ArrayList<String>();
-        tester.add("/** I can check here also");
-        tester.add(" * @binding id the id of the update container");
-        tester.add(" * @binding progressID the id of the AjaxProgress");
-
-        expected = "I can check here also";
-        found = PageGenerator.findClassComment(tester);
-
-        result += checkTest("test7", tester, expected, found);
-
-        tester = new ArrayList<String>();
-        tester.add("/**");
-        tester.add(" * XHTML version of WORadioButtonList");
-        tester.add(" *");
-        tester.add(" * @see WORadioButtonList");
-        tester.add(" * @author mendis");
-        tester.add(" *");
-        tester.add(" */");
-
-        expected = "XHTML version of WORadioButtonList";
-        found = PageGenerator.findClassComment(tester);
-
-        result += checkTest("test8", tester, expected, found);
-
-        if (result > 0) { System.exit(1); }
+//        int result = 0;
+//
+//        ArrayList<String> tester = new ArrayList<String>();
+//        HashMap<String,HashMap<String,String>> foundComment = null;
+//        HashMap<String,HashMap<String,String>> expectedComment = null;
+//        HashMap<String,String> oneComment = null;
+//
+//        tester.add("/**");
+//        tester.add(" * Given an object displays a link to show information about the editing context of that object.*<br />");
+//        tester.add(" *");
+//        tester.add(" * @binding object");
+//        tester.add(" */");
+//        tester.add("");
+//
+//        expectedComment = new HashMap<String,HashMap<String,String>>();
+//
+//        oneComment = new HashMap<String,String>();
+//        oneComment.put("name", "object");
+//        oneComment.put("comment", "");
+//        oneComment.put("order", "000");
+//        expectedComment.put(oneComment.get("name"), oneComment);
+//
+//        //foundComment = PageGenerator.findTagComments(tester, "@binding");
+//
+//        //result += checkTest("test1", tester, expectedComment, foundComment);
+//
+///* XXX - If I put a * at the start of a line, or multiple *'s, does it break things? */
+//
+//        tester = new ArrayList<String>();
+//        tester.add("/**");
+//        tester.add("  * AjaxSocialNetworkLink creates a link to the submission URL for ");
+//        tester.add("  * a social network around the social network's icon.");
+//        tester.add("  * ");
+//        tester.add("  * @author mschrag");
+//        tester.add("@binding name the name of the social network (@see er.ajax.AjaxSocialNetwork.socialNetworkNamed)");
+//        tester.add("  * @binding url the URL to submit");
+//        tester.add("  * @binding url2 the  ");
+//        tester.add("  *    some exta stuff");
+//        tester.add("");
+//        tester.add("  * @binding title the title to submit");
+//        tester.add("     ");
+//        tester.add("  * @binding alt the alt tag (defaults to the name of the network)");
+//        tester.add("  * @binding extra");
+//        tester.add(" * @binding action, optional action to call before opening the modal dialog.");
+//        tester.add("  * @binding target the target of the link");
+//        tester.add("  */");
+//
+//        expectedComment = new HashMap<String,HashMap<String,String>>();
+//
+//        oneComment = new HashMap<String,String>();
+//        oneComment.put("name", "url");
+//        oneComment.put("comment", "the URL to submit");
+//        oneComment.put("order", "001");
+//        expectedComment.put(oneComment.get("name"), oneComment);
+//
+//        oneComment = new HashMap<String,String>();
+//        oneComment.put("name", "url2");
+//        oneComment.put("comment", "the some exta stuff");
+//        oneComment.put("order", "002");
+//        expectedComment.put(oneComment.get("name"), oneComment);
+//
+//        oneComment = new HashMap<String,String>();
+//        oneComment.put("name", "title");
+//        oneComment.put("comment", "the title to submit");
+//        oneComment.put("order", "003");
+//        expectedComment.put(oneComment.get("name"), oneComment);
+//
+//        oneComment = new HashMap<String,String>();
+//        oneComment.put("name", "alt");
+//        oneComment.put("comment", "the alt tag (defaults to the name of the network)");
+//        oneComment.put("order", "004");
+//        expectedComment.put(oneComment.get("name"), oneComment);
+//
+//        oneComment = new HashMap<String,String>();
+//        oneComment.put("name", "extra");
+//        oneComment.put("comment", "");
+//        oneComment.put("order", "005");
+//        expectedComment.put(oneComment.get("name"), oneComment);
+//
+//        oneComment = new HashMap<String,String>();
+//        oneComment.put("name", "target");
+//        oneComment.put("comment", "the target of the link");
+//        oneComment.put("order", "007");
+//        expectedComment.put(oneComment.get("name"), oneComment);
+//
+//        oneComment = new HashMap<String,String>();
+//        oneComment.put("name", "name");
+//        oneComment.put("comment", "the name of the social network (@see er.ajax.AjaxSocialNetwork.socialNetworkNamed)");
+//        oneComment.put("order", "000");
+//        expectedComment.put(oneComment.get("name"), oneComment);
+//
+//        oneComment = new HashMap<String,String>();
+//        oneComment.put("name", "action");
+//        oneComment.put("comment", "optional action to call before opening the modal dialog.");
+//        oneComment.put("order", "006");
+//        expectedComment.put(oneComment.get("name"), oneComment);
+//
+//        //foundComment = PageGenerator.findTagComments(tester, "@binding");
+//
+//        //result += checkTest("test2", tester, expectedComment, foundComment);
+//
+//        String expected = "AjaxSocialNetworkLink creates a link to the submission URL for a social network around the social network's icon.";
+//        String found = PageGenerator.findClassComment(tester);
+//
+//        result += checkTest("test3", tester, expected, found);
+//
+//        tester = new ArrayList<String>();
+//        tester.add("/**");
+//        tester.add("* Component that generates a mailto href of the form: \"<a href=mailto:foo@bar.com>foo@bar.com</a>\".");
+//        tester.add("* <br/>");
+//        tester.add("* Synopsis:<br/>");
+//        tester.add("* email=<i>anEmail</i>;");
+//        tester.add("* <br/>");
+//        tester.add("* Bindings:<br/>");
+//        tester.add("* <b>email</b> email to generate href");
+//        tester.add("* <br/>");
+//        tester.add("*/");
+//
+//        expected = "Component that generates a mailto href of the form: \"<a href=mailto:foo@bar.com>foo@bar.com</a>\".";
+//        found = PageGenerator.findClassComment(tester);
+//
+//        result += checkTest("test4", tester, expected, found);
+//
+//        tester = new ArrayList<String>();
+//        tester.add("/**");
+//        tester.add("* Component that generates a mailto href of the form: \"<a href=mailto:foo@bar.com>foo@bar.com</a>.\"");
+//        tester.add("* <br/>");
+//        tester.add("*/");
+//
+//        expected = "Component that generates a mailto href of the form: \"<a href=mailto:foo@bar.com>foo@bar.com</a>.\"";
+//        found = PageGenerator.findClassComment(tester);
+//
+//        result += checkTest("test5", tester, expected, found);
+//
+//        tester = new ArrayList<String>();
+//        tester.add("/**");
+//        tester.add(" * @binding id the id of the update container");
+//        tester.add(" * @binding progressID the id of the AjaxProgress");
+//
+//        expected = "";
+//        found = PageGenerator.findClassComment(tester);
+//
+//        result += checkTest("test6", tester, expected, found);
+//
+//        tester = new ArrayList<String>();
+//        tester.add("/** I can check here also");
+//        tester.add(" * @binding id the id of the update container");
+//        tester.add(" * @binding progressID the id of the AjaxProgress");
+//
+//        expected = "I can check here also";
+//        found = PageGenerator.findClassComment(tester);
+//
+//        result += checkTest("test7", tester, expected, found);
+//
+//        tester = new ArrayList<String>();
+//        tester.add("/**");
+//        tester.add(" * XHTML version of WORadioButtonList");
+//        tester.add(" *");
+//        tester.add(" * @see WORadioButtonList");
+//        tester.add(" * @author mendis");
+//        tester.add(" *");
+//        tester.add(" */");
+//
+//        expected = "XHTML version of WORadioButtonList";
+//        found = PageGenerator.findClassComment(tester);
+//
+//        result += checkTest("test8", tester, expected, found);
+//
+//        if (result > 0) { System.exit(1); }
     }
 
     static int checkTest(String name, ArrayList<String> tester, Object expected, Object found) {
