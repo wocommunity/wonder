@@ -39,8 +39,17 @@ public class ERXNextPageForResultWOAction extends ERXAbstractPerformWOAction imp
 	private static final Logger log = Logger.getLogger(ERXNextPageForResultWOAction.class);
 	
 	protected Object _result;
+
+	// The page in which this controller was instantiated
+	protected final WOComponent _senderPage;
+
+	// The next page to be returned by the controller in the case of a successful result
 	protected final WOComponent _nextPage;
+
+	// The key into which the result will be pushed by this controller
 	private final String _nextPageResultKey;
+
+	// Additional values that will be pushed into the next page
 	private NSMutableDictionary<String, ?> _nextPageValues;
 
 	/**
@@ -68,10 +77,11 @@ public class ERXNextPageForResultWOAction extends ERXAbstractPerformWOAction imp
 	 *            The key in which to set the result in the nextPage
 	 */
 	public ERXNextPageForResultWOAction(WOComponent nextPage, String nextPageResultKey) {
-		// We assume that this class is instantiated in the originating page and so we capture the
+		// We assume that this class is instantiated in the sender page and so we capture the
 		// current page in context when this class is created and we will use that as the default
 		// nextPage.
-		_nextPage = ( nextPage == null ? ERXWOContext.currentContext().page() : nextPage );
+		_senderPage = ERXWOContext.currentContext().page();
+		_nextPage = ( nextPage == null ? _senderPage : nextPage );
 		_nextPageResultKey = nextPageResultKey;
 	}
 
