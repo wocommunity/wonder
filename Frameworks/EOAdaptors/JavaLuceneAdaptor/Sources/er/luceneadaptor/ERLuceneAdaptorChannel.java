@@ -695,7 +695,6 @@ public class ERLuceneAdaptorChannel extends EOAdaptorChannel {
 	 * Convenience method to create a Lucene query from an EOF qualifier.
 	 * @param qualifier
 	 * @param entity
-	 * @return
 	 */
 	public static Query queryForQualifier(EOQualifier qualifier, EOEntity entity) {
 		if(qualifier == null) {
@@ -711,7 +710,6 @@ public class ERLuceneAdaptorChannel extends EOAdaptorChannel {
 	/**
 	 * Convenience method to create a Lucene sort from an EOF sort ordering array.
 	 * @param sortOrderings
-	 * @return
 	 */
 	public static Sort sortForSortOrderings(NSArray<EOSortOrdering> sortOrderings) {
 		Sort sort = null;
