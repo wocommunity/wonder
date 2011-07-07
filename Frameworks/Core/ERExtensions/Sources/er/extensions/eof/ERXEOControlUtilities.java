@@ -1476,12 +1476,9 @@ public class ERXEOControlUtilities {
      * @param objectsToFilter objects to filter
      * @param entityName name of the entity
      * @param qualifier qualifier
-     * @param prefetchKeyPaths prefetching key paths
      * @param sortOrderings the sort orderings to use on the results
-     * @param fetchLimit the fetch limit to use
      * @param usesDistinct whether or not to distinct the results
      * @param isDeep whether or not to fetch deeply
-     * @param hints fetch hints to apply
      * @param includeNewObjects option to include newly inserted objects in the result set
      * @param includeNewObjectsInParentEditingContext option to include newly inserted objects in parent editing
      *        contexts.  if true, the editing context lineage is explored, any newly-inserted objects matching the

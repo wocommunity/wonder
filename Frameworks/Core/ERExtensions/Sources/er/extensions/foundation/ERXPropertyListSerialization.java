@@ -5797,7 +5797,6 @@ public class ERXPropertyListSerialization {
 	 * @param plist the object to write
 	 * @param out output stream for plist
 	 * @param type type of plist to generate
-	 * @param encoding the string encoding of the bytes in the stream (ignored for binary plist format)
 	 * @see PListFormat#NSPropertyListJsonFormat_v1_0
 	 * @see PListFormat#NSPropertyListBinaryFormat_v1_0
 	 * @see PListFormat#NSPropertyListXMLFormat_v1_0

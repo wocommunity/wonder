@@ -2169,7 +2169,6 @@ public class ERXEOAccessUtilities {
     	/**
     	 * Executes the given operation.
     	 * 
-    	 * @param <T> the type of the results of this operation
     	 * @param databaseContext the database context to operate on
     	 * @throws Exception if anything goes wrong
     	 */
@@ -2187,7 +2186,6 @@ public class ERXEOAccessUtilities {
     	/**
     	 * Executes the given operation with the given channel.
     	 * 
-    	 * @param <T> the type of the results of this operation
     	 * @param databaseContext the locked database context to operate on
     	 * @param channel the open adaptor channel to operate on
     	 * @throws Exception if anything goes wrong

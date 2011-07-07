@@ -103,7 +103,7 @@ public interface IERXRestDelegate {
 		/**
 		 * Registers a rest delegate for the given entity name.
 		 * 
-		 * @param delegateClass
+		 * @param delegate
 		 *            the delegate class to register
 		 * @param entityName
 		 *            the entity name to register for

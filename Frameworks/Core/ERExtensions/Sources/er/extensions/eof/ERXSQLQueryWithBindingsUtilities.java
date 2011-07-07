@@ -202,8 +202,8 @@ public class ERXSQLQueryWithBindingsUtilities {
      * </p>
      * @param ec
      *          The current editing context (used to obtain the correct OSC)
-     * @param entityName
-     *          The name of an entity affected by the query. This does not necessarily have to be accurate,
+     * @param modelName
+     *          The name of a model affected by the query. This does not necessarily have to be accurate,
      *          as this value is only used to find out the correct database that the query will be run against.
      * @param query
      *          The SQL query
