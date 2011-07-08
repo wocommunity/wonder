@@ -1592,7 +1592,6 @@ public class ERXRouteController extends WODirectAction {
 	 * Before returning the action results, this method is called to perform any last minute processing.
 	 * 
 	 * @param results
-	 * @return
 	 */
 	protected WOActionResults processActionResults(WOActionResults results) {
 		WOContext context = context();

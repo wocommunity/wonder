@@ -88,7 +88,6 @@ public class ERJRFetchSpecificationReportTask implements Callable<File>, ERXTask
 	/**
 	 * Callable interface implementation
 	 * 
-	 * @return
 	 * @throws Exception
 	 */
 	public File call() throws Exception {

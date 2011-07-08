@@ -69,7 +69,7 @@ public class ERXKey<T> {
 	private static final ERXKey<?> UNIQUE = new ERXKey<Object>("@unique");
 
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' avgNonNull aggregate operator @avgNonNull. For
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' avgNonNull aggregate operator @avgNonNull. For
 	 * instance, if the key is "price" this will return a new ERXKey "@avgNonNull.price".
 	 * 
 	 * @param key
@@ -83,7 +83,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns ERXArrayUtilities' avgNonNull aggregate operator @avgNonNull.
+	 * Return ERXArrayUtilities' avgNonNull aggregate operator @avgNonNull.
 	 * 
 	 * @return the avgNonNull key
 	 * 
@@ -94,7 +94,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' avgNonNull aggregate operator @avgNonNull. For
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' avgNonNull aggregate operator @avgNonNull. For
 	 * instance, if the key is "price" this will return a new ERXKey "@avgNonNull.price".
 	 * 
 	 * @param key
@@ -108,7 +108,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns a new ERXKey that appends ERXArrayUtilities' avgNonNull aggregate operator @avgNonNull.
+	 * Return a new ERXKey that appends ERXArrayUtilities' avgNonNull aggregate operator @avgNonNull.
 	 * 
 	 * @return the new appended key
 	 * 
@@ -119,7 +119,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * fetchSpec operator @fetchSpec. For instance, if the key is "price" and 
 	 * fetchSpecName is "newHomes" this will return a new ERXKey "@fetchSpec.newHomes.price".
 	 * @param fetchSpecName the fetchSpec name
@@ -136,7 +136,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * fetchSpec operator @fetchSpec. For instance, if the key is "price" and 
 	 * fetchSpecName is "newHomes" this will return a new ERXKey "@fetchSpec.newHomes.price".
 	 * @param fetchSpecName the fetchSpec name
@@ -153,7 +153,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * fetchSpec operator @fetchSpec. For instance, if the 
 	 * fetchSpecName is "newHomes" this will return a new ERXKey "@fetchSpec.newHomes".
 	 * @param fetchSpecName the fetchSpec name
@@ -168,7 +168,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * fetchSpec operator @fetchSpec. For instance, if the 
 	 * fetchSpecName is "newHomes" this will return a new ERXKey "@fetchSpec.newHomes".
 	 * @param fetchSpecName the fetchSpec name
@@ -183,7 +183,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * flatten operator @flatten. For instance, if the key is "price"
 	 *  this will return a new ERXKey "@flatten.price".
 	 * @param key the key to use for this keypath
@@ -198,7 +198,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * flatten operator @flatten. For instance, if the key is "price"
 	 *  this will return a new ERXKey "@flatten.price".
 	 * @param key the key to use for this keypath
@@ -213,7 +213,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * flatten operator @flatten.
 	 * @param <U> the type of the next key
 	 * 
@@ -226,7 +226,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * flatten operator @flatten.
 	 * @param <U> the type of the next key
 	 * 
@@ -239,7 +239,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * isEmpty operator @isEmpty. Since any keypath beyond @isEmpty is ignored, 
 	 * only a no arg method is available.
 	 * 
@@ -252,7 +252,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * isEmpty operator @isEmpty. Since any keypath beyond @isEmpty is ignored, 
 	 * only a no arg method is available.
 	 * 
@@ -265,7 +265,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * limit operator @limit. For instance, if the key is "price" and 
 	 * limit is 3 this will return a new ERXKey "@limit.3.price".
 	 * @param limit the maximum number of objects allowed by the limit
@@ -282,7 +282,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * limit operator @limit. For instance, if the key is "price" and 
 	 * limit is 3 this will return a new ERXKey "@limit.3.price".
 	 * @param limit the maximum number of objects allowed by the limit
@@ -299,7 +299,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * limit operator @limit. For instance, if the limit is 3 this will return 
 	 * a new ERXKey "@limit.3".
 	 * 
@@ -315,7 +315,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * limit operator @limit. For instance, if the limit is 3 this will return 
 	 * a new ERXKey "@limit.3".
 	 * 
@@ -331,10 +331,8 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns ERXArrayUtilities' median aggregate operator @median.
+	 * Return ERXArrayUtilities' median aggregate operator @median.
 	 * 
-	 * @param key
-	 *            the key to use for this aggregate keypath
 	 * @return the new appended key
 	 * 
 	 * @see er.extensions.foundation.ERXArrayUtilities.MedianOperator MedianOperator
@@ -344,7 +342,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' median aggregate operator @median. For
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' median aggregate operator @median. For
 	 * instance, if the key is "price" this will return a new ERXKey "@median.price".
 	 * 
 	 * @param key
@@ -358,10 +356,8 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that appends the given key with ERXArrayUtilities' median aggregate operator @median.
+	 * Return a new ERXKey that appends the given key with ERXArrayUtilities' median aggregate operator @median.
 	 * 
-	 * @param key
-	 *            the key to use for this aggregate keypath
 	 * @return the new appended key
 	 * 
 	 * @see er.extensions.foundation.ERXArrayUtilities.MedianOperator MedianOperator
@@ -371,7 +367,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' median aggregate operator @median. For
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' median aggregate operator @median. For
 	 * instance, if the key is "price" this will return a new ERXKey "@median.price".
 	 * 
 	 * @param key
@@ -385,7 +381,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * objectAtIndex operator @objectAtIndex. For instance, if the index is 3 
 	 * and the key is "price" then this will return a new ERXKey "@objectAtIndex.3.price".
 	 * 
@@ -401,7 +397,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * objectAtIndex operator @objectAtIndex. For instance, if the index is 3 
 	 * and the key is "price" then this will return a new ERXKey "@objectAtIndex.3.price".
 	 * 
@@ -417,7 +413,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * objectAtIndex operator @objectAtIndex. For instance, if the index is 3 
 	 * then this will return a new ERXKey "@objectAtIndex.3".
 	 * 
@@ -432,7 +428,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * objectAtIndex operator @objectAtIndex. For instance, if the index is 3 
 	 * then this will return a new ERXKey "@objectAtIndex.3".
 	 * 
@@ -447,7 +443,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * RemoveNullValues operator @removeNullValues. For instance, if the key is "price"
 	 *  this will return a new ERXKey "@removeNullValues.price".
 	 * @param key the key to use for this keypath
@@ -462,7 +458,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * RemoveNullValues operator @removeNullValues. For instance, if the key is "price"
 	 *  this will return a new ERXKey "@removeNullValues.price".
 	 * @param key the key to use for this keypath
@@ -477,7 +473,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * RemoveNullValues operator @removeNullValues.
 	 * 
 	 * @param <U> the type of the next key
@@ -491,7 +487,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * RemoveNullValues operator @removeNullValues.
 	 * 
 	 * @param <U> the type of the next key
@@ -505,7 +501,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * Reverse operator @reverse. For instance, if the key is "price"
 	 *  this will return a new ERXKey "@reverse.price".
 	 * @param key the key to use for this keypath
@@ -520,7 +516,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * Reverse operator @reverse. For instance, if the key is "price"
 	 *  this will return a new ERXKey "@reverse.price".
 	 * @param key the key to use for this keypath
@@ -535,7 +531,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * Reverse operator @reverse.
 	 * 
 	 * @param <U> the type of the next key
@@ -549,7 +545,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * Reverse operator @reverse.
 	 * 
 	 * @param <U> the type of the next key
@@ -563,7 +559,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * Sort operator @sort.  For instance,
 	 * <code>sort(Employee.FIRST_NAME, Employee.LAST_NAME)</code> 
 	 * would return a key like @sort.firstName,lastname
@@ -581,7 +577,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * Sort operator @sort.  For instance,
 	 * <code>atSort(Employee.FIRST_NAME, Employee.LAST_NAME)</code> 
 	 * would return a key like @sort.firstName,lastname
@@ -598,7 +594,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * SortAscending operator @sortAsc.  For instance,
 	 * <code>sortAsc(Employee.FIRST_NAME, Employee.LAST_NAME)</code> 
 	 * would return a key like @sortAsc.firstName,lastname
@@ -616,7 +612,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * SortAsc operator @sortAsc.  For instance,
 	 * <code>atSortAsc(Employee.FIRST_NAME, Employee.LAST_NAME)</code> 
 	 * would return a key like @sortAsc.firstName,lastname
@@ -633,7 +629,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * SortDescending operator @sortDesc.  For instance,
 	 * <code>sortDesc(Employee.FIRST_NAME, Employee.LAST_NAME)</code> 
 	 * would return a key like @sortDesc.firstName,lastname
@@ -651,7 +647,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * SortDescending operator @sortDesc.  For instance,
 	 * <code>atSortDesc(Employee.FIRST_NAME, Employee.LAST_NAME)</code> 
 	 * would return a key like @sortDesc.firstName,lastname
@@ -668,7 +664,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * SortInsensitiveAscending operator @sortInsensitiveAsc.  For instance,
 	 * <code>sortInsensitiveAsc(Employee.FIRST_NAME, Employee.LAST_NAME)</code> 
 	 * would return a key like @sortInsensitiveAsc.firstName,lastname
@@ -686,7 +682,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * SortInsensitiveAscending operator @sortInsensitiveAsc.  For instance,
 	 * <code>atSortInsensitiveAsc(Employee.FIRST_NAME, Employee.LAST_NAME)</code> 
 	 * would return a key like @sortInsensitiveAsc.firstName,lastname
@@ -704,7 +700,7 @@ public class ERXKey<T> {
 
 	
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * SortInsensitiveDescending operator @sortInsensitiveDesc.  For instance,
 	 * <code>sortInsensitiveDesc(Employee.FIRST_NAME, Employee.LAST_NAME)</code> 
 	 * would return a key like @sortInsensitiveDesc.firstName,lastname
@@ -722,7 +718,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * SortInsensitiveDescending operator @sortInsensitiveDesc.  For instance,
 	 * <code>atSortInsensitiveDesc(Employee.FIRST_NAME, Employee.LAST_NAME)</code> 
 	 * would return a key like @sortInsensitiveDesc.firstName,lastname
@@ -739,7 +735,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * SubarrayWithRange operator @subarrayWithRange. For instance, if the key is "price"
 	 * and the range is <code>new NSRange(4,2)</code> this will return a new ERXKey "@subarrayWithRange.4-2.price".
 	 * @param key the key to use for this keypath
@@ -755,7 +751,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * SubarrayWithRange operator @subarrayWithRange. For instance, if the key is "price"
 	 * and the range is <code>new NSRange(4,2)</code> this will return a new ERXKey "@subarrayWithRange.4-2.price".
 	 * @param key the key to use for this keypath
@@ -771,7 +767,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * SubarrayWithRange operator @subarrayWithRange. For instance, if the range 
 	 * is <code>new NSRange(4,2)</code> this will return a new 
 	 * ERXKey "@subarrayWithRange.4-2.price".
@@ -788,7 +784,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * SubarrayWithRange operator @subarrayWithRange. For instance, if the range 
 	 * is <code>new NSRange(4,2)</code> this will return a new 
 	 * ERXKey "@subarrayWithRange.4-2.price".
@@ -805,7 +801,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * Unique operator @unique. For instance, if the key is "price"
 	 * this will return a new ERXKey "@unique.price".
 	 * @param key the key to use for this keypath
@@ -820,7 +816,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * Unique operator @unique. For instance, if the key is "price"
 	 * this will return a new ERXKey "@unique.price".
 	 * @param key the key to use for this keypath
@@ -835,7 +831,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * Unique operator @unique.
 	 * 
 	 * @param <U> the type of the next key
@@ -849,7 +845,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that prepends the given key with ERXArrayUtilities' 
+	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
 	 * Unique operator @unique.
 	 *  
 	 * @param <U> the type of the next key
@@ -863,7 +859,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns a new ERXKey that prepends the given key with NSArray's SUM aggregate operator @sum. For
+	 * Return a new ERXKey that prepends the given key with NSArray's SUM aggregate operator @sum. For
 	 * instance, if the key is "price" this will return a new ERXKey "@sum.price".
 	 * 
 	 * @param key
@@ -875,7 +871,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that prepends the given key with NSArray's SUM aggregate operator @sum. For
+	 * Return a new ERXKey that prepends the given key with NSArray's SUM aggregate operator @sum. For
 	 * instance, if the key is "price" this will return a new ERXKey "@sum.price".
 	 * 
 	 * @param key
@@ -887,7 +883,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that uses NSArray's SUM aggregate operator @sum.
+	 * Return a new ERXKey that uses NSArray's SUM aggregate operator @sum.
 	 * 
 	 * @return the new key
 	 */
@@ -896,7 +892,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that uses NSArray's SUM aggregate operator @sum.
+	 * Return a new ERXKey that uses NSArray's SUM aggregate operator @sum.
 	 * 
 	 * @return the new key
 	 */
@@ -905,7 +901,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that uses Wonder's standard deviation operator @popStdDev
+	 * Return a new ERXKey that uses Wonder's standard deviation operator @popStdDev
 	 * 
 	 * @return the new key
 	 * 
@@ -916,7 +912,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that uses Wonder's standard deviation operator @popStdDev
+	 * Return a new ERXKey that uses Wonder's standard deviation operator @popStdDev
 	 * 
 	 * @return the new key
 	 * 
@@ -927,7 +923,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that uses Wonder's standard deviation operator @popStdDev
+	 * Return a new ERXKey that uses Wonder's standard deviation operator @popStdDev
 	 * @param key the key to append
 	 * 
 	 * @return the new key
@@ -939,7 +935,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that uses Wonder's standard deviation operator @popStdDev
+	 * Return a new ERXKey that uses Wonder's standard deviation operator @popStdDev
 	 * @param key the key to append
 	 * 
 	 * @return the new key
@@ -951,7 +947,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that uses Wonder's standard deviation operator @stdDev
+	 * Return a new ERXKey that uses Wonder's standard deviation operator @stdDev
 	 * 
 	 * @return the new key
 	 * 
@@ -962,7 +958,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that uses Wonder's standard deviation operator @stdDev
+	 * Return a new ERXKey that uses Wonder's standard deviation operator @stdDev
 	 * 
 	 * @return the new key
 	 * 
@@ -973,7 +969,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that uses Wonder's standard deviation operator @stdDev
+	 * Return a new ERXKey that uses Wonder's standard deviation operator @stdDev
 	 * @param key the key to append
 	 * 
 	 * @return the new key
@@ -985,7 +981,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that uses Wonder's standard deviation operator @stdDev
+	 * Return a new ERXKey that uses Wonder's standard deviation operator @stdDev
 	 * @param key the key to append
 	 * 
 	 * @return the new key
@@ -997,7 +993,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that prepends the given key with NSArray's AVERAGE aggregate operator @avg. For
+	 * Return a new ERXKey that prepends the given key with NSArray's AVERAGE aggregate operator @avg. For
 	 * instance, if the key is "price" this will return a new ERXKey "@avg.price".
 	 * 
 	 * @param key
@@ -1009,7 +1005,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that prepends the given key with NSArray's AVERAGE aggregate operator @avg. For
+	 * Return a new ERXKey that prepends the given key with NSArray's AVERAGE aggregate operator @avg. For
 	 * instance, if the key is "price" this will return a new ERXKey "@avg.price".
 	 * 
 	 * @param key
@@ -1021,7 +1017,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that uses NSArray's AVERAGE aggregate operator @avg.
+	 * Return a new ERXKey that uses NSArray's AVERAGE aggregate operator @avg.
 	 * 
 	 * @return the new key
 	 */
@@ -1030,7 +1026,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that uses NSArray's AVERAGE aggregate operator @avg.
+	 * Return a new ERXKey that uses NSArray's AVERAGE aggregate operator @avg.
 	 * 
 	 * @return the new key
 	 */
@@ -1039,7 +1035,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that prepends the given key with NSArray's MIN aggregate operator @min. For
+	 * Return a new ERXKey that prepends the given key with NSArray's MIN aggregate operator @min. For
 	 * instance, if the key is "price" this will return a new ERXKey "@min.price".
 	 * 
 	 * @param <U> the type of the next key
@@ -1053,7 +1049,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that prepends the given key with NSArray's MIN aggregate operator @min. For
+	 * Return a new ERXKey that prepends the given key with NSArray's MIN aggregate operator @min. For
 	 * instance, if the key is "price" this will return a new ERXKey "@min.price".
 	 * 
 	 * @param <U> the type of the next key
@@ -1067,7 +1063,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that uses NSArray's MIN aggregate operator @min.
+	 * Return a new ERXKey that uses NSArray's MIN aggregate operator @min.
 	 * 
 	 * @param <U> the type of the next key
 	 *
@@ -1078,7 +1074,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that uses NSArray's MIN aggregate operator @min.
+	 * Return a new ERXKey that uses NSArray's MIN aggregate operator @min.
 	 * 
 	 * @param <U> the type of the next key
 	 *
@@ -1089,7 +1085,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that prepends the given key with NSArray's MAX aggregate operator @max. For
+	 * Return a new ERXKey that prepends the given key with NSArray's MAX aggregate operator @max. For
 	 * instance, if the key is "price" this will return a new ERXKey "@max.price".
 	 * 
 	 * @param <U> the type of the next key
@@ -1103,7 +1099,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that prepends the given key with NSArray's MAX aggregate operator @max. For
+	 * Return a new ERXKey that prepends the given key with NSArray's MAX aggregate operator @max. For
 	 * instance, if the key is "price" this will return a new ERXKey "@max.price".
 	 * 
 	 * @param <U> the type of the next key
@@ -1117,7 +1113,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that uses NSArray's MAX aggregate operator @max.
+	 * Return a new ERXKey that uses NSArray's MAX aggregate operator @max.
 	 * 
 	 * @param <U> the type of the next key
 	 *
@@ -1128,7 +1124,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns a new ERXKey that uses NSArray's MAX aggregate operator @max.
+	 * Return a new ERXKey that uses NSArray's MAX aggregate operator @max.
 	 * 
 	 * @param <U> the type of the next key
 	 *
@@ -1139,7 +1135,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns a new ERXKey that uses NSArray's COUNT operator @count. Since any
+	 * Return a new ERXKey that uses NSArray's COUNT operator @count. Since any
 	 * keypath beyond @count is ignored, only a no arg method is available.
 	 * 
 	 * @return the new key
@@ -1149,7 +1145,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Returns a new ERXKey that uses NSArray's COUNT operator @count. Since any
+	 * Return a new ERXKey that uses NSArray's COUNT operator @count. Since any
 	 * keypath beyond @count is ignored, only a no arg method is available.
 	 * 
 	 * @return the new key
@@ -1258,7 +1254,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns the keypath that this ERXKey represents.
+	 * Return the keypath that this ERXKey represents.
 	 * 
 	 * @return the keypath that this ERXKey represents
 	 */
@@ -1823,7 +1819,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns a qualifier that evalutes to true when the value of the given key
+	 * Return a qualifier that evalutes to true when the value of the given key
 	 * contains any of the given tokens (insensitively) in the search string.
 	 * The search string will be tokenized by splitting on space characters.
 	 * 
@@ -1836,7 +1832,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns a qualifier that evalutes to true when the value of the given key
+	 * Return a qualifier that evalutes to true when the value of the given key
 	 * contains any of the given tokens (insensitively).
 	 * 
 	 * @param tokens
@@ -1848,7 +1844,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns a qualifier that evalutes to true when the value of the given key
+	 * Return a qualifier that evalutes to true when the value of the given key
 	 * contains all of the given tokens (insensitively) in the search string.
 	 * The search string will be tokenized by splitting on space characters.
 	 * 
@@ -1861,7 +1857,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns a qualifier that evalutes to true when the value of the given key
+	 * Return a qualifier that evalutes to true when the value of the given key
 	 * contains all of the given tokens (insensitively).
 	 * 
 	 * @param tokens
@@ -1873,11 +1869,11 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * <p>Returns a qualifier that evaluates to true when the given to many key
-	 * contains the given object.</p>
-	 * 
-	 * <p>Equivalent to new ERXKeyValueQualifier(key, EOQualifier.OperatorContains,
-	 * value).</p>
+	 * Return a qualifier that evaluates to true when the given to many key
+	 * contains the given object.
+	 * <p>
+	 * Equivalent to new ERXKeyValueQualifier(key, EOQualifier.OperatorContains,
+	 * value).
 	 * 
 	 * @param obj
 	 *            the object
@@ -1888,7 +1884,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * <p>Equivalent to new ERXInQualifier(key, values);</p>
+	 * Equivalent to new ERXInQualifier(key, values);
 	 * 
 	 * @param values
 	 *            the values
@@ -1909,7 +1905,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns a new ERXKey that appends the given key to this keypath. For
+	 * Return a new ERXKey that appends the given key to this keypath. For
 	 * instance, if this key is "person" and you add "firstName" to it, this
 	 * will return a new ERXKey "person.firstName".
 	 * 
@@ -1932,7 +1928,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Calls append(key)
+	 * Call append(key)
 	 * 
 	 * @param <U>
 	 *            the key type
@@ -1945,7 +1941,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns a new ERXKey that appends the given key to this keypath. For
+	 * Return a new ERXKey that appends the given key to this keypath. For
 	 * instance, if this key is "person" and you add "firstName" to it, this
 	 * will return a new ERXKey "person.firstName".
 	 * 
@@ -1969,7 +1965,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Calls append(key)
+	 * Call append(key)
 	 * 
 	 * @param <U>
 	 *            the key type
@@ -1982,7 +1978,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns a new ERXKey that appends the given key to this keypath. For
+	 * Return a new ERXKey that appends the given key to this keypath. For
 	 * instance, if this key is "person" and you add "firstName" to it, this
 	 * will return a new ERXKey "person.firstName".
 	 * 
@@ -2012,7 +2008,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Calls appendAsArray(key).
+	 * Call appendAsArray(key).
 	 * 
 	 * @param <U>
 	 *            the type
@@ -2025,7 +2021,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns the value of this keypath on the given object.
+	 * Return the value of this keypath on the given object.
 	 * 
 	 * Note: If you ERXKey representation a keypath through an NSArray, this
 	 * method will result in a ClassCastException. See the 'Note' on .append(..)
@@ -2041,7 +2037,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns the value of this keypath on the given object.
+	 * Return the value of this keypath on the given object.
 	 * 
 	 * @param obj
 	 *            the target object to apply this keypath on
@@ -2052,7 +2048,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Returns the value of this keypath on the given object cast as an NSArray.
+	 * Return the value of this keypath on the given object cast as an NSArray.
 	 * 
 	 * @param obj
 	 *            the target object to apply this keypath on
@@ -2064,7 +2060,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Sets the value of this keypath on the given object.
+	 * Set the value of this keypath on the given object.
 	 * 
 	 * @param value
 	 *            the value to set
@@ -2076,7 +2072,7 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Prefixes the keys in the given qualifier with this key. For example, if you have a qualifier on Company of name = 'mDT' 
+	 * Prefix the keys in the given qualifier with this key. For example, if you have a qualifier on Company of name = 'mDT' 
 	 * and you want to find Person eo's whose companies match that qualifier, you need to prefix all the keys in the qualifier 
 	 * to be "company.whatever" (to go through the company relationship on Person) -- so in the example you would need 
 	 * company.name = 'mDT'. Prefix provides a mechanism to do that. 

@@ -197,7 +197,6 @@ public class ERXRestFormat {
 	 * Returns the formatted version of the given object using a recursive "All" filter.
 	 * 
 	 * @param obj the object to render
-	 * @param delegate the rest delegate to use
 	 * @return obj rendered using this format
 	 */
 	public String toString(Object obj, ERXKeyFilter filter) {
@@ -209,7 +208,6 @@ public class ERXRestFormat {
 	 * Returns the formatted version of the given object using a recursive "All" filter.
 	 * 
 	 * @param obj the object to render
-	 * @param delegate the rest delegate to use
 	 * @return obj rendered using this format
 	 */
 	public String toString(Object obj, ERXRestContext context) {
@@ -221,7 +219,7 @@ public class ERXRestFormat {
 	 * 
 	 * @param obj the object to render
 	 * @param filter the filter to apply to the object
-	 * @param delegate the rest delegate to use
+	 * @param context the rest delegate to use
 	 * @return obj rendered using this format
 	 */
 	public String toString(Object obj, ERXKeyFilter filter, ERXRestContext context) {
@@ -234,7 +232,7 @@ public class ERXRestFormat {
 	 * @param classDescription the class description for the elements of the list
 	 * @param list the list
 	 * @param filter the filter
-	 * @param delegate the rest delegate to use
+	 * @param context the rest delegate to use
 	 * @return list rendered using this format
 	 */
 	public String toString(EOClassDescription classDescription, List<?> list, ERXKeyFilter filter, ERXRestContext context) {

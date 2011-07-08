@@ -7,7 +7,6 @@ public interface PropertyChangedDelegate {
 	/**
 	 * 
 	 * @param context The d2wContext of the changed property level component
-	 * @return 
 	 */
 	public NSArray<String> propertyChanged(D2WContext context);
 }

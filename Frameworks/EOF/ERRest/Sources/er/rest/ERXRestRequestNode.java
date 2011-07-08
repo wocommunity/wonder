@@ -786,7 +786,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 *            the entity name of the object to use
 	 * @param keyFilter
 	 *            the filter to use for determining which keys can be updated (or null for no update)
-	 * @param delegate
+	 * @param context
 	 *            the delegate to use
 	 * @return the object that this request node represents
 	 */
@@ -832,7 +832,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 *            the entity name of the object to use
 	 * @param keyFilter
 	 *            the filter to use for determining which keys can be updated (or null for no update)
-	 * @param delegate
+	 * @param context
 	 *            the delegate to use
 	 * @return a new instance of an object represented by this request node
 	 */
@@ -1121,7 +1121,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 *            the object to update
 	 * @param keyFilter
 	 *            the filter to use to determine how to update
-	 * @param delegate
+	 * @param context
 	 *            the delegate
 	 */
 	public void updateObjectWithFilter(Object obj, ERXKeyFilter keyFilter, ERXRestContext context) {
