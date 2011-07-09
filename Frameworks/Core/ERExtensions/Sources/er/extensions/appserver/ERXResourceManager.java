@@ -51,6 +51,15 @@ public class ERXResourceManager extends WOResourceManager {
 		catch (java.lang.SecurityException e) {
 			throw NSForwardException._runtimeExceptionForThrowable(e);
 		}
+		catch (NoSuchFieldException e) {
+			throw NSForwardException._runtimeExceptionForThrowable(e);
+		}
+		catch (IllegalArgumentException e) {
+			throw NSForwardException._runtimeExceptionForThrowable(e);
+		}
+		catch (IllegalAccessException e) {
+			throw NSForwardException._runtimeExceptionForThrowable(e);
+		}
 		String versionManagerClassName = ERXProperties.stringForKeyWithDefault("er.extensions.ERXResourceManager.versionManager", "default");
 		if ("default".equals(versionManagerClassName)) {
 			_versionManager = new DefaultVersionManager();
@@ -67,6 +76,9 @@ public class ERXResourceManager extends WOResourceManager {
 			}
 			catch (java.lang.IllegalAccessException e) {
 				throw new RuntimeException("Unable to create the specified version manager '" + versionManagerClassName + ".", e);
+			}
+			catch (ClassNotFoundException e) {
+				throw NSForwardException._runtimeExceptionForThrowable(e);
 			}
 		}
 	}
