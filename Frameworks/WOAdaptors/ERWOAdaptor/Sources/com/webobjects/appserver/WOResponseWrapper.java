@@ -1,16 +1,12 @@
 package com.webobjects.appserver;
 
-import static org.jboss.netty.buffer.ChannelBuffers.buffer;
-import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.CONTENT_LENGTH;
-import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.COOKIE;
-
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.AbstractMap.SimpleEntry;
 
 import org.apache.log4j.Logger;
 import org.jboss.netty.buffer.ChannelBuffer;
@@ -18,6 +14,7 @@ import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.handler.codec.http.Cookie;
 import org.jboss.netty.handler.codec.http.CookieEncoder;
 import org.jboss.netty.handler.codec.http.HttpHeaders;
+import org.jboss.netty.handler.codec.http.HttpHeaders.Names;
 import org.jboss.netty.handler.codec.http.HttpResponse;
 import org.jboss.netty.handler.codec.http.HttpResponseStatus;
 import org.jboss.netty.handler.codec.http.HttpVersion;
@@ -58,14 +55,16 @@ public class WOResponseWrapper implements HttpResponse {
 				wrapping._content = null;
 			} else {
 				int _length = wrapping._contentData.length();
-				this.setHeader(CONTENT_LENGTH, _length);
+				this.setHeader(Names.CONTENT_LENGTH, _length);
 				_content = ChannelBuffers.copiedBuffer(wrapping._contentData._bytesNoCopy());
 				wrapping._contentData = null;
 			}
 		} else if (wrapping.contentInputStream() != null) {
 			try {
-				_content = buffer(wrapping.contentInputStreamBufferSize());
-				wrapping.contentInputStream().read(_content.array());
+				int length = (int)wrapping.contentInputStreamLength();
+				_content = ChannelBuffers.buffer(length);
+				_content.writeBytes(wrapping.contentInputStream(), length);
+				//wrapping.contentInputStream().read(_content.array());
 				wrapping.setContentStream(null, 0, 0);
 			} catch (IOException exception) {
 				log.error(exception.getCause().getMessage());
@@ -121,7 +120,7 @@ public class WOResponseWrapper implements HttpResponse {
 
 	@Override
 	public String getHeader(String name) {
-		if (name.equals(COOKIE)) {
+		if (name.equals(Names.COOKIE)) {
 			// Encode the cookie.
 			NSArray<WOCookie> wocookies = wrapping.cookies();
 			if(!wocookies.isEmpty()) {
