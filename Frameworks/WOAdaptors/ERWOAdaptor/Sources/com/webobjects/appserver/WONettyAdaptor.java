@@ -29,7 +29,6 @@ import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 import org.jboss.netty.handler.codec.http.DefaultHttpResponse;
 import org.jboss.netty.handler.codec.http.HttpChunkAggregator;
-import org.jboss.netty.handler.codec.http.HttpContentCompressor;
 import org.jboss.netty.handler.codec.http.HttpHeaders.Names;
 import org.jboss.netty.handler.codec.http.HttpHeaders.Values;
 import org.jboss.netty.handler.codec.http.HttpRequest;
@@ -179,8 +178,6 @@ public class WONettyAdaptor extends WOAdaptor {
 			pipeline.addLast("decoder", new HttpRequestDecoder(4096, 8192, maxChunkSize));
 			pipeline.addLast("aggregator", new HttpChunkAggregator(maxFileSize));
 			pipeline.addLast("encoder", new HttpResponseEncoder());
-			// Remove the following line if you don't want automatic content compression.
-			pipeline.addLast("deflater", new HttpContentCompressor());
 			pipeline.addLast("handler", new RequestHandler());
 			return pipeline;
 		}
