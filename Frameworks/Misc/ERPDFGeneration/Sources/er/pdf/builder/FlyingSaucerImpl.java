@@ -100,6 +100,12 @@ public class FlyingSaucerImpl implements PDFBuilder {
       doc = builder.parse(is);
       if (exception != null)
         throw exception;
+      
+	  // Hook up a metadata listener to push keys and values to PDF
+      FlyingSaucerMetadataCreationListener mcl = new FlyingSaucerMetadataCreationListener();
+      mcl.parseMetaTags(doc);
+      renderer.setListener(mcl);
+      
       renderer.setDocument(doc, urlPrefix);
       renderer.layout();
     } catch (Exception e) {
