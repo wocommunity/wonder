@@ -1,0 +1,6 @@
+PageWrapper: PageWrapper {}
+
+ChatLink: WOHyperlink {
+	pageName = "ChatRoom";
+	string = "Chat";
+}
