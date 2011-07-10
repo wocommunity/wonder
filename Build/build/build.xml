@@ -851,6 +851,7 @@
             <param name="project.principal.class" value="" />
             <param name="project.name" value="ERWOAdaptor" />
             <param name="project.dir" value="Frameworks/WOAdaptors/ERWOAdaptor" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
     </target>
     <target name="ERWebSocketExample.all">
