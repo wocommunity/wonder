@@ -241,11 +241,15 @@ public class WONettyAdaptor extends WOAdaptor {
 				// Decide whether to close the connection or not.
 				boolean keepAlive = isKeepAlive(_request);
 	
+				//For reasons that escape me, empty responses fail to close properly.
+				boolean close = !(woresponse._contentLength() > 0 || woresponse.contentInputStream() != null);
+
 				// Write the response.
-				ChannelFuture future = e.getChannel().write(ERWOAdaptorUtilities.asHttpResponse(woresponse));
+				HttpResponse response = ERWOAdaptorUtilities.asHttpResponse(woresponse);
+				ChannelFuture future = e.getChannel().write(response);
 	
 				// Close the non-keep-alive connection after the write operation is done.
-				if (!keepAlive) {
+				if (close || !keepAlive) {
 					future.addListener(ChannelFutureListener.CLOSE);
 				}
 			}
