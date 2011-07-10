@@ -853,6 +853,16 @@
             <param name="project.dir" value="Frameworks/WOAdaptors/ERWOAdaptor" />
         </antcall>
     </target>
+    <target name="ERWebSocketExample.all">
+        <antcall target="global.application.${build.action}" >
+            <param name="project.type" value="application" />
+            <param name="project.principal.class" value="er.websocketexample.Application" />
+            <param name="project.name" value="ERWebSocketExample" />
+            <param name="project.dir" value="Examples/Misc/ERWebSocketExample" />
+
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERWOAdaptor" />
+        </antcall>
+    </target>
 
     <target name="JavaMemoryAdaptor.all">
         <antcall target="global.framework.${build.action}" >
@@ -1016,7 +1026,7 @@
 
     <target name="common.applications.all" depends="BugTracker.all, ERMailer.all, Uber.all, SecretPal.all, ERXTest.all" />
 
-    <target name="common.examples.all" depends="ERSeleniumExample.all, ERIndexingExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, AjaxExample2.all, YUIExample.all, EROpenIDExample.all, JavaRESTAdaptorExample.all, ERDivaliteExample.all, TickTockMan.all, ERComponentTour.all, ERRestRouteExample.all, Movies.all" />
+    <target name="common.examples.all" depends="ERSeleniumExample.all, ERIndexingExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, AjaxExample2.all, YUIExample.all, EROpenIDExample.all, JavaRESTAdaptorExample.all, ERDivaliteExample.all, TickTockMan.all, ERComponentTour.all, ERRestRouteExample.all, Movies.all, ERWebSocketExample.all" />
 
     <target name="dynareporting.frameworks.all" depends="DRGrouping.all, WRReporting.all" />
     <target name="dynareporting.examples.all" depends="DocsByExample.all, DynaReporter.all, DRGroupingTest.all" />
