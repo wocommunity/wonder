@@ -3,7 +3,6 @@
 	<classpathentry kind="src" path="Sources"/>
 	<classpathentry kind="con" path="WOFramework/ERExtensions"/>
 	<classpathentry kind="con" path="WOFramework/ERJars"/>
-	<classpathentry kind="con" path="WOFramework/ERPrototypes"/>
 	<classpathentry kind="con" path="WOFramework/JavaWOExtensions"/>
 	<classpathentry kind="con" path="WOFramework/WOOgnl"/>
 	<classpathentry kind="con" path="WOFramework/JavaEOAccess"/>
