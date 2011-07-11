@@ -93,7 +93,7 @@
             </fileset>
         </copy>
 
-        <javac srcdir="Build/taglets" destdir="${build.root}/Build/lib" debug="true">
+        <javac srcdir="Build/taglets" destdir="${build.root}/Build/lib" debug="true" includeantruntime="true">
             <compilerarg value="-Xlint:deprecation" />
             <compilerarg value="-Xlint:unchecked" />
             <classpath>
