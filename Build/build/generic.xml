@@ -267,7 +267,7 @@ There are many ways to use this script:
          
        <antcall target="${before.compile}" />
 
-       <wocompile srcdir="${project.sources.dir}" destdir="${build.classes}" debug="on" optimize="off" deprecation="off" source="${compiler.source}" target="${compiler.target}" >
+       <wocompile srcdir="${project.sources.dir}" destdir="${build.classes}" debug="on" optimize="off" deprecation="off" source="${compiler.source}" target="${compiler.target}" includeantruntime="true" >
            <!-- compilerarg value="-Xlint:unchecked" -->
            <exclude name="**/Tests/**" /> <!-- perhaps not necessary, but will not hurt. -rrk -->
            <exclude name="${classes.exclude.0}" />

@@ -60,6 +60,23 @@ public class ERXTestSuite {
     //
     //suite.addTestSuite(ERXExpiringCacheTestCase.class);
 
+    suite.addTestSuite(er.chronic.RepeaterMonthNameTest.class);
+    suite.addTestSuite(er.chronic.RepeaterYearTest.class);
+    suite.addTestSuite(er.chronic.RepeaterDayNameTest.class);
+    suite.addTestSuite(er.chronic.ParserTest.class);
+    suite.addTestSuite(er.chronic.ParseSpanTest.class);
+    suite.addTestSuite(er.chronic.RepeaterTimeTest.class);
+    suite.addTestSuite(er.chronic.TokenTestCase.class);
+    suite.addTestSuite(er.chronic.RepeaterMonthTest.class);
+    suite.addTestSuite(er.chronic.RepeaterWeekTest.class);
+    suite.addTestSuite(er.chronic.ChronicTestCase.class);
+    suite.addTestSuite(er.chronic.RepeaterHourTest.class);
+    suite.addTestSuite(er.chronic.RepeaterFortnightTest.class);
+    suite.addTestSuite(er.chronic.SpanTestCase.class);
+    suite.addTestSuite(er.chronic.HandlerTestCase.class);
+    suite.addTestSuite(er.chronic.RepeaterWeekendTest.class);
+    suite.addTestSuite(er.chronic.NumerizerTestCase.class);
+
     return suite;
   }
 }

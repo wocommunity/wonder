@@ -265,7 +265,7 @@
             <param name="project.principal.class" value="er.erxtest.Application" />
             <param name="project.name" value="ERXTest" />
             <param name="project.dir" value="Tests/ERXTest" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERPrototypes/JavaDerbyAdaptor/JavaMemoryAdaptor" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERPrototypes/JavaDerbyAdaptor/JavaMemoryAdaptor/ERChronic" />
         </antcall>
     </target>
 
@@ -1147,6 +1147,64 @@
     <target name="thrash.all">
         <antcall target="thrash.run"><param name="thrash.scheme" value="scheme:SimpleFetchTest::0-5,2-5,3-5" /></antcall>
         <antcall target="thrash.run"><param name="thrash.scheme" value="scheme:SimpleInsertTest::0-5,2-5,5-10" /></antcall>
+    </target>
+
+    <target name="test" depends="global.environment">
+        <condition property="test.target" value="test.app.found" else="no.app.found">
+            <available file="${build.root}/ERXTest.woa/ERXTest" property="test.target" />
+        </condition>
+        <antcall target="${test.target}" />
+    </target>
+
+    <target name="no.app.found">
+        <echo>
+            The ERXTest.woa application must be built and installed in the "build.root" directory in order to run tests.
+            Please try "ant applications" and then try again.
+        </echo>
+    </target>
+
+    <target name="test.app.found">
+        <property name="SLF" value="/System/Library/Frameworks" />
+        <property name="fRJ" value="frameworks/Resources/Java" />
+
+        <java classname="er.erxtest.Application" fork="true" maxmemory="128m" dir="${build.root}/ERXTest.woa">
+            <arg value="-DWORootDirectory=/System" />
+            <arg value="-DWOLocalRootDirectory=" />
+            <arg value="-DWOUserDirectory=${build.root}/ERXTest.woa" />
+            <arg value="-Der.erxtest.ERXTestListener=${er.erxtest.ERXTestListener}" />
+
+            <classpath>
+                <pathelement path="${build.root}/ERXTest.woa/Contents/Resources/Java/" />
+                <pathelement location="${build.root}/ERXTest.woa/Contents/Resources/Java/ERXTest.jar" />
+                <pathelement location="${build.root}/ERExtensions.${fRJ}/ERExtensions.jar" />
+                <pathelement location="${build.root}/ERChronic.${fRJ}/commons-lang-2.4.jar" />
+                <pathelement location="${build.root}/ERChronic.${fRJ}/ERChronic.jar" />
+                <pathelement location="${build.root}/ERJars.${fRJ}/commons-lang-2.5-sources.jar" />
+                <pathelement location="${build.root}/ERJars.${fRJ}/commons-lang-2.5.jar" />
+                <pathelement location="${build.root}/ERJars.${fRJ}/ERFoundation.jar" />
+                <pathelement location="${build.root}/ERJars.${fRJ}/ERJars.jar" />
+                <pathelement location="${build.root}/ERJars.${fRJ}/ERWebObjects.jar" />
+                <pathelement location="${build.root}/ERJars.${fRJ}/erxservletadaptor.jar" />
+                <pathelement location="${build.root}/ERJars.${fRJ}/icu4j-3_8_1.jar" />
+                <pathelement location="${build.root}/ERJars.${fRJ}/joda-time-1.6.2-sources.jar" />
+                <pathelement location="${build.root}/ERJars.${fRJ}/joda-time-1.6.2.jar" />
+                <pathelement location="${build.root}/ERJars.${fRJ}/junit-4.8.jar" />
+                <pathelement location="${build.root}/ERJars.${fRJ}/log4j-1.2.16.jar" />
+                <pathelement location="${build.root}/ERJars.${fRJ}/ognl-2.6.7.jar" />
+                <pathelement location="${build.root}/ERJars.${fRJ}/slf4j-api-1.5.0.jar" />
+                <pathelement location="${build.root}/ERJars.${fRJ}/slf4j-log4j12-1.5.0.jar" />
+                <pathelement location="${build.root}/ERPrototypes.${fRJ}/ERPrototypes.jar" />
+                <pathelement location="${build.root}/JavaMemoryAdaptor.${fRJ}/JavaMemoryAdaptor.jar" />
+                <pathelement location="${build.root}/JavaWOExtensions.${fRJ}/JavaWOExtensions.jar" />
+                <pathelement location="${SLF}/JavaEOAccess.${fRJ}/javaeoaccess.jar" />
+                <pathelement location="${SLF}/JavaEOControl.${fRJ}/javaeocontrol.jar" />
+                <pathelement location="${SLF}/JavaFoundation.${fRJ}/javafoundation.jar" />
+                <pathelement location="${SLF}/JavaJDBCAdaptor.${fRJ}/javajdbcadaptor.jar" />
+                <pathelement location="${SLF}/JavaWOJSPServlet.${fRJ}/javawojspservlet.jar" />
+                <pathelement location="${SLF}/JavaWebObjects.${fRJ}/javawebobjects.jar" />
+                <pathelement location="${SLF}/JavaXML.${fRJ}/javaxml.jar" />
+            </classpath>
+        </java>
     </target>
 
     <target name="clean">

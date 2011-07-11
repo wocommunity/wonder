@@ -104,6 +104,8 @@
         </ant>
     </target>
 
+    <target name="test"><ant antFile="Build/build/build.xml" target="test" /></target>
+
     <target name="all" depends="clean, frameworks, frameworks.install, applications, applications.install, examples, examples.install">
     </target>
 </project>
