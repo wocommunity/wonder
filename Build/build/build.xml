@@ -315,7 +315,27 @@
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
        </antcall>
     </target>
+    
+	<target name="ERJasperReportsExample.all">
+        <antcall target="global.application.${build.action}" >
+            <param name="project.principal.class" value="er.jrexample.appserver.Application" />
+            <param name="project.name" value="ERJasperReportsExample" />
+            <param name="project.dir" value="Examples/Reporting/ERJasperReportsExample" />
+            <param name="wo.system.root.bundles" value="${frameworks.system.core}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERJasperReports/ERPrototypes/WOOgnl/ERMoviesLogic/Ajax/ERTaggable/ERAttachment/ERCoolComponents" />
+       </antcall>
+    </target>
 
+	<target name="BackgroundTasks.all">
+        <antcall target="global.application.${build.action}" >
+            <param name="project.principal.class" value="wowodc.background.appserver.Application" />
+            <param name="project.name" value="BackgroundTasks" />
+            <param name="project.dir" value="Examples/Misc/BackgroundTasks" />
+            <param name="wo.system.root.bundles" value="${frameworks.system.core}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERPrototypes/WOOgnl/ERCoolComponents/Ajax/MySQLPlugIn" />
+       </antcall>
+    </target>
+    
 	<target name="ERAttributeExtension.all">
         <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="er.attributeextension.ERAttributeExtension" />
@@ -1027,7 +1047,7 @@
 
     <target name="common.applications.all" depends="BugTracker.all, ERMailer.all, Uber.all, SecretPal.all, ERXTest.all" />
 
-    <target name="common.examples.all" depends="ERSeleniumExample.all, ERIndexingExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, AjaxExample2.all, YUIExample.all, EROpenIDExample.all, JavaRESTAdaptorExample.all, ERDivaliteExample.all, TickTockMan.all, ERComponentTour.all, ERRestRouteExample.all, Movies.all, ERWebSocketExample.all" />
+    <target name="common.examples.all" depends="ERSeleniumExample.all, ERIndexingExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, AjaxExample2.all, YUIExample.all, EROpenIDExample.all, JavaRESTAdaptorExample.all, ERDivaliteExample.all, TickTockMan.all, ERComponentTour.all, ERRestRouteExample.all, Movies.all, ERWebSocketExample.all, ERJasperReportsExample.all, BackgroundTasks.all" />
 
     <target name="dynareporting.frameworks.all" depends="DRGrouping.all, WRReporting.all" />
     <target name="dynareporting.examples.all" depends="DocsByExample.all, DynaReporter.all, DRGroupingTest.all" />
