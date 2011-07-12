@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="Sources"/>
-	<classpathentry kind="src" path="Tests/Sources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaWOExtensions"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaWebObjects"/>
