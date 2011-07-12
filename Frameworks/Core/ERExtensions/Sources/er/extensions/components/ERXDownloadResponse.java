@@ -29,7 +29,7 @@ public class ERXDownloadResponse extends WOComponent {
 	private static final Logger log = Logger.getLogger(ERXDownloadResponse.class);
 
 	private String _downloadFilename;
-	private int _streamingContentSize = 0;
+	private long _streamingContentSize = 0L;
 
 	public ERXDownloadResponse(WOContext context) {
 		super(context);
@@ -56,7 +56,7 @@ public class ERXDownloadResponse extends WOComponent {
 				_downloadFilename = fileToDownload().getName();
 			} else {
 				_downloadFilename = "downloadedfile";
-			} // ~ if (fileToDownload() != null)
+			}
 		}
 		return _downloadFilename;
 	}
@@ -72,7 +72,9 @@ public class ERXDownloadResponse extends WOComponent {
 		return _fileToDownload;
 	}
 
-	/** Set the file to be downloaded. */
+	/**
+	 * @param aFile the file to be downloaded.
+	 */
 	public void setFileToDownload(File aFile) {
 		_fileToDownload = aFile;
 	}
@@ -92,7 +94,7 @@ public class ERXDownloadResponse extends WOComponent {
 	 * @param inStream
 	 * @param contentSize
 	 */
-	public void setInputStreamToDownload(InputStream inStream, int contentSize) {
+	public void setInputStreamToDownload(InputStream inStream, long contentSize) {
 		_inputStreamToDownload = inStream;
 		_streamingContentSize = contentSize;
 	}
@@ -114,7 +116,7 @@ public class ERXDownloadResponse extends WOComponent {
 			} catch (FileNotFoundException e) {
 				throw new RuntimeException(e);
 			}
-			_streamingContentSize = (int) fileToDownload().length();
+			_streamingContentSize = fileToDownload().length();
 		}
 
 		if (is == null && inputStreamToDownload() != null) {
