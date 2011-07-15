@@ -686,7 +686,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			
 			if (mainBundle != null) {
 				mainUserProps = readProperties(mainBundle, "Properties." + userName);
-				mainProps = readProperties(mainBundle, null);
+				mainProps = readProperties(mainBundle, "Properties");
 			}
 			if (mainProps == null) {
 				String woUserDir = NSProperties.getProperty("webobjects.user.dir");
@@ -960,11 +960,11 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		}
 		ERXConfigurationManager.defaultManager().setCommandLineArguments(argv);
 		ERXFrameworkPrincipal.setUpFrameworkPrincipalClass(ERXExtensions.class);
-		ERXStats.initStatisticsIfNecessary();
+		// NSPropertiesCoordinator.loadProperties();
 	}
 
 	/**
-	 * Installs several bufixes and enhancements to WODynamicElements. Sets the
+	 * Installs several bugfixes and enhancements to WODynamicElements. Sets the
 	 * Context class name to "er.extensions.ERXWOContext" if it is "WOContext".
 	 * Patches ERXWOForm, ERXWOFileUpload, ERXWOText to be used instead of
 	 * WOForm, WOFileUpload, WOText.
@@ -1034,6 +1034,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	public ERXApplication() {
 		super();
+		ERXStats.initStatisticsIfNecessary();
 
 		// WOFrameworksBaseURL and WOApplicationBaseURL properties are broken in 5.4.  
     	// This is the workaround.

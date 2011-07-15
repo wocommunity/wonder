@@ -981,7 +981,7 @@ public class ERXMigrationTable {
 	@SuppressWarnings("unchecked")
 	public NSArray<EOSQLExpression> _renameToExpressions(String newName) {
 		EOSchemaSynchronization schemaSynchronization = _database.synchronizationFactory();
-		NSArray<EOSQLExpression> expressions = schemaSynchronization.statementsToRenameTableNamed(name(), newName, NSDictionary.EmptyDictionary);
+		NSArray<EOSQLExpression> expressions = schemaSynchronization.statementsToRenameTableNamed(name(), newName, (NSDictionary<String, String>) NSDictionary.EmptyDictionary);
 		ERXMigrationDatabase._ensureNotEmpty(expressions, "rename table", true);
 		return expressions;
 	}

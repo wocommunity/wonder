@@ -9,6 +9,7 @@
 <project name="Wonder" default="all" basedir="../..">
 
     <import file="generic.xml" />
+    <property name="wonder.patch" value="54" />
 
     <property name="frameworks.wonder.jars"  value="ERJars" />
     <property name="frameworks.wonder.core"  value="${frameworks.wonder.jars}/ERExtensions/JavaWOExtensions" />
@@ -1070,9 +1071,25 @@
     <target name="_frameworks.all" depends="common.frameworks.all, excelgeneration.frameworks.all, ajax.frameworks.all, woadaptors.all, validity.frameworks.all, plugins.all, paypal.frameworks.all, dynareporting.frameworks.all, woadaptors.all, JavaMonitorFramework.all">
      </target>
 
+    <target name="patch.frameworks.5431">
+       <property name="erx.class.exclude.0" value="com/webobjects/foundation/*.*" />
+       <property name="include.source" value="true" />
+       <antcall target="_frameworks.all">
+	</antcall>
+    </target>
+
+    <target name="patch.frameworks.54">
+       <property name="include.source" value="true" />
+       <antcall target="_frameworks.all" />
+    </target>
+
+    <target name="patch.frameworks.53">
+       <property name="include.source" value="true" />
+       <antcall target="_frameworks.all" />
+    </target>
+
      <target name="frameworks.all">
-        <property name="wonder.patch" value="54" />
-        <antcall target="_frameworks.all" ></antcall>
+        <antcall target="patch.frameworks.${wonder.patch}" />
      </target>
 
     <target name="applications.all" depends="DevStudio.all, common.applications.all, validity.applications.all, JavaMonitor.all, wotaskd.all"/>
@@ -1122,9 +1139,16 @@
     </target>
 
 
-    <target name="patch.54">
-       <property name="erx.class.exclude.0" value="com/webobjects/foundation/*.*" />
+    <target name="patch.5431">
+        <property name="erx.class.exclude.0" value="com/webobjects/foundation/*.*" />
+        <property name="include.source" value="true" />
+        <antcall target="all.run" >
+            <param name="build.action" value="build" />
+        </antcall>
+    </target>
 
+    <target name="patch.54">
+        <property name="erx.class.exclude.0" value="com/webobjects/foundation/*.*" />
         <property name="include.source" value="true" />
         <antcall target="all.run" >
             <param name="build.action" value="build" />
@@ -1139,7 +1163,6 @@
     </target>
 
     <target name="build">
-        <property name="wonder.patch" value="54" />
         <antcall target="patch.${wonder.patch}" ></antcall>
     </target>
 

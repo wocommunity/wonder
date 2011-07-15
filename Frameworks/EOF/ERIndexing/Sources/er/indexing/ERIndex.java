@@ -407,7 +407,7 @@ public class ERIndex {
 
     private Directory _indexDirectory;
 
-    private NSDictionary<String, IndexAttribute> _attributes = NSDictionary.EmptyDictionary;
+    private NSDictionary<String, IndexAttribute> _attributes = (NSDictionary<String, IndexAttribute>) NSDictionary.EmptyDictionary;
 
     private final String _name;
 

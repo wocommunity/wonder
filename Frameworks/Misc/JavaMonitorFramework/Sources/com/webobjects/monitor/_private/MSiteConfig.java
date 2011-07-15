@@ -21,6 +21,8 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import org.apache.log4j.Logger;
@@ -472,7 +474,7 @@ public class MSiteConfig extends MObject {
         NSDictionary monitorRequest = new NSDictionary<String, String>("SITE", "queryWotaskd");
         NSData content = new NSData( (new _JavaMonitorCoder()).encodeRootObjectForKey(monitorRequest, "monitorRequest") );
 
-        WORequest aRequest = new WORequest(MObject._POST, MObject.directActionString, MObject._HTTP1, NSDictionary.EmptyDictionary, content, null);
+        WORequest aRequest = new WORequest(MObject._POST, MObject.directActionString, MObject._HTTP1, (Map<String, ? extends List<String>>) NSDictionary.EmptyDictionary, content, null);
         WOResponse aResponse = null;
 
         try {

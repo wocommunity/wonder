@@ -71,7 +71,7 @@ public class ERXObjectStoreCoordinatorPool {
             ERXObjectStoreCoordinatorSynchronizer.initialize();
             _sharedObjectStoreCoordinatorPool = new ERXObjectStoreCoordinatorPool(ERXProperties.intForKey("er.extensions.ERXObjectStoreCoordinatorPool.maxCoordinators"));
             log.info("setting ERXEC.factory to MultiOSCFactory");
-            ERXEC.setFactory(new MultiOSCFactory(_sharedObjectStoreCoordinatorPool, ERXEC.factory()));
+            ERXEC.setFactory(new MultiOSCFactory(_sharedObjectStoreCoordinatorPool, ERXEC._factory()));
         }
     }
     

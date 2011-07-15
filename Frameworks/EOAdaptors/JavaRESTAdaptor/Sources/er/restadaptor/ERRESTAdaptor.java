@@ -16,7 +16,7 @@ public class ERRESTAdaptor extends EOAdaptor {
   @Override
   public void setConnectionDictionary(NSDictionary dictionary) {
     if (dictionary == null) {
-      super.setConnectionDictionary(NSDictionary.EmptyDictionary);
+      super.setConnectionDictionary((NSDictionary<String, Object>) NSDictionary.EmptyDictionary);
     }
     else {
       super.setConnectionDictionary(dictionary);

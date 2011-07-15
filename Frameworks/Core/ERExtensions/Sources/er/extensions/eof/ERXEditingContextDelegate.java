@@ -62,7 +62,7 @@ public class ERXEditingContextDelegate extends Object implements java.io.Seriali
             }
             if(!_raiseOnMissingEditingContextDelegate) {
                 log.warn("Found null delegate. I will fix this for now by setting it to ERXExtensions.defaultDelegate");
-                ERXEC.factory().setDefaultDelegateOnEditingContext(editingContext);
+                ERXEC._factory().setDefaultDelegateOnEditingContext(editingContext);
                 return true;
             } else {
                 throw new IllegalStateException("Found null delegate. You can disable this check by setting er.extensions.ERXRaiseOnMissingEditingContextDelegate=false in your WebObjects.properties");

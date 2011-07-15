@@ -1221,7 +1221,7 @@ public class ERXEOControlUtilities {
         }
         
         if(string.trim().length()==0) {
-            return NSDictionary.EmptyDictionary;
+            return (NSDictionary<String, Object>)NSDictionary.EmptyDictionary;
         }
         
         EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);

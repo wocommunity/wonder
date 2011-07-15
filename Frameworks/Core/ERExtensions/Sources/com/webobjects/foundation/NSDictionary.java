@@ -393,7 +393,7 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		return NSArray.EmptyArray;
 	}
 
-	private boolean _equalsDictionary(NSDictionary<? extends K, ? extends V> otherDictionary) {
+	private boolean _equalsDictionary(NSDictionary<?, ?> otherDictionary) {
 		int count = count();
 		if (count != otherDictionary.count()) {
 			return false;
@@ -410,7 +410,7 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		return true;
 	}
 
-	public boolean isEqualToDictionary(NSDictionary<? extends K, ? extends V> otherDictionary) {
+	public boolean isEqualToDictionary(NSDictionary<?, ?> otherDictionary) {
 		if (otherDictionary == null) {
 			return false;
 		}

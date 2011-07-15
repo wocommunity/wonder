@@ -178,7 +178,7 @@ public class ERLuceneAdaptorChannel extends EOAdaptorChannel {
 			} else {
 				query = new TermQuery(new Term(key, attr.asLuceneValue(q.value())));
 			}
-			_queries.addObjects(query);
+			_queries.addObject(query);
 			return true;
 		}
 

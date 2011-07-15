@@ -1661,7 +1661,7 @@ public class ERXEC extends EOEditingContext {
 	 * 
 	 * @return editing context factory
 	 */
-	public static Factory factory() {
+	public static Factory _factory() {
 		if (factory == null) {
 			factory = new DefaultFactory();
 		}
@@ -1685,7 +1685,7 @@ public class ERXEC extends EOEditingContext {
 	 * @return a newly created editing context with the default delegate set.
 	 */
 	public static EOEditingContext newEditingContext() {
-		return factory()._newEditingContext();
+		return _factory()._newEditingContext();
 	}
 
 	/**
@@ -1744,7 +1744,7 @@ public class ERXEC extends EOEditingContext {
 	 *         delegate corresponding to the validation flag
 	 */
 	public static EOEditingContext newEditingContext(EOObjectStore parent, boolean validationEnabled) {
-		return factory()._newEditingContext(parent, validationEnabled);
+		return _factory()._newEditingContext(parent, validationEnabled);
 	}
 
 	/**
@@ -1761,7 +1761,7 @@ public class ERXEC extends EOEditingContext {
 	 *         disabled validation.
 	 */
 	public static EOEditingContext newEditingContext(boolean validation) {
-		return factory()._newEditingContext(validation);
+		return _factory()._newEditingContext(validation);
 	}
 
 	/**
@@ -1777,7 +1777,7 @@ public class ERXEC extends EOEditingContext {
 	 * @return new editing context with the given parent object store
 	 */
 	public static EOEditingContext newEditingContext(EOObjectStore objectStore) {
-		return factory()._newEditingContext(objectStore);
+		return _factory()._newEditingContext(objectStore);
 	}
 
 	/**

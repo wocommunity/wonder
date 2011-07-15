@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TimeZone;
 
+import com.webobjects.eocontrol.changeNotification.EOChangeNotificationOptions;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
@@ -26,7 +27,7 @@ import com.webobjects.foundation._NSUtilities;
 import com.webobjects.jdbcadaptor.JDBCAdaptorException;
 
 public class EOAttribute extends EOProperty implements EOPropertyListEncoding, EOSQLExpression.SQLValue {
-
+	
 	enum Characteristic {
 		ExternalType("externalType"), ColumnName("columnName"), ReadOnly("readOnly"), ClassName("className"), ValueType("valueType"), Width("width"), Precision("precision"), Scale("scale"), WriteFormat("writeFormat"), ReadFormat("readFormat"), UserInfo("userInfo"), ServerTimeZone("serverTimeZone"), ValueFactoryClassName("valueFactoryClassName"), ValueFactoryMethodName("valueFactoryMethodName"), AdaptorValueConversionClassName("adaptorValueConversionClassName"), AdaptorValueConversionMethodName("adaptorValueConversionMethodName"), FactoryMethodArgumentType("factoryMethodArgumentType"), AllowsNull("allowsNull"), ParameterDirection("parameterDirection"), InternalInfo("_internalInfo");
 
@@ -1854,5 +1855,18 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 	static {
 		_setPrimaryKeyAttributesSelector = new NSSelector("setPrimaryKeyAttributes", _NSUtilities._ArrayClassArray);
 		valueClasses = (new Class[] { Number.class, String.class, NSData.class, NSTimestamp._CLASS });
+	}
+	
+	// @Override
+	public void setChangeNotificationOptions(
+			EOChangeNotificationOptions changeNotificationOptions) {
+		// AK: method from 5.4.3.1
+		
+	}
+
+	// @Override
+	public EOChangeNotificationOptions changeNotificationOptions() {
+		// AK: method from 5.4.3.1
+		return null;
 	}
 }
