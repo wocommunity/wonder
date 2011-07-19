@@ -138,22 +138,19 @@ public class ImageMagickImageProcessor extends ERImageProcessor {
       List<String> watermarkCommandList = new LinkedList<String>();
       watermarkCommandList.add(_imageMagickCompositeBinary.getAbsolutePath());
 
-      watermarkCommandList.add("-watermark");
-	  watermarkCommandList.add("100%");
+      watermarkCommandList.add("-compose");
+      watermarkCommandList.add("screen");
 
-	  if (tileWatermark) {
-		watermarkCommandList.add("-tile");
-	  }
+      if (tileWatermark) {
+        watermarkCommandList.add("-tile");
+      }
 
-	  watermarkCommandList.add(watermarkFile.getAbsolutePath());
-	  watermarkCommandList.add(outputFile.getAbsolutePath());
-	  watermarkCommandList.add(outputFile.getAbsolutePath());
-	  
-	  String[] watermarkCommands = watermarkCommandList.toArray(new String[watermarkCommandList.size()]);
+      watermarkCommandList.add(watermarkFile.getAbsolutePath());
+      watermarkCommandList.add(outputFile.getAbsolutePath());
+      watermarkCommandList.add(outputFile.getAbsolutePath());
 
       try {
-    	System.out.println("ImageMagickProcessor.processImage: " + watermarkCommandList);
-        Result result = ERXRuntimeUtilities.execute(watermarkCommands, null, null, 0);
+        Result result = ERXRuntimeUtilities.execute(imageMagickCommands, null, null, 0);
         int exitValue = result.getExitValue();
         if (exitValue != 0) {
           log.warn("Warning: ImageMagick composite returned with a value of " + exitValue + ", error = " + result.getErrorAsString());
