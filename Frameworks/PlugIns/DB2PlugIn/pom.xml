@@ -22,19 +22,19 @@
 			<groupId>com.webobjects</groupId>
 			<artifactId>JavaFoundation</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.ibm.db2</groupId>
+			<artifactId>db2jcc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.ibm.db2</groupId>
+			<artifactId>db2jcc_license_cu</artifactId>
+		</dependency>
+		<dependency>
+  			<groupId>as400dq</groupId>
+  			<artifactId>jt400</artifactId>
+		</dependency>
 	</dependencies>
-	<dependency>
-  		<groupId>com.ibm.db2</groupId>
-  		<artifactId>db2jcc</artifactId>
-	</dependency>
-	<dependency>
-  		<groupId>com.ibm.db2</groupId>
-  		<artifactId>db2jcc_license_cu</artifactId>
-	</dependency>
-	<dependency>
-  		<groupId>as400dq</groupId>
-  		<artifactId>jt400</artifactId>
-	</dependency>
 	<build>
 		<sourceDirectory>Sources</sourceDirectory>
 	</build>
