@@ -71,4 +71,7 @@ public class ERXJodaLocalDateFormatter extends Format {
 		return ld;
 	}
 
+	public String toPattern() {
+		return _pattern;
+	}
 }
