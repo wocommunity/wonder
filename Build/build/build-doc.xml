@@ -175,6 +175,7 @@
             <link href="http://developer.apple.com/documentation/WebObjects/Reference/WO53_Reference/" packagelistLoc="${wonder.root}/Build/build/webobjects-package-list"/>
             <link href="http://jakarta.apache.org/log4j/docs/api/"/>
             <link href="http://junit.sourceforge.net/javadoc/"/>
+            <link href="http://joda-time.sourceforge.net/api-release/" />
             <tag name="author" description="Author:" scope="all" />
             <taglet name="BindingTaglet" path="${build.root}/Build/lib/" />
             <taglet name="D2WKeyTaglet" path="${build.root}/Build/lib/" />

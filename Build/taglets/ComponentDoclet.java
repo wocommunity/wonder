@@ -70,14 +70,12 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
         PageGenerator.findClassComments(comps);
         //System.out.println("comps(04): "+comps);
 
-        // Why do we need to do this? Perhaps we do not.
-//        TreeMap<String,TreeSet<String>> classNamePrefixes = PageGenerator.gatherClassesByPrefix(comps, prefixes);
-//
-        // Why do we need to do this? Perhaps we do not.
 //        PageGenerator.findApiFiles(comps, compDirs);
-//
-//        PageGenerator.findPackages(comps);
-//
+
+        PageGenerator.findPackages(comps);
+
+        PageGenerator.findClassDocURLs(comps);
+
         PageGenerator.findTagComments(comps, "@binding");
 //
 //        gatherBindingsFromApi(comps);
@@ -209,7 +207,7 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
 
             out.write("<hr size=\"4\" noshade>\n");
 
-            out.write("<a name=\"ComponentDetails\"/>\n");
+            out.write("<a name=\"ComponentDetails\"/>\n<h1>Component Details</h1>\n");
 
             keys = packageInfo.keySet().iterator();
             while (keys.hasNext()) {
