@@ -33,12 +33,12 @@ public class ERMD2WEditRelationshipHeader extends ERMD2WHeader {
     // FIXME switch to using a localized template
     public String headerString() {
     	if (_headerString == null) {
-    		D2WContext tempContext = new D2WContext();
-			tempContext.setEntity(EOUtilities.entityNamed(object().editingContext(),object().entityName()));
-			tempContext.setPropertyKey(key());
-			tempContext.setTask("editRelationship");
-    		String key = (String)tempContext.valueForKey(Keys.displayKeyForEntity);
-    		if (object() != null) {
+    	    if (object() != null) {
+    	        D2WContext tempContext = new D2WContext();
+    	        tempContext.setEntity(EOUtilities.entityNamed(object().editingContext(),object().entityName()));
+    	        tempContext.setPropertyKey(key());
+    	        tempContext.setTask("editRelationship");
+    	        String key = (String)tempContext.valueForKey(Keys.displayKeyForEntity);
     			if (key.equals("entity.name")) {
     				_headerString = localizedValueForDisplayNameOfKeyPath(key, object());
     			} else {
