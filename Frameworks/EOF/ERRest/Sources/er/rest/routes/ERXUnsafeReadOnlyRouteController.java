@@ -2,12 +2,14 @@ package er.rest.routes;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WORequest;
+import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 
 import er.extensions.eof.ERXKeyFilter;
 import er.extensions.foundation.ERXStringUtilities;
 import er.rest.ERXRestClassDescriptionFactory;
 import er.rest.ERXRestFetchSpecification;
+import er.rest.IERXRestDelegate;
 
 /**
  * If you just want to quickly drop in a controller to test your entities, you can use or extend
@@ -78,7 +80,8 @@ public class ERXUnsafeReadOnlyRouteController<T extends EOEnterpriseObject> exte
 			throw new SecurityException("You are not allowed to delete this type of object.");
 		}
 		T obj = object();
-		Object primaryKey = delegate().primaryKeyForObject(obj);
+        EOClassDescription classDescription = ERXRestClassDescriptionFactory.classDescriptionForObject(obj, false);
+		Object primaryKey = IERXRestDelegate.Factory.delegateForClassDescription(classDescription).primaryKeyForObject(obj, restContext());
 		editingContext().deleteObject(obj);
 		editingContext().saveChanges();
 		return response(primaryKey, null);
@@ -90,7 +93,8 @@ public class ERXUnsafeReadOnlyRouteController<T extends EOEnterpriseObject> exte
 		if (!allowUpdates()) {
 			throw new SecurityException("You are not allowed to create this type of object.");
 		}
-		T obj = (T) delegate().createObjectOfEntityWithID(ERXRestClassDescriptionFactory.classDescriptionForEntityName(entityName()), null);
+		EOClassDescription classDescription = ERXRestClassDescriptionFactory.classDescriptionForEntityName(entityName());
+		T obj = (T) IERXRestDelegate.Factory.delegateForClassDescription(classDescription).createObjectOfEntityWithID(classDescription, null, restContext());
 		return response(obj, showFilter());
 	}
 

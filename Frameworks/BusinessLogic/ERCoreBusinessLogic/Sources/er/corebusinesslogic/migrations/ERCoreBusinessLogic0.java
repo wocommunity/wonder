@@ -3,15 +3,19 @@ package er.corebusinesslogic.migrations;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 
+import er.extensions.foundation.ERXProperties;
 import er.extensions.migration.ERXMigrationDatabase;
 import er.extensions.migration.ERXMigrationTable;
 import er.extensions.migration.ERXModelVersion;
 
+/**
+ *
+ * @property ERCoreBusinessLogic0.languages
+ */
 public class ERCoreBusinessLogic0 extends ERXMigrationDatabase.Migration {
     
     public ERCoreBusinessLogic0() {
-        // FIXME ak: dynamic
-       super(new NSArray("en"));
+       super(ERXProperties.arrayForKey("ERCoreBusinessLogic0.languages"));
     }
     
     @Override

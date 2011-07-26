@@ -1,0 +1,16 @@
+Modernizr: ERXJavaScript {
+	filename = filename;
+	framework = framework;
+}
+
+Prefix: WOString {
+	value = formValuePrefix;
+}
+
+ShouldPostData: WOConditional {
+	condition = shouldPostData;
+}
+
+URL: WOString {
+	value = postURL;
+}

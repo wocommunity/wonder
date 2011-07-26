@@ -13,8 +13,9 @@ import org.zeroturnaround.javarebel.support.PackageClassFilter;
 /**
  * JRebel WebObjects Integration Plugin
  * 
- * @author qdolan
+ * @property wojrebel.noexclude
  *
+ * @author qdolan
  */
 public class WebObjectsPlugin implements Plugin {
   public static final String JREBEL_EVENT = "JRebelReloadEvent";

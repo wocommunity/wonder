@@ -158,7 +158,10 @@ static void sendResponse(HTTPResponse *resp)
       while (resp->content_read < resp->content_length) {
          //fwrite(resp->content,sizeof(char),resp->content_valid,stdout);
 	      FCGX_PutStr(resp->content, resp->content_valid, out);
-		 resp_getResponseContent(resp, 1);
+		 if (resp_getResponseContent(resp, 1) == -1)
+         {
+         	break;
+         }
       }
       //fwrite(resp->content,sizeof(char),resp->content_valid,stdout);
       FCGX_PutStr(resp->content, resp->content_valid, out);

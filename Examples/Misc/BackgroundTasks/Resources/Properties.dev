@@ -1,0 +1,36 @@
+## Logging
+
+# Demo tasks logging
+log4j.logger.wowodc.background.tasks.T01SimpleBackgroundTask = INFO
+log4j.logger.wowodc.background.tasks.T03BackgroundTaskWithProgressFeedback = DEBUG
+
+
+
+log4j.logger.wowodc.background.tasks = WARN
+
+log4j.logger.er.extensions.appserver.ERXNextPageForResultWOAction = DEBUG
+
+log4j.logger.er.coolcomponents.CCAjaxLongResponsePage = WARN
+
+#######################################################################
+## Customize CCAjaxLongResponsePage appearance and behavior
+#######################################################################
+
+# A default status message to display if the long running task does not implement ERXStatusInterface
+er.coolcomponents.CCAjaxLongResponsePage.defaultStatus=Go for a coffee.
+
+# Framework containing the stylesheet for CCAjaxLongResponsePage
+er.coolcomponents.CCAjaxLongResponsePage.stylesheet.framework = app
+
+# Filename of the stylesheet for CCAjaxLongResponsePage
+er.coolcomponents.CCAjaxLongResponsePage.stylesheet.filename = CustomAjaxLongResponsePage.css
+
+# Useful for developing a custom CSS style-sheet. When set to true, this flag prevents AJAX refresh on all containers
+# on the CCAjaxLongResponsePage and keeps the page open indefinitely even after the task has completed.
+#er.coolcomponents.CCAjaxLongResponsePage.stayOnLongResponsePageIndefinitely = true
+
+# Default refresh interval for CCAjaxLongResponsePage
+er.coolcomponents.CCAjaxLongResponsePage.refreshInterval = 1
+
+# Task OSC pool size
+er.extensions.concurrency.ERXTaskObjectStoreCoordinatorPool.maxCoordinators = 2

@@ -10,8 +10,8 @@ package com.webobjects.woextensions;
 /**
  * WOExceptionParser parse the stack trace of a Java exception (in fact the parse is really
  * made in WOParsedErrorLine).
+ * 
  * The stack trace is set in an NSArray that will be used in the UI in the exception page.
- *
  */
 import java.io.File;
 import java.io.FileInputStream;
@@ -45,30 +45,32 @@ public class WOExceptionParser extends Object {
     }
 
     protected NSArray _ignoredPackages() {
-        Enumeration enumerator;
         NSBundle bundle;
         String path, content;
-        NSArray tmpArray;
-        NSDictionary dic;
+        NSDictionary dic = null;
         NSMutableArray allBundles = new NSMutableArray(NSBundle.frameworkBundles());
         NSMutableArray ignored = new NSMutableArray();
-        
-        enumerator = allBundles.objectEnumerator();
-        while (enumerator.hasMoreElements()) {
+
+        for (Enumeration enumerator = allBundles.objectEnumerator(); enumerator.hasMoreElements(); ) {
             bundle = (NSBundle) enumerator.nextElement();
             path = WOApplication.application().resourceManager().pathForResourceNamed("WOIgnoredPackage.plist",bundle.name(),null);
             if (path != null) {
-                content = _stringFromFile(path);
-                dic = (NSDictionary) NSPropertyListSerialization.propertyListFromString(content);
-                tmpArray = (NSArray) dic.objectForKey("ignoredPackages");
-                if (tmpArray != null && tmpArray.count() > 0) {
-                    ignored.addObjectsFromArray(tmpArray);
+                content = _stringFromFileSafely(path);
+                if (content != null) {
+                    dic = (NSDictionary) NSPropertyListSerialization.propertyListFromString(content);
+                    if (dic != null && dic.containsKey("ignoredPackages")) {
+                        NSArray tmpArray = (NSArray) dic.objectForKey("ignoredPackages");
+                        if (tmpArray != null && tmpArray.count() > 0) {
+                            ignored.addObjectsFromArray(tmpArray);
+                        }
+                    }
                 }
             }
         }
+        System.out.println("_ignoredPackages:: "+ignored);
         return ignored;
     }
-        
+
     protected void _verifyPackageForLine(WOParsedErrorLine line, NSArray packages) {
         Enumeration enumerator;
         String ignoredPackageName, linePackageName;
@@ -91,7 +93,7 @@ public class WOExceptionParser extends Object {
         NSArray ignoredPackage;
         WOParsedErrorLine aLine;
         String line;
-        
+
         int i, size;
         try {
             _exception.printStackTrace(pWriter);
@@ -123,7 +125,6 @@ public class WOExceptionParser extends Object {
         if (_stackTrace == null) {
             _stackTrace = new NSMutableArray();
         }
-            
     }
 
     public NSArray stackTrace() {
@@ -134,6 +135,59 @@ public class WOExceptionParser extends Object {
 
     public String message() { return _message; }
 
+    /**
+     * Return a string from the contents of a file, returning null
+     * instead of any possible exception.
+     * 
+     * TODO I wonder if this has been done somewhere else in the
+     * frameworks....
+     */
+    private static String _stringFromFileSafely(String path) {
+        File f = new File(path);
+
+        if (!f.exists()) { return null; }
+
+        FileInputStream fis = null;
+        byte[] data = null;
+
+        int bytesRead = 0;
+
+        try {
+            int size = (int) f.length();
+            fis = new FileInputStream(f);
+            data = new byte[size];
+
+            while (bytesRead < size) {
+                bytesRead += fis.read(data, bytesRead, size - bytesRead);
+            }
+
+        } catch (java.io.IOException e) {
+            return null;
+        } finally {
+            if (f != null) {
+                try {
+                    fis.close();
+                } catch (java.io.IOException e) {
+                    if (NSLog.debugLoggingAllowedForLevelAndGroups(NSLog.DebugLevelInformational, NSLog.DebugGroupIO)) {
+                        NSLog.debug.appendln("Exception while closing file input stream: " + e.getMessage());
+                        NSLog.debug.appendln(e);
+                    }
+                }
+
+                f = null;
+            }
+        }
+
+        if (bytesRead == 0)
+            return null;
+        else
+            return new String(data);
+    }
+
+    /**
+     * Return a string for a file, or return an exception.
+     */
+    // TODO Are any sub-classes using this? Do they catch exceptions?
     protected static String _stringFromFile(String path) {
         File f = new File(path);
         FileInputStream fis = null;
@@ -142,7 +196,7 @@ public class WOExceptionParser extends Object {
         if (!f.exists()) {
             return null;
         }
-        
+
         try {
             int size = (int) f.length();
             fis = new FileInputStream(f);
@@ -164,7 +218,6 @@ public class WOExceptionParser extends Object {
                         NSLog.debug.appendln("Exception while closing file input stream: " + e.getMessage());
                         NSLog.debug.appendln(e);
                     }
-
                 }
 
                 f = null;

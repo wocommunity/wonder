@@ -1,5 +1,9 @@
 package er.extensions.concurrency;
 
+import java.util.concurrent.ExecutorService;
+
+import org.apache.log4j.Logger;
+
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
@@ -10,12 +14,32 @@ import er.extensions.foundation.ERXStopWatch;
  * This {@link Thread} subclass is automatically created by the {@link ERXTaskThreadFactory}
  * which in turn is used by the {@link ERXTaskThreadPoolExecutor}
  * 
- * This {@link Thread} subclass allows me to get status info when I enumerate threads in the application.
+ * The purpose of this subclass is 
+ * <ul>
+ * <li> to identify threads that were created by {@link ERXTaskThreadFactory}
+ * using instanceof when enumerating all threads
+ * <li> to store a reference to the task itself in this Thread subclass while the task is executing
+ * making it easy to get a reference to tasks for application monitoring
+ * <li> provide related static utility methods to find all tasks or tasks of a certain class that are currently running and that were
+ * created by {@link ERXTaskThreadFactory}
+ * </ul>
+ * 
+ * <p>
+ * A user does not generally need to instantiate this class. This class is generally used by {@link ExecutorService} instances
+ * that are created by {@link ERXExecutorService} static utility methods.
+ * </p>
  * 
  * @author kieran
  *
+ * @see ERXTaskThreadPoolExecutor
+ * @see ERXExecutorService
+ * @see ERXTaskThreadFactory
  */
 public class ERXTaskThread extends Thread {
+	
+	@SuppressWarnings("unused")
+	private static final Logger log = Logger.getLogger(ERXTaskThread.class);
+	
 	public ERXTaskThread(Runnable target) {
 		super(target);
 	}
@@ -28,7 +52,10 @@ public class ERXTaskThread extends Thread {
 		return _task;
 	}
 
-	/** @param task the current task being executed */
+	/** 
+	 * @param task the current task being executed 
+	 * 
+	 * TODO: Check if the Runnable is a Future wrapping the real task and unwrap it. */
 	public void setTask(Runnable task){
 		_task = task;
 	}
@@ -83,7 +110,7 @@ public class ERXTaskThread extends Thread {
 		NSMutableArray<T> tasks = new NSMutableArray<T>();
 		for (ERXTaskInfo taskInfo : taskInfos) {
 			Object r = taskInfo.task();
-			System.err.println("ERXTaskThread.taskForTaskClass(): r = " + r.toString());
+			log.debug("ERXTaskThread.taskForTaskClass(): r = " + r.toString());
 			if (clazz.isInstance(r)) {
 				tasks.add((T)r);
 			}

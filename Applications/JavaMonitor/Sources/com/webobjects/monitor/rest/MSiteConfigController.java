@@ -2,10 +2,7 @@ package com.webobjects.monitor.rest;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WORequest;
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
-import com.webobjects.monitor._private.MHost;
 import com.webobjects.monitor._private.MSiteConfig;
 
 import er.extensions.eof.ERXKeyFilter;

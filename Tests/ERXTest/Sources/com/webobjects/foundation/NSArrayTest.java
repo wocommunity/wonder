@@ -564,7 +564,7 @@ public class NSArrayTest extends ERXTestCase {
     NSArray<String> clone = array.immutableClone();
     assertEquals(array, clone);
     assertEquals(array.size(), clone.size());
-    array.addObjects("def");
+    array.addObject("def");
     assertEquals(1, clone.size());
   }
 

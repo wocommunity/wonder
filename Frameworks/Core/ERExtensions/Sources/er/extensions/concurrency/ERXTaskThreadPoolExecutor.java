@@ -2,6 +2,7 @@ package er.extensions.concurrency;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.RejectedExecutionHandler;
@@ -14,16 +15,29 @@ import org.apache.log4j.Logger;
 import er.extensions.eof.ERXEC;
 
 /**
- * This is a custom {@link ThreadPoolExecutor} subclass whose purpose in life is 
- * (1) to ensure that we initialize {@link ERXTaskThread} status before task execution and reset status after execution,
- * (2) use ERXFutureTask subclass of {@link FutureTask} so we have a reference to the wrapped task.
- * (3) tell ERXEC to unlock all editing contexts in the background thread at the end of task execution.
+<<<<<<< HEAD
+ * This is a custom {@link ThreadPoolExecutor} subclass whose purpose in life is
+ * <ul>
+ * <li>to ensure that we initialize {@link ERXTaskThread} status before task execution and reset status after execution,
+ * <li>use ERXFutureTask subclass of {@link FutureTask} so we have a reference to the wrapped task.
+ * <li>tell ERXEC to unlock all editing contexts in the background thread at the end of task execution.
+ * </ul>
  * 
+ * <p>
  * This is accomplished by overriding the protected hook methods {@link ThreadPoolExecutor#beforeExecute(Thread t, Runnable r)}
  * and {@link ThreadPoolExecutor#afterExecute(Runnable r, Throwable t)}, and also the submit methods.
+ * </p>
+ * 
+ * <p>
+ * A user does not generally need to instantiate this class. This class is generally used by {@link ExecutorService} instances
+ * that are created by {@link ERXExecutorService} static utility methods.
+ * </p>
+ * 
+ * @see ERXExecutorService
+ * @see ERXTaskThreadFactory
+ * @see ERXTaskThread
  * 
  * @author kieran
- *
  */
 public class ERXTaskThreadPoolExecutor extends ThreadPoolExecutor {
 

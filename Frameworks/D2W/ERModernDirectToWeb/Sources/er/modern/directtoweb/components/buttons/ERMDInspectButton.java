@@ -46,8 +46,6 @@ public class ERMDInspectButton extends ERMDActionButton {
      * Label for the inspect button
      * <p>
      * Defaults to "Inspect"
-     * 
-     * @return
      */
 	public String buttonLabel() {
 		if (_buttonLabel == null) {
@@ -60,8 +58,6 @@ public class ERMDInspectButton extends ERMDActionButton {
 	 * CSS class for inspect button
 	 * <p>
 	 * Defaults to "Button ObjButton InspectObjButton"
-	 * 
-	 * @return
 	 */
 	public String buttonClass() {
 		if (_buttonClass == null) {
@@ -72,8 +68,6 @@ public class ERMDInspectButton extends ERMDActionButton {
 	
 	/**
 	 * Action for inspect button
-	 * 
-	 * @return
 	 */
 	public WOActionResults inspectObjectAction() {
 		WOActionResults result = null;
@@ -95,8 +89,6 @@ public class ERMDInspectButton extends ERMDActionButton {
 	
 	/**
 	 * Action for inspect button if in-line editing is disabled
-	 * 
-	 * @return
 	 */
 	@SuppressWarnings("unchecked")
     public WOActionResults inspectObjectInPageAction() {

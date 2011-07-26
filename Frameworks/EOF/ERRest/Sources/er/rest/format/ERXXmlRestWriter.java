@@ -1,60 +1,70 @@
 package er.rest.format;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Map;
 
 import com.webobjects.foundation.NSTimestamp;
 
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
+import er.rest.ERXRestContext;
 import er.rest.ERXRestRequestNode;
 import er.rest.ERXRestUtils;
 
+/**
+ *
+ * @property ERXRest.suppressTypeAttributesForSimpleTypes
+ */
 public class ERXXmlRestWriter implements IERXRestWriter {
-	public void appendHeadersToResponse(ERXRestRequestNode node, IERXRestResponse response) {
+	public void appendHeadersToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestContext context) {
 		response.setHeader("text/xml", "Content-Type");
 	}
 
-	public void appendToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestFormat.Delegate delegate) {
-		appendHeadersToResponse(node, response);
+	public void appendToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestFormat.Delegate delegate, ERXRestContext context) {
+		appendHeadersToResponse(node, response, context);
 		response.appendContentString("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-		appendNodeToResponse(node, response, 0, delegate);
+		appendNodeToResponse(node, response, 0, delegate, context);
 	}
 
-	protected String coerceValueToString(Object value) {
-		return ERXRestUtils.coerceValueToString(value);
+	protected String coerceValueToString(Object value, ERXRestContext context) {
+		return ERXRestUtils.coerceValueToString(value, context);
 	}
 
-	protected void appendNodeToResponse(ERXRestRequestNode node, IERXRestResponse response, int indent, ERXRestFormat.Delegate delegate) {
-		delegate.nodeWillWrite(node);
+	protected void appendNodeToResponse(ERXRestRequestNode node, IERXRestResponse response, int indent, ERXRestFormat.Delegate delegate, ERXRestContext context) {
+		if (delegate != null) {
+			delegate.nodeWillWrite(node);
+		}
 		if (node.value() != null || node.isNull()) {
-			appendValueToResponse(node, response, indent);
+			appendValueToResponse(node, response, indent, context);
 		}
 		else if (node.isArray()) {
-			appendArrayToResponse(node, response, indent, delegate);
+			appendArrayToResponse(node, response, indent, delegate, context);
 		}
 		else {
-			appendDictionaryToResponse(node, response, indent, delegate);
+			appendDictionaryToResponse(node, response, indent, delegate, context);
 		}
 	}
 
-	protected void appendValueToResponse(ERXRestRequestNode node, IERXRestResponse response, int indent) {
+	protected void appendValueToResponse(ERXRestRequestNode node, IERXRestResponse response, int indent, ERXRestContext context) {
 		String name = node.name();
 		Object value = node.value();
-		String formattedValue = coerceValueToString(value);
+		String formattedValue = coerceValueToString(value, context);
 		if (formattedValue == null) {
 			indent(response, indent);
 			response.appendContentString("<");
 			response.appendContentString(name);
-			appendAttributesToResponse(node, response);
+			appendAttributesToResponse(node, response, context);
+			appendTypeToResponse(value, response);
 			response.appendContentString("/>");
 			response.appendContentString("\n");
 		}
-		else if (formattedValue != null) {
+		else {
 			indent(response, indent);
 			response.appendContentString("<");
 			response.appendContentString(name);
-			appendAttributesToResponse(node, response);
+			appendAttributesToResponse(node, response, context);
+			appendTypeToResponse(value, response);
 			response.appendContentString(">");
 
 			response.appendContentString(ERXStringUtilities.escapeNonXMLChars(formattedValue));
@@ -64,15 +74,12 @@ public class ERXXmlRestWriter implements IERXRestWriter {
 			response.appendContentString(">");
 			response.appendContentString("\n");
 		}
-		else if (indent == 0) {
-			response.appendContentString("<null/>");
-		}
 	}
 
-	protected void appendAttributesToResponse(ERXRestRequestNode node, IERXRestResponse response) {
+	protected void appendAttributesToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestContext context) {
 		for (Map.Entry<String, Object> attribute : node.attributes().entrySet()) {
 			String key = attribute.getKey();
-			String formattedValue = coerceValueToString(attribute.getValue());
+			String formattedValue = coerceValueToString(attribute.getValue(), context);
 			if (formattedValue != null) {
 				response.appendContentString(" ");
 				response.appendContentString(key);
@@ -83,7 +90,7 @@ public class ERXXmlRestWriter implements IERXRestWriter {
 		}
 	}
 
-	protected void appendDictionaryToResponse(ERXRestRequestNode node, IERXRestResponse response, int indent, ERXRestFormat.Delegate delegate) {
+	protected void appendDictionaryToResponse(ERXRestRequestNode node, IERXRestResponse response, int indent, ERXRestFormat.Delegate delegate, ERXRestContext context) {
 		String objectName = node.name();
 		if (objectName == null) {
 			objectName = node.type();
@@ -93,7 +100,7 @@ public class ERXXmlRestWriter implements IERXRestWriter {
 		response.appendContentString("<");
 		response.appendContentString(objectName);
 
-		appendAttributesToResponse(node, response);
+		appendAttributesToResponse(node, response, context);
 
 		if (node.children().size() == 0) {
 			response.appendContentString("/>");
@@ -104,7 +111,7 @@ public class ERXXmlRestWriter implements IERXRestWriter {
 			response.appendContentString("\n");
 
 			for (ERXRestRequestNode child : node.children()) {
-				appendNodeToResponse(child, response, indent + 1, delegate);
+				appendNodeToResponse(child, response, indent + 1, delegate, context);
 			}
 
 			indent(response, indent);
@@ -121,6 +128,9 @@ public class ERXXmlRestWriter implements IERXRestWriter {
 		}
 		else if (!ERXProperties.booleanForKeyWithDefault("ERXRest.suppressTypeAttributesForSimpleTypes", false)) {
 			if (value instanceof NSTimestamp) {
+				response.appendContentString(" type = \"datetime\"");
+			}
+			else if (value instanceof Date) {
 				response.appendContentString(" type = \"datetime\"");
 			}
 			else if (value instanceof Integer) {
@@ -150,19 +160,19 @@ public class ERXXmlRestWriter implements IERXRestWriter {
 		}
 	}
 
-	protected void appendArrayToResponse(ERXRestRequestNode node, IERXRestResponse response, int indent, ERXRestFormat.Delegate delegate) {
+	protected void appendArrayToResponse(ERXRestRequestNode node, IERXRestResponse response, int indent, ERXRestFormat.Delegate delegate, ERXRestContext context) {
 		indent(response, indent);	
 		String arrayName = node.name();
 		response.appendContentString("<");
 		response.appendContentString(arrayName);
 
-		appendAttributesToResponse(node, response);
+		appendAttributesToResponse(node, response, context);
 
 		response.appendContentString(">");
 		response.appendContentString("\n");
 
 		for (ERXRestRequestNode child : node.children()) {
-			appendNodeToResponse(child, response, indent + 1, delegate);
+			appendNodeToResponse(child, response, indent + 1, delegate, context);
 		}
 
 		indent(response, indent);

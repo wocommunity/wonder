@@ -16,6 +16,19 @@ import com.webobjects.foundation.NSForwardException;
 import er.extensions.ERXFrameworkPrincipal;
 import er.extensions.foundation.ERXProperties;
 
+/**
+ *
+ * @property er.caching.servers
+ * @property er.caching.server.host
+ * @property er.caching.server.port
+ * @property er.caching.server.maxItems
+ * @property er.caching.server.maxMemory
+ * @property er.caching.initialConnections
+ * @property er.caching.sleepTime
+ * @property er.caching.maxConnections
+ * @property er.caching.minConnections
+ * @property er.caching.useNagle
+ */
 public class ERCaching extends ERXFrameworkPrincipal {
 
 	private static Logger log = Logger.getLogger(ERCaching.class);

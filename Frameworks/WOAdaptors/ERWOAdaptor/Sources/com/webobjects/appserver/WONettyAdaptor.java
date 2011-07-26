@@ -2,20 +2,19 @@ package com.webobjects.appserver;
 
 import static org.jboss.netty.channel.Channels.pipeline;
 import static org.jboss.netty.handler.codec.http.HttpHeaders.isKeepAlive;
-import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.COOKIE;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
-import java.util.Map;
-import java.util.Set;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.Executors;
 
 import org.apache.log4j.Logger;
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.buffer.ChannelBufferInputStream;
+import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFactory;
 import org.jboss.netty.channel.ChannelFuture;
@@ -23,28 +22,35 @@ import org.jboss.netty.channel.ChannelFutureListener;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
+import org.jboss.netty.channel.ChannelStateEvent;
 import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
-import org.jboss.netty.handler.codec.http.Cookie;
-import org.jboss.netty.handler.codec.http.CookieDecoder;
+import org.jboss.netty.handler.codec.http.DefaultHttpResponse;
 import org.jboss.netty.handler.codec.http.HttpChunkAggregator;
-import org.jboss.netty.handler.codec.http.HttpContentCompressor;
+import org.jboss.netty.handler.codec.http.HttpHeaders.Names;
+import org.jboss.netty.handler.codec.http.HttpHeaders.Values;
 import org.jboss.netty.handler.codec.http.HttpRequest;
 import org.jboss.netty.handler.codec.http.HttpRequestDecoder;
 import org.jboss.netty.handler.codec.http.HttpResponse;
 import org.jboss.netty.handler.codec.http.HttpResponseEncoder;
-import org.jboss.netty.logging.CommonsLoggerFactory;
-import org.jboss.netty.logging.InternalLogger;
+import org.jboss.netty.handler.codec.http.HttpResponseStatus;
+import org.jboss.netty.handler.codec.http.HttpVersion;
+import org.jboss.netty.handler.codec.http.websocket.WebSocketFrame;
+import org.jboss.netty.handler.codec.http.websocket.WebSocketFrameDecoder;
+import org.jboss.netty.handler.codec.http.websocket.WebSocketFrameEncoder;
 
-import com.webobjects.appserver._private.WOInputStreamData;
 import com.webobjects.appserver._private.WOProperties;
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDelayedCallbackCenter;
 import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSNotificationCenter;
+
+import er.woadaptor.ERWOAdaptorUtilities;
+import er.woadaptor.websockets.WebSocket;
+import er.woadaptor.websockets.WebSocketFactory;
+import er.woadaptor.websockets.WebSocketStore;
 
 /**
  * How to use the WONettyAdaptor:
@@ -68,13 +74,14 @@ import com.webobjects.foundation.NSMutableDictionary;
  *   -WOAllowRapidTurnaround false
  * 
  * @author ravim
+ * @author ramsey (WebSocket support)
  * 
- * @version 1.0
+ * @version 2.0
  */
 public class WONettyAdaptor extends WOAdaptor {
 
     private static final Logger log = Logger.getLogger(WONettyAdaptor.class);
-
+    
     private int _port;
     private String _hostname;
     
@@ -158,9 +165,10 @@ public class WONettyAdaptor extends WOAdaptor {
 	  * 
 	  * @property WOFileUpload.sizeLimit	Max file upload size permitted
 	  */
-	protected class PipelineFactory implements ChannelPipelineFactory {
+	protected static class PipelineFactory implements ChannelPipelineFactory {
 		
-		public final Integer maxChunkSize = Integer.getInteger("WOMaxIOBufferSize", 8196);		// TODO ravi: CHECKME Netty default is 8192; WO default is 8196(!?)
+		// TODO ravi: CHECKME Netty default is 8192; WO default is 8196(!?)
+		public final Integer maxChunkSize = Integer.getInteger("WOMaxIOBufferSize", 8196);
 		public final Integer maxFileSize = Integer.getInteger("WOFileUpload.sizeLimit", 1024*1024*100);
 		
 		public ChannelPipeline getPipeline() throws Exception {
@@ -170,81 +178,9 @@ public class WONettyAdaptor extends WOAdaptor {
 			pipeline.addLast("decoder", new HttpRequestDecoder(4096, 8192, maxChunkSize));
 			pipeline.addLast("aggregator", new HttpChunkAggregator(maxFileSize));
 			pipeline.addLast("encoder", new HttpResponseEncoder());
-			// Remove the following line if you don't want automatic content compression.
-			pipeline.addLast("deflater", new HttpContentCompressor());
 			pipeline.addLast("handler", new RequestHandler());
 			return pipeline;
 		}
-	}
-	
-	/**
-	 * Converts a Netty HttpRequest to a WORequest
-	 * 
-	 * @param request	Netty HttpRequest
-	 * @return	a WORequest
-	 * @throws IOException
-	 */
-	private static WORequest asWORequest(HttpRequest request) throws IOException {
-		// headers
-        NSMutableDictionary<String, NSArray<String>> headers = new NSMutableDictionary<String, NSArray<String>>();
-        for (Map.Entry<String, String> header: request.getHeaders()) {
-        	headers.setObjectForKey(new NSArray<String>(header.getValue().split(",")), header.getKey());
-        }
-        
-        // content
-        ChannelBuffer _content = request.getContent();
-		NSData contentData = (_content.readable()) ? new WOInputStreamData(new NSData(new ChannelBufferInputStream(_content), 4096)) : NSData.EmptyData;	        
-		
-		// create request
-		WORequest _worequest = WOApplication.application().createRequest(
-				request.getMethod().getName(), 
-				request.getUri(), 
-				request.getProtocolVersion().getText(), 
-        		headers,
-        		contentData, 
-        		null);
-		
-		// cookies
-		String cookieString = request.getHeader(COOKIE);
-		if (cookieString != null) {
-			CookieDecoder cookieDecoder = new CookieDecoder();
-			Set<Cookie> cookies = cookieDecoder.decode(cookieString);
-			if(!cookies.isEmpty()) {
-				for (Cookie cookie : cookies) {
-					WOCookie wocookie = asWOCookie(cookie);
-					_worequest.addCookie(wocookie);
-				}
-			}
-		} 
-		
-		return _worequest;
-	}
-	
-	/**
-	 * Converts a Netty Cookie to a WOCookie
-	 * 
-	 * @param cookie	Netty Cookie
-	 * @return	A WOCookie
-	 */
-	private static WOCookie asWOCookie(Cookie cookie) {
-		WOCookie wocookie = new WOCookie(
-				cookie.getName(),
-				cookie.getValue(),
-				cookie.getPath(),
-				cookie.getDomain(),
-				cookie.getMaxAge(),
-				cookie.isSecure());
-		return wocookie;
-	}
-	
-	/**
-	 * Converts a WOResponse to a Netty HttpResponse
-	 * 
-	 * @param woresponse	A WOResponse
-	 * @return	HttpResponse
-	 */
-	private static HttpResponse asHttpResponse(WOResponse woresponse) {
-		return new WOResponseWrapper(woresponse);
 	}
 
 	/**
@@ -258,34 +194,120 @@ public class WONettyAdaptor extends WOAdaptor {
 	 * 
 	 * @author ravim 	ERWOAdaptor/WONettyAdaptor version
 	 */
-	protected class RequestHandler extends SimpleChannelUpstreamHandler {
+	protected static class RequestHandler extends SimpleChannelUpstreamHandler {
 		
-		private InternalLogger log = CommonsLoggerFactory.getDefaultFactory().newInstance(this.getClass().getName());
+		private static final Logger log = Logger.getLogger(RequestHandler.class);
 
+		public void channelClosed(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
+			super.channelClosed(ctx, e);
+			NSNotificationCenter.defaultCenter().postNotification(WebSocketStore.CHANNEL_CLOSED_NOTIFICATION, ctx.getChannel());
+		}
+		
 		/**
 		 * @see <a href="http://docs.jboss.org/netty/3.2/api/org/jboss/netty/channel/SimpleChannelUpstreamHandler.html#messageReceived(org.jboss.netty.channel.ChannelHandlerContext,%20org.jboss.netty.channel.MessageEvent)">SimpleChannelUpstreamHandler</a>
 		 */
 		@Override
 		public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
-			HttpRequest _request = (HttpRequest) e.getMessage();
-
-			WORequest worequest = asWORequest(_request);
-			worequest._setOriginatingAddress(((InetSocketAddress) ctx.getChannel().getRemoteAddress()).getAddress());
-			WOResponse woresponse = WOApplication.application().dispatchRequest(worequest);
-
-			// send a response
-			NSDelayedCallbackCenter.defaultCenter().eventEnded();
-
-			// Decide whether to close the connection or not.
-			boolean keepAlive = isKeepAlive(_request);
-
-			// Write the response.
-			ChannelFuture future = e.getChannel().write(asHttpResponse(woresponse));
-
-			// Close the non-keep-alive connection after the write operation is done.
-			if (!keepAlive) {
-				future.addListener(ChannelFutureListener.CLOSE);
+			Object msg = e.getMessage();
+			if(msg instanceof WebSocketFrame) {
+				handleWebSocketFrame(ctx, e, (WebSocketFrame)msg);
+			} else if(msg instanceof HttpRequest) {
+				handleHTTPRequest(ctx, e, (HttpRequest)msg);
 			}
+		}
+		
+		protected void handleWebSocketFrame(ChannelHandlerContext ctx, MessageEvent e, WebSocketFrame frame) {
+			WebSocket socket = WebSocketStore.defaultWebSocketStore().socketForChannel(e.getChannel());
+			if(socket != null) {
+				socket.receiveFrame(frame);
+			}
+		}
+		
+		protected void handleHTTPRequest(ChannelHandlerContext ctx, MessageEvent e, HttpRequest _request) throws IOException {
+			
+			if(Values.UPGRADE.equalsIgnoreCase(_request.getHeader(Names.CONNECTION)) 
+					&& Values.WEBSOCKET.equalsIgnoreCase(_request.getHeader(Names.UPGRADE))) {
+				
+				handleUpgradeRequest(ctx, _request);
+			} else {
+				
+				WORequest worequest = ERWOAdaptorUtilities.asWORequest(_request);
+				worequest._setOriginatingAddress(((InetSocketAddress) ctx.getChannel().getRemoteAddress()).getAddress());
+				WOResponse woresponse = WOApplication.application().dispatchRequest(worequest);
+	
+				// send a response
+				NSDelayedCallbackCenter.defaultCenter().eventEnded();
+	
+				// Decide whether to close the connection or not.
+				boolean keepAlive = isKeepAlive(_request);
+	
+				//For reasons that escape me, empty responses fail to close properly.
+				boolean close = !(woresponse._contentLength() > 0 || woresponse.contentInputStream() != null);
+
+				// Write the response.
+				HttpResponse response = ERWOAdaptorUtilities.asHttpResponse(woresponse);
+				ChannelFuture future = e.getChannel().write(response);
+	
+				// Close the non-keep-alive connection after the write operation is done.
+				if (close || !keepAlive) {
+					future.addListener(ChannelFutureListener.CLOSE);
+				}
+			}
+		}
+		
+		protected void handleUpgradeRequest(ChannelHandlerContext ctx, HttpRequest req) {
+			//If factory doesn't exist, close the upgrade request channel
+			WebSocketFactory factory = WebSocketStore.defaultWebSocketStore().factory();
+			if(factory == null) {
+				ctx.getChannel().close();
+				return;
+			}
+
+			//Generate response headers
+			HttpResponse response = new DefaultHttpResponse(HttpVersion.HTTP_1_1, new HttpResponseStatus(101, "Switching Protocols"));
+			response.addHeader(Names.UPGRADE, Values.WEBSOCKET);
+			response.addHeader(Names.CONNECTION, Values.UPGRADE);
+			response.addHeader(Names.SEC_WEBSOCKET_ORIGIN, req.getHeader(Names.ORIGIN));
+			response.addHeader(Names.SEC_WEBSOCKET_LOCATION, ERWOAdaptorUtilities.getWebSocketLocation(req));
+			String protocol = req.getHeader(Names.SEC_WEBSOCKET_PROTOCOL);
+			if (protocol != null) {
+				response.addHeader(Names.SEC_WEBSOCKET_PROTOCOL, protocol);
+			}
+
+			// Calculate the answer of the challenge.
+			String key1 = req.getHeader(Names.SEC_WEBSOCKET_KEY1);
+			String key2 = req.getHeader(Names.SEC_WEBSOCKET_KEY2);
+			int a = (int) (Long.parseLong(key1.replaceAll("[^0-9]", "")) / key1.replaceAll("[^ ]", "").length());
+			int b = (int) (Long.parseLong(key2.replaceAll("[^0-9]", "")) / key2.replaceAll("[^ ]", "").length());
+			long c = req.getContent().readLong();
+			ChannelBuffer input = ChannelBuffers.buffer(16);
+			input.writeInt(a);
+			input.writeInt(b);
+			input.writeLong(c);
+			byte[] out = null;
+			try {
+				out = MessageDigest.getInstance("MD5").digest(input.array());
+			} catch(NoSuchAlgorithmException e) {
+				throw NSForwardException._runtimeExceptionForThrowable(e);
+			}
+			ChannelBuffer output = ChannelBuffers.wrappedBuffer(out);
+			response.setContent(output);
+			
+			//Update the channel pipeline
+			Channel socketChannel = ctx.getChannel();
+			ChannelPipeline p = socketChannel.getPipeline();
+			p.remove("aggregator");
+			p.replace("decoder","wsdecoder",new WebSocketFrameDecoder());
+			
+			//Create a WebSocket instance to handle frames
+			WebSocket socket = factory.create(socketChannel, req);
+			WebSocketStore.defaultWebSocketStore().takeSocketForChannel(socket, socketChannel);
+
+			//Write the response, then update the pipeline encoder
+			socketChannel.write(response);
+			p.replace("encoder", "wsencoder", new WebSocketFrameEncoder());
+			
+			socket.didUpgrade();
 		}
 
 		/**

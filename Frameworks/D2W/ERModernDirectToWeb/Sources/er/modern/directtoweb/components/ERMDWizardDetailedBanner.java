@@ -21,8 +21,6 @@ public class ERMDWizardDetailedBanner extends ERMDWizardBanner {
 
     /**
      * CSS class for the current step list li
-     * 
-     * @return
      */
 	public String listItemClass() {
 		String result = "";
@@ -40,8 +38,6 @@ public class ERMDWizardDetailedBanner extends ERMDWizardBanner {
 	
 	/**
 	 * Display number for the current setp list li
-	 * 
-	 * @return
 	 */
 	public int currentStepNumber() {
 		return index + 1;

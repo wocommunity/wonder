@@ -108,13 +108,50 @@ import er.extensions.statistics.ERXStats;
 
 /**
  * ERXApplication is the abstract superclass of WebObjects applications built
- * with the ER frameworks.<br/> <br/> Useful enhancements include the ability
- * to change the deployed name of the application, support for automatic
- * application restarting at given intervals and more context information when
- * handling exceptions.
+ * with the ER frameworks.
+ *
+ * Useful enhancements include the ability to change the deployed name of
+ * the application, support for automatic application restarting at given intervals
+ * and more context information when handling exceptions.
+ * 
+ * @property AppShouldExitOnOutOfMemoryError
+ * @property ERApplicationName
+ * @property ERApplicationNameSuffix
+ * @property ERTimeToDie
+ * @property ERTimeToKill
+ * @property ERTimeToLive
+ * @property NSProjectBundleEnabled
+ * @property WOIDE
+ * @property _DisableClasspathReorder
+ * @property er.extensions.ERXApplication.DefaultEncoding
+ * @property er.extensions.ERXApplication.DefaultMessageEncoding
+ * @property er.extensions.ERXApplication.StatisticsBaseLogPath
+ * @property er.extensions.ERXApplication.StatisticsLogRotationFrequency
+ * @property er.extensions.ERXApplication.developmentMode
+ * @property er.extensions.ERXApplication.developmentMode
+ * @property er.extensions.ERXApplication.fixCachingEnabled
+ * @property er.extensions.ERXApplication.lowMemBufferSize
+ * @property er.extensions.ERXApplication.memoryLowThreshold
+ * @property er.extensions.ERXApplication.memoryStarvedThreshold
+ * @property er.extensions.ERXApplication.memoryThreshold
+ * @property er.extensions.ERXApplication.redirectOnMissingObjects
+ * @property er.extensions.ERXApplication.replaceApplicationPath.pattern
+ * @property er.extensions.ERXApplication.replaceApplicationPath.replace
+ * @property er.extensions.ERXApplication.responseCompressionEnabled
+ * @property er.extensions.ERXApplication.responseCompressionTypes
+ * @property er.extensions.ERXApplication.rewriteDirectConnect
+ * @property er.extensions.ERXApplication.ssl.enabled
+ * @property er.extensions.ERXApplication.ssl.host
+ * @property er.extensions.ERXApplication.ssl.port
+ * @property er.extensions.ERXApplication.traceOpenEditingContextLocks
+ * @property er.extensions.ERXApplication.traceOpenEditingContextLocks
+ * @property er.extensions.ERXApplication.useEditingContextUnlocker
+ * @property er.extensions.ERXApplication.useEditingContextUnlocker
+ * @property er.extensions.ERXApplication.useSessionStoreDeadlockDetection
+ * @property er.extensions.ERXComponentActionRedirector.enabled
  */
-
 public abstract class ERXApplication extends ERXAjaxApplication implements ERXGracefulShutdown.GracefulApplication {
+
 	private static Boolean isWO54 = null;
 
 	/** logging support */
@@ -649,7 +686,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			
 			if (mainBundle != null) {
 				mainUserProps = readProperties(mainBundle, "Properties." + userName);
-				mainProps = readProperties(mainBundle, null);
+				mainProps = readProperties(mainBundle, "Properties");
 			}
 			if (mainProps == null) {
 				String woUserDir = NSProperties.getProperty("webobjects.user.dir");
@@ -825,9 +862,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			}
 		}
 
-		private static NSMutableDictionary<String, NSMutableArray<String>> packages = new NSMutableDictionary<String, NSMutableArray<String>>();
+		private NSMutableDictionary<String, NSMutableArray<String>> packages = new NSMutableDictionary<String, NSMutableArray<String>>();
 
-		private static NSMutableDictionary<String, NSMutableSet<Entry>> classes = new NSMutableDictionary<String, NSMutableSet<Entry>>();
+		private NSMutableDictionary<String, NSMutableSet<Entry>> classes = new NSMutableDictionary<String, NSMutableSet<Entry>>();
 
 		private void processJar(String jar) {
 
@@ -923,11 +960,11 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		}
 		ERXConfigurationManager.defaultManager().setCommandLineArguments(argv);
 		ERXFrameworkPrincipal.setUpFrameworkPrincipalClass(ERXExtensions.class);
-		ERXStats.initStatisticsIfNecessary();
+		// NSPropertiesCoordinator.loadProperties();
 	}
 
 	/**
-	 * Installs several bufixes and enhancements to WODynamicElements. Sets the
+	 * Installs several bugfixes and enhancements to WODynamicElements. Sets the
 	 * Context class name to "er.extensions.ERXWOContext" if it is "WOContext".
 	 * Patches ERXWOForm, ERXWOFileUpload, ERXWOText to be used instead of
 	 * WOForm, WOFileUpload, WOText.
@@ -997,6 +1034,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	public ERXApplication() {
 		super();
+		ERXStats.initStatisticsIfNecessary();
 
 		// WOFrameworksBaseURL and WOApplicationBaseURL properties are broken in 5.4.  
     	// This is the workaround.
@@ -1117,7 +1155,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	public String _newLocationForRequest(WORequest aRequest) {
 		return _rewriteURL(super._newLocationForRequest(aRequest));
 	}
-	
 	/**
 	 * Decides whether to use editing context unlocking.
 	 * 

@@ -1,0 +1,46 @@
+<wo:PageWrapper>
+  <div class = "section container append-bottom">
+  <div style = "float: right;">
+  <wo:link action = "$refresh">
+  <wo:img filename = "arrow_refresh.png" />
+  </wo:link>
+  </div>
+    <h1>TaskInfo Detail</h1>
+    <dl class = "attributes">
+      <dt>Task ID</dt>
+      <dd><wo:str value = "$taskInfo.primaryKey" /></dd>
+            <dt>Status</dt>
+      <dd><wo:str value = "$taskInfo.workflowState" /></dd>
+      <dt>Duration</dt>
+      <dd><wo:str value = "$taskInfo.duration" formatter = "$durationFormatter" /></dd>
+      <dt>Start Time</dt>
+      <dd><wo:str value = "$taskInfo.startTime" formatter = "$timeFormatter" /></dd>
+      <dt>Number Range</dt>
+      <dd>From 
+        <wo:str value = "$taskInfo.startNumber" formatter = "$wholeNumberFormatter" />
+        to 
+        <wo:str value = "$taskInfo.endNumber" formatter = "$wholeNumberFormatter" />
+      </dd>
+      <dt>Count of Numbers Checked</dt>
+      <dd><wo:str value = "$taskInfo.countResultItems" formatter = "$wholeNumberFormatter" /></dd>
+      <dt>Count of Primes</dt>
+      <dd>
+        <wo:str value = "$taskInfo.countPrimes" formatter = "$wholeNumberFormatter" />
+        (<wo:str value = "$taskInfo.percentagePrimes" numberformat = "#0%" />)</dd>
+      <dt>Processing Rate</dt>
+      <dd><wo:str value = "$taskInfo.processingRate" formatter = "$wholeNumberFormatter" /> per Second</dd>
+      <wo:if condition = "$taskInfo.isReadyForFactorialProcessing">
+        <dt>&nbsp;</dt>
+        <dd>
+          <wo:link action = "$processFactorials">Process Factorials</wo:link>
+        </dd>
+      </wo:if>
+            <wo:if condition = "$taskInfo.isFactorialProcessingDone">
+        <dt>Count of Factorial Primes</dt>
+        <dd>
+          <wo:str value = "$taskInfo.countFactorialPrimes" formatter = "$wholeNumberFormatter" />
+        </dd>
+      </wo:if>
+    </dl>
+  </div>
+</wo:PageWrapper>

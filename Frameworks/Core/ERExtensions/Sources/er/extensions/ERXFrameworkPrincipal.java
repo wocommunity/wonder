@@ -180,10 +180,12 @@ public abstract class ERXFrameworkPrincipal {
                 	principal.initialize();
                 	launchingFrameworks.addObject(principal);
                 	NSLog.debug.appendln("Initialized : " + c.getName());
+                	//System.out.println("Initialized : " + c.getName());
                 }
 
             } else {
                 NSLog.debug.appendln("Was already inited: " + c.getName());
+                //System.out.println("Was already inited : " + c.getName());
             }
         } catch (InstantiationException e) {
             throw NSForwardException._runtimeExceptionForThrowable(e);

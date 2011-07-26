@@ -7,7 +7,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 
 /**
- * AjaxValue provides a method for serializing Objects into a Javascript-compatible format
+ * AjaxValue provides a method for serializing Objects into a JavaScript-compatible format
  * with hinting via AjaxOption.Type constants.
  * 
  * @author mschrag
@@ -33,11 +33,32 @@ public class AjaxValue {
 		return escapedValue;
 	}
 	
+	/**
+	 * Creates AjaxValue for value with the type guessed at.
+	 * 
+	 * @see AjaxValue#AjaxValue(er.ajax.AjaxOption.Type, Object)
+	 *
+	 * @param value the value to make into an AjaxValue
+	 */
 	public AjaxValue(Object value) {
 		this(AjaxOption.DEFAULT, value);
 	}
 
+	/**
+	 * Creates AjaxValue for value with the indicated type.  If type is AjaxOption.DEFAULT, then
+	 * the actual type will be inferred if value is String, Number, Boolean, NSArray, NSDictionary, 
+	 * or AjaxValue (if value is an AjaxValue then both type and value are taken from value).
+	 * 
+	 * @see AjaxValue#AjaxValue(Object)
+	 * @see AjaxOption.Type
+	 * 
+	 * @param type one of AjaxOption.Type constants from AjaxOption
+	 * @param value the value to make into an AjaxValue
+	 */
 	public AjaxValue(AjaxOption.Type type, Object value) {
+		_type = type;
+		_value = value;
+		
 		if (type == AjaxOption.DEFAULT) {
 			if (value instanceof String) {
 				_type = AjaxOption.STRING;
@@ -58,17 +79,12 @@ public class AjaxValue {
 				_type = ((AjaxValue)value)._type;
 				_value = ((AjaxValue)value)._value;
 			}
-			else {
-				_type = type;
-			}
-			_value = value;
-		}
-		else {
-			_type = type;
-			_value = value;
 		}
 	}
 
+	/**
+	 * @return a String representing this AjaxValue in a form suitable for use in JavaScript
+	 */
 	public String javascriptValue() {
 		String strValue;
 
@@ -149,7 +165,7 @@ public class AjaxValue {
 				NSArray arrayValue = (NSArray) _value;
 				int count = arrayValue.count();
 				if (count == 1) {
-					strValue = "'" + arrayValue.objectAtIndex(0).toString() + "'";
+					strValue = new AjaxValue(AjaxOption.STRING, arrayValue.objectAtIndex(0)).javascriptValue();
 				}
 				else if (count > 0) {
 					StringBuffer sb = new StringBuffer();

@@ -29,6 +29,10 @@ import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.foundation.ERXProperties;
 
+/**
+ *
+ * @property er.pdf.validation
+ */
 public class FlyingSaucerImpl implements PDFBuilder {
   private static final DocumentBuilderFactory _builderFactory;
 
@@ -96,6 +100,12 @@ public class FlyingSaucerImpl implements PDFBuilder {
       doc = builder.parse(is);
       if (exception != null)
         throw exception;
+      
+	  // Hook up a metadata listener to push keys and values to PDF
+      FlyingSaucerMetadataCreationListener mcl = new FlyingSaucerMetadataCreationListener();
+      mcl.parseMetaTags(doc);
+      renderer.setListener(mcl);
+      
       renderer.setDocument(doc, urlPrefix);
       renderer.layout();
     } catch (Exception e) {

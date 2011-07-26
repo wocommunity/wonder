@@ -19,5 +19,6 @@
 	<classpathentry kind="con" path="WOFramework/JavaDirectToWeb"/>
 	<classpathentry kind="con" path="WOFramework/JavaEOProject"/>
 	<classpathentry kind="con" path="WOFramework/JavaDTWGeneration"/>
+	<classpathentry kind="con" path="WOFramework/ERChronic"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

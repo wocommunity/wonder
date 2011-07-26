@@ -29,6 +29,8 @@ import er.extensions.foundation.ERXSelectorUtilities;
 /**
  * EO subclass that has a timestamp with its creation date, the most recent modification, 
  * and a log entry describing the change.
+ *
+ * @property er.corebusinesslogic.ERCStampedEnterpriseObject.touchReadOnlyEntities
  */
 public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
 

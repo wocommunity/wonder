@@ -146,8 +146,6 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
      * Value displayed by the AjaxAutoFill field, if nothing is entered in the
      * field it will return either the kvc value of 'keyWhenRelationship' on the related
      * entity or the kvc value of 'userPresentableDescription'
-     * 
-     * @return
      */
     public String searchValue() {
     	if (ERXStringUtilities.stringIsNullOrEmpty(_searchValue) && currentSelection() != null) {
@@ -167,8 +165,6 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
 	
 	/**
 	 * Returns the currently selected destination entity
-	 * 
-	 * @return
 	 */
 	public EOEnterpriseObject currentSelection() {
 		if (_currentSelection == null)
@@ -180,8 +176,6 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
 	
 	/**
 	 * Returns the array of available matching destination entities
-	 * 
-	 * @return
 	 */
     public NSArray<EOEnterpriseObject> currentObjects() {
 		NSArray<EOEnterpriseObject> result = null;
@@ -199,8 +193,6 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
     /**
      * Returns the display value for the available matching destination entities in the
      * drop down list.
-     * 
-     * @return
      */
 	public String itemDisplayString() {
 		return (String)item.valueForKey(keyWhenRelationship());
@@ -208,8 +200,6 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
 	
 	/**
 	 * Action called when the user makes a selection from the AjaxAutoComplete
-	 * 
-	 * @return
 	 */
 	public WOActionResults selectObject() {
 //		log.debug("selectobject called: " + item);
@@ -230,8 +220,6 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
 	
 	/**
 	 * Action called when user clicks the Add button
-	 * 
-	 * @return
 	 */
 	@SuppressWarnings("unchecked")
 	public WOActionResults addObject() {

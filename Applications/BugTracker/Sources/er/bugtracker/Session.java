@@ -13,11 +13,9 @@ import com.webobjects.directtoweb.D2W;
 import com.webobjects.directtoweb.D2WPage;
 import com.webobjects.directtoweb.EditPageInterface;
 import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
-import com.webobjects.foundation.NSArray._SumNumberOperator;
 
 import er.corebusinesslogic.ERCoreBusinessLogic;
 import er.extensions.appserver.ERXSession;

@@ -1,0 +1,15 @@
+# A default status message to display if the long running task does not implement ERXStatusInterface
+#er.coolcomponents.CCAjaxLongResponsePage.defaultStatus=Please wait...
+
+# Framework containing the stylesheet for CCAjaxLongResponsePage
+#er.coolcomponents.CCAjaxLongResponsePage.stylesheet.framework = ERCoolComponents
+
+# Filename of the stylesheet for CCAjaxLongResponsePage
+#er.coolcomponents.CCAjaxLongResponsePage.stylesheet.filename = CCAjaxLongResponsePage.css
+
+# Useful for developing a custom CSS style-sheet. When set to true, this flag prevents AJAX refresh on all containers
+# on the CCAjaxLongResponsePage and keeps the page open indefinitely even after the task has completed.
+#er.coolcomponents.CCAjaxLongResponsePage.stayOnLongResponsePageIndefinitely = false
+
+# Default refresh interval for CCAjaxLongResponsePage
+#er.coolcomponents.CCAjaxLongResponsePage.refreshInterval = 2

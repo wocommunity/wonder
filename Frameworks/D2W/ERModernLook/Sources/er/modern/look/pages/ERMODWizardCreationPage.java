@@ -107,8 +107,7 @@ public class ERMODWizardCreationPage extends ERD2WWizardCreationPageTemplate {
 	}
 	
 	/**
-	 * Action called when the cancel button is clicked
-	 * @return
+	 * Action called when the cancel button is clicked.
 	 */
 	public WOComponent doCancelAction() {
 		showCancelDialog = false;
@@ -116,8 +115,7 @@ public class ERMODWizardCreationPage extends ERD2WWizardCreationPageTemplate {
 	}
 	
 	/**
-	 * Action called when the cancel dialog is dismissed
-	 * @return
+	 * Action called when the cancel dialog is dismissed.
 	 */
 	public WOActionResults dismissCancelDialogAction() {
 		showCancelDialog = false;
@@ -147,8 +145,7 @@ public class ERMODWizardCreationPage extends ERD2WWizardCreationPageTemplate {
 	}
 
 	/**
-	 * Returns the ajax update container id for the cancel button
-	 * @return
+	 * Return the ajax update container id for the cancel button.
 	 */
 	public String cancelUpdateContainerID() {
 		Object result = null;

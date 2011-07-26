@@ -3,9 +3,9 @@ package er.rest.format;
 import java.util.List;
 import java.util.Map;
 
-import com.webobjects.appserver.WORequest;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
+import er.rest.ERXRestContext;
 import er.rest.ERXRestRequestNode;
 import er.rest.ERXRestUtils;
 
@@ -24,12 +24,14 @@ public class ERXPListRestParser implements IERXRestParser {
 		}
 		else if (object instanceof List) {
 			requestNode.setArray(true);
-			List list = (List) object;
+			List<?> list = (List<?>) object;
 			for (Object obj : list) {
 				if (ERXRestUtils.isPrimitive(obj)) {
 					ERXRestRequestNode primitiveChild = new ERXRestRequestNode(null, object, false);
 					requestNode.addChild(primitiveChild);
-					delegate.nodeDidParse(primitiveChild);
+					if (delegate != null) {
+						delegate.nodeDidParse(primitiveChild);
+					}
 				}
 				else {
 					requestNode.addChild(createRequestNodeForObject(null, obj, true, delegate));
@@ -37,14 +39,16 @@ public class ERXPListRestParser implements IERXRestParser {
 			}
 		}
 		else if (object instanceof Map) {
-			Map map = (Map) object;
+			Map<?, ?> map = (Map<?, ?>) object;
 			for (Object key : map.keySet()) {
 				String strKey = (String) key;
 				Object value = map.get(key);
 				if (ERXRestUtils.isPrimitive(value)) {
 					ERXRestRequestNode primitiveChild = new ERXRestRequestNode(strKey, value, false);
 					requestNode.addChild(primitiveChild);
-					delegate.nodeDidParse(primitiveChild);
+					if (delegate != null) {
+						delegate.nodeDidParse(primitiveChild);
+					}
 				}
 				else {
 					requestNode.addChild(createRequestNodeForObject(strKey, value, false, delegate));
@@ -55,22 +59,14 @@ public class ERXPListRestParser implements IERXRestParser {
 			throw new IllegalArgumentException("Unknown PLIST value '" + object + "'.");
 		}
 
-		delegate.nodeDidParse(requestNode);
+		if (delegate != null) {
+			delegate.nodeDidParse(requestNode);
+		}
 
 		return requestNode;
 	}
-	
-	@Deprecated
-	public ERXRestRequestNode parseRestRequest(WORequest request, ERXRestFormat.Delegate delegate) {
-		return parseRestRequest(request.contentString(), delegate);
-	}
 
-	@Deprecated
-	public ERXRestRequestNode parseRestRequest(String contentStr, ERXRestFormat.Delegate delegate) {
-		return parseRestRequest(new ERXStringRestRequest(contentStr), delegate);
-	}
-
-	public ERXRestRequestNode parseRestRequest(IERXRestRequest request, ERXRestFormat.Delegate delegate) {
+	public ERXRestRequestNode parseRestRequest(IERXRestRequest request, ERXRestFormat.Delegate delegate, ERXRestContext context) {
 		ERXRestRequestNode rootRequestNode = null;
 		String contentString = request.stringContent();
 		if (contentString != null && contentString.length() > 0) {

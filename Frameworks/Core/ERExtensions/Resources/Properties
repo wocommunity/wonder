@@ -313,6 +313,14 @@ com.webobjects.eoaccess.ERXEntityDependencyOrderingDelegate.active = false
 # er.extensions.ERXEC.traceOpenLocks = true
 
 #########################################################################
+# Concurrency - Task OSC Pool
+#########################################################################
+# Configures the default number of OSCs in the Task OSC Pool which can be used
+# for background tasks to avoid blocking the default OSC(s) used by users
+# browsing the app
+er.extensions.concurrency.ERXTaskObjectStoreCoordinatorPool.maxCoordinators = 1
+
+#########################################################################
 # ERX Remote Synchronizer
 #########################################################################
 ## To use remote EOF synchronization, you must turn on the 

@@ -139,7 +139,7 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 		}
 	}
 
-	public void removeObjectsForKeys(NSArray<?> keys) {
+	public void removeObjectsForKeys(NSArray<? extends K> keys) {
 		if (keys != null) {
 			Object[] keysArray = keys.objectsNoCopy();
 			for (int i = 0; i < keysArray.length; i++) {

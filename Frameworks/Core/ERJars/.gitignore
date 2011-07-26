@@ -4,3 +4,7 @@ build
 *.xcodeproj
 *.pbxproj
 ant.*
+ERFoundationSources
+ERFoundation_bin
+ERWebObjectsSources
+ERWebObjects_bin

@@ -23,9 +23,9 @@ import er.extensions.foundation.ERXProperties;
  * @property er.attachment.file.proxy
  * @property er.attachment.[configurationName].file.overwrite
  * @property er.attachment.file.overwrite
- * @property er.attachment.[configurationName].file.filesystemPath");
+ * @property er.attachment.[configurationName].file.filesystemPath
  * @property er.attachment.file.filesystemPath
- * @property er.attachment.[configurationName].file.webPath");
+ * @property er.attachment.[configurationName].file.webPath
  * @property er.attachment.file.webPath
  *
  * @author mschrag
@@ -92,7 +92,7 @@ public class ERFileAttachmentProcessor extends ERAttachmentProcessor<ERFileAttac
       String desiredFileName = desiredFilesystemPath.getName();
       String actualFileName = actualFilesystemPath.getName();
       // in case the name was not unique and changed, we need to update webPath ...
-      webPath = webPath.replaceAll(desiredFileName + "$", actualFileName);
+      webPath = webPath.replaceAll("\\Q" + desiredFileName + "\\E$", actualFileName);
 
       attachment.setWebPath(webPath);
       attachment.setFilesystemPath(actualFilesystemPath.getAbsolutePath());

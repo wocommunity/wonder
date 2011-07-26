@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation._NSStringUtilities;
 
@@ -14,6 +15,7 @@ public class ERXStringRestRequest implements IERXRestRequest {
 	public ERXStringRestRequest(String contentString) {
 		this(contentString, _NSStringUtilities.UTF8_ENCODING);
 	}
+
 	public ERXStringRestRequest(String contentString, String encoding) {
 		_contentString = contentString;
 		_encoding = encoding;
@@ -30,6 +32,14 @@ public class ERXStringRestRequest implements IERXRestRequest {
 		catch (UnsupportedEncodingException e) {
 			throw NSForwardException._runtimeExceptionForThrowable(e);
 		}
+	}
+
+	public NSArray<String> keyNames() {
+		return NSArray.<String> emptyArray();
+	}
+
+	public Object objectForKey(String key) {
+		return null;
 	}
 
 }

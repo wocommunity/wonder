@@ -1,0 +1,90 @@
+body {
+	/* text-align center is for IE */
+	text-align: center;
+	font-family: "Lucida Grande", Lucida, Verdana, sans-serif;
+	font-size: 1em;
+	background-color: #d5d5d5;
+	margin: 0;
+}
+
+table.progressBar {
+	border: none;
+}
+
+table.progressBar td.percentageFinished {
+	background-image: url('progress-bar.gif');
+	background-repeat: repeat-x;
+}
+
+table.progressBar td.percentageUnfinished {
+	background-image: url('progress-remainder.gif');
+	background-repeat: repeat-x;
+}
+
+#content-wrapper {
+	width: 540px;
+	margin: 0 auto;
+	text-align: center;
+	padding: 50px 0 0 0;
+}
+
+#content-panel {
+	border: 1px solid #424242;
+	padding: 50px;
+	background-color: white;
+	border-radius: 15px;
+	-moz-border-radius: 15px;
+}
+
+div.section {
+	padding: 20px 0 20px 0;
+}
+
+p {
+	margin: 0;
+	padding: 0;
+	text-align: center;
+}
+
+p.status-message {
+	font-size: 2em;
+}
+
+p.percent-display {
+	padding: 10px 0 10px 0;
+}
+
+p.stopping-message {
+	font-size: 2em;
+	color: #FF0000;
+	font-weight: bold;
+	text-decoration: blink;
+}
+
+#development-info {
+	padding-top: 50px;
+}
+
+div#busy-indicator {
+	background: url('ajax-busy-bar.gif');
+	margin-left: 109px;
+	width: 220px;
+	height: 19px;
+}
+
+/* Style the Stop Task link */
+
+a.stop-link {
+	background: url('button_stop_cancel_32.png');
+	display: block;
+	height: 32px;
+	width: 32px;
+	margin-left: 203px;
+}
+
+a.stop-link span.stop-link-text {
+	display: block;
+	width: 0px;
+	height: 0px;
+	overflow: hidden;
+}

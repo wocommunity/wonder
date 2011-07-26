@@ -162,7 +162,7 @@ public class ERXMutableDictionary<K,V> extends NSMutableDictionary<K,V> {
 		}
 
 		@Override
-		public synchronized void removeObjectsForKeys(NSArray<?> keys) {
+		public synchronized void removeObjectsForKeys(NSArray<? extends K> keys) {
 			super.removeObjectsForKeys(keys);
 		}
 
@@ -255,7 +255,7 @@ public class ERXMutableDictionary<K,V> extends NSMutableDictionary<K,V> {
 		}
 
 		@Override
-		public synchronized boolean isEqualToDictionary(NSDictionary<? extends K, ? extends V> otherDictionary) {
+		public synchronized boolean isEqualToDictionary(NSDictionary<?, ?> otherDictionary) {
 			return super.isEqualToDictionary(otherDictionary);
 		}
 
@@ -278,7 +278,7 @@ public class ERXMutableDictionary<K,V> extends NSMutableDictionary<K,V> {
 		public synchronized V objectForKey(Object key) {
 			return super.objectForKey(key);
 		}
-
+		
 		@Override
 		public synchronized NSArray<V> objectsForKeys(NSArray<? extends K> keys, V notFoundMarker) {
 			return super.objectsForKeys(keys, notFoundMarker);

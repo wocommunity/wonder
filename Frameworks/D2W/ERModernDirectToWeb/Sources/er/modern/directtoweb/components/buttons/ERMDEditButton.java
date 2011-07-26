@@ -45,9 +45,7 @@ public class ERMDEditButton extends ERMDActionButton {
 	/**
 	 * Label for the edit button
 	 * <p>
-     * Defaults to "Edit"
-     * 
-	 * @return
+         * Defaults to "Edit"
 	 */
 	public String buttonLabel() {
 		if (_buttonLabel == null) {
@@ -60,8 +58,6 @@ public class ERMDEditButton extends ERMDActionButton {
 	 * CSS class for the edit button.
 	 * <p>
 	 * Defaults to "Button ObjButton EditObjButton"
-	 * 
-	 * @return
 	 */
 	public String buttonClass() {
 		if (_buttonClass == null) {
@@ -72,8 +68,6 @@ public class ERMDEditButton extends ERMDActionButton {
 	
 	/**
 	 * Action performed by the edit button
-	 * 
-	 * @return
 	 */
 	public WOComponent editObjectAction() {
 		WOComponent result = null;
@@ -95,8 +89,6 @@ public class ERMDEditButton extends ERMDActionButton {
 	
 	/**
 	 * Determines whether the entity is editable
-	 * 
-	 * @return
 	 */
     public boolean isEditable() {
         boolean result = ERXValueUtilities.booleanValue(d2wContext().valueForKey(Keys.isEntityEditable));
@@ -109,8 +101,6 @@ public class ERMDEditButton extends ERMDActionButton {
 
     /**
      * Action performed by edit button if in-line editing is disabled
-     * 
-     * @return
      */
     public WOComponent editObjectInPageAction() {
         EOEnterpriseObject localObject = localInstanceOfObject();

@@ -14,12 +14,13 @@ import er.extensions.foundation.ERXStatusInterface;
  * implemented in the wrapped task and if so the values are
  * passed thru from the task.
  * 
- * Usage: <code>
+ * Usage: 
+ * <pre>
 			// If null, then submit the callable task
 			ERXFutureTask _future = new ERXFutureTask(callable);
 
 			ERXExecutorService.executorService().execute(_future);
-			</code>
+	</pre>
  * 
  * @author kieran
  * 
@@ -42,10 +43,16 @@ public class ERXFutureTask<V> extends FutureTask<V> implements ERXExecutionState
 		return _task;
 	}
 
+	/* (non-Javadoc)
+	 * @see er.extensions.foundation.ERXStatusInterface#status()
+	 */
 	public String status() {
 		return (hasStatus() && _task != null) ? ((ERXStatusInterface) _task).status() : null;
 	}
 
+	/* (non-Javadoc)
+	 * @see er.extensions.concurrency.ERXTaskPercentComplete#percentComplete()
+	 */
 	public Double percentComplete() {
 		return (hasPercentComplete() && _task != null) ? ((ERXTaskPercentComplete) _task).percentComplete() : null;
 	}
@@ -58,7 +65,7 @@ public class ERXFutureTask<V> extends FutureTask<V> implements ERXExecutionState
 		return NSKeyValueCoding.DefaultImplementation.valueForKey(this, key);
 	}
 
-	public Boolean _hasStatus;
+	private Boolean _hasStatus;
 
 	/**
 	 * @return whether the wrapped task has @link
@@ -69,6 +76,16 @@ public class ERXFutureTask<V> extends FutureTask<V> implements ERXExecutionState
 			_hasStatus = Boolean.valueOf(_task instanceof ERXStatusInterface);
 		} // ~ if (_hasStatus == null)
 		return _hasStatus.booleanValue();
+	}
+	
+	private Boolean _isStoppable;
+
+	/** @return true if the task bound to this Future implements the {@link IERXStoppable} interface */
+	public boolean isStoppable() {
+		if (_isStoppable == null) {
+			_isStoppable = Boolean.valueOf(_task instanceof IERXStoppable);
+		}
+		return _isStoppable.booleanValue();
 	}
 
 	private Boolean _hasPercentComplete;
@@ -84,32 +101,17 @@ public class ERXFutureTask<V> extends FutureTask<V> implements ERXExecutionState
 		return _hasPercentComplete;
 	}
 
-//	public String userPresentableDescription() {
-//		return (hasUserPresentableDescription() && _task != null) ? ((UserPresentableDescription) _task)
-//						.userPresentableDescription() : _task.toString();
-//	}
-//
-//	private Boolean _userPresentableDescription;
-//
-//	/** @return Callable has task description feature */
-//	public boolean hasUserPresentableDescription() {
-//		if (_userPresentableDescription == null) {
-//			_userPresentableDescription = Boolean.valueOf(_task instanceof UserPresentableDescription);
-//		}
-//		return _userPresentableDescription.booleanValue();
-//	}
-
 	public void afterExecute() {
 		if (_task instanceof ERXExecutionStateTransition) {
 			((ERXExecutionStateTransition) _task).afterExecute();
-		} // ~ if (_callable instanceof ERXExecutionStateTransition)
+		}
 
 	}
 
 	public void beforeExecute() {
 		if (_task instanceof ERXExecutionStateTransition) {
 			((ERXExecutionStateTransition) _task).beforeExecute();
-		} // ~ if (_callable instanceof ERXExecutionStateTransition)
+		}
 	}
 	
 	@Override

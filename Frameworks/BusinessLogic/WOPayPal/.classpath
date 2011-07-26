@@ -3,7 +3,6 @@
 	<classpathentry kind="src" path="Sources"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/ERDirectToWeb"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/ERJavaMail"/>
-	<classpathentry exported="true" kind="con" path="WOFramework/ERPrototypes"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaWOExtensions"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaDirectToWeb"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaDTWGeneration"/>

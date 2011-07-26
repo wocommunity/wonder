@@ -1,0 +1,315 @@
+/* Colors
+#DC0B30 : Same as red in WOWODC 2011 logoc
+#EFB246 : Same yellow as center of WOWODC logo
+#F4F4F4 : Gray for 'section' class background
+*/
+
+
+/* CSS Compatability
+This file has only been tested on Safari.
+Patches, if necessary for other browsers are welcome
+*/
+
+
+.prepend-top {
+	margin-top: 1.5em;
+}
+
+.append-bottom {
+	margin-bottom: 1.5em;
+}
+
+.clearfix:after, .container:after {
+	content: "\0020";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+	overflow: hidden;
+}
+
+.clearfix, .container {
+	display: block;
+}
+
+.clear {
+	clear: both;
+}
+
+.small-round-corners {
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+
+.large-round-corners {
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+}
+
+.border {
+	border: 1px solid #a1a5a9;
+}
+
+.center {
+	text-align: center;
+}
+
+.left {
+	text-align: left;
+}
+
+.right {
+	text-align: right;
+}
+
+/* focus panel */
+.focus {
+	background-color: #F4F4F4;
+	padding: 20px;
+}
+
+/* section */
+.section {
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	
+	border: 1px solid #a1a5a9;
+	
+	background-color: #F4F4F4;
+	padding: 20px;	
+}
+
+/* menu */
+.menu li {
+	list-style: none;
+	padding: 10px 0 10px 0;
+}
+
+/* compact list */
+ul.compact {
+	padding: 0;
+}
+
+ul.compact li {
+	padding: 0;
+}
+
+/* form fields layout */
+dl.attributes {
+	float:  left;
+}
+
+dl.attributes dt, dl.attributes dd{
+	padding: 0;
+	float: left;
+	margin: 0;
+}
+
+
+dl.attributes dt {
+	width: 250px;
+	text-align: right;
+	padding: 10px;
+}
+
+dl.attributes dd {
+	width: 300px;
+	padding: 10px;
+}
+
+
+/* EO list */
+table.list th, table.list td {
+	border: none;
+}
+
+/* pages-menu */
+#hd {
+	/* Prepares this div for positioning ul#nav in top right corner
+	absolute inside relative */
+	position: relative;
+}
+
+ul#nav {
+	position: absolute;
+	top:  146px;
+	right: 17px;
+	padding: 10px 20px;
+	margin: 0;
+	float: right;
+	width: 200;
+	height:  1.6em;
+	font: verdana;
+	font-size: 1.2em;
+	background-color: #55596D;
+	border: 2px solid white;
+}
+
+ul#nav li {
+	list-style-type: none;
+	padding: 0 1em 0 0;
+	float: left;
+}
+
+ul#nav a {
+	text-decoration: none;
+	color: whitesmoke;
+	font-weight: bold;
+	display: block;
+	float: left;
+	margin: 0 10px 0 0;
+	border-bottom: 3px solid whitesmoke;
+}
+
+ul#nav a:hover {
+	color: #EFB246;
+	border-bottom: 3px solid #DC0B30;
+}
+
+
+
+/* BEGIN ERXFlickBatchNavigation paginator styling */
+
+.paginatorContainer {
+	text-align: center;
+	margin-bottom: 20px;
+	margin-top: 20px;
+}
+
+.paginator {
+	font-size: 12px;
+	padding-top: 10px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.paginator a {
+	color: rgb(50, 50, 150);
+	padding: 2px 6px;
+	border: solid 1px rgb(208, 208, 208);
+	background: rgb(255, 255, 255);
+	text-decoration: none;
+}
+
+.paginator a:visited {
+	color: rgb(50, 50, 150);
+	padding: 2px 6px;
+	border: solid 1px rgb(208, 208, 208);
+	background: rgb(255, 255, 255);
+	text-decoration: none;
+}
+
+.paginator .paginatorAtStart {
+	margin-right: 20px;
+	padding: 2px 6px;
+	background: rgb(255, 255, 255);
+	color: rgb(160, 160, 160);
+}
+
+.paginator .paginatorPrev {
+	margin-right: 20px;
+	padding: 2px 6px;
+	border: solid 1px rgb(208, 208, 208);
+	background: rgb(255, 255, 255);
+}
+
+.paginator .paginatorBreak {
+	padding: 2px 6px;
+	border: none;
+	background: rgb(255, 255, 255);
+	text-decoration: none;
+}
+
+.paginator .paginatorNext {
+	margin-left: 20px;
+	padding: 2px 6px;
+	border: solid 1px rgb(208, 208, 208);
+	background: rgb(255, 255, 255);
+}
+
+.paginator .paginatorAtEnd {
+	margin-left: 20px;
+	padding: 2px 6px;
+	background: rgb(255, 255, 255);
+	color: rgb(160, 160, 160);
+}
+
+.paginator .paginatorCurrentPage {
+	padding: 2px 6px;
+	border: 1px solid rgb(144, 144, 144);
+	font-weight: bold;
+	font-size: 13px;
+	vertical-align: top;
+	background: rgb(255, 255, 255);
+	color: rgb(50, 50, 150);
+}
+
+.paginator a:hover {
+	color: rgb(255, 255, 255);
+	background: rgb(50, 50, 150);
+	border-color: rgb(0, 48, 96);
+	text-decoration: none;
+}
+
+.paginatorContainer .paginatorResults {
+	text-align: center;
+	font: 11px/15px Arial, Helvetica;
+	color: rgb(160, 160, 160);
+	margin-top: 8px; 
+}
+
+.paginatorContainer .paginatorBatchSizes {
+	text-align: center;
+	font: 11px/15px Arial, Helvetica;
+	margin-top: 8px; 
+}
+
+.paginatorBatchSizeList {
+	font-weight: bold;
+}
+
+.paginatorBatchSizes a {
+	color: rgb(50, 50, 150);
+	padding: 2px 6px;
+	border: solid 1px rgb(208, 208, 208);
+	background: rgb(255, 255, 255);
+	font-weight: plain;
+	text-decoration: none;
+}
+
+.paginatorBatchSizes a:hover {
+	color: rgb(255, 255, 255);
+	background: rgb(50, 50, 150);
+	border-color: rgb(0, 48, 96);
+	text-decoration: none;
+}
+
+.paginatorBatchSizes .paginatorCurrentPage {
+	padding: 2px 6px;
+	border: 1px solid rgb(144, 144, 144);
+	font-weight: bold;
+	font-size: 13px;
+	vertical-align: top;
+	background: rgb(255, 255, 255);
+	color: rgb(50, 50, 150);
+}
+
+/* my overrides */
+
+.paginatorContainer {
+	background-color: #F4F4F4;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	color: #4D5880;
+	margin: 0;
+}
+
+.paginatorContainer .paginatorResults {
+	color: #4D5880;
+}
+
+
+/* END ERXFlickBatchNavigation paginator styling */

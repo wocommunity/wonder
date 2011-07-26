@@ -33,7 +33,7 @@ public class ERXPartialGenericRecord extends ERXGenericRecord {
 			ERXEntityClassDescription cd = (ERXEntityClassDescription) classDescription();
 			NSArray<Class<ERXPartial>> partialEntityClasses = cd.partialClasses();
 			if (partialEntityClasses == null || partialEntityClasses.count() == 0) {
-				_partials = NSMutableDictionary.EmptyDictionary;
+				_partials = (NSDictionary<Class, ERXPartial>) NSMutableDictionary.EmptyDictionary;
 			}
 			else {
 				NSMutableDictionary<Class, ERXPartial> partials = new NSMutableDictionary<Class, ERXPartial>();

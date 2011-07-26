@@ -1,0 +1,14 @@
+PageWrapper: PageWrapper {}
+
+WebsocketURL: WOString {
+	value = websocketURL;
+}
+
+HasWebSockets: WOConditional {
+	condition = session.objectStore.modernizr.websockets; //VALID
+}
+
+HasNoWebSockets: WOConditional {
+	condition = session.objectStore.modernizr.websockets; //VALID
+	negate = true;
+}

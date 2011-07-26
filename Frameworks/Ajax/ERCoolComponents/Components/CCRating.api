@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="CCRating" wocomponentcontent="false">    <binding name="value"/>
+        <validation message="'value' is a required binding.">
+            <unbound name="value"/>
+        </validation>
+        <validation message="'value' must be bound to a settable value">
+            <unsettable name="value"/>
+        </validation>
+        <binding name="id"/>
+        <binding name="min"/>
+        <binding name="max"/>
+        <binding name="capture"/>
+        <binding name="classNames"/>
+        <binding name="multiple"/>
+        <binding name="rated"/>
+        <binding name="reverse"/>
+        <binding name="formValueName"/>
+        <binding name="updateOptions"/>
+        <binding name="action"/>
+        <binding name="actAsInput"/>
+        
+    <binding name="elementName"/>
+    <binding name="class"/>
+        <binding name="style"/>
+    <binding name="afterChange"/>
+    </wo>
+</wodefinitions>

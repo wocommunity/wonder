@@ -9,6 +9,7 @@ import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation._NSUtilities;
 
 public class ERXRestClassDescriptionFactory {
@@ -37,18 +38,23 @@ public class ERXRestClassDescriptionFactory {
 		}
 		return guessedEntityName;
 	}
-	
+
 	public static void registerClassDescription(EOClassDescription classDescription, Class<?> clazz) {
 		_classDescriptionByClass.put(clazz, classDescription);
 	}
 
 	@SuppressWarnings("unchecked")
 	public static EOClassDescription classDescriptionForObject(Object obj) {
+		return ERXRestClassDescriptionFactory.classDescriptionForObject(obj, false);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static EOClassDescription classDescriptionForObject(Object obj, boolean forceNonEntity) {
 		EOClassDescription classDescription;
 		if (obj == null) {
 			classDescription = null;
 		}
-		else if (obj instanceof EOEnterpriseObject) {
+		else if (obj instanceof EOEnterpriseObject && !forceNonEntity) {
 			classDescription = ERXRestClassDescriptionFactory.classDescriptionForEntityName(((EOEnterpriseObject) obj).entityName());
 		}
 		else if (obj instanceof Map) {
@@ -63,7 +69,7 @@ public class ERXRestClassDescriptionFactory {
 				clazz = obj.getClass();
 			}
 			classDescription = ERXRestClassDescriptionFactory.classDescriptionForClass(clazz, true);
-			if (classDescription == null) {
+			if (classDescription == null && !forceNonEntity) {
 				classDescription = ERXRestClassDescriptionFactory.classDescriptionForEntityName(clazz.getSimpleName());
 			}
 			if (classDescription == null) {
@@ -73,12 +79,30 @@ public class ERXRestClassDescriptionFactory {
 		return classDescription;
 	}
 
+	/**
+	 * Returns the entity name for the given object.
+	 * 
+	 * @param obj
+	 *            the object to return an entity name for
+	 * @return the entity name for the given object
+	 */
+	public static String entityNameForObject(Object obj) {
+		String entityName;
+		if (obj instanceof EOEnterpriseObject) {
+			entityName = ((EOEnterpriseObject) obj).entityName();
+		}
+		else {
+			entityName = obj.getClass().getSimpleName();
+		}
+		return entityName;
+	}
+
 	public static EOClassDescription classDescriptionForEntityName(String entityName) {
+		if (entityName == null) {
+			throw new NullPointerException("You did not specify an entityName.");
+		}
 		EOClassDescription classDescription = EOClassDescription.classDescriptionForEntityName(entityName);
 		if (classDescription == null) {
-			if (entityName == null) {
-				throw new NullPointerException("You did not specify an entityName.");
-			}
 			Class clazz = _classByName.get(entityName);
 			if (clazz == null) {
 				clazz = _NSUtilities.classWithName(entityName);
@@ -95,7 +119,7 @@ public class ERXRestClassDescriptionFactory {
 				classDescription = ERXRestClassDescriptionFactory.classDescriptionForClass(clazz, true);
 			}
 			else {
-				classDescription = null;
+				classDescription = EOClassDescription.classDescriptionForEntityName(ERXRestClassDescriptionFactory._guessMismatchedCaseEntityName(entityName));
 			}
 		}
 		return classDescription;
@@ -103,11 +127,19 @@ public class ERXRestClassDescriptionFactory {
 
 	public static EOClassDescription classDescriptionForClass(Class clazz, boolean forceNonEntity) {
 		EOClassDescription classDescription = _classDescriptionByClass.get(clazz);
-		if (classDescription == null && !forceNonEntity) {
+		if (classDescription == null && !forceNonEntity && EOEnterpriseObject.class.isAssignableFrom(clazz)) {
 			classDescription = ERXRestClassDescriptionFactory.classDescriptionForEntityName(clazz.getSimpleName());
 		}
 		if (classDescription == null) {
-			classDescription = new BeanInfoClassDescription(clazz);
+			if (NSDictionary.class.isAssignableFrom(clazz)) {
+				classDescription = new NSDictionaryClassDescription();
+			}
+			else if (Map.class.isAssignableFrom(clazz)) {
+				classDescription = new MapClassDescription();
+			}
+			else {
+				classDescription = new BeanInfoClassDescription(clazz);
+			}
 		}
 		return classDescription;
 	}

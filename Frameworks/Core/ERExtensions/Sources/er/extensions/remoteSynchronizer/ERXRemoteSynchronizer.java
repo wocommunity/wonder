@@ -30,6 +30,8 @@ import er.extensions.foundation.ERXProperties;
  * 
  * @property er.extensions.remoteSynchronizer.enabled if true, remote synchronization is enabled
  * @property er.extensions.remoteSynchronizer the class name of the remote synchronizer to use (default to ERXSimpleMulticastSynchronizer)
+ * @property er.extensions.remoteSynchronizer.includeEntities
+ * @property er.extensions.remoteSynchronizer.excludeEntities
  * 
  * @author mschrag
  */

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
 /**
@@ -16,9 +17,13 @@ import com.webobjects.foundation.NSMutableArray;
  *  
  * @author mschrag
  */
-public class MapClassDescription extends EOClassDescription {
+public class MapClassDescription extends EOClassDescription implements IERXNonEOClassDescription {
 	private Map<String, ?> _map;
 
+	public MapClassDescription() {
+		this(new HashMap<String, Object>());
+	}
+	
 	public MapClassDescription(Map<String, ?> map) {
 		_map = map;
 	}
@@ -27,7 +32,12 @@ public class MapClassDescription extends EOClassDescription {
 	public String entityName() {
 		String entityName = (String) _map.get("entityName");
 		if (entityName == null) {
-			entityName = _map.getClass().getSimpleName();
+		    if (_map instanceof NSDictionary) {
+		        entityName = "NSDictionary";
+		    }
+		    else {
+		        entityName = "HashMap";
+		    }
 		}
 		return entityName;
 	}
@@ -88,7 +98,9 @@ public class MapClassDescription extends EOClassDescription {
 				return ERXRestClassDescriptionFactory.classDescriptionForClass(type, false);
 			}
 		}
-		return null;
+		else {
+			return ERXRestClassDescriptionFactory.classDescriptionForClass(Object.class, true);
+		}
 	}
 
 	public Object createInstance() {

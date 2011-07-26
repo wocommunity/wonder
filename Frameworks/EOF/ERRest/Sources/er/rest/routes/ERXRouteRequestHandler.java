@@ -24,6 +24,7 @@ import er.extensions.localization.ERXLocalizer;
 import er.rest.ERXRestClassDescriptionFactory;
 import er.rest.ERXRestNameRegistry;
 import er.rest.IERXRestDelegate;
+import er.rest.format.ERXRestFormat;
 import er.rest.routes.jsr311.DELETE;
 import er.rest.routes.jsr311.GET;
 import er.rest.routes.jsr311.HttpMethod;
@@ -116,6 +117,12 @@ import er.rest.routes.jsr311.Paths;
  * http://localhost/cgi-bin/WebObjects/YourApp.woa/ra/person/100/edit.json
  * </pre>
  * 
+ * @property ERXRest.missingControllerName (default "ERXMissingRouteController")
+ * @property ERXRest.parseUnknownExtensions
+ * @property ERXRest.pluralEntityNames
+ * @property ERXRest.routeCase
+ * @property ERXRest.lowercaseEntityNames
+ *
  * @author mschrag
  */
 public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
@@ -275,6 +282,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 
 	private NameFormat _entityNameFormat;
 	private NSMutableArray<ERXRoute> _routes;
+	private boolean _parseUnknownExtensions; 
 
 	/**
 	 * Constructs a new ERXRouteRequestHandler with the default entity name format.
@@ -292,6 +300,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	public ERXRouteRequestHandler(NameFormat entityNameFormat) {
 		_entityNameFormat = entityNameFormat;
 		_routes = new NSMutableArray<ERXRoute>();
+		_parseUnknownExtensions = ERXProperties.booleanForKeyWithDefault("ERXRest.parseUnknownExtensions", true);
 	}
 
 	/**
@@ -530,7 +539,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 		// MS: We should probably remove all of the "boolean numericPKs" attributes for registration, but I don't
 		// want to do that so soon after the initial screencast of using the APIs.
 		EOClassDescription classDescription = ERXRestClassDescriptionFactory.classDescriptionForEntityName(entityName);
-		boolean numericPKs = IERXRestDelegate.Factory.delegateForEntityNamed(entityName, null).__hasNumericPrimaryKeys(classDescription);
+		boolean numericPKs = IERXRestDelegate.Factory.delegateForClassDescription(classDescription).__hasNumericPrimaryKeys(classDescription);
 		addDefaultRoutes(entityName, numericPKs, controllerClass);
 	}
 
@@ -677,13 +686,15 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 
 		int dotIndex = path.lastIndexOf('.');
 		String requestedType = null;
-		if (dotIndex >= 0) {
+		if (dotIndex >= 0 && path.indexOf('/', dotIndex + 1) == -1) {
 			String type = path.substring(dotIndex + 1);
-			if (type.length() > 0) {
-				requestedType = type;
-				userInfo.setObjectForKey(type, ERXRouteRequestHandler.ExtensionKey);
+			if (_parseUnknownExtensions || ERXRestFormat.hasFormatNamed(type)) {
+				if (type.length() > 0) {
+					requestedType = type;
+					userInfo.setObjectForKey(type, ERXRouteRequestHandler.ExtensionKey);
+				}
+				path = path.substring(0, dotIndex);
 			}
-			path = path.substring(0, dotIndex);
 		}
 
 		ERXRoute.Method routeMethod = ERXRoute.Method.valueOf(ERXStringUtilities.capitalize(method.toLowerCase()));

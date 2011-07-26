@@ -4,7 +4,7 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
 
-import ognl.Ognl;
+//import ognl.Ognl;
 
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
@@ -114,6 +114,7 @@ public abstract class EREntityStore {
         if (!attribute.isFlattened()) {
           // Evaluate derived attribute expression
 
+          /*
           //This is a hack to support SQL string concatenation in derived attributes
           String expression = attribute.definition().replaceAll("\\|\\|", "+ '' +");
           try {
@@ -121,6 +122,7 @@ public abstract class EREntityStore {
           } catch (Throwable t) {
             t.printStackTrace();
           }
+          */
         } else {
           String dstKey = attribute.definition();
           value = rawRow.objectForKey(dstKey);

@@ -577,7 +577,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
     super.terminate();
   }
 
-  private NSKeyValueCodingAdditions _objectStore;
+  private transient NSKeyValueCodingAdditions _objectStore;
 
   /** This is a cover method which enables use of the session's object store
    * which is usually access with setObjectForKey and objectForKey. One can use

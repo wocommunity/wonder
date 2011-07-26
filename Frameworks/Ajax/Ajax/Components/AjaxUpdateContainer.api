@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <wodefinitions>
 	<wo class="AjaxUpdateContainer" wocomponentcontent="true">
     
@@ -27,5 +27,6 @@
     
 	<binding name="id"/>
         <binding name="asynchronous"/>
+    <binding defaults="Boolean" name="stopped"/>
     </wo>
 </wodefinitions>

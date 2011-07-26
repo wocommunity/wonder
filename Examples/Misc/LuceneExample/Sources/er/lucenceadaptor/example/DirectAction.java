@@ -201,7 +201,7 @@ public class DirectAction extends ERD2WDirectAction {
 			Random random = new Random(12);
 			for (int i = 0; i < 100; i++) {
 				EOEnterpriseObject eo = EOUtilities.createAndInsertInstance(ec, "LuceneAsset");
-				eo.takeValueForKey(new NSTimestamp().timestampByAddingGregorianUnits(0, 0, -random.nextInt(2500), 0, 0, 0, null), "creationDate");
+				eo.takeValueForKey(new NSTimestamp().timestampByAddingGregorianUnits(0, 0, -random.nextInt(2500), 0, 0, 0), "creationDate");
 				eo.takeValueForKey(ERXLoremIpsumGenerator.randomSentence(), "contents");
 				eo.takeValueForKey(random.nextDouble(), "price");
 				eo.takeValueForKey(Long.valueOf(random.nextInt(2500)), "userCount");

@@ -23,8 +23,11 @@ import er.extensions.foundation.ERXStringUtilities;
  * er.directtoweb.ERDEditHTML.tinyMceSourceFileName = tiny_mce/tiny_mce.js
  * </pre>
  * 
- * @author ak
+ * @property er.directtoweb.ERDEditHTML.tinyMceSourceFileName
+ * @property er.directtoweb.ERDEditHTML.tinyMceSourceFrameworkName
+ * @property er.directtoweb.ERDEditHTML.tinyMceSourceUrl (default http://tinymce.moxiecode.com/js/tinymce/jscripts/tiny_mce/tiny_mce.js)
  *
+ * @author ak
  */
 public class ERDEditHTML extends ERDCustomEditComponent {
 

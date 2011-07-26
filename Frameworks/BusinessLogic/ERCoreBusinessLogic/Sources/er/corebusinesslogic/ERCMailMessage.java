@@ -9,6 +9,7 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
+import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSValidation;
 
 import er.extensions.eof.EOEnterpriseObjectClazz;
@@ -19,6 +20,11 @@ import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.validation.ERXValidationFactory;
 
+/**
+ *
+ * @property er.corebusinesslogic.ERCMailMessage.ShouldArchive
+ * @property er.corebusinesslogic.ERCMailMessage.ShouldGzipContent
+ */
 public class ERCMailMessage extends _ERCMailMessage {
 
     //	===========================================================================
@@ -312,5 +318,17 @@ public class ERCMailMessage extends _ERCMailMessage {
     	} else {
     		takeStoredValueForKey(aValue, Key.TEXT);            
     	}
+    }
+    
+    public void willInsert() {
+    	super.willInsert();
+    	NSTimestamp now = new NSTimestamp();
+    	setCreated(now);
+    	setLastModified(now);
+    }
+    
+    public void willUpdate() {
+    	super.willUpdate();
+    	setLastModified(new NSTimestamp());
     }
 }

@@ -20,7 +20,7 @@ import er.extensions.foundation.ERXProperties;
 import er.extensions.validation.ERXValidationFactory;
 
 /**
- * ERJavaMail is the prinicpal class for the ERJavaMail framework.
+ * ERJavaMail is the principal class for the ERJavaMail framework.
  * 
  * @property er.javamail.centralize
  * @property er.javamail.adminEmail
@@ -239,7 +239,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * deliverers, use their own JavaMail session.
 	 */
 	protected javax.mail.Session _defaultSession;
-	private Map<String, javax.mail.Session> _sessions = new ConcurrentHashMap<String, javax.mail.Session>();
+	private final Map<String, javax.mail.Session> _sessions = new ConcurrentHashMap<String, javax.mail.Session>();
 
 	/**
 	 * Sets the default JavaMail session to a particular value. This value is set by default at initialization of the

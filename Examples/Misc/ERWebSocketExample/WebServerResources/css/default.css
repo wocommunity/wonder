@@ -1,0 +1,377 @@
+@charset "UTF-8";
+
+/*************/
+/* CSS Reset */
+/*************/
+
+html {
+	padding: 0;
+	margin: 0;
+}
+
+body {
+	font: 1em Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif;
+	line-height: 1.618;
+	margin: 0;
+	padding: 0;
+	min-width: 100%;
+}
+
+*:focus, input, button, a, select {
+	outline-color: #C6D8DA;
+}
+
+/* Headings */
+
+h1,h2,h3,h4,h5,h6 {
+	margin: 0 0 0.5ex 0;
+	padding: 0;
+	font-family: Garamond, Baskerville, "Baskerville Old Face", "Hoefler Text", "Times New Roman", serif;
+	font-weight: normal;
+	font-style: normal;
+}
+
+h1 {
+	font-size: 2.618em;
+}
+
+h2 {
+	font-size: 2.0em;
+}
+
+h3 {
+	font-size: 1.618em;
+}
+
+h4 {
+	font-size: 1.236em;
+}
+
+h5 {
+	font-size: 1em;
+	font-weight: bold;
+}
+
+h6 {
+	font-size: 1em;
+	font-style: oblique;
+}
+
+/* Inline Elements */
+
+img, abbr, acronym {
+	border: 0;
+}
+
+tt, code, kbd, samp {
+	font-family: "Courier New", Courier, monospace;
+	font-style: normal;
+	font-weight: normal;
+}
+
+strong, b {
+	font-style: normal;
+	font-weight: bold;
+}
+
+cite, em, i, var {
+	font-style: italic;
+	font-weight: normal;
+}
+
+dfn {
+	font-style: normal;
+	font-weight: normal;
+}
+
+q:before {
+	content: "“";
+}
+
+q:after {
+	content: "”";
+}
+
+var:before {
+	content: "«";
+}
+
+var:after {
+	content: "»";
+}
+
+/* Form Elements */
+
+form {
+	margin: 0;
+	padding: 0;
+}
+
+fieldset {
+	border: 0;
+	margin: 0;
+	padding: 0;
+}
+
+legend {
+
+}
+
+label {
+	font-weight: bold;
+}
+
+label[for] {
+	cursor: pointer;
+}
+
+input {
+	margin: 0;
+	padding: 0;
+}
+
+textarea {
+	margin: 0;
+	padding: 0;
+}
+
+select {
+
+}
+
+/* Block Elements */
+
+address {
+	font-style:normal;
+	font-weight:normal;
+}
+
+blockquote {
+	margin: 0 0 0 1.618em;
+	padding: 0 0 0 1em;
+	border-left: 4px solid;
+}
+
+p {
+	margin: 0 0 1em 0;
+	padding: 0;
+	text-indent: 2.618em;
+	max-width: 39em;
+}
+
+pre {
+	margin: 0;
+	padding: 0;
+}
+
+/* Lists */
+
+ul { 
+	list-style-position:outside;
+	list-style-type: disc;
+}
+
+ol {
+	list-style-position:outside;
+	list-style-type: decimal;
+}
+
+li {
+	margin: 0;
+	padding: 0;
+}
+
+ul, ol {
+	margin: 0 0 1.618em 1.618em;
+	padding: 0;
+}
+
+li ul, li ol  {
+	margin: 0 0 0 1.618em;
+}
+
+dt {
+	font-weight: bold;
+	margin: 0;
+	padding: 0;
+}
+
+dl {
+	margin: 0 0 1.618em 0;
+	padding: 0;
+}
+
+dd {
+	margin: 0 0 0 1.618em;
+	padding: 0;
+}
+
+ul ul, ol ul {
+	list-style-type: circle;
+}
+
+ol ol ul, ol ul ul, ul ol ul, ul ul ul {
+	list-style-type: square;
+}
+
+/* Table Elements */
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+	border: none;
+	caption-side: top;
+	table-layout: fixed;
+	width: 100%;
+}
+
+caption {
+	text-align: center;
+	font-style: normal;
+	font-weight: normal;
+	font-size: larger;
+}
+
+tbody, thead, tfoot, colgroup, th {
+	border: 1px solid;
+}
+
+tr, td {
+	border: none;
+}
+
+th, td {
+	margin: 0;
+	padding: 0 1ex;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	text-align: left;
+	font-style: normal;
+}
+
+th {
+	font-weight: bold;
+}
+
+tbody th, th[scope='colgroup'] {
+	text-align: center;
+	white-space: normal;
+}
+
+/************/
+/* Site CSS */
+/************/
+
+/* Colors */
+
+div#pageHeader {
+	background-color: #3366aa;
+	color: #66ccdd;
+	padding: 0 3%;
+}
+
+div#pageHeader a[href] {
+	color: #66ccdd;
+}
+
+div#pageContent {
+	color: #334433;
+	padding: 0 3%;
+}
+
+a[href] {
+	color: #334433;
+}
+
+a[href]:hover {
+	color: #334433;
+}
+
+tr.even {
+	background-color: #aabbbb;
+}
+
+ul.nav.l1 li {
+	background-color: #0066dd;
+}
+
+ul.nav.l1 li.selected {
+	background-color: white;
+}
+
+ul.nav.l1 {
+	text-align: center;
+	margin: 0 0 1em 0;
+	padding: 0;
+	line-height: 1.618em;
+}
+
+ul.nav.l1 li {
+	display: inline-block;
+	font-size: larger;
+	font-weight: normal;
+	padding: 0 1ex;
+	margin: 0;
+	line-height: 1.618em;
+	vertical-align: bottom;
+}
+
+form.edit {
+	margin: 0 0 1em 0;
+	padding: 1em;
+	-webkit-box-shadow: inset 0px 2px 4px rgba(0,0,0,0.4);
+	-moz-box-shadow: inset 0px 2px 4px rgba(0,0,0,0.4);
+	box-shadow: inset 0px 2px 4px rgba(0,0,0,0.4);
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+form.edit ul {
+	list-style-type: none;
+}
+
+ul.errors {
+	border: 1px solid red;
+}
+
+ul.actions {
+	list-style-type: none;
+	margin: 0;
+}
+
+ul.actions > li {
+	display: inline;
+	white-space: nowrap;
+}
+
+ul.actions > li + li {
+	margin-left: 1ex;
+}
+
+ul#availableLanguages {
+	list-style-type: none;
+	margin: 0;
+}
+
+ul#availableLanguages li {
+	display: inline;
+}
+
+/* Accessibility */
+
+.hidden, #skipNavigation>a {
+	position: absolute;
+	clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+	clip: rect(1px, 1px, 1px, 1px);
+	padding: 0;
+	border: 0;
+	height: 1px;
+	width: 1px;
+	overflow: hidden;
+}
+
+#skipNavigation>a:focus {
+	position: static;
+}
