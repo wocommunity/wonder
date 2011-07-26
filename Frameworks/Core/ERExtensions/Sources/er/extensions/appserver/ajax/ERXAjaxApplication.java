@@ -17,8 +17,6 @@ import er.extensions.foundation.ERXProperties;
  * Wonder (i.e. ERXSession or ERXApplication), you should steal all of the code
  * in ERXAjaxSession, ERXAjaxApplication, and ERXAjaxContext.
  * 
- * @property er.extensions.ERXAjaxApplication.allowContextPageResponse
- *
  * @author mschrag
  */
 public abstract class ERXAjaxApplication extends WOApplication {

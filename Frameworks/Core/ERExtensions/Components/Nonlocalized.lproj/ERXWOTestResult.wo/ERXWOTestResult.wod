@@ -41,12 +41,12 @@ Conditional9: WOConditional {
 
 ReasonRepetition: WORepetition {
 	item = errorline;
-	list = error;
+	list = error.stackTrace;
 }
 
 ReasonRepetition2: WORepetition {
 	item = errorline;
-	list = error;
+	list = error.stackTrace;
 }
 
 Repetition1: WORepetition {

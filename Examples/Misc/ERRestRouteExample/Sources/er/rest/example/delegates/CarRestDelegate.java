@@ -5,7 +5,6 @@ import com.webobjects.foundation.NSArray;
 
 import er.extensions.eof.ERXQ;
 import er.rest.ERXAbstractRestDelegate;
-import er.rest.ERXRestContext;
 import er.rest.example.model.Car;
 
 /**
@@ -19,17 +18,25 @@ import er.rest.example.model.Car;
 public class CarRestDelegate extends ERXAbstractRestDelegate {
 	public CarRestDelegate() {
 	}
-	
-	public Object createObjectOfEntityWithID(EOClassDescription entity, Object id, ERXRestContext context) {
+
+	@Override
+	protected Object _createObjectOfEntityWithID(EOClassDescription entity, Object id) {
 		return new Car();
 	}
-	
-	public Object primaryKeyForObject(Object obj, ERXRestContext context) {
+
+	@Override
+	protected Object _primaryKeyForObject(EOClassDescription entity, Object obj) {
 		return ((Car) obj).getName();
 	}
-	
-	public Object objectOfEntityWithID(EOClassDescription entity, Object id, ERXRestContext context) {
+
+	@Override
+	protected Object _fetchObjectOfEntityWithID(EOClassDescription entity, Object id) {
 		NSArray<Car> cars = ERXQ.filtered(Car.cars(), ERXQ.is("name", id));
 		return cars.size() == 0 ? null : cars.objectAtIndex(0);
+	}
+
+	@Override
+	protected boolean _isDelegateForEntity(EOClassDescription entity) {
+		return "Car".equals(entity.entityName());
 	}
 }

@@ -10,13 +10,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.eoaccess.EOEntityClassDescription;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEnterpriseObject;
-import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
@@ -37,8 +34,6 @@ import er.rest.format.IERXRestWriter;
  * @author mschrag
  */
 public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdditions {
-    private static final Logger log = Logger.getLogger(ERXRestRequestNode.class);
-    
 	private boolean _array;
 	private String _name;
 	private boolean _rootNode;
@@ -169,9 +164,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	protected Object toJavaCollection(ERXRestFormat.Delegate delegate, Map<Object, ERXRestRequestNode> conversionMap, Map<Object, Object> associatedObjects) {
 		Object result = associatedObjects.get(_associatedObject);
 		if (result == null) {
-			if (delegate != null) {
-				delegate.nodeWillWrite(this);
-			}
+			delegate.nodeWillWrite(this);
 
 			if (isArray()) {
 				List<Object> array = new LinkedList<Object>();
@@ -241,9 +234,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	protected Object toNSCollection(ERXRestFormat.Delegate delegate, NSMutableDictionary<Object, Object> associatedObjects) {
 		Object result = associatedObjects.get(_associatedObject);
 		if (result == null) {
-			if (delegate != null) {
-				delegate.nodeWillWrite(this);
-			}
+			delegate.nodeWillWrite(this);
 
 			if (isArray()) {
 				NSMutableArray<Object> array = new NSMutableArray<Object>();
@@ -330,99 +321,35 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	public Object associatedObject() {
 		return _associatedObject;
 	}
- 	
- 	/**
- 	 * A parsed keypath segment that can contain either a name or a name and an index 
- 	 */
- 	private static class Key {
- 		public final String _name;
- 		public final int _index;
- 		
- 		public Key(String name, int index) {
- 			_name = name;
- 			_index = index;
- 		}
- 		
- 		/**
- 		 * Parses "keyName" or "keyName[x]" format keys.
- 		 * 
- 		 * @param keySegment the segment of a keypath to parse
- 		 * @return a Key object
- 		 */
- 		public static Key parse(String keySegment) {
- 			String key = keySegment;
-			int keyIndex = -1;
-			int closeBracketIndex = key.lastIndexOf(']');
-			if (closeBracketIndex != -1) {
-				int openBracketIndex = key.lastIndexOf('[');
-				if (openBracketIndex != -1) {
-					keyIndex = Integer.valueOf(key.substring(openBracketIndex + 1, closeBracketIndex));
-					key = key.substring(0, openBracketIndex);
-				}
-			}
-			return new Key(key, keyIndex);
- 		}
- 	}
 
-	public void takeValueForKey(Object value, String keyName) {
-		if (value instanceof ERXRestRequestNode) {
-			removeAttributeForKey(keyName);
-			removeChildNamed(keyName);
-			((ERXRestRequestNode)value).setName(keyName);
-			addChild((ERXRestRequestNode)value);
-		}
-		else if (_attributes.containsKey(keyName)) {
-			_attributes.put(keyName, value);
+	public void takeValueForKey(Object value, String key) {
+		if (_attributes.containsKey(key)) {
+			_attributes.put(key, value);
 		}
 		else {
-			Key key = Key.parse(keyName);
-			ERXRestRequestNode child = childNamed(key._name);
+			ERXRestRequestNode child = childNamed(key);
 			if (child == null) {
- 				if (key._index != -1) {
- 					child = new ERXRestRequestNode(key._name, null, false);
- 					addChild(child);
- 					child.childAtIndex(key._index).setValue(value);
- 				}
- 				else {
- 					addChild(new ERXRestRequestNode(key._name, value, false));
- 				}
-				//throw new NSKeyValueCoding.UnknownKeyException("There is no key named '" + key + "' on this node.", this, key);
+				throw new NSKeyValueCoding.UnknownKeyException("There is no key named '" + key + "' on this node.", this, key);
 			}
- 			else if (key._index != -1) {
-	 	    		child.childAtIndex(key._index).setValue(value);
- 			}
+			else if (child.children().size() == 0) {
+				child.setValue(value);
+			}
 			else {
-				throw new IllegalArgumentException("Unable to set the value of '" + key._name + "' to " + value + ".");
+				throw new IllegalArgumentException("Unable to set the value of '" + key + "' to " + value + ".");
 			}
 		}
 	}
 
-	public Object valueForKey(String keyName) {
+	public Object valueForKey(String key) {
 		Object value;
-		if (_attributes.containsKey(keyName)) {
-			value = _attributes.get(keyName);
+		if (_attributes.containsKey(key)) {
+			value = _attributes.get(key);
 		}
 		else {
- 			Key key = Key.parse(keyName);
- 			
- 			ERXRestRequestNode child = childNamed(key._name);
+			ERXRestRequestNode child = childNamed(key);
 			if (child == null) {
-				throw new NSKeyValueCoding.UnknownKeyException("There is no key named '" + key._name + "' on this node.", this, key._name);
+				throw new NSKeyValueCoding.UnknownKeyException("There is no key named '" + key + "' on this node.", this, key);
 			}
- 			else if (key._index != -1) {
- 				if (child.children().count() <= key._index) {
- 					throw new NSKeyValueCoding.UnknownKeyException("There is no key named '" + key._name + "' with a child index " + key._index + " on this node.", this, key._name);
- 				}
- 				else {
- 					ERXRestRequestNode indexChild = (ERXRestRequestNode)child.children().objectAtIndex(key._index);
- 					if (indexChild.children().count() == 0) {
- 						value = indexChild.value();
- 					}
- 					else {
- 						value = indexChild;
- 					}
- 				}
- 			}
 			else if (child.children().size() == 0) {
 				value = child.value();
 			}
@@ -436,42 +363,9 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	public Object valueForKeyPath(String keyPath) {
 		return NSKeyValueCodingAdditions.DefaultImplementation.valueForKeyPath(this, keyPath);
 	}
-	
-	public void takeValueForKeyPath(Object value, String keyPath) {
-        if (keyPath == null) {
-            throw new IllegalArgumentException("Key path cannot be null");
-        }
 
-        int separatorIndex = keyPath.indexOf(NSKeyValueCodingAdditions._KeyPathSeparatorChar);
-        if (separatorIndex != -1) {
-	    	Key key = Key.parse(keyPath.substring(0, separatorIndex));
-			ERXRestRequestNode child = childNamed(key._name);
-			if (child == null) {
-				child = new ERXRestRequestNode(key._name, false); 
-				addChild(child);
-			}
-			String nextKeyPath = keyPath.substring(separatorIndex + 1);
-	    	if (key._index == -1) {
-				child.takeValueForKeyPath(value, nextKeyPath);
-	    	}
-	    	else {
-	    		child.childAtIndex(key._index).takeValueForKeyPath(value, nextKeyPath);
-	    	}
-        }
-        else {
-    		takeValueForKey(value, keyPath);
-        }
-	}
-	
-	public ERXRestRequestNode childAtIndex(int index) {
-		int childCount = _children.count();
-		if (childCount <= index) {
-			setArray(true);
-			for (int i = childCount; i <= index; i ++) {
-				addChild(new ERXRestRequestNode(null, false));
-			}
-		}
-		return (ERXRestRequestNode)_children.objectAtIndex(index);
+	public void takeValueForKeyPath(Object value, String keyPath) {
+		NSKeyValueCodingAdditions.DefaultImplementation.takeValueForKeyPath(this, value, keyPath);
 	}
 
 	/**
@@ -639,12 +533,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 *            the value for this node
 	 */
 	public void setValue(Object value) {
-		if (value instanceof NSKeyValueCoding.Null) {
-			_value = null;
-		}
-		else {
-			_value = value;
-		}
+		_value = value;
 		guessNull();
 	}
 
@@ -754,29 +643,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 			}
 		}
 		sb.append("]");
-		if (depth > 0) {
-			sb.append("\n");
-		}
-	}
-	
-	protected String entityName(String suggestedEntityName) {
-		String entityName = suggestedEntityName;
-		if (entityName == null) {
-			entityName = type();
-			if (entityName == null && value() == null) {
-				entityName = "NSDictionary";
-			}
-		}
-		return entityName;
-	}
-
-	/**
-	 * Equivalent to objectWithFilter(null, ERXKeyFilter.filterWithAllRecursive(), new ERXRestContext());
-	 * 
-	 * @return the object that this request node represents
-	 */
-	public Object object() {
-		return objectWithFilter(null, ERXKeyFilter.filterWithAllRecursive(), new ERXRestContext());
+		sb.append("\n");
 	}
 
 	/**
@@ -786,16 +653,16 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 *            the entity name of the object to use
 	 * @param keyFilter
 	 *            the filter to use for determining which keys can be updated (or null for no update)
-	 * @param context
+	 * @param delegate
 	 *            the delegate to use
 	 * @return the object that this request node represents
 	 */
-	public Object objectWithFilter(String entityName, ERXKeyFilter keyFilter, ERXRestContext context) {
+	public Object objectWithFilter(String entityName, ERXKeyFilter keyFilter, IERXRestDelegate delegate) {
 		Object obj;
 		if (isArray()) {
 			NSMutableArray<Object> objs = new NSMutableArray<Object>();
 			for (ERXRestRequestNode childNode : children()) {
-				Object child = childNode.objectWithFilter(entityName, ERXKeyFilter.filterWithAllRecursive(), context);
+				Object child = childNode.objectWithFilter(entityName, ERXKeyFilter.filterWithAllRecursive(), delegate);
 				if (child != null) {
 					objs.addObject(child);
 				}
@@ -803,28 +670,18 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 			obj = objs;
 		}
 		else {
-			String finalEntityName = entityName(entityName);
 			EOClassDescription classDescription = ERXRestClassDescriptionFactory.classDescriptionForEntityName(entityName);
 			if (classDescription == null) {
-				throw new IllegalArgumentException("There is no registered entity with the name '" + finalEntityName + "'.");
+				throw new IllegalArgumentException("There is no registered entity with the name '" + entityName + "'.");
 			}
-			obj = IERXRestDelegate.Factory.delegateForClassDescription(classDescription).objectOfEntityWithID(classDescription, id(), context);
+			obj = delegate.objectOfEntityWithID(classDescription, id());
 			if (keyFilter != null) {
-				updateObjectWithFilter(obj, keyFilter, context);
+				updateObjectWithFilter(obj, keyFilter, delegate);
 			}
 		}
 		return obj;
 	}
 
-	/**
-	 * Equivalent to createObjectWithFilter(null, ERXKeyFilter.filterWithAllRecursive(), new ERXRestContext());
-	 *  
-	 * @return a new instance of an object represented by this request node
-	 */
-	public Object createObject() {
-		return createObjectWithFilter(null, ERXKeyFilter.filterWithAllRecursive(), new ERXRestContext());
-	}
-	
 	/**
 	 * Creates a new instance of an object represented by this request node.
 	 * 
@@ -832,29 +689,18 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 *            the entity name of the object to use
 	 * @param keyFilter
 	 *            the filter to use for determining which keys can be updated (or null for no update)
-	 * @param context
+	 * @param delegate
 	 *            the delegate to use
 	 * @return a new instance of an object represented by this request node
 	 */
-	public Object createObjectWithFilter(String entityName, ERXKeyFilter keyFilter, ERXRestContext context) {
-		// MS: if it's a null node, just hand back a null
-		if (isNull()) {
-			return null;
-		}
-		
-		String finalEntityName = entityName(entityName);
-		// MS: if there is no type, just return the value of this object
-		if (finalEntityName == null) {
-			return value();
-		}
-		
-		EOClassDescription classDescription = ERXRestClassDescriptionFactory.classDescriptionForEntityName(finalEntityName);
+	public Object createObjectWithFilter(String entityName, ERXKeyFilter keyFilter, IERXRestDelegate delegate) {
+		EOClassDescription classDescription = ERXRestClassDescriptionFactory.classDescriptionForEntityName(entityName);
 		if (classDescription == null) {
-			throw new IllegalArgumentException("There is no registered entity with the name '" + finalEntityName + "'.");
+			throw new IllegalArgumentException("There is no registered entity with the name '" + entityName + "'.");
 		}
-		Object obj = IERXRestDelegate.Factory.delegateForClassDescription(classDescription).createObjectOfEntityWithID(classDescription, id(), context);
+		Object obj = delegate.createObjectOfEntityWithID(classDescription, id());
 		if (keyFilter != null) {
-			updateObjectWithFilter(obj, keyFilter, context);
+			updateObjectWithFilter(obj, keyFilter, delegate);
 		}
 		return obj;
 	}
@@ -865,25 +711,16 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 		addChild(attributeNode);
 	}
 
-	protected void _addToManyRelationshipNodeForKeyOfEntityInObject(ERXKey<?> key, EOClassDescription destinationEntity, Object obj, ERXKeyFilter keyFilter, ERXRestContext context, Set<Object> visitedObjects) {
+	protected void _addToManyRelationshipNodeForKeyOfEntityInObject(ERXKey<?> key, EOClassDescription destinationEntity, Object obj, ERXKeyFilter keyFilter, IERXRestDelegate delegate, Set<Object> visitedObjects) {
 		ERXRestRequestNode toManyRelationshipNode = new ERXRestRequestNode(keyFilter.keyMap(key).key(), false);
 		toManyRelationshipNode.setArray(true);
 		toManyRelationshipNode.setType(destinationEntity.entityName());
 
 		List childrenObjects = (List) key.valueInObject(obj);
 		ERXKeyFilter childFilter = keyFilter._filterForKey(key);
-        NSArray<EOSortOrdering> sortOrderings = childFilter.sortOrderings();
-        if (sortOrderings != null && sortOrderings.count() > 0) {
-                if (childrenObjects instanceof NSArray) {
-                        childrenObjects = EOSortOrdering.sortedArrayUsingKeyOrderArray((NSArray<?>)childrenObjects, sortOrderings);
-                }
-                else {
-                        log.warn("Skipping sort orderings for '" + key + "' on " + obj + " because sort orderings are only supported for NSArrays.");
-                }
-        }
-        for (Object childObj : childrenObjects) {
+		for (Object childObj : childrenObjects) {
 			ERXRestRequestNode childNode = new ERXRestRequestNode(null, false);
-			childNode._fillInWithObjectAndFilter(childObj, destinationEntity, childFilter, context, visitedObjects);
+			childNode._fillInWithObjectAndFilter(childObj, destinationEntity, childFilter, delegate, visitedObjects);
 			toManyRelationshipNode.addChild(childNode);
 		}
 
@@ -891,17 +728,17 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 
 	}
 
-	protected void _addToOneRelationshipNodeForKeyInObject(ERXKey<?> key, Object obj, EOClassDescription destinationEntity, ERXKeyFilter keyFilter, ERXRestContext context, Set<Object> visitedObjects) {
+	protected void _addToOneRelationshipNodeForKeyInObject(ERXKey<?> key, Object obj, EOClassDescription destinationEntity, ERXKeyFilter keyFilter, IERXRestDelegate delegate, Set<Object> visitedObjects) {
 		Object value = key.valueInObject(obj);
 		// if (value != null) {
 		ERXRestRequestNode toOneRelationshipNode = new ERXRestRequestNode(keyFilter.keyMap(key).key(), false);
-		toOneRelationshipNode._fillInWithObjectAndFilter(value, destinationEntity, keyFilter._filterForKey(key), context, visitedObjects);
+		toOneRelationshipNode._fillInWithObjectAndFilter(value, destinationEntity, keyFilter._filterForKey(key), delegate, visitedObjects);
 		addChild(toOneRelationshipNode);
 		// }
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void _addAttributesAndRelationshipsForObjectOfEntity(Object obj, EOClassDescription classDescription, ERXKeyFilter keyFilter, ERXRestContext context, Set<Object> visitedObjects) {
+	protected void _addAttributesAndRelationshipsForObjectOfEntity(Object obj, EOClassDescription classDescription, ERXKeyFilter keyFilter, IERXRestDelegate delegate, Set<Object> visitedObjects) {
 		// just break out ... no key filter = nothing to do
 		if (keyFilter == null) {
 			return;
@@ -922,7 +759,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 			// if (relationship.isClassProperty()) {
 			ERXKey<Object> key = new ERXKey<Object>(relationshipName);
 			if (keyFilter.matches(key, ERXKey.Type.ToOneRelationship)) {
-				_addToOneRelationshipNodeForKeyInObject(key, obj, classDescription.classDescriptionForDestinationKey(relationshipName), keyFilter, context, visitedObjects);
+				_addToOneRelationshipNodeForKeyInObject(key, obj, classDescription.classDescriptionForDestinationKey(relationshipName), keyFilter, delegate, visitedObjects);
 				visitedKeys.add(key);
 			}
 			// }
@@ -932,7 +769,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 			// if (relationship.isClassProperty()) {
 			ERXKey<Object> key = new ERXKey<Object>(relationshipName);
 			if (keyFilter.matches(key, ERXKey.Type.ToManyRelationship)) {
-				_addToManyRelationshipNodeForKeyOfEntityInObject(key, classDescription.classDescriptionForDestinationKey(relationshipName), obj, keyFilter, context, visitedObjects);
+				_addToManyRelationshipNodeForKeyOfEntityInObject(key, classDescription.classDescriptionForDestinationKey(relationshipName), obj, keyFilter, delegate, visitedObjects);
 				visitedKeys.add(key);
 			}
 			// }
@@ -947,28 +784,28 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 				// we fallback and lookup the class entity ...
 				if (classDescription instanceof EOEntityClassDescription) {
 					// EOEntityClassDescription.classDescriptionForEntityName(obj.getClass().getName());
-					EOClassDescription nonModelClassDescription = ERXRestClassDescriptionFactory.classDescriptionForObject(obj, true);
+					EOClassDescription nonModelClassDescription = ERXRestClassDescriptionFactory.classDescriptionForClass(obj.getClass(), true);
 					for (ERXKey<?> remainingKey : remainingKeys) {
 						String keyName = remainingKey.key();
 						if (nonModelClassDescription.attributeKeys().containsObject(keyName)) {
 							_addAttributeNodeForKeyInObject(remainingKey, obj, keyFilter);
 						}
 						else if (nonModelClassDescription.toManyRelationshipKeys().containsObject(keyName)) {
-							_addToManyRelationshipNodeForKeyOfEntityInObject(remainingKey, nonModelClassDescription.classDescriptionForDestinationKey(keyName), obj, keyFilter, context, visitedObjects);
+							_addToManyRelationshipNodeForKeyOfEntityInObject(remainingKey, nonModelClassDescription.classDescriptionForDestinationKey(keyName), obj, keyFilter, delegate, visitedObjects);
 						}
 						else if (nonModelClassDescription.toOneRelationshipKeys().containsObject(keyName)) {
-							_addToOneRelationshipNodeForKeyInObject(remainingKey, obj, nonModelClassDescription.classDescriptionForDestinationKey(keyName), keyFilter, context, visitedObjects);
+							_addToOneRelationshipNodeForKeyInObject(remainingKey, obj, nonModelClassDescription.classDescriptionForDestinationKey(keyName), keyFilter, delegate, visitedObjects);
 						}
 						else if (nonModelClassDescription instanceof BeanInfoClassDescription && ((BeanInfoClassDescription) nonModelClassDescription).isAttributeMethod(keyName)) {
 							_addAttributeNodeForKeyInObject(remainingKey, obj, keyFilter);
 						}
 						else if (nonModelClassDescription instanceof BeanInfoClassDescription && ((BeanInfoClassDescription) nonModelClassDescription).isToManyMethod(keyName)) {
-							_addToManyRelationshipNodeForKeyOfEntityInObject(remainingKey, nonModelClassDescription.classDescriptionForDestinationKey(keyName), obj, keyFilter, context, visitedObjects);
+							_addToManyRelationshipNodeForKeyOfEntityInObject(remainingKey, nonModelClassDescription.classDescriptionForDestinationKey(keyName), obj, keyFilter, delegate, visitedObjects);
 						}
 						else if (nonModelClassDescription instanceof BeanInfoClassDescription && ((BeanInfoClassDescription) nonModelClassDescription).isToOneMethod(keyName)) {
-							_addToOneRelationshipNodeForKeyInObject(remainingKey, obj, nonModelClassDescription.classDescriptionForDestinationKey(keyName), keyFilter, context, visitedObjects);
+							_addToOneRelationshipNodeForKeyInObject(remainingKey, obj, nonModelClassDescription.classDescriptionForDestinationKey(keyName), keyFilter, delegate, visitedObjects);
 						}
-						else if (!keyFilter.isUnknownKeyIgnored()) {
+						else {
 							throw new IllegalArgumentException("This key filter specified that the key '" + keyName + "' should be included on '" + nonModelClassDescription.entityName() + "', but it does not exist.");
 						}
 					}
@@ -981,24 +818,24 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 							_addAttributeNodeForKeyInObject(remainingKey, obj, keyFilter);
 						}
 						else if (beanInfoClassDescription.isToManyMethod(keyName)) {
-							_addToManyRelationshipNodeForKeyOfEntityInObject(remainingKey, beanInfoClassDescription.classDescriptionForDestinationKey(keyName), obj, keyFilter, context, visitedObjects);
+							_addToManyRelationshipNodeForKeyOfEntityInObject(remainingKey, beanInfoClassDescription.classDescriptionForDestinationKey(keyName), obj, keyFilter, delegate, visitedObjects);
 						}
 						else if (beanInfoClassDescription.isToOneMethod(keyName)) {
-							_addToOneRelationshipNodeForKeyInObject(remainingKey, obj, beanInfoClassDescription.classDescriptionForDestinationKey(keyName), keyFilter, context, visitedObjects);
+							_addToOneRelationshipNodeForKeyInObject(remainingKey, obj, beanInfoClassDescription.classDescriptionForDestinationKey(keyName), keyFilter, delegate, visitedObjects);
 						}
-						else if (!keyFilter.isUnknownKeyIgnored()) {
+						else {
 							throw new IllegalArgumentException("This key filter specified that the key '" + keyName + "' should be included on '" + beanInfoClassDescription.entityName() + "', but it does not exist.");
 						}
 					}
 				}
-				else if (!keyFilter.isUnknownKeyIgnored()) {
+				else {
 					throw new IllegalArgumentException("This key filter specified that the keys '" + remainingKeys + "' should be included on '" + classDescription.entityName() + "', but they do not exist.");
 				}
 			}
 		}
 	}
 
-	protected void _fillInWithObjectAndFilter(Object obj, EOClassDescription classDescription, ERXKeyFilter keyFilter, ERXRestContext context, Set<Object> visitedObjects) {
+	protected void _fillInWithObjectAndFilter(Object obj, EOClassDescription classDescription, ERXKeyFilter keyFilter, IERXRestDelegate delegate, Set<Object> visitedObjects) {
 		if (obj instanceof List) {
 			setAssociatedObject(obj);
 			// setAttributeForKey(/* ??? */, ERXRestRequestNode.TYPE_KEY);
@@ -1006,24 +843,18 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 
 			for (Object childObj : (List) obj) {
 				ERXRestRequestNode childNode = new ERXRestRequestNode(null, false);
-				childNode._fillInWithObjectAndFilter(childObj, classDescription, keyFilter, context, visitedObjects);
+				childNode._fillInWithObjectAndFilter(childObj, classDescription, keyFilter, delegate, visitedObjects);
 				addChild(childNode);
 			}
 		}
 		else if (ERXRestUtils.isPrimitive(obj)) {
-			if (obj instanceof NSKeyValueCoding.Null) {
-				setValue(null);
-				setAssociatedObject(null);
-			}
-			else {
-				setValue(obj);
-				setAssociatedObject(obj);
-			}
+			setValue(obj);
+			setAssociatedObject(obj);
 		}
 		else {
 			// in case we have a superclass class description passed in
 			if (obj != null) {
-				classDescription = ERXRestClassDescriptionFactory.classDescriptionForObject(obj, false);
+				classDescription = ERXRestClassDescriptionFactory.classDescriptionForObject(obj);
 			}
 			if (_name == null) {
 				_name = classDescription.entityName();
@@ -1032,13 +863,13 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 			setAssociatedObject(obj);
 			setType(classDescription.entityName());
 			if (obj != null) {
-				Object id = IERXRestDelegate.Factory.delegateForClassDescription(classDescription).primaryKeyForObject(obj, context);
+				Object id = delegate.primaryKeyForObject(obj);
 				if (id != null) {
 					setID(id);
 				}
 				if (!visitedObjects.contains(obj) || !keyFilter.isDeduplicationEnabled()) {
 					visitedObjects.add(obj);
-					_addAttributesAndRelationshipsForObjectOfEntity(obj, classDescription, keyFilter, context, visitedObjects);
+					_addAttributesAndRelationshipsForObjectOfEntity(obj, classDescription, keyFilter, delegate, visitedObjects);
 				}
 			}
 		}
@@ -1051,8 +882,8 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 *            the format to use
 	 * @return a string representation of this request node using the given format
 	 */
-	public String toString(ERXRestFormat format, ERXRestContext context) {
-		return toString(format.writer(), format.delegate(), context);
+	public String toString(ERXRestFormat format) {
+		return toString(format.writer(), format.delegate());
 	}
 
 	/**
@@ -1062,9 +893,9 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 *            the writer to use
 	 * @return a string representation of this request node using the given IERXRestWriter
 	 */
-	public String toString(IERXRestWriter writer, ERXRestFormat.Delegate delegate, ERXRestContext context) {
+	public String toString(IERXRestWriter writer, ERXRestFormat.Delegate delegate) {
 		WOResponse octopusHair = new WOResponse();
-		writer.appendToResponse(this, new ERXWORestResponse(octopusHair), delegate, context);
+		writer.appendToResponse(this, new ERXWORestResponse(octopusHair), delegate);
 		return octopusHair.contentString();
 	}
 
@@ -1105,36 +936,26 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	}
 
 	/**
-	 * Equivalent to updateObjectWithFilter(obj, ERXKeyFilter.filterWithAllRecursive(), new ERXRestContext());
-	 * 
-	 * @param obj
-	 *            the object to update
-	 */
-	public void updateObject(Object obj) {
-		updateObjectWithFilter(obj, ERXKeyFilter.filterWithAllRecursive(), new ERXRestContext());
-	}
-
-	/**
 	 * Updates the given object based on this request node.
 	 * 
 	 * @param obj
 	 *            the object to update
 	 * @param keyFilter
 	 *            the filter to use to determine how to update
-	 * @param context
+	 * @param delegate
 	 *            the delegate
 	 */
-	public void updateObjectWithFilter(Object obj, ERXKeyFilter keyFilter, ERXRestContext context) {
+	public void updateObjectWithFilter(Object obj, ERXKeyFilter keyFilter, IERXRestDelegate delegate) {
 		if (obj == null) {
 			return;
 		}
 
-		EOClassDescription classDescription = ERXRestClassDescriptionFactory.classDescriptionForObject(obj, false);
+		EOClassDescription classDescription = ERXRestClassDescriptionFactory.classDescriptionForObject(obj);
 		for (Map.Entry<String, Object> attribute : _attributes.entrySet()) {
 			ERXKey<Object> key = keyFilter.keyMap(new ERXKey<Object>(attribute.getKey()));
 			String keyName = key.key();
 			if (keyFilter.matches(key, ERXKey.Type.Attribute) && isClassProperty(classDescription, keyName)) {
-				Object value = ERXRestUtils.coerceValueToAttributeType(attribute.getValue(), null, obj, keyName, context);
+				Object value = ERXRestUtils.coerceValueToAttributeType(attribute.getValue(), null, obj, keyName);
 				if (value instanceof NSKeyValueCoding.Null) {
 					value = null;
 				}
@@ -1153,90 +974,57 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 			String keyName = key.key();
 			if (isClassProperty(classDescription, keyName)) {
 				NSKeyValueCoding._KeyBinding binding = NSKeyValueCoding.DefaultImplementation._keyGetBindingForKey(obj, keyName);
-				Class<?> valueType = binding.valueType();
-				if (valueType == Object.class) {
-					if (childNode.isArray()) {
-						valueType = NSArray.class;
-					}
-					else {
-						Object childValue = childNode.value();
-						if (childValue != null) {
-							valueType = childValue.getClass();
-						}
-					}
-				}
+				Class valueType = binding.valueType();
 
 				if (List.class.isAssignableFrom(valueType) && keyFilter.matches(key, ERXKey.Type.ToManyRelationship)) {
-					EOClassDescription destinationClassDescription;
+					EOClassDescription destinationEntity;
 					// this is sort of expensive, but we want to support non-eomodel to-many relationships on EO's, so
 					// we fallback and lookup the class entity ...
 					if (!classDescription.toManyRelationshipKeys().containsObject(keyName) && classDescription instanceof EOEntityClassDescription) {
-						EOClassDescription nonModelClassDescription = ERXRestClassDescriptionFactory.classDescriptionForObject(obj, true);
+						EOClassDescription nonModelClassDescription = ERXRestClassDescriptionFactory.classDescriptionForClass(obj.getClass(), true);
 						if (!nonModelClassDescription.toManyRelationshipKeys().containsObject(keyName)) {
 							throw new IllegalArgumentException("There is no to-many relationship named '" + key.key() + "' on '" + classDescription.entityName() + "'.");
 						}
-						destinationClassDescription = classDescription.classDescriptionForDestinationKey(keyName);
+						destinationEntity = classDescription.classDescriptionForDestinationKey(keyName);
 					}
 					else {
-						destinationClassDescription = classDescription.classDescriptionForDestinationKey(keyName);
-					}
-					if (destinationClassDescription == null) {
-						if (keyFilter.isUnknownKeyIgnored()) {
-							continue;
-						}
-						else {
-							throw new NSKeyValueCoding.UnknownKeyException("There is no key '" + keyName + "' on this object.", obj, keyName);
-						}
+						destinationEntity = classDescription.classDescriptionForDestinationKey(keyName);
 					}
 					boolean lockedRelationship = keyFilter.lockedRelationship(key);
 
 					@SuppressWarnings("unchecked")
 					List<Object> existingValues = (List<Object>) NSKeyValueCoding.DefaultImplementation.valueForKey(obj, keyName);
 
-					Set<Object> removedValues;
-					if (existingValues == null) {
-						removedValues = new HashSet<Object>();
-					}
-					else {
-						removedValues = new HashSet<Object>(existingValues);
-					}
+					Set<Object> removedValues = new HashSet<Object>(existingValues);
 					List<Object> newValues = new LinkedList<Object>();
 					List<Object> allValues = new LinkedList<Object>();
 					for (ERXRestRequestNode toManyNode : childNode.children()) {
 						Object id = toManyNode.id();
 
 						Object childObj;
-						if (toManyNode.children().count() == 0 && ERXRestUtils.isPrimitive(toManyNode.value())) {
+						if (id == null) {
 							if (lockedRelationship) {
 								childObj = null;
 							}
 							else {
-								childObj = toManyNode.value();
-							}
-						}
-						else if (id == null) {
-							if (lockedRelationship) {
-								childObj = null;
-							}
-							else {
-								childObj = IERXRestDelegate.Factory.delegateForClassDescription(destinationClassDescription).createObjectOfEntityWithID(destinationClassDescription, id, context);
+								childObj = delegate.createObjectOfEntityWithID(destinationEntity, null);
 							}
 						}
 						else {
-							childObj = IERXRestDelegate.Factory.delegateForClassDescription(destinationClassDescription).objectOfEntityWithID(destinationClassDescription, id, context);
+							childObj = delegate.objectOfEntityWithID(destinationEntity, id);
 						}
 
 						if (childObj != null) {
-							boolean newMemberOfRelationship = existingValues == null || !existingValues.contains(childObj);
+							boolean newMemberOfRelationship = !existingValues.contains(childObj);
 							if (newMemberOfRelationship) {
 								if (!lockedRelationship) {
-									toManyNode.updateObjectWithFilter(childObj, keyFilter._filterForKey(key), context);
+									toManyNode.updateObjectWithFilter(childObj, keyFilter._filterForKey(key), delegate);
 									newValues.add(childObj);
 									allValues.add(childObj);
 								}
 							}
 							else {
-								toManyNode.updateObjectWithFilter(childObj, keyFilter._filterForKey(key), context);
+								toManyNode.updateObjectWithFilter(childObj, keyFilter._filterForKey(key), delegate);
 								allValues.add(childObj);
 							}
 							removedValues.remove(childObj);
@@ -1267,7 +1055,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 					// this is sort of expensive, but we want to support non-eomodel to-one relationships on EO's, so
 					// we fallback and lookup the class entity ...
 					if (!classDescription.toOneRelationshipKeys().containsObject(keyName) && classDescription instanceof EOEntityClassDescription) {
-						EOClassDescription nonModelClassDescription = ERXRestClassDescriptionFactory.classDescriptionForObject(obj, true);
+						EOClassDescription nonModelClassDescription = ERXRestClassDescriptionFactory.classDescriptionForClass(obj.getClass(), true);
 						if (!nonModelClassDescription.toManyRelationshipKeys().containsObject(keyName)) {
 							throw new IllegalArgumentException("There is no to-one relationship named '" + key.key() + "' on '" + classDescription.entityName() + "'.");
 						}
@@ -1275,14 +1063,6 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 					}
 					else {
 						destinationClassDescription = classDescription.classDescriptionForDestinationKey(keyName);
-					}
-					if (destinationClassDescription == null) {
-						if (keyFilter.isUnknownKeyIgnored()) {
-							continue;
-						}
-						else {
-							throw new NSKeyValueCoding.UnknownKeyException("There is no key '" + keyName + "' on this object.", obj, keyName);
-						}
 					}
 					boolean lockedRelationship = keyFilter.lockedRelationship(key);
 
@@ -1309,30 +1089,17 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 					else {
 						Object id = childNode.id();
 
-						ERXKeyFilter childKeyFilter = keyFilter._filterForKey(key);
 						Object childObj;
 						if (id == null) {
 							if (lockedRelationship) {
 								childObj = null;
 							}
-							else if (childKeyFilter.isAnonymousUpdateEnabled()) {
-								childObj = NSKeyValueCoding.DefaultImplementation.valueForKey(obj, keyName);
-								if (childObj == null) {
-									childObj = IERXRestDelegate.Factory.delegateForClassDescription(destinationClassDescription).createObjectOfEntityWithID(destinationClassDescription, null, context);
-								}
-							}
 							else {
-								childObj = IERXRestDelegate.Factory.delegateForClassDescription(destinationClassDescription).createObjectOfEntityWithID(destinationClassDescription, null, context);
-							}
-						}
-						else if ("_".equals(id)) {
-							childObj = NSKeyValueCoding.DefaultImplementation.valueForKey(obj, keyName);
-							if (!lockedRelationship && childObj == null) {
-								childObj = IERXRestDelegate.Factory.delegateForClassDescription(destinationClassDescription).createObjectOfEntityWithID(destinationClassDescription, null, context);
+								childObj = delegate.createObjectOfEntityWithID(destinationClassDescription, null);
 							}
 						}
 						else {
-							childObj = IERXRestDelegate.Factory.delegateForClassDescription(destinationClassDescription).objectOfEntityWithID(destinationClassDescription, id, context);
+							childObj = delegate.objectOfEntityWithID(destinationClassDescription, id);
 						}
 
 						boolean updateChildObj;
@@ -1348,7 +1115,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 						}
 
 						if (updateChildObj) {
-							childNode.updateObjectWithFilter(childObj, childKeyFilter, context);
+							childNode.updateObjectWithFilter(childObj, keyFilter._filterForKey(key), delegate);
 							if (!lockedRelationship) {
 								_safeWillTakeValueForKey(keyFilter, obj, childObj, keyName);
 								if (obj instanceof EOEnterpriseObject && childObj instanceof EOEnterpriseObject) {
@@ -1368,20 +1135,13 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 				else if (/* entity.attributeNamed(keyName) != null && */ERXRestUtils.isPrimitive(valueType) && keyFilter.matches(key, ERXKey.Type.Attribute)) {
 					Object value = childNode.value();
 					if (value instanceof String) {
-						value = ERXRestUtils.coerceValueToAttributeType(value, null, obj, keyName, context);
+						value = ERXRestUtils.coerceValueToAttributeType(value, null, obj, keyName);
 					}
 					if (value instanceof NSKeyValueCoding.Null) {
 						value = null;
 					}
 					_safeWillTakeValueForKey(keyFilter, obj, value, keyName);
-					try {
-						key.takeValueInObject(value, obj);
-					}
-					catch (NSKeyValueCoding.UnknownKeyException e) {
-						if (!keyFilter.isUnknownKeyIgnored()) {
-							throw e;
-						}
-					}
+					key.takeValueInObject(value, obj);
 					_safeDidTakeValueForKey(keyFilter, obj, value, keyName);
 				}
 				else {
@@ -1393,20 +1153,6 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 		}
 	}
 
-	// MS: Totally debatable .... I may take this back out, but it makes things look prettier.
-	public void _removeRedundantTypes() {
-		String type = type();
-		if ("NSDictionary".equals(type) || "NSMutableDictionary".equals(type) || "HashMap".equals(type)) {
-			setType(null);
-		}
-		NSArray<ERXRestRequestNode> children = children();
-		if (children != null) {
-			for (ERXRestRequestNode child : children) {
-				child._removeRedundantTypes();
-			}
-		}
-	}
-    
 	/**
 	 * Creates a hierarchy of ERXRestRequestNodes based off of the given array of objects.
 	 * 
@@ -1418,14 +1164,11 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 *            the filter to use
 	 * @return the root ERXRestRequestNode
 	 */
-	public static ERXRestRequestNode requestNodeWithObjectAndFilter(EOClassDescription classDescription, List<?> objects, ERXKeyFilter keyFilter, ERXRestContext context) {
-		ERXRestRequestNode requestNode = new ERXRestRequestNode(null, true);
-		if (classDescription != null) {
-			String entityName = classDescription.entityName();
-			requestNode = new ERXRestRequestNode(entityName, true);
-			requestNode.setType(entityName);
-		}
-		requestNode._fillInWithObjectAndFilter(objects, classDescription, keyFilter, context, new HashSet<Object>());
+	public static ERXRestRequestNode requestNodeWithObjectAndFilter(EOClassDescription classDescription, List<?> objects, ERXKeyFilter keyFilter, IERXRestDelegate delegate) {
+		String entityName = classDescription.entityName();
+		ERXRestRequestNode requestNode = new ERXRestRequestNode(entityName, true);
+		requestNode.setType(entityName);
+		requestNode._fillInWithObjectAndFilter(objects, classDescription, keyFilter, delegate, new HashSet<Object>());
 		return requestNode;
 	}
 
@@ -1438,11 +1181,11 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 *            the filter to use
 	 * @return the root ERXRestRequestNode
 	 */
-	public static ERXRestRequestNode requestNodeWithObjectAndFilter(Object obj, ERXKeyFilter keyFilter, ERXRestContext context) {
+	public static ERXRestRequestNode requestNodeWithObjectAndFilter(Object obj, ERXKeyFilter keyFilter, IERXRestDelegate delegate) {
 		String shortName = null;
 		EOClassDescription classDescription = null;
 		if (obj != null) {
-			classDescription = ERXRestClassDescriptionFactory.classDescriptionForObject(obj, false);
+			classDescription = ERXRestClassDescriptionFactory.classDescriptionForObject(obj);
 			shortName = classDescription.entityName();
 		}
 		ERXRestRequestNode requestNode = new ERXRestRequestNode(shortName, true);
@@ -1453,7 +1196,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 			if (!(obj instanceof List)) {
 				requestNode.setType(shortName);
 			}
-			requestNode._fillInWithObjectAndFilter(obj, classDescription, keyFilter, context, new HashSet<Object>());
+			requestNode._fillInWithObjectAndFilter(obj, classDescription, keyFilter, delegate, new HashSet<Object>());
 		}
 		return requestNode;
 	}

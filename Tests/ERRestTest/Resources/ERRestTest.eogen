@@ -1,1 +1,0 @@
- -destination Sources -extension java -java -model Resources/ERRestTest.eomodeld -packagedirs -subclassDestination Sources -verbose -loadModelGroup

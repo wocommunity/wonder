@@ -1,14 +1,11 @@
 package er.rest;
 
 import java.beans.BeanInfo;
-import java.beans.IndexedPropertyDescriptor;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.MethodDescriptor;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.List;
 
 import com.webobjects.eocontrol.EOClassDescription;
@@ -16,7 +13,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 
-public class BeanInfoClassDescription extends EOClassDescription implements IERXNonEOClassDescription {
+public class BeanInfoClassDescription extends EOClassDescription {
 	private BeanInfo _beanInfo;
 
 	public BeanInfoClassDescription(Class clazz) {
@@ -128,39 +125,12 @@ public class BeanInfoClassDescription extends EOClassDescription implements IERX
 		return relationships;
 	}
 
-	protected Class<?> toManyComponentType(Type componentType) {
-		Class<?> componentTypeClass = Object.class;
-		if (componentType instanceof ParameterizedType) {
-			Type[] typeArguments = ((ParameterizedType) componentType).getActualTypeArguments();
-			if (typeArguments.length == 1) {
-				componentTypeClass = (Class<?>) typeArguments[0];
-			}
-		}
-		return componentTypeClass;
-	}
-
 	@Override
 	public EOClassDescription classDescriptionForDestinationKey(String detailKey) {
 		for (PropertyDescriptor descriptor : _beanInfo.getPropertyDescriptors()) {
 			if (descriptor.getName().equals(detailKey)) {
 				if (isToMany(descriptor)) {
-					if (descriptor instanceof IndexedPropertyDescriptor) {
-						return ERXRestClassDescriptionFactory.classDescriptionForClass(((IndexedPropertyDescriptor)descriptor).getIndexedPropertyType(), true);
-					}
-					else {
-						Type componentType = null;
-						Method method = descriptor.getReadMethod();
-						if (method != null) {
-							componentType = method.getGenericReturnType();
-						}
-						else {
-							method = descriptor.getWriteMethod();
-							if (method != null) {
-								componentType = method.getGenericParameterTypes()[0];
-							}
-						}
-						return ERXRestClassDescriptionFactory.classDescriptionForClass(toManyComponentType(componentType), true);
-					}
+					return ERXRestClassDescriptionFactory.classDescriptionForClass(Object.class, true);
 				}
 				else {
 					return ERXRestClassDescriptionFactory.classDescriptionForClass(descriptor.getPropertyType(), false);
@@ -171,10 +141,10 @@ public class BeanInfoClassDescription extends EOClassDescription implements IERX
 		// If we didn't find a getMethod, fall back and look for any method with that name
 		for (MethodDescriptor descriptor : _beanInfo.getMethodDescriptors()) {
 			Method descriptorMethod = descriptor.getMethod();
-			Class<?> descriptorReturnType = descriptorMethod.getReturnType();
+			Class descriptorReturnType = descriptorMethod.getReturnType();
 			if (descriptor.getName().equals(detailKey) && descriptorReturnType != void.class && descriptorMethod.getParameterTypes().length == 0) {
 				if (isToMany(descriptorReturnType)) {
-					return ERXRestClassDescriptionFactory.classDescriptionForClass(toManyComponentType(descriptorMethod.getGenericReturnType()), true);
+					return ERXRestClassDescriptionFactory.classDescriptionForClass(Object.class, true);
 				}
 				else {
 					return ERXRestClassDescriptionFactory.classDescriptionForClass(descriptorReturnType, false);

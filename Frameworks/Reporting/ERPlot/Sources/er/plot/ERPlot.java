@@ -8,10 +8,6 @@ import er.extensions.ERXExtensions;
 import er.extensions.ERXFrameworkPrincipal;
 import er.extensions.foundation.ERXProperties;
 
-/**
- *
- * @property er.plot.useLegacyTheme
- */
 public class ERPlot extends ERXFrameworkPrincipal {
 
     public final static Class<?> REQUIRES[] = new Class[] {ERXExtensions.class};

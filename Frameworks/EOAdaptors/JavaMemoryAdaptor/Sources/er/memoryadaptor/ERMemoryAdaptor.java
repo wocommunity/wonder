@@ -28,7 +28,7 @@ public class ERMemoryAdaptor extends EOAdaptor {
 	@Override
 	public void setConnectionDictionary(NSDictionary dictionary) {
 		if (dictionary == null) {
-			super.setConnectionDictionary(NSDictionary.<String, Object> emptyDictionary());
+			super.setConnectionDictionary(NSDictionary.EmptyDictionary);
 		}
 		else {
 			super.setConnectionDictionary(dictionary);

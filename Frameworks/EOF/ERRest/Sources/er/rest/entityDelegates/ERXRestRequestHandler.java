@@ -451,7 +451,7 @@ public class ERXRestRequestHandler extends WORequestHandler {
 
 				IERXRestParser requestParser = requestParserForType(type);
 				ERXWORestRequest woRestRequest = new ERXWORestRequest(request);
-				ERXRestRequestNode rootNode = requestParser.parseRestRequest(woRestRequest, new ERXRestFormatDelegate(), new er.rest.ERXRestContext(editingContext));
+				ERXRestRequestNode rootNode = requestParser.parseRestRequest(woRestRequest, new ERXRestFormatDelegate());
 				ERXRestRequest restRequest = new ERXRestRequest(restContext, rootNode, path);
 				String method = request.method();
 				if ("GET".equalsIgnoreCase(method)) {

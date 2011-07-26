@@ -92,9 +92,4 @@ public class ERPDF2PS extends ERXStatelessComponent {
       }
     }
   }
-  
-  @Override
-  public boolean clickToOpenEnabled(WOResponse response, WOContext context) {
-    return false;
-  }
 }

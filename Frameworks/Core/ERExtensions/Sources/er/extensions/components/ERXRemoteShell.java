@@ -19,10 +19,6 @@ import er.extensions.foundation.ERXSystem;
 import er.extensions.foundation.ERXRuntimeUtilities.Result;
 import er.extensions.foundation.ERXRuntimeUtilities.TimeoutException;
 
-/**
- *
- * @property java.io.tmpdir used for the default upload directory
- */
 public class ERXRemoteShell extends WOComponent {
     private static String alternativeQuote = "!#ALT_QUOTE#!";
 

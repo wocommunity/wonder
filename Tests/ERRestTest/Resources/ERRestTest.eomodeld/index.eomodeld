@@ -1,9 +1,0 @@
-{
-    EOModelVersion = "2.1"; 
-    adaptorName = Memory; 
-    connectionDictionary = {}; 
-    entities = (
-        {className = "er.rest.model.Company"; name = Company; }, 
-        {className = "er.rest.model.Person"; name = Person; }
-    ); 
-}

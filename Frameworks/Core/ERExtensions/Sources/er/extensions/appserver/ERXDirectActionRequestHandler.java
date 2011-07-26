@@ -24,8 +24,6 @@ import er.extensions.foundation.ERXProperties;
  * actually calling the action.
  * 
  * NOTE: This class is multi thread safe. 
- *
- * @property er.extensions.ERXMessageEncoding.Enabled
  */
 public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler {
 

@@ -12,7 +12,7 @@ HasPropertyName: WOConditional {
 
 PropertyName: WOString {
     value=displayNameForProperty;
-	escapeHTML = false;
+	escapeHTML = d2wContext.escapeHTML;
 }
 
 ContextDictionaryRepetition : WORepetition {

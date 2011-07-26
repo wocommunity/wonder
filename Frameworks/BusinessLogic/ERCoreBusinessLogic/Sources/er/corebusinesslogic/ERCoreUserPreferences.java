@@ -33,10 +33,6 @@ import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXRetainer;
 import er.extensions.foundation.ERXValueUtilities;
 
-/**
- *
- * @property er.corebusinesslogic.ERCoreUserPreferences.handlerClassName
- */
 public class ERCoreUserPreferences implements NSKeyValueCoding {
 
     //	===========================================================================

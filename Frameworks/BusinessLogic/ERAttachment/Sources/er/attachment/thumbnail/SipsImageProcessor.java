@@ -42,8 +42,8 @@ public class SipsImageProcessor extends ERImageProcessor {
       
       if (outputMimeType != null) {
         commands.add("--setProperty");
-        commands.add("format");
-        commands.add(outputMimeType.subtype());
+        commands.add("typeIdentifier");
+        commands.add(outputMimeType.uti());
       }
       
       if (compressionQuality != -1) {

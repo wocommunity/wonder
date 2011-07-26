@@ -448,10 +448,7 @@ static void sendResponse(request_rec *r, HTTPResponse *resp) {
 			if (r->connection->aborted) {
 				break;
 			}
-            if (resp_getResponseContent(resp, 1) == -1)
-			{
-				break;
-			}
+            resp_getResponseContent(resp, 1);
         }
 
         ap_rwrite(resp->content, resp->content_valid, r);

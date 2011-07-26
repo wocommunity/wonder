@@ -6,18 +6,30 @@ package er.rest.example.client;
 import com.webobjects.eocontrol.EOClassDescription;
 
 import er.rest.ERXAbstractRestDelegate;
-import er.rest.ERXRestContext;
 
 public class ClientCompanyRestDelegate extends ERXAbstractRestDelegate {
-    public Object primaryKeyForObject(Object obj, ERXRestContext context) {
+	@Override
+	public boolean shouldCreateMissingObjects() {
+		return true;
+	}
+
+	@Override
+	protected Object _primaryKeyForObject(EOClassDescription entity, Object obj) {
 		return ((ClientCompany) obj).getId();
 	}
-    
-    public Object objectOfEntityWithID(EOClassDescription entity, Object id, ERXRestContext context) {
+
+	@Override
+	protected boolean _isDelegateForEntity(EOClassDescription entity) {
+		return ClientCompany.class.getSimpleName().equals(entity.entityName());
+	}
+
+	@Override
+	protected Object _fetchObjectOfEntityWithID(EOClassDescription entity, Object id) {
 		return null;
 	}
-    
-    public Object createObjectOfEntityWithID(EOClassDescription entity, Object id, ERXRestContext context) {
+
+	@Override
+	protected Object _createObjectOfEntityWithID(EOClassDescription entity, Object id) {
 		ClientCompany comp = new ClientCompany();
 		comp.setId(String.valueOf(id));
 		return comp;

@@ -33,6 +33,8 @@ public class ERMDSelectButton extends ERMDActionButton {
      * Label for select button
      * <p>
      * Defaults to "Select"
+     * 
+     * @return
      */
 	public String buttonLabel() {
 		if (_buttonLabel == null) {
@@ -45,6 +47,8 @@ public class ERMDSelectButton extends ERMDActionButton {
 	 * CSS class for the select button
 	 * <p>
 	 * Defaults to "Button ObjButton SelectObjButton"
+	 * 
+	 * @return
 	 */
 	public String buttonClass() {
 		if (_buttonClass == null) {
@@ -55,6 +59,8 @@ public class ERMDSelectButton extends ERMDActionButton {
     
 	/**
 	 * Action performed by the select button
+	 * 
+	 * @return
 	 */
     public WOComponent selectObjectAction() {
         SelectPageInterface parent = parentSelectPage();

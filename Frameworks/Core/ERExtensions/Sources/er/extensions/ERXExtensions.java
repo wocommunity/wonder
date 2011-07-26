@@ -403,7 +403,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      */
     public void sharedEditingContextWasInitialized(NSNotification n) {
     	EOSharedEditingContext sec = EOSharedEditingContext.defaultSharedEditingContext();
-    	ERXEC._factory().setDefaultDelegateOnEditingContext(sec, true);
+    	ERXEC.factory().setDefaultDelegateOnEditingContext(sec, true);
     }
 
     /** logging support for the adaptor channel */

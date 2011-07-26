@@ -75,6 +75,7 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
     
     /**
      * Removes the current object from the relationship
+     * @return
      */
     public WOActionResults removeAction() {
     	WOActionResults result = null;
@@ -99,6 +100,7 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
     
     /**
      * CSS class for the Remove button.
+     * @return
      */
 	public String buttonClass() {
 		String result = null;
@@ -140,6 +142,8 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
      * Label for the dialog's delete button
      * <p>
      * Defaults to "Delete"
+     * 
+     * @return
      */
     public String deleteButtonLabel() {
     	if (_deleteButtonLabel == null) {
@@ -151,7 +155,9 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
 	/**
 	 * Label for the dialog's remove button
 	 * <p>
-         * Defaults to "Remove"
+     * Defaults to "Remove"
+     * 
+	 * @return the removeButtonLabel
 	 */
 	public String removeButtonLabel() {
 		if (_removeButtonLabel == null) {
@@ -175,6 +181,8 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
      * 
      * The remove button show only be displayed if the reverse relationship for the related eo is not
      * mandatory and isEntityRemoveable returns true.
+     * 
+     * @return
      */
     public Boolean showRemoveButton() {
     	if (_showRemoveButton == null) {
@@ -206,6 +214,8 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
      * Boolean used to hide/show the confirmation dialog's delete button
      * 
      * The delete button is only shown if isEntityDeletable returns true
+     * 
+     * @return
      */
     public Boolean showDeleteButton() {
     	if (_showDeleteButton == null) {
@@ -222,6 +232,8 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
      * 		confirmDeleteOrRemoveRelatedMessage
      * 		confirmRemoveRelatedMessage
      * 		confirmDeleteRelatedMessage
+     * 
+     * @return
      */
     public String dialogMessage() {
     	if (_dialogMessage == null) {

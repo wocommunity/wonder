@@ -2239,7 +2239,7 @@ public class ERXStringUtilities {
 			attrValueClass = Class.forName(attr.className());
 		} catch (ClassNotFoundException cnfe) {
 			//An attribute has a className that is not in the classpath
-			throw NSForwardException._runtimeExceptionForThrowable(cnfe);
+			NSForwardException._runtimeExceptionForThrowable(cnfe);
 		}
 		
     	// If value is a date, parse using the formatter.
@@ -2333,7 +2333,7 @@ public class ERXStringUtilities {
 	    			Constructor numberConstructor = numberClass.getConstructor(new Class[] {String.class});
 	    			val = (Number)numberConstructor.newInstance(strVal);
 	    		} catch(Exception e) {
-	    			throw NSForwardException._runtimeExceptionForThrowable(e);
+	    			NSForwardException._runtimeExceptionForThrowable(e);
 	    		}
 			}
 		}
@@ -2463,29 +2463,4 @@ public class ERXStringUtilities {
 		sb.append(arg.substring(end, length));
 		return sb.toString();
 	}
-	
-	/**
-	 * A fast Luhn algorithm check. This method only verifies that the string
-	 * argument validates with the Luhn algorithm. It does not attempt to verify
-	 * if the number conforms to ISO/IEC 7812 specifications.
-	 * 
-	 * @param value
-	 *            A string value consisting of numeric digits between 0-9. If
-	 *            the number contains hyphens, spaces, or anything other than a
-	 *            string of digits between 0-9 the method returns false.
-	 * 
-	 * @return true if the value passes a luhn check, false otherwise.
-	 */
-	public static boolean luhnCheck(String value) {
-		final int length = value.length(), parity = length % 2;
-		final char zero = '0';
-		int sum = 0;
-		for (int i = 0, tmp = 0; i < length; i++) {
-			tmp = value.charAt(i) - zero;
-			if (tmp < 0 || tmp > 9) { return false; }
-			sum += (i % 2 == parity) ? ((2 * tmp) / 10) + ((2 * tmp) % 10) : tmp;
-		}
-		return sum % 10 == 0;
-	}
-
 }

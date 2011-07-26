@@ -11,7 +11,6 @@
     <target name="frameworks">
         <ant antFile="Build/build/build.xml" target="frameworks.all">
             <property name="build.action" value="build" />
-            <property name="wonder.patch" value="54" />
         </ant>
     </target>
     <target name="frameworks.install">
@@ -27,7 +26,6 @@
         <ant antFile="Build/build/build.xml" target="applications.all">
             <property name="build.action" value="build" />
             <property name="wonder.development" value="false" />
-            <property name="wonder.patch" value="54" />
         </ant>
     </target>
     <target name="applications.install">
@@ -105,8 +103,6 @@
             <property name="project.version" value="5.0" />
         </ant>
     </target>
-
-    <target name="test"><ant antFile="Build/build/build.xml" target="test" /></target>
 
     <target name="all" depends="clean, frameworks, frameworks.install, applications, applications.install, examples, examples.install">
     </target>

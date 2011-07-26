@@ -32,7 +32,7 @@ import er.extensions.foundation.ERXProperties;
  * 
  * @property er.extensions.ERXResourceManager.versionManager the class name of the version manager to use (or "default", or "properties")
  * @author ak
- * @author mschrag
+ * @fiddler mschrag
  */
 public class ERXResourceManager extends WOResourceManager {
 	private static Logger log = Logger.getLogger(ERXResourceManager.class);
@@ -48,16 +48,7 @@ public class ERXResourceManager extends WOResourceManager {
 			// AK: yeah, hack, I know...
 			_urlValuedElementsData = (_NSThreadsafeMutableDictionary) field.get(this);
 		}
-		catch (java.lang.SecurityException e) {
-			throw NSForwardException._runtimeExceptionForThrowable(e);
-		}
-		catch (NoSuchFieldException e) {
-			throw NSForwardException._runtimeExceptionForThrowable(e);
-		}
-		catch (IllegalArgumentException e) {
-			throw NSForwardException._runtimeExceptionForThrowable(e);
-		}
-		catch (IllegalAccessException e) {
+		catch (Exception e) {
 			throw NSForwardException._runtimeExceptionForThrowable(e);
 		}
 		String versionManagerClassName = ERXProperties.stringForKeyWithDefault("er.extensions.ERXResourceManager.versionManager", "default");
@@ -71,14 +62,8 @@ public class ERXResourceManager extends WOResourceManager {
 			try {
 				_versionManager = Class.forName(versionManagerClassName).asSubclass(IVersionManager.class).newInstance();
 			}
-			catch (java.lang.InstantiationException e) {
+			catch (Exception e) {
 				throw new RuntimeException("Unable to create the specified version manager '" + versionManagerClassName + ".", e);
-			}
-			catch (java.lang.IllegalAccessException e) {
-				throw new RuntimeException("Unable to create the specified version manager '" + versionManagerClassName + ".", e);
-			}
-			catch (ClassNotFoundException e) {
-				throw NSForwardException._runtimeExceptionForThrowable(e);
 			}
 		}
 	}
@@ -309,10 +294,10 @@ public class ERXResourceManager extends WOResourceManager {
 	}
 
 	/**
-     * Implementation of the IVersionManager interface which provides the
-     * ability to control resource version numbers with Properties settings,
-     * and appends the query parameter "?xxx" to WebServerResource URLs.
-	 *
+	 * PropertiesVersionManager provides the ability to control resource version
+	 * numbers with Properties settings, and appends the query parameter
+	 * "?xxx" to WebServerResource URLs.
+	 * 
 	 * @property er.extensions.ERXResourceManager.versionManager.default the
 	 *           default version to use when an explicit version is not
 	 *           specified, defaults to app startup time. Ideally you should set

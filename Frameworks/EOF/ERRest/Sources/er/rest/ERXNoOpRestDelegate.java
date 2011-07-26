@@ -1,23 +1,42 @@
 package er.rest;
 
 import com.webobjects.eocontrol.EOClassDescription;
+import com.webobjects.eocontrol.EOEditingContext;
 
 public class ERXNoOpRestDelegate extends ERXAbstractRestDelegate {
 	public ERXNoOpRestDelegate() {
+		setCreateMissingObjects(true);
 	}
-	
-	public Object createObjectOfEntityWithID(EOClassDescription entity, Object id, ERXRestContext context) {
-		if (entity instanceof IERXNonEOClassDescription) {
-			return ((IERXNonEOClassDescription) entity).createInstance();
+
+	public ERXNoOpRestDelegate(EOEditingContext editingContext) {
+		super(editingContext);
+	}
+
+	@Override
+	protected Object _createObjectOfEntityWithID(EOClassDescription entity, Object id) {
+		Object obj;
+		if (entity instanceof BeanInfoClassDescription) {
+			obj = ((BeanInfoClassDescription) entity).createInstance();
 		}
-		throw new UnsupportedOperationException("Unable to create an instance of the entity '" + entity + "'.");
+		else {
+			throw new UnsupportedOperationException("Unable to create an instance of the entity '" + entity + "'.");
+		}
+		return obj;
 	}
-	
-	public Object objectOfEntityWithID(EOClassDescription entity, Object id, ERXRestContext context) {
+
+	@Override
+	protected Object _fetchObjectOfEntityWithID(EOClassDescription entity, Object id) {
 		return null;
 	}
-	
-	public Object primaryKeyForObject(Object obj, ERXRestContext context) {
+
+	@Override
+	protected boolean _isDelegateForEntity(EOClassDescription entity) {
+		// MS: This is kind of hacky, but basically we only want to say this is the delegate for this entity if there isn't another custom registered one
+		return IERXRestDelegate.Factory.delegateForEntityNamed(entity.entityName(), null).getClass() == getClass();
+	}
+
+	@Override
+	protected Object _primaryKeyForObject(EOClassDescription entity, Object obj) {
 		return null;
 	}
 }

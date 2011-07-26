@@ -6,10 +6,6 @@ import com.webobjects.foundation.NSLog;
 import er.extensions.ERXFrameworkPrincipal;
 import er.extensions.foundation.ERXProperties;
 
-/**
- *
- * @property webobjectsexamples.ERMoviesLogic.useEmbeddedH2Database
- */
 public class ERMoviesLogic extends ERXFrameworkPrincipal {
     
     static {

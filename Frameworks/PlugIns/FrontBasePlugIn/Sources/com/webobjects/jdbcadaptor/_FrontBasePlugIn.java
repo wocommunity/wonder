@@ -39,7 +39,6 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSPropertyListSerialization;
-import com.webobjects.foundation.NSRange;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimeZone;
 
@@ -360,8 +359,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			return blob;
 		else {
 			try {
-				byte[] bytes = blob.getBytes(1, (int) blob.length());
-				return new NSData(bytes, new NSRange(0, bytes.length), true);
+				return attribute.newValueForBytes(blob.getBytes(1, (int) blob.length()), 0);
 			}
 			catch (Exception ioexception) {
 				throw new JDBCAdaptorException(ioexception.getMessage(), null);
@@ -1095,16 +1093,14 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			}
 			else {
 				// Default values.
-				Object defaultValue = dictionary.valueForKey("Default");
-		        if (defaultValue == null) {
-		            defaultValue = dictionary.valueForKey("er.extensions.eoattribute.default"); // deprecated key
-		        }
-		        if (defaultValue == null) {
-		            defaultValue = dictionary.valueForKey("default");
-		        }
-				if (defaultValue != null) {
+				if (dictionary.valueForKey("Default") != null) {
 					sql.append(" DEFAULT ");
-					sql.append(formatValueForAttribute(defaultValue, attribute));
+					sql.append(dictionary.valueForKey("Default"));
+				}
+
+				if (dictionary.valueForKey("er.extensions.eoattribute.default") != null) {
+					sql.append(" DEFAULT ");
+					sql.append(formatValueForAttribute(dictionary.valueForKey("er.extensions.eoattribute.default"), attribute));
 				}
 
 				// Column constraints.

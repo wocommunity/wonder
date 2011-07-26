@@ -129,8 +129,6 @@ public class ERXEOControlUtilities {
      * Note that the datasource that is constructed uses the
      * class description and editing context of the first object
      * of the array.
-     * @param ec
-     * @param entityName 
      * @param array collection of objects to be turned into a
      *		datasource
      * @return an array datasource corresponding to the array
@@ -277,6 +275,7 @@ public class ERXEOControlUtilities {
      * of the entity to create the enterprise object.
      * The object is then inserted into the editing context
      * and returned.
+     * @param <T> The enterprise object type
      * @param ec editingContext to insert the created object into
      * @param eoClass class of the enterprise object to be created
      * @return created and inserted enterprise object of type T
@@ -392,19 +391,6 @@ public class ERXEOControlUtilities {
             ec.invalidateObjectsWithGlobalIDs(gids);
         }
     }
-
-	/**
-	 * Sets the fetch time stamp of the eo's ec to now to ensure fresh data. and
-	 * refreshes the EO (which merges latest database snapshots with current
-	 * unsaved changes if we have unsaved changes)
-	 *
-	 * @param eo
-	 *            EO to be refreshed
-	 */
-	public static void refreshObject(EOEnterpriseObject eo) {
-		eo.editingContext().setFetchTimestamp(System.currentTimeMillis());
-		eo.editingContext().refreshObject(eo);
-	}
 
     /**
      * Clears snapshot the relaationship of a given enterprise so it will be read again when next accessed.
@@ -1221,7 +1207,7 @@ public class ERXEOControlUtilities {
         }
         
         if(string.trim().length()==0) {
-            return (NSDictionary<String, Object>)NSDictionary.EmptyDictionary;
+            return NSDictionary.EmptyDictionary;
         }
         
         EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
@@ -1476,9 +1462,12 @@ public class ERXEOControlUtilities {
      * @param objectsToFilter objects to filter
      * @param entityName name of the entity
      * @param qualifier qualifier
+     * @param prefetchKeyPaths prefetching key paths
      * @param sortOrderings the sort orderings to use on the results
+     * @param fetchLimit the fetch limit to use
      * @param usesDistinct whether or not to distinct the results
      * @param isDeep whether or not to fetch deeply
+     * @param hints fetch hints to apply
      * @param includeNewObjects option to include newly inserted objects in the result set
      * @param includeNewObjectsInParentEditingContext option to include newly inserted objects in parent editing
      *        contexts.  if true, the editing context lineage is explored, any newly-inserted objects matching the
@@ -2523,5 +2512,4 @@ public class ERXEOControlUtilities {
 		}
 
 	}
-
 }

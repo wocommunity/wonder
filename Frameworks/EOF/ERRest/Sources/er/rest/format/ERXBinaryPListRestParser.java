@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import er.extensions.foundation.ERXPropertyListSerialization;
-import er.rest.ERXRestContext;
 import er.rest.ERXRestRequestNode;
 import er.rest.ERXRestUtils;
 
@@ -62,7 +61,7 @@ public class ERXBinaryPListRestParser implements IERXRestParser {
 		return requestNode;
 	}
 
-	public ERXRestRequestNode parseRestRequest(IERXRestRequest request, ERXRestFormat.Delegate delegate, ERXRestContext context) {
+	public ERXRestRequestNode parseRestRequest(IERXRestRequest request, ERXRestFormat.Delegate delegate) {
 		ERXRestRequestNode rootRequestNode = null;
 
 		if (request != null) {

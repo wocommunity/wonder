@@ -1,6 +1,5 @@
 package er.rest.format;
 
-import er.rest.ERXRestContext;
 import er.rest.ERXRestRequestNode;
 
 /**
@@ -17,7 +16,7 @@ public interface IERXRestWriter {
 	 * @param response
 	 *            the response to write into
 	 */
-	public void appendHeadersToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestContext context);
+	public void appendHeadersToResponse(ERXRestRequestNode node, IERXRestResponse response);
 	
 	/**
 	 * Called at the end of a request to produce the output to the user.
@@ -27,5 +26,5 @@ public interface IERXRestWriter {
 	 * @param response
 	 *            the response to write into
 	 */
-	public void appendToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestFormat.Delegate delegate, ERXRestContext context);
+	public void appendToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestFormat.Delegate delegate);
 }

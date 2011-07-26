@@ -22,8 +22,6 @@ import er.wolips.WOLipsUtilities;
  * based on metadata that is added by ERXComponent (or from your component
  * base class).
  * 
- * @property er.component.clickToOpen
- *
  * @author mschrag
  */
 public class WOLClickToOpen extends WOComponent {

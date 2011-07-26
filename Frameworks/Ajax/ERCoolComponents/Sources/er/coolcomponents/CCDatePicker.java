@@ -124,6 +124,7 @@ public class CCDatePicker extends ERXStatelessComponent {
 	
 	/**
 	 * 
+	 * @return
 	 */
 	public String dateFormatString() {
 		String result = dateformat();

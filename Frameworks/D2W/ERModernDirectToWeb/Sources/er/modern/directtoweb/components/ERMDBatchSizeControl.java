@@ -55,6 +55,8 @@ public class ERMDBatchSizeControl extends ERDCustomComponent {
 	 * The string displayed for 100 [item]s : Show 10
 	 * <p>
 	 * Default is "item"
+	 * 
+	 * @return
 	 */
 	public String itemsString() {
 		if (_itemsString == null) {
@@ -71,6 +73,8 @@ public class ERMDBatchSizeControl extends ERDCustomComponent {
 	 * The string displayed for: 100 items : [Show] 10
 	 * <p>
 	 * Defaults to "Show"
+	 * 
+	 * @return
 	 */
 	public String showString() {
 		if (_showString == null) {
@@ -87,6 +91,8 @@ public class ERMDBatchSizeControl extends ERDCustomComponent {
 	 * The string displayed for: 100 items [:] Show 10
 	 * <p>
 	 * Defaults to ":"
+	 * 
+	 * @return
 	 */
 	public String separatorString() {
 		if (_separatorString == null) {
@@ -103,6 +109,8 @@ public class ERMDBatchSizeControl extends ERDCustomComponent {
 	 * Localizer. 
 	 * <p>
 	 * Defaults to ERXLocalizer.currentLocalizer()
+	 * 
+	 * @return
 	 */
     public ERXLocalizer localizer() {
 		if (_localizer == null) {
@@ -115,6 +123,8 @@ public class ERMDBatchSizeControl extends ERDCustomComponent {
      * Update container id for the displayGroup's list.
      * <p>
      * Defaults to the first parent update container id.
+     * 
+     * @return
      */
 	public String updateContainerID() {
 		if (_updateContainerID == null) {
@@ -128,6 +138,8 @@ public class ERMDBatchSizeControl extends ERDCustomComponent {
 
 	/**
 	 * Returns a unique id for this batch size control
+	 * 
+	 * @return
 	 */
 	public String batchSizeFieldID() {
 		if (_batchSizeFieldID == null) {
@@ -142,6 +154,8 @@ public class ERMDBatchSizeControl extends ERDCustomComponent {
 
 	/**
 	 * Returns the js function to update the updateContainerID
+	 * 
+	 * @return
 	 */
 	public String updateFunction() {
 		return "function(e) { " + updateContainerID() + "Update() }";

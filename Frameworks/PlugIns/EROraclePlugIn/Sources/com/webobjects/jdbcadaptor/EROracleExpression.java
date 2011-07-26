@@ -93,10 +93,7 @@ public class EROracleExpression extends OracleExpression {
       NSDictionary userInfo = attribute.userInfo();
       Object defaultValue = null;
       if (userInfo != null) {
-        defaultValue = userInfo.valueForKey("er.extensions.eoattribute.default"); // deprecated key
-        if (defaultValue == null) {
-          defaultValue = userInfo.valueForKey("default");
-        }
+        defaultValue = userInfo.valueForKey("er.extensions.eoattribute.default");
       }
       String sql;
       String allowsNullClauseForConstraint = allowsNullClauseForConstraint(shouldAllowNull(attribute));

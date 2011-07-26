@@ -61,7 +61,7 @@ public class ERXAjaxSession extends WOSession {
 
   private static boolean overridePrivateCache = ERXProperties.booleanForKey("er.extensions.overridePrivateCache");
   
-  private static final Logger logger = Logger.getLogger(ERXAjaxSession.class.getName());
+  private Logger logger = Logger.getLogger(ERXAjaxSession.class.getName());
   
   
   /*

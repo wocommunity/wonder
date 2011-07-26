@@ -30,7 +30,7 @@ public class ERXTestUtilities {
 		if (adaptorName.equals("Memory")) {
 			for (EOModel model: (NSArray<EOModel>)EOModelGroup.defaultGroup().models()) {
 				model.setAdaptorName("Memory");
-				model.setConnectionDictionary((NSDictionary<String, Object>) NSDictionary.EmptyDictionary);
+				model.setConnectionDictionary(NSDictionary.EmptyDictionary);
 			}
 			return;
 		}

@@ -10,9 +10,8 @@ import er.extensions.foundation.ERXProperties;
  * Component to inject the rule defined stylesheets. Place at the end of a page
  * to make sure the stylesheets take presidence over any other injected style resources
  * 
- * @property er.modern.look.skinframework
- *
  * @author davidleber
+ *
  */
 public class ERMD2WStyleSheetInjector extends ERD2WStatelessComponent {
 	
@@ -33,6 +32,8 @@ public class ERMD2WStyleSheetInjector extends ERD2WStatelessComponent {
      * <p>
      * Looks for a property named er.modern.look.skinframework (which should be supplied by
      * the skin framework, otherwise defaults to 'app'
+     * 
+     * @return
      */
     public String resourceFrameworkName() {
     	String fn = (String)stylesheet().valueForKey("framework");

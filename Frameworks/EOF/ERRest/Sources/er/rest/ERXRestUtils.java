@@ -1,7 +1,6 @@
 package er.rest;
 
 import java.math.BigDecimal;
-import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -21,10 +20,6 @@ import er.extensions.foundation.ERXValueUtilities;
 /**
  * Miscellaneous rest-related utility methods.
  * 
- * @property er.rest.dateFormat
- * @property er.rest.timestampFormat
- * @property er.rest.rfcDateFormat (default "rfc822")
- *
  * @author mschrag
  */
 public class ERXRestUtils {
@@ -35,7 +30,7 @@ public class ERXRestUtils {
 	 * @return whether or not the given object represents a primitive in REST
 	 */
 	public static boolean isPrimitive(Object obj) {
-		return obj == null || ((obj instanceof Class) ? ERXRestUtils.isPrimitive((Class<?>) obj) : ERXRestUtils.isPrimitive(obj.getClass()));
+		return obj == null || ((obj instanceof Class) ? ERXRestUtils.isPrimitive((Class) obj) : ERXRestUtils.isPrimitive(obj.getClass()));
 	}
 
 	/**
@@ -44,7 +39,7 @@ public class ERXRestUtils {
 	 * @param valueType the class to check
 	 * @return whether or not the given class represents a primitive in REST
 	 */
-	public static boolean isPrimitive(Class<?> valueType) {
+	public static boolean isPrimitive(Class valueType) {
 		boolean primitive = false;
 		if (String.class.isAssignableFrom(valueType)) {
 			primitive = true;
@@ -85,9 +80,6 @@ public class ERXRestUtils {
 		else if (Enum.class.isAssignableFrom(valueType)) {
 			primitive = true;
 		}
-		else if (NSKeyValueCoding.Null.class.isAssignableFrom(valueType)) {
-			primitive = true;
-		}
 		return primitive;
 	}
 
@@ -97,9 +89,9 @@ public class ERXRestUtils {
 	 * @param value the value to convert
 	 * @return the REST-formatted string
 	 */
-	public static String coerceValueToString(Object value, ERXRestContext context) {
+	public static String coerceValueToString(Object value) {
 		String formattedValue;
-		if (value == null || value instanceof NSKeyValueCoding.Null) {
+		if (value == null) {
 			formattedValue = null;
 		}
 		else if (value instanceof NSTimestamp) {
@@ -109,12 +101,12 @@ public class ERXRestUtils {
 				formattedValue = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date(timestamp.getTime()));
 				formattedValue = formattedValue.substring(0, formattedValue.length()-2) + ":" + formattedValue.substring(formattedValue.length()-2);  				
 			} else {
-				formattedValue = formattedValue = ERXRestUtils.timestampFormat(false, context).format(timestamp);
+				formattedValue = new NSTimestampFormatter(ERXRestUtils.timestampFormat(false)).format(timestamp);
 			}
 		}
 		else if (value instanceof Date) {
 			Date date = (Date) value;
-			formattedValue = ERXRestUtils.dateFormat(false, context).format(value);
+			formattedValue = new SimpleDateFormat(ERXRestUtils.dateFormat(false)).format(value);
 		}
 		else {
 			formattedValue = value.toString();
@@ -124,76 +116,37 @@ public class ERXRestUtils {
 	}
 
 	// this "spaces" attribute is stupid, i know ... this whole api is stupid.  it's a quick hack for now to accommodate someone very near and dear to my heart ... yes i'm talking to you.
-	protected static Format timestampFormat(boolean spaces, ERXRestContext context) {
-		Format timestampFormatter = (Format)context.userInfoForKey("er.rest.timestampFormatter");
-		if (timestampFormatter == null) {
-			String timestampFormat = (String)context.userInfoForKey("er.rest.timestampFormat");
-			if (timestampFormat == null) {
-				timestampFormat = ERXProperties.stringForKey("er.rest.timestampFormat");
-				if (timestampFormat == null) {
-					if (spaces) {
-						timestampFormat = ERXProperties.stringForKeyWithDefault("er.rest.timestampFormat.secondary", "%Y-%m-%d %H:%M:%S %Z");
-					}
-					else {
-						timestampFormat = ERXProperties.stringForKeyWithDefault("er.rest.timestampFormat.primary", "%Y-%m-%dT%H:%M:%SZ");
-					}
-				}
+	protected static String timestampFormat(boolean spaces) {
+		String dateFormat = ERXProperties.stringForKey("er.rest.timestampFormat");
+		if (dateFormat == null) {
+			if (spaces) {
+				dateFormat = ERXProperties.stringForKeyWithDefault("er.rest.timestampFormat.secondary", "%Y-%m-%d %H:%M:%S %Z");
 			}
-			timestampFormatter = new NSTimestampFormatter(timestampFormat);
+			else {
+				dateFormat = ERXProperties.stringForKeyWithDefault("er.rest.timestampFormat.primary", "%Y-%m-%dT%H:%M:%SZ");
+			}
 		}
-		return timestampFormatter;
+		return dateFormat;
 	}
 
-	protected static Format dateFormat(boolean spaces, ERXRestContext context) {
-		Format dateFormatter = (Format)context.userInfoForKey("er.rest.dateFormatter");
-		if (dateFormatter == null) {
-			String dateFormat = (String)context.userInfoForKey("er.rest.dateFormat");
-			if (dateFormat == null) {
-				dateFormat = ERXProperties.stringForKey("er.rest.dateFormat");
-				if (dateFormat == null) {
-					if (spaces) {
-						dateFormat = ERXProperties.stringForKeyWithDefault("er.rest.dateFormat.secondary", "yyyy-MM-dd HH:mm:ss z");
-					}
-					else {
-						dateFormat = ERXProperties.stringForKeyWithDefault("er.rest.dateFormat.primary", "yyyy-MM-dd'T'HH:mm:ss'Z'");
-					}
-				}
+	protected static String dateFormat(boolean spaces) {
+		String timestampFormat = ERXProperties.stringForKey("er.rest.dateFormat");
+		if (timestampFormat == null) {
+			if (spaces) {
+				timestampFormat = ERXProperties.stringForKeyWithDefault("er.rest.dateFormat.secondary", "YYYY-MM-dd HH:mm:ss z");
 			}
-			dateFormatter = new SimpleDateFormat(dateFormat);
+			else {
+				timestampFormat = ERXProperties.stringForKeyWithDefault("er.rest.dateFormat.primary", "YYYY-MM-dd\\THH:mm:ss\\Z");
+			}
 		}
-		return dateFormatter;
+		return timestampFormat;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static Object coerceValueToTypeNamed(Object value, String valueTypeName, ERXRestContext context, boolean resolveEntities) {
+	public static Object coerceValueToTypeNamed(Object value, String valueTypeName, IERXRestDelegate delegate) {
 		Object parsedValue;
 		Class<?> valueType = _NSUtilities.classWithName(valueTypeName);
-		// test primitives first, since we can't return a null for them
-		if (valueType != null && int.class.isAssignableFrom(valueType)) {
-			parsedValue = ERXValueUtilities.intValueWithDefault(value, 0);
-		}
-		else if (valueType != null && boolean.class.isAssignableFrom(valueType)) {
-			parsedValue = ERXValueUtilities.booleanValueWithDefault(value, false);
-		}
-		else if (valueType != null && char.class.isAssignableFrom(valueType)) {
-			parsedValue = (char)ERXValueUtilities.intValueWithDefault(value, 0);
-		}
-		else if (valueType != null && byte.class.isAssignableFrom(valueType)) {
-			parsedValue = (byte)ERXValueUtilities.intValueWithDefault(value, 0);
-		}
-		else if (valueType != null && long.class.isAssignableFrom(valueType)) {
-			parsedValue = ERXValueUtilities.longValueWithDefault(value, 0);
-		}
-		else if (valueType != null && float.class.isAssignableFrom(valueType)) {
-			parsedValue = ERXValueUtilities.floatValueWithDefault(value, 0);
-		}
-		else if (valueType != null && double.class.isAssignableFrom(valueType)) {
-			parsedValue = ERXValueUtilities.doubleValueWithDefault(value, 0);
-		}
-		else if (valueType != null && short.class.isAssignableFrom(valueType)) {
-			parsedValue = (short)ERXValueUtilities.intValueWithDefault(value, 0);
-		}
-		else if (ERXValueUtilities.isNull(value)) {
+		if (ERXValueUtilities.isNull(value)) {
 			parsedValue = null;
 		}
 		else if (valueType != null && String.class.isAssignableFrom(valueType)) {
@@ -258,9 +211,9 @@ public class ERXRestUtils {
 						throw new IllegalArgumentException(strValue + " didn't match the " + pattern.pattern() + " pattern", new Throwable());
 					}
 				} else {
-					Format formatter = null;
+					NSTimestampFormatter formatter = null;
 					try {
-						formatter = ERXRestUtils.timestampFormat(spaces, context);
+						formatter = new NSTimestampFormatter(ERXRestUtils.timestampFormat(spaces));
 						parsedValue = formatter.parseObject(strValue);		
 					}
 					catch (Throwable t) {
@@ -280,10 +233,10 @@ public class ERXRestUtils {
 			}
 			else {
 				String strValue = (String) value;
-				Format formatter = null;
+				SimpleDateFormat formatter = null;
 				try {
 					boolean spaces = strValue.indexOf(' ') != -1;
-					formatter = ERXRestUtils.dateFormat(spaces, context);
+					formatter = new SimpleDateFormat(ERXRestUtils.dateFormat(spaces));
 					parsedValue = formatter.parseObject(strValue);
 				}
 				catch (Throwable t) {
@@ -299,10 +252,10 @@ public class ERXRestUtils {
 		else if (valueType != null && Enum.class.isAssignableFrom(valueType)) {
 			parsedValue = ERXValueUtilities.enumValueWithDefault(value, (Class<? extends Enum>) valueType, null);
 		}
-		else if (resolveEntities) {
+		else if (delegate != null) {
 			EOClassDescription entity = ERXRestClassDescriptionFactory.classDescriptionForEntityName(valueTypeName);
 			if (entity != null) {
-			  parsedValue = IERXRestDelegate.Factory.delegateForClassDescription(entity).objectOfEntityWithID(entity, value, context);
+			  parsedValue = delegate.objectOfEntityWithID(entity, value);
 			}
 			else {
 				throw new IllegalArgumentException("Unknown value type '" + valueTypeName + "'.");
@@ -313,7 +266,7 @@ public class ERXRestUtils {
 		}
 		return parsedValue;
 	}
-	
+
 	/**
 	 * Parses the given String and returns an object.
 	 * 
@@ -327,9 +280,9 @@ public class ERXRestUtils {
 	 *            the parent object
 	 * @return a parsed version of the String
 	 */
-	public static Object coerceValueToAttributeType(Object value, EOClassDescription parentEntity, Object parentObject, String attributeName, ERXRestContext context) {
+	public static Object coerceValueToAttributeType(Object value, EOClassDescription parentEntity, Object parentObject, String attributeName) {
 		NSKeyValueCoding._KeyBinding binding = NSKeyValueCoding.DefaultImplementation._keyGetBindingForKey(parentObject, attributeName);
-		Class<?> valueType = binding.valueType();
+		Class valueType = binding.valueType();
 
 		try {
 			Object parsedValue;
@@ -352,11 +305,8 @@ public class ERXRestUtils {
 					parsedValue = NSKeyValueCoding.NullValue;
 				}
 			}
-			else if (valueType == Object.class) {
-				parsedValue = value;
-			}
 			else {
-				parsedValue = ERXRestUtils.coerceValueToTypeNamed(value, valueType.getName(), context, false);
+				parsedValue = ERXRestUtils.coerceValueToTypeNamed(value, valueType.getName(), null);
 			}
 			return parsedValue;
 		}

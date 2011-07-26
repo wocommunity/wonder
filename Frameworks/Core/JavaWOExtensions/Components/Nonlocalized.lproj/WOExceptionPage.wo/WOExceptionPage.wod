@@ -9,6 +9,7 @@ CurrentReason: WOString {
 
 ExceptionNameString: WOString {
     value = exception;
+    escapeHTML = false;
 }
 
 ExclamationImage: WOImage {

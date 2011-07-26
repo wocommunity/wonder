@@ -30,6 +30,8 @@ public class ERMODRequiredWrapper extends ERMODComponent {
     
 	/**
 	 * CSS class for the main wrapper.
+	 * 
+	 * @return
 	 */
 	public String wrapperClass() {
 		if (_wrapperClass == null) {
@@ -44,6 +46,8 @@ public class ERMODRequiredWrapper extends ERMODComponent {
 
 	/**
 	 * CSS ID fro the main wrapper.
+	 * 
+	 * @return
 	 */
 	public String wrapperId() {
 		if (_wrapperId == null) {
@@ -58,6 +62,8 @@ public class ERMODRequiredWrapper extends ERMODComponent {
 	
 	/**
 	 * ID of the watchedContainer for the page's global busy indicator.
+	 * 
+	 * @return
 	 */
 	public String watchedContainerID() {
 		if (_watchedContainerID == null) {
@@ -73,6 +79,8 @@ public class ERMODRequiredWrapper extends ERMODComponent {
 	/**
 	 * Name for the page form. If not supplied this will be the current task with 'Form' appended.
 	 * i.e: 'editForm'
+	 * 
+	 * @return
 	 */
 	public String formName() {
 		if (_formName == null) {
@@ -87,6 +95,8 @@ public class ERMODRequiredWrapper extends ERMODComponent {
 	
 	/**
 	 * Show the form for only those pages that need it.
+	 * 
+	 * @return
 	 */
 	public Boolean showForm() {
 		if (_showForm == null) {
@@ -100,6 +110,8 @@ public class ERMODRequiredWrapper extends ERMODComponent {
 
 	/**
 	 * Only show help for those pages that need it.
+	 * 
+	 * @return
 	 */
 	public Boolean showHelp() {
 		if (_showHelp == null) {

@@ -5,13 +5,13 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.webobjects.eocontrol.EOClassDescription;
-import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOEnterpriseObject;
 
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXKeyFilter;
-import er.rest.ERXRestContext;
 import er.rest.ERXRestRequestNode;
+import er.rest.IERXRestDelegate;
+import er.rest.gianduia.ERXGianduiaRestParser;
+import er.rest.gianduia.ERXGianduiaRestWriter;
 
 public class ERXRestFormat {
 	public static final String HTML_KEY = "html";
@@ -21,7 +21,6 @@ public class ERXRestFormat {
 	public static final String PLIST_KEY = "plist";
 	public static final String SPROUTCORE_KEY = "sc";
 	public static final String XML_KEY = "xml";
-	public static final String FORM_KEY = "form";
 
 	private static Map<String, ERXRestFormat> _formats = new ConcurrentHashMap<String, ERXRestFormat>();
 	
@@ -34,8 +33,9 @@ public class ERXRestFormat {
 		ERXRestFormat.registerFormatNamed(new ERXXmlRestParser(), new ERXXmlRestWriter(), new ERXRestFormatDelegate("id", "type", "nil", true, true, true, true), ERXRestFormat.RAILS_KEY, "application/xml", "text/xml");
 		ERXRestFormat.registerFormatNamed(new ERXXmlRestParser(), new ERXXmlRestWriter(), new ERXRestFormatDelegate(), ERXRestFormat.XML_KEY, "application/xml", "text/xml");
 		ERXRestFormat.registerFormatNamed(null, new ERXSimpleRestWriter(), new ERXRestFormatDelegate(), ERXRestFormat.HTML_KEY, "text/html");
+		ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXGianduiaRestWriter(false), new ERXRestFormatDelegate(), "gndj", "application/gndj");
+		ERXRestFormat.registerFormatNamed(new ERXGianduiaRestParser(), new ERXGianduiaRestWriter(true), new ERXRestFormatDelegate(), "gndp", "application/gndp");
 		ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXSproutCoreRestWriter(), new ERXRestFormatDelegate("guid", "type", "nil", true, true, false, false), ERXRestFormat.SPROUTCORE_KEY, "application/sc");
-		ERXRestFormat.registerFormatNamed(new ERXFormRestParser(), new ERXJSONRestWriter(), new ERXRestFormatDelegate(), ERXRestFormat.FORM_KEY, "application/x-www-form-urlencoded");
 	}
 
 	private String _name;
@@ -63,16 +63,6 @@ public class ERXRestFormat {
 	@Deprecated
 	public static final ERXRestFormat SPROUTCORE = ERXRestFormat.formatNamed(ERXRestFormat.SPROUTCORE_KEY);
 	
-	    
-	/**
-	 * Returns the registered html form format.
-	 * 
-	 * @return the registered html form format
-	*/
-	public static ERXRestFormat form() {
-		return formatNamed(ERXRestFormat.FORM_KEY);
-	}
-
 	/**
 	 * Returns the registered html format.
 	 * 
@@ -152,36 +142,9 @@ public class ERXRestFormat {
 	 * @return the parsed request node
 	 */
 	public ERXRestRequestNode parse(String str) {
-		EOEditingContext editingContext = ERXEC.newEditingContext();
-		try {
-			ERXRestRequestNode node = parse(str, new ERXRestContext(editingContext));
-			return node;
-		}
-		finally {
-			editingContext.dispose();
-		}
-	}
-
-	/**
-	 * Returns a parsed ERXRestRequestNode using this format's parser.
-	 * 
-	 * @param str the string to parse
-	 * @return the parsed request node
-	 */
-	public ERXRestRequestNode parse(String str, ERXRestContext context) {
-		return parser().parseRestRequest(new ERXStringRestRequest(str), _delegate, context);
+		return parser().parseRestRequest(new ERXStringRestRequest(str), _delegate);
 	}
 	
-	/**
-	 * Returns a parsed ERXRestRequestNode using this format's parser.
-	 * 
-	 * @param request the request
-	 * @return the parsed request node
-	*/
-	public ERXRestRequestNode parse(IERXRestRequest request, ERXRestContext context) {
-		return parser().parseRestRequest(request, _delegate, context);
-	}
-
 	/**
 	 * Returns the formatted version of the given object using a recursive "All" filter and the default rest delegate.
 	 * 
@@ -189,29 +152,18 @@ public class ERXRestFormat {
 	 * @return obj rendered using this format
 	 */
 	public String toString(Object obj) {
-		EOEditingContext editingContext = (obj instanceof EOEnterpriseObject) ? ((EOEnterpriseObject)obj).editingContext() : null;
-		return toString(obj, new ERXRestContext(editingContext));
+		return ERXRestRequestNode.requestNodeWithObjectAndFilter(obj, ERXKeyFilter.filterWithAllRecursive(), IERXRestDelegate.Factory.delegateForEntityNamed(IERXRestDelegate.Factory.entityNameForObject(obj), ERXEC.newEditingContext())).toString(this);
 	}
 
 	/**
 	 * Returns the formatted version of the given object using a recursive "All" filter.
 	 * 
 	 * @param obj the object to render
+	 * @param delegate the rest delegate to use
 	 * @return obj rendered using this format
 	 */
-	public String toString(Object obj, ERXKeyFilter filter) {
-		EOEditingContext editingContext = (obj instanceof EOEnterpriseObject) ? ((EOEnterpriseObject)obj).editingContext() : null;
-		return toString(obj, filter, new ERXRestContext(editingContext));
-	}
-
-	/**
-	 * Returns the formatted version of the given object using a recursive "All" filter.
-	 * 
-	 * @param obj the object to render
-	 * @return obj rendered using this format
-	 */
-	public String toString(Object obj, ERXRestContext context) {
-		return toString(obj, ERXKeyFilter.filterWithAllRecursive(), context);
+	public String toString(Object obj, IERXRestDelegate delegate) {
+		return ERXRestRequestNode.requestNodeWithObjectAndFilter(obj, ERXKeyFilter.filterWithAllRecursive(), delegate).toString(this);
 	}
 
 	/**
@@ -219,11 +171,11 @@ public class ERXRestFormat {
 	 * 
 	 * @param obj the object to render
 	 * @param filter the filter to apply to the object
-	 * @param context the rest delegate to use
+	 * @param delegate the rest delegate to use
 	 * @return obj rendered using this format
 	 */
-	public String toString(Object obj, ERXKeyFilter filter, ERXRestContext context) {
-		return ERXRestRequestNode.requestNodeWithObjectAndFilter(obj, filter, context).toString(writer(), delegate(), context);
+	public String toString(Object obj, ERXKeyFilter filter, IERXRestDelegate delegate) {
+		return ERXRestRequestNode.requestNodeWithObjectAndFilter(obj, filter, delegate).toString(this);
 	}
 
 	/**
@@ -232,11 +184,11 @@ public class ERXRestFormat {
 	 * @param classDescription the class description for the elements of the list
 	 * @param list the list
 	 * @param filter the filter
-	 * @param context the rest delegate to use
+	 * @param delegate the rest delegate to use
 	 * @return list rendered using this format
 	 */
-	public String toString(EOClassDescription classDescription, List<?> list, ERXKeyFilter filter, ERXRestContext context) {
-		return ERXRestRequestNode.requestNodeWithObjectAndFilter(classDescription, list, filter, context).toString(writer(), delegate(), context);
+	public String toString(EOClassDescription classDescription, List<?> list, ERXKeyFilter filter, IERXRestDelegate delegate) {
+		return ERXRestRequestNode.requestNodeWithObjectAndFilter(classDescription, list, filter, delegate).toString(this);
 	}
 
 	@Override
@@ -244,16 +196,6 @@ public class ERXRestFormat {
 		return "[ERXRestFormat: " + _name + "]";
 	}
 
-	/**
-	 * Returns true if there is a format registered with the given name.
-	 * 
-	 * @param name the name to lookup
-	 * @return true if there is a format registered with the given name
-	 */
-	public static boolean hasFormatNamed(String name) {
-		return name != null && _formats.containsKey(name.toLowerCase());
-	}
-	
 	public static ERXRestFormat formatNamed(String name) {
 		ERXRestFormat format = _formats.get(name.toLowerCase());
 		if (format == null) {

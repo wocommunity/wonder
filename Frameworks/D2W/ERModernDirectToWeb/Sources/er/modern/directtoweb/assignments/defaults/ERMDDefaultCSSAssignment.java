@@ -339,6 +339,7 @@ public class ERMDDefaultCSSAssignment extends ERDAssignment {
 	 * @param c
 	 * @param baseName
 	 * @param rootName
+	 * @return
 	 */
 	public String cssClassBuilderFromBaseName(D2WContext c, String baseName, String rootName) {
 		String base = (String)c.valueForKey(baseName);
@@ -355,6 +356,7 @@ public class ERMDDefaultCSSAssignment extends ERDAssignment {
 	 * @param c
 	 * @param base
 	 * @param root
+	 * @return
 	 */
 	public String cssClassBuilder(D2WContext c, String base, String root) {
 		String tweakedBase = base + " " + pageType(c)+base;
@@ -371,6 +373,7 @@ public class ERMDDefaultCSSAssignment extends ERDAssignment {
 	 * @param c
 	 * @param base
 	 * @param suffix
+	 * @return
 	 */
 	public String pageConfigAppender(D2WContext c, String base, String suffix) {
 		String result = base;
@@ -384,6 +387,7 @@ public class ERMDDefaultCSSAssignment extends ERDAssignment {
 	/**
 	 * Cleans the propertyKey, removing "." and capitalizing key path components
 	 * @param key
+	 * @return
 	 */
 	public String cssClassForPropertyKey(String key) {
 		if (key != null) {

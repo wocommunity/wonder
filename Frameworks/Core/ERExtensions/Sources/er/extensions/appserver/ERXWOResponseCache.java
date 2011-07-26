@@ -48,7 +48,6 @@ import er.extensions.foundation.ERXProperties;
 </code></pre>
 You must also set the default <code>er.extensions.ERXWOResponseCache.Enabled=true</code> for the cache to get used.
  * 
- * @property er.extensions.ERXWOResponseCache.Enabled
  */
 public class ERXWOResponseCache {
 

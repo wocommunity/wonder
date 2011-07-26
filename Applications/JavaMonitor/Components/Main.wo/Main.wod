@@ -16,7 +16,6 @@ LoginSucceeded: WOConditional {
 
 PasswordField: WOPasswordField {
     value = password;
-    id = "password";
 }
 
 Refresh: WOMetaRefresh {

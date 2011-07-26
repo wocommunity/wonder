@@ -22,6 +22,7 @@ public class ChronicFormatter extends SimpleDateFormat {
 	 * Constructs a new ChronicFormatter.
 	 * 
 	 * @param pattern the SimpleDateFormat pattern to parse
+	 * @param options the chronic options to parse with
 	 */
 	public ChronicFormatter(String pattern) {
 		this(pattern, null, true);

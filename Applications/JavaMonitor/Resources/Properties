@@ -1,4 +1,4 @@
-# Properties file for JavaMonitor
+# Properties file for wotaskd
 # Overrides the JavaWebObjects.framework Properties
 
 WOAutoOpenInBrowser=true

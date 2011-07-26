@@ -34,14 +34,12 @@ import er.extensions.localization.ERXLocalizer;
  * @binding startedFunction the javascript function to execute when the progress is started
  * @binding canceledFunction the javascript function to execute when the upload is canceled
  * @binding succeededFunction the javascript function to execute when the upload succeeds
- * @binding clearedFunction the javascript function to execute when the clear button is clicked
  * @binding failedFunction the javascript function to execute when the upload fails
  * @binding finishedFunction the javascript function to execute when the upload finishes (succeeded, failed, or
  *          canceled)
  * @binding finishedAction the action to fire when the upload finishes (cancel, failed, or succeeded)
  * @binding canceledAction the action to fire when the upload is canceled
  * @binding succeededAction the action to fire when the upload succeeded
- * @binding clearedAction the action to fire when the clear button is clicked
  * @binding failedAction the action to fire when the upload fails
  * @binding data the NSData that will be bound with the contents of the upload
  * @binding inputStream will be bound to an input stream on the contents of the upload
@@ -87,7 +85,6 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 		public static final String finishedFunction = "finishedFunction";
 		public static final String failedFunction = "failedFunction";
 		public static final String succeededFunction = "succeededFunction";
-		public static final String clearedFunction = "clearedFunction";
 		public static final String selectFileButtonClass = "selectFileButtonClass";
 		public static final String uploadButtonClass = "uploadButtonClass";
 		public static final String cancelButtonClass = "cancelButtonClass";
@@ -238,9 +235,6 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
     	
     	String succeededFunction = (String)this.valueForBinding(Keys.succeededFunction);
     	if (succeededFunction != null) _options.addObject(String.format("succeededFunction:%s", succeededFunction));
-    	
-    	String clearedFunction = (String)this.valueForBinding(Keys.clearedFunction);
-    	if (clearedFunction != null) _options.addObject(String.format("clearedFunction:%s", clearedFunction));
     	
     	return _options;
     }
@@ -520,12 +514,9 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	/**
 	 * Action called by the clear button, resets the uploader for a new file selection
 	 * 
-	 * @return results of action
 	 */
-	public WOActionResults clearFileResults() {
+	public void clearFileResults() {
 		clearUploadProgress();
-		WOActionResults results = (WOActionResults) valueForBinding("clearedAction");
-		return results;
 	}
 	
 	/**

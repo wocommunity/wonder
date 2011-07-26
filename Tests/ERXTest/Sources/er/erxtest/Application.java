@@ -4,11 +4,7 @@ import java.io.File;
 import java.util.Properties;
 
 import junit.textui.TestRunner;
-
-import org.junit.runner.JUnitCore;
-
 import er.extensions.appserver.ERXApplication;
-
 import er.extensions.foundation.ERXProperties;
 
 public class Application extends ERXApplication {
@@ -46,22 +42,12 @@ public class Application extends ERXApplication {
 
 		String adaptorName = wobuild.getProperty("wo.test.dbAccess.adaptor");
 		if (adaptorName == null) adaptorName = "Memory";
-		ERXTestUtilities.fixModelsForAdaptorNamed(adaptorName);
 		System.out.println("Setting EOModels to use adaptor \""+adaptorName+"\"");
 
-	    String listener = System.getProperty("er.erxtest.ERXTestListener");
-		if (listener == null || listener.compareToIgnoreCase("noisy") != 0)
-			System.out.println("Invoke \"ant -Der.erxtest.ERXTestListener=Noisy test\" to see verbose output.");
+		ERXTestUtilities.fixModelsForAdaptorNamed(adaptorName);
 
 		if (!isLaunchingFromEclipse()) {
-		    JUnitCore core = new JUnitCore();
-
-		    if (listener != null && listener.compareToIgnoreCase("noisy") == 0)
-		    	core.addListener(new ERXTestRunNoisyListener());
-		    else
-		    	core.addListener(new ERXTestRunQuietListener());
-
-		    core.run(ERXTestSuite.suite());
+			TestRunner.run(ERXTestSuite.suite());
 			System.exit(0);
 		}
 	}

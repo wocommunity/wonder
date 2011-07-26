@@ -314,7 +314,8 @@ public abstract class ERMailDelivery {
 	/**
 	 * Sets an additional custom header element for the message.
 	 * 
-	 * @param headerKey
+	 * @param header
+	 *            header key
 	 * @param value
 	 *            value to set
 	 */

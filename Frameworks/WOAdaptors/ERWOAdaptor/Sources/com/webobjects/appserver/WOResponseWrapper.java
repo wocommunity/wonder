@@ -1,13 +1,16 @@
 package com.webobjects.appserver;
 
+import static org.jboss.netty.buffer.ChannelBuffers.buffer;
+import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.CONTENT_LENGTH;
+import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.COOKIE;
+
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.AbstractMap.SimpleEntry;
 
 import org.apache.log4j.Logger;
 import org.jboss.netty.buffer.ChannelBuffer;
@@ -15,13 +18,11 @@ import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.handler.codec.http.Cookie;
 import org.jboss.netty.handler.codec.http.CookieEncoder;
 import org.jboss.netty.handler.codec.http.HttpHeaders;
-import org.jboss.netty.handler.codec.http.HttpHeaders.Names;
 import org.jboss.netty.handler.codec.http.HttpResponse;
 import org.jboss.netty.handler.codec.http.HttpResponseStatus;
 import org.jboss.netty.handler.codec.http.HttpVersion;
 
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSSet;
 
 /**
@@ -33,7 +34,7 @@ public class WOResponseWrapper implements HttpResponse {
     private static final Logger log = Logger.getLogger(WOResponseWrapper.class);
 
 	private WOResponse wrapping;
-	private ChannelBuffer _content;
+	private ChannelBuffer _content = ChannelBuffers.EMPTY_BUFFER;
 	
 	/**
 	 * Converts a WOCookie to a Netty cookie
@@ -48,6 +49,28 @@ public class WOResponseWrapper implements HttpResponse {
 	public WOResponseWrapper(WOResponse response) {
 		super();
 		wrapping = response;
+		
+		// set content string
+		if (wrapping._contentLength() > 0) {
+			if (wrapping._content.length() > 0) {
+				Charset charset = Charset.forName(wrapping.contentEncoding());
+				_content = ChannelBuffers.copiedBuffer(wrapping._content.toString(), charset);
+				wrapping._content = null;
+			} else {
+				int _length = wrapping._contentData.length();
+				this.setHeader(CONTENT_LENGTH, _length);
+				_content = ChannelBuffers.copiedBuffer(wrapping._contentData._bytesNoCopy());
+				wrapping._contentData = null;
+			}
+		} else if (wrapping.contentInputStream() != null) {
+			try {
+				_content = buffer(wrapping.contentInputStreamBufferSize());
+				wrapping.contentInputStream().read(_content.array());
+				wrapping.setContentStream(null, 0, 0);
+			} catch (IOException exception) {
+				log.error(exception.getCause().getMessage());
+			}
+		}
 	}
 
 	@Override
@@ -81,38 +104,6 @@ public class WOResponseWrapper implements HttpResponse {
 
 	@Override
 	public ChannelBuffer getContent() {
-		if(_content == null) {
-			// set content string
-			if (wrapping._contentLength() > 0) {
-				if (wrapping._content.length() > 0) {
-					Charset charset = Charset.forName(wrapping.contentEncoding());
-					_content = ChannelBuffers.copiedBuffer(wrapping._content.toString(), charset);
-					wrapping._content = null;
-				} else {
-					int _length = wrapping._contentData.length();
-					this.setHeader(Names.CONTENT_LENGTH, _length);
-					_content = ChannelBuffers.copiedBuffer(wrapping._contentData._bytesNoCopy());
-					wrapping._contentData = null;
-				}
-			} else if (wrapping.contentInputStream() != null) {
-				try {
-					int length = (int)wrapping.contentInputStreamLength();
-					_content = ChannelBuffers.buffer(length);
-					InputStream stream = null;
-					try {
-						stream = wrapping.contentInputStream();
-						_content.writeBytes(stream, length);
-						wrapping.setContentStream(null, 0, 0l);
-					} finally {
-						try { if(stream != null) { stream.close();} } catch(IOException e) { log.error(e); }
-					}
-				} catch (IOException exception) {
-					throw NSForwardException._runtimeExceptionForThrowable(exception);
-				}
-			} else {
-				_content = ChannelBuffers.EMPTY_BUFFER;
-			}
-		}
 		return _content;
 	}
 
@@ -130,7 +121,7 @@ public class WOResponseWrapper implements HttpResponse {
 
 	@Override
 	public String getHeader(String name) {
-		if (name.equals(Names.COOKIE)) {
+		if (name.equals(COOKIE)) {
 			// Encode the cookie.
 			NSArray<WOCookie> wocookies = wrapping.cookies();
 			if(!wocookies.isEmpty()) {

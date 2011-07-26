@@ -11,9 +11,8 @@ import er.extensions.foundation.ERXProperties;
  * Component to go in the <head> of a page. Injects the standandard set of css stylesheets
  * and the set defined in the rules
  * 
- * @property er.modern.look.skinframework
- *
  * @author davidleber
+ *
  */
 public class ERMD2WCSSReference extends ERD2WStatelessComponent {
 	
