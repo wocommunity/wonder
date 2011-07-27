@@ -450,11 +450,11 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 				if (_multipleSubmit != null && _multipleSubmit.booleanValueInComponent(context.component())) {
 					if (_addDefaultSubmitButton != null && _addDefaultSubmitButton.booleanValueInComponent(context.component()) || (_addDefaultSubmitButton == null && addDefaultSubmitButtonDefault)) {
 						ERXBrowser browser = ERXBrowserFactory.factory().browserMatchingRequest(context.request());
-						boolean useDisplayNone = !(browser.isSafari() && browser.version().compareTo("522") > 0);
+						boolean useDisplayNone = !(browser.isSafari() && browser.version().compareTo("3.0.3") > 0);
 						if(useDisplayNone) {
 							response._appendContentAsciiString("<div style=\"position: absolute; left: -10000px; display: none;\"><input type=\"submit\" name=\"WOFormDummySubmit\" value=\"WOFormDummySubmit\" /></div>");
 						} else {
-							response._appendContentAsciiString("<div style=\"position: absolute; left: -10000px; \"><input type=\"submit\" name=\"WOFormDummySubmit\" value=\"WOFormDummySubmit\" /></div>");
+							response._appendContentAsciiString("<div style=\"position: absolute; left: -10000px; visibility: hidden\"><input type=\"submit\" name=\"WOFormDummySubmit\" value=\"WOFormDummySubmit\" /></div>");
 						}
 					}
 				}
