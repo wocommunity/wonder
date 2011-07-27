@@ -262,7 +262,7 @@
     <target name="ERXTest.all">
         <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
-            <param name="project.principal.class" value="er.plugintest.Application" />
+            <param name="project.principal.class" value="er.erxtest.Application" />
             <param name="project.name" value="ERXTest" />
             <param name="project.dir" value="Tests/ERXTest" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERPrototypes/JavaDerbyAdaptor/JavaMemoryAdaptor" />
@@ -271,7 +271,7 @@
     <target name="PluginTest.all">
         <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
-            <param name="project.principal.class" value="er.erxtest.Application" />
+            <param name="project.principal.class" value="er.plugintest.Application" />
             <param name="project.name" value="PluginTest" />
             <param name="project.dir" value="Tests/PluginTest" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERPrototypes/DB2Plugin" />
