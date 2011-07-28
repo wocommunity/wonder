@@ -210,7 +210,7 @@ public class ERXEnterpriseObjectArrayCache<T extends EOEnterpriseObject> {
     }
 
 	protected boolean isNotFound(NSArray<EOGlobalID> gids) {
-		return gids != null ? NotFoundArray.class == gids.getClass() : gids == null;
+		return gids != null ? NotFoundArray.class == gids.getClass() : false;
 	}
   
     /**

@@ -287,10 +287,20 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 
 	private static NSArray _languagesWithoutPluralForm = new NSArray(new Object[] { "Japanese" });
 
+	/**
+	 * Get a localizer for a specific language. If none could be found or language
+	 * is <code>null</code> a localizer for the {@link #defaultLanguage()} is returned.
+	 * 
+	 * @param language name of the requested language
+	 * @return localizer
+	 */
 	public static ERXLocalizer localizerForLanguage(String language) {
 		if (!isLocalizationEnabled)
 			return createLocalizerForLanguage("Nonlocalized", false);
 
+		if (language == null) {
+			language = defaultLanguage();
+		}
 		ERXLocalizer l = null;
 		l = (ERXLocalizer) localizers.objectForKey(language);
 		if (l == null) {
@@ -319,6 +329,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	 * Returns the default language (English) or the contents of the
 	 * <code>er.extensions.ERXLocalizer.defaultLanguage</code> property.
 	 * 
+	 * @return default language name
 	 */
 	public static String defaultLanguage() {
 		if (defaultLanguage == null) {
