@@ -99,7 +99,9 @@ public class FlyingSaucerMetadataCreationListener extends DefaultPDFCreationList
 		if (this.headMetaTags.getProperty("title") == null) {
 			Element titleTag =
 					(Element) headTag.getElementsByTagName("title").item(0);
-			this.headMetaTags.setProperty("title", titleTag.getTextContent());
+			if (titleTag != null) {
+				this.headMetaTags.setProperty("title", titleTag.getTextContent());
+			}
 		}
 
 		return;
