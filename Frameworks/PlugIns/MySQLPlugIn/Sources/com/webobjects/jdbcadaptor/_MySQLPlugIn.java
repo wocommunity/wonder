@@ -23,6 +23,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation._NSStringUtilities;
 
@@ -224,6 +225,9 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 
 	@Override
 	public Class<com.webobjects.jdbcadaptor._MySQLPlugIn.MySQLExpression> defaultExpressionClass() {
+		if (NSProperties.booleanForKeyWithDefault("com.webobjects.jdbcadaptor.MySQLExpression.enable", false)) {
+			return com.webobjects.jdbcadaptor.MySQLExpression.class;
+		}
 		return com.webobjects.jdbcadaptor._MySQLPlugIn.MySQLExpression.class;
 	}
 
