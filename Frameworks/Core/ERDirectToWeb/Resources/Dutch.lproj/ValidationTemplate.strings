@@ -11,4 +11,11 @@
 	"ObjectsRemovalException" = "<b>@@displayNameForEntity@@</b> kan niet verwijderd worden als<b>@@displayNameForProperty@@</b> nog bestaat.";
 	"PasswordsDontMatchException" = "De <b>wachtwoorden</b> komen niet overeen.";
 	"PasswordsFillBothFieldsException" = "Vul beide <b>wachtwoord</b> velden in.";
+    "QueryEmpty" = "Geef zoek voorwaarden op";
+	"QueryValueRequired" = "Geef een waarde voor @@displayNameForProperty@@";
+	"QueryValueTooShort" = "De waarde in @@displayNameForProperty@@ is niet lang genoeg";
+	"QueryValueTooLong" = "De waarde in @@displayNameForProperty@@ is te lang";
+	"QueryValueTooSmall" = "De waarde in @@displayNameForProperty@@ is te kort";
+	"QueryValueTooLarge" = "De waarde in @@displayNameForProperty@@ is te groot";
+
 }

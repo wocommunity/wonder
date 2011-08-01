@@ -9,4 +9,11 @@
 	"ERXCheckboxMatrix.selectAll" = "Alles";
 	"ERXSortOrder.sortBy" = "Klik hier, om deze kolom te sortieren";
 	"WOToOneRelationship.noneString" = "- geen -";
+	"ERXFlickrBatchNavigation.previous" = " Terug";
+   	"ERXFlickrBatchNavigation.next" = "Verder ";
+   	"ERXFlickrBatchNavigation.item" = "item";
+	"ERXFlickrBatchNavigation.page" = "per blz";
+	"ERXFlickrBatchNavigation.show" = "Toon: ";
+	"ERXFlickrBatchNavigation.all" = "Alle";
+	
 }
