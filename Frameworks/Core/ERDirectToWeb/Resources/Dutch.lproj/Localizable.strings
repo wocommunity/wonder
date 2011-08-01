@@ -1,49 +1,49 @@
 {
 	"contains" = "bevat";
+    "CouldNotQuery" = "Kon zoekopdracht niet uitvoeren: @@message@@";
 	"CouldNotSave" = "Uw wijzigingen konden niet opgeslagen worden: @@message@@";
 	"CouldNotSavePleaseReapply" = "Uw wijzigingen konden niet opgeslagen worden. @@displayNameForEntity@@ is door een andere gebruiker veranderd en uw wijzigingen konden daardoor niet doorgaan. Probeer het nog een keer.";
 	"ends with" = "eindigt met";
+    "ERD2W.addButtonLabel" = "Voeg Toe";
+	"ERD2W.cancelButtonLabel" = "Breek Af";
 	"ERD2W.cancelCreationMessage" = "<b>Wilt u  het toevoegen van @@displayNameForEntity@@ afbreken?</b><br /><br />Met <b>OK</b> verwijdert u alle veranderingen, met <b>Afbreken</b> kunt u verder bewerken.";
-	"ERD2W.cancelButtonLabel" = "Afbreken";
-	"ERD2W.createButtonLabel" = "Toevoegen";
-	"ERD2W.clearButtonLabel" = "Wissen";
+	"ERD2W.clearButtonLabel" = "Maak Leeg";
+	"ERD2W.createButtonLabel" = "Voeg Toe";
+	"ERD2W.deleteButtonLabel" = "Verwijder";
+    "ERD2W.deleteSelectedButtonLabel" = "Verwijder Gekozene";
 	"ERD2W.editButtonLabel" = "Wijzig";
-	"ERD2W.okButtonLabel" = "OK";
-	"ERD2W.pickButtonLabel" = "Kiezen";
-	"ERD2W.saveButtonLabel" = "Opslaan";
-	"ERD2W.returnButtonLabel" = "Terug";
-	"ERD2W.findButtonLabel" = "Zoeken";
-	"ERD2W.previousButtonLabel" = "Vorige stap";
+    "ERD2W.findButtonLabel" = "Zoek";
 	"ERD2W.nextButtonLabel" = "Volgende stap";
-	"ERD2W.addButtonLabel" = "Toevoegen";
-	"ERD2W.yesButtonLabel" = "Ja";
 	"ERD2W.noButtonLabel" = "Nee";
-	"ERD2W.removeButtonLabel" = "Verwijder";
-	"ERD2W.deleteButtonLabel" = "Weggooien";
-	"ERD2W.deleteSelectedButtonLabel" = "Gekozene weggooien";
-	"ERD2W.pickButtonLabel" = "Kiezen";
 	"ERD2W.noSelectionString" = "- geen keuze gemaakt -";
-	"ERD2WBoolean.DontCare" = "Maakt niet uit"; 
-    "ERD2WBoolean.Unset" = "Maakt niet uit"; 
-    "ERD2WBoolean.Yes" = "Ja"; 
-    "ERD2WBoolean.No" = "Nee";
-	"ERD2W.tasks.inspect" = "@@displayNameForEntity@@ bekijken";
-	"ERD2W.tasks.edit" = "@@displayNameForEntity@@ bewerken";
-	"ERD2W.tasks.query" = "@@displayNameForEntity@@ zoeken";
-	"ERD2W.tasks.edit.wizard" = "@@displayNameForEntity@@ bewerken";
+	"ERD2W.okButtonLabel" = "OK";
+	"ERD2W.pickButtonLabel" = "Kies";
+	"ERD2W.previousButtonLabel" = "Vorige stap";
+	"ERD2W.removeButtonLabel" = "Verwijder";
+	"ERD2W.returnButtonLabel" = "Terug";
+	"ERD2W.saveButtonLabel" = "Opslaan";
+	"ERD2W.tasks.confirm" = "Werkelijk @@displayNameForEntity@@?";
+	"ERD2W.tasks.edit" = "Bewerk @@displayNameForEntity@@";
+	"ERD2W.tasks.edit.wizard" = "Maak @@displayNameForEntity@@ aan";
+	"ERD2W.tasks.inspect" = "Bekjk @@displayNameForEntity@@";
 	"ERD2W.tasks.list" = "Lijst: @@displayNameForEntity@@";
-	"ERD2W.tasks.select" = "@@displayNameForEntity@@ kiezen";
-	"ERD2W.tasks.confirm" = "Werkelijk @@displayNameForEntity@@";
-	"ERD2WEditToManyRelationship.noChoiceAvailable" = "Geen @@displayNameForEntity@@ beschikbaar";
-	"ERD2WInspect.alreadyAborted" = "<b>U heeft deze handeling al afgebroken.</b> druk op <b>Afbreken</b> en doe de handeling opnieuw.";
-	"ERD2WList.confirmDeletionMessage" = "<b>@@displayNameForEntity@@ werkelijk verwijderen?</b><br />@@object.userPresentableDescription@@";
-	"ERD2WCreateWizard.cancel" = "Afbreken";
+	"ERD2W.tasks.query" = "Zoek @@displayNameForEntity@@";
+	"ERD2W.tasks.select" = "Kies @@displayNameForEntity@@";
+	"ERD2W.yesButtonLabel" = "Ja";
+	"ERD2WBoolean.DontCare" = "Maakt niet uit"; 
+	"ERD2WBoolean.No" = "Nee";
+	"ERD2WBoolean.Unset" = "Onbekend";
+	"ERD2WBoolean.Yes" = "Ja";
+	"ERD2WCreateWizard.cancel" = "Breek Af";
 	"ERD2WCreateWizard.nextStep" = "Volgende stap";
 	"ERD2WCreateWizard.previousStep" = "Vorige stap";
 	"ERD2WCreateWizard.save" = "Opslaan";
-	"ERD2WInspectPage.cancel" = "Afbreken";
+	"ERD2WEditToManyRelationship.noChoiceAvailable" = "Geen @@displayNameForEntity@@ beschikbaar";
+	"ERD2WInspect.alreadyAborted" = "<b>U heeft deze handeling al afgebroken.</b> druk op <b>Afbreken</b> en doe de handeling opnieuw.";
+	"ERD2WInspectPage.cancel" = "Breek Af";
 	"ERD2WInspectPage.return" = "Terug";
-	"ERD2WInspectPage.saveChanges" = "Opslaan";
+	"ERD2WInspectPage.saveChanges" = "Sla Op";
+	"ERD2WList.confirmDeletionMessage" = "<b>@@displayNameForEntity@@ werkelijk verwijderen?</b><br />@@object.userPresentableDescription@@";
 	"ERD2WQueryDateRange.format" = "Formaat";
 	"ERD2WQueryDateRange.from" = "van";
 	"ERD2WQueryDateRange.to" = "tot";
@@ -65,41 +65,47 @@
 	"ERD2WQueryToOneField.where" = "waar";
 	"ERD2WWizardCreationPage.stepsMessage" = "Stap @@currentStep@@ van @@tabSectionsContents.count@@";
 	"ERDDatePopup.monthList" = (
-		"Jan",
-		"Feb",
-		"Mrt",
-		"Apr",
-		"Mei",
-		"Jun",
-		"Jul",
-		"Aug",
-		"Sep",
-		"Okt",
-		"Nov",
-		"Dec"
+    "Jan",
+    "Feb",
+    "Mrt",
+    "Apr",
+    "Mei",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Okt",
+    "Nov",
+    "Dec"
 	);
-	"ERDDefaultCancelCreationMessageAssignment.cancelCreationMessage" = "<b>Wilt u het toevoegen  @@displayNameForEntity@@ afbreken?</b><br /><br />Met <b>OK</b> maakt u alle veranderingen ongedaan, met <b>Afbreken</b> kunt u verder bewerken.";
+	"ERDDefaultCancelCreationMessageAssignment.cancelCreationMessage" = "<b>Wilt u het toevoegen  @@displayNameForEntity@@ afbreken?</b><br /><br />Met <b>OK</b> maakt u alle veranderingen ongedaan, met <b>Breek Af</b> kunt u verder bewerken.";
 	"ERDDisplayImageIfExists.message" = "Geen afbeelding beschikbaar";
 	"ERDEditDatePopupOrNull.none" = "Niet ingevuld";
 	"ERDEditDatePopupOrNull.or" = "- of -";
+	"ERDEditFile.deleteButton" = "Verwijder bestand";
+	"ERDEditFile.selectButton" = "Kies bestand";
+	"ERDEditFile.selectMessage" = "Kies een bestand van uw eigen schijf:";
+	"ERDEditFile.uploadButton" = "Stuur bestand op";
+	"ERDEditFile.uploadMessage" = "Stuur bestand naar de server:";
 	"ERDEditList.saveLabel" = "@@pluralCount@@ @@pluralString@@ opslaan?";
 	"ERDEditListButton.editButtonName" = "@@displayNameForProperty@@ Lijst bewerken";
-	"ERDEditPasswordConfirm.confirmLabel" = "Wachtwoord bevestigen";
-	"ERDEditPasswordConfirm.confirmNewLabel" = "Nieuw wachtwoord bevestigen";
+	"ERDEditPasswordConfirm.confirmLabel" = "Bevestig Wachtwoord";
+	"ERDEditPasswordConfirm.confirmNewLabel" = "Bevestig Nieuw wachtwoord";
 	"ERDEditPasswordConfirm.infoMessage" = "<i>Let op: Hoofdletter en kleine letters maken verschil uit bij Login naam en wachtwoord.<br>Een wachtwoord moet tussen de 6 en de 16 tekens lang zijn en moet een getal bevatten.</i>";
 	"ERDEditPasswordConfirm.newPasswordLabel" = "Nieuw wachtwoord";
-	"ERDEditPasswordConfirm.passwordLabel" = "wachtwoord";
+	"ERDEditPasswordConfirm.passwordLabel" = "Wachtwoord";
 	"ERDEditStringWithChoices.noSelectionString" = "Geen";
-	"ERDEditToManyRelationship.add" = "Toevoegen";
-	"ERDEditToManyRelationship.delete" = "Gekozenen verwijderen";
+	"ERDEditToManyRelationship.add" = "Voeg Toe";
+	"ERDEditToManyRelationship.delete" = "Verwijder Gekozenen";
 	"ERDEditToManyRelationship.remove" = "Verwijder";
+	"ERDEmptyListMessage.createObjectStringTemplate" = "Maak nieuw record aan";
 	"ERDEmptyListMessage.emptyEmbeddedListMessage" = "<b>Geen @@displayNameForDestinationEntity@@ gevonden.</b>";
 	"ERDEmptyListMessage.emptyListMessage" = "<b>Geen @@displayNameForEntity@@ gevonden.</b>";
-	"ERDInspect.clear" = "Schoonmaken";
-	"ERDInspect.create" = "Toevoegen";
+	"ERDInspect.clear" = "Maak Leeg";
+	"ERDInspect.create" = "Voeg Toe";
 	"ERDInspect.objectUnsetMessage" = "Geen @@displayNameForDestinationEntity@@ ingesteld.";
-	"ERDInspect.select" = "Kiezen...";
-	"ERDList.create" = "Toevoegen";
+	"ERDInspect.select" = "Kies...";
+	"ERDList.create" = "Voeg Toe";
 	"ERDQueryAnyKey.matches" = "bevat";
 	"ERDQueryDateRangeJavaScript.and" = "en";
 	"ERDQueryDateRangeJavaScript.between" = "tussen";

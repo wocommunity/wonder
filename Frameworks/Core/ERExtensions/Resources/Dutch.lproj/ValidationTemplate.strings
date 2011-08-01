@@ -10,4 +10,7 @@
 	"Test validation message for unit test" = "Geldigheidsmelding voor unit test";
 	"Test validation message for unit test in ERX" = "SUCCESS - ERD komt hiervoor";
 	"ValueConversionException" = "De waarden in <b>@@displayNameForProperty@@</b> is ongeldig: <b>@@attribute.valueClass@@</b>.";
+    "UniquenessViolationNewObject" = "<b>@@displayNameForEntity@@</b> met <b>@@displayNameForProperty@@</b> bestaat al.";
+	"UniquenessViolationExistingObject" = "<b>@@displayNameForEntity@@</b>met <b>@@displayNameForProperty@@</b> bestaat al.";
+
 }
