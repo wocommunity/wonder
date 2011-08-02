@@ -1,0 +1,146 @@
+{
+    attributes = (
+        {
+            allowsNull = Y; 
+            columnName = capitalID; 
+            name = capitalID; 
+            prototypeName = id; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = code; 
+            name = code; 
+            prototypeName = varchar10; 
+            width = 3; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = code2; 
+            name = code2; 
+            prototypeName = varchar10; 
+            width = 2; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = continent; 
+            name = continent; 
+            prototypeName = javaEnum; 
+            valueClassName = "er.plugintest.model.Continent"; 
+        }, 
+        {allowsNull = Y; columnName = flag; name = flag; prototypeName = blob; }, 
+        {
+            allowsNull = Y; 
+            columnName = gnp; 
+            name = gNP; 
+            precision = 10; 
+            prototypeName = amount; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = gnpOld; 
+            name = gNPOld; 
+            precision = 10; 
+            prototypeName = amount; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = governmentForm; 
+            name = governmentForm; 
+            prototypeName = varchar50; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = headOfState; 
+            name = headOfState; 
+            prototypeName = varchar100; 
+        }, 
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {
+            allowsNull = Y; 
+            columnName = indepYear; 
+            name = indepYear; 
+            prototypeName = intNumber; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = lifeExpectancy; 
+            name = lifeExpectancy; 
+            prototypeName = doubleNumber; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = localName; 
+            name = localName; 
+            prototypeName = varchar50; 
+        }, 
+        {allowsNull = N; columnName = name; name = name; prototypeName = varchar50; }, 
+        {
+            allowsNull = Y; 
+            columnName = population; 
+            name = population; 
+            prototypeName = intNumber; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = region; 
+            name = region; 
+            prototypeName = varchar50; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = surfaceArea; 
+            name = surfaceArea; 
+            prototypeName = doubleNumber; 
+        }
+    ); 
+    attributesUsedForLocking = (id); 
+    className = "er.plugintest.model.Country"; 
+    classProperties = (
+        capital, 
+        cities, 
+        code, 
+        code2, 
+        continent, 
+        countryLanguages, 
+        flag, 
+        gNP, 
+        gNPOld, 
+        governmentForm, 
+        headOfState, 
+        indepYear, 
+        lifeExpectancy, 
+        localName, 
+        name, 
+        population, 
+        region, 
+        surfaceArea
+    ); 
+    externalName = country; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {"_javaClientClassName" = Country; }; 
+    name = Country; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = City; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = capitalID; }); 
+            name = capital; 
+        }, 
+        {
+            destination = City; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = countryID; sourceAttribute = id; }); 
+            name = cities; 
+        }, 
+        {
+            destination = CountryLanguage; 
+            isToMany = Y; 
+            joinSemantic = EOLeftOuterJoin; 
+            joins = ({destinationAttribute = countryID; sourceAttribute = id; }); 
+            name = countryLanguages; 
+        }
+    ); 
+}

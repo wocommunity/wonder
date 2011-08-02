@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="Sources"/>
+	<classpathentry  exported="true"  kind="con" path="WOFramework/JavaEOAccess"/>
+	<classpathentry  exported="true" kind="con" path="WOFramework/JavaEOControl"/>
+	<classpathentry  exported="true" kind="con" path="WOFramework/JavaFoundation"/>
+	<classpathentry  exported="true" kind="con" path="WOFramework/JavaJDBCAdaptor"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry  exported="true" kind="lib" path="Libraries/db2jcc_license_cu.jar"/>
+	<classpathentry  exported="true" kind="lib" path="Libraries/db2jcc.jar"/>
+	<classpathentry  exported="true" kind="lib" path="Libraries/jt400.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

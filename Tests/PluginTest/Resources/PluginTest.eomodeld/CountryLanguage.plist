@@ -1,0 +1,35 @@
+{
+    attributes = (
+        {
+            allowsNull = Y; 
+            columnName = countryID; 
+            name = countryID; 
+            prototypeName = id; 
+        }, 
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {columnName = isOfficial; name = isOfficial; prototypeName = boolean; }, 
+        {columnName = language; name = language; prototypeName = varchar50; }, 
+        {
+            columnName = percentage; 
+            name = percentage; 
+            precision = 5; 
+            prototypeName = amount; 
+        }
+    ); 
+    attributesUsedForLocking = (id); 
+    className = "er.plugintest.model.CountryLanguage"; 
+    classProperties = (country, isOfficial, language, percentage); 
+    externalName = CountryLanguage; 
+    fetchSpecificationDictionary = {}; 
+    name = CountryLanguage; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = Country; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = countryID; }); 
+            name = country; 
+        }
+    ); 
+}

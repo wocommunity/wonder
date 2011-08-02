@@ -4,7 +4,7 @@
             columnName = amount; 
             externalType = DECIMAL; 
             name = amount; 
-            precision = 38; 
+            precision = 31; 
             scale = 2; 
             userInfo = {modificationDate = "2002-07-21 21:47:27 +0200"; }; 
             valueClassName = NSNumber; 
@@ -19,7 +19,7 @@
         {
             adaptorValueConversionMethodName = toString; 
             columnName = boolean; 
-            externalType = SMALLINT; 
+            externalType = VARCHAR; 
             factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
             name = boolean; 
             valueClassName = "java.lang.Boolean"; 
@@ -49,7 +49,7 @@
             columnName = currencyAmount; 
             externalType = DECIMAL; 
             name = currencyAmount; 
-            precision = 38; 
+            precision = 31; 
             scale = 4; 
             valueClassName = NSDecimalNumber; 
             valueType = B; 
@@ -70,7 +70,7 @@
         }, 
         {
             columnName = doubleNumber; 
-            externalType = "DOUBLE PRECISION"; 
+            externalType = DOUBLE; 
             name = doubleNumber; 
             userInfo = {modificationDate = "2002-06-04 14:00:54 +0200"; }; 
             valueClassName = NSNumber; 
@@ -209,12 +209,11 @@
         }, 
         {
             columnName = longText; 
-            externalType = VARCHAR; 
+            externalType = CLOB; 
             name = longText; 
             userInfo = {modificationDate = "2002-07-21 21:47:32 +0200"; }; 
             valueClassName = NSString; 
             valueType = c; 
-            width = 10000000; 
         }, 
         {
             adaptorValueConversionMethodName = toBlob; 
@@ -376,12 +375,11 @@
         }, 
         {
             columnName = varcharLarge; 
-            externalType = BLOB; 
+            externalType = CLOB; 
             name = varcharLarge; 
             userInfo = {modificationDate = "2002-08-19 11:56:16 +0200"; }; 
             valueClassName = NSString; 
             valueType = c; 
-            width = 32765; 
         }
     ); 
     attributesUsedForLocking = (boolean, id); 
