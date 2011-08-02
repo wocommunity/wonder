@@ -1,0 +1,46 @@
+{
+    attributes = (
+        {
+            allowsNull = Y; 
+            columnName = countryID; 
+            name = countryID; 
+            prototypeName = id; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = description; 
+            name = description; 
+            prototypeName = varcharLarge; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = distict; 
+            name = distict; 
+            prototypeName = varchar50; 
+        }, 
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {columnName = name; name = name; prototypeName = varchar50; }, 
+        {
+            allowsNull = Y; 
+            columnName = population; 
+            name = population; 
+            prototypeName = intNumber; 
+        }
+    ); 
+    attributesUsedForLocking = (id); 
+    className = "er.plugintest.model.City"; 
+    classProperties = (country, description, distict, name, population); 
+    externalName = city; 
+    fetchSpecificationDictionary = {}; 
+    name = City; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = Country; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = countryID; }); 
+            name = country; 
+        }
+    ); 
+}

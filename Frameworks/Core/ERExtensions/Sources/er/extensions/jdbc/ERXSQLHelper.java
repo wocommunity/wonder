@@ -1600,6 +1600,10 @@ public class ERXSQLHelper {
 						else if (databaseProductName.equalsIgnoreCase("h2")) {
 							log.warn("H2Helper");
 							sqlHelper = new H2SQLHelper();
+							
+						} 
+						else if (databaseProductName.equalsIgnoreCase("db2")) {
+								sqlHelper = new DB2SQLHelper();
 						}
 						else if (databaseProductName.equalsIgnoreCase("firebird")) {
 							sqlHelper = new FirebirdSQLHelper();
@@ -2486,4 +2490,104 @@ public class ERXSQLHelper {
 			return null;
 		}
 	}
+	
+	public static class DB2SQLHelper extends ERXSQLHelper {
+		@Override
+		protected String sqlForSubquery(String subquery, String alias) {
+			return "(" + subquery + ") " + alias;
+		}
+
+		@Override
+		protected String sqlForGetNextValFromSequencedNamed(String sequenceName) {
+			String sqlString = "select next value for " + sequenceName + " from SYSIBM.SYSDUMMY1";
+			return sqlString;
+		}
+
+
+		@Override
+		public String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
+				// this might work, too, but only if we have an ORDER BY
+			
+			
+			// remove order by clause 
+			String orderBy = expression.orderByString();
+			String innerSql = sql.replace(orderBy, " ");
+			innerSql = innerSql.replace(" ORDER BY ", " ");
+			String rownum = ", row_number() over ( order by " + orderBy + ") eo_rownum" + " FROM ";
+			innerSql = innerSql.replace(" FROM ", rownum);
+			innerSql = innerSql.replaceAll("FETCH FIRST\\W+[0-9]+\\W+ROWS ONLY", " ");  // this removes any limit that may be on  may want to keep it it does work
+			String limitSQL = "select * from (" +  innerSql +  ") as inner_select where eo_rownum between " + (start + 1) + " and " + end;
+			
+			return limitSQL;
+		}
+
+		@Override
+		protected char commandSeparatorChar() {
+			return ';';
+		}
+
+		@Override
+		protected String commandSeparatorString() {
+			String lineSeparator = System.getProperty("line.separator");
+			String commandSeparator = lineSeparator + ";" + lineSeparator;
+			return commandSeparator;
+		}
+
+		@Override
+		public String createIndexSQLForEntities(NSArray<EOEntity> entities, NSArray<String> externalTypesToIgnore) {
+			NSMutableArray<String> db2ExternalTypesToIgnore = new NSMutableArray<String>();
+			if (externalTypesToIgnore != null) {
+				db2ExternalTypesToIgnore.addObjectsFromArray(externalTypesToIgnore);
+			}
+			db2ExternalTypesToIgnore.addObject("BLOB");
+			db2ExternalTypesToIgnore.addObject("CLOB");
+			db2ExternalTypesToIgnore.addObject("DBCLOB");
+			db2ExternalTypesToIgnore.addObject("LONG VARCHAR");
+			db2ExternalTypesToIgnore.addObject("LONG VARGRAPHIC");
+			return super.createIndexSQLForEntities(entities, db2ExternalTypesToIgnore);
+		}
+		
+		@Override
+		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
+			NSMutableArray<String> columnNames = new NSMutableArray<String>();
+			for (ColumnIndex columnIndex : columnIndexes) {
+				columnNames.addObject(columnIndex.columnName());
+			}
+			return "CREATE UNIQUE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
+		}
+		
+		@Override
+		public String sqlForCreateIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
+			NSMutableArray<String> columnNames = new NSMutableArray<String>();
+			for (ColumnIndex columnIndex : columnIndexes) {
+				columnNames.addObject(columnIndex.columnName());
+			}
+			return "CREATE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
+		}
+
+		@Override
+		public String migrationTableName() {
+			return "dbupdater";
+		}
+		
+		public boolean reassignExternalTypeForValueTypeOverride(EOAttribute attribute) {
+			return false;
+		}
+		
+		@Override
+		protected boolean canReliablyPerformDistinctWithSortOrderings() {
+			return false;
+		}
+		
+		/**
+		 * For DB2, it seems the right thing to do for varcharLarge is to use a Clob column.
+		 * CLOB is limited to 2GB where as VARCHAR is limited to 32672 bytes and a LONG VARCHAR to 32700
+		 */
+		@Override
+		public int varcharLargeJDBCType() {
+			return Types.CLOB;
+		}
+
+	}
+
 }

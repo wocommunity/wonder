@@ -15,5 +15,6 @@
 	<modules>
 		<module>ERXTest</module>
 		<module>TestAdaptor</module>
+		<module>PluginTest</module>
 	</modules>
 </project>
