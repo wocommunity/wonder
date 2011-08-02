@@ -8,3 +8,7 @@ StylesheetInjector : CCResourceInjector {
   framework = resourceFrameworkName;
   media = stylesheet.media;
 }
+
+NonNullStylsheetConditional : ERXNonNullConditional {
+	condition = stylesheet;
+}
