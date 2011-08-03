@@ -1,0 +1,12 @@
+The plugin test is a simple application for exercising a database plugin.  Out of the box it is 
+configured to exercise the DB2Plugin.
+
+If you want to test a different Plugin include the plugin into the project and change these
+properties
+
+	dbConnectURLGLOBAL=jdbc:db2://<DB2SERVER>:50000/
+	dbConnectUserGLOBAL=<USERNAME>
+	dbConnectPasswordGLOBAL=<PASSWORD>
+	dbEOPrototypesEntityGLOBAL=EOJDBCDB2Prototypes
+	dbConnectPluginGLOBAL=DB2
+	databaseProductName=DB2
