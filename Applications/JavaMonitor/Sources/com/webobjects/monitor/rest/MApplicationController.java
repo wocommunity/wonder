@@ -2,6 +2,7 @@ package com.webobjects.monitor.rest;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WORequest;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.monitor._private.MApplication;
 import com.webobjects.monitor._private.MHost;
@@ -112,7 +113,15 @@ public class MApplicationController extends JavaMonitorController {
 
 	private void deleteInstance(MApplication application, Integer instanceId) {
 		final MInstance instance = application.instanceWithID(instanceId);
-		siteConfig().removeInstance_M(instance);
+		handler().startWriting();
+		try {
+			siteConfig().removeInstance_M(instance);
+			if (siteConfig().hostArray().count() != 0) {
+				handler().sendRemoveInstancesToWotaskds(new NSArray(instance), siteConfig().hostArray());
+			}
+		} finally {
+			handler().endWriting();
+		}
 	}
 
 	private void deleteApplication(MApplication application) {
