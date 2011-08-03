@@ -10,17 +10,20 @@ import er.rest.routes.ERXDefaultRouteController;
 
 public class JavaMonitorController extends ERXDefaultRouteController {
 
+    private WOTaskdHandler _handler;
+
 	public JavaMonitorController(WORequest request) {
 		super(request);
+		_handler = new WOTaskdHandler(mySession());
 	}
 		
-    protected MSiteConfig siteConfig() {
-        return WOTaskdHandler.siteConfig();
-    }
+	protected MSiteConfig siteConfig() {
+		return WOTaskdHandler.siteConfig();
+	}
 
-    public WOTaskdHandler handler() {
-    	return new WOTaskdHandler(mySession());
-    }
+	public WOTaskdHandler handler() {
+		return _handler;
+	}
     
     public Session mySession() {
         return (Session) super.session();

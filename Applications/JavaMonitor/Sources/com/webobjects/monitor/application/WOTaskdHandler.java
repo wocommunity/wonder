@@ -187,7 +187,7 @@ public class WOTaskdHandler {
     /* ******* */
 
     /* ******** REMOVING (UPDATE) ********* */
-    protected void sendRemoveInstancesToWotaskds(NSArray exInstanceArray, NSArray wotaskdArray) {
+    public void sendRemoveInstancesToWotaskds(NSArray exInstanceArray, NSArray wotaskdArray) {
         WOResponse[] responses = sendRequest(
                 createUpdateRequestDictionary(null, null, null, exInstanceArray, "remove"), wotaskdArray, true);
         NSDictionary[] responseDicts = generateResponseDictionaries(responses);
