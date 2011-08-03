@@ -1,0 +1,28 @@
+The DB2 and DB2 for iSeries jars are not included with this plugin. Here is where you can find them:
+
+DB2 Jars
+	db2jcc_license_cu.jar
+	db2jcc.jar
+	
+	These jars can be found as part of you DB2 installation at <DB2_HOME>/java.  Alas there is no 
+	simple site to download these jars from.  You can download the DB2 Express-C server for free and 
+	it has the files.  
+	
+	I have also found these the db2jcc.jar at
+		http://www.mvnbrowser.com/artifact-details.html?groupId=com.ibm&artifactId=db2jcc&version=9&tab=FILES#tabs
+	it is enough to build the plugin if you edit the pom.xml
+	
+	
+JTOpen supports the iSeries version of the plugin
+
+	jt400.jar
+	
+	This jar can be found at http://jt400.sourceforge.net
+	
+Building using Maven.
+
+	You will need to add these jars to your maven repository using the following commands.
+
+	mvn install:install-file -Dfile=db2jcc.jar -DgroupId=com.ibm.db2 -DartifactId=db2jcc -Dpackaging=jar -DgeneratePom=true
+	mvn install:install-file -Dfile=db2jcc_license_cu.jar -DgroupId=com.ibm.db2 -DartifactId=db2jcc_license_cu -Dpackaging=jar -DgeneratePom=true
+	mvn install:install-file -Dfile=jt400.jar -DgroupId=as400dq -DartifactId=jt400 -Dpackaging=jar -DgeneratePom=true
