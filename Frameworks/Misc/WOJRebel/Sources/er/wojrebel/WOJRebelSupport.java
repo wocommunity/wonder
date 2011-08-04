@@ -45,7 +45,6 @@ public class WOJRebelSupport {
 		public void finishedLaunchingApp(NSNotification n) {
 			try {
 				WOJRebelClassReloadHandler.getInstance().initialize();
-				WOJRebelEOModelReloadHandler.getInstance().initialize();
 				NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("run", NotificationClassArray), WebObjectsPlugin.JREBEL_EVENT, null);
 			} catch (NoClassDefFoundError e) {
 				/* JRebel isn't in the classpath so we do nothing */
@@ -62,6 +61,10 @@ public class WOJRebelSupport {
 		try {
 			NSNotificationCenter.defaultCenter().addObserver(observer,
 				new NSSelector("finishedLaunchingApp", NotificationClassArray), WOApplication.ApplicationWillFinishLaunchingNotification, null);
+			if (WOJRebelClassReloadHandler.getInstance().isReloadEnabled()) {
+				// We need to initialize this early or we won't see the models load.
+				WOJRebelEOModelReloadHandler.getInstance().initialize();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}	
