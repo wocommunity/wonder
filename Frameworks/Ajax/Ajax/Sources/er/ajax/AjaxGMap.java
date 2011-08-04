@@ -22,6 +22,7 @@ import er.extensions.foundation.ERXProperties;
  * @binding height the height of the map (does not have to be specified here, but must be specified somewhere [ie. css])
  * @binding control control type name. Will automatically append a 'G' before and 'Control' after the name given, possible values here: http://www.google.com/apis/maps/documentation/reference.html#GControlImpl
  * @binding zoomLevel zoom level of map (will default to 13 is not specified). Higher is closer.
+ * @binding apiKey apiKey to use for the map, if you want to ovverride the property below
  * @property ajax.google.maps.apiKey an api key you can get from http://www.google.com/apis/maps/ . If your app runs on http://ip:port/cgi-bin/WebObjects/GoogleMaps.woa, register the key for http://ip:port/cgi-bin/WebObjects/ . Using a fixed WO port is recommended (unless you want to get a new api key everytime you restart your server). AjaxGMaps will not work without an Api Key. 
  */
 public class AjaxGMap extends AjaxComponent {
@@ -37,8 +38,7 @@ public class AjaxGMap extends AjaxComponent {
 	}
 
 	protected void addRequiredWebResources(WOResponse response) {
-		String apiKey = ERXProperties.stringForKey("ajax.google.maps.apiKey");
-		String mapApiJsFilename = "http://maps.google.com/maps?file=api&amp;v=2&amp;key=" + apiKey;
+		String mapApiJsFilename = "http://maps.google.com/maps?file=api&amp;v=2&amp;key=" + apiKey();
 		addScriptResourceInHead(response, mapApiJsFilename);
 		addScriptResourceInHead(response, "WonderGMapsHelpers.js");
 	}
@@ -51,6 +51,10 @@ public class AjaxGMap extends AjaxComponent {
 			}
 		}
 		return _id;
+	}
+	
+	protected String apiKey() {
+		return valueForStringBinding("apiKey", ERXProperties.stringForKey("ajax.google.maps.apiKey"));
 	}
 
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
