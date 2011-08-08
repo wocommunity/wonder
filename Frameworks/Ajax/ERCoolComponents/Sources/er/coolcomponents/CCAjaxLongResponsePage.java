@@ -1,5 +1,7 @@
 package er.coolcomponents;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
@@ -107,8 +109,10 @@ import er.extensions.foundation.ERXStopWatch;
  * 	<dd>This determines the default status text when the task does not implement {@link ERXStatusInterface}</dd>
  * <dt><code>er.coolcomponents.CCAjaxLongResponsePage.refreshInterval</code></dt>
  * 	<dd>This value in seconds determines a custom refresh interval for the update container on the page. The default is 2 seconds</dd>
- * <dt>er.coolcomponents.CCAjaxLongResponsePage.nextPageForErrorResultControllerClassName</dt>
- * 	<dd>Defines a default controller class, other than the hard-coded default, for handling task errors for the application</dd>
+ * <dt><code>er.coolcomponents.CCAjaxLongResponsePage.nextPageForErrorResultControllerClassName</code></dt>
+ * 	<dd>Defines a custom subclass of IERXPerformWOActionForResult as the default controller class, other than the hard-coded default, for handling task errors for the application. Note that <strong>if</strong> you
+ * declare a constructor that takes a single WOComponent argument, that constructor <strong>will</strong> be used and the originating page will
+ * be passed in as the constructor argument for you to use as you please in your custom error handling logic.</dd>
  * </dl>
  * @author kieran
  *
@@ -123,11 +127,17 @@ public class CCAjaxLongResponsePage extends WOComponent {
 	// Lazy initialization of errorController class 
 	private static class DEFAULT_CONTROLLER {
 		final static String KEY_FOR_CLASSNAME = "er.coolcomponents.CCAjaxLongResponsePage.nextPageForErrorResultControllerClassName";
-		final static Class<IERXPerformWOActionForResult> FOR_ERROR_RESULT = defaultErrorController();
+		// This is the default controller for handling errors
+		final static Class<? extends IERXPerformWOActionForResult> FOR_ERROR_RESULT = defaultErrorController();
 		
-		@SuppressWarnings("rawtypes")
-		private static Class<IERXPerformWOActionForResult> defaultErrorController() {
-			Class clazz = null;
+		// This is the preferred constructor if a custom user-defined class is used.
+		// We look for a constructor that takes a single WOComponent argument and we pass in the original referring page to that constructor
+		// giving the developer an opportunity to implement custom error messages in the original page if he so chooses.
+		final static Constructor<? extends IERXPerformWOActionForResult> CONSTRUCTOR_FOR_ERROR_RESULT = preferredConstructor();
+		@SuppressWarnings("unchecked")
+		// Suppresses warning given by _NSUtilities.classWithName(className)
+		private static Class<? extends IERXPerformWOActionForResult> defaultErrorController() {
+			Class<? extends IERXPerformWOActionForResult> clazz = null;
 			String className = ERXProperties.stringForKey(KEY_FOR_CLASSNAME);
 			if (className != null) {
 				clazz = _NSUtilities.classWithName(className);
@@ -138,6 +148,23 @@ public class CCAjaxLongResponsePage extends WOComponent {
 				log.debug("Default error controller class = " + clazz);
 			
 			return clazz;
+		}
+		
+		private static Constructor<? extends IERXPerformWOActionForResult> preferredConstructor() {
+			Constructor<? extends IERXPerformWOActionForResult> result = null;
+			if (!FOR_ERROR_RESULT.getClass().equals(ErrorResultController.class)) {
+				// We have a custom user-defined error controller
+				// Check to see if that controller has a constructor with a single WOComponent argument
+				try {
+					result = FOR_ERROR_RESULT.getConstructor(WOComponent.class);
+				} catch (NoSuchMethodException e) {
+					// No problem, the developer does not want to take advantage of this provision to give him the original calling page.
+					result = null;
+				} catch (SecurityException e) {
+					throw new RuntimeException("Unexpected exception when trying to get Constructor for " + FOR_ERROR_RESULT.getClass().getName());
+				}
+			}
+			return result;
 		}
 			
 	}
@@ -204,11 +231,20 @@ public class CCAjaxLongResponsePage extends WOComponent {
 		if ( _nextPageForErrorController == null ) {
 			// If user has not manually set one, we default to the class defined in system properties or our hard-coded default
 			try {
-				_nextPageForErrorController = DEFAULT_CONTROLLER.FOR_ERROR_RESULT.newInstance();
+				// If we have a constructor with WOComponent argument, use that passing the original calling page
+				// otherwise just default constructor
+				if (DEFAULT_CONTROLLER.CONSTRUCTOR_FOR_ERROR_RESULT != null) {
+					_nextPageForErrorController = DEFAULT_CONTROLLER.CONSTRUCTOR_FOR_ERROR_RESULT.newInstance(_referringPage);
+				} else {
+					_nextPageForErrorController = DEFAULT_CONTROLLER.FOR_ERROR_RESULT.newInstance();
+				}
+				
 			} catch (InstantiationException e1) {
 				throw new RuntimeException("Failed to instantiate an instance of " + DEFAULT_CONTROLLER.FOR_ERROR_RESULT.getName(), e1);
 			} catch (IllegalAccessException e2) {
 				throw new RuntimeException("Failed to instantiate an instance of " + DEFAULT_CONTROLLER.FOR_ERROR_RESULT.getName(), e2);
+			} catch (InvocationTargetException e3) {
+				throw new RuntimeException("Failed to instantiate an instance of " + DEFAULT_CONTROLLER.FOR_ERROR_RESULT.getName() + " using the WOComponent argument constructor", e3);
 			}
 		}
 		return _nextPageForErrorController;
@@ -297,17 +333,20 @@ public class CCAjaxLongResponsePage extends WOComponent {
 	}
 
 	public WOActionResults nextPage() {
-		if (log.isDebugEnabled()) log.debug("nextPage action fired. task result is " + _result);
+		// Get the result of the task
+		Object taskResult = result();
+		
+		if (log.isDebugEnabled()) log.debug("nextPage action fired. task result is " + taskResult);
 		
 		// The response to be returned to the user after the task is done.
-		WOActionResults results = null;
+		WOActionResults nextPageResponse = null;
 		
 		// If user canceled, we just call that controller
 		if (_wasStoppedByUser) {
 			if (log.isDebugEnabled())
 				log.debug("The task was canceled by the user, so now calling " + nextPageForCancelController());
-			results = nextPageForCancelController().performAction();
-		} else if (_result instanceof Exception) {
+			nextPageResponse = nextPageForCancelController().performAction();
+		} else if (taskResult instanceof Exception) {
 			// Invoke error controller
 			IERXPerformWOActionForResult errorController = nextPageForErrorController();
 			errorController.setResult(_result);
@@ -315,21 +354,21 @@ public class CCAjaxLongResponsePage extends WOComponent {
 			if (log.isDebugEnabled())
 				log.debug("The task had an error, so now calling " + errorController);
 			
-			results = errorController.performAction();
+			nextPageResponse = errorController.performAction();
 		} else {
 			// Invoke the expected result controller
 			if (log.isDebugEnabled())
-				log.debug("The task completed normally. Now setting the result, " + result()
+				log.debug("The task completed normally. Now setting the result, " + taskResult
 						+ ", and calling " + nextPageForResultController());
-			nextPageForResultController().setResult(result());
-			results = nextPageForResultController().performAction();
+			nextPageForResultController().setResult(taskResult);
+			nextPageResponse = nextPageForResultController().performAction();
 		}
 		
 
 		if (log.isDebugEnabled())
-			log.debug("results = " + (results == null ? "null" : results.toString()));
+			log.debug("results = " + (nextPageResponse == null ? "null" : nextPageResponse.toString()));
 
-		return results;
+		return nextPageResponse;
 	}
 
 	private Object _result;

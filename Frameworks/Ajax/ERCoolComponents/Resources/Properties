@@ -1,3 +1,6 @@
+#########################################################################
+# CCAjaxLongResponsePage
+#########################################################################
 # A default status message to display if the long running task does not implement ERXStatusInterface
 #er.coolcomponents.CCAjaxLongResponsePage.defaultStatus=Please wait...
 
@@ -13,3 +16,9 @@
 
 # Default refresh interval for CCAjaxLongResponsePage
 #er.coolcomponents.CCAjaxLongResponsePage.refreshInterval = 2
+
+# Defines a custom subclass of IERXPerformWOActionForResult as the  default controller class, other than the hard-coded default, for handling task errors for the application. Note that *if* you
+# declare a constructor that takes a single WOComponent argument, that constructor *will* be used and the originating page will
+# be passed in as the constructor argument for you to use as you please in your custom error handling logic.
+# This custom class must implement the IERXPerformWOActionForResult interface.
+#er.coolcomponents.CCAjaxLongResponsePage.nextPageForErrorResultControllerClassName = my.application.CustomErrorResultController
