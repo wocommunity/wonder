@@ -20,11 +20,16 @@
           <li>
             <wo:link pageName = "TaskInfoList">TaskInfo-List</wo:link>
           </li>
-			<li>
+          <li>
             <wo:link pageName = "AppMonitor">Task Monitor</wo:link>
           </li>
         </ul>
       </div>
+      <wo:if condition = "$hasErrors">
+        <div id = "errors" class = "large-round-corners">
+          <ul> <wo:str value = "$errorString" escapeHTML = "$false" /> </ul>
+        </div>
+      </wo:if>
       <div id = "bd">
         <div class = "append-bottom"> <wo:WOComponentContent /> </div>
         <div class = "push"></div>

@@ -313,3 +313,14 @@ ul#nav a:hover {
 
 
 /* END ERXFlickBatchNavigation paginator styling */
+
+/* error styling */
+div#errors {
+	border: 1px solid red;
+	background-color: yellow;
+}
+
+li.error {
+	color: red;
+	font-weight: bold;
+}
