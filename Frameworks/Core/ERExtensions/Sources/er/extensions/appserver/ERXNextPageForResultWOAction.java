@@ -1,6 +1,7 @@
 package er.extensions.appserver;
 
 
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
@@ -133,6 +134,14 @@ public class ERXNextPageForResultWOAction extends ERXAbstractPerformWOAction imp
 			_nextPageValues = new NSMutableDictionary<String, Object>();
 		}
 		return _nextPageValues;
+	}
+	
+	@Override
+	public String toString() {
+		ToStringBuilder b = new ToStringBuilder(this);
+		b.append("nextPage", _nextPage);
+		b.append("nextPageResultKey", _nextPageResultKey);
+		return b.toString();
 	}
 
 }

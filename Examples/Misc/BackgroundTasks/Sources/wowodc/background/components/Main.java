@@ -7,6 +7,8 @@ import wowodc.background.tasks.T03BackgroundTaskWithProgressFeedback;
 import wowodc.background.tasks.T04SimpleEOFTask;
 import wowodc.background.tasks.T05MultiThreadedEOFTask;
 import wowodc.background.tasks.T07EOFTaskWithSubTasks;
+import wowodc.background.tasks.T08CallableWithSimulatedError;
+import wowodc.background.tasks.T09RunnableWithSimulatedError;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
@@ -162,6 +164,36 @@ public class Main extends ERXComponent {
 		
 		CCAjaxLongResponsePage nextPage = pageWithName(CCAjaxLongResponsePage.class);
 		nextPage.setNextPageForResultController(controller);
+		nextPage.setTask(task);
+		
+		return nextPage;
+	}
+	
+	/**
+	 * Comment out the property <code>er.coolcomponents.CCAjaxLongResponsePage.nextPageForErrorResultControllerClassName</code>
+	 * in Properties to see the default error handling behavior.
+	 *
+	 * @return result of an error in a Callable task.
+	 */
+	public WOActionResults dispatchCallableWithSimulatedError() {
+		T08CallableWithSimulatedError task = new T08CallableWithSimulatedError();
+		
+		CCAjaxLongResponsePage nextPage = pageWithName(CCAjaxLongResponsePage.class);
+		nextPage.setTask(task);
+		
+		return nextPage;
+	}
+	
+	/**
+	 * Comment out the property <code>er.coolcomponents.CCAjaxLongResponsePage.nextPageForErrorResultControllerClassName</code>
+	 * in Properties to see the default error handling behavior.
+	 * 
+	 * @return result of an error in a Runnable task.
+	 */
+	public WOActionResults dispatchRunnableWithSimulatedError() {
+		T09RunnableWithSimulatedError task = new T09RunnableWithSimulatedError();
+		
+		CCAjaxLongResponsePage nextPage = pageWithName(CCAjaxLongResponsePage.class);
 		nextPage.setTask(task);
 		
 		return nextPage;

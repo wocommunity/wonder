@@ -4,8 +4,12 @@ import java.util.Random;
 
 import org.apache.log4j.Logger;
 
+import com.webobjects.foundation.NSMutableArray;
+
+import er.extensions.foundation.ERXThreadStorage;
+
 /**
- * A class with methods that do various things - just to consume time for example tasks.
+ * A utility class for this example app.
  * 
  * @author kieran
  *
@@ -13,6 +17,7 @@ import org.apache.log4j.Logger;
 public class Utilities {
 	
 	private static final Logger log = Logger.getLogger(Utilities.class);
+	public static final String ERRORS_KEY = "_ERRORS_KEY";
 	
 	// Random number generator shared instance
 	private static class RANDOM {
@@ -74,5 +79,38 @@ public class Utilities {
 	
 	public static Random sharedRandom() {
 		return RANDOM.GENERATOR;
+	}
+	
+	/**
+	 * @return errors for the current request
+	 */
+	public static NSMutableArray<String> errorMessages() {
+		NSMutableArray<String> errors = (NSMutableArray<String>) ERXThreadStorage.valueForKey(ERRORS_KEY);
+		if (errors == null) {
+			errors = new NSMutableArray<String>();
+			ERXThreadStorage.takeValueForKey(errors, ERRORS_KEY);
+		}
+		return errors;
+	}
+	
+	/**
+	 * Adds an error message to current list for current request.
+	 * 
+	 * @param message
+	 */
+	public static void addErrorMessage(String message) {
+		errorMessages().addObject(message);
+	}
+	
+	/**
+	 * @return true if we have accumulated any error messages
+	 */
+	public static boolean hasErrors() {
+		boolean result = false;
+		NSMutableArray<String> errors = (NSMutableArray<String>) ERXThreadStorage.valueForKey(ERRORS_KEY);
+		if (errors != null && errors.count() > 0) {
+			result = true;
+		}
+		return result;
 	}
 }

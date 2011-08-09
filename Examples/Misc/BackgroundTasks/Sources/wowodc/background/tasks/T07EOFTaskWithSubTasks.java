@@ -28,8 +28,6 @@ public class T07EOFTaskWithSubTasks extends ERXAbstractTask implements Callable<
 
 	private volatile boolean _isStopped = false;
 
-	private Object _currentTask = null;
-
 	private EOGlobalID _taskInfoGID = null;
 
 	public EOGlobalID call() throws Exception {
@@ -38,8 +36,6 @@ public class T07EOFTaskWithSubTasks extends ERXAbstractTask implements Callable<
 
 		if (!_isStopped) {
 			_task1 = new T04SimpleEOFTask();
-			_currentTask = _task1;
-			
 			// Two ways to skin the cat (http://www.worldwidewords.org/qa/qa-mor1.htm) are shown here
 			// For the first task, we simple execute it in the current thread by calling it directly
 			_taskInfoGID = _task1.call();
@@ -65,8 +61,6 @@ public class T07EOFTaskWithSubTasks extends ERXAbstractTask implements Callable<
 			
 			
 			Future<EOGlobalID> future = ERXExecutorService.executorService().submit(_task2);
-			_currentTask = _task2;
-
 			// This next statement blocks until the task, running in another thread, is complete.
 			_taskInfoGID = future.get();
 			
