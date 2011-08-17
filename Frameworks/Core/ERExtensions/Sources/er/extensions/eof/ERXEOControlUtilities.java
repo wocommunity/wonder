@@ -1738,7 +1738,7 @@ public class ERXEOControlUtilities {
                 EOQualifier qual = (EOQualifier)oriQualifiers.objectAtIndex(i);
                 qualifiers.addObject(localInstancesInQualifier(ec, qual));
             }
-            return new EOAndQualifier(qualifiers);
+            return q instanceof EOAndQualifier ? new EOAndQualifier(qualifiers) : new EOOrQualifier(qualifiers);
         } else if (q instanceof EONotQualifier) {
             EONotQualifier qNot = (EONotQualifier)q;
             EOQualifier qual = localInstancesInQualifier(ec, qNot.qualifier());
