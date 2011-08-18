@@ -3,17 +3,11 @@ package er.extensions.batching;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WODisplayGroup;
-import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EODatabaseDataSource;
-import com.webobjects.eoaccess.EOEntity;
-import com.webobjects.eoaccess.EOModel;
-import com.webobjects.eoaccess.EOModelGroup;
-import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOAndQualifier;
 import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOFetchSpecification;
-import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
@@ -24,13 +18,11 @@ import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation._NSDelegate;
 
 import er.extensions.appserver.ERXDisplayGroup;
+import er.extensions.eof.ERXBatchFetchUtilities;
 import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.eof.ERXEOControlUtilities;
-import er.extensions.eof.ERXEOGlobalIDUtilities;
-import er.extensions.eof.ERXBatchFetchUtilities;
-import er.extensions.eof.ERXS;
+import er.extensions.eof.ERXKey;
 import er.extensions.foundation.ERXArrayUtilities;
-import er.extensions.jdbc.ERXSQLHelper;
 
 /**
  * Extends {@link WODisplayGroup} in order to provide real batching. This is
@@ -212,7 +204,11 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 			refetchIfNecessary();
 			return _displayedObjects;
 		}
-		return super.displayedObjects();
+		NSArray<T> displayedObjects = super.displayedObjects(); 
+		if (_prefetchingRelationshipKeyPaths != null) {
+			ERXBatchFetchUtilities.batchFetch(displayedObjects, _prefetchingRelationshipKeyPaths);
+		}
+		return displayedObjects;
 	}
 	
 	
@@ -269,6 +265,19 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	 */
 	public void setPrefetchingRelationshipKeyPaths(NSArray<String> prefetchingRelationshipKeyPaths) {
 		_prefetchingRelationshipKeyPaths = prefetchingRelationshipKeyPaths;
+	}
+	
+	/**
+	 * Sets the prefetching key paths to override those in the underlying fetch spec.
+	 * 
+	 * @param prefetchingRelationshipKeyPaths the prefetching key paths to override those in the underlying fetch spec
+	 */
+	public void setPrefetchingRelationshipKeyPaths(ERXKey<?>... prefetchingRelationshipKeyPaths) {
+		NSMutableArray<String> keypaths = new NSMutableArray<String>();
+    	for (ERXKey<?> key : prefetchingRelationshipKeyPaths) {
+    		keypaths.addObject(key.key());
+    	}
+		_prefetchingRelationshipKeyPaths = keypaths.immutableClone();
 	}
 	
 	/**
