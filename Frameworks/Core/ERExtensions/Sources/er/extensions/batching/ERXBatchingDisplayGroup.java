@@ -206,7 +206,7 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 		}
 		NSArray<T> displayedObjects = super.displayedObjects(); 
 		if (_prefetchingRelationshipKeyPaths != null) {
-			ERXBatchFetchUtilities.batchFetch(displayedObjects, _prefetchingRelationshipKeyPaths);
+			ERXBatchFetchUtilities.batchFetch(displayedObjects, _prefetchingRelationshipKeyPaths, true);
 		}
 		return displayedObjects;
 	}
