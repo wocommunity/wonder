@@ -23,6 +23,14 @@
         </ant>
     </target>
 
+    <target name="tests">
+        <ant antFile="Build/build/build.xml" target="tests.all">
+            <property name="build.action" value="build" />
+            <property name="wonder.development" value="false" />
+            <property name="wonder.patch" value="54" />
+        </ant>
+    </target>
+
     <target name="applications">
         <ant antFile="Build/build/build.xml" target="applications.all">
             <property name="build.action" value="build" />
@@ -106,7 +114,7 @@
         </ant>
     </target>
 
-    <target name="test"><ant antFile="Build/build/build.xml" target="test" /></target>
+    <target name="tests.run"><ant antFile="Build/build/build.xml" target="tests.run" /></target>
 
     <target name="all" depends="clean, frameworks, frameworks.install, applications, applications.install, examples, examples.install">
     </target>

@@ -3,12 +3,9 @@ package er.erxtest;
 import java.io.File;
 import java.util.Properties;
 
-import junit.textui.TestRunner;
-
 import org.junit.runner.JUnitCore;
 
 import er.extensions.appserver.ERXApplication;
-
 import er.extensions.foundation.ERXProperties;
 
 public class Application extends ERXApplication {
@@ -51,7 +48,7 @@ public class Application extends ERXApplication {
 
 	    String listener = System.getProperty("er.erxtest.ERXTestListener");
 		if (listener == null || listener.compareToIgnoreCase("noisy") != 0)
-			System.out.println("Invoke \"ant -Der.erxtest.ERXTestListener=Noisy test\" to see verbose output.");
+			System.out.println("Invoke \"ant -Der.erxtest.ERXTestListener=Noisy tests.run\" to see verbose output.");
 
 		if (!isLaunchingFromEclipse()) {
 		    JUnitCore core = new JUnitCore();
