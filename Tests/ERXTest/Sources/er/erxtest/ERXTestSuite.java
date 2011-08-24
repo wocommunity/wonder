@@ -50,6 +50,7 @@ public class ERXTestSuite {
     suite.addTestSuite(er.memoryadaptor.ERMemoryAdaptorTest.class);
 
     suite.addTestSuite(er.extensions.appserver.ERXApplicationTest.class);
+    suite.addTestSuite(er.extensions.appserver.ERXRequestTest.class);
     
     suite.addTestSuite(er.directtoweb.ERD2WModelTest.class);
 

@@ -1,6 +1,7 @@
 package er.extensions.appserver;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Enumeration;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -17,9 +18,9 @@ import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSTimestamp;
 
 import er.extensions.foundation.ERXProperties;
-import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 /** Subclass of WORequest that fixes several Bugs.
@@ -163,6 +164,22 @@ public  class ERXRequest extends WORequest {
 		return result;
 	}
 
+    @Override
+    public NSTimestamp dateFormValueForKey(String aKey, SimpleDateFormat dateFormatter) {
+
+        String aDateString = stringFormValueForKey(aKey);
+        java.util.Date aDate = null;
+        if (aDateString != null && dateFormatter != null) {
+            try {
+                aDate = dateFormatter.parse(aDateString);
+            } catch (java.text.ParseException e) {
+               log.error(e);
+            }
+        }
+        return aDate == null ? null : new NSTimestamp(aDate);
+    }
+
+
 	/**
      * Gets the ERXBrowser associated with the user-agent of
      * the request.
@@ -178,7 +195,7 @@ public  class ERXRequest extends WORequest {
     }
 
     /**
-     * Cleaning up retian count on the browser.
+     * Cleaning up retain count on the browser.
      */
     @Override
 	public void finalize() throws Throwable {
@@ -278,7 +295,7 @@ public  class ERXRequest extends WORequest {
     }
 
     private static class _LanguageComparator extends NSComparator {
-        
+
         private static float quality(String languageString) {
             float result=0f;
             if (languageString!=null) {
@@ -302,12 +319,12 @@ public  class ERXRequest extends WORequest {
         
     }
 
-    
+    private final static NSComparator COMPARE_Qs = new _LanguageComparator();
+
     /** Translates ("de", "en-us;q=0.33", "en", "en-gb;q=0.66") to ("de", "en_gb", "en-us", "en").
      * @param languages NSArray of Strings
      * @return sorted NSArray of normalized Strings
      */
-    private final static NSComparator COMPARE_Qs = new _LanguageComparator();
     protected NSArray<String> fixAbbreviationArray(NSArray<String> languages) {
         try {
             languages=languages.sortedArrayUsingComparator(COMPARE_Qs);
@@ -374,7 +391,6 @@ public  class ERXRequest extends WORequest {
         }
     }
     
- 
 
     /**
      * Overridden because the super implementation would pull in all 
