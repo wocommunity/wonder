@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>wonder.frameworks</groupId>
-		<artifactId>core</artifactId>
+		<artifactId>d2w</artifactId>
 		<version>5.4-SNAPSHOT</version>
 	</parent>
 
