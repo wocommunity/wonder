@@ -333,7 +333,7 @@
             <param name="project.name" value="ERJasperReportsExample" />
             <param name="project.dir" value="Examples/Reporting/ERJasperReportsExample" />
             <param name="wo.system.root.bundles" value="${frameworks.system.core}" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERJasperReports/ERPrototypes/WOOgnl/ERMoviesLogic/Ajax/ERTaggable/ERAttachment/ERCoolComponents" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERJasperReports/ERPrototypes/WOOgnl/ERMoviesLogic/Ajax/ERTaggable/ERAttachment/ERCoolComponents/H2PlugIn" />
        </antcall>
     </target>
 
@@ -343,7 +343,7 @@
             <param name="project.name" value="BackgroundTasks" />
             <param name="project.dir" value="Examples/Misc/BackgroundTasks" />
             <param name="wo.system.root.bundles" value="${frameworks.system.core}" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERPrototypes/WOOgnl/ERCoolComponents/Ajax/MySQLPlugIn" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERPrototypes/WOOgnl/ERCoolComponents/Ajax/MySQLPlugIn/H2PlugIn/ERRest" />
        </antcall>
     </target>
     
