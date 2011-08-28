@@ -1,13 +1,16 @@
+# H2 Connection Dictionary
+webobjectsexamples.ERMoviesLogic.useEmbeddedH2Database=true
+
 # MySQL Connection Dictionary
-dbConnectUserGLOBAL=developer
-dbConnectPasswordGLOBAL=passw0rd
-dbConnectDriverGLOBAL=com.mysql.jdbc.Driver
-Movies.URL=jdbc:mysql://localhost/movies?capitalizeTypenames=true&zeroDateTimeBehavior=convertToNull&characterEncoding=UTF-8
+#dbConnectUserGLOBAL=developer
+#dbConnectPasswordGLOBAL=passw0rd
+#dbConnectDriverGLOBAL=com.mysql.jdbc.Driver
+#Movies.URL=jdbc:mysql://localhost/movies?capitalizeTypenames=true&zeroDateTimeBehavior=convertToNull&characterEncoding=UTF-8
 
 # Migrations
 # If you prefer, just use the 
-#er.migration.migrateAtStartup=true
-#er.migration.createTablesIfNecessary=true
+er.migration.migrateAtStartup=true
+er.migration.createTablesIfNecessary=true
 #er.migration.modelNames=YourModel
 
 log4j.logger.wk.webobjects.wocomponents.GenericAjaxLongResponsePage = DEBUG

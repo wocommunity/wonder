@@ -20,5 +20,6 @@
 	<classpathentry kind="con" path="WOFramework/ERAttachment"/>
 	<classpathentry kind="con" path="WOFramework/ERCoolComponents"/>
 	<classpathentry kind="lib" path="Libraries/mysql-connector-java-5.1.13-bin.jar"/>
+	<classpathentry kind="con" path="WOFramework/H2PlugIn"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
