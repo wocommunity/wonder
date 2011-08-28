@@ -3,6 +3,7 @@
 # Demo tasks logging
 log4j.logger.wowodc.background.tasks.T01SimpleBackgroundTask = INFO
 log4j.logger.wowodc.background.tasks.T03BackgroundTaskWithProgressFeedback = DEBUG
+log4j.logger.wowodc.background.tasks.T10RestEOFTask = DEBUG
 
 
 
