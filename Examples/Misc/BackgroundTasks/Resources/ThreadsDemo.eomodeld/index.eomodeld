@@ -1,11 +1,7 @@
 {
     EOModelVersion = "2.1"; 
     adaptorName = JDBC; 
-    connectionDictionary = {
-        URL = "jdbc:mysql://localhost/threadsdemo?capitalizeTypenames=true&useUnicode=true&characterEncoding=UTF-8"; 
-        password = password; 
-        username = guest; 
-    }; 
+    connectionDictionary = {URL = "jdbc:h2:file:/tmp/BackgroundTasks"; password = ""; username = ""; }; 
     entities = (
         {className = "wowodc.eof.ResultItem"; name = ResultItem; }, 
         {className = "wowodc.eof.TaskInfo"; name = TaskInfo; }
@@ -17,12 +13,8 @@
             databaseConfigs = {
                 Default = {
                     adaptorName = JDBC; 
-                    connectionDictionary = {
-                        URL = "jdbc:mysql://localhost/threadsdemo?capitalizeTypenames=true&useUnicode=true&characterEncoding=UTF-8"; 
-                        password = password; 
-                        username = guest; 
-                    }; 
-                    prototypeEntityName = EOJDBCMySQLPrototypes; 
+                    connectionDictionary = {URL = "jdbc:h2:file:/tmp/BackgroundTasks"; password = ""; username = ""; }; 
+                    prototypeEntityName = EOJDBCH2Prototypes; 
                 }; 
             }; 
             entityNamingConvention = {case = Lower; separator = None; }; 

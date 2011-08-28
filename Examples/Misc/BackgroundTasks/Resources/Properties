@@ -45,13 +45,21 @@ er.extensions.ERXEC.useSharedEditingContext=false
 er.extensions.ERXEnterpriseObject.applyRestrictingQualifierOnInsert=true
 er.extensions.ERXEnterpriseObject.updateInverseRelationships=true
 
-dbConnectURLGLOBAL=jdbc:mysql://localhost/threadsdemo?capitalizeTypenames=true&useUnicode=true&characterEncoding=UTF-8
-dbConnectUserGLOBAL=guest
-dbConnectPasswordGLOBAL=password
+# H2 Connection Dictionary
+dbConnectURLGLOBAL=jdbc:h2:file:/tmp/BackgroundTasks
+dbConnectUserGLOBAL=
+dbConnectPasswordGLOBAL=
+dbConnectDriverGLOBAL=org.h2.Driver
+dbConnectPluginGLOBAL=H2PlugIn
+
+# MySQL Connection Dictionary
+#dbConnectURLGLOBAL=jdbc:mysql://localhost/threadsdemo?capitalizeTypenames=true&useUnicode=true&characterEncoding=UTF-8
+#dbConnectUserGLOBAL=guest
+#dbConnectPasswordGLOBAL=password
 
 # Migrations
-#er.migration.migrateAtStartup=true
-#er.migration.createTablesIfNecessary=true
+er.migration.migrateAtStartup=true
+er.migration.createTablesIfNecessary=true
 #er.migration.modelNames=YourModel
 
 # Misc Components

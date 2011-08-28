@@ -19,5 +19,6 @@
 	<classpathentry kind="con" path="WOFramework/Ajax"/>
 	<classpathentry kind="con" path="WOFramework/MySQLPlugIn"/>
 	<classpathentry kind="lib" path="Libraries/mysql-connector-java-5.1.13-bin.jar"/>
+	<classpathentry kind="con" path="WOFramework/H2PlugIn"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
