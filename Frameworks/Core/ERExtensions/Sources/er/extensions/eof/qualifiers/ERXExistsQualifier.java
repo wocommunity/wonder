@@ -185,9 +185,12 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
                 destTableAlias = "t" + expression.aliasesByRelationshipPath().count(); // Probably "t1"
             }
 
-            EOAttribute pk = (EOAttribute)srcEntity.primaryKeyAttributes().lastObject();
-            String foreignKey = expression.sqlStringForAttribute(pk);
+            EOAttribute sourceKeyAttribute = srcEntity.primaryKeyAttributes().lastObject();
+            String sourceKey = expression.sqlStringForAttribute(sourceKeyAttribute);
 
+            EOAttribute destKeyAttribute = relationship.destinationAttributes().lastObject();
+            String destKey = expression.sqlStringForAttribute(destKeyAttribute);
+            
             EOQualifier qual = EOQualifierSQLGeneration.Support._schemaBasedQualifierWithRootEntity(subqualifier, destEntity);
             EOFetchSpecification fetchSpecification = new EOFetchSpecification(destEntity.name(), qual, null, false, true, null);
 
@@ -207,9 +210,9 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
             sb.append(" EXISTS ( ");
             sb.append(ERXStringUtilities.replaceStringByStringInString("t0.", destTableAlias + ".", subExpression.statement()));
             sb.append(" AND ");
-            sb.append(ERXStringUtilities.replaceStringByStringInString("t0.", destTableAlias + ".", foreignKey));
+            sb.append(ERXStringUtilities.replaceStringByStringInString("t0.", destTableAlias + ".", destKey));
             sb.append(" = ");
-            sb.append(ERXStringUtilities.replaceStringByStringInString("t0.", sourceTableAlias + ".", foreignKey));
+            sb.append(ERXStringUtilities.replaceStringByStringInString("t0.", sourceTableAlias + ".", sourceKey));
             sb.append(" ) ");
             return sb.toString();
         }
