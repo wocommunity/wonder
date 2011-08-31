@@ -182,14 +182,17 @@ public class NSMutableSet<E> extends NSSet<E> {
 
 	}
 
+	@Override
 	public Object clone() {
 		return new NSMutableSet<E>(this);
 	}
 
+	@Override
 	public NSSet<E> immutableClone() {
 		return new NSSet<E>(this);
 	}
 
+	@Override
 	public NSMutableSet<E> mutableClone() {
 		return (NSMutableSet<E>) clone();
 	}
@@ -198,18 +201,7 @@ public class NSMutableSet<E> extends NSSet<E> {
 	public static final Class _CLASS = _NSUtilities._classWithFullySpecifiedName("com.webobjects.foundation.NSMutableSet");
 	static final long serialVersionUID = -6054074706096120227L;
 
-	/**
-	 * Add <tt>o</tt> to the set and return true if <tt>o</tt> is not null
-	 * and the set does not already contain <tt>o</tt>. Null elements are not
-	 * permitted.
-	 * 
-	 * @param o
-	 *            element to add to this set
-	 * 
-	 * @return true if o is not null and the set did not already contain o
-	 * @throws IllegalArgumentException
-	 *             if o is null
-	 */
+	@Override
 	public boolean add(E o) {
 		if (contains(o)) {
 			return false;
@@ -220,27 +212,12 @@ public class NSMutableSet<E> extends NSSet<E> {
 		return true;
 	}
 
-	/**
-	 * If the set contains <tt>o</tt>, remove it and returns true.
-	 * 
-	 * @param o
-	 *            element to remove from this set.
-	 * 
-	 * @return true if the set contained <tt>o</tt>
-	 */
+	@Override
 	public boolean remove(Object o) {
 		return removeObject(o) != null ? true : false;
 	}
 
-	/**
-	 * Add elements in <tt>c</tt> one by one and return true. Existing
-	 * elements are not overwritten. Null elements are not permitted.
-	 * 
-	 * @param c
-	 *            collection of elements to add to this set.
-	 * 
-	 * @return true if this set was modified; false otherwise.
-	 */
+	@Override
 	public boolean addAll(Collection<? extends E> c) {
 		boolean updated = false;
 		for (E t : c) {
@@ -253,16 +230,7 @@ public class NSMutableSet<E> extends NSSet<E> {
 		return updated;
 	}
 
-	/**
-	 * Retain only the elements in this set that are contained in <tt>c</tt>.
-	 * 
-	 * @see com.webobjects.foundation.NSMutableSet#intersectSet(NSSet)
-	 * 
-	 * @param c
-	 *            items to retain in this set
-	 * 
-	 * @return true if this set was modified; false otherwise.
-	 */
+	@Override
 	public boolean retainAll(Collection<?> c) {
 		NSMutableSet<Object> s = new NSMutableSet<Object>();
 		boolean updated = false;
@@ -278,16 +246,7 @@ public class NSMutableSet<E> extends NSSet<E> {
 		return updated;
 	}
 
-	/**
-	 * Remove from this set all of its elements that are contained in <tt>c</tt>.
-	 * 
-	 * @see com.webobjects.foundation.NSMutableSet#subtractSet(NSSet)
-	 * 
-	 * @param c
-	 *            items to remove from this set
-	 * 
-	 * @return true if this set was modified; false otherwise.
-	 */
+	@Override
 	public boolean removeAll(Collection<?> c) {
 		NSMutableSet<Object> s = new NSMutableSet<Object>();
 		boolean updated = false;
@@ -302,11 +261,7 @@ public class NSMutableSet<E> extends NSSet<E> {
 		return updated;
 	}
 
-	/**
-	 * Remove all of the elements from this set.
-	 * 
-	 * @see com.webobjects.foundation.NSMutableSet#removeAllObjects()
-	 */
+	@Override
 	public void clear() {
 		removeAllObjects();
 	}
