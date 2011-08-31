@@ -64,12 +64,11 @@ public class NSMutableSet<E> extends NSSet<E> {
 		if (object == null) {
 			throw new IllegalArgumentException("Attempt to insert null into an  " + getClass().getName() + ".");
 		}
-		int count = count();
-		if (++count > capacity()) {
-			_ensureCapacity(count);
+		if (count() == capacity()) {
+			_ensureCapacity(count() + 1);
 		}
 		if (_NSCollectionPrimitives.addValueToSet(object, _objects, _flags)) {
-			_setCount(count);
+			_setCount(count() + 1);
 			_objectsCache = null;
 		}
 	}
