@@ -79,6 +79,13 @@ public class NSMutableSetTest extends ERXTestCase {
 		set.addObject("abc");
 		assertTrue(set.contains("abc"));
 	}
+	
+	public void testAddObjects() {
+		NSMutableSet<String> set = new NSMutableSet<String>();
+		set.addObjects("abc", "123");
+		assertEquals(2, set.size());
+		assertTrue(set.contains("abc"));
+	}
 
 	public void testAddObjectsFromArray() {
 		NSMutableArray<String> list = new NSMutableArray<String>();

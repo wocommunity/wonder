@@ -16,12 +16,12 @@ import java.util.Set;
  * NSSet reimplementation to support JDK 1.5 templates. Use with
  * 
  * <pre>
- * NSSet&lt;T&gt; setA = new NSSet&lt;T&gt;(NSArray &lt; T &gt; listA);
- * NSSet&lt;T&gt; setB = new NSSet&lt;T&gt;(NSArray &lt; T &gt; listB);
+ * NSSet&lt;E&gt; setA = new NSSet&lt;E&gt;(NSArray&lt;E&gt; listA);
+ * NSSet&lt;E&gt; setB = new NSSet&lt;E&gt;(NSArray&lt;E&gt; listB);
  * logger.debug(&quot;intersection contains &quot; + setA.setByIntersectingSet(setB));
  * </pre>
  * 
- * @param &lt;T&gt;
+ * @param <E>
  *            type of set contents
  */
 public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundationCollection, Set<E> {
@@ -96,7 +96,7 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		_initializeSet();
 		_ensureCapacity(1);
 		if (_NSCollectionPrimitives.addValueToSet(object, _objects, _flags)) {
-			_count++;
+			_setCount(count() + 1);
 		}
 	}
 
@@ -106,9 +106,9 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 	
 	public NSSet(E object, E... objects) {
 		this(objects, true);
-		_ensureCapacity(_count + 1);
+		_ensureCapacity(count() + 1);
 		if (_NSCollectionPrimitives.addValueToSet(object, _objects, _flags)) {
-			_count++;
+			_setCount(count() + 1);
 		}
 	}
 
@@ -127,7 +127,7 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 
 	protected void _clearDeletionsAndCollisions() {
 		int size = _hashtableBuckets;
-		if (_count == 0) {
+		if (count() == 0) {
 			_flags = new byte[size];
 		} else {
 			Object[] oldObjects = _objects;
@@ -145,12 +145,12 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 	}
 
 	protected void _ensureCapacity(int capacity) {
-		int currentCapacity = _capacity;
+		int currentCapacity = capacity();
 		if (capacity > currentCapacity) {
 			int newCapacity = _NSCollectionPrimitives.hashTableCapacityForCapacity(capacity);
 			if (newCapacity != currentCapacity) {
 				int oldSize = _hashtableBuckets;
-				_capacity = newCapacity;
+				_setCapacity(newCapacity);
 				_hashtableBuckets = _NSCollectionPrimitives.hashTableBucketsForCapacity(newCapacity);
 				int newSize = _hashtableBuckets;
 				if (newSize == 0) {
@@ -259,6 +259,18 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 	public int count() {
 		return _count;
 	}
+	
+	protected void _setCount(int count) {
+    	_count = count;
+    }
+	
+	protected int capacity() {
+		return _capacity;
+	}
+	
+	protected void _setCapacity(int capacity) {
+		_capacity = capacity;
+	}
 
 	public void encodeWithCoder(NSCoder coder) {
 		coder.encodeObjects(objectsNoCopy());
@@ -308,7 +320,7 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 					throw new IllegalArgumentException("Attempt to insert null object into an  " + getClass().getName() + ".");
 			} else {
 				if (_NSCollectionPrimitives.addValueToSet(objects[i], _objects, _flags)) {
-					_count++;
+					_setCount(count() + 1);
 				}
 			}
 		}
@@ -367,7 +379,7 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 	}
 
 	public E member(Object object) {
-		return _count != 0 && object != null ? (E) _NSCollectionPrimitives.findValueInHashTable(object, _objects, _objects, _flags) : null;
+		return count() != 0 && object != null ? (E) _NSCollectionPrimitives.findValueInHashTable(object, _objects, _objects, _flags) : null;
 	}
 
 	public NSMutableSet<E> mutableClone() {
@@ -376,12 +388,12 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 
 	@SuppressWarnings("unchecked")
 	public Enumeration<E> objectEnumerator() {
-		return new _NSCollectionEnumerator(_objects, _flags, _count);
+		return new _NSCollectionEnumerator(_objects, _flags, count());
 	}
 
 	protected Object[] objectsNoCopy() {
 		if (_objectsCache == null) {
-			_objectsCache = _count != 0 ? _NSCollectionPrimitives.valuesInHashTable(_objects, _objects, _flags, _capacity, _hashtableBuckets) : _NSCollectionPrimitives.EmptyArray;
+			_objectsCache = count() != 0 ? _NSCollectionPrimitives.valuesInHashTable(_objects, _objects, _flags, capacity(), _hashtableBuckets) : _NSCollectionPrimitives.EmptyArray;
 		}
 		return _objectsCache;
 	}
