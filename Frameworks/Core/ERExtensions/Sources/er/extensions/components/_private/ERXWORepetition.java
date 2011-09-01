@@ -544,7 +544,7 @@ public class ERXWORepetition extends WODynamicGroup {
 
 		for (int index = 0; index < count; index++) {
 			_prepareForIterationWithIndex(context, index, wocontext, wocomponent, checkHashCodes);
-			super.appendChildrenToResponse(woresponse, wocontext);
+			appendChildrenToResponse(woresponse, wocontext);
 		}
 		if (count > 0) {
 			_cleanupAfterIteration(count, wocontext, wocomponent);
