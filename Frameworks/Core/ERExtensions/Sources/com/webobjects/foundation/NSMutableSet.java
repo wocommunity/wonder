@@ -7,14 +7,14 @@ import java.util.Set;
  * NSSet reimplementation to support JDK 1.5 templates. Use with
  * 
  * <pre>
- * NSMutableSet&lt;T&gt; set = new NSMutableSet&lt;T&gt;();
- * set.put(new T())
+ * NSMutableSet&lt;E&gt; set = new NSMutableSet&lt;E&gt;();
+ * set.put(new E())
  * 
- * for (T t : set)
+ * for (E t : set)
  *     logger.debug(t);
  * </pre>
  * 
- * @param &lt;T&gt;
+ * @param <E>
  *            type of set contents
  */
 
@@ -64,25 +64,38 @@ public class NSMutableSet<E> extends NSSet<E> {
 		if (object == null) {
 			throw new IllegalArgumentException("Attempt to insert null into an  " + getClass().getName() + ".");
 		}
-		int capacity = _capacity;
-		int count = _count;
-		if (++count > capacity) {
-			_ensureCapacity(count);
+		if (count() == capacity()) {
+			_ensureCapacity(count() + 1);
 		}
 		if (_NSCollectionPrimitives.addValueToSet(object, _objects, _flags)) {
-			_count = count;
+			_setCount(count() + 1);
 			_objectsCache = null;
+		}
+	}
+	
+	public void addObjects(E... objects) {
+		if (objects != null && objects.length > 0) {
+			if (count() + objects.length > capacity()) {
+				_ensureCapacity(count() + objects.length);
+			}
+            for (int i = 0; i < objects.length; i++) {
+                if (objects[i] == null)
+                    throw new IllegalArgumentException("Attempt to insert null into an  " + getClass().getName() + ".");
+                if (_NSCollectionPrimitives.addValueToSet(objects[i], _objects, _flags)) {
+                	_setCount(count() + 1);
+                }
+            }
 		}
 	}
 
 	public E removeObject(Object object) {
 		Object result = null;
-		if (object != null && _count != 0) {
+		if (object != null && count() != 0) {
 			result = _NSCollectionPrimitives.removeValueInHashTable(object, _objects, _objects, _flags);
 			if (result != null) {
-				_count--;
+				_setCount(count() - 1);
 				_deletionLimit--;
-				if (_count == 0 || _deletionLimit == 0) {
+				if (count() == 0 || _deletionLimit == 0) {
 					_clearDeletionsAndCollisions();
 				}
 				_objectsCache = null;
@@ -92,10 +105,10 @@ public class NSMutableSet<E> extends NSSet<E> {
 	}
 
 	public void removeAllObjects() {
-		if (_count != 0) {
+		if (count() != 0) {
 			_objects = new Object[_hashtableBuckets];
 			_flags = new byte[_hashtableBuckets];
-			_count = 0;
+			_setCount(0);
 			_objectsCache = null;
 			_deletionLimit = _NSCollectionPrimitives.deletionLimitForTableBuckets(_hashtableBuckets);
 		}
@@ -168,14 +181,17 @@ public class NSMutableSet<E> extends NSSet<E> {
 
 	}
 
+	@Override
 	public Object clone() {
 		return new NSMutableSet<E>(this);
 	}
 
+	@Override
 	public NSSet<E> immutableClone() {
 		return new NSSet<E>(this);
 	}
 
+	@Override
 	public NSMutableSet<E> mutableClone() {
 		return (NSMutableSet<E>) clone();
 	}
@@ -184,18 +200,7 @@ public class NSMutableSet<E> extends NSSet<E> {
 	public static final Class _CLASS = _NSUtilities._classWithFullySpecifiedName("com.webobjects.foundation.NSMutableSet");
 	static final long serialVersionUID = -6054074706096120227L;
 
-	/**
-	 * Add <tt>o</tt> to the set and return true if <tt>o</tt> is not null
-	 * and the set does not already contain <tt>o</tt>. Null elements are not
-	 * permitted.
-	 * 
-	 * @param o
-	 *            element to add to this set
-	 * 
-	 * @return true if o is not null and the set did not already contain o
-	 * @throws IllegalArgumentException
-	 *             if o is null
-	 */
+	@Override
 	public boolean add(E o) {
 		if (contains(o)) {
 			return false;
@@ -206,27 +211,12 @@ public class NSMutableSet<E> extends NSSet<E> {
 		return true;
 	}
 
-	/**
-	 * If the set contains <tt>o</tt>, remove it and returns true.
-	 * 
-	 * @param o
-	 *            element to remove from this set.
-	 * 
-	 * @return true if the set contained <tt>o</tt>
-	 */
+	@Override
 	public boolean remove(Object o) {
 		return removeObject(o) != null ? true : false;
 	}
 
-	/**
-	 * Add elements in <tt>c</tt> one by one and return true. Existing
-	 * elements are not overwritten. Null elements are not permitted.
-	 * 
-	 * @param c
-	 *            collection of elements to add to this set.
-	 * 
-	 * @return true if this set was modified; false otherwise.
-	 */
+	@Override
 	public boolean addAll(Collection<? extends E> c) {
 		boolean updated = false;
 		for (E t : c) {
@@ -239,16 +229,7 @@ public class NSMutableSet<E> extends NSSet<E> {
 		return updated;
 	}
 
-	/**
-	 * Retain only the elements in this set that are contained in <tt>c</tt>.
-	 * 
-	 * @see com.webobjects.foundation.NSMutableSet#intersectSet(NSSet)
-	 * 
-	 * @param c
-	 *            items to retain in this set
-	 * 
-	 * @return true if this set was modified; false otherwise.
-	 */
+	@Override
 	public boolean retainAll(Collection<?> c) {
 		NSMutableSet<Object> s = new NSMutableSet<Object>();
 		boolean updated = false;
@@ -264,16 +245,7 @@ public class NSMutableSet<E> extends NSSet<E> {
 		return updated;
 	}
 
-	/**
-	 * Remove from this set all of its elements that are contained in <tt>c</tt>.
-	 * 
-	 * @see com.webobjects.foundation.NSMutableSet#subtractSet(NSSet)
-	 * 
-	 * @param c
-	 *            items to remove from this set
-	 * 
-	 * @return true if this set was modified; false otherwise.
-	 */
+	@Override
 	public boolean removeAll(Collection<?> c) {
 		NSMutableSet<Object> s = new NSMutableSet<Object>();
 		boolean updated = false;
@@ -288,11 +260,7 @@ public class NSMutableSet<E> extends NSSet<E> {
 		return updated;
 	}
 
-	/**
-	 * Remove all of the elements from this set.
-	 * 
-	 * @see com.webobjects.foundation.NSMutableSet#removeAllObjects()
-	 */
+	@Override
 	public void clear() {
 		removeAllObjects();
 	}
