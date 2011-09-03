@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>wonder.frameworks</groupId>
-        <artifactId>frameworks</artifactId>
-        <version>5.4-SNAPSHOT</version>
-    </parent>
-    <artifactId>misc</artifactId>
-    <packaging>pom</packaging>
-    <name>Misc Frameworks</name>
-    <modules>
-        <module>ERCalendar</module>
-        <module>ERCaptcha</module>
-        <module>ERChronic</module>
-        <module>ERDirectToRest</module>
-        <module>ERDivaliteLook</module>
-        <module>EROpenID</module>
-        <module>ERPDFGeneration</module>
-        <!-- The Gluonj library used in the Ant build is weird. It's not the same available in the Gluonj website. -->
-        <!-- <module>ERProfiling</module> -->
-        <module>ERSelenium</module>
-        <module>ERWorkerChannel</module>
-        <module>JavaMonitorFramework</module>
-        <module>SnapshotExplorer</module>
-        <module>WOJRebel</module>
-        <module>WOLips</module>
-    </modules>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>wonder.frameworks</groupId>
+		<artifactId>frameworks</artifactId>
+		<version>5.4-SNAPSHOT</version>
+	</parent>
+	<artifactId>misc</artifactId>
+	<packaging>pom</packaging>
+	<name>Misc Frameworks</name>
+	<modules>
+		<module>ERCalendar</module>
+		<module>ERCaptcha</module>
+		<module>ERChronic</module>
+		<module>ERDirectToRest</module>
+		<module>ERDivaliteLook</module>
+		<module>EROpenID</module>
+		<module>ERPDFGeneration</module>
+		<module>ERProfiling</module>
+		<module>ERSelenium</module>
+		<module>ERWorkerChannel</module>
+		<module>JavaMonitorFramework</module>
+		<module>SnapshotExplorer</module>
+		<module>WOJRebel</module>
+		<module>WOLips</module>
+	</modules>
 </project>
