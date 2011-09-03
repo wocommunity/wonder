@@ -618,6 +618,7 @@
                 <groupId>glounj</groupId>
                 <artifactId>glounj</artifactId>
                 <version>1.5-beta</version>
+                <classifier>javassist-embedded</classifier>
             </dependency>
             <dependency>
                 <groupId>org.apache.poi</groupId>
