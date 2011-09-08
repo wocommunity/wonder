@@ -288,7 +288,7 @@ public abstract class ERXComponent extends WOComponent {
 	 *            binding to be resolved as an NSArray.
 	 * @return result of evaluating binding as an NSArray.
 	 */
-	protected NSArray arrayValueForBinding(String binding) {
+	protected <T> NSArray<T> arrayValueForBinding(String binding) {
 		return arrayValueForBinding(binding, null);
 	}
 
@@ -301,7 +301,8 @@ public abstract class ERXComponent extends WOComponent {
 	 *            default NSArray value to be used if the binding is not bound.
 	 * @return result of evaluating binding as an NSArray.
 	 */
-	protected NSArray arrayValueForBinding(String binding, NSArray defaultValue) {
+	@SuppressWarnings("unchecked")
+	protected <T> NSArray<T> arrayValueForBinding(String binding, NSArray<T> defaultValue) {
 		return ERXValueUtilities.arrayValueWithDefault(valueForBinding(binding), defaultValue);
 	}
 
