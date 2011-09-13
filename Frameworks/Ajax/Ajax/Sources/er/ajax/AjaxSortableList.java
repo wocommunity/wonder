@@ -44,6 +44,7 @@ import com.webobjects.foundation.NSRange;
  * @binding scroll
  * @binding onChange
  * @binding onUpdate
+ * @binding index the repetition index
  * 
  * @author mschrag
  *
