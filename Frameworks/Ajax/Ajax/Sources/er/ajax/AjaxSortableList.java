@@ -35,15 +35,17 @@ import com.webobjects.foundation.NSRange;
  * @binding tag
  * @binding only
  * @binding overlap
- * @binding constraint
+ * @binding constraint how to constraint moving elements, can take a value of <i>vertical</i>, <i>horizontal</i> 
+ *          or <code>false</code> with <i>vertical</i> as default
  * @binding containment
- * @binding handle
+ * @binding handle if an element should only be draggable by an embedded handle, takes a class name
  * @binding hoverclass
- * @binding ghosting
+ * @binding ghosting shows ghosting copy during drag, defaults to <code>false</code>
  * @binding dropOnEmpty
  * @binding scroll
- * @binding onChange
- * @binding onUpdate
+ * @binding onChange client side method, fires on updating the sort order during drag
+ * @binding onUpdate client side method, fires on updating the sort order after dropping the element and order really changed
+ * @binding index the repetition index
  * 
  * @author mschrag
  *
