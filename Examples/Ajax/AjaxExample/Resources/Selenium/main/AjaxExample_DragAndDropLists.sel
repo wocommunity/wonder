@@ -14,56 +14,56 @@ Test for DragAndDropLists page
 # I think that this block will verify that the "Drag Item" has moved, as the id
 # of the element changes when it moves.
 
-|assertText|e_0_83_1_1_0_0_1_0_1|Drag Item #0|
-|dragdrop|e_0_83_1_1_0_0_1_0_1|+300,+0|
+|assertText|e_0_81_1_1_0_0_1_0_1|Drag Item #0|
+|dragdrop|e_0_81_1_1_0_0_1_0_1|+300,+0|
 |pause|1200|
-|assertNotText|e_0_83_1_1_0_0_1_0_1|Drag Item #0|
+|assertNotText|e_0_81_1_1_0_0_1_0_1|Drag Item #0|
 
-|assertText|e_0_83_1_1_0_0_1_0_1|Drag Item #1|
-|dragdrop|e_0_83_1_1_0_0_1_0_1|+300,+0|
+|assertText|e_0_81_1_1_0_0_1_0_1|Drag Item #1|
+|dragdrop|e_0_81_1_1_0_0_1_0_1|+300,+0|
 |pause|1200|
-|assertNotText|e_0_83_1_1_0_0_1_0_1|Drag Item #1|
+|assertNotText|e_0_81_1_1_0_0_1_0_1|Drag Item #1|
 
-|assertText|e_0_83_1_1_0_0_1_0_1|Drag Item #2|
-|dragdrop|e_0_83_1_1_0_0_1_0_1|+300,+0|
+|assertText|e_0_81_1_1_0_0_1_0_1|Drag Item #2|
+|dragdrop|e_0_81_1_1_0_0_1_0_1|+300,+0|
 |pause|1200|
-|assertNotText|e_0_83_1_1_0_0_1_0_1|Drag Item #2|
+|assertNotText|e_0_81_1_1_0_0_1_0_1|Drag Item #2|
 
-|assertText|e_0_83_1_1_0_0_1_0_1|Drag Item #3|
-|dragdrop|e_0_83_1_1_0_0_1_0_1|+300,+0|
+|assertText|e_0_81_1_1_0_0_1_0_1|Drag Item #3|
+|dragdrop|e_0_81_1_1_0_0_1_0_1|+300,+0|
 |pause|1200|
-|assertNotText|e_0_83_1_1_0_0_1_0_1|Drag Item #3|
+|assertNotText|e_0_81_1_1_0_0_1_0_1|Drag Item #3|
 
-|assertText|e_0_83_1_1_0_0_1_0_1|Drag Item #4|
-|dragdrop|e_0_83_1_1_0_0_1_0_1|+300,+0|
+|assertText|e_0_81_1_1_0_0_1_0_1|Drag Item #4|
+|dragdrop|e_0_81_1_1_0_0_1_0_1|+300,+0|
 |pause|1200|
-|assertNotText|e_0_83_1_1_0_0_1_0_1|Drag Item #4|
+|assertNotText|e_0_81_1_1_0_0_1_0_1|Drag Item #4|
 
-|assertText|e_0_83_1_1_0_0_1_0_1|Drag Item #5|
-|dragdrop|e_0_83_1_1_0_0_1_0_1|+300,+0|
+|assertText|e_0_81_1_1_0_0_1_0_1|Drag Item #5|
+|dragdrop|e_0_81_1_1_0_0_1_0_1|+300,+0|
 |pause|1200|
-|assertNotText|e_0_83_1_1_0_0_1_0_1|Drag Item #5|
+|assertNotText|e_0_81_1_1_0_0_1_0_1|Drag Item #5|
 
-|assertText|e_0_83_1_1_0_0_1_0_1|Drag Item #6|
-|dragdrop|e_0_83_1_1_0_0_1_0_1|+300,+0|
+|assertText|e_0_81_1_1_0_0_1_0_1|Drag Item #6|
+|dragdrop|e_0_81_1_1_0_0_1_0_1|+300,+0|
 |pause|1200|
-|assertNotText|e_0_83_1_1_0_0_1_0_1|Drag Item #6|
+|assertNotText|e_0_81_1_1_0_0_1_0_1|Drag Item #6|
 
-|assertText|e_0_83_1_1_0_0_1_0_1|Drag Item #7|
-|dragdrop|e_0_83_1_1_0_0_1_0_1|+300,+0|
+|assertText|e_0_81_1_1_0_0_1_0_1|Drag Item #7|
+|dragdrop|e_0_81_1_1_0_0_1_0_1|+300,+0|
 |pause|1200|
-|assertNotText|e_0_83_1_1_0_0_1_0_1|Drag Item #7|
+|assertNotText|e_0_81_1_1_0_0_1_0_1|Drag Item #7|
 
-|assertText|e_0_83_1_1_0_0_1_0_1|Drag Item #8|
-|dragdrop|e_0_83_1_1_0_0_1_0_1|+300,+0|
+|assertText|e_0_81_1_1_0_0_1_0_1|Drag Item #8|
+|dragdrop|e_0_81_1_1_0_0_1_0_1|+300,+0|
 |pause|1200|
-|assertNotText|e_0_83_1_1_0_0_1_0_1|Drag Item #8|
+|assertNotText|e_0_81_1_1_0_0_1_0_1|Drag Item #8|
 
 # An assertNotText here fails because after the last move, the object
 # with the expected id does not exist.
 
-|assertText|e_0_83_1_1_0_0_1_0_1|Drag Item #9|
-|dragdrop|e_0_83_1_1_0_0_1_0_1|+300,+0|
+|assertText|e_0_81_1_1_0_0_1_0_1|Drag Item #9|
+|dragdrop|e_0_81_1_1_0_0_1_0_1|+300,+0|
 |pause|1200|
-|assertText|e_0_83_1_3_0_0_1_9_1|Drag Item #9|
+|assertText|e_0_81_1_3_0_0_1_9_1|Drag Item #9|
 
