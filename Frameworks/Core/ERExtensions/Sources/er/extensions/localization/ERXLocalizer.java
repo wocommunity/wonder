@@ -778,6 +778,23 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 		}
 	}
 
+	/**
+	 * Register the key in the createdKeys array and set it's value in the cache as the NOT_FOUND_key.
+	 * 
+	 * @param key
+	 * @return the value of the created key i.e. NOT_FOUND_key
+	 * 
+	 */
+	protected String createDefaultCacheForKey(String key) {
+		if (createdKeysLog.isDebugEnabled()) {
+			createdKeysLog.debug("Default key inserted: '" + key + "'/" + language);
+		}
+		String value = "NOT_FOUND_"+key;
+		setCacheValueForKey(value, key);
+		addToCreatedKeys(key, key);
+		return value;
+	}
+
 	public Object valueForKeyPath(String key) {
 		Object result = localizedValueForKey(key);
 		if (result == null) {
@@ -796,16 +813,19 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 							setCacheValueForKey(result, key);
 						}
 						else {
-							setCacheValueForKey(NOT_FOUND, key);
+							result = createDefaultCacheForKey(key);
 						}
 					}
 					catch (NSKeyValueCoding.UnknownKeyException e) {
 						if (log.isDebugEnabled()) {
 							log.debug(e.getMessage());
 						}
-						setCacheValueForKey(NOT_FOUND, key);
+						result = createDefaultCacheForKey(key);
 					}
 				}
+			}
+			else {
+				result = createDefaultCacheForKey(key);
 			}
 		}
 		return result;
@@ -840,16 +860,11 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 		}
 		Object result = localizedValueForKey(key);
 		if (result == null || result == NOT_FOUND) {
-			if (createdKeysLog.isDebugEnabled()) {
-				createdKeysLog.debug("Default key inserted: '" + key + "'/" + language);
-			}
-			setCacheValueForKey(key, key);
-			addToCreatedKeys(key, key);
-			result = key;
+			result = createDefaultCacheForKey(key);
 		}
 		return result;
 	}
-
+	
 	/**
 	 * Returns the localized value for a key. An @ keypath such as 
 	 * <code>session.localizer.@locale.getLanguage</code> indicates that
