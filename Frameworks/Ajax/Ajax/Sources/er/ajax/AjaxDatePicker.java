@@ -14,6 +14,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSTimestampFormatter;
 
 import er.extensions.appserver.ERXResponseRewriter;
+import er.extensions.formatters.ERXJodaFormat;
 
 /**
  * Shameless port and adoption of Rails Date Kit.  This input understands the format symbols
@@ -118,6 +119,9 @@ public class AjaxDatePicker extends AjaxComponent {
     		}
     		else if (formatter instanceof SimpleDateFormat) {
     			format = ((SimpleDateFormat)formatter).toPattern();
+    		}
+    		else if (formatter instanceof ERXJodaFormat) {
+    			format = ((ERXJodaFormat)formatter).pattern();
     		}
     		else {
     			throw new RuntimeException("Can't handle formatter of class " + formatter.getClass().getCanonicalName());
