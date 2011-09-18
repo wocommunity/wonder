@@ -1,0 +1,11 @@
+Key: WOString {
+	value = formValueKey;
+}
+
+ShouldPostData: WOConditional {
+	condition = shouldPostData;
+}
+
+URL: WOString {
+	value = postURL;
+}
