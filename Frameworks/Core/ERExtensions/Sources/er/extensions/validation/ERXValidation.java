@@ -189,7 +189,7 @@ public class ERXValidation {
 		String displayName;
 		if (localizer != null) {
 			if (ecd != null) {
-				displayName = localizer.localizedDisplayNameForKey(ecd.entityName(), key);
+				displayName = localizer.localizedDisplayNameForKey(ecd, key);
 			} else {
 				displayName = localizer.localizedStringForKeyWithDefault(key);
 			}

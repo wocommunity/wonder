@@ -27,6 +27,9 @@ import org.apache.log4j.Logger;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOEntityClassDescription;
+import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
@@ -923,6 +926,31 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 				log.info("Found an old-style entry: " + localizerKey + "->" + result);
 			}
 			takeValueForKey(result, localizerKey);
+		}
+		return result;
+	}
+	
+	/**
+	 * Returns a localized string for a given entity class description. If the entity
+	 * uses inheritance it will traverse the inheritance chain until it finds a
+	 * localization.
+	 * 
+	 * @param classDescription the entity class description
+	 * @param key the attribute name
+	 * @return the localized string
+	 */
+	public String localizedDisplayNameForKey(EOClassDescription classDescription, String key) {
+		String result = null;
+		if (classDescription instanceof EOEntityClassDescription) {
+			EOEntity entity = ((EOEntityClassDescription) classDescription).entity();
+			while (entity != null && result == null) {
+				result = localizedStringForKey(entity.name() + "." + key);
+				entity = entity.parentEntity();
+			}
+		}
+		if (result == null) {
+			// fallback
+			result = localizedDisplayNameForKey(classDescription.entityName(), key);
 		}
 		return result;
 	}
