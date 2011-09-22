@@ -914,6 +914,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	 * 
 	 * @param prefix
 	 * @param key
+	 * @return the localized string
 	 */
 	public String localizedDisplayNameForKey(String prefix, String key) {
 		String localizerKey = prefix + "." + key;
@@ -961,7 +962,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 
 	public String localizedTemplateStringForKeyWithObjectOtherObject(String key, Object o1, Object o2) {
 		if (key != null) {
-			String template = (String) localizedStringForKeyWithDefault(key);
+			String template = localizedStringForKeyWithDefault(key);
 			if (template != null)
 				return ERXSimpleTemplateParser.sharedInstance().parseTemplateWithObject(template, null, o1, o2);
 		}
