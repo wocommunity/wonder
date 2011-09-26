@@ -6,8 +6,11 @@ import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSLog;
 
+import er.extensions.appserver.ERXApplication;
+import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.components.ERXComponentUtilities;
 
 /**
@@ -23,6 +26,13 @@ public class WOLToolBar extends WOComponent {
 
   public WOLToolBar(WOContext context) {
     super(context);
+  }
+  
+  public void appendToResponse(WOResponse response, WOContext context) {
+	  super.appendToResponse(response, context);
+	  if(ERXApplication.erxApplication().isDevelopmentMode()) {
+		  ERXResponseRewriter.addStylesheetResourceInHead(response, context, "WOLips", "wolips.css");
+	  }
   }
 
   @Override
