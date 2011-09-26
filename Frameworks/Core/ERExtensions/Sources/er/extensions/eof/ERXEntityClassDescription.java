@@ -951,7 +951,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
      */
     public String displayNameForKey(String key) {
     	if (ERXLocalizer.isLocalizationEnabled()) {
-    		return ERXLocalizer.currentLocalizer().localizedDisplayNameForKey(entityName(), key);
+    		return ERXLocalizer.currentLocalizer().localizedDisplayNameForKey(this, key);
     	}
     	return ERXStringUtilities.displayNameForKey(key);
     }
