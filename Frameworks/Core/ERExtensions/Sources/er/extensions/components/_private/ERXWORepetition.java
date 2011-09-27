@@ -119,9 +119,9 @@ public class ERXWORepetition extends WODynamicGroup {
 	 * WOElements must be reentrant, so we need a context object or will have to add the parameters to every method.
 	 * Note that it's OK to have no object at all.
 	 */
-	protected class Context {
 		protected NSArray nsarray;
 		protected List list;
+	protected static class Context {
 		protected Object[] array;
 
 		public Context(Object object) {
