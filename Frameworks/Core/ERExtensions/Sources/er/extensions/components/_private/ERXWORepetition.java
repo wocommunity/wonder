@@ -1,6 +1,7 @@
 package er.extensions.components._private;
 
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -19,6 +20,7 @@ import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
+import com.webobjects.foundation.NSSet;
 
 import er.extensions.eof.ERXBatchFetchUtilities;
 import er.extensions.eof.ERXConstant;
@@ -130,11 +132,19 @@ public class ERXWORepetition extends WODynamicGroup {
 				else if (object instanceof List) {
 					list = (List) object;
 				}
+				else if (object instanceof Set) {
+					if (object instanceof NSSet) {
+						nsarray = ((NSSet) object).allObjects();
+					} else {
+						array = ((Set<Object>) object).toArray();
+					}
+				}
 				else if (object instanceof Object[]) {
 					array = (Object[]) object;
 				}
 				else {
-					throw new IllegalArgumentException("Evaluating 'list' binding returned a " + object.getClass().getName() + " when it should return either a NSArray, an Object[] array or a java.util.List .");
+					throw new IllegalArgumentException("Evaluating 'list' binding returned a " + object.getClass().getName() +
+							" when it should return either a NSArray, NSSet, an Object[] array, a java.util.List or a java.util.Set.");
 				}
 			}
 		}
