@@ -52,6 +52,11 @@
 	text-shadow: #405882 0px -1px 0px;
 }
 
+.AjaxFlexibleFileUpload a.Button,
+.ERAttachmentFlexibleEditor a.Button {
+	text-decoration: none;
+}
+
 .AjaxFlexibleFileUpload .ClearUploadObjButton {
 	background-image: url(btn_del.png);
 	height: 23px;
