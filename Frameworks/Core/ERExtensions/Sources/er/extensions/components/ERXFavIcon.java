@@ -16,6 +16,10 @@ import com.webobjects.foundation.NSDictionary;
  * @binding href href to the icon
  * @binding filename filename of the icon
  * @binding framework framework of the icon
+ * @binding type the type of icon to use. Default is for a favicon, 
+ * 			while "touch" generates an 'apple-touch-icon-precomposed' 
+ * 			icon for android and iDevices. For information about icon
+ * 			sizes, see <a href="http://mathiasbynens.be/notes/touch-icons">touch icons</a>
  * @author ak
  */
 public class ERXFavIcon extends WOHTMLDynamicElement {
@@ -23,10 +27,12 @@ public class ERXFavIcon extends WOHTMLDynamicElement {
 	protected WOAssociation _href;
 	protected WOAssociation _framework;
 	protected WOAssociation _filename;
+	protected WOAssociation _type;
 
 	public ERXFavIcon(String aName, NSDictionary associations, WOElement template) {
 		super("link", associations, template);
 		_href = (WOAssociation) _associations.removeObjectForKey("href");
+		_type = (WOAssociation) _associations.removeObjectForKey("type");
 		_framework = (WOAssociation) _associations.removeObjectForKey("framework");
 		_filename = (WOAssociation) _associations.removeObjectForKey("filename");
 		if(_filename == null && _href == null) {
@@ -55,7 +61,14 @@ public class ERXFavIcon extends WOHTMLDynamicElement {
 			href = rs.urlForResourceNamed(filename, framework, null, context.request());
 		}
 		response._appendTagAttributeAndValue("href", href, false);
-		response._appendTagAttributeAndValue("rel", "SHORTCUT ICON", false);
+		String rel = "SHORTCUT ICON";
+		if(_type != null) {
+			String val = (String) _type.valueInComponent(component);
+			if("touch".equalsIgnoreCase(val)) {
+				rel = "apple-touch-icon-precomposed";
+			}
+		}
+		response._appendTagAttributeAndValue("rel", rel, false);
 		super.appendAttributesToResponse(response, context);
 	}
 	

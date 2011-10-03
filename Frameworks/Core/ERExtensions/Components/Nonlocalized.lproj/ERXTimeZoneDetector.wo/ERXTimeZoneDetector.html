@@ -1,0 +1,69 @@
+<webobject name = "ShouldPostData">
+<script type="text/javascript">
+//<![CDATA[
+(function(){
+	var xhr = window.XMLHttpRequest?new XMLHttpRequest():new ActiveXObject("Microsoft.XMLHTTP"),
+		url = '<webobject name = "URL"/>',
+		key = '<webobject name = "Key"/>',
+		/** 
+		 * Gets the offset in minutes from UTC for a certain date.
+		 * @param {Date} date
+		 * @returns {Number}
+		 */
+		get_date_offset = function (date) {
+			var offset = -date.getTimezoneOffset();
+			return (offset !== null ? offset : 0);
+		},
+		
+		get_january_offset = function () {
+			return get_date_offset(new Date(2010, 0, 1, 0, 0, 0, 0));
+		},
+		
+		get_june_offset = function () {
+			return get_date_offset(new Date(2010, 5, 1, 0, 0, 0, 0));
+		},
+		
+		/**
+		 * Checks whether a given date is in daylight savings time.
+		 * If the date supplied is after june, we assume that we're checking
+		 * for southern hemisphere DST.
+		 * @param {Date} date
+		 * @returns {Boolean}
+		 */
+		date_is_dst = function (date) {
+			var base_offset = ((date.getMonth() > 5 ? get_june_offset() : get_january_offset())),
+				date_offset = get_date_offset(date); 
+			
+			return (base_offset - date_offset) !== 0;
+		},
+
+		/**
+		 * This function does some basic calculations to create information about 
+		 * the user's timezone.
+		 * 
+		 * Returns a key that can be used to do lookups in jstz.olson.timezones.
+		 * 
+		 * @returns {String}  
+		 */
+		lookup_key = function () {
+			var january_offset = get_january_offset(), 
+				june_offset = get_june_offset(), 
+				diff = get_january_offset() - get_june_offset();
+
+			if (diff < 0) {
+				//Northern Hemisphere
+				return january_offset + ",1,0";
+			} else if (diff > 0) {
+				//Southern Hemisphere
+				return june_offset + ",1,1";
+			}
+			//No DST. Hemisphere doesn't matter.
+			return january_offset + ",0,0";
+		};
+		xhr.open("POST", url, true);
+		xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+		xhr.send(key + '=' + lookup_key());
+}());
+//]]>
+</script>
+</webobject>

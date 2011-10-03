@@ -158,7 +158,7 @@ public class ERXValidation {
                 entity = EOUtilities.entityForObject(((EOEnterpriseObject)eo).editingContext(),(EOEnterpriseObject)eo);
             } else {
                 //the exception is coming from a formatter
-                key=(String)NSArray.componentsSeparatedByString(displayPropertyKeyPath,".").lastObject();
+                key = NSArray.componentsSeparatedByString(displayPropertyKeyPath,".").lastObject();
                 newErrorMessage="<b>"+key+"</b>:"+newErrorMessage;
             }
         } else {
@@ -189,7 +189,7 @@ public class ERXValidation {
 		String displayName;
 		if (localizer != null) {
 			if (ecd != null) {
-				displayName = localizer.localizedDisplayNameForKey(ecd.entityName(), key);
+				displayName = localizer.localizedDisplayNameForKey(ecd, key);
 			} else {
 				displayName = localizer.localizedStringForKeyWithDefault(key);
 			}

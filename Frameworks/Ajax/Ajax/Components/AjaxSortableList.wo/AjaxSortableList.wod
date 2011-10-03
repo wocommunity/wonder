@@ -18,6 +18,7 @@ ListItemContainer : WOGenericContainer {
 ListRepetition : WORepetition {
 	list = ^list;
 	item = ^item;
+	index = ^index;
 }
 
 ContainerID : WOString {

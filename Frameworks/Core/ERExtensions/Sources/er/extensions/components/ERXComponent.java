@@ -280,6 +280,31 @@ public abstract class ERXComponent extends WOComponent {
 		Object v = objectValueForBinding(binding, defaultValue);
 		return v != null ? v.toString() : null;
 	}
+	
+	/**
+	 * Resolves a given binding as an NSArray object.
+	 * 
+	 * @param binding
+	 *            binding to be resolved as an NSArray.
+	 * @return result of evaluating binding as an NSArray.
+	 */
+	protected <T> NSArray<T> arrayValueForBinding(String binding) {
+		return arrayValueForBinding(binding, null);
+	}
+
+	/**
+	 * Resolves a given binding as an NSArray object.
+	 * 
+	 * @param binding
+	 *            binding to be resolved as an NSArray.
+	 * @param defaultValue
+	 *            default NSArray value to be used if the binding is not bound.
+	 * @return result of evaluating binding as an NSArray.
+	 */
+	@SuppressWarnings("unchecked")
+	protected <T> NSArray<T> arrayValueForBinding(String binding, NSArray<T> defaultValue) {
+		return ERXValueUtilities.arrayValueWithDefault(valueForBinding(binding), defaultValue);
+	}
 
 	/**
 	 * Convenience method to get the localizer.

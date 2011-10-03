@@ -13,12 +13,12 @@ import org.joda.time.chrono.BaseChronology;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-public class ERXJodaLocalDateTimeFormatter extends Format {
+public class ERXJodaLocalDateTimeFormatter extends Format implements ERXJodaFormat {
 	private transient DateTimeFormatter formatter;
-	private String _pattern;
-	private BaseChronology _chronology;
-	private Locale _locale;
-	private DateTimeZone _zone;
+	private final String _pattern;
+	private final BaseChronology _chronology;
+	private final Locale _locale;
+	private final DateTimeZone _zone;
 
 	public ERXJodaLocalDateTimeFormatter(String pattern) {
 		this(pattern, null, null, null);
@@ -69,6 +69,22 @@ public class ERXJodaLocalDateTimeFormatter extends Format {
 		pos.setIndex(str.length());
 		LocalDateTime ldt = new LocalDateTime(dt);
 		return ldt;
+	}
+
+	public String pattern() {
+		return _pattern;
+	}
+
+	public BaseChronology chronology() {
+		return _chronology;
+	}
+
+	public Locale locale() {
+		return _locale;
+	}
+
+	public DateTimeZone zone() {
+		return _zone;
 	}
 
 }
