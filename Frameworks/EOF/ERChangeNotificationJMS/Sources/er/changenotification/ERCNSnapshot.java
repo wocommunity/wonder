@@ -89,7 +89,7 @@ public class ERCNSnapshot implements Serializable {
 
     public static boolean shouldApplyChangeFor(String operation) {
         ERCNConfiguration configuration = ERCNNotificationCoordinator.coordinator().configuration();
-        return configuration.changeTypesToSubscrive().containsObject(operation);
+        return configuration.changeTypesToSubscribe().containsObject(operation);
     }
 
     public static boolean shouldSynchronizeEntity(String entityName) {
