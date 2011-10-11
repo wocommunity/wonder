@@ -23,7 +23,6 @@ import com.webobjects.appserver._private.WOConstantValueAssociation;
 import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.appserver._private.WOHTMLDynamicElement;
 import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation._NSDictionaryUtilities;
 
 import er.extensions.appserver.ERXApplication;
@@ -41,7 +40,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * <ul>
  * <li> it adds the FORM's name to the ERXWOContext's mutableUserInfo as as
  * "formName" key, which makes writing JavaScript elements a bit easier.
- * <li> it warns you when you have one FORM embedded inside another and ommits
+ * <li> it warns you when you have one FORM embedded inside another and omits
  * the tags for the nested FORM.
  * <li> it pushes the <code>enctype</code> into the userInfo, so that
  * {@link ERXWOFileUpload} can check if it is set correctly. ERXFileUpload will
@@ -54,20 +53,17 @@ import er.extensions.foundation.ERXStringUtilities;
  * <li> it adds the <code>disabled</code> boolean binding allows you to omit
  * the form tag.
  * <li> it adds a default submit button at the start of the form, so that your
- * user can simply press return without and javascript gimmicks.
+ * user can simply press return without any javascript gimmicks.
  * <li> the <code>id<code> binding can override the <code>name</code> binding.
  * </ul>
- * This subclass is installed when the frameworks loads. <br />
- * If you actually want to see those new bindings in WOBuilder, edit the file
- * <code>WebObjects Builder.app/Contents/Resources/WebObjectDefinitions.xml</code>,
- * which contains the .api for the dynamic elements.
+ * This subclass is installed when the frameworks loads.
  * 
  * @property er.extensions.ERXWOForm.multipleSubmitDefault the default value of
- *           multipleSubmit for all forms
+ *           multipleSubmit for all forms, defaults to false
  * @property er.extensions.ERXWOForm.addDefaultSubmitButtonDefault whether or
- *           not a default submit button should be add to the form
+ *           not a default submit button should be add to the form, defaults to false
  * @property er.extensions.ERXWOForm.useIdInsteadOfNameTag whether or not to use
- *           id instead of name in the form element
+ *           id instead of name in the form element, defaults to false
  * 
  * @binding action Action method to invoke when this element is activated.
  * @binding actionClass The name of the class in which the method
@@ -100,7 +96,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * with the form.
  * @binding secure Determines if the form is secured with SSL. Default is false.
  * @binding embedded when true, a form inside of a form will still render. this is
- * to support forms inside of ajax modal containers that are structually nested
+ * to support forms inside of ajax modal containers that are structurally nested
  * forms, but appears as independent to the end-user
  * 
  * @author ak
@@ -169,7 +165,13 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 
 	@Override
 	public String toString() {
-		return "<" + getClass().getName() + " name: " + (_formName == null ? "null" : _formName.toString()) + " id: " + (_id == null ? "null" : _id.toString()) + " action: " + (_action == null ? "null" : _action.toString()) + " actionClass: " + (_actionClass == null ? "null" : _actionClass.toString()) + " directActionName: " + (_directActionName == null ? "null" : _directActionName.toString()) + " href: " + (_href == null ? "null" : _href.toString()) + " multipleSubmit: " + (_multipleSubmit == null ? "null" : _multipleSubmit.toString()) + " queryDictionary: " + (_queryDictionary == null ? "null" : _queryDictionary.toString()) + " otherQueryAssociations: " + (_otherQueryAssociations == null ? "null" : _otherQueryAssociations.toString()) + " >";
+		return (new StringBuilder()).append("<").append(getClass().getName()).append(" name: ").append(_formName == null ? "null" : _formName.toString())
+				.append(" id: ").append(_id == null ? "null" : _id.toString()).append(" action: ").append(_action == null ? "null" : _action.toString())
+				.append(" actionClass: ").append(_actionClass == null ? "null" : _actionClass.toString()).append(" directActionName: ")
+				.append(_directActionName == null ? "null" : _directActionName.toString()).append(" href: ").append(_href == null ? "null" : _href.toString())
+				.append(" multipleSubmit: ").append(_multipleSubmit == null ? "null" : _multipleSubmit.toString()).append(" queryDictionary: ")
+				.append(_queryDictionary == null ? "null" : _queryDictionary.toString()).append(" otherQueryAssociations: ")
+				.append(_otherQueryAssociations == null ? "null" : _otherQueryAssociations.toString()).append(">").toString();
 	}
 
 	protected boolean _enterFormInContext(WOContext context) {
@@ -304,15 +306,13 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		if (_shouldAppendFormTags(context, wasInForm)) {
 			boolean wasFormSubmitted = context._wasFormSubmitted();
 			_enterFormInContext(context);
-			// log.info(this._formName + "->" +
-			// this.toString().replaceAll(".*(keyPath=\\w+).*", "$1"));
+			// log.info(this._formName + "->" + this.toString().replaceAll(".*(keyPath=\\w+).*", "$1"));
 			String previousFormName = _setFormName(context, wasInForm);
 			try {
 				super.takeValuesFromRequest(request, context);
 			}
 			finally {
-				// log.info(context.elementID() + "->" + context.senderID() + "->" +
-				// context._wasFormSubmitted());
+				// log.info(context.elementID() + "->" + context.senderID() + "->" + context._wasFormSubmitted());
 				_exitFormInContext(context, wasInForm, wasFormSubmitted);
 				_clearFormName(context, previousFormName, wasInForm);
 			}
@@ -429,7 +429,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 				response._appendTagAttributeAndValue("action", href, false);
 			}
 			else {
-				NSLog.err.appendln("<WOForm> : action attribute evaluates to null");
+				log.error("<WOForm> : action attribute evaluates to null");
 			}
 		}
 		finally {
