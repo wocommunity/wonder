@@ -13,6 +13,7 @@ import java.util.Enumeration;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -178,14 +179,14 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		boolean wasInForm = context.isInForm();
 		context.setInForm(true);
 		if (context.elementID().equals(context.senderID())) {
-			context._setFormSubmitted(true);
+			context.setFormSubmitted(true);
 		}
 		return wasInForm;
 	}
 
 	protected void _exitFormInContext(WOContext context, boolean wasInForm, boolean wasFormSubmitted) {
 		context.setInForm(wasInForm);
-		context._setFormSubmitted(wasFormSubmitted);
+		context.setFormSubmitted(wasFormSubmitted);
 	}
 
 	protected String _enctype(WOContext context) {
@@ -206,20 +207,20 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		boolean wasInForm = context.isInForm();
 		WOActionResults result;
 		if (_shouldAppendFormTags(context, wasInForm)) {
-			boolean wasFormSubmitted = context._wasFormSubmitted();
+			boolean wasFormSubmitted = context.wasFormSubmitted();
 			_enterFormInContext(context);
-			boolean wasMultipleSubmitForm = context._isMultipleSubmitForm();
+			boolean wasMultipleSubmitForm = context.isMultipleSubmitForm();
 			String enctype = _enctype(context);
 			if (enctype != null) {
 				_setEnctype(enctype);
 			}
 	
-			context._setActionInvoked(false);
-			context._setIsMultipleSubmitForm(_multipleSubmit == null ? false : _multipleSubmit.booleanValueInComponent(context.component()));
+			context.setActionInvoked(false);
+			context.setIsMultipleSubmitForm(_multipleSubmit == null ? false : _multipleSubmit.booleanValueInComponent(context.component()));
 			String previousFormName = _setFormName(context, wasInForm);
 			try {
 				result = super.invokeAction(worequest, context);
-				if (!wasInForm && !context._wasActionInvoked() && context._wasFormSubmitted()) {
+				if (!wasInForm && !context.wasActionInvoked() && context.wasFormSubmitted()) {
 					if (_action != null) {
 						result = (WOActionResults) _action.valueInComponent(context.component());
 					}
@@ -229,7 +230,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 				}
 			}
 			finally {
-				context._setIsMultipleSubmitForm(wasMultipleSubmitForm);
+				context.setIsMultipleSubmitForm(wasMultipleSubmitForm);
 				_exitFormInContext(context, wasInForm, wasFormSubmitted);
 				_clearFormName(context, previousFormName, wasInForm);
 				_clearEnctype();
@@ -297,14 +298,14 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 
 	protected String cgiAction(WOResponse response, WOContext context, boolean secure) {
 		String s = computeActionStringInContext(_actionClass, _directActionName, context);
-		return context._directActionURL(s, null, secure);
+		return context._directActionURL(s, null, secure, 0, false);
 	}
 
 	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		boolean wasInForm = context.isInForm();
 		if (_shouldAppendFormTags(context, wasInForm)) {
-			boolean wasFormSubmitted = context._wasFormSubmitted();
+			boolean wasFormSubmitted = context.wasFormSubmitted();
 			_enterFormInContext(context);
 			// log.info(this._formName + "->" + this.toString().replaceAll(".*(keyPath=\\w+).*", "$1"));
 			String previousFormName = _setFormName(context, wasInForm);
@@ -403,7 +404,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		super.appendAttributesToResponse(response, context);
 		boolean generatingCompleteURLs = context instanceof ERXWOContext && ((ERXWOContext) context)._generatingCompleteURLs();
 		if (secure && !generatingCompleteURLs) {
-			context._generateCompleteURLs();
+			context.generateCompleteURLs();
 		}
 		try {
 			if (_href != null) {
@@ -418,7 +419,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 				hrefObject = cgiAction(response, context, secure);
 			}
 			else {
-				hrefObject = context._componentActionURL(secure);
+				hrefObject = context.componentActionURL(WOApplication.application().componentRequestHandlerKey(), secure);
 			}
 			if (hrefObject != null) {
 				String href = hrefObject.toString();
@@ -434,7 +435,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		}
 		finally {
 			if (secure && !generatingCompleteURLs) {
-				context._generateRelativeURLs();
+				context.generateRelativeURLs();
 			}
 		}
 	}
