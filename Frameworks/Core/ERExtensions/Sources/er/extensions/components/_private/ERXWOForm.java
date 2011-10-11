@@ -7,7 +7,6 @@
 
 package er.extensions.components._private;
 
-import java.lang.reflect.Method;
 import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
@@ -22,11 +21,9 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WOConstantValueAssociation;
 import com.webobjects.appserver._private.WODynamicElementCreationException;
-import com.webobjects.appserver._private.WOHTMLDynamicElement;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation._NSDictionaryUtilities;
 
-import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXBrowser;
 import er.extensions.appserver.ERXBrowserFactory;
 import er.extensions.appserver.ERXWOContext;
@@ -257,35 +254,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 	}
 
 	private NSDictionary hiddenFieldsInContext(WOContext context, boolean hasActionClass) {
-		NSDictionary hiddenFields;
-		if (ERXApplication.isWO54()) {
-			try {
-				Method computeQueryDictionaryInContextMethod = WOHTMLDynamicElement.class.getDeclaredMethod("computeQueryDictionaryInContext", new Class[] { String.class, WOAssociation.class, NSDictionary.class, boolean.class, WOContext.class });
-				computeQueryDictionaryInContextMethod.setAccessible(true);
-				hiddenFields = (NSDictionary) computeQueryDictionaryInContextMethod.invoke(this, new Object[] { "", _queryDictionary, _otherQueryAssociations, true, context });
-			}
-			catch (Throwable ex1) {
-				try {
-					Method computeQueryDictionaryInContextMethod = WOHTMLDynamicElement.class.getDeclaredMethod("computeQueryDictionaryInContext", new Class[] { String.class, WOAssociation.class, NSDictionary.class, WOContext.class });
-					computeQueryDictionaryInContextMethod.setAccessible(true);
-					hiddenFields = (NSDictionary) computeQueryDictionaryInContextMethod.invoke(this, new Object[] { "", _queryDictionary, _otherQueryAssociations, context });
-				}
-				catch (Throwable e) {
-					throw new RuntimeException("computeQueryDictionaryInContext failed.", ex1);
-				}
-			}
-		}
-		else {
-			try {
-				Method computeQueryDictionaryInContextMethod = WOHTMLDynamicElement.class.getDeclaredMethod("computeQueryDictionaryInContext", new Class[] { WOAssociation.class, WOAssociation.class, WOAssociation.class, boolean.class, NSDictionary.class, WOContext.class });
-				computeQueryDictionaryInContextMethod.setAccessible(true);
-				hiddenFields = (NSDictionary) computeQueryDictionaryInContextMethod.invoke(this, new Object[] { _actionClass, _directActionName, _queryDictionary, Boolean.valueOf(hasActionClass), _otherQueryAssociations, context });
-			}
-			catch (Exception e) {
-				throw new RuntimeException("computeQueryDictionaryInContext failed.", e);
-			}
-		}
-		return hiddenFields;
+		return computeQueryDictionaryInContext("", _queryDictionary, _otherQueryAssociations, true, context);
 	}
 
 	@Override
@@ -387,16 +356,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 			_setEnctype(enctype);
 			response._appendTagAttributeAndValue("enctype", enctype, false);
 		}
-		boolean secure = _secure != null && _secure.booleanValueInComponent(context.component());
-		if (_secure == null && ERXApplication.isWO54()) {
-			try {
-				Boolean secureInContext = (Boolean)WOHTMLDynamicElement.class.getDeclaredMethod("secureInContext", WOContext.class).invoke(this, context);
-				secure = secureInContext.booleanValue();
-			}
-			catch (Throwable t) {
-				throw new RuntimeException("Failed to check for 'secure' binding on WOForm.", t);
-			}
-		}
+		boolean secure = secureInContext(context);
 		Object hrefObject = null;
 		WOComponent wocomponent = context.component();
 		super.appendAttributesToResponse(response, context);
