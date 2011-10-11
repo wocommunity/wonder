@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -51,35 +50,21 @@ public class ValueFactory {
 	public static LocalDate jodaLocalDate(Date value) {
 		GregorianCalendar gc = new GregorianCalendar(GMT);
 		gc.setTime(value);
-		int years = gc.get(Calendar.YEAR);
-		int months = gc.get(Calendar.MONTH) + 1;
-		int days = gc.get(Calendar.DAY_OF_MONTH);
-		LocalDate ld = new LocalDate(years, months, days);
+		LocalDate ld = new LocalDate(gc.getTimeInMillis());
 		return ld;
 	}
 	
 	public static LocalDateTime jodaLocalDateTime(Date value) {
 		GregorianCalendar gc = new GregorianCalendar(GMT);
 		gc.setTime(value);
-		int years = gc.get(Calendar.YEAR);
-		int months = gc.get(Calendar.MONTH) + 1;
-		int days = gc.get(Calendar.DAY_OF_MONTH);
-		int hours = gc.get(Calendar.HOUR_OF_DAY);
-		int minutes = gc.get(Calendar.MINUTE);
-		int seconds = gc.get(Calendar.SECOND);
-		int millis = gc.get(Calendar.MILLISECOND);
-		LocalDateTime ldt = new LocalDateTime(years, months, days, hours, minutes, seconds, millis);
+		LocalDateTime ldt = new LocalDateTime(gc.getTimeInMillis());
 		return ldt;
 	}
 	
 	public static LocalTime jodaLocalTime(Date value) {
 		GregorianCalendar gc = new GregorianCalendar(GMT);
 		gc.setTime(value);
-		int hours = gc.get(Calendar.HOUR_OF_DAY);
-		int minutes = gc.get(Calendar.MINUTE);
-		int seconds = gc.get(Calendar.SECOND);
-		int millis = gc.get(Calendar.MILLISECOND);
-		LocalTime time = new LocalTime(hours, minutes, seconds, millis);
+		LocalTime time = new LocalTime(gc.getTimeInMillis());
 		return time;
 	}
 
