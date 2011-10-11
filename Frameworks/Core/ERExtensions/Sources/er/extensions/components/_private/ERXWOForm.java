@@ -126,32 +126,32 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 	public static boolean useIdInsteadOfNameTag = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXWOForm.useIdInsteadOfNameTag", false);
 
 	@SuppressWarnings("unchecked")
-	public ERXWOForm(String name, NSDictionary associations, WOElement element) {
+	public ERXWOForm(String name, NSDictionary<String, WOAssociation> associations, WOElement element) {
 		super("form", associations, element);
 		_otherQueryAssociations = _NSDictionaryUtilities.extractObjectsForKeysWithPrefix(_associations, "?", true);
 		if (_otherQueryAssociations.count() == 0) {
 			_otherQueryAssociations = null;
 		}
-		_action = (WOAssociation) _associations.removeObjectForKey("action");
-		_href = (WOAssociation) _associations.removeObjectForKey("href");
-		_multipleSubmit = (WOAssociation) _associations.removeObjectForKey("multipleSubmit");
+		_action = _associations.removeObjectForKey("action");
+		_href = _associations.removeObjectForKey("href");
+		_multipleSubmit = _associations.removeObjectForKey("multipleSubmit");
 		if (_multipleSubmit == null && ERXWOForm.multipleSubmitDefault) {
 			_multipleSubmit = new WOConstantValueAssociation(Boolean.valueOf(multipleSubmitDefault));
 		}
-		_actionClass = (WOAssociation) _associations.removeObjectForKey("actionClass");
-		_queryDictionary = (WOAssociation) _associations.removeObjectForKey("queryDictionary");
-		_directActionName = (WOAssociation) _associations.removeObjectForKey("directActionName");
-		_formName = (WOAssociation) _associations.removeObjectForKey("name");
+		_actionClass = _associations.removeObjectForKey("actionClass");
+		_queryDictionary = _associations.removeObjectForKey("queryDictionary");
+		_directActionName = _associations.removeObjectForKey("directActionName");
+		_formName = _associations.removeObjectForKey("name");
 		if (ERXWOForm.useIdInsteadOfNameTag && _id != null) {
 			_formName = _id;	// id takes precedence over name - then subsequently written as id
 			_id = null;
 		}
-		_enctype = (WOAssociation) _associations.removeObjectForKey("enctype");
-		_fragmentIdentifier = (WOAssociation) _associations.removeObjectForKey("fragmentIdentifier");
-		_secure = (WOAssociation) _associations.removeObjectForKey("secure");
-		_disabled = (WOAssociation) _associations.removeObjectForKey("disabled");
-		_addDefaultSubmitButton = (WOAssociation) _associations.removeObjectForKey("addDefaultSubmitButton");
-		_embedded = (WOAssociation) _associations.removeObjectForKey("embedded");
+		_enctype = _associations.removeObjectForKey("enctype");
+		_fragmentIdentifier = _associations.removeObjectForKey("fragmentIdentifier");
+		_secure = _associations.removeObjectForKey("secure");
+		_disabled = _associations.removeObjectForKey("disabled");
+		_addDefaultSubmitButton = _associations.removeObjectForKey("addDefaultSubmitButton");
+		_embedded = _associations.removeObjectForKey("embedded");
 		if (_associations.objectForKey("method") == null && _associations.objectForKey("Method") == null && _associations.objectForKey("METHOD") == null) {
 			_associations.setObjectForKey(new WOConstantValueAssociation("post"), "method");
 		}
