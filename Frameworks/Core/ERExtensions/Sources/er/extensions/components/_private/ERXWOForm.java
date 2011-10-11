@@ -109,7 +109,6 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 	WOAssociation _formName;
 	WOAssociation _enctype;
 	WOAssociation _fragmentIdentifier;
-	WOAssociation _secure;
 	WOAssociation _disabled;
 
 	protected WOAssociation _action;
@@ -149,7 +148,6 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		}
 		_enctype = _associations.removeObjectForKey("enctype");
 		_fragmentIdentifier = _associations.removeObjectForKey("fragmentIdentifier");
-		_secure = _associations.removeObjectForKey("secure");
 		_disabled = _associations.removeObjectForKey("disabled");
 		_addDefaultSubmitButton = _associations.removeObjectForKey("addDefaultSubmitButton");
 		_embedded = _associations.removeObjectForKey("embedded");
