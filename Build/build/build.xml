@@ -1243,7 +1243,7 @@
     </target>
 
     <target name="test.app.found">
-        <property name="SLF" value="/System/Library/Frameworks" />
+        <property name="SLF" value="${wo.system.frameworks}" />
         <property name="fRJ" value="frameworks/Resources/Java" />
 
         <java classname="er.erxtest.Application" fork="true" maxmemory="128m" dir="${build.root}/ERXTest.woa">
