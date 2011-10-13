@@ -1243,17 +1243,16 @@
     </target>
 
     <target name="test.app.found">
-        <property name="SLF" value="${wo.system.frameworks}" />
+
         <property name="fRJ" value="frameworks/Resources/Java" />
 
-        <java classname="er.erxtest.Application" fork="true" maxmemory="128m" dir="${build.root}/ERXTest.woa">
+        <java classname="er.erxtest.Application" fork="true" failonerror="true" maxmemory="128m" dir="${build.root}/ERXTest.woa">
             <arg value="-DWORootDirectory=/System" />
             <arg value="-DWOLocalRootDirectory=" />
             <arg value="-DWOUserDirectory=${build.root}/ERXTest.woa" />
             <arg value="-Der.erxtest.ERXTestListener=${er.erxtest.ERXTestListener}" />
 
             <classpath>
-                <pathelement path="${build.root}/ERXTest.woa/Contents/Resources/Java/" />
                 <pathelement location="${build.root}/ERXTest.woa/Contents/Resources/Java/ERXTest.jar" />
                 <pathelement location="${build.root}/ERExtensions.${fRJ}/ERExtensions.jar" />
                 <pathelement location="${build.root}/ERChronic.${fRJ}/commons-lang-2.4.jar" />
@@ -1275,13 +1274,13 @@
                 <pathelement location="${build.root}/ERPrototypes.${fRJ}/ERPrototypes.jar" />
                 <pathelement location="${build.root}/JavaMemoryAdaptor.${fRJ}/JavaMemoryAdaptor.jar" />
                 <pathelement location="${build.root}/JavaWOExtensions.${fRJ}/JavaWOExtensions.jar" />
-                <pathelement location="${SLF}/JavaEOAccess.${fRJ}/javaeoaccess.jar" />
-                <pathelement location="${SLF}/JavaEOControl.${fRJ}/javaeocontrol.jar" />
-                <pathelement location="${SLF}/JavaFoundation.${fRJ}/javafoundation.jar" />
-                <pathelement location="${SLF}/JavaJDBCAdaptor.${fRJ}/javajdbcadaptor.jar" />
-                <pathelement location="${SLF}/JavaWOJSPServlet.${fRJ}/javawojspservlet.jar" />
-                <pathelement location="${SLF}/JavaWebObjects.${fRJ}/javawebobjects.jar" />
-                <pathelement location="${SLF}/JavaXML.${fRJ}/javaxml.jar" />
+                <pathelement location="${wo.system.frameworks}/JavaEOAccess.${fRJ}/javaeoaccess.jar" />
+                <pathelement location="${wo.system.frameworks}/JavaEOControl.${fRJ}/javaeocontrol.jar" />
+                <pathelement location="${wo.system.frameworks}/JavaFoundation.${fRJ}/javafoundation.jar" />
+                <pathelement location="${wo.system.frameworks}/JavaJDBCAdaptor.${fRJ}/javajdbcadaptor.jar" />
+                <pathelement location="${wo.system.frameworks}/JavaWOJSPServlet.${fRJ}/javawojspservlet.jar" />
+                <pathelement location="${wo.system.frameworks}/JavaWebObjects.${fRJ}/javawebobjects.jar" />
+                <pathelement location="${wo.system.frameworks}/JavaXML.${fRJ}/javaxml.jar" />
             </classpath>
         </java>
     </target>

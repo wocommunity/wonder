@@ -14,9 +14,17 @@ public class ERXTestRunNoisyListener extends RunListener {
 	long start = 0L;
 
 	public void testRunStarted(Description description) { start = System.currentTimeMillis(); }
-	public void testStarted(Description description) { System.out.print("test: "+description); attempted++; }
-	public void testFailure(Failure failure) { System.out.print("\n"+failure+"\n"); failed++; }
-	public void testFinished(Description description) { System.out.println(""); }
+	public void testStarted(Description description) { attempted++; }
+	public void testFailure(Failure failure) {
+		System.out.print("\n\n");
+		System.out.print(failure+"\n\n");
+		System.out.print(failure.getDescription()+"\n\n");
+		System.out.print(failure.getException().getMessage()+"\n\n");
+		failure.getException().printStackTrace();
+		System.out.print("\n\n");
+		failed++;
+	}
+	public void testFinished(Description description) { }
 
 	public void testRunFinished(Result result) {
 		long end = System.currentTimeMillis();
