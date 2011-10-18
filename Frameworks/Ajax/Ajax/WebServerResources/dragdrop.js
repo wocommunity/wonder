@@ -642,6 +642,7 @@ var Sortable = {
       scrollSensitivity: 20,
       scrollSpeed: 15,
       format:      this.SERIALIZE_RULE,
+      markerClass: 'dropmarker',
 
       // these take arrays of elements or ids and can be
       // used for better initialization performance
@@ -822,8 +823,8 @@ var Sortable = {
 
     if(!Sortable._marker) {
       Sortable._marker =
-        ($('dropmarker') || Element.extend(document.createElement('DIV'))).
-          hide().addClassName('dropmarker').setStyle({position:'absolute'});
+        ($(sortable.markerClass) || Element.extend(document.createElement('DIV'))).
+          hide().addClassName(sortable.markerClass).setStyle({position:'absolute'});
       document.getElementsByTagName("body").item(0).appendChild(Sortable._marker);
     }
     var offsets = dropon.cumulativeOffset();

@@ -129,6 +129,9 @@ public class AjaxSortableList extends AjaxComponent {
     ajaxOptionsArray.addObject(new AjaxOption("dropOnEmpty", AjaxOption.BOOLEAN));
     ajaxOptionsArray.addObject(new AjaxOption("scroll", AjaxOption.BOOLEAN));
     ajaxOptionsArray.addObject(new AjaxOption("onChange", AjaxOption.SCRIPT));
+    ajaxOptionsArray.addObject(new AjaxOption("delay", AjaxOption.NUMBER));
+    ajaxOptionsArray.addObject(new AjaxOption("markerClass", AjaxOption.STRING));
+	
     NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
     return options;
   }
