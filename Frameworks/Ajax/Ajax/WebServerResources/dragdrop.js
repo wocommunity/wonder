@@ -195,8 +195,17 @@ var Draggables = {
   },
 
   addObserver: function(observer) {
-    this.observers.push(observer);
-    this._cacheObserverCallbacks();
+  	// workaround to not add the same observer more than once
+  	shouldAdd = true;
+  	this.observers.each(function(e) {
+  		if (e.name == observer.name) {
+  			shouldAdd = false;
+  		} 
+  	});
+  	if (shouldAdd) {
+	    this.observers.push(observer);
+  	  this._cacheObserverCallbacks();
+  	}
   },
 
   removeObserver: function(element) {  // element instead of observer fixes mem leaks
@@ -576,6 +585,7 @@ var SortableObserver = Class.create({
   initialize: function(element, observer) {
     this.element   = $(element);
     this.observer  = observer;
+    this.name      = "SortableObserver";
     this.lastValue = Sortable.serialize(this.element);
   },
 
