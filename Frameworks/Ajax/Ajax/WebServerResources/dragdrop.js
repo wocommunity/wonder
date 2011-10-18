@@ -413,9 +413,13 @@ var Draggable = Class.create({
     }
 
     if(this.options.ghosting) {
-      if (!this._originallyAbsolute)
+      if (!this._originallyAbsolute) {
         Position.relativize(this.element);
-      delete this._originallyAbsolute;
+      }
+      if (null == Sortable._marker) {
+        this.element.parentNode.insertBefore(this.element, this._clone);
+      }
+      delete this.element._originallyAbsolute;
       Element.remove(this._clone);
       this._clone = null;
     }
@@ -766,7 +770,7 @@ var Sortable = {
     if(overlap > .33 && overlap < .66 && Sortable.options(dropon).tree) {
       return;
     } else if(overlap>0.5) {
-      Sortable.mark(dropon, 'before');
+      Sortable.mark(dropon, 'before', element);
       if(dropon.previousSibling != element) {
         var oldParentNode = element.parentNode;
         element.style.visibility = "hidden"; // fix gecko rendering
@@ -776,7 +780,7 @@ var Sortable = {
         Sortable.options(dropon.parentNode).onChange(element);
       }
     } else {
-      Sortable.mark(dropon, 'after');
+      Sortable.mark(dropon, 'after', element);
       var nextElement = dropon.nextSibling || null;
       if(nextElement != element) {
         var oldParentNode = element.parentNode;
@@ -826,7 +830,7 @@ var Sortable = {
     if(Sortable._marker) Sortable._marker.hide();
   },
 
-  mark: function(dropon, position) {
+  mark: function(dropon, position, element) {
     // mark on ghosting only
     var sortable = Sortable.options(dropon.parentNode);
     if(sortable && !sortable.ghosting) return;
@@ -837,14 +841,62 @@ var Sortable = {
           hide().addClassName(sortable.markerClass).setStyle({position:'absolute'});
       document.getElementsByTagName("body").item(0).appendChild(Sortable._marker);
     }
-    var offsets = dropon.cumulativeOffset();
-    Sortable._marker.setStyle({left: offsets[0]+'px', top: offsets[1] + 'px'});
+    var offsets     = Position.cumulativeOffset(dropon);
+    var markerWidth = Sortable._marker.clientWidth;
+		
+		if(sortable.overlap == 'horizontal') {
+			var borderRight = parseFloat(dropon.getStyle('border-right-width')); // if there is no border defined, value = 0;
+			var borderLeft  = parseFloat(dropon.getStyle('border-left-width'));  // if there is no border defined, value = 0;
 
-    if(position=='after')
-      if(sortable.overlap == 'horizontal')
-        Sortable._marker.setStyle({left: (offsets[0]+dropon.clientWidth) + 'px'});
-      else
-        Sortable._marker.setStyle({top: (offsets[1]+dropon.clientHeight) + 'px'});
+			if (position == 'after') {
+				if (dropon.nextSiblings().without(element).length > 0) {
+					var nextOffsets = Position.cumulativeOffset(dropon.nextSiblings().without(element)[0]);
+					// in case of line break
+					if (nextOffsets[1] != offsets[1]) {
+						Sortable._marker.setStyle({
+							left: offsets[0] + dropon.clientWidth + borderRight + borderLeft + 'px',
+							top:  offsets[1] + 'px'});
+					} else {
+						var margin = nextOffsets[0] - (offsets[0] + dropon.clientWidth);
+						Sortable._marker.setStyle({
+							left: offsets[0] + dropon.clientWidth + ((Math.abs(margin)/2) - (markerWidth/2)) + borderRight + 'px',
+							top:  offsets[1] + 'px'});
+					}
+				} else {
+					// marker at end point
+					Sortable._marker.setStyle({
+						left: offsets[0] + dropon.clientWidth + borderLeft + borderRight + 'px',
+						top:  offsets[1] + 'px'});
+				}
+			} else if (position == 'before') {
+				if (dropon.previousSiblings().without(element).length > 0) {
+					var prevOffsets = Position.cumulativeOffset(dropon.previousSiblings().without(element)[0]);
+					// in case of line break
+					if (prevOffsets[1] != offsets[1]) {
+						Sortable._marker.setStyle({
+							left: (offsets[0] - markerWidth) + 'px',
+							top:   offsets[1] + 'px'});
+					} else {
+						var margin = offsets[0] - (prevOffsets[0] + dropon.previousSiblings().without(element)[0].clientWidth);
+						Sortable._marker.setStyle({
+							left: prevOffsets[0] + dropon.previousSiblings().without(element)[0].clientWidth + (Math.abs(margin)/2) - (markerWidth/2) + borderLeft + 'px',
+							top:  offsets[1] + 'px'});
+					}
+				} else {
+					// marker at start point
+					Sortable._marker.setStyle({
+						left: (offsets[0] - markerWidth) + 'px',
+						top:   offsets[1] + 'px'});
+				}
+			}
+		}
+		else {
+			if (position == 'after') {
+        Sortable._marker.setStyle({
+        	top: (offsets[1] + dropon.clientHeight) + 'px',
+        	left: offsets[0] + 'px'});
+			}
+		}
 
     Sortable._marker.show();
   },
