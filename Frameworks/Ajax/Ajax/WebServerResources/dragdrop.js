@@ -487,9 +487,9 @@ var Draggable = Class.create({
     }}
 
     var style = this.element.style;
-    if((!this.options.constraint) || (this.options.constraint=='horizontal'))
+    if((this.options.constraint=='false') || (this.options.constraint=='horizontal'))
       style.left = p[0] + "px";
-    if((!this.options.constraint) || (this.options.constraint=='vertical'))
+    if((this.options.constraint=='false') || (this.options.constraint=='vertical'))
       style.top  = p[1] + "px";
 
     if(style.visibility=="hidden") style.visibility = ""; // fix gecko rendering
@@ -630,7 +630,7 @@ var Sortable = {
       tree:        false,
       treeTag:     'ul',
       overlap:     'vertical', // one of 'vertical', 'horizontal'
-      constraint:  'vertical', // one of 'vertical', 'horizontal', false
+      constraint:  'vertical', // one of 'vertical', 'horizontal', 'false'
       containment: element,    // also takes array of elements (or id's); or false
       handle:      false,      // or a CSS class
       only:        false,
