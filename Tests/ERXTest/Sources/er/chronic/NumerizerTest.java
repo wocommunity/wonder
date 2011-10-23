@@ -6,7 +6,7 @@ import java.util.Map;
 import junit.framework.TestCase;
 import er.chronic.numerizer.Numerizer;
 
-public class NumerizerTestCase extends TestCase {
+public class NumerizerTest extends TestCase {
   public void testStraightParsing() {
     Map<Integer, String> strings = new LinkedHashMap<Integer, String>();
     strings.put(Integer.valueOf(1), "one");

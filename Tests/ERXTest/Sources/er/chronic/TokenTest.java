@@ -1,21 +1,11 @@
 package er.chronic;
 
-import java.util.Calendar;
-
 import junit.framework.TestCase;
 import er.chronic.tags.Scalar;
 import er.chronic.tags.StringTag;
-import er.chronic.utils.Time;
 import er.chronic.utils.Token;
 
-public class TokenTestCase extends TestCase {
-  private Calendar _now;
-
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    _now = Time.construct(2006, 8, 16, 14, 0, 0, 0);
-  }
+public class TokenTest extends TestCase {
 
   public void testToken() {
     Token token = new Token("foo");
