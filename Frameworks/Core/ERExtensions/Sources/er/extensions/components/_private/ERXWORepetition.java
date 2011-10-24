@@ -493,10 +493,7 @@ public class ERXWORepetition extends WODynamicGroup {
 			wocontext.deleteLastElementIDComponent();
 		}
 		else {
-			int start = indexString == null ? 0 : index;
-			int end = indexString == null ? count : (index + 1);
-
-			for (int i = start; i < end && woactionresults == null; i++) {
+			for (int i = 0; i < count && woactionresults == null; i++) {
 				_prepareForIterationWithIndex(repetitionContext, i, wocontext, wocomponent, checkHashCodes);
 				woactionresults = super.invokeAction(worequest, wocontext);
 			}
