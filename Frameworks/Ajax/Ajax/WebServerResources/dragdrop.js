@@ -838,9 +838,11 @@ var Sortable = {
     if(!Sortable._marker) {
       Sortable._marker =
         ($(sortable.markerClass) || Element.extend(document.createElement('DIV'))).
-          hide().addClassName(sortable.markerClass).setStyle({position:'absolute'});
+          hide().setStyle({position:'absolute'});
       document.getElementsByTagName("body").item(0).appendChild(Sortable._marker);
     }
+    Sortable._marker.className = sortable.markerClass;
+    
     var offsets     = Position.cumulativeOffset(dropon);
     var markerWidth = Sortable._marker.clientWidth;
 		
