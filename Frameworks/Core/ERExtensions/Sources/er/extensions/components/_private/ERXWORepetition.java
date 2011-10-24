@@ -475,9 +475,7 @@ public class ERXWORepetition extends WODynamicGroup {
 						if (raiseOnUnmatchedObject(wocomponent)) {
 							throw new UnmatchedObjectException();
 						}
-						else {
-							return wocontext.page();
-						}
+						return wocontext.page();
 					}
 					object = repetitionContext.objectAtIndex(index);
 				}
