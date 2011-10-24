@@ -23,10 +23,8 @@ import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import er.extensions.eof.ERXBatchFetchUtilities;
 import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXDatabaseContextDelegate;
-import er.extensions.eof.ERXRecursiveBatchFetching;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
-import er.extensions.foundation.ERXThreadStorage;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
