@@ -344,7 +344,14 @@ public class ERXResponseRewriter {
 			tagIndex = -1;
 		}
 		if (tagIndex >= 0) {
-			response.setContent(ERXStringUtilities.insertString(responseContent, content, tagIndex));
+			int insertIndex = tagIndex;
+			if (content.toLowerCase().startsWith("<link") || content.toLowerCase().startsWith("<style")) {
+				int scriptIndex = responseContent.toLowerCase().indexOf("<script");
+				if (scriptIndex > 0 && scriptIndex < insertIndex) {
+					insertIndex = scriptIndex;
+				}
+			}
+			response.setContent(ERXStringUtilities.insertString(responseContent, content, insertIndex));
 			inserted = true;
 		}
 		else if (tagMissingBehavior == TagMissingBehavior.Inline) {
