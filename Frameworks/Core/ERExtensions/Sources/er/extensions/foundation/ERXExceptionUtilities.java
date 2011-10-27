@@ -102,10 +102,13 @@ public class ERXExceptionUtilities {
 	 * @return the paragraph string
 	 */
 	public static String toParagraph(Throwable t, boolean removeHtmlTags) {
-		StringBuffer messageBuffer = new StringBuffer();
+		StringBuilder messageBuffer = new StringBuilder();
 		boolean foundInternalError = false;
 		Throwable throwable = t;
 		while (throwable != null) {
+			if (messageBuffer.length() > 0) {
+				messageBuffer.append(" ");
+			}
 			Throwable oldThrowable = ERXExceptionUtilities.getMeaningfulThrowable(throwable);
 			String message = throwable.getLocalizedMessage();
 			if (message == null) {
@@ -123,10 +126,7 @@ public class ERXExceptionUtilities {
 			message = message.trim();
 			messageBuffer.append(message);
 			if (!message.endsWith(".")) {
-				messageBuffer.append(". ");
-			}
-			else {
-				messageBuffer.append(" ");
+				messageBuffer.append(".");
 			}
 			throwable = ERXExceptionUtilities.getCause(oldThrowable);
 		}
