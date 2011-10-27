@@ -15,7 +15,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.ERXExtensions;
+import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 /**
@@ -240,7 +240,7 @@ public class ERXExceptionUtilities {
 					URL path = ERXFileUtilities.pathURLForResourceNamed(skipPatternsFile, framework, null);
 					if (path != null) {
 						try {
-							NSArray<String> skipPatternStrings = (NSArray<String>) ERXExtensions.readPropertyListFromFileInFramework(skipPatternsFile, framework, null);
+							NSArray<String> skipPatternStrings = (NSArray<String>) ERXFileUtilities.readPropertyListFromFileInFramework(skipPatternsFile, framework, (NSArray)null);
 							if (skipPatternStrings != null) {
 								for (String skipPatternString : skipPatternStrings) {
 									try {
