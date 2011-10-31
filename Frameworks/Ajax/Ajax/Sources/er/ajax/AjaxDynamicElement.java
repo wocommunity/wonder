@@ -76,9 +76,14 @@ public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjax
 	}
   
 	/**
-	 * Execute the request, if it's comming from our action, then invoke the ajax handler and put the key
+	 * Execute the request, if it's coming from our action, then invoke the ajax handler and put the key
 	 * <code>AJAX_REQUEST_KEY</code> in the request userInfo dictionary (<code>request.userInfo()</code>).
+	 * 
+	 * @param request the current request
+	 * @param context the current context
+	 * @return the action results
 	 */
+	@Override
 	public WOActionResults invokeAction(WORequest request, WOContext context) {
 		WOActionResults result = null;
 		if (shouldHandleRequest(request, context)) {
@@ -108,7 +113,11 @@ public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjax
 
 	/**
 	 * Overridden to call {@link #addRequiredWebResources(WOResponse, WOContext)}.
+	 * 
+	 * @param response the current response
+	 * @param context the current context
 	 */
+    @Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		addRequiredWebResources(response, context);
 	}
@@ -119,6 +128,7 @@ public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjax
 		}
 	}
 
+	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		takeChildrenValuesFromRequest(request, context);
 	}
@@ -126,14 +136,16 @@ public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjax
 	/**
 	 * Override this method to append the needed scripts for this component.
 	 * 
+	 * @param request the current request
+	 * @param context the current context
 	 */
 	protected abstract void addRequiredWebResources(WOResponse response, WOContext context);
 
 	/**
 	 * Override this method to return the response for an Ajax request.
 	 * 
-	 * @param request
-	 * @param context
+	 * @param request the current request
+	 * @param context the current context
 	 */
 	public abstract WOActionResults handleRequest(WORequest request, WOContext context);
 
