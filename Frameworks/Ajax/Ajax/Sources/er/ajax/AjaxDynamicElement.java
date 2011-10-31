@@ -16,12 +16,10 @@ import er.extensions.appserver.ajax.ERXAjaxApplication;
 
 public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjaxElement {
 	protected Logger log = Logger.getLogger(getClass());
-	private WOElement _children;
 	private NSDictionary<String, WOAssociation> _associations;
 
 	public AjaxDynamicElement(String name, NSDictionary<String, WOAssociation> associations, WOElement children) {
 		super(name, associations, children);
-		_children = children;
 		_associations = associations;
 	}
 
