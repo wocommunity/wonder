@@ -82,10 +82,6 @@ public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjax
 	public WOActionResults invokeAction(WORequest request, WOContext context) {
 		WOActionResults result = null;
 		if (shouldHandleRequest(request, context)) {
-			WOComponent component = context.component();
-			String elementID = context.elementID();
-			AjaxResponse response = AjaxUtils.createResponse(request, context);
-			NSDictionary userInfo = AjaxUtils.mutableUserInfo(request);
 			result = handleRequest(request, context);
 			AjaxUtils.updateMutableUserInfoWithAjaxInfo(context);
         	if (ERXAjaxApplication.shouldIgnoreResults(request, context, result)) {
