@@ -17,15 +17,15 @@ import er.extensions.appserver.ajax.ERXAjaxApplication;
 public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjaxElement {
 	protected Logger log = Logger.getLogger(getClass());
 	private WOElement _children;
-	private NSDictionary _associations;
+	private NSDictionary<String, WOAssociation> _associations;
 
-	public AjaxDynamicElement(String name, NSDictionary associations, WOElement children) {
+	public AjaxDynamicElement(String name, NSDictionary<String, WOAssociation> associations, WOElement children) {
 		super(name, associations, children);
 		_children = children;
 		_associations = associations;
 	}
 
-	public NSDictionary associations() {
+	public NSDictionary<String, WOAssociation> associations() {
 		return _associations;
 	}
 	
@@ -34,7 +34,7 @@ public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjax
 	}
 	
 	public WOAssociation bindingNamed(String name) {
-		return (WOAssociation) associations().objectForKey(name);
+		return associations().objectForKey(name);
 	}
 
 	public Object valueForBinding(String name, Object defaultValue, WOComponent component) {
