@@ -295,6 +295,14 @@ public class AjaxUtils {
 		}
 		return defaultValue;
 	}
+	
+	public static String stringValueForBinding(String name, String defaultValue, NSDictionary<String, WOAssociation> associations, WOComponent component) {
+		String value = AjaxUtils.stringValueForBinding(name, associations, component);
+		if (value != null) {
+			return value;
+		}
+		return defaultValue;
+	}
 
 	public static String stringValueForBinding(String name, NSDictionary associations, WOComponent component) {
 		WOAssociation association = (WOAssociation) associations.objectForKey(name);

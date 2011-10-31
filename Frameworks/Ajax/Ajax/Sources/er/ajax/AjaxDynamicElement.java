@@ -49,6 +49,10 @@ public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjax
 		return AjaxUtils.stringValueForBinding(name, associations(), component);
 	}
 	
+	public String stringValueForBinding(String name, String defaultValue, WOComponent component) {
+		return AjaxUtils.stringValueForBinding(name, defaultValue, associations(), component);
+	}
+	
 	public boolean booleanValueForBinding(String name, boolean defaultValue, WOComponent component) {
 		return AjaxUtils.booleanValueForBinding(name, defaultValue, associations(), component);
 	}
