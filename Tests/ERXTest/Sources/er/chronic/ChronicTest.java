@@ -1,6 +1,5 @@
 package er.chronic;
 
-import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -8,21 +7,14 @@ import junit.framework.TestCase;
 import er.chronic.handlers.Handler;
 import er.chronic.repeaters.EnumRepeaterDayPortion;
 import er.chronic.repeaters.RepeaterDayName;
+import er.chronic.repeaters.RepeaterDayName.DayName;
 import er.chronic.repeaters.RepeaterDayPortion;
 import er.chronic.repeaters.RepeaterTime;
-import er.chronic.repeaters.RepeaterDayName.DayName;
 import er.chronic.utils.Span;
 import er.chronic.utils.Time;
 import er.chronic.utils.Token;
 
-public class ChronicTestCase extends TestCase {
-  private Calendar _now;
-
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    _now = Time.construct(2006, 8, 16, 14, 0, 0, 0);
-  }
+public class ChronicTest extends TestCase {
 
   public void testPostNormalizeAmPmAliases() {
     List<Token> tokens = new LinkedList<Token>();

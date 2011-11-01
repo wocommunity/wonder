@@ -1,9 +1,10 @@
 
 package er.erxtest;
 
+import java.util.List;
+
 import org.junit.runner.Description;
 import org.junit.runner.Result;
-
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 
@@ -34,5 +35,10 @@ public class ERXTestRunQuietListener extends RunListener {
 		System.out.println("tests FAILED: "+failed);
 		System.out.println("time elapsed: "+(int)((end - start)/1000)+" sec");
 		System.out.println("");
+		System.out.println("--- Test Failures ---");
+		List<Failure> failures = result.getFailures();
+		for(Failure f : failures) {
+			System.out.println("Failure: " + f);
+		}
 	}
 }

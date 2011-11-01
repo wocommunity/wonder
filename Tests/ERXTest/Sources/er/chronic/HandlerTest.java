@@ -1,6 +1,5 @@
 package er.chronic;
 
-import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,17 +18,14 @@ import er.chronic.repeaters.RepeaterYear;
 import er.chronic.tags.Pointer;
 import er.chronic.tags.Scalar;
 import er.chronic.tags.ScalarDay;
-import er.chronic.utils.Time;
 import er.chronic.utils.Token;
 
-public class HandlerTestCase extends TestCase {
+public class HandlerTest extends TestCase {
   private Options _options;
-  private Calendar _now;
   
   @Override
   protected void setUp() throws Exception {
     super.setUp();
-    _now = Time.construct(2006, 8, 16, 14, 0, 0, 0);
     _options = new Options();
   }
   

@@ -99,7 +99,7 @@ public abstract class ERCNConfiguration {
         return _changeTypesToPublish;
     }
 
-    public NSArray changeTypesToSubscrive() {
+    public NSArray changeTypesToSubscribe() {
         return _changeTypesToSubscribe;
     }
 

@@ -58,8 +58,7 @@ public class Application extends ERXApplication {
 		    else
 		    	core.addListener(new ERXTestRunQuietListener());
 
-		    core.run(ERXTestSuite.suite());
-			System.exit(0);
+			System.exit(core.run(ERXTestSuite.suite()).getFailureCount());
 		}
 	}
 }

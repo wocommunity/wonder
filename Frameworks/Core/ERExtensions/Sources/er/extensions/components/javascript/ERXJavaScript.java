@@ -239,7 +239,7 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 		if(s != null) {
 			_appendOpenTagToResponse(woresponse, wocontext);
 		}
-		if(_scriptSource == null && _filename == null && hasChildrenElements() 
+		if(_scriptSource == null && _filename == null && ( hasChildrenElements() || _scriptString != null)
 				&& _scriptKey == null) {
 			appendChildrenToResponse(woresponse, wocontext);
 		}

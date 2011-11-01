@@ -159,7 +159,7 @@ public abstract class ERXAbstractBlowfishCrypter implements ERXCrypterInterface 
 		}
 
 		if (i != 0) {
-			for (int j = i; j < _blockSize; i++) {
+			for (int j = i; j < _blockSize; j++) {
 				encryptedBytes[j] = 0;
 			}
 			try {
