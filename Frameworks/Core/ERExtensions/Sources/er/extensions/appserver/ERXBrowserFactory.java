@@ -460,40 +460,47 @@ public class ERXBrowserFactory {
     }
 
     private String _browserString(String userAgent) {
-        String browserString = userAgent;
         int startpos;
 
+        // Get substring "Chrome/0.X.Y.Z Safari/525.13"
+        // from          "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US) "
+        //               "AppleWebKit/525.13 (KHTML, wie z. B. Gecko) Chrome/0.X.Y.Z Safari/525.13"
+        final String chrome = "Chrome";
+        startpos = userAgent.indexOf(chrome);
+        if (startpos > -1)
+            return userAgent.substring(startpos);
+        
         // Get substring "Safari/48"
         // from          "Safari 1.0b(v48) Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-us) "
         //               "AppleWebKit/48 (like Gecko) Safari/48"
         final String safari = "Safari";
-        startpos = browserString.indexOf(safari);
+        startpos = userAgent.indexOf(safari);
         if (startpos > -1)
-            browserString = browserString.substring(startpos);
+        	return userAgent.substring(startpos);
 
         // Get substring "Opera 6.04  [en]" 
         // from          "Mozilla/4.0 (compatible; MSIE 5.0; Windows 2000) Opera 6.04  [en]"
         final String opera = "Opera";
-        startpos = browserString.indexOf(opera);
+        startpos = userAgent.indexOf(opera);
         if (startpos > -1) 
-            browserString = browserString.substring(startpos);
+        	return userAgent.substring(startpos);
 
         // Get substring "MSIE 5.21; Mac_PowerPC)"
         // from          "Mozilla/4.0 (compatible; MSIE 5.21; Mac_PowerPC)" 
         final String compatible = "compatible;";
-        startpos = browserString.indexOf(compatible);
+        startpos = userAgent.indexOf(compatible);
         if (startpos > -1) 
-            browserString = browserString.substring(startpos + compatible.length());
+        	return userAgent.substring(startpos + compatible.length());
             
         // Get substring "Netscape6/6.2.3" 
         // from          "Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-US; rv:0.9.4.1) 
         //                Gecko/20020508 Netscape6/6.2.3"
         final String netscape = "Netscape";
-        startpos = browserString.indexOf(netscape);
+        startpos = userAgent.indexOf(netscape);
         if (startpos > -1) 
-            browserString = browserString.substring(startpos);
+        	return userAgent.substring(startpos);
             
-        return browserString;
+        return userAgent;
     }
 
     private NSMutableDictionary _browserPool;
