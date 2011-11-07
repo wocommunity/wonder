@@ -154,21 +154,25 @@ public class ERXBasicBrowser extends ERXBrowser {
 
         _isMozillaVersion40 = -1 < _mozillaVersion.indexOf("4.0");
 
-        _isVersion9 = -1 < _version.indexOf("9.");
-        _isVersion8 = -1 < _version.indexOf("8.");
-        _isVersion7 = -1 < _version.indexOf("7.");
-        _isVersion6 = -1 < _version.indexOf("6.");
-        _isVersion5 = -1 < _version.indexOf("5.");
-        _isVersion51 = -1 < _version.indexOf("5.1");
+        String normalizedVersion = _version;
+        int dotPos = normalizedVersion.indexOf(".");
+        if (dotPos > -1 && dotPos < normalizedVersion.length())
+        	normalizedVersion = normalizedVersion.substring(0, dotPos) + "." + normalizedVersion.substring(dotPos + 1).replaceAll("\\.", "");
+        _isVersion9 = normalizedVersion.startsWith("9.");
+        _isVersion8 = normalizedVersion.startsWith("8.");
+        _isVersion7 = normalizedVersion.startsWith("7.");
+        _isVersion6 = normalizedVersion.startsWith("6.");
+        _isVersion5 = normalizedVersion.startsWith("5.");
+        _isVersion51 = normalizedVersion.startsWith("5.1");
 
-        _isVersion45 = (-1 < _version.indexOf("4.5")) || (-1 < _version.indexOf("4.6")) || (-1 < _version.indexOf("4.7"));
+        _isVersion45 = normalizedVersion.startsWith("4.5") || normalizedVersion.startsWith("4.6") || normalizedVersion.startsWith("4.7");
 
-        _isVersion41 = -1 < _version.indexOf("4.1");
-        _isVersion40 = -1 < _version.indexOf("4.0");
+        _isVersion41 = normalizedVersion.startsWith("4.1");
+        _isVersion40 = normalizedVersion.startsWith("4.0");
 
-        _isVersion4 = -1 < _version.indexOf("4.");
-        _isVersion3 = -1 < _version.indexOf("3.");
-        _isVersion2 = -1 < _version.indexOf("2.");
+        _isVersion4 = normalizedVersion.startsWith("4.");
+        _isVersion3 = normalizedVersion.startsWith("3.");
+        _isVersion2 = normalizedVersion.startsWith("2.");
        
         _isMacOS = _platform.equals(MACOS);
         _isWindows = _platform.equals(WINDOWS);
