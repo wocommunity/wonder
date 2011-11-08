@@ -545,7 +545,7 @@ public class ERXDatabaseContextDelegate {
     /**
      * Refreshes the fetch timestamp for the fetched objects.
      * @param eos
-     * @param ec
+     * @param timestamp
      */
 	private void freshenFetchTimestamps(NSArray eos, long timestamp) {
 		for(Object eo: eos) {
@@ -625,15 +625,15 @@ public class ERXDatabaseContextDelegate {
 						long timestamp = ((AutoBatchFaultingEnterpriseObject) source).batchFaultingTimeStamp();
 						NSMutableArray<EOEnterpriseObject> eos = new NSMutableArray<EOEnterpriseObject>();
 						NSMutableArray faults = new NSMutableArray();
-						for (Object o : candidates) {
-							if (o instanceof AutoBatchFaultingEnterpriseObject) {
-								AutoBatchFaultingEnterpriseObject eo = (AutoBatchFaultingEnterpriseObject) o;
-								if (eo.batchFaultingTimeStamp() == timestamp || fromThreadStorage) {
-									if (!EOFaultHandler.isFault(eo) && eo.classDescription() == source.classDescription()) {
-										Object fault = eo.storedValueForKey(key);
+						for (EOEnterpriseObject current : candidates) {
+							if (current instanceof AutoBatchFaultingEnterpriseObject) {
+								AutoBatchFaultingEnterpriseObject currentEO = (AutoBatchFaultingEnterpriseObject) current;
+								if (currentEO.batchFaultingTimeStamp() == timestamp || fromThreadStorage) {
+									if (!EOFaultHandler.isFault(currentEO) && currentEO.classDescription() == source.classDescription()) {
+										Object fault = currentEO.storedValueForKey(key);
 										if (EOFaultHandler.isFault(fault)) {
 											faults.addObject(fault);
-											eos.addObject(eo);
+											eos.addObject(currentEO);
 											if (eos.count() == autoBatchFetchSize()) {
 												break;
 											}
@@ -677,7 +677,7 @@ public class ERXDatabaseContextDelegate {
 	 * 
 	 * @param dbc
 	 *            database context
-	 * @param obj
+	 * @param eo
 	 *            to-one fault
 	 * @return true if it's still a fault.
 	 */
