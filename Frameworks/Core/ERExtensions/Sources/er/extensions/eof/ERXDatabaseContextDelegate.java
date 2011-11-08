@@ -607,10 +607,19 @@ public class ERXDatabaseContextDelegate {
 						NSArray<EOEnterpriseObject> candidates = null;
 						NSArray currentObjects = (NSArray) ERXThreadStorage.valueForKey(THREAD_KEY);
 						boolean fromThreadStorage = false;
-						if(currentObjects != null && currentObjects.lastObject() instanceof AutoBatchFaultingEnterpriseObject) {
-							candidates = currentObjects;
-							fromThreadStorage = true;
-						} else {
+						if (currentObjects != null) {
+							NSMutableArray<EOEnterpriseObject> tmpList = new NSMutableArray<EOEnterpriseObject>();
+							for (Object tmpItem : currentObjects) {
+								if (tmpItem instanceof AutoBatchFaultingEnterpriseObject) {
+									tmpList.add((EOEnterpriseObject) tmpItem);
+								}
+							}
+							if (tmpList.count() > 0) {
+								candidates = tmpList;
+								fromThreadStorage = true;
+							}
+						}
+						if (candidates == null) {
 							candidates = ec.registeredObjects();
 						}
 						long timestamp = ((AutoBatchFaultingEnterpriseObject) source).batchFaultingTimeStamp();
@@ -691,10 +700,19 @@ public class ERXDatabaseContextDelegate {
 						NSMutableSet faults = new NSMutableSet();
 						NSArray<EOEnterpriseObject> candidates = null;
 						NSArray currentObjects = (NSArray) ERXThreadStorage.valueForKey(THREAD_KEY);
-						if(currentObjects != null && currentObjects.lastObject() instanceof AutoBatchFaultingEnterpriseObject) {
-							candidates = currentObjects;
-							fromThreadStorage = true;
-						} else {
+						if (currentObjects != null) {
+							NSMutableArray<EOEnterpriseObject> tmpList = new NSMutableArray<EOEnterpriseObject>();
+							for (Object tmpItem : currentObjects) {
+								if (tmpItem instanceof AutoBatchFaultingEnterpriseObject) {
+									tmpList.add((EOEnterpriseObject) tmpItem);
+								}
+							}
+							if (tmpList.count() > 0) {
+								candidates = tmpList;
+								fromThreadStorage = true;
+							}
+						}
+						if (candidates == null) {
 							candidates = ec.registeredObjects();
 						}
 						for (EOEnterpriseObject current : candidates) {
