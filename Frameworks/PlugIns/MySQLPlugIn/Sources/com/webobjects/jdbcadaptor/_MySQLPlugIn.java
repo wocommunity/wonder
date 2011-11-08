@@ -16,7 +16,6 @@ import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.synchronization.EOSchemaGenerationOptions;
 import com.webobjects.eoaccess.synchronization.EOSchemaSynchronizationFactory;
-import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSData;
@@ -27,10 +26,6 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation._NSStringUtilities;
 
-/**
- *
- *
- */
 public class _MySQLPlugIn extends JDBCPlugIn {
 
 	private static final String DriverClassName = "com.mysql.jdbc.Driver";
@@ -44,7 +39,6 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 	}
 
 	public static class MySQLExpression extends JDBCExpression {
-		protected int _fetchLimit;
 		
 		public MySQLExpression(EOEntity entity) {
 			super(entity);
@@ -53,22 +47,6 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 		@Override
         public char sqlEscapeChar(){
 			return '|';
-		}
-		
-		/**
-		 * Overriding super here so we can add a fetch limit if specified in the EOFetchSpecification.
-		 * 
-		 * @see EOFetchSpecification#setFetchLimit(int)
-		 * @see JDBCExpression#prepareSelectExpressionWithAttributes(NSArray, boolean, EOFetchSpecification)
-		 */
-		@Override
-		public void prepareSelectExpressionWithAttributes(NSArray<EOAttribute> attributes, boolean lock,
-				EOFetchSpecification fetchSpec) {
-			_fetchLimit = fetchSpec.fetchLimit();
-			super.prepareSelectExpressionWithAttributes(attributes, lock, fetchSpec);
-			if (!fetchSpec.promptsAfterFetchLimit() && _fetchLimit > 0) {
-				_statement = _statement + " LIMIT " + _fetchLimit;
-			}
 		}
 
 	}
