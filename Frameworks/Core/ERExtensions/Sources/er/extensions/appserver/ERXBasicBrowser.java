@@ -11,6 +11,8 @@ import org.apache.log4j.Logger;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.foundation.ERXStringUtilities;
+
 /**
  * <code>ERXBasicBrowser</code> is a concrete subclass of {@link ERXBrowser}
  * that defines browser object. A browser object represents the web browser
@@ -154,10 +156,8 @@ public class ERXBasicBrowser extends ERXBrowser {
 
         _isMozillaVersion40 = -1 < _mozillaVersion.indexOf("4.0");
 
-        String normalizedVersion = _version;
-        int dotPos = normalizedVersion.indexOf(".");
-        if (dotPos > -1 && dotPos < normalizedVersion.length())
-        	normalizedVersion = normalizedVersion.substring(0, dotPos) + "." + normalizedVersion.substring(dotPos + 1).replaceAll("\\.", "");
+        
+        String normalizedVersion = ERXStringUtilities.removeExtraDotsFromVersionString(_version);
         _isVersion9 = normalizedVersion.startsWith("9.");
         _isVersion8 = normalizedVersion.startsWith("8.");
         _isVersion7 = normalizedVersion.startsWith("7.");
