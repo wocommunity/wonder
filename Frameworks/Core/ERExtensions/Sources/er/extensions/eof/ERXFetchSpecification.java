@@ -87,6 +87,9 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 
 	/**
 	 * Sets a arbitrary value.
+	 * 
+	 * @param value
+	 * @param key
 	 */
 	public void setObjectForKey(Object value, String key) {
 		_userInfo = _userInfo == null ? new NSMutableDictionary() : _userInfo;
@@ -95,7 +98,9 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 
 	/**
 	 * Gets an arbitrary value.
+	 * 
 	 * @param key
+	 * @return object for given key
 	 */
 	public Object objectForKey(String key) {
 		return _userInfo!= null ? _userInfo.valueForKey(key) : null;
@@ -103,6 +108,8 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	
 	/**
 	 * Gets the user info.
+	 * 
+	 * @return user info dictionary
 	 */
 	public NSDictionary userInfo() {
 		return _userInfo == null ? NSDictionary.EmptyDictionary : _userInfo.immutableClone(); 
@@ -110,7 +117,9 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	
 	/**
 	 * Type-safe method to fetch objects for this fetch spec.
+	 * 
 	 * @param ec
+	 * @return object array
 	 */
 	public NSArray<T> fetchObjects(EOEditingContext ec) {
 		return ec.objectsWithFetchSpecification(this);
@@ -118,7 +127,9 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	
 	/**
 	 * Type-safe method to fetch raw rows.
+	 * 
 	 * @param ec
+	 * @return array of raw row dictionaries
 	 */
 	public NSArray<NSDictionary<String, Object>> fetchRawRows(EOEditingContext ec) {
 		boolean old = fetchesRawRows();
@@ -133,9 +144,23 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 			}
 		}
 	}
+	
+	/**
+	 * Sets a list of attribute keys to be fetched as raw data. Uses two params for backwards
+	 * compatibility as a <code>setRawRowKeyPaths(null)</code> would be ambiguous otherwise.
+	 * 
+	 * @see ERXFetchSpecification#setRawRowKeyPaths(NSArray)
+	 * @param keyPath 
+	 * @param keyPaths list of attribute keys
+	 */
+	public void setRawRowKeyPaths(String keyPath, String... keyPaths) {
+		super.setRawRowKeyPaths(new NSArray<String>(keyPath, keyPaths));
+	}
 
 	/**
 	 * Collects all relevant attributes and the bindings and returns a key suitable for caching.
+	 * 
+	 * @return identifier string
 	 */
 	public String identifier() {
 		return identifierForFetchSpec(this);
@@ -185,9 +210,11 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	
 	/**
 	 * Converts a normal fetch spec to an ERX one.
+	 * 
 	 * @param <T>
 	 * @param fs
 	 * @param clazz
+	 * @return converted fetch spec
 	 */
 	public static <T extends EOEnterpriseObject> ERXFetchSpecification<T> fetchSpec(EOFetchSpecification fs, Class<T> clazz) {
 		if (fs instanceof ERXFetchSpecification) {
@@ -198,8 +225,10 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	
 	/**
 	 * Converts a normal fetch spec to an ERX one.
+	 * 
 	 * @param <T>
 	 * @param fs
+	 * @return converted fetch spec
 	 */
 	public static <T extends EOEnterpriseObject> ERXFetchSpecification<T> fetchSpec(EOFetchSpecification fs) {
 		if (fs instanceof ERXFetchSpecification) {
@@ -210,11 +239,13 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	
 	/**
 	 * Helper to create a string from a qualifier.
-	 * @param q
+	 * 
+	 * @param qualifier
+	 * @return qualifier string
 	 */
-	protected static String identifierForQualifier(EOQualifier q) {
+	protected static String identifierForQualifier(EOQualifier qualifier) {
 		final StringBuilder sb = new StringBuilder();
-		if(q != null) {
+		if(qualifier != null) {
 			ERXQualifierTraversal traversal = new ERXQualifierTraversal() {
 
 				protected void visit(EOQualifierEvaluation q) {
@@ -250,14 +281,16 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 					return super.traverseKeyValueQualifier(q);
 				}
 			};
-			traversal.traverse(q);
+			traversal.traverse(qualifier);
 		}
 		return sb.toString();
 	}
 	
 	/**
 	 * Builds an identifier for the given fetch spec which is suitable for caching.
+	 * 
 	 * @param fs
+	 * @return fetch spec string
 	 */
 	public static String identifierForFetchSpec(EOFetchSpecification fs) {
 		StringBuilder sb = new StringBuilder( identifierForQualifier(fs.qualifier()));
