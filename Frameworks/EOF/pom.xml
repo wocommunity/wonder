@@ -10,6 +10,7 @@
 	<packaging>pom</packaging>
 	<name>EOF Frameworks</name>
 	<modules>
+		<module>ERAttributeExtension</module>
 		<module>ERCaching</module>
 		<module>ERChangeNotificationJMS</module>
 		<module>ERIndexing</module>
