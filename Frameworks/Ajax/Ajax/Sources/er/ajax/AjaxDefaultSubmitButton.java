@@ -1,6 +1,5 @@
 package er.ajax;
 
-import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
@@ -8,6 +7,9 @@ import com.webobjects.appserver.WOResponse;
 
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
+
+import er.extensions.appserver.ERXBrowser;
+import er.extensions.appserver.ERXBrowserFactory;
 
 /**
  * Invisible form submit button that can be included as the first element in an Ajax submitted form so that hitting
@@ -18,7 +20,6 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @binding action the action to execute when this button is pressed
  * @binding id the HTML ID of this submit button
  * @binding class the HTML class of this submit button
- * @binding style the HTML style of this submit button
  * @binding onClick arbitrary Javascript to execute when the client clicks the button
  * @binding onClickBefore if the given function returns true, the onClick is executed.  This is to support confirm(..) dialogs.
  * @binding onServerClick if the action defined in the action binding returns null, the value of this binding will be returned as javascript from the server
@@ -145,9 +146,8 @@ public class AjaxDefaultSubmitButton extends AjaxSubmitButton
         
         response.appendContentString("<input ");
         appendTagAttributeToResponse(response, "tabindex", "");
-        appendTagAttributeToResponse(response, "type", "image");
-        appendTagAttributeToResponse(response, "src", WOApplication.application().resourceManager().urlForResourceNamed("clear1x1.gif", "Ajax",
-                                                                                                                        component.session().languages(), context.request()));
+        appendTagAttributeToResponse(response, "type", "submit");
+
         String name = nameInContext(context, component);
         appendTagAttributeToResponse(response, "name", name);
         appendTagAttributeToResponse(response, "value", valueForBinding("value", component));
@@ -166,13 +166,16 @@ public class AjaxDefaultSubmitButton extends AjaxSubmitButton
         	appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
         }
         
-        // Force in a default style to control size and border
-        StringBuilder sb = new StringBuilder("height:1px; width:1px; border: none; ");
-        Object style = valueForBinding("style", component);
-        if (style != null) {
-        	sb.append(style);
-        }        
-        appendTagAttributeToResponse(response, "style", sb.toString());
+        // Force in a default style to hide the button
+        String style;
+        ERXBrowser browser = ERXBrowserFactory.factory().browserMatchingRequest(context.request());
+        boolean useDisplayNone = !(browser.isSafari() && browser.version().compareTo("3.0.3") > 0);
+        if (useDisplayNone) {
+        	style = "position: absolute; left: -10000px; display: none;";
+        } else {
+        	style = "position: absolute; left: -10000px; visibility: hidden;";
+        }
+        appendTagAttributeToResponse(response, "style", style);
         appendTagAttributeToResponse(response, "id", valueForBinding("id", component));
         appendTagAttributeToResponse(response, "onclick", onClickBuffer.toString());
 
