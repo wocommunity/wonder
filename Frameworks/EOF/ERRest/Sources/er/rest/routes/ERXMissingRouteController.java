@@ -36,7 +36,7 @@ public class ERXMissingRouteController extends ERXRouteController {
 	/**
 	 * Returns an error response of 404 or an error response of 405 if strict mode is set to true
 	 * 
-	 * @return an error response of 404
+	 * @return an error response of 404 or 405
 	 */
 	public WOActionResults missingAction() {
 	   boolean isStrictMode = ERXProperties.booleanForKeyWithDefault("ERXRest.strictMode", true);
