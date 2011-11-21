@@ -1,0 +1,34 @@
+{
+    attributes = (
+        {allowsNull = Y; columnName = PHOTO; name = photo; prototypeName = blob; }, 
+        {
+            allowsNull = N; 
+            columnName = "TALENT_ID"; 
+            name = talentID; 
+            precision = 9; 
+            prototypeName = id; 
+        }
+    ); 
+    attributesUsedForLocking = (talentID); 
+    className = "er.distribution.example.server.eo.TalentPhoto"; 
+    classProperties = (talent); 
+    externalName = "TALENT_PHOTO"; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {
+        "_clientClassPropertyNames" = (talent); 
+        "_javaClientClassName" = "er.distribution.example.client.eo.TalentPhoto"; 
+    }; 
+    maxNumberOfInstancesToBatchFetch = 10; 
+    name = TalentPhoto; 
+    primaryKeyAttributes = (talentID); 
+    relationships = (
+        {
+            destination = Talent; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = talentID; sourceAttribute = talentID; }); 
+            name = talent; 
+        }
+    ); 
+}
