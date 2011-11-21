@@ -1,0 +1,48 @@
+{
+    attributes = (
+        {
+            allowsNull = N; 
+            columnName = "MOVIE_ID"; 
+            name = movieID; 
+            precision = 9; 
+            prototypeName = id; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = "NUMBER_OF_VOTES"; 
+            name = numberOfVotes; 
+            precision = 9; 
+            prototypeName = intNumber; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = "RUNNING_AVERAGE"; 
+            externalType = FLOAT; 
+            name = runningAverage; 
+            precision = 9; 
+            prototypeName = doubleNumber; 
+            scale = 20; 
+        }
+    ); 
+    attributesUsedForLocking = (movieID, numberOfVotes); 
+    className = "er.distribution.example.server.eo.Voting"; 
+    classProperties = (numberOfVotes, movie, runningAverage); 
+    externalName = VOTING; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {
+        "_clientClassPropertyNames" = (numberOfVotes, movie, runningAverage); 
+        "_javaClientClassName" = "er.distribution.example.client.eo.Voting"; 
+    }; 
+    name = Voting; 
+    primaryKeyAttributes = (movieID); 
+    relationships = (
+        {
+            destination = Movie; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = movieID; sourceAttribute = movieID; }); 
+            name = movie; 
+        }
+    ); 
+}

@@ -1,0 +1,1 @@
+ -destination Sources -extension java -javaclient -javaTemplate _WonderEntity.java -model ../ERDistributionExampleServer/Resources/Movies.eomodeld -packagedirs -subclassDestination Sources -subclassJavaTemplate WonderEntity.java -verbose -loadModelGroup

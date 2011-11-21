@@ -1,0 +1,38 @@
+{
+    attributes = (
+        {
+            columnName = BUDGET; 
+            name = budget; 
+            precision = 15; 
+            prototypeName = currencyAmount; 
+            scale = 2; 
+        }, 
+        {columnName = NAME; name = name; prototypeName = varchar50; width = 40; }, 
+        {
+            allowsNull = N; 
+            columnName = "STUDIO_ID"; 
+            name = studioID; 
+            precision = 9; 
+            prototypeName = id; 
+        }
+    ); 
+    attributesUsedForLocking = (budget, name, studioID); 
+    className = "er.distribution.example.server.eo.Studio"; 
+    classProperties = (budget, movies, name); 
+    externalName = STUDIO; 
+    internalInfo = {
+        "_clientClassPropertyNames" = (budget, movies, name); 
+        "_javaClientClassName" = "er.distribution.example.client.eo.Studio"; 
+    }; 
+    name = Studio; 
+    primaryKeyAttributes = (studioID); 
+    relationships = (
+        {
+            destination = Movie; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = studioID; sourceAttribute = studioID; }); 
+            name = movies; 
+        }
+    ); 
+}
