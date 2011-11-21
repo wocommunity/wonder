@@ -486,7 +486,38 @@
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/WOOgnl/ERCayenne/ERPrototypes" />
         </antcall>
     </target>
-	
+
+    <target name="ERDistributionExampleServer.all">
+        <antcall target="global.application.${build.action}" >
+            <param name="project.type" value="application" />
+            <param name="project.principal.class" value="er.distribution.example.server.Application" />
+            <param name="project.name" value="ERDistributionExampleServer" />
+            <param name="project.dir" value="Examples/Misc/ERDistributionExampleServer" />
+            <param name="wo.system.root.bundles" value="${frameworks.system.core}/JavaEODistribution" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/WOOgnl/ERPrototypes/DerbyPlugIn/ERDistribution/ERDistributionExampleModel" />
+        </antcall>
+    </target>
+
+     <target name="ERDistributionExampleClient.post.build">
+        <delete includeemptydirs="true">
+        	<fileset dir="${build.root}/${project.name}.woa/Contents/Frameworks/" includes="*/WebServerResources/**/*"/>
+        </delete>
+    </target>
+    
+    <target name="ERDistributionExampleClient.all">
+        <antcall target="global.application.${build.action}" >
+            <param name="project.type" value="application" />
+            <param name="project.principal.class" value="er.distribution.example.client.Application" />
+            <param name="project.name" value="ERDistributionExampleClient" />
+            <param name="project.dir" value="Examples/Misc/ERDistributionExampleClient" />
+            <param name="wo.system.root.bundles" value="JavaFoundation/JavaEOAccess/JavaEOControl/JavaWebObjects/JavaXML/JavaEODistribution" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.jars}/ERExtensions/ERDistribution/ERDistributionExampleModel" />
+      		<param name="wo.system.root.bundles.embed" value="true" />
+      		<param name="wo.external.root.bundles.embed" value="true" />
+      		<param name="after.build" value="ERDistributionExampleClient.post.build" />
+        </antcall>
+    </target>
+    
     <target name="Movies.all">
         <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
@@ -654,6 +685,25 @@
             <param name="project.principal.class" value="er.cayenne.CayennePrincipal" />
             <param name="project.name" value="ERCayenne" />
             <param name="project.dir" value="Frameworks/Misc/ERCayenne" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
+        </antcall>
+    </target>
+    
+    <target name="ERDistribution.all">
+        <antcall target="global.framework.${build.action}" >
+            <param name="project.principal.class" value="er.distribution.ERDistributionPrincipal" />
+            <param name="project.name" value="ERDistribution" />
+            <param name="project.dir" value="Frameworks/Misc/ERDistribution" />
+            <param name="wo.system.root.bundles" value="${frameworks.system.core}/JavaEODistribution" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
+        </antcall>
+    </target>
+
+    <target name="ERDistributionExampleModel.all">
+        <antcall target="global.framework.${build.action}" >
+            <param name="project.name" value="ERDistributionExampleModel" />
+            <param name="project.dir" value="Examples/Misc/ERDistributionExampleModel" />
+            <param name="wo.system.root.bundles" value="${frameworks.system.core}/JavaEODistribution" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
     </target>
@@ -1080,11 +1130,11 @@
         to add your own, add a target definition above and choose the correct group below
      -->
 
-    <target name="common.frameworks.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, Ajax.all, ERDirectToWeb.all, ERNeutralLook.all, ERSelenium.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERIndexing.all, ERChronic.all, ERCaching.all, ERCaptcha.all, ERProfiling.all, EROpenID.all, ERPDFGeneration.all, ERJGroupsSynchronizer.all, ERRest.all, ERDirectToRest.all, ERAttachment.all, ERTaggable.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all, ERWorkerChannel.all, BTBusinessLogic.all, JavaMemoryAdaptor.all, JavaRESTAdaptor.all, JavaFSAdaptor.all, JavaERJDBCAdaptor.all, WOLips.all, WOJRebel.all, ERMoviesLogic.all, SnapshotExplorer.all, ERDivaliteLook.all, ERJasperReports.all, ERAttributeExtension.all, ERWOAdaptor.all, ERCayenne.all" />
+    <target name="common.frameworks.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, Ajax.all, ERDirectToWeb.all, ERNeutralLook.all, ERSelenium.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERIndexing.all, ERChronic.all, ERCaching.all, ERCaptcha.all, ERProfiling.all, EROpenID.all, ERPDFGeneration.all, ERJGroupsSynchronizer.all, ERRest.all, ERDirectToRest.all, ERAttachment.all, ERTaggable.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all, ERWorkerChannel.all, BTBusinessLogic.all, JavaMemoryAdaptor.all, JavaRESTAdaptor.all, JavaFSAdaptor.all, JavaERJDBCAdaptor.all, WOLips.all, WOJRebel.all, ERMoviesLogic.all, SnapshotExplorer.all, ERDivaliteLook.all, ERJasperReports.all, ERAttributeExtension.all, ERWOAdaptor.all, ERCayenne.all, ERCayenne.all, ERDistribution.all" />
 
     <target name="common.applications.all" depends="BugTracker.all, ERMailer.all, Uber.all, SecretPal.all, ERXTest.all, PluginTest.all" />
 
-    <target name="common.examples.all" depends="ERSeleniumExample.all, ERIndexingExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, AjaxExample2.all, YUIExample.all, EROpenIDExample.all, JavaRESTAdaptorExample.all, ERDivaliteExample.all, TickTockMan.all, ERComponentTour.all, ERRestRouteExample.all, Movies.all, ERWebSocketExample.all, ERJasperReportsExample.all, BackgroundTasks.all, ERCayenneExample.all" />
+    <target name="common.examples.all" depends="ERSeleniumExample.all, ERIndexingExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, AjaxExample2.all, YUIExample.all, EROpenIDExample.all, JavaRESTAdaptorExample.all, ERDivaliteExample.all, TickTockMan.all, ERComponentTour.all, ERRestRouteExample.all, Movies.all, ERWebSocketExample.all, ERJasperReportsExample.all, BackgroundTasks.all, ERCayenneExample.all, ERDistributionExampleModel.all, ERDistributionExampleServer.all, ERDistributionExampleClient.all" />
 
     <target name="dynareporting.frameworks.all" depends="DRGrouping.all, WRReporting.all" />
     <target name="dynareporting.examples.all" depends="DocsByExample.all, DynaReporter.all, DRGroupingTest.all" />

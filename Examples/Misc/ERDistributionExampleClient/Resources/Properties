@@ -1,0 +1,6 @@
+
+er.distribution.applicationUrl=http://localhost:2099/cgi-bin/WebObjects/ERDistributionExampleServer.woa
+
+er.distribution.trustAllSslCertificates=true
+
+er.distribution.disallowHttpRequestsOnEventThread=true
