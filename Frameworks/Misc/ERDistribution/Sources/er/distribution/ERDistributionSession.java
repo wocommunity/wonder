@@ -55,46 +55,38 @@ public abstract class ERDistributionSession extends ERXSession implements EODist
     
     public abstract EOGlobalID clientSideRequestLogin(final String username, String password);
     
-	@Override
 	public NSData distributionContextWillSendData(EODistributionContext distributionContext, NSData data) {
 		return data;
 	}
 
-	@Override
 	public NSData distributionContextDidReceiveData(EODistributionContext distributionContext, NSData data) {
 		return data;
 	}
 
-	@Override
 	public boolean distributionContextShouldFollowKeyPath(EODistributionContext distributionContext, String keyPath) {
 		return "session".equals(keyPath) || isUserAuthenticated();
 	}
 
-	@Override
 	public boolean distributionContextShouldAllowInvocation(
 			EODistributionContext distributionContext, Object receiver, NSSelector selector, Object[] arguments) {
 		return isUserAuthenticated();
 	}
 
-	@Override
 	public boolean distributionContextShouldAllowAccessToClassDescription(
 			EODistributionContext distributionContext, EOClassDescription classDescription) {
 		return true;
 	}
 
-	@Override
 	public boolean distributionContextShouldFetchObjectsWithFetchSpecification(
 			EODistributionContext distributionContext, EOFetchSpecification fetchSpec) {
 		return isUserAuthenticated();
 	}
 
-	@Override
 	public boolean distributionContextShouldFetchObjectWithGlobalID(
 			EODistributionContext distributionContext, EOGlobalID globalID, EOClassDescription classDescription) {
 		return isUserAuthenticated();
 	}
 
-	@Override
 	public boolean distributionContextShouldSave(EODistributionContext distributionContext, EOEditingContext editingContext) {
 		return isUserAuthenticated();
 	}
