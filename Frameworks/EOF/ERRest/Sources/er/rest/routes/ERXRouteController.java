@@ -1119,6 +1119,19 @@ public class ERXRouteController extends WODirectAction {
 		}
 		return response(format, responseNode);
 	}
+	
+	/**
+	 * Returns an response with the given HTTP status and without any body content.
+	 * Useful to return HTTP codes like 410 (Gone) or 304 (Not Modified)
+	 * @param status
+	 *            the HTTP status code
+	 * @return an error WOResponse
+	 */
+	public WOActionResults response(int status) {
+		WOResponse response = WOApplication.application().createResponseInContext(context());
+		response.setStatus(status);
+		return response;
+	}
 
 	/**
 	 * Returns an error response with the given HTTP status.
