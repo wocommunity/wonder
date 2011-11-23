@@ -370,7 +370,11 @@ public class ERXRoute {
 				ERXRoute.Key key = entry.getKey();
 				String valueStr = entry.getValue();
 				Object value = ERXRestUtils.coerceValueToTypeNamed(valueStr, key.valueType(), context, true);
-				objects.setObjectForKey(value, key);
+				if (value != null) {
+					objects.setObjectForKey(value, key);
+				} else {
+					objects = new NSMutableDictionary<ERXRoute.Key, Object>();
+				}
 			}
 		}
 		else {
