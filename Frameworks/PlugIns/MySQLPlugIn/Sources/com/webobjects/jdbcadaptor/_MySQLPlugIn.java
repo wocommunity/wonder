@@ -16,6 +16,8 @@ import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.synchronization.EOSchemaGenerationOptions;
 import com.webobjects.eoaccess.synchronization.EOSchemaSynchronizationFactory;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSData;
@@ -39,6 +41,9 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 	}
 
 	public static class MySQLExpression extends JDBCExpression {
+
+		private int _fetchLimit;
+
 		
 		public MySQLExpression(EOEntity entity) {
 			super(entity);
@@ -47,6 +52,89 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 		@Override
         public char sqlEscapeChar(){
 			return '|';
+		}
+
+		/* (non-Javadoc)
+		 *
+		 * Overriding super here so we can grab a fetch limit if specified in the EOFetchSpecification.
+		 *
+		 * @see com.webobjects.jdbcadaptor.JDBCExpression#prepareSelectExpressionWithAttributes(NSArray, boolean, EOFetchSpecification)
+		 */
+		@Override
+		public void prepareSelectExpressionWithAttributes(NSArray<EOAttribute> attributes, boolean lock,
+				EOFetchSpecification fetchSpec) {
+			if (!fetchSpec.promptsAfterFetchLimit()) {
+				_fetchLimit = fetchSpec.fetchLimit();
+			}
+			super.prepareSelectExpressionWithAttributes(attributes, lock, fetchSpec);
+		}
+
+		/* (non-Javadoc)
+		 *
+		 * Overriding to add LIMIT clause if _fetchLimit > 0.
+		 * This is same logic as original super with minor additions to support LIMIT clause only.
+		 *
+		 * @see com.webobjects.eoaccess.EOSQLExpression#assembleSelectStatementWithAttributes(NSArray, boolean, EOQualifier, NSArray, java.lang.String, String, String, String, String, String, String)
+		 */
+		@Override
+		public String assembleSelectStatementWithAttributes(NSArray attributes, boolean lock, EOQualifier qualifier,
+				NSArray fetchOrder, String selectString, String columnList, String tableList, String whereClause,
+				String joinClause, String orderByClause, String lockClause) {
+			String limitClause = null;
+
+			int size = selectString.length() + columnList.length() + tableList.length() + 7;
+			if ((lockClause != null) && (lockClause.length() != 0))
+				size += lockClause.length() + 1;
+			if ((whereClause != null) && (whereClause.length() != 0))
+				size += whereClause.length() + 7;
+			if ((joinClause != null) && (joinClause.length() != 0))
+				size += joinClause.length() + 7;
+			if ((orderByClause != null) && (orderByClause.length() != 0)) {
+				size += orderByClause.length() + 10;
+			}
+
+			// If necessary, create LIMIT clause and add to buffer size
+			if (_fetchLimit > 0) {
+				limitClause = Integer.toString(_fetchLimit);
+				size += 7 + limitClause.length();  // " LIMIT " = 7 chars
+			}
+
+			// Use a StringBuilder here since synchronized StringBuffer not needed.
+			StringBuilder buffer = new StringBuilder(size);
+			buffer.append(selectString);
+			buffer.append(columnList);
+			buffer.append(" FROM ");
+			buffer.append(tableList);
+
+			if ((whereClause != null) && (whereClause.length() != 0)) {
+				buffer.append(" WHERE ");
+				buffer.append(whereClause);
+			}
+			if ((joinClause != null) && (joinClause.length() != 0)) {
+				if ((whereClause != null) && (whereClause.length() != 0))
+					buffer.append(" AND ");
+				else
+					buffer.append(" WHERE ");
+				buffer.append(joinClause);
+			}
+
+			if ((orderByClause != null) && (orderByClause.length() != 0)) {
+				buffer.append(" ORDER BY ");
+				buffer.append(orderByClause);
+			}
+
+			// Add limit clause
+			if (limitClause != null) {
+				buffer.append(" LIMIT ");
+				buffer.append(limitClause);
+			}
+
+			if ((lockClause != null) && (lockClause.length() != 0)) {
+				buffer.append(' ');
+				buffer.append(lockClause);
+			}
+
+			return buffer.toString();
 		}
 
 	}
