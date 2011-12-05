@@ -309,7 +309,7 @@ public class AjaxAutoComplete extends AjaxComponent {
 
     protected void appendItemToResponse(Object value, WOElement child, boolean hasItem, WOResponse response, WOContext context) {
         response.appendContentString("<li>");
-        if(hasItem && child != null) {
+        if(hasItem && !hasBinding("displayString") && child != null) {
             setValueForBinding(value, "item");
             context._setCurrentComponent(parent());
             child.appendToResponse(response, context);
