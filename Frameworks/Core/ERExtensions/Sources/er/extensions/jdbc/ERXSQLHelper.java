@@ -2111,6 +2111,28 @@ public class ERXSQLHelper {
 		protected int maximumElementPerInClause(EOEntity entity) {
 			return 15000;
 		}
+		
+		/**
+		 * For BOOLEAN we take 'boolean' as external type. For any other
+		 * case, we pass it up to the default impl.
+		 * 
+		 * @param adaptor
+		 *            the adaptor to retrieve an external type for
+		 * @param jdbcType
+		 *            the JDBC type number
+		 * @return a guess at the external type name to use
+		 */
+		@Override
+		public String externalTypeForJDBCType(JDBCAdaptor adaptor, int jdbcType) {
+			String externalType;
+			if (jdbcType == Types.BOOLEAN) {
+				externalType = "boolean";
+			}
+			else {
+				externalType = super.externalTypeForJDBCType(adaptor, jdbcType);
+			}
+			return externalType;
+		}
 	}
 
 	public static class MySQLSQLHelper extends ERXSQLHelper {

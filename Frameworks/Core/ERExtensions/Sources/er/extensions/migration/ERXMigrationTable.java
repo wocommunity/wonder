@@ -733,7 +733,8 @@ public class ERXMigrationTable {
 
 	/**
 	 * Returns a new flag boolean column.  See newColumn(..) for the full docs.
-	 * This might or might not work with your database, it's only tested with PostgreSQL.
+	 * This might or might not work with your database, it's only tested with PostgreSQL
+	 * and FrontBase.
 	 * 
 	 * @param name the name of the column
 	 * @param allowsNull if true, the column will allow null values
@@ -746,7 +747,8 @@ public class ERXMigrationTable {
 
 	/**
 	 * Returns a new flag boolean column.  See newColumn(..) for the full docs.
-	 * This might or might not work with your database, it's only tested with PostgreSQL.
+	 * This might or might not work with your database, it's only tested with PostgreSQL
+	 * and FrontBase.
 	 * 
 	 * @param name the name of the column
 	 * @param allowsNull if true, the column will allow null values
