@@ -162,7 +162,7 @@ public class WOCookie
                 header.append("; secure");
             }
             if (_isHttpOnly) {
-                header.append("; httpOnly");
+                header.append("; HttpOnly");
             }
         }
         return new String(header);
