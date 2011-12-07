@@ -557,7 +557,12 @@ public class ERXBrowserFactory {
     	if (startpos > -1)  {
     		versionString = userAgent.substring(startpos);
     	} else {
-    		versionString = _browserString(userAgent);
+    		startpos = userAgent.indexOf("Firefox/");
+        	if (startpos > -1)  {
+        		versionString = userAgent.substring(startpos);
+        	} else {
+        		versionString = _browserString(userAgent);
+        	}
     	}
 
     	return versionString;
