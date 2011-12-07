@@ -6,7 +6,6 @@
 //
 package er.extensions.appserver;
 
-import java.util.Enumeration;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
@@ -18,7 +17,6 @@ import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
-import com.webobjects.foundation.NSSet;
 
 import er.extensions.foundation.ERXMutableDictionary;
 import er.extensions.foundation.ERXMutableInteger;
@@ -557,7 +555,12 @@ public class ERXBrowserFactory {
     	if (startpos > -1)  {
     		versionString = userAgent.substring(startpos);
     	} else {
-    		versionString = _browserString(userAgent);
+    		startpos = userAgent.indexOf("Firefox/");
+        	if (startpos > -1)  {
+        		versionString = userAgent.substring(startpos);
+        	} else {
+        		versionString = _browserString(userAgent);
+        	}
     	}
 
     	return versionString;

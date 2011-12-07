@@ -78,6 +78,7 @@ public class ERXBasicBrowser extends ERXBrowser {
 
     private final String          _browserName;
     private final String          _version;
+    private final Integer         _majorVersion;
     private final String          _mozillaVersion;
     private final String          _platform;
     private final String          _cpu;
@@ -180,6 +181,17 @@ public class ERXBasicBrowser extends ERXBrowser {
         _isIPhone = _platform.equals(IPHONE);
         _isIPad = _platform.equals(IPAD);
         _isUnknownPlatform = _platform.equals(UNKNOWN_PLATFORM);
+        
+        String majorVersion = normalizedVersion;
+        if (majorVersion.indexOf(".") != -1) {
+        	majorVersion = majorVersion.substring(0, majorVersion.indexOf("."));
+        }
+        try {
+        	_majorVersion = Integer.valueOf(majorVersion);
+        } catch (NumberFormatException e) {
+        	log.info("could not determine major version from '" + majorVersion + "'", e);
+        	throw e;
+		}
     }
 
     public String browserName() {
@@ -188,6 +200,11 @@ public class ERXBasicBrowser extends ERXBrowser {
 
     public String version() {
         return _version;
+    }
+    
+    @Override
+    public Integer majorVersion() {
+    	return _majorVersion;
     }
 
     public String mozillaVersion() {
