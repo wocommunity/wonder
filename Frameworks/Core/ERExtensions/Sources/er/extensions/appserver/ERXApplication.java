@@ -58,6 +58,7 @@ import com.webobjects.appserver.WOTimer;
 import com.webobjects.appserver._private.WOComponentDefinition;
 import com.webobjects.appserver._private.WOProperties;
 import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOObserverCenter;
 import com.webobjects.eocontrol.EOTemporaryGlobalID;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
@@ -1947,6 +1948,13 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		// don't end up on
 		// someone else's thread by accident
 		ERXThreadStorage.reset();
+		/*
+		 * Clear the _ThreadInfo in the EOObserverCenter for this thread to prevent a bug
+		 * which results in ECs loosing track of change state on multiple worker threads. 
+		 * A more complete explanation available here:
+		 * http://www.mail-archive.com/webobjects-dev@lists.apple.com/msg25391.html
+		 */
+		EOObserverCenter.notifyObserversObjectWillChange(null);
 		// We *always* want to unlock left over ECs.
 		ERXEC.unlockAllContextsForCurrentThread();
 		// we don't want this hanging around
