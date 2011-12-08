@@ -92,6 +92,12 @@ public abstract class ERXBrowser implements NSKeyValueCoding {
      * @return what version of browser
      */
     public abstract String version();
+    
+    /**
+     * Major version
+     * @return what major version of browser
+     */
+    public abstract Integer majorVersion();
 
     /**
      * MozillaVersion string
