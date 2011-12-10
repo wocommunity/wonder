@@ -128,7 +128,7 @@ public class WOCookieWrapper implements Cookie {
 
 	@Override
 	public int compareTo(Cookie o) {
-		return o.compareTo(this);
+		return -1 * o.compareTo(this);
 	}
 
 	@Override
