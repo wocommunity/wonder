@@ -16,16 +16,14 @@ import er.extensions.appserver.ajax.ERXAjaxApplication;
 
 public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjaxElement {
 	protected Logger log = Logger.getLogger(getClass());
-	private WOElement _children;
-	private NSDictionary _associations;
+	private NSDictionary<String, WOAssociation> _associations;
 
-	public AjaxDynamicElement(String name, NSDictionary associations, WOElement children) {
+	public AjaxDynamicElement(String name, NSDictionary<String, WOAssociation> associations, WOElement children) {
 		super(name, associations, children);
-		_children = children;
 		_associations = associations;
 	}
 
-	public NSDictionary associations() {
+	public NSDictionary<String, WOAssociation> associations() {
 		return _associations;
 	}
 	
@@ -34,7 +32,7 @@ public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjax
 	}
 	
 	public WOAssociation bindingNamed(String name) {
-		return (WOAssociation) associations().objectForKey(name);
+		return associations().objectForKey(name);
 	}
 
 	public Object valueForBinding(String name, Object defaultValue, WOComponent component) {
@@ -47,6 +45,10 @@ public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjax
 
 	public String stringValueForBinding(String name, WOComponent component) {
 		return AjaxUtils.stringValueForBinding(name, associations(), component);
+	}
+	
+	public String stringValueForBinding(String name, String defaultValue, WOComponent component) {
+		return AjaxUtils.stringValueForBinding(name, defaultValue, associations(), component);
 	}
 	
 	public boolean booleanValueForBinding(String name, boolean defaultValue, WOComponent component) {
@@ -74,16 +76,17 @@ public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjax
 	}
   
 	/**
-	 * Execute the request, if it's comming from our action, then invoke the ajax handler and put the key
+	 * Execute the request, if it's coming from our action, then invoke the ajax handler and put the key
 	 * <code>AJAX_REQUEST_KEY</code> in the request userInfo dictionary (<code>request.userInfo()</code>).
+	 * 
+	 * @param request the current request
+	 * @param context the current context
+	 * @return the action results
 	 */
+	@Override
 	public WOActionResults invokeAction(WORequest request, WOContext context) {
 		WOActionResults result = null;
 		if (shouldHandleRequest(request, context)) {
-			WOComponent component = context.component();
-			String elementID = context.elementID();
-			AjaxResponse response = AjaxUtils.createResponse(request, context);
-			NSDictionary userInfo = AjaxUtils.mutableUserInfo(request);
 			result = handleRequest(request, context);
 			AjaxUtils.updateMutableUserInfoWithAjaxInfo(context);
         	if (ERXAjaxApplication.shouldIgnoreResults(request, context, result)) {
@@ -110,7 +113,11 @@ public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjax
 
 	/**
 	 * Overridden to call {@link #addRequiredWebResources(WOResponse, WOContext)}.
+	 * 
+	 * @param response the current response
+	 * @param context the current context
 	 */
+    @Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		addRequiredWebResources(response, context);
 	}
@@ -121,6 +128,7 @@ public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjax
 		}
 	}
 
+	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		takeChildrenValuesFromRequest(request, context);
 	}
@@ -128,14 +136,16 @@ public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjax
 	/**
 	 * Override this method to append the needed scripts for this component.
 	 * 
+	 * @param request the current request
+	 * @param context the current context
 	 */
 	protected abstract void addRequiredWebResources(WOResponse response, WOContext context);
 
 	/**
 	 * Override this method to return the response for an Ajax request.
 	 * 
-	 * @param request
-	 * @param context
+	 * @param request the current request
+	 * @param context the current context
 	 */
 	public abstract WOActionResults handleRequest(WORequest request, WOContext context);
 
