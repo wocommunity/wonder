@@ -82,7 +82,8 @@ public class ERWOAdaptorUtilities {
 				cookie.getPath(),
 				cookie.getDomain(),
 				cookie.getMaxAge(),
-				cookie.isSecure());
+				cookie.isSecure(),
+				cookie.isHttpOnly());
 		return wocookie;
 	}
 	

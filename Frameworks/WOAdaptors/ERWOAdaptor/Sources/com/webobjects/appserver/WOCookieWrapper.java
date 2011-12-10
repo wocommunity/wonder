@@ -75,8 +75,7 @@ public class WOCookieWrapper implements Cookie {
 
 	@Override
 	public boolean isHttpOnly() {
-		// TODO Auto-generated method stub
-		return false;
+		return wrapping.isHttpOnly();
 	}
 
 	@Override
@@ -97,8 +96,7 @@ public class WOCookieWrapper implements Cookie {
 
 	@Override
 	public void setHttpOnly(boolean httpOnly) {
-		// TODO Auto-generated method stub
-		
+		wrapping.setIsHttpOnly(httpOnly);
 	}
 
 	@Override
