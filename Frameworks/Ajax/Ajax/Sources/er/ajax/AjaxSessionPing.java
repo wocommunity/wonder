@@ -32,6 +32,7 @@ public class AjaxSessionPing extends AjaxDynamicElement {
      * Appends script to start Ajax.ActivePeriodicalUpdater to the response.
      */
     public void appendToResponse(WOResponse response, WOContext context) {
+    	super.appendToResponse(response, context);
         WOComponent component = context.component();
         response.appendContentString("<script>var AjaxSessionPinger = new Ajax.ActivePeriodicalUpdater('AjaxSessionPinger', '");
 
