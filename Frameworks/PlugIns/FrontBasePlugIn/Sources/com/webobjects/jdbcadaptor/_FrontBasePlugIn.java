@@ -649,7 +649,6 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 				result.addObjectsFromArray(primaryKeyConstraintStatementsForEntityGroups(nsarray5));
 			}
 			if (boolValueForKeyDefault(options, "foreignKeyConstraints", false)) {
-				NSMutableSet nsmutableset = new NSMutableSet();
 				NSArray nsarray6 = tableEntityGroupsForEntities(entities);
 				for (int i = 0; i < nsarray6.count(); i++)
 					result.addObjectsFromArray(_foreignKeyConstraintStatementsForEntityGroup((NSArray) nsarray6.objectAtIndex(i)));
@@ -697,16 +696,17 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 		}
 
 		@Override
-		public NSArray primaryKeySupportStatementsForEntityGroup(NSArray entityGroup) {
+		public NSArray primaryKeySupportStatementsForEntityGroup(NSArray<EOEntity> entityGroup) {
 			if (entityGroup == null)
 				return NSArray.EmptyArray;
 
-			NSMutableArray result = new NSMutableArray();
+			NSMutableArray<EOSQLExpression> result = new NSMutableArray<EOSQLExpression>();
 			EOEntity eoentity = null;
 
 			for (int i = entityGroup.count() - 1; i >= 0; i--) {
-				eoentity = (EOEntity) entityGroup.objectAtIndex(i);
+				eoentity = entityGroup.objectAtIndex(i);
 				String externalName = eoentity.externalName();
+				NSArray<String> keys = eoentity.primaryKeyAttributeNames();
 
 				if (externalName != null && externalName.length() > 0) {
 					String unique = null;
@@ -723,6 +723,10 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 						unique = "1000000";
 					}
 					result.addObject(_expressionForString("SET UNIQUE = " + unique + " FOR " + quoteTableName(externalName)));
+					if (keys.count() == 1) {
+						result.addObject(_expressionForString("ALTER TABLE " + quoteTableName(externalName) + " ALTER "
+								+ quoteTableName(keys.objectAtIndex(0)) + " SET DEFAULT UNIQUE"));
+					}
 				}
 			}
 			return result;
@@ -868,7 +872,6 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			NSMutableArray result = new NSMutableArray();
 			EOSQLExpression eosqlexpression = null;
 			EOEntity eoentity = null;
-			NSMutableArray nsmutablearray = new NSMutableArray();
 			int j = nsarray != null ? nsarray.count() : 0;
 
 			if (j == 0)
@@ -1931,7 +1934,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 		 * helps <code>FrontbaseExpression</code> to assemble
 		 * the correct join clause.
 		 */
-		public class JoinClause {
+		public static class JoinClause {
 			String table1;
 			String op;
 			String table2;
