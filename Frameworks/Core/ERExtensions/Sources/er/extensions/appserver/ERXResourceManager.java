@@ -196,6 +196,8 @@ public class ERXResourceManager extends WOResourceManager {
 				completeURL = completeURL.replaceFirst("\\?wodata=file%3A", "/wodata=");
 				if (completeURL.indexOf("/wodata=") > 0) {
 					completeURL = completeURL.replaceAll("%2F", "/");
+					// SWK: On Windows we have /C%3A/ changed to /C:
+					completeURL = completeURL.replaceAll("%3A", ":");
 				}
 			}
 		}
