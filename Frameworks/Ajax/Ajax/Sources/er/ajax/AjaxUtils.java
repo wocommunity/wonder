@@ -280,48 +280,56 @@ public class AjaxUtils {
 		response.appendContentString("</script>");
 	}
 
-	public static boolean hasBinding(String name, NSDictionary associations) {
+	public static boolean hasBinding(String name, NSDictionary<String, WOAssociation> associations) {
 		return associations.objectForKey(name) != null;
 	}
 	
-	public static WOAssociation bindingNamed(String name, NSDictionary associations) {
-		return (WOAssociation) associations.objectForKey(name);
+	public static WOAssociation bindingNamed(String name, NSDictionary<String, WOAssociation> associations) {
+		return associations.objectForKey(name);
 	}
 	
-	public static Object valueForBinding(String name, Object defaultValue, NSDictionary associations, WOComponent component) {
+	public static Object valueForBinding(String name, Object defaultValue, NSDictionary<String, WOAssociation> associations, WOComponent component) {
 		Object value = AjaxUtils.valueForBinding(name, associations, component);
 		if (value != null) {
 			return value;
 		}
 		return defaultValue;
 	}
+	
+	public static String stringValueForBinding(String name, String defaultValue, NSDictionary<String, WOAssociation> associations, WOComponent component) {
+		String value = AjaxUtils.stringValueForBinding(name, associations, component);
+		if (value != null) {
+			return value;
+		}
+		return defaultValue;
+	}
 
-	public static String stringValueForBinding(String name, NSDictionary associations, WOComponent component) {
-		WOAssociation association = (WOAssociation) associations.objectForKey(name);
+	public static String stringValueForBinding(String name, NSDictionary<String, WOAssociation> associations, WOComponent component) {
+		WOAssociation association = associations.objectForKey(name);
 		if (association != null) {
 			return (String) association.valueInComponent(component);
 		}
 		return null;
 	}
 
-	public static Object valueForBinding(String name, NSDictionary associations, WOComponent component) {
-		WOAssociation association = (WOAssociation) associations.objectForKey(name);
+	public static Object valueForBinding(String name, NSDictionary<String, WOAssociation> associations, WOComponent component) {
+		WOAssociation association = associations.objectForKey(name);
 		if (association != null) {
 			return association.valueInComponent(component);
 		}
 		return null;
 	}
 
-	public static boolean booleanValueForBinding(String name, boolean defaultValue, NSDictionary associations, WOComponent component) {
-		WOAssociation association = (WOAssociation) associations.objectForKey(name);
+	public static boolean booleanValueForBinding(String name, boolean defaultValue, NSDictionary<String, WOAssociation> associations, WOComponent component) {
+		WOAssociation association = associations.objectForKey(name);
 		if (association != null) {
 			return association.booleanValueInComponent(component);
 		}
 		return defaultValue;
 	}
 
-	public static void setValueForBinding(Object value, String name, NSDictionary associations, WOComponent component) {
-		WOAssociation association = (WOAssociation) associations.objectForKey(name);
+	public static void setValueForBinding(Object value, String name, NSDictionary<String, WOAssociation> associations, WOComponent component) {
+		WOAssociation association = associations.objectForKey(name);
 		if (association != null) {
 			association.setValue(value, component);
 		}
@@ -417,12 +425,12 @@ public class AjaxUtils {
 		return actionUrl;
 	}
 
-	public static void appendTagAttributeAndValue(WOResponse response, WOContext context, WOComponent component, NSDictionary associations, String name) {
+	public static void appendTagAttributeAndValue(WOResponse response, WOContext context, WOComponent component, NSDictionary<String, WOAssociation> associations, String name) {
 		AjaxUtils.appendTagAttributeAndValue(response, context, component, associations, name, null);
 	}
 
-	public static void appendTagAttributeAndValue(WOResponse response, WOContext context, WOComponent component, NSDictionary associations, String name, String appendValue) {
-		AjaxUtils.appendTagAttributeAndValue(response, context, component, name, (WOAssociation) associations.objectForKey(name), appendValue);
+	public static void appendTagAttributeAndValue(WOResponse response, WOContext context, WOComponent component, NSDictionary<String, WOAssociation> associations, String name, String appendValue) {
+		AjaxUtils.appendTagAttributeAndValue(response, context, component, name, associations.objectForKey(name), appendValue);
 	}
 
 	public static void appendTagAttributeAndValue(WOResponse response, WOContext context, WOComponent component, String name, WOAssociation association) {
