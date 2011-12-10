@@ -313,16 +313,16 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 		}
 	}
 
-	protected static String updateContainerID(AjaxDynamicElement element, WOComponent component) {
+	public static String updateContainerID(AjaxDynamicElement element, WOComponent component) {
 		return AjaxUpdateContainer.updateContainerID(element, "updateContainerID", component);
 	}
 
-	protected static String updateContainerID(AjaxDynamicElement element, String bindingName, WOComponent component) {
+	public static String updateContainerID(AjaxDynamicElement element, String bindingName, WOComponent component) {
 		String updateContainerID = (String) element.valueForBinding("updateContainerID", component);
 		return AjaxUpdateContainer.updateContainerID(updateContainerID);
 	}
 
-	protected static String updateContainerID(String updateContainerID) {
+	public static String updateContainerID(String updateContainerID) {
 		if ("_parent".equals(updateContainerID)) {
 			updateContainerID = AjaxUpdateContainer.currentUpdateContainerID();
 		}
