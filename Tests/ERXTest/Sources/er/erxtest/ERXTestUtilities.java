@@ -5,11 +5,14 @@ import java.util.List;
 import java.util.Random;
 
 import com.webobjects.eoaccess.EODatabaseContext;
+import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOFaultHandler;
+import com.webobjects.eocontrol.EOFaulting;
 import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
@@ -21,7 +24,9 @@ import er.erxtest.model.Paycheck;
 import er.erxtest.model.Role;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOAccessUtilities;
+import er.extensions.eof.ERXEOAccessUtilities.DatabaseContextOperation;
 import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.foundation.ERXAssert;
 import er.extensions.qualifiers.ERXKeyValueQualifier;
 
 
@@ -86,6 +91,64 @@ public class ERXTestUtilities {
 	}
 	
 	/**
+	 * @param eo
+	 * @param relationshipName
+	 * @return the EODatabaseContext/EODatabase toMany snapshot array for a toMany relationship on eo.
+	 */
+	public static NSArray snapshotArrayForRelationshipInObject(EOEnterpriseObject object, final String relationshipName) {
+	    final EOEditingContext ec = object.editingContext();
+	    EOEntity entity = EOUtilities.entityForObject(ec, object);
+
+        final EOGlobalID gid = ec.globalIDForObject(object);
+        String modelName = entity.model().name();
+        final EODatabaseContext dbc = EOUtilities.databaseContextForModelNamed(ec, modelName);
+
+        NSArray toManySnapshot = ERXEOAccessUtilities.executeDatabaseContextOperation(dbc, 2,
+                new DatabaseContextOperation<NSArray>() {
+                    public NSArray execute(EODatabaseContext databaseContext) throws Exception {
+                        // Search for and return the snapshot
+                        return dbc.snapshotForSourceGlobalID(gid, relationshipName, ec.fetchTimestamp());
+                    }
+                });
+        return toManySnapshot;
+	}
+	
+    /**
+     * @param eo
+     * @return the EODatabaseContext/EODatabase snapshot for eo.
+     */
+    public static NSDictionary snapshotForObject(EOEnterpriseObject object) {
+        final EOEditingContext ec = object.editingContext();
+        EOEntity entity = EOUtilities.entityForObject(ec, object);
+
+        final EOGlobalID gid = ec.globalIDForObject(object);
+        String modelName = entity.model().name();
+        final EODatabaseContext dbc = EOUtilities.databaseContextForModelNamed(ec, modelName);
+
+        NSDictionary snapshot = ERXEOAccessUtilities.executeDatabaseContextOperation(dbc, 2,
+                new DatabaseContextOperation<NSDictionary>() {
+                    public NSDictionary execute(EODatabaseContext databaseContext) throws Exception {
+                        // Search for and return the snapshot
+                        return dbc.snapshotForGlobalID(gid, ec.fetchTimestamp());
+                    }
+                });
+        return snapshot;
+    }
+    
+	/**
+	 * Quick utility to be DRY in unit tests.
+	 * 
+	 * @param object
+	 */
+	public static void fireFault(Object object) {
+	    if (EOFaultHandler.isFault(object)) {
+            EOFaulting fault = (EOFaulting)object;
+            fault.faultHandler().completeInitializationOfObject(fault);
+            ERXAssert.POST.isFalse(EOFaultHandler.isFault(object));
+        }
+	}
+	
+	/**
 	 * Useful for clearing the database before a unit test.
 	 */
 	public static void deleteAllObjects() {
@@ -112,7 +175,7 @@ public class ERXTestUtilities {
 		EOEditingContext ec = ERXEC.newEditingContext();
 		ec.lock();
 		try {
-			Company c = ERXEOControlUtilities.createAndInsertObject(ec, Company.class);
+			Company c = (Company) EOUtilities.createAndInsertInstance(ec, Company.ENTITY_NAME);
 			c.setName("Disney World");
 			Employee e1 = c.createEmployeesRelationship();
 			e1.setFirstName("Mickey");
@@ -144,7 +207,7 @@ public class ERXTestUtilities {
 		EOEditingContext ec = ERXEC.newEditingContext();
 		ec.lock();
 		try {
-			Company c = ERXEOControlUtilities.createAndInsertObject(ec, Company.class);
+			Company c = (Company) EOUtilities.createAndInsertInstance(ec, Company.ENTITY_NAME);
 			c.setName("Disney World");
 			ec.saveChanges();
 			return ec.globalIDForObject(c);
