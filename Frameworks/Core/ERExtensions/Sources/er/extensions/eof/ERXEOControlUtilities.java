@@ -13,10 +13,12 @@ import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabase;
 import com.webobjects.eoaccess.EODatabaseContext;
+import com.webobjects.eoaccess.EODatabaseDataSource;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EOObjectNotAvailableException;
+import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOSQLExpressionFactory;
 import com.webobjects.eoaccess.EOUtilities;
@@ -58,6 +60,7 @@ import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
 
+import er.extensions.eof.ERXEOAccessUtilities.DatabaseContextOperation;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXDictionaryUtilities;
 import er.extensions.foundation.ERXKeyValueCodingUtilities;
@@ -746,6 +749,77 @@ public class ERXEOControlUtilities {
         EOAttribute aggregateAttribute = EOEnterpriseObjectClazz.objectCountUniqueAttribute(attribute);
         return (Integer)_aggregateFunctionWithQualifierAndAggregateAttribute(ec, entityName, qualifier, aggregateAttribute);
     }
+
+	/**
+	 * Counts the objects in a toMany relationship in an effective way.
+	 *
+	 * If the relationship fault has already been fired,
+	 * it just returns the array count. If relationship is a fault, it looks for a relationship snapshot array, and if that
+	 * is present, returns the count of the snapshot array. Finally if it is a fault and no snapshot array
+	 * exists, performs a count in the database.
+	 *
+	 * @param object
+	 *            the EOEnterpriseObject whose relationship is being counted.
+	 * @param relationshipName
+	 *            the name of the relationship being counted.
+	 * @return count of objects in the relationship named
+	 *         <code>relationshipName</code>
+	 */
+	public static Integer objectCountForToManyRelationship(EOEnterpriseObject object, final String relationshipName) {
+		// --- (1) Simple case of a new unsaved object ---
+		// Does not exist in the db, does not have a snapshot in EOdb.
+		if (isNewObject(object)) {
+			NSArray<EOEnterpriseObject> relatedObjects = (NSArray<EOEnterpriseObject>) object.valueForKey(relationshipName);
+			// --- (1) return result
+			return Integer.valueOf(relatedObjects.count());
+		}
+
+		final EOEditingContext ec = object.editingContext();
+		EOEntity entity = ERXEOAccessUtilities.entityForEo(object);
+		EORelationship relationship = entity.relationshipNamed(relationshipName);
+
+		// Fail early with useful message in the event that the key is not a valid toMany relationship key
+		if (!relationship.isToMany()) {
+			throw new IllegalArgumentException("The relationship named '" + relationshipName
+					+ "' on entity named '" + entity.name() +"' is not a toMany relationship!");
+		}
+
+		// Get relationship object which may, or may not, be a fault
+		Object relationshipValue = object.storedValueForKey(relationshipName);
+
+		// --- (2) Case where the relationship fault has already been fired ---
+		if (!EOFaultHandler.isFault(relationshipValue)) {
+			NSArray relatedItems = (NSArray)relationshipValue;
+			// --- (2) return result
+			return Integer.valueOf(relatedItems.count());
+		}
+
+		// --- (3) Case of a fault and a snapshot exists to provide a count
+		final EOGlobalID gid = ec.globalIDForObject(object);
+		String modelName = entity.model().name();
+		final EODatabaseContext dbc = EOUtilities.databaseContextForModelNamed(ec, modelName);
+
+		NSArray toManySnapshot = ERXEOAccessUtilities.executeDatabaseContextOperation(dbc, 2,
+				new DatabaseContextOperation<NSArray>() {
+					public NSArray execute(EODatabaseContext databaseContext) throws Exception {
+						// Search for and return the snapshot
+						return dbc.snapshotForSourceGlobalID(gid, relationshipName, ec.fetchTimestamp());
+					}
+				});
+
+		// Null means that a relationship snapshot array was not found in EODBCtx or EODB.
+		if (toManySnapshot != null) {
+			// --- (3) return result
+			return Integer.valueOf(toManySnapshot.count());
+		}
+
+		// Default case
+		// --- (4) Case where relationship has not been faulted, and no snapshot array exists
+		EOQualifier q = EODatabaseDataSource._qualifierForRelationshipKey(relationshipName, object);
+		// --- (4) return result
+		return objectCountWithQualifier(ec, relationship.destinationEntity().name(), q);
+
+	}
 
     /**
      * Returns the number of objects in the database with the qualifier and counting attribute.  This implementation
