@@ -10,10 +10,19 @@ import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOGlobalID;
+import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
+import er.erxtest.model.Company;
+import er.erxtest.model.Employee;
+import er.erxtest.model.Paycheck;
+import er.erxtest.model.Role;
 import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOAccessUtilities;
+import er.extensions.eof.ERXEOControlUtilities;
+import er.extensions.qualifiers.ERXKeyValueQualifier;
 
 
 public class ERXTestUtilities {
@@ -74,6 +83,74 @@ public class ERXTestUtilities {
 			ec.deleteObject((EOEnterpriseObject)obj);
 		}
 		ec.saveChanges();
+	}
+	
+	/**
+	 * Useful for clearing the database before a unit test.
+	 */
+	public static void deleteAllObjects() {
+		EOEditingContext ec = ERXEC.newEditingContext();
+		// Hacky way to qualify all objects in any entity in ERXTest, assuming pk is always "id"
+		EOQualifier q = new ERXKeyValueQualifier("id", EOQualifier.QualifierOperatorNotEqual, Integer.valueOf(-1));
+		ERXEOAccessUtilities.deleteRowsDescribedByQualifier(ec, Company.ENTITY_NAME, q);
+		ERXEOAccessUtilities.deleteRowsDescribedByQualifier(ec, Employee.ENTITY_NAME, q);
+		ERXEOAccessUtilities.deleteRowsDescribedByQualifier(ec, Paycheck.ENTITY_NAME, q);
+		ERXEOAccessUtilities.deleteRowsDescribedByQualifier(ec, Role.ENTITY_NAME, q);
+		
+		// Join table hacky delete
+		q = new ERXKeyValueQualifier("roleId", EOQualifier.QualifierOperatorNotEqual, Integer.valueOf(-1));
+		ERXEOAccessUtilities.deleteRowsDescribedByQualifier(ec, "EmployeeRole", q);
+	}
+	
+	/**
+	 * Convenience for simple tests.
+	 * 
+	 * @return the gid of the created company having 3 employees.
+	 */
+	public static EOGlobalID createCompanyAnd3Employees() {
+		
+		EOEditingContext ec = ERXEC.newEditingContext();
+		ec.lock();
+		try {
+			Company c = ERXEOControlUtilities.createAndInsertObject(ec, Company.class);
+			c.setName("Disney World");
+			Employee e1 = c.createEmployeesRelationship();
+			e1.setFirstName("Mickey");
+			e1.setLastName("Mouse");
+			e1.setManager(Boolean.FALSE);
+			Employee e2 = c.createEmployeesRelationship();
+			e2.setFirstName("Donald");
+			e2.setLastName("Duck");
+			e2.setManager(Boolean.FALSE);
+			Employee e3 = c.createEmployeesRelationship();
+			e3.setFirstName("Goofy");
+			e3.setLastName("Dog");
+			e3.setManager(Boolean.FALSE);
+			
+			ec.saveChanges();
+			return ec.globalIDForObject(c);
+		} finally {
+			ec.unlock();
+		}
+	}
+	
+	/**
+	 * Convenience for simple tests.
+	 * 
+	 * @return the gid of the created company having zero employees.
+	 */
+	public static EOGlobalID createCompanyAndNoEmployees() {
+		
+		EOEditingContext ec = ERXEC.newEditingContext();
+		ec.lock();
+		try {
+			Company c = ERXEOControlUtilities.createAndInsertObject(ec, Company.class);
+			c.setName("Disney World");
+			ec.saveChanges();
+			return ec.globalIDForObject(c);
+		} finally {
+			ec.unlock();
+		}
 	}
 
 	public static void deleteObjectsWithPrefix(EOEditingContext ec, NSArray<Object> eos) {
