@@ -1,0 +1,9 @@
+#er.migration.migrateAtStartup=true 
+#er.migration.createTablesIfNecessary=true 
+#HotNewModel.MigrationClassPrefix=er.erxtest.migration.ERXTest
+
+# To get migrations to work, the db connection dict must be defined.
+# Still does not work. Just generated from the model for now.
+ERXTest.dbuser=developer
+ERXTest.dbpassword=passw0rd
+ERXTest.URL = jdbc:mysql://localhost/test?capitalizeTypenames=true&useBundledJdbcInfo=true 
