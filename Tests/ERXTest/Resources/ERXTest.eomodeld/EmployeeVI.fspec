@@ -1,0 +1,14 @@
+{
+    plebs = {
+        class = EOFetchSpecification; 
+        entityName = EmployeeVI; 
+        prefetchingRelationshipKeyPaths = (); 
+        qualifier = {
+            class = EOKeyValueQualifier; 
+            key = manager; 
+            selectorName = "isEqualTo:"; 
+            value = 0; 
+        }; 
+        sortOrderings = ({class = EOSortOrdering; key = firstName; selectorName = compareAscending; }); 
+    }; 
+}

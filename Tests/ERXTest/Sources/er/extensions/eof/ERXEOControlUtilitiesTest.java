@@ -5,10 +5,12 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOFaultHandler;
 import com.webobjects.eocontrol.EOFaulting;
+import com.webobjects.eocontrol.EOGenericRecord;
 import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.foundation.NSArray;
@@ -34,22 +36,40 @@ public class ERXEOControlUtilitiesTest extends ERXTestCase {
 		Assert.assertNotNull(co);
 		Assert.assertTrue(ec.insertedObjects().contains(co));
 	}
-	
+
+	public void testRootEntity() {
+		EOEditingContext ec = ERXEC.newEditingContext();
+
+		// using vertical inheritance
+		EOGenericRecord eo1 = (EOGenericRecord)EOUtilities.createAndInsertInstance(ec, "EmployeeVI");
+		assertEquals("Person", ERXEOControlUtilities.rootEntityName(eo1));
+		assertEquals(EOModelGroup.defaultGroup().entityNamed("Person"), ERXEOControlUtilities.rootEntity(eo1));
+
+		// using horizontal inheritance
+		EOGenericRecord eo2 = (EOGenericRecord)EOUtilities.createAndInsertInstance(ec, "EmployeeHI");
+		assertEquals("Person", ERXEOControlUtilities.rootEntityName(eo2));
+		assertEquals(EOModelGroup.defaultGroup().entityNamed("Person"), ERXEOControlUtilities.rootEntity(eo2));
+	}
+
 	/**
-	 * Test case where the object is a new unsaved object.
+	 * Test case where
+	 * <li>the object is a new unsaved object.
 	 */
 	public void testObjectCountForToManyRelationship_NewEO() {
 		EOEditingContext ec = ERXEC.newEditingContext();
 		ec.lock();
 		try {
 			Company c = (Company) EOUtilities.createAndInsertInstance(ec, Company.ENTITY_NAME);
-			
+
 			// No employees
 			Integer count = ERXEOControlUtilities.objectCountForToManyRelationship(c, Company.EMPLOYEES_KEY);
 			assertEquals(0, count.intValue());
 			
+			@SuppressWarnings("unused")
 			Employee e1 = c.createEmployeesRelationship();
+			@SuppressWarnings("unused")
 			Employee e2 = c.createEmployeesRelationship();
+			@SuppressWarnings("unused")
 			Employee e3 = c.createEmployeesRelationship();
 			// Expecting a new object for this call
 			assertTrue(ERXEOControlUtilities.isNewObject(c));
@@ -222,6 +242,4 @@ public class ERXEOControlUtilitiesTest extends ERXTestCase {
 			ec1.unlock();
 		}
 	}
-
-
 }
