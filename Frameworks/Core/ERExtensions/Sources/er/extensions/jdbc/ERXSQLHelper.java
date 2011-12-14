@@ -1313,7 +1313,7 @@ public class ERXSQLHelper {
 		if (sql != null) {
 			char commandSeparatorChar = commandSeparatorChar();
 			Pattern commentPattern = commentPattern();
-			StringBuffer statementBuffer = new StringBuffer();
+			StringBuilder statementBuffer = new StringBuilder();
 			BufferedReader reader = new BufferedReader(new StringReader(sql));
 			boolean inQuotes = false;
 
