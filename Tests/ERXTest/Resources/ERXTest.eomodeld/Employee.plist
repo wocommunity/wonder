@@ -26,6 +26,12 @@
             prototypeName = id; 
         }, 
         {
+            allowsNull = Y; 
+            columnName = departmentID; 
+            name = departmentID; 
+            prototypeName = id; 
+        }, 
+        {
             allowsNull = N; 
             columnName = firstName; 
             name = firstName; 
@@ -58,6 +64,7 @@
         bestSalesTotal, 
         city, 
         companyID, 
+        departmentID, 
         firstName, 
         id, 
         lastName, 
@@ -72,6 +79,7 @@
         bestSalesTotal, 
         city, 
         company, 
+        department, 
         firstName, 
         lastName, 
         manager, 
@@ -91,6 +99,18 @@
             joinSemantic = EOInnerJoin; 
             joins = ({destinationAttribute = id; sourceAttribute = companyID; }); 
             name = company; 
+        }, 
+        {
+            destination = Department; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = departmentID; }); 
+            name = department; 
+            userInfo = {
+                "_EntityModeler" = {
+                    documentation = "While in real life, a department may be mandatory, leave it as an option t-one here since we need an optional t-one somewhere for testing purposes."; 
+                }; 
+            }; 
         }, 
         {
             deleteRule = EODeleteRuleCascade; 
