@@ -766,6 +766,10 @@ public class ERXEOControlUtilities {
 	 */
 	public static Integer objectCountForToManyRelationship(EOEnterpriseObject object, final String relationshipName) {
 
+                final EOEditingContext ec = object.editingContext();
+                EOEntity entity = ERXEOAccessUtilities.entityForEo(object);
+                EORelationship relationship = entity.relationshipNamed(relationshipName);
+
                 // Fail early with useful message in the event that the key is not a valid toMany relationship key
                 if (!relationship.isToMany()) {
                         throw new IllegalArgumentException("The relationship named '" + relationshipName
@@ -779,10 +783,6 @@ public class ERXEOControlUtilities {
 			// --- (1) return result
 			return Integer.valueOf(relatedObjects.count());
 		}
-
-		final EOEditingContext ec = object.editingContext();
-		EOEntity entity = ERXEOAccessUtilities.entityForEo(object);
-		EORelationship relationship = entity.relationshipNamed(relationshipName);
 
 		// Get relationship object which may, or may not, be a fault
 		Object relationshipValue = object.storedValueForKey(relationshipName);
