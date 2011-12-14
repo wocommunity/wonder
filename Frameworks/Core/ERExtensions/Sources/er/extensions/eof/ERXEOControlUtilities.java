@@ -761,37 +761,62 @@ public class ERXEOControlUtilities {
 	 *            the EOEnterpriseObject whose relationship is being counted.
 	 * @param relationshipName
 	 *            the name of the relationship being counted.
-	 * @return count of objects in the relationship named <code>relationshipName</code>
-         * @throws IllegalArgumentException if the relationshipName is not the name of a to-many relationship
+	 * @return count of related objects in the relationship named {@code relationshipName}
+	 * @throws NullPointerException if either {@code object} or {@code relationshipName} are null
+	 * @throws IllegalArgumentException if {@code relationshipName} is not a toMany relationship key 
 	 */
 	public static Integer objectCountForToManyRelationship(EOEnterpriseObject object, final String relationshipName) {
 
-                final EOEditingContext ec = object.editingContext();
-                EOEntity entity = ERXEOAccessUtilities.entityForEo(object);
-                EORelationship relationship = entity.relationshipNamed(relationshipName);
+		try {
+			// --- (1) Simple case of a new unsaved object ---
+			// Does not exist in the db, does not have a snapshot in EOdb.
+			if (isNewObject(object)) {
+				NSArray<EOEnterpriseObject> relatedObjects = (NSArray<EOEnterpriseObject>) object.storedValueForKey(relationshipName);
+				// --- (1) return result
+				return Integer.valueOf(relatedObjects.count());
+			}
 
-                // Fail early with useful message in the event that the key is not a valid toMany relationship key
-                if (!relationship.isToMany()) {
-                        throw new IllegalArgumentException("The relationship named '" + relationshipName
-                                        + "' on entity named '" + entity.name() +"' is not a toMany relationship!");
-                }
+			// Get relationship object which may, or may not, be a fault
+			Object relationshipValue = object.storedValueForKey(relationshipName);
 
-		// --- (1) Simple case of a new unsaved object ---
-		// Does not exist in the db, does not have a snapshot in EOdb.
-		if (isNewObject(object)) {
-			NSArray<EOEnterpriseObject> relatedObjects = (NSArray<EOEnterpriseObject>) object.valueForKey(relationshipName);
-			// --- (1) return result
-			return Integer.valueOf(relatedObjects.count());
+			// --- (2) Case where the relationship fault has already been fired
+			if (!EOFaultHandler.isFault(relationshipValue)) {
+				NSArray relatedItems = (NSArray) relationshipValue;
+				// --- (2) return result
+				return Integer.valueOf(relatedItems.count());
+			}
 		}
+		catch (NullPointerException e) {
+			if (object == null) {
+				NullPointerException e1 = new NullPointerException("object argument cannot be null");
+				e1.initCause(e);
+				throw e1;
+			} else if (relationshipName == null) {
+				NullPointerException e1 = new NullPointerException("relationshipName argument cannot be null");
+				e1.initCause(e);
+				throw e1;
+			}
+			// Otherwise NPE here means the attribute returned null value, indicating it
+			// is not a toMany since a toMany always returns an NSArray object
+			throw new IllegalArgumentException("The attribute named '" + relationshipName + "' in the entity named '" + object.entityName() + "' is not a toMany relationship! Expected an NSArray, but got null.");
+		}
+		catch (ClassCastException e) {
+			// CCE here means the attribute returned some non-null value other than an
+			// NSArray instance value, indicating it is not a toMany
+			throw new IllegalArgumentException("The attribute named '" + relationshipName + "' in the entity named '" + object.entityName() 
+					+ "' is not a toMany relationship! Expected an NSArray, but got a " 
+					+ object.storedValueForKey(relationshipName).getClass().getName(), e);
+		}
+		
+		final EOEditingContext ec = object.editingContext();
+		EOEntity entity = ERXEOAccessUtilities.entityForEo(object);
+		EORelationship relationship = entity.relationshipNamed(relationshipName);
 
-		// Get relationship object which may, or may not, be a fault
-		Object relationshipValue = object.storedValueForKey(relationshipName);
-
-		// --- (2) Case where the relationship fault has already been fired ---
-		if (!EOFaultHandler.isFault(relationshipValue)) {
-			NSArray relatedItems = (NSArray)relationshipValue;
-			// --- (2) return result
-			return Integer.valueOf(relatedItems.count());
+		// Fail in the event that the relationship fault is not a toMany
+		if (!relationship.isToMany()) {
+			// Happens if toOne key used and the to-one is a fault
+			throw new IllegalArgumentException("The attribute named '" + relationshipName
+					+ "' in the entity named '" + object.entityName() +"' is not a toMany relationship!");
 		}
 
 		// --- (3) Case of a fault and a snapshot exists to provide a count
@@ -818,7 +843,6 @@ public class ERXEOControlUtilities {
 		EOQualifier q = EODatabaseDataSource._qualifierForRelationshipKey(relationshipName, object);
 		// --- (4) return result
 		return objectCountWithQualifier(ec, relationship.destinationEntity().name(), q);
-
 	}
 
     /**
