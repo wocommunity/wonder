@@ -1,5 +1,6 @@
 package er.erxtest;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -17,6 +18,7 @@ import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSTimestamp;
 
 import er.erxtest.model.Company;
 import er.erxtest.model.Employee;
@@ -189,6 +191,14 @@ public class ERXTestUtilities {
 			e3.setFirstName("Goofy");
 			e3.setLastName("Dog");
 			e3.setManager(Boolean.FALSE);
+			
+			// Give Mickey a paycheck
+			Paycheck p = (Paycheck) EOUtilities.createAndInsertInstance(ec, Paycheck.ENTITY_NAME);
+			p.setAmount(BigDecimal.valueOf(12345.67));
+			p.setCashed(Boolean.FALSE);
+			p.setPaymentDate(new NSTimestamp());
+			
+			p.setEmployeeRelationship(e1);
 			
 			ec.saveChanges();
 			return ec.globalIDForObject(c);
