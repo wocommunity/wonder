@@ -242,4 +242,114 @@ public class ERXEOControlUtilitiesTest extends ERXTestCase {
 			ec1.unlock();
 		}
 	}
+
+	/**
+	 * Test obvious invalid arguments.
+	 */
+	public void testObjectCountForToManyRelationship_BadArgumentsFailure() {
+		// Setup
+		EOGlobalID cGid = ERXTestUtilities.createCompanyAnd3Employees();
+
+		EOEditingContext ec = ERXEC.newEditingContext();
+		ec.lock();
+		try {
+
+			// Test using null eo
+			Integer count;
+
+			try {
+				// Company is null
+				count = ERXEOControlUtilities.objectCountForToManyRelationship(null, Employee.COMPANY_KEY);
+			} catch (NullPointerException exception) {
+				assertEquals("object argument cannot be null", exception.getMessage());
+			}
+
+			// Test using a key that is not a toMany on a new object
+			Employee e = (Employee) EOUtilities.createAndInsertInstance(ec, Employee.ENTITY_NAME);
+
+			try {
+				// key is null
+				count = ERXEOControlUtilities.objectCountForToManyRelationship(e, null);
+			} catch (NullPointerException exception) {
+				assertEquals("relationshipName argument cannot be null", exception.getMessage());
+			}
+
+			try {
+				// Company is null
+				count = ERXEOControlUtilities.objectCountForToManyRelationship(e, Employee.COMPANY_KEY);
+			} catch (IllegalArgumentException exception) {
+				assertEquals(
+						"The attribute named 'company' in the entity named 'Employee' is not a toMany relationship! Expected an NSArray, but got null.",
+						exception.getMessage());
+			}
+
+			Company c = (Company) EOUtilities.createAndInsertInstance(ec, Company.ENTITY_NAME);
+			e.setCompanyRelationship(c);
+
+			try {
+				// Company is not null
+				count = ERXEOControlUtilities.objectCountForToManyRelationship(e, Employee.COMPANY_KEY);
+			} catch (IllegalArgumentException exception) {
+				assertEquals(
+						"The attribute named 'company' in the entity named 'Employee' is not a toMany relationship! Expected an NSArray, but got a er.erxtest.model.Company",
+						exception.getMessage());
+			}
+
+			// ----------------------------------------------------------
+			// Test using a key that is not a toMany on an existing object
+
+			c = (Company) ec.faultForGlobalID(cGid, ec);
+
+			try {
+				// address1 attribute is null
+				count = ERXEOControlUtilities.objectCountForToManyRelationship(c, Company.ADDRESS1_KEY);
+			} catch (IllegalArgumentException exception) {
+				assertEquals(
+						"The attribute named 'address1' in the entity named 'Company' is not a toMany relationship! Expected an NSArray, but got null.",
+						exception.getMessage());
+			}
+
+			e = c.employees().objectAtIndex(0);
+
+			EOGlobalID eGid = ec.globalIDForObject(e);
+			try {
+				// Company is not null
+				count = ERXEOControlUtilities.objectCountForToManyRelationship(e, Employee.COMPANY_KEY);
+			} catch (IllegalArgumentException exception) {
+				assertEquals(
+						"The attribute named 'company' in the entity named 'Employee' is not a toMany relationship! Expected an NSArray, but got a er.erxtest.model.Company",
+						exception.getMessage());
+			}
+
+			try {
+				// Department to-one is null
+				count = ERXEOControlUtilities.objectCountForToManyRelationship(e, Employee.DEPARTMENT_KEY);
+			} catch (IllegalArgumentException exception) {
+				assertEquals(
+						"The attribute named 'department' in the entity named 'Employee' is not a toMany relationship! Expected an NSArray, but got null.",
+						exception.getMessage());
+			}
+
+			// Test failure where key is to-one fault
+			ec.revert();
+			ec.invalidateAllObjects();
+
+			e = (Employee) ec.faultForGlobalID(eGid, ec);
+			assertTrue(EOFaultHandler.isFault(e.storedValueForKey(Employee.COMPANY_KEY)));
+			try {
+				// Company is a to-one fault
+				count = ERXEOControlUtilities.objectCountForToManyRelationship(e, Employee.COMPANY_KEY);
+			} catch (IllegalArgumentException exception) {
+				assertEquals(
+						"The attribute named 'company' in the entity named 'Employee' is not a toMany relationship!",
+						exception.getMessage());
+			}
+
+		} finally {
+			ec.unlock();
+		}
+	}
+
+
 }
+
