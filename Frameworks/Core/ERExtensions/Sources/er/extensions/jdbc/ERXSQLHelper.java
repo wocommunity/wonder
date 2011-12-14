@@ -1332,6 +1332,7 @@ public class ERXSQLHelper {
 					// Determine if the line ends inside a single quoted string
 					int length = nextLine.length();
 					char ch = 0;
+					char prev = 0;
 					for (int i = 0; i < length; i++) {
 						ch = nextLine.charAt(i);
 						// Determine if we are in a quoted string, but ignore escaped apostrophes, e.g. 'Mike\'s Code' 
@@ -1341,9 +1342,14 @@ public class ERXSQLHelper {
 						else if (ch == '\'') {
 							inQuotes = !inQuotes;
 						}
+						else if (ch == '-' && prev == '-' && !inQuotes) {
+							statementBuffer.deleteCharAt(statementBuffer.length() - 1);
+							break;
+						}
 						if (inQuotes || ch != commandSeparatorChar) {
 							statementBuffer.append(ch);
 						}
+						prev = ch;
 					}
 
 					// If we are not in a quoted string, either this is the end of the command or we need to 
