@@ -19,13 +19,11 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorChannel;
-import com.webobjects.eoaccess.EOAdaptorOperation;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabase;
 import com.webobjects.eoaccess.EODatabaseChannel;
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
-import com.webobjects.eoaccess.EOGeneralAdaptorException;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOQualifierSQLGeneration;
 import com.webobjects.eoaccess.EORelationship;
@@ -47,10 +45,8 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation.NSTimestamp;
-import com.webobjects.foundation.NSValidation;
 import com.webobjects.foundation._NSUtilities;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
-import com.webobjects.jdbcadaptor.JDBCAdaptorException;
 import com.webobjects.jdbcadaptor.JDBCPlugIn;
 
 import er.extensions.eof.ERXConstant;
@@ -60,7 +56,6 @@ import er.extensions.eof.ERXModelGroup;
 import er.extensions.eof.qualifiers.ERXFullTextQualifier;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
-import er.extensions.validation.ERXValidationFactory;
 
 /**
  * ERXSQLHelper provides support for additional database-vender-specific
@@ -548,7 +543,7 @@ public class ERXSQLHelper {
 		}
 		else {
 			NSMutableArray<EOAttribute> rawRowAttributes = new NSMutableArray<EOAttribute>();
-			for (String rawRowKeyPath : (NSArray<String>) fetchSpec.rawRowKeyPaths()) {
+			for (String rawRowKeyPath : fetchSpec.rawRowKeyPaths()) {
 				rawRowAttributes.addObject(entity.anyAttributeNamed(rawRowKeyPath));
 			}
 			attributes = rawRowAttributes.immutableClone();
