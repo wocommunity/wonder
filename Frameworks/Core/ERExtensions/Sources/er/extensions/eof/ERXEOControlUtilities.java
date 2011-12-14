@@ -305,9 +305,10 @@ public class ERXEOControlUtilities {
     /**
      * Creates an enterprise object for the given entity
      * name by first looking up the class description
-     * of the entity to create the enterprise object.
-     * The object is then inserted into the editing context
-     * and returned.
+     * of the entity to create the enterprise object and
+     * then adding values from the dictionary. The object is
+     * then inserted into the editing context and returned.
+     *
      * @param editingContext editingContext to insert the created object into
      * @param entityName name of the entity to be created.
      * @param objectInfo dictionary of values pushed onto the object
@@ -464,15 +465,14 @@ public class ERXEOControlUtilities {
      * @param ec editing context, only used to determine the entity
      * @param entityName name of the entity, only used to determine the entity
      * @param eoqualifier to construct the fetch spec with
-     * @param sortOrderings array of sort orderings to sort the result set
-     *		with.
+     * @param sortOrderings array of sort orderings to sort the result set with.
      * @param additionalKeys array of additional key paths to construct the
      *		raw rows key paths to fetch.
      * @return fetch specification that can be used to fetch primary keys for
      * 		a given qualifier and sort orderings.
      */
     @SuppressWarnings("unchecked")
-	public static EOFetchSpecification primaryKeyFetchSpecificationForEntity(EOEditingContext ec,
+    public static EOFetchSpecification primaryKeyFetchSpecificationForEntity(EOEditingContext ec,
                                                                       String entityName,
                                                                       EOQualifier eoqualifier,
                                                                       NSArray<EOSortOrdering> sortOrderings,
@@ -489,7 +489,7 @@ public class ERXEOControlUtilities {
     }
     
     /**
-    * Fetches an array of primary keys matching a given qualifier
+     * Fetches an array of primary keys matching a given qualifier
      * and sorted with a given array of sort orderings.
      * @param ec editing context to fetch into
      * @param entityName name of the entity
@@ -553,17 +553,17 @@ public class ERXEOControlUtilities {
      * Fetches an enterprise object based on a given primary key value.
      * This method has an advantage over the standard EOUtilities method
      * in that you can specify prefetching key paths as well as refreshing
-     * the snapshot of the given object
+     * the snapshot of the given object.
      * @param ec editing context to fetch into
      * @param entityName name of the entity
      * @param primaryKeyValue primary key value. Compound primary keys are given as NSDictionaries.
-     * @param prefetchingKeyPaths key paths to fetch off of the eo
+     * @param prefetchingKeyPaths key paths to prefetch for the eo
      * @param refreshRefetchedObjects if true, the object will be refetched and refreshed
      * @param throwIfMissing if true, an exception is thrown for a missing object
      * @return enterprise object matching the given value or null if none is foudn
      * @throws IllegalStateException if the entity has a compound key and only one key is provided or 
      * if more than one object is found matching the value.
-     * @throws EOObjectNotAvailableException if throwIfMissing is true and 
+     * @throws EOObjectNotAvailableException if throwIfMissing is true and the object is missing
      */    
     @SuppressWarnings("unchecked")
     public static EOEnterpriseObject objectWithPrimaryKeyValue(EOEditingContext ec,
@@ -733,10 +733,9 @@ public class ERXEOControlUtilities {
 
     /**
      * Returns the number of unique objects matching the given
-     * qualifier for a given entity name. Implementation
-     * wise this method will generate the correct sql to only
-     * perform a count, i.e. all of the objects wouldn't be
-     * pulled into memory.
+     * qualifier for a given entity name. This method will generate
+     * the correct sql to perform a count and not to fetch the objects.
+     *
      * @param ec editing context to use for the count qualification
      * @param entityName name of the entity to fetch
      * @param qualifier to find the matching objects
@@ -762,10 +761,17 @@ public class ERXEOControlUtilities {
 	 *            the EOEnterpriseObject whose relationship is being counted.
 	 * @param relationshipName
 	 *            the name of the relationship being counted.
-	 * @return count of objects in the relationship named
-	 *         <code>relationshipName</code>
+	 * @return count of objects in the relationship named <code>relationshipName</code>
+         * @throws IllegalArgumentException if the relationshipName is not the name of a to-many relationship
 	 */
 	public static Integer objectCountForToManyRelationship(EOEnterpriseObject object, final String relationshipName) {
+
+                // Fail early with useful message in the event that the key is not a valid toMany relationship key
+                if (!relationship.isToMany()) {
+                        throw new IllegalArgumentException("The relationship named '" + relationshipName
+                                        + "' on entity named '" + entity.name() +"' is not a toMany relationship!");
+                }
+
 		// --- (1) Simple case of a new unsaved object ---
 		// Does not exist in the db, does not have a snapshot in EOdb.
 		if (isNewObject(object)) {
@@ -777,12 +783,6 @@ public class ERXEOControlUtilities {
 		final EOEditingContext ec = object.editingContext();
 		EOEntity entity = ERXEOAccessUtilities.entityForEo(object);
 		EORelationship relationship = entity.relationshipNamed(relationshipName);
-
-		// Fail early with useful message in the event that the key is not a valid toMany relationship key
-		if (!relationship.isToMany()) {
-			throw new IllegalArgumentException("The relationship named '" + relationshipName
-					+ "' on entity named '" + entity.name() +"' is not a toMany relationship!");
-		}
 
 		// Get relationship object which may, or may not, be a fault
 		Object relationshipValue = object.storedValueForKey(relationshipName);
@@ -1060,8 +1060,8 @@ public class ERXEOControlUtilities {
     /**
      * Fetches a shared enterprise object for a given fetch
      * specification from the default shared editing context.
-     * @param fetchSpec name of the fetch specification on the
-     *		shared object.
+     *
+     * @param fetch specification on the shared object
      * @param entityName name of the shared entity
      * @return the shared enterprise object fetch by the fetch spec named.
      */
@@ -1069,6 +1069,14 @@ public class ERXEOControlUtilities {
         return EOUtilities.objectWithFetchSpecificationAndBindings(EOSharedEditingContext.defaultSharedEditingContext(), entityName, fetchSpec, null);
     }
 
+    /**
+     * Fetches a shared enterprise object from the default shared editing context
+     * given the name of a fetch specification.
+     *
+     * @param fetchSpec name of the fetch specification on the shared object.
+     * @param entityName name of the shared entity
+     * @return the shared enterprise object fetch by the fetch spec named.
+     */
     public static NSArray sharedObjectsWithFetchSpecificationNamed(String entityName, String fetchSpecName) {
         NSArray result = null;
 
@@ -1100,7 +1108,7 @@ public class ERXEOControlUtilities {
      * Gets the shared enterprise object with the given primary
      * from the default shared editing context. This has the
      * advantage of not requiring a roundtrip to the database to
-     * lookup the object. But, it will fetch if the object is not
+     * lookup the object. But it will fetch if the object is not
      * found in the default shared editing context.
      * @param entityName name of the entity
      * @param primaryKey primary key of object to be found
@@ -1117,8 +1125,8 @@ public class ERXEOControlUtilities {
     
     /**
      * Gets a fetch specification from a given entity. If qualifier binding variables
-     * are passed in then the fetchspecification is cloned and the binding variables
-     * are substituted returning a fetch specification that can be used.
+     * are passed in then the fetch specification is cloned and the binding variables
+     * are substituted, returning a fetch specification that can be used.
      * @param entityName name of the entity that the fetch specification is bound to
      * @param fetchSpecificationName name of the fetch specification
      * @param bindings dictionary of qualifier bindings
@@ -1141,9 +1149,8 @@ public class ERXEOControlUtilities {
      * @return new primary key dictionary or null if one of the properties is
      * null or one of the primary key attributes is not a class property.
      */
-
     @SuppressWarnings("unchecked")
-	public static NSDictionary<String, Object> newPrimaryKeyDictionaryForObjectFromClassProperties(EOEnterpriseObject eo) {
+    public static NSDictionary<String, Object> newPrimaryKeyDictionaryForObjectFromClassProperties(EOEnterpriseObject eo) {
         EOEditingContext ec = eo.editingContext();
         EOEntity entity = EOUtilities.entityNamed(ec, eo.entityName());
         NSArray<String> pkAttributes = entity.primaryKeyAttributeNames();
@@ -1169,7 +1176,6 @@ public class ERXEOControlUtilities {
      * {@link #newPrimaryKeyDictionaryForEntityNamed(EOEditingContext, String)}
      * @return new primary key dictionary or null if a failure occured.
      */
-
     public static NSDictionary<String, Object> newPrimaryKeyDictionaryForObject(EOEnterpriseObject eo) {
         NSDictionary<String, Object> dict = newPrimaryKeyDictionaryForObjectFromClassProperties(eo);
         if(dict == null) {
@@ -1195,7 +1201,7 @@ public class ERXEOControlUtilities {
      *		entity.
      */
     @SuppressWarnings("unchecked")
-	public static NSDictionary<String, Object> newPrimaryKeyDictionaryForEntityNamed(EOEditingContext ec, String entityName) {
+    public static NSDictionary<String, Object> newPrimaryKeyDictionaryForEntityNamed(EOEditingContext ec, String entityName) {
         EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
         EODatabaseContext dbContext = EODatabaseContext.registeredDatabaseContextForModel(entity.model(), ec);
         NSDictionary<String, Object> primaryKey = null;
@@ -1289,7 +1295,7 @@ public class ERXEOControlUtilities {
      *		object.
      */
     @SuppressWarnings("unchecked")
-	public static NSDictionary<String, Object> primaryKeyDictionaryForString(EOEditingContext ec, String entityName, String string) {
+    public static NSDictionary<String, Object> primaryKeyDictionaryForString(EOEditingContext ec, String entityName, String string) {
         if(string == null) {
             return null;
         }
@@ -1341,9 +1347,8 @@ public class ERXEOControlUtilities {
      * Returns the decoded global id for an propertylist encoded string representation
      * of the primary key for a given object.
      */
-
     @SuppressWarnings("unchecked")
-	public static EOGlobalID globalIDForString(EOEditingContext ec, String entityName, String string) {
+    public static EOGlobalID globalIDForString(EOEditingContext ec, String entityName, String string) {
     	NSDictionary<String, Object> values = primaryKeyDictionaryForString(ec, entityName, string);
     	EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
         NSArray<String> pks = entity.primaryKeyAttributeNames();
@@ -1363,7 +1368,7 @@ public class ERXEOControlUtilities {
     }
 
     /**
-        * Gives the primary key array for a given enterprise
+     * Gives the primary key array for a given enterprise
      * object. This has the advantage of not firing the
      * fault of the object, unlike the method in
      * {@link com.webobjects.eoaccess.EOUtilities EOUtilities}.
@@ -1386,8 +1391,8 @@ public class ERXEOControlUtilities {
     }
 
     /**
-     * Calls <code>objectsWithQualifierFormat(ec, entityName, qualifierFormat, args, prefetchKeyPaths, includeNewObjects, false)</code>
-     * <p>
+     * Calls <code>objectsWithQualifierFormat(ec, entityName, qualifierFormat, args, prefetchKeyPaths, includeNewObjects, false)</code>.
+     * 
      * That is, passes false for <code>includeNewObjectsInParentEditingContexts</code>.  This method exists
      * to maintain API compatability.
      */
@@ -1426,7 +1431,7 @@ public class ERXEOControlUtilities {
 
     /**
      * Calls objectsWithQualifier(ec, entityName, qualifier, prefetchKeyPaths, includeNewObjects, false).
-     * <p>
+     *
      * That is, passes false for <code>includeNewObjectsInParentEditingContexts</code>.  This method
      * exists to maintain API compatability.
      */
@@ -1717,7 +1722,7 @@ public class ERXEOControlUtilities {
     }
     
     /**
-     * @return the array of objects of the given type that have been inserted into 
+     * Returns the array of objects of the given type that have been inserted into 
      * the editing context and match the given qualifier.  Yes, it's odd that it
      * returns NSMutableArray -- it's an optimization specifically for objectsWithQualifier.
      * Returns an empty array if no objects match.
@@ -1742,7 +1747,7 @@ public class ERXEOControlUtilities {
     }
 
     /**
-     * @return the array of objects of the given type that have been updated in
+     * Returns the array of objects of the given type that have been updated in
      * the editing context and match the given qualifier. Returns an empty array if no objects match.
      * 
      * @param editingContext the editing context to look in
@@ -1765,32 +1770,31 @@ public class ERXEOControlUtilities {
     }
 
     /**
-     * @return the array of objects of the given type that have been deleted from
-     * the editing context and match the given qualifier. Returns an empty array if no objects match.
+     * Return the array of objects of the given type that have been deleted from
+     * the editing context and match the given qualifier.
      * 
      * @param editingContext the editing context to look in
      * @param entityNames the names of the entity to look for
      * @param qualifier the qualifier to restrict by
+     * @return array of objects or an empty array
      */
     public static NSMutableArray deletedObjects(EOEditingContext editingContext, NSArray<String> entityNames, EOQualifier qualifier) {
       NSMutableArray result = new NSMutableArray();
       NSDictionary deletedObjects = ERXArrayUtilities.arrayGroupedByKeyPath(editingContext.deletedObjects(), "entityName");
       for (String entityName : entityNames) {
-	      NSArray deletedObjectsForEntity = (NSArray) deletedObjects.objectForKey(entityName);
-	      if (deletedObjectsForEntity != null && deletedObjectsForEntity.count() > 0) {
-	        NSArray inMemory = EOQualifier.filteredArrayWithQualifier(deletedObjectsForEntity, qualifier);
-	        if (inMemory.count() > 0) {
-		        if (inMemory.count() > 0) {
-		        	result.addObjectsFromArray(inMemory);
-		        }
-	        }
-	      }
+        NSArray deletedObjectsForEntity = (NSArray) deletedObjects.objectForKey(entityName);
+        if (deletedObjectsForEntity != null && deletedObjectsForEntity.count() > 0) {
+          NSArray inMemory = EOQualifier.filteredArrayWithQualifier(deletedObjectsForEntity, qualifier);
+          if (inMemory.count() > 0) {
+            result.addObjectsFromArray(inMemory);
+          }
+        }
       }
       return result;
     }
 
-    /** faults every EO in the qualifiers into the specified editingContext. This is important for 
-     * in memory filtering and eo comparision
+    /** Faults every EO in the qualifiers into the specified editingContext. This is important for 
+     * in memory filtering and eo comparision.
      * @param ec
      * @param q
      */
@@ -1822,7 +1826,7 @@ public class ERXEOControlUtilities {
         
     }
 
-    /** returns a NSArray containing EOGlobalIDs from the provided eos.
+    /** Returns a NSArray containing EOGlobalIDs from the provided eos.
      * @param eos the NSArray of EOEnterpriseObjects
      * @return a NSArray of EOGlobalIDs
      */
@@ -1865,7 +1869,7 @@ public class ERXEOControlUtilities {
         return result != null ? result : NSArray.EmptyArray;
     }
 
-    /** returns a NSArray containing EOEnterpriseObjects (actually faults...) for the provided EOGlobalIDs.
+    /** Returns a NSArray containing EOEnterpriseObjects (actually faults...) for the provided EOGlobalIDs.
      * @param ec the EOEditingContext in which the EOEnterpriseObjects should be faulted
      * @param gids the EOGlobalIDs
      * @return a NSArray of EOEnterpriseObjects
@@ -2386,7 +2390,7 @@ public class ERXEOControlUtilities {
 	}
 
 	/**
-	 * Convinience method which passes <code>null</code> for
+	 * Convenience method which passes <code>null</code> for
 	 * <code>entityName</code>.
 	 * 
 	 * @param eo
@@ -2403,7 +2407,7 @@ public class ERXEOControlUtilities {
 	}
 
 	/**
-	 * Convinience method which passes <code>null</code> for
+	 * Convenience method which passes <code>null</code> for
 	 * <code>restrictingQualifier</code> and <code>entityName</code>.
 	 * 
 	 * @param eo
@@ -2417,7 +2421,7 @@ public class ERXEOControlUtilities {
 	}
 	
 	/**
-	 * Convinience method which passes <code>null</code> for
+	 * Convenience method which passes <code>null</code> for
 	 * <code>restrictingQualifier</code>.
 	 * 
 	 * @param eo
@@ -2597,5 +2601,4 @@ public class ERXEOControlUtilities {
 		}
 
 	}
-
 }
