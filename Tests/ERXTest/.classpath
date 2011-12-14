@@ -6,7 +6,6 @@
 	<classpathentry exported="true" kind="con" path="WOFramework/ERPrototypes"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaWOExtensions"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/FrontBasePlugIn"/>
-	<classpathentry kind="con" path="WOFramework/MySQLPlugIn"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/PostgresqlPlugIn"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaEOAccess"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaEOControl"/>
@@ -21,6 +20,5 @@
 	<classpathentry kind="con" path="WOFramework/JavaEOProject"/>
 	<classpathentry kind="con" path="WOFramework/JavaDTWGeneration"/>
 	<classpathentry kind="con" path="WOFramework/ERChronic"/>
-	<classpathentry kind="lib" path="Libraries/mysql-connector-java-5.1.13-bin.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

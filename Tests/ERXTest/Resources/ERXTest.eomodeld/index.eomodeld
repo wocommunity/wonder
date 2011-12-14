@@ -1,11 +1,6 @@
 {
     EOModelVersion = "2.1"; 
     adaptorName = JDBC; 
-    connectionDictionary = {
-        URL = "jdbc:mysql://localhost/test?capitalizeTypenames=true&useBundledJdbcInfo=true"; 
-        password = passw0rd; 
-        username = developer; 
-    }; 
     entities = (
         {className = "er.erxtest.model.Company"; name = Company; }, 
         {className = "er.erxtest.model.Department"; name = Department; }, 
@@ -17,20 +12,4 @@
         {className = EOGenericRecord; name = Person; }, 
         {className = "er.erxtest.model.Role"; name = Role; }
     ); 
-    userInfo = {
-        "_EntityModeler" = {
-            activeDatabaseConfigName = MySQL; 
-            databaseConfigs = {
-                MySQL = {
-                    adaptorName = JDBC; 
-                    connectionDictionary = {
-                        URL = "jdbc:mysql://localhost/test?capitalizeTypenames=true&useBundledJdbcInfo=true"; 
-                        password = passw0rd; 
-                        username = developer; 
-                    }; 
-                    prototypeEntityName = EOJDBCMySQLPrototypes; 
-                }; 
-            }; 
-        }; 
-    }; 
 }
