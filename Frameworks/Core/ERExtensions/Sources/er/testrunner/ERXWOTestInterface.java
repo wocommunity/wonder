@@ -192,11 +192,11 @@ public class ERXWOTestInterface extends WOComponent implements ERXTestListener {
     }
 
     public void appendToResponse(WOResponse r, WOContext c) {
-    	if (session().objectForKey("ERXLog4JConfiguration.enabled") != null) {
+    	if (session().objectForKey("ERXWOTestInterface.enabled") != null) {
     		super.appendToResponse(r, c);
     	}
     	else {
-    		r.appendContentString("please use the ERXDirectAction log4jAction to login first!");
+    		r.appendContentString("please use the ERXDirectAction testAction to login first!");
     	}
     }
 }
