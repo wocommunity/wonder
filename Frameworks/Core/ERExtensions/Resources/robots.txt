@@ -37,6 +37,7 @@ bdfetch
 bigbrother
 bigbrother
 bimbot
+bingbot
 bjaaland
 blackwidow
 blindekuh
