@@ -87,6 +87,7 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
 
 			attachment.setS3Location(bucket, key);
 
+			attachment.setConfigurationName(configurationName);
 			String s3Path = attachment.queryStringAuthGenerator().makeBareURL(bucket, key);
 			attachment.setS3Path(s3Path);
 
