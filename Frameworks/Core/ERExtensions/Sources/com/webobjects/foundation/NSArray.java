@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
 
+import er.extensions.eof.ERXKey;
+
 /**
  * NSArray re-implementation to support JDK 1.5 templates. Use with
  * <pre>
@@ -1072,5 +1074,23 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 			}
 			throw NSForwardException._runtimeExceptionForThrowable(e);
 		}
+	}
+	
+	/**
+	 * Type-safe KVC getter.
+	 * @param erxKey
+	 * @return an Object of the type defined by the ERXKey
+	 */
+	public <T> T valueForKeyPath(ERXKey erxKey) {
+		return (T) valueForKeyPath(erxKey.key());
+	}
+	
+	/**
+	 * Type-safe KVC getter.
+	 * @param erxKey
+	 * @return an Object of the type defined by the ERXKey
+	 */
+	public <T> T valueForKey(ERXKey erxKey) {
+		return (T) valueForKey(erxKey.key());
 	}
 }
