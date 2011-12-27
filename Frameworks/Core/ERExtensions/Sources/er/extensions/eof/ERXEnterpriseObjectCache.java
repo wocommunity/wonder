@@ -18,6 +18,7 @@ import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
 
+import er.extensions.appserver.ERXApplication;
 import er.extensions.foundation.ERXExpiringCache;
 import er.extensions.foundation.ERXSelectorUtilities;
 
@@ -86,6 +87,11 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     /** If <code>true</code>, object that have not been saved yet are found by the cache.    */
     private boolean _returnUnsavedObjects;
     
+    /** If <code>false</code>, the cache is not allowed to fetch values as migrations may not have been processed yet.
+     * @see ERXApplication#ApplicationDidFinishInitializationNotification
+     */
+    private boolean _applicationDidFinishInitialization;
+    
     /**
      * Creates the cache for the given entity name and the given keypath. No
      * timeout value is used.
@@ -153,6 +159,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
         _qualifier = qualifier;
         _resetOnChange = true; // MS: for backwards compatibility
         _fetchInitialValues = true; // MS: for backwards compatibility
+        _applicationDidFinishInitialization = false;
         start();
     }
 
@@ -198,6 +205,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
         _timeout = timeout;
         _qualifier = qualifier;
         _returnUnsavedObjects = shouldReturnUnsavedObjects;
+        _applicationDidFinishInitialization = false;
         setRetainObjects(shouldRetainObjects);
         setResetOnChange(false);
         setFetchInitialValues(shouldFetchInitialValues);
@@ -210,8 +218,13 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
 	 * @see #stop()
      */
 	public void start() {
+		// Catch this to disable caching before application did finish to start (and most importantly processed migrations)
+		NSSelector selector = ERXSelectorUtilities.notificationSelector("enableFetchingOfInitialValues");
+		NSNotificationCenter.defaultCenter().addObserver(this, selector, 
+		        ERXApplication.ApplicationDidFinishInitializationNotification, null);
+		
 		// Catch this to update the cache when an object is changed
-		NSSelector selector = ERXSelectorUtilities.notificationSelector("editingContextDidSaveChanges");
+		selector = ERXSelectorUtilities.notificationSelector("editingContextDidSaveChanges");
         NSNotificationCenter.defaultCenter().addObserver(this, selector, 
                 EOEditingContext.EditingContextDidSaveChangesNotification, null);
         
@@ -230,6 +243,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
 	 * @see #start()
      */
 	public void stop() {
+		NSNotificationCenter.defaultCenter().removeObserver(this, ERXApplication.ApplicationDidFinishInitializationNotification, null);
 		NSNotificationCenter.defaultCenter().removeObserver(this, EOEditingContext.EditingContextDidSaveChangesNotification, null);
 		NSNotificationCenter.defaultCenter().removeObserver(this, ERXEnterpriseObjectCache.ClearCachesNotification, null);
     	_cache.stopBackgroundExpiration();
@@ -295,7 +309,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      */
     public void editingContextDidSaveChanges(NSNotification n) {
         EOEditingContext ec = (EOEditingContext) n.object();
-        if(ec.parentObjectStore() instanceof EOObjectStoreCoordinator) {
+        if(_applicationDidFinishInitialization && ec.parentObjectStore() instanceof EOObjectStoreCoordinator) {
         	NSArray<T> releventsInsertedEOs = relevantChanges(n.userInfo(), EOEditingContext.InsertedKey);
         	NSArray<T> releventsUpdatedEOs = relevantChanges(n.userInfo(), EOEditingContext.UpdatedKey);
         	NSArray<T> releventsDeletedEOs = relevantChanges(n.userInfo(), EOEditingContext.DeletedKey);
@@ -330,6 +344,15 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     	if(n.object() == null || entityName().equals(n.object())) {
     		reset();
     	}
+    }
+    
+    /**
+    * Handler for the ApplicationDidFinishInitializationNotification notification. Enables the fetching of initial
+    * values and such ensure that any migrations have been processed before.
+    * @param n notification that is fired in ERXApplication.finishInitialization
+    */
+    public void enableFetchingOfInitialValues(NSNotification n) {
+        _applicationDidFinishInitialization = true;
     }
     
     /**
