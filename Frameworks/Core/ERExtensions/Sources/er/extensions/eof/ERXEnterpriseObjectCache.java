@@ -23,7 +23,7 @@ import er.extensions.foundation.ERXExpiringCache;
 import er.extensions.foundation.ERXSelectorUtilities;
 
 /**
- * Caches instances of one entity by a given key(path).  Typically you'd have an "identifier" property 
+ * Caches instances of one entity by a given key(path). Typically you'd have an "identifier" property 
  * and you'd fetch values by:<code><pre>
  * ERXEnterpriseObjectCache&lt;HelpText&gt; helpTextCache = new ERXEnterpriseObjectCache&lt;HelpText&gt;("HelpText", "pageConfiguration");
  * ...
@@ -32,22 +32,22 @@ import er.extensions.foundation.ERXSelectorUtilities;
  * 
  * You can supply a timeout after which individual objects (or all objects if fetchInitialValues
  * is <code>true</code>) get cleared and re-fetched. This implementation can cache either only the global IDs, 
- * or the global ID and a copy of the actual object.  Caching the actual object ensures that the snapshot stays around
+ * or the global ID and a copy of the actual object. Caching the actual object ensures that the snapshot stays around
  * and thus prevent additional trips to the database.
  * 
  * Listens to EOEditingContextDidSaveChanges notifications to track changes to objects in the cache and ClearCachesNotification 
- * for  messages to purge the cache.
+ * for messages to purge the cache.
  * @author ak inspired by a class from Dominik Westner
  * @param <T> the type of EOEnterpriseObject in this cache
  */
 public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
 	
 	/** Other code can send this notification if it needs to have this cache discard all of the
-	 * objects that it has.  The object in the notification is the name of the EOEntity to discard cache for.
+	 * objects that it has. The object in the notification is the name of the EOEntity to discard cache for.
 	 */
     public static String ClearCachesNotification = "ERXEnterpriseObjectCache.ClearCaches";
     
-    protected static final EOGlobalID NO_GID_MARKER= new EOTemporaryGlobalID();
+    protected static final EOGlobalID NO_GID_MARKER = new EOTemporaryGlobalID();
     
     /** Name of the EOEntity to cache. */
     private String _entityName;
@@ -58,16 +58,16 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     /** EOQualifier restricting which instances are stored in this cache */
     private EOQualifier _qualifier;
     
-    /** Actual cache implementation.  */
+    /** Actual cache implementation. */
     private ERXExpiringCache<Object, EORecord<T>> _cache;
     
     /** Time to live in milliseconds for an object in this cache. */
     private long _timeout;
     
-    /** The time when the objects in this cache were fetched.  Only used if _fetchInitialValues is <code>true</code>. */
+    /** The time when the objects in this cache were fetched. Only used if _fetchInitialValues is <code>true</code>. */
     private long _fetchTime;
     
-    /** <code>true</code> if this cache should be populated when created, <code>false</code> for lazy population.  */
+    /** <code>true</code> if this cache should be populated when created, <code>false</code> for lazy population. */
     private boolean _fetchInitialValues;
     
     /** If <code>true</code>, just a single editing context instance is used for this cache instance. */
@@ -79,12 +79,12 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     /** If <code>true</code>, this cache retains an instance of each object so that the snapshot does not expire. */
     private boolean _retainObjects;
     
-    /** If <code>true</code>, the entire cache contents are discarded when any object in it changes.  Probably not what you want.
+    /** If <code>true</code>, the entire cache contents are discarded when any object in it changes. Probably not what you want.
      * @see #editingContextDidSaveChanges(NSNotification)
      */
     private boolean _resetOnChange;
     
-    /** If <code>true</code>, object that have not been saved yet are found by the cache.    */
+    /** If <code>true</code>, object that have not been saved yet are found by the cache. */
     private boolean _returnUnsavedObjects;
     
     /** If <code>false</code>, the cache is not allowed to fetch values as migrations may not have been processed yet.
@@ -139,9 +139,9 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     }
     
     /**
-     * Creates the cache for the given entity, keypath and timeout value in milliseconds.  Only objects
+     * Creates the cache for the given entity, keypath and timeout value in milliseconds. Only objects
      * that match qualifier are stored in the cache. Note that _resetOnChange (and _fetchInitialValues) are
-     * both <code>true</code> after this constructor.  You will almost certainly want to call
+     * both <code>true</code> after this constructor. You will almost certainly want to call
      * <code>setResetOnChange(false);</code>.
  	 *
  	 * @see #setResetOnChange(boolean)
@@ -164,7 +164,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     }
 
     /**
-     * Creates the cache for the given entity, keypath and timeout value in milliseconds.  Only objects
+     * Creates the cache for the given entity, keypath and timeout value in milliseconds. Only objects
      * that match qualifier are stored in the cache.
  	 *
  	 * @see #setResetOnChange(boolean)
@@ -183,7 +183,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     }
 
     /**
-     * Creates the cache for the given entity, keypath and timeout value in milliseconds.  Only objects
+     * Creates the cache for the given entity, keypath and timeout value in milliseconds. Only objects
      * that match qualifier are stored in the cache.
  	 *
  	 * @see #setResetOnChange(boolean)
@@ -213,7 +213,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     }
     
     /**
-     * Call this to re-start cache updating after stop() is called.  This is automatically called from the
+     * Call this to re-start cache updating after stop() is called. This is automatically called from the
      * constructor so unless you call stop(), there is no need to ever call this method.
 	 * @see #stop()
      */
@@ -228,7 +228,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
         NSNotificationCenter.defaultCenter().addObserver(this, selector, 
                 EOEditingContext.EditingContextDidSaveChangesNotification, null);
         
-        // Catch this for custom  notifications that the cache should be discarded
+        // Catch this for custom notifications that the cache should be discarded
         selector = ERXSelectorUtilities.notificationSelector("clearCaches");
         NSNotificationCenter.defaultCenter().addObserver(this, selector, 
                 ERXEnterpriseObjectCache.ClearCachesNotification, null);
@@ -250,8 +250,8 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
 	}
     
 	/**
-	 * Returns the editing context that holds object that are in this cache.  If _reuseEditingContext is false, 
-	 * a new editing context instance is returned each time.  The returned editing context is autolocking.
+	 * Returns the editing context that holds object that are in this cache. If _reuseEditingContext is false, 
+	 * a new editing context instance is returned each time. The returned editing context is autolocking.
 	 * 
 	 * @return the editing context that holds object that are in this cache
 	 */
@@ -297,7 +297,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     }
     
     /**
-     * Handler for the editingContextDidSaveChanges notification.  If <code>_resetOnChange</code> is <code>true</code>, this
+     * Handler for the editingContextDidSaveChanges notification. If <code>_resetOnChange</code> is <code>true</code>, this
      * calls reset() to discard the entire cache contents if an object of the given entity has been changed.  
      * If <code>_resetOnChange</code> is <code>false</code>, this updates the cache to reflect the added/changed/removed
      * objects.
@@ -370,7 +370,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     }
 
     /**
-     * Returns the backing cache. If the cache is to old, it is cleared first.  The cache is created if needed,
+     * Returns the backing cache. If the cache is to old, it is cleared first. The cache is created if needed,
      * and the contents populated if <code>_fetchInitialValues</code>.
      * @return the backing cache
      */
@@ -399,7 +399,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     }
     
     /**
-     * Created an EORecord instance representing eo using its EOGlobalID.  If <code>_retainObjects</code>, 
+     * Created an EORecord instance representing eo using its EOGlobalID. If <code>_retainObjects</code>, 
      * this will also include an instance of the EO to ensure that the snapshot is retained.
      *
      * @param gid EOGlobalID of eo
@@ -430,7 +430,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
             _fetchTime = System.currentTimeMillis();
             ERXEC ec = editingContext();
             ec.setCoalesceAutoLocks(false);
-            // The other methods are synchronized on cache and then lock the EC.  If we do it backwards, 
+            // The other methods are synchronized on cache and then lock the EC. If we do it backwards, 
             // we can get a deadly embrace.
     		synchronized (cache()) {
 	            ec.lock();	// Prevents lock churn
@@ -523,7 +523,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     /**
      * Updates an object in the cache (adding if not present) with the given key if it 
      * matches the qualifier, or if there is no qualifier. The object can be null, in which 
-     * case is it removed from the cache.  If <code>qualifier()</code> is not null, the object
+     * case is it removed from the cache. If <code>qualifier()</code> is not null, the object
      * is removed from the cache if it does not match the qualifier.
      * @param eo eo the object to update in the cache
      * @param key the key of the object to update
@@ -569,8 +569,8 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     }
     
     /**
-     * Retrieves an EO that matches the given key.  If there is no match in the
-     * cache, it attempts to fetch the missing objects.  Null is returned if no matching
+     * Retrieves an EO that matches the given key. If there is no match in the
+     * cache, it attempts to fetch the missing objects. Null is returned if no matching
      * object can be fetched. 
      * @param ec editing context to get the object into
      * @param key key value under which the object is registered 
@@ -581,11 +581,11 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     }
     
     /**
-     * Retrieves an EO that matches the given key.  If there is no match in the
+     * Retrieves an EO that matches the given key. If there is no match in the
      * cache, and <code>_returnUnsavedObjects</code> is <code>true</code>,
-     * it attempts to find and return an unsaved object.  If there is still no match
+     * it attempts to find and return an unsaved object. If there is still no match
      * and <code>handleUnsuccessfulQueryForKey</code> is <code>true</code>,
-     * it attempts to fetch the missing objects.  Null is returned if 
+     * it attempts to fetch the missing objects. Null is returned if 
      * <code>handleUnsuccessfulQueryForKey</code> is <code>false</code> or no matching
      * object can be fetched. 
      * @param ec editing context to get the object into
@@ -689,7 +689,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     protected void handleUnsuccessfullQueryForKey(Object key) {
     	if (!_fetchInitialValues) {
     		ERXExpiringCache cache = cache();
-            // The other methods are synchronized on cache and then lock the EC.  If we do it backwards, 
+            // The other methods are synchronized on cache and then lock the EC. If we do it backwards, 
             // we can get a deadly embrace.
     		synchronized (cache) {
                 ERXEC editingContext = editingContext();
@@ -777,7 +777,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     
     /**
      * Sets whether or not the initial values should be fetched into
-     * this cache or whether it should lazy load.  If turned off, resetOnChange
+     * this cache or whether it should lazy load. If turned off, resetOnChange
      * will also be turned off.
      * 
      * @param fetchInitialValues if true, the initial values are fetched into the cache
@@ -802,7 +802,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
 	}
     
     /**
-     * Sets whether or not the cached EO's themselves are retained versus just their GID's.  If set,
+     * Sets whether or not the cached EO's themselves are retained versus just their GID's. If set,
      * this implicitly sets reuseEditingContext to true.
      *   
      * @param retainObjects if true, the EO's are retained
@@ -818,7 +818,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
 	}
     
     /**
-     * Sets whether or not the cache is cleared when any change occurs.  This requires fetching initial values (and will
+     * Sets whether or not the cache is cleared when any change occurs. This requires fetching initial values (and will
      * be turned on if you set this)
      * 
      * @param resetOnChange if true, the cache will clear on changes; if false, the cache will update on changes
