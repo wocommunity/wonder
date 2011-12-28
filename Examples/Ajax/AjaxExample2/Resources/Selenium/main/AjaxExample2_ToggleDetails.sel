@@ -3,6 +3,11 @@ Test for Toggle Details page
 |open|/|
 
 |click|link=Toggle Details|
-|pause|1200|
-|verifyTextPresent|Mike Schrag|
+|waitForTextPresent|Mike Schrag|
+
+|click|link=profile|
+|waitForTextPresent|804.555.1212|
+
+|click|link=profile|
+|waitForTextNotPresent|804.555.1212|
 

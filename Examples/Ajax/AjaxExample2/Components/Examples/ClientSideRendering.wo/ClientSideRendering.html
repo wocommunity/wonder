@@ -13,7 +13,8 @@
 	<div id = "peopleContainer">
 		
 	</div>
-	
+
+<!-- The addClassName(person.name) is only so that Selenium can locate the string for a click(). -->
 <script>
 function refreshPeople() {
 	var family = json.proxy.family();
@@ -22,13 +23,11 @@ function refreshPeople() {
 	family.nsarray.each(function(person, index) {
 		var li = document.createElement('li');
 		if (person != null) {
-			var nameSpan = document.createElement('span');
-			nameSpan.addClassName('name');
+			var nameSpan = document.createElement('span').addClassName('name').addClassName(person.name);
 			nameSpan.innerHTML = person.name;
 			li.appendChild(nameSpan);
 			
-			var votesSpan = document.createElement('span');
-			votesSpan.addClassName('votes');
+			var votesSpan = document.createElement('span').addClassName('votes');
 			votesSpan.innerHTML = person.votes;
 			li.appendChild(votesSpan);
 		}
