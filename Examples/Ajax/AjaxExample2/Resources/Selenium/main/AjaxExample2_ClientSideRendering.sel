@@ -3,6 +3,19 @@ Test for Client-Side Rendering page
 |open|/|
 
 |click|link=Client-side Rendering|
-|pause|1200|
-|verifyTextPresent|Click to Vote|
+|waitForTextPresent|Click to Vote|
+|verifyTextPresent|Mike|
+|verifyTextPresent|Kirsten|
+|verifyTextPresent|Andrew|
 
+|click|//span[contains(@class, 'Mike')]|
+|click|//span[contains(@class, 'Mike')]|
+|click|//span[contains(@class, 'Mike')]|
+|waitForTextPresent|3|
+
+|click|//span[contains(@class, 'Kirsten')]|
+|click|//span[contains(@class, 'Kirsten')]|
+|waitForTextPresent|2|
+
+|click|//span[contains(@class, 'Andrew')]|
+|waitForTextPresent|1|
