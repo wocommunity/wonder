@@ -108,7 +108,8 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 
 	private Boolean _autoSubmit;
 	private Boolean _allowCancel;
-	
+	private Boolean _clearUploadProgressOnSuccess;
+
 	public boolean testFlag = false;
 	public enum UploadState { DORMANT, STARTED, INPROGRESS, CANCELED, FAILED, SUCCEEDED, FINISHED }
 	public UploadState state = UploadState.DORMANT;
@@ -223,7 +224,8 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
     	NSMutableArray<String> _options = new NSMutableArray<String>(String.format("refreshtime:%s", refreshTime()));
     	_options.addObject("autosubmit:" + autoSubmit());
     	_options.addObject("allowcancel:" + valueForBinding(Keys.allowCancel));
-    	
+      _options.add("clearUploadProgressOnSuccess:" + clearUploadProgressOnSuccess());
+
     	String startedFunction = (String)this.valueForBinding(Keys.startedFunction);
     	if (startedFunction != null) _options.addObject(String.format("startedFunction:%s", startedFunction));
     	
@@ -239,9 +241,9 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
     	String succeededFunction = (String)this.valueForBinding(Keys.succeededFunction);
     	if (succeededFunction != null) _options.addObject(String.format("succeededFunction:%s", succeededFunction));
     	
-    	String clearedFunction = (String)this.valueForBinding(Keys.clearedFunction);
-    	if (clearedFunction != null) _options.addObject(String.format("clearedFunction:%s", clearedFunction));
-    	
+      String clearedFunction = (String)this.valueForBinding(Keys.clearedFunction);
+      if (clearedFunction != null) _options.addObject(String.format("clearedFunction:%s", clearedFunction));
+      
     	return _options;
     }
     
@@ -588,13 +590,21 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 * 
 	 * @return value for 'autoSubmit' binding
 	 */
-	public Boolean autoSubmit() {
-		if (_autoSubmit == null) {
-			_autoSubmit = ERXValueUtilities.BooleanValueWithDefault(valueForBinding(Keys.autoSubmit), Boolean.TRUE);
-		}
-		return _autoSubmit;
-	}
-	
+  public Boolean autoSubmit() {
+    if (_autoSubmit == null) {
+      _autoSubmit = ERXValueUtilities.BooleanValueWithDefault(valueForBinding(Keys.autoSubmit), Boolean.TRUE);
+    }
+    return _autoSubmit;
+  }
+  
+  public Boolean clearUploadProgressOnSuccess() {
+    if (_clearUploadProgressOnSuccess == null) {
+      _clearUploadProgressOnSuccess = ERXValueUtilities.BooleanValueWithDefault(valueForBinding(Keys.clearUploadProgressOnSuccess), Boolean.FALSE);
+      System.out.println("clearUploadProgressOnSuccess: " + _clearUploadProgressOnSuccess);
+    }
+    return _clearUploadProgressOnSuccess;
+  }
+  
 	public Boolean allowCancel() {
 		if (_allowCancel == null) {
 			_allowCancel = ERXValueUtilities.BooleanValueWithDefault(valueForBinding(Keys.allowCancel), Boolean.FALSE);
