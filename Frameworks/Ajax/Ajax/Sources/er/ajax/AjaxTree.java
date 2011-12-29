@@ -1,5 +1,7 @@
 package er.ajax;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -44,6 +46,7 @@ import er.extensions.appserver.ERXWOContext;
  * @author mschrag
  */
 public class AjaxTree extends WOComponent {
+	private static final Logger log = Logger.getLogger(AjaxTree.class);
 	private AjaxTreeModel _treeModel;
 
 	private NSArray _nodes;
@@ -150,6 +153,7 @@ public class AjaxTree extends WOComponent {
 			else {
 				level = _level;
 			}
+			
 			if (_level > level) {
 				_closeCount = (_level - level);
 			}
@@ -159,6 +163,9 @@ public class AjaxTree extends WOComponent {
 			_lastParent = parent;
 			_level = level;
 			_item = item;
+			if (log.isDebugEnabled()) {
+				log.debug("AjaxTree item at level "+_level+" with close count "+_closeCount+": "+_item);
+			}
 			setValueForBinding(item, "item");
 		}
 	}
@@ -177,6 +184,23 @@ public class AjaxTree extends WOComponent {
 
 	public int _closeCount() {
 		return _closeCount;
+	}
+	
+	/**
+	 * Count of /ul /li close elements at the end of the tree.
+	 * If showRoot is "false" all displayed nodes have an internal "level" one greater than is really displayed,
+	 * e.g. the first level after the root has a level of "1", but is displayed at level "0". CloseCount is used
+	 * to close any open elements. When showRoot is "false" the jump from level 1 to level 0 at the end would compute 
+	 * to a closeCount of 1, but the last close is not necessary (as we are really displaying at level 0) and must be 
+	 * avoided.     
+	 * @return the last close count
+	 */
+	public int lastCloseCount()	{
+		if (AjaxUtils.booleanValueForBinding("showRoot", true, _keyAssociations, parent()) || _closeCount < 1) {
+			return _closeCount;
+		}
+
+		return _closeCount - 1;
 	}
 
 	public void setTreeModel(AjaxTreeModel treeModel) {
