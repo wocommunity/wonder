@@ -1,5 +1,6 @@
 package er.rest;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections.ListUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOResponse;
@@ -25,6 +27,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.eof.ERXKey;
 import er.extensions.eof.ERXKeyFilter;
+import er.extensions.foundation.ERXArrayUtilities;
 import er.rest.format.ERXRestFormat;
 import er.rest.format.ERXWORestResponse;
 import er.rest.format.IERXRestWriter;
@@ -872,6 +875,13 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 
 		List childrenObjects = (List) key.valueInObject(obj);
 		ERXKeyFilter childFilter = keyFilter._filterForKey(key);
+		if (childFilter.isDistinct()) {
+			if (childrenObjects instanceof NSArray) {
+				childrenObjects = ERXArrayUtilities.distinct((NSArray<?>) childrenObjects);
+			} else {
+				childrenObjects = new ArrayList(new HashSet(childrenObjects));
+			}
+		}
         NSArray<EOSortOrdering> sortOrderings = childFilter.sortOrderings();
         if (sortOrderings != null && sortOrderings.count() > 0) {
                 if (childrenObjects instanceof NSArray) {
