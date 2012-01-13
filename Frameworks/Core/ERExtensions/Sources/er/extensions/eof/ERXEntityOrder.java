@@ -209,7 +209,7 @@ public abstract class ERXEntityOrder
     /**
      * @return list of all entities in all models in the model group
      */
-    public NSArray allEntities() {
+    public NSArray<EOEntity> allEntities() {
         return allEntities;
     }
 
