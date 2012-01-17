@@ -1077,20 +1077,22 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 	}
 	
 	/**
-	 * Type-safe KVC getter.
+	 * A type-safe wrapper for {@link #valueForKeyPath(String)}.
+	 * @param <T> the type of elements in the returned NSArray
 	 * @param erxKey
-	 * @return an Object of the type defined by the ERXKey
+	 * @return an NSArray of T objects.
 	 */
-	public <T> T valueForKeyPath(ERXKey erxKey) {
-		return (T) valueForKeyPath(erxKey.key());
+	public <T> NSArray<T> valueForKeyPath(ERXKey<T> erxKey) {
+		return (NSArray<T>) valueForKeyPath(erxKey.key());
 	}
 	
 	/**
-	 * Type-safe KVC getter.
+	 * A type-safe wrapper for {@link #valueForKey(String)}
+	 * @param <T> the type of elements in the returned NSArray
 	 * @param erxKey
-	 * @return an Object of the type defined by the ERXKey
+	 * @return an NSArray of T objects.
 	 */
-	public <T> T valueForKey(ERXKey erxKey) {
-		return (T) valueForKey(erxKey.key());
+	public <T> NSArray<T> valueForKey(ERXKey<T> erxKey) {
+		return (NSArray<T>) valueForKey(erxKey.key());
 	}
 }
