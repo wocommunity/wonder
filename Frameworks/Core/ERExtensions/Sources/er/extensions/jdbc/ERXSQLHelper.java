@@ -1912,6 +1912,14 @@ public class ERXSQLHelper {
 			}
 			return "CREATE UNIQUE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
 		}
+		
+		/**
+		 * @see er.extensions.jdbc.ERXSQLHelper#sqlForGetNextValFromSequencedNamed(java.lang.String)
+		 */
+		@Override
+		protected String sqlForGetNextValFromSequencedNamed(String sequenceName) {
+			return "VALUES (NEXT VALUE FOR " + sequenceName + ")"; 
+		}
 
 		@Override
 		public String migrationTableName() {
