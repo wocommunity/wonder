@@ -182,16 +182,20 @@ public class ERXBasicBrowser extends ERXBrowser {
         _isIPad = _platform.equals(IPAD);
         _isUnknownPlatform = _platform.equals(UNKNOWN_PLATFORM);
         
-        String majorVersion = normalizedVersion;
-        if (majorVersion.indexOf(".") != -1) {
-        	majorVersion = majorVersion.substring(0, majorVersion.indexOf("."));
+        if (_version.equals(UNKNOWN_VERSION)) {
+        	_majorVersion = Integer.valueOf(0);
+        } else {
+	        String majorVersion = normalizedVersion;
+	        if (majorVersion.indexOf(".") != -1) {
+	        	majorVersion = majorVersion.substring(0, majorVersion.indexOf("."));
+	        }
+	        try {
+	        	_majorVersion = Integer.valueOf(majorVersion);
+	        } catch (NumberFormatException e) {
+	        	log.info("could not determine major version from '" + majorVersion + "'", e);
+	        	throw e;
+			}
         }
-        try {
-        	_majorVersion = Integer.valueOf(majorVersion);
-        } catch (NumberFormatException e) {
-        	log.info("could not determine major version from '" + majorVersion + "'", e);
-        	throw e;
-		}
     }
 
     public String browserName() {

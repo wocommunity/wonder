@@ -1208,7 +1208,12 @@ var AjaxUploadClient = Class.create({
 		    	this.options.succeededFunction(this.id);
 			if (this.options.finishedFunction)
 				this.options.finishedFunction(this.id);
-			$('AFUClearButton' + this.id).show();
+			if (this.options.clearUploadProgressOnSuccess) {
+				$('AFUFileObject' + this.id).hide();
+				$('AFUSelectFileButtonWrapper' + this.id).show();
+			} else {
+				$('AFUClearButton' + this.id).show();
+			}
 			this.previousState = this.STATE.SUCCEEDED;
 			break;
 		case this.STATE.FINISHED:

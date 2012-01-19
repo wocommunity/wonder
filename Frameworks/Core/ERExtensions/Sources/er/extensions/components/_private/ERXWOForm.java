@@ -22,6 +22,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WOConstantValueAssociation;
 import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding.UnknownKeyException;
 import com.webobjects.foundation._NSDictionaryUtilities;
 
 import er.extensions.appserver.ERXBrowser;
@@ -334,14 +335,26 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 	}
 
 	protected void _clearFormName(WOContext context, String previousFormName, boolean wasInForm) {
-		if (_shouldAppendFormTags(context, wasInForm)) {
-			String formName = _formName(context);
-			if (formName != null) {
-				ERXWOContext.contextDictionary().removeObjectForKey("formName");
+		try {
+			if (_shouldAppendFormTags(context, wasInForm)) {
+				String formName = _formName(context);
+				if (formName != null) {
+					ERXWOContext.contextDictionary().removeObjectForKey("formName");
+				}
 			}
-		}
-		if (previousFormName != null) {
-			ERXWOContext.contextDictionary().setObjectForKey(previousFormName, "formName");
+			if (previousFormName != null) {
+				ERXWOContext.contextDictionary().setObjectForKey(previousFormName, "formName");
+			}
+		} catch(UnknownKeyException e) {
+			/*
+			 * _clearFormName is called in the finally block of takeValues, invoke, and append.
+			 * If anything in those methods throws an exception, the form is often no longer
+			 * the context.component.  When that happens, this exception is thrown when _formName
+			 * or _disabled is called, and has the effect of swallowing the *real* exception.
+			 * Since I know of no case where this is actually the legitimate exception, I'm
+			 * swallowing this one instead. -RG
+			 */
+			log.error("UnknownKeyException thrown in ERXWOForm as a result of other exception.");
 		}
 	}
 

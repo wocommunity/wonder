@@ -15,11 +15,14 @@ import com.webobjects.appserver._private.WOProjectBundle;
 import com.webobjects.appserver._private.WOURLEncoder;
 import com.webobjects.appserver._private.WOURLValuedElementData;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSPathUtilities;
 import com.webobjects.foundation._NSStringUtilities;
 import com.webobjects.foundation._NSThreadsafeMutableDictionary;
 
+import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXMutableURL;
 import er.extensions.foundation.ERXProperties;
 
@@ -39,6 +42,7 @@ public class ERXResourceManager extends WOResourceManager {
 	private WODeployedBundle TheAppProjectBundle;
 	private _NSThreadsafeMutableDictionary _urlValuedElementsData;
 	private IVersionManager _versionManager;
+	private static final NSDictionary<String, String> _mimeTypes = _additionalMimeTypes();
 
 	protected ERXResourceManager() {
 		TheAppProjectBundle = _initAppBundle();
@@ -361,5 +365,25 @@ public class ERXResourceManager extends WOResourceManager {
 			}
 			return resourceUrl;
 		}
+	}
+	
+	/**
+	 * Overridden to supply additional mime types that are not present in the
+	 * JavaWebObjects framework.
+	 */
+	public String contentTypeForResourceNamed(String aResourcePath) {
+		String aPathExtension = NSPathUtilities.pathExtension(aResourcePath);
+		if(aPathExtension != null && aPathExtension.length() != 0) {
+			String mime = _mimeTypes.objectForKey(aPathExtension.toLowerCase());
+			if(mime != null) {
+				return mime;
+			}
+		}
+		return super.contentTypeForResourceNamed(aResourcePath);
+	}
+	
+	private static NSDictionary<String, String> _additionalMimeTypes() {
+		NSDictionary<String, String> plist = (NSDictionary<String, String>)ERXFileUtilities.readPropertyListFromFileInFramework("AdditionalMimeTypes.plist", "ERExtensions", null, "UTF-8");
+		return plist;
 	}
 }

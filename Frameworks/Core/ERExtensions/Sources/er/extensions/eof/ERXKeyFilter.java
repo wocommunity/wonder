@@ -35,6 +35,18 @@ import com.webobjects.foundation.NSSet;
  * reminderAuthorFilter.exclude(Author.HUGE_RELATIONSHIP);
  * </pre>
  * 
+ * <p>
+ * For keys representing to-many relationships you can set a distinct flag
+ * if you want to filter that relationship to return only distinct objects.
+ * For this you can either pass in a key with the unique operator of
+ * ERXArrayUtilities or explicitly set the flag:
+ * <pre>
+ * ERXKeyFilter companyFilter = ERXKeyFilter.filterWithAttribtues();
+ * companyFilter.include(ERXKey.unique(Company.EMPLOYEES));
+ * companyFilter.include(Company.CLIENTS).setDistinct(true);
+ * </pre>
+ * </p>
+ * 
  * more method comments to come ...
  * 
  * @author mschrag
@@ -61,6 +73,7 @@ public class ERXKeyFilter {
 	private boolean _deduplicationEnabled;
 	private boolean _anonymousUpdateEnabled;
 	private boolean _unknownKeyIgnored;
+	private boolean _distinct;
 
 	/**
 	 * Creates a new ERXKeyFilter.
@@ -413,6 +426,13 @@ public class ERXKeyFilter {
 		ERXKeyFilter filter;
 		String keyPath = key.key();
 		int dotIndex = keyPath.indexOf('.');
+		boolean useUnique = false;
+		if (dotIndex != -1 && keyPath.startsWith("@unique.")) {
+			keyPath = keyPath.substring(dotIndex + 1);
+			dotIndex = keyPath.indexOf('.');
+			useUnique = true;
+			key = new ERXKey(keyPath);
+		}
 		if (dotIndex == -1) {
 			if (existingFilter != null) {
 				_includes.put(key, existingFilter);
@@ -427,9 +447,11 @@ public class ERXKeyFilter {
 					_excludes.removeObject(key);
 				}
 			}
+			filter.setDistinct(useUnique);
 		}
 		else {
 			ERXKeyFilter subFilter = include(new ERXKey(keyPath.substring(0, dotIndex)), null);
+			subFilter.setDistinct(useUnique);
 			filter = subFilter.include(new ERXKey(keyPath.substring(dotIndex + 1)), existingFilter);
 		}
 		return filter;
@@ -560,6 +582,27 @@ public class ERXKeyFilter {
 	public boolean isUnknownKeyIgnored() {
 		return _unknownKeyIgnored;
 	}
+    
+    /**
+	 * Sets whether or not a to-many relationship should return only distinct objects.
+	 * 
+	 * @param distinct if <code>true</code> and the key represents a to-many only distinct objects
+	 * 		  will be returned
+	 * @return this filter
+	 */
+	public ERXKeyFilter setDistinct(boolean distinct) {
+		_distinct = distinct;
+		return this;
+	}
+	
+	/**
+	 * Returns whether or not a to-many relationship should return only distinct objects.
+	 * 
+	 * @return whether or not a to-many relationship should return only distinct objects.
+	 */
+	public boolean isDistinct() {
+		return _distinct;
+	}
 
 	/**
 	 * Returns whether or not the given key (of the given type, if known) is included in this filter.
@@ -599,6 +642,9 @@ public class ERXKeyFilter {
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("[ERXKeyFilter: base=" + _base);
+		if (_distinct) {
+			sb.append("; distinct");
+		}
 		if (!_includes.isEmpty()) {
 			sb.append("; includes=" + _includes + "");
 		}
