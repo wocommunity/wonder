@@ -109,7 +109,7 @@ public class ERXRestUtils {
 				formattedValue = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date(timestamp.getTime()));
 				formattedValue = formattedValue.substring(0, formattedValue.length()-2) + ":" + formattedValue.substring(formattedValue.length()-2);  				
 			} else {
-				formattedValue = formattedValue = ERXRestUtils.timestampFormat(false, context).format(timestamp);
+				formattedValue = ERXRestUtils.timestampFormat(false, context).format(timestamp);
 			}
 		}
 		else if (value instanceof Date) {
