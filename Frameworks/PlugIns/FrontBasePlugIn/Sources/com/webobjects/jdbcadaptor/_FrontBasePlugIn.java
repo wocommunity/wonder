@@ -42,6 +42,7 @@ import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSRange;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimeZone;
+import com.webobjects.foundation._NSUtilities;
 
 /**
  * This is the wo5 java runtime plugin for FrontBase.
@@ -1657,17 +1658,14 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 				case FB_DayTime: {
 					return escapedString(obj);
 				}
-				case FB_BLOB: {
-					if (obj instanceof String)
-						if (((String) obj).length() == 27 && ((String) obj).startsWith("@"))
-							return (String) obj;
-					if (_lobList == null)
-						_lobList = new NSMutableArray();
-					_lobList.addObject(eoattribute);
-					_lobList.addObject(obj);
-					return "NULL";
-				}
+				case FB_BLOB:
 				case FB_CLOB: {
+					if (!(obj instanceof String) && eoattribute.valueFactoryMethod() != null) {
+						Class valueClass = _NSUtilities.classWithName(eoattribute.className());
+						if (valueClass.isAssignableFrom(obj.getClass())) {
+							obj = eoattribute.adaptorValueByConvertingAttributeValue(obj);
+						}
+					}
 					if (obj instanceof String)
 						if (((String) obj).length() == 27 && ((String) obj).startsWith("@"))
 							return (String) obj;
