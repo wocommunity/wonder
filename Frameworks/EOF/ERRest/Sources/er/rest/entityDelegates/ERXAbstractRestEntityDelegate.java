@@ -34,7 +34,9 @@ import er.rest.ERXRestUtils;
  * Provides default implementations of many of the common entity delegate behaviors.
  * 
  * @author mschrag
+ * @deprecated  Will be deleted soon ["personally i'd mark them with a delete into the trashcan" - mschrag]
  */
+@Deprecated
 public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDelegate {
 	/**
 	 * Do nothing by default

@@ -13,7 +13,9 @@ import er.rest.format.IERXRestResponse;
  * IERXRestResponseWriter provides the interface for generating the output of a restful request.
  * 
  * @author mschrag
+ * @deprecated  Will be deleted soon ["personally i'd mark them with a delete into the trashcan" - mschrag]
  */
+@Deprecated
 public interface IERXRestResponseWriter {
 	public static final String REST_PREFIX = "ERXRest.";
 	public static final String DETAILS_PREFIX = ".details";

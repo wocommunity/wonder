@@ -40,7 +40,9 @@ import er.rest.format.IERXRestResponse;
  * </pre>
 
  * @author mschrag
+ * @deprecated  Will be deleted soon ["personally i'd mark them with a delete into the trashcan" - mschrag]
  */
+@Deprecated
 public class ERXXmlRestResponseWriter extends ERXAbstractRestResponseWriter {
 	/**
 	 * Constructs an ERXXmlRestResponseWriter with displayAllProperties = false.

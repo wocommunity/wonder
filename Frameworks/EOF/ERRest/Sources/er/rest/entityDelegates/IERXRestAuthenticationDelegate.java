@@ -10,7 +10,9 @@ package er.rest.entityDelegates;
  * current user to the context. 
  * 
  * @author mschrag
+ * @deprecated  Will be deleted soon ["personally i'd mark them with a delete into the trashcan" - mschrag]
  */
+@Deprecated
 public interface IERXRestAuthenticationDelegate {
 	/**
 	 * Attempt to authenticate the user with the given context.  The

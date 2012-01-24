@@ -132,7 +132,9 @@ import er.rest.ERXRestException;
  * </p>
  * 
  * @author mschrag
+ * @deprecated  Will be deleted soon ["personally i'd mark them with a delete into the trashcan" - mschrag]
  */
+@Deprecated
 public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntityDelegate {
 	private NSMutableSet<String> _viewPropertyNames;
 	private NSMutableSet<String> _updatePropertyNames;

@@ -15,7 +15,9 @@ import er.rest.format.IERXRestResponse;
  * Provides the output methods for generating PList responses to a REST request.
  * 
  * @author mschrag
+ * @deprecated  Will be deleted soon ["personally i'd mark them with a delete into the trashcan" - mschrag]
  */
+@Deprecated
 public class ERXPListRestResponseWriter implements IERXRestResponseWriter {
 	private ERXKeyFilter _filter;
 	private boolean _displayAllProperties;

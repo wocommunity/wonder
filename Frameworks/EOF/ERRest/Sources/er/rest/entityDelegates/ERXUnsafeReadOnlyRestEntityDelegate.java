@@ -18,7 +18,9 @@ import er.rest.ERXRestException;
  * for.
  * 
  * @author mschrag
+ * @deprecated  Will be deleted soon ["personally i'd mark them with a delete into the trashcan" - mschrag]
  */
+@Deprecated
 public class ERXUnsafeReadOnlyRestEntityDelegate extends ERXStandardRestEntityDelegate {
 	private NSMutableSet<String> _initializedEntityNames;
 

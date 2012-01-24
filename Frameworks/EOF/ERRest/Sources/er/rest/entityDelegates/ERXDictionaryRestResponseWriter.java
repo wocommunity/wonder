@@ -21,7 +21,9 @@ import er.rest.format.IERXRestResponse;
  * (json, plist, etc).
  * 
  * @author mschrag
+ * @deprecated  Will be deleted soon ["personally i'd mark them with a delete into the trashcan" - mschrag]
  */
+@Deprecated
 public class ERXDictionaryRestResponseWriter extends ERXAbstractRestResponseWriter {
 	private Stack<Object> _stack;
 
