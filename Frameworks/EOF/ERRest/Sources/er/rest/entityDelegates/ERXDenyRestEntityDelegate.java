@@ -15,7 +15,9 @@ import er.rest.ERXRestRequestNode;
  * throws security exceptions at any attempt to perform an action.
  * 
  * @author mschrag
+ * @deprecated  Will be deleted soon ["personally i'd mark them with a delete into the trashcan" - mschrag]
  */
+@Deprecated
 public class ERXDenyRestEntityDelegate implements IERXRestEntityDelegate {
 	public void initializeEntityNamed(String entityName) {
 		// DO NOTHING

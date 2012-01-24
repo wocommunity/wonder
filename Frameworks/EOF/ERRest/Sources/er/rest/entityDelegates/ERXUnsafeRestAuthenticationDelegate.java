@@ -9,7 +9,9 @@ import er.extensions.appserver.ERXApplication;
  * always return false if ERXApplication.erxApplication().isDevelopmentMode() is false.
  *  
  * @author mschrag
+ * @deprecated  Will be deleted soon ["personally i'd mark them with a delete into the trashcan" - mschrag]
  */
+@Deprecated
 public class ERXUnsafeRestAuthenticationDelegate implements IERXRestAuthenticationDelegate {
 	public boolean authenticate(ERXRestContext context) {
 		boolean developmentMode = ERXApplication.isDevelopmentModeSafe();

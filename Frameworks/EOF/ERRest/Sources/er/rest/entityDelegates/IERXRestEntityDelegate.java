@@ -20,7 +20,9 @@ import er.rest.ERXRestRequestNode;
  * </pre>
  * 
  * @author mschrag
+ * @deprecated  Will be deleted soon ["personally i'd mark them with a delete into the trashcan" - mschrag]
  */
+@Deprecated
 public interface IERXRestEntityDelegate extends IERXRestSecurityDelegate {
 	/**
 	 * Called by the rest delegate for each entity that gets requested. This is called every time, so your entity

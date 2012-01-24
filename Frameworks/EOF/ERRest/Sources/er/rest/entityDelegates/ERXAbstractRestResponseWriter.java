@@ -121,7 +121,9 @@ import er.rest.format.IERXRestResponse;
  * </p>
  * 
  * @author mschrag
+ * @deprecated  Will be deleted soon ["personally i'd mark them with a delete into the trashcan" - mschrag]
  */
+@Deprecated
 public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseWriter {
 	private ERXKeyFilter _filter;
 	private boolean _displayAllProperties;

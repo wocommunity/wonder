@@ -25,7 +25,9 @@ import er.extensions.foundation.ERXProperties;
  * false.
  * 
  * @author mschrag
+ * @deprecated  Will be deleted soon ["personally i'd mark them with a delete into the trashcan" - mschrag]
  */
+@Deprecated
 public class ERXUnsafeRestEntityDelegate extends ERXStandardRestEntityDelegate {
 	private NSMutableSet<String> _initializedEntityNames;
 

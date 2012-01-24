@@ -17,7 +17,9 @@ import er.extensions.eof.ERXEC;
  * level, similar to the session defaultEditingContext.
  * 
  * @author mschrag
+ * @deprecated  Will be deleted soon ["personally i'd mark them with a delete into the trashcan" - mschrag]
  */
+@Deprecated
 public class ERXRestContext implements NSKeyValueCoding, NSKeyValueCoding.ErrorHandling {
 	private WOContext _context;
 	private EOEditingContext _editingContext;

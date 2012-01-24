@@ -15,7 +15,9 @@ import er.rest.format.ERXStringBufferRestResponse;
  * Miscellaneous rest-related utility methods.
  * 
  * @author mschrag
+ * @deprecated  Will be deleted soon ["personally i'd mark them with a delete into the trashcan" - mschrag]
  */
+@Deprecated
 public class ERXRestEntityDelegateUtils {
 	public static EOEntity requiredEntityNamed(EOEditingContext editingContext, String name) {
 		EOEntity entity = EOUtilities.entityNamed(editingContext, name);

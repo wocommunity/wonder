@@ -9,7 +9,9 @@ import er.rest.ERXRestException;
  * IERXRestDelegate provides the core hooks into REST processing.
  *  
  * @author mschrag
+ * @deprecated  Will be deleted soon ["personally i'd mark them with a delete into the trashcan" - mschrag]
  */
+@Deprecated
 public interface IERXRestDelegate {
 
 	/**

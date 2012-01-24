@@ -6,7 +6,9 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 /**
  * Handles allowed actions.
  *
+ * @deprecated  Will be deleted soon ["personally i'd mark them with a delete into the trashcan" - mschrag]
  */
+@Deprecated
 public interface IERXRestSecurityDelegate {
 
 	/**

@@ -7,7 +7,9 @@ import er.rest.ERXRestRequestNode;
  * ERXRestRequest encapsulates the state of a rest request.
  * 
  * @author mschrag
+ * @deprecated  Will be deleted soon ["personally i'd mark them with a delete into the trashcan" - mschrag]
  */
+@Deprecated
 public class ERXRestRequest {
 	private ERXRestKey _key;
 	private ERXRestRequestNode _rootNode;

@@ -19,7 +19,9 @@ import er.rest.ERXRestRequestNode;
  * registering custom IERXRestEntityDelegates for specific entities.
  * 
  * @author mschrag
+ * @deprecated  Will be deleted soon ["personally i'd mark them with a delete into the trashcan" - mschrag]
  */
+@Deprecated
 public class ERXDefaultRestDelegate implements IERXRestDelegate {
 	private NSMutableDictionary<String, String> _entityAliases;
 	private NSMutableDictionary<String, IERXRestEntityDelegate> _entityDelegates;

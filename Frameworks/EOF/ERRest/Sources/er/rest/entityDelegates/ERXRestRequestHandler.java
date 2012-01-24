@@ -252,7 +252,9 @@ import er.rest.format.IERXRestParser;
  * only one-way and read-only on the client.
  * 
  * @author mschrag
+ * @deprecated  Will be deleted soon ["personally i'd mark them with a delete into the trashcan" - mschrag]
  */
+@Deprecated
 public class ERXRestRequestHandler extends WORequestHandler {
 	public static final Logger log = Logger.getLogger(ERXRestRequestHandler.class);
 

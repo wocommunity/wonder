@@ -15,7 +15,9 @@ import er.rest.ERXRestRequestNode;
  * can contain object IDs. An ERXRestKey is basically a doubly-linked list of keypath entries.
  * 
  * @author mschrag
+ * @deprecated  Will be deleted soon ["personally i'd mark them with a delete into the trashcan" - mschrag]
  */
+@Deprecated
 public class ERXRestKey {
 	private ERXRestContext _context;
 	private ERXRestKey _previousKey;
