@@ -222,6 +222,17 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 		}
 
 		@Override
+		public String _columnCreationClauseForAttribute(EOAttribute attribute) {
+			return addCreateClauseForAttribute(attribute).toString();
+		}
+		
+		public StringBuffer addCreateClauseForAttribute(EOAttribute attribute) {
+			EOSQLExpression expression = _expressionForEntity(attribute.entity());
+			expression.addCreateClauseForAttribute(attribute);
+			return new StringBuffer(expression.listString());
+		}
+		
+		@Override
 		public NSArray<EOSQLExpression> _statementsToDropPrimaryKeyConstraintsOnTableNamed(final String tableName) {
 			return new NSArray<EOSQLExpression>(_expressionForString("alter table " + formatTableName(tableName) + " drop primary key"));
 		}
