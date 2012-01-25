@@ -11,6 +11,7 @@ import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOSynchronizationFactory;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
@@ -221,28 +222,50 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 		}
 
 		@Override
-		public NSArray _statementsToDropPrimaryKeyConstraintsOnTableNamed(final String tableName) {
-			return new NSArray(_expressionForString("alter table " + tableName + " drop primary key"));
+		public String _columnCreationClauseForAttribute(EOAttribute attribute) {
+			return addCreateClauseForAttribute(attribute).toString();
+		}
+		
+		public StringBuffer addCreateClauseForAttribute(EOAttribute attribute) {
+			EOSQLExpression expression = _expressionForEntity(attribute.entity());
+			expression.addCreateClauseForAttribute(attribute);
+			return new StringBuffer(expression.listString());
+		}
+		
+		@Override
+		public NSArray<EOSQLExpression> _statementsToDropPrimaryKeyConstraintsOnTableNamed(final String tableName) {
+			return new NSArray<EOSQLExpression>(_expressionForString("alter table " + formatTableName(tableName) + " drop primary key"));
 		}
 
 		@Override
-		public NSArray dropPrimaryKeySupportStatementsForEntityGroups(final NSArray entityGroups) {
+		public NSArray<EOSQLExpression> dropPrimaryKeySupportStatementsForEntityGroups(final NSArray entityGroups) {
 			String pkTable = ((JDBCAdaptor) adaptor()).plugIn().primaryKeyTableName();
-			return new NSArray(_expressionForString("drop table " + pkTable));
+			return new NSArray<EOSQLExpression>(_expressionForString("drop table " + formatTableName(pkTable)));
 		}
 
 		@Override
-		public NSArray dropTableStatementsForEntityGroup(final NSArray entityGroup) {
-			return new NSArray(_expressionForString("drop table " + ((EOEntity) entityGroup.objectAtIndex(0)).externalName()));
+		public NSArray<EOSQLExpression> dropTableStatementsForEntityGroup(final NSArray<EOEntity> entityGroup) {
+			return new NSArray<EOSQLExpression>(_expressionForString("drop table " + formatTableName(entityGroup.objectAtIndex(0).externalName())));
+		}
+		
+		@Override
+		public NSArray<EOSQLExpression> statementsToModifyColumnNullRule(String columnName, String tableName, boolean allowsNull, NSDictionary nsdictionary) {
+			NSArray<EOSQLExpression> statements;
+			if (allowsNull) {
+				statements = new NSArray<EOSQLExpression>(_expressionForString("alter table " + formatTableName(tableName) + " alter column " + formatColumnName(columnName) + " null"));
+			} else {
+				statements = new NSArray<EOSQLExpression>(_expressionForString("alter table " + formatTableName(tableName) + " alter column " + formatColumnName(columnName) + " not null"));
+			}
+			return statements;
 		}
 
-		boolean isPrimaryKeyAttributes(EOEntity entity, NSArray attributes) {
-			NSArray keys = entity.primaryKeyAttributeNames();
+		boolean isPrimaryKeyAttributes(EOEntity entity, NSArray<EOAttribute> attributes) {
+			NSArray<String> keys = entity.primaryKeyAttributeNames();
 			boolean result = attributes.count() == keys.count();
 
 			if (result) {
 				for (int i = 0; i < keys.count(); i++) {
-					if (!(result = keys.indexOfObject(((EOAttribute) attributes.objectAtIndex(i)).name()) != NSArray.NotFound))
+					if (!(result = keys.indexOfObject(attributes.objectAtIndex(i).name()) != NSArray.NotFound))
 						break;
 				}
 			}
@@ -250,7 +273,7 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 		}
 
 		@Override
-		public NSArray foreignKeyConstraintStatementsForRelationship(EORelationship relationship) {
+		public NSArray<EOSQLExpression> foreignKeyConstraintStatementsForRelationship(EORelationship relationship) {
 			if (!relationship.isToMany() && isPrimaryKeyAttributes(relationship.destinationEntity(), relationship.destinationAttributes())) {
 				StringBuffer sql = new StringBuffer();
 				String tableName = relationship.entity().externalName();
@@ -263,7 +286,7 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 				constraint.append(tableName);
 
 				StringBuffer fkSql = new StringBuffer(" FOREIGN KEY (");
-				NSArray attributes = relationship.sourceAttributes();
+				NSArray<EOAttribute> attributes = relationship.sourceAttributes();
 
 				for (int i = 0; i < attributes.count(); i++) {
 					constraint.append("_");
@@ -271,7 +294,7 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 						fkSql.append(", ");
 
 					fkSql.append("\"");
-					String columnName = ((EOAttribute) attributes.objectAtIndex(i)).columnName();
+					String columnName = attributes.objectAtIndex(i).columnName();
 					fkSql.append(columnName.toUpperCase());
 					constraint.append(columnName);
 					fkSql.append("\"");
@@ -294,7 +317,7 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 						fkSql.append(", ");
 
 					fkSql.append("\"");
-					String referencedColumnName = ((EOAttribute) attributes.objectAtIndex(i)).columnName();
+					String referencedColumnName = attributes.objectAtIndex(i).columnName();
 					fkSql.append(referencedColumnName.toUpperCase());
 					constraint.append(referencedColumnName);
 					fkSql.append("\"");
@@ -311,30 +334,33 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 					sql.append(constraint);
 				sql.append(fkSql);
 
-				return new NSArray(_expressionForString(sql.toString()));
+				return new NSArray<EOSQLExpression>(_expressionForString(sql.toString()));
 			}
 			return NSArray.EmptyArray;
 		}
 
 
 		@Override
-		public NSArray primaryKeySupportStatementsForEntityGroups(final NSArray entityGroups) {
+		public NSArray<EOSQLExpression> primaryKeySupportStatementsForEntityGroups(final NSArray entityGroups) {
 			String pkTable = ((JDBCAdaptor) adaptor()).plugIn().primaryKeyTableName();
-			return new NSArray(_expressionForString("create table " + pkTable + " (name char(40) primary key, pk INT)"));
+			return new NSArray<EOSQLExpression>(_expressionForString("create table " + formatTableName(pkTable) + " (name char(40) primary key, pk INT)"));
+		}
+		
+		@Override
+		public NSArray<EOSQLExpression> statementsToRenameColumnNamed(String columnName, String tableName, String newName, NSDictionary nsdictionary) {
+			return new NSArray<EOSQLExpression>(_expressionForString("rename column " + formatTableName(tableName) + "." + formatColumnName(columnName) + " to " + formatColumnName(newName)));
 		}
 
 		@Override
-		public NSArray statementsToInsertColumnForAttribute(final EOAttribute attribute, final NSDictionary options) {
+		public NSArray<EOSQLExpression> statementsToInsertColumnForAttribute(final EOAttribute attribute, final NSDictionary options) {
 			String clause = _columnCreationClauseForAttribute(attribute);
-
-			System.out.println("alter table " + attribute.entity().externalName() + " add column " + clause);
-
-			NSArray result = new NSArray(_expressionForString("alter table " + attribute.entity().externalName() + " add column " + clause));
-
-			System.out.println(result);
-
-			return result;
+			return new NSArray(_expressionForString("alter table " + formatTableName(attribute.entity().externalName()) + " add column " + clause));
 		}
+		
+		@Override
+	    public NSArray<EOSQLExpression> statementsToRenameTableNamed(String tableName, String newName, NSDictionary options) {
+	    	return new NSArray<EOSQLExpression>(_expressionForString("rename table " + formatTableName(tableName) + " to " + formatTableName(newName)));
+	    }
 
 		@Override
 		public boolean supportsSchemaSynchronization() {
