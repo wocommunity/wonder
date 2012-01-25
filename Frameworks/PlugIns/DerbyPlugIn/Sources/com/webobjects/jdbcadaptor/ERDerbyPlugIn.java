@@ -222,19 +222,19 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 		}
 
 		@Override
-		public NSArray _statementsToDropPrimaryKeyConstraintsOnTableNamed(final String tableName) {
-			return new NSArray(_expressionForString("alter table " + tableName + " drop primary key"));
+		public NSArray<EOSQLExpression> _statementsToDropPrimaryKeyConstraintsOnTableNamed(final String tableName) {
+			return new NSArray<EOSQLExpression>(_expressionForString("alter table " + formatTableName(tableName) + " drop primary key"));
 		}
 
 		@Override
-		public NSArray dropPrimaryKeySupportStatementsForEntityGroups(final NSArray entityGroups) {
+		public NSArray<EOSQLExpression> dropPrimaryKeySupportStatementsForEntityGroups(final NSArray entityGroups) {
 			String pkTable = ((JDBCAdaptor) adaptor()).plugIn().primaryKeyTableName();
-			return new NSArray(_expressionForString("drop table " + pkTable));
+			return new NSArray<EOSQLExpression>(_expressionForString("drop table " + formatTableName(pkTable)));
 		}
 
 		@Override
-		public NSArray dropTableStatementsForEntityGroup(final NSArray entityGroup) {
-			return new NSArray(_expressionForString("drop table " + ((EOEntity) entityGroup.objectAtIndex(0)).externalName()));
+		public NSArray<EOSQLExpression> dropTableStatementsForEntityGroup(final NSArray<EOEntity> entityGroup) {
+			return new NSArray<EOSQLExpression>(_expressionForString("drop table " + formatTableName(entityGroup.objectAtIndex(0).externalName())));
 		}
 		
 		@Override
@@ -248,13 +248,13 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 			return statements;
 		}
 
-		boolean isPrimaryKeyAttributes(EOEntity entity, NSArray attributes) {
-			NSArray keys = entity.primaryKeyAttributeNames();
+		boolean isPrimaryKeyAttributes(EOEntity entity, NSArray<EOAttribute> attributes) {
+			NSArray<String> keys = entity.primaryKeyAttributeNames();
 			boolean result = attributes.count() == keys.count();
 
 			if (result) {
 				for (int i = 0; i < keys.count(); i++) {
-					if (!(result = keys.indexOfObject(((EOAttribute) attributes.objectAtIndex(i)).name()) != NSArray.NotFound))
+					if (!(result = keys.indexOfObject(attributes.objectAtIndex(i).name()) != NSArray.NotFound))
 						break;
 				}
 			}
@@ -262,7 +262,7 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 		}
 
 		@Override
-		public NSArray foreignKeyConstraintStatementsForRelationship(EORelationship relationship) {
+		public NSArray<EOSQLExpression> foreignKeyConstraintStatementsForRelationship(EORelationship relationship) {
 			if (!relationship.isToMany() && isPrimaryKeyAttributes(relationship.destinationEntity(), relationship.destinationAttributes())) {
 				StringBuffer sql = new StringBuffer();
 				String tableName = relationship.entity().externalName();
@@ -275,7 +275,7 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 				constraint.append(tableName);
 
 				StringBuffer fkSql = new StringBuffer(" FOREIGN KEY (");
-				NSArray attributes = relationship.sourceAttributes();
+				NSArray<EOAttribute> attributes = relationship.sourceAttributes();
 
 				for (int i = 0; i < attributes.count(); i++) {
 					constraint.append("_");
@@ -283,7 +283,7 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 						fkSql.append(", ");
 
 					fkSql.append("\"");
-					String columnName = ((EOAttribute) attributes.objectAtIndex(i)).columnName();
+					String columnName = attributes.objectAtIndex(i).columnName();
 					fkSql.append(columnName.toUpperCase());
 					constraint.append(columnName);
 					fkSql.append("\"");
@@ -306,7 +306,7 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 						fkSql.append(", ");
 
 					fkSql.append("\"");
-					String referencedColumnName = ((EOAttribute) attributes.objectAtIndex(i)).columnName();
+					String referencedColumnName = attributes.objectAtIndex(i).columnName();
 					fkSql.append(referencedColumnName.toUpperCase());
 					constraint.append(referencedColumnName);
 					fkSql.append("\"");
@@ -323,16 +323,16 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 					sql.append(constraint);
 				sql.append(fkSql);
 
-				return new NSArray(_expressionForString(sql.toString()));
+				return new NSArray<EOSQLExpression>(_expressionForString(sql.toString()));
 			}
 			return NSArray.EmptyArray;
 		}
 
 
 		@Override
-		public NSArray primaryKeySupportStatementsForEntityGroups(final NSArray entityGroups) {
+		public NSArray<EOSQLExpression> primaryKeySupportStatementsForEntityGroups(final NSArray entityGroups) {
 			String pkTable = ((JDBCAdaptor) adaptor()).plugIn().primaryKeyTableName();
-			return new NSArray(_expressionForString("create table " + pkTable + " (name char(40) primary key, pk INT)"));
+			return new NSArray<EOSQLExpression>(_expressionForString("create table " + formatTableName(pkTable) + " (name char(40) primary key, pk INT)"));
 		}
 		
 		@Override
@@ -341,16 +341,9 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 		}
 
 		@Override
-		public NSArray statementsToInsertColumnForAttribute(final EOAttribute attribute, final NSDictionary options) {
+		public NSArray<EOSQLExpression> statementsToInsertColumnForAttribute(final EOAttribute attribute, final NSDictionary options) {
 			String clause = _columnCreationClauseForAttribute(attribute);
-
-			System.out.println("alter table " + attribute.entity().externalName() + " add column " + clause);
-
-			NSArray result = new NSArray(_expressionForString("alter table " + attribute.entity().externalName() + " add column " + clause));
-
-			System.out.println(result);
-
-			return result;
+			return new NSArray(_expressionForString("alter table " + formatTableName(attribute.entity().externalName()) + " add column " + clause));
 		}
 		
 		@Override
