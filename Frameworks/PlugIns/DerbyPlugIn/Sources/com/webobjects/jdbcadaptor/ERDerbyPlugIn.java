@@ -11,6 +11,7 @@ import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOSynchronizationFactory;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
@@ -235,6 +236,17 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 		public NSArray dropTableStatementsForEntityGroup(final NSArray entityGroup) {
 			return new NSArray(_expressionForString("drop table " + ((EOEntity) entityGroup.objectAtIndex(0)).externalName()));
 		}
+		
+		@Override
+		public NSArray<EOSQLExpression> statementsToModifyColumnNullRule(String columnName, String tableName, boolean allowsNull, NSDictionary nsdictionary) {
+			NSArray<EOSQLExpression> statements;
+			if (allowsNull) {
+				statements = new NSArray<EOSQLExpression>(_expressionForString("alter table " + formatTableName(tableName) + " alter column " + formatColumnName(columnName) + " null"));
+			} else {
+				statements = new NSArray<EOSQLExpression>(_expressionForString("alter table " + formatTableName(tableName) + " alter column " + formatColumnName(columnName) + " not null"));
+			}
+			return statements;
+		}
 
 		boolean isPrimaryKeyAttributes(EOEntity entity, NSArray attributes) {
 			NSArray keys = entity.primaryKeyAttributeNames();
@@ -322,6 +334,11 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 			String pkTable = ((JDBCAdaptor) adaptor()).plugIn().primaryKeyTableName();
 			return new NSArray(_expressionForString("create table " + pkTable + " (name char(40) primary key, pk INT)"));
 		}
+		
+		@Override
+		public NSArray<EOSQLExpression> statementsToRenameColumnNamed(String columnName, String tableName, String newName, NSDictionary nsdictionary) {
+			return new NSArray<EOSQLExpression>(_expressionForString("rename column " + formatTableName(tableName) + "." + formatColumnName(columnName) + " to " + formatColumnName(newName)));
+		}
 
 		@Override
 		public NSArray statementsToInsertColumnForAttribute(final EOAttribute attribute, final NSDictionary options) {
@@ -335,6 +352,11 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 
 			return result;
 		}
+		
+		@Override
+	    public NSArray<EOSQLExpression> statementsToRenameTableNamed(String tableName, String newName, NSDictionary options) {
+	    	return new NSArray<EOSQLExpression>(_expressionForString("rename table " + formatTableName(tableName) + " to " + formatTableName(newName)));
+	    }
 
 		@Override
 		public boolean supportsSchemaSynchronization() {
