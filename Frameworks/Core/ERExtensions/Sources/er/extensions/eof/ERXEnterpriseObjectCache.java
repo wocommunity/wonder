@@ -353,6 +353,8 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     */
     public void enableFetchingOfInitialValues(NSNotification n) {
         _applicationDidFinishInitialization = true;
+        NSNotificationCenter.defaultCenter().removeObserver(this,
+				ERXApplication.ApplicationDidFinishInitializationNotification, null);
     }
     
     /**
