@@ -1282,6 +1282,18 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	protected Object _validateValueForKey(Object value, String key) throws NSValidation.ValidationException {
 		return value;
 	}
+	
+	/**
+	 * Checks if {@link #validateForSave()} should be skipped. That is the case
+	 * when _validatedWhenNested is <code>false</code> and this EO is localInstanced
+	 * from a parent EC.
+	 * 
+	 * @return <code>true</code> if validation should be skipped
+	 */
+	protected boolean shouldSkipValidateForSave() {
+		return !_validatedWhenNested && editingContext().parentObjectStore() instanceof EOEditingContext
+				&& ((EOEditingContext)editingContext().parentObjectStore()).objectForGlobalID(editingContext().globalIDForObject(this)) != null;
+	}
 
 	/**
 	 * This method performs a few checks before invoking super's implementation.
@@ -1294,8 +1306,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 */
 	@Override
 	public void validateForSave() throws NSValidation.ValidationException {
-		// Support for skipping validation when _validatedWhenNested is false and this EO is localInstanced from a parent EC
-		if (!_validatedWhenNested && editingContext().parentObjectStore() instanceof EOEditingContext && ((EOEditingContext)editingContext().parentObjectStore()).objectForGlobalID(editingContext().globalIDForObject(this)) != null) {
+		if (shouldSkipValidateForSave()) {
 			return;
 		}
 		
