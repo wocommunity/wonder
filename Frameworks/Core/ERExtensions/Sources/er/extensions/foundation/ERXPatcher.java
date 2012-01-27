@@ -1,5 +1,7 @@
 package er.extensions.foundation;
 
+import java.lang.reflect.Constructor;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
@@ -26,6 +28,7 @@ import com.webobjects.appserver._private.WOHiddenField;
 import com.webobjects.appserver._private.WOImage;
 import com.webobjects.appserver._private.WOImageButton;
 import com.webobjects.appserver._private.WOInput;
+import com.webobjects.appserver._private.WOInputList;
 import com.webobjects.appserver._private.WOJavaScript;
 import com.webobjects.appserver._private.WOPasswordField;
 import com.webobjects.appserver._private.WOPopUpButton;
@@ -35,6 +38,7 @@ import com.webobjects.appserver._private.WOResetButton;
 import com.webobjects.appserver._private.WOSubmitButton;
 import com.webobjects.appserver._private.WOText;
 import com.webobjects.appserver._private.WOTextField;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
@@ -477,7 +481,13 @@ public class ERXPatcher {
 				}
 			}
 			
-			//Overriden to stop swallowed exceptions. Isn't actually used by the WOPopupButton, but just in case...
+			/**
+			 * Overridden to stop swallowing all exceptions and properly handle
+			 * listClassInContext(WOContext) returning an NSArray.
+			 * 
+			 * This method isn't actually used by WOPopUpButton, but just in case...
+			 */
+			@Override
 			protected void setSelectionListInContext(WOContext context, List selections) {
 				if(_selections != null && _selections.isValueSettable()) {
 					try {
@@ -485,6 +495,22 @@ public class ERXPatcher {
 						Object result = resultClass.newInstance();
 						if(result instanceof NSMutableArray) {
 							((NSMutableArray)result).addObjects(selections.toArray());
+						} else if (result instanceof NSArray) {
+							/*
+							 * If "result" is an instanceof NSArray, we need to
+							 * assign a new NSArray instance containing the
+							 * contents of the "selections" parameter instead of
+							 * calling addAll(Collection) on the existing
+							 * instance because NSArray does not support it.
+							 * 
+							 * We are using reflection to do the assignment in
+							 * case resultClass is actually a subclass of
+							 * NSArray.
+							 */
+							Class nsArrayArgTypes[] = new Class[] {List.class, Boolean.TYPE};
+							Constructor nsArrayConstructor = resultClass.getConstructor(nsArrayArgTypes);
+							Object nsArrayConstructorArgs[] = new Object[] {selections, Boolean.TRUE};
+							result = nsArrayConstructor.newInstance(nsArrayConstructorArgs);
 						} else { 
 							if(result instanceof List) {
 								((List)result).addAll(selections);
@@ -492,9 +518,31 @@ public class ERXPatcher {
 						}
 						_selections.setValue(result, context.component());
                     } catch(Exception exception) {
+                    	/*
+                    	 * Don't ignore Exceptions like WOInputList does. Throw.
+                    	 */
                     	throw NSForwardException._runtimeExceptionForThrowable(exception);
                     }
 				}
+			}
+			
+			/**
+			 * Overridden to make the default return {@link Class} a
+			 * NSMutableArray instead of NSArray.
+			 * 
+			 * @return a <b>mutable</b> Class that implements {@link List}
+			 */
+			@Override
+			protected Class<List> listClassInContext(WOContext context) {
+				Class aListClass = NSMutableArray.class;
+				if (_list != null) {
+					Object value = _list.valueInComponent(context.component());
+					if (value instanceof NSArray)
+						aListClass = NSMutableArray.class;
+					else if (value instanceof List)
+						aListClass = value.getClass();
+				}
+				return aListClass;
 			}
 		}
 
@@ -520,7 +568,11 @@ public class ERXPatcher {
 				}
 			}
 			
-			//Overriden to stop swallowed exceptions.
+			/**
+			 * Overridden to stop swallowing all exceptions and properly handle
+			 * listClassInContext(WOContext) returning an NSArray.
+			 */
+			@Override
 			protected void setSelectionListInContext(WOContext context, List selections) {
 				if(_selections != null && _selections.isValueSettable()) {
 					try {
@@ -528,6 +580,22 @@ public class ERXPatcher {
 						Object result = resultClass.newInstance();
 						if(result instanceof NSMutableArray) {
 							((NSMutableArray)result).addObjects(selections.toArray());
+						} else if (result instanceof NSArray) {
+							/*
+							 * If "result" is an instanceof NSArray, we need to
+							 * assign a new NSArray instance containing the
+							 * contents of the "selections" parameter instead of
+							 * calling addAll(Collection) on the existing
+							 * instance because NSArray does not support it.
+							 * 
+							 * We are using reflection to do the assignment in
+							 * case resultClass is actually a subclass of
+							 * NSArray.
+							 */
+							Class nsArrayArgTypes[] = new Class[] {List.class, Boolean.TYPE};
+							Constructor nsArrayConstructor = resultClass.getConstructor(nsArrayArgTypes);
+							Object nsArrayConstructorArgs[] = new Object[] {selections, Boolean.TRUE};
+							result = nsArrayConstructor.newInstance(nsArrayConstructorArgs);
 						} else { 
 							if(result instanceof List) {
 								((List)result).addAll(selections);
@@ -535,9 +603,31 @@ public class ERXPatcher {
 						}
 						_selections.setValue(result, context.component());
                     } catch(Exception exception) {
+                    	/*
+                    	 * Don't ignore Exceptions like WOInputList does. Throw.
+                    	 */
                     	throw NSForwardException._runtimeExceptionForThrowable(exception);
                     }
 				}
+			}
+			
+			/**
+			 * Overridden to make the default return {@link Class} a
+			 * NSMutableArray instead of NSArray.
+			 * 
+			 * @return a <b>mutable</b> Class that implements {@link List}
+			 */
+			@Override
+			protected Class<List> listClassInContext(WOContext context) {
+				Class aListClass = NSMutableArray.class;
+				if (_list != null) {
+					Object value = _list.valueInComponent(context.component());
+					if (value instanceof NSArray)
+						aListClass = NSMutableArray.class;
+					else if (value instanceof List)
+						aListClass = value.getClass();
+				}
+				return aListClass;
 			}
 
 		}
@@ -585,7 +675,11 @@ public class ERXPatcher {
 				}
 			}
 			
-			//Overriden to stop swallowed exceptions.
+			/**
+			 * Overridden to stop swallowing all exceptions and properly handle
+			 * listClassInContext(WOContext) returning an NSArray.
+			 */
+			@Override
 			protected void setSelectionListInContext(WOContext context, List selections) {
 				if(_selections != null && _selections.isValueSettable()) {
 					try {
@@ -593,6 +687,22 @@ public class ERXPatcher {
 						Object result = resultClass.newInstance();
 						if(result instanceof NSMutableArray) {
 							((NSMutableArray)result).addObjects(selections.toArray());
+						} else if (result instanceof NSArray) {
+							/*
+							 * If "result" is an instanceof NSArray, we need to
+							 * assign a new NSArray instance containing the
+							 * contents of the "selections" parameter instead of
+							 * calling addAll(Collection) on the existing
+							 * instance because NSArray does not support it.
+							 * 
+							 * We are using reflection to do the assignment in
+							 * case resultClass is actually a subclass of
+							 * NSArray.
+							 */
+							Class nsArrayArgTypes[] = new Class[] {List.class, Boolean.TYPE};
+							Constructor nsArrayConstructor = resultClass.getConstructor(nsArrayArgTypes);
+							Object nsArrayConstructorArgs[] = new Object[] {selections, Boolean.TRUE};
+							result = nsArrayConstructor.newInstance(nsArrayConstructorArgs);
 						} else { 
 							if(result instanceof List) {
 								((List)result).addAll(selections);
@@ -600,9 +710,31 @@ public class ERXPatcher {
 						}
 						_selections.setValue(result, context.component());
                     } catch(Exception exception) {
+                    	/*
+                    	 * Don't ignore Exceptions like WOInputList does. Throw.
+                    	 */
                     	throw NSForwardException._runtimeExceptionForThrowable(exception);
                     }
 				}
+			}
+			
+			/**
+			 * Overridden to make the default return {@link Class} a
+			 * NSMutableArray instead of NSArray.
+			 * 
+			 * @return a <b>mutable</b> Class that implements {@link List}
+			 */
+			@Override
+			protected Class<List> listClassInContext(WOContext context) {
+				Class aListClass = NSMutableArray.class;
+				if (_list != null) {
+					Object value = _list.valueInComponent(context.component());
+					if (value instanceof NSArray)
+						aListClass = NSMutableArray.class;
+					else if (value instanceof List)
+						aListClass = value.getClass();
+				}
+				return aListClass;
 			}
 
 		}
@@ -778,7 +910,11 @@ public class ERXPatcher {
 				}
 			}
 			
-			//Overriden to stop swallowed exceptions.
+			/**
+			 * Overridden to stop swallowing all exceptions and properly handle
+			 * listClassInContext(WOContext) returning an NSArray.
+			 */
+			@Override
 			protected void setSelectionListInContext(WOContext context, List selections) {
 				if(_selections != null && _selections.isValueSettable()) {
 					try {
@@ -786,6 +922,22 @@ public class ERXPatcher {
 						Object result = resultClass.newInstance();
 						if(result instanceof NSMutableArray) {
 							((NSMutableArray)result).addObjects(selections.toArray());
+						} else if (result instanceof NSArray) {
+							/*
+							 * If "result" is an instanceof NSArray, we need to
+							 * assign a new NSArray instance containing the
+							 * contents of the "selections" parameter instead of
+							 * calling addAll(Collection) on the existing
+							 * instance because NSArray does not support it.
+							 * 
+							 * We are using reflection to do the assignment in
+							 * case resultClass is actually a subclass of
+							 * NSArray.
+							 */
+							Class nsArrayArgTypes[] = new Class[] {List.class, Boolean.TYPE};
+							Constructor nsArrayConstructor = resultClass.getConstructor(nsArrayArgTypes);
+							Object nsArrayConstructorArgs[] = new Object[] {selections, Boolean.TRUE};
+							result = nsArrayConstructor.newInstance(nsArrayConstructorArgs);
 						} else { 
 							if(result instanceof List) {
 								((List)result).addAll(selections);
@@ -793,9 +945,31 @@ public class ERXPatcher {
 						}
 						_selections.setValue(result, context.component());
                     } catch(Exception exception) {
+                    	/*
+                    	 * Don't ignore Exceptions like WOInputList does. Throw.
+                    	 */
                     	throw NSForwardException._runtimeExceptionForThrowable(exception);
                     }
 				}
+			}
+			
+			/**
+			 * Overridden to make the default return {@link Class} a
+			 * NSMutableArray instead of NSArray.
+			 * 
+			 * @return a <b>mutable</b> Class that implements {@link List}
+			 */
+			@Override
+			protected Class<List> listClassInContext(WOContext context) {
+				Class aListClass = NSMutableArray.class;
+				if (_list != null) {
+					Object value = _list.valueInComponent(context.component());
+					if (value instanceof NSArray)
+						aListClass = NSMutableArray.class;
+					else if (value instanceof List)
+						aListClass = value.getClass();
+				}
+				return aListClass;
 			}
 
 		}
