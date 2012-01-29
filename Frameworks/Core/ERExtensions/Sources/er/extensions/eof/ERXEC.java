@@ -11,7 +11,6 @@ import java.io.StringWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -156,8 +155,8 @@ public class ERXEC extends EOEditingContext {
 	/** holds a flag if editing context locks should be marked */
 	private static Boolean markOpenLocks;
 
-	/** key for the thread storage used by the unlocker. */
-	private static final String LockedContextsForCurrentThreadKey = "ERXEC.lockedContextsForCurrentThread";
+//	/** key for the thread storage used by the unlocker. */
+//	private static final String LockedContextsForCurrentThreadKey = "ERXEC.lockedContextsForCurrentThread";
 
 	private static final NSSelector EditingContextWillRevertObjectsDelegateSelector = new NSSelector("editingContextWillRevertObjects", new Class[] { EOEditingContext.class, NSArray.class, NSArray.class, NSArray.class });
 	private static final NSSelector EditingContextDidRevertObjectsDelegateSelector = new NSSelector("editingContextDidRevertObjects", new Class[] { EOEditingContext.class, NSArray.class, NSArray.class, NSArray.class });
@@ -564,18 +563,18 @@ public class ERXEC extends EOEditingContext {
 		}
 		currentTraces.addObject(openLockTrace);
 		// AK: disabled, because do we really need this? It's really annoying while debugging.
-		if (!currentThread.equals(lockingThread) && false) {
-			StringBuffer buf = new StringBuffer(1024);
-			buf.append(System.identityHashCode(this) + " Attempting to lock editing context from " + currentThread.getName() + " that was previously locked in " + lockingThread.getName() + "\n");
-			buf.append(" Current stack trace: " + ERXUtilities.stackTrace(openLockTrace) + "\n");
-			buf.append(" Lock count: " + openLockTraces.count() + "\n");
-			Enumeration openLockTracesEnum = openLockTraces.objectEnumerator();
-			while (openLockTracesEnum.hasMoreElements()) {
-				Exception existingOpenLockTrace = (Exception) openLockTracesEnum.nextElement();
-				buf.append(" Existing lock: " + ERXUtilities.stackTrace(existingOpenLockTrace));
-			}
-			log.info(buf);
-		}
+//		if (!currentThread.equals(lockingThread) && false) {
+//			StringBuffer buf = new StringBuffer(1024);
+//			buf.append(System.identityHashCode(this) + " Attempting to lock editing context from " + currentThread.getName() + " that was previously locked in " + lockingThread.getName() + "\n");
+//			buf.append(" Current stack trace: " + ERXUtilities.stackTrace(openLockTrace) + "\n");
+//			buf.append(" Lock count: " + openLockTraces.count() + "\n");
+//			Enumeration openLockTracesEnum = openLockTraces.objectEnumerator();
+//			while (openLockTracesEnum.hasMoreElements()) {
+//				Exception existingOpenLockTrace = (Exception) openLockTracesEnum.nextElement();
+//				buf.append(" Existing lock: " + ERXUtilities.stackTrace(existingOpenLockTrace));
+//			}
+//			log.info(buf);
+//		}
 	}
 
 	private synchronized void traceUnlock() {
