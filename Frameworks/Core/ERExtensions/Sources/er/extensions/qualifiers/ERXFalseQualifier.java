@@ -29,6 +29,11 @@ public class ERXFalseQualifier extends EOQualifier implements NSCoding, EOKeyVal
 		return false;
 	}
 	
+	@Override
+	public String toString() {
+		return "(false)";
+	}
+
     public Class classForCoder() {
     	return getClass();
     }
