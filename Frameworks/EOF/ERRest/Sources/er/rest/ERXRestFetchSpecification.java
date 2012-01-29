@@ -36,6 +36,7 @@ import er.extensions.eof.ERXS;
  * <li>sort=lastName|asc,firstName|desc</li>
  * <li>batchSize=25&batch=1</li>
  * <li>qualifier=firstName%3D'Mike'</li>
+ * <li>Range=items%3D10-19</li>
  * </ul>
  * 
  * <p>
