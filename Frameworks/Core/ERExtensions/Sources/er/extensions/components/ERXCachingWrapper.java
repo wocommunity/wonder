@@ -1,4 +1,5 @@
 package er.extensions.components;
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -64,7 +65,7 @@ public class ERXCachingWrapper extends ERXStatelessComponent {
     });
     
     /** Simply cache entry class. It caches a string for a duration and can replace the session ID on retrieval. */
-    protected class Entry {
+    protected static class Entry implements Serializable{
     	private long insertTime;
     	private long duration;
     	private String content;

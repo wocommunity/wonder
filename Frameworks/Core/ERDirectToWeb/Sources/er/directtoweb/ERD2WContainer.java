@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
+import java.io.Serializable;
+
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
@@ -13,7 +15,7 @@ import com.webobjects.foundation.NSMutableArray;
  * Used to hold pieces of a tabsSectionsContents, holds either sections or tabs.
  */
 
-public class ERD2WContainer {
+public class ERD2WContainer implements Serializable {
     public String name;
     public String displayName;
     public NSMutableArray keys;

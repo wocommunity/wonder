@@ -1,5 +1,7 @@
 package er.extensions.components;
 
+import java.io.Serializable;
+
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
@@ -266,7 +268,7 @@ public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
 		}
 	}
 
-	public static class Error {
+	public static class Error implements Serializable {
 		private Throwable _t;
 
 		private String _method;

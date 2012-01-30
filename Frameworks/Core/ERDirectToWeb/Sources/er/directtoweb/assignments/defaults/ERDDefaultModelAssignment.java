@@ -214,7 +214,7 @@ public class ERDDefaultModelAssignment extends ERDAssignment {
         return result;
     }
 
-    private EOEntity _dummyEntity;
+    private transient EOEntity _dummyEntity;
     /** Utility to create a fake entity that can be used for tasks such as error/confirm. */
     // CHECKME ak We may have to insert the entity into the default model group
     protected EOEntity dummyEntity() {

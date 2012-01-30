@@ -1,5 +1,7 @@
 package er.extensions.components;
 
+import java.io.Serializable;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 
@@ -20,7 +22,7 @@ public class ERXBooleanSelector extends ERXStatelessComponent {
 
 	private final NSArray<Boolean> _options = new NSArray<Boolean>(new Boolean[] { Boolean.TRUE, Boolean.FALSE });
 
-    public static class BooleanProxy {
+    public static class BooleanProxy implements Serializable {
     	
         private final Boolean _value;
        
