@@ -104,28 +104,6 @@ public class ERXQualifierTraversal {
 	}
 
 	/**
-	 * Should traverse true qualifier?
-	 *
-	 * @param q
-	 *            the qualifier to process
-	 * @return should traverse true qualifier
-	 */
-	protected boolean traverseTrueQualifier(ERXTrueQualifier q) {
-		return true;
-	}
-
-	/**
-	 * Should traverse false qualifier?
-	 *
-	 * @param q
-	 *            the qualifier to process
-	 * @return should traverse false qualifier
-	 */
-	protected boolean traverseFalseQualifier(ERXFalseQualifier q) {
-		return true;
-	}
-
-	/**
 	 * Traverses the supplied qualifier
 	 * 
 	 * @param q
@@ -192,12 +170,6 @@ public class ERXQualifierTraversal {
 			}
 			else if (q instanceof EOKeyComparisonQualifier) {
 				result = traverseKeyComparisonQualifier((EOKeyComparisonQualifier) q) ? Boolean.TRUE : Boolean.FALSE;
-			}
-			else if (q instanceof ERXTrueQualifier) {
-				result = traverseTrueQualifier((ERXTrueQualifier) q) ? Boolean.TRUE : Boolean.FALSE;
-			}
-			else if (q instanceof ERXFalseQualifier) {
-				result = traverseFalseQualifier((ERXFalseQualifier) q) ? Boolean.TRUE : Boolean.FALSE;
 			}
 			else {
 				result = traverseUnknownQualifier(q) ? Boolean.TRUE : Boolean.FALSE;
