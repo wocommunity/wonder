@@ -60,6 +60,10 @@ public class ERXRadioButtonMatrix extends ERXStatelessComponent {
     public Number index() {
         return index;
     }
+    
+    public boolean disabled() {
+    	return booleanValueForBinding("disabled", false);
+    }
 
     public void setIndex(Number newIndex) {
         index = newIndex;
