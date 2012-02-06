@@ -254,6 +254,13 @@ public class ERXUnmodeledToManyRelationship<S extends ERXEnterpriseObject, D ext
 			object.removeObjectFromBothSidesOfRelationshipWithKey(sourceObject, reverseRelationshipKey.toString());
 		}
 	}
+	
+	public void removeAllFromObjectsRelationship() {
+		NSArray<D> objects = objects().immutableClone();
+		for (D object : objects) {
+			removeFromObjectsRelationship(object);
+		}
+	}
 
 	public void deleteObjectRelationship(D object) {
 		removeFromObjectsRelationship(object);
