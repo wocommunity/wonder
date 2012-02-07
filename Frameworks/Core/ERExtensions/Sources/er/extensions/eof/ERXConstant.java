@@ -21,7 +21,6 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
 import er.extensions.foundation.ERXArrayUtilities;
-import er.extensions.jdbc.ERXJDBCAdaptor;
 
 /**
  * General purpose constant class, useful when you want reference object that are not
