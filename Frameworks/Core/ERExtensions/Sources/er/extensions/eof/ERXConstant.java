@@ -21,6 +21,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
 import er.extensions.foundation.ERXArrayUtilities;
+import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * General purpose constant class, useful when you want reference object that are not
@@ -491,8 +492,10 @@ public abstract class ERXConstant {
      * @throws NumberFormatException forwarded from the
      *		parseInt method off of Integer
      * @return potentially cache Integer for a given String
+     * 
+     * @deprecated use {@link ERXStringUtilities#integerWithString(String)}
      */
-    // MOVEME: ERXStringUtilities
+    @Deprecated
     public static Integer integerForString(String s) throws NumberFormatException {
         return integerForInt(Integer.parseInt(s));
     }
