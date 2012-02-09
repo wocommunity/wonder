@@ -14,6 +14,7 @@ import com.webobjects.foundation.NSMutableArray;
 import er.extensions.foundation.ERXValueUtilities;
 import org.apache.log4j.Logger;
 
+import java.io.Serializable;
 import java.util.Enumeration;
 
 /**
@@ -25,7 +26,7 @@ import java.util.Enumeration;
  * @see ERXNavigationManager
  * @see ERXNavigationMenuItem
  */
-public class ERXNavigationItem {
+public class ERXNavigationItem implements Serializable {
 
     private static int counter = 0;
 

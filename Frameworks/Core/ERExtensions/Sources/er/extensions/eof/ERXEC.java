@@ -119,7 +119,7 @@ public class ERXEC extends EOEditingContext {
 	 * if traceOpenEditingContextLocks is true, this will contain
 	 * the locking thread
 	 */
-	Thread lockingThread;
+	transient Thread lockingThread;
 	
 	/**
 	 * And, as the name might change, also the name of the locking thread (might contain session ID or other info)
@@ -135,7 +135,7 @@ public class ERXEC extends EOEditingContext {
 	private Boolean coalesceAutoLocks;
 
 	/** if > 0, there is an autolock on this editingContext */ 
-	private int autoLocked;
+	private transient int autoLocked;
 
 	/**
 	 * holds a flag if the EC is in finalize(). This is needed because we can't
@@ -450,7 +450,7 @@ public class ERXEC extends EOEditingContext {
 
 	public ERXEC(EOObjectStore os) {
 		super(os);
-		super._initWithParentObjectStore(os);
+		//super._initWithParentObjectStore(os);
 		
 		ERXEnterpriseObject.Observer.install();
 		if (ERXEC.markOpenLocks()) {
@@ -460,15 +460,15 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 	
-	protected void _initWithParentObjectStore(EOObjectStore parent) {
-		/* NOTE: This method is called from EOEditingContext's constructor. Doing nothing here to avoid the following race condition:
-		 * - new ERXEC() is called, it starts with invoking EOEditingContext constructor
-		 * - EOEditingContext constructor registers notifications' handlers
-		 * - One of the handlers gets triggered in another thread
-		 * - As some handlers are overriden in ERXEC, the ERXEC's handler is called - which means that ERXEC's method is invoked when ERXEC is still
-		 * under construction. This leads to disaster as all instance variables are not initialized at the time of the method call.
-		 */
-	}
+//	protected void _initWithParentObjectStore(EOObjectStore parent) {
+//		/* NOTE: This method is called from EOEditingContext's constructor. Doing nothing here to avoid the following race condition:
+//		 * - new ERXEC() is called, it starts with invoking EOEditingContext constructor
+//		 * - EOEditingContext constructor registers notifications' handlers
+//		 * - One of the handlers gets triggered in another thread
+//		 * - As some handlers are overriden in ERXEC, the ERXEC's handler is called - which means that ERXEC's method is invoked when ERXEC is still
+//		 * under construction. This leads to disaster as all instance variables are not initialized at the time of the method call.
+//		 */
+//	}
 
 	/** Utility to delete a bunch of objects. 
 	 * @param objects */
@@ -553,7 +553,7 @@ public class ERXEC extends EOEditingContext {
 		if (markOpenLocks()) {
 			traceLock();
 		}
-		lockAttempts.set(lockAttempts.get().intValue()+1);
+		lockAttempts().set(lockAttempts().get().intValue()+1);
 		super.lock();
 		pushLockedContextForCurrentThread(this);
 		if (markOpenLocks()) {
@@ -646,19 +646,26 @@ public class ERXEC extends EOEditingContext {
 			}
 		}
 		super.unlock();
-		lockAttempts.set(lockAttempts.get().intValue()-1);
+		lockAttempts().set(lockAttempts().get().intValue()-1);
 	}
 
 	private boolean isLockedInThread() {
 		return locks.get().contains(this);
 	}
 
-	private ThreadLocal<Integer> lockAttempts = new ThreadLocal<Integer>() {
-		@Override
-		protected Integer initialValue() {
-			return Integer.valueOf(0);
+	private transient ThreadLocal<Integer> lockAttempts;
+	
+	private ThreadLocal<Integer> lockAttempts() {
+		if(lockAttempts == null) {
+			lockAttempts = new ThreadLocal<Integer>() {
+				@Override
+				protected Integer initialValue() {
+					return Integer.valueOf(0);
+				}
+			};
 		}
-	};
+		return lockAttempts;
+	}
 		
   
 
@@ -671,7 +678,7 @@ public class ERXEC extends EOEditingContext {
 	 * @return whether we did lock automatically
 	 */
 	protected boolean autoLock(String method) {
-		if (!useAutoLock() || isFinalizing || isLockedInThread() || lockAttempts.get().intValue() > 0)
+		if (!useAutoLock() || isFinalizing || isLockedInThread() || lockAttempts().get().intValue() > 0)
 			return false;
 
 		boolean wasAutoLocked = false;

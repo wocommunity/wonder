@@ -6,6 +6,7 @@
 //
 package er.extensions.appserver.navigation;
 
+import java.io.Serializable;
 import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
@@ -18,7 +19,7 @@ import com.webobjects.foundation.NSRange;
 import er.extensions.foundation.ERXValueUtilities;
 
 /** Please read "Documentation/Navigation.html" to fnd out how to use the navigation components.*/
-public class ERXNavigationState {
+public class ERXNavigationState implements Serializable {
 
     /** logging support */
     public static final Logger log = Logger.getLogger(ERXNavigationState.class);

@@ -6,6 +6,10 @@
  */
 package com.webobjects.directtoweb;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +18,7 @@ import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModelGroup;
 
 
 /**
@@ -22,7 +27,7 @@ import com.webobjects.eoaccess.EOEntity;
  * @author david caching
  * @author ak factory, thread safety, fix
  */
-public class ERD2WContext extends D2WContext {
+public class ERD2WContext extends D2WContext implements Serializable {
 
     private static Map customAttributes = new HashMap();
     private static final Object NOT_FOUND = new Object();
@@ -116,4 +121,25 @@ public class ERD2WContext extends D2WContext {
         }
         return eoattribute;
     }
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+		takeValueForKey(in.readObject(), D2WModel.SessionKey);
+		takeValueForKey(in.readBoolean()?D2WModel.One:D2WModel.Zero, D2WModel.FrameKey);
+		takeValueForKey(in.readObject(), D2WModel.TaskKey);
+		String entityName = (String) in.readObject();
+		EOEntity entity = entityName == null?null:EOModelGroup.defaultGroup().entityNamed(entityName);
+		takeValueForKey(entity, D2WModel.EntityKey);
+		takeValueForKey(in.readObject(), D2WModel.PropertyKeyKey);
+		takeValueForKey(in.readObject(), D2WModel.DynamicPageKey);
+		takeValueForKey(in.readObject(), "object");
+	}
+	private void writeObject(ObjectOutputStream out) throws IOException {
+		out.writeObject(valueForKey(D2WModel.SessionKey));
+		out.writeBoolean(frame());
+		out.writeObject(task());
+		out.writeObject(entity() == null?null:entity().name());
+		out.writeObject(propertyKey());
+		out.writeObject(dynamicPage());
+		Object obj = valueForKey("object");
+		out.writeObject(obj);
+	}
 }
