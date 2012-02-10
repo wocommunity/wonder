@@ -28,7 +28,9 @@ import er.extensions.foundation.ERXExceptionUtilities;
 import er.extensions.foundation.ERXProperties;
 
 /**
- * ERS3AttachmentProcessor implements storing attachments in Amazon's S3 service. For more information about configuring an ERS3AttachmentProcessor, see the top level documentation.
+ * ERS3AttachmentProcessor implements storing attachments in Amazon's S3
+ * service. For more information about configuring an ERS3AttachmentProcessor,
+ * see the top level documentation.
  * 
  * @property er.attachment.[configurationName].s3.bucket
  * @property er.attachment.s3.bucket
@@ -38,10 +40,10 @@ import er.extensions.foundation.ERXProperties;
  * @property er.attachment.s3.accessKeyID
  * @property er.attachment.[configurationName].s3.secretAccessKey
  * @property er.attachment.s3.secretAccessKey
- * 
  * @author mschrag
  */
-public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachment> {
+public class ERS3AttachmentProcessor extends
+		ERAttachmentProcessor<ERS3Attachment> {
 	public static final String S3_URL = "http://s3.amazonaws.com";
 
 	private ERS3UploadQueue _queue;
@@ -52,9 +54,12 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
 	}
 
 	@Override
-	public ERS3Attachment _process(EOEditingContext editingContext, File uploadedFile, String recommendedFileName, String mimeType, String configurationName, String ownerID, boolean pendingDelete) {
+	public ERS3Attachment _process(EOEditingContext editingContext,
+			File uploadedFile, String recommendedFileName, String mimeType,
+			String configurationName, String ownerID, boolean pendingDelete) {
 		boolean proxy = true;
-		String proxyStr = ERXProperties.stringForKey("er.attachment." + configurationName + ".s3.proxy");
+		String proxyStr = ERXProperties.stringForKey("er.attachment."
+				+ configurationName + ".s3.proxy");
 		if (proxyStr == null) {
 			proxyStr = ERXProperties.stringForKey("er.attachment.s3.proxy");
 		}
@@ -62,15 +67,20 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
 			proxy = Boolean.parseBoolean(proxyStr);
 		}
 
-		String bucket = ERXProperties.decryptedStringForKey("er.attachment." + configurationName + ".s3.bucket");
+		String bucket = ERXProperties.decryptedStringForKey("er.attachment."
+				+ configurationName + ".s3.bucket");
 		if (bucket == null) {
-			bucket = ERXProperties.decryptedStringForKey("er.attachment.s3.bucket");
+			bucket = ERXProperties
+					.decryptedStringForKey("er.attachment.s3.bucket");
 		}
 		if (bucket == null) {
-			throw new IllegalArgumentException("There is no 'er.attachment." + configurationName + ".s3.bucket' or 'er.attachment.s3.bucket' property set.");
+			throw new IllegalArgumentException("There is no 'er.attachment."
+					+ configurationName
+					+ ".s3.bucket' or 'er.attachment.s3.bucket' property set.");
 		}
 
-		String keyTemplate = ERXProperties.stringForKey("er.attachment." + configurationName + ".s3.key");
+		String keyTemplate = ERXProperties.stringForKey("er.attachment."
+				+ configurationName + ".s3.key");
 		if (keyTemplate == null) {
 			keyTemplate = ERXProperties.stringForKey("er.attachment.s3.key");
 		}
@@ -78,23 +88,28 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
 			keyTemplate = "${pk}${ext}";
 		}
 
-		ERS3Attachment attachment = ERS3Attachment.createERS3Attachment(editingContext, Boolean.FALSE, new NSTimestamp(), mimeType, recommendedFileName, proxy, Integer.valueOf((int) uploadedFile.length()), null);
+		ERS3Attachment attachment = ERS3Attachment.createERS3Attachment(
+				editingContext, Boolean.FALSE, new NSTimestamp(), mimeType,
+				recommendedFileName, proxy,
+				Integer.valueOf((int) uploadedFile.length()), null);
 		if (delegate() != null) {
 			delegate().attachmentCreated(this, attachment);
 		}
 		try {
-			String key = ERAttachmentProcessor._parsePathTemplate(attachment, keyTemplate, recommendedFileName);
+			String key = ERAttachmentProcessor._parsePathTemplate(attachment,
+					keyTemplate, recommendedFileName);
 
 			attachment.setS3Location(bucket, key);
-
-			String s3Path = attachment.queryStringAuthGenerator().makeBareURL(bucket, key);
+			attachment.setConfigurationName(configurationName);
+			String s3Path = attachment.queryStringAuthGenerator().makeBareURL(
+					bucket, key);
 			attachment.setS3Path(s3Path);
 
 			attachment._setPendingUploadFile(uploadedFile, pendingDelete);
 
-			// performUpload(uploadedFile, bucket, key, attachment.mimeType(), configurationName);
-		}
-		catch (RuntimeException e) {
+			// performUpload(uploadedFile, bucket, key, attachment.mimeType(),
+			// configurationName);
+		} catch (RuntimeException e) {
 			attachment.delete();
 			if (pendingDelete) {
 				uploadedFile.delete();
@@ -106,12 +121,14 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
 	}
 
 	@Override
-	public InputStream attachmentInputStream(ERS3Attachment attachment) throws IOException {
+	public InputStream attachmentInputStream(ERS3Attachment attachment)
+			throws IOException {
 		return new URL(attachment.s3Path()).openStream();
 	}
 
 	@Override
-	public String attachmentUrl(ERS3Attachment attachment, WORequest request, WOContext context) {
+	public String attachmentUrl(ERS3Attachment attachment, WORequest request,
+			WOContext context) {
 		String attachmentUrl = attachment.s3Path();
 
 		if (attachment.proxied()) {
@@ -124,10 +141,13 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
 			try {
 				attachmentUrl = (new URL(attachmentUrl)).getPath();
 				attachmentUrl = "id/" + attachment.primaryKey() + attachmentUrl;
-				attachmentUrl = context.urlWithRequestHandlerKey(ERAttachmentRequestHandler.REQUEST_HANDLER_KEY, attachmentUrl, null);
-			}
-			catch (MalformedURLException e) {
-				log.fatal("attachment.s3Path() is returning something that isn't a valid URl. This is a bt strange. I'm going to reutrn it in it's raw format which will result in either a 'url cannot be found' error or may result in a 403 from s3.", e);
+				attachmentUrl = context.urlWithRequestHandlerKey(
+						ERAttachmentRequestHandler.REQUEST_HANDLER_KEY,
+						attachmentUrl, null);
+			} catch (MalformedURLException e) {
+				log.fatal(
+						"attachment.s3Path() is returning something that isn't a valid URl. This is a bt strange. I'm going to reutrn it in it's raw format which will result in either a 'url cannot be found' error or may result in a 403 from s3.",
+						e);
 			}
 
 		}
@@ -137,13 +157,16 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
 	}
 
 	@Override
-	public void deleteAttachment(ERS3Attachment attachment) throws MalformedURLException, IOException {
+	public void deleteAttachment(ERS3Attachment attachment)
+			throws MalformedURLException, IOException {
 		AWSAuthConnection conn = attachment.awsConnection();
 		String bucket = attachment.bucket();
 		String key = attachment.key();
 		Response response = conn.delete(bucket, key, null);
 		if (failed(response)) {
-			throw new IOException("Failed to delete '" + bucket + "/" + key + "' to S3: Error " + response.connection.getResponseCode() + ": " + response.connection.getResponseMessage());
+			throw new IOException("Failed to delete '" + bucket + "/" + key
+					+ "' to S3: Error " + response.connection.getResponseCode()
+					+ ": " + response.connection.getResponseMessage());
 		}
 	}
 
@@ -153,33 +176,47 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
 		_queue.enqueue(attachment);
 	}
 
-	public void performUpload(File uploadedFile, String originalFileName, String bucket, String key, String mimeType, ERS3Attachment attachment) throws MalformedURLException, IOException {
+	public void performUpload(File uploadedFile, String originalFileName,
+			String bucket, String key, String mimeType,
+			ERS3Attachment attachment) throws MalformedURLException,
+			IOException {
 		try {
 			AWSAuthConnection conn = attachment.awsConnection();
-			FileInputStream attachmentFileInputStream = new FileInputStream(uploadedFile);
-			BufferedInputStream attachmentInputStream = new BufferedInputStream(attachmentFileInputStream);
+			FileInputStream attachmentFileInputStream = new FileInputStream(
+					uploadedFile);
+			BufferedInputStream attachmentInputStream = new BufferedInputStream(
+					attachmentFileInputStream);
 			try {
-				S3StreamObject attachmentStreamObject = new S3StreamObject(attachmentInputStream, null);
+				S3StreamObject attachmentStreamObject = new S3StreamObject(
+						attachmentInputStream, null);
 
 				Map<String, List<String>> headers = new TreeMap<String, List<String>>();
-				headers.put("Content-Type", Arrays.asList(new String[] { mimeType }));
-				headers.put("Content-Length", Arrays.asList(new String[] { String.valueOf(uploadedFile.length()) }));
-				headers.put("x-amz-acl", Arrays.asList(new String[] { attachment.acl() }));
+				headers.put("Content-Type",
+						Arrays.asList(new String[] { mimeType }));
+				headers.put("Content-Length", Arrays
+						.asList(new String[] { String.valueOf(uploadedFile
+								.length()) }));
+				headers.put("x-amz-acl",
+						Arrays.asList(new String[] { attachment.acl() }));
 
 				if (originalFileName != null) {
-					headers.put("Content-Disposition", Arrays.asList(new String[] { "attachment; filename=" + originalFileName }));
+					headers.put("Content-Disposition", Arrays
+							.asList(new String[] { "attachment; filename="
+									+ originalFileName }));
 				}
 
-				Response response = conn.putStream(bucket, key, attachmentStreamObject, headers);
+				Response response = conn.putStream(bucket, key,
+						attachmentStreamObject, headers);
 				if (failed(response)) {
-					throw new IOException("Failed to write '" + bucket + "/" + key + "' to S3: Error " + response.connection.getResponseCode() + ": " + response.connection.getResponseMessage());
+					throw new IOException("Failed to write '" + bucket + "/"
+							+ key + "' to S3: Error "
+							+ response.connection.getResponseCode() + ": "
+							+ response.connection.getResponseMessage());
 				}
-			}
-			finally {
+			} finally {
 				attachmentInputStream.close();
 			}
-		}
-		finally {
+		} finally {
 			if (attachment._isPendingDelete()) {
 				uploadedFile.delete();
 			}
@@ -221,11 +258,12 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
 		public void enqueue(ERS3Attachment attachment) {
 			_editingContext.lock();
 			try {
-				ERS3Attachment localAttachment = attachment.localInstanceIn(_editingContext);
-				ERS3QueueEntry entry = new ERS3QueueEntry(attachment._pendingUploadFile(), localAttachment);
+				ERS3Attachment localAttachment = attachment
+						.localInstanceIn(_editingContext);
+				ERS3QueueEntry entry = new ERS3QueueEntry(
+						attachment._pendingUploadFile(), localAttachment);
 				enqueue(entry);
-			}
-			finally {
+			} finally {
 				_editingContext.unlock();
 			}
 		}
@@ -251,43 +289,54 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
 					if (proxyAsAttachment(attachment)) {
 						originalFileName = attachment.originalFileName();
 					}
-				}
-				finally {
+				} finally {
 					_editingContext.unlock();
 				}
 
 				try {
-					ERS3AttachmentProcessor.this.performUpload(uploadedFile, originalFileName, bucket, key, mimeType, attachment);
+					ERS3AttachmentProcessor.this
+							.performUpload(uploadedFile, originalFileName,
+									bucket, key, mimeType, attachment);
 
 					_editingContext.lock();
 					try {
 						attachment.setAvailable(Boolean.TRUE);
 						_editingContext.saveChanges();
-					}
-					finally {
+					} finally {
 						_editingContext.unlock();
 					}
 					if (ERS3AttachmentProcessor.this.delegate() != null) {
-						ERS3AttachmentProcessor.this.delegate().attachmentAvailable(ERS3AttachmentProcessor.this, attachment);
+						ERS3AttachmentProcessor.this.delegate()
+								.attachmentAvailable(
+										ERS3AttachmentProcessor.this,
+										attachment);
 					}
-				}
-				catch (Throwable t) {
+				} catch (Throwable t) {
 					if (ERS3AttachmentProcessor.this.delegate() != null) {
-						ERS3AttachmentProcessor.this.delegate().attachmentNotAvailable(ERS3AttachmentProcessor.this, attachment, ERXExceptionUtilities.toParagraph(t));
+						ERS3AttachmentProcessor.this.delegate()
+								.attachmentNotAvailable(
+										ERS3AttachmentProcessor.this,
+										attachment,
+										ERXExceptionUtilities.toParagraph(t));
 					}
-					ERAttachmentProcessor.log.error("Failed to upload '" + uploadedFile + "' to S3.", t);
-				}
-				finally {
+					ERAttachmentProcessor.log.error("Failed to upload '"
+							+ uploadedFile + "' to S3.", t);
+				} finally {
 					if (attachment._isPendingDelete()) {
 						uploadedFile.delete();
 					}
 				}
-			}
-			else {
+			} else {
 				if (ERS3AttachmentProcessor.this.delegate() != null) {
-					ERS3AttachmentProcessor.this.delegate().attachmentNotAvailable(ERS3AttachmentProcessor.this, attachment, "Missing attachment file '" + uploadedFile + "'.");
+					ERS3AttachmentProcessor.this.delegate()
+							.attachmentNotAvailable(
+									ERS3AttachmentProcessor.this,
+									attachment,
+									"Missing attachment file '" + uploadedFile
+											+ "'.");
 				}
-				ERAttachmentProcessor.log.error("Missing attachment file '" + uploadedFile + "'.");
+				ERAttachmentProcessor.log.error("Missing attachment file '"
+						+ uploadedFile + "'.");
 			}
 		}
 	}
