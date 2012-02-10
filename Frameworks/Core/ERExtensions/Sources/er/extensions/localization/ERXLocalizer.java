@@ -525,7 +525,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 					try {
 						framework = "app".equals(framework) ? null : framework;
 						log.debug("Loading: " + fileName + " - " + (framework == null ? "app" : framework) + " - " + languages + path);
-						NSDictionary dict = (NSDictionary) ERXExtensions.readPropertyListFromFileInFramework(fileName, framework, languages);
+						NSDictionary<String, Object> dict = (NSDictionary<String, Object>) ERXFileUtilities.readPropertyListFromFileInFramework(fileName, framework, languages);
 						// HACK: ak we have could have a collision between the search path for validation strings and
 						// the normal localized strings.
 						if (fileName.indexOf(ERXValidationFactory.VALIDATION_TEMPLATE_PREFIX) == 0) {
@@ -760,8 +760,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
 	protected NSDictionary readPropertyListFromFileInFramework(String fileName, String framework, NSArray languages) {
-		NSDictionary dict = (NSDictionary) ERXExtensions.readPropertyListFromFileInFramework(fileName, framework, languages);
-		return dict;
+		return (NSDictionary) ERXFileUtilities.readPropertyListFromFileInFramework(fileName, framework, languages);
 	}
 
 	/**
