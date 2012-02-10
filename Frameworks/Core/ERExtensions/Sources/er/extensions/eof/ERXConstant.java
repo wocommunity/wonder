@@ -21,7 +21,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
 import er.extensions.foundation.ERXArrayUtilities;
-import er.extensions.jdbc.ERXJDBCAdaptor;
+import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * General purpose constant class, useful when you want reference object that are not
@@ -456,7 +456,7 @@ public abstract class ERXConstant {
     
     protected static Integer[] INTEGERS=new Integer[MAX_INT];
     static {
-        for (int i=0; i<MAX_INT; i++) INTEGERS[i]=new Integer(i);
+        for (int i=0; i<MAX_INT; i++) INTEGERS[i]=Integer.valueOf(i);
     }
 
     public static final Object EmptyObject = new Object();
@@ -464,11 +464,11 @@ public abstract class ERXConstant {
     public static final NSArray EmptyArray = NSArray.EmptyArray;
     public static final NSArray SingleNullValueArray = new NSArray(NSKeyValueCoding.NullValue);
     public static final NSDictionary EmptyDictionary = NSDictionary.EmptyDictionary;
-    public static final Integer MinusOneInteger = new Integer(-1);
+    public static final Integer MinusOneInteger = Integer.valueOf(-1);
     public static final Integer OneInteger = integerForInt(1);
-    public static final Integer ZeroInteger = integerForInt (0);
-    public static final Integer TwoInteger = integerForInt (2);
-    public static final Integer ThreeInteger = integerForInt (3);
+    public static final Integer ZeroInteger = integerForInt(0);
+    public static final Integer TwoInteger = integerForInt(2);
+    public static final Integer ThreeInteger = integerForInt(3);
     public static final BigDecimal ZeroBigDecimal = new BigDecimal(0.00);
     public static final BigDecimal OneBigDecimal = new BigDecimal(1.00); 
     public static final Class[] EmptyClassArray = new Class[0];
@@ -484,7 +484,7 @@ public abstract class ERXConstant {
      * @return potentially cache Integer for a given int
      */
     public static Integer integerForInt(int i) {
-        return (i>=0 && i<MAX_INT) ? INTEGERS[i] : new Integer(i);
+        return (i>=0 && i<MAX_INT) ? INTEGERS[i] : Integer.valueOf(i);
     }
 
     /**
@@ -492,8 +492,10 @@ public abstract class ERXConstant {
      * @throws NumberFormatException forwarded from the
      *		parseInt method off of Integer
      * @return potentially cache Integer for a given String
+     * 
+     * @deprecated use {@link ERXStringUtilities#integerWithString(String)}
      */
-    // MOVEME: ERXStringUtilities
+    @Deprecated
     public static Integer integerForString(String s) throws NumberFormatException {
         return integerForInt(Integer.parseInt(s));
     }
