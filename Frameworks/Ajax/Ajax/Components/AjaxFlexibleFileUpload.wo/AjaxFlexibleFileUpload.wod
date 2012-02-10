@@ -80,6 +80,7 @@ CancelButton : WOHyperlink {
   onclick = cancelUploadFunction;
   id = cancelButtonId;
   class = cancelButtonClass;
+  style = "display:none";
 }
 
 CancelLabel : WOString {
