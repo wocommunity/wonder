@@ -19,6 +19,8 @@ import com.webobjects.appserver.WOSession;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
 
 
 /**
@@ -121,7 +123,29 @@ public class ERD2WContext extends D2WContext implements Serializable {
         }
         return eoattribute;
     }
+    
+//    private static final ObjectStreamField[] serialPersistentFields = new ObjectStreamField[] {
+//    	new ObjectStreamField(D2WModel.SessionKey, WOSession.class),
+//    	new ObjectStreamField(D2WModel.FrameKey, Boolean.TYPE),
+//    	new ObjectStreamField(D2WModel.TaskKey, String.class),
+//    	new ObjectStreamField("entityName", String.class),
+//    	new ObjectStreamField(D2WModel.PropertyKeyKey, String.class),
+//    	new ObjectStreamField(D2WModel.DynamicPageKey, String.class),
+//    	new ObjectStreamField("object", EOEnterpriseObject.class),
+//    };
+    
 	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+//		GetField fields = in.readFields();
+//		takeValueForKey(fields.get(D2WModel.SessionKey, null), D2WModel.SessionKey);
+//		takeValueForKey(fields.get(D2WModel.FrameKey, false)?D2WModel.One:D2WModel.Zero, D2WModel.FrameKey);
+//		takeValueForKey(fields.get(D2WModel.TaskKey, null), D2WModel.TaskKey);
+//		String entityName = (String) fields.get("entityName", null);
+//		EOEntity entity = entityName == null?null:EOModelGroup.defaultGroup().entityNamed(entityName);
+//		takeValueForKey(entity, D2WModel.EntityKey);
+//		takeValueForKey(fields.get(D2WModel.PropertyKeyKey, null), D2WModel.PropertyKeyKey);
+//		takeValueForKey(fields.get(D2WModel.DynamicPageKey, null), D2WModel.DynamicPageKey);
+//		takeValueForKey(fields.get("object", null), "object");
+
 		takeValueForKey(in.readObject(), D2WModel.SessionKey);
 		takeValueForKey(in.readBoolean()?D2WModel.One:D2WModel.Zero, D2WModel.FrameKey);
 		takeValueForKey(in.readObject(), D2WModel.TaskKey);
@@ -130,16 +154,44 @@ public class ERD2WContext extends D2WContext implements Serializable {
 		takeValueForKey(entity, D2WModel.EntityKey);
 		takeValueForKey(in.readObject(), D2WModel.PropertyKeyKey);
 		takeValueForKey(in.readObject(), D2WModel.DynamicPageKey);
+		/*
+		 * The ec must be deserialized before the EO. Otherwise, when the EO is
+		 * deserialized, it attempts to deserialize the EC, which turns around
+		 * and tries to deserialize the EO again. The EO is returned in its partially
+		 * deserialized state, which results in a NullPointerException when the EC
+		 * starts to try to load values into the EO's dictionary... which is null.
+		 */
+		EOEditingContext ec = (EOEditingContext) in.readObject();
 		takeValueForKey(in.readObject(), "object");
 	}
+	
 	private void writeObject(ObjectOutputStream out) throws IOException {
+//		PutField fields = out.putFields();
+//		fields.put(D2WModel.SessionKey, valueForKey(D2WModel.SessionKey));
+//		fields.put(D2WModel.FrameKey, frame());
+//		fields.put(D2WModel.TaskKey, task());
+//		fields.put("entityName", entity() == null?null:entity().name());
+//		fields.put(D2WModel.PropertyKeyKey, propertyKey());
+//		fields.put(D2WModel.DynamicPageKey, dynamicPage());
+//		fields.put("object", valueForKey("object"));
+//		out.writeFields();
+		
 		out.writeObject(valueForKey(D2WModel.SessionKey));
 		out.writeBoolean(frame());
 		out.writeObject(task());
 		out.writeObject(entity() == null?null:entity().name());
 		out.writeObject(propertyKey());
 		out.writeObject(dynamicPage());
-		Object obj = valueForKey("object");
+		EOEnterpriseObject obj = (EOEnterpriseObject) valueForKey("object");
+		EOEditingContext ec = (obj == null || obj.editingContext() == null)?null:obj.editingContext();
+		/*
+		 * The ec must be deserialized before the EO. Otherwise, when the EO is
+		 * deserialized, it attempts to deserialize the EC, which turns around
+		 * and tries to deserialize the EO again. The EO is returned in its partially
+		 * deserialized state, which results in a NullPointerException when the EC
+		 * starts to try to load values into the EO's dictionary... which is null.
+		 */
+		out.writeObject(ec);
 		out.writeObject(obj);
 	}
 }
