@@ -408,8 +408,9 @@ public class ERXStringUtilities {
      */
     public static Integer integerWithString(String s) {
         try {
-            return ERXConstant.integerForString(s);
-        } catch (Exception e) {
+            return ERXConstant.integerForInt(Integer.parseInt(s));
+        } catch (NumberFormatException e) {
+        	// ignore
         }
         return null;
     } 
