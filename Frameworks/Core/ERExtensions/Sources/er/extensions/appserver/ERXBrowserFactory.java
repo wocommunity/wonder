@@ -425,6 +425,14 @@ public class ERXBrowserFactory {
             if (st.hasMoreTokens()) 
                 version = st.nextToken();  // Will return "5.21" portion of "5.21; Mac_PowerPC)"
         }
+		// Test if we got a real number
+		try {
+	        String normalizedVersion = ERXStringUtilities.removeExtraDotsFromVersionString(version);
+			Double.parseDouble(normalizedVersion);
+		}
+		catch (NumberFormatException e) {
+			version = ERXBrowser.UNKNOWN_VERSION;
+		}
         return version;
     }
 
