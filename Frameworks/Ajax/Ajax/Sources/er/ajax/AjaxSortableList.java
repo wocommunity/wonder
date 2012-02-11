@@ -64,19 +64,11 @@ public class AjaxSortableList extends AjaxComponent {
   }
 
   public String listElementName() {
-    String elementName = "ul";
-    if (hasBinding("listElementName")) {
-      elementName = (String) valueForBinding("listElementName");
-    }
-    return elementName;
+    return valueForStringBinding("listElementName", "ul");
   }
 
   public String listItemElementName() {
-    String elementName = "li";
-    if (hasBinding("listItemElementName")) {
-      elementName = (String) valueForBinding("listItemElementName");
-    }
-    return elementName;
+    return valueForStringBinding("listItemElementName", "li");
   }
 
   public String listItemID(String itemID) {
@@ -99,12 +91,7 @@ public class AjaxSortableList extends AjaxComponent {
 
   public void appendToResponse(WOResponse response, WOContext context) {
     _actionUrl = AjaxUtils.ajaxComponentActionUrl(context);
-    if (hasBinding("id")) {
-      _id = (String) valueForBinding("id");
-    }
-    else {
-      _id = safeElementID();
-    }
+    _id = valueForStringBinding("id", safeElementID());
     _sortOrderKeyName = safeElementID();
     super.appendToResponse(response, context);
   }
@@ -129,6 +116,9 @@ public class AjaxSortableList extends AjaxComponent {
     ajaxOptionsArray.addObject(new AjaxOption("dropOnEmpty", AjaxOption.BOOLEAN));
     ajaxOptionsArray.addObject(new AjaxOption("scroll", AjaxOption.BOOLEAN));
     ajaxOptionsArray.addObject(new AjaxOption("onChange", AjaxOption.SCRIPT));
+    ajaxOptionsArray.addObject(new AjaxOption("delay", AjaxOption.NUMBER));
+    ajaxOptionsArray.addObject(new AjaxOption("markerClass", AjaxOption.STRING));
+	
     NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
     return options;
   }

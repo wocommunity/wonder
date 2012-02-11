@@ -53,5 +53,8 @@
         <validation message="'index' must be bound to a settable value">
             <unsettable name="index"/>
         </validation>
+    <binding name="delay"/>
+    <binding name="markerClass"/>
+        
     </wo>
 </wodefinitions>

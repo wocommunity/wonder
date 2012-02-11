@@ -195,8 +195,17 @@ var Draggables = {
   },
 
   addObserver: function(observer) {
-    this.observers.push(observer);
-    this._cacheObserverCallbacks();
+  	// workaround to not add the same observer more than once
+  	shouldAdd = true;
+  	this.observers.each(function(e) {
+  		if (e.name == observer.name) {
+  			shouldAdd = false;
+  		} 
+  	});
+  	if (shouldAdd) {
+	    this.observers.push(observer);
+  	  this._cacheObserverCallbacks();
+  	}
   },
 
   removeObserver: function(element) {  // element instead of observer fixes mem leaks
@@ -404,9 +413,13 @@ var Draggable = Class.create({
     }
 
     if(this.options.ghosting) {
-      if (!this._originallyAbsolute)
+      if (!this._originallyAbsolute) {
         Position.relativize(this.element);
-      delete this._originallyAbsolute;
+      }
+      if (null == Sortable._marker) {
+        this.element.parentNode.insertBefore(this.element, this._clone);
+      }
+      delete this.element._originallyAbsolute;
       Element.remove(this._clone);
       this._clone = null;
     }
@@ -487,9 +500,9 @@ var Draggable = Class.create({
     }}
 
     var style = this.element.style;
-    if((!this.options.constraint) || (this.options.constraint=='horizontal'))
+    if((this.options.constraint=='false') || (this.options.constraint=='horizontal'))
       style.left = p[0] + "px";
-    if((!this.options.constraint) || (this.options.constraint=='vertical'))
+    if((this.options.constraint=='false') || (this.options.constraint=='vertical'))
       style.top  = p[1] + "px";
 
     if(style.visibility=="hidden") style.visibility = ""; // fix gecko rendering
@@ -576,6 +589,7 @@ var SortableObserver = Class.create({
   initialize: function(element, observer) {
     this.element   = $(element);
     this.observer  = observer;
+    this.name      = "SortableObserver";
     this.lastValue = Sortable.serialize(this.element);
   },
 
@@ -630,7 +644,7 @@ var Sortable = {
       tree:        false,
       treeTag:     'ul',
       overlap:     'vertical', // one of 'vertical', 'horizontal'
-      constraint:  'vertical', // one of 'vertical', 'horizontal', false
+      constraint:  'vertical', // one of 'vertical', 'horizontal', 'false'
       containment: element,    // also takes array of elements (or id's); or false
       handle:      false,      // or a CSS class
       only:        false,
@@ -642,6 +656,7 @@ var Sortable = {
       scrollSensitivity: 20,
       scrollSpeed: 15,
       format:      this.SERIALIZE_RULE,
+      markerClass: 'dropmarker',
 
       // these take arrays of elements or ids and can be
       // used for better initialization performance
@@ -755,7 +770,7 @@ var Sortable = {
     if(overlap > .33 && overlap < .66 && Sortable.options(dropon).tree) {
       return;
     } else if(overlap>0.5) {
-      Sortable.mark(dropon, 'before');
+      Sortable.mark(dropon, 'before', element);
       if(dropon.previousSibling != element) {
         var oldParentNode = element.parentNode;
         element.style.visibility = "hidden"; // fix gecko rendering
@@ -765,7 +780,7 @@ var Sortable = {
         Sortable.options(dropon.parentNode).onChange(element);
       }
     } else {
-      Sortable.mark(dropon, 'after');
+      Sortable.mark(dropon, 'after', element);
       var nextElement = dropon.nextSibling || null;
       if(nextElement != element) {
         var oldParentNode = element.parentNode;
@@ -815,25 +830,75 @@ var Sortable = {
     if(Sortable._marker) Sortable._marker.hide();
   },
 
-  mark: function(dropon, position) {
+  mark: function(dropon, position, element) {
     // mark on ghosting only
     var sortable = Sortable.options(dropon.parentNode);
     if(sortable && !sortable.ghosting) return;
 
     if(!Sortable._marker) {
       Sortable._marker =
-        ($('dropmarker') || Element.extend(document.createElement('DIV'))).
-          hide().addClassName('dropmarker').setStyle({position:'absolute'});
+        ($(sortable.markerClass) || Element.extend(document.createElement('DIV'))).
+          hide().setStyle({position:'absolute'});
       document.getElementsByTagName("body").item(0).appendChild(Sortable._marker);
     }
-    var offsets = dropon.cumulativeOffset();
-    Sortable._marker.setStyle({left: offsets[0]+'px', top: offsets[1] + 'px'});
+    Sortable._marker.className = sortable.markerClass;
+    
+    var offsets     = Position.cumulativeOffset(dropon);
+    var markerWidth = Sortable._marker.clientWidth;
+		
+		if(sortable.overlap == 'horizontal') {
+			var borderRight = parseFloat(dropon.getStyle('border-right-width')); // if there is no border defined, value = 0;
+			var borderLeft  = parseFloat(dropon.getStyle('border-left-width'));  // if there is no border defined, value = 0;
 
-    if(position=='after')
-      if(sortable.overlap == 'horizontal')
-        Sortable._marker.setStyle({left: (offsets[0]+dropon.clientWidth) + 'px'});
-      else
-        Sortable._marker.setStyle({top: (offsets[1]+dropon.clientHeight) + 'px'});
+			if (position == 'after') {
+				if (dropon.nextSiblings().without(element).length > 0) {
+					var nextOffsets = Position.cumulativeOffset(dropon.nextSiblings().without(element)[0]);
+					// in case of line break
+					if (nextOffsets[1] != offsets[1]) {
+						Sortable._marker.setStyle({
+							left: offsets[0] + dropon.clientWidth + borderRight + borderLeft + 'px',
+							top:  offsets[1] + 'px'});
+					} else {
+						var margin = nextOffsets[0] - (offsets[0] + dropon.clientWidth);
+						Sortable._marker.setStyle({
+							left: offsets[0] + dropon.clientWidth + ((Math.abs(margin)/2) - (markerWidth/2)) + borderRight + 'px',
+							top:  offsets[1] + 'px'});
+					}
+				} else {
+					// marker at end point
+					Sortable._marker.setStyle({
+						left: offsets[0] + dropon.clientWidth + borderLeft + borderRight + 'px',
+						top:  offsets[1] + 'px'});
+				}
+			} else if (position == 'before') {
+				if (dropon.previousSiblings().without(element).length > 0) {
+					var prevOffsets = Position.cumulativeOffset(dropon.previousSiblings().without(element)[0]);
+					// in case of line break
+					if (prevOffsets[1] != offsets[1]) {
+						Sortable._marker.setStyle({
+							left: (offsets[0] - markerWidth) + 'px',
+							top:   offsets[1] + 'px'});
+					} else {
+						var margin = offsets[0] - (prevOffsets[0] + dropon.previousSiblings().without(element)[0].clientWidth);
+						Sortable._marker.setStyle({
+							left: prevOffsets[0] + dropon.previousSiblings().without(element)[0].clientWidth + (Math.abs(margin)/2) - (markerWidth/2) + borderLeft + 'px',
+							top:  offsets[1] + 'px'});
+					}
+				} else {
+					// marker at start point
+					Sortable._marker.setStyle({
+						left: (offsets[0] - markerWidth) + 'px',
+						top:   offsets[1] + 'px'});
+				}
+			}
+		}
+		else {
+			if (position == 'after') {
+        Sortable._marker.setStyle({
+        	top: (offsets[1] + dropon.clientHeight) + 'px',
+        	left: offsets[0] + 'px'});
+			}
+		}
 
     Sortable._marker.show();
   },
