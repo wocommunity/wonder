@@ -503,4 +503,18 @@ public class ERXDirectAction extends WODirectAction {
       return (T) super.pageWithName(componentClass.getName());
     }
 
+	public WOActionResults stopAction() {
+    	WOResponse response = new WOResponse();
+    	response.setHeader("text/plain", "Content-Type");
+
+		if (ERXApplication.isDevelopmentModeSafe()) {
+	    	WOApplication.application().terminate();
+			response.setContent("OK");
+		} else {
+			response.setStatus(401);
+		}
+		
+    	return response;
+	}
+	
 }
