@@ -71,6 +71,13 @@ import er.extensions.foundation.ERXValueUtilities;
  * @property er.extensions.ERXEC.editingContextClassName
  */
 public class ERXEC extends EOEditingContext {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 
 	/** general logging */
 	public static final Logger log = Logger.getLogger(ERXEC.class);
@@ -135,7 +142,7 @@ public class ERXEC extends EOEditingContext {
 	private Boolean coalesceAutoLocks;
 
 	/** if > 0, there is an autolock on this editingContext */ 
-	private transient int autoLocked;
+	private int autoLocked;
 
 	/**
 	 * holds a flag if the EC is in finalize(). This is needed because we can't
@@ -1087,9 +1094,8 @@ public class ERXEC extends EOEditingContext {
 		finally {
 			autoUnlock(wasAutoLocked);
 			savingChanges = false;
+			processQueuedNotifications();
 		}
-
-		processQueuedNotifications();
 	}
 
 	/**
