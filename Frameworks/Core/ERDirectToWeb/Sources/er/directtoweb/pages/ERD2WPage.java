@@ -294,7 +294,13 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         setEditingContext((eo != null) ? eo.editingContext() : null);
         // for SmartAssignment
         d2wContext().takeValueForKey(eo, Keys.object);
-        super.setObject(eo);
+        /*
+         * Storing the EO in the D2WComponent field prevents serialization. The
+         * ec must be serialized before the EO. So we store the value in the
+         * context instead.
+         */
+        //super.setObject(eo);
+        d2wContext().takeValueForKey(eo, Keys.object);
     }
     
     /**
