@@ -124,28 +124,7 @@ public class ERD2WContext extends D2WContext implements Serializable {
         return eoattribute;
     }
     
-//    private static final ObjectStreamField[] serialPersistentFields = new ObjectStreamField[] {
-//    	new ObjectStreamField(D2WModel.SessionKey, WOSession.class),
-//    	new ObjectStreamField(D2WModel.FrameKey, Boolean.TYPE),
-//    	new ObjectStreamField(D2WModel.TaskKey, String.class),
-//    	new ObjectStreamField("entityName", String.class),
-//    	new ObjectStreamField(D2WModel.PropertyKeyKey, String.class),
-//    	new ObjectStreamField(D2WModel.DynamicPageKey, String.class),
-//    	new ObjectStreamField("object", EOEnterpriseObject.class),
-//    };
-    
 	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-//		GetField fields = in.readFields();
-//		takeValueForKey(fields.get(D2WModel.SessionKey, null), D2WModel.SessionKey);
-//		takeValueForKey(fields.get(D2WModel.FrameKey, false)?D2WModel.One:D2WModel.Zero, D2WModel.FrameKey);
-//		takeValueForKey(fields.get(D2WModel.TaskKey, null), D2WModel.TaskKey);
-//		String entityName = (String) fields.get("entityName", null);
-//		EOEntity entity = entityName == null?null:EOModelGroup.defaultGroup().entityNamed(entityName);
-//		takeValueForKey(entity, D2WModel.EntityKey);
-//		takeValueForKey(fields.get(D2WModel.PropertyKeyKey, null), D2WModel.PropertyKeyKey);
-//		takeValueForKey(fields.get(D2WModel.DynamicPageKey, null), D2WModel.DynamicPageKey);
-//		takeValueForKey(fields.get("object", null), "object");
-
 		takeValueForKey(in.readObject(), D2WModel.SessionKey);
 		takeValueForKey(in.readBoolean()?D2WModel.One:D2WModel.Zero, D2WModel.FrameKey);
 		takeValueForKey(in.readObject(), D2WModel.TaskKey);
@@ -166,16 +145,6 @@ public class ERD2WContext extends D2WContext implements Serializable {
 	}
 	
 	private void writeObject(ObjectOutputStream out) throws IOException {
-//		PutField fields = out.putFields();
-//		fields.put(D2WModel.SessionKey, valueForKey(D2WModel.SessionKey));
-//		fields.put(D2WModel.FrameKey, frame());
-//		fields.put(D2WModel.TaskKey, task());
-//		fields.put("entityName", entity() == null?null:entity().name());
-//		fields.put(D2WModel.PropertyKeyKey, propertyKey());
-//		fields.put(D2WModel.DynamicPageKey, dynamicPage());
-//		fields.put("object", valueForKey("object"));
-//		out.writeFields();
-		
 		out.writeObject(valueForKey(D2WModel.SessionKey));
 		out.writeBoolean(frame());
 		out.writeObject(task());
@@ -192,6 +161,11 @@ public class ERD2WContext extends D2WContext implements Serializable {
 		 * starts to try to load values into the EO's dictionary... which is null.
 		 */
 		out.writeObject(ec);
-		out.writeObject(obj);
+		/*
+		 * If a create page is cancelled, the object is deleted. When that happens,
+		 * the ec is null. Writing the EO without an EC results with the same error
+		 * as not writing the ec at all.
+		 */
+		out.writeObject(ec==null?null:obj);
 	}
 }
