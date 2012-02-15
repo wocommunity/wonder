@@ -1,0 +1,11 @@
+Slider : MTJSSlider {
+	elementClass = "element";
+	knobClass = "knob";
+	id = "slider";
+	mode = "vertical";
+	observer = "SliderValue";
+	onChange = "function(pos) { $('SliderValue').value = pos; }";
+	range = "[1, 50]";
+	value = sliderValue;
+	wheel = true;
+}

@@ -1,0 +1,59 @@
+Form: WOForm {
+	multipleSubmit = true;
+}
+
+FormValueA: WOTextField {
+	value = formValueA;
+}
+
+FormValueB: WOTextField {
+	value = formValueB;
+}
+
+SubmitButton: WOSubmitButton {	
+	action = save;
+	class = "btn";
+	value = "Save";
+}
+
+TabbedPanel : MTAjaxTabbedPanel {
+	class = "nav nav-tabs";
+	id = "tabbedPanel";
+	busyDiv = "busyDiv";
+	onLoad = "alert('Tabbed Panel onLoad event')";
+}
+
+Tab1 : MTAjaxTabbedPanelTab {
+	id = "panel1";
+	name = "Slow Loading Content";
+	isSelected = isSlowLoadingContentSelected;
+}
+
+Tab2: MTAjaxTabbedPanelTab {
+	id = "panel2";
+	name = "Inline Content";
+	isSelected = isInlineContentSelected;
+}
+
+Tab3: MTAjaxTabbedPanelTab {
+	id = "panel3";
+	name = "Refreshing Content";
+	isSelected = isRefreshingContentSelected;
+	refreshOnSelect = true;
+	onLoad = "alert('Refreshing Content tab onLoad event')";
+}
+
+Tab4: MTAjaxTabbedPanelTab {
+	name = "Invisible";
+	isVisible = false;
+	isSelected = true;  // or false, it does not have any effect
+}
+
+CurrentTime: WOString {
+	value = now;
+}
+
+BusyImage : WOImage {
+  framework = "Ajax";
+  filename = "wait30.gif";
+}

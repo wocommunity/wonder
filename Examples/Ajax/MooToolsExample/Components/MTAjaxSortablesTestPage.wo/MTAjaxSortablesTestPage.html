@@ -1,0 +1,22 @@
+<wo:Main pageTitle = "Sortable List Example">
+	<h2>Sortable List Test</h2>
+	<hr/>
+	<p>
+		Port from the original.
+	</p>
+	<wo:form>
+		<webobject name = "SortableListA">
+			<webobject name = "ListItemNameA"></webobject><br/>
+		</webobject>
+		<webobject name = "ASB"></webobject>
+	</wo:form>
+	<hr/>
+	<wo:MTAjaxUpdateContainer id = "UpdateContainer">
+		Stored order:
+		<p>
+		<wo:loop list = "$listA" item = "$repetitionListItemA">
+			<wo:str value = "$repetitionListItemA.title" /><br/>
+		</wo:loop>
+		</p>
+	</wo:MTAjaxUpdateContainer>
+</wo:Main>
