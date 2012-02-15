@@ -1,0 +1,9 @@
+ElementsContainer : WOGenericContainer {
+	class = "elements";
+	elementName = "div";
+}
+
+TogglerContainer : WOGenericContainer {
+	class = "togglers";
+	elementName = "div";
+}

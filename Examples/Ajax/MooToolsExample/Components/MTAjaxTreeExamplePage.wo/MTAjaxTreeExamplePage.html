@@ -1,0 +1,45 @@
+<wo:Main pageTitle = "Ajax Tree Example">
+	<style>
+	ul.mav img.nodeControl {
+		border: none;
+		vertical-align: top;
+	}
+
+	ul.nav ul {
+		margin: 0px;
+		padding: 0px 0px 0px 19px;
+	}
+
+	ul.nav li {
+		list-style: none;
+	}
+
+	ul.nav li a {
+		text-decoration: none;
+	}
+	
+	ul.nav .nodeLabel {
+		margin-left: 19px;
+		margin-top: -16px;
+		margin-bottom: 3px;
+	}
+	</style>
+	<h2>Test Ajax Tree</h2>
+	<hr/>
+	<p>
+		Port from the original.  The only difference is that we use MT versions of AUL and AUC.
+	</p>
+	<div class = "span-5">
+		<webobject name = "AjaxTree"><div class = "nodeLabel">
+			<webobject name = "TreeNodeAction"/>
+			<br/>
+			two-line label
+			</div>
+		</webobject>
+	</div>
+	<div class = "span-12 last">	
+		<webobject name = "Workarea">
+			<wo:str value = "$selectedNode" />
+		</webobject>
+	</div>
+</wo:Main>

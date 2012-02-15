@@ -1,0 +1,41 @@
+<wo:Main pageTitle = "JavaScript Slider">
+	<script>
+		var slider;
+	</script>
+	<style>
+	
+		.element {
+			background-color: gray;
+			display: block;
+			height: 300px;
+			width: 24px;			
+		}
+		
+		.knob {
+			background-color: black;
+			display: block;
+			height: 24px;
+			width: 24px;
+		}
+		
+	</style>
+	
+	<h2>JavaScript Slider Example</h2>
+	<hr/>
+	<div class = "row">
+		<div class = "span3">
+			<webobject name = "Slider"></webobject>
+		</div>
+		<div class = "span5 offset1">
+			<label>Slider Value 1 - 50.  If you enter the value here into the textfield it will update the slider on change.  See bindings observer and observerevent.</label>
+			<input type = "text" id = "SliderValue" />
+		</div>
+	</div>
+	<script>
+		// an example of setting the slider's value.
+		window.addEvent('domready', function() {
+			slider.set(10);
+		});
+	</script>
+
+</wo:Main>
