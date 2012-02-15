@@ -1,0 +1,53 @@
+<wo:Main pageTitle = "Ajax Tabbed Panel Example">
+<style>
+
+#tabbedPanel {
+}
+
+#tabbedPanel_panecontrol li {
+	display: none;
+}
+
+#tabbedPanel_panecontrol li.active {
+	display: block;
+}
+
+</style>
+  <wo name = "Form">
+	  <div class="tabBox">
+	    <wo name="TabbedPanel">
+	        <wo name="Tab1">
+				This is tab # 1.
+	        </wo>
+	        <wo name="Tab2">
+	            This is inline content on the same page as the panel and tabs are declared.<br />
+	            It does not refresh when the tab is selected:<br />
+	            <webObject name="CurrentTime"/>
+	            <br/><br/>
+	            Form Value A: <webobject name = "FormValueA"/>
+	        </wo>
+	        <wo name="Tab3">
+	            This is inline content on the same page as the panel and tabs are declared.<br />
+	            This tab refreshs when the tab is selected, the time will change:<br />
+	            <wo name="CurrentTime"/>
+	            <br/><br/>
+	            Form Value B: <webobject name = "FormValueB"/>
+	        </wo>
+	        <wo name="Tab4">
+	            This tab is simply not visible and is not rendered in the HTML.<br />
+	        <wo name="CurrentTime"/>
+	        </wo>
+	        <wo name = "SubmitButton"/>
+	    </wo>
+	  </div>
+  </wo>
+    <div id="busyDiv" style="display: none;">
+    	<wo name = "BusyImage"/>
+        Loading...
+    </div>
+    <p style="width: 600px;">The selected tab is saved in the session, so if you come back to this page, the last tab selected will be remembered.  If you have the 
+    Slow Loading Context tab selected and go away and come back, this page will load slowly.</p>
+    <p style="width: 600px;">The form values should be preserved across all tab changes and repeated clicking of save.</p>
+
+
+</wo:Main>

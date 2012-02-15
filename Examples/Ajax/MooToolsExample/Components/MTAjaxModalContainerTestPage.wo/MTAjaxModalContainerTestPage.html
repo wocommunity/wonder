@@ -1,0 +1,46 @@
+<wo:Main pageTitle = "Modal Container Tests">
+	<style>
+		.modal form {
+			margin: 0px;
+			padding: 0px;
+		}
+	</style>
+	
+	<h2>Various Modal Container Tests</h2>
+	<hr/>
+	<h3>Simple No Ajax Modal Container</h3>
+	<webobject name = "ContentBox">
+		<p>Some Text Content</p>
+	</webobject>
+	<hr/>
+	<h3>Modal container with internal href</h3>
+	<webobject name = "InteralHrefBox"></webobject>
+	<hr/>
+	<h3>Ajax Modal Container</h3>
+	<p>See example.  You may need to stylize the content like this to get your buttons and form elements placed nicely.  See bindings autoWrapContent, showFooter, showTitle.</p>
+	<webobject name = "WordsContainer">
+		<ul>
+			<webobject name = "WordsRepetition">
+				<li>
+					<webobject name = "RepetitionWordName"/>
+					(<webobject name="RepetitionBox">
+						<wo:form>
+							 <div class="modal-header">
+							    <a class="close" data-dismiss="modal">×</a>
+							    <h3><webobject name = "RepetitionWordName"></webobject></h3>
+							</div>
+							<div class="modal-body">	
+								<webobject name = "WordNameField"/>
+							</div>
+							<div class = "modal-footer">
+								<webobject name = "WordSubmitButton"/>
+								<a href="#" class="dismiss btn">Cancel</a>
+							</div>
+						</wo:form> 
+					</webobject>)
+				</li>
+			</webobject>
+		</ul>
+	</webobject>
+	
+</wo:Main>

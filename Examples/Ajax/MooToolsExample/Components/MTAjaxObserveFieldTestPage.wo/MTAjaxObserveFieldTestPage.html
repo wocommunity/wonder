@@ -1,0 +1,23 @@
+<wo:Main pageTitle = "Ajax Observe Field / Dependent PopUp Test">
+	<h2>Ajax Observe Field - Dependent PopUp List Example</h2>
+	<hr/>
+	<p>
+		AjaxUpdateContainer has an optional 'observeFieldID' binding.  You can set this binding to the id of the element to observe.  When the element changes,
+		the observed value will be sent back to the server (as a "partial form submission"), and the AjaxUpdateContainer will be updated.  This feature 
+		requires that you use the ERExtensions framework (due to required changes to WOForm).  With partial form submission, only the 
+		observed field's value is submitted back to the server so that you can attempt to avoid validation failures that might occur
+		if the entire form was submitted.
+	</p>
+	<hr/>
+	This can be used to create dependent PopUpButtons like in the following example:
+	<hr/>	
+	<webobject name = "DependentListForm">
+		<webobject name = "PrimaryColorField"></webobject>	
+		<webobject name = "ColorObserveField"></webobject>
+		<webobject name = "SecondaryColorUpdateComponent">
+			<webobject name = "SecondaryColorField"></webobject>
+		</webobject>
+	</webobject>
+
+
+</wo:Main>
