@@ -34,3 +34,8 @@ RemoveObjectButton : ERMDRemoveRelatedButton {
 ERXNonNullConditional : ERXNonNullConditional {
   condition = currentSelection;
 }
+
+IsEntityWritable: WOConditional {
+	_unroll = true;
+	condition = isEntityCreatable;
+}

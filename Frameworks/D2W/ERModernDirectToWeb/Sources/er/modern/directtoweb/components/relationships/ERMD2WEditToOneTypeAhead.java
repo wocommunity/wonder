@@ -417,5 +417,9 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
 	public String searchTermSelectedFunction() {
 		return "function(e) { " + searchTermSelectedFunctionName() + "(); }";
 	}
-	
+    
+	/** Should the 'new' button be displayed? */
+	public boolean isEntityCreatable() {
+		return ERXValueUtilities.booleanValue(d2wContext().valueForKey("isEntityCreatable"));
+	}
 }
