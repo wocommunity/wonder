@@ -3774,7 +3774,6 @@ Element.implement({
 		catch(e){}
 		//<ltIE9>
 		if ((value == '' || value == null) && doesNotRemoveStyles && this.style.removeAttribute) {
-			console.log("I'm less than IE 9");
 			this.style.removeAttribute(property);
 		}
 		//</ltIE9>
