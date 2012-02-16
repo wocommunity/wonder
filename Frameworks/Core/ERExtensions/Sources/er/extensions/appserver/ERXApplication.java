@@ -840,14 +840,23 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			return false;
 		}
 		
-		String appUrl;
 		if (!(application().wasMainInvoked())) {
 			return false;
-		} else if (application().isDirectConnectEnabled()) {
-			appUrl = application().cgiAdaptorURL().replace("/cgi", ":" + application().port() + "/cgi");
+		}
+		
+		String adapterUrl;
+		if (application().host() != null) {
+			adapterUrl = application().cgiAdaptorURL();
+		} else {
+			adapterUrl = application().cgiAdaptorURL().replace("://null/", "://localhost/");
+		}
+		
+		String appUrl;
+		if (application().isDirectConnectEnabled()) {
+			appUrl = adapterUrl.replace("/cgi", ":" + application().port() + "/cgi");
 			appUrl += "/" + application().name() + ".woa";
 		} else {
-			appUrl = application().cgiAdaptorURL() + "/" + application().name() + ".woa/-" + application().port();
+			appUrl = adapterUrl + "/" + application().name() + ".woa/-" + application().port();
 		}
 		
 		URL url;
@@ -860,7 +869,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			URLConnection connection = url.openConnection();
 			connection.getContent();
 			
-			Thread.sleep(2000); // really only necessary for direct connect mode
+			Thread.sleep(2000);
 			
 			return true;
 		} catch (Throwable e) {
