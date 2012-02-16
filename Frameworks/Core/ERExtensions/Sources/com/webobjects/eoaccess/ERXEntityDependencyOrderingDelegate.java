@@ -41,19 +41,19 @@ public class ERXEntityDependencyOrderingDelegate {
 
 
     /**
-     * Lazy creation of an EOAdaptorOpComparator that uses a list of entities that are in FK dependancy order.
+     * Lazy creation of an EOAdaptorOpComparator that uses a list of entities that are in FK dependency order.
      * Enable DEBUG logging to see the ordered list of entity names.
      *
      * @see com.webobjects.eoaccess.EOAdaptorOpComparator
-     * @return EOAdaptorOpComparator that uses a list of entities that are in FK dependancy order
+     * @return EOAdaptorOpComparator that uses a list of entities that are in FK dependency order
      */
     protected NSComparator adaptorOpComparator() {
         if (adaptorOpComparator == null) {
             ERXEntityFKConstraintOrder constraintOrder = new ERXEntityFKConstraintOrder();
             NSComparator entityOrderingComparator = new ERXEntityOrder.EntityInsertOrderComparator(constraintOrder);
             try {
-                NSArray entityOrdering = constraintOrder.allEntities().sortedArrayUsingComparator(entityOrderingComparator);
-                NSArray entityNameOrdering = (NSArray)entityOrdering.valueForKey("name");
+                NSArray<EOEntity> entityOrdering = constraintOrder.allEntities().sortedArrayUsingComparator(entityOrderingComparator);
+                NSArray<String> entityNameOrdering = (NSArray<String>)entityOrdering.valueForKey("name");
 
                 if (logger.isDebugEnabled()) {
                     logger.debug("Entity ordering:\n " + entityNameOrdering.componentsJoinedByString("\n"));
@@ -78,12 +78,12 @@ public class ERXEntityDependencyOrderingDelegate {
      * @param adaptorOperations list of operations to execute
      * @param adaptorChannel the adaptor channel these will be executed on
      *
-     * @see com.webobjects.eoaccess.EODatabaseContext.Delegate#databaseContextWillPerformAdaptorOperations(EODatabaseContext, NSArray,EOAdaptorChannel)
+     * @see com.webobjects.eoaccess.EODatabaseContext.Delegate#databaseContextWillPerformAdaptorOperations(EODatabaseContext,NSArray,EOAdaptorChannel)
      * @return operations in an order that should avoid FK constraint violations
      */
-    public NSArray databaseContextWillPerformAdaptorOperations(EODatabaseContext aDatabaseContext,
-                                                               NSArray adaptorOperations,
-                                                               EOAdaptorChannel adaptorChannel) {
+	public NSArray<EOAdaptorOperation> databaseContextWillPerformAdaptorOperations(EODatabaseContext aDatabaseContext, 
+																				   NSArray<EOAdaptorOperation> adaptorOperations, 
+																				   EOAdaptorChannel adaptorChannel) {
         try {
             return adaptorOperations.sortedArrayUsingComparator(adaptorOpComparator());
         }
