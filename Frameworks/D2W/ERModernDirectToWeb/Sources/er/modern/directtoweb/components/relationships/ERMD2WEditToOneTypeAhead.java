@@ -417,5 +417,16 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
 	public String searchTermSelectedFunction() {
 		return "function(e) { " + searchTermSelectedFunctionName() + "(); }";
 	}
-	
+    
+	/** Should the 'new' button be displayed? */
+	public boolean isEntityCreatable() {
+		return ERXValueUtilities.booleanValueWithDefault(d2wContext()
+				.valueForKey("isDestinationEntityCreatable"), true);
+	}
+
+	/** Should the 'inspect' button be displayed? */
+	public boolean isEntityInspectable() {
+		return ERXValueUtilities.booleanValueWithDefault(d2wContext()
+				.valueForKey("isDestinationEntityInspectable"), true);
+	}
 }
