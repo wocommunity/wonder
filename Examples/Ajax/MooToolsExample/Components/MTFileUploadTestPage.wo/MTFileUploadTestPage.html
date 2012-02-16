@@ -1,0 +1,39 @@
+<wo:Main pageTitle = "File Upload Example">
+	<h2>AjaxFileUpload</h2>
+	<hr/>
+	This AjaxFileUpload does not bind to anything, so its file is just immediately deleted.  It allows all of the same binding options 
+	as WOFileUpload.  This demo has a maximum file upload size of 2M (change this in Properties if you want to try a local file upload).
+	<p>
+	<hr/>
+	<p>
+		I changed the progress bar's HTML around a little bit to make it easier to style.
+		Instead of a table it now uses a layout like this:
+		<pre>
+			&lt;div class = "value of binding progressBarContainerClass" &gt;
+				&lt;div class = "bar" style = "calculated width percentage"&gt;&lt;/div&gt;
+			&lt;/div&gt;
+		</pre>	
+	</p>
+	<p>There is also a new binding for "linkClass" that allows you to stylize the upload button</p>
+	<hr/>
+	<webobject name = "AjaxFileUpload">
+		<webobject name = "UploadDoneConditional">
+			<p>
+				<webobject name = "SucceededConditional">
+					<i>Your upload succeeded.</i>
+				</webobject>
+				<webobject name = "CanceledConditional">
+					<i>Your upload was canceled.</i>
+				</webobject>
+				<webobject name = "FailedConditional">
+					<i>Your upload failed: <webobject name = "FailureMessage"/></i>
+				</webobject>
+			</p>
+		</webobject>
+	</webobject>
+	</p>
+	<p>
+	Here's a progress bar attached to a thread that is just incrementing the progress value.
+	<webobject name = "AjaxProgress"/>
+	</p>
+</wo:Main>
