@@ -85,6 +85,18 @@ public class ERXPrefixQualifierTraversal extends ERXQualifierTraversal {
 	}
 
 	@Override
+	protected boolean traverseFalseQualifier(ERXFalseQualifier q) {
+		_qualifiers.addObject(q);
+		return true;
+	}
+
+	@Override
+	protected boolean traverseTrueQualifier(ERXTrueQualifier q) {
+		_qualifiers.addObject(q);
+		return true;
+	}
+
+	@Override
 	public synchronized void traverse(EOQualifierEvaluation q, boolean postOrder) {
 		if (!postOrder) {
 			throw new IllegalArgumentException("ERXPrefixQualifierTraversal requires a postOrder traversal.");

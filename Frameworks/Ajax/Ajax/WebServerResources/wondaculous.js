@@ -10169,6 +10169,8 @@ Form.Element.RadioButtonObserver = Class.create(Form.Element.EventObserver, {
 });
 
 var AjaxBusy = {
+	spinners: {},
+	
 	requestContainer: function(request) {
 		var updateContainer;
 		if (request && request.container && request.container.success) {
@@ -10177,11 +10179,19 @@ var AjaxBusy = {
 		return updateContainer;
 	},
 	
-	register: function(busyClass, busyAnimationElement, watchContainerID, onCreateCallback, onCompleteCallback) {
+	register: function(busyClass, busyAnimationElement, watchContainerID, onCreateCallback, onCompleteCallback, useSpinJS, spinOpts) {
 		Ajax.Responders.register({
 			onCreate: function(request, transport) {
 	     	var updateContainer = AjaxBusy.requestContainer(request);
 	     	if (!watchContainerID || (updateContainer && updateContainer.id == watchContainerID)) {
+	     		if (useSpinJS == true) {
+	     			var spinner = AjaxBusy.spinners[busyAnimationElement];
+	     			if (spinner == undefined) {
+	     				spinner = new Spinner(spinOpts);
+	     				AjaxBusy.spinners[busyAnimationElement] = spinner;
+	     			}
+	     			spinner.spin($(busyAnimationElement));
+	     		}
 			  	if (busyClass && updateContainer) {
 						Element.addClassName(updateContainer, busyClass);
 			   	}
@@ -10210,6 +10220,14 @@ var AjaxBusy = {
 			   	if (onCompleteCallback) {
 			   		onCompleteCallback(request, transport);
 			   	}
+			   	
+	     		if (useSpinJS == true) {
+	     			var spinner = AjaxBusy.spinners[busyAnimationElement];
+	     			if (spinner) {
+	     				AjaxBusy.spinners[busyAnimationElement] = undefined;
+	     				setTimeout(function() { spinner.stop(); }, 500);
+	     			}
+	     		}
 			  }
 			}
 	  });
@@ -10397,7 +10415,12 @@ var AjaxUploadClient = Class.create({
 		    	this.options.succeededFunction(this.id);
 			if (this.options.finishedFunction)
 				this.options.finishedFunction(this.id);
-			$('AFUClearButton' + this.id).show();
+			if (this.options.clearUploadProgressOnSuccess) {
+				$('AFUFileObject' + this.id).hide();
+				$('AFUSelectFileButtonWrapper' + this.id).show();
+			} else {
+				$('AFUClearButton' + this.id).show();
+			}
 			this.previousState = this.STATE.SUCCEEDED;
 			break;
 		case this.STATE.FINISHED:

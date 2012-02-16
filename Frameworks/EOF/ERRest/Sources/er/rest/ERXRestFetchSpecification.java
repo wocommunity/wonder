@@ -34,8 +34,9 @@ import er.extensions.eof.ERXS;
  * </p>
  * <ul>
  * <li>sort=lastName|asc,firstName|desc</li>
- * <li>batchSize=25&batch=1</li>
+ * <li>batchSize=25&batch=1 (Note that batch number is a zero-based index)</li>
  * <li>qualifier=firstName%3D'Mike'</li>
+ * <li>Range=items%3D10-19 (Note that the index values for Range items are zero-based)</li>
  * </ul>
  * 
  * <p>

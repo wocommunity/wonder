@@ -10,7 +10,13 @@ import com.webobjects.foundation.NSCoding;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableSet;
 
-public class ERXFalseQualifier extends EOQualifier implements NSCoding, EOKeyValueArchiving {
+/**
+ * An EOQualifier that always evaluates to a <code>true</code> result.
+ * 
+ * @author kieran
+ * 
+ */
+public class ERXTrueQualifier extends EOQualifier implements NSCoding, EOKeyValueArchiving {
 	@Override
 	public void addQualifierKeysToSet(NSMutableSet keys) {
 	}
@@ -26,28 +32,29 @@ public class ERXFalseQualifier extends EOQualifier implements NSCoding, EOKeyVal
 
 	@Override
 	public boolean evaluateWithObject(Object object) {
-		return false;
+		return true;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "(false)";
+		return "(true)";
 	}
 
-    public Class classForCoder() {
-    	return getClass();
-    }
-    
+	public Class classForCoder() {
+		return getClass();
+	}
+
 	public static Object decodeObject(NSCoder coder) {
-		return new ERXFalseQualifier();
+		return new ERXTrueQualifier();
 	}
 
-	public void encodeWithCoder(NSCoder coder) {}
+	public void encodeWithCoder(NSCoder coder) {
+	}
 
-	public void encodeWithKeyValueArchiver(EOKeyValueArchiver archiver) {}
+	public void encodeWithKeyValueArchiver(EOKeyValueArchiver archiver) {
+	}
 
 	public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver unarchiver) {
-		return new ERXFalseQualifier();
+		return new ERXTrueQualifier();
 	}
-	
 }
