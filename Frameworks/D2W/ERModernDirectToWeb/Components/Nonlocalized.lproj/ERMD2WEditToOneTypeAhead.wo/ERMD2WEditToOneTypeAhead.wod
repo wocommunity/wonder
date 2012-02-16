@@ -34,3 +34,11 @@ RemoveObjectButton : ERMDRemoveRelatedButton {
 ERXNonNullConditional : ERXNonNullConditional {
   condition = currentSelection;
 }
+
+ShowNewButton: WOConditional {
+	condition = isEntityCreatable;
+}
+
+ShowInspectButton: WOConditional {
+	condition = isEntityInspectable;
+}
