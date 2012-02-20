@@ -9,6 +9,7 @@ EditToOneRelationship: ERXToOneRelationship {
         sourceEntityName = object.entityName;
         sourceObject = object;
         uiStyle = d2wContext.toOneUIStyle;
+	goingVertically = d2wContext.goingVertically;
 	noSelectionString = d2wContext.noSelectionString;
 	popupName = d2wContext.popupName;
 	localizeDisplayKeys = d2wContext.localizeDisplayKeys;
