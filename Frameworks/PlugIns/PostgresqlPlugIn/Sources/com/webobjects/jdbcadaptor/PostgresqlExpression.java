@@ -380,6 +380,10 @@ public class PostgresqlExpression extends JDBCExpression {
         if (externalType != null && externalType.endsWith( "[]" ) ) {
             return externalType;
         }
+        //CHECKME: Why isn't this found in jdbcinfo?
+        if("integer".equals(externalType)) {
+        	return externalType;
+        }
         return super.columnTypeStringForAttribute( attribute );
     }
     
