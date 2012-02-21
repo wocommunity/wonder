@@ -443,6 +443,10 @@ public class ERXRouteController extends WODirectAction {
 					String[] types = contentType.split("/");
 					if (types.length == 2) {
 						type = types[1];
+						String[] charsets = type.split(";");
+						if (charsets.length >0) {
+							type = charsets[0];
+						}
 					}
 				}
 			}
