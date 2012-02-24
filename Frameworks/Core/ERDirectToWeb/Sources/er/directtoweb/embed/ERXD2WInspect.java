@@ -8,7 +8,10 @@ package er.directtoweb.embed;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WInspect;
+import com.webobjects.directtoweb.NextPageDelegate;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+
+import er.directtoweb.delegates.ERD2WEmbeddedComponentActionDelegate;
 
 // Only difference between this component and D2WInspect is that this one uses ERD2WSwitchComponent
 /**
@@ -29,7 +32,8 @@ public class ERXD2WInspect extends D2WInspect {
         parent().validationFailedWithException(e, value, keyPath);
     }
     /**
-     * Calling super is a bad thing in 5.2 when used as an embedded inspect.
+     * Calling super is a bad thing in 5.2 when used as an embedded inspect. Also causes
+     * errors when using deserialized components in 5.4.3
      */
     public void awake() {}
     
@@ -41,5 +45,13 @@ public class ERXD2WInspect extends D2WInspect {
                 entityName = eo.entityName();
         }
         return entityName;
+    }
+    
+    /**
+     * Overridden to support serialization
+     */
+    @Override
+    public NextPageDelegate newPageDelegate() {
+    	return ERD2WEmbeddedComponentActionDelegate.instance;
     }
 }

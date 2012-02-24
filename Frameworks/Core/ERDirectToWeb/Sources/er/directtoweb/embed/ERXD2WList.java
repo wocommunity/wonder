@@ -8,6 +8,7 @@ package er.directtoweb.embed;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WList;
+import com.webobjects.directtoweb.NextPageDelegate;
 import com.webobjects.eocontrol.EOArrayDataSource;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EODataSource;
@@ -15,6 +16,7 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 
+import er.directtoweb.delegates.ERD2WEmbeddedComponentActionDelegate;
 import er.extensions.foundation.ERXArrayUtilities;
 
 // Only difference between this component and D2WList is that this one uses ERD2WSwitchComponent
@@ -69,5 +71,13 @@ public class ERXD2WList extends D2WList {
                 _dataSource.setArray(nsarray);
         }
         return _dataSource;
+    }
+
+    /**
+     * Overridden to support serialization
+     */
+    @Override
+    public NextPageDelegate newPageDelegate() {
+    	return ERD2WEmbeddedComponentActionDelegate.instance;
     }
 }

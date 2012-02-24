@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.embed;
 
+import java.io.Serializable;
+
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WEmbeddedComponent;
@@ -22,7 +24,7 @@ public class D2WPick extends D2WEmbeddedComponent {
     
 public D2WPick(WOContext context) { super(context); }
     
-    static class _D2WPickActionDelegate implements NextPageDelegate {
+    static class _D2WPickActionDelegate implements NextPageDelegate, Serializable {
         public static NextPageDelegate instance=new _D2WPickActionDelegate ();
         public WOComponent nextPage(WOComponent sender) {
             WOComponent target = (WOComponent)D2WEmbeddedComponent.findTarget(sender);

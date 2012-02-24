@@ -5,6 +5,9 @@ import org.apache.log4j.Logger;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WQuery;
 import com.webobjects.directtoweb.D2WSwitchComponent;
+import com.webobjects.directtoweb.NextPageDelegate;
+
+import er.directtoweb.delegates.ERD2WQueryActionDelegate;
 
 /**
  * Same as D2WQuery, except that you can specify the queryBindings in advance.
@@ -28,5 +31,13 @@ public class ERD2WQuery extends D2WQuery {
     
     static {
     	D2WSwitchComponent.addToPossibleBindings("queryBindings");
+    }
+
+    /**
+     * Overridden to support serialization
+     */
+    @Override
+    public NextPageDelegate newPageDelegate() {
+    	return ERD2WQueryActionDelegate.instance;
     }
 }
