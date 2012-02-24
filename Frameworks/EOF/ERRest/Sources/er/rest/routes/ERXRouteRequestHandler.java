@@ -260,6 +260,9 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 		 */
 		public String formatEntityNamed(String entityName, boolean pluralizeIfNecessary) {
 			String singularEntityName = caseifyEntityNamed(entityName);
+			if ((entityName == null) || (entityName.length() == 0)) {
+				return singularEntityName;
+			}			
 			String controllerPath;
 			if (pluralizeIfNecessary && pluralRouteName()) {
 				controllerPath = ERXLocalizer.englishLocalizer().plurifiedString(singularEntityName, 2);
