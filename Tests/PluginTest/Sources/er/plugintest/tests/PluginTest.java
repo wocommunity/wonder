@@ -52,10 +52,10 @@ public class PluginTest extends ERXTestCase {
 					ERXJDBCUtilities.executeUpdateScript(channel, sql);
 				}
 				catch (SQLException e) {
-					log.error(org.apache.commons.lang.exception.ExceptionUtils.getFullStackTrace(e), e);
+					log.error(e, e);
 					throw new NSForwardException(e);
 				} catch (IOException e) {
-					log.error(org.apache.commons.lang.exception.ExceptionUtils.getFullStackTrace(e), e);
+					log.error(e, e);
 					throw new NSForwardException(e);
 				}
 				return 0;
