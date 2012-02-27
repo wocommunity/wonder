@@ -6,6 +6,10 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.components;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;
@@ -20,6 +24,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.foundation.ERXArrayUtilities;
+import er.extensions.foundation.ERXEOSerializationUtilities;
 
 /**
  * Superclass for most of the custom edit components.  <br />
@@ -52,6 +57,18 @@ public abstract class ERDCustomEditComponent extends ERDCustomComponent {
     private EOEnterpriseObject object;
     protected EOEditingContext editingContext;
     
+	private void writeObject(ObjectOutputStream out) throws IOException {
+		out.writeObject(_defaultSortOrderingsForDestinationEntity);
+		out.writeObject(editingContext);
+		ERXEOSerializationUtilities.writeEO(out, object);
+	}
+    
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+		_defaultSortOrderingsForDestinationEntity = (NSArray) in.readObject();
+		editingContext = (EOEditingContext) in.readObject();
+		object = ERXEOSerializationUtilities.readEO(in);
+	}
+
     public Object objectPropertyValue() {
         return objectKeyPathValue();
     }
@@ -67,12 +84,24 @@ public abstract class ERDCustomEditComponent extends ERDCustomComponent {
 
     public void setObject(EOEnterpriseObject newObject) {
         object=newObject;
-        if (object!=null) // making sure the editing context stays alive
+        if (object!=null) {
+        	// making sure the editing context stays alive
             editingContext=object.editingContext();
+        }
     }
     public EOEnterpriseObject object() {
-        if (object==null && !synchronizesVariablesWithBindings())
+        if (object==null && !synchronizesVariablesWithBindings()) {
             object=(EOEnterpriseObject)valueForBinding(Keys.object);
+            if (object!=null) {
+            	/*
+            	 * making sure the editing context stays alive
+            	 * ...
+            	 * I don't think this is really necessary, but doing
+            	 * it to be consistent.
+            	 */
+                editingContext=object.editingContext();
+            }
+        }
         return object;
     }
     
