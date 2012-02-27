@@ -48,7 +48,7 @@ public class CUDTest extends PluginTest{
 				NSData flag = new NSData(ERXFileUtilities.inputStreamForResourceNamed("us.png", null, null), 1024);
 				country.setFlag(flag);
 			} catch (IOException e) {
-				log.error(e, e);
+				log.error(org.apache.commons.lang.exception.ExceptionUtils.getFullStackTrace(e), e);
 				throw new RuntimeException(e.getMessage(), e);
 			}
 			ec.saveChanges();

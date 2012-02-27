@@ -2,7 +2,8 @@ package er.plugintest.tests;
 
 import java.util.*;
 
-import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang.*;
+import org.apache.commons.lang.math.*;
 
 import com.webobjects.foundation.*;
 
@@ -116,7 +117,6 @@ public class MultithreadedTest extends PluginTest {
 
 		@Override
 		public void run() {
-			Random random = new Random();
 			for (int i = 0; i < 25; i++) {
 				ERXEC ec = (ERXEC) ERXEC.newEditingContext();
 				ec.lock();
@@ -124,7 +124,7 @@ public class MultithreadedTest extends PluginTest {
 					City city = City.fetchCity(ec, City.NAME.eq("Amsterdam"));
 					
 					if (city != null) {
-						city.setPopulation(random.nextInt(3));
+						city.setPopulation(RandomUtils.nextInt(3));
 					}
 					
 					ec.saveChanges();
