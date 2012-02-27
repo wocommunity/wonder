@@ -3,7 +3,7 @@ package er.extensions.components;
 import java.util.Date;
 import java.util.TimeZone;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
