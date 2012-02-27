@@ -16,6 +16,7 @@ import com.webobjects.directtoweb.D2WPage;
 import com.webobjects.foundation.NSDictionary;
 
 import er.directtoweb.ERDirectToWeb;
+import er.directtoweb.pages.ERD2WPage;
 import er.extensions.components.ERXNonSynchronizingComponent;
 import er.extensions.eof.ERXConstant;
 import er.extensions.validation.ERXExceptionHolder;
