@@ -14,12 +14,12 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 
 public class WOExceptionPage extends WOComponent {
-    public Throwable exception;
-    protected NSArray _reasonLines;
+    public transient Throwable exception;
+    protected NSArray<String> _reasonLines;
     public String currentReasonLine;
 
-    public WOExceptionParser error;
-    public WOParsedErrorLine errorline;
+    public transient WOExceptionParser error;
+    public transient WOParsedErrorLine errorline;
 
     public WOExceptionPage(WOContext aContext)  {
         super(aContext);
@@ -52,7 +52,7 @@ public class WOExceptionPage extends WOComponent {
             if (aMessage!=null) {
                 _reasonLines = NSArray.componentsSeparatedByString(exception.getMessage(), "\n");
             } else {
-                _reasonLines = new NSArray();
+                _reasonLines = new NSArray<String>();
             }
         }
         return _reasonLines;
