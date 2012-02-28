@@ -2235,7 +2235,9 @@ public class ERXStringUtilities {
 		return stripped;
 	}
 	
-	@deprecated Replaced by stripHtml(str, false)
+	/**
+	 * @deprecated  Replaced by stripHtml(str, false)
+	 */
 	public static String stripHtml(String str) {
 		return stripHtml(str, false);
 	}
