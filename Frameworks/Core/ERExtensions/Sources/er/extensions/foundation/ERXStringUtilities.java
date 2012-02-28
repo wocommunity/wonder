@@ -2206,45 +2206,79 @@ public class ERXStringUtilities {
 	}
 
 	/**
-	 * Removes HTML characters from the given string.
+	 * Removes HTML characters from the given string
+	 * May be useful before trimming text
 	 * 
-	 * @param str the string to remove HTML from
+	 * @param str the string to remove HTML Tags from
+	 * @param convertChars set to true if you want html special chars to be converted ( ex. &copy; to (C) ), false otherwise
 	 * @return the string without HTML characters in it
 	 */
-	public static String stripHtml(String str) {
+	public static String stripHtml(String str, boolean convertChars) {
 		String stripped = str;
 		if (stripped != null) {
-			stripped = stripped.replaceAll("<[^>]*>", " ");
-			stripped = stripped.replaceAll("\\s+", " ");
-			stripped = stripped.replaceAll("&#8217;", "'");
-			stripped = stripped.replaceAll("&#169;", "(C)");
-			stripped = stripped.replaceAll("&#215;", " x ");
-			stripped = stripped.replaceAll("&#8230;", "...");
-			stripped = stripped.replaceAll("&#8212;", " -- ");
-			stripped = stripped.replaceAll("&#8211;", " - ");
-			stripped = stripped.replaceAll("&#8220;", "\"");
-			stripped = stripped.replaceAll("&#8221;", "\"");
-			stripped = stripped.replaceAll("&#174;", "(C)");
-			stripped = stripped.replaceAll("&#174;", "(R)");
-			stripped = stripped.replaceAll("&#8482;", "(TM)");
-			stripped = stripped.trim();
+			
+			stripped = stripped.replaceAll("\\<.*?\\>","");
+			
+			if(convertChars) {
+				stripped = stripped.replaceAll("<[^>]*>", " ");
+				stripped = stripped.replaceAll("\\s+", " ");
+				stripped = stripped.replaceAll("&#8217;", "'");
+				stripped = stripped.replaceAll("&#169;", "(C)");
+				stripped = stripped.replaceAll("&#215;", " x ");
+				stripped = stripped.replaceAll("&#8230;", "...");
+				stripped = stripped.replaceAll("&#8212;", " -- ");
+				stripped = stripped.replaceAll("&#8211;", " - ");
+				stripped = stripped.replaceAll("&#8220;", "\"");
+				stripped = stripped.replaceAll("&#8221;", "\"");
+				stripped = stripped.replaceAll("&#174;", "(C)");
+				stripped = stripped.replaceAll("&#174;", "(R)");
+				stripped = stripped.replaceAll("&#8482;", "(TM)");
+				stripped = stripped.trim();
+			}
 		}
 		return stripped;
 	}
 	
 	/**
-	 * Removes all HTML tags
+	 * Removes HTML characters from the given string.
 	 * 
-	 * @param str the string to remove HTML Tags from
-	 * @return the string without HTML tags
+	 * @deprecated You shoud use stripHtml(String str, boolean convertChars) instead
+	 * @param str the string to remove HTML from
+	 * @return the string without HTML characters in it
 	 */
-	public static String stripHtmlTags(String str) {
-		String stripped = str;
-		if (str != null) {
-			stripped = stripped.replaceAll("\\<.*?\\>","");
-		}
-		return stripped;
+	@Deprecated
+	public static String stripHtml(String str) {
+		return stripHtml(str, false);
 	}
+	
+	/**
+	 * Returns a string trimmed about at the max lenght you define without truncating the last word and adding "..." (if necessary)
+	 * 
+	 * @param trimmingString the string you would like to trim
+	 * @param maxLenght the max lenght you need
+	 * @return the string trimmed
+	 */
+	public static String wordSafeTrimmedString(String trimmingString, int maxLenght) {
+		
+		String cuttedString = trimmingString;
+		
+		if ( ( trimmingString != null ) && ( trimmingString.length() > maxLenght ) ) {
+		
+			trimmingString = stripHtml(trimmingString,false);
+			
+			if( trimmingString.length() > maxLenght) {
+				int space = trimmingString.indexOf(" ",(maxLenght - 20));
+				try {
+					cuttedString = trimmingString.substring(0, space)+" ...";
+				} catch ( Exception e ) {
+					//GIVE UP
+				}
+			}
+		}
+		
+		return cuttedString;
+    }
+	
 
 	/**
 	 * Attempts to convert string values for attributes into the appropriate
