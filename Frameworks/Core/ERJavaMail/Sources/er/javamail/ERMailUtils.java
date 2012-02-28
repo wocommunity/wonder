@@ -295,5 +295,39 @@ public class ERMailUtils extends Object {
 
 		return addrArray;
 	}
+	
+	
+	/**
+	 * This method will parse a large strng of email address that could be separated, by commas, simicolon, tabs, spaces, carriage returns, (even mixed) and will return an NSArray of addresses(strings)
+	 * @param str
+	 * @return NSArray<String> of email address
+	 */
+	public static NSArray<String> emailsFromBulkList(String str) {
+		  
+		if ( (str!=null) && (str.length() > 3) ) {
+			  
+			//str = str.toLowerCase();
+			  
+			str = str.replace("\"", "");
+			str = str.replace(";", "");
+			str = str.replace(":", "");
+			str = str.replace("'", "");
+			str = str.replace("\n", ",");
+			str = str.replace("\r", ",");
+			str = str.replace(" ", ",");
+			str = str.replace("\t", ",");
+			  
+			//TODO, faster parsing using regex
+	    		
+			while ( str.contains(",,")) {
+				str = str.replace(",,", ",");
+			}
+	    		
+			String[] tokens = str.split(",");
+			return new NSArray<String>(tokens);
+		}
+		  return null;
+	}
+	
 
 }
