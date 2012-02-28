@@ -2231,6 +2231,20 @@ public class ERXStringUtilities {
 		}
 		return stripped;
 	}
+	
+	/**
+	 * Removes all HTML tags
+	 * 
+	 * @param str the string to remove HTML Tags from
+	 * @return the string without HTML tags
+	 */
+	public static String stripHtmlTags(String str) {
+		String stripped = str;
+		if (str != null) {
+			stripped = stripped.replaceAll("\\<.*?\\>","");
+		}
+		return stripped;
+	}
 
 	/**
 	 * Attempts to convert string values for attributes into the appropriate

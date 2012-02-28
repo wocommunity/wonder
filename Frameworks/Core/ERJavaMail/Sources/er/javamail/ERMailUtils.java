@@ -295,5 +295,80 @@ public class ERMailUtils extends Object {
 
 		return addrArray;
 	}
+	
+	/**
+	 * Utility method to check if an email is valid (will do just a syntax checking, not real email check)
+	 * @param anEmailAddress
+	 * @return true if email is valid
+	 */
+	public static boolean isValidEmailAddress(String anEmailAddress) {
+		boolean result = false;
+		if (anEmailAddress != null) {
+	    	try {
+	    		@SuppressWarnings("unused")
+				InternetAddress emailAddr = new InternetAddress(anEmailAddress);
+	    		if ( _hasNameAndDomain(anEmailAddress) ) {
+	    			result = true;
+	    		}
+	    	}
+	    	catch (AddressException ex){
+	    		result = false;
+	    	}
+	    }
+	    
+		return result;
+	}
+
+	/**
+	 * Utility method to check if email address have the name and domain
+	 * @param aEmailAddress
+	 * @return true is email is valid
+	 */
+	private static boolean _hasNameAndDomain( String anEmailAddress ) {
+		if (anEmailAddress!=null) {
+			String[] tokens = anEmailAddress.split("@");
+			return 
+					tokens.length == 2 &&
+					tokens[0]!=null &&
+					tokens[1]!=null &&
+					tokens[0].length() > 1 &&
+					tokens[1].length() > 3;
+		}
+		return false;
+	}
+	
+	
+	/**
+	 * This method will parse a large strng of email address that could be separated, by commas, simicolon, tabs, spaces, carriage returns, (even mixed) and will return an NSArray of addresses(strings)
+	 * @param str
+	 * @return NSArray<String> of email address
+	 */
+	public static NSArray<String> emailsFromBulkList(String str) {
+		  
+		if ( (str!=null) && (str.length() > 3) ) {
+			  
+			//str = str.toLowerCase();
+			  
+			str = str.replace("\"", "");
+			str = str.replace(";", "");
+			str = str.replace(":", "");
+			str = str.replace("'", "");
+			str = str.replace("\n", ",");
+			str = str.replace("\r", ",");
+			str = str.replace(" ", ",");
+			str = str.replace("\t", ",");
+			  
+			//TODO, faster parsing using regex
+	    		
+			while ( str.contains(",,")) {
+				str = str.replace(",,", ",");
+			}
+	    		
+			String[] tokens = str.split(",");
+			return new NSArray<String>(tokens);
+		}
+		  return null;
+	}
+	
 
 }
