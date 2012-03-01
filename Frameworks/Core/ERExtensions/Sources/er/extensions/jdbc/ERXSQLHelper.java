@@ -19,13 +19,11 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorChannel;
-import com.webobjects.eoaccess.EOAdaptorOperation;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabase;
 import com.webobjects.eoaccess.EODatabaseChannel;
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
-import com.webobjects.eoaccess.EOGeneralAdaptorException;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOQualifierSQLGeneration;
 import com.webobjects.eoaccess.EORelationship;
@@ -47,10 +45,8 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation.NSTimestamp;
-import com.webobjects.foundation.NSValidation;
 import com.webobjects.foundation._NSUtilities;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
-import com.webobjects.jdbcadaptor.JDBCAdaptorException;
 import com.webobjects.jdbcadaptor.JDBCPlugIn;
 
 import er.extensions.eof.ERXConstant;
@@ -60,7 +56,6 @@ import er.extensions.eof.ERXModelGroup;
 import er.extensions.eof.qualifiers.ERXFullTextQualifier;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
-import er.extensions.validation.ERXValidationFactory;
 
 /**
  * ERXSQLHelper provides support for additional database-vender-specific
@@ -548,7 +543,7 @@ public class ERXSQLHelper {
 		}
 		else {
 			NSMutableArray<EOAttribute> rawRowAttributes = new NSMutableArray<EOAttribute>();
-			for (String rawRowKeyPath : (NSArray<String>) fetchSpec.rawRowKeyPaths()) {
+			for (String rawRowKeyPath : fetchSpec.rawRowKeyPaths()) {
 				rawRowAttributes.addObject(entity.anyAttributeNamed(rawRowKeyPath));
 			}
 			attributes = rawRowAttributes.immutableClone();
@@ -1313,7 +1308,7 @@ public class ERXSQLHelper {
 		if (sql != null) {
 			char commandSeparatorChar = commandSeparatorChar();
 			Pattern commentPattern = commentPattern();
-			StringBuffer statementBuffer = new StringBuffer();
+			StringBuilder statementBuffer = new StringBuilder();
 			BufferedReader reader = new BufferedReader(new StringReader(sql));
 			boolean inQuotes = false;
 
@@ -1332,6 +1327,7 @@ public class ERXSQLHelper {
 					// Determine if the line ends inside a single quoted string
 					int length = nextLine.length();
 					char ch = 0;
+					char prev = 0;
 					for (int i = 0; i < length; i++) {
 						ch = nextLine.charAt(i);
 						// Determine if we are in a quoted string, but ignore escaped apostrophes, e.g. 'Mike\'s Code' 
@@ -1341,9 +1337,14 @@ public class ERXSQLHelper {
 						else if (ch == '\'') {
 							inQuotes = !inQuotes;
 						}
+						else if (ch == '-' && prev == '-' && !inQuotes) {
+							statementBuffer.deleteCharAt(statementBuffer.length() - 1);
+							break;
+						}
 						if (inQuotes || ch != commandSeparatorChar) {
 							statementBuffer.append(ch);
 						}
+						prev = ch;
 					}
 
 					// If we are not in a quoted string, either this is the end of the command or we need to 
