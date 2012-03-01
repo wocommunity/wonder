@@ -30,6 +30,10 @@ CloseCountRepetition : WORepetition {
 	count = closeCount;
 }
 
+LastCloseCountRepetition: WORepetition {
+    count = lastCloseCount;
+}
+
 TreeNodeRepetition : WORepetition {
 	list = nodes;
 	item = item;
