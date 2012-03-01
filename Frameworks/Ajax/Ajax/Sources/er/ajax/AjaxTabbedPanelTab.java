@@ -43,6 +43,8 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
     private WOAssociation onLoad;
     private WOAssociation isVisible;
     private WOAssociation accesskey;
+    private WOAssociation parentId;
+    private WOAssociation tabNumber;
 
 
     public AjaxTabbedPanelTab(String aName, NSDictionary associations, WOElement template) {
@@ -56,6 +58,8 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
         onLoad = (WOAssociation) associations.objectForKey("onLoad");
         isVisible = (WOAssociation) associations.objectForKey("isVisible");
         accesskey = (WOAssociation)associations.objectForKey("accesskey");
+        parentId = (WOAssociation)associations.objectForKey("parentId");
+        tabNumber = (WOAssociation)associations.objectForKey("tabNumber");
         
         if (name == null) {
         	throw new RuntimeException("name binding is required");
@@ -70,7 +74,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
     	WOComponent component = aContext.component();
     	if (isVisble(component)) {
             aResponse.appendContentString("<li id=\"");
-            aResponse.appendContentString((String)id().valueInComponent(component) + "_panel");
+            aResponse.appendContentString(tabIdInComponent(component) + "_panel");
             aResponse.appendContentString("\" updateUrl=\"");
             aResponse.appendContentString(AjaxUtils.ajaxComponentActionUrl(aContext));
     		aResponse.appendContentString("\" class=\"");
@@ -93,7 +97,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
             // it is fired by the user clicking tabs
             if (isSelected(component) && content != null) {
             	aResponse.appendContentString("<script>AjaxTabbedPanel.onLoad('");
-            	aResponse.appendContentString((String)id().valueInComponent(component) + "_panel");
+            	aResponse.appendContentString(tabIdInComponent(component) + "_panel");
             	aResponse.appendContentString("');</script>\n");
             }
     	}
@@ -172,9 +176,23 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
 	 * @return ID to cache this Ajax response under
 	 */
 	protected String _containerID(WOContext context) {
-		return (String)id().valueInComponent(context.component()) + "_panel";
+		return tabIdInComponent(context.component()) + "_panel";
 	}
 
+	/**
+	 * If the id binding is set, then this is used for the id, otherwise the parentId and tabNumber bindings are combined
+	 * to make an id.
+	 * @param component for value lookups
+	 * @return id of this tab
+	 */
+	public String tabIdInComponent(WOComponent component)
+	{
+		if (id() == null) {
+			return parentId().valueInComponent(component).toString() + tabNumber().valueInComponent(component).toString();
+		}
+
+		return id().valueInComponent(component).toString();
+	}
 
     /**
      * @return association for HTML id attribute
@@ -225,4 +243,20 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
     public WOAssociation accesskey() {
     	return accesskey;
     }
+
+	public void setParentId(WOAssociation aParentId) {
+		this.parentId = aParentId;
+	}
+
+	public WOAssociation parentId() {
+		return parentId;
+	}
+
+	public void setTabNumber(WOAssociation aTabNumber) {
+		this.tabNumber = aTabNumber;
+	}
+
+	public WOAssociation tabNumber() {
+		return tabNumber;
+	}
 }
