@@ -1,6 +1,7 @@
 package er.extensions.eof;
 
 import java.math.BigDecimal;
+import java.util.Locale;
 
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
@@ -1272,6 +1273,30 @@ public class ERXKey<T> {
 	 */
 	public String key() {
 		return _key;
+	}
+	
+	/**
+	 * Returns a localized key.
+	 * 
+	 * @param locale
+	 * 	locale for the new key.
+	 * 
+	 * @return localized key
+	 */
+	public ERXKey<T> loc(String locale) {
+		return new ERXKey(key(), locale);
+	}
+
+	/**
+	 * Returns a localized key.
+	 * 
+	 * @param locale
+	 * 	locale for the new key.
+	 * 
+	 * @return localized key
+	 */
+	public ERXKey<T> loc(Locale locale) {
+		return new ERXKey(key(), locale.getLanguage().toLowerCase());
 	}
 
 	/**
