@@ -1182,6 +1182,18 @@ public class ERXKey<T> {
 	}
 
 	/**
+	 * Constructs a localized ERXKey.
+	 * 
+	 * @param key
+	 *            the underlying keypath
+	 * @param locale
+	 * 			  the locale for the key
+	 */
+	public ERXKey(String key, String locale) {
+		_key = key + "_" + locale;
+	}
+
+	/**
 	 * Equivalent to ERXS.asc(key())
 	 * 
 	 * @return asc sort ordering for key
