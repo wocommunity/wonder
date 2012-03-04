@@ -2,6 +2,7 @@ package er.snapshotexplorer.components.pages;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModel;
 
 import er.rest.routes.ERXRouteParameter;
 import er.rest.routes.IERXRouteComponent;
@@ -22,6 +23,11 @@ public class SEEOEntityShowPage extends SEPage implements IERXRouteComponent {
   public void setEOEntity(EOEntity entity) {
     _entity = entity;
     _entityStats = new SEModelStats(entity.model()).entityStatsForEntityNamed(entity.name());
+  }
+
+  @ERXRouteParameter
+  public void setEoEntity(EOEntity entity) {
+	  setEOEntity(entity);
   }
 
   public EOEntity eoentity() {
