@@ -69,8 +69,7 @@ public class MySQLExpression
     extends
         com.webobjects.jdbcadaptor.MySQLPlugIn.MySQLExpression
 {
-	
-	private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger( MySQLExpression.class );
+
 	private static final List< NSSelector > SORT_ORDERING_ASC_SELECTORS =
 	    Arrays.asList( EOSortOrdering.CompareAscending, EOSortOrdering.CompareCaseInsensitiveAscending );
 	private static final List< NSSelector > SORT_ORDERING_BIN_SELECTORS = Arrays.asList( EOSortOrdering.CompareAscending, EOSortOrdering.CompareDescending );
