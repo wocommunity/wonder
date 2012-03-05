@@ -12,6 +12,7 @@ import com.webobjects.eocontrol.EOQualifierEvaluation;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
@@ -33,11 +34,11 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	private NSMutableDictionary _userInfo;
 	private boolean _includeEditingContextChanges;
 	
-	public ERXFetchSpecification(String entityName, EOQualifier qualifier, NSArray sortOrderings, boolean usesDistinct, boolean isDeep, NSDictionary hints) {
+	public ERXFetchSpecification(String entityName, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings, boolean usesDistinct, boolean isDeep, NSDictionary hints) {
 		super(entityName, qualifier, sortOrderings, usesDistinct, isDeep, hints);
 	}
 
-	public ERXFetchSpecification(String entityName, EOQualifier qualifier, NSArray sortOrderings) {
+	public ERXFetchSpecification(String entityName, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings) {
 		super(entityName, qualifier, sortOrderings);
 	}
 
@@ -155,6 +156,14 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	 */
 	public void setRawRowKeyPaths(String keyPath, String... keyPaths) {
 		super.setRawRowKeyPaths(new NSArray<String>(keyPath, keyPaths));
+	}
+	
+	public void setPrefetchingRelationshipKeyPaths(ERXKey<?>... prefetchingRelationshipKeyPaths) {
+		NSMutableArray<String> keypaths = new NSMutableArray<String>();
+    	for (ERXKey<?> key : prefetchingRelationshipKeyPaths) {
+    		keypaths.addObject(key.key());
+    	}
+		setPrefetchingRelationshipKeyPaths(keypaths);
 	}
 
 	/**

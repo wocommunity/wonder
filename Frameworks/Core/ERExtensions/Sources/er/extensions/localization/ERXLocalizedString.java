@@ -1,10 +1,3 @@
-//
-// ERXLocalizedString.java: Class file for WO Component 'ERXLocalizedString'
-// Project ERExtensions
-//
-// Created by ak on Sun May 05 2002
-//
-
 package er.extensions.localization;
 
 import com.webobjects.appserver.WOContext;
@@ -12,8 +5,8 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 
 import er.extensions.components.ERXStatelessComponent;
-/**
 
+/**
 Examples:
  1) value = "Localize me" -> the localized value of "Localize me"
  2) keyPath = "componentName" (note that the path must be a String) -> localized name of the parent component
@@ -24,11 +17,15 @@ Examples:
  
 Bindings:
  
- @binding object the object to derive the value of, if not given and keyPath is set, parent() is assumed
+ @binding escapeHTML when <code>true</code> will escape the value
  @binding keyPath the keyPath to get of the object which is to be localized
- @binding value string to localize
- @binding templateString the key to the template to evaluate with object and otherObject
+ @binding object the object to derive the value of, if not given and keyPath is set, parent() is assumed
+ @binding omitWhenEmpty outputs an empty string if <code>true</code> when it would be <code>null</code>
  @binding otherObject second object to use with templateString
+ @binding templateString the key to the template to evaluate with object and otherObject
+ @binding value string to localize
+ @binding valueWhenEmpty display this value if value evaluates to <code>null</code>. The binding 
+          <i>omitWhenEmpty</i> will prevent this.
  */
 public class ERXLocalizedString extends ERXStatelessComponent {
 
@@ -65,22 +62,22 @@ public class ERXLocalizedString extends ERXStatelessComponent {
             if(hasBinding("object") || hasBinding("keyPath")) {
                 Object value = object();
                 if(hasBinding("keyPath"))
-                    value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(value, (String)valueForBinding("keyPath"));
+                    value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(value, stringValueForBinding("keyPath"));
                 stringToLocalize = objectToString(value);
             } else if(hasBinding("value")) {
-            	stringToLocalize = (String)valueForBinding("value");
+            	stringToLocalize = stringValueForBinding("value");
             	if(booleanValueForBinding("omitWhenEmpty") && localizer.localizedStringForKey(stringToLocalize) == null) {
             		stringToLocalize = "";
             	}
             }
             if(stringToLocalize == null && hasBinding("valueWhenEmpty")) {
-                stringToLocalize = (String)valueForBinding("valueWhenEmpty");
+                stringToLocalize = stringValueForBinding("valueWhenEmpty");
             }
             if(stringToLocalize != null) {
                 localizedString = localizer.localizedStringForKeyWithDefault(stringToLocalize);
             }
         } else {
-        	String templateString = (String)valueForBinding("templateString");
+        	String templateString = stringValueForBinding("templateString");
             Object otherObject = valueForBinding("otherObject");
         	localizedString = localizer.localizedTemplateStringForKeyWithObjectOtherObject(templateString, object(), otherObject);
         }
