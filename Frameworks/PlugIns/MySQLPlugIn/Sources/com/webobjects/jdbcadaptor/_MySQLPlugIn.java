@@ -312,10 +312,14 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 	}
 
 	@Override
-	public Class<com.webobjects.jdbcadaptor._MySQLPlugIn.MySQLExpression> defaultExpressionClass() {
-		if (NSProperties.booleanForKeyWithDefault("com.webobjects.jdbcadaptor.MySQLExpression.enable", false)) {
-			return com.webobjects.jdbcadaptor.MySQLExpression.class;
-		}
+	public Class<MySQLExpression> defaultExpressionClass() {
+		try {
+			if (NSProperties.booleanForKey("com.webobjects.jdbcadaptor.MySQLExpression.enable")) {
+				return com.webobjects.jdbcadaptor.MySQLPlugIn.MySQLExpression.class;
+			}
+		} catch (NullPointerException ex) {
+			// property was not set
+		} 
 		return com.webobjects.jdbcadaptor._MySQLPlugIn.MySQLExpression.class;
 	}
 
