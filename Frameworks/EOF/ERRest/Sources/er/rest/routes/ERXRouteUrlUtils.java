@@ -53,7 +53,9 @@ public class ERXRouteUrlUtils {
 			}
 		}
 		else if (action != null && !"index".equals(action)) {
-			sb.append("/");
+			if ((entityName != null) && (entityName.length() > 0)) {
+				sb.append("/");				
+			}
 			sb.append(action);
 		}
 		sb.append(".");

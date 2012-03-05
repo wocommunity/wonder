@@ -1,0 +1,19 @@
+<wo:Main pageTitle = "Drag and Drop Example">
+	<style type="text/css">
+		.draggableExample {
+		}
+		
+	</style>
+	<div id = "myDiv">
+		<h2>Ajax Draggable - Drag & Drop Example.</h2>
+		<hr/>
+		<webobject name = "StatusMessage"><wo:str value = "$statusMessage" /></webobject>
+		<hr/>
+		<wo:loop list = "$objects" item = "$o1">	
+			<webobject name = "DraggableExample1"><span id="FirstDraggableItem">This is draggable #1, Item <b><webobject name="FirstItem"></webobject></b> (I move around freely)</span></webobject>
+		</wo:loop>
+		<div class = "droppable alert alert-info" id = "DropArea1">Drop Items Here</div>
+		<div class = "droppable alert alert-info" id = "DropArea2">Drop Items Here</div>
+	</div>
+
+</wo:Main>

@@ -1,2 +1,0 @@
-svn propset svn:ignore -F .cvsignore `find Applications -type d -depth 1|grep -v .svn` `find Frameworks -type d -depth 2|grep -v .svn` `find Examples -type d -depth 2|grep -v .svn`  `find Tests -type d -depth 1|grep -v .svn`
-svn propset svn:ignore ant.\* `find . -name woproject`

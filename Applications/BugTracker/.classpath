@@ -25,7 +25,6 @@
 	<classpathentry exported="true" kind="con" path="WOFramework/WOOgnl"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/DerbyPlugIn"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/ERChronic"/>
-	<classpathentry exported="true" kind="con" path="WOFramework/ERCaching"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaDirectToWeb"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaDTWGeneration"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaEOAccess"/>

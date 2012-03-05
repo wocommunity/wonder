@@ -91,7 +91,11 @@ public class ERLuceneAdaptor extends EOAdaptor {
 	@Override
 	public void assertConnectionDictionaryIsValid() {
 		try {
-			File indexDirectory = new File(new URL((String) connectionDictionary().objectForKey("URL")).getFile());
+			String url = (String) connectionDictionary().objectForKey("URL");
+			if(url == null) {
+				throw new ERLuceneAdaptorException("URL can't be empty.");
+			}
+			File indexDirectory = new File(new URL(url).getFile());
 			_directory = FSDirectory.open(indexDirectory);
 		} catch (MalformedURLException e) {
 			throw new ERLuceneAdaptorException("Open Directory failed: " + e.getMessage(), e);

@@ -33,6 +33,7 @@ import er.extensions.foundation.ERXUtilities;
  * @d2wKey sortCaseInsensitive
  * @d2wKey id
  * @d2wKey title
+ * @d2wKey goingVertically
  */
 public class ERD2WEditToOneRelationship extends D2WEditToOneRelationship {
 
