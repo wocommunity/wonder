@@ -42,7 +42,7 @@ import com.webobjects.foundation._NSStringUtilities;
  * But that's a more complex approach in the author's view.
  * </p>
  * <p>
- * Another approach is to only every use qualifiers and sort orderings that are
+ * Another approach is to only ever use qualifiers and sort orderings that are
  * case sensitive (semantically) and choose in your model what external type to
  * map to in order to control the behaviour. In my view this is bad practice
  * because you're separating the logic of queries and returning results that are
@@ -69,8 +69,7 @@ public class MySQLExpression
     extends
         com.webobjects.jdbcadaptor.MySQLPlugIn.MySQLExpression
 {
-	
-	private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger( MySQLExpression.class );
+
 	private static final List< NSSelector > SORT_ORDERING_ASC_SELECTORS =
 	    Arrays.asList( EOSortOrdering.CompareAscending, EOSortOrdering.CompareCaseInsensitiveAscending );
 	private static final List< NSSelector > SORT_ORDERING_BIN_SELECTORS = Arrays.asList( EOSortOrdering.CompareAscending, EOSortOrdering.CompareDescending );
