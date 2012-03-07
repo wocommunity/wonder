@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <wodefinitions>
    <wo class="AjaxDatePicker.java" wocomponentcontent="false">
 
@@ -32,5 +32,7 @@
     <binding name="calendarCSSFramework"/>
    <binding name="onDateSelect"/>
     <binding defaults="Boolean" name="disabled"/>
+    
+    <binding name="locale"/>
     </wo>
 </wodefinitions>
