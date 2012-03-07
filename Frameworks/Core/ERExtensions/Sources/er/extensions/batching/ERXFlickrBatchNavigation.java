@@ -178,9 +178,13 @@ public class ERXFlickrBatchNavigation extends ERXComponent {
 	public Integer displayNameCount(){
 		Integer displayNameCount = Integer.valueOf(0);
 		if(displayGroup() != null){
-			NSArray objects = objects();
-			if(objects != null && objects.count() > 0){
+			if (displayGroup() instanceof ERXBatchingDisplayGroup) {
+				displayNameCount = Integer.valueOf(((ERXBatchingDisplayGroup)displayGroup()).rowCount());
+			} else {
+				NSArray objects = objects();
+				if(objects != null && objects.count() > 0){
 					displayNameCount = Integer.valueOf(objects.count());
+				}
 			}
 		} else {
 			displayNameCount = Integer.valueOf(maxNumberOfObjects());
