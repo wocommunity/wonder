@@ -10,7 +10,6 @@ import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.appserver.ERXDisplayGroup;
 import er.extensions.components.ERXComponent;
-import er.extensions.components.ERXComponentUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 /**
@@ -166,9 +165,9 @@ public class ERXFlickrBatchNavigation extends ERXComponent {
 	}
 
 	public String displayName() {
-		String displayName = (String) valueForBinding("displayName");
+		String displayName = stringValueForBinding("displayName");
 		if (displayName == null) {
-			displayName = (String) valueForBinding("objectName");
+			displayName = stringValueForBinding("objectName"); // CHECKME should this be deprecated?
 		}
 		if (displayName == null) {
 			displayName = ERXLocalizer.currentLocalizer().localizedStringForKey("ERXFlickrBatchNavigation.item");
@@ -207,7 +206,7 @@ public class ERXFlickrBatchNavigation extends ERXComponent {
 			int nearCount;
 			int minimumCount;
 
-			if (ERXComponentUtilities.booleanValueForBinding(this, "small", false)) {
+			if (booleanValueForBinding("small")) {
 				nearEdgeCount = 1;
 				endCount = 1;
 				nearCount = 0;
@@ -301,23 +300,20 @@ public class ERXFlickrBatchNavigation extends ERXComponent {
 		int numberOfObjects = 0;
 		if(displayGroup() != null){
 			numberOfObjects = displayGroup().numberOfObjectsPerBatch();
-		} else if(hasBinding("numberOfObjectsPerBatch")){
-			Integer numberOfObjectsPerBatch = (Integer) valueForBinding("numberOfObjectsPerBatch");
-			if(numberOfObjectsPerBatch != null && numberOfObjectsPerBatch.intValue() > 0){
-				numberOfObjects = numberOfObjectsPerBatch.intValue();
-			} 
+		} else {
+			numberOfObjects = intValueForBinding("numberOfObjectsPerBatch", 0);
+			if (numberOfObjects < 0) {
+				numberOfObjects = 0;
+			}
 		}
 		return numberOfObjects;
 	}
 	
 	public int maxNumberOfObjects() {
-		int maxNumber = 0; 
-		if (hasBinding("maxNumberOfObjects")) {
-			Integer maxNumberOfObjects = (Integer) valueForBinding("maxNumberOfObjects");
-			if (maxNumberOfObjects != null && maxNumberOfObjects.intValue() > 0) {
-				maxNumber = maxNumberOfObjects.intValue();
-			} 
-		} 
+		int maxNumber = intValueForBinding("maxNumberOfObjects", 0); 
+		if (maxNumber < 0) {
+			maxNumber = 0;
+		}
 		return maxNumber;
 	}
 	
@@ -325,10 +321,10 @@ public class ERXFlickrBatchNavigation extends ERXComponent {
 		int index = 1;
 		if(displayGroup() != null){
 			index = displayGroup().currentBatchIndex();
-		} else if(hasBinding("currentBatchIndex")){
-			Integer currentBatchIndex = (Integer) valueForBinding("currentBatchIndex");
-			if(currentBatchIndex != null && currentBatchIndex.intValue() > 1){
-				index = currentBatchIndex.intValue();
+		} else {
+			index = intValueForBinding("currentBatchIndex", 1);
+			if (index < 1) {
+				index = 1;
 			}
 		}
 		return index;
@@ -336,7 +332,7 @@ public class ERXFlickrBatchNavigation extends ERXComponent {
 	
 	public String parentActionName(){
 		if(_parentActionName == null){
-			_parentActionName = (String) valueForBinding("parentActionName");
+			_parentActionName = stringValueForBinding("parentActionName");
 		}
 		return _parentActionName;
 	}
