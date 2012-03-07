@@ -28,7 +28,7 @@ import er.extensions.localization.ERXLocalizer;
  * 
  * @binding displayGroup the display group to paginate
  * @binding displayName the name of the items that are being display ("photo", "bug", etc)
- * @binding showPageRange if <code>true</code>, the page of items on the page is shown, for example "(1-7 of 200 items)"
+ * @binding showPageRange if <code>true</code>, the range of items on the page is shown, for example "(1-7 of 200 items)"
  * @binding showBatchSizes if <code>true</code>, a menu to change the items per page is shown "Show: (10) 20 (100) (All) items per page"
  * @binding batchSizes can be either a string or an NSArray of numbers that define the batch sizes to chose from. The number "0" provides an "All" items batch size. For example "10,20,30" or "10,50,100,0"
  * @binding small if <code>true</code>, a compressed page count style is used 
