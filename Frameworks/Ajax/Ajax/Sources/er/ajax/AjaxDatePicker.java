@@ -1,20 +1,23 @@
 package er.ajax;
 
 import java.text.Format;
-
 import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSTimestampFormatter;
 
 import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.formatters.ERXJodaFormat;
+import er.extensions.localization.ERXLocalizer;
 
 /**
  * Shameless port and adoption of Rails Date Kit.  This input understands the format symbols
@@ -28,6 +31,8 @@ import er.extensions.formatters.ERXJodaFormat;
  * the initial display in the input, the format of the value that the date picker places into the input, and 
  * validation of the input contents on form submission. The use of formatter over format is
  * preferred for reasons of efficiency and localization.</p>
+ * <p>FL: The component uses the default Locale to determine the start day of the week. It also uses the current
+ * language in ERXLocalizer to translate the day and month names (you must set up the localizations).</p>
  * 
  * <p><b>NOTE</b>: the AjaxDatePicker does <b>NOT</b> play nice with the AjaxModalDialogOpener.  There is some sort of 
  * initialization conflict (I think) with Prototype that leaves you with a blank page and the browser waiting
@@ -57,7 +62,8 @@ import er.extensions.formatters.ERXJodaFormat;
  * @binding dayNames list of day names (Sunday to Saturday) for localization, English is the default
  * @binding monthNames list of month names for localization, English is the default
  * @binding imagesDir directory to take images from, takes them from Ajax.framework by default
- *
+ * @binding locale FL: locale can be set if ERXLocalizer returns the wrong one. IE the English localizer returns a US Locale. If you want the UK one then set this binding.
+ * 
  * @binding calendarCSS name of CSS resource with classed for calendar, defaults to "calendar.css"
  * @binding calendarCSSFramework name of framework (null for application) containing calendarCSS resource, defaults to "Ajax"
  *
@@ -70,7 +76,10 @@ import er.extensions.formatters.ERXJodaFormat;
  */
 public class AjaxDatePicker extends AjaxComponent {
 	
-	private static String defaultImagesDir;
+    private static final NSArray<String> _dayNames = new NSArray<String>(new String[] {"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"}); 
+    private static final NSArray<String> _monthNames = new NSArray<String>(new String[] {"January","February","March","April","May","June","July","August","September","October","November","December"}); 
+
+    private static String defaultImagesDir;
 	
 	private NSMutableDictionary<String, String> options;
 	private Format formatter;
@@ -107,7 +116,7 @@ public class AjaxDatePicker extends AjaxComponent {
      */
     public void awake() {
 		super.awake();
-	
+
 		if ( ! (hasBinding("formatter") || hasBinding("format"))) {
 			format = "%m %d %Y";  // Default
 			formatter = new NSTimestampFormatter(format);
@@ -144,6 +153,35 @@ public class AjaxDatePicker extends AjaxComponent {
     	format = null;
     	super.reset();
     }
+    
+    public Locale locale() {
+    	return (Locale)valueForBinding("locale", ERXLocalizer.currentLocalizer().locale());
+    }
+    
+    public Integer startDay() {
+    	// Get first day of week from current localizer Locale.
+    	return new Integer(new GregorianCalendar(locale()).getFirstDayOfWeek() - 1);
+    }
+    
+    private NSArray<String> localizeStringArray(NSArray<String> strings) {
+    	NSMutableArray<String> localizedStrings = new NSMutableArray<String>(strings.count());
+    	ERXLocalizer l = ERXLocalizer.currentLocalizer();
+    	for (String string : strings)
+    		localizedStrings.add(l.localizedStringForKeyWithDefault(string));
+    	return localizedStrings.immutableClone();
+    }
+
+    public NSArray<String> dayNames() {
+    	if (hasBinding("dayNames"))
+    		return (NSArray<String>)valueForBinding("dayNames");
+    	return localizeStringArray(_dayNames);
+    }
+
+    public NSArray<String> monthNames() {
+    	if (hasBinding("monthNames"))
+    		return (NSArray<String>)valueForBinding("monthNames");
+    	return localizeStringArray(_monthNames);
+    }
 
     /**
      * Sets up AjaxOptions prior to rendering.
@@ -154,8 +192,11 @@ public class AjaxDatePicker extends AjaxComponent {
 		
 		// The "constant" form of AjaxOption is used so that we can rename the bindings or convert the values
 		ajaxOptionsArray.addObject(new AjaxConstantOption("format", "format", format(), AjaxOption.STRING));
-		ajaxOptionsArray.addObject(new AjaxOption("month_names", "monthNames", null, AjaxOption.ARRAY));
-		ajaxOptionsArray.addObject(new AjaxOption("day_names", "dayNames", null, AjaxOption.ARRAY));
+		ajaxOptionsArray.addObject(new AjaxOption("month_names", "monthNames", monthNames(), AjaxOption.ARRAY));
+		ajaxOptionsArray.addObject(new AjaxOption("day_names", "dayNames", dayNames(), AjaxOption.ARRAY));
+		
+		// FL Added to support start day, defaults to 0 (Sunday - choice made in calendar.js).
+		ajaxOptionsArray.addObject(new AjaxOption("start_day", "startDay", startDay(), AjaxOption.NUMBER));
 
 		ajaxOptionsArray.addObject(new AjaxOption("onDateSelect", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("fireEvent", AjaxOption.BOOLEAN));
