@@ -1,7 +1,5 @@
 package er.extensions.batching;
 
-
-
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
@@ -30,10 +28,10 @@ import er.extensions.localization.ERXLocalizer;
  * 
  * @binding displayGroup the display group to paginate
  * @binding displayName the name of the items that are being display ("photo", "bug", etc)
- * @binding showPageRange if true, the page of items on the page is shown, for example "(1-7 of 200 items)"
- * @binding showBatchSizes if true, a menu to change the items per page is shown "Show: (10) 20 (100) (All) items per page"
+ * @binding showPageRange if <code>true</code>, the page of items on the page is shown, for example "(1-7 of 200 items)"
+ * @binding showBatchSizes if <code>true</code>, a menu to change the items per page is shown "Show: (10) 20 (100) (All) items per page"
  * @binding batchSizes can be either a string or an NSArray of numbers that define the batch sizes to chose from. The number "0" provides an "All" items batch size. For example "10,20,30" or "10,50,100,0"
- * @binding small if true, a compressed page count style is used 
+ * @binding small if <code>true</code>, a compressed page count style is used 
  * 
  * @binding parentActionName (if you don't provide a displayGroup) the action to be executed on the parent component to get the next batch of items.
  * @binding currentBatchIndex (if you don't provide a displayGroup) used to get and set on the parent component the selected page index
@@ -119,8 +117,8 @@ public class ERXFlickrBatchNavigation extends ERXComponent {
 			WODisplayGroup displayGroup = displayGroup();
 			displayGroup.displayPreviousBatch();
 		} else if(parentActionName() != null){
-			if(!(previousBatchIndex.intValue()  > 0)){
 			Integer previousBatchIndex = Integer.valueOf((currentBatchIndex() - 1));
+			if(previousBatchIndex.intValue() < 1){
 				previousBatchIndex = Integer.valueOf(1);
 			} 
 			setValueForBinding(previousBatchIndex, "currentBatchIndex");
@@ -141,7 +139,7 @@ public class ERXFlickrBatchNavigation extends ERXComponent {
 		} else if(parentActionName() != null){
 			Integer nextBatchIndex = Integer.valueOf(currentBatchIndex() + 1);
 			int pageCount  = batchCount();
-			if((nextBatchIndex.intValue()  > pageCount)){
+			if(nextBatchIndex.intValue()  > pageCount){
 				nextBatchIndex = Integer.valueOf(pageCount);
 			} 
 			setValueForBinding(nextBatchIndex, "currentBatchIndex");
@@ -290,7 +288,7 @@ public class ERXFlickrBatchNavigation extends ERXComponent {
 		} else {
 			int numberOfObjectsPerBatch = numberOfObjectsPerBatch();
 			int maxNumberOfObjects = maxNumberOfObjects();
-			if (!(numberOfObjectsPerBatch == 0)){	
+			if (numberOfObjectsPerBatch != 0){	
 				if (maxNumberOfObjects == 0)
 					batchCount = 1;
 				else
@@ -375,12 +373,12 @@ public class ERXFlickrBatchNavigation extends ERXComponent {
 		return false;
 	}
 	
-	public NSArray<Number> possibleBatchSizes() {
+	public NSArray<? extends Number> possibleBatchSizes() {
 		Object value = valueForBinding("batchSizes");
 		if(value == null) {
-			return new NSArray(new Object[] {10, 50, 100, 0});
+			return new NSArray<Integer>(new Integer[] {10, 50, 100, 0});
 		}
-		NSMutableArray result = new NSMutableArray();
+		NSMutableArray<Integer> result = new NSMutableArray<Integer>();
 		if (value instanceof String) {
 			String[] parts = value.toString().split("\\s*,");
 			for (int i = 0; i < parts.length; i++) {
@@ -397,7 +395,7 @@ public class ERXFlickrBatchNavigation extends ERXComponent {
 		if(displayGroup() == null) {
 			return 0;
 		}
-		return displayGroup().numberOfObjectsPerBatch() ;
+		return displayGroup().numberOfObjectsPerBatch();
 	}
 	
 	public String currentBatchSizeString() {
