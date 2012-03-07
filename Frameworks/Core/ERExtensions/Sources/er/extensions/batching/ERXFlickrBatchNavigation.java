@@ -120,9 +120,9 @@ public class ERXFlickrBatchNavigation extends ERXComponent {
 			WODisplayGroup displayGroup = displayGroup();
 			displayGroup.displayPreviousBatch();
 		} else if(parentActionName() != null){
-			Integer previousBatchIndex = new Integer((currentBatchIndex() - 1));
 			if(!(previousBatchIndex.intValue()  > 0)){
-				previousBatchIndex = new Integer(1);
+			Integer previousBatchIndex = Integer.valueOf((currentBatchIndex() - 1));
+				previousBatchIndex = Integer.valueOf(1);
 			} 
 			setValueForBinding(previousBatchIndex, "currentBatchIndex");
 			previousPage = performParentAction(parentActionName());
@@ -140,10 +140,10 @@ public class ERXFlickrBatchNavigation extends ERXComponent {
 			WODisplayGroup displayGroup = displayGroup();
 			displayGroup.displayNextBatch();
 		} else if(parentActionName() != null){
-			Integer nextBatchIndex = new Integer((currentBatchIndex() + 1));
+			Integer nextBatchIndex = Integer.valueOf(currentBatchIndex() + 1);
 			int pageCount  = batchCount();
 			if((nextBatchIndex.intValue()  > pageCount)){
-				nextBatchIndex = new Integer(pageCount);
+				nextBatchIndex = Integer.valueOf(pageCount);
 			} 
 			setValueForBinding(nextBatchIndex, "currentBatchIndex");
 			nextPage = performParentAction(parentActionName());
@@ -177,14 +177,14 @@ public class ERXFlickrBatchNavigation extends ERXComponent {
 	}
 	
 	public Integer displayNameCount(){
-		Integer displayNameCount = new Integer(0);
+		Integer displayNameCount = Integer.valueOf(0);
 		if(displayGroup() != null){
 			NSArray objects = objects();
 			if(objects != null && objects.count() > 0){
-				displayNameCount = new Integer(objects.count());
+					displayNameCount = Integer.valueOf(objects.count());
 			}
 		} else {
-			displayNameCount = new Integer(maxNumberOfObjects());
+			displayNameCount = Integer.valueOf(maxNumberOfObjects());
 		}
 		
 		return displayNameCount;
