@@ -31,6 +31,10 @@ import com.webobjects.appserver.WOResponse;
  * @binding trail (optional) afterglow percentage
  * @binding shadow (optional) whether to render a shadow
  * @binding spinOpts (optional) json style list of spinner options (explicit binding values take precedence)
+ * 
+ * @property er.extensions.ERXResponseRewriter.resource.Ajax.spin.js=Ajax.spin.min.js replaces the normal
+ *           spin.js file with the minified version
+ * 
  * @author qdolan
  */
 public class AjaxBusySpinner extends AjaxComponent {
