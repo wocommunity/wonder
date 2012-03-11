@@ -9,5 +9,8 @@
 		<binding name="relative"/>
 		<binding name="shouldEncryptObjectFormValues"/>
 		<binding name="directActionName"/>
+        <validation message="'directActionName' is a required binding.">
+            <unbound name="directActionName"/>
+        </validation>		
 	</wo>
 </wodefinitions>
