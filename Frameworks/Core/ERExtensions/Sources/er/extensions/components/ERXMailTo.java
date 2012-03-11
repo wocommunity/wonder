@@ -15,8 +15,7 @@ import com.webobjects.appserver.WOContext;
  * Synopsis:<br/>
  * email=<i>anEmail</i>;
  * <br/>
- * Bindings:<br/>
- * <b>email</b> email to generate href
+ * @binding email email address to generate href
  * <br/>
  */
 public class ERXMailTo extends WOComponent {

@@ -24,6 +24,8 @@ import com.webobjects.foundation.NSMutableDictionary;
  * Some fixing will be done for you, like you can give a <code>style.unit</code> which will be applied to all bindings
  * that evalutate to a number. If none is supplied, "px" is appended to make size definitions settable via plain numerical bindings.
  *
+ * @binding elementId The type of element (div, p, span, etc.) to generate
+ *
  * @author ak
  */
 public class ERXStyledContainer extends WOGenericContainer {
