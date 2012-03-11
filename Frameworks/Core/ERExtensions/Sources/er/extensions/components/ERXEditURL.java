@@ -14,8 +14,9 @@ import com.webobjects.appserver.WOContext;
 /**
  * Used to edit urls with a default value.<br />
  * 
- * @binding value
- * @binding size
+ * @binding value The URL to edit (can be a string or a java.net.URL object). If not set, 
+ * the default value is http://www.
+ * @binding size A integer to set the size of the text field
  */
 
 public class ERXEditURL extends WOComponent {
