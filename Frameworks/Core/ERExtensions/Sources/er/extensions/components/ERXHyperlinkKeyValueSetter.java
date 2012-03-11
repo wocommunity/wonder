@@ -15,8 +15,8 @@ import er.extensions.ERXExtensions;
 /**
  * Sets a key value when the hyperlink is clicked.<br />
  * 
- * @binding value
- * @binding binding
+ * @binding value The value to set when the hyperlink is set
+ * @binding binding The method to call to set the value
  * @binding string optional link text
  * @binding action optional action
  * @binding class optional css class name
