@@ -23,6 +23,10 @@ import er.extensions.appserver.ERXRequest;
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.foundation.ERXMutableURL;
 
+/*
+ *  * @binding useDefaultCSS (boolean) defaults to true.  Will load a default CSS file for the modal container.
+ */
+
 public class MTAjaxModalContainer extends AjaxDynamicElement {
 	
 	private String _updateContainerID = null;
@@ -259,6 +263,7 @@ public class MTAjaxModalContainer extends AjaxDynamicElement {
 
 	@Override
 	protected void addRequiredWebResources(WOResponse response, WOContext context) {
+		
 		MTAjaxUtils.addScriptResourceInHead(context, context.response(), "MooTools", MTAjaxUtils.MOOTOOLS_CORE_JS);
 		MTAjaxUtils.addScriptResourceInHead(context, context.response(), "MooTools", MTAjaxUtils.MOOTOOLS_MORE_JS);
 		MTAjaxUtils.addScriptResourceInHead(context, context.response(), "MooTools", "scripts/plugins/bootstrap/ui/Bootstrap.js");
@@ -267,11 +272,17 @@ public class MTAjaxModalContainer extends AjaxDynamicElement {
 		MTAjaxUtils.addScriptResourceInHead(context, context.response(), "MooTools", "scripts/plugins/bootstrap/ui/Bootstrap.Popup.js");
 		MTAjaxUtils.addScriptResourceInHead(context, context.response(), "MooTools", "scripts/plugins/bootstrap/ui/CSSEvents.js");
 		MTAjaxUtils.addScriptResourceInHead(context, context.response(), "MooTools", MTAjaxUtils.MOOTOOLS_WONDER_JS);
+
+		Boolean useDefaultCSS = (Boolean)valueForBinding("useDefaultCSS", Boolean.TRUE, context.component());
+		if(useDefaultCSS) {
+			MTAjaxUtils.addStylesheetResourceInHead(context, context.response(), "MooTools", "scripts/plugins/bootstrap/modal/modal.css");
+		}
+
 	}
 
 	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
-		System.out.println("Hello?");
+
 		WOComponent component = context.component();
 		
 		WOResponse response = null;
