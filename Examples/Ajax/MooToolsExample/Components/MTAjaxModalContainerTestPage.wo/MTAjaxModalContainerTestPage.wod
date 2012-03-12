@@ -1,6 +1,7 @@
 ContentBox : MTAjaxModalContainer {
 	label = "Click me to Show";
 	title = "Some Title";
+	useDefaultCSS = false;
 }
 
 InteralHrefBox : MTAjaxModalContainer {
@@ -9,6 +10,7 @@ InteralHrefBox : MTAjaxModalContainer {
 	label = "Click me to show";
 	showTitle = true;
 	title = "Loading from an Internal Href";
+	useDefaultCSS = false;
 }
 
 RepetitionBox: MTAjaxModalContainer {
@@ -18,6 +20,7 @@ RepetitionBox: MTAjaxModalContainer {
 	label = "edit";
 	showFooter = false;
 	showTitle = false;
+	useDefaultCSS = false;
 	varName = wordID;
 }
 
