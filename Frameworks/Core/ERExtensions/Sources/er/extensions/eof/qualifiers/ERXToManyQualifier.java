@@ -20,6 +20,7 @@ import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableSet;
 
@@ -143,18 +144,18 @@ public class ERXToManyQualifier extends ERXKeyValueQualifier implements Cloneabl
             targetRelationship=targetEntity.relationshipNamed(toManyKeys.lastObject());
             targetEntity=targetRelationship.destinationEntity();
 
-            if (targetRelationship.joins()==null || targetRelationship.joins().count()==0) {
+            if (targetRelationship.joins()==null || targetRelationship.joins().isEmpty()) {
                 // we have a flattened many to many
                 String definitionKeyPath=targetRelationship.definition();                        
-                NSArray definitionKeys=NSArray.componentsSeparatedByString(definitionKeyPath,".");
+                NSArray<String> definitionKeys=NSArray.componentsSeparatedByString(definitionKeyPath,".");
                 EOEntity lastStopEntity=targetRelationship.entity();
-                EORelationship firstHopRelationship= lastStopEntity.relationshipNamed((String)definitionKeys.objectAtIndex(0));
+                EORelationship firstHopRelationship= lastStopEntity.relationshipNamed(definitionKeys.objectAtIndex(0));
                 EOEntity endOfFirstHopEntity= firstHopRelationship.destinationEntity();
-                EOJoin join=(EOJoin) firstHopRelationship.joins().objectAtIndex(0); // assumes 1 join
+                EOJoin join= firstHopRelationship.joins().objectAtIndex(0); // assumes 1 join
                 EOAttribute sourceAttribute=join.sourceAttribute();
                 EOAttribute targetAttribute=join.destinationAttribute();
-                EORelationship secondHopRelationship=endOfFirstHopEntity.relationshipNamed((String)definitionKeys.objectAtIndex(1));
-                join=(EOJoin) secondHopRelationship.joins().objectAtIndex(0); // assumes 1 join
+                EORelationship secondHopRelationship=endOfFirstHopEntity.relationshipNamed(definitionKeys.objectAtIndex(1));
+                join= secondHopRelationship.joins().objectAtIndex(0); // assumes 1 join
                 EOAttribute secondHopSourceAttribute=join.sourceAttribute();
 
                 NSMutableArray<String> lastStopPKeyPath=new NSMutableArray<String>(toManyKeys);
@@ -167,7 +168,7 @@ public class ERXToManyQualifier extends ERXKeyValueQualifier implements Cloneabl
 
                 result.append(lastStopEntity.externalName());
                 result.append('.');
-                result.append(((EOAttribute)lastStopEntity.primaryKeyAttributes().objectAtIndex(0)).columnName());
+                result.append(lastStopEntity.primaryKeyAttributes().objectAtIndex(0).columnName());
 
                 result.append(" FROM ");
 
@@ -196,7 +197,7 @@ public class ERXToManyQualifier extends ERXKeyValueQualifier implements Cloneabl
                     result.append(secondHopSourceAttribute.columnName());
                     
                     result.append(" IN ("); 
-                    EOAttribute pk = (EOAttribute)targetEntity.primaryKeyAttributes().lastObject();
+                    EOAttribute pk = targetEntity.primaryKeyAttributes().lastObject();
                     for(int i = 0; i < pKeys.count(); i++) {
                         
                         Object key = pKeys.objectAtIndex(i);
@@ -266,7 +267,6 @@ public class ERXToManyQualifier extends ERXKeyValueQualifier implements Cloneabl
     @Override
 	public void validateKeysWithRootClassDescription(EOClassDescription arg0) {
         // TODO Auto-generated method stub
-        
     }
 
     @Override

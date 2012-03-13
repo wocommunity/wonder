@@ -27,7 +27,6 @@ import er.erxtest.model.Role;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.eof.ERXEOAccessUtilities.DatabaseContextOperation;
-import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.foundation.ERXAssert;
 import er.extensions.qualifiers.ERXKeyValueQualifier;
 
