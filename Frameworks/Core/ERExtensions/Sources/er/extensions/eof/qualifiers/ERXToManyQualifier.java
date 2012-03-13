@@ -278,16 +278,18 @@ public class ERXToManyQualifier extends ERXKeyValueQualifier implements Cloneabl
     @SuppressWarnings("unchecked")
     public boolean evaluateWithObject(Object object) {
     	boolean result = false;
-    	if ( ( object != null ) && ( ( object instanceof NSKeyValueCoding ) == true ) ) {
-            Object obj = ((NSKeyValueCoding)object).valueForKey(this.key());
+    	if (object != null && object instanceof NSKeyValueCoding) {
+            Object obj = ((NSKeyValueCoding)object).valueForKey(key());
+            if (obj == null && object instanceof NSKeyValueCodingAdditions) {
+            	obj = ((NSKeyValueCodingAdditions)object).valueForKeyPath(key());
+            }
             if (obj instanceof NSArray) {
             	NSArray objArray = (NSArray)obj;
-            	int objArrayCount = objArray.count();
-            	if (objArrayCount > 0) {
+            	if (!objArray.isEmpty()) {
             		if(_minCount == 0) {
             			result = ERXArrayUtilities.arrayContainsArray(objArray, elements());
             		} else {
-            			return ERXArrayUtilities.intersectingElements(objArray, elements()).count() >= _minCount;
+            			result = ERXArrayUtilities.intersectingElements(objArray, elements()).count() >= _minCount;
             		}
             	}
             }
