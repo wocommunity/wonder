@@ -724,10 +724,6 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 						unique = "1000000";
 					}
 					result.addObject(_expressionForString("SET UNIQUE = " + unique + " FOR " + quoteTableName(externalName)));
-					if (keys.count() == 1) {
-						result.addObject(_expressionForString("ALTER TABLE " + quoteTableName(externalName) + " ALTER "
-								+ quoteTableName(keys.objectAtIndex(0)) + " SET DEFAULT UNIQUE"));
-					}
 				}
 			}
 			return result;
