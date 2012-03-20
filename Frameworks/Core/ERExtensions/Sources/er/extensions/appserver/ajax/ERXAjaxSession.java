@@ -6,6 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.appserver.ajax;
 
+import java.io.Serializable;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -58,11 +59,25 @@ public class ERXAjaxSession extends WOSession {
   private static final String PAGE_REPLACEMENT_CACHE_KEY = "page_replacement_cache";
 
   private static int MAX_PAGE_REPLACEMENT_CACHE_SIZE = Integer.parseInt(System.getProperty("er.extensions.maxPageReplacementCacheSize", "30"));
+  
+  private static boolean storesPageInfo = ERXProperties.booleanForKeyWithDefault("er.extensions.appserver.ajax.ERXAjaxSession.storesPageInfo", false);
+  
+  private NSMutableDictionary<WOComponent, NSMutableDictionary<String, Object>> pageInfoDictionary;
 
-  private static boolean overridePrivateCache = ERXProperties.booleanForKey("er.extensions.overridePrivateCache");
+  private static boolean overridePrivateCache = storesPageInfo || ERXProperties.booleanForKey("er.extensions.overridePrivateCache");
   
   private static final Logger logger = Logger.getLogger(ERXAjaxSession.class.getName());
   
+  public boolean storesPageInfo() {
+	  return storesPageInfo;
+  }
+  
+  public NSMutableDictionary<WOComponent, NSMutableDictionary<String,Object>> pageInfoDictionary() {
+	  if(pageInfoDictionary == null) {
+		  pageInfoDictionary = new NSMutableDictionary<WOComponent, NSMutableDictionary<String,Object>>();
+	  }
+	  return pageInfoDictionary;
+  }
   
   /*
    * ERTransactionRecord is a reimplementation of WOTransactionRecord for
@@ -70,8 +85,8 @@ public class ERXAjaxSession extends WOSession {
    * 
    * @author mschrag
    */
-  static class TransactionRecord {
-    private WOContext _context;
+  static class TransactionRecord implements Serializable {
+    private String _contextID;
     private WOComponent _page;
     private String _key;
     private boolean _oldPage;
@@ -79,7 +94,7 @@ public class ERXAjaxSession extends WOSession {
 
     public TransactionRecord(WOComponent page, WOContext context, String key) {
       _page = page;
-      _context = context;
+      _contextID = context._requestContextID();
       _key = key;
       touch();
     }
@@ -100,8 +115,9 @@ public class ERXAjaxSession extends WOSession {
       return _page;
     }
 
+    @Deprecated
     public WOContext context() {
-      return _context;
+    	throw new RuntimeException("Deprecated method");
     }
 
     // MS: The preferrable behavior here is for Ajax records to expire
@@ -130,7 +146,7 @@ public class ERXAjaxSession extends WOSession {
     }
 
     public String toString() {
-      return "[TransactionRecord: page = " + _page.name() + "; context = " + _context.contextID() + "; key = " + _key + "; oldPage? " + _oldPage + "]";
+      return "[TransactionRecord: page = " + _page.name() + "; context = " + _contextID + "; key = " + _key + "; oldPage? " + _oldPage + "]";
     }
   }
   
@@ -396,6 +412,9 @@ public class ERXAjaxSession extends WOSession {
 			for (int i = WOApplication.application().permanentPageCacheSize(); _permanentContextIDArray.count() >= i; _permanentContextIDArray.removeObjectAtIndex(0)) {
 				String s1 = (String) _permanentContextIDArray.objectAtIndex(0);
 				WOComponent page = (WOComponent) permanentPageCache.removeObjectForKey(s1);
+				if(storesPageInfo()) {
+					pageInfoDictionary().removeObjectForKey(page);
+				}
 			}
 
 			permanentPageCache.setObjectForKey(wocomponent, contextID);
@@ -442,6 +461,11 @@ public class ERXAjaxSession extends WOSession {
 
     if (page != null) {
       WOContext context = page.context();
+      if(context == null) {
+    	  //FIXME this doesn't work. Incremented context means prototype.js is resent?
+          page._awakeInContext(context());
+          context = page.context();
+      }
       WORequest request = context.request();
       // MS: I suspect we don't have to do this all the time, but I don't know if we have 
       // enough information at this point to know whether to do it or not, unfortunately.
