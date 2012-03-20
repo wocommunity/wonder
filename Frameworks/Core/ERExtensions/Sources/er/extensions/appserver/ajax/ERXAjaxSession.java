@@ -462,7 +462,6 @@ public class ERXAjaxSession extends WOSession {
     if (page != null) {
       WOContext context = page.context();
       if(context == null) {
-    	  //FIXME this doesn't work. Incremented context means prototype.js is resent?
           page._awakeInContext(context());
           context = page.context();
       }
