@@ -1,10 +1,13 @@
-#Thu Mar 13 10:35:51 EDT 2008
 eclipse.preferences.version=1
 formatter_profile=_Project Wonder
 formatter_settings_version=11
 org.eclipse.jdt.ui.exception.name=e
 org.eclipse.jdt.ui.gettersetter.use.is=true
+org.eclipse.jdt.ui.ignorelowercasenames=true
+org.eclipse.jdt.ui.importorder=java;javax;org;com;
 org.eclipse.jdt.ui.javadoc=false
 org.eclipse.jdt.ui.keywordthis=false
+org.eclipse.jdt.ui.ondemandthreshold=99
 org.eclipse.jdt.ui.overrideannotation=false
+org.eclipse.jdt.ui.staticondemandthreshold=99
 org.eclipse.jdt.ui.text.custom_code_templates=<?xml version\="1.0" encoding\="UTF-8"?><templates/>
