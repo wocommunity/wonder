@@ -121,6 +121,30 @@ public class AjaxSessionPing extends AjaxDynamicElement {
             return pingSessionAction();
         }
 
+    	/**
+    	 * There has been a long standing problem with exceptions thrown from a
+    	 * DirectAction. If the session has been referenced it is not checked back
+    	 * in and the application will deadlock immediately if it is not dispatching
+    	 * requests concurrently. If it is dispatching concurrently, just that one
+    	 * session will deadlock. To avoid this, implement the DirectAction method
+    	 * performAction() along these lines:
+    	 */
+    	@Override
+    	public WOActionResults performActionNamed(String name)
+    	{
+    		try
+    		{
+    			return super.performActionNamed(name);
+    		}
+    		catch (Exception e)
+    		{
+    			return WOApplication.application().handleException(e, context());
+    		}
+    		catch (Throwable t)
+    		{
+    			return WOApplication.application().handleException(new NSForwardException(t), context());
+    		}
+    	}
     }
 
 }
