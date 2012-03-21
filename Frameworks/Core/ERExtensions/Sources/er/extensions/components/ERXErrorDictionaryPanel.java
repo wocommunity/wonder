@@ -21,11 +21,15 @@ import er.extensions.localization.ERXLocalizer;
 /**
  * Useful for displaying a dictionary of caught exception messages.<br />
  * 
- * @binding errorMessages
- * @binding extraErrorMessage
- * @binding shouldShowNewLineAbove
- * @binding shouldShowNewLineBelow
- * @binding errorKeyOrder
+ * @binding errorMessages An NSMutableDictionary that contains the list of errors to display
+ * @binding extraErrorMessage An String containing an error. If errorMessages is also set, 
+ * 		extraErrorMessage will be added below errorMessages
+ * @binding shouldShowNewLineAbove An Boolean, if true, will add a new empty line above 
+ * 		the list of errors
+ * @binding shouldShowNewLineBelow An Boolean, if true, will add a new empty line below 
+ * 		the list of errors
+ * @binding errorKeyOrder An NSMutableArray containing a list of string keys to sort
+ * 		the errorMessages list
  */
 
 public class ERXErrorDictionaryPanel extends ERXStatelessComponent {

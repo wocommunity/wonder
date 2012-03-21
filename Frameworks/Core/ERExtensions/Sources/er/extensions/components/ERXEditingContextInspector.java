@@ -16,9 +16,12 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import er.extensions.foundation.ERXStringUtilities;
 
 /**
- * Inspects an eo's editing context.*<br />
+ * Inspects an eo's editing context.
  * 
- * @binding object
+ * @binding object The EOEditingContext to inspect
+ * @binding item The EOEnterpriseObject to inspect
+ * @binding key A string
+ * @binding debugPageProvider
  */
 
 public class ERXEditingContextInspector extends WOComponent {

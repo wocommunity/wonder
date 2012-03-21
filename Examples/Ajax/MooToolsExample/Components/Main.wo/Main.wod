@@ -1,0 +1,3 @@
+PageTitle : WOString {
+	value = pageTitle;
+}

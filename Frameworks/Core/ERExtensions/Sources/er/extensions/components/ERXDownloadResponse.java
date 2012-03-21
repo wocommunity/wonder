@@ -20,6 +20,17 @@ import er.extensions.foundation.ERXFileContext;
  * component, use appropriate setters for the type of content to be downloaded
  * and return the component from a component action
  * 
+ * @binding contentDisposition A string to set the content-disposition header. Defaults to 
+ * <code>"attachment;filename=\"" + downloadFilename() + "\""</code>
+ * @binding contentType A string to represents the MIME type (text/plain, application/pdf, 
+ * etc.) of the file 
+ * @binding downloadFilename A string that represents the name of the file. Defaults to 
+ * "downloadedfile"
+ * @binding fileContext An ERXFileContext object that contains a reference to the file, 
+ * the file name and the MIME type. If you set this binding, you don't need to set the 
+ * contentType, fileToDownload and downloadFilename bindings.
+ * @binding fileToDownload A java.io.File object that will be returned in the response
+ *
  * @author kieran 1/27/2006
  * 
  * 

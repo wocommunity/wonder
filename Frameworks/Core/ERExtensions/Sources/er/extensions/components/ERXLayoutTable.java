@@ -15,6 +15,25 @@ import er.extensions.eof.ERXConstant;
 /**
  * Table that can handle cell with row and colspans. Very useful with D2W to make more advance layouts.<br />
  * 
+ * @binding col
+ * @binding index
+ * @binding list
+ * @binding maxColumns
+ * @binding row
+ * @binding item
+ * @binding border
+ * @binding cellpadding
+ * @binding cellspacing
+ * @binding rowBackgroundColor
+ * @binding cellColSpan
+ * @binding cellRowSpan
+ * @binding cellBackgroundColor
+ * @binding cellAlign
+ * @binding cellVAlign
+ * @binding cellWidth
+ * @binding tableBackgroundColor
+ * @binding tableWidth
+ * @binding otherTagString
  */
 
 public class ERXLayoutTable extends WOComponent {

@@ -13,7 +13,8 @@ import com.webobjects.appserver.WOContext;
 /**
  * Displays a mandatory field marker. Extended in look frameworks to provide custom images.<br />
  * 
- * @binding condition
+ * @binding condition If the condition returns true, will display a '*', if false, it will
+ *		display a transparent 1x1 pixel
  */
 
 public class ERXMandatoryFieldMarker extends WOComponent {
