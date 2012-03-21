@@ -96,7 +96,7 @@ public class ERXDirectAction extends WODirectAction {
      * @return {@link er.testrunner.ERXWOTestInterface ERXWOTestInterface} 
      * with the results after performing the given test.
      */
-    public WOComponent testAction() {
+    public WOActionResults testAction() {
         if (canPerformActionWithPasswordKey("er.extensions.ERXJUnitPassword")) {
         	ERXWOTestInterface result = pageWithName(ERXWOTestInterface.class);
             session().setObjectForKey(Boolean.TRUE, "ERXWOTestInterface.enabled");
@@ -198,7 +198,7 @@ public class ERXDirectAction extends WODirectAction {
      * Note: this action must be invoked against a specific instance (the instance number must be in the request URL).
      * @return a page showing what action was taken (with regard to EOAdaptorDebugging), if any.
      */
-    public WOComponent eoAdaptorDebuggingAction() {
+    public WOActionResults eoAdaptorDebuggingAction() {
         if (canPerformActionWithPasswordKey("er.extensions.ERXEOAdaptorDebuggingPassword")) {
         	ERXStringHolder result = pageWithName(ERXStringHolder.class);
         	result.setEscapeHTML(false);
@@ -254,7 +254,7 @@ public class ERXDirectAction extends WODirectAction {
      * <br/>
      * @return {@link ERXLog4JConfiguration} for modifying current logging settings.
      */
-    public WOComponent log4jAction() {
+    public WOActionResults log4jAction() {
         if (canPerformActionWithPasswordKey("er.extensions.ERXLog4JPassword")) {
         	session().setObjectForKey(Boolean.TRUE, "ERXLog4JConfiguration.enabled");
             return pageWithName(ERXLog4JConfiguration.class);
@@ -274,7 +274,7 @@ public class ERXDirectAction extends WODirectAction {
      * <br/>
      * @return {@link ERXLog4JConfiguration} for modifying current logging settings.
      */
-    public WOComponent remoteShellAction() {
+    public WOActionResults remoteShellAction() {
         if (canPerformActionWithPasswordKey("er.extensions.ERXRemoteShellPassword")) {
         	session().setObjectForKey(Boolean.TRUE, "ERXRemoteShell.enabled");
             return pageWithName(ERXRemoteShell.class);
@@ -294,7 +294,7 @@ public class ERXDirectAction extends WODirectAction {
      * <br/>
      * @return {@link ERXLog4JConfiguration} for modifying current logging settings.
      */
-    public WOComponent databaseConsoleAction() {
+    public WOActionResults databaseConsoleAction() {
         if (canPerformActionWithPasswordKey("er.extensions.ERXDatabaseConsolePassword")) {
         	session().setObjectForKey(Boolean.TRUE, "ERXDatabaseConsole.enabled");
         	return pageWithName(ERXDatabaseConsole.class);
@@ -314,7 +314,7 @@ public class ERXDirectAction extends WODirectAction {
      * <br/>
      * @return short info about free and used memory before and after GC.
      */
-    public WOComponent forceGCAction() {
+    public WOActionResults forceGCAction() {
         if (canPerformActionWithPasswordKey("er.extensions.ERXGCPassword")) {
         	ERXStringHolder result = pageWithName(ERXStringHolder.class);
             Runtime runtime = Runtime.getRuntime();
@@ -351,7 +351,7 @@ public class ERXDirectAction extends WODirectAction {
      * er.extensions.ERXApplication.traceOpenEditingContextLocks is enabled and 
      * er.extensions.ERXOpenEditingContextLocksPassword is set.
      */
-    public WOComponent showOpenEditingContextLockTracesAction() {
+    public WOActionResults showOpenEditingContextLockTracesAction() {
       if (canPerformActionWithPasswordKey("er.extensions.ERXOpenEditingContextLockTracesPassword")) {
         ERXStringHolder result = pageWithName(ERXStringHolder.class);
         result.setEscapeHTML(false);
