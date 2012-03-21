@@ -49,13 +49,14 @@ public class ERXDirectAction extends WODirectAction {
     /** holds a reference to the current browser used for this session */
     private ERXBrowser browser;
 
-    /** Public constructor */
     public ERXDirectAction(WORequest r) { super(r); }
 
 
     /**
      * Checks if the action can be executed.
-     * @param passwordKey
+     * 
+     * @param passwordKey the password to test
+     * @return <code>true</code> if action is allowed to be invoked
      */
     protected boolean canPerformActionWithPasswordKey(String passwordKey) {
     	if(ERXApplication.isDevelopmentModeSafe()) {
@@ -124,6 +125,8 @@ public class ERXDirectAction extends WODirectAction {
 
     /**
      * Direct access to WOStats by giving over the password in the "pw" parameter.
+     * 
+     * @return statistics page
      */
     public WOActionResults statsAction() {
         WOStatsPage nextPage = (WOStatsPage) pageWithName("ERXStatisticsPage");
@@ -135,6 +138,7 @@ public class ERXDirectAction extends WODirectAction {
      * Direct access to reset the stats by giving over the password in the "pw" parameter.  This
      * calls ERXStats.reset();
      * 
+     * @return statistics page
      */
     public WOActionResults resetStatsAction() {
     	WOActionResults result = null;
@@ -149,6 +153,8 @@ public class ERXDirectAction extends WODirectAction {
     
     /**
      * Direct access to WOEventDisplay by giving over the password in the "pw" parameter.
+     * 
+     * @return event page
      */
     public WOActionResults eventsAction() {
         WOEventDisplayPage nextPage = (WOEventDisplayPage) pageWithName("WOEventDisplayPage");
@@ -161,6 +167,8 @@ public class ERXDirectAction extends WODirectAction {
     /**
      * Direct access to WOEventDisplay by giving over the password in the "pw" 
      * parameter and turning on all events.
+     * 
+     * @return event setup page
      */
     public WOActionResults eventsSetupAction() {
         WOEventSetupPage nextPage = (WOEventSetupPage) pageWithName("WOEventSetupPage");
@@ -350,6 +358,8 @@ public class ERXDirectAction extends WODirectAction {
      * Returns a list of the traces of open editing context locks.  This is only useful if
      * er.extensions.ERXApplication.traceOpenEditingContextLocks is enabled and 
      * er.extensions.ERXOpenEditingContextLocksPassword is set.
+     * 
+     * @return list of lock traces
      */
     public WOComponent showOpenEditingContextLockTracesAction() {
       ERXStringHolder result = (ERXStringHolder)pageWithName("ERXStringHolder");
@@ -370,6 +380,11 @@ public class ERXDirectAction extends WODirectAction {
       return result;
     }
 
+    /**
+     * Will terminate an existing session and redirect to the default action.
+     * 
+     * @return redirect to default action
+     */
     public WOActionResults logoutAction() {
         if (existingSession()!=null) {
             existingSession().terminate();
@@ -397,6 +412,7 @@ public class ERXDirectAction extends WODirectAction {
         return browser; 
     }
 
+    @Override
     public WOActionResults performActionNamed(String actionName) {
         WOActionResults actionResult = super.performActionNamed(actionName);
         if (browser != null) 
@@ -448,6 +464,8 @@ public class ERXDirectAction extends WODirectAction {
     
     /**
      * Opens the localizer edit page if the app is in development mode.
+     * 
+     * @return localizer editor
      */
     public WOActionResults editLocalizedFilesAction() {
     	WOResponse r = null;
@@ -457,7 +475,12 @@ public class ERXDirectAction extends WODirectAction {
 		return r;
     }
     
-    
+    /**
+     * Will dump all created keys of the current localizer via log4j and
+     * returns an empty response.
+     * 
+     * @return empty response
+     */
     public WOActionResults dumpCreatedKeysAction() {
     	WOResponse r = new WOResponse();
     	if (ERXApplication.isDevelopmentModeSafe()) {
@@ -503,6 +526,11 @@ public class ERXDirectAction extends WODirectAction {
       return (T) super.pageWithName(componentClass.getName());
     }
 
+    /**
+     * Terminates the application when in development.
+     * 
+     * @return "OK" if application has been shut down
+     */
 	public WOActionResults stopAction() {
     	WOResponse response = new WOResponse();
     	response.setHeader("text/plain", "Content-Type");
