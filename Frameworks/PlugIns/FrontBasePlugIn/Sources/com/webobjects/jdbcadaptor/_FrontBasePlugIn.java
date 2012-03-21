@@ -702,14 +702,20 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 				return NSArray.EmptyArray;
 
 			NSMutableArray<EOSQLExpression> result = new NSMutableArray<EOSQLExpression>();
-			EOEntity eoentity = null;
 
 			for (int i = entityGroup.count() - 1; i >= 0; i--) {
-				eoentity = entityGroup.objectAtIndex(i);
+				EOEntity eoentity = entityGroup.objectAtIndex(i);
 				String externalName = eoentity.externalName();
-				NSArray<String> keys = eoentity.primaryKeyAttributeNames();
+				NSArray<EOAttribute> priKeyAttributes = eoentity.primaryKeyAttributes();
 
-				if (externalName != null && externalName.length() > 0) {
+				if (priKeyAttributes.count() == 1 && externalName != null && externalName.length() > 0) {
+					EOAttribute priKeyAttribute = priKeyAttributes.objectAtIndex(0);
+					
+					// pk counter not needed for non number primary key
+					if (priKeyAttribute.adaptorValueType() != EOAttribute.AdaptorNumberType) {
+						continue;
+					}
+
 					String unique = null;
 					if (eoentity.model() != null) {
 						unique = System.getProperty("com.frontbase.unique." + eoentity.model().name() + "." + eoentity.name());
@@ -724,6 +730,8 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 						unique = "1000000";
 					}
 					result.addObject(_expressionForString("SET UNIQUE = " + unique + " FOR " + quoteTableName(externalName)));
+					result.addObject(_expressionForString("ALTER TABLE " + quoteTableName(externalName) + " ALTER "
+							+ quoteTableName(priKeyAttribute.name()) + " SET DEFAULT UNIQUE"));
 				}
 			}
 			return result;
