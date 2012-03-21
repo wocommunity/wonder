@@ -1,4 +1,3 @@
-#Fri Dec 31 14:30:03 EST 2010
 eclipse.preferences.version=1
 encoding//Resources/Dutch.lproj=UTF-16LE
 encoding//Resources/English.lproj=UTF-16BE
@@ -7,4 +6,4 @@ encoding//Resources/German.lproj=UTF-16LE
 encoding//Resources/Italian.lproj=UTF-16LE
 encoding//Resources/Japanese.lproj=UTF-16LE
 encoding//Resources/Norwegian.lproj=UTF-16LE
-encoding/Components=UTF-8
+encoding/<project>=UTF-8
