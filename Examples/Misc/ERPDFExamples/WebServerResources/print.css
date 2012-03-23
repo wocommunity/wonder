@@ -1,0 +1,26 @@
+@CHARSET "UTF-8";
+
+body {
+	margin: .25in; .25 in;
+	border: 1px solid red;
+	padding: 1em;
+}
+
+p {
+	padding: 1em;
+}
+
+dl {
+	font-size: small;
+}
+
+dl dt {
+	font-weight: bold;
+	font-variant: small-caps;
+}
+
+dl dd {
+	font-style: italic;
+	font-size: smaller;
+	margin-bottom: 2em;
+}
