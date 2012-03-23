@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>ERPDFGeneration Examples</title>
+	<wo:ERXStyleSheet filename = "screen.css" media = "screen"/>
+	<wo:WOConditional condition = "$usePrintCss"><wo:ERXStyleSheet filename = "print.css" media = "print"/></wo:WOConditional>
+</head>
+<body>
+<wo:WOComponentContent/>
+<p>use print css = <wo:WOString value = "$usePrintCss"/></p>
+</body>
+</html>
