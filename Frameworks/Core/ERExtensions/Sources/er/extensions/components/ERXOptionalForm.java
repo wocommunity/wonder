@@ -9,7 +9,10 @@ package er.extensions.components;
 import com.webobjects.appserver.WOContext;
 
 /**
- * @binding showForm
+ * Simple wrapper around a WOForm with a binding (showForm) to determine if the form should
+ * be hidden or not.
+ *
+ * @binding showForm If false, the form is not displayed
  * @binding action
  * @binding name
  * @binding enctype

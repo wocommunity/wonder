@@ -107,7 +107,8 @@ public class AjaxTabbedPanel extends AjaxDynamicElement {
 
             	// The tabs need to have an id attribute so we assign one if needed
                 if (childTab.id() == null) {
-                    childTab.setId(new WOConstantValueAssociation(id.valueInComponent(null) + "_pane_" + tabs.count()));
+                	childTab.setParentId(id);
+                	childTab.setTabNumber(new WOConstantValueAssociation("_pane_" + tabs.count()));
                 }
 
                 tabs.addObject(childTab);
@@ -151,7 +152,7 @@ public class AjaxTabbedPanel extends AjaxDynamicElement {
             AjaxTabbedPanelTab tab = (AjaxTabbedPanelTab)tabs.objectAtIndex(i);
             if (tab.isVisble(component)) {
 	            boolean isSelectedTab = tab.isSelected(context.component());
-	            String panelTabID = (String) tab.id().valueInComponent(component);
+	            String panelTabID = tab.tabIdInComponent(component);
 	            String panelID = panelTabID + "_panel";
 	            response.appendContentString("  <li class=\"ajaxTabbedPanelTab-");
 	            response.appendContentString(isSelectedTab ? "selected" : "unselected");

@@ -1,0 +1,50 @@
+ContentBox : MTAjaxModalContainer {
+	label = "Click me to Show";
+	title = "Some Title";
+	useDefaultCSS = false;
+}
+
+InteralHrefBox : MTAjaxModalContainer {
+	href = "/";
+	showFooter = false;
+	label = "Click me to show";
+	showTitle = true;
+	title = "Loading from an Internal Href";
+	useDefaultCSS = false;
+}
+
+RepetitionBox: MTAjaxModalContainer {
+	ajax = true;
+	autoWrapContent = false;
+	id = wordID;
+	label = "edit";
+	showFooter = false;
+	showTitle = false;
+	useDefaultCSS = false;
+	varName = wordID;
+}
+
+
+RepetitionWordName : WOString {
+	value = repetitionWord.name;
+}
+
+WordsContainer : MTAjaxUpdateContainer {
+	id = "repetitionContainer";
+}
+
+WordsRepetition : WORepetition {
+	list = words;
+	item = repetitionWord; 
+}
+
+WordNameField : WOTextField {
+	value = repetitionWord.name;
+}
+
+WordSubmitButton : MTAjaxSubmitButton {
+	class = "dismiss btn btn-primary";
+	updateContainerID = "repetitionContainer";
+	value = "Save";
+}
+

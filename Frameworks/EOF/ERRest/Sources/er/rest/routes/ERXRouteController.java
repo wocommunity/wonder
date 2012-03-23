@@ -416,22 +416,6 @@ public class ERXRouteController extends WODirectAction {
 				type = (String) request().userInfo().objectForKey(ERXRouteRequestHandler.TypeKey);
 			}
 			
-//			if (type == null) {
-//				List<String> acceptTypesList = new LinkedList<String>();
-//				String accept = request().headerForKey("Accept");
-//				if (accept != null) {
-//					String[] acceptTypes = accept.split(",");
-//					for (String acceptType : acceptTypes) {
-//						int semiIndex = acceptType.indexOf(";");
-//						if (semiIndex == -1) {
-//							acceptTypesList.add(acceptType);
-//						} else { 
-//							acceptTypesList.add(acceptType.substring(0, semiIndex));
-//						}
-//					}
-//				}
-//			}
-			
 			/*
 			 * To trap things like this: 
 			 *   Content-Type: application/json

@@ -20,7 +20,8 @@ import er.extensions.eof.ERXEnterpriseObject;
 /**
  * Given an object displays a link to show information about the editing context of that object.
  * 
- * @binding object
+ * @binding object An EOEditingContext or an EOEnterpriseObject object 
+ * @binding debugPageProvider Page to display for showing up details about a EOEnterpriseObject
  */
 
 public class ERXDebugMarker extends WOComponent {

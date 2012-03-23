@@ -11,8 +11,8 @@ import com.webobjects.appserver.WOContext;
 /**
  * Table implementation of a grouping repetition.<br />
  * 
- * @binding list
- * @binding item
+ * @binding list NSArray
+ * @binding item An object coming from the list
  * @binding sectionForItem
  * @binding subList
  * @binding subListSection
@@ -31,7 +31,7 @@ import com.webobjects.appserver.WOContext;
  * @binding cellVAlign
  * @binding cellWidth
  * @binding tableWidth
- * @binding goingVertically" defaults="Boolean
+ * @binding goingVertically defaults=Boolean
  */
 
 public class ERXGroupingTable extends ERXGroupingRepetition {

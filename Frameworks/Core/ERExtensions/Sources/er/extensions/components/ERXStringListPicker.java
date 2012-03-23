@@ -15,6 +15,12 @@ import com.webobjects.foundation.NSDictionary;
 /**
  * Useful for picking a String from a list.<br />
  * 
+ * @binding item 
+ * @binding selection
+ * @binding explanationComponentName
+ * @binding choices List (NSDictionary) containing the list of string to display
+ * @binding cancelPage A WOComponent that is used when people click on Cancel button
+ * @binding nextPage A WOComponent that is used when people click on Next button
  */
 
 public class ERXStringListPicker extends WOComponent {

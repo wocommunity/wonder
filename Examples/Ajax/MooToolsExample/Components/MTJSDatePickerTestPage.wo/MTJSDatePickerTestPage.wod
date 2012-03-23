@@ -1,0 +1,27 @@
+ASB : MTAjaxSubmitButton {
+	action = updateTime;
+	class = "btn btn-primary";
+	beforeEffect = "slide";
+	beforeEffectDuration = "long";
+	beforeEffectProperty = "out";
+	beforeEffectTransition = "Fx.Transitions.Bounce.easeOut";
+	effect = "slide";
+	effectDuration = "long";
+	effectProperty = "in";
+	updateContainerID = "AUC";	
+	value = "Update Time";
+}
+
+AUC : MTAjaxUpdateContainer {
+	id = "AUC";
+}
+
+DatePicker : MTJSDatePicker { 
+	dateformat = "%Y-%m-%d";
+	pickerClass = "datepicker_dashboard";
+	onClose = "function() {console.log('close'); }";
+	onSelect = "function() {console.log('select'); }";
+	onShow = "function() {console.log('show');}";
+	useDefaultCSS = "false";  
+	value = today; 
+}

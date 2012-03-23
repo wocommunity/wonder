@@ -15,9 +15,11 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.net.BindException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -44,6 +46,7 @@ import org.w3c.dom.NodeList;
 
 import com.webobjects.appserver.WOAction;
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOAdaptor;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -98,6 +101,7 @@ import er.extensions.formatters.ERXFormatterFactory;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXCompressionUtilities;
 import er.extensions.foundation.ERXConfigurationManager;
+import er.extensions.foundation.ERXExceptionUtilities;
 import er.extensions.foundation.ERXPatcher;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXRuntimeUtilities;
@@ -150,6 +154,7 @@ import er.extensions.statistics.ERXStats;
  * @property er.extensions.ERXApplication.useEditingContextUnlocker
  * @property er.extensions.ERXApplication.useSessionStoreDeadlockDetection
  * @property er.extensions.ERXComponentActionRedirector.enabled
+ * @property er.extensions.ERXApplication.allowMultipleDevInstances
  */
 public abstract class ERXApplication extends ERXAjaxApplication implements ERXGracefulShutdown.GracefulApplication {
 
@@ -821,6 +826,58 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		WOApplication.main(argv, applicationClass);
 	}
 
+	/**
+	 * <p>Terminates a different instance of the same application that may already be running.<br>
+	 * Only in dev mode.</p>
+	 * <p>Set the property "er.extensions.ERXApplication.allowMultipleDevInstances" to "true" if
+	 * you need to run multiple instances in dev mode.</p>
+	 * 
+	 * @return true if a previously running instance was stopped.
+	 */
+	private static boolean stopPreviousDevInstance() {
+		if (!isDevelopmentModeSafe() || 
+				ERXProperties.booleanForKeyWithDefault("er.extensions.ERXApplication.allowMultipleDevInstances", false)) {
+			return false;
+		}
+		
+		if (!(application().wasMainInvoked())) {
+			return false;
+		}
+		
+		String adapterUrl;
+		if (application().host() != null) {
+			adapterUrl = application().cgiAdaptorURL();
+		} else {
+			adapterUrl = application().cgiAdaptorURL().replace("://null/", "://localhost/");
+		}
+		
+		String appUrl;
+		if (application().isDirectConnectEnabled()) {
+			appUrl = adapterUrl.replace("/cgi", ":" + application().port() + "/cgi");
+			appUrl += "/" + application().name() + ".woa";
+		} else {
+			appUrl = adapterUrl + "/" + application().name() + ".woa/-" + application().port();
+		}
+		
+		URL url;
+		try {
+			appUrl = appUrl + "/" + application().directActionRequestHandlerKey() + "/stop";
+			url = new URL(appUrl);
+
+			log.debug("Stopping previously running instance of " + application().name());
+			
+			URLConnection connection = url.openConnection();
+			connection.getContent();
+			
+			Thread.sleep(2000);
+			
+			return true;
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
 	/**
 	 * Utility class to track down duplicate items in the class path. Reports
 	 * duplicate packages and packages that are present in different versions.
@@ -2617,6 +2674,19 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		return additionalAdaptors;
 	}
 
+	@Override
+	public WOAdaptor adaptorWithName(String aClassName, NSDictionary<String, Object> anArgsDictionary) {
+		try {
+			return super.adaptorWithName(aClassName, anArgsDictionary);
+		} catch (NSForwardException e) {
+			Throwable rootCause = ERXExceptionUtilities.getMeaningfulThrowable(e);
+			if ((rootCause instanceof BindException) && stopPreviousDevInstance()) {
+				return super.adaptorWithName(aClassName, anArgsDictionary);
+			}
+			throw e;
+		}
+	}
+	
 	protected void _debugValueForDeclarationNamed(WOComponent component, String verb, String aDeclarationName, String aDeclarationType, String aBindingName, String anAssociationDescription, Object aValue) {
 		if (aValue instanceof String) {
 			StringBuffer stringbuffer = new StringBuffer(((String) aValue).length() + 2);

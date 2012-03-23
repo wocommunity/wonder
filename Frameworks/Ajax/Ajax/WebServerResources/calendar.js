@@ -31,6 +31,7 @@
   AUTHOR:  
     Stuart Rackham <srackham@methods.co.nz>
     Chuck Hill: minor extensions and Wonder compatability
+    Fredrik Lindren: added start day
 
   LICENSE: 
     This source code is released under the MIT license.
@@ -329,6 +330,11 @@ function calendar_update() {
   var m = calendar.month_date.getMonth();
   var y = calendar.month_date.getFullYear();
   var day1 = calendar.month_date.getDay(); // Day of week: 0..6 of first day of the month.
+  if (day1 - calendar.start_day < 0) // FL Adjust for start_day
+  	day1 = 7 + day1 - calendar.start_day;
+  else
+  	day1 = day1 - calendar.start_day;	
+
   get_element('calendar_header').innerHTML = calendar.month_names[m].substr(0,3).toUpperCase()+ ' ' + y;
   get_element('calendar_prev_month').onclick = calendar_prev_month;
   get_element('calendar_next_month').onclick = calendar_next_month;
@@ -347,8 +353,11 @@ function calendar_update() {
         styles = 'selected';
       if (dates_equal(date, new Date()))
         styles += ' today';
-      if ( i % 7 == 0 || i % 7 == 1)
-        styles += ' weekend';
+      var dayIndex=(((i-1) % 7)+calendar.start_day) % 7; // FL Adjust for start_day
+      if ( dayIndex == 0 || dayIndex == 6)
+        styles += ' weekend ';
+      if ( dayIndex == 0 ) // FL Added class holiday to sundays
+        styles += 'holiday ';
       el.onmouseover = calendar_over;
       el.onmouseout = calendar_out;
       el.onclick = calendar_click;
@@ -396,6 +405,11 @@ function calendar_open(input_element, options) {
   if(options.fireEvent == false) {
     calendar.fireEvent = false;
   }
+  
+  // FL Added to support diffrent start days. Defaults to 0 (Sunday).
+  if (options.start_day) {
+  	calendar.start_day = options.start_day
+  }
   // CH: Done add init of new options
   
   if (options.day_names) {
@@ -408,8 +422,9 @@ function calendar_open(input_element, options) {
   // Set day name cells.
   var day_names = calendar.element.getElementsByTagName('tr')[1].childNodes;
   for (var i=0; i < day_names.length; i++) {
-    day_names[i].innerHTML = calendar.day_names[i].substr(0,3);
-    if ( i == 0 || i == 6)
+  	var dayIndex=(i+calendar.start_day) % 7; // FL Adjust for start_day
+    day_names[i].innerHTML = calendar.day_names[dayIndex].substr(0,3);
+    if ( dayIndex == 0 || dayIndex == 6)
       day_names[i].className += ' weekend';
   }
   var images_dir = options.images_dir || '.';
@@ -523,6 +538,7 @@ calendar = {                        // Calendar properties.
   input_element: undefined,         // Calendar input element, set by calendar_show().
   onDateSelect: undefined,          // CH: add function called when user selects a date
   fireEvent: true,					// CH: add should event listener for text field be fired upon date select?
+  start_day: 0,						// FL: Start day, defaults to 0 Sunday.
   input_date: undefined,            // Date value of input element, set by calendar_show().
   month_date: undefined,            // First day of calendar month.
   format: undefined,                // The date display format, set by calendar_show().

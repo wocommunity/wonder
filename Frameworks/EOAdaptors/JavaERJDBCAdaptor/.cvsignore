@@ -1,9 +1,0 @@
-bin
-build
-*.xcodeproj
-PB.project
-Makefile.*
-Makefile
-CPFileList.txt
-*~
-.DS_Store

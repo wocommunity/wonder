@@ -9,7 +9,9 @@ package er.extensions.components;
 import com.webobjects.appserver.WOContext;
 
 /**
- * description forthcoming!<br />
+ * ERXDirectActionImage is the same as a ERXDirectActionHyperlink, but the direct action
+ * response have to return a URL to an image, that URL will be used as the source of the
+ * image to display with this component.
  * 
  */
 
