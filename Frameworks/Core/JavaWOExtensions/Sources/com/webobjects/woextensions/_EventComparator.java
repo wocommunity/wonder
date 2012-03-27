@@ -12,6 +12,12 @@ import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSComparator;
 import com.webobjects.foundation.NSSelector;
 
+/**
+ * <span class="ja">
+ *  このクラスは二つの EOEvent を比較する為に使用します。
+ *  woextensions の private クラス
+ * </span>
+ */
 public class _EventComparator extends NSComparator {
     protected boolean _compareAscending;
     protected WOEventDisplayPage _controller;
