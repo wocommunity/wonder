@@ -13,6 +13,11 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSComparator;
 import com.webobjects.foundation.NSMutableArray;
 
+/**
+ * <span class="ja">
+ *  woextensions の private クラス
+ * </span>
+ */
 public class _WOJExtensionsUtil extends Object {
 
     public static boolean booleanValue(Object associationValue) {
