@@ -4,75 +4,78 @@
  * This a modified version.
  * Original license: http://www.opensource.apple.com/apsl/
  */
-
 package com.webobjects.woextensions;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 
-
+/**
+ * <span class="ja">
+ *  このパッケージ内の Javascript のスーパークラス
+ * </span>
+ */
 public abstract class JSComponent extends WOComponent {
-    public JSComponent(WOContext aContext)  {
-        super(aContext);
-    }
 
-    public boolean synchronizesVariablesWithBindings() {
-           return false;
-    }
+	/** バージョンID */
+	public static final long serialVersionUID = 20120327L;
 
+	public JSComponent(WOContext aContext)  {
+		super(aContext);
+	}
 
-    public String framework() {
-        String aFramework = (String)_WOJExtensionsUtil.valueForBindingOrNull("framework",this);
-        if ((aFramework != null) && aFramework.equalsIgnoreCase("app"))
-            aFramework=null;
-        return aFramework;
-    }
+	@Override
+	public boolean synchronizesVariablesWithBindings() {
+		return false;
+	}
 
-    public String imageLocation() {
+	/** <span class="ja">フレームワーク</span> */
+	public String framework() {
+		String aFramework = (String)_WOJExtensionsUtil.valueForBindingOrNull("framework",this);
+		if ((aFramework != null) && aFramework.equalsIgnoreCase("app"))
+			aFramework=null;
+		return aFramework;
+	}
 
-           // Return the image source (SRC) location ...
-        String aFilename = (String)_WOJExtensionsUtil.valueForBindingOrNull("filename",this);
+	/** <span class="ja">イメージ・ロケーション</span> */
+	public String imageLocation() {
+		// Return the image source (SRC) location ...
+		String aFilename = (String)_WOJExtensionsUtil.valueForBindingOrNull("filename", this);
+		return application(). resourceManager(). urlForResourceNamed( aFilename, framework(), session().languages(), context().request());
+	}
 
-        return application(). resourceManager(). urlForResourceNamed( aFilename, framework(), session().languages(), context().request());
+	/** <span class="ja">アクションURL</span> */
+	public String contextComponentActionURL() {
+		// If the user specified an action or pageName, return the source URL
+		if (hasBinding("action") || (valueForBinding("pageName")!=null)) {
+			// Return the URL to the action or page placed in the context by invokeAction
+			return context().componentActionURL();
+		}
 
-    }
+		// If the user specified some javascript, put that into the HREF and return it
+		String theFunction = (String)_WOJExtensionsUtil.valueForBindingOrNull("javascriptFunction",this);
+		if (theFunction!=null) {
+			// Make sure there are no extra quotations marks - replace them with apostrophes
+			theFunction = NSArray.componentsSeparatedByString(theFunction, "\"").componentsJoinedByString("'");
 
-    public String contextComponentActionURL() {
+			// Return the javascript HREF of what the user passed
+			return "javascript:" + theFunction;
+		}
+		return null;
+	}
 
-        // If the user specified an action or pageName, return the source URL
-        if (hasBinding("action") || (valueForBinding("pageName")!=null)) {
+	/** 
+	 * <span class="ja">アクション実行</span>
+	 */
+	public WOComponent invokeAction() {
+		// Set the result of the link, either an action from the parent or a page
+		WOComponent anActionResult = (WOComponent)_WOJExtensionsUtil.valueForBindingOrNull("action",this);
 
-            // Return the URL to the action or page placed in the context by invokeAction
-            return context().componentActionURL();
+		if ((anActionResult == null) && hasBinding("pageName")) {
+			String aPageName = (String)_WOJExtensionsUtil.valueForBindingOrNull("pageName",this);
+			anActionResult = pageWithName(aPageName);
+		}
 
-        }
-
-        // If the user specified some javascript, put that into the HREF and return it
-        String theFunction = (String)_WOJExtensionsUtil.valueForBindingOrNull("javascriptFunction",this);
-        if (theFunction!=null) {
-
-            // Make sure there are no extra quotations marks - replace them with apostrophes
-            theFunction = NSArray.componentsSeparatedByString(theFunction, "\""). componentsJoinedByString("'");
-
-            // Return the javascript HREF of what the user passed
-            return "javascript:"+theFunction;
-        }
-        return null;
-
-
-    }
-
-    public WOComponent invokeAction() {
-
-            // Set the result of the link, either an action from the parent or a page
-            WOComponent anActionResult = (WOComponent)_WOJExtensionsUtil.valueForBindingOrNull("action",this);
-
-            if ((anActionResult==null) && hasBinding("pageName")) {
-                    String aPageName = (String)_WOJExtensionsUtil.valueForBindingOrNull("pageName",this);
-                    anActionResult = pageWithName(aPageName);
-            }
-
-            return anActionResult;
-    }
+		return anActionResult;
+	}
 }
