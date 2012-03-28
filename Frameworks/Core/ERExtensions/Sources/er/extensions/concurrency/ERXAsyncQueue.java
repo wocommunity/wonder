@@ -7,7 +7,7 @@ import java.util.LinkedList;
  * To use it, implement the process(Object) method in your subclass.
  * 
  * @author ak
- * 
+ * @param <T> 
  */
 public abstract class ERXAsyncQueue<T> extends Thread {
 	private LinkedList<T> _jobs = new LinkedList<T>();

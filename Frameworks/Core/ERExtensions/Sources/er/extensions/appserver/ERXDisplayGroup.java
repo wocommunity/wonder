@@ -26,6 +26,7 @@ import er.extensions.eof.ERXS;
  * <li>clears out the sort ordering when the datasource changes. This is a cure fix to prevent errors when using switch components.
  * </ul>
  * @author ak
+ * @param <T> 
  */
 public class ERXDisplayGroup<T> extends WODisplayGroup {
 

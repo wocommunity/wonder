@@ -36,6 +36,7 @@ import er.extensions.foundation.ERXSelectorUtilities;
  * You can supply a timeout after which the cache is to get cleared and all the objects refetched. Note
  * that this implementation only caches the global IDs, not the actual data. 
  * @author ak
+ * @param <T> 
  */
 public class ERXEnterpriseObjectArrayCache<T extends EOEnterpriseObject> {
     private String _entityName;
