@@ -17,7 +17,7 @@ import com.webobjects.foundation.NSMutableArray;
  * </ul>
  * @author ak
  *
- * @param &lt;T&gt;
+ * @param <T>
  */
 public class ERXGroupingFetchSpecification<T extends NSDictionary> extends ERXFetchSpecification {
 

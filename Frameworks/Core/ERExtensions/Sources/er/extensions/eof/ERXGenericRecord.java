@@ -236,6 +236,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 * Clazz object implementation for ERXGenericRecord. See
 	 * {@link EOEnterpriseObjectClazz} for more information on this neat design
 	 * pattern.
+	 * @param <T> 
 	 */
 	public static class ERXGenericRecordClazz<T extends EOEnterpriseObject> extends EOEnterpriseObjectClazz<T> {
 
