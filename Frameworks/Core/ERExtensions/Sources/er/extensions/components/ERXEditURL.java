@@ -29,7 +29,7 @@ public class ERXEditURL extends WOComponent {
     public final static String DEFAULT="http://www.";
 
     public Object value() {
-        Object result=(Object)valueForBinding("value");
+        Object result = valueForBinding("value");
         if(result instanceof URL)
             result = result.toString();
         if (result==null || ((String)result).length()==0)

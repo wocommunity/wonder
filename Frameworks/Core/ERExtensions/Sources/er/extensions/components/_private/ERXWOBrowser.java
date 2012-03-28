@@ -59,9 +59,6 @@ public class ERXWOBrowser extends WOInput {
 		if (_selections != null && _selectedValues != null) {
 			throw new WODynamicElementCreationException("<" + getClass().getName() + "> : Cannot have both selections and selectedValues.");
 		}
-		else {
-			return;
-		}
 	}
 	
 	// Tells WOHTMLDynamicElement ancenstor that there are "option" tags to render 

@@ -130,7 +130,7 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
         if ((navigationItem().action() != null) && (navigationItem().action() != "")) {
             anActionResult = (WOComponent)valueForKeyPath(navigationItem().action());
         } else if ((navigationItem().pageName() != null) && (navigationItem().pageName() != "")) {
-            anActionResult = (WOComponent)(pageWithName(navigationItem().pageName()));
+            anActionResult = pageWithName(navigationItem().pageName());
         } else if ((navigationItem().directActionName() != null) && (navigationItem().directActionName() != "")) {
             // FIXME: Need to support directAction classes
             if(_linkDirectlyToDirectActions) {

@@ -126,7 +126,7 @@ public abstract class ERXEnterpriseObjectChangeListener<T extends EOEnterpriseOb
 	 *            the name of the changed entity
 	 * @return true if this change is relevant to this change listener
 	 */
-	@SuppressWarnings( { "cast", "unchecked" })
+	@SuppressWarnings( { "unchecked" })
 	protected boolean isRelevant(EOEditingContext editingContext, String changedEntityName) {
 		boolean relevant = false;
 		if (changedEntityName.equals(_entityName)) {

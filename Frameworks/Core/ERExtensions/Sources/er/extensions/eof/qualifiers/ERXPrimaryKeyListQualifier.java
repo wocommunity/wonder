@@ -148,7 +148,7 @@ public class ERXPrimaryKeyListQualifier extends ERXInQualifier {
         EOEntity entity = ((EOEntityClassDescription)eo.classDescription()).entity();
         if (entity.primaryKeyAttributeNames().count() != 1)
             throw new IllegalStateException("Attempting to construct a qualifier for an entity with a compound primary key: " + entity);
-        return (String)entity.primaryKeyAttributeNames().lastObject();
+        return entity.primaryKeyAttributeNames().lastObject();
     }
 
     /**

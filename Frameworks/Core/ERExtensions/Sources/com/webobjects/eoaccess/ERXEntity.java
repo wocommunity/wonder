@@ -71,7 +71,7 @@ public class ERXEntity extends EOEntity {
 			if (neededIndex >= primaryKeyAttributeNames().count()) {
 				throw new IllegalStateException("No matching primary key found for entity'" + name() + "' with attribute'" + name + "'");
 			}
-			result = (EOAttribute) primaryKeyAttributes().objectAtIndex(neededIndex);
+			result = primaryKeyAttributes().objectAtIndex(neededIndex);
 		}
 		return result;
 	}

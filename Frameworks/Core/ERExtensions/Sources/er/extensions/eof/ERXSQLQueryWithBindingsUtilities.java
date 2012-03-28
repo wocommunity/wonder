@@ -180,7 +180,7 @@ public class ERXSQLQueryWithBindingsUtilities {
 
         NSArray pkDicts = ec.objectsWithFetchSpecification(pkSpec);
         NSMutableArray pks = new NSMutableArray();
-        String pkAtttributeName = ((EOAttribute) entity.primaryKeyAttributes().lastObject()).name();
+        String pkAtttributeName = entity.primaryKeyAttributes().lastObject().name();
 
         for ( Enumeration rowEnumerator = pkDicts.objectEnumerator(); rowEnumerator.hasMoreElements(); ) {
             NSDictionary row = (NSDictionary) rowEnumerator.nextElement();
