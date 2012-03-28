@@ -2,24 +2,13 @@ package er.extensions.eof;
 
 import java.util.Iterator;
 
-import com.webobjects.eoaccess.EOModelGroup;
-import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOFetchSpecification;
-import com.webobjects.eocontrol.EOKeyComparisonQualifier;
-import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
-import com.webobjects.eocontrol.EOQualifierEvaluation;
-import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.foundation.NSMutableDictionary;
-import com.webobjects.foundation.NSPropertyListSerialization;
-
-import er.extensions.qualifiers.ERXQualifierTraversal;
 
 /**
  * Extended fetch specification (work in progress). 

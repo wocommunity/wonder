@@ -1,7 +1,5 @@
 package er.extensions.components._private;
 
-import java.io.IOException;
-
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;

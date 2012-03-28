@@ -15,7 +15,6 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 
-import er.extensions.appserver.ERXApplication;
 import er.extensions.foundation.ERXMulticastingDelegate;
 
 

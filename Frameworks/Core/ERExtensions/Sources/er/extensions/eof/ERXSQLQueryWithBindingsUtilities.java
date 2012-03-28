@@ -4,7 +4,6 @@ package er.extensions.eof;
 import java.util.Enumeration;
 
 import com.webobjects.eoaccess.EOAdaptorChannel;
-import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabaseChannel;
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
@@ -15,7 +14,6 @@ import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOObjectStore;
-import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;

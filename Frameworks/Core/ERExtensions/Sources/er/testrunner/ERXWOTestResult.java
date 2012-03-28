@@ -21,7 +21,6 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSForwardException;
-import com.webobjects.woextensions.WOExceptionParser;
 import com.webobjects.woextensions.WOParsedErrorLine;
 
 /**
