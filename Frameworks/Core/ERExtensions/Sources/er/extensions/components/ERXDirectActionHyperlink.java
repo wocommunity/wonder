@@ -239,7 +239,7 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
                 ERXStringUtilities.appendSeparatorIfLastNot('&', '?', result);
                 result.append(key);
                 result.append("=");
-                result.append(ERXCrypto.blowfishEncode(value));
+                result.append(ERXCrypto.crypterForAlgorithm(ERXCrypto.BLOWFISH).encrypt(value));
             }
         }
 

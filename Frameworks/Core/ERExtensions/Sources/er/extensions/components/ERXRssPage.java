@@ -42,7 +42,7 @@ public class ERXRssPage extends ERXStatelessComponent {
 	
 	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
-		context._generateCompleteURLs();
+		context.generateCompleteURLs();
 		response.setHeader("text/xml", "content-type");
 		super.appendToResponse(response, context);
 	}

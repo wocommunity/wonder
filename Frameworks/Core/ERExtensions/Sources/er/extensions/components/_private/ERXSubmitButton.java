@@ -211,17 +211,17 @@ public class ERXSubmitButton extends WOInput {
     public WOActionResults invokeAction(WORequest worequest, WOContext wocontext) {
         Object obj = null;
         WOComponent wocomponent = wocontext.component();
-        if(!isDisabledInContext(wocontext) && wocontext._wasFormSubmitted()) {
-            if(wocontext._isMultipleSubmitForm()) {
+        if(!isDisabledInContext(wocontext) && wocontext.wasFormSubmitted()) {
+            if(wocontext.isMultipleSubmitForm()) {
                 if(worequest.formValueForKey(nameInContext(wocontext, wocomponent)) != null) {
-                    wocontext._setActionInvoked(true);
+                    wocontext.setActionInvoked(true);
                     if(_action != null)
                         obj = (WOActionResults)_action.valueInComponent(wocomponent);
                     if(obj == null)
                         obj = wocontext.page();
                 }
             } else {
-                wocontext._setActionInvoked(true);
+                wocontext.setActionInvoked(true);
                 if(_action != null)
                     obj = (WOActionResults)_action.valueInComponent(wocomponent);
                 if(obj == null)

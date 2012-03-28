@@ -51,7 +51,7 @@ public class ERXSimpleSpamCheck extends ERXComponent {
 
 	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
-		if (context._wasFormSubmitted()) {
+		if (context.wasFormSubmitted()) {
 			super.takeValuesFromRequest(request, context);
 			if (!ERXExtensions.safeEquals(_expectedSpamCheck, _spamCheck)) {
 				validationFailedWithException(new NSValidation.ValidationException("Spam check failed."), this, ERXSimpleSpamCheck.SPAM_CHECK_KEY);
