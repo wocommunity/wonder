@@ -148,6 +148,12 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	public boolean _generatingCompleteResourceURLs() {
 		return _generateCompleteResourceURLs;
 	}
+	
+	@Override
+	public void generateCompleteURLs() {
+		super.generateCompleteURLs();
+		_generateCompleteURLs = true; 
+	}
 
 	@Override
 	public void _generateCompleteURLs() {
@@ -155,6 +161,12 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 		_generateCompleteURLs = true; 
 	}
 
+	@Override
+	public void generateRelativeURLs() {
+		super.generateRelativeURLs();
+		_generateCompleteURLs = false;
+	}
+	
 	@Override
 	public void _generateRelativeURLs() {
 		super._generateRelativeURLs();
@@ -609,7 +621,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 		}
 
 		if (!completeUrls) {
-			context._generateCompleteURLs();
+			context.generateCompleteURLs();
 		}
 
 		String url;
@@ -660,7 +672,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 		}
 		finally {
 			if (!completeUrls) {
-				context._generateRelativeURLs();
+				context.generateRelativeURLs();
 			}
 		}
 		return url;
