@@ -6,6 +6,8 @@
 //
 package er.extensions.appserver;
 
+import java.util.regex.Pattern;
+
 import org.apache.log4j.Logger;
 
 import com.webobjects.foundation.NSDictionary;
@@ -76,6 +78,8 @@ public class ERXBasicBrowser extends ERXBrowser {
     /** logging support */
     public static final Logger log = Logger.getLogger(ERXBasicBrowser.class);
 
+    public static final Pattern DIGIT_PATTERN = Pattern.compile("[0-9]+");
+    
     private final String          _browserName;
     private final String          _version;
     private final Integer         _majorVersion;
@@ -189,12 +193,14 @@ public class ERXBasicBrowser extends ERXBrowser {
 	        if (majorVersion.indexOf(".") != -1) {
 	        	majorVersion = majorVersion.substring(0, majorVersion.indexOf("."));
 	        }
+	        Integer intMajorVersion;
 	        try {
-	        	_majorVersion = Integer.valueOf(majorVersion);
+	        	intMajorVersion = Integer.valueOf(majorVersion);
 	        } catch (NumberFormatException e) {
 	        	log.info("could not determine major version from '" + majorVersion + "'", e);
-	        	throw e;
+	        	intMajorVersion = Integer.valueOf(0);
 			}
+	        _majorVersion = intMajorVersion;
         }
     }
 
