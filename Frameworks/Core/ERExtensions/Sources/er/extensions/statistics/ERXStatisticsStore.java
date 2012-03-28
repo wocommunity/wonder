@@ -23,7 +23,6 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXSession;
-import er.extensions.eof.ERXDatabaseContext;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXObjectStoreCoordinator;
 import er.extensions.foundation.ERXProperties;

@@ -6,7 +6,6 @@ import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSTimestamp;
 
 /**
