@@ -441,7 +441,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      */
     public String encryptedPrimaryKey() {
         String pk = ERXEOControlUtilities.primaryKeyStringForObject(this);
-        return pk==null ? null : ERXCrypto.blowfishEncode(pk);
+        return pk==null ? null : ERXCrypto.crypterForAlgorithm(ERXCrypto.BLOWFISH).encrypt(pk);
     }
         
     /* (non-Javadoc)

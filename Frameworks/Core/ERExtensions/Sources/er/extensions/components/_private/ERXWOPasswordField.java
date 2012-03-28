@@ -64,7 +64,7 @@ public class ERXWOPasswordField extends WOInput {
 
   public void takeValuesFromRequest(WORequest request, WOContext context) {
     WOComponent component = context.component();
-    if (!isDisabledInContext(context) && context._wasFormSubmitted() && !isReadonlyInContext(context)) {
+    if (!isDisabledInContext(context) && context.wasFormSubmitted() && !isReadonlyInContext(context)) {
       String name = nameInContext(context, component);
       if (name != null) {
         String value = request.stringFormValueForKey(name);

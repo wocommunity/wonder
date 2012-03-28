@@ -317,7 +317,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			for (int i = 0; i < files.length; i++) {
 				String string = files[i];
 				try {
-					urls[i] = new File(string).toURL();
+					urls[i] = new File(string).toURI().toURL();
 				}
 				catch (MalformedURLException e) {
 					// TODO Auto-generated catch block
@@ -2108,7 +2108,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 						NSData compressedNSData = ERXCompressionUtilities.gzipInputStreamAsNSData(contentInputStream, (int)inputBytesLength);
 						//compressedData = compressedNSData._bytesNoCopy();
 						compressedData = compressedNSData.bytes();
-						response.setContentStream(null, 0, 0);
+						response.setContentStream(null, 0, 0L);
 					}
 					else {
 						NSData input = response.content();

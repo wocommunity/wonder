@@ -78,7 +78,7 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 
 	public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
 		WOComponent component = wocontext.component();
-		if(!isDisabledInContext(wocontext) && wocontext._wasFormSubmitted() && !isReadonlyInContext(wocontext)) {
+		if(!isDisabledInContext(wocontext) && wocontext.wasFormSubmitted() && !isReadonlyInContext(wocontext)) {
 			String name = nameInContext(wocontext, component);
 			if(name != null) {
 				String stringValue;
