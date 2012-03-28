@@ -170,8 +170,6 @@ public class ERXSubmitButton extends WOInput {
 			css = (String) _class.valueInComponent(wocontext.component());
 		}
        	
-    	WOAssociation assoc = _action;
-
     	if(_action != null) {
     		css += " " + STYLE_PREFIX + _action.keyPath().replaceAll("\\W+", "");
     	} else if(_directActionName != null) {
@@ -194,7 +192,7 @@ public class ERXSubmitButton extends WOInput {
     	_appendValueAttributeToResponse(woresponse, wocontext);
     	_appendNameAttributeToResponse(woresponse, wocontext);
     	if(!shouldSubmitForm) {
-    		String action = (String) wocontext.componentActionURL();
+    		String action = wocontext.componentActionURL();
     		woresponse._appendTagAttributeAndValue("onclick", "document.location.href='" + action + "'; return false;", false);
     	}
     }

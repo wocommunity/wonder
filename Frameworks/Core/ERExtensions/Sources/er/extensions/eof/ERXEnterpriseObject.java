@@ -148,8 +148,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
                 }
             }
         }
-    };
-
+    }
      
     public static abstract class Processor {
         
@@ -171,7 +170,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
                 perform(ec, (ERXEnterpriseObject)eo);
             }
         }
-    };
+    }
 
     public static Processor FlushCachesProcessor = new Processor() {
         protected void perform(EOEditingContext ec, ERXEnterpriseObject eo) {

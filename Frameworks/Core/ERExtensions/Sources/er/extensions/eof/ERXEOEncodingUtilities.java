@@ -199,7 +199,7 @@ public class ERXEOEncodingUtilities {
     		synchronized(ERXEOEncodingUtilities.class) {
     			if(_encodedEntityNames == null) {
     				_encodedEntityNames = new NSMutableDictionary ();
-    				NSArray models = (NSArray)EOModelGroup.defaultGroup ().models ();
+    				NSArray models = EOModelGroup.defaultGroup().models();
     				for (Enumeration en = models.objectEnumerator ();
     				en.hasMoreElements ();) {
     					NSArray entities = ((EOModel)en.nextElement ()).entities ();

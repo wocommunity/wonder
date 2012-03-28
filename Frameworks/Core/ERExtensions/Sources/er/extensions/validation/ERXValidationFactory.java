@@ -320,11 +320,11 @@ public class ERXValidationFactory {
                     String property = eov.key();
                     if(property == null && message.indexOf("Removal") == 0) {
                         //FIXME: (ak) pattern matching?
-                        property = (String)(NSArray.componentsSeparatedByString(message, "'").objectAtIndex(3));
+                        property = NSArray.componentsSeparatedByString(message, "'").objectAtIndex(3);
                     }
                     if(property == null && message.indexOf("Error encountered converting") == 0) {
                         //FIXME: (ak) pattern matching?
-                        property = (String)(NSArray.componentsSeparatedByString(message, "'").objectAtIndex(1));
+                        property = NSArray.componentsSeparatedByString(message, "'").objectAtIndex(1);
                     }
                     erve = createException(eo, property, value, type);
                     break;

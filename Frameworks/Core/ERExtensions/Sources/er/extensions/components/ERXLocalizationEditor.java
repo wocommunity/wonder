@@ -219,7 +219,7 @@ public class ERXLocalizationEditor extends WOComponent {
     		Object item = currentEntry.objectForKey(currentLanguage);
     		Object newValue;
     		if (item instanceof String) {
-    			newValue = (String)value;
+    			newValue = value;
 			} else {
 				newValue = NSPropertyListSerialization.propertyListFromString(value);
 			}

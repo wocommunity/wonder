@@ -733,7 +733,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
 
   protected void _convertSessionCookiesToSecure(WOResponse response) {
 	    if(storesIDsInCookies() && !ERXRequest._isSecureDisabled()) {
-			for (WOCookie cookie : (NSArray<WOCookie>)response.cookies()) {
+			for (WOCookie cookie : response.cookies()) {
 				String sessionIdKey;
 				String instanceIdKey;
 				if (ERXApplication.isWO54()) {
@@ -759,7 +759,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
   
   protected void _convertSessionCookiesToHttpOnly(final WOResponse response) {
       if (storesIDsInCookies()) {
-          for (WOCookie cookie : (NSArray<WOCookie>) response.cookies()) {
+          for (WOCookie cookie : response.cookies()) {
               String sessionIdKey;
               String instanceIdKey;
               if (ERXApplication.isWO54()) {

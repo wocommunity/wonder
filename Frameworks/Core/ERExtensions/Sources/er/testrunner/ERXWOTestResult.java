@@ -86,7 +86,7 @@ public class ERXWOTestResult extends WOComponent {
         return byos.toString();
     }
     public String currentErrorTestName() {
-        Object failedTest = (Object)currentError.failedTest();
+        Object failedTest = currentError.failedTest();
         if (failedTest instanceof TestCase)
             return ((TestCase)failedTest).getName();
         else if (failedTest instanceof TestSuite)

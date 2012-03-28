@@ -207,7 +207,6 @@ public class ERXRuntimeUtilities {
      */
 
     public static Throwable originalThrowable(Throwable t) {
-    	Throwable throwable = null;
     	if (t instanceof InvocationTargetException) {
     		return originalThrowable(((InvocationTargetException)t).getTargetException());
     	} 

@@ -50,7 +50,7 @@ public class ERXEditDateJavascript extends ERXStatelessComponent {
     }
     
 	public String dateformat() {
-		String format = (String) stringValueForBinding("dateformat");
+		String format = stringValueForBinding("dateformat");
 		if (format == null) {
 			format = ERXTimestampFormatter.DEFAULT_PATTERN;
 		}
@@ -62,7 +62,7 @@ public class ERXEditDateJavascript extends ERXStatelessComponent {
 	}
 
 	public String dateString() {
-		return (String) stringValueForBinding("dateString");
+		return stringValueForBinding("dateString");
 	}
 
 	public void setDateString(String value) {

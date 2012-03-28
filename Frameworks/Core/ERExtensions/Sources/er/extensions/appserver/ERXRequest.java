@@ -159,13 +159,13 @@ public  class ERXRequest extends WORequest {
                 fixedLanguages = fixAbbreviationArray(rawLanguages);
                 for (Enumeration<String> e = fixedLanguages.objectEnumerator(); e.hasMoreElements();) {
 					String languageKey = e.nextElement();
-					String language = (String) WOProperties.TheLanguageDictionary.objectForKey(languageKey);
+					String language = WOProperties.TheLanguageDictionary.objectForKey(languageKey);
 					if(language == null) {
 						int index = languageKey.indexOf('_');
 						if(index > 0) {
 							String mainLanguageKey = languageKey.substring(0, index);
 							String region = languageKey.substring(index);
-							language = (String) WOProperties.TheLanguageDictionary.objectForKey(mainLanguageKey);
+							language = WOProperties.TheLanguageDictionary.objectForKey(mainLanguageKey);
 							if(language != null) {
 								language = language + region.toUpperCase();
 							}

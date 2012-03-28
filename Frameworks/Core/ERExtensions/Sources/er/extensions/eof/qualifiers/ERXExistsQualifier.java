@@ -263,7 +263,7 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
                     } else {
                         path.addObject(rel);
                     }
-                    att = (EOAttribute)rel.destinationAttributes().lastObject();
+                    att = rel.destinationAttributes().lastObject();
                 } else { // The test for an attribute.
                     att = entity.anyAttributeNamed(key);
                 }

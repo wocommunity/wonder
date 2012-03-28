@@ -197,7 +197,7 @@ public class ERXLongPrimaryKeyFactory {
 		}
 
 		Long pk = getNextPkValueForEntity(entityName);
-		String pkName = (String) entity.primaryKeyAttributeNames().objectAtIndex(0);
+		String pkName = entity.primaryKeyAttributeNames().objectAtIndex(0);
 		return new NSDictionary(new Object[] { pk}, new Object[] { pkName});
 	}
 
@@ -311,7 +311,7 @@ public class ERXLongPrimaryKeyFactory {
 		EOEntity entity = EOModelGroup.defaultGroup().entityNamed(ename);
 		if (entity == null) throw new NullPointerException("could not find an entity named " + ename);
 		String tableName = entity.externalName();
-		String colName = ((EOAttribute)entity.primaryKeyAttributes().lastObject()).columnName();
+		String colName = entity.primaryKeyAttributes().lastObject().columnName();
 		String sql = "select max(" + colName + ") from " + tableName;
 
 		ERXJDBCConnectionBroker broker = ERXJDBCConnectionBroker.connectionBrokerForEntityNamed(ename);

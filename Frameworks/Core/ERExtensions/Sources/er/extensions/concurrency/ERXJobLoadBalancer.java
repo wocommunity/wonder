@@ -220,7 +220,7 @@ public class ERXJobLoadBalancer {
             try {
                 in = new ObjectInputStream(new FileInputStream(friend));                                                                                                                                                                      
                 long entryCreationTime = in.readLong();
-                String friendId = (String)in.readUTF();
+                String friendId = in.readUTF();
                 if ((now-entryCreationTime)<ttl) {
                     aliveFriendsCount++;
                     if (friendId.compareTo(workerId.id())<0) {
