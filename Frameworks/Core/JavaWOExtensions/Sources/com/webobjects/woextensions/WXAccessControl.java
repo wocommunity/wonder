@@ -13,22 +13,31 @@ import com.webobjects.foundation.NSDictionary;
 
 public class WXAccessControl extends WOComponent {
 
-    public WXAccessControl(WOContext aContext)  {
-        super(aContext);
-    }
+	//********************************************************************
+	//	Constructor
+	//********************************************************************
 
-    /////////////
-    // No-Sync
-    ////////////
-    public boolean synchronizesVariablesWithBindings() {
-        return false;
-    }
+	public WXAccessControl(WOContext aContext)  {
+		super(aContext);
+	}
 
-    public boolean shouldShow() {
-        NSDictionary permissions = (NSDictionary)session().valueForKey("permissions");
-        if (permissions!=null) {
-            return ((Boolean)permissions.valueForKey((String)valueForBinding("key"))).booleanValue();
-        }
-        return true;
-    }
+	//********************************************************************
+	//	Overwrite
+	//********************************************************************
+
+	public boolean synchronizesVariablesWithBindings() {
+		return false;
+	}
+
+	//********************************************************************
+	//	Methods
+	//********************************************************************
+
+	public boolean shouldShow() {
+		NSDictionary permissions = (NSDictionary)session().valueForKey("permissions");
+		if (permissions!=null) {
+			return ((Boolean)permissions.valueForKey((String)valueForBinding("key"))).booleanValue();
+		}
+		return true;
+	}
 }
