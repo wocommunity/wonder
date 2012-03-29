@@ -32,13 +32,13 @@ import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
 
 import er.extensions.appserver.ERXSession;
-import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXPatcher;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXSelectorUtilities;
+import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
@@ -355,7 +355,7 @@ public class ERDSavedQueriesComponent extends WOComponent {
                 if (log.isDebugEnabled()) log.debug("decodeEO with dict: " + dictionary);
 
                 if (primaryKeyAttribute != null && !String.class.getName().equals(primaryKeyAttribute.className())) {
-                    primaryKeyObject = ERXConstant.integerForString(pk);
+                    primaryKeyObject = ERXStringUtilities.integerWithString(pk);
                 }
 
                 try {

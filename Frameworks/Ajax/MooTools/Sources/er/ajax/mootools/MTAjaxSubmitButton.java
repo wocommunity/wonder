@@ -362,12 +362,12 @@ public class MTAjaxSubmitButton extends AjaxDynamicElement {
 		WOComponent wocomponent = wocontext.component();
 
 		String nameInContext = nameInContext(wocontext, wocomponent);
-		boolean shouldHandleRequest = (!disabledInComponent(wocomponent) && wocontext._wasFormSubmitted()) && ((wocontext._isMultipleSubmitForm() && nameInContext.equals(worequest.formValueForKey(KEY_AJAX_SUBMIT_BUTTON_NAME))) || !wocontext._isMultipleSubmitForm());
+		boolean shouldHandleRequest = (!disabledInComponent(wocomponent) && wocontext.wasFormSubmitted()) && ((wocontext.isMultipleSubmitForm() && nameInContext.equals(worequest.formValueForKey(KEY_AJAX_SUBMIT_BUTTON_NAME))) || !wocontext.isMultipleSubmitForm());
 
 		if (shouldHandleRequest) {
 			String updateContainerID = MTAjaxUpdateContainer.updateContainerID(this, wocomponent);
 			MTAjaxUpdateContainer.setUpdateContainerID(worequest, updateContainerID);
-			wocontext._setActionInvoked(true);
+			wocontext.setActionInvoked(true);
 			result = handleRequest(worequest, wocontext);
 			AjaxUtils.updateMutableUserInfoWithAjaxInfo(wocontext);
 		}

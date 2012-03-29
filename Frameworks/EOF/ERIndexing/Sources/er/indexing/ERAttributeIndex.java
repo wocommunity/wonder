@@ -58,7 +58,7 @@ public class ERAttributeIndex extends ERIndex {
 
     private static String toUrl(File store) {
         try {
-            return store.toURL().toString();
+            return store.toURI().toURL().toString();
         } catch (MalformedURLException e) {
             throw NSForwardException._runtimeExceptionForThrowable(e);
         }

@@ -77,7 +77,7 @@ public class AjaxUpdaterLink extends AjaxUpdater {
     
     // actions
     public WOActionResults invokeAction() {
-    	context()._setActionInvoked(true);
+    	context().setActionInvoked(true);
 		if (hasBinding(Bindings.action))  {
 			WOActionResults action = action();
 			if (action instanceof WOComponent)  ((WOComponent) action)._setIsPage(true);	// cache is pageFrag cache

@@ -207,7 +207,7 @@ public class ERCMailDelivery {
         } else {
             WOContext context = component.context();
             // Emails should generate complete urls
-            context._generateCompleteURLs ();
+            context.generateCompleteURLs();
             message = component.generateResponse().contentString();
         }
         return composeEmail(from, to, cc, bcc, title, message, ec);
@@ -282,7 +282,7 @@ public class ERCMailDelivery {
         if(plainTextComponent!=null){
             EOKeyValueCodingAdditions.DefaultImplementation.takeValuesFromDictionary(plainTextComponent, bindings);
             WOContext context = plainTextComponent.context();
-            context._generateCompleteURLs ();
+            context.generateCompleteURLs();
             result.setPlainText(plainTextComponent.generateResponse().contentString());
         }
         return result;
@@ -315,7 +315,7 @@ public class ERCMailDelivery {
         if ( plainTextComponent != null ) {
             WOContext context = plainTextComponent.context();
             
-            context._generateCompleteURLs();
+            context.generateCompleteURLs();
             result.setPlainText(plainTextComponent.generateResponse().contentString());
         }
         

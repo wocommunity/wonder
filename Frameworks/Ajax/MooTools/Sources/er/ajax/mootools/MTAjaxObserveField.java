@@ -180,11 +180,11 @@ public class MTAjaxObserveField extends AjaxDynamicElement {
 		WOActionResults result = null;
 		WOComponent wocomponent = context.component();
 		String nameInContext = nameInContext(context, wocomponent, this);
-		boolean shouldHandleRequest = !context._wasActionInvoked() && context._wasFormSubmitted() && nameInContext.equals(ERXAjaxApplication.ajaxSubmitButtonName(request));
+		boolean shouldHandleRequest = !context.wasActionInvoked() && context.wasFormSubmitted() && nameInContext.equals(ERXAjaxApplication.ajaxSubmitButtonName(request));
 		if (shouldHandleRequest) {
 			String updateContainerID = MTAjaxUpdateContainer.updateContainerID(this, wocomponent);
 			AjaxUpdateContainer.setUpdateContainerID(request, updateContainerID);
-			context._setActionInvoked(true);
+			context.setActionInvoked(true);
 			result = (WOActionResults)valueForBinding("action", wocomponent);
 			if (result == null) {
 				result = handleRequest(request, context);

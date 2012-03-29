@@ -291,7 +291,7 @@ public class AjaxFileUpload extends WOComponent {
 			}
 
 			if (hasBinding("data")) {
-				NSData data = new NSData(progress.tempFile().toURL());
+				NSData data = new NSData(progress.tempFile().toURI().toURL());
 				setValueForBinding(data, "data");
 			}
 			

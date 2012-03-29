@@ -174,7 +174,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 
 			String actionUrl = null;
 			if (directActionNameAssociation != null) {
-				actionUrl = context._directActionURL((String) directActionNameAssociation.valueInComponent(component), ERXComponentUtilities.queryParametersInComponent(associations(), component), ERXRequest.isRequestSecure(context.request())).replaceAll("&amp;", "&");
+				actionUrl = context._directActionURL((String) directActionNameAssociation.valueInComponent(component), ERXComponentUtilities.queryParametersInComponent(associations(), component), ERXRequest.isRequestSecure(context.request()), 0, false).replaceAll("&amp;", "&");
 			}
 			else {
 				actionUrl = AjaxUtils.ajaxComponentActionUrl(context);

@@ -185,6 +185,6 @@ public class WRNavigationControl extends ERXStatelessComponent {
     }
 
     public boolean showNavigation() {
-        return valueForBooleanBinding("showNavigation");
+        return booleanValueForBinding("showNavigation");
     }
 }

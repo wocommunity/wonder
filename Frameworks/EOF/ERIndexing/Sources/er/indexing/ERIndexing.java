@@ -94,7 +94,7 @@ public class ERIndexing extends ERXFrameworkPrincipal {
 
 	public void fileDidChange(NSNotification n) throws MalformedURLException {
 		File file = (File) n.object();
-		loadModel(file.toURL());
+		loadModel(file.toURI().toURL());
 	}
 
 	private void loadModel(URL url) {
@@ -126,7 +126,7 @@ public class ERIndexing extends ERXFrameworkPrincipal {
 		// If index store not defined, default to index named the dsame as the indexModel file in the indexRoot directory
 		if(!dict.containsKey("store")) {
 			try {
-				dict.setObjectForKey(new File(indexRoot(), key).toURL().toString(), "store");
+				dict.setObjectForKey(new File(indexRoot(), key).toURI().toURL().toString(), "store");
 			} catch (MalformedURLException e) {
 				throw NSForwardException._runtimeExceptionForThrowable(e);
 			}
