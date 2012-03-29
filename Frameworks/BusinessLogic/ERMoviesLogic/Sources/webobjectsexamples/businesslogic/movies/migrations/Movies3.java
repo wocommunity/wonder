@@ -3,7 +3,6 @@ package webobjectsexamples.businesslogic.movies.migrations;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 
-import er.extensions.jdbc.ERXJDBCUtilities;
 import er.extensions.migration.ERXMigrationDatabase;
 import er.extensions.migration.ERXMigrationTable;
 import er.extensions.migration.ERXModelVersion;

@@ -8,7 +8,6 @@ package er.directtoweb.excel;
 
 import com.webobjects.foundation.*;
 
-import er.extensions.*;
 import er.extensions.foundation.ERXDictionaryUtilities;
 
 /**

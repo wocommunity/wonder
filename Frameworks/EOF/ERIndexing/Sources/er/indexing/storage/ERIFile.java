@@ -2,7 +2,6 @@ package er.indexing.storage;
 
 import java.io.IOException;
 
-import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.IndexInput;
 import org.apache.lucene.store.IndexOutput;
 

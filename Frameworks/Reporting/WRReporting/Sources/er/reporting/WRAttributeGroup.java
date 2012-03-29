@@ -3,7 +3,6 @@ package er.reporting;
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
-import er.extensions.*;
 import er.extensions.foundation.ERXValueUtilities;
 import er.grouping.*;
 

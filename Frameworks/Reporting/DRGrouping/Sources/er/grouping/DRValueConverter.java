@@ -4,8 +4,6 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.foundation.*;
 
-import er.extensions.*;
-
 /**
  * Converts values. The main reason for this class is to provide a
  * point where you can patch into the internals of the grouping framework

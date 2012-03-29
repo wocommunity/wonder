@@ -14,7 +14,6 @@ import com.webobjects.foundation.NSMutableDictionary;
 import er.ajax.AjaxDynamicElement;
 import er.ajax.AjaxOption;
 import er.ajax.AjaxOptions;
-import er.ajax.AjaxSubmitButton;
 import er.ajax.AjaxUpdateContainer;
 import er.ajax.AjaxUtils;
 import er.ajax.IAjaxElement;

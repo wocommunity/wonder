@@ -1,7 +1,6 @@
 package er.prototaculous;
 
 import com.webobjects.appserver.WOActionResults;
-import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver._private.WODynamicElementCreationException;
@@ -9,7 +8,6 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.appserver.ERXWOContext;
-import er.prototaculous.widgets.ModalBoxButton.Bindings;
 
 /**
  * An Ajax.Request as a button (that also submits the form and form values)

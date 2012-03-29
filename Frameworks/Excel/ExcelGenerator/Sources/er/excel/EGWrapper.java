@@ -7,7 +7,6 @@ import org.apache.log4j.*;
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
-import er.extensions.*;
 import er.extensions.components.ERXComponentUtilities;
 import er.extensions.components.ERXNonSynchronizingComponent;
 

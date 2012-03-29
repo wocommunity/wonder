@@ -1,7 +1,6 @@
 package er.calendar;
 
 import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
 
 /**
  * ERCalendarEvent is an interface for events used by

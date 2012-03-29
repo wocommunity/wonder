@@ -15,7 +15,6 @@ import org.apache.poi.poifs.filesystem.*;
 
 import com.webobjects.foundation.*;
 
-import er.extensions.*;
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXKeyValueCodingUtilities;
 

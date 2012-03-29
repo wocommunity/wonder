@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
-import er.extensions.*;
 import er.extensions.eof.ERXConstant;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;

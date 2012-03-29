@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.collections.ListUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOResponse;

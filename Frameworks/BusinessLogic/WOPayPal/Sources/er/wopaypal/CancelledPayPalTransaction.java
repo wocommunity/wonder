@@ -6,10 +6,7 @@
 //
 package er.wopaypal;
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 
 /** CancelledPayPalTransaction is a very simple component to which the application will return your customers after a cancelled PayPal transaction, if you don't tell it to return a different one.  See cancelAction in the PayPalAction class.
  */

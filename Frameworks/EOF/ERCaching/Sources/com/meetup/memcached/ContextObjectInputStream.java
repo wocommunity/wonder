@@ -22,8 +22,6 @@
  */
 package com.meetup.memcached;
 
-import java.util.*;
-import java.util.zip.*;
 import java.io.*;
 
 public class ContextObjectInputStream extends ObjectInputStream { 
