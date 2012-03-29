@@ -3,6 +3,7 @@ package er.imadaptor.components;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
@@ -73,7 +74,7 @@ public class IMPickListAction extends WOComponent {
 
 	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
-		String actionUrl = context._componentActionURL(false);
+		String actionUrl = context.componentActionURL(WOApplication.application().componentRequestHandlerKey(), false);
 		response.setHeader(actionUrl, InstantMessengerAdaptor.IM_ACTION_URL_KEY);
 		super.appendToResponse(response, context);
 	}

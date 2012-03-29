@@ -113,7 +113,7 @@ public class ERWOMailDelivery {
 		WOSession session = component.context()._session();
 		String response;
 
-		component.context()._generateCompleteURLs();
+		component.context().generateCompleteURLs();
 		if (session == null) {
 			response = component.generateResponse().contentString();
 		}
@@ -123,7 +123,7 @@ public class ERWOMailDelivery {
 			response = component.generateResponse().contentString();
 			session.setStoresIDsInURLs(oldStoresIDsInURLs);
 		}
-		component.context()._generateRelativeURLs();
+		component.context().generateRelativeURLs();
 
 		// --
 

@@ -101,7 +101,7 @@ public class ERAttachmentUpload extends WOComponent {
   @Override
   public WOActionResults invokeAction(WORequest request, WOContext context) {
     WOActionResults results = super.invokeAction(request, context);
-    if (context._wasFormSubmitted() && !ajax()) {
+    if (context.wasFormSubmitted() && !ajax()) {
       try {
         _uploadSucceeded();
         valueForBinding("succeededAction");

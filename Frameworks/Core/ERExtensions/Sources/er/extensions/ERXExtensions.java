@@ -1252,7 +1252,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 	    			}
 	    		}
 	    	}
-	    	ERXExtensions.initApp(null, woaFolder.toURL(), applicationSubclass, args);
+	    	ERXExtensions.initApp(null, woaFolder.toURI().toURL(), applicationSubclass, args);
 		}
 		catch (IOException e) {
 			throw new NSForwardException(e);

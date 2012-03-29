@@ -153,7 +153,7 @@ public class ERAttachmentRequestHandler extends WORequestHandler {
           }
 
           response.setStatus(200);
-          response.setContentStream(attachmentInputStream, bufferSize, (int) length);
+          response.setContentStream(attachmentInputStream, bufferSize, length);
         }
         catch (SecurityException e) {
           NSLog.out.appendln(e);

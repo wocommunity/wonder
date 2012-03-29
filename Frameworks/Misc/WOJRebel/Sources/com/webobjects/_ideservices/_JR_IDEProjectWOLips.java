@@ -423,7 +423,7 @@ public class _JR_IDEProjectWOLips implements _IDEProject {
 
   public URL bundlePathURL() {
     try {
-      return new File(bundlePath()).toURL();
+      return new File(bundlePath()).toURI().toURL();
     }
     catch (MalformedURLException e) {
       throw new RuntimeException(e);
@@ -437,7 +437,7 @@ public class _JR_IDEProjectWOLips implements _IDEProject {
     while (en.hasMoreElements()) {
       String path = (String) en.nextElement();
       try {
-        urls.add(new File(path).toURL());
+        urls.add(new File(path).toURI().toURL());
       }
       catch (MalformedURLException e) {
         throw new RuntimeException(e);
