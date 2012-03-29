@@ -21,15 +21,24 @@ public class WOAggregateEventRow extends WOEventRow {
         return false;
     }
 
+    /** 
+     * <span class="ja">object としてバインディングされている EOAggregateEvent を戻します。</span>
+     */
     public EOAggregateEvent object()
     {
         return (EOAggregateEvent)_WOJExtensionsUtil.valueForBindingOrNull("object",this);
     }
 
+    /** 
+     * <span class="ja">WOEventDisplayPage コントロールを戻します </span>
+     */
     public WOEventDisplayPage controller()    {
         return (WOEventDisplayPage)_WOJExtensionsUtil.valueForBindingOrNull("controller",this);
     }
 
+    /** 
+     * <span class="ja">表示モードを戻します </span>
+     */
     public int displayMode()
     {
         int result = 1;
@@ -44,11 +53,17 @@ public class WOAggregateEventRow extends WOEventRow {
         return result;
     }
     
+    /** 
+     * <span class="ja">イベント </span>
+     */
     public EOEvent event()
     {
         return (EOEvent)object().events().objectAtIndex(0);
     }
 
+    /** 
+     * <span class="ja">表示するコンポーネント名 </span>
+     */
     public String displayComponentName()
     {
         WOEventDisplayPage ctr;
