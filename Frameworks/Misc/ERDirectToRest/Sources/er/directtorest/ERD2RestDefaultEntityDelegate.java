@@ -2,7 +2,6 @@ package er.directtorest;
 
 import java.util.Map;
 
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import com.webobjects.directtoweb.D2WContext;
@@ -15,7 +14,6 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.directtorest.security.ERD2RestAllowSecurityDelegate;
-import er.directtoweb.ERD2WModel;
 import er.directtoweb.ERDirectToWeb;
 import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.eof.ERXEOControlUtilities;

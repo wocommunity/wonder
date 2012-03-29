@@ -4,10 +4,8 @@ package er.bugtracker;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOSharedEditingContext;
 import com.webobjects.foundation.NSArray;
 
-import er.corebusinesslogic.ERCMailState;
 import er.extensions.eof.ERXConstant;
 
 /**

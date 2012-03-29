@@ -11,8 +11,6 @@ import com.webobjects.directtoweb.D2WComponent;
 import com.webobjects.foundation.NSArray;
 
 import er.directtoweb.ERDirectToWeb;
-import er.extensions.foundation.ERXValueUtilities;
-
 
 /**
  * A component to encapsulate the repetition over "extra" display property keys.  The property keys

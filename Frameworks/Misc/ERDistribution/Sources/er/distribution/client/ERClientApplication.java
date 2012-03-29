@@ -6,7 +6,6 @@ import java.util.prefs.Preferences;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eocontrol.EOClassDescription;
-import com.webobjects.eodistribution.client.EODistributedObjectStore;
 import com.webobjects.eodistribution.client.EODistributionChannel;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
@@ -17,7 +16,6 @@ import er.distribution.client.exceptions.NoInstanceAvailableException;
 import er.distribution.client.exceptions.RequestedApplicationNotFoundException;
 import er.distribution.client.exceptions.ServerConnectionException;
 import er.distribution.client.exceptions.ServerException;
-import er.extensions.ERXExtensions;
 import er.extensions.eof.ERXEC;
 import er.extensions.logging.ERXLogger;
 

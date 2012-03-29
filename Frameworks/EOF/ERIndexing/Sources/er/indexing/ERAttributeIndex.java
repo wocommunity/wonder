@@ -10,7 +10,6 @@ import com.webobjects.foundation.NSNotification;
 
 import er.extensions.eof.ERXEC;
 import er.extensions.foundation.ERXArrayUtilities;
-import er.indexing.ERAutoIndex.AutoTransactionHandler;
 
 public class ERAttributeIndex extends ERIndex {
 

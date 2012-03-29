@@ -12,7 +12,6 @@ import com.webobjects.appserver.xml.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 
-import er.extensions.*;
 import er.extensions.eof.ERXConstant;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;

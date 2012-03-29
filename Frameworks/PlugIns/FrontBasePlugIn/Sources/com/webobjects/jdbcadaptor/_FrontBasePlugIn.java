@@ -37,7 +37,6 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
-import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSRange;
 import com.webobjects.foundation.NSSelector;

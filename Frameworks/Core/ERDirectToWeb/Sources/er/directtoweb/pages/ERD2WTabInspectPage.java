@@ -6,15 +6,12 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.pages;
 
-import java.util.Iterator;
-
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.directtoweb.EditPageInterface;
-import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSValidation;
 
@@ -24,7 +21,6 @@ import er.directtoweb.interfaces.ERDTabEditPageInterface;
 import er.extensions.components._private.ERXWOForm;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
-import er.extensions.validation.ERXValidationException;
 
 /**
  * Superclass for all tab and wizard pages.<br />

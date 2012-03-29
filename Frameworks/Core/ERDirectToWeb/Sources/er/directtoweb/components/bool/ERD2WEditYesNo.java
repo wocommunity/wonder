@@ -9,11 +9,6 @@ package er.directtoweb.components.bool;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WORequest;
-import com.webobjects.directtoweb.D2WEditBoolean;
-import com.webobjects.foundation.NSValidation;
-
-import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * Edits a boolean with radio buttons and Yes/No<br />

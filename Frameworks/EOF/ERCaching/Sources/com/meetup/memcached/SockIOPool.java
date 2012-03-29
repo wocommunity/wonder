@@ -37,7 +37,6 @@ import java.util.TreeMap;
 import java.util.zip.*;
 import java.net.*;
 import java.io.*;
-import java.nio.*;
 import java.nio.channels.*;
 import java.util.concurrent.locks.ReentrantLock;
 import org.apache.log4j.Logger;
