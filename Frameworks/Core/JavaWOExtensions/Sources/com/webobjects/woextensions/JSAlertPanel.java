@@ -16,6 +16,9 @@ public class JSAlertPanel extends JSComponent {
         super(aContext);
     }
 
+    /**
+     * <span class="ja">alert メッセージ</span>
+     */
     public String alertJSMessage() {
 
         String theMessage = (String)_WOJExtensionsUtil.valueForBindingOrNull("alertMessage",this);
@@ -37,18 +40,27 @@ public class JSAlertPanel extends JSComponent {
 
     }
 
+    /**
+     * <span class="ja">イメージの指定があれば YES が戻ります。</span>
+     */
     public boolean isImage() {
 
            // If the user specified an image name, return YES
         return (valueForBinding("filename")!=null);
     }
 
+    /** 
+     * <span class="ja">テキストの指定があれば YES が戻ります。 </span>
+     */
     public boolean isText() {
 
            // If the user specified a hyperlink string, return YES
         return (valueForBinding("string")!=null);
     }
 
+    /**
+     * <span class="ja">イメージ＆テキストの指定があれば YES が戻ります。</span>
+     */
     public boolean isImageAndText() {
 
            // If the user specified a hyperlink string AND and image, return YES
