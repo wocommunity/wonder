@@ -156,6 +156,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	}
 
 	@Override
+	@Deprecated
 	public void _generateCompleteURLs() {
 		super._generateCompleteURLs();
 		_generateCompleteURLs = true; 
@@ -168,11 +169,18 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	}
 	
 	@Override
+	@Deprecated
 	public void _generateRelativeURLs() {
 		super._generateRelativeURLs();
 		_generateCompleteURLs = false;
 	}
+	
+	@Override
+	public boolean doesGenerateCompleteURLs() {
+		return _generateCompleteURLs;
+	}
 
+	@Deprecated
 	public boolean _generatingCompleteURLs() {
 		return _generateCompleteURLs;
 	}
@@ -613,11 +621,8 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 		if (host == null && currentlySecure == secureBool && port == null) {
 			completeUrls = true;
 		}
-		else if (context instanceof ERXWOContext) {
-			completeUrls = ((ERXWOContext) context)._generatingCompleteURLs();
-		}
 		else {
-			completeUrls = false;
+			completeUrls = context.doesGenerateCompleteURLs();
 		}
 
 		if (!completeUrls) {

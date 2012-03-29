@@ -373,7 +373,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		Object hrefObject = null;
 		WOComponent wocomponent = context.component();
 		super.appendAttributesToResponse(response, context);
-		boolean generatingCompleteURLs = context instanceof ERXWOContext && ((ERXWOContext) context)._generatingCompleteURLs();
+		boolean generatingCompleteURLs = context.doesGenerateCompleteURLs();
 		if (secure && !generatingCompleteURLs) {
 			context.generateCompleteURLs();
 		}
