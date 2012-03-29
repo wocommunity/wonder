@@ -12,7 +12,7 @@ import er.extensions.foundation.ERXProperties;
  * Virus scanner that uses ClamAV to check files and streams. Be sure that
  * ClamAV is installed on the system.
  * 
- * @property  er.extensions.virus.ClamAvVirusScanner set this property to
+ * @property  er.extensions.virus.ERXClamAvVirusScanner set this property to
  *           the path of the <code>clamscan</code> executable. Defaults to
  *           <code>/usr/bin/clamscan</code>
  * 
@@ -21,7 +21,7 @@ import er.extensions.foundation.ERXProperties;
 public class ERXClamAvVirusScanner extends ERXVirusScanner {
 	private static final Logger log = Logger.getLogger(ERXClamAvVirusScanner.class);
 	private static final String clamscan = ERXProperties.stringForKeyWithDefault(
-			"com.nureg.extensions.virus.ClamAvVirusScanner", "/usr/bin/clamscan");
+			"er.extensions.virus.ERXClamAvVirusScanner", "/usr/bin/clamscan");
 	private int status = -1;
 	
 	public ERXClamAvVirusScanner() {
