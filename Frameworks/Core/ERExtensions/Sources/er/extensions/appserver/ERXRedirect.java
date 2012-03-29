@@ -186,7 +186,7 @@ public class ERXRedirect extends WOComponent {
  		boolean secure = (_secure == null) ? ERXRequest.isRequestSecure(context.request()) : _secure.booleanValue();
  		
  		// Check whether we are currently generating complete URL's. We'll use this in finally() to reset the context to it's behavior before calling this.
- 		boolean generatingCompleteURLs = ((ERXWOContext)context)._generatingCompleteURLs();
+ 		boolean generatingCompleteURLs = context.doesGenerateCompleteURLs();
  
  		// Generate a full URL if changing between secure and insecure
 		boolean generateCompleteURLs = secure != ERXRequest.isRequestSecure(context.request());
