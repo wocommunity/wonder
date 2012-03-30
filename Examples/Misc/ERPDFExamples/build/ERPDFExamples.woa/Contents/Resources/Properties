@@ -38,7 +38,7 @@ er.javamail.smtpPassword=
 
 # Log4j Configuration
 log4j.loggerFactory=er.extensions.logging.ERXLogger$Factory
-log4j.rootCategory=INFO,A1
+log4j.rootCategory=DEBUG,A1
 log4j.appender.A1=er.extensions.logging.ERXConsoleAppender
 log4j.appender.A1.layout=er.extensions.logging.ERXPatternLayout
 log4j.appender.A1.layout.ConversionPattern=%d{MMM dd HH:mm:ss} %$[%#] %-5p %c %x - %m%n
@@ -51,6 +51,10 @@ log4j.appender.A1.layout.ConversionPattern=%d{MMM dd HH:mm:ss} %$[%#] %-5p %c %x
 # Very handy.
 # Base Category
 log4j.logger.er=INFO
+log4j.logger.er.pdf=DEBUG
+log4j.logger.er.pdfexamples=DEBUG
+log4j.logger.org.apache.fop=INFO
+log4j.logger.org.apache.xmlgraphics=INFO
 
 # ERExtensions
 # Transaction - Switching this to debug will start the sql ouputting.
@@ -66,3 +70,9 @@ er.extensions.ERXNSLogLog4jBridge=INFO
 log4j.logger.er.extensions.ERXDatabaseContextDelegate=WARN
 log4j.logger.er.extensions.ERXConfigurationManager=INFO
 #log4j.logger.er.extensions.ERXApplication.RequestHandling=DEBUG
+
+#########
+# Property to point to an xsl transform sheet in the class path
+# This is looked up by the component that produces the pdf
+xsl.xml2fop.er.pdfexamples.components.SimpleHTML2FOP2PDF=er/pdfexamples/xsl/xhtml2xslfo.xsl
+xsl.xml2fop.er.pdfexamples.components.SimpleXML2FOP2PDF1=er/pdfexamples/xsl/testxml2fo.xsl
