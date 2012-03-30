@@ -2,3 +2,4 @@
 *.properties
 **/*.xsl
 **/*.png
+**/*.xml
