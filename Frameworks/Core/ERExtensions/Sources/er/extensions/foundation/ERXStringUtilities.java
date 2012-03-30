@@ -1746,7 +1746,7 @@ public class ERXStringUtilities {
     private static void dumpDictionary(StringBuffer sb, NSDictionary dict, int level) {
     	sb.append("{\n");
     	for(Enumeration e = dict.keyEnumerator(); e.hasMoreElements();) {
-    		String key = (String) e.nextElement();
+    		Object key = e.nextElement();
     		Object value = dict.objectForKey(key);
     		indent(sb, level+1);
     		sb.append(key).append(" = ");
