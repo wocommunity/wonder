@@ -413,7 +413,41 @@ public class ERXStringUtilities {
         	// ignore
         }
         return null;
-    } 
+    }
+    
+    /**
+     * Wrapper for {@link Integer#valueOf(String)} that catches
+     * the NumberFormatException.
+     * 
+     * @param s string to convert to an Integer
+     * @return Integer or <code>null</code> if the string could
+     *      not be parsed
+     */
+    public static Integer safeInteger(String s) {
+    	try {
+            return Integer.valueOf(s);
+        } catch (NumberFormatException e) {
+        	// ignore
+        }
+        return null;
+    }
+    
+    /**
+     * Wrapper for {@link Long#valueOf(String)} that catches
+     * the NumberFormatException.
+     * 
+     * @param s string to convert to a Long
+     * @return Long or <code>null</code> if the string could
+     *      not be parsed
+     */
+    public static Long safeLong(String s) {
+    	try {
+            return Long.valueOf(s);
+        } catch (NumberFormatException e) {
+        	// ignore
+        }
+        return null;
+    }
 
     /**
      * Retrives a given string for a given name, extension
