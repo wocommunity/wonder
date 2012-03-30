@@ -1,0 +1,41 @@
+ImageOneLink : MTMediaBox {
+	filename = "mediabox/Beach-Large.jpg";
+	framework = "app";
+	rel ="lightbox[set1]";
+	title = "Big Beach Makena";
+}
+
+ImageOneThumb : WOImage {
+	filename = "mediabox/Beach-Thumb.jpg";
+	class = "thumbnail";
+}
+
+ImageTwoThumb : WOImage {
+	filename = "mediabox/Rainbow-Thumb.jpg";
+	class = "thumbnail";
+}
+
+ImageTwoLink : MTMediaBox {
+	filename = "mediabox/Rainbow-Large.jpg";
+	framework = "app";
+	rel ="lightbox[set1]";
+	title = "Somewhere over the rainbow, way up high...";	
+}
+
+ImageThreeThumb : WOImage { 
+	filename = "mediabox/Sunset-Thumb.jpg";
+	class = "thumbnail";
+}
+
+ImageThreeLink : MTMediaBox {
+	filename = "mediabox/Sunset-Large.jpg";
+	framework = "app";
+	rel ="lightbox[set1]";
+	title = "Sunset Magic";	
+}
+
+VideoLink : MTMediaBox {
+	href = "http://www.youtube.com/watch?v=f4rgtYSYt50";
+	rel = "lightbox[social 640 385]";
+	title = "A Horse Video";
+}
