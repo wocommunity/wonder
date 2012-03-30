@@ -1,47 +1,42 @@
 package er.pdfexamples.components;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSData;
 
+import er.extensions.appserver.ERXResponse;
 import er.extensions.components.ERXComponent;
 
 public class Main extends ERXComponent {
-	private boolean usePrintCss = false;
+	/**
+	 * Logger for this class
+	 */
+	private static final Logger logger = Logger.getLogger(Main.class);
 
 	public Main(WOContext context) {
 		super(context);
 	}
 
-@Override
-public void appendToResponse(WOResponse response, WOContext context) {
-	this.session().setObjectForKey(this, "mainpage");
-	super.appendToResponse(response, context);
-}
+	public WOActionResults combinePdfStreams() {
 
-	/**
-	 * @return the usePrintCss
-	 */
-	public boolean usePrintCss() {
+		CombineTheStreams combined = pageWithName(CombineTheStreams.class);
+		WOContext ctx = this.context();
 
-		return usePrintCss;
-	}
+		SimplePDFGeneration1 spg = (SimplePDFGeneration1) this.application().pageWithName(SimplePDFGeneration1.class.getName(), ctx);
+		combined.pdfsToCombine.add(spg.generateResponse().content().stream());
+		spg = null;
+		
+		ctx = this.context();
+		SimpleXML2FOP2PDF1 sxp = (SimpleXML2FOP2PDF1) this.application().pageWithName(SimpleXML2FOP2PDF1.class.getName(), ctx);
+		combined.pdfsToCombine.add(sxp.generateResponse().content().stream());
+		sxp = null;
 
-	/**
-	 * @param usePrintCss
-	 *            the usePrintCss to set
-	 */
-	public void setUsePrintCss(boolean usePrintCss) {
-		this.usePrintCss = usePrintCss;
-	}
-
-	public WOActionResults loadPrintCSS() {
-		this.setUsePrintCss(true);
-		return null;
-	}
-
-	public WOActionResults unloadPrintCSS() {
-		this.setUsePrintCss(false);
-		return null;
+		
+		
+		return combined;
 	}
 }
