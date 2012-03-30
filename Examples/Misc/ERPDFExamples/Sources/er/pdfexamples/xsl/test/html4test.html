@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>ERPDFGeneration Examples</title>
+	<link  rel="stylesheet" type="text/css" href="/cgi-bin/WebObjects/ERPDFExamples.woa/_wr_/wodata=/Users/lmg42/Development/Java/Wonder/elemgee_wonder/wonder/Examples/Misc/ERPDFExamples/WebServerResources/base.css"/>
+
+	
+	
+	<link  rel="stylesheet" type="text/css" href="/cgi-bin/WebObjects/ERPDFExamples.woa/_wr_/wodata=/Users/lmg42/Development/Java/Wonder/elemgee_wonder/wonder/Examples/Misc/ERPDFExamples/WebServerResources/print.css" media="print"/>
+
+</head>
+<body>
+
+<div id="header">Simple ERPDFGeneration Examples</div>
+<div id="footer">Page </div>
+<div id="left">Cras sed ante. Phasellus in massa. Curabitur dolor eros, gravida et, hendrerit ac, cursus non, massa. Aliquam lorem. In hac habitasse platea dictumst. Cras eu mauris. Quisque lacus. Donec ipsum. Nullam vitae sem at nunc pharetra ultricies. Vivamus elit eros, ullamcorper a, adipiscing sit amet, porttitor ut, nibh. Maecenas adipiscing mollis massa. Nunc ut dui eget nulla venenatis aliquet. Sed luctus posuere justo. Cras vehicula varius turpis. Vivamus eros metus, tristique sit amet, molestie dignissim, malesuada et, urna.<br /></div>
+
+  <h1>ERPDFGeneration Examples </h1>
+  <p>This application is intended to exercise the facilities
+    in ERPDFGeneration framework of Project Wonder. Enormous profit
+    from the use of this framework is left as an exercise for the user.
+  </p>
+  <p>The ERPDFGeneration framework is pretty small and narrowly focused
+    so the following links are variations on the basic task of generating
+    pdf output from material within your application. For reporting output
+    using pdf (and other formats) you can also look at Jasper Reports (and 
+    the corresponding Wonder framework, ERJasperReports (Frameworks/Reporting/ERJasperReports).
+    An example of that framework is found in Examples/Reporting/ERJasperReportsExample.
+  </p>
+  <h3>Examples</h3>
+  <dl>
+    <dt>
+      <a href="/cgi-bin/WebObjects/ERPDFExamples.woa/wo/pfSivEI7ADSvY6JfWrTlzw/0.9">Simple PDF Generation</a>
+    </dt>
+    <dd>This page wrapped in an ERPDFWrapper component rather than the page wrapper used for 
+      html view and navigation. The difference between that page and this page is only
+      the use of ERPDFWrapper instead of PageWrapper (from the example application). 
+      I did put in a filename binding for the ERPDFWrapper, but it is not necessary.
+      Finer control over the layout of the generated pdf is achieved through the use of 
+      css for print viewing. Take a look at the <code>print.css</code> stylesheet for 
+      examples of the sorts of things you can style using the FlyingSaucer renderer.
+    </dd>
+
+
+    <dt>Simple FOP example</dt>
+    <dd>As with the Simple PDF Generation example above, this uses the contents of this page 
+      to feed an FOP transformation to PDF. This process uses the Apache FOP project.
+    </dd>
+    <dt>Simple FOP example using XML</dt>
+    <dd>It is probably more likely that you'll be using FOP to transform XML source material.
+      (If you can use Jasper Reports for reporting on XML data sources, it may be helpful to 
+      consider that option because writing xsl for fo is not difficult, but it's also not as nice
+      as using the report writer in Jasper. The reason I added the FOP processor is because I 
+      have xml reports that are built in multiple stages and much of the fo transforms pre-date
+      the Jasper Reports option ... so get off my back and quit dissing FOP!)</dd>
+  </dl>
+
+</body>
+</html>
