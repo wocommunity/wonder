@@ -83,9 +83,7 @@ public class Fop2PdfImpl implements FOPBuilder {
 
 	@Override
 	public void createDocument(OutputStream os, NSDictionary<String, Object> agentAttributes) throws Throwable {
-		if (logger.isDebugEnabled()) {
-			logger.debug("createDocument(OutputStream os=" + os + ", NSDictionary<String,Object> agentAttributes=" + agentAttributes + ") - start"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		}
+
 
 		fopFactory = FopFactory.newInstance();
 
@@ -111,7 +109,6 @@ public class Fop2PdfImpl implements FOPBuilder {
 		try {
 			Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, foUserAgent, os);
 
-			logger.debug("createDocument(OutputStream) - Fop initialized with:  - _fopxslLocation=" + _fopxslLocation + ", os=" + os + ", foUserAgent=" + foUserAgent); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			logger.debug("xsl resource: " + Fop2PdfImpl.class.getClassLoader().getResourceAsStream(_fopxslLocation));
 			
 			TransformerFactory txfac = TransformerFactory.newInstance();
