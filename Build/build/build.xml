@@ -1063,7 +1063,7 @@
             <param name="project.principal.class" value="er.ajax.Ajax" />
             <param name="project.name" value="MooTools" />
             <param name="project.dir" value="Frameworks/Ajax/MooTools" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax/ERAttachment" />
         </antcall>
     </target>
     <target name="MooToolsExample.all">
