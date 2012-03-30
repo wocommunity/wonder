@@ -290,7 +290,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 			stateObj.takeValueForKey(progress.fileName(), "filename");
 		}
 		this.refreshState();
-		stateObj.takeValueForKey(new Integer(state.ordinal()), "state");
+		stateObj.takeValueForKey(Integer.valueOf(state.ordinal()), "state");
 		if (state == UploadState.CANCELED) {
 			stateObj.takeValueForKey(cancelUrl(), "cancelUrl");
 		}
@@ -623,9 +623,9 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 		if (progress != null) {
 			if (!progress.isSucceeded()) {
 				int percent = (int)(progress.percentage() * 100);
-				amount = new Integer(percent);
+				amount = Integer.valueOf(percent);
 			} else {
-				amount = new Integer(100);
+				amount = Integer.valueOf(100);
 			}
 		}
 		return amount;
