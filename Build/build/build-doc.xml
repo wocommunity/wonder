@@ -222,7 +222,6 @@ window.onload=change;
             <taglet name="PropertyTaglet" path="${build.root}/Build/lib/" />
         </javadoc>
         <echo>javadoc generation finished</echo>
-        <echo>${basedir}/mystylesheet.css</echo>
         <antcall target="componentsOnly" />
         <antcall target="d2wOnly" />
         <java classname="PageInstaller" fork="true">
