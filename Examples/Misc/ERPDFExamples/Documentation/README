@@ -15,7 +15,10 @@ but that can be added later.
 
 This property setup is intended to be simple to use subclasses to render different transforms
 because you can look up this property using getClass().getName() rather than explicitly setting
-this for each component
+this for each component. 
+
+One non-default thing that this application does is to change the woproject.class.include.patternset
+to include **/*.xsl so that the files will end up in the built jar file for the application. 
 
 #########
 # Property to point to an xsl transform sheet in the class path
@@ -26,3 +29,4 @@ xsl.xml2fop.er.pdfexamples.components.SimpleXML2FOP2PDF1=er/pdfexamples/xsl/test
 Other than that, there is not that much to the example. Know that the FOP transform is
 picky about well-formed XHTML (XML) and knowing about entities, so this will not 
 fix ill-formed content.
+
