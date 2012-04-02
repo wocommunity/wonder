@@ -616,6 +616,16 @@
                 <version>3.6</version>
             </dependency>
             <dependency>
+				<groupId>org.apache.xmlgraphics</groupId>
+				<artifactId>xmlgraphics-commons</artifactId>
+				<version>1.4</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.xmlgraphics</groupId>
+				<artifactId>fop</artifactId>
+				<version>1.0</version>
+			</dependency>
+            <dependency>
                 <groupId>com.intellij</groupId>
                 <artifactId>annotations</artifactId>
                 <version>7.0.3</version>
