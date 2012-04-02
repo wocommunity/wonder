@@ -158,11 +158,12 @@ public class ERXFileUtilities {
     }
 
     /**
-        * Returns a string from the input stream using the specified
+     * Returns a string from the input stream using the specified
      * encoding.
      * @param in stream to read
-     * @param encoding to be used, null will use the default
-     * @return string representation of the stream.
+     * @param encoding to be used, <code>null</code> will use the default
+     * @return string representation of the stream
+     * @throws IOException if things go wrong
      */
     public static String stringFromInputStream(InputStream in, String encoding) throws IOException {
         return new String(bytesFromInputStream(in), encoding);
@@ -173,6 +174,7 @@ public class ERXFileUtilities {
      * encoding.
      * @param in stream to read
      * @return string representation of the stream.
+     * @throws IOException if things go wrong
      */
     public static String stringFromInputStream(InputStream in) throws IOException {
         return new String(bytesFromInputStream(in));
@@ -223,7 +225,7 @@ public class ERXFileUtilities {
     }
 
     /**
-        * Returns an array of the first n bytes for a given file.
+     * Returns an array of the first n bytes for a given file.
      * @param f file to get the bytes from
      * @param n number of bytes to read from input file
      * @throws IOException if things go wrong
@@ -258,9 +260,9 @@ public class ERXFileUtilities {
     }
     
     /**
-        * @deprecated use writeInputStreamToFile(InputStream is, File f) instead
+     * @deprecated use writeInputStreamToFile(InputStream is, File f) instead
      */
-    @SuppressWarnings("dep-ann")
+    @Deprecated
 	public static void writeInputStreamToFile(File f, InputStream is) throws IOException {
         writeInputStreamToFile(is, f);
     }
@@ -270,7 +272,8 @@ public class ERXFileUtilities {
 	 * 
 	 * @param stream
 	 *            to pull data from
-	 * @return the temp file that was created 
+	 * @return the temp file that was created
+     * @throws IOException if things go wrong
 	 */
 	public static File writeInputStreamToTempFile(InputStream stream) throws IOException {
 		return ERXFileUtilities.writeInputStreamToTempFile(stream, "_Wonder", ".tmp");
@@ -284,6 +287,7 @@ public class ERXFileUtilities {
 	 * @param prefix the filename prefix of the temp file
 	 * @param suffix the filename suffix of the temp file
 	 * @return the temp file that was created 
+     * @throws IOException if things go wrong
 	 */
 	public static File writeInputStreamToTempFile(InputStream stream, String prefix, String suffix) throws IOException {
 		File tempFile;
@@ -313,9 +317,10 @@ public class ERXFileUtilities {
 	}
 
     /**
-        * Writes the contents of an InputStream to a specified file.
+     * Writes the contents of an InputStream to a specified file.
      * @param file to write to
      * @param stream to pull data from
+     * @throws IOException if things go wrong
      */
     public static void writeInputStreamToFile(InputStream stream, File file) throws IOException {
     	FileOutputStream out;
@@ -404,6 +409,7 @@ public class ERXFileUtilities {
      * 
      * @param s the string to be written to file
      * @param f the destination file
+     * @throws IOException if things go wrong
      */
     public static void stringToFile(String s, File f) throws IOException {
         stringToFile( s, f, System.getProperty("file.encoding") );
@@ -416,6 +422,7 @@ public class ERXFileUtilities {
      * @param s the string to be written to file
      * @param f the destination file
      * @param encoding  the desired encoding
+     * @throws IOException if things go wrong
      */
     public static void stringToFile(String s, File f, String encoding) throws IOException {
         if (s == null) throw new IllegalArgumentException("string argument cannot be null");
@@ -436,10 +443,11 @@ public class ERXFileUtilities {
 
     /**
      * Copy a file across hosts using scp.
-     * @param srcHost host to send from (null if file is local)
+     * @param srcHost host to send from (<code>null</code> if file is local)
      * @param srcPath path on srcHost to read from
-     * @param dstHost host to send to (null if file is local)
+     * @param dstHost host to send to (<code>null</code> if file is local)
      * @param dstPath path on srcHost to write to
+     * @throws IOException if things go wrong
      */
     public static void remoteCopyFile(String srcHost, String srcPath, String dstHost, String dstPath) throws IOException {
         if (srcPath == null) throw new IllegalArgumentException("null source path not allowed");
@@ -468,8 +476,9 @@ public class ERXFileUtilities {
     /**
      * Copy a file across hosts using scp.
      * @param srcFile local file to send
-     * @param dstHost host to send to (null if file is local)
+     * @param dstHost host to send to (<code>null</code> if file is local)
      * @param dstPath path on srcHost to write to
+     * @throws IOException if things go wrong
      */
     public static void remoteCopyFile(File srcFile, String dstHost, String dstPath) throws IOException {
         remoteCopyFile(null, srcFile.getPath(), dstHost, dstPath);
@@ -477,9 +486,10 @@ public class ERXFileUtilities {
 
     /**
      * Copy a file across hosts using scp.
-     * @param srcHost host to send from (null if file is local)
+     * @param srcHost host to send from (<code>null</code> if file is local)
      * @param srcPath path on srcHost to read from
      * @param dstFile local file to write to
+     * @throws IOException if things go wrong
      */
     public static void remoteCopyFile(String srcHost, String srcPath, File dstFile) throws IOException {
         remoteCopyFile(srcHost, srcPath, null, dstFile.getPath());
@@ -490,6 +500,7 @@ public class ERXFileUtilities {
  	 * encoding.
  	 * @param f file to read
  	 * @return string representation of that file.
+     * @throws IOException if things go wrong
  	 */
  	public static String stringFromGZippedFile(File f) throws IOException {
  		return new String(bytesFromGZippedFile(f));
@@ -500,6 +511,7 @@ public class ERXFileUtilities {
      * encoding.
      * @param f file to read
      * @return string representation of that file.
+     * @throws IOException if things go wrong
      */
     public static String stringFromFile(File f) throws IOException {
         return new String(bytesFromFile(f));
@@ -509,8 +521,9 @@ public class ERXFileUtilities {
      * Returns a string from the file using the specified
      * encoding.
      * @param f file to read
-     * @param encoding to be used, null will use the default
+     * @param encoding to be used, <code>null</code> will use the default
      * @return string representation of the file.
+     * @throws IOException if things go wrong
      */
     public static String stringFromFile(File f, String encoding) throws IOException {
         if (encoding == null) {
@@ -523,12 +536,13 @@ public class ERXFileUtilities {
      * Determines the path of the specified Resource. This is done
      * to get a single entry point due to the deprecation of pathForResourceNamed
      * @param fileName name of the file
-     * @param frameworkName name of the framework, null or "app"
+     * @param frameworkName name of the framework, <code>null</code> or "app"
      *		for the application bundle
+     * @param languages array of languages to get localized resource or <code>null</code>
      * @return the absolutePath method off of the
      *		file object
      */
-    public static String pathForResourceNamed(String fileName, String frameworkName, NSArray languages) {
+    public static String pathForResourceNamed(String fileName, String frameworkName, NSArray<String> languages) {
         String path = null;
         NSBundle bundle = "app".equals(frameworkName) ? NSBundle.mainBundle() : NSBundle.bundleForName(frameworkName);
         if(bundle != null && bundle.isJar()) {
@@ -554,12 +568,13 @@ public class ERXFileUtilities {
      * Determines if a given resource exists. This is done
      * to get a single entry point due to the deprecation of pathForResourceNamed
      * @param fileName name of the file
-     * @param frameworkName name of the framework, null or "app"
+     * @param frameworkName name of the framework, <code>null</code> or "app"
      *      for the application bundle
+     * @param languages array of languages to get localized resource or <code>null</code>
      * @return the absolutePath method off of the
      *      file object
      */
-    public static boolean resourceExists(String fileName, String frameworkName, NSArray languages) {
+    public static boolean resourceExists(String fileName, String frameworkName, NSArray<String> languages) {
         URL url = WOApplication.application().resourceManager().pathURLForResourceNamed(fileName, frameworkName, languages);
         return url != null;
     }
@@ -570,17 +585,17 @@ public class ERXFileUtilities {
     /**
      * Get the input stream from the specified Resource. 
      * @param fileName name of the file
-     * @param frameworkName name of the framework, null or "app"
+     * @param frameworkName name of the framework, <code>null</code> or "app"
      *		for the application bundle
-     * @return the absolutePath method off of the
-     *		file object
+     * @param languages array of languages to get localized resource or <code>null</code>
+     * @return the absolutePath method off of the file object
      */
-    public static InputStream inputStreamForResourceNamed(String fileName, String frameworkName, NSArray languages) {
+    public static InputStream inputStreamForResourceNamed(String fileName, String frameworkName, NSArray<String> languages) {
         return WOApplication.application().resourceManager().inputStreamForResourceNamed(fileName, frameworkName, languages);
     }
 
     /**
-        * Returns a path containing an optional root with a directory hierarchy based on the current time
+     * Returns a path containing an optional root with a directory hierarchy based on the current time
      * @param rootPath Root of the path before the above the date directories
      * @return the path based on time.
      */
@@ -609,12 +624,12 @@ public class ERXFileUtilities {
      * to get a single entry point due to the deprecation of pathForResourceNamed.
      * In a later version this will call out to the resource managers new methods directly.
      * @param fileName name of the file
-     * @param frameworkName name of the framework, null or "app"
+     * @param frameworkName name of the framework, <code>null</code> or "app"
      *		for the application bundle
-     * @return the absolutePath method off of the
-     *		file object
+     * @param languages array of languages to get localized resource or <code>null</code>
+     * @return the absolutePath method off of the file object
      */
-    public static URL pathURLForResourceNamed(String fileName, String frameworkName, NSArray languages) {
+    public static URL pathURLForResourceNamed(String fileName, String frameworkName, NSArray<String> languages) {
     	URL url = null;
     	WOApplication application = WOApplication.application();
     	if (application != null) {
@@ -661,11 +676,11 @@ public class ERXFileUtilities {
     }
 
     /**
-        * Determines the last modification date for a given file
+     * Determines the last modification date for a given file
      * in a framework. Note that this method will only test for
      * the global resource not the localized resources.
      * @param fileName name of the file
-     * @param frameworkName name of the framework, null or "app"
+     * @param frameworkName name of the framework, <code>null</code> or "app"
      *		for the application bundle
      * @return the <code>lastModified</code> method off of the
      *		file object
@@ -697,7 +712,7 @@ public class ERXFileUtilities {
      * Reads a file in from the file system and then parses
      * it as if it were a property list, using the platform's default encoding.
      * @param fileName name of the file
-     * @param aFrameWorkName name of the framework, null or
+     * @param aFrameWorkName name of the framework, <code>null</code> or
      *		'app' for the application bundle.
      * @return de-serialized object from the plist formatted file
      *		specified.
@@ -711,7 +726,7 @@ public class ERXFileUtilities {
      * it as if it were a property list, using the specified encoding.
      *
      * @param fileName name of the file
-     * @param aFrameWorkName name of the framework, null or
+     * @param aFrameWorkName name of the framework, <code>null</code> or
      *		'app' for the application bundle.
      * @param encoding  the encoding used with <code>fileName</code>
      * @return de-serialized object from the plist formatted file
@@ -726,7 +741,7 @@ public class ERXFileUtilities {
      * of languages and then parses the file as if it were a
      * property list, using the platform's default encoding.
      * @param fileName name of the file
-     * @param aFrameWorkName name of the framework, null or
+     * @param aFrameWorkName name of the framework, <code>null</code> or
      *		'app' for the application bundle.
      * @param languageList language list search order
      * @return de-serialized object from the plist formatted file
@@ -734,7 +749,7 @@ public class ERXFileUtilities {
      */
     public static Object readPropertyListFromFileInFramework(String fileName,
                                                              String aFrameWorkName,
-                                                             NSArray languageList) {
+                                                             NSArray<String> languageList) {
         Object plist = null;
         try {
             plist = readPropertyListFromFileInFramework( fileName, aFrameWorkName, languageList, System.getProperty("file.encoding")); 
@@ -757,7 +772,7 @@ public class ERXFileUtilities {
      * property list, using the specified encoding.
      *
      * @param fileName name of the file
-     * @param aFrameWorkName name of the framework, null or
+     * @param aFrameWorkName name of the framework, <code>null</code> or
      *		'app' for the application bundle.
      * @param languageList language list search order
      * @param encoding  the encoding used with <code>fileName</code>
@@ -766,7 +781,7 @@ public class ERXFileUtilities {
      */    
     public static Object readPropertyListFromFileInFramework(String fileName,
             String aFrameWorkName,
-            NSArray languageList,
+            NSArray<String> languageList,
             String encoding) {
         Object result = null;
         InputStream stream = inputStreamForResourceNamed(fileName, aFrameWorkName, languageList);
@@ -797,9 +812,9 @@ public class ERXFileUtilities {
      * Deletes all of the files in a given directory with the option to
      * recursively delete all of the files in the given directory.
      * @param directory to delete all of the files from
-     * @param filter optional FileFilter to restrict what gets deleted, null to delete everything
+     * @param filter optional FileFilter to restrict what gets deleted, <code>null</code> to delete everything
      * @param recurseIntoDirectories determines if the delete is recursive
-     * @param removeDirectories true if directories should be removed as well as files, false to only remove files
+     * @param removeDirectories <code>true</code> if directories should be removed as well as files, <code>false</code> to only remove files
      */
     public static void deleteFilesInDirectory(File directory, FileFilter filter, boolean recurseIntoDirectories, boolean removeDirectories) {
         if (!directory.exists())
@@ -925,13 +940,14 @@ public class ERXFileUtilities {
      * rights. This is compareable to a <code>rm -f filename</code> instead of <code>rm filename</code>
      * @param recursiveCopy specifies if directories should be recursively copied
      * @param filter which restricts the files to be copied
+     * @throws IOException if things go wrong
      */
 	 public static void copyFilesFromDirectory(File srcDirectory,
 	                                           File dstDirectory,
 	                                           boolean deleteOriginals,
 	                                           boolean recursiveCopy,
 	                                           FileFilter filter)
-	     throws FileNotFoundException, IOException {
+	     throws IOException {
 		 copyFilesFromDirectory(srcDirectory, dstDirectory, deleteOriginals, true, recursiveCopy, filter);
  	}
 
@@ -941,9 +957,10 @@ public class ERXFileUtilities {
      * @param dstDirectory destination directory
      * @param deleteOriginals tells if the original files, the file is deleted even if appuser has no write
      * rights. This is compareable to a <code>rm -f filename</code> instead of <code>rm filename</code>
-	 * @param replaceExistingFiles true if the destination should be overwritten if it already exists
+	 * @param replaceExistingFiles <code>true</code> if the destination should be overwritten if it already exists
      * @param recursiveCopy specifies if directories should be recursively copied
      * @param filter which restricts the files to be copied
+     * @throws IOException if things go wrong
      */
     public static void copyFilesFromDirectory(File srcDirectory,
                                               File dstDirectory,
@@ -951,7 +968,7 @@ public class ERXFileUtilities {
                                               boolean replaceExistingFiles,
                                               boolean recursiveCopy,
                                               FileFilter filter)
-        throws FileNotFoundException, IOException {
+        throws IOException {
             if (!srcDirectory.exists() || !dstDirectory.exists())
                 throw new RuntimeException("Both the src and dst directories must exist! Src: " + srcDirectory
                                            + " Dst: " + dstDirectory);
@@ -987,15 +1004,16 @@ public class ERXFileUtilities {
 
     /**
      * Copies the source file to the destination.
-     * Automatically creates parent directory or directories of {@code dstFile) if they are missing.
+     * Automatically creates parent directory or directories of {@code dstFile} if they are missing.
      *
      * @param srcFile source file
      * @param dstFile destination file which may or may not exist already. If it exists, its contents will be overwritten.
      * @param deleteOriginals if {@code true} then {@code srcFile} will be deleted. Note that if the appuser has no write rights
      * on {@code srcFile} it is NOT deleted unless {@code forceDelete} is true
      * @param forceDelete if {@code true} then missing write rights are ignored and the file is deleted.
+     * @throws IOException if things go wrong
      */
-    public static void copyFileToFile(File srcFile, File dstFile, boolean deleteOriginals, boolean forceDelete) throws FileNotFoundException, IOException {
+    public static void copyFileToFile(File srcFile, File dstFile, boolean deleteOriginals, boolean forceDelete) throws IOException {
         if (srcFile.exists() && srcFile.isFile()) {
         	boolean copied = false;
             if (deleteOriginals && (!forceDelete || srcFile.canWrite())) {
@@ -1083,7 +1101,7 @@ public class ERXFileUtilities {
     }
 
     /**
-        * Creates a temporary directory.
+     * Creates a temporary directory.
      *
      * @return a temporary directory
      *
@@ -1100,7 +1118,9 @@ public class ERXFileUtilities {
     }
 
     /**
-        * Creates a temporary directory.
+     * Creates a temporary directory.
+     * @param prefix prefix to use for the filename
+     * @param suffix suffix to use for the filename
      *
      * @return a temporary directory
      *
@@ -1117,10 +1137,10 @@ public class ERXFileUtilities {
     }
 
     /**
-        * Creates a new NSArray which contains all files in the specified directory.
+     * Creates a new NSArray which contains all files in the specified directory.
      *
      * @param directory the directory from which to add the files
-     * @param recursive if true then files are added recursively meaning subdirectories are scanned, too.
+     * @param recursive if <code>true</code> then files are added recursively meaning subdirectories are scanned, too.
      *
      * @return a NSArray containing the files in the directory. If the specified directory does not
      * exist then the array is empty.
@@ -1179,14 +1199,14 @@ public class ERXFileUtilities {
      *
      *
      * @param f The file to unzip
-     * @param destination the destination directory. If directory is null then the file will be unzipped in
+     * @param destination the destination directory. If directory is <code>null</code> then the file will be unzipped in
      * java.io.tmpdir, if it does not exist, then a directory is created and if it exists but is a file
      * then the destination is set to the directory in which the file is located.
      *
      *
      * @return the file or directory in which the zipfile was unzipped
      *
-     * @exception IOException
+     * @exception IOException if something goes wrong
      */
     public static File unzipFile(File f, File destination) throws IOException {
         if (!f.exists()) {
@@ -1247,19 +1267,29 @@ public class ERXFileUtilities {
     }
 
     /**
-        * zips a given File.
+     * Compresses a given File with zip.
      * @param f the file to zip, either a file or a directory
      * @param absolutePaths if <code>true</code> then the files are added with absolute paths
      * @param deleteOriginal if <code>true</code> then the original file is deleted
      * @param forceDelete if <code>true</code> then the original is deleted even if the file is read only
+     * @return file pointer to the zip archive
+     * @throws IOException if something goes wrong
      */
     public static File zipFile(File f, boolean absolutePaths, boolean deleteOriginal, boolean forceDelete) throws IOException {
         return zipFile(f, absolutePaths, deleteOriginal, forceDelete, 9);
     }
 
+    /**
+     * Compresses a given File with zip.
+     * @param f the file to zip, either a file or a directory
+     * @param absolutePaths if <code>true</code> then the files are added with absolute paths
+     * @param deleteOriginal if <code>true</code> then the original file is deleted
+     * @param forceDelete if <code>true</code> then the original is deleted even if the file is read only
+     * @param level the compression level (0-9)
+     * @return file pointer to the zip archive
+     * @throws IOException if something goes wrong
+     */
     public static File zipFile(File f, boolean absolutePaths, boolean deleteOriginal, boolean forceDelete, int level) throws IOException {
-        
-
         if (!f.exists()) {
             throw new FileNotFoundException("file "+f+" does not exist");
         }
@@ -1379,6 +1409,12 @@ public class ERXFileUtilities {
         return ERXStringUtilities.byteArrayToHexString(md5(in));
     }    
     
+    /**
+     * Returns the size of the given file. If <code>f</code> points
+     * to a directory the size of all its children will be computed.
+     * @param f file to get the size of
+     * @return the file size
+     */
     public static long length(File f) {
         if (!f.isDirectory()) {
             return f.length();
@@ -1446,20 +1482,29 @@ public class ERXFileUtilities {
         return name.substring(index + 1);
     }
 
-    /** Deletes all files in filesToDelete
-     *  uses the methdo deleteDirectory
+    /** 
+     * Deletes all files in array <code>filesToDelete</code> by
+     * using the method deleteDirectory.
      * 
-     * @param filesToDelete
+     * @param filesToDelete array of files to delete
+     * @return <code>true</code> if all file have been deleted,
+     * <code>false</code> otherwise
      */
-    public static boolean deleteFiles(NSMutableArray filesToDelete) {
+    public static boolean deleteFiles(NSArray<File> filesToDelete) {
         boolean deletedAllFiles = true;
         for (int i = filesToDelete.count(); i-- > 0;) {
-            File currentFile = (File) filesToDelete.objectAtIndex(i);
+            File currentFile = filesToDelete.objectAtIndex(i);
             if (!deleteFile(currentFile) && deletedAllFiles) deletedAllFiles = false;
         }
         return deletedAllFiles;
     }
 
+    /**
+     * Deletes the given file by using the method deleteDirectory.
+     * @param fileToDelete file to delete
+     * @return <code>true</code> if file has been deleted,
+     * <code>false</code> otherwise
+     */
     public static boolean deleteFile(File fileToDelete) {
         return deleteDirectory(fileToDelete);
     }
@@ -1467,7 +1512,7 @@ public class ERXFileUtilities {
     /** Lists all directories in the specified directory, is desired recursive.
      *  
      * @param baseDir the dir from which to list the child directories
-     * @param recursive if true this methods works recursively
+     * @param recursive if <code>true</code> this methods works recursively
      * @return an array of files which are directories
      */
     public static File[] listDirectories(File baseDir, boolean recursive) {
@@ -1495,8 +1540,8 @@ public class ERXFileUtilities {
     /** Lists all files in the specified directory, if desired recursively.
      *  
      * @param baseDir the dir from which to list the child files
-     * @param recursive if true this method works recursively
-     * @param filter filter to match the files against. If null, all files will be included. 
+     * @param recursive if <code>true</code> this method works recursively
+     * @param filter filter to match the files against. If <code>null</code>, all files will be included. 
      * @return an array of files
      */
     public static File[] listFiles(File baseDir, boolean recursive, FileFilter filter) {
