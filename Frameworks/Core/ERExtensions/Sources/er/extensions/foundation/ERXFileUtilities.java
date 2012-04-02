@@ -42,10 +42,8 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOResourceManager;
-import com.webobjects.appserver._private.WOEncodingDetector;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
-import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSPropertyListSerialization;
@@ -432,11 +430,7 @@ public class ERXFileUtilities {
         if (encoding == null) throw new IllegalArgumentException("encoding argument cannot be null");
         Reader reader = new BufferedReader(new StringReader(s));
         FileOutputStream fos = new FileOutputStream(f);
-        Writer out;
-        if( encoding == null )
-            out = new BufferedWriter( new OutputStreamWriter(fos) );
-        else
-            out = new BufferedWriter( new OutputStreamWriter(fos, encoding) );        
+        Writer out = new BufferedWriter( new OutputStreamWriter(fos, encoding) );        
         char buf[] = new char[1024 * 50];
         int read = -1;
         while ((read = reader.read(buf)) != -1) {
@@ -612,11 +606,17 @@ public class ERXFileUtilities {
         int month = defaultCalendar.get(Calendar.MONTH) + 1;
         int day = defaultCalendar.get(Calendar.DAY_OF_MONTH);
         int hour = defaultCalendar.get(Calendar.HOUR_OF_DAY);
-        String datePath = rootPath+"/y" + year
-            + ((month > 9) ? "/m" : "/m0") + month
-            + ((day > 9) ? "/d" : "/d0") + day
-            + ((hour > 9) ? "/h" : "/h0") + hour;
-        return datePath;
+        StringBuilder datePath = new StringBuilder();
+        datePath.append(rootPath);
+        datePath.append("/y");
+        datePath.append(year);
+        datePath.append((month > 9) ? "/m" : "/m0");
+        datePath.append(month);
+        datePath.append((day > 9) ? "/d" : "/d0");
+        datePath.append(day);
+        datePath.append((hour > 9) ? "/h" : "/h0");
+        datePath.append(hour);
+        return datePath.toString();
     }
 
     /**
@@ -685,10 +685,23 @@ public class ERXFileUtilities {
      * @return the <code>lastModified</code> method off of the
      *		file object
      */
-    // ENHANCEME: Should be able to specify the language to check
     public static long lastModifiedDateForFileInFramework(String fileName, String frameworkName) {
+        return lastModifiedDateForFileInFramework(fileName, frameworkName, null);
+    }
+
+    /**
+     * Determines the last modification date for a given file
+     * in a framework. Note that this method will only test for
+     * the global resource not the localized resources.
+     * @param fileName name of the file
+     * @param frameworkName name of the framework, <code>null</code> or "app"
+     *		for the application bundle
+     * @param languages array of languages to get localized resource or <code>null</code>
+     * @return the <code>lastModified</code> method off of the file object
+     */
+    public static long lastModifiedDateForFileInFramework(String fileName, String frameworkName, NSArray<String> languages) {
         long lastModified = 0;
-        String filePath = pathForResourceNamed(fileName, frameworkName, null);
+        String filePath = pathForResourceNamed(fileName, frameworkName, languages);
         if (filePath != null) {
             lastModified = new File(filePath).lastModified();
         }
@@ -774,19 +787,7 @@ public class ERXFileUtilities {
         InputStream stream = inputStreamForResourceNamed(fileName, aFrameWorkName, languageList);
         try {
         	if(stream != null) {
-        		String stringFromFile;
-        		if(true) {
-        			stringFromFile = stringFromInputStream(stream, encoding);
-        		} else {
-        			byte bytes[] = bytesFromInputStream(stream);
-            		String guessed = WOEncodingDetector.sharedInstance().guessEncodingForData(new NSData(bytes));
-            		if(!guessed.equals(encoding) && !"ASCII".equals(guessed)) {
-        				stringFromFile = new String(bytes, guessed);
-        				log.info("Encoding differs, guessed: " + guessed + " wanted: " + encoding + " fileName:"  + aFrameWorkName + "/" + fileName +  languageList);
-        			} else {
-        				stringFromFile = new String(bytes, encoding);
-        			}
-        		}
+        		String stringFromFile = stringFromInputStream(stream, encoding);
         		result = NSPropertyListSerialization.propertyListFromString(stringFromFile);
             }
         } catch (IOException ioe) {
@@ -1178,20 +1179,15 @@ public class ERXFileUtilities {
     public static String replaceFileExtension(String path, String newExtension) {
         String tmp = "." + newExtension;
 
-        if(path.endsWith(tmp)) {
+        if (path.endsWith(tmp)) {
             return path;
-
-        } else {
-            int index = path.lastIndexOf(".");
-
-            if(index > 0) {
-                String p = path.substring(0, index);
-                return p + tmp;
-
-            } else {
-                return path + tmp;
-            }
         }
+        int index = path.lastIndexOf(".");
+        if (index > 0) {
+            String p = path.substring(0, index);
+            return p + tmp;
+        }
+        return path + tmp;
     }
 
     /**
@@ -1260,7 +1256,7 @@ public class ERXFileUtilities {
                 }
             } else {
                 InputStream is = zipFile.getInputStream(ze);
-                writeInputStreamToFile(new File(absolutePath + name), is);
+                writeInputStreamToFile(is, new File(absolutePath, name));
                 if (log.isDebugEnabled()) {
                     log.debug("unzipped file "+ze.getName()+" into "+(absolutePath + name));
                 }
@@ -1422,14 +1418,13 @@ public class ERXFileUtilities {
     public static long length(File f) {
         if (!f.isDirectory()) {
             return f.length();
-        } else {
-            long length = 0;
-            File[] files = f.listFiles();
-            for (int i = files.length; i-- > 0;) {
-                length += length(files[i]);
-            }
-            return length;
         }
+        long length = 0;
+        File[] files = f.listFiles();
+        for (int i = files.length; i-- > 0;) {
+            length += length(files[i]);
+        }
+        return length;
     }
     
     /** shortens a filename, for example aVeryLongFileName.java -> aVer...Name.java
@@ -1471,9 +1466,8 @@ public class ERXFileUtilities {
         int index = name.lastIndexOf(".");
         if (index == -1) {
             return name;
-        } else {
-            return name.substring(0, index);
         }
+        return name.substring(0, index);
     }
 
     /** returns the fileExtension from the specified filename
@@ -1484,9 +1478,8 @@ public class ERXFileUtilities {
         int index = name.lastIndexOf(".");
         if (index == -1) {
             return "";
-        } else {
-            return name.substring(index + 1);
         }
+        return name.substring(index + 1);
     }
 
     /** 
