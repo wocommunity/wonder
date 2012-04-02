@@ -7,14 +7,10 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.Executors;
 
 import org.apache.log4j.Logger;
 import org.jboss.netty.bootstrap.ServerBootstrap;
-import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFactory;
 import org.jboss.netty.channel.ChannelFuture;
@@ -27,7 +23,6 @@ import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
-import org.jboss.netty.handler.codec.http.DefaultHttpResponse;
 import org.jboss.netty.handler.codec.http.HttpChunkAggregator;
 import org.jboss.netty.handler.codec.http.HttpHeaders.Names;
 import org.jboss.netty.handler.codec.http.HttpHeaders.Values;
@@ -35,16 +30,16 @@ import org.jboss.netty.handler.codec.http.HttpRequest;
 import org.jboss.netty.handler.codec.http.HttpRequestDecoder;
 import org.jboss.netty.handler.codec.http.HttpResponse;
 import org.jboss.netty.handler.codec.http.HttpResponseEncoder;
-import org.jboss.netty.handler.codec.http.HttpResponseStatus;
-import org.jboss.netty.handler.codec.http.HttpVersion;
-import org.jboss.netty.handler.codec.http.websocket.WebSocketFrame;
-import org.jboss.netty.handler.codec.http.websocket.WebSocketFrameDecoder;
-import org.jboss.netty.handler.codec.http.websocket.WebSocketFrameEncoder;
+import org.jboss.netty.handler.codec.http.websocketx.CloseWebSocketFrame;
+import org.jboss.netty.handler.codec.http.websocketx.PingWebSocketFrame;
+import org.jboss.netty.handler.codec.http.websocketx.PongWebSocketFrame;
+import org.jboss.netty.handler.codec.http.websocketx.WebSocketFrame;
+import org.jboss.netty.handler.codec.http.websocketx.WebSocketServerHandshaker;
+import org.jboss.netty.handler.codec.http.websocketx.WebSocketServerHandshakerFactory;
 
 import com.webobjects.appserver._private.WOProperties;
 import com.webobjects.foundation.NSDelayedCallbackCenter;
 import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSNotificationCenter;
 
 import er.woadaptor.ERWOAdaptorUtilities;
@@ -197,6 +192,8 @@ public class WONettyAdaptor extends WOAdaptor {
 	protected static class RequestHandler extends SimpleChannelUpstreamHandler {
 		
 		private static final Logger log = Logger.getLogger(RequestHandler.class);
+		
+		private WebSocketServerHandshaker handshaker;
 
 		public void channelClosed(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
 			super.channelClosed(ctx, e);
@@ -218,15 +215,21 @@ public class WONettyAdaptor extends WOAdaptor {
 		
 		protected void handleWebSocketFrame(ChannelHandlerContext ctx, MessageEvent e, WebSocketFrame frame) {
 			WebSocket socket = WebSocketStore.defaultWebSocketStore().socketForChannel(e.getChannel());
-			if(socket != null) {
+	        if (frame instanceof CloseWebSocketFrame) {
+	        	//TODO remove from store?
+	            handshaker.close(ctx.getChannel(), (CloseWebSocketFrame) frame);
+	        } else if (frame instanceof PingWebSocketFrame) {
+	            ctx.getChannel().write(new PongWebSocketFrame(frame.getBinaryData()));
+	        } else if(socket != null) {
 				socket.receiveFrame(frame);
 			}
 		}
 		
 		protected void handleHTTPRequest(ChannelHandlerContext ctx, MessageEvent e, HttpRequest _request) throws IOException {
 			
-			if(Values.UPGRADE.equalsIgnoreCase(_request.getHeader(Names.CONNECTION)) 
-					&& Values.WEBSOCKET.equalsIgnoreCase(_request.getHeader(Names.UPGRADE))) {
+			if(_request.getHeader(Names.SEC_WEBSOCKET_VERSION) != null || 
+					(Values.UPGRADE.equalsIgnoreCase(_request.getHeader(Names.CONNECTION)) && Values.WEBSOCKET.equalsIgnoreCase(_request.getHeader(Names.UPGRADE)))
+					) {
 				
 				handleUpgradeRequest(ctx, _request);
 			} else {
@@ -262,52 +265,23 @@ public class WONettyAdaptor extends WOAdaptor {
 				ctx.getChannel().close();
 				return;
 			}
-
-			//Generate response headers
-			HttpResponse response = new DefaultHttpResponse(HttpVersion.HTTP_1_1, new HttpResponseStatus(101, "Switching Protocols"));
-			response.addHeader(Names.UPGRADE, Values.WEBSOCKET);
-			response.addHeader(Names.CONNECTION, Values.UPGRADE);
-			response.addHeader(Names.SEC_WEBSOCKET_ORIGIN, req.getHeader(Names.ORIGIN));
-			response.addHeader(Names.SEC_WEBSOCKET_LOCATION, ERWOAdaptorUtilities.getWebSocketLocation(req));
-			String protocol = req.getHeader(Names.SEC_WEBSOCKET_PROTOCOL);
-			if (protocol != null) {
-				response.addHeader(Names.SEC_WEBSOCKET_PROTOCOL, protocol);
-			}
-
-			// Calculate the answer of the challenge.
-			String key1 = req.getHeader(Names.SEC_WEBSOCKET_KEY1);
-			String key2 = req.getHeader(Names.SEC_WEBSOCKET_KEY2);
-			int a = (int) (Long.parseLong(key1.replaceAll("[^0-9]", "")) / key1.replaceAll("[^ ]", "").length());
-			int b = (int) (Long.parseLong(key2.replaceAll("[^0-9]", "")) / key2.replaceAll("[^ ]", "").length());
-			long c = req.getContent().readLong();
-			ChannelBuffer input = ChannelBuffers.buffer(16);
-			input.writeInt(a);
-			input.writeInt(b);
-			input.writeLong(c);
-			byte[] out = null;
-			try {
-				out = MessageDigest.getInstance("MD5").digest(input.array());
-			} catch(NoSuchAlgorithmException e) {
-				throw NSForwardException._runtimeExceptionForThrowable(e);
-			}
-			ChannelBuffer output = ChannelBuffers.wrappedBuffer(out);
-			response.setContent(output);
 			
-			//Update the channel pipeline
+			WebSocketServerHandshakerFactory wsFactory = new WebSocketServerHandshakerFactory(
+	                ERWOAdaptorUtilities.getWebSocketLocation(req), null, false);
+			handshaker = wsFactory.newHandshaker(req);
+			
 			Channel socketChannel = ctx.getChannel();
-			ChannelPipeline p = socketChannel.getPipeline();
-			p.remove("aggregator");
-			p.replace("decoder","wsdecoder",new WebSocketFrameDecoder());
-			
-			//Create a WebSocket instance to handle frames
-			WebSocket socket = factory.create(socketChannel, req);
-			WebSocketStore.defaultWebSocketStore().takeSocketForChannel(socket, socketChannel);
-
-			//Write the response, then update the pipeline encoder
-			socketChannel.write(response);
-			p.replace("encoder", "wsencoder", new WebSocketFrameEncoder());
-			
-			socket.didUpgrade();
+			if(handshaker == null) {
+				wsFactory.sendUnsupportedWebSocketVersionResponse(socketChannel);
+			} else {
+				ChannelFuture future = handshaker.handshake(socketChannel, req);
+				//TODO tie this to the channel future result?
+				//Create a WebSocket instance to handle frames
+				WebSocket socket = factory.create(socketChannel, req);
+				WebSocketStore.defaultWebSocketStore().takeSocketForChannel(socket, socketChannel);
+				
+				socket.didUpgrade();
+			}
 		}
 
 		/**
