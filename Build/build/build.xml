@@ -255,7 +255,8 @@
             <param name="project.principal.class" value="er.erxtest.Application" />
             <param name="project.name" value="ERXTest" />
             <param name="project.dir" value="Tests/ERXTest" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERPrototypes/JavaDerbyAdaptor/JavaMemoryAdaptor/ERChronic" />
+            <param name="wo.external.root.bundles"
+                   value="${frameworks.wonder.core}/ERPrototypes/JavaDerbyAdaptor/JavaMemoryAdaptor/ERChronic/ExcelGenerator" />
         </antcall>
     </target>
 

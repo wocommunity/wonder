@@ -67,6 +67,8 @@ public class ERXTestSuite {
     //
     //suite.addTestSuite(ERXExpiringCacheTestCase.class);
 
+    suite.addTestSuite(er.extensions.excel.EGSimpleWorkbookHelperTest.class);
+
     suite.addTestSuite(er.chronic.RepeaterMonthNameTest.class);
     suite.addTestSuite(er.chronic.RepeaterYearTest.class);
     suite.addTestSuite(er.chronic.RepeaterDayNameTest.class);
