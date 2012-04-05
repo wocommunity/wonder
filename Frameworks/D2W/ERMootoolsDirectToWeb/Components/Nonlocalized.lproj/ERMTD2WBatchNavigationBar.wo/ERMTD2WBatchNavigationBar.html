@@ -1,0 +1,22 @@
+<wo name = "BatchNavigationContainer">
+	<webobject name = "HasMultiplePagesConditional">
+		<wo name = "BatchNavigationListContainer">
+			<webobject name = "HasPreviousPageConditional">
+				<webobject name = "BatchNavigationListItem">
+					<webobject name = "PreviousPageAction"><webobject name="PreviousLabel"/></webobject>
+				</webobject>
+			</webobject>
+			<webobject name = "PageNumberRepetition">
+				<wo name = "BatchNavigationNumberedListItem">
+					<wo name = "IsPageNumberConditional">
+						<webobject name = "SelectPageAction"><webobject name = "PageNumber"/></webobject>				
+					</wo>
+					<webobject name = "IsEllipsisConditional"><a href="#">...</a></webobject>
+				</wo>
+			</webobject>
+			<webobject name = "HasNextPageConditional">
+				<webobject name = "NextPageAction"><webobject name="NextLabel"/></webobject>
+			</webobject>
+		</wo>	
+	</webobject>
+</wo>
