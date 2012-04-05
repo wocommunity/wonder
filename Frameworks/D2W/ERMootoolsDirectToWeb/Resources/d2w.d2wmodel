@@ -1,0 +1,49 @@
+{
+    rules = (
+        {
+            author = 10; 
+            class = "com.webobjects.directtoweb.Assignment"; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = batchNavigationContainerClassName; 
+                value = pagination; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = batchNavigationContainerElementName; 
+                value = div; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = batchNavigationBarPreviousPageActionClassName; 
+                value = ""; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = batchNavigationListContainerClassName; 
+                value = ""; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = batchNavigationListContainerElementName; 
+                value = ul; 
+            }; 
+        }
+    ); 
+}
