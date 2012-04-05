@@ -44,6 +44,24 @@
                 keyPath = batchNavigationListContainerElementName; 
                 value = ul; 
             }; 
+        }, 
+        {
+            author = 10; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = batchNavigationListItemElementName; 
+                value = li; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = batchNavigationCurrentListItemClassName; 
+                value = active; 
+            }; 
         }
     ); 
 }
