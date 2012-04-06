@@ -1,0 +1,43 @@
+ContextDictionaryRepetition : WORepetition {
+	list = contextDictionaryForPropertyKey.allKeys.@sortAsc.toString;
+	item = currentKey;
+}
+
+CurrentKey : WOString {
+	value = currentKey;
+}
+
+CurrentValue : WOString {
+	value = currentValue;
+}
+
+DebuggingEnabled : WOConditional {
+	condition = d2wDebuggingEnabled;
+}
+
+EditingLabelContainer : WOGenericContainer {
+	class = d2wContext.propertyNameEditingLabelDefaultClassName;
+	elementName = d2wContext.propertyNameEditingLabelElementName;
+}
+
+HasPropertyName : WOConditional {
+	condition = hasPropertyName;
+}
+
+InspectLabelContainer : WOGenericContainer {
+	elementName = d2wContext.propertyNameInspectLabelElementName;
+}
+
+IsEditing : WOConditional {
+	condition = isEditing;
+}
+
+IsInspecting : WOConditional {
+	condition = isEditing;
+	negate = true;
+}
+
+PropertyName : WOString {
+	escapeHTML = false;
+	value = displayNameForProperty;
+}

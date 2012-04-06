@@ -1,22 +1,22 @@
 <wo name = "BatchNavigationContainer">
-	<webobject name = "HasMultiplePagesConditional">
+	<wo name = "HasMultiplePagesConditional">
 		<wo name = "BatchNavigationListContainer">
-			<webobject name = "HasPreviousPageConditional">
-				<webobject name = "BatchNavigationListItem">
-					<webobject name = "PreviousPageAction"><webobject name="PreviousLabel"/></webobject>
-				</webobject>
-			</webobject>
-			<webobject name = "PageNumberRepetition">
+			<wo name = "HasPreviousPageConditional">
+				<wo name = "BatchNavigationListItem">
+					<wo name = "PreviousPageAction"><wo name="PreviousLabel"/></wo>
+				</wo>
+			</wo>
+			<wo name = "PageNumberRepetition">
 				<wo name = "BatchNavigationNumberedListItem">
 					<wo name = "IsPageNumberConditional">
-						<webobject name = "SelectPageAction"><webobject name = "PageNumber"/></webobject>				
+						<wo name = "SelectPageAction"><wo name = "PageNumber"/></wo>				
 					</wo>
-					<webobject name = "IsEllipsisConditional"><a href="#">...</a></webobject>
+					<wo name = "IsEllipsisConditional"><a href="#">...</a></wo>
 				</wo>
-			</webobject>
-			<webobject name = "HasNextPageConditional">
-				<webobject name = "NextPageAction"><webobject name="NextLabel"/></webobject>
-			</webobject>
+			</wo>
+			<wo name = "HasNextPageConditional">
+				<wo name = "NextPageAction"><wo name="NextLabel"/></wo> 
+			</wo>
 		</wo>	
-	</webobject>
+	</wo>
 </wo>
