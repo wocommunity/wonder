@@ -8,6 +8,8 @@ package er.extensions.eof;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
@@ -54,7 +56,10 @@ import er.extensions.foundation.ERXValueUtilities;
  * interface and you would create a new EC by using:
  * <code>ERXEC.newEditingContext()</code> You can also install your own
  * Factory classes. It is recommended to subclass ERXEC.DefaultFactory and
- * override <code>_createEditingContext()</code>
+ * override <code>_createEditingContext()</code> or use the 
+ * er.extensions.ERXEC.editingContextClassName property to specify the name of the 
+ * editing context class to be instantiated by ERXEC.DefaultFactory's
+ * _createEditingContext() core method. 
  *
  * @property er.extensions.ERXEC.useSharedEditingContext
  * @property er.extensions.ERXEC.markOpenLocks
@@ -64,6 +69,7 @@ import er.extensions.foundation.ERXValueUtilities;
  * @property er.extensions.ERXEC.defaultAutomaticLockUnlock
  * @property er.extensions.ERXEC.defaultCoalesceAutoLocks
  * @property er.extensions.ERXEC.safeLocking
+ * @property er.extensions.ERXEC.editingContextClassName
  */
 public class ERXEC extends EOEditingContext {
 
@@ -157,6 +163,16 @@ public class ERXEC extends EOEditingContext {
 	private static final NSSelector EditingContextDidRevertObjectsDelegateSelector = new NSSelector("editingContextDidRevertObjects", new Class[] { EOEditingContext.class, NSArray.class, NSArray.class, NSArray.class });
 	private static final NSSelector EditingContextDidFailSaveChangesDelegateSelector = new NSSelector("editingContextDidFailSaveChanges", new Class[] { EOEditingContext.class, EOGeneralAdaptorException.class });
 
+	/**
+	 * @return the value of the <code>er.extensions.ERXEC.editingContextClassName</code> property, which
+	 * is the name of the editing context class instantiated by ERXEC.DefaultFactory's _createEditingContext() 
+	 * core method. It defaults to the name of the ERXEC class.
+	 *  
+	 */
+	public static String editingContextClassName() {
+		return ERXProperties.stringForKeyWithDefault("er.extensions.ERXEC.editingContextClassName", ERXEC.class.getName());
+	}
+	
 	/**
 	 * Returns the value of the <code>er.extensions.ERXEC.safeLocking</code> property, which is the
 	 * new catch-all setting that turns on all of the recommended locking settings.
@@ -1632,12 +1648,66 @@ public class ERXEC extends EOEditingContext {
 			return ec;
 		}
 
+		private Constructor _editingContextConstructor;
+		
+		/**
+		 * @return The Constructor used by _createEditingContext() to create a new editing context by instantiating
+		 * the class named ERXEC.editingContextClassName().
+		 */
+		protected Constructor editingContextConstructor() {
+			if (_editingContextConstructor == null) {
+				Class editingContextClass;
+				try {
+					editingContextClass = Class.forName(ERXEC.editingContextClassName());
+				}
+				catch (ClassNotFoundException e) {
+					throw new RuntimeException(e);
+				}
+				Class[] parameterTypes = new Class[] { EOObjectStore.class };
+				try {
+					_editingContextConstructor = editingContextClass.getConstructor(parameterTypes);
+				}
+				catch (SecurityException e) {
+					throw new RuntimeException(e);
+				}
+				catch (NoSuchMethodException e) {
+					throw new RuntimeException(e);
+				}
+			}
+			
+			return _editingContextConstructor;
+		}
+		
 		/**
 		 * Actual EC creation bottleneck. Override this to return other
-		 * subclasses.
+		 * subclasses or use the <code>er.extensions.ERXEC.editingContextClassName</code> property to 
+		 * specify the name of your editing context class to be instantiated and returned by this method.
+		 * 
+		 * @param parent	The parent EOObjectStore for the editing context created and returned by this method
+		 * @return 			The editing context created by this method
 		 */
 		protected EOEditingContext _createEditingContext(EOObjectStore parent) {
-			return new ERXEC(parent == null ? EOEditingContext.defaultParentObjectStore() : parent);
+			
+			EOObjectStore arg = (parent == null ? EOEditingContext.defaultParentObjectStore() : parent);
+			EOEditingContext editingContext;
+			
+			try {
+				editingContext = (EOEditingContext) editingContextConstructor().newInstance(arg);
+			}
+			catch (IllegalArgumentException e) {
+				throw new RuntimeException(e);
+			}
+			catch (InstantiationException e) {
+				throw new RuntimeException(e);
+			}
+			catch (IllegalAccessException e) {
+				throw new RuntimeException(e);
+			}
+			catch (InvocationTargetException e) {
+				throw new RuntimeException(e);
+			}
+			
+			return editingContext;
 		}
 
 		public boolean useSharedEditingContext() {
