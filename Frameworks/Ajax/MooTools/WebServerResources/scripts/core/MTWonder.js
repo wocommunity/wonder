@@ -24,6 +24,37 @@
 
  });
  
+var MTAjaxInPlace = {
+
+	saveFunctionName: function(id) {
+		return "window." + id + "Save";
+	},
+	
+	cancelFunctionName: function(id) {
+		return "window." + id + "Cancel";
+	},
+	
+	editFunctionName: function(id) {
+		return "window." + id + "Edit";
+	},
+	
+	cleanupEdit: function(id) {
+		var saveFunctionName = this.saveFunctionName(id);
+		var cancelFunctionName = this.cancelFunctionName(id);
+		if (typeof eval(saveFunctionName) != 'undefined') { eval(saveFunctionName + " = null"); }
+		if (typeof eval(cancelFunctionName) != 'undefined') { eval(cancelFunctionName + " = null"); }
+	},
+	
+	cleanupView: function(id) {
+		var editFunctionName = this.editFunctionName(id);
+		if (typeof eval(editFunctionName) != 'undefined') { eval(editFunctionName + " = null"); }
+	}
+
+};
+
+var MTAIP = MTAjaxInPlace;
+ 
+ 
 var MTAjaxOptions = {
 
 	defaultOptions: function(additionalOptions) {
@@ -116,7 +147,7 @@ var MTAjaxUpdateLink = {
 		if(elementID) {
 			actionUrl = actionUrl.replace(/[^\/]+$/, elementID);
 		}
-		
+
 		options.url = actionUrl;
 		options.update = $(id);
 		options.__updateID = id;
@@ -251,7 +282,7 @@ var MTAjaxSubmitButton = {
 
 	request : function(form, queryParams, options) {
 		
-		var finalUrl = MTAjaxSubmitButton.generateActionUrl(id, form, queryParams);
+		var finalUrl = MTAjaxSubmitButton.generateActionUrl(null, form, queryParams);
 		var finalOptions = MTAjaxSubmitButton.processOptions(form, options);
 
 		new Request.HTML(Object.merge({

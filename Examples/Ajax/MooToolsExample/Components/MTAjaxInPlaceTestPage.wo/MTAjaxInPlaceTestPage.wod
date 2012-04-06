@@ -1,0 +1,123 @@
+ClickToCancel : WOHyperlink {
+	class = "btn";
+	href = "javascript:void(0)";
+	onclick = "ExampleInPlaceManualCancel()";
+}
+
+ClickToEdit : WOHyperlink {
+	class = "btn";
+	href = "javascript:void(0)";
+	onclick = "ExampleInPlaceManualEdit()";
+}
+
+ClickToSave : WOHyperlink {
+	class = "btn btn-primary";
+	href = "javascript:void(0)";
+	onclick = "ExampleInPlaceManualSave()";
+}
+
+Edit : ERXWOTemplate {
+	templateName = "edit";
+}
+
+EditManual : ERXWOTemplate {
+	templateName = "edit";
+}
+
+ExampleInPlace : MTAjaxInPlace {
+	cancelAction = valueCancelled;
+	cancelClass = "btn btn-inverse";
+	formClass = "well form-inline";
+	saveClass = "btn btn-primary";
+	saveAction = valueSaved;
+}
+
+ExampleInPlaceManual : MTAjaxInPlace {
+	cancelAction = valueCancelled;
+	id = "ExampleInPlaceManual";
+	manualControl = true;
+	saveAction = valueSaved;
+}
+
+FancyCancel : AjaxFunctionLink {
+	class = "btn";
+	onclick = "fancyCancel()";
+}
+
+FancyEdit : ERXWOTemplate {
+	templateName = "edit";
+}
+
+FancyInPlace : MTAjaxInPlace {
+	formClass = "well";
+	id = "fancy";
+	manualEditControl = true;
+}
+
+FancySave : MTAjaxSubmitButton {
+	class = "btn btn-primary";
+	onClick = "fancySave()";
+	value = "save";
+}
+
+FancyView : ERXWOTemplate {
+	templateName = "view";
+}
+
+FirstName : WOString {
+	value = firstName;
+}
+
+FirstNameField : WOTextField {
+	class = "span3";
+	id = "firstName";
+	value = firstName;
+}
+
+LastName : WOString {
+	value = lastName;
+}
+
+LastNameField : WOTextField {
+	class = "span3";
+	id = "lastName";
+	value = lastName;
+}
+
+ManualValue : WOString {
+	value = manualValue;
+}
+
+ManualValueField : WOTextField {
+	value = manualValue;
+	size = "30";
+}
+
+PhoneNumber : WOString {
+	value = phoneNumber;
+}
+
+PhoneNumberField : WOTextField {
+	class = "span3";
+	id = "phoneNumber";
+	value = phoneNumber;
+}
+
+Value : WOString {
+	value = value;
+}
+
+ValueField : WOTextField {
+	id = "valueField";
+	onEnter = "alert('You hit enter and I am showing you an onEnter handler now.')";
+	selectAll = true;
+	value = value;
+}
+
+View : ERXWOTemplate {
+	templateName = "view";
+}
+
+ViewManual : ERXWOTemplate {
+	templateName = "view";
+}
