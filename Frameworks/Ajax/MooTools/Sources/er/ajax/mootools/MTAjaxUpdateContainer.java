@@ -111,7 +111,7 @@ public class MTAjaxUpdateContainer extends AjaxUpdateContainer {
 		options.setObjectForKey("'get'", "method");
 		if (options.objectForKey("evalScripts") == null) {
 			options.setObjectForKey("true", "evalScripts");
-		}
+		}  
 
 		AjaxUpdateContainer.expandInsertionFromOptions(options, this, component);
 
