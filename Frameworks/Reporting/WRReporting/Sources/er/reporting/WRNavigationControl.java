@@ -3,7 +3,6 @@ package er.reporting;
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
-import er.extensions.*;
 import er.extensions.components.ERXStatelessComponent;
 import er.grouping.*;
 
@@ -185,6 +184,6 @@ public class WRNavigationControl extends ERXStatelessComponent {
     }
 
     public boolean showNavigation() {
-        return valueForBooleanBinding("showNavigation");
+        return booleanValueForBinding("showNavigation");
     }
 }

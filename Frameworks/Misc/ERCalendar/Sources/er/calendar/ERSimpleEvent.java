@@ -1,7 +1,6 @@
 package er.calendar;
 
 import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
 
 /**
  * ERSimpleEvent is an simple implementation of an event class,

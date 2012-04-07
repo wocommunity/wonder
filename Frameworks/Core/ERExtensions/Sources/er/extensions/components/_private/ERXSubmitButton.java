@@ -170,8 +170,6 @@ public class ERXSubmitButton extends WOInput {
 			css = (String) _class.valueInComponent(wocontext.component());
 		}
        	
-    	WOAssociation assoc = _action;
-
     	if(_action != null) {
     		css += " " + STYLE_PREFIX + _action.keyPath().replaceAll("\\W+", "");
     	} else if(_directActionName != null) {
@@ -194,7 +192,7 @@ public class ERXSubmitButton extends WOInput {
     	_appendValueAttributeToResponse(woresponse, wocontext);
     	_appendNameAttributeToResponse(woresponse, wocontext);
     	if(!shouldSubmitForm) {
-    		String action = (String) wocontext.componentActionURL();
+    		String action = wocontext.componentActionURL();
     		woresponse._appendTagAttributeAndValue("onclick", "document.location.href='" + action + "'; return false;", false);
     	}
     }
@@ -213,17 +211,17 @@ public class ERXSubmitButton extends WOInput {
     public WOActionResults invokeAction(WORequest worequest, WOContext wocontext) {
         Object obj = null;
         WOComponent wocomponent = wocontext.component();
-        if(!isDisabledInContext(wocontext) && wocontext._wasFormSubmitted()) {
-            if(wocontext._isMultipleSubmitForm()) {
+        if(!isDisabledInContext(wocontext) && wocontext.wasFormSubmitted()) {
+            if(wocontext.isMultipleSubmitForm()) {
                 if(worequest.formValueForKey(nameInContext(wocontext, wocomponent)) != null) {
-                    wocontext._setActionInvoked(true);
+                    wocontext.setActionInvoked(true);
                     if(_action != null)
                         obj = (WOActionResults)_action.valueInComponent(wocomponent);
                     if(obj == null)
                         obj = wocontext.page();
                 }
             } else {
-                wocontext._setActionInvoked(true);
+                wocontext.setActionInvoked(true);
                 if(_action != null)
                     obj = (WOActionResults)_action.valueInComponent(wocomponent);
                 if(obj == null)

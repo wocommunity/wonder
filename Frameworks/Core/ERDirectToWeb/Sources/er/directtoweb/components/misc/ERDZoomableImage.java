@@ -1,25 +1,10 @@
 package er.directtoweb.components.misc;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.URL;
-
-import javax.imageio.ImageIO;
-
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WOComponent;
-import com.webobjects.appserver.WOResponse;
-import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSKeyValueCoding;
-import com.webobjects.foundation.NSMutableDictionary;
 
-import er.directtoweb.components.ERDCustomEditComponent;
-import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.components.ERXStatelessComponent;
-import er.extensions.foundation.ERXPatcher.DynamicElementsPatches.Image;
-import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 

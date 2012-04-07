@@ -12,7 +12,6 @@
 
 package webobjectsexamples.businesslogic.movies.common;
 
-import com.webobjects.eocontrol.EOGenericRecord;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;

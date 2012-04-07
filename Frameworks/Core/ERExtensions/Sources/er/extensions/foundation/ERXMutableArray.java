@@ -236,7 +236,7 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 
 		@Override
 		public synchronized void replaceObjectsInRange(NSRange range, NSArray otherArray, NSRange otherRange) {
-			super.replaceObjectsInRange(range, (NSArray)otherArray, otherRange);
+			super.replaceObjectsInRange(range, otherArray, otherRange);
 		}
 
 		@Override
@@ -266,7 +266,7 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 
 		@Override
 		public synchronized ArrayList<V> arrayList() {
-			V[] objects = (V[]) objectsNoCopy();
+			V[] objects = objectsNoCopy();
 			ArrayList<V> list = new ArrayList<V>(objects.length);
 			for(int i = 0; i < objects.length; i++) {
 				list.add(objects[i]);

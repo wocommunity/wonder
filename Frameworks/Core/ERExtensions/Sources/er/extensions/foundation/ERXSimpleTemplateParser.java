@@ -283,15 +283,34 @@ public class ERXSimpleTemplateParser {
         return buffer.toString();
     }
     
-    protected Object doGetValue(String aKeyPath, Object anObject) {
-        Object result;
-        if(anObject instanceof NSKeyValueCodingAdditions) {
-            result = ((NSKeyValueCodingAdditions)anObject).valueForKeyPath(aKeyPath);
-        } else {
-            result = NSKeyValueCodingAdditions.Utility.valueForKeyPath(anObject, aKeyPath);
-        }       
-        return result;
-    }
+	/**
+	 * To allow flexibility of the variable provider object type we use similar
+	 * logic to NSDictionary valueForKeyPath. Consequently
+	 * <code>java.util.Properties</code> objects that use keyPath separator (.)
+	 * in the property names (which is common) can be reliably used as object
+	 * providers.
+	 * 
+	 * @param aKeyPath
+	 * @param anObject
+	 * @return the value corresponding to either a key with value
+	 *         <code>aKeypath</code>, or when no key, a keyPath with value
+	 *         <code>aKeyPath</code>
+	 */
+	protected Object doGetValue(String aKeyPath, Object anObject) {
+		// Mimic NSDictionary valueForKeypath behavior which first checks for a
+		// "flattened" key before calling real valueForKeypath logic
+		Object result = null;
+		try {
+			result = NSKeyValueCoding.Utility.valueForKey(anObject, aKeyPath);
+		}
+		catch (NSKeyValueCoding.UnknownKeyException t) {
+		}
+
+		if (result == null) {
+			return NSKeyValueCodingAdditions.Utility.valueForKeyPath(anObject, aKeyPath);
+		}
+		return result;
+	}
     
     /**
      * Parses the given templateString with an ERXSimpleTemplateParser.

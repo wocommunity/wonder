@@ -9,7 +9,6 @@
 
 package com.amazon.s3;
 
-import java.util.List;
 import java.util.Map;
 
 /**

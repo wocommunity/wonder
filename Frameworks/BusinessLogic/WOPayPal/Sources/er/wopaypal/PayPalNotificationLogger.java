@@ -9,7 +9,6 @@ package er.wopaypal;
 
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import er.wopaypal.*;
 
 /**
  *  The PayPalNotificationLogger class is simply an example of a delegate for the PayPalNotificationListener class.  In reality, a delegate can implement any or all of these methods from the PayPalNotificationListener.Delegate interface, and use whatever custom logic fits the need.  Examples would be logging the transactions to a database, a file, etc.

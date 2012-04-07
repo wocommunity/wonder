@@ -103,14 +103,14 @@ public class ERXSingleValueID extends EOKeyGlobalID {
 
 	private void writeObject(ObjectOutputStream s) throws IOException {
 		java.io.ObjectOutputStream.PutField fields = s.putFields();
-		fields.put("values", ((Object) (_keyValuesNoCopy())));
+		fields.put("values", _keyValuesNoCopy());
 		s.writeFields();
 	}
 
 	private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
 		java.io.ObjectInputStream.GetField fields = null;
 		fields = s.readFields();
-		Object[] values = (Object[]) (Object[]) fields.get("values", ((Object) (new Object[0])));
+		Object[] values = (Object[]) fields.get("values", new Object[0]);
 		_value = values[0];
 	}
 

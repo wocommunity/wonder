@@ -23,7 +23,6 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXSession;
-import er.extensions.eof.ERXDatabaseContext;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXObjectStoreCoordinator;
 import er.extensions.foundation.ERXProperties;
@@ -150,7 +149,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 				sb.append("\nRequest Thread Name: ").append(capturedThreadName).append("\n\n");
 				for (Iterator iterator = traces.keySet().iterator(); iterator.hasNext();) {
 					Thread t = (Thread) iterator.next();
-					StackTraceElement stack[] = (StackTraceElement[]) traces.get(t);
+					StackTraceElement stack[] = traces.get(t);
 					String name = t.getName() != null ? t.getName() : "No name";
 					String groupName = t.getThreadGroup() != null ? t.getThreadGroup().getName() : "No group";
 

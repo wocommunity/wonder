@@ -90,7 +90,7 @@ public class ERXRouteURL extends ERXComponent {
 
 		boolean absolute = booleanValueForBinding("absolute");
 		if (absolute) {
-			context()._generateCompleteURLs();
+			context().generateCompleteURLs();
 		}
 		String format = stringValueForBinding("format", "html");
 		Object record = record();
@@ -120,7 +120,7 @@ public class ERXRouteURL extends ERXComponent {
 			}
 		}
 		if (absolute) {
-			context()._generateRelativeURLs();
+			context().generateRelativeURLs();
 		}
 		return linkUrl;
 	}

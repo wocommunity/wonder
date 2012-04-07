@@ -2,6 +2,7 @@ package er.extensions.components;
 
 import org.apache.log4j.Logger;
 
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
@@ -233,14 +234,16 @@ public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
 		}
 		catch (Throwable t) {
 			String html = new Error("template", t).formatWithTemplate(errorTemplate());
-			return WOComponent.templateWithHTMLString(html, "", null);
+			return WOComponent.templateWithHTMLString("", "", html, "", null, 
+					WOApplication.application().associationFactoryRegistry(), WOApplication.application().namespaceProvider());
 		}
 	}
 
 	private WOElement _template() {
 		String html = stringValueForBinding(TEMPLATE_HTML_BINDING, "");
 		String wod = stringValueForBinding(TEMPLATE_WOD_BINDING, "");
-		WOElement element = WOComponent.templateWithHTMLString(html, wod, null);
+		WOElement element = WOComponent.templateWithHTMLString("", "", html, wod, null, 
+				WOApplication.application().associationFactoryRegistry(), WOApplication.application().namespaceProvider());
 		return element;
 	}
 

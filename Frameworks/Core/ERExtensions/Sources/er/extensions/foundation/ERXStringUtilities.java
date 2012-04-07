@@ -413,7 +413,41 @@ public class ERXStringUtilities {
         	// ignore
         }
         return null;
-    } 
+    }
+    
+    /**
+     * Wrapper for {@link Integer#valueOf(String)} that catches
+     * the NumberFormatException.
+     * 
+     * @param s string to convert to an Integer
+     * @return Integer or <code>null</code> if the string could
+     *      not be parsed
+     */
+    public static Integer safeInteger(String s) {
+    	try {
+            return Integer.valueOf(s);
+        } catch (NumberFormatException e) {
+        	// ignore
+        }
+        return null;
+    }
+    
+    /**
+     * Wrapper for {@link Long#valueOf(String)} that catches
+     * the NumberFormatException.
+     * 
+     * @param s string to convert to a Long
+     * @return Long or <code>null</code> if the string could
+     *      not be parsed
+     */
+    public static Long safeLong(String s) {
+    	try {
+            return Long.valueOf(s);
+        } catch (NumberFormatException e) {
+        	// ignore
+        }
+        return null;
+    }
 
     /**
      * Retrives a given string for a given name, extension
@@ -2213,9 +2247,9 @@ public class ERXStringUtilities {
 	 * @return the string without HTML characters in it
 	 */
 	public static String stripHtml(String str, boolean convertChars) {
- 		String stripped = str;
- 		if (stripped != null) {
- 			stripped = stripped.replaceAll("<[^>]*>", " ");
+		String stripped = str;
+		if (stripped != null) {
+			stripped = stripped.replaceAll("<[^>]*>", " ");
 			if(convertChars) {
 				stripped = stripped.replaceAll("\\s+", " ");
 				stripped = stripped.replaceAll("&#8217;", "'");
@@ -2229,13 +2263,12 @@ public class ERXStringUtilities {
 				stripped = stripped.replaceAll("&#174;", "(C)");
 				stripped = stripped.replaceAll("&#174;", "(R)");
 				stripped = stripped.replaceAll("&#8482;", "(TM)");
-			stripped = stripped.trim();
+				stripped = stripped.trim();
 			}
- 		}
- 		return stripped;
- 	}
-
-
+		}
+		return stripped;
+	}
+	
 	/**
 	 * @deprecated  Replaced by stripHtml(str, false)
 	 */
@@ -2509,6 +2542,29 @@ public class ERXStringUtilities {
 			sum += (i % 2 == parity) ? ((2 * tmp) / 10) + ((2 * tmp) % 10) : tmp;
 		}
 		return sum % 10 == 0;
+	}
+	
+	/**
+	* Returns a string trimmed about at the max lenght you define without truncating the last word and adding "..." (if necessary)
+	* 
+	* @param trimmingString the string you would like to trim
+	* @param maxLenght the max lenght you need
+	* @return the string trimmed
+	*/
+	public static String wordSafeTrimmedString(String trimmingString, int maxLenght) {
+		String cuttedString = trimmingString;
+		if ( ( trimmingString != null ) && ( trimmingString.length() > maxLenght ) ) {
+			trimmingString = stripHtml(trimmingString,false);
+			if( trimmingString.length() > maxLenght) {
+				int space = trimmingString.indexOf(" ",(maxLenght - 20));
+				try {
+					cuttedString = trimmingString.substring(0, space)+" ...";
+				} catch ( Exception e ) {
+					//GIVE UP
+				}
+			}
+		}
+		return cuttedString;
 	}
 
 }

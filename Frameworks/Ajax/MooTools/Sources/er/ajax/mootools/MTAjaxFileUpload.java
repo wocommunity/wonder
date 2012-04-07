@@ -9,7 +9,6 @@ import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSData;
 
 import er.ajax.AjaxFileUpload;
@@ -293,7 +292,7 @@ public class MTAjaxFileUpload extends WOComponent {
 			}
 
 			if (hasBinding("data")) {
-				NSData data = new NSData(progress.tempFile().toURL());
+				NSData data = new NSData(progress.tempFile().toURI().toURL());
 				setValueForBinding(data, "data");
 			}
 			

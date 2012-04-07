@@ -16,87 +16,104 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSRange;
 
 public class WXOutlineEntry extends WOComponent {
-    protected int _nestingLevel;
 
-    public WXOutlineEntry(WOContext aContext)  {
-        super(aContext);
-    }
+	//********************************************************************
+	//	Var
+	//********************************************************************
 
-    /////////////
-    // No-Sync
-    ////////////
-    public boolean synchronizesVariablesWithBindings() {
-        return false;
-    }
+	protected int _nestingLevel;
 
-    public void awake() {
-        super.awake();
-        Object nestLevelBinding = _WOJExtensionsUtil.valueForBindingOrNull("nestingLevel",this);
-        if (nestLevelBinding instanceof Number) {
-            _nestingLevel = ((Number)nestLevelBinding).intValue();
-            return;
-        }
+	//********************************************************************
+	//	Constructor
+	//********************************************************************
 
-        if ((nestLevelBinding == null) || nestLevelBinding.equals("")) {
-            _nestingLevel = 0;
-            return;
-        }
-        try {
-            _nestingLevel = Integer.parseInt(nestLevelBinding.toString());
-        } catch (NumberFormatException e) {
-            throw new IllegalStateException("WXOutLineEntry - problem parsing int from nestingLevel binding "+e);
-        }
-    }
+	public WXOutlineEntry(WOContext aContext)  {
+		super(aContext);
+	}
 
-    public int nestingLevel() {
-        return _nestingLevel;
-    }
+	//********************************************************************
+	//	Overwrite
+	//********************************************************************
 
-    public boolean isExpanded() {
-        Object currentItem = valueForBinding("item");
-        NSArray selectionPath = (NSArray)_WOJExtensionsUtil.valueForBindingOrNull("selectionPath",this);
-        return (_nestingLevel < selectionPath.count())
-            && selectionPath.objectAtIndex(_nestingLevel).equals(currentItem);
-    }
+	public boolean synchronizesVariablesWithBindings() {
+		return false;
+	}
 
-    public int nestingLevelForChildren() {
-        return _nestingLevel+1;
-    }
+	//********************************************************************
+	//	Methods
+	//********************************************************************
 
-    public WOComponent toggleExpansion() {
-        NSArray selectionPath = (NSArray)_WOJExtensionsUtil.valueForBindingOrNull("selectionPath",this);
+	public int nestingLevel() {
+		return _nestingLevel;
+	}
 
-        selectionPath = selectionPath.subarrayWithRange(new NSRange(0, _nestingLevel));
+	public boolean isExpanded() {
+		Object currentItem = valueForBinding("item");
+		NSArray selectionPath = (NSArray)_WOJExtensionsUtil.valueForBindingOrNull("selectionPath",this);
+		return (_nestingLevel < selectionPath.count())
+				&& selectionPath.objectAtIndex(_nestingLevel).equals(currentItem);
+	}
 
-        if (!isExpanded()) {
-            Object currentItem = valueForBinding("item");
-    //        NSLog(@"*** currentItem=%@", currentItem);
-            selectionPath = selectionPath.arrayByAddingObject(currentItem);
-        }
+	public int nestingLevelForChildren() {
+		return _nestingLevel+1;
+	}
 
-        setValueForBinding(selectionPath, "selectionPath");
-        return null;
-    }
+	public WOComponent toggleExpansion() {
+		NSArray selectionPath = (NSArray)_WOJExtensionsUtil.valueForBindingOrNull("selectionPath",this);
 
-    public boolean hasChildren() {
-        return ((Boolean)valueForBinding("hasChildren")).booleanValue();
-    }
+		selectionPath = selectionPath.subarrayWithRange(new NSRange(0, _nestingLevel));
 
+		if (!isExpanded()) {
+			Object currentItem = valueForBinding("item");
+			//        NSLog(@"*** currentItem=%@", currentItem);
+			selectionPath = selectionPath.arrayByAddingObject(currentItem);
+		}
 
-    public void takeValuesFromRequest(WORequest aRequest, WOContext aContext) {
-        session().setObjectForKey(this, "_outlineEntry");
-        super.takeValuesFromRequest(aRequest, aContext);
-    }
+		setValueForBinding(selectionPath, "selectionPath");
+		return null;
+	}
 
-    public WOActionResults invokeAction(WORequest aRequest, WOContext aContext) {
-        WOActionResults returnElement;
-        session().setObjectForKey(this, "_outlineEntry");
-        returnElement = super.invokeAction(aRequest, aContext);
-        return returnElement;
-    }
+	public boolean hasChildren() {
+		return ((Boolean)valueForBinding("hasChildren")).booleanValue();
+	}
 
-    public void appendToResponse(WOResponse aResponse, WOContext aContext) {
-        session().setObjectForKey(this, "_outlineEntry");
-        super.appendToResponse(aResponse, aContext);
-    }
+	//********************************************************************
+	//	RR - Methods
+	//********************************************************************
+
+	public void awake() {
+		super.awake();
+		Object nestLevelBinding = _WOJExtensionsUtil.valueForBindingOrNull("nestingLevel",this);
+		if (nestLevelBinding instanceof Number) {
+			_nestingLevel = ((Number)nestLevelBinding).intValue();
+			return;
+		}
+
+		if ((nestLevelBinding == null) || nestLevelBinding.equals("")) {
+			_nestingLevel = 0;
+			return;
+		}
+		try {
+			_nestingLevel = Integer.parseInt(nestLevelBinding.toString());
+		} catch (NumberFormatException e) {
+			throw new IllegalStateException("WXOutLineEntry - problem parsing int from nestingLevel binding "+e);
+		}
+	}
+
+	public void takeValuesFromRequest(WORequest aRequest, WOContext aContext) {
+		session().setObjectForKey(this, "_outlineEntry");
+		super.takeValuesFromRequest(aRequest, aContext);
+	}
+
+	public WOActionResults invokeAction(WORequest aRequest, WOContext aContext) {
+		WOActionResults returnElement;
+		session().setObjectForKey(this, "_outlineEntry");
+		returnElement = super.invokeAction(aRequest, aContext);
+		return returnElement;
+	}
+
+	public void appendToResponse(WOResponse aResponse, WOContext aContext) {
+		session().setObjectForKey(this, "_outlineEntry");
+		super.appendToResponse(aResponse, aContext);
+	}
 }

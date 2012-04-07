@@ -7,7 +7,6 @@
 package er.directtoweb.components.misc;
 
 import com.webobjects.appserver.WOContext;
-import com.webobjects.directtoweb.D2WStatelessComponent;
 
 import er.directtoweb.components.ERD2WStatelessComponent;
 

@@ -57,12 +57,12 @@ public class MTAjaxModalContainer extends AjaxDynamicElement {
 				NSDictionary queryDictionary = (NSDictionary)valueForBinding("queryDictionary", component);
 				boolean secure = booleanValueForBinding("secure", ERXRequest.isRequestSecure(context.request()), component);
 				if(secure) {
-					boolean generatingCompleteURLs = (context instanceof ERXWOContext) ? ((ERXWOContext)context)._generatingCompleteURLs() : false;
+					boolean generatingCompleteURLs = context.doesGenerateCompleteURLs();
 					if(!generatingCompleteURLs) {
-						context._generateCompleteURLs();
+						context.generateCompleteURLs();
 					}
 					try {
-						_url = context._directActionURL(directActionName, queryDictionary, secure);
+						_url = context._directActionURL(directActionName, queryDictionary, secure, 0, false);
 						ERXMutableURL u = new ERXMutableURL(_url);
 						u.addQueryParameter(String.valueOf(System.currentTimeMillis()), null);
 						_url = u.toExternalForm();
@@ -70,7 +70,7 @@ public class MTAjaxModalContainer extends AjaxDynamicElement {
 						throw new NSForwardException(e);
 					} finally {
 						if(!generatingCompleteURLs) {
-							context._generateRelativeURLs();
+							context.generateRelativeURLs();
 						}
 					}
 				} else {

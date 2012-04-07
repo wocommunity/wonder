@@ -33,6 +33,7 @@ import er.extensions.foundation.ERXArrayUtilities;
  * 
  * @author dt first version
  * @author ak gross hacks, made functional and usable.
+ * @param <T> 
  */
 public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 

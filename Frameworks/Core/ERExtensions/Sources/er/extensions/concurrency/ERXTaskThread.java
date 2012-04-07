@@ -36,8 +36,6 @@ import er.extensions.foundation.ERXStopWatch;
  * @see ERXTaskThreadFactory
  */
 public class ERXTaskThread extends Thread {
-	
-	@SuppressWarnings("unused")
 	private static final Logger log = Logger.getLogger(ERXTaskThread.class);
 	
 	public ERXTaskThread(Runnable target) {

@@ -9,7 +9,6 @@ import com.webobjects.foundation.NSMutableArray;
 import er.extensions.ERXExtensions;
 import er.extensions.components.ERXArrayChooser;
 import er.extensions.eof.ERXEOControlUtilities;
-import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * Back port from WO 5 WOExtensions. This component is binding compatible, but not source compatible.<br />

@@ -77,7 +77,7 @@ public class WXGenericContainer extends WOComponent {
     
     // action 
     public WOActionResults invokeAction() {
-    	context()._setActionInvoked(true);
+    	context().setActionInvoked(true);
     	_setIsPage(true);
     	_omitTags = true;
     	return this;

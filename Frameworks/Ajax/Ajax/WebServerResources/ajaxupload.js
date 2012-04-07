@@ -354,7 +354,13 @@
          * that will hover above the button
          * <div><input type='file' /></div>
          */
-        _createInput: function(){ 
+        _createInput: function(){
+            // check if element already exists
+            var oldInput = document.getElementById(this._settings.name);
+            if (oldInput) {
+                this._input = oldInput;
+                return;
+            }
             var self = this;
             var input = document.createElement("input");
             input.setAttribute('type', 'file');
@@ -370,7 +376,8 @@
                 'margin' : 0,
                 'padding' : 0,
                 'fontSize' : '480px',                
-                'cursor' : 'pointer'
+                'cursor' : 'pointer',
+                'height' : '100%' // make overlay same height as button
             });            
 
             var div = document.createElement("div");                        
@@ -428,7 +435,7 @@
                 // We use visibility instead of display to fix problem with Safari 4
                 // The problem is that the value of input doesn't change if it 
                 // has display none when user selects a file           
-                input.parentNode.style.visibility = 'hidden';
+                self._input.parentNode.style.visibility = 'hidden';
 
             });   
                         

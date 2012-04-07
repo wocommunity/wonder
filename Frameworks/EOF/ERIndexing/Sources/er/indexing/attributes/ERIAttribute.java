@@ -1,9 +1,7 @@
 package er.indexing.attributes;
 
-import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParseException;
-import java.text.ParsePosition;
 
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.NSForwardException;

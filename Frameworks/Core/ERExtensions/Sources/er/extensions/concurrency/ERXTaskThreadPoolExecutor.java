@@ -40,8 +40,6 @@ import er.extensions.eof.ERXEC;
  * @author kieran
  */
 public class ERXTaskThreadPoolExecutor extends ThreadPoolExecutor {
-
-	@SuppressWarnings("unused")
 	private static final Logger log = Logger.getLogger(ERXTaskThreadPoolExecutor.class);
 
 	public ERXTaskThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit,

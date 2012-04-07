@@ -14,11 +14,9 @@ import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 
-import er.bugtracker._Framework.Key;
 import er.corebusinesslogic.ERCoreBusinessLogic;
 import er.corebusinesslogic.ERCoreUserInterface;
 import er.extensions.eof.ERXQ;
-import er.extensions.eof.ERXS;
 
 public class People extends _People implements ERCoreUserInterface {
     static final Logger log = Logger.getLogger(People.class);

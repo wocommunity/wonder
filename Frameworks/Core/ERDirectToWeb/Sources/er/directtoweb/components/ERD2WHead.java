@@ -5,7 +5,6 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.D2WHead;
-import com.webobjects.directtoweb.D2WPage;
 import com.webobjects.foundation.NSSelector;
 
 import er.directtoweb.ERD2WFactory;

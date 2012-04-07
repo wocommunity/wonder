@@ -2,7 +2,6 @@ package er.divalite.components.buttons;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eoaccess.EODatabaseContext;

@@ -83,12 +83,12 @@ public class AjaxModalContainer extends AjaxDynamicElement {
         		NSDictionary queryDictionary = (NSDictionary)valueForBinding("queryDictionary", component);
         		boolean secure = booleanValueForBinding("secure", ERXRequest.isRequestSecure(context.request()), component);
         		if (secure) {
-              boolean generatingCompleteURLs = (context instanceof ERXWOContext) ? ((ERXWOContext)context)._generatingCompleteURLs() : false;
+              boolean generatingCompleteURLs = context.doesGenerateCompleteURLs();
               if (!generatingCompleteURLs) {
-        				context._generateCompleteURLs();
+        				context.generateCompleteURLs();
         			}
               try {
-          			href = context._directActionURL(directActionName, queryDictionary, secure);
+          			href = context._directActionURL(directActionName, queryDictionary, secure, 0, false);
           			ERXMutableURL u = new ERXMutableURL(href);
           			u.addQueryParameter(String.valueOf(System.currentTimeMillis()), null);
           			href = u.toExternalForm();
@@ -98,7 +98,7 @@ public class AjaxModalContainer extends AjaxDynamicElement {
               }
               finally {
           			if (!generatingCompleteURLs) {
-          				context._generateRelativeURLs();
+          				context.generateRelativeURLs();
           			}
               }
         		}

@@ -139,6 +139,9 @@ public class ERXNavigationState {
                         if (children == null)
                             log.warn("For nav core object: " + levelRoot + " and child binding: " + levelRoot.childrenBinding()
                                      + " couldn't find children for choice key: " + (String)o);
+                    } else if (o instanceof Boolean) {
+                    	String s = Boolean.toString((Boolean)o);
+                    	children = (NSArray)levelRoot.childrenChoices().objectForKey(s);
                     } else {
                         log.warn("For nav core object: " + levelRoot + " and child binding: " + levelRoot.childrenBinding()
                                  + " recieved binding object: " + o);

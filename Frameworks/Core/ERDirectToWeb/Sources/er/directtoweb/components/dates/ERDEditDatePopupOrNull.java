@@ -55,7 +55,7 @@ public class ERDEditDatePopupOrNull extends ERDEditDatePopupCommon {
 
     public void takeValuesFromRequest (WORequest request, WOContext context) {
         super.takeValuesFromRequest (request,context);
-        if (context._wasFormSubmitted()) {
+        if (context.wasFormSubmitted()) {
         	if (radioValue().equals(date)){
         		NSTimestamp date = null;
         		try {

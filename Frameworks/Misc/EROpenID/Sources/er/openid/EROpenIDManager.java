@@ -162,7 +162,7 @@ public class EROpenIDManager {
         }
       }
       else {
-        context._generateCompleteURLs();
+        context.generateCompleteURLs();
         try {
           if (requireSecureReturnURL) {
             Method _directActionURLMethod = context.getClass().getMethod("_directActionURL", new Class[] { String.class, NSDictionary.class, boolean.class });
@@ -176,7 +176,7 @@ public class EROpenIDManager {
           throw new RuntimeException("_directActionURL failed.", e);
         }
         finally {
-          context._generateRelativeURLs();
+          context.generateRelativeURLs();
         }
       }
       EROpenIDManager.log.debug("Return to URL: " + returnToUrl);

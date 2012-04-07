@@ -1,6 +1,5 @@
 package er.directtoweb.components.attachments._ajax;
 
-import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WComponent;
 

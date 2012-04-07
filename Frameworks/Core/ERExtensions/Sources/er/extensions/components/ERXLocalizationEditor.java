@@ -18,7 +18,6 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
-import er.extensions.ERXExtensions;
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
@@ -95,7 +94,7 @@ public class ERXLocalizationEditor extends WOComponent {
 			NSArray languageArray = new NSArray(language);
 			URL url = ERXFileUtilities.pathURLForResourceNamed(currentFilename, currentFramework, languageArray);
 			if(url != null) {
-				NSDictionary dict = (NSDictionary)ERXExtensions.readPropertyListFromFileInFramework(currentFilename, currentFramework, languageArray);
+				NSDictionary dict = (NSDictionary)ERXFileUtilities.readPropertyListFromFileInFramework(currentFilename, currentFramework, languageArray);
 				allKeys.addObjectsFromArray(dict.allKeys());
 				for (Enumeration keys = dict.allKeys().objectEnumerator(); keys.hasMoreElements();) {
 					String key = (String) keys.nextElement();
@@ -219,7 +218,7 @@ public class ERXLocalizationEditor extends WOComponent {
     		Object item = currentEntry.objectForKey(currentLanguage);
     		Object newValue;
     		if (item instanceof String) {
-    			newValue = (String)value;
+    			newValue = value;
 			} else {
 				newValue = NSPropertyListSerialization.propertyListFromString(value);
 			}

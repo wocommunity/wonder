@@ -56,7 +56,7 @@ public class CCSubmitLink extends ERXNonSynchronizingComponent {
 			// deprecated call required to maintain WO5.3 compatibility.
 			// change to context.setActionInvoked(true) once move to
 			// WO5.4+ is complete -davidleber
-			context._setActionInvoked(true);
+			context.setActionInvoked(true);
 		}
 		return super.invokeAction(request, context);
 	}

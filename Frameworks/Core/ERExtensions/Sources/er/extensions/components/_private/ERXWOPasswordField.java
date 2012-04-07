@@ -1,7 +1,5 @@
 package er.extensions.components._private;
 
-import java.io.IOException;
-
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -66,7 +64,7 @@ public class ERXWOPasswordField extends WOInput {
 
   public void takeValuesFromRequest(WORequest request, WOContext context) {
     WOComponent component = context.component();
-    if (!isDisabledInContext(context) && context._wasFormSubmitted() && !isReadonlyInContext(context)) {
+    if (!isDisabledInContext(context) && context.wasFormSubmitted() && !isReadonlyInContext(context)) {
       String name = nameInContext(context, component);
       if (name != null) {
         String value = request.stringFormValueForKey(name);

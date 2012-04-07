@@ -1,7 +1,11 @@
 package er.pdf;
 
+import org.apache.log4j.Logger;
+
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Map;
+
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOAssociation;
@@ -11,10 +15,17 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.pdf.builder.FOPBuilder;
+import er.pdf.builder.FOPBuilderFactory;
 import er.pdf.builder.PDFBuilder;
 import er.pdf.builder.PDFBuilderFactory;
 
 public class ERPDFUtilities {
+	/**
+	 * Logger for this class
+	 */
+	private static final Logger logger = Logger.getLogger(ERPDFUtilities.class);
+
   private ERPDFUtilities() {
     // Utility class. Don't instantiate
   }
@@ -128,5 +139,45 @@ public class ERPDFUtilities {
       throw NSForwardException._runtimeExceptionForThrowable(e);
     }
   }
+  
+  
+  
+	/**
+	 * takes xml as a string and a transform document as a url and transforms it
+	 * to pdf like freakin' magic.
+	 * 
+	 * @param xml a string of xml to be passed into the transformation process 
+	 * @param fopxsl the location of the xml->fo transform sheet (should be in the classpath)
+	 * @param encoding
+	 * @param config dictionary of additional configuration elements for the fop engine 
+	 * @return NSData raw pdf file contents
+	 * @throws Throwable IOException 
+	 */
+	public static NSData xml2Fop2Pdf(String xml, String fopxsl, NSDictionary<String, Object> config) throws Throwable {
+		if (logger.isDebugEnabled()) {
+			logger.debug("xml2Fop2Pdf(String xml (length)=" + xml.length() + ", String fopxsl=" + fopxsl + ", NSDictionary<String,Object> config=" + config + ") - start"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		}
+
+
+		NSMutableDictionary<String, Object> _config = config == null ? new NSMutableDictionary<String, Object>() : config.mutableClone();
+		FOPBuilder fopb = FOPBuilderFactory.newBuilder();
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		try {
+			fopb.setConfiguration(_config);
+			fopb.setXML(xml);
+			fopb.setXSL(fopxsl);
+			fopb.createDocument(os);
+			os.close();
+			NSData returnNSData = new NSData(os.toByteArray());
+			if (logger.isDebugEnabled()) {
+				logger.debug("xml2Fop2Pdf(String, String, NSDictionary<String,Object>) - end - return value=" + returnNSData); //$NON-NLS-1$
+			}
+			return returnNSData;
+		} catch (IOException e) {
+			logger.error("xml2Fop2Pdf(String, String, NSDictionary<String,Object>)", e); //$NON-NLS-1$
+
+			throw NSForwardException._runtimeExceptionForThrowable(e);
+		}
+	}
 
 }

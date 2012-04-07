@@ -1,0 +1,75 @@
+@CHARSET "UTF-8";
+
+body {
+	margin: 0;
+}
+h1,h2,h3,h4 {
+	margin-top: 1em;
+}
+
+
+dl {
+	font-size: small;
+}
+
+dl dt {
+	font-variant: small-caps;
+}
+
+dl dd {
+	font-size: smaller;
+}
+
+/* note the color change from the html in the browser
+ to the generated pdf rendered.*/
+code {
+	color: red;
+}
+
+/* don't style any links  in the pdf */
+a {
+	text-decoration: none;
+	color: inherit;
+}
+
+@page {
+	size: 8.5in 11in;
+	font-size: .8em;
+	/*-fs-flow-top: "header";
+	-fs-flow-bottom: "footer";
+	-fs-flow-left: "left";
+	-fs-flow-right: "right";
+	-fs-flow-top: "header";
+	*/
+}
+
+/*#header {
+	font-size: 80%;
+	font-family: serif;
+	position: absolute;
+	top: 1em;
+	left: 1em;
+	font: bold serif;
+	-fs-move-to-flow: "header";
+}
+#footer {
+	font-size: 80%;
+	font-style: italic;
+	font-family: serif;
+	position: absolute;
+	top: 1em;
+	left: 1em;
+	-fs-move-to-flow: "footer";
+}
+*/
+
+#left {
+	-fs-move-to-flow: "left";
+	display: inline;
+	font-size: small;
+	font-style: italic;
+	background: dark-red;
+	color: white;
+	padding: 2em;
+	display: inline;
+}

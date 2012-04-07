@@ -145,7 +145,7 @@ public class ERXInQualifier extends ERXKeyValueQualifier implements Cloneable {
                     // so we try to compare 'n' values with 'm' objects.
                     // we use set intersection
                     NSSet vs = new NSSet((NSArray) value);
-                    NSSet vss = new NSSet((NSArray) values());
+                    NSSet vss = new NSSet(values());
                     return vs.intersectsSet(vss);
                 }
             }

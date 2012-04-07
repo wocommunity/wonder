@@ -15,6 +15,10 @@ import er.rest.entityDelegates.ERXXmlRestResponseWriter;
 import er.rest.entityDelegates.IERXRestAuthenticationDelegate;
 import er.rest.format.ERXXmlRestParser;
 
+/**
+ * @deprecated This example uses the older and deprecated REST APIs, look at ERRestRouteExample instead
+ */
+@Deprecated
 public class Application extends ERXApplication {
     public static void main(String argv[]) {
         ERXApplication.main(argv, Application.class);

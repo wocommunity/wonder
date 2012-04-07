@@ -28,6 +28,7 @@ public class ERXAjaxContext extends WOContext {
 	}
 	
 	@Override
+	@Deprecated
 	public boolean _wasFormSubmitted() {
 		boolean wasFormSubmitted = super._wasFormSubmitted();
 		if (wasFormSubmitted) {

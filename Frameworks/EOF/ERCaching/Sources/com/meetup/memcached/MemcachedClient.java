@@ -20,10 +20,7 @@ package com.meetup.memcached;
 import java.util.*;
 import java.util.zip.*;
 import java.nio.*;          
-import java.net.InetAddress;
-import java.nio.charset.*;  
 import java.nio.channels.*;
-import java.nio.channels.spi.*;
 import java.io.*;
 import java.net.URLEncoder;
 
