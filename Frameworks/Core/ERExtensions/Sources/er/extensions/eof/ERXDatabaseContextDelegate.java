@@ -176,7 +176,13 @@ public class ERXDatabaseContextDelegate {
 			} else if(exLog.isInfoEnabled()) {
 				exLog.info("Database Exception occured: " + throwable);
 			}
-			boolean handled = ERXSQLHelper.newSQLHelper(databaseContext).handleDatabaseException(databaseContext, throwable);
+			boolean handled = false;
+			try {
+				handled = ERXSQLHelper.newSQLHelper(databaseContext).handleDatabaseException(databaseContext, throwable);
+			} catch(RuntimeException e) {
+				databaseContext.rollbackChanges();
+				throw e;
+			}
 			if(!handled && throwable.getMessage() != null && throwable.getMessage().indexOf("_obtainOpenChannel") != -1) {
 				NSArray models = databaseContext.database().models();
 				for(Enumeration e = models.objectEnumerator(); e.hasMoreElements(); ) {
