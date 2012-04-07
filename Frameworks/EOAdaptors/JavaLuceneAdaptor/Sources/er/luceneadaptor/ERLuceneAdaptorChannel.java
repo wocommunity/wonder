@@ -23,7 +23,6 @@ import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.DisjunctionMaxQuery;
 import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.MatchAllDocsQuery;
 import org.apache.lucene.search.MultiPhraseQuery;
 import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.Query;
@@ -374,11 +373,16 @@ public class ERLuceneAdaptorChannel extends EOAdaptorChannel {
 			}
 		}
 
-		public Field valueToField(Document doc,Object value) {
+		public Field valueToField(Document doc, Object value) {
 			String stringValue = asLuceneValue(value);
 			Field field = doc.getField(columnName());
-			if(field == null) {
-				field = new Field(columnName(), stringValue, store(), index(), termVector());
+			if (value != null) {
+				if (field == null) {
+					field = new Field(columnName(), stringValue, store(), index(), termVector());
+				}
+				field.setValue(stringValue);
+			} else {
+				field = null;
 			}
 			field.setValue(stringValue);
 			return field;

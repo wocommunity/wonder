@@ -78,6 +78,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      * Clazz object implementation for ERXCustomObject. See
      * {@link EOEnterpriseObjectClazz} for more information on this
      * neat design pattern.
+     * @param <T> 
      */
     public static class ERXCustomObjectClazz<T extends EOEnterpriseObject> extends EOEnterpriseObjectClazz<T> {
         
@@ -440,7 +441,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      */
     public String encryptedPrimaryKey() {
         String pk = ERXEOControlUtilities.primaryKeyStringForObject(this);
-        return pk==null ? null : ERXCrypto.blowfishEncode(pk);
+        return pk==null ? null : ERXCrypto.crypterForAlgorithm(ERXCrypto.BLOWFISH).encrypt(pk);
     }
         
     /* (non-Javadoc)

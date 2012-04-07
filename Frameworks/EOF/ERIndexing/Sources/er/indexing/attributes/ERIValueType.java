@@ -1,19 +1,13 @@
 package er.indexing.attributes;
 
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.FieldPosition;
 import java.text.Format;
-import java.text.ParseException;
 import java.text.ParsePosition;
 
-import com.webobjects.foundation.NSForwardException;
-import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
-import com.webobjects.foundation._NSFoundationCollection;
 
 import er.extensions.eof.ERXConstant;
-import er.extensions.foundation.ERXRuntimeUtilities;
 
 public class ERIValueType extends ERXConstant.NumberConstant {
 

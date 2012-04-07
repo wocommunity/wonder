@@ -1,6 +1,5 @@
 package er.diva.pages;
 
-import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
 

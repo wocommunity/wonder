@@ -482,7 +482,7 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
         // and are given isMandatory=0 on a mandatory relationship to force users to pick one..
         super.takeValuesFromRequest(r, c);
         
-        if (c._wasFormSubmitted()) {
+        if (c.wasFormSubmitted()) {
           Object realSource = realSourceObject();
           if(realSource instanceof EOEnterpriseObject) {
               EOEnterpriseObject localObject = (EOEnterpriseObject)realSource;

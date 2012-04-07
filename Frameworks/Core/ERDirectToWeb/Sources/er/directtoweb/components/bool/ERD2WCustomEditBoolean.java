@@ -7,13 +7,8 @@
 package er.directtoweb.components.bool;
 
 import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WORequest;
 import com.webobjects.directtoweb.D2WEditBoolean;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.foundation.NSValidation;
-
-import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * Allows editing boolean values based on radio buttons and localizable strings.<br />

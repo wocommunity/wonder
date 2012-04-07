@@ -273,7 +273,8 @@ public class ERXComponentUtilities {
 			/** require [valid_componentName] componentName != null;  **/
 			String htmlString = ERXComponentUtilities.template(componentName, "html", languages);
 			String wodString = ERXComponentUtilities.template(componentName, "wod", languages);
-			return WOComponent.templateWithHTMLString(htmlString, wodString, languages);
+			return WOComponent.templateWithHTMLString("", "", htmlString, wodString, languages,
+					WOApplication.application().associationFactoryRegistry(), WOApplication.application().namespaceProvider());
 			/** ensure [valid_Result] Result != null;  **/
 		}
 		catch (IOException e) {

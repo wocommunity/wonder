@@ -148,19 +148,39 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	public boolean _generatingCompleteResourceURLs() {
 		return _generateCompleteResourceURLs;
 	}
+	
+	@Override
+	public void generateCompleteURLs() {
+		super.generateCompleteURLs();
+		_generateCompleteURLs = true; 
+	}
 
 	@Override
+	@Deprecated
 	public void _generateCompleteURLs() {
 		super._generateCompleteURLs();
 		_generateCompleteURLs = true; 
 	}
 
 	@Override
+	public void generateRelativeURLs() {
+		super.generateRelativeURLs();
+		_generateCompleteURLs = false;
+	}
+	
+	@Override
+	@Deprecated
 	public void _generateRelativeURLs() {
 		super._generateRelativeURLs();
 		_generateCompleteURLs = false;
 	}
+	
+	@Override
+	public boolean doesGenerateCompleteURLs() {
+		return _generateCompleteURLs;
+	}
 
+	@Deprecated
 	public boolean _generatingCompleteURLs() {
 		return _generateCompleteURLs;
 	}
@@ -601,15 +621,12 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 		if (host == null && currentlySecure == secureBool && port == null) {
 			completeUrls = true;
 		}
-		else if (context instanceof ERXWOContext) {
-			completeUrls = ((ERXWOContext) context)._generatingCompleteURLs();
-		}
 		else {
-			completeUrls = false;
+			completeUrls = context.doesGenerateCompleteURLs();
 		}
 
 		if (!completeUrls) {
-			context._generateCompleteURLs();
+			context.generateCompleteURLs();
 		}
 
 		String url;
@@ -660,7 +677,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 		}
 		finally {
 			if (!completeUrls) {
-				context._generateRelativeURLs();
+				context.generateRelativeURLs();
 			}
 		}
 		return url;

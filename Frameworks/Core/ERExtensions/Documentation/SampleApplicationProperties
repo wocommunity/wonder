@@ -24,11 +24,6 @@
 # ERExtensions Framework Configuration
 #########################################################################
 
-### Compiler Proxy ###
-#er.extensions.ERXCompilerProxyEnabled = true
-#CPRaiseOnError = false
-
-
 ### Localizer ###
 
 # If you use extra frameworks with localized resources, 

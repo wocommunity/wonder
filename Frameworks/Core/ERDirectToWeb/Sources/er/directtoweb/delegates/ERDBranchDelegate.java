@@ -19,7 +19,6 @@ import java.util.Iterator;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOComponent;
-import com.webobjects.directtoweb.D2WComponent;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.NextPageDelegate;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -30,7 +29,6 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.directtoweb.ERDirectToWeb;
-import er.directtoweb.components.ERDCustomComponent;
 import er.directtoweb.interfaces.ERDMessagePageInterface;
 import er.directtoweb.pages.ERD2WPage;
 import er.extensions.foundation.ERXArrayUtilities;

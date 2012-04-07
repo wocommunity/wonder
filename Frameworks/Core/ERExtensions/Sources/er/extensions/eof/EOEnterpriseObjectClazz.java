@@ -52,6 +52,7 @@ import er.extensions.foundation.ERXPatcher;
  * in your subclasses, which is not legal for client-side classes. The implementation
  * for a client-side class could then be easily switched to use the server-side EOUtilites
  * implementation.</p>
+ * @param <T> 
  */
 public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
     /**

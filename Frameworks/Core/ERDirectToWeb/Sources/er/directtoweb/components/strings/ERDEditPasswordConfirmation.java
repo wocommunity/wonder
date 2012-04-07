@@ -120,7 +120,7 @@ public class ERDEditPasswordConfirmation extends ERDCustomEditComponent {
     
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         super.takeValuesFromRequest(r,c);
-        if (c._wasFormSubmitted()) {
+        if (c.wasFormSubmitted()) {
         	checkPasswords();
 		}
     }

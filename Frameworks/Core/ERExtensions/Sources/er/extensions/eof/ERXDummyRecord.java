@@ -264,7 +264,7 @@ public class ERXDummyRecord extends EOCustomObject {
 		EOClassDescription cd = null;
 		NSMutableArray objects = new NSMutableArray();
 		for (Enumeration iter = list.objectEnumerator(); iter.hasMoreElements();) {
-			Object o = (Object) iter.nextElement();
+			Object o = iter.nextElement();
 
 			EOEnterpriseObject eo = recordForObject(ec, o);
 			ec = eo.editingContext();

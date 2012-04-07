@@ -9,7 +9,6 @@ import com.webobjects.foundation.NSArray;
 
 import er.directtoweb.components.ERDCustomQueryComponent;
 import er.extensions.appserver.ERXDisplayGroup;
-import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.eof.qualifiers.ERXRegExQualifier;
 

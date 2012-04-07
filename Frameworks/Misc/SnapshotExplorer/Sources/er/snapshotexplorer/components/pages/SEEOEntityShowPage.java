@@ -24,6 +24,11 @@ public class SEEOEntityShowPage extends SEPage implements IERXRouteComponent {
     _entityStats = new SEModelStats(entity.model()).entityStatsForEntityNamed(entity.name());
   }
 
+  @ERXRouteParameter
+  public void setEoEntity(EOEntity entity) {
+	  setEOEntity(entity);
+  }
+
   public EOEntity eoentity() {
     return _entity;
   }

@@ -494,7 +494,7 @@ public class ERXMailAppender extends AppenderSkeleton {
         String result;
         if(getExceptionPageName() != null && ERXValueUtilities.booleanValue(formatAsError())) {
             NSDictionary dict = composeExceptionPageDictionary(event);
-            WOComponent page = (WOComponent)ERXApplication.instantiatePage(exceptionPageName);
+            WOComponent page = ERXApplication.instantiatePage(exceptionPageName);
 
             for(Enumeration keys = dict.keyEnumerator(); keys.hasMoreElements();) {
                 String key = (String) keys.nextElement();

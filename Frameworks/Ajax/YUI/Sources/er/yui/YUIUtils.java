@@ -7,6 +7,7 @@ import com.webobjects.foundation.NSDictionary;
 
 import er.ajax.AjaxUtils;
 import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXStringUtilities;
 
 /**
  *
@@ -60,7 +61,7 @@ public class YUIUtils {
   public static String id(String idBindingName, NSDictionary associations, WOContext context) {
     String id = AjaxUtils.stringValueForBinding(idBindingName, associations, context.component());
     if (id == null) {
-      id = AjaxUtils.toSafeElementID(context.elementID());
+      id = ERXStringUtilities.safeIdentifierName(context.elementID());
     }
     return id;
   }

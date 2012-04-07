@@ -6,6 +6,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.foundation.ERXMutableURL;
@@ -26,6 +27,7 @@ public class ERXRedirect extends WOComponent {
 	private String _requestHandlerKey;
 	private String _requestHandlerPath;
 	private Boolean _secure;
+	private boolean _includeSessionID;
 
 	private String _directActionClass;
 	private String _directActionName;
@@ -36,6 +38,7 @@ public class ERXRedirect extends WOComponent {
 	public ERXRedirect(WOContext context) {
 		super(context);
 		_originalComponent = context.page();
+		_includeSessionID = false;
 	}
 
 	/**
@@ -47,6 +50,17 @@ public class ERXRedirect extends WOComponent {
 	 */
 	public void setSecure(boolean secure) {
 		_secure = Boolean.valueOf(secure);
+	}
+	
+	/**
+	 * Sets whether or not a direct action URL should contain the session ID.
+	 * This defaults to <code>false</code> to maintain backward compatibility.
+	 *  
+	 * @param includeSessionID
+	 *            whether or not a sessionID should be included
+	 */
+	public void setIncludeSessionID(boolean includeSessionID) {
+		_includeSessionID = includeSessionID;
 	}
 
 	/**
@@ -150,6 +164,19 @@ public class ERXRedirect extends WOComponent {
 		}
 		return queryParametersString;
 	}
+	
+	protected NSDictionary<String, Object> directActionQueryParameters() {
+		NSMutableDictionary<String, Object> params = null;
+		if (_queryParameters != null) {
+			params = (NSMutableDictionary<String, Object>) _queryParameters.mutableClone();
+		} else {
+			params = new NSMutableDictionary<String, Object>();
+		}
+		if (!_includeSessionID) {
+			params.takeValueForKey(Boolean.FALSE.toString(), WOApplication.application().sessionIdKey());
+		}
+		return params;
+	}
 
 	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
@@ -159,12 +186,12 @@ public class ERXRedirect extends WOComponent {
  		boolean secure = (_secure == null) ? ERXRequest.isRequestSecure(context.request()) : _secure.booleanValue();
  		
  		// Check whether we are currently generating complete URL's. We'll use this in finally() to reset the context to it's behavior before calling this.
- 		boolean generatingCompleteURLs = ((ERXWOContext)context)._generatingCompleteURLs();
+ 		boolean generatingCompleteURLs = context.doesGenerateCompleteURLs();
  
  		// Generate a full URL if changing between secure and insecure
 		boolean generateCompleteURLs = secure != ERXRequest.isRequestSecure(context.request());
 		if (generateCompleteURLs) {
-		  context._generateCompleteURLs();
+		  context.generateCompleteURLs();
 		}
 		
 		try {
@@ -221,7 +248,7 @@ public class ERXRedirect extends WOComponent {
 				else {
 					requestHandlerPath = _directActionName;
 				}
-				url = context._urlWithRequestHandlerKey(WOApplication.application().directActionRequestHandlerKey(), requestHandlerPath, queryParametersString(), secure);
+				url = context.directActionURLForActionNamed(requestHandlerPath, directActionQueryParameters(), secure, 0, false);
 			}
 			else {
 				throw new IllegalStateException("You must provide a component, url, requestHandlerKey, or directActionName to this ERXRedirect.");
@@ -252,9 +279,9 @@ public class ERXRedirect extends WOComponent {
 		finally {
 			// Switch the context back to the original url behaviour.
 			if (generatingCompleteURLs) {
-				context._generateCompleteURLs();
+				context.generateCompleteURLs();
 			} else {
-				context._generateRelativeURLs();
+				context.generateRelativeURLs();
 			}
 		}
 	}

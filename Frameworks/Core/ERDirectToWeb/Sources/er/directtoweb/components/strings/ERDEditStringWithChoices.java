@@ -113,7 +113,7 @@ public class ERDEditStringWithChoices extends ERDCustomEditComponent {
     /** Extends the parent implementation in order to force validation. */
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         super.takeValuesFromRequest(r,c);
-        if (c._wasFormSubmitted()) {
+        if (c.wasFormSubmitted()) {
         	try {
         		object().validateTakeValueForKeyPath(objectPropertyValue(), key());
         	} catch (NSValidation.ValidationException e) {

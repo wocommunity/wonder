@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -27,7 +26,7 @@ import com.webobjects.foundation.NSMutableArray;
  */
 public class ERXWOBrowser extends WOInput {
 
-	Logger log = Logger.getLogger(ERXWOBrowser.class);
+	private static Logger log = Logger.getLogger(ERXWOBrowser.class);
 	
 	WOAssociation _list;
 	WOAssociation _item;
@@ -59,9 +58,6 @@ public class ERXWOBrowser extends WOInput {
 		if (_selections != null && _selectedValues != null) {
 			throw new WODynamicElementCreationException("<" + getClass().getName() + "> : Cannot have both selections and selectedValues.");
 		}
-		else {
-			return;
-		}
 	}
 	
 	// Tells WOHTMLDynamicElement ancenstor that there are "option" tags to render 
@@ -83,7 +79,7 @@ public class ERXWOBrowser extends WOInput {
 
 	private void _slowTakeValuesFromRequest(WORequest worequest, WOContext wocontext) {
 		WOComponent wocomponent = wocontext.component();
-		if (_selections != null && !disabledInComponent(wocomponent) && wocontext._wasFormSubmitted()) {
+		if (_selections != null && !disabledInComponent(wocomponent) && wocontext.wasFormSubmitted()) {
 			String s = nameInContext(wocontext, wocomponent);
 			NSArray nsarray = worequest.formValuesForKey(s);
 			int i = nsarray != null ? nsarray.count() : 0;
@@ -129,7 +125,7 @@ public class ERXWOBrowser extends WOInput {
 						}
 					}
 					else {
-						WOApplication.application().debugString(toString() + " 'value' evaluated to null in component " + wocomponent.toString() + ".\n" + "Unable to select item " + obj1);
+						log.debug(toString() + " 'value' evaluated to null in component " + wocomponent.toString() + ".\n" + "Unable to select item " + obj1);
 					}
 				}
 
@@ -156,7 +152,7 @@ public class ERXWOBrowser extends WOInput {
 
 	private void _fastTakeValuesFromRequest(WORequest worequest, WOContext wocontext) {
 		WOComponent wocomponent = wocontext.component();
-		if (_selections != null && !disabledInComponent(wocomponent) && wocontext._wasFormSubmitted()) {
+		if (_selections != null && !disabledInComponent(wocomponent) && wocontext.wasFormSubmitted()) {
 			String s = nameInContext(wocontext, wocomponent);
 			NSArray nsarray = worequest.formValuesForKey(s);
 			int i = nsarray != null ? nsarray.count() : 0;
@@ -203,7 +199,7 @@ public class ERXWOBrowser extends WOInput {
 	public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
 		if (_value != null) {
 			if (!_loggedSlow) {
-				WOApplication.application().debugString("<" + getClass().getName() + "> Warning: Avoid using the 'value' binding as it is much slower than omitting it, and it is just cosmetic.");
+				log.debug("<" + getClass().getName() + "> Warning: Avoid using the 'value' binding as it is much slower than omitting it, and it is just cosmetic.");
 				_loggedSlow = true;
 			}
 			_slowTakeValuesFromRequest(worequest, wocontext);

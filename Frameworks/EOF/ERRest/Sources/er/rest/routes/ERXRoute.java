@@ -12,7 +12,6 @@ import com.webobjects.foundation._NSUtilities;
 
 import er.rest.ERXRestContext;
 import er.rest.ERXRestUtils;
-import er.rest.IERXRestDelegate;
 
 /**
  * <p>

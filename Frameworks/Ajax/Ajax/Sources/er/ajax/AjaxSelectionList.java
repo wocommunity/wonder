@@ -146,7 +146,7 @@ public class AjaxSelectionList extends AjaxComponent {
 
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		super.takeValuesFromRequest(request, context);
-		if (context._wasFormSubmitted()) {
+		if (context.wasFormSubmitted()) {
 			if (_value == null) {
 				setSelection(null);
 			}

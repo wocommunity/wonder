@@ -5,8 +5,6 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 
 import er.extensions.foundation.ERXPatcher;
-import er.extensions.foundation.ERXPatcher.DynamicElementsPatches;
-import er.extensions.foundation.ERXPatcher.DynamicElementsPatches.Text;
 
 /**
  * Patch for WOText to not include the <code>value</code> attribute.

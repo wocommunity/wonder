@@ -15,7 +15,6 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 
 import er.extensions.eof.ERXEC;
-import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
 public class ERDInspectButton extends ERDActionButton {

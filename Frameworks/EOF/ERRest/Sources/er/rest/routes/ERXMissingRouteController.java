@@ -1,14 +1,11 @@
 package er.rest.routes;
 
-import java.io.FileNotFoundException;
-
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOMessage;
 import com.webobjects.appserver.WORequest;
 
 import er.extensions.appserver.ERXHttpStatusCodes;
 import er.extensions.foundation.ERXProperties;
-import er.rest.ERXNotAllowedException;
 
 /**
  * ERXMissingRouteController is the controller that is used when no route can be found. It's "missing" action is loaded.

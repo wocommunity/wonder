@@ -23,7 +23,6 @@
 
 package er.selenium;
 
-import java.io.File;
 import java.net.URL;
 import java.util.Iterator;
 

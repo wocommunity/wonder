@@ -9,7 +9,6 @@ import com.webobjects.directtoweb.D2WPage;
 import com.webobjects.directtoweb.ERD2WUtilities;
 import com.webobjects.directtoweb.EditPageInterface;
 import com.webobjects.directtoweb.ListPageInterface;
-import com.webobjects.directtoweb.NextPageDelegate;
 import com.webobjects.directtoweb.QueryPageInterface;
 import com.webobjects.directtoweb.SelectPageInterface;
 import com.webobjects.eocontrol.EODataSource;

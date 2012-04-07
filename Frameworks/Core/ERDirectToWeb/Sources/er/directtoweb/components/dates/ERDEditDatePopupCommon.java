@@ -15,6 +15,7 @@ import com.webobjects.foundation.NSTimestampFormatter;
 
 import er.directtoweb.components.ERDCustomEditComponent;
 import er.extensions.eof.ERXConstant;
+import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
 
@@ -117,8 +118,8 @@ public class ERDEditDatePopupCommon extends ERDCustomEditComponent {
             }
             if (yearRangeBottom != null && yearRangeTop != null) {
                 try {
-                    Integer start = ERXConstant.integerForString(yearRangeBottom);
-                    Integer end = ERXConstant.integerForString(yearRangeTop);
+                    Integer start = ERXStringUtilities.integerWithString(yearRangeBottom);
+                    Integer end = ERXStringUtilities.integerWithString(yearRangeTop);
                     if (end.intValue() > start.intValue()) {
                         startYear = start.intValue();
                         endYear = end.intValue();

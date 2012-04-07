@@ -3,8 +3,6 @@ package er.divalite.pages;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2W;
-import com.webobjects.directtoweb.EditPageInterface;
-import com.webobjects.foundation.NSDictionary;
 
 import er.directtoweb.pages.ERD2WListPage;
 import er.extensions.eof.ERXEOControlUtilities;

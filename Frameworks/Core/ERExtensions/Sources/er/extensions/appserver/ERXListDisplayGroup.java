@@ -16,6 +16,7 @@ import er.extensions.batching.IBatchingList;
  * this object is a fake array just like ERXBatchingDisplayGroup uses.
  * 
  * @author mschrag
+ * @param <T> 
  */
 public class ERXListDisplayGroup<T> extends WODisplayGroup {
 	private List<T> _objectList;

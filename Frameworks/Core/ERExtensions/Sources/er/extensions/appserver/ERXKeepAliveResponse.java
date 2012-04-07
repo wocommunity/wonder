@@ -6,7 +6,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import com.webobjects.foundation.NSForwardException;
@@ -70,7 +69,7 @@ public class ERXKeepAliveResponse extends ERXResponse {
 				}
 			}
 
-		}, 1, Integer.MAX_VALUE); // MS: turning it up to 11
+		}, 1, Long.MAX_VALUE); // MS: turning it up to 11
 	}
 
 	/**

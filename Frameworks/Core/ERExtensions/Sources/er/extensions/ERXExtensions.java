@@ -11,10 +11,8 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.locks.Lock;
@@ -1252,7 +1250,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 	    			}
 	    		}
 	    	}
-	    	ERXExtensions.initApp(null, woaFolder.toURL(), applicationSubclass, args);
+	    	ERXExtensions.initApp(null, woaFolder.toURI().toURL(), applicationSubclass, args);
 		}
 		catch (IOException e) {
 			throw new NSForwardException(e);

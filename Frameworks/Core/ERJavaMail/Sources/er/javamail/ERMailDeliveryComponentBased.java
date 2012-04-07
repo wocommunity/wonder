@@ -85,7 +85,7 @@ public abstract class ERMailDeliveryComponentBased extends ERMailDelivery {
 			// CHECKME: It's probably not a good idea to do this here
 			// since the context could also have been generating relative URLs
 			// unless the context is created from scratch
-			context._generateCompleteURLs();
+			context.generateCompleteURLs();
 			WOMessage response = component.generateResponse();
 			contentString = response.contentString();
 		}

@@ -102,6 +102,7 @@ public class ERWOAdaptorUtilities {
 		String serverName = context.request()._serverName();
 		String serverPort = context.request()._serverPort();
 		String sessionID = context.session().sessionID();
+		//TODO secure websocket support
 		return "ws://" + serverName + ":" + serverPort + "?" + WOApplication.application().sessionIdKey() + "=" + sessionID;
 	}
 	

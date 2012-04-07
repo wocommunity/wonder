@@ -255,7 +255,8 @@
             <param name="project.principal.class" value="er.erxtest.Application" />
             <param name="project.name" value="ERXTest" />
             <param name="project.dir" value="Tests/ERXTest" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERPrototypes/JavaDerbyAdaptor/JavaMemoryAdaptor/ERChronic" />
+            <param name="wo.external.root.bundles"
+                   value="${frameworks.wonder.core}/ERPrototypes/JavaDerbyAdaptor/JavaMemoryAdaptor/ERChronic/ExcelGenerator" />
         </antcall>
     </target>
 
@@ -326,6 +327,16 @@
        </antcall>
     </target>
 
+	<target name="ERPDFExamples.all">
+        <antcall target="global.application.${build.action}" >
+            <param name="project.principal.class" value="er.pdfexamples.Application" />
+            <param name="project.name" value="ERPDFExamples" />
+            <param name="project.dir" value="Examples/Reporting/ERPDFExamples" />
+            <param name="wo.system.root.bundles" value="${frameworks.system.core}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERPDFGeneration" />
+       </antcall>
+    </target>
+    
 	<target name="BackgroundTasks.all">
         <antcall target="global.application.${build.action}" >
             <param name="project.principal.class" value="wowodc.background.appserver.Application" />
@@ -405,7 +416,7 @@
             <param name="project.dir" value="Applications/BugTracker" />
 
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.logic}/Ajax/BTBusinessLogic/DRGrouping/WRReporting/ERPlot/ERRest/ERAttachment/ERTaggable/DerbyPlugIn/PostgresqlPlugIn/ExcelGenerator/WOOgnl/ERCaptcha/ERSelenium/ERCalendar/ERJavaMail/ERExcelLook/ERCaching" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.logic}/Ajax/BTBusinessLogic/DRGrouping/WRReporting/ERPlot/ERRest/ERAttachment/ERTaggable/DerbyPlugIn/PostgresqlPlugIn/ExcelGenerator/WOOgnl/ERCaptcha/ERSelenium/ERCalendar/ERJavaMail/ERExcelLook" />
         </antcall>
     </target>
 
@@ -1063,7 +1074,7 @@
             <param name="project.principal.class" value="er.ajax.Ajax" />
             <param name="project.name" value="MooTools" />
             <param name="project.dir" value="Frameworks/Ajax/MooTools" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax/ERAttachment" />
         </antcall>
     </target>
     <target name="MooToolsExample.all">
@@ -1141,7 +1152,7 @@
 
     <target name="common.applications.all" depends="BugTracker.all, ERMailer.all, Uber.all, SecretPal.all, ERXTest.all, PluginTest.all" />
 
-    <target name="common.examples.all" depends="ERSeleniumExample.all, ERIndexingExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, AjaxExample2.all, YUIExample.all, EROpenIDExample.all, JavaRESTAdaptorExample.all, ERDivaliteExample.all, TickTockMan.all, ERComponentTour.all, ERRestRouteExample.all, Movies.all, ERWebSocketExample.all, ERJasperReportsExample.all, BackgroundTasks.all, ERCayenneExample.all, ERDistributionExampleModel.all, ERDistributionExampleServer.all, ERDistributionExampleClient.all, MooToolsExample.all" />
+    <target name="common.examples.all" depends="ERSeleniumExample.all, ERIndexingExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, AjaxExample2.all, YUIExample.all, EROpenIDExample.all, JavaRESTAdaptorExample.all, ERDivaliteExample.all, TickTockMan.all, ERComponentTour.all, ERRestRouteExample.all, Movies.all, ERWebSocketExample.all, ERJasperReportsExample.all, BackgroundTasks.all, ERCayenneExample.all, ERDistributionExampleModel.all, ERDistributionExampleServer.all, ERDistributionExampleClient.all, MooToolsExample.all, ERPDFExamples.all" />
 
     <target name="dynareporting.frameworks.all" depends="DRGrouping.all, WRReporting.all" />
     <target name="dynareporting.examples.all" depends="DocsByExample.all, DynaReporter.all, DRGroupingTest.all" />
