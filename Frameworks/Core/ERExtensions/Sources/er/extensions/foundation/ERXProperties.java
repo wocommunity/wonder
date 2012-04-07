@@ -1174,6 +1174,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     		this.key = key;
     		this.value = value;
     	}
+    	@Override
     	public String toString() {
     		return key + " = " + value;
     	}
@@ -1417,6 +1418,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * 	@return プロパティー値
      * </span>
      */
+    @Override
     public String getProperty(String key) {
         String property = null;
         String application = applicationNameForAppending();
