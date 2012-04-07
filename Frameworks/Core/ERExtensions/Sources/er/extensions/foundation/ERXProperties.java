@@ -78,7 +78,11 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     /** WebObjects version number as double */ 
     private static double _webObjectsVersionDouble;
 
-    /** Internal cache of type converted values to avoid reconverting attributes that are asked for frequently */
+    /** 
+     * <span class="en">Internal cache of type converted values to avoid reconverting attributes that are asked for frequently</span> 
+     * 
+     * <span class="ja">タイプ変換されている値を内部でキャシュし、何回も同じ変換をする必要なくなります</span>
+     */
     private static Map _cache = Collections.synchronizedMap(new HashMap());
 
     
@@ -112,6 +116,13 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
        _useLoadtimeAppSpecifics = ERXValueUtilities.booleanValueWithDefault(System.getProperty("NSProperties.useLoadtimeAppSpecifics"), true);
     }
 
+    /**
+     * <span class="ja">
+     * 	デフォルト値を保持するかどかをセットします
+     * 
+     * 	@return boolean - true の場合には保持する
+     * </span>
+     */
     private static boolean retainDefaultsEnabled() {
         if (RetainDefaultsEnabled == null) {
             final String propertyValue = ERXSystem.getProperty("er.extensions.ERXProperties.RetainDefaultsEnabled", "false");
@@ -811,10 +822,19 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
     
     /** 
+     * <span class="en">
      * Copies all properties from source to dest. 
      * 
-     * @param source  properties copied from 
-     * @param dest  properties copied to
+     * @param source - properties copied from 
+     * @param dest - properties copied to
+     * </span>
+     * 
+     * <span class="ja">
+     * 全てのプロパティーをコピー元からコピー先へコピーします。
+     * 
+     * @param source - コピー元するプロパティー
+     * @param dest - コピー先のプロパティー
+     * </span>
      */
     public static void transferPropertiesFromSourceToDest(Properties source, Properties dest) {
         if (source != null) {
@@ -828,6 +848,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 
     
     /**
+     * <span class="en">
      * Reads a Java properties file at the given path 
      * and returns a {@link java.util.Properties Properties} object 
      * as the result. If the file does not exist, returns 
@@ -836,6 +857,17 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @param path  file path to the properties file
      * @return properties object with the values from the file
      *      specified.
+     * </span>
+     * 
+     * <span class="ja">
+     * 	指定パスを使って、 Java プロパティー・ファイルを読込み、
+     *  {@link java.util.Properties Properties} オブジェクトとして戻します。
+     *  ファイルが存在していなければ、empty プロパティー・オブジェクトが戻ります。
+     *  
+     *  @param path - プロパティー・ファイルへのパス
+     *  
+     *  @return ファイルの内容を持つプロパティー・オブジェクト
+     * </span>
      */
     // FIXME: This shouldn't eat the exception
     public static Properties propertiesFromPath(String path) {
@@ -862,11 +894,25 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
 
     /**
+     * <span class="en">
      * Gets the properties for a given file.
      * 
-     * @param file the properties file
+     * @param file - the properties file
+     * 
      * @return properties from the given file
+     * 
      * @throws java.io.IOException if the file is not found or cannot be read
+     * </span>
+     * 
+     * <span class="ja">
+     * 	指定ファイルのプロパティーをプロパティー・オブジェクトへロードします。
+     * 
+     * 	@param file - プロパティー・ファイル
+     * 
+     * 	@return ファイルの内容を持つプロパティー・オブジェクト
+     * 
+     * 	@throws java.io.IOException if the file is not found or cannot be read
+     * </span>
      */
     public static Properties propertiesFromFile(File file) throws java.io.IOException {
         if (file == null)
@@ -877,13 +923,22 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
     
     /**
+     * <span class="en">
      * Sets and returns properties object with the values from 
      * the given command line arguments string array. 
      * 
-     * @param argv  string array typically provided by 
+     * @param argv - string array typically provided by 
      *               the command line arguments
-     * @return properties object with the values from 
+     * @return properties - object with the values from 
      *          the argv
+     * </span>  
+     * <span class="ja">
+     * 	コマンドライン等で渡されている文字列配列をプロパティー・オブジェクトへロードします。
+     * 
+     * @param argv - コマンドライン等で渡されている文字列配列
+     * 
+     * @return argv の内容を持つプロパティー・オブジェクト
+     * </span>
      */
     public static Properties propertiesFromArgv(String[] argv) {
     	ERXProperties._Properties properties = new ERXProperties._Properties();
@@ -897,6 +952,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
 
     /** 
+     * <span class="en">
      * Returns an array of paths to the <code>Properties</code> and 
      * <code>WebObjects.properties</code> files contained in the 
      * application/framework bundles and home directory. 
@@ -909,6 +965,18 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * will change between versions of the dev-tools.
      * 
      * @return paths to Properties files
+     * </span>
+     * 
+     * <span class="ja">
+     * 	application/framework バンドルとホーム・ダイレクトリーに含む <code>Properties</code> と
+     *  <code>WebObjects.properties</code> ファイルへのファイル・パス配列を戻します
+     *  <p>
+     *  プロジェクト・ビルダーがプロジェクトを開いていれば、バンドルではなく、プロジェクトへのパスが戻されます。
+     *  <p>
+     *  開いているプロジェクト問題は開発ツールによって違っています。
+     *  
+     *  @return プロパティー・ファイルパス配列
+     * </span>
      */
     public static NSArray pathsForUserAndBundleProperties() {
         return pathsForUserAndBundleProperties(false);
@@ -925,7 +993,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     	}
     }
     
-    public static NSArray pathsForUserAndBundleProperties(boolean reportLoggingEnabled) {
+    public static NSArray<String> pathsForUserAndBundleProperties(boolean reportLoggingEnabled) {
         NSMutableArray<String> propertiesPaths = new NSMutableArray();
         NSMutableArray<String> projectsInfo = new NSMutableArray();
 
@@ -1111,6 +1179,13 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     	}
     }
 
+    /**
+     * <span class="ja">
+     * 	全プロパティーの配列を戻します
+     * 
+     * 	@return 全プロパティーの配列
+     * </span>
+     */
     public static NSArray<Property> allProperties() {
     	NSMutableArray props = new NSMutableArray();
     	for (Enumeration e = ERXSystem.getProperties().keys(); e.hasMoreElements();) {
@@ -1225,11 +1300,19 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
 
     /**
+     * <span class="en">
      * Gets an array of optionally defined configuration files.  For each file, if it does not
      * exist as an absolute path, ERXProperties will attempt to resolve it as an application resource
      * and use that instead.
      *  
      * @return array of configuration file names
+     * </span>
+     * <span class="ja">
+     * オプションで定義セットアップファイルの配列を取得します。各ファイル、完全パスとして存在していなければ、
+     * ERXProperties はアプリケーション・リソースとして処理します。
+     *  
+     * @return オプションで定義セットアップファイルの配列
+     * </span>
      */
     public static NSArray optionalConfigurationFiles() {
     	NSArray immutableOptionalConfigurationFiles = arrayForKey("er.extensions.ERXProperties.OptionalConfigurationFiles");
@@ -1271,6 +1354,9 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         return actualPath;
     }
     
+    /**
+     * <span class="ja">システム・プロパティーが変更されたので、キャシュをクリアする</span>
+     */
     public static void systemPropertiesChanged() {
         synchronized (AppSpecificPropertyNames) {
             AppSpecificPropertyNames.clear();
@@ -1310,11 +1396,26 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
 
     /**
+     * <span class="en">
      * Overriding the default getProperty method to first check:
-     * key.&lt;ApplicationName> before checking for key. If nothing
+     * key.&lt;ApplicationName&gt; before checking for key. If nothing
      * is found then key.Default is checked.
-     * @param key to check
+     * 
+     * @param key - to check
+     * 
      * @return property value
+     * </span>
+     * 
+     * <span class="ja">
+     * 	デフォルト・プロパティーの getProperty メソッドをオーバライドします。
+     * 
+     * 	キー &lt;ApplicationName&gt; を先にチェックします。
+     * 	何も見つからなければ、キーを使用します。
+     * 
+     * 	@param key - チェックするキー
+     * 
+     * 	@return プロパティー値
+     * </span>
      */
     public String getProperty(String key) {
         String property = null;
