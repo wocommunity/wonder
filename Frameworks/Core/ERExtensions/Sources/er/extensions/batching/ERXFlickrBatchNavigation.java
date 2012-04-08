@@ -1,5 +1,7 @@
 package er.extensions.batching;
 
+import java.io.Serializable;
+
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
@@ -263,7 +265,7 @@ public class ERXFlickrBatchNavigation extends ERXComponent {
 		}
 	}
 
-	public static class PageNumber {
+	public static class PageNumber implements Serializable {
 		private Integer _pageNumber;
 		private boolean _ellipsis;
 
