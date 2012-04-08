@@ -175,6 +175,7 @@ public class ERXEC extends EOEditingContext {
 	/**
 	 * Returns the value of the <code>er.extensions.ERXEC.safeLocking</code> property, which is the
 	 * new catch-all setting that turns on all of the recommended locking settings.
+	 * @return the value of the <code>er.extensions.ERXEC.safeLocking</code> property
 	 */
 	public static boolean safeLocking() {
 		return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXEC.safeLocking", false);
@@ -183,6 +184,7 @@ public class ERXEC extends EOEditingContext {
 	/**
 	 * Returns the value of the <code>er.extensions.ERXEC.defaultAutomaticLockUnlock</code> property, which 
 	 * turns on auto-locking by default. Also returns true if <code>safeLocking</code> is true.
+	 * @return the value of the <code>er.extensions.ERXEC.defaultAutomaticLockUnlock</code> property
 	 */
 	public static boolean defaultAutomaticLockUnlock() {
 		return ERXProperties.booleanForKey("er.extensions.ERXEC.defaultAutomaticLockUnlock") || ERXEC.safeLocking();
@@ -192,6 +194,7 @@ public class ERXEC extends EOEditingContext {
 	 * Returns the value of the <code>er.extensions.ERXEC.defaultCoalesceAutoLocks</code> property, which 
 	 * turns on coalescing auto-locks, meaning that the EC gets locked once and unlocked at the end of the RR loop.
 	 * Also returns true if <code>safeLocking</code> is true.
+	 * @return the value of the <code>er.extensions.ERXEC.defaultCoalesceAutoLocks</code> property
 	 */
 	public static boolean defaultCoalesceAutoLocks() {
 		return ERXProperties.booleanForKey("er.extensions.ERXEC.defaultCoalesceAutoLocks") || ERXEC.safeLocking();
@@ -201,6 +204,7 @@ public class ERXEC extends EOEditingContext {
 	 * Returns the value of the <code>er.extensions.ERXEC.useUnlocker</code> property, which 
 	 * turns on unlocking at the end of the RR loop.
 	 * Also returns true if <code>safeLocking</code> is true.
+	 * @return the value of the <code>er.extensions.ERXEC.useUnlocker</code> property
 	 */
 	public static boolean useUnlocker() {
 		if (useUnlocker == null) {
@@ -224,6 +228,7 @@ public class ERXEC extends EOEditingContext {
 	 * <code>kill -HUP</code>, by the
 	 * <code>ERXDirectAction/showOpenEditingContextLockTraces</code> action or 
 	 * by setting your App's statistic store to <code>ERXStatisticStore</code>.
+	 * @return the value of the <code>er.extensions.ERXEC.traceOpenLocks</code> property
 	 */
 	public static boolean traceOpenLocks() {
 		if (traceOpenLocks == null) {
@@ -244,6 +249,7 @@ public class ERXEC extends EOEditingContext {
 	 * <code>ERXDirectAction/showOpenEditingContextLockTraces</code> action or 
 	 * by setting your App's statistic store to <code>ERXStatisticStore</code>.
 	 * Also returns true if <code>traceOpenLocks</code> is true.
+	 * @return the value of the <code>er.extensions.ERXEC.markOpenLocks</code> property
 	 */
 	public static boolean markOpenLocks() {
 		if (markOpenLocks == null) {
@@ -259,6 +265,7 @@ public class ERXEC extends EOEditingContext {
 	
 	/**
 	 * Sets whether or not open editing context lock tracing is enabled.
+	 * @param value 
 	 */
 	public static void setTraceOpenLocks(boolean value) {
 		traceOpenLocks = value;
@@ -266,6 +273,7 @@ public class ERXEC extends EOEditingContext {
 	
 	/**
 	 * Sets whether or not open editing context lock marking is enabled.
+	 * @param value 
 	 */
 	public static void setMarkOpenLocks(boolean value) {
 		markOpenLocks = value;
@@ -462,7 +470,8 @@ public class ERXEC extends EOEditingContext {
 		 */
 	}
 
-	/** Utility to delete a bunch of objects. */
+	/** Utility to delete a bunch of objects. 
+	 * @param objects */
 	public void deleteObjects(NSArray objects) {
 		for (int i = objects.count(); i-- > 0;) {
 			Object o = objects.objectAtIndex(i);
@@ -475,7 +484,9 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
-	/** Decides on a per-EC-level if autoLocking should be used. */
+	/** Decides on a per-EC-level if autoLocking should be used. 
+	 * @return true if autoLocking should be used
+	 */
 	public boolean useAutoLock() {
 		if (useAutolock == null) {
 			useAutolock = Boolean.valueOf(defaultAutomaticLockUnlock());
@@ -483,7 +494,9 @@ public class ERXEC extends EOEditingContext {
 		return useAutolock.booleanValue();
 	}
 
-	/** Sets whether to use autoLocking on this EC. */
+	/** Sets whether to use autoLocking on this EC. 
+	 * @param value 
+	 */
 	public void setUseAutoLock(boolean value) {
 		useAutolock = Boolean.valueOf(value);
 	}
@@ -495,6 +508,7 @@ public class ERXEC extends EOEditingContext {
 	 * attempts to solve this problem by leaving your auto lock open after the
 	 * first use. This "hanging lock" will be cleaned up at the end of the RR
 	 * loop by the unlocker.
+	 * @return true if coalesceAutoLocks is enabled
 	 */
 	public boolean coalesceAutoLocks() {
 		if (coalesceAutoLocks == null) {
@@ -508,6 +522,7 @@ public class ERXEC extends EOEditingContext {
 
 	/**
 	 * Sets whether or not coalescing auto locks should be enabled.
+	 * @param value 
 	 */
 	public void setCoalesceAutoLocks(boolean value) {
 		coalesceAutoLocks = Boolean.valueOf(value);
@@ -516,13 +531,14 @@ public class ERXEC extends EOEditingContext {
 	/**
 	 * If traceOpenEditingContextLocks is true, returns the stack trace from
 	 * when this EC was created
+	 * @return the stack trace from when this EC was created
 	 */
 	public Exception creationTrace() {
 		return creationTrace;
 	}
 
 	/**
-	 * If traceOpenEditingContextLocks is true, returns the stack trace from
+	 * @return If traceOpenEditingContextLocks is true, returns the stack trace from
 	 * when this EC was locked
 	 */
 	public synchronized NSDictionary<Thread, NSMutableArray<Exception>> openLockTraces() {
@@ -1777,6 +1793,10 @@ public class ERXEC extends EOEditingContext {
 
 	/**
 	 * Factory method to create a new tolerant editing context.
+	 * @param parent the parent object store
+	 * @param retry true if the ec should retry on failed save
+	 * @param merge true if ec changes should be merged
+	 * @return a new ec
 	 */
 	public static EOEditingContext newTolerantEditingContext(EOObjectStore parent, boolean retry, boolean merge) {
 		ERXEC ec = (ERXEC) newEditingContext(parent);
