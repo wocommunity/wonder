@@ -48,7 +48,7 @@ public class ERDDebuggingHelp extends WOComponent implements ERXDebugMarker.Debu
     public boolean synchronizesVariablesWithBindings() { return false; }
     
     public boolean showHelp() {
-        return ERDirectToWeb.d2wDebuggingEnabled(session()) || ERXValueUtilities.booleanValue(valueForBinding("condition"));
+        return (session() != null && ERDirectToWeb.d2wDebuggingEnabled(session())) || ERXValueUtilities.booleanValue(valueForBinding("condition"));
     }
     public boolean d2wComponentNameDebuggingEnabled() {
         return ERDirectToWeb.d2wComponentNameDebuggingEnabled(session());
