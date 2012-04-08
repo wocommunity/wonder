@@ -2,9 +2,9 @@ package er.directtoweb.components;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WOSession;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.D2WHead;
+import com.webobjects.directtoweb.ERD2WContext;
 import com.webobjects.foundation.NSSelector;
 
 import er.directtoweb.ERD2WFactory;
@@ -31,7 +31,7 @@ public class ERD2WHead extends D2WHead {
             return (String) context.valueForKey("displayNameForPageConfiguration");
         } else {
             if(_d2wContext == null)
-                _d2wContext = new D2WContext((WOSession)null);
+                _d2wContext = ERD2WContext.newContext();
             synchronized(_d2wContext) {
                 _d2wContext.setDynamicPage(ERD2WFactory.pageConfigurationFromPage(context().page()));
                 return (String)_d2wContext.valueForKey("displayNameForPageConfiguration");

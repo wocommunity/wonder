@@ -15,6 +15,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.ERD2WContext;
 import com.webobjects.eoaccess.EOGeneralAdaptorException;
 import com.webobjects.eocontrol.EOArrayDataSource;
 import com.webobjects.eocontrol.EOClassDescription;
@@ -264,7 +265,7 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
     private D2WContext _d2wContextForMassChangeEO;
     public D2WContext d2wContextForMassChangeEO() {
         if (_d2wContextForMassChangeEO == null) {
-            _d2wContextForMassChangeEO = new D2WContext(d2wContext());
+            _d2wContextForMassChangeEO = ERD2WContext.newContext(d2wContext());
             _d2wContextForMassChangeEO.takeValueForKey(Boolean.TRUE, MassChangeEntityDisplayKey);
         }
         return _d2wContextForMassChangeEO;

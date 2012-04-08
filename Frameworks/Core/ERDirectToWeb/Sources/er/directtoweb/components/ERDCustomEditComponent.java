@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.ERD2WContext;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
@@ -118,7 +119,7 @@ public abstract class ERDCustomEditComponent extends ERDCustomComponent {
      */
     public NSArray defaultSortOrderingsForDestinationEntity() {
         if (_defaultSortOrderingsForDestinationEntity == null) {
-            final D2WContext context = new D2WContext();
+            final D2WContext context = ERD2WContext.newContext();
             final NSArray sortOrderingDefinition;
             final int sortOrderingDefinitionCount;
             NSMutableArray sortOrderings = null;
