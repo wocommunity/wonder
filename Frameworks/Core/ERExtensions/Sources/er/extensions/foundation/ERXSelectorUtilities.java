@@ -11,6 +11,8 @@ import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSSelector;
 
+import er.extensions.eof.ERXConstant;
+
 /**
  * NSSelector utilities.  These exist mostly to allow selector invocation without explicitly
  * catching the non-runtime exceptions that can be thrown by <code>NSSelector.invoke()</code>.
@@ -71,6 +73,6 @@ public class ERXSelectorUtilities {
      * @param methodName
      */
     public static NSSelector notificationSelector(String methodName) {
-        return new NSSelector(methodName, new Class[] {NSNotification.class});
+        return new NSSelector(methodName, ERXConstant.NotificationClassArray);
     }
 }
