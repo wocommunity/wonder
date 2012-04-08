@@ -1008,7 +1008,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     	}
     }
     
-    public static NSArray pathsForUserAndBundleProperties(boolean reportLoggingEnabled) {
+    public static NSArray<String> pathsForUserAndBundleProperties(boolean reportLoggingEnabled) {
         NSMutableArray<String> propertiesPaths = new NSMutableArray();
         NSMutableArray<String> projectsInfo = new NSMutableArray();
 
@@ -1088,6 +1088,8 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         String applicationUserPropertiesPath = ERXProperties.applicationUserProperties();
     	addIfPresent("Application-User Properties", applicationUserPropertiesPath, propertiesPaths, projectsInfo);
         
+        optionalPropertiesLoader(ERXSystem.getProperty("user.name"), propertiesPaths, projectsInfo);
+
         /*  Report the result */
 		if (reportLoggingEnabled && projectsInfo.count() > 0 && log.isInfoEnabled()) {
 			StringBuffer message = new StringBuffer();
@@ -1101,6 +1103,107 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 		}
 
     	return propertiesPaths.immutableClone();
+    }
+
+    /** 
+     * <span class="en">
+     * 	Making it possible to use Properties File in the Application more
+     * 	powerful, specially for newcomers.
+     * 	For every Framework it will try to call also following 
+     * 		Properties.[Framework] and Properties.[Framework].[Username]
+     * 	Also there is a Propertie for
+     * 		Properties.log4j, Properties.log4j.[Username] for logging
+     * 		Properties.database, Properties.database.[Username] for database infos
+     * 		Properties.multilanguage, Properties.multilanguage.[Username] for Encoding
+     * 		Properties.migration, Properties.migration.[Username] for Migration
+     * 
+     * 	@param userName - Username
+     * 	@param propertiesPaths - Properites Path
+     * 		{@link ERXProperties#pathsForUserAndBundleProperties}
+     *  @param projectsInfo - Project Info
+     * 		{@link ERXProperties#pathsForUserAndBundleProperties}
+     * </span>
+     * 
+     * <span class="ja">
+     * 	アプリケーション内でプロパティーをもっと活躍させる為に種類別おプロパティーが追加されました。
+     * 	初心者を含めてとても使いやすくなります。
+     * 	各フレームワークへのプロパティー・ファイルを読み込むことを試します 
+     * 		Properties.[Framework] と Properties.[Framework].[Username]
+     * 	他にも次のプロパティーがあります
+     * 		Properties.log4j, Properties.log4j.[Username] ログ専用
+     * 		Properties.database, Properties.database.[Username] データベース情報
+     * 		Properties.multilanguage, Properties.multilanguage.[Username] エンコーディング
+     * 		Properties.migration, Properties.migration.[Username] マイグレーション
+     * 
+     * 	@param userName - ユーザ名
+     * 	@param propertiesPaths - プロパティー・パス
+     * 		{@link ERXProperties#pathsForUserAndBundleProperties}
+     *  @param projectsInfo - プロジェクト情報
+     * 		{@link ERXProperties#pathsForUserAndBundleProperties}
+     * </span>
+     */
+    private static void optionalPropertiesLoader(String userName, NSMutableArray<String> propertiesPaths, NSMutableArray<String> projectsInfo) {
+
+    	/** Properties.log4j.<userName> -- per-Application-per-User properties */
+        String logPropertiesPath;
+        logPropertiesPath = ERXProperties.variantPropertiesInBundle("log4j", "app");
+        if(logPropertiesPath != null) {
+        	addIfPresent("Application-User Log4j Properties", logPropertiesPath, propertiesPaths, projectsInfo);
+        }
+        logPropertiesPath = ERXProperties.variantPropertiesInBundle("log4j." + userName, "app");
+        if(logPropertiesPath != null) {
+        	addIfPresent("Application-User Log4j Properties", logPropertiesPath, propertiesPaths, projectsInfo);
+        }
+
+        /** Properties.database.<userName> -- per-Application-per-User properties */
+        String databasePropertiesPath;
+        databasePropertiesPath = ERXProperties.variantPropertiesInBundle("database", "app");
+        if(databasePropertiesPath != null) {
+        	addIfPresent("Application-User Database Properties", databasePropertiesPath, propertiesPaths, projectsInfo);
+        }
+        databasePropertiesPath = ERXProperties.variantPropertiesInBundle("database." + userName, "app");
+        if(databasePropertiesPath != null) {
+        	addIfPresent("Application-User Database Properties", databasePropertiesPath, propertiesPaths, projectsInfo);
+        }
+   	
+        /** Properties.multilanguage.<userName> -- per-Application-per-User properties */
+        String multilanguagePath;
+        multilanguagePath = ERXProperties.variantPropertiesInBundle("multilanguage", "app");
+        if(multilanguagePath != null) {
+        	addIfPresent("Application-User Multilanguage Properties", multilanguagePath, propertiesPaths, projectsInfo);
+        }
+        multilanguagePath = ERXProperties.variantPropertiesInBundle("multilanguage." + userName, "app");
+        if(multilanguagePath != null) {
+        	addIfPresent("Application-User Multilanguage Properties", multilanguagePath, propertiesPaths, projectsInfo);
+        }
+    	
+        /** Properties.migration -- per-Application properties */
+        String migrationPath;
+        migrationPath = ERXProperties.variantPropertiesInBundle("migration", "app");
+        if(migrationPath != null) {
+        	addIfPresent("Application-User Migration Properties", migrationPath, propertiesPaths, projectsInfo);
+        }
+        migrationPath = ERXProperties.variantPropertiesInBundle("migration." + userName, "app");
+        if(migrationPath != null) {
+        	addIfPresent("Application-User Migration Properties", migrationPath, propertiesPaths, projectsInfo);
+        }
+    	
+        /** Properties.<frameworkName>.<userName> -- per-Application-per-User properties */
+        @SuppressWarnings("unchecked")
+        NSArray<String> frameworkNames = (NSArray<String>) NSBundle.frameworkBundles().valueForKey("name");
+        Enumeration<String> e = frameworkNames.reverseObjectEnumerator();
+        while (e.hasMoreElements()) {
+          String frameworkName = e.nextElement();
+          String userPropertiesPath;
+          userPropertiesPath = ERXProperties.variantPropertiesInBundle(frameworkName, "app");
+          if(userPropertiesPath != null) {
+        	  addIfPresent(frameworkName + ".framework.common", userPropertiesPath, propertiesPaths, projectsInfo);
+          }
+          userPropertiesPath = ERXProperties.variantPropertiesInBundle(frameworkName + "." + userName, "app");
+          if(userPropertiesPath != null) {
+        	  addIfPresent(frameworkName + ".framework.user", userPropertiesPath, propertiesPaths, projectsInfo);
+          }
+        }
     }
 
     /**
