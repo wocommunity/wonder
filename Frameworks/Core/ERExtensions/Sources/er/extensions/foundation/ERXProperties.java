@@ -370,14 +370,27 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
 
     /**
+     * <span class="en">
      * Cover method for returning an NSArray for a
      * given system property and set a default value if not given.
-     * @param s system property
-     * @param defaultValue default value
+     * @param s - system property
+     * @param defaultValue - default value
+     * 
      * @return array de-serialized from the string in
      *      the system properties or default value
+     * </span>
+     * 
+     * <span class="ja">
+     * 	システム・プロパティーの結果を NSArray で戻します
+     * 
+     * 	@param s - キー（システム・プロパティー内）
+     * 	@param defaultValue - デフォルト値
+     * 
+     * 	@return システム・プロパティー内の連結した String を NSArray に変換した配列
+     * </span>
      */
-    public static NSArray arrayForKeyWithDefault(final String s, final NSArray defaultValue) {
+    @SuppressWarnings("javadoc")
+	public static NSArray arrayForKeyWithDefault(final String s, final NSArray defaultValue) {
         final String propertyName = getApplicationSpecificPropertyName(s);
 		NSArray value;
 		Object cachedValue = _cache.get(propertyName);
@@ -458,25 +471,53 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
     
     /**
+     * <span class="en">
      * Cover method for returning an NSDictionary for a
      * given system property.
-     * @param s system property
+     * 
+     * @param s - system property
+     * 
      * @return dictionary de-serialized from the string in
      *      the system properties
+     * </span>
+     * 
+     * <span class="ja">
+     * 	システム・プロパティーの結果を NSDictionary で戻します
+     * 
+     * 	@param s - キー（システム・プロパティー内）
+     * 
+     * 	@return システム・プロパティー内の NSDictionary に変換
+     * </span>
      */    
-    public static NSDictionary dictionaryForKey(String s) {
+    @SuppressWarnings("javadoc")
+	public static NSDictionary dictionaryForKey(String s) {
         return dictionaryForKeyWithDefault(s, null);
     }
 
     /**
+     * <span class="en">
+     * dictionaryForKeyWithDefault
      * Cover method for returning an NSDictionary for a
      * given system property or the default value.
-     * @param s system property
-     * @param defaultValue default value
+     * 
+     * @param s  - system property
+     * @param defaultValue - default value
+     * 
      * @return dictionary de-serialized from the string in
      *      the system properties
+     * </span>
+     * 
+     * <span class="ja">
+     * 	システム・プロパティーの結果を NSDictionary で戻します
+     * 
+     * 	@param s - キー（システム・プロパティー内）
+     * 	@param defaultValue - デフォルト値
+     * 
+     * 	@return システム・プロパティーの結果を NSDictionary
+     * </span>
      */
-    public static NSDictionary dictionaryForKeyWithDefault(final String s, final NSDictionary defaultValue) {
+    @SuppressWarnings("javadoc")
+	public static NSDictionary dictionaryForKeyWithDefault(final String s, final NSDictionary defaultValue) {
         final String propertyName = getApplicationSpecificPropertyName(s);
 		NSDictionary value;
 		Object cachedValue = _cache.get(propertyName);
@@ -833,26 +874,52 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
 
     /**
+     * <span class="en">
      * Returns an array of strings separated with the given separator string.
      * 
-     * @param key the key to lookup
-     * @param separator the separator (",")
+     * @param key - the key to lookup
+     * @param separator - the separator (",")
+     * 
      * @return the array of strings or NSArray.EmptyArray if not found
+     * </span>
+     * <span class="ja">
+     * 	システム・プロパティーの結果を指定 key と指定 separator より配列を戻します。
+     * 	取得文字列は句切れ文字で配列に切り出します。
+     * 
+     * 	@param key - キー（システム・プロパティー内）
+     * 	@param separator - 句切れ文字 (",")
+     * 
+     * 	@return 文字列よりの配列、無ければ NSArray.EmptyArray が戻ります
+     * </span>
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "javadoc" })
     public static NSArray<String> componentsSeparatedByString(String key, String separator) {
     	return ERXProperties.componentsSeparatedByStringWithDefault(key, separator, (NSArray<String>)NSArray.EmptyArray);
     }
 
     /**
+     * <span class="en">
      * Returns an array of strings separated with the given separator string.
      * 
-     * @param key the key to lookup
-     * @param separator the separator (",")
-     * @param defaultValue the default array to return if there is no value
+     * @param key - the key to lookup
+     * @param separator - the separator (",")
+     * @param defaultValue - the default array to return if there is no value
+     * 
      * @return the array of strings
+     * </span>
+     * 
+     * <span class="ja">
+     * 	システム・プロパティーの結果を指定 key と指定 separator より配列を戻します。
+     * 	取得文字列は句切れ文字で配列に切り出します。
+     * 
+     * 	@param key - キー（システム・プロパティー内）
+     * 	@param separator - 句切れ文字 (",")
+     * 	@param defaultValue - 値が無ければ、デフォルト値
+     * 
+     * 	@return 文字列よりの配列、無ければ defaultValue が戻ります
+     * </span>
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "javadoc" })
 	public static NSArray<String> componentsSeparatedByStringWithDefault(String key, String separator, NSArray<String> defaultValue) {
     	NSArray<String> array;
     	String str = stringForKeyWithDefault(key, null);
@@ -866,20 +933,39 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
     
     /**
+     * <span class="en">
      * Sets an array in the System properties for
      * a particular key.
-     * @param array to be set in the System properties
-     * @param key to be used to get the value
+     * @param array - to be set in the System properties
+     * @param key - to be used to get the value
+     * </span>
+     * 
+     * <span class="ja">
+     * 	システム・プロパティーに NSArray をセットします
+     * 
+     * 	@param array - システム・プロパティーにセットする配列
+     * 	@param key - セットする為のキー
+     * </span>
      */
     public static void setArrayForKey(NSArray array, String key) {
         setStringForKey(NSPropertyListSerialization.stringFromPropertyList(array), key);
     }
 
     /**
+     * <span class="en">
      * Sets a dictionary in the System properties for
      * a particular key.
-     * @param dictionary to be set in the System properties
-     * @param key to be used to get the value
+     * 
+     * @param dictionary - to be set in the System properties
+     * @param key - to be used to get the value
+     * </span>
+     * 
+     * <span class="ja">
+     * システム・プロパティーの指定キーをディクショナリー内にセットします
+     * 
+     * @param dictionary - システム・プロパティーをセットするディクショナリー
+     * @param key - 値をアクセスするキー
+     * </span>
      */    
     public static void setDictionaryForKey(NSDictionary dictionary, String key) {
         setStringForKey(NSPropertyListSerialization.stringFromPropertyList(dictionary), key);
@@ -1320,12 +1406,24 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
 
     /**
+     * <span class="en">
      * Returns all of the properties in the system mapped to their evaluated values, sorted by key.
      * 
-     * @param protectValues if true, keys with the word "password" in them will have their values removed 
+     * @param protectValues - if true, keys with the word "password" in them will have their values removed 
+     * 
      * @return all of the properties in the system mapped to their evaluated values, sorted by key
+     * </span>
+     * 
+     * <span class="ja">
+     * 値にマップされているシステム内の全プロパティーをキーでソート済みとして戻します。
+     * 
+     * @param protectValues - true の場合にはパスワードを含むキーが出力されません。
+     * 
+     * @return 値にマップされているシステム内の全プロパティーをキーでソート済み
+     * </span>
      */
-    public static Map<String, String> allPropertiesMap(boolean protectValues) {
+    @SuppressWarnings("javadoc")
+	public static Map<String, String> allPropertiesMap(boolean protectValues) {
     	return propertiesMap(ERXSystem.getProperties(), protectValues);
     }
 
@@ -1391,15 +1489,29 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      }
 
     /** 
+     * <span class="en">
      * Returns the full path to the Properties file under the 
      * given project path. At the current implementation, 
      * it looks for /Properties and /Resources/Properties. 
      * If the Properties file doesn't exist, returns null.  
      * 
-     * @param projectPath  string to the project root directory
+     * @param projectPath - string to the project root directory
+     * 
      * @return  the path to the Properties file if it exists
+     * </span>
+     * 
+     * <span class="ja">
+     * 指定プロジェクト・パスのプロパティー・ファイルの完全パスを戻します。
+     * カレントの実装では、 /Properties と /Resources/Properties を参照します。
+     * プロパティー・ファイルが存在していなければ、 null が戻ります。
+     * 
+     * @param projectPath - プロジェクトのルート・ダイレクトリーへのパス
+     * 
+     * @return プロパティー・ファイルへのパス
+     * </span>
      */
-    public static String pathForPropertiesUnderProjectPath(String projectPath) {
+    @SuppressWarnings("javadoc")
+	public static String pathForPropertiesUnderProjectPath(String projectPath) {
         String path = null; 
         final NSArray supportedPropertiesPaths = new NSArray(new Object[] 
                                         {"/Properties", "/Resources/Properties"});
@@ -1419,9 +1531,20 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
     
     /**
+     * <span class="en">
      * Returns the application-specific user properties.
+     * 
+     * @return application-specific user properties
+     * </span>
+     * 
+     * <span class="ja">
+     * アプリケーション開発者プロパティーへのパスを戻します。
+     * 
+     * @return 開発者プロパティーへのパス
+     * </span>
      */
-    public static String applicationDeveloperProperties() {
+    @SuppressWarnings("javadoc")
+	public static String applicationDeveloperProperties() {
     	String applicationDeveloperPropertiesPath = null;
     	if (ERXApplication.isDevelopmentModeSafe()) {
 	        String devName = ERXSystem.getProperty("er.extensions.ERXProperties.devPropertiesName", "dev");
@@ -1445,20 +1568,46 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
 
     /**
+     * <span class="en">
      * Returns the application-specific user properties.
+     * 
+     * @return 
+     * </span>
+     * 
+     * <span class="ja">
+     * アプリケーション特定のユーザ・プロパティーへのパスを戻します。
+     * 
+     * @return ユーザ・プロパティーへのパス
+     * </span>
      */
-    public static String applicationUserProperties() {
+    @SuppressWarnings("javadoc")
+	public static String applicationUserProperties() {
     	return variantPropertiesInBundle(ERXSystem.getProperty("user.name"), "app");
     }
     
     /**
+     * <span class="en">
      * Returns the path to the application-specific system-wide file "fileName".  By default this path is /etc/WebObjects, 
      * and the application name will be appended.  For instance, if you are asking for the MyApp Properties file for the
      * system, it would go in /etc/WebObjects/MyApp/Properties.
      * 
+     * @param fileName - the Filename
+     * 
      * @return the path, or null if the path does not exist
+     * </span>
+     * 
+     * <span class="ja">
+     * アプリケーション特定の "fileName" へのパスを戻します。
+     * デフォルトでは /etc/WebObjects とアプリケーション名です。
+     * 例えば、MyApp プロパティー・ファイルへの問い合わせをすると、/etc/WebObjects/MyApp/Properties が戻ります。
+     * 
+     * @param fileName - ファイル名
+     * 
+     * @return プロパティーへのパス、無ければ null
+     * </span>
      */
-    public static String applicationMachinePropertiesPath(String fileName) {
+	@SuppressWarnings("javadoc")
+	public static String applicationMachinePropertiesPath(String fileName) {
     	String applicationMachinePropertiesPath = null;
     	String machinePropertiesPath = ERXSystem.getProperty("er.extensions.ERXProperties.machinePropertiesPath", "/etc/WebObjects");
     	WOApplication application = WOApplication.application();
@@ -1529,16 +1678,30 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
     
     /**
+     * <span class="en">
      * Returns actual full path to the given file system path  
      * that could contain symbolic links. For example: 
      * /Resources will be converted to /Versions/A/Resources
      * when /Resources is a symbolic link.
      * 
-     * @param path  path string to a resource that could 
+     * @param path - path string to a resource that could 
      *               contain symbolic links
+     *               
      * @return actual path to the resource
+     * </span>
+     * 
+     * <span class="ja">
+     * 指定ファイル・システム・パスへの完全パスを戻します。（シンボリックリンク可）
+     * 
+     * 例えば、/Resources がシンボリックであれば、 /Resources は /Versions/A/Resources へコンバートされる
+     * 
+     * @param path - リソースへの文字列パス（シンボリックリンクである可能性があります）
+     * 
+     * @return リソースへの実際のパス
+     * </span>
      */
-    public static String getActualPath(String path) {
+    @SuppressWarnings("javadoc")
+	public static String getActualPath(String path) {
         String actualPath = null;
         File file = new File(path);
         try {
@@ -1646,11 +1809,26 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
     
     /**
+     * <span class="en">
      * Load the properties from a String in Property file format. Useful when you use them 
      * as custom value types, you would set this as the factory method name.
+     * 
      * @param string
+     * 
+     * @return 
+     * </span>
+     * <span class="ja">
+     * プロパティー・ファイル・フォーマットの文字列からプロパティーを読込みます。
+     * カスタム値タイプとして使用する時に便利です。
+     * ファクトリー・メソッド名として使用するといい
+     * 
+     * @param string - プロパティー・ファイル・フォーマットの文字列
+     * 
+     * @return 
+     * </span>
      */
-    public static ERXProperties fromExternalForm(String string) {
+    @SuppressWarnings("javadoc")
+	public static ERXProperties fromExternalForm(String string) {
         ERXProperties result = new ERXProperties();
         try {
 			result.load(new ByteArrayInputStream(string.getBytes()));
@@ -2086,12 +2264,21 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 	}
 
 	/**
+	 * <span class="en">
 	 * _Properties is a subclass of Properties that provides support for including other
 	 * Properties files on the fly.  If you create a property named .includeProps, the value
 	 * will be interpreted as a file to load.  If the path is absolute, it will just load it
 	 * directly.  If it's relative, the path will be loaded relative to the current user's
 	 * home directory.  Multiple .includeProps can be included in a Properties file and they
 	 * will be loaded in the order they appear within the file.
+	 * </span>
+	 * 
+	 * <span class="ja">
+     * 	_Properties は Properties のサブクラスでプロパティ・ファイルのオンザフライ読み込みを可能にします。
+     * 	.includeProps のようなプロパティ名を作成するとファイルとして認識され、読み込まれます。
+     * 	完全パスの場合には直接読み込みを行います。相違パスの場合はカレント・ユーザのホームフォルダ対象になります。
+     * 	プロパティ・ファイルには複数の .includeProps を含むことができ、発生される順番でロードされます。
+     * </span>
 	 *  
 	 * @author mschrag
 	 */
