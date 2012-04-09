@@ -2048,4 +2048,120 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 	public static void setCommandLineArguments(String[] argv) {
 		
 	}
+	
+	/**
+	 * <span class="ja">
+	 * 	システム・プロパティーの結果を String で戻します。
+	 * 	最大2つのキーを指定可能で、最初に見つかったキーを使用します。
+	 * 
+	 * 	@param s1 - キー1（システム・プロパティー内）
+	 * 	@param s2 - キー2（システム・プロパティー内）
+	 * 
+	 * 	@return String 値、デフォルトはnull
+	 * 
+	 * 	@author A10 nettani
+	 * </span>
+	 */    
+	public static String stringFor2Keys(String s1, String s2) {
+		return stringForManyKeys(ERXValueUtilities.stringsToStringArray(s1, s2));
+	}
+	
+	/**
+	 * <span class="ja">
+	 * 	システム・プロパティーの結果を String で戻します。
+	 * 	最大2つのキーを指定可能で、最初に見つかったキーを使用します。
+	 * 
+	 * 	@param s1 - キー1（システム・プロパティー内）
+	 * 	@param s2 - キー2（システム・プロパティー内）
+	 * 	@param defaultValue - デフォルト値
+	 * 
+	 * 	@return String 値、デフォルトはdefaultValue
+	 * 
+	 * 	@author A10 nettani
+	 * </span>
+	 */    
+	public static String stringFor2KeysWithDefault(String s1, String s2, final String defaultValue) {
+		return stringForManyKeysWithDefault(ERXValueUtilities.stringsToStringArray(s1, s2), defaultValue);
+	}
+
+	/**
+	 * <span class="ja">
+	 * 	システム・プロパティーの結果を String で戻します。
+	 * 	最大3つのキーを指定可能で、最初に見つかったキーを使用します。
+	 * 
+	 * 	@param s1 - キー1（システム・プロパティー内）
+	 * 	@param s2 - キー2（システム・プロパティー内）
+	 * 	@param s3 - キー3（システム・プロパティー内）
+	 * 
+	 * 	@return String 値、デフォルトは null
+	 * 
+	 * 	@author A10 nettani
+	 * </span>
+	 */    
+	public static String stringFor3Keys(String s1, String s2, String s3) {
+		return stringForManyKeys(ERXValueUtilities.stringsToStringArray(s1, s2, s3));
+	}
+
+	/**
+	 * <span class="ja">
+	 * 	システム・プロパティーの結果を String で戻します。
+	 * 	最大3つのキーを指定可能で、最初に見つかったキーを使用します。
+	 * 
+	 * 	@param s1 - キー1（システム・プロパティー内）
+	 * 	@param s2 - キー2（システム・プロパティー内）
+	 * 	@param s3 - キー3（システム・プロパティー内）
+	 * 	@param defaultValue - デフォルト値
+	 * 
+	 * 	@return String 値、デフォルトはdefaultValue
+	 * 
+	 * 	@author A10 nettani
+	 * </span>
+	 */    
+	public static String stringFor3KeysWithDefault(String s1, String s2, String s3, final String defaultValue) {
+		return stringForManyKeysWithDefault(ERXValueUtilities.stringsToStringArray(s1, s2, s3), defaultValue);
+	}
+
+	/**
+	 * <span class="ja">
+	 * 	システム・プロパティーの結果を String で戻します。
+	 * 	キーは文字列配列で渡され配列要素位置0から開始し最初に見つかったキーを使用します。
+	 * 
+	 * 	@param ss - キーs（システム・プロパティー内）
+	 * 
+	 * 	@return String 値、デフォルトはnull
+	 * 
+	 * 	@author A10 nettani
+	 * </span>
+	 */    
+	public static String stringForManyKeys(String[] ss) {
+		return stringForManyKeysWithDefault(ss,null);
+	}
+
+	/**
+	 * <span class="ja">
+	 * 	システム・プロパティーの結果やデフォルト値を String で戻します。
+	 * 	キーは文字列配列で渡され配列要素位置0から開始し最初に見つかったキーを使用します。
+	 * 
+	 * 	@param ss - キーs（システム・プロパティー内）
+	 * 	@param defaultValue - デフォルト値
+	 * 
+	 * 	@return String 値
+	 * 
+	 * 	@author A10 nettani
+	 * </span>
+	 */
+	public static String stringForManyKeysWithDefault(final String[] ss, final String defaultValue) {
+		if((ss == null) || (ss.length == 0)) return defaultValue;	// 文字列配列が無いならdefaultValue
+		int count = ss.length;
+		String value = null;
+		for(int loop = 0; loop < count; loop++){
+			if((ss[loop] != null) && (ss[loop].length() > 0)){
+				value = stringForKey(ss[loop]);
+				if(!ERXStringUtilities.stringIsNullOrEmpty(value))
+					return stringForKey(ss[loop]);
+			}
+		}
+		return defaultValue;
+	}
+
 }
