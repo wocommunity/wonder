@@ -10,7 +10,6 @@ import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.WORequest;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSComparator;
 import com.webobjects.foundation.NSMutableArray;
@@ -356,36 +355,6 @@ public class ERXTcpIp extends Object {
 		}
 
 		return resultArray.immutableClone();
-	}
-
-	/** 
-	 * <span class="ja">
-	 * 	Returns the IP address of the client.
-	 * 	This should return accurate information whether in direct connect or webserver deployment mode.
-	 * 	If performance caching is turned on on OS X server, this method will correctly use pc-remote-addr
-	 * 
-	 * 	@param request - WORequest
-	 * 
-	 * 	@return The IP address as a string.
-	 * </span>
-	 */
-	public static String clientIP(WORequest request) {
-		Object ipAddress = request.headerForKey("pc-remote-addr");
-		if (ipAddress == null) {
-			ipAddress = request.headerForKey("remote_addr");
-			if(ipAddress == null) {
-				ipAddress = request.headerForKey("remote_host");
-				if(ipAddress == null) {
-					ipAddress = request._remoteAddress();
-					if(ipAddress == null) {
-						ipAddress = request._originatingAddress();
-						if(ipAddress != null)
-							ipAddress = ((InetAddress)ipAddress).getHostAddress();
-					}
-				}
-			}
-		}
-		return ipAddress == null ? "<address unknown>" : ipAddress.toString();
 	}
 
 	/**
