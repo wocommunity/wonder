@@ -2567,4 +2567,44 @@ public class ERXStringUtilities {
 		return cuttedString;
 	}
 
+	/**
+	 * <span class="en">
+	 * 	trim leading 0 from a (Number) String 
+	 *
+	 * 	@param str - the String
+	 * 
+	 * 	@return Result String
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * 	半角数字の前の0を取る処理。
+	 *
+	 * 	@param str - 処理対象の文字列
+	 * 
+	 * 	@return 処理済みの文字列
+	 * </span>
+	 */
+	@SuppressWarnings("javadoc")
+	public static String trimZeroInFrontOfNumbers(String str){
+		// 文字有無確認
+		if(stringIsNullOrEmpty(str)) 
+			return str;
+
+		// 不必要番号削除処理
+		int loopIdxMax =  str.length() -1;
+		StringBuilder retStr = new StringBuilder(loopIdxMax +1);
+		char targetChar;
+		boolean alladdFlg = false;
+		for(int loopIdx = 0; loopIdx < loopIdxMax; loopIdx++){
+			targetChar = str.charAt(loopIdx);
+			if(alladdFlg || ((targetChar >= '1') && (targetChar <= '9')) ){
+				retStr.append ( targetChar );	// 文字コードが0以外なら残りを全て保存
+				alladdFlg = true;
+			}
+		}
+		retStr.append (str.charAt(loopIdxMax));	// 最後のコードを追加
+
+		return retStr.toString();
+	}
+
 }
