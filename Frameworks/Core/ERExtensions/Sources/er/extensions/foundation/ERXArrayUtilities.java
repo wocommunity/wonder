@@ -2398,34 +2398,6 @@ public class ERXArrayUtilities extends Object {
 
 	/**
 	 * <span class="en">
-	 * Check if an NSMutableArray is null or Empty
-	 * 
-	 * @param aNSArray - NSMutableArray
-	 * 
-	 * @return if an NSMutableArray is null or Empty <code>true</code> returns
-	 * </span>
-	 * 
-	 * <span class="ja">
-	 * 	配列が null か空かをチェックします
-	 * 
-	 * 	@param aNSArray - NSMutableArray
-	 * 
-	 * 	@return NSMutable配列が null か空の場合は <code>true</code> が戻ります
-	 * </span>
-	 */
-	@SuppressWarnings("javadoc")
-	public static boolean arrayIsNullOrEmpty(NSMutableArray<?> aNSArray){
-		if(aNSArray == null)
-			return true;
-
-		if(aNSArray.isEmpty())
-			return true;
-
-		return false;
-	}
-
-	/**
-	 * <span class="en">
 	 * 	To create oneLine Log for an NSArray&lt;String&gt;
 	 * 
 	 * 	@param aNSArray - NSArray
