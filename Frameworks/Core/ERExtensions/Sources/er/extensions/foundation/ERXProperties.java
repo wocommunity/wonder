@@ -40,6 +40,7 @@ import er.extensions.appserver.ERXApplication;
 import er.extensions.crypting.ERXCrypto;
 
 /**
+ * <span class="en">
  * Collection of simple utility methods used to get and set properties
  * in the system properties. The only reason this class is needed is
  * because all of the methods in NSProperties have been deprecated.
@@ -60,6 +61,15 @@ import er.extensions.crypting.ERXCrypto;
  * could ask that Project Wonder frameworks only use this class.
  * 
  * @property er.extensions.ERXProperties.RetainDefaultsEnabled
+ * </span>
+ * 
+ * <span class="ja">
+ * 	システム・プロパティーのセットや取得するユーティリティー・メソッド集です。
+ * 	このクラスが作成されている理由は、NSPropertiesの全メソッドが廃止になったからです。
+ * 	普通はシステム・プロパティーの Boolean オブジェクトを扱う為に <code>getBoolean</code> などがあればいいのです。
+ * 
+ * @property er.extensions.ERXProperties.RetainDefaultsEnabled
+ * </span>
  */
 public class ERXProperties extends Properties implements NSKeyValueCoding {
 
@@ -299,13 +309,26 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 
     
     /**
+     * <span class="en">
      * Cover method for returning an NSArray for a
      * given system property.
-     * @param s system property
+     * 
+     * @param s - system property
+     * 
      * @return array de-serialized from the string in
      *      the system properties
+     * </span>
+     * 
+     * <span class="ja">
+     * 	システム・プロパティーの結果を NSArray で戻します
+     * 
+     * 	@param s - キー（システム・プロパティー内）
+     * 
+     * 	@return システム・プロパティー内の連結した String を NSArray に変換した配列
+     * </span>
      */
-    public static NSArray arrayForKey(String s) {
+    @SuppressWarnings("javadoc")
+	public static NSArray arrayForKey(String s) {
         return arrayForKeyWithDefault(s, null);
     }
 
@@ -708,20 +731,35 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
     
     /**
+     * <span class="en">
      * Returns the decrypted value for the given property name using
      * the default crypter if the property propertyName.encrypted=true.  For
      * instance, if you are requesting my.password, if my.password.encrypted=true
      * the value of my.password will be passed to the default crypter's decrypt
      * method.
      * 
-     * @param propertyName the property name to retrieve and optionally decrypt
+     * @param propertyName - the property name to retrieve and optionally decrypt
+     * 
      * @return the decrypted property value
+     * </span>
+     * 
+     * <span class="ja">
+     * 	指定プロパティー名とデフォルト暗号化方法 (propertyName.encrypted=true) を使って復元されている値を戻します。
+     * 	例えば、my.password を取得する場合、my.password.encrypted=true も設定されていれば、
+     * 	my.password は復元する時にデフォルト暗号化方法 {@link ERXCrypto.defaultCrypter} を使用します。
+     * 
+     * 	@param propertyName - プロパティー名
+     * 
+     * 	@return 復元されている値
+     * </span>
      */
+    @SuppressWarnings("javadoc")
     public static String decryptedStringForKey(String propertyName) {
     	return ERXProperties.decryptedStringForKeyWithDefault(propertyName, null);
     }
     
     /**
+     * <span class="en">
      * If the <code>propertyName.encrypted</code> property is set to true, returns
      * the plain text value of the given property name, after decrypting it with the
      * {@link ERXCrypto.defaultCrypter}. For instance, if you are requesting
@@ -729,11 +767,25 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * the value of <code>my.password</code> will be sent to the default crypter's
      * decrypt() method.
      * 
-     * @param propertyName the property name to retrieve and optionally decrypt
-     * @param defaultValue the default value to return if there is no password
+     * @param propertyName - the property name to retrieve and optionally decrypt
+     * @param defaultValue - the default value to return if there is no password
+     * 
      * @return the decrypted property value
+     * </span>
+     * 
+     * <span class="ja">
+     * 	指定プロパティー名とデフォルト暗号化方法 (propertyName.encrypted=true) を使って復元されている値を戻します。
+     * 	例えば、my.password を取得する場合、my.password.encrypted=true も設定されていれば、
+     * 	my.password は復元する時にデフォルト暗号化方法 {@link ERXCrypto.defaultCrypter} を使用します。
+     * 
+     * 	@param propertyName - プロパティー名
+     * 	@param defaultValue - プロパティーが無ければ、デフォルト値
+     * 
+     * 	@return 復元されている値
+     * </span>
      */
-    public static String decryptedStringForKeyWithDefault(String propertyName, String defaultValue) {
+    @SuppressWarnings("javadoc")
+	public static String decryptedStringForKeyWithDefault(String propertyName, String defaultValue) {
 		boolean propertyNameEncrypted = ERXProperties.booleanForKeyWithDefault(propertyName + ".encrypted", false);
 		String decryptedPassword;
 		if (propertyNameEncrypted) {
@@ -750,16 +802,31 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
 
     /**
+     * <span class="en">
      * Returns the decrypted value for the given property name using the
      * {@link ERXCrypto.defaultCrypter}. This is slightly different than
      * decryptedStringWithKeyWithDefault in that it does not require  the encrypted
      * property to be set.
      *  
-     * @param propertyName the name of the property to decrypt
-     * @param defaultValue the default encrypted value
+     * @param propertyName - the name of the property to decrypt
+     * @param defaultValue - the default encrypted value
+     * 
      * @return the decrypted value
+     * </span>
+     * 
+     * <span class="ja">
+     * 	指定プロパティー名とデフォルト暗号化方法 (propertyName.encrypted=true) を使って復元されている値を戻します。
+     * 	例えば、my.password を取得する場合、my.password.encrypted=true も設定されていれば、
+     * 	my.password は復元する時にデフォルト暗号化方法 {@link ERXCrypto.defaultCrypter} を使用します。
+     *  
+     * 	@param propertyName - プロパティー名
+     * 	@param defaultValue - プロパティーが無ければ、暗号化されているデフォルト値
+     * 
+     * 	@return 復元されている値
+     * </span>
      */
-    public static String decryptedStringForKeyWithEncryptedDefault(String propertyName, String defaultValue) {
+    @SuppressWarnings("javadoc")
+	public static String decryptedStringForKeyWithEncryptedDefault(String propertyName, String defaultValue) {
     	String encryptedPassword = ERXProperties.stringForKeyWithDefault(propertyName, defaultValue);
     	return ERXCrypto.defaultCrypter().decrypt(encryptedPassword);
     }
@@ -829,6 +896,13 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         _cache.remove(key);
     }
     
+    /**
+     * <span class="ja">
+     * 	キーを削除します
+     * 
+     * 	@param key - キー
+     * </span>
+     */
     public static void removeKey(String key) {
     	System.getProperties().remove(key);
     	_cache.remove(key);
