@@ -16,7 +16,6 @@ import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WODirectAction;
-import com.webobjects.appserver.WORedirect;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.woextensions.WOEventDisplayPage;
@@ -24,7 +23,10 @@ import com.webobjects.woextensions.WOEventSetupPage;
 import com.webobjects.woextensions.WOStatsPage;
 
 import er.extensions.ERXExtensions;
+import er.extensions.components.ERXLocalizationEditor;
+import er.extensions.components.ERXRemoteShell;
 import er.extensions.components.ERXStringHolder;
+import er.extensions.eof.ERXDatabaseConsole;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXObjectStoreCoordinator;
 import er.extensions.formatters.ERXUnitAwareDecimalFormat;
@@ -35,7 +37,9 @@ import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
 import er.extensions.logging.ERXLog4JConfiguration;
 import er.extensions.logging.ERXLogger;
+import er.extensions.statistics.ERXStatisticsPage;
 import er.extensions.statistics.ERXStats;
+import er.testrunner.ERXWOTestInterface;
 
 /**
  * Basic collector for direct action additions. All of the actions are password protected, 
@@ -49,13 +53,14 @@ public class ERXDirectAction extends WODirectAction {
     /** holds a reference to the current browser used for this session */
     private ERXBrowser browser;
 
-    /** Public constructor */
     public ERXDirectAction(WORequest r) { super(r); }
 
 
     /**
      * Checks if the action can be executed.
-     * @param passwordKey
+     * 
+     * @param passwordKey the password to test
+     * @return <code>true</code> if action is allowed to be invoked
      */
     protected boolean canPerformActionWithPasswordKey(String passwordKey) {
     	if(ERXApplication.isDevelopmentModeSafe()) {
@@ -92,20 +97,19 @@ public class ERXDirectAction extends WODirectAction {
      * @return {@link er.testrunner.ERXWOTestInterface ERXWOTestInterface} 
      * with the results after performing the given test.
      */
-    public WOComponent testAction() {
-        WOComponent result=null;
+    public WOActionResults testAction() {
         if (canPerformActionWithPasswordKey("er.extensions.ERXJUnitPassword")) {
-            
-            result=pageWithName("ERXWOTestInterface");
+        	ERXWOTestInterface result = pageWithName(ERXWOTestInterface.class);
             session().setObjectForKey(Boolean.TRUE, "ERXWOTestInterface.enabled");
             String testCase = request().stringFormValueForKey("case");
             if(testCase != null) {
-                result.takeValueForKey(testCase, "theTest");
+                result.theTest = testCase;
                 // (ak:I wish we could return a direct test result...)
                 // return (WOComponent)result.valueForKey("performTest");
             }
-        }             
-        return result;
+            return result;
+        }
+        return forbiddenResponse();
     }
     
     /**
@@ -114,19 +118,20 @@ public class ERXDirectAction extends WODirectAction {
      * @return "OK"
      */
     public WOActionResults flushComponentCacheAction() {
-    	WOResponse response = new WOResponse();
     	if (canPerformActionWithPasswordKey("er.extensions.ERXFlushComponentCachePassword")) {
     		WOApplication.application()._removeComponentDefinitionCacheContents();
-    		response.setContent("OK");
+    		return new ERXResponse("OK");
     	}
-    	return response;
+    	return forbiddenResponse();
     }
 
     /**
      * Direct access to WOStats by giving over the password in the "pw" parameter.
+     * 
+     * @return statistics page
      */
     public WOActionResults statsAction() {
-        WOStatsPage nextPage = (WOStatsPage) pageWithName("ERXStatisticsPage");
+        WOStatsPage nextPage = pageWithName(ERXStatisticsPage.class);
         nextPage.password = context().request().stringFormValueForKey("pw");
         return nextPage.submit();
     }
@@ -135,25 +140,28 @@ public class ERXDirectAction extends WODirectAction {
      * Direct access to reset the stats by giving over the password in the "pw" parameter.  This
      * calls ERXStats.reset();
      * 
+     * @return statistics page
      */
     public WOActionResults resetStatsAction() {
-    	WOActionResults result = null;
         if (canPerformActionWithPasswordKey("WOStatisticsPassword")) {
         	ERXStats.reset();
-        	WORedirect redirect = new WORedirect(context());
-        	redirect.setUrl(context().directActionURLForActionNamed("ERXDirectAction/stats", null));
-        	result = redirect;
+        	ERXRedirect redirect = pageWithName(ERXRedirect.class);
+        	redirect.setDirectActionName("stats");
+        	redirect.setDirectActionClass("ERXDirectAction");
+        	return redirect;
         }
-        return result;
+        return forbiddenResponse();
     }
     
     /**
      * Direct access to WOEventDisplay by giving over the password in the "pw" parameter.
+     * 
+     * @return event page
      */
     public WOActionResults eventsAction() {
-        WOEventDisplayPage nextPage = (WOEventDisplayPage) pageWithName("WOEventDisplayPage");
+        WOEventDisplayPage nextPage = pageWithName(WOEventDisplayPage.class);
         nextPage.password = context().request().stringFormValueForKey("pw");
-        nextPage.valueForKey("submit");
+        nextPage.submit();
         return nextPage;
     }
 
@@ -161,9 +169,11 @@ public class ERXDirectAction extends WODirectAction {
     /**
      * Direct access to WOEventDisplay by giving over the password in the "pw" 
      * parameter and turning on all events.
+     * 
+     * @return event setup page
      */
     public WOActionResults eventsSetupAction() {
-        WOEventSetupPage nextPage = (WOEventSetupPage) pageWithName("WOEventSetupPage");
+        WOEventSetupPage nextPage = pageWithName(WOEventSetupPage.class);
         nextPage.password = context().request().stringFormValueForKey("pw");
         nextPage.submit();
         nextPage.selectAll();
@@ -196,11 +206,10 @@ public class ERXDirectAction extends WODirectAction {
      * Note: this action must be invoked against a specific instance (the instance number must be in the request URL).
      * @return a page showing what action was taken (with regard to EOAdaptorDebugging), if any.
      */
-    public WOComponent eoAdaptorDebuggingAction() {
-        ERXStringHolder result = (ERXStringHolder)pageWithName("ERXStringHolder");
-        result.setEscapeHTML(false);
-
+    public WOActionResults eoAdaptorDebuggingAction() {
         if (canPerformActionWithPasswordKey("er.extensions.ERXEOAdaptorDebuggingPassword")) {
+        	ERXStringHolder result = pageWithName(ERXStringHolder.class);
+        	result.setEscapeHTML(false);
             String message;
             boolean currentState = ERXExtensions.adaptorLogging();
             int instance = request().applicationNumber();
@@ -234,9 +243,10 @@ public class ERXDirectAction extends WODirectAction {
 
             message += "<p><em>Please be mindful of using EOAdaptorDebugging as it may have a large impact on application performance.</em></p>";
             result.setValue(message);
+            return result;
         }
 
-        return result;
+        return forbiddenResponse();
     }
     
     /**
@@ -252,13 +262,12 @@ public class ERXDirectAction extends WODirectAction {
      * <br/>
      * @return {@link ERXLog4JConfiguration} for modifying current logging settings.
      */
-    public WOComponent log4jAction() {
-        WOComponent result=null;
+    public WOActionResults log4jAction() {
         if (canPerformActionWithPasswordKey("er.extensions.ERXLog4JPassword")) {
-            	result=pageWithName("ERXLog4JConfiguration");
-            	session().setObjectForKey(Boolean.TRUE, "ERXLog4JConfiguration.enabled");
+        	session().setObjectForKey(Boolean.TRUE, "ERXLog4JConfiguration.enabled");
+            return pageWithName(ERXLog4JConfiguration.class);
         }
-        return result;
+        return forbiddenResponse();
     }
 
     /**
@@ -273,13 +282,12 @@ public class ERXDirectAction extends WODirectAction {
      * <br/>
      * @return {@link ERXLog4JConfiguration} for modifying current logging settings.
      */
-    public WOComponent remoteShellAction() {
-        WOComponent result=null;
+    public WOActionResults remoteShellAction() {
         if (canPerformActionWithPasswordKey("er.extensions.ERXRemoteShellPassword")) {
-                result=pageWithName("ERXRemoteShell");
-                session().setObjectForKey(Boolean.TRUE, "ERXRemoteShell.enabled");
+        	session().setObjectForKey(Boolean.TRUE, "ERXRemoteShell.enabled");
+            return pageWithName(ERXRemoteShell.class);
         }
-        return result;
+        return forbiddenResponse();
     }
 
     /**
@@ -294,13 +302,12 @@ public class ERXDirectAction extends WODirectAction {
      * <br/>
      * @return {@link ERXLog4JConfiguration} for modifying current logging settings.
      */
-    public WOComponent databaseConsoleAction() {
-        WOComponent result=null;
+    public WOActionResults databaseConsoleAction() {
         if (canPerformActionWithPasswordKey("er.extensions.ERXDatabaseConsolePassword")) {
-                result=pageWithName("ERXDatabaseConsole");
-                session().setObjectForKey(Boolean.TRUE, "ERXDatabaseConsole.enabled");
+        	session().setObjectForKey(Boolean.TRUE, "ERXDatabaseConsole.enabled");
+        	return pageWithName(ERXDatabaseConsole.class);
         }
-        return result;
+        return forbiddenResponse();
     }
 
     /**
@@ -315,9 +322,9 @@ public class ERXDirectAction extends WODirectAction {
      * <br/>
      * @return short info about free and used memory before and after GC.
      */
-    public WOComponent forceGCAction() {
-        ERXStringHolder result=(ERXStringHolder)pageWithName("ERXStringHolder");
+    public WOActionResults forceGCAction() {
         if (canPerformActionWithPasswordKey("er.extensions.ERXGCPassword")) {
+        	ERXStringHolder result = pageWithName(ERXStringHolder.class);
             Runtime runtime = Runtime.getRuntime();
             ERXUnitAwareDecimalFormat decimalFormatter = new ERXUnitAwareDecimalFormat(ERXUnitAwareDecimalFormat.BYTE);
             decimalFormatter.setMaximumFractionDigits(2);
@@ -342,18 +349,21 @@ public class ERXDirectAction extends WODirectAction {
 
             result.setValue(info);
             log.info("GC forced\n"+info);
+            return result;
         }
-        return result;
+        return forbiddenResponse();
     }
 
     /**
      * Returns a list of the traces of open editing context locks.  This is only useful if
      * er.extensions.ERXApplication.traceOpenEditingContextLocks is enabled and 
      * er.extensions.ERXOpenEditingContextLocksPassword is set.
+     * 
+     * @return list of lock traces
      */
-    public WOComponent showOpenEditingContextLockTracesAction() {
-      ERXStringHolder result = (ERXStringHolder)pageWithName("ERXStringHolder");
+    public WOActionResults showOpenEditingContextLockTracesAction() {
       if (canPerformActionWithPasswordKey("er.extensions.ERXOpenEditingContextLockTracesPassword")) {
+        ERXStringHolder result = pageWithName(ERXStringHolder.class);
         result.setEscapeHTML(false);
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
@@ -366,16 +376,22 @@ public class ERXDirectAction extends WODirectAction {
         pw.println("</pre>");
         pw.close();
         result.setValue(sw.toString());
+        return result;
       }
-      return result;
+      return forbiddenResponse();
     }
 
+    /**
+     * Will terminate an existing session and redirect to the default action.
+     * 
+     * @return redirect to default action
+     */
     public WOActionResults logoutAction() {
         if (existingSession()!=null) {
             existingSession().terminate();
         }
-        WORedirect r=(WORedirect)pageWithName("WORedirect");
-        r.setUrl(context().directActionURLForActionNamed("default", null));
+        ERXRedirect r = pageWithName(ERXRedirect.class);
+        r.setDirectActionName("default");
         return r;
     }
     
@@ -397,6 +413,7 @@ public class ERXDirectAction extends WODirectAction {
         return browser; 
     }
 
+    @Override
     public WOActionResults performActionNamed(String actionName) {
         WOActionResults actionResult = super.performActionNamed(actionName);
         if (browser != null) 
@@ -413,10 +430,9 @@ public class ERXDirectAction extends WODirectAction {
      * @return either null when the password is wrong or a new page showing the System properties
      */
     public WOActionResults systemPropertyAction() {
-    	WOResponse r = null;
     	if (canPerformActionWithPasswordKey("er.extensions.ERXDirectAction.ChangeSystemPropertyPassword")) {
     		String key = request().stringFormValueForKey("key");
-    		r = new WOResponse();
+    		ERXResponse r = new ERXResponse();
     		if (ERXStringUtilities.stringIsNullOrEmpty(key) ) {
         		String user = request().stringFormValueForKey("user");
         		Properties props = ERXConfigurationManager.defaultManager().defaultProperties();
@@ -442,29 +458,36 @@ public class ERXDirectAction extends WODirectAction {
     			}
     			r.appendContentString("</body></html>");
     		}
+    		return r;
     	}
-		return r;
+		return forbiddenResponse();
     }
     
     /**
      * Opens the localizer edit page if the app is in development mode.
+     * 
+     * @return localizer editor
      */
     public WOActionResults editLocalizedFilesAction() {
-    	WOResponse r = null;
     	if (ERXApplication.isDevelopmentModeSafe()) {
-    		return pageWithName("ERXLocalizationEditor");
+    		return pageWithName(ERXLocalizationEditor.class);
     	}
-		return r;
+		return null;
     }
     
-    
+    /**
+     * Will dump all created keys of the current localizer via log4j and
+     * returns an empty response.
+     * 
+     * @return empty response
+     */
     public WOActionResults dumpCreatedKeysAction() {
-    	WOResponse r = new WOResponse();
     	if (ERXApplication.isDevelopmentModeSafe()) {
     		session();
             ERXLocalizer.currentLocalizer().dumpCreatedKeys();
+            return new ERXResponse();
     	}
-		return r;
+    	return null;
     }
     
     /**
@@ -473,8 +496,7 @@ public class ERXDirectAction extends WODirectAction {
      * @return nothing
      */
     public WOActionResults emptyAction() {
-    	WOResponse response = new WOResponse();
-    	return response;
+    	return new ERXResponse();
     }
 
     /**
@@ -492,8 +514,7 @@ public class ERXDirectAction extends WODirectAction {
      * @return simple response to close the connection
      */
     public WOActionResults closeHTTPSessionAction() { 
-    	WOResponse response = new WOResponse();
-    	response.setContent(""); 
+    	ERXResponse response = new ERXResponse("");
     	response.setHeader("close", "Connection"); 
     	return response; 
     }
@@ -503,8 +524,13 @@ public class ERXDirectAction extends WODirectAction {
       return (T) super.pageWithName(componentClass.getName());
     }
 
+    /**
+     * Terminates the application when in development.
+     * 
+     * @return "OK" if application has been shut down
+     */
 	public WOActionResults stopAction() {
-    	WOResponse response = new WOResponse();
+    	ERXResponse response = new ERXResponse();
     	response.setHeader("text/plain", "Content-Type");
 
 		if (ERXApplication.isDevelopmentModeSafe()) {
@@ -517,4 +543,12 @@ public class ERXDirectAction extends WODirectAction {
     	return response;
 	}
 	
+	/**
+	 * Creates a response object with HTTP status code 403.
+	 * 
+	 * @return 403 response
+	 */
+	protected WOResponse forbiddenResponse() {
+		return new ERXResponse(null, ERXHttpStatusCodes.STATUS_FORBIDDEN);
+	}
 }
