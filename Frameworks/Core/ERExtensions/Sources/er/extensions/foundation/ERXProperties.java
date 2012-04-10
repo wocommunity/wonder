@@ -144,30 +144,54 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
 
     /**
+     * <span class="en">
      * Puts handy properties such as <code>com.webobjects.version</code> 
      * into the system properties. This method is called when 
      * the framework is initialized  
      * (when WOApplication.ApplicationWillFinishLaunchingNotification 
      * is posted.)
+     * </span>
+     * 
+     * <span class="ja">
+     * <code>com.webobjects.version</code> をシステム・プロパティーへセットします。
+     * フレームワークが初期化される時に呼ばれます。
+     * 
+     * (WOApplication.ApplicationWillFinishLaunchingNotification 発行時)
+     * </span>
      */
     public static void populateSystemProperties() {
         System.setProperty("com.webobjects.version", webObjectsVersion());
     }
 
     /** 
+     * <span class="en">
      * Returns the version string of the application.  
      * It checks <code>CFBundleShortVersionString</code> property 
      * in the <code>info.plist</code> resource and returns 
      * a trimmed version of the value. 
      * 
      * @return version number as string; can be a null-string when 
-     *          the applicaiton doesn't have the value of
+     *          the application doesn't have the value of
      *          <code>CFBundleShortVersionString</code>
      *                  in its <code>info.plist</code> resource. 
+     *                  
      * @see #versionStringForFrameworkNamed
      * @see #webObjectsVersion
+     * </span>
+     * 
+     * <span class="ja">
+     * アプリケーションのバージョンを取得します
+     * 
+     * CustomInfo.plist 内の CFBundleShortVersionString プロパティーを調べ、Trimした結果を戻します
+     * 
+     * @return バージョン番号を文字列として戻ります。見つからない場合には null-string が戻ります。
+     * 
+     * @see #versionStringForFrameworkNamed
+     * @see #webObjectsVersion
+     * </span>
      */ 
-    public static String versionStringForApplication() {
+    @SuppressWarnings("javadoc")
+	public static String versionStringForApplication() {
         NSBundle bundle = NSBundle.mainBundle();
         String versionString = (String) bundle.infoDictionary()
                                             .objectForKey("CFBundleShortVersionString");
@@ -175,22 +199,41 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
 
     /** 
+     * <span class="en">
      * Returns the version string of the given framework.
      * It checks <code>CFBundleShortVersionString</code> property 
      * in the <code>info.plist</code> resource and returns 
      * a trimmed version of the value. 
      * 
-     * @param  frameworkName name
+     * @param frameworkName - name
+     * 
      * @return version number as string; can be null-string when 
      *          the framework is not found or the framework
      *          doesn't have the value of
      *                  <code>CFBundleShortVersionString</code> in its
      *                  <code>info.plist</code> resource.
+     *                  
      * @see #versionStringForApplication
      * @see #webObjectsVersion
      * @see ERXStringUtilities#removeExtraDotsFromVersionString
+     * </span>
+     * 
+     * <span class="ja">
+     * 指定されたフレームワークのバージョンを取得します
+     * 
+     * CustomInfo.plist 内の CFBundleShortVersionString プロパティーを調べ、Trimした結果を戻します
+     * 
+     * @param frameworkName - フレームワーク名
+     * 
+     * @return バージョン番号を文字列として戻ります。フレームワークが見つからない場合には null-string が戻ります。
+     * 
+     * @see #versionStringForApplication
+     * @see #webObjectsVersion
+     * @see ERXStringUtilities#removeExtraDotsFromVersionString
+     * </span>
      */ 
-    public static String versionStringForFrameworkNamed(String frameworkName) {
+    @SuppressWarnings("javadoc")
+	public static String versionStringForFrameworkNamed(String frameworkName) {
         NSBundle bundle = NSBundle.bundleForName(frameworkName);
         if (bundle == null)  return "";
         
@@ -200,6 +243,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
 
     /**
+     * <span class="en">
      * Returns the version string of the given framework.
      * It checks <code>SourceVersion</code> property
      * in the <code>version.plist</code> resource and returns
@@ -210,10 +254,24 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      *          doesn't have the value of
      *                  <code>SourceVersion</code> in its
      *                  <code>info.plist</code> resource.
+     *                  
      * @see #versionStringForApplication
      * @see #webObjectsVersion
+     * </span>
+     * 
+     * <span class="ja">
+     * WebObjectsフレームワークのバージョンを取得します
+     * 
+     * version.plist内の <code>SourceVersion</code> プロパティーを調べ、Trimした結果を戻します
+     * 
+     * @return バージョン番号をStringとして戻します。フレームワークが見つからなければ、null-stringが戻ります。
+     * 
+     * @see #versionStringForApplication
+     * @see #webObjectsVersion
+     * </span>
      */
-    public static String sourceVersionString() {
+    @SuppressWarnings("javadoc")
+	public static String sourceVersionString() {
         NSBundle bundle = NSBundle.bundleForName("JavaWebObjects");
         if (bundle == null)  return "";
         String dictString = new String(bundle.bytesForResourcePath("version.plist"));
@@ -224,18 +282,33 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
 
     /** 
+     * <span class="en">
      * Returns WebObjects version as string. If it's one of those 
      * version 5.1s (5.1, 5.1.1, 5.1.2...), this method will only 
-     * return 5.1. If it's 5.2s, this mothod will return more precise 
+     * return 5.1. If it's 5.2s, this method will return more precise 
      * version numbers such as 5.2.1. Note that version 5.0 series 
      * is not supported and may return incorrect version numbers 
      * (it will return 5.1). 
      * 
      * @return WebObjects version number as string
+     * 
      * @see #webObjectsVersionAsDouble
      * @see ERXStringUtilities#removeExtraDotsFromVersionString
+     * </span>
+     * 
+     * <span class="ja">
+     * WebObjectsのバージョンをStringとして戻します。
+     * ただし、5.1x (5.1, 5.1.1, 5.1.2...)の場合は単に5.1が戻ります。
+     * 5.2以上では正しく5.2.1の様な番号が戻ります。5.1以下はサポート対象外で正しい番号が戻りません。
+     * 
+     * @return WebObjects バージョン番号を String として戻ります。
+     * 
+     * @see #webObjectsVersionAsDouble
+     * @see ERXStringUtilities#removeExtraDotsFromVersionString
+     * </span>
      */ 
-    public static String webObjectsVersion() {
+    @SuppressWarnings("javadoc")
+	public static String webObjectsVersion() {
         if (_webObjectsVersion == null) {
             _webObjectsVersion = versionStringForFrameworkNamed("JavaWebObjects");
             
@@ -247,17 +320,31 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
 
     /** 
+     * <span class="en">
      * Returns WebObjects version as double. If it's one of those 
      * version 5.1s (5.1, 5.1.1, 5.1.2...), this method will only 
-     * return 5.1. If it's 5.2s, this mothod will return more precise 
+     * return 5.1. If it's 5.2s, this method will return more precise 
      * version numbers such as 5.2.1. Note that version 5.0 series 
      * is not supported and may return incorrect version numbers 
      * (it will return 5.1). 
      * 
      * @return WebObjects version number as double
+     * 
      * @see #webObjectsVersion
+     * </span>
+     * 
+     * <span class="ja">
+     * WebObjectsのバージョンをdoubleとして戻します。
+     * ただし、5.1x (5.1, 5.1.1, 5.1.2...)の場合は単に5.1が戻ります。
+     * 5.2以上では正しく5.2.1の様な番号が戻ります。5.1以下はサポート対象外で正しい番号が戻りません。
+     * 
+     * @return WebObjects バージョン番号を double として戻ります。
+     * 
+     * @see #webObjectsVersion
+     * </span>
      */
-    public static double webObjectsVersionAsDouble() {
+    @SuppressWarnings("javadoc")
+	public static double webObjectsVersionAsDouble() {
         if (_webObjectsVersionDouble == 0.0d) {
             String woVersionString = ERXStringUtilities.removeExtraDotsFromVersionString(webObjectsVersion());
             int cutoffIndex = woVersionString.indexOf(' ');
@@ -278,11 +365,20 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
 
     /**
+     * <span class="en">
      * Quick convience method used to determine if the current
-     * webobjects version is 5.2 or higher.
-     * @return if the version of webobjects is 5.2 or better
+     * WebObjects version is 5.2 or higher.
+     * @return if the version of WebObjects is 5.2 or better
+     * </span>
+     * 
+     * <span class="ja">
+     *  WebObjectsのバージョン番号が5.2以上の場合にはtrueが戻ります
+     *  
+     *  @return true もし、バージョン番号が5.2以上であれば
+     * </span>
      */
-    public static boolean webObjectsVersionIs52OrHigher() {
+    @SuppressWarnings("javadoc")
+	public static boolean webObjectsVersionIs52OrHigher() {
         if(ERXProperties.booleanForKey("er.extensions.ERXProperties.checkOldVersions")) {
             return webObjectsVersionAsDouble() >= 5.2d;
         }
@@ -290,11 +386,21 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
 
     /**
+     * <span class="en">
      * Quick convience method used to determine if the current
-     * webobjects version is 5.22 or higher.
-     * @return if the version of webobjects is 5.22 or better
+     * WebObjects version is 5.22 or higher.
+     * 
+     * @return if the version of WebObjects is 5.22 or better
+     * </span>
+     * 
+     * <span class="ja">
+     * WebObjectsのバージョン番号が5.22以上の場合にはtrueが戻ります
+     * 
+     * @return true もし、バージョン番号が5.22以上であれば
+     * </span>
      */
-    public static boolean webObjectsVersionIs522OrHigher() {
+    @SuppressWarnings("javadoc")
+	public static boolean webObjectsVersionIs522OrHigher() {
         if(ERXProperties.booleanForKey("er.extensions.ERXProperties.checkOldVersions")) {
             String webObjectsVersion = webObjectsVersion();
             if("5.2".equals(webObjectsVersion)) {
@@ -334,12 +440,26 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
 
     /**
+     * <span class="en">
      * Converts the standard propertyName into one with a .&lt;AppName> on the end, if the property is defined with
      * that suffix.  If not, then this caches the standard propertyName.  A cache is maintained to avoid concatenating
      * strings frequently, but may be overkill since most usage of this system doesn't involve frequent access.
+     * 
      * @param propertyName
+     * 
+     * @return
+     * </span>
+     * <span class="ja">
+     * 標準プロパティー名の右側にアプリケーション名を追加し、プロパティーを使用します。なければ、標準プロパティーを使用します。
+     * 毎回の文字列処理を防ぐ為にはキャシュを使用します。
+     * 
+     * @param propertyName - プロパティー名
+     * 
+     * @return アプリケーション専用のプロパティー名
+     * </span>
      */
-    private static String getApplicationSpecificPropertyName(final String propertyName) {
+    @SuppressWarnings("javadoc")
+	private static String getApplicationSpecificPropertyName(final String propertyName) {
     	if (_useLoadtimeAppSpecifics) {
     		return propertyName;
     	}
@@ -423,13 +543,11 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * </span>
      * 
      * <span class="ja">
-     * 	システム・プロパティーの結果やデフォルト値を
-     * 	<code>booleanValue</code> で戻します
+     * システム・プロパティーの結果を boolean で戻します
      * 
-     * 	@param s - キー（システム・プロパティー内）
-     * 	@param defaultValue - デフォルト値
+     * @param s - キー（システム・プロパティー内）
      * 
-     * 	@return boolean 値
+     * @return boolean 値、デフォルトはfalse
      * </span>
      */    
     @SuppressWarnings("javadoc")
@@ -438,16 +556,30 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
 
     /**
+     * <span class="en">
      * Cover method for returning a boolean for a
      * given system property or a default value. This method uses the
      * method <code>booleanValue</code> from
      * {@link ERXUtilities}.
-     * @param s system property
-     * @param defaultValue default value
+     * 
+     * @param s - system property
+     * @param defaultValue - default value
+     * 
      * @return boolean value of the string in the
      *      system properties.
+     * </span>
+     * 
+     * <span class="ja">
+     * システム・プロパティーの結果やデフォルト値を boolean で戻します<br>
+     * 
+     * @param s - キー（システム・プロパティー内）
+     * @param defaultValue - デフォルト値
+     * 
+     * @return boolean 値
+     * </span>
      */
-    public static boolean booleanForKeyWithDefault(final String s, final boolean defaultValue) {
+    @SuppressWarnings("javadoc")
+	public static boolean booleanForKeyWithDefault(final String s, final boolean defaultValue) {
         final String propertyName = getApplicationSpecificPropertyName(s);
         boolean value;
 		Object cachedValue = _cache.get(propertyName);
@@ -539,69 +671,148 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
 
     /**
+     * <span class="en">
      * Cover method for returning an int for a
      * given system property.
-     * @param s system property
+     * 
+     * @param s - system property
+     * 
      * @return int value of the system property or 0
+     * </span>
+     * 
+     * <span class="ja">
+     * システム・プロパティーの結果を int で戻します
+     * 
+     * @param s - キー（システム・プロパティー内）
+     * 
+     * @return int 値、デフォルトは 0
+     * </span>
      */
-    public static int intForKey(String s) {
+    @SuppressWarnings("javadoc")
+	public static int intForKey(String s) {
         return intForKeyWithDefault(s, 0);
     }
 
     /**
+     * <span class="en">
      * Cover method for returning a long for a
      * given system property.
-     * @param s system property
+     * 
+     * @param s - system property
+     * 
      * @return long value of the system property or 0
+     * </span>
+     * 
+     * <span class="ja">
+     * システム・プロパティーの結果を long で戻します
+     * 
+     * @param s - キー（システム・プロパティー内）
+     * 
+     * @return long 値、デフォルトは 0
+     * </span>
      */
-    public static long longForKey(String s) {
+    @SuppressWarnings("javadoc")
+	public static long longForKey(String s) {
         return longForKeyWithDefault(s, 0);
     }
 
     /**
+     * <span class="en">
      * Cover method for returning a float for a
      * given system property.
-     * @param s system property
+     * 
+     * @param s - system property
+     * 
      * @return float value of the system property or 0
+     * </span>
+     * 
+     * <span class="ja">
+     * システム・プロパティーの結果を float で戻します
+     * 
+     * @param s - キー（システム・プロパティー内）
+     * 
+     * @return float 値、デフォルトは 0
+     * </span>
      */
-    public static float floatForKey(String s) {
+    @SuppressWarnings("javadoc")
+	public static float floatForKey(String s) {
         return floatForKeyWithDefault(s, 0);
     }
 
     /**
+     * <span class="en">
      * Cover method for returning a double for a
      * given system property.
-     * @param s system property
+     * 
+     * @param s - system property
+     * 
      * @return double value of the system property or 0
+     * </span>
+     * 
+     * <span class="ja">
+     * システム・プロパティーの結果を double で戻します
+     * 
+     * @param s - キー（システム・プロパティー内）
+     * 
+     * @return double 値、デフォルトは 0
+     * </span>
      */
-    public static double doubleForKey(String s) {
+    @SuppressWarnings("javadoc")
+	public static double doubleForKey(String s) {
         return doubleForKeyWithDefault(s, 0);
     }
 
     /**
+     * <span class="en">
      * Cover method for returning a BigDecimal for a
      * given system property. This method uses the
      * method <code>bigDecimalValueWithDefault</code> from
      * {@link ERXValueUtilities}.
-     * @param s system property
+     * 
+     * @param s - system property
+     * 
      * @return bigDecimal value of the string in the
      *      system properties.  Scale is controlled by the string, ie "4.400" will have a scale of 3.
+     * </span>
+     * 
+     * <span class="ja">
+     * システム・プロパティーの結果を BigDecimal で戻します
+     * 
+     * @param s - キー（システム・プロパティー内）
+     * 
+     * @return BigDecimal 値、デフォルトは null
+     * </span>
      */
-    public static BigDecimal bigDecimalForKey(String s) {
+    @SuppressWarnings("javadoc")
+	public static BigDecimal bigDecimalForKey(String s) {
         return bigDecimalForKeyWithDefault(s,null);
     }
 
     /**
+     * <span class="en">
      * Cover method for returning a BigDecimal for a
      * given system property or a default value. This method uses the
      * method <code>bigDecimalValueWithDefault</code> from
      * {@link ERXValueUtilities}.
-     * @param s system property
-     * @param defaultValue default value
+     * 
+     * @param s - system property
+     * @param defaultValue - default value
+     * 
      * @return BigDecimal value of the string in the
      *      system properties. Scale is controlled by the string, ie "4.400" will have a scale of 3.
+     * </span>
+     * 
+     * <span class="ja">
+     * システム・プロパティーの結果を BigDecimal で戻します
+     * 
+     * @param s - キー（システム・プロパティー内）
+     * @param defaultValue - デフォルト値
+     * 
+     * @return BigDecimal 値、又はデフォルト値
+     * </span>
      */
-    public static BigDecimal bigDecimalForKeyWithDefault(String s, BigDecimal defaultValue) {
+    @SuppressWarnings("javadoc")
+	public static BigDecimal bigDecimalForKeyWithDefault(String s, BigDecimal defaultValue) {
         final String propertyName = getApplicationSpecificPropertyName(s);
 
         Object value = _cache.get(propertyName);
@@ -623,13 +834,27 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
 
     /**
+     * <span class="en">
      * Cover method for returning an int for a
      * given system property with a default value.
-     * @param s system property
-     * @param defaultValue default value
+     * 
+     * @param s - system property
+     * @param defaultValue - default value
+     * 
      * @return int value of the system property or the default value
+     * </span>
+     * 
+     * <span class="ja">
+     * システム・プロパティーの結果を int で戻します
+     * 
+     * @param s - キー（システム・プロパティー内）
+     * @param defaultValue - デフォルト値
+     * 
+     * @return int 値、又はデフォルト値
+     * </span>
      */    
-    public static int intForKeyWithDefault(final String s, final int defaultValue) {
+    @SuppressWarnings("javadoc")
+	public static int intForKeyWithDefault(final String s, final int defaultValue) {
         final String propertyName = getApplicationSpecificPropertyName(s);
 		int value;
 		Object cachedValue = _cache.get(propertyName);
@@ -653,13 +878,27 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
 
     /**
+     * <span class="en">
      * Cover method for returning a long for a
      * given system property with a default value.
-     * @param s system property
-     * @param defaultValue default value
+     * 
+     * @param s - system property
+     * @param defaultValue - default value
+     * 
      * @return long value of the system property or the default value
+     * </span>
+     * 
+     * <span class="ja">
+     * システム・プロパティーの結果を long で戻します
+     * 
+     * @param s - キー（システム・プロパティー内）
+     * @param defaultValue - デフォルト値
+     * 
+     * @return long 値、又はデフォルト値
+     * </span>
      */    
-    public static long longForKeyWithDefault(final String s, final long defaultValue) {
+    @SuppressWarnings("javadoc")
+	public static long longForKeyWithDefault(final String s, final long defaultValue) {
         final String propertyName = getApplicationSpecificPropertyName(s);
 		long value;
 		Object cachedValue = _cache.get(propertyName);
@@ -683,13 +922,27 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
 
     /**
+     * <span class="en">
      * Cover method for returning a float for a
      * given system property with a default value.
-     * @param s system property
-     * @param defaultValue default value
+     * 
+     * @param s - system property
+     * @param defaultValue - default value
+     * 
      * @return float value of the system property or the default value
+     * </span>
+     * 
+     * <span class="ja">
+     * システム・プロパティーの結果やデフォルト値を float で戻します
+     * 
+     * @param s - キー（システム・プロパティー内）
+     * @param defaultValue - デフォルト値
+     * 
+     * @return float 値
+     * </span>
      */    
-    public static float floatForKeyWithDefault(final String s, final float defaultValue) {
+    @SuppressWarnings("javadoc")
+	public static float floatForKeyWithDefault(final String s, final float defaultValue) {
         final String propertyName = getApplicationSpecificPropertyName(s);
 
 		float value;
@@ -714,13 +967,27 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
 
     /**
+     * <span class="en">
      * Cover method for returning a double for a
      * given system property with a default value.
-     * @param s system property
-     * @param defaultValue default value
+     * 
+     * @param s - system property
+     * @param defaultValue - default value
+     * 
      * @return double value of the system property or the default value
+     * </span>
+     * 
+     * <span class="ja">
+     * システム・プロパティーの結果やデフォルト値を double で戻します
+     * 
+     * @param s - キー（システム・プロパティー内）
+     * @param defaultValue - デフォルト値
+     * 
+     * @return double 値
+     * </span>
      */    
-    public static double doubleForKeyWithDefault(final String s, final double defaultValue) {
+    @SuppressWarnings("javadoc")
+	public static double doubleForKeyWithDefault(final String s, final double defaultValue) {
         final String propertyName = getApplicationSpecificPropertyName(s);
 
 		double value;
@@ -745,24 +1012,52 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
     
     /**
+     * <span class="en">
      * Returning an string for a given system 
      * property. This is a cover method of 
      * {@link java.lang.System#getProperty}
-     * @param s system property
-     * @return string value of the system propery or null
+     * 
+     * @param s - system property
+     * 
+     * @return string value of the system property or null
+     * </span>
+     * 
+     * <span class="ja">
+     * システム・プロパティーの結果を String で戻します
+     * 
+     * @param s - キー（システム・プロパティー内）
+     * 
+     * @return String 値、デフォルトはnull
+     * </span>
      */
-    public static String stringForKey(String s) {
+    @SuppressWarnings("javadoc")
+	public static String stringForKey(String s) {
         return stringForKeyWithDefault(s, null);
     }
 
     /**
+     * <span class="en">
      * Returning an string for a given system
      * property. This is a cover method of
      * {@link java.lang.System#getProperty}
-     * @param s system property
-     * @return string value of the system propery or null
+     * 
+     * @param s - system property
+     * @param defaultValue - default Value
+     * 
+     * @return string value of the system property or null
+     * </span>
+     * 
+     * <span class="ja">
+     * システム・プロパティーの結果やデフォルト値を String で戻します
+     * 
+     * @param s - キー（システム・プロパティー内）
+     * @param defaultValue - デフォルト値
+     * 
+     * @return String 値、又はデフォルト値
+     * </span>
      */
-    public static String stringForKeyWithDefault(final String s, final String defaultValue) {
+    @SuppressWarnings("javadoc")
+	public static String stringForKeyWithDefault(final String s, final String defaultValue) {
         final String propertyName = getApplicationSpecificPropertyName(s);
         final String propertyValue = ERXSystem.getProperty(propertyName);
         final String stringValue = propertyValue == null ? defaultValue : propertyValue;
@@ -972,10 +1267,20 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
 
     /**
+     * <span class="en">
      * Sets a string in the System properties for
      * another string.
-     * @param string to be set in the System properties
-     * @param key to be used to get the value
+     * 
+     * @param string - to be set in the System properties
+     * @param key - to be used to get the value
+     * </span>
+     * 
+     * <span class="ja">
+     * システム・プロパティーに String をセットします
+     * 
+     * @param string - システム・プロパティーにセットするString
+     * @param key - セットする為のキー
+     * </span>
      */
     // DELETEME: Really not needed anymore -- MS: Why?  We need the cache clearing.
     public static void setStringForKey(String string, String key) {
@@ -1737,14 +2042,26 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     //	---------------------------------------------------------------------------
 
     /**
+     * <span class="en">
      * Caches the application name for appending to the key.
      * Note that for a period when the application is starting up
      * application() will be null and name() will be null.
+     * 
      * @return application name used for appending, for example ".ERMailer"
+     * 
      * Note: this is redundant with the scheme checked in on March 21, 2005 by clloyd (ben holt did checkin).
      * This scheme requires the user to swizzle the existing properties file with a new one of this type.
+     * </span>
+     * 
+     * <span class="ja">
+     * キーに追加する為のアプリケーション名を戻します。
+     * 注意：起動時には少しの間 application() と name() がまだ null のままのです。
+     * 
+     * @return キーに追加する為のアプリケーション名、例えば ".ERMailer"
+     * </span>
      */
-    protected String applicationNameForAppending() {
+    @SuppressWarnings("javadoc")
+	protected String applicationNameForAppending() {
         if (applicationNameForAppending == null) {
             applicationNameForAppending = WOApplication.application() != null ? WOApplication.application().name() : null;
             if (applicationNameForAppending != null) {
@@ -1798,9 +2115,22 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
 
     /**
+     * <span class="en">
      * Returns the properties as a String in Property file format. Useful when you use them 
      * as custom value types, you would set this as the conversion method name.
+     * 
      * @throws IOException
+     * </span>
+     * 
+     * <span class="ja">
+     * プロパティーをプロパティー・ファイル・フォーマットの文字列として戻します。
+     * カスタム値タイプとして使用する時に便利です。
+     * コンバーション・メソッド名として使用するといい
+     * 
+     * @return プロパティーをプロパティー・ファイル・フォーマットの文字列
+     * 
+     * @throws IOException
+     * </span>
      */
     public Object toExternalForm() throws IOException {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -1859,23 +2189,35 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
 
 	/**
-	 * Stores the mapping between operator keys and operators
+	 * <span class="en">Stores the mapping between operator keys and operators</span>
+	 * 
+	 * <span class="ja">オペレータ処理とオペレータ・キーのマップを保持しま</span>
 	 */
 	private static final NSMutableDictionary<String, ERXProperties.Operator> operators = new NSMutableDictionary<String, ERXProperties.Operator>();
 
 	/**
+	 * <span class="en">
 	 * Registers a property operator for a particular key.
 	 * 
 	 * @param operator
 	 *            the operator to register
 	 * @param key
 	 *            the key name of the operator
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * あるキーへのプロパティー・オペレータを登録します。
+	 * 
+	 * @param operator - 登録するオペレータ
+	 * @param key - オペレータのキー名
+	 * </span>
 	 */
 	public static void setOperatorForKey(ERXProperties.Operator operator, String key) {
 		ERXProperties.operators.setObjectForKey(operator, key);
 	}
 
 	/**
+	 * <span class="en">
 	 * <p>
 	 * Property operators work like array operators. In your properties, you can
 	 * define keys like:
@@ -1907,11 +2249,41 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 	 * that the operators are evaluated before all of the properties in the
 	 * system are loaded.
 	 * </p>
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * <p>
+	 * プロパティー・オペレータは配列オペレータと同じ様に動作します。
+	 * あなたのプロパティー内には次のようにキーを作成が可能です：
+	 * </p>
+	 * 
+	 * <code>er.extensions.akey.@someOperatorKey.aparameter=somevalue</code>
+	 * 
+	 * <p>
+	 * someOperatorKey オペレータより処理されます。アプリケーション起動時に、
+	 * プロパティーが早い段階で処理されるので、オペレータをアプリケーションクラスのスタティックで宣言するといいのです。
+	 * </p>
+	 * 
+	 * <code>
+	 * static {
+	 *   ERXProperties.setOperatorForKey(new ERXProperties.InRangeOperator(100), ERXProperties.InRangeOperator.ForInstanceKey);
+	 * }
+	 * </code>
+	 * 
+	 * <p>
+	 * 大変重要はプロパティー・オペレータがロード時で処理されるので、アクセス時ではありません。
+	 * 計算されている関数ステータスがランタイム状況に左右されないようにする必要がある。
+	 * 
+	 * 追伸：計算オペレータ・メソッド内で他のプロパティーをアクセスする時にも注意が必要です。
+	 * なぜなら、計算時にまだシステムにロードされていない可能性があるからです。
+	 * </p>
+	 * </span>
 	 * 
 	 * @author mschrag
 	 */
 	public static interface Operator {
 		/**
+		 * <span class="en">
 		 * Performs some computation on the key, value, and parameters and
 		 * returns a dictionary of new properties. If this method returns null,
 		 * the original key and value will be used. If any other dictionary is
@@ -1927,13 +2299,33 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 		 * @param parameters
 		 *            ("aparameter" in
 		 *            "er.extensions.akey.@someOperatorKey.aparameter=somevalue")
+		 *            
 		 * @return a dictionary of properties (or null to use the original key
 		 *         and value)
+		 * </span>
+		 * <span class="ja">
+		 * キー、値とパラメータを処理し、新プロパティーのディクショナリーを戻します。
+		 * もし、このメソッドが null を戻すなら、オリジナル・キーと値が使用されます。
+		 * 
+		 * 他のディクショナリーが戻される、ディクショナリーのプロパティーは
+		 * ターゲット・プロパティーにコピーされます。
+		 * 
+		 * @param key - キー　
+		 * 		("er.extensions.akey.@someOperatorKey.aparameter=somevalue" 内の "er.extensions.akey")
+		 * @param value - 値 
+		 * 		("er.extensions.akey.@someOperatorKey.aparameter=somevalue" 内の "somevalue")
+		 * @param parameters - パラメータ 
+		 * 		("er.extensions.akey.@someOperatorKey.aparameter=somevalue" 内の "aparameter")
+		 * 
+		 * @return プロパティーのディクショナリー (null の場合にはオリジナルのキーと値が使用)
+		 * </span>
 		 */
+		@SuppressWarnings("javadoc")
 		public NSDictionary<String, String> compute(String key, String value, String parameters);
 	}
 
 	/**
+	 * <span class="en">
 	 * <p>
 	 * InRangeOperator provides support for defining properties that only
 	 * get set if a value falls within a specific range of values.
@@ -1982,22 +2374,59 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 	 * result, it's important to not define overlapping ranges, or you
 	 * may get unexpected results.
 	 * </p>
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * <p>InRangeOperator は指定レンジ内のあるプロパティーをセットする処理をサポートします。</p>
+	 * 
+	 * <p>このメソッドのサンプルとして、インスタンス番号ベース・プロパティーです。
+	 * 指定値をプロパティーとしてセットするのはインスタンス番号がある値の間にある時だけ。
+	 * 例えば、
+	 * インスタンス番号はアプリケーションよりも、リクエストと関連されています。
+	 * クラス登録によって、このオペレータがインスタンス番号がわかるのです。</p>
+	 * 
+	 * <p>InRangeOperator は次のようなキーをサポートしています：</p>
+	 * 
+	 * <code>er.extensions.akey.@forInstance.50=avalue</code>
+	 * <p>インスタンスが50になると "er.extensions.akey" の値を "avalue" にセットします。</p>
+	 * 
+	 * <code>er.extensions.akey.@forInstance.60,70=avalue</code>
+	 * <p>インスタンスが60又は70の場合 "er.extensions.akey" の値を "avalue" にセットします。</p>
+	 * 
+	 * <code>er.extensions.akey.@forInstance.100-300=avalue</code>
+	 * <p>インスタンスが100から300の間にある場合 "er.extensions.akey" の値を "avalue" にセットします。</p>
+	 * 
+	 * <code>er.extensions.akey.@forInstance.20-30,50=avalue</code>
+	 * <p>インスタンスが20から30の間、又は50の場合 "er.extensions.akey" の値を "avalue" にセットします。</p>
+	 * 
+	 * <p>複数の処理が同じキーでヒットすると、最後のプロパティー（キー名でソートされて）が採用されます。
+	 * 結果として、オーバラップされる値をセットしないように、そうしないと思わない結果が得られます。</p>
+	 * </span>
 	 * 
 	 * @author mschrag
 	 */
 	public static class InRangeOperator implements ERXProperties.Operator {
 		/**
-		 * The default key name of the ForInstance variant of the InRange operator.
+		 * <span class="en">The default key name of the ForInstance variant of the InRange operator.</span>
+		 * <span class="ja">InRangeオペレータのインスタンス・デフォルト・キー名</span>
 		 */
 		public static final String ForInstanceKey = "forInstance";
 
 		private int _instanceNumber;
 
 		/**
+		 * <span class="en">
 		 * Constructs a new InRangeOperator.
 		 * 
 		 * @param value
 		 *            the instance number of this application
+		 * </span>
+		 * 
+		 * <span class="ja">
+	     * 新規 InRangeOperator を作成します。「コンストラクタ」
+	     * 
+	     * @param value - このアプリケーションのインスタンス番号
+	     * </span>
 		 */
 		public InRangeOperator(int value) {
 			_instanceNumber = value;
@@ -2018,6 +2447,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 	}
 
 	/**
+	 * <span class="en">
 	 * <p>
 	 * Encrypted operator supports decrypting values using the default crypter. To register this
 	 * operator, add the following static block to your Application class:
@@ -2031,7 +2461,19 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 	 * 
 	 * Call er.extensions.ERXProperties.EncryptedOperator.register() in an Application static
 	 * block to register this operator.
-	 * </p> 
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * <p>暗号オペレータ・サポート。デフォルト暗号化処理が使用されます。</p>
+	 * 
+	 * <code>
+	 * static {
+	 *   ERXProperties.setOperatorForKey(new ERXProperties.EncryptedOperator(), ERXProperties.EncryptedOperator.Key);
+	 * }
+	 * </code>
+	 * 
+	 * er.extensions.ERXProperties.EncryptedOperator.register() をスタティック・ブロック内で呼ぶことで登録できます。
+	 * </span>
 	 * 
 	 * @author mschrag
 	 */
@@ -2167,6 +2609,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 	}
 
 	/**
+	 * <span class="en">
 	 * For each property in originalProperties, process the keys and values with
 	 * the registered property operators and stores the converted value into
 	 * destinationProperties.
@@ -2175,6 +2618,16 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 	 *            the properties to convert
 	 * @param destinationProperties
 	 *            the properties to copy into
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * オリジナル・プロパティーの各プロパティーのキーと値を登録されているオペレータで処理し、
+	 * 変換されている結果をターゲット・プロパティーに記録します。
+	 * ※ ERXSystemより呼ばれる ※
+	 * 
+	 * @param originalProperties - オリジナル・プロパティー
+	 * @param destinationProperties - 変換済みのターゲット・プロパティー
+	 * </span>
 	 */
 	public static void evaluatePropertyOperators(Properties originalProperties, Properties destinationProperties) {
 		NSArray<String> operatorKeys = ERXProperties.operators.allKeys();
