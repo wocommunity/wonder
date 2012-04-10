@@ -192,10 +192,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      */ 
     @SuppressWarnings("javadoc")
 	public static String versionStringForApplication() {
-        NSBundle bundle = NSBundle.mainBundle();
-        String versionString = (String) bundle.infoDictionary()
-                                            .objectForKey("CFBundleShortVersionString");
-        return versionString == null  ?  ""  :  versionString.trim(); // remove the line ending char
+        return valueFromPlistBundleWithKey(NSBundle.mainBundle(), "CustomInfo.plist", "CFBundleShortVersionString");
     }
 
     /** 
@@ -234,12 +231,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      */ 
     @SuppressWarnings("javadoc")
 	public static String versionStringForFrameworkNamed(String frameworkName) {
-        NSBundle bundle = NSBundle.bundleForName(frameworkName);
-        if (bundle == null)  return "";
-        
-        String versionString = (String) bundle.infoDictionary()
-                                            .objectForKey("CFBundleShortVersionString");
-        return versionString == null  ?  ""  :  versionString.trim(); // trim() removes the line ending char
+        return valueFromPlistBundleWithKey(NSBundle.bundleForName(frameworkName), "CustomInfo.plist", "CFBundleShortVersionString");
     }
 
     /**
@@ -272,13 +264,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      */
     @SuppressWarnings("javadoc")
 	public static String sourceVersionString() {
-        NSBundle bundle = NSBundle.bundleForName("JavaWebObjects");
-        if (bundle == null)  return "";
-        String dictString = new String(bundle.bytesForResourcePath("version.plist"));
-        NSDictionary versionDictionary = NSPropertyListSerialization.dictionaryForString(dictString);
-
-        String versionString = (String) versionDictionary.objectForKey("SourceVersion");
-        return versionString == null  ?  ""  :  versionString.trim(); // trim() removes the line ending char
+        return valueFromPlistBundleWithKey(NSBundle.bundleForName("JavaWebObjects"), "version.plist", "SourceVersion");
     }
 
     /**
