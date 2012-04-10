@@ -281,6 +281,38 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         return versionString == null  ?  ""  :  versionString.trim(); // trim() removes the line ending char
     }
 
+    /**
+     * <span class="en">
+     * Returns the key in an plist of the given framework.
+     * 
+     * @param bundle - bundle name
+     * @param plist - plist Filename
+     * @param key - key
+     * 
+     * @return Result
+     * </span>
+     * <span class="ja">
+     * 対象バンドル内のplistファイル内のキーを使って、結果を戻します。
+     * 
+     * @param bundle - 対象するバンドル名
+     * @param plist - plist ファイル名
+     * @param key - plist 内に調べるキー
+     * 
+     * @return 結果文字列
+     * </span>
+     */
+    @SuppressWarnings("javadoc")
+    public static String valueFromPlistBundleWithKey(NSBundle bundle, String plist, String key) {
+    	if (bundle == null)
+    		return "";
+
+    	String dictString = new String(bundle.bytesForResourcePath(plist));
+    	NSDictionary versionDictionary = NSPropertyListSerialization.dictionaryForString(dictString);
+
+    	String versionString = (String) versionDictionary.objectForKey(key);
+    	return versionString == null  ?  ""  :  versionString.trim(); // trim() removes the line ending char
+    }
+    
     /** 
      * <span class="en">
      * Returns WebObjects version as string. If it's one of those 
