@@ -1,4 +1,4 @@
-package com.webobjects.appserver._private;
+package er.extensions.appserver;
 
 /**
  * Patched to fix the security hole about direct access of components
@@ -21,11 +21,11 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSProperties;
 
-public class WOComponentRequestHandler extends WORequestHandler
+public class ERXComponentRequestHandler extends WORequestHandler
 {
 	private boolean _directComponentAccessAllowed;
 
-	public WOComponentRequestHandler() {
+	public ERXComponentRequestHandler() {
 		super();
 		setDirectComponentAccessAllowed(NSProperties.booleanForKeyWithDefault("ERXDirectComponentAccessAllowed", true));
 	}
