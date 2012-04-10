@@ -2,7 +2,7 @@ package er.extensions.appserver;
 
 /**
  * Patched to fix the security hole about direct access of components
- * use ERXDirectComponentAccessAllowed=false to block direct access to components
+ * use ERXDirectComponentAccessAllowed=true to restore the original behaviour (direct access to components by name in URL)
  */
 
 import com.webobjects.appserver.WOActionResults;
@@ -19,7 +19,8 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotificationCenter;
-import com.webobjects.foundation.NSProperties;
+
+import er.extensions.foundation.ERXProperties;
 
 public class ERXComponentRequestHandler extends WORequestHandler
 {
@@ -27,7 +28,7 @@ public class ERXComponentRequestHandler extends WORequestHandler
 
 	public ERXComponentRequestHandler() {
 		super();
-		setDirectComponentAccessAllowed(NSProperties.booleanForKeyWithDefault("ERXDirectComponentAccessAllowed", true));
+		setDirectComponentAccessAllowed(ERXProperties.booleanForKeyWithDefault("ERXDirectComponentAccessAllowed", false));
 	}
 
 	public static NSDictionary requestHandlerValuesForRequest(WORequest aRequest) {

@@ -1092,10 +1092,13 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	public ERXApplication() {
 		super();
 		
-		// ERXComponentRequestHandler is a pathed verson of the original WOComponentRequestHandler
-		// Will patch the direct component access security hole
-		ERXComponentRequestHandler erComponentRequestHandler = new ERXComponentRequestHandler();
-		registerRequestHandler(erComponentRequestHandler, this.componentRequestHandlerKey());
+		// ERXComponentRequestHandler is a patched verson of the original WOComponentRequestHandler
+		// This method will tell Application to used the patched, the pathed version will disallow direct component access by name
+		// If you want to use the unpatched version set the property ERXDirectComponentAccessAllowed to true
+		if (!ERXProperties.booleanForKeyWithDefault("ERXDirectComponentAccessAllowed", false)) {
+			ERXComponentRequestHandler erComponentRequestHandler = new ERXComponentRequestHandler();
+			registerRequestHandler(erComponentRequestHandler, this.componentRequestHandlerKey());
+		}
 		
 		ERXStats.initStatisticsIfNecessary();
 
