@@ -206,7 +206,16 @@ public class ERXResourceManager extends WOResourceManager {
 			}
 		}
 		completeURL = _versionManager.versionedUrlForResourceNamed(completeURL, name, bundleName, languages, request);
+		completeURL = _postprocessURL(completeURL, bundleName);
 		return completeURL;
+	}
+	
+	protected String _postprocessURL(String url, String bundleName) {
+		if (WOApplication.application() instanceof ERXApplication) {
+			WODeployedBundle bundle = _cachedBundleForFrameworkNamed(bundleName);
+			return ERXApplication.erxApplication()._rewriteResourceURL(url, bundle);
+		}
+		return url;
 	}
 
 	private WOURLValuedElementData cachedDataForKey(String key) {

@@ -2473,6 +2473,20 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	    }
 		return processedURL;
 	}
+	
+	/**
+	 * This method is called by ERXResourceManager and provides the application a hook
+	 * to rewrite generated URLs for resources.
+	 *
+	 * @param url
+	 *            the URL to rewrite
+	 * @param bundle
+	 *            the bundle the resource is located in
+	 * @return the rewritten URL
+	 */
+	public String _rewriteResourceURL(String url, WODeployedBundle bundle) {
+	    return url;
+	}
 
 	/**
 	 * Returns whether or not to rewrite direct connect URLs.
