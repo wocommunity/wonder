@@ -58,6 +58,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.appserver.WOTimer;
 import com.webobjects.appserver._private.WOComponentDefinition;
+import com.webobjects.appserver._private.WODeployedBundle;
 import com.webobjects.appserver._private.WOProperties;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOObserverCenter;
@@ -566,7 +567,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 					}
 				}
 			}
-			NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("bundleDidLoad", new Class[] { NSNotification.class }), "NSBundleDidLoadNotification", null);
+			NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("bundleDidLoad", ERXConstant.NotificationClassArray), "NSBundleDidLoadNotification", null);
 		}
 		
 		private void debugMsg(String msg) {
@@ -2042,7 +2043,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * @return response
 	 */
 	@Override
-
 	public WOResponse dispatchRequest(WORequest request) {
 		WOResponse response = null;
 		ERXDelayedRequestHandler delayedRequestHandler = delayedRequestHandler();
@@ -2287,6 +2287,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * Returns whether or not this application is running in development-mode.
 	 * If you are using Xcode, you should add a WOIDE=Xcode setting to your
 	 * launch parameters.
+	 * @return <code>true</code> if application is in dev mode
 	 */
 	public boolean isDevelopmentMode() {
 		return ERXApplication._defaultIsDevelopmentMode();
@@ -2433,6 +2434,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 	/**
 	 * Returns an ERXMigrator with the lock owner name "appname-instancenumber".
+	 * @return migrator for this instance
 	 */
 	public ERXMigrator migrator() {
 		return new ERXMigrator(name() + "-" + host() + ":" + port());
