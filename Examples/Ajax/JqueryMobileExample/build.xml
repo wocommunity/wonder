@@ -1,0 +1,4 @@
+<project name="JQueryMobileExample" default="build" basedir=".">
+	<property name="wodka.builder" value="../../WOdkaProject/WOdkaBuilder" />
+	<import file="${wodka.builder}/Templates/common-app.xml" />
+</project>

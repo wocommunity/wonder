@@ -1,0 +1,6 @@
+#### loading Information
+er.extensions.load.Properties.database=app
+
+dbConnectURLGLOBAL=jdbc:Frontbase://localhost/Movies/isolation=read_committed/locking=optimistic
+dbConnectUserGLOBAL=_SYSTEM
+#dbConnectPasswordGLOBAL=

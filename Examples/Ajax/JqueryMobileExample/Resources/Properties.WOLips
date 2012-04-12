@@ -1,0 +1,8 @@
+#### loading Information
+er.extensions.load.Properties.WOLips=app
+
+# OGNL
+ognl.helperFunctions=true
+ognl.inlineBindings=true
+
+#wolips.password=wo
