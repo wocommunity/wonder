@@ -148,7 +148,7 @@ public class SockIOPool {
 	};
 
 	// Constants
-	private static final Integer ZERO       = new Integer( 0 );
+	private static final Integer ZERO       = Integer.valueOf(0);
 	public static final int NATIVE_HASH     = 0;				// native String.hashCode();
 	public static final int OLD_COMPAT_HASH = 1;				// original compatibility hashing algorithm (works with other clients)
 	public static final int NEW_COMPAT_HASH = 2;				// new CRC32 based compatibility hashing algorithm (works with other clients)

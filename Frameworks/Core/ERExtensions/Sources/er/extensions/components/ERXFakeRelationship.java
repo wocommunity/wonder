@@ -151,7 +151,7 @@ public class ERXFakeRelationship extends WOComponent {
 	    try {
 		if(s.length() > 0) {
 		    if(!hasStringPk)  {
-			pkValue = new Integer(Integer.parseInt(s));
+			pkValue = Integer.valueOf(s);
 		    } else {
 			pkValue = s;
 		    }

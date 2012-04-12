@@ -143,7 +143,7 @@ public class ERXLongPrimaryKeyFactory {
 
 	private int hostCode() {
 		if (hostCode == null) {
-			hostCode = new Integer(ERXSystem.getProperty(HOST_CODE_KEY));
+			hostCode = Integer.valueOf(ERXSystem.getProperty(HOST_CODE_KEY));
 		}
 		return hostCode.intValue();
 	}
@@ -412,7 +412,7 @@ public class ERXLongPrimaryKeyFactory {
 	 */
 	private int increaseBy() {
 		if (increaseBy == null) {
-			increaseBy = new Integer(ERXProperties.intForKeyWithDefault("er.extensions.ERXLongPrimaryKeyFactory.increaseBy", 1000));
+			increaseBy = Integer.valueOf(ERXProperties.intForKeyWithDefault("er.extensions.ERXLongPrimaryKeyFactory.increaseBy", 1000));
 		}
 		return increaseBy.intValue();
 	}

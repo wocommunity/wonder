@@ -274,7 +274,7 @@ public class ERPublishCalendarPage extends WOComponent {
 	GregorianCalendar calendarDate = new GregorianCalendar();
 
 	calendarDate.setTime (event.startTime());
-	return new Integer (calendarDate.get (Calendar.MONTH) + 1);
+	return Integer.valueOf(calendarDate.get(Calendar.MONTH) + 1);
     }
 
     /**
@@ -286,7 +286,7 @@ public class ERPublishCalendarPage extends WOComponent {
 	String byDay = "";
 
 	if (event.repeatDayOfWeekInMonth() != 0) {
-	    byDay = new Integer (event.repeatDayOfWeekInMonth()).toString();
+	    byDay = Integer.valueOf(event.repeatDayOfWeekInMonth()).toString();
 	}
 	switch (event.repeatDayOfWeek()) {
 	    case Calendar.SUNDAY:

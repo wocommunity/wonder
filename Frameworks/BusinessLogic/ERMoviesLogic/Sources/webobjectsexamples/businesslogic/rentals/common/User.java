@@ -42,7 +42,7 @@ public class User extends EOGenericRecord {
 	public void awakeFromInsertion(EOEditingContext editingContext) {
 		super.awakeFromInsertion(editingContext);
 		if (accessLevel() == null) {
-			setAccessLevel(new Integer(NoAccessLevel));
+			setAccessLevel(Integer.valueOf(NoAccessLevel));
 		}
 	}
 

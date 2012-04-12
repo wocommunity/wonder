@@ -184,7 +184,7 @@ public class BTDataCreator {
 			String string = names[i];
 			Framework framework = (Framework) Framework.clazz.createAndInsertObject(ec);
 			framework.setName(string);
-			framework.setOrdering(new Integer(i));
+			framework.setOrdering(Integer.valueOf(i));
 		}
 		log.info("Saving...");
 		ec.saveChanges();

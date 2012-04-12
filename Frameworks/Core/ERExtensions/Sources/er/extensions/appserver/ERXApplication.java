@@ -2389,7 +2389,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	}
 
 	public Number sessionTimeOutInMinutes() {
-		return new Integer(sessionTimeOut().intValue() / 60);
+		return Integer.valueOf(sessionTimeOut().intValue() / 60);
 	}
 
 	protected static final ERXFormatterFactory _formatterFactory = new ERXFormatterFactory();

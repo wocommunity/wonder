@@ -174,7 +174,7 @@ public class DB2PlugIn extends JDBCPlugIn {
                 Number pkObj = (Number)pksEnum.nextElement();
                 Number pk;
                 if (isIntType) {
-                  pk = new Integer(pkObj.intValue());
+                  pk = Integer.valueOf(pkObj.intValue());
                 }
                 else {
                   pk = new Long(pkObj.longValue());

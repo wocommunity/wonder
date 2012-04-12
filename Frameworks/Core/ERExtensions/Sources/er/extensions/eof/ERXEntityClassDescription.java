@@ -1066,7 +1066,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                 }
             } else {
                 if (adaptorType == AdaptorNumberType) {
-                    defaultValue = new Integer(Integer.parseInt(stringValue));
+                    defaultValue = Integer.valueOf(stringValue);
                 }
                 EOGlobalID gid = EOKeyGlobalID.globalIDWithEntityName(relationshipEntityName, new Object[] {defaultValue});
                 EOEnterpriseObject fault = ec.faultForGlobalID(gid,ec);

@@ -32,9 +32,9 @@ public class GSVEOAttribute {
             return width;
         String temp = (String)attribute.objectForKey("width");
         if(temp!=null)
-            width = new Integer(temp);
+            width = Integer.valueOf(temp);
         else
-            width = new Integer(0);
+            width = Integer.valueOf(0);
         return width;
     }
 

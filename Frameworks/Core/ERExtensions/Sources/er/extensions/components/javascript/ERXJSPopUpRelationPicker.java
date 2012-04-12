@@ -139,7 +139,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
     
     protected Object idForParent(Object parent) {
         if(parent != null) {
-            return new Integer(parentEntitiesList().indexOfObject(parent));
+            return Integer.valueOf(parentEntitiesList().indexOfObject(parent));
         }
         return null;
     }
@@ -586,7 +586,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
     }
     public int size() {
         if(_size == null) {
-            _size = new Integer(intValueForBinding("size", multiple() ? 5 : 1));
+            _size = Integer.valueOf(intValueForBinding("size", multiple() ? 5 : 1));
         }
         return _size.intValue();
     }

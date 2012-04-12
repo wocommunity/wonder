@@ -62,7 +62,7 @@ public class ERXLongResponse extends ERXNonSynchronizingComponent {
     	return _refreshInterval.intValue();
     }
     public void setRefreshInterval(int value) {
-    	_refreshInterval = new Integer(value);
+    	_refreshInterval = Integer.valueOf(value);
     }
     
     public WOComponent refresh() {

@@ -524,14 +524,14 @@ public class MSiteConfig extends MObject {
         if (xmlDict == null) {
             values = new NSMutableDictionary();
             setViewRefreshEnabled(Boolean.TRUE);
-            setViewRefreshRate(new Integer(60));
+            setViewRefreshRate(Integer.valueOf(60));
         } else {
             NSDictionary siteDict = (NSDictionary) xmlDict.valueForKey("site");
             if (siteDict == null) {
                 // rdar://3935864 - Seed: "Null Pointer Exception" for WO Application Instances
                 // It seems this should not be necessary, but there is no other place for default values to get fed in. -rrk
                 //
-                values = new NSMutableDictionary(new NSArray( new Object[] { Boolean.TRUE, new Integer(60) }),
+                values = new NSMutableDictionary(new NSArray( new Object[] { Boolean.TRUE, Integer.valueOf(60) }),
                                                  new NSArray ( new Object[] { "viewRefreshEnabled", "viewRefreshRate" }));
             } else {
                 values = new NSMutableDictionary(siteDict);
@@ -552,7 +552,7 @@ public class MSiteConfig extends MObject {
         String WOAssumeAppIsDeadMultiplier = System.getProperties().getProperty("WOAssumeApplicationIsDeadMultiplier");
         if (WOAssumeAppIsDeadMultiplier != null) {
             try {
-                Integer tempInt = new Integer(WOAssumeAppIsDeadMultiplier);
+                Integer tempInt = Integer.valueOf(WOAssumeAppIsDeadMultiplier);
                 _appIsDeadMultiplier = tempInt.intValue() * 1000;
             } catch (NumberFormatException e) {
                 // go with the default
@@ -1201,12 +1201,12 @@ public class MSiteConfig extends MObject {
     public MInstance instanceWithHostnameAndPort(String hostAndPort) {
         NSArray hostPortArray = NSArray.componentsSeparatedByString(hostAndPort, "\n");
         return instanceWithHostnameAndPort( (String) hostPortArray.objectAtIndex(0),
-                                                new Integer((String) hostPortArray.objectAtIndex(2)) );
+                                                Integer.valueOf((String) hostPortArray.objectAtIndex(2)) );
     }
 
     public MInstance instanceWithHostnameAndPort(String hostName, String port) {
         try {
-            Integer anIntPort = new Integer(port);
+            Integer anIntPort = Integer.valueOf(port);
             return instanceWithHostnameAndPort(hostName, anIntPort);
         } catch (Exception e) {
             log.error("Exception getting instance: " + hostName + " + " + port, e);
@@ -1225,7 +1225,7 @@ public class MSiteConfig extends MObject {
     
     public MInstance instanceWithHostAndPort(String name, InetAddress host, String port) {
         try {
-            Integer anIntPort = new Integer(port);
+            Integer anIntPort = Integer.valueOf(port);
             MHost aHost = hostWithAddress(host);
             if (aHost == null) {
                 return null;

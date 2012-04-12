@@ -53,8 +53,8 @@ public class ERXCheckboxMatrix extends ERXNonSynchronizingComponent {
     public final static Logger log = Logger.getLogger(ERXCheckboxMatrix.class);
 
     
-    private static final Integer DEFAULT_PADDING = new Integer(0);
-    private static final Integer DEFAULT_SPACING = new Integer(0);
+    private static final Integer DEFAULT_PADDING = Integer.valueOf(0);
+    private static final Integer DEFAULT_SPACING = Integer.valueOf(0);
 
     public ERXCheckboxMatrix(WOContext aContext) {
         super(aContext);

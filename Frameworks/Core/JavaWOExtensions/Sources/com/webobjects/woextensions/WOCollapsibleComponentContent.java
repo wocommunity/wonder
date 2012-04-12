@@ -60,9 +60,9 @@ public class WOCollapsibleComponentContent extends WOComponent
         _isVisible = isVisible() ? false : true;
         if (canSetValueForBinding("visibility")) {
             if (_isVisible) {
-                setValueForBinding(new Integer(1), "visibility");
+                setValueForBinding(Integer.valueOf(1), "visibility");
             } else {
-                setValueForBinding(new Integer(0), "visibility");
+                setValueForBinding(Integer.valueOf(0), "visibility");
             }
         }
         

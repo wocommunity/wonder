@@ -271,7 +271,7 @@ public abstract class ERXRemoteSynchronizer {
 			obj = new Short(dis.readShort());
 		}
 		else if (keyType == ERXRemoteSynchronizer.INT_TYPE) {
-			obj = new Integer(dis.readInt());
+			obj = Integer.valueOf(dis.readInt());
 		}
 		else if (keyType == ERXRemoteSynchronizer.LONG_TYPE) {
 			obj = new Long(dis.readLong());

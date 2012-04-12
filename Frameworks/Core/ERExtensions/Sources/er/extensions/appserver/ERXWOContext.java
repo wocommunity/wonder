@@ -490,7 +490,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 			String directActionURL;
 			if (ERXApplication.isWO54()) {
 				Method _directActionURLMethod = context.getClass().getMethod("_directActionURL", new Class[] { String.class, NSDictionary.class, boolean.class, int.class, boolean.class });
-				directActionURL = (String) _directActionURLMethod.invoke(context, new Object[] { actionName, queryParams, Boolean.valueOf(secure), new Integer(0), Boolean.FALSE });
+				directActionURL = (String) _directActionURLMethod.invoke(context, new Object[] { actionName, queryParams, Boolean.valueOf(secure), Integer.valueOf(0), Boolean.FALSE });
 			}
 			else {
 				Method _directActionURLMethod = context.getClass().getMethod("_directActionURL", new Class[] { String.class, NSDictionary.class, boolean.class });

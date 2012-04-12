@@ -27,7 +27,7 @@ public class MObject extends Object implements NSKeyValueCoding {
     
     public static NSArray hostTypeArray = new NSArray <Object>(new Object[]{"MacOSX" , "Windows" , "Unix"});
     
-    public static NSArray urlVersionArray = new NSArray <Object>(new Object[]{new Integer(4), new Integer(3)});
+    public static NSArray urlVersionArray = new NSArray <Object>(new Object[]{Integer.valueOf(4), Integer.valueOf(3)});
     
     protected static String[] weekNames = new String[]{"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
     public static NSArray weekArray = new NSArray <String>(weekNames);
@@ -38,8 +38,8 @@ public class MObject extends Object implements NSKeyValueCoding {
     public static NSArray timeOfDayArray = new NSArray <String>(timesOfDay);
 
     protected static Integer[] schedulingIntervals =
-        new Integer[]{new Integer(1), new Integer(2), new Integer(3), new Integer(4),
-                      new Integer(6), new Integer(8), new Integer(12) };
+        new Integer[]{Integer.valueOf(1), Integer.valueOf(2), Integer.valueOf(3), Integer.valueOf(4),
+                      Integer.valueOf(6), Integer.valueOf(8), Integer.valueOf(12) };
     public static NSArray schedulingIntervalArray = new NSArray<Integer>(schedulingIntervals);
     
     public static NSArray schedulingTypeArray = new NSArray<Object>(new Object[]{"HOURLY", "DAILY", "WEEKLY"});
@@ -66,7 +66,7 @@ public class MObject extends Object implements NSKeyValueCoding {
     public static int CRASHING = 5;
 
     public static String _emptyString = new String("");
-    public static Integer _zeroInteger = new Integer(0);
+    public static Integer _zeroInteger = Integer.valueOf(0);
 
     public static String directActionString = "/cgi-bin/WebObjects/wotaskd.woa/wa/monitorRequest";
     public static String adminActionStringPrefix = "/cgi-bin/WebObjects/";
@@ -95,16 +95,15 @@ public class MObject extends Object implements NSKeyValueCoding {
     public static Integer validatedInteger(Integer value) {
         if (value == null) {
             return value;
-        } else {
-            return new Integer(Math.abs(value.intValue()));
         }
+        return Integer.valueOf(Math.abs(value.intValue()));
     }
 
     public static Integer validatedUrlVersion(Integer version) {
         if (version != null) {
             int intVal = version.intValue();
             if (intVal != 3 && intVal != 4) {
-                return new Integer(4);
+                return Integer.valueOf(4);
             }
         }
         return version;
@@ -135,10 +134,9 @@ public class MObject extends Object implements NSKeyValueCoding {
         } catch (Exception e) {}
 
         if (intVal < 1) {
-            return new Integer(30);
-        } else {
-            return value;
+            return Integer.valueOf(30);
         }
+        return value;
     }
 
     public static String validatedSchedulingType(String value) {
@@ -166,7 +164,7 @@ public class MObject extends Object implements NSKeyValueCoding {
     public static Integer morphedSchedulingStartTime(String value) {
         int i = MObject.timeOfDayArray.indexOfObject(value);
         if (i != NSArray.NotFound) {
-            return new Integer(i);
+            return Integer.valueOf(i);
         }
         return null;
     }
@@ -196,7 +194,7 @@ public class MObject extends Object implements NSKeyValueCoding {
     public static Integer morphedSchedulingStartDay(String value) {
         int i = MObject.weekArray.indexOfObject(value);
         if (i != NSArray.NotFound) {
-            return new Integer(i);
+            return Integer.valueOf(i);
         }
         return null;
     }

@@ -311,7 +311,7 @@ public class ERXTimestampUtilities extends Object {
     public static Integer unixTimestamp(NSTimestamp ts) {
         long seconds = 0;
         seconds = ts.getTime() - epoch().getTime();
-        return (new Integer((int)((seconds-60*60)/1000L)));
+        return Integer.valueOf((int)((seconds-60*60)/1000L));
     }
     
     /**

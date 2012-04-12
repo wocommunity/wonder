@@ -80,7 +80,6 @@ public class WOCheckboxMatrix extends WOComponent {
         // ** This is where we accept the formValues.  Kind of weird.
         NSMutableArray aSelectionsArray = new NSMutableArray();
         if (aFormValuesArray != null) {
-            Number anIndex = null;
             Enumeration anIndexEnumerator = aFormValuesArray.objectEnumerator();
             NSArray anItemList = (NSArray)_WOJExtensionsUtil.valueForBindingOrNull("list",this);
             if (anItemList == null) {
@@ -88,8 +87,7 @@ public class WOCheckboxMatrix extends WOComponent {
             }
             int anItemCount = anItemList.count();
             while (anIndexEnumerator.hasMoreElements()) {
-                anIndex = new Integer((String)anIndexEnumerator.nextElement());
-                int i = anIndex.intValue();
+                int i = Integer.parseInt((String)anIndexEnumerator.nextElement());
                 if (i < anItemCount) {
                     Object anObject = anItemList.objectAtIndex(i);
                     aSelectionsArray.addObject(anObject);

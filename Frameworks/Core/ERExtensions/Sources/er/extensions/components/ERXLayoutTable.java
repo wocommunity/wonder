@@ -114,14 +114,14 @@ public class ERXLayoutTable extends WOComponent {
     				// fill up rows until enough are present
     				// this currently doesn't work when a col has eaten all
     				for(int i = colCounts.count(); i < rowSpan + row; i++) {
-    					colCounts.addObject(new Integer(maxColumns));
+    					colCounts.addObject(Integer.valueOf(maxColumns));
     					//log.info("Added: " + item + " " + colCounts);
     				}
     				//log.info("Start: " + item + "  " + currentRow + "/" + rowSpan + " " + currentCol + "/" + colSpan + " " + colCounts);
     				for(int i = row; i < row + rowSpan; i++) {
     					int currentMaxColumns = ((Integer) colCounts.objectAtIndex(i)).intValue();
     					currentMaxColumns = currentMaxColumns - (colSpan - (i == row ? 1 : 0));
-    					colCounts.replaceObjectAtIndex(new Integer(currentMaxColumns), i);
+    					colCounts.replaceObjectAtIndex(Integer.valueOf(currentMaxColumns), i);
     					//log.info("Curr: " + item + "  " + i + "/" + rowSpan + " " + currentMaxColumns + "/" + colSpan + " " + colCounts);
     				}
     				//log.info("Intern: " + item + "  " + currentRow + "/" + rowSpan + " " + currentCol + "/" + colSpan + " " + colCounts);
@@ -136,7 +136,7 @@ public class ERXLayoutTable extends WOComponent {
     	   			index = index + 1;
     			}
     			if(total > maxColumns * colCounts.count()) {
-    				colCounts.addObject(new Integer(total - maxColumns * colCounts.count()));
+    				colCounts.addObject(Integer.valueOf(total - maxColumns * colCounts.count()));
     			}
     			//log.info("Result: " + colCounts);
     			_colCounts = colCounts;

@@ -34,13 +34,13 @@ public class StatsUtilities extends Object  {
             if (aStatsDict != null) {
                 try {
                     String aValue = (String) aStatsDict.valueForKey("transactions");
-                    aTotalTrans = aTotalTrans + (new Integer(aValue)).intValue();
+                    aTotalTrans = aTotalTrans + Integer.parseInt(aValue);
                 } catch (Throwable ex) {
                     // do nothing
                 }
             }
         }
-        return new Integer(aTotalTrans);
+        return Integer.valueOf(aTotalTrans);
     }
 
 
@@ -57,13 +57,13 @@ public class StatsUtilities extends Object  {
             if (aStatsDict != null) {
                 try {
                     String aValue = (String) aStatsDict.valueForKey("activeSessions");
-                    aTotalActiveSessions = aTotalActiveSessions + (new Integer(aValue)).intValue();
+                    aTotalActiveSessions = aTotalActiveSessions + Integer.parseInt(aValue);
                 } catch (Throwable ex) {
                     // do nothing
                 }
             }
         }
-        return new Integer(aTotalActiveSessions);
+        return Integer.valueOf(aTotalActiveSessions);
     }
 
 
@@ -82,7 +82,7 @@ public class StatsUtilities extends Object  {
             if (aStatsDict != null) {
                 try {
                     String aValue = (String)aStatsDict.valueForKey("transactions");
-                    Integer aTrans = new Integer(aValue);
+                    Integer aTrans = Integer.valueOf(aValue);
 
                     if (aTrans.intValue() > 0) {
                         aValue = (String)aStatsDict.valueForKey("avgTransactionTime");
@@ -119,7 +119,7 @@ public class StatsUtilities extends Object  {
             if (aStatsDict != null) {
                 try {
                     String aValue = (String)aStatsDict.valueForKey("transactions");
-                    Integer aTrans = new Integer(aValue);
+                    Integer aTrans = Integer.valueOf(aValue);
 
                      if (aTrans.intValue() > 0) {
                          String idleString = (String)aStatsDict.valueForKey("averageIdlePeriod");
@@ -156,7 +156,7 @@ public class StatsUtilities extends Object  {
             if (aStatsDict != null) {
                 aStartDate = (String)aStatsDict.valueForKey("startedAt");
                 try {
-                    aTrans = new Integer( (String) aStatsDict.valueForKey("transactions") );
+                    aTrans = Integer.valueOf((String) aStatsDict.valueForKey("transactions"));
                 } catch (Throwable ex) {
                     aTrans = null;
                 }

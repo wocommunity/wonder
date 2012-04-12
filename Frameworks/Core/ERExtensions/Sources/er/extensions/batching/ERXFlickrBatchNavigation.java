@@ -378,7 +378,7 @@ public class ERXFlickrBatchNavigation extends ERXComponent {
 	public NSArray<? extends Number> possibleBatchSizes() {
 		Object value = valueForBinding("batchSizes");
 		if(value == null) {
-			return new NSArray<Integer>(new Integer[] {10, 50, 100, 0});
+			return new NSArray<Integer>(new Integer[] {Integer.valueOf(10), Integer.valueOf(50), Integer.valueOf(100), Integer.valueOf(0)});
 		}
 		NSMutableArray<Integer> result = new NSMutableArray<Integer>();
 		if (value instanceof String) {

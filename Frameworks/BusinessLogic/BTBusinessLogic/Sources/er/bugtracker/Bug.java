@@ -313,7 +313,7 @@ public class Bug extends _Bug implements Markable {
             for (Enumeration e=a.objectEnumerator(); e.hasMoreElements();) {
                 String s=(String)e.nextElement();
                 try {
-                    Integer i=new Integer(s);
+                    Integer i = Integer.valueOf(s);
                     quals.addObject(new EOKeyValueQualifier("id", EOQualifier.QualifierOperatorEqual, i));
 
                 } catch (NumberFormatException ex) {}

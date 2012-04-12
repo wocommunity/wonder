@@ -264,7 +264,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
     }
 
     public Integer itemHashCode(){
-        return new Integer(browserItem.hashCode());
+        return Integer.valueOf(browserItem.hashCode());
     }
 
     public void updateEOsOrdering(){
@@ -404,9 +404,9 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
                log.debug("indexKey = "+indexKey());
            } 
             if(selectedIndex!=0){
-                objectAtIndex(selectedIndex-1).takeValueForKey(new Integer(selectedIndex),
+                objectAtIndex(selectedIndex-1).takeValueForKey(Integer.valueOf(selectedIndex),
                                                                indexKey());
-                browserSelection().takeValueForKey(new Integer(selectedIndex-1),
+                browserSelection().takeValueForKey(Integer.valueOf(selectedIndex-1),
                                                    indexKey());
             }
             
@@ -427,9 +427,9 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
             int lastIndex =
                 ((Integer)lastObject.valueForKey(indexKey())).intValue();
             if(selectedIndex!=lastIndex){
-                objectAtIndex(selectedIndex+1).takeValueForKey(new Integer(selectedIndex),
+                objectAtIndex(selectedIndex+1).takeValueForKey(Integer.valueOf(selectedIndex),
                                                                indexKey());
-                browserSelection().takeValueForKey(new Integer(selectedIndex+1),
+                browserSelection().takeValueForKey(Integer.valueOf(selectedIndex+1),
                                                    indexKey());
             }
         }
@@ -467,7 +467,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
             if(log.isDebugEnabled()){
                 log.debug("object's hashCode is "+indexObject.hashCode());
             }
-            if( (new Integer(indexObject.hashCode())).toString().equals(hashCode)){
+            if( (Integer.toString(indexObject.hashCode())).equals(hashCode)){
                 result = indexObject;
                 break;
             }

@@ -199,7 +199,7 @@ public class MHost extends MObject {
                 runningInstances++;
             }
         }
-        return new Integer(runningInstances);
+        return Integer.valueOf(runningInstances);
     }
 
     public boolean isPortInUse(Integer port) {
@@ -214,7 +214,7 @@ public class MHost extends MObject {
         Integer retVal = null;
         do {
             if (isPortInUse(startingPort)) {
-                startingPort = new Integer(startingPort.intValue() + 1);
+                startingPort = Integer.valueOf(startingPort.intValue() + 1);
             } else {
                 retVal = startingPort;
             }

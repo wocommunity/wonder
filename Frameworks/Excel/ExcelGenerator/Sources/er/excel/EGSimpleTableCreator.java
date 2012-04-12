@@ -178,7 +178,7 @@ public class EGSimpleTableCreator {
 	 */
 	private void appendSheet(HSSFSheet sheet, String name) {
 		_html.append("<table");
-		appendAttribute("border", new Integer(1));
+		appendAttribute("border", Integer.valueOf(1));
 		appendAttribute("name", name);
 		appendValueForKey(sheet, "defaultRowHeightInPoints");
 		appendValueForKey(sheet, "defaultColumnWidth");

@@ -105,13 +105,13 @@ public class WOTable extends WOComponent {
         Object item = index < aList.count() ? aList.objectAtIndex(index) : null;
         setValueForBinding(item, "item");
         if (canSetValueForBinding("row")) {
-            setValueForBinding(new Integer(currentRow), "row");
+            setValueForBinding(Integer.valueOf(currentRow), "row");
         }
         if (canSetValueForBinding("col")) {
-            setValueForBinding(new Integer(currentCol), "col");
+            setValueForBinding(Integer.valueOf(currentCol), "col");
         }
         if (canSetValueForBinding("index")) {
-            setValueForBinding(new Integer(index), "index");
+            setValueForBinding(Integer.valueOf(index), "index");
         }
     }
 

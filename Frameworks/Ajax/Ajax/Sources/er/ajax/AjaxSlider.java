@@ -84,8 +84,8 @@ public class AjaxSlider extends AjaxComponent {
         } else {
         	new AjaxOption("onSlide", AjaxOption.SCRIPT).addToDictionary(this, options);
          }
-        Number min = (Number)valueForBinding("minimum", new Integer(0));
-        Number max = (Number)valueForBinding("maximum", new Integer(100));
+        Number min = (Number)valueForBinding("minimum", Integer.valueOf(0));
+        Number max = (Number)valueForBinding("maximum", Integer.valueOf(100));
         options.setObjectForKey("$R(" + min + "," + max + ")", "range");
 
         if (min != null && max != null && ERXComponentUtilities.booleanValueForBinding(this, "snap")) {

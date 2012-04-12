@@ -371,7 +371,7 @@ public class NativeHandler {
 	}
 	
 	protected static Integer decodeInteger( byte[] b ) {
-		return new Integer( toInt( b ) );
+		return Integer.valueOf(toInt(b));
 	}
 	
 	protected static Long decodeLong( byte[] b ) throws Exception {

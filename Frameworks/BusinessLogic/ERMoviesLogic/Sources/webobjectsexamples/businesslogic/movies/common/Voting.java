@@ -28,7 +28,7 @@ public class Voting extends _Voting {
 
 	public Number getNumberOfVotes() {
 		Number numberOfVotes = (Number) (storedValueForKey(NumberOfVotesKey));
-		return (numberOfVotes != null) ? numberOfVotes : new Integer(0);
+		return (numberOfVotes != null) ? numberOfVotes : Integer.valueOf(0);
 	}
 
 	public void setNumberOfVotes(Number value) {
@@ -50,7 +50,7 @@ public class Voting extends _Voting {
 			double total = getRunningAverage().doubleValue() * numberOfVotes + vote;
 			++numberOfVotes;
 
-			setNumberOfVotes(new Integer(numberOfVotes));
+			setNumberOfVotes(Integer.valueOf(numberOfVotes));
 			setRunningAverage(new Double(total / numberOfVotes));
 		}
 	}

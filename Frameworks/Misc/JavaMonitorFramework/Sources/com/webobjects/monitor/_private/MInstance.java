@@ -372,11 +372,11 @@ public class MInstance extends MObject {
 
         setSchedulingEnabled(Boolean.FALSE);
         setSchedulingType("DAILY");
-        setSchedulingHourlyStartTime(new Integer(3));
-        setSchedulingDailyStartTime(new Integer(3));
-        setSchedulingWeeklyStartTime(new Integer(3));
-        setSchedulingStartDay(new Integer(1)); // Sunday
-        setSchedulingInterval(new Integer(12));
+        setSchedulingHourlyStartTime(Integer.valueOf(3));
+        setSchedulingDailyStartTime(Integer.valueOf(3));
+        setSchedulingWeeklyStartTime(Integer.valueOf(3));
+        setSchedulingStartDay(Integer.valueOf(1)); // Sunday
+        setSchedulingInterval(Integer.valueOf(12));
         setGracefulScheduling(Boolean.TRUE);
     }
 
@@ -1100,7 +1100,7 @@ public class MInstance extends MObject {
             try {
                 String aValue = (String) aStatsDict.valueForKey(key);
                 if (aValue != null) {
-                    return (new Integer(aValue)).intValue();
+                    return Integer.parseInt(aValue);
                 }
             } catch (Throwable ex) {
                 // do nothing

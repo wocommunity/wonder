@@ -746,7 +746,7 @@ public class WODisplayGroup implements NSKeyValueCoding, NSKeyValueCoding.ErrorH
 		NSArray newSelection = _NSArrayUtilities.indexesForObjectsIndenticalTo(_displayedObjects, objectSelection);
 		if (newSelection.count() == 0) {
 			if ((selectFirstOnNoMatch) && (_displayedObjects.count() != 0)) {
-				newSelection = new NSArray(new Integer(0));
+				newSelection = new NSArray(Integer.valueOf(0));
 			} else {
 				newSelection = _NSArrayUtilities.closestMatchingIndexes(_selection, _displayedObjects.count(),
 						selectFirstOnNoMatch);

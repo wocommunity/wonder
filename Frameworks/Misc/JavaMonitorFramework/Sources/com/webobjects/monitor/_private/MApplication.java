@@ -273,23 +273,23 @@ public class MApplication extends MObject {
     }
     
     private static NSDictionary _defaults = new NSDictionary <Object, Object>(new Object[]{
-                                                                new Integer(2001),
-                                                                new Integer(30),
+                                                                Integer.valueOf(2001),
+                                                                Integer.valueOf(30),
                                                                 Boolean.TRUE,
                                                                 Boolean.TRUE,
-                                                                new Integer(0),
+                                                                Integer.valueOf(0),
                                                                 Boolean.TRUE,
                                                                 "WODefaultAdaptor",
-                                                                new Integer(8),
-                                                                new Integer(128),
-                                                                new Integer(16),
-                                                                new Integer(256),
+                                                                Integer.valueOf(8),
+                                                                Integer.valueOf(128),
+                                                                Integer.valueOf(16),
+                                                                Integer.valueOf(256),
 								"()",
-								new Integer(3600),
+								Integer.valueOf(3600),
 								"",
                                                                 Boolean.FALSE,
                                                                 Boolean.FALSE,
-                                                                new Integer(30),
+                                                                Integer.valueOf(30),
                                                                 "",
                                                                 Boolean.FALSE,
                                                                 "/Library/WebObjects/Logs",
@@ -377,7 +377,7 @@ public class MApplication extends MObject {
                 lastSequence = thisSequence;
             }
         }
-        return new Integer(lastSequence+1);
+        return Integer.valueOf(lastSequence+1);
     }
 
     public boolean isIDInUse(Integer ID) {
@@ -407,7 +407,7 @@ public class MApplication extends MObject {
                 runningInstances++;
             }
         }
-        return new Integer(runningInstances);
+        return Integer.valueOf(runningInstances);
     }
 
     public boolean isRunning_W() {
@@ -426,17 +426,17 @@ public class MApplication extends MObject {
     }
 
     public int runningInstancesCount() {
-        return runningInstancesCount;
+        return runningInstancesCount.intValue();
     }
 
     public void setRunningInstancesCount(int cnt) {
-        runningInstancesCount = new Integer(cnt);
+        runningInstancesCount = Integer.valueOf(cnt);
     }
 
     // Used for the AppDetailPage
     public Integer runningInstancesCount_M() {
         int runningInstances = runningInstances_M().count();
-        Integer riInt = new Integer(runningInstances);
+        Integer riInt = Integer.valueOf(runningInstances);
         runningInstancesCount = riInt;
         return riInt;
     }

@@ -141,7 +141,7 @@ public class ERXNumberFormatter extends NSNumberFormatter {
 			    int scaleOffset = factorString.indexOf(";");
 			    if(scaleOffset >= 0) {
 			        String scaleString = factorString.substring(scaleOffset+1);
-			        Integer scale = new Integer(scaleString);
+			        Integer scale = Integer.valueOf(scaleString);
 			        setScale(scale);
 			        factorString = factorString.substring(0,scaleOffset);
 			    }

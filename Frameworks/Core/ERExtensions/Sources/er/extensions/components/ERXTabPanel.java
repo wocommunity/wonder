@@ -52,7 +52,7 @@ public class ERXTabPanel extends WOTabPanel  {
 
     public Object selectedTabIdentifier() {
     	int id = selectedTabName().hashCode();
-    	return new Integer(id < 0 ? -id : id);
+    	return Integer.valueOf(id < 0 ? -id : id);
     }
     
     public void switchSubmitTab() {

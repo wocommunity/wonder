@@ -147,7 +147,7 @@ public class Customer extends EOGenericRecord {
 	}
 
 	public Number numberOfAllFees() {
-		return new Integer(allFees().count());
+		return Integer.valueOf(allFees().count());
 	}
 
 	public NSArray unpaidFees() {
@@ -156,7 +156,7 @@ public class Customer extends EOGenericRecord {
 	}
 
 	public Number numberOfUnpaidFees() {
-		return new Integer(unpaidFees().count());
+		return Integer.valueOf(unpaidFees().count());
 	}
 
 	public boolean hasUnpaidFees() {
@@ -169,7 +169,7 @@ public class Customer extends EOGenericRecord {
 	}
 
 	public Number numberOfAllRentals() {
-		return new Integer(allRentals().count());
+		return Integer.valueOf(allRentals().count());
 	}
 
 	public NSArray outRentals() {
@@ -178,7 +178,7 @@ public class Customer extends EOGenericRecord {
 	}
 
 	public Number numberOfOutRentals() {
-		return new Integer(outRentals().count());
+		return Integer.valueOf(outRentals().count());
 	}
 
 	public boolean hasOutRentals() {
@@ -191,7 +191,7 @@ public class Customer extends EOGenericRecord {
 	}
 
 	public Number numberOfOverdueRentals() {
-		return new Integer(overdueRentals().count());
+		return Integer.valueOf(overdueRentals().count());
 	}
 
 	public boolean hasOverdueRentals() {

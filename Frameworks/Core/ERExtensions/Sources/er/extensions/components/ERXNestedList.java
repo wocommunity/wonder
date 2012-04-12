@@ -28,7 +28,7 @@ public class ERXNestedList extends ERXStatelessComponent {
      */
      
     public void pushLevel()  {
-        setValueForBinding( new Integer(1) , "level" );
+        setValueForBinding(Integer.valueOf(1), "level");
     }
 
 
@@ -39,7 +39,7 @@ public class ERXNestedList extends ERXStatelessComponent {
      */
      
     public void  popLevel()  {
-        setValueForBinding( new Integer(0) , "level" );
+        setValueForBinding(Integer.valueOf(0), "level");
     }
 
 
@@ -62,7 +62,7 @@ public class ERXNestedList extends ERXStatelessComponent {
      */
      
     public void setCurrentLevel(Number aChildLevel)  {
-        setValueForBinding(new Integer(aChildLevel.intValue() + 1) , "level");
+        setValueForBinding(Integer.valueOf(aChildLevel.intValue() + 1) , "level");
     }
 
 

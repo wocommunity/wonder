@@ -160,7 +160,7 @@ public class AjaxDatePicker extends AjaxComponent {
     
     public Integer startDay() {
     	// Get first day of week from current localizer Locale.
-    	return new Integer(new GregorianCalendar(locale()).getFirstDayOfWeek() - 1);
+    	return Integer.valueOf(new GregorianCalendar(locale()).getFirstDayOfWeek() - 1);
     }
     
     private NSArray<String> localizeStringArray(NSArray<String> strings) {
