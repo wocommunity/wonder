@@ -1,0 +1,10 @@
+<wo:genericContainer elementName="div" data-role="header" data-position="$dataPosition" data-theme="$^theme">
+  <wo:if condition="$^hasBackButton">
+    <wo:hyperlink href="#" data-theme="$^backButton-theme" data-icon="check" data-rel="back"><wo:str value="$^backButton-title" valueWhenEmpty="$localizer.ERJQueryMobile.Back" /></wo:hyperlink>
+  </wo:if>
+  <h1><wo:str value="$^string" /></h1>
+  <wo:if condition="$hasAction"><webobject name="ACTION" /></wo:if>
+  <wo:else>
+    <wo:if condition="$hasLinkResource"><webobject name="LINK" /></wo:if>
+  </wo:else>
+</wo:genericContainer>

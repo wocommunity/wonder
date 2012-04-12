@@ -1,0 +1,4 @@
+LABEL : WOGenericContainer {
+	elementName = "label";
+	for = javaScriptElementID;
+}
