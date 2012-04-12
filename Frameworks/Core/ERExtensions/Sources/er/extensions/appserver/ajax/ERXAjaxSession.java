@@ -522,9 +522,6 @@ protected boolean cleanPageReplacementCacheIfNecessary(String _cacheKeyToAge) {
 	@SuppressWarnings("javadoc")
 	protected boolean _shouldPutInPermanentCache(WOComponent wocomponent) {
 		boolean flag = true;
-		if(false) {
-			return true;
-		}
 		if ((com.webobjects.appserver._private._PermanentCacheSingleton.class).isInstance(wocomponent)) {
 			flag = false;
 		}
