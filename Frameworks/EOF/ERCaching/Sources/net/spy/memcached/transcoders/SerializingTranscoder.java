@@ -50,7 +50,7 @@ public class SerializingTranscoder extends BaseSerializingTranscoder
 					rv=Integer.valueOf(tu.decodeInt(data));
 					break;
 				case SPECIAL_LONG:
-					rv=new Long(tu.decodeLong(data));
+					rv=Long.valueOf(tu.decodeLong(data));
 					break;
 				case SPECIAL_DATE:
 					rv=new Date(tu.decodeLong(data));

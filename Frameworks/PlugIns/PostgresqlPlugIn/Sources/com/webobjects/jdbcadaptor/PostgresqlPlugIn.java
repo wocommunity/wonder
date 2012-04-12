@@ -195,7 +195,7 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
                   pk = Integer.valueOf(pkObj.intValue());
                 }
                 else {
-                  pk = new Long(pkObj.longValue());
+                  pk = Long.valueOf(pkObj.longValue());
                 }
                 results.addObject(new NSDictionary(pk, attrName));
               }            

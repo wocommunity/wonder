@@ -1262,7 +1262,7 @@ public class ERXSQLHelper {
 				// EOAttribute.adaptorValueByConvertingAttributeValue() doesn't
 				// actually return a suitable value
 				if (value instanceof ERXConstant.NumberConstant) {
-					value = new Long(((Number) value).longValue());
+					value = Long.valueOf(((Number) value).longValue());
 				}
 				else {
 					value = formatValueForAttribute(e, value, attribute, key);

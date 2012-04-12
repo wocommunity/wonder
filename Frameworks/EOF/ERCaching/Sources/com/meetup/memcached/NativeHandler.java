@@ -375,7 +375,7 @@ public class NativeHandler {
 	}
 	
 	protected static Long decodeLong( byte[] b ) throws Exception {
-		return new Long( toLong( b ) );
+		return Long.valueOf(toLong(b));
 	}
 	
 	protected static Character decodeCharacter( byte[] b ) {

@@ -800,7 +800,7 @@ public class SockIOPool {
 				if ( expire > MAX_RETRY_DELAY )
 					expire = MAX_RETRY_DELAY;
 
-				hostDeadDur.put( host, new Long( expire ) );
+				hostDeadDur.put( host, Long.valueOf(expire) );
 				if ( log.isDebugEnabled() )
 					log.debug( "++++ ignoring dead host: " + host + " for " + expire + " ms" );
 
@@ -1066,7 +1066,7 @@ public class SockIOPool {
 			Map<SockIO,Long> sockets = pool.get( host );
 
 			if ( sockets != null ) {
-				sockets.put( socket, new Long( System.currentTimeMillis() ) );
+				sockets.put( socket, Long.valueOf(System.currentTimeMillis()) );
 				return;
 			}
 		}
@@ -1074,7 +1074,7 @@ public class SockIOPool {
 		Map<SockIO,Long> sockets =
 			new IdentityHashMap<SockIO,Long>();
 
-		sockets.put( socket, new Long( System.currentTimeMillis() ) );
+		sockets.put( socket, Long.valueOf(System.currentTimeMillis()) );
 		pool.put( host, sockets );
 	}
 

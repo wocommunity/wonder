@@ -189,7 +189,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 		protected void startTimer() {
 			if (!hasTimerStarted()) {
 				synchronized (_requestThreads) {
-					_requestThreads.put(Thread.currentThread(), new Long(System.currentTimeMillis()));
+					_requestThreads.put(Thread.currentThread(), Long.valueOf(System.currentTimeMillis()));
 				}
 			}
 		}

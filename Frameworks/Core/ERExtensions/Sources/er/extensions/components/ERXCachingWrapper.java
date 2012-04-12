@@ -173,9 +173,9 @@ public class ERXCachingWrapper extends ERXStatelessComponent {
         if(cacheDuration == null) {
             Number value = (Number)valueForBinding("duration");
             if(value == null) {
-                cacheDuration = new Long(60L*1000L);
+                cacheDuration = Long.valueOf(60L*1000L);
             } else {
-                cacheDuration = new Long(value.longValue());
+                cacheDuration = Long.valueOf(value.longValue());
             }
         }
         return cacheDuration.longValue();
