@@ -137,10 +137,12 @@ public class ERXAjaxSession extends WOSession {
       _lastModified = System.currentTimeMillis();
     }
 
+    @Override
     public int hashCode() {
       return _key.hashCode();
     }
 
+    @Override
     public boolean equals(Object _obj) {
       return (_obj instanceof TransactionRecord && ((TransactionRecord) _obj)._key.equals(_key));
     }
@@ -179,6 +181,7 @@ public class ERXAjaxSession extends WOSession {
       return _oldPage;
     }
 
+    @Override
     public String toString() {
       return "[TransactionRecord: page = " + _page.name() + "; context = " + _contextID + "; key = " + _key + "; oldPage? " + _oldPage + "]";
     }
@@ -263,6 +266,7 @@ public class ERXAjaxSession extends WOSession {
    * 二つの状態を保存することでトランスアクション内の問題を防ぐことが可能になります。</p>
    * </span>
    */
+  @Override
   public void savePage(WOComponent page) {
 	  WOContext context = context();
     if (ERXAjaxApplication.shouldNotStorePage(context)) {
@@ -464,6 +468,7 @@ protected boolean cleanPageReplacementCacheIfNecessary(String _cacheKeyToAge) {
 	 * 永続ページ・キャシュに登録する為にオーバライドされています。
 	 * </span>
 	 */
+    @Override
 	public void _saveCurrentPage() {
 		if(overridePrivateCache) {
 			WOContext _currentContext = context();
@@ -548,6 +553,7 @@ protected boolean cleanPageReplacementCacheIfNecessary(String _cacheKeyToAge) {
 	 */
 	// FIXME: ak: as we save the perm pages under a lot of context IDs, we should have a way to actually limit the size...
 	// not sure how, though
+    @Override
 	public void savePageInPermanentCache(WOComponent wocomponent) {
 		if(overridePrivateCache) {
 			WOContext wocontext = context();
@@ -581,6 +587,7 @@ protected boolean cleanPageReplacementCacheIfNecessary(String _cacheKeyToAge) {
 	 * 独自内部ページ・キャシュのサポート
 	 * </span>
 	 */
+    @Override
   public WOComponent restorePageForContextID(String contextID) {
 	if (logger.isDebugEnabled()) logger.debug("Restoring page for contextID: " + contextID);
     LinkedHashMap pageReplacementCache = (LinkedHashMap) objectForKey(ERXAjaxSession.PAGE_REPLACEMENT_CACHE_KEY);
