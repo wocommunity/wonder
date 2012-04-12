@@ -459,7 +459,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 
     /**
      * <span class="en">
-     * Converts the standard propertyName into one with a .&lt;AppName> on the end, if the property is defined with
+     * Converts the standard propertyName into one with a .&lt;AppName&gt; on the end, if the property is defined with
      * that suffix.  If not, then this caches the standard propertyName.  A cache is maintained to avoid concatenating
      * strings frequently, but may be overkill since most usage of this system doesn't involve frequent access.
      * 
@@ -686,6 +686,34 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 	        }
 		}
 		return value;
+    }
+    
+    /**
+     * Checks if a property for the given key exists.
+     * @param key name of the property
+     * @return <code>true</code> if a property for key exists
+     */
+    public static boolean hasKey(String key) {
+		return hasKey(key, false);
+    }
+    
+    /**
+     * Checks if a property for the given key exists. If you want to
+     * ignore properties that have an empty value pass <code>true</code>
+     * as parameter (i.e. '<code>my.property=</code>').
+     * @param key name of the property
+     * @param ignoreEmptyValue <code>true</code> if you want to ignore
+     *            properties with empty values
+     * @return <code>true</code> if a property exists
+     */
+    public static boolean hasKey(String key, boolean ignoreEmptyValue) {
+    	final String propertyName = getApplicationSpecificPropertyName(key);
+    	Object cachedValue = _cache.get(propertyName);
+    	if (cachedValue == null || cachedValue == UndefinedMarker) {
+    		String value = ERXSystem.getProperty(key);
+    		return value != null && !(ignoreEmptyValue && value.length() == 0);
+    	}
+		return true;
     }
 
     /**
@@ -1207,7 +1235,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      */
     @SuppressWarnings({ "unchecked", "javadoc" })
     public static NSArray<String> componentsSeparatedByString(String key, String separator) {
-    	return ERXProperties.componentsSeparatedByStringWithDefault(key, separator, (NSArray<String>)NSArray.EmptyArray);
+    	return ERXProperties.componentsSeparatedByStringWithDefault(key, separator, NSArray.EmptyArray);
     }
 
     /**
@@ -1240,7 +1268,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     		array = defaultValue;
     	}
     	else {
-    		array = (NSArray<String>)NSArray.componentsSeparatedByString(str, separator);
+    		array = NSArray.componentsSeparatedByString(str, separator);
     	}
     	return array;
     }
@@ -1694,6 +1722,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * Apply the current configuration to the supplied properties.
      * @param source
      * @param commandLine
+     * @return
      */
     public static Properties applyConfiguration(Properties source, Properties commandLine) {
 
@@ -1753,7 +1782,8 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     /**
      * Returns all of the properties in the system mapped to their evaluated values, sorted by key.
      * 
-     * @param protectValues if true, keys with the word "password" in them will have their values removed 
+     * @param properties
+     * @param protectValues if <code>true</code>, keys with the word "password" in them will have their values removed 
      * @return all of the properties in the system mapped to their evaluated values, sorted by key
      */
     public static Map<String, String> propertiesMap(Properties properties, boolean protectValues) {
@@ -1773,9 +1803,10 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     /**
      * Returns a string suitable for logging.
      * @param properties
+     * @return string for logging
      */
     public static String logString(Properties properties) {
-    	StringBuffer message = new StringBuffer();
+    	StringBuilder message = new StringBuilder();
         for (Map.Entry<String, String> entry : propertiesMap(properties, true).entrySet()) {
         	message.append("  " + entry.getKey() + "=" + entry.getValue() + "\n");
         }
@@ -1878,6 +1909,9 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     
     /**
      * Returns the application-specific variant properties for the given bundle.
+     * @param userName 
+     * @param bundleName 
+     * @return 
      */
     public static String variantPropertiesInBundle(String userName, String bundleName) {
     	String applicationUserPropertiesPath = null;
@@ -2804,9 +2838,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 				}
 				return null;
 			}
-			else {
-				return super.put(key, value);
-			}
+			return super.put(key, value);
 		}
 
 		public synchronized void load(File propsFile) throws IOException {
@@ -2826,6 +2858,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 		}
 	}
 
+	@Deprecated
 	public static void setCommandLineArguments(String[] argv) {
 		
 	}
