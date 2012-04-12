@@ -1,0 +1,20 @@
+#### loading Information
+er.extensions.load.Properties=app
+
+# Misc
+er.extensions.stackTrace.cleanup=true
+
+# EOF
+er.extensions.ERXEC.safeLocking=true
+er.extensions.ERXEC.useSharedEditingContext=false
+er.extensions.ERXEnterpriseObject.applyRestrictingQualifierOnInsert=true
+er.extensions.ERXEnterpriseObject.updateInverseRelationships=true
+
+
+# Misc Components
+#er.extensions.ERXWOForm.multipleSubmitDefault=true
+#er.extensions.ERXWORepetition.checkHashCodes=true
+#er.extensions.ERXWORepetition.raiseOnUnmatchedObject=true
+#er.extensions.ERXWORepetition.eoSupport=true
+#er.component.clickToOpen=true
+
