@@ -1,0 +1,3 @@
+<project name="ERJQueryMobile" default="build" basedir=".">
+	<import file="../../WOdkaProject/WOdkaBuilder/Templates/common-framework.xml" />
+</project>
