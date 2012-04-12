@@ -43,7 +43,7 @@ public class WXBar extends WOComponent {
         } else {
             try {
                 if (aPercentageString != null) {
-                    aPercentage = (new Double(aPercentageString.toString())).doubleValue();
+                    aPercentage = Double.parseDouble(aPercentageString.toString());
                 }
             } catch (NumberFormatException e) {
                 throw new IllegalStateException("WXBar - problem parsing int from fullWidth and percentage bindings "+e);

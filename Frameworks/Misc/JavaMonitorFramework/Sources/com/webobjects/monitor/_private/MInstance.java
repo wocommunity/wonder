@@ -1116,7 +1116,7 @@ public class MInstance extends MObject {
             try {
                 String aValue = (String) aStatsDict.valueForKey(key);
                 if (aValue != null) {
-                    return (new Float(aValue)).floatValue();
+                    return Float.parseFloat(aValue);
                 }
             } catch (Throwable ex) {
                 // do nothing

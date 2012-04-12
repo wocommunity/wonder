@@ -265,10 +265,10 @@ public abstract class ERXRemoteSynchronizer {
 		Object obj;
 		int keyType = dis.readByte();
 		if (keyType == ERXRemoteSynchronizer.BYTE_TYPE) {
-			obj = new Byte(dis.readByte());
+			obj = Byte.valueOf(dis.readByte());
 		}
 		else if (keyType == ERXRemoteSynchronizer.SHORT_TYPE) {
-			obj = new Short(dis.readShort());
+			obj = Short.valueOf(dis.readShort());
 		}
 		else if (keyType == ERXRemoteSynchronizer.INT_TYPE) {
 			obj = Integer.valueOf(dis.readInt());

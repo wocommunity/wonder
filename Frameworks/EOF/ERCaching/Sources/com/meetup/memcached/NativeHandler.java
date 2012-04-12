@@ -362,7 +362,7 @@ public class NativeHandler {
 	
 	// decode methods
 	protected static Byte decodeByte( byte[] b ) {
-		return new Byte( b[0] );
+		return Byte.valueOf(b[0]);
 	}
 	
 	protected static Boolean decodeBoolean( byte[] b ) {
@@ -396,7 +396,7 @@ public class NativeHandler {
 	}
 	
 	protected static Short decodeShort( byte[] b ) throws Exception {
-		return new Short( (short)decodeInteger( b ).intValue() );
+		return Short.valueOf((short)decodeInteger(b).intValue());
 	}
 	
 	protected static Double decodeDouble( byte[] b ) throws Exception {
