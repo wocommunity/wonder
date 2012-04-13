@@ -1102,7 +1102,7 @@
             <param name="project.name" value="JqueryMobileExample" />
             <param name="project.dir" value="Examples/Ajax/JqueryMobileExample" />
 
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/JqueryMobileExample/ERMoviesLogic" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERJQueryMobile/ERMoviesLogic" />
         </antcall>
     </target>    
 
