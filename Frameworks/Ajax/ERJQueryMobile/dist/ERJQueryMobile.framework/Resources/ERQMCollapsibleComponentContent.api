@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<wodefinitions>
-    <wo class="ERQMCollapsibleComponentContent" wocomponentcontent="true">    <binding name="string"/>
-    <binding name="theme"/>
-        <binding name="content-theme"/>
-    <binding defaults="Boolean" name="collapsed"/>
-    </wo>
-</wodefinitions>

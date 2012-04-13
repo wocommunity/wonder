@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="Sources"/>
 	<classpathentry kind="src" path="Tests"/>
+	<classpathentry kind="con" path="WOFramework/Ajax"/>
 	<classpathentry kind="con" path="WOFramework/ERExtensions"/>
 	<classpathentry kind="con" path="WOFramework/ERJars"/>
 	<classpathentry kind="con" path="WOFramework/ERPrototypes"/>
@@ -16,7 +17,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="con" path="WOFramework/ERCoolComponents"/>
-	<classpathentry kind="con" path="WOFramework/Ajax"/>
 	<classpathentry kind="con" path="WOFramework/MySQLPlugIn"/>
 	<classpathentry kind="lib" path="Libraries/mysql-connector-java-5.1.13-bin.jar"/>
 	<classpathentry kind="con" path="WOFramework/H2PlugIn"/>
