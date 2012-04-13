@@ -131,7 +131,7 @@ public class AjaxFileUploadRequestHandler extends WORequestHandler {
 				}
 			}
 			catch (Throwable t) {
-				log.error(t);
+				log.error("Upload failed",t);
 				response.appendContentString("Failed: " + t.getMessage());
 			}
 			return response;
