@@ -1,9 +1,5 @@
 package er.extensions.appserver;
 
-/**
- * Patched to fix the security hole about direct access of components
- * use ERXDirectComponentAccessAllowed=true to restore the original behaviour (direct access to components by name in URL)
- */
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
@@ -22,6 +18,10 @@ import com.webobjects.foundation.NSNotificationCenter;
 
 import er.extensions.foundation.ERXProperties;
 
+/**
+ * Patch to prevent direct access to components via /wo/pagename.wo URLs
+ * @property ERXDirectComponentAccessAllowed set to true to restore the original behavior. Default is false.
+ */
 public class ERXComponentRequestHandler extends WORequestHandler
 {
 	private boolean _directComponentAccessAllowed;
@@ -31,11 +31,7 @@ public class ERXComponentRequestHandler extends WORequestHandler
 		setDirectComponentAccessAllowed(ERXProperties.booleanForKeyWithDefault("ERXDirectComponentAccessAllowed", false));
 	}
 
-	public static NSDictionary requestHandlerValuesForRequest(WORequest aRequest) {
-		return requestHandlerValuesForRequest(aRequest, true);
-	}
-
-	public static NSDictionary requestHandlerValuesForRequest(WORequest aRequest, boolean directComponentAccessAllowed)
+	public static NSDictionary requestHandlerValuesForRequest(WORequest aRequest)
 	{
 		NSMutableDictionary aDictionary = new NSMutableDictionary();
 		NSArray pathArray = aRequest.requestHandlerPathArray();
@@ -44,11 +40,9 @@ public class ERXComponentRequestHandler extends WORequestHandler
 		String aSessionID = null;
 		String aContextID = null;
 		String aSenderID = null;
-		String pageName = null;
 		int p = 0;
 		int count = 0;
 		int length = 0;
-		int pageNameLocation = 0;
 		int pageNameLength = 0;
 		boolean _lookForIDsInCookiesFirst = WORequest._lookForIDsInCookiesFirst();
 
@@ -110,31 +104,6 @@ public class ERXComponentRequestHandler extends WORequestHandler
 				}
 			}
 			
-			if (pageNameLength != 0)
-			{
-				if (pageNameLength == 1)
-				{
-					pageName = (String)pathArray.objectAtIndex(0);
-				}
-				else {
-					StringBuffer s = new StringBuffer(256);
-					int i;
-					for (i = pageNameLocation; i < pageNameLength - pageNameLocation; i++) {
-						s.append((String)pathArray.objectAtIndex(i));
-						s.append('/');
-					}
-					s.append((String)pathArray.objectAtIndex(i));
-					pageName = new String(s);
-				}
-
-				if (pageName.endsWith(".wo")) {
-					pageName = pageName.substring(0, pageName.length() - 3);
-				}
-				
-				if(directComponentAccessAllowed) {
-					aDictionary.setObjectForKey(pageName, "wopage");
-				}
-			}
 			if ((aSessionID == null) && (!_lookForIDsInCookiesFirst))
 			{
 				aSessionID = aRequest.stringFormValueForKey(WOApplication.application().sessionIdKey());
@@ -310,7 +279,7 @@ public class ERXComponentRequestHandler extends WORequestHandler
 		WOContext aContext = null;
 		WOResponse aResponse;
 
-		NSDictionary requestHandlerValues = requestHandlerValuesForRequest(aRequest,isDirectComponentAccessAllowed());
+		NSDictionary requestHandlerValues = requestHandlerValuesForRequest(aRequest);
 
 		WOApplication anApplication = WOApplication.application();
 		String aSessionID = (String)requestHandlerValues.objectForKey(WOApplication.application().sessionIdKey());
