@@ -335,7 +335,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
 
     /** Sets the d2wContext for this page */
     public void setLocalContext(D2WContext newValue) {
-        if (ERXExtensions.safeDifferent(newValue, d2wContext())) {
+        if (ERXExtensions.safeDifferent(newValue, _localContext)) {
             // HACK ALERT: this next line is made necessary by the
             // brain-damageness of
             // D2WComponent.setLocalContext, which holds on to the first non
