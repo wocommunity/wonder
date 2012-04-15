@@ -112,7 +112,7 @@ public class ERXLog4JConfiguration extends WOComponent {
 
     public LoggerLevel newLoggerLevel = null;
 
-    private NSArray _appenders;
+    private transient NSArray _appenders;
     public AppenderSkeleton anAppender;
     public Level aLevel;
     public LoggerLevel aLoggerLevel;
