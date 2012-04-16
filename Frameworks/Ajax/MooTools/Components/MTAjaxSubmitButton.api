@@ -29,9 +29,7 @@
         <binding name="showUI"/>
         <binding name="style"/>
         <binding name="updateContainerID"/>
-        <validation message="'updateContainerID' is a required binding.">
-            <unbound name="updateContainerID"/>
-        </validation>
+        
         <binding name="value"/>
     <binding name="async"/>
     <binding name="afterEffectDuration"/>
