@@ -19,7 +19,6 @@ public class ERD2WQueryActionDelegate implements NextPageDelegate, Serializable 
 
 	public static final ERD2WQueryActionDelegate instance = new ERD2WQueryActionDelegate();
 	
-	@Override
 	public WOComponent nextPage(WOComponent sender) {
 		WOComponent target = D2WEmbeddedComponent.findTarget(sender);
 		if(target.hasBinding("queryDataSource")) {

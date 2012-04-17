@@ -1,3 +1,4 @@
+
 package er.directtoweb.delegates;
 
 import java.io.Serializable;
@@ -17,7 +18,6 @@ public class ERD2WEmbeddedComponentActionDelegate implements Serializable, NextP
 
 	public static ERD2WEmbeddedComponentActionDelegate instance = new ERD2WEmbeddedComponentActionDelegate();
 
-	@Override
 	public WOComponent nextPage(WOComponent sender) {
 		return (WOComponent) D2WEmbeddedComponent.findTarget(sender).valueForBinding("action");
 	}

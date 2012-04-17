@@ -16,7 +16,6 @@ import er.extensions.foundation.ERXStringUtilities;
  */
 public class ERDEnumAssignment extends ERDAssignment {
 
-	@Override
 	public NSArray<String> dependentKeys(String keyPath) {
 		return null;
 	}
