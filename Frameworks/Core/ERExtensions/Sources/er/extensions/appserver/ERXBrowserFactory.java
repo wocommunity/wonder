@@ -86,7 +86,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * IE 5.21          Mozilla/4.0 (compatible; MSIE 5.21; Mac_PowerPC)
  * Netscape 7.0b1   Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-US; rv:1.0rc2) Gecko/20020512 Netscape/7.0b1
  * Netscape 6.2.3   Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-US; rv:0.9.4.1) Gecko/20020508 Netscape6/6.2.3
- * OmniWeb 4.1-v422 Mozilla/4.5 (compatible; OmniWeb/4.1-v422; Mac_PowerPC)
+ * OmniWeb 5.11.1   Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_7_3; en-US) AppleWebKit/533.21.1+(KHTML, like Gecko, Safari/533.19.4) Version/5.11.1 OmniWeb/622.18.0
  * Safari 1.0b(v48) Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-us) AppleWebKit/48 (like Gecko) Safari/48
  * iPhone 1.0       Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543a Safari/419.3
  * 
@@ -781,6 +781,15 @@ public class ERXBrowserFactory {
         startpos = userAgent.indexOf(chrome);
         if (startpos > -1)
             return userAgent.substring(startpos);
+        
+        // Get substring "OmniWeb/622.18.0"
+        // from          "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_7_3; en-US)"
+        //               "AppleWebKit/533.21.1+(KHTML, like Gecko, Safari/533.19.4) "
+        //               "Version/5.11.1 OmniWeb/622.18.0"
+        final String omniWeb = "OmniWeb";
+        startpos = userAgent.indexOf(omniWeb);
+        if (startpos > -1)
+          return userAgent.substring(startpos);
         
         // Get substring "Safari/48"
         // from          "Safari 1.0b(v48) Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-us) "
