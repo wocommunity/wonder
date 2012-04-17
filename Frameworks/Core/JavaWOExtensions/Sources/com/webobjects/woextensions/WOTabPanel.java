@@ -127,7 +127,7 @@ public class WOTabPanel extends WOComponent
     }
 
     public String submitActionName()  {
-        if (_submitActionName==_undefinedMarker) {
+        if (_undefinedMarker.equals(_submitActionName)) {
             if (hasBinding("submitActionName"))
                 _submitActionName=(String)_WOJExtensionsUtil.valueForBindingOrNull("submitActionName",this);
             else
