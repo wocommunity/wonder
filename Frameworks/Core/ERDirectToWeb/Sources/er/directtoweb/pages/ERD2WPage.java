@@ -6,6 +6,9 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.pages;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
 
@@ -1331,4 +1334,17 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         return (String)d2wContext().valueForKey("inlineStyle");
     }
 
+	private void writeObject(ObjectOutputStream out) throws IOException {
+		out.defaultWriteObject();
+		out.writeObject(d2wContext().valueForKey(Keys.tabKey));
+		out.writeObject(d2wContext().valueForKey(Keys.tabCount));
+		out.writeObject(d2wContext().valueForKey(Keys.tabIndex));
+	}
+	
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+		in.defaultReadObject();
+        d2wContext().takeValueForKey(in.readObject(), Keys.tabKey);
+        d2wContext().takeValueForKey(in.readObject(), Keys.tabCount);
+        d2wContext().takeValueForKey(in.readObject(), Keys.tabIndex);
+	}
 }
