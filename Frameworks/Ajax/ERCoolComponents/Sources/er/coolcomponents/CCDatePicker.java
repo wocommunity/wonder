@@ -127,22 +127,22 @@ public class CCDatePicker extends ERXStatelessComponent {
 	 */
 	public String dateFormatString() {
 		String result = dateformat();
-		result = ERXStringUtilities.replaceStringByStringInString("-", "-ds", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%a", "-D", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%A", "-l", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%b", "-M", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%B", "-F", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%d", "-d", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%e", "-j", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%m", "-m", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%y", "-y", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%Y", "-Y", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%w", "-w", result);
-		
-		result = ERXStringUtilities.replaceStringByStringInString(" ", "-sp", result);
-		result = ERXStringUtilities.replaceStringByStringInString(".", "-dt", result);
-		result = ERXStringUtilities.replaceStringByStringInString("/", "-sl", result);
-		result = ERXStringUtilities.replaceStringByStringInString(",", "-cc", result);
+//		result = ERXStringUtilities.replaceStringByStringInString("-", "-ds", result);
+//		result = ERXStringUtilities.replaceStringByStringInString("%a", "-D", result);
+//		result = ERXStringUtilities.replaceStringByStringInString("%A", "-l", result);
+//		result = ERXStringUtilities.replaceStringByStringInString("%b", "-M", result);
+//		result = ERXStringUtilities.replaceStringByStringInString("%B", "-F", result);
+//		result = ERXStringUtilities.replaceStringByStringInString("%d", "-d", result);
+//		result = ERXStringUtilities.replaceStringByStringInString("%e", "-j", result);
+//		result = ERXStringUtilities.replaceStringByStringInString("%m", "-m", result);
+//		result = ERXStringUtilities.replaceStringByStringInString("%y", "-y", result);
+//		result = ERXStringUtilities.replaceStringByStringInString("%Y", "-Y", result);
+//		result = ERXStringUtilities.replaceStringByStringInString("%w", "-w", result);
+//		
+//		result = ERXStringUtilities.replaceStringByStringInString(" ", "-sp", result);
+//		result = ERXStringUtilities.replaceStringByStringInString(".", "-dt", result);
+//		result = ERXStringUtilities.replaceStringByStringInString("/", "-sl", result);
+//		result = ERXStringUtilities.replaceStringByStringInString(",", "-cc", result);
 		
 		if (result.indexOf("-") == 0) {
 			// strip off leading "-"
@@ -156,7 +156,7 @@ public class CCDatePicker extends ERXStatelessComponent {
 	
 	public String datePickerCreateScript() {
 		if (_createScript == null) {
-			_createScript = "datePickerController.destroyDatePicker('"+elementID()+"'); datePickerController.createDatePicker("+datePickerOptions() + ")";
+			_createScript = "datePickerController.createDatePicker("+datePickerOptions() + ")";
 		}
 		log.debug(_createScript);
 		return _createScript;
@@ -245,6 +245,10 @@ public class CCDatePicker extends ERXStatelessComponent {
 			_elementID = ERXStringUtilities.safeIdentifierName(context().elementID(), "datebox");
 		}
 		return _elementID;
+	}
+	
+	public String elementAnchorID() {
+	  return "#" + elementID();
 	}
 
 	private String parseDateRangeString(String dateRange) {
