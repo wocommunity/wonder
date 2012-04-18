@@ -333,6 +333,9 @@ public class ERXRedirect extends WOComponent {
 					throw new IllegalArgumentException("You specified a value for 'url' and for 'secure', which is not supported.");
 				}
 				url = _url;
+				
+				// the external url don't need it but if the url is a internal CMS Link then queryParamers is nice to have
+				url += "?" + queryParametersString();
 			}
 			else if (_requestHandlerKey != null) {
 				url = context._urlWithRequestHandlerKey(_requestHandlerKey, _requestHandlerPath, queryParametersString(), secure);
