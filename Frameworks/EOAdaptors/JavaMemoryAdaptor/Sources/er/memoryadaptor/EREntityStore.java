@@ -4,7 +4,7 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
 
-//import ognl.Ognl;
+import ognl.Ognl;
 
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
@@ -112,17 +112,15 @@ public abstract class EREntityStore {
       Object value = rawRow.objectForKey(attribute.columnName());
       if (attribute.isDerived()) {
         if (!attribute.isFlattened()) {
-          // Evaluate derived attribute expression
-
-          /*
-          //This is a hack to support SQL string concatenation in derived attributes
-          String expression = attribute.definition().replaceAll("\\|\\|", "+ '' +");
           try {
+            // Evaluate derived attribute expression
+            // This is a hack to support SQL string concatenation in derived attributes
+            String expression = attribute.definition().replaceAll("\\|\\|", "+ '' +");
             value = Ognl.getValue(expression, rawRow);
+            
           } catch (Throwable t) {
             t.printStackTrace();
           }
-          */
         } else {
           String dstKey = attribute.definition();
           value = rawRow.objectForKey(dstKey);
@@ -141,7 +139,7 @@ public abstract class EREntityStore {
       for (Enumeration e = entity.attributes().objectEnumerator(); e.hasMoreElements();) {
         EOAttribute attribute = (EOAttribute) e.nextElement();
         Object value = row.objectForKey(attribute.name());
-        if (!attribute.isDerived())
+        if (!(attribute.isDerived() || attribute.isReadOnly()))
           mutableRow.setObjectForKey(value != null ? value : NSKeyValueCoding.NullValue, attribute.columnName());
       }
       _insertRow(mutableRow, entity);
