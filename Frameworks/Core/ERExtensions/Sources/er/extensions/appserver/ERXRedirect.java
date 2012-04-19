@@ -335,7 +335,8 @@ public class ERXRedirect extends WOComponent {
 				url = _url;
 				
 				// the external url don't need it but if the url is a internal CMS Link then queryParamers is nice to have
-				url += "?" + queryParametersString();
+				if (_queryParameters != null && _queryParameters.count() > 0)
+					url += "?" + queryParametersString();
 			}
 			else if (_requestHandlerKey != null) {
 				url = context._urlWithRequestHandlerKey(_requestHandlerKey, _requestHandlerPath, queryParametersString(), secure);
