@@ -8,6 +8,7 @@ table#calendar_control {
   background: white;
   border: 1px solid silver;
   cursor: default;
+  width: auto;
 }
 
 table#calendar_control td {
