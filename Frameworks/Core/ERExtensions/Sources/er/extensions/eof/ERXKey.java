@@ -12,6 +12,7 @@ import com.webobjects.foundation.NSTimestamp;
 import er.extensions.qualifiers.ERXAndQualifier;
 import er.extensions.qualifiers.ERXKeyComparisonQualifier;
 import er.extensions.qualifiers.ERXKeyValueQualifier;
+import er.extensions.qualifiers.ERXNotQualifier;
 import er.extensions.qualifiers.ERXOrQualifier;
 import er.extensions.qualifiers.ERXPrefixQualifierTraversal;
 
@@ -1701,6 +1702,18 @@ public class ERXKey<T> {
 	public ERXOrQualifier in(NSArray<T> values) {
 		return ERXQ.in(_key, values);
 	}
+	
+	 /**
+	   * Equivalent to a new ERXOrQualifier of EOKeyValueQualifier with key equals
+	   * value for each value.
+	   * 
+	   * @param values
+	   *            the values
+	   * @return an ERXOrQualifier
+	   */
+	  public ERXOrQualifier in(T... values) {
+	    return ERXQ.inObjects(_key, values);
+	  }
 
 	/**
 	 * Equivalent to a new ERXAndQualifier of
@@ -1712,6 +1725,18 @@ public class ERXKey<T> {
 	 */
 	public ERXAndQualifier notIn(NSArray<T> values) {
 		return ERXQ.notIn(_key, values);
+	}
+
+	 /**
+	   * Equivalent to a new ERXAndQualifier of
+	   * EONotQualifier(EOKeyValueQualifier) with key equals value for each value.
+	   * 
+	   * @param values
+	   *            the values
+	   * @return an ERXAndQualifier
+	   */
+	public ERXAndQualifier notIn(T... values) {
+		return ERXQ.notIn(_key, new NSArray(values));
 	}
 
 	/**
