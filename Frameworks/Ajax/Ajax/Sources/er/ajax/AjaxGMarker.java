@@ -18,6 +18,8 @@ import er.extensions.appserver.ERXWOContext;
  * @binding infoWindowHtml the html that is inside the infowindow
  * @binding options the opts? argument to the constructor of the GMarker class. Value will be place inside {}
  */
+
+@Deprecated
 public class AjaxGMarker extends WOComponent {
 
 	private String _id;
