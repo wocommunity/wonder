@@ -25,6 +25,8 @@ import er.extensions.foundation.ERXProperties;
  * @binding apiKey apiKey to use for the map, if you want to ovverride the property below
  * @property ajax.google.maps.apiKey an api key you can get from http://www.google.com/apis/maps/ . If your app runs on http://ip:port/cgi-bin/WebObjects/GoogleMaps.woa, register the key for http://ip:port/cgi-bin/WebObjects/ . Using a fixed WO port is recommended (unless you want to get a new api key everytime you restart your server). AjaxGMaps will not work without an Api Key. 
  */
+
+@Deprecated
 public class AjaxGMap extends AjaxComponent {
 	private String _id;
 
