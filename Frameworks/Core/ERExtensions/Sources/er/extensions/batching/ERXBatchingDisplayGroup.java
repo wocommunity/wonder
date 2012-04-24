@@ -197,7 +197,7 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	 * would always fetch from the start until the end of the objects from the
 	 * fetch limit.
 	 * 
-	 * @return the objects that should be diplayed.
+	 * @return the objects that should be displayed.
 	 */
 	@Override
 	public NSArray<T> displayedObjects() {

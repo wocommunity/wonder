@@ -25,7 +25,7 @@ import er.extensions.eof.ERXS;
  * <ul>
  * <li>provide access to the filtered objects</li>
  * <li>allows you to add qualifiers to the final query qualifier (as opposed to just min/equals/max with the keys)</li>
- * <li>clears out the sort ordering when the datasource changes. This is a cure fix to prevent errors when using switch components.
+ * <li>clears out the sort ordering when the datasource changes. This is a cure fix to prevent errors when using switch components.</li>
  * </ul>
  * @author ak
  * @param <T> 
@@ -91,6 +91,7 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 
 	/**
 	 * Overridden to support extra qualifiers.
+	 * @return the qualifier constructed
 	 */
 	@Override
 	public EOQualifier qualifierFromQueryValues() {
@@ -106,6 +107,7 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 
 	/**
 	 * Overridden to localize the fetch specification if needed.
+	 * @return <code>null</code> to force the page to reload
 	 */
 	@Override
 	public Object fetch() {
@@ -136,8 +138,8 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 
 	/**
 	 * Returns all objects, filtered by the qualifier().
+	 * @return filtered objects
 	 */
-	@SuppressWarnings("unchecked")
 	public NSArray<T> filteredObjects() {
 		// FIXME AK: need to cache here
 		NSArray<T> result;
@@ -152,16 +154,13 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 
 	/**
 	 * Returns allObjects(), first filtered by the qualifier(), then sorted by the sortOrderings().
+	 * @return sorted filtered objects
 	 */
 	public NSArray<T> sortedObjects() {
 		return ERXS.sorted(filteredObjects(), sortOrderings());
 	}
 
-	/**
-	 * Overridden to track selection changes.
-	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public NSArray<T> selectedObjects() {
 		if(log.isDebugEnabled()) {
 			log.debug("selectedObjects@" + hashCode() +  ":" + super.selectedObjects().count());
@@ -169,11 +168,7 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 		return super.selectedObjects();
 	}
 
-	/**
-	 * Overridden to track selection changes.
-	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public void setSelectedObjects(NSArray nsarray) {
 		if(log.isDebugEnabled()) {
 			log.debug("setSelectedObjects@" + hashCode()  + ":" + (nsarray != null ? nsarray.count() : "0"));
@@ -181,11 +176,7 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 		super.setSelectedObjects(nsarray);
 	}
 
-	/**
-	 * Overridden to track selection changes.
-	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public boolean setSelectionIndexes(NSArray nsarray) {
 		if(log.isDebugEnabled()) {
 			log.debug("setSelectionIndexes@" + hashCode()  + ":" + (nsarray != null ? nsarray.count() : "0"),
@@ -252,29 +243,32 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	}
 
 	/**
-	 * Overriden to re-set the selection. Why is this cleared in the super class?
+	 * Overridden to preserve the current selection.
+	 * @param count the proposed number of objects the WODisplayGroup should display at a time
 	 */
 	@Override
-	public void setNumberOfObjectsPerBatch(int i) {
+	public void setNumberOfObjectsPerBatch(int count) {
 		NSArray<T> oldSelection = selectedObjects();
-		super.setNumberOfObjectsPerBatch(i);
+		super.setNumberOfObjectsPerBatch(count);
 		setSelectedObjects(oldSelection);
 	}
 
 	/**
 	 * Overridden to clear out the sort ordering if it is no longer applicable.
+	 * @param ds the proposed EODataSource
 	 */
 	@Override
-	public void setDataSource(EODataSource eodatasource) {
+	public void setDataSource(EODataSource ds) {
 		EODataSource old = dataSource();
-		super.setDataSource(eodatasource);
-		if(old != null && eodatasource != null && ERXExtensions.safeDifferent(old.classDescriptionForObjects(), eodatasource.classDescriptionForObjects())) {
+		super.setDataSource(ds);
+		if(old != null && ds != null && ERXExtensions.safeDifferent(old.classDescriptionForObjects(), ds.classDescriptionForObjects())) {
 			setSortOrderings(NSArray.EmptyArray);
 		}
 	}
 
 	/**
-	 * Overriden to re-set the selection. Why is this cleared in the super class?
+	 * Overridden to preserve the current selection.
+	 * @return <code>null</code> to force the page to reload
 	 */
 	@Override
 	public Object displayNextBatch() {
@@ -285,7 +279,8 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	}
 
 	/**
-	 * Overriden to re-set the selection. Why is this cleared in the super class?
+	 * Overridden to preserve the current selection.
+	 * @return <code>null</code> to force the page to reload
 	 */
 	@Override
 	public Object displayPreviousBatch() {
@@ -297,7 +292,7 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	
 	/**
 	 * Selects the visible objects.
-	 *
+	 * @return <code>null</code> to force the page to reload
 	 */
 	public Object selectFilteredObjects() {
 		setSelectedObjects(filteredObjects());
@@ -306,9 +301,9 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 
 	/**
 	 * Overridden to log a message when more than one sort order exists. Useful to track down errors.
+	 * @param nsarray the proposed EOSortOrdering objects
 	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public void setSortOrderings(NSArray nsarray) {
 		super.setSortOrderings(nsarray);
 		if(nsarray != null && nsarray.count() > 1) {
@@ -324,55 +319,35 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	
 	/* Generified methods */
 	
-	/**
-	 * Overridden to return generic types
-	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public NSArray<T> allObjects() {
 		return super.allObjects();
 	}
 	
-	/**
-	 * Overridden to return generic types
-	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public NSArray<String> allQualifierOperators() {
 		return super.allQualifierOperators();
 	}
 	
-	/**
-	 * Overridden to return generic types
-	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public NSArray<T> displayedObjects() {
 		return super.displayedObjects();
 	}
 	
-	/**
-	 * Overridden to return generic types
-	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public T selectedObject() {
 		return (T) super.selectedObject();
 	}
 	
-	/**
-	 * Overridden to return generic types
-	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public NSArray<EOSortOrdering> sortOrderings() {
 		return super.sortOrderings();
 	}
 	
 	/**
 	 * Overridden to return correct result when no objects are displayed
+	 * @return the index of the first object displayed by the current batch
 	 */
-	
 	@Override
 	public int indexOfFirstDisplayedObject() {
 		if (currentBatchIndex() == 1 && displayedObjects().count() == 0)
@@ -385,6 +360,7 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	 * is not a multiple of <code>numberOfObjectsPerBatch</code> and we are
 	 * on the last batch index. The superclass incorrectly uses allObjects
 	 * instead of displayedObjects to determine the index value.
+	 * @return the index of the last object displayed by the current batch
 	 */
 	@Override
 	public int indexOfLastDisplayedObject() {
