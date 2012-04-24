@@ -14,9 +14,9 @@ import er.ajax.AjaxDynamicElement;
  * WebObjects wrapper for INGoogleMap.js.
  *
  * <p>
- * CCGoogleMapMarker replaces AjaxGmapMarker and will allow you to easily insert one or more google markers inside a CCGoogleMap inside your page</p>
+ * CCGoogleMapMarker replaces AjaxGmapMarker and will allow you to easily insert one or more google markers inside a CCGoogleMap, CCGoogleMapMarker tag can be added everywhere in the page</p>
  *
- * <p>CCGoogleMapMarker will also insert an html address element on the page,
+ * <p>CCGoogleMapMarker will also insert an html Address element on the page,
  * the content of CCGoogleMapMarker wil be copied inside the ballon thet people wil see clicking on the marker
  * if you don't want the address element to be shown on page simply set display none using css (id, class or style)</p>
  * 
@@ -24,8 +24,9 @@ import er.ajax.AjaxDynamicElement;
  * @binding class the class of the address element
  * @binding style the style of the address element
  * @binding googleMapId REQUIRED the id of the google map where you want the marker to be placed
- * @binding lat the latidude of the marker
- * @binding lng the longitude of the marker
+ * @binding the address of the marked, formatted for google, like: 1 Infinite Loop, Cupertino CA, United States
+ * @binding lat the latidude of the marker. if lat and lng are specified they will override the address lookup
+ * @binding lng the longitude of the marker. if lat and lng are specified they will override the address lookup
  *
  * 
  * @see <a href="https://github.com/amedeomantica/INWebTools">INWebTools</a>
@@ -40,6 +41,7 @@ public class CCGoogleMapMarker extends AjaxDynamicElement {
     private WOAssociation _elementStyle;
     private WOAssociation _googleMapId;
     private WOAssociation _draggable;
+    private WOAssociation _address;
     private WOAssociation _lat;
     private WOAssociation _lng;
     private WOElement _children;
@@ -54,6 +56,7 @@ public class CCGoogleMapMarker extends AjaxDynamicElement {
 		
 		_googleMapId = (WOAssociation) someAssociations.objectForKey("googleMapId");
 		_draggable = (WOAssociation) someAssociations.objectForKey("draggable");
+		_address = (WOAssociation) someAssociations.objectForKey("address");
 		_lat = (WOAssociation) someAssociations.objectForKey("lat");
 		_lng = (WOAssociation) someAssociations.objectForKey("lng");
 		
@@ -90,12 +93,21 @@ public class CCGoogleMapMarker extends AjaxDynamicElement {
     	
     	response.appendContentString("data-draggable=\"" + draggable + "\" ");
     	
-    	response.appendContentString("data-lng=\"" + _lng.valueInComponent(context.component()) + "\" ");
-    	response.appendContentString("data-lat=\"" + _lat.valueInComponent(context.component()) + "\"");
+    	if (_address!=null) {
+			response.appendContentString("data-address=\""
+					+ _address.valueInComponent(context.component()) + "\" ");
+		}
+    	
+    	if((_lng!=null) && (_lng!=null)) {
+    		response.appendContentString("data-lng=\"" + _lng.valueInComponent(context.component()) + "\" ");
+    		response.appendContentString("data-lat=\"" + _lat.valueInComponent(context.component()) + "\"");
+    	}
     	
     	response.appendContentString(">");
     	
-    	_children.appendToResponse(response, context);
+    	if(_children!=null) {
+    		_children.appendToResponse(response, context);
+    	}
     	
     	response.appendContentString("</address>");
 		
