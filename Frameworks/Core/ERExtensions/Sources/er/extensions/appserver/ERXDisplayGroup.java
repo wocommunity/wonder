@@ -13,6 +13,8 @@ import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSSet;
 
 import er.extensions.ERXExtensions;
 import er.extensions.eof.ERXEOAccessUtilities;
@@ -190,6 +192,63 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 					new RuntimeException("Dummy for Stacktrace"));
 		}
 		return super.setSelectionIndexes(nsarray);
+	}
+	
+	/**
+	 * Extends the current selection by the given object.
+	 * @param object object to add to the selection
+	 * @return <code>true</code> if the object was added or <code>false</code> otherwise
+	 */
+	public boolean addToSelection(T object) {
+		if (object == null) {
+			return false;
+		}
+		return addToSelection(new NSArray<T>(object));
+	}
+	
+	/**
+	 * Extends the current selection by the given objects.
+	 * @param objects objects to add to the selection
+	 * @return <code>true</code> if at least one object was added or <code>false</code> otherwise
+	 */
+	public boolean addToSelection(NSArray<T> objects) {
+		if (objects == null || objects.isEmpty()) {
+			return false;
+		}
+		NSMutableSet<T> selection = new NSMutableSet<T>(selectedObjects());
+		int selectionCountBefore = selection.count();
+		selection.addObjectsFromArray(objects);
+		setSelectedObjects(selection.allObjects());
+		return selection.count() != selectionCountBefore;
+	}
+	
+	/**
+	 * Removes the given object from the current selection.
+	 * @param object object to remove from the selection
+	 * @return <code>true</code> if the object was removed or <code>false</code> otherwise
+	 */
+	public boolean removeFromSelection(T object) {
+		if (object == null) {
+			return false;
+		}
+		return removeFromSelection(new NSArray<T>(object));
+	}
+	
+	/**
+	 * Removes the given objects from the current selection.
+	 * @param objects objects to remove from the selection
+	 * @return <code>true</code> if at least one object was removed or <code>false</code> otherwise
+	 */
+	public boolean removeFromSelection(NSArray<T> objects) {
+		if (objects == null || objects.isEmpty()) {
+			return false;
+		}
+		NSMutableSet<T> selection = new NSMutableSet<T>(selectedObjects());
+		int selectionCountBefore = selection.count();
+		NSSet<T> objectsToRemove = new NSSet<T>(objects);
+		selection.subtractSet(objectsToRemove);
+		setSelectedObjects(selection.allObjects());
+		return selection.count() != selectionCountBefore;
 	}
 
 	/**
