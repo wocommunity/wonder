@@ -28,7 +28,7 @@ import er.extensions.qualifiers.ERXQualifierTraversal;
  * </ul>
  * @author ak
  *
- * @param &lt;T&gt;
+ * @param <T>
  */
 public class ERXGroupingFetchSpecification<T extends NSDictionary> extends ERXFetchSpecification {
 

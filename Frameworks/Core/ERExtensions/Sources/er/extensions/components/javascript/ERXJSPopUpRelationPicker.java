@@ -393,7 +393,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         //var parentschildren = new Array(new Entity("dogs","1",new Array(new Entity("poodle","4",null,false),new Entity("puli","5",null,true),new Entity("greyhound","5",null,false)),false), new Entity("fish","2",new Array(new Entity("trout","6",null,true),new Entity("mackerel","7",null,false),new Entity("bass","8",null,false)),true), new Entity("birds","3",new Array(new Entity("robin","9",null,false),new Entity("hummingbird","10",null,false),new Entity("crow","11",null,true)),false));
 
         StringBuffer returnString = new StringBuffer(1000);
-        returnString.append("var "+objectsArrayName+" = new Array(");
+        returnString.append("var "+objectsArrayName+" = [");
 
         int iCount = parentEntitiesList().count();
         for (int i=0;i<iCount;i++) {
@@ -404,7 +404,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
             returnString.append(" \"" + System.identityHashCode(aParent) + "\",");
 
             // now do all the possible children of the parent. Each child should look like 'new Entity("poodle","4",null,false)'
-            returnString.append(" new Array(");
+            returnString.append(" [");
             NSArray childrenOfAParent = sortedChildren(aParent);
 
             int jCount = childrenOfAParent.count();
@@ -431,7 +431,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
                 }
                 if (aChild==defaultChild) defaultChildIndex=j;
             }
-            returnString.append("),");
+            returnString.append("],");
             if (isSelectedParent(aParent)) { // in the single case, the parent will be updated when we call parent changed
                 returnString.append(" true");
             } else {
@@ -447,7 +447,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
                 returnString.append(", ");
             }
         }
-        returnString.append(");");
+        returnString.append("];");
         return returnString.toString();
     }
 

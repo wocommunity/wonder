@@ -21,6 +21,7 @@ import er.extensions.foundation.ERXSelectorUtilities;
  * given entity and calls the entitiesChanged method when the entity changes.
  * 
  * @author mschrag (mostly taken from ERXEnterpriseObjectCache, though)
+ * @param <T> 
  */
 public abstract class ERXEnterpriseObjectChangeListener<T extends EOEnterpriseObject> {
 	public static String ClearCacheNotification = "ERXEnterpriseObjectChangeListener.ClearCache";

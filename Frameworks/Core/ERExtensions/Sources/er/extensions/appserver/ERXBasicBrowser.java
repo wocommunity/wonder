@@ -20,15 +20,15 @@ import er.extensions.foundation.ERXStringUtilities;
  * information retrieved from HTTP request's <code>"user-agent"</code>
  * header, and such information includes web browser's name, version, Mozilla
  * compatible version and platform (OS). Also, a browser object can answer
- * boolean questions such as {@link #isIE},{@link #isOmniWeb},
- * {@link #isVersion5}and {@link #isMozilla40Compatible}, and even more
- * specific questions like {@link #isIFrameSupported}and
+ * boolean questions such as {@link #isIE}, {@link #isOmniWeb},
+ * {@link #isVersion5} and {@link #isMozilla40Compatible}, and even more
+ * specific questions like {@link #isIFrameSupported} and
  * {@link #willRenderNestedTablesFast}.
  * <p>
  * <code>ERXBasicBrowser</code> is immutable and shared by different sessions
  * and direct actions. The shared instances are managed by
- * {@link ERXBrowserFactory}which is also responsible to parse <code>"user-agent"</code>
- * header in a {@link com.webobjects.appserver.WORequest WORequest}object and
+ * {@link ERXBrowserFactory} which is also responsible to parse <code>"user-agent"</code>
+ * header in a {@link com.webobjects.appserver.WORequest WORequest} object and
  * to get an appropriate browser object.
  * <p>
  * You can extends <code>ERXBasicBrowser</code> or its abstract parent <code>ERXBrowser</code>
@@ -37,37 +37,37 @@ import er.extensions.foundation.ERXStringUtilities;
  * checks if the client is using one of the supported browsers for your
  * application.
  * <p>
- * {@link ERXSession}holds a browser object that represent the web browser for
- * that session and {@link ERXSession#browser browser()}method returns the
+ * {@link ERXSession} holds a browser object that represent the web browser for
+ * that session and {@link ERXSession#browser browser()} method returns the
  * object.
  * <p>
  * To access <code>ERXBasicBrowser</code>'s boolean questions from <code>WOConditionals</code>
  * on a web component, set the key path like <code>"session.brower.isNetscape"</code>
  * to their condition bindings.
  * <p>
- * {@link ERXDirectAction}also holds a browser object for the current request.
- * Use its {@link ERXDirectAction#browser browser()}method to access the
+ * {@link ERXDirectAction} also holds a browser object for the current request.
+ * Use its {@link ERXDirectAction#browser browser()} method to access the
  * object from a session-less direct action.
  * 
  * 
- * Some browser user-agents: 
+ * <h3>Some browser user-agents</h3>
  * 
- * IE 5.17 OS 9: 
+ * <p><strong>IE 5.17 OS 9</strong><br>
  * user-agent = (Mozilla/4.0 (compatible; MSIE 5.17; Mac_PowerPC)); ua-os = (MacOS); ua-cpu = (PPC);
  * 
  * IE 5.0 OS 9: user-agent = (Mozilla/4.0 (compatible; MSIE 5.0; Mac_PowerPC));
  * ua-os = (MacOS); ua-cpu = (PPC);
  * 
- * FireFox OS X 10.3.3: 
+ * <p><strong>FireFox OS X 10.3.3</strong><br>
  * user-agent = (Mozilla/5.0 (Macintosh; U; PPC Mac OS X Mach-O; en-US; rv:1.6) Gecko/20040206 Firefox/0.8);
  * 
- * IE 5.2 MacOS X: 
+ * <p><strong>IE 5.2 MacOS X</strong><br>
  * user-agent = (Mozilla/4.0 (compatible; MSIE 5.23; Mac_PowerPC)); ua-os = (MacOS); ua-cpu = (PPC);
  * 
- * Safari: 
+ * <p><strong>Safari</strong><br>
  * user-agent = ("Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-us) AppleWebKit/124 (KHTML, like Gecko) Safari/125.1");
  * 
- * IE WIndows 6.02: 
+ * <p><strong>IE WIndows 6.02</strong><br>
  * user-agent = (Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0));
  *  
  */
@@ -189,12 +189,13 @@ public class ERXBasicBrowser extends ERXBrowser {
 	        if (majorVersion.indexOf(".") != -1) {
 	        	majorVersion = majorVersion.substring(0, majorVersion.indexOf("."));
 	        }
+	        Integer mj = -1;
 	        try {
-	        	_majorVersion = Integer.valueOf(majorVersion);
+	        	mj = Integer.valueOf(majorVersion);
 	        } catch (NumberFormatException e) {
 	        	log.info("could not determine major version from '" + majorVersion + "'", e);
-	        	throw e;
 			}
+			_majorVersion = mj;
         }
     }
 

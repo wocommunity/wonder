@@ -105,7 +105,7 @@ import er.extensions.foundation.ERXStringUtilities;
 public class ERXBrowserFactory {
 
     /** logging support */
-    public static final Logger log = Logger.getLogger(ERXBrowserFactory.class);
+    protected static final Logger log = Logger.getLogger(ERXBrowserFactory.class);
 
     /** holds the default browser class name */
     private static final String _DEFAULT_BROWSER_CLASS_NAME = ERXBasicBrowser.class.getName();
@@ -273,7 +273,7 @@ public class ERXBrowserFactory {
             log.error("Unable to create a browser for class name: " + browserClassNameForBrowserNamed(browserName) 
                             + " with exception: " + ex.getMessage() + ".  Will use default classes."
                             + " Please ensure that the fully-qualified name for the class is specified"
-                            + " if it is in a different package.");
+                            + " if it is in a different package.", ex);
         }
         if (browser == null) {
             try {
@@ -283,7 +283,7 @@ public class ERXBrowserFactory {
                 log.error("Unable to create even a default browser for class name: " + _DEFAULT_BROWSER_CLASS_NAME
                             + " with exception: " + ex.getMessage()
                             + "  Will instanciate a browser with regular" 
-                            + " new " + _DEFAULT_BROWSER_CLASS_NAME + "(...) statement.");
+                            + " new " + _DEFAULT_BROWSER_CLASS_NAME + "(...) statement.", ex);
                 browser = new ERXBasicBrowser(browserName, version, mozillaVersion, platform, userInfo);
             }
         }
