@@ -9,6 +9,9 @@ package er.directtoweb.pages;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
 
@@ -31,11 +34,13 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation._NSUtilities;
 
 import er.directtoweb.ERD2WContainer;
 import er.directtoweb.ERD2WDirectAction;
@@ -161,7 +166,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
 		public static final String firstResponderKey = "firstResponderKey";
         
     }
-
+    
     /** logging support */
     public final static Logger log = Logger.getLogger(ERD2WPage.class);
 
@@ -364,19 +369,23 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     // Error handling extensions
     // **************************************************************************
 
-    protected NSMutableDictionary<String,String> errorMessages = new NSMutableDictionary<String,String>();
+    protected NSMutableDictionary errorMessages = new NSMutableDictionary();
 
-    protected NSMutableArray<String> errorKeyOrder = new NSMutableArray<String>();
+    protected NSMutableArray errorKeyOrder = new NSMutableArray();
 
     protected NSMutableArray<String> keyPathsWithValidationExceptions = new NSMutableArray<String>();
 
     protected String errorMessage = "";
+    
+    protected ValidationDelegate validationDelegate;
+    
+    protected boolean validationDelegateInited;
 
-    public NSMutableDictionary<String,String> errorMessages() {
+    public NSMutableDictionary errorMessages() {
         return errorMessages;
     }
 
-    public void setErrorMessages(NSMutableDictionary<String,String> value) {
+    public void setErrorMessages(NSMutableDictionary value) {
         errorMessages = value;
     }
 
@@ -392,7 +401,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         return (errorMessages != null && errorMessages.count() > 0) || (errorMessage != null && errorMessage.trim().length() > 0);
     }
 
-    public NSArray<String> errorKeyOrder() {
+    public NSArray errorKeyOrder() {
         return errorKeyOrder;
     }
 
@@ -436,6 +445,10 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
             validationLog.debug("Validation failed with exception: " + e + " value: " + value + " keyPath: " + keyPath);
         }
         if (shouldCollectValidationExceptions()) {
+        	if(validationDelegate() != null) {
+        		validationDelegate().validationFailedWithException(e, value, keyPath);
+        		return;
+        	}
             if (e instanceof ERXValidationException) {
                 ERXValidationException erv = (ERXValidationException) e;
 
@@ -505,6 +518,67 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
             parent().validationFailedWithException(e, value, keyPath);
         }
     }
+    
+    public ValidationDelegate validationDelegate() {
+    	if(shouldCollectValidationExceptions() && !validationDelegateInited) {
+    		// initialize validation delegate
+    		String delegateClassName = (String)d2wContext().valueForKey("validationDelegateClassName");
+    		if(delegateClassName != null) {
+	    		try {
+	    			Class<? extends ValidationDelegate> delegateClass = 
+	    					_NSUtilities.classWithName(delegateClassName);
+	    			if(delegateClass != null) {
+	    				Constructor<? extends ValidationDelegate> constructor = 
+	    						delegateClass.getConstructor(ERD2WPage.class);
+	    				validationDelegate = constructor.newInstance(this);
+	    			}    			
+	    		} catch (NoSuchMethodException e) {
+	    			throw NSForwardException._runtimeExceptionForThrowable(e);
+	    		} catch (IllegalArgumentException e) {
+					throw NSForwardException._runtimeExceptionForThrowable(e);
+				} catch (InstantiationException e) {
+					throw NSForwardException._runtimeExceptionForThrowable(e);
+				} catch (IllegalAccessException e) {
+					throw NSForwardException._runtimeExceptionForThrowable(e);
+				} catch (InvocationTargetException e) {
+					throw NSForwardException._runtimeExceptionForThrowable(e);
+				}
+    		}
+    		validationDelegateInited = true;
+    	}
+    	return validationDelegate;
+    }
+    
+    public void setValidationDelegate(ValidationDelegate delegate) {
+    	validationDelegate = delegate;
+    }
+
+    public static abstract class ValidationDelegate implements Serializable {
+    	protected final ERD2WPage _page;
+    	
+    	public ValidationDelegate(ERD2WPage page) {
+    		_page = page;
+    	}
+    	
+    	protected NSMutableDictionary errorMessages() {
+    		return _page.errorMessages;
+    	}
+    	
+    	protected NSMutableArray errorKeyOrder() {
+    		return _page.errorKeyOrder;
+    	}
+    	
+    	protected String errorMessage() {
+    		return _page.errorMessage;
+    	}
+    	
+    	protected void setErrorMessage(String errorMessage) {
+    		_page.setErrorMessage(errorMessage);
+    	}
+    	
+        public abstract boolean hasValidationExceptionForPropertyKey();
+        public abstract void validationFailedWithException(Throwable e, Object value, String keyPath);
+    }
 
     /** Checks if the current object can be edited. */
     public boolean isObjectEditable() {
@@ -554,6 +628,9 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * current property key.
      */
     public boolean hasValidationExceptionForPropertyKey() {
+    	if(validationDelegate() != null) {
+    		return validationDelegate().hasValidationExceptionForPropertyKey();
+    	}
         return d2wContext().propertyKey() != null && keyPathsWithValidationExceptions.count() != 0 ? keyPathsWithValidationExceptions.containsObject(d2wContext().propertyKey())
                 : false;
     }
