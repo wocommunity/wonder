@@ -338,6 +338,8 @@ public class ERXQ {
 	 *            the key
 	 * @param values
 	 *            the values
+	 * @param min
+	 *            the minimum number of objects from values to match
 	 * @return an EOKeyValueQualifier
 	 */
 	public static ERXKeyValueQualifier hasAtLeast(String key, NSArray values, int min) {
@@ -630,6 +632,24 @@ public class ERXQ {
 		}
 		return new ERXOrQualifier(qualifiers);
 	}
+	
+	/**
+	 * Equivalent to a new ERXAndQualifier of
+	 * EONotQualifier(EOKeyValueQualifier) with key equals value for each value.
+	 * 
+	 * @param key
+	 *            the key
+	 * @param values
+	 *            the values
+	 * @return an EOQualifier
+	 */
+	public static ERXAndQualifier notInObjects(String key, Object... values) {
+		NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
+		for (Object value : values) {
+			qualifiers.addObject(ERXQ.notEquals(key, value));
+		}
+		return new ERXAndQualifier(qualifiers);
+	}
 
 	/**
 	 * Equivalent to a new ERXOrQualifier of EOKeyValueQualifier with key equals
@@ -700,6 +720,8 @@ public class ERXQ {
 	 *            the lower bound value
 	 * @param upperBound
 	 *            the upper bound value
+	 * @param inclusive
+	 *            if the lowerBound and upperBound should be inclusive
 	 * @return the qualifier
 	 */
 	public static EOQualifier between(String key, Object lowerBound, Object upperBound, boolean inclusive) {
