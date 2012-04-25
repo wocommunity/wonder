@@ -29,8 +29,9 @@ import er.extensions.foundation.ERXProperties;
  * @binding class the class of the div element
  * @binding style the style of the div element
  * @binding zoom the desidered map startup zoom level
- * @binding lat the latidude of the map center
- * @binding lng the longitude of the map center
+ * @binding the address of the marked, formatted for google, like: 1 Infinite Loop, Cupertino CA, United States
+ * @binding lat the latidude of the map center. if lat and lng are specified they will override the address lookup
+ * @binding lng the longitude of the map center. if lat and lng are specified they will override the address lookup
  * @binding type, can be ROADMAP, SATELLITE, HYBRID or TERRAIN, default to ROADMAP. all uppercase string
  *
  * 
@@ -47,6 +48,7 @@ public class CCGoogleMap extends AjaxDynamicElement {
     private WOAssociation _elementStyle;
     private WOAssociation _zoom;
     private WOAssociation _type;
+    private WOAssociation _address;
     private WOAssociation _lat;
     private WOAssociation _lng;
     
@@ -60,11 +62,12 @@ public class CCGoogleMap extends AjaxDynamicElement {
 		
 		_zoom = (WOAssociation) someAssociations.objectForKey("zoom");
 		_type = (WOAssociation) someAssociations.objectForKey("type");
+		_address = (WOAssociation) someAssociations.objectForKey("address");
 		_lat = (WOAssociation) someAssociations.objectForKey("lat");
 		_lng = (WOAssociation) someAssociations.objectForKey("lng");
 		
-		if( (_lat == null )||( _lng == null ) ) {
-			throw new WODynamicElementCreationException("Unable to create CCGoogleMap, missing coordinates");
+		if( ((_lat == null )||( _lng == null )) && (_address == null)) {
+			throw new WODynamicElementCreationException("Unable to create CCGoogleMap, missing coordinates or address");
 		}
 		
 	}
@@ -103,8 +106,15 @@ public class CCGoogleMap extends AjaxDynamicElement {
     	}
     	
     	response.appendContentString("data-type=\"" + mapType + "\" ");
-    	response.appendContentString("data-lng=\"" + _lng.valueInComponent(context.component()) + "\" ");
-    	response.appendContentString("data-lat=\"" + _lat.valueInComponent(context.component()) + "\"");
+    	
+    	if(_address!=null) {
+    		response.appendContentString("data-address=\"" + _address.valueInComponent(context.component()) + "\" ");
+    	}
+    	
+    	if((_lng!=null) && (_lng!=null)) {
+    		response.appendContentString("data-lng=\"" + _lng.valueInComponent(context.component()) + "\" ");
+    		response.appendContentString("data-lat=\"" + _lat.valueInComponent(context.component()) + "\"");
+    	}
     	
     	response.appendContentString("></div>");
     }
