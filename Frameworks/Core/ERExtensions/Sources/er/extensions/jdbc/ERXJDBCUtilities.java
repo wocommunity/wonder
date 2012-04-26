@@ -437,7 +437,7 @@ public class ERXJDBCUtilities {
 	}
 
 	/**
-	 * @see ERXJDBCUtilities._copyDatabaseDefinedByEOModelAndConnectionDictionaryToDatabaseWithConnectionDictionary(EOModel, NSDictionary, NSDictionary)
+	 * @see ERXJDBCUtilities#_copyDatabaseDefinedByEOModelAndConnectionDictionaryToDatabaseWithConnectionDictionary(EOModel, NSDictionary, NSDictionary)
 	 * @param modelGroup
 	 *            the model group to copy
 	 * @param sourceDict

@@ -152,7 +152,8 @@ public class ERMailUtils extends Object {
 	/**
 	 * This method sets the values found in a dictionary into the session's state dictionary. This method is useful when
 	 * one want to transfer current session's state into a newly created session (for example when sending a mail whose
-	 * page has been instantiated with {@link ERMailUtils.instantiatePage} or {@link ERXApplication.instantiatePage}.)
+	 * page has been instantiated with {@link ERMailUtils#instantiatePage(String, NSDictionary)} or
+	 * {@link ERXApplication#instantiatePage(String)}.)
 	 * 
 	 * @param dict
 	 *            a <code>NSDictionary</code> value containing the values we want to set in the session parameter.
@@ -297,7 +298,8 @@ public class ERMailUtils extends Object {
 	}
 	
 	/**
-	* This method will parse a large strng of email address that could be separated, by commas, simicolon, tabs, spaces, carriage returns, (even mixed) and will return an NSArray of addresses(strings)
+	* This method will parse a large string of email address that could be separated by commas,
+	* semicolon, tabs, spaces, carriage returns, (even mixed) and will return an NSArray of addresses(strings)
 	* @param str
 	* @return NSArray<String> of email address
 	*/
@@ -320,6 +322,6 @@ public class ERMailUtils extends Object {
 			return new NSArray<String>(tokens);
 		}
 		return null;
-	}	
+	}
 
 }

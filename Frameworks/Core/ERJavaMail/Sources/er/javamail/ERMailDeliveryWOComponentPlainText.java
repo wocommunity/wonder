@@ -9,7 +9,7 @@ package er.javamail;
 import javax.activation.DataHandler;
 
 /**
- * This ERMailDelivery subclass is specifically crafted for plain text messages using a WOComponent as redering device.
+ * This ERMailDelivery subclass is specifically crafted for plain text messages using a WOComponent as rendering device.
  * 
  * @author Camille Troillard <tuscland@mac.com>
  */
@@ -18,11 +18,11 @@ public class ERMailDeliveryWOComponentPlainText extends ERMailDeliveryComponentB
 	/**
 	 * Pre-processes the mail before it gets sent.
 	 * 
-	 * @see ERMailDelivery#prepareMail
+	 * @see ERMailDelivery#prepareMail()
 	 */
 	@Override
 	protected DataHandler prepareMail() {
-		String messageContent = this.componentContentString();
+		String messageContent = componentContentString();
 		return new DataHandler(messageContent, "text/plain; charset=\"" + charset() + "\"");
 	}
 }

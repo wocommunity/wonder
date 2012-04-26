@@ -2,6 +2,7 @@ package com.webobjects.woextensions;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver._private.WORadioButtonList;
 
 /**
  * XHTML version of WORadioButtonList

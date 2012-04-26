@@ -98,7 +98,7 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased {
 	/**
 	 * Pre-processes the mail before it gets sent.
 	 * 
-	 * @see ERMailDelivery#prepareMail
+	 * @see ERMailDelivery#prepareMail()
 	 */
 	@Override
 	protected DataHandler prepareMail() throws MessagingException {
