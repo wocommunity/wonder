@@ -314,10 +314,7 @@ public class ERMailUtils extends Object {
 			str = str.replace("\r", ",");
 			str = str.replace(" ", ",");
 			str = str.replace("\t", ",");
-			//TODO, faster parsing using regex
-			while ( str.contains(",,")) {
-				str = str.replace(",,", ",");
-			}
+			str = str.replaceAll(",+", ",");
 			String[] tokens = str.split(",");
 			return new NSArray<String>(tokens);
 		}
