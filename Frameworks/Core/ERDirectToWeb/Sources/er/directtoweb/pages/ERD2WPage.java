@@ -113,6 +113,12 @@ import er.extensions.validation.ERXValidationException;
  * @d2wKey inlineStyle
  */
 public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, ERDUserInfoInterface, ERXComponentActionRedirector.Restorable, ERDBranchInterface {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** interface for all the keys used in this pages code */
     public static interface Keys {
@@ -554,7 +560,14 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     }
 
     public static abstract class ValidationDelegate implements Serializable {
-    	protected final ERD2WPage _page;
+    	/**
+    	 * Do I need to update serialVersionUID?
+    	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+    	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+    	 */
+    	private static final long serialVersionUID = 1L;
+
+   	protected final ERD2WPage _page;
     	
     	public ValidationDelegate(ERD2WPage page) {
     		_page = page;

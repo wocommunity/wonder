@@ -33,6 +33,12 @@ import er.extensions.foundation.ERXSelectorUtilities;
  * @property er.corebusinesslogic.ERCStampedEnterpriseObject.touchReadOnlyEntities
  */
 public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public interface Keys {
 		public static final String CREATED = "created";

@@ -7,6 +7,8 @@
 
 package er.directtoweb.components.strings;
 
+import java.util.regex.Pattern;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WDisplayString;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -14,14 +16,18 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
-import java.util.regex.Pattern;
-
 /**
  * Displays string representation of object inside of "pre" tags.
  * keyWhenRelationship is respected if the object is an EOEnterpriseObject.
  * NSDictionary and NSArray objects are displayed using NSPropertyListSerialization.
  */
 public class ERD2WDisplayPreformattedString extends D2WDisplayString {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERD2WDisplayPreformattedString(WOContext context) {
         super(context);
