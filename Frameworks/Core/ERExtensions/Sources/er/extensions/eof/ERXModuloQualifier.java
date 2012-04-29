@@ -22,7 +22,13 @@ import com.webobjects.eoaccess.*;
  */
 // ENHANCEME: Should support restrictive qualifiers, don't need to subclass KeyValueQualifier
 public class ERXModuloQualifier extends EOKeyValueQualifier implements Cloneable {
- 
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     /** register SQL generation support for the qualifier */
     static {
         EOQualifierSQLGeneration.Support.setSupportForClass(new ModuloQualifierSQLGenerationSupport(), ERXModuloQualifier.class);

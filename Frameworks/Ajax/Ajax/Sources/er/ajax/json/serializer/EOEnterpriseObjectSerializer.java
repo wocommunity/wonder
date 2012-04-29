@@ -47,6 +47,13 @@ import er.extensions.foundation.ERXStringUtilities;
  * @author <a href="mailto:jfveillette@os.ca">Jean-François Veillette</a>
  */
 public class EOEnterpriseObjectSerializer extends AbstractSerializer {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	protected static final NSMutableDictionary<String, NSArray<String>> readableAttributeNames = new NSMutableDictionary<String, NSArray<String>>();
 	protected static final NSMutableDictionary<String, NSArray<String>> writableAttributeNames = new NSMutableDictionary<String, NSArray<String>>();
 	protected static final NSMutableDictionary<String, NSArray<String>> includedRelationshipNames = new NSMutableDictionary<String, NSArray<String>>();

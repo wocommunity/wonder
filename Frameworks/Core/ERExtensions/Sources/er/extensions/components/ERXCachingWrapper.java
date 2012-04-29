@@ -46,12 +46,26 @@ import er.extensions.foundation.ERXAssert;
 //ENHANCEME cache should get reaped every so often and remove stale entries. 
 
 public class ERXCachingWrapper extends ERXStatelessComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 
     /** logging support */
     private static final Logger log = Logger.getLogger(ERXCachingWrapper.class);
 
     /** The cached entries */
     protected static Map cache = Collections.synchronizedMap(new HashMap() {
+    	/**
+    	 * Do I need to update serialVersionUID?
+    	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+    	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+    	 */
+    	private static final long serialVersionUID = 1L;
+
     	public Object get(Object key) {
     		Entry result = (Entry) super.get(key);
     		if(result != null) {
@@ -66,6 +80,13 @@ public class ERXCachingWrapper extends ERXStatelessComponent {
     
     /** Simply cache entry class. It caches a string for a duration and can replace the session ID on retrieval. */
     protected static class Entry implements Serializable{
+    	/**
+    	 * Do I need to update serialVersionUID?
+    	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+    	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+    	 */
+    	private static final long serialVersionUID = 1L;
+
     	private long insertTime;
     	private long duration;
     	private String content;

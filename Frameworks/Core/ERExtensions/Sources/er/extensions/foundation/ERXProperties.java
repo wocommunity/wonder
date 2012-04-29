@@ -73,6 +73,12 @@ import er.extensions.net.ERXTcpIp;
  * </span>
  */
 public class ERXProperties extends Properties implements NSKeyValueCoding {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** default string */
     public static final String DefaultString = "Default";
@@ -2792,6 +2798,13 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 	 * @author mschrag
 	 */
 	public static class _Properties extends Properties {
+		/**
+		 * Do I need to update serialVersionUID?
+		 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+		 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public static final String IncludePropsKey = ".includeProps";
 		
 		private Stack<File> _files = new Stack<File>();

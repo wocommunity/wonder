@@ -1,11 +1,7 @@
 package er.pdf.builder;
 
-import java.io.File;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.Date;
 
 import javax.xml.transform.Result;
