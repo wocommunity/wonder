@@ -24,6 +24,13 @@ import er.extensions.foundation.ERXRuntimeUtilities.TimeoutException;
  * @property java.io.tmpdir used for the default upload directory
  */
 public class ERXRemoteShell extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     private static String alternativeQuote = "!#ALT_QUOTE#!";
 
     public String dir = "/";

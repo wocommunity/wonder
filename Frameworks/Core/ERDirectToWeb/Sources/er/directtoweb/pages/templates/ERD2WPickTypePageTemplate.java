@@ -21,6 +21,12 @@ import er.directtoweb.pages.ERD2WPickTypePage;
 //DELETEME This looks like a select page? Except for the popup, which I can't imagine makes sense?
 
 public class ERD2WPickTypePageTemplate extends ERD2WPickTypePage {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERD2WPickTypePageTemplate(WOContext context) {super(context);}
 }

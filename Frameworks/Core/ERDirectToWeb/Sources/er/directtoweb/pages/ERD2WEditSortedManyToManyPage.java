@@ -47,6 +47,12 @@ import er.extensions.foundation.ERXValueUtilities;
  * @d2wKey maxBrowserSize
  */
 public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRelationshipPageInterface {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     // this pages allows the editing of a sorted many-to-many relationship
     // d2wContext keys:

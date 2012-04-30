@@ -7,11 +7,9 @@
 package er.directtoweb.components.misc;
 
 import com.webobjects.appserver.WOContext;
-
-import er.directtoweb.components.ERDCustomEditComponent;
-
 import com.webobjects.foundation.NSArray;
 
+import er.directtoweb.components.ERDCustomEditComponent;
 import er.extensions.foundation.ERXArrayUtilities;
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -31,6 +29,12 @@ import er.extensions.foundation.ERXArrayUtilities;
  */
 
 public class ERDDisplayMailTo extends ERDCustomEditComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
      public ERDDisplayMailTo(WOContext context) { super(context); }
     

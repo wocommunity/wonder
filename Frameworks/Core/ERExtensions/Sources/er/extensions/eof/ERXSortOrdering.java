@@ -26,6 +26,13 @@ import er.extensions.ERXExtensions;
  */
 public class ERXSortOrdering extends EOSortOrdering {
 	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
 	 * Constructs an ERXSortOrdering (see EOSortOrdering).
 	 * 
 	 * @param key
@@ -142,6 +149,13 @@ public class ERXSortOrdering extends EOSortOrdering {
 	 * @author mschrag
 	 */
 	public static class ERXSortOrderings extends NSMutableArray<EOSortOrdering> {
+		/**
+		 * Do I need to update serialVersionUID?
+		 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+		 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+		 */
+		private static final long serialVersionUID = 1L;
+
 		/**
 		 * Constructs an empty ERXSortOrderings.
 		 */

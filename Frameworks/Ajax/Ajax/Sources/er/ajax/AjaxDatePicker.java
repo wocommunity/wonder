@@ -75,6 +75,13 @@ import er.extensions.localization.ERXLocalizer;
  * @author ported by Chuck Hill
  */
 public class AjaxDatePicker extends AjaxComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	
     private static final NSArray<String> _dayNames = new NSArray<String>(new String[] {"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"}); 
     private static final NSArray<String> _monthNames = new NSArray<String>(new String[] {"January","February","March","April","May","June","July","August","September","October","November","December"}); 

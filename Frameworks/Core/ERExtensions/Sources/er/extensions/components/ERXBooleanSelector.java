@@ -19,11 +19,23 @@ import er.extensions.localization.ERXLocalizer;
  * @binding selection the selected value
  */
 public class ERXBooleanSelector extends ERXStatelessComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private final NSArray<Boolean> _options = new NSArray<Boolean>(new Boolean[] { Boolean.TRUE, Boolean.FALSE });
 
     public static class BooleanProxy implements Serializable {
-    	
+    	/**
+    	 * Do I need to update serialVersionUID?
+    	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+    	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+    	 */
+    	private static final long serialVersionUID = 1L;
+
         private final Boolean _value;
        
         BooleanProxy(Boolean value) {

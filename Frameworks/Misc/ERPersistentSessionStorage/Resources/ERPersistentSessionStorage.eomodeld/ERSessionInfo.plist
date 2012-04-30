@@ -1,0 +1,57 @@
+{
+    attributes = (
+        {
+            columnName = expirationDate; 
+            name = expirationDate; 
+            prototypeName = dateTime; 
+            userInfo = {"_EntityModeler" = {documentation = "The date when the session expires."; }; }; 
+        }, 
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {
+            columnName = intLock; 
+            name = intLock; 
+            prototypeName = intNumber; 
+            userInfo = {
+                "_EntityModeler" = {
+                    documentation = "Since we can't lock on the sessionData blob, this column is locked and updated on each save. This is done to prevent cases where a session might be checked out twice before it is checked in."; 
+                }; 
+            }; 
+        }, 
+        {
+            columnName = sessionData; 
+            name = sessionData; 
+            prototypeName = blob; 
+            userInfo = {"_EntityModeler" = {documentation = "Holds the session data blob."; }; }; 
+        }, 
+        {
+            columnName = sessionID; 
+            name = sessionID; 
+            prototypeName = varchar50; 
+            userInfo = {"_EntityModeler" = {documentation = "The WOSession id."; }; }; 
+        }
+    ); 
+    attributesUsedForLocking = (id, intLock, sessionID); 
+    className = "er.persistentsessionstorage.model.ERSessionInfo"; 
+    classProperties = (expirationDate, intLock, sessionData, sessionID); 
+    entityIndexes = (
+        {
+            attributes = (sessionID); 
+            constraint = distinct; 
+            indexType = clustered; 
+            name = "sessionID_idx"; 
+            order = asc; 
+            userInfo = {
+                "_EntityModeler" = {documentation = "Unique index to prevent duplicate session ids."; }; 
+            }; 
+        }
+    ); 
+    externalName = ERSessionInfo; 
+    fetchSpecificationDictionary = {}; 
+    name = ERSessionInfo; 
+    primaryKeyAttributes = (id); 
+    userInfo = {
+        "_EntityModeler" = {
+            documentation = "This EO maintains state information for a WO application. The session data blob is the serialized WOSession.  If you're making relationships to this EO in your model, you're probably doing something very wrong :)"; 
+        }; 
+    }; 
+}
