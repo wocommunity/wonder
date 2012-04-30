@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -1215,7 +1216,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         boolean implementsMethod = false;
         for (Enumeration e = (new NSArray(object.getClass().getMethods())).objectEnumerator(); e.hasMoreElements();) {
             Method m = (Method)e.nextElement();
-            if (m.getName().equals(methodName) && m.getParameterTypes().equals(parameters)) {
+            if (m.getName().equals(methodName) && Arrays.equals(m.getParameterTypes(), parameters)) {
                 implementsMethod = true; break;
             }
         }
