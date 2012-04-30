@@ -20,9 +20,6 @@ import java.util.Set;
  * @param <E>
  *            type of set contents
  */
-
-//TODO iterator.remove() throws unimplemented
-
 public class NSMutableSet<E> extends NSSet<E> {
 	public NSMutableSet() {
 	}
