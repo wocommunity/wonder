@@ -219,33 +219,6 @@ public class NSMutableSetTest extends ERXTestCase {
 		assertTrue(set.contains("abc"));
 	}
 	
-	public void testNSSetIterator() {
-		NSSet<String> set = new NSSet<String>("abc", "def");
-		NSMutableSet<String> check = set.mutableClone();
-		
-		Iterator<String> iterator = set.iterator();
-		assertTrue(iterator.hasNext());
-		assertTrue(check.remove(iterator.next()));
-		assertTrue(iterator.hasNext());
-		assertTrue(check.remove(iterator.next()));
-		assertFalse(iterator.hasNext());
-		assertTrue(check.isEmpty());
-		try {
-			iterator.next(); // no items left, should throw ArrayIndexOutOfBoundsException
-			fail();
-		} catch (ArrayIndexOutOfBoundsException e) {
-			// test passed
-		}
-		
-		iterator = set.iterator();
-		try {
-			iterator.remove(); // immutable, should throw UnsupportedOperationException
-			fail();
-		} catch (UnsupportedOperationException e) {
-			// test passed
-		}
-	}
-	
 	public void testNSMutableSetIterator() {
 		NSMutableSet<String> set = new NSMutableSet<String>("abc", "def");
 		int size = set.size();
