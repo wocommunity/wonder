@@ -702,9 +702,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * an integer.
      * @param s string to be parsed
      * @return if the string can be parsed into an int
+     * @deprecated use {@link ERXStringUtilities#stringIsParseableInteger(String)}
      */
-    // FIXME: Should return false if the object is null.
-    // MOVEME: ERXStringUtilities
+    @Deprecated
     public static boolean stringIsParseableInteger(String s) {
         try {
             Integer.parseInt(s);

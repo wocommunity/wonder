@@ -416,6 +416,22 @@ public class ERXStringUtilities {
     }
     
     /**
+     * Tests if a given string object can be parsed into
+     * an integer.
+     * @param s string to be parsed
+     * @return <code>true</code> if the string is not <code>null</code>
+     *      and can be parsed to an int
+     */
+    public static boolean stringIsParseableInteger(String s) {
+        try {
+            Integer.parseInt(s);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+    
+    /**
      * Wrapper for {@link Integer#valueOf(String)} that catches
      * the NumberFormatException.
      * 
