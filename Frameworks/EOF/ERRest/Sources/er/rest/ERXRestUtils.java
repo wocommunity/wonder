@@ -235,13 +235,13 @@ public class ERXRestUtils {
 				boolean spaces = strValue.indexOf(' ') != -1;
 				String rfcFormat = ERXProperties.stringForKeyWithDefault("er.rest.rfcDateFormat", "rfc822");					
 				if ("rfc3339".equals(rfcFormat)) {
-					SimpleDateFormat formatter = null;
+					SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 					java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("(.*[\\-,\\+]{1}[0-9]{1,2}):([0-9]{1,2})");
 					java.util.regex.Matcher matcher = pattern.matcher(strValue);
 					if (matcher.matches()) {
 						try {
 							strValue = matcher.group(1) + matcher.group(2);
-							parsedValue = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parseObject(strValue);
+							parsedValue = formatter.parseObject(strValue);
 							if (parsedValue instanceof java.util.Date) {
 								parsedValue = new NSTimestamp((Date)parsedValue);
 							} 
