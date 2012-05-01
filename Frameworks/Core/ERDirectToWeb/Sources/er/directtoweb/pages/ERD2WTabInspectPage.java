@@ -177,11 +177,13 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
     }
 
 
-    /** @deprecated use nextTabAction */
+    /** @deprecated use {@link #nextTabAction()} */
+    @Deprecated
     public WOComponent nextTab() {
         return nextTabAction();
     }
-    /** @deprecated use previousTabAction */
+    /** @deprecated use {@link #previousTabAction()} */
+    @Deprecated
     public WOComponent previousTab() {
         return previousTabAction();
     }

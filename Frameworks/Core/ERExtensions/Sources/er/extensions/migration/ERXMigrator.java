@@ -401,7 +401,7 @@ public class ERXMigrator {
 	 * ModelVersion represents a particular version of an EOModel.
 	 * 
 	 * @author mschrag
-	 * @deprecated Use er.extensions.migration.ERXModelVersion instead
+	 * @deprecated use {@link er.extensions.migration.ERXModelVersion}
 	 */
 	@Deprecated
 	public static class ModelVersion extends ERXModelVersion {

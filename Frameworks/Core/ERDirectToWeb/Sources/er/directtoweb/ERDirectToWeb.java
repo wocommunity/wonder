@@ -342,26 +342,31 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
     }
 
     /** @deprecated use ERD2WFactory.erFactory().printerFriendlyPageForD2WContext(D2WContext context, WOSession session)*/
+    @Deprecated
     public static WOComponent printerFriendlyPageForD2WContext(D2WContext context, WOSession session) {
         return ERD2WFactory.erFactory().printerFriendlyPageForD2WContext(context, session);
     }
 
     /** @deprecated use ERD2WFactory.erFactory().csvExportPageForD2WContext(D2WContext context, WOSession session)*/
+    @Deprecated
     public static WOComponent csvExportPageForD2WContext(D2WContext context, WOSession session) {
         return ERD2WFactory.erFactory().csvExportPageForD2WContext(context, session);
     }
 
     /** @deprecated use ERD2WFactory.erFactory().pageForTaskSubTaskAndEntityNamed(String task, String subtask, String entityName, WOSession session)*/
+    @Deprecated
     public static WOComponent pageForTaskSubTaskAndEntityNamed(String task, String subtask, String entityName, WOSession session) {
         return ERD2WFactory.erFactory().pageForTaskSubTaskAndEntityNamed(task, subtask, entityName, session);
     }
 
     /** @deprecated use ERD2WFactory.erFactory().queryPageWithFetchSpecificationForEntityNamed(String fsName, String entityName, WOSession session)*/
+    @Deprecated
     public static QueryPageInterface queryPageWithFetchSpecificationForEntityNamed(String fsName, String entityName, WOSession session) {
         return ERD2WFactory.erFactory().queryPageWithFetchSpecificationForEntityNamed(fsName, entityName, session);
     }
 
     /** @deprecated use ERD2WFactory.erFactory().errorPageForException(Throwable e, WOSession session)*/
+    @Deprecated
     public static WOComponent errorPageForException(Throwable e, WOSession session) {
         return ERD2WFactory.erFactory().errorPageForException(e, session);
     }

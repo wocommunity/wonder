@@ -556,6 +556,7 @@ public class ERXEC extends EOEditingContext {
 	 * Overridden to emit log messages and push this instance to the locked
 	 * editing contexts in this thread.
 	 */
+	@Override
 	public void lock() {
 		if (markOpenLocks()) {
 			traceLock();
@@ -639,6 +640,7 @@ public class ERXEC extends EOEditingContext {
 	 * Overridden to emit log messages and pull this instance from the locked
 	 * editing contexts in this thread.
 	 */
+	@Override
 	public void unlock() {
 		popLockedContextForCurrentThread(this);
 		if (markOpenLocks()) {
@@ -748,6 +750,7 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+	@Override
 	public void dispose() {
 		if (markOpenLocks()) {
 			_checkOpenLockTraces();
@@ -755,6 +758,7 @@ public class ERXEC extends EOEditingContext {
 		super.dispose();
 	}
 
+	@Override
 	public void finalize() throws Throwable {
 		isFinalizing = true;
 		try {
@@ -807,7 +811,7 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
-
+	@Override
 	public void reset() {
 		boolean wasAutoLocked = autoLock("reset");
 		try {
@@ -818,6 +822,7 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+	@Override
 	public void recordObject(EOEnterpriseObject eoenterpriseobject, EOGlobalID eoglobalid) {
 		boolean wasAutoLocked = autoLock("recordObject");
 		try {
@@ -828,6 +833,7 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+	@Override
 	public void forgetObject(EOEnterpriseObject eoenterpriseobject) {
 		boolean wasAutoLocked = autoLock("forgetObject");
 		try {
@@ -838,6 +844,7 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+	@Override
 	public void processRecentChanges() {
 		boolean wasAutoLocked = autoLock("processRecentChanges");
 		try {
@@ -848,6 +855,7 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+	@Override
 	public NSArray updatedObjects() {
 		boolean wasAutoLocked = autoLock("updatedObjects");
 		try {
@@ -858,6 +866,7 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+	@Override
 	public NSArray registeredObjects() {
 		boolean wasAutoLocked = autoLock("registeredObjects");
 		try {
@@ -868,6 +877,7 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+	@Override
 	public NSArray insertedObjects() {
 		boolean wasAutoLocked = autoLock("insertedObjects");
 		try {
@@ -878,6 +888,7 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+	@Override
 	public NSArray deletedObjects() {
 		boolean wasAutoLocked = autoLock("deletedObjects");
 		try {
@@ -888,6 +899,7 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+	@Override
 	public void setSharedEditingContext(EOSharedEditingContext eosharededitingcontext) {
 		boolean wasAutoLocked = autoLock("setSharedEditingContext");
 		try {
@@ -898,6 +910,7 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+	@Override
 	public EOEnterpriseObject objectForGlobalID(EOGlobalID eoglobalid) {
 		boolean wasAutoLocked = autoLock("objectForGlobalID");
 		try {
@@ -908,6 +921,7 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+	@Override
 	public EOGlobalID globalIDForObject(EOEnterpriseObject eoenterpriseobject) {
 		boolean wasAutoLocked = autoLock("globalIDForObject");
 		try {
@@ -918,6 +932,7 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+	@Override
 	public NSDictionary committedSnapshotForObject(EOEnterpriseObject eoenterpriseobject) {
 		boolean wasAutoLocked = autoLock("committedSnapshotForObject");
 		try {
@@ -928,6 +943,7 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+	@Override
 	public NSDictionary currentEventSnapshotForObject(EOEnterpriseObject eoenterpriseobject) {
 		boolean wasAutoLocked = autoLock("currentEventSnapshotForObject");
 		try {
@@ -938,6 +954,7 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+	@Override
 	public void objectWillChange(Object obj) {
 		boolean wasAutoLocked = autoLock("objectWillChange");
 		try {
@@ -948,6 +965,7 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+	@Override
 	public void insertObjectWithGlobalID(EOEnterpriseObject eoenterpriseobject, EOGlobalID eoglobalid) {
 		boolean wasAutoLocked = autoLock("insertObjectWithGlobalID");
 		try {
@@ -958,6 +976,7 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+	@Override
 	public void insertObject(EOEnterpriseObject eoenterpriseobject) {
 		boolean wasAutoLocked = autoLock("insertObject");
 		try {
@@ -972,6 +991,7 @@ public class ERXEC extends EOEditingContext {
 	 * Overridden to support autoLocking and to call mightDelete() on subclasses
 	 * of ERXEnterpriseObject.
 	 */
+	@Override
 	public void deleteObject(EOEnterpriseObject eo) {
 		boolean wasAutoLocked = autoLock("deleteObject");
 		try {
@@ -986,6 +1006,7 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+	@Override
 	public boolean hasChanges() {
 		boolean wasAutoLocked = autoLock("hasChanges");
 		try {
@@ -1057,8 +1078,8 @@ public class ERXEC extends EOEditingContext {
 	 * method is invoked, but this method will take the lock on the parent
 	 * editing context if the <code>ec</code> is a nested context before and
 	 * after the save in order to get the objects and to flush caches on them.
-	 * 
 	 */
+	@Override
 	public void saveChanges() {
 		boolean wasAutoLocked = autoLock("saveChanges");
         _EOAssertSafeMultiThreadedAccess("saveChanges()");
@@ -1177,6 +1198,7 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+	@Override
 	public EOEnterpriseObject faultForGlobalID(EOGlobalID eoglobalid, EOEditingContext eoeditingcontext) {
 		boolean wasAutoLocked = autoLock("faultForGlobalID");
 		try {
@@ -1187,6 +1209,7 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+	@Override
 	public NSArray arrayFaultWithSourceGlobalID(EOGlobalID eoglobalid, String s, EOEditingContext eoeditingcontext) {
 		boolean wasAutoLocked = autoLock("arrayFaultWithSourceGlobalID");
 		try {
@@ -1197,6 +1220,7 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+	@Override
 	public void initializeObject(EOEnterpriseObject eoenterpriseobject, EOGlobalID eoglobalid, EOEditingContext eoeditingcontext) {
 		boolean wasAutoLocked = autoLock("initializeObject");
 		try {
@@ -1220,6 +1244,7 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+	@Override
 	public void editingContextDidForgetObjectWithGlobalID(EOEditingContext eoeditingcontext, EOGlobalID eoglobalid) {
 		boolean wasAutoLocked = autoLock("editingContextDidForgetObjectWithGlobalID");
 		try {
@@ -1230,6 +1255,7 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+	@Override
 	public NSArray objectsForSourceGlobalID(EOGlobalID eoglobalid, String s, EOEditingContext eoeditingcontext) {
 		boolean wasAutoLocked = autoLock("objectsForSourceGlobalID");
 		try {
@@ -1240,6 +1266,7 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+	@Override
 	public void refaultObject(EOEnterpriseObject eoenterpriseobject) {
 		boolean wasAutoLocked = autoLock("refaultObject");
 		try {
@@ -1254,6 +1281,7 @@ public class ERXEC extends EOEditingContext {
 	 * Overridden to support autoLocking and to flush the cache of all
 	 * ERXEnterpriseObjects.
 	 */
+	@Override
 	public void refaultObject(EOEnterpriseObject eoenterpriseobject, EOGlobalID eoglobalid, EOEditingContext eoeditingcontext) {
 		boolean wasAutoLocked = autoLock("refaultObject");
 		try {
@@ -1267,6 +1295,7 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+	@Override
 	public NSArray objectsWithFetchSpecification(EOFetchSpecification fs, EOEditingContext eoeditingcontext) {
 		boolean wasAutoLocked = autoLock("objectsWithFetchSpecification");
 		try {
@@ -1282,6 +1311,7 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+	@Override
 	public void saveChangesInEditingContext(EOEditingContext eoeditingcontext) {
 		boolean wasAutoLocked = autoLock("saveChangesInEditingContext");
 		try {
@@ -1300,6 +1330,7 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+	@Override
 	public void refaultAllObjects() {
 		boolean wasAutoLocked = autoLock("refaultAllObjects");
 		try {
@@ -1310,6 +1341,7 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+	@Override
 	public void invalidateObjectsWithGlobalIDs(NSArray nsarray) {
 		boolean wasAutoLocked = autoLock("invalidateObjectsWithGlobalIDs");
 		try {
@@ -1320,6 +1352,7 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+	@Override
 	public void invalidateAllObjects() {
 		boolean wasAutoLocked = autoLock("invalidateAllObjects");
 		try {
@@ -1330,6 +1363,7 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+	@Override
 	public void lockObject(EOEnterpriseObject eoenterpriseobject) {
 		boolean wasAutoLocked = autoLock("lockObject");
 		try {
@@ -1340,7 +1374,8 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
-	/** Overridden to support autoLocking and will/did revert delegate methods. * */
+	/** Overridden to support autoLocking and will/did revert delegate methods. */
+	@Override
 	public void revert() {
 		boolean wasAutoLocked = autoLock("revert");
 		try {
@@ -1378,7 +1413,8 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
-	/** @deprecated */
+	/** @deprecated use {@link #saveChanges()} */
+    @Deprecated
 	public void saveChanges(Object obj) {
 		boolean wasAutoLocked = autoLock("saveChanges");
 		try {
@@ -1389,6 +1425,7 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+    @Override
 	public void refreshObject(EOEnterpriseObject eoenterpriseobject) {
 		boolean wasAutoLocked = autoLock("refreshObject");
 		try {
@@ -1399,6 +1436,7 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+    @Override
 	public void undo() {
 		boolean wasAutoLocked = autoLock("undo");
 		try {
@@ -1409,6 +1447,7 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+    @Override
 	public void redo() {
 		boolean wasAutoLocked = autoLock("redo");
 		try {
@@ -1419,6 +1458,7 @@ public class ERXEC extends EOEditingContext {
 		}
 	}
 
+    @Override
 	public Object invokeRemoteMethod(EOEditingContext eoeditingcontext, EOGlobalID eoglobalid, String s, Class aclass[], Object aobj[]) {
 		boolean wasAutoLocked = autoLock("invokeRemoteMethod");
 		try {
@@ -1436,8 +1476,8 @@ public class ERXEC extends EOEditingContext {
 
 	/**
 	 * Overridden so add a bugfix from Lenny Marks
-	 * 
 	 */
+	@Override
 	public void _objectsChangedInStore(NSNotification nsnotification) {
 		ERXEnterpriseObject.FlushCachesProcessor.perform(this, (NSArray) nsnotification.userInfo().objectForKey("objects"));
 		if (savingChanges) {
@@ -1528,6 +1568,7 @@ public class ERXEC extends EOEditingContext {
 	/**
 	 * Sets the delegate for this context.
 	 */
+	@Override
 	public void setDelegate(Object d) {
 		if (log.isDebugEnabled()) {
 			log.debug("setting delegate to " + d);

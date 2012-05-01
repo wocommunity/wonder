@@ -15,11 +15,10 @@ import com.webobjects.directtoweb.NextPageDelegate;
 /**
  * Similiar to the message page, except this one has the choice Yes or No.<br />
  * As this functionality is already integrated in ERD2WMessagePage, you should use this instead.
- * @deprecated subclass ERD2WMessagePage instead, also, the name is wrong
+ * @deprecated use subclass of {@link ERD2WMessagePage} instead, also, the name is wrong
  * @d2wKey pageWrapperName
  */
-//DELETEME
-
+@Deprecated
 public class ERDQuestionPage extends ERD2WMessagePage implements ConfirmPageInterface {
 	/**
 	 * Do I need to update serialVersionUID?

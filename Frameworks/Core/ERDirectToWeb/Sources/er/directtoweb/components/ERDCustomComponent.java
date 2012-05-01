@@ -125,7 +125,8 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
             ((ERXExceptionHolder)parent()).clearValidationFailed();
     }
 
-    /** @deprecated use booleanValueForBinding() instead */
+    /** @deprecated use {@link #booleanValueForBinding(String)} */
+    @Deprecated
     public boolean booleanForBinding(String binding) {
         return booleanValueForBinding(binding);
     }

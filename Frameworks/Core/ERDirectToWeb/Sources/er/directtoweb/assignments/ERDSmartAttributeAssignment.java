@@ -29,12 +29,13 @@ import er.directtoweb.assignments.defaults.ERDDefaultModelAssignment;
  * not find it is that it uses the Model to find out the EOAttribute 
  * and starts from A. Following the relationship b, gives a B, and 
  * asking B for an attribute named k returns nil and you lose.
- * @deprecated use ERDDefaultModelAssignment
+ * @deprecated use {@link ERDDefaultModelAssignment}
 */
 //	Note that these assignments require that the object is pushed into the context.  Look
 //	on some of the ERInspectPage setObject methods we push the object into the context.
 // MOVEME: Should combind with ERDSmartRelationship into a single class, maybe the defaults
 //		class.
+@Deprecated
 public class ERDSmartAttributeAssignment extends ERDAssignment {
 	/**
 	 * Do I need to update serialVersionUID?

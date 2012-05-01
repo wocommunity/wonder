@@ -13,6 +13,7 @@ import com.webobjects.appserver.WOContext;
 /** @Deprecated
     The WOAppleScript component is deprecated.
 */
+@Deprecated
 public class WOAppleScript extends WOComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -30,6 +31,7 @@ public class WOAppleScript extends WOComponent {
         _controller = Undefined; // this marks an undefined id
     }
 
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }

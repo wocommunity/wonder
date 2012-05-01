@@ -102,7 +102,8 @@ public class ERXEOEncodingUtilities {
         return EntityNameSeparator;
     }
 
-    /** @deprecated use <code>decodeEnterpriseObjectsFromFormValues</code> instead */
+    /** @deprecated use {@link #decodeEnterpriseObjectsFromFormValues(EOEditingContext, NSDictionary)} */
+    @Deprecated
     public static NSArray enterpriseObjectsFromFormValues(EOEditingContext ec, NSDictionary formValues) {
         return decodeEnterpriseObjectsFromFormValues(ec, formValues);
     }

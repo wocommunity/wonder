@@ -25,7 +25,12 @@ public class WOCookie implements NSKeyValueCoding, com.webobjects.foundation.NSK
 	NSTimestamp _expires;
 	int _timeout;
 	boolean _isHttpOnly;
-	final SimpleDateFormat theDateFormat;
+	static final SimpleDateFormat TheDateFormat;
+
+	static {
+		TheDateFormat = new SimpleDateFormat("EEE, dd-MMM-yyyy HH:mm:ss 'GMT'", new DateFormatSymbols(Locale.US));
+		TheDateFormat.setTimeZone(NSTimeZone.timeZoneWithName("GMT", true));
+	}
 
 	@Deprecated
 	public static WOCookie cookieWithName(final String name, final String value, final String path,
@@ -62,8 +67,6 @@ public class WOCookie implements NSKeyValueCoding, com.webobjects.foundation.NSK
 		_isSecure = isSecure;
 		_isHttpOnly = httpOnly;
 		setTimeOut(-1);
-		theDateFormat = new SimpleDateFormat("EEE, dd-MMM-yyyy HH:mm:ss 'GMT'", new DateFormatSymbols(Locale.US));
-		theDateFormat.setTimeZone(NSTimeZone.timeZoneWithName("GMT", true));
 		return;
 	}
 
@@ -84,8 +87,6 @@ public class WOCookie implements NSKeyValueCoding, com.webobjects.foundation.NSK
 		setTimeOut(timeout);
 		_isSecure = isSecure;
 		_isHttpOnly = httpOnly;
-		theDateFormat = new SimpleDateFormat("EEE, dd-MMM-yyyy HH:mm:ss 'GMT'", new DateFormatSymbols(Locale.US));
-		theDateFormat.setTimeZone(NSTimeZone.timeZoneWithName("GMT", true));
 		return;
 	}
 
@@ -96,7 +97,7 @@ public class WOCookie implements NSKeyValueCoding, com.webobjects.foundation.NSK
 	@Override
 	public String toString() {
 		String expiresString = _expires != null ? (new StringBuilder()).append(" expires=")
-				.append(theDateFormat.format(_expires)).toString() : "";
+				.append(TheDateFormat.format(_expires)).toString() : "";
 		String expires = _timeout < 0 ? "" : (new StringBuilder()).append(" max-age=").append(_timeout).toString();
 
 		return (new StringBuilder()).append("<").append(getClass().getName()).append(" name=").append(_name)
@@ -137,7 +138,7 @@ public class WOCookie implements NSKeyValueCoding, com.webobjects.foundation.NSK
 			}
 			if (_expires != null) {
 				header.append("; expires=");
-				header.append(theDateFormat.format(localExpires));
+				header.append(TheDateFormat.format(localExpires));
 			}
 			if (_path != null) {
 				header.append("; path=");

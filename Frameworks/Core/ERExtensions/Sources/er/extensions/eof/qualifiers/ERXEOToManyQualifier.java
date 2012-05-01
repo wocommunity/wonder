@@ -11,8 +11,8 @@ import com.webobjects.foundation.NSArray;
 
 import er.extensions.eof.ERXEOAccessUtilities;
 
-/** @deprecated use ERXToManyQualifier instead */
-
+/** @deprecated use {@link ERXToManyQualifier} */
+@Deprecated
 public class ERXEOToManyQualifier extends ERXToManyQualifier implements Cloneable {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -28,15 +28,17 @@ public class ERXEOToManyQualifier extends ERXToManyQualifier implements Cloneabl
     }
 
     /**
-     * @deprecated use ERXEOAccessUtilities.primaryKeysForObjects(NSArray) instead
+     * @deprecated use {@link ERXEOAccessUtilities#primaryKeysForObjects(NSArray)}
      */
+     @Deprecated
     public static NSArray primaryKeysForObjectsFromSameEntity(NSArray eos) {
         return ERXEOAccessUtilities.primaryKeysForObjects(eos);           
     }
 
     /**
-     * @deprecated use ERXEOAccessUtilities.snapshotsForRelationshipNamed(NSArray,String) instead
+     * @deprecated use {@link ERXEOAccessUtilities#snapshotsForObjectsFromRelationshipNamed(NSArray, String)}
      */
+     @Deprecated
     public static NSArray primaryKeysForObjectsFromSameEntity(String relKey, NSArray eos) {
         return ERXEOAccessUtilities.snapshotsForObjectsFromRelationshipNamed(eos,relKey);
     }

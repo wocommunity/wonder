@@ -14,6 +14,7 @@ import er.extensions.foundation.ERXStringUtilities;
   * It is pretty cool as it can be used as a replacement for WOText, since it works no matter is JS is enabled or not.
   * @deprecated use ERDEditHTML instead
   */
+@Deprecated
 public class ERXDHTMLComponent extends ERXStatelessComponent {
 	/**
 	 * Do I need to update serialVersionUID?

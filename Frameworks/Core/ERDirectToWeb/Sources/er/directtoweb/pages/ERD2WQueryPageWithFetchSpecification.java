@@ -9,7 +9,7 @@ import com.webobjects.appserver.WOContext;
 
 /**
  * Query page utilizing fetch specifications.<br />
- * @deprecated use ERD2WQueryPage instead
+ * @deprecated use {@link ERD2WQueryPage}
  * @d2wKey entity
  * @d2wKey pageWrapperName
  * @d2wKey border
@@ -18,6 +18,7 @@ import com.webobjects.appserver.WOContext;
  * @d2wKey propertyKey
  * @d2wKey findButtonLabel
  */
+@Deprecated
 public class ERD2WQueryPageWithFetchSpecification extends ERD2WQueryPage  {
 	/**
 	 * Do I need to update serialVersionUID?

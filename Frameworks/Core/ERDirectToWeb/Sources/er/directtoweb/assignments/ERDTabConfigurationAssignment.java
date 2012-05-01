@@ -15,9 +15,9 @@ import er.directtoweb.assignments.defaults.ERDDefaultConfigurationNameAssignment
 // MOVEME: ERDConfigurationAssignment
 /**
  * Generated pageConfigurations that will use the tab inspect templates.<br />
- * @deprecated use ERDDefaultConfigurationNameAssignment with key inspectTabConfigurationName
+ * @deprecated use {@link ERDDefaultConfigurationNameAssignment} with key inspectTabConfigurationName
  */
-
+@Deprecated
 public class ERDTabConfigurationAssignment extends ERDDefaultConfigurationNameAssignment {
 	/**
 	 * Do I need to update serialVersionUID?

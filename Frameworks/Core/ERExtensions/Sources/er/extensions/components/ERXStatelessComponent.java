@@ -29,6 +29,7 @@ public abstract class ERXStatelessComponent extends ERXNonSynchronizingComponent
     }
 
     /** component is stateless */
+    @Override
     public boolean isStateless() { return true; }
 
     /**
@@ -37,10 +38,9 @@ public abstract class ERXStatelessComponent extends ERXNonSynchronizingComponent
      * @param defaultValue default int value to be used if the
      *        binding is not bound.
      * @return result of evaluating binding as a int.
-     * @deprecated use intValueForBinding() instead
+     * @deprecated use {@link #intValueForBinding(String, int)}
      */
-    // RENAMEME: all of the valueForXXX method should be named
-    // xxxValueForBinding() like the ones in WORequest.
+    @Deprecated
     public int valueForIntBinding(String binding, int defaultValue) {
         return super.intValueForBinding(binding, defaultValue);
     }
@@ -50,8 +50,9 @@ public abstract class ERXStatelessComponent extends ERXNonSynchronizingComponent
      * false.
      * @param binding binding to be resolved as a boolean value.
      * @return result of evaluating binding as a boolean.
-     * @deprecated use booleanValueForBinding() instead
+     * @deprecated use {@link #booleanValueForBinding(String)}
      */
+    @Deprecated
     public boolean valueForBooleanBinding(String binding) {
         return booleanValueForBinding(binding, false);
     }
@@ -61,11 +62,12 @@ public abstract class ERXStatelessComponent extends ERXNonSynchronizingComponent
      * @param defaultValue default boolean value to be used if the
      *        binding is not bound.
      * @return result of evaluating binding as a boolean.
-     * @deprecated use booleanValueForBinding() instead
+     * @deprecated use {@link #booleanValueForBinding(String, boolean)}
      */
     // CHECKME: from the name of the method, one would think that
     // ERXValueUtilities.booleanValueForBindingOnComponentWithDefault
     // would be the correct method to use, but after reading the comment there, I'm not sure.
+    @Deprecated
     public boolean valueForBooleanBinding(String binding, boolean defaultValue) {
         return super.booleanValueForBinding(binding, false);
     }
@@ -77,8 +79,9 @@ public abstract class ERXStatelessComponent extends ERXNonSynchronizingComponent
      * @param defaultValue boolean operator to be evaluated if the
      *        binding is not present.
      * @return result of evaluating binding as a boolean.
-     * @deprecated use booleanValueForBinding() instead
+     * @deprecated use {@link #booleanValueForBinding(String, er.extensions.foundation.ERXUtilities.BooleanOperation)}
      */
+    @Deprecated
     public boolean valueForBooleanBinding(String binding, ERXUtilities.BooleanOperation defaultValue) {
         return super.booleanValueForBinding(binding, defaultValue);
     }
@@ -92,10 +95,11 @@ public abstract class ERXStatelessComponent extends ERXNonSynchronizingComponent
      * @param binding name of the component binding.
      * @return the object for the given binding and in the case that
      *         it is an instance of an Operation the value of that operation.
-     * @deprecated use objectValueForBinding() instead
+     * @deprecated use {@link #objectValueForBinding(String)}
      */
+    @Deprecated
     public Object valueForObjectBinding(String binding) {
-        return super.objectValueForBinding(binding, null);
+        return super.objectValueForBinding(binding);
     }
 
     /**
@@ -109,16 +113,14 @@ public abstract class ERXStatelessComponent extends ERXNonSynchronizingComponent
      *        returns null.
      * @return the object for the given binding and in the case that
      *         it is an instance of an Operation the value of that operation.
-     * @deprecated use objectValueForBinding() instead
+     * @deprecated use {@link #objectValueForBinding(String, Object)}
      */
+    @Deprecated
     public Object valueForObjectBinding(String binding, Object defaultValue) {
         return super.objectValueForBinding(binding, defaultValue);
     }
 
-    
-    /* (non-Javadoc)
-     * @see com.webobjects.appserver.WOComponent#reset()
-     */
+    @Override
     public void reset() {
         super.reset();
         _dynamicBindings = null;

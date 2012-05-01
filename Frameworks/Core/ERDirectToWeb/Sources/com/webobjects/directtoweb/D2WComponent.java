@@ -72,8 +72,9 @@ public class D2WComponent extends WOComponent implements DTWGeneration {
 	}
 
 	/**
-	 * @deprecated Method localContext is deprecated
+	 * @deprecated use {@link #d2wContext()}
 	 */
+    @Deprecated
 	public D2WContext localContext() {
 		return _localContext;
 	}
@@ -429,9 +430,9 @@ public class D2WComponent extends WOComponent implements DTWGeneration {
 	}
 
 	/**
-	 * @deprecated Method isLiveAssistantEnabled is deprecated
+	 * @deprecated use {@link D2W#isWebAssistantEnabled()}
 	 */
-
+    @Deprecated
 	public boolean isLiveAssistantEnabled() {
 		return D2W.factory().isWebAssistantEnabled();
 	}

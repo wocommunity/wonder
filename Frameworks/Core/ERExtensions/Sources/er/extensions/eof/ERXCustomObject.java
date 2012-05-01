@@ -621,8 +621,9 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
     }
 
     /**
-        * @deprecated use {@link ERXGenericRecord#isNewObject() ERXGenericRecord#isNewObject}
+     * @deprecated use {@link ERXGenericRecord#isNewObject() ERXGenericRecord#isNewObject}
      */
+    @Deprecated
     public boolean isNewEO() {
         return isNewObject();
     }

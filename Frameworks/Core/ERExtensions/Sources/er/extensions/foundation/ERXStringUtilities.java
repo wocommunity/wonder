@@ -200,7 +200,7 @@ public class ERXStringUtilities {
 
     /**
      * Fuzzy matching is useful for catching user entered typos. For example
-     * if a user is search for a company named 'Aple' within your application
+     * if a user is searching for a company named 'Aple' within your application
      * they aren't going to find it. Thus the idea of fuzzy matching, meaning you
      * can define a threshold of 'how close can they be' type of thing.
      *
@@ -226,23 +226,23 @@ public class ERXStringUtilities {
                                      ERXFuzzyMatchCleaner cleaner,
                                      NSArray sortOrderings ){
         String eoKey = "eo";
-        NSMutableArray results = new NSMutableArray();
+        NSMutableArray<NSMutableDictionary<String, Object>> results = new NSMutableArray<NSMutableDictionary<String, Object>>();
         EOFetchSpecification fs = new EOFetchSpecification( entityName, null, null );
         fs.setFetchesRawRows( true );
-        NSArray pks = EOUtilities.entityNamed( ec, entityName ).primaryKeyAttributeNames();
-        NSMutableArray keyPaths = new NSMutableArray(pks);
+        NSArray<String> pks = EOUtilities.entityNamed( ec, entityName ).primaryKeyAttributeNames();
+        NSMutableArray<String> keyPaths = new NSMutableArray<String>(pks);
         keyPaths.addObject( propertyKey );
         if( synonymsKey != null ) 
             keyPaths.addObject( synonymsKey );
         //we use only the strictly necessary keys.
         fs.setRawRowKeyPaths( keyPaths );
-        NSArray rawRows = ec.objectsWithFetchSpecification( fs );
+        NSArray<NSDictionary<String, Object>> rawRows = ec.objectsWithFetchSpecification( fs );
         if(name == null)
             name = "";
         name = name.toUpperCase();
         String cleanedName = cleaner.cleanStringForFuzzyMatching(name);
         for(Enumeration e = rawRows.objectEnumerator(); e.hasMoreElements(); ){
-            NSMutableDictionary dico = ((NSDictionary)e.nextElement()).mutableClone();
+            NSMutableDictionary<String, Object> dico = ((NSDictionary)e.nextElement()).mutableClone();
             Object value = dico.valueForKey(propertyKey);
             boolean trySynonyms = true;
             //First try to match with the name of the eo
@@ -254,7 +254,7 @@ public class ERXStringUtilities {
                     (distance(cleanedName, cleanedComparedString) <=
                      Math.min((double)cleanedName.length(), (double)cleanedComparedString.length())*adjustement)){
                     dico.setObjectForKey( new Double(distance(name, comparedString)), _DISTANCE );
-                    NSDictionary pkValues = new NSDictionary( dico.objectsForKeys( pks, NSKeyValueCoding.NullValue ), pks );
+                    NSDictionary<String, Object> pkValues = new NSDictionary<String, Object>(dico.objectsForKeys(pks, NSKeyValueCoding.NullValue ), pks);
                     dico.setObjectForKey( EOUtilities.faultWithPrimaryKey( ec, entityName, pkValues ), eoKey );
                     results.addObject( dico );
                     trySynonyms = false;
@@ -273,7 +273,7 @@ public class ERXStringUtilities {
                            (distance(cleanedName, comparedString) <=
                             Math.min((double)cleanedName.length(), (double)comparedString.length())*adjustement)){
                             dico.setObjectForKey( new Double(distance(name, comparedString)), _DISTANCE );
-                            NSDictionary pkValues = new NSDictionary( dico.objectsForKeys( pks, NSKeyValueCoding.NullValue ), pks );
+                            NSDictionary<String, Object> pkValues = new NSDictionary<String, Object>(dico.objectsForKeys(pks, NSKeyValueCoding.NullValue ), pks);
                             dico.setObjectForKey( EOUtilities.faultWithPrimaryKey( ec, entityName, pkValues ), eoKey );
                             results.addObject( dico );
                             break;
@@ -283,16 +283,23 @@ public class ERXStringUtilities {
             }
         }
         if( sortOrderings != null ) {
-            results = (NSMutableArray)EOSortOrdering.sortedArrayUsingKeyOrderArray(results, sortOrderings);
+            results = (NSMutableArray<NSMutableDictionary<String, Object>>) EOSortOrdering.sortedArrayUsingKeyOrderArray(results, sortOrderings);
         }
         return (NSArray) results.valueForKey( eoKey );        
     }
     
-    /** @deprecated use 
-        <code>fuzzyMatch(String name, String entityName, String propertyKey,
-                         String synonymsKey, EOEditingContext ec,
-                         ERXFuzzyMatchCleaner cleaner, NSArray sortOrderings )</code>
-        instead*/
+    /**
+     * @param name
+     * @param entityName
+     * @param propertyKey
+     * @param synonymsKey
+     * @param ec
+     * @param cleaner
+     * @param comparisonString
+     * @return an array of objects that match in a fuzzy manner the name passed in.
+     * @deprecated use {@link #fuzzyMatch(String, String, String, String, EOEditingContext, ERXFuzzyMatchCleaner, NSArray)}
+     */
+    @Deprecated
     public static NSArray fuzzyMatch(String name,
                                      String entityName,
                                      String propertyKey,
@@ -416,6 +423,22 @@ public class ERXStringUtilities {
     }
     
     /**
+     * Tests if a given string object can be parsed into
+     * an integer.
+     * @param s string to be parsed
+     * @return <code>true</code> if the string is not <code>null</code>
+     *      and can be parsed to an int
+     */
+    public static boolean stringIsParseableInteger(String s) {
+        try {
+            Integer.parseInt(s);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+    
+    /**
      * Wrapper for {@link Integer#valueOf(String)} that catches
      * the NumberFormatException.
      * 
@@ -527,23 +550,23 @@ public class ERXStringUtilities {
      * @return display name for the given key
      */
     public static String displayNameForKey(String key) {
-        StringBuffer finalString = null;
+        StringBuilder finalString = null;
         if (!stringIsNullOrEmpty(key) && !key.trim().equals("")) {
-            finalString = new StringBuffer();
+            finalString = new StringBuilder();
             String lastHop=key.indexOf(".") == -1 ? key : key.endsWith(".") ? "" : key.substring(key.lastIndexOf(".") + 1);
-            StringBuffer tempString = new StringBuffer();
+            StringBuilder tempString = new StringBuilder();
             char[] originalArray = lastHop.toCharArray();
             originalArray[0] = Character.toUpperCase(originalArray[0]);
             Character tempChar = null;
             Character nextChar = null;
             for(int i=0;i<(originalArray.length-1);i++){
-                tempChar = new Character(originalArray[i]);
-                nextChar = new Character(originalArray[i+1]);
+                tempChar = Character.valueOf(originalArray[i]);
+                nextChar = Character.valueOf(originalArray[i+1]);
                 if(Character.isUpperCase(originalArray[i]) &&
                    Character.isLowerCase(originalArray[i+1])) {
                     finalString.append(tempString.toString());
                     if (i>0) finalString.append(' ');
-                    tempString = new StringBuffer();
+                    tempString = new StringBuilder();
                 }
                 tempString.append(tempChar.toString());
             }
@@ -590,7 +613,7 @@ public class ERXStringUtilities {
      * a certain character. Useful for determining
      * if you need to add an '&' to the end of a
      * form value string.
-     * @param separator character to add to potentially
+     * @param separator character to potentially
      *		add to the StringBuffer.
      * @param not character to test if the given
      *		StringBuffer ends in it.
@@ -598,6 +621,24 @@ public class ERXStringUtilities {
      *		append to.
      */
     public static void appendSeparatorIfLastNot(char separator, char not, StringBuffer sb) {
+        if (sb.length() > 0 && sb.charAt(sb.length() - 1) != not)
+            sb.append(separator);
+    }
+
+    /**
+     * Utility method to append a character to a
+     * StringBuilder if the last character is not
+     * a certain character. Useful for determining
+     * if you need to add an '&' to the end of a
+     * form value string.
+     * @param separator character to potentially
+     *		add to the StringBuilder.
+     * @param not character to test if the given
+     *		StringBuilder ends in it.
+     * @param sb StringBuilder to test and potentially
+     *		append to.
+     */
+    public static void appendSeparatorIfLastNot(char separator, char not, StringBuilder sb) {
         if (sb.length() > 0 && sb.charAt(sb.length() - 1) != not)
             sb.append(separator);
     }
@@ -613,7 +654,7 @@ public class ERXStringUtilities {
         int begin, end;
         int oldLength = old.length();
         int length = buffer.length();
-        StringBuffer convertedString = new StringBuffer(length + 100);
+        StringBuilder convertedString = new StringBuilder(length + 100);
 
         begin = 0;
         while(begin < length)
@@ -652,7 +693,7 @@ public class ERXStringUtilities {
             final int sourceStringLength = sourceString.length();
             final int stringToReplaceLength = stringToReplace.length();
             final int replacementStringLength = replacementString.length();
-            final StringBuffer buffer = new StringBuffer(sourceStringLength - stringToReplaceLength + replacementStringLength);
+            final StringBuilder buffer = new StringBuilder(sourceStringLength - stringToReplaceLength + replacementStringLength);
             
             buffer.append(sourceString.substring(0, indexOfMatch));
             buffer.append(replacementString);
@@ -720,12 +761,12 @@ public class ERXStringUtilities {
 
     /**
      * String multiplication.
-     * @param n the number of times to concatinate a given string
-     * @param s string to be multipled
+     * @param n the number of times to concatenate a given string
+     * @param s string to be multiplied
      * @return multiplied string
      */
     public static String stringWithNtimesString(int n, String s) {
-        StringBuffer sb=new StringBuffer();
+    	StringBuilder sb = new StringBuilder(n);
         for (int i=0; i<n; i++) sb.append(s);
         return sb.toString();
     }
@@ -783,7 +824,7 @@ public class ERXStringUtilities {
     public static String escapeNonXMLChars(String str) {
         if (str == null) return null;
 
-        StringBuffer result = new StringBuffer(str.length());
+        StringBuilder result = new StringBuilder(str.length());
         for (int i = 0; i < str.length(); i++) {
         	char c = str.charAt(i);
         	switch(c) {
@@ -926,7 +967,7 @@ public class ERXStringUtilities {
     	String close = "]]>";
     	String escape = "]]]]><![CDATA[>";
 
-    	StringBuffer sb = new StringBuffer("<![CDATA[");
+    	StringBuilder sb = new StringBuilder("<![CDATA[");
     	
     	do {
         	end = pcdata.indexOf(close, start);
@@ -952,7 +993,7 @@ public class ERXStringUtilities {
     public static String escapeNonBasicLatinChars(String str) {
         if (str == null) return null;
 
-        StringBuffer result = new StringBuffer(str.length());
+        StringBuilder result = new StringBuilder(str.length());
         for (int i = 0; i < str.length(); i++) 
             result.append(escapeNonBasicLatinChars(str.charAt(i)));
             
@@ -988,7 +1029,7 @@ public class ERXStringUtilities {
         targetString = null;
       }
       else {
-        StringBuffer targetBuffer = null;
+    	StringBuilder targetBuffer = null;
         int lastMatch = 0;
         int length = _sourceString.length();
         for (int sourceIndex = 0; sourceIndex < length; sourceIndex++) {
@@ -1001,7 +1042,7 @@ public class ERXStringUtilities {
           }
           if (escape) {
             if (targetBuffer == null) {
-              targetBuffer = new StringBuffer(length + 100);
+              targetBuffer = new StringBuilder(length + 100);
             }
             if (sourceIndex - lastMatch > 0) {
               targetBuffer.append(_sourceString.substring(lastMatch, sourceIndex));
@@ -1022,7 +1063,7 @@ public class ERXStringUtilities {
     }
 
     public static String toHexString(char c) {
-        StringBuffer result = new StringBuffer("\u005C\u005Cu9999".length());
+    	StringBuilder result = new StringBuilder("\u005C\u005Cu9999".length());
         String u = Long.toHexString((int) c).toUpperCase();
         switch (u.length()) {
             case 1:   result.append("\u005C\u005Cu000");  break;
@@ -1037,7 +1078,7 @@ public class ERXStringUtilities {
     public static String toHexString(String str) {
         if (str == null) return null;
 
-        StringBuffer result = new StringBuffer("\u005C\u005Cu9999".length() * str.length());
+        StringBuilder result = new StringBuilder("\u005C\u005Cu9999".length() * str.length());
         for (int i = 0; i < str.length(); i++) 
             result.append(toHexString(str.charAt(i)));
 
@@ -1051,7 +1092,7 @@ public class ERXStringUtilities {
      */
     public static String byteArrayToHexString(byte[] block) {
         int len = block.length;
-        StringBuffer buf = new StringBuffer(2 * len);
+        StringBuilder buf = new StringBuilder(2 * len);
         for (int i = 0; i < len; ++i) {
             int high = ((block[i] & 0xf0) >> 4);
             int low  =  (block[i] & 0x0f);
@@ -1130,7 +1171,7 @@ public class ERXStringUtilities {
     public static String capitalize(String value) {
         String capital = null;
         if (value != null && value.length() > 0) {
-            StringBuffer buffer = new StringBuffer(value);
+        	StringBuilder buffer = new StringBuilder(value);
 
             buffer.setCharAt(0, Character.toUpperCase(value.charAt(0)));
             capital = buffer.toString();            
@@ -1148,7 +1189,7 @@ public class ERXStringUtilities {
         if (value != null) {
         	int length = value.length();
         	if (length > 0) {
-	            StringBuffer buffer = new StringBuffer(value);
+        		StringBuilder buffer = new StringBuilder(value);
 	            for (int i = 0; i < length; i ++) {
 	            	char ch = value.charAt(i);
 	            	if (i == 0 || i == length - 1 || (i < length - 1 && Character.isUpperCase(value.charAt(i + 1)))) {
@@ -1179,7 +1220,7 @@ public class ERXStringUtilities {
     public static String capitalizeAllWords(String value) {
         String capitalize = null;
         if (value != null && value.length() > 0) {
-            StringBuffer buffer = new StringBuffer();
+        	StringBuilder buffer = new StringBuilder();
             boolean first = true;
             for (StringTokenizer tokenizer = new StringTokenizer(value); tokenizer.hasMoreElements();) {
                 String token = tokenizer.nextToken();
@@ -1202,7 +1243,7 @@ public class ERXStringUtilities {
      * @return the StringWithoutUnderscores
      */
     public static String underscoreToCamelCase(String underscoreString, boolean capitalize) {
-    	StringBuffer camelCase = new StringBuffer();
+    	StringBuilder camelCase = new StringBuilder();
     	String[] underscoreStrings = underscoreString.split("_");
     	for (int i = 0; i < underscoreStrings.length; i ++) {
     		String word;
@@ -1223,7 +1264,7 @@ public class ERXStringUtilities {
      * @return the string_with_underscores
      */
     public static String camelCaseToUnderscore(String camelString, boolean lowercase) {
-    	StringBuffer underscore = new StringBuffer();
+    	StringBuilder underscore = new StringBuilder();
     	boolean lastCharacterWasWordBreak = false;
     	boolean lastCharacterWasCapital = false;
     	int length = camelString.length();
@@ -1481,22 +1522,24 @@ public class ERXStringUtilities {
     }
 
     /**
-         * Returns a string from the input stream using the default
-          * encoding.
-          * @param in stream to read
-          * @return string representation of the stream.
-      */
+     * Returns a string from the input stream using the default
+     * encoding.
+     * @param in stream to read
+     * @return string representation of the stream.
+     * @throws IOException if things go wrong
+     */
      public static String stringFromInputStream(InputStream in) throws IOException {
          return new String(ERXFileUtilities.bytesFromInputStream(in));
      }
 
      /**
       * Returns a string from the input stream using the default
-       * encoding.
-       * @param in stream to read
-       * @param encoding to be used, null will use the default
-       * @return string representation of the stream.
-   */
+      * encoding.
+      * @param in stream to read
+      * @param encoding to be used, null will use the default
+      * @return string representation of the stream.
+      * @throws IOException if things go wrong
+      */
      public static String stringFromInputStream(InputStream in, String encoding) throws IOException {
          return new String(ERXFileUtilities.bytesFromInputStream(in), encoding);
      }
@@ -1511,7 +1554,7 @@ public class ERXStringUtilities {
        * @return a string representation from the array
        */
     public static String toString(Object[] array, String separator) {
-          StringBuffer buf = new StringBuffer();
+    	StringBuilder buf = new StringBuilder();
           for (int i = 0; i < array.length; i++) {
               Object o = array[i];
               buf.append(o.toString());
@@ -1553,7 +1596,7 @@ public class ERXStringUtilities {
 	 * @return a new string only with characters from the characters argument
 	 */
 	public static String removeExceptCharacters(String source, String characters) {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		int l = source.length();
 		for (int i = 0; i < l; i++) {
 			char c = source.charAt(i);
@@ -1571,7 +1614,7 @@ public class ERXStringUtilities {
 	 * @return a new string without any characters from the characters argument
 	 */
 	public static String removeCharacters(String source, String characters) {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		int l = source.length();
 		for (int i = 0; i < l; i++) {
 			char c = source.charAt(i);
@@ -1887,9 +1930,9 @@ public class ERXStringUtilities {
 	public static String stringFromDictionary(NSDictionary dict) {
 		NSArray orderedKeys = dict.allKeys();
 		orderedKeys = ERXArrayUtilities.sortedArraySortedWithKey(orderedKeys, "toString.toLowerCase");
-		StringBuffer result = new StringBuffer();
+		StringBuilder result = new StringBuilder();
 		for (Enumeration keys = orderedKeys.objectEnumerator(); keys.hasMoreElements();) {
-			Object key = (Object) keys.nextElement();
+			Object key = keys.nextElement();
 			Object value = dict.objectForKey(key);
 			String stringValue = NSPropertyListSerialization.stringFromPropertyList(value);
 			String stringKey = NSPropertyListSerialization.stringFromPropertyList(key);
@@ -1952,12 +1995,12 @@ public class ERXStringUtilities {
      */
     public static String safeIdentifierName(String source, String prefix, char replacement)
     {
-    	StringBuffer b;
+    	StringBuilder b;
     	// Add prefix if source does not start with valid character
         if (source == null || source.length() == 0 || Character.isJavaIdentifierStart(source.charAt(0))) {
-            b = new StringBuffer(source);
+            b = new StringBuilder(source);
         } else {
-        	b = new StringBuffer(prefix);
+        	b = new StringBuilder(prefix);
         	b.append(source);
         }
     	
@@ -2090,7 +2133,7 @@ public class ERXStringUtilities {
     		return string;
     	}
     	
-        StringBuffer buffer = new StringBuffer(string);
+    	StringBuilder buffer = new StringBuilder(string);
         for (int i = string.length(); i < paddedLength; i++) {
             buffer.append(padChar);
         }
@@ -2112,7 +2155,7 @@ public class ERXStringUtilities {
     		return string;
     	}
     	
-        StringBuffer buffer = new StringBuffer();
+    	StringBuilder buffer = new StringBuilder();
         for (int i = string.length(); i < paddedLength; i++) {
             buffer.append(padChar);
         }
@@ -2137,7 +2180,7 @@ public class ERXStringUtilities {
     		result = contentToInsert;
     	}
     	else {
-			StringBuffer sb = new StringBuffer(destinationString.length() + contentToInsert.length());
+			StringBuilder sb = new StringBuilder(destinationString.length() + contentToInsert.length());
 			sb.append(destinationString.substring(0, insertOffset));
 			sb.append(contentToInsert);
 			sb.append(destinationString.substring(insertOffset));
@@ -2159,7 +2202,7 @@ public class ERXStringUtilities {
     }
     
     /**
-     * Removes line breaks and quotes the string if neccessary
+     * Removes line breaks and quotes the string if necessary
      * 
      * @param s
      * 
@@ -2214,7 +2257,7 @@ public class ERXStringUtilities {
 			throw new IllegalArgumentException("Neither the string nor the quote symbol are allowed to be null");
 		}
 
-		s = new StringBuffer().append(quoteSymbol).append(s).append(quoteSymbol).toString();
+		s = new StringBuilder().append(quoteSymbol).append(s).append(quoteSymbol).toString();
 		return s;
 	}
 	
@@ -2270,8 +2313,9 @@ public class ERXStringUtilities {
 	}
 	
 	/**
-	 * @deprecated  Replaced by stripHtml(str, false)
+	 * @deprecated use {@link #stripHtml(String, boolean)}
 	 */
+	@Deprecated
 	public static String stripHtml(String str) {
 		return stripHtml(str, false);
 	}

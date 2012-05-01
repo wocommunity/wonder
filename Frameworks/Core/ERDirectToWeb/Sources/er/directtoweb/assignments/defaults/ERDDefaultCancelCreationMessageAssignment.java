@@ -18,9 +18,9 @@ import er.directtoweb.assignments.ERDLocalizedAssignment;
 // FIXME: Should be renamed ERDDefaultLocalizedMessageAssignment.
 /**
  * Message assignment used when hitting a cancel button, just a little "Are you sure?" kind of thing.<br />
- * @deprecated use ERDLocalizedAssignment
+ * @deprecated use {@link ERDLocalizedAssignment}
  */
-
+@Deprecated
 public class ERDDefaultCancelCreationMessageAssignment extends ERDAssignment implements ERDLocalizableAssignmentInterface {
 	/**
 	 * Do I need to update serialVersionUID?

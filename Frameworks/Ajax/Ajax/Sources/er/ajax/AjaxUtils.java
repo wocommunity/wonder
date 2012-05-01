@@ -152,6 +152,7 @@ public class AjaxUtils {
 	 * @param endTag
 	 * @deprecated this is not called by anything anymore and does not use the new support for loading-on-demand
 	 */
+	@Deprecated
 	public static void addResourceInHead(WOContext context, WOResponse response, String framework, String fileName, String startTag, String endTag) {
 		ERXResponseRewriter.addResourceInHead(response, context, framework, fileName, startTag, endTag, ERXResponseRewriter.TagMissingBehavior.Top);
 
@@ -184,8 +185,9 @@ public class AjaxUtils {
 	}
 
 	/**
-	 * @deprecated replaced by ERXStringUtilities.safeIdentifierName
+	 * @deprecated use {@link ERXStringUtilities#safeIdentifierName(String)}
 	 */
+	@Deprecated
 	public static String toSafeElementID(String elementID) {
 		return ERXStringUtilities.safeIdentifierName(elementID);
 	}
