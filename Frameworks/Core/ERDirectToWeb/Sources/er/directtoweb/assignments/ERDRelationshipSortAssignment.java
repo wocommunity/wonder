@@ -16,8 +16,9 @@ import er.directtoweb.assignments.defaults.ERDDefaultModelAssignment;
 /**
  * Relationship sort assignment that works with the new caching 
  * scheme. Should only ever need one of these assignments.
- * @deprecated use ERDDefaultModelAssignment
+ * @deprecated use {@link ERDDefaultModelAssignment}
  */
+@Deprecated
 public class ERDRelationshipSortAssignment extends ERDAssignment {
 	/**
 	 * Do I need to update serialVersionUID?

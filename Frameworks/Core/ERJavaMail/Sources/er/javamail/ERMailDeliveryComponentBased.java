@@ -30,8 +30,9 @@ public abstract class ERMailDeliveryComponentBased extends ERMailDelivery {
 	/**
 	 * Sets the WOComponent used to render the HTML message.
 	 * 
-	 * @deprecated use setComponent instead.
+	 * @deprecated use {@link #setComponent(WOComponent)}
 	 */
+	@Deprecated
 	public void setWOComponentContent(WOComponent component) {
 		this.setComponent(component);
 	}

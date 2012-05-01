@@ -198,6 +198,7 @@ public class NSMutableSet<E> extends NSSet<E> {
 
 	@SuppressWarnings({ "hiding", "unchecked" })
 	public static final Class _CLASS = _NSUtilities._classWithFullySpecifiedName("com.webobjects.foundation.NSMutableSet");
+	@SuppressWarnings("hiding")
 	static final long serialVersionUID = -6054074706096120227L;
 
 	@Override
@@ -265,6 +266,7 @@ public class NSMutableSet<E> extends NSSet<E> {
 		removeAllObjects();
 	}
 	
+	@Override
 	public Iterator<E> iterator() {
         return new Itr();
     }

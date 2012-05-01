@@ -11,9 +11,10 @@ import com.webobjects.appserver.WOContext;
 
 /**
  * A recoverable error page.<br />
- * @deprecated subclass ERD2WMessagePage instead
+ * @deprecated subclass {@link ERD2WMessagePage} instead
  * @d2wKey pageWrapperName
  */
+@Deprecated
 public class ERDRecoverableErrorPage extends ERD2WMessagePage {
 	/**
 	 * Do I need to update serialVersionUID?

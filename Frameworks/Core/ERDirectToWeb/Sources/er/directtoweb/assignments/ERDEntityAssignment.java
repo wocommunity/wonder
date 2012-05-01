@@ -18,8 +18,9 @@ import er.directtoweb.assignments.defaults.ERDDefaultModelAssignment;
 import er.extensions.eof.ERXEOAccessUtilities;
 
 /**
- * @deprecated use a ERDKeyValueAssignment to a ERDDefaultModelAssigmentwith key entityForPageConfiguration instead
+ * @deprecated use a {@link ERDKeyValueAssignment} or a {@link ERDDefaultModelAssignment} with key entityForPageConfiguration instead
  */
+@Deprecated
 public class ERDEntityAssignment extends Assignment implements ERDComputingAssignmentInterface {
 	/**
 	 * Do I need to update serialVersionUID?

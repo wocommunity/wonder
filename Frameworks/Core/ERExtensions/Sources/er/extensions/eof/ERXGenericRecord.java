@@ -1174,19 +1174,17 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	}
 
 	/**
-	 * @deprecated use {@link ERXGenericRecord#isNewObject}
+	 * @deprecated use {@link ERXGenericRecord#isNewObject()}
 	 */
 	@SuppressWarnings("dep-ann")
+    @Deprecated
 	public boolean isNewEO() {
 		return isNewObject();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see er.extensions.ERXEnterpriseObject#isNewObject()
+	/**
+	 * @see ERXEOControlUtilities#isNewObject(EOEnterpriseObject)
 	 */
-
 	public boolean isNewObject() {
 		return ERXEOControlUtilities.isNewObject(this);
 	}

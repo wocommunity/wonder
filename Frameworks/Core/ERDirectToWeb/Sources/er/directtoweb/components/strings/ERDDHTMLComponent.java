@@ -17,9 +17,9 @@ import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * Rich text edit component.<br />
- * @deprecated use ERDEditHTML instead
+ * @deprecated use {@link ERDEditHTML} instead
  */
-
+@Deprecated
 public class ERDDHTMLComponent extends ERDCustomEditComponent {
 	/**
 	 * Do I need to update serialVersionUID?

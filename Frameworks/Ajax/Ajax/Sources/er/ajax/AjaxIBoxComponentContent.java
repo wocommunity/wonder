@@ -9,8 +9,9 @@ import com.webobjects.foundation.NSDictionary;
 /**
  * @see AjaxModelContainer
  * @see AjaxModalDialog
- * @deprecated use AjaxModelContainer or AjaxModalDialog
+ * @deprecated use {@link AjaxModalContainer} or {@link AjaxModalDialog}
  */
+@Deprecated
 public class AjaxIBoxComponentContent extends AjaxModalContainer {
 
 	public AjaxIBoxComponentContent(String name, NSDictionary associations, WOElement children) {

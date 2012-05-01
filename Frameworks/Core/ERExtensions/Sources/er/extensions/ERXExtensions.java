@@ -81,7 +81,6 @@ import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXRuntimeUtilities;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXSystem;
-import er.extensions.foundation.ERXUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.jdbc.ERXJDBCAdaptor;
 import er.extensions.localization.ERXLocalizer;
@@ -169,7 +168,6 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * the {@link ERXCompilerProxy} and {@link ERXValidationFactory}.
      * This delegate is configured when this framework is loaded.
      */
-   
     protected void initialize() {
     	NSNotificationCenter.defaultCenter().addObserver(this,
     			new NSSelector("bundleDidLoad", ERXConstant.NotificationClassArray),
@@ -364,8 +362,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     }
 
     /**
-     * This method is called everytime the configuration file
-     * is changed. This allows for turning SQL debuging on and
+     * This method is called every time the configuration file
+     * is changed. This allows for turning SQL debugging on and
      * off at runtime.
      * @param n notification posted when the configuration file
      * 	changes.
@@ -381,7 +379,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * session was active.
      * Not used in WO 5.2+
      * @param n notification that contains the session ID.
+     * @deprecated not needed anymore in WO 5.4
      */
+    @Deprecated
     public void sessionDidTimeOut(NSNotification n) {
         String sessionID=(String)n.object();
         ERXExtensions.sessionDidTimeOut(sessionID);
@@ -391,7 +391,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * This is needed for WO pre-5.2 when ec's were not
      * retained by their eos. Not called in 5.2+ systems.
      * @param n notification posted when an ec is created
+     * @deprecated not needed anymore in WO 5.4
      */
+    @Deprecated
     public void editingContextDidCreate(NSNotification n) {
         EOEditingContext ec = (EOEditingContext)n.object();
         ERXExtensions.retainEditingContextForCurrentSession(ec);
@@ -418,7 +420,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     private static Boolean adaptorEnabled;
 
     /** 
-     * flag to inidicate if rapid turn around is enabled for the
+     * flag to indicate if rapid turn around is enabled for the
      * adaptor channel logging. 
      */
     private static boolean _isConfigureAdaptorContextRapidTurnAround = false;
@@ -517,6 +519,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * this hopefully will go some way towards avoiding the 'attempted to send'
      * message to EO whose EditingContext is gone. Only used in pre-5.2 systems.
      */
+    @Deprecated
     private static NSMutableDictionary _editingContextsPerSession;
     
     /**
@@ -526,7 +529,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * session was active. This method is only called in
      * pre-WO 5.2 versions of WebObjects.
      * @param sessionID of the session that timed out
+     * @deprecated not needed anymore in WO 5.4
      */
+    @Deprecated
     public static void sessionDidTimeOut(String sessionID) {
         if (sessionID != null) {
             if (_editingContextsPerSession != null) {
@@ -551,7 +556,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * used for versions of WO pre-5.2. If you use ERXEC to create your editing
      * contexts then you never need to call this method yourself.
      * @param ec to be retained.
+     * @deprecated not needed anymore in WO 5.4
      */
+    @Deprecated
     public static void retainEditingContextForCurrentSession(EOEditingContext ec) {
          WOSession s= ERXSession.session();
          if (s != null) {
@@ -648,8 +655,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param s string to capitalize
      * @return capitalized string if the first char is a
      *		lowercase character.
-     *@deprecated ERXStringUtilities.capitalize()
+     *@deprecated use {@link ERXStringUtilities#capitalize(String)}
      */
+    @Deprecated
     public static String capitalize(String s) {
         return ERXStringUtilities.capitalize(s);
     }
@@ -661,8 +669,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param howMany number of its
      * @param language target language
      * @return plurified string
-     * @deprecated use ERXLocalizer.localizerForLanguage(language).plurifiedString(s, howMany)
+     * @deprecated use {@link ERXLocalizer#localizerForLanguage(String)} then {@link ERXLocalizer#plurifiedString(String, int)}
      */
+    @Deprecated
     public static String plurify(String s, int howMany, String language) {
         return ERXLocalizer.localizerForLanguage(language).plurifiedString(s, howMany);
     }
@@ -719,8 +728,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * string can not be parsed then 0 is returned.
      * @param s string to be parsed.
      * @return int from the string or 0 if un-parsable.
+     * @deprecated use {@link ERXValueUtilities#intValue(Object)}
      */
-    // MOVEME: ERXStringUtilities
+    @Deprecated
     public static int intFromParseableIntegerString(String s) {
         try {
             int x = Integer.parseInt(s);
@@ -730,14 +740,27 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         }
     }
 
-    // DELETEME: Already have this method in this class: replaceStringByStringInString
-    //		 plus this is the wrong implementation.
+    /**
+     * Replaces a given string by another string in a string.
+     * @param s1 string to be replaced
+     * @param s2 to be inserted
+     * @param s string to have the replacement done on it
+     * @return string after having all of the replacement done.
+     * @deprecated use {@link ERXStringUtilities#replaceStringByStringInString(String, String, String)}
+     */
+    @Deprecated
     public static String substituteStringByStringInString(String s1, String s2, String s) {
         NSArray a=NSArray.componentsSeparatedByString(s,s1);
         return a!=null ? a.componentsJoinedByString(s2) : s;
     }
 
-    // DELETEME:  Depricated use singleton method accessor
+    /**
+     * Method used to retrieve the shared instance of the
+     * html formatter.
+     * @return shared instance of the html formatter
+     * @deprecated use {@link ERXSimpleHTMLFormatter#formatter()}
+     */
+    @Deprecated
     public static ERXSimpleHTMLFormatter htmlFormatter() { return ERXSimpleHTMLFormatter.formatter(); }
 
     /**
@@ -779,7 +802,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param f file to get the bytes from
      * @throws IOException if things go wrong
      * @return byte array of the file.
+     * @deprecated user {@link ERXFileUtilities#bytesFromFile(File)}
      */
+    @Deprecated
     public static byte[] bytesFromFile(File f) throws IOException {
         return ERXFileUtilities.bytesFromFile(f);
     }
@@ -788,9 +813,11 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * Returns a string from the file using the default
      * encoding.
      * @param f file to read
+     * @throws IOException if things go wrong
      * @return string representation of that file.
+     * @deprecated use {@link ERXFileUtilities#stringFromFile(File)}
      */
-    // MOVEME: ERXFileUtilities
+    @Deprecated
     public static String stringFromFile(File f) throws IOException {
         return ERXFileUtilities.stringFromFile(f);
     }
@@ -799,9 +826,11 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * encoding.
      * @param f file to read
      * @param encoding to be used, null will use the default
+     * @throws IOException if things go wrong
      * @return string representation of the file.
+     * @deprecated user {@link ERXFileUtilities#stringFromFile(File, String)}
      */
-    // MOVEME: ERXFileUtilities    
+    @Deprecated
     public static String stringFromFile(File f, String encoding) throws IOException {
         return ERXFileUtilities.stringFromFile(f, encoding);
     }
@@ -814,8 +843,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param frameworkName name of the framework, null or "app"
      *		for the application bundle
      * @return the <code>lastModified</code> method of the file object
-     * @deprecated use ERXFileUtilities.lastModifiedDateForFileInFramework()
+     * @deprecated use {@link ERXFileUtilities#lastModifiedDateForFileInFramework(String, String)}
      */
+    @Deprecated
     public static long lastModifiedDateForFileInFramework(String fileName, String frameworkName) {
         return ERXFileUtilities.lastModifiedDateForFileInFramework(fileName, frameworkName);
     }
@@ -827,8 +857,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      *		'app' for the application bundle.
      * @return de-serialized object from the plist formatted file
      *		specified.
-     * @deprecated use ERXFileUtilities.readPropertyListFromFileInFramework()
+     * @deprecated use {@link ERXFileUtilities#readPropertyListFromFileInFramework(String, String)}
      */
+    @Deprecated
     public static Object readPropertyListFromFileinFramework(String fileName, String aFrameWorkName) {
         return ERXFileUtilities.readPropertyListFromFileInFramework(fileName, aFrameWorkName);
     }
@@ -842,8 +873,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param languageList language list search order
      * @return de-serialized object from the plist formatted file
      *		specified.
-     * @deprecated use ERXFileUtilities.readPropertyListFromFileInFramework()
+     * @deprecated use {@link ERXFileUtilities#readPropertyListFromFileInFramework(String, String, NSArray)}
      */
+    @Deprecated
     public static Object readPropertyListFromFileInFramework(String fileName,
                                                              String aFrameWorkName,
                                                              NSArray languageList) {
@@ -1077,7 +1109,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 
     /**
      * Given an initial string and an array of substrings, 
-     * Removes any occurances of any of the substrings
+     * Removes any occurrences of any of the substrings
      * from the initial string. Used in conjunction with
      * fuzzy matching.
      * @param newString initial string from which to remove other strings
@@ -1117,9 +1149,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     }
 
     /**
-     * Retrieves a value from the session's dictionary and evaulates
+     * Retrieves a value from the session's dictionary and evaluates
      * that object using the <code>booleanValue</code> method of
-     * {@link ERXUtilities}. If there is no object corresponding
+     * {@link ERXValueUtilities}. If there is no object corresponding
      * to the key passed in, then the default value is returned. The
      * usual way in which boolean values are set on the session object
      * is by using the method <code>setBooleanFlagOnSessionForKey</code>
@@ -1143,6 +1175,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param session that is currently active for this thread.
      * @deprecated use  ERXSession.setSession(session) instead
      */
+    @Deprecated
     public synchronized static void setSession(ERXSession session) {
     	 ERXSession.setSession(session);
     }
@@ -1152,6 +1185,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @return current session object for this thread
      * @deprecated use  ERXSession.session() instead
      */
+    @Deprecated
     public synchronized static ERXSession session() {
         return  ERXSession.session();
     }
@@ -1163,7 +1197,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * 
      * @param key preference key
      * @param context most likely a d2wContext object
-     * @return a unique preference key for storing and retriving preferences
+     * @return a unique preference key for storing and retrieving preferences
      */
     // FIXME: Needs to find a better home.
     public static String userPreferencesKeyFromContext(String key, NSKeyValueCoding context) {

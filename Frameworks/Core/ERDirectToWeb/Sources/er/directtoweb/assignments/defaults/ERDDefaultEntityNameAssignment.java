@@ -24,9 +24,9 @@ import er.extensions.foundation.ERXStringUtilities;
 //		keys passing in the current keyPath.
 /**
  * Beautify the entity name.<br />
- * @deprecated for entityName, use ERDDefaultsAssigment, for displayNameForEntity and displayNameForDestinationEntity use ERDDefaultDisplayNameAssigment
+ * @deprecated for entityName, use {@link ERDDefaultModelAssignment}, for displayNameForEntity and displayNameForDestinationEntity use {@link ERDDefaultDisplayNameAssignment}
  */
-
+@Deprecated
 public class ERDDefaultEntityNameAssignment extends ERDAssignment implements ERDLocalizableAssignmentInterface {
 	/**
 	 * Do I need to update serialVersionUID?

@@ -260,7 +260,7 @@ public class ERXFileUtilities {
     }
     
     /**
-     * @deprecated use writeInputStreamToFile(InputStream is, File f) instead
+     * @deprecated use {@link #writeInputStreamToFile(InputStream, File)}
      */
     @Deprecated
 	public static void writeInputStreamToFile(File f, InputStream is) throws IOException {

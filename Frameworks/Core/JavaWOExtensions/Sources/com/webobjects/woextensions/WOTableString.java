@@ -23,6 +23,7 @@ import com.webobjects.foundation.NSTimestampFormatter;
  * @Deprecated
  * WOTableString is no longer supported
  */
+@Deprecated
 public class WOTableString extends WOComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -39,6 +40,7 @@ public class WOTableString extends WOComponent {
         super(aContext);
     }
 
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }
@@ -82,6 +84,7 @@ public class WOTableString extends WOComponent {
         _value = null;
     }
 
+    @Override
     public void appendToResponse(WOResponse aResponse, WOContext aContext)  {
         _resetInternalCaches();
         super.appendToResponse(aResponse, aContext);

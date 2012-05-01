@@ -31,11 +31,12 @@ import er.directtoweb.assignments.defaults.ERDDefaultModelAssignment;
  * find it is that it uses the Model to find out the EORelationship
  * and starts from A. Following the relationship b, gives a B, and 
  * asking B for a relationship named k returns null and you lose.
- * @deprecated use ERDDefaultModelAssignment
+ * @deprecated use {@link ERDDefaultModelAssignment}
  */
 //	Note that these assignments require that the object is pushed into the context.  Look
 //	on some of the ERInspectPage setObject methods we push the object into the context.
 // MOVEME: Combind with SmartAttribute
+@Deprecated
 public class ERDSmartRelationshipAssignment extends ERDAssignment {
 	/**
 	 * Do I need to update serialVersionUID?

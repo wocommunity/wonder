@@ -22,13 +22,15 @@ import java.util.Vector;
  * Once these issues are resolved in a WO distribution, this class will go away and the Apple 
  * supplied will will be used again without changes in code on your side. <br />
  * @author ak
+ * @param <E> type of array contents
  */
 public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
 
 	@SuppressWarnings({ "hiding", "unchecked" })
 	public static final Class _CLASS = _NSUtilitiesExtra._classWithFullySpecifiedNamePrime("com.webobjects.foundation.NSMutableArray");
     
-    static final long serialVersionUID = -3909373569895711876L;
+    @SuppressWarnings("hiding")
+	static final long serialVersionUID = -3909373569895711876L;
 
     public static final Object ERX_MARKER = "Wonder";
 
@@ -185,9 +187,9 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
     }
 
     /**
-     * @deprecated Method replaceObjectAtIndex is deprecated
+     * @deprecated use {@link #replaceObjectAtIndex(Object, int)}
      */
-
+    @Deprecated
     public void replaceObjectAtIndex(int index, E object) {
         replaceObjectAtIndex(object, index);
     }

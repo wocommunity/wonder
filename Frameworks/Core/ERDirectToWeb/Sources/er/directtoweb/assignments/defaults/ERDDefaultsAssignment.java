@@ -12,9 +12,9 @@ import er.directtoweb.assignments.ERDAssignment;
 
 
 /**
- * @deprecated use ERDDefaultModelAssignment
+ * @deprecated use {@link ERDDefaultModelAssignment}
  */
-
+@Deprecated
 public class ERDDefaultsAssignment extends ERDDefaultModelAssignment {
 	/**
 	 * Do I need to update serialVersionUID?

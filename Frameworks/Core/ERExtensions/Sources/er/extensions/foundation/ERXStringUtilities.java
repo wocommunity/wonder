@@ -200,7 +200,7 @@ public class ERXStringUtilities {
 
     /**
      * Fuzzy matching is useful for catching user entered typos. For example
-     * if a user is search for a company named 'Aple' within your application
+     * if a user is searching for a company named 'Aple' within your application
      * they aren't going to find it. Thus the idea of fuzzy matching, meaning you
      * can define a threshold of 'how close can they be' type of thing.
      *
@@ -288,11 +288,18 @@ public class ERXStringUtilities {
         return (NSArray) results.valueForKey( eoKey );        
     }
     
-    /** @deprecated use 
-        <code>fuzzyMatch(String name, String entityName, String propertyKey,
-                         String synonymsKey, EOEditingContext ec,
-                         ERXFuzzyMatchCleaner cleaner, NSArray sortOrderings )</code>
-        instead*/
+    /**
+     * @param name
+     * @param entityName
+     * @param propertyKey
+     * @param synonymsKey
+     * @param ec
+     * @param cleaner
+     * @param comparisonString
+     * @return an array of objects that match in a fuzzy manner the name passed in.
+     * @deprecated use {@link #fuzzyMatch(String, String, String, String, EOEditingContext, ERXFuzzyMatchCleaner, NSArray)}
+     */
+    @Deprecated
     public static NSArray fuzzyMatch(String name,
                                      String entityName,
                                      String propertyKey,
@@ -606,7 +613,7 @@ public class ERXStringUtilities {
      * a certain character. Useful for determining
      * if you need to add an '&' to the end of a
      * form value string.
-     * @param separator character to add to potentially
+     * @param separator character to potentially
      *		add to the StringBuffer.
      * @param not character to test if the given
      *		StringBuffer ends in it.
@@ -754,8 +761,8 @@ public class ERXStringUtilities {
 
     /**
      * String multiplication.
-     * @param n the number of times to concatinate a given string
-     * @param s string to be multipled
+     * @param n the number of times to concatenate a given string
+     * @param s string to be multiplied
      * @return multiplied string
      */
     public static String stringWithNtimesString(int n, String s) {
@@ -1515,22 +1522,24 @@ public class ERXStringUtilities {
     }
 
     /**
-         * Returns a string from the input stream using the default
-          * encoding.
-          * @param in stream to read
-          * @return string representation of the stream.
-      */
+     * Returns a string from the input stream using the default
+     * encoding.
+     * @param in stream to read
+     * @return string representation of the stream.
+     * @throws IOException if things go wrong
+     */
      public static String stringFromInputStream(InputStream in) throws IOException {
          return new String(ERXFileUtilities.bytesFromInputStream(in));
      }
 
      /**
       * Returns a string from the input stream using the default
-       * encoding.
-       * @param in stream to read
-       * @param encoding to be used, null will use the default
-       * @return string representation of the stream.
-   */
+      * encoding.
+      * @param in stream to read
+      * @param encoding to be used, null will use the default
+      * @return string representation of the stream.
+      * @throws IOException if things go wrong
+      */
      public static String stringFromInputStream(InputStream in, String encoding) throws IOException {
          return new String(ERXFileUtilities.bytesFromInputStream(in), encoding);
      }
@@ -2193,7 +2202,7 @@ public class ERXStringUtilities {
     }
     
     /**
-     * Removes line breaks and quotes the string if neccessary
+     * Removes line breaks and quotes the string if necessary
      * 
      * @param s
      * 
@@ -2304,8 +2313,9 @@ public class ERXStringUtilities {
 	}
 	
 	/**
-	 * @deprecated  Replaced by stripHtml(str, false)
+	 * @deprecated use {@link #stripHtml(String, boolean)}
 	 */
+	@Deprecated
 	public static String stripHtml(String str) {
 		return stripHtml(str, false);
 	}

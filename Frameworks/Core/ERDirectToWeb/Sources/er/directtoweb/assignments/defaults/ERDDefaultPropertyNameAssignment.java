@@ -19,9 +19,9 @@ import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * Beautify the propertyKey name in a better way.<br />
- * @deprecated use ERDDefaultDisplayNameAssignment
+ * @deprecated use {@link ERDDefaultDisplayNameAssignment}
  */
-
+@Deprecated
 public class ERDDefaultPropertyNameAssignment extends ERDAssignment implements ERDLocalizableAssignmentInterface {
 	/**
 	 * Do I need to update serialVersionUID?

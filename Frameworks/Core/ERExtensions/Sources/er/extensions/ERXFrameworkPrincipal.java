@@ -193,8 +193,7 @@ public abstract class ERXFrameworkPrincipal {
     }
 
     /**
-     * Called directly after the contructor.
-     *
+     * Called directly after the constructor.
      */
     protected void initialize() {
         // empty

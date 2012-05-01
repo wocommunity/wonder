@@ -11,8 +11,9 @@ import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import er.directtoweb.assignments.defaults.ERDDefaultConfigurationNameAssignment;
 
 /**
- * @deprecated use ERDDefaultConfigurationNameAssignment
+ * @deprecated use {@link ERDDefaultConfigurationNameAssignment}
  */
+@Deprecated
 public class ERDConfigurationAssignment extends ERDDefaultConfigurationNameAssignment {
 	/**
 	 * Do I need to update serialVersionUID?

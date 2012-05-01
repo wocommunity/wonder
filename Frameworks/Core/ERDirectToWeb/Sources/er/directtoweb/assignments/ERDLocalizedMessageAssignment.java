@@ -4,8 +4,9 @@ import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import er.directtoweb.assignments.delayed.ERDDelayedLocalizedAssignment;
 
 /**
- * @deprecated  use {@link ERDDelayedLocalizedAssignment}.
+ * @deprecated  use {@link ERDDelayedLocalizedAssignment}
  */
+@Deprecated
 public class ERDLocalizedMessageAssignment extends ERDDelayedLocalizedAssignment {
 	/**
 	 * Do I need to update serialVersionUID?

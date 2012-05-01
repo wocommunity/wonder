@@ -133,8 +133,9 @@ public class ERCMailMessage extends _ERCMailMessage {
 
     /**
      * Use setIsRead(boolean)
-     * @deprecated setIsRead
+     * @deprecated use {@link #setIsRead(Boolean)}
      */
+    @Deprecated
     public void setReadAsBoolean(boolean read) {
         setIsRead(read);
     }
