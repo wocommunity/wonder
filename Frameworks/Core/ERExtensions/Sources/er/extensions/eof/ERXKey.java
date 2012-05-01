@@ -4,11 +4,14 @@ import java.math.BigDecimal;
 import java.util.Locale;
 
 import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSRange;
+import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestamp;
 
+import er.extensions.eof.ERXSortOrdering.ERXSortOrderings;
 import er.extensions.qualifiers.ERXAndQualifier;
 import er.extensions.qualifiers.ERXKeyComparisonQualifier;
 import er.extensions.qualifiers.ERXKeyValueQualifier;
@@ -2126,5 +2129,46 @@ public class ERXKey<T> {
 	@Override
 	public String toString() {
 		return _key;
+	}
+	
+	/**
+	 * Prefix the key in the given sort ordering with this key. For example, if
+	 * you have a sort ordering on Company of "name ascending" and you want to
+	 * sort a group of Person eo's by the name of the company they work for, you
+	 * need to prefix the key in the existing sort ordering to be "company.name
+	 * ascending" (to go through the company relationship on Person). Prefix
+	 * provides a mechanism to do that.
+	 * 
+	 * Person.COMPANY.prefix(Company.NAME.asc()) is equivalent to ERXS.sortOrder("compan.name", ERXS.ASC)
+	 * 
+	 * @param sortOrder
+	 *            the sort ordering to prefix
+	 * @return a sort ordering with its key prefixed with this key
+	 * @author David Avendasora
+	 */
+	public ERXSortOrdering prefix(EOSortOrdering sortOrder) {
+		String keyPathToChain = sortOrder.key();
+		String fullKeyPath = append(keyPathToChain).key();
+		NSSelector selector = sortOrder.selector();
+		ERXSortOrdering prefixedSortOrdering = ERXS.sortOrder(fullKeyPath, selector);
+		return prefixedSortOrdering;
+	}
+
+	/**
+	 * Prefix the keys in the given array of sort orderings with this key.
+	 * 
+	 * @param sortOrderings
+	 *            an Array of sort orderings to prefix
+	 * @return a sort ordering with its key prefixed with this key
+	 * @see #prefix(EOSortOrdering)
+	 * @author David Avendasora
+	 */
+	public ERXSortOrderings prefix(NSArray<EOSortOrdering> sortOrderings) {
+		ERXSortOrderings prefixedSortOrderings = new ERXSortOrderings();
+		for (EOSortOrdering sortOrdering : sortOrderings) {
+			EOSortOrdering prefixedSortOrdering = prefix(sortOrdering);
+			prefixedSortOrderings.addObject(prefixedSortOrdering);
+		}
+		return prefixedSortOrderings;
 	}
 }
