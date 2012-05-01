@@ -43,7 +43,7 @@ public class _NSObjectUtilities  {
                                     boolean showFields, boolean getFields,
                                     boolean showMethods, boolean getMethodsJava, boolean getMethodsNext) throws IOException {
         StringWriter outputWriter = new StringWriter();
-        String CR = new Character('\n').toString();
+        String CR = Character.valueOf('\n').toString();
         outputWriter.write(CR);
         outputWriter.write("This object's hashCode is = " + o.hashCode() + CR);
 

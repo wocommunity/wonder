@@ -203,7 +203,7 @@ public class ERXRestUtils {
 			parsedValue = ERXValueUtilities.BooleanValueWithDefault(value, null);
 		}
 		else if (valueType != null && Character.class.isAssignableFrom(valueType)) {
-			parsedValue = new Character(((String) value).charAt(0)); // MS: Presumes String
+			parsedValue = Character.valueOf(((String) value).charAt(0)); // MS: Presumes String
 		}
 		else if (valueType != null && Byte.class.isAssignableFrom(valueType)) {
 			parsedValue = Byte.valueOf((String) value); // MS: Presumes String
