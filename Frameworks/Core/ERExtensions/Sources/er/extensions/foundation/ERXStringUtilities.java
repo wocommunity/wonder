@@ -619,6 +619,24 @@ public class ERXStringUtilities {
     }
 
     /**
+     * Utility method to append a character to a
+     * StringBuilder if the last character is not
+     * a certain character. Useful for determining
+     * if you need to add an '&' to the end of a
+     * form value string.
+     * @param separator character to potentially
+     *		add to the StringBuilder.
+     * @param not character to test if the given
+     *		StringBuilder ends in it.
+     * @param sb StringBuilder to test and potentially
+     *		append to.
+     */
+    public static void appendSeparatorIfLastNot(char separator, char not, StringBuilder sb) {
+        if (sb.length() > 0 && sb.charAt(sb.length() - 1) != not)
+            sb.append(separator);
+    }
+
+    /**
      * Replaces a given string by another string in a string.
      * @param old string to be replaced
      * @param newString to be inserted
