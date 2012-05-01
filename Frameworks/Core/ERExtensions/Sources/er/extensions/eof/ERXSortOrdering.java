@@ -73,8 +73,9 @@ public class ERXSortOrdering extends EOSortOrdering {
 	 * @author David Avendasora
 	 */
 	public ERXSortOrderings then(NSArray<EOSortOrdering> nextSortOrderings) {
-		array().insertObjectAtIndex(this, 0);
-		return array();
+		ERXSortOrderings sortOrderings = array();
+		sortOrderings.addObjectsFromArray(nextSortOrderings);
+		return sortOrderings;
 	}
 
 	/**
