@@ -61,6 +61,7 @@ public class ERXNavigationItem implements Serializable {
 	protected NSDictionary _childrenChoices;
 	protected NSDictionary _queryBindings;
 	protected String _href;
+	protected String _secure;
 	protected ERXNavigationItem _parent;
 
 	protected int _height;
@@ -100,6 +101,7 @@ public class ERXNavigationItem implements Serializable {
 			if (_displayName == null || _displayName.length() == 0)
 				_displayName = _name;
 			_pageName = (String) values.valueForKey("pageName");
+			_secure = (String) values.valueForKey("secure");
 			_hasActivity = (String) values.valueForKey("hasActivity");
 			if (values.valueForKey("children") != null && values.valueForKey("children") instanceof NSArray) {
 				_children = (NSArray) values.valueForKey("children");
@@ -144,6 +146,7 @@ public class ERXNavigationItem implements Serializable {
 	 * 
 	 * @param context
 	 *            in which to evaluate visibility
+	 * @return true if the item meets display conditions
 	 */
 	public boolean meetsDisplayConditionsInComponent(NSKeyValueCodingAdditions context) {
 		Boolean meetsDisplayConditions = Boolean.TRUE;
@@ -218,7 +221,7 @@ public class ERXNavigationItem implements Serializable {
 					children = (NSArray) o;
 				}
 				else if (o != null && o instanceof String) {
-					children = (NSArray) childrenChoices().objectForKey((String) o);
+					children = (NSArray) childrenChoices().objectForKey(o);
 					if (children == null) {
 						log.warn("For nav core object: " + this + " and child binding: " + childrenBinding() + " couldn't find children for choice key: " + o);
 					}
@@ -253,6 +256,17 @@ public class ERXNavigationItem implements Serializable {
 			children = childNavItems;
 		}
 		return children;
+	}
+	
+	public Boolean secureInContext(NSKeyValueCodingAdditions context) {
+		if(_secure == null) {
+			return null;
+		}
+		Object value = _secure;
+		if(_secure.indexOf('.') > -1) {
+			value = context.valueForKeyPath(_secure);
+		}
+		return ERXValueUtilities.BooleanValueWithDefault(value, null);
 	}
 
 	public boolean isRootNode() {
