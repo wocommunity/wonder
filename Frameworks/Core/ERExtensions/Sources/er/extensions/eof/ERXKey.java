@@ -2183,4 +2183,40 @@ public class ERXKey<T> {
 		}
 		return prefixedSortOrderings;
 	}
+	
+	/**
+	 * Simple cover method for {@link #prefix(EOQualifier)}.
+	 * 
+	 * @param qualifier
+	 *            the qualifier to prefix
+	 * @return a qualifier with all of its keys prefixed with this key
+	 * @author David Avendasora
+	 */
+	public EOQualifier dot(EOQualifier qualifier) {
+		return prefix(qualifier);
+	}
+	
+	/**
+	 * Simple cover method for {@link #prefix(EOSortOrdering)}.
+	 * 
+	 * @param sortOrdering
+	 *            the sort ordering to prefix
+	 * @return a sort ordering with its key prefixed with this key
+	 * @author David Avendasora
+	 */
+	public ERXSortOrdering dot(EOSortOrdering sortOrdering) {
+		return prefix(sortOrdering);
+	}
+	
+	/**
+	 * Simple cover method for {@link #prefix(NSArray)}.
+	 * 
+	 * @param sortOrderings
+	 *            an Array of sort orderings to prefix
+	 * @return a sort ordering with its key prefixed with this key
+	 * @author David Avendasora
+	 */
+	public ERXSortOrderings dot(NSArray<EOSortOrdering> sortOrderings) {
+		return prefix(sortOrderings);
+	}
 }
