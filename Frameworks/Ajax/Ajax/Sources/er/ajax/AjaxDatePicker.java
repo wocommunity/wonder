@@ -225,7 +225,7 @@ public class AjaxDatePicker extends AjaxComponent {
      * @return JavaScript for onClick binding of HTML input
      */
     public String onClickScript() {
-        	StringBuffer script = new StringBuffer(200);
+        	StringBuilder script = new StringBuilder(200);
            	script.append("event.cancelBubble=true; ");
          	script.append(showCalendarScript());
             return script.toString();

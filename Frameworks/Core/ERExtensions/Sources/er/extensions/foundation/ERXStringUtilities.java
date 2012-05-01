@@ -543,11 +543,11 @@ public class ERXStringUtilities {
      * @return display name for the given key
      */
     public static String displayNameForKey(String key) {
-        StringBuffer finalString = null;
+        StringBuilder finalString = null;
         if (!stringIsNullOrEmpty(key) && !key.trim().equals("")) {
-            finalString = new StringBuffer();
+            finalString = new StringBuilder();
             String lastHop=key.indexOf(".") == -1 ? key : key.endsWith(".") ? "" : key.substring(key.lastIndexOf(".") + 1);
-            StringBuffer tempString = new StringBuffer();
+            StringBuilder tempString = new StringBuilder();
             char[] originalArray = lastHop.toCharArray();
             originalArray[0] = Character.toUpperCase(originalArray[0]);
             Character tempChar = null;
@@ -559,7 +559,7 @@ public class ERXStringUtilities {
                    Character.isLowerCase(originalArray[i+1])) {
                     finalString.append(tempString.toString());
                     if (i>0) finalString.append(' ');
-                    tempString = new StringBuffer();
+                    tempString = new StringBuilder();
                 }
                 tempString.append(tempChar.toString());
             }
@@ -629,7 +629,7 @@ public class ERXStringUtilities {
         int begin, end;
         int oldLength = old.length();
         int length = buffer.length();
-        StringBuffer convertedString = new StringBuffer(length + 100);
+        StringBuilder convertedString = new StringBuilder(length + 100);
 
         begin = 0;
         while(begin < length)
@@ -668,7 +668,7 @@ public class ERXStringUtilities {
             final int sourceStringLength = sourceString.length();
             final int stringToReplaceLength = stringToReplace.length();
             final int replacementStringLength = replacementString.length();
-            final StringBuffer buffer = new StringBuffer(sourceStringLength - stringToReplaceLength + replacementStringLength);
+            final StringBuilder buffer = new StringBuilder(sourceStringLength - stringToReplaceLength + replacementStringLength);
             
             buffer.append(sourceString.substring(0, indexOfMatch));
             buffer.append(replacementString);
@@ -741,7 +741,7 @@ public class ERXStringUtilities {
      * @return multiplied string
      */
     public static String stringWithNtimesString(int n, String s) {
-        StringBuffer sb=new StringBuffer();
+    	StringBuilder sb = new StringBuilder(n);
         for (int i=0; i<n; i++) sb.append(s);
         return sb.toString();
     }
@@ -799,7 +799,7 @@ public class ERXStringUtilities {
     public static String escapeNonXMLChars(String str) {
         if (str == null) return null;
 
-        StringBuffer result = new StringBuffer(str.length());
+        StringBuilder result = new StringBuilder(str.length());
         for (int i = 0; i < str.length(); i++) {
         	char c = str.charAt(i);
         	switch(c) {
@@ -942,7 +942,7 @@ public class ERXStringUtilities {
     	String close = "]]>";
     	String escape = "]]]]><![CDATA[>";
 
-    	StringBuffer sb = new StringBuffer("<![CDATA[");
+    	StringBuilder sb = new StringBuilder("<![CDATA[");
     	
     	do {
         	end = pcdata.indexOf(close, start);
@@ -968,7 +968,7 @@ public class ERXStringUtilities {
     public static String escapeNonBasicLatinChars(String str) {
         if (str == null) return null;
 
-        StringBuffer result = new StringBuffer(str.length());
+        StringBuilder result = new StringBuilder(str.length());
         for (int i = 0; i < str.length(); i++) 
             result.append(escapeNonBasicLatinChars(str.charAt(i)));
             
@@ -1004,7 +1004,7 @@ public class ERXStringUtilities {
         targetString = null;
       }
       else {
-        StringBuffer targetBuffer = null;
+    	StringBuilder targetBuffer = null;
         int lastMatch = 0;
         int length = _sourceString.length();
         for (int sourceIndex = 0; sourceIndex < length; sourceIndex++) {
@@ -1017,7 +1017,7 @@ public class ERXStringUtilities {
           }
           if (escape) {
             if (targetBuffer == null) {
-              targetBuffer = new StringBuffer(length + 100);
+              targetBuffer = new StringBuilder(length + 100);
             }
             if (sourceIndex - lastMatch > 0) {
               targetBuffer.append(_sourceString.substring(lastMatch, sourceIndex));
@@ -1038,7 +1038,7 @@ public class ERXStringUtilities {
     }
 
     public static String toHexString(char c) {
-        StringBuffer result = new StringBuffer("\u005C\u005Cu9999".length());
+    	StringBuilder result = new StringBuilder("\u005C\u005Cu9999".length());
         String u = Long.toHexString((int) c).toUpperCase();
         switch (u.length()) {
             case 1:   result.append("\u005C\u005Cu000");  break;
@@ -1053,7 +1053,7 @@ public class ERXStringUtilities {
     public static String toHexString(String str) {
         if (str == null) return null;
 
-        StringBuffer result = new StringBuffer("\u005C\u005Cu9999".length() * str.length());
+        StringBuilder result = new StringBuilder("\u005C\u005Cu9999".length() * str.length());
         for (int i = 0; i < str.length(); i++) 
             result.append(toHexString(str.charAt(i)));
 
@@ -1067,7 +1067,7 @@ public class ERXStringUtilities {
      */
     public static String byteArrayToHexString(byte[] block) {
         int len = block.length;
-        StringBuffer buf = new StringBuffer(2 * len);
+        StringBuilder buf = new StringBuilder(2 * len);
         for (int i = 0; i < len; ++i) {
             int high = ((block[i] & 0xf0) >> 4);
             int low  =  (block[i] & 0x0f);
@@ -1146,7 +1146,7 @@ public class ERXStringUtilities {
     public static String capitalize(String value) {
         String capital = null;
         if (value != null && value.length() > 0) {
-            StringBuffer buffer = new StringBuffer(value);
+        	StringBuilder buffer = new StringBuilder(value);
 
             buffer.setCharAt(0, Character.toUpperCase(value.charAt(0)));
             capital = buffer.toString();            
@@ -1164,7 +1164,7 @@ public class ERXStringUtilities {
         if (value != null) {
         	int length = value.length();
         	if (length > 0) {
-	            StringBuffer buffer = new StringBuffer(value);
+        		StringBuilder buffer = new StringBuilder(value);
 	            for (int i = 0; i < length; i ++) {
 	            	char ch = value.charAt(i);
 	            	if (i == 0 || i == length - 1 || (i < length - 1 && Character.isUpperCase(value.charAt(i + 1)))) {
@@ -1195,7 +1195,7 @@ public class ERXStringUtilities {
     public static String capitalizeAllWords(String value) {
         String capitalize = null;
         if (value != null && value.length() > 0) {
-            StringBuffer buffer = new StringBuffer();
+        	StringBuilder buffer = new StringBuilder();
             boolean first = true;
             for (StringTokenizer tokenizer = new StringTokenizer(value); tokenizer.hasMoreElements();) {
                 String token = tokenizer.nextToken();
@@ -1218,7 +1218,7 @@ public class ERXStringUtilities {
      * @return the StringWithoutUnderscores
      */
     public static String underscoreToCamelCase(String underscoreString, boolean capitalize) {
-    	StringBuffer camelCase = new StringBuffer();
+    	StringBuilder camelCase = new StringBuilder();
     	String[] underscoreStrings = underscoreString.split("_");
     	for (int i = 0; i < underscoreStrings.length; i ++) {
     		String word;
@@ -1239,7 +1239,7 @@ public class ERXStringUtilities {
      * @return the string_with_underscores
      */
     public static String camelCaseToUnderscore(String camelString, boolean lowercase) {
-    	StringBuffer underscore = new StringBuffer();
+    	StringBuilder underscore = new StringBuilder();
     	boolean lastCharacterWasWordBreak = false;
     	boolean lastCharacterWasCapital = false;
     	int length = camelString.length();
@@ -1527,7 +1527,7 @@ public class ERXStringUtilities {
        * @return a string representation from the array
        */
     public static String toString(Object[] array, String separator) {
-          StringBuffer buf = new StringBuffer();
+    	StringBuilder buf = new StringBuilder();
           for (int i = 0; i < array.length; i++) {
               Object o = array[i];
               buf.append(o.toString());
@@ -1569,7 +1569,7 @@ public class ERXStringUtilities {
 	 * @return a new string only with characters from the characters argument
 	 */
 	public static String removeExceptCharacters(String source, String characters) {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		int l = source.length();
 		for (int i = 0; i < l; i++) {
 			char c = source.charAt(i);
@@ -1587,7 +1587,7 @@ public class ERXStringUtilities {
 	 * @return a new string without any characters from the characters argument
 	 */
 	public static String removeCharacters(String source, String characters) {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		int l = source.length();
 		for (int i = 0; i < l; i++) {
 			char c = source.charAt(i);
@@ -1903,7 +1903,7 @@ public class ERXStringUtilities {
 	public static String stringFromDictionary(NSDictionary dict) {
 		NSArray orderedKeys = dict.allKeys();
 		orderedKeys = ERXArrayUtilities.sortedArraySortedWithKey(orderedKeys, "toString.toLowerCase");
-		StringBuffer result = new StringBuffer();
+		StringBuilder result = new StringBuilder();
 		for (Enumeration keys = orderedKeys.objectEnumerator(); keys.hasMoreElements();) {
 			Object key = keys.nextElement();
 			Object value = dict.objectForKey(key);
@@ -1968,12 +1968,12 @@ public class ERXStringUtilities {
      */
     public static String safeIdentifierName(String source, String prefix, char replacement)
     {
-    	StringBuffer b;
+    	StringBuilder b;
     	// Add prefix if source does not start with valid character
         if (source == null || source.length() == 0 || Character.isJavaIdentifierStart(source.charAt(0))) {
-            b = new StringBuffer(source);
+            b = new StringBuilder(source);
         } else {
-        	b = new StringBuffer(prefix);
+        	b = new StringBuilder(prefix);
         	b.append(source);
         }
     	
@@ -2106,7 +2106,7 @@ public class ERXStringUtilities {
     		return string;
     	}
     	
-        StringBuffer buffer = new StringBuffer(string);
+    	StringBuilder buffer = new StringBuilder(string);
         for (int i = string.length(); i < paddedLength; i++) {
             buffer.append(padChar);
         }
@@ -2128,7 +2128,7 @@ public class ERXStringUtilities {
     		return string;
     	}
     	
-        StringBuffer buffer = new StringBuffer();
+    	StringBuilder buffer = new StringBuilder();
         for (int i = string.length(); i < paddedLength; i++) {
             buffer.append(padChar);
         }
@@ -2153,7 +2153,7 @@ public class ERXStringUtilities {
     		result = contentToInsert;
     	}
     	else {
-			StringBuffer sb = new StringBuffer(destinationString.length() + contentToInsert.length());
+			StringBuilder sb = new StringBuilder(destinationString.length() + contentToInsert.length());
 			sb.append(destinationString.substring(0, insertOffset));
 			sb.append(contentToInsert);
 			sb.append(destinationString.substring(insertOffset));
@@ -2230,7 +2230,7 @@ public class ERXStringUtilities {
 			throw new IllegalArgumentException("Neither the string nor the quote symbol are allowed to be null");
 		}
 
-		s = new StringBuffer().append(quoteSymbol).append(s).append(quoteSymbol).toString();
+		s = new StringBuilder().append(quoteSymbol).append(s).append(quoteSymbol).toString();
 		return s;
 	}
 	
