@@ -75,8 +75,8 @@ public abstract class ERXFrameworkPrincipal {
     protected final Logger log = Logger.getLogger(getClass());
 
     /** holds the mapping between framework principals classes and ERXFrameworkPrincipal objects */
-    protected static final NSMutableDictionary  initializedFrameworks = new NSMutableDictionary();
-    protected static final NSMutableArray  launchingFrameworks = new NSMutableArray();
+    protected static final NSMutableDictionary<String, ERXFrameworkPrincipal> initializedFrameworks = new NSMutableDictionary<String, ERXFrameworkPrincipal>();
+    protected static final NSMutableArray<ERXFrameworkPrincipal> launchingFrameworks = new NSMutableArray<ERXFrameworkPrincipal>();
 
     public static class Observer {
         
@@ -92,8 +92,7 @@ public abstract class ERXFrameworkPrincipal {
          */
         public final void willFinishInitialization(NSNotification n) {
             NSNotificationCenter.defaultCenter().removeObserver(this, ERXApplication.ApplicationDidCreateNotification, null);
-            for (Enumeration enumerator = launchingFrameworks.objectEnumerator(); enumerator.hasMoreElements();) {
-                ERXFrameworkPrincipal principal = (ERXFrameworkPrincipal) enumerator.nextElement();
+            for (ERXFrameworkPrincipal principal : launchingFrameworks) {
                 principal.finishInitialization();
                 NSLog.debug.appendln("Finished initialization after launch: " + principal);
             }
@@ -111,8 +110,7 @@ public abstract class ERXFrameworkPrincipal {
          */
         public final void didFinishInitialization(NSNotification n) {
             NSNotificationCenter.defaultCenter().removeObserver(this);
-            for (Enumeration enumerator = launchingFrameworks.objectEnumerator(); enumerator.hasMoreElements();) {
-                ERXFrameworkPrincipal principal = (ERXFrameworkPrincipal) enumerator.nextElement();
+            for (ERXFrameworkPrincipal principal : launchingFrameworks) {
                 principal.didFinishInitialization();
             }
         }

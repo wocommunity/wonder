@@ -226,23 +226,23 @@ public class ERXStringUtilities {
                                      ERXFuzzyMatchCleaner cleaner,
                                      NSArray sortOrderings ){
         String eoKey = "eo";
-        NSMutableArray results = new NSMutableArray();
+        NSMutableArray<NSMutableDictionary<String, Object>> results = new NSMutableArray<NSMutableDictionary<String, Object>>();
         EOFetchSpecification fs = new EOFetchSpecification( entityName, null, null );
         fs.setFetchesRawRows( true );
-        NSArray pks = EOUtilities.entityNamed( ec, entityName ).primaryKeyAttributeNames();
-        NSMutableArray keyPaths = new NSMutableArray(pks);
+        NSArray<String> pks = EOUtilities.entityNamed( ec, entityName ).primaryKeyAttributeNames();
+        NSMutableArray<String> keyPaths = new NSMutableArray<String>(pks);
         keyPaths.addObject( propertyKey );
         if( synonymsKey != null ) 
             keyPaths.addObject( synonymsKey );
         //we use only the strictly necessary keys.
         fs.setRawRowKeyPaths( keyPaths );
-        NSArray rawRows = ec.objectsWithFetchSpecification( fs );
+        NSArray<NSDictionary<String, Object>> rawRows = ec.objectsWithFetchSpecification( fs );
         if(name == null)
             name = "";
         name = name.toUpperCase();
         String cleanedName = cleaner.cleanStringForFuzzyMatching(name);
         for(Enumeration e = rawRows.objectEnumerator(); e.hasMoreElements(); ){
-            NSMutableDictionary dico = ((NSDictionary)e.nextElement()).mutableClone();
+            NSMutableDictionary<String, Object> dico = ((NSDictionary)e.nextElement()).mutableClone();
             Object value = dico.valueForKey(propertyKey);
             boolean trySynonyms = true;
             //First try to match with the name of the eo
@@ -254,7 +254,7 @@ public class ERXStringUtilities {
                     (distance(cleanedName, cleanedComparedString) <=
                      Math.min((double)cleanedName.length(), (double)cleanedComparedString.length())*adjustement)){
                     dico.setObjectForKey( new Double(distance(name, comparedString)), _DISTANCE );
-                    NSDictionary pkValues = new NSDictionary( dico.objectsForKeys( pks, NSKeyValueCoding.NullValue ), pks );
+                    NSDictionary<String, Object> pkValues = new NSDictionary<String, Object>(dico.objectsForKeys(pks, NSKeyValueCoding.NullValue ), pks);
                     dico.setObjectForKey( EOUtilities.faultWithPrimaryKey( ec, entityName, pkValues ), eoKey );
                     results.addObject( dico );
                     trySynonyms = false;
@@ -273,7 +273,7 @@ public class ERXStringUtilities {
                            (distance(cleanedName, comparedString) <=
                             Math.min((double)cleanedName.length(), (double)comparedString.length())*adjustement)){
                             dico.setObjectForKey( new Double(distance(name, comparedString)), _DISTANCE );
-                            NSDictionary pkValues = new NSDictionary( dico.objectsForKeys( pks, NSKeyValueCoding.NullValue ), pks );
+                            NSDictionary<String, Object> pkValues = new NSDictionary<String, Object>(dico.objectsForKeys(pks, NSKeyValueCoding.NullValue ), pks);
                             dico.setObjectForKey( EOUtilities.faultWithPrimaryKey( ec, entityName, pkValues ), eoKey );
                             results.addObject( dico );
                             break;
@@ -283,7 +283,7 @@ public class ERXStringUtilities {
             }
         }
         if( sortOrderings != null ) {
-            results = (NSMutableArray)EOSortOrdering.sortedArrayUsingKeyOrderArray(results, sortOrderings);
+            results = (NSMutableArray<NSMutableDictionary<String, Object>>) EOSortOrdering.sortedArrayUsingKeyOrderArray(results, sortOrderings);
         }
         return (NSArray) results.valueForKey( eoKey );        
     }
@@ -1889,7 +1889,7 @@ public class ERXStringUtilities {
 		orderedKeys = ERXArrayUtilities.sortedArraySortedWithKey(orderedKeys, "toString.toLowerCase");
 		StringBuffer result = new StringBuffer();
 		for (Enumeration keys = orderedKeys.objectEnumerator(); keys.hasMoreElements();) {
-			Object key = (Object) keys.nextElement();
+			Object key = keys.nextElement();
 			Object value = dict.objectForKey(key);
 			String stringValue = NSPropertyListSerialization.stringFromPropertyList(value);
 			String stringKey = NSPropertyListSerialization.stringFromPropertyList(key);

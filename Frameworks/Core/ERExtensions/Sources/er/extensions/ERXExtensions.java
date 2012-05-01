@@ -305,11 +305,11 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 		ERXObjectStoreCoordinatorPool.initializeIfNecessary();
     }
     
-    private static Map _qualifierKeys;
+    private static Map<String, Support> _qualifierKeys;
     
     public static synchronized void registerSQLSupportForSelector(NSSelector selector, EOQualifierSQLGeneration.Support support) {
         if(_qualifierKeys == null) {
-            _qualifierKeys = new HashMap();
+            _qualifierKeys = new HashMap<String, Support>();
             EOQualifierSQLGeneration.Support old = EOQualifierSQLGeneration.Support.supportForClass(EOKeyValueQualifier.class);
             EOQualifierSQLGeneration.Support.setSupportForClass(new KeyValueQualifierSQLGenerationSupport(old), EOKeyValueQualifier.class);
         }
@@ -334,7 +334,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
             EOQualifierSQLGeneration.Support support = null;
             if(qualifier instanceof EOKeyValueQualifier) {
                 synchronized (_qualifierKeys) {
-                    support = (Support) _qualifierKeys.get(((EOKeyValueQualifier)qualifier).selector().name());
+                    support = _qualifierKeys.get(((EOKeyValueQualifier)qualifier).selector().name());
                 }
             }
             if(support == null) {
@@ -491,7 +491,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param onOff
      */
     public static void setAdaptorLogging(boolean onOff) {
-    	Boolean targetState = onOff ? Boolean.TRUE : Boolean.FALSE;
+    	Boolean targetState = Boolean.valueOf(onOff);
     	if (NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess) != targetState.booleanValue()) {
 			// Post a notification to give us a hook to perform other operations necessary to get logging going, e.g. change Logger settings, etc.
 			NSNotificationCenter.defaultCenter().postNotification(new NSNotification(eoAdaptorLoggingWillChangeNotification, targetState));
@@ -553,7 +553,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param ec to be retained.
      */
     public static void retainEditingContextForCurrentSession(EOEditingContext ec) {
-         WOSession s=session();
+         WOSession s= ERXSession.session();
          if (s != null) {
              if (_editingContextsPerSession == null) {
                  _editingContextsPerSession = new NSMutableDictionary();
@@ -1086,7 +1086,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      */
     // MOVEME: Either ERXStringUtilities or fuzzy matching stuff
     // FIXME: Should use a StringBuffer instead of creating strings all over the place.
-    public static String cleanString(String newString, NSArray toBeCleaneds) {
+    public static String cleanString(String newString, NSArray<String> toBeCleaneds) {
         String result=newString;
         if (newString!=null) {
             for(Enumeration e = toBeCleaneds.objectEnumerator(); e.hasMoreElements();){
@@ -1454,7 +1454,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 	    			}
 									
 					ERXApplication.setup(args);
-					((ERXExtensions) ERXFrameworkPrincipal.sharedInstance(ERXExtensions.class)).bundleDidLoad(null);
+					ERXFrameworkPrincipal.sharedInstance(ERXExtensions.class).bundleDidLoad(null);
 				}
 				catch (Exception e) {
 					throw new NSForwardException(e);

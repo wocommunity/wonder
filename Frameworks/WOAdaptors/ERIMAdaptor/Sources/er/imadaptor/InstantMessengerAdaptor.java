@@ -399,7 +399,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 				catch (InterruptedException t) {
 					// ignore
 				}
-				InstantMessengerAdaptor.this.removeExpiredConversations();
+				removeExpiredConversations();
 			}
 		}
 	}
