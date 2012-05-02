@@ -1077,20 +1077,32 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 	}
 	
 	/**
-	 * A type-safe wrapper for {@link #valueForKeyPath(String)}.
-	 * @param <T> the type of elements in the returned NSArray
+	 * A type-safe wrapper for {@link #valueForKeyPath(String)} that simply
+	 * calls {@code valueForKeyPath(erxKey.key())} and attempts to cast the
+	 * result to {@code NSArray<T>}. If the value returned cannot be cast it
+	 * will throw a {@code ClassCastException}.
+	 * 
+	 * @param <T>
+	 *            the Type of elements in the returned {@code NSArray}
 	 * @param erxKey
-	 * @return an NSArray of T objects.
+	 * @return an {@code NSArray} of {@code T} objects.
+	 * @author David Avendasora
 	 */
 	public <T> NSArray<T> valueForKeyPath(ERXKey<T> erxKey) {
 		return (NSArray<T>) valueForKeyPath(erxKey.key());
 	}
-	
+
 	/**
-	 * A type-safe wrapper for {@link #valueForKey(String)}
-	 * @param <T> the type of elements in the returned NSArray
+	 * A type-safe wrapper for {@link #valueForKey(String)} that simply calls
+	 * {@code valueForKey(erxKey.key())} and attempts to cast the result to
+	 * {@code NSArray<T>}. If the value returned cannot be cast it will throw a
+	 * {@code ClassCastException}.
+	 * 
+	 * @param <T>
+	 *            the Type of elements in the returned {@code NSArray}
 	 * @param erxKey
-	 * @return an NSArray of T objects.
+	 * @return an {@code NSArray} of {@code T} objects.
+	 * @author David Avendasora
 	 */
 	public <T> NSArray<T> valueForKey(ERXKey<T> erxKey) {
 		return (NSArray<T>) valueForKey(erxKey.key());
