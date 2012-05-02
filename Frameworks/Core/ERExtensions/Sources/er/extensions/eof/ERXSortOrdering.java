@@ -71,20 +71,6 @@ public class ERXSortOrdering extends EOSortOrdering {
 	}
 
 	/**
-	 * Returns ERXSortOrderings with this sort ordering followed by the provided
-	 * array of next sort orderings.
-	 * 
-	 * @param nextSortOrderings
-	 *            the next sort orderings to chain to this
-	 * @return an array of sort orderings
-	 * @author David Avendasora
-	 */
-	public ERXSortOrderings then(NSArray<EOSortOrdering> nextSortOrderings) {
-		array().insertObjectAtIndex(this, 0);
-		return array();
-	}
-
-	/**
 	 * Returns this sort ordering as an array.
 	 * 
 	 * @return this sort ordering as an array
@@ -213,19 +199,6 @@ public class ERXSortOrdering extends EOSortOrdering {
 		 */
 		public ERXSortOrderings then(EOSortOrdering nextSortOrdering) {
 			addObject(nextSortOrdering);
-			return this;
-		}
-
-		/**
-		 * Adds the given sort orderings to the end of this list and returns
-		 * "this" so it can be chained again.
-		 * 
-		 * @param nextSortOrderings the sort ordering to add
-		 * @return this (with the sort orderings appended)
-		 * @author David Avendasora
-		 */
-		public ERXSortOrderings then(ERXSortOrderings nextSortOrderings) {
-			addObjectsFromArray(nextSortOrderings);
 			return this;
 		}
 
