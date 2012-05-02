@@ -12,6 +12,9 @@ import com.webobjects.directtoweb.D2WDisplayToManyTable;
 /**
  * Improved toMany display compononent, uses ERListDisplay.<br />
  * @d2wKey emptyArrayDisplayString
+ * @d2wKey separator
+ * @d2wKey finalSeperator
+ * @d2wKey escapeHTML
  */
 public class ERD2WDisplayToManyList extends D2WDisplayToManyTable {
 	/**
