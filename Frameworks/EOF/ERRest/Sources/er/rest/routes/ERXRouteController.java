@@ -73,13 +73,13 @@ import er.rest.util.ERXRestTransactionRequestAdaptor;
  * methods for manipulating restful requests and responses (update(..), create(..), requestNode(), response(..), etc) ,
  * and it supports multiple formats for you.
  * 
- * @property ERXRest.accessControlAllowRequestHeaders
- * @property ERXRest.accessControlAllowRequestMethods
- * @property ERXRest.defaultFormat
- * @property ERXRest.strictMode
+ * @property ERXRest.accessControlAllowRequestHeaders See https://developer.mozilla.org/En/HTTP_access_control#Access-Control-Allow-Headers
+ * @property ERXRest.accessControlAllowRequestMethods See https://developer.mozilla.org/En/HTTP_access_control#Access-Control-Allow-Methods
+ * @property ERXRest.defaultFormat (default "xml") Allow you to set the default format for all of your REST controllers
+ * @property ERXRest.strictMode (default "true") If set to true, status code in the response will be 405 Not Allowed, if set to false, status code will be 404 Not Found
  * @property ERXRest.allowWindowNameCrossDomainTransport
- * @property ERXRest.accessControlMaxAge
- * @property ERXRest.accessControlAllowOrigin
+ * @property ERXRest.accessControlMaxAge (default 1728000) This header indicates how long the results of a preflight request can be cached.  For an example of a preflight request, see the above examples. See https://developer.mozilla.org/En/HTTP_access_control#Access-Control-Max-Age
+ * @property ERXRest.accessControlAllowOrigin  Set the value to '*' to enable all origins. See https://developer.mozilla.org/En/HTTP_access_control#Access-Control-Allow-Origin
  *
  * @author mschrag
  */
