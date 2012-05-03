@@ -117,9 +117,9 @@ import er.rest.routes.jsr311.Paths;
  * http://localhost/cgi-bin/WebObjects/YourApp.woa/ra/person/100/edit.json
  * </pre>
  * 
- * @property ERXRest.missingControllerName (default "ERXMissingRouteController") Allow you to specify which controller to use when a route doesn't exist
- * @property ERXRest.parseUnknownExtensions (default "true") If set to "false", will return a 404 status code if the format doesn't exist
- * @property ERXRest.pluralEntityNames 
+ * @property ERXRest.missingControllerName (default "ERXMissingRouteController")
+ * @property ERXRest.parseUnknownExtensions
+ * @property ERXRest.pluralEntityNames
  * @property ERXRest.routeCase
  * @property ERXRest.lowercaseEntityNames
  *

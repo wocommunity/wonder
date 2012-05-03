@@ -14,7 +14,7 @@ import er.rest.ERXRestUtils;
 
 /**
  *
- * @property ERXRest.suppressTypeAttributesForSimpleTypes (default "false") If set to true, primitive types, like type = "datetime", won't be added to the output
+ * @property ERXRest.suppressTypeAttributesForSimpleTypes
  */
 public class ERXXmlRestWriter implements IERXRestWriter {
 	public void appendHeadersToResponse(ERXRestRequestNode node, IERXRestResponse response, ERXRestContext context) {
