@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
 
+import er.extensions.eof.ERXKey;
+
 /**
  * NSArray re-implementation to support JDK 1.5 templates. Use with
  * <pre>
@@ -1068,5 +1070,37 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 			}
 			throw NSForwardException._runtimeExceptionForThrowable(e);
 		}
+	}
+	
+	/**
+	 * A type-safe wrapper for {@link #valueForKeyPath(String)} that simply
+	 * calls {@code valueForKeyPath(erxKey.key())} and attempts to cast the
+	 * result to {@code NSArray<T>}. If the value returned cannot be cast it
+	 * will throw a {@code ClassCastException}.
+	 * 
+	 * @param <T>
+	 *            the Type of elements in the returned {@code NSArray}
+	 * @param erxKey
+	 * @return an {@code NSArray} of {@code T} objects.
+	 * @author David Avendasora
+	 */
+	public <T> NSArray<T> valueForKeyPath(ERXKey<T> erxKey) {
+		return (NSArray<T>) valueForKeyPath(erxKey.key());
+	}
+
+	/**
+	 * A type-safe wrapper for {@link #valueForKey(String)} that simply calls
+	 * {@code valueForKey(erxKey.key())} and attempts to cast the result to
+	 * {@code NSArray<T>}. If the value returned cannot be cast it will throw a
+	 * {@code ClassCastException}.
+	 * 
+	 * @param <T>
+	 *            the Type of elements in the returned {@code NSArray}
+	 * @param erxKey
+	 * @return an {@code NSArray} of {@code T} objects.
+	 * @author David Avendasora
+	 */
+	public <T> NSArray<T> valueForKey(ERXKey<T> erxKey) {
+		return (NSArray<T>) valueForKey(erxKey.key());
 	}
 }
