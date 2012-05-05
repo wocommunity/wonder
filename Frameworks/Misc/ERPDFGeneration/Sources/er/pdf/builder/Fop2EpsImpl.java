@@ -1,7 +1,6 @@
 package er.pdf.builder;
 
 import java.io.OutputStream;
-import java.net.URL;
 
 import org.apache.fop.apps.MimeConstants;
 
