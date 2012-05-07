@@ -12,7 +12,7 @@ public class ERPersistentSessionStorage0 extends ERXMigrationDatabase.Migration 
 	public NSArray<ERXModelVersion> modelDependencies() {
 		return null;
 	}
-
+  
 	@Override
 	public void downgrade(EOEditingContext editingContext, ERXMigrationDatabase database) throws Throwable {
 		// DO NOTHING
@@ -22,14 +22,13 @@ public class ERPersistentSessionStorage0 extends ERXMigrationDatabase.Migration 
 	public void upgrade(EOEditingContext editingContext, ERXMigrationDatabase database) throws Throwable {
 		ERXMigrationTable erSessionInfoTable = database.newTableNamed("ERSessionInfo");
 		erSessionInfoTable.newTimestampColumn("expirationDate", false);
-		erSessionInfoTable.newIntegerColumn("id", false);
 		erSessionInfoTable.newIntegerColumn("intLock", false);
 		erSessionInfoTable.newBlobColumn("sessionData", false);
 		erSessionInfoTable.newStringColumn("sessionID", 50, false);
 
-		erSessionInfoTable.addUniqueIndex("sessionID_idx", erSessionInfoTable.existingColumnNamed("sessionID"));
 
 		erSessionInfoTable.create();
-	 	erSessionInfoTable.setPrimaryKey("id");
+	 	erSessionInfoTable.setPrimaryKey("sessionID");
+
 	}
 }
