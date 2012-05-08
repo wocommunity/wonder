@@ -23,6 +23,7 @@ import com.webobjects.appserver.WOSession;
 import com.webobjects.foundation.NSArray;
 
 /**
+ * <span class="en">
  * Drop-in replacement for WOMailDelivery.
  * 
  * <P>
@@ -34,6 +35,20 @@ import com.webobjects.foundation.NSArray;
  * <I>*sun.net.smtp.SmtpClient doesn't put addresses in angle brackets when sending the SMTP MAIL FROM command. Many
  * SMTP servers won't work with it.</I>
  * </P>
+ * </span>
+ * 
+ * <span class="ja">
+ * WOMailDelivery の替わりに使用します。
+ * 
+ * <P>
+ * ERWOMailDelivery は WOMailDelivery と同じように動作します。全く同じ制限と不思議な API を持っています。
+ * 正しい、Sun 社の壊れているサポートしない sun.net.smtp.SmtpClient と違って JavaMail を使用しています。
+ * </P>
+ * 
+ * <P>
+ * <I>*sun.net.smtp.SmtpClient は SMTP MAIL FROM で送信するアドレスを括弧で囲まないので、大抵の SMTP サーバは動作しないのです。</I>
+ * </P>
+ * </span>
  * 
  * @author Jonathan 'Wolf' Rentzsch (jon at redshed dot net)
  * @see <A
@@ -41,19 +56,31 @@ import com.webobjects.foundation.NSArray;
  */
 
 public class ERWOMailDelivery {
-	/** @return The shared instance. */
+	/** 
+	 * <span class="en">
+	 * @return The shared instance. 
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * @return 共有インスタンス
+	 * </span>
+	 */
 	public static ERWOMailDelivery sharedInstance() {
 		if (_sharedInstance == null)
 			_sharedInstance = new ERWOMailDelivery();
 		return _sharedInstance;
 	}
 
-	/** Default constructor (don't use). Use {@link #sharedInstance()} instead. */
+	/** 
+	 * <span class="en">Default constructor (don't use). Use {@link #sharedInstance()} instead. </span>
+	 * <span class="ja">未使用のコンストラクタ： {@link #sharedInstance()} を使用します。 </span>
+	 */
 	protected ERWOMailDelivery() {
 		// Just here & protected so folks don't try to construct directly.
 	}
 
 	/**
+	 * <span class="en">
 	 * Creates and optionally sends a plain text email.
 	 *
 	 * @param fromEmailAddress
@@ -69,6 +96,19 @@ public class ERWOMailDelivery {
 	 * @param sendNow
 	 *            Whether to send the message right away. If you're going to send the message right away, it's faster to
 	 *            set sendNow to true than set it to false and calling {@link #sendEmail(String)} later.
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * 標準テキスト・メールを作成と送信します。
+	 *
+	 * @param fromEmailAddress - 送信元メール・アドレス（必須）
+	 * @param toEmailAddresses - 送信先メール・アドレス NSArray（必須）
+	 * @param bccEmailAddresses - BCC メール・アドレス NSArray （Null可）
+	 * @param subject - メール・サブジェクト（Null可）
+	 * @param message - メッセージ（必須）
+	 * @param sendNow - true ですぐに送信します。
+	 * 					すぐに送信時には false を設定し後で {@link #sendEmail(String)} で送信するよりも true の方が早い
+	 * </span>
 	 */
 	public String composePlainTextEmail(String fromEmailAddress, NSArray toEmailAddresses, NSArray bccEmailAddresses, String subject, String message, boolean sendNow) {
 		// /JAssert.notEmpty( fromEmailAddress );
@@ -84,6 +124,7 @@ public class ERWOMailDelivery {
 	}
 
 	/**
+	 * <span class="en">
 	 * Creates and optionally sends a WOComponent as email.
 	 * 
 	 * @param fromEmailAddress
@@ -99,6 +140,19 @@ public class ERWOMailDelivery {
 	 * @param sendNow
 	 *            Whether to send the message right away. If you're going to send the message right away, it's faster to
 	 *            set sendNow to true than set it to false and calling {@link #sendEmail(String)} later.
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * WOComponent メールを作成と送信します。
+	 * 
+	 * @param fromEmailAddress - 送信元メール・アドレス（必須）
+	 * @param toEmailAddresses - 送信先メール・アドレス NSArray（必須）
+	 * @param bccEmailAddresses - BCC メール・アドレス NSArray （Null可）
+	 * @param subject - メール・サブジェクト（Null可）
+	 * @param component - コンポーネント（必須）
+	 * @param sendNow - true ですぐに送信します。
+	 * 					すぐに送信時には false を設定し後で {@link #sendEmail(String)} で送信するよりも true の方が早い
+	 * </span>
 	 */
 	public String composeComponentEmail(String fromEmailAddress, NSArray toEmailAddresses, NSArray bccEmailAddresses, String subject, WOComponent component, boolean sendNow) {
                 // XXX the component parameter above was 'message'. the real parameter could be renamed.
@@ -133,10 +187,18 @@ public class ERWOMailDelivery {
 	}
 
 	/**
+	 * <span class="en">
 	 * Sends the RFC822 mail string created with either
 	 * {@link #composePlainTextEmail(String,NSArray,NSArray,String,String,boolean)} or
 	 * {@link #composeComponentEmail(String,NSArray,NSArray,String,WOComponent,boolean)}. It's faster to call either
 	 * method with the sendNow parameter set to true than to use this method.
+	 * </span>
+	 * 
+	 * <span class="ja>
+	 * {@link #composePlainTextEmail(String,NSArray,NSArray,String,String,boolean)} や
+	 * {@link #composeComponentEmail(String,NSArray,NSArray,String,WOComponent,boolean)} で
+	 * 作成されている RFC822 メールを送信します。
+	 * </span>
 	 */
 	public void sendEmail(String mailString) {
 		// /JAssert.notEmpty( mailString );
