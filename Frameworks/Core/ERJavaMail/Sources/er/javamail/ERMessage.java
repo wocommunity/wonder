@@ -1,6 +1,4 @@
 /*
- $Id$
-
  ERMessage.java - Camille Troillard - tuscland@mac.com
  */
 
