@@ -10,7 +10,6 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.appserver.ERXBrowser;
 import er.extensions.appserver.ERXBrowserFactory;
-import er.extensions.components._private.ERXWOForm;
 
 /**
  * Invisible form submit button that can be included as the first element in an Ajax submitted form so that hitting
@@ -167,24 +166,20 @@ public class AjaxDefaultSubmitButton extends AjaxSubmitButton
         	appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
         }
         
-        appendTagAttributeToResponse(response, "style", "position:absolute;left:-10000px");
+        // Force in a default style to hide the button
+        String style;
+        ERXBrowser browser = ERXBrowserFactory.factory().browserMatchingRequest(context.request());
+        boolean useDisplayNone = !(browser.isSafari() && browser.version().compareTo("3.0.3") > 0);
+        if (useDisplayNone) {
+        	style = "position: absolute; left: -10000px; display: none;";
+        } else {
+        	style = "position: absolute; left: -10000px; visibility: hidden;";
+        }
+        appendTagAttributeToResponse(response, "style", style);
         appendTagAttributeToResponse(response, "id", valueForBinding("id", component));
         appendTagAttributeToResponse(response, "onclick", onClickBuffer.toString());
 
         response.appendContentString(" />");
-
-        // fix for IE < 9 that deactivates the standard submit routine of the form and
-        // triggers the onClick handler of this submit element instead
-        ERXBrowser browser = ERXBrowserFactory.factory().browserMatchingRequest(context.request());
-        if (browser.isIE() && browser.majorVersion().compareTo(Integer.valueOf(9)) < 0) {
-            if (!hasBinding("formName")) {
-                formName = ERXWOForm.formName(context, "");
-            }
-            AjaxUtils.appendScriptHeader(response);
-            response.appendContentString("document." + formName + ".observe('submit', function(event){");
-            response.appendContentString("$$('[name=" + name + "]')[0].fireEvent('onClick');event.returnValue=false;");
-            response.appendContentString("});");
-            AjaxUtils.appendScriptFooter(response);
-        }
     }
+
 }
