@@ -11,8 +11,15 @@ import javax.mail.util.ByteArrayDataSource;
 import com.webobjects.foundation.NSData;
 
 /**
+ * <span class="en">
  * Attaches a byte array or NSData to a mail. The mime type is pulled from the file name, so be sure to provide a
  * reasonable one.
+ * </span>
+ * 
+ * <span class="ja">
+ * byte 配列、又は NSData をメールに添付します。
+ * mime タイプはファイル名より取得され、正しいファイル名を渡す必要がある。
+ * </span>
  * 
  * @author ak
  */
@@ -46,24 +53,60 @@ public class ERMailDataAttachment extends ERMailAttachment {
 		_mimeType = FileTypeMap.getDefaultFileTypeMap().getContentType(aFilename);
 	}
 
+	/**
+	 * <span class="ja">
+	 * ファイル名を取得します。
+	 * 設定されていなければ、"attachement.txt" が戻ります。
+	 * 
+	 * @return ファイル名
+	 * </span>
+	 */
 	public String fileName() {
 		if (_fileName == null)
 			_fileName = "attachement.txt";
 		return _fileName;
 	}
 
+	/**
+	 * <span class="ja">
+	 * DataHandler を取得します。
+	 * 
+	 * @return DataHandler
+	 * </span>
+	 */
 	public DataHandler getDataHandler() {
 		return _dataHandler;
 	}
 
+	/**
+	 * <span class="ja">
+	 * ファイル名をセットします。
+	 * 
+	 * @param name - ファイル名
+	 * </span>
+	 */
 	public void setFileName(String name) {
 		_fileName = name;
 	}
 
+	/**
+	 * <span class="ja">
+	 * コンテント ID を取得します。
+	 * 
+	 * @return コンテント ID
+	 * </span>
+	 */
 	public String contentID() {
 		return _contentID;
 	}
 
+	/**
+	 * <span class="ja">
+	 * コンテント ID をセットします。
+	 * 
+	 * @param id - コンテント ID
+	 * </span>
+	 */
 	public void setContentID(String id) {
 		_contentID = id;
 	}

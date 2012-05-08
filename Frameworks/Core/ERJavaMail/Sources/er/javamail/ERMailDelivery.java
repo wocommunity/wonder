@@ -28,11 +28,20 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 /**
+ * <span class="en">
  * This is the main class for sending mail with the JavaMail API. You should create
  * instances of its subclasses that match with specific use cases.
  *
  * <p>Here is an example of its usage:
+ * </span>
  * 
+ * <span class="ja">
+ * JavaMail API でメールを送信するメインクラスです。このクラスは抽選クラスなので、のインスタンスを作成しません。
+ * 替わりに特集なサブクラスを作る場合にインスタンス化する必要はあるでしょう！
+ * 
+ * <p>使用方法：
+ * </span>
+
 <pre>
     ERMailDeliveryHTML mail = new ERMailDeliveryHTML ();
     mail.setWOComponentContent (mailPage);
@@ -62,15 +71,38 @@ public abstract class ERMailDelivery {
 	private javax.mail.Session _session;
 
 	/**
+	 * <span class="en">
 	 * Content of sent mail. In one instance of ERMailDelivery, when creating multiple mails, you must be sure to call
 	 * newMail () method before send a new mail in order to have a cleared fresh mail
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * メールのコンテントです。
+	 * ERMailDelivery のインスタンスで複数メールを送信する時には newMail() コマンドで初期化を行ってください。
+	 * </span>
 	 */
 	protected MimeMessage _mimeMessage;
 
-	/** NSArray of ERMailAttachment that must be binded to the message as ATTACHEMENT. */
+	/** 
+	 * <span class="en">
+	 * NSArray of ERMailAttachment that must be binded to the message as ATTACHEMENT. 
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * ERMailAttachment の NSArray でメッセージの ATTACHEMENT としてバインディングされる
+	 * </span>
+	 */
 	protected NSMutableArray<ERMailAttachment> _attachments;
 
-	/** NSArray of ERMailAttachment that must be binded to the message as INLINE. */
+	/** 
+	 * <span class="en">
+	 * NSArray of ERMailAttachment that must be binded to the message as INLINE. 
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * ERMailAttachment の NSArray でメッセージの INLINE としてバインディングされる
+	 * </span>
+	 */
 	protected NSMutableArray<ERMailAttachment> _inlineAttachments;
 
 	private ERMessage.Delegate _delegate;
@@ -93,31 +125,58 @@ public abstract class ERMailDelivery {
 	}
 
 	/**
+	 * <span class="en">
 	 * Sets the given delegate to listen to any messages that are created from this ERMailDelivery. This will
 	 * automatically call ERMessage.setDelegate(delegate) for any ERMessage that is generated.
 	 * 
 	 * @param delegate
 	 *            the delegate to use for notifications
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * この ERMailDelivery で作成されるすべてのメッセージをリスンするデリゲートを指定します。
+	 * 作成される全メッセージの ERMessage.setDelegate(delegate) が確実に呼ばれます。
+	 * 
+	 * @param delegate - 通知のためのデリゲート
+	 * </span>
 	 */
 	public void setDelegate(ERMessage.Delegate delegate) {
 		_delegate = delegate;
 	}
 
 	/**
+	 * <span class="en">
 	 * Sets the userInfo dictionary for this ERMailDelivery. This userInfo is passed through to any ERMessage that is
 	 * created by this ERMailDelivery, which can be used by delegates to get additional information about the message.
 	 * 
 	 * @param userInfo
 	 *            the userInfo dictionary
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * ERMailDelivery のユーザ情報ディクショナリーをセットします。
+	 * このユーザ情報は ERMailDelivery で作成される全メッセージに行き渡ります。
+	 * デリゲートと合わせてメッセージの追加情報で使用できます。
+	 * 
+	 * @param userInfo - ユーザ情報ディクショナリー
+	 * </span>
 	 */
 	public void setUserInfo(NSDictionary<String, Object> userInfo) {
 		_userInfo = userInfo;
 	}
 
 	/**
+	 * <span class="en">
 	 * Returns the userInfo dictionary for this ERMailDelivery.
 	 * 
 	 * @return the userInfo dictionary
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * ERMailDelivery のユーザ情報ディクショナリーを戻します。
+	 * 
+	 * @return ユーザ情報ディクショナリー
+	 * </span>
 	 */
 	public NSDictionary<String, Object> userInfo() {
 		return _userInfo;
@@ -147,7 +206,15 @@ public abstract class ERMailDelivery {
 		_session = aSession;
 	}
 
-	/** Creates a new mail instance within ERMailDelivery */
+	/** 
+	 * <span class="en">
+	 * Creates a new mail instance within ERMailDelivery 
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * ERMailDelivery インスタンス内で新しいメールを作成します。
+	 * </span>
+	 */
 	public void newMail() {
 		this._attachments().removeAllObjects();
 		this._inlineAttachments().removeAllObjects();
@@ -194,7 +261,12 @@ public abstract class ERMailDelivery {
 		this._attachments().removeObject(attachment);
 		this._inlineAttachments().removeObject(attachment);
 	}
-
+	
+	/** 
+	 * <span class="ja">
+	 * メール・アドレスと名前を InternetAddress としてインスタンス化と戻します
+	 * </span>
+	 */
 	protected InternetAddress internetAddressWithEmailAndPersonal(String email, String personal) throws AddressException {
 		InternetAddress address = null;
 
@@ -222,87 +294,205 @@ public abstract class ERMailDelivery {
 		return address;
 	}
 
-	/** Sets the from address for the current message instance */
+	/** 
+	 * <span class="en">
+	 * Sets the from address for the current message instance 
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * カレント・メッセージ・インスタンスの送信元アドレスをセットします
+	 * </span>
+	 */
 	public void setFromAddress(String fromAddress) throws MessagingException, AddressException {
 		setFromAddress(fromAddress, null);
 	}
 
-	/** Sets the from address for the current message instance using an email and the personal name. */
+	/** 
+	 * <span class="en">
+	 * Sets the from address for the current message instance using an email and the personal name. 
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * カレント・メッセージ・インスタンスの送信元アドレスと名前をセットします
+	 * </span>
+	 */
 	public void setFromAddress(String fromAddress, String personalName) throws MessagingException, AddressException {
 		InternetAddress address = this.internetAddressWithEmailAndPersonal(fromAddress, personalName);
 		this.mimeMessage().setFrom(address);
 	}
 
+	/** 
+	 * <span class="ja">
+	 * カレント・メッセージ・インスタンスの送信先アドレスをセットします 
+	 * </span>
+	 */
 	public void setToAddress(String toAddress) throws MessagingException, AddressException {
 		this.setToAddress(toAddress, null);
 	}
 
-	/** Sets the to address for the current message instance using an email and the personal name. */
+	/** 
+	 * <span class="en">
+	 * Sets the to address for the current message instance using an email and the personal name. 
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * カレント・メッセージ・インスタンスの送信先アドレスと名前をセットします
+	 * </span>
+	 */
 	public void setToAddress(String toAddress, String personalName) throws MessagingException, AddressException {
 		InternetAddress address = this.internetAddressWithEmailAndPersonal(toAddress, personalName);
 		setInternetAddresses(new NSArray<InternetAddress>(address), Message.RecipientType.TO);
 	}
 
-	/** Sets the to-addresses array for the current message instance */
+	/** 
+	 * <span class="en">
+	 * Sets the to-addresses array for the current message instance 
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * カレント・メッセージ・インスタンスの送信先 NSArray アドレスをセットします
+	 * </span>
+	 */
 	public void setToAddresses(NSArray<String> toAddresses) throws MessagingException, AddressException {
 		setAddresses(toAddresses, Message.RecipientType.TO, true);
 	}
 
-	/** Sets the to-addresses array for the current message instance */
+	/** 
+	 * <span class="en">
+	 * Sets the to-addresses array for the current message instance 
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * カレント・メッセージ・インスタンスの送信先 NSDictionary アドレスをセットします
+	 * </span>
+	 */
 	public void setToAddresses(NSDictionary<String, String> toAddresses) throws MessagingException, AddressException {
 		setAddresses(toAddresses, Message.RecipientType.TO, true);
 	}
 
-	/** Sets the reply-to address for the current message instance */
+	/** 
+	 * <span class="en">
+	 * Sets the reply-to address for the current message instance 
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * カレント・メッセージ・インスタンスの Reply To アドレスをセットします
+	 * </span>
+	 */
 	public void setReplyToAddress(String toAddress) throws MessagingException, AddressException {
 		setReplyToAddress(toAddress, null);
 	}
 
-	/** Sets the reply-to address for the current message instance */
+	/** 
+	 * <span class="en">
+	 * Sets the reply-to address for the current message instance 
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * カレント・メッセージ・インスタンスの Reply To アドレスと名前をセットします
+	 * </span>
+	 */
 	public void setReplyToAddress(String toAddress, String personalName) throws MessagingException, AddressException {
 		InternetAddress addresses[] = new InternetAddress[] { this.internetAddressWithEmailAndPersonal(toAddress, personalName) };
 		this.mimeMessage().setReplyTo(addresses);
 	}
 
-	/** Sets the cc-addresses array for the current message instance */
+	/** 
+	 * <span class="en">
+	 * Sets the cc-addresses array for the current message instance 
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * カレント・メッセージ・インスタンスの CCアドレス NSArray をセットします
+	 * </span>
+	 */
 	public void setCCAddresses(NSArray<String> ccAddresses) throws MessagingException, AddressException {
 		setAddresses(ccAddresses, Message.RecipientType.CC, true);
 	}
 
-	/** Sets the cc-addresses array for the current message instance */
+	/** 
+	 * <span class="en">
+	 * Sets the cc-addresses array for the current message instance 
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * カレント・メッセージ・インスタンスの CCアドレス NSDictionary をセットします
+	 * </span>
+	 */
 	public void setCCAddresses(NSDictionary<String, String> ccAddresses) throws MessagingException, AddressException {
 		setAddresses(ccAddresses, Message.RecipientType.CC, true);
 	}
 
-	/** Sets the bcc-addresses array for the current message instance */
+	/** 
+	 * <span class="en">
+	 * Sets the bcc-addresses array for the current message instance 
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * カレント・メッセージ・インスタンスの BCCアドレス NSArray をセットします
+	 * </span>
+	 */
 	public void setBCCAddresses(NSArray<String> bccAddresses) throws MessagingException, AddressException {
 		setAddresses(bccAddresses, Message.RecipientType.BCC, true);
 	}
 	
-	/** Sets the bcc-addresses array for the current message instance */
+	/** 
+	 * <span class="en">
+	 * Sets the bcc-addresses array for the current message instance 
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * カレント・メッセージ・インスタンスの BCCアドレス NSDictionary をセットします
+	 * </span>
+	 */
 	public void setBCCAddresses(NSDictionary<String, String> bccAddresses) throws MessagingException, AddressException {
 		setAddresses(bccAddresses, Message.RecipientType.BCC, true);
 	}
 
-	/** Sets the subject for the current message instance */
+	/** 
+	 * <span class="en">
+	 * Sets the subject for the current message instance 
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * カレント・メッセージ・インスタンスの題名をセットします
+	 * </span>
+	 */
 	public void setSubject(String subject) throws MessagingException {
 		this.mimeMessage().setSubject(ERMailUtils.encodeString(subject, this.charset()));
 	}
 
 	/**
+	 * <span class="en">
 	 * Sets the X-Mailer header for the message. Useful for tracking which mailers are sending messages.
 	 * 
 	 * @param xMailer
 	 *            value to set
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * メッセージの X-Mailer ヘッダーをセットします。
+	 * どのメールソフトが送信しているかどうかの調査使用します。
+	 * 
+	 * @param xMailer - セットする値
+	 * </span>
 	 */
 	public void setXMailerHeader(String xMailer) throws MessagingException {
 		this.mimeMessage().setHeader("X-Mailer", xMailer);
 	}
 
 	/**
+	 * <span class="en">
 	 * Gets the X-Mailer header set on the MimeMessage.
 	 * 
 	 * @return X-Mailer header if it is set
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * メッセージの X-Mailer ヘッダーを取得します。
+	 * 
+	 * @return セットされていれば、X-Mailer ヘッダー
+	 * </span>
 	 */
 	public String xMailerHeader() throws MessagingException {
 		String[] headers = this.mimeMessage().getHeader("X-Mailer");
@@ -321,9 +511,17 @@ public abstract class ERMailDelivery {
 	}
 
 	/**
+	 * <span class="en">
 	 * Builds an ERMessage for the current MimeMessage.
 	 * 
 	 * @return ERMessage for the current MimeMessage.
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * カレント MimeMessage のために ERMessage を生成します。
+	 * 
+	 * @return カレント MimeMessage のための ERMessage
+	 * </span>
 	 */
 	protected ERMessage buildMessage() {
 		ERMessage message = new ERMessage();
@@ -348,7 +546,13 @@ public abstract class ERMailDelivery {
 	}
 
 	/**
+	 * <span class="en">
 	 * Sends the mail immediately. The message is put in a FIFO queue managed by a static threaded inner class
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * メールを直ちに送信します。メッセージは内部スレッド・クラスによる FIFO キューに保存されます。
+	 * </span>
 	 */
 	public void sendMail() {
 		try {
@@ -360,12 +564,22 @@ public abstract class ERMailDelivery {
 	}
 
 	/**
+	 * <span class="en">
 	 * Method used to construct a MimeMessage and then send it. This method can be specified to block until the message
 	 * is sent or to add the message to a queue and have a callback object handle any exceptions that happen. If sending
 	 * is blocking then any exception thrown will be wrapped in a general {@link NSForwardException}.
 	 * 
 	 * @param shouldBlock
 	 *            boolean to indicate if the message should be added to a queue or sent directly.
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * MimeMessage を生成し、送信を試します。
+	 * このメソッドは送信完了までにブロックするかキューに登録し例外が発生する場合はコールバック・オブジェクトで処理されるかを指定できます。
+	 * 送信でブロックを使用するとすべての例外は {@link NSForwardException} にラップされます。
+	 * 
+	 * @param shouldBlock - ブロックするかキューを使うかの boolean
+	 * </span>
 	 */
 	public void sendMail(boolean shouldBlock) {
 		try {
@@ -461,7 +675,13 @@ public abstract class ERMailDelivery {
 	}
 
 	/**
+	 * <span class="en">
 	 * Sets addresses using an NSArray of InternetAddress objects.
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * InternetAddress オブジェクトの NSArray をセットします
+	 * </span>
 	 */
 	public void setInternetAddresses(NSArray<InternetAddress> addresses, Message.RecipientType type) throws MessagingException {
 		if ((type == null) || (addresses == null) || (addresses.count() == 0)) {
@@ -478,8 +698,15 @@ public abstract class ERMailDelivery {
 	}
 
 	/**
+	 * <span class="en">
 	 * Sets addresses regarding their recipient type in the current message. Has the option to filter the address list
 	 * based on the white and black lists.
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * カレント・メッセージの送信宛先タイプのアドレスをセットします。
+	 * オプションでホワイト＆ブラック・リスト・フィルターされる
+	 * </span>
 	 */
 	private void setAddresses(NSArray<String> addressesArray, Message.RecipientType type, boolean filterAddresses) throws MessagingException, AddressException {
 		if (filterAddresses) {
@@ -494,8 +721,15 @@ public abstract class ERMailDelivery {
 	}
 
 	/**
+	 * <span class="en">
 	 * Sets addresses regarding their recipient type in the current message. Has the option to filter the address list
 	 * based on the white and black lists.
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * カレント・メッセージの送信宛先タイプのアドレスをセットします。
+	 * オプションでホワイト＆ブラック・リスト・フィルターされる
+	 * </span>
 	 */
 	private void setAddresses(NSDictionary<String, String> addressesDictionary, Message.RecipientType type, boolean filterAddresses) throws MessagingException, AddressException {
 		NSArray<String> mailAdresses = addressesDictionary.allKeys();
@@ -515,9 +749,17 @@ public abstract class ERMailDelivery {
 	}
 
 	/**
+	 * <span class="en">
 	 * Abstract method called by subclasses for doing pre-processing before sending the mail.
 	 * 
 	 * @return the multipart used to put in the mail.
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * メールを送信前の処理のサブクラスの抽選メソッド
+	 * 
+	 * @return メールのマルチパート
+	 * </span>
 	 */
 	protected abstract DataHandler prepareMail() throws MessagingException;
 }
