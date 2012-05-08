@@ -1,6 +1,4 @@
 /*
- $Id$
- 
  ERMailDeliveryWOComponentPlainText.java - Camille Troillard - tuscland@mac.com
  */
 

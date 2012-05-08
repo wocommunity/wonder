@@ -1,6 +1,4 @@
 /*
- $Id$
-
  ERMailSender.java - Camille Troillard - tuscland@mac.com
  */
 

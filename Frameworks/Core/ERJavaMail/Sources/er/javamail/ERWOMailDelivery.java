@@ -1,6 +1,4 @@
 /*
- $Id$
- 
  Copyright (c) 2002 Red Shed Software. All rights reserved.
  by Jonathan 'Wolf' Rentzsch (jon at redshed dot net)
  */

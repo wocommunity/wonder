@@ -1,6 +1,4 @@
 /*
- $Id$
-
  ERQueue.java - Camille Troillard - tuscland@mac.com
  */
 
