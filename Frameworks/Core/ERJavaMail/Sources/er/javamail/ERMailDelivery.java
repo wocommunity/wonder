@@ -109,7 +109,7 @@ public abstract class ERMailDelivery {
 	private NSDictionary<String, Object> _userInfo;
 	private String _contextString;
 
-	public static final String DefaultCharset = System.getProperty("er.javamail.defaultEncoding");
+	public static final String DefaultCharset = System.getProperty("er.javamail.defaultEncoding", "UTF-8");
 	public String _charset = DefaultCharset;
 
 	/** Designated constructor */
