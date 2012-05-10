@@ -217,6 +217,13 @@ public class AdminApplicationsPage extends ApplicationsPage {
         }
     }
 
+	public void bounceRolling(NSArray<MApplication> applications) {
+        for (MApplication application : applications) {
+            AppDetailPage page = AppDetailPage.create(context(), application);
+            page = (AppDetailPage) page.bounceClickedWithRollingBouncer();
+        }
+	}
+	
     public WOComponent bounceClicked() {
         AppDetailPage page = AppDetailPage.create(context(), currentApplication);
         page = (AppDetailPage) page.bounceClicked();
@@ -326,4 +333,5 @@ public class AdminApplicationsPage extends ApplicationsPage {
     public static WOComponent create(WOContext context) {
         return WOApplication.application().pageWithName(AdminApplicationsPage.class.getName(), context);
     }
+
 }

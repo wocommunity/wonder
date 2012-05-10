@@ -19,9 +19,10 @@
 <li><a href="#15"><b>What instance defaults and settings are available through Monitor?</b></a></li>
 <li><a href="#16"><b>What application settings are available through Monitor?</b></a></li>
 <li><a href="#17"><b>What is Instance Scheduling?</b></a></li>
-<li><a href="#18"><b>Monitor's Hosts page</b></a></li>
-<li><a href="#19"><b>Monitor's Detail View page</b></a></li>
-<li><a href="#20"><b>Deployment FAQ</b></a></li>
+<li><a href="#18"><b>What does "Bounce" do to an application?</b></a></li>
+<li><a href="#19"><b>Monitor's Hosts page</b></a></li>
+<li><a href="#20"><b>Monitor's Detail View page</b></a></li>
+<li><a href="#21"><b>Deployment FAQ</b></a></li>
 </ul>
 
 <p>&nbsp;</p>
@@ -100,11 +101,12 @@
     instance of that application chosen by the adaptor. Load-balancing takes
     place between instances with the same name (cf <code>WOApplicationName</code>).
     The default load-balancing
-    scheme is Random, where an instance is chosen arbitrarily,
+    scheme is Round Robin,
     but other load-balancing schemes are available. Round Robin
     distributes a request to instances one after another. Load Average
     attempts to balance load to the instances by evenly
-    distributing the sessions between instances.</p>
+    distributing the sessions between instances.
+    If using the Random load-balancing scheme, an instance is chosen arbitrarily.</p>
 </blockquote>
 
 <p><br />
@@ -819,7 +821,33 @@ Monitor?</b></font></a> <a href="#00"><font size="-1">(top)</font></a><br />
 <br />
 </p>
 
-<p><a name="18"><font size="+2"><b>Monitor's Hosts page</b></font></a> <a href="#00"><font size="-1">(top)</font></a><br />
+<p><a name="18"><font size="+2"><b>What does "Bounce" do to an application?</b></font></a> <a href="#00"><font size="-1">(top)</font></a><br />
+</p>
+
+<blockquote>
+    <p>"Bounce" restarts an application gracefully. It does so by starting at least one inactive instance
+ per active host (or 10 % of the total active instance count), waiting
+ until they have started, then refusing sessions for all old instances and
+ turning scheduling on for all but the number of instances we started
+ originally. The next effect should be that the new users get the new app,
+ old instances die in due time and then restart when the sessions stop.<br/>
+ You must have at least one inactive instance in order to perform a graceful bounce.<br/>
+ You may or may not need to set ERKillTimer to prevent totally
+ long-running sessions to keep the app from dying.
+    </p>
+</blockquote>
+
+<p><br />
+<br />
+</p>
+
+<hr>
+
+<p><br />
+<br />
+</p>
+
+<p><a name="19"><font size="+2"><b>Monitor's Hosts page</b></font></a> <a href="#00"><font size="-1">(top)</font></a><br />
 </p>
 
 <blockquote>
@@ -850,7 +878,7 @@ Monitor?</b></font></a> <a href="#00"><font size="-1">(top)</font></a><br />
 <br />
 </p>
 
-<p><a name="19"><font size="+2"><b>Monitor's Detail View page</b></font></a> <a href="#00"><font size="-1">(top)</font></a><br />
+<p><a name="20"><font size="+2"><b>Monitor's Detail View page</b></font></a> <a href="#00"><font size="-1">(top)</font></a><br />
 </p>
 
 <blockquote>
@@ -964,7 +992,7 @@ Monitor?</b></font></a> <a href="#00"><font size="-1">(top)</font></a><br />
 <br />
 </p>
 
-<p><a name="20"><font size="+2"><b>Deployment FAQ</b></font></a> <a href="#00"><font size="-1">(top)</font></a><br />
+<p><a name="21"><font size="+2"><b>Deployment FAQ</b></font></a> <a href="#00"><font size="-1">(top)</font></a><br />
 </p>
 
 <blockquote>

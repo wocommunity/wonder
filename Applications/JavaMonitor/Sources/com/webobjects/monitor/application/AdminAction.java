@@ -172,10 +172,11 @@ import com.webobjects.monitor._private.MSiteConfig;
  * </tr>
  * <tr>
  * <td>bouncetype</td>
- * <td>graceful | shutdown</td>
+ * <td>graceful | shutdown | rolling</td>
  * <td>graceful bounces the application by starting a few instances per host and setting the rest to refusing sessions<br />
  * shutdown bounces the application by stopping all instances and then restarting them (use this if your<br />
  * application will migrate the database so the old application will crash)<br />
+ * rolling will start a few instances per host, then forcefully restart the existing instances one at a time<br/>
  * The default bouncetype is graceful.</td>
  * </tr>
  * <tr>
@@ -433,6 +434,8 @@ public class AdminAction extends WODirectAction {
 				}
         	}
         	applicationsPage().bounceShutdown(applications, maxwait);
+        } else if (bouncetype.equalsIgnoreCase("rolling")) {
+        	applicationsPage().bounceRolling(applications);
         } else {
         	woresponse.setContent("Unknown bouncetype");
             woresponse.setStatus(406);
@@ -480,10 +483,10 @@ public class AdminAction extends WODirectAction {
         applicationsPage().start(instances);
     }
 
-    protected void prepareApplications(NSArray nsarray) {
-        if (nsarray == null)
+    protected void prepareApplications(NSArray<String> appNames) {
+        if (appNames == null)
             throw new DirectActionException("at least one application name needs to be specified for type app", 406);
-        for (Enumeration enumeration = nsarray.objectEnumerator(); enumeration.hasMoreElements();) {
+        for (Enumeration enumeration = appNames.objectEnumerator(); enumeration.hasMoreElements();) {
             String s = (String) enumeration.nextElement();
             MApplication mapplication = siteConfig().applicationWithName(s);
             if (mapplication != null) {
@@ -495,11 +498,27 @@ public class AdminAction extends WODirectAction {
         }
 
     }
+    
+    protected void prepareApplicationsOnHosts(NSArray<String> appNames, NSArray<String> hostNames) {
+        if (appNames == null)
+            throw new DirectActionException("at least one application name needs to be specified for type app", 406);
+        for (Enumeration enumeration = appNames.objectEnumerator(); enumeration.hasMoreElements();) {
+            String s = (String) enumeration.nextElement();
+            MApplication mapplication = siteConfig().applicationWithName(s);
+            if (mapplication != null) {
+            	NSArray<MInstance> hostInstances = MInstance.HOST_NAME.in(hostNames).filtered(mapplication.instanceArray());
+            	instances.addObjectsFromArray(hostInstances);
+            }
+            else
+                throw new DirectActionException("Unknown application " + s, 404);
+        }
 
-    protected void prepareInstances(NSArray nsarray) {
-        if (nsarray == null)
+    }
+    
+    protected void prepareInstances(NSArray<String> appNamesAndNumbers) {
+        if (appNamesAndNumbers == null)
             throw new DirectActionException("at least one instance name needs to be specified for type ins", 406);
-        for (Enumeration enumeration = nsarray.objectEnumerator(); enumeration.hasMoreElements();) {
+        for (Enumeration enumeration = appNamesAndNumbers.objectEnumerator(); enumeration.hasMoreElements();) {
             String s = (String) enumeration.nextElement();
             MInstance minstance = siteConfig().instanceWithName(s);
             if (minstance != null)
@@ -528,11 +547,17 @@ public class AdminAction extends WODirectAction {
         if ("all".equalsIgnoreCase(s1)) {
             prepareApplications((NSArray) siteConfig().applicationArray().valueForKey("name"));
         } else {
-            NSArray nsarray = context().request().formValuesForKey("name");
-            if ("app".equalsIgnoreCase(s1))
-                prepareApplications(nsarray);
-            else if ("ins".equalsIgnoreCase(s1))
-                prepareInstances(nsarray);
+            NSArray appNames = context().request().formValuesForKey("name");
+            NSArray hosts = context().request().formValuesForKey("host");
+
+            if ("app".equalsIgnoreCase(s1)) {
+            	if (hosts == null || hosts.isEmpty()) {
+            		prepareApplications(appNames);
+            	} else {
+            		prepareApplicationsOnHosts(appNames, hosts);
+            	}
+            } else if ("ins".equalsIgnoreCase(s1))
+                prepareInstances(appNames);
             else
                 throw new DirectActionException("Invalid type " + s1, 406);
         }

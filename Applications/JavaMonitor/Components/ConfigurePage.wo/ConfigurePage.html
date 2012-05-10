@@ -7,6 +7,30 @@
 <p>URL to Adaptor: <webobject name="AdaptorURLField" /> <webobject name="SubmitAdaptorButton" /></p>
 </webobject>
 </div>
+
+<div class="Box AdapterInfo">
+<h2 class="SectionHeading">View site statistics and WOAdaptor information</h2>
+<p class="AdaptorLoginHelp">The username and password are set in the WOAdaptor configuration file, typically 
+"/System/Library/WebObjects/Adaptors/Apache2.2/apache.conf"
+using the directives WebObjectsAdminUsername and WebObjectsAdminPassword.</p>
+<webobject name="AdaptorInfoForm">
+<table class="FormFieldTable">
+	<tr>
+		<th>Username:</th>
+		<td><webobject name = "AdaptorInfoUsername"/></td>
+	</tr>
+	<tr>
+		<th>Password:</th>
+		<td><webobject name = "AdaptorInfoPassword"/></td>
+	</tr>
+	<tr>
+		<th></th>
+		<td><webobject name = "AdaptorInfoSubmit"/></td>
+	</tr>
+</table>
+</webobject>
+</div>
+
 <div class="Box AdaptorSettingsBox">
   <webobject name="AdaptorSettingsAjaxExpansion">
     <webobject name="AdaptorSettingsForm">

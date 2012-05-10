@@ -1,6 +1,8 @@
 # Properties file for JavaMonitor
 # Overrides the JavaWebObjects.framework Properties
 
+#WOHost=localhost
+
 WOAutoOpenInBrowser=true
 
 WODebuggingEnabled=false
