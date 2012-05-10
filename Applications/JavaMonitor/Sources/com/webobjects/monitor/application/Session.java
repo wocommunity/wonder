@@ -91,7 +91,6 @@ public class Session extends ERXSession implements ErrorCollector {
             _message = errorMessageArray.componentsJoinedByString(", ");
             errorMessageArray = new _NSThreadsafeMutableArray(new NSMutableArray<Object>());
         }
-        NSLog.out.appendln("Session.message: " + _message);
         return _message;
     }
 

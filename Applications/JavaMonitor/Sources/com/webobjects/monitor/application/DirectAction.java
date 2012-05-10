@@ -12,6 +12,7 @@ package com.webobjects.monitor.application;
  IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION, MODIFICATION AND/OR DISTRIBUTION OF THE APPLE SOFTWARE, HOWEVER CAUSED AND WHETHER UNDER THEORY OF CONTRACT, TORT (INCLUDING NEGLIGENCE), STRICT LIABILITY OR OTHERWISE, EVEN IF APPLE HAS BEEN  ADVISED OF THE POSSIBILITY OF 
  SUCH DAMAGE.
  */
+import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
@@ -32,6 +33,16 @@ public class DirectAction extends WODirectAction {
         super(aRequest);
     }
 
+    @Override
+    public WOActionResults defaultAction() {
+    	if (request().stringFormValueForKey("pw") != null ) {
+    		Main loginPage = (Main) pageWithName(Main.class.getName());
+    		loginPage.setPassword(request().stringFormValueForKey("pw"));
+    		return loginPage.loginClicked();
+    	}
+    	return super.defaultAction();
+    }
+    
     public WOComponent MainAction() {
         return pageWithName("Main");
     }
