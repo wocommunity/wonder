@@ -4,3 +4,9 @@ bin
 *.pbxproj
 ant.*
 .DS_Store
+*.o
+*.lo
+*.slo
+*.la
+*.so
+Utilities/Adaptors/Apache2.2/.libs
