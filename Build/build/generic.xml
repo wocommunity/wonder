@@ -21,10 +21,10 @@ There are many ways to use this script:
 		-Dproject.dir=/path/to/my/SomeProject \
 		-Dwo.external.root.bundles=Some/Root/Framework/Or/Other \
 		-Dwo.external.root.bundles.embed=true \
-		-Dwo.local.bundles=Some/Library/Framework/Or/Other \
-		-Dwo.local.bundles.embed=true \
-		-Dwo.system.bundles=Some/Library/Framework/Or/Other \
-		-Dwo.system.bundles.embed=true \
+		-Dwo.local.root.bundles=Some/Library/Framework/Or/Other \
+		-Dwo.local.root.bundles.embed=true \
+		-Dwo.system.root.bundles=Some/Library/Framework/Or/Other \
+		-Dwo.system.root.bundles.embed=true \
 		generic.MODE
 
     or shorter:
