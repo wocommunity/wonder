@@ -47,7 +47,6 @@ public class Main extends MonitorComponent {
     }
 
     public WOComponent loginClicked() {
-    	 NSLog.out.appendln("Main.loginClicked: " + password());
         if (siteConfig().compareStringWithPassword(password())) {
             mySession().setIsLoggedIn(true);
         } else {
@@ -55,7 +54,7 @@ public class Main extends MonitorComponent {
             return pageWithName(Main.class);
         }
 
-        return ApplicationsPage.create(context());
+        return pageWithName(ApplicationsPage.class.getName());
     }
     
     public String message() {
