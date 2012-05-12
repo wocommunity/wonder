@@ -23,10 +23,10 @@
     <p>This page automatically updates every <webobject name = "RefreshRate"></webobject> seconds.</p>
 </webobject>
 <webobject name = "HasBouncer"><div>Bouncer: <webobject name = "Bouncer"/></div></webobject>
-<p><webobject name = "RefreshLink">Refresh Now</webobject> | 
+<p><webobject name = "RefreshLink">Refresh</webobject> | 
 	<webobject name = "ShowDetailStatistics">
-		<webobject name="ShowStatistics">Hide Details</webobject>
-		<webobject name="NotShowStatistics">Show Details</webobject>
+		<webobject name="ShowStatistics">Hide Stats</webobject>
+		<webobject name="NotShowStatistics">Show Stats</webobject>
     </webobject></p>
 
 <span class="error"><webobject name = "MessageString"></webobject>
@@ -132,8 +132,9 @@
       </td>
       <td>
         <webobject name = "ShouldDisplayDeathDetailLink">
+          <span class="Deaths"><webobject name = "InstDeathCount"></webobject></span>
           <webobject name = "InstDeathDetailLink">
-            <webobject name = "InstDeathCount"></webobject>
+            (Details)
           </webobject>
         </webobject>
         <webobject name = "ShouldNOTDisplayDeathDetailLink">-</webobject>
@@ -222,7 +223,7 @@
         </div>
       </td>
 <!--       Next Scheduled Shutdown       -->
-      <td class="AllBounce"><webobject name = "BounceLink">Bounce</webobject></td>
+      <td class="AllBounce"><webobject name = "BounceLink">Bounce</webobject>&nbsp;<webobject name = "BounceHelpLink"><webobject name="HelpImage"/></webobject></td>
       <td class="AllClearDeaths"><webobject name = "ClearDeathsLink">Clear Deaths</webobject></td>
 <!--       Statistics All       -->
    <webobject name = "ShowStatistics">

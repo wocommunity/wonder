@@ -2252,20 +2252,6 @@ public class ERXSQLHelper {
 		protected String sqlForGetNextValFromSequencedNamed(String sequenceName) {
 			return "select NEXTVAL('" + sequenceName + "') as key"; 
 		}
-		
-		@Override
-		protected String formatValueForAttribute(EOSQLExpression expression, Object value, EOAttribute attribute, String key) {
-			// The Postgres Expression has a problem using bind variables so we
-			// have to get the formatted
-			// SQL string for a value instead. All Apple provided plugins must
-			// use the bind variables
-			// however. Frontbase can go either way
-			// MS: is expression always instanceof PostgresExpression for
-			// postgres?
-			// boolean isPostgres =
-			// e.getClass().getName().equals("com.webobjects.jdbcadaptor.PostgresqlExpression");
-			return expression.formatValueForAttribute(value, attribute);
-		}
 
 		@Override
 		public String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {

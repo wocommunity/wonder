@@ -153,7 +153,7 @@ public class MObject extends Object implements NSKeyValueCoding {
     public static Integer validatedSchedulingStartTime(Integer value) {
         if (value != null) {
             int intVal = value.intValue();
-            if ( (intVal >= 1) && (intVal <= 24) ) {
+            if ( (intVal >= 0) && (intVal <= 23) ) {
                 return value;
             }
         }
