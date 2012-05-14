@@ -4,14 +4,8 @@ import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
-import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.appserver._private.WODynamicElementCreationException;
-import com.webobjects.appserver._private.WOInput;
 import com.webobjects.foundation.NSDictionary;
-
-import er.extensions.foundation.ERXKeyValueCodingUtilities;
-import er.extensions.foundation.ERXPatcher;
 
 /**
  * <span class="en">
@@ -32,7 +26,7 @@ import er.extensions.foundation.ERXPatcher;
  * 
  * @author ishimoto
  */
-public class ERXWOUrlField extends WOInput {
+public class ERXWOUrlField extends ERXWOInput {
 
   public final String URL_PATTERN ="^(http|https)://[0-9A-Za-z/#&?%\\.\\-\\+_=]+$";
   
@@ -44,9 +38,6 @@ public class ERXWOUrlField extends WOInput {
   protected WOAssociation _maxlength;
   protected WOAssociation _pattern;
   protected WOAssociation _placeholder;
-  protected WOAssociation _readonly;
-  protected WOAssociation _required;
-  protected WOAssociation _blankIsNull;
 
   //********************************************************************
   //  Constructor
@@ -54,59 +45,17 @@ public class ERXWOUrlField extends WOInput {
 
   public ERXWOUrlField(String tagname, NSDictionary<String, WOAssociation> nsdictionary, WOElement woelement) {
     super("input", nsdictionary, woelement);
-    if(_value == null || !_value.isValueSettable())
-      throw new WODynamicElementCreationException("<" + getClass().getName() + "> 'value' attribute not present or is a constant");
 
     _size = _associations.removeObjectForKey("size");
     _maxlength = _associations.removeObjectForKey("maxlength");
 
     _pattern = _associations.removeObjectForKey("pattern");
     _placeholder = _associations.removeObjectForKey("placeholder");
-
-    _readonly = _associations.removeObjectForKey("readonly");
-    _required = _associations.removeObjectForKey("required");
-
-    _blankIsNull = _associations.removeObjectForKey("blankIsNull");
   }
 
   @Override
   public String type() {
     return "url";
-  }
-
-  @Override
-  protected boolean isDisabledInContext(WOContext context) {
-    WOAssociation disabled = (WOAssociation) ERXKeyValueCodingUtilities.privateValueForKey(this, "_disabled");
-    return disabled != null && disabled.booleanValueInComponent(context.component());
-  }
-
-  protected boolean isReadonlyInContext(WOContext context) {
-    return _readonly != null && _readonly.booleanValueInComponent(context.component());
-  }
-
-  protected boolean isRequiredInContext(WOContext context) {
-    return _required != null && _required.booleanValueInComponent(context.component());
-  }
-
-  @Override
-  public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
-    WOComponent component = wocontext.component();
-    if(!isDisabledInContext(wocontext) && wocontext.wasFormSubmitted() && !isReadonlyInContext(wocontext)) {
-      String name = nameInContext(wocontext, component);
-      if(name != null) {
-        String stringValue;
-        boolean blankIsNull = _blankIsNull == null || _blankIsNull.booleanValueInComponent(component);
-        if (blankIsNull) {
-          stringValue = worequest.stringFormValueForKey(name);
-        }
-        else {
-          Object objValue = worequest.formValueForKey(name);
-          stringValue = (objValue == null) ? null : objValue.toString();
-        }
-        Object result = stringValue;
-        _value.setValue(result, component);
-      }
-    }
   }
 
   protected void _appendValueAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -161,9 +110,6 @@ public class ERXWOUrlField extends WOInput {
     }
   }
 
-  protected void _appendCloseTagToResponse(WOResponse woresponse, WOContext wocontext) {
-  }
-
   @Override
   public String toString() {
     StringBuffer stringbuffer = new StringBuffer();
@@ -175,21 +121,5 @@ public class ERXWOUrlField extends WOInput {
     stringbuffer.append(" maxlength=" + _maxlength);
     stringbuffer.append(">");
     return stringbuffer.toString();
-  }
-
-  /**
-   * <span class="ja">
-   * XML 互換性の為にオーバライド
-   * </span>
-   */
-  @Override
-  public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-    WOResponse newResponse = ERXPatcher.DynamicElementsPatches.cleanupXHTML ? new WOResponse() : woresponse;
-    super.appendToResponse(newResponse, wocontext);
-
-    ERXPatcher.DynamicElementsPatches.processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
-    if (ERXPatcher.DynamicElementsPatches.cleanupXHTML) {
-      woresponse.appendContentString(newResponse.contentString());
-    }
   }
 }
