@@ -17,7 +17,6 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOSession;
 import com.webobjects.eoaccess.EOAdaptorChannel;
-import com.webobjects.eoaccess.EOAdaptorContext;
 import com.webobjects.eoaccess.EOAdaptorOperation;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabase;
@@ -98,25 +97,21 @@ public class ERXEOAccessUtilities {
     public static EOEntity entityMatchingString(EOEditingContext ec, String string) {
         EOEntity result = null;
         if (string != null) {
-            NSArray entityNames = null;
             String lowerCaseName = string.toLowerCase();
-            if (entityNames == null) {
-                EOModelGroup group = modelGroup(ec);
-                entityNames = (NSArray) ERXUtilities.entitiesForModelGroup(group).valueForKeyPath("name.toLowerCase");
-            }
-            NSMutableArray possibleEntities = new NSMutableArray();
-            for (Enumeration e = entityNames.objectEnumerator(); e.hasMoreElements();) {
-                String lowercaseEntityName = (String) e.nextElement();
+            EOModelGroup group = modelGroup(ec);
+            NSArray<String> entityNames = (NSArray<String>) ERXUtilities.entitiesForModelGroup(group).valueForKeyPath("name.toLowerCase");
+            NSMutableArray<String> possibleEntities = new NSMutableArray<String>();
+            for (String lowercaseEntityName : entityNames) {
                 if (lowerCaseName.indexOf(lowercaseEntityName) != -1) possibleEntities.addObject(lowercaseEntityName);
             }
             if (possibleEntities.count() == 1) {
-                result = ERXUtilities.caseInsensitiveEntityNamed((String) possibleEntities.lastObject());
+                result = ERXUtilities.caseInsensitiveEntityNamed(possibleEntities.lastObject());
             } else if (possibleEntities.count() > 1) {
                 ERXArrayUtilities.sortArrayWithKey(possibleEntities, "length");
-                if (((String) possibleEntities.objectAtIndex(0)).length() == ((String) possibleEntities.lastObject()).length())
+                if (possibleEntities.objectAtIndex(0).length() == possibleEntities.lastObject().length())
                         log.warn("Found multiple entities of the same length for string: " + string + " possible entities: "
                                 + possibleEntities);
-                result = ERXUtilities.caseInsensitiveEntityNamed((String) possibleEntities.lastObject());
+                result = ERXUtilities.caseInsensitiveEntityNamed(possibleEntities.lastObject());
             }
             if (log.isDebugEnabled())
                     log.debug("Found possible entities: " + possibleEntities + " for string: " + string + " result: " + result);
@@ -929,11 +924,10 @@ public class ERXEOAccessUtilities {
      *            array of enterprise objects
      * @return array of primary keys
      */
-    public static NSArray primaryKeysForObjects(NSArray eos) {
+    public static NSArray primaryKeysForObjects(NSArray<? extends EOEnterpriseObject> eos) {
         NSMutableArray result = new NSMutableArray();
-        if (eos.count() > 0) {
-            for (Enumeration e = eos.objectEnumerator(); e.hasMoreElements();) {
-                EOEnterpriseObject target = (EOEnterpriseObject) e.nextElement();
+        if (eos != null) {
+            for (EOEnterpriseObject target : eos) {
                 NSDictionary pKey = EOUtilities.primaryKeyForObject(target.editingContext(), target);
                 result.addObject(pKey.allValues().objectAtIndex(0));
             }
@@ -958,8 +952,8 @@ public class ERXEOAccessUtilities {
      * @param keyPath key path
      * @return array of EOProperties that make up the given key path
      */
-    public static NSArray attributePathForKeyPath(EOEntity entity, String keyPath) {
-        NSMutableArray result = new NSMutableArray();
+    public static NSArray<EOProperty> attributePathForKeyPath(EOEntity entity, String keyPath) {
+        NSMutableArray<EOProperty> result = new NSMutableArray<EOProperty>();
         String[] parts = keyPath.split("\\.");
         String part;
         for (int i = 0; i < parts.length - 1; i++) {
@@ -981,12 +975,11 @@ public class ERXEOAccessUtilities {
                 throw new IllegalArgumentException("Last element is not an attribute nor a relationship: " + keyPath);
             }
             if (relationship.isFlattened()) {
-            	NSArray path = attributePathForKeyPath(entity, relationship.definition());
+            	NSArray<EOProperty> path = attributePathForKeyPath(entity, relationship.definition());
             	result.addObjectsFromArray(path);
             	return result;
-            } else {
-                attribute = ((EOJoin) relationship.joins().lastObject()).sourceAttribute();
             }
+            attribute = relationship.joins().lastObject().sourceAttribute();
          }
         result.addObject(attribute);
         return result;
@@ -1077,9 +1070,8 @@ public class ERXEOAccessUtilities {
         if(keyPath == null || keyPath.length() == 0) {
             return entity;
         }
-        NSArray keyArray = NSArray.componentsSeparatedByString(keyPath, ".");
-        for(Enumeration keys = keyArray.objectEnumerator(); keys.hasMoreElements(); ) {
-            String key = (String)keys.nextElement();
+        NSArray<String> keyArray = NSArray.componentsSeparatedByString(keyPath, ".");
+        for(String key : keyArray) {
             EORelationship rel = entity.anyRelationshipNamed(key);
             if(rel == null) {
                 if(entity.anyAttributeNamed(key) == null) {
@@ -1244,16 +1236,16 @@ public class ERXEOAccessUtilities {
     }
 
 	public static String createLogString(EOAdaptorChannel channel, EOSQLExpression expression, long millisecondsNeeded) {
+		StringBuilder sb = new StringBuilder();
         String entityName = (expression.entity() != null ? expression.entity().name() : "Unknown");
-		String description = "\"" + entityName + "\"@" + channel.adaptorContext().hashCode() + " expression took "
-		        + millisecondsNeeded + " ms: " + expression.statement();
-		StringBuffer sb = new StringBuffer();
-		NSArray variables = expression.bindVariableDictionaries();
+        sb.append("\"").append(entityName).append("\"@").append(channel.adaptorContext().hashCode());
+        sb.append(" expression took ").append(millisecondsNeeded).append(" ms: ").append(expression.statement());
+		NSArray<NSDictionary<String, ? extends Object>> variables = expression.bindVariableDictionaries();
 		int cnt = variables != null ? variables.count() : 0;
 		if (cnt > 0) {
 		    sb.append(" withBindings: ");
 		    for (int i = 0; i < cnt; i++) {
-		        NSDictionary nsdictionary = (NSDictionary) variables.objectAtIndex(i);
+		        NSDictionary<String, ? extends Object> nsdictionary = variables.objectAtIndex(i);
 		        Object obj = nsdictionary.valueForKey("BindVariableValue");
 		        String attributeName = (String) nsdictionary.valueForKey("BindVariableName");
 		        if (obj instanceof String) {
@@ -1295,9 +1287,8 @@ public class ERXEOAccessUtilities {
 		        sb.append("]");
 		    }
 		}
-		description = description + sb.toString();
 
-		return description;
+		return sb.toString();
 	}
     
     
@@ -1309,12 +1300,11 @@ public class ERXEOAccessUtilities {
      * @param values 
      * @return qualifier
      */
-    public static EOQualifier qualifierFromAttributes(NSArray attributes, NSDictionary values) {
-        NSMutableArray qualifiers = new NSMutableArray();
+    public static EOQualifier qualifierFromAttributes(NSArray<EOAttribute> attributes, NSDictionary values) {
         EOQualifier result = null;
-        if(attributes.count() > 0) {
-            for (Enumeration i = attributes.objectEnumerator(); i.hasMoreElements();) {
-                EOAttribute key = (EOAttribute) i.nextElement();
+        if (attributes != null && attributes.count() > 0) {
+        	NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
+            for (EOAttribute key : attributes) {
                 Object value = values.objectForKey(key.name());
                 qualifiers.addObject(new EOKeyValueQualifier(key.name(), EOQualifier.QualifierOperatorEqual, value));
             }
@@ -1332,13 +1322,11 @@ public class ERXEOAccessUtilities {
      * @return filtered array of EORelationship objects that have
      *      the given attribute as the source attribute.
      */
-    public static NSArray relationshipsForAttribute(EOEntity entity, EOAttribute attrib) {
-        NSMutableArray arr = new NSMutableArray();
-        int cnt = entity.relationships().count();
-        for(int i=0; i<cnt; i++){
-            EORelationship rel = (EORelationship)entity.relationships().objectAtIndex(i);
-            NSArray attribs = rel.sourceAttributes();
-            if(attribs.containsObject(attrib)){
+    public static NSArray<EORelationship> relationshipsForAttribute(EOEntity entity, EOAttribute attrib) {
+        NSMutableArray<EORelationship> arr = new NSMutableArray<EORelationship>();
+        for (EORelationship rel : entity.relationships()) {
+            NSArray<EOAttribute> attribs = rel.sourceAttributes();
+            if (attribs.containsObject(attrib)) {
                 arr.addObject(rel);
             }
         }
@@ -1366,7 +1354,7 @@ public class ERXEOAccessUtilities {
      */
     public static EOAttribute sourceAttributeForRelationship(EORelationship relationship)
     {
-        EOJoin join = (EOJoin)relationship.joins().objectAtIndex(0);
+        EOJoin join = relationship.joins().objectAtIndex(0);
         return join.sourceAttribute();
     }
 
@@ -1879,11 +1867,9 @@ public class ERXEOAccessUtilities {
 
  									NSMutableDictionary databaseSnapshotClone;
  									NSMutableDictionary memorySnapshotClone = snapshot.mutableClone();
- 									EOAdaptorContext context;
  									EOAdaptorChannel channel = databaseContext.availableChannel().adaptorChannel();
  									channel.openChannel();
  									channel.selectAttributes(entity.attributesToFetch(), gidFetchSpec, false, entity);
- 									NSDictionary nextRow;
  									try {
  										databaseSnapshotClone = channel.fetchRow().mutableClone();
  									}
@@ -1920,16 +1906,12 @@ public class ERXEOAccessUtilities {
  											channel.openChannel();
  											try {
  												channel.selectAttributes(relationship.destinationEntity().attributesToFetch(), relationshipFetchSpec, false, relationship.destinationEntity());
- 												NSDictionary nextRow;
  												NSDictionary destinationSnapshot = null;
  												do {
  													destinationSnapshot = channel.fetchRow();
  													if (destinationSnapshot != null) {
  														EOGlobalID destinationGID = relationship.destinationEntity().globalIDForRow(destinationSnapshot);
  														newDestinationGIDs.addObject(destinationGID);
- 													}
- 													else {
- 														destinationSnapshot = null;
  													}
  												}
  												while (destinationSnapshot != null);
