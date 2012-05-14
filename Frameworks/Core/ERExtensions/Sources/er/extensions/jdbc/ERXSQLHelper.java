@@ -104,7 +104,7 @@ public class ERXSQLHelper {
 	 * 
 	 * @param entities
 	 *            a NSArray containing the entities for which create table
-	 *            statements should be generated or null if all entitites in the
+	 *            statements should be generated or null if all entities in the
 	 *            model should be used.
 	 * @param modelName
 	 *            the name of the EOModel
@@ -121,7 +121,7 @@ public class ERXSQLHelper {
 	/**
 	 * Reimplementation that does not try to the shared objects. You should exit
 	 * soon after calling this, as it may or may not leave channels open. It is
-	 * simply to geenrate sql.
+	 * simply to generate sql.
 	 * 
 	 * @param model
 	 * @param coordinator
@@ -151,7 +151,7 @@ public class ERXSQLHelper {
 	 * 
 	 * @param entities
 	 *            a NSArray containing the entities for which create table
-	 *            statements should be generated or null if all entitites in the
+	 *            statements should be generated or null if all entities in the
 	 *            model should be used.
 	 * @param model
 	 *            the EOModel
