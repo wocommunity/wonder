@@ -305,7 +305,7 @@ public abstract class ERXConstant {
 			return getClass().getName() + ": " + userPresentableDescription();
 		}
 
-		public Object value() {
+		public Number value() {
 			return integerForInt(intValue());
 		}
 		
@@ -373,7 +373,7 @@ public abstract class ERXConstant {
 			return _sortOrder;
 		}
 		
-		public Object value() {
+		public String value() {
 			return _value;
 		}
 		
@@ -411,6 +411,10 @@ public abstract class ERXConstant {
 			this((NSData)NSPropertyListSerialization.propertyListFromString(value.toString()),name);
 		}
 		
+		public ByteConstant(byte value[], String name) {
+			this(new NSData(value),name);
+		}
+		
 		public ByteConstant(NSData value, String name) {
 			_value = value;
 			_name = name;
@@ -426,7 +430,7 @@ public abstract class ERXConstant {
 			return _sortOrder;
 		}
 		
-		public Object value() {
+		public NSData value() {
 			return _value;
 		}
 		

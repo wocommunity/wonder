@@ -1,6 +1,4 @@
 /*
- $Id$
-
  ERMailDeliveryComponentBased.java - Camille Troillard - tuscland@mac.com
  */
 
@@ -12,7 +10,13 @@ import com.webobjects.appserver.WOMessage;
 import com.webobjects.foundation.NSDictionary;
 
 /**
+ * <span class="en">
  * This abstract class is the basis for all WOComponetn based deliverers.
+ * </span>
+ * 
+ * <span class="ja">
+ * この抽選クラスは WOComponent のメール対応のスーパー・クラスになります。
+ * </span>
  * 
  * @author Camille Troillard <tuscland@mac.com>
  */
@@ -22,8 +26,15 @@ public abstract class ERMailDeliveryComponentBased extends ERMailDelivery {
 	protected WOComponent _alternativeComponent;
 
 	/**
+	 * <span class="en">
 	 * Variable that stores the state of the session. In the case the component was instanciated with
 	 * ERMailUtils.instanciatePage, the session may be new and hence, would lack its dictionary properties.
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * セッション情報を保持する変数です。例えば、ERMailUtils.instanciatePage でインスタンス化されているコンポーネント
+	 * ではセッションが新しく、必要な情報がないことになります。
+	 * </span>
 	 */
 	protected NSDictionary _sessionDictionary = NSDictionary.EmptyDictionary;
 
@@ -37,7 +48,15 @@ public abstract class ERMailDeliveryComponentBased extends ERMailDelivery {
 		this.setComponent(component);
 	}
 
-	/** Sets the WOComponent used to render the HTML message. */
+	/** 
+	 * <span class="en">
+	 * Sets the WOComponent used to render the HTML message. 
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * HTML メッセージに使用される WOComponent をセットします。
+	 * </span>
+	 */
 	public void setComponent(WOComponent component) {
 		_component = component;
 	}
@@ -47,7 +66,13 @@ public abstract class ERMailDeliveryComponentBased extends ERMailDelivery {
 	}
 	
 	/**
+	 * <span class="en">
 	 * Sets the alternative view component for rendering a different mime type (text/plain, etc)
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * 他の mime タイプ (text/plain, 等) のレンダリングに使用するコンポーネント
+	 * </span>
 	 */
 	public void setAlternativeComponent(WOComponent alternativeComponent) {
 		_alternativeComponent = alternativeComponent;
@@ -67,17 +92,40 @@ public abstract class ERMailDeliveryComponentBased extends ERMailDelivery {
 		_sessionDictionary = dict;
 	}
 
-	/** Generates the output string used in messages */
+	/** 
+	 * <span class="en">
+	 * Generates the output string used in messages
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * メッセージで使用されている出力結果を生成します
+	 * </span>
+	 */
 	protected String componentContentString() {
 		return _componentContentString(component());
 	}
 
-	/** Generates the output string used in messages */
+	/** 
+	 * <span class="en">
+	 * Generates the output string used in messages 
+	 * </span>
+	 * <span class="ja">
+	 * メッセージで使用されている出力結果を生成します
+	 * </span>
+	 */
 	protected String alternativeComponentContentString() {
 		return _componentContentString(alternativeComponent());
 	}
 
-	/** Generates the output string used in messages */
+	/** 
+	 * <span class="en">
+	 * Generates the output string used in messages 
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * メッセージで使用されている出力結果を生成します
+	 * </span>
+	 */
 	protected String _componentContentString(WOComponent component) {
 		String contentString = null;
 		if (component != null) {

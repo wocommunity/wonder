@@ -60,14 +60,28 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	}
 
 	/**
+	 * <span class="en">
 	 * ERJavaMail class singleton.
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * シングルトン・クラス
+	 * </span>
 	 */
 	protected static ERJavaMail sharedInstance;
 
 	/**
+	 * <span class="en">
 	 * Accessor to the ERJavaMail singleton.
 	 * 
 	 * @return the one <code>ERJavaMail</code> instance
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * ERJavaMail シングルトン・アクセス・メソッド
+	 * 
+	 * @return <code>ERJavaMail</code> インスタンス
+	 * </span>
 	 */
 	public static synchronized ERJavaMail sharedInstance() {
 		if (sharedInstance == null) {
@@ -77,7 +91,13 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	}
 
 	/**
+	 * <span class="en">
 	 * <code>EMAIL_VALIDATION_PATTERN</code> is a regexp pattern that is used to validate emails.
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * <code>EMAIL_VALIDATION_PATTERN</code> はメールアドレスの検証のための Regex パタン
+	 * </span>
 	 */
 	// RFC 2822 token definitions for valid email - only used together to form a java Pattern object:
 	private static final String sp = "!#$%&'*+\\-/=?^_`{|}~";
@@ -114,8 +134,15 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	}
 
 	/**
+	 * <span class="en">
 	 * This method is used to initialize ERJavaMail from System properties. Later, we will implement a way to initialize
 	 * those properties everytime the propertis are changed. The observer will call this method whenever appropriate.
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * このメソッドは ERJavaMail をシステム・プロパティより初期化するためにあります。
+	 * 後でプロパティが変更される度にこのメソッドが実行される処理を追加実装します。
+	 * </span>
 	 */
 	public void initializeFrameworkFromSystemProperties() {
 		// Centralize mails ?
@@ -163,6 +190,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	}
 
 	/**
+	 * <span class="en">
 	 * Helper method to init the smtpHost property. This method first check is <code>er.javamail.smtpHost</code> is
 	 * set. If it is not set, then it looks for <code>mail.smtp.host</code> (standard JavaMail property) and finally
 	 * the <code>WOSMTPHost</code> property. When a correct property is found, then it sets both properties to the
@@ -171,6 +199,17 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * @throws RuntimeException
 	 *             if neither one of <code>er.javamail.smtpHost</code>, <code>mail.smtp.host</code> or
 	 *             <code>WOSMTPHost</code> is set.
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * smtpHost プロパティを初期化するヘルプ・メソッドです。
+	 * 最初には <code>er.javamail.smtpHost</code> がセットされているかどうかをチェックします。
+	 * セットされていなければ、<code>mail.smtp.host</code> (標準 JavaMail プロパティ) をチェックし、最終的には
+	 * <code>WOSMTPHost</code> プロパティ。
+	 * 正しいプロパティが見つかると結果値を両方のプロパティにセットします。見つからない場合には RuntimeException が発生します。
+	 * 
+	 * @throws RuntimeException - <code>er.javamail.smtpHost</code>, <code>mail.smtp.host</code> 又は <code>WOSMTPHost</code> がセットされていなければ
+	 * </span>
 	 */
 	protected void setupSmtpHostSafely() {
 		setupSmtpProperties(System.getProperties(), null);
@@ -235,19 +274,37 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	}
 
 	/**
+	 * <span class="en">
 	 * This is the default JavaMail Session. It is shared among all deliverers for immediate deliveries. Deferred
 	 * deliverers, use their own JavaMail session.
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * JavaMail のデフォルト・セッションです。
+	 * 即時配信処理より共有されています。
+	 * 延期配信は独自の JavaMail セッションを使用しています。
+	 * </span>
 	 */
 	protected javax.mail.Session _defaultSession;
 	private final Map<String, javax.mail.Session> _sessions = new ConcurrentHashMap<String, javax.mail.Session>();
 
 	/**
+	 * <span class="en">
 	 * Sets the default JavaMail session to a particular value. This value is set by default at initialization of the
 	 * framework but you can specify a custom one by using this method. Note that a new deliverer need to be
 	 * instanciated for changes to be taken in account.
 	 * 
 	 * @param session
 	 *            the default <code>javax.mail.Session</code>
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * JavaMail のデフォルト・セッションをセットします。
+	 * フレームワークの初期化時に設定されのですが、独自で設定する時には
+	 * ここを実行するといいのです。
+	 * 
+	 * @param session - デフォルト <code>javax.mail.Session</code>
+	 * </span>
 	 */
 	public void setDefaultSession(javax.mail.Session session) {
 		session.setDebug(this.debugEnabled());
@@ -255,30 +312,58 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	}
 
 	/**
+	 * <span class="en">
 	 * This is the deafult JavaMail Session accessor. It is shared among all deliverers for immediate deliveries.
 	 * Deferred deliverers, use their own JavaMail session.
 	 * 
 	 * @return the default <code>javax.mail.Session</code> instance
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * JavaMail のデフォルト・セッション・アクセス方法です。
+	 * 即時配信処理のために共有されています。
+	 * 延期配信は独自の JavaMail セッションを使用しています。
+	 * 
+	 * @return デフォルト <code>javax.mail.Session</code> インスタンス
+	 * </span>
 	 */
 	public javax.mail.Session defaultSession() {
 		return _defaultSession;
 	}
 	
 	/**
+	 * <span class="en">
 	 * Returns a newly allocated Session object from the given Properties
 	 * 
 	 * @param props
 	 *            a <code>Properties</code> value
 	 * @return a <code>javax.mail.Session</code> value initialized from the given properties
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * 指定プロパティを使った新規セッションを戻します。
+	 * 
+	 * @param props - <code>Properties</code> 値
+	 * 
+	 * @return 指定プロパティで初期化されている <code>javax.mail.Session</code> 値
+	 * </span>
 	 */
 	public javax.mail.Session newSession(Properties props) {
 		return newSessionForContext(props, null);
 	}
 
 	/**
+	 * <span class="en">
 	 * Returns a newly allocated Session object from the System Properties
 	 * 
 	 * @return a <code>javax.mail.Session</code> value
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * システム・プロパティを使った新規セッションを戻します。
+	 * 
+	 * @return <code>javax.mail.Session</code> 値
+	 * </span>
 	 */
 	public javax.mail.Session newSession() {
 		return newSession(System.getProperties());
@@ -370,20 +455,38 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	protected String _adminEmail;
 
 	/**
+	 * <span class="en">
 	 * admin email accessor. The admin email is the email address where centralized mail go to.
 	 * 
 	 * @return a <code>String</code> value
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * centralizeMails == true の場合で使用されるメール・アドレス<br>
+	 * デバッグ中にすべてのメールが一つのターゲットに送信されます。
+	 * 
+	 * @return メール・アドレス
+	 * </span>
 	 */
 	public String adminEmail() {
 		return _adminEmail;
 	}
 
 	/**
+	 * <span class="en">
 	 * Sets the admin email to another value. This value is set at initialization from the
 	 * <code>er.javamail.adminEmail</code> Property.
 	 * 
 	 * @param adminEmail
 	 *            a <code>String</code> value
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * この値は初期化中で <code>er.javamail.adminEmail</code> プロパティより設定されますが、
+	 * このコマンドでオーバライドが可能です。
+	 * 
+	 * @param adminEmail - メール・アドレス
+	 * </span>
 	 */
 	public void setAdminEmail(String adminEmail) {
 		if (!(isValidEmail(adminEmail) || (adminEmail != null && adminEmail.trim().length() > 0))) {
@@ -396,19 +499,35 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	protected boolean _debugEnabled = true;
 
 	/**
+	 * <span class="en">
 	 * Returns <code>true</code> if JavaMail is debug enabled.
 	 * 
 	 * @return a <code>boolean</code> value
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * JavaMail がデバッグ中の場合には <code>true</code> が戻ります。
+	 * 
+	 * @return <code>boolean</code> 値
+	 * </span>
 	 */
 	public boolean debugEnabled() {
 		return _debugEnabled;
 	}
 
 	/**
+	 * <span class="en">
 	 * Sets the debug mode of JavaMail.
 	 * 
 	 * @param debug
 	 *            a <code>boolean</code> value sets JavaMail in debug mode
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * JavaMail のデバッグ・モードをセットします。
+	 * 
+	 * @param debug - <code>boolean</code> でデバッグ・モードを On / Off できます
+	 * </span>
 	 */
 	public void setDebugEnabled(boolean debug) {
 		_debugEnabled = debug;
@@ -418,20 +537,37 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	protected String _defaultXMailerHeader = null;
 
 	/**
+	 * <span class="en">
 	 * Gets the default X-Mailer header to use for sending mails. Pulls the value out of the property:
 	 * er.javamail.XMailerHeader
 	 * 
 	 * @return default X-Mailer header
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * 送信時の XMailer ヘッダーのデフォルト値を取得します。
+	 * プロパティの er.javamail.XMailerHeader を参照！
+	 * 
+	 * @return デフォルト X-Mailer ヘッダー
+	 * </span>
 	 */
 	public String defaultXMailerHeader() {
 		return _defaultXMailerHeader;
 	}
 
 	/**
+	 * <span class="en">
 	 * Sets the default value of the XMailer header used when sending mails.
 	 * 
 	 * @param header
 	 *            a <code>String</code> value
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * 送信時の XMailer ヘッダーのデフォルト値をセットします。
+	 * 
+	 * @param header - <code>String</code> 値
+	 * </span>
 	 */
 	public void setDefaultXMailerHeader(String header) {
 		_defaultXMailerHeader = header;
@@ -441,27 +577,51 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	protected boolean _centralize = true;
 
 	/**
+	 * <span class="en">
 	 * Centralize is used to send all the outbound email to a single address which is useful when debugging.
 	 * 
 	 * @return a <code>boolean</code> value
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * すべてのメールを er.javamail.adminEmail ユーザに送信します。(デバッグ中に便利)
+	 * 
+	 * @return <code>boolean</code> 値
+	 * </span>
 	 */
 	public boolean centralize() {
 		return _centralize;
 	}
 
 	/**
+	 * <span class="en">
 	 * Sets the value of the <code>er.javamail.centralize</code> Property.
 	 * 
 	 * @param centralize
 	 *            if the boolean value is true, then all the outbound mails will be sent to <code>adminEmail</code>
 	 *            email address.
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * <code>er.javamail.centralize</code> プロパティの値をセットします。
+	 * 
+	 * @param centralize - true の場合にはすべてのメールが <code>adminEmail</code> へ送信されます。
+	 * </span>
 	 */
 	public void setCentralize(boolean centralize) {
 		_centralize = centralize;
 	}
 
 	/**
+	 * <span class="en">
 	 * Returns the SMTP protocol to use for connections.
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * 接続の為の SMTP プロトコールを設定します。 (smtp or smtps)
+	 * 
+	 * @param smtpProtocol - SMTP プロトコール名
+	 * </span>
 	 */
 	public String smtpProtocolForContext(String contextString) {
 		String contextSuffix = (contextString == null) ? "" : ("." + contextString);
@@ -478,35 +638,67 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 		return _senderQueueSize;
 	}
 
+	/**
+	 * <span class="ja">
+	 * 送信キューが一回で保持できるメッセージ数です。
+	 * デフォルトでは 50 メッセージで、システム・プロパティの <code>er.javamail.senderQueue.size</code> で変更可能です。
+	 * </span>
+	 */
 	public void setSenderQueueSize(int value) {
 		_senderQueueSize = value;
 	}
 
-	/** Wait n milliseconds (by default this value is 6000) if the mail sender is overflowed */
+	/** 
+	 * <span class="en">
+	 * Wait n milliseconds (by default this value is 6000) if the mail sender is overflowed 
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * メール・キューがオーバフローされている時に待つ時間。 (デフォルトでは 6000)
+	 * </span>
+	 */
 	protected int _milliSecondsWaitIfSenderOverflowed = 6000;
 
 	/**
+	 * <span class="en">
 	 * This method return the time spent waiting if the mail queue if overflowed. During that time, mails are sent and
 	 * the queue lowers. When the duration is spent, and the queue is under the overflow limit, the mails are being sent
 	 * again.
 	 * 
 	 * @return an <code>int</code> value
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * メール・キューがオーバフローされている時に待つ時間を設定します。この時間内ではメールが送信され、キューが減ります。
+	 * 期間が過ぎるとキューがオーバフロー制限より以下であれば、メールが再度に送信されます。
+	 * 
+	 * @return <code>int</code> 値
+	 * </span>
 	 */
 	public int milliSecondsWaitIfSenderOverflowed() {
 		return _milliSecondsWaitIfSenderOverflowed;
 	}
 
 	/**
+	 * <span class="en">
 	 * Sets the value of the <code>er.javamail.milliSecondsWaitIfSenderOverflowed</code> Property.
 	 * 
 	 * @param value
 	 *            an <code>int</code> value in milli-seconds.
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * <code>er.javamail.milliSecondsWaitIfSenderOverflowed</code> プロパティをセットします。
+	 * 
+	 * @param value - <code>int</code> ミリ秒
+	 * </span>
 	 */
 	public void setMilliSecondsWaitIfSenderOverflowed(int value) {
 		_milliSecondsWaitIfSenderOverflowed = value;
 	}
 
 	/**
+	 * <span class="en">
 	 * Validates an enterprise object's email attribute (accessed via key).
 	 * 
 	 * @param object
@@ -516,6 +708,17 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * @param email
 	 *            the email value
 	 * @return the email if the validation didn't failed
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * エンタプライス・オブジェクトのメール・アトリビュートを検証します。（キーよりのアクセス）
+	 * 
+	 * @param object - 検証するオブジェクト
+	 * @param key - アトリビュート名
+	 * @param email - メール値
+	 * 
+	 * @return 検証が失敗しない場合のメールアドレス
+	 * </span>
 	 */
 	public String validateEmail(EOEnterpriseObject object, String key, String email) {
 		if (email != null) {
@@ -527,12 +730,22 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	}
 
 	/**
+	 * <span class="en">
 	 * Predicate used to validate email well-formness.
 	 * 
 	 * @return true if the email is valid
 	 * @param email
 	 *            the email String value to validate
 	 * @return a <code>boolean</code> value
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * メールが正しいかどうかを検証します。
+	 * 
+	 * @param email - 検証するメール値
+	 * 
+	 * @return メールが有効であれば true が戻ります。
+	 * </span>
 	 */
 	public synchronized boolean isValidEmail(String email) {
 		if (_pattern == null) {
@@ -556,42 +769,99 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 
 	// ===========================================================================
 	// Black and White list email address filtering support
+	// メール・フィルター：　ホワイト＆ブラック・リスト
 	// ---------------------------------------------------------------------------
 
-	/** holds the array of white list email addresses */
+	/** 
+	 * <span class="en">
+	 * holds the array of white list email addresses 
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * ホワイト・リスト・メールアドレス配列を保持
+	 * </span>
+	 */
 	protected NSArray<String> whiteListEmailAddressPatterns;
 
-	/** holds the array of black list email addresses */
+	/** 
+	 * <span class="en">
+	 * holds the array of black list email addresses
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * ブラック・リスト・メールアドレス配列を保持
+	 * </span>
+	 */
 	protected NSArray<String> blakListEmailAddressPatterns;
 
-	/** holds the white list qualifier */
+	/** 
+	 * <span class="en">
+	 * holds the white list qualifier
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * ホワイト・リスト qualifier を保持
+	 * </span>
+	 */
 	protected EOOrQualifier whiteListQualifier;
 
-	/** holds the black list qualifier */
+	/** 
+	 * <span class="en">
+	 * holds the black list qualifier 
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * ブラック・リスト qualifier を保持
+	 * </span>
+	 */
 	protected EOOrQualifier blackListQualifier;
 
 	/**
+	 * <span class="en">
 	 * Determines if a white list has been specified
 	 * 
 	 * @return if the white list has any elements in it
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * ホワイト・リストがあるかどうかを戻します。
+	 * 
+	 * @return ホワイト・リストがある場合には true が戻ります。
+	 * </span>
 	 */
 	public boolean hasWhiteList() {
 		return this.whiteListEmailAddressPatterns().count() > 0;
 	}
 
 	/**
+	 * <span class="en">
 	 * Determines if a black list has been specified
 	 * 
 	 * @return if the black list has any elements in it
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * ブラック・リストがあるかどうかを戻します。
+	 * 
+	 * @return ブラック・リストがある場合には true が戻ります。
+	 * </span>
 	 */
 	public boolean hasBlackList() {
 		return this.blackListEmailAddressPatterns().count() > 0;
 	}
 
 	/**
+	 * <span class="en">
 	 * Gets the array of white list email address patterns.
 	 * 
 	 * @return array of white list email address patterns
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * ホワイト・リスト・メールアドレス配列パターンを戻します。
+	 * 
+	 * @return ホワイト・リスト・メールアドレス配列パターン
+	 * </span>
 	 */
 	@SuppressWarnings("unchecked")
 	public NSArray<String> whiteListEmailAddressPatterns() {
@@ -602,9 +872,17 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	}
 
 	/**
+	 * <span class="en">
 	 * Gets the array of black list email address patterns.
 	 * 
 	 * @return array of black list email address patterns
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * ブラック・リスト・メールアドレス配列パターンを戻します。
+	 * 
+	 * @return ブラック・リスト・メールアドレス配列パターン
+	 * </span>
 	 */
 	@SuppressWarnings("unchecked")
 	public NSArray<String> blackListEmailAddressPatterns() {
@@ -615,9 +893,16 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	}
 
 	/**
+	 * <span class="en">
 	 * Whilte list Or qualifier to match any of the patterns in the white list.
 	 * 
 	 * @return Or qualifier for the white list
+	 * </span>
+	 * <span class="ja">
+	 * ホワイト・リスト内でマッチするパタンのホワイト・リスト Or qualifier
+	 * 
+	 * @return ホワイト・リスト Or qualifier
+	 * </span>
 	 */
 	public EOOrQualifier whiteListQualifier() {
 		if (whiteListQualifier == null) {
@@ -627,9 +912,17 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	}
 
 	/**
+	 * <span class="en">
 	 * Gets the Or qualifier to match any of the patterns in the black list.
 	 * 
 	 * @return or qualifier
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * ブラック・リスト内でマッチするパタンのブラック・リスト Or qualifier
+	 * 
+	 * @return ブラック・リスト Or qualifier
+	 * </span>
 	 */
 	public EOOrQualifier blackListQualifier() {
 		if (blackListQualifier == null) {
@@ -639,12 +932,22 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	}
 
 	/**
+	 * <span class="en">
 	 * Constructs an Or qualifier for filtering an array of strings that might have the * wildcard character. Will be
 	 * nice when we have regex in Java 1.4.
 	 * 
 	 * @param emailPatterns
 	 *            array of email patterns
 	 * @return or qualifier to match any of the given patterns
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * ワイルドカード文字 * を持つ配列をフィルターする Or qualifier を作成します。
+	 * 
+	 * @param emailPatterns - メール・パタンの配列
+	 * 
+	 * @return 指定パタンのマッチに使用する or qualifier
+	 * </span>
 	 */
 	protected EOOrQualifier qualifierArrayForEmailPatterns(NSArray<String> emailPatterns) {
 		NSMutableArray<EOQualifier> patternQualifiers = new NSMutableArray<EOQualifier>();
@@ -655,11 +958,21 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	}
 
 	/**
+	 * <span class="en">
 	 * Filters an array of email addresses by the black and white lists.
 	 * 
 	 * @param emailAddresses
 	 *            array of email addresses to be filtered
 	 * @return array of filtered email addresses
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * メールアドレス配列をホワイト＆ブラック・リストでフィルターします。
+	 * 
+	 * @param emailAddresses - フィルターするメール・アドレス配列
+	 * 
+	 * @return フィルター済みのメールアドレス配列
+	 * </span>
 	 */
 	public NSArray<String> filterEmailAddresses(NSArray<String> emailAddresses) {
 		NSMutableArray<String> filteredAddresses = null;

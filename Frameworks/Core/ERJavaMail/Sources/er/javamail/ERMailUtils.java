@@ -1,6 +1,4 @@
 /*
- $Id$
-
  ERMailUtils.java - Camille Troillard - tuscland@mac.com
  */
 
@@ -24,7 +22,13 @@ import com.webobjects.foundation.NSMutableArray;
 import er.extensions.appserver.ERXApplication;
 
 /**
+ * <span class="en">
  * <code>ERMailUtils</code> contains various utility method related to mail sending.
+ * </span>
+ * 
+ * <span class="ja">
+ * <code>ERMailUtils</code> はメール送信の為のユーティリティー・メソッド集
+ * </span>
  * 
  * @author <a href="mailto:tuscland@mac.com">Camille Troillard</a>
  * @version $Id$
@@ -34,13 +38,29 @@ public class ERMailUtils extends Object {
 	/** The class logger. */
 	private static Logger log = Logger.getLogger(ERMailUtils.class);
 
-	/** The shared mail deliverer */
+	/** 
+	 * <span class="en">
+	 * The shared mail deliverer
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * メール配信の共有インスタンス 
+	 * </span>
+	 */
 	private static ERMailDeliveryHTML sharedDeliverer;
 
 	/**
+	 * <span class="en">
 	 * Accessor to the shared instance of a ERMailDeliveryHTML.
 	 * 
 	 * @return the <code>ERMailDeliveryHTML</code> singleton
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * 共有インスタンス ERMailDeliveryHTML へのアクセス
+	 * 
+	 * @return <code>ERMailDeliveryHTML</code> シングルトン
+	 * </span>
 	 */
 	public static ERMailDeliveryHTML sharedDeliverer() {
 		if (sharedDeliverer == null) {
@@ -51,6 +71,7 @@ public class ERMailUtils extends Object {
 	}
 
 	/**
+	 * <span class="en">
 	 * Augmented version of the method found in {@link ERXApplication}. Used to instantiate a WOComponent, typically
 	 * outside of a session.
 	 * 
@@ -60,6 +81,18 @@ public class ERMailUtils extends Object {
 	 *            can be provided in order to set objects/keys in the newly created session of the component. This is
 	 *            useful when one want to preserve state when sending a mail.
 	 * @return a newly instantiated <code>WOComponent</code>.
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * {@link ERXApplication} 内にある同名メソッドの拡張版。
+	 * セッションの外側のインスタンス化に使用します。
+	 * 
+	 * @param pageName - インスタンス化する WOComponent 名
+	 * @param sessionDict - コンポーネントのために、新規作成されるセッションにセットする「オブジェクト/キー」
+	 * 						メール送信にセッション情報が必要な場合に有効です。
+	 *            
+	 * @return 新規のインスタンス済み <code>WOComponent</code> 
+	 * </span>
 	 */
 	public static WOComponent instantiatePage(String pageName, NSDictionary sessionDict) {
 		WOComponent component = ERXApplication.instantiatePage(pageName);
@@ -71,6 +104,7 @@ public class ERMailUtils extends Object {
 	}
 
 	/**
+	 * <span class="en">
 	 * Use this method to send an HTML mail.
 	 * 
 	 * @param delivery
@@ -88,6 +122,19 @@ public class ERMailUtils extends Object {
 	 *            the email address where the mail must be replied-to.
 	 * @param subject
 	 *            the subject of the mail
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * HTML メール送信に使用します。
+	 * 
+	 * @param delivery - メール配信に使用される  <code>ERMailDeliveryHTML</code>
+	 * @param pageName - HTMLメッセージを持つインスタンス化する WOComponent 名
+	 * @param alternatePageName - テキスト・メッセージを持つインスタンス化する WOComponent 名
+	 * @param emailFrom - 送信元のメール・アドレス
+	 * @param emailTo - 送信先のメール・アドレス
+	 * @param emailReplyTo - 返信先のメール・アドレス
+	 * @param subject - メールのサブジェクト
+	 * </span>
 	 */
 	public static void sendHTMLMail(ERMailDeliveryHTML delivery, String pageName, String alternatePageName, String emailFrom, String emailTo, String emailReplyTo, String subject) {
 		WOComponent mailPage = ERMailUtils.instantiatePage(pageName, delivery.sessionDictionary());
@@ -129,6 +176,7 @@ public class ERMailUtils extends Object {
 	}
 
 	/**
+	 * <span class="en">
 	 * Use this method to send an HTML mail, but default mail delivery.
 	 * 
 	 * @param pageName
@@ -144,12 +192,25 @@ public class ERMailUtils extends Object {
 	 *            the email address where the mail must be replied-to.
 	 * @param subject
 	 *            the subject of the mail
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * デフォルト配信インスタンスを使用し、 HTML メール送信を行います。
+	 * 
+	 * @param pageName - HTMLメッセージを持つインスタンス化する WOComponent 名
+	 * @param alternatePageName - テキスト・メッセージを持つインスタンス化する WOComponent 名
+	 * @param emailFrom - 送信元のメール・アドレス
+	 * @param emailTo - 送信先のメール・アドレス
+	 * @param emailReplyTo - 返信先のメール・アドレス
+	 * @param subject - メールのサブジェクト
+	 * </span>
 	 */
 	public static void sendHTMLMail(String pageName, String alternatePageName, String emailFrom, String emailTo, String emailReplyTo, String subject) {
 		sendHTMLMail(sharedDeliverer(), pageName, alternatePageName, emailFrom, emailTo, emailReplyTo, subject);
 	}
 
 	/**
+	 * <span class="en">
 	 * This method sets the values found in a dictionary into the session's state dictionary. This method is useful when
 	 * one want to transfer current session's state into a newly created session (for example when sending a mail whose
 	 * page has been instantiated with {@link ERMailUtils#instantiatePage(String, NSDictionary)} or
@@ -159,6 +220,17 @@ public class ERMailUtils extends Object {
 	 *            a <code>NSDictionary</code> value containing the values we want to set in the session parameter.
 	 * @param session
 	 *            a <code>WOSession</code> value that will receive the values contained in the dict parameter.
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * このメソッドはディクショナリー内で見つかる値をセッション状態ディクショナリーにセットします。
+	 * このメソッドはカレント・セッションを新セッションに移行する時に有効です。
+	 * （たとえば、{@link ERMailUtils.instantiatePage} や {@link ERXApplication.instantiatePage}
+	 * でインスタンス化されているページを送信する場合に有効です。）
+	 * 
+	 * @param dict - セッションに設定する情報を持つ <code>NSDictionary</code> 
+	 * @param session - ディクショナリー内に設定されている値をセットする <code>WOSession</code>
+	 * </span>
 	 */
 	public static void setDictionaryValuesInSession(NSDictionary dict, WOSession session) {
 		if ((dict == null) || (session == null)) {
@@ -179,6 +251,7 @@ public class ERMailUtils extends Object {
 		}
 	}
 
+	/** <span class="ja">エンコーディング処理</span> */
 	public static String encodeString(String string, String charset) {
 		String encodedString = null;
 
@@ -193,6 +266,7 @@ public class ERMailUtils extends Object {
 	}
 
 	/**
+	 * <span class="en">
 	 * Method that converts NSArray of String emails to InternetAddress [].
 	 * 
 	 * @param addrs
@@ -200,6 +274,17 @@ public class ERMailUtils extends Object {
 	 * @return an <code>InternetAddress[]</code> value
 	 * @exception AddressException
 	 *                if an error occurs
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * String メールの NSArray を InternetAddress [] へ変換します。
+	 * 
+	 * @param addrs - <code>NSArray</code>
+	 * 
+	 * @return <code>InternetAddress[]</code>
+	 * 
+	 * @exception AddressException - エラー発生した場合
+	 * </span>
 	 */
 	public static InternetAddress[] convertNSArrayToInternetAddresses(NSArray addrs) throws AddressException {
 		if (addrs == null)
@@ -216,6 +301,7 @@ public class ERMailUtils extends Object {
 	}
 
 	/**
+	 * <span class="en">
 	 * Method that converts Address [] loaded with either Address or InternetAddress objects to NSArray of String
 	 * emails.
 	 * <p>
@@ -226,6 +312,19 @@ public class ERMailUtils extends Object {
 	 * @return a <code>NSArray</code> value
 	 * @exception AddressException
 	 *                if an error occurs
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * Address [] 又は InternetAddress [] を String メールの NSArray へ変換します。
+	 * <p>
+	 * 注意： Address [] 又は InternetAddress [] が有効です
+	 * 
+	 * @param addressesArray - <code>Address[]</code>
+	 * 
+	 * @return <code>NSArray</code>
+	 * 
+	 * @exception AddressException - エラー発生した場合
+	 * </span>
 	 */
 	@SuppressWarnings("unchecked")
 	public static NSArray<String> convertInternetAddressesToNSArray(Address[] addressesArray) {
@@ -250,6 +349,7 @@ public class ERMailUtils extends Object {
 	}
 
 	/**
+	 * <span class="en">
 	 * Method that converts NSDictionary consisting of String emails as keys and String personal names
 	 * to InternetAddress [].
 	 * 
@@ -260,6 +360,19 @@ public class ERMailUtils extends Object {
 	 * @return an <code>InternetAddress[]</code> value
 	 * @exception AddressException
 	 *                if an error occurs
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * String メールの NSDictionary を InternetAddress [] へ変換します。
+	 * キーが String メール・アドレスでオブジェクトが String の個人名
+	 * 
+	 * @param addrs - <code>NSDictionary</code> メール 個人名の KV
+	 * @param charset - 個人名文字列に使用する文字セット
+	 *            
+	 * @return <code>InternetAddress[]</code>
+	 * 
+	 * @exception AddressException - エラー発生した場合
+	 * </span>
 	 */
 	public static InternetAddress[] convertNSDictionaryToInternetAddresses(NSDictionary<String, String> addrs, String charset) throws AddressException {
 		if (addrs == null || addrs.isEmpty())

@@ -31,6 +31,7 @@ import com.webobjects.monitor._private.MObject;
 import com.webobjects.monitor._private.StatsUtilities;
 import com.webobjects.monitor.application.starter.ApplicationStarter;
 import com.webobjects.monitor.application.starter.GracefulBouncer;
+import com.webobjects.monitor.application.starter.RollingShutdownBouncer;
 import com.webobjects.monitor.application.starter.ShutdownBouncer;
 
 public class AppDetailPage extends MonitorComponent {
@@ -80,6 +81,10 @@ public class AppDetailPage extends MonitorComponent {
     
     public WOComponent bounceClickedWithShutdownBouncer(int maxwait) {
         return bounceClickedWithBouncer(new ShutdownBouncer(myApplication(), maxwait));
+    }
+    
+    public WOComponent bounceClickedWithRollingBouncer() {
+        return bounceClickedWithBouncer(new RollingShutdownBouncer(myApplication()));
     }
     
     private WOComponent bounceClickedWithBouncer(ApplicationStarter bouncer) {
@@ -554,6 +559,13 @@ public class AppDetailPage extends MonitorComponent {
     private WOComponent newDetailPage() {
         AppDetailPage nextPage = AppDetailPage.create(context(), myApplication());
         nextPage.displayGroup.setSelectedObjects(displayGroup.selectedObjects());
+        nextPage.showDetailStatistics = this.showDetailStatistics;
+        if (currentBouncer() != null &&
+        		!"Finished".equals(currentBouncer().status()) && 
+        		!currentBouncer().errors().isEmpty()) {
+        	mySession().addObjectsFromArrayIfAbsentToErrorMessageArray(currentBouncer().errors());
+        	session().removeObjectForKey(bouncerName());
+        }
         return nextPage;
     }
 
@@ -743,7 +755,7 @@ public class AppDetailPage extends MonitorComponent {
         }
     }
 
-    public static AppDetailPage create(WOContext context, MApplication currentApplication, NSArray<MInstance> selected) {
+	public static AppDetailPage create(WOContext context, MApplication currentApplication, NSArray<MInstance> selected) {
         AppDetailPage page = (AppDetailPage) WOApplication.application().pageWithName(AppDetailPage.class.getName(), context);
         page.setMyApplication(currentApplication);
         NSArray instancesArray = currentApplication.instanceArray();

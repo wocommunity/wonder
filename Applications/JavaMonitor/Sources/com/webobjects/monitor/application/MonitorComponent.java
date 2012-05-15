@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOSession;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.monitor._private.MApplication;
 import com.webobjects.monitor._private.MHost;
@@ -76,7 +77,7 @@ public class MonitorComponent extends ERXComponent {
     public Session mySession() {
         return (Session) super.session();
     }
-
+    
     public WOTaskdHandler handler() {
         return _handler;
     }

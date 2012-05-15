@@ -104,7 +104,7 @@ public class ERXSQLHelper {
 	 * 
 	 * @param entities
 	 *            a NSArray containing the entities for which create table
-	 *            statements should be generated or null if all entitites in the
+	 *            statements should be generated or null if all entities in the
 	 *            model should be used.
 	 * @param modelName
 	 *            the name of the EOModel
@@ -121,7 +121,7 @@ public class ERXSQLHelper {
 	/**
 	 * Reimplementation that does not try to the shared objects. You should exit
 	 * soon after calling this, as it may or may not leave channels open. It is
-	 * simply to geenrate sql.
+	 * simply to generate sql.
 	 * 
 	 * @param model
 	 * @param coordinator
@@ -151,7 +151,7 @@ public class ERXSQLHelper {
 	 * 
 	 * @param entities
 	 *            a NSArray containing the entities for which create table
-	 *            statements should be generated or null if all entitites in the
+	 *            statements should be generated or null if all entities in the
 	 *            model should be used.
 	 * @param model
 	 *            the EOModel
@@ -2251,20 +2251,6 @@ public class ERXSQLHelper {
 		@Override
 		protected String sqlForGetNextValFromSequencedNamed(String sequenceName) {
 			return "select NEXTVAL('" + sequenceName + "') as key"; 
-		}
-		
-		@Override
-		protected String formatValueForAttribute(EOSQLExpression expression, Object value, EOAttribute attribute, String key) {
-			// The Postgres Expression has a problem using bind variables so we
-			// have to get the formatted
-			// SQL string for a value instead. All Apple provided plugins must
-			// use the bind variables
-			// however. Frontbase can go either way
-			// MS: is expression always instanceof PostgresExpression for
-			// postgres?
-			// boolean isPostgres =
-			// e.getClass().getName().equals("com.webobjects.jdbcadaptor.PostgresqlExpression");
-			return expression.formatValueForAttribute(value, attribute);
 		}
 
 		@Override
