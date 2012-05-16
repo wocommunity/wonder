@@ -1,36 +1,28 @@
-
 {
-    EOModelVersion = 2.1;
-    adaptorName = JDBC;
-    entities = 
-    (
-       
-       {
-           className = er.attachment.model.ERAttachment;
-           name = ERAttachment;
-       }, 
-       
-       {
-           className = er.attachment.model.ERAttachmentData;
-           name = ERAttachmentData;
-       }, 
-       
-       {
-           className = er.attachment.model.ERDatabaseAttachment;
-           name = ERDatabaseAttachment;
-           parent = ERAttachment;
-       }, 
-       
-       {
-           className = er.attachment.model.ERFileAttachment;
-           name = ERFileAttachment;
-           parent = ERAttachment;
-       }, 
-       
-       {
-           className = er.attachment.model.ERS3Attachment;
-           name = ERS3Attachment;
-           parent = ERAttachment;
-       }
-    );
+    EOModelVersion = "2.1"; 
+    adaptorName = JDBC; 
+    entities = (
+        {className = "er.attachment.model.ERAttachment"; name = ERAttachment; }, 
+        {className = "er.attachment.model.ERAttachmentData"; name = ERAttachmentData; }, 
+        {
+            className = "er.attachment.model.ERCloudFilesAttachment"; 
+            name = ERCloudFilesAttachment; 
+            parent = ERAttachment; 
+        }, 
+        {
+            className = "er.attachment.model.ERDatabaseAttachment"; 
+            name = ERDatabaseAttachment; 
+            parent = ERAttachment; 
+        }, 
+        {
+            className = "er.attachment.model.ERFileAttachment"; 
+            name = ERFileAttachment; 
+            parent = ERAttachment; 
+        }, 
+        {
+            className = "er.attachment.model.ERS3Attachment"; 
+            name = ERS3Attachment; 
+            parent = ERAttachment; 
+        }
+    ); 
 }

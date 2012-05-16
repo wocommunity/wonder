@@ -14,6 +14,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 import er.attachment.ERAttachmentRequestHandler;
 import er.attachment.model.ERAttachment;
+import er.attachment.model.ERCloudFilesAttachment;
 import er.attachment.model.ERDatabaseAttachment;
 import er.attachment.model.ERFileAttachment;
 import er.attachment.model.ERPendingAttachment;
@@ -74,6 +75,7 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
       _processors.setObjectForKey(new ERDatabaseAttachmentProcessor(), ERDatabaseAttachment.STORAGE_TYPE);
       _processors.setObjectForKey(new ERS3AttachmentProcessor(), ERS3Attachment.STORAGE_TYPE);
       _processors.setObjectForKey(new ERFileAttachmentProcessor(), ERFileAttachment.STORAGE_TYPE);
+      _processors.setObjectForKey(new ERCloudFilesAttachmentProcessor(), ERCloudFilesAttachment.STORAGE_TYPE);
     }
     return _processors;
   }
