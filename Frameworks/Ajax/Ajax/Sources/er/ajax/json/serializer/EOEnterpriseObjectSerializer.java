@@ -222,11 +222,13 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 	 * to be an exposed primary or foreign key and not copied. Such attributes are set to null. See
 	 * exposedKeyAttributeNames for details on how this is determined. It can be used when creating custom
 	 * implementations of the duplicate() method in EOCopyable.
+	 * @param state 
 	 * 
 	 * @param source
 	 *            the EOEnterpriseObject to copy attribute values from
 	 * @param destination
 	 *            the EOEnterpriseObject to copy attribute values to
+	 * @throws MarshallException 
 	 */
 	public void addAttributes(SerializerState state, EOEnterpriseObject source, JSONObject destination) throws MarshallException {
 		boolean useEO = false;
@@ -300,6 +302,8 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 	/**
 	 * Override to return whether or not a new entity can be inserted.
 	 * @param entityName
+	 * 
+	 * @return 
 	 */
 	protected boolean _canInsert(String entityName) {
 		return ERXProperties.booleanForKeyWithDefault("er.ajax.json." + entityName + ".canInsert", false);
@@ -308,6 +312,8 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 	/**
 	 * Override to return the appropriate attribute names.
 	 * @param eo
+	 * 
+	 * @return 
 	 */
 	protected NSArray<String> _readableAttributeNames(EOEnterpriseObject eo) {
 		return EOEnterpriseObjectSerializer.readableAttributeNames(eo);
@@ -316,6 +322,8 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 	/**
 	 * Override to return the appropriate attribute names.
 	 * @param eo
+	 * 
+	 * @return 
 	 */
 	protected NSArray<String> _writableAttributeNames(EOEnterpriseObject eo) {
 		return EOEnterpriseObjectSerializer.writableAttributeNames(eo);
