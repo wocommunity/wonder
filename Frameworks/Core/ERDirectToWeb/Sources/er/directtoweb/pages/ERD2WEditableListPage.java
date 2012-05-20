@@ -165,8 +165,8 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
         try {
             if (!isListEmpty() && validateObjects && shouldValidateBeforeSave()) {
                 if (log.isDebugEnabled()) log.debug("tryToSaveChanges calling validateForSave");
-                editingContext().insertedObjects().makeObjectsPerformSelector(ValidateForInsertSelector, null);
-                editingContext().updatedObjects().makeObjectsPerformSelector(ValidateForSaveSelector, null);
+                editingContext().insertedObjects().makeObjectsPerformSelector(ValidateForInsertSelector, (Object[])null);
+                editingContext().updatedObjects().makeObjectsPerformSelector(ValidateForSaveSelector, (Object[])null);
             }
             if (!isListEmpty() && shouldSaveChanges() && editingContext().hasChanges())
                 editingContext().saveChanges();

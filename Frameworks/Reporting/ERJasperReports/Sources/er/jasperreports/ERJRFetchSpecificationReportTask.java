@@ -31,8 +31,6 @@ import er.extensions.foundation.ERXAssert;
  *
  */
 public class ERJRFetchSpecificationReportTask implements Callable<File>, ERXTaskPercentComplete {
-	
-	@SuppressWarnings("unused")
 	private static final Logger log = Logger.getLogger(ERJRFetchSpecificationReportTask.class);
 	
 	private File reportFile;
