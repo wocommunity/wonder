@@ -68,7 +68,10 @@ public class ERXRestClassDescriptionFactory {
 			else {
 				clazz = obj.getClass();
 			}
-			classDescription = ERXRestClassDescriptionFactory.classDescriptionForClass(clazz, true);
+			classDescription = null; 
+			if (classDescription == null && !forceNonEntity) {
+				classDescription = ERXRestClassDescriptionFactory.classDescriptionForClass(clazz, true);
+			}
 			if (classDescription == null && !forceNonEntity) {
 				classDescription = ERXRestClassDescriptionFactory.classDescriptionForEntityName(clazz.getSimpleName());
 			}
