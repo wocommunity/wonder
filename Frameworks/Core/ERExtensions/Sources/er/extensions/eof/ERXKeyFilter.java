@@ -638,7 +638,7 @@ public class ERXKeyFilter {
 			if (dotIndex == -1) {
 				ERXKey key = new ERXKey(keyPath);
 				_excludes.addObject(key);
-				_includes.removeObjectForKey(key);
+				_includes.remove(key);
 			}
 			else {
 				ERXKeyFilter subFilter = include(new ERXKey(keyPath.substring(0, dotIndex)));
