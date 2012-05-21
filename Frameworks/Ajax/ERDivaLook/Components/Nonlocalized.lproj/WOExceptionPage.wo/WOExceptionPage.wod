@@ -38,7 +38,7 @@ methodname: WOHyperlink {
         ?methodName = errorline.methodName;
         ?line = errorline.lineNumber;
         ?filename = errorline.fileName;
-        ?errorMessage = errorMessage;
+//        ?errorMessage = errorMessage;
         ?fullClassName = errorline.packageClassPath;
 	string = errorline.methodName;
 }
