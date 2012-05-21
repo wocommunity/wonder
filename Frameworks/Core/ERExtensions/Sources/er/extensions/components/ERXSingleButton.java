@@ -6,7 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.components;
 
-import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
@@ -35,6 +34,9 @@ import er.extensions.foundation.ERXValueUtilities;
             use javascript code to set "document.location", which does not submit
             the form the button is in. The default value is <code>false</code>.
  * @binding name If is null takes context.elementID
+ * @binding class
+ * @binding style
+ * @binding id
  */
 public class ERXSingleButton extends WOComponent {
 	/**
@@ -60,23 +62,6 @@ public class ERXSingleButton extends WOComponent {
             !((ERXSession)session()).browser().isOmniWeb())
             result=false;
         return result;
-    }
-
-    public String buttonCssClass() {
-    	String css = (String) valueForBinding("css");
-    	if(css == null) {
-    		css = "";
-    	}
-    	WOAssociation assoc = _associationWithName("action");
-    	if(assoc != null) {
-    		css += " " + ERXSubmitButton.STYLE_PREFIX + assoc.keyPath().replaceAll("\\W+", "");
-    	} else {
-    		css += " " + ERXSubmitButton.STYLE_PREFIX + valueForBinding("directActionName");
-    	}
-    	if(css.length() == 0) {
-    		css = null;
-    	}
-    	return css;
     }
 
     public boolean useButton() {
@@ -119,5 +104,4 @@ public class ERXSingleButton extends WOComponent {
         }
         return !shouldSubmitForm() ? "javascript:document.location='"+ url +"'; return false;" : "";
     }
-
 }
