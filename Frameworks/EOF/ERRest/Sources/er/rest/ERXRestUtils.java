@@ -10,7 +10,9 @@ import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntityClassDescription;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOKeyValueCoding;
+import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
 import com.webobjects.foundation._NSUtilities;
@@ -115,6 +117,9 @@ public class ERXRestUtils {
 		else if (value instanceof Date) {
 			Date date = (Date) value;
 			formattedValue = ERXRestUtils.dateFormat(false, context).format(value);
+		}
+		else if (value instanceof NSData && ((NSData)value).length() == 24) {
+			formattedValue = NSPropertyListSerialization.stringFromPropertyList(value);
 		}
 		else {
 			formattedValue = value.toString();
@@ -226,6 +231,9 @@ public class ERXRestUtils {
 		else if (valueType != null && Double.class.isAssignableFrom(valueType)) {
 			parsedValue = ERXValueUtilities.DoubleValueWithDefault(value, null);
 		}
+		else if (valueType != null && NSData.class.isAssignableFrom(valueType)) {
+			parsedValue = ERXValueUtilities.dataValueWithDefault(value, null);
+		}		
 		else if (valueType != null && NSTimestamp.class.isAssignableFrom(valueType)) {
 			if (value instanceof NSTimestamp) {
 				parsedValue = value;

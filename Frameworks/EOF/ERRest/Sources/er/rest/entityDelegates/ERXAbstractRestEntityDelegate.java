@@ -234,6 +234,9 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 
 	protected String idForNode(ERXRestRequestNode attributeNode) {
 		Object idObj = attributeNode.id();
+		if(idObj instanceof NSData) {
+			idObj = NSPropertyListSerialization.stringFromPropertyList(idObj);
+		}		
 		String id = String.valueOf(idObj);
 		if (idObj != null && id.length() == 0) {
 			id = null;
