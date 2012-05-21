@@ -610,6 +610,11 @@ public class ERXValueUtilities {
 						throw new IllegalArgumentException("Failed to parse data from the value '" + obj + "'.");
 					}
 					value = (NSData) objValue;
+					if (value instanceof NSMutableData) {
+						// AK: we need NSData if we want to use it for a PK, but
+						// we get NSMutableData
+						value = new NSData(value);
+					}
 				}
 			} else {
 				throw new IllegalArgumentException("Failed to parse data from the value '" + obj + "'.");
