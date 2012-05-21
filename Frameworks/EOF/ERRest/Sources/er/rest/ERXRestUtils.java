@@ -116,6 +116,9 @@ public class ERXRestUtils {
 			Date date = (Date) value;
 			formattedValue = ERXRestUtils.dateFormat(false, context).format(value);
 		}
+		else if (value instanceof NSData && ((NSData)value).length() == 24) {
+			formattedValue = NSPropertyListSerialization.stringFromPropertyList(value);
+		}
 		else {
 			formattedValue = value.toString();
 		}
@@ -226,6 +229,9 @@ public class ERXRestUtils {
 		else if (valueType != null && Double.class.isAssignableFrom(valueType)) {
 			parsedValue = ERXValueUtilities.DoubleValueWithDefault(value, null);
 		}
+		else if (valueType != null && NSData.class.isAssignableFrom(valueType)) {
+			parsedValue = ERXValueUtilities.dataValueWithDefault(value, null);
+		}		
 		else if (valueType != null && NSTimestamp.class.isAssignableFrom(valueType)) {
 			if (value instanceof NSTimestamp) {
 				parsedValue = value;
