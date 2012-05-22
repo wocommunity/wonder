@@ -13,5 +13,6 @@
         </validation>
     <binding name="theme"/>
     <binding defaults="Boolean" name="mini"/>
+    <binding name="name"/>
     </wo>
 </wodefinitions>

@@ -14,5 +14,7 @@
     	
     	<binding defaults="Boolean" name="disabled"/>
     	<binding defaults="Boolean" name="hideLabel"/>
+	<binding name="name"/>
+    <binding defaults="Boolean" name="mini"/>
 	</wo>
 </wodefinitions>
