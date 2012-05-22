@@ -1,4 +1,5 @@
 PropertyName: ERMD2WPropertyName {
+	WOComponentName = d2wContext.propertyNameComponentName;
 	localContext = d2wContext;
 }
 
