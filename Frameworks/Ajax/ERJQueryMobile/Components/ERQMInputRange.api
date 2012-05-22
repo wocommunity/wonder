@@ -23,5 +23,6 @@
         </validation>
     <binding name="themeTrack"/>
     <binding defaults="Boolean" name="mini"/>
+    <binding name="name"/>
     </wo>
 </wodefinitions>
