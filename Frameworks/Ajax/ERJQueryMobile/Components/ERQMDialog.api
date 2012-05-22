@@ -3,5 +3,6 @@
     <wo class="ERQMDialog" wocomponentcontent="false">    <binding name="title"/>
     <binding name="theme"/>
     
+    <binding defaults="Boolean" name="withoutHeader"/>
     </wo>
 </wodefinitions>
