@@ -8,5 +8,7 @@
     <binding name="inline"/>
     <binding name="iconpos"/>
     <binding defaults="Boolean" name="mini"/>
+    <binding name="actionClass"/>
+    <binding name="directActionName"/>
     </wo>
 </wodefinitions>
