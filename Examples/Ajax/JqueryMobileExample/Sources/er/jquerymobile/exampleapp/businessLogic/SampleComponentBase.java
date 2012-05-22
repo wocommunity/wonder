@@ -1,7 +1,7 @@
 package er.jquerymobile.exampleapp.businessLogic;
 
-import webobjectsexamples.businesslogic.eo.Movie;
-import webobjectsexamples.businesslogic.eo.Talent;
+import webobjectsexamples.businesslogic.movies.common.Movie;
+import webobjectsexamples.businesslogic.movies.common.Talent;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;

@@ -12,7 +12,7 @@
 				
 					<!-- ▼Nested List Sample -->
 					<ul>
-						<wo:foreach list="$oneTalent.moviesDirected" item="$oneMovie">
+						<wo:foreach list="$oneTalent.moviesStarredIn" item="$oneMovie">
 							<wo:ERQMListViewElement action="$doShowOneMovieAction"><wo:str value = "$oneMovie.title" /></wo:ERQMListViewElement>
 						</wo:foreach>
 					</ul>

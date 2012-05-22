@@ -1,1 +1,0 @@
- -destination Sources -extension java -java -javaTemplate _WOdkaEntity.java -model Resources/Movies.eomodeld -packagedirs -subclassDestination Sources -subclassJavaTemplate WOdkaEntity.java -templatedir ../../../../WOdkaProject/WOdkaBuilder/Templates -verbose -loadModelGroup
