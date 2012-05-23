@@ -10,10 +10,10 @@
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaEOControl"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaJDBCAdaptor"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/commons-beanutils-1.7.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/commons-logging-1.1.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/commons-collections-3.2.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/ezmorph-1.0.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/json-lib-2.3-jdk15.jar"/>
+	<classpathentry kind="lib" path="Libraries/commons-beanutils-1.8.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
