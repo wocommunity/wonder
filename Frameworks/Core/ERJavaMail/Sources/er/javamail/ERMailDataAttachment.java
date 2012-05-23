@@ -41,16 +41,16 @@ public class ERMailDataAttachment extends ERMailAttachment {
 	public ERMailDataAttachment(String fileName, String id, byte content[]) {
 		super(content);
 		_mimeType = FileTypeMap.getDefaultFileTypeMap().getContentType(fileName);
-		this.setFileName(fileName);
-		this.setContentID(id);
+		_fileName = fileName;
+		_contentID = id;
 	}
 	
-	public ERMailDataAttachment(String aFilename, String anId, DataHandler aHandler)  {
+	public ERMailDataAttachment(String fileName, String id, DataHandler aHandler)  {
 		super(null);
-		this.setFileName(aFilename);
-		this.setContentID(anId);
+		_fileName = fileName;
+		_contentID = id;
 		_dataHandler = aHandler;
-		_mimeType = FileTypeMap.getDefaultFileTypeMap().getContentType(aFilename);
+		_mimeType = FileTypeMap.getDefaultFileTypeMap().getContentType(fileName);
 	}
 
 	/**

@@ -24,8 +24,8 @@ public class ERMailFileAttachment extends ERMailAttachment {
 
 	public ERMailFileAttachment(String fileName, String id, File content) {
 		super(content);
-		this.setFileName(fileName);
-		this.setContentID(id);
+		_fileName = fileName;
+		_contentID = id;
 	}
 
 	/**
