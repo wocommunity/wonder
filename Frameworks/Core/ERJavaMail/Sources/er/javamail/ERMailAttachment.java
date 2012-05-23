@@ -12,7 +12,7 @@ public abstract class ERMailAttachment {
 
 	public ERMailAttachment(Object content) {
 		super();
-		this.setContent(content);
+		_content = content;
 	}
 
 	protected Object content() {

@@ -115,8 +115,8 @@ public abstract class ERMailDelivery {
 	/** Designated constructor */
 	public ERMailDelivery(javax.mail.Session session) {
 		super();
-		this.setSession(session);
-		this.setMimeMessage(new MimeMessage(this.session()));
+		_session = session;
+		_mimeMessage = new MimeMessage(session);
 	}
 
 	/** Default constructor */
