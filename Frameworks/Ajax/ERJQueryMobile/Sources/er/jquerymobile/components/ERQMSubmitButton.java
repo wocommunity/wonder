@@ -32,4 +32,8 @@ public class ERQMSubmitButton extends ERQMInputBaseComponent {
     return result;
   }
 
+  public boolean hasActionBinding() {
+    return hasBinding("action");
+  }
+
 }

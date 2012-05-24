@@ -1,3 +1,7 @@
+##  Properies Info
+er.extensions.load.Properties.framework.ERDivaLook=load
+er.extensions.ERDivaLook.hasLocalization=true
+
 er.extensions.ERXWOForm.addDefaultSubmitButtonDefault=true
 er.extensions.foundation.ERXPatcher.DynamicElementsPatches.SubmitButton.useButtonTag=true
 er.extensions.ERXResponseRewriter.javascriptTypeAttribute=true

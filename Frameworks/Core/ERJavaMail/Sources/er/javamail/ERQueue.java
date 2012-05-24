@@ -57,7 +57,7 @@ public class ERQueue<T> extends Vector<T> {
 
 	public ERQueue(int maxSize) {
 		super();
-		this.setMaxSize(maxSize);
+		_maxSize = maxSize;
 	}
 
 	/**

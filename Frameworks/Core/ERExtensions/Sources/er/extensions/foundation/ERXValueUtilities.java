@@ -7,6 +7,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableData;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSRange;
 import com.webobjects.foundation.NSSet;
@@ -610,6 +611,11 @@ public class ERXValueUtilities {
 						throw new IllegalArgumentException("Failed to parse data from the value '" + obj + "'.");
 					}
 					value = (NSData) objValue;
+					if (value instanceof NSMutableData) {
+						// AK: we need NSData if we want to use it for a PK, but
+						// we get NSMutableData
+						value = new NSData(value);
+					}
 				}
 			} else {
 				throw new IllegalArgumentException("Failed to parse data from the value '" + obj + "'.");

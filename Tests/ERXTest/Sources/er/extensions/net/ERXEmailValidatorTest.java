@@ -30,11 +30,11 @@ public class ERXEmailValidatorTest extends ERXTestCase {
 	}
 	
 	public void testIsValidDomainString() {
-		Assert.assertEquals(Boolean.TRUE, ERXEmailValidator.isValidDomainString("gmail.com", 500));
+		Assert.assertTrue(!Boolean.FALSE.equals(ERXEmailValidator.isValidDomainString("gmail.com", 500)));
 		Assert.assertNull(ERXEmailValidator.isValidDomainString("gmail.com", 0));
-		Assert.assertEquals(Boolean.FALSE, ERXEmailValidator.isValidDomainString("flitter.blah", 500));
-		Assert.assertEquals(Boolean.TRUE, ERXEmailValidator.isValidDomainString("x.com", 500));
-		Assert.assertEquals(Boolean.FALSE, ERXEmailValidator.isValidDomainString(" x.com", 500));
+		Assert.assertTrue(!Boolean.TRUE.equals(ERXEmailValidator.isValidDomainString("flitter.blah", 500)));
+		Assert.assertTrue(!Boolean.FALSE.equals(ERXEmailValidator.isValidDomainString("x.com", 500)));
+		Assert.assertTrue(!Boolean.TRUE.equals(ERXEmailValidator.isValidDomainString(" x.com", 500)));
 	}
 	
 	public void testHostNameForEmailString() {

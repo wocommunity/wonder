@@ -1,0 +1,186 @@
+{
+    attributes = (
+        {
+            allowsNull = Y; 
+            columnName = CATEGORY; 
+            externalType = char; 
+            name = category; 
+            prototypeName = varchar16; 
+            width = 20; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = "DATE_RELEASED"; 
+            externalType = timestamp; 
+            name = dateReleased; 
+            prototypeName = dateTime; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = "MOVIE_ID"; 
+            externalType = integer; 
+            name = movieID; 
+            prototypeName = id; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = "POSTER_NAME"; 
+            externalType = char; 
+            name = posterName; 
+            prototypeName = varchar255; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = RATED; 
+            externalType = char; 
+            name = rated; 
+            prototypeName = varchar10; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = REVENUE; 
+            externalType = decimal; 
+            name = revenue; 
+            precision = 10; 
+            prototypeName = amount; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = "STUDIO_ID"; 
+            externalType = integer; 
+            name = studioID; 
+            prototypeName = id; 
+        }, 
+        {
+            columnName = TITLE; 
+            externalType = char; 
+            name = title; 
+            prototypeName = varchar255; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = "TRAILER_NAME"; 
+            externalType = char; 
+            name = trailerName; 
+            prototypeName = varchar255; 
+        }
+    ); 
+    attributesUsedForLocking = (
+        title, 
+        movieID, 
+        dateReleased, 
+        category, 
+        revenue, 
+        studioID, 
+        posterName, 
+        trailerName, 
+        rated
+    ); 
+    className = "webobjectsexamples.businesslogic.eo.Movie"; 
+    classProperties = (
+        category, 
+        dateReleased, 
+        title, 
+        directors, 
+        revenue, 
+        roles, 
+        plotSummary, 
+        studio, 
+        posterName, 
+        trailerName, 
+        reviews, 
+        voting, 
+        rated
+    ); 
+    externalName = MOVIE; 
+    internalInfo = {
+        "_clientClassPropertyNames" = (
+            category, 
+            dateReleased, 
+            title, 
+            directors, 
+            revenue, 
+            roles, 
+            plotSummary, 
+            studio, 
+            posterName, 
+            trailerName, 
+            reviews, 
+            voting, 
+            rated
+        ); 
+        "_javaClientClassName" = EOGenericRecord; 
+        "_nameInObjectStore" = MOVIE; 
+    }; 
+    maxNumberOfInstancesToBatchFetch = 10; 
+    name = Movie; 
+    primaryKeyAttributes = (movieID); 
+    relationships = (
+        {
+            definition = "toDirector.toTalent"; 
+            joinSemantic = EOInnerJoin; 
+            name = directors; 
+        }, 
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = PlotSummary; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = movieID; sourceAttribute = movieID; }); 
+            name = plotSummary; 
+            ownsDestination = Y; 
+            propagatesPrimaryKey = Y; 
+        }, 
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = Review; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = movieID; sourceAttribute = movieID; }); 
+            name = reviews; 
+            ownsDestination = Y; 
+        }, 
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = MovieRole; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = movieID; sourceAttribute = movieID; }); 
+            name = roles; 
+            numberOfToManyFaultsToBatchFetch = 20; 
+            ownsDestination = Y; 
+            propagatesPrimaryKey = Y; 
+        }, 
+        {
+            destination = Studio; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = studioID; sourceAttribute = studioID; }); 
+            name = studio; 
+            numberOfToManyFaultsToBatchFetch = 0; 
+        }, 
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = Director; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = movieID; sourceAttribute = movieID; }); 
+            name = toDirector; 
+            ownsDestination = Y; 
+            propagatesPrimaryKey = Y; 
+        }, 
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = Voting; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = movieID; sourceAttribute = movieID; }); 
+            name = voting; 
+            ownsDestination = Y; 
+            propagatesPrimaryKey = Y; 
+        }
+    ); 
+    storedProcedureNames = {}; 
+}
