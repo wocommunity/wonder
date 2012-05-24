@@ -77,7 +77,7 @@ public class NSArraySerializer extends AbstractSerializer {
 		try {
 			Enumeration e = nsarray.objectEnumerator();
 			while (e.hasMoreElements()) {
-				Object json = ser.marshall(state, arr, e.nextElement(), new Integer(index));
+				Object json = ser.marshall(state, arr, e.nextElement(), Integer.valueOf(index));
 				if (JSONSerializer.CIRC_REF_OR_DUPLICATE != json) {
 					arr.put(json);
 				}

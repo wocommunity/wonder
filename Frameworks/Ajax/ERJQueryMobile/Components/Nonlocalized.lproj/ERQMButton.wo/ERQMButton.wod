@@ -1,0 +1,25 @@
+ACTION : ERXHyperlinkResource {
+	action = ^action;
+	string = ^string;
+	data-role = "button";
+	class = cssClass;
+	data-icon = ^icon;
+	data-theme = ^theme;
+	data-inline = ^inline;
+	data-iconpos = ^iconpos;
+	data-transition = ^transition;
+	otherTagString = otherTagString;
+}
+
+LINK : ERXHyperlinkResource {
+	linkResource = ^linkResource;
+	string = ^string;
+	data-role = "button";
+	class = cssClass;
+	data-icon = ^icon;
+	data-theme = ^theme;
+	data-inline = ^inline;
+	data-iconpos = ^iconpos;
+	data-transition = ^transition;
+	otherTagString = otherTagString;
+}

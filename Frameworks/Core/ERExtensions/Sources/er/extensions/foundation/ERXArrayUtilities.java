@@ -7,6 +7,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -472,7 +473,7 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-     * Simple comparision method to see if two array
+     * Simple comparison method to see if two array
      * objects are identical sets.
      * @param a1 first array
      * @param a2 second array
@@ -1780,15 +1781,17 @@ public class ERXArrayUtilities extends Object {
     }
     
     /**
-     * @deprecated
+     * @deprecated use {@link #filteredArrayWithEntityFetchSpecification(NSArray, String, String, NSDictionary)}
      */
+    @Deprecated
     public static <T> NSArray<T> filteredArrayWithFetchSpecificationNamedEntityNamedBindings(NSArray<T> array, String fetchSpec, String entity, NSDictionary<String, ?> bindings) {
         return filteredArrayWithEntityFetchSpecification( array, entity, fetchSpec, bindings);
     }
 
     /**
-     * @deprecated
+     * @deprecated use {@link #filteredArrayWithEntityFetchSpecification(NSArray, String, String, NSDictionary)}
      */
+    @Deprecated
     public static <T> NSArray<T> filteredArrayWithFetchSpecificationNamedEntityNamed(NSArray<T> array, String fetchSpec, String entity) {
         return filteredArrayWithEntityFetchSpecification(array, entity, fetchSpec, null);
     }
@@ -1975,7 +1978,7 @@ public class ERXArrayUtilities extends Object {
         return result.immutableClone();
     }
     
-    /** Removes all occurencies of NSKeyValueCoding.NullValue in the provided array
+    /** Removes all occurrences of NSKeyValueCoding.NullValue in the provided array
      * @param array the array from which the NullValue should be removed
      * @return a new NSArray with the same order than the original array but 
      * without NSKeyValueCoding.NullValue objects
@@ -1984,7 +1987,7 @@ public class ERXArrayUtilities extends Object {
         return removeNullValues(array, array);
     }
     
-    /** Removes all occurencies of NSKeyValueCoding.NullValue in the provided array
+    /** Removes all occurrences of NSKeyValueCoding.NullValue in the provided array
      * @param target array to remove objects from
      * @param array array of values
      * @return a new NSArray with the same order than the original array but 
@@ -2005,7 +2008,7 @@ public class ERXArrayUtilities extends Object {
     }
     
     /** Converts an Object array to a String array by casting each element.
-     * This is analogus to <code>String[] myStringArray = (String[])myObjectArray;</code> 
+     * This is analogous to <code>String[] myStringArray = (String[])myObjectArray;</code> 
      * except that it creates a clone of the array.
      * @param o an Object array containing String elements
      * @return a String array containing the same elements
@@ -2279,7 +2282,7 @@ public class ERXArrayUtilities extends Object {
 	 */
 	public static <T> void swapObjectsAtIndexesInArray (NSMutableArray<T> array, int indexOfA, int indexOfB) {
 		try {
-			T tmp = (T)array.replaceObjectAtIndex(array.objectAtIndex(indexOfA), indexOfB);
+			T tmp = array.replaceObjectAtIndex(array.objectAtIndex(indexOfA), indexOfB);
 			array.replaceObjectAtIndex(tmp, indexOfA);
 		}
 		catch (Exception e) {
@@ -2368,4 +2371,80 @@ public class ERXArrayUtilities extends Object {
 		return clonedSet;
     }
 	
+	/**
+	 * <span class="en">
+	 * Check if an NSArray is null or Empty
+	 * 
+	 * @param aNSArray - NSArray
+	 * 
+	 * @return if an NSArray is null or Empty <code>true</code> returns
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * 	配列が null か空かをチェックします
+	 * 
+	 * 	@param aNSArray - NSArray
+	 * 
+	 * 	@return 配列が null か空の場合は <code>true</code> が戻ります
+	 * </span>
+	 */
+	@SuppressWarnings("javadoc")
+	public static boolean arrayIsNullOrEmpty(NSArray<?> aNSArray){
+		if(aNSArray == null)
+			return true;
+
+		if(aNSArray.isEmpty())
+			return true;
+
+		return false;
+	}
+
+	/**
+	 * <span class="en">
+	 * 	To create oneLine Log for an NSArray&lt;String&gt;
+	 * 
+	 * 	@param aNSArray - NSArray
+	 * 
+	 * 	@return change a NSArray to String
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * 	NSArray 配列をログとして出力する時に複数行に渡らないで、一行で収まるように
+	 * 
+	 * 	@param aNSArray - 文字列配列
+	 * 
+	 * 	@return NSArray を String に変換した行
+	 * </span>
+	 */
+	@SuppressWarnings("javadoc")
+	public static String arrayToLogstring(NSArray<String> aNSArray){
+		String result = "( ";
+
+		for(String obj : aNSArray) {
+			result += obj + ", ";
+		}
+		result = result.substring(0, result.length()-2);
+		result += " )";
+
+		return result;
+	}
+
+
+	public static <T> T requiredOneFilteredArrayWithQualifierEvaluation(NSArray<T> array, EOQualifier qualifier) {
+		NSArray<T> results = requiredFilteredArrayWithQualifierEvaluation(array, qualifier);
+		if (results.count() > 1) {
+			throw new NoSuchElementException("There was more than one element in the array " + array.toString() + " that matched the qualifier '" + qualifier + "'.");
+		}
+		T result = results.lastObject();
+		return result;
+	}
+
+	public static <T> NSArray<T> requiredFilteredArrayWithQualifierEvaluation(NSArray<T> array, EOQualifierEvaluation qualifier) {
+		NSArray<T> results = filteredArrayWithQualifierEvaluation(array, qualifier);
+		if (results.isEmpty()) {
+			throw new IllegalStateException("There were no elements in the array " + array.toString() + " that matched the qualifier '" + qualifier + "'.");
+		}
+		return results;
+	}
+
 }

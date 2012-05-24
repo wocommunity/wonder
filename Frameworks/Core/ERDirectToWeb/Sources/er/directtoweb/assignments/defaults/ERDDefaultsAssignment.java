@@ -12,10 +12,17 @@ import er.directtoweb.assignments.ERDAssignment;
 
 
 /**
- * @deprecated use ERDDefaultModelAssignment
+ * @deprecated use {@link ERDDefaultModelAssignment}
  */
-
+@Deprecated
 public class ERDDefaultsAssignment extends ERDDefaultModelAssignment {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     public ERDDefaultsAssignment(EOKeyValueUnarchiver u) { super(u); }
     public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver eokeyvalueunarchiver)  {
         ERDAssignment.logDeprecatedMessage(ERDDefaultsAssignment.class, ERDDefaultModelAssignment.class);

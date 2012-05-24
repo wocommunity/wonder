@@ -26,6 +26,13 @@ import er.extensions.ERXExtensions;
  */
 public class ERXSortOrdering extends EOSortOrdering {
 	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
 	 * Constructs an ERXSortOrdering (see EOSortOrdering).
 	 * 
 	 * @param key
@@ -60,6 +67,21 @@ public class ERXSortOrdering extends EOSortOrdering {
 	public ERXSortOrderings then(EOSortOrdering nextSortOrdering) {
 		ERXSortOrderings sortOrderings = array();
 		sortOrderings.addObject(nextSortOrdering);
+		return sortOrderings;
+	}
+
+	/**
+	 * Returns ERXSortOrderings with this sort ordering followed by the provided
+	 * array of next sort orderings.
+	 * 
+	 * @param nextSortOrderings
+	 *            the next sort orderings to chain to this
+	 * @return an array of sort orderings
+	 * @author David Avendasora
+	 */
+	public ERXSortOrderings then(NSArray<EOSortOrdering> nextSortOrderings) {
+		ERXSortOrderings sortOrderings = array();
+		sortOrderings.addObjectsFromArray(nextSortOrderings);
 		return sortOrderings;
 	}
 
@@ -143,6 +165,13 @@ public class ERXSortOrdering extends EOSortOrdering {
 	 */
 	public static class ERXSortOrderings extends NSMutableArray<EOSortOrdering> {
 		/**
+		 * Do I need to update serialVersionUID?
+		 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+		 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+		 */
+		private static final long serialVersionUID = 1L;
+
+		/**
 		 * Constructs an empty ERXSortOrderings.
 		 */
 		public ERXSortOrderings() {
@@ -185,6 +214,19 @@ public class ERXSortOrdering extends EOSortOrdering {
 		 */
 		public ERXSortOrderings then(EOSortOrdering nextSortOrdering) {
 			addObject(nextSortOrdering);
+			return this;
+		}
+
+		/**
+		 * Adds the given sort orderings to the end of this list and returns
+		 * "this" so it can be chained again.
+		 * 
+		 * @param nextSortOrderings the sort ordering to add
+		 * @return this (with the sort orderings appended)
+		 * @author David Avendasora
+		 */
+		public ERXSortOrderings then(ERXSortOrderings nextSortOrderings) {
+			addObjectsFromArray(nextSortOrderings);
 			return this;
 		}
 

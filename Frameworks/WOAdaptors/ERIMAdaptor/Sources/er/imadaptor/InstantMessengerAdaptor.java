@@ -163,8 +163,9 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 	}
 
 	/**
-	 * @deprecated use defaultInstantMessenger() instead
+	 * @deprecated use {@link #defaultInstantMessenger()}
 	 */
+	@Deprecated
 	public IInstantMessenger instantMessenger() {
 		return defaultInstantMessenger();
 	}
@@ -399,7 +400,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 				catch (InterruptedException t) {
 					// ignore
 				}
-				InstantMessengerAdaptor.this.removeExpiredConversations();
+				removeExpiredConversations();
 			}
 		}
 	}

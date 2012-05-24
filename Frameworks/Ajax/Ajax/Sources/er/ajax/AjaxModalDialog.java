@@ -137,6 +137,12 @@ import er.extensions.components._private.ERXWOForm;
  * TODO add transitioning to other contents without closing dialog
  */
 public class AjaxModalDialog extends AjaxComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/** JavaScript to execute on the client to close the modal dialog */
 	public static final String Close = "AMD.close();";
@@ -255,8 +261,9 @@ public class AjaxModalDialog extends AjaxComponent {
 	 * 
 	 * @see #update(WOContext, String)
 	 * @param context the current WOContext
-	 * @deprecated use update(WOContext, null) instead
+	 * @deprecated use {@link #update(WOContext, String)}
 	 */
+	@Deprecated
 	public static void update(WOContext context) {
 		update(context, null);
 	}
@@ -267,8 +274,9 @@ public class AjaxModalDialog extends AjaxComponent {
 	 * @see #update(WOContext, String)
 	 * @param context the current WOContext
 	 * @param title the new title for the dialog window
-	 * @deprecated use update(WOContext, title) instead
+	 * @deprecated use {@link #update(WOContext, String)}
 	 */
+	@Deprecated
 	public static void setTitle(WOContext context, String title) {
 		AjaxUtils.javascriptResponse("$wi('MB_caption').innerHTML=" + AjaxValue.javaScriptEscaped(title) + ";", context);
 	}

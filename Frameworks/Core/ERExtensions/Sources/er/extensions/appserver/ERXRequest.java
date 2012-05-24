@@ -474,7 +474,7 @@ public  class ERXRequest extends WORequest {
     }
     
     /**
-     * @deprecated Use remoteHostAddress() instead
+     * @deprecated use {@link #remoteHostAddress()}
      */
     @Deprecated
 	public String remoteHost() {

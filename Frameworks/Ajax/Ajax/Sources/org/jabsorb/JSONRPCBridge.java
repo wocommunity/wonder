@@ -589,7 +589,7 @@ public class JSONRPCBridge implements Serializable
     }
     else
     {
-      if ((oi = resolveObject(new Integer(objectID))) == null)
+      if ((oi = resolveObject(Integer.valueOf(objectID))) == null)
       {
         return new JSONRPCResult(JSONRPCResult.CODE_ERR_NOMETHOD, requestId,
             JSONRPCResult.MSG_ERR_NOMETHOD);

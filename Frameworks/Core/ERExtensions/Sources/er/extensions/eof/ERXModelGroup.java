@@ -617,9 +617,9 @@ public class ERXModelGroup extends EOModelGroup {
 			if (d == null)
 				d = NSDictionary.EmptyDictionary;
 			Object o = d.objectForKey("entityCode");
-			cachedValue = o == null ? null : new Integer(o.toString());
+			cachedValue = o == null ? null : Integer.valueOf(o.toString());
 			if (cachedValue == null) {
-				cachedValue = new Integer(0);
+				cachedValue = Integer.valueOf(0);
 			}
 			cache.put(entity, cachedValue);
 		}
@@ -1265,7 +1265,7 @@ public class ERXModelGroup extends EOModelGroup {
 			// 5.4 - API changed
 			try {
 				Method isKeyEnumOverriddenMethod = att.getClass().getMethod("_isKeyEnumOverriden", new Class[] { int.class });
-				Boolean isKeyEnumOverridden = (Boolean)isKeyEnumOverriddenMethod.invoke(att, new Object[] { new Integer(key) });
+				Boolean isKeyEnumOverridden = (Boolean)isKeyEnumOverriddenMethod.invoke(att, new Object[] { Integer.valueOf(key) });
 				return isKeyEnumOverridden.booleanValue();
 			}
 			catch (Exception e) {

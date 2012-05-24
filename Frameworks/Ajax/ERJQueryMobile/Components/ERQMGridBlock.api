@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERQMGridBlock" wocomponentcontent="true">    <binding name="theme"/>
+    <binding name="blockNumber"/>
+    <validation message="'blockNumber' is a required binding.">
+            <unbound name="blockNumber"/>
+        </validation>
+    </wo>
+</wodefinitions>

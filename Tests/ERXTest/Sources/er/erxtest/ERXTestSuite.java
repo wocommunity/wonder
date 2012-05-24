@@ -50,6 +50,8 @@ public class ERXTestSuite {
     suite.addTestSuite(er.extensions.formatters.ERXOrdinalDateFormatterTests.class);
     
     suite.addTestSuite(er.extensions.jdbc.MicrosoftSQLHelperTest.class);
+    
+    suite.addTestSuite(er.extensions.net.ERXEmailValidatorTest.class);
 
     suite.addTestSuite(er.memoryadaptor.ERMemoryAdaptorTest.class);
 
@@ -66,6 +68,8 @@ public class ERXTestSuite {
     // TODO - How long is this supposed to take to run? Is it hanging?
     //
     //suite.addTestSuite(ERXExpiringCacheTestCase.class);
+
+    suite.addTestSuite(er.extensions.excel.EGSimpleWorkbookHelperTest.class);
 
     suite.addTestSuite(er.chronic.RepeaterMonthNameTest.class);
     suite.addTestSuite(er.chronic.RepeaterYearTest.class);

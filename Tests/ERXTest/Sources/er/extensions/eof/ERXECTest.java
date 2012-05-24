@@ -1,12 +1,19 @@
 
 package er.extensions.eof;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import junit.framework.Assert;
 
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSData;
 
 import er.erxtest.ERXTestCase;
 import er.erxtest.ERXTestUtilities;
@@ -43,6 +50,45 @@ public class ERXECTest extends ERXTestCase {
         Assert.assertNotNull(ec3);
 
         Assert.assertEquals(parentEC3, ec3.parentObjectStore());
+    }
+    
+    public void testSerializablilty() throws IOException, ClassNotFoundException {
+		EOEditingContext ec = ERXEC.newEditingContext();
+		Company.createCompany(ec, "Some fruit company");
+		
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		ObjectOutputStream oos = null;
+		NSData data = null;
+
+		try {
+			oos = new ObjectOutputStream(baos);
+			oos.writeObject(ec);
+			oos.flush();
+			byte[] bytes = baos.toByteArray();
+			data = new NSData(bytes);
+		} finally {
+			if (oos != null) {
+				oos.close();
+			}
+		}
+		
+		Object object = null;
+		byte[] bytes = data.bytes();
+		ObjectInputStream ois = null;
+		try {
+			ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
+			object = ois.readObject();
+		} finally {
+			if (ois != null) {
+				ois.close();
+			}
+		}
+
+		EOEditingContext ec2 = (EOEditingContext) object;
+		
+		Assert.assertNotSame(ec, ec2);
+		ec.dispose();
+		ec2.saveChanges();
     }
 
 	/**

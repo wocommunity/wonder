@@ -17,6 +17,13 @@ import er.extensions.foundation.ERXProperties;
  * @author mschrag
  */
 public class ERS3Attachment extends _ERS3Attachment {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public static final String STORAGE_TYPE = "s3";
 	private static Logger log = Logger.getLogger(ERS3Attachment.class);
 

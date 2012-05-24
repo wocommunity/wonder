@@ -1,6 +1,4 @@
 /*
- $Id$
-
  ERMessage.java - Camille Troillard - tuscland@mac.com
  */
 
@@ -17,37 +15,76 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
 /**
+ * <span class="en">
  * ERMessage represents an email message.
+ * </span>
+ * 
+ * <span class="ja">
+ * ERMessage はメール・メッセージを表現します
+ * </span>
  */
 public class ERMessage extends Object {
 	/**
+	 * <span class="en">
 	 * Defines a delegate interface for receiving notifications
 	 * about email messages.
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * メール・メッセージについての通知を受信するデリゲート・インタフェースを定義します。
+	 * </span>
 	 * 
 	 * @author mschrag
 	 */
 	public static interface Delegate {
 		/**
+		 * <span class="en">
 		 * Called when a message is successfully delivered.
 		 * 
 		 * @param message the message that was delivered
+		 * </span>
+		 * 
+		 * <span class="ja">
+		 * メッセージ送信が成功した場合
+		 * 
+		 * @param message - 成功したメッセージ
+		 * </span>
 		 */
 		public void deliverySucceeded(ERMessage message);
 		
 		/**
+		 * <span class="en">
 		 * Called when a message fails with invalid recipients.  You will get
 		 * a call to invalidRecipients AND a call to deliveryFailed.
 		 * 
 		 * @param message the message that was not delivered
 		 * @param invalidRecipientAddresses the array of invalid email addresses
+		 * </span>
+		 * 
+		 * <span class="ja">
+		 * メッセージが送信先などで失敗したい場合
+		 * invalidRecipients と deliveryFailed にコールが行きます。
+		 * 
+		 * @param message - 送信できなかったしたメッセージ
+		 * @param invalidRecipientAddresses - 失敗したメール・アドレス配列
+		 * </span>
 		 */
 		public void invalidRecipients(ERMessage message, NSArray<String> invalidRecipientAddresses);
 		
 		/**
+		 * <span class="en">
 		 * Called when a message fails to deliver.
 		 * 
 		 * @param message the message that failed
 		 * @param failure the exception of the failure
+		 * </span>
+		 * 
+		 * <span class="ja">
+		 * メッセージ送信が失敗した場合
+		 * 
+		 * @param message - 失敗したメッセージ
+		 * @param failure - 失敗した原因
+		 * </span>
 		 */
 		public void deliveryFailed(ERMessage message, Throwable failure);
 	}
@@ -96,9 +133,17 @@ public class ERMessage extends Object {
 	}
 
 	/**
+	 * <span class="en">
 	 * @param recipientType
 	 *            which can be: <code>Message.RecipientType.To</code>, <code>Message.RecipientType.CC</code>, or
 	 *            <code>Message.RecipientType.BCC</code>
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * @param recipientType
+	 * 			<code>Message.RecipientType.To</code>、 <code>Message.RecipientType.CC</code> 又は 
+	 * 			<code>Message.RecipientType.BCC</code> の中の一つ
+	 * </span>
 	 */
 	public Address[] recipients(Message.RecipientType recipientType) throws MessagingException {
 		return _message == null ? null : _message.getRecipients(recipientType);

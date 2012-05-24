@@ -142,3 +142,20 @@ BackupButton: WOSubmitButton {
     action = backupConfiguration;
     value = "Backup Now";
 }
+
+AdaptorInfoForm: WOForm {
+	target = "_blank";
+}
+
+AdaptorInfoUsername: WOTextField {
+	value = adaptorInfoUsername;
+}
+
+AdaptorInfoPassword: WOTextField {
+	value = adaptorInfoPassword;
+}
+
+AdaptorInfoSubmit: WOSubmitButton {
+	action = adaptorInfoLoginClicked;
+	value = "Log In";
+}

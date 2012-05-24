@@ -15,6 +15,8 @@ This adaptor is intended to be used as a server plugin where state information c
 <P>
 This document describes how to build the adaptor. It also describes briefly how the adaptor works so that developers can modify it to suit their own needs. For information on installing the adaptor, see the installation files for <A HREF="CGI/Installation.html">CGI</A>, <A HREF="Apache/Installation.html">Apache</A>, <A HREF="IIS/Installation.html">Microsoft ISAPI</A>, or <A HREF="NSAPI/Installation.html">Netscape NSAPI</A>.
 </P>
+
+<HR>
 <H2>Building the adaptor</H2>
 <P>
 Source files including makefiles are located in <CODE>$NEXT_ROOT/Developer/Examples/WebObjects/Source/Adaptors</CODE>. Build flags and configuration changes that are specific to OS platforms and/or related to other installed software, like Netscape Web Server, are found in make.config or the makefiles.
@@ -53,6 +55,18 @@ Type <CODE>make</CODE> in the directory <CODE>$NEXT_ROOT/Developer/Examples/WebO
 <P>
 Note: The Windows version of WebObjects includes an older C compiler and linker. There are known compatibility issues which make it impossible to build the plugin adaptor on Windows using the supplied compiler and linker with current third party libraries, including the current iPlanet. It is possible to build the plugin adaptors on Windows using older versions of the Netscape, although the Netscape plugin may not work with iPlanet 6.0. It may also be possible to port the adaptor source to a non-WebObjects build environment to build using current Netscape.
 </P>
+
+<hr>
+<h2>Developing with Eclipse</h2>
+<p>
+The project contains an Eclipse project. You can install the C language plugin by going to Eclipse and choosing:<br/>
+Help -> Install New Software -> Helios (or your eclipse version) -> Program Languages -> C/C++ Development Tools (CDT)
+</p>
+<p>
+Then import the project by choosing File -> Import -> General -> Existing Projects into Workspace.  Select the Root Directory as:<br/>
+&lt;wonder&gt;/Utilities/Adaptors<br/>
+where &lt;wonder&gt; is the root of your wonder source tree.
+</p>
 
 <HR>
 <H2>Code roadmap</H2>

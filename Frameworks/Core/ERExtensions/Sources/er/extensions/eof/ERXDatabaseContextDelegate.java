@@ -64,6 +64,13 @@ public class ERXDatabaseContextDelegate {
 	public static final String DatabaseContextFailedToFetchObject = "DatabaseContextFailedToFetchObject";
 	
     public static class ObjectNotAvailableException extends EOObjectNotAvailableException {
+    	/**
+    	 * Do I need to update serialVersionUID?
+    	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+    	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+    	 */
+    	private static final long serialVersionUID = 1L;
+
     	private EOGlobalID globalID;
     	
 		public ObjectNotAvailableException(String message) {
@@ -176,7 +183,13 @@ public class ERXDatabaseContextDelegate {
 			} else if(exLog.isInfoEnabled()) {
 				exLog.info("Database Exception occured: " + throwable);
 			}
-			boolean handled = ERXSQLHelper.newSQLHelper(databaseContext).handleDatabaseException(databaseContext, throwable);
+			boolean handled = false;
+			try {
+				handled = ERXSQLHelper.newSQLHelper(databaseContext).handleDatabaseException(databaseContext, throwable);
+			} catch(RuntimeException e) {
+				databaseContext.rollbackChanges();
+				throw e;
+			}
 			if(!handled && throwable.getMessage() != null && throwable.getMessage().indexOf("_obtainOpenChannel") != -1) {
 				NSArray models = databaseContext.database().models();
 				for(Enumeration e = models.objectEnumerator(); e.hasMoreElements(); ) {

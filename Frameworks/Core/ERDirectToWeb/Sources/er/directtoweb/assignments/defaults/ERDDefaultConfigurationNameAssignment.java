@@ -20,6 +20,12 @@ import er.directtoweb.assignments.ERDComputingAssignmentInterface;
  * names for the current entity in the context.
  */
 public class ERDDefaultConfigurationNameAssignment extends ERDAssignment {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** holds the array of keys this assignment depends upon */
     public static final NSArray _DEPENDENT_KEYS=new NSArray(new String[] {"propertyKey", "object.entityName", "entity.name"});

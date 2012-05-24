@@ -1,5 +1,7 @@
 package er.extensions.components;
 
+import java.io.Serializable;
+
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
@@ -52,6 +54,12 @@ import er.extensions.foundation.ERXSimpleTemplateParser;
  * 
  */
 public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private static Logger log = Logger.getLogger(ERXInlineTemplate.class);
 
@@ -266,7 +274,14 @@ public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
 		}
 	}
 
-	public static class Error {
+	public static class Error implements Serializable {
+		/**
+		 * Do I need to update serialVersionUID?
+		 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+		 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+		 */
+		private static final long serialVersionUID = 1L;
+
 		private Throwable _t;
 
 		private String _method;

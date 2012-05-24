@@ -18,7 +18,13 @@ import com.webobjects.foundation.NSArray;
  * @param <T>
  */
 public class ERXFaultArray<T extends EOEnterpriseObject> extends NSArray<T> {
-	
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private EOEditingContext _editingContext;
 	private EOGlobalID[] _array;
 	private WeakReference<T>[] _refs;

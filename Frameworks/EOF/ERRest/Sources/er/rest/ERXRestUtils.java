@@ -10,7 +10,9 @@ import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntityClassDescription;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOKeyValueCoding;
+import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
 import com.webobjects.foundation._NSUtilities;
@@ -116,6 +118,9 @@ public class ERXRestUtils {
 			Date date = (Date) value;
 			formattedValue = ERXRestUtils.dateFormat(false, context).format(value);
 		}
+		else if (value instanceof NSData && ((NSData)value).length() == 24) {
+			formattedValue = NSPropertyListSerialization.stringFromPropertyList(value);
+		}
 		else {
 			formattedValue = value.toString();
 		}
@@ -203,7 +208,7 @@ public class ERXRestUtils {
 			parsedValue = ERXValueUtilities.BooleanValueWithDefault(value, null);
 		}
 		else if (valueType != null && Character.class.isAssignableFrom(valueType)) {
-			parsedValue = new Character(((String) value).charAt(0)); // MS: Presumes String
+			parsedValue = Character.valueOf(((String) value).charAt(0)); // MS: Presumes String
 		}
 		else if (valueType != null && Byte.class.isAssignableFrom(valueType)) {
 			parsedValue = Byte.valueOf((String) value); // MS: Presumes String
@@ -226,6 +231,9 @@ public class ERXRestUtils {
 		else if (valueType != null && Double.class.isAssignableFrom(valueType)) {
 			parsedValue = ERXValueUtilities.DoubleValueWithDefault(value, null);
 		}
+		else if (valueType != null && NSData.class.isAssignableFrom(valueType)) {
+			parsedValue = ERXValueUtilities.dataValueWithDefault(value, null);
+		}		
 		else if (valueType != null && NSTimestamp.class.isAssignableFrom(valueType)) {
 			if (value instanceof NSTimestamp) {
 				parsedValue = value;
@@ -235,13 +243,13 @@ public class ERXRestUtils {
 				boolean spaces = strValue.indexOf(' ') != -1;
 				String rfcFormat = ERXProperties.stringForKeyWithDefault("er.rest.rfcDateFormat", "rfc822");					
 				if ("rfc3339".equals(rfcFormat)) {
-					SimpleDateFormat formatter = null;
+					SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 					java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("(.*[\\-,\\+]{1}[0-9]{1,2}):([0-9]{1,2})");
 					java.util.regex.Matcher matcher = pattern.matcher(strValue);
 					if (matcher.matches()) {
 						try {
 							strValue = matcher.group(1) + matcher.group(2);
-							parsedValue = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parseObject(strValue);
+							parsedValue = formatter.parseObject(strValue);
 							if (parsedValue instanceof java.util.Date) {
 								parsedValue = new NSTimestamp((Date)parsedValue);
 							} 

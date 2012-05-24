@@ -207,7 +207,11 @@ public class ERXResponseRewriter {
 	 */
 	public static NSMutableDictionary<String, Object> ajaxPageUserInfo(WOContext context) {
 		WOComponent page = context.page();
-		NSMutableDictionary<String, Object> pageInfo = ERXResponseRewriter._ajaxPageUserInfos.get(page);
+		ERXSession session = ERXSession.session();
+		boolean sessionStoresPageInfo = session != null && session.storesPageInfo();
+		Map<WOComponent, NSMutableDictionary<String, Object>> pageInfoDict =
+				sessionStoresPageInfo?session.pageInfoDictionary():ERXResponseRewriter._ajaxPageUserInfos;
+		NSMutableDictionary<String, Object> pageInfo = pageInfoDict.get(page);
 		String contextID = context.contextID();
 		if (contextID == null) {
 			contextID = "none";
@@ -218,7 +222,7 @@ public class ERXResponseRewriter {
 		if (pageInfo == null) {
 			pageInfo = new NSMutableDictionary<String, Object>();
 			pageInfo.setObjectForKey(contextID, ERXResponseRewriter.ORIGINAL_CONTEXT_ID_KEY);
-			ERXResponseRewriter._ajaxPageUserInfos.put(page, pageInfo);
+			pageInfoDict.put(page, pageInfo);
 		}
 		return pageInfo;
 	}
