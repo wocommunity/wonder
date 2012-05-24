@@ -40,7 +40,6 @@ public class ERAttachment0 extends ERXMigrationDatabase.Migration {
     attachmentTable.newIntegerColumn("attachmentDataID", true);
     attachmentTable.newStringColumn("filesystemPath", 255, true);
     attachmentTable.newStringColumn("s3Path", 1000, true);
-    attachmentTable.newStringColumn("cfPath", 1000, true);
     attachmentTable.create();
     attachmentTable.setPrimaryKey("id");
     attachmentTable.addUniqueIndex("ERAttachmentWebPath", "webPath", 1000);
