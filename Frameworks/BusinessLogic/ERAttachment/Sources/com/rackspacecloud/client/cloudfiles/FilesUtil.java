@@ -40,7 +40,7 @@ public class FilesUtil
         InputStream io = FilesUtil.class.getClassLoader().getResourceAsStream(file);
         if (io == null)
         {
-            throw new FileNotFoundException("Property file '" + file + "' not found in the classpath.");
+            //throw new FileNotFoundException("Property file '" + file + "' not found in the classpath.");
         }
         loadProperties(io);
     }
