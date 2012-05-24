@@ -13,5 +13,7 @@
 	<classpathentry exported="true" kind="lib" path="Libraries/joda-time-1.6.2.jar" sourcepath="Libraries/joda-time-1.6.2-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/joda-time-1.6.2-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/log4j-1.2.16.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/commons-codec-1.6-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/commons-codec-1.6.jar" sourcepath="Libraries/commons-codec-1.6-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
