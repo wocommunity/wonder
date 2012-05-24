@@ -12,6 +12,11 @@ import com.webobjects.eocontrol.EOEditingContext;
 import er.extensions.eof.ERXGenericRecord;
 import er.extensions.foundation.ERXProperties;
 
+/**
+ * ERS3Attachment (type = "cf") represents an attachment whose content is stored on RackSpace's CloudFiles service and will be served directly from CloudFiles.
+ * 
+ * @author probert
+ */
 public class ERCloudFilesAttachment extends _ERCloudFilesAttachment {
   @SuppressWarnings("unused")
   public static final String STORAGE_TYPE = "cf";
