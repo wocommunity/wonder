@@ -224,3 +224,6 @@ er.attachment.mimeType.video/x-ms-wmp.extensions=wmp
 er.attachment.mimeType.video/x-ms-wmv.name=Windows Media
 er.attachment.mimeType.video/x-ms-wmv.uti=com.microsoft.windows-​media-wmv
 er.attachment.mimeType.video/x-ms-wmv.extensions=wmv
+
+er.attachment.cf.connectionTimeOut=5000
+er.attachment.cf.authUrl=https://auth.api.rackspacecloud.com/v1.0

@@ -85,12 +85,28 @@ public class ERCloudFilesAttachment extends _ERCloudFilesAttachment {
     return username;
   }
   
+  public String authUrl() {
+    String authUrl = ERXProperties.decryptedStringForKey("er.attachment." + configurationName() + ".cf.authUrl");
+    if (authUrl == null) {
+      authUrl = ERXProperties.decryptedStringForKeyWithDefault("er.attachment.cf.authUrl", "https://auth.api.rackspacecloud.com/v1.0");
+    }
+    return authUrl;
+  }
+  
+  public int connectionTimeOut() {
+    String connectionTimeOut = ERXProperties.decryptedStringForKey("er.attachment." + configurationName() + ".cf.connectionTimeOut");
+    if (connectionTimeOut == null) {
+      connectionTimeOut = ERXProperties.decryptedStringForKeyWithDefault("er.attachment.cf.connectionTimeOut", "5000");
+    }
+    return new Integer(connectionTimeOut);
+  }
+  
   public String acl() {
     return "private";
   }
   
   public FilesClient cloudFilesConnection() {
-    FilesClient conn = new FilesClient(username(), accessKeyID());
+    FilesClient conn = new FilesClient(username(), accessKeyID(), authUrl(), null, connectionTimeOut());
     try {
       conn.login();
     }
