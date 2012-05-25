@@ -2,8 +2,7 @@
 <classpath>
 	<classpathentry exported="true" kind="lib" path="Libraries/ERFoundation.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/ERWebObjects.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/commons-lang-2.5.jar" sourcepath="Libraries/commons-lang-2.5-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/commons-lang-2.5-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/commons-lang-2.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/erxservletadaptor.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/junit-4.8.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/icu4j-3_8_1.jar"/>
@@ -13,5 +12,7 @@
 	<classpathentry exported="true" kind="lib" path="Libraries/joda-time-1.6.2.jar" sourcepath="Libraries/joda-time-1.6.2-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/joda-time-1.6.2-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/log4j-1.2.16.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/commons-codec-1.6-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/commons-codec-1.6.jar" sourcepath="Libraries/commons-codec-1.6-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

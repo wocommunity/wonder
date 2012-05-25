@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="Sources"/>
+	<classpathentry exported="true" kind="con" path="WOFramework/ERJars"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaWOExtensions"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaWebObjects"/>
@@ -10,6 +11,5 @@
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaEOControl"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaJDBCAdaptor"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="Libraries/commons-lang-2.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

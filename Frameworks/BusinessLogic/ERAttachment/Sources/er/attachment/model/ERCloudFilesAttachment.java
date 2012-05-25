@@ -12,6 +12,11 @@ import com.webobjects.eocontrol.EOEditingContext;
 import er.extensions.eof.ERXGenericRecord;
 import er.extensions.foundation.ERXProperties;
 
+/**
+ * ERS3Attachment (type = "cf") represents an attachment whose content is stored on RackSpace's CloudFiles service and will be served directly from CloudFiles.
+ * 
+ * @author probert
+ */
 public class ERCloudFilesAttachment extends _ERCloudFilesAttachment {
   @SuppressWarnings("unused")
   public static final String STORAGE_TYPE = "cf";
@@ -85,12 +90,28 @@ public class ERCloudFilesAttachment extends _ERCloudFilesAttachment {
     return username;
   }
   
+  public String authUrl() {
+    String authUrl = ERXProperties.decryptedStringForKey("er.attachment." + configurationName() + ".cf.authUrl");
+    if (authUrl == null) {
+      authUrl = ERXProperties.decryptedStringForKeyWithDefault("er.attachment.cf.authUrl", "https://auth.api.rackspacecloud.com/v1.0");
+    }
+    return authUrl;
+  }
+  
+  public int connectionTimeOut() {
+    String connectionTimeOut = ERXProperties.decryptedStringForKey("er.attachment." + configurationName() + ".cf.connectionTimeOut");
+    if (connectionTimeOut == null) {
+      connectionTimeOut = ERXProperties.decryptedStringForKeyWithDefault("er.attachment.cf.connectionTimeOut", "5000");
+    }
+    return new Integer(connectionTimeOut);
+  }
+  
   public String acl() {
     return "private";
   }
   
   public FilesClient cloudFilesConnection() {
-    FilesClient conn = new FilesClient(username(), accessKeyID());
+    FilesClient conn = new FilesClient(username(), accessKeyID(), authUrl(), null, connectionTimeOut());
     try {
       conn.login();
     }
