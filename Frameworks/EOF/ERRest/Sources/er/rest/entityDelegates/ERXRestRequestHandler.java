@@ -389,7 +389,7 @@ public class ERXRestRequestHandler extends WORequestHandler {
 	}
 
 	/**
-	 * Handle the incoming REST request. REST requests can have session ids associated with them as cookies or wosid
+	 * Handle the incoming REST request. REST requests can have session ids associated with them as cookies or <i>sessionIdKey</i>
 	 * query string parameters. Right now rendering type is not supported, but ultimately the file extension of the
 	 * request will determine which renderer is used to render the response.
 	 * 
@@ -411,15 +411,12 @@ public class ERXRestRequestHandler extends WORequestHandler {
 			path = path.substring(0, dotIndex);
 		}
 
-		String wosid = null;
-		// if (wosid == null) {
-		wosid = request.cookieValueForKey("wosid");
-		// }
-		woContext._setRequestSessionID(wosid);
+		String sessionId = request.cookieValueForKey(WOApplication.application().sessionIdKey());
+		woContext._setRequestSessionID(sessionId);
 
 		WOSession session = null;
 		if (woContext._requestSessionID() != null) {
-			session = WOApplication.application().restoreSessionWithID(wosid, woContext);
+			session = WOApplication.application().restoreSessionWithID(sessionId, woContext);
 		}
 		if (session != null) {
 			session.awake();
@@ -428,7 +425,7 @@ public class ERXRestRequestHandler extends WORequestHandler {
 			if (woContext._session() != null) {
 				WOSession contextSession = woContext._session();
 				// If this is a new session, then we have to force it to be a cookie session
-				if (wosid == null) {
+				if (sessionId == null) {
 					boolean storesIDsInCookies = contextSession.storesIDsInCookies();
 					try {
 						contextSession.setStoresIDsInCookies(true);

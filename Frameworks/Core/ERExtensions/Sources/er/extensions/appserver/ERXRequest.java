@@ -417,6 +417,8 @@ public  class ERXRequest extends WORequest {
      * content even if the request is supposed to be streaming and thus 
      * very large. Will now return <code>false</code> if the request
      * handler is streaming.
+     * 
+     * @return <code>true</code> if the session ID can be obtained from the form values or a cookie.
      */
     @Override
 	public boolean isSessionIDInRequest() {
@@ -424,9 +426,8 @@ public  class ERXRequest extends WORequest {
         
         if (app.isStreamingRequestHandlerKey(requestHandlerKey())) {
             return false;
-        } else {
-            return super.isSessionIDInRequest();
         }
+        return super.isSessionIDInRequest();
     }
     
 
@@ -435,10 +436,14 @@ public  class ERXRequest extends WORequest {
      * content even if the request is supposed to be streaming and thus 
      * very large. Will now look for the session ID only in the cookie
      * values.
+     * 
+     * @param inCookiesFirst
+     *            define if session ID should be searched first in cookie
      */
     @Override
 	protected String _getSessionIDFromValuesOrCookie(boolean inCookiesFirst) {
         ERXApplication app = (ERXApplication)WOApplication.application();
+        String sessionIdKey = WOApplication.application().sessionIdKey();
 
         boolean wis = WOApplication.application().streamActionRequestHandlerKey().equals(requestHandlerKey());
         boolean alternateStreaming = app.isStreamingRequestHandlerKey(requestHandlerKey());
@@ -446,16 +451,16 @@ public  class ERXRequest extends WORequest {
         
         String sessionID = null;
         if(inCookiesFirst) {
-            sessionID = cookieValueForKey("wosid");
+            sessionID = cookieValueForKey(sessionIdKey);
             if(sessionID == null && !streaming) {
-                sessionID = stringFormValueForKey("wosid");
+                sessionID = stringFormValueForKey(sessionIdKey);
             }
         } else {
             if(!streaming) {
-                sessionID = stringFormValueForKey("wosid");
+                sessionID = stringFormValueForKey(sessionIdKey);
             }
             if(sessionID == null) {
-                sessionID = cookieValueForKey("wosid");
+                sessionID = cookieValueForKey(sessionIdKey);
             }
         }
         return sessionID;
@@ -464,6 +469,10 @@ public  class ERXRequest extends WORequest {
     /**
      * Utility method to set credentials for basic authorization.
      * 
+     * @param userName
+     *            the user name
+     * @param password
+     *            the password
      */
     public void setCredentials(String userName, String password) {
         String up = userName + ":" + password;

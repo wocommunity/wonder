@@ -210,7 +210,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 			Iterator instantMessengerIter = _instantMessengers.entrySet().iterator();
 			while (instantMessengerIter.hasNext()) {
 				Map.Entry instantMessengerEntry = (Map.Entry) instantMessengerIter.next();
-				String screenName = (String) instantMessengerEntry.getKey();
+				// String screenName = (String) instantMessengerEntry.getKey();
 				InstantMessengerConnection connection = (InstantMessengerConnection) instantMessengerEntry.getValue();
 				connection.connect(this);
 			}
@@ -226,7 +226,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 		Iterator instantMessengerIter = _instantMessengers.entrySet().iterator();
 		while (instantMessengerIter.hasNext()) {
 			Map.Entry instantMessengerEntry = (Map.Entry) instantMessengerIter.next();
-			String screenName = (String) instantMessengerEntry.getKey();
+			// String screenName = (String) instantMessengerEntry.getKey();
 			InstantMessengerConnection connection = (InstantMessengerConnection) instantMessengerEntry.getValue();
 			connection.disconnect();
 			instantMessengerIter.remove();
@@ -253,7 +253,6 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 		Conversation conversation = _instantMessengerConnectionNamed(screenName).conversationForBuddyNamed(buddyName, _conversationTimeout);
 		String requestUrl = conversation.requestUrl();
 		if (requestUrl == null) {
-			String webserverConnectUrl = _application.webserverConnectURL();
 			String cgiAdaptorURL = _application.cgiAdaptorURL();
 			WODynamicURL imConversationUrl = new WODynamicURL();
 
@@ -291,7 +290,10 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 		uri.append(WOURLEncoder.encode(rawMessage));
 		String sessionID = conversation.sessionID();
 		if (sessionID != null) {
-			uri.append("&wosid=" + sessionID);
+			uri.append("&");
+			uri.append(WOApplication.application().sessionIdKey());
+			uri.append("=");
+			uri.append(sessionID);
 		}
 
 		NSMutableDictionary headers = new NSMutableDictionary();
@@ -385,7 +387,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 		Iterator instantMessengerIter = _instantMessengers.entrySet().iterator();
 		while (instantMessengerIter.hasNext()) {
 			Map.Entry instantMessengerEntry = (Map.Entry) instantMessengerIter.next();
-			String screenName = (String) instantMessengerEntry.getKey();
+			// String screenName = (String) instantMessengerEntry.getKey();
 			InstantMessengerConnection connection = (InstantMessengerConnection) instantMessengerEntry.getValue();
 			connection.removeExpiredConversations(_conversationTimeout);
 		}
