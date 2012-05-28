@@ -1,6 +1,7 @@
 package er.extensions.crypting;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.security.Key;
 
 import javax.crypto.Cipher;
@@ -163,7 +164,15 @@ public abstract class ERXAbstractAESCrypter implements ERXCrypterInterface {
 		}
 		ByteArrayOutputStream result = new ByteArrayOutputStream();
 		byte[] clearText = null;
-		byte[] decodedBytes = ERXCrypto.base64urlDecode(cryptedText);
+		byte[] decodedBytes = null;
+
+		try {
+			decodedBytes = ERXCrypto.base64Decode(cryptedText);
+		}
+		catch (IOException e1) {
+			e1.printStackTrace();
+			return null;
+		}
 
 		int length = decodedBytes.length;
 		for (int j = 0; j < length;) {

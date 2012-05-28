@@ -6,6 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.crypting;
 
+import java.io.IOException;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -264,7 +265,7 @@ public class ERXCrypto {
 			md.update(buf);
 			return ERXStringUtilities.byteArrayToHexString(md.digest());
 		}
-		catch (java.security.NoSuchAlgorithmException ex) {
+		catch (NoSuchAlgorithmException ex) {
 			throw new NSForwardException(ex, "Couldn't find the algorithm '" + algorithmName
 					+ "'; perhaps you do not have the SunJCE security provider installed properly?");
 		}
@@ -295,8 +296,10 @@ public class ERXCrypto {
 	 * 
 	 * @param s the string to decode
 	 * @return a byte array of the decoded string
+	 * @throws IOException if the decode fails
 	 */
-	public static byte[] base64Decode(String s) {
+	// TODO remove throws declaration when API change is possible
+	public static byte[] base64Decode(String s) throws IOException {
 		return Base64.decodeBase64(s);
 	}
 	
@@ -305,29 +308,12 @@ public class ERXCrypto {
 	 * 
 	 * @param s the string to URL decode
 	 * @return a byte array of the decoded string
+	 * @throws IOException if the decode fails
+	 * @deprecated use {@link #base64Decode(String)} 
 	 */
-	public static byte[] base64urlDecode(String s) {
-		int length = s.length();
-		StringBuffer sb = new StringBuffer(length);
-		int i = 0;
-		while (i < length || (i & 2) != 0) {
-			if (i >= length) {
-				sb.append('=');
-			} else {
-				char ch = s.charAt(i);
-				if (ch == '-') {
-					sb.append('+');
-				}
-				else if (ch == '_') {
-					sb.append('/');
-				}
-				else {
-					sb.append(ch);
-				}
-			}
-			i++;
-		}
-		return base64Decode(sb.toString());
+	@Deprecated
+	public static byte[] base64urlDecode(String s) throws IOException {
+		return base64Decode(s);
 	}
 
 	/**
