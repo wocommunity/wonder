@@ -27,7 +27,7 @@ public class ERXEOSerializationUtilities {
 		out.writeObject(ec==null?null:eo);
 	}
 	
-	public static class SerialEOWrapper implements Serializable {
+	public static class SerialEOWrapper implements Serializable, EOEnterpriseObject {
 		/**
 		 * Do I need to update serialVersionUID?
 		 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
