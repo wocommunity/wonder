@@ -125,6 +125,7 @@ public abstract class ERXMigration implements IERXMigration {
 	 * Checks in the current bundle for migration files corresponding to this classes name
 	 * 
 	 * @param migrationName
+	 * @return SQL string
 	 */
 	protected String getSQLForMigration(String migrationName) {
 		NSBundle bundle;
@@ -160,6 +161,8 @@ public abstract class ERXMigration implements IERXMigration {
 	/**
 	 * The name to create the NSBundle for the current bundle, defaults to the
 	 * bundle that contains the migration class.
+	 * 
+	 * @return <code>null</code> 
 	 */
 	protected String migrationBundleName() {
 		return null;

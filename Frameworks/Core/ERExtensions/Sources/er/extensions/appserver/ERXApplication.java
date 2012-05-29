@@ -1758,6 +1758,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * Also, in case the top-level exception was a EOGeneralAdaptorException,
 	 * then you also get the failed ops and the sql exception. <br/>
 	 * 
+	 * @param e exception
+	 * @param context the current context
 	 * @return dictionary containing extra information for the current context.
 	 */
 	public NSMutableDictionary extraInformationForExceptionInContext(Exception e, WOContext context) {
@@ -1769,7 +1771,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 	/**
 	 * Reports an exception. This method only logs the error and could be
-	 * overriden to return a valid error page.
+	 * overridden to return a valid error page.
 	 * 
 	 * @param exception
 	 *            to be reported

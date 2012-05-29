@@ -19,7 +19,7 @@ import com.webobjects.foundation.NSKeyValueCoding;
  * <code>ERXUnitAwareDecimalFormat</code> extends {@link java.text.DecimalFormat} 
  * to add an automatic unit conversion feature for 
  * the given unit. Convenient to display friendly values 
- * for file size, elaps time, etc.
+ * for file size, elapsed time, etc.
  * 
  * <strong>Examples:</strong>
  * <pre>
