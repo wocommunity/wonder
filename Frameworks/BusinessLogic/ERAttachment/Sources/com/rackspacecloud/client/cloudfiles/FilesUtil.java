@@ -56,7 +56,7 @@ public class FilesUtil
     {
         if (null == io)
         {
-            throw new IllegalArgumentException("Input stream cannot be null.");
+            //throw new IllegalArgumentException("Input stream cannot be null.");
         }
         props = new Properties();
         props.load(io);

@@ -66,6 +66,8 @@ public class ERXMigrationColumn {
 	 *            the scale of the column (or 0 for unspecified)
 	 * @param allowsNull
 	 *            if true, the column will allow null values
+	 * @param overrideValueType
+	 *            value type associated with the underlying attribute (or <code>null</code> for autoselect)
 	 * @param defaultValue
 	 *            this will set the "Default" hint in the EOAttribute's userInfo
 	 *            dictionary (your plugin must support this)

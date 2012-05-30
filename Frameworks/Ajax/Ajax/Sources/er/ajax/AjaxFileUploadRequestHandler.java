@@ -62,7 +62,8 @@ public class AjaxFileUploadRequestHandler extends WORequestHandler {
 			int streamLength = -1;
 
 			try {
-				String wosid = request.cookieValueForKey("wosid");
+				String sessionIdKey = WOApplication.application().sessionIdKey();
+				String sessionId = request.cookieValueForKey(sessionIdKey);
 				WOMultipartIterator multipartIterator = request.multipartIterator();
 				if (multipartIterator == null) {
 					response.appendContentString("Already Consumed!");
@@ -71,8 +72,8 @@ public class AjaxFileUploadRequestHandler extends WORequestHandler {
 					WOMultipartIterator.WOFormData formData = null;
 					while ((formData = multipartIterator.nextFormData()) != null) {
 						String name = formData.name();
-						if ("wosid".equals(name)) {
-							wosid = formData.formValue();
+						if (sessionIdKey.equals(name)) {
+							sessionId = formData.formValue();
 						}
 						else if ("id".equals(name)) {
 							uploadIdentifier = formData.formValue();
@@ -84,10 +85,10 @@ public class AjaxFileUploadRequestHandler extends WORequestHandler {
 							break;
 						}
 					}
-					context._setRequestSessionID(wosid);
+					context._setRequestSessionID(sessionId);
 					WOSession session = null;
 					if (context._requestSessionID() != null) {
-						session = WOApplication.application().restoreSessionWithID(wosid, context);
+						session = WOApplication.application().restoreSessionWithID(sessionId, context);
 					}
 					File tempFile = File.createTempFile("AjaxFileUpload", ".tmp", _tempFileFolder);
 					tempFile.deleteOnExit();

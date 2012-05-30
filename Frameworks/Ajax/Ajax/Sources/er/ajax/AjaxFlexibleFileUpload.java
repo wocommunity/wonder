@@ -3,6 +3,7 @@ package er.ajax;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
@@ -77,7 +78,6 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	
 	public static interface Keys {
 		public static final String name = "name";
-		public static final String wosid = "wosid";
 		public static final String selectFileLabel = "selectFileLabel";
 		public static final String cancelLabel = "cancelLabel";
 		public static final String clearLabel = "clearLabel";
@@ -150,12 +150,13 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	}
 	
 	/**
-	 * Builds the array of required additional AjaxUpload data items (wosid, id).
+	 * Builds the array of required additional AjaxUpload data items (<i>sessionIdKey</i>, id).
 	 * 
-	 * @return array of required additional AjaxUpload data items (wosid, id).
+	 * @return array of required additional AjaxUpload data items (<i>sessionIdKey</i>, id).
 	 */
 	protected NSArray<String> _ajaxUploadData() {
-		NSMutableArray<String> _data = new NSMutableArray<String>("wosid:'" + this.session().sessionID() + "'");
+		NSMutableArray<String> _data = new NSMutableArray<String>(WOApplication.application().sessionIdKey()
+				+ ":'" + this.session().sessionID() + "'");
 		
 		_data.addObject("id:'" + id() + "'");
 		
@@ -507,7 +508,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 * @return url sent to the iframe to cancel
 	 */
 	public String cancelUrl() {
-		NSDictionary<String,Boolean> queryParams = new NSDictionary<String,Boolean>(Boolean.FALSE, Keys.wosid);
+		NSDictionary<String,Boolean> queryParams = new NSDictionary<String,Boolean>(Boolean.FALSE, WOApplication.application().sessionIdKey());
 		String url = ERXWOContext._directActionURL(context(), "ERXDirectAction/closeHTTPSession", queryParams, ERXRequest.isRequestSecure(context().request()));
 		if (log.isDebugEnabled()) log.debug("URL: " + url);
 		return url;

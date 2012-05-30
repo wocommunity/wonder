@@ -9,6 +9,7 @@ package er.extensions;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.Arrays;
@@ -21,6 +22,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.log4j.Logger;
 
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabase;
@@ -76,6 +78,7 @@ import er.extensions.formatters.ERXSimpleHTMLFormatter;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXConfigurationManager;
 import er.extensions.foundation.ERXFileUtilities;
+import er.extensions.foundation.ERXMutableURL;
 import er.extensions.foundation.ERXPatcher;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXRuntimeUtilities;
@@ -1091,20 +1094,46 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 	    daURL.append(r);
 	}
     }
+    
     /**
-     * Adds the session ID (wosid) for a given session to a given url. 
-     * @param url to add wosid form value to.
-     * @return url with the addition of wosid form value
+     * Adds the session ID for a given session to a given URL. 
+     * @param url URL string to add session ID form value to.
+     * @param session session object
+     * @return URL with the addition of session ID form value
+     * @deprecated use {@link #addSessionIdFormValue(String, WOSession)}
      */
-    // FIXME: Should check to see if the wosid form value has already been set.
-    public static String addWosidFormValue(String url, WOSession s) {
-        String result= url;
-        if (result!=null && s!=null) {
-            result += ( result.indexOf("?") == -1 ? "?" : "&" ) + "wosid=" + s.sessionID();
-        } else {
-        	_log.warn("not adding sid: url="+url+" session="+s);
-        }
-        return result;
+    @Deprecated
+    public static String addWosidFormValue(String url, WOSession session) {
+        return addSessionIdFormValue(url, session);
+    }
+    
+    /**
+     * Adds the session ID for a given session to a given URL.
+     * 
+     * @param urlString
+     *            URL string to add session ID form value to
+     * @param session
+     *            session object
+     * @return URL with the addition of session ID form value
+     */
+    public static String addSessionIdFormValue(String urlString, WOSession session) {
+    	if (urlString == null || session == null) {
+    		_log.warn("not adding session ID: url=" + (urlString != null ? urlString : "<null>") + " session=" + (session != null ? session : "<null>"));
+    		return urlString;
+    	}
+    	String sessionIdKey = WOApplication.application().sessionIdKey();
+    	try {
+			ERXMutableURL url = new ERXMutableURL(urlString);
+			if (!url.containsQueryParameter(sessionIdKey)) {
+				url.setQueryParameter(sessionIdKey, session.sessionID());
+			}
+			return url.toExternalForm();
+		}
+		catch (MalformedURLException e) {
+			_log.error("invalid URL string: " + urlString, e);
+		}
+    	
+    	return urlString;
     }
 
     /**

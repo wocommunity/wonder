@@ -26,7 +26,7 @@ HiddenID : WOGenericElement {
 HiddenWOSID : WOGenericElement {
 	elementName = "input";
 	type = "hidden";
-	name = "wosid";
+	name = application.sessionIdKey;
 	value = session.sessionID;
 }
 

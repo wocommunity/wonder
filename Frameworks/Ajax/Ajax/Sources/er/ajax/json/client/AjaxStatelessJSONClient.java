@@ -1,5 +1,6 @@
 package er.ajax.json.client;
 
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 
@@ -57,7 +58,8 @@ public class AjaxStatelessJSONClient extends ERXComponent {
 
 		String queryString = null;
 		if (wocontext.request().sessionID() != null && wocontext.session().storesIDsInURLs()) {
-			queryString = "wosid=" + wocontext.request().sessionID();
+			String sessionIdKey = WOApplication.application().sessionIdKey();
+			queryString = sessionIdKey + "=" + wocontext.request().sessionID();
 		}
 
 		String componentName = jsonComponent();

@@ -196,19 +196,20 @@ public class JSONRequestHandler extends WORequestHandler {
 			try {
 				String inputString = request.contentString();
 				JSONObject input = new JSONObject(inputString);
-				String wosid = request.cookieValueForKey("wosid");
-				if (wosid == null) {
+				String sessionIdKey = WOApplication.application().sessionIdKey();
+				String sessionId = request.cookieValueForKey(sessionIdKey);
+				if (sessionId == null) {
 					ERXMutableURL url = new ERXMutableURL();
 					url.setQueryParameters(request.queryString());
-					wosid = url.queryParameter("wosid");
-					if (wosid == null && input.has("wosid")) {
-						wosid = input.getString("wosid");
+					sessionId = url.queryParameter(sessionIdKey);
+					if (sessionId == null && input.has(sessionIdKey)) {
+						sessionId = input.getString(sessionIdKey);
 					}
 				}
-				context._setRequestSessionID(wosid);
+				context._setRequestSessionID(sessionId);
 				WOSession session = null;
 				if (context._requestSessionID() != null) {
-					session = WOApplication.application().restoreSessionWithID(wosid, context);
+					session = WOApplication.application().restoreSessionWithID(sessionId, context);
 				}
 				if (session != null) {
 					session.awake();
@@ -276,7 +277,7 @@ public class JSONRequestHandler extends WORequestHandler {
 					if (context._session() != null) {
 						WOSession contextSession = context._session();
 						// If this is a new session, then we have to force it to be a cookie session
-						if (wosid == null) {
+						if (sessionId == null) {
 							boolean storesIDsInCookies = contextSession.storesIDsInCookies();
 							try {
 								contextSession.setStoresIDsInCookies(true);

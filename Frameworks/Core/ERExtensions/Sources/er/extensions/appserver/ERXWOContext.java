@@ -55,7 +55,9 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	}
 
 	/**
-	 * Returns the existing session if any is given in the form values or url.
+	 * Returns the existing session if any is given in the form values or URL.
+	 * 
+	 * @return session for this request or <code>null</code>
 	 */
 	public WOSession existingSession() {
 		String sessionID = _requestSessionID();
@@ -75,9 +77,6 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 		return existingSession() != null;
 	}
 
-	/**
-	 * Public constructor
-	 */
 	public static NSMutableDictionary contextDictionary() {
 		if (observer == null) {
 			synchronized (ERXWOContext.class) {
@@ -256,23 +255,23 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	/**
 	 * Returns a complete URL for the specified action. Works like
 	 * {@link WOContext#directActionURLForActionNamed} but has one extra
-	 * parameter to specify whether or not to include the current Session ID
-	 * (wosid) in the URL. Convenient if you embed the link for the direct
-	 * action into an email message and don't want to keep the Session ID in it.
+	 * parameter to specify whether or not to include the current session ID
+	 * in the URL. Convenient if you embed the link for the direct
+	 * action into an email message and don't want to keep the session ID in it.
 	 * <p>
 	 * <code>actionName</code> can be either an action -- "ActionName" -- or
 	 * an action on a class -- "ActionClass/ActionName". You can also specify
 	 * <code>queryDict</code> to be an NSDictionary which contains form values
 	 * as key/value pairs. <code>includeSessionID</code> indicates if you want
-	 * to include the Session ID (wosid) in the URL.
+	 * to include the session ID in the URL.
 	 * 
 	 * @param actionName
 	 *            String action name
 	 * @param queryDict
 	 *            NSDictionary containing query key/value pairs
 	 * @param includeSessionID
-	 *            true: to include the Session ID (if has one), <br>
-	 *            false: not to include the Session ID
+	 *            <code>true</code>: to include the session ID (if has one), <br>
+	 *            <code>false</code>: not to include the session ID
 	 * @return a String containing the URL for the specified action
 	 * @see WODirectAction
 	 */
@@ -285,23 +284,24 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	}
 
 	/**
-	 * Removes Session ID (wosid) query key/value pair from the given URL
+	 * Removes session ID query key/value pair from the given URL
 	 * string.
 	 * 
 	 * @param url
 	 *            String URL
-	 * @return a String with the Session ID removed
+	 * @return a String with the session ID removed
 	 */
 	public static String stripSessionIDFromURL(String url) {
 		if (url == null)
 			return null;
+		String sessionIdKey = WOApplication.application().sessionIdKey();
 		int len = 1;
-		int startpos = url.indexOf("?wosid");
+		int startpos = url.indexOf("?" + sessionIdKey);
 		if (startpos < 0) {
-			startpos = url.indexOf("&wosid");
+			startpos = url.indexOf("&" + sessionIdKey);
 		}
 		if (startpos < 0) {
-			startpos = url.indexOf("&amp;wosid");
+			startpos = url.indexOf("&amp;" + sessionIdKey);
 			len = 5;
 		}
 
@@ -513,9 +513,9 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	 * @param directActionName
 	 *            the direct action name
 	 * @param secure
-	 *            true = https, false = http, null = same as request
+	 *            <code>true</code> = https, <code>false</code> = http, <code>null</code> = same as request
 	 * @param includeSessionID
-	 *            if false, removes wosid from query parameters
+	 *            if <code>false</code>, removes session ID from query parameters
 	 * @return the constructed direct action URL
 	 */
 	public static String directActionUrl(WOContext context, String directActionName, Boolean secure, boolean includeSessionID) {
@@ -530,13 +530,13 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	 * @param directActionName
 	 *            the direct action name
 	 * @param key
-	 *            the query parameter key to add (or null to skip)
+	 *            the query parameter key to add (or <code>null</code> to skip)
 	 * @param value
-	 *            the query parameter value to add (or null to skip)
+	 *            the query parameter value to add (or <code>null</code> to skip)
 	 * @param secure
-	 *            true = https, false = http, null = same as request
+	 *            <code>true</code> = https, <code>false</code> = http, <code>null</code> = same as request
 	 * @param includeSessionID
-	 *            if false, removes wosid from query parameters
+	 *            if <code>false</code>, removes session ID from query parameters
 	 * @return the constructed direct action URL
 	 */
 	public static String directActionUrl(WOContext context, String directActionName, String key, String value, Boolean secure, boolean includeSessionID) {
@@ -551,11 +551,11 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	 * @param directActionName
 	 *            the direct action name
 	 * @param queryParameters
-	 *            the query parameters to append (or null)
+	 *            the query parameters to append (or <code>null</code>)
 	 * @param secure
-	 *            true = https, false = http, null = same as request
+	 *            <code>true</code> = https, <code>false</code> = http, <code>null</code> = same as request
 	 * @param includeSessionID
-	 *            if false, removes wosid from query parameters
+	 *            if <code>false</code>, removes session ID from query parameters
 	 * @return the constructed direct action URL
 	 */
 	public static String directActionUrl(WOContext context, String directActionName, NSDictionary<String, ? extends Object> queryParameters, Boolean secure, boolean includeSessionID) {
@@ -568,21 +568,21 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	 * @param context
 	 *            the context to generate the URL within
 	 * @param host
-	 *            the host name for the URL (or null for default)
+	 *            the host name for the URL (or <code>null</code> for default)
 	 * @param port
-	 *            the port number of the URL (or null for default)
+	 *            the port number of the URL (or <code>null</code> for default)
 	 * @param path
-	 *            the custom path prefix (or null for none)
+	 *            the custom path prefix (or <code>null</code> for none)
 	 * @param directActionName
 	 *            the direct action name
 	 * @param key
-	 *            the query parameter key to add (or null to skip)
+	 *            the query parameter key to add (or <code>null</code> to skip)
 	 * @param value
-	 *            the query parameter value to add (or null to skip)
+	 *            the query parameter value to add (or <code>null</code> to skip)
 	 * @param secure
-	 *            true = https, false = http, null = same as request
+	 *            <code>true</code> = https, <code>false</code> = http, <code>null</code> = same as request
 	 * @param includeSessionID
-	 *            if false, removes wosid from query parameters
+	 *            if <code>false</code>, removes session ID from query parameters
 	 * @return the constructed direct action URL
 	 */
 	public static String directActionUrl(WOContext context, String host, Integer port, String path, String directActionName, String key, Object value, Boolean secure, boolean includeSessionID) {
@@ -599,19 +599,19 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	 * @param context
 	 *            the context to generate the URL within
 	 * @param host
-	 *            the host name for the URL (or null for default)
+	 *            the host name for the URL (or <code>null</code> for default)
 	 * @param port
-	 *            the port number of the URL (or null for default)
+	 *            the port number of the URL (or <code>null</code> for default)
 	 * @param path
-	 *            the custom path prefix (or null for none)
+	 *            the custom path prefix (or <code>null</code> for none)
 	 * @param directActionName
 	 *            the direct action name
 	 * @param queryParameters
-	 *            the query parameters to append (or null)
+	 *            the query parameters to append (or <code>null</code>)
 	 * @param secure
-	 *            true = https, false = http, null = same as request
+	 *            <code>true</code> = https, <code>false</code> = http, <code>null</code> = same as request
 	 * @param includeSessionID
-	 *            if false, removes wosid from query parameters
+	 *            if <code>false</code>, removes session ID from query parameters
 	 * @return the constructed direct action URL
 	 */
 	public static String directActionUrl(WOContext context, String host, Integer port, String path, String directActionName, NSDictionary<String, ? extends Object> queryParameters, Boolean secure, boolean includeSessionID) {
@@ -638,7 +638,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 			if (!customPath) {
 				mu.setURL(ERXWOContext._directActionURL(context, directActionName, queryParameters, secureBool));
 				if (!includeSessionID) {
-					mu.removeQueryParameter("wosid");
+					mu.removeQueryParameter(WOApplication.application().sessionIdKey());
 				}
 			}
 			else {
@@ -652,7 +652,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 				mu.setPath(path + directActionName);
 				mu.setQueryParameters(queryParameters);
 				if (includeSessionID && context.session().storesIDsInURLs()) {
-					mu.setQueryParameter("wosid", context.session().sessionID());
+					mu.setQueryParameter(WOApplication.application().sessionIdKey(), context.session().sessionID());
 				}
 			}
 
@@ -692,7 +692,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	/**
 	 * Workaround for missing componentActionUrl(String) in 5.3.
 	 * @param context
-	 * @return ajax action url
+	 * @return ajax action URL
 	 */
 	public static String ajaxActionUrl(WOContext context) {
 		String url = context.componentActionURL().replaceFirst( "/" + WOApplication.application().componentRequestHandlerKey() + "/", "/" +ERXApplication.erAjaxRequestHandlerKey() + "/");

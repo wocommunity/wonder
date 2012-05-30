@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOJoin;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EORelationship;
@@ -18,6 +19,7 @@ import com.webobjects.eoaccess.synchronization.EOSchemaGenerationOptions;
 import com.webobjects.eoaccess.synchronization.EOSchemaSynchronizationFactory;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSData;
@@ -42,21 +44,69 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 	}
 
 	public static class MySQLExpression extends JDBCExpression {
+		
+		// Lazy initialized constants
+		private static class CONFIG {
+			// Turning on identifier quoting allows the use of reserved words for identifier (table, field, etc.) names
+			final static boolean ENABLE_IDENTIFIER_QUOTING = Boolean.getBoolean("com.webobjects.jdbcadaptor.MySQLExpression.enableIdentifierQuoting");
+			// Inserts "\n\t" between statement clauses for log readability. Useful in development
+			final static boolean LINE_PER_CLAUSE = Boolean.getBoolean("com.webobjects.jdbcadaptor.MySQLExpression.enableLinePerClause");
+			
+			// Length values for the string constant elements of the statement taking into account LINE_PER_CLAUSE for development and/or MySQL log readability.
+			// Note that the space is needed before FROM, WHERE etc in the LINE_PER_CLAUSE variant to ensure compatibility with code that assumes a space
+			// surrounding the FROM, as in er.extensions.jdbc.ERXSQLHelper.rowCountForFetchSpecification(...) for example 
+			final static String FROM_STRING = ( CONFIG.LINE_PER_CLAUSE ? "\n\t FROM " : " FROM " );
+			final static String WHERE_STRING = ( CONFIG.LINE_PER_CLAUSE ? "\n\t WHERE " : " WHERE " );
+			final static String ORDER_BY_STRING = ( CONFIG.LINE_PER_CLAUSE ? "\n\t ORDER BY " : " ORDER BY " );
+			final static String LIMIT_STRING = ( CONFIG.LINE_PER_CLAUSE ? "\n\t LIMIT " : " LIMIT " );
+			final static int FROM_LENGTH = FROM_STRING.length();
+			final static int WHERE_LENGTH = WHERE_STRING.length();
+			final static int ORDER_BY_LENGTH = ORDER_BY_STRING.length();
+			final static int LIMIT_LENGTH = LIMIT_STRING.length();
+			
+			/**
+			 * From the MySQL Manual: &quot;An identifier may be quoted or
+			 * unquoted. If an identifier contains special characters or is a
+			 * reserved word, you must quote it whenever you refer to it. ...
+			 * The identifier quote character is the backtick.&quot;
+			 */
+			final static String IDENTIFIER_QUOTE_CHARACTER = (ENABLE_IDENTIFIER_QUOTING ? "`" : "");
+		}
 
 		private int _fetchLimit;
-
+		
+		/**
+		 * Holds array of join clause definitions
+		 */
+		private final NSMutableArray<JoinClauseDefinition> _alreadyJoined = new NSMutableArray<JoinClauseDefinition>();
 		
 		public MySQLExpression(EOEntity entity) {
 			super(entity);
 		}
 
+		/**
+		 * http://dev.mysql.com/doc/refman/5.5/en/string-comparison-functions.html
+		 * 
+		 * @see com.webobjects.eoaccess.EOSQLExpression#sqlEscapeChar()
+		 */
 		@Override
         public char sqlEscapeChar(){
 			return '|';
 		}
 
-		/* (non-Javadoc)
-		 *
+		/**
+		 * Overridden because MySQL does not use the default quote character in
+		 * EOSQLExpression.externalNameQuoteCharacter() which is an empty
+		 * string.
+		 * 
+		 * Note that quoting is disabled by default and can be enabled by setting property <code>com.webobjects.jdbcadaptor.MySQLExpression.enableIdentifierQuoting</code> to true.
+		 */
+		@Override
+		public String externalNameQuoteCharacter() {
+			return CONFIG.IDENTIFIER_QUOTE_CHARACTER;
+		}
+
+		/**
 		 * Overriding super here so we can grab a fetch limit if specified in the EOFetchSpecification.
 		 *
 		 * @see com.webobjects.jdbcadaptor.JDBCExpression#prepareSelectExpressionWithAttributes(NSArray, boolean, EOFetchSpecification)
@@ -70,63 +120,70 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 			super.prepareSelectExpressionWithAttributes(attributes, lock, fetchSpec);
 		}
 
-		/* (non-Javadoc)
-		 *
-		 * Overriding to add LIMIT clause if _fetchLimit > 0.
-		 * This is same logic as original super with minor additions to support LIMIT clause only.
+		/**
+		 * Overriding to 
+		 * <ul>
+		 * <li>add LIMIT clause if _fetchLimit > 0</li>
+		 * <li>support MySQL JOIN syntax (similar syntax to what PostgreSQL PlugIn generates)</li>
+		 * </ul>
 		 *
 		 * @see com.webobjects.eoaccess.EOSQLExpression#assembleSelectStatementWithAttributes(NSArray, boolean, EOQualifier, NSArray, java.lang.String, String, String, String, String, String, String)
 		 */
 		@Override
-		public String assembleSelectStatementWithAttributes(NSArray attributes, boolean lock, EOQualifier qualifier,
-				NSArray fetchOrder, String selectString, String columnList, String tableList, String whereClause,
+		public String assembleSelectStatementWithAttributes(@SuppressWarnings("rawtypes") NSArray/*<EOAttribute>*/ attributes, boolean lock, EOQualifier qualifier,
+				@SuppressWarnings("rawtypes") NSArray fetchOrder, String selectString, String columnList, String tableList, String whereClause,
 				String joinClause, String orderByClause, String lockClause) {
-			String limitClause = null;
 
-			int size = selectString.length() + columnList.length() + tableList.length() + 7;
-			if ((lockClause != null) && (lockClause.length() != 0))
+			// When we are selecting from a single table, the joinClause will be empty and the tableList will contain the single table reference.
+			// When we have joins, then both the joinClause and tableList will be passed in, however we will just be using the joinClause in the FROM clause.
+
+			int size = selectString.length() + columnList.length() + CONFIG.FROM_LENGTH;
+			if ((lockClause != null) && (lockClause.length() != 0)) {
 				size += lockClause.length() + 1;
-			if ((whereClause != null) && (whereClause.length() != 0))
-				size += whereClause.length() + 7;
-			if ((joinClause != null) && (joinClause.length() != 0))
-				size += joinClause.length() + 7;
+			}
+			if ((whereClause != null) && (whereClause.length() != 0)) {
+				size += (whereClause.length() + CONFIG.WHERE_LENGTH);
+			}
+			if ((joinClause != null) && (joinClause.length() != 0)) {
+				size += joinClause.length();
+			} else {
+				size += tableList.length();
+			}
 			if ((orderByClause != null) && (orderByClause.length() != 0)) {
-				size += orderByClause.length() + 10;
+				size += (orderByClause.length() + CONFIG.ORDER_BY_LENGTH);
 			}
 
 			// If necessary, create LIMIT clause and add to buffer size
+			String limitClause = null;
 			if (_fetchLimit > 0) {
 				limitClause = Integer.toString(_fetchLimit);
-				size += 7 + limitClause.length();  // " LIMIT " = 7 chars
+				size += CONFIG.LIMIT_LENGTH + limitClause.length();
 			}
 
-			// Use a StringBuilder here since synchronized StringBuffer not needed.
 			StringBuilder buffer = new StringBuilder(size);
 			buffer.append(selectString);
 			buffer.append(columnList);
-			buffer.append(" FROM ");
-			buffer.append(tableList);
-
-			if ((whereClause != null) && (whereClause.length() != 0)) {
-				buffer.append(" WHERE ");
-				buffer.append(whereClause);
-			}
-			if ((joinClause != null) && (joinClause.length() != 0)) {
-				if ((whereClause != null) && (whereClause.length() != 0))
-					buffer.append(" AND ");
-				else
-					buffer.append(" WHERE ");
+			buffer.append(CONFIG.FROM_STRING);
+			
+			if (joinClause != null && joinClause.length() > 0) {
 				buffer.append(joinClause);
+			} else {
+				buffer.append(tableList);
+			}
+
+			if (whereClause != null && whereClause.length() > 0) {
+				buffer.append(CONFIG.WHERE_STRING);
+				buffer.append(whereClause);
 			}
 
 			if ((orderByClause != null) && (orderByClause.length() != 0)) {
-				buffer.append(" ORDER BY ");
+				buffer.append(CONFIG.ORDER_BY_STRING);
 				buffer.append(orderByClause);
 			}
 
 			// Add limit clause
 			if (limitClause != null) {
-				buffer.append(" LIMIT ");
+				buffer.append(CONFIG.LIMIT_STRING);
 				buffer.append(limitClause);
 			}
 
@@ -137,7 +194,249 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 
 			return buffer.toString();
 		}
+		
+		/**
+		 * Overrides the parent implementation to compose the final string
+		 * expression for the join clauses.
+		 * 
+		 * kieran copied from PostgresqlExpression
+		 */
+		@Override
+		public String joinClauseString() {
+			NSMutableDictionary<String, Boolean> seenIt = new NSMutableDictionary<String, Boolean>();
+			StringBuilder sb = new StringBuilder();
+			JoinClauseDefinition jc;
+			EOSortOrdering.sortArrayUsingKeyOrderArray(_alreadyJoined, new NSArray<EOSortOrdering>(EOSortOrdering.sortOrderingWithKey("sortKey", EOSortOrdering.CompareCaseInsensitiveAscending)));
+			if (_alreadyJoined.count() > 0) {
+				jc = _alreadyJoined.objectAtIndex(0);
 
+				sb.append(jc);
+				seenIt.setObjectForKey(Boolean.TRUE, jc.table1);
+				seenIt.setObjectForKey(Boolean.TRUE, jc.table2);
+			}
+
+			for (int i = 1; i < _alreadyJoined.count(); i++) {
+				jc = _alreadyJoined.objectAtIndex(i);
+
+				sb.append(jc.op);
+				if (seenIt.objectForKey(jc.table1) == null) {
+					sb.append(jc.table1);
+					seenIt.setObjectForKey(Boolean.TRUE, jc.table1);
+				} else if (seenIt.objectForKey(jc.table2) == null) {
+					sb.append(jc.table2);
+					seenIt.setObjectForKey(Boolean.TRUE, jc.table2);
+				}
+				sb.append(jc.joinCondition);
+			}
+			return sb.toString();
+		}
+		
+		/**
+		 * Override so that the joinClause can be constructed after super has
+		 * iterated though all joins and called our assembleJoinClause to create
+		 * our array of JoinClauseDefinitions.
+		 * 
+		 * @see com.webobjects.eoaccess.EOSQLExpression#joinExpression()
+		 */
+		@Override
+		public void joinExpression() {
+			super.joinExpression();
+			if (_alreadyJoined.count() > 0) {
+				_joinClauseString = joinClauseString();
+			} else {
+				_joinClauseString = null;
+			}
+		}
+
+		/**
+		 * Overriden to contruct a valid SQL92 JOIN clause as opposed to the
+		 * Oracle-like SQL the superclass produces.
+		 * 
+		 * @param leftName
+		 *            the table name on the left side of the clause
+		 * @param rightName
+		 *            the table name on the right side of the clause
+		 * @param semantic
+		 *            the join semantic
+		 * @return the join clause
+		 * 
+		 * kieran based this on logic from PostgresqlExpression
+		 */
+		@SuppressWarnings("unchecked")
+		@Override
+		public String assembleJoinClause(String leftName, String rightName, int semantic) {
+			if (!useAliases()) {
+				return super.assembleJoinClause(leftName, rightName, semantic);
+			}
+
+			String leftAlias = leftName.substring(0, leftName.indexOf("."));
+			String rightAlias = rightName.substring(0, rightName.indexOf("."));
+
+			NSArray<String> k;
+			EOEntity rightEntity;
+			EOEntity leftEntity;
+			String relationshipKey = null;
+			EORelationship r;
+
+			if (leftAlias.equals("t0")) {
+				leftEntity = entity();
+			} else {
+				k = aliasesByRelationshipPath().allKeysForObject(leftAlias);
+				relationshipKey = k.count() > 0 ? (String) k.lastObject() : "";
+				leftEntity = entityForKeyPath(relationshipKey);
+			}
+
+			if (rightAlias.equals("t0")) {
+				rightEntity = entity();
+			} else {
+				k = aliasesByRelationshipPath().allKeysForObject(rightAlias);
+				relationshipKey = k.count() > 0 ? (String) k.lastObject() : "";
+				rightEntity = entityForKeyPath(relationshipKey);
+			}
+			int dotIndex = relationshipKey.indexOf(".");
+			relationshipKey = dotIndex == -1 ? relationshipKey : relationshipKey.substring(relationshipKey.lastIndexOf(".") + 1);
+			r = rightEntity.anyRelationshipNamed(relationshipKey);
+			// fix from Michael Müller for the case Foo.fooBars.bar has a
+			// Bar.foo relationship (instead of Bar.foos)
+			if (r == null || r.destinationEntity() != leftEntity) {
+				r = leftEntity.anyRelationshipNamed(relationshipKey);
+			}
+			// timc 2006-02-26 IMPORTANT or quotes are ignored and mixed case
+			// field names won't work
+			String rightTable;
+			String leftTable;
+			if (CONFIG.ENABLE_IDENTIFIER_QUOTING) {
+				rightTable = rightEntity.valueForSQLExpression(this);
+				leftTable = leftEntity.valueForSQLExpression(this);
+			} else {
+				rightTable = rightEntity.externalName();
+				leftTable = leftEntity.externalName();
+			}
+			JoinClauseDefinition jc = new JoinClauseDefinition();
+
+			jc.table1 = leftTable + " " + leftAlias;
+
+			switch (semantic) {
+			case EORelationship.LeftOuterJoin:
+				// LEFT OUTER JOIN and LEFT JOIN are equivalent in MySQL
+				jc.op = " LEFT JOIN ";
+				break;
+			case EORelationship.RightOuterJoin:
+				// RIGHT OUTER JOIN and RIGHT JOIN are equivalent in MySQL
+				jc.op = " RIGHT JOIN ";
+				break;
+			case EORelationship.FullOuterJoin:
+				throw new IllegalArgumentException("Unfortunately MySQL does not support FULL OUTER JOIN that is specified for " + leftName + " joining " + rightName + "!");
+				//jc.op = " FULL OUTER JOIN ";
+				//break;
+			case EORelationship.InnerJoin:
+				// INNER JOIN and JOIN are equivalent in MySQL
+				jc.op = " JOIN ";
+				break;
+			}
+
+			jc.table2 = rightTable + " " + rightAlias;
+			NSArray<EOJoin> joins = r.joins();
+			int joinsCount = joins.count();
+			NSMutableArray<String> joinStrings = new NSMutableArray<String>(joinsCount);
+			for (int i = 0; i < joinsCount; i++) {
+				EOJoin currentJoin = joins.objectAtIndex(i);
+				String left;
+				String right;
+				if (CONFIG.ENABLE_IDENTIFIER_QUOTING) {
+					left = leftAlias + "." + sqlStringForSchemaObjectName(currentJoin.sourceAttribute().columnName());
+					right = rightAlias + "." + sqlStringForSchemaObjectName(currentJoin.destinationAttribute().columnName());
+				} else {
+					left = leftAlias + "." + currentJoin.sourceAttribute().columnName();
+					right = rightAlias + "." + currentJoin.destinationAttribute().columnName();
+				}
+				joinStrings.addObject(left + " = " + right);
+			}
+			jc.joinCondition = " ON " + joinStrings.componentsJoinedByString(" AND ");
+			if (!_alreadyJoined.containsObject(jc)) {
+				_alreadyJoined.insertObjectAtIndex(jc, 0);
+				return jc.toString();
+			}
+			return null;
+		}
+
+		/**
+		 * Utility that traverses a key path to find the last destination entity
+		 * 
+		 * @param keyPath
+		 *            the key path
+		 * @return the entity at the end of the keypath
+		 */
+		private EOEntity entityForKeyPath(String keyPath) {
+			NSArray<String> keys = NSArray.componentsSeparatedByString(keyPath, ".");
+			EOEntity ent = entity();
+
+			for (int i = 0; i < keys.count(); i++) {
+				String k = keys.objectAtIndex(i);
+				EORelationship rel = ent.anyRelationshipNamed(k);
+				if (rel == null) {
+					// it may be an attribute
+					if (ent.anyAttributeNamed(k) != null) {
+						break;
+					}
+					throw new IllegalArgumentException("relationship " + keyPath + " generated null");
+				}
+				ent = rel.destinationEntity();
+			}
+			return ent;
+		}
+
+		/**
+		 * Overriden to not call the super implementation.
+		 * 
+		 * @param leftName
+		 *            the table name on the left side of the clause
+		 * @param rightName
+		 *            the table name on the right side of the clause
+		 * @param semantic
+		 *            the join semantic
+		 *            
+		 * kieran copied from PostgresqlExpression
+		 */
+		@Override
+		public void addJoinClause(String leftName, String rightName, int semantic) {
+			assembleJoinClause(leftName, rightName, semantic);
+		}
+
+		/**
+		 * Helper class that stores a join definition and helps
+		 * <code>MySQLExpression</code> to assemble the correct join
+		 * clause.
+		 * 
+		 * kieran copied from PostgreSQLPlugIn's JoinClause helper class
+		 */
+		public static class JoinClauseDefinition {
+			String table1;
+			String op;
+			String table2;
+			String joinCondition;
+
+			@Override
+			public String toString() {
+				return table1 + op + table2 + joinCondition;
+			}
+
+			@Override
+			public boolean equals(Object obj) {
+				if (obj == null || !(obj instanceof JoinClauseDefinition)) {
+					return false;
+				}
+				return toString().equals(obj.toString());
+			}
+
+			/**
+			 * Property that makes this class "sortable". Needed to correctly
+			 * assemble a join clause.
+			 */
+			public String sortKey() {
+				return table1.substring(table1.indexOf(" ") + 1);
+			}
+		}
 	}
 
 	public static class MySQLSynchronizationFactory extends EOSchemaSynchronizationFactory {
