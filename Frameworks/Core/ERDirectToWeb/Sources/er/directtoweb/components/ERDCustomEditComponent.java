@@ -6,10 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.components;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;
@@ -24,7 +20,6 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.foundation.ERXArrayUtilities;
-import er.extensions.foundation.ERXEOSerializationUtilities;
 
 /**
  * Superclass for most of the custom edit components.  <br />
@@ -37,7 +32,7 @@ public abstract class ERDCustomEditComponent extends ERDCustomComponent {
 	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
 	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 
     /** logging support */
     public final static Logger log = Logger.getLogger(ERDCustomEditComponent.class);
@@ -63,19 +58,7 @@ public abstract class ERDCustomEditComponent extends ERDCustomComponent {
     private EOEnterpriseObject object;
     protected EOEditingContext editingContext;
     
-	private void writeObject(ObjectOutputStream out) throws IOException {
-		out.writeObject(_defaultSortOrderingsForDestinationEntity);
-		out.writeObject(editingContext);
-		ERXEOSerializationUtilities.writeEO(out, object);
-	}
-    
-	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-		_defaultSortOrderingsForDestinationEntity = (NSArray) in.readObject();
-		editingContext = (EOEditingContext) in.readObject();
-		object = ERXEOSerializationUtilities.readEO(in);
-	}
-
-    public Object objectPropertyValue() {
+   public Object objectPropertyValue() {
         return objectKeyPathValue();
     }
     public void setObjectPropertyValue(Object newValue) {
