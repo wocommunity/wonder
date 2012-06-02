@@ -491,25 +491,21 @@ public class ERXResponseRewriter {
 		else {
 			cssEndTag = "\">";
 		}
-		// MS: It looks like all the browsers can load CSS inline, so we don't
-		// even need all this.
-		// String fallbackStartTag;
-		// String fallbackEndTag;
-		// if (ERXAjaxApplication.isAjaxRequest(context.request())) {
-		// fallbackStartTag = "<script>AOD.loadCSS('";
-		// fallbackEndTag = "')</script>";
-		// }
-		// else {
-		// fallbackStartTag = null;
-		// fallbackEndTag = null;
-		// }
-		// ERXResponseRewriter.addResourceInHead(response, context, framework,
-		// fileName, cssStartTag, cssEndTag, fallbackStartTag, fallbackEndTag,
-		// TagMissingBehavior.SkipAndWarn);
+		String fallbackStartTag = null;
+		String fallbackEndTag = null;
+
+		if (ERXAjaxApplication.isAjaxRequest(context.request()) && ERXProperties.booleanForKeyWithDefault("er.extensions.loadOnDemand", true)) {
+			if (ERXProperties.booleanForKeyWithDefault("er.extensions.loadOnDemandDuringReplace", false)) {
+				boolean appendTypeAttribute = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXResponseRewriter.javascriptTypeAttribute", false);
+				fallbackStartTag = (appendTypeAttribute ? "<script type=\"text/javascript\">AOD.loadCSS('" : "<script>AOD.loadCSS('");
+				fallbackEndTag = "')</script>";
+			}
+		}
+		ERXResponseRewriter.addResourceInHead(response, context, framework, fileName, cssStartTag, cssEndTag, fallbackStartTag, fallbackEndTag, TagMissingBehavior.Inline);
 		
 		// Q: We use TagMissingBehaviour.Inline in case this is called from inside the 
 		// HEAD tag and there is no close tag yet
-		ERXResponseRewriter.addResourceInHead(response, context, framework, fileName, cssStartTag, cssEndTag, null, null, TagMissingBehavior.Inline);
+//		ERXResponseRewriter.addResourceInHead(response, context, framework, fileName, cssStartTag, cssEndTag, null, null, TagMissingBehavior.Inline);
 	}
 
 	/**
