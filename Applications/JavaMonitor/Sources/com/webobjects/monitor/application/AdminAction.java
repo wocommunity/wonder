@@ -354,7 +354,7 @@ public class AdminAction extends WODirectAction {
             result += "\"schedulingHourlyStartTime\": " + minstance.schedulingHourlyStartTime() + ", ";
             result += "\"schedulingDailyStartTime\": " + minstance.schedulingDailyStartTime() + ", ";
             result += "\"schedulingWeeklyStartTime\": " + minstance.schedulingWeeklyStartTime() + ", ";
-            result += "\"schedulingType\": " + minstance.schedulingType() + ", ";
+            result += "\"schedulingType\": \"" + minstance.schedulingType() + "\", ";
             result += "\"schedulingStartDay\": " + minstance.schedulingStartDay() + ", ";
             result += "\"schedulingInterval\": " + minstance.schedulingInterval() + ", ";
             result += "\"transactions\": \"" + minstance.transactions() + "\", ";
