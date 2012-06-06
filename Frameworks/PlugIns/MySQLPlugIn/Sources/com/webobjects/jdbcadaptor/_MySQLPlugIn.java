@@ -196,8 +196,8 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 		}
 		
 		/**
-		 * Overrides the parent implementation to compose the final string
-		 * expression for the join clauses.
+		 * Overriden to contruct a valid SQL92 JOIN clause as opposed to the
+		 * Oracle-like SQL the superclass produces.
 		 * 
 		 * kieran copied from PostgresqlExpression
 		 */
@@ -206,27 +206,27 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 			NSMutableDictionary<String, Boolean> seenIt = new NSMutableDictionary<String, Boolean>();
 			StringBuilder sb = new StringBuilder();
 			JoinClauseDefinition jc;
-			EOSortOrdering.sortArrayUsingKeyOrderArray(_alreadyJoined, new NSArray<EOSortOrdering>(EOSortOrdering.sortOrderingWithKey("sortKey", EOSortOrdering.CompareCaseInsensitiveAscending)));
+			EOSortOrdering.sortArrayUsingKeyOrderArray(_alreadyJoined, new NSArray<EOSortOrdering>(EOSortOrdering.sortOrderingWithKey("sortKey", EOSortOrdering.CompareAscending)));
 			if (_alreadyJoined.count() > 0) {
 				jc = _alreadyJoined.objectAtIndex(0);
 
 				sb.append(jc);
-				seenIt.setObjectForKey(Boolean.TRUE, jc.table1);
-				seenIt.setObjectForKey(Boolean.TRUE, jc.table2);
+				seenIt.setObjectForKey(Boolean.TRUE, jc._table1);
+				seenIt.setObjectForKey(Boolean.TRUE, jc._table2);
 			}
 
 			for (int i = 1; i < _alreadyJoined.count(); i++) {
 				jc = _alreadyJoined.objectAtIndex(i);
 
-				sb.append(jc.op);
-				if (seenIt.objectForKey(jc.table1) == null) {
-					sb.append(jc.table1);
-					seenIt.setObjectForKey(Boolean.TRUE, jc.table1);
-				} else if (seenIt.objectForKey(jc.table2) == null) {
-					sb.append(jc.table2);
-					seenIt.setObjectForKey(Boolean.TRUE, jc.table2);
+				sb.append(jc._op);
+				if (seenIt.objectForKey(jc._table1) == null) {
+					sb.append(jc._table1);
+					seenIt.setObjectForKey(Boolean.TRUE, jc._table1);
+				} else if (seenIt.objectForKey(jc._table2) == null) {
+					sb.append(jc._table2);
+					seenIt.setObjectForKey(Boolean.TRUE, jc._table2);
 				}
-				sb.append(jc.joinCondition);
+				sb.append(jc._joinCondition);
 			}
 			return sb.toString();
 		}
@@ -249,8 +249,13 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 		}
 
 		/**
-		 * Overriden to contruct a valid SQL92 JOIN clause as opposed to the
-		 * Oracle-like SQL the superclass produces.
+		 * This is called by super for each join. We do not actually construct the join clause as we get called since
+		 * for SQL92 JOIN syntax we need to know about all joins before we construct the complete join clause.
+		 * 
+		 * The objective of this implementation is to insert a new unique {@link JoinClauseDefinition} into
+		 * the <code>_alreadyJoined</code> array of {@link JoinClauseDefinition} objects.
+		 * 
+		 * The join clause itself is assembled by <code>joinClauseString()</code>.
 		 * 
 		 * @param leftName
 		 *            the table name on the left side of the clause
@@ -312,18 +317,24 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 				rightTable = rightEntity.externalName();
 				leftTable = leftEntity.externalName();
 			}
-			JoinClauseDefinition jc = new JoinClauseDefinition();
 
-			jc.table1 = leftTable + " " + leftAlias;
+			// We need the numeric table by removing the leading 't' or 'T' from the table alias
+			int leftTableID = Integer.parseInt(leftAlias.substring(1));
+			
+			// Compute left and right table references
+			String leftTableNameAndAlias = leftTable + " " + leftAlias;
+			String rightTableNameAndAlias = rightTable + " " + rightAlias;
 
+			// COmpute joinOperation
+			String joinOperation = null;
 			switch (semantic) {
 			case EORelationship.LeftOuterJoin:
 				// LEFT OUTER JOIN and LEFT JOIN are equivalent in MySQL
-				jc.op = " LEFT JOIN ";
+				joinOperation = " LEFT JOIN ";
 				break;
 			case EORelationship.RightOuterJoin:
 				// RIGHT OUTER JOIN and RIGHT JOIN are equivalent in MySQL
-				jc.op = " RIGHT JOIN ";
+				joinOperation = " RIGHT JOIN ";
 				break;
 			case EORelationship.FullOuterJoin:
 				throw new IllegalArgumentException("Unfortunately MySQL does not support FULL OUTER JOIN that is specified for " + leftName + " joining " + rightName + "!");
@@ -331,11 +342,11 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 				//break;
 			case EORelationship.InnerJoin:
 				// INNER JOIN and JOIN are equivalent in MySQL
-				jc.op = " JOIN ";
+				joinOperation = " JOIN ";
 				break;
 			}
 
-			jc.table2 = rightTable + " " + rightAlias;
+			// Compute joinCondition
 			NSArray<EOJoin> joins = r.joins();
 			int joinsCount = joins.count();
 			NSMutableArray<String> joinStrings = new NSMutableArray<String>(joinsCount);
@@ -352,10 +363,11 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 				}
 				joinStrings.addObject(left + " = " + right);
 			}
-			jc.joinCondition = " ON " + joinStrings.componentsJoinedByString(" AND ");
+			String joinCondition = " ON " + joinStrings.componentsJoinedByString(" AND ");
+			
+			JoinClauseDefinition jc = new JoinClauseDefinition(leftTableNameAndAlias, joinOperation, rightTableNameAndAlias, joinCondition, leftTableID);
 			if (!_alreadyJoined.containsObject(jc)) {
 				_alreadyJoined.insertObjectAtIndex(jc, 0);
-				return jc.toString();
 			}
 			return null;
 		}
@@ -387,7 +399,7 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 		}
 
 		/**
-		 * Overriden to not call the super implementation.
+		 * Overriden to not call the super implementation. This simply calls our custom assembleJoinClause
 		 * 
 		 * @param leftName
 		 *            the table name on the left side of the clause
@@ -410,15 +422,27 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 		 * 
 		 * kieran copied from PostgreSQLPlugIn's JoinClause helper class
 		 */
-		public static class JoinClauseDefinition {
-			String table1;
-			String op;
-			String table2;
-			String joinCondition;
+		public static final class JoinClauseDefinition {
+			private final String _table1;
+			private final String _op;
+			private final String _table2;
+			private final String _joinCondition;
+			private final int _leftTableID;
+			private final String _toString;
+
+			public JoinClauseDefinition(String leftTableNameAndAlias, String joinOperation, String rightTableNameAndAlias, String joinCondition2, int leftTableID) {
+				_table1 = leftTableNameAndAlias;
+				_op = joinOperation;
+				_table2 = rightTableNameAndAlias;
+				_joinCondition = joinCondition2;
+				_leftTableID = leftTableID;
+				
+				_toString = _table1 + _op + _table2 + _joinCondition;
+			}
 
 			@Override
 			public String toString() {
-				return table1 + op + table2 + joinCondition;
+				return _toString;
 			}
 
 			@Override
@@ -426,15 +450,25 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 				if (obj == null || !(obj instanceof JoinClauseDefinition)) {
 					return false;
 				}
-				return toString().equals(obj.toString());
+				return _toString.equals(obj.toString());
+			}
+
+			/* Effective Java #9 : Must override hashCode when overriding equals.
+			 * 
+			 * (non-Javadoc)
+			 * @see java.lang.Object#hashCode()
+			 */
+			@Override
+			public int hashCode() {
+				return _toString.hashCode() + 43;
 			}
 
 			/**
-			 * Property that makes this class "sortable". Needed to correctly
+			 * Property that makes this class "sortable" by left table ID. Needed to correctly
 			 * assemble a join clause.
 			 */
-			public String sortKey() {
-				return table1.substring(table1.indexOf(" ") + 1);
+			public int sortKey() {
+				return _leftTableID;
 			}
 		}
 	}
