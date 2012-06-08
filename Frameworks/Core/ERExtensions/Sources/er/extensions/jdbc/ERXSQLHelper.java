@@ -10,6 +10,8 @@ import java.io.StringReader;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.text.MessageFormat;
+import java.text.ParseException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,11 +21,13 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorChannel;
+import com.webobjects.eoaccess.EOAdaptorOperation;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabase;
 import com.webobjects.eoaccess.EODatabaseChannel;
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOGeneralAdaptorException;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOQualifierSQLGeneration;
 import com.webobjects.eoaccess.EORelationship;
@@ -47,6 +51,7 @@ import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation._NSUtilities;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
+import com.webobjects.jdbcadaptor.JDBCAdaptorException;
 import com.webobjects.jdbcadaptor.JDBCPlugIn;
 
 import er.extensions.eof.ERXConstant;
@@ -56,6 +61,8 @@ import er.extensions.eof.ERXModelGroup;
 import er.extensions.eof.qualifiers.ERXFullTextQualifier;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.validation.ERXValidationException;
+import er.extensions.validation.ERXValidationFactory;
 
 /**
  * ERXSQLHelper provides support for additional database-vender-specific
@@ -2235,7 +2242,14 @@ public class ERXSQLHelper {
 	}
 
 	public static class PostgresqlSQLHelper extends ERXSQLHelper {
+		/**
+		 * The exception state string for unique constraint exceptions.
+		 * 
+		 * @see <a href="http://www.postgresql.org/docs/9.1/static/errcodes-appendix.html">Error codes</a>
+		 */
+		public static final String UNIQUE_CONSTRAINT_EXCEPTION_STATE = "23505";
 
+		public static final String UNIQUE_CONSTRAINT_MESSAGE_FORMAT = "ERROR: duplicate key value violates unique constraint \"{0}\"\n  Detail: Key ({1})=({2}) already exists.";
 		/**
 		 * Overriden to prevent the external time types set in 
 		 * {@link #externalTypeForJDBCType(JDBCAdaptor, int)} from being reset.
@@ -2359,6 +2373,36 @@ public class ERXSQLHelper {
 		@Override
 		public int varcharLargeColumnWidth() {
 			return -1;
+		}
+		
+		public boolean handleDatabaseException(EODatabaseContext databaseContext, Throwable throwable) {
+			if(throwable instanceof EOGeneralAdaptorException) {
+				EOGeneralAdaptorException gae = (EOGeneralAdaptorException) throwable;
+				EOAdaptorOperation failedOperation = (EOAdaptorOperation) gae.userInfo().objectForKey(EOAdaptorChannel.FailedAdaptorOperationKey);
+				if(failedOperation != null) {
+					Throwable t = failedOperation.exception();
+					if(t instanceof JDBCAdaptorException) {
+						JDBCAdaptorException jdbcEx = (JDBCAdaptorException) t;
+						SQLException sqlEx = jdbcEx.sqlException();
+						if(UNIQUE_CONSTRAINT_EXCEPTION_STATE.equals(sqlEx.getSQLState())) {
+							String message = sqlEx.getMessage();
+							MessageFormat format = new MessageFormat(UNIQUE_CONSTRAINT_MESSAGE_FORMAT);
+							try {
+								Object[] objs = format.parse(message);
+								String idx = (String) objs[0];
+								ERXValidationFactory factory = ERXValidationFactory.defaultFactory();
+								String method = "UniqueConstraintException." + idx;
+								ERXValidationException ex = factory.createCustomException(null, method);
+								databaseContext.rollbackChanges();
+								throw ex;
+							} catch (ParseException	 pe) {
+								log.warn("Error parsing unique constraint exception message: " + message);
+							}
+						}
+					}
+				}
+			}
+			return false;
 		}
 
 	}
