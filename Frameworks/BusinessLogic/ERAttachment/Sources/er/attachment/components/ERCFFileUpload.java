@@ -12,9 +12,12 @@ import com.rackspacecloud.client.cloudfiles.FilesNotFoundException;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
+import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSPathUtilities;
+import com.webobjects.foundation.NSTimestamp;
 
+import er.attachment.model.ERCloudFilesAttachment;
 import er.attachment.utils.ERMimeType;
 import er.attachment.utils.ERMimeTypeManager;
 import er.extensions.components.ERXComponent;
@@ -148,10 +151,18 @@ public class ERCFFileUpload extends ERXComponent {
     catch (FilesNotFoundException e) {
       cloudFilesConnection().createContainer(container());
     } finally {
-      cloudFilesConnection().storeObjectAs(container(), uploadedFile, mimeType(uploadedFile.getName()), NSPathUtilities.lastPathComponent(_filePath));
-      URL pathToFile = new URL(cloudFilesConnection().getStorageURL() + "/" + container() + "/" + NSPathUtilities.lastPathComponent(_filePath));
-      setValueForBinding(pathToFile.toExternalForm(), "webPath");
+      String mimeType = mimeType(uploadedFile.getName());
+      Long fileSize = new Long(uploadedFile.length());
+      
+      cloudFilesConnection().storeObjectAs(container(), uploadedFile, mimeType, NSPathUtilities.lastPathComponent(_filePath));
+      URL urlToFile = new URL(cloudFilesConnection().getStorageURL() + "/" + container() + "/" + NSPathUtilities.lastPathComponent(_filePath));
+      EOEditingContext editingContext = (EOEditingContext) valueForBinding("editingContext");
+      
+      ERCloudFilesAttachment attachment = ERCloudFilesAttachment.createERCloudFilesAttachment(editingContext, true, new NSTimestamp(), mimeType, NSPathUtilities.lastPathComponent(_filePath), true, fileSize.intValue(), urlToFile.getPath());
+      attachment.setCfPath(urlToFile.toExternalForm());
+      setValueForBinding(attachment, "attachment");
     }
+        
   }
 
   private String mimeType(String recommendedFileName) {

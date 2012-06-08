@@ -5,9 +5,12 @@
             <unbound name="container"/>
         </validation>
     <binding name="configurationName"/>
-    <binding name="webPath"/>
-        <validation message="'webPath' is a required binding.">
-            <unbound name="webPath"/>
+    
+        
+    <binding name="attachment"/>
+        <validation message="'attachment' is a required binding.">
+            <unbound name="attachment"/>
         </validation>
+    <binding name="editingContext"/>
     </wo>
 </wodefinitions>
