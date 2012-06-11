@@ -387,4 +387,214 @@ public class ERXComponentUtilities {
 		return (T) ERXApplication.erxApplication().pageWithName(componentClass);
 	}
 
+	/**
+	 * Checks if there is an association for a binding with the given name.
+	 * 
+	 * @param name binding name
+	 * @param associations array of associations
+	 * @return <code>true</code> if the association exists
+	 */
+	public static boolean hasBinding(String name, NSDictionary<String, WOAssociation> associations) {
+		return associations.objectForKey(name) != null;
+	}
+	
+	/**
+	 * Returns the association for a binding with the given name. If there is
+	 * no such association <code>null</code> will be returned.
+	 * 
+	 * @param name binding name
+	 * @param associations array of associations
+	 * @return association for given binding or <code>null</code>
+	 */
+	public static WOAssociation bindingNamed(String name, NSDictionary<String, WOAssociation> associations) {
+		return associations.objectForKey(name);
+	}
+	
+	/**
+	 * Checks if the association for a binding with the given name can assign
+	 * values at runtime.
+	 * 
+	 * @param name binding name
+	 * @param associations array of associations
+	 * @return <code>true</code> if binding is settable
+	 */
+	public static boolean bindingIsSettable(String name, NSDictionary<String, WOAssociation> associations) {
+		boolean isSettable = false;
+		WOAssociation association = bindingNamed(name, associations);
+		if (association != null) {
+			isSettable = association.isValueSettable();
+		}
+		return isSettable;
+	}
+	
+	/**
+	 * Will try to set the given binding in the component to the passed value.
+	 * 
+	 * @param value new value for the binding
+	 * @param name binding name
+	 * @param associations array of associations
+	 * @param component component to set the value in
+	 */
+	public static void setValueForBinding(Object value, String name, NSDictionary<String, WOAssociation> associations, WOComponent component) {
+		WOAssociation association = bindingNamed(name, associations);
+		if (association != null) {
+			association.setValue(value, component);
+		}
+	}
+	
+	/**
+	 * Retrieves the current value of the given binding from the component. If there
+	 * is no such binding or its value evaluates to <code>null</code> the default
+	 * value will be returned.
+	 * 
+	 * @param name binding name
+	 * @param defaultValue default value
+	 * @param associations array of associations
+	 * @param component component to get value from
+	 * @return retrieved value or default value
+	 */
+	public static Object valueForBinding(String name, Object defaultValue, NSDictionary<String, WOAssociation> associations, WOComponent component) {
+		Object value = valueForBinding(name, associations, component);
+		if (value != null) {
+			return value;
+		}
+		return defaultValue;
+	}
+	
+	/**
+	 * Retrieves the current value of the given binding from the component. If there
+	 * is no such binding <code>null</code> will be returned.
+	 * 
+	 * @param name binding name
+	 * @param associations array of associations
+	 * @param component component to get value from
+	 * @return retrieved value or <code>null</code>
+	 */
+	public static Object valueForBinding(String name, NSDictionary<String, WOAssociation> associations, WOComponent component) {
+		WOAssociation association = bindingNamed(name, associations);
+		if (association != null) {
+			return association.valueInComponent(component);
+		}
+		return null;
+	}
+	
+	/**
+	 * Retrieves the current string value of the given binding from the component. If there
+	 * is no such binding or its value evaluates to <code>null</code> the default
+	 * value will be returned.
+	 * 
+	 * @param name binding name
+	 * @param defaultValue default value
+	 * @param associations array of associations
+	 * @param component component to get value from
+	 * @return retrieved string value or default value
+	 */
+	public static String stringValueForBinding(String name, String defaultValue, NSDictionary<String, WOAssociation> associations, WOComponent component) {
+		String value = stringValueForBinding(name, associations, component);
+		if (value != null) {
+			return value;
+		}
+		return defaultValue;
+	}
+
+	/**
+	 * Retrieves the current string value of the given binding from the component. If there
+	 * is no such binding <code>null</code> will be returned.
+	 * 
+	 * @param name binding name
+	 * @param associations array of associations
+	 * @param component component to get value from
+	 * @return retrieved string value or <code>null</code>
+	 */
+	public static String stringValueForBinding(String name, NSDictionary<String, WOAssociation> associations, WOComponent component) {
+		WOAssociation association = bindingNamed(name, associations);
+		if (association != null) {
+			return (String) association.valueInComponent(component);
+		}
+		return null;
+	}
+	
+	/**
+	 * Retrieves the current boolean value of the given binding from the component. If there
+	 * is no such binding the default value will be returned.
+	 * 
+	 * @param name binding name
+	 * @param defaultValue default value
+	 * @param associations array of associations
+	 * @param component component to get value from
+	 * @return retrieved boolean value or default value
+	 */
+	public static boolean booleanValueForBinding(String name, boolean defaultValue, NSDictionary<String, WOAssociation> associations, WOComponent component) {
+		WOAssociation association = bindingNamed(name, associations);
+		if (association != null) {
+			return association.booleanValueInComponent(component);
+		}
+		return defaultValue;
+	}
+	
+	/**
+	 * Retrieves the current boolean value of the given binding from the component. If there
+	 * is no such binding <code>false</code> will be returned.
+	 * 
+	 * @param name binding name
+	 * @param associations array of associations
+	 * @param component component to get value from
+	 * @return retrieved boolean value or <code>false</code>
+	 */
+	public static boolean booleanValueForBinding(String name, NSDictionary<String, WOAssociation> associations, WOComponent component) {
+		return booleanValueForBinding(name, false, associations, component);
+	}
+	
+	/**
+	 * Retrieves the current int value of the given binding from the component. If there
+	 * is no such binding the default value will be returned.
+	 * 
+	 * @param name binding name
+	 * @param defaultValue default value
+	 * @param associations array of associations
+	 * @param component component to get value from
+	 * @return retrieved int value or default value
+	 */
+	public static int integerValueForBinding(String name, int defaultValue, NSDictionary<String, WOAssociation> associations, WOComponent component) {
+		WOAssociation association = bindingNamed(name, associations);
+		if (association != null) {
+			Object value = association.valueInComponent(component);
+			return ERXValueUtilities.intValueWithDefault(value, defaultValue);
+		}
+		return defaultValue;
+	}
+	
+	
+	/**
+	 * Retrieves the current array value of the given binding from the component. If there
+	 * is no such binding or its value evaluates to <code>null</code> the default
+	 * value will be returned.
+	 * 
+	 * @param name binding name
+	 * @param defaultValue default value
+	 * @param associations array of associations
+	 * @param component component to get value from
+	 * @return retrieved array value or default value
+	 */
+	public static <T> NSArray<T> arrayValueForBinding(String name, NSArray<T> defaultValue, NSDictionary<String, WOAssociation> associations, WOComponent component) {
+		WOAssociation association = bindingNamed(name, associations);
+		if (association != null) {
+			Object value = association.valueInComponent(component);
+			return ERXValueUtilities.arrayValueWithDefault(value, defaultValue);
+		}
+		return defaultValue;
+	}
+
+	/**
+	 * Retrieves the current array value of the given binding from the component. If there
+	 * is no such binding <code>null</code> will be returned.
+	 * 
+	 * @param name binding name
+	 * @param associations array of associations
+	 * @param component component to get value from
+	 * @return retrieved array value or <code>null</code>
+	 */
+	public static NSArray arrayValueForBinding(String name, NSDictionary<String, WOAssociation> associations, WOComponent component) {
+		return arrayValueForBinding(name, null, associations, component);
+	}
 }
