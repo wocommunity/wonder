@@ -8,6 +8,7 @@ package er.extensions.validation;
 
 import org.apache.log4j.Logger;
 
+import com.webobjects.appserver.WOMessage;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOUtilities;
@@ -272,6 +273,16 @@ public class ERXValidationException extends NSValidation.ValidationException imp
      * @return failed validation value.
      */
     public Object value() { return value; }
+    
+    /**
+     * Provides an escaped value to use in validation template string.
+     */
+    public String escapedValue() {
+    	if(value() != null) {
+    		return WOMessage.stringByEscapingHTMLString(value().toString());
+    	}
+    	return null;
+    }
 
     /**
      * Sets the value that failed validation.
