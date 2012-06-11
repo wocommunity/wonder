@@ -45,7 +45,7 @@ public class ERXComponentUtilities {
 	 *            the set of associations
 	 * @param component
 	 *            the component to evaluate their values within
-	 * @return a dictionary of key=value query parameters
+	 * @return a dictionary of key-value query parameters
 	 */
 	public static NSMutableDictionary queryParametersInComponent(NSDictionary associations, WOComponent component) {
 		NSMutableDictionary queryParameterAssociations = ERXComponentUtilities.queryParameterAssociations(associations);
@@ -62,7 +62,7 @@ public class ERXComponentUtilities {
 	 *            the component to evaluate their values within
 	 * @param removeQueryParametersAssociations
 	 *            should the entries be removed from the passed-in dictionary?
-	 * @return dictionary of key-value query parameters
+	 * @return a dictionary of key-value query parameters
 	 */
 	public static NSMutableDictionary queryParametersInComponent(NSMutableDictionary associations, WOComponent component, boolean removeQueryParametersAssociations) {
 		NSMutableDictionary queryParameterAssociations = ERXComponentUtilities.queryParameterAssociations(associations, removeQueryParametersAssociations);
@@ -89,14 +89,15 @@ public class ERXComponentUtilities {
 	 * 
 	 * @param associations
 	 *            the associations to enumerate
+	 * @return dictionary with query parameter associations
 	 */
-	public static NSMutableDictionary queryParameterAssociations(NSDictionary associations) {
+	public static NSMutableDictionary<String, WOAssociation> queryParameterAssociations(NSDictionary<String, WOAssociation> associations) {
 		return ERXComponentUtilities._queryParameterAssociations(associations, false);
 	}
 
 	/**
 	 * Returns the set of ?key=value associations from an associations
-	 * dictionary. If removeQueryParameterAssociations is true, the
+	 * dictionary. If removeQueryParameterAssociations is <code>true</code>, the
 	 * corresponding entries will be removed from the associations dictionary
 	 * that was passed in.
 	 * 
@@ -104,17 +105,18 @@ public class ERXComponentUtilities {
 	 *            the associations to enumerate
 	 * @param removeQueryParameterAssociations
 	 *            should the entries be removed from the passed-in dictionary?
+	 * @return dictionary with query parameter associations
 	 */
-	public static NSMutableDictionary queryParameterAssociations(NSMutableDictionary associations, boolean removeQueryParameterAssociations) {
+	public static NSMutableDictionary<String, WOAssociation> queryParameterAssociations(NSMutableDictionary<String, WOAssociation> associations, boolean removeQueryParameterAssociations) {
 		return ERXComponentUtilities._queryParameterAssociations(associations, removeQueryParameterAssociations);
 	}
 
-	public static NSMutableDictionary _queryParameterAssociations(NSDictionary associations, boolean removeQueryParameterAssociations) {
-		NSMutableDictionary mutableAssociations = null;
+	public static NSMutableDictionary<String, WOAssociation> _queryParameterAssociations(NSDictionary<String, WOAssociation> associations, boolean removeQueryParameterAssociations) {
+		NSMutableDictionary<String, WOAssociation> mutableAssociations = null;
 		if (removeQueryParameterAssociations) {
 			mutableAssociations = (NSMutableDictionary) associations;
 		}
-		NSMutableDictionary queryParameterAssociations = new NSMutableDictionary();
+		NSMutableDictionary<String, WOAssociation> queryParameterAssociations = new NSMutableDictionary<String, WOAssociation>();
 		Enumeration keyEnum = associations.keyEnumerator();
 		while (keyEnum.hasMoreElements()) {
 			String key = (String) keyEnum.nextElement();
@@ -215,6 +217,7 @@ public class ERXComponentUtilities {
 	 *            the list of languages to use for finding components
 	 * @return the string contents of the html template (or null if there isn't
 	 *         one)
+	 * @throws IOException
 	 */
 	public static String htmlTemplate(String componentName, NSArray languages) throws IOException {
 		return ERXComponentUtilities.template(componentName, "html", languages);
@@ -233,6 +236,7 @@ public class ERXComponentUtilities {
 	 * @param languages
 	 *            the list of languages to use for finding components
 	 * @return the string contents of the template (or null if there isn't one)
+	 * @throws IOException
 	 */
 	public static String template(String componentName, String extension, NSArray languages) throws IOException {
 		String template;
@@ -285,8 +289,9 @@ public class ERXComponentUtilities {
 	/**
 	 * Returns an array of the current component names.
 	 * 
+	 * @return array of current component names
 	 */
-	public static NSArray componentTree() {
+	public static NSArray<String> componentTree() {
 		WOContext context = ERXWOContext.currentContext();
 		NSMutableArray<String> result = new NSMutableArray<String>();
 		if (context != null) {
@@ -369,7 +374,7 @@ public class ERXComponentUtilities {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T extends WOComponent> T pageWithName(Class<T> componentClass, WOContext context) {
-		return (T) ERXApplication.erxApplication().pageWithName(componentClass, context);
+		return ERXApplication.erxApplication().pageWithName(componentClass, context);
 	}
 
 	/**
@@ -384,7 +389,7 @@ public class ERXComponentUtilities {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T extends WOComponent> T pageWithName(Class<T> componentClass) {
-		return (T) ERXApplication.erxApplication().pageWithName(componentClass);
+		return ERXApplication.erxApplication().pageWithName(componentClass);
 	}
 
 	/**
