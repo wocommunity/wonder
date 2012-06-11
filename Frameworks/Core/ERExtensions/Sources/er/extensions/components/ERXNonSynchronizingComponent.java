@@ -34,11 +34,6 @@ public abstract class ERXNonSynchronizingComponent extends ERXComponent {
 		return false;
 	}
 
-	/** component is not stateless */
-	public boolean isStateless() {
-		return false;
-	}
-
 	/**
 	 * Calls {@link #resetCachedBindingsInStatefulComponent} prior to super.takeValuesFromRequest.
 	 * @param request from which the values will be taken
