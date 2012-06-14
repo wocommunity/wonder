@@ -15,6 +15,7 @@ import er.neo4jadaptor.query.Filter;
 import er.neo4jadaptor.query.Results;
 import er.neo4jadaptor.query.neo4j_by_pk.results.NodesRelatedTo;
 import er.neo4jadaptor.query.neo4j_by_pk.results.NodesWithIds;
+import er.neo4jadaptor.query.neo4j_eval.EvaluatingFilter;
 import er.neo4jadaptor.storage.neo4j.RelationshipStore;
 import er.neo4jadaptor.utils.EOUtilities;
 
@@ -51,13 +52,17 @@ public class ByPrimaryKeyFilter<T extends PropertyContainer> extends Filter<T> {
 			if (! containsNulls) {
 				if (entity.primaryKeyAttributes().size() == 1 && att.equals(EOUtilities.primaryKeyAttribute(entity))) {
 					// it's primary key
-					return (Results<T>) primaryKeyReference(db, (Collection<? extends Number>) values);
+					Results<T> filter = (Results<T>) primaryKeyReference(db, (Collection<? extends Number>) values);
+					
+					return new EvaluatingFilter<T>(filter, entity, qualifier);
 				}
 				if (rel != null 
 						&& ! RelationshipStore.shouldBeStoredAsRelationship(rel.entity()) 
 						&& ! RelationshipStore.shouldBeStoredAsRelationship(rel.destinationEntity()) ) {
 					// it's using foreign key
-					return (Results<T>) foreignKeyReference(db, rel, (Collection<? extends Number>) values);
+					Results<T> filter = (Results<T>) foreignKeyReference(db, rel, (Collection<? extends Number>) values);
+					
+					return new EvaluatingFilter<T>(filter, entity, qualifier);
 				}
 			}
 		}
