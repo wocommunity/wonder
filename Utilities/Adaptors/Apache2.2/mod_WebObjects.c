@@ -357,7 +357,7 @@ static void copyHeaders(request_rec *r, HTTPRequest *req) {
 
     port = (char *)WOMALLOC(32);
     if (port) {
-        apr_snprintf(port, sizeof(port), "%u", s->port);
+        apr_snprintf(port, sizeof(port), "%d", ap_get_server_port(r));
         req_addHeader(req, "SERVER_PORT", port, STR_FREEVALUE);
     }
 
