@@ -591,7 +591,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	/**
 	 * Appends function body to open the modal dialog window.
 	 * 
-	 * @see AjaxModalDialog#openDialogFunctionName(String)
+	 * @see #openDialogFunctionName(String)
 	 * 
 	 * @param response WOResponse to append to
 	 * @param context WOContext of response
@@ -778,7 +778,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	 * Stash this dialog instance in the context so we can access it from the static methods.  If there is one AMD 
 	 * nested in another (a rather dubious thing to do that we warn about but it may have its uses), we need to remember 
 	 * the outer one while processing this inner one
-	 * @see AjaxModalDialog#popDialog()
+	 * @see #popDialog()
 	 */
 	protected void pushDialog() {
 		outerDialog = (AjaxModalDialog) ERXWOContext.contextDictionary().objectForKey(AjaxModalDialog.class.getName());
