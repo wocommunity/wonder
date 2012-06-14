@@ -68,13 +68,18 @@ public class DatabasePool {
 	}
 	
 	/**
-	 * Gets database instance configured as in system properties operating in the given path.
+	 * Gets database instance configured as in system properties operating at the given URL.
 	 * 
-	 * @param path database path
+	 * @param url database url
 	 * @return database
 	 */
-	public GraphDatabaseService get(String path) {
-		GraphDatabaseService db = map.get(path);
+	public GraphDatabaseService get(String url) {
+		if (! url.startsWith("file://")) {
+			throw new IllegalArgumentException("Only URLs for file protocol (starting with 'file://') are supported");
+		}
+		String path = url.substring("file://".length());
+		
+		GraphDatabaseService db = map.get(url);
 		
 		if (db == null) {
 			Map<String, String> config = getConfig();
@@ -92,7 +97,7 @@ public class DatabasePool {
 			}
 			
 			registerShutdownHook(db);
-			map.put(path, db);
+			map.put(url, db);
 		}
 		return db;
 	}
