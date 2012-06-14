@@ -2,6 +2,7 @@ package er.extensions.appserver;
 
 import java.text.SimpleDateFormat;
 import java.util.Enumeration;
+import java.util.Map;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
@@ -24,12 +25,13 @@ import com.webobjects.foundation.NSTimestamp;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.localization.ERXLocalizer;
 
-/** Subclass of WORequest that fixes several Bugs.
+/**
+ * Subclass of WORequest that fixes several Bugs.
  * The ID's are #2924761 and #2961017. It can also be extended to handle
  * #2957558 ("de-at" is converted to "German" instead of "German_Austria").
  * The request is created via {@link ERXApplication#createRequest(String,String,String, NSDictionary,NSData,NSDictionary)}.
  */
-public  class ERXRequest extends WORequest {
+public class ERXRequest extends WORequest {
 
 	/** logging support */
     public static final Logger log = Logger.getLogger(ERXRequest.class);
@@ -55,21 +57,26 @@ public  class ERXRequest extends WORequest {
 
     /**
      * Specifies whether https should be overridden to be enabled or disabled app-wide. This is 
-     * useful if you are developing with DirectConnect and you want to be able to specif secure 
+     * useful if you are developing with DirectConnect and you want to be able to specify secure 
      * forms and links, but you want to be able to continue testing them without setting up SSL.
      * 
-     * Defaults to false, set er.extensions.ERXRequest.secureDisabled=true to turn it off.
+     * Defaults to <code>false</code>, set er.extensions.ERXRequest.secureDisabled=true to turn it off.
      */
     protected boolean _secureDisabled;
     
-    
-    
-     /** Simply call superclass constructor */
-    public ERXRequest(String string, String string0, String string1,
-                      NSDictionary nsdictionary, NSData nsdata,
-                      NSDictionary nsdictionary2) {
-        super(string, string0, string1, nsdictionary,
-              nsdata, nsdictionary2);
+    /**
+     * Returns a ERXRequest object initialized with the specified parameters.
+     * 
+     * @param aMethod a "GET", "POST" or "HEAD", may not be <code>null</code>. If <code>null</code>, or not one of the allowed methods, an IllegalArgumentException will be thrown
+     * @param aURL a URL, may not be null or an IllegalArgumentException will be thrown
+     * @param anHTTPVersion  the version of HTTP used when sending the message, may not be <code>null</code> or an IllegalArgumentException will be thrown
+     * @param someHeaders  a dictionary whose String keys correspond to header names and whose values are arrays of one or more strings corresponding to the values of each header
+     * @param aContent the HTML content
+     * @param aUserInfoDictionary java.util.Map that contains any information that the WORequest object wants to pass along to other objects
+     */
+    public ERXRequest(String aMethod, String aURL, String anHTTPVersion,
+                      Map someHeaders, NSData aContent, Map aUserInfoDictionary) {
+        super(aMethod, aURL, anHTTPVersion, someHeaders, aContent, aUserInfoDictionary);
         if (isBrowserFormValueEncodingOverrideEnabled() && browser().formValueEncoding() != null) {
             setDefaultFormValueEncoding(browser().formValueEncoding());
         }
@@ -113,18 +120,19 @@ public  class ERXRequest extends WORequest {
 	}
 
     /**
-     * Returns true if er.extensions.ERXRequest.secureDisabled is true.
+     * Returns <code>true</code> if er.extensions.ERXRequest.secureDisabled is true.
+     * Defaults to <code>false</code>.
      * 
-     * @return true if er.extensions.ERXRequest.secureDisabled is true
+     * @return <code>true</code> if er.extensions.ERXRequest.secureDisabled is true
      */
     public static boolean _isSecureDisabled() {
         return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXRequest.secureDisabled", false);
     }
     
     /**
-     * Returns true if er.extensions.ERXRequest.secureDisabled is true.
+     * Returns <code>true</code> if er.extensions.ERXRequest.secureDisabled is true.
      * 
-     * @return true if er.extensions.ERXRequest.secureDisabled is true
+     * @return <code>true</code> if er.extensions.ERXRequest.secureDisabled is true
      */
     public boolean isSecureDisabled() {
     	return _secureDisabled;
@@ -482,6 +490,7 @@ public  class ERXRequest extends WORequest {
     }
     
     /**
+     * @return remote client host address
      * @deprecated use {@link #remoteHostAddress()}
      */
     @Deprecated
