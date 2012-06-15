@@ -1,0 +1,102 @@
+{
+    attributes = (
+        {
+            allowsNull = Y; 
+            columnName = bool; 
+            name = bool; 
+            valueClassName = NSNumber; 
+            valueType = c; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = floatNumber; 
+            name = floatNumber; 
+            valueClassName = NSNumber; 
+            valueType = f; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = ID; 
+            externalType = INTEGER; 
+            name = id; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = number; 
+            name = number; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = secondEntityId; 
+            name = secondEntityId; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = text; 
+            name = text; 
+            valueClassName = NSString; 
+            valueType = S; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = timestamp; 
+            name = timestamp; 
+            valueClassName = NSCalendarDate; 
+            valueType = T; 
+        }
+    ); 
+    attributesUsedForLocking = (bool, floatNumber, id, number, secondEntityId, text, timestamp); 
+    className = "er.neo4jadaptor.test.eo.FirstEntity"; 
+    classProperties = (
+        bool, 
+        floatNumber, 
+        joins, 
+        "joins_secondEntity", 
+        "joins_secondEntity_firstEntities", 
+        number, 
+        secondEntity, 
+        secondEntityId, 
+        text, 
+        thirdEntities, 
+        timestamp
+    ); 
+    externalName = FirstEntity; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {"_javaClientClassName" = FirstEntity; }; 
+    name = FirstEntity; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = Join; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = firstId; sourceAttribute = id; }); 
+            name = joins; 
+        }, 
+        {definition = "joins.secondEntity"; name = "joins_secondEntity"; }, 
+        {
+            definition = "joins.secondEntity.firstEntities"; 
+            name = "joins_secondEntity_firstEntities"; 
+        }, 
+        {
+            destination = SecondEntity; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = secondEntityId; }); 
+            name = secondEntity; 
+        }, 
+        {
+            destination = ThirdEntity; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = firstId; sourceAttribute = id; }); 
+            name = thirdEntities; 
+        }
+    ); 
+}
