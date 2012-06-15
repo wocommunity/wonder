@@ -270,6 +270,15 @@
         </antcall>
     </target>
 
+	<target name="JavaNeo4JAdaptorTest.all">
+        <antcall target="global.application.${build.action}" >
+            <param name="project.type" value="application" />
+            <param name="project.name" value="JavaNeo4JAdaptorTest" />
+            <param name="project.dir" value="Tests/JavaNeo4JAdaptorTest" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/JavaNeo4JAdaptor" />
+        </antcall>
+    </target>
+
     <target name="ERIndexing.all">
         <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="" />
@@ -1238,7 +1247,7 @@
 
     <target name="applications.all" depends="DevStudio.all, common.applications.all, validity.applications.all, JavaMonitor.all, wotaskd.all"/>
     <target name="examples.all" depends="common.examples.all, validity.examples.all, dynareporting.examples.all, ajax.examples.all, experimental.all"/>
-    <target name="tests.all" depends="ERXTest.all, PluginTest.all"/> <!-- TODO include ERRestTest, TestAdaptor -->
+    <target name="tests.all" depends="ERXTest.all, PluginTest.all"/> <!-- TODO include ERRestTest, TestAdaptor, JavaNeo4JAdaptorTest.all -->
 
     <target name="all.run" depends="frameworks.all, applications.all, examples.all"/>
 
