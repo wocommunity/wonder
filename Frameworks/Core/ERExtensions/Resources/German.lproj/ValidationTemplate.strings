@@ -1,7 +1,7 @@
 {
 	"EOObjectNotAvailableException" = "This object was not found in the database. It was probably deleted by someone else.";
 	"ExceedsMaximumLengthException" = "The value entered for <b>@@displayNameForProperty@@</b> exceeds the length of <b>@@attribute.width@@</b>.";
-	"InvalidNumberException" = "Please check <b>@@displayNameForProperty@@</b> as @@value@@ is an invalid number.";
+	"InvalidNumberException" = "Please check <b>@@displayNameForProperty@@</b> as @@escapedValue@@ is an invalid number.";
 	"MandatoryToManyRelationshipException" = "The <b>@@object.entityName@@</b> must has a mandatory relationship which is not being satisfied.";
 	"MandatoryToOneRelationshipException" = "A <b>@@displayNameForEntity@@</b> must have a <b>@@displayNameForProperty@@</b>.";
 	"NullPropertyException" = "Please provide a <b>@@displayNameForProperty@@</b>.";

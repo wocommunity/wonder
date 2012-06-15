@@ -432,6 +432,9 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         errorMessages.removeAllObjects();
         errorKeyOrder.removeAllObjects();
         keyPathsWithValidationExceptions.removeAllObjects();
+        if(validationDelegate() != null) {
+        	validationDelegate().clearValidationFailed();
+        }
     }
 
     /**
@@ -591,6 +594,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     	
         public abstract boolean hasValidationExceptionForPropertyKey();
         public abstract void validationFailedWithException(Throwable e, Object value, String keyPath);
+        public abstract void clearValidationFailed();
     }
 
     /** Checks if the current object can be edited. */
@@ -961,6 +965,15 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
 
     /** Returns the {@link ERD2WContainer} defining the current tab. */
     public ERD2WContainer currentTab() {
+        if (_currentTab == null && tabSectionsContents() != null && tabSectionsContents().count() > 0) {
+            //If firstTab is not null, then try to find the tab named firstTab
+        	Integer tabIndex = (Integer) d2wContext().valueForKey(Keys.tabIndex);
+            if(tabIndex!=null && tabIndex.intValue() <= tabSectionsContents().count()){
+                setCurrentTab((ERD2WContainer)tabSectionsContents().objectAtIndex(tabIndex.intValue()));
+            }
+            if(_currentTab==null)
+                setCurrentTab((ERD2WContainer)tabSectionsContents().objectAtIndex(0));
+        }
         return _currentTab;
     }
 

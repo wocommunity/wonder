@@ -12,6 +12,7 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.appserver.ERXApplication;
+import er.extensions.appserver.ERXHttpStatusCodes;
 import er.extensions.eof.ERXEC;
 import er.rest.ERXRestRequestNode;
 import er.rest.format.ERXRestFormatDelegate;
@@ -474,7 +475,7 @@ public class ERXRestRequestHandler extends WORequestHandler {
 
 					IERXRestResponseWriter restResponseWriter = responseWriterForType(type);
 					restResponseWriter.appendToResponse(restContext, new ERXWORestResponse(response), responseKey);
-					response.setStatus(201);
+					response.setStatus(ERXHttpStatusCodes.CREATED);
 				}
 			}
 			finally {
@@ -487,17 +488,17 @@ public class ERXRestRequestHandler extends WORequestHandler {
 			}
 		}
 		catch (ERXRestNotFoundException e) {
-			response.setStatus(404);
+			response.setStatus(ERXHttpStatusCodes.NOT_FOUND);
 			response.setContent(e.getMessage() + "\n");
 			ERXRestRequestHandler.log.error("Request failed.", e);
 		}
 		catch (ERXRestSecurityException e) {
-			response.setStatus(403);
+			response.setStatus(ERXHttpStatusCodes.STATUS_FORBIDDEN);
 			response.setContent(e.getMessage() + "\n");
 			ERXRestRequestHandler.log.error("Request failed.", e);
 		}
 		catch (Exception e) {
-			response.setStatus(500);
+			response.setStatus(ERXHttpStatusCodes.INTERNAL_ERROR);
 			response.setContent(e.getMessage() + "\n");
 			ERXRestRequestHandler.log.error("Request failed.", e);
 		}

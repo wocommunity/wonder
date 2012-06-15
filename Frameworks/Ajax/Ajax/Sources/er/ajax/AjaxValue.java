@@ -36,7 +36,7 @@ public class AjaxValue {
 	/**
 	 * Creates AjaxValue for value with the type guessed at.
 	 * 
-	 * @see AjaxValue#AjaxValue(er.ajax.AjaxOption.Type, Object)
+	 * @see #AjaxValue(er.ajax.AjaxOption.Type, Object)
 	 *
 	 * @param value the value to make into an AjaxValue
 	 */
@@ -49,7 +49,7 @@ public class AjaxValue {
 	 * the actual type will be inferred if value is String, Number, Boolean, NSArray, NSDictionary, 
 	 * or AjaxValue (if value is an AjaxValue then both type and value are taken from value).
 	 * 
-	 * @see AjaxValue#AjaxValue(Object)
+	 * @see #AjaxValue(Object)
 	 * @see AjaxOption.Type
 	 * 
 	 * @param type one of AjaxOption.Type constants from AjaxOption

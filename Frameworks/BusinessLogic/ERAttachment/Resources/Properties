@@ -227,3 +227,4 @@ er.attachment.mimeType.video/x-ms-wmv.extensions=wmv
 
 er.attachment.cf.connectionTimeOut=5000
 er.attachment.cf.authUrl=https://auth.api.rackspacecloud.com/v1.0
+er.attachment.cf.authTokenName=X-Auth-Token

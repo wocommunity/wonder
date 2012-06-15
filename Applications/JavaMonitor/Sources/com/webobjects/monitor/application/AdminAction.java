@@ -351,6 +351,12 @@ public class AdminAction extends WODirectAction {
             result += "\"deaths\": \"" + minstance.deathCount() + "\", ";
             result += "\"refusingNewSessions\": " + minstance.isRefusingNewSessions() + ", ";
             result += "\"scheduled\": " + minstance.isScheduled() + ", ";
+            result += "\"schedulingHourlyStartTime\": " + minstance.schedulingHourlyStartTime() + ", ";
+            result += "\"schedulingDailyStartTime\": " + minstance.schedulingDailyStartTime() + ", ";
+            result += "\"schedulingWeeklyStartTime\": " + minstance.schedulingWeeklyStartTime() + ", ";
+            result += "\"schedulingType\": \"" + minstance.schedulingType() + "\", ";
+            result += "\"schedulingStartDay\": " + minstance.schedulingStartDay() + ", ";
+            result += "\"schedulingInterval\": " + minstance.schedulingInterval() + ", ";
             result += "\"transactions\": \"" + minstance.transactions() + "\", ";
             result += "\"activeSessions\": \"" + minstance.activeSessions() + "\", ";
             result += "\"averageIdlePeriod\": \"" + minstance.averageIdlePeriod() + "\", ";
@@ -445,6 +451,35 @@ public class AdminAction extends WODirectAction {
 
     public void clearDeathsAction() {
         applicationsPage().clearDeaths(instances);
+    }
+    
+    public void scheduleTypeAction() {
+        String scheduleType = (String) context().request().formValueForKey("scheduleType");
+        if (scheduleType != null && ("HOURLY".equals(scheduleType) ||  "DAILY".equals(scheduleType) || "WEEKLY".equals(scheduleType)))
+        		applicationsPage().scheduleType(instances, scheduleType);
+    }
+
+    public void hourlyScheduleRangeAction() {
+        String beginScheduleWindow = (String) context().request().formValueForKey("hourBegin");
+        String endScheduleWindow = (String) context().request().formValueForKey("hourEnd");
+        String interval = (String) context().request().formValueForKey("interval");
+        if (beginScheduleWindow != null && endScheduleWindow != null && interval != null)
+        		applicationsPage().hourlyStartHours(instances, Integer.parseInt(beginScheduleWindow), Integer.parseInt(endScheduleWindow), Integer.parseInt(interval));
+    }
+
+    public void dailyScheduleRangeAction() {
+        String beginScheduleWindow = (String) context().request().formValueForKey("hourBegin");
+        String endScheduleWindow = (String) context().request().formValueForKey("hourEnd");
+        if (beginScheduleWindow != null && endScheduleWindow != null)
+        		applicationsPage().dailyStartHours(instances, Integer.parseInt(beginScheduleWindow), Integer.parseInt(endScheduleWindow));
+    }
+    
+    public void weeklyScheduleRangeAction() {
+        String beginScheduleWindow = (String) context().request().formValueForKey("hourBegin");
+        String endScheduleWindow = (String) context().request().formValueForKey("hourEnd");
+        String weekDay = (String) context().request().formValueForKey("weekDay");
+        if (beginScheduleWindow != null && endScheduleWindow != null && weekDay != null)
+        		applicationsPage().weeklyStartHours(instances, Integer.parseInt(beginScheduleWindow), Integer.parseInt(endScheduleWindow), Integer.parseInt(weekDay));
     }
 
     public void turnScheduledOnAction() {

@@ -35,7 +35,6 @@ import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.eof.ERXGenericRecord;
 import er.extensions.foundation.ERXArrayUtilities;
-import er.extensions.foundation.ERXEOSerializationUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 import er.modern.directtoweb.components.buttons.ERMDActionButton;
 import er.modern.directtoweb.interfaces.ERMEditRelationshipPageInterface;
@@ -495,9 +494,9 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	}
 	
 	private void writeObject(ObjectOutputStream out) throws IOException {
-		ERXEOSerializationUtilities.writeEO(out, _masterObject);
-		ERXEOSerializationUtilities.writeEO(out, _objectToAddToRelationship);
-		ERXEOSerializationUtilities.writeEO(out, _selectedObject);
+		out.writeObject(_masterObject);
+		out.writeObject(_objectToAddToRelationship);
+		out.writeObject(_selectedObject);
 		out.writeObject(_relationshipKey);
 		out.writeBoolean(isRelationshipToMany);
 		out.writeObject(_dataSource);
@@ -508,9 +507,9 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	}
 	
 	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-		_masterObject = ERXEOSerializationUtilities.readEO(in);
-		_objectToAddToRelationship = ERXEOSerializationUtilities.readEO(in);
-		_selectedObject = ERXEOSerializationUtilities.readEO(in);
+		_masterObject = (EOEnterpriseObject) in.readObject();
+		_objectToAddToRelationship = (EOEnterpriseObject) in.readObject();
+		_selectedObject = (EOEnterpriseObject) in.readObject();
 		_relationshipKey = (String) in.readObject();
 		isRelationshipToMany = in.readBoolean();
 		_dataSource = (EODataSource) in.readObject();

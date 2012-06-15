@@ -6,6 +6,9 @@
 //
 package er.extensions.eof;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Constructor;
@@ -27,6 +30,7 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.eocontrol.EOObjectStore;
+import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.eocontrol.EOSharedEditingContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -2021,5 +2025,27 @@ public class ERXEC extends EOEditingContext {
 		public void handle(Signal signal) {
 			log.info(outstandingLockDescription());
 		}
+	}
+	
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+		in.defaultReadObject();
+	}
+	
+	private void writeObject(ObjectOutputStream out) throws IOException {
+		out.defaultWriteObject();
+		/*
+		 * The superclass serialization methods register for notifications during
+		 * readObject, but do not unregister during writeObject. Since the
+		 * NSNotificationCenter hangs on to the ec until it is gc'ed, then it is
+		 * possible to have an ec containing insertedObjects which were later
+		 * saved in a different deserialized ec. If one of these objects is then
+		 * deleted, the notification center broadcasts an invalidate objects
+		 * notification to the ec which still contains the eo in insertedObjects.
+		 * 
+		 * When this happens, the ec throws an exception. To prevent this, the ec 
+		 * is removed here as an observer for notifications when it is serialized.
+		 */
+		NSNotificationCenter nc = NSNotificationCenter.defaultCenter();
+		nc.removeObserver(this);
 	}
 }

@@ -7,6 +7,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.appserver.ERXHttpStatusCodes;
 import er.extensions.foundation.ERXProperties;
 import er.rest.ERXRestContext;
 import er.rest.ERXRestRequestNode;
@@ -95,7 +96,7 @@ public class ERXRouteResults implements WOActionResults {
 			}
 		}
 		if (("POST".equals(_context.request().method())) && (isStrictMode)) {
-			response.setStatus(201);
+			response.setStatus(ERXHttpStatusCodes.CREATED);
 		}
 		// PR: ERXRouteResults is not extending from WOResponse, so this code can't be in ERXRouteController.processActionResults
 		WOSession session = _context._session();

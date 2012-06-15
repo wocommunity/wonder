@@ -1140,7 +1140,18 @@ public class ERXRouteController extends WODirectAction {
 		}
 		String str = format().toString(errorMessage, null, null);
 		WOResponse response = stringResponse(str);
-		response.setStatus(status);	
+		response.setStatus(status);
+		if (format().equals(ERXRestFormat.json())) {
+			response.setHeader("application/json", "Content-Type");
+		} else if (format().equals(ERXRestFormat.xml())) { 
+			response.setHeader("text/xml", "Content-Type");
+		} else if (format().equals(ERXRestFormat.plist())) { 
+			response.setHeader("text/plist", "Content-Type");
+		} else if (format().equals(ERXRestFormat.bplist())) { 
+			response.setHeader("application/x-plist", "Content-Type");
+		} else {
+			response.setHeader("application/json", "Content-Type");			
+		}
 		log.error("Request failed: " + request().uri(), t);
 		return response;
 	}
@@ -1571,10 +1582,10 @@ public class ERXRouteController extends WODirectAction {
 		Throwable meaningfulThrowble = ERXExceptionUtilities.getMeaningfulThrowable(t);
 		boolean isStrictMode = ERXProperties.booleanForKeyWithDefault("ERXRest.strictMode", true);
 		if (meaningfulThrowble instanceof ObjectNotAvailableException || meaningfulThrowble instanceof FileNotFoundException || meaningfulThrowble instanceof NoSuchElementException) {
-			results = errorResponse(meaningfulThrowble, WOMessage.HTTP_STATUS_NOT_FOUND);
+			results = errorResponse(meaningfulThrowble, ERXHttpStatusCodes.NOT_FOUND);
 		}
 		else if (meaningfulThrowble instanceof SecurityException) {
-			results = errorResponse(meaningfulThrowble, WOMessage.HTTP_STATUS_FORBIDDEN);
+			results = errorResponse(meaningfulThrowble, ERXHttpStatusCodes.STATUS_FORBIDDEN);
 		}
 		else if (meaningfulThrowble instanceof ERXNotAllowedException) {
 			results = errorResponse(ERXHttpStatusCodes.METHOD_NOT_ALLOWED);
@@ -1583,7 +1594,7 @@ public class ERXRouteController extends WODirectAction {
 			results = errorResponse(meaningfulThrowble, ERXHttpStatusCodes.BAD_REQUEST);
 		}
 		else {
-			results = errorResponse(meaningfulThrowble, WOMessage.HTTP_STATUS_INTERNAL_ERROR);
+			results = errorResponse(meaningfulThrowble,ERXHttpStatusCodes.INTERNAL_ERROR);
 		}
 		// MS: Should we jam the exception in the response userInfo so the transaction adaptor can rethrow the real exception?
 		return results;

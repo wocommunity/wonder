@@ -89,6 +89,8 @@ public class ERXTestSuite {
     suite.addTestSuite(er.chronic.HandlerTest.class);
     suite.addTestSuite(er.chronic.RepeaterWeekendTest.class);
     suite.addTestSuite(er.chronic.NumerizerTest.class);
+    
+    suite.addTestSuite(er.extensions.crypting.TestBCrypt.class);
 
     return suite;
   }
