@@ -152,7 +152,7 @@ Refer to package description for each component details.
 There are two things you need to do to start using Neo4J adaptor in your model:
 <ol>
 <li>Set adaptor name to "Neo4J"</li>
-<li>In connection dictionary set value for "URL" key being filesystem path to your database. At the moment it's not really an URL, but is there for EO modeler UI compatibility and in future if Neo4J server API is used it would be suitable property.</li>
+<li>In connection dictionary set value for "URL" key being filesystem path to your database. At the moment only <code>file://...</code> URLs are supported.</li>
 </ol>
 Since graph database has no schema you don't need to set up database, it will be created and set up by the adaptor.
 

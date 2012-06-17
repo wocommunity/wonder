@@ -529,7 +529,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     }
     
     public ValidationDelegate validationDelegate() {
-    	if(shouldCollectValidationExceptions() && !validationDelegateInited) {
+    	if(!validationDelegateInited && _localContext != null && shouldCollectValidationExceptions()) {
     		// initialize validation delegate
     		String delegateClassName = (String)d2wContext().valueForKey("validationDelegateClassName");
     		if(delegateClassName != null) {
@@ -595,7 +595,20 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         public abstract boolean hasValidationExceptionForPropertyKey();
         public abstract void validationFailedWithException(Throwable e, Object value, String keyPath);
         public abstract void clearValidationFailed();
+        public abstract String errorMessageForPropertyKey();
     }
+    
+    /**
+     * @return the validation exception message for the current property key
+     */
+    public String errorMessageForPropertyKey() {
+    	if(validationDelegate() != null) {
+    		return validationDelegate().errorMessageForPropertyKey();
+    	}
+        return propertyKey() != null && keyPathsWithValidationExceptions.containsObject(propertyKey())?
+        		(String) errorMessages().objectForKey(propertyKey()):null;
+    }
+
 
     /** Checks if the current object can be edited. */
     public boolean isObjectEditable() {

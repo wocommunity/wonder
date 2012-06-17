@@ -119,14 +119,6 @@ public class NodeStore implements Store<Ersatz, Neo4JErsatz> {
 			if (! Integer.class.equals(valueType) && ! Long.class.equals(valueType)) {
 				throw new UnsupportedEntityException("Primary key " + entity.name() + "." + pk.name() + " value type must be integer or long type");
 			}
-			
-			// check attributes
-			for (EOAttribute att : entity.attributes()) {
-				valueType = Class.forName(att.valueTypeClassName());
-				if (Float.class.equals(valueType) || Double.class.equals(valueType)) {
-					log.warn("Floating point may be not accurately handled in queries");
-				}
-			}
 		} catch (ClassNotFoundException e) {
 			throw new RuntimeException(e);
 		}
