@@ -54,6 +54,7 @@ import er.rest.ERXRestContext;
 import er.rest.ERXRestFetchSpecification;
 import er.rest.ERXRestRequestNode;
 import er.rest.ERXRestUtils;
+import er.rest.IERXRestDelegate;
 import er.rest.format.ERXRestFormat;
 import er.rest.format.ERXWORestRequest;
 import er.rest.format.ERXWORestResponse;
@@ -99,6 +100,10 @@ public class ERXRouteController extends WODirectAction {
 	private boolean _shouldDisposeEditingContext;
 	private ERXRestContext _restContext;
 
+	protected boolean addLocationHeader;
+	protected Object createdObject;
+	protected String locationActionName;
+
 	/**
 	 * Constructs a new ERXRouteController.
 	 * 
@@ -108,6 +113,7 @@ public class ERXRouteController extends WODirectAction {
 	public ERXRouteController(WORequest request) {
 		super(request);
 		_shouldDisposeEditingContext = true;
+		addLocationHeader = false;
 		ERXRouteController._registerControllerForRequest(this, request);
 	}
 
@@ -643,7 +649,7 @@ public class ERXRouteController extends WODirectAction {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T create(ERXKeyFilter filter, ERXRestContext restContext) {
-		return (T)requestNode().createObjectWithFilter(entityName(), filter, restContext);
+		return create(entityName(), filter, restContext);
 	}
 
 	/**
@@ -660,7 +666,49 @@ public class ERXRouteController extends WODirectAction {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T create(String entityName, ERXKeyFilter filter, ERXRestContext restContext) {
-		return (T)requestNode().createObjectWithFilter(entityName, filter, restContext);
+		T newObject = (T) requestNode().createObjectWithFilter(entityName, filter, restContext);
+		registerCreatedObject(newObject);
+		return newObject;
+	}
+
+	/**
+	 * Register the given object to be used to create a location header for the response object. This is
+	 * called automatically by the different create methods in this class. If you create your object
+	 * manually you should call this method yourself.
+	 * 
+	 * @param newObject
+	 *            object that has been created
+	 */
+	public void registerCreatedObject(Object newObject) {
+		addLocationHeader = true;
+		createdObject = newObject;
+	}
+
+	
+	/**
+	 * Unregisters the currently registered created object so that no location header will be
+	 * added to the response.
+	 */
+	public void unregisterCreatedObject() {
+		addLocationHeader = false;
+		createdObject = null;
+	}
+	
+	/**
+	 * @return name of the action to use for the location header
+	 */
+	public String locationActionName() {
+		return locationActionName;
+	}
+	
+	/**
+	 * Set the name of the action method to be used for the location header. If <code>null</code> it will
+	 * use the default show action.
+	 * 
+	 * @param locationActionName action method name for location header
+	 */
+	public void setLocationActionName(String locationActionName) {
+		this.locationActionName = locationActionName;
 	}
 
 	/**
@@ -1621,8 +1669,33 @@ public class ERXRouteController extends WODirectAction {
 			if (allowOrigin != null) {
 				_setHeaderForActionResults(allowOrigin, "Access-Control-Allow-Origin", results);
 			}
+			
+			if (addLocationHeader && createdObject != null) {
+				boolean completeURLs = context.doesGenerateCompleteURLs();
+				if (!completeURLs) {
+					context.generateCompleteURLs();
+					try {
+						NSMutableDictionary<String, Object> queryDict = new NSMutableDictionary<String, Object>();
+						if (context.hasSession()) {
+							queryDict.takeValueForKey(session().sessionID(), WOApplication.application().sessionIdKey());
+						}
+						boolean isSecure = ERXRequest.isRequestSecure(context.request());
+						Object entityID = IERXRestDelegate.Factory.delegateForEntityNamed(entityName()).primaryKeyForObject(createdObject, restContext());
+						
+						String url = actionUrlForEntity(context(), entityName(), entityID, locationActionName(), format().name(), queryDict, isSecure, true);
+						
+						_setHeaderForActionResults(url, "Location", results);
+					}
+					finally {
+						if (!completeURLs) {
+							context.generateRelativeURLs();
+						}
+					}
+				}
+			}
 		}
-		
+		unregisterCreatedObject();
+
 		WOActionResults processedResults = results;
 		if (allowWindowNameCrossDomainTransport()) {
 			String windowNameCrossDomainTransport = request().stringFormValueForKey("windowname");
@@ -1640,7 +1713,31 @@ public class ERXRouteController extends WODirectAction {
 		}
 		return processedResults;
 	}
-	
+
+	/**
+	 * Creates the URL to access a newly created object. This uses the default URL schema of ERRest but you can override
+	 * this method in your controller class to alter the URL or use an own URL factory.
+	 * 
+	 * @param context
+	 *            current context
+	 * @param entityName
+	 *            the entity name used by the controller
+	 * @param entityID
+	 *            the object id
+	 * @param actionName
+	 * @param format
+	 *            the format for the response
+	 * @param queryParameters
+	 * @param isSecure
+	 *            <code>true</code> if the request used https
+	 * @param includeSessionID
+	 *            <code>true</code> if the session id should be put into the URL
+	 * @return the URL string to retrieve the newly created object
+	 */
+	protected String actionUrlForEntity(WOContext context, String entityName, Object entityID, String actionName, String format, NSDictionary<String, Object> queryParameters, boolean isSecure, boolean includeSessionID) {
+		return ERXRouteUrlUtils.actionUrlForEntity(context, entityName, entityID, actionName, format, queryParameters, isSecure, includeSessionID);
+	}
+
 	/**
 	 * Returns whether or not the window.name cross-domain transport is allowed.
 	 * 
