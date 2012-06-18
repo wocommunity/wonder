@@ -1674,22 +1674,22 @@ public class ERXRouteController extends WODirectAction {
 				boolean completeURLs = context.doesGenerateCompleteURLs();
 				if (!completeURLs) {
 					context.generateCompleteURLs();
-					try {
-						NSMutableDictionary<String, Object> queryDict = new NSMutableDictionary<String, Object>();
-						if (context.hasSession()) {
-							queryDict.takeValueForKey(session().sessionID(), WOApplication.application().sessionIdKey());
-						}
-						boolean isSecure = ERXRequest.isRequestSecure(context.request());
-						Object entityID = IERXRestDelegate.Factory.delegateForEntityNamed(entityName()).primaryKeyForObject(createdObject, restContext());
-						
-						String url = actionUrlForEntity(context(), entityName(), entityID, locationActionName(), format().name(), queryDict, isSecure, true);
-						
-						_setHeaderForActionResults(url, "Location", results);
+				}
+				try {
+					NSMutableDictionary<String, Object> queryDict = new NSMutableDictionary<String, Object>();
+					if (context.hasSession()) {
+						queryDict.takeValueForKey(session().sessionID(), WOApplication.application().sessionIdKey());
 					}
-					finally {
-						if (!completeURLs) {
-							context.generateRelativeURLs();
-						}
+					boolean isSecure = ERXRequest.isRequestSecure(context.request());
+					Object entityID = IERXRestDelegate.Factory.delegateForEntityNamed(entityName()).primaryKeyForObject(createdObject, restContext());
+					
+					String url = actionUrlForEntity(context(), entityName(), entityID, locationActionName(), format().name(), queryDict, isSecure, true);
+					
+					_setHeaderForActionResults(url, "Location", results);
+				}
+				finally {
+					if (!completeURLs) {
+						context.generateRelativeURLs();
 					}
 				}
 			}
