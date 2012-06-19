@@ -9,6 +9,7 @@ import ognl.Ognl;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOGeneralAdaptorException;
+import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eocontrol.EOAndQualifier;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOQualifier;
@@ -16,6 +17,7 @@ import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSRange;
@@ -29,9 +31,17 @@ import com.webobjects.foundation.NSRange;
  */
 public abstract class EREntityStore {
   private int _sequence = 0;
+  private final EREntityStoreFactory _factory;
   
   public interface JoinEntityStore { }
   
+  public EREntityStore(EREntityStoreFactory factory) {
+    _factory = factory;
+  }
+  
+  protected EREntityStoreFactory _factory() {
+    return _factory;
+  }
   public void clear() {
     _sequence = 0;
   }
@@ -46,7 +56,7 @@ public abstract class EREntityStore {
       Iterator<NSMutableDictionary<String, Object>> i = iterator();
       while (i.hasNext()) {
         NSMutableDictionary<String, Object> rawRow = i.next();
-        NSMutableDictionary<String, Object> row = rowFromStoredValues(rawRow, entity);
+        FetchedRow row = new FetchedRow(rawRow, entity);
         if (qualifier == null || qualifier.evaluateWithObject(row)) {
           i.remove();
           count++;
@@ -63,7 +73,7 @@ public abstract class EREntityStore {
     }
   }
 
-  public NSMutableArray<NSMutableDictionary<String, Object>> fetch(NSArray<EOAttribute> attributesToFetch, EOFetchSpecification fetchSpecification, boolean shouldLock, EOEntity entity) {
+  public NSMutableArray<FetchedRow> fetch(NSArray<EOAttribute> attributesToFetch, EOFetchSpecification fetchSpecification, boolean shouldLock, EOEntity entity) {
     EOQualifier qualifier = null;
     int fetchLimit = 0;
     NSArray sortOrderings = null;
@@ -81,19 +91,19 @@ public abstract class EREntityStore {
 			}
 		}
     
-//    int count = 0;
-    NSMutableArray<NSMutableDictionary<String, Object>> fetchedRows = new NSMutableArray<NSMutableDictionary<String, Object>>();
+    int count = 0;
+    NSMutableArray<FetchedRow> fetchedRows = new NSMutableArray<FetchedRow>();
     Iterator<NSMutableDictionary<String, Object>> i = iterator();
     while (i.hasNext()) {
       NSMutableDictionary<String, Object> rawRow = i.next();
-      NSMutableDictionary<String, Object> row = rowFromStoredValues(rawRow, entity);
+      FetchedRow row = new FetchedRow(rawRow, entity);
       if (qualifier == null || qualifier.evaluateWithObject(row)) {
         fetchedRows.addObject(row);
-//        count++;
+        count++;
       }
-//      if (fetchLimit > 0 && count == fetchLimit) {
-//        break;
-//      }
+      if (sortOrderings == null && fetchLimit > 0 && count == fetchLimit) {
+        break;
+      }
     }
 
     if (sortOrderings != null) {
@@ -104,31 +114,6 @@ public abstract class EREntityStore {
     	fetchedRows.removeObjectsInRange(new NSRange(fetchLimit, fetchedRows.count() - fetchLimit));
     }
     return fetchedRows;
-  }
-
-  protected NSMutableDictionary<String, Object> rowFromStoredValues(NSMutableDictionary<String, Object> rawRow, EOEntity entity) {
-    NSMutableDictionary<String, Object> row = new NSMutableDictionary<String, Object>(rawRow.count()); 
-    for (EOAttribute attribute : (NSArray<EOAttribute>)entity.attributesToFetch()) {
-      Object value = rawRow.objectForKey(attribute.columnName());
-      if (attribute.isDerived()) {
-        if (!attribute.isFlattened()) {
-          try {
-            // Evaluate derived attribute expression
-            // This is a hack to support SQL string concatenation in derived attributes
-            String expression = attribute.definition().replaceAll("\\|\\|", "+ '' +");
-            value = Ognl.getValue(expression, rawRow);
-            
-          } catch (Throwable t) {
-            t.printStackTrace();
-          }
-        } else {
-          String dstKey = attribute.definition();
-          value = rawRow.objectForKey(dstKey);
-        }
-      }
-      row.setObjectForKey(value != null ? value : NSKeyValueCoding.NullValue, attribute.name());
-    }
-    return row;
   }
 
   protected abstract void _insertRow(NSMutableDictionary<String, Object> row, EOEntity entity);
@@ -169,7 +154,7 @@ public abstract class EREntityStore {
       Iterator<NSMutableDictionary<String, Object>> i = iterator();
       while (i.hasNext()) {
         NSMutableDictionary<String, Object> rawRow = i.next();
-        NSMutableDictionary<String, Object> row = rowFromStoredValues(rawRow, entity);
+        FetchedRow row = new FetchedRow(rawRow, entity);
         
         if (qualifier == null || qualifier.evaluateWithObject(row)) {
           for (Map.Entry<String, Object> entry : updatedRow.entrySet()) {
@@ -192,4 +177,57 @@ public abstract class EREntityStore {
     }
   }  
   
+  protected class FetchedRow extends NSMutableDictionary<String, Object> {
+    final EOEntity _entity;
+    
+    public FetchedRow(NSMutableDictionary<String, Object> rawRow, EOEntity entity) {
+      super(rawRow.size());
+      addEntriesFromDictionary(rowFromStoredValues(rawRow, entity));
+      _entity = entity;
+    }
+    
+    @Override
+    public Object valueForKeyPath(String keyPath) {
+      if (keyPath == null) {
+        return null;
+      }
+      int index = keyPath.indexOf(NSKeyValueCodingAdditions.KeyPathSeparator);
+      if (index < 0) {
+        return super.valueForKeyPath(keyPath);
+      }
+      String key = keyPath.substring(0, index);
+      EORelationship rel = _entity._relationshipForPath(key);
+      EREntityStore relatedStore = _factory()._entityStoreForEntity(rel.destinationEntity());
+      EOFetchSpecification fspec = new EOFetchSpecification(rel.destinationEntity().name(), rel.qualifierWithSourceRow(this), null);
+      NSMutableArray<FetchedRow> result = relatedStore.fetch(rel.destinationAttributes(), fspec, false, rel.destinationEntity());
+      
+      //TODO This logic assumes a to-one relationship. It should support to-many as well
+      FetchedRow value = result.lastObject();
+      return value != null ? value.valueForKeyPath(keyPath.substring(index + 1)) : null;
+    }
+    
+    protected NSMutableDictionary<String, Object> rowFromStoredValues(NSMutableDictionary<String, Object> rawRow, EOEntity entity) {
+      NSMutableDictionary<String, Object> row = new NSMutableDictionary<String, Object>(rawRow.count()); 
+      for (EOAttribute attribute : (NSArray<EOAttribute>)entity.attributesToFetch()) {
+        Object value = rawRow.objectForKey(attribute.columnName());
+        if (attribute.isDerived()) {
+          if (!attribute.isFlattened() && attribute.definition().contains("||")) {
+            try {
+              // Evaluate derived attribute expression
+              // This is a hack to support SQL string concatenation in derived attributes
+              String expression = attribute.definition().replaceAll("\\|\\|", "+ '' +");
+              value = Ognl.getValue(expression, rawRow);
+            } catch (Throwable t) {
+              t.printStackTrace();
+            }
+          } else {
+            String dstKey = attribute.definition();
+            value = rawRow.objectForKey(dstKey);
+          }
+        }
+        row.setObjectForKey(value != null ? value : NSKeyValueCoding.NullValue, attribute.name());
+      }
+      return row;
+    }
+  }
 }

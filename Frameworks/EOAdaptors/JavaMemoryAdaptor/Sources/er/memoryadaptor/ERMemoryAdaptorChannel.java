@@ -14,6 +14,8 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.memoryadaptor.EREntityStore.FetchedRow;
+
 /**
  * ERMemoryAdaptorChannel provides the adaptor channel implementation for ERMemoryAdaptor.
  * 
@@ -21,7 +23,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  */
 public class ERMemoryAdaptorChannel extends EOAdaptorChannel {
   private NSArray<EOAttribute> _attributes;
-  private NSMutableArray<NSMutableDictionary<String, Object>> _fetchedRows;
+  private NSMutableArray<FetchedRow> _fetchedRows;
   private int _fetchIndex;
   private boolean _open;
   // During a fetch, the adaptor channel is called:
@@ -31,7 +33,7 @@ public class ERMemoryAdaptorChannel extends EOAdaptorChannel {
   // Of course, it become false if there is an exception during this process (cancelFetch is called in such case).
   private boolean _fetchInProgress = false;
 
-  public ERMemoryAdaptorChannel(ERMemoryAdaptorContext context) {
+  public ERMemoryAdaptorChannel(EREntityStoreAdaptorContext context) {
     super(context);
     _fetchIndex = -1;
   }
@@ -42,8 +44,8 @@ public class ERMemoryAdaptorChannel extends EOAdaptorChannel {
   }
 
   @Override
-  public ERMemoryAdaptorContext adaptorContext() {
-    return (ERMemoryAdaptorContext) super.adaptorContext();
+  public EREntityStoreAdaptorContext adaptorContext() {
+    return (EREntityStoreAdaptorContext) super.adaptorContext();
   }
 
   @Override
