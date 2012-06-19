@@ -17,7 +17,8 @@ import com.webobjects.foundation.NSMutableDictionary;
 public class ERMemoryEntityStore extends EREntityStore {
   protected NSMutableArray<NSMutableDictionary<String, Object>> _rows;
 
-  public ERMemoryEntityStore() {
+  public ERMemoryEntityStore(EREntityStoreFactory factory) {
+    super(factory);
     _rows = new NSMutableArray<NSMutableDictionary<String, Object>>();
   }
 
@@ -29,7 +30,7 @@ public class ERMemoryEntityStore extends EREntityStore {
 
   @Override
   public ERMemoryEntityStore transactionStore() {
-    ERMemoryEntityStore cloneStore = new ERMemoryEntityStore() {
+    ERMemoryEntityStore cloneStore = new ERMemoryEntityStore(_factory()) {
       public int nextSequence() { 
         return ERMemoryEntityStore.this.nextSequence(); 
       }
