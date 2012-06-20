@@ -143,7 +143,7 @@ public class ERMemoryAdaptorChannel extends EOAdaptorChannel {
     EREntityStore store = adaptorContext()._entityStoreForEntity(entity);
     try {
       _fetchIndex = 0;
-      _fetchedRows = store.fetch(attributesToFetch, fetchSpecification, shouldLock, entity, adaptorContext());
+      _fetchedRows = store.fetch(attributesToFetch, fetchSpecification, shouldLock, entity);
     }
     catch (EOGeneralAdaptorException e) {
       cancelFetch();
