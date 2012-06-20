@@ -29,15 +29,16 @@ public class ERJoinEntityStore extends EREntityStore implements JoinEntityStore 
   private EOEntity _entity;
 
   public ERJoinEntityStore(NSDictionary<EOEntity, EREntityStore> stores, EOEntity entity) {
+    super(null);
     _stores = stores;
     _entity = entity;
   }
 
   @Override
-  public NSMutableArray<NSMutableDictionary<String, Object>> fetch(NSArray<EOAttribute> attributesToFetch, EOFetchSpecification fetchSpecification,
-      boolean shouldLock, EOEntity entity, ERMemoryAdaptorContext context) {
+  public NSMutableArray<FetchedRow> fetch(NSArray<EOAttribute> attributesToFetch, EOFetchSpecification fetchSpecification,
+      boolean shouldLock, EOEntity entity) {
     EREntityStore store = joinedStore(attributesToFetch, fetchSpecification, entity);
-    return store.fetch(attributesToFetch, fetchSpecification, shouldLock, entity, context);
+    return store.fetch(attributesToFetch, fetchSpecification, shouldLock, entity);
   }
 
   private EREntityStore joinedStore(NSArray<EOAttribute> attributesToFetch, EOFetchSpecification fetchSpecification, EOEntity entity) {
@@ -105,6 +106,7 @@ public class ERJoinEntityStore extends EREntityStore implements JoinEntityStore 
 
     @SuppressWarnings("cast")
     public InnerJoinEntityStore(EORelationship rel, EREntityStore store1, EREntityStore store2) {
+      super(null);
       srcStore = store1;
       destStore = store2;
       relationship = rel;
