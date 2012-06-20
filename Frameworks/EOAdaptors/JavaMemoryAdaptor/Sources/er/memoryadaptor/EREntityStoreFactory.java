@@ -104,7 +104,7 @@ public class EREntityStoreFactory {
   private EREntityStore _entityStoreForExternalName(String name, boolean transactional) {
     EREntityStore store = _entityStores.objectForKey(name);
     if (store == null) {
-      store = (EREntityStore) _NSUtilities.instantiateObject(_entityStoreClazz, new Class[] { EREntityStoreFactory.class }, new Object[] { this }, false, false);
+      store = (EREntityStore) _NSUtilities.instantiateObject(_entityStoreClazz, null, null, false, false);
       _entityStores.setObjectForKey(store, name);
     }
     if (transactional) {

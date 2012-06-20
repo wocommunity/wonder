@@ -47,6 +47,5 @@
 	    <unbound name="updateContainerID"/>
     </validation>
     <binding name="title"/>
-    <binding name="disabled"/>
     </wo>
 </wodefinitions>

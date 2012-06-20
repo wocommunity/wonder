@@ -45,6 +45,9 @@ var fdLocale = {
                 "Nov",
                 "D\u00E9c"
                 ],
+        /* Only stipulate the firstDayOfWeek should the first day not be Monday           
+        firstDayOfWeek:1,        
+         */         
         titles:[
                 "Mois pr\u00E9cedent",
                 "Mois suivant",
@@ -62,9 +65,5 @@ var fdLocale = {
                 "Date désactivé : "
                 ]
 };
-try { 
-        if("datePickerController" in window) { 
-                datePickerController.loadLanguage(); 
-        }; 
-} catch(err) {}; 
+try { datePickerController.loadLanguage(); } catch(err) {}
  
