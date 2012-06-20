@@ -122,7 +122,7 @@ public class CCGoogleMap extends AjaxDynamicElement {
 
 	@Override
 	protected void addRequiredWebResources(WOResponse response,WOContext context) {
-		addScriptResourceInHead(context, response, "ERCoolComponents", "INGoogleMaps.min.js");
+		addScriptResourceInHead(context, response, "ERCoolComponents", "INGoogleMaps.js");
 	}
 
 

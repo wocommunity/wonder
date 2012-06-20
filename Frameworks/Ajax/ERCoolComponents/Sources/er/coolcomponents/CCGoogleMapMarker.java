@@ -118,7 +118,7 @@ public class CCGoogleMapMarker extends AjaxDynamicElement {
 	protected void addRequiredWebResources(WOResponse response,
 			WOContext context) {
 		
-		addScriptResourceInHead(context, response, "ERCoolComponents", "INGoogleMaps.min.js");
+		addScriptResourceInHead(context, response, "ERCoolComponents", "INGoogleMaps.js");
 		
 	}
 
