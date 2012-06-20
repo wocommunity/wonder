@@ -413,10 +413,6 @@ public class ERXKeyFilter {
 		return _lockedRelationships;
 	}
 	
-	public void include(String keyName) {
-		include(new ERXKey<Object>(keyName));
-	}
-	
 	/**
 	 * Includes the given set of keys in this filter, wrapping them in ERXKey objects for you.
 	 * 
