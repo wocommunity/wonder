@@ -149,7 +149,7 @@ function IN_setupGoogleMaps() {
     script.type = "text/javascript";
 
     // Ask Google to call IN_initializeMaps() after loading
-    script.src = "http://maps.googleapis.com/maps/api/js?key=" + apiKey + "&sensor=false&callback=IN_initializeMaps";
+    script.src = document.location.protocol + "//maps.googleapis.com/maps/api/js?key=" + apiKey + "&sensor=false&callback=IN_initializeMaps";
     document.body.appendChild(script);
 }
 
