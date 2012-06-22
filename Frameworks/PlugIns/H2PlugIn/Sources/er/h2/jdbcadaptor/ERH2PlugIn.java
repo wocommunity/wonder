@@ -441,7 +441,7 @@ public class ERH2PlugIn extends JDBCPlugIn {
 			if (allowsNull) {
 				statements = new NSArray(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " ALTER COLUMN " + formatColumnName(columnName) + " SET NULL"));
 			} else {
-				statements = new NSArray(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " ALTER COLUM " + formatColumnName(columnName) + " SET NOT NULL"));
+				statements = new NSArray(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " ALTER COLUMN " + formatColumnName(columnName) + " SET NOT NULL"));
 			}
 			return statements;
 		}
