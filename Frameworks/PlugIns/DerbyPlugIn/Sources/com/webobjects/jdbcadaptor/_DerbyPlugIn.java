@@ -71,46 +71,14 @@ public class _DerbyPlugIn extends JDBCPlugIn {
 		protected boolean enableBooleanQuoting() {
 			return false;
 		}
-
+		
 		/**
-		 * Fixes an incompatibility with JDK 1.5 and using toString() instead of
-		 * toPlainString() for BigDecimals. From what I understand, you will
-		 * only need this if you disable bind variables.
-		 *
 		 * @param value
 		 * @param eoattribute
-		 * @return string representation of the BigDecimal
-		 * @author ak
+		 * @return the plain string representation of the given value
 		 */
-		private String fixBigDecimal(final BigDecimal value, final EOAttribute eoattribute) {
-			String result;
-			if (System.getProperty("java.version").compareTo("1.5") >= 0) {
-				try {
-					if (_bigDecimalToString == null) {
-						_bigDecimalToString = BigDecimal.class.getMethod("toPlainString", (Class[]) null);
-					}
-					result = (String) _bigDecimalToString.invoke(value, (Object[]) null);
-				}
-				catch (IllegalArgumentException e) {
-					throw NSForwardException._runtimeExceptionForThrowable(e);
-				}
-				catch (IllegalAccessException e) {
-					throw NSForwardException._runtimeExceptionForThrowable(e);
-				}
-				catch (InvocationTargetException e) {
-					throw NSForwardException._runtimeExceptionForThrowable(e);
-				}
-				catch (SecurityException e) {
-					throw NSForwardException._runtimeExceptionForThrowable(e);
-				}
-				catch (NoSuchMethodException e) {
-					throw NSForwardException._runtimeExceptionForThrowable(e);
-				}
-			}
-			else {
-				result = value.toString();
-			}
-			return result;
+		private String formatBigDecimal(final BigDecimal value, final EOAttribute eoattribute) {
+			return value.toPlainString();
 		}
 
 		@Override
@@ -130,7 +98,7 @@ public class _DerbyPlugIn extends JDBCPlugIn {
 			}
 			else if (obj instanceof Number) {
 				if (obj instanceof BigDecimal) {
-					value = fixBigDecimal((BigDecimal) obj, eoattribute);
+					value = formatBigDecimal((BigDecimal) obj, eoattribute);
 				}
 				else {
 					Object convertedObj = eoattribute.adaptorValueByConvertingAttributeValue(obj);
