@@ -13,7 +13,6 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.appserver.ERXWOContext;
-import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * ERXDynamicElement provides a common base class for dynamic elements.
