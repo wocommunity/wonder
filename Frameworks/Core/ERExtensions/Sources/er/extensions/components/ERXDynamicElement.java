@@ -21,7 +21,7 @@ import er.extensions.appserver.ERXWOContext;
  */
 public abstract class ERXDynamicElement extends WODynamicGroup {
 	protected Logger log = Logger.getLogger(getClass());
-	private NSDictionary<String, WOAssociation> _associations;
+	private final NSDictionary<String, WOAssociation> _associations;
 
 	public ERXDynamicElement(String name, NSDictionary<String, WOAssociation> associations, WOElement template) {
 		super(name, associations, template);
@@ -64,7 +64,7 @@ public abstract class ERXDynamicElement extends WODynamicGroup {
 	 * @param context context of the transaction
 	 * @return elementID
 	 */
-	public String nameInContext(WOContext context) {
+	protected String nameInContext(WOContext context) {
 		return context.elementID();
 	}
 	
