@@ -915,7 +915,7 @@ public class DirectAction extends WODirectAction  {
         aResponse.appendContentString(xml);
         aResponse.setHeader("text/xml", "content-type");
         aResponse.setHeader(aFormat.format(new NSTimestamp()), "Last-Modified");
-        if (NSLog.debugLoggingAllowedForLevelAndGroups(NSLog.DebugLevelInformational, NSLog.DebugGroupDeployment))
+        if (NSLog.debugLoggingAllowedForLevelAndGroups(NSLog.DebugLevelDetailed, NSLog.DebugGroupDeployment))
             NSLog.debug.appendln("woConfigAction returned: " + xml);
 
         return aResponse;
