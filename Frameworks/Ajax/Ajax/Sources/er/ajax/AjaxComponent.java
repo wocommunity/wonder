@@ -18,7 +18,6 @@ import er.extensions.foundation.ERXValueUtilities;
  *          &copy; 2006 OS communications informatiques, inc. http://www.os.ca
  *          Tous droits réservés.
  */
-
 public abstract class AjaxComponent extends WOComponent implements IAjaxElement {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -90,7 +89,12 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
      * Execute the request, if it's coming from our action, then invoke the
      * ajax handler and put the key <code>AJAX_REQUEST_KEY</code> in the
      * request userInfo dictionary (<code>request.userInfo()</code>).
+     * 
+     * @param request the request
+     * @param context context of the transaction
+     * @return a WOActionResults containing the result of the request
      */
+    @Override
     public WOActionResults invokeAction(WORequest request, WOContext context) {
         Object result;
         if (shouldHandleRequest(request, context)) {
@@ -130,7 +134,11 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
 
     /**
      * Overridden to call {@link #addRequiredWebResources(WOResponse)}.
+     * 
+     * @param res the HTTP response that an application returns to a Web server to complete a cycle of the request-response loop
+     * @param ctx context of a transaction
      */
+    @Override
     public void appendToResponse(WOResponse res, WOContext ctx) {
         super.appendToResponse(res, ctx);
         addRequiredWebResources(res);
