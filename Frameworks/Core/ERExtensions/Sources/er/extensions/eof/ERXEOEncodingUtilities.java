@@ -110,8 +110,8 @@ public class ERXEOEncodingUtilities {
     
     /**
      * Returns enterprise objects grouped by entity name. 
-     * The specific encoding is
-     * specified in the method: <code>encodeEnterpriseObjectsPrimaryKeyForUrl
+     * The specific encoding is specified in the method: <code>encodeEnterpriseObjectsPrimaryKeyForUrl</code>.
+     * 
      * @param ec    the editing context to fetch the objects from
      * @param formValues    dictionary where the values are an
      *		encoded representation of the primary key values in either

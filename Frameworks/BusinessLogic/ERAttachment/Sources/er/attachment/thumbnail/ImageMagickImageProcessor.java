@@ -174,7 +174,6 @@ public class ImageMagickImageProcessor extends ERImageProcessor {
   /**
    * Returns an ImageMagick image processor.
    * 
-   * @property er.attachment.ImageProcessor.imageMagickBinFolder the ImageMagick bin folder
    * @return an ImageMagick image processor
    * @throws IOException if an ImageMagick cannot be created
    */

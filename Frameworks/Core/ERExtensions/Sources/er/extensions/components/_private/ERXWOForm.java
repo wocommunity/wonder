@@ -53,7 +53,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * the form tag.
  * <li> it adds a default submit button at the start of the form, so that your
  * user can simply press return without any javascript gimmicks.
- * <li> the <code>id<code> binding can override the <code>name</code> binding.
+ * <li> the <code>id</code> binding can override the <code>name</code> binding.
  * </ul>
  * This subclass is installed when the frameworks loads.
  * 
