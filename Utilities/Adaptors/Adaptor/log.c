@@ -101,7 +101,7 @@ const char * const WOLogLevel[] = {"Debug", "Info", "Warn",  "Error", "User", ""
 
 static int baselevel = WO_DBG;
 
-void WOLog_init(const char *logfile, const char *level)
+void WOLog_init(const char *logfile, const char *logflag, const char *level)
 {
    int i;
    int fd;
@@ -112,7 +112,11 @@ void WOLog_init(const char *logfile, const char *level)
     *	the file we stat() to see if we should log
     */
 #ifndef	ALWAYS_LOG
-   sprintf(logFlag,"%s/%s",tmp(),LOG_FLAG);
+   if (logflag != NULL) {
+       strcpy(logFlag, logflag);
+   } else {
+       sprintf(logFlag,"%s/%s",tmp(),LOG_FLAG);
+   }
 #endif
 
    /*

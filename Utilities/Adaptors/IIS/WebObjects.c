@@ -508,13 +508,14 @@ typedef struct _regthing {
 } regthing;
 
 static const regthing options[] = {
-   { "WOUSERNAME", WOUSERNAME },
-   { "WOPASSWORD", WOPASSWORD },
-   { "CONF_INTERVAL", WOCNFINTVL },
-   { "CONF_URL", WOCONFIG },
-   { "LOG_PATH", WOLOGPATH },
-   { "WEBOBJECTS_OPTIONS", WOOPTIONS },
-   { NULL, NULL }
+    { "WOUSERNAME", WOUSERNAME },
+    { "WOPASSWORD", WOPASSWORD },
+    { "CONF_INTERVAL", WOCNFINTVL },
+    { "CONF_URL", WOCONFIG },
+    { "LOG_FLAG", WOLOGFLAG },
+    { "LOG_PATH", WOLOGPATH },
+    { "WEBOBJECTS_OPTIONS", WOOPTIONS },
+    { NULL, NULL }
 };
 #define	MAX_VAL_LENGTH	4096
 

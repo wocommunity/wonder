@@ -136,6 +136,7 @@ const char *adaptor_valueForKey(const char *option);
 #define	WOCNFINTVL	"confinterval"		/* WebObjectsConfig	  */
 #define	WOLOGPATH	"logPath"	 	/* WebObjectsLog */
 #define	WOLOGLEVEL	"logLevel"		/* WebObjectsLog */
+#define	WOLOGFLAG	"logFlag"		/* WebObjectsLog */
 #define	WOSTATEFILE	"stateFile"		/* WebObjectsStateFile */
 #define WOOPTIONS       "options"               /* additional adaptor options string */
 #define WODOMAIN        "domainname"            /* domain name to use in links to the adaptor */
