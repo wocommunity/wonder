@@ -124,7 +124,8 @@ public class ERMDDeleteButton extends ERMDActionButton {
 	    	if (displayGroup() != null && displayGroup().displayedObjects().count() == 0) {
 	    		displayGroup().displayPreviousBatch();
 	    	}
-	    	if (finalCommit) { // if we are editing, then don't save the parent ec.
+            if (finalCommit && !ERXEOControlUtilities.isNewObject(object())) {
+                // if we are editing, then don't save the parent ec.
 	    		object().editingContext().saveChanges();
 	    	}
 	    	d2wContext().takeValueForKey(null, Keys.objectPendingDeletion);
