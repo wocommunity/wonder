@@ -87,7 +87,7 @@ public abstract class AjaxDynamicElement extends ERXDynamicElement implements IA
     /**
 	 * Override this method to append the needed scripts for this component.
 	 * 
-	 * @param request the current request
+	 * @param response the current response
 	 * @param context context of the transaction
 	 */
 	protected abstract void addRequiredWebResources(WOResponse response, WOContext context);
