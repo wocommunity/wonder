@@ -45,7 +45,7 @@ and limitations under the License.
 typedef struct _scheduler * scheduler_t;
 
 /* A convenience macro for checking an instance's timers against the current time */
-#define canScheduleInstance(inst, currentTime) (inst->connectFailedTimer < currentTime && inst->refuseNewSessionsTimer < currentTime && inst->instanceNumber[0] != '-')
+#define canScheduleInstance(inst, currentTime) (inst->connectFailedTimer < currentTime && inst->refuseNewSessionsTimer < currentTime && inst->instanceNumber[0] != '-' && (inst->refuseNewSessions == 0))
 
 /*
  *	called during init_adaptor().

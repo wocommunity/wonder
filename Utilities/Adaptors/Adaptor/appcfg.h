@@ -142,6 +142,7 @@ typedef struct _WOInstanceStruct {
    int connectTimeout;			/* timeouts (seconds) */
    int sendTimeout;
    int recvTimeout;
+   unsigned int refuseNewSessions;
 
    /* these are copied from the WOApp during config so they can be accessed without locking the app struct */
    int connectionPoolSize;
