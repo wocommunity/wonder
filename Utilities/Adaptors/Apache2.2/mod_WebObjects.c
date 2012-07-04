@@ -431,7 +431,8 @@ static void sendResponse(request_rec *r, HTTPResponse *resp) {
 	r->content_type = "text/html";
     }
 
-    ap_set_content_length(r, resp->content_length);
+   if((resp->flags & RESP_LENGTH_EXPLICIT) == RESP_LENGTH_EXPLICIT)
+	    ap_set_content_length(r, resp->content_length);
 
 
     /*
@@ -442,17 +443,27 @@ static void sendResponse(request_rec *r, HTTPResponse *resp) {
 
     /* resp->content_valid will be 0 for HEAD requests and empty responses */
     if ( (!r->header_only) && (resp->content_valid) ) {
-        while (resp->content_read < resp->content_length)
-        {
-			ap_rwrite(resp->content, resp->content_valid, r);
-			if (r->connection->aborted) {
-				break;
-			}
-            if (resp_getResponseContent(resp, 1) == -1)
-			{
-				break;
-			}
-        }
+        while (resp->content_read < resp->content_length &&
+              (resp->flags & RESP_LENGTH_INVALID) != RESP_LENGTH_INVALID)
+          {
+            int count;
+            
+            ap_rwrite(resp->content, resp->content_valid, r);
+            if (r->connection->aborted) {
+                break;
+            }
+          
+          count = resp_getResponseContent(resp, 1);
+          if(count > 0)
+          {
+             // 2009/06/09: handle situations where content_length is wrong or
+             //             unset.  Read as much data as possible from the
+             //             WebObjects application and send the data to the
+             //             client-side.
+            resp->content_read += count;
+            resp->content_valid = count;
+          }
+        }
 
         ap_rwrite(resp->content, resp->content_valid, r);
     }

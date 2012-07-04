@@ -144,14 +144,31 @@ static void sendResponse(HTTPResponse *resp)
 #ifndef PROFILE
    /* resp->content_valid will be 0 for HEAD requests and empty responses */
    if (resp->content_valid) {
-      while (resp->content_read < resp->content_length) {
-         fwrite(resp->content,sizeof(char),resp->content_valid,stdout);
-         if (resp_getResponseContent(resp, 1) == -1)
-         {
-         	break;
-         }
-      }
-      fwrite(resp->content,sizeof(char),resp->content_valid,stdout);
+      int count;
+
+      while (resp->content_read < resp->content_length &&
+             (resp->flags & RESP_LENGTH_INVALID) != RESP_LENGTH_INVALID) {
+           fwrite(resp->content,sizeof(char),resp->content_valid,stdout);
+         count = resp_getResponseContent(resp, 1);
+         if(count > 0)
+         {
+            // 2009/06/09: handle situations where content_length is wrong or
+            //             unset.  Read as much data as possible from the
+            //             WebObjects application and send the data to the
+            //             client-side.
+            resp->content_read += count;
+            resp->content_valid = count;
+         }
+         if(count != 0)
+         {
+            // 2009/04/30: error while reading response content (this can happen
+            //             if the instance dies during sending the response - e.g.
+            //             during a file download - or if the content_length is
+            //             wrong/unset).  Stop the loop to avoid endless looping!
+            WOLog(WO_WARN, "sendResponse(): received an incomplete data package.  Please look for a dead instance or adjust content-length value.");
+         }
+        }
+        fwrite(resp->content,sizeof(char),resp->content_valid,stdout);
    }
    fflush(stdout);
 #endif
