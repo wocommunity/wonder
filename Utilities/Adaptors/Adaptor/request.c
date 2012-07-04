@@ -131,8 +131,13 @@ void req_reformatRequest(HTTPRequest *req, WOAppReq *app, WOURLComponents *wc, c
    strcat(req->request_str," ");
    if (http_version) {
       strcat(req->request_str,http_version);
+      if (strcasecmp(http_version,"HTTP/1.1") == 0)
+      {
+         req_addHeader(req, "Host", app->host, 0);
+      }
    } else {
       strcat(req->request_str,default_http_version);
+      req_addHeader(req, "Host", app->host, 0);
    }
    strcat(req->request_str,"\r\n");
 
