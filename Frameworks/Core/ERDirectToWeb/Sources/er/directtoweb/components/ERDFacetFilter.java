@@ -11,7 +11,7 @@ import com.webobjects.foundation.NSMutableSet;
 
 import er.extensions.eof.ERXS;
 import er.extensions.foundation.ERXArrayUtilities;
-+import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * Provides simple filtered grouping capability for display groups, like ebay or Solr.
