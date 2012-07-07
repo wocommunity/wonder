@@ -761,6 +761,26 @@ public class MInstance extends MObject {
     }
 
     public void sendDeathNotificationEmail() {
+    	NSTimestamp currentTime = new NSTimestamp();
+        String currentDate = currentTime.toString();
+
+        long cutOffTime = _lastRegistration.getTime() + lifebeatCheckInterval();
+        String assumedToBeDead = "";
+        if (currentTime.getTime() > cutOffTime) {
+        	long secondsDifference = (currentTime.getTime() - cutOffTime) / 1000;
+        	assumedToBeDead = "The app did not respond for " + secondsDifference + "seconds " +
+        			"which is greater than the allowed threshold of " + lifebeatCheckInterval() + " seconds " +
+        			"(Lifebeat Interval * WOAssumeApplicationIsDeadMultiplier) so it is assumed to be dead.\n";
+        }
+    	String message = "Application '" + displayName() + "' on " + _host.name() + ":" + port() +
+	        " stopped running at " + (currentDate) + ".\n" + 
+	        "The app's current state was: " + stateArray[state] + ".\n" +
+	        assumedToBeDead + 
+	        "The last successful communication occurred at: " + _lastRegistration.toString() + ". " + 
+	        "This may be the result of a crash or an intentional shutdown from outside of wotaskd";
+        
+    	NSLog.err.appendln(message);
+        
         boolean shouldEmail = false;
         Boolean aBool = _application.notificationEmailEnabled();
         if (aBool != null) {
@@ -770,13 +790,10 @@ public class MInstance extends MObject {
         if (shouldEmail) {
             try {
                 WOMailDelivery mailer = WOMailDelivery.sharedInstance();
-                String currentDate = (new NSTimestamp()).toString();
                 String fromAddress = siteConfig().emailReturnAddr();
                 NSArray toAddress = null;
                 String subject = new String("App stopped running: " + displayName());
-                String bodyText = new String("The application " + displayName() + " listening on port " + port()
-                        + " on host " + _host.name() + " stopped running at " + (currentDate)
-                        + ".  This may be the result of a crash or an intentional shutdown from outside of wotaskd");
+                String bodyText = message;
                 if (fromAddress != null) {
                     fromAddress = new String("root@" + _host.name());
                 }

@@ -1220,7 +1220,11 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 								childObj = null;
 							}
 							else {
-								childObj = toManyNode.value();
+								if (toManyNode.value() != null) {
+									childObj = toManyNode.value();
+								} else {
+									childObj = IERXRestDelegate.Factory.delegateForClassDescription(destinationClassDescription).objectOfEntityWithID(destinationClassDescription, id, context);
+								}
 							}
 						}
 						else if (id == null) {

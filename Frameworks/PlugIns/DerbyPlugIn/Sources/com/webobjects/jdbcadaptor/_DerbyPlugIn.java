@@ -24,7 +24,7 @@ import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
 
-public class ERDerbyPlugIn extends JDBCPlugIn {
+public class _DerbyPlugIn extends JDBCPlugIn {
 	static final boolean USE_NAMED_CONSTRAINTS = true;
 	
 	protected static String quoteTableName(String s) {
@@ -71,45 +71,14 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 		protected boolean enableBooleanQuoting() {
 			return false;
 		}
-
+		
 		/**
-		 * Fixes an incompatibility with JDK 1.5 and using toString() instead of
-		 * toPlainString() for BigDecimals. From what I understand, you will
-		 * only need this if you disable bind variables.
-		 *
 		 * @param value
 		 * @param eoattribute
-		 * @author ak
+		 * @return the plain string representation of the given value
 		 */
-		private String fixBigDecimal(final BigDecimal value, final EOAttribute eoattribute) {
-			String result;
-			if (System.getProperty("java.version").compareTo("1.5") >= 0) {
-				try {
-					if (_bigDecimalToString == null) {
-						_bigDecimalToString = BigDecimal.class.getMethod("toPlainString", (Class[]) null);
-					}
-					result = (String) _bigDecimalToString.invoke(value, (Object[]) null);
-				}
-				catch (IllegalArgumentException e) {
-					throw NSForwardException._runtimeExceptionForThrowable(e);
-				}
-				catch (IllegalAccessException e) {
-					throw NSForwardException._runtimeExceptionForThrowable(e);
-				}
-				catch (InvocationTargetException e) {
-					throw NSForwardException._runtimeExceptionForThrowable(e);
-				}
-				catch (SecurityException e) {
-					throw NSForwardException._runtimeExceptionForThrowable(e);
-				}
-				catch (NoSuchMethodException e) {
-					throw NSForwardException._runtimeExceptionForThrowable(e);
-				}
-			}
-			else {
-				result = value.toString();
-			}
-			return result;
+		private String formatBigDecimal(final BigDecimal value, final EOAttribute eoattribute) {
+			return value.toPlainString();
 		}
 
 		@Override
@@ -129,7 +98,7 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 			}
 			else if (obj instanceof Number) {
 				if (obj instanceof BigDecimal) {
-					value = fixBigDecimal((BigDecimal) obj, eoattribute);
+					value = formatBigDecimal((BigDecimal) obj, eoattribute);
 				}
 				else {
 					Object convertedObj = eoattribute.adaptorValueByConvertingAttributeValue(obj);
@@ -201,6 +170,7 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 		 * Helper to check for timestamp columns that have a "D" value type.
 		 *
 		 * @param eoattribute
+		 * @return <code>true</code> if date attribute
 		 */
 		private boolean isDateAttribute(final EOAttribute eoattribute) {
 			return "D".equals(eoattribute.valueType());
@@ -210,6 +180,7 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 		 * Helper to check for timestamp columns that have a "T" value type.
 		 *
 		 * @param eoattribute
+		 * @return <code>true</code> if timestamp attribute
 		 */
 		private boolean isTimestampAttribute(final EOAttribute eoattribute) {
 			return "T".equals(eoattribute.valueType());
@@ -387,7 +358,7 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 	 */
 	private static Method _bigDecimalToString = null;
 
-	public ERDerbyPlugIn(final JDBCAdaptor adaptor) {
+	public _DerbyPlugIn(final JDBCAdaptor adaptor) {
 		super(adaptor);
 	}
 
@@ -412,12 +383,12 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 	}
 
 	/**
-	 * <P>
 	 * This is usually extracted from the the database using JDBC, but this is
 	 * really inconvenient for users who are trying to generate SQL at some. A
 	 * specific version of the data has been written into the property list of
 	 * the framework and this can be used as a hard-coded equivalent.
-	 * </P>
+	 * 
+	 * @return JDBC info
 	 */
 	@Override
 	public NSDictionary jdbcInfo() {
@@ -461,16 +432,18 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 		return jdbcInfo;
 	}
 
+	@Override
 	public String name() {
 		return DRIVER_NAME;
 	}
 
 	/**
-	 * <P>
-	 * This method returns true if the connection URL for the database has
+	 * This method returns <code>true</code> if the connection URL for the database has
 	 * <code>useBundledJdbcInfo=true</code> on it which indicates to the system
 	 * that the jdbcInfo which has been bundled into the plugin is acceptable to
 	 * use in place of actually going to the database and getting it.
+	 * 
+	 * @return <code>true</code> if bundled JDBC info should be used
 	 */
 	protected boolean shouldUseBundledJdbcInfo() {
 		boolean shouldUseBundledJdbcInfo = false;
@@ -480,5 +453,4 @@ public class ERDerbyPlugIn extends JDBCPlugIn {
 		}
 		return shouldUseBundledJdbcInfo;
 	}
-
 }
