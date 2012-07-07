@@ -60,3 +60,5 @@ Binaries
 --------------------
 
 Binaries can be downloaded from the [community build server](http://jenkins.wocommunity.org/job/Wonder/)
+
+W00t!
