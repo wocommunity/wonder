@@ -7,8 +7,13 @@ KeyList: WORepetition {
 	item = currentKey;
 }
 
+ValueItem: WOGenericContainer {
+	elementName = "li";
+	class = itemClassName;
+}
+
 Key: WOString {
-	value = currentKey;
+	value = currentDisplayName;
 }
 
 HasValueList: WOConditional {

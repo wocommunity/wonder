@@ -11,12 +11,51 @@ import com.webobjects.foundation.NSMutableSet;
 
 import er.extensions.eof.ERXS;
 import er.extensions.foundation.ERXArrayUtilities;
++import er.extensions.foundation.ERXStringUtilities;
+
+/**
+ * Provides simple filtered grouping capability for display groups, like ebay or Solr.
+ * To be put outside of the "is this list empty" conditional.
+ * 
+ * @binding displayGroup displayGroup to filter
+ * @binding groupingKeys keys to group on
+ * 
+ * @author ak
+ *
+ */
+
+/* sample CSS
+<style>
+.FacetFilterKeys {
+    float: left;
+}
+.FacetFilterKey, .FacetFilterKey {
+    padding-left: 1em;
+}
+.FacetFilterKey span {
+    font-weight: bold;
+}
+.FacetFilterItem.Selected {
+    font-weight: bold;
+}
+.ObjTable {
+    width: 80%;
+}
+.ERMDEmptyList {
+    margin-left: 20%;
+}
+</style>
+*/
+
+// TODO: doesn't account for changes in displayGroup or groupingKeys, no batching support, can lead to empty list, should maybe update count of selectable items (so you don't end up with an empty list), localization
 
 public class ERDFacetFilter extends ERDCustomQueryComponent {
 	
 	public Object currentValue;
 	public String currentKey;
 	private NSArray<EOEnterpriseObject> _allObjects;
+	
+	private static String NONE = "(None)";
 	
 	private NSMutableDictionary<String, NSDictionary<Object, NSArray<EOEnterpriseObject>>> values = new NSMutableDictionary();
 	private NSMutableDictionary<String, NSMutableArray<Object>> selectedValues = new NSMutableDictionary();
@@ -36,7 +75,11 @@ public class ERDFacetFilter extends ERDCustomQueryComponent {
 			values.removeAllObjects();
 			selectedValues.removeAllObjects();
 			for (String keyPath : allKeys()) {
-				NSDictionary<Object, NSArray<EOEnterpriseObject>> groupedObjects = ERXArrayUtilities.arrayGroupedByKeyPath(_allObjects, keyPath);
+				NSMutableDictionary<Object, NSArray<EOEnterpriseObject>> groupedObjects = ERXArrayUtilities.arrayGroupedByKeyPath(_allObjects, keyPath).mutableClone();
+				NSArray<EOEnterpriseObject> nulls = groupedObjects.remove(ERXArrayUtilities.NULL_GROUPING_KEY);
+				if(nulls != null) {
+				    groupedObjects.setObjectForKey(nulls, NONE);
+				}
 				values.setObjectForKey(groupedObjects, keyPath);
 				selectedValues.setObjectForKey(new NSMutableArray(), keyPath);
 			}
@@ -98,12 +141,35 @@ public class ERDFacetFilter extends ERDCustomQueryComponent {
 	}
 
 	public boolean hasSelectedValues() {
-		return selectedValues.objectForKey(currentKey).count() > 0;
+	    if(currentKey != null) {
+	        return selectedValues.objectForKey(currentKey).count() > 0;
+	    }
+	    for (NSArray values : selectedValues.values()) {
+            if(values.count() > 0) {
+                return true;
+            }
+        }
+	    return false;
 	}
 
 	public WOActionResults clearSelectedValues() {
-		selectedValues.objectForKey(currentKey).removeAllObjects();
+	    if(currentKey != null) {
+	        selectedValues.objectForKey(currentKey).removeAllObjects();
+	    } else {
+	        for (NSMutableArray values : selectedValues.allValues()) {
+                values.removeAllObjects();
+            }
+	    }
 		updateSelectedValues();
 		return null;
 	}
+	
+	public String itemClassName() {
+        return isCurrentValueSelected() ? "FacetFilterItem Selected" : "FacetFilterItem";
+    }
+
+    public String currentDisplayName() {
+        return NONE == currentKey ? NONE : ERXStringUtilities.displayNameForKey(currentKey);
+    }
+
 }
