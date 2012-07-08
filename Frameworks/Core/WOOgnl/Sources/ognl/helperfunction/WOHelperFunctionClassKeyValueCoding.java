@@ -74,48 +74,48 @@ public class WOHelperFunctionClassKeyValueCoding {
 		  // MS: slurped in from _NSReflectionUtilities because the original won't return a typed keypath for an abstract method, which
 		  // means you don't get type information when you bind a helper function to an interface method
 		  public static Method _methodForClass(Class objectClass, String methodName, Class argumentTypes[], boolean publicMethodOnly) {
-		    /* <-MISALIGNED-> *//*  75*/Method method = null;
-		    /* <-MISALIGNED-> *//*  76*/if (publicMethodOnly) {
-		      /* <-MISALIGNED-> *//*  78*/try {
-		        /* <-MISALIGNED-> *//*  78*/method = objectClass.getMethod(methodName, argumentTypes == null ? _noArgumentTypes : argumentTypes);
-		      }
-		      /* <-MISALIGNED-> *//*  79*/catch (NoSuchMethodException exception) {
-		        /* <-MISALIGNED-> *//*  80*/NSLog._conditionallyLogPrivateException(exception);
-		        /* <-MISALIGNED-> *//*  81*/method = null;
-		      }
-		      /* <-MISALIGNED-> *//*  82*/catch (SecurityException exception) {
-		        /* <-MISALIGNED-> *//*  83*/NSLog._conditionallyLogPrivateException(exception);
-		        /* <-MISALIGNED-> *//*  84*/method = null;
-		      }
+			  Method method = null;
+			  if (publicMethodOnly) {
+				  try {
+					  method = objectClass.getMethod(methodName, argumentTypes == null ? _noArgumentTypes : argumentTypes);
+				  }
+				  catch (NoSuchMethodException exception) {
+					  NSLog._conditionallyLogPrivateException(exception);
+					  method = null;
+				  }
+				  catch (SecurityException exception) {
+					  NSLog._conditionallyLogPrivateException(exception);
+					  method = null;
+				  }
 		    }
 		    else {
-		      /* <-MISALIGNED-> *//*  87*/do {
-		        /* <-MISALIGNED-> *//*  87*/if (objectClass == _NSUtilities._ObjectClass || method != null) {
-		          /* <-MISALIGNED-> *//*  89*/break;
-		        }
-		        /* <-MISALIGNED-> *//*  89*/try {
-		          /* <-MISALIGNED-> *//*  89*/method = objectClass.getDeclaredMethod(methodName, argumentTypes == null ? _noArgumentTypes : argumentTypes);
-		        }
-		        /* <-MISALIGNED-> *//*  90*/catch (NoSuchMethodException exception) {
-		          /* <-MISALIGNED-> *//*  91*/NSLog._conditionallyLogPrivateException(exception);
-		          /* <-MISALIGNED-> *//*  92*/method = null;
-		        }
-		        /* <-MISALIGNED-> *//*  93*/catch (SecurityException exception) {
-		          /* <-MISALIGNED-> *//*  94*/NSLog._conditionallyLogPrivateException(exception);
-		          /* <-MISALIGNED-> *//*  95*/method = null;
-		        }
-		        /* <-MISALIGNED-> *//*  98*/if (method == null) {
-		          /* <-MISALIGNED-> *//*  99*/objectClass = objectClass.getSuperclass();
-		        }
-		      } while (true);
+		    	do {
+		    		if (objectClass == _NSUtilities._ObjectClass || method != null) {
+		    			break;
+		    		}
+		    		try {
+		    			method = objectClass.getDeclaredMethod(methodName, argumentTypes == null ? _noArgumentTypes : argumentTypes);
+		    		}
+		    		catch (NoSuchMethodException exception) {
+		    			NSLog._conditionallyLogPrivateException(exception);
+		    			method = null;
+		    		}
+		    		catch (SecurityException exception) {
+		    			NSLog._conditionallyLogPrivateException(exception);
+		    			method = null;
+		    		}
+		    		if (method == null) {
+		    			objectClass = objectClass.getSuperclass();
+		    		}
+		    	} while (true);
 		    }
-		    /* <-MISALIGNED-> *//* 103*/if (method != null) {
-		      /* <-MISALIGNED-> *//* 104*/int modifiers = method.getModifiers();
-		      /* <-MISALIGNED-> *//* 105*/if (Modifier.isPrivate(modifiers) || Modifier.isStatic(modifiers)/* || Modifier.isAbstract(modifiers)*/) {
-		        /* <-MISALIGNED-> *//* 106*/return null;
-		      }
-		    }
-		    /* <-MISALIGNED-> *//* 109*/return method;
+			  if (method != null) {
+				  int modifiers = method.getModifiers();
+				  if (Modifier.isPrivate(modifiers) || Modifier.isStatic(modifiers)/* || Modifier.isAbstract(modifiers)*/) {
+					  return null;
+				  }
+			  }
+			  return method;
 		  }
 	
 		public static _KeyBinding _methodKeyGetBinding(Class objectClass, String key, String methodName) {
