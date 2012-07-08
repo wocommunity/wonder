@@ -37,7 +37,7 @@ import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation._NSUtilities;
 
 /**
- * <span calss="en">
+ * <span class="en">
  * WOOgnl provides a template parser that support WOOgnl associations, Helper Functions, Inline Bindings, and Binding Debugging. 
  * 
  * @property ognl.active - defaults to true, if false ognl support is disabled
