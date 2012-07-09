@@ -1244,7 +1244,7 @@ public class ERXModelGroup extends EOModelGroup {
 		}
 	}
 
-	private static final NSArray _prototypeKeys = new NSArray(new Object[] { "externalType", "columnName", "readOnly", ERXApplication.isWO54()?"className":"valueClassName", "valueType", "width", "precision", "scale", "writeFormat", "readFormat", "userInfo", "serverTimeZone", "valueFactoryMethodName", "adaptorValueConversionMethodName", "factoryMethodArgumentType", "allowsNull", "parameterDirection", "_internalInfo" });
+	private static final NSArray _prototypeKeys = new NSArray(new Object[] { "externalType", "columnName", "readOnly", "className", "valueType", "width", "precision", "scale", "writeFormat", "readFormat", "userInfo", "serverTimeZone", "valueFactoryMethodName", "adaptorValueConversionMethodName", "factoryMethodArgumentType", "allowsNull", "parameterDirection", "_internalInfo" });
 
 	public static NSArray _prototypeKeys() {
 		return _prototypeKeys;
@@ -1259,18 +1259,6 @@ public class ERXModelGroup extends EOModelGroup {
 	}
 
 	public static boolean _isKeyEnumOverriden(EOAttribute att, int key) {
-		if (!ERXApplication.isWO54()) {
-			// 5.4 - API changed
-			try {
-				Method isKeyEnumOverriddenMethod = att.getClass().getMethod("_isKeyEnumOverriden", new Class[] { int.class });
-				Boolean isKeyEnumOverridden = (Boolean)isKeyEnumOverriddenMethod.invoke(att, new Object[] { Integer.valueOf(key) });
-				return isKeyEnumOverridden.booleanValue();
-			}
-			catch (Exception e) {
-				throw new RuntimeException("_isKeyEnumOverridden failed.", e);
-			}
-		}
-		
 		boolean result = false;
 		if(att.prototype() != null) {
 			Map characteristics = (Map) NSKeyValueCoding.Utility.valueForKey(att, "overwrittenCharacteristics");

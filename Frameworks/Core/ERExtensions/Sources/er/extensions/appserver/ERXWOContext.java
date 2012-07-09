@@ -245,10 +245,14 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	@Override
 	public String _urlWithRequestHandlerKey(String requestHandlerKey, String requestHandlerPath, String queryString, boolean secure) {
 		_preprocessURL();
-		String url = super._urlWithRequestHandlerKey(requestHandlerKey, requestHandlerPath, queryString, secure);
-		if (!ERXApplication.isWO54()) {
-			url = _postprocessURL(url);
-		}
+		return super._urlWithRequestHandlerKey(requestHandlerKey, requestHandlerPath, queryString, secure);
+	}
+	
+	@Override
+	public String _urlWithRequestHandlerKey(String requestHandlerKey, String requestHandlerPath, String queryString, boolean isSecure, int somePort) {
+		_preprocessURL();
+		String url = super._urlWithRequestHandlerKey(requestHandlerKey, requestHandlerPath, queryString, isSecure, somePort);
+		url = _postprocessURL(url);
 		return url;
 	}
 
@@ -486,23 +490,11 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	 * @param secure
 	 *            whether or not the URL should be HTTPS
 	 * @return the URL to the given direct action
+	 * @deprecated use non-static {@link #_directActionURL(String, NSDictionary, boolean, int, boolean)} instead
 	 */
+	@Deprecated
 	public static String _directActionURL(WOContext context, String actionName, NSDictionary queryParams, boolean secure) {
-		try {
-			String directActionURL;
-			if (ERXApplication.isWO54()) {
-				Method _directActionURLMethod = context.getClass().getMethod("_directActionURL", new Class[] { String.class, NSDictionary.class, boolean.class, int.class, boolean.class });
-				directActionURL = (String) _directActionURLMethod.invoke(context, new Object[] { actionName, queryParams, Boolean.valueOf(secure), Integer.valueOf(0), Boolean.FALSE });
-			}
-			else {
-				Method _directActionURLMethod = context.getClass().getMethod("_directActionURL", new Class[] { String.class, NSDictionary.class, boolean.class });
-				directActionURL = (String) _directActionURLMethod.invoke(context, new Object[] { actionName, queryParams, Boolean.valueOf(secure) });
-			}
-			return directActionURL;
-		}
-		catch (Exception e) {
-			throw new NSForwardException(e);
-		}
+		return context._directActionURL(actionName, queryParams, secure, 0, false);
 	}
 
 	/**

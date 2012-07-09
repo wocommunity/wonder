@@ -327,15 +327,13 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 
 	public NSDictionary statistics() {
 		NSDictionary stats = super.statistics();
-		if (ERXApplication.isWO54()) {
-			NSMutableDictionary fixed = stats.mutableClone();
-			for (Enumeration enumerator = stats.keyEnumerator(); enumerator.hasMoreElements();) {
-				Object key = enumerator.nextElement();
-				Object value = stats.objectForKey(key);
-				fixed.setObjectForKey(fix(value), key);
-			}
-			stats = fixed;
+		NSMutableDictionary fixed = stats.mutableClone();
+		for (Enumeration enumerator = stats.keyEnumerator(); enumerator.hasMoreElements();) {
+			Object key = enumerator.nextElement();
+			Object value = stats.objectForKey(key);
+			fixed.setObjectForKey(fix(value), key);
 		}
+		stats = fixed;
 		return stats;
 		
 	}
