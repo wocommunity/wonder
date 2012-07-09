@@ -4,6 +4,9 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.eocontrol.EOEditingContext;
 
+import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXStringUtilities;
+
 /**
  * <span class="en">
  * ERFileAttachment (type = "file") represents an attachment whose
@@ -45,4 +48,48 @@ public class ERFileAttachment extends _ERFileAttachment {
     setStorageType(ERFileAttachment.STORAGE_TYPE);
   }
   
+  /**
+   * <span class="en">
+   * If the FilePath is set it will be used on Top of the Result of the filesystemPath
+   * This conversion makes it easy to switch Data easily between Deploy and Develop
+   * </span>
+   * 
+   * <span class="ja">
+   * データベース内にファイルストアへのパスを設定しないとファイルストアの移動が簡単になります。
+   * </span>
+   * 
+   * @property er.attachment.file.filebasePath - FilePath
+   */
+  @Override
+  public String filesystemPath() {
+    String filebasePath = ERXProperties.stringForKey("er.attachment.file.filebasePath");
+    String result = super.filesystemPath();
+    if(!ERXStringUtilities.stringIsNullOrEmpty(filebasePath)) {
+      result = filebasePath + result;
+    }
+    return result;
+  }
+
+  /**
+   * <span class="en">
+   * If the FilePath is set it will be used on Top of the Result of the filesystemPath
+   * This conversion makes it easy to switch Data easily between Deploy and Develop
+   * </span>
+   * 
+   * <span class="ja">
+   * データベース内にファイルストアへのパスを設定しないとファイルストアの移動が簡単になります。
+   * </span>
+   * 
+   * @property er.attachment.file.filebasePath - FilePath
+   */
+  @Override
+  public void setFilesystemPath(String value) {
+    String filebasePath = ERXProperties.stringForKey("er.attachment.file.filebasePath");
+    if(!ERXStringUtilities.stringIsNullOrEmpty(filebasePath)) {
+      value = value.replace(filebasePath, ""); // 
+    }
+
+    super.setFilesystemPath(value);
+  }
+
 }

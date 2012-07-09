@@ -11,6 +11,10 @@ er.extensions.ERAttachment.hasLocalization=true
 ##er.attachment.productAttachment.file.filesystemPath=/Volumes/Data/Users/xxx/Desktop/products/attachments/${hash}/${pk}${ext}
 ##er.attachment.productAttachment.file.webPath=/products/attachments/${hash}/${pk}${ext}
 
+
+#### Base Folder for File Storage Type : see ERFileAttachment
+#er.attachment.file.filebasePath=
+
 #### Migration
 ERAttachment.MigrationClassPrefix=er.attachment.migrations.ERAttachment
 
