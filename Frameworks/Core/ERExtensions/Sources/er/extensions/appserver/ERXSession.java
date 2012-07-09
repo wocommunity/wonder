@@ -738,23 +738,10 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
   }
 
   protected void _convertSessionCookiesToSecure(WOResponse response) {
-	    if(storesIDsInCookies() && !ERXRequest._isSecureDisabled()) {
+	    if (storesIDsInCookies() && !ERXRequest._isSecureDisabled()) {
 			for (WOCookie cookie : response.cookies()) {
-				String sessionIdKey;
-				String instanceIdKey;
-				if (ERXApplication.isWO54()) {
-					try {
-						sessionIdKey = (String)WOApplication.class.getMethod("sessionIdKey").invoke(WOApplication.application());
-						instanceIdKey = (String)WOApplication.class.getMethod("instanceIdKey").invoke(WOApplication.application());
-					}
-					catch (Throwable e) {
-						throw new NSForwardException(e);
-					}
-				}
-				else {
-					sessionIdKey = WORequest.SessionIDKey;
-					instanceIdKey = WORequest.InstanceKey;
-				}
+				String sessionIdKey = application().sessionIdKey();
+				String instanceIdKey = application().instanceIdKey();
 				String cookieName = cookie.name();
 				if (sessionIdKey.equals(cookieName) || instanceIdKey.equals(cookieName)) {
 					 cookie.setIsSecure(true);
@@ -766,21 +753,8 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
   protected void _convertSessionCookiesToHttpOnly(final WOResponse response) {
       if (storesIDsInCookies()) {
           for (WOCookie cookie : response.cookies()) {
-              String sessionIdKey;
-              String instanceIdKey;
-              if (ERXApplication.isWO54()) {
-                  try {
-                      sessionIdKey = (String) WOApplication.class.getMethod("sessionIdKey").invoke(
-                              WOApplication.application());
-                      instanceIdKey = (String) WOApplication.class.getMethod("instanceIdKey").invoke(
-                              WOApplication.application());
-                  } catch (Throwable e) {
-                      throw new NSForwardException(e);
-                  }
-              } else {
-                  sessionIdKey = WORequest.SessionIDKey;
-                  instanceIdKey = WORequest.InstanceKey;
-              }
+              String sessionIdKey = application().sessionIdKey();
+              String instanceIdKey = application().instanceIdKey();
               String cookieName = cookie.name();
               if (sessionIdKey.equals(cookieName) || instanceIdKey.equals(cookieName)) {
                   cookie.setIsHttpOnly(true);

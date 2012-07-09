@@ -128,9 +128,6 @@ public class ERXPatcher {
 		if (ERXProperties.booleanForKeyWithDefault("er.extensions.WOSwitchComponent.patch", true)) {
 			ERXPatcher.setClassForName(ERXSwitchComponent.class, "WOSwitchComponent");
 		}
-		if (!ERXApplication.isWO54() || ERXProperties.booleanForKey("er.extensions.WOConditional.patch")) {
-			ERXPatcher.setClassForName(ERXWOConditional.class, "WOConditional");
-		}
 		
 		// RM XHTML strict compliance
 		ERXPatcher.setClassForName(DynamicElementsPatches.JavaScript.class, "WOJavaScript");
@@ -311,18 +308,13 @@ public class ERXPatcher {
 				}
 			}
 			
-			// WO 5.4: 5.4 returns false for this
-			protected boolean hasContent() {
-				return !ERXApplication.isWO54();
-			}
-			
 			// WO 5.4: 5.4 already does this, but for 5.3, if you want to use WOImage's with
 			// PDF generation, you need XHTML output
 		    protected void _appendOpenTagToResponse(WOResponse response, WOContext context) {
 		        response.appendContentCharacter('<');
 		        response.appendContentString(elementName());
 		        appendAttributesToResponse(response, context);
-		        if(!hasContent() || ERXResponse.isXHTML(response)) {
+		        if(!hasContent() || ERXResponse.isXHTML(response)) { // CHECKME do we need to check isXHTML?
 		            response.appendContentString(" /");
 		        }
 		        response.appendContentCharacter('>');
