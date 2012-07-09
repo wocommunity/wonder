@@ -5,8 +5,15 @@ import org.apache.log4j.Logger;
 import com.webobjects.eocontrol.EOEditingContext;
 
 /**
+ * <span class="en">
  * ERDatabaseAttachment (type "db") represents an attachment whose data
  * is stored in the database in an ERAttachmentData class.
+ * </span>
+ * 
+ * <span class="ja">
+ * ERDatabaseAttachment (type "db") はアタッチメントがデータデータベース内
+ * の ERAttachmentData クラスに保存されます。
+ * </span>
  * 
  * @author mschrag
  */
