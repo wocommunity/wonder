@@ -1,3 +1,6 @@
+##  Properies Info
+er.extensions.load.Properties.framework.ERCoreBusinessLogic=load
+er.extensions.ERCoreBusinessLogic.hasLocalization=true
 
 # ERCoreBusinessLogic Framework Properties
 
