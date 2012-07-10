@@ -1,0 +1,55 @@
+AjaxUpdateContainer : MTAjaxUpdateContainer {
+	class = ^class;
+	id = id;
+	onRefreshComplete = onExpansionComplete;
+}
+
+Content : ERXWOComponentContent {
+	
+}
+
+EscapedLinkString : WOString {
+	value = jsEscapedString;
+}
+
+Expanded : WOConditional {
+	condition = expanded;
+}
+
+ExpandedValue : WOString {
+	value = expanded;
+}
+
+HasEscapedLinkString : WOConditional {
+	condition = jsEscapedString.length;
+}
+
+IsAjaxRequest : WOConditional {
+	condition = isAjaxRequest;
+}
+
+LabelContent : ERXWOComponentContent {
+	templateName = "label";
+}
+
+LinkID : WOString {
+	value = linkID;
+}
+
+ToggleLink : MTAjaxUpdateLink {
+	accesskey = ^accesskey;
+	action = toggle;
+	class = linkClass;
+	elementName = ^elementName;
+	id = linkID;
+	onComplete = ^onComplete;
+	onFailure = ^onFailure;
+	onLoading = ^onLoading;
+	onSuccess = ^onSuccess;
+	updateContainerID = id;
+}
+
+ToggleLinkString : WOString {
+	escapeHTML = false;
+	value = string;
+}

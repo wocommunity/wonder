@@ -510,5 +510,24 @@ var MTAjaxDraggable = new Class({
 
 var MTAD = MTAjaxDraggable;
 
+var MTAjaxUtils = {
+	toggleClassName: function(element, className, toggled) {
+		element = document.id(element);
+		if (toggled) {
+			element.addClass(className);
+		}
+		else {
+			element.removeClass(className);
+		}
+	},
+	
+	decode: function(input) {
+		var e = document.createElement('div');
+		e.innerHTML = input;
+		return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;	
+	}
+
+	
+};
 
 

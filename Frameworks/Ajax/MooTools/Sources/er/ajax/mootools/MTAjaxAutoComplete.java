@@ -193,94 +193,95 @@ public class MTAjaxAutoComplete extends AjaxComponent {
 		}
 		return strValue;
 	}
-    
-    protected String displayStringForValue(Object value) {
-    	Object displayValue = valueForBinding("displayString", valueForBinding("item", value));
-    	String displayString = displayValue == null ? null : displayValue.toString();
-    	return displayString;
-    }
-    
-    protected int maxItems() {
-        int maxItems = ERXValueUtilities.intValueWithDefault(valueForBinding("maxItems"), 50);
-        return maxItems;
-    }
-    
-    public void setStringValue(String strValue) {
-    	if (hasBinding("selection")) {
-            Object selection = null;
-            if (strValue != null) {
-	    		NSArray values = (NSArray) valueForBinding("list");
-		        int maxItems = maxItems();
-		        int itemsCount = 0;
-		        for(Enumeration e = values.objectEnumerator(); e.hasMoreElements() && itemsCount++ < maxItems;) {
-		            Object value = e.nextElement();
-	                setValueForBinding(value, "item");
-	            	String displayString = displayStringForValue(value);
-	            	if (ERXStringUtilities.stringEqualsString(displayString, strValue)) {
-	            		selection = value;
-	            		break;
-	            	}
-		        }
-            }
-        	setValueForBinding(selection, "selection");
-    	}
-    	setValueForBinding(strValue, "value");
-    }
-    
-    public void takeValuesFromRequest(WORequest request, WOContext context) {
-    	super.takeValuesFromRequest(request, context);
-    }
 
-    protected void appendItemToResponse(Object value, WOElement child, boolean hasItem, WOResponse response, WOContext context) {
-        response.appendContentString("<li>");
-        if(hasItem && child != null) {
-            setValueForBinding(value, "item");
-            context._setCurrentComponent(parent());
-            child.appendToResponse(response, context);
-            context._setCurrentComponent(this);
-        } else {
-        	if(hasItem) {
-                setValueForBinding(value, "item");
-         	}
-            response.appendContentString(displayStringForValue(value));
-        }
-        response.appendContentString("</li>");
-    }
-    
-    /**
-     * Handles the Ajax request. Checks for the form value in the edit field,
-     * pushes it up to the parent and pulls the "list" binding. The parent is
-     * responsible for returning a list with some items that match the current value.
-     */
-     public WOActionResults handleRequest(WORequest request, WOContext context) {
-        // String inputString = request.contentString();
-        String fieldValue = context.request().stringFormValueForKey(fieldName);
-        setValueForBinding(fieldValue, "value");
-        
-        WOResponse response = AjaxUtils.createResponse(request, context);
-        response.appendContentString("<ul>");
-        
-        int maxItems = maxItems();
-        int itemsCount = 0;
-        Object values = valueForBinding("list");
-        WOElement child = _childTemplate();
-        boolean hasItem = hasBinding("item");
-        if (values instanceof NSArray) {
-	        for(Enumeration valueEnum = ((NSArray)values).objectEnumerator(); valueEnum.hasMoreElements() && itemsCount++ < maxItems;) {
-	        	appendItemToResponse(valueEnum.nextElement(), child, hasItem, response, context);
-	        }
-        }
-        else if (values instanceof List) {
-	        for(Iterator iter = ((List)values).iterator(); iter.hasNext() && itemsCount++ < maxItems;) {
-	        	appendItemToResponse(iter.next(), child, hasItem, response, context);
-	        }
-        }
-        response.appendContentString("</ul>");
-        return response;
-     
-     }
+	protected String displayStringForValue(Object value) {
+		Object displayValue = valueForBinding("displayString", valueForBinding("item", value));
+		String displayString = displayValue == null ? null : displayValue.toString();
+		return displayString;
+	}
 
- 	public String zcontainerName() {
+	protected int maxItems() {
+		int maxItems = ERXValueUtilities.intValueWithDefault(valueForBinding("maxItems"), 50);
+		return maxItems;
+	}
+
+	public void setStringValue(String strValue) {
+		if (hasBinding("selection")) {
+			Object selection = null;
+			if (strValue != null) {
+				NSArray values = (NSArray) valueForBinding("list");
+				int maxItems = maxItems();
+				int itemsCount = 0;
+				for(Enumeration e = values.objectEnumerator(); e.hasMoreElements() && itemsCount++ < maxItems;) {
+					Object value = e.nextElement();
+					setValueForBinding(value, "item");
+					String displayString = displayStringForValue(value);
+					if (ERXStringUtilities.stringEqualsString(displayString, strValue)) {
+						selection = value;
+						break;
+					}
+				}
+			}
+			setValueForBinding(selection, "selection");
+		}
+		setValueForBinding(strValue, "value");
+	}
+
+	public void takeValuesFromRequest(WORequest request, WOContext context) {
+		super.takeValuesFromRequest(request, context);
+	}
+
+	protected void appendItemToResponse(Object value, WOElement child, boolean hasItem, WOResponse response, WOContext context) {
+		response.appendContentString("<li>");
+		if(hasItem && child != null) {
+			setValueForBinding(value, "item");
+			context._setCurrentComponent(parent());
+			child.appendToResponse(response, context);
+			context._setCurrentComponent(this);
+		} else {
+			if(hasItem) {
+				setValueForBinding(value, "item");
+			}
+			response.appendContentString(displayStringForValue(value));
+		}
+		response.appendContentString("</li>");
+	}
+
+	/**
+	 * Handles the Ajax request. Checks for the form value in the edit field,
+	 * pushes it up to the parent and pulls the "list" binding. The parent is
+	 * responsible for returning a list with some items that match the current value.
+	 */
+	public WOActionResults handleRequest(WORequest request, WOContext context) {
+		// String inputString = request.contentString();
+
+		String fieldValue = context.request().stringFormValueForKey(fieldName);
+		setValueForBinding(fieldValue, "value");
+
+		WOResponse response = AjaxUtils.createResponse(request, context);
+		response.appendContentString("<ul>");
+
+		int maxItems = maxItems();
+		int itemsCount = 0;
+		Object values = valueForBinding("list");
+		WOElement child = _childTemplate();
+		boolean hasItem = hasBinding("item");
+		if (values instanceof NSArray) {
+			for(Enumeration valueEnum = ((NSArray)values).objectEnumerator(); valueEnum.hasMoreElements() && itemsCount++ < maxItems;) {
+				appendItemToResponse(valueEnum.nextElement(), child, hasItem, response, context);
+			}
+		}
+		else if (values instanceof List) {
+			for(Iterator iter = ((List)values).iterator(); iter.hasNext() && itemsCount++ < maxItems;) {
+				appendItemToResponse(iter.next(), child, hasItem, response, context);
+			}
+		}
+		response.appendContentString("</ul>");
+		return response;
+
+	}
+
+	public String zcontainerName() {
 		return "ZContainer" + divName;
 	}
 

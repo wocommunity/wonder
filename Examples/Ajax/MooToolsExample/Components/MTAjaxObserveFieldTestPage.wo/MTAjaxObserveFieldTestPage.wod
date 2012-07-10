@@ -1,3 +1,28 @@
+Checkbox : WOCheckBox {
+	checked = checked;
+	id = "CheckBoxInput";
+}
+
+CheckboxForm : WOForm {
+	
+}
+
+CheckboxObserver : MTAjaxObserveField {
+	observeFieldID = "CheckBoxInput";
+	updateContainerID = "CheckboxMTAUC";
+	
+}
+
+CheckboxValueUpdateContainer : MTAjaxUpdateContainer {
+	id = "CheckboxMTAUC";
+}
+
+CheckboxValue : WOString {
+	value = checked;
+}
+
+
+
 ColorObserveField : MTAjaxObserveField { 
 	observeFieldID = "PrimaryColorID";
 	updateContainerID = "SecondaryColorDiv";
