@@ -7,6 +7,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableData;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSRange;
 import com.webobjects.foundation.NSSet;
@@ -41,8 +42,9 @@ public class ERXValueUtilities {
      * @param component the component to evaluate the binding on
      * @param def the default value if the binding value is null
      * @return the boolean value of the binding
-     * @deprecated use ERXComponentUtilities.booleanValueForBinding(component, binding, def)
+     * @deprecated use {@link ERXComponentUtilities#booleanValueForBinding(WOComponent, String, boolean)}
      */
+    @Deprecated
     public static boolean booleanValueForBindingOnComponentWithDefault(String binding, WOComponent component, boolean def) {
         return ERXComponentUtilities.booleanValueForBinding(component, binding, def);
     }
@@ -609,6 +611,11 @@ public class ERXValueUtilities {
 						throw new IllegalArgumentException("Failed to parse data from the value '" + obj + "'.");
 					}
 					value = (NSData) objValue;
+					if (value instanceof NSMutableData) {
+						// AK: we need NSData if we want to use it for a PK, but
+						// we get NSMutableData
+						value = new NSData(value);
+					}
 				}
 			} else {
 				throw new IllegalArgumentException("Failed to parse data from the value '" + obj + "'.");

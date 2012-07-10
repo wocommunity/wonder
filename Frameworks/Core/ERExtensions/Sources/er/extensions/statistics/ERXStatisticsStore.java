@@ -46,7 +46,7 @@ import er.extensions.foundation.ERXProperties;
  * @property er.extensions.ERXStatisticsStore.milliSeconds.fatal defaults to 5 minutes
  *
  * @author ak
- * @author kieran (Oct 14, 2009) - minor changes to capture thread name in middle of the request (useful for {@link ERXSession#threadName()}
+ * @author kieran (Oct 14, 2009) - minor changes to capture thread name in middle of the request (useful for {@link ERXSession#threadName()}}
  */
 public class ERXStatisticsStore extends WOStatisticsStore {
 

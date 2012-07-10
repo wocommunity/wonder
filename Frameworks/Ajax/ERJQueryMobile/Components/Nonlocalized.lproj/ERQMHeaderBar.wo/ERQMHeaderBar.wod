@@ -13,3 +13,18 @@ LINK : ERXHyperlinkResource {
 	data-theme = ^rightButton-theme;
 	class = "ui-btn-right";	
 }
+
+HasBackButtonAnAction : WOConditional {
+	condition = ^backButton-action;
+}
+
+BackLink : WOHyperlink {
+	action = ^backButton-action;
+	data-theme = ^backButton-theme;
+	data-icon = "arrow-l";
+}
+
+HasNoBackButtonAnAction : WOConditional {
+	condition = ^backButton-action;
+	negate = true;
+}

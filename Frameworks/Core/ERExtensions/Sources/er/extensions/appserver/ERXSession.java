@@ -54,6 +54,12 @@ import er.extensions.localization.ERXLocalizer;
  * support has been added.
  */
 public class ERXSession extends ERXAjaxSession implements Serializable {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
   /** logging support */
   public static final Logger log = Logger.getLogger(ERXSession.class);
@@ -828,4 +834,37 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
   		}
   		return autoAdjustTimeZone;
   	}
+  	
+  //********************************************************************
+  //  Current D2W Look for this Session 
+  //  Because it is possible to have different Looks depends on the User
+  //********************************************************************
+
+  /**
+   * set the current Look for this Session
+   * 
+   * <pre>
+   * 90 : *true* => look = "session.currentD2WLook" 
+   *    [er.directtoweb.assignments.delayed.ERDDelayedKeyValueAssignment]
+   * </pre>
+   * 
+   * @param currentD2WLook - Look Name
+   */
+  public void setCurrentD2WLook(String currentD2WLook) {
+    this.currentD2WLook = currentD2WLook;
+  }
+
+  /**
+   * et the current Look for this Session
+   * 
+   * @return Look Name
+   */
+  public String currentD2WLook() {
+    if(ERXStringUtilities.stringIsNullOrEmpty(currentD2WLook)) {
+      currentD2WLook = "ERModernLook";
+    }
+    return currentD2WLook;
+  }
+  private String currentD2WLook = null;
+  	
 }

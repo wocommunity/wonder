@@ -437,7 +437,7 @@ public class ERXJDBCUtilities {
 	}
 
 	/**
-	 * @see ERXJDBCUtilities._copyDatabaseDefinedByEOModelAndConnectionDictionaryToDatabaseWithConnectionDictionary(EOModel, NSDictionary, NSDictionary)
+	 * @see ERXJDBCUtilities#_copyDatabaseDefinedByEOModelAndConnectionDictionaryToDatabaseWithConnectionDictionary(EOModel, NSDictionary, NSDictionary)
 	 * @param modelGroup
 	 *            the model group to copy
 	 * @param sourceDict
@@ -696,8 +696,9 @@ public class ERXJDBCUtilities {
 	 * @return the number of rows updated
 	 * @throws SQLException
 	 *             if there is a problem
-	 * @deprecated use executeUpdateScript with the boolean param
+	 * @deprecated use {@link #executeUpdateScript(EOAdaptorChannel, String, boolean)}
 	 */
+    @Deprecated
 	public static int executeUpdateScriptIgnoringErrors(EOAdaptorChannel channel, String script) throws SQLException {
 		return ERXJDBCUtilities.executeUpdateScript(channel, script, true);
 	}

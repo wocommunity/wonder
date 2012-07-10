@@ -1,6 +1,4 @@
 /*
- $Id$
- 
  ERMailDeliveryHTML.java - Camille Troillard - tuscland@mac.com
  */
 
@@ -15,7 +13,13 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
 
 /**
+ * <span class="en">
  * This ERMailDelivery subclass is specifically crafted for HTML messages using a WOComponent as rendering device.
+ * </span>
+ * 
+ * <span class="ja">
+ * HTML メッセージに使用する ERMailDelivery サブクラス
+ * </span>
  * 
  * @author Camille Troillard <tuscland@mac.com>
  */
@@ -32,9 +36,18 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased {
 	private String _hiddenPlainTextContent;
 
 	/**
+	 * <span class="en">
 	 * Gets the current factory. If the factory is unset, sets it to the default factory.
 	 * 
 	 * @return the current factory
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * カレント・ファクトリーを戻します。
+	 * ファクトリーがセットされていない場合、デフォルト・ファクトリーが使用される
+	 * 
+	 * @return カレント・ファクトリー
+	 * </span>
 	 */
 	public static Factory factory() {
 		if (factory == null)
@@ -44,10 +57,18 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased {
 	}
 
 	/**
+	 * <span class="en">
 	 * Sets the factory.
 	 * 
 	 * @param value
 	 *            the factory to use
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * ファクトリーをセットします。
+	 * 
+	 * @param value - 使用されるファクトリー
+	 * </span>
 	 */
 	public static void setFactory(Factory value) {
 		factory = value;
@@ -58,25 +79,49 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased {
 	}
 
 	/**
+	 * <span class="en">
 	 * Sets the Plain text preamble that will be displayed set in top of HTML source. Non-HTML compliant mail readers
 	 * can at least display this message.
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * HTML ソースの前に標準テキストをセットします。
+	 * HTML 表示が不可能なメール・ソフトウェアでも標準テキストが表示できるようになります。
+	 * </span>
 	 */
 	public void setHiddenPlainTextContent(String content) {
 		_hiddenPlainTextContent = content;
 	}
 
 	/**
+	 * <span class="en">
 	 * Sets the HTML content. Note that if you set the WOComponent to be used when rendering the message this content
 	 * will be ignored.
 	 * 
 	 * @param content
 	 *            HTML content to be used
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * HTML コンテントをセットします。
+	 * 注意：レンダリングに WOComponent を使用される場合にはこのコンテントが無視されます。
+	 * 
+	 * @param content - 使用される HTML コンテント
+	 * </span>
 	 */
 	public void setHTMLContent(String content) {
 		_htmlContent = content;
 	}
 
-	/** Creates a new mail instance within ERMailDelivery. Sets hasHiddenPlainTextContent to false. */
+	/** 
+	 * <span class="en">
+	 * Creates a new mail instance within ERMailDelivery. Sets hasHiddenPlainTextContent to false. 
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * ERMailDelivery の新規メール・インスタンスを作成します。hasHiddenPlainTextContent を null にします。
+	 * </span>
+	 */
 	@Override
 	public void newMail() {
 		super.newMail();
@@ -96,9 +141,15 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased {
 	}
 
 	/**
+	 * <span class="en">
 	 * Pre-processes the mail before it gets sent.
+	 * </span>
 	 * 
-	 * @see ERMailDelivery#prepareMail
+	 * <span class="ja">
+	 * メールが送信される前の前処理
+	 * 
+	 * @see ERMailDelivery#prepareMail()
+	 * </span>
 	 */
 	@Override
 	protected DataHandler prepareMail() throws MessagingException {
@@ -156,15 +207,30 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased {
 
 	public static interface Factory {
 		/**
+		 * <span class="en">
 		 * Vends a new instance of an HTML mail delivery.
 		 * 
 		 * @return a new instance
+		 * </span>
+		 * 
+		 * <span class="ja">
+		 * HTML メールの新規インスタンスを作成します。
+		 * 
+		 * @return 新規インスタンス
+		 * </span>
 		 */
 		public ERMailDeliveryHTML newHTMLMailDelivery();
 	}
 
 	/**
+	 * <span class="en">
 	 * The default factory. Vends the ERMailDeliveryHTML object back.
+	 * </span>
+	 * 
+	 * <span class="ja">
+	 * デフォルト・ファクトリー
+	 * ERMailDeliveryHTML オブジェクトが戻ります。
+	 * </span>
 	 */
 	public static class DefaultFactory implements Factory {
 		public ERMailDeliveryHTML newHTMLMailDelivery() {

@@ -5,7 +5,7 @@ import com.webobjects.appserver.WOMessage;
 /**
  * Bunch of static values for the HTTP status code that are not in WOMessage
  * 
- * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+ * @see <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html">W3C HTTP/1.1 status code definitions</a>
  * @author probert
  *
  */

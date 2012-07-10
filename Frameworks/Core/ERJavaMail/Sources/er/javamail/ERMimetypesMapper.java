@@ -1,6 +1,4 @@
 /*
- $Id$
-
  ERMimetypesMapper.java - Camille Troillard - tuscland@mac.com
  */
 
@@ -28,6 +26,19 @@ public class ERMimetypesMapper {
 		return mimetypesMapper;
 	}
 
+	/**
+	 * <span class="ja">
+	 * Mimetype オブジェクトへアクセスします。ファイルへのパスを引数として渡すと Mime が戻ります。
+	 * 
+	 * @param path - ファイルへのパス
+	 * 
+	 * @return Mimetype を持つ文字列
+	 * 
+	 * サンプル
+	 * 
+	 * String s =  ERMimetypesMapper.mimeContentTypeForPath( ERXFileUtilities.pathForResourceNamed("test.gif", "ERExtensions", null) );
+	 * </span>
+	 */
 	public static String mimeContentTypeForPath(String path) {
 		return ERMimetypesMapper.mapper().getContentType(path);
 	}

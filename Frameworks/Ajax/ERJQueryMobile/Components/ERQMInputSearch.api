@@ -11,5 +11,6 @@
             <unsettable name="value"/>
         </validation>
     <binding defaults="Boolean" name="mini"/>
+    <binding name="name"/>
     </wo>
 </wodefinitions>

@@ -18,11 +18,17 @@ import er.directtoweb.assignments.ERDLocalizedAssignment;
 // FIXME: Should be renamed ERDDefaultLocalizedMessageAssignment.
 /**
  * Message assignment used when hitting a cancel button, just a little "Are you sure?" kind of thing.<br />
- * @deprecated use ERDLocalizedAssignment
+ * @deprecated use {@link ERDLocalizedAssignment}
  */
-
+@Deprecated
 public class ERDDefaultCancelCreationMessageAssignment extends ERDAssignment implements ERDLocalizableAssignmentInterface {
-    
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     /** holds the array of keys this assignment depends upon */
     public static final NSArray _DEPENDENT_KEYS=new NSArray("entity.name");
 

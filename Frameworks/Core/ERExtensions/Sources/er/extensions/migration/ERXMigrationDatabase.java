@@ -419,7 +419,7 @@ public class ERXMigrationDatabase {
 		}
 
 		/**
-		 * @see IERXMigration.downgrade
+		 * @see IERXMigration#downgrade(EOEditingContext, EOAdaptorChannel, EOModel)
 		 * @param editingContext
 		 *            the editing context
 		 * @param database
@@ -441,7 +441,7 @@ public class ERXMigrationDatabase {
 		}
 
 		/**
-		 * @see IERXMigration.upgrade
+		 * @see IERXMigration#upgrade(EOEditingContext, EOAdaptorChannel, EOModel)
 		 * @param editingContext
 		 *            the editing context
 		 * @param database

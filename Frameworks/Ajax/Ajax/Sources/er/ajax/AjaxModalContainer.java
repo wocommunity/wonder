@@ -60,7 +60,7 @@ public class AjaxModalContainer extends AjaxDynamicElement {
     public WOActionResults invokeAction(WORequest worequest, WOContext wocontext) {
         WOComponent component = wocontext.component();
     	if (!booleanValueForBinding("ajax", false, component)) {
-	        WOAssociation action = (WOAssociation) associations().objectForKey("action");
+	        WOAssociation action = associations().objectForKey("action");
 	        if(action != null && wocontext.elementID().equals(wocontext.senderID())) {
 	            return (WOActionResults) action.valueInComponent(component);
 	        }
@@ -208,7 +208,7 @@ public class AjaxModalContainer extends AjaxDynamicElement {
         WOComponent component = context.component();
 
         WOResponse response = null;
-        WOAssociation action = (WOAssociation) associations().objectForKey("action");
+        WOAssociation action = associations().objectForKey("action");
         if(action != null) {
             action.valueInComponent(component);
         }

@@ -1220,7 +1220,11 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 								childObj = null;
 							}
 							else {
-								childObj = toManyNode.value();
+								if (toManyNode.value() != null) {
+									childObj = toManyNode.value();
+								} else {
+									childObj = IERXRestDelegate.Factory.delegateForClassDescription(destinationClassDescription).objectOfEntityWithID(destinationClassDescription, id, context);
+								}
 							}
 						}
 						else if (id == null) {
@@ -1277,7 +1281,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 					// we fallback and lookup the class entity ...
 					if (!classDescription.toOneRelationshipKeys().containsObject(keyName) && classDescription instanceof EOEntityClassDescription) {
 						EOClassDescription nonModelClassDescription = ERXRestClassDescriptionFactory.classDescriptionForObject(obj, true);
-						if (!nonModelClassDescription.toManyRelationshipKeys().containsObject(keyName)) {
+						if (!nonModelClassDescription.toOneRelationshipKeys().containsObject(keyName)) {
 							throw new IllegalArgumentException("There is no to-one relationship named '" + key.key() + "' on '" + classDescription.entityName() + "'.");
 						}
 						destinationClassDescription = nonModelClassDescription.classDescriptionForDestinationKey(keyName);

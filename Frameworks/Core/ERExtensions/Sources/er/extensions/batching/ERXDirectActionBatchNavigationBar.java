@@ -42,6 +42,12 @@ import er.extensions.localization.ERXLocalizer;
  * @author cug - Sep 20, 2007
  */
 public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * the batchnumbers to display, cached in this instance, resetted after completion

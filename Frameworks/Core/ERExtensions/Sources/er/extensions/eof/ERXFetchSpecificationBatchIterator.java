@@ -9,6 +9,7 @@ package er.extensions.eof;
 import java.util.Enumeration;
 import java.util.Iterator;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAttribute;
@@ -493,5 +494,28 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
 	 */
 	public Object nextElement() {
 		return next();
+	}
+	
+	/*
+	 * Return useful debug info including fetchspec info.
+	 * 
+	 *  (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		ToStringBuilder b = new ToStringBuilder(this);
+		b.append("PKs Initialized", primaryKeys == null ? "No" : "Yes");
+		if (primaryKeys != null) {
+			b.append("Count", primaryKeys.count());
+		}
+		b.append("entityName", fetchSpecification.entityName());
+		b.append("qualifier", fetchSpecification.qualifier());
+		b.append("isDeep", fetchSpecification.isDeep());
+		b.append("usesDistinct", fetchSpecification.usesDistinct());
+		b.append("sortOrderings", fetchSpecification.sortOrderings());
+		b.append("hints", fetchSpecification.hints());
+		b.append("prefetchingRelationshipKeyPaths", fetchSpecification.prefetchingRelationshipKeyPaths());
+		return b.toString();
 	}
 }

@@ -59,10 +59,9 @@ public class AjaxUploadProgress extends AjaxProgress {
 	/**
 	 * Deletes the temporary file.
 	 */
+	@Override
 	public void dispose() {
 		_tempFile.delete();
 		super.dispose();
 	}
-
-
 }

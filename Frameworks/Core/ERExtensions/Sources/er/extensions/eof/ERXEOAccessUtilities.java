@@ -17,7 +17,6 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOSession;
 import com.webobjects.eoaccess.EOAdaptorChannel;
-import com.webobjects.eoaccess.EOAdaptorContext;
 import com.webobjects.eoaccess.EOAdaptorOperation;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabase;
@@ -93,30 +92,26 @@ public class ERXEOAccessUtilities {
      *            editing context
      * @param string
      *            string to look into
-     * @return found entity or null
+     * @return found entity or <code>null</code>
      */
     public static EOEntity entityMatchingString(EOEditingContext ec, String string) {
         EOEntity result = null;
         if (string != null) {
-            NSArray entityNames = null;
             String lowerCaseName = string.toLowerCase();
-            if (entityNames == null) {
-                EOModelGroup group = modelGroup(ec);
-                entityNames = (NSArray) ERXUtilities.entitiesForModelGroup(group).valueForKeyPath("name.toLowerCase");
-            }
-            NSMutableArray possibleEntities = new NSMutableArray();
-            for (Enumeration e = entityNames.objectEnumerator(); e.hasMoreElements();) {
-                String lowercaseEntityName = (String) e.nextElement();
+            EOModelGroup group = modelGroup(ec);
+            NSArray<String> entityNames = (NSArray<String>) ERXUtilities.entitiesForModelGroup(group).valueForKeyPath("name.toLowerCase");
+            NSMutableArray<String> possibleEntities = new NSMutableArray<String>();
+            for (String lowercaseEntityName : entityNames) {
                 if (lowerCaseName.indexOf(lowercaseEntityName) != -1) possibleEntities.addObject(lowercaseEntityName);
             }
             if (possibleEntities.count() == 1) {
-                result = ERXUtilities.caseInsensitiveEntityNamed((String) possibleEntities.lastObject());
+                result = ERXUtilities.caseInsensitiveEntityNamed(possibleEntities.lastObject());
             } else if (possibleEntities.count() > 1) {
                 ERXArrayUtilities.sortArrayWithKey(possibleEntities, "length");
-                if (((String) possibleEntities.objectAtIndex(0)).length() == ((String) possibleEntities.lastObject()).length())
+                if (possibleEntities.objectAtIndex(0).length() == possibleEntities.lastObject().length())
                         log.warn("Found multiple entities of the same length for string: " + string + " possible entities: "
                                 + possibleEntities);
-                result = ERXUtilities.caseInsensitiveEntityNamed((String) possibleEntities.lastObject());
+                result = ERXUtilities.caseInsensitiveEntityNamed(possibleEntities.lastObject());
             }
             if (log.isDebugEnabled())
                     log.debug("Found possible entities: " + possibleEntities + " for string: " + string + " result: " + result);
@@ -134,7 +129,7 @@ public class ERXEOAccessUtilities {
      *            editing context
      * @param tableName
      *            table (external) name to find an entity for
-     * @return found entity or null
+     * @return found entity or <code>null</code>
      */
     public static EOEntity entityUsingTable(EOEditingContext ec, String tableName) {
         EOEntity result = null;
@@ -484,15 +479,15 @@ public class ERXEOAccessUtilities {
     }
 
     /**
-     * Similar to the helper in EOUtilities, but allows for null editingContext.
-     * If ec is null, it will try to get at the session via thread storage and
+     * Similar to the helper in EOUtilities, but allows for <code>null</code> editingContext.
+     * If ec is <code>null</code>, it will try to get at the session via thread storage and
      * use its defaultEditingContext. This is here now so we can remove the
      * delegate in ERXApplication.
      * 
      * @param ec
-     *            editing context used to locate the model group (can be null)
+     *            editing context used to locate the model group (can be <code>null</code>)
+     * @return the model group associated with the editing context's root object store
      */
-
     public static EOModelGroup modelGroup(EOEditingContext ec) {
     	if (ec == null && !ERXThreadStorage.wasInheritedFromParentThread()) {
 			// this can be problematic, if called from a background thread with ERXThreadStorage.useInheritableThreadLocal=true, 
@@ -514,12 +509,13 @@ public class ERXEOAccessUtilities {
     }
 
     /**
-     * Similar to the helper in EOUtilities, but allows for null editingContext.
+     * Similar to the helper in EOUtilities, but allows for <code>null</code> editingContext.
      * 
      * @param ec
-     *            editing context used to locate the model group (can be null)
+     *            editing context used to locate the model group (can be <code>null</code>)
      * @param entityName
      *            entity name
+     * @return the entity with the specified name
      */
     public static EOEntity entityNamed(EOEditingContext ec, String entityName) {
         EOModelGroup modelGroup = modelGroup(ec);
@@ -650,7 +646,8 @@ public class ERXEOAccessUtilities {
         return aggregate;
     }
 
-    /** oracle 9 has a maximum length of 30 characters for table names, column names and constraint names
+    /** 
+     * Oracle 9 has a maximum length of 30 characters for table names, column names and constraint names.
      * Foreign key constraint names are defined like this from the plugin:<br/><br/>
      * 
      * TABLENAME_FOEREIGNKEYNAME_FK <br/><br/>
@@ -662,8 +659,17 @@ public class ERXEOAccessUtilities {
      * THIS means that the tablename and the columnname together cannot
      * be longer than 26 characters.<br/><br/>
      * 
-     * This method checks each foreign key constraint name and if it is longer than 30 characters its replaced
+     * This method checks each foreign key constraint name and if it is longer than 30 characters it is replaced
      * with a unique name.
+     * @param entities
+	 *            a NSArray containing the entities for which create table
+	 *            statements should be generated or <code>null</code> if all entities in the
+	 *            model should be used.
+     * @param modelName
+	 *            the name of the EOModel
+     * @param optionsCreate 
+     * @return a <code>String</code> containing SQL statements to create
+	 *         tables
      * 
      * @see createSchemaSQLForEntitiesInModelWithNameAndOptions
      */
@@ -916,12 +922,12 @@ public class ERXEOAccessUtilities {
      * 
      * @param eos
      *            array of enterprise objects
+     * @return array of primary keys
      */
-    public static NSArray primaryKeysForObjects(NSArray eos) {
+    public static NSArray primaryKeysForObjects(NSArray<? extends EOEnterpriseObject> eos) {
         NSMutableArray result = new NSMutableArray();
-        if (eos.count() > 0) {
-            for (Enumeration e = eos.objectEnumerator(); e.hasMoreElements();) {
-                EOEnterpriseObject target = (EOEnterpriseObject) e.nextElement();
+        if (eos != null) {
+            for (EOEnterpriseObject target : eos) {
                 NSDictionary pKey = EOUtilities.primaryKeyForObject(target.editingContext(), target);
                 result.addObject(pKey.allValues().objectAtIndex(0));
             }
@@ -942,11 +948,12 @@ public class ERXEOAccessUtilities {
      * EOSQLExpression method <code>sqlStringForAttributePath</code>. If the last element is a
      * relationship, then the relationship's source attribute will get chosen. As such, this can only 
      * work for single-value relationships in the last element.
-     * @param entity
-     * @param keyPath
+     * @param entity base entity
+     * @param keyPath key path
+     * @return array of EOProperties that make up the given key path
      */
-    public static NSArray attributePathForKeyPath(EOEntity entity, String keyPath) {
-        NSMutableArray result = new NSMutableArray();
+    public static NSArray<EOProperty> attributePathForKeyPath(EOEntity entity, String keyPath) {
+        NSMutableArray<EOProperty> result = new NSMutableArray<EOProperty>();
         String[] parts = keyPath.split("\\.");
         String part;
         for (int i = 0; i < parts.length - 1; i++) {
@@ -954,7 +961,7 @@ public class ERXEOAccessUtilities {
             EORelationship relationship = entity.anyRelationshipNamed(part);
             if(relationship == null) {
             	// CHECKME AK:  it would probably be better to return null 
-            	// to indocate that this is not a valid path?
+            	// to indicate that this is not a valid path?
             	return NSArray.EmptyArray;
             }
             entity = relationship.destinationEntity();
@@ -968,12 +975,11 @@ public class ERXEOAccessUtilities {
                 throw new IllegalArgumentException("Last element is not an attribute nor a relationship: " + keyPath);
             }
             if (relationship.isFlattened()) {
-            	NSArray path = attributePathForKeyPath(entity, relationship.definition());
+            	NSArray<EOProperty> path = attributePathForKeyPath(entity, relationship.definition());
             	result.addObjectsFromArray(path);
             	return result;
-            } else {
-                attribute = ((EOJoin) relationship.joins().lastObject()).sourceAttribute();
             }
+            attribute = relationship.joins().lastObject().sourceAttribute();
          }
         result.addObject(attribute);
         return result;
@@ -1004,8 +1010,9 @@ public class ERXEOAccessUtilities {
      * Returns the database context for the given entity in the given
      * EOObjectStoreCoordinator
      * 
-     * @param entityName
-     * @param osc
+     * @param entityName entity name
+     * @param osc the object store coordinator
+     * @return database context
      */
     public static EODatabaseContext databaseContextForEntityNamed(EOObjectStoreCoordinator osc, String entityName) {
         EOModel model = EOModelGroup.modelGroupForObjectStoreCoordinator(osc).entityNamed(entityName).model();
@@ -1020,6 +1027,7 @@ public class ERXEOAccessUtilities {
      * @param osc
      *            the EOObjectStoreCoordinator from which the (JDBC)Connections
      *            should be closed
+     * @return <code>true</code> if all connections have been closed
      */
     public static boolean closeDatabaseConnections(EOObjectStoreCoordinator osc) {
         boolean couldClose = true;
@@ -1050,20 +1058,20 @@ public class ERXEOAccessUtilities {
         return couldClose;
     }
 
+    private static Set<String> _keysWithWarning = Collections.synchronizedSet(new HashSet<String>());
+    
     /**
-     * Returns the last entity for the given key path. If the path is empty or null, returns the given entity.
+     * Returns the last entity for the given key path. If the path is empty or <code>null</code>, returns the given entity.
      * @param entity
      * @param keyPath
+     * @return entity object
      */
-    private static Set _keysWithWarning = Collections.synchronizedSet(new HashSet());
-    
     public static EOEntity destinationEntityForKeyPath(EOEntity entity, String keyPath) {
         if(keyPath == null || keyPath.length() == 0) {
             return entity;
         }
-        NSArray keyArray = NSArray.componentsSeparatedByString(keyPath, ".");
-        for(Enumeration keys = keyArray.objectEnumerator(); keys.hasMoreElements(); ) {
-            String key = (String)keys.nextElement();
+        NSArray<String> keyArray = NSArray.componentsSeparatedByString(keyPath, ".");
+        for(String key : keyArray) {
             EORelationship rel = entity.anyRelationshipNamed(key);
             if(rel == null) {
                 if(entity.anyAttributeNamed(key) == null) {
@@ -1228,16 +1236,16 @@ public class ERXEOAccessUtilities {
     }
 
 	public static String createLogString(EOAdaptorChannel channel, EOSQLExpression expression, long millisecondsNeeded) {
+		StringBuilder sb = new StringBuilder();
         String entityName = (expression.entity() != null ? expression.entity().name() : "Unknown");
-		String description = "\"" + entityName + "\"@" + channel.adaptorContext().hashCode() + " expression took "
-		        + millisecondsNeeded + " ms: " + expression.statement();
-		StringBuffer sb = new StringBuffer();
-		NSArray variables = expression.bindVariableDictionaries();
+        sb.append("\"").append(entityName).append("\"@").append(channel.adaptorContext().hashCode());
+        sb.append(" expression took ").append(millisecondsNeeded).append(" ms: ").append(expression.statement());
+		NSArray<NSDictionary<String, ? extends Object>> variables = expression.bindVariableDictionaries();
 		int cnt = variables != null ? variables.count() : 0;
 		if (cnt > 0) {
 		    sb.append(" withBindings: ");
 		    for (int i = 0; i < cnt; i++) {
-		        NSDictionary nsdictionary = (NSDictionary) variables.objectAtIndex(i);
+		        NSDictionary<String, ? extends Object> nsdictionary = variables.objectAtIndex(i);
 		        Object obj = nsdictionary.valueForKey("BindVariableValue");
 		        String attributeName = (String) nsdictionary.valueForKey("BindVariableName");
 		        if (obj instanceof String) {
@@ -1279,9 +1287,8 @@ public class ERXEOAccessUtilities {
 		        sb.append("]");
 		    }
 		}
-		description = description + sb.toString();
 
-		return description;
+		return sb.toString();
 	}
     
     
@@ -1289,13 +1296,15 @@ public class ERXEOAccessUtilities {
      * Creates an AND qualifier of EOKeyValueQualifiers for every keypath in the given array of attributes.
      *
      * @author ak
+     * @param attributes 
+     * @param values 
+     * @return qualifier
      */
-    public static EOQualifier qualifierFromAttributes(NSArray attributes, NSDictionary values) {
-        NSMutableArray qualifiers = new NSMutableArray();
+    public static EOQualifier qualifierFromAttributes(NSArray<EOAttribute> attributes, NSDictionary values) {
         EOQualifier result = null;
-        if(attributes.count() > 0) {
-            for (Enumeration i = attributes.objectEnumerator(); i.hasMoreElements();) {
-                EOAttribute key = (EOAttribute) i.nextElement();
+        if (attributes != null && attributes.count() > 0) {
+        	NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
+            for (EOAttribute key : attributes) {
                 Object value = values.objectForKey(key.name());
                 qualifiers.addObject(new EOKeyValueQualifier(key.name(), EOQualifier.QualifierOperatorEqual, value));
             }
@@ -1307,18 +1316,17 @@ public class ERXEOAccessUtilities {
     /**
      * Filters a list of relationships for only the ones that
      * have a given EOAttribute as a source attribute. 
+     * @param entity 
      * @param attrib EOAttribute to filter source attributes of
      *      relationships.
      * @return filtered array of EORelationship objects that have
      *      the given attribute as the source attribute.
      */
-    public static NSArray relationshipsForAttribute(EOEntity entity, EOAttribute attrib) {
-        NSMutableArray arr = new NSMutableArray();
-        int cnt = entity.relationships().count();
-        for(int i=0; i<cnt; i++){
-            EORelationship rel = (EORelationship)entity.relationships().objectAtIndex(i);
-            NSArray attribs = rel.sourceAttributes();
-            if(attribs.containsObject(attrib)){
+    public static NSArray<EORelationship> relationshipsForAttribute(EOEntity entity, EOAttribute attrib) {
+        NSMutableArray<EORelationship> arr = new NSMutableArray<EORelationship>();
+        for (EORelationship rel : entity.relationships()) {
+            NSArray<EOAttribute> attribs = rel.sourceAttributes();
+            if (attribs.containsObject(attrib)) {
                 arr.addObject(rel);
             }
         }
@@ -1346,7 +1354,7 @@ public class ERXEOAccessUtilities {
      */
     public static EOAttribute sourceAttributeForRelationship(EORelationship relationship)
     {
-        EOJoin join = (EOJoin)relationship.joins().objectAtIndex(0);
+        EOJoin join = relationship.joins().objectAtIndex(0);
         return join.sourceAttribute();
     }
 
@@ -1413,6 +1421,7 @@ public class ERXEOAccessUtilities {
      * it has been refetched.
      *
      * @param eo enterprise object to have the changes re-applied to.
+     * @param e 
      */
     public static void reapplyChanges(EOEnterpriseObject eo, EOGeneralAdaptorException e) {
         EOAdaptorOperation adaptorOp = (EOAdaptorOperation) e.userInfo().objectForKey(EOAdaptorChannel.FailedAdaptorOperationKey);
@@ -1611,7 +1620,8 @@ public class ERXEOAccessUtilities {
     /**
 	 * Tries to get the plugin name for a JDBC based model.
 	 * 
-	 * @param model
+	 * @param model model name
+     * @return name of the JDBC plugin or <code>null</code>
 	 */
     public static String guessPluginName(EOModel model) {
         String pluginName = null;
@@ -1663,10 +1673,11 @@ public class ERXEOAccessUtilities {
     }
      
      /**
-      * Returns a new fetch spec by morphing sort oderings containing the keys <code>foo.name</code>
+      * Returns a new fetch spec by morphing sort orderings containing the keys <code>foo.name</code>
       * returning <code>foo.name_de</code> where appropriate.
       * @param ec
       * @param fetchSpecification
+      * @return localized fetch specification
       */
      public static EOFetchSpecification localizeFetchSpecification(EOEditingContext ec, EOFetchSpecification fetchSpecification) {
          if(fetchSpecification != null && fetchSpecification.sortOrderings().count() > 0) {
@@ -1856,11 +1867,9 @@ public class ERXEOAccessUtilities {
 
  									NSMutableDictionary databaseSnapshotClone;
  									NSMutableDictionary memorySnapshotClone = snapshot.mutableClone();
- 									EOAdaptorContext context;
  									EOAdaptorChannel channel = databaseContext.availableChannel().adaptorChannel();
  									channel.openChannel();
  									channel.selectAttributes(entity.attributesToFetch(), gidFetchSpec, false, entity);
- 									NSDictionary nextRow;
  									try {
  										databaseSnapshotClone = channel.fetchRow().mutableClone();
  									}
@@ -1897,16 +1906,12 @@ public class ERXEOAccessUtilities {
  											channel.openChannel();
  											try {
  												channel.selectAttributes(relationship.destinationEntity().attributesToFetch(), relationshipFetchSpec, false, relationship.destinationEntity());
- 												NSDictionary nextRow;
  												NSDictionary destinationSnapshot = null;
  												do {
  													destinationSnapshot = channel.fetchRow();
  													if (destinationSnapshot != null) {
  														EOGlobalID destinationGID = relationship.destinationEntity().globalIDForRow(destinationSnapshot);
  														newDestinationGIDs.addObject(destinationGID);
- 													}
- 													else {
- 														destinationSnapshot = null;
  													}
  												}
  												while (destinationSnapshot != null);
@@ -1941,7 +1946,7 @@ public class ERXEOAccessUtilities {
 
  	/**
    * Utility method to make a shared entity editable. This
-   * can be useful if you want to have an adminstration
+   * can be useful if you want to have an administration
    * application that can edit shared enterprise objects
    * and need a way at start up to disable the sharing
    * constraints.
@@ -1985,7 +1990,7 @@ public class ERXEOAccessUtilities {
 	 *            EOClassDescription.DeleteRuleNullify
 	 * @param isMandatory mandatory or not
 	 * @param isClassProperty class property or not
-	 * @param shouldPropagatePrimaryKey propagate prmary key or not
+	 * @param shouldPropagatePrimaryKey propagate primary key or not
 	 * @return the newly created relationship
 	 * 
 	 * @author th
@@ -2236,13 +2241,13 @@ public class ERXEOAccessUtilities {
     }
 
 	/**
+	 * @param ec editing context
 	 * @param rootEntityName
 	 * @return a list of all concrete entity names that inherit from
 	 *         rootEntityName, including rootEntityName itself if it is
 	 *         concrete.
 	 */
 	public static NSArray<String> entityHierarchyNamesForEntityNamed(EOEditingContext ec, String rootEntityName) {
-	
 		NSMutableArray<String> names = new NSMutableArray<String>();
 		EOEntity rootEntity = entityNamed(ec, rootEntityName);
 		NSArray<EOEntity> entities = entityHierarchyForEntity(ec, rootEntity);
@@ -2251,10 +2256,10 @@ public class ERXEOAccessUtilities {
 			names.add(entity.name());
 		}
 		return names.immutableClone();
-	
 	}
 
 	/**
+	 * @param ec editing context
 	 * @param rootEntity
 	 * @return a list of all concrete entities that inherit from rootEntity,
 	 *         including rootEntity itself if it is concrete.

@@ -8,6 +8,8 @@
 
 package er.directtoweb.components;
 
+import org.apache.log4j.Level;
+
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.woextensions.WOStatsPage;
@@ -28,6 +30,12 @@ import er.extensions.foundation.ERXProperties;
 
 
 public class ERD2WDebugFlags extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERD2WDebugFlags(WOContext context) {
         super(context);
@@ -43,9 +51,14 @@ public class ERD2WDebugFlags extends WOComponent {
         return nextPage.submit();
     }
     
-    public WOComponent toggleD2WInfo() {
-        boolean currentState=ERDirectToWeb.d2wDebuggingEnabled(session());
+    public WOComponent toggleD2WInfo() {    
+        boolean currentState = ERDirectToWeb.d2wDebuggingEnabled(session());
+        Level level = currentState ? Level.INFO : Level.DEBUG;
+        ERDirectToWeb.debugLog.setLevel(level);
+        ERD2WModel.ruleTraceEnabledLog.setLevel(level);
         ERDirectToWeb.setD2wDebuggingEnabled(session(), !currentState);
+        ERDirectToWeb.setD2wComponentNameDebuggingEnabled(session(), !currentState);
+        ERDirectToWeb.setD2wPropertyKeyDebuggingEnabled(session(), !currentState);
         return null;
     }
 

@@ -15,14 +15,21 @@
  */
 package com.thimbleware.jmemcached;
 
-import org.apache.mina.common.ByteBuffer;
-
 import java.io.Serializable;
+
+import org.apache.mina.common.ByteBuffer;
 
 /**
  * Represents an outbound response on the network stream.
  */
 public class ResponseMessage implements Serializable {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     public ByteBuffer out;
 
     public ResponseMessage() {

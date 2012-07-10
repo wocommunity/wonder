@@ -17,6 +17,13 @@ import com.webobjects.foundation.NSPropertyListSerialization;
  * Transforms NSData between JavaScript and Java.
  */
 public class NSDataSerializer extends AbstractSerializer {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private static Class[] _serializableClasses = new Class[] { NSData.class, NSMutableData.class };
 	private static Class[] _JSONClasses = new Class[] { JSONObject.class };
 

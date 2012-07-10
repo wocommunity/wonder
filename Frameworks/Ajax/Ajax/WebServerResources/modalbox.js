@@ -523,8 +523,9 @@ Modalbox.Methods = {
 	// CH: done
 	
 	_preventScroll: function(event) { // Disabling scrolling by "space" key
-		if (!["input", "textarea", "select", "button"].include(event.element().tagName.toLowerCase())
-				&& event.element().contentEditable != 'true')
+		var el = event.element();
+		if (!["input", "textarea", "select", "button"].include(el.tagName.toLowerCase())
+				&& !(el.contentEditable == 'true' || el.contentEditable == ''))
 			event.stop();
 	},
 	

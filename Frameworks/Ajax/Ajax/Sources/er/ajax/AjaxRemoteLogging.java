@@ -45,6 +45,7 @@ public class AjaxRemoteLogging extends AjaxDynamicElement {
 
 	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
+		super.appendToResponse(response, context);
 		String level = "info";
 		String logger = getClass().getSimpleName();
 		String filter = null;

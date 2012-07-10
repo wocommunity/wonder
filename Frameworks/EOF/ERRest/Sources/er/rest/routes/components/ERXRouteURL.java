@@ -1,5 +1,6 @@
 package er.rest.routes.components;
 
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
@@ -70,7 +71,8 @@ public class ERXRouteURL extends ERXComponent {
 				Object value = valueForBinding(bindingKey);
 				String key = bindingKey.substring(1);
 				if (value != null) {
-					if ("wosid".equals(key) && (Boolean.FALSE.equals(value) || "false".equals(value))) {
+					String sessionIdKey = WOApplication.application().sessionIdKey();
+					if (sessionIdKey.equals(key) && (Boolean.FALSE.equals(value) || "false".equals(value))) {
 						includeSessionID = false;
 					}
 					else {

@@ -22,6 +22,7 @@ public class ERXRestFormat {
 	public static final String SPROUTCORE_KEY = "sc";
 	public static final String XML_KEY = "xml";
 	public static final String FORM_KEY = "form";
+	public static final String BINARY_PLIST_KEY = "bplist";
 
 	private static Map<String, ERXRestFormat> _formats = new ConcurrentHashMap<String, ERXRestFormat>();
 	
@@ -30,7 +31,7 @@ public class ERXRestFormat {
 		ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXJSONRestWriter(), new ERXRestFormatDelegate(), ERXRestFormat.JSON_KEY, "application/json");
 		ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXJSONRestWriter(), new ERXRestFormatDelegate(), ERXRestFormat.JS_KEY, "text/js");
 		ERXRestFormat.registerFormatNamed(new ERXPListRestParser(), new ERXPListRestWriter(), new ERXRestFormatDelegate(), ERXRestFormat.PLIST_KEY, "text/plist");
-		ERXRestFormat.registerFormatNamed(new ERXBinaryPListRestParser(), new ERXBinaryPListRestWriter(), new ERXRestFormatDelegate(), "bplist", "application/x-plist");
+		ERXRestFormat.registerFormatNamed(new ERXBinaryPListRestParser(), new ERXBinaryPListRestWriter(), new ERXRestFormatDelegate(), ERXRestFormat.BINARY_PLIST_KEY, "application/x-plist");
 		ERXRestFormat.registerFormatNamed(new ERXXmlRestParser(), new ERXXmlRestWriter(), new ERXRestFormatDelegate("id", "type", "nil", true, true, true, true), ERXRestFormat.RAILS_KEY, "application/xml", "text/xml");
 		ERXRestFormat.registerFormatNamed(new ERXXmlRestParser(), new ERXXmlRestWriter(), new ERXRestFormatDelegate(), ERXRestFormat.XML_KEY, "application/xml", "text/xml");
 		ERXRestFormat.registerFormatNamed(null, new ERXSimpleRestWriter(), new ERXRestFormatDelegate(), ERXRestFormat.HTML_KEY, "text/html");
@@ -108,6 +109,16 @@ public class ERXRestFormat {
 	public static ERXRestFormat xml() {
 		return formatNamed(ERXRestFormat.XML_KEY);
 	}
+	
+	/**
+	 * Returns the registered plist format.
+	 * 
+	 * @return the registered plist format
+	 */
+	public static ERXRestFormat bplist() {
+		return formatNamed(ERXRestFormat.BINARY_PLIST_KEY);
+	}
+	
 	
 	/**
 	 * Constructs a new ERXRestFormat.

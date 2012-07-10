@@ -325,7 +325,7 @@ public class ERXModel extends EOModel {
 	
 	/**
 	 * Defaults to false as returned by {@link #isUseExtendedPrototypesEnabled()}.
-	 * @see ERXModel#isUseExtendedPrototypesEnabled()
+	 * @see #isUseExtendedPrototypesEnabled()
 	 */
 	protected boolean useExtendedPrototypes() {
 		return isUseExtendedPrototypesEnabled();
