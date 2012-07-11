@@ -1,0 +1,3 @@
+Link : WOString {
+  value = linkURL;
+}

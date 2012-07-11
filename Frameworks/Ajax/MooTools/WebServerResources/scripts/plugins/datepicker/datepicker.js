@@ -264,8 +264,8 @@ var DatePicker = new Class({
 		} else {
 			// swap contents so we can fill the newContents again and animate
 			var o = this.oldContents;
-			this.oldContents = this.newContents;
-			this.newContents = o;
+			this.oldContents.replaces(this.newContents);
+			this.newContents.replaces(o);
 			this.newContents.empty();
 		}
 		
@@ -460,6 +460,7 @@ var DatePicker = new Class({
 	},
 	
 	renderYear: function() {
+
 		var month = this.today.getMonth();
 		var thisyear = this.d.getFullYear() == this.today.getFullYear();
 		var selectedyear = this.d.getFullYear() == this.choice.year;

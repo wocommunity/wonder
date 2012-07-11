@@ -1,0 +1,6 @@
+{
+	COScheduler.DefaultMailErrorMessage = "Message d'erreur: {0}. Temps de traitement : {1}";
+    COScheduler.DefaultMailShortMessage = "Temps de traitement : {0}";
+    COScheduler.DefaultMailMessageWithMoreInfos = "Plus d'informations : {0}. Temps de traitement : {1}";
+    COScheduler.MailSubject = "Job info: {0} is termine.";
+}

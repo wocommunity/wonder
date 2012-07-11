@@ -1,0 +1,75 @@
+<html>
+  <head>
+    <title>Processing... Please Wait ...</title>
+    <webobject name = "ERXStyleSheet" />
+    <script>
+      var performNextPageAction = function () {
+          window.location='<webobject name = "NextPageActionURL" />';
+      }
+    </script>
+  </head>
+  <body>
+    <div id = "content-wrapper">
+      <div id = "content-panel">
+        <webobject name = "TaskProgressRefresh">
+          <div id = "status-area" class = "section">
+            <!-- We either show the task status, or fallback to user-defined default status, or fallback to global default status message -->
+            <webobject name = "FutureHasStatus">
+              <p class = "status-message"> <webobject name = "FutureStatus" /> </p>
+            </webobject>
+            <webobject name = "FutureDoesNotHaveStatus">
+              <p class = "status-message"><webobject name = "DefaultStatus" /></p>
+            </webobject>
+          </div>
+          <div id = "progress-area" class = "section">
+            <!-- We show a percentage based progress feedback, or fallback to an ajax busy indicator -->
+            <webobject name = "FutureHasPercentComplete">
+              <table class = "progressBar" width = "100%" cellspacing = "0">
+                <tr>
+                  <webobject name = "Finished">&nbsp;</webobject>
+                  <webobject name = "Unfinished" />
+                </tr>
+              </table>
+              <p class = "percent-display"> <webobject name = "FinishedPercentage" /> </p>
+            </webobject>
+            <webobject name = "FutureDoesNotHavePercentComplete">
+              <!-- Just show an ajax busy indicator which is determined by CSS styling of this div -->
+              <div id = "busy-indicator">
+              &nbsp;
+              </div>
+            </webobject>
+          </div>
+          <div id = "elapsed-time-area" class = "section">
+            <p class = "elapsed-time">Elapsed Time: <webobject name = "ElapsedTime" /></p>
+          </div>
+          <!-- The content of this next javascript changes when the task is done so that the nextPage action is fired -->
+          <script>
+            <webobject name = "ControlScriptContent" />
+          </script>
+        </webobject>
+        <webobject name = "FutureIsStoppable">
+          <webobject name = "StopControlUpdateContainer">
+            <!-- We want the Stop control outside of the refresh area, otherwise a user click on Stop at the same time as a refresh request might not have any effect. -->
+            <webobject name = "WasStoppedByUser">
+              <p class = "stopping-message">Stopping...</p>
+            </webobject>
+            <webobject name = "ERXElse2">
+            <webobject name = "StopTaskUpdateHyperlink"><span class = "stop-link-text">Stop Task</span></webobject>
+            </webobject>
+          </webobject>
+        </webobject>
+      </div>
+      <webobject name = "ApplicationIsDevelopmentMode">
+        <webobject name = "IsDebugMode">
+          <div id = "development-info">
+            <h4>Development Info</h4>
+            <ul>
+              <li>NextPageController: <webobject name = "NextPageForResultControllerClassSimpleName" /></li>
+              <li>Task: <webobject name = "TaskClassSimpleName" /></li>
+            </ul>
+          </div>
+        </webobject>
+      </webobject>
+    </div>
+  </body>
+</html>

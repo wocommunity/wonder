@@ -1,0 +1,47 @@
+{
+    attributes = (
+        {
+            allowsNull = N; 
+            columnName = "MOVIE_ID"; 
+            externalType = integer; 
+            name = movieID; 
+            prototypeName = id; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = "NUMBER_OF_VOTES"; 
+            externalType = integer; 
+            name = numberOfVotes; 
+            prototypeName = intNumber; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = "RUNNING_AVERAGE"; 
+            externalType = float; 
+            name = runningAverage; 
+            prototypeName = doubleNumber; 
+        }
+    ); 
+    attributesUsedForLocking = (movieID, numberOfVotes); 
+    className = "webobjectsexamples.businesslogic.eo.Voting"; 
+    classProperties = (numberOfVotes, movie, runningAverage); 
+    externalName = VOTING; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {
+        "_clientClassPropertyNames" = (numberOfVotes, movie, runningAverage); 
+        "_javaClientClassName" = "webobjectsexamples.businesslogic.movies.common.Voting"; 
+        "_nameInObjectStore" = VOTING; 
+    }; 
+    name = Voting; 
+    primaryKeyAttributes = (movieID); 
+    relationships = (
+        {
+            destination = Movie; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = movieID; sourceAttribute = movieID; }); 
+            name = movie; 
+        }
+    ); 
+}

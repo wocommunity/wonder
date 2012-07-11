@@ -1,0 +1,10 @@
+{
+    EOModelVersion = "2.1"; 
+    adaptorName = JDBC; 
+    entities = (
+        {
+            className = "er.persistentsessionstorage.model.ERSessionInfo"; 
+            name = ERSessionInfo; 
+        }
+    ); 
+}
