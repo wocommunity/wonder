@@ -335,6 +335,30 @@ public class ERXComponentUtilities {
 			ERXComponentUtilities.appendHtmlAttribute(key, association, response, component);
 		}
 	}
+	
+	/**
+	 * Appends a dictionary of associations as HTML attributes.
+	 * 
+	 * @param associations
+	 *            the associations dictionary
+	 * @param excludeKeys
+	 *            the associations to ignore
+	 * @param response
+	 *            the response to write to
+	 * @param component
+	 *            the component to evaluate the associations within
+	 */
+	public static void appendHtmlAttributes(NSDictionary<String, WOAssociation> associations, NSArray<String> excludeKeys, WOResponse response, WOComponent component) {
+		if (excludeKeys == null) {
+			excludeKeys = NSArray.EmptyArray;
+		}
+		for (String key : associations.allKeys()) {
+			if (!excludeKeys.contains(key)) {
+				WOAssociation association = associations.objectForKey(key);
+				ERXComponentUtilities.appendHtmlAttribute(key, association, response, component);
+			}
+		}
+	}
 
 	/**
 	 * Appends an association as an HTML attribute.
