@@ -22,13 +22,26 @@ import com.webobjects.foundation.NSData;
 import er.extensions.foundation.ERXProperties;
 
 /**
+ * <span class="en">
  * ERCaptcha presents a captcha image to the use along with a text field for the user to identify the image.
  * 
  * @binding validated returns whether or not the user properly validated the image
  * @binding resetText if set, a submit button will be added with this text that resets the image
  * 
  * @property er.captcha.captchaEngineClass the class name of the CaptchaEngine to use
+ * </span>
  * 
+ * <span class="ja">
+ * ERCaptcha は JCaptcha ( http://jcaptcha.sourceforge.net/ ) ライブラリーの上に位置します。
+ * ダイナミック・イメージ生成の為に、 AWT クラスを使用している為アプリケーションを配布時で -Djava.awt.headless=true として実行する必要があります。
+
+ * ERCaptcha はキャプチャ・イメージと確認用のユーザが使用できるテキスト・フィールドを表現します。
+ * 
+ * @binding validated - ユーザがイメージを有効で認識できたかどうかを戻します。
+ * @binding resetText - セットされている場合には、イメージをリセットする為のサブミット・ボタンが表示されます。
+ * 
+ * @property er.captcha.captchaEngineClass - 使用する CaptchaEngine のクラス名
+ * </span>
  * @author mschrag
  */
 public class ERCaptcha extends WOComponent {

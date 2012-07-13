@@ -3,8 +3,15 @@ package er.attachment.model;
 import org.apache.log4j.Logger;
 
 /**
+ * <span class="en">
  * For a database attachment, ERAttachmentData contains the actual backing
  * data for the attachment.
+ * </span>
+ * 
+ * <span class="ja">
+ * データベース内の保存です。
+ * ERAttachmentData は実際のデータベース内のデータを保持します。
+ * </span>
  * 
  * @author mschrag
  */

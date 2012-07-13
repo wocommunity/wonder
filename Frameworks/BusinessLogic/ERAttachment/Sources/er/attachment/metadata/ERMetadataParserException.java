@@ -14,19 +14,36 @@ public class ERMetadataParserException extends Exception {
 	private static final long serialVersionUID = 1L;
 
   /**
+   * <span class="en">
    * Constructs a new ERMetadataParserException.
    * 
    * @param message the exception message
+   * </span>
+   * 
+   * <span class="ja">
+   * コンストラクタ
+   * 
+   * @param message - 例外メッセージ
+   * </span>
    */
   public ERMetadataParserException(String message) {
     super(message);
   }
 
   /**
+   * <span class="en">
    * Constructs a new ERMetadataParserException.
    * 
    * @param message the exception message
    * @param cause the cause
+   * </span>
+   * 
+   * <span class="ja">
+   * コンストラクタ
+   * 
+   * @param message - 例外メッセージ
+   * @param cause - 理由
+   * </span>
    */
   public ERMetadataParserException(String message, Throwable cause) {
     super(message, cause);
