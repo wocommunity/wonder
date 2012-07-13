@@ -897,6 +897,11 @@ public class PostgresqlExpression extends JDBCExpression {
         	EOEntity kpEntity = entityForKeyPath(kp);
         	attribute = kpEntity.attributeNamed(kp.substring(lastDotIdx+1));
         }
+        // AK: inet6 addresses get handed down as "xxx:xxx:...:xxx%y", not "xxx:xxx:...:xxx/y"
+        // note that this might break if you hand over a host name that contains percent chars (not sure if possible)
+    	if(attribute != null && "inet".equals(attribute.externalType()) && v != null && v.toString().indexOf('%') > 0) {
+    		v = v.toString().replace('%', '/');
+    	}
         if(attribute != null && v != null && v != NSKeyValueCoding.NullValue) {
         	String s = columnTypeStringForAttribute(attribute);
         	return super.sqlStringForValue(v, kp) + "::" + s;
