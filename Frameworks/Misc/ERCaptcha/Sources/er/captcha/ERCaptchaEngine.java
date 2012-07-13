@@ -21,12 +21,17 @@ import com.octo.captcha.component.word.wordgenerator.WordGenerator;
 import com.octo.captcha.engine.image.ListImageCaptchaEngine;
 import com.octo.captcha.image.gimpy.GimpyFactory;
 
+import er.extensions.foundation.ERXProperties;
+
 /**
  * ERCaptchaEngine is the default captcha engine for ERCaptcha.
  * 
  * @author mschrag
  */
 public class ERCaptchaEngine extends ListImageCaptchaEngine {
+
+	public static String WORD_GENERATOR = "er.captcha.ERCaptchaEngine.wordgenerator";
+
 	public ERCaptchaEngine() {
 	}
 
@@ -48,7 +53,7 @@ public class ERCaptchaEngine extends ListImageCaptchaEngine {
 		ImageDeformation postDef = new ImageDeformationByFilters(new ImageFilter[] { water });
 		WordToImage word2image = new DeformedComposedWordToImage(shearedFont, back, randomPaster, backDef, textDef, postDef);
 
-		WordGenerator dictionaryWords = new RandomWordGenerator("BCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz2346789");
+		WordGenerator dictionaryWords = new RandomWordGenerator(ERXProperties.stringForKeyWithDefault(WORD_GENERATOR, "BCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz2346789"));
 		addFactory(new GimpyFactory(dictionaryWords, word2image));
 	}
 }

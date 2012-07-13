@@ -1,0 +1,4 @@
+{
+    ERCMailMessage.emptytoAddresses = "送り先のメールアドレスを1つ以上設定する必要があります。";
+    ERCMailMessage.eitherPlainTextOrText = "プレインテキストを含む両テキストが空又はnullである。どちらか1つをセットする必要があります。";
+}
