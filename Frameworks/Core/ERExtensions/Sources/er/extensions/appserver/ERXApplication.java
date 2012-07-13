@@ -357,9 +357,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	private static Loader _loader;
 
 	/**
-	 * Responsible for classpath munging.
+	 * Responsible for classpath munging and ensuring all bundles are loaded
 	 * 
-	 *
+	 * @property er.extensions.appserver.projectBundleLoading - to see logging this has to be set on the command line by using -Der.extensions.appserver.projectBundleLoading=DEBUG
+	 * 
 	 * @author ak
 	 */
 	public static class Loader {
@@ -586,7 +587,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		
 		// for logging before logging has been setup and configured by loading the properties files
 		private void debugMsg(String msg) {
-			if ("DEBUG".equals(System.getProperty("ERXApplication.Loader"))) {
+			if ("DEBUG".equals(System.getProperty("er.extensions.appserver.projectBundleLoading"))) {
 				System.out.println(msg); 
 			}
 		}
