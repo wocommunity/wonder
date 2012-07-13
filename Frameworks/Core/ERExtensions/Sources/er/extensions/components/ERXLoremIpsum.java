@@ -8,10 +8,19 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 
 /**
+ * <span class="en">
  * ERXLoremIpsum provides a component wrapper around the ERXLoremIpsumGenerator.
  * 
  * @binding type "word", "sentence", or "paragraph", defaults to <i>paragraph</i>
  * @binding count the number of words, sentences, or paragraphs to generate, defaults to <i>1</i>
+ * </span>
+ * 
+ * <span class="ja">
+ * ERXLoremIpsum は ERXLoremIpsumGenerator のコンポーネント・ラッパーです。
+ * 
+ * @binding type - "word", "sentence", 又は "paragraph"
+ * @binding count - 生成する (ワード = words, 文 = sentences, 又は 段落 = paragraphs) 数
+ * </span>
  * 
  * @author mschrag
  */
