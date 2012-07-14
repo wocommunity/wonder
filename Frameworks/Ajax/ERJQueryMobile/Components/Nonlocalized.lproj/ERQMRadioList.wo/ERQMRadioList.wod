@@ -19,7 +19,7 @@ RadioButton : WOGenericElement {
 	name = wrapperElementID;
 	id = id;
 	value = index;
-	otherTagString = isCurrentItemSelected;
+	otherTagString = otherTagString;
 }
 
 LABEL : WOGenericContainer {
