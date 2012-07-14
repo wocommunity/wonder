@@ -24,6 +24,10 @@ public class ERXTestCase extends TestCase {
 		TestCase.assertEquals(arg0, arg1);
 	}
 
+	public static String adaptorName() {
+		return com.webobjects.eoaccess.EOModelGroup.defaultGroup().modelNamed("ERXTest").adaptorName();
+	}
+
 	public static void assertEquals(Collection<?> arg0, Collection<?> arg1) {
 		if (arg0 == null && arg1 == null)
 			return;

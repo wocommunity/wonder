@@ -1400,8 +1400,8 @@
                 <pathelement location="${build.root}/ERJars.${fRJ}/junit-4.8.jar" />
                 <pathelement location="${build.root}/ERJars.${fRJ}/log4j-1.2.16.jar" />
                 <pathelement location="${build.root}/ERJars.${fRJ}/ognl-2.6.7.jar" />
-                <pathelement location="${build.root}/ERJars.${fRJ}/slf4j-api-1.5.0.jar" />
-                <pathelement location="${build.root}/ERJars.${fRJ}/slf4j-log4j12-1.5.0.jar" />
+                <pathelement location="${build.root}/ERJars.${fRJ}/slf4j-api-1.6.5.jar" />
+                <pathelement location="${build.root}/ERJars.${fRJ}/slf4j-log4j12-1.6.5.jar" />
                 <pathelement location="${build.root}/ERPrototypes.${fRJ}/ERPrototypes.jar" />
                 <pathelement location="${build.root}/JavaMemoryAdaptor.${fRJ}/JavaMemoryAdaptor.jar" />
                 <pathelement location="${build.root}/JavaWOExtensions.${fRJ}/JavaWOExtensions.jar" />
