@@ -16,5 +16,6 @@
         </validation>
     <binding name="name"/>
     <binding defaults="Boolean" name="mini"/>
+    <binding name="countryNumber"/>
     </wo>
 </wodefinitions>

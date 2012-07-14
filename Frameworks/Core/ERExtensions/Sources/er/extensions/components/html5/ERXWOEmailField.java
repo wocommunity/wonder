@@ -13,7 +13,7 @@ import com.webobjects.foundation.NSDictionary;
  * </span>
  * 
  * <span class="ja">
- * type = "tel" - 電話番号の入力欄を作成する (*5)
+ * type = "email" - メールアドレスの入力欄を作成する (*5)
  * name属性 - フォーム部品に名前をつける
  * value属性 - 送信される値を指定する
  * size属性 - 表示文字数を指定（1以上の正の整数）
@@ -26,9 +26,9 @@ import com.webobjects.foundation.NSDictionary;
  * 
  * @author ishimoto
  */
-public class ERXWOTelField extends ERXWOInput {
+public class ERXWOEmailField extends ERXWOInput {
 
-  public final String TEL_PATTERN ="^[0-9\\-]+$";
+  public final String EMAIL_PATTERN ="^[0-9a-zA-Z]+[\\w-]+@[\\w\\.-]+\\.\\w{2,}$";
 
   //********************************************************************
   //  Binding Properties
@@ -43,7 +43,7 @@ public class ERXWOTelField extends ERXWOInput {
   //  Constructor
   //********************************************************************
 
-  public ERXWOTelField(String tagname, NSDictionary<String, WOAssociation> nsdictionary, WOElement woelement) {
+  public ERXWOEmailField(String tagname, NSDictionary<String, WOAssociation> nsdictionary, WOElement woelement) {
     super("input", nsdictionary, woelement);
 
     _size = _associations.removeObjectForKey("size");
@@ -53,16 +53,11 @@ public class ERXWOTelField extends ERXWOInput {
     _placeholder = _associations.removeObjectForKey("placeholder");
   }
 
-  //********************************************************************
-  //  Methods
-  //********************************************************************
-
   @Override
   public String type() {
-    return "tel";
+    return "email";
   }
 
-  @Override
   protected void _appendValueAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
     WOComponent component = wocontext.component();
 
@@ -103,7 +98,7 @@ public class ERXWOTelField extends ERXWOInput {
         woresponse._appendTagAttributeAndValue("pattern", stringValue, true);
       }     
     } else {
-      woresponse._appendTagAttributeAndValue("pattern", TEL_PATTERN, true);
+      woresponse._appendTagAttributeAndValue("pattern", EMAIL_PATTERN, true);
     }
 
     if (isRequiredInContext(wocontext)) {
@@ -127,5 +122,4 @@ public class ERXWOTelField extends ERXWOInput {
     stringbuffer.append(">");
     return stringbuffer.toString();
   }
-
 }
