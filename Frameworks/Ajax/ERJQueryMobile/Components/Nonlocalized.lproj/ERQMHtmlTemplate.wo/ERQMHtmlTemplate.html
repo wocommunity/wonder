@@ -7,8 +7,12 @@
     <wo:genericElement elementName="link" rel="stylesheet" href="$styleSheetUrl" />
     <wo:genericContainer elementName="script" src="$jQueryUrl" />
     <wo:genericContainer elementName="script" src="$javascriptUrl" />
+    <webobject name="InHeaderContent" />
   </head>
   <body>
-    <wo:genericContainer elementName="div" id="currentPage" data-role="page" data-title="$^title" data-content-theme="$^theme"><wo:content /></wo:genericContainer>
+    <wo:genericContainer elementName="div" id="currentPage" data-role="page" data-title="$^title" data-content-theme="$^theme">
+      <webobject name="HasNoNewTemplates"><webobject name="MainComponent" /></webobject>
+      <webobject name="ContainerContent" />
+    </wo:genericContainer>
   </body>
 </html>
