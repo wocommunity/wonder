@@ -10,6 +10,11 @@ package er.directtoweb.components.numbers;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WQueryNumberRange;
 
+/**
+ * <span class="ja">
+ * このプロパティ・レベル・コンポーネントは number のクエリを二つの数値の間でビルドします。
+ * </span>
+ */
 public class ERD2WQueryNumberRange extends D2WQueryNumberRange {
 	/**
 	 * Do I need to update serialVersionUID?
