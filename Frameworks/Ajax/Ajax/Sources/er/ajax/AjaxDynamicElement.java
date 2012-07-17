@@ -82,6 +82,7 @@ public abstract class AjaxDynamicElement extends ERXDynamicElement implements IA
     @Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		addRequiredWebResources(response, context);
+		super.appendToResponse(response, context);
 	}
     
     /**
