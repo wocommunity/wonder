@@ -1,5 +1,5 @@
 //
-// ERXWOContext.java
+// ERXAjaxContext.java
 // Project armehaut
 //
 // Created by ak on Mon Apr 01 2002
@@ -10,14 +10,21 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 
 /**
+ * <span class="en">
  * ERXAjaxContext provides the overrides necessary methods for partial form
  * submits to work. If you want to use the Ajax framework without using other
  * parts of Project Wonder (i.e. ERXSession or ERXApplication), you should steal
  * all of the code in ERXAjaxSession, ERXAjaxApplication, and ERXAjaxContext.
+ * </span>
+ * 
+ * <span class="ja">
+ * ERXAjaxContext は部分的なフォーム・サブミットの機能を提供します。
+ * </span>
  * 
  * @author mschrag
  */
 public class ERXAjaxContext extends WOContext {
+	
 	public ERXAjaxContext(WORequest request) {
 		super(request);
 	}

@@ -148,7 +148,7 @@ public class SockIOPool {
 	};
 
 	// Constants
-	private static final Integer ZERO       = new Integer( 0 );
+	private static final Integer ZERO       = Integer.valueOf(0);
 	public static final int NATIVE_HASH     = 0;				// native String.hashCode();
 	public static final int OLD_COMPAT_HASH = 1;				// original compatibility hashing algorithm (works with other clients)
 	public static final int NEW_COMPAT_HASH = 2;				// new CRC32 based compatibility hashing algorithm (works with other clients)
@@ -800,7 +800,7 @@ public class SockIOPool {
 				if ( expire > MAX_RETRY_DELAY )
 					expire = MAX_RETRY_DELAY;
 
-				hostDeadDur.put( host, new Long( expire ) );
+				hostDeadDur.put( host, Long.valueOf(expire) );
 				if ( log.isDebugEnabled() )
 					log.debug( "++++ ignoring dead host: " + host + " for " + expire + " ms" );
 
@@ -1066,7 +1066,7 @@ public class SockIOPool {
 			Map<SockIO,Long> sockets = pool.get( host );
 
 			if ( sockets != null ) {
-				sockets.put( socket, new Long( System.currentTimeMillis() ) );
+				sockets.put( socket, Long.valueOf(System.currentTimeMillis()) );
 				return;
 			}
 		}
@@ -1074,7 +1074,7 @@ public class SockIOPool {
 		Map<SockIO,Long> sockets =
 			new IdentityHashMap<SockIO,Long>();
 
-		sockets.put( socket, new Long( System.currentTimeMillis() ) );
+		sockets.put( socket, Long.valueOf(System.currentTimeMillis()) );
 		pool.put( host, sockets );
 	}
 

@@ -6,6 +6,9 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.pages;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -90,6 +93,12 @@ import er.extensions.statistics.ERXStats;
  * @d2wKey showBatchNavigation
  */
 public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, SelectPageInterface, ERXComponentActionRedirector.Restorable {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/** logging support */
 	public final static Logger log = Logger.getLogger(ERD2WListPage.class);
@@ -109,7 +118,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	public ERD2WListPage(WOContext c) {
 		super(c);
 		_sessionID = c.session().sessionID();
-		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("editingContextDidSaveChanges", ERXConstant.NotificationClassArray), EOEditingContext.EditingContextDidSaveChangesNotification, null);
+		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector<Void>("editingContextDidSaveChanges", ERXConstant.NotificationClassArray), EOEditingContext.EditingContextDidSaveChangesNotification, null);
 	}
 
 	/* Not necessary -- NSNotificationCenter uses weak references
@@ -174,7 +183,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	 * display.
 	 */
 	public void editingContextDidSaveChanges(NSNotification notif) {
-	    if(sessionID() == ERXSession.currentSessionID()) {
+	    if(ERXExtensions.safeEquals(sessionID(), ERXSession.currentSessionID())) {
 	        _hasToUpdate = true;
 	    }
 	}
@@ -785,4 +794,14 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 
         return delegate;
     }
+    
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+		in.defaultReadObject();
+		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector<Void>("editingContextDidSaveChanges", ERXConstant.NotificationClassArray), EOEditingContext.EditingContextDidSaveChangesNotification, null);
+	}
+	
+	private void writeObject(ObjectOutputStream out) throws IOException {
+		out.defaultWriteObject();
+		NSNotificationCenter.defaultCenter().removeObserver(this, EOEditingContext.EditingContextDidSaveChangesNotification, null);
+	}
 }

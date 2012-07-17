@@ -299,7 +299,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 	 * @return valueClassName
 	 * @deprecated Method valueClassName is deprecated
 	 */
-
+	@Deprecated
 	public String valueClassName() {
 		return _valueClassName;
 	}
@@ -701,7 +701,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 	 *            valueClassName
 	 * @deprecated Method setValueClassName is deprecated
 	 */
-
+	@Deprecated
 	public void setValueClassName(String name) {
 		_valueClassName = name == null || name.length() <= 0 ? null : name;
 		_className = _javaNameForObjcName(_valueClassName);
@@ -912,7 +912,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 	 * @return newValueForBytesString
 	 * @deprecated Method newValueForBytesString is deprecated
 	 */
-
+	@Deprecated
 	public Object newValueForBytesString(byte bytes[], int length) {
 		Class stringClass = String.class;
 		Object value = null;
@@ -1191,8 +1191,9 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 
 	/**
 	 * @return adaptorValueClass
-	 * @deprecated Method _adaptorValueClass is deprecated
+	 * @deprecated use {@link #adaptorValueClass()}
 	 */
+	@Deprecated
 	protected Class _adaptorValueClass() {
 		return adaptorValueClass();
 	}

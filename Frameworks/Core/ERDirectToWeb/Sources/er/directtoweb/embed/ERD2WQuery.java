@@ -5,6 +5,9 @@ import org.apache.log4j.Logger;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WQuery;
 import com.webobjects.directtoweb.D2WSwitchComponent;
+import com.webobjects.directtoweb.NextPageDelegate;
+
+import er.directtoweb.delegates.ERD2WQueryActionDelegate;
 
 /**
  * Same as D2WQuery, except that you can specify the queryBindings in advance.
@@ -14,6 +17,12 @@ import com.webobjects.directtoweb.D2WSwitchComponent;
  */
 
 public class ERD2WQuery extends D2WQuery {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** logging support */
     private static final Logger log = Logger.getLogger(ERD2WQuery.class);
@@ -28,5 +37,13 @@ public class ERD2WQuery extends D2WQuery {
     
     static {
     	D2WSwitchComponent.addToPossibleBindings("queryBindings");
+    }
+
+    /**
+     * Overridden to support serialization
+     */
+    @Override
+    public NextPageDelegate newPageDelegate() {
+    	return ERD2WQueryActionDelegate.instance;
     }
 }

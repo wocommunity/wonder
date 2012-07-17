@@ -17,7 +17,7 @@
  */
 package com.meetup.memcached;
 
-import java.io.*;
+import java.io.IOException;
 
 /**
  * Bridge class to provide nested Exceptions with IOException which has
@@ -27,6 +27,12 @@ import java.io.*;
  * @version 1.2
  */
 public class NestedIOException extends IOException {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /**
      * Create a new <code>NestedIOException</code> instance.

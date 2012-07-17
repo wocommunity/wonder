@@ -20,10 +20,18 @@ import com.webobjects.foundation.NSTimestampFormatter;
  */
 
 /**
- * @deprecated
+ * @Deprecated
  * WOTableString is no longer supported
  */
+@Deprecated
 public class WOTableString extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     protected Object _value;
     protected String oldFormatString = null;
     protected NSTimestampFormatter _cachedTSFormatter = null;
@@ -32,6 +40,7 @@ public class WOTableString extends WOComponent {
         super(aContext);
     }
 
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }
@@ -75,6 +84,7 @@ public class WOTableString extends WOComponent {
         _value = null;
     }
 
+    @Override
     public void appendToResponse(WOResponse aResponse, WOContext aContext)  {
         _resetInternalCaches();
         super.appendToResponse(aResponse, aContext);

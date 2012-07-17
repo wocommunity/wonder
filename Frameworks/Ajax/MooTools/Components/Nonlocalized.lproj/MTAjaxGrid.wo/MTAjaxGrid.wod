@@ -1,0 +1,117 @@
+ColumnRepetition: WORepetition {
+	list = configurationData.columns; // VALID
+	item = currentColumn;
+	checkHashCodes = checkHashCodes;
+	uniqueKey = "title";
+}
+
+ColumnTitle: WOString {
+	value = currentColumn.title; // VALID
+}
+
+ColumnValue: WOSwitchComponent {
+	WOComponentName = columnComponentName;
+	value = columnValue;
+	grid = thisComponent;
+}
+
+GridUpdater: MTAjaxUpdateContainer {
+	id = configurationData.updateContainerID; // VALID
+	onRefreshComplete = afterUpdate;
+	evalScripts = true;
+	action = containerUpdated;
+	frequency = configurationData.updateFrequency;  // VALID
+	parameters = ^updateContainerParameters;
+}
+
+InitScript: WOString {
+	value= initScript;
+	escapeHTML = false;
+}
+
+IsColumnSorted: WOConditional {
+	condition = isCurrentColumnSorted;
+}
+
+IsColumnSortedAscending: WOConditional {
+	condition = isCurrentColumnSortedAscending;
+}
+
+IsColumnSortedDescending: WOConditional {
+	condition = isCurrentColumnSortedAscending;
+	negate = true;
+}
+
+IsRowNotSelected: WOConditional {
+	condition = isRowSelected;
+	negate = true;
+}
+
+IsRowSelected: WOConditional {
+	condition = isRowSelected;
+}
+
+RemoveSorting: MTAjaxUpdateLink {
+	action = removeSorting;
+	updateContainerID = configurationData.updateContainerID; // VALID
+	id = removeSortingID;
+}
+
+RowRepetition: WORepetition {
+	list = displayGroup.displayedObjects;
+	item = row;
+	index = rowIndex;
+	checkHashCodes = checkHashCodes;
+	uniqueKey = rowIdentifierKey;
+}
+
+SortColumn: MTAjaxUpdateLink {
+	action = sortOrderUpdated;
+	updateContainerID = configurationData.updateContainerID; // VALID
+	id = currentColumnID;
+}
+
+SortIndex: WOString {
+	value = currentColumnSortIndex;
+}
+
+Table: WOGenericContainer {
+	elementName = "table";
+	id = tableID;
+	class = configurationData.cssClass; // VALID
+	style = configurationData.cssStyle; // VALID
+}
+
+TableData: WOGenericContainer {
+	elementName = "td";
+	class = currentColumn.cssClass; // VALID
+	style = currentColumn.cssStyle; // VALID
+}
+
+TableRow: WOGenericContainer {
+	elementName = "tr";
+	class = rowClass;
+	style = rowStyle;
+}
+
+CanSelectRows: WOConditional {
+	condition = showRowSelector;
+}
+
+CantSelectRows: WOConditional {
+	condition = showRowSelector;
+	negate = true;
+}
+
+ToggleRowSelection: MTAjaxUpdateLink {
+	action = toggleRowSelection;
+	updateContainerID = configurationData.updateContainerID; // VALID
+	id = toggleRowSelectionID;
+}
+
+
+UpdateColumnOrder: MTAjaxUpdateLink {
+	action = columnOrderUpdated;
+	functionName = "updateServerColumnOrder";
+	updateContainerID = configurationData.updateContainerID; // VALID
+}

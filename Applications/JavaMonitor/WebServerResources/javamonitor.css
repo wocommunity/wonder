@@ -377,3 +377,21 @@ td.PushButtonWrapper {
 .JumpToField {
 	width: 250px;
 }
+
+.AllBounce {
+	line-height: 42px;
+}
+
+.Deaths {
+	color: maroon; 
+	font-weight: bold;
+}
+
+.HostNotAvailable {
+	color: maroon;
+	font-weight: bold;
+}
+
+.AdaptorLoginHelp {
+	font-size: small;	
+}

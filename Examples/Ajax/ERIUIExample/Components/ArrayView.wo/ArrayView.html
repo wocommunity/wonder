@@ -7,7 +7,7 @@
 		<ul>
 			<wo:loop list="$objs" item="$obj">
 				<li>
-					<wo:if condition="$pointsToDictionary"><wo:ERIUINextLink action = "$toDictView"><wo:str value="$obj.title" /></wo:ERIUINextLink></wo:if>
+					<wo:if condition="$pointsToDictionary"><wo:ERIUINextLink action = "$toDictView"><wo:str value="$obj.title//VALID" /></wo:ERIUINextLink></wo:if>
 					<wo:if condition="$pointsToArray"><wo:ERIUINextLink action = "$toArrayView">[]: <wo:str value="$obj.@count" numberformat="0" /> objects</wo:ERIUINextLink></wo:if>
 					<wo:if condition="$pointsToObject"><wo:str value="$obj" /></wo:if>
 				</li>

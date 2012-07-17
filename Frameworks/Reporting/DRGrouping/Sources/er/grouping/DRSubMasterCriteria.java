@@ -443,7 +443,7 @@ public class DRSubMasterCriteria extends Object  {
         }
 
         v = DRValueConverter.converter().doubleForValue(val) + delta;
-        return (new Double(v)).toString();
+        return Double.toString(v);
     }
 
     /**

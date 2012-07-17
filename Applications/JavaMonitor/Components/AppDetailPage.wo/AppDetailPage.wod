@@ -359,6 +359,14 @@ HasBouncer: WOConditional {
 Bouncer : WOString {
   value = currentBouncer.status;
 }
+BounceHelpLink : WOHyperlink {
+	pageName = "HelpPage";
+	fragmentIdentifier = "18";
+}
+HelpImage : WOImage {
+	filename = "help.png";
+	style = "vertical-align: middle;";
+}
 
 Observer : AjaxObserveField {
 	action = selectOne;

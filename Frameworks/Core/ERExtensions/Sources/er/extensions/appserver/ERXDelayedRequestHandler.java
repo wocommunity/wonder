@@ -306,7 +306,7 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 						String args = "id=" + id;
 						String sessionID = request.sessionID();
 						if (sessionID != null) {
-							args += "&wosid=" + sessionID;
+							args += "&" + WOApplication.application().sessionIdKey() + "=" + sessionID;
 						}
 						args += "&__start=" + delayedRequest.start().getTime();
 						args += "&__time=" + System.currentTimeMillis();
@@ -366,14 +366,15 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 	 * and you probably shouldn't do it either. The default implementation
 	 * redirect to the entry.
 	 * 
-	 * @param request
+	 * @param request the request object
+	 * @return 302 response
 	 */
 	protected WOResponse createStoppedResponse(WORequest request) {
-		final ERXApplication app = ERXApplication.erxApplication();
-		String args = (request.sessionID() != null ? "wosid=" + request.sessionID() : "");
+		String sessionIdKey = WOApplication.application().sessionIdKey();
+		String args = (request.sessionID() != null ? sessionIdKey + "=" + request.sessionID() : "");
 
 		String url = request.applicationURLPrefix() + "?" + args;
-		WOResponse result = new WOResponse();
+		ERXResponse result = new ERXResponse();
 		result.setHeader(url, "location");
 		result.setStatus(302);
 		return result;

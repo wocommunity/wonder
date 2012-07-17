@@ -107,8 +107,6 @@ public class ERS3AttachmentProcessor extends
 
 			attachment._setPendingUploadFile(uploadedFile, pendingDelete);
 
-			// performUpload(uploadedFile, bucket, key, attachment.mimeType(),
-			// configurationName);
 		} catch (RuntimeException e) {
 			attachment.delete();
 			if (pendingDelete) {

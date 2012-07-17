@@ -21,7 +21,7 @@ extends NSKeyValueCoding.ValueAccessor
     public Object methodValue(Object object, Method method)
     throws IllegalArgumentException, IllegalAccessException,
     InvocationTargetException {
-        return method.invoke(object, null);
+        return method.invoke(object, (Object[])null);
     }
 
     public void setMethodValue

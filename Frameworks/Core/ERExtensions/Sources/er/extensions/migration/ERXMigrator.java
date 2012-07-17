@@ -363,7 +363,7 @@ public class ERXMigrator {
 				}
 				if (erMigrationClass != null) {
 					IERXMigration migration = (IERXMigration) erMigrationClass.newInstance();
-					versions.put(modelName, new Integer(versionNum));
+					versions.put(modelName, Integer.valueOf(versionNum));
 					NSArray<ERXModelVersion> migrationDependencies = migration.modelDependencies();
 					if (migrationDependencies != null) {
 						Enumeration<ERXModelVersion> migrationDependenciesEnum = migrationDependencies.objectEnumerator();
@@ -382,7 +382,7 @@ public class ERXMigrator {
 					if (ERXMigrator.log.isDebugEnabled()) {
 						ERXMigrator.log.debug("  Migration " + erMigrationClassName + " and/or " + vendorMigrationClassName + " do not exist.");
 					}
-					versions.put(modelName, new Integer(ERXMigrator.LATEST_VERSION));
+					versions.put(modelName, Integer.valueOf(ERXMigrator.LATEST_VERSION));
 				}
 			}
 		}
@@ -401,7 +401,7 @@ public class ERXMigrator {
 	 * ModelVersion represents a particular version of an EOModel.
 	 * 
 	 * @author mschrag
-	 * @deprecated Use er.extensions.migration.ERXModelVersion instead
+	 * @deprecated use {@link er.extensions.migration.ERXModelVersion}
 	 */
 	@Deprecated
 	public static class ModelVersion extends ERXModelVersion {

@@ -122,7 +122,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
             }
         }
 
-        private static Observer observer;
+        private static volatile Observer observer;
         
         public static void install()  {
             if(observer == null) {

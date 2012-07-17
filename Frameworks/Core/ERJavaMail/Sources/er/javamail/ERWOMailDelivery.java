@@ -1,6 +1,4 @@
 /*
- $Id$
- 
  Copyright (c) 2002 Red Shed Software. All rights reserved.
  by Jonathan 'Wolf' Rentzsch (jon at redshed dot net)
  */
@@ -9,6 +7,7 @@ package er.javamail;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.util.Enumeration;
 
 import javax.activation.DataHandler;
 import javax.mail.Message;
@@ -110,7 +109,7 @@ public class ERWOMailDelivery {
 	 * 					すぐに送信時には false を設定し後で {@link #sendEmail(String)} で送信するよりも true の方が早い
 	 * </span>
 	 */
-	public String composePlainTextEmail(String fromEmailAddress, NSArray toEmailAddresses, NSArray bccEmailAddresses, String subject, String message, boolean sendNow) {
+	public String composePlainTextEmail(String fromEmailAddress, NSArray<String> toEmailAddresses, NSArray<String> bccEmailAddresses, String subject, String message, boolean sendNow) {
 		// /JAssert.notEmpty( fromEmailAddress );
 		// /JAssert.notNull( toEmailAddresses );
 		// /JAssert.greaterThan( toEmailAddresses.count(), 0 );
@@ -154,7 +153,7 @@ public class ERWOMailDelivery {
 	 * 					すぐに送信時には false を設定し後で {@link #sendEmail(String)} で送信するよりも true の方が早い
 	 * </span>
 	 */
-	public String composeComponentEmail(String fromEmailAddress, NSArray toEmailAddresses, NSArray bccEmailAddresses, String subject, WOComponent component, boolean sendNow) {
+	public String composeComponentEmail(String fromEmailAddress, NSArray<String> toEmailAddresses, NSArray<String> bccEmailAddresses, String subject, WOComponent component, boolean sendNow) {
                 // XXX the component parameter above was 'message'. the real parameter could be renamed.
 		// /JAssert.notEmpty( fromEmailAddress );
 		// /JAssert.notNull( toEmailAddresses );
@@ -223,7 +222,7 @@ public class ERWOMailDelivery {
 	private static Logger log = Logger.getLogger(ERWOMailDelivery.class);
 	private static ERWOMailDelivery _sharedInstance = null;
 
-	private MimeMessage newMimeMessage(String fromEmailAddress, NSArray toEmailAddresses, NSArray bccEmailAddresses, String subject, String message, String contentType, boolean sendNow) {
+	private MimeMessage newMimeMessage(String fromEmailAddress, NSArray<String> toEmailAddresses, NSArray<String> bccEmailAddresses, String subject, String message, String contentType, boolean sendNow) {
 		// /JAssert.notEmpty( fromEmailAddress );
 		// /JAssert.notNull( toEmailAddresses );
 		// /JAssert.greaterThan( toEmailAddresses.count(), 0 );
@@ -238,16 +237,16 @@ public class ERWOMailDelivery {
 			smtpMessage = new MimeMessage(ERJavaMail.sharedInstance().defaultSession());
 			smtpMessage.setFrom(new InternetAddress(fromEmailAddress));
 
-			java.util.Enumeration addressEnumerator = toEmailAddresses.objectEnumerator();
+			Enumeration<String> addressEnumerator = toEmailAddresses.objectEnumerator();
 			while (addressEnumerator.hasMoreElements()) {
-				String address = (String) addressEnumerator.nextElement();
+				String address = addressEnumerator.nextElement();
 				smtpMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(address));
 			}
 
 			if (bccEmailAddresses != null && bccEmailAddresses.count() > 0) {
 				addressEnumerator = bccEmailAddresses.objectEnumerator();
 				while (addressEnumerator.hasMoreElements()) {
-					String address = (String) addressEnumerator.nextElement();
+					String address = addressEnumerator.nextElement();
 					smtpMessage.addRecipient(Message.RecipientType.BCC, new InternetAddress(address));
 				}
 			}
