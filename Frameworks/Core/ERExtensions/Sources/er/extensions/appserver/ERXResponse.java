@@ -59,6 +59,14 @@ public class ERXResponse extends WOResponse {
 	public ERXResponse(String content) {
 		setContent(content);
 	}
+	
+	/**
+	 * Convenience constructor for direct actions.
+	 * @param status HTTP status code of the response
+	 */
+	public ERXResponse(int status) {
+		setStatus(status);
+	}
 
 	public ERXResponse(WOContext context) {
 		_context = context;
@@ -124,6 +132,7 @@ public class ERXResponse extends WOResponse {
 
 	/**
 	 * Overridden to insert the partials in the respective area.
+	 * @param originalContext context
 	 */
 	@Override
 	public void _finalizeInContext(WOContext originalContext) {
@@ -200,7 +209,12 @@ public class ERXResponse extends WOResponse {
 	 * The original _appendTagAttributeAndValue would skip null values, but not
 	 * blank values, which would produce html like &lt;div style = ""&gt;. This
 	 * implementation also skips blank values.
+	 * 
+	 * @param name attribute name
+	 * @param value attribute value
+	 * @param escape <code>true</code> if value should be escaped
 	 */
+	// REMOVEME as of WO5.4.3 this seems not necessary anymore
 	@Override
 	public void _appendTagAttributeAndValue(String name, String value, boolean escape) {
 		if (value != null) {
@@ -261,7 +275,7 @@ public class ERXResponse extends WOResponse {
 	 * 
 	 * @param key
 	 *            key to return value from userInfo() for
-	 * @return value from userInfo() for key, or null if not available
+	 * @return value from {@link #userInfo()} for key, or <code>null</code> if not available
 	 */
 	public Object userInfoForKey(String key) {
 		/** require [valid_key] key != null; **/

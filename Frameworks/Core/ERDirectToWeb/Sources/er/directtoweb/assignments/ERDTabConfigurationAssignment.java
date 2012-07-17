@@ -15,10 +15,16 @@ import er.directtoweb.assignments.defaults.ERDDefaultConfigurationNameAssignment
 // MOVEME: ERDConfigurationAssignment
 /**
  * Generated pageConfigurations that will use the tab inspect templates.<br />
- * @deprecated use ERDDefaultConfigurationNameAssignment with key inspectTabConfigurationName
+ * @deprecated use {@link ERDDefaultConfigurationNameAssignment} with key inspectTabConfigurationName
  */
-
+@Deprecated
 public class ERDTabConfigurationAssignment extends ERDDefaultConfigurationNameAssignment {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /**
      * Static constructor required by the EOKeyValueUnarchiver

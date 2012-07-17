@@ -163,6 +163,7 @@ public class ERXSimpleTemplateParser {
      * @param template to use to parse
      * @param delimiter to use to find keys
      * @param object to resolve keys
+     * @return parsed template with keys replaced
      */
     public String parseTemplateWithObject(String template, String delimiter, Object object) {
         return parseTemplateWithObject(template,
@@ -173,7 +174,7 @@ public class ERXSimpleTemplateParser {
     
     /**
      * This method replaces the keys enclosed between the
-     * delimeter with the values found in object and otherObject.
+     * delimiter with the values found in object and otherObject.
      * It first looks for a value in object, and then in otherObject
      * if the key is not found in object. Therefore, otherObject is
      * a good place to store default values while object is a
@@ -218,7 +219,7 @@ public class ERXSimpleTemplateParser {
             log.debug("Components: " + components);
         }
         boolean deriveElement = false; // if the template starts with delim, the first component will be a zero-length string
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (Enumeration e = components.objectEnumerator(); e.hasMoreElements();) {
             String element = (String)e.nextElement();
             if(!isLoggingDisabled) {
@@ -268,19 +269,19 @@ public class ERXSimpleTemplateParser {
                                 + "\" in either the object or extra data.");
                     }
                 }
-                buffer.append(result.toString());
+                sb.append(result.toString());
                 deriveElement = false;
             } else {
                 if(element.length() > 0) {
-                    buffer.append(element);
+                    sb.append(element);
                 }
                 deriveElement = true;
             }
             if(!isLoggingDisabled && log.isDebugEnabled()) {
-                log.debug("Buffer: " + buffer);
+                log.debug("Buffer: " + sb);
             }
         }
-        return buffer.toString();
+        return sb.toString();
     }
     
 	/**

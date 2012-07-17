@@ -1,0 +1,26 @@
+<wo:ERQMHtmlTemplate title="SplitButtonList">
+	<wo:ERQMHeaderBar string="SplitButtonList" isFixed="true" theme="a" 
+		hasBackButton="true" backButton-theme="a" backButton-title="BACK" 
+		rightButton-icon="home" rightButton-theme="a" rightButton-title="Main" rightButton-linkResource="da://default" />
+
+	<wo:ERQMContent>
+	
+		<wo:ERQMListView split-icon="gear" split-theme="d">
+			<wo:foreach list="$onlyFiveMovies" item="$oneMovie" index="$index">
+				<wo:ERQMListViewElement>
+					<wo:ERXHyperlinkResource action="$doShowOneMovieAction">
+						<wo:ERQMListViewImage imageResource="$fileName" alt="Test Image" />
+						<h3><wo:str value = "$oneMovie.title" /></h3>
+						<p><wo:str value = "$oneMovie.studio.name" /></p>
+					</wo:ERXHyperlinkResource>
+				
+					<!-- This Link makes the SplitView : also because set split-icon the link isButton has to be false -->
+					<wo:ERQMDialogLink linkResource="page://PurchaseSheet" transition="slideup" isButton="false" />
+				</wo:ERQMListViewElement>
+			</wo:foreach>
+		</wo:ERQMListView>
+		
+	</wo:ERQMContent>
+
+	<wo:ERQMFooterBar><p>2012 WOCommunity Association</p></wo:ERQMFooterBar>
+</wo:ERQMHtmlTemplate>

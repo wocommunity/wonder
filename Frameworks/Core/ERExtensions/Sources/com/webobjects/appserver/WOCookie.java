@@ -58,17 +58,16 @@ public class WOCookie implements NSKeyValueCoding, com.webobjects.foundation.NSK
 			final NSTimestamp expires, final boolean isSecure, final boolean httpOnly) {
 		if (name == null) {
 			throw new IllegalArgumentException("Cookie may not have null name.");
-		} else {
-			_name = name;
-			_value = value;
-			_path = path;
-			_domain = domain;
-			_expires = expires;
-			_isSecure = isSecure;
-			_isHttpOnly = httpOnly;
-			setTimeOut(-1);
-			return;
 		}
+		_name = name;
+		_value = value;
+		_path = path;
+		_domain = domain;
+		_expires = expires;
+		_isSecure = isSecure;
+		_isHttpOnly = httpOnly;
+		setTimeOut(-1);
+		return;
 	}
 
 	public WOCookie(final String name, final String value, final String path, final String domain, final int timeout,
@@ -80,16 +79,15 @@ public class WOCookie implements NSKeyValueCoding, com.webobjects.foundation.NSK
 			final boolean isSecure, final boolean httpOnly) {
 		if (name == null) {
 			throw new IllegalArgumentException("Cookie may not have null name.");
-		} else {
-			_name = name;
-			_value = value;
-			_path = path;
-			_domain = domain;
-			setTimeOut(timeout);
-			_isSecure = isSecure;
-			_isHttpOnly = httpOnly;
-			return;
 		}
+		_name = name;
+		_value = value;
+		_path = path;
+		_domain = domain;
+		setTimeOut(timeout);
+		_isSecure = isSecure;
+		_isHttpOnly = httpOnly;
+		return;
 	}
 
 	public WOCookie(final String name, final String value) {
@@ -256,7 +254,7 @@ public class WOCookie implements NSKeyValueCoding, com.webobjects.foundation.NSK
 		com.webobjects.foundation.NSKeyValueCodingAdditions.DefaultImplementation.takeValueForKeyPath(this, value, key);
 	}
 
-	public void writeObject(final ObjectOutputStream out) throws IOException {
+	private void writeObject(final ObjectOutputStream out) throws IOException {
 		out.writeInt(_timeout);
 		out.writeUTF(_name);
 		out.writeUTF(_value);
@@ -267,7 +265,7 @@ public class WOCookie implements NSKeyValueCoding, com.webobjects.foundation.NSK
 		out.writeBoolean(_isHttpOnly);
 	}
 
-	public void readObject(final ObjectInputStream out) throws IOException, ClassNotFoundException {
+	private void readObject(final ObjectInputStream out) throws IOException, ClassNotFoundException {
 		_timeout = out.readInt();
 		_name = out.readUTF();
 		_value = out.readUTF();

@@ -36,7 +36,7 @@ import er.extensions.appserver.ajax.ERXAjaxApplication;
  * <p>
  * If you leave of observeFieldID, AjaxObserveField must generate an HTML container, so
  * that it can find the form fields that correspond to this component from the client
- * side, so you will get an extra dom element when used as a container.
+ * side, so you will get an extra DOM element when used as a container.
  * </p>
  * 
  * <p>
@@ -62,7 +62,7 @@ import er.extensions.appserver.ajax.ERXAjaxApplication;
  * @binding class CSS class to use on the container. (Only used if you leave off observeFieldID)
  * @binding style CSS style to use on the container. (Only used if you leave off observeFieldID)
  * @binding onCreate Takes a JavaScript function which is called after the form has been serialized, 
- * 			but befor the Ajax request is sent to the server. Useful e.g. if you want to disable the 
+ * 			but before the Ajax request is sent to the server. Useful e.g. if you want to disable the 
  * 			form while the ajax request is running. 
  */
 public class AjaxObserveField extends AjaxDynamicElement {

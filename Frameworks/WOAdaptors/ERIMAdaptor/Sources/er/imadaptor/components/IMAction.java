@@ -30,7 +30,6 @@ public class IMAction extends WODynamicElement {
 
 	@Override
 	public WOActionResults invokeAction(WORequest request, WOContext context) {
-		String s = null;
 		WOActionResults results = null;
 		if (context.elementID().equals(context.senderID())) {
 			actionInvoked(request, context);

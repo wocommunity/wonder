@@ -58,6 +58,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.appserver.WOTimer;
 import com.webobjects.appserver._private.WOComponentDefinition;
+import com.webobjects.appserver._private.WODeployedBundle;
 import com.webobjects.appserver._private.WOProperties;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOObserverCenter;
@@ -566,7 +567,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 					}
 				}
 			}
-			NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("bundleDidLoad", new Class[] { NSNotification.class }), "NSBundleDidLoadNotification", null);
+			NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("bundleDidLoad", ERXConstant.NotificationClassArray), "NSBundleDidLoadNotification", null);
 		}
 		
 		private void debugMsg(String msg) {
@@ -1087,10 +1088,21 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	}
 
 	/**
-	 * The ERXApplication contructor.
+	 * The ERXApplication constructor.
 	 */
 	public ERXApplication() {
 		super();
+		
+		/* 
+		 * ERXComponentRequestHandler is a patched version of the original WOComponentRequestHandler
+		 * This method will tell Application to used the patched, the patched version will disallow direct component access by name
+		 * If you want to use the unpatched version set the property ERXDirectComponentAccessAllowed to true
+		 */
+		if (!ERXProperties.booleanForKeyWithDefault("ERXDirectComponentAccessAllowed", false)) {
+			ERXComponentRequestHandler erxComponentRequestHandler = new ERXComponentRequestHandler();
+			registerRequestHandler(erxComponentRequestHandler, componentRequestHandlerKey());
+		}
+		
 		ERXStats.initStatisticsIfNecessary();
 
 		// WOFrameworksBaseURL and WOApplicationBaseURL properties are broken in 5.4.  
@@ -1216,8 +1228,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * Decides whether to use editing context unlocking.
 	 * 
 	 * @return true if ECs should be unlocked after each RR-loop
-	 * @deprecated use er.extensions.ERXEC.useUnlocker property instead
+	 * @deprecated use {@link ERXEC#useUnlocker()}
 	 */
+	@Deprecated
 	public Boolean useEditingContextUnlocker() {
 		Boolean useUnlocker = null;
 		if (ERXProperties.stringForKey("er.extensions.ERXApplication.useEditingContextUnlocker") != null) {
@@ -1230,8 +1243,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * Decides whether or not to keep track of open editing context locks.
 	 * 
 	 * @return true if editing context locks should be tracked
-	 * @deprecated use er.extensions.ERXEC.traceOpenLocks property instead
+	 * @deprecated use {@link ERXEC#traceOpenLocks()}
 	 */
+	@Deprecated
 	public Boolean traceOpenEditingContextLocks() {
 		Boolean traceOpenLocks = null;
 		if (ERXProperties.stringForKey("er.extensions.ERXApplication.traceOpenEditingContextLocks") != null) {
@@ -1744,6 +1758,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * Also, in case the top-level exception was a EOGeneralAdaptorException,
 	 * then you also get the failed ops and the sql exception. <br/>
 	 * 
+	 * @param e exception
+	 * @param context the current context
 	 * @return dictionary containing extra information for the current context.
 	 */
 	public NSMutableDictionary extraInformationForExceptionInContext(Exception e, WOContext context) {
@@ -1755,7 +1771,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 	/**
 	 * Reports an exception. This method only logs the error and could be
-	 * overriden to return a valid error page.
+	 * overridden to return a valid error page.
 	 * 
 	 * @param exception
 	 *            to be reported
@@ -2042,7 +2058,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * @return response
 	 */
 	@Override
-
 	public WOResponse dispatchRequest(WORequest request) {
 		WOResponse response = null;
 		ERXDelayedRequestHandler delayedRequestHandler = delayedRequestHandler();
@@ -2287,6 +2302,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * Returns whether or not this application is running in development-mode.
 	 * If you are using Xcode, you should add a WOIDE=Xcode setting to your
 	 * launch parameters.
+	 * @return <code>true</code> if application is in dev mode
 	 */
 	public boolean isDevelopmentMode() {
 		return ERXApplication._defaultIsDevelopmentMode();
@@ -2388,7 +2404,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	}
 
 	public Number sessionTimeOutInMinutes() {
-		return new Integer(sessionTimeOut().intValue() / 60);
+		return Integer.valueOf(sessionTimeOut().intValue() / 60);
 	}
 
 	protected static final ERXFormatterFactory _formatterFactory = new ERXFormatterFactory();
@@ -2433,6 +2449,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 	/**
 	 * Returns an ERXMigrator with the lock owner name "appname-instancenumber".
+	 * @return migrator for this instance
 	 */
 	public ERXMigrator migrator() {
 		return new ERXMigrator(name() + "-" + host() + ":" + port());
@@ -2472,6 +2489,20 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	      processedURL = processedURL.replaceFirst(_replaceApplicationPathPattern, _replaceApplicationPathReplace);
 	    }
 		return processedURL;
+	}
+
+	/**
+	 * This method is called by ERXResourceManager and provides the application a hook
+	 * to rewrite generated URLs for resources.
+	 *
+	 * @param url
+	 *            the URL to rewrite
+	 * @param bundle
+	 *            the bundle the resource is located in
+	 * @return the rewritten URL
+	 */
+	public String _rewriteResourceURL(String url, WODeployedBundle bundle) {
+	    return url;
 	}
 
 	/**

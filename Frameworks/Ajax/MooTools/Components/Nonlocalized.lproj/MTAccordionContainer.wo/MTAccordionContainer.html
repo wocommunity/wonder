@@ -1,0 +1,8 @@
+<webobject name = "AccordionDiv">
+	<wo:componentContent />
+</webobject>
+<wo:genericContainer elementName = "script" type = "text/javascript">
+	window.addEvent('domready', function() {
+		new Fx.Accordion($$('#<webobject name = "AccordionContainerID" /> .togglers'), $$('#<webobject name = "AccordionContainerID" /> .elements'), <webobject name = "AjaxOptions" />);
+	});
+</wo:genericContainer>

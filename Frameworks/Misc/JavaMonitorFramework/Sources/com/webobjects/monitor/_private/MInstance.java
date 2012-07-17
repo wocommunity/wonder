@@ -1,9 +1,9 @@
 /*
-� Copyright 2006- 2007 Apple Computer, Inc. All rights reserved.
+© Copyright 2006- 2007 Apple Computer, Inc. All rights reserved.
 
-IMPORTANT:  This Apple software is supplied to you by Apple Computer, Inc. (�Apple�) in consideration of your agreement to the following terms, and your use, installation, modification or redistribution of this Apple software constitutes acceptance of these terms.  If you do not agree with these terms, please do not use, install, modify or redistribute this Apple software.
+IMPORTANT:  This Apple software is supplied to you by Apple Computer, Inc. ("Apple") in consideration of your agreement to the following terms, and your use, installation, modification or redistribution of this Apple software constitutes acceptance of these terms.  If you do not agree with these terms, please do not use, install, modify or redistribute this Apple software.
 
-In consideration of your agreement to abide by the following terms, and subject to these terms, Apple grants you a personal, non-exclusive license, under Apple�s copyrights in this original Apple software (the �Apple Software�), to use, reproduce, modify and redistribute the Apple Software, with or without modifications, in source and/or binary forms; provided that if you redistribute the Apple Software in its entirety and without modifications, you must retain this notice and the following text and disclaimers in all such redistributions of the Apple Software.  Neither the name, trademarks, service marks or logos of Apple Computer, Inc. may be used to endorse or promote products derived from the Apple Software without specific prior written permission from Apple.  Except as expressly stated in this notice, no other rights or licenses, express or implied, are granted by Apple herein, including but not limited to any patent rights that may be infringed by your derivative works or by other works in which the Apple Software may be incorporated.
+In consideration of your agreement to abide by the following terms, and subject to these terms, Apple grants you a personal, non-exclusive license, under Apple's copyrights in this original Apple software (the "Apple Software"), to use, reproduce, modify and redistribute the Apple Software, with or without modifications, in source and/or binary forms; provided that if you redistribute the Apple Software in its entirety and without modifications, you must retain this notice and the following text and disclaimers in all such redistributions of the Apple Software.  Neither the name, trademarks, service marks or logos of Apple Computer, Inc. may be used to endorse or promote products derived from the Apple Software without specific prior written permission from Apple.  Except as expressly stated in this notice, no other rights or licenses, express or implied, are granted by Apple herein, including but not limited to any patent rights that may be infringed by your derivative works or by other works in which the Apple Software may be incorporated.
 
 The Apple Software is provided by Apple on an "AS IS" basis.  APPLE MAKES NO WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, REGARDING THE APPLE SOFTWARE OR ITS USE AND OPERATION ALONE OR IN COMBINATION WITH YOUR PRODUCTS. 
 
@@ -29,10 +29,15 @@ import com.webobjects.foundation.NSTimeZone;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
 
+import er.extensions.eof.ERXKey;
+
 public class MInstance extends MObject {
     static NSTimestampFormatter dateFormatter = new NSTimestampFormatter("%m/%d/%Y %H:%M:%S %Z");
 
     static NSTimestampFormatter shutdownFormatter = new NSTimestampFormatter("%a @ %H:00");
+
+    public static final ERXKey<MHost> HOST = new ERXKey<MHost>("host");
+    public static final ERXKey<String> HOST_NAME = new ERXKey<String>("hostName");
 
     /*
      * String hostName; Integer id; Integer port; String applicationName;
@@ -372,11 +377,11 @@ public class MInstance extends MObject {
 
         setSchedulingEnabled(Boolean.FALSE);
         setSchedulingType("DAILY");
-        setSchedulingHourlyStartTime(new Integer(3));
-        setSchedulingDailyStartTime(new Integer(3));
-        setSchedulingWeeklyStartTime(new Integer(3));
-        setSchedulingStartDay(new Integer(1)); // Sunday
-        setSchedulingInterval(new Integer(12));
+        setSchedulingHourlyStartTime(Integer.valueOf(3));
+        setSchedulingDailyStartTime(Integer.valueOf(3));
+        setSchedulingWeeklyStartTime(Integer.valueOf(3));
+        setSchedulingStartDay(Integer.valueOf(1)); // Sunday
+        setSchedulingInterval(Integer.valueOf(12));
         setGracefulScheduling(Boolean.TRUE);
     }
 
@@ -1100,7 +1105,7 @@ public class MInstance extends MObject {
             try {
                 String aValue = (String) aStatsDict.valueForKey(key);
                 if (aValue != null) {
-                    return (new Integer(aValue)).intValue();
+                    return Integer.parseInt(aValue);
                 }
             } catch (Throwable ex) {
                 // do nothing
@@ -1116,7 +1121,7 @@ public class MInstance extends MObject {
             try {
                 String aValue = (String) aStatsDict.valueForKey(key);
                 if (aValue != null) {
-                    return (new Float(aValue)).floatValue();
+                    return Float.parseFloat(aValue);
                 }
             } catch (Throwable ex) {
                 // do nothing

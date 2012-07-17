@@ -49,12 +49,19 @@ import er.extensions.foundation.ERXArrayUtilities;
  */
 
 public class ERXCheckboxMatrix extends ERXNonSynchronizingComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     /** logging support */
     public final static Logger log = Logger.getLogger(ERXCheckboxMatrix.class);
 
     
-    private static final Integer DEFAULT_PADDING = new Integer(0);
-    private static final Integer DEFAULT_SPACING = new Integer(0);
+    private static final Integer DEFAULT_PADDING = Integer.valueOf(0);
+    private static final Integer DEFAULT_SPACING = Integer.valueOf(0);
 
     public ERXCheckboxMatrix(WOContext aContext) {
         super(aContext);

@@ -6,6 +6,7 @@
 //
 package er.extensions.foundation;
 
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -214,9 +215,10 @@ public class ERXTimestampUtilities extends Object {
     /**
      * Cover method for returning DistantPast
      * off of NSTimestamp.
-     * @deprecated use <code>NSTimestamp.DistantPast</code> instead
+     * @deprecated use {@link NSTimestamp#DistantPast}
      * @return a date in the distant past
      */
+    @Deprecated
     public static NSTimestamp distantPast() {
        return NSTimestamp.DistantPast;
     }
@@ -224,16 +226,18 @@ public class ERXTimestampUtilities extends Object {
     /**
      * Cover method for returning DistantFuture
      * off of NSTimestamp.
-     * @deprecated use <code>NSTimestamp.DistantFuture</code> instead
+     * @deprecated use {@link NSTimestamp#DistantFuture}
      * @return a date in the distant future
-     */    
+     */   
+    @Deprecated 
     public static NSTimestamp distantFuture() {
         return NSTimestamp.DistantFuture;
     }
 
     /**
-     * @deprecated use <code>timestampByAddingTime</code> instead
+     * @deprecated use {@link #timestampByAddingTime(NSTimestamp, NSTimestamp)}
      */
+    @Deprecated
     public static NSTimestamp dateByAddingTime(NSTimestamp ts, NSTimestamp t1) {
         ERXTimestamp time = getInstance(t1);
         return ts.timestampByAddingGregorianUnits(0, 0, 0, time.hourOfDay(), time.minuteOfHour(), time.secondOfMinute());
@@ -254,24 +258,26 @@ public class ERXTimestampUtilities extends Object {
 
     /**
      * Compares two timestamps.
-     * @deprecated use <code>java.sql.Timestamp.before<code> instead.
+     * @deprecated use {@link Timestamp#before(Timestamp)}
      * @param ts1 first timestamp
      * @param ts2 second timestamp
      * @return true if the the second timestamp is earlier than the
      *		first timestamp.
      */
+    @Deprecated
     public static boolean isEarlierThan(NSTimestamp ts1, NSTimestamp ts2) {
         return ts1.compare(ts2) == NSComparator.OrderedAscending;
     }
 
     /**
      * Compares two timestamps.
-     * @deprecated use <code>java.sql.Timestamp.after<code> instead.
+     * @deprecated use {@link Timestamp#after(Timestamp)}
      * @param ts1 first timestamp
      * @param ts2 second timestamp
      * @return true if the the second timestamp is later than the
      *		first timestamp.
      */
+    @Deprecated
     public static boolean isLaterThan(NSTimestamp ts1, NSTimestamp ts2) {
         return ts1.compare(ts2) == NSComparator.OrderedDescending;
     }    
@@ -311,7 +317,7 @@ public class ERXTimestampUtilities extends Object {
     public static Integer unixTimestamp(NSTimestamp ts) {
         long seconds = 0;
         seconds = ts.getTime() - epoch().getTime();
-        return (new Integer((int)((seconds-60*60)/1000L)));
+        return Integer.valueOf((int)((seconds-60*60)/1000L));
     }
     
     /**

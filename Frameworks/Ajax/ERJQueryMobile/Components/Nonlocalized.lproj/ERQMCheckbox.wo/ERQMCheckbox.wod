@@ -1,0 +1,6 @@
+CheckBox : WOCheckBox {
+	id = javaScriptElementID;
+	checked = ^checked;
+	data-theme = ^theme;
+	otherTagString = miniVersion;
+}

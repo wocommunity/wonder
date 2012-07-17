@@ -20,6 +20,13 @@ import er.extensions.foundation.ERXValueUtilities;
  */
 
 public abstract class AjaxComponent extends WOComponent implements IAjaxElement {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     public AjaxComponent(WOContext context) {
         super(context);
     }
@@ -60,7 +67,7 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
     }
     
 	public Object valueForBinding(String name, Object defaultValue, WOComponent component) {
-		return valueForBinding(name, (Object)defaultValue);
+		return valueForBinding(name, defaultValue);
 	}
 
     protected void addScriptResourceInHead(WOResponse _response, String _fileName) {

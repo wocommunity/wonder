@@ -1,0 +1,11 @@
+#### loading Information
+er.extensions.load.Properties.ERJavaMail=app
+
+#### ERJavaMail
+er.javamail.centralize=true
+er.javamail.adminEmail=admin@yourhost.com
+er.javamail.debugEnabled=false
+er.javamail.smtpHost=your.smtpserver.com
+er.javamail.smtpAuth=false
+er.javamail.smtpUser=
+er.javamail.smtpPassword=

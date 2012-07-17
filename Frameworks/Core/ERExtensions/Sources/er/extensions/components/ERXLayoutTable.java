@@ -37,6 +37,12 @@ import er.extensions.eof.ERXConstant;
  */
 
 public class ERXLayoutTable extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	static final Logger log = Logger.getLogger(ERXLayoutTable.class);
 	
@@ -114,14 +120,14 @@ public class ERXLayoutTable extends WOComponent {
     				// fill up rows until enough are present
     				// this currently doesn't work when a col has eaten all
     				for(int i = colCounts.count(); i < rowSpan + row; i++) {
-    					colCounts.addObject(new Integer(maxColumns));
+    					colCounts.addObject(Integer.valueOf(maxColumns));
     					//log.info("Added: " + item + " " + colCounts);
     				}
     				//log.info("Start: " + item + "  " + currentRow + "/" + rowSpan + " " + currentCol + "/" + colSpan + " " + colCounts);
     				for(int i = row; i < row + rowSpan; i++) {
     					int currentMaxColumns = ((Integer) colCounts.objectAtIndex(i)).intValue();
     					currentMaxColumns = currentMaxColumns - (colSpan - (i == row ? 1 : 0));
-    					colCounts.replaceObjectAtIndex(new Integer(currentMaxColumns), i);
+    					colCounts.replaceObjectAtIndex(Integer.valueOf(currentMaxColumns), i);
     					//log.info("Curr: " + item + "  " + i + "/" + rowSpan + " " + currentMaxColumns + "/" + colSpan + " " + colCounts);
     				}
     				//log.info("Intern: " + item + "  " + currentRow + "/" + rowSpan + " " + currentCol + "/" + colSpan + " " + colCounts);
@@ -136,7 +142,7 @@ public class ERXLayoutTable extends WOComponent {
     	   			index = index + 1;
     			}
     			if(total > maxColumns * colCounts.count()) {
-    				colCounts.addObject(new Integer(total - maxColumns * colCounts.count()));
+    				colCounts.addObject(Integer.valueOf(total - maxColumns * colCounts.count()));
     			}
     			//log.info("Result: " + colCounts);
     			_colCounts = colCounts;

@@ -26,10 +26,10 @@ import com.webobjects.foundation.NSValidation;
  * hvae the changes merged from the database or stomp all the changes
  * the database regardless of locking. The entry point for using this
  * class is the <code>save</code> method.
- * @deprecated use ERXEC
- * 
+ * @deprecated use {@link ERXEC}
  */
 // MOVEME: All of these methods could move to something like ERXEOFUtilities
+@Deprecated
 public class ERXTolerantSaver {
 
     /** logging support */

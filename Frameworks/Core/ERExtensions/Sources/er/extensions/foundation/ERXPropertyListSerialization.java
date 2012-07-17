@@ -5289,7 +5289,7 @@ public class ERXPropertyListSerialization {
 	/**
 	 * Converts the property list <code>object</code> into a string and returns it as an NSData object. This method uses the platform's default character encoding to convert the result string to byte.
 	 *
-	 * @deprecated Use dataFromPropertyList(Object object, String encoding) instead.
+	 * @deprecated use {@link #dataFromPropertyList(Object, String)}
 	 * @param plist
 	 *            property list object
 	 * @return <code>object</code> converted to an NSData
@@ -5340,7 +5340,7 @@ public class ERXPropertyListSerialization {
 	 * <p>
 	 * This method uses the platform's default character encoding to convert the bytes in <code>data</code> byte array to characters in a string representation.
 	 *
-	 * @deprecated Use propertyListFromData(NSData data, String encoding)
+	 * @deprecated use {@link #propertyListFromData(NSData, String)}
 	 * @param data
 	 *            the byte array to be converted to a property list
 	 * @return <code>data</code> as a property list

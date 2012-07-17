@@ -76,6 +76,19 @@ public class ERXMultiKey {
         for (int i=0; i<keys.size(); i++) _keys[i]=keys.elementAt(i);
         recomputeHashCode();
     }
+    
+    /**
+     * Constructs a multi-key for a given
+     * list of keys.
+     * @param key one key
+     * @param keys additional keys
+     */
+    public ERXMultiKey(Object key, Object ... keys) {
+        this((short)(keys.length + 1));
+        _keys[0] = key;
+        System.arraycopy(keys,0,_keys,1,(int)_keyCount-1);
+        recomputeHashCode();
+    }
 
     /**
      * Method used to return the object array

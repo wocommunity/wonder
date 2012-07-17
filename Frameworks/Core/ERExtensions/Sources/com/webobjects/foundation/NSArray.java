@@ -24,9 +24,8 @@ import java.util.Vector;
  * 	  ...
  * }</pre>
  *
- * @param &lt;E&gt; type of array contents
+ * @param <E> type of array contents
  */
-
 public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValueCoding, NSKeyValueCodingAdditions, _NSFoundationCollection, List<E> {
 	public static class _AvgNumberOperator extends _Operator implements Operator {
 
@@ -472,9 +471,8 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 	}
 
 	/**
-	 * @deprecated Method getObjects is deprecated
+	 * @deprecated use {@link #objects()} or {@link #objectsNoCopy()}
 	 */
-
 	@Deprecated
 	public void getObjects(Object[] objects) {
 		if (objects == null) {
@@ -484,9 +482,8 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 	}
 
 	/**
-	 * @deprecated Method getObjects is deprecated
+	 * @deprecated use {@link #objects(NSRange)}
 	 */
-
 	@Deprecated
 	public void getObjects(Object[] objects, NSRange range) {
 		if (objects == null) {
@@ -621,7 +618,6 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 	/**
 	 * @deprecated Method sortedArrayUsingSelector is deprecated
 	 */
-
 	@Deprecated
 	@SuppressWarnings("unchecked")
 	public NSArray sortedArrayUsingSelector(NSSelector selector) throws NSComparator.ComparisonException {

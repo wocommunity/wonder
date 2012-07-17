@@ -40,6 +40,13 @@ import er.extensions.validation.ERXValidationFactory;
  *
  */
 public class ERDEditFile extends ERDCustomEditComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     static final Logger log = Logger.getLogger(ERDEditFile.class);
     // Instance variables for the name and contents of the upload
     public String fileName;

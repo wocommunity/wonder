@@ -36,6 +36,12 @@ import er.extensions.foundation.ERXArrayUtilities;
  * @param <T> 
  */
 public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/** Logging support */
 	private static final Logger log = Logger.getLogger(ERXBatchingDisplayGroup.class);
@@ -197,7 +203,7 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	 * would always fetch from the start until the end of the objects from the
 	 * fetch limit.
 	 * 
-	 * @return the objects that should be diplayed.
+	 * @return the objects that should be displayed.
 	 */
 	@Override
 	public NSArray<T> displayedObjects() {
@@ -522,6 +528,13 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	 * should display.
 	 */
 	public static class FakeArray extends NSMutableArray<Object> {
+		/**
+		 * Do I need to update serialVersionUID?
+		 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+		 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public FakeArray(int count) {
 			super(count);
 			Object fakeObject = new NSKeyValueCoding.ErrorHandling() {

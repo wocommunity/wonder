@@ -1,6 +1,6 @@
 /*
 
-Copyright © 2000-2007 Apple, Inc. All Rights Reserved.
+Copyright ï¿½ 2000-2007 Apple, Inc. All Rights Reserved.
 
 The contents of this file constitute Original Code as defined in and are
 subject to the Apple Public Source License Version 1.1 (the 'License').
@@ -69,7 +69,7 @@ and limitations under the License.
 #ifdef _MSC_VER // SWK changed from 8 to 16 cause VS2005 uses _time_t_64
 #define WA_INST_LB_INFO_SIZE		16	/* size in bytes to reserve for load balancing info in WOInstance */
 #else
-#define WA_INST_LB_INFO_SIZE		8	/* size in bytes to reserve for load balancing info in WOInstance */
+#define WA_INST_LB_INFO_SIZE		16	/* size in bytes to reserve for load balancing info in WOInstance */
 #endif
 #define WA_MAX_HOST_NAME_LENGTH		64	/* maximum length of a host name, including the null */
 #define WA_MAX_INSTANCE_NUMBER_LENGTH	8	/* maximum length of an instance number, including the null */

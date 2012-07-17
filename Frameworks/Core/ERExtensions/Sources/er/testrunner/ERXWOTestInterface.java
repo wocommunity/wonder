@@ -30,6 +30,12 @@ import er.extensions.foundation.ERXPatcher;
  */
 
 public class ERXWOTestInterface extends WOComponent implements ERXTestListener {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** logging support */
     public static final Logger log = Logger.getLogger(ERXWOTestInterface.class);
@@ -192,11 +198,11 @@ public class ERXWOTestInterface extends WOComponent implements ERXTestListener {
     }
 
     public void appendToResponse(WOResponse r, WOContext c) {
-    	if (session().objectForKey("ERXLog4JConfiguration.enabled") != null) {
+    	if (session().objectForKey("ERXWOTestInterface.enabled") != null) {
     		super.appendToResponse(r, c);
     	}
     	else {
-    		r.appendContentString("please use the ERXDirectAction log4jAction to login first!");
+    		r.appendContentString("please use the ERXDirectAction testAction to login first!");
     	}
     }
 }

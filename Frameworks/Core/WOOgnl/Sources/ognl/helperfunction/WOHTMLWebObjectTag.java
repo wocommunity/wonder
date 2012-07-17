@@ -135,7 +135,7 @@ public class WOHTMLWebObjectTag {
 			wocomponentreference = wocomponentdefinition.componentReferenceWithAssociations(nsdictionary, woelement);
 		}
 		else {
-			throw new ClassNotFoundException("Cannot find class or component named " + s + " in runtime or in a loadable bundle");
+			throw new ClassNotFoundException("Cannot find class or component named \'" + s + "\" in runtime or in a loadable bundle");
 		}
 		return wocomponentreference;
 	}

@@ -666,6 +666,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * @return all objects currently in the cache and unexpired
      */
     public NSArray<T> allObjects(EOEditingContext ec, EOQualifier additionalQualifier) {
+		additionalQualifier = ERXEOControlUtilities.localInstancesInQualifier(ec, additionalQualifier);
     	ERXExpiringCache<Object, EORecord<T>> cache = cache();
     	NSArray allKeys = cache.allKeys();
     	NSMutableArray allObjects = new NSMutableArray(allKeys.count());

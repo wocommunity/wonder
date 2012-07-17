@@ -1,5 +1,9 @@
 package er.modern.look.pages;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
@@ -10,6 +14,7 @@ import com.webobjects.directtoweb.SelectPageInterface;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EODataSource;
+import com.webobjects.eocontrol.EODetailDataSource;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOQualifier;
@@ -79,7 +84,7 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	public WOComponent nextPage;
 	public NextPageDelegate nextPageDelegate;
 	
-    public ERMODEditRelationshipPage(WOContext context) {
+	public ERMODEditRelationshipPage(WOContext context) {
         super(context);
     }
     
@@ -488,4 +493,34 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 		return ERXValueUtilities.booleanValue(d2wContext().valueForKey(Keys.isEntityCreatable)) && !isEntityReadOnly();
 	}
 	
+	private void writeObject(ObjectOutputStream out) throws IOException {
+		out.writeObject(_masterObject);
+		out.writeObject(_objectToAddToRelationship);
+		out.writeObject(_selectedObject);
+		out.writeObject(_relationshipKey);
+		out.writeBoolean(isRelationshipToMany);
+		out.writeObject(_dataSource);
+		out.writeObject(_relationshipDisplayGroup.dataSource());
+		out.writeObject(_relationshipDisplayGroup);
+		out.writeObject(_selectDataSource);
+		out.writeObject(d2wContext().valueForKey("inlineTask"));
+	}
+	
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+		_masterObject = (EOEnterpriseObject) in.readObject();
+		_objectToAddToRelationship = (EOEnterpriseObject) in.readObject();
+		_selectedObject = (EOEnterpriseObject) in.readObject();
+		_relationshipKey = (String) in.readObject();
+		isRelationshipToMany = in.readBoolean();
+		_dataSource = (EODataSource) in.readObject();
+		EODetailDataSource ds = (EODetailDataSource) in.readObject();
+		ds.qualifyWithRelationshipKey(_relationshipKey, _masterObject);
+		_relationshipDisplayGroup = (WODisplayGroup) in.readObject();
+		_selectDataSource = (EODataSource) in.readObject();
+		String inlineTask = (String) in.readObject();
+		if(inlineTask != null) {
+			d2wContext().takeValueForKey(inlineTask, "inlineTask");
+		}
+	}
+
 }

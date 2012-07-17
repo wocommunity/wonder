@@ -32,7 +32,7 @@ public class SeleniumTestRCRunner {
 						browser.doCommand(command.getName(), new String[] {command.getTarget(), command.getValue()} );
 					} else {
 						try {
-							Thread.sleep(new Integer(command.getTarget()));
+							Thread.sleep(Long.parseLong(command.getTarget()));
 						} catch (NumberFormatException e) {
 							log.warn("invalid argument for pause command: " + command.getTarget());
 							throw new SeleniumException(e);

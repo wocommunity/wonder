@@ -1,0 +1,10 @@
+FileUpload : WOFileUpload {
+	filePath = filePath;
+	streamToFilePath = tempFilePath;
+	finalFilePath = finalFilePath;
+	overwrite = true;
+	id = ^id;
+	class = ^class;
+	style = ^style;
+	title = ^title;
+}
