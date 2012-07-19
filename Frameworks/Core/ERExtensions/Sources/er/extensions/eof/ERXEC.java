@@ -860,7 +860,7 @@ public class ERXEC extends EOEditingContext {
 	}
 
 	@Override
-	public NSArray updatedObjects() {
+	public NSArray<EOEnterpriseObject> updatedObjects() {
 		boolean wasAutoLocked = autoLock("updatedObjects");
 		try {
 			return super.updatedObjects();
@@ -882,7 +882,7 @@ public class ERXEC extends EOEditingContext {
 	}
 
 	@Override
-	public NSArray insertedObjects() {
+	public NSArray<EOEnterpriseObject> insertedObjects() {
 		boolean wasAutoLocked = autoLock("insertedObjects");
 		try {
 			return super.insertedObjects();
@@ -893,7 +893,7 @@ public class ERXEC extends EOEditingContext {
 	}
 
 	@Override
-	public NSArray deletedObjects() {
+	public NSArray<EOEnterpriseObject> deletedObjects() {
 		boolean wasAutoLocked = autoLock("deletedObjects");
 		try {
 			return super.deletedObjects();
