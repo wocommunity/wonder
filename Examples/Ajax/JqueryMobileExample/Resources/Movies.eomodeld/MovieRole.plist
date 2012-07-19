@@ -1,0 +1,56 @@
+{
+    attributes = (
+        {
+            allowsNull = N; 
+            columnName = "MOVIE_ID"; 
+            externalType = integer; 
+            name = movieID; 
+            prototypeName = id; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = "ROLE_NAME"; 
+            externalType = char; 
+            name = roleName; 
+            prototypeName = varchar16; 
+            width = 30; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = "TALENT_ID"; 
+            externalType = integer; 
+            name = talentID; 
+            prototypeName = id; 
+        }
+    ); 
+    attributesUsedForLocking = (talentID, movieID, roleName); 
+    className = "webobjectsexamples.businesslogic.eo.MovieRole"; 
+    classProperties = (roleName, movie, talent); 
+    externalName = "MOVIE_ROLE"; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {
+        "_clientClassPropertyNames" = (roleName, movie, talent); 
+        "_nameInObjectStore" = "MOVIE_ROLE"; 
+    }; 
+    maxNumberOfInstancesToBatchFetch = 10; 
+    name = MovieRole; 
+    primaryKeyAttributes = (movieID, talentID); 
+    relationships = (
+        {
+            destination = Movie; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = movieID; sourceAttribute = movieID; }); 
+            name = movie; 
+        }, 
+        {
+            destination = Talent; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = talentID; sourceAttribute = talentID; }); 
+            name = talent; 
+        }
+    ); 
+}

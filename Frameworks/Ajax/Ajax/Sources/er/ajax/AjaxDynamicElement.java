@@ -136,7 +136,7 @@ public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjax
 	/**
 	 * Override this method to append the needed scripts for this component.
 	 * 
-	 * @param request the current request
+	 * @param response the current response
 	 * @param context the current context
 	 */
 	protected abstract void addRequiredWebResources(WOResponse response, WOContext context);

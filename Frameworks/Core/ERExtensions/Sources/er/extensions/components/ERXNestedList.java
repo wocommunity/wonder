@@ -14,6 +14,12 @@ import com.webobjects.appserver.WOContext;
  *
  */
 public class ERXNestedList extends ERXStatelessComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ERXNestedList.class);
 
@@ -28,7 +34,7 @@ public class ERXNestedList extends ERXStatelessComponent {
      */
      
     public void pushLevel()  {
-        setValueForBinding( new Integer(1) , "level" );
+        setValueForBinding(Integer.valueOf(1), "level");
     }
 
 
@@ -39,7 +45,7 @@ public class ERXNestedList extends ERXStatelessComponent {
      */
      
     public void  popLevel()  {
-        setValueForBinding( new Integer(0) , "level" );
+        setValueForBinding(Integer.valueOf(0), "level");
     }
 
 
@@ -62,7 +68,7 @@ public class ERXNestedList extends ERXStatelessComponent {
      */
      
     public void setCurrentLevel(Number aChildLevel)  {
-        setValueForBinding(new Integer(aChildLevel.intValue() + 1) , "level");
+        setValueForBinding(Integer.valueOf(aChildLevel.intValue() + 1) , "level");
     }
 
 

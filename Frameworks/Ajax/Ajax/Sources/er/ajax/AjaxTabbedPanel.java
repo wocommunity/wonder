@@ -147,7 +147,7 @@ public class AjaxTabbedPanel extends AjaxDynamicElement {
         String paneControlID = idString + "_panecontrol";
 
         for (int i = 0; i < tabs.count(); i++) {
-            String index = new Integer(i).toString();
+            String index = Integer.toString(i);
             String tabID = idString + "_tab_" + index;
             AjaxTabbedPanelTab tab = (AjaxTabbedPanelTab)tabs.objectAtIndex(i);
             if (tab.isVisble(component)) {

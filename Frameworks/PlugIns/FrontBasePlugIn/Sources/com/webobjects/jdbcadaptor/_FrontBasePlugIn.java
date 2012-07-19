@@ -1320,7 +1320,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			relationshipKey = dotIndex == -1 ? relationshipKey : relationshipKey.substring(relationshipKey.lastIndexOf(".") + 1);
 			r = rightEntity.anyRelationshipNamed(relationshipKey);
 
-			// fix from Michael M�ller for the case Foo.fooBars.bar has a Bar.foo relationship (instead of Bar.foos)
+			// fix from Michael Müller for the case Foo.fooBars.bar has a Bar.foo relationship (instead of Bar.foos)
 			if (r == null || r.destinationEntity() != leftEntity) {
 				r = leftEntity.anyRelationshipNamed(relationshipKey);
 			}

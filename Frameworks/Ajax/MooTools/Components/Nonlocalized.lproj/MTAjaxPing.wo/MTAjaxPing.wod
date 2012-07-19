@@ -1,0 +1,29 @@
+PingUpdateContainer : MTAjaxUpdateContainer {
+	id = id;
+}
+
+ComponentContent : WOComponentContent {
+}
+
+ID : WOString {
+	value = id;
+}
+
+HasTargetContainerID : WOConditional {
+	condition = ^targetContainerID;
+}
+
+PingUpdate : MTAjaxPingUpdate {
+	cacheKey = ^cacheKey;
+	targetContainerID = ^targetContainerID;
+	onBeforeUpdate = ^onBeforeUpdate;
+}
+
+Frequency : WOString {
+	value = frequency;
+}
+
+Running : WOConditional {
+	condition = ^stop;
+	negate = true;
+}

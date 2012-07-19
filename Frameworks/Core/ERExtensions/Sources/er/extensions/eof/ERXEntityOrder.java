@@ -91,7 +91,7 @@ public abstract class ERXEntityOrder
             // immediately to avoid dependencies between entities in the same group
             NSMutableDictionary<String,Integer> groupDictionary = new NSMutableDictionary<String,Integer>();
 
-            Integer group = new Integer(groupNum++);
+            Integer group = Integer.valueOf(groupNum++);
             logger.trace("Building group " + group);
 
             // Examine each entity not already in a group and add it to this group if
@@ -130,7 +130,7 @@ public abstract class ERXEntityOrder
         if (logger.isTraceEnabled()) {
             logger.trace("Entity groups in dependency order:");
             for (int i = 1; i < groupNum; i++) {
-                logger.trace("Group " + i + ": " + groupedEntities().allKeysForObject(new Integer(i)));
+                logger.trace("Group " + i + ": " + groupedEntities().allKeysForObject(Integer.valueOf(i)));
                 logger.trace("");
             }
         }

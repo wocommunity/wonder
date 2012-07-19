@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.pages;
 
+import java.util.Enumeration;
+
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
@@ -36,8 +38,6 @@ import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
 
-import java.util.Enumeration;
-
 /**
  * Superclass for all query pages.<br />
  * In addition to the rest of the goodies of ERD2WPage, it lets you save and
@@ -59,6 +59,12 @@ import java.util.Enumeration;
  * @d2wKey canQueryPropertyForNullValues
  */
 public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     protected WODisplayGroup displayGroup;
 

@@ -1,0 +1,14 @@
+AjaxOptions : AjaxOptions {
+	options = createAjaxOptions;
+}
+
+DateInput : WOTextField {
+	value = ^value;
+	id = ^id;
+	class = classes;
+	dateformat = ^dateformat;
+	style = ^style;
+	size = ^size;
+	maxlength = ^maxlength;
+	name = ^name;
+}

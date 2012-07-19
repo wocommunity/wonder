@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
+import java.io.Serializable;
+
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
@@ -13,7 +15,14 @@ import com.webobjects.foundation.NSMutableArray;
  * Used to hold pieces of a tabsSectionsContents, holds either sections or tabs.
  */
 
-public class ERD2WContainer {
+public class ERD2WContainer implements Serializable {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     public String name;
     public String displayName;
     public NSMutableArray keys;

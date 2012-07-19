@@ -52,6 +52,8 @@ public class ERXLogger extends org.apache.log4j.Logger {
 			catch (Exception ex) {
 				System.err.println("Exception while creating logger factory of class " + factoryClassName + ": " + ex);
 			}
+		} else {
+			ERXLogger.factory = new Factory();
 		}
 	}
 

@@ -1,0 +1,13 @@
+<wo:if condition="$isInset">
+  <wo:genericContainer elementName="div" otherTagString="$inset" data-role="fieldcontain">
+    <fieldset data-role="controlgroup">
+      <legend>Agree to the terms:</legend>
+      <webobject name="CheckBox" />
+      <wo:genericContainer elementName="label" for="$javaScriptElementID"> <wo:str value="$^string" /> </wo:genericContainer>
+    </fieldset>
+  </wo:genericContainer>
+</wo:if>
+<wo:else>
+  <webobject name="CheckBox" />
+  <wo:genericContainer elementName="label" for="$javaScriptElementID"> <wo:str value="$^string" /> </wo:genericContainer>
+</wo:else>

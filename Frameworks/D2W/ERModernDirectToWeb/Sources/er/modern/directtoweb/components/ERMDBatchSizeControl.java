@@ -37,7 +37,7 @@ public class ERMDBatchSizeControl extends ERDCustomComponent {
 	
 	private String _itemsString;
 	private String _showString;
-	private ERXLocalizer _localizer;
+	private transient ERXLocalizer _localizer;
 	private String _updateContainerID;
 	private String _separatorString;
 	private String _batchSizeFieldID;

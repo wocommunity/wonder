@@ -22,6 +22,13 @@ import er.extensions.components.ERXComponentUtilities;
  * @binding snap if true, and min/max is set, this will set "values" to be the list of integer values
  */
 public class AjaxSlider extends AjaxComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private static final Logger log = Logger.getLogger(AjaxSlider.class);
 
     private String _trackerId;
@@ -84,8 +91,8 @@ public class AjaxSlider extends AjaxComponent {
         } else {
         	new AjaxOption("onSlide", AjaxOption.SCRIPT).addToDictionary(this, options);
          }
-        Number min = (Number)valueForBinding("minimum", new Integer(0));
-        Number max = (Number)valueForBinding("maximum", new Integer(100));
+        Number min = (Number)valueForBinding("minimum", Integer.valueOf(0));
+        Number max = (Number)valueForBinding("maximum", Integer.valueOf(100));
         options.setObjectForKey("$R(" + min + "," + max + ")", "range");
 
         if (min != null && max != null && ERXComponentUtilities.booleanValueForBinding(this, "snap")) {

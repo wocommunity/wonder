@@ -1,6 +1,4 @@
 /*
- $Id$
- 
  ERMailTextAttachment.java - Camille Troillard - tuscland@mac.com
  */
 
@@ -14,7 +12,7 @@ public class ERMailTextAttachment extends ERMailFileAttachment {
 
 	public ERMailTextAttachment(String fileName, String content) {
 		super(content);
-		this.setFileName(fileName);
+		_fileName = fileName;
 	}
 
 	@Override

@@ -26,6 +26,13 @@ import er.extensions.validation.ERXValidationFactory;
  * @property er.corebusinesslogic.ERCMailMessage.ShouldGzipContent
  */
 public class ERCMailMessage extends _ERCMailMessage {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 
     //	===========================================================================
     //	Class Constant(s)
@@ -126,8 +133,9 @@ public class ERCMailMessage extends _ERCMailMessage {
 
     /**
      * Use setIsRead(boolean)
-     * @deprecated setIsRead
+     * @deprecated use {@link #setIsRead(Boolean)}
      */
+    @Deprecated
     public void setReadAsBoolean(boolean read) {
         setIsRead(read);
     }

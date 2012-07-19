@@ -29,6 +29,13 @@ import er.extensions.foundation.ERXProperties;
  * @author ak
  */
 public class ERD2WRule extends Rule {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     private int _priority = -1;
     private String _assignmentClassName;
     private boolean patchRulePriority = ERXProperties.booleanForKeyWithDefault("er.directtoweb.ERD2WRule.patchRulePriority", true);

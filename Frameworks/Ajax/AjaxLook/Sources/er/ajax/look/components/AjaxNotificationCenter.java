@@ -21,6 +21,13 @@ import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXStringUtilities;
 
 public class AjaxNotificationCenter extends ERDCustomComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public static final ERXKey<String> AJAX_NOTIFICATION_CENTER_ID = new ERXKey<String>("ajaxNotificationCenterID");
 	public static final ERXKey<String> PROPERTY_OBSERVER_ID = new ERXKey<String>("propertyObserverID");
 	public static final ERXKey<String> PROPERTY_KEY = new ERXKey<String>("propertyKey");

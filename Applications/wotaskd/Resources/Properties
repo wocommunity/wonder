@@ -1,6 +1,8 @@
 # Properties file for wotaskd
 # Overrides the JavaWebObjects.framework Properties
 
+#WOHost=localhost
+
 WOAutoOpenInBrowser=false
 WODebuggingEnabled=false
 WODirectConnectEnabled=true

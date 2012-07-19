@@ -227,7 +227,8 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
     	return fs;
     }
 
-    /** @deprecated use primaryKeyFromRequest(EOEditingContext ec, String entityName) */
+    /** @deprecated use {@link #primaryKeyFromRequest(EOEditingContext, String)} */
+    @Deprecated
     public Number primaryKeyFromRequest() {
         return context().request().numericFormValueForKey(primaryKeyKey, new NSNumberFormatter("#"));
     }
