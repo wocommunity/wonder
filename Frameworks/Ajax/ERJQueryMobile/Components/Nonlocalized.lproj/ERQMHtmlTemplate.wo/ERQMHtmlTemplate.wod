@@ -1,9 +1,9 @@
 InHeaderContent : ERXWOComponentContent {
-	templateName = templateContextForHeader;
+	templateName = "TemplateContextForHeader";
 }
 
 ContainerContent : ERXWOComponentContent {
-	templateName = templateContextForMainContainer;
+	templateName = "TemplateContextForMainContainer";
 }
 
 MainComponent : WOComponentContent {}
