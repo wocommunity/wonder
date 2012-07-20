@@ -2,19 +2,23 @@ package er.woinstaller.ui;
 
 
 public class NullProgressMonitor implements IWOInstallerProgressMonitor {
+  @Override
   public void done() {
     // DO NOTHING
   }
   
-  public void beginTask(String taskName, int totalWork) {
+  @Override
+  public void beginTask(String taskName, long totalWork) {
     // DO NOTHING
   }
   
+  @Override
   public boolean isCanceled() {
     return false;
   }
   
-  public void worked(int amount) {
+  @Override
+  public void worked(long amount) {
     // DO NOTHING
   }
 }

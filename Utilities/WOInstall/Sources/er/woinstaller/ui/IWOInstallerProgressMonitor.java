@@ -3,9 +3,9 @@ package er.woinstaller.ui;
 public interface IWOInstallerProgressMonitor {
   public boolean isCanceled();
   
-  public void beginTask(String taskName, int totalWork);
+  public void beginTask(String taskName, long totalWork);
   
-  public void worked(int amount);
+  public void worked(long amount);
   
   public void done();
 }

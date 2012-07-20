@@ -11,7 +11,6 @@ import java.io.InputStream;
 public class BoundedInputStream extends InputStream {
   private InputStream _inputStream;
   private long _remaining;
-  private long _loc;
 
   public BoundedInputStream(InputStream inputStream, long start, long remaining) throws IOException {
     _inputStream = inputStream;
@@ -20,13 +19,10 @@ public class BoundedInputStream extends InputStream {
     	skip -= _inputStream.skip(skip);
     }
     _remaining = remaining;
-    _loc = start;
   }
 
   @Override
   public int read() throws IOException {
-    //_inputStream.skip(_loc++);
-	_loc++;
     if (_remaining-- <= 0) {
       return -1;
     }
@@ -49,7 +45,6 @@ public class BoundedInputStream extends InputStream {
     int ret = -1;
     ret = _inputStream.read(b, off, len);
     if (ret > 0) {
-      _loc += ret;
       _remaining -= ret;
     }
     return ret;
