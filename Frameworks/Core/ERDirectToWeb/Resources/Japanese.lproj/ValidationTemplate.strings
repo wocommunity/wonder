@@ -1,0 +1,13 @@
+{
+    IllegalCharacterInNumberException = "<b>@@displayNameForProperty@@</b>に入力した <b>@@value@@</b>が正しいか確認して下さい。";
+    InvalidDateFormatException ="<b>@@value@@</b> は日付けとして正しくありません。<b>@@displayNameForProperty@@</b> を確認して下さい。";
+    InvalidNumberException = "数字ではない値が入力されました。";
+    MandatoryToManyRelationshipException = "@@displayNameForEntity@@ の @@displayNameForProperty@@ プロパティーに、最低でもひとつの値を設定してください。";
+    MandatoryToOneRelationshipException = "@@displayNameForEntity@@ の @@displayNameForProperty@@ プロパティーを設定してください。";
+    NotANumberException = "<b>@@value@@</b> は数値ではありません。";
+    NullPropertyException = "<b>@@displayNameForProperty@@</b> を入力して下さい。";
+    ObjectRemovalException = "<b>@@displayNameForEntity@@</b> を削除することができません。最初に、<b>@@displayNameForProperty@@</b> に設定されている項目を削除してください。";
+    ObjectsRemovalException = "<b>@@displayNameForEntity@@</b> を削除することができません。最初に、<b>@@displayNameForProperty@@</b> に設定されている項目を削除してください。";
+    PasswordsDontMatchException = "ふたつの <b>パスワード</b> フィールドの内容が一致しません。";
+    PasswordsFillBothFieldsException = "両方の <b>パスワード</b> フィールドへ入力して下さい。";
+}
