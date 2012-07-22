@@ -18,6 +18,6 @@ String2: WOString {
 }
 
 String3: WOString {
-	value = d2wContext.displayValueForNull;
+	value = displayValueForNull;
 }
 
