@@ -526,7 +526,9 @@ public class ERD2WModel extends D2WModel {
     }
 
     protected void invalidateCaches() {
+      if(log.isDebugEnabled())
         log.debug("Invalidating cache");
+      
         if (_cache!=null)
             _cache.clear();
         if (_systemCache!=null)
@@ -536,16 +538,26 @@ public class ERD2WModel extends D2WModel {
         super.invalidateCaches();
     }
 
+    /**
+     * <span class="ja">
+     * モデル・リセット
+     * 
+     * 開発中：ローカライズ・ファイルが変更されるとモデルもリセットされます
+     * </span>
+     */
     public void resetModel() {
+      if(log.isInfoEnabled())
         log.info("Resetting Model");
-        if (_filePathRuleTraceCache!=null)
-            _filePathRuleTraceCache.clear();
-        NSNotificationCenter.defaultCenter().postNotification(ModelWillReset, this);
-        setRules(new NSArray());
-        initializeClientConfiguration();
-        loadRules();
-        //invalidateCaches();
-        //sortRules();
+      
+      if (_filePathRuleTraceCache!=null)
+        _filePathRuleTraceCache.clear();
+      
+      NSNotificationCenter.defaultCenter().postNotification(ModelWillReset, this);
+      setRules(new NSArray());
+      initializeClientConfiguration();
+      loadRules();
+      //invalidateCaches();
+      //sortRules();
     }
 
     protected File _currentFile;
