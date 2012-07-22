@@ -244,7 +244,7 @@ public class CPIO {
   }
 
   protected static class LinkNameLengthComparator implements Comparator<Link>, Serializable {
-    @Override
+
     public int compare(Link s1, Link s2) {
       int length1 = s1.getRealFile().toString().length();
       int length2 = s2.getRealFile().toString().length();
