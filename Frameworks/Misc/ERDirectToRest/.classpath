@@ -14,5 +14,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="WOFramework/ERDirectToWeb"/>
 	<classpathentry kind="con" path="WOFramework/ERRest"/>
+	<classpathentry kind="con" path="WOFramework/JavaDirectToWeb"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
