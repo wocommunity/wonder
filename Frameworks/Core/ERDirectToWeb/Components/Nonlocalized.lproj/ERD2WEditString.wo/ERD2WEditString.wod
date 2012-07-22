@@ -1,3 +1,18 @@
+READONLY : WOConditional {
+	condition = d2wContext.readOnly;
+}
+
+String : WOString {
+	value = value;
+	valueWhenEmpty = d2wContext.valueWhenEmpty;
+	escapeHTML = d2wContext.escapeHTML;
+}
+
+NORMAL : WOConditional {
+	condition = d2wContext.readOnly;
+	negate = true;
+}
+
 EditString: WOTextField {
         size = length;
         value = value;
