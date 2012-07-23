@@ -5,7 +5,6 @@ import java.util.Map;
 import junit.framework.Assert;
 
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSMutableArray;
 
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOEditingContext;
@@ -35,7 +34,7 @@ public class ERXThreadStorageTest extends ERXTestCase {
         private NSArray<EOEnterpriseObject> eos;
         private NSArray<String> keys;
 
-        private RunnableStorageTester(int pauseInterval,
+        protected RunnableStorageTester(int pauseInterval,
                                       String testName,
                                       NSArray<EOEnterpriseObject> objects,
                                       NSArray<String> keyStrings) {
