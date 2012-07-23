@@ -3,6 +3,9 @@ package er.directtoweb.components.dates;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WQueryDateRange;
 
+/**
+ * <span class="ja">このプロパティ・レベル・コンポーネントは date のクエリを 開始日と終了日のパラメータでビルドします。</span>
+ */
 public class ERD2WQueryDateRange extends D2WQueryDateRange {
 	/**
 	 * Do I need to update serialVersionUID?

@@ -99,6 +99,13 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
         }
     }
     
+  /**
+   * <span class="ja">
+   * ディスプレイ・グループの全クエリ設定を取り除きます。
+   * 
+   * @return カレント・ページ
+   * </span>
+   */
     public WOComponent clearAction() {
         displayGroup().queryBindings().removeAllObjects();
         displayGroup().queryMin().removeAllObjects();
@@ -395,8 +402,17 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
     }
 
     /**
+     * <span class="en">
      * Gets the query validation delegate.
+     * 
      * @return the query validation delegate
+     * </span>
+     * 
+     * <span class="ja">
+     * クエリ検証デリゲートを戻します。
+     * 
+     * @return クエリ検証デリゲート
+     * </span>
      */
     public ERDQueryValidationDelegate queryValidationDelegate() {
         if (null == queryValidationDelegate) {
@@ -406,8 +422,17 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
     }
 
     /**
+     * <span class="en">
      * Sets the query validation delegate.
+     * 
      * @param delegate to use as the query validation delegate
+     * </span>
+     * 
+     * <span class="ja">
+     * クエリ検証デリゲートをセットします。
+     * 
+     * @param delegate -　クエリ検証デリゲート (@see ERDQueryValidationDelegate)
+     * </span>
      */
     public void setQueryValidationDelegate(ERDQueryValidationDelegate delegate) {
         queryValidationDelegate = delegate;
