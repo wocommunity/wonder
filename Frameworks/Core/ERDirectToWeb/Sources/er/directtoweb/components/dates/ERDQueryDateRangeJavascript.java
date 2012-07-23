@@ -20,7 +20,8 @@ import er.extensions.localization.ERXLocalizer;
 import er.extensions.validation.ERXValidationFactory;
 
 /**
- * Used for building date queries with javascript.<br />
+ * <span class="en">Used for building date queries with javascript.</span>
+ * <span class="ja">Javascript を使用した日付ビルド・クエリ</span>
  */
 
 public class ERDQueryDateRangeJavascript extends ERDCustomQueryComponent {
