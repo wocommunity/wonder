@@ -1,0 +1,13 @@
+UseFirebug : WOConditional {
+	condition = useFirebug;
+}
+
+JS : ERXJavaScript { //FIXME : It works only if this get called. Little Strange but for now it works
+	framework = "ERFirebug";
+	filename = "content/firebug-lite-dev.js";
+}
+
+JS2 : ERXJavaScript {
+	framework = "ERFirebug";
+	filename = "content/firebug-lite.js";
+}
