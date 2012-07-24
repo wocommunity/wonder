@@ -27,54 +27,55 @@ public class ERD2WQueryStringOperator extends D2WQueryStringOperator {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    public ERXKeyValuePair currentElement;
+    public ERXKeyValuePair<String, String> currentElement;
     
     public ERD2WQueryStringOperator(WOContext context) {
         super(context);
     }
     
-    public NSArray allQualifierOperators(){
-        NSArray operators = qualifierOperatorsOverrideFromRules() != null ? qualifierOperatorsOverrideFromRules() : _allQualifierOperators;
+    public NSArray<ERXKeyValuePair<String, String>> allQualifierOperators(){
+        NSArray<String> operators = qualifierOperatorsOverrideFromRules() != null ? qualifierOperatorsOverrideFromRules() : _allQualifierOperators;
         int count = operators.count();
-        NSMutableArray result = new NSMutableArray( count );
+        NSMutableArray<ERXKeyValuePair<String, String>> result = new NSMutableArray<ERXKeyValuePair<String, String>>( count );
         for( int i = 0; i < count; i++ ) {
-            String currentOperatorString = (String)operators.objectAtIndex(i);
+            String currentOperatorString = operators.objectAtIndex(i);
             String value = (String)ERXLocalizer.currentLocalizer().valueForKey(currentOperatorString);
             if(value == null) {
                 value = currentOperatorString;
             }
-            result.addObject(new ERXKeyValuePair(currentOperatorString, value));
+            result.addObject(new ERXKeyValuePair<String, String>(currentOperatorString, value));
         }
         return result;
     }
     
-    private static NSArray _stringQualifierOperators;
-    private static NSArray _allQualifierOperators;
+    private static NSArray<String> _stringQualifierOperators;
+    private static NSArray<String> _allQualifierOperators;
     
-    public NSArray qualifierOperatorsOverrideFromRules(){
-        return (NSArray)d2wContext().valueForKey("qualifierOperators");
+    public NSArray<String> qualifierOperatorsOverrideFromRules(){
+        return (NSArray<String>)d2wContext().valueForKey("qualifierOperators");
     }
     
-    public ERXKeyValuePair selectedElement() {
-        String value = (String) anOperator();
+    public ERXKeyValuePair<String, String> selectedElement() {
+        String value = anOperator();
         String choice = (String) ERXLocalizer.currentLocalizer().valueForKey(value);
         if(choice == null) {
             choice = value;
         }
-        return new ERXKeyValuePair(value, choice);        
+        return new ERXKeyValuePair<String, String>(value, choice);        
     }
     
-    public void  setSelectedElement(ERXKeyValuePair newSelection) {
-        setAnOperator(newSelection != null ? (String) newSelection.key() : null );
+    public void  setSelectedElement(ERXKeyValuePair<String, String> newSelection) {
+        setAnOperator(newSelection != null ? newSelection.key() : null );
     }
     
+    @Override
     public void reset() {
         super.reset();
         currentElement = null;
     }
     
     static {
-        _stringQualifierOperators = new NSArray(new String[]{"starts with", "contains", "ends with", "is", "like"});
+        _stringQualifierOperators = new NSArray<String>(new String[]{"starts with", "contains", "ends with", "is", "like"});
         _allQualifierOperators = _stringQualifierOperators.arrayByAddingObjectsFromArray(EOQualifier.relationalQualifierOperators());
     }
 }
