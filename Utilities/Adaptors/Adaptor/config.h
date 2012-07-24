@@ -45,7 +45,14 @@ and limitations under the License.
 }
 #else
 #define DEBUGWAIT
+
+#ifndef _INTPTR_T_DEFINED
+typedef int  intptr_t;
+#define _INTPTR_T_DEFINED
 #endif
+
+#endif
+
 
 #define	CURRENT_WOF_VERSION_MAJOR	4
 #define CURRENT_WOF_VERSION_MINOR	5

@@ -71,7 +71,7 @@ and limitations under the License.
  */
 extern server_rec *_webobjects_server;
 #elif defined(IIS)
-#include <httpext.h>
+// #include <httpext.h> // deactivated anyway
 /*
  *	to log properly into IIS's error.lgo
  */
