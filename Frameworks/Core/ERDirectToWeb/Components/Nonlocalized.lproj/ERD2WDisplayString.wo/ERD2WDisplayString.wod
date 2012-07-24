@@ -9,3 +9,7 @@ Span: WOGenericContainer {
 	class = d2wContext.class;
 	omitTags = d2wContext.omitTags;
 }
+
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}
