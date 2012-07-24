@@ -16,8 +16,18 @@ import er.extensions.foundation.ERXKeyValuePair;
 import er.extensions.localization.ERXLocalizer;
 
 /**
+ * <span class="en">
  * @d2wKey name
  * @d2wKey qualifierOperators
+ * </span>
+ * 
+ * <span class="ja">
+ * このプロパティ・レベル・コンポーネントは string のクエリをビルドします。
+ * 例：("starts with" 又は "contains")
+ * 
+ * @d2wKey name - テキストフィールドの name タグ
+ * @d2wKey qualifierOperators - 指定 qualifier (NSArray<String>)
+ * </span>
  */
 public class ERD2WQueryStringOperator extends D2WQueryStringOperator {
 	/**
@@ -51,6 +61,13 @@ public class ERD2WQueryStringOperator extends D2WQueryStringOperator {
     private static NSArray<String> _stringQualifierOperators;
     private static NSArray<String> _allQualifierOperators;
     
+    /**
+     * <span class="ja">
+     * _allQualifierOperators をオーバライドできます。
+     * 
+     * @return qualifier NSArray
+     * </span>
+     */
     public NSArray<String> qualifierOperatorsOverrideFromRules(){
         return (NSArray<String>)d2wContext().valueForKey("qualifierOperators");
     }
