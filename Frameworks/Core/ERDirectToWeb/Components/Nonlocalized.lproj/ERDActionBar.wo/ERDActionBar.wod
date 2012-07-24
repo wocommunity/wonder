@@ -13,3 +13,7 @@ SubmitButton3: ERXSingleButton {
 HasChoices: WOConditional {
 	condition = hasBranchChoices;
 }
+
+IsAllowed : WOConditional {
+	condition = isDelegateAllowed;
+}
