@@ -103,4 +103,17 @@
 	"like" = "同様は";
 	"starts with" = "開始文字は";
 	"ERD2WQueryUnavailable.CanNotBeUsed" = "- このアトリビュートは検索できません -";
+	"ERD2WHint.Hint" = "アトリビュート・インフォメーション";
+	"ERD2WDebugFlags.LOG4J" = "ログ";
+	"ERD2WDebugFlags.D2W" = "D2W 詳細";
+	"ERD2WDebugFlags.CSS" = "CSS 表示";
+	"ERD2WDebugFlags.SQL" = "SQL 切替";
+	"ERD2WDebugFlags.CLEAR" = "D2W キャシュ・クリア";
+	"ERD2WDebugFlags.METRICS" = "レンダリング時間";
+	"ERD2WDebugFlags.SHOW" = "詳細表示";
+	"ERD2WDebugFlags.HIDE" = "詳細非表示";
+	"ERD2WDebugFlags.DUMP" = "キー作成";
+	"ERD2WDebugFlags.LOCALIZE" = "ローカライズ";
+	"ERD2WDebugFlags.STATS" = "統計";
+	"ERD2WDebugFlags.RUN" = "テスト実行";	
 }
