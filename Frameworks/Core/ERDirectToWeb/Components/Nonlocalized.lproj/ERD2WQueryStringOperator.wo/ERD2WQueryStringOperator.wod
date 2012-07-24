@@ -12,4 +12,3 @@ OperatorPopUp: WOPopUpButton {
 	displayString = currentElement.value;
 	class = "ERD2WQueryOperatorPopup";
 }
-
