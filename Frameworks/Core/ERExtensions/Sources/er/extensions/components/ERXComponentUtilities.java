@@ -1,6 +1,9 @@
 package er.extensions.components;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Enumeration;
 
@@ -191,15 +194,46 @@ public class ERXComponentUtilities {
 	 */
 	public static URL templateUrl(String componentName, String extension, NSArray languages) {
 		String htmlPathName = componentName + ".wo/" + componentName + "." + extension;
-		WOResourceManager resourcemanager = WOApplication.application().resourceManager();
-		URL templateUrl = resourcemanager.pathURLForResourceNamed(htmlPathName, null, languages);
+		WOResourceManager resourceManager = WOApplication.application().resourceManager();
+		URL templateUrl = pathUrlForResourceNamed(resourceManager, htmlPathName, languages);
+		if (templateUrl == null) {
+			// jw: hack for bundle-less builds as there is some sort of classpath problem that will
+			// pick up the wrong class for WOProjectBundle, _WOProject, … that register only component's
+			// .wo directories but not the containing files (.html, .wod, .woo). Thus we are assuming
+			// that if we can find the .wo directory we can manually point to the correct subfile
+			templateUrl = pathUrlForResourceNamed(resourceManager, componentName + ".wo", languages);
+			if (templateUrl != null) {
+				File templateDir = null;
+				try {
+					templateDir = new File(templateUrl.toURI());
+				} catch(URISyntaxException e) {
+					templateDir = new File(templateUrl.getPath());
+				}
+				if (templateDir.isDirectory()) {
+					File templateFile = new File(templateDir, componentName + "." + extension);
+					if (templateFile.exists()) {
+						try {
+							templateUrl = templateFile.toURI().toURL();
+						}
+						catch (MalformedURLException e) {
+							// ignore
+						}
+					}
+				}
+			}
+		}
+		return templateUrl;
+	}
+
+	private static URL pathUrlForResourceNamed(WOResourceManager resourceManager, String resourceName, NSArray languages) {
+		URL templateUrl = resourceManager.pathURLForResourceNamed(resourceName, null, languages);
 		if (templateUrl == null) {
 			NSArray frameworkBundles = NSBundle.frameworkBundles();
 			if (frameworkBundles != null) {
 				Enumeration frameworksEnum = frameworkBundles.objectEnumerator();
 				while (templateUrl == null && frameworksEnum.hasMoreElements()) {
 					NSBundle frameworkBundle = (NSBundle) frameworksEnum.nextElement();
-					templateUrl = resourcemanager.pathURLForResourceNamed(htmlPathName, frameworkBundle.name(), languages);
+					templateUrl = resourceManager.pathURLForResourceNamed(resourceName, frameworkBundle.name(), languages);
 				}
 			}
 		}
