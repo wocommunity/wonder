@@ -272,7 +272,9 @@ static const char *setOption3(cmd_parms *cmd, void *keys, const char *v1, const 
  *	array
  */
 static int copyTableEntries(void *req, const char *key, const char *val) {
-    req_addHeader((HTTPRequest *)req, key, val, 0);
+    if(strcmp(key, "SSL_SERVER_CERT") != 0 &&
+        strcmp(key, "SSL_CLIENT_CERT") != 0)
+        req_addHeader((HTTPRequest *)req, key, val, 0);
     return 1;
 }
 
