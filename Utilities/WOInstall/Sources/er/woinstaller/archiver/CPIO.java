@@ -13,7 +13,6 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
-
 import er.woinstaller.io.BoundedInputStream;
 import er.woinstaller.io.FileUtilities;
 import er.woinstaller.ui.IWOInstallerProgressMonitor;
@@ -44,8 +43,9 @@ public class CPIO {
 	  this.fileLength = length;
   }
 
+  @SuppressWarnings("unused")
   public void extractTo(File destinationFolder, boolean symbolicLinksSupported, IWOInstallerProgressMonitor progressMonitor) throws IOException, InterruptedException {
-    progressMonitor.beginTask("Extracting WebObjects ...", (int)fileLength);
+    progressMonitor.beginTask("Extracting WebObjects ...", fileLength);
     
     long amount = 0;
     List<Link> links = new LinkedList<Link>();
@@ -116,7 +116,7 @@ public class CPIO {
 
             int relativeAmount = 70 + nameSize + fileSize;
             amount += relativeAmount;
-            progressMonitor.worked(relativeAmount);
+            progressMonitor.worked(amount);
           }
         }
         
@@ -129,7 +129,7 @@ public class CPIO {
 //      System.out.println(amount + ":" + fileLength);
   	  paxStream.close();
     }
-
+    progressMonitor.done();
     progressMonitor.beginTask("Linking WebObjects ...", links.size());
     Collections.sort(links, new LinkNameLengthComparator());
     int linkNum = 0;
@@ -244,6 +244,7 @@ public class CPIO {
   }
 
   protected static class LinkNameLengthComparator implements Comparator<Link>, Serializable {
+
     public int compare(Link s1, Link s2) {
       int length1 = s1.getRealFile().toString().length();
       int length2 = s2.getRealFile().toString().length();

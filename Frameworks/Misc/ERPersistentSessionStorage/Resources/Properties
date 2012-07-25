@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+=======
+##  Properies Info	
+er.extensions.load.Properties.framework.ERPersistentSessionStorage=load
+er.extensions.ERPersistentSessionStorage.hasLocalization=false
+
+>>>>>>> 75ed1cdb3aeff37627e8a8159002db3b5482e1ae
 #The number of seconds for which a session may be idle before it times out.
 #The default is 3600 seconds (one hour). A value of 0 means sessions never
 #time out.

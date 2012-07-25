@@ -196,7 +196,9 @@ public class LifebeatRequestHandler extends WORequestHandler {
     }
 
     private void registerCrash(String instanceName, String host, String port) {
-        // app will stop in a bad way - notify if necessary
+    	NSLog.err.appendln("App '" + instanceName + "' on " + host + ":" + port + " received 'willCrash' notification.");
+    	
+    	// app will stop in a bad way - notify if necessary
         InetAddress hostAddress = addressForName(host);
 
         theApplication._lock.startReading();

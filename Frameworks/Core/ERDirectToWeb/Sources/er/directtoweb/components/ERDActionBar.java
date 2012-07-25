@@ -23,6 +23,12 @@ import er.directtoweb.delegates.ERDBranchInterface;
  */
 
 public class ERDActionBar extends ERDCustomEditComponent implements ERDBranchInterface {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** logging support */
     private static final Logger log = Logger.getLogger(ERDActionBar.class);
@@ -125,7 +131,8 @@ public class ERDActionBar extends ERDCustomEditComponent implements ERDBranchInt
     }
 
     /**
-        * Determines if this message page should display branch choices.
+     * Determines if this message page should display branch choices.
+     * 
      * @return if the current delegate supports branch choices.
      */
     public boolean hasBranchChoices() {
@@ -134,6 +141,7 @@ public class ERDActionBar extends ERDCustomEditComponent implements ERDBranchInt
 
     public void validationFailedWithException(Throwable theException,Object theValue, String theKeyPath) {
         parent().validationFailedWithException(theException, theValue, theKeyPath);
-        log.info("" + theException + theValue + theKeyPath);
+        if(log.isInfoEnabled())
+          log.info("" + theException + theValue + theKeyPath);
     }
 }

@@ -109,15 +109,15 @@ import er.extensions.jdbc.ERXSQLHelper;
  * @property er.extensions.ERXModelGroup.[ENTITY_NAME].[ATTRIBUTE_NAME].columnName
  * @property er.extensions.ERXModelGroup.[ENTITY_NAME].[ATTRIBUTE_NAME].ignoreTypeMismatch
  * @property er.extensions.ERXModelGroup.[ENTITY_NAME].externalName
- * @property er.extensions.ERXModelGroup.flattenPrototypes
+ * @property er.extensions.ERXModelGroup.flattenPrototypes defined if the prototypes should get flattened. Default is true. Note: this default value may be incompatible with {@link ERXModel#isUseExtendedPrototypesEnabled}.
  * @property er.extensions.ERXModelGroup.ignoreTypeMismatch
  * @property er.extensions.ERXModelGroup.modelClassName
- * @property er.extensions.ERXModelGroup.modelLoadOrder NSArray.EmptyArray
- * @property er.extensions.ERXModelGroup.patchModelsOnLoad
+ * @property er.extensions.ERXModelGroup.modelLoadOrder defines the load order of the models. When you use this property, the bundle loading will be disregarded. The default returns NSArray.EmptyArray.
+ * @property er.extensions.ERXModelGroup.patchModelsOnLoad a boolean that defines whether the created should be a {@link Model}, not a EOModel. Default is false.
  * @property er.extensions.ERXModelGroup.patchedModelClassName
- * @property er.extensions.ERXModelGroup.prototypeModelName
- * @property er.extensions.ERXModelGroup.prototypeModelNames
- * @property er.extensions.ERXModelGroup.raiseOnUnmatchingConnectionDictionaries, true
+ * @property er.extensions.ERXModelGroup.prototypeModelName if defined, overrides the default name, erprototypes.eomodeld.
+ * @property er.extensions.ERXModelGroup.prototypeModelNames defines the names of the models that are prototypes. They get put in front of the model load order. The default is <code>(erprototypes)</code>.
+ * @property er.extensions.ERXModelGroup.raiseOnUnmatchingConnectionDictionaries defaut is true
  * @property er.extensions.ERXModelGroup.sqlDumpDirectory
  * @property [MODEL_NAME].DBConnectionRecycle
  * @property [MODEL_NAME].DBDebugLevel
@@ -142,28 +142,12 @@ public class ERXModelGroup extends EOModelGroup {
 	 */
 	public static final String LANGUAGES_KEY = "ERXLanguages";
 
-	/**
-	 * <code>er.extensions.ERXModelGroup.patchModelsOnLoad</code> is a boolean that defines is the created should be a {@link Model} not a EOModel. 
-	 * Default is false.
-	 */
 	protected static final boolean patchModelsOnLoad = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXModelGroup.patchModelsOnLoad", false);
 	
-	/**
-	 * <code>er.extensions.ERXModelGroup.flattenPrototypes</code> defines if the prototypes should get flattened. Default is true.
-	 * <p>Note: the default of true may be incompatible with {@link ERXModel#isUseExtendedPrototypesEnabled}.</p>
-	 */
 	protected static final boolean flattenPrototypes = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXModelGroup.flattenPrototypes", true);
 	
-	/**
-	 * <code>er.extensions.ERXModelGroup.prototypeModelNames</code> defines the names of the models that are prototypes. They
-	 * get put in front of the model load order. The default is <code>erprototypes</code>
-	 */
 	protected NSArray<String> _prototypeModelNames = ERXProperties.componentsSeparatedByStringWithDefault("er.extensions.ERXModelGroup.prototypeModelNames", "," ,new NSArray<String>(ERXProperties.stringForKeyWithDefault("er.extensions.ERXModelGroup.prototypeModelName", "erprototypes")));
 
-	/**
-	 * <code>er.extensions.ERXModelGroup.modelLoadOrder</code> defines the load order of the models. When you use this property
-	 * the bundle loading will be disregarded. There is no default value.
-	 */
 	protected NSArray<String> _modelLoadOrder = ERXProperties.componentsSeparatedByStringWithDefault("er.extensions.ERXModelGroup.modelLoadOrder", ",", NSArray.EmptyArray);
 	
 	private boolean raiseOnUnmatchingConnectionDictionaries = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXModelGroup.raiseOnUnmatchingConnectionDictionaries", true);
@@ -239,14 +223,13 @@ public class ERXModelGroup extends EOModelGroup {
 			String prototypeModelName = (String) prototypeModelNamesEnum.nextElement();
 			URL prototypeModelURL = (URL) modelNameURLDictionary.removeObjectForKey(prototypeModelName); // WO53
 			modelNames.removeObject(prototypeModelName);
-			if (prototypeModelURL == null) {
+			if (prototypeModelURL != null) {
+				modelURLs.addObject(prototypeModelURL);
+			} else {
 				// AK: we throw for everything except erprototypes, as it is set by default
 				if(!"erprototypes".equals(prototypeModelName)) {
 					throw new IllegalArgumentException("You specified the prototype model '" + prototypeModelName + "' in your prototypeModelNames array, but it can not be found.");
 				}
-			}
-			else {
-				modelURLs.addObject(prototypeModelURL);
 			}
 		}
 		// Next, add all models that are stated explicitely
@@ -308,6 +291,7 @@ public class ERXModelGroup extends EOModelGroup {
 		 * @param entity
 		 * @param attribute
 		 * @param newName
+		 * @return cloned attribute
 		 */
 		protected EOAttribute cloneAttribute(EOEntity entity, EOAttribute attribute, String newName) {
 			// NOTE: order is important here. To add the prototype,
@@ -328,7 +312,7 @@ public class ERXModelGroup extends EOModelGroup {
 			return copy;
 		}
 
-		protected void adjustLocalizedAttributes(EOModelGroup group ) {
+		protected void adjustLocalizedAttributes(EOModelGroup group) {
 			for (Enumeration enumerator = group.models().objectEnumerator(); enumerator.hasMoreElements();) {
 				EOModel model = (EOModel) enumerator.nextElement();
 				for (Enumeration e1 = model.entities().objectEnumerator(); e1.hasMoreElements();) {
@@ -448,23 +432,32 @@ public class ERXModelGroup extends EOModelGroup {
 	public static String sqlDumpDirectory() {
 		return ERXSystem.getProperty("er.extensions.ERXModelGroup.sqlDumpDirectory");
 	}
-	
+
+	private final static String SQLDUMP_DIR_NOT_WRITEABLE_DIR = "The er.extensions.ERXModelGroup.sqlDumpDirectory property is set and is not a valid, writeable directory.";
+	private final static String SQLDUMP_FILE_NOT_WRITEABLE = "The er.extensions.ERXModelGroup.sqlDumpDirectory property is set and the dump file for this model exists and is not writeable.";
+
 	private void dumpSchemaSQL(EOModel eomodel) {
 		String dumpDir = sqlDumpDirectory();
 		if(dumpDir != null) {
-			EOAdaptor adaptor = EOAdaptor.adaptorWithModel(eomodel);
-			if (adaptor instanceof JDBCAdaptor) {
-				JDBCAdaptor jdbc = (JDBCAdaptor) adaptor;
-				try {
+			try {
+				File dumpDirectory = new File(dumpDir);
+				if (! dumpDirectory.isDirectory() || ! dumpDirectory.canWrite()) {
+					throw NSForwardException._runtimeExceptionForThrowable(new IllegalArgumentException(SQLDUMP_DIR_NOT_WRITEABLE_DIR));
+				}
+				File dumpFile = new File(dumpDir + File.separator + eomodel.name() + ".sql");
+				if (dumpFile.exists() && ! dumpFile.canWrite()) {
+					throw NSForwardException._runtimeExceptionForThrowable(new IllegalArgumentException(SQLDUMP_FILE_NOT_WRITEABLE));
+				}
+				EOAdaptor adaptor = EOAdaptor.adaptorWithModel(eomodel);
+				if (adaptor instanceof JDBCAdaptor) {
+					JDBCAdaptor jdbc = (JDBCAdaptor) adaptor;
 					ERXSQLHelper helper = ERXSQLHelper.newSQLHelper(jdbc);
 					String sql = helper.createSchemaSQLForEntitiesInModelAndOptions(eomodel.entities(), eomodel, helper.defaultOptionDictionary(true, true));
-					File file = new File(dumpDir + File.separator + eomodel.name() + ".sql");
-					ERXFileUtilities.writeInputStreamToFile(new ByteArrayInputStream(sql.getBytes()), file);
-					log.info("Wrote Schema SQL to " + file);
+					ERXFileUtilities.writeInputStreamToFile(new ByteArrayInputStream(sql.getBytes()), dumpFile);
+					log.info("Wrote Schema SQL to " + dumpFile);
 				}
-				catch (IOException e) {
-					throw NSForwardException._runtimeExceptionForThrowable(e);
-				}
+			} catch (java.io.IOException e) {
+				throw NSForwardException._runtimeExceptionForThrowable(e);
 			}
 		}
 	}
@@ -478,8 +471,8 @@ public class ERXModelGroup extends EOModelGroup {
 	 * This class is used by the runtime when the property
 	 * <code>er.extensions.ERXModelGroup.patchModelsOnLoad=true</code>.
 	 * 
-	 * <p>Note: <code>er.extensions.ERXModelGroup.patchModelsOnLoad=true</code> makes the following property
-	 * <code>er.extensions.ERXModel.useExtendedPrototypes=true</code>.
+	 * <p>Note: <code>er.extensions.ERXModelGroup.patchModelsOnLoad=true</code> sets the <code>er.extensions.ERXModel.useExtendedPrototypes</code>
+         * property to <code>true</code>.
 	 * 
 	 * @author ak
 	 */
@@ -490,17 +483,19 @@ public class ERXModelGroup extends EOModelGroup {
 		}
 
 		/**
+		 * @return <code>true</code>
 		 * @see com.webobjects.eoaccess.ERXModel#useExtendedPrototypes()
 		 */
 		@Override
 		protected boolean useExtendedPrototypes() {
 			return true;
 		}
-
 	}
 
 	/**
 	 * Overridden to use our model class in the runtime.
+	 * @param url URL to model
+	 * @return model object
 	 */
 	@Override
 	public EOModel addModelWithPathURL(URL url) {
@@ -641,6 +636,8 @@ public class ERXModelGroup extends EOModelGroup {
 	
 	/**
 	 * Returns whether or not the given entity name is a prototype entity
+	 * @param entityName entity name
+	 * @return <code>true</code> if entity if a prototype
 	 */
 	public static boolean isPrototypeEntityName(String entityName) {
 		return (entityName.startsWith("EO") && entityName.endsWith("Prototypes"));
@@ -921,8 +918,10 @@ public class ERXModelGroup extends EOModelGroup {
 	
 	/**
 	 * Returns whether the given model is listed as a prototype model in the properties.
+	 * @param model model object
+	 * @return <code>true</code> if model is used for prototypes
 	 */
-	public boolean isPrototypeModel (EOModel model) {
+	public boolean isPrototypeModel(EOModel model) {
 		if (_prototypeModelNames != null && model != null && _prototypeModelNames.containsObject(model.name())) {
 			return true;
 		}
@@ -1014,7 +1013,7 @@ public class ERXModelGroup extends EOModelGroup {
 				String pluginPrototypeEntityName = "EOJDBC" + pluginName + "Prototypes";
 				// This check isn't technically necessary since
 				// it doesn't down below, but since
-				// we are guessing here, I don't want themt o
+				// we are guessing here, I don't want them to
 				// get a warning about the prototype not
 				// being found if they aren't even using Wonder
 				// prototypes.

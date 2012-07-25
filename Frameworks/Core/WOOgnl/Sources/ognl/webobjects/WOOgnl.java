@@ -37,13 +37,30 @@ import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation._NSUtilities;
 
 /**
+ * <span class="en">
  * WOOgnl provides a template parser that support WOOgnl associations, Helper Functions, Inline Bindings, and Binding Debugging. 
  * 
+ * @property ognl.active - defaults to true, if false ognl support is disabled
+ * @property ognl.inlineBindings - if true, inline bindings are supported in component templates
+ * @property ognl.parseStandardTags - if true, you can use inline bindings in regular html tags, but requires well-formed templates
+ * @property ognl.debugSupport - if true, debug metadata is included in all bindings (but binding debug is not automatically turned on) 
+ * </span>
+ * 
+ * <span class="ja">
+ * WOOgnlはテンプレートパーサーに対して、OGNL (Object Graph Navigation Language)機能のヘルプ機能/インラインbinding/bindingデバッグ等の機能を提供する。
+ * 
+ * OGNL (Object Graph Navigation Language) は，Javaオブジェクトのプロパティにアクセス（setting/getting）する式言語です。
+ * Javaオブジェクトのプロパティにアクセスするほか、直接メソッドを呼び出すことなどが可能です。
+ * 2010-10-09 日本語追加 by A10
+ * 
+ * @property ognl.active - デフォルト値はtrue、falseにするとognl機能は無効。
+ * @property ognl.inlineBindings - trueにするとコンポーネントテンプレートでのインライン・バインディング機能になる。
+ * @property ognl.parseStandardTags - trueにするとhtmlタグ内でのインライン・バインディングが使用できる。しかし、正確なテンプレートを必要とする。
+ * @property ognl.debugSupport - trueにするとデバッグ用のメタデータが全てのバインディングに追加される。 (しかし、この機能は自動では追加されない) 
+ * </span>
+ * 
  * @author mschrag
- * @property ognl.active defaults to true, if false ognl support is disabled
- * @property ognl.inlineBindings if true, inline bindings are supported in component templates
- * @property ognl.parseStandardTags if true, you can use inline bindings in regular html tags, but requires well-formed templates
- * @property ognl.debugSupport if true, debug metadata is included in all bindings (but binding debug is not automatically turned on) 
+ * 
  */
 public class WOOgnl {
 	public static Logger log = Logger.getLogger(WOOgnl.class);

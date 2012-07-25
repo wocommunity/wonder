@@ -83,7 +83,7 @@ public class EROpenIDManager {
      * @param context the WOContext
      * @return a FetchRequest
      * @throws MessageException 
-     * @deprecated Replaced by createFetchMessageExtensions
+     * @deprecated Replaced by {@link #createFetchMessageExtensions(String, WORequest, WOContext)}
      */
     @Deprecated
     public MessageExtension createFetchRequest(String userSuppliedString, WORequest request, WOContext context) throws MessageException;

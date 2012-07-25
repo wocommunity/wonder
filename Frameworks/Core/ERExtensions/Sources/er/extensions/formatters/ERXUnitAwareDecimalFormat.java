@@ -19,7 +19,7 @@ import com.webobjects.foundation.NSKeyValueCoding;
  * <code>ERXUnitAwareDecimalFormat</code> extends {@link java.text.DecimalFormat} 
  * to add an automatic unit conversion feature for 
  * the given unit. Convenient to display friendly values 
- * for file size, elaps time, etc.
+ * for file size, elapsed time, etc.
  * 
  * <strong>Examples:</strong>
  * <pre>
@@ -41,6 +41,12 @@ import com.webobjects.foundation.NSKeyValueCoding;
  * </pre>
  */
 public class ERXUnitAwareDecimalFormat extends DecimalFormat implements Cloneable, Serializable {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** Predefined computer mass unit; supports: bytes, KB, MB, GB, TB */
     public static final String BYTE = "byte";

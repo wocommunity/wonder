@@ -75,6 +75,13 @@ import er.extensions.localization.ERXLocalizer;
  * @author ported by Chuck Hill
  */
 public class AjaxDatePicker extends AjaxComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	
     private static final NSArray<String> _dayNames = new NSArray<String>(new String[] {"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"}); 
     private static final NSArray<String> _monthNames = new NSArray<String>(new String[] {"January","February","March","April","May","June","July","August","September","October","November","December"}); 
@@ -107,6 +114,7 @@ public class AjaxDatePicker extends AjaxComponent {
     /**
      * @return <code>true</code>
      */
+    @Override
     public boolean isStateless() {
     	return true;
     }
@@ -114,6 +122,7 @@ public class AjaxDatePicker extends AjaxComponent {
     /**
      * Sets up format / formatter values.
      */
+    @Override
     public void awake() {
 		super.awake();
 
@@ -147,6 +156,7 @@ public class AjaxDatePicker extends AjaxComponent {
     /**
      * Clear cached values.
      */
+    @Override
     public void reset() {
     	options = null;
     	formatter = null;
@@ -185,7 +195,12 @@ public class AjaxDatePicker extends AjaxComponent {
 
     /**
      * Sets up AjaxOptions prior to rendering.
+     * 
+     * @param res the HTTP response that an application returns to a
+     *        Web server to complete a cycle of the request-response loop
+     * @param ctx context of a transaction
      */
+    @Override
     public void appendToResponse(WOResponse res, WOContext ctx) {
 		
 		NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<AjaxOption>();
@@ -218,7 +233,7 @@ public class AjaxDatePicker extends AjaxComponent {
      * @return JavaScript for onClick binding of HTML input
      */
     public String onClickScript() {
-        	StringBuffer script = new StringBuffer(200);
+        	StringBuilder script = new StringBuilder(200);
            	script.append("event.cancelBubble=true; ");
          	script.append(showCalendarScript());
             return script.toString();
@@ -320,8 +335,12 @@ public class AjaxDatePicker extends AjaxComponent {
 	}
     	
     /**
-     * Overridden so that parent will handle in the same manner as if this were a dynamic element. 
+     * Overridden so that parent will handle in the same manner as if this were a dynamic element.
+     * @param t the exception thrown during validation
+     * @param value the given value to be validated
+     * @param keyPath the key path associated with this value, identifies the property of an object
      */
+	@Override
     public void validationFailedWithException(Throwable t, Object value, String keyPath) {
     	if (keyPath != null && "<none>".equals(keyPath) && t instanceof ValidationException) {
     		ValidationException e = (ValidationException) t;

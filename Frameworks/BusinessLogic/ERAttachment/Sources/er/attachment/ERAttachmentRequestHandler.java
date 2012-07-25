@@ -77,14 +77,14 @@ public class ERAttachmentRequestHandler extends WORequestHandler {
       WOContext context = application.createContextForRequest(request);
       WOResponse response = application.createResponseInContext(context);
 
-      String wosid = (String) request.formValueForKey("wosid");
-      if (wosid == null) {
-        wosid = request.cookieValueForKey("wosid");
+      String sessionIdKey = WOApplication.application().sessionIdKey();
+      String sessionId = (String) request.formValueForKey(sessionIdKey);
+      if (sessionId == null) {
+        sessionId = request.cookieValueForKey(sessionIdKey);
       }
-      context._setRequestSessionID(wosid);
-      WOSession session = null;
+      context._setRequestSessionID(sessionId);
       if (context._requestSessionID() != null) {
-        session = WOApplication.application().restoreSessionWithID(wosid, context);
+        WOApplication.application().restoreSessionWithID(sessionId, context);
       }
       try {
         ERXDynamicURL url = new ERXDynamicURL(request._uriDecomposed());

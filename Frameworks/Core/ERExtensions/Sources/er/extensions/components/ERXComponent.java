@@ -20,6 +20,13 @@ import er.extensions.localization.ERXLocalizer;
  * @author mschrag
  */
 public abstract class ERXComponent extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	protected NSMutableDictionary _dynamicBindings = null;
 	
 	/**
@@ -86,6 +93,9 @@ public abstract class ERXComponent extends WOComponent {
 
 	/**
 	 * Calls _checkAccess prior to super.takeValuesFromRequest.
+	 * 
+	 * @param request the current request with the WOComponent object
+	 * @param context context of a transaction
 	 */
 	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
@@ -95,6 +105,10 @@ public abstract class ERXComponent extends WOComponent {
 
 	/**
 	 * Calls _checkAccess prior to super.invokeAction.
+	 * 
+	 * @param request the request
+	 * @param context context of the transaction
+	 * @return a WOActionResults containing the result of the request
 	 */
 	@Override
 	public WOActionResults invokeAction(WORequest request, WOContext context) {
@@ -105,6 +119,9 @@ public abstract class ERXComponent extends WOComponent {
 	/**
 	 * Calls _checkAccess prior to super.appendToResponse and adds support for
 	 * ClickToOpen (TM).
+	 * 
+	 * @param res the HTTP response that an application returns to a Web server to complete a cycle of the request-response loop
+	 * @param ctx context of a transaction
 	 */
 	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {

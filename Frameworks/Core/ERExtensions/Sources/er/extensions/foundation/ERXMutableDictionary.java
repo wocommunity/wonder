@@ -131,6 +131,12 @@ public class ERXMutableDictionary<K,V> extends NSMutableDictionary<K,V> {
 	 */
 
 	public static class ThreadSafeDictionary<K,V> extends ERXMutableDictionary<K,V> {
+		/**
+		 * Do I need to update serialVersionUID?
+		 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+		 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+		 */
+		private static final long serialVersionUID = 1L;
 
 		public ThreadSafeDictionary(NSMutableDictionary<? extends K, ? extends V> dictionary) {
 			super(dictionary);

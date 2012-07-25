@@ -23,7 +23,6 @@ import er.directtoweb.delegates.ERDPageDelegate;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.eof.ERXGuardedObjectInterface;
-import er.extensions.foundation.ERXEOSerializationUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 /**
@@ -306,12 +305,12 @@ public class ERMDDeleteButton extends ERMDActionButton {
 	private void writeObject(ObjectOutputStream out) throws IOException {
 		out.defaultWriteObject();
 		EOEnterpriseObject eo = (EOEnterpriseObject) d2wContext().valueForKey(Keys.objectPendingDeletion);
-		ERXEOSerializationUtilities.writeEO(out, eo);		
+		out.writeObject(eo);		
 	}
 	
 	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
 		in.defaultReadObject();
-		EOEnterpriseObject eo = ERXEOSerializationUtilities.readEO(in);
+		EOEnterpriseObject eo = (EOEnterpriseObject) in.readObject();
 		d2wContext().takeValueForKey(eo, Keys.objectPendingDeletion);
 	}
 }

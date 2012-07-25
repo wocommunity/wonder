@@ -18,9 +18,16 @@ import er.directtoweb.components.strings.ERD2WDisplayPreformattedString;
  * Displays a dictionary by serializing it as property list.  The dictionary is assumed
  * to only contain objects that are valid for an old-style (i.e., non-XML) plist.
  *
- * @deprecated Use {@link ERD2WDisplayPreformattedString} instead.
+ * @deprecated use {@link ERD2WDisplayPreformattedString}
  */
+@Deprecated
 public class ERD2WDisplayDictionary extends D2WDisplayString {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERD2WDisplayDictionary(WOContext context) {
         super(context);

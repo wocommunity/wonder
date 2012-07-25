@@ -379,7 +379,7 @@ public class NativeHandler {
 	}
 	
 	protected static Character decodeCharacter( byte[] b ) {
-		return new Character( (char)decodeInteger( b ).intValue() );
+		return Character.valueOf( (char)decodeInteger( b ).intValue() );
 	}
 	
 	protected static String decodeString( byte[] b ) throws Exception {

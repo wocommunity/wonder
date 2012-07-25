@@ -1,7 +1,0 @@
-Conditional1: WOConditional {
-	condition = hasPropertyName;
-}
-
-String1: WOString {
-	value = displayNameForProperty;
-}

@@ -474,7 +474,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 						else if (fixedJar.matches(frameworkPattern) || fixedJar.matches(appPattern) || fixedJar.matches(folderPattern)) {
 							normalLibs += jar + File.pathSeparator;
 						}
-						else if (fixedJar.matches(projectPattern) || fixedJar.matches(".*?/ERFoundation.jar") || fixedJar.matches(".*?/ERWebObjects.jar")) {
+						else if (fixedJar.matches(projectPattern) || fixedJar.matches(".*?/erfoundation.jar") || fixedJar.matches(".*?/erwebobjects.jar")) {
 							normalLibs += jar + File.pathSeparator;
 						}
 						else {
@@ -1228,8 +1228,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * Decides whether to use editing context unlocking.
 	 * 
 	 * @return true if ECs should be unlocked after each RR-loop
-	 * @deprecated use er.extensions.ERXEC.useUnlocker property instead
+	 * @deprecated use {@link ERXEC#useUnlocker()}
 	 */
+	@Deprecated
 	public Boolean useEditingContextUnlocker() {
 		Boolean useUnlocker = null;
 		if (ERXProperties.stringForKey("er.extensions.ERXApplication.useEditingContextUnlocker") != null) {
@@ -1242,8 +1243,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * Decides whether or not to keep track of open editing context locks.
 	 * 
 	 * @return true if editing context locks should be tracked
-	 * @deprecated use er.extensions.ERXEC.traceOpenLocks property instead
+	 * @deprecated use {@link ERXEC#traceOpenLocks()}
 	 */
+	@Deprecated
 	public Boolean traceOpenEditingContextLocks() {
 		Boolean traceOpenLocks = null;
 		if (ERXProperties.stringForKey("er.extensions.ERXApplication.traceOpenEditingContextLocks") != null) {
@@ -1756,6 +1758,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * Also, in case the top-level exception was a EOGeneralAdaptorException,
 	 * then you also get the failed ops and the sql exception. <br/>
 	 * 
+	 * @param e exception
+	 * @param context the current context
 	 * @return dictionary containing extra information for the current context.
 	 */
 	public NSMutableDictionary extraInformationForExceptionInContext(Exception e, WOContext context) {
@@ -1767,7 +1771,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 	/**
 	 * Reports an exception. This method only logs the error and could be
-	 * overriden to return a valid error page.
+	 * overridden to return a valid error page.
 	 * 
 	 * @param exception
 	 *            to be reported

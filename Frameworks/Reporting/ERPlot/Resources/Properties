@@ -1,3 +1,7 @@
+##  Properies Info
+er.extensions.load.Properties.framework.ERPlot=load
+er.extensions.ERPlot.hasLocalization=false
+
 # These properties are loaded into the Java system properties for applications linking against this framework
 # These properties will be overridden by properties set by the application
 # The properties listed are only examples, and are not intended to be comprehensive

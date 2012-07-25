@@ -22,6 +22,11 @@ public class ERQMHeaderBar extends ERXStatelessComponent {
     super(aContext);
   }
 
+  @Override
+  public boolean synchronizesVariablesWithBindings() {
+    return false;
+  }
+  
   //********************************************************************
   //  Methods
   //********************************************************************

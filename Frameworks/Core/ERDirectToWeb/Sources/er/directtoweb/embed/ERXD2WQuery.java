@@ -10,6 +10,13 @@ import com.webobjects.directtoweb.NextPageDelegate;
 import er.directtoweb.delegates.ERD2WQueryActionDelegate;
 
 public class ERXD2WQuery extends D2WQuery {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/** logging support */
 	private static final Logger log = Logger.getLogger(ERXD2WQuery.class);
 

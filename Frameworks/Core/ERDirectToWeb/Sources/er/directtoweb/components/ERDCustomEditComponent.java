@@ -6,10 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.components;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;
@@ -24,19 +20,26 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.foundation.ERXArrayUtilities;
-import er.extensions.foundation.ERXEOSerializationUtilities;
 
 /**
- * Superclass for most of the custom edit components.  <br />
- * 
+ * <span class="en">Superclass for most of the custom edit components.</span>
+ * <span class="ja">カスタム編集可能コンポーネントのスーパークラス</span>
  */
-
 public abstract class ERDCustomEditComponent extends ERDCustomComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 2L;
 
     /** logging support */
     public final static Logger log = Logger.getLogger(ERDCustomEditComponent.class);
 
-    /** interface for all the keys used in this pages code */
+    /** 
+     * <span class="en">interface for all the keys used in this pages code</span>
+     * <span class="ja">このページで使用する全キーのインタフェース</span>
+     */
     public static interface Keys {
         public static final String object = "object";
         public static final String localContext = "localContext";
@@ -57,19 +60,7 @@ public abstract class ERDCustomEditComponent extends ERDCustomComponent {
     private EOEnterpriseObject object;
     protected EOEditingContext editingContext;
     
-	private void writeObject(ObjectOutputStream out) throws IOException {
-		out.writeObject(_defaultSortOrderingsForDestinationEntity);
-		out.writeObject(editingContext);
-		ERXEOSerializationUtilities.writeEO(out, object);
-	}
-    
-	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-		_defaultSortOrderingsForDestinationEntity = (NSArray) in.readObject();
-		editingContext = (EOEditingContext) in.readObject();
-		object = ERXEOSerializationUtilities.readEO(in);
-	}
-
-    public Object objectPropertyValue() {
+   public Object objectPropertyValue() {
         return objectKeyPathValue();
     }
     public void setObjectPropertyValue(Object newValue) {
@@ -82,6 +73,13 @@ public abstract class ERDCustomEditComponent extends ERDCustomComponent {
         if (key() != null && object() != null) object().takeValueForKeyPath(newValue,key());
     }
 
+    /**
+     * <span class="ja">
+     * オブジェクトをセットします
+     * 
+     * @param newObject - 新オブジェクト
+     * </span>
+     */
     public void setObject(EOEnterpriseObject newObject) {
         object=newObject;
         if (object!=null) {
@@ -89,6 +87,14 @@ public abstract class ERDCustomEditComponent extends ERDCustomComponent {
             editingContext=object.editingContext();
         }
     }
+    
+    /**
+     * <span class="ja">
+     * エンタプライス・オブジェクトを戻します。
+     * 
+     * @return エンタプライス・オブジェクト
+     * </span>
+     */
     public EOEnterpriseObject object() {
         if (object==null && !synchronizesVariablesWithBindings()) {
             object=(EOEnterpriseObject)valueForBinding(Keys.object);

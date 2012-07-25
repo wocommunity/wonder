@@ -13,5 +13,7 @@
         <validation message="'value' must be bound to a settable value">
             <unsettable name="value"/>
         </validation>
+    <binding name="name"/>
+    <binding defaults="Boolean" name="mini"/>
     </wo>
 </wodefinitions>

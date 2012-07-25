@@ -1,3 +1,7 @@
+##  Properies Info
+er.extensions.load.Properties.framework.H2PlugIn=load
+er.extensions.H2PlugIn.hasLocalization=false
+
 # H2 connection URL
 #dbConnectURLGLOBAL=jdbc:h2:file://tmp/Example
 

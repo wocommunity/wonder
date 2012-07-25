@@ -10,7 +10,7 @@ import er.extensions.foundation.ERXProperties;
 /**
  * ERXMissingRouteController is the controller that is used when no route can be found. It's "missing" action is loaded.
  * 
- * @property ERXRest.strictMode
+ * @property ERXRest.strictMode (default "true") If set to true, status code in the response will be 405 Not Allowed, if set to false, status code will be 404 Not Found
  *
  * @author mschrag
  */

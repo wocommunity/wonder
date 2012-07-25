@@ -1243,5 +1243,18 @@ public class MSiteConfig extends MObject {
         return null;
     }
 
+    public NSArray instancesWithHostName(String host) {
+        try {
+            MHost aHost = hostWithName(host);
+            if (aHost == null) {
+                return null;
+            }
+            return aHost.instanceArray();
+        } catch (Exception e) {
+            log.error("Exception getting instances for host: " + host, e);
+        }
+        return null;
+    }
+    
     public int _appIsDeadMultiplier;
 }
