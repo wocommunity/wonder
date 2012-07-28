@@ -735,16 +735,6 @@
       		<param name="before.build" value="Ajax.pre.build" />
         </antcall>
     </target>
-    <target name="YUIExample.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="Application" />
-            <param name="project.name" value="YUIExample" />
-            <param name="project.dir" value="Examples/Ajax/YUIExample" />
-
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax/YUI" />
-        </antcall>
-    </target>
     <target name="YUI.all">
         <antcall target="global.framework.${build.action}" >
             <param name="project.type" value="framework" />
@@ -1156,14 +1146,14 @@
 
     <target name="common.applications.all" depends="BugTracker.all, ERMailer.all, Uber.all, SecretPal.all, ERXTest.all, PluginTest.all" />
 
-    <target name="common.examples.all" depends="ERSeleniumExample.all, ERIndexingExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, AjaxExample2.all, YUIExample.all, EROpenIDExample.all, ERDivaliteExample.all, TickTockMan.all, ERComponentTour.all, ERRestRouteExample.all, Movies.all, ERWebSocketExample.all, ERJasperReportsExample.all, BackgroundTasks.all, ERCayenneExample.all, ERDistributionExampleModel.all, ERDistributionExampleServer.all, ERDistributionExampleClient.all, MooToolsExample.all, ERPDFExamples.all, JqueryMobileExample.all" />
+    <target name="common.examples.all" depends="ERSeleniumExample.all, ERIndexingExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, AjaxExample2.all, EROpenIDExample.all, ERDivaliteExample.all, TickTockMan.all, ERComponentTour.all, ERRestRouteExample.all, Movies.all, ERWebSocketExample.all, ERJasperReportsExample.all, BackgroundTasks.all, ERCayenneExample.all, ERDistributionExampleModel.all, ERDistributionExampleServer.all, ERDistributionExampleClient.all, MooToolsExample.all, ERPDFExamples.all, JqueryMobileExample.all" />
 
     <target name="dynareporting.frameworks.all" depends="DRGrouping.all, WRReporting.all" />
 
     <target name="excelgeneration.frameworks.all" depends="ExcelGenerator.all" />
 
     <target name="ajax.frameworks.all" depends="YUI.all, AjaxLook.all, ERIUI.all, GoogleChart.all, ERCoolComponents.all, ERJQuery.all, ERPrototaculous.all, ERDivaLook.all, ERModernDirectToWeb.all, ERModernLook.all, ERModernDefaultSkin.all" />
-    <target name="ajax.examples.all" depends="AjaxExample.all, AjaxExample2.all, YUIExample.all, ERIUIExample.all, ERDivaLookExample.all, ERModernMoviesDemo.all" />
+    <target name="ajax.examples.all" depends="AjaxExample.all, AjaxExample2.all, ERIUIExample.all, ERDivaLookExample.all, ERModernMoviesDemo.all" />
 
     <target name="plugins.all" depends="PostgresqlPlugIn.all,FrontBasePlugIn.all,DerbyPlugIn.all,EROraclePlugIn.all,H2PlugIn.all,MySQLPlugIn.all,DB2PlugIn.all" />
 
