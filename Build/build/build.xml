@@ -668,18 +668,6 @@
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/WOOgnl/Validity/ERSelenium" />
         </antcall>
     </target>
-	
-    <target name="DevStudio.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="ag.kcmedia.Application" />
-            <param name="project.name" value="DevStudio" />
-            <param name="project.dir" value="Examples/Misc/DevStudio" />
-
-            <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}" />
-         </antcall>
-    </target>
 
     <target name="ERCalendar.all">
         <antcall target="global.framework.${build.action}" >
@@ -1232,7 +1220,6 @@
 
     <target name="paypal.frameworks.all" depends="WOPayPal.all" />
     <target name="woadaptors.all" depends="ERIMAdaptor.all, ERWOAdaptor.all" />
-    <target name="experimental.all" depends="DevStudio.all" />
 
     <target name="_frameworks.all" depends="common.frameworks.all, excelgeneration.frameworks.all, ajax.frameworks.all, woadaptors.all, validity.frameworks.all, plugins.all, paypal.frameworks.all, dynareporting.frameworks.all, woadaptors.all, JavaMonitorFramework.all">
      </target>
@@ -1258,8 +1245,8 @@
         <antcall target="patch.frameworks.${wonder.patch}" />
      </target>
 
-    <target name="applications.all" depends="DevStudio.all, common.applications.all, validity.applications.all, JavaMonitor.all, wotaskd.all"/>
-    <target name="examples.all" depends="common.examples.all, validity.examples.all, dynareporting.examples.all, ajax.examples.all, experimental.all"/>
+    <target name="applications.all" depends="common.applications.all, validity.applications.all, JavaMonitor.all, wotaskd.all"/>
+    <target name="examples.all" depends="common.examples.all, validity.examples.all, dynareporting.examples.all, ajax.examples.all"/>
     <target name="tests.all" depends="ERXTest.all, PluginTest.all"/> <!-- TODO include ERRestTest, TestAdaptor, JavaNeo4JAdaptorTest.all -->
 
     <target name="all.run" depends="frameworks.all, applications.all, examples.all"/>
