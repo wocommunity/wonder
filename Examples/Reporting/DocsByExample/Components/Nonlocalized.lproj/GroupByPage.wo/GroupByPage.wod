@@ -1,3 +1,0 @@
-Custom1: WRReportEditor { attributeList = session.attribArray2; masterCriteriaList = session.critArray2; masterCriteriaUpdateAction = "rebuild"; }
-Custom2: WRReport { model = session.reportModel2; recordGroupTotalToShow = "Attribute1"; selectedRecordGroupDisplayType = "SINGLE_TOTAL"; selectedReportStyle = "VERTICAL_ROWS"; showCustomReportStyle = NO; showNavigation = YES; showPresentationControls = YES; showRecordGroupAsTable = NO; showRecordGroupHeadings = YES; }
-Form1: WOForm { multipleSubmit = 1; }
