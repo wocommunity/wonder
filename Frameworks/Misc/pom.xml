@@ -16,6 +16,7 @@
 		<module>ERChronic</module>
 		<module>ERDirectToRest</module>
 		<module>ERDivaliteLook</module>
+		<module>ERFirebug</module>
 		<module>EROpenID</module>
 		<module>ERPDFGeneration</module>
 		<module>ERProfiling</module>
