@@ -597,18 +597,6 @@
         </antcall>
     </target>
 
-    <target name="DynaReporter.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="er.reporting.examples.Application" />
-            <param name="project.name" value="DynaReporter" />
-            <param name="project.dir" value="Examples/Reporting/DynaReporter" />
-
-            <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/WOOgnl/DRGrouping/WRReporting/DerbyPlugIn/ERMoviesLogic/ERAttachment/ERTaggable" />
-        </antcall>
-    </target>
-
     <target name="Validity.all">
         <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="" />
@@ -1181,7 +1169,6 @@
     <target name="common.examples.all" depends="ERSeleniumExample.all, ERIndexingExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, AjaxExample2.all, YUIExample.all, EROpenIDExample.all, JavaRESTAdaptorExample.all, ERDivaliteExample.all, TickTockMan.all, ERComponentTour.all, ERRestRouteExample.all, Movies.all, ERWebSocketExample.all, ERJasperReportsExample.all, BackgroundTasks.all, ERCayenneExample.all, ERDistributionExampleModel.all, ERDistributionExampleServer.all, ERDistributionExampleClient.all, MooToolsExample.all, ERPDFExamples.all, JqueryMobileExample.all" />
 
     <target name="dynareporting.frameworks.all" depends="DRGrouping.all, WRReporting.all" />
-    <target name="dynareporting.examples.all" depends="DynaReporter.all" />
 
     <target name="excelgeneration.frameworks.all" depends="ExcelGenerator.all" />
 
@@ -1222,7 +1209,7 @@
      </target>
 
     <target name="applications.all" depends="common.applications.all, validity.applications.all, JavaMonitor.all, wotaskd.all"/>
-    <target name="examples.all" depends="common.examples.all, validity.examples.all, dynareporting.examples.all, ajax.examples.all"/>
+    <target name="examples.all" depends="common.examples.all, validity.examples.all, ajax.examples.all"/>
     <target name="tests.all" depends="ERXTest.all, PluginTest.all"/> <!-- TODO include ERRestTest, TestAdaptor, JavaNeo4JAdaptorTest.all -->
 
     <target name="all.run" depends="frameworks.all, applications.all, examples.all"/>
