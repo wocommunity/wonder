@@ -609,18 +609,6 @@
         </antcall>
     </target>
 
-    <target name="DRGroupingTest.all">
-        <antcall target="global.application.${build.action}" >
-            <param name="project.type" value="application" />
-            <param name="project.principal.class" value="er.grouping.examples.Application" />
-            <param name="project.name" value="DRGroupingTest" />
-            <param name="project.dir" value="Examples/Reporting/DRGroupingTest" />
-
-            <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/WOOgnl/DRGrouping/WRReporting/DerbyPlugIn/ERMoviesLogic/ERAttachment/ERTaggable" />
-        </antcall>
-    </target>
-
     <target name="Validity.all">
         <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="" />
@@ -1193,7 +1181,7 @@
     <target name="common.examples.all" depends="ERSeleniumExample.all, ERIndexingExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, AjaxExample2.all, YUIExample.all, EROpenIDExample.all, JavaRESTAdaptorExample.all, ERDivaliteExample.all, TickTockMan.all, ERComponentTour.all, ERRestRouteExample.all, Movies.all, ERWebSocketExample.all, ERJasperReportsExample.all, BackgroundTasks.all, ERCayenneExample.all, ERDistributionExampleModel.all, ERDistributionExampleServer.all, ERDistributionExampleClient.all, MooToolsExample.all, ERPDFExamples.all, JqueryMobileExample.all" />
 
     <target name="dynareporting.frameworks.all" depends="DRGrouping.all, WRReporting.all" />
-    <target name="dynareporting.examples.all" depends="DynaReporter.all, DRGroupingTest.all" />
+    <target name="dynareporting.examples.all" depends="DynaReporter.all" />
 
     <target name="excelgeneration.frameworks.all" depends="ExcelGenerator.all" />
 
