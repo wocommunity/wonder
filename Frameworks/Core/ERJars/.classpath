@@ -9,10 +9,12 @@
 	<classpathentry exported="true" kind="lib" path="Libraries/slf4j-api-1.6.5.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/slf4j-log4j12-1.6.5.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/ognl-2.6.7.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/joda-time-1.6.2.jar" sourcepath="Libraries/joda-time-1.6.2-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/joda-time-1.6.2-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/log4j-1.2.16.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/commons-codec-1.6-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/commons-codec-1.6.jar" sourcepath="Libraries/commons-codec-1.6-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/commons-codec-1.6.jar" sourcepath="LibrarySources/commons-codec-1.6-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/joda-time-2.1.jar" sourcepath="LibrarySources/joda-time-2.1-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/commons-cli-1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/commons-io-1.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/httpclient-4.2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/httpcore-4.2.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

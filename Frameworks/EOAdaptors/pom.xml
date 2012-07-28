@@ -13,6 +13,7 @@
 		<module>JavaERJDBCAdaptor</module>
 		<module>JavaFSAdaptor</module>
 		<module>JavaMemoryAdaptor</module>
+		<module>JavaNeo4JAdaptor</module>
 		<module>JavaRESTAdaptor</module>
 	</modules>
 </project>

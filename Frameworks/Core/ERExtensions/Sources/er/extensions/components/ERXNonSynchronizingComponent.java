@@ -24,18 +24,17 @@ public abstract class ERXNonSynchronizingComponent extends ERXComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	/** Public constructor */
 	public ERXNonSynchronizingComponent(WOContext context) {
 		super(context);
 	}
 
-	/** component does not synchronize variables */
+	/**
+	 * Component does not synchronize variables.
+	 * 
+	 * @return <code>false</code>
+	 */
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
-		return false;
-	}
-
-	/** component is not stateless */
-	public boolean isStateless() {
 		return false;
 	}
 
@@ -80,7 +79,7 @@ public abstract class ERXNonSynchronizingComponent extends ERXComponent {
 	}
 
 	/**
-	 * Implements a {@link WOComponent#reset()reset-like} hook for stateful, but non-synchronizing 
+	 * Implements a {@link WOComponent#reset() reset-like} hook for stateful, but non-synchronizing 
 	 * components.  This method is called at the beginning of takeValuesFromRequest, invokeAction 
 	 * and appendToResponse if the component subclass is non-synchronized but stateful.  If it is
 	 * non-synchronized, but stateless, use {@link WOComponent#reset()}.

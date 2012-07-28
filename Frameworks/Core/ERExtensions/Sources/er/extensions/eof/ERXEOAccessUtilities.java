@@ -850,6 +850,29 @@ public class ERXEOAccessUtilities {
         return wasHandled;
     }
 
+  /**
+   * <span class="ja">
+   * 例外エラーが重複エラーの場合は true を戻します。
+   * 
+   * @param e - saveChanges() から受けた例外エラーそのまま
+   * 
+   * @return エラーが処理できた場合は true
+   * </span>
+   */
+  public static boolean isUniqueFailure(EOGeneralAdaptorException e) {
+    boolean wasHandled = false;
+    NSDictionary userInfo = e.userInfo();
+    if(userInfo != null) {
+      EOAdaptorOperation adaptorOp = (EOAdaptorOperation) userInfo.objectForKey(EOAdaptorChannel.FailedAdaptorOperationKey);
+
+      wasHandled = adaptorOp.toString().contains("UNIQUE");
+      if (!wasHandled) {
+        log.error("UNIQUE Integrity constraint violation  " + e + ": " + userInfo);
+      }
+    }
+    return wasHandled;
+  }
+
     /**
      * Given an array of EOs, returns snapshot dictionaries for the given
      * related objects.

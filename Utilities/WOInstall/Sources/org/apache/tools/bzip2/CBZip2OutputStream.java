@@ -305,6 +305,7 @@ public class CBZip2OutputStream extends OutputStream implements BZip2Constants {
     private int workDone;
     private int workLimit;
     private boolean firstAttempt;
+    @SuppressWarnings("unused")
     private int nBlocksRandomised;
 
     private int currentChar = -1;
@@ -341,6 +342,7 @@ public class CBZip2OutputStream extends OutputStream implements BZip2Constants {
      * modified by Oliver Merkel, 010128
      *
      */
+    @Override
     public void write(int bv) throws IOException {
         int b = (256 + bv) % 256;
         if (currentChar != -1) {
@@ -410,11 +412,13 @@ public class CBZip2OutputStream extends OutputStream implements BZip2Constants {
 
     boolean closed = false;
 
+    @Override
     protected void finalize() throws Throwable {
         close();
         super.finalize();
     }
 
+    @Override
     public void close() throws IOException {
         if (closed) {
             return;
@@ -431,6 +435,7 @@ public class CBZip2OutputStream extends OutputStream implements BZip2Constants {
         bsStream.close();
     }
 
+    @Override
     public void flush() throws IOException {
         super.flush();
         bsStream.flush();
@@ -598,6 +603,7 @@ public class CBZip2OutputStream extends OutputStream implements BZip2Constants {
         bsW(numBits, c);
     }
 
+    @SuppressWarnings("unused")
     private void sendMTFValues() throws IOException {
         char len[][] = new char[N_GROUPS][MAX_ALPHA_SIZE];
 
@@ -1160,6 +1166,7 @@ public class CBZip2OutputStream extends OutputStream implements BZip2Constants {
         int[] copy = new int[256];
         boolean[] bigDone = new boolean[256];
         int c1, c2;
+        @SuppressWarnings("unused")
         int numQSorted;
 
         /*

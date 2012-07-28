@@ -65,7 +65,7 @@ public class ERPDFMerge {
 	 * @param document
 	 * @param paginate
 	 * 
-	 * @see com.lowagie.text.Documnet iText Document class
+	 * @see com.lowagie.text.Document iText Document class
 	 * @see com.lowagie.text.PageSize Page Size class in iText
 	 * 
 	 * @author Larry Mills-Gahl &ltlmg@webfarm.com&gt;

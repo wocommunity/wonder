@@ -131,7 +131,8 @@ public class ERDActionBar extends ERDCustomEditComponent implements ERDBranchInt
     }
 
     /**
-        * Determines if this message page should display branch choices.
+     * Determines if this message page should display branch choices.
+     * 
      * @return if the current delegate supports branch choices.
      */
     public boolean hasBranchChoices() {
@@ -140,6 +141,7 @@ public class ERDActionBar extends ERDCustomEditComponent implements ERDBranchInt
 
     public void validationFailedWithException(Throwable theException,Object theValue, String theKeyPath) {
         parent().validationFailedWithException(theException, theValue, theKeyPath);
-        log.info("" + theException + theValue + theKeyPath);
+        if(log.isInfoEnabled())
+          log.info("" + theException + theValue + theKeyPath);
     }
 }

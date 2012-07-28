@@ -51,7 +51,7 @@ public class ERXAbstractTask {
 
 	/**
 	 * <strong>You must manually lock and unlock the editing context returned by
-	 * this method.<strong> It is not recommended that you depend on auto
+	 * this method.</strong> It is not recommended that you depend on auto
 	 * locking in background threads.
 	 * 
 	 * Even though this method currently returns an auto-locking EC if

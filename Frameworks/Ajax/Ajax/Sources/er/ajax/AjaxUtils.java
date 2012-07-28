@@ -22,6 +22,7 @@ import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.appserver.ajax.ERXAjaxSession;
+import er.extensions.components.ERXComponentUtilities;
 import er.extensions.formatters.ERXNumberFormatter;
 import er.extensions.formatters.ERXTimestampFormatter;
 import er.extensions.foundation.ERXProperties;
@@ -263,13 +264,7 @@ public class AjaxUtils {
 	}
 
 	public static void appendScriptHeader(WOResponse response) {
-		boolean appendTypeAttribute = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXResponseRewriter.javascriptTypeAttribute", false);
-		if (appendTypeAttribute) {
-			response.appendContentString("<script type=\"text/javascript\">");
-		}
-		else {
-			response.appendContentString("<script>");
-		}
+		ERXResponseRewriter.appendScriptTagOpener(response);
 	}
 
 	public static void appendScriptFooterIfNecessary(WORequest request, WOResponse response) {
@@ -279,17 +274,29 @@ public class AjaxUtils {
 	}
 
 	public static void appendScriptFooter(WOResponse response) {
-		response.appendContentString("</script>");
+		ERXResponseRewriter.appendScriptTagCloser(response);
 	}
 
+	/**
+	 * @deprecated use {@link ERXComponentUtilities#hasBinding(String, NSDictionary)} instead
+	 */
+	@Deprecated
 	public static boolean hasBinding(String name, NSDictionary<String, WOAssociation> associations) {
 		return associations.objectForKey(name) != null;
 	}
 	
+	/**
+	 * @deprecated use {@link ERXComponentUtilities#bindingNamed(String, NSDictionary)} instead
+	 */
+	@Deprecated
 	public static WOAssociation bindingNamed(String name, NSDictionary<String, WOAssociation> associations) {
 		return associations.objectForKey(name);
 	}
 	
+	/**
+	 * @deprecated use {@link ERXComponentUtilities#valueForBinding(String, Object, NSDictionary, WOComponent)} instead
+	 */
+	@Deprecated
 	public static Object valueForBinding(String name, Object defaultValue, NSDictionary<String, WOAssociation> associations, WOComponent component) {
 		Object value = AjaxUtils.valueForBinding(name, associations, component);
 		if (value != null) {
@@ -298,6 +305,10 @@ public class AjaxUtils {
 		return defaultValue;
 	}
 	
+	/**
+	 * @deprecated use {@link ERXComponentUtilities#stringValueForBinding(String, String, NSDictionary, WOComponent)} instead
+	 */
+	@Deprecated
 	public static String stringValueForBinding(String name, String defaultValue, NSDictionary<String, WOAssociation> associations, WOComponent component) {
 		String value = AjaxUtils.stringValueForBinding(name, associations, component);
 		if (value != null) {
@@ -306,6 +317,10 @@ public class AjaxUtils {
 		return defaultValue;
 	}
 
+	/**
+	 * @deprecated use {@link ERXComponentUtilities#stringValueForBinding(String, NSDictionary, WOComponent)} instead
+	 */
+	@Deprecated
 	public static String stringValueForBinding(String name, NSDictionary<String, WOAssociation> associations, WOComponent component) {
 		WOAssociation association = associations.objectForKey(name);
 		if (association != null) {
@@ -314,6 +329,10 @@ public class AjaxUtils {
 		return null;
 	}
 
+	/**
+	 * @deprecated use {@link ERXComponentUtilities#valueForBinding(String, NSDictionary, WOComponent)} instead
+	 */
+	@Deprecated
 	public static Object valueForBinding(String name, NSDictionary<String, WOAssociation> associations, WOComponent component) {
 		WOAssociation association = associations.objectForKey(name);
 		if (association != null) {
@@ -322,6 +341,10 @@ public class AjaxUtils {
 		return null;
 	}
 
+	/**
+	 * @deprecated use {@link ERXComponentUtilities#booleanValueForBinding(String, boolean, NSDictionary, WOComponent)} instead
+	 */
+	@Deprecated
 	public static boolean booleanValueForBinding(String name, boolean defaultValue, NSDictionary<String, WOAssociation> associations, WOComponent component) {
 		WOAssociation association = associations.objectForKey(name);
 		if (association != null) {
@@ -330,6 +353,10 @@ public class AjaxUtils {
 		return defaultValue;
 	}
 
+	/**
+	 * @deprecated use {@link ERXComponentUtilities#setValueForBinding(Object, String, NSDictionary, WOComponent)} instead
+	 */
+	@Deprecated
 	public static void setValueForBinding(Object value, String name, NSDictionary<String, WOAssociation> associations, WOComponent component) {
 		WOAssociation association = associations.objectForKey(name);
 		if (association != null) {

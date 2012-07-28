@@ -127,7 +127,9 @@ public class Application extends ERXApplication  {
             NSLog.out.setIsVerbose(true);
             NSLog.err.setIsVerbose(true);
             NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupDeployment);
-            NSLog.debug.setAllowedDebugLevel(NSLog.DebugLevelDetailed);
+            if (!NSLog.debugLoggingAllowedForLevel(NSLog.DebugLevelInformational)) {
+            	NSLog.debug.setAllowedDebugLevel(NSLog.DebugLevelInformational);
+            }
         }
 
         com.webobjects.appserver._private.WOHttpIO._alwaysAppendContentLength = false;

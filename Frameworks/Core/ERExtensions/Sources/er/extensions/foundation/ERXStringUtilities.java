@@ -473,7 +473,7 @@ public class ERXStringUtilities {
     }
 
     /**
-     * Retrives a given string for a given name, extension
+     * Retrieves a given string for a given name, extension
      * and bundle.
      * @param name of the resource
      * @param extension of the resource, example: txt or rtf
@@ -577,10 +577,10 @@ public class ERXStringUtilities {
     }
 
     /** 
-     * Locate the the first numeric character in the given string. 
+     * Locate the the first numeric character in the given string.
+     * 
      * @param str string to scan
-     *
-     * @return position in int. -1 for not found. 
+     * @return position in string or -1 if no numeric found 
      */ 
     public static int indexOfNumericInString(String str) {
         return indexOfNumericInString(str, 0);
@@ -588,10 +588,11 @@ public class ERXStringUtilities {
         
     /** 
      * Locate the the first numeric character 
-     * after <code>fromIndex</code> in the given string. 
+     * after <code>fromIndex</code> in the given string.
+     * 
      * @param str string to scan
-     *
-     * @return position in int. -1 for not found. 
+     * @param fromIndex index position from where to start
+     * @return position in string or -1 if no numeric found
      */ 
     public static int indexOfNumericInString(String str, int fromIndex) {
         if (str == null)  throw new IllegalArgumentException("String cannot be null.");
@@ -709,11 +710,13 @@ public class ERXStringUtilities {
     }    
 
     /**
-     * Removes the spaces in a given String
-     * @return string removing all spaces in it.
+     * Removes the spaces in a given string.
+     * 
+     * @param aString string to remove spaces from
+     * @return string without spaces
      */
-    public static String escapeSpace(String aString){
-        NSArray parts = NSArray.componentsSeparatedByString(aString," ");
+    public static String escapeSpace(String aString) {
+        NSArray<String> parts = NSArray.componentsSeparatedByString(aString, " ");
         return parts.componentsJoinedByString("");
     }
 
@@ -986,8 +989,7 @@ public class ERXStringUtilities {
         Character.UnicodeBlock block = Character.UnicodeBlock.of(c);
         if (block != null  &&  Character.UnicodeBlock.BASIC_LATIN.equals(block)) 
             return String.valueOf(c);
-        else 
-            return toHexString(c);
+        return toHexString(c);
     }
 
     public static String escapeNonBasicLatinChars(String str) {
@@ -1103,8 +1105,10 @@ public class ERXStringUtilities {
     }
     
     /**
-     * Converts a even-length, hex-encoded String to a byte array. 
-     * @param hexString
+     * Converts a even-length, hex-encoded String to a byte array.
+     * 
+     * @param hexString hex string to convert
+     * @return byte array of given hex string
      */
     public static byte[] hexStringToByteArray(String hexString) {
     	int length = hexString.length();
@@ -1259,8 +1263,10 @@ public class ERXStringUtilities {
     }
     
     /**
-     * Converts ThisIsATest to this_is_a_test
-     * @param camelString the StringWithCaps
+     * Converts a string in camel case to an underscore representation.
+     * 
+     * @param camelString string to convert
+     * @param lowercase if all uppercase characters should be converted to lowercase
      * @return the string_with_underscores
      */
     public static String camelCaseToUnderscore(String camelString, boolean lowercase) {
@@ -1545,8 +1551,9 @@ public class ERXStringUtilities {
      }
 
   
-      /** Returns a String by invoking toString() on each object from the array. After each toString() call
-       * the separator is appended to the buffer
+      /**
+       * Returns a String by invoking toString() on each object from the array. After each toString() call
+       * the separator is appended to the buffer.
        * 
        * @param array an object array from which to get a nice String representation
        * @param separator a separator which is displayed between the objects toString() value
@@ -1564,7 +1571,10 @@ public class ERXStringUtilities {
       }
 
     /**
-     * creates a readable debug string for some data types (dicts, arrays, adaptorOperations, databaseOperations)
+     * Creates a readable debug string for some data types (dicts, arrays, adaptorOperations, databaseOperations).
+     * 
+     * @param object the object to dump
+     * @return string representation of the given object
      */
     public static String dumpObject(Object object) {
 		StringBuffer sb = new StringBuffer(4000);
@@ -1572,7 +1582,8 @@ public class ERXStringUtilities {
 		return sb.toString();
 	}
 
-	/** Checks if any of the characters specified in characters is contained in the string
+	/**
+	 * Checks if any of the characters specified in characters is contained in the string
 	 * specified by source.
 	 * 
 	 * @param source the String which might contain characters
@@ -1589,7 +1600,8 @@ public class ERXStringUtilities {
 		return false;
 	}
 
-	/** removes any character which is not in characters from the source string
+	/**
+	 * Removes any character which is not in characters from the source string.
 	 * 
 	 * @param source the string which will be modified
 	 * @param characters the characters that are allowed to be in source
@@ -1607,7 +1619,8 @@ public class ERXStringUtilities {
 		return buf.toString();
 	}
 	
-	/** removes any character which is in characters from the source string
+	/**
+	 * Removes any character which is in characters from the source string.
 	 * 
 	 * @param source the string which will be modified
 	 * @param characters the characters that are not allowed to be in source

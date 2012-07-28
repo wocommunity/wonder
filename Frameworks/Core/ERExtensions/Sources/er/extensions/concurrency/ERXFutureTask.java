@@ -8,19 +8,17 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import er.extensions.foundation.ERXStatusInterface;
 
 /**
- * A FutureTask that implements @link {@link ERXStatusInterface} and @link
- * {@link ERXTaskPercentComplete} and @link {@link NSKeyValueCoding}. Additional
- * methods are provided in this FutureTask for checking if those interfaces are
- * implemented in the wrapped task and if so the values are
- * passed thru from the task.
+ * A FutureTask that implements {@link ERXStatusInterface} and {@link ERXTaskPercentComplete}
+ * and {@link NSKeyValueCoding}. Additional methods are provided in this FutureTask for checking
+ * if those interfaces are implemented in the wrapped task and if so the values are passed thru
+ * from the task.
  * 
  * Usage: 
- * <pre>
-			// If null, then submit the callable task
-			ERXFutureTask _future = new ERXFutureTask(callable);
-
-			ERXExecutorService.executorService().execute(_future);
-	</pre>
+ * <blockquote><pre>
+   // If null, then submit the callable task
+   ERXFutureTask _future = new ERXFutureTask(callable);
+   ERXExecutorService.executorService().execute(_future);
+   </pre></blockquote>
  * 
  * @author kieran
  * 
@@ -118,5 +116,4 @@ public class ERXFutureTask<V> extends FutureTask<V> implements ERXExecutionState
 	public String toString() {
 		return _task == null ? super.toString() : _task.toString();
 	}
-
 }

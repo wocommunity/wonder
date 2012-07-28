@@ -153,7 +153,7 @@ public class ERCNNotificationCoordinator {
     /**
      * releases JMS resouces, including closing the connection. 
      * <p>
-     * This method is supposed to be called by the applicaiton's 
+     * This method is supposed to be called by the application's 
      * terminate method. 
      */ 
      // ENHANCEME: Should remove observers as well. 

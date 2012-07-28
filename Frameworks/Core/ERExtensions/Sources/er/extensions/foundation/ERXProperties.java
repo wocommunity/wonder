@@ -58,9 +58,6 @@ import er.extensions.net.ERXTcpIp;
  * <li>in the eclipse launcher or on the command-line</li>
  * </ul>
  * 
- * TODO - If this would fallback to calling the System getProperty, we
- * could ask that Project Wonder frameworks only use this class.
- * 
  * @property er.extensions.ERXProperties.RetainDefaultsEnabled
  * </span>
  * 
@@ -71,6 +68,15 @@ import er.extensions.net.ERXTcpIp;
  * 
  * @property er.extensions.ERXProperties.RetainDefaultsEnabled
  * </span>
+ * 
+ * @property NSProperties.useLoadtimeAppSpecifics Default is true.
+ * 
+ * TODO - Neither of these property names are standard. Should be camel-case and proper prefix.
+ * 
+ * TODO - What character sets can you use in property names? Only ISO-8859-1? UTF-8?
+ * 
+ * TODO - If this would fallback to calling the System getProperty, we could ask that Project Wonder frameworks only use this class.
+ * 
  */
 public class ERXProperties extends Properties implements NSKeyValueCoding {
 	/**
@@ -85,6 +91,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     
     private static Boolean RetainDefaultsEnabled;
     private static String UndefinedMarker = "-undefined-";
+
     /** logging support */
     public final static Logger log = Logger.getLogger(ERXProperties.class);
     private static final Map AppSpecificPropertyNames = new HashMap(128);
@@ -117,7 +124,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * <p>
      * The new behavior will analyze all properties after being loaded from their source, and create
      * (or update) generic properties for each application specific one. So, if we are MyApp,
-     * foo.bar.MyApp=4 will originate a new property foo.bar=4 (or, is foo.bar already exists,
+     * foo.bar.MyApp=4 will originate a new property foo.bar=4 (or, if foo.bar already exists,
      * update its value to 4). foo.bar.MyApp is also kept, because we cannot be sure foo.bar.MyApp
      * is an app specific property or a regular property with an ambiguous name.
      * </p>
@@ -128,6 +135,16 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * </p> 
      */
     public static final boolean _useLoadtimeAppSpecifics;
+
+    /**
+     * Set in flattenPropertyNames().
+     *
+     * The flattenPropertyNames() method is called from ERXSystem.updateProperties(), 
+     *     which is called from ERXConfigurationManager.loadConfiguration(),
+     *         which is called from ERXExtensions.finishInitialization(),
+     *             which is registered to be called at ApplicationDidFinishLaunching-time by ERXApplication.
+     */
+    private String _appNameSuffix;
 
     static {
        _useLoadtimeAppSpecifics = ERXValueUtilities.booleanValueWithDefault(System.getProperty("NSProperties.useLoadtimeAppSpecifics"), true);
@@ -2753,6 +2770,9 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 	 * 
 	 * @param properties Properties to update
 	 */
+// xxxxxxxxxxxxxxxxxxx
+// This is more complex than it needs to be. Can just use endsWith....
+//
 	public static void flattenPropertyNames(Properties properties) {
 	    if (_useLoadtimeAppSpecifics == false) {
 	        return;

@@ -10,11 +10,29 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WEditString;
 
 /**
+ * <span class="en">
  * Allows specifing the maxLength for a WOTextField.<br />
- * @d2wKey maxLength
+ * 
  * @d2wKey id
  * @d2wKey title
  * @d2wKey name
+ * @d2wKey maxLength
+ * @d2wKey length
+ * 
+ * @d2wKey readOnly
+ * </span>
+ * 
+ * <span class="ja">
+ * このプロパティ・レベル・コンポーネントは編集可能文字列を表示します。
+ * 
+ * @d2wKey id - id タグ
+ * @d2wKey title - title タグ
+ * @d2wKey name - name タグ
+ * @d2wKey maxLength - maxLength タグ
+ * @d2wKey length - 入力枠のサイズ
+ * 
+ * @d2wKey readOnly - 編集禁止
+ * </span>
  */
 public class ERD2WEditString extends D2WEditString {
 	/**

@@ -5,6 +5,8 @@ import org.apache.log4j.Logger;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.woextensions.WORadioButtonMatrix;
 
+import er.extensions.foundation.ERXStringUtilities;
+
 @SuppressWarnings("serial")
 public class ERQMRadioList extends WORadioButtonMatrix {
 
@@ -39,4 +41,18 @@ public class ERQMRadioList extends WORadioButtonMatrix {
     return wrapperElementID + String.valueOf(index);
   }
 
+  public String otherTagString() {
+    String s = super.isCurrentItemSelected();
+
+    if(valueForBooleanBinding("disabled", false)) {
+      if(!ERXStringUtilities.stringIsNullOrEmpty(s)) {
+        s += " ";
+      } else {
+        s = "";
+      }
+      s += "disabled";
+    }
+
+    return s;
+  }
 }
