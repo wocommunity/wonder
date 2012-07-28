@@ -534,7 +534,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 											String bundleName = classpathFolder.getName();
 
 											File buildPropertiesFile = new File(classpathFolder, "build.properties");
-											if (false && buildPropertiesFile.exists()) {
+											if (buildPropertiesFile.exists()) {
 												Properties buildProperties = new Properties();
 												buildProperties.load(new FileReader(buildPropertiesFile));
 												if (buildProperties.get("project.name") != null) {
@@ -1156,7 +1156,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		if (_loader == null) {
 			System.out.println("No loader: " + System.getProperty("java.class.path"));
 		} else if (!_loader.didLoad()) {
-			throw new RuntimeException("ERXExtensions have not been initialized. Debugging information can be enabled by adding the JVM argument: '-DERXApplication.Loader=DEBUG'. Please report the classpath and the rest of the bundles to the Wonder mailing list: " + "\nRemaining frameworks: " + (_loader == null ? "none" : _loader.allFrameworks) + "\nClasspath: " + System.getProperty("java.class.path"));
+			throw new RuntimeException("ERXExtensions have not been initialized. Debugging information can be enabled by adding the JVM argument: '-Der.extensions.appserver.projectBundleLoading=DEBUG'. Please report the classpath and the rest of the bundles to the Wonder mailing list: " + "\nRemaining frameworks: " + (_loader == null ? "none" : _loader.allFrameworks) + "\nClasspath: " + System.getProperty("java.class.path"));
 		}
 		if ("JavaFoundation".equals(NSBundle.mainBundle().name())) {
 			throw new RuntimeException("Your main bundle is \"JavaFoundation\".  You are not launching this WO application properly.  If you are using Eclipse, most likely you launched your WOA as a \"Java Application\" instead of a \"WO Application\".");
