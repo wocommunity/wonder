@@ -103,7 +103,7 @@
 	"like" = "同様は";
 	"starts with" = "開始文字は";
 	"ERD2WQueryUnavailable.CanNotBeUsed" = "- このアトリビュートは検索できません -";
-	"ERD2WHint.Hint" = "アトリビュート・インフォメーション";
+	"Hint.SampleText" = "アトリビュート・インフォメーション";
 	"ERD2WDebugFlags.LOG4J" = "ログ";
 	"ERD2WDebugFlags.D2W" = "D2W 詳細";
 	"ERD2WDebugFlags.CSS" = "CSS 表示";

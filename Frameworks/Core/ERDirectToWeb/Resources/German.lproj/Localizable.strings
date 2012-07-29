@@ -109,7 +109,7 @@
 	"is" = "ist";
 	"like" = "enth\U00e4lt";
 	"starts with" = "beginnt mit";
-	"ERD2WHint.Hint" = "Attribute Information";
+	"Hint.SampleText" = "Attribute Information";
 	"ERD2WDebugFlags.LOG4J" = "Log4J";
 	"ERD2WDebugFlags.D2W" = "D2W";
 	"ERD2WDebugFlags.CSS" = "CSS";

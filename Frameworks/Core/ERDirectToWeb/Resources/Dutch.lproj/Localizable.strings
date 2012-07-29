@@ -114,7 +114,7 @@
 	"is" = "is";
 	"like" = "bevat";
 	"starts with" = "begint met";
-	"ERD2WHint.Hint" = "Attribute Information";
+	"Hint.SampleText" = "Attribute Information";
 	"ERD2WDebugFlags.LOG4J" = "Log4J";
 	"ERD2WDebugFlags.D2W" = "D2W";
 	"ERD2WDebugFlags.CSS" = "CSS";
