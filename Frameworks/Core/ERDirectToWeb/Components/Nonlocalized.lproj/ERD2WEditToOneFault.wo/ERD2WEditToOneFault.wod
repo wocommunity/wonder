@@ -14,3 +14,7 @@ EditObject: WOHyperlink {
 	string = toOneDescription;
 	target = target;
 }
+
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

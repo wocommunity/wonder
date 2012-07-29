@@ -13,3 +13,6 @@ Hyperlink:WOHyperlink {
 	disabled = 1;
 }
 
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

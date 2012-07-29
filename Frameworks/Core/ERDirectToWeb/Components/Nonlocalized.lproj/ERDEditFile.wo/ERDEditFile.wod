@@ -38,3 +38,8 @@ Upload: WOFileUpload {
 hasNoSetting: WOConditional {
 	condition = objectKeyPathValue;
 }
+
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}
+

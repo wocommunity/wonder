@@ -14,3 +14,7 @@ WOTable: ERXTable {
 	showIndex = d2wContext.showIndex;
         goingVertically = d2wContext.goingVertically;
 }
+
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

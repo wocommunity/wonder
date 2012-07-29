@@ -2,3 +2,6 @@ String1: WOString {
 	value = displayConstant;
 }
 
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

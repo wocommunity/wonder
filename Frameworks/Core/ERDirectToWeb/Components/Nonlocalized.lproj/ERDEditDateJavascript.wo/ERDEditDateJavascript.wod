@@ -3,4 +3,6 @@ EditDateJavascript: ERXEditDateJavascript {
 	dateformat = formatter;
 }
 
-
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

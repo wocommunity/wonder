@@ -24,3 +24,7 @@ Icon: WOSwitchComponent {
 	attachment = objectPropertyValue;
 	size = d2wContext.size;
 }
+
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

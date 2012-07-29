@@ -10,3 +10,6 @@ PopUpButton2: WOPopUpButton {
 	selection = numberOfMonths;
 }
 
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

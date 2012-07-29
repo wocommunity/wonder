@@ -4,3 +4,6 @@ listing: ERXListDisplay {
 	nullArrayDisplay = ^emptyArrayDisplayString;
 }
 
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

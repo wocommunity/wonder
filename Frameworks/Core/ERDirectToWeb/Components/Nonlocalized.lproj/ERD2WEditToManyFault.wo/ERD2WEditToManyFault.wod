@@ -22,3 +22,8 @@ Values: WOBrowser {
 	size = d2wContext.size;
 	displayString = browserStringForItem;
 }
+
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}
+

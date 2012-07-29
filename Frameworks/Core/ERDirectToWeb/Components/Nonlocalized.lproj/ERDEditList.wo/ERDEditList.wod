@@ -36,3 +36,7 @@ SubmitButton2: WOSubmitButton {
 Wrapper: WOSwitchComponent {
 	WOComponentName = ^pageWrapper;
 }
+
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

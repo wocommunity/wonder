@@ -3,3 +3,7 @@ Selector: ERXBooleanSelector {
 	yesString = "Allow";
 	noString = "Restrict";
 }
+
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

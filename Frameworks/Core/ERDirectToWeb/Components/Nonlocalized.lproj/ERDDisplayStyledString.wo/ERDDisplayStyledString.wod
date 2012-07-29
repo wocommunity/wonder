@@ -30,3 +30,7 @@ String: WOString {
 	formatter = formatter;
 }
 
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}
+

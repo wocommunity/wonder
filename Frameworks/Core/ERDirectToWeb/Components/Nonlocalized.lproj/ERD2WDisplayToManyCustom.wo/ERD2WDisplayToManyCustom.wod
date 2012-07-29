@@ -12,3 +12,6 @@ WOTable: WOTable {
 	maxColumns = d2wContext.numCols;
 }
 
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

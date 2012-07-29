@@ -1,3 +1,7 @@
 Display: WOString {
 	value = displayString;
 }
+
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

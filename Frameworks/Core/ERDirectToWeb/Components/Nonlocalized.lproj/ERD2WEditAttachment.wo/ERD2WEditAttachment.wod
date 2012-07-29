@@ -40,3 +40,8 @@ DeleteButton: WOSubmitButton {
 	title = "Delete";
 	value = "Remove";
 }
+
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}
+

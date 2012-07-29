@@ -20,3 +20,6 @@ String3: WOString {
 	value = d2wContext.nullValueDisplay;
 }
 
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

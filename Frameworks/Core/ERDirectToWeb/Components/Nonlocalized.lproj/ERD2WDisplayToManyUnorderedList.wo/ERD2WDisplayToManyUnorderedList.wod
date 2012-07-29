@@ -17,3 +17,7 @@ HasNoItems: WOConditional {
 	condition = hasItems;
 	negate = true;
 }
+
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

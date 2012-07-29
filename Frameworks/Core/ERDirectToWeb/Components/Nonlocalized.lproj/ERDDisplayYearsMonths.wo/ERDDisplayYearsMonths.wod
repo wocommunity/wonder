@@ -15,3 +15,7 @@ PluralYears: ERXPluralString {
 	count = numberOfYears;
 	value = "year";
 }
+
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

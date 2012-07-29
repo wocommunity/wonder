@@ -30,3 +30,7 @@ RadioButton5: WORadioButton {
 	selection = value;
 }
 
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}
+

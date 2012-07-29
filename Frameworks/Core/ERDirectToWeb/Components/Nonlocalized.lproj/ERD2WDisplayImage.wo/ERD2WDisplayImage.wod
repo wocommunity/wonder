@@ -3,16 +3,23 @@ Image1: WOImage {
 	width=d2wContext.imageWidth; 
     height=d2wContext.imageHeight;
 }
+
 Image2: WOImage {
 	data = objectPropertyValue;
 	mimeType = d2wContext.imageMimeType;
 	width=d2wContext.imageWidth; 
     height=d2wContext.imageHeight;
 }
+
 IsData : WOConditional {
 	condition = isData;
 }
+
 IsNoData : WOConditional {
 	condition = isData;
 	negate = true;
+}
+
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
 }

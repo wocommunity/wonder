@@ -22,3 +22,6 @@ String9: WOString {
 	value = location.zip; // VALID
 }
 
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

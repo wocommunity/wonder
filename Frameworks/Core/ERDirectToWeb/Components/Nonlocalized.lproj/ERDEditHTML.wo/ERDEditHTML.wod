@@ -10,3 +10,7 @@ InitScript : ERXJavaScript {}
 InitScriptString : WOString {
 	value = initScript;
 }
+
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

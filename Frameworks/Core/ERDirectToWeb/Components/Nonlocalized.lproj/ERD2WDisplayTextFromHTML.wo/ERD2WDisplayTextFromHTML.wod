@@ -3,4 +3,6 @@ String1: WOString {
 	value = textString;
 }
 
-
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

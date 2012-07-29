@@ -1,3 +1,7 @@
 EditDateJavascript: ERXEditDateJavascript {
 	dateString = dateString;
 }
+
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

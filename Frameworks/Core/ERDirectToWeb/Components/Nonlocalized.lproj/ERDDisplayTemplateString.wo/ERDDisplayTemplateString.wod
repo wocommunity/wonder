@@ -4,3 +4,7 @@ String : ERXLocalizedString {
 	escapeHTML = ^escapeHTML;
 	valueWhenEmpty = ^valueWhenEmpty;
 }
+
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

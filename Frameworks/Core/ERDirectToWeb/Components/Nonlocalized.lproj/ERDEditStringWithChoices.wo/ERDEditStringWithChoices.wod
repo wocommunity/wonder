@@ -7,3 +7,6 @@ PopUpButton1: WOPopUpButton {
 	noSelectionString = session.localizer.ERDEditStringWithChoices.noSelectionString;
 }
 
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

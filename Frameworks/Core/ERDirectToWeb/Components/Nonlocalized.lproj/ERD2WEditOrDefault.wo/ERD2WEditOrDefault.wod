@@ -20,3 +20,6 @@ SwitchComponent1: WOSwitchComponent {
 	object = object;
 }
 
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

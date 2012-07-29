@@ -18,3 +18,6 @@ Values: WOBrowser {
 	displayString = browserStringForItem;
 }
 
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

@@ -21,3 +21,6 @@ String3: WOString {
 	value = displayValueForNull;
 }
 
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}
