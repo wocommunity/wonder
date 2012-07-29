@@ -97,14 +97,8 @@ public class ERXJSValidationErrors extends ERXStatelessComponent {
         } catch (NSValidation.ValidationException ex1) {
             _errors = ex1.getMessage();
         } finally {        
-            if(eo != null && eo.editingContext() != null)
+            if (eo != null && eo.editingContext() != null) {
                 eo.editingContext().unlock();
-            if(page != null) {
-                // we cheat here because calling sleep() is not enough...
-            	// Michael Bushkov: WO5.4.3 tracks all awakened components so no need to call this manually
-            	if (!ERXApplication.isWO54()) {
-            		page._sleepInContext(page.context());
-            	}
             }
         }
     }
