@@ -214,4 +214,27 @@ public abstract class ERXFrameworkPrincipal {
     public String toString() {
       return ERXStringUtilities.lastPropertyKeyInKeyPath(getClass().getName());
     }
+    
+  /**
+   * <span class="ja">
+   * 指定フレームワークがインストールされているかどうかを確認します。
+   * 
+   * @return ある場合には true が戻ります。
+   * </span>
+   */
+  public static boolean hasFrameworkInstalled(String frameworkName) {
+    if(ERXStringUtilities.stringIsNullOrEmpty(frameworkName)) {
+      return false;
+    }
+
+    for (ERXFrameworkPrincipal frameworkPrincipal : ERXFrameworkPrincipal.launchingFrameworks) {
+      String s = frameworkPrincipal.toString();
+      if(frameworkName.equalsIgnoreCase(s)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
 }
