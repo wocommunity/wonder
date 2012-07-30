@@ -1173,7 +1173,7 @@
             <param name="project.principal.class" value="com.webobjects.monitor.wotaskd.Application" />
             <param name="project.name" value="wotaskd" />
             <param name="project.dir" value="Applications/wotaskd" />
-      		<param name="wo.external.root.bundles" value="ERJars/ERExtensions/JavaWOExtensions/JavaMonitorFramework" />
+      		<param name="wo.external.root.bundles" value="ERJars/ERExtensions/JavaWOExtensions/JavaMonitorFramework/ERRest" />
       		<param name="wo.external.root.bundles.embed" value="${wonder.deployment.embed.jars}" />
       		<param name="wo.system.root.bundles.embed" value="${wonder.deployment.embed.jars}" />
       		<param name="after.build" value="wotaskd.post.build" />
