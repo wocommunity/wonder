@@ -16,6 +16,7 @@
 		<module>ERDivaLook</module>
 		<module>ERIUI</module>
 		<module>ERJQuery</module>
+		<module>ERJQueryMobile</module>
 		<module>ERPrototaculous</module>
 		<module>GoogleChart</module>
 		<module>YUI</module>
