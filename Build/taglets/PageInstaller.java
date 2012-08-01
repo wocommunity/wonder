@@ -11,23 +11,20 @@ import java.util.Iterator;
 import java.util.Properties;
 
 public class PageInstaller {
-
     static void addLinkToNavBar(String targetFilename, String htmlFilename, String linkName) {
-
         File file = new File(targetFilename);
-
         FileReader fRdr = null;
 
         try {
             fRdr = new FileReader(file);
-        } catch (java.io.FileNotFoundException fnfe) { System.err.println("ERROR: could not open file for reading: "+file); System.exit(1); }
+        } catch (java.io.FileNotFoundException fnfe) {
+            System.err.println("ERROR: could not open file for reading: " + file);
+            System.exit(1);
+        }
 
         LineNumberReader rdr = new LineNumberReader(fRdr);
-
         String line = "";
-
         ArrayList<String> output = new ArrayList<String>();
-
         boolean needsUpdate = false;
 
         while (line != null) {

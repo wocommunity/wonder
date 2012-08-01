@@ -3,13 +3,13 @@ import com.sun.javadoc.*;
 import java.util.Map;
 
 /**
- * Abstract Taglet class for our binding and D2W keys
+ * Abstract Taglet class for our binding and D2W keys.
+ *
  * @author ak
  */
-
 public abstract class AbstractTaglet implements Taglet {
-    
-    public abstract String getName();    
+    public abstract String getName();  
+  
     public abstract String getHeader();    
 
     public boolean inField() {
@@ -43,7 +43,10 @@ public abstract class AbstractTaglet implements Taglet {
     /**
      * Given the <code>Tag</code> representation of this custom
      * tag, return its string representation.
-     * @param tag   the <code>Tag</code> representation of this custom tag.
+     * 
+     * @param tag
+     *            the <code>Tag</code> representation of this custom tag
+     * @return string representation of the <code>Tag</code>
      */
     public String toString(Tag tag) {
         return toString(new Tag[] {tag});
@@ -51,9 +54,9 @@ public abstract class AbstractTaglet implements Taglet {
     
     private String bindingName(Tag tag) {
         String result = tag.text();
-        if(result != null) {
+        if (result != null) {
             int space = result.indexOf(" ");
-            if(space >= 0) {
+            if (space >= 0) {
                 result = result.substring(0, space);
             }
         }
@@ -62,9 +65,9 @@ public abstract class AbstractTaglet implements Taglet {
     
     private String bindingDescription(Tag tag) {
         String result = tag.text();
-        if(result != null) {
+        if (result != null) {
             int space = result.indexOf(" ");
-            if(space >= 0) {
+            if (space >= 0) {
                 result = result.substring(space);
             }
         }
@@ -74,7 +77,10 @@ public abstract class AbstractTaglet implements Taglet {
     /**
      * Given an array of <code>Tag</code>s representing this custom
      * tag, return its string representation.
-     * @param tags  the array of <code>Tag</code>s representing of this custom tag.
+     * 
+     * @param tags
+     *            the array of <code>Tag</code>s representing of this custom tag
+     * @return string representation of the <code>Tag</code>s
      */
     public String toString(Tag[] tags) {
         if (tags.length == 0) {
@@ -102,4 +108,3 @@ public abstract class AbstractTaglet implements Taglet {
         return sb.toString();
     }
 }
-

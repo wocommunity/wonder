@@ -1,4 +1,3 @@
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
@@ -37,23 +36,24 @@ import org.jdom.input.SAXBuilder;
  * @author kiddyr
  */
 public class ComponentDoclet extends com.sun.javadoc.Doclet {
+    private static ArrayList<String> srcDirs;
+    private static ArrayList<String> compDirs;
 
-    static ArrayList<String> srcDirs;
-    static ArrayList<String> compDirs;
+    private static HashMap<String,HashMap<String,Object>> comps;
 
-    static HashMap<String,HashMap<String,Object>> comps;
-
-    static String[] prefixes = new String[] { "Selenium", "ERDAjax", "PayPal", "ERD2W", "ERDIV", "ERIUI", "ERNEU",
+    private static String[] prefixes = new String[] { "Selenium", "ERDAjax", "PayPal", "ERD2W", "ERDIV", "ERIUI", "ERNEU",
                                               "ERPDF", "ERXJS", "Ajax", "SEEO", "UJAC", "D2W", "ERC", "ERD", "ERO", "ERP", "ERX",
                                               "GSV", "WOL", "YUI", "ER", "GC", "IM", "JS", "SC", "SE", "WO", "WR", "WX" };
 
     /**
      * Generate javadoc. This needs some explanations, comments and a bit of unwinding. It seems
      * over-complicated to me and I wrote it.
+     *
+     * @param root
+     * @return <code>true</code> on success
      */
     @SuppressWarnings("unchecked")
     public static boolean start(RootDoc root) {
-
         // test();
 
         ClassDoc[] classes = root.classes();
@@ -329,14 +329,14 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
             out.close();
 
         } catch (java.io.IOException ioe) {
-            System.err.println("Error writing to /tmp/foo.html"); System.exit(1);
+            System.err.println("Error writing to /tmp/foo.html");
+            System.exit(1);
         }
 
         return false;
     }
  
     static void gatherBindingsFromApi(HashMap<String,HashMap<String,Object>> comps) {
-
         // Gather the bindings for the component from the api file.
         //
         Iterator<String> keys = comps.keySet().iterator();
@@ -368,7 +368,6 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
     }
 
     static void test() {
-
 //        int result = 0;
 //
 //        ArrayList<String> tester = new ArrayList<String>();
@@ -541,7 +540,6 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
     }
 
     static int checkTest(String name, ArrayList<String> tester, Object expected, Object found) {
-
         if (name == null | name.length() == 0 || tester == null || expected == null || found == null) return 1;
 
         if (!found.equals(expected)) {
@@ -557,7 +555,6 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
     }
 
     static void writeHead(FileWriter out) {
-
        try {
             out.write("<html><head>\n");
             out.write("<meta name=\"ROBOTS\" content=\"NOINDEX\" />\n");
@@ -634,7 +631,6 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
     }
 
     static void writeTail(FileWriter out) {
-
         try {
             out.write("<!-- ======= START OF BOTTOM NAVBAR ====== -->\n");
             out.write("<A NAME=\"navbar_bottom\"><!-- --></A>\n");
@@ -695,7 +691,6 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
     }
 
     public static boolean validOptions(String[][] options, DocErrorReporter reporter) {
-
         srcDirs = new ArrayList<String>();
 
         // System.out.println("options:");

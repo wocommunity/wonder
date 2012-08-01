@@ -350,10 +350,12 @@ public class PageGenerator {
     /**
      * Take a list of comment strings, eg ("/**", "Something", "", " * @binding some", "\*\/"),
      * and return a dictionary of binding names to binding comment structures.
+     * 
+     * @param comps
+     * @param tag
      */
     @SuppressWarnings("unchecked")
-    static void findTagComments(HashMap<String,HashMap<String,Object>> comps, String tag) {
-
+    static void findTagComments(HashMap<String, HashMap<String, Object>> comps, String tag) {
         // System.out.println("start: comments = "+comments);
 
         Iterator<String> keys = comps.keySet().iterator();
