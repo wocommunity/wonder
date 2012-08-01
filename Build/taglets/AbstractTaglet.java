@@ -80,25 +80,26 @@ public abstract class AbstractTaglet implements Taglet {
         if (tags.length == 0) {
             return null;
         }
-        String result = "";
-        result += "<TABLE BORDER=\"1\" WIDTH=\"100%\" CELLPADDING=\"3\" CELLSPACING=\"0\" SUMMARY=\"\">";
-        result += "<TR BGCOLOR=\"#CCCCFF\" CLASS=\"TableHeadingColor\">";
-        result += "<TD COLSPAN=2><FONT SIZE=\"+2\">";
-        result += "<B>"+getHeader()+"</B></FONT></TD>";
-        result += "</TR>";
+        StringBuilder sb = new StringBuilder();
+        sb.append("<TABLE BORDER=\"1\" WIDTH=\"100%\" CELLPADDING=\"3\" CELLSPACING=\"0\" SUMMARY=\"\">");
+        sb.append("<TR BGCOLOR=\"#CCCCFF\" CLASS=\"TableHeadingColor\">");
+        sb.append("<TD COLSPAN=2><FONT SIZE=\"+2\">");
+        sb.append("<B>" + getHeader() + "</B></FONT></TD>");
+        sb.append("</TR>");
         for (int i = 0; i < tags.length; i++) {
-            result += "<TR BGCOLOR=\"white\" CLASS=\"TableRowColor\">";
-            result += "<TD ALIGN=\"right\" VALIGN=\"top\" WIDTH=\"1%\"><FONT SIZE=\"-1\">";
-            result += "<CODE>";
-            result += bindingName(tags[i]);
-            result += "</CODE></FONT></TD>";
-            result += "<TD>";
-            result += bindingDescription(tags[i]);
-            result += "<BR>";
-            result += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>";
-            result += "</TR>";
+            sb.append("<TR BGCOLOR=\"white\" CLASS=\"TableRowColor\">");
+            sb.append("<TD ALIGN=\"right\" VALIGN=\"top\" WIDTH=\"1%\"><FONT SIZE=\"-1\">");
+            sb.append("<CODE>");
+            sb.append(bindingName(tags[i]));
+            sb.append("</CODE></FONT></TD>");
+            sb.append("<TD>");
+            sb.append(bindingDescription(tags[i]));
+            sb.append("<BR>");
+            sb.append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>");
+            sb.append("</TR>");
         }
-        return result + "</TABLE>\n";
+        sb.append("</TABLE>\n");
+        return sb.toString();
     }
 }
 

@@ -39,11 +39,14 @@ public class PageInstaller {
                 output.add(line);
                 if (line.indexOf("CLASS=\"NavBarCell1\"") > 0 && line.indexOf("deprecated-list.html") > 0) {
                     needsUpdate = true;
-                    String str = "  <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\">    <A HREF=\"";
-                    str += dotsForPath(targetFilename);
-                    str += htmlFilename;
-                    str += "\"<FONT CLASS=\"NavBarFont1\"><B>"+linkName+"</B></FONT></A>&nbsp;</TD>";
-                    output.add(str);
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("  <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\">    <A HREF=\"");
+                    sb.append(dotsForPath(targetFilename));
+                    sb.append(htmlFilename);
+                    sb.append("\"<FONT CLASS=\"NavBarFont1\"><B>");
+                    sb.append(linkName);
+                    sb.append("</B></FONT></A>&nbsp;</TD>");
+                    output.add(sb.toString());
                 }
             }
         }
