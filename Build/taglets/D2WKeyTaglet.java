@@ -34,6 +34,7 @@ public class D2WKeyTaglet extends AbstractTaglet {
      * Register this Taglet.
      * @param tagletMap  the map to register this tag to.
      */
+    @SuppressWarnings("unchecked")
     public static void register(Map tagletMap) {
        D2WKeyTaglet tag = new D2WKeyTaglet();
        Taglet t = (Taglet) tagletMap.get(tag.getName());

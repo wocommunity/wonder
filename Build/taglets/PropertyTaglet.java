@@ -37,7 +37,8 @@ public class PropertyTaglet extends AbstractTaglet  {
      * Register this Taglet.
      * @param tagletMap the map to register this tag to.
      */
-    public static void register(Map<String,Taglet> tagletMap) {
+    @SuppressWarnings("unchecked")
+    public static void register(Map tagletMap) {
        PropertyTaglet tag = new PropertyTaglet();
        Taglet t = (Taglet) tagletMap.get(tag.getName());
        if (t != null) {
