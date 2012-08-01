@@ -9,7 +9,6 @@ import com.webobjects.eocontrol.EOQualifier;
  * SQL generation support for {@link ERXTrueQualifier}.
  * 
  * @author kieran
- * 
  */
 public class ERXTrueQualifierSupport extends EOQualifierSQLGeneration.Support {
 	public String sqlStringForSQLExpression(EOQualifier qualifier, EOSQLExpression expression) {

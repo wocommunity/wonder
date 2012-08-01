@@ -14,7 +14,6 @@ import com.webobjects.foundation.NSMutableSet;
  * An EOQualifier that always evaluates to a <code>true</code> result.
  * 
  * @author kieran
- * 
  */
 public class ERXTrueQualifier extends EOQualifier implements NSCoding, EOKeyValueArchiving {
 	/**
