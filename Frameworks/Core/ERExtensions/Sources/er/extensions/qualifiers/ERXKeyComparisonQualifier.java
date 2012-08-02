@@ -40,7 +40,7 @@ public class ERXKeyComparisonQualifier extends EOKeyComparisonQualifier implemen
 	}
 
 	public ERXNotQualifier not() {
-		return ERXChainedQualifierUtils.not(this);
+		return ERXQ.not(this);
 	}
 
 	public ERXOrQualifier or(EOQualifier... qualifiers) {

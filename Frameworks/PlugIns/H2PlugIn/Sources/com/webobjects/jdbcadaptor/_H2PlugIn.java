@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.sql.Blob;
+import java.sql.Clob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -26,10 +27,6 @@ import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation._NSStringUtilities;
-import com.webobjects.jdbcadaptor.JDBCAdaptor;
-import com.webobjects.jdbcadaptor.JDBCAdaptorException;
-import com.webobjects.jdbcadaptor.JDBCExpression;
-import com.webobjects.jdbcadaptor.JDBCPlugIn;
 
 public class _H2PlugIn extends JDBCPlugIn {
 	static final boolean USE_NAMED_CONSTRAINTS = true;
@@ -85,6 +82,19 @@ public class _H2PlugIn extends JDBCPlugIn {
 		return data;
 	}
 	
+	@Override
+	public Object fetchCLOB(ResultSet rs, int column, EOAttribute attribute, boolean materialize) throws SQLException {
+		Clob clob = rs.getClob(column);
+		if (clob == null) {
+			return null;
+		}
+		if (!materialize) {
+			return clob;
+		} else {
+			return clob.getSubString(1L, (int) clob.length());
+		}
+	}
+
 	public static class H2Expression extends JDBCExpression {
 
 		public H2Expression(final EOEntity entity) {

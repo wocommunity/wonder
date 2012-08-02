@@ -291,6 +291,7 @@ public class PageGenerator {
      * Because memory is a problem, we are going to remove the class comment
      * from the allComments array as we locate it. 
      */
+    @SuppressWarnings("unchecked")
     static String findClassComment(HashMap<String,Object> comp) {
     		//List<String> comments) {
 
@@ -349,9 +350,12 @@ public class PageGenerator {
     /**
      * Take a list of comment strings, eg ("/**", "Something", "", " * @binding some", "\*\/"),
      * and return a dictionary of binding names to binding comment structures.
+     * 
+     * @param comps
+     * @param tag
      */
-    static void findTagComments(HashMap<String,HashMap<String,Object>> comps, String tag) {
-
+    @SuppressWarnings("unchecked")
+    static void findTagComments(HashMap<String, HashMap<String, Object>> comps, String tag) {
         // System.out.println("start: comments = "+comments);
 
         Iterator<String> keys = comps.keySet().iterator();

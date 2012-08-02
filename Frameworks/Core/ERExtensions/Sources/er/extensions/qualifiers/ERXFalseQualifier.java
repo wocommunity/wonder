@@ -10,6 +10,9 @@ import com.webobjects.foundation.NSCoding;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableSet;
 
+/**
+ * An EOQualifier that always evaluates to a <code>false</code> result.
+ */
 public class ERXFalseQualifier extends EOQualifier implements NSCoding, EOKeyValueArchiving {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -56,5 +59,4 @@ public class ERXFalseQualifier extends EOQualifier implements NSCoding, EOKeyVal
 	public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver unarchiver) {
 		return new ERXFalseQualifier();
 	}
-	
 }
