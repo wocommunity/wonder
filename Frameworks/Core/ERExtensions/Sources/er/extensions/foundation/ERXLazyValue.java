@@ -84,7 +84,7 @@ public class ERXLazyValue<T> {
 	}
 
 	/**
-	 * Forecfully invalidates the lazy value, regardless of the state of the
+	 * Forcefully invalidates the lazy value, regardless of the state of the
 	 * invalidator.
 	 */
 	public synchronized void invalidate() {

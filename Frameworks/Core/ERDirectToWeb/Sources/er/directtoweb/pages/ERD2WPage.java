@@ -531,7 +531,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     public ValidationDelegate validationDelegate() {
     	if(!validationDelegateInited && _localContext != null && shouldCollectValidationExceptions()) {
     		// initialize validation delegate
-    		String delegateClassName = (String)d2wContext().valueForKey("validationDelegateClassName");
+    		String delegateClassName = (String)_localContext.valueForKey("validationDelegateClassName");
     		if(delegateClassName != null) {
 	    		try {
 	    			Class<? extends ValidationDelegate> delegateClass = 

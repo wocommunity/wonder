@@ -23,12 +23,15 @@ public abstract class ERXStatelessComponent extends ERXNonSynchronizingComponent
 	 */
 	private static final long serialVersionUID = 1L;
 
-    /** Public constructor */
     public ERXStatelessComponent(WOContext context) {
         super(context);
     }
 
-    /** component is stateless */
+    /**
+     * Component is stateless.
+     * 
+     * @return <code>true</code>
+     */
     @Override
     public boolean isStateless() { return true; }
 

@@ -14,7 +14,7 @@ import er.extensions.appserver.ERXWOContext;
  * 
  * In order to use this, the form elements(i.e WOTextField, etc) need to have their name attribute bound to concrete values.
  * The Prototype Ajax.Request form is parametized using these names. WOElements won't correctly take form values otherwise.
- * Also Prototype/WO integration requires the use of <button> rather than <input> WOSubmitButtons. 
+ * Also Prototype/WO integration requires the use of &lt;button&gt; rather than &lt;input&gt; WOSubmitButtons. 
  * So set:		
  * 			 er.extensions.foundation.ERXPatcher.DynamicElementsPatches.SubmitButton.useButtonTag=true
  *  

@@ -24,22 +24,24 @@ import er.extensions.qualifiers.ERXOrQualifier;
 import er.extensions.qualifiers.ERXTrueQualifier;
 
 /**
- * <p>
  * ERXQ provides lots of much shorter methods of constructing EOQualifiers than
  * the very verbose style that you normally have to use. For instance ...
- * </p>
  * 
- * <code>
- * EOQualifier qualifier = new ERXAndQualifier(new NSArray(new Object[] { new ERXKeyValueQualifier("name", EOQualifier.QualifierOperatorsEquals, "Mike"), new ERXKeyValueQualifier("admin", EOQualifier.QualifierOperatorsEquals, Boolean.TRUE) }));
- * </code>
+ * <blockquote><pre>
+   EOQualifier qualifier = new ERXAndQualifier(
+            new NSArray(new Object[] { 
+                   new ERXKeyValueQualifier("name", EOQualifier.QualifierOperatorsEquals, "Mike"), 
+                   new ERXKeyValueQualifier("admin", EOQualifier.QualifierOperatorsEquals,
+                   Boolean.TRUE) }));
+   </pre></blockquote>
  * 
  * <p>
  * ... becomes ...
  * </p>
  * 
- * <code>
- * EOQualifier qualifier = ERXQ.and(ERXQ.equals("name", "Mike"), ERXQ.isTrue("admin"));
- * </code>
+ * <blockquote><code>
+   EOQualifier qualifier = ERXQ.and(ERXQ.equals("name", "Mike"), ERXQ.isTrue("admin"));
+ * </code></blockquote>
  * 
  * @author mschrag
  */

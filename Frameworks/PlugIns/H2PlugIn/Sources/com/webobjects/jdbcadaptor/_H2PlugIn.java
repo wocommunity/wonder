@@ -1,4 +1,4 @@
-package er.h2.jdbcadaptor;
+package com.webobjects.jdbcadaptor;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -31,8 +31,7 @@ import com.webobjects.jdbcadaptor.JDBCAdaptorException;
 import com.webobjects.jdbcadaptor.JDBCExpression;
 import com.webobjects.jdbcadaptor.JDBCPlugIn;
 
-public class ERH2PlugIn extends JDBCPlugIn {
-
+public class _H2PlugIn extends JDBCPlugIn {
 	static final boolean USE_NAMED_CONSTRAINTS = true;
 
 	protected static String quoteTableName(String name) {
@@ -441,7 +440,7 @@ public class ERH2PlugIn extends JDBCPlugIn {
 			if (allowsNull) {
 				statements = new NSArray(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " ALTER COLUMN " + formatColumnName(columnName) + " SET NULL"));
 			} else {
-				statements = new NSArray(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " ALTER COLUM " + formatColumnName(columnName) + " SET NOT NULL"));
+				statements = new NSArray(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " ALTER COLUMN " + formatColumnName(columnName) + " SET NOT NULL"));
 			}
 			return statements;
 		}
@@ -485,7 +484,7 @@ public class ERH2PlugIn extends JDBCPlugIn {
 	 */
 	private volatile boolean testedJdbcInfo;
 
-	public ERH2PlugIn(final JDBCAdaptor adaptor) {
+	public _H2PlugIn(final JDBCAdaptor adaptor) {
 		super(adaptor);
 	}
 
@@ -593,5 +592,4 @@ public class ERH2PlugIn extends JDBCPlugIn {
 		}
 		return shouldUseBundledJdbcInfo;
 	}
-
 }

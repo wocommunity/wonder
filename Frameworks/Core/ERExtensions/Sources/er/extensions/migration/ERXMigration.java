@@ -25,14 +25,13 @@ import er.extensions.jdbc.ERXJDBCUtilities;
  * migration naming conventions, inherit from this class and put your SQL in a properly 
  * named text file (or more than one file, if you use database specific migrations).</p>
  * 
- * <p>If you need database specific migrations use</p>
+ * <p>If you need database specific migrations use:
  * 
- * <p><code>er.extensions.migration.ERXMigration.useDatabaseSpecificMigrations=true</code></p>
+ * <blockquote><code>er.extensions.migration.ERXMigration.useDatabaseSpecificMigrations=true</code></blockquote>
  * 
- * <p>in your Properties. The default is not to use database specific migrations. A filename
- * for a database specific migration is then for example</p>
- * <p><code>ClassnameX_FrontBase_Upgrade.migration</code> or</p>
- * <p><code>ClassnameX_Postgresql_Upgrade.migration</code></p>
+ * in your Properties. The default is not to use database specific migrations. A filename
+ * for a database specific migration is then, for example, <code>ClassnameX_FrontBase_Upgrade.migration</code> or
+ * <code>ClassnameX_Postgresql_Upgrade.migration</code>.
  * 
  * <p>For the database specific part of the filename, the databaseProductName as from the JDBC
  * adaptor is used. So make sure, you're using the correct filename. The migration will throw
