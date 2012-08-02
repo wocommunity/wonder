@@ -458,9 +458,12 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
     removeObjectForKey("ERXActionLogging");
   }
 
-  /** override this method in order to provide a different name for the WorkerThread for this rr loop
-   * very useful for logging stuff: assign a log statement to a log entry. Something useful could be:
-   * <code>return session().sessionID() + valueForKeyPath("user.username");
+  /**
+   * Override this method in order to provide a different name for the WorkerThread for this
+   * request-response loop very useful for logging stuff: assign a log statement to a log entry.
+   * Something useful could be:
+   * 
+   * <blockquote><code>return session().sessionID() + valueForKeyPath("user.username");</code></blockquote>
    */
   public String threadName() {
     return Thread.currentThread().getName();

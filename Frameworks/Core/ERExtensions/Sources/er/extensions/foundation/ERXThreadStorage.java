@@ -3,7 +3,8 @@
  *
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
- * included with this distribution in the LICENSE.NPL file.  */
+ * included with this distribution in the LICENSE.NPL file.
+ */
 package er.extensions.foundation;
 
 import java.util.HashMap;
@@ -24,17 +25,16 @@ import er.extensions.appserver.ERXApplication;
 import er.extensions.concurrency.ERXCloneableThreadLocal;
 import er.extensions.eof.ERXEOControlUtilities;
 /**
- * <code>ERXThreadStorage</code> provides a way to store objects for
- * a particular thread. This can be especially handy for storing objects
- * like the current actor or the current form name within the scope of
- * a thread handling a particular request. <br />
- * The system property <code>er.extensions.ERXThreadStorage.useInheritableThreadLocal</code> 
- * defines if the thread storage can be either inherited by client threads (default)
- * or get used only by the current thread. 
+ * Provides a way to store objects for a particular thread. This can be especially handy for storing objects
+ * like the current actor or the current form name within the scope of a thread handling a particular request.
+ * <p>
+ * The system property <code>er.extensions.ERXThreadStorage.useInheritableThreadLocal</code> defines if the
+ * thread storage can be either inherited by client threads (default) or get used only by the current thread.
  * The usage of some types of objects inherited from the parent thread can cause problems.
+ * </p><p>
  * The system property <code>er.extensions.ERXThreadStorage.logUsageOfProblematicInheritedValues</code>
- * defines, if potential problems should be logged. This defaults to true when running in development mode
- * and to false when running a deployed app.
+ * defines, if potential problems should be logged. This defaults to <code>true</code> when running in development mode
+ * and to <code>false</code> when running a deployed application.
  */
 public class ERXThreadStorage {
 	private static final Logger log = Logger.getLogger(ERXThreadStorage.class);

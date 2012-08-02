@@ -102,7 +102,7 @@ ComponentContent3: ERXWOComponentContent {
  * So, the way this could work is to add functionality to WOComponentContent
  * which allows it to iterate through its elements and locate the named
  * templates. It also needs to be extended so that it takes the contents of its
- * refernce as a default if no named template is provided/found.
+ * reference as a default if no named template is provided/found.
  * 
  * <code><pre>
 &lt;webobject name=IfThenElse&gt;

@@ -10,6 +10,7 @@ import java.text.Format;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WDisplayNumber;
+import com.webobjects.foundation.NSDictionary;
 
 import er.extensions.formatters.ERXNumberFormatter;
 
@@ -36,4 +37,22 @@ public class ERD2WDisplayNumberWithUnit extends D2WDisplayNumber {
     public Format numberFormatter() {
         return ERXNumberFormatter.numberFormatterForPattern(formatter());
     }
+    
+    /**
+     * <span class="ja">
+     * null 時に表示する値
+     * 
+     * @return
+     * </span>
+     */
+    public String displayValueForNull() {
+      Object obj = d2wContext().valueForKey("displayValueForNull"); // (1) try Rule
+      if(obj == null) {
+        NSDictionary ui = d2wContext().attribute().userInfo();
+        if(ui != null) {
+          obj = ui.valueForKey("displayValueForNull"); // (2) try UserInfo
+        }
+      }
+      return (obj == null) ? null : String.valueOf(obj);     
+    }    
 }

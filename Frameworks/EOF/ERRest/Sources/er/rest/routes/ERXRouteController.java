@@ -1638,6 +1638,22 @@ public class ERXRouteController extends WODirectAction {
 				processedResults = response;
 			}
 		}
+		if (allowJSONP()) {
+			if (this.format().equals(ERXRestFormat.json())) {
+				String callbackMethodName = request().stringFormValueForKey("callback");
+				if (callbackMethodName != null) {
+					WOResponse response = results.generateResponse();
+					String content = response.contentString();
+					if (content != null) {
+						content = content.replaceAll("\n", "");
+						content = ERXStringUtilities.escapeJavascriptApostrophes(content);
+					}
+					response.setContent(callbackMethodName + "(" + content + ");");
+					response.setHeader("text/javascript", "Content-Type");
+					processedResults = response;				
+				}
+			}
+		}
 		return processedResults;
 	}
 	
@@ -1648,6 +1664,15 @@ public class ERXRouteController extends WODirectAction {
 	 */
 	protected boolean allowWindowNameCrossDomainTransport() {
 		return ERXProperties.booleanForKeyWithDefault("ERXRest.allowWindowNameCrossDomainTransport", false);
+	}
+	
+	/**
+	 * Returns whether or not JSONP (JSON with Padding) is allowed.
+	 * 
+	 * @return whether or not JSONP (JSON with Padding) is allowed
+	 */
+	protected boolean allowJSONP() {
+		return ERXProperties.booleanForKeyWithDefault("ERXRest.allowJSONP", false);
 	}
 	
 	/**

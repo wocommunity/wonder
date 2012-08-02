@@ -114,4 +114,5 @@
 	"is" = "is";
 	"like" = "is like";
 	"starts with" = "starts with";
+	"ERD2WQueryUnavailable.CanNotBeUsed" = "- cannot be used in a query -";
 }

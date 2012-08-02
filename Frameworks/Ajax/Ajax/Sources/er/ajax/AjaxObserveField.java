@@ -34,7 +34,7 @@ import er.extensions.appserver.ajax.ERXAjaxApplication;
  * </p>
  * 
  * <p>
- * If you leave of observeFieldID, AjaxObserveField must generate an HTML container, so
+ * If you omit the observeFieldID, AjaxObserveField must generate an HTML container, so
  * that it can find the form fields that correspond to this component from the client
  * side, so you will get an extra DOM element when used as a container.
  * </p>

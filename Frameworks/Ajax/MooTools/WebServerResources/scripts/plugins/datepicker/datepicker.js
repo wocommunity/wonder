@@ -460,6 +460,7 @@ var DatePicker = new Class({
 	},
 	
 	renderYear: function() {
+
 		var month = this.today.getMonth();
 		var thisyear = this.d.getFullYear() == this.today.getFullYear();
 		var selectedyear = this.d.getFullYear() == this.choice.year;

@@ -2,7 +2,7 @@ EditString: WOText {
 	cols = d2wContext.length;
 	rows = d2wContext.rows;
 	value = value;
-	disabled = d2wContext.disabled;
+	disabled = disabled;
 	id = d2wContext.id;
 	title = d2wContext.title;
 	name = d2wContext.name;

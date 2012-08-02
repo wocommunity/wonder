@@ -31,7 +31,7 @@ import er.extensions.foundation.ERXKeyValueCodingUtilities;
 /**
  * Dumps a workbook into the "HTML" needed to re-create it by the EGSimpleTableParser.
  * Uses the property list <code>Codes.plist</code> to re-create the needed class constant
- * dictionary, so the output uses <code>ALING_GENERAL</code> instead of <code>0</code>.
+ * dictionary, so the output uses <code>ALIGN_GENERAL</code> instead of <code>0</code>.
  * @author ak
  */
 public class EGSimpleTableCreator {

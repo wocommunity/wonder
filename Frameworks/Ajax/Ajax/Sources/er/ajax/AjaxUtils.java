@@ -264,13 +264,7 @@ public class AjaxUtils {
 	}
 
 	public static void appendScriptHeader(WOResponse response) {
-		boolean appendTypeAttribute = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXResponseRewriter.javascriptTypeAttribute", false);
-		if (appendTypeAttribute) {
-			response.appendContentString("<script type=\"text/javascript\">");
-		}
-		else {
-			response.appendContentString("<script>");
-		}
+		ERXResponseRewriter.appendScriptTagOpener(response);
 	}
 
 	public static void appendScriptFooterIfNecessary(WORequest request, WOResponse response) {
@@ -280,7 +274,7 @@ public class AjaxUtils {
 	}
 
 	public static void appendScriptFooter(WOResponse response) {
-		response.appendContentString("</script>");
+		ERXResponseRewriter.appendScriptTagCloser(response);
 	}
 
 	/**

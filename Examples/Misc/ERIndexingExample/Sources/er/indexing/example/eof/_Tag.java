@@ -1,4 +1,4 @@
-// $LastChangedRevision: 7683 $ DO NOT EDIT.  Make changes to Tag.java instead.
+// $LastChangedRevision$ DO NOT EDIT.  Make changes to Tag.java instead.
 package er.indexing.example.eof;
 
 import er.extensions.foundation.*;
