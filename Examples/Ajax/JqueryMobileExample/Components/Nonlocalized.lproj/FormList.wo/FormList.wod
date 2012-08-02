@@ -1,0 +1,5 @@
+SAVE_ACTION : ERQMSubmitButton {
+	action = doSaveAction;
+	value = "SUBMIT";
+	theme = "b";
+}

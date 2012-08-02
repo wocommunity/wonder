@@ -66,6 +66,12 @@ parent3(child2,child5)
  */
 
 public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERXJSPopUpRelationPicker(WOContext aContext) {
         super(aContext);
@@ -139,7 +145,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
     
     protected Object idForParent(Object parent) {
         if(parent != null) {
-            return new Integer(parentEntitiesList().indexOfObject(parent));
+            return Integer.valueOf(parentEntitiesList().indexOfObject(parent));
         }
         return null;
     }
@@ -586,7 +592,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
     }
     public int size() {
         if(_size == null) {
-            _size = new Integer(intValueForBinding("size", multiple() ? 5 : 1));
+            _size = Integer.valueOf(intValueForBinding("size", multiple() ? 5 : 1));
         }
         return _size.intValue();
     }

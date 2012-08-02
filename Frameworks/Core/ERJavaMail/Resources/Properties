@@ -1,3 +1,7 @@
+##  Properies Info
+er.extensions.load.Properties.framework.ERJavaMail=load
+er.extensions.ERJavaMail.hasLocalization=false
+
 # *** ERJavaMail settings
 # *** Defaults to 'safe' settings:
 # ***

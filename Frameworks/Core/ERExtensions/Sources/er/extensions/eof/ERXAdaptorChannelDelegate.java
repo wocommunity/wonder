@@ -83,7 +83,7 @@ public class ERXAdaptorChannelDelegate {
 	
 	private int numberOfStatementsToCollect () {
 		if (_numberOfStatementsToCollect == null) {
-			_numberOfStatementsToCollect = new Integer (ERXProperties.intForKeyWithDefault("er.extensions.ERXSQLExpressionTracker.numberOfStatementsToCollect", 10));
+			_numberOfStatementsToCollect = Integer.valueOf(ERXProperties.intForKeyWithDefault("er.extensions.ERXSQLExpressionTracker.numberOfStatementsToCollect", 10));
 		}
 		return _numberOfStatementsToCollect.intValue();
 	}

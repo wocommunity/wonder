@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERQMNavBarElement" wocomponentcontent="false">    <binding name="linkResource"/>
+    <binding defaults="Boolean" name="isSelected"/>
+    <binding name="string"/>
+    <binding defaults="Actions" name="action"/>
+    <binding name="icon"/>
+    </wo>
+</wodefinitions>

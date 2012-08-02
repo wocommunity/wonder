@@ -17,6 +17,9 @@ import er.rest.routes.ERXRouteRequestHandler;
 /**
  * EXPERIMENTAL.
  * 
+ * @property ERXRest.transactionsEnabled (default 'false')
+ * @property ERXRestTransaction.transactionManager (default '50')
+ * 
  * @author mschrag
  */
 public class ERXRestTransactionRequestAdaptor {

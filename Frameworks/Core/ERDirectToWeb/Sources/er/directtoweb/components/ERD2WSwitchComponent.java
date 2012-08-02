@@ -10,6 +10,7 @@ import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
+import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
@@ -23,6 +24,9 @@ import com.webobjects.directtoweb.ERD2WUtilities;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSMutableDictionary;
 
 // This works around the following bug: if you switch the pageConfiguration and refresh the page,
 // the context is not regenerated.  This is only used for nested configurations.
@@ -36,9 +40,17 @@ import com.webobjects.foundation.NSDictionary;
  */
 
 public class ERD2WSwitchComponent extends D2WSwitchComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** logging support */
     public static final Logger log = Logger.getLogger(ERD2WSwitchComponent.class);
+    
+    protected transient NSMutableDictionary<String, Object> extraBindings = new NSMutableDictionary<String, Object>(16);
 
     public ERD2WSwitchComponent(WOContext context) {
         super(context);
@@ -143,4 +155,50 @@ public class ERD2WSwitchComponent extends D2WSwitchComponent {
     public void validationFailedWithException(Throwable e, Object value, String keyPath) {
         parent().validationFailedWithException(e, value, keyPath);
     }
+    
+	public NSDictionary extraBindings() {
+		if(extraBindings == null) {
+			extraBindings = new NSMutableDictionary<String, Object>(16);
+		}
+		
+		extraBindings.removeAllObjects();
+		Enumeration e = possibleBindings.elements();
+		do {
+			if (!e.hasMoreElements())
+				break;
+			String key = (String) e.nextElement();
+			if (hasBinding(key)) {
+				Object value = valueForBinding(key);
+				if (value != null)
+					extraBindings.setObjectForKey(value, key);
+				else
+					extraBindings.setObjectForKey(NSKeyValueCoding.NullValue, key);
+			}
+		} while (true);
+		return extraBindings;
+	}
+
+	public void setExtraBindings(Object newValue) {
+		extraBindings = (NSMutableDictionary) newValue;
+		Enumeration e = possibleBindings.elements();
+		do {
+			if (!e.hasMoreElements())
+				break;
+			String key = (String) e.nextElement();
+			if (hasBinding(key) && associationWithName(key).isValueSettableInComponent(this))
+				setValueForBinding(extraBindings.objectForKey(key), key);
+		} while (true);
+	}
+
+	private WOAssociation associationWithName(String name) {
+		WOAssociation result = (WOAssociation) _keyAssociations.objectForKey(name);
+		if (result == null) {
+			NSLog.err.appendln((new StringBuilder()).append("DirectToWeb - association with name ").append(name)
+					.append(" not found on ").append(this).toString());
+			throw new IllegalArgumentException((new StringBuilder()).append("DirectToWeb - association with name ")
+					.append(name).append(" not found on ").append(this).toString());
+		} else {
+			return result;
+		}
+	}
 }

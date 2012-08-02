@@ -24,10 +24,16 @@ import er.extensions.foundation.ERXStringUtilities;
 //		keys passing in the current keyPath.
 /**
  * Beautify the entity name.<br />
- * @deprecated for entityName, use ERDDefaultsAssigment, for displayNameForEntity and displayNameForDestinationEntity use ERDDefaultDisplayNameAssigment
+ * @deprecated for entityName, use {@link ERDDefaultModelAssignment}, for displayNameForEntity and displayNameForDestinationEntity use {@link ERDDefaultDisplayNameAssignment}
  */
-
+@Deprecated
 public class ERDDefaultEntityNameAssignment extends ERDAssignment implements ERDLocalizableAssignmentInterface {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** logging support */
     public static final Logger log = Logger.getLogger(ERDDefaultEntityNameAssignment.class);
@@ -82,7 +88,7 @@ public class ERDDefaultEntityNameAssignment extends ERDAssignment implements ERD
     }
 
    // a fake entity that can be used for tasks such as error/confirm..
-    private EOEntity _dummyEntity;
+    private transient EOEntity _dummyEntity;
     public EOEntity dummyEntity() {
         if (_dummyEntity==null) {
             _dummyEntity=new EOEntity();

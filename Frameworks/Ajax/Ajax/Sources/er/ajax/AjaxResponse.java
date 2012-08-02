@@ -151,7 +151,7 @@ public class AjaxResponse extends ERXResponse {
 	
 	/**
 	 * Convenience method that calls <code>AjaxUtils.appendScriptHeaderIfNecessary</code> with this request. 
-	 * @see AjaxUtils#appendScriptHeaderIfNecessary
+	 * @see AjaxUtils#appendScriptHeaderIfNecessary(WORequest, WOResponse)
 	 */
 	public void appendScriptHeaderIfNecessary() {
 		AjaxUtils.appendScriptHeaderIfNecessary(_request, this);
@@ -159,7 +159,7 @@ public class AjaxResponse extends ERXResponse {
 	
 	/**
 	 * Convenience method that calls <code>AjaxUtils.appendScriptFooterIfNecessary</code> with this request. 
-	 * @see AjaxUtils#appendScriptFooterIfNecessary
+	 * @see AjaxUtils#appendScriptFooterIfNecessary(WORequest, WOResponse)
 	 */
 	public void appendScriptFooterIfNecessary() {
 		AjaxUtils.appendScriptFooterIfNecessary(_request, this);
@@ -167,7 +167,7 @@ public class AjaxResponse extends ERXResponse {
 	
 	/**
 	 * Convenience method that calls <code>AjaxUtils.updateDomElement</code> with this request. 
-	 * @see AjaxUtils#updateDomElement
+	 * @see AjaxUtils#updateDomElement(WOResponse, String, Object, String, String, String)
 	 */
 	public void updateDomElement(String id, Object value, String numberFormat, String dateFormat, String valueWhenEmpty) {
 		AjaxUtils.updateDomElement(this, id, value, numberFormat, dateFormat, valueWhenEmpty);

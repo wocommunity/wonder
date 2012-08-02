@@ -53,7 +53,7 @@ public class EROResponse implements NSKeyValueCoding.ErrorHandling {
    * Returns the OpenID FetchResponse that contains extended attributes from the request.
    * 
    * @return the OpenID FetchResponse
-   * @deprecated use messageExtensions instead
+   * @deprecated use {@link #messageExtensions()}
    */
   @Deprecated
   public FetchResponse fetchResponse() {

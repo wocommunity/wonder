@@ -10,10 +10,17 @@ package com.webobjects.woextensions;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
-/** @deprecated
+/** @Deprecated
     The WOAppleScript component is deprecated.
 */
+@Deprecated
 public class WOAppleScript extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     protected String _controller;
 
@@ -24,6 +31,7 @@ public class WOAppleScript extends WOComponent {
         _controller = Undefined; // this marks an undefined id
     }
 
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }

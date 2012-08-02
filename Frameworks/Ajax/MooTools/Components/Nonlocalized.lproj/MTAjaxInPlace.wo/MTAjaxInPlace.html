@@ -1,0 +1,46 @@
+<webobject name = "UpdateContainer">
+	<webobject name = "IsNotEditingConditional">
+		<webobject name = "IsChangingToViewConditional">
+			<webobject name = "ScriptContainer">
+				MTAIP.cleanupEdit('<webobject name = "ID" />');
+			</webobject>
+		</webobject>	
+		<webobject name = "EditFunction"></webobject>
+		<webobject name = "ManualViewControlConditional">
+			<webobject name = "ViewComponent"></webobject>
+		</webobject>
+		<webobject name = "NotManualViewControlConditional">
+			<webobject name = "EditAction"><webobject name = "ViewComponent" /></webobject>
+		</webobject>
+	</webobject>
+	<webobject name = "IsEditingConditional">
+		<webobject name = "EditForm">
+			<webobject name = "EditComponent" />
+			<webobject name = "IsChangingToEditConditional">
+				<webobject name = "ScriptContainer">
+					MTAIP.cleanupView('<webobject name = "ID"></webobject>');
+				</webobject>
+			</webobject>
+			<webobject name = "SubmitOnSaveConditional">
+				<webobject name = "SaveSubmitFunction"></webobject>
+			</webobject>
+			<webobject name = "LinkOnSaveConditional">
+				<webobject name = "SaveLinkFunction"></webobject>
+			</webobject>
+			<webobject name = "CancelFunction"></webobject>
+			<webobject name = "NotManualEditControlConditional">
+				<webobject name = "ButtonConditional">
+					<webobject name = "SaveButtonAction"></webobject>
+				</webobject>
+				<webobject name = "LinkConditional">
+					<webobject name = "SaveLinkAction">
+						<webobject name = "SaveLabel" />
+					</webobject>
+				</webobject>
+				<webobject name = "CancelAction">
+					<webobject name = "CancelLabel"/>
+				</webobject>
+			</webobject>
+		</webobject>
+	</webobject>	
+</webobject>

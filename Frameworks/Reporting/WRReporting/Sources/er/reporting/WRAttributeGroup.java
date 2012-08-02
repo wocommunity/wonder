@@ -83,7 +83,7 @@ public class WRAttributeGroup extends WOComponent  {
 
 
     public NSArray attributeListAtDepth() {
-        Number ky = new Integer(depth);
+        Number ky = Integer.valueOf(depth);
         return (NSArray)this.attributeListDict().objectForKey(ky);
     }
 

@@ -1,6 +1,9 @@
 package com.webobjects.foundation;
 
 import java.util.Collection;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 /**
@@ -17,9 +20,6 @@ import java.util.Set;
  * @param <E>
  *            type of set contents
  */
-
-//TODO iterator.remove() throws unimplemented
-
 public class NSMutableSet<E> extends NSSet<E> {
 	public NSMutableSet() {
 	}
@@ -198,6 +198,7 @@ public class NSMutableSet<E> extends NSSet<E> {
 
 	@SuppressWarnings({ "hiding", "unchecked" })
 	public static final Class _CLASS = _NSUtilities._classWithFullySpecifiedName("com.webobjects.foundation.NSMutableSet");
+	@SuppressWarnings("hiding")
 	static final long serialVersionUID = -6054074706096120227L;
 
 	@Override
@@ -264,5 +265,47 @@ public class NSMutableSet<E> extends NSSet<E> {
 	public void clear() {
 		removeAllObjects();
 	}
+	
+	@Override
+	public Iterator<E> iterator() {
+        return new Itr();
+    }
 
+	private class Itr implements Iterator<E> {
+        int cursor = 0;
+        static final int NotFound = -1;
+        int lastRet = NotFound;
+
+        protected Itr() { }
+        
+        public boolean hasNext() {
+            return cursor != size();
+        }
+
+        public E next() {
+            try {
+                Object next = objectsNoCopy()[cursor];
+                lastRet = cursor++;
+                return (E)next;
+            } catch (IndexOutOfBoundsException e) {
+                throw new NoSuchElementException();
+            }
+        }
+
+        public void remove() {
+            if (lastRet == NotFound) {
+                throw new IllegalStateException();
+            }
+
+            try {
+                removeObject(objectsNoCopy()[lastRet]);
+                if (lastRet < cursor) {
+                    cursor--;
+                }
+                lastRet = NotFound;
+            } catch (IndexOutOfBoundsException e) {
+                throw new ConcurrentModificationException();
+            }
+        }
+    }
 }

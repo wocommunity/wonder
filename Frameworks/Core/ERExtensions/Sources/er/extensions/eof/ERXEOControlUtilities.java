@@ -2506,7 +2506,7 @@ public class ERXEOControlUtilities {
 				String entityName = kgid.entityName();
 				Integer count = counts.objectForKey(entityName);
 				if(count == null) {
-					count = new Integer(0);
+					count = Integer.valueOf(0);
 					counts.setObjectForKey(count, entityName);
 				}
 				counts.setObjectForKey(count+1, entityName);

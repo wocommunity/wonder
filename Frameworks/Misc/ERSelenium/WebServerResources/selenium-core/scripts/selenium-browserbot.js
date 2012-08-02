@@ -37,6 +37,7 @@ var BrowserBot = function(topLevelApplicationWindow) {
     this.currentWindow = this.topWindow;
     this.currentWindowName = null;
     this.allowNativeXpath = true;
+    this.xpathLibrary = this.defaultXpathLibrary = 'ajaxslt' // change to "javascript-xpath" for the newer, faster engine
 
     // We need to know this in advance, in case the frame closes unexpectedly
     this.isSubFrameSelected = false;
@@ -176,6 +177,9 @@ BrowserBot.prototype.resetPopups = function() {
 
 BrowserBot.prototype.getNextAlert = function() {
     var t = this.recordedAlerts.shift();
+    if (t) { 
+        t = t.replace(/\n/g, " ");  // because Selenese loses \n's when retrieving text from HTML table
+    }
     this.relayBotToRC("browserbot.recordedAlerts");
     return t;
 };
@@ -202,7 +206,7 @@ BrowserBot.prototype.getNextPrompt = function() {
 
 /* Fire a mouse event in a browser-compatible manner */
 
-BrowserBot.prototype.triggerMouseEvent = function(element, eventType, canBubble, clientX, clientY) {
+BrowserBot.prototype.triggerMouseEvent = function(element, eventType, canBubble, clientX, clientY, button) {
     clientX = clientX ? clientX : 0;
     clientY = clientY ? clientY : 0;
 
@@ -211,10 +215,10 @@ BrowserBot.prototype.triggerMouseEvent = function(element, eventType, canBubble,
     var screenY = 0;
 
     canBubble = (typeof(canBubble) == undefined) ? true : canBubble;
-    if (element.fireEvent) {
+    if (element.fireEvent && element.ownerDocument && element.ownerDocument.createEventObject) { //IE
         var evt = createEventObject(element, this.controlKeyDown, this.altKeyDown, this.shiftKeyDown, this.metaKeyDown);
         evt.detail = 0;
-        evt.button = 1;
+        evt.button = button ? button : 1; // default will be the left mouse click ( http://www.javascriptkit.com/jsref/event.shtml )
         evt.relatedTarget = null;
         if (!screenX && !screenY && !clientX && !clientY && !this.controlKeyDown && !this.altKeyDown && !this.shiftKeyDown && !this.metaKeyDown) {
             element.fireEvent('on' + eventType);
@@ -247,9 +251,11 @@ BrowserBot.prototype.triggerMouseEvent = function(element, eventType, canBubble,
         var evt = document.createEvent('MouseEvents');
         if (evt.initMouseEvent)
         {
+            // see http://developer.mozilla.org/en/docs/DOM:event.button and
+            // http://developer.mozilla.org/en/docs/DOM:event.initMouseEvent for button ternary logic logic
             //Safari
             evt.initMouseEvent(eventType, canBubble, true, document.defaultView, 1, screenX, screenY, clientX, clientY,
-                this.controlKeyDown, this.altKeyDown, this.shiftKeyDown, this.metaKeyDown, 0, null);
+                this.controlKeyDown, this.altKeyDown, this.shiftKeyDown, this.metaKeyDown, button ? button : 0, null);
         }
         else {
             LOG.warn("element doesn't have initMouseEvent; firing an event which should -- but doesn't -- have other mouse-event related attributes here, as well as controlKeyDown, altKeyDown, shiftKeyDown, metaKeyDown");
@@ -259,7 +265,10 @@ BrowserBot.prototype.triggerMouseEvent = function(element, eventType, canBubble,
             evt.metaKey = this.metaKeyDown;
             evt.altKey = this.altKeyDown;
             evt.ctrlKey = this.controlKeyDown;
-
+            if(button)
+            {
+              evt.button = button;
+            }
         }
         element.dispatchEvent(evt);
     }
@@ -301,16 +310,36 @@ BrowserBot.prototype._modifyWindow = function(win) {
 };
 
 BrowserBot.prototype.selectWindow = function(target) {
-    // TODO implement a locator syntax here
-    if (target && target != "null") {
-        try {
-            this._selectWindowByName(target);
-        }
-        catch (e) {
-            this._selectWindowByTitle(target);
-        }
-    } else {
+    if (!target || target == "null") {
         this._selectTopWindow();
+        return;
+    }
+    var result = target.match(/^([a-zA-Z]+)=(.*)/);
+    if (!result) {
+        this._selectWindowByWindowId(target);
+        return;
+    }
+    locatorType = result[1];
+    locatorValue = result[2];
+    if (locatorType == "title") {
+        this._selectWindowByTitle(locatorValue);
+    }
+    // TODO separate name and var into separate functions
+    else if (locatorType == "name") {
+        this._selectWindowByName(locatorValue);
+    } else if (locatorType == "var") {
+        this._selectWindowByName(locatorValue);
+    } else {
+        throw new SeleniumError("Window locator not recognized: " + locatorType);
+    }
+};
+
+BrowserBot.prototype.selectPopUp = function(windowId) {
+    if (! windowId || windowId == 'null') {
+        this._selectFirstNonTopWindow();
+    }
+    else {
+        this._selectWindowByWindowId(windowId);
     }
 };
 
@@ -320,6 +349,15 @@ BrowserBot.prototype._selectTopWindow = function() {
     this.topFrame = this.topWindow;
     this.isSubFrameSelected = false;
 }
+
+BrowserBot.prototype._selectWindowByWindowId = function(windowId) {
+    try {
+        this._selectWindowByName(windowId);
+    }
+    catch (e) {
+        this._selectWindowByTitle(windowId);
+    }
+};
 
 BrowserBot.prototype._selectWindowByName = function(target) {
     this.currentWindow = this.getWindowByName(target, false);
@@ -337,20 +375,27 @@ BrowserBot.prototype._selectWindowByTitle = function(target) {
     }
 }
 
+BrowserBot.prototype._selectFirstNonTopWindow = function() {
+    var names = this.getNonTopWindowNames();
+    if (names.length) {
+        this._selectWindowByName(names[0]);
+    }
+};
+
 BrowserBot.prototype.selectFrame = function(target) {
     if (target.indexOf("index=") == 0) {
         target = target.substr(6);
         var frame = this.getCurrentWindow().frames[target];
         if (frame == null) {
-            throw new SeleniumError("Not found: frames["+index+"]");
+            throw new SeleniumError("Not found: frames["+target+"]");
         }
         if (!frame.document) {
-            throw new SeleniumError("frames["+index+"] is not a frame");
+            throw new SeleniumError("frames["+target+"] is not a frame");
         }
         this.currentWindow = frame;
         this.isSubFrameSelected = true;
     }
-    else if (target == "relative=up") {
+    else if (target == "relative=up" || target == "relative=parent") {
         this.currentWindow = this.getCurrentWindow().parent;
         this.isSubFrameSelected = (this._getFrameElement(this.currentWindow) != null);
     } else if (target == "relative=top") {
@@ -513,6 +558,8 @@ BrowserBot.prototype.getCurrentPage = function() {
 BrowserBot.prototype.modifyWindowToRecordPopUpDialogs = function(windowToModify, browserBot) {
     var self = this;
 
+    windowToModify.seleniumAlert = windowToModify.alert;
+
     windowToModify.alert = function(alert) {
         browserBot.recordedAlerts.push(alert);
         self.relayBotToRC.call(self, "browserbot.recordedAlerts");
@@ -550,6 +597,10 @@ BrowserBot.prototype.modifyWindowToRecordPopUpDialogs = function(windowToModify,
         var myOriginalOpen = originalOpen;
         if (isHTA) {
             myOriginalOpen = this[originalOpenReference];
+        }
+        if (windowName == "" || windowName == "_blank") {
+            windowName = "selenium_blank" + Math.round(100000 * Math.random());
+            LOG.warn("Opening window '_blank', which is not a real window name.  Randomizing target to be: " + windowName);
         }
         var openedWindow = myOriginalOpen(url, windowName, windowFeatures, replaceFlag);
         LOG.debug("window.open call intercepted; window ID (which you can use with selectWindow()) is \"" +  windowName + "\"");
@@ -915,7 +966,7 @@ BrowserBot.prototype.getWindowByName = function(windowName, doNotModify) {
         }
     }
     if (!targetWindow) {
-        throw new SeleniumError("Window does not exist");
+        throw new SeleniumError("Window does not exist. If this looks like a Selenium bug, make sure to read http://selenium-core.openqa.org/reference.html#openWindow for potential workarounds.");
     }
     if (browserVersion.isHTA) {
         try {
@@ -964,6 +1015,19 @@ BrowserBot.prototype.getWindowNameByTitle = function(windowTitle) {
     throw new SeleniumError("Could not find window with title " + windowTitle);
 };
 
+BrowserBot.prototype.getNonTopWindowNames = function() {
+    var nonTopWindowNames = [];
+    
+    for (var windowName in this.openedWindows) {
+        var win = this.openedWindows[windowName];
+        if (! this._windowClosed(win) && win != this.topWindow) {
+            nonTopWindowNames.push(windowName);
+        }
+    }
+    
+    return nonTopWindowNames;
+};
+
 BrowserBot.prototype.getCurrentWindow = function(doNotModify) {
     if (this.proxyInjectionMode) {
         return window;
@@ -976,6 +1040,21 @@ BrowserBot.prototype.getCurrentWindow = function(doNotModify) {
     }
     testWindow = this._handleClosedSubFrame(testWindow, doNotModify);
     return testWindow;
+};
+
+/**
+ * Offer a method the end-user can reliably use to retrieve the current window.
+ * This should work even for windows with an XPCNativeWrapper. Returns the
+ * current window object.
+ */
+BrowserBot.prototype.getUserWindow = function() {
+    var userWindow = this.getCurrentWindow(true);
+    
+    if (userWindow.wrappedJSObject) {
+        userWindow = userWindow.wrappedJSObject;
+    }
+    
+    return userWindow;
 };
 
 BrowserBot.prototype._handleClosedSubFrame = function(testWindow, doNotModify) {
@@ -1077,6 +1156,103 @@ BrowserBot.prototype.getTitle = function() {
     return t;
 }
 
+BrowserBot.prototype.getCookieByName = function(cookieName, doc) {
+    if (!doc) doc = this.getDocument();
+    var ck = doc.cookie;
+    if (!ck) return null;
+    var ckPairs = ck.split(/;/);
+    for (var i = 0; i < ckPairs.length; i++) {
+        var ckPair = ckPairs[i].trim();
+        var ckNameValue = ckPair.split(/=/);
+        var ckName = decodeURIComponent(ckNameValue[0]);
+        if (ckName === cookieName) {
+            return decodeURIComponent(ckNameValue[1]);
+        }
+    }
+    return null;
+}
+
+BrowserBot.prototype.getAllCookieNames = function(doc) {
+    if (!doc) doc = this.getDocument();
+    var ck = doc.cookie;
+    if (!ck) return [];
+    var cookieNames = [];
+    var ckPairs = ck.split(/;/);
+    for (var i = 0; i < ckPairs.length; i++) {
+        var ckPair = ckPairs[i].trim();
+        var ckNameValue = ckPair.split(/=/);
+        var ckName = decodeURIComponent(ckNameValue[0]);
+        cookieNames.push(ckName);
+    }
+    return cookieNames;
+}
+
+BrowserBot.prototype.deleteCookie = function(cookieName, domain, path, doc) {
+    if (!doc) doc = this.getDocument();
+    var expireDateInMilliseconds = (new Date()).getTime() + (-1 * 1000);
+    var cookie = cookieName + "=deleted; ";
+    if (path) {
+        cookie += "path=" + path + "; ";
+    }
+    if (domain) {
+        cookie += "domain=" + domain + "; ";
+    }
+    cookie += "expires=" + new Date(expireDateInMilliseconds).toGMTString();
+    LOG.debug("Setting cookie to: " + cookie);
+    doc.cookie = cookie;
+}
+
+/** Try to delete cookie, return false if it didn't work */
+BrowserBot.prototype._maybeDeleteCookie = function(cookieName, domain, path, doc) {
+    this.deleteCookie(cookieName, domain, path, doc);
+    return (!this.getCookieByName(cookieName, doc));
+}
+    
+
+BrowserBot.prototype._recursivelyDeleteCookieDomains = function(cookieName, domain, path, doc) {
+    var deleted = this._maybeDeleteCookie(cookieName, domain, path, doc);
+    if (deleted) return true;
+    var dotIndex = domain.indexOf(".");
+    if (dotIndex == 0) {
+        return this._recursivelyDeleteCookieDomains(cookieName, domain.substring(1), path, doc);
+    } else if (dotIndex != -1) {
+        return this._recursivelyDeleteCookieDomains(cookieName, domain.substring(dotIndex), path, doc);
+    } else {
+        // No more dots; try just not passing in a domain at all
+        return this._maybeDeleteCookie(cookieName, null, path, doc);
+    }
+}
+
+BrowserBot.prototype._recursivelyDeleteCookie = function(cookieName, domain, path, doc) {
+    var slashIndex = path.lastIndexOf("/");
+    var finalIndex = path.length-1;
+    if (slashIndex == finalIndex) {
+        slashIndex--;
+    }
+    if (slashIndex != -1) {
+        deleted = this._recursivelyDeleteCookie(cookieName, domain, path.substring(0, slashIndex+1), doc);
+        if (deleted) return true;
+    }
+    return this._recursivelyDeleteCookieDomains(cookieName, domain, path, doc);
+}
+
+BrowserBot.prototype.recursivelyDeleteCookie = function(cookieName, domain, path, win) {
+    if (!win) win = this.getCurrentWindow();
+    var doc = win.document;
+    if (!domain) {
+        domain = doc.domain;
+    }
+    if (!path) {
+        path = win.location.pathname;
+    }
+    var deleted = this._recursivelyDeleteCookie(cookieName, "." + domain, path, doc);
+    if (deleted) return;
+    // Finally try a null path (Try it last because it's uncommon)
+    deleted = this._recursivelyDeleteCookieDomains(cookieName, "." + domain, null, doc);
+    if (deleted) return;
+    throw new SeleniumError("Couldn't delete cookie " + cookieName);
+}
+
 /*
  * Finds an element recursively in frames and nested frames
  * in the specified document, using various lookup protocols
@@ -1089,10 +1265,14 @@ BrowserBot.prototype.findElementRecursive = function(locatorType, locatorString,
     }
 
     for (var i = 0; i < inWindow.frames.length; i++) {
-        element = this.findElementRecursive(locatorType, locatorString, inWindow.frames[i].document, inWindow.frames[i]);
+        // On some browsers, the document object is undefined for third-party
+        // frames.  Make sure the document is valid before continuing.
+        if (inWindow.frames[i].document) {
+            element = this.findElementRecursive(locatorType, locatorString, inWindow.frames[i].document, inWindow.frames[i]);
 
-        if (element != null) {
-            return element;
+            if (element != null) {
+                return element;
+            }
         }
     }
 };
@@ -1101,20 +1281,12 @@ BrowserBot.prototype.findElementRecursive = function(locatorType, locatorString,
 * Finds an element on the current page, using various lookup protocols
 */
 BrowserBot.prototype.findElementOrNull = function(locator, win) {
-    var locatorType = 'implicit';
-    var locatorString = locator;
-
-    // If there is a locator prefix, use the specified strategy
-    var result = locator.match(/^([A-Za-z]+)=(.+)/);
-    if (result) {
-        locatorType = result[1].toLowerCase();
-        locatorString = result[2];
-    }
+    locator = parse_locator(locator);
 
     if (win == null) {
         win = this.getCurrentWindow();
     }
-    var element = this.findElementRecursive(locatorType, locatorString, win.document, win);
+    var element = this.findElementRecursive(locator.type, locator.string, win.document, win);
 
     if (element != null) {
         return this.browserbot.highlight(element);
@@ -1145,8 +1317,14 @@ BrowserBot.prototype.locateElementByIdentifier = function(identifier, inDocument
  */
 BrowserBot.prototype.locateElementById = function(identifier, inDocument, inWindow) {
     var element = inDocument.getElementById(identifier);
-    if (element && element.id === identifier) {
+    if (element && element.getAttribute('id') === identifier) {
         return element;
+    }
+    else if (browserVersion.isIE || browserVersion.isOpera) {
+        // SEL-484
+        var xpath = '/descendant::*[@id=' + identifier.quoteForXPath() + ']';
+        return BrowserBot.prototype
+            .locateElementByXPath(xpath, inDocument, inWindow);
     }
     else {
         return null;
@@ -1200,79 +1378,14 @@ BrowserBot.prototype.locateElementByDomTraversal.prefix = "dom";
  * begin with "//".
  */
 BrowserBot.prototype.locateElementByXPath = function(xpath, inDocument, inWindow) {
-    // Trim any trailing "/": not valid xpath, and remains from attribute
-    // locator.
-    if (xpath.charAt(xpath.length - 1) == '/') {
-        xpath = xpath.slice(0, -1);
-    }
-
-    // Handle //tag
-    var match = xpath.match(/^\/\/(\w+|\*)$/);
-    if (match) {
-        var elements = inDocument.getElementsByTagName(match[1].toUpperCase());
-        if (elements == null) return null;
-        return elements[0];
-    }
-
-    // Handle //tag[@attr='value']
-    var match = xpath.match(/^\/\/(\w+|\*)\[@(\w+)=('([^\']+)'|"([^\"]+)")\]$/);
-    if (match) {
-        // We don't return the value without checking if it is null first.
-        // This is beacuse in some rare cases, this shortcut actually WONT work
-        // but that the full XPath WILL. A known case, for example, is in IE
-        // when the attribute is onclick/onblur/onsubmit/etc. Due to a bug in IE
-        // this shortcut won't work because the actual function is returned
-        // by getAttribute() rather than the text of the attribute.
-        var val = this._findElementByTagNameAndAttributeValue(
-                inDocument,
-                match[1].toUpperCase(),
-                match[2].toLowerCase(),
-                match[3].slice(1, -1)
-                );
-        if (val) {
-            return val;
-        }
-    }
-
-    // Handle //tag[text()='value']
-    var match = xpath.match(/^\/\/(\w+|\*)\[text\(\)=('([^\']+)'|"([^\"]+)")\]$/);
-    if (match) {
-        return this._findElementByTagNameAndText(
-                inDocument,
-                match[1].toUpperCase(),
-                match[2].slice(1, -1)
-                );
-    }
-
-    return this._findElementUsingFullXPath(xpath, inDocument);
-};
-
-BrowserBot.prototype._findElementByTagNameAndAttributeValue = function(
-        inDocument, tagName, attributeName, attributeValue
-        ) {
-    if (browserVersion.isIE && attributeName == "class") {
-        attributeName = "className";
-    }
-    var elements = inDocument.getElementsByTagName(tagName);
-    for (var i = 0; i < elements.length; i++) {
-        var elementAttr = elements[i].getAttribute(attributeName);
-        if (elementAttr == attributeValue) {
-            return elements[i];
-        }
-    }
-    return null;
-};
-
-BrowserBot.prototype._findElementByTagNameAndText = function(
-        inDocument, tagName, text
-        ) {
-    var elements = inDocument.getElementsByTagName(tagName);
-    for (var i = 0; i < elements.length; i++) {
-        if (getText(elements[i]) == text) {
-            return elements[i];
-        }
-    }
-    return null;
+    var results = eval_xpath(xpath, inDocument, {
+        returnOnFirstMatch          : true,
+        ignoreAttributesWithoutValue: this.ignoreAttributesWithoutValue,
+        allowNativeXpath            : this.allowNativeXpath,
+        xpathLibrary                : this.xpathLibrary,
+        namespaceResolver           : this._namespaceResolver
+    });
+    return (results.length > 0) ? results[0] : null;
 };
 
 BrowserBot.prototype._namespaceResolver = function(prefix) {
@@ -1285,65 +1398,17 @@ BrowserBot.prototype._namespaceResolver = function(prefix) {
     }
 }
 
-BrowserBot.prototype._findElementUsingFullXPath = function(xpath, inDocument, inWindow) {
-    // HUGE hack - remove namespace from xpath for IE
-    if (browserVersion.isIE) {
-        xpath = xpath.replace(/x:/g, '')
-    }
-
-    // Use document.evaluate() if it's available
-    if (this.allowNativeXpath && inDocument.evaluate) {
-        return inDocument.evaluate(xpath, inDocument, this._namespaceResolver, 0, null).iterateNext();
-    }
-
-    // If not, fall back to slower JavaScript implementation
-    // DGF set xpathdebug = true (using getEval, if you like) to turn on JS XPath debugging
-    //xpathdebug = true;
-    var context = new ExprContext(inDocument);
-    var xpathObj = xpathParse(xpath);
-    var xpathResult = xpathObj.evaluate(context);
-    if (xpathResult && xpathResult.value) {
-        return xpathResult.value[0];
-    }
-    return null;
-
-};
-
-// DGF this may LOOK identical to _findElementUsingFullXPath, but 
-// fEUFX pops the first element off the resulting nodelist; this function
-// wraps the xpath in a count() operator and returns the numeric value directly
+/**
+ * Returns the number of xpath results.
+ */
 BrowserBot.prototype.evaluateXPathCount = function(xpath, inDocument) {
-    // HUGE hack - remove namespace from xpath for IE
-    if (browserVersion.isIE) {
-        xpath = xpath.replace(/x:/g, '')
-    }
-    xpath = new String(xpath);
-    if (xpath.indexOf("xpath=") == 0) {
-        xpath = xpath.substring(6); 
-    }
-    if (xpath.indexOf("count(") == 0) {
-        // DGF we COULD just fix this up for the user, but we might get it wrong (parens?)
-        throw new SeleniumError("XPath count expressions must not be wrapped in count() function: " + xpath);
-    }
-    
-    xpath="count("+xpath+")";
-
-    // Use document.evaluate() if it's available
-    if (this.allowNativeXpath && inDocument.evaluate) {
-        var result = inDocument.evaluate(xpath, inDocument, this._namespaceResolver, XPathResult.NUMBER_TYPE, null);
-        return result.numberValue;
-    }
-
-    // If not, fall back to slower JavaScript implementation
-    // DGF set xpathdebug = true (using getEval, if you like) to turn on JS XPath debugging
-    //xpathdebug = true;
-    var context = new ExprContext(inDocument);
-    var xpathObj = xpathParse(xpath);
-    var xpathResult = xpathObj.evaluate(context);
-    if (xpathResult && xpathResult.value) {
-        return xpathResult.value;
-    }
-    return 0;
+    var results = eval_xpath(xpath, inDocument, {
+        ignoreAttributesWithoutValue: this.ignoreAttributesWithoutValue,
+        allowNativeXpath            : this.allowNativeXpath,
+        xpathLibrary                : this.xpathLibrary,
+        namespaceResolver           : this._namespaceResolver
+    });
+    return results.length;
 };
 
 /**
@@ -1382,6 +1447,11 @@ BrowserBot.prototype.findAttribute = function(locator) {
 
     // Get the attribute value.
     var attributeValue = element.getAttribute(attributeName);
+    
+    // IE returns an object for the "style" attribute
+    if (attributeName == 'style' && typeof(attributeValue) != 'string') {
+        attributeValue = attributeValue.cssText;
+    }
 
     return attributeValue ? attributeValue.toString() : null;
 };
@@ -1515,6 +1585,11 @@ BrowserBot.prototype.doubleClickElement = function(element, clientX, clientY) {
        this._fireEventOnElement("dblclick", element, clientX, clientY);
 };
 
+// The contextmenu event is fired when the user right-clicks to open the context menu
+BrowserBot.prototype.contextMenuOnElement = function(element, clientX, clientY) {
+       this._fireEventOnElement("contextmenu", element, clientX, clientY);
+};
+
 BrowserBot.prototype._modifyElementTarget = function(element) {
     if (element.target) {
         if (element.target == "_blank" || /^selenium_blank/.test(element.target) ) {
@@ -1551,6 +1626,9 @@ BrowserBot.prototype._getTargetWindow = function(element) {
 
 BrowserBot.prototype._getFrameFromGlobal = function(target) {
 
+    if (target == "_self") {
+        return this.getCurrentWindow();
+    }
     if (target == "_top") {
         return this.topFrame;
     } else if (target == "_parent") {
@@ -1627,10 +1705,21 @@ BrowserBot.prototype.goForward = function() {
 };
 
 BrowserBot.prototype.close = function() {
+    if (browserVersion.isIE) {
+        // fix "do you want to close this window" warning in IE
+        // You can only close windows that you have opened.
+        // So, let's "open" it.
+        try {
+            this.topFrame.name=new Date().getTime();
+            window.open("", this.topFrame.name, "");
+            this.topFrame.close();
+            return;
+        } catch (e) {}
+    }
     if (browserVersion.isChrome || browserVersion.isSafari || browserVersion.isOpera) {
-        this.getCurrentWindow().close();
+        this.topFrame.close();
     } else {
-        this.getCurrentWindow().eval("window.close();");
+        this.getCurrentWindow().eval("window.top.close();");
     }
 };
 
@@ -1723,12 +1812,75 @@ BrowserBot.prototype.locateElementByAlt = function(locator, document) {
  * Find an element by css selector
  */
 BrowserBot.prototype.locateElementByCss = function(locator, document) {
-    var elements = cssQuery(locator, document);
+    var elements = eval_css(locator, document);
     if (elements.length != 0)
         return elements[0];
     return null;
 }
 
+/**
+ * This function is responsible for mapping a UI specifier string to an element
+ * on the page, and returning it. If no element is found, null is returned.
+ * Returning null on failure to locate the element is part of the undocumented
+ * API for locator strategies.
+ */
+BrowserBot.prototype.locateElementByUIElement = function(locator, inDocument) {
+    // offset locators are delimited by "->", which is much simpler than the
+    // previous scheme involving detecting the close-paren.
+    var locators = locator.split(/->/, 2);
+    
+    var locatedElement = null;
+    var pageElements = UIMap.getInstance()
+        .getPageElements(locators[0], inDocument);
+    
+    if (locators.length > 1) {
+        for (var i = 0; i < pageElements.length; ++i) {
+            var locatedElements = eval_locator(locators[1], inDocument,
+                pageElements[i]);
+            if (locatedElements.length) {
+                locatedElement = locatedElements[0];
+                break;
+            }
+        }
+    }
+    else if (pageElements.length) {
+        locatedElement = pageElements[0];
+    }
+    
+    return locatedElement;
+}
+
+BrowserBot.prototype.locateElementByUIElement.prefix = 'ui';
+
+// define a function used to compare the result of a close UI element
+// match with the actual interacted element. If they are close enough
+// according to the heuristic, consider them a match.
+/**
+ * A heuristic function for comparing a node with a target node. Typically the
+ * node is specified in a UI element definition, while the target node is
+ * returned by the recorder as the leaf element which had some event enacted
+ * upon it. This particular heuristic covers the case where the anchor element
+ * contains other inline tags, such as "em" or "img".
+ *
+ * @param node    the node being compared to the target node
+ * @param target  the target node
+ * @return        true if node equals target, or if node is a link
+ *                element and target is its descendant, or if node has
+ *                an onclick attribute and target is its descendant.
+ *                False otherwise.
+ */
+BrowserBot.prototype.locateElementByUIElement.is_fuzzy_match = function(node, target) {
+    try {
+        var isMatch = (
+            (node == target) ||
+            ((node.nodeName == 'A' || node.onclick) && is_ancestor(node, target))
+        );
+        return isMatch;
+    }
+    catch (e) {
+        return false;
+    }
+};
 
 /*****************************************************************/
 /* BROWSER-SPECIFIC FUNCTIONS ONLY AFTER THIS LINE */
@@ -1855,7 +2007,7 @@ IEBrowserBot.prototype.modifyWindowToRecordPopUpDialogs = function(windowToModif
         var runInterval = '';
         
         // Only set run interval if options is defined
-        if (typeof(window.runOptions) != undefined) {
+        if (typeof(window.runOptions) != 'undefined') {
             runInterval = "&runInterval=" + runOptions.runInterval;
         }
             
@@ -1988,28 +2140,6 @@ IEBrowserBot.prototype._windowClosed = function(win) {
  */
 IEBrowserBot.prototype.locateElementByIdentifer = function(identifier, inDocument, inWindow) {
     return inDocument.getElementById(identifier);
-};
-
-IEBrowserBot.prototype._findElementByTagNameAndAttributeValue = function(
-        inDocument, tagName, attributeName, attributeValue
-        ) {
-    if (attributeName == "class") {
-        attributeName = "className";
-    }
-    var elements = inDocument.getElementsByTagName(tagName);
-    for (var i = 0; i < elements.length; i++) {
-        var elementAttr = elements[i].getAttribute(attributeName);
-        if (elementAttr == attributeValue) {
-            return elements[i];
-        }
-        // DGF SEL-347, IE6 URL-escapes javascript href attribute
-        if (!elementAttr) continue;
-        elementAttr = unescape(new String(elementAttr));
-        if (elementAttr == attributeValue) {
-            return elements[i];
-        }
-    }
-    return null;
 };
 
 SafariBrowserBot.prototype.modifyWindowToRecordPopUpDialogs = function(windowToModify, browserBot) {

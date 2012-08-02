@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Enumeration;
 
 import com.webobjects.eoaccess.EOAttribute;
@@ -232,7 +233,7 @@ public class PostgresqlExpression extends JDBCExpression {
             ? relationshipKey
             : relationshipKey.substring( relationshipKey.lastIndexOf( "." ) + 1 );
         r = rightEntity.anyRelationshipNamed( relationshipKey );
-        // fix from Michael M�ller for the case Foo.fooBars.bar has a Bar.foo relationship (instead of Bar.foos)
+        // fix from Michael Müller for the case Foo.fooBars.bar has a Bar.foo relationship (instead of Bar.foos)
         if( r == null || r.destinationEntity() != leftEntity ) {
             r = leftEntity.anyRelationshipNamed( relationshipKey );
         }
@@ -508,6 +509,11 @@ public class PostgresqlExpression extends JDBCExpression {
         	// AK: I don't really like this, but we might want to prevent infinite recursion
         	try {
         		Object adaptorValue = eoattribute.adaptorValueByConvertingAttributeValue(obj);
+        		if(adaptorValue instanceof Date && !(adaptorValue instanceof NSTimestamp)) {
+        			//Support joda classes
+        			Date date = (Date)adaptorValue;
+        			adaptorValue = new NSTimestamp(date);
+        		}
         		if(adaptorValue instanceof NSData || adaptorValue instanceof NSTimestamp
         				|| adaptorValue instanceof String || adaptorValue instanceof Number 
         				|| adaptorValue instanceof Boolean) {

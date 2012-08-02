@@ -28,6 +28,12 @@ import er.extensions.localization.ERXLocalizer;
  * when this is re-entered, the resulting value will again be 0.0165.
  */
 public class ERXNumberFormatter extends NSNumberFormatter {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/** holds a reference to the repository */
 	private static Hashtable _repository = new Hashtable();
@@ -141,7 +147,7 @@ public class ERXNumberFormatter extends NSNumberFormatter {
 			    int scaleOffset = factorString.indexOf(";");
 			    if(scaleOffset >= 0) {
 			        String scaleString = factorString.substring(scaleOffset+1);
-			        Integer scale = new Integer(scaleString);
+			        Integer scale = Integer.valueOf(scaleString);
 			        setScale(scale);
 			        factorString = factorString.substring(0,scaleOffset);
 			    }
