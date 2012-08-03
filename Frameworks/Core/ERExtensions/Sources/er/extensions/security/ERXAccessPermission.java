@@ -48,12 +48,15 @@ public class ERXAccessPermission implements IERXAccessPermissionInterface {
     return canWithDefault(key, false);
   }
 
-
   public boolean canWithDefault(String key, boolean defaultValue) {
     if(delegate() != null) {
       return delegate().canWithDefault(key, defaultValue);
     }
-
+    
+    if(defaultValue) { // if true then return result without Displaying Warning
+      return defaultValue;
+    }
+    
     log.warn("No Delegate is set. Result for '" + key + "' is false.");
     return false;
   }

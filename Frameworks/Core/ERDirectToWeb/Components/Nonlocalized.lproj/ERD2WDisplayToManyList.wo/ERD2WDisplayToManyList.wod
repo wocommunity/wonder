@@ -8,3 +8,6 @@ ERListDisplay1: ERXListDisplay {
 
 }
 
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

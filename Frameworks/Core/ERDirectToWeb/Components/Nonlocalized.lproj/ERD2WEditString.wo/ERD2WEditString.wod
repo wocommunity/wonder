@@ -14,10 +14,14 @@ NORMAL : WOConditional {
 }
 
 EditString: WOTextField {
-        size = length;
-        value = value;
+	size = length;
+	value = value;
 	maxlength = d2wContext.maxLength;
 	id = d2wContext.id;
 	title = d2wContext.title;
 	name = d2wContext.name;
+}
+
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
 }

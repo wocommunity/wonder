@@ -7,3 +7,7 @@ EditString: WOText {
 	title = d2wContext.title;
 	name = d2wContext.name;
 }
+
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

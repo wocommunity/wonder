@@ -5,3 +5,6 @@ EditNumber: WOTextField {
 	name = d2wContext.name;
 }
 
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

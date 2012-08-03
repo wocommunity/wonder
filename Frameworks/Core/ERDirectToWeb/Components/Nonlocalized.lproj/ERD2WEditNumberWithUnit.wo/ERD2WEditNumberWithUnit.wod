@@ -9,3 +9,6 @@ String1: WOString {
 	value =d2wContext.resolvedUnit;
 }
 
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

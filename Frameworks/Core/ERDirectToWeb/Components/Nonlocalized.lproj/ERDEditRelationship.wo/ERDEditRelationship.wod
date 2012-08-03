@@ -5,3 +5,7 @@ EmbeddedEditRelationship: ERXD2WEditRelationship {
 	masterObject = object;
 	relationshipKey = key;
 }
+
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

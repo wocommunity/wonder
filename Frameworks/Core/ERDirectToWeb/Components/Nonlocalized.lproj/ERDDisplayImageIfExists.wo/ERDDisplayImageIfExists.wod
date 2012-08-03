@@ -16,3 +16,6 @@ TestImageNotExists: ERXNonNullConditional {
 	negate = true;
 }
 
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

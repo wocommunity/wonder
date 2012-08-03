@@ -26,3 +26,7 @@ NoConditional: WOConditional {
 YesConditional: WOConditional {
 	condition = objectPropertyValue;
 }
+
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

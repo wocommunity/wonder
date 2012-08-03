@@ -35,3 +35,8 @@ DeleteButton: WOSubmitButton {
 	value = "Remove";
 	class = "D2WAjaxEditToManyFault_Delete";
 }
+
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}
+

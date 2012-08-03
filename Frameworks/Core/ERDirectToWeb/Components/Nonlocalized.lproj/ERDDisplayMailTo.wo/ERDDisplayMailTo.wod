@@ -10,3 +10,7 @@ MailHyperlink: WOHyperlink {
     href=mailToHref;
     string = displayString;
 }
+
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

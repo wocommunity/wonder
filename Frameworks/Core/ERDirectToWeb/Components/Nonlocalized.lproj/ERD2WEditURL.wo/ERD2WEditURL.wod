@@ -3,3 +3,7 @@ Edit: ERXEditURL {
     size = d2wContext.length;
     maxlength = d2wContext.maxLength;
 }
+
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

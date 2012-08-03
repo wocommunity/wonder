@@ -15,3 +15,7 @@ CollapseContainer: WOSwitchComponent {
 	submitActionName = submitActionName;
 	container = container;
 }
+
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

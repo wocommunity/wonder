@@ -24,3 +24,7 @@ yearPopup: WOPopUpButton {
 	list = yearList;
 	selection = year;
 }
+
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

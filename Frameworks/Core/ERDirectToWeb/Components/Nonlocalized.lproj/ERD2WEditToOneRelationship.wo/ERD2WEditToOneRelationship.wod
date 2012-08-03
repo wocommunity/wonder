@@ -19,3 +19,7 @@ EditToOneRelationship: ERXToOneRelationship {
     id = d2wContext.id;
     title = d2wContext.title;
 }
+
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

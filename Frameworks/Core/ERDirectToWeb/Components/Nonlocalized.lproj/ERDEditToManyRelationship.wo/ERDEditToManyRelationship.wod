@@ -53,3 +53,7 @@ RemoveButton: WOSubmitButton {
 TaskIsEdit: WOConditional {
 	condition = isEditing;
 }
+
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

@@ -3,3 +3,7 @@ String: WOString {
     value = stringContents;
 	escapeHTML = localContext.escapeHTML;
 }
+
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

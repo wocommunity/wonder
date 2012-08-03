@@ -3,3 +3,6 @@ ERStringWithLineBreaks1: ERXStringWithLineBreaks {
 	valueWhenEmpty = localContext.valueWhenEmpty;
 }
 
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}

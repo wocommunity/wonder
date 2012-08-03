@@ -7,3 +7,7 @@ Image: ERDZoomableImage {
 	noImageString = d2wContext.noImageString;
 	enableZoomForImage = d2wContext.enableZoomForImage;
 }
+
+HINT : ERDDisplayHint {
+	d2wContext = d2wContext;
+}
