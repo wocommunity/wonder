@@ -45,10 +45,12 @@ public class ERXPrefixQualifierTraversal extends ERXQualifierTraversal {
 		return prefixedQualifier;
 	}
 
+	@Override
 	protected boolean traverseUnknownQualifier(EOQualifierEvaluation q) {
 		throw new UnsupportedOperationException("Unknown qualifier type '" + q.getClass().getName() + "'.");
 	}
 
+	@Override
 	protected boolean traverseNotQualifier(EONotQualifier q) {
 		ERXNotQualifier nq = new ERXNotQualifier(_qualifiers.lastObject());
 		_qualifiers.removeLastObject();
@@ -56,6 +58,7 @@ public class ERXPrefixQualifierTraversal extends ERXQualifierTraversal {
 		return true;
 	}
 
+	@Override
 	protected boolean traverseOrQualifier(EOOrQualifier q) {
 		NSRange range = new NSRange(_qualifiers.count() - q.qualifiers().count(), q.qualifiers().count());
 		ERXOrQualifier oq = new ERXOrQualifier(_qualifiers.subarrayWithRange(range));
@@ -64,6 +67,7 @@ public class ERXPrefixQualifierTraversal extends ERXQualifierTraversal {
 		return true;
 	}
 
+	@Override
 	protected boolean traverseAndQualifier(EOAndQualifier q) {
 		NSRange range = new NSRange(_qualifiers.count() - q.qualifiers().count(), q.qualifiers().count());
 		ERXAndQualifier aq = new ERXAndQualifier(_qualifiers.subarrayWithRange(range));
@@ -72,12 +76,14 @@ public class ERXPrefixQualifierTraversal extends ERXQualifierTraversal {
 		return true;
 	}
 
+	@Override
 	protected boolean traverseKeyValueQualifier(EOKeyValueQualifier q) {
 		ERXKeyValueQualifier kvq = new ERXKeyValueQualifier(_prefix + q.key(), q.selector(), q.value());
 		_qualifiers.addObject(kvq);
 		return true;
 	}
 
+	@Override
 	protected boolean traverseKeyComparisonQualifier(EOKeyComparisonQualifier q) {
 		ERXKeyComparisonQualifier kcq = new ERXKeyComparisonQualifier(_prefix + q.leftKey(), q.selector(), _prefix + q.rightKey());
 		_qualifiers.addObject(kcq);
