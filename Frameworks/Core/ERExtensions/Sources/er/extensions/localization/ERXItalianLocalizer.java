@@ -41,6 +41,7 @@ public class ERXItalianLocalizer extends ERXLocalizer {
      * @return ローカライズ済み文字列
      * </span>
      */
+    @Override
     protected String plurify(String name, int count) {
         String result = name;
         if(name != null && count > 1) {

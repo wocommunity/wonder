@@ -49,6 +49,7 @@ public class ERXLocalizerAssociation extends WOAssociation {
 		return _isConstant;
 	}
 	
+	@Override
 	public Object valueInComponent(WOComponent wocomponent) {
 		String key = null;
 		if(_isConstant) {

@@ -1502,6 +1502,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
    * @return 文字列表現
    * </span>
    */
+	@Override
 	public String toString() {
 		return "<" + getClass().getName() + " " + language + ">";
 	}

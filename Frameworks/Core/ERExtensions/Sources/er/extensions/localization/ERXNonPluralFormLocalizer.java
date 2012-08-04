@@ -47,7 +47,9 @@ public class ERXNonPluralFormLocalizer extends ERXLocalizer {
      * @return ローカライズ済み文字列
      * </span>
      */
+    @Override
     public String plurifiedString(String name, int count) { return name; }
 
+    @Override
     public String toString() { return "<ERXNonPluralFormLocalizer "+language+">"; }
 }

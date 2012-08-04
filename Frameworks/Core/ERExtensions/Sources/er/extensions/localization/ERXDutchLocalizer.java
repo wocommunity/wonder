@@ -62,6 +62,7 @@ public class ERXDutchLocalizer extends ERXLocalizer {
         super(aLanguage);
     }
     
+    @Override
     protected String plurify(String name, int count) {
         String result = name;
         if(name != null && count > 1) {
