@@ -1,0 +1,44 @@
+{
+    attributes = (
+        {
+            allowsNull = Y; 
+            columnName = digest; 
+            externalType = char; 
+            name = digest; 
+            valueClassName = NSString; 
+            width = 40; 
+        }, 
+        {
+            columnName = pk; 
+            externalType = INT; 
+            name = pk; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            columnName = "result_pk"; 
+            externalType = INT; 
+            name = resultPk; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {columnName = rname; name = rname; prototypeName = varchar255; }
+    ); 
+    attributesUsedForLocking = (digest, pk, resultPk, rname); 
+    className = "com.webobjects.eocontrol.EOGenericRecord"; 
+    classProperties = (digest, result, rname); 
+    externalName = "version_digests"; 
+    fetchSpecificationDictionary = {}; 
+    name = VersionDigest; 
+    primaryKeyAttributes = (pk); 
+    relationships = (
+        {
+            destination = Result; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = pk; sourceAttribute = resultPk; }); 
+            name = result; 
+        }
+    ); 
+}
