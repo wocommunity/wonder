@@ -597,15 +597,22 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
    */
 	public static NSArray<String> frameworkSearchPath() {
 		if (frameworkSearchPath == null) {
-			frameworkSearchPath = ERXProperties.arrayForKey("er.extensions.ERXLocalizer.frameworkSearchPath");
-			if(frameworkSearchPath == null) {
-				NSMutableArray<String> defaultValue = new NSMutableArray<String>();
-				for (Enumeration<NSBundle> e = NSBundle.frameworkBundles().objectEnumerator(); e.hasMoreElements();) {
-					NSBundle bundle = e.nextElement();
-					String name = bundle.name();
-					if(!(name.equals("ERCoreBusinessLogic") || name.equals("ERDirectToWeb") || name.equals("ERExtensions"))) {
-						defaultValue.addObject(name);
-					}
+		  frameworkSearchPath = ERXProperties.arrayForKey("er.extensions.ERXLocalizer.frameworkSearchPath");
+		  if(frameworkSearchPath == null) {
+		    NSMutableArray<String> defaultValue = new NSMutableArray<String>();
+		    for (Enumeration<NSBundle> e = NSBundle.frameworkBundles().objectEnumerator(); e.hasMoreElements();) {
+		      NSBundle bundle = e.nextElement();
+		      String name = bundle.name();
+		  
+		      // Check the Properties and Add it Automatically
+		      String propertyName = "er.extensions." + name + ".hasLocalization";
+		      boolean hasLocalization = ERXProperties.booleanForKeyWithDefault(propertyName, false);
+		  
+          if(name.equals("ERCoreBusinessLogic") || name.equals("ERDirectToWeb") || name.equals("ERExtensions")){ //|| name.startsWith("Java")
+            // do nothing yet, because will add later
+          } else if(hasLocalization) { 
+            defaultValue.addObject(name);
+          }
 				}
 				if(NSBundle.bundleForName("ERCoreBusinessLogic") != null) 
 					defaultValue.addObject("ERCoreBusinessLogic");
@@ -955,13 +962,13 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
    * 最初はプロパティーをチェックします。
    * 
    * <code>
-   * wodka.wonder.ERXLocalizer.en.singularifyRules=(.*)person$=$1people:(.*)man$=$1men
+   * er.extensions.ERXLocalizer.en.singularifyRules=(.*)person$=$1people:(.*)man$=$1men
    * </code>
    * 
    * が次のように
    * 
    * <code>
-   * wodka.wonder.ERXLocalizer.en.singularifyRules=pattern1=replacement1:pattern2=replacement2:etc
+   * er.extensions.ERXLocalizer.en.singularifyRules=pattern1=replacement1:pattern2=replacement2:etc
    * </code>
    * 
    * 各言語のルール不足分で、デフォルト・ルールは英語です。
