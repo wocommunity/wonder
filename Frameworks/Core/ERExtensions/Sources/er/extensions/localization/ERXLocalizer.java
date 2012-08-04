@@ -367,9 +367,9 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	public static void resetCache() {
 		initialize();
 		if (WOApplication.application().isCachingEnabled()) {
-			Enumeration e = localizers.objectEnumerator();
+			Enumeration<ERXLocalizer> e = localizers.objectEnumerator();
 			while (e.hasMoreElements()) {
-				((ERXLocalizer) e.nextElement()).load();
+				e.nextElement().load();
 			}
 		}
 		else {
@@ -416,10 +416,11 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 
 		if (languages == null || languages.isEmpty())
 			return localizerForLanguage(defaultLanguage());
+		
 		ERXLocalizer l = null;
-		Enumeration e = languages.objectEnumerator();
+		Enumeration<String> e = languages.objectEnumerator();
 		while (e.hasMoreElements()) {
-			String language = (String) e.nextElement();
+			String language = e.nextElement();
 			l = localizers.objectForKey(language);
 			if (l != null) {
 				return l;
@@ -439,7 +440,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 		return localizerForLanguage(languages.objectAtIndex(0));
 	}
 
-	private static NSArray _languagesWithoutPluralForm = new NSArray(new Object[] { "Japanese" });
+	private static NSArray<String> _languagesWithoutPluralForm = new NSArray<String>(new String[] { "Japanese" });
 
 	/**
 	 * <span class="en">
@@ -538,11 +539,11 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
    * @return NSAray - ファイル名配列
    * </span>
    */
-	public static NSArray fileNamesToWatch() {
+	public static NSArray<String> fileNamesToWatch() {
 		if (fileNamesToWatch == null) {
-			fileNamesToWatch = ERXProperties.arrayForKeyWithDefault("er.extensions.ERXLocalizer.fileNamesToWatch", new NSArray(new Object[] { "Localizable.strings", "ValidationTemplate.strings" }));
+			fileNamesToWatch = ERXProperties.arrayForKeyWithDefault("er.extensions.ERXLocalizer.fileNamesToWatch", new NSArray<String>(new String[] { "Localizable.strings", "ValidationTemplate.strings" }));
 			if (log.isDebugEnabled())
-				log.debug("FileNamesToWatch: " + fileNamesToWatch);
+        log.debug("FileNamesToWatch: " + fileNamesToWatch.componentsJoinedByString(" / "));
 		}
 		return fileNamesToWatch;
 	}
@@ -554,7 +555,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
    * @param value - ファイル配列
    * </span>
    */
-	public static void setFileNamesToWatch(NSArray value) {
+	public static void setFileNamesToWatch(NSArray<String> value) {
 		fileNamesToWatch = value;
 		resetCache();
 	}
@@ -570,7 +571,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 		if (availableLanguages == null) {
 			availableLanguages = ERXProperties.arrayForKeyWithDefault("er.extensions.ERXLocalizer.availableLanguages", new NSArray(new String[] { "English", "German", "Japanese" }));
 			if (log.isDebugEnabled())
-				log.debug("AvailableLanguages: " + availableLanguages);
+        log.debug("AvailableLanguages: " + availableLanguages.componentsJoinedByString(" / "));
 		}
 		return availableLanguages;
 	}
@@ -599,8 +600,8 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 			frameworkSearchPath = ERXProperties.arrayForKey("er.extensions.ERXLocalizer.frameworkSearchPath");
 			if(frameworkSearchPath == null) {
 				NSMutableArray<String> defaultValue = new NSMutableArray<String>();
-				for (Enumeration e = NSBundle.frameworkBundles().objectEnumerator(); e.hasMoreElements();) {
-					NSBundle bundle = (NSBundle) e.nextElement();
+				for (Enumeration<NSBundle> e = NSBundle.frameworkBundles().objectEnumerator(); e.hasMoreElements();) {
+					NSBundle bundle = e.nextElement();
 					String name = bundle.name();
 					if(!(name.equals("ERCoreBusinessLogic") || name.equals("ERDirectToWeb") || name.equals("ERExtensions"))) {
 						defaultValue.addObject(name);
@@ -616,7 +617,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 				frameworkSearchPath = defaultValue;
 			}
 			if (log.isDebugEnabled())
-				log.debug("FrameworkSearchPath: " + frameworkSearchPath);
+				log.debug("FrameworkSearchPath: " + frameworkSearchPath.componentsJoinedByString(" / "));
 		}
 		return frameworkSearchPath;
 	}
@@ -628,7 +629,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
    * @param value - フレームワーク検索
    * </span>
    */
-	public static void setFrameworkSearchPath(NSArray value) {
+	public static void setFrameworkSearchPath(NSArray<String> value) {
 		frameworkSearchPath = value;
 		resetCache();
 	}
@@ -763,28 +764,30 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 		createdKeys.removeAllObjects();
 
 		if (log.isDebugEnabled())
-			log.debug("Loading templates for language: " + language + " for files: " + fileNamesToWatch() + " with search path: " + frameworkSearchPath());
+		  log.debug("Loading templates for language: " + language + " for files: " + fileNamesToWatch().componentsJoinedByString(" / ") + " with search path: " + frameworkSearchPath().componentsJoinedByString(" / "));
 
 		NSArray<String> languages = new NSArray<String>(language);
-		Enumeration fn = fileNamesToWatch().objectEnumerator();
+		Enumeration<String> fn = fileNamesToWatch().objectEnumerator();
 		while (fn.hasMoreElements()) {
-			String fileName = (String) fn.nextElement();
-			Enumeration fr = frameworkSearchPath().reverseObjectEnumerator();
+			String fileName = fn.nextElement();
+			Enumeration<String> fr = frameworkSearchPath().reverseObjectEnumerator();
 			while (fr.hasMoreElements()) {
-				String framework = (String) fr.nextElement();
+				String framework = fr.nextElement();
 
 				URL path = ERXFileUtilities.pathURLForResourceNamed(fileName, framework, languages);
 				if (path != null) {
 					try {
 						framework = "app".equals(framework) ? null : framework;
-						log.debug("Loading: " + fileName + " - " + (framework == null ? "app" : framework) + " - " + languages + path);
+						if(log.isDebugEnabled())
+						  log.debug("Loading: " + fileName + " - " + (framework == null ? "app" : framework) + " - " + languages.componentsJoinedByString(" / ") + " " + path);
+						
 						NSDictionary<String, Object> dict = (NSDictionary<String, Object>) ERXFileUtilities.readPropertyListFromFileInFramework(fileName, framework, languages);
 						// HACK: ak we have could have a collision between the search path for validation strings and
 						// the normal localized strings.
 						if (fileName.indexOf(ERXValidationFactory.VALIDATION_TEMPLATE_PREFIX) == 0) {
 							NSMutableDictionary<String, Object> newDict = new NSMutableDictionary<String, Object>();
-							for (Enumeration keys = dict.keyEnumerator(); keys.hasMoreElements();) {
-								String key = (String) keys.nextElement();
+							for (Enumeration<String> keys = dict.keyEnumerator(); keys.hasMoreElements();) {
+								String key = keys.nextElement();
 								newDict.setObjectForKey(dict.objectForKey(key), ERXValidationFactory.VALIDATION_TEMPLATE_PREFIX + key);
 							}
 							dict = newDict;
@@ -800,11 +803,12 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 						}
 					}
 					catch (Exception ex) {
-						log.warn("Exception loading: " + fileName + " - " + (framework == null ? "app" : framework) + " - " + languages + ":" + ex, ex);
+            log.warn("Exception loading: " + fileName + " - " + (framework == null ? "app" : framework) + " - " + languages.componentsJoinedByString(" / ") + ":" + ex, ex);
 					}
 				}
 				else {
-					log.debug("Unable to create path for resource named: " + fileName + " framework: " + (framework == null ? "app" : framework) + " languages: " + languages);
+				  if(log.isDebugEnabled())
+				    log.debug("Unable to create path for resource named: " + fileName + " framework: " + (framework == null ? "app" : framework) + " languages: " + languages.componentsJoinedByString(" / "));
 				}
 			}
 		}
@@ -868,7 +872,6 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 			}
 		}
 		return plurifyRules;
-
 	}
 	
 	/**
@@ -982,7 +985,6 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 			}
 		}
 		return singularifyRules;
-
 	}
 	
 	/**
@@ -1160,7 +1162,8 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
    * </span>
    */
 	public void dumpCreatedKeys() {
-		log.info(NSPropertyListSerialization.stringFromPropertyList(createdKeys()));
+	  if(log.isInfoEnabled())
+	    log.info(NSPropertyListSerialization.stringFromPropertyList(createdKeys()));
 	}
 
   /**
@@ -1231,7 +1234,8 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 			return result;
 
 		if (createdKeysLog.isDebugEnabled()) {
-			log.debug("Key not found: '" + key + "'/" + language);
+		  if(log.isDebugEnabled())
+		    log.debug("Key not found: '" + key + "'/" + language);
 		}
 		if (fallbackToDefaultLanguage() && !defaultLanguage().equals(language)) {
 			Object valueInDefaultLanguage = defaultLocalizer().localizedValueForKey(key);
@@ -1309,7 +1313,8 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 			String localized = localizedStringForKey(result);
 			if (localized != null) {
 				result = localized;
-				log.info("Found an old-style entry: " + localizerKey + "->" + result);
+				if(log.isInfoEnabled())
+				  log.info("Found an old-style entry: " + localizerKey + "->" + result);
 			}
 			takeValueForKey(result, localizerKey);
 		}
@@ -1404,9 +1409,9 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 		String result = str;
 		if (str != null) {
 			boolean converted = false;
-			Iterator rulesIter = rules.entrySet().iterator();
+			Iterator<Map.Entry<Pattern, String>> rulesIter = rules.entrySet().iterator();
 			while (!converted && rulesIter.hasNext()) {
-				Map.Entry<Pattern, String> rule = (Map.Entry<Pattern, String>) rulesIter.next();
+				Map.Entry<Pattern, String> rule = rulesIter.next();
 				Pattern rulePattern = rule.getKey();
 				Matcher ruleMatcher = rulePattern.matcher(str);
 				if (ruleMatcher.matches()) {
