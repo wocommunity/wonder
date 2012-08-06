@@ -1,3 +1,7 @@
+##  Properies Info
+er.extensions.load.Properties.framework.ERJasperReports=load
+er.extensions.ERJasperReports.hasLocalization=false
+
 ################################################################
 # ERJasperReports configuration
 ################################################################
