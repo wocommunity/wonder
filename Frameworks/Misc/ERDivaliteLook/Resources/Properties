@@ -1,3 +1,7 @@
+##  Properies Info
+er.extensions.load.Properties.framework.ERDivaliteLook=load
+er.extensions.ERDivaliteLook.hasLocalization=false
+
 er.extensions.ERXWOForm.addDefaultSubmitButtonDefault=true
 er.extensions.foundation.ERXPatcher.DynamicElementsPatches.SubmitButton.useButtonTag=true
 er.extensions.ERXResponseRewriter.javascriptTypeAttribute=true
