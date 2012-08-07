@@ -25,7 +25,6 @@ import er.extensions.eof.qualifiers.ERXPrimaryKeyListQualifier;
  * @binding size number of rows for "checkbox" or "browser" UIStyle
  * 
  * @author ak on Wed Apr 07 2004
- * @project ERDirectToWeb
  */
 
 public class ERDQueryIsContainedInArray extends ERDCustomQueryComponent {

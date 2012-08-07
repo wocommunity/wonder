@@ -19,7 +19,6 @@ import er.extensions.eof.ERXConstant;
  *
  * @binding task implementation of ERXLongResponseTask
  * @author ak on Tue Feb 03 2004
- * @project ERExtensions
  */
 
 public class ERXLongResponse extends ERXNonSynchronizingComponent {

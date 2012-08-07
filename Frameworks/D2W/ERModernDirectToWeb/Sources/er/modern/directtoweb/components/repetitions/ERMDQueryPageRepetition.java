@@ -8,7 +8,6 @@ import er.extensions.foundation.ERXStringUtilities;
 /**
  * Modern QueryPage repetition.
  * 
- * @project ERModernDirectToWeb
  * @d2wKey componentName
  * @d2wKey hidePropertyName
  * @d2wKey propertyNameComponentName

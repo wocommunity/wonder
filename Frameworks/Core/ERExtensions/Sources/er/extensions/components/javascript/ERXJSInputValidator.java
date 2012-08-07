@@ -27,7 +27,6 @@ import er.extensions.components._private.ERXWOTextField;
  * @binding disabled disable the validation
  *
  * @author ak on Fri May 02 2003
- * @project ERExtensions
  */
 
 public class ERXJSInputValidator extends WOComponent {

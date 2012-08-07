@@ -12,7 +12,7 @@ import com.webobjects.appserver.WODisplayGroup;
  * @d2wKey sample sample d2w key
  *
  * @author ak on Mon Sep 01 2003
- * @project ERDirectToWeb
+ * 
  * @d2wKey componentName
  * @d2wKey colSpan
  * @d2wKey rowSpan

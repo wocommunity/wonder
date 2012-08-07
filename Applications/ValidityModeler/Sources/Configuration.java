@@ -12,7 +12,6 @@ public final class Configuration extends Object implements WOXMLCoding {
     private String password;
     private String fontList;
     
-    /** @TypeInfo java.lang.String */
     private NSArray availableFontLists = new NSArray(new Object[] {
         "Arial,Helvetica", "Osaka,MS P Gothic" }); 
 

@@ -10,7 +10,7 @@ import com.webobjects.foundation.NSArray;
  * Grouping list that can be used as a repetition in list pages.
  *
  * @author ak on 31.10.05
- * @project ERDirectToWeb
+ * 
  * @d2wKey justification
  * @d2wKey componentName
  * @d2wKey propertyKey

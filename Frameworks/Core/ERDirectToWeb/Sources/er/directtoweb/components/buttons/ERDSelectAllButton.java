@@ -19,7 +19,6 @@ import er.directtoweb.interfaces.ERDPickPageInterface;
  * @d2wKey sample sample d2w key
  *
  * @author ak on Fri Sep 05 2003
- * @project ERDirectToWeb
  */
 
 public class ERDSelectAllButton extends ERDActionButton {

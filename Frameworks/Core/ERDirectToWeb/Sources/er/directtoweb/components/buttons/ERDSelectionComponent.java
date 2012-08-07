@@ -8,7 +8,6 @@ import er.directtoweb.interfaces.ERDPickPageInterface;
 /**
  * For editing a selection in a list repetition. You'd typicically but this somewhere into the actions.
  * @author ak on Thu Sep 04 2003
- * @project ERDirectToWeb
  */
 
 public class ERDSelectionComponent extends ERDActionButton {

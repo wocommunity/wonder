@@ -23,7 +23,6 @@ import er.extensions.localization.ERXLocalizer;
  * @binding noTrashcanExplanation
  *
  * @author ak on Mon Sep 01 2003
- * @project ERDirectToWeb
  */
 
 public class ERDDeleteButton extends ERDActionButton {

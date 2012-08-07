@@ -14,7 +14,6 @@ import com.webobjects.directtoweb.SelectPageInterface;
  * @binding d2wContext the d2wContext
  *
  * @author ak on Mon Sep 01 2003
- * @project ERDirectToWeb
  */
 
 public class ERDSelectButton extends ERDActionButton {

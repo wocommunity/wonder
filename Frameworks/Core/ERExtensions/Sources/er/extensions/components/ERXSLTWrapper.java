@@ -64,7 +64,6 @@ import er.extensions.foundation.ERXSimpleTemplateParser;
  * @binding stream will be set to the transformed data (optional)
  * @binding nocache flag that if set creates a new transformer instead of using the one in the cache. Useful when deleloping the stylesheet. 
  * @author ak on 07.04.05
- * @project ERExtensions
  */
 
 public class ERXSLTWrapper extends ERXNonSynchronizingComponent {

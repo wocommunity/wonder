@@ -12,7 +12,6 @@ import com.webobjects.appserver.WOContext;
  * @binding framework framework from where the image comes from
  *
  * @author ak on Tue Sep 02 2003
- * @project ERDirectToWeb
  */
 
 public class ERDBannerComponent extends ERDCustomComponent {

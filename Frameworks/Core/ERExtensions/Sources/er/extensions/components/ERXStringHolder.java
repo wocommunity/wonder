@@ -10,7 +10,6 @@ import com.webobjects.appserver.WOContext;
  * @binding escapeHTML escape HTML
  *
  * @author ak on Sat Sep 27 2003
- * @project ERExtensions
  */
 
 public class ERXStringHolder extends ERXStatelessComponent {

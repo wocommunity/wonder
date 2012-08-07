@@ -272,7 +272,6 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    *           for this application
    * @see      #availableLanguagesForThisSession 
    * @see      ERXLocalizer#availableLanguages
-   * @TypeInfo java.lang.String 
    */
   public NSArray availableLanguagesForTheApplication() {
     return ERXLocalizer.availableLanguages();
@@ -294,7 +293,6 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * @see      #availableLanguagesForTheApplication 
    * @see      ERXRequest#browserLanguages
    * @see      ERXLocalizer#availableLanguages
-   * @TypeInfo java.lang.String 
    */
   public NSArray availableLanguagesForThisSession() {
     NSArray browserLanguages = null;

@@ -19,7 +19,6 @@ import er.extensions.appserver.ERXWOContext;
  *  <li> catches "ran out of data" IllegalStateException in superclass when the user backtracked.
  *</ul>
  * @author ak on Wed Oct 09 2002
- * @project ERExtensions
  */
 
 public class ERXWOFileUpload extends com.webobjects.appserver._private.WOFileUpload {

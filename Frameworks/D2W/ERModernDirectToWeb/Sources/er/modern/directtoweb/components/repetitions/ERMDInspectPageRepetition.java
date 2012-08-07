@@ -9,7 +9,6 @@ import er.extensions.foundation.ERXStringUtilities;
 /**
  * Modern tableless inspect/edit page repetition
  * 
- * @project ERModernDirectToWeb
  * @d2wKey componentName
  * @d2wKey propertyNameComponentName
  * @d2wKey sectionComponentName

@@ -25,7 +25,6 @@ import er.extensions.eof.ERXEOControlUtilities;
  * @d2wKey inspectButtonLabel
  * 
  * @author davidleber
- * @project ERModernDirectToWeb
  */
 public class ERMDInspectButton extends ERMDActionButton {
 	

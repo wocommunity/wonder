@@ -69,7 +69,6 @@ public class ERDEditListButton extends ERDCustomEditComponent {
         return _editButtonName;
     }
     
-    /** @TypeInfo Object */
     private String _choices;
     public String choices(){
         if (_choices==null)

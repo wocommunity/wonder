@@ -12,7 +12,6 @@ import er.extensions.concurrency.ERXLongResponseTask;
  * The task is currently responsible for returning the correct page for each stage.
  * Work in progress.
  * @author ak on Wed Feb 04 2004
- * @project ERDirectToWeb
  */
 
 public class ERD2WProgressPage extends ERD2WMessagePage {

@@ -18,7 +18,6 @@ import er.extensions.validation.ERXValidationException;
  * @binding sample sample binding explanation
  *
  * @author ak on Fri May 02 2003
- * @project ERExtensions
  */
 
 public class ERXJSValidationErrors extends ERXStatelessComponent {

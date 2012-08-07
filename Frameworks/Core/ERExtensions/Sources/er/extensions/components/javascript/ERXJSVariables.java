@@ -14,7 +14,6 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @binding sample sample binding explanation
  *
  * @author ak on Sat May 03 2003
- * @project ERExtensions
  */
 
 public class ERXJSVariables extends WOComponent {

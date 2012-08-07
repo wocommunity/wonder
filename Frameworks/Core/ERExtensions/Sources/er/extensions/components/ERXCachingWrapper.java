@@ -40,7 +40,6 @@ import er.extensions.foundation.ERXAssert;
  * @binding entryName the name to cache on
  *
  * @author ak on 20.01.05
- * @project ERExtensions
  */
 
 //ENHANCEME cache should get reaped every so often and remove stale entries. 

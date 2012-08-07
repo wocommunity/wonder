@@ -23,7 +23,6 @@ import er.extensions.validation.ERXValidationFactory;
  * @d2wKey length the length of the text field
  *
  * @author ak on Sun Aug 17 2003
- * @project ERDirectToWeb
  */
 
 public class ERDEditPasswordConfirmation extends ERDCustomEditComponent {

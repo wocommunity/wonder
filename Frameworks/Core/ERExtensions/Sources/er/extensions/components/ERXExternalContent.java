@@ -22,7 +22,6 @@ import er.extensions.foundation.ERXFileUtilities;
  * @binding encoding content encoding to use.
  *
  * @author ak on 31.10.05
- * @project ERExtensions
  */
 
 public class ERXExternalContent extends ERXStatelessComponent {

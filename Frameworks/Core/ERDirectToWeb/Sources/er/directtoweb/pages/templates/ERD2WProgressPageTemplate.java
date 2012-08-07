@@ -13,7 +13,6 @@ import er.directtoweb.pages.ERD2WProgressPage;
  * @d2wKey sample sample d2w key
  *
  * @author ak on Wed Feb 04 2004
- * @project ERDirectToWeb
  * @d2wKey displayNameForPageConfiguration
  * @d2wKey pageWrapperName
  */

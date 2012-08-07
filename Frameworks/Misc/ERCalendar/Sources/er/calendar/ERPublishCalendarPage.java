@@ -55,7 +55,6 @@ public class ERPublishCalendarPage extends WOComponent {
     protected final int maxLineLength = 75;
     public static String newline = System.getProperty("line.separator");
 
-    /** @TypeInfo er.calendar.ERCalendarEvent */
     protected NSMutableArray events;
     public ERCalendarEvent event;
     protected NSTimestamp eventTimestamp;
@@ -150,7 +149,6 @@ public class ERPublishCalendarPage extends WOComponent {
 	events.removeObjectsInArray (eventsArray);
     }
 
-    /** @TypeInfo er.calendar.ERCalendarEvent */
     public NSMutableArray events() {
 	return events;
     }

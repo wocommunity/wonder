@@ -49,7 +49,6 @@ public class ERDEditToManyRelationship extends ERDCustomEditComponent {
     public int objectsToAdd = 1;
     public EOEnterpriseObject currentObject;
 
-    /** @TypeInfo com.webobjects.eocontrol.EOEnterpriseObject */
     protected NSMutableArray selectedObjects;
     
     /**

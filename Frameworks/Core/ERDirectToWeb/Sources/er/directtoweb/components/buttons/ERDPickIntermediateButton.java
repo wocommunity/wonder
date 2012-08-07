@@ -24,7 +24,6 @@ import er.extensions.localization.ERXLocalizer;
  * @binding pickButtonLabel label for the button (optional)
  *
  * @author ak on 07.11.05
- * @project ERDirectToWeb
  */
 
 public class ERDPickIntermediateButton extends ERDActionButton {

@@ -13,7 +13,6 @@ import er.grouping.DRReportModel;
 
 
 public class GroupingOnly extends WOComponent {
-    /** @TypeInfo Movie */
     protected Movie aMovie;
     protected DRRecordGroup aDRRecordGroup;
 
@@ -37,7 +36,6 @@ public class GroupingOnly extends WOComponent {
         return null;
     }
 
-    /** @TypeInfo DRRecordGroup */
     public NSArray recordGroups() {
         Session s = (Session)session();
         NSArray recGrps;

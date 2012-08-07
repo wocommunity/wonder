@@ -16,7 +16,7 @@ import er.extensions.appserver.ERXWOContext;
  * Class for DirectToWeb Component ERDAttributeRepetition.
  *
  * @author ak on Mon Sep 01 2003
- * @project ERDirectToWeb
+ * 
  * @d2wKey sectionKey
  * @d2wKey displayNameForPageConfiguration
  * @d2wKey pageConfiguration

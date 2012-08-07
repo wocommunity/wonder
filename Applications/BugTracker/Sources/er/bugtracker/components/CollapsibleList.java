@@ -22,7 +22,6 @@ import er.extensions.localization.ERXLocalizer;
  * @binding noItemsString 
  * 
  * @created ak on Thu Aug 22 2002
- * @project BugTracker
  */
 
 public class CollapsibleList extends WOComponent {

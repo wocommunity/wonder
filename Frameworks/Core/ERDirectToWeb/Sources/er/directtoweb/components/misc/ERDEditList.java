@@ -55,7 +55,7 @@ public class ERDEditList extends ERDCustomEditComponent {
     public EOEnterpriseObject item;
     
     private NSArray _list;
-    /** @TypeInfo com.webobjects.eocontrol.EOEnterpriseObject */    
+
     public NSArray list() {
         if (_list==null) {
             EOEditingContext objectContext = object().editingContext();

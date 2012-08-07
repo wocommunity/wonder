@@ -19,7 +19,6 @@ import com.webobjects.foundation.NSMutableArray;
  * @binding sample sample binding explanation
  *
  * @created ak on Fri Jul 26 2002
- * @project DevStudio
  */
 public class EOModeler extends WOComponent {
     /** logging support */

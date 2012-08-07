@@ -32,7 +32,6 @@ import er.extensions.eof.qualifiers.ERXPrimaryKeyListQualifier;
  *          if unset all children are shown
  * displayGroup = display group the query is in
  * @author ak on Fri Nov 21 2003
- * @project ERDirectToWeb
  */
 
 public class ERDQueryTwoLevelRelationship extends ERDCustomQueryComponent {

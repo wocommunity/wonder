@@ -23,7 +23,6 @@ import er.extensions.components.ERXComponentUtilities;
  * the string is assumed to be null. This is because
  * D2W is not able to give back null values anymore.
  * @author ak on Mon Oct 28 2002
- * @project ERExtensions
  */
 
 public class ERXValueUtilities {

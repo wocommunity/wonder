@@ -19,7 +19,6 @@ public class BugReportEmail extends WOComponent {
         super(aContext);
     }
 
-    /** @TypeInfo er.bugtracker.Bug */
     public NSArray unreadBugs;
     public People owner;
     public Bug bug;   
