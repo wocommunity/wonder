@@ -1,4 +1,4 @@
-##  Properies Info : Has to go into WOLips itself
+##  Properies Info
 er.extensions.load.Properties.framework.WOLips=load
 er.extensions.WOLips.hasLocalization=false
 

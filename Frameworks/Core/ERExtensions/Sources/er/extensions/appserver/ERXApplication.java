@@ -1148,11 +1148,11 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		if (!ERXConfigurationManager.defaultManager().isDeployedAsServlet() && (!wasERXApplicationMainInvoked || _loader == null)) {
 			_displayMainMethodWarning();
 		}
-		try {
-			NSBundle.mainBundle().versionString();
-		} catch (NoSuchMethodError e) {
-			throw new RuntimeException("No versionString() method in NSBundle found. \nThis means your class path is incorrect. Adjust it so that ERJars comes before JavaFoundation.");
-		}
+		// try {
+		// 	NSBundle.mainBundle().versionString();
+		// } catch (NoSuchMethodError e) {
+		// 	throw new RuntimeException("No versionString() method in NSBundle found. \nThis means your class path is incorrect. Adjust it so that ERJars comes before JavaFoundation.");
+		// }
 		if (_loader == null) {
 			System.out.println("No loader: " + System.getProperty("java.class.path"));
 		} else if (!_loader.didLoad()) {

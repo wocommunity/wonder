@@ -12,9 +12,7 @@ import com.webobjects.appserver.WOContext;
  * @binding framework framework from where the image comes from
  *
  * @author ak on Tue Sep 02 2003
- * @project ERDirectToWeb
  */
-
 public class ERDBannerComponent extends ERDCustomComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -35,9 +33,11 @@ public class ERDBannerComponent extends ERDCustomComponent {
     }
 
     /** component does not synchronize it's variables */
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     /** component is stateless */
+    @Override
     public boolean isStateless() { return true; }
 
     public boolean showBanner() {

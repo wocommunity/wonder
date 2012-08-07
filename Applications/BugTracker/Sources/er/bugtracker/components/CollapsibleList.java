@@ -22,9 +22,7 @@ import er.extensions.localization.ERXLocalizer;
  * @binding noItemsString 
  * 
  * @created ak on Thu Aug 22 2002
- * @project BugTracker
  */
-
 public class CollapsibleList extends WOComponent {
 
     /** logging support */
@@ -45,6 +43,7 @@ public class CollapsibleList extends WOComponent {
     }
 
     /** component does not synchronize it's variables */
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     ERXLocalizer localizer() {
