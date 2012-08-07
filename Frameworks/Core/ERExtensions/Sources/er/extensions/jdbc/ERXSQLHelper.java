@@ -2375,28 +2375,31 @@ public class ERXSQLHelper {
 			return -1;
 		}
 		
+		@Override
 		public boolean handleDatabaseException(EODatabaseContext databaseContext, Throwable throwable) {
-			if(throwable instanceof EOGeneralAdaptorException) {
+			if (throwable instanceof EOGeneralAdaptorException) {
 				EOGeneralAdaptorException gae = (EOGeneralAdaptorException) throwable;
-				EOAdaptorOperation failedOperation = (EOAdaptorOperation) gae.userInfo().objectForKey(EOAdaptorChannel.FailedAdaptorOperationKey);
-				if(failedOperation != null) {
-					Throwable t = failedOperation.exception();
-					if(t instanceof JDBCAdaptorException) {
-						JDBCAdaptorException jdbcEx = (JDBCAdaptorException) t;
-						SQLException sqlEx = jdbcEx.sqlException();
-						if(sqlEx != null && UNIQUE_CONSTRAINT_EXCEPTION_STATE.equals(sqlEx.getSQLState())) {
-							String message = sqlEx.getMessage();
-							MessageFormat format = new MessageFormat(UNIQUE_CONSTRAINT_MESSAGE_FORMAT);
-							try {
-								Object[] objs = format.parse(message);
-								String idx = (String) objs[0];
-								ERXValidationFactory factory = ERXValidationFactory.defaultFactory();
-								String method = "UniqueConstraintException." + idx;
-								ERXValidationException ex = factory.createCustomException(null, method);
-								databaseContext.rollbackChanges();
-								throw ex;
-							} catch (ParseException	 pe) {
-								log.warn("Error parsing unique constraint exception message: " + message);
+				if (gae.userInfo() != null) {
+					EOAdaptorOperation failedOperation = (EOAdaptorOperation) gae.userInfo().objectForKey(EOAdaptorChannel.FailedAdaptorOperationKey);
+					if (failedOperation != null) {
+						Throwable t = failedOperation.exception();
+						if (t instanceof JDBCAdaptorException) {
+							JDBCAdaptorException jdbcEx = (JDBCAdaptorException) t;
+							SQLException sqlEx = jdbcEx.sqlException();
+							if (sqlEx != null && UNIQUE_CONSTRAINT_EXCEPTION_STATE.equals(sqlEx.getSQLState())) {
+								String message = sqlEx.getMessage();
+								MessageFormat format = new MessageFormat(UNIQUE_CONSTRAINT_MESSAGE_FORMAT);
+								try {
+									Object[] objs = format.parse(message);
+									String idx = (String) objs[0];
+									ERXValidationFactory factory = ERXValidationFactory.defaultFactory();
+									String method = "UniqueConstraintException." + idx;
+									ERXValidationException ex = factory.createCustomException(null, method);
+									databaseContext.rollbackChanges();
+									throw ex;
+								} catch (ParseException e) {
+									log.warn("Error parsing unique constraint exception message: " + message);
+								}
 							}
 						}
 					}
@@ -2404,7 +2407,6 @@ public class ERXSQLHelper {
 			}
 			return false;
 		}
-
 	}
 	
 	public static class FirebirdSQLHelper extends ERXSQLHelper {

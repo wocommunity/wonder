@@ -172,8 +172,9 @@ public class ERXDatabaseContextDelegate {
 	 * EOF. To see the exceptions trace, set the logger
 	 * er.transaction.adaptor.Exceptions to DEBUG.
 	 * 
-	 * @param databaseContext
-	 * @param throwable
+	 * @param databaseContext the current database context
+	 * @param throwable the original exception
+	 * @return <code>true</code> if the exception has been handled already
 	 */
 	public boolean databaseContextShouldHandleDatabaseException(EODatabaseContext databaseContext, Throwable throwable) {
 		if(!reportingError.canEnter(databaseContext)) return true;
