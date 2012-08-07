@@ -64,5 +64,4 @@ public class GroupingOnly extends WOComponent {
         }
         return recGrps;
     }
-
 }

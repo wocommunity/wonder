@@ -22,7 +22,6 @@ import er.directtoweb.interfaces.ERDPickPageInterface;
  * 
  * @author ak on Mon Sep 01 2003
  */
-
 public  class ERDActionButton extends ERDCustomComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -50,9 +49,11 @@ public  class ERDActionButton extends ERDCustomComponent {
     }
 
     /** Action buttons must be stateless. */
+    @Override
     public final boolean isStateless() { return true; }
 
     /** Action buttons do not synchronize their variables. */
+    @Override
     public final boolean synchronizesVariablesWithBindings() { return false; }
 
     /** The current object. */
@@ -65,6 +66,7 @@ public  class ERDActionButton extends ERDCustomComponent {
     public EODataSource dataSource() {return (EODataSource)valueForBinding(Keys.dataSource); }
 
     /** The current task.*/
+    @Override
     public String task() { return (String)valueForBinding(Keys.task);  }
 
     /** Utility to return the next page in the enclosing page. */

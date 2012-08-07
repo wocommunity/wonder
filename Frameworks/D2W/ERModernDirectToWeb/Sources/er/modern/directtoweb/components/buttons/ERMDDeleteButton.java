@@ -43,7 +43,6 @@ import er.extensions.localization.ERXLocalizer;
  *
  * @author davidleber
  */
-
 public class ERMDDeleteButton extends ERMDActionButton {
 	
 	@SuppressWarnings("unused")

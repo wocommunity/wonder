@@ -6,6 +6,7 @@ import er.directtoweb.pages.ERD2WQueryEntitiesPage;
 
 /**
  * Class for DirectToWeb Component ERD2WQueryEntitiesPageTemplate.
+ * 
  * @author ak on Mon Sep 01 2003
  * 
  * @d2wKey displayNameForEntity

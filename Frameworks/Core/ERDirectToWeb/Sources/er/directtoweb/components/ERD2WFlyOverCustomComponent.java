@@ -38,12 +38,18 @@ public class ERD2WFlyOverCustomComponent extends D2WCustomComponent {
     }
 
     /** component does not synchronize it's variables */
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
+    
+    @Override
     public boolean isStateless() { return true; }
 
+    @Override
     public NSArray displayPropertyKeys() {
         return (NSArray)d2wContext().valueForKey("displayPropertyKeys");
     }
+    
+    @Override
     public D2WContext d2wContext() {
     	return (D2WContext)valueForBinding("localContext");
     }

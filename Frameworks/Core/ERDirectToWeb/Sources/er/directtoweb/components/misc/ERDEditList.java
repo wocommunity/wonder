@@ -30,7 +30,6 @@ import er.extensions.eof.ERXEOControlUtilities;
  * 
  */
 //DELETEME This looks like a pick page?
-
 public class ERDEditList extends ERDCustomEditComponent {
 	/**
 	 * Do I need to update serialVersionUID?

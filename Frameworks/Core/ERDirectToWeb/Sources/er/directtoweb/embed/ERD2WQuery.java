@@ -14,7 +14,6 @@ import er.directtoweb.delegates.ERD2WQueryActionDelegate;
  * 
  * @author ak on Fri Jan 09 2004
  */
-
 public class ERD2WQuery extends D2WQuery {
 	/**
 	 * Do I need to update serialVersionUID?

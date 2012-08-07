@@ -58,6 +58,7 @@ public class ERDListPageRepetition extends ERDAttributeRepetition {
         return actions == null ? NO_ACTIONS : actions;
     }
     
+    @Override
     public NSArray sectionsContents() {
     	NSArray result = super.sectionsContents();
     	if(result.count() == 1) {

@@ -101,6 +101,4 @@ public class ERMDInspectButton extends ERMDActionButton {
         epi.setObject(object());
         return (WOActionResults)epi;
     }
-
-	
 }

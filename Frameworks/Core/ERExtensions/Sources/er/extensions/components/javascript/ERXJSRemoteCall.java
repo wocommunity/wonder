@@ -1,4 +1,5 @@
 package er.extensions.components.javascript;
+
 import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
@@ -18,7 +19,6 @@ import er.extensions.foundation.ERXValueUtilities;
  *
  * @author ak on Fri May 02 2003
  */
-
 public class ERXJSRemoteCall extends WOComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -46,10 +46,16 @@ public class ERXJSRemoteCall extends WOComponent {
     }
 
     /** component does not synchronize it's variables */
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
+    
+    @Override
     public String name() { return (String)valueForBinding("name");}
+    
     public String frameName() { return name() + "Frame";}
+    
     public String actionClass() { return (String)valueForBinding("actionClass");}
+    
     public String url() {
         if(_url == null)
             _url = context().directActionURLForActionNamed((actionClass() == null ? "" : actionClass() + "/") + name(), arguments());
@@ -77,6 +83,7 @@ public class ERXJSRemoteCall extends WOComponent {
         return _parameters;
     }
     
+    @Override
     public void reset() {
         _arguments = null;
         _parameters = null;

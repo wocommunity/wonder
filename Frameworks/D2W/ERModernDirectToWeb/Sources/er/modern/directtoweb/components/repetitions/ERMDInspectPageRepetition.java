@@ -22,7 +22,6 @@ import er.extensions.foundation.ERXStringUtilities;
  * @d2wKey classForAttributeRepetitionWrapper
  * 
  * @author davidleber
- *
  */
 public class ERMDInspectPageRepetition extends ERDInspectPageRepetition {
 	

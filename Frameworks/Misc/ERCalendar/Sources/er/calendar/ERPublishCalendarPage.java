@@ -41,7 +41,6 @@ import com.webobjects.foundation.NSTimestampFormatter;
  * @author 	Johan Carlberg <johan@oops.se>
  * @version 	1.0, 2002-09-30
  */
-
 public class ERPublishCalendarPage extends WOComponent {
 	/**
 	 * Do I need to update serialVersionUID?

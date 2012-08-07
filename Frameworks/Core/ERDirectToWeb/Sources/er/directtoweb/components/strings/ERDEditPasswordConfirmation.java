@@ -24,7 +24,6 @@ import er.extensions.validation.ERXValidationFactory;
  *
  * @author ak on Sun Aug 17 2003
  */
-
 public class ERDEditPasswordConfirmation extends ERDCustomEditComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -63,6 +62,7 @@ public class ERDEditPasswordConfirmation extends ERDCustomEditComponent {
         return passwordPropertyKey;
     }
 
+    @Override
     public Object objectKeyPathValue() {
         return passwordPropertyKey() == null || object() == null ? null : object().valueForKeyPath(passwordPropertyKey()); 
     }
@@ -87,6 +87,7 @@ public class ERDEditPasswordConfirmation extends ERDCustomEditComponent {
         _passwordConfirm = value;
     }
 
+    @Override
     public void setObject(EOEnterpriseObject newObject) {
         if (newObject!=object()) {
             _passwordConfirm = null;
@@ -123,6 +124,7 @@ public class ERDEditPasswordConfirmation extends ERDCustomEditComponent {
         }
     }
     
+    @Override
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         super.takeValuesFromRequest(r,c);
         if (c.wasFormSubmitted()) {
@@ -130,6 +132,7 @@ public class ERDEditPasswordConfirmation extends ERDCustomEditComponent {
 		}
     }
 
+    @Override
 	public void reset() {
 		ERXWOContext.contextDictionary().removeObjectForKey("ERDEditPassword");
 		super.reset();

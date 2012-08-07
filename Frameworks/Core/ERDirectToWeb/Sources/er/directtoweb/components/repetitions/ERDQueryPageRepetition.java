@@ -45,8 +45,8 @@ public class ERDQueryPageRepetition extends ERDAttributeRepetition {
     }
 
     /** component does not synchronize it's variables */
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
-
 
     public WODisplayGroup displayGroup() {
         return (WODisplayGroup)valueForBinding("displayGroup");

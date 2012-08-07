@@ -83,13 +83,6 @@ public final class Configuration extends Object implements WOXMLCoding {
         return (paths().count()>0);
     }
 
-
-    
-
-
-
-
-    
     // xml interfaced methods
     public void encodeWithWOXMLCoder(WOXMLCoder coder) {
         coder.encodeObjectForKey((NSArray)paths, "Paths");
@@ -115,5 +108,4 @@ public final class Configuration extends Object implements WOXMLCoding {
         return null;
         }
     }
-
 }

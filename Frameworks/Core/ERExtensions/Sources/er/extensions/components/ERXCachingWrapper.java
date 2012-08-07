@@ -1,4 +1,5 @@
 package er.extensions.components;
+
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -41,9 +42,7 @@ import er.extensions.foundation.ERXAssert;
  *
  * @author ak on 20.01.05
  */
-
 //ENHANCEME cache should get reaped every so often and remove stale entries. 
-
 public class ERXCachingWrapper extends ERXStatelessComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -65,6 +64,7 @@ public class ERXCachingWrapper extends ERXStatelessComponent {
     	 */
     	private static final long serialVersionUID = 1L;
 
+    	@Override
     	public Object get(Object key) {
     		Entry result = (Entry) super.get(key);
     		if(result != null) {
@@ -124,6 +124,7 @@ public class ERXCachingWrapper extends ERXStatelessComponent {
         super(context);
     }
     
+    @Override
     public void awake() {
     	super.awake();
     	keys = null;
@@ -217,12 +218,14 @@ public class ERXCachingWrapper extends ERXStatelessComponent {
     	return values;
     }
     
+    @Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		if(entry == null) {
 			super.takeValuesFromRequest(request, context);
 		}
 	}
 	
+    @Override
 	public WOActionResults invokeAction(WORequest request, WOContext context) {
 		if(entry == null) {
 			return super.invokeAction(request, context);
@@ -230,6 +233,7 @@ public class ERXCachingWrapper extends ERXStatelessComponent {
 		return null;
 	}
 	
+    @Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		if(entry == null) {
 			WOResponse newResponse = application().createResponseInContext(context);

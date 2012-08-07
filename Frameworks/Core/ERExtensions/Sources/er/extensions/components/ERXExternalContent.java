@@ -1,4 +1,5 @@
 package er.extensions.components;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -23,7 +24,6 @@ import er.extensions.foundation.ERXFileUtilities;
  *
  * @author ak on 31.10.05
  */
-
 public class ERXExternalContent extends ERXStatelessComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -94,9 +94,9 @@ public class ERXExternalContent extends ERXStatelessComponent {
     	return result;
     }
     
+    @Override
     public void appendToResponse(WOResponse response, WOContext arg1) {
     	String content = contentString();
     	response.appendContentString(content);
     }
-    
  }

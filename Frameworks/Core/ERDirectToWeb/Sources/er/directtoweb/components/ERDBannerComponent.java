@@ -13,7 +13,6 @@ import com.webobjects.appserver.WOContext;
  *
  * @author ak on Tue Sep 02 2003
  */
-
 public class ERDBannerComponent extends ERDCustomComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -34,9 +33,11 @@ public class ERDBannerComponent extends ERDCustomComponent {
     }
 
     /** component does not synchronize it's variables */
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     /** component is stateless */
+    @Override
     public boolean isStateless() { return true; }
 
     public boolean showBanner() {

@@ -8,7 +8,6 @@ import com.webobjects.directtoweb.ErrorPageInterface;
  *
  * @author ak on Thu Jan 29 2004
  */
-
 public interface ERDErrorPageInterface extends ErrorPageInterface {
     
     /** Sets the exception. */

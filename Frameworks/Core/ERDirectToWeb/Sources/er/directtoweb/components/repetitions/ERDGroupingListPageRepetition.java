@@ -43,6 +43,7 @@ public class ERDGroupingListPageRepetition extends ERDListPageRepetition {
 	}
 	
 	/** component does not synchronize it's variables */
+	@Override
 	public boolean synchronizesVariablesWithBindings() { return false; }
 	
 	

@@ -1,4 +1,5 @@
 package ag.kcmedia;
+
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOComponent;
@@ -13,6 +14,7 @@ import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSchemaGeneration;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
+
 /**
 * Class for Component EOModeler.
  *
@@ -71,6 +73,7 @@ public class EOModeler extends WOComponent {
     public String sql;
     public NSArray attributesUsedInRelationships;
     
+    @Override
         public void awake() {
             super.awake();
             modelPath();

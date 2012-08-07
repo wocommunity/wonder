@@ -24,7 +24,6 @@ import er.extensions.localization.ERXLocalizer;
  *
  * @author ak on Mon Sep 01 2003
  */
-
 public class ERDDeleteButton extends ERDActionButton {
 	/**
 	 * Do I need to update serialVersionUID?

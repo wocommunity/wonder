@@ -25,7 +25,6 @@ import er.extensions.localization.ERXLocalizer;
  *
  * @author ak on 07.11.05
  */
-
 public class ERDPickIntermediateButton extends ERDActionButton {
 	/**
 	 * Do I need to update serialVersionUID?

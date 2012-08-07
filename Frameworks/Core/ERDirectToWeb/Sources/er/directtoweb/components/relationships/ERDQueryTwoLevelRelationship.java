@@ -31,9 +31,9 @@ import er.extensions.eof.qualifiers.ERXPrimaryKeyListQualifier;
  * restrictedChildrenChoiceKey = "session.user.visibleDepartments", Restriction on the children entity,
  *          if unset all children are shown
  * displayGroup = display group the query is in
+ * 
  * @author ak on Fri Nov 21 2003
  */
-
 public class ERDQueryTwoLevelRelationship extends ERDCustomQueryComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -54,6 +54,7 @@ public class ERDQueryTwoLevelRelationship extends ERDCustomQueryComponent {
     }
 
     /** component does not synchronize it's variables */
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     /** eg. city */
@@ -89,10 +90,12 @@ public class ERDQueryTwoLevelRelationship extends ERDCustomQueryComponent {
         }
     }
     
+    @Override
     public Object displayGroupQueryMatchValue() {
         return primaryQueryKey() != null && displayGroup() != null ? displayGroup().queryMatch().objectForKey(primaryQueryKey()) : null;
     }
     
+    @Override
     public void setDisplayGroupQueryMatchValue (Object newValue) {
         if (primaryQueryKey() != null && displayGroup () != null && displayGroup().queryMatch()!=null ) {
             if(newValue != null) {

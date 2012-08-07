@@ -11,9 +11,9 @@ import er.extensions.concurrency.ERXLongResponseTask;
  * You call up this page and give it a long running task. 
  * The task is currently responsible for returning the correct page for each stage.
  * Work in progress.
+ * 
  * @author ak on Wed Feb 04 2004
  */
-
 public class ERD2WProgressPage extends ERD2WMessagePage {
 	/**
 	 * Do I need to update serialVersionUID?
