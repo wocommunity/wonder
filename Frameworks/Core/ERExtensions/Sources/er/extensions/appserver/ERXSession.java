@@ -30,7 +30,6 @@ import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSPathUtilities;
 import com.webobjects.foundation.NSSelector;
-import com.webobjects.foundation.NSTimestamp;
 
 import er.extensions.appserver.ajax.ERXAjaxSession;
 import er.extensions.eof.ERXConstant;
@@ -672,10 +671,6 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
       log.debug("Session has been deserialized: " + toString());
   }
 
-  public NSTimestamp _birthDate() {
-	  return super._birthDate();
-  }
-  
   @Override
   public String toString() {
     String superString = super.toString();
