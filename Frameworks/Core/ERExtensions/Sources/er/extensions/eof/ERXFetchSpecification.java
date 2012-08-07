@@ -15,6 +15,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation.NSRange;
 
 import er.extensions.crypting.ERXCrypto;
 import er.extensions.qualifiers.ERXQualifierTraversal;
@@ -40,6 +41,7 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 
 	private NSMutableDictionary _userInfo;
 	private boolean _includeEditingContextChanges;
+	private NSRange _fetchRange;
 	
 	public ERXFetchSpecification(String entityName, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings, boolean usesDistinct, boolean isDeep, NSDictionary hints) {
 		super(entityName, qualifier, sortOrderings, usesDistinct, isDeep, hints);
@@ -57,12 +59,13 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 		setRawRowKeyPaths(spec.rawRowKeyPaths());
 		setPromptsAfterFetchLimit(spec.promptsAfterFetchLimit());
 		setRefreshesRefetchedObjects(spec.refreshesRefetchedObjects());
-		setPrefetchingRelationshipKeyPaths(spec.prefetchingRelationshipKeyPaths());  
+		setPrefetchingRelationshipKeyPaths(spec.prefetchingRelationshipKeyPaths());
 	}
 
 	public ERXFetchSpecification(ERXFetchSpecification<T> spec) {
 		this((EOFetchSpecification)spec);
 		_userInfo = spec.userInfo().count() > 0 ? null : spec.userInfo().mutableClone();
+		_fetchRange = spec.fetchRange();
 	}
 
 	/**
@@ -121,6 +124,20 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	 */
 	public NSDictionary userInfo() {
 		return _userInfo == null ? NSDictionary.EmptyDictionary : _userInfo.immutableClone(); 
+	}
+	
+	public NSRange fetchRange() {
+		return _fetchRange;
+	}
+	
+	/**
+	 * Defines a batch range that should be applied to the SQL statement. Only useful if the database plugin supports it and as an alternative to fetchLimit.
+	 * The SQL generation behavior when both a fetchLimit and a fetchRange are specified is undefined and dependent on the individual database plugin.
+	 * 
+	 * @param range
+	 */
+	public void setFetchRange(NSRange range) {
+		_fetchRange = range;
 	}
 	
 	/**
@@ -188,7 +205,11 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	
 	@Override
 	public Object clone() {
-		return fetchSpec((EOFetchSpecification) super.clone());
+		ERXFetchSpecification<T> fs = fetchSpec((EOFetchSpecification) super.clone());
+		fs._fetchRange = _fetchRange;
+		fs._userInfo = _userInfo == null ? null : _userInfo.mutableClone();
+		fs._includeEditingContextChanges = _includeEditingContextChanges;
+		return fs;
 	}
 	
 	/**

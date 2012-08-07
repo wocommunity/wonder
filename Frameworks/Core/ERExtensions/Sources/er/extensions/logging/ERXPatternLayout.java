@@ -349,7 +349,7 @@ class ERXPatternParser extends PatternParser {
 
 	/**
 	 * The <code>AppInfoPatternConverter</code> is useful for logging various
-	 * info about the WebObjects applicaiton instance. See
+	 * info about the WebObjects application instance. See
 	 * {@link ERXPatternLayout} for example/supported partterns.
 	 */
 	private class AppInfoPatternConverter extends PatternConverter {

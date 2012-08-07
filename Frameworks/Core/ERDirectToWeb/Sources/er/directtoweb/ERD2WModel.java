@@ -94,7 +94,7 @@ public class ERD2WModel extends D2WModel {
     public static final String WillSortRules = "WillSortRules";
     public static final String ModelWillReset = "ModelWillReset";
 
-    /** null refernced used to represent null in the caching system */
+    /** null referenced used to represent null in the caching system */
     private final static Object NULL_VALUE="<NULL>";
 
     private Hashtable _cache=new Hashtable(10000);

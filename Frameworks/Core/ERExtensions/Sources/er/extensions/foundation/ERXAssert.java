@@ -8,33 +8,43 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 /**
-Provides flexible and powerful assertion. Is modeled a bit like log4j in that you can have multiple asserters that can have different behavior. In particular, each can be disabled, set to logging mode or set to raise an exception. Also you can set your own failure handler.
- 
-In WebObjects.properties, you can have:
- 
-    ERXAssert.instances=RAISE
-    ERXAssert.instances.com.somepackage=LOG
-    ERXAssert.instances.com.somepackage.someclass=RAISE
-
-In your code's static initialization, you can write: 
-
-    private static ERXAssert Assert = ERXAssert.getAssert(Foo.class);
-    private static ERXAssert Pre = ERXAssert.PRE;
-    private static ERXAssert Post = ERXAssert.POST;
-
-And finally, in your methods, you call it via:
-
-    Pre.notNull(someObject);
-    Assert.notNull("someObject" ,someObject);
-    Post.notNull(someObject);
-
-or you can use the supplied assertors directly
-
-    ERXAssert.DURING.notNull("someObject", someObject);
- 
-Most of this code is derived from Jonathan "Wolf" Rentzsch's JAssert, which can be found here:
-    http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/redshed/JAssert/
- **/
+ * Provides flexible and powerful assertion. Is modeled a bit like log4j in that you can have multiple asserters that can have 
+ * different behavior. In particular, each can be disabled, set to logging mode or set to raise an exception. Also you can set
+ * your own failure handler.
+ * 
+ * In WebObjects.properties, you can have:
+ * 
+ * <blockquote><pre>
+ * ERXAssert.instances=RAISE
+ * ERXAssert.instances.com.somepackage=LOG
+ * ERXAssert.instances.com.somepackage.someclass=RAISE
+ * </pre></blockquote>
+ * 
+ * In your code's static initialization, you can write: 
+ *
+ * <blockquote><pre>
+ * private static ERXAssert Assert = ERXAssert.getAssert(Foo.class);
+ * private static ERXAssert Pre = ERXAssert.PRE;
+ * private static ERXAssert Post = ERXAssert.POST;
+ * </pre></blockquote>
+ *
+ * And finally, in your methods, you call it via:
+ *
+ * <blockquote><pre>
+ * Pre.notNull(someObject);
+ * Assert.notNull("someObject" ,someObject);
+ * Post.notNull(someObject);
+ * </pre></blockquote>
+ *
+ * or you can use the supplied assertors directly
+ *
+ * <blockquote><pre>
+ * ERXAssert.DURING.notNull("someObject", someObject);
+ * </pre></blockquote>
+ * 
+ * Most of this code is derived from Jonathan "Wolf" Rentzsch's JAssert, which can be found here:
+ * <a href="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/redshed/JAssert/">http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/redshed/JAssert/</a>.
+**/
 public class ERXAssert {
     private static final NSMutableDictionary _instances = new NSMutableDictionary();
     private static final NSMutableDictionary _handlersForKey = new NSMutableDictionary();
