@@ -1,0 +1,16 @@
+{
+    EOModelVersion = "2.1"; 
+    adaptorName = JDBC; 
+    connectionDictionary = {URL = ""; password = ""; username = ""; }; 
+    entities = (
+        {className = "com.webobjects.eocontrol.EOGenericRecord"; name = Environment; }, 
+        {className = "com.webobjects.eocontrol.EOGenericRecord"; name = EnvJoin; }, 
+        {className = "com.webobjects.eocontrol.EOGenericRecord"; name = Failure; }, 
+        {className = "com.webobjects.eocontrol.EOGenericRecord"; name = Result; }, 
+        {
+            className = "com.webobjects.eocontrol.EOGenericRecord"; 
+            name = VersionDigest; 
+        }
+    ); 
+    userInfo = {}; 
+}

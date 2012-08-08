@@ -41,7 +41,6 @@ import com.webobjects.foundation.NSTimestampFormatter;
  * @author 	Johan Carlberg <johan@oops.se>
  * @version 	1.0, 2002-09-30
  */
-
 public class ERPublishCalendarPage extends WOComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -55,7 +54,6 @@ public class ERPublishCalendarPage extends WOComponent {
     protected final int maxLineLength = 75;
     public static String newline = System.getProperty("line.separator");
 
-    /** @TypeInfo er.calendar.ERCalendarEvent */
     protected NSMutableArray events;
     public ERCalendarEvent event;
     protected NSTimestamp eventTimestamp;
@@ -150,7 +148,6 @@ public class ERPublishCalendarPage extends WOComponent {
 	events.removeObjectsInArray (eventsArray);
     }
 
-    /** @TypeInfo er.calendar.ERCalendarEvent */
     public NSMutableArray events() {
 	return events;
     }

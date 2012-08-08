@@ -1,0 +1,42 @@
+{
+    attributes = (
+        {
+            columnName = "env_pk"; 
+            externalType = INT; 
+            name = envPk; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            columnName = "result_pk"; 
+            externalType = INT; 
+            name = resultPk; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }
+    ); 
+    attributesUsedForLocking = (envPk, resultPk); 
+    className = "com.webobjects.eocontrol.EOGenericRecord"; 
+    externalName = "env_joins"; 
+    fetchSpecificationDictionary = {}; 
+    name = EnvJoin; 
+    primaryKeyAttributes = (envPk, resultPk); 
+    relationships = (
+        {
+            destination = Environment; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = pk; sourceAttribute = envPk; }); 
+            name = environment; 
+        }, 
+        {
+            destination = Result; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = pk; sourceAttribute = resultPk; }); 
+            name = result; 
+        }
+    ); 
+}

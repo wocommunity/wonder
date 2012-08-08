@@ -237,6 +237,10 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     				EOEnterpriseObject eo = ERXEOAccessUtilities.refetchFailedObject(ec, ex);
     				setErrorMessage(ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CouldNotSavePleaseReapply", d2wContext()));
     				validationFailedWithException(ex, eo, "CouldNotSavePleaseReapply");
+    				} else if(ERXEOAccessUtilities.isUniqueFailure(ex)) { 
+    				  EOEnterpriseObject eo = ERXEOAccessUtilities.refetchFailedObject(ec, ex);
+    				  setErrorMessage(ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("DatabaseUniqException", d2wContext()));
+    				  validationFailedWithException(ex, eo, "DatabaseUniqException");
     			} else {
     				throw ex;
     			}

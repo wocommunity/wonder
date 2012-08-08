@@ -1,3 +1,7 @@
+##  Properies Info
+er.extensions.load.Properties.framework.JavaMonitorFramework=load
+er.extensions.JavaMonitorFramework.hasLocalization=false
+
 # Add framework properties here
 
 # These properties are loaded into the Java system properties for applications linking against this framework

@@ -1,0 +1,20 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html><head><title>WOTested</title></head>
+<body>
+
+<h3>Results:</h3>
+
+<ul>
+<wo:loop list="$results" item="$aResult">
+	<li>
+		result: <wo:str value="$aResult.whence//VALID" />; 
+		versions # <wo:str value="$aResult.digests.count//VALID" />; 
+		<wo:loop list="$aResult.environments//VALID" item="$env">
+		<wo:str value="$env.info//VALID" />;
+		</wo:loop>
+		failures # <wo:str value="$aResult.failures.count//VALID" />
+	</li>
+</wo:loop>
+</ul>
+
+</body></html>

@@ -1,3 +1,6 @@
+##  Properies Info
+er.extensions.load.Properties.framework.ERChangeNotificationJMS=load
+er.extensions.ERChangeNotificationJMS.hasLocalization=false
 
 # ERChangeNotificationJMS Framework Properties
 

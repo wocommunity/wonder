@@ -17,6 +17,7 @@ import com.webobjects.woextensions.WOStatsPage;
 import er.directtoweb.ERD2WModel;
 import er.directtoweb.ERDirectToWeb;
 import er.extensions.ERXExtensions;
+import er.extensions.ERXFrameworkPrincipal;
 import er.extensions.appserver.ERXApplication;
 import er.extensions.components.ERXComponentUtilities;
 import er.extensions.foundation.ERXProperties;
@@ -41,6 +42,7 @@ public class ERD2WDebugFlags extends WOComponent {
         super(context);
     }
 
+    @Override
     public boolean isStateless() {
         return true;
     }
@@ -118,6 +120,15 @@ public class ERD2WDebugFlags extends WOComponent {
      */
     public boolean shouldShow() {
         return ERXComponentUtilities.booleanValueForBinding(this, "shouldShow", ERXApplication.erxApplication().isDevelopmentMode());
+    }
+
+    /**
+     * Check if Selenium Framework is installed.
+     * 
+     * @return if Selenium Framework is Installed the <code>true</code> will return
+     */
+    public boolean hasSeleniumFramework() {
+      return ERXFrameworkPrincipal.hasFrameworkInstalled("ERSelenium");
     }
 
 }
