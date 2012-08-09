@@ -205,6 +205,7 @@ public class Application extends ERXApplication  {
         restHandler.addDefaultRoutes("MApplication", false, MApplicationController.class);
         restHandler.insertRoute(new ERXRoute("MApplication","/mApplications/{name:MApplication}/addInstance", ERXRoute.Method.Get, MApplicationController.class, "addInstance"));
         restHandler.insertRoute(new ERXRoute("MApplication","/mApplications/{name:MApplication}/deleteInstance", ERXRoute.Method.Get, MApplicationController.class, "deleteInstance"));
+        restHandler.insertRoute(new ERXRoute("MApplication","/mApplications/info", ERXRoute.Method.Get, MApplicationController.class, "info"));
         restHandler.addDefaultRoutes("MHost", false, MHostController.class);
         restHandler.addDefaultRoutes("MSiteConfig", false, MSiteConfigController.class);
         restHandler.insertRoute(new ERXRoute("MSiteConfig","/mSiteConfig", ERXRoute.Method.Put, MSiteConfigController.class, "update"));

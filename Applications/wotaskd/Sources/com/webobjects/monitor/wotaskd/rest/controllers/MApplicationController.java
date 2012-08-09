@@ -1,12 +1,17 @@
 package com.webobjects.monitor.wotaskd.rest.controllers;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WORequest;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.monitor._private.MApplication;
 import com.webobjects.monitor._private.MHost;
 import com.webobjects.monitor._private.MInstance;
 
 import er.extensions.eof.ERXKeyFilter;
+import er.extensions.eof.ERXQ;
 
 public class MApplicationController extends JavaMonitorController {
 
@@ -101,5 +106,50 @@ public class MApplicationController extends JavaMonitorController {
 		} finally {
 		}
 	}
+	
+  public WOActionResults infoAction() {
+    checkPassword();
+    
+    String type = request().stringFormValueForKey("type");
+    String name = request().stringFormValueForKey("name");
+    
+    NSArray<MInstance> instances = siteConfig().instanceArray();
+    if ("app".equals(type)) {
+      instances = ERXQ.filtered(siteConfig().instanceArray(), ERXQ.is("applicationName", name));
+    } else if ("ins".equals(type)) {
+      Pattern p = Pattern.compile("^(.*)\\-([0-9]+)$");
+      Matcher m = p.matcher(name);
+      if (m.matches()) {
+        String applicationName = m.group(1);
+        String id = m.group(2);
+        instances = ERXQ.filtered(siteConfig().instanceArray(), ERXQ.is("applicationName", applicationName).and(ERXQ.is("id", id)));
+      }
+    }
+    
+    return response(instances, instanceFilter());
+  }
+  
+  public ERXKeyFilter instanceFilter() {
+    ERXKeyFilter filter = ERXKeyFilter.filterWithNone();
+    filter.include("applicationName");
+    filter.include("id");
+    filter.include("host.name");
+    filter.include("port");
+    filter.include("deaths");
+    filter.include("isRefusingNewSessions");
+    filter.include("isScheduled");
+    filter.include("schedulingHourlyStartTime");
+    filter.include("schedulingDailyStartTime");
+    filter.include("schedulingWeeklyStartTime");
+    filter.include("schedulingType");
+    filter.include("schedulingStartDay");
+    filter.include("schedulingInterval");
+    filter.include("transactions");
+    filter.include("activeSessions");
+    filter.include("averageIdlePeriod");
+    filter.include("avgTransactionTime");
+    filter.include("isAutoRecovering");
+    return filter;
+  }
 
 }
