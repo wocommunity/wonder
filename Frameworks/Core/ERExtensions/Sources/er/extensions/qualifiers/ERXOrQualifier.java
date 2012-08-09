@@ -23,13 +23,13 @@ public class ERXOrQualifier extends EOOrQualifier implements IERXChainableQualif
 	public ERXOrQualifier(NSArray<? extends EOQualifier> qualifiers) {
 		super((NSArray<EOQualifier>) qualifiers);
 	}
-
+	
 	public ERXAndQualifier and(EOQualifier... qualifiers) {
 		return ERXChainedQualifierUtils.and(this, qualifiers);
 	}
 
 	public ERXNotQualifier not() {
-		return ERXChainedQualifierUtils.not(this);
+		return ERXQ.not(this);
 	}
 
 	@SuppressWarnings("unchecked")

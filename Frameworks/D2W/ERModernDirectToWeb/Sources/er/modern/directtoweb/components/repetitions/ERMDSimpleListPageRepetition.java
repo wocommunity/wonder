@@ -5,8 +5,6 @@ import com.webobjects.appserver.WOContext;
 /**
  * Modernized table based list page repetition. Suitable for most needs.Eliminiates much of the
  * additions from ERMDListPageRepetition.
- *
- * @project ERModernDirectToWeb
  * 
  * @binding displayGroup
  * @binding d2wContext
