@@ -18,6 +18,7 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import javax.management.InstanceAlreadyExistsException;
@@ -29,6 +30,15 @@ import javax.management.ObjectName;
 import javax.management.remote.JMXConnectorServer;
 import javax.management.remote.JMXConnectorServerFactory;
 import javax.management.remote.JMXServiceURL;
+
+import org.apache.sshd.SshServer;
+import org.apache.sshd.common.NamedFactory;
+import org.apache.sshd.server.Command;
+import org.apache.sshd.server.PasswordAuthenticator;
+import org.apache.sshd.server.command.ScpCommandFactory;
+import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider;
+import org.apache.sshd.server.session.ServerSession;
+import org.apache.sshd.server.sftp.SftpSubsystem;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WORequest;
@@ -222,6 +232,28 @@ public class Application extends ERXApplication  {
         restHandler.insertRoute(new ERXRoute("MSiteConfig","/mSiteConfig", ERXRoute.Method.Put, MSiteConfigController.class, "update"));
 
         ERXRouteRequestHandler.register(restHandler);
+        
+        SshServer sshd = SshServer.setUpDefaultServer();
+        sshd.setPort(6022);
+        sshd.setPasswordAuthenticator(new SshPasswordAuthenticator());
+        sshd.setKeyPairProvider(new SimpleGeneratorHostKeyProvider("hostkey.ser"));
+        sshd.setCommandFactory(new ScpCommandFactory());
+        sshd.setSubsystemFactories(Arrays.<NamedFactory<Command>>asList(new SftpSubsystem.Factory()));
+        try {
+          sshd.start();
+        }
+        catch (IOException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
+    }
+    
+    public class SshPasswordAuthenticator implements PasswordAuthenticator {
+
+      public boolean authenticate(String username, String password, ServerSession serversession) {
+        return (siteConfig().compareStringWithPassword(password)) ? true: false;
+      }
+      
     }
     
 	/**
