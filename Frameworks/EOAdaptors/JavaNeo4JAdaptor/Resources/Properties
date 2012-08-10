@@ -1,3 +1,8 @@
+##  Properies Info
+er.extensions.load.Properties.framework.JavaNeo4JAdaptor=load
+er.extensions.JavaNeo4JAdaptor.hasLocalization=false
+
+
 log4j.logger.er.neo4jadaptor.database.pool=INFO
 
 

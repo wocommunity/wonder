@@ -17,7 +17,6 @@ import com.webobjects.foundation.NSArray;
  * @d2wKey displayPropertyKeys the keys value to show in the table
  *
  * @author ak on Tue Feb 10 2004
- * @project ERDirectToWeb
  */
 public class ERD2WFlyOverCustomComponent extends D2WCustomComponent {
 	/**
@@ -39,12 +38,18 @@ public class ERD2WFlyOverCustomComponent extends D2WCustomComponent {
     }
 
     /** component does not synchronize it's variables */
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
+    
+    @Override
     public boolean isStateless() { return true; }
 
+    @Override
     public NSArray displayPropertyKeys() {
         return (NSArray)d2wContext().valueForKey("displayPropertyKeys");
     }
+    
+    @Override
     public D2WContext d2wContext() {
     	return (D2WContext)valueForBinding("localContext");
     }

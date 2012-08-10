@@ -152,7 +152,7 @@ public class D2WKeyDoclet extends com.sun.javadoc.Doclet {
                     String compKey = compKeys.next();
                     HashMap map = comps.get(compKey);
 
-                    String bindingCheck = "";
+                    StringBuilder bindingCheck = new StringBuilder();
 
                     out.write("<a name=\""+compKey+"\"><!-- --></a>\n");
                     out.write("<h3>"+comps.get(compKey).get("componentName")+"</h3>\n");
@@ -160,13 +160,13 @@ public class D2WKeyDoclet extends com.sun.javadoc.Doclet {
                     out.write("<p>From <a href=\""+comps.get(compKey).get("classDocURL")+"\">");
                     out.write(map.get("package")+"."+map.get("componentName"));
                     out.write("</a>:\n");
-                    bindingCheck += "          warning: No package defined for class\n";
+                    bindingCheck.append("          warning: No package defined for class\n");
 
                     if (map.get("classComment") != null && ((String)map.get("classComment")).length() != 0)
                         out.write((String)map.get("classComment"));
                     else {
                         out.write("<i>Class documentation missing.</i>");
-                        bindingCheck += "          warning: No class comment defined for class\n";
+                        bindingCheck.append("          warning: No class comment defined for class\n");
                     }
                     out.write("</p>\n");
 
@@ -207,7 +207,7 @@ public class D2WKeyDoclet extends com.sun.javadoc.Doclet {
 
                             if (bindingComment == null || bindingComment.length() == 0) {
                                 out.write("<td>&nbsp;</td>\n");
-                                bindingCheck += "          Binding: \""+bindingName+"\": binding tag in javadoc but no/empty comment\n";
+                                bindingCheck.append("          Binding: \"" + bindingName + "\": binding tag in javadoc but no/empty comment\n");
                             } else {
                                 out.write("<td>"+bindingComment+"<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>\n");
 
@@ -226,8 +226,8 @@ public class D2WKeyDoclet extends com.sun.javadoc.Doclet {
                     check.write("      classDocURL: \""+map.get("classDocURL")+"\"\n");
                     check.write("      allComments: \""+map.get("allComments")+"\"\n");
                     check.write("        condition: \""+map.get("Ok")+"\"\n");
-                    if (!bindingCheck.equals(""))
-                        check.write(bindingCheck);
+                    if (bindingCheck.length() > 0)
+                        check.write(bindingCheck.toString());
                     check.write("\n");
 
                     out.write("<hr/>\n\n");

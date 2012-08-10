@@ -1,0 +1,70 @@
+{
+    attributes = (
+        {
+            columnName = duration; 
+            externalType = bigint; 
+            name = duration; 
+            valueClassName = NSNumber; 
+            valueType = l; 
+        }, 
+        {
+            columnName = email; 
+            externalType = varchar; 
+            name = email; 
+            valueClassName = NSString; 
+            width = 127; 
+        }, 
+        {
+            columnName = pk; 
+            externalType = INT; 
+            name = pk; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            columnName = "time_zone"; 
+            externalType = varchar; 
+            name = timeZone; 
+            valueClassName = NSString; 
+            width = 32; 
+        }, 
+        {
+            columnName = whence; 
+            externalType = char; 
+            name = whence; 
+            valueClassName = NSString; 
+            width = 19; 
+        }
+    ); 
+    attributesUsedForLocking = (duration, email, pk, timeZone, whence); 
+    className = "com.webobjects.eocontrol.EOGenericRecord"; 
+    classProperties = (digests, duration, email, environments, failures, timeZone, whence); 
+    externalName = results; 
+    fetchSpecificationDictionary = {}; 
+    name = Result; 
+    primaryKeyAttributes = (pk); 
+    relationships = (
+        {
+            destination = VersionDigest; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = resultPk; sourceAttribute = pk; }); 
+            name = digests; 
+        }, 
+        {definition = "envJoins.environment"; name = environments; }, 
+        {
+            destination = EnvJoin; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = resultPk; sourceAttribute = pk; }); 
+            name = envJoins; 
+        }, 
+        {
+            destination = Failure; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = resultPk; sourceAttribute = pk; }); 
+            name = failures; 
+        }
+    ); 
+}

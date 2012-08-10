@@ -1,3 +1,7 @@
+##  Properies Info
+er.extensions.load.Properties.framework.ERMoviesLogic=load
+er.extensions.ERMoviesLogic.hasLocalization=false
+
 
 # Embedded H2 Database
 #

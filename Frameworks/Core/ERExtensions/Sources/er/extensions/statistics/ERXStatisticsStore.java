@@ -67,9 +67,10 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 	 */
 	class StopWatchTimer implements Runnable {
 
-		long maximumRequestErrorTime;
-		long maximumRequestWarnTime;
-		long maximumRequestFatalTime;
+		long _maximumRequestErrorTime;
+		long _maximumRequestWarnTime;
+		long _maximumRequestFatalTime;
+		long _lastLog;
 
 		Map<Thread, Long> _requestThreads = new WeakHashMap<Thread, Long>();
 		Map<Thread, Map<Thread, StackTraceElement[]>> _warnTraces = Collections.synchronizedMap(new WeakHashMap<Thread, Map<Thread, StackTraceElement[]>>());
@@ -83,9 +84,9 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 			Thread timerThread = new Thread(this);
 			timerThread.setDaemon(true);
 			timerThread.start();
-			maximumRequestWarnTime = ERXProperties.longForKeyWithDefault("er.extensions.ERXStatisticsStore.milliSeconds.warn", 2000L);
-			maximumRequestErrorTime = ERXProperties.longForKeyWithDefault("er.extensions.ERXStatisticsStore.milliSeconds.error", 10000L);
-			maximumRequestFatalTime = ERXProperties.longForKeyWithDefault("er.extensions.ERXStatisticsStore.milliSeconds.fatal", 5 * 60 * 1000L);
+			_maximumRequestWarnTime = ERXProperties.longForKeyWithDefault("er.extensions.ERXStatisticsStore.milliSeconds.warn", 2000L);
+			_maximumRequestErrorTime = ERXProperties.longForKeyWithDefault("er.extensions.ERXStatisticsStore.milliSeconds.error", 10000L);
+			_maximumRequestFatalTime = ERXProperties.longForKeyWithDefault("er.extensions.ERXStatisticsStore.milliSeconds.fatal", 5 * 60 * 1000L);
 		}
 
 		private long time() {
@@ -116,15 +117,20 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 				synchronized (_requestThreads) {
 					_requestThreads.remove(Thread.currentThread());
 				}
-				if (requestTime > maximumRequestFatalTime) {
+				long currentTime = System.currentTimeMillis();
+				if(currentTime - _lastLog > 10000) {
+					return;
+				}
+				_lastLog = currentTime;
+				if (requestTime > _maximumRequestFatalTime) {
 					String requestDescription = aContext == null ? aString : descriptionForContext(aContext);
 					log.fatal("Request did take too long : " + requestTime + "ms request was: " + requestDescription + trace);
 				}
-				else if (requestTime > maximumRequestErrorTime) {
+				else if (requestTime > _maximumRequestErrorTime) {
 					String requestDescription = aContext == null ? aString : descriptionForContext(aContext);
 					log.error("Request did take too long : " + requestTime + "ms request was: " + requestDescription + trace);
 				}
-				else if (requestTime > maximumRequestWarnTime) {
+				else if (requestTime > _maximumRequestWarnTime) {
 					String requestDescription = aContext == null ? aString : descriptionForContext(aContext);
 					log.warn("Request did take too long : " + requestTime + "ms request was: " + requestDescription + trace);
 				}
@@ -232,24 +238,31 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 	            requestThreads.putAll(_requestThreads);
 			}
 			if (!requestThreads.isEmpty()) {
+				Map traces = null; 
 				for (Iterator iterator = requestThreads.keySet().iterator(); iterator.hasNext();) {
 					Thread thread = (Thread) iterator.next();
 					Long time = requestThreads.get(thread);
 					if (time != null) {
 						time = System.currentTimeMillis() - time;
-						if (time > maximumRequestWarnTime/2 && _warnTraces.get(thread) == null) {
-							Map traces = Thread.getAllStackTraces();
+						if (time > _maximumRequestWarnTime/2 && _warnTraces.get(thread) == null) {
+							if(traces == null) {
+								traces = Thread.getAllStackTraces();
+							}
 							Map names = getCurrentThreadNames(traces.keySet());
 							_warnTraces.put(thread, traces);
 						}
-						if (time > maximumRequestErrorTime/2 && _errorTraces.get(thread) == null) {
-							Map traces = Thread.getAllStackTraces();
+						if (time > _maximumRequestErrorTime/2 && _errorTraces.get(thread) == null) {
+							if(traces == null) {
+								traces = Thread.getAllStackTraces();
+							}
 							Map names = getCurrentThreadNames(traces.keySet());
 							_errorTraces.put(thread, traces);
 							_errorTracesNames.put(thread, names);
 						}
-						if (time > maximumRequestFatalTime && _fatalTraces.get(thread) == null) {
-							Map traces = Thread.getAllStackTraces();
+						if (time > _maximumRequestFatalTime && _fatalTraces.get(thread) == null) {
+							if(traces == null) {
+								traces = Thread.getAllStackTraces();
+							}
 							Map names = getCurrentThreadNames(traces.keySet());
 							_fatalTraces.put(thread, traces);
 							_fatalTracesNames.put(thread, names);

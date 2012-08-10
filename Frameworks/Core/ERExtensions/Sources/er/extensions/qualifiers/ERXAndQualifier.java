@@ -36,7 +36,7 @@ public class ERXAndQualifier extends EOAndQualifier implements IERXChainableQual
 	}
 
 	public ERXNotQualifier not() {
-		return ERXChainedQualifierUtils.not(this);
+		return ERXQ.not(this);
 	}
 
 	public ERXOrQualifier or(EOQualifier... qualifiers) {

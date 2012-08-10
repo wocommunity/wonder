@@ -540,30 +540,30 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 	}
 
 	public String toString() {
-		StringBuffer buffer = new StringBuffer(128);
-		buffer.append("{");
+		StringBuilder sb = new StringBuilder(128);
+		sb.append('{');
 		Object[] keys = keysNoCopy();
 		for (int i = 0; i < keys.length; i++) {
 			Object key = keys[i];
 			Object object = objectForKey(key);
-			buffer.append(key.toString());
-			buffer.append(" = ");
+			sb.append(key.toString());
+			sb.append(" = ");
 			if (object instanceof String) {
-				buffer.append('"');
-				buffer.append((String) object);
-				buffer.append('"');
+				sb.append('"');
+				sb.append((String) object);
+				sb.append('"');
 			}
 			else if (object instanceof Boolean) {
-				buffer.append(((Boolean) object).booleanValue() ? "true" : "false");
+				sb.append(((Boolean) object).toString());
 			}
 			else {
-				buffer.append(object);
+				sb.append(object);
 			}
-			buffer.append("; ");
+			sb.append("; ");
 		}
 
-		buffer.append("}");
-		return new String(buffer);
+		sb.append('}');
+		return sb.toString();
 	}
 
 	private void writeObject(ObjectOutputStream s) throws IOException {

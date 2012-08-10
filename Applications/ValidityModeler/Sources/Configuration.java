@@ -12,7 +12,6 @@ public final class Configuration extends Object implements WOXMLCoding {
     private String password;
     private String fontList;
     
-    /** @TypeInfo java.lang.String */
     private NSArray availableFontLists = new NSArray(new Object[] {
         "Arial,Helvetica", "Osaka,MS P Gothic" }); 
 
@@ -84,13 +83,6 @@ public final class Configuration extends Object implements WOXMLCoding {
         return (paths().count()>0);
     }
 
-
-    
-
-
-
-
-    
     // xml interfaced methods
     public void encodeWithWOXMLCoder(WOXMLCoder coder) {
         coder.encodeObjectForKey((NSArray)paths, "Paths");
@@ -116,5 +108,4 @@ public final class Configuration extends Object implements WOXMLCoding {
         return null;
         }
     }
-
 }

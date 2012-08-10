@@ -29,7 +29,7 @@ public class ERXNotQualifier extends EONotQualifier implements IERXChainableQual
 	}
 
 	public ERXNotQualifier not() {
-		return ERXChainedQualifierUtils.not(this);
+		return ERXQ.not(this);
 	}
 
 	public ERXOrQualifier or(EOQualifier... qualifiers) {

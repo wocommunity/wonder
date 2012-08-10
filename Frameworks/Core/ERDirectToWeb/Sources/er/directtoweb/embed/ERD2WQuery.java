@@ -13,9 +13,7 @@ import er.directtoweb.delegates.ERD2WQueryActionDelegate;
  * Same as D2WQuery, except that you can specify the queryBindings in advance.
  * 
  * @author ak on Fri Jan 09 2004
- * @project ERDirectToWeb
  */
-
 public class ERD2WQuery extends D2WQuery {
 	/**
 	 * Do I need to update serialVersionUID?
