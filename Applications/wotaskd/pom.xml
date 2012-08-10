@@ -18,6 +18,10 @@
 			<groupId>wonder.misc</groupId>
 			<artifactId>JavaMonitorFramework</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>wonder.eof</groupId>
+			<artifactId>ERRest</artifactId>
+		</dependency>
 	</dependencies>
 	<build>
 		<sourceDirectory>Sources</sourceDirectory>
