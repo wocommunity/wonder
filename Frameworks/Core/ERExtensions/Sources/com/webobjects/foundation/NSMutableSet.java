@@ -7,20 +7,28 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 /**
+ * <span class="en">
  * NSSet reimplementation to support JDK 1.5 templates. Use with
+ * </span>
+ * 
+ * <span class="ja">
+ * JDK 1.5 テンプレートをサポートする為の再実装。使用は
+ * </span>
  * 
  * <pre>
- * NSMutableSet&lt;E&gt; set = new NSMutableSet&lt;E&gt;();
+ * NSMutableSet<E> set = new NSMutableSet<E>();
  * set.put(new E())
  * 
  * for (E t : set)
  *     logger.debug(t);
  * </pre>
  * 
- * @param <E>
- *            type of set contents
+ * @param <E> - type of set contents
  */
 public class NSMutableSet<E> extends NSSet<E> {
+  
+  static final long serialVersionUID = -6054074706096120227L;
+
 	public NSMutableSet() {
 	}
 
@@ -196,10 +204,7 @@ public class NSMutableSet<E> extends NSSet<E> {
 		return (NSMutableSet<E>) clone();
 	}
 
-	@SuppressWarnings({ "hiding", "unchecked" })
 	public static final Class _CLASS = _NSUtilities._classWithFullySpecifiedName("com.webobjects.foundation.NSMutableSet");
-	@SuppressWarnings("hiding")
-	static final long serialVersionUID = -6054074706096120227L;
 
 	@Override
 	public boolean add(E o) {
