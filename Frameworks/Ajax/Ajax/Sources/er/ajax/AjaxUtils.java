@@ -48,9 +48,10 @@ public class AjaxUtils {
 
 	/**
 	 * Return whether or not the given request is an Ajax request.
+	 * 
 	 * @param request the request the check
 	 * 
-	 * @return 
+	 * @return if it an Ajax request the <code>true</code> 
 	 */
 	public static boolean isAjaxRequest(WORequest request) {
 		return ERXAjaxApplication.isAjaxRequest(request);
