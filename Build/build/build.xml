@@ -557,6 +557,17 @@
             <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/DerbyPlugIn/ERMoviesLogic/ERSelenium/ERAttachment/ERTaggable" />
        </antcall>
     </target>
+    
+    <target name="TextSearchDemo.all">
+        <antcall target="global.application.${build.action}" >
+            <param name="project.type" value="application" />
+            <param name="project.principal.class" value="er.examples.textsearchdemo.Application" />
+            <param name="project.name" value="TextSearchDemo" />
+            <param name="project.dir" value="Examples/Misc/TextSearchDemo" />
+            <param name="wo.system.root.bundles" value="${frameworks.system.core}" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/H2PlugIn/ERMoviesLogic/ERTaggable/Ajax/ERIndexing" />
+       </antcall>
+    </target>    
 
     <target name="D2WComponentTour.all">
         <antcall target="global.application.${build.action}" >
@@ -1236,7 +1247,7 @@
 
     <target name="common.applications.all" depends="BugTracker.all, ERMailer.all, Uber.all, SecretPal.all, ERXTest.all, PluginTest.all, WOTested.all" />
 
-    <target name="common.examples.all" depends="ERSeleniumExample.all, ERIndexingExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, AjaxExample2.all, YUIExample.all, EROpenIDExample.all, JavaRESTAdaptorExample.all, ERDivaliteExample.all, TickTockMan.all, ERComponentTour.all, ERRestRouteExample.all, Movies.all, ERWebSocketExample.all, ERJasperReportsExample.all, BackgroundTasks.all, ERCayenneExample.all, ERDistributionExampleModel.all, ERDistributionExampleServer.all, ERDistributionExampleClient.all, MooToolsExample.all, ERPDFExamples.all, JqueryMobileExample.all" />
+    <target name="common.examples.all" depends="ERSeleniumExample.all, ERIndexingExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, AjaxExample2.all, YUIExample.all, EROpenIDExample.all, JavaRESTAdaptorExample.all, ERDivaliteExample.all, TickTockMan.all, ERComponentTour.all, ERRestRouteExample.all, Movies.all, ERWebSocketExample.all, ERJasperReportsExample.all, BackgroundTasks.all, ERCayenneExample.all, ERDistributionExampleModel.all, ERDistributionExampleServer.all, ERDistributionExampleClient.all, MooToolsExample.all, ERPDFExamples.all, JqueryMobileExample.all, TextSearchDemo.all" />
 
     <target name="dynareporting.frameworks.all" depends="DRGrouping.all, WRReporting.all" />
     <target name="dynareporting.examples.all" depends="DocsByExample.all, DynaReporter.all, DRGroupingTest.all" />
