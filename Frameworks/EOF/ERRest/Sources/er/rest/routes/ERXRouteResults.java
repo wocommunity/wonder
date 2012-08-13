@@ -7,6 +7,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.appserver.ERXHttpStatusCodes;
 import er.extensions.foundation.ERXProperties;
 import er.rest.ERXRestContext;
 import er.rest.ERXRestRequestNode;
@@ -17,6 +18,8 @@ import er.rest.format.IERXRestWriter;
 /**
  * ERXRouteResults encapsulates the data necessary to produce a RESTful response. This object exists to defer the
  * generation of the response (so you can chain together rest responders).
+ * 
+ * @property ERXRest.strictMode (default "true") If set to true, creating a ressource will return status code 201 Created, if set to false, will return 200 OK
  * 
  * @author mschrag
  */
@@ -93,7 +96,7 @@ public class ERXRouteResults implements WOActionResults {
 			}
 		}
 		if (("POST".equals(_context.request().method())) && (isStrictMode)) {
-			response.setStatus(201);
+			response.setStatus(ERXHttpStatusCodes.CREATED);
 		}
 		// PR: ERXRouteResults is not extending from WOResponse, so this code can't be in ERXRouteController.processActionResults
 		WOSession session = _context._session();

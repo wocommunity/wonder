@@ -23,7 +23,6 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXSession;
-import er.extensions.eof.ERXDatabaseContext;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXObjectStoreCoordinator;
 import er.extensions.foundation.ERXProperties;
@@ -47,7 +46,7 @@ import er.extensions.foundation.ERXProperties;
  * @property er.extensions.ERXStatisticsStore.milliSeconds.fatal defaults to 5 minutes
  *
  * @author ak
- * @author kieran (Oct 14, 2009) - minor changes to capture thread name in middle of the request (useful for {@link ERXSession#threadName()}
+ * @author kieran (Oct 14, 2009) - minor changes to capture thread name in middle of the request (useful for {@link ERXSession#threadName()}}
  */
 public class ERXStatisticsStore extends WOStatisticsStore {
 
@@ -150,7 +149,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 				sb.append("\nRequest Thread Name: ").append(capturedThreadName).append("\n\n");
 				for (Iterator iterator = traces.keySet().iterator(); iterator.hasNext();) {
 					Thread t = (Thread) iterator.next();
-					StackTraceElement stack[] = (StackTraceElement[]) traces.get(t);
+					StackTraceElement stack[] = traces.get(t);
 					String name = t.getName() != null ? t.getName() : "No name";
 					String groupName = t.getThreadGroup() != null ? t.getThreadGroup().getName() : "No group";
 
@@ -190,7 +189,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 		protected void startTimer() {
 			if (!hasTimerStarted()) {
 				synchronized (_requestThreads) {
-					_requestThreads.put(Thread.currentThread(), new Long(System.currentTimeMillis()));
+					_requestThreads.put(Thread.currentThread(), Long.valueOf(System.currentTimeMillis()));
 				}
 			}
 		}

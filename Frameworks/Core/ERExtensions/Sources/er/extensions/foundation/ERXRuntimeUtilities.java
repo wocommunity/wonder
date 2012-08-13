@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URI;
 import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.Timer;
@@ -22,7 +21,6 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
-import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.jdbcadaptor.JDBCAdaptorException;
@@ -207,7 +205,6 @@ public class ERXRuntimeUtilities {
      */
 
     public static Throwable originalThrowable(Throwable t) {
-    	Throwable throwable = null;
     	if (t instanceof InvocationTargetException) {
     		return originalThrowable(((InvocationTargetException)t).getTargetException());
     	} 
@@ -574,6 +571,12 @@ public class ERXRuntimeUtilities {
     }
 
     public static class TimeoutException extends Exception {
+    	/**
+    	 * Do I need to update serialVersionUID?
+    	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+    	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+    	 */
+    	private static final long serialVersionUID = 1L;
 
         public TimeoutException(String string) {
             super(string);

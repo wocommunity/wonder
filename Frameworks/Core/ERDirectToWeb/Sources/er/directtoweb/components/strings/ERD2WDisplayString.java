@@ -18,6 +18,12 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
  */
 //FIXME AK: should actually use keyWhenRelationship
 public class ERD2WDisplayString extends D2WDisplayString {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERD2WDisplayString(WOContext context) {
         super(context);

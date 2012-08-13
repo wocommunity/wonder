@@ -23,6 +23,17 @@ PreviousPageAction : AjaxUpdateLink {
 	updateContainerID = updateContainerID;
 }
 
+PreviousLabel : ERXLocalizedString {
+	value = "ERXFlickrBatchNavigation.previous";
+}
+
+ShowLabel : ERXLocalizedString {
+	value = "ERXFlickrBatchNavigation.show";
+}
+
+PerPageLabel : ERXLocalizedString {
+	value = "ERXFlickrBatchNavigation.page";
+}
 HasNextPageConditional : WOConditional {
 	condition = hasNextPage;
 }
@@ -37,6 +48,10 @@ NextPageAction : AjaxUpdateLink {
 	class = "paginatorNext";
 	onClick = ^onClick;
 	updateContainerID = updateContainerID;
+}
+
+NextLabel : ERXLocalizedString {
+	value = "ERXFlickrBatchNavigation.next";
 }
 
 SelectPageAction : AjaxUpdateLink {
@@ -79,17 +94,38 @@ LastIndex : WOString {
 	value = lastIndex;
 }
 
+ShowLabels : WOConditional {
+	condition = showLabels;
+}
+
 DisplayName : ERXPluralString {
 	count = displayNameCount;
 	value = displayName;
 }
 
-NextLabel : ERXLocalizedString {
-	value = "ERXFlickrBatchNavigation.next";
+
+DisplayName2 : ERXPluralString {
+	count = displayNameCount;
+	value = displayName;
+	showNumber = false;
 }
 
-PreviousLabel : ERXLocalizedString {
-	value = "ERXFlickrBatchNavigation.previous";
+BatchSizes : WORepetition {
+	list = possibleBatchSizes;
+	item = currentBatchSize;
+}
+
+SelectBatchSize : AjaxUpdateLink {
+	action = selectBatchSize;
+	string = currentBatchSizeString;
+	disabled = isCurrentBatchSizeSelected;
+	class = "selectBatchSize";
+	onClick = ^onClick;
+	updateContainerID = updateContainerID;
+}
+
+ShowBatchSizes : WOConditional {
+  condition = showBatchSizes;
 }
 
 OfLabel : ERXLocalizedString {

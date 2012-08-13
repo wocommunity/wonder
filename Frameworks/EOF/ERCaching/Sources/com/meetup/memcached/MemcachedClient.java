@@ -20,10 +20,7 @@ package com.meetup.memcached;
 import java.util.*;
 import java.util.zip.*;
 import java.nio.*;          
-import java.net.InetAddress;
-import java.nio.charset.*;  
 import java.nio.channels.*;
-import java.nio.channels.spi.*;
 import java.io.*;
 import java.net.URLEncoder;
 
@@ -882,7 +879,7 @@ public class MemcachedClient {
 	 * @return true/false indicating success
 	 */
 	public boolean storeCounter( String key, long counter ) {
-		return set( "set", key, new Long( counter ), null, null, true );
+		return set( "set", key, Long.valueOf(counter), null, null, true );
 	}
 
 	/** 
@@ -980,7 +977,7 @@ public class MemcachedClient {
 	 * @return value of incrementer
 	 */
 	public long addOrIncr( String key, long inc, Integer hashCode ) {
-		boolean ret = set( "add", key, new Long( inc ), null, hashCode, true );
+		boolean ret = set( "add", key, Long.valueOf(inc), null, hashCode, true );
 
 		if ( ret ) {
 			return inc;
@@ -1020,7 +1017,7 @@ public class MemcachedClient {
 	 * @return value of incrementer
 	 */
 	public long addOrDecr( String key, long inc, Integer hashCode ) {
-		boolean ret = set( "add", key, new Long( inc ), null, hashCode, true );
+		boolean ret = set( "add", key, Long.valueOf(inc), null, hashCode, true );
 
 		if ( ret ) {
 			return inc;

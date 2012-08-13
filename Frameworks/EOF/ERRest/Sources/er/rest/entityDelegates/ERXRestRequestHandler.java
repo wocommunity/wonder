@@ -12,6 +12,7 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.appserver.ERXApplication;
+import er.extensions.appserver.ERXHttpStatusCodes;
 import er.extensions.eof.ERXEC;
 import er.rest.ERXRestRequestNode;
 import er.rest.format.ERXRestFormatDelegate;
@@ -389,7 +390,7 @@ public class ERXRestRequestHandler extends WORequestHandler {
 	}
 
 	/**
-	 * Handle the incoming REST request. REST requests can have session ids associated with them as cookies or wosid
+	 * Handle the incoming REST request. REST requests can have session ids associated with them as cookies or <i>sessionIdKey</i>
 	 * query string parameters. Right now rendering type is not supported, but ultimately the file extension of the
 	 * request will determine which renderer is used to render the response.
 	 * 
@@ -411,15 +412,12 @@ public class ERXRestRequestHandler extends WORequestHandler {
 			path = path.substring(0, dotIndex);
 		}
 
-		String wosid = null;
-		// if (wosid == null) {
-		wosid = request.cookieValueForKey("wosid");
-		// }
-		woContext._setRequestSessionID(wosid);
+		String sessionId = request.cookieValueForKey(WOApplication.application().sessionIdKey());
+		woContext._setRequestSessionID(sessionId);
 
 		WOSession session = null;
 		if (woContext._requestSessionID() != null) {
-			session = WOApplication.application().restoreSessionWithID(wosid, woContext);
+			session = WOApplication.application().restoreSessionWithID(sessionId, woContext);
 		}
 		if (session != null) {
 			session.awake();
@@ -428,7 +426,7 @@ public class ERXRestRequestHandler extends WORequestHandler {
 			if (woContext._session() != null) {
 				WOSession contextSession = woContext._session();
 				// If this is a new session, then we have to force it to be a cookie session
-				if (wosid == null) {
+				if (sessionId == null) {
 					boolean storesIDsInCookies = contextSession.storesIDsInCookies();
 					try {
 						contextSession.setStoresIDsInCookies(true);
@@ -477,7 +475,7 @@ public class ERXRestRequestHandler extends WORequestHandler {
 
 					IERXRestResponseWriter restResponseWriter = responseWriterForType(type);
 					restResponseWriter.appendToResponse(restContext, new ERXWORestResponse(response), responseKey);
-					response.setStatus(201);
+					response.setStatus(ERXHttpStatusCodes.CREATED);
 				}
 			}
 			finally {
@@ -490,17 +488,17 @@ public class ERXRestRequestHandler extends WORequestHandler {
 			}
 		}
 		catch (ERXRestNotFoundException e) {
-			response.setStatus(404);
+			response.setStatus(ERXHttpStatusCodes.NOT_FOUND);
 			response.setContent(e.getMessage() + "\n");
 			ERXRestRequestHandler.log.error("Request failed.", e);
 		}
 		catch (ERXRestSecurityException e) {
-			response.setStatus(403);
+			response.setStatus(ERXHttpStatusCodes.STATUS_FORBIDDEN);
 			response.setContent(e.getMessage() + "\n");
 			ERXRestRequestHandler.log.error("Request failed.", e);
 		}
 		catch (Exception e) {
-			response.setStatus(500);
+			response.setStatus(ERXHttpStatusCodes.INTERNAL_ERROR);
 			response.setContent(e.getMessage() + "\n");
 			ERXRestRequestHandler.log.error("Request failed.", e);
 		}

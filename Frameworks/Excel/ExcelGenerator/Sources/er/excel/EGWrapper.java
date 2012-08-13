@@ -1,13 +1,17 @@
 package er.excel;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSData;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
 
-import er.extensions.*;
 import er.extensions.components.ERXComponentUtilities;
 import er.extensions.components.ERXNonSynchronizingComponent;
 
@@ -17,10 +21,14 @@ import er.extensions.components.ERXNonSynchronizingComponent;
  * @binding sample sample binding explanation
  *
  * @author ak on Thu Mar 04 2004
- * @project ExcelGenerator
  */
-
 public class EGWrapper extends ERXNonSynchronizingComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** logging support */
     private static final Logger log = Logger.getLogger(EGWrapper.class);

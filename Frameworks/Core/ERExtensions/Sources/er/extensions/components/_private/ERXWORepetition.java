@@ -110,6 +110,13 @@ public class ERXWORepetition extends WODynamicGroup {
 	private static boolean _eoSupportDefault = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXWORepetition.eoSupport", ERXProperties.booleanForKey(ERXWORepetition.class.getName() + ".eoSupport"));
 	
 	public static class UnmatchedObjectException extends RuntimeException {
+		/**
+		 * Do I need to update serialVersionUID?
+		 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+		 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public UnmatchedObjectException() {
 
 		}

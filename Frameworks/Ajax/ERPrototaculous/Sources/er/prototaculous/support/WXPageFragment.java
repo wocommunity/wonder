@@ -29,11 +29,11 @@ public abstract class WXPageFragment extends WOComponent {
 		if (_forceFormSubmittedElementID == null) _forceFormSubmittedElementID = (String) request.formValueForKey("_forceFormSubmitted");
 		String forceFormSubmittedElementID = (String) request.formValueForKey("_forceFormSubmitted");
 		boolean forceFormSubmitted = forceFormSubmittedElementID != null && forceFormSubmittedElementID.equals(_forceFormSubmittedElementID);
-		boolean _wasFormSubmitted = context._wasFormSubmitted();
+		boolean _wasFormSubmitted = context.wasFormSubmitted();
 
-		if (isAjax() && forceFormSubmitted) context._setFormSubmitted(true);
+		if (isAjax() && forceFormSubmitted) context.setFormSubmitted(true);
 		super.takeValuesFromRequest(request, context);
-		if (isAjax() && forceFormSubmitted) context._setFormSubmitted(_wasFormSubmitted);
+		if (isAjax() && forceFormSubmitted) context.setFormSubmitted(_wasFormSubmitted);
 	}
 	
 	private boolean isAjax() {

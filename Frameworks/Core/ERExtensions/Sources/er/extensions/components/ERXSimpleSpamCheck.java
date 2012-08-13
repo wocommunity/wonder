@@ -20,6 +20,13 @@ import er.extensions.foundation.ERXStringUtilities;
  * @author mschrag
  */
 public class ERXSimpleSpamCheck extends ERXComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public static final String SPAM_CHECK_KEY = "spamCheck";
 
 	private String _id;
@@ -51,7 +58,7 @@ public class ERXSimpleSpamCheck extends ERXComponent {
 
 	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
-		if (context._wasFormSubmitted()) {
+		if (context.wasFormSubmitted()) {
 			super.takeValuesFromRequest(request, context);
 			if (!ERXExtensions.safeEquals(_expectedSpamCheck, _spamCheck)) {
 				validationFailedWithException(new NSValidation.ValidationException("Spam check failed."), this, ERXSimpleSpamCheck.SPAM_CHECK_KEY);

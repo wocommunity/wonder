@@ -20,7 +20,7 @@ import com.webobjects.foundation.NSMutableArray;
  * @author mschrag
  */
 public class ERXWOFormBarrier extends WODynamicGroup {
-	public ERXWOFormBarrier(String aName, NSDictionary someAssociations, WOElement template) {
+	public ERXWOFormBarrier(String aName, NSDictionary<String, WOAssociation> someAssociations, WOElement template) {
 		super(aName, someAssociations, template);
 	}
 
@@ -31,46 +31,46 @@ public class ERXWOFormBarrier extends WODynamicGroup {
 	@Override
 	public void appendToResponse(WOResponse aResponse, WOContext aContext) {
 		boolean wasInForm = aContext.isInForm();
-		boolean wasFormSubmitted = aContext._wasFormSubmitted();
+		boolean wasFormSubmitted = aContext.wasFormSubmitted();
 		aContext.setInForm(false);
-		aContext._setFormSubmitted(false);
+		aContext.setFormSubmitted(false);
 		try {
 			super.appendToResponse(aResponse, aContext);
 		}
 		finally {
 			aContext.setInForm(wasInForm);
-			aContext._setFormSubmitted(wasFormSubmitted);
+			aContext.setFormSubmitted(wasFormSubmitted);
 		}
 	}
 
 	@Override
 	public void takeValuesFromRequest(WORequest aRequest, WOContext aContext) {
 		boolean wasInForm = aContext.isInForm();
-		boolean wasFormSubmitted = aContext._wasFormSubmitted();
+		boolean wasFormSubmitted = aContext.wasFormSubmitted();
 		aContext.setInForm(false);
-		aContext._setFormSubmitted(false);
+		aContext.setFormSubmitted(false);
 		try {
 			super.takeValuesFromRequest(aRequest, aContext);
 		}
 		finally {
 			aContext.setInForm(wasInForm);
-			aContext._setFormSubmitted(wasFormSubmitted);
+			aContext.setFormSubmitted(wasFormSubmitted);
 		}
 	}
 
 	@Override
 	public WOActionResults invokeAction(WORequest aRequest, WOContext aContext) {
 		boolean wasInForm = aContext.isInForm();
-		boolean wasFormSubmitted = aContext._wasFormSubmitted();
+		boolean wasFormSubmitted = aContext.wasFormSubmitted();
 		aContext.setInForm(false);
-		aContext._setFormSubmitted(false);
+		aContext.setFormSubmitted(false);
 		try {
 			WOActionResults results = super.invokeAction(aRequest, aContext);
 			return results;
 		}
 		finally {
 			aContext.setInForm(wasInForm);
-			aContext._setFormSubmitted(wasFormSubmitted);
+			aContext.setFormSubmitted(wasFormSubmitted);
 		}
 	}
 }

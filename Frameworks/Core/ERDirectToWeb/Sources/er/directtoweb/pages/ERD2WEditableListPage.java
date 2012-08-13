@@ -15,6 +15,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.ERD2WContext;
 import com.webobjects.eoaccess.EOGeneralAdaptorException;
 import com.webobjects.eocontrol.EOArrayDataSource;
 import com.webobjects.eocontrol.EOClassDescription;
@@ -64,6 +65,12 @@ import er.extensions.validation.ERXValidation;
  * @d2wKey showMassChange
  */
 public class ERD2WEditableListPage extends ERD2WListPage implements ERXExceptionHolder, ERDObjectSaverInterface {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public static final Logger log = Logger.getLogger(ERD2WEditableListPage.class);
 
@@ -158,8 +165,8 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
         try {
             if (!isListEmpty() && validateObjects && shouldValidateBeforeSave()) {
                 if (log.isDebugEnabled()) log.debug("tryToSaveChanges calling validateForSave");
-                editingContext().insertedObjects().makeObjectsPerformSelector(ValidateForInsertSelector, null);
-                editingContext().updatedObjects().makeObjectsPerformSelector(ValidateForSaveSelector, null);
+                editingContext().insertedObjects().makeObjectsPerformSelector(ValidateForInsertSelector, (Object[])null);
+                editingContext().updatedObjects().makeObjectsPerformSelector(ValidateForSaveSelector, (Object[])null);
             }
             if (!isListEmpty() && shouldSaveChanges() && editingContext().hasChanges())
                 editingContext().saveChanges();
@@ -264,7 +271,7 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
     private D2WContext _d2wContextForMassChangeEO;
     public D2WContext d2wContextForMassChangeEO() {
         if (_d2wContextForMassChangeEO == null) {
-            _d2wContextForMassChangeEO = new D2WContext(d2wContext());
+            _d2wContextForMassChangeEO = ERD2WContext.newContext(d2wContext());
             _d2wContextForMassChangeEO.takeValueForKey(Boolean.TRUE, MassChangeEntityDisplayKey);
         }
         return _d2wContextForMassChangeEO;
@@ -286,6 +293,13 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
 
     // custom generic record class that manages unbound keys in a dictionary.
     public class ERDMassChangeGenericRecord extends EOGenericRecord {
+    	/**
+    	 * Do I need to update serialVersionUID?
+    	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+    	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+    	 */
+    	private static final long serialVersionUID = 1L;
+
         // dictionary of non property key values
         private NSMutableDictionary _unboundKeyDictionary;
         public ERDMassChangeGenericRecord(EOClassDescription classDescription) {

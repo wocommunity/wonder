@@ -66,6 +66,7 @@ public class ERXMigrationTable {
 	
 	/**
 	 * Returns the configured default languages for this migration.
+	 * @return the configured default languages for this migration
 	 */
 	public NSArray<String> languages() {
 		//TODO AK have a local override
@@ -226,7 +227,9 @@ public class ERXMigrationTable {
 	 * @param precision the precision of the column (or 0 for unspecified)
 	 * @param scale the scale of the column (or 0 for unspecified)
 	 * @param allowsNull if true, the column will allow null values
+	 * @param overrideValueType value type associated with the underlying attribute (or <code>null</code> for autoselect)
 	 * @param defaultValue the default value for the column
+	 * @param autocreate if <code>true</code> will call create on new column
 	 * @return the new ERXMigrationColumn
 	 * @throws SQLException if the column cannot be created 
 	 */
@@ -253,6 +256,7 @@ public class ERXMigrationTable {
 	 * @param precision the precision of the column (or 0 for unspecified)
 	 * @param scale the scale of the column (or 0 for unspecified)
 	 * @param allowsNull if true, the column will allow null values
+	 * @param overrideValueType value type associated with the underlying attribute (or <code>null</code> for autoselect)
 	 * @param defaultValue the default value for the column
 	 * @return the new ERXMigrationColumn
 	 * @throws SQLException if the column cannot be created 
@@ -275,6 +279,7 @@ public class ERXMigrationTable {
 	 * @param precision the precision of the column (or 0 for unspecified)
 	 * @param scale the scale of the column (or 0 for unspecified)
 	 * @param allowsNull if true, the column will allow null values
+	 * @param overrideValueType value type associated with the underlying attribute (or <code>null</code> for autoselect)
 	 * @return the new ERXMigrationColumn
 	 * @throws SQLException if the column cannot be created 
 	 */
@@ -978,6 +983,9 @@ public class ERXMigrationTable {
 	/**
 	 * Returns an array of EOSQLExpressions for renaming this table.
 	 * 
+	 * @param newName
+	 *            new table name
+	 * 
 	 * @return an array of EOSQLExpressions for renaming this table
 	 */
 	@SuppressWarnings("unchecked")
@@ -991,6 +999,9 @@ public class ERXMigrationTable {
 	/**
 	 * Executes the SQL operations to rename this table.
 	 * 
+	 * @param newName
+	 *            new table name
+	 * 
 	 * @throws SQLException if the rename fails
 	 */
 	public void renameTo(String newName) throws SQLException {
@@ -999,7 +1010,9 @@ public class ERXMigrationTable {
 	}
 
 	/**
-	 * Returns an array of EOSQLExpressions for setting the primary key constraint of this table
+	 * Returns an array of EOSQLExpressions for setting the primary key constraint of this table.
+	 * 
+	 * @param columns 
 	 * 
 	 * @return an array of EOSQLExpressions for setting the primary key constraint of this table
 	 */
@@ -1045,6 +1058,7 @@ public class ERXMigrationTable {
 	 * 
 	 * @param indexName the name of the index
 	 * @param columnName the name of the column to add a unique index on
+	 * @param width 
 	 * @throws SQLException if the constraint fails
 	 */
 	public void addUniqueIndex(String indexName, String columnName, int width) throws SQLException {
@@ -1122,6 +1136,7 @@ public class ERXMigrationTable {
 	 * 
 	 * @param indexName the name of the index
 	 * @param columnName the name of the column to add a unique index on
+	 * @param width 
 	 * @throws SQLException if the constraint fails
 	 */
 	public void addIndex(String indexName, String columnName, int width) throws SQLException {

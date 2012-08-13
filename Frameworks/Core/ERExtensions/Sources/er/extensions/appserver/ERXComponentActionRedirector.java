@@ -222,8 +222,9 @@ public class ERXComponentActionRedirector {
         url = r.urlForCurrentState();
         if(context.session().storesIDsInURLs()) {
 	        String argsChar = url.indexOf("?") >= 0? "&" : "?";
-	        if(url.indexOf("wosid=") < 0) {
-	            url = url + argsChar + "wosid=" +sessionID;
+	        String sessionIdKey = WOApplication.application().sessionIdKey();
+	        if(url.indexOf(sessionIdKey + "=") < 0) {
+	            url = url + argsChar + sessionIdKey + "=" +sessionID;
 	            argsChar = "&";
 	        }
 	        if(url.indexOf("wocid=") < 0) {

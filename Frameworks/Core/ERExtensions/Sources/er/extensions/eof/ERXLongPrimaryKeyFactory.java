@@ -10,7 +10,6 @@ import java.util.Stack;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAdaptorChannel;
-import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModelGroup;
@@ -87,7 +86,7 @@ public class ERXLongPrimaryKeyFactory {
 			if (log.isDebugEnabled()) {
 				log.debug("new pk value for "+ename+"("+((ERXModelGroup) EOModelGroup.defaultGroup()).entityCode(ename)+"), db value = "+pk+", new value = "+realPk);
 			}
-			pk = new Long(realPk);
+			pk = Long.valueOf(realPk);
 		}
 		if (encodeEntityInPkValue()) {
 			long l = pk.longValue();
@@ -104,7 +103,7 @@ public class ERXLongPrimaryKeyFactory {
 			if (log.isDebugEnabled()) {
 				log.debug("new pk value for "+ename+"("+((ERXModelGroup) EOModelGroup.defaultGroup()).entityCode(ename)+"), db value = "+pk+", new value = "+realPk);
 			}
-			pk = new Long(realPk);
+			pk = Long.valueOf(realPk);
 		}
 		return pk;
 	}
@@ -144,7 +143,7 @@ public class ERXLongPrimaryKeyFactory {
 
 	private int hostCode() {
 		if (hostCode == null) {
-			hostCode = new Integer(ERXSystem.getProperty(HOST_CODE_KEY));
+			hostCode = Integer.valueOf(ERXSystem.getProperty(HOST_CODE_KEY));
 		}
 		return hostCode.intValue();
 	}
@@ -197,7 +196,7 @@ public class ERXLongPrimaryKeyFactory {
 		}
 
 		Long pk = getNextPkValueForEntity(entityName);
-		String pkName = (String) entity.primaryKeyAttributeNames().objectAtIndex(0);
+		String pkName = entity.primaryKeyAttributeNames().objectAtIndex(0);
 		return new NSDictionary(new Object[] { pk}, new Object[] { pkName});
 	}
 
@@ -267,7 +266,7 @@ public class ERXLongPrimaryKeyFactory {
 							con.createStatement().executeUpdate("insert into pk_table (eoentity_name, pk_value) values ('" + entityName + "', " + (pk+increasePkBy) + ")");
 						}
 						con.commit();
-						return new Long(pk);
+						return Long.valueOf(pk);
 					} catch(SQLException ex) {
 						String s = ex.getMessage().toLowerCase();
 						boolean creationError = (s.indexOf("error code 116") != -1); // frontbase?
@@ -311,7 +310,7 @@ public class ERXLongPrimaryKeyFactory {
 		EOEntity entity = EOModelGroup.defaultGroup().entityNamed(ename);
 		if (entity == null) throw new NullPointerException("could not find an entity named " + ename);
 		String tableName = entity.externalName();
-		String colName = ((EOAttribute)entity.primaryKeyAttributes().lastObject()).columnName();
+		String colName = entity.primaryKeyAttributes().lastObject().columnName();
 		String sql = "select max(" + colName + ") from " + tableName;
 
 		ERXJDBCConnectionBroker broker = ERXJDBCConnectionBroker.connectionBrokerForEntityNamed(ename);
@@ -400,7 +399,7 @@ public class ERXLongPrimaryKeyFactory {
 		long value = pkValueStart.longValue();
 		log.debug("filling pkCache for " + ename + ", starting at " + value);
 		for (int i = increaseBy(); i > 0;  i--) {
-			s.push(new Long(i + value));
+			s.push(Long.valueOf(i + value));
 		}
 	}
 
@@ -413,7 +412,7 @@ public class ERXLongPrimaryKeyFactory {
 	 */
 	private int increaseBy() {
 		if (increaseBy == null) {
-			increaseBy = new Integer(ERXProperties.intForKeyWithDefault("er.extensions.ERXLongPrimaryKeyFactory.increaseBy", 1000));
+			increaseBy = Integer.valueOf(ERXProperties.intForKeyWithDefault("er.extensions.ERXLongPrimaryKeyFactory.increaseBy", 1000));
 		}
 		return increaseBy.intValue();
 	}

@@ -34,6 +34,7 @@ public class ERXTestSuite {
     suite.addTestSuite(er.extensions.eof.ERXKeyTest.class);
 
     suite.addTestSuite(er.extensions.eof.qualifiers.ERXToManyQualifierTest.class);
+    suite.addTestSuite(er.extensions.eof.qualifiers.ERXQTest.class);
 
     suite.addTestSuite(er.extensions.foundation.ERXArrayUtilitiesTest.class);
     suite.addTestSuite(er.extensions.foundation.ERXMutableArrayTest.class);
@@ -50,6 +51,8 @@ public class ERXTestSuite {
     
     suite.addTestSuite(er.extensions.jdbc.MicrosoftSQLHelperTest.class);
 
+    suite.addTestSuite(er.extensions.net.ERXEmailValidatorTest.class);
+
     suite.addTestSuite(er.memoryadaptor.ERMemoryAdaptorTest.class);
 
     suite.addTestSuite(er.extensions.appserver.ERXApplicationTest.class);
@@ -65,6 +68,8 @@ public class ERXTestSuite {
     // TODO - How long is this supposed to take to run? Is it hanging?
     //
     //suite.addTestSuite(ERXExpiringCacheTestCase.class);
+
+    suite.addTestSuite(er.extensions.excel.EGSimpleWorkbookHelperTest.class);
 
     suite.addTestSuite(er.chronic.RepeaterMonthNameTest.class);
     suite.addTestSuite(er.chronic.RepeaterYearTest.class);
@@ -84,6 +89,8 @@ public class ERXTestSuite {
     suite.addTestSuite(er.chronic.HandlerTest.class);
     suite.addTestSuite(er.chronic.RepeaterWeekendTest.class);
     suite.addTestSuite(er.chronic.NumerizerTest.class);
+
+    suite.addTestSuite(er.extensions.crypting.TestBCrypt.class);
 
     return suite;
   }

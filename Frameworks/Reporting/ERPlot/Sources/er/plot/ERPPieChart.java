@@ -41,6 +41,12 @@ import er.extensions.foundation.ERXAssert;
  */
 
 public class ERPPieChart extends ERPChart {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** logging support */
     public static final NSArray<String> SUPPORTED_TYPES = new NSArray<String>(new String[] {"PieChart", "PieChart3D", "RingChart"});
@@ -51,7 +57,13 @@ public class ERPPieChart extends ERPChart {
      * @author ak
      */
     public static class AccumulatingPieDataset extends DefaultPieDataset {
-        
+    	/**
+    	 * Do I need to update serialVersionUID?
+    	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+    	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+    	 */
+    	private static final long serialVersionUID = 1L;
+
         /**
          * Overridden so it adds the value to the current value for the key instead of replacing it.
          */

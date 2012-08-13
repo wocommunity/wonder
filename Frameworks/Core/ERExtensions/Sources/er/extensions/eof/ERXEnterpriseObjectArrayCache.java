@@ -45,6 +45,13 @@ public class ERXEnterpriseObjectArrayCache<T extends EOEnterpriseObject> {
     private long _fetchTime;
     
     public static class NotFoundArray extends NSArray {
+    	/**
+    	 * Do I need to update serialVersionUID?
+    	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+    	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+    	 */
+    	private static final long serialVersionUID = 1L;
+
     }
     
     protected static final NSArray NOT_FOUND_MARKER= new NotFoundArray();

@@ -11,6 +11,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation._NSStringUtilities;
 
+import er.extensions.foundation.ERXProperties;
 import er.extensions.jdbc.ERXJDBCUtilities;
 
 /**
@@ -87,9 +88,7 @@ public abstract class ERXMigration implements IERXMigration {
 			if (useDatabaseSpecificMigrations()) {
 				throw new ERXMigrationFailedException("No downgrade for migration: " + this.getClass().getName() + "found for database: " + ERXJDBCUtilities.databaseProductName(channel));
 			}
-			else {
-				throw new ERXMigrationFailedException("No downgrade for migration: " + this.getClass().getName());
-			}
+			throw new ERXMigrationFailedException("No downgrade for migration: " + this.getClass().getName());
 		}
 
 	}
@@ -115,9 +114,7 @@ public abstract class ERXMigration implements IERXMigration {
 			if (useDatabaseSpecificMigrations()) {
 				throw new ERXMigrationFailedException("No upgrade for migration: " + this.getClass().getName() + " found for database: " + ERXJDBCUtilities.databaseProductName(channel));
 			}
-			else {
-				throw new ERXMigrationFailedException("No upgrade for migration: " + this.getClass().getName() + " found.");
-			}
+			throw new ERXMigrationFailedException("No upgrade for migration: " + this.getClass().getName() + " found.");
 		}
 	}
 
@@ -125,6 +122,7 @@ public abstract class ERXMigration implements IERXMigration {
 	 * Checks in the current bundle for migration files corresponding to this classes name
 	 * 
 	 * @param migrationName
+	 * @return SQL string
 	 */
 	protected String getSQLForMigration(String migrationName) {
 		NSBundle bundle;
@@ -138,12 +136,10 @@ public abstract class ERXMigration implements IERXMigration {
 				bundle = NSBundle._appBundleForName(this.migrationBundleName());
 			}
 		}
-		NSArray resourcePaths = bundle.resourcePathsForResources("migration", null);
+		NSArray<String> resourcePaths = bundle.resourcePathsForResources("migration", null);
 
 		if (resourcePaths != null) {
-			for (int i = 0; i < resourcePaths.count(); i++) {
-				String currentPath = (String) resourcePaths.objectAtIndex(i);
-
+			for (String currentPath : resourcePaths) {
 				if (currentPath.endsWith(migrationName)) {
 					try {
 						return new String(bundle.bytesForResourcePath(currentPath), _NSStringUtilities.UTF8_ENCODING);
@@ -160,6 +156,8 @@ public abstract class ERXMigration implements IERXMigration {
 	/**
 	 * The name to create the NSBundle for the current bundle, defaults to the
 	 * bundle that contains the migration class.
+	 * 
+	 * @return <code>null</code> 
 	 */
 	protected String migrationBundleName() {
 		return null;
@@ -167,7 +165,8 @@ public abstract class ERXMigration implements IERXMigration {
 
 	protected boolean useDatabaseSpecificMigrations() {
 		if (this._useDatabaseSpecificMigrations == null) {
-			this._useDatabaseSpecificMigrations = new Boolean (Boolean.getBoolean("er.extensions.migration.ERXMigration.useDatabaseSpecificMigrations"));
+			this._useDatabaseSpecificMigrations = Boolean.valueOf(
+					ERXProperties.booleanForKeyWithDefault("er.extensions.migration.ERXMigration.useDatabaseSpecificMigrations", false));
 		}
 		return this._useDatabaseSpecificMigrations.booleanValue();
 	}

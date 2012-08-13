@@ -19,6 +19,8 @@ import er.extensions.batching.ERXFlickrBatchNavigation;
  * @binding onClick an optional JavaScript String to bind to the previous, next, and select page AjaxUpdateLinks.
  * @binding updateContainerID (optional) the id of the container to refresh (defaults to the nearest parent)
  * @binding showPageRange if true, the page of items on the page is shown, for example "(1-7 of 200 items)" 
+ * @binding showBatchSizes if <code>true</code>, a menu to change the items per page is shown "Show: (10) 20 (100) (All) items per page"
+ * @binding batchSizes can be either a string or an NSArray of numbers that define the batch sizes to chose from. The number "0" provides an "All" items batch size. For example "10,20,30" or "10,50,100,0"
  * @binding small if true, a compressed page count style is used 
  * 
  * @binding parentActionName (if you don't provide a displayGroup) the action to be executed on the parent component to get the next batch of items.
@@ -27,6 +29,13 @@ import er.extensions.batching.ERXFlickrBatchNavigation;
  * @binding numberOfObjectsPerBatch (if you don't provide a displayGroup) the number of objects per batch (page)
  */
 public class AjaxFlickrBatchNavigation extends ERXFlickrBatchNavigation {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public AjaxFlickrBatchNavigation(WOContext context) {
 		super(context);
 	}

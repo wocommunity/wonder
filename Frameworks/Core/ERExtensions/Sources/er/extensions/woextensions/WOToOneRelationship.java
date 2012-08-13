@@ -9,7 +9,6 @@ import com.webobjects.foundation.NSMutableArray;
 import er.extensions.ERXExtensions;
 import er.extensions.components.ERXArrayChooser;
 import er.extensions.eof.ERXEOControlUtilities;
-import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * Back port from WO 5 WOExtensions. This component is binding compatible, but not source compatible.<br />
@@ -17,6 +16,13 @@ import er.extensions.foundation.ERXValueUtilities;
  */
 
 public class WOToOneRelationship extends ERXArrayChooser {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     protected Object _selection;
 
     public WOToOneRelationship(WOContext aContext)  {

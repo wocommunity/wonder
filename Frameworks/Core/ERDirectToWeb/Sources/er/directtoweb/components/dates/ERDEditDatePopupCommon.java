@@ -15,6 +15,7 @@ import com.webobjects.foundation.NSTimestampFormatter;
 
 import er.directtoweb.components.ERDCustomEditComponent;
 import er.extensions.eof.ERXConstant;
+import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
 
@@ -30,6 +31,12 @@ import er.extensions.localization.ERXLocalizer;
  */
 
 public class ERDEditDatePopupCommon extends ERDCustomEditComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERDEditDatePopupCommon(WOContext context) { super(context); }
 
@@ -117,8 +124,8 @@ public class ERDEditDatePopupCommon extends ERDCustomEditComponent {
             }
             if (yearRangeBottom != null && yearRangeTop != null) {
                 try {
-                    Integer start = ERXConstant.integerForString(yearRangeBottom);
-                    Integer end = ERXConstant.integerForString(yearRangeTop);
+                    Integer start = ERXStringUtilities.integerWithString(yearRangeBottom);
+                    Integer end = ERXStringUtilities.integerWithString(yearRangeTop);
                     if (end.intValue() > start.intValue()) {
                         startYear = start.intValue();
                         endYear = end.intValue();

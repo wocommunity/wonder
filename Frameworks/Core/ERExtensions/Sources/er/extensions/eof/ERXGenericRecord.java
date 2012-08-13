@@ -30,7 +30,6 @@ import com.webobjects.eocontrol.EOSharedEditingContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
-import com.webobjects.foundation.NSKeyValueCoding._KeyBinding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSValidation;
@@ -79,6 +78,12 @@ import er.extensions.validation.ERXValidationFactory;
  * <code>er.extensions.ERXEnterpriseObject.updateInverseRelationships=true</code>.
  */
 public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjectInterface, ERXGeneratesPrimaryKeyInterface, ERXEnterpriseObject, ERXKey.ValueCoding, AutoBatchFaultingEnterpriseObject, ERXNonNullObjectInterface {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/** holds all subclass related Logger's */
 	private static final NSMutableDictionary<Class, Logger> classLogs = new NSMutableDictionary<Class, Logger>();
@@ -721,7 +726,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 */
 	public String encryptedPrimaryKey() {
 		String pk = ERXEOControlUtilities.primaryKeyStringForObject(this);
-		return pk == null ? null : ERXCrypto.blowfishEncode(pk);
+		return pk == null ? null : ERXCrypto.crypterForAlgorithm(ERXCrypto.BLOWFISH).encrypt(pk);
 	}
 
 	/*
@@ -810,7 +815,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 						boolean incompletePK = false;
 						for (EOAttribute primaryKeyAttribute : primaryKeyAttributes) {
 							Object value = null;
-							for (EORelationship relationship : (NSArray<EORelationship>) entity.relationships()) {
+							for (EORelationship relationship : entity.relationships()) {
 								// .. we need to find the relationship that is
 								// associated with each PK attribute
 								if (relationship._isToOneClassProperty() && relationship.sourceAttributes().contains(primaryKeyAttribute)) {
@@ -819,7 +824,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 										// .. and then get the PK dictionary for
 										// the related object
 										NSDictionary<String, Object> foreignKey = ((ERXGenericRecord) obj).primaryKeyDictionary(inTransaction);
-										for (EOJoin join : (NSArray<EOJoin>) relationship.joins()) {
+										for (EOJoin join : relationship.joins()) {
 											// .. find the particular join that
 											// is associated with this pk
 											// attribute
@@ -905,7 +910,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 * @see er.extensions.ERXEnterpriseObject#committedSnapshotValueForKey(java.lang.String)
 	 */
 	public Object committedSnapshotValueForKey(String key) {
-		NSDictionary snapshot = committedSnapshot();
+		NSDictionary<String, Object> snapshot = committedSnapshot();
 		return snapshot != null ? snapshot.objectForKey(key) : null;
 	}
 
@@ -919,16 +924,14 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 * 
 	 * @return the committed snapshot
 	 */
-	public NSDictionary committedSnapshot() {
+	public NSDictionary<String, Object> committedSnapshot() {
 		if (!isNewObject()) {
 			return editingContext().committedSnapshotForObject(this);
 		}
-		else {
-			NSArray keys = allPropertyKeys();
-			NSMutableDictionary allNullDict = new NSMutableDictionary(keys.count());
-			ERXDictionaryUtilities.setObjectForKeys(allNullDict, NSKeyValueCoding.NullValue, keys);
-			return allNullDict;
-		}
+		NSArray keys = allPropertyKeys();
+		NSMutableDictionary allNullDict = new NSMutableDictionary(keys.count());
+		ERXDictionaryUtilities.setObjectForKeys(allNullDict, NSKeyValueCoding.NullValue, keys);
+		return allNullDict;
 	}
 
 	/*
@@ -964,7 +967,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 * 
 	 * @see er.extensions.ERXEnterpriseObject#changesFromCommittedSnapshot()
 	 */
-	public NSDictionary changesFromCommittedSnapshot() {
+	public NSDictionary<String, Object> changesFromCommittedSnapshot() {
 		return changesFromSnapshot(committedSnapshot());
 	}
 	
@@ -975,7 +978,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 * @return true if it has changed
 	 */
 	public boolean hasKeyChangedFromCommittedSnapshot(String key) {
-		NSDictionary d = changesFromCommittedSnapshot();
+		NSDictionary<String, Object> d = changesFromCommittedSnapshot();
 		return d.containsKey(key);
 	}
 
@@ -988,7 +991,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 * @return true if the specified key value has changed from the specified value
 	 */
 	public boolean hasKeyChangedFromCommittedSnapshotFromValue(String key, Object oldValue) {
-		NSDictionary d = changesFromCommittedSnapshot();
+		NSDictionary<String, Object> d = changesFromCommittedSnapshot();
 		return d.containsKey(key) && ERXExtensions.safeEquals(oldValue, committedSnapshotValueForKey(key));
 	}
 
@@ -1002,7 +1005,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 * @return true if the specified key value has changed from the specified value
 	 */
 	public boolean hasKeyChangedFromCommittedSnapshotFromValueToNewValue(String key, Object oldValue, Object newValue) {
-		NSDictionary d = changesFromCommittedSnapshot();
+		NSDictionary<String, Object> d = changesFromCommittedSnapshot();
 		return d.containsKey(key) && ERXExtensions.safeEquals(newValue, d.objectForKey(key)) && ERXExtensions.safeEquals(oldValue, committedSnapshotValueForKey(key));
 	}
 
@@ -1171,19 +1174,17 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	}
 
 	/**
-	 * @deprecated use {@link ERXGenericRecord#isNewObject}
+	 * @deprecated use {@link ERXGenericRecord#isNewObject()}
 	 */
 	@SuppressWarnings("dep-ann")
+    @Deprecated
 	public boolean isNewEO() {
 		return isNewObject();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see er.extensions.ERXEnterpriseObject#isNewObject()
+	/**
+	 * @see ERXEOControlUtilities#isNewObject(EOEnterpriseObject)
 	 */
-
 	public boolean isNewObject() {
 		return ERXEOControlUtilities.isNewObject(this);
 	}

@@ -1,0 +1,28 @@
+ERPDFExamples
+
+
+This example application exercises some of the features of the ERPDFGeneration framework.
+It is not (yet) comprehensive so there is plenty of room for someone to add demonstration
+and tutorial code. This app came from trying to exercise some new wrappers to handle
+FOP in addition to the other existing rendering technologies. 
+
+This application requires no database or external files. The important pieces to notice
+with respect to FOP are the style sheets (which are held in the classpath of the application
+and loaded as resource streams). The following lines in the Properties file show how a component
+with ERFOPWrapper wrapped content can read the location of the resource from the properties file.
+There are many more pieces of the process that can (and should) be managed through properties,
+but that can be added later. 
+
+This property setup is intended to be simple to use subclasses to render different transforms
+because you can look up this property using getClass().getName() rather than explicitly setting
+this for each component
+
+#########
+# Property to point to an xsl transform sheet in the class path
+# This is looked up by the component that produces the pdf
+xsl.xml2fop.er.pdfexamples.components.SimpleHTML2FOP2PDF=er/pdfexamples/xsl/xhtml2xslfo.xsl
+xsl.xml2fop.er.pdfexamples.components.SimpleXML2FOP2PDF1=er/pdfexamples/xsl/testxml2fo.xsl
+
+Other than that, there is not that much to the example. Know that the FOP transform is
+picky about well-formed XHTML (XML) and knowing about entities, so this will not 
+fix ill-formed content.

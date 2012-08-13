@@ -2,7 +2,7 @@ package er.attachment.components;
 
 import com.webobjects.appserver.WOContext;
 
-import er.attachment.components.ERAttachmentUpload;
+import er.ajax.AjaxFlexibleFileUpload;
 
 /**
  * <p>
@@ -65,7 +65,12 @@ import er.attachment.components.ERAttachmentUpload;
  * @property er.attachment.height
  */
 public class ERAttachmentFlexibleUpload extends ERAttachmentUpload {
-	
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 	
     public ERAttachmentFlexibleUpload(WOContext context) {
         super(context);

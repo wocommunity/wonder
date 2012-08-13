@@ -142,7 +142,7 @@ public class _NSWeakMutableArray extends _NSWeakMutableCollection implements Ser
 	private void writeObject(ObjectOutputStream s) throws IOException {
 		java.io.ObjectOutputStream.PutField fields = s.putFields();
 		Object values[] = allObjects().objects();
-		fields.put("objects", ((Object) (values)));
+		fields.put("objects", values);
 		s.writeFields();
 	}
 
@@ -150,8 +150,8 @@ public class _NSWeakMutableArray extends _NSWeakMutableCollection implements Ser
 		java.io.ObjectInputStream.GetField fields = null;
 		fields = s.readFields();
 
-		Object values[] = (Object[]) (Object[]) fields.get("objects", ((Object) (_NSUtilities._NoObjectArray)));
-		values = values != null ? values : (Object[]) _NSUtilities._NoObjectArray;
+		Object values[] = (Object[]) fields.get("objects", _NSUtilities._NoObjectArray);
+		values = values != null ? values : _NSUtilities._NoObjectArray;
 		int c = values.length;
 		for (int i = 0; i < c; i++)
 			addObject(values[i]);

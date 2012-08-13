@@ -30,6 +30,12 @@ import er.extensions.localization.ERXLocalizer;
  */
 
 public class ERDEditStringWithChoices extends ERDCustomEditComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERDEditStringWithChoices(WOContext context) {super(context);}
     
@@ -113,7 +119,7 @@ public class ERDEditStringWithChoices extends ERDCustomEditComponent {
     /** Extends the parent implementation in order to force validation. */
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         super.takeValuesFromRequest(r,c);
-        if (c._wasFormSubmitted()) {
+        if (c.wasFormSubmitted()) {
         	try {
         		object().validateTakeValueForKeyPath(objectPropertyValue(), key());
         	} catch (NSValidation.ValidationException e) {

@@ -6,10 +6,7 @@
 //
 package er.wopaypal;
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 
 /** PayPalViewShoppingCartHyperlink is a WOComponent that allows you to embed text, an image, etc. inside the hyperlink, or assign the string through through its bindings.
  *

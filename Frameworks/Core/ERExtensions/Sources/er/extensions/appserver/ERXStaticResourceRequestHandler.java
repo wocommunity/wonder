@@ -9,12 +9,12 @@ import java.net.URLDecoder;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WODynamicURL;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WORequestHandler;
 import com.webobjects.appserver.WOResourceManager;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODeployedBundle;
-import com.webobjects.appserver._private.WODynamicURL;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSNotificationCenter;
@@ -65,7 +65,7 @@ public class ERXStaticResourceRequestHandler extends WORequestHandler {
 		_useRequestHandlerPath = true;
 	}
 
-	protected WOResponse _generateResponseForInputStream(InputStream is, int length, String type) {
+	protected WOResponse _generateResponseForInputStream(InputStream is, long length, String type) {
 		WOResponse response = application.createResponseInContext(null);
 		if (is != null) {
 			if (length != 0) {
@@ -98,7 +98,7 @@ public class ERXStaticResourceRequestHandler extends WORequestHandler {
 	public WOResponse handleRequest(WORequest request) {
 		WOResponse response = null;
 		FileInputStream is = null;
-		int length = 0;
+		long length = 0;
 		String contentType = null;
 		String uri = request.uri();
 		if (uri.charAt(0) == '/') {
@@ -153,7 +153,7 @@ public class ERXStaticResourceRequestHandler extends WORequestHandler {
 					path = URLDecoder.decode(path, "UTF-8");
 				}
 				file = new File(path);
-				length = (int) file.length();
+				length = file.length();
 				is = new FileInputStream(file);
 				
 				contentType = rm.contentTypeForResourceNamed(path);

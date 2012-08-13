@@ -20,7 +20,6 @@ import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation._NSUtilities;
 
-import er.extensions.ERXExtensions;
 import er.extensions.eof.ERXConstant;
 import er.extensions.foundation.ERXFileNotificationCenter;
 import er.extensions.foundation.ERXFileUtilities;
@@ -109,7 +108,7 @@ public class ERXNavigationManager {
     public void loadNavigationMenu() {
         NSMutableArray navigationMenus = new NSMutableArray();
         // First load the nav_menu from application.
-        NSArray appNavigationMenu = (NSArray)ERXExtensions.readPropertyListFromFileinFramework(navigationMenuFileName(),null);
+        NSArray appNavigationMenu = (NSArray)ERXFileUtilities.readPropertyListFromFileInFramework(navigationMenuFileName(), null);
         if (appNavigationMenu != null) {
             if (log.isDebugEnabled())
                 log.debug("Found navigation menu in application: " + WOApplication.application().name());
@@ -118,7 +117,7 @@ public class ERXNavigationManager {
         }
         for (Enumeration e = ERXUtilities.allFrameworkNames().objectEnumerator(); e.hasMoreElements();) {
             String frameworkName = (String)e.nextElement();
-            NSArray aNavigationMenu = (NSArray)ERXExtensions.readPropertyListFromFileinFramework(navigationMenuFileName(), frameworkName);
+            NSArray aNavigationMenu = (NSArray)ERXFileUtilities.readPropertyListFromFileInFramework(navigationMenuFileName(), frameworkName);
             if (aNavigationMenu != null && aNavigationMenu.count() > 0) {
                 if (log.isDebugEnabled()) log.debug("Found navigation menu in framework: " + frameworkName);
                 navigationMenus.addObjectsFromArray(createNavigationItemsFromDictionaries(aNavigationMenu));

@@ -9,11 +9,6 @@ package er.directtoweb.components.bool;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WORequest;
-import com.webobjects.directtoweb.D2WEditBoolean;
-import com.webobjects.foundation.NSValidation;
-
-import er.extensions.foundation.ERXValueUtilities;
 
 /**
  * Edits a boolean with radio buttons and Yes/No<br />
@@ -22,6 +17,12 @@ import er.extensions.foundation.ERXValueUtilities;
 
 @Deprecated
 public class ERD2WEditYesNo extends ERD2WCustomEditBoolean {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
     
     public static Logger log = Logger.getLogger(ERD2WEditYesNo.class);
 

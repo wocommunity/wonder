@@ -1,8 +1,6 @@
 package er.jquery.widgets;
 
-import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WORequest;
 
 /**
  * @see AjaxUpload

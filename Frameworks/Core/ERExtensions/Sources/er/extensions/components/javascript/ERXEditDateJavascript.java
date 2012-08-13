@@ -24,6 +24,13 @@ import er.extensions.localization.ERXLocalizer;
  * @binding dateString
  */
 public class ERXEditDateJavascript extends ERXStatelessComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	static final Logger log = Logger.getLogger(ERXEditDateJavascript.class);
 	private static String _datePickerJavaScriptUrl;
 
@@ -50,7 +57,7 @@ public class ERXEditDateJavascript extends ERXStatelessComponent {
     }
     
 	public String dateformat() {
-		String format = (String) stringValueForBinding("dateformat");
+		String format = stringValueForBinding("dateformat");
 		if (format == null) {
 			format = ERXTimestampFormatter.DEFAULT_PATTERN;
 		}
@@ -62,7 +69,7 @@ public class ERXEditDateJavascript extends ERXStatelessComponent {
 	}
 
 	public String dateString() {
-		return (String) stringValueForBinding("dateString");
+		return stringValueForBinding("dateString");
 	}
 
 	public void setDateString(String value) {

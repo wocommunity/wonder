@@ -9,7 +9,6 @@ import com.webobjects.directtoweb.D2WPage;
 import com.webobjects.directtoweb.ERD2WUtilities;
 import com.webobjects.directtoweb.EditPageInterface;
 import com.webobjects.directtoweb.ListPageInterface;
-import com.webobjects.directtoweb.NextPageDelegate;
 import com.webobjects.directtoweb.QueryPageInterface;
 import com.webobjects.directtoweb.SelectPageInterface;
 import com.webobjects.eocontrol.EODataSource;
@@ -26,6 +25,12 @@ import er.directtoweb.interfaces.ERDPickPageInterface;
  */
 
 public  class ERDActionButton extends ERDCustomComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** logging support */
     private static final Logger log = Logger.getLogger(ERDActionButton.class);

@@ -6,7 +6,6 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
-import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
@@ -123,7 +122,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
             }
         }
 
-        private static Observer observer;
+        private static volatile Observer observer;
         
         public static void install()  {
             if(observer == null) {
@@ -148,8 +147,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
                 }
             }
         }
-    };
-
+    }
      
     public static abstract class Processor {
         
@@ -171,7 +169,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
                 perform(ec, (ERXEnterpriseObject)eo);
             }
         }
-    };
+    }
 
     public static Processor FlushCachesProcessor = new Processor() {
         protected void perform(EOEditingContext ec, ERXEnterpriseObject eo) {

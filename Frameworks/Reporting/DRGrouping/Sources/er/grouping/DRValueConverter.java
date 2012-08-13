@@ -4,8 +4,6 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.foundation.*;
 
-import er.extensions.*;
-
 /**
  * Converts values. The main reason for this class is to provide a
  * point where you can patch into the internals of the grouping framework
@@ -29,7 +27,7 @@ public class DRValueConverter {
             return 0.0;
         } else if (v instanceof String) {
             try {
-                scr = (new Double((String)v)).doubleValue();
+                scr = Double.parseDouble((String)v);
             } catch(NumberFormatException e) {
                 log.error("Not a number: " + v);
                 scr = 0.0;
@@ -44,7 +42,7 @@ public class DRValueConverter {
             scr = 0.0;
         } else {
             try {
-                scr = (new Double(v.toString())).doubleValue();
+                scr = Double.parseDouble(v.toString());
             } catch(NumberFormatException ex) {
                 log.error("Not a number: " + v);
                 scr = 0.0;

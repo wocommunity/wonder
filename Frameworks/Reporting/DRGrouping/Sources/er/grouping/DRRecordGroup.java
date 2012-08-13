@@ -122,7 +122,7 @@ public class DRRecordGroup extends Object  {
                     DRValue val = (DRValue)en2.nextElement();
                     boolean isComputed = val.attribute().isComputed();
                     double subTot, lastTot, newTot;
-                    Number indexNum = new Integer(i);
+                    Number indexNum = Integer.valueOf(i);
                     DRValue totalValue = (DRValue)_totals.objectForKey(indexNum);
                     if (totalValue == null) {
                         if (val.shouldTotal()) {
@@ -168,7 +168,7 @@ public class DRRecordGroup extends Object  {
             NSMutableArray totList = new NSMutableArray();
 
             for (i = 0; i < cnt; i++) {
-                totList.addObject(this.totals().objectForKey(new Integer(i)));
+                totList.addObject(this.totals().objectForKey(Integer.valueOf(i)));
             }
             _totalList = new NSArray(totList);
         }

@@ -14,8 +14,6 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.eof.ERXModelGroup;
-import er.extensions.foundation.ERXProperties;
 import er.extensions.jdbc.ERXJDBCUtilities;
 
 /**
@@ -421,7 +419,7 @@ public class ERXMigrationDatabase {
 		}
 
 		/**
-		 * @see IERXMigration.downgrade
+		 * @see IERXMigration#downgrade(EOEditingContext, EOAdaptorChannel, EOModel)
 		 * @param editingContext
 		 *            the editing context
 		 * @param database
@@ -443,7 +441,7 @@ public class ERXMigrationDatabase {
 		}
 
 		/**
-		 * @see IERXMigration.upgrade
+		 * @see IERXMigration#upgrade(EOEditingContext, EOAdaptorChannel, EOModel)
 		 * @param editingContext
 		 *            the editing context
 		 * @param database

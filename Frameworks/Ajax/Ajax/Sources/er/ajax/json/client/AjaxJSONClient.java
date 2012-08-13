@@ -19,6 +19,13 @@ import er.extensions.foundation.ERXRandomGUID;
  * @binding instance if global is false, you can set a specific instance identifier (leave out for a generated value)
  */
 public class AjaxJSONClient extends AjaxStatelessJSONClient {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private String _instance;
 
 	public AjaxJSONClient(WOContext context) {

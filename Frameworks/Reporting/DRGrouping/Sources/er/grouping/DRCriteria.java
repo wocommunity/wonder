@@ -6,8 +6,6 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.foundation.*;
 
-import er.extensions.*;
-
 /**
  * The "value" for the {@link DRMasterCriteria}. For example, given
  * a <code>category</code> key, it would contain "Drama", "Sci-Fi" and "Comedy".

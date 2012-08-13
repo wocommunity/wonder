@@ -49,6 +49,13 @@ import er.extensions.qualifiers.ERXKeyValueQualifier;
  */
 // ENHANCEME: Should support restrictive qualifiers, don't need to subclass KeyValueQualifier
 public class ERXInQualifier extends ERXKeyValueQualifier implements Cloneable {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     private static final int DefaultPadToSize =
             ERXProperties.intForKeyWithDefault("er.extensions.ERXInQualifier.DefaultPadToSize", 8);
 
@@ -145,7 +152,7 @@ public class ERXInQualifier extends ERXKeyValueQualifier implements Cloneable {
                     // so we try to compare 'n' values with 'm' objects.
                     // we use set intersection
                     NSSet vs = new NSSet((NSArray) value);
-                    NSSet vss = new NSSet((NSArray) values());
+                    NSSet vss = new NSSet(values());
                     return vs.intersectsSet(vss);
                 }
             }

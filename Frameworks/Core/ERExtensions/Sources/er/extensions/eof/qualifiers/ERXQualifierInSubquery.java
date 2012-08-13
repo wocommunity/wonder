@@ -53,6 +53,12 @@ import er.extensions.eof.ERXEOAccessUtilities;
  */
 
 public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQLGeneration, Cloneable, EOQualifierEvaluation {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/** logging support */
 	public static final Logger log = Logger.getLogger(ERXQualifierInSubquery.class);
@@ -97,8 +103,8 @@ public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQ
 		if(relationshipName != null) {
 			this.relationshipName = relationshipName;
 			EORelationship rel = ERXEOAccessUtilities.entityNamed(null, entityName).relationshipNamed(relationshipName);
-			this.attributeName = (String) ((EOAttribute) rel.sourceAttributes().lastObject()).name();
-			this.destinationAttName = (String) ((EOAttribute) rel.destinationAttributes().lastObject()).name();
+			this.attributeName = rel.sourceAttributes().lastObject().name();
+			this.destinationAttName = rel.destinationAttributes().lastObject().name();
 		}
 	}
 
@@ -169,7 +175,7 @@ public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQ
 		if (attributeName != null)
 			sb.append(e.sqlStringForAttributeNamed(attributeName));
 		else {
-			EOAttribute pk = (EOAttribute) e.entity().primaryKeyAttributes().lastObject();
+			EOAttribute pk = e.entity().primaryKeyAttributes().lastObject();
 			sb.append(e.sqlStringForAttribute(pk));
 		}
 		sb.append(" IN ( ");

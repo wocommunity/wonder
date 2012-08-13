@@ -45,6 +45,12 @@ import er.extensions.foundation.ERXUtilities;
  */
 
 public abstract class ERXArrayChooser extends ERXStatelessComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** logging support */
     public static final Logger log = Logger.getLogger(ERXArrayChooser.class);
@@ -482,7 +488,7 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
         // and are given isMandatory=0 on a mandatory relationship to force users to pick one..
         super.takeValuesFromRequest(r, c);
         
-        if (c._wasFormSubmitted()) {
+        if (c.wasFormSubmitted()) {
           Object realSource = realSourceObject();
           if(realSource instanceof EOEnterpriseObject) {
               EOEnterpriseObject localObject = (EOEnterpriseObject)realSource;

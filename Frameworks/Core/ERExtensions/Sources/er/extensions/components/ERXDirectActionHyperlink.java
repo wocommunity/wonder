@@ -49,6 +49,12 @@ import er.extensions.foundation.ERXStringUtilities;
  * 		form values
  */
 public class ERXDirectActionHyperlink extends ERXStatelessComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     // Class instances -------------------------------------------------
 
@@ -239,7 +245,7 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
                 ERXStringUtilities.appendSeparatorIfLastNot('&', '?', result);
                 result.append(key);
                 result.append("=");
-                result.append(ERXCrypto.blowfishEncode(value));
+                result.append(ERXCrypto.crypterForAlgorithm(ERXCrypto.BLOWFISH).encrypt(value));
             }
         }
 

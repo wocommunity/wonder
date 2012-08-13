@@ -95,6 +95,57 @@ public class AdminApplicationsPage extends ApplicationsPage {
         sendCommandInstancesToWotaskds("CLEAR");
     }
 
+    public void scheduleType(NSArray nsarray, String scheduleType) {
+    		// Should be one of "HOURLY", "DAILY", "WEEKLY"
+		for(Enumeration enumeration = nsarray.objectEnumerator(); enumeration.hasMoreElements();) {
+			MInstance minstance = (MInstance) enumeration.nextElement();
+			minstance.setSchedulingType(scheduleType);
+			processedInstance(minstance);
+		}
+		sendUpdateInstancesToWotaskds();
+    }
+    
+    public void hourlyStartHours(NSArray nsarray, int beginScheduleWindow, int endScheduleWindow, int interval) {
+    		int hour = beginScheduleWindow;
+    		for(Enumeration enumeration = nsarray.objectEnumerator(); enumeration.hasMoreElements();) {
+    			if (hour > endScheduleWindow)
+    				hour = beginScheduleWindow;
+    			MInstance minstance = (MInstance) enumeration.nextElement();
+    			minstance.setSchedulingHourlyStartTime(new Integer(hour));
+    			minstance.setSchedulingInterval(new Integer(interval));
+    			processedInstance(minstance);
+    			hour++;
+    		}
+    		sendUpdateInstancesToWotaskds();
+    }
+    
+    public void dailyStartHours(NSArray nsarray, int beginScheduleWindow, int endScheduleWindow) {
+        int hour = beginScheduleWindow;
+        for(Enumeration enumeration = nsarray.objectEnumerator(); enumeration.hasMoreElements();) {
+            if (hour > endScheduleWindow)
+            		hour = beginScheduleWindow;
+            MInstance minstance = (MInstance) enumeration.nextElement();
+            minstance.setSchedulingDailyStartTime(new Integer(hour));
+            processedInstance(minstance);
+            hour++;
+        }
+        sendUpdateInstancesToWotaskds();
+    }
+    
+    public void weeklyStartHours(NSArray nsarray, int beginScheduleWindow, int endScheduleWindow, int startDay) {
+		int hour = beginScheduleWindow;
+		for(Enumeration enumeration = nsarray.objectEnumerator(); enumeration.hasMoreElements();) {
+			if (hour > endScheduleWindow)
+				hour = beginScheduleWindow;
+			MInstance minstance = (MInstance) enumeration.nextElement();
+			minstance.setSchedulingWeeklyStartTime(new Integer(hour));
+			minstance.setSchedulingStartDay(new Integer(startDay));
+			processedInstance(minstance);
+			hour++;
+		}
+		sendUpdateInstancesToWotaskds();
+}
+
     public void turnScheduledOn(NSArray nsarray) {
         for(Enumeration enumeration = nsarray.objectEnumerator(); enumeration.hasMoreElements();) {
             MInstance minstance = (MInstance) enumeration.nextElement();
@@ -217,6 +268,13 @@ public class AdminApplicationsPage extends ApplicationsPage {
         }
     }
 
+	public void bounceRolling(NSArray<MApplication> applications) {
+        for (MApplication application : applications) {
+            AppDetailPage page = AppDetailPage.create(context(), application);
+            page = (AppDetailPage) page.bounceClickedWithRollingBouncer();
+        }
+	}
+	
     public WOComponent bounceClicked() {
         AppDetailPage page = AppDetailPage.create(context(), currentApplication);
         page = (AppDetailPage) page.bounceClicked();
@@ -326,4 +384,5 @@ public class AdminApplicationsPage extends ApplicationsPage {
     public static WOComponent create(WOContext context) {
         return WOApplication.application().pageWithName(AdminApplicationsPage.class.getName(), context);
     }
+
 }

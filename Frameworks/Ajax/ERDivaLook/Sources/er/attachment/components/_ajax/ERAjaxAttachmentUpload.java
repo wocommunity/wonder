@@ -8,7 +8,6 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.foundation.NSForwardException;
 
 import er.attachment.components.ERAttachmentUpload;
-import er.attachment.model.ERAttachment;
 
 /**
  * ERAttachment component for er.prototaculous.AjaxUpload

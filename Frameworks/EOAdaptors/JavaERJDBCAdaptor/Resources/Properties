@@ -1,0 +1,9 @@
+##  Properies Info
+er.extensions.load.Properties.framework.JavaERJDBCAdaptor=load
+er.extensions.JavaERJDBCAdaptor.hasLocalization=false
+
+# if enabled then eof uses a pool of java.sql.Connections instead of
+# one connection for every adaptor. Useful if one uses one multiple
+# EOF stacks with the same connection dictionary
+# er.jdbcadaptor.ERJDBCAdaptor.poolModelConnections=false 
+

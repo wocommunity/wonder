@@ -1,5 +1,9 @@
 package er.modern.directtoweb.components.buttons;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
@@ -298,4 +302,15 @@ public class ERMDDeleteButton extends ERMDActionButton {
     	return _dialogMessage;
     }
 
+	private void writeObject(ObjectOutputStream out) throws IOException {
+		out.defaultWriteObject();
+		EOEnterpriseObject eo = (EOEnterpriseObject) d2wContext().valueForKey(Keys.objectPendingDeletion);
+		out.writeObject(eo);		
+	}
+	
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+		in.defaultReadObject();
+		EOEnterpriseObject eo = (EOEnterpriseObject) in.readObject();
+		d2wContext().takeValueForKey(eo, Keys.objectPendingDeletion);
+	}
 }

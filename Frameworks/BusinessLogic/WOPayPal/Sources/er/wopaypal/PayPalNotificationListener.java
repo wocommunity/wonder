@@ -8,7 +8,6 @@ package er.wopaypal;
 
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import java.util.*;
 import java.lang.reflect.*;
 
 /**

@@ -24,7 +24,6 @@
 	<classpathentry exported="true" kind="lib" path="Libraries/jaxen-1.1.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/jcommon-1.0.15.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/xml-apis.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/commons-lang-2.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/iText-2.1.7.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/poi-3.5-FINAL-20090928.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/jpa.jar"/>

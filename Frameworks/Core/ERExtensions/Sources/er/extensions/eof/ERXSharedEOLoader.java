@@ -17,7 +17,6 @@ import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
-import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.eocontrol.EOSharedEditingContext;
@@ -42,7 +41,7 @@ import er.extensions.foundation.ERXUtilities;
 // contain shared objects. What seems to be happening is EOF's shared EO loader goes like this:
 // 1) request comes in for object from model #1
 // 2) shared EOs are loaded for model #1 (none).
-// 3) object from step #1 touches are relationship to an entity in model #2.
+// 3) object from step #1 touches a relationship to an entity in model #2.
 // 4) shared EOs are loaded for model #2.
 // For some reason, this is too late. All the shared EOs for all models need to
 // be loaded at once.

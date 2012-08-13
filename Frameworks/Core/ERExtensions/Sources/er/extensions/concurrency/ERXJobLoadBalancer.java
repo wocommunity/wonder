@@ -127,7 +127,7 @@ public class ERXJobLoadBalancer {
         // to do specify TTL per type?
         Long result=(Long)_ttlsPerType.get(type);
         if (result==null) {
-            result=new Long(ERXProperties.longForKeyWithDefault(DEFAULT_DEAD_TIMEOUT_MILLIS, 60000)); // 1mn by default
+            result = Long.valueOf(ERXProperties.longForKeyWithDefault(DEFAULT_DEAD_TIMEOUT_MILLIS, 60000L)); // 1mn by default
             _ttlsPerType.put(type, result);
         }
         return result.longValue();
@@ -138,7 +138,7 @@ public class ERXJobLoadBalancer {
      * @param ttl (in milliseconds)
      */
     public void setTtlForWorkerType(String type, long ttl) {
-    		_ttlsPerType.put(type, new Long(ttl));
+    		_ttlsPerType.put(type, Long.valueOf(ttl));
     }
 
     protected String pathForWorkerIdentification(WorkerIdentification workerId) {
@@ -220,7 +220,7 @@ public class ERXJobLoadBalancer {
             try {
                 in = new ObjectInputStream(new FileInputStream(friend));                                                                                                                                                                      
                 long entryCreationTime = in.readLong();
-                String friendId = (String)in.readUTF();
+                String friendId = in.readUTF();
                 if ((now-entryCreationTime)<ttl) {
                     aliveFriendsCount++;
                     if (friendId.compareTo(workerId.id())<0) {

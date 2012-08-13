@@ -3,7 +3,10 @@ package er.extensions.eof;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
 
+import com.webobjects.eocontrol.EOAndQualifier;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
+import com.webobjects.eocontrol.EONotQualifier;
+import com.webobjects.eocontrol.EOOrQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
@@ -18,6 +21,7 @@ import er.extensions.qualifiers.ERXKeyComparisonQualifier;
 import er.extensions.qualifiers.ERXKeyValueQualifier;
 import er.extensions.qualifiers.ERXNotQualifier;
 import er.extensions.qualifiers.ERXOrQualifier;
+import er.extensions.qualifiers.ERXTrueQualifier;
 
 /**
  * <p>
@@ -334,6 +338,8 @@ public class ERXQ {
 	 *            the key
 	 * @param values
 	 *            the values
+	 * @param min
+	 *            the minimum number of objects from values to match
 	 * @return an EOKeyValueQualifier
 	 */
 	public static ERXKeyValueQualifier hasAtLeast(String key, NSArray values, int min) {
@@ -628,6 +634,24 @@ public class ERXQ {
 	}
 
 	/**
+	 * Equivalent to a new ERXAndQualifier of
+	 * EONotQualifier(EOKeyValueQualifier) with key equals value for each value.
+	 * 
+	 * @param key
+	 *            the key
+	 * @param values
+	 *            the values
+	 * @return an EOQualifier
+	 */
+	public static ERXAndQualifier notInObjects(String key, Object... values) {
+		NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
+		for (Object value : values) {
+			qualifiers.addObject(ERXQ.notEquals(key, value));
+		}
+		return new ERXAndQualifier(qualifiers);
+	}
+
+	/**
 	 * Equivalent to a new ERXOrQualifier of EOKeyValueQualifier with key equals
 	 * value for each value.
 	 * 
@@ -696,6 +720,8 @@ public class ERXQ {
 	 *            the lower bound value
 	 * @param upperBound
 	 *            the upper bound value
+	 * @param inclusive
+	 *            if the lowerBound and upperBound should be inclusive
 	 * @return the qualifier
 	 */
 	public static EOQualifier between(String key, Object lowerBound, Object upperBound, boolean inclusive) {
@@ -1029,5 +1055,80 @@ public class ERXQ {
 	 */
 	public static String keyPath(String... elements) {
 		return new NSArray<String>(elements).componentsJoinedByString(".");
+	}
+	
+	/**
+	 * Analyzes the given qualifier and returns all found {@link EOKeyValueQualifier} objects
+	 * contained within.
+	 * 
+	 * @param qualifier
+	 *            qualifier to analyze
+	 * @return array of found key value qualifiers
+	 */
+	public static NSArray<EOKeyValueQualifier> extractKeyValueQualifiers(EOQualifier qualifier) {
+		if (qualifier == null) {
+			return NSArray.EmptyArray;
+		}
+  		NSMutableArray<EOKeyValueQualifier> array = new NSMutableArray<EOKeyValueQualifier>();
+  		_extractKeyValueQualifiers(array, qualifier);
+  		return array;
+  	}
+	
+	private static void _extractKeyValueQualifiers(NSMutableArray<EOKeyValueQualifier> array, EOQualifier qualifier) {
+		if (qualifier instanceof EOKeyValueQualifier) {
+			array.add((EOKeyValueQualifier) qualifier);
+  		} else if (qualifier instanceof EOAndQualifier || qualifier instanceof EOOrQualifier) {
+  			NSArray<EOQualifier> qualifiers;
+  			if (qualifier instanceof EOAndQualifier) {
+  				qualifiers = ((EOAndQualifier)qualifier).qualifiers();
+  			} else {
+  				qualifiers = ((EOOrQualifier)qualifier).qualifiers();
+  			}
+  			for (EOQualifier item : qualifiers) {
+  				_extractKeyValueQualifiers(array, item);
+  			}
+  		} else if (qualifier instanceof EONotQualifier) {
+  			_extractKeyValueQualifiers(array, ((EONotQualifier)qualifier).qualifier());
+  		}
+	}
+	
+	/**
+	 * Takes a qualifier and searches for the given qualifier within to replace it with another one.
+	 * 
+	 * @param qualifier
+	 *            the qualifier to modify
+	 * @param searchFor
+	 *            the qualifier to replace
+	 * @param replaceWith
+	 *            the qualifier that replaces the searched one
+	 * @return modified qualifier
+	 */
+	public static EOQualifier replaceQualifierWithQualifier(EOQualifier qualifier, EOQualifier searchFor, EOQualifier replaceWith) {
+		if (qualifier == null || searchFor == null) {
+			throw new IllegalStateException("The params qualifier and searchFor must not be null!");
+		}
+		if (replaceWith == null) {
+			replaceWith = new ERXTrueQualifier();
+		}
+  		EOQualifier result = qualifier;
+  		if (qualifier.equals(searchFor)) {
+  			result = replaceWith;
+  		} else if (qualifier instanceof EOAndQualifier) {
+  			NSMutableArray<EOQualifier> array = new NSMutableArray<EOQualifier>();
+  			for (EOQualifier item : ((EOAndQualifier)qualifier).qualifiers()) {
+  				array.add(replaceQualifierWithQualifier(item, searchFor, replaceWith));
+  			}
+  			result = new EOAndQualifier(array);
+  		} else if (qualifier instanceof EOOrQualifier) {
+  			NSMutableArray<EOQualifier> array = new NSMutableArray<EOQualifier>();
+  			for (EOQualifier item : ((EOOrQualifier)qualifier).qualifiers()) {
+  				array.add(replaceQualifierWithQualifier(item, searchFor, replaceWith));
+  			}
+  			result = new EOOrQualifier(array);
+  		} else if (qualifier instanceof EONotQualifier) {
+  			EOQualifier replacedQualifier = replaceQualifierWithQualifier(((EONotQualifier)qualifier).qualifier(), searchFor, replaceWith);
+  			result = new EONotQualifier(replacedQualifier);
+  		}
+		return result;
 	}
 }

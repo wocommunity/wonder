@@ -102,7 +102,8 @@ public class ERXEOEncodingUtilities {
         return EntityNameSeparator;
     }
 
-    /** @deprecated use <code>decodeEnterpriseObjectsFromFormValues</code> instead */
+    /** @deprecated use {@link #decodeEnterpriseObjectsFromFormValues(EOEditingContext, NSDictionary)} */
+    @Deprecated
     public static NSArray enterpriseObjectsFromFormValues(EOEditingContext ec, NSDictionary formValues) {
         return decodeEnterpriseObjectsFromFormValues(ec, formValues);
     }
@@ -199,7 +200,7 @@ public class ERXEOEncodingUtilities {
     		synchronized(ERXEOEncodingUtilities.class) {
     			if(_encodedEntityNames == null) {
     				_encodedEntityNames = new NSMutableDictionary ();
-    				NSArray models = (NSArray)EOModelGroup.defaultGroup ().models ();
+    				NSArray models = EOModelGroup.defaultGroup().models();
     				for (Enumeration en = models.objectEnumerator ();
     				en.hasMoreElements ();) {
     					NSArray entities = ((EOModel)en.nextElement ()).entities ();
@@ -349,7 +350,7 @@ public class ERXEOEncodingUtilities {
 
             // Add the result to the list of encoded objects
             encoded.addObject(encodedEntityName + separator + (encrypt ? "E" : "") + c++ + "=" +
-                              (encrypt ? ERXCrypto.blowfishEncode(pk) : pk));
+                              (encrypt ? ERXCrypto.crypterForAlgorithm(ERXCrypto.BLOWFISH).encrypt(pk) : pk));
         }
 
         // Return the result as an url-encoded string
@@ -421,7 +422,7 @@ public class ERXEOEncodingUtilities {
             throw new NSForwardException(ex);
         }
         NSArray values = isEncrypted
-            ? NSArray.componentsSeparatedByString( ERXCrypto.blowfishDecode(value).trim(), AttributeValueSeparator )
+            ? NSArray.componentsSeparatedByString( ERXCrypto.crypterForAlgorithm(ERXCrypto.BLOWFISH).decrypt(value).trim(), AttributeValueSeparator )
             : NSArray.componentsSeparatedByString( value, AttributeValueSeparator );  
         int attrCount = pkAttributeNames.count();
         NSMutableDictionary result = new NSMutableDictionary( attrCount );

@@ -86,10 +86,10 @@ public class ERXJSSubmitFunction extends WODynamicElement {
   public WOActionResults invokeAction(WORequest request, WOContext context) {
     Object obj = null;
     WOComponent component = context.component();
-    if (!disabledInComponent(component) && context._wasFormSubmitted()) {
-      if (context._isMultipleSubmitForm()) {
+    if (!disabledInComponent(component) && context.wasFormSubmitted()) {
+      if (context.isMultipleSubmitForm()) {
         if (ERXStringUtilities.nullForEmptyString((String) request.formValueForKey(nameInContext(context, component))) != null) {
-          context._setActionInvoked(true);
+          context.setActionInvoked(true);
           if (_action != null) {
             obj = _action.valueInComponent(component);
           }
@@ -99,7 +99,7 @@ public class ERXJSSubmitFunction extends WODynamicElement {
         }
       }
       else {
-        context._setActionInvoked(true);
+        context.setActionInvoked(true);
         if (_action != null) {
           obj = _action.valueInComponent(component);
         }

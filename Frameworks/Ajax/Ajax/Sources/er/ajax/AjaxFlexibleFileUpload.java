@@ -3,6 +3,7 @@ package er.ajax;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
@@ -66,12 +67,17 @@ import er.extensions.localization.ERXLocalizer;
  * @author mschrag
  */
 public class AjaxFlexibleFileUpload extends AjaxFileUpload {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 	
 	protected final Logger log = Logger.getLogger(getClass());
 	
 	public static interface Keys {
 		public static final String name = "name";
-		public static final String wosid = "wosid";
 		public static final String selectFileLabel = "selectFileLabel";
 		public static final String cancelLabel = "cancelLabel";
 		public static final String clearLabel = "clearLabel";
@@ -144,12 +150,13 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	}
 	
 	/**
-	 * Builds the array of required additional AjaxUpload data items (wosid, id).
+	 * Builds the array of required additional AjaxUpload data items (<i>sessionIdKey</i>, id).
 	 * 
-	 * @return array of required additional AjaxUpload data items (wosid, id).
+	 * @return array of required additional AjaxUpload data items (<i>sessionIdKey</i>, id).
 	 */
 	protected NSArray<String> _ajaxUploadData() {
-		NSMutableArray<String> _data = new NSMutableArray<String>("wosid:'" + this.session().sessionID() + "'");
+		NSMutableArray<String> _data = new NSMutableArray<String>(WOApplication.application().sessionIdKey()
+				+ ":'" + this.session().sessionID() + "'");
 		
 		_data.addObject("id:'" + id() + "'");
 		
@@ -290,7 +297,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 			stateObj.takeValueForKey(progress.fileName(), "filename");
 		}
 		this.refreshState();
-		stateObj.takeValueForKey(new Integer(state.ordinal()), "state");
+		stateObj.takeValueForKey(Integer.valueOf(state.ordinal()), "state");
 		if (state == UploadState.CANCELED) {
 			stateObj.takeValueForKey(cancelUrl(), "cancelUrl");
 		}
@@ -501,7 +508,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 * @return url sent to the iframe to cancel
 	 */
 	public String cancelUrl() {
-		NSDictionary<String,Boolean> queryParams = new NSDictionary<String,Boolean>(Boolean.FALSE, Keys.wosid);
+		NSDictionary<String,Boolean> queryParams = new NSDictionary<String,Boolean>(Boolean.FALSE, WOApplication.application().sessionIdKey());
 		String url = ERXWOContext._directActionURL(context(), "ERXDirectAction/closeHTTPSession", queryParams, ERXRequest.isRequestSecure(context().request()));
 		if (log.isDebugEnabled()) log.debug("URL: " + url);
 		return url;
@@ -623,9 +630,9 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 		if (progress != null) {
 			if (!progress.isSucceeded()) {
 				int percent = (int)(progress.percentage() * 100);
-				amount = new Integer(percent);
+				amount = Integer.valueOf(percent);
 			} else {
-				amount = new Integer(100);
+				amount = Integer.valueOf(100);
 			}
 		}
 		return amount;

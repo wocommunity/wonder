@@ -6,15 +6,12 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.pages;
 
-import java.util.Iterator;
-
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver.WORequest;
 import com.webobjects.directtoweb.EditPageInterface;
-import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSValidation;
 
@@ -24,7 +21,6 @@ import er.directtoweb.interfaces.ERDTabEditPageInterface;
 import er.extensions.components._private.ERXWOForm;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
-import er.extensions.validation.ERXValidationException;
 
 /**
  * Superclass for all tab and wizard pages.<br />
@@ -32,6 +28,12 @@ import er.extensions.validation.ERXValidationException;
  * @d2wKey tabComponentName
  */
 public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditPageInterface {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public final static String WILL_SWITCH_TAB = "willSwitchTab";
 
@@ -58,21 +60,12 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
         return switchTab && errorMessages.count()==0;
     }
 
-    // Need to set the first tab before the page renders the first time so that rules based on tabKey will fire.
-    public void appendToResponse(WOResponse response, WOContext context) {
+    public void takeValuesFromRequest(WORequest request, WOContext context) {
         // ak: this only works in a direct link or if there are no form
         // values...
-        String tabName = context().request().stringFormValueForKey("__tab");
+        String tabName = request.stringFormValueForKey("__tab");
         setTabByName(tabName);
-       if (currentTab() == null && tabSectionsContents() != null && tabSectionsContents().count() > 0) {
-            //If firstTab is not null, then try to find the tab named firstTab
-            if(tabNumber()!=null && tabNumber().intValue() <= tabSectionsContents().count()){
-                setCurrentTab((ERD2WContainer)tabSectionsContents().objectAtIndex(tabNumber().intValue()));
-            }
-            if(currentTab()==null)
-                setCurrentTab((ERD2WContainer)tabSectionsContents().objectAtIndex(0));
-        }
-        super.appendToResponse(response, context);
+        super.takeValuesFromRequest(request, context);
     }
 
     //AK: what are these used for? They do nothing?
@@ -175,11 +168,13 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
     }
 
 
-    /** @deprecated use nextTabAction */
+    /** @deprecated use {@link #nextTabAction()} */
+    @Deprecated
     public WOComponent nextTab() {
         return nextTabAction();
     }
-    /** @deprecated use previousTabAction */
+    /** @deprecated use {@link #previousTabAction()} */
+    @Deprecated
     public WOComponent previousTab() {
         return previousTabAction();
     }

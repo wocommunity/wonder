@@ -87,6 +87,12 @@ import er.extensions.foundation.ERXStringUtilities;
  */
 
 public class ERXDummyRecord extends EOCustomObject {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private Object object;
 
@@ -101,6 +107,12 @@ public class ERXDummyRecord extends EOCustomObject {
 	}
 	
 	public static class GlobalID extends EOGlobalID {
+		/**
+		 * Do I need to update serialVersionUID?
+		 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+		 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+		 */
+		private static final long serialVersionUID = 1L;
 
 		private Object object;
 
@@ -264,7 +276,7 @@ public class ERXDummyRecord extends EOCustomObject {
 		EOClassDescription cd = null;
 		NSMutableArray objects = new NSMutableArray();
 		for (Enumeration iter = list.objectEnumerator(); iter.hasMoreElements();) {
-			Object o = (Object) iter.nextElement();
+			Object o = iter.nextElement();
 
 			EOEnterpriseObject eo = recordForObject(ec, o);
 			ec = eo.editingContext();

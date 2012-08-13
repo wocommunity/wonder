@@ -9,8 +9,6 @@
 
 package com.amazon.s3;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +32,7 @@ public class QueryStringAuthGenerator {
     private Long expires = null;
 
     // by default, expire in 1 minute.
-    private static final Long DEFAULT_EXPIRES_IN = new Long(60 * 1000);
+    private static final Long DEFAULT_EXPIRES_IN = Long.valueOf(60 * 1000);
 
     public QueryStringAuthGenerator(String awsAccessKeyId, String awsSecretAccessKey) {
         this(awsAccessKeyId, awsSecretAccessKey, true);
@@ -67,12 +65,12 @@ public class QueryStringAuthGenerator {
     }
 
     public void setExpires(long millisSinceEpoch) {
-        expires = new Long(millisSinceEpoch);
+        expires = Long.valueOf(millisSinceEpoch);
         expiresIn = null;
     }
 
     public void setExpiresIn(long millis) {
-        expiresIn = new Long(millis);
+        expiresIn = Long.valueOf(millis);
         expires = null;
     }
 

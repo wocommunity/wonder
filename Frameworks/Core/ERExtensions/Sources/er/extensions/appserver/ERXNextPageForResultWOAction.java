@@ -35,8 +35,6 @@ import er.extensions.eof.ERXEC;
  *
  */
 public class ERXNextPageForResultWOAction extends ERXAbstractPerformWOAction implements IERXPerformWOActionForResult {
-	
-	@SuppressWarnings("unused")
 	private static final Logger log = Logger.getLogger(ERXNextPageForResultWOAction.class);
 	
 	protected Object _result;

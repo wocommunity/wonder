@@ -60,7 +60,7 @@ public class AjaxModalContainer extends AjaxDynamicElement {
     public WOActionResults invokeAction(WORequest worequest, WOContext wocontext) {
         WOComponent component = wocontext.component();
     	if (!booleanValueForBinding("ajax", false, component)) {
-	        WOAssociation action = (WOAssociation) associations().objectForKey("action");
+	        WOAssociation action = associations().objectForKey("action");
 	        if(action != null && wocontext.elementID().equals(wocontext.senderID())) {
 	            return (WOActionResults) action.valueInComponent(component);
 	        }
@@ -83,12 +83,12 @@ public class AjaxModalContainer extends AjaxDynamicElement {
         		NSDictionary queryDictionary = (NSDictionary)valueForBinding("queryDictionary", component);
         		boolean secure = booleanValueForBinding("secure", ERXRequest.isRequestSecure(context.request()), component);
         		if (secure) {
-              boolean generatingCompleteURLs = (context instanceof ERXWOContext) ? ((ERXWOContext)context)._generatingCompleteURLs() : false;
+              boolean generatingCompleteURLs = context.doesGenerateCompleteURLs();
               if (!generatingCompleteURLs) {
-        				context._generateCompleteURLs();
+        				context.generateCompleteURLs();
         			}
               try {
-          			href = context._directActionURL(directActionName, queryDictionary, secure);
+          			href = context._directActionURL(directActionName, queryDictionary, secure, 0, false);
           			ERXMutableURL u = new ERXMutableURL(href);
           			u.addQueryParameter(String.valueOf(System.currentTimeMillis()), null);
           			href = u.toExternalForm();
@@ -98,7 +98,7 @@ public class AjaxModalContainer extends AjaxDynamicElement {
               }
               finally {
           			if (!generatingCompleteURLs) {
-          				context._generateRelativeURLs();
+          				context.generateRelativeURLs();
           			}
               }
         		}
@@ -208,7 +208,7 @@ public class AjaxModalContainer extends AjaxDynamicElement {
         WOComponent component = context.component();
 
         WOResponse response = null;
-        WOAssociation action = (WOAssociation) associations().objectForKey("action");
+        WOAssociation action = associations().objectForKey("action");
         if(action != null) {
             action.valueInComponent(component);
         }

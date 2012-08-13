@@ -32,13 +32,13 @@ import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
 
 import er.extensions.appserver.ERXSession;
-import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXPatcher;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXSelectorUtilities;
+import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
 /**
@@ -53,14 +53,23 @@ import er.extensions.foundation.ERXValueUtilities;
  * @author dscheck
  */
 public class ERDSavedQueriesComponent extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public static final Logger log = Logger.getLogger(ERDSavedQueriesComponent.class);
 
     public static final EOKeyValueArchiving.Support originalEOKVArchivingTimestampSupport = new EOKeyValueArchiving._TimestampSupport();
     public static final EOKeyValueArchiving.Support newEOKVArchivingTimestampSupport = new ERDSavedQueriesComponent._TimestampSupport();
 
     /** @deprecated  use {@link #originalEOKVArchivingTimestampSupport} */
+    @Deprecated
     public static final EOKeyValueArchiving.Support originalEOKVArchiningTimestampSupport = originalEOKVArchivingTimestampSupport;
     /** @deprecated  use {@link #newEOKVArchivingTimestampSupport} */
+    @Deprecated
     public static final EOKeyValueArchiving.Support newEOKVArchiningTimestampSupport = newEOKVArchivingTimestampSupport;
 
 	public ERDSavedQueriesComponent(WOContext context) {
@@ -355,7 +364,7 @@ public class ERDSavedQueriesComponent extends WOComponent {
                 if (log.isDebugEnabled()) log.debug("decodeEO with dict: " + dictionary);
 
                 if (primaryKeyAttribute != null && !String.class.getName().equals(primaryKeyAttribute.className())) {
-                    primaryKeyObject = ERXConstant.integerForString(pk);
+                    primaryKeyObject = ERXStringUtilities.integerWithString(pk);
                 }
 
                 try {

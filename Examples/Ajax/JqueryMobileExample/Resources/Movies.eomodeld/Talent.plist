@@ -1,0 +1,77 @@
+{
+    attributes = (
+        {
+            columnName = "FIRST_NAME"; 
+            externalType = char; 
+            name = firstName; 
+            prototypeName = varchar16; 
+            width = 20; 
+        }, 
+        {
+            columnName = "LAST_NAME"; 
+            externalType = char; 
+            name = lastName; 
+            prototypeName = varchar16; 
+            width = 30; 
+        }, 
+        {
+            allowsNull = N; 
+            columnName = "TALENT_ID"; 
+            externalType = integer; 
+            name = talentID; 
+            precision = 9; 
+            prototypeName = id; 
+        }
+    ); 
+    attributesUsedForLocking = (talentID, firstName, lastName); 
+    className = "webobjectsexamples.businesslogic.eo.Talent"; 
+    classProperties = (firstName, lastName, roles, moviesDirected, photo); 
+    externalName = TALENT; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {
+        "_clientClassPropertyNames" = (firstName, lastName, roles, moviesDirected, photo); 
+        "_javaClientClassName" = "webobjectsexamples.businesslogic.movies.common.Talent"; 
+        "_nameInObjectStore" = TALENT; 
+    }; 
+    maxNumberOfInstancesToBatchFetch = 10; 
+    name = Talent; 
+    primaryKeyAttributes = (talentID); 
+    relationships = (
+        {
+            definition = "toDirector.toMovie"; 
+            joinSemantic = EOInnerJoin; 
+            name = moviesDirected; 
+        }, 
+        {
+            deleteRule = EODeleteRuleCascade; 
+            destination = TalentPhoto; 
+            isMandatory = Y; 
+            isToMany = N; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = talentID; sourceAttribute = talentID; }); 
+            name = photo; 
+            ownsDestination = Y; 
+            propagatesPrimaryKey = Y; 
+        }, 
+        {
+            deleteRule = EODeleteRuleDeny; 
+            destination = MovieRole; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = talentID; sourceAttribute = talentID; }); 
+            name = roles; 
+            numberOfToManyFaultsToBatchFetch = 20; 
+            propagatesPrimaryKey = Y; 
+        }, 
+        {
+            deleteRule = EODeleteRuleDeny; 
+            destination = Director; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = talentID; sourceAttribute = talentID; }); 
+            name = toDirector; 
+            numberOfToManyFaultsToBatchFetch = 20; 
+            propagatesPrimaryKey = Y; 
+        }
+    ); 
+}

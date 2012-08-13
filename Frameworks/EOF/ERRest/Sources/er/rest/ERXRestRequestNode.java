@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.collections.ListUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOResponse;
@@ -1278,7 +1277,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 					// we fallback and lookup the class entity ...
 					if (!classDescription.toOneRelationshipKeys().containsObject(keyName) && classDescription instanceof EOEntityClassDescription) {
 						EOClassDescription nonModelClassDescription = ERXRestClassDescriptionFactory.classDescriptionForObject(obj, true);
-						if (!nonModelClassDescription.toManyRelationshipKeys().containsObject(keyName)) {
+						if (!nonModelClassDescription.toOneRelationshipKeys().containsObject(keyName)) {
 							throw new IllegalArgumentException("There is no to-one relationship named '" + key.key() + "' on '" + classDescription.entityName() + "'.");
 						}
 						destinationClassDescription = nonModelClassDescription.classDescriptionForDestinationKey(keyName);

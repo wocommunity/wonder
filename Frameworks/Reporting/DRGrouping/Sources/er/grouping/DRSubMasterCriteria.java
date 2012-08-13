@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.foundation.*;
 
-import er.extensions.*;
 import er.extensions.foundation.ERXValueUtilities;
 
 
@@ -444,7 +443,7 @@ public class DRSubMasterCriteria extends Object  {
         }
 
         v = DRValueConverter.converter().doubleForValue(val) + delta;
-        return (new Double(v)).toString();
+        return Double.toString(v);
     }
 
     /**

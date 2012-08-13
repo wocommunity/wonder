@@ -22,6 +22,7 @@ import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXResourceManager;
 import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.foundation.ERXExpiringCache;
+import er.extensions.foundation.ERXProperties;
 
 /**
  * Modern version of a javascript component. 
@@ -43,6 +44,9 @@ import er.extensions.foundation.ERXExpiringCache;
  * @binding scriptKey if set, the content will get rendered into an external script src
  * @binding hideInComment boolean that specifies if the script content should
  *   be included in HTML comments, true by default of the script tag contains a script
+ *   
+ * @property er.extensions.ERXJavaScript.hideInComment sets globally if the script
+ *   content should be included within HTML comments, defaults to <code>true</code>
  */
 public class ERXJavaScript extends WOHTMLDynamicElement {
 
@@ -82,17 +86,17 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 	WOAssociation _hideInComment;
 	WOAssociation _language;
 
-	public ERXJavaScript(String s, NSDictionary nsdictionary, WOElement woelement) {
+	public ERXJavaScript(String s, NSDictionary<String, WOAssociation> nsdictionary, WOElement woelement) {
 		super("script", nsdictionary, woelement);
-		_scriptFile = (WOAssociation)_associations.removeObjectForKey("scriptFile");
-		_scriptString = (WOAssociation)_associations.removeObjectForKey("scriptString");
-		_scriptSource = (WOAssociation)_associations.removeObjectForKey("scriptSource");
-		_filename = (WOAssociation)_associations.removeObjectForKey("filename");
-		_language = (WOAssociation)_associations.removeObjectForKey("language");
-		_scriptKey = (WOAssociation)_associations.removeObjectForKey("scriptKey");
-		_hideInComment = (WOAssociation)_associations.removeObjectForKey("hideInComment");
-		_scriptFramework = (WOAssociation) _associations.removeObjectForKey("scriptFramework");
-		_framework = (WOAssociation) _associations.removeObjectForKey("framework");
+		_scriptFile = _associations.removeObjectForKey("scriptFile");
+		_scriptString = _associations.removeObjectForKey("scriptString");
+		_scriptSource = _associations.removeObjectForKey("scriptSource");
+		_filename = _associations.removeObjectForKey("filename");
+		_language = _associations.removeObjectForKey("language");
+		_scriptKey = _associations.removeObjectForKey("scriptKey");
+		_hideInComment = _associations.removeObjectForKey("hideInComment");
+		_scriptFramework = _associations.removeObjectForKey("scriptFramework");
+		_framework = _associations.removeObjectForKey("framework");
 		if((_scriptFile != null && _scriptString != null) 
 				|| (_scriptFile != null && (_scriptSource != null || _filename != null)) 
 				|| (_scriptString != null && (_scriptSource != null || _filename != null))) {
@@ -183,7 +187,7 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 	@Override
 	public void appendChildrenToResponse(WOResponse woresponse, WOContext wocontext) {
 			String script = "";
-			boolean hideInComment = true;
+			boolean hideInComment = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXJavaScript.hideInComment", true);
 			WOComponent wocomponent = wocontext.component();
 			if(_hideInComment != null) {
 				hideInComment = _hideInComment.booleanValueInComponent(wocomponent);
@@ -250,7 +254,7 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
     
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append("<");
 		sb.append(getClass().getName());
 		sb.append(" scriptFile=" + _scriptFile);

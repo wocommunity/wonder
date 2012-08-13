@@ -12,10 +12,10 @@ import org.apache.log4j.Logger;
 import com.webobjects.appserver.WOAdaptor;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODynamicURL;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
-import com.webobjects.appserver._private.WODynamicURL;
 import com.webobjects.appserver._private.WOURLEncoder;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDelayedCallbackCenter;
@@ -163,8 +163,9 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 	}
 
 	/**
-	 * @deprecated use defaultInstantMessenger() instead
+	 * @deprecated use {@link #defaultInstantMessenger()}
 	 */
+	@Deprecated
 	public IInstantMessenger instantMessenger() {
 		return defaultInstantMessenger();
 	}
@@ -209,7 +210,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 			Iterator instantMessengerIter = _instantMessengers.entrySet().iterator();
 			while (instantMessengerIter.hasNext()) {
 				Map.Entry instantMessengerEntry = (Map.Entry) instantMessengerIter.next();
-				String screenName = (String) instantMessengerEntry.getKey();
+				// String screenName = (String) instantMessengerEntry.getKey();
 				InstantMessengerConnection connection = (InstantMessengerConnection) instantMessengerEntry.getValue();
 				connection.connect(this);
 			}
@@ -225,7 +226,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 		Iterator instantMessengerIter = _instantMessengers.entrySet().iterator();
 		while (instantMessengerIter.hasNext()) {
 			Map.Entry instantMessengerEntry = (Map.Entry) instantMessengerIter.next();
-			String screenName = (String) instantMessengerEntry.getKey();
+			// String screenName = (String) instantMessengerEntry.getKey();
 			InstantMessengerConnection connection = (InstantMessengerConnection) instantMessengerEntry.getValue();
 			connection.disconnect();
 			instantMessengerIter.remove();
@@ -252,7 +253,6 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 		Conversation conversation = _instantMessengerConnectionNamed(screenName).conversationForBuddyNamed(buddyName, _conversationTimeout);
 		String requestUrl = conversation.requestUrl();
 		if (requestUrl == null) {
-			String webserverConnectUrl = _application.webserverConnectURL();
 			String cgiAdaptorURL = _application.cgiAdaptorURL();
 			WODynamicURL imConversationUrl = new WODynamicURL();
 
@@ -290,7 +290,10 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 		uri.append(WOURLEncoder.encode(rawMessage));
 		String sessionID = conversation.sessionID();
 		if (sessionID != null) {
-			uri.append("&wosid=" + sessionID);
+			uri.append("&");
+			uri.append(WOApplication.application().sessionIdKey());
+			uri.append("=");
+			uri.append(sessionID);
 		}
 
 		NSMutableDictionary headers = new NSMutableDictionary();
@@ -384,7 +387,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 		Iterator instantMessengerIter = _instantMessengers.entrySet().iterator();
 		while (instantMessengerIter.hasNext()) {
 			Map.Entry instantMessengerEntry = (Map.Entry) instantMessengerIter.next();
-			String screenName = (String) instantMessengerEntry.getKey();
+			// String screenName = (String) instantMessengerEntry.getKey();
 			InstantMessengerConnection connection = (InstantMessengerConnection) instantMessengerEntry.getValue();
 			connection.removeExpiredConversations(_conversationTimeout);
 		}
@@ -399,7 +402,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 				catch (InterruptedException t) {
 					// ignore
 				}
-				InstantMessengerAdaptor.this.removeExpiredConversations();
+				removeExpiredConversations();
 			}
 		}
 	}

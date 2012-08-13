@@ -10,7 +10,6 @@
 package com.amazon.s3;
 
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
 import java.net.URLEncoder;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -23,11 +22,10 @@ import java.util.TreeMap;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.apache.commons.codec.binary.Base64;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 import org.xml.sax.SAXException;
-
-import sun.misc.BASE64Encoder;
 
 public class Utils {
     static final String METADATA_PREFIX = "x-amz-meta-";
@@ -158,7 +156,7 @@ public class Utils {
         }
 
         // Compute the HMAC on the digest, and set it.
-        String b64 = new BASE64Encoder().encode(mac.doFinal(canonicalString.getBytes()));
+        String b64 = Base64.encodeBase64String(mac.doFinal(canonicalString.getBytes()));
 
         if (urlencode) {
             return urlencode(b64);

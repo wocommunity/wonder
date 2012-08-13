@@ -2,7 +2,6 @@ package er.snapshotexplorer.components.pages;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.eoaccess.EOEntity;
-import com.webobjects.eoaccess.EOModel;
 
 import er.rest.routes.ERXRouteParameter;
 import er.rest.routes.IERXRouteComponent;

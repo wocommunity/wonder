@@ -342,26 +342,31 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
     }
 
     /** @deprecated use ERD2WFactory.erFactory().printerFriendlyPageForD2WContext(D2WContext context, WOSession session)*/
+    @Deprecated
     public static WOComponent printerFriendlyPageForD2WContext(D2WContext context, WOSession session) {
         return ERD2WFactory.erFactory().printerFriendlyPageForD2WContext(context, session);
     }
 
     /** @deprecated use ERD2WFactory.erFactory().csvExportPageForD2WContext(D2WContext context, WOSession session)*/
+    @Deprecated
     public static WOComponent csvExportPageForD2WContext(D2WContext context, WOSession session) {
         return ERD2WFactory.erFactory().csvExportPageForD2WContext(context, session);
     }
 
     /** @deprecated use ERD2WFactory.erFactory().pageForTaskSubTaskAndEntityNamed(String task, String subtask, String entityName, WOSession session)*/
+    @Deprecated
     public static WOComponent pageForTaskSubTaskAndEntityNamed(String task, String subtask, String entityName, WOSession session) {
         return ERD2WFactory.erFactory().pageForTaskSubTaskAndEntityNamed(task, subtask, entityName, session);
     }
 
     /** @deprecated use ERD2WFactory.erFactory().queryPageWithFetchSpecificationForEntityNamed(String fsName, String entityName, WOSession session)*/
+    @Deprecated
     public static QueryPageInterface queryPageWithFetchSpecificationForEntityNamed(String fsName, String entityName, WOSession session) {
         return ERD2WFactory.erFactory().queryPageWithFetchSpecificationForEntityNamed(fsName, entityName, session);
     }
 
     /** @deprecated use ERD2WFactory.erFactory().errorPageForException(Throwable e, WOSession session)*/
+    @Deprecated
     public static WOComponent errorPageForException(Throwable e, WOSession session) {
         return ERD2WFactory.erFactory().errorPageForException(e, session);
     }
@@ -373,7 +378,13 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
      * @author ak
      */
     public static class D2WException extends NSForwardException {
-    	
+    	/**
+    	 * Do I need to update serialVersionUID?
+    	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+    	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+    	 */
+    	private static final long serialVersionUID = 1L;
+
 		private D2WContext _context;
 		
 		public D2WException(Exception ex, D2WContext context) {

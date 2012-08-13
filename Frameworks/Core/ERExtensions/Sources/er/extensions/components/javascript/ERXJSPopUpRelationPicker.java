@@ -66,6 +66,12 @@ parent3(child2,child5)
  */
 
 public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERXJSPopUpRelationPicker(WOContext aContext) {
         super(aContext);
@@ -139,7 +145,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
     
     protected Object idForParent(Object parent) {
         if(parent != null) {
-            return new Integer(parentEntitiesList().indexOfObject(parent));
+            return Integer.valueOf(parentEntitiesList().indexOfObject(parent));
         }
         return null;
     }
@@ -174,7 +180,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
             }
         } else {
             for (Enumeration parents = parentEntitiesList().objectEnumerator(); parents.hasMoreElements();) {
-                Object aParent = (Object) parents.nextElement();
+                Object aParent = parents.nextElement();
                 int offset = sortedChildren(aParent).indexOfObject(child);
                 if(offset != NOT_FOUND) {
                     return idForParent(aParent) + "|" + offset;
@@ -303,7 +309,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
             setSelectedParents(new NSArray(parentEntitiesList().objectAtIndex(0)));
         int iCount = parentEntitiesList().count();
         for (int i=0;i<iCount;i++) {
-            Object aEntity = (Object)parentEntitiesList().objectAtIndex(i);
+            Object aEntity = parentEntitiesList().objectAtIndex(i);
             returnString.append("\t<option ");
             if (isSelectedParent(aEntity)) {
                 returnString.append("selected=\"selected\" ");
@@ -397,7 +403,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
 
         int iCount = parentEntitiesList().count();
         for (int i=0;i<iCount;i++) {
-            Object aParent = (Object)parentEntitiesList().objectAtIndex(i);
+            Object aParent = parentEntitiesList().objectAtIndex(i);
             returnString.append("\n\tnew Entity(");
             returnString.append(" \"" + NSKeyValueCodingAdditions.Utility.valueForKeyPath(aParent, parentDisplayValueName()) + "\",");
             returnString.append(" \"" + idForParent(aParent) + "\",");
@@ -412,7 +418,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
             int defaultChildIndex=-1;
 
             for (int j=0;j<jCount;j++) {
-                Object aChild = (Object)childrenOfAParent.objectAtIndex(j);
+                Object aChild = childrenOfAParent.objectAtIndex(j);
                 returnString.append("\n\t\t new Entity(");
                 returnString.append(" \"" + NSKeyValueCodingAdditions.Utility.valueForKeyPath(aChild, childDisplayValueName()) + "\","); // visible text of pop-up
                 returnString.append(" \"" + idForChild(aParent, aChild) + "\","); // value text of pop-up
@@ -586,7 +592,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
     }
     public int size() {
         if(_size == null) {
-            _size = new Integer(intValueForBinding("size", multiple() ? 5 : 1));
+            _size = Integer.valueOf(intValueForBinding("size", multiple() ? 5 : 1));
         }
         return _size.intValue();
     }

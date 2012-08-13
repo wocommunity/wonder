@@ -65,7 +65,7 @@ public class SeleniumRepeatExpanderTestFilter extends SeleniumTestFilterHelper i
 					}
 
 					int relTargetIndex = i + 1 - repeatIndex;
-					loopData.setObjectForKey(new LoopData((NSArray<String>)metaCommand.arguments(), relTargetIndex, mcName.equals("values") ? LoopData.PlacementType.Value : LoopData.PlacementType.Target), new Integer(relTargetIndex));
+					loopData.setObjectForKey(new LoopData((NSArray<String>)metaCommand.arguments(), relTargetIndex, mcName.equals("values") ? LoopData.PlacementType.Value : LoopData.PlacementType.Target), Integer.valueOf(relTargetIndex));
 					repetitionCount = metaCommand.arguments().count();
 					elements.set(i, new SeleniumTest.Comment('#' + mcName));
 				}
@@ -88,7 +88,7 @@ public class SeleniumRepeatExpanderTestFilter extends SeleniumTestFilterHelper i
 		for (int j = 0; j < repetitionCount; ++j) {
 			elements.insertObjectAtIndex(new SeleniumTest.Comment("#iteration"), insertIndex++);
 			for (int i = repeatIndex + 1; i < doneIndex; ++i) {
-				LoopData data = loopData.objectForKey(new Integer(i - repeatIndex));
+				LoopData data = loopData.objectForKey(Integer.valueOf(i - repeatIndex));
 				
 				if (data != null) {
 					SeleniumTest.Command newCommand = (Command)((SeleniumTest.Command)elements.objectAtIndex(i)).clone();
