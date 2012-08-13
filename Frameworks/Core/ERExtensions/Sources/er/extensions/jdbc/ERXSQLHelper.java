@@ -690,11 +690,32 @@ public class ERXSQLHelper {
 	 * @return the generated read format
 	 */
 	public String readFormatForAggregateFunction(String functionName, String columnName, String aggregateName) {
-		StringBuffer sb = new StringBuffer();
+		return readFormatForAggregateFunction(functionName, columnName, aggregateName, false);
+	}
+	
+	/**
+	 * Returns the attribute read format for an aggregate function for a
+	 * particular column with a name.
+	 * 
+	 * @param functionName
+	 *            the aggregate function to generate
+	 * @param columnName
+	 *            the column name to aggregate on
+	 * @param aggregateName
+	 *            the name to assign to the aggregate result
+	 * @param usesDistinct
+	 *            <code>true</code> if function should be used on distinct values
+	 * @return the generated read format
+	 */
+	public String readFormatForAggregateFunction(String functionName, String columnName, String aggregateName, boolean usesDistinct) {
+		StringBuilder sb = new StringBuilder();
 		sb.append(functionName);
-		sb.append("(");
+		sb.append('(');
+		if (usesDistinct) {
+			sb.append("distinct ");
+		}
 		sb.append(columnName);
-		sb.append(")");
+		sb.append(')');
 		if (aggregateName != null) {
 			sb.append(" AS ");
 			sb.append(aggregateName);
