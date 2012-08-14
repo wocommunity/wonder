@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.eoaccess.EODatabaseDataSource;
-import com.webobjects.eocontrol.EOAndQualifier;
 import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOFetchSpecification;
@@ -23,6 +22,7 @@ import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.eof.ERXKey;
 import er.extensions.foundation.ERXArrayUtilities;
+import er.extensions.qualifiers.ERXAndQualifier;
 
 /**
  * Extends {@link WODisplayGroup} in order to provide real batching. This is
@@ -308,9 +308,8 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 		EOQualifier qualifier = spec.qualifier();
 		if (dgQualifier != null) {
 			if (qualifier != null) {
-				qualifier = new EOAndQualifier(new NSArray<EOQualifier>(new EOQualifier[] { dgQualifier, qualifier }));
-			}
-			else {
+				qualifier = new ERXAndQualifier(dgQualifier, qualifier);
+			} else {
 				qualifier = dgQualifier;
 			}
 			spec.setQualifier(qualifier);
