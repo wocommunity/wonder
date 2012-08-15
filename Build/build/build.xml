@@ -486,13 +486,16 @@
        </antcall>
     </target>
 
-     <target name="WOTested.all">
+     <target name="WOTested.all" depends="wotested.embed.check">
+		<property name="wonder.wotested.embed.jars" value="false" />
          <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
             <param name="project.principal.class" value="org.ganymede.Application" />
             <param name="project.name" value="WOTested" />
             <param name="project.dir" value="Applications/WOTested" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/WOOgnl" />
+      		<param name="wo.external.root.bundles.embed" value="${wonder.wotested.embed.jars}" />
+      		<param name="wo.system.root.bundles.embed" value="${wonder.wotested.embed.jars}" />
        </antcall>
     </target>
 
@@ -1167,6 +1170,10 @@
     
      <target name="deployment.embed.check" if="deployment.standalone">
         <property name="wonder.deployment.embed.jars" value="true" />
+    </target>
+    
+	<target name="wotested.embed.check" if="wotested.standalone">
+        <property name="wonder.wotested.embed.jars" value="true" />
     </target>
 
     <target name="JavaMonitor.all" depends="deployment.embed.check">
