@@ -307,14 +307,14 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 
 	/**
 	 * Overridden to log a message when more than one sort order exists. Useful to track down errors.
-	 * @param nsarray the proposed EOSortOrdering objects
+	 * @param sortOrderings the proposed EOSortOrdering objects
 	 */
 	@Override
-	public void setSortOrderings(NSArray nsarray) {
-		super.setSortOrderings(nsarray);
-		if(nsarray != null && nsarray.count() > 1) {
-			if(log.isDebugEnabled()) {
-				log.debug("More than one sort order: " + nsarray);
+	public void setSortOrderings(NSArray<EOSortOrdering> sortOrderings) {
+		super.setSortOrderings(sortOrderings);
+		if (sortOrderings != null && sortOrderings.count() > 1) {
+			if (log.isDebugEnabled()) {
+				log.debug("More than one sort order: " + sortOrderings);
 			}
 		}
 	}
