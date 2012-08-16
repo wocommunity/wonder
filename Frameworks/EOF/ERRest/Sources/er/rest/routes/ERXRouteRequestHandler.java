@@ -3,6 +3,7 @@ package er.rest.routes;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOAction;
@@ -309,6 +310,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	 *            the route to insert
 	 */
 	public void insertRoute(ERXRoute route) {
+		verifyRoute(route);
 		_routes.insertObjectAtIndex(route, 0);
 	}
 
@@ -322,6 +324,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 		if (log.isDebugEnabled()) {
 			log.debug("adding route " + route);
 		}
+		verifyRoute(route);
 		_routes.addObject(route);
 	}
 
@@ -707,6 +710,57 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 		}
 
 		return matchingRoute;
+	}
+	
+	/**
+	 * @param method
+	 * @param pattern
+	 * @return the first route matching <code>method</code> and <code>pattern</code>.
+	 */
+	protected ERXRoute routeForMethodAndPattern(ERXRoute.Method method, String urlPattern) {
+		for (ERXRoute route : _routes) {
+			if (route.method().equals(method) && route.routePattern().pattern().equals(urlPattern)) {
+				return route;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Checks for an existing route that matches the {@link ERXRoute.Method} and {@link ERXRoute#routePattern()} of <code>route</code> and
+	 * yet has a different controller or action mapping.
+	 * @param route
+	 */
+	protected void verifyRoute(ERXRoute route) {
+		ERXRoute duplicateRoute = routeForMethodAndPattern(route.method(), route.routePattern().pattern());
+		if (duplicateRoute != null) {
+			boolean isDifferentController = ObjectUtils.notEqual(duplicateRoute.controller(), route.controller());
+			boolean isDifferentAction = ObjectUtils.notEqual(duplicateRoute.action(), route.action());
+			if (isDifferentController || isDifferentAction) {
+				// We have a problem whereby two routes with same url pattern and http method map to different direct actions
+				StringBuilder message = new StringBuilder();
+				message.append("The route <");
+				message.append(route);
+				message.append("> conflicts with existing route <");
+				message.append(duplicateRoute);
+				message.append(">.");
+				if (isDifferentController) {
+					message.append(" The controller class <");
+					message.append(route.controller());
+					message.append("> is different to <");
+					message.append(duplicateRoute.controller());
+					message.append(">.");
+				}
+				if (isDifferentAction) {
+					message.append(" The action <");
+					message.append(route.action());
+					message.append("> is different to <");
+					message.append(duplicateRoute.action());
+					message.append(">.");
+				}
+				throw new IllegalStateException(message.toString());
+			}
+		}
 	}
 
 	/**
