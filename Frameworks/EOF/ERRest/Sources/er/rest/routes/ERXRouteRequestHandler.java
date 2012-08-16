@@ -25,11 +25,7 @@ import er.rest.ERXRestClassDescriptionFactory;
 import er.rest.ERXRestNameRegistry;
 import er.rest.IERXRestDelegate;
 import er.rest.format.ERXRestFormat;
-import er.rest.routes.jsr311.DELETE;
-import er.rest.routes.jsr311.GET;
 import er.rest.routes.jsr311.HttpMethod;
-import er.rest.routes.jsr311.POST;
-import er.rest.routes.jsr311.PUT;
 import er.rest.routes.jsr311.Path;
 import er.rest.routes.jsr311.Paths;
 
@@ -464,6 +460,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 				}
 
 				ERXRoute.Method method = null;
+				// Search annotations for @PUT, @GET, etc.
 				for (Annotation annotation : routeMethod.getAnnotations()) {
 					HttpMethod httpMethod = annotation.annotationType().getAnnotation(HttpMethod.class);
 					if (httpMethod != null) {
@@ -475,23 +472,12 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 						}
 					}
 				}
+
+				// Finally default declared REST actions to @GET
 				if (method == null) {
 					method = ERXRoute.Method.Get;
 				}
 
-				Annotation methodAnnotation = routeMethod.getAnnotation(GET.class);
-				if (methodAnnotation == null) {
-					methodAnnotation = routeMethod.getAnnotation(POST.class);
-					if (methodAnnotation == null) {
-						methodAnnotation = routeMethod.getAnnotation(PUT.class);
-						if (methodAnnotation == null) {
-							methodAnnotation = routeMethod.getAnnotation(DELETE.class);
-						}
-					}
-				}
-				if (methodAnnotation != null) {
-					method = methodAnnotation.annotationType().getAnnotation(HttpMethod.class).value();
-				}
 				if (pathAnnotation != null) {
 					addRoute(new ERXRoute(entityName, pathAnnotation.value(), method, routeControllerClass, actionName));
 					declaredRoutesFound = true;
