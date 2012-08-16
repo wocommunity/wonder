@@ -31,12 +31,12 @@ public class ERXRoute {
 	public static final ERXRoute.Key ControllerKey = new ERXRoute.Key("controller");
 	public static final ERXRoute.Key ActionKey = new ERXRoute.Key("action");
 
-	private String _entityName;
-	private Pattern _routePattern;
+	private final String _entityName;
+	private final Pattern _routePattern;
 	private ERXRoute.Method _method;
-	private NSMutableArray<ERXRoute.Key> _keys;
-	private Class<? extends ERXRouteController> _controller;
-	private String _action;
+	private final NSMutableArray<ERXRoute.Key> _keys;
+	private final Class<? extends ERXRouteController> _controller;
+	private final String _action;
 
 	/**
 	 * Constructs a new route with the given URL pattern.
@@ -418,7 +418,7 @@ public class ERXRoute {
 	public static class Key {
 		protected String _valueType;
 		protected String _key;
-		private Map<Class<?>, RouteParameterMethod> _routeParameterMethodCache;
+		private final Map<Class<?>, RouteParameterMethod> _routeParameterMethodCache;
 
 		public Key(String key) {
 			this(key, String.class.getName());
@@ -471,7 +471,7 @@ public class ERXRoute {
 	}
 	
 	public static class RouteParameterMethod {
-		private java.lang.reflect.Method _method;
+		private final java.lang.reflect.Method _method;
 		private boolean _stringParameter;
 		
 		public RouteParameterMethod(java.lang.reflect.Method method) {
@@ -497,6 +497,7 @@ public class ERXRoute {
 			return _method;
 		}
 		
+		@Override
 		public String toString() {
 			return "[ERXRoute.RouteParameterMethod: method=" + (_method == null ? "(none)" : _method.toString()) + "]";
 		}

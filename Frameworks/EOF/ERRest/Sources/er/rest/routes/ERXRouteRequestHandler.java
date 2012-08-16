@@ -175,9 +175,9 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 			LowercaseUnderscore
 		}
 
-		private boolean _pluralControllerName;
-		private boolean _pluralRouteName;
-		private Case _routeCase;
+		private final boolean _pluralControllerName;
+		private final boolean _pluralRouteName;
+		private final Case _routeCase;
 
 		/**
 		 * Creates a new NameFormat.
@@ -283,9 +283,9 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	public static final String RouteKey = "ERXRouteRequestHandler.route";
 	public static final String KeysKey = "ERXRouteRequestHandler.keys";
 
-	private NameFormat _entityNameFormat;
-	private NSMutableArray<ERXRoute> _routes;
-	private boolean _parseUnknownExtensions; 
+	private final NameFormat _entityNameFormat;
+	private final NSMutableArray<ERXRoute> _routes;
+	private final boolean _parseUnknownExtensions; 
 
 	/**
 	 * Constructs a new ERXRouteRequestHandler with the default entity name format.
