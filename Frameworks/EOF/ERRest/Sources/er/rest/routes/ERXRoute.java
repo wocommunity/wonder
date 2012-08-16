@@ -254,6 +254,13 @@ public class ERXRoute {
 	}
 	
 	/**
+	 * @return the controller action name for this route.
+	 */
+	public String action() {
+		return _action;
+	}
+	
+	/**
 	 * Returns the Pattern used to match this route.
 	 * 
 	 * @return the Pattern used to match this route
