@@ -35,7 +35,13 @@ import er.extensions.foundation.ERXValueUtilities;
  * @author davidleber
  */
 public class ERMODWizardCreationPage extends ERD2WWizardCreationPageTemplate {
-	
+  /**
+   * Do I need to update serialVersionUID?
+   * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+   * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+   */
+  private static final long serialVersionUID = 1L;
+
 	public interface Keys extends ERD2WWizardCreationPageTemplate.Keys{
 		public static final String useAjaxControlsWhenEmbedded = "useAjaxControlsWhenEmbedded";
 		public static final String parentPageConfiguration = "parentPageConfiguration";

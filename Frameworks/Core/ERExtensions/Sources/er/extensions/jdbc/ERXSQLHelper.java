@@ -532,7 +532,7 @@ public class ERXSQLHelper {
 	}
 
 	/**
-	 * Returns the last of attributes to fetch for a fetch spec. The entity is
+	 * Returns the list of attributes to fetch for a fetch spec. The entity is
 	 * passed in here because it has likely already been looked up for the
 	 * particular fetch spec.
 	 * 
@@ -642,7 +642,7 @@ public class ERXSQLHelper {
 		}
 		EOSQLExpression sqlExpr = sqlFactory.selectStatementForAttributes(attributes, false, spec, entity);
 		String sql = sqlExpr.statement();
-		if(spec.hints() != null && !spec.hints().isEmpty() && !(spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey) == null)) {
+		if (spec.hints() != null && !spec.hints().isEmpty() && spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey) != null) {
 			Object hint = spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey);
 			sql = customQueryExpressionHintAsString(hint);
 		}
@@ -690,11 +690,32 @@ public class ERXSQLHelper {
 	 * @return the generated read format
 	 */
 	public String readFormatForAggregateFunction(String functionName, String columnName, String aggregateName) {
-		StringBuffer sb = new StringBuffer();
+		return readFormatForAggregateFunction(functionName, columnName, aggregateName, false);
+	}
+	
+	/**
+	 * Returns the attribute read format for an aggregate function for a
+	 * particular column with a name.
+	 * 
+	 * @param functionName
+	 *            the aggregate function to generate
+	 * @param columnName
+	 *            the column name to aggregate on
+	 * @param aggregateName
+	 *            the name to assign to the aggregate result
+	 * @param usesDistinct
+	 *            <code>true</code> if function should be used on distinct values
+	 * @return the generated read format
+	 */
+	public String readFormatForAggregateFunction(String functionName, String columnName, String aggregateName, boolean usesDistinct) {
+		StringBuilder sb = new StringBuilder();
 		sb.append(functionName);
-		sb.append("(");
+		sb.append('(');
+		if (usesDistinct) {
+			sb.append("distinct ");
+		}
 		sb.append(columnName);
-		sb.append(")");
+		sb.append(')');
 		if (aggregateName != null) {
 			sb.append(" AS ");
 			sb.append(aggregateName);
@@ -1110,7 +1131,7 @@ public class ERXSQLHelper {
 		if (spec.hints() == null || spec.hints().isEmpty() || spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey) == null) {
 			// no hints
 			if (spec.fetchLimit() > 0 || spec.sortOrderings() != null) {
-				boolean usesDistinct=spec.usesDistinct();
+				boolean usesDistinct = spec.usesDistinct();
 				spec = new EOFetchSpecification(spec.entityName(), spec.qualifier(), null);
 				spec.setUsesDistinct(usesDistinct);
 			}
