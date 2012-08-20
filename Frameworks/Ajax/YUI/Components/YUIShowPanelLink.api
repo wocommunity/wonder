@@ -6,7 +6,7 @@
 		<binding name = "panelID"/>
 		<binding name = "type"/>
     
-    <validation message = "&apos;panelID&apos; must be bound.">
+    <validation message = "'panelID' must be bound.">
 	    <unbound name = "panelID"/>
     </validation>
 	</wo>

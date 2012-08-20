@@ -11,11 +11,11 @@
 		<binding name="style"/>
 		<binding name="useBullets" defaults="Boolean"/>
 
-		<validation message="&apos;exception&apos; is a required binding">
+		<validation message="'exception' is a required binding">
 			<unbound name="exception"/>
 		</validation>
 
-		<validation message="&apos;exception&apos; must be bound to a settable value">
+		<validation message="'exception' must be bound to a settable value">
 			<unsettable name="exception"/>
 		</validation>
 	</wo>

@@ -22,7 +22,7 @@
 		<binding name = "y"/>
 		<binding name = "zIndex"/>
     
-    <validation message = "&apos;context&apos; must be bound.">
+    <validation message = "'context' must be bound.">
 	    <unbound name = "context"/>
     </validation>
 	</wo>

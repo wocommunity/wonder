@@ -8,7 +8,7 @@
 		<binding name="numberformat" defaults="Number Format Strings"/>
 		<binding name="value"/>
 
-		<validation message="&apos;value&apos; is a required binding">
+		<validation message="'value' is a required binding">
 			<unbound name="value"/>
 		</validation>
 

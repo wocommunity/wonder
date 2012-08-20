@@ -13,7 +13,7 @@
 			</and>
 		</validation>
 
-		<validation message="&apos;seconds&apos; is a required binding">
+		<validation message="'seconds' is a required binding">
 			<unbound name="seconds"/>
 		</validation>
 	</wo>

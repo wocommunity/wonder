@@ -22,7 +22,7 @@
 		<binding name="localizeDisplayKeys" defaults="Boolean"/>
 
 
-		<validation message="&apos;sourceObject&apos; is a required binding">
+		<validation message="'sourceObject' is a required binding">
 			<unbound name="sourceObject"/>
 		</validation>
 
