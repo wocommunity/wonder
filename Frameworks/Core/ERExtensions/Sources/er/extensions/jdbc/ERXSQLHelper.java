@@ -1138,7 +1138,7 @@ public class ERXSQLHelper {
 
 			EOSQLExpression sqlExpression = sqlExpressionForFetchSpecification(ec, spec, 0, -1);
 			String statement = sqlExpression.statement();
-			int index = statement.toLowerCase().indexOf(" from ");
+			String listString = sqlExpression.listString();
 
 			String countExpression;
 			if (spec.usesDistinct()) {
@@ -1154,7 +1154,7 @@ public class ERXSQLHelper {
 			else {
 				countExpression = "count(*) ";
 			}
-			statement = (new StringBuilder()).append("select ").append(countExpression).append(statement.substring(index, statement.length())).toString();
+			statement = statement.replace(listString, countExpression);
 			sqlExpression.setStatement(statement);
 			sql = statement;
 			result = ERXEOAccessUtilities.rawRowsForSQLExpression(ec, model.name(), sqlExpression);
