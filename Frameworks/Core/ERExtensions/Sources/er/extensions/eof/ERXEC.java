@@ -199,7 +199,7 @@ public class ERXEC extends EOEditingContext {
 	 * @return the value of the <code>er.extensions.ERXEC.suppressAutoLockingForGlobalIdRetrieval</code> property
 	 */
 	public static boolean suppressAutoLockingForGlobalIdRetrieval() {
-		return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXEC.suppressAutoLockingForGlobalIdRetrieval", true);
+		return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXEC.suppressAutoLockingForGlobalIdRetrieval", false);
 	}
 
 	/**
