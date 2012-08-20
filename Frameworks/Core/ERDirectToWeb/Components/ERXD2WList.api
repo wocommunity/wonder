@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="macintosh" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <wodefinitions>
 	<wo class="ERXD2WList" wocomponentcontent="YES">
 
@@ -9,21 +9,21 @@
 		<binding name="pageConfiguration"/>
 		<binding name="displayKeys"/>
 
-		<validation message="&apos;entityName&apos; or &apos;pageConfiguratio&apos; must be bound">
+		<validation message="'entityName' or 'pageConfiguratio' must be bound">
 			<and>
 				<unbound name="entityName"/>
 				<unbound name="pageConfiguration"/>
 			</and>
 		</validation>
 
-		<validation message="either &apos;list&apos; or &apos;dataSource&apos; must be bound">
+		<validation message="either 'list' or 'dataSource' must be bound">
 			<and>
 				<unbound name="dataSource"/>
 				<unbound name="list"/>
 			</and>
 		</validation>
 
-		<validation message="&apos;list&apos; and &apos;dataSource&apos; can not both be bound">
+		<validation message="'list' and 'dataSource' can not both be bound">
 			<and>
 				<bound name="list"/>
 				<bound name="dataSource"/>

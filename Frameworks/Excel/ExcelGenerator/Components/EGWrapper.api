@@ -9,7 +9,7 @@
 		<binding name="styles"/>
 		<binding name="fonts"/>
 
-		<validation message="&apos;data&apos; must be bound to a settable value">
+		<validation message="'data' must be bound to a settable value">
 			<unsettable name="data"/>
 		</validation>
 	</wo>

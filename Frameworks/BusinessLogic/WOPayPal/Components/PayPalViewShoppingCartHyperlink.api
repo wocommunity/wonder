@@ -6,7 +6,7 @@
 		<binding name="payPalBusinessName"/>
 		<binding name="string"/>
 
-		<validation message="&apos;payPalBusinessName&apos; is a required binding">
+		<validation message="'payPalBusinessName' is a required binding">
 			<unbound name="payPalBusinessName"/>
 		</validation>
 	</wo>

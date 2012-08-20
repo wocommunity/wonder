@@ -7,11 +7,11 @@
 		<binding name="attributeKeys"/>
 		<binding name="currentMessage"/>
 
-		<validation message="&apos;exception&apos; is a required binding">
+		<validation message="'exception' is a required binding">
 			<unbound name="exception"/>
 		</validation>
 
-		<validation message="&apos;currentMessage&apos; is a required binding">
+		<validation message="'currentMessage' is a required binding">
 			<unbound name="currentMessage"/>
 		</validation>
 	</wo>
