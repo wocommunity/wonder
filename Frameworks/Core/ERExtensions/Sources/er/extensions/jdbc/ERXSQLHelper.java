@@ -1142,16 +1142,13 @@ public class ERXSQLHelper {
 
 			String countExpression;
 			if (spec.usesDistinct()) {
-				NSArray primaryKeyAttributeNames = entity.primaryKeyAttributeNames();
+				NSArray<String> primaryKeyAttributeNames = entity.primaryKeyAttributeNames();
 				if (primaryKeyAttributeNames.count() > 1)
 					log.warn("Composite primary keys are currently unsupported in rowCountForFetchSpecification, when the spec uses distinct");
-				String pkAttributeName = (String) primaryKeyAttributeNames.lastObject();
+				String pkAttributeName = primaryKeyAttributeNames.lastObject();
 				String pkColumnName = entity.attributeNamed(pkAttributeName).columnName();
-				countExpression = "count(distinct " +
-						quoteColumnName("t0." + pkColumnName) 
-						+ ") ";
-			}
-			else {
+				countExpression = "count(distinct " + quoteColumnName("t0." + pkColumnName) + ") ";
+			} else {
 				countExpression = "count(*) ";
 			}
 			statement = statement.replace(listString, countExpression);
