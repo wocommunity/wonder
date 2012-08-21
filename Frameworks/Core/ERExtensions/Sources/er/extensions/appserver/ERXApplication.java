@@ -1806,6 +1806,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	// NOTE: if you use WO 5.1, comment out this method, otherwise it won't
 	// compile.
+	// CHECKME this was created for WO 5.2, do we still need this for 5.4.3?
 	@Override
 	public WOResponse handleActionRequestError(WORequest aRequest, Exception exception, String reason, WORequestHandler aHandler, String actionClassName, String actionName, Class actionClass, WOAction actionInstance) {
 		WOContext context = actionInstance != null ? actionInstance.context() : null;

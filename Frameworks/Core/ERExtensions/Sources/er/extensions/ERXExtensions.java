@@ -377,33 +377,6 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     }
     
     /**
-     * This method is called every time a session times
-     * out. It allows us to release references to all the
-     * editing contexts that were created when that particular
-     * session was active.
-     * Not used in WO 5.2+
-     * @param n notification that contains the session ID.
-     * @deprecated not needed anymore in WO 5.4
-     */
-    @Deprecated
-    public void sessionDidTimeOut(NSNotification n) {
-        String sessionID=(String)n.object();
-        ERXExtensions.sessionDidTimeOut(sessionID);
-    }
-
-    /**
-     * This is needed for WO pre-5.2 when ec's were not
-     * retained by their eos. Not called in 5.2+ systems.
-     * @param n notification posted when an ec is created
-     * @deprecated not needed anymore in WO 5.4
-     */
-    @Deprecated
-    public void editingContextDidCreate(NSNotification n) {
-        EOEditingContext ec = (EOEditingContext)n.object();
-        ERXExtensions.retainEditingContextForCurrentSession(ec);
-    }
-    
-    /**
      * This method is called for the following notification
      * {@link EOSharedEditingContext#DefaultSharedEditingContextWasInitializedNotification}
      * 
@@ -516,73 +489,6 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     	}	
     	adaptorEnabled = targetState;
    }
-
-    /**
-     * Retaining the editing contexts explicitly until the session that was active
-     * when they were created goes away
-     * this hopefully will go some way towards avoiding the 'attempted to send'
-     * message to EO whose EditingContext is gone. Only used in pre-5.2 systems.
-     */
-    @Deprecated
-    private static NSMutableDictionary _editingContextsPerSession;
-    
-    /**
-     * This method is called when a session times out.
-     * Calling this method will release references to
-     * all editing contexts that were created when this
-     * session was active. This method is only called in
-     * pre-WO 5.2 versions of WebObjects.
-     * @param sessionID of the session that timed out
-     * @deprecated not needed anymore in WO 5.4
-     */
-    @Deprecated
-    public static void sessionDidTimeOut(String sessionID) {
-        if (sessionID != null) {
-            if (_editingContextsPerSession != null) {
-                if (_log.isDebugEnabled()) {
-                    NSArray a=(NSArray)_editingContextsPerSession.objectForKey(sessionID);
-                    _log.debug("Session "+sessionID+" is timing out ");
-                    _log.debug("Found "+ ((a == null) ? 0 : a.count()) + " editing context(s)");
-                }
-                NSArray ecs = (NSArray)_editingContextsPerSession.removeObjectForKey(sessionID);
-                // Just helping things along.
-                if (ecs != null && ecs.count() > 0) {
-                    for (Enumeration ecEnumerator = ecs.objectEnumerator(); ecEnumerator.hasMoreElements();) {
-                        ((EOEditingContext)ecEnumerator.nextElement()).dispose();
-                    }
-                }                
-            }
-        }
-    }
-
-    /**
-     * Retains an editing context for the current session. This is only needed or
-     * used for versions of WO pre-5.2. If you use ERXEC to create your editing
-     * contexts then you never need to call this method yourself.
-     * @param ec to be retained.
-     * @deprecated not needed anymore in WO 5.4
-     */
-    @Deprecated
-    public static void retainEditingContextForCurrentSession(EOEditingContext ec) {
-         WOSession s= ERXSession.session();
-         if (s != null) {
-             if (_editingContextsPerSession == null) {
-                 _editingContextsPerSession = new NSMutableDictionary();
-             }
-             NSMutableArray a = (NSMutableArray)_editingContextsPerSession.objectForKey(s.sessionID());
-             if (a == null) {
-                 a = new NSMutableArray();
-                 _editingContextsPerSession.setObjectForKey(a, s.sessionID());
-                 if (_log.isDebugEnabled())
-                	 _log.debug("Creating array for "+s.sessionID());
-             }
-             a.addObject(ec);
-             if (_log.isDebugEnabled())
-            	 _log.debug("Added new ec to array for "+s.sessionID());
-         } else if (_log.isDebugEnabled()) {
-        	 _log.debug("Editing Context created with null session.");
-         }
-    }
 
     /**
      * Removes all of the HTML tags from a given string.
