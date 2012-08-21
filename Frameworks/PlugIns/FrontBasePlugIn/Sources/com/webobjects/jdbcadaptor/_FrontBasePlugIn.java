@@ -1329,7 +1329,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			String leftTable = leftEntity.valueForSQLExpression(this);
 			JoinClause jc = new JoinClause();
 
-			jc.table1 = leftTable + " " + leftAlias;
+			jc.setTable1(leftTable, leftAlias);
 			jc.table2 = rightTable + " " + rightAlias;
 
 			switch (semantic) {
@@ -1940,6 +1940,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			String op;
 			String table2;
 			String joinCondition;
+	    	String sortKey;
 
 			@Override
 			public String toString() {
@@ -1953,6 +1954,15 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 				}
 				return toString().equals(obj.toString());
 			}
+			
+			public void setTable1(String leftTable, String leftAlias) {
+	    		table1 = leftTable + " " + leftAlias;
+	    		sortKey = leftAlias.substring(1);
+	    		if (sortKey.length() < 2) {
+	    			// add padding for cases with >9 joins
+	    			sortKey = " " + sortKey;
+	    		}
+	    	}
 
 			/**
 			 * Returns the table alias for the first table (e.g. returns T2 if table 1 is "Students" T2).  This makes this class "sortable"
@@ -1961,7 +1971,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			 * @return the table alias (e.g. returns T2 if table1 is "Students" T2)
 			 */
 			public String sortKey() {
-				return table1.substring(table1.indexOf(" ") + 1);
+				return sortKey;
 			}
 		}
 
