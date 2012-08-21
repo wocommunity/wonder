@@ -249,7 +249,7 @@ public class PostgresqlExpression extends JDBCExpression {
         }
         JoinClause jc = new JoinClause();
         
-        jc.table1 = leftTable + " " + leftAlias;
+        jc.setTable1(leftTable, leftAlias);
         
         switch (semantic) {
             case EORelationship.LeftOuterJoin:
@@ -920,11 +920,14 @@ public class PostgresqlExpression extends JDBCExpression {
         String op;
         String table2;
         String joinCondition;
+    	String sortKey;
         
+    	@Override
         public String toString() {
             return table1 + op + table2 + joinCondition;
         }
         
+        @Override
         public boolean equals( Object obj ) {
             if( obj == null || !(obj instanceof JoinClause) ) {
                 return false;
@@ -932,12 +935,21 @@ public class PostgresqlExpression extends JDBCExpression {
             return toString().equals( obj.toString() );
         }
         
+    	public void setTable1(String leftTable, String leftAlias) {
+    		table1 = leftTable + " " + leftAlias;
+    		sortKey = leftAlias.substring(1);
+    		if (sortKey.length() < 2) {
+    			// add padding for cases with >9 joins
+    			sortKey = " " + sortKey;
+    		}
+    	}
+
         /**
          * Property that makes this class "sortable". 
          * Needed to correctly assemble a join clause.
          */
         public String sortKey() {
-            return table1.substring( table1.indexOf( " " ) + 1 );
+        	return sortKey;
         }
     }
     
