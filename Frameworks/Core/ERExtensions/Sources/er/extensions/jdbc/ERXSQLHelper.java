@@ -1138,23 +1138,20 @@ public class ERXSQLHelper {
 
 			EOSQLExpression sqlExpression = sqlExpressionForFetchSpecification(ec, spec, 0, -1);
 			String statement = sqlExpression.statement();
-			int index = statement.toLowerCase().indexOf(" from ");
+			String listString = sqlExpression.listString();
 
 			String countExpression;
 			if (spec.usesDistinct()) {
-				NSArray primaryKeyAttributeNames = entity.primaryKeyAttributeNames();
+				NSArray<String> primaryKeyAttributeNames = entity.primaryKeyAttributeNames();
 				if (primaryKeyAttributeNames.count() > 1)
 					log.warn("Composite primary keys are currently unsupported in rowCountForFetchSpecification, when the spec uses distinct");
-				String pkAttributeName = (String) primaryKeyAttributeNames.lastObject();
+				String pkAttributeName = primaryKeyAttributeNames.lastObject();
 				String pkColumnName = entity.attributeNamed(pkAttributeName).columnName();
-				countExpression = "count(distinct " +
-						quoteColumnName("t0." + pkColumnName) 
-						+ ") ";
-			}
-			else {
+				countExpression = "count(distinct " + quoteColumnName("t0." + pkColumnName) + ") ";
+			} else {
 				countExpression = "count(*) ";
 			}
-			statement = (new StringBuilder()).append("select ").append(countExpression).append(statement.substring(index, statement.length())).toString();
+			statement = statement.replace(listString, countExpression);
 			sqlExpression.setStatement(statement);
 			sql = statement;
 			result = ERXEOAccessUtilities.rawRowsForSQLExpression(ec, model.name(), sqlExpression);
