@@ -11,11 +11,11 @@
 		<binding name="textColor"/>
 		<binding name="useFormSubmit" defaults="Boolean"/>
 
-		<validation message="&apos;tabs&apos; is a required binding">
+		<validation message="'tabs' is a required binding">
 			<unbound name="tabs"/>
 		</validation>
 
-		<validation message="&apos;bgcolor&apos; is a required binding">
+		<validation message="'bgcolor' is a required binding">
 			<unbound name="bgcolor"/>
 		</validation>
 	</wo>

@@ -15,31 +15,31 @@
 		<binding name="recordGroupTotalToShow"/>
 		<binding name="recordGroupTotalFormat"/>
 
-		<validation message="&apos;model&apos; is a required binding">
+		<validation message="'model' is a required binding">
 			<unbound name="model"/>
 		</validation>
 
-		<validation message="&apos;selectedReportStyle&apos; is a required binding">
+		<validation message="'selectedReportStyle' is a required binding">
 			<unbound name="selectedReportStyle"/>
 		</validation>
 
-		<validation message="&apos;selectedRecordGroupDisplayType&apos; is a required binding">
+		<validation message="'selectedRecordGroupDisplayType' is a required binding">
 			<unbound name="selectedRecordGroupDisplayType"/>
 		</validation>
 
-		<validation message="&apos;shouldTotalCheck&apos; is a required binding">
+		<validation message="'shouldTotalCheck' is a required binding">
 			<unbound name="shouldTotalCheck"/>
 		</validation>
 
-		<validation message="&apos;showCustomReportStyle&apos; is a required binding">
+		<validation message="'showCustomReportStyle' is a required binding">
 			<unbound name="showCustomReportStyle"/>
 		</validation>
 
-		<validation message="&apos;showNavigation&apos; is a required binding">
+		<validation message="'showNavigation' is a required binding">
 			<unbound name="showNavigation"/>
 		</validation>
 
-		<validation message="&apos;recordGroupTotalFormat&apos; is a required binding">
+		<validation message="'recordGroupTotalFormat' is a required binding">
 			<unbound name="recordGroupTotalFormat"/>
 		</validation>
 	</wo>

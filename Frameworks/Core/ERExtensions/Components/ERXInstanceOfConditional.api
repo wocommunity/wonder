@@ -6,11 +6,11 @@
 		<binding name="className"/>
 		<binding name="negate" defaults="Boolean"/>
 
-		<validation message="&apos;object&apos; is a required binding">
+		<validation message="'object' is a required binding">
 			<unbound name="object"/>
 		</validation>
 
-		<validation message="&apos;className&apos; is a required binding">
+		<validation message="'className' is a required binding">
 			<unbound name="className"/>
 		</validation>
 	</wo>

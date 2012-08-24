@@ -4,12 +4,12 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.eoaccess.EODatabaseDataSource;
-import com.webobjects.eocontrol.EOAndQualifier;
 import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
@@ -23,6 +23,7 @@ import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.eof.ERXKey;
 import er.extensions.foundation.ERXArrayUtilities;
+import er.extensions.qualifiers.ERXAndQualifier;
 
 /**
  * Extends {@link WODisplayGroup} in order to provide real batching. This is
@@ -136,25 +137,29 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	/**
 	 * Determines if batching is possible.
 	 * 
-	 * @return true if dataSource is an instance of EODatabaseDataSource
+	 * @return <code>true</code> if dataSource is an instance of EODatabaseDataSource
 	 */
 	protected boolean isBatching() {
 		return _isBatching == null ? false : _isBatching.booleanValue();
 	}
 
 	/**
-	 * Overridden to set the isBatching flag to true if we have an
+	 * Overridden to set the isBatching flag to <code>true</code> if we have an
 	 * EODatabaseDataSource.
+	 * 
+	 * @param datasource the EODataSource to use
 	 */
 	@Override
-	public void setDataSource(EODataSource eodatasource) {
-		_isBatching = (eodatasource instanceof EODatabaseDataSource) ? Boolean.TRUE : Boolean.FALSE;
+	public void setDataSource(EODataSource datasource) {
+		_isBatching = (datasource instanceof EODatabaseDataSource) ? Boolean.TRUE : Boolean.FALSE;
 		setRowCount(-1);
-		super.setDataSource(eodatasource);
+		super.setDataSource(datasource);
 	}
 	
 	/**
-	 * Overridden to return the pre-calculated number of batches
+	 * Overridden to return the pre-calculated number of batches.
+	 * 
+	 * @return the number of batches to display
 	 */
 	@Override
 	public int batchCount() {
@@ -168,7 +173,9 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	}
 
 	/**
-	 * Overriden to clear out our array of fetched objects.
+	 * Overridden to clear out our array of fetched objects.
+	 * 
+	 * @param index the index of the batch to display
 	 */
 	@Override
 	public void setCurrentBatchIndex(int index) {
@@ -180,7 +187,9 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	}
 
 	/**
-	 * Overriden to clear out our array of fetched objects.
+	 * Overridden to clear out our array of fetched objects.
+	 * 
+	 * @param count the maximum number of objects to display per batch
 	 */
 	@Override
 	public void setNumberOfObjectsPerBatch(int count) {
@@ -221,8 +230,10 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	
 	
 	/** 
-	 * Overridden to refetchIfNecessary() first to ensure we get a correct result in cases where this is called before displayedObjects().
-	 * See http://issues.objectstyle.org/jira/browse/WONDER-381
+	 * Overridden to refetchIfNecessary() first to ensure we get a correct result in cases
+	 * where this is called before displayedObjects().
+	 * 
+	 * @return <code>true</code> if batchCount is greater than 1, <code>false</code> otherwise
 	 */
 	@Override
 	public boolean hasMultipleBatches() {
@@ -232,6 +243,8 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 
 	/**
 	 * Overridden to return allObjects() when batching, as we can't qualify in memory.
+	 * 
+	 * @return filtered objects
 	 */
 	@Override
 	public NSArray<T> filteredObjects() {
@@ -243,22 +256,25 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 
 	/**
 	 * Overridden to trigger a refetch.
+	 * 
+	 * @param qualifier the qualifier for the display group
 	 */
 	@Override
-	public void setQualifier(EOQualifier aEoqualifier) {
-		super.setQualifier(aEoqualifier);
+	public void setQualifier(EOQualifier qualifier) {
+		super.setQualifier(qualifier);
 		_displayedObjects = null;
 		setRowCount(-1);
 	}
 
 	/**
 	 * Overridden to preserve the selected objects.
+	 * 
+	 * @param sortOrderings the proposed EOSortOrdering objects
 	 */
 	@Override
-	@SuppressWarnings("unchecked")
-	public void setSortOrderings(NSArray nsarray) {
+	public void setSortOrderings(NSArray<EOSortOrdering> sortOrderings) {
 		NSArray<T> selectedObjects = selectedObjects();
-		super.setSortOrderings(nsarray);
+		super.setSortOrderings(sortOrderings);
 		setSelectedObjects(selectedObjects);
 		if (isBatching()) {
 			_displayedObjects = null;
@@ -289,6 +305,7 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	
 	/**
 	 * Returns the prefetching key paths overriding those in the underlying fetch spec.
+	 * 
 	 * @return the prefetching key paths overriding those in the underlying fetch spec
 	 */
 	public NSArray<String> prefetchingRelationshipKeyPaths() {
@@ -296,9 +313,10 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	}
 
 	/**
-	 * Utility to get the fetch spec from the datasource and the filter
+	 * Utility to get the fetch specification from the datasource and the filter
 	 * qualifier.
 	 * 
+	 * @return the fetch specification
 	 */
 	protected EOFetchSpecification fetchSpecification() {
 		EODatabaseDataSource ds = (EODatabaseDataSource) dataSource();
@@ -308,9 +326,8 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 		EOQualifier qualifier = spec.qualifier();
 		if (dgQualifier != null) {
 			if (qualifier != null) {
-				qualifier = new EOAndQualifier(new NSArray<EOQualifier>(new EOQualifier[] { dgQualifier, qualifier }));
-			}
-			else {
+				qualifier = new ERXAndQualifier(dgQualifier, qualifier);
+			} else {
 				qualifier = dgQualifier;
 			}
 			spec.setQualifier(qualifier);
@@ -320,14 +337,15 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 
 	/**
 	 * Utility to get at the number of rows when batching.
+	 * 
+	 * @return number of total rows
 	 */
 	public int rowCount() {
 		int rowCount = _rowCount;
 		if (rowCount == -1) {
 			if (isBatching()) {
 				rowCount = ERXEOAccessUtilities.rowCountForFetchSpecification(dataSource().editingContext(), fetchSpecification());
-			}
-			else {
+			} else {
 				rowCount = dataSource().fetchObjects().count();
 			}
 			if (shouldRememberRowCount()) {
@@ -371,8 +389,10 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	
 	/**
 	 * Utility to fetch the object in a given range.
-	 * @param start
-	 * @param end
+	 * 
+	 * @param start start index of the range
+	 * @param end end index of the range
+	 * @return array of object in the given range
 	 */
 	protected NSArray<T> objectsInRange(int start, int end) {
 		EOEditingContext ec = dataSource().editingContext();
@@ -414,7 +434,7 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 			end = rowCount;
 		}
 
-		if(filteredObjects().count() != rowCount) {
+		if (filteredObjects().count() != rowCount) {
 			NSArray<T> selectedObjects = selectedObjects();
 			setObjectArray(new FakeArray(rowCount));
 			setSelectedObjects(selectedObjects);
@@ -446,6 +466,8 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 
 	/**
 	 * Overridden to update the batch count.
+	 * 
+	 * @param objects the object array to set
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
@@ -456,6 +478,8 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 
 	/**
 	 * Overridden to fetch only within displayed limits.
+	 * 
+	 * @return <code>null</code> to force the page to reload
 	 */
 	@Override
 	public Object fetch() {
@@ -463,7 +487,7 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 			_NSDelegate delegate = null;
 			if (this.delegate() != null) {
 				delegate = new _NSDelegate(WODisplayGroup.Delegate.class, delegate());
-				if(delegate.respondsTo("displayGroupShouldFetch") && !delegate.booleanPerform("displayGroupShouldFetch", this)) {
+				if (delegate.respondsTo("displayGroupShouldFetch") && !delegate.booleanPerform("displayGroupShouldFetch", this)) {
 		            return null;
 				}
 			}
@@ -492,7 +516,7 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 			NSArray<T> obj = allObjects();
 			if (delegate() != null) {
 				_NSDelegate delegate = new _NSDelegate(WODisplayGroup.Delegate.class, delegate());
-				if (delegate != null && delegate.respondsTo("displayGroupDisplayArrayForObjects")) {
+				if (delegate.respondsTo("displayGroupDisplayArrayForObjects")) {
 					delegate.perform("displayGroupDisplayArrayForObjects", this, obj);
 				}
 			}
@@ -500,9 +524,8 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 			setSelectedObjects(selectedObjects);
 			// selectObjectsIdenticalToSelectFirstOnNoMatch(selectedObjects,
 			// false);
-			redisplay();
-		}
-		else {
+			willChange();
+		} else {
 			super.updateDisplayedObjects();
 		}
 	}
@@ -511,8 +534,8 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	 * Selects the visible objects, overridden to fetch all objects. Note that
 	 * this makes sense only when there are only a "few" objects in the list.
 	 * 
+	 * @return <code>null</code> to force the page to reload
 	 */
-
 	@Override
 	public Object selectFilteredObjects() {
 		if (isBatching()) {
@@ -550,11 +573,9 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 			};
 			for (int i = 0; i < count; i++) {
 				// GROSS HACK: (ak) WO wants to sort the given array via KVC so
-				// we just
-				// let it sort "nothing" objects
+				// we just let it sort "nothing" objects
 				insertObjectAtIndex(fakeObject, i);
 			}
 		}
 	}
-
 }

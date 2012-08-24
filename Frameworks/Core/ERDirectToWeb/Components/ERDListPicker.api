@@ -8,11 +8,11 @@
 		<binding name="object"/>
 		<binding name="key"/>
 
-		<validation message="&apos;listComponentName&apos; is a required binding">
+		<validation message="'listComponentName' is a required binding">
 			<unbound name="listComponentName"/>
 		</validation>
 
-		<validation message="&apos;pickComponentName&apos; is a required binding">
+		<validation message="'pickComponentName' is a required binding">
 			<unbound name="pickComponentName"/>
 		</validation>
 	</wo>

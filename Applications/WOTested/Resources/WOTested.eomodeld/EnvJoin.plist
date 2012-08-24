@@ -1,18 +1,11 @@
 {
     attributes = (
+        {allowsNull = N; columnName = "env_pk"; name = envPk; prototypeName = id; }, 
         {
-            columnName = "env_pk"; 
-            externalType = INT; 
-            name = envPk; 
-            valueClassName = NSNumber; 
-            valueType = i; 
-        }, 
-        {
+            allowsNull = N; 
             columnName = "result_pk"; 
-            externalType = INT; 
             name = resultPk; 
-            valueClassName = NSNumber; 
-            valueType = i; 
+            prototypeName = id; 
         }
     ); 
     attributesUsedForLocking = (envPk, resultPk); 

@@ -13,7 +13,7 @@
 		<binding name="valueMin"/>
 		<binding name="width"/>
 
-		<validation message="&apos;value&apos; is a required binding">
+		<validation message="'value' is a required binding">
 			<unbound name="value"/>
 		</validation>
 	</wo>
