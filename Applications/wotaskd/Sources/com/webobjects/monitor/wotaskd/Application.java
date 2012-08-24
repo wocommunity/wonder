@@ -255,7 +255,7 @@ public class Application extends ERXApplication  {
     public class SshPasswordAuthenticator implements PasswordAuthenticator {
 
       public boolean authenticate(String username, String password, ServerSession serversession) {
-        return (siteConfig().compareStringWithPassword((password.length() > 0) ? password : null)) ? true: false;
+        return (siteConfig().compareStringWithPassword(password)) ? true: false;
       }
       
     }
