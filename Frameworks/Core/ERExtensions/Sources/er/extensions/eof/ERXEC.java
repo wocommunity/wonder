@@ -191,6 +191,16 @@ public class ERXEC extends EOEditingContext {
 	public static boolean safeLocking() {
 		return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXEC.safeLocking", false);
 	}
+	
+	/**
+	 * Returns the value of the <code>er.extensions.ERXEC.suppressAutoLockingForGlobalIdRetrieval</code> property.
+	 * If this setting is enabled, autolocking will be suppressed on globalIDForObject()
+	 * because it's not really needed there and is especially prone to deadlocks.
+	 * @return the value of the <code>er.extensions.ERXEC.suppressAutoLockingForGlobalIdRetrieval</code> property
+	 */
+	public static boolean suppressAutoLockingForGlobalIdRetrieval() {
+		return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXEC.suppressAutoLockingForGlobalIdRetrieval", false);
+	}
 
 	/**
 	 * Returns the value of the <code>er.extensions.ERXEC.defaultAutomaticLockUnlock</code> property, which 
@@ -927,6 +937,9 @@ public class ERXEC extends EOEditingContext {
 
 	@Override
 	public EOGlobalID globalIDForObject(EOEnterpriseObject eoenterpriseobject) {
+		if( ERXEC.suppressAutoLockingForGlobalIdRetrieval() ) {
+			return super.globalIDForObject(eoenterpriseobject);
+		}
 		boolean wasAutoLocked = autoLock("globalIDForObject");
 		try {
 			return super.globalIDForObject(eoenterpriseobject);
