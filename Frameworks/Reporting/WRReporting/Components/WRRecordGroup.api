@@ -16,11 +16,11 @@
 		<binding name="colorForCoords"/>
 		<binding name="coordinates"/>
 
-		<validation message="&apos;model&apos; is a required binding">
+		<validation message="'model' is a required binding">
 			<unbound name="model"/>
 		</validation>
 
-		<validation message="&apos;recordGroup&apos; is a required binding">
+		<validation message="'recordGroup' is a required binding">
 			<unbound name="recordGroup"/>
 		</validation>
 	</wo>

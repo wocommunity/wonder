@@ -17,23 +17,23 @@
 		<binding name="size"/>
 		<binding name="multiple" defaults="Boolean"/>
 
-		<validation message="&apos;parentEntitiesList&apos; is a required binding">
+		<validation message="'parentEntitiesList' is a required binding">
 			<unbound name="parentEntitiesList"/>
 		</validation>
 
-		<validation message="&apos;parentSelection&apos; must be bound to a settable value">
+		<validation message="'parentSelection' must be bound to a settable value">
 			<unsettable name="parentSelection"/>
 		</validation>
 
-		<validation message="&apos;childrenSelection&apos; must be bound to a settable value">
+		<validation message="'childrenSelection' must be bound to a settable value">
 			<unsettable name="childrenSelection"/>
 		</validation>
 
-		<validation message="&apos;parentToChildrenRelationshipName&apos; is a required binding">
+		<validation message="'parentToChildrenRelationshipName' is a required binding">
 			<unbound name="parentToChildrenRelationshipName"/>
 		</validation>
 
-		<validation message="&apos;parentLabel&apos; is a required binding">
+		<validation message="'parentLabel' is a required binding">
 			<unbound name="parentLabel"/>
 		</validation>
 	</wo>

@@ -15,8 +15,8 @@ er.extensions.ERXEnterpriseObject.updateInverseRelationships=true
 #dbConnectPasswordGLOBAL=
 
 # Migrations
-#er.migration.migrateAtStartup=true
-#er.migration.createTablesIfNecessary=true
+er.migration.migrateAtStartup=true
+er.migration.createTablesIfNecessary=true
 #er.migration.modelNames=YourModel
 
 # Misc Components

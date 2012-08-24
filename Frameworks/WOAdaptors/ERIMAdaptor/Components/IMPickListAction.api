@@ -8,15 +8,15 @@
 		<binding name = "action"/>
 		<binding name = "quicksilver"/>
 		
-    <validation message = "&apos;action&apos; is a required binding">
+    <validation message = "'action' is a required binding">
       <unbound name = "action"/>
     </validation>
 		
-    <validation message = "&apos;list&apos; is a required binding">
+    <validation message = "'list' is a required binding">
       <unbound name = "list"/>
     </validation>
 		
-    <validation message = "One of &apos;selection&apos; or &apos;selections&apos; must be bound">
+    <validation message = "One of 'selection' or 'selections' must be bound">
     	<and>
 	      <unbound name = "selection"/>
   	    <unbound name = "selection"/>

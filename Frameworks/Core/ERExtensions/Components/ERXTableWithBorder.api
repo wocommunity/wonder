@@ -7,7 +7,7 @@
 		<binding name="renderBorder" defaults="Boolean"/>
 		<binding name="bgcolor"/>
 
-		<validation message="&apos;color&apos; is a required binding">
+		<validation message="'color' is a required binding">
 			<unbound name="color"/>
 		</validation>
 	</wo>

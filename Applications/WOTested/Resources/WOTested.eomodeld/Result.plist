@@ -1,40 +1,15 @@
 {
     attributes = (
-        {
-            columnName = duration; 
-            externalType = bigint; 
-            name = duration; 
-            valueClassName = NSNumber; 
-            valueType = l; 
-        }, 
-        {
-            columnName = email; 
-            externalType = varchar; 
-            name = email; 
-            valueClassName = NSString; 
-            width = 127; 
-        }, 
-        {
-            columnName = pk; 
-            externalType = INT; 
-            name = pk; 
-            valueClassName = NSNumber; 
-            valueType = i; 
-        }, 
+        {columnName = duration; name = duration; prototypeName = longNumber; }, 
+        {columnName = email; name = email; prototypeName = varchar100; width = 127; }, 
+        {allowsNull = N; columnName = pk; name = pk; prototypeName = id; }, 
         {
             columnName = "time_zone"; 
-            externalType = varchar; 
             name = timeZone; 
-            valueClassName = NSString; 
+            prototypeName = varchar50; 
             width = 32; 
         }, 
-        {
-            columnName = whence; 
-            externalType = char; 
-            name = whence; 
-            valueClassName = NSString; 
-            width = 19; 
-        }
+        {columnName = whence; name = whence; prototypeName = varchar50; width = 19; }
     ); 
     attributesUsedForLocking = (duration, email, pk, timeZone, whence); 
     className = "com.webobjects.eocontrol.EOGenericRecord"; 
