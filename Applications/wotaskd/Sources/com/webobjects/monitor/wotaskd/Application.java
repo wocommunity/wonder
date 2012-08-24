@@ -58,6 +58,7 @@ import com.webobjects.monitor.wotaskd.rest.controllers.MHostController;
 import com.webobjects.monitor.wotaskd.rest.controllers.MSiteConfigController;
 
 import er.extensions.appserver.ERXApplication;
+import er.extensions.foundation.ERXProperties;
 import er.rest.routes.ERXRoute;
 import er.rest.routes.ERXRouteRequestHandler;
 
@@ -236,7 +237,7 @@ public class Application extends ERXApplication  {
         ERXRouteRequestHandler.register(restHandler);
         
         SshServer sshd = SshServer.setUpDefaultServer();
-        sshd.setPort(6022);
+        sshd.setPort(ERXProperties.intForKeyWithDefault("er.wotaskd.sshPort", 6022));
         sshd.setPasswordAuthenticator(new SshPasswordAuthenticator());
         sshd.setKeyPairProvider(new SimpleGeneratorHostKeyProvider("hostkey.ser"));
         sshd.setCommandFactory(new ScpCommandFactory());
