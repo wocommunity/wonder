@@ -34,11 +34,13 @@ import javax.management.remote.JMXServiceURL;
 import org.apache.sshd.SshServer;
 import org.apache.sshd.common.NamedFactory;
 import org.apache.sshd.server.Command;
+import org.apache.sshd.server.CommandFactory;
 import org.apache.sshd.server.PasswordAuthenticator;
 import org.apache.sshd.server.command.ScpCommandFactory;
 import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider;
 import org.apache.sshd.server.session.ServerSession;
 import org.apache.sshd.server.sftp.SftpSubsystem;
+import org.apache.sshd.server.shell.ProcessShellFactory;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WORequest;
@@ -239,6 +241,7 @@ public class Application extends ERXApplication  {
         sshd.setKeyPairProvider(new SimpleGeneratorHostKeyProvider("hostkey.ser"));
         sshd.setCommandFactory(new ScpCommandFactory());
         sshd.setSubsystemFactories(Arrays.<NamedFactory<Command>>asList(new SftpSubsystem.Factory()));
+        sshd.setShellFactory(new ProcessShellFactory(new String[] { "/bin/bash", "-i", "-l" }));
         try {
           sshd.start();
         }
@@ -251,7 +254,7 @@ public class Application extends ERXApplication  {
     public class SshPasswordAuthenticator implements PasswordAuthenticator {
 
       public boolean authenticate(String username, String password, ServerSession serversession) {
-        return (siteConfig().compareStringWithPassword(password)) ? true: false;
+        return (siteConfig().compareStringWithPassword((password.length() > 0) ? password : null)) ? true: false;
       }
       
     }
