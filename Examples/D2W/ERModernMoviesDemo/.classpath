@@ -26,5 +26,6 @@
 	<classpathentry kind="con" path="WOFramework/ERTaggable"/>
 	<classpathentry kind="con" path="WOFramework/ERAttachment"/>
 	<classpathentry kind="con" path="WOFramework/ERCoolComponents"/>
+	<classpathentry kind="con" path="WOFramework/ERXNavigation"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -7,7 +7,7 @@
 package er.examples.movies;
 
 import er.extensions.appserver.ERXApplication;
-import er.extensions.appserver.navigation.ERXNavigationManager;
+import er.navigation.ERXNavigationManager;
 
 public class Application extends ERXApplication {
 

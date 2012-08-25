@@ -4,7 +4,7 @@
 //
 //  Created by Max Muller on Wed Oct 30 2002.
 //
-package er.extensions.appserver.navigation;
+package er.navigation;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
