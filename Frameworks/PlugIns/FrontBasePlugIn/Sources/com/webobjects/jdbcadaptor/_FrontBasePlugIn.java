@@ -41,6 +41,7 @@ import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSRange;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimeZone;
+import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation._NSUtilities;
 
 /**
@@ -632,6 +633,10 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			if (entities == null || entities.count() == 0)
 				return result;
 
+			// データベース・ストラクチャに変更する時にはこの行を実行しないとエラーになる可能性があります。
+			result.addObject(_expressionForString("-- SQL creation time : " + new NSTimestamp().toString()));
+			result.addObject(_expressionForString("-- PlugIn version : " + getPlugInVersion()));
+			result.addObject(_expressionForString("-- To change any Structure Information this Command is must have"));
 			result.addObject(_expressionForString("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE, LOCKING PESSIMISTIC"));
 
 			NSDictionary<String, Object> connectionDict = entities.lastObject().model().connectionDictionary();
