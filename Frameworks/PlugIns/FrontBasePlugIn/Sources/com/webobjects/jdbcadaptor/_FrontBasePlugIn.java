@@ -44,12 +44,18 @@ import com.webobjects.foundation.NSTimeZone;
 import com.webobjects.foundation._NSUtilities;
 
 /**
+ * <span class="en">
  * This is the wo5 java runtime plugin for FrontBase.
+ * </span>
+ * 
+ * <span class="ja">
+ * FrontBase の WO5 Java ランタイム・プラグイン
+ * </span>
  *
  * @author Cail Borrell
  */
-
 public class _FrontBasePlugIn extends JDBCPlugIn {
+	
 	private static final String QUERY_STRING_USE_BUNDLED_JDBC_INFO = "useBundledJdbcInfo";
 
 	static final boolean USE_NAMED_CONSTRAINTS = true;
@@ -613,6 +619,12 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			return result.toString();
 		}
 
+		/**
+		 * <span class="ja">
+		 * Eclipse の EntityModeler でエンティティを作成時に使用されるメソッド。
+		 * SQL 生成をクリックするとここで呼び出される
+		 * </span>
+		 */
 		@Override
 		public NSArray<EOSQLExpression> schemaCreationStatementsForEntities(NSArray<EOEntity> entities, NSDictionary<String, String> options) {
 			NSMutableArray<EOSQLExpression> result = new NSMutableArray<EOSQLExpression>();
@@ -803,6 +815,9 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			return NSArray.EmptyArray;
 		}
 
+		/** 
+		 * <span class="ja">複数のエンティティ・グループス作成 SQL を生成します。</span> 
+		 */
 		@Override
 		public NSArray<EOSQLExpression> createTableStatementsForEntityGroups(NSArray<NSArray<EOEntity>> entityGroups) {
 			NSMutableArray<EOSQLExpression> nsmutablearray = new NSMutableArray<EOSQLExpression>();
@@ -814,6 +829,9 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			return nsmutablearray;
 		}
 
+		/** 
+		 * <span class="ja">エンティティ・グループの SQL を生成します</span>
+		 */
 		@Override
 		public NSArray<EOSQLExpression> createTableStatementsForEntityGroup(NSArray<EOEntity> entityGroup) {
 			EOSQLExpression eosqlexpression = null;
@@ -824,9 +842,13 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			if (j == 0)
 				return NSArray.EmptyArray;
 
+			// 出力バッファーを準備
 			StringBuilder columns = new StringBuilder();
+			
+			// エンティティの出力開始
 			eosqlexpression = _expressionForEntity(entityGroup.objectAtIndex(0));
 
+			// 各エンティティをループで回す
 			for (int i = 0; i < j; i++) {
 				eoentity = entityGroup.objectAtIndex(i);
 				NSArray nsarray1 = eoentity.attributes();
@@ -902,6 +924,9 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			return result;
 		}
 
+		/** 
+		 * <span class="ja">1つのアトリビュートの SQL を生成します </span>
+		 */
 		public StringBuilder addCreateClauseForAttribute(EOAttribute eoattribute) {
 			EOSQLExpression expression = _expressionForEntity(eoattribute.entity());
 			expression.addCreateClauseForAttribute(eoattribute);
