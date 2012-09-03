@@ -1,14 +1,17 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <wodefinitions>
 	<wo class="ERXSingleButton" wocomponentcontent="false">
 
 		<binding name="action"/>
 		<binding name="value"/>
-		<binding name="doNotUseForm" defaults="Boolean"/>
+		<binding defaults="Boolean" name="doNotUseForm"/>
 		<binding name="actionClass"/>
 		<binding name="directActionName"/>
 		<binding name="target"/>
-		<binding name="shouldSubmitForm" defaults="Boolean"/>
+		<binding defaults="Boolean" name="shouldSubmitForm"/>
 		<binding name="name"/>
+    <binding name="class"/>
+    <binding name="style"/>
+    <binding name="id"/>
     </wo>
 </wodefinitions>
