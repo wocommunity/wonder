@@ -17,7 +17,10 @@ import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EORelationship;
-import com.webobjects.eoaccess.EOSynchronizationFactory;
+import com.webobjects.eoaccess.EOSQLExpression;
+import com.webobjects.eoaccess.synchronization.EOSchemaGenerationOptions;
+import com.webobjects.eoaccess.synchronization.EOSchemaSynchronization;
+import com.webobjects.eoaccess.synchronization.EOSchemaSynchronizationFactory;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSData;
@@ -28,6 +31,11 @@ import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation._NSStringUtilities;
 
+/**
+ * WO runtime plugin with support for H2.
+ * 
+ * @see <a href="http://www.h2database.com/">http://www.h2database.com</a>
+ */
 public class _H2PlugIn extends JDBCPlugIn {
 	static final boolean USE_NAMED_CONSTRAINTS = true;
 
@@ -267,15 +275,15 @@ public class _H2PlugIn extends JDBCPlugIn {
 		}
 	}
 
-	public static class H2SynchronizationFactory extends EOSynchronizationFactory {
+	public static class H2SynchronizationFactory extends EOSchemaSynchronizationFactory {
 
 		public H2SynchronizationFactory(final EOAdaptor adaptor) {
 			super(adaptor);
 		}
 
 		@Override
-		public NSArray _statementsToDropPrimaryKeyConstraintsOnTableNamed(final String tableName) {
-			return new NSArray(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " DROP PRIMARY KEY"));
+		public NSArray<EOSQLExpression> _statementsToDropPrimaryKeyConstraintsOnTableNamed(String tableName) {
+			return new NSArray<EOSQLExpression>(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " DROP PRIMARY KEY"));
 		}
 
 		public String columnTypeStringForAttribute(EOAttribute attribute) {
@@ -292,40 +300,28 @@ public class _H2PlugIn extends JDBCPlugIn {
 		}
 
 		@Override
-		public NSArray dropPrimaryKeySupportStatementsForEntityGroups(final NSArray entityGroups) {
+		public NSArray<EOSQLExpression> dropPrimaryKeySupportStatementsForEntityGroups(NSArray<NSArray<EOEntity>> entityGroups) {
 			String pkTable = ((JDBCAdaptor) adaptor()).plugIn().primaryKeyTableName();
-			return new NSArray(_expressionForString("DROP TABLE " + formatTableName(pkTable)));
+			return new NSArray<EOSQLExpression>(_expressionForString("DROP TABLE " + formatTableName(pkTable)));
 		}
 
 		@Override
-		public NSArray dropTableStatementsForEntityGroup(final NSArray entityGroup) {
-			String tableName = ((EOEntity) entityGroup.objectAtIndex(0)).externalName();
-			return new NSArray(_expressionForString("DROP TABLE " + formatTableName(tableName)));
-		}
-
-		//@Override WO5.4
-		@Override
-		public String formatColumnName(String columnName) {
-			return columnName;
-		}
-
-		//@Override WO5.4
-		@Override
-		public String formatTableName(String tableName) {
-			return tableName;
+		public NSArray<EOSQLExpression> dropTableStatementsForEntityGroup(NSArray<EOEntity> entityGroup) {
+			String tableName = entityGroup.objectAtIndex(0).externalName();
+			return new NSArray<EOSQLExpression>(_expressionForString("DROP TABLE " + formatTableName(tableName)));
 		}
 
 		public String formatUpperString(String string) {
 			return string.toUpperCase();
 		}
 
-		boolean isPrimaryKeyAttributes(EOEntity entity, NSArray attributes) {
-			NSArray keys = entity.primaryKeyAttributeNames();
+		boolean isPrimaryKeyAttributes(EOEntity entity, NSArray<EOAttribute> attributes) {
+			NSArray<String> keys = entity.primaryKeyAttributeNames();
 			boolean result = attributes.count() == keys.count();
 
 			if (result) {
 				for (int i = 0; i < keys.count(); i++) {
-					if (!(result = keys.indexOfObject(((EOAttribute) attributes.objectAtIndex(i)).name()) != NSArray.NotFound))
+					if (!(result = keys.indexOfObject(attributes.objectAtIndex(i).name()) != NSArray.NotFound))
 						break;
 				}
 			}
@@ -333,7 +329,7 @@ public class _H2PlugIn extends JDBCPlugIn {
 		}
 
 		@Override
-		public NSArray foreignKeyConstraintStatementsForRelationship(EORelationship relationship) {
+		public NSArray<EOSQLExpression> foreignKeyConstraintStatementsForRelationship(EORelationship relationship) {
 			if (relationship != null
 					&& !relationship.isToMany()
 					&& isPrimaryKeyAttributes(relationship.destinationEntity(), relationship.destinationAttributes()))
@@ -345,18 +341,18 @@ public class _H2PlugIn extends JDBCPlugIn {
 				sql.append(tableName);
 				sql.append(" ADD");
 
-				StringBuffer constraint = new StringBuffer(" CONSTRAINT \"FOREIGN_KEY_");
+				StringBuilder constraint = new StringBuilder(" CONSTRAINT \"FOREIGN_KEY_");
 				constraint.append(formatUpperString(tableName));
 
-				StringBuffer fkSql = new StringBuffer(" FOREIGN KEY (");
-				NSArray attributes = relationship.sourceAttributes();
+				StringBuilder fkSql = new StringBuilder(" FOREIGN KEY (");
+				NSArray<EOAttribute> attributes = relationship.sourceAttributes();
 
 				for (int i = 0; i < attributes.count(); i++) {
 					constraint.append("_");
 					if (i != 0)
 						fkSql.append(", ");
 
-					String columnName = formatColumnName(((EOAttribute) attributes.objectAtIndex(i)).columnName());
+					String columnName = formatColumnName(attributes.objectAtIndex(i).columnName());
 					fkSql.append(columnName);
 					constraint.append(formatUpperString(columnName));
 				}
@@ -377,7 +373,7 @@ public class _H2PlugIn extends JDBCPlugIn {
 					if (i != 0)
 						fkSql.append(", ");
 
-					String referencedColumnName = formatColumnName(((EOAttribute) attributes.objectAtIndex(i)).columnName());
+					String referencedColumnName = formatColumnName(attributes.objectAtIndex(i).columnName());
 					fkSql.append(referencedColumnName);
 					constraint.append(formatUpperString(referencedColumnName));
 				}
@@ -393,22 +389,22 @@ public class _H2PlugIn extends JDBCPlugIn {
 					sql.append(constraint);
 				sql.append(fkSql);
 
-				return new NSArray(_expressionForString(sql.toString()));
+				return new NSArray<EOSQLExpression>(_expressionForString(sql.toString()));
 			}
 			return NSArray.EmptyArray;
 		}
 
 
 		@Override
-		public NSArray primaryKeySupportStatementsForEntityGroups(final NSArray entityGroups) {
+		public NSArray<EOSQLExpression> primaryKeySupportStatementsForEntityGroups(NSArray<NSArray<EOEntity>> entityGroups) {
 			String pkTable = ((JDBCAdaptor) adaptor()).plugIn().primaryKeyTableName();
 			String charField = formatColumnName("name") + " CHAR(40)";
 			String pkField = formatColumnName("pk") + " INT";
-			return new NSArray(_expressionForString("CREATE TABLE " + formatTableName(pkTable) + " (" + charField + ", " + pkField + ")"));
+			return new NSArray<EOSQLExpression>(_expressionForString("CREATE TABLE " + formatTableName(pkTable) + " (" + charField + ", " + pkField + ")"));
 		}
 
 		@Override
-		public NSArray statementsToConvertColumnType(String columnName, String tableName, ColumnTypes oldType, ColumnTypes newType, NSDictionary options) {
+		public NSArray<EOSQLExpression> statementsToConvertColumnType(String columnName, String tableName, EOSchemaSynchronization.ColumnTypes oldType, EOSchemaSynchronization.ColumnTypes newType, EOSchemaGenerationOptions options) {
 			EOAttribute attr = new EOAttribute();
 			attr.setName(columnName);
 			attr.setColumnName(columnName);
@@ -418,51 +414,39 @@ public class _H2PlugIn extends JDBCPlugIn {
 			attr.setWidth(newType.width());
 
 			String columnTypeString = columnTypeStringForAttribute(attr);
-
-			NSArray statements = new NSArray(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " ALTER COLUMN " + formatColumnName(columnName) + " " + columnTypeString));
-			return statements;
+			return new NSArray<EOSQLExpression>(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " ALTER COLUMN " + formatColumnName(columnName) + " " + columnTypeString));
 		}
 
 		@Override
-		public NSArray statementsToDeleteColumnNamed(String columnName, String tableName, NSDictionary options) {
-			return new NSArray(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " DROP COLUMN " + formatTableName(columnName)));
+		public NSArray<EOSQLExpression> statementsToDeleteColumnNamed(String columnName, String tableName, EOSchemaGenerationOptions options) {
+			return new NSArray<EOSQLExpression>(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " DROP COLUMN " + formatTableName(columnName)));
 		}
 
 		@Override
-		public NSArray statementsToInsertColumnForAttribute(final EOAttribute attribute, final NSDictionary options) {
+		public NSArray<EOSQLExpression> statementsToInsertColumnForAttribute(EOAttribute attribute, EOSchemaGenerationOptions options) {
 			String clause = _columnCreationClauseForAttribute(attribute);
-
-			System.out.println("ALTER TABLE " + formatTableName(attribute.entity().externalName()) + " ADD COLUMN " + clause);
-
-			NSArray result = new NSArray(_expressionForString("ALTER TABLE " + formatTableName(attribute.entity().externalName()) + " ADD COLUMN " + clause));
-
-			//System.out.println(result);
-
-			return result;
+			return new NSArray<EOSQLExpression>(_expressionForString("ALTER TABLE " + formatTableName(attribute.entity().externalName()) + " ADD COLUMN " + clause));
 		}
 
-		/**
-		 * @see com.webobjects.eoaccess.EOSynchronizationFactory#statementsToModifyColumnNullRule(java.lang.String, java.lang.String, boolean, com.webobjects.foundation.NSDictionary)
-		 */
 		@Override
-		public NSArray statementsToModifyColumnNullRule(String columnName, String tableName, boolean allowsNull, NSDictionary options) {
-			NSArray statements;
+		public NSArray<EOSQLExpression> statementsToModifyColumnNullRule(String columnName, String tableName, boolean allowsNull, EOSchemaGenerationOptions options) {
+			NSArray<EOSQLExpression> statements;
 			if (allowsNull) {
-				statements = new NSArray(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " ALTER COLUMN " + formatColumnName(columnName) + " SET NULL"));
+				statements = new NSArray<EOSQLExpression>(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " ALTER COLUMN " + formatColumnName(columnName) + " SET NULL"));
 			} else {
-				statements = new NSArray(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " ALTER COLUMN " + formatColumnName(columnName) + " SET NOT NULL"));
+				statements = new NSArray<EOSQLExpression>(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " ALTER COLUMN " + formatColumnName(columnName) + " SET NOT NULL"));
 			}
 			return statements;
 		}
 
 		@Override
-		public NSArray statementsToRenameColumnNamed(String columnName, String tableName, String newName, NSDictionary nsdictionary) {
-			return new NSArray(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " ALTER COLUMN " + formatColumnName(columnName) + " RENAME TO " + formatColumnName(newName)));
+		public NSArray<EOSQLExpression> statementsToRenameColumnNamed(String columnName, String tableName, String newName, EOSchemaGenerationOptions options) {
+			return new NSArray<EOSQLExpression>(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " ALTER COLUMN " + formatColumnName(columnName) + " RENAME TO " + formatColumnName(newName)));
 		}
 
 		@Override
-		public NSArray statementsToRenameTableNamed(String tableName, String newName, NSDictionary options) {
-			return new NSArray(_expressionForString("ALTER TABLE " + formatTableName(tableName) + " RENAME TO " + formatTableName(newName)));
+		public NSArray<EOSQLExpression> statementsToRenameTableNamed(String oldTableName, String newTableName, EOSchemaGenerationOptions options) {
+			return new NSArray<EOSQLExpression>(_expressionForString("ALTER TABLE " + formatTableName(oldTableName) + " RENAME TO " + formatTableName(newTableName)));
 		}
 
 		@Override
@@ -499,7 +483,7 @@ public class _H2PlugIn extends JDBCPlugIn {
 	}
 
 	@Override
-	public EOSynchronizationFactory createSynchronizationFactory() {
+	public EOSchemaSynchronizationFactory createSchemaSynchronizationFactory() {
 		return new H2SynchronizationFactory(adaptor());
 	}
 
@@ -588,11 +572,12 @@ public class _H2PlugIn extends JDBCPlugIn {
 	}
 
 	/**
-	 * <p>
-	 * This method returns true by default unless the connection URL for the database has
+	 * This method returns <code>true</code> by default unless the connection URL for the database has
 	 * <code>useBundledJdbcInfo=false</code> on it which indicates to the system
 	 * that the jdbcInfo which has been bundled into the plugin is not acceptable to
 	 * use and instead it should fetch a fresh copy from the database.
+	 * 
+	 * @return <code>true</code> if bundled jdbcInfo should be used
 	 */
 	protected boolean shouldUseBundledJdbcInfo() {
 		boolean shouldUseBundledJdbcInfo = true;
