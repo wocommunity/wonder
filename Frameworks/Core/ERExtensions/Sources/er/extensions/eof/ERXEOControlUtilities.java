@@ -233,16 +233,24 @@ public class ERXEOControlUtilities {
 
     /**
      * This has one advantage over the standard EOUtilites
-     * method of first checking if the editingcontexts are
+     * method of first checking if the editing contexts are
      * equal before creating a fault for the object in the
-     * editing context.
+     * editing context. If the object cannot be copied to
+     * the given editing context an IllegalStateException
+     * will be thrown.
+     * 
      * @param ec editing context to get a local instance of the object in
      * @param eo object to get a local copy of
-     * @return enterprise object local to the passed in editing contex
+     * @return enterprise object local to the passed in editing context
      */
 	public static <T extends EOEnterpriseObject> T localInstanceOfObject(EOEditingContext ec, T eo) {
-        return eo != null && ec != null && eo.editingContext() != null && !ec.equals(eo.editingContext()) ?
-        (T)EOUtilities.localInstanceOfObject(ec, eo) : eo;
+		if (eo != null && ec != null && eo.editingContext() != null && !ec.equals(eo.editingContext())) {
+			T localInstance = (T) EOUtilities.localInstanceOfObject(ec, eo);
+			if (localInstance == null) {
+				throw new IllegalStateException("You attempted to localInstance " + eo + ", which has not yet been committed.");
+			}
+		}
+		return eo;
     }
     
     /**
