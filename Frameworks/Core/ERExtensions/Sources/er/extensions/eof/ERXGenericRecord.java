@@ -972,9 +972,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 */
 	@Override
 	public String toString() {
-		String pk = primaryKey();
-		pk = (pk == null) ? "null" : pk;
-		return "<" + getClass().getName() + " pk:\"" + pk + "\">";
+		return new StringBuilder().append('<').append(getClass().getName())
+				.append(" pk:\"").append(primaryKey()).append("\">").toString();
 	}
 
 	public String description() {
