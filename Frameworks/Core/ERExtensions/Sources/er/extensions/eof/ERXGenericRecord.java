@@ -1360,20 +1360,11 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 		super.validateForUpdate();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see er.extensions.ERXEnterpriseObject#checkConsistency()
-	 */
-	// CHECKME: This method was very useful at NS, might not be as useful here.
+	@Deprecated
 	public void checkConsistency() throws NSValidation.ValidationException {
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see er.extensions.ERXEnterpriseObject#batchCheckConsistency()
-	 */
+	@Deprecated
 	public void batchCheckConsistency() throws NSValidation.ValidationException {
 	}
 

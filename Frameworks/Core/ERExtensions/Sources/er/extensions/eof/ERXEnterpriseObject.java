@@ -592,7 +592,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
      * environments.
      * @throws NSValidation.ValidationException if the object is not consistent
      */
-    // CHECKME: This method was very useful at NS, might not be as useful here.
+    @Deprecated
     public abstract void checkConsistency()
             throws NSValidation.ValidationException;
 
@@ -607,6 +607,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
      * the use of this method.
      * @throws NSValidation.ValidationException if the object fails consistency
      */
+    @Deprecated
     public abstract void batchCheckConsistency()
             throws NSValidation.ValidationException;
 
