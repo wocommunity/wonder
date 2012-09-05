@@ -8,11 +8,11 @@
 		<binding name="showActions"/>
 		<binding name="inspectConfigurationName"/>
 
-		<validation message="&apos;object&apos; is a required binding">
+		<validation message="'object' is a required binding">
 			<unbound name="object"/>
 		</validation>
 
-		<validation message="&apos;inspectConfigurationName&apos; is a required binding">
+		<validation message="'inspectConfigurationName' is a required binding">
 			<unbound name="inspectConfigurationName"/>
 		</validation>
 	</wo>

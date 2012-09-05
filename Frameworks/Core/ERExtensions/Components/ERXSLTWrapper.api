@@ -8,15 +8,15 @@
 		<binding name="stream"/>
 		<binding name="enabled"/>
 
-		<validation message="&apos;stylesheet&apos; is a required binding">
+		<validation message="'stylesheet' is a required binding">
 			<unbound name="stylesheet"/>
 		</validation>
 
-		<validation message="&apos;data&apos; must be bound to a settable value">
+		<validation message="'data' must be bound to a settable value">
 			<unsettable name="data"/>
 		</validation>
 
-		<validation message="&apos;stream&apos; must be bound to a settable value">
+		<validation message="'stream' must be bound to a settable value">
 			<unsettable name="stream"/>
 		</validation>
 	</wo>

@@ -5,7 +5,7 @@
 		<binding name="condition"/>
 		<binding name="negate" defaults="Boolean"/>
 
-		<validation message="&apos;condition&apos; is a required binding">
+		<validation message="'condition' is a required binding">
 			<unbound name="condition"/>
 		</validation>
 	</wo>

@@ -6,7 +6,7 @@
 		<binding name="negate" defaults="Boolean"/>
 		<binding name="value"/>
 
-		<validation message="&apos;key&apos; is a required binding">
+		<validation message="'key' is a required binding">
 			<unbound name="key"/>
 		</validation>
 	</wo>

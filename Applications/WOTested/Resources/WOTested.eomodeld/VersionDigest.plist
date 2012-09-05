@@ -1,27 +1,8 @@
 {
     attributes = (
-        {
-            allowsNull = Y; 
-            columnName = digest; 
-            externalType = char; 
-            name = digest; 
-            valueClassName = NSString; 
-            width = 40; 
-        }, 
-        {
-            columnName = pk; 
-            externalType = INT; 
-            name = pk; 
-            valueClassName = NSNumber; 
-            valueType = i; 
-        }, 
-        {
-            columnName = "result_pk"; 
-            externalType = INT; 
-            name = resultPk; 
-            valueClassName = NSNumber; 
-            valueType = i; 
-        }, 
+        {columnName = digest; name = digest; prototypeName = varchar50; width = 40; }, 
+        {allowsNull = N; columnName = pk; name = pk; prototypeName = id; }, 
+        {columnName = "result_pk"; name = resultPk; prototypeName = id; }, 
         {columnName = rname; name = rname; prototypeName = varchar255; }
     ); 
     attributesUsedForLocking = (digest, pk, resultPk, rname); 

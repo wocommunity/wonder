@@ -1,0 +1,9 @@
+PageWrapper : PageWrapper {
+	pageTitle = "Simple Search";
+	backPage = backPage;
+}
+
+PrimeIndexLink : WOHyperlink {
+	action = indexMoviesAction;
+	class = "Button PrimeIndexButton";
+}

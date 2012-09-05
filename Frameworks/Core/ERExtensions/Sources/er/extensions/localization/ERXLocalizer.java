@@ -606,7 +606,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 		  
 		      // Check the Properties and Add it Automatically
 		      String propertyName = "er.extensions." + name + ".hasLocalization";
-		      boolean hasLocalization = ERXProperties.booleanForKeyWithDefault(propertyName, false);
+		      boolean hasLocalization = ERXProperties.booleanForKeyWithDefault(propertyName, true);
 		  
           if(name.equals("ERCoreBusinessLogic") || name.equals("ERDirectToWeb") || name.equals("ERExtensions")){ //|| name.startsWith("Java")
             // do nothing yet, because will add later

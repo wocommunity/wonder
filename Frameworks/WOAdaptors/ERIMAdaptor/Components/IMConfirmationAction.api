@@ -4,11 +4,11 @@
 		<binding name = "confirmed"/>
 		<binding name = "action"/>
 		
-    <validation message = "&apos;action&apos; is a required binding">
+    <validation message = "'action' is a required binding">
       <unbound name = "action"/>
     </validation>
 		
-    <validation message = "&apos;confirmed&apos; is a required binding">
+    <validation message = "'confirmed' is a required binding">
       <unbound name = "confirmed"/>
     </validation>
 	</wo>

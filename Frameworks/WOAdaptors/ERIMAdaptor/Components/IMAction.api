@@ -3,7 +3,7 @@
 	<wo wocomponentcontent = "false" class="IMAction.java">
 		<binding name = "action"/>
 		
-    <validation message = "&apos;action&apos; is a required binding">
+    <validation message = "'action' is a required binding">
       <unbound name = "action"/>
     </validation>
 	</wo>

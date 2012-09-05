@@ -8,15 +8,15 @@
 		<binding name="rows"/>
 		<binding name="value"/>
 
-		<validation message="&apos;formName&apos; is a required binding">
+		<validation message="'formName' is a required binding">
 			<unbound name="formName"/>
 		</validation>
 
-		<validation message="&apos;value&apos; is a required binding">
+		<validation message="'value' is a required binding">
 			<unbound name="value"/>
 		</validation>
 
-		<validation message="&apos;value&apos; must be bound to a settable value">
+		<validation message="'value' must be bound to a settable value">
 			<unsettable name="value"/>
 		</validation>
 	</wo>
