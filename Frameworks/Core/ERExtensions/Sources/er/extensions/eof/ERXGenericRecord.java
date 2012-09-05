@@ -416,27 +416,27 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 		flushCaches();
 	}
 
-	public void addObjectsToBothSidesOfRelationshipWithKey(NSArray<EOEnterpriseObject> objects, String key) {
+	public <T extends EOEnterpriseObject> void addObjectsToBothSidesOfRelationshipWithKey(NSArray<T> objects, String key) {
 		if (objects != null && objects.count() > 0) {
-			NSArray<EOEnterpriseObject> objectsSafe = objects instanceof NSMutableArray ? objects.immutableClone() : objects;
+			NSArray<T> objectsSafe = objects instanceof NSMutableArray ? objects.immutableClone() : objects;
 			for (EOEnterpriseObject eo : objectsSafe) {
 				addObjectToBothSidesOfRelationshipWithKey(eo, key);
 			}
 		}
 	}
 
-	public void removeObjectsFromBothSidesOfRelationshipWithKey(NSArray<EOEnterpriseObject> objects, String key) {
+	public <T extends EOEnterpriseObject> void removeObjectsFromBothSidesOfRelationshipWithKey(NSArray<T> objects, String key) {
 		if (objects != null && objects.count() > 0) {
-			NSArray<EOEnterpriseObject> objectsSafe = objects instanceof NSMutableArray ? objects.immutableClone() : objects;
+			NSArray<T> objectsSafe = objects instanceof NSMutableArray ? objects.immutableClone() : objects;
 			for (EOEnterpriseObject eo : objectsSafe) {
 				removeObjectFromBothSidesOfRelationshipWithKey(eo, key);
 			}
 		}
 	}
 
-	public void removeObjectsFromPropertyWithKey(NSArray<EOEnterpriseObject> objects, String key) {
+	public <T extends EOEnterpriseObject> void removeObjectsFromPropertyWithKey(NSArray<T> objects, String key) {
 		if (objects != null && objects.count() > 0) {
-			NSArray<EOEnterpriseObject> objectsSafe = objects instanceof NSMutableArray ? objects.immutableClone() : objects;
+			NSArray<T> objectsSafe = objects instanceof NSMutableArray ? objects.immutableClone() : objects;
 			for (EOEnterpriseObject eo : objectsSafe) {
 				removeObjectFromPropertyWithKey(eo, key);
 			}
@@ -814,7 +814,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 		return ERXEOControlUtilities.localInstanceOfObject(ec, this);
 	}
 
-	public NSArray<EOEnterpriseObject> localInstancesOf(NSArray<EOEnterpriseObject> eos) {
+	public <T extends EOEnterpriseObject> NSArray<T> localInstancesOf(NSArray<T> eos) {
 		return ERXEOControlUtilities.localInstancesOfObjects(editingContext(), eos);
 	}
 

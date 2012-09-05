@@ -406,8 +406,8 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
      * @param objects objects to add to both sides of the given relationship
      * @param key relationship key
      */
-    public abstract void addObjectsToBothSidesOfRelationshipWithKey(
-            NSArray<EOEnterpriseObject> objects, String key);
+    public abstract <T extends EOEnterpriseObject> void addObjectsToBothSidesOfRelationshipWithKey(
+            NSArray<T> objects, String key);
 
     /**
      * Removes a collection of objects to a given relationship by calling
@@ -416,8 +416,8 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
      * @param objects objects to be removed from both sides of the given relationship
      * @param key relationship key
      */
-    public abstract void removeObjectsFromBothSidesOfRelationshipWithKey(
-            NSArray<EOEnterpriseObject> objects, String key);
+    public abstract <T extends EOEnterpriseObject> void removeObjectsFromBothSidesOfRelationshipWithKey(
+            NSArray<T> objects, String key);
 
     /**
      * Removes a collection of objects to a given relationship by calling
@@ -426,7 +426,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
      * @param objects objects to be removed from both sides of the given relationship
      * @param key relationship key
      */
-    public abstract void removeObjectsFromPropertyWithKey(NSArray<EOEnterpriseObject> objects,
+    public abstract <T extends EOEnterpriseObject> void removeObjectsFromPropertyWithKey(NSArray<T> objects,
             String key);
 
     /**
@@ -519,7 +519,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
      * @param eos array of EOs to local instance
      * @return array of EOs in the same editing context as the caller.
      */
-    public abstract NSArray<EOEnterpriseObject> localInstancesOf(NSArray<EOEnterpriseObject> eos);
+    public abstract <T extends EOEnterpriseObject> NSArray<T> localInstancesOf(NSArray<T> eos);
 
     /**
      * Computes the current set of changes that this object has from the
