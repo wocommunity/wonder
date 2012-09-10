@@ -35,7 +35,7 @@ Control.Rating = Class.create({
                 on: 'rating_on',
                 selected: 'rating_selected'
             },
-            updateUrl: false,
+            data-updateUrl: false,
             updateParameterName: 'value',
             updateOptions : {},
             afterChange: Prototype.emptyFunction
@@ -108,10 +108,10 @@ Control.Rating = Class.create({
         }
         this.render(this.value,force_selected);
         if(!prevent_callbacks){
-            if(this.options.updateUrl){
+            if(this.options.data-updateUrl){
                 var params = {}, a;
                 params[this.options.updateParameterName] = this.value;
-                a = new Ajax.Request(this.options.updateUrl, Object.extend(
+                a = new Ajax.Request(this.options.data-updateUrl, Object.extend(
                     this.options.updateOptions, { parameters : params }
                 ));
             }

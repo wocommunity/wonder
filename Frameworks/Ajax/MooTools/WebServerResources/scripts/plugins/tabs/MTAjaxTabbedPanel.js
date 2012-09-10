@@ -79,7 +79,7 @@ var MTAjaxTabbedPanel = new Class({
 			delay: 0.25,
 			initialDelay: 0.25,
 			update : panel,
-			url : panel.get('updateUrl'),
+			url : panel.get('data-updateUrl'),
 			async: true,
 			evalScripts: true,
 			onSuccess: function() {
@@ -119,7 +119,7 @@ var MTAjaxTabbedPanel = new Class({
 			if(node != this.selectedPane) {
 				if(node.hasClass(this.selectedPanelClassName)) {
 					new Request({ 
-						url: node.get('updateUrl'), 
+						url: node.get('data-updateUrl'), 
 						async: true,
 						evalScripts: false,
 						didSelect: false
@@ -132,7 +132,7 @@ var MTAjaxTabbedPanel = new Class({
 
 		selectedPane.addClass(this.options.selectedPanelClassName);
 		new Request({
-			url: selectedPane.get('updateUrl'),
+			url: selectedPane.get('data-updateUrl'),
 			async: true,
 			evalScripts: false,
 			didSelect: true,

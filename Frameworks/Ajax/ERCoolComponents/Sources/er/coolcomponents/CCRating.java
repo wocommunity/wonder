@@ -177,10 +177,10 @@ public class CCRating extends AjaxDynamicElement {
         // updateParameterName is renamed to formValueName to be more WO like
         ajaxOptionsArray.addObject(new AjaxConstantOption("updateParameterName", "formValueName", formValueName(context), AjaxOption.STRING));
 
-        // These parameters are mutually exclusive at present, but updateUrl could be used with an input if there is a reason for it.
+        // These parameters are mutually exclusive at present, but data-updateUrl could be used with an input if there is a reason for it.
         // I can't think of one right now
         if ( ! actAsInput(context)) {
-            ajaxOptionsArray.addObject(new AjaxConstantOption("updateUrl", AjaxUtils.ajaxComponentActionUrl(context), AjaxOption.STRING));
+            ajaxOptionsArray.addObject(new AjaxConstantOption("data-updateUrl", AjaxUtils.ajaxComponentActionUrl(context), AjaxOption.STRING));
             ajaxOptionsArray.addObject(new AjaxOption("updateOptions", AjaxOption.DICTIONARY));
         }
         else {

@@ -10210,7 +10210,7 @@ Modalbox.Methods = {
 	// CH: done
 	
 	_preventScroll: function(event) { // Disabling scrolling by "space" key
-	  var el = event.element();
+		var el = event.element();
 		if (!["input", "textarea", "select", "button"].include(el.tagName.toLowerCase())
 				&& !(el.contentEditable == 'true' || el.contentEditable == ''))
 			event.stop();
@@ -10629,7 +10629,7 @@ var AjaxOptions = {
 
 var AjaxUpdateContainer = {
 	registerPeriodic: function(id, canStop, stopped, options) {
-		var url = $(id).getAttribute('updateUrl');
+		var url = $(id).getAttribute('data-updateUrl');
 		var updater;
 		if (!canStop) {
 			updater = new Ajax.PeriodicalUpdater(id, url, options);
@@ -10706,7 +10706,7 @@ var AjaxUpdateContainer = {
 		if (updateElement == null) {
 			alert('There is no element on this page with the id "' + id + '".');
 		}
-		var actionUrl = updateElement.getAttribute('updateUrl');
+		var actionUrl = updateElement.getAttribute('data-updateUrl');
 		if (options && options['_r']) {
 			actionUrl = actionUrl.addQueryParameters('_r='+ id);
 		}
@@ -10732,7 +10732,7 @@ var AjaxUpdateLink = {
 		if (updateElement == null) {
 			alert('There is no element on this page with the id "' + id + '".');
 		}
-		AjaxUpdateLink._update(id, updateElement.getAttribute('updateUrl'), options, elementID, queryParams);
+		AjaxUpdateLink._update(id, updateElement.getAttribute('data-updateUrl'), options, elementID, queryParams);
 	},
 	
 	_update: function(id, actionUrl, options, elementID, queryParams) {
@@ -11099,7 +11099,7 @@ AjaxPeriodicUpdater.prototype = {
 	},
 	
 	start: function() {
-		var actionUrl = $(this.id).getAttribute('updateUrl');
+		var actionUrl = $(this.id).getAttribute('data-updateUrl');
 		actionUrl = actionUrl.addQueryParameters('_u='+ id);
 		this.updater = new Ajax.PeriodicalUpdater(this.id, actionUrl, { evalScripts: true, frequency: 2.0 });
 	},
@@ -11791,7 +11791,7 @@ var AjaxTabbedPanel = {
         $(node);  // Force prototype extension of node for IE 7
         if (node.id != selectedPane.id) {
           if (node.hasClassName('ajaxTabbedPanelPane-selected')) {
-            new Ajax.Request(node.getAttribute('updateUrl') + "?didSelect=false",  {asynchronous:true, evalScripts:false})
+            new Ajax.Request(node.getAttribute('data-updateUrl') + "?didSelect=false",  {asynchronous:true, evalScripts:false})
             node.removeClassName('ajaxTabbedPanelPane-selected').addClassName('ajaxTabbedPanelPane-unselected');
           }
         };
@@ -11799,7 +11799,7 @@ var AjaxTabbedPanel = {
 
       // Select the new tab and notify the app of the selected tab
       selectedPane.removeClassName('ajaxTabbedPanelPane-unselected').addClassName('ajaxTabbedPanelPane-selected');
-      new Ajax.Request(selectedPane.getAttribute('updateUrl') + "?didSelect=true",  {asynchronous:true, evalScripts:false})
+      new Ajax.Request(selectedPane.getAttribute('data-updateUrl') + "?didSelect=true",  {asynchronous:true, evalScripts:false})
     },
 
     // Loads the panel contents if not already loaded
@@ -11807,7 +11807,7 @@ var AjaxTabbedPanel = {
       var pane = $(paneID);
       if (pane.innerHTML=='' || pane.innerHTML==this.busyContent(busyDivID) || shouldReload) {
          pe = new PeriodicalExecuter(function(pe) { pane.innerHTML=AjaxTabbedPanel.busyContent(busyDivID); pe.stop()}, 0.25);
-         new Ajax.Updater(pane, pane.getAttribute('updateUrl'), {asynchronous: true, 
+         new Ajax.Updater(pane, pane.getAttribute('data-updateUrl'), {asynchronous: true, 
          														 evalScripts: true, 
          														 onComplete: function(a, b) {pe.stop(); 
          														                             AjaxTabbedPanel.runOnLoad(pane); 
