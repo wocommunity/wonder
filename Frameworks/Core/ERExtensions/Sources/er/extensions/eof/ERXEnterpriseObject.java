@@ -407,7 +407,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
      * @param key relationship key
      */
     public abstract void addObjectsToBothSidesOfRelationshipWithKey(
-            NSArray<EOEnterpriseObject> objects, String key);
+            NSArray<? extends EOEnterpriseObject> objects, String key);
 
     /**
      * Removes a collection of objects to a given relationship by calling
@@ -417,7 +417,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
      * @param key relationship key
      */
     public abstract void removeObjectsFromBothSidesOfRelationshipWithKey(
-            NSArray<EOEnterpriseObject> objects, String key);
+            NSArray<? extends EOEnterpriseObject> objects, String key);
 
     /**
      * Removes a collection of objects to a given relationship by calling
@@ -426,7 +426,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
      * @param objects objects to be removed from both sides of the given relationship
      * @param key relationship key
      */
-    public abstract void removeObjectsFromPropertyWithKey(NSArray<EOEnterpriseObject> objects,
+    public abstract void removeObjectsFromPropertyWithKey(NSArray<? extends EOEnterpriseObject> objects,
             String key);
 
     /**

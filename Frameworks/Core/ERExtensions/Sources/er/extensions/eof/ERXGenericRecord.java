@@ -416,27 +416,27 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 		flushCaches();
 	}
 
-	public void addObjectsToBothSidesOfRelationshipWithKey(NSArray<EOEnterpriseObject> objects, String key) {
+	public void addObjectsToBothSidesOfRelationshipWithKey(NSArray<? extends EOEnterpriseObject> objects, String key) {
 		if (objects != null && objects.count() > 0) {
-			NSArray<EOEnterpriseObject> objectsSafe = objects instanceof NSMutableArray ? objects.immutableClone() : objects;
+			NSArray<? extends EOEnterpriseObject> objectsSafe = objects.immutableClone();
 			for (EOEnterpriseObject eo : objectsSafe) {
 				addObjectToBothSidesOfRelationshipWithKey(eo, key);
 			}
 		}
 	}
 
-	public void removeObjectsFromBothSidesOfRelationshipWithKey(NSArray<EOEnterpriseObject> objects, String key) {
+	public void removeObjectsFromBothSidesOfRelationshipWithKey(NSArray<? extends EOEnterpriseObject> objects, String key) {
 		if (objects != null && objects.count() > 0) {
-			NSArray<EOEnterpriseObject> objectsSafe = objects instanceof NSMutableArray ? objects.immutableClone() : objects;
+			NSArray<? extends EOEnterpriseObject> objectsSafe = objects.immutableClone();
 			for (EOEnterpriseObject eo : objectsSafe) {
 				removeObjectFromBothSidesOfRelationshipWithKey(eo, key);
 			}
 		}
 	}
 
-	public void removeObjectsFromPropertyWithKey(NSArray<EOEnterpriseObject> objects, String key) {
+	public void removeObjectsFromPropertyWithKey(NSArray<? extends EOEnterpriseObject> objects, String key) {
 		if (objects != null && objects.count() > 0) {
-			NSArray<EOEnterpriseObject> objectsSafe = objects instanceof NSMutableArray ? objects.immutableClone() : objects;
+			NSArray<? extends EOEnterpriseObject> objectsSafe = objects.immutableClone();
 			for (EOEnterpriseObject eo : objectsSafe) {
 				removeObjectFromPropertyWithKey(eo, key);
 			}
