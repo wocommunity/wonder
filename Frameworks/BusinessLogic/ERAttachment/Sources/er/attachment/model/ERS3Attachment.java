@@ -83,8 +83,9 @@ public class ERS3Attachment extends _ERS3Attachment {
 	 * @return the S3 key for this attachment.
 	 */
 	public String key() {
-		String[] paths = webPath().split("/");
-		String key = paths[2];
+		// Retrieve the index of the second slash, considering the first char is always a slash
+		int indexOfKeySeparator = webPath().indexOf("/", 1);
+		String key = webPath().substring(indexOfKeySeparator + 1);
 		return key;
 	}
 

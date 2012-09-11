@@ -55,8 +55,8 @@ import er.extensions.foundation.ERXValueUtilities;
  * @binding class (optional) the class attribute of the file input
  * @binding style (optional) the style attribute of the file input
  * 
- * @property er.attachment.[configurationName].tempFolder (optional) the temp folder to use for WOFileUploads
- * @property er.attachment.tempFolder (optional) the temp folder to use for WOFileUploads
+ * @property er.attachment.[configurationName].tempFolder the temp folder to use for WOFileUploads for a specific configuration. Default is er.attachment.tempFolder value.
+ * @property er.attachment.tempFolder the temp folder to use for WOFileUploads. If not set, temporary dir will be set from File.createTempFile().
  * @property er.attachment.[configurationName].storageType
  * @property er.attachment.storageType
  * @property er.attachment.[configurationName].width

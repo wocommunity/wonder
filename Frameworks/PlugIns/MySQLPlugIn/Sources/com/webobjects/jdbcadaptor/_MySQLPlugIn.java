@@ -3,6 +3,7 @@ package com.webobjects.jdbcadaptor;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,6 +30,8 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation.NSRange;
+import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation._NSStringUtilities;
 
 public class _MySQLPlugIn extends JDBCPlugIn {
@@ -74,7 +77,10 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 		}
 
 		private int _fetchLimit;
-
+		
+		private NSRange _fetchRange;
+		private final NSSelector<NSRange> _fetchRangeSelector = new NSSelector<NSRange>("fetchRange");
+		
 		/**
 		 * Holds array of join clause definitions
 		 */
@@ -107,14 +113,30 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 		}
 
 		/**
-		 * Overriding super here so we can grab a fetch limit if specified in the EOFetchSpecification.
+		 * Overriding super here so we can grab a fetch range or fetch limit if specified in the EOFetchSpecification. If a fetchRange method
+		 * returning an NSRange exists in the EOFetchSpecification subclass being passed in, the the fetchLimit will be ignored.
 		 *
 		 * @see com.webobjects.jdbcadaptor.JDBCExpression#prepareSelectExpressionWithAttributes(NSArray, boolean, EOFetchSpecification)
 		 */
 		@Override
 		public void prepareSelectExpressionWithAttributes(NSArray<EOAttribute> attributes, boolean lock,
 				EOFetchSpecification fetchSpec) {
-			if (!fetchSpec.promptsAfterFetchLimit()) {
+			try {
+				_fetchRange = _fetchRangeSelector.invoke(fetchSpec);
+				// We will get an error when not using our custom ERXFetchSpecification subclass
+				// We could have added ERExtensions to the classpath and checked for instanceof, but I thought
+				// this is a little cleaner since people may be using this PlugIn and not Wonder in some legacy apps.
+			} catch (IllegalArgumentException e) {
+				;
+			} catch (IllegalAccessException e) {
+				;
+			} catch (InvocationTargetException e) {
+				;
+			} catch (NoSuchMethodException e) {
+				;
+			}
+			// Only check for fetchLimit of fetchRange is not provided.
+			if (_fetchRange == null && !fetchSpec.promptsAfterFetchLimit()) {
 				_fetchLimit = fetchSpec.fetchLimit();
 			}
 			super.prepareSelectExpressionWithAttributes(attributes, lock, fetchSpec);
@@ -155,7 +177,11 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 
 			// If necessary, create LIMIT clause and add to buffer size
 			String limitClause = null;
-			if (_fetchLimit > 0) {
+			// fetchRange override fetchLimit
+			if (_fetchRange != null) {
+				limitClause = _fetchRange.location() + ", " + _fetchRange.length();
+				size += CONFIG.LIMIT_LENGTH + limitClause.length();
+			} else if (_fetchLimit > 0) {
 				limitClause = Integer.toString(_fetchLimit);
 				size += CONFIG.LIMIT_LENGTH + limitClause.length();
 			}

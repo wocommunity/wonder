@@ -2384,7 +2384,7 @@ public class ERXSQLHelper {
 					if(t instanceof JDBCAdaptorException) {
 						JDBCAdaptorException jdbcEx = (JDBCAdaptorException) t;
 						SQLException sqlEx = jdbcEx.sqlException();
-						if(UNIQUE_CONSTRAINT_EXCEPTION_STATE.equals(sqlEx.getSQLState())) {
+						if(sqlEx != null && UNIQUE_CONSTRAINT_EXCEPTION_STATE.equals(sqlEx.getSQLState())) {
 							String message = sqlEx.getMessage();
 							MessageFormat format = new MessageFormat(UNIQUE_CONSTRAINT_MESSAGE_FORMAT);
 							try {

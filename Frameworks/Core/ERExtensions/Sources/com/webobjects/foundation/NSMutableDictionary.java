@@ -15,9 +15,9 @@ import java.util.Map;
  * 	logger.debug(env.valueForKey(key));
  * </pre>
  * 
- * @param &lt;K&gt;
+ * @param <K>
  *            type of key contents
- * @param &lt;V&gt;
+ * @param <V>
  *            type of value contents
  */
 @SuppressWarnings("unchecked")

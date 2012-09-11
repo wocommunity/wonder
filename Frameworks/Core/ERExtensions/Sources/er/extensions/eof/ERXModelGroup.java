@@ -308,6 +308,7 @@ public class ERXModelGroup extends EOModelGroup {
 		 * @param entity
 		 * @param attribute
 		 * @param newName
+		 * @return cloned attribute
 		 */
 		protected EOAttribute cloneAttribute(EOEntity entity, EOAttribute attribute, String newName) {
 			// NOTE: order is important here. To add the prototype,
@@ -328,7 +329,7 @@ public class ERXModelGroup extends EOModelGroup {
 			return copy;
 		}
 
-		protected void adjustLocalizedAttributes(EOModelGroup group ) {
+		protected void adjustLocalizedAttributes(EOModelGroup group) {
 			for (Enumeration enumerator = group.models().objectEnumerator(); enumerator.hasMoreElements();) {
 				EOModel model = (EOModel) enumerator.nextElement();
 				for (Enumeration e1 = model.entities().objectEnumerator(); e1.hasMoreElements();) {
@@ -490,6 +491,7 @@ public class ERXModelGroup extends EOModelGroup {
 		}
 
 		/**
+		 * @return <code>true</code>
 		 * @see com.webobjects.eoaccess.ERXModel#useExtendedPrototypes()
 		 */
 		@Override
@@ -501,6 +503,8 @@ public class ERXModelGroup extends EOModelGroup {
 
 	/**
 	 * Overridden to use our model class in the runtime.
+	 * @param url URL to model
+	 * @return model object
 	 */
 	@Override
 	public EOModel addModelWithPathURL(URL url) {
@@ -641,6 +645,8 @@ public class ERXModelGroup extends EOModelGroup {
 	
 	/**
 	 * Returns whether or not the given entity name is a prototype entity
+	 * @param entityName entity name
+	 * @return <code>true</code> if entity if a prototype
 	 */
 	public static boolean isPrototypeEntityName(String entityName) {
 		return (entityName.startsWith("EO") && entityName.endsWith("Prototypes"));
@@ -921,8 +927,10 @@ public class ERXModelGroup extends EOModelGroup {
 	
 	/**
 	 * Returns whether the given model is listed as a prototype model in the properties.
+	 * @param model model object
+	 * @return <code>true</code> if model is used for prototypes
 	 */
-	public boolean isPrototypeModel (EOModel model) {
+	public boolean isPrototypeModel(EOModel model) {
 		if (_prototypeModelNames != null && model != null && _prototypeModelNames.containsObject(model.name())) {
 			return true;
 		}
@@ -1014,7 +1022,7 @@ public class ERXModelGroup extends EOModelGroup {
 				String pluginPrototypeEntityName = "EOJDBC" + pluginName + "Prototypes";
 				// This check isn't technically necessary since
 				// it doesn't down below, but since
-				// we are guessing here, I don't want themt o
+				// we are guessing here, I don't want them to
 				// get a warning about the prototype not
 				// being found if they aren't even using Wonder
 				// prototypes.
