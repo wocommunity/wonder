@@ -53,7 +53,7 @@ My solution is currently to generate a static array for the attributes and the r
 1. create the database
 	- Change into the ERXPartialBaseModel directory
 
-	> _GVCDev:ERXPartialBaseModel daspinall$ ant fb.recreate
+	> _GVCDev:ERXPartialBaseModel daspinall$ ant fb.recreate_
 	>
 	> Buildfile: /Volumes/Data/Development/GitHub/ERXPartials/wonder/Tests/ERXPartials/ERXPartialBaseModel/build.xml
 	> 
