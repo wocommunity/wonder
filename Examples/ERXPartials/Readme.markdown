@@ -34,7 +34,7 @@ By default I was using the `_WonderEntity.java` template, however there was a sm
 	…
       EOQualifier inverseQualifier = new EOKeyValueQualifier(er.example.erxpartials.model.Partial_EmployeePerson.DEPARTMENT_KEY, EOQualifier.QualifierOperatorEqual, this);
 
-A patched `_WonderEntity.java` is included int the Resources of the `ERXPartialExampleModel` project.
+A patched `_PartialWonderEntity.java` is included int the Resources of the `ERXPartialExampleModel` project.
 
 
 
@@ -47,6 +47,7 @@ Additionally when the `ERXPartialInitializer` merges the partial entities into t
 
 My solution is currently to generate a static array for the attributes and the relationships and have the `ERXPartialGenericRecord` query the partial to determine the validity of a given key path before forwarding the invocation.
 
+Patches for this are included in the `ERXPartial`, `ERXPartialGenericObject` classes and support is also added to the `_PartialWonderEntity.java` template.
 
 ## Getting Started
 
