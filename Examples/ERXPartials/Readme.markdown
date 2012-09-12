@@ -53,7 +53,7 @@ My solution is currently to generate a static array for the attributes and the r
 1. create the database
 	- Change into the ERXPartialBaseModel directory
 
-	> _GVCDev:ERXPartialBaseModel daspinall$ __ant fb.recreate___
+	> _GVCDev:ERXPartialBaseModel daspinall$ ant fb.recreate
 	>
 	> Buildfile: /Volumes/Data/Development/GitHub/ERXPartials/wonder/Tests/ERXPartials/ERXPartialBaseModel/build.xml
 	> 
@@ -81,7 +81,7 @@ My solution is currently to generate a static array for the attributes and the r
 	>
 	> Total time: 1 second
 	>
-	> _GVCDev:ERXPartialBaseModel daspinall$_
+	> GVCDev:ERXPartialBaseModel daspinall$
 
 2. compile and run. The main page is a login page, but there is no login logic, just click the button :)
 
