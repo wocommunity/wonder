@@ -1,0 +1,29 @@
+{
+    EOModelVersion = "2.1"; 
+    adaptorName = JDBC; 
+    connectionDictionary = {
+        URL = "jdbc:FrontBase://localhost/ERXPartials"; 
+        password = test; 
+        username = erxpartial; 
+    }; 
+    entities = (
+        {className = "er.example.erxpartials.model.GenderType"; name = GenderType; }, 
+        {className = "er.example.erxpartials.model.Person"; name = Person; }
+    ); 
+    userInfo = {
+        "_EntityModeler" = {
+            activeDatabaseConfigName = Default; 
+            databaseConfigs = {
+                Default = {
+                    adaptorName = JDBC; 
+                    connectionDictionary = {
+                        URL = "jdbc:FrontBase://localhost/ERXPartials"; 
+                        password = test; 
+                        username = erxpartial; 
+                    }; 
+                    prototypeEntityName = EOJDBCFrontBasePrototypes; 
+                }; 
+            }; 
+        }; 
+    }; 
+}
