@@ -30,6 +30,7 @@ public abstract class _Department extends  ERXGenericRecord {
   public static final String COMPANY_KEY = COMPANY.key();
   public static final String PARTIAL__EMPLOYEE_PERSONS_KEY = PARTIAL__EMPLOYEE_PERSONS.key();
 
+
   private static Logger LOG = Logger.getLogger(_Department.class);
 
   public Department localInstanceIn(EOEditingContext editingContext) {

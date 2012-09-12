@@ -4,7 +4,6 @@
 	<classpathentry kind="con" path="WOFramework/ERDirectToWeb"/>
 	<classpathentry kind="con" path="WOFramework/ERExtensions"/>
 	<classpathentry kind="con" path="WOFramework/ERJars"/>
-	<classpathentry kind="con" path="WOFramework/ERNeutralLook"/>
 	<classpathentry kind="con" path="WOFramework/ERPrototypes"/>
 	<classpathentry kind="con" path="WOFramework/JavaDirectToWeb"/>
 	<classpathentry kind="con" path="WOFramework/JavaDTWGeneration"/>
@@ -23,5 +22,11 @@
 	<classpathentry kind="con" path="WOFramework/ERXPartialsExampleModel"/>
 	<classpathentry kind="con" path="WOFramework/WOLips"/>
 	<classpathentry kind="con" path="WOFramework/FrontBasePlugIn"/>
+	<classpathentry kind="con" path="WOFramework/ERDirectToRest"/>
+	<classpathentry kind="con" path="WOFramework/ERModernLook"/>
+	<classpathentry kind="con" path="WOFramework/ERModernDefaultSkin"/>
+	<classpathentry kind="con" path="WOFramework/ERCoolComponents"/>
+	<classpathentry kind="con" path="WOFramework/ERRest"/>
+	<classpathentry kind="con" path="WOFramework/ERModernDirectToWeb"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

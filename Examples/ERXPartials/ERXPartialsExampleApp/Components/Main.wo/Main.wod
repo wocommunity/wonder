@@ -1,35 +1,35 @@
-AssistantConditional: WOConditional {
-	condition = isAssistantCheckboxVisible;
+LoginForm : WOForm {
+  multipleSubmit = false;
+  directActionName = "login";
+  actionClass = "DirectAction";
+  name="LoginForm";
 }
 
-DirectToWebPlaque: WOImage {
-	alt = "Direct to Web - WebObjects 4.5";
-	filename = "DTW.gif";
-	framework = "JavaDirectToWeb";
-	height = "49";
-	name = "Direct to Web - WebObjects 4.5";
-	width = "196";
+UsernameField : WOTextField {
+  value = username;
+  name = "username";
 }
 
-LACheckbox: WOCheckBox {
-	checked = wantsWebAssistant;
+PasswordField : WOPasswordField {
+  value = password;
+  name = "password";
 }
 
-LoginButton: WOSubmitButton {
-	action = defaultPage;
-	value = "Login";
+Stylesheet : ERXStyleSheet {
+	filename = "default_login_page.css";
+	framework = "ERModernDefaultSkin";
 }
 
-LoginForm: WOForm {
+HasErrorMessage : WOConditional {
+  condition = errorMessage;
 }
 
-PasswordField: WOPasswordField {
-	value = password;
-	width = "16";
+ErrorMessage : WOString {
+  value = errorMessage;
 }
 
-UsernameField: WOTextField {
-	value = username;
-	width = "16";
+DefaultSubmit : WOImageButton {
+  filename = "s.gif";
+  framework = "ERExtensions";
+  directActionName = "login";
 }
-

@@ -24,8 +24,8 @@ er.migration.modelNames=ERXPartialBase,ERXPartialExample
 #er.extensions.ERXWORepetition.checkHashCodes=true
 #er.extensions.ERXWORepetition.raiseOnUnmatchedObject=true
 #er.extensions.ERXWORepetition.eoSupport=true
-#er.component.clickToOpen=true
-#wolips.password=wo
+er.component.clickToOpen=true
+wolips.password=erxpartial
 
 # ERJavaMail
 er.javamail.centralize=true
@@ -80,3 +80,7 @@ er.extensions.ERXNSLogLog4jBridge=INFO
 log4j.logger.er.extensions.ERXDatabaseContextDelegate=WARN
 log4j.logger.er.extensions.ERXConfigurationManager=INFO
 #log4j.logger.er.extensions.ERXApplication.RequestHandling=DEBUG
+
+#ERXNavigation
+er.extensions.ERXNavigationManager.localizeDisplayKeys=true
+er.extensions.ERXNavigationManager.includeLabelSpanTag=true

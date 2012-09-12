@@ -4,66 +4,58 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 
+import er.extensions.appserver.navigation.ERXNavigationManager;
+import er.extensions.appserver.navigation.ERXNavigationState;
+
 public class MenuHeader extends WOComponent {
-    public String entityNameInList;
-    private String _manipulatedEntityName;
+	private static final long serialVersionUID = 1L;
 
     public MenuHeader(WOContext aContext) {
         super(aContext);
     }
 
-    public String manipulatedEntityName() {
-        if (_manipulatedEntityName == null) {
-            WOComponent currentPage = context().page();
-            _manipulatedEntityName = D2W.factory().entityNameFromPage(currentPage);
-        }
-        return _manipulatedEntityName;
-    }
+	// ERXModernNavigationMenu Support
 
-    public void setManipulatedEntityName(String newValue) {
-        _manipulatedEntityName = newValue;
-    }
+	public NSKeyValueCoding navigationContext()
+	{
 
-    public NSArray visibleEntityNames() {
-        return D2W.factory().visibleEntityNames(session());
-    }
+		NSKeyValueCoding context = (NSKeyValueCoding) session().objectForKey("navigationContext");
 
-    public WOComponent findEntityAction() {
-        QueryPageInterface newQueryPage = D2W.factory().queryPageForEntityNamed(_manipulatedEntityName, session());
-        return (WOComponent) newQueryPage;
-    }
+		if (context().page() instanceof D2WPage)
+		{
+			context = ((D2WPage) context().page()).d2wContext();
+		}
 
-    public WOComponent newObjectAction() {
-        WOComponent nextPage = null;
-        try {
-            EditPageInterface epi = D2W.factory().editPageForNewObjectWithEntityNamed(_manipulatedEntityName, session());
-            epi.setNextPage(context().page());
-            nextPage = (WOComponent) epi;
-        } catch (IllegalArgumentException e) {
-            ErrorPageInterface epf = D2W.factory().errorPage(session());
-            epf.setMessage(e.toString());
-            epf.setNextPage(context().page());
-            nextPage = (WOComponent) epf;
-        }
-        return nextPage;
-    }
+		// log.debug(ERXNavigationManager.manager().navigationStateForSession(session()));
+		if (context == null)
+		{
+			context = new NSMutableDictionary<Object, String>();
+			session().setObjectForKey(context, "navigationContext");
+		}
+		@SuppressWarnings("unused")
+		ERXNavigationState state = ERXNavigationManager.manager().navigationStateForSession(session());
+		// log.debug("NavigationState:" + state + "," + state.state() + "," +
+		// state.stateAsString());
+		// log.info("navigationContext:" +
+		// session().objectForKey("navigationContext"));
+		return context;
+	}
 
-    public WOComponent logout() {
-        WOComponent redirectPage = pageWithName("WORedirect");
-        ((WORedirect) redirectPage).setUrl(D2W.factory().homeHrefInContext(context()));
-        session().terminate();
-        return redirectPage;
-    }
 
-    public WOComponent homeAction() {
-        return D2W.factory().defaultPage(session());
-    }
+	// Actions
 
-    public WOComponent showWebAssistant() {
-        return D2W.factory().webAssistantInContext(context());
-    }
+	public WOComponent logout()
+	{
+		WOComponent redirectPage = pageWithName("WORedirect");
+		((WORedirect) redirectPage).setUrl(D2W.factory().homeHrefInContext(context()));
+		session().terminate();
+		return redirectPage;
+	}
 
-    public boolean isWebAssistantEnabled () {
-        return D2W.factory().isWebAssistantEnabled();
-    }
+
+	public WOComponent homeAction()
+	{
+		return D2W.factory().defaultPage(session());
+	}
+
 }

@@ -28,6 +28,32 @@ public abstract class _Partial_AuthenticatedPerson extends er.extensions.partial
   public static final String USERNAME_KEY = USERNAME.key();
   // Relationships
 
+	public static NSArray<String> _partialAttributes = null;
+	public static NSArray<String> _partialRelationships = null;
+	
+	public static NSArray<String> partialAttributes() {
+		if ( _partialAttributes == null ) {
+			synchronized(ENTITY_NAME) {
+				NSMutableArray<String> partialList = new NSMutableArray<String>();
+				partialList.addObject( LAST_LOGIN_DATE_KEY );
+				partialList.addObject( PASSWORD_KEY );
+				partialList.addObject( USERNAME_KEY );
+				_partialAttributes = partialList.immutableClone();
+			}
+		}
+		return _partialAttributes;
+	}
+
+	public static NSArray<String> partialRelationships() {
+		if ( _partialRelationships == null ) {
+			synchronized(ENTITY_NAME) {
+				NSMutableArray<String> partialList = new NSMutableArray<String>();
+				_partialRelationships = partialList.immutableClone();
+			}
+		}
+		return _partialRelationships;
+	}
+
   private static Logger LOG = Logger.getLogger(_Partial_AuthenticatedPerson.class);
 
   public NSTimestamp lastLoginDate() {
@@ -64,12 +90,8 @@ public abstract class _Partial_AuthenticatedPerson extends er.extensions.partial
   }
 
 
-  public Partial_AuthenticatedPerson initPartial_AuthenticatedPerson(EOEditingContext editingContext, String password
-, String username
-) {
+  public Partial_AuthenticatedPerson initPartial_AuthenticatedPerson(EOEditingContext editingContext) {
     Partial_AuthenticatedPerson eo = (Partial_AuthenticatedPerson)this;    
-		eo.setPassword(password);
-		eo.setUsername(username);
     return eo;
   }
 }

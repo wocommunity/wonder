@@ -2,6 +2,7 @@ package er.example.erxpartials;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WORequest;
+import com.webobjects.directtoweb.D2W;
 
 import er.directtoweb.ERD2WDirectAction;
 import er.example.erxpartials.components.Main;
@@ -27,4 +28,14 @@ public class DirectAction extends ERD2WDirectAction {
     public WOActionResults defaultAction() {
         return pageWithName(Main.class.getName());
     }
+
+	public WOActionResults loginAction()
+	{
+		String username = request().stringFormValueForKey("username");
+		String password = request().stringFormValueForKey("password");
+
+		// ENHANCEME - add appropriate login behaviour here
+
+		return D2W.factory().defaultPage(session());
+	}
 }

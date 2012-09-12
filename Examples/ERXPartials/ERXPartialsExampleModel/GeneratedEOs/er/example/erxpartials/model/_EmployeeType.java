@@ -26,6 +26,7 @@ public abstract class _EmployeeType extends  ERXGenericRecord {
   // Relationships
   public static final String PARTIAL__EMPLOYEE_PERSONS_KEY = PARTIAL__EMPLOYEE_PERSONS.key();
 
+
   private static Logger LOG = Logger.getLogger(_EmployeeType.class);
 
   public EmployeeType localInstanceIn(EOEditingContext editingContext) {

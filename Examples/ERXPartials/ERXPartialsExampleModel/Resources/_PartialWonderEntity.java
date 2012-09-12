@@ -40,6 +40,37 @@ public abstract class ${entity.prefixClassNameWithoutPackage} extends #if ($enti
   public static final String ${relationship.uppercaseUnderscoreName}_KEY = ${relationship.uppercaseUnderscoreName}.key();
 #end
 
+#if ($entity.partialEntitySet)
+	public static NSArray<String> _partialAttributes = null;
+	public static NSArray<String> _partialRelationships = null;
+	
+	public static NSArray<String> partialAttributes() {
+		if ( _partialAttributes == null ) {
+			synchronized(ENTITY_NAME) {
+				NSMutableArray<String> partialList = new NSMutableArray<String>();
+#foreach ($attribute in $entity.sortedClassAttributes)
+				partialList.addObject( ${attribute.uppercaseUnderscoreName}_KEY );
+#end
+				_partialAttributes = partialList.immutableClone();
+			}
+		}
+		return _partialAttributes;
+	}
+
+	public static NSArray<String> partialRelationships() {
+		if ( _partialRelationships == null ) {
+			synchronized(ENTITY_NAME) {
+				NSMutableArray<String> partialList = new NSMutableArray<String>();
+#foreach ($relationship in $entity.sortedClassRelationships)
+				partialList.addObject( ${relationship.uppercaseUnderscoreName}_KEY );
+#end
+				_partialRelationships = partialList.immutableClone();
+			}
+		}
+		return _partialRelationships;
+	}
+#end
+
   private static Logger LOG = Logger.getLogger(${entity.prefixClassNameWithoutPackage}.class);
 
 #if (!$entity.partialEntitySet)

@@ -36,6 +36,7 @@ public abstract class _Company extends  ERXGenericRecord {
   // Relationships
   public static final String DEPARTMENTS_KEY = DEPARTMENTS.key();
 
+
   private static Logger LOG = Logger.getLogger(_Company.class);
 
   public Company localInstanceIn(EOEditingContext editingContext) {

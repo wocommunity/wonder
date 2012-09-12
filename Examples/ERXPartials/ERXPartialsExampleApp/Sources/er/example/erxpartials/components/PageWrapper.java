@@ -6,7 +6,9 @@ import com.webobjects.directtoweb.D2WContext;
 
 public class PageWrapper extends WOComponent {
 
-    public PageWrapper(WOContext aContext) {
+	private static final long serialVersionUID = 1L;
+
+	public PageWrapper(WOContext aContext) {
         super(aContext);
     }
     public D2WContext d2wContext() {
@@ -16,4 +18,15 @@ public class PageWrapper extends WOComponent {
 		}
     	return null;
     }
+    
+	public String bodyClass()
+	{
+		String result = null;
+		String pageConfig = (String) d2wContext().valueForKey("pageConfiguration");
+		if (pageConfig != null && pageConfig.length() > 0)
+		{
+			result = pageConfig + "Body";
+		}
+		return result;
+	}
 }

@@ -3,6 +3,7 @@ package er.example.erxpartials;
 import com.webobjects.foundation.NSLog;
 
 import er.extensions.appserver.ERXApplication;
+import er.extensions.appserver.navigation.ERXNavigationManager;
 
 public class Application extends ERXApplication {
     public static void main(String argv[]) {
@@ -13,4 +14,14 @@ public class Application extends ERXApplication {
         NSLog.out.appendln("Welcome to " + this.name() + " !");
         /* ** put your initialization code in here ** */
     }
+    
+	@Override
+	public void finishInitialization()
+	{
+		super.finishInitialization();
+
+		// Setup main navigation
+		ERXNavigationManager.manager().configureNavigation();
+
+	}
 }

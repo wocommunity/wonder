@@ -22,7 +22,6 @@
             name = "Partial_EmployeePerson"; 
         }
     ); 
-    internalInfo = {"_deletedEntityNamesInObjectStore" = ("Partial_AuthenticatedPerson"); }; 
     userInfo = {
         "_EntityModeler" = {
             activeDatabaseConfigName = Default; 

@@ -1,22 +1,33 @@
-Body: WOComponentContent {
-	_unroll = YES;
+MainContent : WOComponentContent {
+    _unroll = YES;
 }
 
-BodyContainer: WOBody {
-	filename = "Background.gif";
-	framework = "JavaDirectToWeb";
+BodyTag : WOBody {
+    class = bodyClass;
 }
 
-Head: D2WHead {
+HeadTag : ERD2WHead {
 }
 
-Header: MenuHeader {
+EntitiesMenu : MenuHeader {
 }
 
 ERD2WDebugFlags : ERD2WDebugFlags {
-	context = d2wContext;
+    context = d2wContext;
 }
 
-IsDebug :WOConditional {
-	condition = application.isDevelopmentMode;
+IsDebug : WOConditional {
+    condition = application.isDevelopmentMode;
+}
+
+StyleSheets : ERMD2WCSSReference {
+    localContext = d2wContext;
+}
+
+ERMD2WStyleSheetInjector : ERMD2WStyleSheetInjector {
+  localContext = d2wContext;
+}
+
+WOLToolBar : WOLToolBar {
+  expanded = true;
 }

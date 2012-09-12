@@ -63,9 +63,9 @@ public class ERXPartialExample0 extends ERXMigrationDatabase.Migration implement
 
 		ERXMigrationTable partial_EmployeePersonTable = database.existingTableNamed("Person");
 		partial_EmployeePersonTable.newIntegerColumn("departmentID", true);
-		partial_EmployeePersonTable.newStringColumn("employeeNumber", 255, false, "999-999-999");
+		partial_EmployeePersonTable.newStringColumn("employeeNumber", 255, true);
 		partial_EmployeePersonTable.newIntegerColumn("employeeTypeID", true);
-		partial_EmployeePersonTable.newBigDecimalColumn("salary", 38, 2, false, BigDecimal.ZERO);
+		partial_EmployeePersonTable.newBigDecimalColumn("salary", 38, 2, true);
 
 		partial_EmployeePersonTable.addForeignKey("departmentID", "Department", "id");
 		partial_EmployeePersonTable.addForeignKey("employeeTypeID", "EmployeeType", "id");

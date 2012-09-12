@@ -1,13 +1,4 @@
 {
-    rules = (
-        {
-            class = com.webobjects.directtoweb.Rule;
-            author = 100;
-            rhs = {
-                class = com.webobjects.directtoweb.Assignment;
-                keyPath = look;
-                value = "NeutralLook";
-            };
-        }
-    );
+  "rules" = (
+  ); 
 }

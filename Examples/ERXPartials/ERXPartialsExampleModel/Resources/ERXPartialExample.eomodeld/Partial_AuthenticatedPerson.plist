@@ -5,10 +5,20 @@
             allowsNull = Y; 
             columnName = lastLoginDate; 
             name = lastLoginDate; 
-            prototypeName = date; 
+            prototypeName = dateTime; 
         }, 
-        {columnName = password; name = password; prototypeName = varchar255; }, 
-        {columnName = username; name = username; prototypeName = varchar255; }
+        {
+            allowsNull = Y; 
+            columnName = password; 
+            name = password; 
+            prototypeName = varchar255; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = username; 
+            name = username; 
+            prototypeName = varchar255; 
+        }
     ); 
     attributesUsedForLocking = (id, password, username); 
     className = "er.example.erxpartials.model.Partial_AuthenticatedPerson"; 

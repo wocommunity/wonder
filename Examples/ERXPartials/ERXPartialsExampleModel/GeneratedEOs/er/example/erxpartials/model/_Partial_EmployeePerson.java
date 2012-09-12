@@ -30,6 +30,33 @@ public abstract class _Partial_EmployeePerson extends er.extensions.partials.ERX
   public static final String DEPARTMENT_KEY = DEPARTMENT.key();
   public static final String EMPLOYEE_TYPE_KEY = EMPLOYEE_TYPE.key();
 
+	public static NSArray<String> _partialAttributes = null;
+	public static NSArray<String> _partialRelationships = null;
+	
+	public static NSArray<String> partialAttributes() {
+		if ( _partialAttributes == null ) {
+			synchronized(ENTITY_NAME) {
+				NSMutableArray<String> partialList = new NSMutableArray<String>();
+				partialList.addObject( EMPLOYEE_NUMBER_KEY );
+				partialList.addObject( SALARY_KEY );
+				_partialAttributes = partialList.immutableClone();
+			}
+		}
+		return _partialAttributes;
+	}
+
+	public static NSArray<String> partialRelationships() {
+		if ( _partialRelationships == null ) {
+			synchronized(ENTITY_NAME) {
+				NSMutableArray<String> partialList = new NSMutableArray<String>();
+				partialList.addObject( DEPARTMENT_KEY );
+				partialList.addObject( EMPLOYEE_TYPE_KEY );
+				_partialRelationships = partialList.immutableClone();
+			}
+		}
+		return _partialRelationships;
+	}
+
   private static Logger LOG = Logger.getLogger(_Partial_EmployeePerson.class);
 
   public String employeeNumber() {
@@ -105,14 +132,8 @@ public abstract class _Partial_EmployeePerson extends er.extensions.partials.ERX
   }
   
 
-  public Partial_EmployeePerson initPartial_EmployeePerson(EOEditingContext editingContext, String employeeNumber
-, java.math.BigDecimal salary
-, er.example.erxpartials.model.Department department, er.example.erxpartials.model.EmployeeType employeeType) {
+  public Partial_EmployeePerson initPartial_EmployeePerson(EOEditingContext editingContext) {
     Partial_EmployeePerson eo = (Partial_EmployeePerson)this;    
-		eo.setEmployeeNumber(employeeNumber);
-		eo.setSalary(salary);
-    eo.setDepartmentRelationship(department);
-    eo.setEmployeeTypeRelationship(employeeType);
     return eo;
   }
 }
