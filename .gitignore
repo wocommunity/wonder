@@ -10,3 +10,7 @@ ant.*
 *.la
 *.so
 Utilities/Adaptors/Apache2.2/.libs
+
+/Examples/ERXPartials/ERXPartialBaseModel/build
+/Examples/ERXPartials/ERXPartialsExampleApp/build
+/Examples/ERXPartials/ERXPartialsExampleModel/build
