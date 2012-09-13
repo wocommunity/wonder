@@ -1,0 +1,108 @@
+{
+  "rules" = (
+    {
+      "author" = "40"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.BooleanAssignment"; 
+        "keyPath" = "isEntityEditable"; 
+        "value" = "true"; 
+      }; 
+    }, 
+    {
+      "author" = "40"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.BooleanAssignment"; 
+        "keyPath" = "isEntityDeletable"; 
+        "value" = "true"; 
+      }; 
+    }, 
+    {
+      "author" = "50"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "look"; 
+        "value" = "ERModernLook"; 
+      }; 
+    }, 
+    {
+      "author" = "100"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "lhs" = {
+        "class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; 
+        "key" = "pageConfiguration"; 
+        "selectorName" = "isEqualTo"; 
+        "value" = "ListPerson"; 
+      }; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "displayPropertyKeys"; 
+        "value" = (
+          "firstName", 
+          "lastName", 
+          "username", 
+          "password", 
+          "employeeType.name", 
+          "salary", 
+          "department.name"
+        ); 
+      }; 
+    }, 
+    {
+      "author" = "155"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "documentation" = "Added for playlist galleries"; 
+      "lhs" = {
+        "class" = "com.webobjects.eocontrol.EOAndQualifier"; 
+        "qualifiers" = (
+          {
+            "class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; 
+            "key" = "pageConfiguration"; 
+            "selectorName" = "isEqualTo"; 
+            "value" = "ListPerson"; 
+          }, 
+          {
+            "class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; 
+            "key" = "propertyKey"; 
+            "selectorName" = "isEqualTo"; 
+            "value" = "department.name"; 
+          }
+        ); 
+      }; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "displayNameForProperty"; 
+        "value" = "Department"; 
+      }; 
+    }, 
+    {
+      "author" = "155"; 
+      "class" = "com.webobjects.directtoweb.Rule"; 
+      "documentation" = "Added for playlist galleries"; 
+      "lhs" = {
+        "class" = "com.webobjects.eocontrol.EOAndQualifier"; 
+        "qualifiers" = (
+          {
+            "class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; 
+            "key" = "pageConfiguration"; 
+            "selectorName" = "isEqualTo"; 
+            "value" = "ListPerson"; 
+          }, 
+          {
+            "class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; 
+            "key" = "propertyKey"; 
+            "selectorName" = "isEqualTo"; 
+            "value" = "employeeType.name"; 
+          }
+        ); 
+      }; 
+      "rhs" = {
+        "class" = "com.webobjects.directtoweb.Assignment"; 
+        "keyPath" = "displayNameForProperty"; 
+        "value" = "Employee Type"; 
+      }; 
+    }
+  ); 
+}
