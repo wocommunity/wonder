@@ -1,0 +1,47 @@
+{
+    attributes = (
+        {
+            allowsNull = Y; 
+            columnName = address1; 
+            name = address1; 
+            prototypeName = varchar255; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = address2; 
+            name = address2; 
+            prototypeName = varchar255; 
+        }, 
+        {allowsNull = Y; columnName = city; name = city; prototypeName = varchar255; }, 
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {columnName = name; name = name; prototypeName = varchar255; }, 
+        {
+            allowsNull = Y; 
+            columnName = state; 
+            name = state; 
+            prototypeName = varchar255; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = zipcode; 
+            name = zipcode; 
+            prototypeName = varchar255; 
+        }
+    ); 
+    attributesUsedForLocking = (address1, address2, city, id, name, state, zipcode); 
+    className = "er.example.erxpartials.model.Company"; 
+    classProperties = (address1, address2, city, departments, name, state, zipcode); 
+    externalName = Company; 
+    fetchSpecificationDictionary = {}; 
+    name = Company; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = Department; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = companyID; sourceAttribute = id; }); 
+            name = departments; 
+        }
+    ); 
+}
