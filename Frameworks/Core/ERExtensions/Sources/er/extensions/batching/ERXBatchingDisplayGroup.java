@@ -34,7 +34,7 @@ import er.extensions.qualifiers.ERXAndQualifier;
  * 
  * @author dt first version
  * @author ak gross hacks, made functional and usable.
- * @param <T> 
+ * @param <T> data type of the displaygroup's objects
  */
 public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	/**
