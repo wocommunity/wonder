@@ -266,6 +266,9 @@ public abstract class ERMailDelivery {
 	 * <span class="ja">
 	 * メール・アドレスと名前を InternetAddress としてインスタンス化と戻します
 	 * </span>
+	 * 
+	 * @return address object
+	 * @throws AddressException if parsing of email failed
 	 */
 	protected InternetAddress internetAddressWithEmailAndPersonal(String email, String personal) throws AddressException {
 		InternetAddress address = null;
@@ -457,6 +460,8 @@ public abstract class ERMailDelivery {
 	 * <span class="ja">
 	 * カレント・メッセージ・インスタンスの題名をセットします
 	 * </span>
+	 * @param subject subject string
+	 * @throws MessagingException if the charset conversion of the subject fails
 	 */
 	public void setSubject(String subject) throws MessagingException {
 		this.mimeMessage().setSubject(ERMailUtils.encodeString(subject, this.charset()));

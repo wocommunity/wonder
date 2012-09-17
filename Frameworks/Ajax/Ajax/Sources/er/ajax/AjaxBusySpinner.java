@@ -49,12 +49,9 @@ public class AjaxBusySpinner extends AjaxComponent {
 		super(context);
 	}
 
+	@Override
 	public boolean isStateless() {
 		return true;
-	}
-
-	public boolean synchronizesVariablesWithBindings() {
-		return false;
 	}
 
 	protected void addRequiredWebResources(WOResponse res) {
@@ -109,5 +106,4 @@ public class AjaxBusySpinner extends AjaxComponent {
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		return null;
 	}
-
 }

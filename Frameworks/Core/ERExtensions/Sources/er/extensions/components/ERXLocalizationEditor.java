@@ -186,10 +186,8 @@ public class ERXLocalizationEditor extends WOComponent {
      		NSDictionary newDict = (NSDictionary) NSPropertyListSerialization.propertyListFromString(result);
      		if(!newDict.equals(dict)) {
      			throw new IllegalStateException("Data wasn't equal when comparing before save");
-     		} else {
-     			if(url != null) {
-     				ERXFileUtilities.stringToFile(result, new File(url.getFile()));
-     			}
+     		} else if(url != null) {
+     			ERXFileUtilities.stringToFile(result, new File(url.getFile()), "UTF-16BE");
      		}
     	}
     }
