@@ -8,6 +8,8 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.appserver.ERXBrowser;
+import er.extensions.appserver.ERXRequest;
 import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.foundation.ERXUtilities;
 import er.extensions.foundation.ERXValueUtilities;
@@ -530,6 +532,25 @@ public abstract class ERXComponent extends WOComponent {
 	public ERXLocalizer localizer() {
 		return ERXLocalizer.currentLocalizer();
 	}
+
+  /** 
+   * <span class="en">
+   * Convenience method to get the browser.
+   * 
+   * @return the current browser 
+   * </span>
+   * 
+   * <span class="ja">
+   * browser オブジェクトを戻します。基本的には session にも directaction にも browser オブジェクトへのアクセスがありますが、
+   * session 又は directaction 内にあるかどうか分からない時にはこのコマンドが便利です。
+   * 
+   * @return browser オブジェクト
+   * </span>
+   */
+  public ERXBrowser browser() {
+    ERXRequest request = (ERXRequest) context().request();
+    return request.browser();
+  }
 
 	/**
 	 * <span class="en">
