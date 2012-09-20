@@ -653,7 +653,7 @@ er.extensions.ERXWOForm.multipleSubmitDefault=true
 #########################################################################
 # ERXLocalizationEditor 
 #########################################################################
-er.extensions.components.ERXLocalizationEditor=UTF-16BE
+er.extensions.ERXLocalizationEditor.endoding=UTF-16BE
 
 #########################################################################
 # SSL DirectConnect
