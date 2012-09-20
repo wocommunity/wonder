@@ -2,6 +2,10 @@
 
 ## Notes about ERXPartials
 
+### Sponsored By
+
+Work on this package was partly funded by [Logic Squad][logicsquad].
+
 ### Design Overview
 
 1. `ERXPartialBaseModel` contains a very basic model containing the Root entity for the partials named **Person**.
@@ -51,10 +55,11 @@ Patches for this are included in the `ERXPartial`, `ERXPartialGenericObject` cla
 
 ## Getting Started
 
-1. create the database
+1. creating the database.  I have added a small Frontbase script and ant target to create the empty database and set the ownership permissions
+
 	- Change into the ERXPartialBaseModel directory
 
-	> _GVCDev:ERXPartialBaseModel daspinall$ ant fb.recreate_
+	_GVCDev:ERXPartialBaseModel daspinall$ **ant fb.recreate**_
 	>
 	> Buildfile: /Volumes/Data/Development/GitHub/ERXPartials/wonder/Tests/ERXPartials/ERXPartialBaseModel/build.xml
 	> 
@@ -81,8 +86,8 @@ Patches for this are included in the `ERXPartial`, `ERXPartialGenericObject` cla
 	> BUILD SUCCESSFUL
 	>
 	> Total time: 1 second
-	>
-	> GVCDev:ERXPartialBaseModel daspinall$
+	
+	_GVCDev:ERXPartialBaseModel daspinall$_
 
 2. compile and run. The main page is a login page, but there is no login logic, just click the button :)
 
@@ -94,3 +99,4 @@ Senior IT Consultant
 
 
 [gvc]: http://www.global-village.net
+[logicsquad]: http://logicsquad.net/
