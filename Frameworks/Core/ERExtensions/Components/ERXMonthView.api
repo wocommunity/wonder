@@ -8,7 +8,7 @@
 		<binding name="grouper"/>
 		<binding name="action"/>
 
-		<validation message="&apos;grouper&apos; is a required binding">
+		<validation message="'grouper' is a required binding">
 			<unbound name="grouper"/>
 		</validation>
 	</wo>

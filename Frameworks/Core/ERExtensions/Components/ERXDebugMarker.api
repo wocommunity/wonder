@@ -5,7 +5,7 @@
 		<binding name="object"/>
 		<binding name="debugPageProvider"/>
 
-		<validation message="&apos;object&apos; is a required binding">
+		<validation message="'object' is a required binding">
 			<unbound name="object"/>
 		</validation>
 	</wo>

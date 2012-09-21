@@ -1,19 +1,7 @@
 {
     attributes = (
-        {
-            columnName = info; 
-            externalType = varchar; 
-            name = info; 
-            valueClassName = NSString; 
-            width = 64; 
-        }, 
-        {
-            columnName = pk; 
-            externalType = INT; 
-            name = pk; 
-            valueClassName = NSNumber; 
-            valueType = i; 
-        }
+        {columnName = info; name = info; prototypeName = varchar50; width = 64; }, 
+        {allowsNull = N; columnName = pk; name = pk; prototypeName = id; }
     ); 
     attributesUsedForLocking = (info, pk); 
     className = "com.webobjects.eocontrol.EOGenericRecord"; 

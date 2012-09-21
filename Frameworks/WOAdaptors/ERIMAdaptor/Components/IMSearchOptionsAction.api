@@ -9,32 +9,32 @@
 		<binding name = "quicksilver"/>
 		<binding name = "action"/>
 		
-    <validation message = "&apos;action&apos; is a required binding">
+    <validation message = "'action' is a required binding">
       <unbound name = "action"/>
     </validation>
 		
-    <validation message = "Either &apos;value&apos; or &apos;values&apos; must be bound">
+    <validation message = "Either 'value' or 'values' must be bound">
     	<and>
 	      <unbound name = "value"/>
   	    <unbound name = "values"/>
   	  </and>
     </validation>
 		
-    <validation message = "One of &apos;optionsDictionary&apos; or &apos;optionsArray&apos; must be bound">
+    <validation message = "One of 'optionsDictionary' or 'optionsArray' must be bound">
     	<and>
 		    <unbound name = "optionsArray"/>
 		    <unbound name = "optionsDictionary"/>
 		  </and>
     </validation>
 		
-    <validation message = "Both &apos;optionsDictionary&apos; and &apos;optionsArray&apos; cannot be bound at the same time">
+    <validation message = "Both 'optionsDictionary' and 'optionsArray' cannot be bound at the same time">
     	<and>
 		    <bound name = "optionsArray"/>
 		    <bound name = "optionsDictionary"/>
 	    </and>
     </validation>
 		
-    <validation message = "You can't specify both &apos;optionsDictionary&apos; and &apos;optionKeyPath&apos;">
+    <validation message = "You can't specify both 'optionsDictionary' and 'optionKeyPath'">
     	<and>
 	      <bound name = "optionsDictionary"/>
 	      <bound name = "optionKeyPath"/>

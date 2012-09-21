@@ -2,9 +2,8 @@
     attributes = (
         {
             columnName = message; 
-            externalType = varchar; 
             name = message; 
-            valueClassName = NSString; 
+            prototypeName = varchar50; 
             width = 511; 
         }, 
         {allowsNull = N; columnName = pk; name = pk; prototypeName = id; }, 

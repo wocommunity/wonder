@@ -202,7 +202,9 @@ public class ERXPartialGenericRecord extends ERXGenericRecord {
 	public Object validateTakeValueForKeyPath(Object value, String keyPath) throws ValidationException {
 		Object result = super.validateTakeValueForKeyPath(value, keyPath);
 		for (ERXPartial partial : _partials()) {
-			result = partial.validateTakeValueForKeyPath(value, keyPath);
+			if ( partial.isPartialKeypath(keyPath) == true ) {
+				result = partial.validateTakeValueForKeyPath(value, keyPath);
+			}
 		}
 		return result;
 	}

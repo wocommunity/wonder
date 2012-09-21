@@ -291,7 +291,9 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
     public abstract Logger getClassLog();
 
     /**
-     * self is usefull for directtoweb purposes
+     * self is useful for D2W purposes
+     * 
+     * @return the EO itself
      */
     public abstract ERXEnterpriseObject self();
 
@@ -405,7 +407,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
      * @param key relationship key
      */
     public abstract void addObjectsToBothSidesOfRelationshipWithKey(
-            NSArray objects, String key);
+            NSArray<? extends EOEnterpriseObject> objects, String key);
 
     /**
      * Removes a collection of objects to a given relationship by calling
@@ -415,7 +417,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
      * @param key relationship key
      */
     public abstract void removeObjectsFromBothSidesOfRelationshipWithKey(
-            NSArray objects, String key);
+            NSArray<? extends EOEnterpriseObject> objects, String key);
 
     /**
      * Removes a collection of objects to a given relationship by calling
@@ -424,7 +426,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
      * @param objects objects to be removed from both sides of the given relationship
      * @param key relationship key
      */
-    public abstract void removeObjectsFromPropertyWithKey(NSArray objects,
+    public abstract void removeObjectsFromPropertyWithKey(NSArray<? extends EOEnterpriseObject> objects,
             String key);
 
     /**
@@ -481,9 +483,11 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
     public abstract Object foreignKeyForRelationshipWithKey(String rel);
 
     /**
-     * Returns the names of all primary key attributes. 
+     * Returns the names of all primary key attributes.
+     * 
+     * @return list of attribute names
      */
-    public abstract NSArray primaryKeyAttributeNames();
+    public abstract NSArray<String> primaryKeyAttributeNames();
 
     /**
      * Determines what the value of the given key is in the committed
@@ -495,21 +499,27 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
 
     /**
      * Returns an EO in the same editing context as the caller.
+     * 
+     * @param eo to local instance
      * @return an EO in the same editing context as the caller.
      */
     public abstract EOEnterpriseObject localInstanceOf(EOEnterpriseObject eo);
 
     /**
      * Returns this EO in the supplied editing context.
+     * 
+     * @param ec editing context to local instance in
      * @return this EO in the supplied editing context.
      */
     public abstract EOEnterpriseObject localInstanceIn(EOEditingContext ec);
 
     /**
      * Returns an array of EOs in the same editing context as the caller.
-     * @return  array of EOs in the same editing context as the caller.
+     * 
+     * @param eos array of EOs to local instance
+     * @return array of EOs in the same editing context as the caller.
      */
-    public abstract NSArray localInstancesOf(NSArray eos);
+    public abstract NSArray<EOEnterpriseObject> localInstancesOf(NSArray<EOEnterpriseObject> eos);
 
     /**
      * Computes the current set of changes that this object has from the
@@ -517,7 +527,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
      * @return a dictionary holding the changed values from the currently
      *         committed snapshot.
      */
-    public abstract NSDictionary changesFromCommittedSnapshot();
+    public abstract NSDictionary<String, Object> changesFromCommittedSnapshot();
 
     /**
      * Simple method that will return if the parent object store of this object's editing
@@ -581,7 +591,6 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
      * a null editing context.
      * @return if the object is a new enterprise object.
      */
-
     public abstract boolean isNewObject();
 
     /**
@@ -592,7 +601,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
      * environments.
      * @throws NSValidation.ValidationException if the object is not consistent
      */
-    // CHECKME: This method was very useful at NS, might not be as useful here.
+    @Deprecated
     public abstract void checkConsistency()
             throws NSValidation.ValidationException;
 
@@ -607,6 +616,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
      * the use of this method.
      * @throws NSValidation.ValidationException if the object fails consistency
      */
+    @Deprecated
     public abstract void batchCheckConsistency()
             throws NSValidation.ValidationException;
 

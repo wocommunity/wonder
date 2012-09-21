@@ -39,7 +39,7 @@ import er.extensions.eof.ERXConstant;
  * (Back port from WO 5 WOExtensions)<br />
  * 
  */
-
+@Deprecated
 public class WOTable extends WOComponent {
 	/**
 	 * Do I need to update serialVersionUID?

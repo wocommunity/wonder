@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><wodefinitions>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?><wodefinitions>
 	<wo class="AjaxSlider.java" wocomponentcontent="false">
 		<binding name="id"/>
 		<binding name="orientation"/>

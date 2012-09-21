@@ -12,7 +12,7 @@
 		<binding name="submitActionName"/>
 		<binding name="wrapLabelWithHTMLTag" defaults="Boolean"/>
 
-		<validation message="&apos;visibility&apos; must be bound to a settable value">
+		<validation message="'visibility' must be bound to a settable value">
 			<unsettable name="visibility"/>
 		</validation>
 	</wo>
