@@ -187,7 +187,7 @@ public class ERXLocalizationEditor extends WOComponent {
      		if(!newDict.equals(dict)) {
      			throw new IllegalStateException("Data wasn't equal when comparing before save");
      		} else if(url != null) {
-     			ERXFileUtilities.stringToFile(result, new File(url.getFile()), "UTF-16BE");
+     			ERXFileUtilities.stringToFile(result, new File(url.getFile()), ERXProperties.stringForKeyWithDefault("er.extensions.ERXLocalizationEditor.endoding", "UTF-16BE"));
      		}
     	}
     }
