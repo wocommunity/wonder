@@ -8,21 +8,17 @@ package er.extensions.components;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.woextensions.WOTable;
 
 import er.extensions.eof.ERXConstant;
 import er.extensions.foundation.ERXValueUtilities;
-import er.extensions.woextensions.WOTable;
 
 /**
  * Enhanced table component that adds the ability to have the
  * table layed out in a vertical orientation and adds the
  * ability to specify an array of header images that appear
- * in the header cells of the table. Corrects a bug intorduced
- * in WO 5.1 where OutOfBounds exceptions are thrown. Note that
- * this component subclasses WOTable from this framework, not
- * the WOTable in com.webobjects.woextensions. The reason for
- * this is that all of the instance variables are private in
- * JavaWOExtensions WOTable.<br/>
+ * in the header cells of the table. Corrects a bug introduced
+ * in WO 5.1 where OutOfBounds exceptions are thrown.
  * <br/>
  * Synopsis:<br/>
  * list=<i>anArray</i>;item=<i>aSettableObject</i>;[col=<i>aSettableNumber</i>;][index=<i>aSettableNumber</i>;][row=<i>aSettableNumber</i>;]
@@ -90,6 +86,7 @@ public class ERXTable extends WOTable {
       return header;
     }
 
+    @Override
     public int colCount() {
     	if(_colCount == -1) {
     		if(ERXValueUtilities.booleanValue(valueForBinding("fillColumns"))) {
@@ -102,19 +99,15 @@ public class ERXTable extends WOTable {
     }
     
     /**
-     * Component is stateless.
-     * @return true
-     */
-    // CHECKME: This shouldn't be needed, although for some strange reason it was needed at one point.
-    public boolean isStateless() { return true; }
-
-    /**
      * resets the cached variables
      */
+    @Override
     protected void _resetInternalCaches() {
         super._resetInternalCaches();
+        header = null;
         _goingVertically = null;
-		  _showIndex = null;
+		_showIndex = null;
+		index = 0;
     }
 
     /**
@@ -139,6 +132,7 @@ public class ERXTable extends WOTable {
      * This method pushs the current item up to the
      * parent component.
      */
+    @Override
     public void pushItem() {
         NSArray aList = list();
         //int index;
