@@ -478,7 +478,7 @@ public class ERXMutableURL {
 	 * 
 	 * @param key
 	 *            the key to lookup
-	 * @return the query parmeters for the given key
+	 * @return the query parameters for the given key
 	 */
 	public synchronized List<String> queryParameters(String key) {
 		return _queryParameters.get(key);
@@ -489,7 +489,7 @@ public class ERXMutableURL {
 	 * 
 	 * @param key
 	 *            the key to lookup
-	 * @return the first query parmeter for the given key
+	 * @return the first query parameter for the given key
 	 */
 	public synchronized String queryParameter(String key) {
 		String queryParameter = null;
