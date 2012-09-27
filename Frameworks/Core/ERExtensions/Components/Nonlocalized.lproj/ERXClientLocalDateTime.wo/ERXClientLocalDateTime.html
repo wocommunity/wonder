@@ -1,0 +1,124 @@
+<script type="text/javascript">
+<!-- 
+/*
+
+  Functions below take a time in seconds in GMT/UTC and outputs the local
+  browser time.
+  Supported formats are:
+  - clientLocalDateTime:    Date and time in european style format
+  - clientLocalDateTimeUS:  Date and time in a US style format
+  - clientLocalTime:        Time in 24hr format
+  - clientLocalTimeUS:      Time in US format (12hr am|pm)
+  - clientLocalDate:        Date in european style format
+  - clientLocalDateUS:      Date in US style format
+
+  Klaus Berkling for DynEd Sept 19, 2012 (berkling.us)
+  
+ */
+ 
+/*
+ * Function below returns the time and date in normal format.
+ */
+function clientLocalDateTime(secondsInUTC) {
+	if (secondsInUTC == "")
+		return "";
+	newTimeObj = new Date(secondsInUTC*1000);
+	return newTimeObj.getHours()+":"+newTimeObj.getMinutes()+" "+newTimeObj.getDate()+"."+(newTimeObj.getMonth()+1)+"."+newTimeObj.getFullYear()
+}
+
+/*
+ * Function below returns the time and date in US format.
+ */
+function clientLocalDateTimeUS(secondsInUTC) {
+	if (secondsInUTC == "")
+		return "";
+	newTimeObj = new Date(secondsInUTC*1000);
+	
+	var hour = newTimeObj.getHours();
+	var meridian = "pm";
+	if (hour <= 12) {
+		meridian = "am";
+	} 
+	else if (hour == 0) {
+		hour = 12;
+	} 
+	else {
+		hour = hour - 12;
+	}
+	return (newTimeObj.getMonth()+1)+"/"+newTimeObj.getDate()+"/"+newTimeObj.getFullYear()+" "+hour+":"+newTimeObj.getMinutes()+" "+meridian
+}
+
+/*
+ * Function below returns the local time on 24hr clock.
+ */
+function clientLocalTime(secondsInUTC) {
+	if (secondsInUTC == "")
+		return "";
+	newTimeObj = new Date(secondsInUTC*1000);
+	return newTimeObj.getHours()+":"+newTimeObj.getMinutes()
+}
+
+/*
+ * Function below returns the time in US format.
+ */
+function clientLocalTimeUS(secondsInUTC) {
+	if (secondsInUTC == "")
+		return "";
+	newTimeObj = new Date(secondsInUTC*1000);
+	
+	var hour = newTimeObj.getHours();
+	var meridian = "pm";
+	if (hour <= 12) {
+		meridian = "am";
+	} 
+	else if (hour == 0) {
+		hour = 12;
+	} 
+	else {
+		hour = hour - 12;
+	}
+	return hour+":"+newTimeObj.getMinutes()+" "+meridian
+}
+
+/*
+ * Function below returns the date in normal format.
+ */
+function clientLocalDate(secondsInUTC) {
+	if (secondsInUTC == "")
+		return "";
+	newTimeObj = new Date(secondsInUTC*1000);
+	return newTimeObj.getDate()+"."+(newTimeObj.getMonth()+1)+"."+newTimeObj.getFullYear()
+}
+
+/*
+ * Function below returns the date in US format.
+ */
+function clientLocalDateUS(secondsInUTC) {
+	if (secondsInUTC == "")
+		return "";
+	newTimeObj = new Date(secondsInUTC*1000);
+	
+	var hour = newTimeObj.getHours();
+	var meridian = "pm";
+	if (hour <= 12) {
+		meridian = "am";
+	} 
+	else if (hour == 0) {
+		hour = 12;
+	} 
+	else {
+		hour = hour - 12;
+	}
+	return (newTimeObj.getMonth()+1)+"/"+newTimeObj.getDate()+"/"+newTimeObj.getFullYear()
+}
+
+/*
+ * Function below returns the current local time
+ */
+function currentLocalTime() {
+	newTimeObj = new Date();
+	return newTimeObj.getHours()+":"+newTimeObj.getMinutes()+" "+newTimeObj.getDate()+"."+(newTimeObj.getMonth()+1)+"."+newTimeObj.getFullYear()
+}
+
+-->
+</script> 

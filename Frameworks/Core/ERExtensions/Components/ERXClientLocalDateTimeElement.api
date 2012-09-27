@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ClientLocalDateTimeElement" wocomponentcontent="true">    <binding name="value"/>
+        <validation message="'value' is a required binding.">
+            <unbound name="value"/>
+        </validation>
+        <binding name="id"/>
+        <binding name="style"/>
+        <validation message="'style' is a required binding.">
+            <unbound name="id"/>
+        </validation>
+    <binding name="valueWhenEmpty"/>
+    <binding name="class"/>
+    <binding name="formatFunction"/>
+    </wo>
+</wodefinitions>
