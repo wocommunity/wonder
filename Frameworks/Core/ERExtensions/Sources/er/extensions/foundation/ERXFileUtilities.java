@@ -25,6 +25,7 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.channels.FileChannel;
@@ -351,7 +352,7 @@ public class ERXFileUtilities {
      * @throws IOException if things go wrong
      */
     public static void writeInputStreamToFile(InputStream stream, File file) throws IOException {
-    	FileOutputStream out;
+    	FileOutputStream out = null;
     	try {
 	        if (file == null) throw new IllegalArgumentException("Attempting to write to a null file!");
 	        File parent = file.getParentFile();
@@ -360,22 +361,26 @@ public class ERXFileUtilities {
                         throw new RuntimeException("Cannot create parent directory for file");
 	        }
 	        out = new FileOutputStream(file);
-    	}
-    	catch (IOException e) {
+	        ERXFileUtilities.writeInputStreamToOutputStream(stream, true, out, true);
+    	} finally {
     		stream.close();
-    		throw e;
+    		if (out != null) {
+    			out.close();
+    		}
     	}
-    	catch (RuntimeException e) {
-    		stream.close();
-    		throw e;
-    	}
-        ERXFileUtilities.writeInputStreamToOutputStream(stream, true, out, true);
     }
     
     public static void writeInputStreamToGZippedFile(InputStream stream, File file) throws IOException {
     	if (file == null) throw new IllegalArgumentException("Attempting to write to a null file!");
-     	FileOutputStream out = new FileOutputStream(file);
-     	ERXFileUtilities.writeInputStreamToOutputStream(stream, false, new GZIPOutputStream(out), true);
+    	GZIPOutputStream out = null;
+     	try {
+     		out = new GZIPOutputStream(new FileOutputStream(file));
+     		ERXFileUtilities.writeInputStreamToOutputStream(stream, false, out, true);
+     	} finally {
+     		if (out != null) {
+     			out.close();
+     		}
+     	}
     }
  	
     /**
@@ -697,7 +702,7 @@ public class ERXFileUtilities {
         if(fileName != null) {
             try {
                 url = new URL("file://" + fileName);
-            } catch (java.net.MalformedURLException ex) {
+            } catch(MalformedURLException ex) {
                 throw new NSForwardException(ex);
             }
         }
@@ -1296,12 +1301,18 @@ public class ERXFileUtilities {
                     log.debug("created directory "+d.getAbsolutePath());
                 }
             } else {
-                InputStream is = zipFile.getInputStream(ze);
-                writeInputStreamToFile(is, new File(absolutePath, name));
-                if (log.isDebugEnabled()) {
-                    log.debug("unzipped file "+ze.getName()+" into "+(absolutePath + name));
+                InputStream is = null;
+                try {
+                	is = zipFile.getInputStream(ze);
+	                writeInputStreamToFile(is, new File(absolutePath, name));
+	                if (log.isDebugEnabled()) {
+	                    log.debug("unzipped file "+ze.getName()+" into "+(absolutePath + name));
+	                }
+                } finally {
+                	if (is != null) {
+                		is.close();
+                	}
                 }
-                is.close();
             }
         }
 
@@ -1375,9 +1386,10 @@ public class ERXFileUtilities {
                 }
                 origin.close();
             }
-            zout.close();
         } catch(Exception e) {
             e.printStackTrace();
+        } finally {
+        	zout.close();
         }
         
         if (deleteOriginal) {
