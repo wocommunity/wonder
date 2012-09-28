@@ -917,14 +917,14 @@ public class ERXFileUtilities {
     }
     
     /**
-        * Creates a symlink for a given file. Note this only works on
+     * Creates a symlink for a given file. Note this only works on
      * civilized OSs which support symbolic linking.
      * @param source to create the link to
      * @param destination file to create the link to
      * @param symbolic determines if a symlink should be created
      * @param allowUnlink determines if the symlink is a hardlink which allows unlinking
      * @param followSymbolicLinks If the destination is a symbolic link, follow it
-     * @throws IOException 
+     * @throws IOException if the link could not be created
      */
     public static void linkFiles(File source, File destination,
                                  boolean symbolic,
@@ -1407,7 +1407,7 @@ public class ERXFileUtilities {
      *
      * @param file the file to sum
      * @return the MD5 sum of the bytes in file
-     * @exception IOException
+     * @exception IOException if file could not be read
      */
     public static byte[] md5(File file) throws IOException {
         FileInputStream fis = new FileInputStream(file);
@@ -1424,7 +1424,7 @@ public class ERXFileUtilities {
      *
      * @param in the input stream to sum
      * @return the MD5 sum of the bytes in file
-     * @exception IOException
+     * @exception IOException if the input stream could not be read
      */
     public static byte[] md5(InputStream in) throws IOException {
         try {
@@ -1446,7 +1446,7 @@ public class ERXFileUtilities {
      *
      * @param file the file to sum
      * @return the hex encoded MD5 sum of the bytes in file
-     * @exception IOException
+     * @exception IOException if the file could not be read
      */
     public static String md5Hex(File file) throws IOException {
         return ERXStringUtilities.byteArrayToHexString(md5(file));
@@ -1457,7 +1457,7 @@ public class ERXFileUtilities {
      *
      * @param in the input stream to sum
      * @return the hex encoded MD5 sum of the bytes in file
-     * @exception IOException
+     * @exception IOException if the input stream could not be read
      */
     public static String md5Hex(InputStream in) throws IOException {
         return ERXStringUtilities.byteArrayToHexString(md5(in));
@@ -1591,7 +1591,8 @@ public class ERXFileUtilities {
     }
 
     
-    /** Lists all files in the specified directory, if desired recursively.
+    /**
+     * Lists all files in the specified directory, if desired recursively.
      *  
      * @param baseDir the dir from which to list the child files
      * @param recursive if <code>true</code> this method works recursively
@@ -1617,15 +1618,15 @@ public class ERXFileUtilities {
         return files;
     }
 
-    /** moves a file from one location to another one. This works different
+    /**
+     * Moves a file from one location to another one. This works different
      * than java.io.File.renameTo as renameTo does not work across partitions
      * 
-     * @param source
-     * @param destination
-     * @throws IOException
-     * @throws FileNotFoundException
+     * @param source the file to move
+     * @param destination the destination to move the source to
+     * @throws IOException if things go wrong
      */
-    public static void renameTo(File source, File destination) throws FileNotFoundException, IOException {
+    public static void renameTo(File source, File destination) throws IOException {
         if (!source.renameTo(destination)) {
             ERXFileUtilities.copyFileToFile(source, destination, true, true);
         }
