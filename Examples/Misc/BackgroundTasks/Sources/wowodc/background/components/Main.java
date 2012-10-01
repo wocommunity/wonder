@@ -19,9 +19,9 @@ import er.extensions.appserver.ERXNextPageForResultWOAction;
 import er.extensions.appserver.IERXPerformWOActionForResult;
 import er.extensions.components.ERXComponent;
 import er.extensions.concurrency.ERXExecutorService;
-import er.extensions.concurrency.ERXTaskPercentComplete;
+import er.extensions.concurrency.IERXPercentComplete;
 import er.extensions.concurrency.IERXStoppable;
-import er.extensions.foundation.ERXStatusInterface;
+import er.extensions.foundation.IERXStatus;
 
 public class Main extends ERXComponent {
 	public Main(WOContext context) {
@@ -62,8 +62,7 @@ public class Main extends ERXComponent {
 	/**
 	 * Demo 3
 	 * 
-	 * 
-	 * @return long response page running a task that implements {@link ERXStatusInterface}, {@link ERXTaskPercentComplete} and {@link IERXStoppable} interfaces.
+	 * @return long response page running a task that implements {@link IERXStatus}, {@link IERXPercentComplete} and {@link IERXStoppable} interfaces.
 	 */
 	public WOActionResults dispatchBackgroundTaskWithLongResponsePageFeedback() {
 		Runnable task = new T03BackgroundTaskWithProgressFeedback();

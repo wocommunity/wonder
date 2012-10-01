@@ -14,11 +14,11 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.foundation.NSTimestamp;
 
-import er.extensions.concurrency.ERXTaskPercentComplete;
+import er.extensions.concurrency.IERXPercentComplete;
 import er.extensions.concurrency.IERXStoppable;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOControlUtilities;
-import er.extensions.foundation.ERXStatusInterface;
+import er.extensions.foundation.IERXStatus;
 
 /**
  * A task that <em>returns</em> an EOGlobalID result.
@@ -43,7 +43,7 @@ import er.extensions.foundation.ERXStatusInterface;
  * @author kieran
  *
  */
-public class T04SimpleEOFTask implements Callable<EOGlobalID>, ERXStatusInterface , ERXTaskPercentComplete, IERXStoppable {
+public class T04SimpleEOFTask implements Callable<EOGlobalID>, IERXStatus , IERXPercentComplete, IERXStoppable {
 	
 	private static final Logger log = Logger.getLogger(T04SimpleEOFTask.class);
 	
@@ -133,14 +133,14 @@ public class T04SimpleEOFTask implements Callable<EOGlobalID>, ERXStatusInterfac
 	}
 	
 	/* (non-Javadoc)
-	 * @see er.extensions.concurrency.ERXTaskPercentComplete#percentComplete()
+	 * @see er.extensions.concurrency.IERXPercentComplete#percentComplete()
 	 */
 	public Double percentComplete() {
 		return _percentComplete;
 	}
 
 	/* (non-Javadoc)
-	 * @see er.extensions.foundation.ERXStatusInterface#status()
+	 * @see er.extensions.foundation.IERXStatus#status()
 	 */
 	public String status() {
 		return _status;
