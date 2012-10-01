@@ -66,8 +66,8 @@ WOShouldUseSpawn=true
 #WOTaskd.receiveTimeout=5000
 
 
-
-
+# The TCP port on which the built-in SSH/SCP server will run on
+er.wotaskd.sshPort = 6022
 
 
 
