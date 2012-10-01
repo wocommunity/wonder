@@ -19,7 +19,6 @@ import er.extensions.foundation.IERXStatus;
  * A demo task that runs two other tasks in sequence and uses the result of the first as the argument for the second.
  * 
  * @author kieran
- *
  */
 public class T07EOFTaskWithSubTasks extends ERXAbstractTask implements Callable<EOGlobalID>, IERXStatus,
 		IERXPercentComplete, IERXStoppable {
@@ -90,7 +89,6 @@ public class T07EOFTaskWithSubTasks extends ERXAbstractTask implements Callable<
 		if (_task2 != null) {
 			_task2.stop();
 		}
-
 	}
 
 	public Double percentComplete() {
@@ -121,5 +119,4 @@ public class T07EOFTaskWithSubTasks extends ERXAbstractTask implements Callable<
 		// Default
 		return _status;
 	}
-
 }

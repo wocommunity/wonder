@@ -18,7 +18,6 @@ import er.extensions.foundation.IERXStatus;
  * This stateless component is regenerated on each refresh with fresh statistics.
  *
  * @author kieran
- *
  */
 public class TaskThreadMonitor extends WOComponent {
 	
@@ -133,6 +132,4 @@ public class TaskThreadMonitor extends WOComponent {
 
 		return iERXStop;
 	}
-
-
 }

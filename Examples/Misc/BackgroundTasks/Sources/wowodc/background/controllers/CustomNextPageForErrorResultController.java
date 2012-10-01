@@ -14,11 +14,8 @@ import er.extensions.appserver.IERXPerformWOActionForResult;
  *  A simple class that demonstrates how to implement custom handling of errors thrown by tasks running in {@link CCAjaxLongResponsePage}
  *  
  * @author kieran
- *
  */
 public class CustomNextPageForErrorResultController implements IERXPerformWOActionForResult {
-	
-	@SuppressWarnings("unused")
 	private static final Logger log = Logger.getLogger(CustomNextPageForErrorResultController.class);
 	
 	private Exception _result = null;
@@ -48,7 +45,5 @@ public class CustomNextPageForErrorResultController implements IERXPerformWOActi
 		} else {
 			throw new IllegalArgumentException("We expected an Exception argument, but instead we got " + result + "!"); 
 		}
-		
 	}
-
 }

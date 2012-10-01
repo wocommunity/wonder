@@ -31,7 +31,6 @@ import er.extensions.foundation.IERXStatus;
  * http://en.wikipedia.org/wiki/Factorial_prime
  * 
  * @author kieran
- *
  */
 public class T06EOFFactorialUpdateTask extends ERXAbstractTask implements Callable<EOGlobalID>, IERXStatus , IERXPercentComplete, IERXStoppable {
 	
@@ -187,8 +186,6 @@ public class T06EOFFactorialUpdateTask extends ERXAbstractTask implements Callab
 				resultItem.setIsFactorialPrime(Boolean.TRUE);
 			}
 		}
-		
-		
 	}
 	
 	/* (non-Javadoc)
@@ -212,7 +209,4 @@ public class T06EOFFactorialUpdateTask extends ERXAbstractTask implements Callab
 		log.info("The task was stopped by the user.");
 		_isStopped = true;
 	}
-	
-	
-	
 }

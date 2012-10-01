@@ -80,8 +80,6 @@ public class Main extends ERXComponent {
 	/**
 	 * Demo 4
 	 * 
-	 * 
-	 * 
 	 * @return result {@link TaskInfoPage} displaying result of task {@link T04SimpleEOFTask}
 	 */
 	public WOActionResults dispatchSimpleEOFTask() {
@@ -197,8 +195,4 @@ public class Main extends ERXComponent {
 		
 		return nextPage;
 	}
-
-
-
-
 }

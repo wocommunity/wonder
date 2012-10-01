@@ -39,9 +39,7 @@ import er.extensions.foundation.IERXStatus;
  * 
  * Every number checked is stored as a {@link ResultItem} that is related to the {@link TaskInfo}
  * 
- * 
  * @author kieran
- *
  */
 public class T04SimpleEOFTask implements Callable<EOGlobalID>, IERXStatus , IERXPercentComplete, IERXStoppable {
 	
@@ -64,7 +62,6 @@ public class T04SimpleEOFTask implements Callable<EOGlobalID>, IERXStatus , IERX
 	private long _count = 0;
 	
 	private volatile boolean _isStopped = false;
-	
 	
 	private EOGlobalID _resultGid;
 
@@ -153,7 +150,4 @@ public class T04SimpleEOFTask implements Callable<EOGlobalID>, IERXStatus , IERX
 		log.info("The task was stopped by the user.");
 		_isStopped = true;
 	}
-	
-	
-	
 }

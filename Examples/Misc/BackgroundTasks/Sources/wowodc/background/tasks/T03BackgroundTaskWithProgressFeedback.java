@@ -1,6 +1,5 @@
 package wowodc.background.tasks;
 
-
 import java.text.DecimalFormat;
 import java.text.Format;
 
@@ -37,8 +36,6 @@ public class T03BackgroundTaskWithProgressFeedback implements Runnable, IERXStat
 	private String _status = "Starting...";
 	
 	private long _numberToCheck = 0;
-	
-	private final long _primesFound = 0;
 	
 	private volatile boolean _isStopped = false;
 
@@ -93,5 +90,4 @@ public class T03BackgroundTaskWithProgressFeedback implements Runnable, IERXStat
 		log.info("The task was stopped by the user.");
 		_isStopped = true;
 	}
-
 }

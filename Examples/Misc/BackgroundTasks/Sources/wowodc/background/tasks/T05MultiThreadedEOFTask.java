@@ -45,7 +45,6 @@ import er.extensions.foundation.IERXStatus;
  * for every
  * 
  * @author kieran
- *
  */
 public class T05MultiThreadedEOFTask extends ERXAbstractTask implements Callable<EOGlobalID>, IERXStatus , IERXPercentComplete, IERXStoppable {
 	
@@ -101,7 +100,7 @@ public class T05MultiThreadedEOFTask extends ERXAbstractTask implements Callable
 	/**
 	 * Use a demo duration parameter rather than default random demo duration.
 	 * 
-	 * @param demoTaskDuration
+	 * @param demoTaskDuration duration in milliseconds
 	 */
 	public T05MultiThreadedEOFTask(long demoTaskDuration) {
 		_taskDuration = demoTaskDuration;
@@ -110,7 +109,7 @@ public class T05MultiThreadedEOFTask extends ERXAbstractTask implements Callable
 	private EOGlobalID _resultGid;
 
 	public EOGlobalID call() throws Exception {
-		// Start at zero to guage performance rate with different numbers of threads and OSCs
+		// Start at zero to gauge performance rate with different numbers of threads and OSCs
 		//_startNumber = Utilities.newStartNumber();
 		_elapsedTime = 0;
 		Format wholeNumberFormatter = new DecimalFormat("#,##0");
@@ -210,7 +209,7 @@ public class T05MultiThreadedEOFTask extends ERXAbstractTask implements Callable
 	/**
 	 * Removes completed futures from the futures array.
 	 * 
-	 * @param futures
+	 * @param futures array of futures
 	 */
 	public void removeCompletedFutures(NSMutableArray<Future<?>> futures) {
 		Iterator<Future<?>> iterator = futures.iterator();
@@ -270,7 +269,6 @@ public class T05MultiThreadedEOFTask extends ERXAbstractTask implements Callable
 	 * Note we declare this as a non-static inner class so that the child thread can update the parent thread _count (for demo of volatile)
 	 * 
 	 * @author kieran
-	 *
 	 */
 	private class ChildPrimeTask extends ERXAbstractTask implements Runnable, IERXStatus , IERXPercentComplete {
 		
@@ -334,7 +332,6 @@ public class T05MultiThreadedEOFTask extends ERXAbstractTask implements Callable
 			} finally {
 				ec.unlock();
 			}
-			
 		}
 		
 		// 
@@ -355,9 +352,5 @@ public class T05MultiThreadedEOFTask extends ERXAbstractTask implements Callable
 			}
 			return _toString;
 		}
-		
 	}
-	
-	
-	
 }
