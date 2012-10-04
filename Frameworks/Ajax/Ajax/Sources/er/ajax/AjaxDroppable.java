@@ -66,10 +66,6 @@ public class AjaxDroppable extends AjaxComponent {
     return true;
   }
 
-  public boolean synchronizesVariablesWithBindings() {
-    return false;
-  }
-
   @Override
   public void appendToResponse(WOResponse response, WOContext context) {
     _actionUrl = AjaxUtils.ajaxComponentActionUrl(context());

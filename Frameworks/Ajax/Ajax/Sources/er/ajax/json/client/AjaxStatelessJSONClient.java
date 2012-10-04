@@ -31,11 +31,6 @@ public class AjaxStatelessJSONClient extends ERXComponent {
 		super(context);
 	}
 
-	@Override
-	public boolean synchronizesVariablesWithBindings() {
-		return false;
-	}
-
 	public boolean global() {
 		return booleanValueForBinding("global", false);
 	}

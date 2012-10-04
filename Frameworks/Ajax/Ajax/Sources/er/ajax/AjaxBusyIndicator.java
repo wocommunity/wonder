@@ -38,10 +38,6 @@ public class AjaxBusyIndicator extends AjaxComponent {
 		return true;
 	}
 
-	public boolean synchronizesVariablesWithBindings() {
-		return false;
-	}
-
 	protected void addRequiredWebResources(WOResponse res) {
 		addScriptResourceInHead(res, "prototype.js");
 		addScriptResourceInHead(res, "effects.js");

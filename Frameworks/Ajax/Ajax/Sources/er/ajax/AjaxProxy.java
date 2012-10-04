@@ -109,13 +109,6 @@ public class AjaxProxy extends AjaxComponent {
 	}
 
 	/**
-	 * Overridden because the component does not synch with the bindings.
-	 */
-	public boolean synchronizesVariablesWithBindings() {
-		return false;
-	}
-
-	/**
 	 * Adds the jsonrpc.js script to the head in the response if not already present and also adds a javascript proxy
 	 * for the supplied bridge under the name "JSONRPC_<variableName>".
 	 * 

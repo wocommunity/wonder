@@ -60,10 +60,6 @@ public class WOAnyField extends WOComponent {
         selectedKeyItem = aSelectedKeyItem;
     }
 
-    public boolean synchronizesVariablesWithBindings() {
-        return false;
-    }
-
     @Override
     public boolean isStateless() {
         return true;

@@ -102,10 +102,6 @@ public class AjaxDraggable extends AjaxComponent {
     return true;
   }
 
-  public boolean synchronizesVariablesWithBindings() {
-    return false;
-  }
-  
   public static Object draggableObjectForPage(WOComponent page, String draggableID) {
     Object droppedObject = null;
     Map componentDraggablesMap = (Map)page.context().session().objectForKey(AjaxDraggable.COMPONENT_DRAGGABLES_MAP_KEY);

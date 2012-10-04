@@ -24,10 +24,6 @@ public class AjaxAccordionTab extends WOComponent {
     return true;
   }
 
-  public boolean synchronizesVariablesWithBindings() {
-    return false;
-  }
-
   public String tabID() {
     String id = (String) valueForBinding("id");
     if (id == null) {

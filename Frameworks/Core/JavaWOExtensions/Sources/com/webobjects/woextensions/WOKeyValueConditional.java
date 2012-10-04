@@ -61,11 +61,6 @@ public class WOKeyValueConditional extends WOComponent {
         return true;
     }
     
-    @Override
-    public boolean synchronizesVariablesWithBindings() {
-    	return false;
-    }
-
     protected void _invalidateCaches() {
         // In order for this to behave like an element, all instance
         // variables need to be flushed when this component sleeps

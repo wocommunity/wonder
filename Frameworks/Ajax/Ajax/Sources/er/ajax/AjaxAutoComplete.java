@@ -134,13 +134,6 @@ public class AjaxAutoComplete extends AjaxComponent {
         return true;
     }
 
-    /**
-     * Overridden because the component does not synch with the bindings.
-     */
-    public boolean synchronizesVariablesWithBindings() {
-        return false;
-    }
-
     public String indicator() {
     	String indicator = (String)valueForBinding("indicator");
     	if (indicator == null && valueForBinding("indicatorFilename") != null) {
@@ -313,10 +306,6 @@ public class AjaxAutoComplete extends AjaxComponent {
     	setValueForBinding(strValue, "value");
     }
     
-    public void takeValuesFromRequest(WORequest request, WOContext context) {
-    	super.takeValuesFromRequest(request, context);
-    }
-
     protected void appendItemToResponse(Object value, WOElement child, boolean hasItem, WOResponse response, WOContext context) {
         response.appendContentString("<li>");
         if(hasItem && child != null) {

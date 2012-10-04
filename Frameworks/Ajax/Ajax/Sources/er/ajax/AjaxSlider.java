@@ -47,13 +47,6 @@ public class AjaxSlider extends AjaxComponent {
     }
 
     /**
-     * Overridden because the component does not synch with the bindings.
-     */
-    public boolean synchronizesVariablesWithBindings() {
-        return false;
-    }
-
-    /**
      * Overridden to add the initialization javascript for the auto completer.
      */
     @Override
