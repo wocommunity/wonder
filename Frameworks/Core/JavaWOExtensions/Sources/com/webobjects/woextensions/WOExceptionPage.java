@@ -55,7 +55,7 @@ public class WOExceptionPage extends WOComponent {
         return WOApplication.application().isDebuggingEnabled();
     }
 
-    public NSArray reasonLines() {
+    public NSArray<String> reasonLines() {
         if (null==_reasonLines) {
             String aMessage = exception.getMessage();
             if (aMessage!=null) {

@@ -48,7 +48,7 @@ public class WOExceptionParser extends Object {
         NSBundle bundle;
         String path, content;
         NSDictionary dic = null;
-        NSMutableArray allBundles = new NSMutableArray(NSBundle.frameworkBundles());
+        NSMutableArray<NSBundle> allBundles = new NSMutableArray<NSBundle>(NSBundle.frameworkBundles());
         NSMutableArray ignored = new NSMutableArray();
 
         for (Enumeration enumerator = allBundles.objectEnumerator(); enumerator.hasMoreElements(); ) {

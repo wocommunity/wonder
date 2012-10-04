@@ -598,7 +598,7 @@ public class _H2PlugIn extends JDBCPlugIn {
 	 * </p>
 	 */
 	@Override
-	public NSDictionary jdbcInfo() {
+	public NSDictionary<String, Object> jdbcInfo() {
 		// optionally write out a fresh copy of the H2JDBCInfo.plist file.
 		if (!testedJdbcInfo) {
 			testedJdbcInfo = true;
@@ -622,7 +622,7 @@ public class _H2PlugIn extends JDBCPlugIn {
 			}
 		}
 
-		NSDictionary jdbcInfo;
+		NSDictionary<String, Object> jdbcInfo;
 		// have a look at the JDBC connection URL to see if the flag has been
 		// set to
 		// specify that the hard-coded jdbcInfo information should be used.
@@ -637,7 +637,7 @@ public class _H2PlugIn extends JDBCPlugIn {
 			}
 
 			try {
-				jdbcInfo = (NSDictionary) NSPropertyListSerialization.propertyListFromData(new NSData(jdbcInfoStream, 2048), "US-ASCII");
+				jdbcInfo = (NSDictionary<String, Object>) NSPropertyListSerialization.propertyListFromData(new NSData(jdbcInfoStream, 2048), "US-ASCII");
 			}
 			catch (IOException e) {
 				throw new RuntimeException("Failed to load 'H2JDBCInfo.plist' from this plugin jar: " + e, e);
