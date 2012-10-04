@@ -59,6 +59,7 @@ public class AjaxExpansion extends AjaxComponent {
 		super(context);
 	}
 
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}

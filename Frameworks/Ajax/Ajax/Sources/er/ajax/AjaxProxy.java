@@ -103,6 +103,7 @@ public class AjaxProxy extends AjaxComponent {
 	/**
 	 * Overridden because the component is stateless
 	 */
+	@Override
 	public boolean isStateless() {
 		return true;
 	}

@@ -41,6 +41,7 @@ public class AjaxSlider extends AjaxComponent {
     /**
      * Overridden because the component is stateless
      */
+    @Override
     public boolean isStateless() {
         return true;
     }
@@ -55,6 +56,7 @@ public class AjaxSlider extends AjaxComponent {
     /**
      * Overridden to add the initialization javascript for the auto completer.
      */
+    @Override
     public void appendToResponse(WOResponse res, WOContext ctx) {
         super.appendToResponse(res, ctx);
         _trackerId = safeElementID() + "_tracker";
@@ -131,6 +133,7 @@ public class AjaxSlider extends AjaxComponent {
     	addScriptResourceInHead(res, "slider.js");
     }
 
+    @Override
     public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
     	try {
 	    		String format = (String) valueForBinding("numberformat", "0");
@@ -153,5 +156,4 @@ public class AjaxSlider extends AjaxComponent {
     	}
     	return result;
     }
-
 }

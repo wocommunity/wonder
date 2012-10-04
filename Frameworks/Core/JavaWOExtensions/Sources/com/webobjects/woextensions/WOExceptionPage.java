@@ -32,6 +32,7 @@ public class WOExceptionPage extends WOComponent {
         super(aContext);
     }
 
+    @Override
     public boolean isEventLoggingEnabled() {
         return false;
     }
@@ -41,6 +42,7 @@ public class WOExceptionPage extends WOComponent {
         exception = newException;
     }
 
+    @Override
     public WOResponse generateResponse() {
         WOResponse response = super.generateResponse();
         // we don't need the exception to stick around if we leave the page

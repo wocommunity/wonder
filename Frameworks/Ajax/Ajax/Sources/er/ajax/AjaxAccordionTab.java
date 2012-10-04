@@ -19,6 +19,7 @@ public class AjaxAccordionTab extends WOComponent {
     super(context);
   }
 
+  @Override
   public boolean isStateless() {
     return true;
   }

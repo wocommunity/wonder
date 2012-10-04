@@ -40,6 +40,7 @@ public class AjaxStatelessJSONClient extends ERXComponent {
 		return booleanValueForBinding("global", false);
 	}
 
+	@Override
 	public boolean isStateless() {
 		return true;
 	}

@@ -55,6 +55,7 @@ public class WOSimpleArrayDisplay2 extends WOSimpleArrayDisplay
         return list().count()+" items";
     }
 
+    @Override
     protected void _invalidateCaches() {
         listTarget = null;
         itemTarget = null;

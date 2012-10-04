@@ -44,6 +44,7 @@ public class WOCollapsibleComponentContent extends WOComponent
         }
     }
 
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }
@@ -168,6 +169,4 @@ public class WOCollapsibleComponentContent extends WOComponent
     public String anchor() {
         return "" + _anchor;
     }
-
-
 }

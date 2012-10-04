@@ -100,10 +100,12 @@ public class AjaxSortableList extends AjaxComponent {
     return listItemID;
   }
 
+  @Override
   public boolean synchronizesVariablesWithBindings() {
     return false;
   }
 
+  @Override
   public void appendToResponse(WOResponse response, WOContext context) {
     _actionUrl = AjaxUtils.ajaxComponentActionUrl(context);
     if (hasBinding("id")) {

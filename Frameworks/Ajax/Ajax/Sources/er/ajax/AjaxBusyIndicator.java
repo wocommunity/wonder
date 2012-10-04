@@ -33,6 +33,7 @@ public class AjaxBusyIndicator extends AjaxComponent {
 		super(context);
 	}
 
+	@Override
 	public boolean isStateless() {
 		return true;
 	}
@@ -78,5 +79,4 @@ public class AjaxBusyIndicator extends AjaxComponent {
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		return null;
 	}
-
 }

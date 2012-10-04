@@ -64,6 +64,7 @@ public class WOAnyField extends WOComponent {
         return false;
     }
 
+    @Override
     public boolean isStateless() {
         return true;
     }
@@ -227,11 +228,13 @@ public class WOAnyField extends WOComponent {
         _displayGroup = null;
     }
 
+    @Override
     public void finalize() throws Throwable {
         super.finalize();
         invalidateCaches();
     }
 
+    @Override
     public void reset() {
         invalidateCaches();
     }

@@ -54,6 +54,7 @@ public class WOCheckboxMatrix extends WOComponent {
         super(aContext);
     }
     
+    @Override
     public boolean isStateless() {
         return true;
     }
@@ -122,6 +123,7 @@ public class WOCheckboxMatrix extends WOComponent {
         currentItem = null;
     }
 
+    @Override
     public void reset()  {
         _invalidateCaches();
     }

@@ -56,6 +56,7 @@ public class WOKeyValueConditional extends WOComponent {
         return _negate != 0;
     }
 
+    @Override
     public boolean isStateless() {
         return true;
     }
@@ -73,6 +74,7 @@ public class WOKeyValueConditional extends WOComponent {
         _negate = -1;
     }
 
+    @Override
     public void reset()  {
         _invalidateCaches();
     }

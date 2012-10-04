@@ -110,6 +110,7 @@ public class AjaxAutoComplete extends AjaxComponent {
     /**
      * Overridden to set the IDs for the field and the div tag.
      */
+    @Override
     public void awake() {
         super.awake();
         divName = safeElementID() + "_div";
@@ -117,6 +118,7 @@ public class AjaxAutoComplete extends AjaxComponent {
         indicatorName = safeElementID() + "_indicator";
     }
     
+    @Override
     public void sleep() {
     	divName = null;
     	fieldName = null;
@@ -127,6 +129,7 @@ public class AjaxAutoComplete extends AjaxComponent {
     /**
      * Overridden because the component is stateless
      */
+    @Override
     public boolean isStateless() {
         return true;
     }
@@ -171,6 +174,7 @@ public class AjaxAutoComplete extends AjaxComponent {
     /**
      * Overridden to add the initialization javascript for the auto completer.
      */
+    @Override
     public void appendToResponse(WOResponse res, WOContext ctx) {
         super.appendToResponse(res, ctx);
 		boolean isDisabled = hasBinding("disabled") && ((Boolean) valueForBinding("disabled")).booleanValue();

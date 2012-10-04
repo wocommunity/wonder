@@ -24,6 +24,7 @@ public class WOMetaRefresh extends WOComponent
         super(aContext);
     }
 
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }
