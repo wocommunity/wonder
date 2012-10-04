@@ -243,6 +243,8 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			}
 			catch (IOException e) {
 				throw new RuntimeException("Failed to load 'FrontBaseJDBCInfo.plist' from this plugin jar.", e);
+			} finally {
+				try { jdbcInfoStream.close(); } catch (IOException e) {}
 			}
 		}
 		else {

@@ -487,12 +487,17 @@ public class ERXStringUtilities {
         }
         path = bundle.resourcePathForLocalizedResourceNamed(name + (extension == null || extension.length() == 0 ? "" : "." + extension), null);
         if(path != null) {
+        	InputStream stream = null;
             try {
-                InputStream stream = bundle.inputStreamForResourcePath(path);
+                stream = bundle.inputStreamForResourcePath(path);
                 byte bytes[] = ERXFileUtilities.bytesFromInputStream(stream);
                 return new String(bytes);
             } catch (IOException e) {
                 log.warn("IOException when stringFromResource(" + name + "." + extension + " in bundle " + bundle.name());
+            } finally {
+            	if (stream != null) {
+            		try { stream.close(); } catch (IOException e) {}
+            	}
             }
         }
         return null;

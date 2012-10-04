@@ -642,6 +642,9 @@ public class _H2PlugIn extends JDBCPlugIn {
 			catch (IOException e) {
 				throw new RuntimeException("Failed to load 'H2JDBCInfo.plist' from this plugin jar: " + e, e);
 			}
+			finally {
+				try { jdbcInfoStream.close(); } catch (IOException e) {}
+			}
 		}
 		else {
 			jdbcInfo = super.jdbcInfo();
