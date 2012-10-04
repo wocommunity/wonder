@@ -212,7 +212,7 @@ public class AjaxAutoComplete extends AjaxComponent {
     }
 
 	String listeJS() {
-		StringBuffer str = new StringBuffer();
+		StringBuilder str = new StringBuilder();
 		str.append("new Array(");
 		NSArray list = (NSArray) valueForBinding("list");
 		int max = list.count();
@@ -235,7 +235,7 @@ public class AjaxAutoComplete extends AjaxComponent {
 			str.append("\"");
 		}
 		str.append(")");
-		return String.valueOf(str);
+		return str.toString();
 	}		
 
     /**

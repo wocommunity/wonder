@@ -152,7 +152,7 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
     }
 
     String filenameHash = ERXCrypto.shaEncode(recommendedFileName);
-    StringBuffer hashPathBuffer = new StringBuffer();
+    StringBuilder hashPathBuffer = new StringBuilder();
     hashPathBuffer.append(filenameHash.charAt(0));
     hashPathBuffer.append('/');
     hashPathBuffer.append(filenameHash.charAt(1));

@@ -91,7 +91,7 @@ public class AjaxSlider extends AjaxComponent {
         options.setObjectForKey("$R(" + min + "," + max + ")", "range");
 
         if (min != null && max != null && ERXComponentUtilities.booleanValueForBinding(this, "snap")) {
-          StringBuffer valuesBuffer = new StringBuffer();
+          StringBuilder valuesBuffer = new StringBuilder();
           valuesBuffer.append("[");
           for (int i = min.intValue(); i <= max.intValue(); i ++ ) {
             valuesBuffer.append(i);

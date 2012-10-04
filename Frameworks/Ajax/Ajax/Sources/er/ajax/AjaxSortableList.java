@@ -143,7 +143,7 @@ public class AjaxSortableList extends AjaxComponent {
   }
 
   public String onUpdate() {
-    StringBuffer onUpdateBuffer = new StringBuffer();
+	StringBuilder onUpdateBuffer = new StringBuilder();
     onUpdateBuffer.append("function(container) {");
     // onComplete:ajaxResponse
     String containerID = (String) valueForBinding("id");

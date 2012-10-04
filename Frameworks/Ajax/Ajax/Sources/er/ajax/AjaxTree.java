@@ -283,7 +283,7 @@ public class AjaxTree extends WOComponent {
 	}
 
 	public String nodeItem() {
-		StringBuffer nodeItem = new StringBuffer();
+		StringBuilder nodeItem = new StringBuilder();
 		nodeItem.append("<li");
 		if (hasBinding("itemID")) {
 			String itemID = (String) valueForBinding("itemID");

@@ -827,7 +827,7 @@ public class AjaxGrid extends WOComponent {
 	 * @return ID to be used on AjaxUpdateLink bound to sortOrderUpdated() for currentColumn()
 	 */
 	public String currentColumnID() {
-		StringBuffer b = new StringBuffer(tableID());
+		StringBuilder b = new StringBuilder(tableID());
 		b.append("_SortBy_");
 		b.append(ERXStringUtilities.safeIdentifierName((String)currentColumn().objectForKey(TITLE)));
 		b.append(isCurrentColumnSortedAscending() ? "_Descending" : "_Ascending");

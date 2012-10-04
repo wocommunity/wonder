@@ -73,12 +73,12 @@ public class WOExceptionPage extends WOComponent {
     }*/
     
     public String errorMessage() {
-        // Construct the error message that should be display in ProjectBuilder
-        StringBuffer buffer = new StringBuffer(128);
+        // Construct the error message that should be displayed in ProjectBuilder
+        StringBuilder buffer = new StringBuilder(128);
         buffer.append("Error : ");
         buffer.append(exception.getClass().getName());
         buffer.append(" - Reason :");
         buffer.append(exception.getMessage());
-        return new String(buffer);
+        return buffer.toString();
     }
 }

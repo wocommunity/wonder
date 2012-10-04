@@ -74,7 +74,7 @@ public class AjaxExpansion extends AjaxComponent {
 
 	public String linkClass() {
 		String linkClass = (String) valueForBinding("linkClass");
-		StringBuffer linkClassBuffer = new StringBuffer();
+		StringBuilder linkClassBuffer = new StringBuilder();
 		linkClassBuffer.append("expansion");
 		if (isExpanded()) {
 			linkClassBuffer.append(" expanded");

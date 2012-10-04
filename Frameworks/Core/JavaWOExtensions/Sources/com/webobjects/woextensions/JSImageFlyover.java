@@ -29,7 +29,7 @@ public class JSImageFlyover extends JSComponent {
         // We need to give each image a unique name, with considerations that there might be
         // more than one ImageFlyover per page.
 
-        StringBuffer uniqueIDBuffer = new StringBuffer("ImageFlyover");
+    	StringBuilder uniqueIDBuffer = new StringBuilder("ImageFlyover");
         uniqueIDBuffer.append(context.contextID());
         uniqueIDBuffer.append("_");
         uniqueIDBuffer.append(context.elementID().replace('.', '_'));

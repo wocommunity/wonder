@@ -839,7 +839,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	 * @return URL to invoke when the dialog is opened
 	 */
 	protected String openDialogURL(WOContext context) {
-		return new StringBuffer(ajaxComponentActionUrl).append(Open_ElementID_Suffix).toString();
+		return new StringBuilder(ajaxComponentActionUrl).append(Open_ElementID_Suffix).toString();
 	}
 	
 	/**
@@ -847,6 +847,6 @@ public class AjaxModalDialog extends AjaxComponent {
 	 * @return URL to invoke when the dialog is closed
 	 */
 	protected String closeDialogURL(WOContext context) {
-		return new StringBuffer(ajaxComponentActionUrl).append(Close_ElementID_Suffix).toString();
+		return new StringBuilder(ajaxComponentActionUrl).append(Close_ElementID_Suffix).toString();
 	}
 }

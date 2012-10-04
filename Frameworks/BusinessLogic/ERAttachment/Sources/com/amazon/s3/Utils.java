@@ -52,7 +52,7 @@ public class Utils {
     static String makeCanonicalString(String method, String resource,
                                              Map headers, String expires)
     {
-        StringBuffer buf = new StringBuffer();
+    	StringBuilder buf = new StringBuilder();
         buf.append(method + "\n");
 
         // Add all interesting headers to a list, then sort them.  "Interesting"
@@ -166,7 +166,7 @@ public class Utils {
     }
 
     static String pathForListOptions(String bucket, String prefix, String marker, Integer maxKeys) {
-        StringBuffer path = new StringBuffer(bucket);
+    	StringBuilder path = new StringBuilder(bucket);
         path.append("?");
 
         // these two params must be url encoded
@@ -209,7 +209,7 @@ public class Utils {
      * @return String of all headers, with commas.
      */
     private static String concatenateList(List values) {
-        StringBuffer buf = new StringBuffer();
+    	StringBuilder buf = new StringBuilder();
         for (int i = 0, size = values.size(); i < size; ++ i) {
             buf.append(((String)values.get(i)).replaceAll("\n", "").trim());
             if (i != (size - 1)) {
