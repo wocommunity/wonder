@@ -12,6 +12,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 
 import er.extensions.eof.ERXConstant;
+import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * Radio button list with lots of more options.<br />
@@ -98,6 +99,16 @@ public class ERXRadioButtonMatrix extends ERXStatelessComponent {
         }
 
         return "";
+    }
+
+	public String otherTagStringForRadioButton() {
+    	boolean isDisabled = disabled();
+    	boolean isChecked = !ERXStringUtilities.stringIsNullOrEmpty(isCurrentItemSelected());
+        	return (isDisabled ? "disabled" : "") + (isDisabled && isChecked? " " : "") + (isChecked ? "checked" : "");
+	}
+
+    public boolean disabled() {
+    	return booleanValueForBinding("disabled", false);
     }
 
     public void awake() {
