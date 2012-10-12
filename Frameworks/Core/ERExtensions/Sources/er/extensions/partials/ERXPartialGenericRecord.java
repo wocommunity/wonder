@@ -14,14 +14,15 @@ import er.extensions.eof.ERXGenericRecord;
 
 /**
  * <p>
- * For overview information on partials, read the package.html in er.extensions.partials.
+ * For overview information on partials, read the {@code package.html} in
+ * {@code er.extensions.partials}.
  * </p>
  * 
  * <p>
- * ERXPartialGenericRecord is the base class of any entity that allows itself to be extended
- * with partials.
+ * {@code ERXPartialGenericRecord} is the base class of any entity that allows
+ * itself to be extended with partials.
  * </p>
- *  
+ * 
  * @author mschrag
  */
 public class ERXPartialGenericRecord extends ERXGenericRecord {
