@@ -229,7 +229,7 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 		dos.flush();
 		_multicastSocket.send(baos.createDatagramPacket());
 		if (ERXRemoteSynchronizer.log.isDebugEnabled()) {
-			ERXRemoteSynchronizer.log.info("Multicast instance " + ERXStringUtilities.byteArrayToHexString(_identifier) + ": Writing " + cacheChange);
+			ERXRemoteSynchronizer.log.debug("Multicast instance " + ERXStringUtilities.byteArrayToHexString(_identifier) + ": Writing " + cacheChange);
 		}
 	}
 
