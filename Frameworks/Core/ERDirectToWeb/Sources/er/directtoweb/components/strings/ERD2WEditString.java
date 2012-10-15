@@ -7,7 +7,12 @@
 package er.directtoweb.components.strings;
 
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
 import com.webobjects.directtoweb.D2WEditString;
+
+import er.extensions.foundation.ERXValueUtilities;
+import er.extensions.validation.ERXValidationException;
+import er.extensions.validation.ERXValidationFactory;
 
 /**
  * <span class="en">
@@ -42,11 +47,21 @@ public class ERD2WEditString extends D2WEditString {
 	 */
 	private static final long serialVersionUID = 1L;
 
-        public ERD2WEditString(WOContext context) { super(context); }
+    public ERD2WEditString(WOContext context) { super(context); }
     
     public void validationFailedWithException(Throwable theException,Object theValue, String theKeyPath) {
         // This is for number formatting exceptions
         String keyPath = theKeyPath.equals("value") ? propertyKey() : theKeyPath;
         parent().validationFailedWithException(theException, theValue, keyPath);
     }
+    
+    @Override
+	public void takeValuesFromRequest(WORequest arg0, WOContext arg1) {
+		super.takeValuesFromRequest(arg0, arg1);
+		// AK: meh... this would belong right in D2WComponent... it's so you can have fake keys that behave like attibutes
+		if (ERXValueUtilities.booleanValue(d2wContext().valueForKey("displayRequiredMarker")) && d2wContext().valueForKey("attribute") == null && value() == null) {
+			ERXValidationException exception = ERXValidationFactory.defaultFactory().createException(object(), propertyKey(), value(), "NullPropertyException");
+			validationFailedWithException(exception, value(), propertyKey());
+		}
+	}
 }
