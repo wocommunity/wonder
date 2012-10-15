@@ -872,7 +872,7 @@ public class ERXFileUtilities {
     }
 
     /**
-        * Deletes a given directory in a recursive fashion.
+     * Deletes a given directory in a recursive fashion.
      * @param directory to be deleted
      * @return if the directory deleted successfully
      */

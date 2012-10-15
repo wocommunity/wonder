@@ -21,13 +21,6 @@ import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 
 /**
- * Copied from ERExtensions to enable the "title"-attribute for stylesheets.
- * 
- * 
- * 
- * 
- * 
- * 
  * Adds a style sheet to a page. You can either supply a complete URL, a file
  * and framework name or put something in the component content. The content of
  * the component is cached under a "key" binding and then delivered via a direct
@@ -40,14 +33,15 @@ import er.extensions.foundation.ERXStringUtilities;
  *          content. Default is the sessionID. That means, you should *really*
  *          explicitly set a key, when you use more than one ERXStyleSheet using
  *          the component content method within one session
- * @binding inline when true, the generated link tag will be appended inline,
- *          when false it'll be placed in the head of the page, when unset it
+ * @binding inline when <code>true</code>, the generated link tag will be appended inline,
+ *          when <code>false</code> it'll be placed in the head of the page, when unset it
  *          will be placed inline for ajax requests and in the head for regular
  *          requests
- * @property er.extensions.ERXStyleSheet.xhtml (defaults true) if false, link
- *           tags are not closed, which is compatible with older HTML
+ * @binding media media name this style sheet is for
+ * @property er.extensions.ERXStyleSheet.xhtml (defaults <code>true</code>) if <code>false</code>,
+ *           link tags are not closed, which is compatible with older HTML
  */
-// FIXME: cache should be able to cache on calues of bindings, not a single key
+// FIXME: cache should be able to cache on values of bindings, not a single key
 public class ERXStyleSheet extends ERXStatelessComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -98,7 +92,7 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 	}
 
 	/**
-	 * returns the complete url to the style sheet.
+	 * Returns the complete url to the style sheet.
 	 * 
 	 * @return style sheet url
 	 */
@@ -144,7 +138,7 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 	 * Returns key under which the stylesheet should be placed in the cache. If
 	 * no key is given, the session id is used.
 	 * 
-	 * @return style sheet framework name
+	 * @return cache key
 	 */
 	public String styleSheetKey() {
 		String result = (String)valueForBinding( "key" );
@@ -170,6 +164,7 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 
 	/**
 	 * Specifies on what device the linked document will be displayed.
+	 * @return media string
 	 */
 	public String mediaType() {
 		return stringValueForBinding( "media" );
@@ -177,6 +172,7 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 
 	/**
 	 * Returns the languages for the request.
+	 * @return requested languages
 	 */
 	@SuppressWarnings( "unchecked" )
 	private NSArray<String> languages() {
