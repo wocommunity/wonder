@@ -300,7 +300,7 @@ public class ERXBetweenQualifier extends ERXKeyValueQualifier implements EOQuali
             for ( int index = 0; index < count; index++ ) {
                 Class	aClass = someClasses[ index ];
 
-                if ( aClass.isAssignableFrom( anObjectClass ) == true ) {
+                if ( aClass.isAssignableFrom( anObjectClass ) ) {
                     return someComparators[ index ];
                 }
             }
@@ -317,7 +317,7 @@ public class ERXBetweenQualifier extends ERXKeyValueQualifier implements EOQuali
         *         the qualifier.
         */
     public boolean evaluateWithObject(Object anObject) {
-        if ( ( anObject != null ) && ( ( anObject instanceof NSKeyValueCoding ) == true ) ) {
+        if ( ( anObject != null ) && ( anObject instanceof NSKeyValueCoding ) ) {
             String	aKey = this.key();
             Object	aMinimumValue = this.minimumValue();
             Object	aMaximumValue = this.maximumValue();

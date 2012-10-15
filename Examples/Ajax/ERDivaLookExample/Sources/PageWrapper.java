@@ -14,7 +14,7 @@ public class PageWrapper extends ERDIVPageWrapper {
     
     // accessors
     public String style() {
-    	return ((Session) session()).showMenubar == true ? "" : "display: none; ";
+    	return ((Session) session()).showMenubar ? "" : "display: none; ";
     }
     
     public String stylesheet() {

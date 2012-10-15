@@ -116,7 +116,7 @@ public class ERXPartial<T extends ERXGenericRecord> {
 	 */
 	public boolean isPartialKeypath(String keypath) {
 		for (String key : partialProperties()) {
-			if (key.equals(keypath) == true) {
+			if (key.equals(keypath)) {
 				return true;
 			}
 		}
