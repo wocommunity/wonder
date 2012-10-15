@@ -4,7 +4,6 @@ package er.indexing.example;
 import com.webobjects.foundation.NSLog;
 
 import er.extensions.appserver.ERXApplication;
-import er.indexing.ERIndexing;
 
 public class Application extends ERXApplication {
 	

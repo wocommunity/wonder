@@ -1,7 +1,5 @@
 package er.coolcomponents;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOContext;
