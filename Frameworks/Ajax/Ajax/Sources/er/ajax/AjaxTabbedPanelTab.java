@@ -75,7 +75,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
     	if (isVisble(component)) {
             aResponse.appendContentString("<li id=\"");
             aResponse.appendContentString(tabIdInComponent(component) + "_panel");
-            aResponse.appendContentString("\" updateUrl=\"");
+            aResponse.appendContentString("\" data-updateUrl=\"");
             aResponse.appendContentString(AjaxUtils.ajaxComponentActionUrl(aContext));
     		aResponse.appendContentString("\" class=\"");
             aResponse.appendContentString(isSelected(component) ? "ajaxTabbedPanelPane-selected" : "ajaxTabbedPanelPane-unselected");
