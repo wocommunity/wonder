@@ -19,7 +19,7 @@ import er.extensions.eof.ERXEC;
  * It is like the D2WQueryAll page except that you can partition your entities into sections.
  *
  * @author ak on Mon Sep 01 2003
- * @project ERDirectToWeb
+ * 
  * @d2wKey queryConfigurationName
  * @d2wKey listConfigurationName
  */

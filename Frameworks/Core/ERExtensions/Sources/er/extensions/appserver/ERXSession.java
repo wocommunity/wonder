@@ -246,6 +246,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * @see #language
    * @see #setLanguage
    */
+  @Override
   public void setLanguages(NSArray languageList) {
     super.setLanguages(languageList);
     ERXLocalizer newLocalizer = ERXLocalizer.localizerForLanguages(languageList);
@@ -272,7 +273,6 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    *           for this application
    * @see      #availableLanguagesForThisSession 
    * @see      ERXLocalizer#availableLanguages
-   * @TypeInfo java.lang.String 
    */
   public NSArray availableLanguagesForTheApplication() {
     return ERXLocalizer.availableLanguages();
@@ -287,14 +287,13 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * ({@link ERXLocalizer#availableLanguages}). 
    * <p>
    * Note that the order of the resulting language names  
-   * is not defined at this morment.
+   * is not defined at this moment.
    * 
    * @return   NSArray of language name strings available 
    *           for this particular session
    * @see      #availableLanguagesForTheApplication 
    * @see      ERXRequest#browserLanguages
    * @see      ERXLocalizer#availableLanguages
-   * @TypeInfo java.lang.String 
    */
   public NSArray availableLanguagesForThisSession() {
     NSArray browserLanguages = null;
@@ -366,6 +365,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * @return the session's default editing context with
    * 		the default delegate set.
    */
+  @Override
   public EOEditingContext defaultEditingContext() {
     if (!_editingContextWasCreated) {
       setDefaultEditingContext(newDefaultEditingContext());
@@ -374,6 +374,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
     return super.defaultEditingContext();
   }
 
+  @Override
   public void setDefaultEditingContext(EOEditingContext ec) {
     _editingContextWasCreated = true;
     super.setDefaultEditingContext(ec);
@@ -425,6 +426,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * Overridden to provide a few checks to
    * see if javascript is enabled.
    */
+  @Override
   public void awake() {
     super.awake();
     ERXSession.setSession(this);
@@ -447,6 +449,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * Overridden to post the notification that
    * the session will sleep.
    */
+  @Override
   public void sleep() {
     NSNotificationCenter.defaultCenter().postNotification(SessionWillSleepNotification, this);
     super.sleep();
@@ -545,6 +548,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * @param aRequest current request
    * @param aContext current context
    */
+  @Override
   public void takeValuesFromRequest(WORequest aRequest, WOContext aContext) {
     messageEncoding().setDefaultFormValueEncodingToRequest(aRequest);
     super.takeValuesFromRequest(aRequest, aContext);
@@ -556,6 +560,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * @param aResponse current response object
    * @param aContext current context object
    */
+  @Override
   public void appendToResponse(WOResponse aResponse, WOContext aContext) {
     messageEncoding().setEncodingToResponse(aResponse);
     super.appendToResponse(aResponse, aContext);
@@ -571,6 +576,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
   /**
    * Overrides terminate to free up resources and unregister for notifications.
    */
+  @Override
   public void terminate() {
     if (_observer != null) {
       NSNotificationCenter.defaultCenter().removeObserver(_observer);
@@ -670,6 +676,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
 	  return super._birthDate();
   }
   
+  @Override
   public String toString() {
     String superString = super.toString();
     String thisString = " localizer=" + (_localizer == null ? "null" : _localizer.toString()) + " messageEncoding=" + (_messageEncoding == null ? "null" : _messageEncoding.toString()) + " browser=" + (_browser == null ? "null" : _browser.toString());
@@ -685,8 +692,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
     return toStr;
   }
   
-  // @Override
-  // override removed for 5.4 
+  @Override
   public EOEditingContext newDefaultEditingContext() {
     return ERXEC.newEditingContext();
   }
@@ -837,4 +843,37 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
   		}
   		return autoAdjustTimeZone;
   	}
+  	
+  //********************************************************************
+  //  Current D2W Look for this Session 
+  //  Because it is possible to have different Looks depends on the User
+  //********************************************************************
+
+  /**
+   * set the current Look for this Session
+   * 
+   * <pre>
+   * 90 : *true* => look = "session.currentD2WLook" 
+   *    [er.directtoweb.assignments.delayed.ERDDelayedKeyValueAssignment]
+   * </pre>
+   * 
+   * @param currentD2WLook - Look Name
+   */
+  public void setCurrentD2WLook(String currentD2WLook) {
+    this.currentD2WLook = currentD2WLook;
+  }
+
+  /**
+   * et the current Look for this Session
+   * 
+   * @return Look Name
+   */
+  public String currentD2WLook() {
+    if(ERXStringUtilities.stringIsNullOrEmpty(currentD2WLook)) {
+      currentD2WLook = "ERModernLook";
+    }
+    return currentD2WLook;
+  }
+  private String currentD2WLook = null;
+  	
 }

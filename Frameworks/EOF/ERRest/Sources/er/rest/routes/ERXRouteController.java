@@ -230,6 +230,10 @@ public class ERXRouteController extends WODirectAction {
 	protected void checkAccess() throws SecurityException {
 	}
 
+	public void _setEditingContent(EOEditingContext ec) {
+		_editingContext = ec;
+	}
+
 	/**
 	 * The controller maintains an editing context for the duration of the request. The first time you call this method,
 	 * you will get a new EOEditingContext. Subsequent calls will return the same instance. This makes it a little more
@@ -1638,6 +1642,22 @@ public class ERXRouteController extends WODirectAction {
 				processedResults = response;
 			}
 		}
+		if (allowJSONP()) {
+			if (this.format().equals(ERXRestFormat.json())) {
+				String callbackMethodName = request().stringFormValueForKey("callback");
+				if (callbackMethodName != null) {
+					WOResponse response = results.generateResponse();
+					String content = response.contentString();
+					if (content != null) {
+						content = content.replaceAll("\n", "");
+						content = ERXStringUtilities.escapeJavascriptApostrophes(content);
+					}
+					response.setContent(callbackMethodName + "(" + content + ");");
+					response.setHeader("text/javascript", "Content-Type");
+					processedResults = response;				
+				}
+			}
+		}
 		return processedResults;
 	}
 	
@@ -1648,6 +1668,15 @@ public class ERXRouteController extends WODirectAction {
 	 */
 	protected boolean allowWindowNameCrossDomainTransport() {
 		return ERXProperties.booleanForKeyWithDefault("ERXRest.allowWindowNameCrossDomainTransport", false);
+	}
+	
+	/**
+	 * Returns whether or not JSONP (JSON with Padding) is allowed.
+	 * 
+	 * @return whether or not JSONP (JSON with Padding) is allowed
+	 */
+	protected boolean allowJSONP() {
+		return ERXProperties.booleanForKeyWithDefault("ERXRest.allowJSONP", false);
 	}
 	
 	/**
@@ -1775,11 +1804,11 @@ public class ERXRouteController extends WODirectAction {
 	public <T extends ERXRouteController> T controller(Class<T> controllerClass) {
 		try {
 			T controller = requestHandler().controller(controllerClass, request(), context());
-			controller._route = _route;
-			controller._editingContext = _editingContext;
-			controller._routeKeys = _routeKeys;
-			controller._objects = _objects;
-			controller._options = _options;
+			controller._setRoute(_route);
+			controller._setEditingContent(_editingContext);
+			controller._setRouteKeys(_routeKeys);
+			controller._setRouteObjects(_objects);
+			controller.setOptions(_options);
 			return controller;
 		}
 		catch (Exception e) {

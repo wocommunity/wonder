@@ -6,7 +6,7 @@
         <binding name = "onLoad" />
 	</wo>
 	
-	<validation message = "&apos;id&apos; is a required binding">
+	<validation message = "'id' is a required binding">
         <unbound name = "id"/>
     </validation>
 </wodefinitions>

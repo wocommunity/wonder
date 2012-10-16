@@ -1562,7 +1562,7 @@ public class ERXPropertyListSerialization {
 					c >>= '\004';
 					byte byte3 = (byte) (c & 0xf);
 					c >>= '\004';
-					stringbuffer.append("\\U");
+					stringbuffer.append("\\u");
 					stringbuffer.append(this._hexDigitForNibble(byte3));
 					stringbuffer.append(this._hexDigitForNibble(byte2));
 					stringbuffer.append(this._hexDigitForNibble(byte1));

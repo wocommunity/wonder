@@ -14,10 +14,16 @@ import com.webobjects.appserver.WODisplayGroup;
 import er.extensions.validation.ERXExceptionHolder;
 
 /**
- * Superclass for most custom query components. <br />
- *  
+ * <span class="en">
+ * Superclass for most custom query components.
+ * </span>
+ * 
+ * <span class="ja">
+ * 沢山のカスタム・コンポーネントのベース・クラスである
+ * 
+ * @d2wKey displayGroup - ディスプレイグループ
+ * </span>
  */
-
 public class ERDCustomQueryComponent extends ERDCustomComponent implements ERXExceptionHolder {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -28,8 +34,7 @@ public class ERDCustomQueryComponent extends ERDCustomComponent implements ERXEx
 
     /** interface for all the keys used in this pages code */
     public static interface Keys {
-
-        public static final String displayGroup = "displayGroup";
+      public static final String displayGroup = "displayGroup";
     }
 
     /** logging support */

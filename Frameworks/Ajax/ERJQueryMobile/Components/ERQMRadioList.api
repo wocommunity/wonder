@@ -15,5 +15,6 @@
     <binding name="string"/>
     <binding defaults="Boolean" name="isHorizontal"/>
     <binding defaults="Boolean" name="mini"/>
+    <binding defaults="Boolean" name="disabled"/>
     </wo>
 </wodefinitions>

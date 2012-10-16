@@ -11,6 +11,7 @@ import com.webobjects.foundation.NSDictionary;
 import er.directtoweb.delegates.ERDBranchDelegate;
 import er.directtoweb.delegates.ERDBranchDelegateInterface;
 import er.directtoweb.delegates.ERDBranchInterface;
+import er.extensions.security.ERXAccessPermission;
 
 /**
  * Displays a set of buttons and calls the enclosing page's branch delegate with it.
@@ -19,9 +20,7 @@ import er.directtoweb.delegates.ERDBranchInterface;
  * @binding d2wContext the context for this component 
  *
  * @author ak on Sun Jan 26 2003
- * @project ERExtras
  */
-
 public class ERDActionBar extends ERDCustomEditComponent implements ERDBranchInterface {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -131,7 +130,8 @@ public class ERDActionBar extends ERDCustomEditComponent implements ERDBranchInt
     }
 
     /**
-        * Determines if this message page should display branch choices.
+     * Determines if this message page should display branch choices.
+     * 
      * @return if the current delegate supports branch choices.
      */
     public boolean hasBranchChoices() {
@@ -140,6 +140,33 @@ public class ERDActionBar extends ERDCustomEditComponent implements ERDBranchInt
 
     public void validationFailedWithException(Throwable theException,Object theValue, String theKeyPath) {
         parent().validationFailedWithException(theException, theValue, theKeyPath);
-        log.info("" + theException + theValue + theKeyPath);
+        if(log.isInfoEnabled())
+          log.info("" + theException + theValue + theKeyPath);
+    }
+    
+    /**
+     * <span class="en">
+     * Before Display the Button it will check the Permission. If no Permission are set it
+     * will return true, and Display the Button. (Default)
+     * 
+     * Sample:
+     * <code>public WOComponent copyOnlineToWork(WOComponent sender)</code>
+     * 
+     * Access Permission Key : <code>Delegate.copyOnlineToWork</code>
+     * </span>
+     * 
+     * <span class="ja">
+     * ボタンを表示する前にアクセス権限をチェックします。アクセス権限がなければ、そのままで true として実行します。
+     * 
+     * 例：
+     * <code>public WOComponent copyOnlineToWork(WOComponent sender)</code>
+     * 
+     * アクセス権限キー： <code>Delegate.copyOnlineToWork</code>
+     * </span>
+     * 
+     * @author ishimoto
+     */
+    public boolean isDelegateAllowed() {
+      return ERXAccessPermission.instance().canWithDefault("Delegate." + branchName(), true);
     }
 }

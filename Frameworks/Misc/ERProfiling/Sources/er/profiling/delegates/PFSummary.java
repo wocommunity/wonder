@@ -152,9 +152,9 @@ public class PFSummary implements PFProfiler.Delegate {
             response.appendContentString("<a href=\"javascript:void(0);\" onClick=\"window.open('" + context.completeURLWithRequestHandlerKey("profiler", "heat", "", false, 0)
                     + "','heat','width=1,height=1')\">");
             if (PFHeatMap.isHeatEnabled()) {
-                response.appendContentString("heat on");
+                response.appendContentString("heat is on");
             } else {
-                response.appendContentString("heat off");
+                response.appendContentString("heat is off");
             }
             response.appendContentString("</a>");
 

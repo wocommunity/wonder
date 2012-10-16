@@ -48,7 +48,10 @@ public class AjaxUtils {
 
 	/**
 	 * Return whether or not the given request is an Ajax request.
+	 * 
 	 * @param request the request the check
+	 * 
+	 * @return if it an Ajax request the <code>true</code> 
 	 */
 	public static boolean isAjaxRequest(WORequest request) {
 		return ERXAjaxApplication.isAjaxRequest(request);
@@ -110,7 +113,9 @@ public class AjaxUtils {
 	/**
 	 * Adds a script tag with a correct resource url in the html head tag if it isn't already present in the response.
 	 * 
+	 * @param context 
 	 * @param response
+	 * @param framework 
 	 * @param fileName
 	 */
 	public static void addScriptResourceInHead(WOContext context, WOResponse response, String framework, String fileName) {
@@ -124,6 +129,10 @@ public class AjaxUtils {
 
 	/**
 	 * Calls ERXWOContext.addScriptResourceInHead with "Ajax" framework
+	 * 
+	 * @param context 
+	 * @param response 
+	 * @param fileName 
 	 */
 	public static void addScriptResourceInHead(WOContext context, WOResponse response, String fileName) {
 		AjaxUtils.addScriptResourceInHead(context, response, "Ajax", fileName);
@@ -131,6 +140,11 @@ public class AjaxUtils {
 
 	/**
 	 * Calls ERXWOContext.addStylesheetResourceInHead
+	 * 
+	 * @param context 
+	 * @param response 
+	 * @param framework 
+	 * @param fileName 
 	 */
 	public static void addStylesheetResourceInHead(WOContext context, WOResponse response, String framework, String fileName) {
 		ERXResponseRewriter.addStylesheetResourceInHead(response, context, framework, fileName);
@@ -138,6 +152,10 @@ public class AjaxUtils {
 
 	/**
 	 * Calls ERXWOContext.addStylesheetResourceInHead with "Ajax" framework
+	 * 
+	 * @param context 
+	 * @param response 
+	 * @param fileName 
 	 */
 	public static void addStylesheetResourceInHead(WOContext context, WOResponse response, String fileName) {
 		AjaxUtils.addStylesheetResourceInHead(context, response, "Ajax", fileName);
@@ -147,10 +165,13 @@ public class AjaxUtils {
 	 * Adds a reference to an arbitrary file with a correct resource url wrapped between startTag and endTag in the html
 	 * head tag if it isn't already present in the response.
 	 * 
+	 * @param context 
 	 * @param response
+	 * @param framework 
 	 * @param fileName
 	 * @param startTag
 	 * @param endTag
+	 * 
 	 * @deprecated this is not called by anything anymore and does not use the new support for loading-on-demand
 	 */
 	@Deprecated
@@ -180,6 +201,10 @@ public class AjaxUtils {
 
 	/**
 	 * Calls ERXWOContext.addScriptCodeInHead.
+	 * 
+	 * @param response 
+	 * @param context 
+	 * @param script 
 	 */
 	public static void addScriptCodeInHead(WOResponse response, WOContext context, String script) {
 		ERXResponseRewriter.addScriptCodeInHead(response, context, script);
@@ -206,10 +231,24 @@ public class AjaxUtils {
 		return shouldHandleRequest;
 	}
 
+	/**
+	 * <span class="ja">
+	 * ユーザ・インフォメーション・ディクショナリーにページキャシュを保存しないことを登録します。
+	 * 
+	 * @param context - WOContext
+	 * </span>
+	 */
 	public static void updateMutableUserInfoWithAjaxInfo(WOContext context) {
 		AjaxUtils.updateMutableUserInfoWithAjaxInfo(context.response());
 	}
 
+	/**
+	 * <span class="ja">
+	 * ユーザ・インフォメーション・ディクショナリーにページキャシュを保存しないことを登録します。
+	 * 
+	 * @param message - WOMessage
+	 * </span>
+	 */
 	public static void updateMutableUserInfoWithAjaxInfo(WOMessage message) {
 		NSMutableDictionary dict = AjaxUtils.mutableUserInfo(message);
 		dict.takeValueForKey(ERXAjaxSession.DONT_STORE_PAGE, ERXAjaxSession.DONT_STORE_PAGE);
@@ -264,13 +303,7 @@ public class AjaxUtils {
 	}
 
 	public static void appendScriptHeader(WOResponse response) {
-		boolean appendTypeAttribute = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXResponseRewriter.javascriptTypeAttribute", false);
-		if (appendTypeAttribute) {
-			response.appendContentString("<script type=\"text/javascript\">");
-		}
-		else {
-			response.appendContentString("<script>");
-		}
+		ERXResponseRewriter.appendScriptTagOpener(response);
 	}
 
 	public static void appendScriptFooterIfNecessary(WORequest request, WOResponse response) {
@@ -280,7 +313,7 @@ public class AjaxUtils {
 	}
 
 	public static void appendScriptFooter(WOResponse response) {
-		response.appendContentString("</script>");
+		ERXResponseRewriter.appendScriptTagCloser(response);
 	}
 
 	/**

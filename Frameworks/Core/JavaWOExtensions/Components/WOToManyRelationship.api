@@ -11,15 +11,15 @@
 		<binding name="sourceObject"/>
 		<binding name="uiStyle"/>
 
-		<validation message="&apos;sourceEntityName&apos; is a required binding">
+		<validation message="'sourceEntityName' is a required binding">
 			<unbound name="sourceEntityName"/>
 		</validation>
 
-		<validation message="&apos;sourceObject&apos; is a required binding">
+		<validation message="'sourceObject' is a required binding">
 			<unbound name="sourceObject"/>
 		</validation>
 
-		<validation message="&apos;relationshipKey&apos; is a required binding">
+		<validation message="'relationshipKey' is a required binding">
 			<unbound name="relationshipKey"/>
 		</validation>
 	</wo>

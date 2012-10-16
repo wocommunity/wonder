@@ -21,9 +21,7 @@ import com.webobjects.foundation.NSMutableArray;
  * @binding sample sample binding explanation
  *
  * @created ak on Tue Aug 27 2002
- * @project DevStudio
  */
-
 public class JavaDocViewer extends WOComponent {
 
     public String className;
@@ -40,9 +38,8 @@ public class JavaDocViewer extends WOComponent {
         super(context);
     }
 
-    
-
     /** component does not synchronize it's variables */
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     public Node node;
@@ -100,5 +97,4 @@ public class JavaDocViewer extends WOComponent {
         className = value;
         node = parse(selectedClass.documentationPath());
     }
-    
 }

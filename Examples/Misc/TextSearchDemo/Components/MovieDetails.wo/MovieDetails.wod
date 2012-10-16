@@ -1,0 +1,4 @@
+PageWrapper : PageWrapper {
+	title = movie;
+	backPage = backPage;
+}

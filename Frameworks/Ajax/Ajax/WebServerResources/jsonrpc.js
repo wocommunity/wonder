@@ -778,6 +778,7 @@ JSONRpcClient.prototype._sendRequest = function (req)
   try
   {
     http.setRequestHeader("Content-type", "text/plain");
+    http.setRequestHeader("x-requested-with", "XMLHttpRequest");
   }
   catch(e)
   {

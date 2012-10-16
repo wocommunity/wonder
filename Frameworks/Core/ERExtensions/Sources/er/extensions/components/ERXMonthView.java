@@ -1,18 +1,17 @@
 package er.extensions.components;
+
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 
 /**
-* Class for Wonder Component ERXMonthView.
+ * Class for Wonder Component ERXMonthView.
  *
  * @binding cellWidth width if the date cells. Default is 20.
  *
  * @author ak on Thu Sep 04 2003
- * @project ERExtensions
  */
-
 public class ERXMonthView extends ERXStatelessComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -32,6 +31,8 @@ public class ERXMonthView extends ERXStatelessComponent {
     public ERXMonthView(WOContext context) {
         super(context);
     }
+    
+    @Override
     public void reset() {
         super.reset();
         _cellWidth = -1;

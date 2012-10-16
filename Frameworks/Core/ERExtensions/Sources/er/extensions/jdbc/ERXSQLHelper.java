@@ -532,7 +532,7 @@ public class ERXSQLHelper {
 	}
 
 	/**
-	 * Returns the last of attributes to fetch for a fetch spec. The entity is
+	 * Returns the list of attributes to fetch for a fetch spec. The entity is
 	 * passed in here because it has likely already been looked up for the
 	 * particular fetch spec.
 	 * 
@@ -642,7 +642,7 @@ public class ERXSQLHelper {
 		}
 		EOSQLExpression sqlExpr = sqlFactory.selectStatementForAttributes(attributes, false, spec, entity);
 		String sql = sqlExpr.statement();
-		if(spec.hints() != null && !spec.hints().isEmpty() && !(spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey) == null)) {
+		if (spec.hints() != null && !spec.hints().isEmpty() && spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey) != null) {
 			Object hint = spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey);
 			sql = customQueryExpressionHintAsString(hint);
 		}
@@ -690,11 +690,32 @@ public class ERXSQLHelper {
 	 * @return the generated read format
 	 */
 	public String readFormatForAggregateFunction(String functionName, String columnName, String aggregateName) {
-		StringBuffer sb = new StringBuffer();
+		return readFormatForAggregateFunction(functionName, columnName, aggregateName, false);
+	}
+	
+	/**
+	 * Returns the attribute read format for an aggregate function for a
+	 * particular column with a name.
+	 * 
+	 * @param functionName
+	 *            the aggregate function to generate
+	 * @param columnName
+	 *            the column name to aggregate on
+	 * @param aggregateName
+	 *            the name to assign to the aggregate result
+	 * @param usesDistinct
+	 *            <code>true</code> if function should be used on distinct values
+	 * @return the generated read format
+	 */
+	public String readFormatForAggregateFunction(String functionName, String columnName, String aggregateName, boolean usesDistinct) {
+		StringBuilder sb = new StringBuilder();
 		sb.append(functionName);
-		sb.append("(");
+		sb.append('(');
+		if (usesDistinct) {
+			sb.append("distinct ");
+		}
 		sb.append(columnName);
-		sb.append(")");
+		sb.append(')');
 		if (aggregateName != null) {
 			sb.append(" AS ");
 			sb.append(aggregateName);
@@ -1110,30 +1131,27 @@ public class ERXSQLHelper {
 		if (spec.hints() == null || spec.hints().isEmpty() || spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey) == null) {
 			// no hints
 			if (spec.fetchLimit() > 0 || spec.sortOrderings() != null) {
-				boolean usesDistinct=spec.usesDistinct();
+				boolean usesDistinct = spec.usesDistinct();
 				spec = new EOFetchSpecification(spec.entityName(), spec.qualifier(), null);
 				spec.setUsesDistinct(usesDistinct);
 			}
 
 			EOSQLExpression sqlExpression = sqlExpressionForFetchSpecification(ec, spec, 0, -1);
 			String statement = sqlExpression.statement();
-			int index = statement.toLowerCase().indexOf(" from ");
+			String listString = sqlExpression.listString();
 
 			String countExpression;
 			if (spec.usesDistinct()) {
-				NSArray primaryKeyAttributeNames = entity.primaryKeyAttributeNames();
+				NSArray<String> primaryKeyAttributeNames = entity.primaryKeyAttributeNames();
 				if (primaryKeyAttributeNames.count() > 1)
 					log.warn("Composite primary keys are currently unsupported in rowCountForFetchSpecification, when the spec uses distinct");
-				String pkAttributeName = (String) primaryKeyAttributeNames.lastObject();
+				String pkAttributeName = primaryKeyAttributeNames.lastObject();
 				String pkColumnName = entity.attributeNamed(pkAttributeName).columnName();
-				countExpression = "count(distinct " +
-						quoteColumnName("t0." + pkColumnName) 
-						+ ") ";
-			}
-			else {
+				countExpression = "count(distinct " + quoteColumnName("t0." + pkColumnName) + ") ";
+			} else {
 				countExpression = "count(*) ";
 			}
-			statement = (new StringBuilder()).append("select ").append(countExpression).append(statement.substring(index, statement.length())).toString();
+			statement = statement.replace(listString, countExpression);
 			sqlExpression.setStatement(statement);
 			sql = statement;
 			result = ERXEOAccessUtilities.rawRowsForSQLExpression(ec, model.name(), sqlExpression);
@@ -2374,29 +2392,32 @@ public class ERXSQLHelper {
 		public int varcharLargeColumnWidth() {
 			return -1;
 		}
-
+		
+		@Override
 		public boolean handleDatabaseException(EODatabaseContext databaseContext, Throwable throwable) {
-			if(throwable instanceof EOGeneralAdaptorException) {
+			if (throwable instanceof EOGeneralAdaptorException) {
 				EOGeneralAdaptorException gae = (EOGeneralAdaptorException) throwable;
-				EOAdaptorOperation failedOperation = (EOAdaptorOperation) gae.userInfo().objectForKey(EOAdaptorChannel.FailedAdaptorOperationKey);
-				if(failedOperation != null) {
-					Throwable t = failedOperation.exception();
-					if(t instanceof JDBCAdaptorException) {
-						JDBCAdaptorException jdbcEx = (JDBCAdaptorException) t;
-						SQLException sqlEx = jdbcEx.sqlException();
-						if(sqlEx != null && UNIQUE_CONSTRAINT_EXCEPTION_STATE.equals(sqlEx.getSQLState())) {
-							String message = sqlEx.getMessage();
-							MessageFormat format = new MessageFormat(UNIQUE_CONSTRAINT_MESSAGE_FORMAT);
-							try {
-								Object[] objs = format.parse(message);
-								String idx = (String) objs[0];
-								ERXValidationFactory factory = ERXValidationFactory.defaultFactory();
-								String method = "UniqueConstraintException." + idx;
-								ERXValidationException ex = factory.createCustomException(null, method);
-								databaseContext.rollbackChanges();
-								throw ex;
-							} catch (ParseException	 pe) {
-								log.warn("Error parsing unique constraint exception message: " + message);
+				if (gae.userInfo() != null) {
+					EOAdaptorOperation failedOperation = (EOAdaptorOperation) gae.userInfo().objectForKey(EOAdaptorChannel.FailedAdaptorOperationKey);
+					if (failedOperation != null) {
+						Throwable t = failedOperation.exception();
+						if (t instanceof JDBCAdaptorException) {
+							JDBCAdaptorException jdbcEx = (JDBCAdaptorException) t;
+							SQLException sqlEx = jdbcEx.sqlException();
+							if (sqlEx != null && UNIQUE_CONSTRAINT_EXCEPTION_STATE.equals(sqlEx.getSQLState())) {
+								String message = sqlEx.getMessage();
+								MessageFormat format = new MessageFormat(UNIQUE_CONSTRAINT_MESSAGE_FORMAT);
+								try {
+									Object[] objs = format.parse(message);
+									String idx = (String) objs[0];
+									ERXValidationFactory factory = ERXValidationFactory.defaultFactory();
+									String method = "UniqueConstraintException." + idx;
+									ERXValidationException ex = factory.createCustomException(null, method);
+									databaseContext.rollbackChanges();
+									throw ex;
+								} catch (ParseException e) {
+									log.warn("Error parsing unique constraint exception message: " + message);
+								}
 							}
 						}
 					}
@@ -2404,7 +2425,6 @@ public class ERXSQLHelper {
 			}
 			return false;
 		}
-
 	}
 	
 	public static class FirebirdSQLHelper extends ERXSQLHelper {

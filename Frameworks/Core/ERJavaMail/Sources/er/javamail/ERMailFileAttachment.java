@@ -29,7 +29,7 @@ public class ERMailFileAttachment extends ERMailAttachment {
 	}
 
 	/**
-	 * <span class"ja">
+	 * <span class="ja">
 	 * ファイル名を取得します。
 	 * 設定されていなければ、"attachement.txt" が戻ります。
 	 * 
@@ -43,7 +43,7 @@ public class ERMailFileAttachment extends ERMailAttachment {
 	}
 
 	/**
-	 * <span class"ja">
+	 * <span class="ja">
 	 * ファイル名をセットします。
 	 * 
 	 * @param name - ファイル名
@@ -54,7 +54,7 @@ public class ERMailFileAttachment extends ERMailAttachment {
 	}
 
 	/**
-	 * <span class"ja">
+	 * <span class="ja">
 	 * コンテント ID を取得します。
 	 * 
 	 * @return コンテント ID
@@ -65,7 +65,7 @@ public class ERMailFileAttachment extends ERMailAttachment {
 	}
 
 	/**
-	 * <span class"ja">
+	 * <span class="ja">
 	 * コンテント ID をセットします。
 	 * 
 	 * @param id - コンテント ID

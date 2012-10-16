@@ -4,7 +4,7 @@
 
 		<binding name="d2wContext"/>
 
-		<validation message="&apos;d2wContext&apos; is a required binding">
+		<validation message="'d2wContext' is a required binding">
 			<unbound name="d2wContext"/>
 		</validation>
 	</wo>

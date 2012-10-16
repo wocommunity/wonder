@@ -2,6 +2,11 @@ Show: WOConditional {
 	condition = shouldShow;
 }
 
+CSSUrl: WOResourceURL {
+	framework = "ERExtensions";
+	filename = "css-debug.css";
+}
+
 Log4J: WOHyperlink {
 	class = ^linkClass;
 	actionClass = "ERXDirectAction";
@@ -9,14 +14,36 @@ Log4J: WOHyperlink {
 	target = "log4J";
 }
 
+LOCALIZE_log4j : ERXLocalizedString { //Log4J
+	value = "ERD2WDebugFlags.LOG4J";
+}
+
 D2W: WOHyperlink {
 	action = toggleD2WInfo;
 	class = ^linkClass;
 }
 
+LOCALIZE_d2w : ERXLocalizedString {
+	value = "ERD2WDebugFlags.D2W";
+}
+
+CSS: WOHyperlink {
+	href = "#";
+	onclick = "ERD2WDebugFlags_cssDebug();void(0);";
+	class = ^linkClass;
+}
+
+LOCALIZE_css : ERXLocalizedString {
+	value = "ERD2WDebugFlags.CSS";
+}
+
 SQL: WOHyperlink {
 	action = toggleAdaptorLogging;
 	class = ^linkClass;
+}
+
+LOCALIZE_sql : ERXLocalizedString {
+	value = "ERD2WDebugFlags.SQL";
 }
 
 SQLEnabled: WOConditional {
@@ -28,37 +55,31 @@ SQLNotEnabled: WOConditional {
     negate = true;
 }
 
-CSSUrl : WOResourceURL {
-	framework = "ERExtensions";
-	filename = "css-debug.css";
-}
-
-CSS: WOHyperlink {
-	href = "#";
-	onclick = "ERD2WDebugFlags_cssDebug();void(0);";
-	class = ^linkClass;
-}
-
 Clear: WOHyperlink {
 	action = clearD2WRuleCache;
 	class = ^linkClass;
 }
 
-Dump: WOHyperlink {
-	actionClass = "ERXDirectAction";
-	directActionName = "dumpCreatedKeys";
+LOCALIZE_clear : ERXLocalizedString {
+	value = "ERD2WDebugFlags.CLEAR";
+}
+
+PageMetrics: WOHyperlink {
+	action = togglePageMetrics;
 	class = ^linkClass;
 }
 
-WOStats: WOHyperlink {
-	action = statisticsPage;
-	class = ^linkClass;
+LOCALIZE_metrics : ERXLocalizedString {
+	value = "ERD2WDebugFlags.METRICS";
 }
 
-Localization: WOHyperlink {
-	actionClass = "ERXDirectAction";
-	directActionName = "editLocalizedFiles";
-	class = ^linkClass;
+IfMetricsEnabled: WOConditional {
+    condition = metricsEnabled;
+}
+
+IfNotMetricsEnabled: WOConditional {
+    condition = metricsEnabled;
+    negate = true;
 }
 
 DetailedPageMetrics: WOHyperlink {
@@ -75,21 +96,52 @@ IfNotDetailedMetricsEnabled: WOConditional {
     negate = true;
 }
 
-IfMetricsEnabled: WOConditional {
-    condition = metricsEnabled;
+LOCALIZE_show : ERXLocalizedString {
+	value = "ERD2WDebugFlags.SHOW";
 }
 
-IfNotMetricsEnabled: WOConditional {
-    condition = metricsEnabled;
-    negate = true;
+LOCALIZE_hide : ERXLocalizedString {
+	value = "ERD2WDebugFlags.HIDE";
 }
 
-PageMetrics: WOHyperlink {
-	action = togglePageMetrics;
+Dump: WOHyperlink {
+	actionClass = "ERXDirectAction";
+	directActionName = "dumpCreatedKeys";
 	class = ^linkClass;
+}
+
+LOCALIZE_dump : ERXLocalizedString {
+	value = "ERD2WDebugFlags.DUMP";
+}
+
+Localization: WOHyperlink {
+	actionClass = "ERXDirectAction";
+	directActionName = "editLocalizedFiles";
+	class = ^linkClass;
+}
+
+LOCALIZE_localize : ERXLocalizedString {
+	value = "ERD2WDebugFlags.LOCALIZE";
+}
+
+WOStats: WOHyperlink {
+	action = statisticsPage;
+	class = ^linkClass;
+}
+
+LOCALIZE_stats : ERXLocalizedString {
+	value = "ERD2WDebugFlags.STATS";
 }
 
 Test: WOHyperlink {
 	actionClass = "er.selenium.SeleniumStartTesting";
 	class = ^linkClass;
+}
+
+LOCALIZE_test : ERXLocalizedString {
+	value = "ERD2WDebugFlags.RUN";
+}
+
+hasSelenium : WOConditional {
+	condition = hasSeleniumFramework;
 }

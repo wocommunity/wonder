@@ -7,11 +7,11 @@
 		<binding name="sourceKeypath"/>
 		<binding name="destinationKeypath"/>
 
-		<validation message="&apos;source&apos; is a required binding">
+		<validation message="'source' is a required binding">
 			<unbound name="source"/>
 		</validation>
 
-		<validation message="&apos;destination&apos; is a required binding">
+		<validation message="'destination' is a required binding">
 			<unbound name="destination"/>
 		</validation>
 	</wo>

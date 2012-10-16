@@ -30,9 +30,7 @@ import er.extensions.validation.ERXValidationFactory;
  * @d2wKey length the length of the text field
  *
  * @author ak on Sun Aug 17 2003
- * @project ERDirectToWeb
  */
-
 public class ERDEditPassword extends ERDCustomEditComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -54,6 +52,7 @@ public class ERDEditPassword extends ERDCustomEditComponent {
         super(context);
     }
 
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
     
     protected Boolean _passwordConfirmationValidates;
@@ -72,6 +71,7 @@ public class ERDEditPassword extends ERDCustomEditComponent {
         _password = value;
     }
 
+    @Override
     public void setObject(EOEnterpriseObject newObject) {
         if (newObject!=object()) {
             setPassword(null);
@@ -98,6 +98,7 @@ public class ERDEditPassword extends ERDCustomEditComponent {
         ERXWOContext.contextDictionary().setObjectForKey(userInfo, "ERDEditPassword");
     }
 
+    @Override
     public void appendToResponse(WOResponse r, WOContext c) {
         super.appendToResponse(r,c);
         if(passwordConfirmationValidates()) {
@@ -105,6 +106,7 @@ public class ERDEditPassword extends ERDCustomEditComponent {
         }
     }
     
+    @Override
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         super.takeValuesFromRequest(r,c);
         if (c.wasFormSubmitted()) {

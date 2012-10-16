@@ -9,10 +9,13 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
+import com.webobjects.eoaccess.EOSQLExpression;
+import com.webobjects.eoaccess.EOSQLExpressionFactory;
 import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSForwardException;
 
 import er.extensions.foundation.ERXProperties;
@@ -117,14 +120,20 @@ public class ERXSequence {
 	 */
 	public static class DatabaseSequence extends ERXSequence {
 
+		private static final String ERX_SEQUENCE_TABLE = EOSQLExpression.sqlStringForString(ERXProperties.stringForKeyWithDefault("er.extensions.ERXSequence.TableName", "erx_sequence_table"));
+		private static final String VALUE_COLUMN_NAME = EOSQLExpression.sqlStringForString("value_");
+		private static final String NAME_COLUMN_NAME = EOSQLExpression.sqlStringForString("name_");
+
 		private ERXJDBCConnectionBroker _broker;
+		private EOSQLExpressionFactory _factory;
 
 		public DatabaseSequence(EOEditingContext ec, String modelName, String name, long initialValue) {
 			super(name, initialValue);
 			EOModel model = ERXEOAccessUtilities.modelGroup(ec).modelNamed(modelName);
 			_broker = ERXJDBCConnectionBroker.connectionBrokerForModel(model);
+    		_factory = new EOSQLExpressionFactory(EOAdaptor.adaptorWithModel(model));
 			_lastValue = increasedMaxValue(0);
-			_maxValue = _lastValue;			
+			_maxValue = _lastValue;
 		}
 
 		public DatabaseSequence(EOEditingContext ec, String modelName, String name) {
@@ -137,12 +146,26 @@ public class ERXSequence {
 		
 		protected long selectAndUpdateValue(Connection con, long increment) throws SQLException {
 			long pk;
-			String where = "where name_ = '"+ name() +"'";
-    		ResultSet resultSet = con.createStatement().executeQuery("select value_ from erx_sequence_table " + where + " for update");
+			EOSQLExpression selectExpression = _factory.expressionForEntity(null);
+
+			String columnList = VALUE_COLUMN_NAME;
+			String tableList = ERX_SEQUENCE_TABLE;
+			String whereSelector = selectExpression.sqlStringForSelector(EOQualifier.QualifierOperatorEqual, name());
+			String whereClause = NAME_COLUMN_NAME + " " + whereSelector + " '" + name() + "'";
+			String lockClause = selectExpression.lockClause();
+
+			String selectStatement = selectExpression.assembleSelectStatementWithAttributes(null, true, null, null, "SELECT ", columnList , tableList, whereClause, null, null, lockClause);
+			ResultSet resultSet = con.createStatement().executeQuery(selectStatement);
+    		
     		boolean hasNext = resultSet.next();
     		if (hasNext) {
-    			pk = resultSet.getLong("value_");
-    			con.createStatement().executeUpdate("update erx_sequence_table set value_ = value_ +" + increment + " " + where);
+    			String incrementString = EOSQLExpression.sqlStringForNumber(Long.valueOf(increment));
+    			String updateValueColumn = VALUE_COLUMN_NAME + " = " + VALUE_COLUMN_NAME + " + " + incrementString;
+				String updateList = updateValueColumn;
+    		
+    			pk = resultSet.getLong(VALUE_COLUMN_NAME);
+				String updateStatement = _factory.expressionForEntity(null).assembleUpdateStatementWithRow(null, null, tableList, updateList, whereClause);
+    			con.createStatement().executeQuery(updateStatement);
     		} else {
     			pk = createRow(con, increment);
     		}
@@ -150,16 +173,25 @@ public class ERXSequence {
 		}
 
 		protected long createRow(Connection con, long increment) throws SQLException {
-			con.createStatement().executeUpdate("insert into erx_sequence_table (name_, value_) values ('" + name() + "', " + increment + ")");
+			String incrementString = EOSQLExpression.sqlStringForNumber(Long.valueOf(increment));
+			String tableList = ERX_SEQUENCE_TABLE;
+			String columnList = NAME_COLUMN_NAME + "," + VALUE_COLUMN_NAME;
+			String valueList = "'" + name() + "'," + incrementString;
+			String insertStatement = _factory.expressionForEntity(null).assembleInsertStatementWithRow(null, tableList, columnList, valueList);
+			con.createStatement().executeUpdate(insertStatement);
 			return 0L;
 		}
 
 		protected void createTable(Connection con) throws SQLException {
-			con.createStatement().executeUpdate("create table erx_sequence_table (name_ varchar(100) not null, value_ int)");
-			con.createStatement().executeUpdate("alter table erx_sequence_table add primary key (name_)");// NOT
+			String nameColumnClause = NAME_COLUMN_NAME + " VARCHAR(100) NOT NULL";
+			String valueColumnClause = VALUE_COLUMN_NAME + " INT";
+			String createTableStatement = "CREATE TABLE " + ERX_SEQUENCE_TABLE + " (" + nameColumnClause + ", " + valueColumnClause + ")";
+			String alterTableStatement = "ALTER TABLE " + ERX_SEQUENCE_TABLE + " ADD PRIMARY KEY (" + NAME_COLUMN_NAME + ")";// NOT
 			// DEFERRABLE
 			// INITIALLY
 			// IMMEDIATE");
+			con.createStatement().executeUpdate(createTableStatement);
+			con.createStatement().executeUpdate(alterTableStatement);
 		}
 		
 		protected long increasedMaxValue(long increment) {
@@ -205,11 +237,12 @@ public class ERXSequence {
 		protected boolean isCreationError(SQLException ex) {
 			String s = ex.getMessage().toLowerCase();
     		boolean creationError = false;
-    		creationError |= (s.indexOf("error code 116") != -1); // frontbase?
-			creationError |= (s.indexOf("erx_sequence_table") != -1 && s.indexOf("does not exist") != -1); // postgres ?
+    		String tableNameLastComponent = DatabaseSequence.ERX_SEQUENCE_TABLE.substring(DatabaseSequence.ERX_SEQUENCE_TABLE.lastIndexOf('.')+1);
+    		creationError |= (s.indexOf("error 116") != -1); // frontbase?
+			creationError |= (s.indexOf(tableNameLastComponent) != -1 && s.indexOf("does not exist") != -1); // postgres ?
 			creationError |= s.indexOf("ora-00942") != -1; // oracle
 			creationError |= s.indexOf("doesn't exist") != -1; // mysql
-			creationError |= (s.indexOf("erx_sequence_table") != -1 && s.indexOf("not found.") != -1); // sybase
+			creationError |= (s.indexOf(tableNameLastComponent) != -1 && s.indexOf("not found.") != -1); // sybase
 			return creationError;
 		}
 	}
@@ -225,7 +258,7 @@ public class ERXSequence {
 		protected long createRow(Connection con, long increment) throws SQLException {
 			EOEntity entity = ERXEOAccessUtilities.rootEntityForEntityNamed(_entityName);
 			String tableName = entity.externalName();
-			String colName = ((EOAttribute)entity.primaryKeyAttributes().lastObject()).columnName();
+			String colName = entity.primaryKeyAttributes().lastObject().columnName();
 			String sql = "select max(" + colName + ") from " + tableName;
 
 			ResultSet resultSet;

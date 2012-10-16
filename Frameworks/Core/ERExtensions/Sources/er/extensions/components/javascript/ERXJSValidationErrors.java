@@ -1,4 +1,5 @@
 package er.extensions.components.javascript;
+
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOComponent;
@@ -18,9 +19,7 @@ import er.extensions.validation.ERXValidationException;
  * @binding sample sample binding explanation
  *
  * @author ak on Fri May 02 2003
- * @project ERExtensions
  */
-
 public class ERXJSValidationErrors extends ERXStatelessComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -44,6 +43,8 @@ public class ERXJSValidationErrors extends ERXStatelessComponent {
     }
 
     public String callback() { return "parent." + _callback; }
+    
+    @Override
     public void awake() {
         String key = context().request().stringFormValueForKey("_vkey");
         String value = context().request().stringFormValueForKey("_vvalue");
@@ -109,5 +110,6 @@ public class ERXJSValidationErrors extends ERXStatelessComponent {
         }
     }
     
+    @Override
     public void reset() { _errors = null; _callback = null;}
 }

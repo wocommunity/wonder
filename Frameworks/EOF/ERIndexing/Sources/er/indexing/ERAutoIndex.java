@@ -154,9 +154,6 @@ public class ERAutoIndex extends ERIndex {
          */
         protected ConfigurationEntry configureEntity(String entityName, NSArray keys) {
 
-        	// CHECKME: Why would _entities be created for each entity in our index configuration?
-            _entities = new NSMutableSet();
-            
             // Get ConfigurationEntry for the entity if it already exists
             ConfigurationEntry config = configuration.objectForKey(entityName);
 
@@ -406,6 +403,9 @@ public class ERAutoIndex extends ERIndex {
                 _queue.start();
             }
         }
+        
+        _entities = new NSMutableSet();
+        
          _configuration.initFromDictionary(indexDef);
         setTransactionHandler(new AutoTransactionHandler());
     }

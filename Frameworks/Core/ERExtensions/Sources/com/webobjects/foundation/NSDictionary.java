@@ -16,10 +16,16 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * <span class="en">
  * NSDictionary reimplementation to support JDK 1.5 templates. Use with
+ * </span>
+ * 
+ * <span class="ja">
+ * JDK 1.5 テンプレートをサポートする為の再実装。使用は
+ * </span>
  * 
  * <pre>
- * NSDictionary&lt;String, String&gt; env = new NSDictionary&lt;String, String&gt;(System.getenv(), true);
+ * NSDictionary<String, String> env = new NSDictionary<String, String>(System.getenv(), true);
  * 
  * for (String key : env)
  * 	logger.debug(env.valueForKey(key));
@@ -31,6 +37,9 @@ import java.util.Set;
  *            type of value contents
  */
 public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NSKeyValueCoding, NSKeyValueCodingAdditions, _NSFoundationCollection, Map<K, V> {
+  
+  static final long serialVersionUID = 2886170486405617806L;
+
 	public class _JavaNSDictionaryMapEntry<P, Q> implements java.util.Map.Entry<P, Q> {
 
 		public P getKey() {
@@ -485,7 +494,6 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		NSKeyValueCodingAdditions.DefaultImplementation.takeValueForKeyPath(this, value, keyPath);
 	}
 
-	@SuppressWarnings("unchecked")
 	public Class classForCoder() {
 		return _CLASS;
 	}
@@ -540,30 +548,30 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 	}
 
 	public String toString() {
-		StringBuffer buffer = new StringBuffer(128);
-		buffer.append("{");
+		StringBuilder sb = new StringBuilder(128);
+		sb.append('{');
 		Object[] keys = keysNoCopy();
 		for (int i = 0; i < keys.length; i++) {
 			Object key = keys[i];
 			Object object = objectForKey(key);
-			buffer.append(key.toString());
-			buffer.append(" = ");
+			sb.append(key.toString());
+			sb.append(" = ");
 			if (object instanceof String) {
-				buffer.append('"');
-				buffer.append((String) object);
-				buffer.append('"');
+				sb.append('"');
+				sb.append((String) object);
+				sb.append('"');
 			}
 			else if (object instanceof Boolean) {
-				buffer.append(((Boolean) object).booleanValue() ? "true" : "false");
+				sb.append(((Boolean) object).toString());
 			}
 			else {
-				buffer.append(object);
+				sb.append(object);
 			}
-			buffer.append("; ");
+			sb.append("; ");
 		}
 
-		buffer.append("}");
-		return new String(buffer);
+		sb.append('}');
+		return sb.toString();
 	}
 
 	private void writeObject(ObjectOutputStream s) throws IOException {
@@ -590,7 +598,6 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		initFromKeyValues(values, keys, CheckForNull);
 	}
 
-	@SuppressWarnings("unused")
 	private Object readResolve() throws ObjectStreamException {
 		if (getClass() == _CLASS && count() == 0) {
 			return EmptyDictionary;
@@ -674,13 +681,9 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		return new NSSet<Map.Entry<K, V>>(set);
 	}
 
-	@SuppressWarnings("unchecked")
 	public static final Class _CLASS = _NSUtilitiesExtra._classWithFullySpecifiedNamePrime("com.webobjects.foundation.NSDictionary");
-	@SuppressWarnings("unchecked")
 	public static final Class _MAP_ENTRY_CLASS = _NSUtilitiesExtra._classWithFullySpecifiedNamePrime("com.webobjects.foundation.NSDictionary$_JavaNSDictionaryMapEntry");
-	@SuppressWarnings("unchecked")
 	public static final NSDictionary EmptyDictionary = new NSDictionary();
-	static final long serialVersionUID = 2886170486405617806L;
     private static final String SerializationKeysFieldKey = "keys";
     private static final String SerializationValuesFieldKey = "objects";
 	private static final Class<?> _objectArrayClass = ((Object) (new Object[0])).getClass();

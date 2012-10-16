@@ -63,10 +63,6 @@ public class ERD2WPropertyName extends ERD2WStatelessComponent {
     }
     
     public boolean hasNoErrors() {
-        if(false) {
-            String keyPath = "errorMessages." + displayNameForProperty();
-            return d2wContext().valueForKeyPath(keyPath) == null;
-        }
         return !validationExceptionOccurredForPropertyKey();
     }
 
@@ -118,8 +114,7 @@ public class ERD2WPropertyName extends ERD2WStatelessComponent {
     }
 
     public boolean displayRequiredMarker() {
-    	boolean displayRequiredMarker = ERXValueUtilities.booleanValue(d2wContext().valueForKey("displayRequiredMarker"));
-    	return displayRequiredMarker;
+    	return ERXValueUtilities.booleanValue(d2wContext().valueForKey("displayRequiredMarker"));
     }
 
     public void takeValuesFromRequest(WORequest r, WOContext c) {

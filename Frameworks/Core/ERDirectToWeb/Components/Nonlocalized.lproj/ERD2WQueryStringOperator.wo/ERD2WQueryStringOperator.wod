@@ -2,6 +2,7 @@ NumberField: WOTextField {
 	size = length;
 	value = value;
 	name = d2wContext.name;
+	class = "ERD2WQueryStringOperator";
 }
 
 OperatorPopUp: WOPopUpButton {
