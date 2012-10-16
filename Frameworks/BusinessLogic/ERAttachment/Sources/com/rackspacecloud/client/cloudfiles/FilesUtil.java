@@ -42,7 +42,11 @@ public class FilesUtil
         {
             throw new FileNotFoundException("Property file '" + file + "' not found in the classpath.");
         }
-        loadProperties(io);
+        try {
+        	loadProperties(io);
+        } finally {
+        	io.close();
+        }
     }
 
 

@@ -2,7 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path="Sources"/>
 	<classpathentry kind="src" path="Tests"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/metadata-extractor-2.3.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/metadata-extractor-2.6.2.jar" sourcepath="LibrarySources/metadata-extractor-2.6.2-src.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/xmpcore.jar"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/ERExtensions"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/ERJars"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/ERPrototypes"/>

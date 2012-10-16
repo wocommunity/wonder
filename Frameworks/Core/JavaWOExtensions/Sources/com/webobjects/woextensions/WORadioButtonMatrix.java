@@ -7,7 +7,6 @@
 
 package com.webobjects.woextensions;
 
-
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
@@ -68,10 +67,12 @@ public class WORadioButtonMatrix extends WOComponent {
         currentItem = null;
     }
 
+    @Override
     public boolean isStateless() {
         return true;
     }
 
+    @Override
     public void reset()  {
         _invalidateCaches();
     }

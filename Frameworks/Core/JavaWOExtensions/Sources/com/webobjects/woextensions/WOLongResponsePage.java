@@ -137,6 +137,7 @@ public abstract class WOLongResponsePage extends WOComponent implements Runnable
         _done = true;
     }
 
+    @Override
     public void appendToResponse(WOResponse aResponse, WOContext aContext)  {
 
         if (!_performingAction) {
@@ -187,6 +188,7 @@ public abstract class WOLongResponsePage extends WOComponent implements Runnable
         return refreshPageForStatus(aStatus);
     }
 
+    @Override
     public WOActionResults invokeAction(WORequest aRequest, WOContext aContext)  {
         if (aContext.senderID().equals(WOMetaRefreshSenderId)) {
             // We recognized the elementID that was set for the meta refresh.
@@ -229,5 +231,5 @@ public abstract class WOLongResponsePage extends WOComponent implements Runnable
         return cancelPageForStatus(status());
     }
 
-    public abstract Object performAction() ;
+    public abstract Object performAction();
 }

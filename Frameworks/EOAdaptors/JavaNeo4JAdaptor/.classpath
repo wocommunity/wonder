@@ -30,7 +30,6 @@
 	<classpathentry kind="lib" path="Libraries/neo4j-com-1.7.1.jar"/>
 	<classpathentry kind="lib" path="Libraries/neo4j-management-1.7.1.jar"/>
 	<classpathentry kind="lib" path="Libraries/org.apache.servicemix.bundles.netty-3.2.5.Final_1.jar"/>
-	<classpathentry kind="lib" path="Libraries/slf4j-api-1.6.1.jar"/>
 	<classpathentry kind="lib" path="Libraries/zookeeper-3.3.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -287,7 +287,7 @@ public class DictClient implements Serializable
 	    String rWord = line.substring((qoff = line.indexOf('"') + 1),
 					  (qoff = line.indexOf('"', qoff+1)));
 	    String rDb = line.substring(qoff+2, line.indexOf(' ', qoff+2));
-	    StringBuffer def = new StringBuffer();
+	    StringBuilder def = new StringBuilder();
 	    while(true) {
 		line = in.readLine();
 		if(line.equals(".")) break;

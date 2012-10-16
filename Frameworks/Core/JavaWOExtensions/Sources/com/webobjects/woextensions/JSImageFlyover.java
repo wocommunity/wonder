@@ -24,11 +24,12 @@ public class JSImageFlyover extends JSComponent {
         super(aContext);
     }
 
+    @Override
     public void appendToResponse(WOResponse response, WOContext context) {
         // We need to give each image a unique name, with considerations that there might be
         // more than one ImageFlyover per page.
 
-        StringBuffer uniqueIDBuffer = new StringBuffer("ImageFlyover");
+    	StringBuilder uniqueIDBuffer = new StringBuilder("ImageFlyover");
         uniqueIDBuffer.append(context.contextID());
         uniqueIDBuffer.append("_");
         uniqueIDBuffer.append(context.elementID().replace('.', '_'));
@@ -55,6 +56,7 @@ public class JSImageFlyover extends JSComponent {
         return uniqueID+".src='"+_url("unselectedImage")+"'";
     }
 
+    @Override
     public String imageLocation() {
         // Return the base image (what the hyperlink starts with) to the WOImage
         return _url("unselectedImage");

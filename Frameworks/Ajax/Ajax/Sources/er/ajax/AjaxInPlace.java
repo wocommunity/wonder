@@ -133,6 +133,7 @@ public class AjaxInPlace extends WOComponent {
 		super(context);
 	}
 
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}
@@ -157,23 +158,26 @@ public class AjaxInPlace extends WOComponent {
 		return _id;
 	}
 	
+	@Override
 	public WOActionResults invokeAction(WORequest aRequest, WOContext aContext) {
-    _alreadyInForm = context().isInForm();
+		_alreadyInForm = context().isInForm();
 		WOActionResults results = super.invokeAction(aRequest, aContext);
 		// MS: see appendToResponse
 		_id = null;
 		return results;
 	}
 	
+	@Override
 	public void takeValuesFromRequest(WORequest aRequest, WOContext aContext) {
-    _alreadyInForm = context().isInForm();
+		_alreadyInForm = context().isInForm();
 		super.takeValuesFromRequest(aRequest, aContext);
 		// MS: see appendToResponse
 		_id = null;
 	}
 
+	@Override
 	public void appendToResponse(WOResponse aResponse, WOContext aContext) {
-    _alreadyInForm = context().isInForm();
+		_alreadyInForm = context().isInForm();
 		super.appendToResponse(aResponse, aContext);
 		// MS: id was being cached, but if the structure of the page changes,
 		// it can cache too aggressively.  We really only care that the id
@@ -398,5 +402,4 @@ public class AjaxInPlace extends WOComponent {
 		// ignore results
 		return results;
 	}
-
 }

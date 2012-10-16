@@ -44,6 +44,7 @@ public class WOAssociationEventRow extends WOEventRow {
         }
     }
 
+    @Override
     public String hyperlinkTitle()
     {
         return declarationName()+" : "+ event.signatureOfType(WOEvent.ComponentSignature);

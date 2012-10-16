@@ -54,6 +54,7 @@ public class AjaxSelectionList extends AjaxComponent {
 		super(context);
 	}
 
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}
@@ -75,6 +76,7 @@ public class AjaxSelectionList extends AjaxComponent {
 		return valueForBinding("item");
 	}
 
+	@Override
 	public void sleep() {
 		super.sleep();
 		_list = null;
@@ -151,6 +153,7 @@ public class AjaxSelectionList extends AjaxComponent {
 		return selectedIndex;
 	}
 
+	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		super.takeValuesFromRequest(request, context);
 		if (context.wasFormSubmitted()) {

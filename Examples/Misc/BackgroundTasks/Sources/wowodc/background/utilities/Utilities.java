@@ -12,7 +12,6 @@ import er.extensions.foundation.ERXThreadStorage;
  * A utility class for this example app.
  * 
  * @author kieran
- *
  */
 public class Utilities {
 	
@@ -34,8 +33,8 @@ public class Utilities {
 	 * 		http://primes.utm.edu/
 	 * 		http://primes.utm.edu/notes/faq/one.html
 	 * 
-	 * @param aNumber
-	 * @return true if a number is a prime number, false otherwise
+	 * @param aNumber number to check
+	 * @return <code>true</code> if a number is a prime number, <code>false</code> otherwise
 	 */
 	public static boolean isPrime(long aNumber) {
 		if (aNumber < 2) {
@@ -96,7 +95,7 @@ public class Utilities {
 	/**
 	 * Adds an error message to current list for current request.
 	 * 
-	 * @param message
+	 * @param message error message
 	 */
 	public static void addErrorMessage(String message) {
 		errorMessages().addObject(message);

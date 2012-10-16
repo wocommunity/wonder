@@ -1509,7 +1509,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 	public String relationshipPath() {
 		if (!isFlattened())
 			return null;
-		StringBuffer relPath = new StringBuffer();
+		StringBuilder relPath = new StringBuilder();
 		int iCount = _definitionArray.count() - 1;
 		for (int i = 0; i < iCount; i++) {
 			if (i > 0)
@@ -1517,7 +1517,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 			relPath.append(((EORelationship) _definitionArray.objectAtIndex(i)).name());
 		}
 
-		return new String(relPath);
+		return relPath.toString();
 	}
 
 	EOAttribute targetAttribute() {

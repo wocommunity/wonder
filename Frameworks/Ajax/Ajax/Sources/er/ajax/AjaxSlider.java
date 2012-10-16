@@ -41,20 +41,15 @@ public class AjaxSlider extends AjaxComponent {
     /**
      * Overridden because the component is stateless
      */
+    @Override
     public boolean isStateless() {
         return true;
     }
 
     /**
-     * Overridden because the component does not synch with the bindings.
-     */
-    public boolean synchronizesVariablesWithBindings() {
-        return false;
-    }
-
-    /**
      * Overridden to add the initialization javascript for the auto completer.
      */
+    @Override
     public void appendToResponse(WOResponse res, WOContext ctx) {
         super.appendToResponse(res, ctx);
         _trackerId = safeElementID() + "_tracker";
@@ -96,7 +91,7 @@ public class AjaxSlider extends AjaxComponent {
         options.setObjectForKey("$R(" + min + "," + max + ")", "range");
 
         if (min != null && max != null && ERXComponentUtilities.booleanValueForBinding(this, "snap")) {
-          StringBuffer valuesBuffer = new StringBuffer();
+          StringBuilder valuesBuffer = new StringBuilder();
           valuesBuffer.append("[");
           for (int i = min.intValue(); i <= max.intValue(); i ++ ) {
             valuesBuffer.append(i);
@@ -131,6 +126,7 @@ public class AjaxSlider extends AjaxComponent {
     	addScriptResourceInHead(res, "slider.js");
     }
 
+    @Override
     public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
     	try {
 	    		String format = (String) valueForBinding("numberformat", "0");
@@ -153,5 +149,4 @@ public class AjaxSlider extends AjaxComponent {
     	}
     	return result;
     }
-
 }

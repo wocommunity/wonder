@@ -158,7 +158,7 @@ public class MTAjaxUpdateContainer extends AjaxUpdateContainer {
 				appendTagAttributeToResponse(response, "id", id);
 				appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
 				appendTagAttributeToResponse(response, "style", valueForBinding("style", component));
-				appendTagAttributeToResponse(response, "updateUrl", MTAjaxUtils.ajaxComponentActionUrl(context));
+				appendTagAttributeToResponse(response, "data-updateUrl", MTAjaxUtils.ajaxComponentActionUrl(context));
 				response.appendContentString(">");
 			
 				if(hasChildrenElements()) {

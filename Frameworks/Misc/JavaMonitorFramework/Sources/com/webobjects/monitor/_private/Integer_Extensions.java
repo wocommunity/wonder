@@ -13,15 +13,9 @@ SUCH DAMAGE.
 
 package com.webobjects.monitor._private;
 
-import com.webobjects.foundation._NSUtilities;
-
 public class Integer_Extensions {
     static public Integer booleanAsNumber(boolean aBOOL) {
-        if (aBOOL == true) {
-            return _NSUtilities.IntegerForInt(1);
-        } else {
-            return _NSUtilities.IntegerForInt(0);
-        }
+    	return aBOOL ? Integer.valueOf(1) : Integer.valueOf(0);
     }
 
     static public boolean asBool(Integer aNumber) {

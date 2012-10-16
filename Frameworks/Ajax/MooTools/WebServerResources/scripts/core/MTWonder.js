@@ -75,7 +75,7 @@ var MTAjaxUpdateContainer = {
 	registerPeriodic: function(id, canStop, stopped, options) {
 		
 		var el = $(id);
-		var url = el.get('updateUrl');
+		var url = el.get('data-updateUrl');
 		var updater;
 		if(!canStop) {
 
@@ -111,7 +111,7 @@ var MTAjaxUpdateContainer = {
 			alert('There is no element on this page with the id "' + id + '".');
 		}
 		
-		var actionUrl = updateElement.get('updateUrl');
+		var actionUrl = updateElement.get('data-updateUrl');
 		actionUrl = actionUrl.addQueryParameters('__updateID=' + id);
 //		new Ajax.Updater(id, actionUrl, AjaxOptions.defaultOptions(options));
 		new Request.HTML(Object.merge(MTAjaxOptions.defaultOptions(options), {
@@ -139,7 +139,7 @@ var MTAjaxUpdateLink = {
 		if(updateElement == null) {
 			alert('There is no element on this page with the id "' + id + '".');
 		}
-		MTAjaxUpdateLink._update(id, updateElement.get('updateUrl'), options, elementID, queryParams);
+		MTAjaxUpdateLink._update(id, updateElement.get('data-updateUrl'), options, elementID, queryParams);
 	},
 	
 	_update: function(id, actionUrl, options, elementID, queryParams) {

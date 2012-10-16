@@ -66,10 +66,10 @@ public abstract class FSQualifierHandler {
                 if (aSet != null) {
                     String aKey = aQualifier.key();
                     for (int index = 0; index < PathKeysCount; index++) {
-                        if (aKey.equals(PathKeys[index]) == true) {
+                        if (aKey.equals(PathKeys[index])) {
                             String aPath = aQualifier.value().toString();
                             File aFile = fileWithPath(aPath);
-                            if (aFile.exists() == true)
+                            if (aFile.exists())
                                 aSet.addObject(aFile);
                             if (debug)
                                 System.out.println("EOKeyValueQualifier.addFileWithQualifierToSet: " + aFile);
@@ -239,7 +239,7 @@ public abstract class FSQualifierHandler {
                 int count = someHandlers.length;
                 for (int index = 0; index < count; index++) {
                     FSQualifierHandler anHandler = someHandlers[index];
-                    if (anHandler.canHandleQualifier(aQualifier) == true) {
+                    if (anHandler.canHandleQualifier(aQualifier)) {
                         anHandler.addFilesMatchingQualifierToSet(aQualifier, aSet);
                         break;
                     }

@@ -1223,6 +1223,10 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 		if(!ERXStringUtilities.stringIsNullOrEmpty(key) && _localizerMethodIndicatorCharacter == key.charAt(0)) {
 			int dotIndex = key.indexOf(NSKeyValueCodingAdditions.KeyPathSeparator);
 			String methodKey = (dotIndex>0)?key.substring(1, dotIndex):key.substring(1, key.length());
+      
+      // KI : This can make bad invoke Errors in D2W Apps, when Rules are like '@count'
+      // If the key is one of operatorNames then don't invoke it.
+      if(!NSArray.operatorNames().contains(methodKey)) {
 			try {
 				Method m = ERXLocalizer.class.getMethod(methodKey);
 				return m.invoke(this, (Object[])null);
@@ -1234,6 +1238,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 				throw NSForwardException._runtimeExceptionForThrowable(ite);
 			}
 		}
+    }
 		Object result = cache.objectForKey(key);
 		if (key == null || result == NOT_FOUND)
 			return null;
