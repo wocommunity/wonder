@@ -22,7 +22,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * 
  * @author mendis
  * 
- * Note: it overloads the HTML5 ref attribute for the updateUrl.
+ * Note: it overloads the HTML5 ref attribute for the data-updateUrl.
  */
 public class WXGenericContainer extends WOComponent {
 	public boolean _omitTags;

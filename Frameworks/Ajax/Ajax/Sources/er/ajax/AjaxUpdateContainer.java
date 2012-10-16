@@ -179,7 +179,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 				appendTagAttributeToResponse(response, "id", id);
 				appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
 				appendTagAttributeToResponse(response, "style", valueForBinding("style", component));
-				appendTagAttributeToResponse(response, "updateUrl", AjaxUtils.ajaxComponentActionUrl(context));
+				appendTagAttributeToResponse(response, "data-updateUrl", AjaxUtils.ajaxComponentActionUrl(context));
 				// appendTagAttributeToResponse(response, "woElementID", context.elementID());
 				response.appendContentString(">");
 				if (hasChildrenElements()) {
