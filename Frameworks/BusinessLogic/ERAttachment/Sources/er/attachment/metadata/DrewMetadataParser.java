@@ -1,15 +1,13 @@
 package er.attachment.metadata;
 
 import java.io.File;
-import java.util.Iterator;
+import java.io.IOException;
 
 import com.drew.imaging.jpeg.JpegMetadataReader;
 import com.drew.imaging.jpeg.JpegProcessingException;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
-import com.drew.metadata.MetadataException;
 import com.drew.metadata.Tag;
-import com.webobjects.foundation.NSLog;
 
 public class DrewMetadataParser implements IERMetadataParser {
   public static final String UNKNOWN_TAG = "Unknown tag";
@@ -21,9 +19,7 @@ public class DrewMetadataParser implements IERMetadataParser {
     try {
       ERMetadataDirectorySet directorySet = new ERMetadataDirectorySet();
       Metadata metadata = JpegMetadataReader.readMetadata(importFile);
-      Iterator directoryIter = metadata.getDirectoryIterator();
-      while (directoryIter.hasNext()) {
-        Directory directory = (Directory) directoryIter.next();
+      for (Directory directory : metadata.getDirectories()) {
         ERParsedMetadataDirectory parsedMetadataDirectory = new ERParsedMetadataDirectory(directory.getName());
         DrewMetadataParser.fillInParsedMetadataDirectoryFromDrewMetadata(parsedMetadataDirectory, directory);
         directorySet.addMetadata(parsedMetadataDirectory);
@@ -32,16 +28,15 @@ public class DrewMetadataParser implements IERMetadataParser {
     }
     catch (JpegProcessingException e) {
       throw new ERMetadataParserException("Failed to parse metadata.", e);
-    }
+    } catch (IOException e) {
+      throw new ERMetadataParserException("Failed to read metadata from file " + importFile.getName() + ".", e);
+	}
   }
 
   public static void fillInParsedMetadataDirectoryFromDrewMetadata(ERParsedMetadataDirectory parsedMetadataDirectory, Directory directory) {
     String directoryName = directory.getName();
     boolean isEXIF = IERMetadataDirectory.EXIF.equalsIgnoreCase(directoryName);
-    Iterator tags = directory.getTagIterator();
-    while (tags.hasNext()) {
-      Tag tag = (Tag) tags.next();
-      try {
+    for (Tag tag : directory.getTags()) {
         String tagName = tag.getTagName();
         String tagValue = tag.getDescription();
         int tagType = tag.getTagType();
@@ -55,10 +50,6 @@ public class DrewMetadataParser implements IERMetadataParser {
         else {
           // NSLog.out.appendln("Skipped " + tagType + ": " + tagValue);
         }
-      }
-      catch (MetadataException t) {
-        NSLog.out.appendln(t);
-      }
     }
     /*
      if (directory.hasErrors()) {
