@@ -2,8 +2,6 @@ package er.indexing.example.eof;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.foundation.ERXMutableDictionary;

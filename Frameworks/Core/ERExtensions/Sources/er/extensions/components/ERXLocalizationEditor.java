@@ -19,6 +19,7 @@ import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
 import er.extensions.foundation.ERXFileUtilities;
+import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
 /**
@@ -186,10 +187,8 @@ public class ERXLocalizationEditor extends WOComponent {
      		NSDictionary newDict = (NSDictionary) NSPropertyListSerialization.propertyListFromString(result);
      		if(!newDict.equals(dict)) {
      			throw new IllegalStateException("Data wasn't equal when comparing before save");
-     		} else {
-     			if(url != null) {
-     				ERXFileUtilities.stringToFile(result, new File(url.getFile()));
-     			}
+     		} else if(url != null) {
+     			ERXFileUtilities.stringToFile(result, new File(url.getFile()), ERXProperties.stringForKeyWithDefault("er.extensions.ERXLocalizationEditor.endoding", "UTF-16BE"));
      		}
     	}
     }

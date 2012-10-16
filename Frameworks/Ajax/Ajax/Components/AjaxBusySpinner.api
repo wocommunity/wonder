@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+    <wo class="AjaxBusySpinner" wocomponentcontent="false">
+        <binding name="busyClass"/>
+        <binding name="divID"/>
+        <binding name="onCreate"/>
+        <binding name="onComplete"/>
+        <binding name="id"/>
+        <binding name="watchContainerID"/>
+        <binding name="class"/>
+        <binding name="style"/>
+        <binding name="lines"/>
+        <binding name="length"/>
+        <binding name="width"/>
+        <binding name="radius"/>
+        <binding name="color"/>
+        <binding name="speed"/>
+        <binding name="trail"/>
+        <binding defaults="Boolean" name="shadow"/>
+        <binding name="spinOpts"/>
+    </wo>
+</wodefinitions>

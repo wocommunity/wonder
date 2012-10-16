@@ -353,6 +353,7 @@ public class AjaxGrid extends WOComponent {
 	/**
 	 * @return false, AjaxGrid is manually synchronized
 	 */
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}
@@ -360,6 +361,7 @@ public class AjaxGrid extends WOComponent {
 	/**
 	 * Adds movecolumns.js to the header.
 	 */
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		super.appendToResponse(response, context);
 		AjaxUtils.addScriptResourceInHead(context, response, "AjaxGrid.js");
@@ -825,7 +827,7 @@ public class AjaxGrid extends WOComponent {
 	 * @return ID to be used on AjaxUpdateLink bound to sortOrderUpdated() for currentColumn()
 	 */
 	public String currentColumnID() {
-		StringBuffer b = new StringBuffer(tableID());
+		StringBuilder b = new StringBuilder(tableID());
 		b.append("_SortBy_");
 		b.append(ERXStringUtilities.safeIdentifierName((String)currentColumn().objectForKey(TITLE)));
 		b.append(isCurrentColumnSortedAscending() ? "_Descending" : "_Ascending");

@@ -156,5 +156,4 @@ public class TaskInfo extends _TaskInfo {
 	public void deleteAllResultItemsRelationships() {
 		resultItemsRelationship().deleteAllObjectsRelationships();
 	}
-	
 }

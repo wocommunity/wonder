@@ -1,0 +1,31 @@
+{
+    attributes = (
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {
+            allowsNull = Y; 
+            columnName = lastLoginDate; 
+            name = lastLoginDate; 
+            prototypeName = dateTime; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = password; 
+            name = password; 
+            prototypeName = varchar255; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = username; 
+            name = username; 
+            prototypeName = varchar255; 
+        }
+    ); 
+    attributesUsedForLocking = (id, password, username); 
+    className = "er.example.erxpartials.model.Partial_AuthenticatedPerson"; 
+    classProperties = (lastLoginDate, password, username); 
+    externalName = Person; 
+    fetchSpecificationDictionary = {}; 
+    name = "Partial_AuthenticatedPerson"; 
+    primaryKeyAttributes = (id); 
+    userInfo = {"_EntityModeler" = {partialEntity = Person; }; }; 
+}

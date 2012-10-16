@@ -60,10 +60,7 @@ public class WOAnyField extends WOComponent {
         selectedKeyItem = aSelectedKeyItem;
     }
 
-    public boolean synchronizesVariablesWithBindings() {
-        return false;
-    }
-
+    @Override
     public boolean isStateless() {
         return true;
     }
@@ -227,11 +224,13 @@ public class WOAnyField extends WOComponent {
         _displayGroup = null;
     }
 
+    @Override
     public void finalize() throws Throwable {
         super.finalize();
         invalidateCaches();
     }
 
+    @Override
     public void reset() {
         invalidateCaches();
     }

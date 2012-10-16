@@ -16,11 +16,11 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSTimestamp;
 
 import er.extensions.concurrency.ERXAbstractTask;
-import er.extensions.concurrency.ERXTaskPercentComplete;
+import er.extensions.concurrency.IERXPercentComplete;
 import er.extensions.concurrency.IERXStoppable;
 import er.extensions.eof.ERXFetchSpecification;
 import er.extensions.eof.ERXFetchSpecificationBatchIterator;
-import er.extensions.foundation.ERXStatusInterface;
+import er.extensions.foundation.IERXStatus;
 
 /**
  * This task iterates thru a the ResultItems related to a TaskInfo argument.
@@ -31,9 +31,8 @@ import er.extensions.foundation.ERXStatusInterface;
  * http://en.wikipedia.org/wiki/Factorial_prime
  * 
  * @author kieran
- *
  */
-public class T06EOFFactorialUpdateTask extends ERXAbstractTask implements Callable<EOGlobalID>, ERXStatusInterface , ERXTaskPercentComplete, IERXStoppable {
+public class T06EOFFactorialUpdateTask extends ERXAbstractTask implements Callable<EOGlobalID>, IERXStatus , IERXPercentComplete, IERXStoppable {
 	
 	private static final Logger log = Logger.getLogger(T06EOFFactorialUpdateTask.class);
 	
@@ -187,19 +186,17 @@ public class T06EOFFactorialUpdateTask extends ERXAbstractTask implements Callab
 				resultItem.setIsFactorialPrime(Boolean.TRUE);
 			}
 		}
-		
-		
 	}
 	
 	/* (non-Javadoc)
-	 * @see er.extensions.concurrency.ERXTaskPercentComplete#percentComplete()
+	 * @see er.extensions.concurrency.IERXPercentComplete#percentComplete()
 	 */
 	public Double percentComplete() {
 		return _percentComplete;
 	}
 
 	/* (non-Javadoc)
-	 * @see er.extensions.foundation.ERXStatusInterface#status()
+	 * @see er.extensions.foundation.IERXStatus#status()
 	 */
 	public String status() {
 		return _status;
@@ -212,7 +209,4 @@ public class T06EOFFactorialUpdateTask extends ERXAbstractTask implements Callab
 		log.info("The task was stopped by the user.");
 		_isStopped = true;
 	}
-	
-	
-	
 }

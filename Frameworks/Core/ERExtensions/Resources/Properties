@@ -651,6 +651,11 @@ er.extensions.stackTrace.skipPatternsFile=StackTraceSkipPatterns-Normal.plist
 er.extensions.ERXWOForm.multipleSubmitDefault=true
 
 #########################################################################
+# ERXLocalizationEditor 
+#########################################################################
+er.extensions.ERXLocalizationEditor.endoding=UTF-16BE
+
+#########################################################################
 # SSL DirectConnect
 #########################################################################
 ## You should probably not enable any of these settings in a normal Apache webserver deployment,

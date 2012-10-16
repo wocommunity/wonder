@@ -15,7 +15,6 @@ package com.webobjects.monitor.application;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WORedirect;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.monitor._private.MObject;
 import com.webobjects.monitor._private.String_Extensions;

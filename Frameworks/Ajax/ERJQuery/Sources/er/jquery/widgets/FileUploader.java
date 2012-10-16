@@ -217,6 +217,9 @@ public abstract class FileUploader extends WOComponent {
 							} catch (IOException e) {
 								exception = new RuntimeException("Couldn't write input stream to output stream: " + e);
 								throw exception;
+							} finally {
+								try { anOutputStream.close(); } catch (IOException e) {}
+								try { anInputStream.close(); } catch (IOException e) {}
 							}
 						} else {
 							if (hasBinding(Bindings.finalFilePath)) {
@@ -228,6 +231,8 @@ public abstract class FileUploader extends WOComponent {
 							} catch (IOException e) {
 								exception = new RuntimeException("Couldn't write input stream to temp file: " + e);
 								throw exception;
+							} finally {
+								try { anInputStream.close(); } catch (IOException e) {}
 							}
 						}
 
@@ -256,7 +261,9 @@ public abstract class FileUploader extends WOComponent {
 					catch (IOException e) {
 						exception = new RuntimeException("Error skipping empty file upload: " + e);
 						throw exception;
-					} 
+					} finally {
+						try { anInputStream.close(); } catch (IOException e) {}
+					}
 				}
 			}
 

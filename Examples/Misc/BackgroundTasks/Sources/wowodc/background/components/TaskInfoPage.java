@@ -76,15 +76,6 @@ public class TaskInfoPage extends ERXComponent  implements IERXRefreshPage {
 	public void refresh() {
 		ERXEOControlUtilities.refreshObject(taskInfo());
 	}
-
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	public WOActionResults processFactorials() {
 		T06EOFFactorialUpdateTask task = new T06EOFFactorialUpdateTask(taskInfo());
@@ -93,6 +84,4 @@ public class TaskInfoPage extends ERXComponent  implements IERXRefreshPage {
 		nextPage.setTask(task);
 		return nextPage;
 	}
-
-
 }

@@ -202,6 +202,9 @@ public class FilesObject
         if (ret == -1)
         {
         	out.write(data, 0, data.length);
+            out.flush();
+            out.close();
+            in.close ();
         	return data.length;
         }
 

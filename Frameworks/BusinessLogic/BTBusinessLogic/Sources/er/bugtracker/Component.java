@@ -46,7 +46,7 @@ public class Component extends _Component {
 
 	public String indentedDescription() {
 		int level = level();
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		if (level == -1)
 			sb.append("***");
 		else

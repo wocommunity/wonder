@@ -10,7 +10,6 @@ package com.webobjects.woextensions;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
-
 public class WOEventPage extends WOComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -26,6 +25,7 @@ public class WOEventPage extends WOComponent {
         super(aContext);
     }
 
+    @Override
     public boolean isEventLoggingEnabled() {
         return false;
     }

@@ -6,7 +6,6 @@ import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.eocontrol.EODataSource;
 
 import er.directtoweb.components.ERDCustomComponent;
-import er.directtoweb.pages.ERD2WListPage;
 import er.directtoweb.pages.ERD2WPage;
 
 /**

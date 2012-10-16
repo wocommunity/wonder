@@ -30,6 +30,7 @@ public class AjaxGMarker extends WOComponent {
 
 	private String _id;
 
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}

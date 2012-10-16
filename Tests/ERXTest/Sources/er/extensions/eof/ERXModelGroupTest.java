@@ -6,7 +6,6 @@ import junit.framework.Assert;
 import com.webobjects.eoaccess.EOModelGroup;
 
 import er.erxtest.ERXTestCase;
-import er.erxtest.ERXTestUtilities;
 
 public class ERXModelGroupTest extends ERXTestCase {
 

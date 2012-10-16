@@ -708,6 +708,8 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 				jdbcInfo = (NSDictionary<String, Object>) NSPropertyListSerialization.propertyListFromData(new NSData(jdbcInfoStream, 2048), "US-ASCII");
 			} catch (IOException e) {
 				throw new RuntimeException("Failed to load 'JDBCInfo.plist' from this plugin jar.", e);
+			} finally {
+				try { jdbcInfoStream.close(); } catch (IOException e) {}
 			}
 
 	    } else {

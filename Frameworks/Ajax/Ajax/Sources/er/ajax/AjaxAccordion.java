@@ -26,14 +26,12 @@ public class AjaxAccordion extends AjaxComponent {
     super(context);
   }
 
+  @Override
   public boolean isStateless() {
     return true;
   }
 
-  public boolean synchronizesVariablesWithBindings() {
-    return false;
-  }
-
+  @Override
   public void appendToResponse(WOResponse response, WOContext context) {
     _accordionID = (String) valueForBinding("id", ERXWOContext.safeIdentifierName(context, true) + "Accordion");
     super.appendToResponse(response, context);
