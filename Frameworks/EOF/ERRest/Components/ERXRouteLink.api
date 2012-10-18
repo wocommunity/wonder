@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <wodefinitions>
     <wo class="ERXRouteLink" wocomponentcontent="true">    <binding name="id"/>
         <binding name="class"/>
@@ -9,5 +9,7 @@
     <binding name="entityName"/>
         <binding name="queryDictionary"/>
     <binding name="format"/>
+    <binding name="target"/>
+    <binding name="string"/>
     </wo>
 </wodefinitions>
