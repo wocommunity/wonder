@@ -10,9 +10,12 @@ er.extensions.ERXEC.safeLocking=true
 er.extensions.ERXEC.useSharedEditingContext=false
 er.extensions.ERXEnterpriseObject.applyRestrictingQualifierOnInsert=true
 er.extensions.ERXEnterpriseObject.updateInverseRelationships=true
-dbConnectURLGLOBAL=jdbc:FrontBase://localhost/ERXPartials
-dbConnectUserGLOBAL=erxpartial
-dbConnectPasswordGLOBAL=test
+dbConnectServerGLOBAL=localhost
+dbConnectURLGLOBAL=jdbc:h2:mem:
+dbConnectUserGLOBAL=h2user
+dbConnectPasswordGLOBAL=
+dbConnectPluginGLOBAL=H2PlugIn
+dbConnectDriverGLOBAL=org.h2.Driver
 
 # Migrations
 er.migration.migrateAtStartup=true
