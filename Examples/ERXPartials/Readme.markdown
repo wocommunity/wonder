@@ -83,14 +83,50 @@ classes and support is also added to the `_PartialWonderEntity.java` template.
 ## Getting Started
 
 The example application (`ERXPartialsExampleApp`) can be run against any
-database. As shipped, there is a setup script for FrontBase, and some
-instructions below for using PostgreSQL instead.
+database. As shipped, it runs on an in-memory H2 instance. It has also been
+confirmed to work using FrontBase and PostgreSQL.
 
-### FrontBase
+### [H2][h2]
 
-Create the database.  I have added a small FrontBase script and Ant target to
-create the empty database and set the ownership permissions. Change into the
-`ERXPartialBaseModel` directory, and run `ant fb.recreate`:
+Out of the box, `ERXPartialsExampleApp` runs on a private, in-memory H2
+instance. This is for simplicity, and just to prove that it works—you can run
+the application immediately, log in, and browse the entities. The interesting
+part, though, is examining the entities that are created, and the `Person` table
+in particular. For this, you need to persist the database, or at least allow
+multiple simultaneous connections to the in-memory database. There are a couple
+of options for doing this with H2.
+
+#### Using a shared in-memory database
+
+You can use a named in-memory database in server mode, but you need to start it
+up _before_ you start the application. Using a connection URL like:
+
+    jdbc:h2:tcp://localhost/mem:ERXPartials
+
+is fine, but you can't start `ERXPartialsExampleApp` first. Use the built-in H2
+viewer application from wherever you have `H2PlugIn.framework` installed:
+
+    java -jar H2PlugIn.framework/Resources/Java/h2-*.jar
+
+Give it the connection URL, and the username `h2user`. This will start up the
+in-memory database and the TCP-based server in the right order. You can then
+start `ERXPartialsExampleApp`, refresh the viewer, and view the tables created.
+
+#### Using a file-based database
+
+Alternatively, you can use a file-based database, with a connection URL like
+this:
+
+    jdbc:h2:file:~/ERXPartials
+    
+Run `ERXPartialsExampleApp`, wait until migrations have run, quit the
+application and then use the H2 viewer application as above with the file URL.
+
+### [FrontBase][frontbase]
+
+Create the database using the Ant target to create the empty database and set
+the ownership permissions. Change into the `ERXPartialBaseModel` directory, and
+run `ant fb.recreate`:
 
 <pre><code>$ ant fb.recreate
 Buildfile: /Volumes/Data/Development/GitHub/ERXPartials/wonder/Tests/ERXPartials/ERXPartialBaseModel/build.xml
@@ -120,11 +156,23 @@ BUILD SUCCESSFUL
 
 Total time: 1 second</code></pre>
 
+Alter the connection properties in `ERXPartialsExampleApp/Resources/Properties`
+as appropriate:
+
+    dbConnectURLGLOBAL=jdbc:FrontBase://localhost/ERXPartials
+    dbConnectUserGLOBAL=erxpartial
+    dbConnectPasswordGLOBAL=test
+
+Add the `FrontBasePlugIn.framework` to the application's build path
+(right-click on application, Build Path > Configure Build Path... > Libraries >
+Add Library... > WebObjects Frameworks > Next, then check FrontBasePlugIn and
+click Finish.
+
 Compile and run the `ERXPartialsExampleApp`. The main page is a login page, but
 there is no login logic, just click the Login button.
 
 
-### PostgreSQL
+### [PostgreSQL][pgsql]
 
 Create the database.
 
@@ -153,6 +201,11 @@ David Aspinall
 Senior IT Consultant  
 [Global Village Consulting Inc.][gvc]
 
+Paul Hoadley  
+[Logic Squad][logicsquad]
 
 [gvc]: http://www.global-village.net
 [logicsquad]: http://logicsquad.net/
+[h2]: http://www.h2database.com/
+[frontbase]: http://www.frontbase.com/
+[pgsql]: http://postgresql.org/
