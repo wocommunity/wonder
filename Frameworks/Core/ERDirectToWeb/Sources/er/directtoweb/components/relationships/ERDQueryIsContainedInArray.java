@@ -25,9 +25,7 @@ import er.extensions.eof.qualifiers.ERXPrimaryKeyListQualifier;
  * @binding size number of rows for "checkbox" or "browser" UIStyle
  * 
  * @author ak on Wed Apr 07 2004
- * @project ERDirectToWeb
  */
-
 public class ERDQueryIsContainedInArray extends ERDCustomQueryComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -48,8 +46,10 @@ public class ERDQueryIsContainedInArray extends ERDCustomQueryComponent {
     }
 
     /** component does not synchronize it's variables */
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
     
+    @Override
     public void awake() {
         super.awake();
         displayGroup().queryOperator().setObjectForKey(ERXPrimaryKeyListQualifier.IsContainedInArraySelectorName, key());

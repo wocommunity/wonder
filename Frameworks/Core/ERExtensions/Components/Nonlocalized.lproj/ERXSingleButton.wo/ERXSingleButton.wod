@@ -3,6 +3,7 @@ ButtonAsAction: WOSubmitButton {
 	value = ^value;
     class = ^class;
     style = ^style;
+    id = ^id;
 }
 
 ButtonAsDirectAction: WOSubmitButton {
@@ -11,6 +12,7 @@ ButtonAsDirectAction: WOSubmitButton {
 	actionClass = ^actionClass;
     class = ^class;
     style = ^style;
+    id = ^id;
 }
 
 ButtonAsInput: WOGenericElement {
@@ -22,6 +24,7 @@ ButtonAsInput: WOGenericElement {
     name=componentName;
     class = ^class;
     style = ^style;
+    id = ^id;
 }
 
 ButtonAsButton: WOGenericContainer {
@@ -33,6 +36,7 @@ ButtonAsButton: WOGenericContainer {
     name=componentName;
     class = ^class;
     style = ^style;
+    id = ^id;
 }
 
 Value : WOString {

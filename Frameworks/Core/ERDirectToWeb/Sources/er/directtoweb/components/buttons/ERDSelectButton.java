@@ -7,16 +7,13 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WPage;
 import com.webobjects.directtoweb.SelectPageInterface;
 
-
 /**
  * Select button to display in lists.
  *
  * @binding d2wContext the d2wContext
  *
  * @author ak on Mon Sep 01 2003
- * @project ERDirectToWeb
  */
-
 public class ERDSelectButton extends ERDActionButton {
 	/**
 	 * Do I need to update serialVersionUID?

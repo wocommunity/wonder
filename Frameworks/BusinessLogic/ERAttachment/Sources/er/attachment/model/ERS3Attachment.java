@@ -12,7 +12,15 @@ import er.extensions.eof.ERXGenericRecord;
 import er.extensions.foundation.ERXProperties;
 
 /**
- * ERS3Attachment (type = "s3") represents an attachment whose content is stored on Amazon's S3 service and will be served directly from S3. This type may eventually support proxying as well, but currently only direct links are enabled.
+ * <span class="en">
+ * ERS3Attachment (type = "s3") represents an attachment whose content is stored on Amazon's S3 service and will be served directly from S3. 
+ * This type may eventually support proxying as well, but currently only direct links are enabled.
+ * </span>
+ * 
+ * <span class="ja">
+ * ERS3Attachment (type "s3") はアタッチメントが Amazon's S3 サービスに保存されます。
+ * S3 より直接共有されます。現在ではダイレクト・リンクのみがサポートされます。
+ * </span>
  * 
  * @author mschrag
  */
@@ -59,19 +67,36 @@ public class ERS3Attachment extends _ERS3Attachment {
 	}
 
 	/**
+	 * <span class="en">
 	 * Sets the S3 location for this attachment.
 	 * 
 	 * @param bucket
 	 *          the S3 bucket
 	 * @param key
 	 *          the S3 key
+	 * </span>
+	 * 
+	 * <span class="ja">
+   * このアタッチメントの S3 ロケーションをセットします。
+   * 
+   * @param bucket - S3 のパケット
+   * @param key - S3 のキー
+   * </span>
 	 */
 	public void setS3Location(String bucket, String key) {
 		setWebPath("/" + bucket + "/" + key);
 	}
 
 	/**
+	 * <span class="en">
 	 * @return the S3 bucket for this attachment.
+	 * </span>
+	 * 
+	 * <span class="ja">
+   * このアタッチメントの S3 パケットを戻します。
+   * 
+   * @return S3 のパケット
+   * </span>
 	 */
 	public String bucket() {
 		String[] paths = webPath().split("/");
@@ -80,7 +105,15 @@ public class ERS3Attachment extends _ERS3Attachment {
 	}
 
 	/**
+	 * <span class="en">
 	 * @return the S3 key for this attachment.
+	 * </span>
+	 * 
+	 * <span class="ja">
+   * このアタッチメントの S3 キーを戻します。
+   * 
+   * @return S3 のキー
+   * </span>
 	 */
 	public String key() {
 		// Retrieve the index of the second slash, considering the first char is always a slash

@@ -7,7 +7,7 @@
 		<binding name="style"/>
 		<binding name="useContent" defaults="Boolean"/>
 
-		<validation message="&apos;email&apos; is a required binding">
+		<validation message="'email' is a required binding">
 			<unbound name="email"/>
 		</validation>
 	</wo>

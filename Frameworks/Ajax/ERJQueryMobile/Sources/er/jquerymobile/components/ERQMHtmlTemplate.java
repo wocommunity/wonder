@@ -1,11 +1,16 @@
 package er.jquerymobile.components;
 
+import java.util.Enumeration;
+
 import org.apache.log4j.Logger;
 
 
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOElement;
+import com.webobjects.appserver._private.WODynamicGroup;
 
 import er.extensions.components.ERXStatelessComponent;
+import er.extensions.components.conditionals.ERXWOTemplate;
 import er.extensions.foundation.ERXHyperlinkResource;
 import er.extensions.foundation.ERXProperties;
 
@@ -57,6 +62,35 @@ public class ERQMHtmlTemplate extends ERXStatelessComponent {
       uri = ERXProperties.stringForKey("er.jquerymobile.javascript.local.location");
     }
     return ERXHyperlinkResource.urlForHyperlinkResource(context(), uri);
+  }
+
+  //********************************************************************
+  //  コンテント・フローのヘルパー
+  //********************************************************************
+
+  /**
+   * <span class="ja">
+   * 新しいテンプレート方式を使用するか旧方式で実行するかを決定する為のコード
+   * 
+   * @return true の場合には最新テンプレート方式
+   * </span>
+   */
+  public boolean hastTemplateInComponent() {
+    boolean result = false;
+
+    WOElement content =  this._childTemplate();
+    if (content instanceof WODynamicGroup) {
+      WODynamicGroup group = (WODynamicGroup) content;
+      for(Enumeration<WOElement> e = group.childrenElements().objectEnumerator(); e.hasMoreElements() && !result ; ) {
+        WOElement current = (WOElement) e.nextElement();
+        if(current instanceof ERXWOTemplate) {
+          result = true;
+        }
+      }
+    } else if (content instanceof ERXWOTemplate) {
+      result = true;
+    }
+    return result;
   }
 
 }

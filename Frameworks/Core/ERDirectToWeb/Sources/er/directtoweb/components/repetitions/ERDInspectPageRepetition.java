@@ -9,7 +9,7 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
  * Class for DirectToWeb Component ERDInspectPageRepetition.
  *
  * @author ak on Mon Sep 01 2003
- * @project ERDirectToWeb
+ * 
  * @d2wKey componentName
  * @d2wKey colSpan
  * @d2wKey rowSpan
@@ -41,6 +41,7 @@ public class ERDInspectPageRepetition extends ERDAttributeRepetition {
     }
 
     /** component does not synchronize it's variables */
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     public EOEnterpriseObject object() {

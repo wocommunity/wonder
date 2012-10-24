@@ -42,9 +42,7 @@ import er.extensions.localization.ERXLocalizer;
  * @d2wKey confirmDeleteMessage
  *
  * @author davidleber
- * @project ERModernDirectToWeb
  */
-
 public class ERMDDeleteButton extends ERMDActionButton {
 	
 	@SuppressWarnings("unused")

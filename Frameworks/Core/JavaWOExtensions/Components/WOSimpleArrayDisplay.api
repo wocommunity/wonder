@@ -9,7 +9,7 @@
 		<binding name="listActionString"/>
 		<binding name="numberToDisplay"/>
 
-		<validation message="&apos;list&apos; is a required binding">
+		<validation message="'list' is a required binding">
 			<unbound name="list"/>
 		</validation>
 	</wo>

@@ -32,6 +32,7 @@ EntityName: WOString {
 Info: WOString {
 	value = componentConfiguration.inspectionInformation;
 }
+
 ObjectSwitch: WOSwitchComponent {
 	WOComponentName = componentName;
 	localContext = d2wContext;
@@ -43,13 +44,14 @@ PageConfiguration: WOString {
 }
 
 Properties: WORepetition {
-	list = keys.@sortAsc.toString;
+	list = keys.@sortAsc.toString; // Valid
 	item = componentName;
 }
 
 PropertyKey: WOString {
 	value = d2wContext.propertyKey;
 }
+
 Task: WOString {
 	value = d2wContext.task;
 }
@@ -69,5 +71,6 @@ UseDisplayGroup: WOConditional {
 UseObject: WOConditional {
 	condition = useObject;
 }
+
 Wrapper: ERXTolerantWrapper {
 }

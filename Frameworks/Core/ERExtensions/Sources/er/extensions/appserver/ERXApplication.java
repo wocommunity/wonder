@@ -9,6 +9,7 @@ package er.extensions.appserver;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -82,6 +83,7 @@ import com.webobjects.foundation.NSRange;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.development.NSBundleFactory;
 
 import er.extensions.ERXExtensions;
 import er.extensions.ERXFrameworkPrincipal;
@@ -355,9 +357,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	private static Loader _loader;
 
 	/**
-	 * Responsible for classpath munging.
+	 * Responsible for classpath munging and ensuring all bundles are loaded
 	 * 
-	 *
+	 * @property er.extensions.appserver.projectBundleLoading - to see logging this has to be set on the command line by using -Der.extensions.appserver.projectBundleLoading=DEBUG
+	 * 
 	 * @author ak
 	 */
 	public static class Loader {
@@ -474,7 +477,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 						else if (fixedJar.matches(frameworkPattern) || fixedJar.matches(appPattern) || fixedJar.matches(folderPattern)) {
 							normalLibs += jar + File.pathSeparator;
 						}
-						else if (fixedJar.matches(projectPattern) || fixedJar.matches(".*?/ERFoundation.jar") || fixedJar.matches(".*?/ERWebObjects.jar")) {
+						else if (fixedJar.matches(projectPattern) || fixedJar.matches(".*?/erfoundation.jar") || fixedJar.matches(".*?/erwebobjects.jar")) {
 							normalLibs += jar + File.pathSeparator;
 						}
 						else {
@@ -528,8 +531,20 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 										}
 										if (isBundle) {
 											System.setProperty("NSProjectBundleEnabled", "true");
-											allFrameworks.add(classpathFolder.getName());
-											debugMsg("Added Binary Bundle: " + allFrameworks);
+											String bundleName = classpathFolder.getName();
+
+											File buildPropertiesFile = new File(classpathFolder, "build.properties");
+											if (buildPropertiesFile.exists()) {
+												Properties buildProperties = new Properties();
+												buildProperties.load(new FileReader(buildPropertiesFile));
+												if (buildProperties.get("project.name") != null) {
+													// the project folder might be named differently than the actual bundle name
+													bundleName = (String) buildProperties.get("project.name");
+												}
+											}
+											
+											allFrameworks.add(bundleName);
+											debugMsg("Added Binary Bundle (Project bundle): " + bundleName);
 										} else {
 											debugMsg("Skipping binary bundle: " + jar);
 										}
@@ -570,8 +585,11 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("bundleDidLoad", ERXConstant.NotificationClassArray), "NSBundleDidLoadNotification", null);
 		}
 		
+		// for logging before logging has been setup and configured by loading the properties files
 		private void debugMsg(String msg) {
-			// System.out.println(msg);
+			if ("DEBUG".equals(System.getProperty("er.extensions.appserver.projectBundleLoading"))) {
+				System.out.println(msg); 
+			}
 		}
 		
 		public boolean didLoad() {
@@ -590,6 +608,13 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			if (mainBundle == null) {
 				// AK: when we get here, the main bundle wasn't inited yet
 				// so we do it ourself...
+				
+				if (isDevelopmentModeSafe() && 
+						ERXConfigurationManager.defaultManager().isDeployedAsServlet()) {
+					// bundle-less builds do not appear to work when running in servlet mode, so make it prefer the legacy bundle style 
+					NSBundleFactory.registerBundleFactory(new com.webobjects.foundation.development.NSLegacyBundle.Factory());
+				}
+				
 				try {
 					Field ClassPath = NSBundle.class.getDeclaredField("ClassPath");
 					ClassPath.setAccessible(true);
@@ -624,8 +649,12 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		
 		public void bundleDidLoad(NSNotification n) {
 			NSBundle bundle = (NSBundle) n.object();
-			// System.out.println(bundle.name() + ": " + allFrameworks);
-			allFrameworks.remove(bundle.name());
+			if (allFrameworks.contains(bundle.name())) {
+				allFrameworks.remove(bundle.name());
+				debugMsg("Loaded " + bundle.name() + ". Remaining: " + allFrameworks);
+			} else if (bundle.isFramework()) {
+				debugMsg("Loaded unexpected framework bundle '" + bundle.name() + "'. Ensure your build.properties settings like project.name match the bundle name (including case).");
+			}
 			if (allBundleProps == null) {
 				allBundleProps = new Properties();
 			}
@@ -1119,10 +1148,15 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		if (!ERXConfigurationManager.defaultManager().isDeployedAsServlet() && (!wasERXApplicationMainInvoked || _loader == null)) {
 			_displayMainMethodWarning();
 		}
+		// try {
+		// 	NSBundle.mainBundle().versionString();
+		// } catch (NoSuchMethodError e) {
+		// 	throw new RuntimeException("No versionString() method in NSBundle found. \nThis means your class path is incorrect. Adjust it so that ERJars comes before JavaFoundation.");
+		// }
 		if (_loader == null) {
 			System.out.println("No loader: " + System.getProperty("java.class.path"));
 		} else if (!_loader.didLoad()) {
-			throw new RuntimeException("ERXExtensions have not been initialized. Please report the classpath and the rest of the bundles to the Wonder mailing list: " + "\nRemaining frameworks: " + (_loader == null ? "none" : _loader.allFrameworks) + "\nClasspath: " + System.getProperty("java.class.path"));
+			throw new RuntimeException("ERXExtensions have not been initialized. Debugging information can be enabled by adding the JVM argument: '-Der.extensions.appserver.projectBundleLoading=DEBUG'. Please report the classpath and the rest of the bundles to the Wonder mailing list: " + "\nRemaining frameworks: " + (_loader == null ? "none" : _loader.allFrameworks) + "\nClasspath: " + System.getProperty("java.class.path"));
 		}
 		if ("JavaFoundation".equals(NSBundle.mainBundle().name())) {
 			throw new RuntimeException("Your main bundle is \"JavaFoundation\".  You are not launching this WO application properly.  If you are using Eclipse, most likely you launched your WOA as a \"Java Application\" instead of a \"WO Application\".");

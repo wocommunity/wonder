@@ -1,3 +1,7 @@
+##  Properies Info	
+er.extensions.load.Properties.framework.ERQuartzScheduler=load
+er.extensions.ERQuartzScheduler.hasLocalization=true
+
 # All the below properties can be set or overridden in  your project.
 
 fr.sophiacom.ynp.schedulerService.schedulerServiceToLaunch=true 

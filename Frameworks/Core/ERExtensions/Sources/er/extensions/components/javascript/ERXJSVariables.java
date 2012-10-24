@@ -1,4 +1,5 @@
 package er.extensions.components.javascript;
+
 import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
@@ -14,9 +15,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @binding sample sample binding explanation
  *
  * @author ak on Sat May 03 2003
- * @project ERExtensions
  */
-
 public class ERXJSVariables extends WOComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -41,6 +40,7 @@ public class ERXJSVariables extends WOComponent {
     }
 
     /** component does not synchronize it's variables */
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     public NSDictionary arguments() {

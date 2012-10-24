@@ -6,7 +6,7 @@ public class NullProgressMonitor implements IWOInstallerProgressMonitor {
     // DO NOTHING
   }
   
-  public void beginTask(String taskName, int totalWork) {
+  public void beginTask(String taskName, long totalWork) {
     // DO NOTHING
   }
   
@@ -14,7 +14,7 @@ public class NullProgressMonitor implements IWOInstallerProgressMonitor {
     return false;
   }
   
-  public void worked(int amount) {
+  public void worked(long amount) {
     // DO NOTHING
   }
 }

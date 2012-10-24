@@ -1,0 +1,107 @@
+$Rev: 285 $
+
+ERExcelGenerator フレームワークについて
+
+このフレームワークでは簡単に Excel ファイルを作成できます。Excel のファイル形式 xls として保存されます。
+日本語の漢字は UTF-8 のみ対応です。なぜなら、Java ライブラリーのパサー制限です。
+
+最初のステップ：HTML コンポーネントを作成します。
+
+	<table name="Sheet 1" border="1" cellType="CELL_TYPE_NUMERIC" cellFormat="0" class="default">
+		<tr>
+			<td cellType="CELL_TYPE_STRING" height="20" width="40" class="default">1.1</td>
+			<td cellType="CELL_TYPE_STRING" height="20" width="40">ABC 日本語</td>
+			<td cellType="CELL_TYPE_NUMERIC" width="40">21</td>
+			<td cellType="CELL_TYPE_BLANK" width="40"></td>
+		</tr>
+	</table>
+	
+	
+table はシートになります。後は各エレメントがセルになります。
+
+セル・タイプは
+			cellType="CELL_TYPE_STRING"		文字列
+			cellType="CELL_TYPE_NUMERIC"	数値
+			cellType="CELL_TYPE_FORMULA"	フォーミュラー
+
+高さ
+			height="20"
+	
+幅
+			width="40"
+
+フォーミュラーの場合
+			sum(C1:C3)
+	
+alignment
+			alignment = "ALIGN_GENERAL"
+			alignment = "ALIGN_LEFT"
+			alignment = "ALIGN_CENTER"
+			alignment = "ALIGN_RIGHT"
+	
+borderLeft
+borderTop
+borderRight
+borderBottom
+            borderXXX = "BORDER_NONE"
+            borderXXX = "BORDER_THIN"
+            borderXXX = "BORDER_MEDIUM"
+            borderXXX = "BORDER_DASHED"
+            borderXXX = "BORDER_HAIR"
+            borderXXX = "BORDER_DOUBLE"
+            borderXXX = "BORDER_DOTTED"
+            borderXXX = "BORDER_MEDIUM_DASHED"
+            borderXXX = "BORDER_DASH_DOT"
+            borderXXX = "BORDER_MEDIUM_DASH_DOT"
+            borderXXX = "BORDER_DASH_DOT_DOT"
+            borderXXX = "BORDER_MEDIUM_DASH_DOT_DOT"
+            borderXXX = "BORDER_SLANTED_DASH_DOT"
+	
+fillPattern
+            fillPattern = "NO_FILL"
+            fillPattern = "SOLID_FOREGROUND"
+            fillPattern = "FINE_DOTS"
+            fillPattern = "ALT_BARS"
+            fillPattern = "SPARSE_DOTS"
+            fillPattern = "THICK_HORZ_BANDS"
+            fillPattern = "THICK_VERT_BANDS"
+            fillPattern = "THICK_BACKWARD_DIAG"
+            fillPattern = "THICK_FORWARD_DIAG"
+            fillPattern = "BIG_SPOTS"
+            fillPattern = "BRICKS"
+            fillPattern = "THIN_HORZ_BANDS"
+            fillPattern = "THIN_BACKWARD_DIAG"
+            fillPattern = "THIN_FORWARD_DIAG"
+            fillPattern = "SQUARES"
+            fillPattern = "DIAMONDS"
+	
+次には ExcelStyles.plist を WOdka のリソース・フォルダから自分の app リソース・フォルダにコピーします。（オプション）
+	自由に変更可能！
+	
+	そのまま WOdka バージョンを使用すると二つのクラスがあります。
+	
+class="default"		
+            name="Arial";
+            fontHeightInPoints="10";
+            alignment="ALIGN_RIGHT";
+            
+class="bold"
+            name="Arial Black";
+            alignment="ALIGN_LEFT";
+
+次には画面で確認が完了されているページを Excel に出力するには EGWrapper で囲みます。
+
+<webobject name=EGWrapper>
+	<table name="Sheet 1" border="1" cellType="CELL_TYPE_NUMERIC" cellFormat="0" class="default">
+		...
+	</table>
+</webobject>
+
+バインディングは
+
+EGWrapper: EGWrapper {
+	enabled = true;
+	styles = application.excelData.Styles; //VALID
+	fonts = application.excelData.Fonts; //VALID
+	// fileName = "test.xls";
+}

@@ -74,10 +74,12 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
         //throw new CCoruptionError();
     }
 
+    @SuppressWarnings("unused")
     private static void badBGLengths() {
         cadvise();
     }
 
+    @SuppressWarnings("unused")
     private static void bitStreamEOF() {
         cadvise();
     }
@@ -179,6 +181,7 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
         setupBlock();
     }
 
+    @Override
     public int read() {
         if (streamEnd) {
             return -1;

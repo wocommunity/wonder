@@ -30,11 +30,12 @@ public class EGWrapper extends ERXNonSynchronizingComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    /** logging support */
-    private static final Logger log = Logger.getLogger(EGWrapper.class);
+	/** logging support */
+	private static final Logger log = Logger.getLogger(EGWrapper.class);
+    
 	private String _fileName;
 	private NSDictionary _styles;
-    private NSDictionary _fonts;
+	private NSDictionary _fonts;
     
     /**
      * Public constructor
@@ -79,7 +80,7 @@ public class EGWrapper extends ERXNonSynchronizingComponent {
     	_fonts = value;
     }
     
-
+    @Override
     public void appendToResponse(WOResponse response, WOContext context) {
         if (isEnabled()) {
             WOResponse newResponse = new WOResponse();
@@ -112,11 +113,15 @@ public class EGWrapper extends ERXNonSynchronizingComponent {
                 }
                 response.appendContentString(contentString);
             } else {
-                response.appendContentData(data);
                 String fileName = fileName();
                 if(fileName == null) {
                     fileName = "results.xls";
                 }
+                
+                response.disableClientCaching();
+                response.appendHeader(String.valueOf( data.length()), "Content-Length" );
+                response.setContent(data); // Changed by ishimoto because it was sooooo buggy and didn't work in Japanese
+
                 response.setHeader("inline; filename=\"" + fileName + "\"", "content-disposition");
                 response.setHeader("application/vnd.ms-excel", "content-type");
             }

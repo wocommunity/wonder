@@ -8,8 +8,7 @@ import java.util.Map;
  * example, "@property er.migration.skipModelNames a comma-separated list of 
  * model names to NOT be migrated." would be shown as:
  * <DL>
- * <DT>
- * <B>Properties:</B>
+ * <DT><B>Properties:</B></DT>
  * <DD><table><tr><th>er.migration.skipModelNames</th><td>
  * a comma-separated list of model names
  * to NOT be migrated.</td></tr></table></DD>
@@ -17,27 +16,33 @@ import java.util.Map;
  *
  * @author chill
  */
-
 public class PropertyTaglet extends AbstractTaglet  {
-    
     private static final String NAME = "property";
     private static final String HEADER = "Properties";
     
+    @Override
     public String getName() {
         return NAME;
     }
     
+    @Override
     public String getHeader() {
         return HEADER;
     }
     
-    public boolean inMethod() { return true; }
+    @Override
+    public boolean inMethod() {
+        return true;
+    }
 
     /**
      * Register this Taglet.
-     * @param tagletMap the map to register this tag to.
+     * 
+     * @param tagletMap
+     *            the map to register this tag to
      */
-    public static void register(Map<String,Taglet> tagletMap) {
+    @SuppressWarnings("unchecked")
+    public static void register(Map tagletMap) {
        PropertyTaglet tag = new PropertyTaglet();
        Taglet t = (Taglet) tagletMap.get(tag.getName());
        if (t != null) {
@@ -46,4 +51,3 @@ public class PropertyTaglet extends AbstractTaglet  {
        tagletMap.put(tag.getName(), tag);
     }
 }
-

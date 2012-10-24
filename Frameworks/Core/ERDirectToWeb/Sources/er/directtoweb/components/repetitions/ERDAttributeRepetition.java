@@ -16,7 +16,7 @@ import er.extensions.appserver.ERXWOContext;
  * Class for DirectToWeb Component ERDAttributeRepetition.
  *
  * @author ak on Mon Sep 01 2003
- * @project ERDirectToWeb
+ * 
  * @d2wKey sectionKey
  * @d2wKey displayNameForPageConfiguration
  * @d2wKey pageConfiguration
@@ -44,6 +44,7 @@ public class ERDAttributeRepetition extends ERDCustomComponent {
     }
     
     /** component does not synchronize it's variables */
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     public String sectionTitle() {
@@ -118,11 +119,15 @@ public class ERDAttributeRepetition extends ERDCustomComponent {
         //}
         return _sectionsContents;
     }
+    
+    @Override
     public void appendToResponse(WOResponse r, WOContext c) {
         //HACK ak we should clean this on every step of the phase or not cache at all...
         _sectionsContents=null;
         super.appendToResponse(r,c);
     }
+    
+    @Override
     public void awake() {
         //HACK ak we should clean this on every step of the phase or not cache at all...
         _sectionsContents=null;
