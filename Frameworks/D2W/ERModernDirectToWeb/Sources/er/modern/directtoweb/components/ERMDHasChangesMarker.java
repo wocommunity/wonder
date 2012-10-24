@@ -65,5 +65,5 @@ public class ERMDHasChangesMarker extends ERDHasChangesMarker {
 		_indicatorFrameworkName = null;
 		super.reset();
 	}
-}
+
 }
