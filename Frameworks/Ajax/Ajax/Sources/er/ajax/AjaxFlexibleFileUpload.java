@@ -62,6 +62,7 @@ import er.extensions.localization.ERXLocalizer;
  * @binding clearButtonClass class for the select file button (defaults to "Button ObjButton ClearUploadObjButton")
  * @binding clearUploadProgressOnSuccess if true, displays the select file button instead of the uploaded file name on completion of a successful upload
  * @binding mimeType set from the content-type of the upload header if available
+ * @binding onClickBefore if the given function returns true, the onClick is executed.  This is to support confirm(..) dialogs.
  * 
  * @author dleber
  * @author mschrag
@@ -73,7 +74,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
 	 */
 	private static final long serialVersionUID = 1L;
-
+	
 	protected final Logger log = Logger.getLogger(getClass());
 	
 	public static interface Keys {
@@ -100,6 +101,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 		public static final String clearButtonClass = "clearButtonClass";
 		public static final String injectDefaultCSS = "injectDefaultCSS";
 		public static final String clearUploadProgressOnSuccess = "clearUploadProgressOnSuccess";
+		public static final String onClickBefore = "onClickBefore";
 	}
 	
 	private String _refreshTime;
@@ -189,6 +191,10 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
     		_options.add("autoSubmit:false");
     	}
     	_options.add("onSubmit:" + onSubmitFunction());
+    	
+    	String onClickBefore = (String)this.valueForBinding(Keys.onClickBefore);
+    	if (onClickBefore != null) _options.addObject(String.format("onClickBefore:'%s'", onClickBefore.replaceAll("'", "\\\\'")));
+    	
     	return _options.immutableClone();
     }
     
@@ -331,6 +337,13 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 				} 
 			} else {
 				state = UploadState.STARTED;
+				// isDone can happen when a file with no EOF is upload
+				// isFailed can happen when the upload request handler throws an
+				//     exception before the upload started (wrong file extension uploaded or exceeds file size)
+				if (progress.isDone() || progress.isFailed()) {
+					state = UploadState.FAILED;
+					uploadFailed();
+				}
 			}
 		}
 		if (log.isDebugEnabled()) log.debug("AjaxFlexibleFileUpload.refreshState: " + state);
@@ -555,6 +568,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 */
 	@Override
 	public WOActionResults uploadFailed() {
+		if (_progress != null && _progress.failure() != null && canSetValueForBinding("failure")) setValueForBinding(_progress.failure(), "failure");
 		clearUploadProgress();
 		return super.uploadFailed();
 	}
@@ -607,7 +621,6 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
   public Boolean clearUploadProgressOnSuccess() {
     if (_clearUploadProgressOnSuccess == null) {
       _clearUploadProgressOnSuccess = ERXValueUtilities.BooleanValueWithDefault(valueForBinding(Keys.clearUploadProgressOnSuccess), Boolean.FALSE);
-      System.out.println("clearUploadProgressOnSuccess: " + _clearUploadProgressOnSuccess);
     }
     return _clearUploadProgressOnSuccess;
   }
