@@ -4,7 +4,7 @@
 //
 // Created by max on Wed Oct 30 2002
 //
-package er.extensions.appserver.navigation;
+package er.navigation;
 
 import org.apache.log4j.Logger;
 
@@ -207,7 +207,6 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
         return "Nav" + level() + (isSelected() ? "Selected" : (isDisabled() ? "Disabled" : ""));
     }
 
-    private final static String[] COLOR=new String[] { "", "#EEEEEE", "#111111", "#EEEEEE", "#111111" };
     private final static String[] TD_BGCOLOR=new String[] { "", "#003366", "#d0d0d0", "#ff6600", "#ff6600" };
     private final static String[] DISABLED_TD_BGCOLOR=new String[] { "", "#003366", "#EFEFEF", "#ff9966", "#ff9966" };
 

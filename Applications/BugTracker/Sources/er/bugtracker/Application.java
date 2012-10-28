@@ -12,10 +12,10 @@ import com.webobjects.foundation.NSLog;
 import er.bugtracker.mail.MailReader;
 import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXDelayedRequestHandler;
-import er.extensions.appserver.navigation.ERXNavigationManager;
 import er.extensions.components._private.ERXSubmitButton;
 import er.extensions.foundation.ERXPatcher;
 import er.extensions.foundation.ERXProperties;
+import er.navigation.ERXNavigationManager;
 import er.rest.entityDelegates.ERXRestRequestHandler;
 
 public class Application extends ERXApplication {

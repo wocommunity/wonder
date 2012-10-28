@@ -18,9 +18,9 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 
 import er.extensions.appserver.ERXSession;
-import er.extensions.appserver.navigation.ERXNavigationManager;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOControlUtilities;
+import er.navigation.ERXNavigationManager;
 
 public class Session extends ERXSession {
 

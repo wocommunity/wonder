@@ -15,8 +15,8 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.bugtracker.Factory;
-import er.extensions.appserver.navigation.ERXNavigationManager;
-import er.extensions.appserver.navigation.ERXNavigationState;
+import er.navigation.ERXNavigationManager;
+import er.navigation.ERXNavigationState;
 
 public class MenuHeader extends WOComponent {
 

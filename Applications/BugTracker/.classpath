@@ -38,5 +38,6 @@
 	<classpathentry kind="con" path="WOFramework/JavaMemoryAdaptor"/>
 	<classpathentry kind="con" path="WOFramework/FrontBasePlugIn"/>
 	<classpathentry kind="con" path="WOFramework/WOLips"/>
+	<classpathentry kind="con" path="WOFramework/ERXNavigation"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

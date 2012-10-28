@@ -8,9 +8,9 @@ import com.webobjects.directtoweb.D2WPage;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.appserver.navigation.ERXNavigationManager;
-import er.extensions.appserver.navigation.ERXNavigationState;
 import er.extensions.components.ERXComponent;
+import er.navigation.ERXNavigationManager;
+import er.navigation.ERXNavigationState;
 
 public class MenuHeader extends ERXComponent {
 	

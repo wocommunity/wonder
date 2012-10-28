@@ -1,4 +1,4 @@
-package er.extensions.appserver.navigation;
+package er.navigation;
 
 import org.apache.log4j.Logger;
 

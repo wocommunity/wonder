@@ -4,7 +4,7 @@
 //
 // Created by max on Wed Oct 30 2002
 //
-package er.extensions.appserver.navigation;
+package er.navigation;
 
 import org.apache.log4j.Logger;
 

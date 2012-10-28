@@ -151,6 +151,15 @@
        </antcall>
     </target>
 
+    <target name="ERXNavigation.all">
+        <antcall target="global.framework.${build.action}" >
+            <param name="project.principal.class" value="er.navigation.ERXNavigation" />
+            <param name="project.name" value="ERXNavigation" />
+            <param name="project.dir" value="Frameworks/Core/ERXNavigation" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
+       </antcall>
+    </target>
+
   <target name="ERIUI.all">
       <antcall target="global.framework.${build.action}" >
           <param name="project.principal.class" value="er.iui.ERIUI" />
@@ -474,7 +483,7 @@
             <param name="project.dir" value="Applications/BugTracker" />
 
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.logic}/Ajax/BTBusinessLogic/DRGrouping/WRReporting/ERPlot/ERRest/ERAttachment/ERTaggable/DerbyPlugIn/PostgresqlPlugIn/ExcelGenerator/WOOgnl/ERCaptcha/ERSelenium/ERCalendar/ERJavaMail/ERExcelLook" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.logic}/Ajax/BTBusinessLogic/DRGrouping/WRReporting/ERPlot/ERRest/ERAttachment/ERTaggable/DerbyPlugIn/PostgresqlPlugIn/ExcelGenerator/WOOgnl/ERCaptcha/ERSelenium/ERCalendar/ERJavaMail/ERExcelLook/ERXNavigation" />
       		<param name="wo.external.root.bundles.embed" value="${wonder.examples.embed.jars}" />
       		<param name="wo.system.root.bundles.embed" value="${wonder.examples.embed.jars}" />            
         </antcall>
@@ -615,7 +624,7 @@
             <param name="project.name" value="ERMovies" />
             <param name="project.dir" value="Examples/D2W/ERMovies" />
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/DerbyPlugIn/ERMoviesLogic/ERSelenium/ERAttachment/ERTaggable" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/DerbyPlugIn/ERMoviesLogic/ERSelenium/ERAttachment/ERTaggable/ERXNavigation" />
       		<param name="wo.external.root.bundles.embed" value="${wonder.examples.embed.jars}" />
       		<param name="wo.system.root.bundles.embed" value="${wonder.examples.embed.jars}" />            
        </antcall>
@@ -999,7 +1008,7 @@
             <param name="project.dir" value="Examples/D2W/ERModernMoviesDemo" />
 
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax/ERModernLook/ERModernDirectToWeb/ERModernDefaultSkin/H2PlugIn/ERMoviesLogic/ERAttachment/ERTaggable" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax/ERModernLook/ERModernDirectToWeb/ERModernDefaultSkin/H2PlugIn/ERMoviesLogic/ERAttachment/ERTaggable/ERXNavigation" />
       		<param name="wo.external.root.bundles.embed" value="${wonder.examples.embed.jars}" />
       		<param name="wo.system.root.bundles.embed" value="${wonder.examples.embed.jars}" />            
         </antcall>
@@ -1329,7 +1338,7 @@
         to add your own, add a target definition above and choose the correct group below
      -->
 
-    <target name="common.frameworks.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, Ajax.all, ERDirectToWeb.all, ERNeutralLook.all, ERSelenium.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERIndexing.all, ERChronic.all, ERCaching.all, ERCaptcha.all, ERProfiling.all, EROpenID.all, ERPDFGeneration.all, ERJGroupsSynchronizer.all, ERRest.all, ERAttachment.all, ERTaggable.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all, ERWorkerChannel.all, BTBusinessLogic.all, JavaMemoryAdaptor.all, JavaNeo4JAdaptor.all, JavaRESTAdaptor.all, JavaFSAdaptor.all, JavaERJDBCAdaptor.all, WOLips.all, WOJRebel.all, ERMoviesLogic.all, SnapshotExplorer.all, ERDivaliteLook.all, ERJasperReports.all, ERAttributeExtension.all, ERWOAdaptor.all, ERCayenne.all, ERCayenne.all, ERDistribution.all, MooTools.all, ERJQueryMobile.all, ERPersistentSessionStorage.all, ERQuartzScheduler.all, ERXiss.all, ERFirebug.all" />
+    <target name="common.frameworks.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, Ajax.all, ERDirectToWeb.all, ERNeutralLook.all, ERSelenium.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERIndexing.all, ERChronic.all, ERCaching.all, ERCaptcha.all, ERProfiling.all, EROpenID.all, ERPDFGeneration.all, ERJGroupsSynchronizer.all, ERRest.all, ERAttachment.all, ERTaggable.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all, ERWorkerChannel.all, BTBusinessLogic.all, JavaMemoryAdaptor.all, JavaNeo4JAdaptor.all, JavaRESTAdaptor.all, JavaFSAdaptor.all, JavaERJDBCAdaptor.all, WOLips.all, WOJRebel.all, ERMoviesLogic.all, SnapshotExplorer.all, ERDivaliteLook.all, ERJasperReports.all, ERAttributeExtension.all, ERWOAdaptor.all, ERCayenne.all, ERCayenne.all, ERDistribution.all, MooTools.all, ERJQueryMobile.all, ERPersistentSessionStorage.all, ERQuartzScheduler.all, ERXiss.all, ERFirebug.all, ERXNavigation.all" />
 
     <target name="common.applications.all" depends="BugTracker.all, ERMailer.all, Uber.all, SecretPal.all, ERXTest.all, PluginTest.all, WOTested.all" />
 

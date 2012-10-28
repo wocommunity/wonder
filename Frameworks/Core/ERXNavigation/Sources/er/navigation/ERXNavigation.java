@@ -6,7 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 
 /* ERXNavigation.java created by max on Thu 27-Jul-2000 */
-package er.extensions.appserver.navigation;
+package er.navigation;
 
 import java.util.StringTokenizer;
 
