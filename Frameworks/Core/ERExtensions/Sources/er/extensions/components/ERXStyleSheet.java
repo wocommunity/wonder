@@ -210,7 +210,7 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 			}
 			md5 = cachedResponse.headerForKey( "checksum" );
 			NSDictionary<String, Object> query = new NSDictionary<String, Object>( md5, "checksum" );
-			href = wocontext.directActionURLForActionNamed( Sheet.class.getName() + "/" + key, query );
+			href = wocontext.directActionURLForActionNamed( Sheet.class.getName() + "/" + key, query, wocontext.request().isSecure(), 0, false );
 		}
 
 		response._appendContentAsciiString( "<link " );
