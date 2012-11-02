@@ -1,0 +1,22 @@
+{
+    attributes = (
+        {allowsNull = N; name = id; prototypeName = id; }, 
+        {allowsNull = N; columnName = name; name = name; prototypeName = varchar255; }
+    ); 
+    attributesUsedForLocking = (id, name); 
+    className = "er.example.erxpartials.model.GenderType"; 
+    classProperties = (name, persons); 
+    externalName = GenderType; 
+    fetchSpecificationDictionary = {}; 
+    name = GenderType; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = Person; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = genderTypeID; sourceAttribute = id; }); 
+            name = persons; 
+        }
+    ); 
+}

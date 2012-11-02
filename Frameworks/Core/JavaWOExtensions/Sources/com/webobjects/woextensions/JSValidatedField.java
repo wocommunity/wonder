@@ -28,6 +28,7 @@ public class JSValidatedField extends WOComponent {
         super(aContext);
     }
 
+    @Override
     public void awake() {
         // We need to give each image a unique name, with considerations that there might be
         // more than ImageFlyover per page.
@@ -37,6 +38,7 @@ public class JSValidatedField extends WOComponent {
     }
 
 
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }

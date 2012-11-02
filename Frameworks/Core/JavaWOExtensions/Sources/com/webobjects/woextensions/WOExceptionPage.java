@@ -32,6 +32,7 @@ public class WOExceptionPage extends WOComponent {
         super(aContext);
     }
 
+    @Override
     public boolean isEventLoggingEnabled() {
         return false;
     }
@@ -41,6 +42,7 @@ public class WOExceptionPage extends WOComponent {
         exception = newException;
     }
 
+    @Override
     public WOResponse generateResponse() {
         WOResponse response = super.generateResponse();
         // we don't need the exception to stick around if we leave the page
@@ -53,7 +55,7 @@ public class WOExceptionPage extends WOComponent {
         return WOApplication.application().isDebuggingEnabled();
     }
 
-    public NSArray reasonLines() {
+    public NSArray<String> reasonLines() {
         if (null==_reasonLines) {
             String aMessage = exception.getMessage();
             if (aMessage!=null) {
@@ -71,12 +73,12 @@ public class WOExceptionPage extends WOComponent {
     }*/
     
     public String errorMessage() {
-        // Construct the error message that should be display in ProjectBuilder
-        StringBuffer buffer = new StringBuffer(128);
+        // Construct the error message that should be displayed in ProjectBuilder
+        StringBuilder buffer = new StringBuilder(128);
         buffer.append("Error : ");
         buffer.append(exception.getClass().getName());
         buffer.append(" - Reason :");
         buffer.append(exception.getMessage());
-        return new String(buffer);
+        return buffer.toString();
     }
 }

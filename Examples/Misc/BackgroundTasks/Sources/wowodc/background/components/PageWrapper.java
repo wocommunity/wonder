@@ -51,6 +51,4 @@ public class PageWrapper extends ERXComponent {
 		}
 		return b.toString();
 	}
-
-
 }

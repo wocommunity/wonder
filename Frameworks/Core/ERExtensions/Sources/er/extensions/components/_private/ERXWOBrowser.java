@@ -23,9 +23,23 @@ import com.webobjects.foundation.NSMutableArray;
  * handle java collections.
  * 
  * @author ak, with help from a friend named jad
+ * 
+ * @binding class class of the browser
+ * @binding displayString the string to display for an item
+ * @binding escapeHTML if the displayString should be escaped, defaults to <code>true</code>
+ * @binding id id of the browser
+ * @binding item the current item in the iteration
+ * @binding list the array or list of items to iterate over
+ * @binding multiple if multiple elements are selectable, defaults to <code>false</code>
+ * @binding name the name of the browser
+ * @binding selectedValues array of selected objects used for direct action
+ * @binding selections array of selected objects
+ * @binding size how many items to display at one time, defaults to 5
+ * @binding style style of the browser
+ * @binding title title of the browser
+ * @binding value the value to use for an item
  */
 public class ERXWOBrowser extends WOInput {
-
 	private static Logger log = Logger.getLogger(ERXWOBrowser.class);
 	
 	WOAssociation _list;
@@ -35,23 +49,19 @@ public class ERXWOBrowser extends WOInput {
 	WOAssociation _selectedValues;
 	WOAssociation _size;
 	WOAssociation _multiple;
-	WOAssociation _escapeHTML;
 	private boolean _loggedSlow;
-	private WOAssociation _disabled;
 
 	public ERXWOBrowser(String s, NSDictionary nsdictionary, WOElement woelement) {
 		super("select", nsdictionary, null);
 		_loggedSlow = false;
-		_disabled = (WOAssociation) nsdictionary.objectForKey("disabled");
-		_list = (WOAssociation) _associations.removeObjectForKey("list");
-		_item = (WOAssociation) _associations.removeObjectForKey("item");
-		_displayString = (WOAssociation) _associations.removeObjectForKey("displayString");
-		_multiple = (WOAssociation) _associations.removeObjectForKey("multiple");
-		_size = (WOAssociation) _associations.removeObjectForKey("size");
-		_escapeHTML = (WOAssociation) _associations.removeObjectForKey("escapeHTML");
+		_list = _associations.removeObjectForKey("list");
+		_item = _associations.removeObjectForKey("item");
+		_displayString = _associations.removeObjectForKey("displayString");
+		_multiple = _associations.removeObjectForKey("multiple");
+		_size = _associations.removeObjectForKey("size");
 		String suffix = (isBrowser() ? "s" : "");
-		_selections = (WOAssociation) _associations.removeObjectForKey("selection" + suffix);
-		_selectedValues = (WOAssociation) _associations.removeObjectForKey("selectedValue" + suffix);
+		_selections = _associations.removeObjectForKey("selection" + suffix);
+		_selectedValues = _associations.removeObjectForKey("selectedValue" + suffix);
 		if (_list == null || (_value != null || _displayString != null) && (_item == null || !_item.isValueSettable()) || _selections != null && !_selections.isValueSettable()) {
 			throw new WODynamicElementCreationException("<" + getClass().getName() + "> : Invalid attributes: 'list' must be present. 'item' must not be a constant if 'value' is present.  Cannot have 'displayString' or 'value' without 'item'.  'selection' must not be a constant if present. 'value' is not allowed anymore.");
 		}
@@ -60,7 +70,8 @@ public class ERXWOBrowser extends WOInput {
 		}
 	}
 	
-	// Tells WOHTMLDynamicElement ancenstor that there are "option" tags to render 
+	// Tells WOHTMLDynamicElement ancestor that there are "option" tags to render 
+	@Override
 	protected boolean hasContent() { 
 	    return true; 
 	}
@@ -69,17 +80,26 @@ public class ERXWOBrowser extends WOInput {
 		return true;
 	}
 	
+	@Override
 	public String toString() {
-		return "<" +getClass().getSimpleName() + " list: " + _list.toString() + " item: " + (_item == null ? "null" : _item.toString()) + " string: " + (_displayString == null ? "null" : _displayString.toString()) + " selections: " + (_selections == null ? "null" : _selections.toString()) + " selectedValues: " + (_selectedValues == null ? "null" : _selectedValues.toString()) + " multiple: " + (_multiple == null ? "null" : _multiple.toString()) + " size: " + (_size == null ? "null" : _size.toString()) + " escapeHTML: " + (_escapeHTML == null ? "null" : _escapeHTML.toString()) + " >";
+		return new StringBuilder('<').append(getClass().getSimpleName()).append(" list: ").append(_list)
+				.append(" item: ").append(_item).append(" string: ").append(_displayString)
+				.append(" selections: ").append(_selections).append(" selectedValues: ")
+				.append(_selectedValues).append(" multiple: ").append(_multiple)
+				.append(" size: ").append(_size).append(" escapeHTML: ").append(_escapeHTML).append('>').toString();
 	}
 	
+	/**
+	 * @deprecated use {@link #isDisabledInContext(WOContext)} instead
+	 */
+	@Deprecated
 	public boolean disabledInComponent(WOComponent component) {
-		return _disabled != null && _disabled.booleanValueInComponent(component);
+		return isDisabledInContext(component.context());
 	}
 
 	private void _slowTakeValuesFromRequest(WORequest worequest, WOContext wocontext) {
 		WOComponent wocomponent = wocontext.component();
-		if (_selections != null && !disabledInComponent(wocomponent) && wocontext.wasFormSubmitted()) {
+		if (_selections != null && !isDisabledInContext(wocontext) && wocontext.wasFormSubmitted()) {
 			String s = nameInContext(wocontext, wocomponent);
 			NSArray nsarray = worequest.formValuesForKey(s);
 			int i = nsarray != null ? nsarray.count() : 0;
@@ -152,7 +172,7 @@ public class ERXWOBrowser extends WOInput {
 
 	private void _fastTakeValuesFromRequest(WORequest worequest, WOContext wocontext) {
 		WOComponent wocomponent = wocontext.component();
-		if (_selections != null && !disabledInComponent(wocomponent) && wocontext.wasFormSubmitted()) {
+		if (_selections != null && !isDisabledInContext(wocontext) && wocontext.wasFormSubmitted()) {
 			String s = nameInContext(wocontext, wocomponent);
 			NSArray nsarray = worequest.formValuesForKey(s);
 			int i = nsarray != null ? nsarray.count() : 0;
@@ -196,6 +216,7 @@ public class ERXWOBrowser extends WOInput {
 		}
 	}
 
+	@Override
 	public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
 		if (_value != null) {
 			if (!_loggedSlow) {
@@ -209,6 +230,7 @@ public class ERXWOBrowser extends WOInput {
 		}
 	}
 
+	@Override
 	public void appendChildrenToResponse(WOResponse woresponse, WOContext wocontext) {
 		NSArray nsarray = null;
 		List vector = null;
@@ -331,9 +353,11 @@ public class ERXWOBrowser extends WOInput {
 
 	}
 
+	@Override
 	protected void _appendValueAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 	}
 
+	@Override
 	public void appendAttributesToResponse(WOResponse woresponse, WOContext wocontext) {
 		super.appendAttributesToResponse(woresponse, wocontext);
 		Object obj = null;

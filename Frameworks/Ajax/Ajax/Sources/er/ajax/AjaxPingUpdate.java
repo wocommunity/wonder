@@ -36,6 +36,7 @@ public class AjaxPingUpdate extends WOComponent {
 		super(context);
 	}
 
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}
@@ -61,6 +62,7 @@ public class AjaxPingUpdate extends WOComponent {
 		return _refreshTarget.booleanValue();
 	}
 	
+	@Override
 	public void sleep() {
 		super.sleep();
 		_refreshTarget = null;
@@ -74,5 +76,4 @@ public class AjaxPingUpdate extends WOComponent {
 	public String targetContainerID() {
 		return (String) valueForBinding("targetContainerID");
 	}
-
 }

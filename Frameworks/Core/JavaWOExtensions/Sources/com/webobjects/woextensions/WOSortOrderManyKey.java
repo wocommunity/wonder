@@ -38,10 +38,12 @@ public class WOSortOrderManyKey extends WOComponent {
       return _currentKey;
     }
 
+    @Override
     public boolean isStateless() {
         return true;
     }
 
+    @Override
     public void reset()  {
         _currentKey=null;
         _selectedKey=null;

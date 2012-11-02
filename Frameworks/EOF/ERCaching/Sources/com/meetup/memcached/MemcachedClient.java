@@ -1383,6 +1383,9 @@ public class MemcachedClient {
 							log.error( "++++ ClassNotFoundException thrown while trying to deserialize for key: " + key, e );
 							throw new NestedIOException( "+++ failed while trying to deserialize for key: " + key, e );
 						}
+						finally {
+							ois.close();
+						}
 					}
 				}
 				else if ( END.equals( line ) ) {
@@ -1725,6 +1728,9 @@ public class MemcachedClient {
 
 						log.error( "++++ ClassNotFoundException thrown while trying to deserialize for key: " + key, e );
 						throw new NestedIOException( "+++ failed while trying to deserialize for key: " + key, e );
+					}
+					finally {
+						ois.close();
 					}
 				}
 

@@ -25,16 +25,19 @@ public class WOMethodInvocation extends WODynamicElement {
         _invoke = (WOAssociation)associations.objectForKey("invoke");
     }
 
+    @Override
     public void appendToResponse(WOResponse aResponse, WOContext aContext)  {
         WOComponent aComponent = aContext.component();
         _invoke.valueInComponent(aComponent);
     }
 
+    @Override
     public void takeValuesFromRequest(WORequest aRequest, WOContext aContext)  {
         WOComponent aComponent = aContext.component();
         _invoke.valueInComponent(aComponent);
     }
 
+    @Override
     public WOActionResults invokeAction(WORequest aRequest, WOContext aContext)  {
         WOComponent aComponent = aContext.component();
         _invoke.valueInComponent(aComponent);

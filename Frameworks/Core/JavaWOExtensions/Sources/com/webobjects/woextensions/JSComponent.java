@@ -29,6 +29,7 @@ public abstract class JSComponent extends WOComponent {
         super(aContext);
     }
 
+    @Override
     public boolean synchronizesVariablesWithBindings() {
            return false;
     }

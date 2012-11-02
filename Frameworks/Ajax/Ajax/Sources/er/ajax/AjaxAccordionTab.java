@@ -19,12 +19,9 @@ public class AjaxAccordionTab extends WOComponent {
     super(context);
   }
 
+  @Override
   public boolean isStateless() {
     return true;
-  }
-
-  public boolean synchronizesVariablesWithBindings() {
-    return false;
   }
 
   public String tabID() {

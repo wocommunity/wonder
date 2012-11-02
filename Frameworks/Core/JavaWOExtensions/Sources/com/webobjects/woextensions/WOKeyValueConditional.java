@@ -56,15 +56,11 @@ public class WOKeyValueConditional extends WOComponent {
         return _negate != 0;
     }
 
+    @Override
     public boolean isStateless() {
         return true;
     }
     
-    @Override
-    public boolean synchronizesVariablesWithBindings() {
-    	return false;
-    }
-
     protected void _invalidateCaches() {
         // In order for this to behave like an element, all instance
         // variables need to be flushed when this component sleeps
@@ -73,6 +69,7 @@ public class WOKeyValueConditional extends WOComponent {
         _negate = -1;
     }
 
+    @Override
     public void reset()  {
         _invalidateCaches();
     }

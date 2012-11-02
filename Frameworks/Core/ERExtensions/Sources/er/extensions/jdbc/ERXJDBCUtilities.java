@@ -319,8 +319,10 @@ public class ERXJDBCUtilities {
 									tempFile.delete();
 
 							continue;
+						} finally {
+							try { bis.close(); } catch (IOException e) {}
 						}
-						FileInputStream fis;
+						FileInputStream fis = null;
 						try {
 							fis = new FileInputStream(tempFile);
 						}
@@ -332,6 +334,10 @@ public class ERXJDBCUtilities {
 									tempFile.delete();
 
 							continue;
+						} finally {
+							if (fis != null) {
+								try { fis.close(); } catch (IOException e) {}
+							}
 						}
 						upps.setBinaryStream(i + 1, fis, (int) tempFile.length());
 						tempfilesToDelete.addObject(tempFile);

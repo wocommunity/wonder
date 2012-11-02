@@ -55,19 +55,18 @@ public class AjaxDroppable extends AjaxComponent {
     super(_context);
   }
 
+  @Override
   public void awake() {
     super.awake();
     _draggableIDKeyName = safeElementID() + "_draggableID";
   }
 
+  @Override
   public boolean isStateless() {
     return true;
   }
 
-  public boolean synchronizesVariablesWithBindings() {
-    return false;
-  }
-
+  @Override
   public void appendToResponse(WOResponse response, WOContext context) {
     _actionUrl = AjaxUtils.ajaxComponentActionUrl(context());
     _elementID = context.elementID();
@@ -161,5 +160,4 @@ public class AjaxDroppable extends AjaxComponent {
     }
     return null;
   }
-
 }

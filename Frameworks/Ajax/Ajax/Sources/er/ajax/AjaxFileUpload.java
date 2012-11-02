@@ -101,6 +101,7 @@ public class AjaxFileUpload extends WOComponent {
 		return _requestHandlerKey;
 	}
 	
+	@Override
 	public void appendToResponse(WOResponse aResponse, WOContext aContext) {
 		super.appendToResponse(aResponse, aContext);
 		AjaxUtils.addScriptResourceInHead(aContext, aResponse, "prototype.js");

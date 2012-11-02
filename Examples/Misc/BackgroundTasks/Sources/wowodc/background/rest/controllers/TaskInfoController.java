@@ -1,7 +1,5 @@
 package wowodc.background.rest.controllers;
 
-import java.util.concurrent.Callable;
-
 import wowodc.background.tasks.T10RestEOFTask;
 import wowodc.background.utilities.Utilities;
 import wowodc.eof.TaskInfo;
@@ -9,9 +7,7 @@ import wowodc.eof.TaskInfo;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSTimestamp;
 
 import er.extensions.appserver.ERXHttpStatusCodes;
@@ -82,6 +78,4 @@ public class TaskInfoController extends ERXRouteController {
     }
     return host;
   }
-  
-  
 }

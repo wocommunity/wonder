@@ -41,10 +41,12 @@ public class WOSimpleArrayDisplay extends WOComponent
         numberToDisplay = -1;
     }
 
+    @Override
     public boolean isStateless() {
         return true;
     }
 
+    @Override
     public void reset()  {
         _invalidateCaches();
     }
