@@ -6,28 +6,49 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOObjectStore;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 
+import er.extensions.appserver.ERXApplication;
 import er.extensions.eof.ERXEC;
 
 /**
  * A convenience class that provides some common logic that is used in
- * {@link Runnable} and/or {@link Callable} tasks.
+ * {@link Runnable} and/or {@link Callable} tasks. It provides support for
+ * cleaning up editing context locks at the end of your task's run() method
+ * just like the behavior at the end of a normal R-R loop.
  * 
  * @author kieran
- * @deprecated use {@link ERXTask} instead
  */
-@Deprecated
-public class ERXAbstractTask {
-
-	volatile private EOObjectStore _parentObjectStore;
-
+public abstract class ERXTask {
+	private volatile EOObjectStore _parentObjectStore;
+	private Long _taskEditingContextTimestampLag;
+	
 	/**
-	 * See EFfective Java item #71 for explanation of this threadsafe lazy
+	 * Do not override run directly. Instead, override _run. The run
+	 * method in ERXTask makes your _run method appear to be in a request,
+	 * and cleans up resources at the end of the request.
+	 */
+	public final void run() {
+		ERXApplication._startRequest();
+		try {
+			_run();
+		}
+		finally {
+			ERXApplication._endRequest();
+		}
+	}
+	
+	/**
+	 * Override _run to provide your task's implementation.
+	 */
+	public abstract void _run();
+	
+	/**
+	 * See Effective Java item #71 for explanation of this threadsafe lazy
 	 * initialization technique
 	 * 
 	 * @return the parent, usually an {@link EOObjectStoreCoordinator} to
 	 *         partition the task's EOF intensive work form the rest of the app.
 	 */
-	final protected EOObjectStore parentObjectStore() {
+	protected final EOObjectStore parentObjectStore() {
 		EOObjectStore osc = _parentObjectStore;
 		if (osc == null) {
 			synchronized (this) {
@@ -47,7 +68,7 @@ public class ERXAbstractTask {
 	 *            app. If you are going to manually set this, you should do it
 	 *            before starting the task.
 	 */
-	final public synchronized void setParentObjectStore(EOObjectStore parentObjectStore) {
+	public final synchronized void setParentObjectStore(EOObjectStore parentObjectStore) {
 		_parentObjectStore = parentObjectStore;
 	}
 
@@ -65,14 +86,12 @@ public class ERXAbstractTask {
 	 */
 	protected EOEditingContext newEditingContext() {
 		EOEditingContext ec = ERXEC.newEditingContext(parentObjectStore());
-		// If this is not a nested EC, we can set the fetch time stamp
+		// if this is not a nested EC, we can set the fetch time stamp
 		if (!(parentObjectStore() instanceof EOEditingContext)) {
 			ec.setFetchTimestamp(taskEditingContextTimestampLag());
 		}
 		return ec;
 	}
-
-	private Long _taskEditingContextTimestampLag;
 
 	/**
 	 * By design EOEditingContext's have a fetch timestamp (default is 1 hour)
@@ -102,7 +121,7 @@ public class ERXAbstractTask {
 	 */
 	private long taskEditingContextTimestampLag() {
 		if (_taskEditingContextTimestampLag == null) {
-			_taskEditingContextTimestampLag = System.currentTimeMillis();
+			_taskEditingContextTimestampLag = Long.valueOf(System.currentTimeMillis());
 		}
 		return _taskEditingContextTimestampLag.longValue();
 	}
