@@ -16,15 +16,18 @@ import er.extensions.eof.ERXEC;
  * just like the behavior at the end of a normal R-R loop.
  * 
  * @author kieran
+ * @param <T> if you implement a {@link Callable} this is the result type of
+ *            the callable, if you implement a {@link Runnable} you don't
+ *            need to specify this.
  */
-public abstract class ERXTask {
+public abstract class ERXTask<T> {
 	private volatile EOObjectStore _parentObjectStore;
 	private Long _taskEditingContextTimestampLag;
 	
 	/**
-	 * Do not override run directly. Instead, override _run. The run
-	 * method in ERXTask makes your _run method appear to be in a request,
-	 * and cleans up resources at the end of the request.
+	 * If you have a {@link Runnable} do not override run directly. Instead,
+	 * override _run. The run method in ERXTask makes your _run method appear
+	 * to be in a request, and cleans up resources at the end of the request.
 	 */
 	public final void run() {
 		ERXApplication._startRequest();
@@ -37,9 +40,37 @@ public abstract class ERXTask {
 	}
 	
 	/**
-	 * Override _run to provide your task's implementation.
+	 * Override _run to provide your task's implementation if you have a {@link Runnable}.
 	 */
-	public abstract void _run();
+	public void _run() { }
+	
+	/**
+	 * If you have a {@link Callable} do not override call directly. Instead,
+	 * override _call. The call method in ERXTask makes your _call method appear
+	 * to be in a request, and cleans up resources at the end of the request.
+	 * 
+	 * @return computed result
+	 * @throws Exception if unable to compute a result
+	 */
+	public final T call() throws Exception {
+		ERXApplication._startRequest();
+		try {
+			return _call();
+		}
+		finally {
+			ERXApplication._endRequest();
+		}
+	}
+	
+	/**
+	 * Override _call to provide your task's implementation if you have a {@link Callable}.
+	 * 
+	 * @return computed result
+	 * @throws Exception if unable to compute a result
+	 */
+	public T _call() throws Exception {
+		return null;
+	}
 	
 	/**
 	 * See Effective Java item #71 for explanation of this threadsafe lazy
