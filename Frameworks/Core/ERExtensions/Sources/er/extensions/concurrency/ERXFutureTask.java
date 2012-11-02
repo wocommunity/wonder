@@ -23,7 +23,7 @@ import er.extensions.foundation.ERXStatusInterface;
  * @author kieran
  * 
  */
-public class ERXFutureTask<V> extends FutureTask<V> implements ERXExecutionStateTransition, ERXStatusInterface,
+public class ERXFutureTask<V> extends FutureTask<V> implements IERXExecutionStateTransition, ERXStatusInterface,
 				ERXTaskPercentComplete, NSKeyValueCoding {
 	private final Object _task;
 
@@ -100,15 +100,14 @@ public class ERXFutureTask<V> extends FutureTask<V> implements ERXExecutionState
 	}
 
 	public void afterExecute() {
-		if (_task instanceof ERXExecutionStateTransition) {
-			((ERXExecutionStateTransition) _task).afterExecute();
+		if (_task instanceof IERXExecutionStateTransition) {
+			((IERXExecutionStateTransition) _task).afterExecute();
 		}
-
 	}
 
 	public void beforeExecute() {
-		if (_task instanceof ERXExecutionStateTransition) {
-			((ERXExecutionStateTransition) _task).beforeExecute();
+		if (_task instanceof IERXExecutionStateTransition) {
+			((IERXExecutionStateTransition) _task).beforeExecute();
 		}
 	}
 	

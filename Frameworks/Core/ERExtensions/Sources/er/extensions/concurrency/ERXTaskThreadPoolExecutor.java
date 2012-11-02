@@ -96,9 +96,9 @@ public class ERXTaskThreadPoolExecutor extends ThreadPoolExecutor {
 			}
 		}
 
-		if (r instanceof ERXExecutionStateTransition) {
-			((ERXExecutionStateTransition)r).beforeExecute();
-		} //~ if (r instanceof ERXExecutionStateTransition)
+		if (r instanceof IERXExecutionStateTransition) {
+			((IERXExecutionStateTransition)r).beforeExecute();
+		} //~ if (r instanceof IERXExecutionStateTransition)
 
 		super.beforeExecute(t, r);
 	}
@@ -117,9 +117,9 @@ public class ERXTaskThreadPoolExecutor extends ThreadPoolExecutor {
 				log.debug("Finished executing " + (r == null ? "null" : r) + " after " + elapsedTime);
 		}
 
-		if (r instanceof ERXExecutionStateTransition) {
-			((ERXExecutionStateTransition)r).afterExecute();
-		} //~ if (r instanceof ERXExecutionStateTransition)
+		if (r instanceof IERXExecutionStateTransition) {
+			((IERXExecutionStateTransition)r).afterExecute();
+		} //~ if (r instanceof IERXExecutionStateTransition)
 		
 		// Safety net to unlock any locked EC's at the end of this task's operation in this thread
 		ERXEC.unlockAllContextsForCurrentThread();
