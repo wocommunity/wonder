@@ -307,18 +307,6 @@ public class ERXPatcher {
 					woresponse.appendContentString(newResponse.contentString());
 				}
 			}
-			
-			// WO 5.4: 5.4 already does this, but for 5.3, if you want to use WOImage's with
-			// PDF generation, you need XHTML output
-		    protected void _appendOpenTagToResponse(WOResponse response, WOContext context) {
-		        response.appendContentCharacter('<');
-		        response.appendContentString(elementName());
-		        appendAttributesToResponse(response, context);
-		        if(!hasContent() || ERXResponse.isXHTML(response)) { // CHECKME do we need to check isXHTML?
-		            response.appendContentString(" /");
-		        }
-		        response.appendContentCharacter('>');
-		    }
 		}
 
 		public static class ActiveImage extends WOActiveImage {
