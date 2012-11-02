@@ -682,8 +682,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
     return toStr;
   }
   
-  // @Override
-  // override removed for 5.4 
+  @Override
   public EOEditingContext newDefaultEditingContext() {
     return ERXEC.newEditingContext();
   }

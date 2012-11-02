@@ -51,22 +51,19 @@ public class CCSubmitLink extends ERXNonSynchronizingComponent {
         super(context);
     }
     
-	@SuppressWarnings("deprecation")
+	@Override
 	public WOActionResults invokeAction(WORequest request, WOContext context) {
 		String formValue = (String) request.formValueForKey(fieldName());
 		if (fieldName().equals(formValue)) {
 			// Tell context that an action was performed. If this is
 			// not done, the form's default action will be called also.
 			// *note* Uses undocumented method of WOContext.
-			//
-			// deprecated call required to maintain WO5.3 compatibility.
-			// change to context.setActionInvoked(true) once move to
-			// WO5.4+ is complete -davidleber
 			context.setActionInvoked(true);
 		}
 		return super.invokeAction(request, context);
 	}
 	
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		// Check if the link is in a form so we know if we need to
 		// use the link and a hidden field to submit the form.

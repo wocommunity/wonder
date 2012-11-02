@@ -293,13 +293,11 @@ public class _H2PlugIn extends JDBCPlugIn {
 			return new NSArray(_expressionForString("DROP TABLE " + formatTableName(tableName)));
 		}
 
-		//@Override WO5.4
 		@Override
 		public String formatColumnName(String columnName) {
 			return columnName;
 		}
 
-		//@Override WO5.4
 		@Override
 		public String formatTableName(String tableName) {
 			return tableName;
