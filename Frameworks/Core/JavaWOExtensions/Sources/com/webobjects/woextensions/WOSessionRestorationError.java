@@ -23,11 +23,13 @@ public class WOSessionRestorationError extends WOComponent {
         super(aContext);
     }
 
+    @Override
     public boolean isEventLoggingEnabled() {
         return false;
     }
 
-    public void appendToResponse(WOResponse aResponse, WOContext aContext)  {
+    @Override
+    public void appendToResponse(WOResponse aResponse, WOContext aContext) {
         super.appendToResponse(aResponse, aContext);
         aResponse.disableClientCaching();
     }

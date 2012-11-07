@@ -424,6 +424,8 @@ public class _DerbyPlugIn extends JDBCPlugIn {
 			}
 			catch (IOException e) {
 				throw new RuntimeException("Failed to load 'JDBCInfo.plist' from this plugin jar: " + e, e);
+			} finally {
+				try { jdbcInfoStream.close(); } catch (IOException e) {}
 			}
 		}
 		else {

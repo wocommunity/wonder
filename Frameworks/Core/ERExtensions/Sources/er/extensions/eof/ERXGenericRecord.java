@@ -416,27 +416,27 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 		flushCaches();
 	}
 
-	public void addObjectsToBothSidesOfRelationshipWithKey(NSArray<EOEnterpriseObject> objects, String key) {
+	public void addObjectsToBothSidesOfRelationshipWithKey(NSArray<? extends EOEnterpriseObject> objects, String key) {
 		if (objects != null && objects.count() > 0) {
-			NSArray<EOEnterpriseObject> objectsSafe = objects instanceof NSMutableArray ? objects.immutableClone() : objects;
+			NSArray<? extends EOEnterpriseObject> objectsSafe = objects.immutableClone();
 			for (EOEnterpriseObject eo : objectsSafe) {
 				addObjectToBothSidesOfRelationshipWithKey(eo, key);
 			}
 		}
 	}
 
-	public void removeObjectsFromBothSidesOfRelationshipWithKey(NSArray<EOEnterpriseObject> objects, String key) {
+	public void removeObjectsFromBothSidesOfRelationshipWithKey(NSArray<? extends EOEnterpriseObject> objects, String key) {
 		if (objects != null && objects.count() > 0) {
-			NSArray<EOEnterpriseObject> objectsSafe = objects instanceof NSMutableArray ? objects.immutableClone() : objects;
+			NSArray<? extends EOEnterpriseObject> objectsSafe = objects.immutableClone();
 			for (EOEnterpriseObject eo : objectsSafe) {
 				removeObjectFromBothSidesOfRelationshipWithKey(eo, key);
 			}
 		}
 	}
 
-	public void removeObjectsFromPropertyWithKey(NSArray<EOEnterpriseObject> objects, String key) {
+	public void removeObjectsFromPropertyWithKey(NSArray<? extends EOEnterpriseObject> objects, String key) {
 		if (objects != null && objects.count() > 0) {
-			NSArray<EOEnterpriseObject> objectsSafe = objects instanceof NSMutableArray ? objects.immutableClone() : objects;
+			NSArray<? extends EOEnterpriseObject> objectsSafe = objects.immutableClone();
 			for (EOEnterpriseObject eo : objectsSafe) {
 				removeObjectFromPropertyWithKey(eo, key);
 			}
@@ -1050,6 +1050,30 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 */
 	public boolean isValidatedWhenNested() {
 		return _validatedWhenNested;
+	}
+	
+	/**
+	 * Override so that we can handle the case of in-memory qualifier evaluation against a hidden primary key 
+	 * attribute (simple or component of compound). This will allow database qualifiers containing primary key
+	 * attribute names to be used for in-memory sorting and filtering.
+	 * 
+	 * @see com.webobjects.eocontrol.EOCustomObject#handleQueryWithUnboundKey(java.lang.String)
+	 */
+	@Override
+	public Object handleQueryWithUnboundKey(String key) {
+		NSDictionary pkDict = EOUtilities.primaryKeyForObject(editingContext(), this);
+		if (pkDict == null) {
+			// This will be the case for new unsaved objects, so just
+			// check if the user was using a key that is valid as a primary key attribute
+			if (entity().primaryKeyAttributeNames().contains(key)) {
+				// Valid hidden PK key, so return null since PK is still essentially null.
+				return null;
+			}
+		} else if (pkDict.allKeys().contains(key)) {
+			// Valid PK key, so return the atribute value.
+			return pkDict.valueForKey(key);
+		}
+		return super.handleQueryWithUnboundKey(key);
 	}
 	
 	/**

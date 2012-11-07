@@ -23,6 +23,7 @@ public class WOBatchNavigationBar extends WOComponent {
         super(aContext);
     }
 
+    @Override
     public boolean isStateless() {
         return true;
     }

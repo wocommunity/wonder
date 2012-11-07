@@ -27,6 +27,7 @@ public class AjaxSocialNetworkLink extends ERXComponent {
 		super(context);
 	}
 
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}

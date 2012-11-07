@@ -27,6 +27,7 @@ import java.io.StringReader;
 import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -53,7 +54,10 @@ import er.extensions.foundation.ERXRuntimeUtilities.Result;
 import er.extensions.foundation.ERXRuntimeUtilities.TimeoutException;
 
 /**
-* Collection of handy {java.io.File} utilities.
+ * Collection of handy {java.io.File} utilities.
+ *
+ * By default, will use UTF-8 for the character set, though one can set the static ivar to
+ * override this choice.
  */
 public class ERXFileUtilities {
 
@@ -63,6 +67,26 @@ public class ERXFileUtilities {
 
     /** logging support */
     public static final Logger log = Logger.getLogger(ERXFileUtilities.class);
+
+    private static Charset charset = null;
+
+    static { setDefaultCharset("UTF-8"); }
+
+    //  ===========================================================================
+    //  Static Methods
+    //  ---------------------------------------------------------------------------
+
+    public static Charset charset() { return charset; }
+
+    public static void setDefaultCharset(String name) {
+        Charset original = charset;
+        try {
+            charset = Charset.forName(name);
+        } catch (Exception e) {
+            log.error("Unable to set default charset to \""+name+"\"");
+            charset = original;
+        }
+    }
 
     //	===========================================================================
     //	Class Methods
@@ -273,7 +297,7 @@ public class ERXFileUtilities {
 	 * @param stream
 	 *            to pull data from
 	 * @return the temp file that was created
-     * @throws IOException if things go wrong
+	 * @throws IOException if things go wrong
 	 */
 	public static File writeInputStreamToTempFile(InputStream stream) throws IOException {
 		return ERXFileUtilities.writeInputStreamToTempFile(stream, "_Wonder", ".tmp");
@@ -287,34 +311,39 @@ public class ERXFileUtilities {
 	 * @param prefix the filename prefix of the temp file
 	 * @param suffix the filename suffix of the temp file
 	 * @return the temp file that was created 
-     * @throws IOException if things go wrong
+	 * @throws IOException if things go wrong
 	 */
 	public static File writeInputStreamToTempFile(InputStream stream, String prefix, String suffix) throws IOException {
-		File tempFile;
-		try {
-			tempFile = File.createTempFile(prefix, suffix);
-			try {
-				ERXFileUtilities.writeInputStreamToFile(stream, tempFile);
-			}
-			catch (RuntimeException e) {
-				tempFile.delete();
-				throw e;
-			}
-			catch (IOException e) {
-				tempFile.delete();
-				throw e;
-			}
-		}
-		catch (RuntimeException e) {
-			stream.close();
-			throw e;
-		}
-		catch (IOException e) {
-			stream.close();
-			throw e;
-		}
-		return tempFile;
-	}
+	    File tempFile;
+	    try {
+	        tempFile = File.createTempFile(prefix, suffix);
+	        try {
+	            ERXFileUtilities.writeInputStreamToFile(stream, tempFile);
+	        }
+	        catch (RuntimeException e) {
+	            if (! tempFile.delete())
+	                log.error("RuntimeException occured, but cannot delete tempFile \""+tempFile.getPath()+"\"");
+	            throw e;
+	        }
+	        catch (IOException e) {
+	            if (! tempFile.delete())
+	                log.error("IOException occured, but cannot delete tempFile \""+tempFile.getPath()+"\"");
+	            throw e;
+	        }
+	    }
+	    catch (RuntimeException e) {
+	        stream.close();
+	        throw e;
+	    }
+	    catch (IOException e) {
+	        stream.close();
+	        throw e;
+	    }
+	    finally {
+	        stream.close();
+	    }
+	    return tempFile;
+    	}
 
     /**
      * Writes the contents of an InputStream to a specified file.
@@ -323,30 +352,35 @@ public class ERXFileUtilities {
      * @throws IOException if things go wrong
      */
     public static void writeInputStreamToFile(InputStream stream, File file) throws IOException {
-    	FileOutputStream out;
+    	FileOutputStream out = null;
     	try {
 	        if (file == null) throw new IllegalArgumentException("Attempting to write to a null file!");
 	        File parent = file.getParentFile();
 	        if(parent != null && !parent.exists()) {
-	            parent.mkdirs();
+	            if (! parent.mkdirs())
+                        throw new RuntimeException("Cannot create parent directory for file");
 	        }
 	        out = new FileOutputStream(file);
-    	}
-    	catch (IOException e) {
+	        ERXFileUtilities.writeInputStreamToOutputStream(stream, true, out, true);
+    	} finally {
     		stream.close();
-    		throw e;
+    		if (out != null) {
+    			out.close();
+    		}
     	}
-    	catch (RuntimeException e) {
-    		stream.close();
-    		throw e;
-    	}
-        ERXFileUtilities.writeInputStreamToOutputStream(stream, true, out, true);
     }
     
     public static void writeInputStreamToGZippedFile(InputStream stream, File file) throws IOException {
     	if (file == null) throw new IllegalArgumentException("Attempting to write to a null file!");
-     	FileOutputStream out = new FileOutputStream(file);
-     	ERXFileUtilities.writeInputStreamToOutputStream(stream, false, new GZIPOutputStream(out), true);
+    	GZIPOutputStream out = null;
+     	try {
+     		out = new GZIPOutputStream(new FileOutputStream(file));
+     		ERXFileUtilities.writeInputStreamToOutputStream(stream, false, out, true);
+     	} finally {
+     		if (out != null) {
+     			out.close();
+     		}
+     	}
     }
  	
     /**
@@ -398,7 +432,7 @@ public class ERXFileUtilities {
 	    if (s == null) throw new NullPointerException("string argument cannot be null");
 	    if (f == null) throw new NullPointerException("file argument cannot be null");
 	    
-	    byte[] bytes = s.getBytes();
+	    byte[] bytes = s.getBytes(charset());
 	    ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
 	    writeInputStreamToGZippedFile(bais, f);
     }
@@ -496,15 +530,15 @@ public class ERXFileUtilities {
     }
     
     /**
- 	 * Returns a string from the gzipped file using the default
- 	 * encoding.
- 	 * @param f file to read
- 	 * @return string representation of that file.
+     * Returns a string from the gzipped file using the default
+     * encoding.
+     * @param f file to read
+     * @return string representation of that file.
      * @throws IOException if things go wrong
- 	 */
- 	public static String stringFromGZippedFile(File f) throws IOException {
- 		return new String(bytesFromGZippedFile(f));
- 	}
+     */
+    public static String stringFromGZippedFile(File f) throws IOException {
+        return new String(bytesFromGZippedFile(f), charset());
+    }
  	
     /**
      * Returns a string from the file using the default
@@ -514,7 +548,7 @@ public class ERXFileUtilities {
      * @throws IOException if things go wrong
      */
     public static String stringFromFile(File f) throws IOException {
-        return new String(bytesFromFile(f));
+        return new String(bytesFromFile(f), charset());
     }
 
     /**
@@ -527,7 +561,7 @@ public class ERXFileUtilities {
      */
     public static String stringFromFile(File f, String encoding) throws IOException {
         if (encoding == null) {
-            return new String(bytesFromFile(f));
+            return new String(bytesFromFile(f), charset());
         }
         return new String(bytesFromFile(f), encoding);
     }
@@ -651,7 +685,7 @@ public class ERXFileUtilities {
         if(file != null) {
             try {
                 url = URLFromPath(file.getCanonicalPath());
-            } catch(IOException ex) {
+            } catch (IOException ex) {
                 throw new NSForwardException(ex);
             }
         }
@@ -818,7 +852,7 @@ public class ERXFileUtilities {
      */
     public static void deleteFilesInDirectory(File directory, FileFilter filter, boolean recurseIntoDirectories, boolean removeDirectories) {
         if (!directory.exists())
-            throw new RuntimeException("Attempting to delete files from a non-existant directory: " + directory);
+            throw new RuntimeException("Attempting to delete files from a non-existent directory: " + directory);
         if (!directory.isDirectory())
             throw new RuntimeException("Attmepting to delete files from a file that is not a directory: " + directory);
         File files[] = filter != null ? directory.listFiles(filter) : directory.listFiles() ;
@@ -830,7 +864,8 @@ public class ERXFileUtilities {
                 }
                 if (aFile.isFile() || (aFile.isDirectory() && removeDirectories
                                        && (aFile.listFiles() == null || aFile.listFiles().length == 0))) {
-                    aFile.delete();
+                    if (! aFile.delete())
+                        throw new RuntimeException("Directory \""+directory+"\" not successfully deleted.");
                 }
             }
         }
@@ -882,14 +917,14 @@ public class ERXFileUtilities {
     }
     
     /**
-        * Creates a symlink for a given file. Note this only works on
+     * Creates a symlink for a given file. Note this only works on
      * civilized OSs which support symbolic linking.
      * @param source to create the link to
      * @param destination file to create the link to
      * @param symbolic determines if a symlink should be created
      * @param allowUnlink determines if the symlink is a hardlink which allows unlinking
      * @param followSymbolicLinks If the destination is a symbolic link, follow it
-     * @throws IOException 
+     * @throws IOException if the link could not be created
      */
     public static void linkFiles(File source, File destination,
                                  boolean symbolic,
@@ -925,7 +960,7 @@ public class ERXFileUtilities {
                                              catch (InterruptedException e) {}
                                          }
                                          if (task.exitValue() != 0) {
-                                             BufferedReader err = new BufferedReader(new InputStreamReader(task.getErrorStream()));
+                                             BufferedReader err = new BufferedReader(new InputStreamReader(task.getErrorStream(), charset()));
                                              throw new IOException("Unable to create link: " + err.readLine());
                                          }
                                      } finally {
@@ -957,7 +992,7 @@ public class ERXFileUtilities {
      * @param dstDirectory destination directory
      * @param deleteOriginals tells if the original files, the file is deleted even if appuser has no write
      * rights. This is compareable to a <code>rm -f filename</code> instead of <code>rm filename</code>
-	 * @param replaceExistingFiles <code>true</code> if the destination should be overwritten if it already exists
+     * @param replaceExistingFiles <code>true</code> if the destination should be overwritten if it already exists
      * @param recursiveCopy specifies if directories should be recursively copied
      * @param filter which restricts the files to be copied
      * @throws IOException if things go wrong
@@ -967,14 +1002,16 @@ public class ERXFileUtilities {
                                               boolean deleteOriginals,
                                               boolean replaceExistingFiles,
                                               boolean recursiveCopy,
-                                              FileFilter filter)
-        throws IOException {
+                                              FileFilter filter) throws IOException {
+
             if (!srcDirectory.exists() || !dstDirectory.exists())
                 throw new RuntimeException("Both the src and dst directories must exist! Src: " + srcDirectory
                                            + " Dst: " + dstDirectory);
+
             File srcFiles[] = filter!=null ?
                 srcDirectory.listFiles(filter) :
                 srcDirectory.listFiles();
+
             if (srcFiles != null && srcFiles.length > 0) {
 
                 for (int i = 0; i < srcFiles.length; i++) {
@@ -985,8 +1022,10 @@ public class ERXFileUtilities {
                         if (deleteOriginals) {
                             renameTo(srcFile, dstFile);
                         } else {
-                            dstFile.mkdirs();
-                            copyFilesFromDirectory(srcFile, dstFile, deleteOriginals, replaceExistingFiles, recursiveCopy, filter);
+                            if (dstFile.mkdirs())
+                                copyFilesFromDirectory(srcFile, dstFile, deleteOriginals, replaceExistingFiles, recursiveCopy, filter);
+                            else
+                                log.error("Error creating directories for destination \""+dstDirectory.getPath()+"\"");
                         }
                     } else if (!srcFile.isDirectory()) {
                     	if (replaceExistingFiles || ! dstFile.exists()) {
@@ -1022,7 +1061,7 @@ public class ERXFileUtilities {
             if (!copied) {
                 Throwable thrownException = null;
                 File parent = dstFile.getParentFile();
-                if (!parent.exists() && !parent.mkdirs()) {
+                if (! parent.exists() && ! parent.mkdirs()) {
                 	throw new IOException("Failed to create the directory " + parent + ".");
                 }
                 
@@ -1054,21 +1093,18 @@ public class ERXFileUtilities {
                         finally {
                         	out.close();
                         }
-                	}
-                    catch (Throwable t) {
+                    } catch (Throwable t) {
                 		if (thrownException == null) {
                 			thrownException = t;
                 		}
-                    }
-                	finally {
+                    } finally {
                     	srcChannel.close();
                 	}
                 } catch (Throwable t) {
                 	if (thrownException == null) {
                 		thrownException = t;
                 	}
-                }
-                finally {
+                } finally {
                 	try {
                 		in.close();
                 	}
@@ -1108,17 +1144,20 @@ public class ERXFileUtilities {
      * @exception IOException if something goes wrong
      */
     public static final File createTempDir() throws IOException {
-        File f = File.createTempFile("WonderTempDir", "");
+        File f = createTempDir("WonderTempDir", "");
 
-        f.delete();
-        f.delete();
-        f.mkdirs();
+        if (f.delete() || f.delete())
+            log.debug("Could not delete temporary directory: \""+f.getPath()+"\"");
+
+        if (! f.mkdirs())
+            log.error("Could not create temporary directory: \""+f.getPath()+"\"");
 
         return f;
     }
 
     /**
      * Creates a temporary directory.
+     *
      * @param prefix prefix to use for the filename
      * @param suffix suffix to use for the filename
      *
@@ -1129,9 +1168,11 @@ public class ERXFileUtilities {
     public static final File createTempDir(String prefix, String suffix) throws IOException {
         File f = File.createTempFile(prefix, suffix);
 
-        f.delete();
-        f.delete();
-        f.mkdirs();
+        if (f.delete() || f.delete()) 
+            log.debug("Could not delete temporary directory: \""+f.getPath()+"\"");
+
+        if (! f.mkdirs())
+            log.error("Could not create temporary directory: \""+f.getPath()+"\"");
 
         return f;
     }
@@ -1209,6 +1250,7 @@ public class ERXFileUtilities {
      * @exception IOException if something goes wrong
      */
     public static File unzipFile(File f, File destination) throws IOException {
+
         if (!f.exists()) {
             throw new FileNotFoundException("file "+f+" does not exist");
         }
@@ -1217,7 +1259,8 @@ public class ERXFileUtilities {
         if (destination != null) {
             absolutePath = destination.getAbsolutePath();
             if (!destination.exists()) {
-                destination.mkdirs();
+                if (! destination.mkdirs())
+                    throw new RuntimeException("Cannot create destination directory: \""+destination.getPath()+"\"");
             } else if (!destination.isDirectory()) {
                 absolutePath = absolutePath.substring(0, absolutePath.lastIndexOf(File.separator));
             }
@@ -1238,8 +1281,10 @@ public class ERXFileUtilities {
                 if (dir.endsWith(".zip")) {
                     dir = dir.substring(0, dir.length() - 4);
                 }
-                new File(dir).mkdirs();
-                absolutePath = dir + File.separator;
+                if (new File(dir).mkdirs())
+                    absolutePath = dir + File.separator;
+                else
+                    throw new IOException("Cannot create directory: \""+dir+"\"");
             }
         } else {
             return null;
@@ -1250,15 +1295,23 @@ public class ERXFileUtilities {
             String name = ze.getName();
             if (ze.isDirectory()) {
                 File d = new File(absolutePath + name);
-                d.mkdirs();
+                if (! d.mkdirs())
+                    throw new IOException("Cannot create directory: \""+d.getPath()+"\"");
                 if (log.isDebugEnabled()) {
                     log.debug("created directory "+d.getAbsolutePath());
                 }
             } else {
-                InputStream is = zipFile.getInputStream(ze);
-                writeInputStreamToFile(is, new File(absolutePath, name));
-                if (log.isDebugEnabled()) {
-                    log.debug("unzipped file "+ze.getName()+" into "+(absolutePath + name));
+                InputStream is = null;
+                try {
+                	is = zipFile.getInputStream(ze);
+	                writeInputStreamToFile(is, new File(absolutePath, name));
+	                if (log.isDebugEnabled()) {
+	                    log.debug("unzipped file "+ze.getName()+" into "+(absolutePath + name));
+	                }
+                } finally {
+                	if (is != null) {
+                		is.close();
+                	}
                 }
             }
         }
@@ -1333,9 +1386,10 @@ public class ERXFileUtilities {
                 }
                 origin.close();
             }
-            zout.close();
         } catch(Exception e) {
             e.printStackTrace();
+        } finally {
+        	zout.close();
         }
         
         if (deleteOriginal) {
@@ -1353,7 +1407,7 @@ public class ERXFileUtilities {
      *
      * @param file the file to sum
      * @return the MD5 sum of the bytes in file
-     * @exception IOException
+     * @exception IOException if file could not be read
      */
     public static byte[] md5(File file) throws IOException {
         FileInputStream fis = new FileInputStream(file);
@@ -1370,7 +1424,7 @@ public class ERXFileUtilities {
      *
      * @param in the input stream to sum
      * @return the MD5 sum of the bytes in file
-     * @exception IOException
+     * @exception IOException if the input stream could not be read
      */
     public static byte[] md5(InputStream in) throws IOException {
         try {
@@ -1392,7 +1446,7 @@ public class ERXFileUtilities {
      *
      * @param file the file to sum
      * @return the hex encoded MD5 sum of the bytes in file
-     * @exception IOException
+     * @exception IOException if the file could not be read
      */
     public static String md5Hex(File file) throws IOException {
         return ERXStringUtilities.byteArrayToHexString(md5(file));
@@ -1403,7 +1457,7 @@ public class ERXFileUtilities {
      *
      * @param in the input stream to sum
      * @return the hex encoded MD5 sum of the bytes in file
-     * @exception IOException
+     * @exception IOException if the input stream could not be read
      */
     public static String md5Hex(InputStream in) throws IOException {
         return ERXStringUtilities.byteArrayToHexString(md5(in));
@@ -1537,7 +1591,8 @@ public class ERXFileUtilities {
     }
 
     
-    /** Lists all files in the specified directory, if desired recursively.
+    /**
+     * Lists all files in the specified directory, if desired recursively.
      *  
      * @param baseDir the dir from which to list the child files
      * @param recursive if <code>true</code> this method works recursively
@@ -1563,15 +1618,15 @@ public class ERXFileUtilities {
         return files;
     }
 
-    /** moves a file from one location to another one. This works different
+    /**
+     * Moves a file from one location to another one. This works different
      * than java.io.File.renameTo as renameTo does not work across partitions
      * 
-     * @param source
-     * @param destination
-     * @throws IOException
-     * @throws FileNotFoundException
+     * @param source the file to move
+     * @param destination the destination to move the source to
+     * @throws IOException if things go wrong
      */
-    public static void renameTo(File source, File destination) throws FileNotFoundException, IOException {
+    public static void renameTo(File source, File destination) throws IOException {
         if (!source.renameTo(destination)) {
             ERXFileUtilities.copyFileToFile(source, destination, true, true);
         }

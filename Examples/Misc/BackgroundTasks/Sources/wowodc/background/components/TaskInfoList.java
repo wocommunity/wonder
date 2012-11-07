@@ -80,5 +80,4 @@ public class TaskInfoList extends WOComponent {
 		}
 		return _wholeNumberFormatter;
 	}
-	
 }

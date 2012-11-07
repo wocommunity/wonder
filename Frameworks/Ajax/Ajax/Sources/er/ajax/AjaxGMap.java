@@ -39,9 +39,9 @@ public class AjaxGMap extends AjaxComponent {
 
 	public AjaxGMap(WOContext context) {
 		super(context);
-
 	}
 
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}

@@ -26,6 +26,7 @@ public class WXAccessControl extends WOComponent {
     /////////////
     // No-Sync
     ////////////
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }

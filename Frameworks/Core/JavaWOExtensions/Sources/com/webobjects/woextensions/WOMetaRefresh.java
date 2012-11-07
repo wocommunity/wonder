@@ -24,6 +24,7 @@ public class WOMetaRefresh extends WOComponent
         super(aContext);
     }
 
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }
@@ -34,7 +35,7 @@ public class WOMetaRefresh extends WOComponent
         // contentString = aSeconds+";url="+aUrl;
         Object aSeconds = valueForBinding("seconds");
         String aUrl = context().componentActionURL();
-        StringBuffer buffer = new StringBuffer(40); //reasonable value
+        StringBuilder buffer = new StringBuilder(40); //reasonable value
         if (aSeconds != null) {
             buffer.append(aSeconds.toString());
         } else {

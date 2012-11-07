@@ -168,6 +168,7 @@ public class AjaxModalDialog extends AjaxComponent {
 		super(context);
 	}
 
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}
@@ -326,6 +327,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	 *
 	 * @see com.webobjects.appserver.WOComponent#awake()
 	 */
+	@Override
 	public void awake() {
 		super.awake();
 		if (_actionResults != null) {
@@ -338,6 +340,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	 *
 	 * @see com.webobjects.appserver.WOComponent#takeValuesFromRequest(com.webobjects.appserver.WORequest, com.webobjects.appserver.WOContext)
 	 */
+	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		ajaxComponentActionUrl = AjaxUtils.ajaxComponentActionUrl(context());
 		if (isOpen()) {
@@ -370,6 +373,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	 * @see #update(WOContext)
 	 * @see com.webobjects.appserver.WOComponent#takeValuesFromRequest(com.webobjects.appserver.WORequest, com.webobjects.appserver.WOContext)
 	 */
+	@Override
 	public WOActionResults invokeAction(WORequest request, WOContext context) {
 		ajaxComponentActionUrl = AjaxUtils.ajaxComponentActionUrl(context());
 		pushDialog();		
@@ -408,6 +412,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	 *
 	 * @return <code>true</code> if this request is for this component
 	 */
+	@Override
     protected boolean shouldHandleRequest(WORequest request, WOContext context) {
 		String elementID = context.elementID();
 		String senderID = context.senderID();
@@ -507,6 +512,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	 *
 	 * @see er.ajax.AjaxComponent#appendToResponse(com.webobjects.appserver.WOResponse, com.webobjects.appserver.WOContext)
 	 */
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		ajaxComponentActionUrl = AjaxUtils.ajaxComponentActionUrl(context());
 		if (context.isInForm()) {
@@ -611,6 +617,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	 *
 	 * @see com.webobjects.appserver.WOComponent#sleep()
 	 */
+	@Override
 	public void sleep() {
 		if (_actionResults != null) {
 			_actionResults._sleepInContext(context());
@@ -651,6 +658,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	 *
 	 * @return id()
 	 */
+	@Override
 	protected String _containerID(WOContext context) {
 		return id();
 	}
@@ -831,7 +839,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	 * @return URL to invoke when the dialog is opened
 	 */
 	protected String openDialogURL(WOContext context) {
-		return new StringBuffer(ajaxComponentActionUrl).append(Open_ElementID_Suffix).toString();
+		return new StringBuilder(ajaxComponentActionUrl).append(Open_ElementID_Suffix).toString();
 	}
 	
 	/**
@@ -839,6 +847,6 @@ public class AjaxModalDialog extends AjaxComponent {
 	 * @return URL to invoke when the dialog is closed
 	 */
 	protected String closeDialogURL(WOContext context) {
-		return new StringBuffer(ajaxComponentActionUrl).append(Close_ElementID_Suffix).toString();
+		return new StringBuilder(ajaxComponentActionUrl).append(Close_ElementID_Suffix).toString();
 	}
 }

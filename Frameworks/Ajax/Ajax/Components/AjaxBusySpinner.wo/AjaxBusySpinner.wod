@@ -21,7 +21,7 @@ CustomBusyDiv : WOGenericContainer {
 BusyDiv : WOGenericContainer {
 	elementName = "div";
 	id = divID;
-	style = "display: none; position: fixed; top: 50%; left: 50%; z-index: 9999;";
+	style = "display: none; position: fixed; top: 50%; left: 50%; z-index: 9999";
 }
 
 DivID : WOString {

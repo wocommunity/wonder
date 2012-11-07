@@ -79,6 +79,10 @@ public class ERXD2WList extends D2WList {
         return _dataSource;
     }
 
+    public void validationFailedWithException(Throwable e, Object value, String keyPath) {
+        parent().validationFailedWithException(e, value, keyPath);
+    }
+
     /**
      * Overridden to support serialization
      */

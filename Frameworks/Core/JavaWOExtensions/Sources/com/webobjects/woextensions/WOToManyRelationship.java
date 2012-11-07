@@ -57,6 +57,7 @@ public class WOToManyRelationship extends WOComponent {
         super(aContext);
     }
 
+    @Override
     public boolean isStateless() {
         return true;
     }
@@ -170,6 +171,7 @@ public class WOToManyRelationship extends WOComponent {
         set_privateSelections(null);
     }
 
+    @Override
     public void reset() {
         _invalidateCaches();
     }

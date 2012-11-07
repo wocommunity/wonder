@@ -37,6 +37,7 @@ public class WOCompletionBar extends WOComponent {
         super(aContext);
     }
     
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }
@@ -54,6 +55,7 @@ public class WOCompletionBar extends WOComponent {
         return result;
     }
     
+    @Override
     public void appendToResponse(WOResponse aResponse, WOContext aContext)  {
         Object v = valueForBinding("value");
         valueMin = _intValue("valueMin",0);

@@ -23,6 +23,7 @@ public class JSModalWindow extends JSComponent {
     }
 
 
+    @Override
     public String contextComponentActionURL(){
         // Return the javascript function to the HREF, getting the URL for the action
         // from the invokeAction setting in the context
@@ -30,8 +31,7 @@ public class JSModalWindow extends JSComponent {
     }
 
     public String windowInfo() {
-
-            // Generate the javascript window details
+        // Generate the javascript window details
         return "toolbar="+((null!=valueForBinding("showToolbar")) ? "yes" : "no")+
         ",location="+((null!=valueForBinding("showLocation")) ? "yes" : "no")+
         ",status="+((null!=valueForBinding("showStatus")) ? "yes" : "no")+

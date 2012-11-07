@@ -25,6 +25,7 @@ public class WXOutlineRepetition extends WOComponent {
     /////////////
     // No-Sync
     ////////////
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }

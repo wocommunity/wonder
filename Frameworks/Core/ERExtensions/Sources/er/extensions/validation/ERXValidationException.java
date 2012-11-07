@@ -77,7 +77,7 @@ public class ERXValidationException extends NSValidation.ValidationException imp
      * for creating custom validation exceptions the 
      * {@link ERXValidationFactory} should be used.
      *
-     * @param type of the exception, should be one of the constaints
+     * @param type of the exception, should be one of the constraints
      *		defined in this class.
      * @param object that is throwing the exception
      * @param key property key that failed validation
@@ -92,7 +92,7 @@ public class ERXValidationException extends NSValidation.ValidationException imp
      * for creating custom validation exceptions the
      * {@link ERXValidationFactory} should be used.
      *
-     * @param type of the exception, should be one of the constaints
+     * @param type of the exception, should be one of the constraints
      *		defined in this class.
      * @param object that is throwing the exception
      * @param key property key that failed validation
@@ -274,6 +274,9 @@ public class ERXValidationException extends NSValidation.ValidationException imp
     
     /**
      * Provides an escaped value to use in validation template string.
+     * @return escaped value
+     * @see #value()
+     * @see WOMessage#stringByEscapingHTMLString(String)
      */
     public String escapedValue() {
     	if(value() != null) {

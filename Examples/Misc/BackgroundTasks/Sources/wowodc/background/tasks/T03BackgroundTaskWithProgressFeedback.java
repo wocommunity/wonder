@@ -1,26 +1,24 @@
 package wowodc.background.tasks;
 
-
 import java.text.DecimalFormat;
 import java.text.Format;
 
 import org.apache.log4j.Logger;
 
 import wowodc.background.utilities.Utilities;
-import er.extensions.concurrency.ERXTaskPercentComplete;
+import er.extensions.concurrency.IERXPercentComplete;
 import er.extensions.concurrency.IERXStoppable;
-import er.extensions.foundation.ERXStatusInterface;
+import er.extensions.foundation.IERXStatus;
 
 /**
  * This task does practically the same as the previous example in {@link T01T02SimpleBackgroundTask}, but we have
- * added support for 3 interfaces indicating that the task provides a status message ({@link ERXStatusInterface}), 
- * a percent complete value ({@link ERXTaskPercentComplete}) and
+ * added support for 3 interfaces indicating that the task provides a status message ({@link IERXStatus}), 
+ * a percent complete value ({@link IERXPercentComplete}) and
  * that the task can be stopped by the user in a graceful way ({@link IERXStoppable}).
  * 
  * @author kieran
- * 
  */
-public class T03BackgroundTaskWithProgressFeedback implements Runnable, ERXStatusInterface , ERXTaskPercentComplete, IERXStoppable {
+public class T03BackgroundTaskWithProgressFeedback implements Runnable, IERXStatus , IERXPercentComplete, IERXStoppable {
 	
 	private static final Logger log = Logger.getLogger(T03BackgroundTaskWithProgressFeedback.class);
 	
@@ -38,8 +36,6 @@ public class T03BackgroundTaskWithProgressFeedback implements Runnable, ERXStatu
 	private String _status = "Starting...";
 	
 	private long _numberToCheck = 0;
-	
-	private final long _primesFound = 0;
 	
 	private volatile boolean _isStopped = false;
 
@@ -74,14 +70,14 @@ public class T03BackgroundTaskWithProgressFeedback implements Runnable, ERXStatu
 	}
 
 	/* (non-Javadoc)
-	 * @see er.extensions.concurrency.ERXTaskPercentComplete#percentComplete()
+	 * @see er.extensions.concurrency.IERXPercentComplete#percentComplete()
 	 */
 	public Double percentComplete() {
 		return _percentComplete;
 	}
 
 	/* (non-Javadoc)
-	 * @see er.extensions.foundation.ERXStatusInterface#status()
+	 * @see er.extensions.foundation.IERXStatus#status()
 	 */
 	public String status() {
 		return _status;
@@ -94,5 +90,4 @@ public class T03BackgroundTaskWithProgressFeedback implements Runnable, ERXStatu
 		log.info("The task was stopped by the user.");
 		_isStopped = true;
 	}
-
 }

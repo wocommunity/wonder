@@ -64,7 +64,7 @@ public class AjaxRemoteLogging extends AjaxDynamicElement {
 			throttle =  _throttle.valueInComponent(context.component());
 		}
 		String url = context.directActionURLForActionNamed(Log.class.getName(), null);
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append("<script type='text/javascript'>\n");
 		buf.append("WonderRemoteLogging.install({url: '").append(url);
 		buf.append("', level: '").append(level);

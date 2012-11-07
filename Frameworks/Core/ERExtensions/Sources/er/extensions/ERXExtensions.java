@@ -681,14 +681,14 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 
     /**
      * A safe comparison method that first checks to see
-     * if either of the objects are null before comparing
+     * if either of the objects are <code>null</code> before comparing
      * them with the <code>equals</code> method.<br/>
      * <br/>
-     * Note that if both objects are null then they will
+     * Note that if both objects are <code>null</code> then they will
      * be considered equal.
      * @param v1 first object
      * @param v2 second object
-     * @return true if they are equal, false if not
+     * @return <code>true</code> if they are equal, <code>false</code> if not
      */
     public static boolean safeEquals(Object v1, Object v2) {
         return v1==v2 || (v1!=null && v2!=null && v1.equals(v2));
@@ -696,14 +696,14 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 
     /**
      * A safe different comparison method that first checks to see
-     * if either of the objects are null before comparing
+     * if either of the objects are <code>null</code> before comparing
      * them with the <code>equals</code> method.<br/>
      * <br/>
-     * Note that if both objects are null then they will
+     * Note that if both objects are <code>null</code> then they will
      * be considered equal.
      * @param v1 first object
      * @param v2 second object
-     * @return treu if they are not equal, false if they are
+     * @return <code>true</code> if they are not equal, <code>false</code> if they are
      */
     public static boolean safeDifferent(Object v1, Object v2) {
         return v1 != v2 && (v1 == null || v2 == null || !v1.equals(v2));

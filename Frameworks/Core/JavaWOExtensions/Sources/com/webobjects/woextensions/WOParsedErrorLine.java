@@ -120,6 +120,7 @@ public class WOParsedErrorLine extends Object {
         return _line;
     }
     
+    @Override
     public String toString() {
         String lineInfo = (_line >= 0) ? String.valueOf( _line) : "No line info due to compiled code";
         String fileInfo = (_line >= 0) ? _fileName : "Compiled code no file info";

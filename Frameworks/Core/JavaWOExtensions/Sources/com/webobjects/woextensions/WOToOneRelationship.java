@@ -55,6 +55,7 @@ public class WOToOneRelationship extends WOComponent {
         super(aContext);
     }
 
+    @Override
     public boolean isStateless() {
         return true;
     }
@@ -174,6 +175,7 @@ public class WOToOneRelationship extends WOComponent {
         set_privateSelection(null);
     }
 
+    @Override
     public void reset() {
         _invalidateCaches();
     }

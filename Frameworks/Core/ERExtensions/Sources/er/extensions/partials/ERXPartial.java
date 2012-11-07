@@ -6,6 +6,7 @@ package er.extensions.partials;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EORelationshipManipulation;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSValidation;
 import com.webobjects.foundation.NSValidation.ValidationException;
 
@@ -57,6 +58,47 @@ public class ERXPartial<T extends ERXGenericRecord> {
 		return _primaryEO;
 	}
 	
+	/**
+	 * When partial entities are initialized the EOEntity is removed from the model making it impossible to query attributs and relationships later.
+	 * 
+	 * @return array of String keys for the partial entity attributes
+	 */
+	public static NSArray<String> partialAttributes() {
+		return NSArray.EmptyArray;
+	}
+
+	/**
+	 * When partial entities are initialized the EOEntity is removed from the model making it impossible to query attributs and relationships later.
+	 * 
+	 * @return array of String keys for the partial entity relationships
+	 */
+	public static NSArray<String> partialRelationships() {
+		return NSArray.EmptyArray;
+	}
+
+	/**
+	 * When partial entities are initialized the EOEntity is removed from the model making it impossible to query attributs and relationships later.
+	 * 
+	 * @return array of String keys for the partial entity attributes and relationships
+	 */
+	public static NSArray<String> partialProperties() {
+		return partialAttributes().arrayByAddingObjectsFromArray(partialRelationships());
+	}
+
+	/**
+	 * Tests the given keypath to see if it is a valid attribute or relationship for this partial
+	 * 
+	 * @return true if the keypath matches an attribute or relationship
+	 */
+	public boolean isPartialKeypath(String keypath) {
+		for (String key : partialProperties()) {
+			if ( key.equals(keypath) == true ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * Returns primaryEO.editingContext.
 	 * 
