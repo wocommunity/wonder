@@ -104,79 +104,86 @@ public class ERXStringUtilities {
     	return levenshteinDistance(a, b);
     }
 
-    /**
-     * Java port of the distance algorithm.
-     *
-     * The code below comes from the following post on http://mail.python.org
-     * Fuzzy string matching
-     *   Magnus L. Hetland mlh@idt.ntnu.no
-     *   27 Aug 1999 15:51:03 +0200
-     *
-     *  Explanation of the distance algorithm...
-     *
-     *  The algorithm:
-     *
-     *  def distance(a,b):
-     *   c = {}
-     *  n = len(a); m = len(b)
-     *
-     *  for i in range(0,n+1):
-     *  c[i,0] = i
-     *  for j in range(0,m+1):
-     *  c[0,j] = j
-     *
-     *  for i in range(1,n+1):
-     *  for j in range(1,m+1):
-     *  x = c[i-1,j]+1
-     *  y = c[i,j-1]+1
-     *  if a[i-1] == b[j-1]:
-     *    z = c[i-1,j-1]
-     *  else:
-     *    z = c[i-1,j-1]+1
-     *  c[i,j] = min(x,y,z)
-     *  return c[n,m]
-     *
-     *  It calculates the following: Given two strings, a and b, and three
-     *  operations, adding, subtracting and exchanging single characters, what
-     *  is the minimal number of steps needed to translate a into b?
-     *
-     *  The method is based on the following idea:
-     *
-     *  We want to find the distance between a[:x] and b[:y]. To do this, we
-     *  first calculate
-     *
-     *  1) the distance between a[:x-1] and b[:y], adding the cost of a
-     *  subtract-operation, used to get from a[:x] to a[:z-1];
-     *
-     *  2) the distance between a[:x] and b[:y-1], adding the cost of an
-     *  addition-operation, used to get from b[:y-1] to b[:y];
-     *
-     *  3) the distance between a[:x-1] and b[:y-1], adding the cost of a
-     *  *possible* exchange of the letter b[y] (with a[x]).
-     *
-     *  The cost of the subtraction and addition operations are 1, while the
-     *  exchange operation has a cost of 1 if a[x] and b[y] are different, and
-     *  0 otherwise.
-     *
-     *  After calculating these costs, we choose the least one of them
-     * (since we want to use the best solution.)
-     *
-     *  Instead of doing this recursively, i.e. calculating ourselves "back"
-     *  from the final value, we build a cost-matrix c containing the optimal
-     *  costs, so we can reuse them when calculating the later values. The
-     *  costs c[i,0] (from string of length n to empty string) are all i, and
-     *  correspondingly all c[0,j] (from empty string to string of length j)
-     *  are j.
-     *
-     *  Finally, the cost of translating between the full strings a and b
-     *  (c[n,m]) is returned.
-     *
-     *  I guess that ought to cover it...
-     * --------------------------
-     * @param a first string
-     * @param b second string
-     * @return the distance between the two strings
-     */
+	/**
+	 * <p>
+	 * Returns the <a
+	 * href="http://en.wikipedia.org/wiki/Levenshtein_distance">Levenshtein
+	 * distance</a> between {@code a} and {@code b}. This code is based on <a
+	 * href
+	 * ="http://mail.python.org/pipermail/python-list/1999-August/006031.html"
+	 * >some Python code posted to a mailing list</a> by Magnus L. Hetland
+	 * &lt;mlh@idt.ntnu.no&gt;, and assumed to be in the public domain.
+	 * </p>
+	 * 
+	 * <h3>Algorithm</h3>
+	 * 
+	 * <pre>
+	 * <code>def distance(a,b):
+	 *   c = {}
+	 *   n = len(a); m = len(b)
+	 * 
+	 *   for i in range(0,n+1):
+	 *     c[i,0] = i
+	 *   for j in range(0,m+1):
+	 *     c[0,j] = j
+	 * 
+	 *   for i in range(1,n+1):
+	 *     for j in range(1,m+1):
+	 *       x = c[i-1,j]+1
+	 *       y = c[i,j-1]+1
+	 *       if a[i-1] == b[j-1]:
+	 *         z = c[i-1,j-1]
+	 *       else:
+	 *         z = c[i-1,j-1]+1
+	 *       c[i,j] = min(x,y,z)
+	 *   return c[n,m]</code>
+	 * </pre>
+	 * 
+	 * <p>
+	 * It calculates the following: Given two strings, {@code a} and {@code b},
+	 * and three operations, adding, subtracting and exchanging single
+	 * characters, what is the minimal number of steps needed to translate
+	 * {@code a} into {@code b}? The method is based on the following idea. We
+	 * want to find the distance between {@code a[:x]} and {@code b[:y]}. To do
+	 * this, we first calculate:
+	 * </p>
+	 * 
+	 * <ol>
+	 * <li>the distance between {@code a[:x-1]} and {@code b[:y]}, adding the
+	 * cost of a subtract-operation, used to get from {@code a[:x]} to
+	 * {@code a[:z-1]};</li>
+	 * <li>the distance between {@code a[:x]} and {@code b[:y-1]}, adding the
+	 * cost of an addition-operation, used to get from {@code b[:y-1]} to
+	 * {@code b[:y]};</li>
+	 * <li>the distance between {@code a[:x-1]} and {@code b[:y-1]}, adding the
+	 * cost of a <em>possible</em> exchange of the letter {@code b[y]} (with
+	 * {@code a[x]}).</li>
+	 * </ol>
+	 * 
+	 * <p>
+	 * The cost of the subtraction and addition operations are 1, while the
+	 * exchange operation has a cost of 1 if {@code a[x]} and {@code b[y]} are
+	 * different, and 0 otherwise. After calculating these costs, we choose the
+	 * least one of them (since we want to use the best solution.)
+	 * </p>
+	 * 
+	 * <p>
+	 * Instead of doing this recursively, i.e. calculating ourselves "back" from
+	 * the final value, we build a cost-matrix {@code c} containing the optimal
+	 * costs, so we can reuse them when calculating the later values. The costs
+	 * {@code c[i,0]} (from string of length {@code n} to empty string) are all
+	 * {@code i}, and correspondingly all {@code c[0,j]} (from empty string to
+	 * string of length {@code j}) are {@code j}. Finally, the cost of
+	 * translating between the full strings {@code a} and {@code b} (
+	 * {@code c[n,m]}) is returned.
+	 * </p>
+	 * 
+	 * @param a
+	 *            first string
+	 * @param b
+	 *            second string
+	 * @return the distance between the two strings
+	 */
 	public static int levenshteinDistance(String a, String b) {
 		int n = a.length();
 		int m = b.length();
