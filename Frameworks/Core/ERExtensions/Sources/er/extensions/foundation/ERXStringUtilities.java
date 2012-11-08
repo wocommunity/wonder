@@ -82,7 +82,28 @@ public class ERXStringUtilities {
      * a single entry for English.
      */
     private static NSArray _defaultTargetDisplayLanguages = new NSArray(DEFAULT_TARGET_DISPLAY_LANGUAGE);
-    
+
+	/**
+	 * Returns the <a
+	 * href="http://en.wikipedia.org/wiki/Levenshtein_distance">Levenshtein
+	 * distance</a> between {@code a} and {@code b} as a {@code double}. (This
+	 * method is being retained for backwards compatibility, and will be removed
+	 * at some future point. New code should use
+	 * {@link #levenshteinDistance(String, String)}.)
+	 * 
+	 * @param a
+	 *            first string
+	 * @param b
+	 *            second string
+	 * @return Levenshtein distance between {@code a} and {@code b}
+	 * @deprecated Use {@link #levenshteinDistance(String, String)}, which
+	 *             correctly returns an {@code int} result
+	 */
+    @Deprecated
+    public static double distance(String a, String b) {
+    	return levenshteinDistance(a, b);
+    }
+
     /**
      * Java port of the distance algorithm.
      *
@@ -156,32 +177,32 @@ public class ERXStringUtilities {
      * @param b second string
      * @return the distance between the two strings
      */
-    public static double distance(String a, String b) {
-        int n = a.length();
-        int m = b.length();
-        int c[][] = new int[n+1][m+1];
-        for(int i = 0; i<=n; i++){
-            c[i][0] = i;
-        }
-        for(int j = 0; j<=m; j++){
-            c[0][j] = j;
-        }
-        for(int i = 1; i<=n; i++){
-            for(int j = 1; j<=m; j++){
-                int x = c[i-1][j] + 1;
-                int y = c[i][j-1] + 1;
-                int z = 0;
-                if(a.charAt(i-1) == b.charAt(j-1))
-                    z = c[i-1][j-1];
-                else
-                    z = c[i-1][j-1] + 1;
-                int temp = Math.min(x,y);
-                c[i][j] = Math.min(z, temp);
-            }
-        }
-        return c[n][m];
-    }
-
+	public static int levenshteinDistance(String a, String b) {
+		int n = a.length();
+		int m = b.length();
+		int c[][] = new int[n + 1][m + 1];
+		for (int i = 0; i <= n; i++) {
+			c[i][0] = i;
+		}
+		for (int j = 0; j <= m; j++) {
+			c[0][j] = j;
+		}
+		for (int i = 1; i <= n; i++) {
+			for (int j = 1; j <= m; j++) {
+				int x = c[i - 1][j] + 1;
+				int y = c[i][j - 1] + 1;
+				int z = 0;
+				if (a.charAt(i - 1) == b.charAt(j - 1))
+					z = c[i - 1][j - 1];
+				else
+					z = c[i - 1][j - 1] + 1;
+				int temp = Math.min(x, y);
+				c[i][j] = Math.min(z, temp);
+			}
+		}
+		return c[n][m];
+	}
+    
     /** holds the base adjustment for fuzzy matching */
     // FIXME: Not thread safe
     // MOVEME: Needs to go with the fuzzy matching stuff
