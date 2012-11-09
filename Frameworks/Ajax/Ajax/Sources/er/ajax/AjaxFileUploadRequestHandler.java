@@ -135,6 +135,16 @@ public class AjaxFileUploadRequestHandler extends WORequestHandler {
 				log.error("Upload failed",t);
 				response.appendContentString("Failed: " + t.getMessage());
 			}
+			finally {
+				if (uploadInputStream != null) {
+					try {
+						uploadInputStream.close();
+					}
+					catch (IOException e) {
+						// ignore
+					}
+				}
+			}
 			return response;
 		}
 		finally {
