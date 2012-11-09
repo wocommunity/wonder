@@ -12,7 +12,6 @@ SUCH DAMAGE.
  */
 package com.webobjects.monitor._private;
 
-
 public class String_Extensions {
 
     public static boolean boolValue(String aString) {
@@ -61,4 +60,3 @@ public class String_Extensions {
         return true;
     }
 }
-

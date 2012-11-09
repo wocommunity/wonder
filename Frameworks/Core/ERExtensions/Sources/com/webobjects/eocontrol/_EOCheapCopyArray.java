@@ -151,5 +151,4 @@ public class _EOCheapCopyArray extends NSArray implements EOFaulting {
 		willRead();
 		s.defaultWriteObject();
 	}
-
 }

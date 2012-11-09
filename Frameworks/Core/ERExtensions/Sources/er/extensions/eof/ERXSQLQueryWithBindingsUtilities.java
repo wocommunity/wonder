@@ -388,6 +388,4 @@ public class ERXSQLQueryWithBindingsUtilities {
         }
         return EODatabaseContext.registeredDatabaseContextForModel(model, ec);
     }
-
-    
 }

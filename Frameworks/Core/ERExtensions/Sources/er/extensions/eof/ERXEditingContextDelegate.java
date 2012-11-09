@@ -74,7 +74,7 @@ public class ERXEditingContextDelegate extends Object implements java.io.Seriali
             }
             throw new IllegalStateException("Found null delegate. You can disable this check by setting er.extensions.ERXRaiseOnMissingEditingContextDelegate=false in your WebObjects.properties");
         }
-        if (delegate!=null && !(delegate instanceof ERXEditingContextDelegate)) {
+        if (!(delegate instanceof ERXEditingContextDelegate)) {
             boolean _raiseOnMissingEditingContextDelegate = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXRaiseOnMissingEditingContextDelegate", true);
             if(!_raiseOnMissingEditingContextDelegate) {
                 log.warn("Found unexpected delegate class: "+delegate.getClass().getName());
@@ -83,8 +83,6 @@ public class ERXEditingContextDelegate extends Object implements java.io.Seriali
             throw new IllegalStateException("Found unexpected delegate class. You can disable this check by setting er.extensions.ERXRaiseOnMissingEditingContextDelegate=false in your WebObjects.properties");
         }
         return false;
-        
     }
-    
 }
 

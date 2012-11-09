@@ -77,7 +77,6 @@ public class WOHelperFunctionClassKeyValueCoding {
 				  }
 				  catch (NoSuchMethodException exception) {
 					  NSLog._conditionallyLogPrivateException(exception);
-					  method = null;
 				  }
 				  catch (SecurityException exception) {
 					  NSLog._conditionallyLogPrivateException(exception);
@@ -94,7 +93,6 @@ public class WOHelperFunctionClassKeyValueCoding {
 		    		}
 		    		catch (NoSuchMethodException exception) {
 		    			NSLog._conditionallyLogPrivateException(exception);
-		    			method = null;
 		    		}
 		    		catch (SecurityException exception) {
 		    			NSLog._conditionallyLogPrivateException(exception);
@@ -369,5 +367,4 @@ public class WOHelperFunctionClassKeyValueCoding {
 			throw new IllegalStateException("Cannot instantiate an instance of class " + getClass().getName());
 		}
 	}
-
 }

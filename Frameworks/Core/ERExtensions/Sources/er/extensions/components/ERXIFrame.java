@@ -1,12 +1,4 @@
-//
-// Sources/ag/kcmedia/ERXIFrame.java: Class file for WO Component 'ERXIFrame'
-// Project DevStudio
-//
-// Created by ak on Thu Jul 25 2002
-//
 package er.extensions.components;
-
-import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
@@ -34,8 +26,6 @@ public class ERXIFrame extends WOHTMLDynamicElement {
 	WOAssociation _src;
 	WOAssociation _pageName;
 	WOAssociation _action;
-
-	private static final Logger log = Logger.getLogger(ERXIFrame.class);
 
 	public ERXIFrame(String name, NSDictionary<String, WOAssociation> associations, WOElement parent) {
 		super("iframe", associations, parent);

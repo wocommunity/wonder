@@ -122,7 +122,7 @@ public class ERXFileNotificationCenter {
      */
     public void addObserver(Object observer, NSSelector selector, File file) {
         if (file == null)
-            throw new RuntimeException("Attempting to register a null file. " + (file != null ? " File path: " + file.getAbsolutePath() : null));
+            throw new RuntimeException("Attempting to register a null file.");
         if (observer == null)
             throw new RuntimeException("Attempting to register null observer for file: " + file);
         if (selector == null)

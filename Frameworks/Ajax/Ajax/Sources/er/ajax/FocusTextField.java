@@ -22,7 +22,6 @@ import er.extensions.components._private.ERXWOTextField;
  * @binding onEnter javascript to execute when the enter key is pressed
  */
 public class FocusTextField extends ERXWOTextField {
-	protected WOAssociation _id;
 	protected WOAssociation _selectAll;
 	protected WOAssociation _focus;
 	protected WOAssociation _onEnter;
@@ -31,7 +30,6 @@ public class FocusTextField extends ERXWOTextField {
 	public FocusTextField(String tagname, NSDictionary nsdictionary, WOElement woelement) {
 		super(tagname, nsdictionary, woelement);
 
-		_id = (WOAssociation) nsdictionary.valueForKey("id");
 		_selectAll = (WOAssociation) _associations.removeObjectForKey("selectAll");
 		_focus = (WOAssociation) _associations.removeObjectForKey("focus");
 		_onEnter = (WOAssociation) _associations.removeObjectForKey("onEnter");
@@ -75,7 +73,6 @@ public class FocusTextField extends ERXWOTextField {
 	}
 
 	public static void _appendAttributesFromAssociationsToResponse(WOResponse response, WOContext wocontext, String id, String onKeyPress, String onEnterScript) {
-		WOComponent component = wocontext.component();
 		if (onKeyPress != null || onEnterScript != null) {
 			response.appendContentString(" onkeypress = \"");
 			if (onKeyPress != null) {
@@ -92,7 +89,6 @@ public class FocusTextField extends ERXWOTextField {
 	}
 	
 	public static void appendJavascriptToResponse(WOResponse response, WOContext context, String id, boolean focus, boolean selectAll, String onEnterScript) {
-		WOComponent component = context.component();
 		AjaxUtils.appendScriptHeader(response);
 		if (focus || selectAll) {
 			response.appendContentString("setTimeout(function() { ");

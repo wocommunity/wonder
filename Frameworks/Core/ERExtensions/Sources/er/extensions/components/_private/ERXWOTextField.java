@@ -218,7 +218,6 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 							stringValue = null;
 						} catch(ParseException parseexception) {
 							NSLog._conditionallyLogPrivateException(parseexception);
-							stringValue = null;
 						} finally {
 							tsFormat.setDefaultFormatTimeZone(formatZone);
 							tsFormat.setDefaultParseTimeZone(parseZone);
@@ -234,7 +233,6 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 						stringValue = null;
 					} catch(ParseException parseexception) {
 						NSLog._conditionallyLogPrivateException(parseexception);
-						stringValue = null;
 					}
 				}
 			}

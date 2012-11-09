@@ -30,7 +30,6 @@ import er.extensions.foundation.ERXStringUtilities;
  * @binding cellWidth
  * @binding tableOtherTagString
  */
-
 public class ERXRadioButtonMatrix extends ERXStatelessComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -156,5 +155,4 @@ public class ERXRadioButtonMatrix extends ERXStatelessComponent {
         }
         return DEFAULT_SPACING;
     }
-
 }

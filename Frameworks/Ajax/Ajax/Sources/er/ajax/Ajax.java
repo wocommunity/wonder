@@ -13,7 +13,6 @@ public class Ajax extends ERXFrameworkPrincipal {
 	public static Class[] REQUIRES = new Class[0];
 	public static final Logger log = Logger.getLogger(Ajax.class);
 	
-	
     static {
         setUpFrameworkPrincipalClass(Ajax.class);
     }
@@ -54,6 +53,4 @@ public class Ajax extends ERXFrameworkPrincipal {
 	public void finishAjaxInitialization(NSNotification notification) {
 		finishInitialization();
 	}
-	
-	
 }

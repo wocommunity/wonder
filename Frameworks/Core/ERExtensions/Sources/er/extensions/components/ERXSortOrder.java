@@ -180,7 +180,6 @@ public class ERXSortOrder extends WOSortOrder {
         return null;
     }
     
-    
 
     public String helpString() {
        return ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("ERXSortOrder.sortBy", this);
