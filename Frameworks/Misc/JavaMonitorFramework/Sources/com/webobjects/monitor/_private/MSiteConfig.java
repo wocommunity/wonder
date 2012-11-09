@@ -401,19 +401,16 @@ public class MSiteConfig extends MObject {
     public boolean compareStringWithPassword(String aString) {
         String _encryptedPassword = password();
         
-        if ( ((aString == null) && (_encryptedPassword != null)) || ((aString != null) && (_encryptedPassword == null)) ) {
-            // if one is null, and the other isn't, no match
-            return false;
-        } else if ( (aString == null) && (_encryptedPassword == null) ) {
+        if (aString == null && _encryptedPassword == null) {
             // if both are null, match
             return true;
-        } else if ( ((aString.length() == 0) && (_encryptedPassword == null)) || ((_encryptedPassword.length() == 0) && (aString == null)) ){
-            // if one is blank, and the other is null, match
-            return true;
+        } else if (aString == null || _encryptedPassword == null) {
+            // if one is null, and the other isn't, no match
+            return false;
         } else {	// do all the calculations
             // extract random portion of the encrypted password
             String fudgetoo_part = _encryptedPassword.substring(0, 4);
-            // encyrpt the new string using the random bit from the old string
+            // encrypt the new string using the random bit from the old string
             String encrypted_string = encryptStringWithKey(aString, fudgetoo_part);
             // compare keys and return
             return encrypted_string.equals(_encryptedPassword);
