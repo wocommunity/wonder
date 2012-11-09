@@ -57,10 +57,12 @@ public class ERXJSToManyRelationshipEditor extends ERXNonSynchronizingComponent 
         super(context);
     }
 
+    @Override
     public boolean isStateless() {
         return true;
     }
 
+    @Override
     public void reset() {
         invalidateCaches();
     }
@@ -133,10 +135,12 @@ public class ERXJSToManyRelationshipEditor extends ERXNonSynchronizingComponent 
         _editorContextID = null;
     }
 
+    @Override
     public void sleep() {
         invalidateCaches();
     }
 
+    @Override
     public void appendToResponse(WOResponse aResponse, WOContext aContext) {
         invalidateCaches();
         super.appendToResponse(aResponse, aContext);

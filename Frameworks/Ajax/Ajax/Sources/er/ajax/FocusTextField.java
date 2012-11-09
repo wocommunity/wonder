@@ -47,6 +47,7 @@ public class FocusTextField extends ERXWOTextField {
 	  return id;
 	}
 	
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
 
@@ -60,6 +61,7 @@ public class FocusTextField extends ERXWOTextField {
 		FocusTextField.appendJavascriptToResponse(response, context, id, focus, selectAll, onEnterScript);
 	}
 
+	@Override
 	protected void _appendAttributesFromAssociationsToResponse(WOResponse response, WOContext wocontext, NSDictionary nsdictionary) {
 		super._appendAttributesFromAssociationsToResponse(response, wocontext, nsdictionary);
 		WOComponent component = wocontext.component();

@@ -1,4 +1,5 @@
 package com.webobjects.eocontrol;
+
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.Enumeration;
@@ -11,8 +12,8 @@ import com.webobjects.foundation._NSUtilities;
 
 /**
  * Reimplementation which fixes a bug in NSArray, where the iterator methods won't trigger the fault.
+ * 
  * @author ak
- *
  */
 public class _EOCheapCopyArray extends NSArray implements EOFaulting {
 
@@ -44,6 +45,7 @@ public class _EOCheapCopyArray extends NSArray implements EOFaulting {
 		_faultHandler = null;
 	}
 
+	@Override
 	public int count() {
 		willRead();
 		return super.count();
@@ -57,6 +59,7 @@ public class _EOCheapCopyArray extends NSArray implements EOFaulting {
 		return _faultHandler != null;
 	}
 
+	@Override
 	public NSMutableArray mutableClone() {
 		if (_faultHandler != null) {
 			return _faultHandler._mutableCloneForArray(this);
@@ -64,6 +67,7 @@ public class _EOCheapCopyArray extends NSArray implements EOFaulting {
 		return super.mutableClone();
 	}
 	
+	@Override
     public NSArray immutableClone() {
         if (_faultHandler != null) {
             return _faultHandler._immutableCloneForArray(this);
@@ -72,57 +76,67 @@ public class _EOCheapCopyArray extends NSArray implements EOFaulting {
         return new _EOCheapCopyArray(this);
     }
         
-
+	@Override
 	public Object get(int index) {
 		willRead();
 		return super.get(index);
 	}
 
+	@Override
 	public Object objectAtIndex(int index) {
 		willRead();
 		return super.objectAtIndex(index);
 	}
 
+	@Override
 	public Enumeration objectEnumerator() {
 		willRead();
 		return super.objectEnumerator();
 	}
 
+	@Override
 	public int hashCode() {
 		// willRead();
 		return super.hashCode();
 	}
 
+	@Override
     public Iterator iterator() {
     	willRead();
     	return super.iterator();
     }
 
+	@Override
 	public ListIterator listIterator() {
 		willRead();
 		return super.listIterator();
 	}
 
+	@Override
 	public ListIterator listIterator(int index) {
 		willRead();
 		return super.listIterator(index);
 	}
 	
+	@Override
 	protected Object[] objectsNoCopy() {
 		willRead();
 		return super.objectsNoCopy();
 	}
 
+	@Override
 	public Enumeration reverseObjectEnumerator() {
 		willRead();
 		return super.reverseObjectEnumerator();
 	}
 	
+	@Override
 	public int lastIndexOf(Object element) {
 		willRead();
 		return super.lastIndexOf(element);
 	}
     
+	@Override
 	public String toString() {
 		if (isFault()) {
 			return getClass().getName() + "["

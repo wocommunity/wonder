@@ -52,6 +52,7 @@ public class WOSortOrder extends ERXStatelessComponent {
         super(aContext);
     }
     
+    @Override
     public void reset() {
         _invalidateCaches();
     }

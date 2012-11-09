@@ -39,6 +39,7 @@ public class ERXDatabaseContext extends EODatabaseContext {
 		_fetching.set(Boolean.valueOf(fetching));
 	}
 
+	@Override
 	public NSArray objectsForSourceGlobalID(EOGlobalID gid, String name, EOEditingContext context) {
 		NSArray results;
 		boolean fetching = isFetching();
@@ -56,6 +57,7 @@ public class ERXDatabaseContext extends EODatabaseContext {
 		return results;
 	}
 
+	@Override
 	public NSArray _objectsWithFetchSpecificationEditingContext(EOFetchSpecification fetchSpec, EOEditingContext context) {
 		NSArray results;
 		boolean fetching = isFetching();
@@ -73,11 +75,13 @@ public class ERXDatabaseContext extends EODatabaseContext {
 		return results;
 	}
 	
+	@Override
 	public void _followFetchSpecification(EOFetchSpecification fetchSpec, String relationshipName, NSArray sourceObjects, EOEditingContext context) {
 		fetchSpec = ERXEOAccessHelper.adjustPrefetching(this, fetchSpec, relationshipName, sourceObjects, context);
 		super._followFetchSpecification(fetchSpec, relationshipName, sourceObjects, context);
 	}
 
+	@Override
 	public void _verifyNoChangesToReadonlyEntity(EODatabaseOperation dbOp) {
 		EOEntity entity = dbOp.entity();
 		if (entity.isReadOnly()) {

@@ -60,12 +60,14 @@ public class _EOCheapCopyMutableArray extends NSMutableArray implements EOFaulti
 		return _faultHandler;
 	}
 
+	@Override
 	public Object clone() {
 		if (_faultHandler != null)
 			return _faultHandler._mutableCloneForArray(this);
 		return new _EOCheapCopyMutableArray(this);
 	}
 
+	@Override
 	public NSMutableArray mutableClone() {
 		if (_faultHandler != null) {
 			return _faultHandler._mutableCloneForArray(this);
@@ -73,6 +75,7 @@ public class _EOCheapCopyMutableArray extends NSMutableArray implements EOFaulti
 		return new _EOCheapCopyMutableArray(this);
 	}
 	
+	@Override
 	public NSArray immutableClone() {
 		if (_faultHandler != null)
 			return _faultHandler._immutableCloneForArray(this);
@@ -85,49 +88,58 @@ public class _EOCheapCopyMutableArray extends NSMutableArray implements EOFaulti
 		_immutableCopy = copy;
 	}
 
+	@Override
 	protected Object[] objectsNoCopy() {
 		willRead();
 		return super.objectsNoCopy();
 	}
 
+	@Override
 	public int count() {
 		willRead();
 		return super.count();
 	}
 
+	@Override
 	public Object objectAtIndex(int index) {
 		willRead();
 		return super.objectAtIndex(index);
 	}
 
+	@Override
 	public Enumeration objectEnumerator() {
 		willRead();
 		return super.objectEnumerator();
 	}
 
+	@Override
 	public Enumeration reverseObjectEnumerator() {
 		willRead();
 		return super.reverseObjectEnumerator();
 	}
 
+	@Override
 	public void setArray(NSArray otherArray) {
 		willRead();
 		super.setArray(otherArray);
 		_immutableCopy = null;
 	}
 
+	@Override
 	public void addObject(Object object) {
 		willRead();
 		super.addObject(object);
 		_immutableCopy = null;
 	}
 
+	@Override
 	public void addObjects(Object... objects) {
 		willRead();
 		super.addObjects(objects);
 		_immutableCopy = null;
 	}
 
+	@Override
 	public Object replaceObjectAtIndex(Object object, int index) {
 		willRead();
 		Object result = super.replaceObjectAtIndex(object, index);
@@ -135,12 +147,14 @@ public class _EOCheapCopyMutableArray extends NSMutableArray implements EOFaulti
 		return result;
 	}
 
+	@Override
 	public void insertObjectAtIndex(Object object, int index) {
 		willRead();
 		super.insertObjectAtIndex(object, index);
 		_immutableCopy = null;
 	}
 
+	@Override
 	public Object removeObjectAtIndex(int index) {
 		willRead();
 		Object result = super.removeObjectAtIndex(index);
@@ -148,18 +162,21 @@ public class _EOCheapCopyMutableArray extends NSMutableArray implements EOFaulti
 		return result;
 	}
 
+	@Override
 	public void removeAllObjects() {
 		willRead();
 		super.removeAllObjects();
 		_immutableCopy = null;
 	}
 
+	@Override
 	public void sortUsingComparator(NSComparator comparator) throws com.webobjects.foundation.NSComparator.ComparisonException {
 		willRead();
 		super.sortUsingComparator(comparator);
 		_immutableCopy = null;
 	}
 
+	@Override
 	public String toString() {
 		if (isFault())
 			return getClass().getName() + "[" + Integer.toHexString(System.identityHashCode(this)) + "]";
@@ -171,16 +188,19 @@ public class _EOCheapCopyMutableArray extends NSMutableArray implements EOFaulti
 		s.defaultWriteObject();
 	}
 
+	@Override
     public Iterator iterator() {
     	willRead();
     	return super.iterator();
     }
 
+	@Override
 	public ListIterator listIterator() {
 		willRead();
 		return super.listIterator();
 	}
 
+	@Override
 	public ListIterator listIterator(int index) {
 		willRead();
 		return super.listIterator(index);

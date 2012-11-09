@@ -50,6 +50,7 @@ public class ERXRadioButtonMatrix extends ERXStatelessComponent {
     protected Number index;
     protected Object uniqueID;
 
+    @Override
     public void reset() {
         invalidateCaches();
     }
@@ -110,6 +111,7 @@ public class ERXRadioButtonMatrix extends ERXStatelessComponent {
     	return booleanValueForBinding("disabled", false);
     }
 
+    @Override
     public void awake() {
         super.awake();
         uniqueID = valueForBinding("uniqueID");
@@ -125,10 +127,12 @@ public class ERXRadioButtonMatrix extends ERXStatelessComponent {
         uniqueID=null;
     }
 
+    @Override
     public void appendToResponse(WOResponse aResponse, WOContext aContext) {
         super.appendToResponse(aResponse, aContext);
     }
 
+    @Override
     public void takeValuesFromRequest(WORequest aRequest, WOContext aContext) {
         setSelection(aRequest.stringFormValueForKey(uniqueID()));
         super.takeValuesFromRequest(aRequest, aContext);

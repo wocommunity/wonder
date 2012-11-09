@@ -76,6 +76,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	/**
 	 * Reset the instance variables
 	 */
+	@Override
 	public void reset() {
 		// reset all ivars
 		this.dictInRepetition = null;
@@ -293,6 +294,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * Convenience method to get the localizer.
 	 * 
 	 */
+	@Override
 	public ERXLocalizer localizer() {
 		if (this.context().hasSession()) {
 			return ERXLocalizer.currentLocalizer();
