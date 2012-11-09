@@ -102,9 +102,11 @@ public class AjaxFileUploadRequestHandler extends WORequestHandler {
 						}
 					}
 
-					NSArray<String> contentType = (NSArray<String>)formData.headers().valueForKey("content-type");
-					if (contentType != null) {
-						progress.setContentType(contentType.objectAtIndex(0));
+					if (formData != null) {
+						NSArray<String> contentType = (NSArray<String>)formData.headers().valueForKey("content-type");
+						if (contentType != null) {
+							progress.setContentType(contentType.objectAtIndex(0));
+						}
 					}
 					
 					try {

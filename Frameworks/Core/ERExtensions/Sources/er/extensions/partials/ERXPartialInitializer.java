@@ -88,7 +88,7 @@ public class ERXPartialInitializer {
 					if (partialEntityName != null) {
 						EOEntity partialEntity = modelGroup.entityNamed(partialEntityName);
 						if (partialEntity == null) {
-							throw new IllegalArgumentException("The entity '" + partialExtensionEntity.name() + "' claimed to be a partialEntity for the entity '" + partialEntity.name() + "', but there is no entity of that name.");
+							throw new IllegalArgumentException("The entity '" + partialExtensionEntity.name() + "' claimed to be a partialEntity for the entity '" + partialEntityName + "', but there is no entity of that name.");
 						}
 
 						Enumeration partialAttributes = partialExtensionEntity.attributes().objectEnumerator();
