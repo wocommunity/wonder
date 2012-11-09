@@ -27,6 +27,8 @@ import com.webobjects.monitor._private.MInstance;
 import com.webobjects.monitor._private.MSiteConfig;
 import com.webobjects.monitor.application.WOTaskdHandler.ErrorCollector;
 
+import er.extensions.appserver.ERXResponse;
+
 public class DirectAction extends WODirectAction {
 
     public DirectAction(WORequest aRequest) {
@@ -97,7 +99,7 @@ public class DirectAction extends WODirectAction {
     }
     
     public WOResponse statisticsAction() {
-        WOResponse response = new WOResponse();
+        ERXResponse response = new ERXResponse();
         String pw = context().request().stringFormValueForKey("pw");
         if(siteConfig().compareStringWithPassword(pw)) {
             WOTaskdHandler handler = new WOTaskdHandler(new ErrorCollector() {

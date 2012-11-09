@@ -12,6 +12,7 @@ import com.webobjects.appserver.WOSession;
 import com.webobjects.foundation.NSDictionary;
 
 import er.extensions.appserver.ERXDirectAction;
+import er.extensions.appserver.ERXResponse;
 
 /**
  * Allows you to log <code>window.console</code> JS messages from the browser to
@@ -107,7 +108,7 @@ public class AjaxRemoteLogging extends AjaxDynamicElement {
 			else if ("debug".equalsIgnoreCase(level)) {
 				log.debug(msg);
 			}
-			return new WOResponse();
+			return new ERXResponse();
 		}
 	}
 

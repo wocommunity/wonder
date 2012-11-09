@@ -11,6 +11,8 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WOHTMLDynamicElement;
 import com.webobjects.foundation.NSDictionary;
 
+import er.extensions.appserver.ERXResponse;
+
 /**
  * IFRAME that can use its own contents to render when none of the other
  * bindings are supplied. Makes page-writing a lot easier as you don't need an
@@ -51,7 +53,7 @@ public class ERXIFrame extends WOHTMLDynamicElement {
 				else if (_action != null) {
 					return (WOActionResults) _action.valueInComponent(component);
 				} else {
-					WOResponse response = new WOResponse();
+					ERXResponse response = new ERXResponse();
 					//AK: we might want to be able to set this...
 					response.appendContentString("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
 					response.appendContentString("<html><body style='border:0; margin: 0; padding: 0; width:100%; height: 100%'>");

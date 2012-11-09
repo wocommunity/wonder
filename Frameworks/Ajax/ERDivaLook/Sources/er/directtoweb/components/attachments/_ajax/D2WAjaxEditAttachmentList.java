@@ -2,10 +2,10 @@ package er.directtoweb.components.attachments._ajax;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WOResponse;
 import com.webobjects.directtoweb.D2WComponent;
 
 import er.attachment.model.ERAttachment;
+import er.extensions.appserver.ERXResponse;
 
 /**
  * D2W component for editing toMany ERAttachments
@@ -42,6 +42,6 @@ public class D2WAjaxEditAttachmentList extends D2WComponent {
     // actions    
     public WOActionResults removeAttachment() {
     	object().removeObjectFromBothSidesOfRelationshipWithKey(attachment, propertyKey());		
-		return new WOResponse();
+		return new ERXResponse();
     }
 }

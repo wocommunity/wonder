@@ -34,6 +34,9 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSSelector;
 
+import er.extensions.appserver.ERXHttpStatusCodes;
+import er.extensions.appserver.ERXResponse;
+
 /**
  * DirectAction that starts testing. 
  * Has wa/SeleniumStartTesting, wa/SeleniumStartTesting/run and wa/SeleniumStartTesting/edit.
@@ -81,9 +84,7 @@ public class SeleniumStartTesting extends WODirectAction {
     }
     
     private WOActionResults html(String url) {
-        WOResponse response = new WOResponse();
-        response.appendContentString("<html><body><a href='" + url + "'>go</a><body></html>");
-        return response;
+        return new ERXResponse("<html><body><a href='" + url + "'>go</a><body></html>");
     }
     
     private WOActionResults result(String suite, boolean edit) {
@@ -104,7 +105,7 @@ public class SeleniumStartTesting extends WODirectAction {
 
     public WOActionResults performActionNamed(String anActionName) {
         if(!ERSelenium.testsEnabled()) {
-            return new WOResponse();
+            return new ERXResponse(ERXHttpStatusCodes.STATUS_FORBIDDEN);
         }
         if("default".equals(anActionName)) {
             anActionName = null;

@@ -11,7 +11,6 @@ import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
-import com.webobjects.appserver.WOResponse;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
@@ -21,6 +20,8 @@ import com.webobjects.foundation.NSPropertyListSerialization;
 import er.attachment.model.ERAttachment;
 import er.attachment.model.ERDatabaseAttachment;
 import er.attachment.processors.ERAttachmentProcessor;
+import er.extensions.appserver.ERXHttpStatusCodes;
+import er.extensions.appserver.ERXResponse;
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.components.ERXNonSynchronizingComponent;
 import er.extensions.eof.ERXQ;
@@ -108,11 +109,7 @@ public class ERDragAndDropUpload extends ERXNonSynchronizingComponent {
 		} else if (invokeAction) {
 			invokeAction = false;
 			willAccept = true;
-			WOResponse response = new WOResponse();
-			//CHECKME 406 or 415?
-			response.setStatus(400);			
-			response.setContent(localizer().localizedStringForKey("UnacceptableMimetype"));
-			return response;
+			return new ERXResponse(localizer().localizedStringForKey("UnacceptableMimetype"), ERXHttpStatusCodes.BAD_REQUEST); // CHECKME 406 or 415?
 		}
 		return super.invokeAction(request, context);
 	}

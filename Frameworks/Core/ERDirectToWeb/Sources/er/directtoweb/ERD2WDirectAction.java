@@ -13,7 +13,6 @@ import org.apache.log4j.Logger;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WORequest;
-import com.webobjects.appserver.WOResponse;
 import com.webobjects.directtoweb.D2W;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.D2WPage;
@@ -52,6 +51,8 @@ import er.directtoweb.pages.ERD2WEditableListPage;
 import er.directtoweb.pages.ERD2WQueryPage;
 import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXDirectAction;
+import er.extensions.appserver.ERXHttpStatusCodes;
+import er.extensions.appserver.ERXResponse;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.eof.ERXEOControlUtilities;
@@ -444,10 +445,7 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
      * Returns a response with a 401 (access denied) message. Override this for something more user friendly.
      */
     public WOActionResults forbiddenAction() {
-        WOResponse response = new WOResponse();
-        response.setStatus(401);
-        response.setContent("Access denied");
-        return response;
+    	return new ERXResponse("Access denied", ERXHttpStatusCodes.UNAUTHORIZED);
     }
     
     /**

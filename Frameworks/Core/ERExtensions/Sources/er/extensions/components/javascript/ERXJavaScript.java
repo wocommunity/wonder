@@ -20,6 +20,7 @@ import com.webobjects.foundation._NSStringUtilities;
 
 import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXResourceManager;
+import er.extensions.appserver.ERXResponse;
 import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.foundation.ERXExpiringCache;
 import er.extensions.foundation.ERXProperties;
@@ -161,7 +162,7 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 				boolean render = cache.isStale(key);
 				render |= ERXApplication.isDevelopmentModeSafe();
 				if(render) {
-					WOResponse newresponse = new WOResponse();
+					WOResponse newresponse = new ERXResponse();
 					super.appendChildrenToResponse(newresponse, wocontext);
 					newresponse.setHeader("application/x-javascript", "content-type");
 					cache.setObjectForKey(newresponse, key);

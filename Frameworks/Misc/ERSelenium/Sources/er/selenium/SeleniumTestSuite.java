@@ -26,8 +26,9 @@ package er.selenium;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
-import com.webobjects.appserver.WOResponse;
 
+import er.extensions.appserver.ERXHttpStatusCodes;
+import er.extensions.appserver.ERXResponse;
 import er.extensions.foundation.ERXStringUtilities;
 
 /**
@@ -47,7 +48,7 @@ public class SeleniumTestSuite extends WODirectAction {
 	// @Override
 	public WOActionResults performActionNamed(String anActionName) {
 	    if(!ERSelenium.testsEnabled()) {
-	        return new WOResponse();
+	        return new ERXResponse(ERXHttpStatusCodes.STATUS_FORBIDDEN);
 	    }
 	    if (anActionName.equals("default")) {
 	        return defaultAction();

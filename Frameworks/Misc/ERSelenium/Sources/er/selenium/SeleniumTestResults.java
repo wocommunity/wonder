@@ -31,10 +31,11 @@ import org.apache.log4j.Logger;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
-import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSComparator;
 
+import er.extensions.appserver.ERXHttpStatusCodes;
+import er.extensions.appserver.ERXResponse;
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXProperties;
 
@@ -88,9 +89,7 @@ public class SeleniumTestResults extends WODirectAction {
     		}
     	}
     	
-    	WOResponse response = new WOResponse();
-    	response.appendContentString(report());
-    	return response;
+    	return new ERXResponse(report());
     }
     
     public WOActionResults defaultAction() {
@@ -99,7 +98,7 @@ public class SeleniumTestResults extends WODirectAction {
 
     public WOActionResults performActionNamed(String actionName) {
         if(!ERSelenium.testsEnabled()) {
-            return new WOResponse();
+            return new ERXResponse(ERXHttpStatusCodes.STATUS_FORBIDDEN);
         }
         if (actionName.equals("default"))
             return defaultAction();

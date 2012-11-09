@@ -12,6 +12,7 @@ import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 
+import er.extensions.appserver.ERXResponse;
 import er.extensions.components.ERXComponentUtilities;
 import er.extensions.components.ERXNonSynchronizingComponent;
 
@@ -83,7 +84,7 @@ public class EGWrapper extends ERXNonSynchronizingComponent {
     @Override
     public void appendToResponse(WOResponse response, WOContext context) {
         if (isEnabled()) {
-            WOResponse newResponse = new WOResponse();
+            ERXResponse newResponse = new ERXResponse();
 
             super.appendToResponse(newResponse, context);
 

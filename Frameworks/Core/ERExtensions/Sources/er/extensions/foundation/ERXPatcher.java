@@ -187,7 +187,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
@@ -236,7 +236,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
@@ -258,7 +258,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, null);
@@ -280,7 +280,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, null);
@@ -302,7 +302,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, null);
@@ -346,7 +346,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
@@ -385,7 +385,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
@@ -427,7 +427,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
@@ -470,7 +470,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
@@ -557,7 +557,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
@@ -642,7 +642,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
@@ -664,7 +664,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
@@ -749,7 +749,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
@@ -776,7 +776,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
@@ -813,7 +813,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
@@ -840,7 +840,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
@@ -877,7 +877,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
@@ -899,7 +899,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
