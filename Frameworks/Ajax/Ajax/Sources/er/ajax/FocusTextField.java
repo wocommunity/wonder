@@ -86,7 +86,7 @@ public class FocusTextField extends ERXWOTextField {
 				}
 				response.appendContentString(id + "SubmitOnEnter(event);");
 			}
-			response.appendContentString("\"");
+			response.appendContentCharacter('"');
 		}
 	}
 	

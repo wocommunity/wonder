@@ -125,6 +125,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	@Override
 	public void finishInitialization() {
 		initializeFrameworkFromSystemProperties();
+		log.debug("ERJavaMail loaded");
 	}
 
 	/**
