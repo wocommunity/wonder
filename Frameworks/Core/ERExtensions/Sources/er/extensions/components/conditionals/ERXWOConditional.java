@@ -103,9 +103,7 @@ public class ERXWOConditional extends WODynamicGroup {
 		if (meetsConditionInComponent(wocontext.component())) {
 			return super.invokeAction(worequest, wocontext);
 		}
-		else {
-			return null;
-		}
+		return null;
 	}
 
 	public WOActionResults invokeChildrenAction(WORequest worequest, WOContext wocontext) {

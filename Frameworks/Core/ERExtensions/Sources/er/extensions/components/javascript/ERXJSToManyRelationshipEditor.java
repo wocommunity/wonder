@@ -182,9 +182,8 @@ public class ERXJSToManyRelationshipEditor extends ERXNonSynchronizingComponent 
     private int indexOfObjectInArrayUsingERXEOControlUtilitiesEOEquals(Object anObject, NSArray anArray) {
         if (anObject instanceof EOEnterpriseObject) {
             return ERXArrayUtilities.indexOfObjectUsingEqualator(anArray, anObject, ERXEqualator.EOEqualsEqualator);
-        } else {
-            return anArray.indexOfObject(anObject);
         }
+        return anArray.indexOfObject(anObject);
     }
 
     /**

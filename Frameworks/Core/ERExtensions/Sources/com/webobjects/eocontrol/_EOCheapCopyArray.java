@@ -60,9 +60,8 @@ public class _EOCheapCopyArray extends NSArray implements EOFaulting {
 	public NSMutableArray mutableClone() {
 		if (_faultHandler != null) {
 			return _faultHandler._mutableCloneForArray(this);
-		} else {
-			return super.mutableClone();
 		}
+		return super.mutableClone();
 	}
 	
     public NSArray immutableClone() {
@@ -128,9 +127,8 @@ public class _EOCheapCopyArray extends NSArray implements EOFaulting {
 		if (isFault()) {
 			return getClass().getName() + "["
 					+ Integer.toHexString(System.identityHashCode(this)) + "]";
-		} else {
-			return super.toString();
 		}
+		return super.toString();
 	}
 
 	public void turnIntoFault(EOFaultHandler handler) {

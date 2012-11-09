@@ -297,9 +297,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 		if (this.context().hasSession()) {
 			return ERXLocalizer.currentLocalizer();
 		}
-		else {
-			return ERXLocalizer.localizerForLanguages(this.context().request().browserLanguages());
-		}
+		return ERXLocalizer.localizerForLanguages(this.context().request().browserLanguages());
 	}
 
 	// *******************************************************************
@@ -332,8 +330,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 		if (this.stringValueForBinding(ACTION_CLASS_KEY) != null) {
 			return this.stringValueForBinding(ACTION_CLASS_KEY);
 		}
-		else
-			return "DirectAction";
+		return "DirectAction";
 	}
 
 	/**

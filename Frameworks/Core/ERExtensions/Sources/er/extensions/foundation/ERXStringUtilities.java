@@ -781,18 +781,17 @@ public class ERXStringUtilities {
 
         // If the string has no different char, then return the string as is,
         // otherwise create a lowercase version in a char array.
-        if (different == -1)
+        if (different == -1) {
             return str;
-        else {
-            char[] chars = new char[len];
-            str.getChars(0, len, chars, 0);
-            // (Note we start at different, not at len.)
-            for(int j = different; j >= 0; j--) {
-                chars[j] = Character.toLowerCase(chars[j]);
-            }
-
-            return new String(chars);
         }
+        char[] chars = new char[len];
+        str.getChars(0, len, chars, 0);
+        // (Note we start at different, not at len.)
+        for(int j = different; j >= 0; j--) {
+            chars[j] = Character.toLowerCase(chars[j]);
+        }
+
+        return new String(chars);
     }
 
     /**

@@ -1122,11 +1122,8 @@ public class ERXPatcher {
 
 				if ( isWhiteSpace(ch) || ch == '>' ) {
 					break;
-
 				}
-				else {
-					tagName.append(ch);
-				}
+				tagName.append(ch);
 			}
 
 			buf.append(tagName);
@@ -1206,11 +1203,8 @@ public class ERXPatcher {
 
 					if (hasQuotes) {
 						return i;
-
 					}
-					else {
-						hasQuotes = true;
-					}
+					hasQuotes = true;
 
 				case ' ':
 
@@ -1256,9 +1250,8 @@ public class ERXPatcher {
 					if( afterWhiteSpace ) {
 						buf.append(attName).append("=\"").append(attName).append("\"");
 						return i - 2;
-					} else {
-						attName.append(ch);
 					}
+					attName.append(ch);
 				}
 			}
 
@@ -1336,9 +1329,7 @@ public class ERXPatcher {
 				return buf.toString();
 
 			}
-			else {
-				return atts;
-			}
+			return atts;
 		}
 
 		private static final StringBuffer getBuffer(String src, int len, StringBuffer buf) {
@@ -1350,11 +1341,8 @@ public class ERXPatcher {
 				}
 
 				return ret;
-
 			}
-			else {
-				return buf;
-			}
+			return buf;
 		}
 
 	}

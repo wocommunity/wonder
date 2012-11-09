@@ -147,7 +147,7 @@ public class ERXLocalizationEditor extends WOComponent {
     	if (!hasCurrentValue()) {
     		return "unset";
     	}
-    	else return "inputfield";
+    	return "inputfield";
     }
     
     /**
@@ -162,7 +162,7 @@ public class ERXLocalizationEditor extends WOComponent {
     	if (availableLanguages() != null && availableLanguages().count() > 1) {
     		return availableLanguages().count() - 1;
     	}
-    	else return 1;
+    	return 1;
     }
     
     public String valueComponentName() {

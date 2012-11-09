@@ -341,10 +341,9 @@ public class ERXJDBCConnectionBroker implements ERXJDBCAdaptor.ConnectionBroker 
                         connection.lock();
                         result = connection.getConnection();
                         return result;
-                    } else {
-                        loop++;
-                        roundRobin++;
                     }
+                    loop++;
+                    roundRobin++;
                 }
             } while ((!gotOne) && (loop <= activeConnections));
 

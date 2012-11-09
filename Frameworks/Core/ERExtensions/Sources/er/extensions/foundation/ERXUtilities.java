@@ -212,12 +212,9 @@ public class ERXUtilities {
             EORelationship rel = srcentity.relationshipNamed(key);
             if (rel == null) {
                 break;
-
-            } else {
-                srcentity = rel.destinationEntity();
-                keyPath = ERXStringUtilities.keyPathWithoutFirstProperty(keyPath);
-                
             }
+            srcentity = rel.destinationEntity();
+            keyPath = ERXStringUtilities.keyPathWithoutFirstProperty(keyPath);
         }
         NSDictionary d = new NSDictionary(new Object[]{srcentity, keyPath}, new Object[]{"entity", "keyPath"});
         return d;

@@ -2724,13 +2724,11 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 							computedProperties = operator.compute(key.substring(0, key.length() - operatorKeyWithAt.length()), value, null);
 							break;
 						}
-						else {
-							int keyIndex = key.indexOf(operatorKeyWithAt + ".");
-							if (keyIndex != -1) {
-								operator = ERXProperties.operators.objectForKey(operatorKey);
-								computedProperties = operator.compute(key.substring(0, keyIndex), value, key.substring(keyIndex + operatorKeyWithAt.length() + 1));
-								break;
-							}
+						int keyIndex = key.indexOf(operatorKeyWithAt + ".");
+						if (keyIndex != -1) {
+							operator = ERXProperties.operators.objectForKey(operatorKey);
+							computedProperties = operator.compute(key.substring(0, keyIndex), value, key.substring(keyIndex + operatorKeyWithAt.length() + 1));
+							break;
 						}
 					}
 

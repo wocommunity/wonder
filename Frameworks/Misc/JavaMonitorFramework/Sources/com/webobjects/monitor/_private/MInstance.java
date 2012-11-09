@@ -642,9 +642,8 @@ public class MInstance extends MObject {
         Integer lb = lifebeatInterval();
         if (lb == null) {
             return 30 * _siteConfig._appIsDeadMultiplier;
-        } else {
-            return lb.intValue() * _siteConfig._appIsDeadMultiplier;
         }
+        return lb.intValue() * _siteConfig._appIsDeadMultiplier;
     }
 
     public boolean isRunning_W() {
@@ -657,24 +656,21 @@ public class MInstance extends MObject {
             if (currentTime < finishStartingByTime) {
                 if (currentTime > cutOffTime) {
                     return false;
-                } else {
-                    state = MObject.ALIVE;
-                    return true;
                 }
+                state = MObject.ALIVE;
+                return true;
                 // I'm finished trying to start
-            } else {
-                // I've received a lifebeat in time
-                if (currentTime > cutOffTime) {
-                    addDeath();
-                    sendDeathNotificationEmail();
-                    setShouldDie(false);
-                    state = MObject.DEAD;
-                    return false;
-                } else {
-                    state = MObject.ALIVE;
-                    return true;
-                }
             }
+            // I've received a lifebeat in time
+            if (currentTime > cutOffTime) {
+                addDeath();
+                sendDeathNotificationEmail();
+                setShouldDie(false);
+                state = MObject.DEAD;
+                return false;
+            }
+            state = MObject.ALIVE;
+            return true;
         } else if (state == MObject.ALIVE) {
             if (currentTime > cutOffTime) {
                 addDeath();
@@ -682,9 +678,8 @@ public class MInstance extends MObject {
                 setShouldDie(false);
                 state = MObject.DEAD;
                 return false;
-            } else {
-                return true;
             }
+            return true;
         } else if (state == MObject.CRASHING) {
             addDeath();
             sendDeathNotificationEmail();
@@ -694,11 +689,10 @@ public class MInstance extends MObject {
             if (currentTime > cutOffTime) {
                 state = MObject.DEAD;
                 return false;
-            } else {
-                // KH - I've returned to life - what should I do?
-                state = MObject.ALIVE;
-                return true;
             }
+            // KH - I've returned to life - what should I do?
+            state = MObject.ALIVE;
+            return true;
         }
     }
 
@@ -842,9 +836,8 @@ public class MInstance extends MObject {
     private String toNullOrString(Object o) {
         if (o != null) {
             return o.toString();
-        } else {
-            return null;
         }
+        return null;
     }
 
     public NSArray commandLineArgumentsAsArray() {

@@ -60,13 +60,9 @@ public class WOHelperFunctionClassKeyValueCoding {
 				if (_NSUtilities._isClassABoolean(valueClass)) {
 					return new _BooleanFieldBinding(objectClass, key, field, valueAccessor);
 				}
-				else {
-					return new _FieldBinding(objectClass, key, field, valueAccessor);
-				}
+				return new _FieldBinding(objectClass, key, field, valueAccessor);
 			}
-			else {
-				return null;
-			}
+			return null;
 		}
 
 		  private static final Class _noArgumentTypes[] = new Class[0];
@@ -130,13 +126,9 @@ public class WOHelperFunctionClassKeyValueCoding {
 				if (_NSUtilities._isClassABoolean(valueClass)) {
 					return new _BooleanMethodBinding(objectClass, key, method, valueAccessor);
 				}
-				else {
-					return new _MethodBinding(objectClass, key, method, valueAccessor);
-				}
+				return new _MethodBinding(objectClass, key, method, valueAccessor);
 			}
-			else {
-				return null;
-			}
+			return null;
 		}
 
 		public static _KeyBinding _methodKeySetBinding(Class objectClass, String key, String methodName) {
@@ -151,13 +143,9 @@ public class WOHelperFunctionClassKeyValueCoding {
 				if (_NSUtilities._isClassABoolean(valueClass)) {
 					return new _BooleanMethodBinding(objectClass, key, method, valueAccessor);
 				}
-				else {
-					return new _MethodBinding(objectClass, key, method, valueAccessor);
-				}
+				return new _MethodBinding(objectClass, key, method, valueAccessor);
 			}
-			else {
-				return null;
-			}
+			return null;
 		}
 
 		private static _KeyBinding _createKeyBindingForKey(Class objectClass, String key, int lookupOrder[], boolean trueForSetAndFalseForGet) {
@@ -372,12 +360,9 @@ public class WOHelperFunctionClassKeyValueCoding {
 			if (index < 0) {
 				return WOHelperFunctionClassKeyValueCoding.DefaultImplementation._keyGetBindingForKey(objectClass, keyPath);
 			}
-			else {
-				String key = keyPath.substring(0, index);
-				_KeyBinding keyBinding = WOHelperFunctionClassKeyValueCoding.DefaultImplementation._keyGetBindingForKey(objectClass, key);
-				return keyBinding != null ? WOHelperFunctionClassKeyValueCoding.DefaultImplementation.keyGetBindingForKeyPath(keyBinding.valueType(), keyPath.substring(index + 1)) : null;
-			}
-
+			String key = keyPath.substring(0, index);
+			_KeyBinding keyBinding = WOHelperFunctionClassKeyValueCoding.DefaultImplementation._keyGetBindingForKey(objectClass, key);
+			return keyBinding != null ? WOHelperFunctionClassKeyValueCoding.DefaultImplementation.keyGetBindingForKeyPath(keyBinding.valueType(), keyPath.substring(index + 1)) : null;
 		}
 
 		DefaultImplementation() {

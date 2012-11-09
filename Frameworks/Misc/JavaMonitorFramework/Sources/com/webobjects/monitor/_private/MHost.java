@@ -203,10 +203,7 @@ public class MHost extends MObject {
     }
 
     public boolean isPortInUse(Integer port) {
-        if (instanceWithPort(port) == null)
-            return false;
-        else
-            return true;
+        return instanceWithPort(port) != null;
     }
 
     // KH - this is probably slow :)

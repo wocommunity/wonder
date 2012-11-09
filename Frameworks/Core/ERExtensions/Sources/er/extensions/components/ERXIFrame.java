@@ -72,12 +72,10 @@ public class ERXIFrame extends WOHTMLDynamicElement {
 					comp.setComponent(context.page());
 					return comp;
 				}
-			} else {
-				return invokeChildrenAction(request, context);
 			}
-		} else {
-			return null;
+			return invokeChildrenAction(request, context);
 		}
+		return null;
 	}
 	
 	public void doAppendChildrenToResponse(WOResponse response, WOContext context) {

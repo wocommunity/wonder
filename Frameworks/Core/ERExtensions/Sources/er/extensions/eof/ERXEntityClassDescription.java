@@ -1204,9 +1204,8 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             Throwable targetException = e4.getTargetException();
             if (targetException instanceof NSValidation.ValidationException) {
                 throw (NSValidation.ValidationException)targetException;
-            } else {
-                log.error("an exception occured in validityValidateEOObjectOnSave", e4);
             }
+            log.error("an exception occured in validityValidateEOObjectOnSave", e4);
         }
     }
 

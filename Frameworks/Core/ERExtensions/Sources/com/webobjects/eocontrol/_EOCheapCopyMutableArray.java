@@ -63,16 +63,14 @@ public class _EOCheapCopyMutableArray extends NSMutableArray implements EOFaulti
 	public Object clone() {
 		if (_faultHandler != null)
 			return _faultHandler._mutableCloneForArray(this);
-		else
-			return new _EOCheapCopyMutableArray(this);
+		return new _EOCheapCopyMutableArray(this);
 	}
 
 	public NSMutableArray mutableClone() {
 		if (_faultHandler != null) {
 			return _faultHandler._mutableCloneForArray(this);
-		} else {
-			return new _EOCheapCopyMutableArray(this);
 		}
+		return new _EOCheapCopyMutableArray(this);
 	}
 	
 	public NSArray immutableClone() {
@@ -165,8 +163,7 @@ public class _EOCheapCopyMutableArray extends NSMutableArray implements EOFaulti
 	public String toString() {
 		if (isFault())
 			return getClass().getName() + "[" + Integer.toHexString(System.identityHashCode(this)) + "]";
-		else
-			return super.toString();
+		return super.toString();
 	}
 
 	private void writeObject(ObjectOutputStream s) throws IOException {

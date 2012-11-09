@@ -40,11 +40,7 @@ public class String_Extensions {
         } else if (anObject instanceof Boolean) {
             return ((Boolean)anObject).booleanValue();
         } else if (anObject instanceof Number) {
-            if ( ((Number)anObject).intValue() != 0) {
-                return true;
-            } else {
-                return false;
-            }
+            return ((Number)anObject).intValue() != 0;
         } else if (anObject instanceof String) {
             return boolValue((String)anObject);
         }

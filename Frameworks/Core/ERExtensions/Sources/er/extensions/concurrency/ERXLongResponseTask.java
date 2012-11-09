@@ -332,9 +332,8 @@ public interface ERXLongResponseTask extends Runnable {
 			if (isDone()) {
 				if (isCancelled()) {
 					return cancelPageForStatus(status());
-				} else {
-					return pageForResult(result());
 				}
+				return pageForResult(result());
 			}
 			return refreshPageForStatus(status());
 		}

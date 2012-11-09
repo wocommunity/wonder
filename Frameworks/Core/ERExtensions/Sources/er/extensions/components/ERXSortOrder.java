@@ -192,9 +192,8 @@ public class ERXSortOrder extends WOSortOrder {
         if (nsarray != null && nsarray.count() > 0) {
             EOSortOrdering eosortordering = (EOSortOrdering)nsarray.objectAtIndex(0);
             return eosortordering;
-        } else {
-            return null;
         }
+        return null;
     }
 
     protected NSSelector _primaryKeySortOrderingSelector() {

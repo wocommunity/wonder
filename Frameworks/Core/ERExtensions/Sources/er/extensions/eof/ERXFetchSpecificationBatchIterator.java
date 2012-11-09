@@ -298,9 +298,8 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
             NSArray nextBatch = batchWithRange(range);
             currentObjectFetchCount += range.length();
             return nextBatch;
-        } else {
-            throw new IllegalStateException("Iterator is exhausted");
         }
+        throw new IllegalStateException("Iterator is exhausted");
     }
 
     private NSRange _rangeForBatchIndex(int index) {

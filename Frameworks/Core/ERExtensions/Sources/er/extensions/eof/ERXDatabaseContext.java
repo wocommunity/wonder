@@ -95,9 +95,7 @@ public class ERXDatabaseContext extends EODatabaseContext {
 				if (!dbOp.dbSnapshot().equals(dbOp.newRow())) {
 					throw new IllegalStateException("cannot update '" + dbOp.rowDiffsForAttributes(entity.attributes()).allKeys() + "' keys on object:" + dbOp.object() + " that corresponds to read-only entity: " + entity.name() + " in databaseContext " + this);
 				}
-				else {
-					return;
-				}
+				return;
 			}
 		}
 		// HACK: ak these methods are protected, so we call them via KVC
@@ -121,9 +119,7 @@ public class ERXDatabaseContext extends EODatabaseContext {
 					if (att.isReadOnly()) {
 						throw new IllegalStateException("cannot update read-only key '" + key + "' on object:" + dbOp.object() + " of entity: " + entity.name() + " in databaseContext " + this);
 					}
-					else {
-						throw new IllegalStateException("cannot update primary-key '" + key + "' from '" + dbSnapshot.objectForKey(key) + "' to '" + newRow.objectForKey(key) + "' on object:" + dbOp.object() + " of entity: " + entity.name() + " in databaseContext " + this);
-					}
+					throw new IllegalStateException("cannot update primary-key '" + key + "' from '" + dbSnapshot.objectForKey(key) + "' to '" + newRow.objectForKey(key) + "' on object:" + dbOp.object() + " of entity: " + entity.name() + " in databaseContext " + this);
 				}
 			}
 

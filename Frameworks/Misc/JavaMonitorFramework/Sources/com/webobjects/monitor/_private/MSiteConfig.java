@@ -371,11 +371,7 @@ public class MSiteConfig extends MObject {
     }
 
     public boolean isPasswordRequired() {
-        if (password() != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return password() != null;
     }
 
     // setPassword(value) is in the 'values' accessors
@@ -452,9 +448,8 @@ public class MSiteConfig extends MObject {
             if (_oldPassword != null) {
                 _passwordDictionary.takeValueForKey(new NSMutableArray<String>(_oldPassword), "password");
                 return _passwordDictionary;
-            } else {
-                return NSDictionary.emptyDictionary();
             }
+            return NSDictionary.emptyDictionary();
         }
         if (aPassword != null) {
             _passwordDictionary.takeValueForKey(aPassword, "password");
@@ -510,9 +505,8 @@ public class MSiteConfig extends MObject {
         NSDictionary queryWotaskdResponse = (NSDictionary) xmlDict.valueForKey("queryWotaskdResponse");
         if (queryWotaskdResponse != null) {
             return new MSiteConfig((NSDictionary) queryWotaskdResponse.valueForKey("SiteConfig"));
-        } else {
-            return new MSiteConfig(null);
         }
+        return new MSiteConfig(null);
     }
 
 
@@ -600,11 +594,7 @@ public class MSiteConfig extends MObject {
 
         String _fS = File.separator;
 
-        if (_configDirectoryPath != null) {
-            return _configDirectoryPath;
-        }
-        else {
-
+        if (_configDirectoryPath == null) {
             _configDirectoryPath = System.getProperty("WODeploymentConfigurationDirectory");
             if (_configDirectoryPath != null) {
                 NSLog.debug.appendln("WODeploymentConfigurationDirectory set to non-default: "+_configDirectoryPath);
@@ -1218,9 +1208,8 @@ public class MSiteConfig extends MObject {
         MHost aHost = hostWithName(hostName);
         if (aHost == null) {
             return null;
-        } else {
-            return aHost.instanceWithPort(port);
         }
+        return aHost.instanceWithPort(port);
     }
     
     public MInstance instanceWithHostAndPort(String name, InetAddress host, String port) {
@@ -1229,13 +1218,12 @@ public class MSiteConfig extends MObject {
             MHost aHost = hostWithAddress(host);
             if (aHost == null) {
                 return null;
-            } else {
-                MInstance anInstance = aHost.instanceWithPort(anIntPort);
-                if (anInstance != null) {
-                    if (anInstance.applicationName().equals(name)) {
-                        return anInstance;
-                    }                       
-                }
+            }
+            MInstance anInstance = aHost.instanceWithPort(anIntPort);
+            if (anInstance != null) {
+                if (anInstance.applicationName().equals(name)) {
+                    return anInstance;
+                }                       
             }
         } catch (Exception e) {
             log.error("Exception getting instance: " + host + " + " + port, e);

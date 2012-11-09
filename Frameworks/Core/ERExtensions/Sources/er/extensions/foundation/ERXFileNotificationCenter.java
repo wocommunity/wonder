@@ -182,9 +182,7 @@ public class ERXFileNotificationCenter {
 	    		return Long.valueOf(0);
 	    	}
     	}
-    	else {
-    		return Long.valueOf(file.lastModified());
-    	}
+    	return Long.valueOf(file.lastModified());
     }
     
     /**

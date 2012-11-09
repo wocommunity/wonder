@@ -95,9 +95,8 @@ public class ERXBatchTestInterface extends Object implements ERXTestListener {
     private Logger userLog() {
         if (_userLog == null) {
             return log;
-        } else {
-            return _userLog;
         }
+        return _userLog;
     }
     
     public synchronized void print() {

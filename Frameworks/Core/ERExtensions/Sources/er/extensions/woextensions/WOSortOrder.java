@@ -79,9 +79,8 @@ public class WOSortOrder extends ERXStatelessComponent {
         if (nsarray != null && nsarray.count() > 0) {
             EOSortOrdering eosortordering = (EOSortOrdering)nsarray.objectAtIndex(0);
             return eosortordering;
-        } else {
-            return null;
         }
+        return null;
     }
 
     private boolean _isCurrentKeyPrimary() {

@@ -144,9 +144,8 @@ public class ERXRadioButtonMatrix extends ERXStatelessComponent {
         
         if(v != null) {
             return v;
-        } else {
-            return DEFAULT_PADDING;
         }
+        return DEFAULT_PADDING;
     }
 
     public Object cellspacing() {
@@ -154,9 +153,8 @@ public class ERXRadioButtonMatrix extends ERXStatelessComponent {
 
         if(v != null) {
             return v;
-        } else {
-            return DEFAULT_SPACING;
         }
+        return DEFAULT_SPACING;
     }
 
 }

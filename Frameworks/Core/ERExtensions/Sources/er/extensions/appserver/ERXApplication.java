@@ -558,9 +558,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 										System.err.println("Skipping '" + projectFile + "': " + t);
 									}
 									break;
-								} else {
-									debugMsg("Skipping, no project: " + projectFile);
 								}
+								debugMsg("Skipping, no project: " + projectFile);
 							}
 						}
 					}
