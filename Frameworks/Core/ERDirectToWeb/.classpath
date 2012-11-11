@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="Sources"/>
+	<classpathentry kind="src" output="target/classes" path="Sources"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/ERExtensions"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/ERJars"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaWOExtensions"/>
@@ -14,6 +16,5 @@
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaWebObjects"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaWOJSPServlet"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaXML"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>
