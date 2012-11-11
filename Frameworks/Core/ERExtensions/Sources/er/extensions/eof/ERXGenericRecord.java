@@ -1060,18 +1060,22 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 */
 	@Override
 	public Object handleQueryWithUnboundKey(String key) {
-		NSDictionary pkDict = EOUtilities.primaryKeyForObject(editingContext(), this);
-		if (pkDict == null) {
-			// This will be the case for new unsaved objects, so just
-			// check if the user was using a key that is valid as a primary key attribute
-			if (entity().primaryKeyAttributeNames().contains(key)) {
-				// Valid hidden PK key, so return null since PK is still essentially null.
-				return null;
-			}
-		} else if (pkDict.allKeys().contains(key)) {
-			// Valid PK key, so return the atribute value.
-			return pkDict.valueForKey(key);
-		}
+        if (!isDeletedEO()) {
+            NSDictionary pkDict = EOUtilities.primaryKeyForObject(editingContext(), this);
+            if (pkDict == null) {
+                // This will be the case for new unsaved objects, so just
+                // check if the user was using a key that is valid as a primary
+                // key attribute
+                if (entity().primaryKeyAttributeNames().contains(key)) {
+                    // Valid hidden PK key, so return null since PK is still
+                    // essentially null.
+                    return null;
+                }
+            } else if (pkDict.allKeys().contains(key)) {
+                // Valid PK key, so return the atribute value.
+                return pkDict.valueForKey(key);
+            }
+        }
 		return super.handleQueryWithUnboundKey(key);
 	}
 	
