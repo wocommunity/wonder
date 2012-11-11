@@ -28,7 +28,11 @@ import com.webobjects.foundation.NSDictionary;
  */
 public class ERXWOTelField extends ERXWOInput {
 
+<<<<<<< HEAD
+  public final String URL_PATTERN ="^[0-9\\-]+$";
+=======
   public final String TEL_PATTERN ="^[0-9\\-]+$";
+>>>>>>> 75ed1cdb3aeff37627e8a8159002db3b5482e1ae
 
   //********************************************************************
   //  Binding Properties
@@ -103,7 +107,11 @@ public class ERXWOTelField extends ERXWOInput {
         woresponse._appendTagAttributeAndValue("pattern", stringValue, true);
       }     
     } else {
+<<<<<<< HEAD
+      woresponse._appendTagAttributeAndValue("pattern", URL_PATTERN, true);
+=======
       woresponse._appendTagAttributeAndValue("pattern", TEL_PATTERN, true);
+>>>>>>> 75ed1cdb3aeff37627e8a8159002db3b5482e1ae
     }
 
     if (isRequiredInContext(wocontext)) {

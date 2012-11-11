@@ -9,6 +9,8 @@ public class MTAjaxObserveFieldTestPage extends Main {
 	public String primaryColor, selectedPrimaryColor, secondaryColor, selectedSecondaryColor;
 	private NSArray<String> _secondaryColors;
 	
+	private Boolean _checked;
+	
 	public MTAjaxObserveFieldTestPage(WOContext context) {
         super(context);
     }
@@ -48,6 +50,18 @@ public class MTAjaxObserveFieldTestPage extends Main {
 	public void setSecondaryColors(NSArray<String> secondaryColors) {
 		wasteTime();
 		_secondaryColors = secondaryColors;
+	}
+
+	public Boolean checked() {
+		if(_checked == null) {
+			_checked = true;
+		}
+		return _checked;
+	}
+
+	public void setChecked(Boolean checked) {
+		System.out.println(checked);
+		this._checked = checked;
 	}
 
 }
