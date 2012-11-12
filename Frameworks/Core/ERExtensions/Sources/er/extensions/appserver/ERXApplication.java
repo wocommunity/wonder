@@ -1032,10 +1032,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		}
 
 		// ERXPatcher.setClassForName(ERXSubmitButton.class, "WOSubmitButton");
-
-		// Fix for 3190479 URI encoding should always be UTF8
-		// See http://www.w3.org/International/O-URL-code.html
-		com.webobjects.appserver._private.WOURLEncoder.WO_URL_ENCODING = "UTF-8";
 	}
 
 	@Override
