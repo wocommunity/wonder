@@ -215,7 +215,6 @@ public class PostgresqlExpression extends JDBCExpression {
         String relationshipKey = null;
         EORelationship r;
         
-        
         if (leftAlias.equals("t0")) {
             leftEntity = entity();
         } else {
@@ -571,7 +570,8 @@ public class PostgresqlExpression extends JDBCExpression {
 
     /**
      * Helper to check for timestamp columns that have a "D" value type.
-     * @param eoattribute
+     * @param eoattribute attribute to check
+     * @return <code>true</code> if of type Date
      */
     private boolean isDateAttribute(EOAttribute eoattribute) {
         return "D".equals(eoattribute.valueType());
@@ -579,7 +579,8 @@ public class PostgresqlExpression extends JDBCExpression {
 
     /**
      * Helper to check for timestamp columns that have a "T" value type.
-     * @param eoattribute
+     * @param eoattribute attribute to check
+     * @return <code>true</code> if of type Timestamp
      */
     private boolean isTimestampAttribute(EOAttribute eoattribute) {
         return "T".equals(eoattribute.valueType());
@@ -587,7 +588,8 @@ public class PostgresqlExpression extends JDBCExpression {
 
     /**
      * Helper to check for data columns that are not keys.
-     * @param eoattribute
+     * @param eoattribute attribute to check
+     * @return <code>true</code> if of type Data
      */
     private boolean isDataAttribute(EOAttribute attribute) {
         return (attribute.className().equals("com.webobjects.foundation.NSData") ||
@@ -631,7 +633,6 @@ public class PostgresqlExpression extends JDBCExpression {
         }
         return sb.toString();
     }
-    
     
     /**
      * Overrides the parent implementation to add an <code>INITIALLY DEFERRED</code> to the generated statement.
@@ -712,7 +713,6 @@ public class PostgresqlExpression extends JDBCExpression {
    		return externalNameQuoteCharacter() + identifier + externalNameQuoteCharacter();
     }
     
-    
     /**
      * Overridden so we can get the fetch limit from the fetchSpec.
      *
@@ -789,7 +789,6 @@ public class PostgresqlExpression extends JDBCExpression {
       appendItemToListString(sql, _listString());
     }
 
-
     /**
      * cug: Quick hack for bug in WebObjects 5.4 where the "not null" statement is added without a space, 
      * and "addCreateClauseForAttribute" is not called anymore. Will probably change.
@@ -841,7 +840,6 @@ public class PostgresqlExpression extends JDBCExpression {
         return sql;
     }
     
-
     /**
      * Overridden because the original version throws an exception when the
      * data contains negative byte values. 

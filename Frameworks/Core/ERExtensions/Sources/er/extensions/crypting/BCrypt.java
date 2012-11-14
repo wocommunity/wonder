@@ -418,7 +418,7 @@ public class BCrypt {
 
 	/**
 	 * Look up the 3 bits base64-encoded by the specified character,
-	 * range-checking againt conversion table
+	 * range-checking against conversion table
 	 * @param x	the base64-encoded value
 	 * @return	the decoded value of x
 	 */
@@ -508,7 +508,7 @@ public class BCrypt {
 	}
 
 	/**
-	 * Cycically extract a word of key material
+	 * Cyclically extract a word of key material
 	 * @param data	the string to extract the data from
 	 * @param offp	a "pointer" (as a one-entry array) to the
 	 * current offset into data
@@ -529,7 +529,7 @@ public class BCrypt {
 	}
 
 	/**
-	 * Initialise the Blowfish key schedule
+	 * Initialize the Blowfish key schedule
 	 */
 	private void init_key() {
 		P = P_orig.clone();
