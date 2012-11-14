@@ -117,7 +117,7 @@ SwitchComponent1: WOSwitchComponent {
 
 SwitchComponent2: WOSwitchComponent {
 	WOComponentName = componentName;
-	localContext = localContext;
+	localContext = d2wContext;
 	object = object;
 }
 

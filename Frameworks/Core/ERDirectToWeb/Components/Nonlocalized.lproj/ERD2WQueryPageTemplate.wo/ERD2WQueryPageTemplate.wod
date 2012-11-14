@@ -38,7 +38,7 @@ QueryForm: WOForm {
 }
 
 QueryPageRepetition: ERDQueryPageRepetition {
-	d2wContext = localContext;
+	d2wContext = d2wContext;
 	displayGroup = displayGroup;
 }
 

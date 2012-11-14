@@ -119,7 +119,7 @@ D2wContextTitle: WOString {
 
 SwitchComponent1: WOSwitchComponent {
 	WOComponentName = componentName;
-	localContext = localContext;
+	localContext = d2wContext;
 	object = object;
 }
 

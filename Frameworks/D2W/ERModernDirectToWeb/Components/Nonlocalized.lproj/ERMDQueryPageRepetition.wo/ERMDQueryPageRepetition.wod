@@ -82,5 +82,5 @@ SavedQuerySwitchedComponent:  WOSwitchComponent {
 	_componentUnroll = true;
 	_unroll = true;
 	displayGroup = displayGroup;
-	localContext = localContext;
+	localContext = d2wContext;
 }

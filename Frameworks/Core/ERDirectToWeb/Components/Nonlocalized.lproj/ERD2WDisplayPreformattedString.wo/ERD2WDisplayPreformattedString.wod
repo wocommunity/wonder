@@ -1,5 +1,5 @@
 String: WOString {
-    valueWhenEmpty = localContext.valueWhenEmpty;
+    valueWhenEmpty = d2wContext.valueWhenEmpty;
     value = stringContents;
-    escapeHTML = localContext.escapeHTML;
+    escapeHTML = d2wContext.escapeHTML;
 }

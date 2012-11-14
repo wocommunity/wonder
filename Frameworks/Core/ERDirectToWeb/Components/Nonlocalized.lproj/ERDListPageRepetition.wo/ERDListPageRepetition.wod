@@ -33,12 +33,12 @@ ExtraRow : WOGenericContainer {
 ExtraListComponent : WOSwitchComponent {
 	WOComponentName = d2wContext.extraListComponentName;
 	object = d2wContext.object;
-	d2wContext = localContext;
+	d2wContext = d2wContext;
 }
 
 InspectRepetition : ERDInspectPageRepetition {
 	object = d2wContext.object;
-	d2wContext = localContext;
+	d2wContext = d2wContext;
 	displayPropertyKeys = currentSection.keys;
 }
 

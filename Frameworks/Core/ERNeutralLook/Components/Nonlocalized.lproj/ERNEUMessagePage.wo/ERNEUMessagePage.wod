@@ -10,7 +10,7 @@ AttributeRepetition: WORepetition {
 }
 
 AttributeValue: ERXTimedSwitchComponent {
-	localContext = localContext;
+	localContext = d2wContext;
 	object = object;
 	statsKey = statsKeyForCurrentPropertyKey;
 	WOComponentName = d2wContext.componentName;

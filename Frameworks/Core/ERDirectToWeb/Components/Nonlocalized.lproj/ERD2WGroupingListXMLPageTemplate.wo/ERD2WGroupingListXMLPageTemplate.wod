@@ -119,7 +119,7 @@ String5: WOString {
 
 SwitchComponent1: WOSwitchComponent {
 	WOComponentName = componentName;
-	localContext = localContext;
+	localContext = d2wContext;
 	object = object;
 }
 

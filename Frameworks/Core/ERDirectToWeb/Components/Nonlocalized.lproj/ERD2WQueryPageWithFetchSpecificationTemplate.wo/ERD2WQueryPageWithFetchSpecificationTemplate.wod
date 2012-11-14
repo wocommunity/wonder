@@ -10,7 +10,7 @@ EntitySelectedConditional: WOConditional {
 
 PageWrapper: WOSwitchComponent {
     _componentName=d2wContext.pageWrapperName;
-    //localContext=localContext;
+    //localContext= d2wContext;
     _unroll = true;
     _componentUnroll = true;
 	WOComponentName = d2wContext.pageWrapperName;
@@ -36,7 +36,7 @@ QueryTableHeaderRow : WOGenericContainer {
 
 ResourceInputRepresentation: WOSwitchComponent {
 	displayGroup=displayGroup;
-    localContext=localContext;
+    localContext= d2wContext;
     _unroll = true;
     _componentUnroll = true;
 	WOComponentName = d2wContext.componentName;

@@ -8,14 +8,14 @@ ExcelButton : ERExcelButton {
 }
 
 Title : ERCDisplayHelpText {
-	context = localContext;
+	d2wContext = d2wContext;
 	key = "title";
 	defaultValue = title;
 	prefix = ^pageConfiguration;
 }
 
 CMS : ERCDisplayHelpText {
-	context = localContext;
+	d2wContext = d2wContext;
 	key = "explaination";
 	prefix = ^pageConfiguration;
 }
