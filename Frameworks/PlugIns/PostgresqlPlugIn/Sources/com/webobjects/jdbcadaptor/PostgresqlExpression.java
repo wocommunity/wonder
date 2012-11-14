@@ -231,6 +231,9 @@ public class PostgresqlExpression extends JDBCExpression {
             relationshipKey = k.count()>0? (String)k.lastObject() : "";
             rightEntity = entityForKeyPath(relationshipKey);
         }
+        if (relationshipKey == null) {
+        	throw new IllegalStateException("Could not determine relationship for join.");
+        }
         int dotIndex = relationshipKey.indexOf( "." );
         relationshipKey = dotIndex == -1
             ? relationshipKey
@@ -750,9 +753,9 @@ public class PostgresqlExpression extends JDBCExpression {
         EOEntity entity = attribute.entity();
         EOEntity parentEntity = entity.parentEntity();
         String externalName = entity.externalName();
-        if (externalName != null) {
+        if (externalName != null && parentEntity != null) {
           // If you have a parent entity and that parent entity shares your table name, then you're single table inheritance
-          boolean singleTableInheritance = (parentEntity != null && externalName.equals(parentEntity.externalName()));
+          boolean singleTableInheritance = externalName.equals(parentEntity.externalName());
           if (singleTableInheritance) {
             EOAttribute parentAttribute = parentEntity.attributeNamed(attribute.name());
             if (parentAttribute == null) {

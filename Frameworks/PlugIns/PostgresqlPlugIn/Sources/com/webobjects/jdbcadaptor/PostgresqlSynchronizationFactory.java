@@ -122,6 +122,9 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
      * @return the array of SQL statements
      */
     public NSArray dropPrimaryKeySupportStatementsForEntityGroup(NSArray entityGroup) {
+        if (entityGroup == null) {
+            return NSArray.EmptyArray;
+        }
         NSMutableSet sequenceNames = new NSMutableSet();
         NSMutableArray results = new NSMutableArray();
         int count = entityGroup.count();
@@ -145,6 +148,9 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
      * @return the array of SQL statements
      */
     public NSArray dropTableStatementsForEntityGroup(NSArray entityGroup) {
+        if (entityGroup == null) {
+            return NSArray.EmptyArray;
+        }
         NSMutableArray results = new NSMutableArray();
         int count = entityGroup.count();
         for (int i = 0; i < count; i++) {
