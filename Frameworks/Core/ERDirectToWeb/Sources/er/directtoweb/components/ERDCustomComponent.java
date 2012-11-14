@@ -278,6 +278,7 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
     }
 
     /** Used by stateful but non-synching subclasses */
+    @Override
     public void resetCachedBindingsInStatefulComponent() {
         super.resetCachedBindingsInStatefulComponent();
         extraBindings = null;
@@ -287,6 +288,7 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
     }
 
     /** Used by stateless subclasses. */
+    @Override
     public void reset() {
         super.reset();
         extraBindings = null;
