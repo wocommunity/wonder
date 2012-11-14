@@ -1001,7 +1001,7 @@ public class PostgresqlExpression extends JDBCExpression {
      */
     @Override
     public void setUseBindVariables(boolean value) {
-    	_disableBindVariables = (value ? Boolean.FALSE : Boolean.TRUE);
+    	_disableBindVariables = Boolean.valueOf(value);
     }
 
     /**
