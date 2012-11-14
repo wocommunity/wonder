@@ -119,8 +119,15 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
       catch (IOException e) {
         throw new RuntimeException("Failed to load 'JDBCInfo.plist' from this plugin jar.", e);
       }
-    }
-    else {
+      finally {
+        try {
+          jdbcInfoStream.close();
+        }
+        catch (IOException e) {
+          // ignore
+        }
+      }
+    } else {
       jdbcInfo = super.jdbcInfo();
     }
     return jdbcInfo;
