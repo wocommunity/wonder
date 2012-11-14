@@ -132,6 +132,7 @@ public class ERXErrorDictionaryPanel extends ERXStatelessComponent {
 
     public Object value;
 
+    @Override
     public void reset() {
         super.reset();
         errorMessages = null;
@@ -139,6 +140,7 @@ public class ERXErrorDictionaryPanel extends ERXStatelessComponent {
         extraErrorMessage = null;
     }
 
+    @Override
     public void appendToResponse(WOResponse r, WOContext c) {
         // this is a little silly but has the advantage of minimizing impact
         // on other pieces of code

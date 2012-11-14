@@ -73,6 +73,7 @@ public class AjaxObserveField extends AjaxDynamicElement {
 	/**
 	 * Adds all required resources.
 	 */
+	@Override
 	protected void addRequiredWebResources(WOResponse response, WOContext context) {
 		addScriptResourceInHead(context, response, "prototype.js");
 		addScriptResourceInHead(context, response, "wonder.js");
@@ -97,6 +98,7 @@ public class AjaxObserveField extends AjaxDynamicElement {
 		return options;
 	}
 
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		super.appendToResponse(response, context);
 		
@@ -169,6 +171,7 @@ public class AjaxObserveField extends AjaxDynamicElement {
 		return (String) element.valueForBinding("name", context.elementID(), component);
 	}
 
+	@Override
 	public WOActionResults invokeAction(WORequest worequest, WOContext wocontext) {
 		WOActionResults result = null;
 		WOComponent wocomponent = wocontext.component();
@@ -189,6 +192,7 @@ public class AjaxObserveField extends AjaxDynamicElement {
 		return result;
 	}
 
+	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 	    WOResponse response = AjaxUtils.createResponse(request, context);
 		return response;

@@ -60,6 +60,7 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
         return switchTab && errorMessages.count()==0;
     }
 
+    @Override
     public void takeValuesFromRequest(WORequest request, WOContext context) {
         // ak: this only works in a direct link or if there are no form
         // values...
@@ -70,20 +71,20 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
 
     //AK: what are these used for? They do nothing?
     protected Integer _tabNumber;
+
+    @Override
     public Integer tabNumber(){ return _tabNumber;}
+
+    @Override
     public void setTabNumber(Integer newTabNumber){ _tabNumber  = newTabNumber;}
 
+    @Override
     public WOComponent printerFriendlyVersion() {
         WOComponent result=ERD2WFactory.erFactory().printerFriendlyPageForD2WContext(d2wContext(),session());
         ((EditPageInterface)result).setObject(object());
         return result;
     }
-    
-    @Override
-    public void awake() {
-        super.awake();
-    }
-    
+
     public void setTabByName(String tabName) {
         if (tabName != null) {
             int i = 0;
@@ -97,7 +98,8 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
             }
         }
     }
-    
+
+    @Override
     public String urlForCurrentState() {
         String url = super.urlForCurrentState();
         if (currentTab() != null) {
@@ -117,6 +119,7 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
      * generated.</p>
      * @return a JavaScript string.
      */
+    @Override
     public String tabScriptString() {
 		if (d2wContext().valueForKey(Keys.firstResponderKey) != null) {
             return scriptForFirstResponderActivation();
