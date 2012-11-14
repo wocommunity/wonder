@@ -198,7 +198,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
             s = replaceStringByStringInString("ALTER TABLE " + tableNameWithoutSchemaName, "ALTER TABLE " + tableName, s);
             expression.setStatement(s);
             NSArray columnNames = ((NSArray) relationship.sourceAttributes().valueForKey("columnName"));
-            StringBuffer sbColumnNames = new StringBuffer();
+            StringBuilder sbColumnNames = new StringBuilder();
             for (int j = 0; j < columnNames.count(); j++) {
                 sbColumnNames.append((j == 0 ? "" : ", ") + expression.sqlStringForSchemaObjectName((String) columnNames.objectAtIndex(j)));
             }
@@ -249,7 +249,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
             String constraintName = result.sqlStringForSchemaObjectName(externalNameForEntityWithoutSchema(entity) + "_pk");
             String tableName = result.sqlStringForSchemaObjectName(entity.externalName());
 
-            StringBuffer statement = new StringBuffer("ALTER TABLE ");
+            StringBuilder statement = new StringBuilder("ALTER TABLE ");
             statement.append(tableName);
             statement.append(" ADD CONSTRAINT ");
             statement.append(constraintName);
@@ -407,7 +407,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
         int begin, end;
         int oldLength = old.length();
         int length = buffer.length();
-        StringBuffer convertedString = new StringBuffer(length + 100);
+        StringBuilder convertedString = new StringBuilder(length + 100);
 
         begin = 0;
         while (begin < length) {
