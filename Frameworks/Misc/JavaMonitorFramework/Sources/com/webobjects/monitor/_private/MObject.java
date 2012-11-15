@@ -65,7 +65,7 @@ public class MObject extends Object implements NSKeyValueCoding {
     public static int DEAD = 4;
     public static int CRASHING = 5;
 
-    public static String _emptyString = new String("");
+    public static String _emptyString = "";
     public static Integer _zeroInteger = Integer.valueOf(0);
 
     public static String directActionString = "/cgi-bin/WebObjects/wotaskd.woa/wa/monitorRequest";

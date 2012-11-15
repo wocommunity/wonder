@@ -786,10 +786,10 @@ public class MInstance extends MObject {
                 WOMailDelivery mailer = WOMailDelivery.sharedInstance();
                 String fromAddress = siteConfig().emailReturnAddr();
                 NSArray toAddress = null;
-                String subject = new String("App stopped running: " + displayName());
+                String subject = "App stopped running: " + displayName();
                 String bodyText = message;
                 if (fromAddress != null) {
-                    fromAddress = new String("root@" + _host.name());
+                    fromAddress = "root@" + _host.name();
                 }
                 if (_application.notificationEmailAddr() != null) {
                     toAddress = NSArray.componentsSeparatedByString(_application.notificationEmailAddr(), ",");

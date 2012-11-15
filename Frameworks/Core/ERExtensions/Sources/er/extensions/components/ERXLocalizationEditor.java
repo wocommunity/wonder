@@ -47,7 +47,7 @@ public class ERXLocalizationEditor extends WOComponent {
 	public NSMutableDictionary currentEntry;
 	public String selectedFramework;
 	public String selectedFilename;
-	public String UNSET = new String("***UNSET***");
+	public String UNSET = "***UNSET***";
 	public WODisplayGroup displayGroup;
 	public String keyToAdd;
 	
