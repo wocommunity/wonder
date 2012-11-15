@@ -75,7 +75,7 @@ public class PostgresqlExpression extends JDBCExpression {
     private static final ThreadLocal<SimpleDateFormat> DATE_FORMATTER = new ThreadLocal<SimpleDateFormat>() {
         @Override
         protected SimpleDateFormat initialValue() {
-            return new SimpleDateFormat("yyyy-MM-dd");
+            return new SimpleDateFormat("''yyyy-MM-dd''");
         }
     };
 
@@ -85,7 +85,7 @@ public class PostgresqlExpression extends JDBCExpression {
     private static final ThreadLocal<SimpleDateFormat> TIMESTAMP_FORMATTER = new ThreadLocal<SimpleDateFormat>() {
         @Override
         protected SimpleDateFormat initialValue() {
-            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+            return new SimpleDateFormat("''yyyy-MM-dd HH:mm:ss.SSS''");
         }
     };
 
@@ -444,9 +444,9 @@ public class PostgresqlExpression extends JDBCExpression {
         if(obj instanceof NSData) {
             value = sqlStringForData((NSData)obj);
         } else if((obj instanceof NSTimestamp) && isTimestampAttribute(eoattribute)) {
-            value = "'" + TIMESTAMP_FORMATTER.get().format(obj) + "'";
+            value = TIMESTAMP_FORMATTER.get().format(obj);
         } else if((obj instanceof NSTimestamp) && isDateAttribute(eoattribute)) {
-            value = "'" + DATE_FORMATTER.get().format(obj) + "'";
+            value = DATE_FORMATTER.get().format(obj);
         } else if(obj instanceof String) {
             value = formatStringValue((String)obj);
         } else if(obj instanceof Number) {
