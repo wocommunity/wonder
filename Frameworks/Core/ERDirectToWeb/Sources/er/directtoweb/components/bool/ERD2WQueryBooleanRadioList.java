@@ -34,17 +34,19 @@ public class ERD2WQueryBooleanRadioList extends D2WQueryBoolean {
 	private static final long serialVersionUID = 1L;
 
     /** logging support */
-    private static final Logger log = Logger.getLogger(ERD2WQueryBooleanRadioList.class);
-    protected NSArray _choicesNames;
+    @SuppressWarnings("unused")
+	private static final Logger log = Logger.getLogger(ERD2WQueryBooleanRadioList.class);
+    protected NSArray<String> _choicesNames;
     
     public ERD2WQueryBooleanRadioList(WOContext context) {
         super(context);
     }
     
     // accessors
-    public NSArray<String> choicesNames() {
+    @SuppressWarnings("unchecked")
+	public NSArray<String> choicesNames() {
         if (_choicesNames == null)
-            _choicesNames = (NSArray)d2wContext().valueForKey("choicesNames");
+            _choicesNames = (NSArray<String>)d2wContext().valueForKey("choicesNames");
         return _choicesNames;
     }
 
@@ -56,7 +58,7 @@ public class ERD2WQueryBooleanRadioList extends D2WQueryBoolean {
     
     @Override
     public String displayString() {
-        NSArray choicesNames = choicesNames();
+        NSArray<String> choicesNames = choicesNames();
         String result;
         if(choicesNames == null) {
             result = super.displayString();

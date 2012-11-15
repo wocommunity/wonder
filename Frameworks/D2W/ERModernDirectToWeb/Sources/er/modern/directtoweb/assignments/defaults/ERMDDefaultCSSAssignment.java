@@ -20,11 +20,13 @@ import er.extensions.foundation.ERXStringUtilities;
  */
 public class ERMDDefaultCSSAssignment extends ERDAssignment {
 
-    /** logging support */
+	private static final long serialVersionUID = 1L;
+
+	/** logging support */
     public final static Logger log = Logger.getLogger(ERMDDefaultCSSAssignment.class);
 
     /** holds the array of keys this assignment depends upon */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
 	protected static final NSDictionary keys = ERXDictionaryUtilities.dictionaryWithObjectsAndKeys( new Object [] {
 			new NSArray(new Object[] {"task", "parentPageConfiguration", "pageConfiguration"}), "classForAttributeRepetitionWrapper",
 			new NSArray(new Object[] {"task", "pageConfiguration"}), "classForAttributeRepetition",
@@ -70,7 +72,8 @@ public class ERMDDefaultCSSAssignment extends ERDAssignment {
      * @param keyPath to compute significant keys for.
      * @return array of context keys this assignment depends upon.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("rawtypes")
+    @Override
 	public NSArray dependentKeys(String keyPath) {
         return (NSArray)keys.valueForKey(keyPath);
     }

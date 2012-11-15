@@ -193,6 +193,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     /**
      * Overridden to lock the page's editingContext, if there is any present.
      */
+	@Override
     public void awake() {
         super.awake();
         if (_context != null) {
@@ -296,6 +297,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * 
      * @return url for the current page
      */
+	@Override
     public String urlForCurrentState() {
         return context().directActionURLForActionNamed(d2wContext().dynamicPage(), null).replaceAll("&amp;", "&");
     }
@@ -304,6 +306,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     protected EOEditingContext _context;
 
     /** Implementation of the {@link InspectPageInterface} */
+	@Override
     public void setObject(EOEnterpriseObject eo) {
         setEditingContext((eo != null) ? eo.editingContext() : null);
         // for SmartAssignment
@@ -320,10 +323,12 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     /**
      * Return the object from the d2wContext.
      */
+	@Override
     public EOEnterpriseObject object() {
         return (EOEnterpriseObject) d2wContext().valueForKey(Keys.object);
     }
 
+	@Override
     public void setDataSource(EODataSource eodatasource) {
         setEditingContext(eodatasource != null ? eodatasource.editingContext() : null);
         super.setDataSource(eodatasource);
@@ -340,6 +345,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * 
      * @return d2wContext
      */
+	@Override
     public D2WContext d2wContext() {
         if (super.d2wContext() == null) {
             if (hasBinding(Keys.localContext)) {
@@ -354,6 +360,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     }
 
     /** Sets the d2wContext for this page */
+	@Override
     public void setLocalContext(D2WContext newValue) {
         if (ERXExtensions.safeDifferent(newValue, _localContext)) {
             // HACK ALERT: this next line is made necessary by the
@@ -428,6 +435,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * Clears all of the collected validation exceptions. Implementation of the
      * {@link ERXExceptionHolder} interface.
      */
+	@Override
     public void clearValidationFailed() {
         errorMessages.removeAllObjects();
         errorKeyOrder.removeAllObjects();
@@ -449,6 +457,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     private NSMutableDictionary<String,String> _temp = new NSMutableDictionary<String,String>();
 
     /** Handles validation errors. */
+	@Override
     public void validationFailedWithException(Throwable e, Object value, String keyPath) {
         if (validationLog.isDebugEnabled()) {
             validationLog.debug("Validation failed with exception: " + e + " value: " + value + " keyPath: " + keyPath);
@@ -639,6 +648,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * True if the entity is read only. Returns
      * <code>!(isEntityEditable()) </code>
      */
+	@Override
     public boolean isEntityReadOnly() {
         return !isEntityEditable();
     }
@@ -673,6 +683,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     protected NSMutableDictionary _userInfo = new NSMutableDictionary();
 
     /** Implementation of the {@link ERDUserInfoInterface} */
+	@Override
     public NSMutableDictionary userInfo() {
         return _userInfo;
     }
@@ -703,6 +714,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * This will allow d2w pages to be listed on a per configuration basis in
      * stats collecting.
      */
+	@Override
     public String descriptionForResponse(WOResponse aResponse, WOContext aContext) {
         String descriptionForResponse = (String) d2wContext().valueForKey(Keys.pageConfiguration);
         /*
@@ -716,6 +728,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * Overridden from the parent for better logging. Also clears validation
      * errors
      */
+	@Override
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         // Need to make sure that we have a clean plate, every time
         clearValidationFailed();
@@ -728,6 +741,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     }
 
     /** Overridden from the parent for better logging. */
+	@Override
     public WOActionResults invokeAction(WORequest r, WOContext c) {
         WOActionResults result = null;
         NDC.push("Page: " + getClass().getName() + (d2wContext() != null ? (" - Configuration: " + d2wContext().valueForKey(Keys.pageConfiguration)) : ""));
@@ -756,6 +770,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * Overridden from the parent for better logging. Reports exceptions in the
      * console for easier debugging.
      */
+	@Override
     public void appendToResponse(WOResponse response, WOContext context) {
     	String info = "(" + d2wContext().dynamicPage() + ")";
     	// String info = "(" + getClass().getName() + (d2wContext() != null ? ("/" + d2wContext().valueForKey(Keys.pageConfiguration)) : "") + ")";
@@ -813,6 +828,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * @return user selected branch name.
      */
     // ENHANCEME: Should be localized
+	@Override
     public String branchName() {
         if (branch() != null) {
             return (String) branch().valueForKey(ERDBranchDelegate.BRANCH_NAME);
@@ -1094,10 +1110,12 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
 
     protected NextPageDelegate _nextPageDelegate;
 
+	@Override
     public WOComponent nextPage() {
         return _nextPage;
     }
 
+	@Override
     public void setNextPage(WOComponent wocomponent) {
         _nextPage = wocomponent;
     }
