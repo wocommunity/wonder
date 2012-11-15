@@ -70,14 +70,24 @@ public class PostgresqlExpression extends JDBCExpression {
     private static final String EXTERNAL_NAME_QUOTE_CHARACTER = "\"";   
     
     /**
-     * formatter to use when handling date columns
+     * Formatter to use when handling date columns. Each thread has its own copy.
      */
-    private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
+    private static final ThreadLocal<SimpleDateFormat> DATE_FORMATTER = new ThreadLocal<SimpleDateFormat>() {
+        @Override
+        protected SimpleDateFormat initialValue() {
+            return new SimpleDateFormat("yyyy-MM-dd");
+        }
+    };
 
     /**
-     * formatter to use when handling timestamps
+     * Formatter to use when handling timestamp columns. Each thread has its own copy.
      */
-    private static final SimpleDateFormat TIMESTAMP_FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+    private static final ThreadLocal<SimpleDateFormat> TIMESTAMP_FORMATTER = new ThreadLocal<SimpleDateFormat>() {
+        @Override
+        protected SimpleDateFormat initialValue() {
+            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        }
+    };
 
     /**
      * Method to get the string value from a BigDecimals from.
@@ -434,9 +444,9 @@ public class PostgresqlExpression extends JDBCExpression {
         if(obj instanceof NSData) {
             value = sqlStringForData((NSData)obj);
         } else if((obj instanceof NSTimestamp) && isTimestampAttribute(eoattribute)) {
-            value = "'" + TIMESTAMP_FORMATTER.format(obj) + "'";
+            value = "'" + TIMESTAMP_FORMATTER.get().format(obj) + "'";
         } else if((obj instanceof NSTimestamp) && isDateAttribute(eoattribute)) {
-            value = "'" + DATE_FORMATTER.format(obj) + "'";
+            value = "'" + DATE_FORMATTER.get().format(obj) + "'";
         } else if(obj instanceof String) {
             value = formatStringValue((String)obj);
         } else if(obj instanceof Number) {
