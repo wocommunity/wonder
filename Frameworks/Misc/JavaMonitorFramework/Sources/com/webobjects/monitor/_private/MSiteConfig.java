@@ -911,7 +911,7 @@ public class MSiteConfig extends MObject {
     /********** Archiving Support **********/
     // KH - speed this up by uniquing the strings
     public String generateAdaptorConfigXML(boolean onlyIncludeRunningInstances, boolean shouldIncludeUnregisteredInstances) {
-        StringBuffer sb = new StringBuffer("<?xml version=\"1.0\" encoding=\"ASCII\"?>\n<adaptor>\n");
+        StringBuilder sb = new StringBuilder("<?xml version=\"1.0\" encoding=\"ASCII\"?>\n<adaptor>\n");
 
         for (Enumeration e = applicationArray().objectEnumerator(); e.hasMoreElements(); ) {
             MApplication anApp = (MApplication) e.nextElement();

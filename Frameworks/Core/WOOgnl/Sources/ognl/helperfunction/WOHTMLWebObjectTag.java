@@ -76,7 +76,7 @@ public class WOHTMLWebObjectTag {
 		Enumeration enumeration = _children.objectEnumerator();
 		if (enumeration != null) {
 			nsmutablearray = new NSMutableArray(_children.count());
-			StringBuffer stringbuffer = new StringBuffer(128);
+			StringBuilder stringbuffer = new StringBuilder(128);
 			while (enumeration.hasMoreElements()) {
 				Object obj1 = enumeration.nextElement();
 				if (obj1 instanceof String) {
@@ -84,7 +84,7 @@ public class WOHTMLWebObjectTag {
 				}
 				else {
 					if (stringbuffer.length() > 0) {
-						WOHTMLBareString wohtmlbarestring1 = new WOHTMLBareString(_NSStringUtilities.stringFromBuffer(stringbuffer));
+						WOHTMLBareString wohtmlbarestring1 = new WOHTMLBareString(stringbuffer.toString());
 						nsmutablearray.addObject(wohtmlbarestring1);
 						stringbuffer.setLength(0);
 					}
@@ -92,7 +92,7 @@ public class WOHTMLWebObjectTag {
 				}
 			}
 			if (stringbuffer.length() > 0) {
-				WOHTMLBareString wohtmlbarestring = new WOHTMLBareString(_NSStringUtilities.stringFromBuffer(stringbuffer));
+				WOHTMLBareString wohtmlbarestring = new WOHTMLBareString(stringbuffer.toString());
 				stringbuffer.setLength(0);
 				nsmutablearray.addObject(wohtmlbarestring);
 			}

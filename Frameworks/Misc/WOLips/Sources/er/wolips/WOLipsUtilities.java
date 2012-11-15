@@ -41,7 +41,7 @@ public class WOLipsUtilities {
       if (password == null) {
         throw new NullPointerException("You must set 'wolips.password' in your Properties file.");
       }
-      StringBuffer urlBuffer = new StringBuffer();
+      StringBuilder urlBuffer = new StringBuilder();
       urlBuffer.append("http://");
       urlBuffer.append(host);
       urlBuffer.append(":");

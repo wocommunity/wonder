@@ -461,7 +461,7 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 	}
 
 	public String toString() {
-		StringBuffer buffer = new StringBuffer(128);
+		StringBuilder buffer = new StringBuilder(128);
 		buffer.append("(");
 		Object[] objects = objectsNoCopy();
 		for (int i = 0; i < objects.length; i++) {
@@ -484,7 +484,7 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		}
 
 		buffer.append(")");
-		return new String(buffer);
+		return buffer.toString();
 	}
 
 	private void writeObject(ObjectOutputStream s) throws IOException {

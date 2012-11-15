@@ -1022,7 +1022,7 @@ public class WODisplayGroup implements NSKeyValueCoding, NSKeyValueCoding.ErrorH
 				if (operatorString.compareTo("is") == 0) {
 					operatorString = "=";
 				} else {
-					StringBuffer buffer = new StringBuffer(length + 4);
+					StringBuilder buffer = new StringBuilder(length + 4);
 
 					if (operatorString.compareTo(QUERYOPERATOR_DEFAULTSTRING) == 0) {
 						if (_DSMFindexOfObject > 0) {
@@ -1033,23 +1033,23 @@ public class WODisplayGroup implements NSKeyValueCoding, NSKeyValueCoding.ErrorH
 						if (i < _defaultStringMatchFormat.length) {
 							buffer.append(_defaultStringMatchFormat, i, _defaultStringMatchFormat.length - i);
 						}
-						aValue = new String(buffer);
+						aValue = buffer.toString();
 						operatorString = _defaultStringMatchOperator;
 					} else if (operatorString.compareTo("starts with") == 0) {
 						buffer.append(valueString);
 						buffer.append(QUERYOPERATOR_WILDCARD);
-						aValue = new String(buffer);
+						aValue = buffer.toString();
 						operatorString = _defaultStringMatchOperator;
 					} else if (operatorString.compareTo("ends with") == 0) {
 						buffer.append(QUERYOPERATOR_WILDCARD);
 						buffer.append(valueString);
-						aValue = new String(buffer);
+						aValue = buffer.toString();
 						operatorString = _defaultStringMatchOperator;
 					} else if (operatorString.compareTo("contains") == 0) {
 						buffer.append(QUERYOPERATOR_WILDCARD);
 						buffer.append(valueString);
 						buffer.append(QUERYOPERATOR_WILDCARD);
-						aValue = new String(buffer);
+						aValue = buffer.toString();
 						operatorString = _defaultStringMatchOperator;
 					}
 
