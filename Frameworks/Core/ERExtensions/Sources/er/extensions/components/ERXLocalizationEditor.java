@@ -59,8 +59,9 @@ public class ERXLocalizationEditor extends WOComponent {
         displayGroup.setDefaultStringMatchFormat("*%@*");
         displayGroup.setDefaultStringMatchOperator(EOQualifier.QualifierOperatorCaseInsensitiveLike.name());
     }
-    
-    public void awake () {
+
+    @Override
+    public void awake() {
     	super.awake();
     	this.keyToAdd = null;
     	if (this.displayGroup != null) {

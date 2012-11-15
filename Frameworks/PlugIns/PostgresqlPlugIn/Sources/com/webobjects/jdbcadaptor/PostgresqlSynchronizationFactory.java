@@ -483,7 +483,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
 /* 748*/        for(int count = statements.count(); i < count; i++)
 /* 749*/            appendExpressionToScript((EOSQLExpression)statements.objectAtIndex(i), result);
 
-/* 751*/        return new String(result);
+/* 751*/        return result.toString();
     }
 
     public NSArray schemaCreationStatementsForEntities(NSArray allEntities, NSDictionary options)

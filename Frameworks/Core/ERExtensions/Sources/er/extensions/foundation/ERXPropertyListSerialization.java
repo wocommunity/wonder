@@ -1425,7 +1425,7 @@ public class ERXPropertyListSerialization {
 			if (obj instanceof String)
 				return obj;
 			if (obj instanceof StringBuffer)
-				return new String((StringBuffer) obj);
+				return ((StringBuffer) obj).toString();
 			if (obj instanceof NSData)
 				return ((NSData) obj).clone();
 			if (obj instanceof NSArray<?>) {
@@ -2358,7 +2358,7 @@ public class ERXPropertyListSerialization {
 			if (obj instanceof String)
 				return obj;
 			if (obj instanceof StringBuffer)
-				return new String((StringBuffer) obj);
+				return ((StringBuffer) obj).toString();
 			if (obj instanceof NSData)
 				return ((NSData) obj).clone();
 			if (obj instanceof NSArray<?>) {

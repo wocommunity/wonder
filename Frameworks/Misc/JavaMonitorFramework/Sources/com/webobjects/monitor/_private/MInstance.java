@@ -867,7 +867,7 @@ public class MInstance extends MObject {
         anArray.addObject("-WOLifebeatEnabled");
         anArray.addObject("YES");
         anArray.addObject("-WOLifebeatDestinationPort");
-        anArray.addObject(new String(WOApplication.application().lifebeatDestinationPort() + ""));
+        anArray.addObject(String.valueOf(WOApplication.application().lifebeatDestinationPort()));
 
         // application stuff
         String adaptorString = toNullOrString(_application.adaptor());
