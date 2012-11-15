@@ -819,6 +819,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 	private String stringFromJar(String jar, String path) {
 		JarFile f;
+		InputStream is = null;
 		try {
 			if (!new File(jar).exists()) {
 				ERXApplication.log.warn("Will not process jar '" + jar + "' because it cannot be found ...");
@@ -827,7 +828,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			f = new JarFile(jar);
 			JarEntry e = (JarEntry) f.getEntry(path);
 			if (e != null) {
-				InputStream is = f.getInputStream(e);
+				is = f.getInputStream(e);
 				ByteArrayOutputStream bout = new ByteArrayOutputStream();
 				int read = -1;
 				byte[] buf = new byte[1024 * 50];
@@ -845,6 +846,16 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		}
 		catch (IOException e1) {
 			throw NSForwardException._runtimeExceptionForThrowable(e1);
+		}
+		finally {
+			if (is != null) {
+				try {
+					is.close();
+				}
+				catch (IOException e) {
+					// ignore
+				}
+			}
 		}
 	}
 	}
