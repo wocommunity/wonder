@@ -98,7 +98,7 @@ public class WOHTMLWebObjectTag {
 			}
 		}
 		WOElement obj = null;
-		if (nsmutablearray.count() == 1) {
+		if (nsmutablearray != null && nsmutablearray.count() == 1) {
 			Object obj2 = nsmutablearray.objectAtIndex(0);
 			if (obj2 instanceof WOComponentReference) {
 				obj = new WODynamicGroup(_name, null, (WOElement) obj2);
