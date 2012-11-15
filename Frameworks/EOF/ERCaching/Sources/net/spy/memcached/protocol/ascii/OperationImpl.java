@@ -6,6 +6,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
+import org.apache.commons.lang.CharEncoding;
+
 import net.spy.memcached.KeyUtil;
 import net.spy.memcached.ops.Operation;
 import net.spy.memcached.ops.OperationCallback;
@@ -20,7 +22,6 @@ import net.spy.memcached.protocol.BaseOperationImpl;
 abstract class OperationImpl extends BaseOperationImpl implements Operation {
 
 	protected static final byte[] CRLF={'\r', '\n'};
-	private static final String CHARSET = "UTF-8";
 
 	private final ByteArrayOutputStream byteBuffer=new ByteArrayOutputStream();
 	OperationReadType readType=OperationReadType.LINE;
@@ -123,7 +124,7 @@ abstract class OperationImpl extends BaseOperationImpl implements Operation {
 					}
 				}
 				if(offset >= 0) {
-					String line=new String(byteBuffer.toByteArray(), CHARSET);
+					String line = new String(byteBuffer.toByteArray(), CharEncoding.UTF_8);
 					byteBuffer.reset();
 					OperationErrorType eType=classifyError(line);
 					if(eType != null) {

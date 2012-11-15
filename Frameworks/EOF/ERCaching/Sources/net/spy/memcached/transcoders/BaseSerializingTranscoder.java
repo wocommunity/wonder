@@ -9,6 +9,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import org.apache.commons.lang.CharEncoding;
+
 import net.spy.SpyObject;
 import net.spy.util.CloseUtil;
 
@@ -23,10 +25,8 @@ public abstract class BaseSerializingTranscoder extends SpyObject {
 	 */
 	public static final int DEFAULT_COMPRESSION_THRESHOLD = 16384;
 
-	private static final String DEFAULT_CHARSET = "UTF-8";
-
 	protected int compressionThreshold=DEFAULT_COMPRESSION_THRESHOLD;
-	protected String charset=DEFAULT_CHARSET;
+	protected String charset = CharEncoding.UTF_8;
 
 
 	/**

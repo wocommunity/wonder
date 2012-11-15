@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
 
+import org.apache.commons.lang.CharEncoding;
+
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -93,11 +95,11 @@ public class ERPublishCalendarPage extends WOComponent {
     public void appendToResponse (WOResponse aResponse, WOContext aContext)
     {
 	eventTimestamp = new NSTimestamp();
-	aResponse.setContentEncoding ("UTF-8");
+	aResponse.setContentEncoding(CharEncoding.UTF_8);
 	super.appendToResponse (aResponse, aContext);
 	aResponse.setHeader ("text/calendar","content-type");
 	try {
-	    aResponse.setContent (new NSData (foldLongLinesInString (new String (aResponse.content().bytes(), "UTF-8")).getBytes ("UTF-8")));
+	    aResponse.setContent(new NSData(foldLongLinesInString(new String(aResponse.content().bytes(), CharEncoding.UTF_8)).getBytes(CharEncoding.UTF_8)));
 	} catch (java.io.UnsupportedEncodingException exception) {
 	    // If encoding is not supported, content of response is left unmodified
 	    // (although exceptions will be thrown elsewhere if UTF-8 is unsupported).

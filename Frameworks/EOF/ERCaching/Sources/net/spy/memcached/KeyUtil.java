@@ -4,6 +4,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.apache.commons.lang.CharEncoding;
+
 /**
  * Utilities for processing key values.
  */
@@ -17,7 +19,7 @@ public class KeyUtil {
 	 */
 	public static byte[] getKeyBytes(String k) {
 		try {
-			return k.getBytes("UTF-8");
+			return k.getBytes(CharEncoding.UTF_8);
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}

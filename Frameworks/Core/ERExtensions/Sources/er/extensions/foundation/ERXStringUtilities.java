@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import org.apache.commons.lang.CharEncoding;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
@@ -1723,7 +1724,7 @@ public class ERXStringUtilities {
 	else {
 	  	try {
 	  		if(encoding == null) {
-	  			encoding = "UTF-8";
+	  			encoding = CharEncoding.UTF_8;
 	  		}
 			bytes = ERXFileUtilities.md5(new ByteArrayInputStream(str.getBytes(encoding)));
 		}
@@ -2118,7 +2119,7 @@ public class ERXStringUtilities {
      * @param string string to convert
      */
     public static byte[] toUTF8Bytes(String string) {
-    	return toBytes(string, "UTF-8");
+    	return toBytes(string, CharEncoding.UTF_8);
     }
 
     /**
@@ -2144,7 +2145,7 @@ public class ERXStringUtilities {
      * @param bytes string to convert
      */
     public static String fromUTF8Bytes(byte bytes[]) {
-    	return fromBytes(bytes, "UTF-8");
+    	return fromBytes(bytes, CharEncoding.UTF_8);
     }
 
     /**

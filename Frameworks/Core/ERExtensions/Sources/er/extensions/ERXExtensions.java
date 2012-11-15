@@ -20,6 +20,7 @@ import java.util.Random;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.apache.commons.lang.CharEncoding;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
@@ -193,7 +194,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         	ERXSystem.updateProperties();
  
     		// AK: enable this when we're ready
-        	// WOEncodingDetector.sharedInstance().setFallbackEncoding("UTF-8");
+        	// WOEncodingDetector.sharedInstance().setFallbackEncoding(CharEncoding.UTF_8);
         	
         	// GN: configure logging with optional custom subclass of ERXLogger
         	String className = ERXProperties.stringForKey("er.extensions.erxloggerclass"); 

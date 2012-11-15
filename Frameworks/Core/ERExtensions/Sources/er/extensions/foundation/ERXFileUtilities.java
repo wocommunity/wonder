@@ -39,6 +39,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
+import org.apache.commons.lang.CharEncoding;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
@@ -70,7 +71,7 @@ public class ERXFileUtilities {
 
     private static Charset charset = null;
 
-    static { setDefaultCharset("UTF-8"); }
+    static { setDefaultCharset(CharEncoding.UTF_8); }
 
     //  ===========================================================================
     //  Static Methods
@@ -791,10 +792,10 @@ public class ERXFileUtilities {
             try {
                 // BUGFIX: we didnt use an encoding before, so java tried to guess the encoding. Now some Localizable.strings plists
                 // are encoded in MacRoman whereas others are UTF-16.
-                plist = readPropertyListFromFileInFramework( fileName, aFrameWorkName, languageList, "UTF-16" );
+                plist = readPropertyListFromFileInFramework(fileName, aFrameWorkName, languageList, CharEncoding.UTF_16);
             } catch (IllegalArgumentException e1) {
                 // OK, whatever it is, try to parse it!
-                plist = readPropertyListFromFileInFramework( fileName, aFrameWorkName, languageList, "UTF-8" );
+                plist = readPropertyListFromFileInFramework(fileName, aFrameWorkName, languageList, CharEncoding.UTF_8);
             }
         }
         return plist;

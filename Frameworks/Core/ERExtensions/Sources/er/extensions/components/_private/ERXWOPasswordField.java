@@ -1,5 +1,7 @@
 package er.extensions.components._private;
 
+import org.apache.commons.lang.CharEncoding;
+
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -73,7 +75,7 @@ public class ERXWOPasswordField extends WOInput {
           if (!value.equals(hiddenValue)) {
         	  boolean hashValue = (_hashValue != null && _hashValue.booleanValueInComponent(component));
         	  if (hashValue) {
-    			  value = ERXStringUtilities.md5Hex(value, "UTF-8");
+    			  value = ERXStringUtilities.md5Hex(value, CharEncoding.UTF_8);
         	  }
         	  _value.setValue(value, component);
           }

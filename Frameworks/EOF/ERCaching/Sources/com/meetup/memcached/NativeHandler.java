@@ -18,6 +18,8 @@
 package com.meetup.memcached;
 
 import java.util.Date;
+
+import org.apache.commons.lang.CharEncoding;
 import org.apache.log4j.Logger;
 
 /**
@@ -255,7 +257,7 @@ public class NativeHandler {
 	}
 	
 	protected static byte[] encode( String value ) throws Exception {
-		return value.getBytes( "UTF-8" );
+		return value.getBytes(CharEncoding.UTF_8);
 	}
 	
 	protected static byte[] encode( StringBuffer value ) throws Exception {
@@ -383,7 +385,7 @@ public class NativeHandler {
 	}
 	
 	protected static String decodeString( byte[] b ) throws Exception {
-		return new String( b, "UTF-8" );
+		return new String(b, CharEncoding.UTF_8);
 	}
 	
 	protected static StringBuffer decodeStringBuffer( byte[] b ) throws Exception {
