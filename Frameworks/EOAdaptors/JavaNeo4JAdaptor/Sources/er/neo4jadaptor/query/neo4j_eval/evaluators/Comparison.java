@@ -105,7 +105,7 @@ public class Comparison <T extends PropertyContainer> implements Evaluator<T> {
 				throw new UnsupportedOperationException();
 			}
 			
-			if (comparisonResult == true) {
+			if (comparisonResult) {
 				// terminate early
 				return true;
 			}

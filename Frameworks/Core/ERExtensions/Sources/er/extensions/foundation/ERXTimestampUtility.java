@@ -13,10 +13,11 @@ import com.webobjects.foundation.NSTimeZone;
 import com.webobjects.foundation.NSTimestamp;
 
 /**
- * A simple utility for providing deprecated functionality for NSTimestamps<br />
+ * A simple utility for providing deprecated functionality for NSTimestamps.
  * 
+ * @deprecated use {@link ERXTimestampUtilities} instead
  */
-
+@Deprecated
 public class ERXTimestampUtility {
 
     public static GregorianCalendar calendarForTimestamp(NSTimestamp t) {
