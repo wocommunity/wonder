@@ -54,7 +54,7 @@ public class ERDTabDictionaryComputer extends TabDictionaryComputer implements E
     public ERDTabDictionaryComputer (String key, Object value) { super(key,value); }
 
     /**
-     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This
      * assignment depends upon the context key: "displayPropertyKeys". 
      * This array of keys is used when constructing the 
      * significant keys for the passed in keyPath.

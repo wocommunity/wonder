@@ -32,7 +32,7 @@ public class AjaxResponse extends ERXResponse {
 	 * tag along. For instance, if you have an area at the top of your pages that
 	 * show errors or notifications, you may want all of your ajax responses to have
 	 * a chance to trigger an update of this area, so you could register an 
-	 * AjaxResponseAppender that renders a javascript block that calls 
+	 * {@link er.ajax.AjaxResponseAppender} that renders a javascript block that calls
 	 * MyNotificationsUpdate() only if there are notifications to be shown. Without
 	 * response appenders, you would have to include a check in all of your 
 	 * components to do this. 
@@ -151,7 +151,7 @@ public class AjaxResponse extends ERXResponse {
 	
 	/**
 	 * Convenience method that calls <code>AjaxUtils.appendScriptHeaderIfNecessary</code> with this request. 
-	 * @see AjaxUtils#appendScriptHeaderIfNecessary(WORequest, WOResponse)
+	 * @see er.ajax.AjaxUtils#appendScriptHeaderIfNecessary(WORequest, WOResponse)
 	 */
 	public void appendScriptHeaderIfNecessary() {
 		AjaxUtils.appendScriptHeaderIfNecessary(_request, this);
@@ -159,7 +159,7 @@ public class AjaxResponse extends ERXResponse {
 	
 	/**
 	 * Convenience method that calls <code>AjaxUtils.appendScriptFooterIfNecessary</code> with this request. 
-	 * @see AjaxUtils#appendScriptFooterIfNecessary(WORequest, WOResponse)
+	 * @see er.ajax.AjaxUtils#appendScriptFooterIfNecessary(WORequest, WOResponse)
 	 */
 	public void appendScriptFooterIfNecessary() {
 		AjaxUtils.appendScriptFooterIfNecessary(_request, this);
@@ -167,7 +167,7 @@ public class AjaxResponse extends ERXResponse {
 	
 	/**
 	 * Convenience method that calls <code>AjaxUtils.updateDomElement</code> with this request. 
-	 * @see AjaxUtils#updateDomElement(WOResponse, String, Object, String, String, String)
+	 * @see er.ajax.AjaxUtils#updateDomElement(WOResponse, String, Object, String, String, String)
 	 */
 	public void updateDomElement(String id, Object value, String numberFormat, String dateFormat, String valueWhenEmpty) {
 		AjaxUtils.updateDomElement(this, id, value, numberFormat, dateFormat, valueWhenEmpty);

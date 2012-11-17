@@ -43,7 +43,6 @@ import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation._NSUtilities;
 
 import er.directtoweb.ERD2WContainer;
-import er.directtoweb.ERD2WDirectAction;
 import er.directtoweb.ERDirectToWeb;
 import er.directtoweb.delegates.ERDBranchDelegate;
 import er.directtoweb.delegates.ERDBranchDelegateInterface;
@@ -289,10 +288,10 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     }
 
     /**
-     * Implementation of the {@link ERXComponentActionRedirector.Restorable}
+     * Implementation of the {@link er.extensions.appserver.ERXComponentActionRedirector.Restorable}
      * interface. This implementation creates an URL with the name of the
      * current pageConfiguration as a direct action, which assumes a
-     * {@link ERD2WDirectAction} as the default direct action. Subclasses need
+     * {@link er.directtoweb.ERD2WDirectAction} as the default direct action. Subclasses need
      * to implement more sensible behaviour.
      * 
      * @return url for the current page
@@ -839,7 +838,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     /**
      * Calculates the branch choices for the current page. This method is just a
      * cover for calling the method <code>branchChoicesForContext</code> on
-     * the current {@link ERDBranchDelegate ERDBranchDelegate}.
+     * the current {@link er.directtoweb.delegates.ERDBranchDelegate ERDBranchDelegate}.
      * 
      * @return array of branch choices
      */
@@ -893,7 +892,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     /**
      * The display keys for the current section. You bind to this method.
      * 
-     * @return array of {@link ERD2WContainer} holding the keys for the current
+     * @return array of {@link er.directtoweb.ERD2WContainer} holding the keys for the current
      *         section
      */
     public NSArray currentSectionKeys() {
@@ -914,7 +913,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     /**
      * The array of sections. You bind to this method.
      * 
-     * @return array of arrays of {@link ERD2WContainer} holding the keys.
+     * @return array of arrays of {@link er.directtoweb.ERD2WContainer} holding the keys.
      */
     public NSArray sectionsContents() {
         if (_sectionsContents == null) {
@@ -934,11 +933,11 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     // Display property key extensions (Tabs)
     // **************************************************************************
 
-    /** Holds the array of {@link ERD2WContainer} defining the tabs. */
+    /** Holds the array of {@link er.directtoweb.ERD2WContainer} defining the tabs. */
     private NSArray _tabSectionsContents;
 
     /**
-     * Returns the array of {@link ERD2WContainer} defining the tabs. A tab is a
+     * Returns the array of {@link er.directtoweb.ERD2WContainer} defining the tabs. A tab is a
      * key and an array of sections
      */
     public NSArray<ERD2WContainer> tabSectionsContents() {
@@ -992,7 +991,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     /** Holds the current tab. */
     private ERD2WContainer _currentTab;
 
-    /** Returns the {@link ERD2WContainer} defining the current tab. */
+    /** Returns the {@link er.directtoweb.ERD2WContainer} defining the current tab. */
     public ERD2WContainer currentTab() {
         if (_currentTab == null && tabSectionsContents() != null && tabSectionsContents().count() > 0) {
             //If firstTab is not null, then try to find the tab named firstTab

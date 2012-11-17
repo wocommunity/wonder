@@ -15,7 +15,7 @@ import er.directtoweb.assignments.defaults.ERDDefaultConfigurationNameAssignment
 // MOVEME: ERDConfigurationAssignment
 /**
  * Generated pageConfigurations that will use the tab inspect templates.<br />
- * @deprecated use {@link ERDDefaultConfigurationNameAssignment} with key inspectTabConfigurationName
+ * @deprecated use {@link er.directtoweb.assignments.defaults.ERDDefaultConfigurationNameAssignment} with key inspectTabConfigurationName
  */
 @Deprecated
 public class ERDTabConfigurationAssignment extends ERDDefaultConfigurationNameAssignment {
