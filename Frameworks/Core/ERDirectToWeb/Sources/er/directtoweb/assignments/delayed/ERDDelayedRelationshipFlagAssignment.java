@@ -9,12 +9,10 @@ import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.directtoweb.components.relationships.ERD2WDisplayRelationshipFlag;
-
 /**
  * Creates the needed values to have dymamic values in a list page repetition. 
  * Answers on displayPropertyKeys and displayNameForProperty.
- * @see ERD2WDisplayRelationshipFlag for more info
+ * @see er.directtoweb.components.relationships.ERD2WDisplayRelationshipFlag for more info
  * @author ak 
  *
  */

@@ -22,7 +22,6 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.appserver.ERXApplication;
-import er.extensions.appserver.ERXSession;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXObjectStoreCoordinator;
 import er.extensions.foundation.ERXProperties;
@@ -46,7 +45,7 @@ import er.extensions.foundation.ERXProperties;
  * @property er.extensions.ERXStatisticsStore.milliSeconds.fatal defaults to 5 minutes
  *
  * @author ak
- * @author kieran (Oct 14, 2009) - minor changes to capture thread name in middle of the request (useful for {@link ERXSession#threadName()}}
+ * @author kieran (Oct 14, 2009) - minor changes to capture thread name in middle of the request (useful for {@link er.extensions.appserver.ERXSession#threadName()}}
  */
 public class ERXStatisticsStore extends WOStatisticsStore {
 

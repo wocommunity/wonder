@@ -11,7 +11,7 @@ import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import er.directtoweb.assignments.defaults.ERDDefaultConfigurationNameAssignment;
 
 /**
- * @deprecated use {@link ERDDefaultConfigurationNameAssignment}
+ * @deprecated use {@link er.directtoweb.assignments.defaults.ERDDefaultConfigurationNameAssignment}
  */
 @Deprecated
 public class ERDConfigurationAssignment extends ERDDefaultConfigurationNameAssignment {

@@ -470,7 +470,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
 
     /**
      * Takes the primary key of the object and encrypts it
-     * with the blowfish cipher using {@link ERXCrypto ERXCrypto}.
+     * with the blowfish cipher using {@link er.extensions.crypting.ERXCrypto ERXCrypto}.
      * @return blowfish encrypted primary key
      */
     public abstract String encryptedPrimaryKey();
