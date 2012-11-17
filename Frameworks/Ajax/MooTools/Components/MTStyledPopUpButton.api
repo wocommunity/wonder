@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="MTStyledPopUpButton" wocomponentcontent="true">    <binding name="showText"/>
+        <binding name="showImages"/>
+        <binding name="className"/>
+        <binding name="autoHide"/>
+        <binding name="autoScrollWindow"/>
+        <binding name="animateFade"/>
+        <binding name="fx"/>
+        <binding name="onShow"/>
+        <binding name="onHide"/>
+        <binding name="onAttach"/>
+        <binding name="list"/>
+        <validation message="'list' is a required binding.">
+            <unbound name="list"/>
+        </validation>
+        <binding name="item"/>
+        <validation message="'item' is a required binding.">
+            <unbound name="item"/>
+        </validation>
+        <binding name="displayString"/>
+        <binding name="value"/>
+        <binding name="selection"/>
+        <binding name="name"/>
+        <binding name="disabled"/>
+        <binding name="escapeHTML"/>
+        <binding name="noSelectionString"/>
+    <binding name="id"/>
+    <binding name="useDefaultCss"/>
+    <binding name="onDeattach"/>
+    <binding name="selectedValue"/>
+    </wo>
+</wodefinitions>
