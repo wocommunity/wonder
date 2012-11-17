@@ -5,7 +5,6 @@ import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
-import er.directtoweb.assignments.ERDComputingAssignmentInterface;
 import er.directtoweb.assignments.defaults.ERDDefaultConfigurationNameAssignment;
 import er.extensions.foundation.ERXDictionaryUtilities;
 
@@ -54,7 +53,7 @@ public class ERMDDefaultConfigurationNameAssignment extends ERDDefaultConfigurat
     public ERMDDefaultConfigurationNameAssignment (String key, Object value) { super(key,value); }
 
     /**
-     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This
      * assignment depends upon the context keys: "entity.name" and 
      * "object.entityName". This array of keys is used when constructing the 
      * significant keys for the passed in keyPath.

@@ -168,7 +168,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
 
     /** 
      * registers this observer object for 
-     * {@link ERXLocalizer.LocalizationDidResetNotification} 
+     * {@link er.extensions.localization.ERXLocalizer#LocalizationDidResetNotification}
      */
     private void registerForLocalizationDidResetNotification() {
       NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("localizationDidReset", ERXConstant.NotificationClassArray), ERXLocalizer.LocalizationDidResetNotification, null);
@@ -179,7 +179,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * Method to get the current localizer for this
    * session. If local instance variable is null
    * then a localizer is fetched for the session's
-   * <code>languages</code> array. See {@link ERXLocalizer}
+   * <code>languages</code> array. See {@link er.extensions.localization.ERXLocalizer}
    * for more information about using a localizer.
    * @return the current localizer for this session
    */
@@ -207,7 +207,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * Cover method to set the current localizer
    * to the localizer for that language.
    * <p>
-   * Also updates languages list with the new single language. 
+   * Also updates languages list with the new single language.
    * 
    * @param language to set the current localizer for.
    * @see #language
@@ -265,14 +265,14 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
   /**
    * Returns the NSArray of language names available for  
    * this application. This is simply a cover method of 
-   * {@link ERXLocalizer#availableLanguages}, 
+   * {@link er.extensions.localization.ERXLocalizer#availableLanguages},
    * but will be convenient for binding to dynamic elements 
    * like language selector popup. 
    * 
    * @return   NSArray of language name strings available 
    *           for this application
    * @see      #availableLanguagesForThisSession 
-   * @see      ERXLocalizer#availableLanguages
+   * @see      er.extensions.localization.ERXLocalizer#availableLanguages
    */
   public NSArray availableLanguagesForTheApplication() {
     return ERXLocalizer.availableLanguages();
@@ -284,7 +284,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * The resulting array is an intersect of web browser's 
    * language array ({@link ERXRequest#browserLanguages}) 
    * and localizer's available language array 
-   * ({@link ERXLocalizer#availableLanguages}). 
+   * ({@link er.extensions.localization.ERXLocalizer#availableLanguages}).
    * <p>
    * Note that the order of the resulting language names  
    * is not defined at this moment.
@@ -293,7 +293,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    *           for this particular session
    * @see      #availableLanguagesForTheApplication 
    * @see      ERXRequest#browserLanguages
-   * @see      ERXLocalizer#availableLanguages
+   * @see      er.extensions.localization.ERXLocalizer#availableLanguages
    */
   public NSArray availableLanguagesForThisSession() {
     NSArray browserLanguages = null;
@@ -361,7 +361,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
 
   /**
    * Ensures that the returned editingContext was created with
-   * the {@link ERXEC} factory.
+   * the {@link er.extensions.eof.ERXEC} factory.
    * @return the session's default editing context with
    * 		the default delegate set.
    */

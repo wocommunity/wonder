@@ -13,8 +13,6 @@ import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
-import er.directtoweb.assignments.ERDComputingAssignmentInterface;
-
 /**
  * The delayed non-null conditional is a way to provide a 
  * branching result from a rule resolution. The value of this 
@@ -93,7 +91,7 @@ public class ERDDelayedNonNullConditionalAssignment extends ERDDelayedAssignment
     public ERDDelayedNonNullConditionalAssignment(String key, Object value) { super(key,value); }
 
     /**
-     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This
      * assignment depends upon an array composed of the single value 
      * "nonNullKeyPath" from the dictionary of the value of this assignment. 
      * This array of keys is used when constructing the 
@@ -108,7 +106,7 @@ public class ERDDelayedNonNullConditionalAssignment extends ERDDelayedAssignment
 
     /**
      * Implementation of the abstract method from
-     * {@link ERDDelayedAssignment}. This method is
+     * {@link er.directtoweb.assignments.delayed.ERDDelayedAssignment}. This method is
      * called each time this Assignment is resolved
      * from the rule firing cache. For the non-null
      * conditional the dictionary key 'nonNullKeyPath'

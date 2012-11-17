@@ -59,7 +59,7 @@ public class ERDDelayedKeyValueAssignment extends ERDDelayedAssignment implement
     public ERDDelayedKeyValueAssignment(String key, Object value) { super(key,value); }
 
     /**
-     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This
      * assignment depends upon an array composed of the <code>value</code>
      * of this assignment. This array of keys is used when constructing the 
      * significant keys for the passed in keyPath.

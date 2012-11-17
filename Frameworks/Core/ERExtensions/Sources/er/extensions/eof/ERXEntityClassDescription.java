@@ -690,7 +690,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
      * {@link ERXValidationException} and that is
      * thrown.
      * @param obj enterprise object to be deleted
-     * @throws validation exception
+     * @throws NSValidation.ValidationException validation exception
      */
     public void validateObjectForDelete(EOEnterpriseObject obj) throws NSValidation.ValidationException {
         try {
@@ -752,7 +752,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
      * {@link ERXValidationException} and that is
      * thrown.
      * @param obj enterprise object to be deleted
-     * @throws validation exception
+     * @throws NSValidation.ValidationException validation exception
      */
     public void validateObjectForUpdate(EOEnterpriseObject obj) throws NSValidation.ValidationException {
         try {
@@ -777,7 +777,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
      * {@link ERXValidationException} and that is
      * thrown.
      * @param obj enterprise object to be deleted
-     * @throws validation exception
+     * @throws NSValidation.ValidationException validation exception
      */
     public void validateObjectForInsert(EOEnterpriseObject obj) throws NSValidation.ValidationException {
         try {
@@ -807,7 +807,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
      * @param obj value to be validated
      * @param s property key to validate the value
      *		against.
-     * @throws validation exception
+     * @throws NSValidation.ValidationException validation exception
      */
     public Object validateValueForKey(Object obj, String s) throws NSValidation.ValidationException {
         Object validated = null;
@@ -839,7 +839,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
      * {@link ERXValidationException} and that is
      * thrown. 
      * @param obj enterprise object to be saved
-     * @throws validation exception
+     * @throws NSValidation.ValidationException validation exception
      */
 
     public void validateObjectForSave(EOEnterpriseObject obj) throws NSValidation.ValidationException {
