@@ -341,6 +341,7 @@ public class ERXRequest extends WORequest {
     }
 
     private static class _LanguageComparator extends NSComparator {
+        public _LanguageComparator() {}
 
         private static float quality(String languageString) {
             float result=0f;

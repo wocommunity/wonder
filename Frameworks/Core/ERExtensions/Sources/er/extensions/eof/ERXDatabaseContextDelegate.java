@@ -525,6 +525,7 @@ public class ERXDatabaseContextDelegate {
     }
     
     private class ReentranceProtector {
+    	public ReentranceProtector() {}
     	
     	private NSMutableArray<EODatabaseContext> _accessing = new NSMutableArray<EODatabaseContext>();
     	
