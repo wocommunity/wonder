@@ -1,6 +1,6 @@
 package er.extensions.appserver;
 
-import com.webobjects.appserver._private.WODefaultAdaptor;
+import com.webobjects.appserver._private.WOClassicAdaptor;
 import com.webobjects.foundation.NSDictionary;
 
 /**
@@ -9,7 +9,7 @@ import com.webobjects.foundation.NSDictionary;
  * 
  * @author mschrag
  */
-public class ERXDefaultAdaptor extends WODefaultAdaptor {
+public class ERXDefaultAdaptor extends WOClassicAdaptor {
 	/**
 	 * Constructs an ERXDefaultAdaptor.
 	 * 
