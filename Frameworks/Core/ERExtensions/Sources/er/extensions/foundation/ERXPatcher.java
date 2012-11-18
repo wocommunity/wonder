@@ -373,7 +373,7 @@ public class ERXPatcher {
 
 			public TextField(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_readonly = (WOAssociation) _associations.removeObjectForKey("readonly");
+				_readonly = _associations.removeObjectForKey("readonly");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -415,7 +415,7 @@ public class ERXPatcher {
 
 			public Text(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_readonly = (WOAssociation) _associations.removeObjectForKey("readonly");
+				_readonly = _associations.removeObjectForKey("readonly");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -764,7 +764,7 @@ public class ERXPatcher {
 
 			public HiddenField(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_readonly = (WOAssociation) _associations.removeObjectForKey("readonly");
+				_readonly = _associations.removeObjectForKey("readonly");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -828,7 +828,7 @@ public class ERXPatcher {
 
 			public PasswordField(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_readonly = (WOAssociation) _associations.removeObjectForKey("readonly");
+				_readonly = _associations.removeObjectForKey("readonly");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {

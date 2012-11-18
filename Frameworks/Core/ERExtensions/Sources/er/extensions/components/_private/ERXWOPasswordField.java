@@ -46,9 +46,9 @@ public class ERXWOPasswordField extends WOInput {
     if (_value == null || !_value.isValueSettable()) {
       throw new WODynamicElementCreationException("<ERXWOPasswordField> 'value' attribute not present or is a constant.");
     }
-    _hiddenValue = (WOAssociation) _associations.removeObjectForKey("hiddenValue");
-    _hashValue = (WOAssociation) _associations.removeObjectForKey("hashValue");
-	_readonly = (WOAssociation) _associations.removeObjectForKey("readonly");
+    _hiddenValue = _associations.removeObjectForKey("hiddenValue");
+    _hashValue = _associations.removeObjectForKey("hashValue");
+	_readonly = _associations.removeObjectForKey("readonly");
   }
 
   protected String type() {

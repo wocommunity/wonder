@@ -428,7 +428,7 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
             log.debug("Fetching primary keys.");
             NSArray primaryKeyDictionaries = editingContext().objectsWithFetchSpecification(pkFetchSpec);
 
-            String pkAttributeName = ((EOAttribute)entity.primaryKeyAttributes().lastObject()).name();
+            String pkAttributeName = entity.primaryKeyAttributes().lastObject().name();
             primaryKeys = (NSArray)primaryKeyDictionaries.valueForKey(pkAttributeName);
             if (performDistinctInMemory) {
             	primaryKeys = ERXArrayUtilities.arrayWithoutDuplicates(primaryKeys);

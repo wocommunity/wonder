@@ -245,7 +245,7 @@ public class ERXSQLHelper {
 		
 		NSMutableArray<EOEntity> foreignKeyEntities = entities.mutableClone();
 		for (EOEntity entity : entities) {
-			for (EORelationship relationship : (NSArray<EORelationship>)entity.relationships()) {
+			for (EORelationship relationship : entity.relationships()) {
 				if (!relationship.isToMany()) {
 					EOEntity destinationEntity = relationship.destinationEntity();
 					if (destinationEntity.model() != entity.model()) {

@@ -1,7 +1,5 @@
 package er.coolcomponents;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 

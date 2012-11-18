@@ -39,11 +39,11 @@ public class AjaxFunctionLink extends WOHTMLDynamicElement {
 
 	public AjaxFunctionLink(String aName, NSDictionary associations, WOElement template) {
 		super("a", AjaxFunctionLink.processAssociations(associations), template);
-		_action = (WOAssociation) _associations.removeObjectForKey("action");
-		_updateContainerID = (WOAssociation) _associations.removeObjectForKey("updateContainerID");
-		WOAssociation onclick = (WOAssociation) _associations.objectForKey("onclick");
+		_action = _associations.removeObjectForKey("action");
+		_updateContainerID = _associations.removeObjectForKey("updateContainerID");
+		WOAssociation onclick = _associations.objectForKey("onclick");
 		if (onclick == null) {
-			onclick = (WOAssociation) _associations.objectForKey("onClick");
+			onclick = _associations.objectForKey("onClick");
 		}
 		if (onclick != null && _action != null) {
 			throw new WODynamicElementCreationException("You cannot bind both 'action' and 'onclick' at the same time.");

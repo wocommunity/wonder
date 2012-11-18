@@ -15,7 +15,6 @@ import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSValidation;
 
 import er.extensions.ERXExtensions;
-import er.extensions.crypting.ERXCrypto;
 import er.extensions.foundation.ERXPatcher;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXSelectorUtilities;

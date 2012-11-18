@@ -729,7 +729,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                 } else {
                     EOModel model = _entity.model();
                     if(model == null) {
-                        model = (EOModel)ERXEOAccessUtilities.modelGroup(null).models().lastObject();
+                        model = ERXEOAccessUtilities.modelGroup(null).models().lastObject();
                     }
                     model.addEntity(_entity);
                     log.warn("Added <" + _entity.name() + "> to default model group.");

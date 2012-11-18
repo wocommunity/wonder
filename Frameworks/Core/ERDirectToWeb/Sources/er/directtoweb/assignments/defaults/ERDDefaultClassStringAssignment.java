@@ -8,7 +8,6 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
 import er.directtoweb.assignments.ERDAssignment;
-import er.directtoweb.assignments.ERDComputingAssignmentInterface;
 import er.extensions.foundation.ERXDictionaryUtilities;
 import er.extensions.foundation.ERXStringUtilities;
 

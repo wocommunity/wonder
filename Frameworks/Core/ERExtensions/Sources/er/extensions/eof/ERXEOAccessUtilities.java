@@ -913,7 +913,7 @@ public class ERXEOAccessUtilities {
     		EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
     		EORelationship relationship = entity.relationshipNamed(relKey);
     		if(relationship.sourceAttributes().count() == 1) {
-    			EOAttribute attribute = (EOAttribute) relationship.sourceAttributes().lastObject();
+    			EOAttribute attribute = relationship.sourceAttributes().lastObject();
     			EODatabaseContext context = EOUtilities.databaseContextForModelNamed(ec, entity.model().name());
     			String name = attribute.name();
     			for (Enumeration e = eos.objectEnumerator(); e.hasMoreElements();) {
