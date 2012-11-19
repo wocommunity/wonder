@@ -1205,6 +1205,12 @@ public class ERXEOAccessUtilities {
         return externalNamesForEntity(EOModelGroup.defaultGroup().entityNamed(entityName), includeParentEntities);
     }
 
+    /**
+     * Walks all of the parentEntity relationships to
+     * find the root entity.
+     * @param entity to find the root parent
+     * @return root parent entity
+     */
     public static EOEntity rootEntityForEntity(EOEntity entity) {
         while (entity.parentEntity() != null) {
             entity = entity.parentEntity();
@@ -1212,6 +1218,12 @@ public class ERXEOAccessUtilities {
         return entity;
     }
 
+    /**
+     * Walks all of the parentEntity relationships to
+     * find the root entity.
+     * @param entityName to find the root parent
+     * @return root parent entity
+     */
     public static EOEntity rootEntityForEntityNamed(String entityName) {
         return rootEntityForEntity(EOModelGroup.defaultGroup().entityNamed(entityName));
     }
@@ -2308,8 +2320,11 @@ public class ERXEOAccessUtilities {
 	}
 
 	/**
+	 * Utility method used to find all of the non-abstract sub entities
+	 * for a given entity including itself.
 	 * @param ec editing context
-	 * @param rootEntity
+	 * @param rootEntity to walk all of the <code>subEntities</code>
+	 *            relationships
 	 * @return a list of all concrete entities that inherit from rootEntity,
 	 *         including rootEntity itself if it is concrete.
 	 */

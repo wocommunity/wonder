@@ -1267,7 +1267,7 @@ public class ERXSQLHelper {
 
 		int maxPerQuery = maximumElementPerInClause(e.entity());
 
-		// Need to wrap this SQL in parens if there are multiple grougps
+		// Need to wrap this SQL in parenthesis if there are multiple groups
 		if (valueArray.count() > maxPerQuery) {
 			sb.append(" ( ");
 		}

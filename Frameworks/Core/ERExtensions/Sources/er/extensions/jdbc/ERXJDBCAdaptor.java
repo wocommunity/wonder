@@ -205,6 +205,7 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 		/**
 		 * Overridden to post a notification when the operations were performed.
 		 */
+		@Override
 		public void performAdaptorOperations(NSArray ops) {
 			super.performAdaptorOperations(ops);
 			ERXAdaptorOperationWrapper.adaptorOperationsDidPerform(ops);
