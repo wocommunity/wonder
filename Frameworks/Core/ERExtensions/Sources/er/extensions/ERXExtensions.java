@@ -20,6 +20,7 @@ import java.util.Random;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
@@ -689,7 +690,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param v1 first object
      * @param v2 second object
      * @return <code>true</code> if they are equal, <code>false</code> if not
+     * @deprecated use {@link ObjectUtils#equals(Object, Object)} instead
      */
+    @Deprecated
     public static boolean safeEquals(Object v1, Object v2) {
         return v1==v2 || (v1!=null && v2!=null && v1.equals(v2));
     }
@@ -704,7 +707,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param v1 first object
      * @param v2 second object
      * @return <code>true</code> if they are not equal, <code>false</code> if they are
+     * @deprecated user {@link ObjectUtils#notEqual(Object, Object)} instead
      */
+    @Deprecated
     public static boolean safeDifferent(Object v1, Object v2) {
         return v1 != v2 && (v1 == null || v2 == null || !v1.equals(v2));
     }
