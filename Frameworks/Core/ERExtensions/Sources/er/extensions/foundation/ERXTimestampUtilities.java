@@ -9,11 +9,14 @@ import java.util.GregorianCalendar;
 import com.webobjects.foundation.NSComparator;
 import com.webobjects.foundation.NSTimeZone;
 import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSTimestampFormatter;
 
 /**
  * Collection of {@link com.webobjects.foundation.NSTimestamp NSTimestamp} utilities.
  */
 public class ERXTimestampUtilities extends Object {
+    /** caches date formatter the first time it is used */
+    private static NSTimestampFormatter _gregorianDateFormatterForJavaDate;
 
     /**
      * Calculates a timestamp given a string. Currently supports
@@ -524,5 +527,17 @@ public class ERXTimestampUtilities extends Object {
 
     public static int yearOfCommonEra(NSTimestamp t) {
         return calendarForTimestamp(t).get(Calendar.YEAR);
+    }
+
+    /**
+     * Utility method to return a standard timestamp
+     * formatter for the default string representation
+     * of java dates.
+     * @return timestamp formatter for java dates.
+     */
+    public static NSTimestampFormatter gregorianDateFormatterForJavaDate() {
+        if (_gregorianDateFormatterForJavaDate == null)
+            _gregorianDateFormatterForJavaDate = new NSTimestampFormatter("%a %b %d %H:%M:%S %Z %Y");
+        return _gregorianDateFormatterForJavaDate;
     }
 }

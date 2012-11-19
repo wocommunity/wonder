@@ -2315,14 +2315,38 @@ public class ERXEOAccessUtilities {
 	 */
 	public static NSArray<EOEntity> entityHierarchyForEntity(EOEditingContext ec, EOEntity rootEntity) {
 		NSMutableArray<EOEntity> entities = new NSMutableArray<EOEntity>();
-	
-		if (!rootEntity.isAbstractEntity()) {
-			entities.add(rootEntity);
+
+		if (rootEntity != null) {
+			if (!rootEntity.isAbstractEntity()) {
+				entities.add(rootEntity);
+			}
+			for (EOEntity subEntity : rootEntity.subEntities()) {
+				entities.addAll(allSubEntitiesForEntity(subEntity, false));
+			}
 		}
-		@SuppressWarnings("unchecked")
-		NSArray<EOEntity> subEntities = rootEntity.subEntities();
-		for (EOEntity subEntity : subEntities) {
-			entities.addAll(entityHierarchyForEntity(ec, subEntity));
+		return entities.immutableClone();
+	}
+
+	/**
+	 * Utility method used to find all of the sub entities
+	 * for a given entity.
+	 * @param rootEntity to walk all of the <code>subEntities</code>
+	 *            relationships
+	 * @param includeAbstracts determines if abstract entities should
+	 *            be included in the returned array
+	 * @return all of the sub-entities for a given entity.
+	 */
+	public static NSArray<EOEntity> allSubEntitiesForEntity(EOEntity rootEntity, boolean includeAbstracts) {
+		NSMutableArray<EOEntity> entities = new NSMutableArray<EOEntity>();
+		if (rootEntity != null) {
+			for (EOEntity subEntity : rootEntity.subEntities()) {
+				if (!subEntity.isAbstractEntity() || includeAbstracts) {
+					entities.addObject(subEntity);
+				}
+				if (subEntity.subEntities().count() > 0) {
+					entities.addAll(allSubEntitiesForEntity(subEntity, includeAbstracts));
+				}
+			}
 		}
 		return entities.immutableClone();
 	}
