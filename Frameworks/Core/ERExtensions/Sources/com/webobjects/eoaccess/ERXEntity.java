@@ -8,8 +8,12 @@ import java.util.regex.Pattern;
 
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOKeyGlobalID;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+
+import er.extensions.eof.ERXEOAccessUtilities;
 
 /**
  * ERXEntity provides a basic subclass of EOEntity providing
@@ -101,5 +105,28 @@ public class ERXEntity extends EOEntity {
 	@Override
 	protected EOKeyGlobalID _globalIDWithoutTypeCoercion(Object[] values) {
 		return ERXSingleValueID.globalIDWithEntityName(name(), values);
+	}
+
+	/**
+	 * Registers all relationships of subentities as hidden relationships. This enables you
+	 * to create qualifiers on a parent entity that includes relationships that are only
+	 * defined in a subentity.
+	 * 
+	 * @see #_hiddenRelationships()
+	 */
+	public void updateHiddenRelationshipsForInheritance() {
+		if (!subEntities().isEmpty()) {
+			NSMutableArray<EORelationship> hiddenRelationships = _hiddenRelationships();
+			synchronized (hiddenRelationships) {
+				NSArray<EOEntity> subEntities = ERXEOAccessUtilities.allSubEntitiesForEntity(this, false);
+				for (EOEntity subEntity : subEntities) {
+					for (EORelationship relationship : subEntity.relationships()) {
+						if (!hiddenRelationships.contains(relationship)) {
+							hiddenRelationships.add(relationship);
+						}
+					}
+				}
+			}
+		}
 	}
 }
