@@ -117,7 +117,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 					_requestThreads.remove(Thread.currentThread());
 				}
 				long currentTime = System.currentTimeMillis();
-				if(currentTime - _lastLog > 10000) {
+				if(currentTime - _lastLog < 10000) {
 					return;
 				}
 				_lastLog = currentTime;
