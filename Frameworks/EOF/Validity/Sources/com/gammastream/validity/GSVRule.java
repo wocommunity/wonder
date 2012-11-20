@@ -14,7 +14,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  *	@author GammaStream Technologies, Inc.
  */
 
-public final class GSVRule extends Object implements WOXMLCoding {
+public final class GSVRule implements WOXMLCoding {
 
     //definitions
     private String ruleName = null;

@@ -39,7 +39,7 @@ import er.extensions.foundation.ERXProperties;
  * 
  * @author ishimoto
  */
-public abstract class ERXHttpDataObjectBase extends Object {
+public abstract class ERXHttpDataObjectBase {
 
   protected static final Logger log = Logger.getLogger(ERXHttpDataObjectBase.class);
 

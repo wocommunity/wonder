@@ -14,7 +14,7 @@ import javax.mail.MessagingException;
 import javax.mail.AuthenticationFailedException;
 import javax.mail.FolderNotFoundException;
 
-public class ERIMAP extends Object {
+public class ERIMAP {
 
 	private IMAPStore imapStore;
 	

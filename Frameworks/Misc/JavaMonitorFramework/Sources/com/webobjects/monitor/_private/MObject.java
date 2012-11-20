@@ -19,7 +19,7 @@ import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation._NSThreadsafeMutableDictionary;
 
-public class MObject extends Object implements NSKeyValueCoding {
+public class MObject implements NSKeyValueCoding {
 
     /********** Useful Statics **********/
     public static NSArray loadSchedulerArray = new NSArray <Object>(new Object[]{"Default" , "Round Robin" , "Random" , "Load Average", "Custom"});

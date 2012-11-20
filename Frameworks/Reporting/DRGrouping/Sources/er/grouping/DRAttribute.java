@@ -18,7 +18,7 @@ import com.webobjects.foundation.*;
  * @author david neumann
  *
  */
-public class DRAttribute extends Object  {
+public class DRAttribute {
     
     protected String _keyPath;
     protected String _format;

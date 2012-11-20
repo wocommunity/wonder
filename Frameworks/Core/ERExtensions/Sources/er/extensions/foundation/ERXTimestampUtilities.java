@@ -14,7 +14,7 @@ import com.webobjects.foundation.NSTimestampFormatter;
 /**
  * Collection of {@link com.webobjects.foundation.NSTimestamp NSTimestamp} utilities.
  */
-public class ERXTimestampUtilities extends Object {
+public class ERXTimestampUtilities {
     /** caches date formatter the first time it is used */
     private static NSTimestampFormatter _gregorianDateFormatterForJavaDate;
 

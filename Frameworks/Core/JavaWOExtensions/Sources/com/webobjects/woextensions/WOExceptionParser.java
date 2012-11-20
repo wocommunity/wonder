@@ -29,7 +29,7 @@ import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
-public class WOExceptionParser extends Object {
+public class WOExceptionParser {
     protected NSMutableArray _stackTrace;
     protected Throwable _exception;
     protected String _message;

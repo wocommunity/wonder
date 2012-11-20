@@ -23,7 +23,7 @@ import com.webobjects.foundation.NSValidation;
  *
  *	@author GammaStream Technologies, Inc.
  */
-public final class GSVEngine extends Object {
+public final class GSVEngine {
 
     /**********************************  STATIC  **********************************/
     
