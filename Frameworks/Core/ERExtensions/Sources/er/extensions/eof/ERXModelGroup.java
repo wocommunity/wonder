@@ -136,7 +136,7 @@ public class ERXModelGroup extends EOModelGroup {
 	/** logging support */
 	public static final Logger log = Logger.getLogger(ERXModelGroup.class);
 	
-	private Hashtable cache;
+	private Hashtable<EOEntity, Integer> cache;
 
 	/**
 	 * Key for languages, can be either in properties or in the model object's user info.
@@ -164,7 +164,7 @@ public class ERXModelGroup extends EOModelGroup {
 	 * Default public constructor
 	 */
 	public ERXModelGroup() {
-		cache = new Hashtable();
+		cache = new Hashtable<EOEntity, Integer>();
 	}
 
 	/**
@@ -616,7 +616,7 @@ public class ERXModelGroup extends EOModelGroup {
 	 * @return either the userInfo.entityCode or 0 if no entry could be found
 	 */
 	public int entityCode(EOEntity entity) {
-		Integer cachedValue = (Integer) cache.get(entity);
+		Integer cachedValue = cache.get(entity);
 		if (cachedValue == null) {
 			NSDictionary d = entity.userInfo();
 			if (d == null)
