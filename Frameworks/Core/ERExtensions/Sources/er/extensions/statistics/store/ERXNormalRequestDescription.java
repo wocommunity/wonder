@@ -1,12 +1,12 @@
 package er.extensions.statistics.store;
 
-public class NormalRequestDescription implements RequestDescription {
+public class ERXNormalRequestDescription implements IERXRequestDescription {
 
     private final String componentName;
     private final String requestHandler;
     private final String additionalInfo;
 
-    public NormalRequestDescription(String componentName, String requestHandler, String additionalInfo) {
+    public ERXNormalRequestDescription(String componentName, String requestHandler, String additionalInfo) {
         this.componentName = componentName;
         this.requestHandler = requestHandler;
         this.additionalInfo = additionalInfo;

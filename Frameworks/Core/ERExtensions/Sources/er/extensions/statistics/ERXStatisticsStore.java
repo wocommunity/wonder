@@ -1,18 +1,35 @@
 package er.extensions.statistics;
 
-import com.webobjects.appserver.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.WeakHashMap;
+
+import org.apache.log4j.Logger;
+
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOSession;
+import com.webobjects.appserver.WOStatisticsStore;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+
 import er.extensions.appserver.ERXApplication;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXObjectStoreCoordinator;
 import er.extensions.foundation.ERXProperties;
-import er.extensions.statistics.store.*;
-import org.apache.log4j.Logger;
-
-import java.util.*;
+import er.extensions.statistics.store.ERXDumbStatisticsStoreListener;
+import er.extensions.statistics.store.IERXStatisticsStoreListener;
+import er.extensions.statistics.store.ERXEmptyRequestDescription;
+import er.extensions.statistics.store.ERXNormalRequestDescription;
+import er.extensions.statistics.store.IERXRequestDescription;
 
 /**
  * Enhances the normal stats store with a bunch of useful things which get
@@ -45,10 +62,10 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 		return _timer;
 	}
 
-    private final ERXStatisticsStoreListener listener;
+    private final IERXStatisticsStoreListener listener;
 
     public ERXStatisticsStore() {
-        listener = new DumbERXStatisticsStoreListener();
+        listener = new ERXDumbStatisticsStoreListener();
     }
 
     /**
@@ -57,7 +74,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
      * 
      * @param listener a customer listener to do something 'special' when requests are slow
      */
-    public ERXStatisticsStore(ERXStatisticsStoreListener listener) {
+    public ERXStatisticsStore(IERXStatisticsStoreListener listener) {
         this.listener = listener;
     }
 
@@ -117,7 +134,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 					_lastLog = currentTime;
 				}
 			
-                RequestDescription requestDescription = descriptionObjectForContext(aContext, aString);
+                IERXRequestDescription requestDescription = descriptionObjectForContext(aContext, aString);
                 listener.log(requestTime, requestDescription);
 				if (requestTime > _maximumRequestFatalTime) {
 					log.fatal("Request did take too long : " + requestTime + "ms request was: " + requestDescription + trace);
@@ -221,7 +238,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 			return descriptionObjectForContext(aContext, string).toString();
 		}
 
-        public RequestDescription descriptionObjectForContext(WOContext aContext, String string) {
+        public IERXRequestDescription descriptionObjectForContext(WOContext aContext, String string) {
             if (aContext != null) {
                 try {
                     WOComponent component = aContext.page();
@@ -232,13 +249,13 @@ public class ERXStatisticsStore extends WOStatisticsStore {
                     if (!requestHandler.equals("wo")) {
                         additionalInfo = additionalInfo + aContext.request().uri();
                     }
-                    return new NormalRequestDescription(componentName, requestHandler, additionalInfo);
+                    return new ERXNormalRequestDescription(componentName, requestHandler, additionalInfo);
                 }
                 catch (RuntimeException e) {
                     log.error("Cannot get context description since received exception " + e, e);
                 }
             }
-            return new EmptyRequestDescription(string);
+            return new ERXEmptyRequestDescription(string);
         }
 
 
