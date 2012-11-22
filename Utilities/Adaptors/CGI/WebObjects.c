@@ -52,8 +52,10 @@ and limitations under the License.
 #include <signal.h>
 #else
 #include <winsock.h>
+#if !defined(MINGW64)
 #include <winnt-pdo.h>
-#include <io.h> /* setmode() */
+#endif
+#include <io.h>	/* setmode() */
 #include <fcntl.h>
 #endif
 

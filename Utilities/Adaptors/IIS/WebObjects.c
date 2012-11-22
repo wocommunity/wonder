@@ -31,6 +31,10 @@ and limitations under the License.
  All the decoded bits will already be in the headers.
  end client certificate support **/
 
+#if defined(MINGW64)
+#define MS_BOOL WINBOOL
+#endif
+
 #include "config.h"
 #include "womalloc.h"
 #include "request.h"
