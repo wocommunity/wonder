@@ -6,23 +6,74 @@
 //
 package er.extensions.eof;
 
-import com.webobjects.appserver.WOSession;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
-import com.webobjects.jdbcadaptor.JDBCPlugIn;
-import er.extensions.appserver.ERXSession;
-import er.extensions.eof.listener.ERXEOExecutionListener;
-import er.extensions.eof.listener.ERXEOExecutionListenerDumbImpl;
-import er.extensions.foundation.*;
-import er.extensions.jdbc.ERXSQLHelper;
-import er.extensions.statistics.ERXStats;
-import er.extensions.statistics.ERXStats.Group;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
+import com.webobjects.appserver.WOSession;
+import com.webobjects.eoaccess.EOAdaptorChannel;
+import com.webobjects.eoaccess.EOAdaptorOperation;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EODatabase;
+import com.webobjects.eoaccess.EODatabaseChannel;
+import com.webobjects.eoaccess.EODatabaseContext;
+import com.webobjects.eoaccess.EODatabaseOperation;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOEntityClassDescription;
+import com.webobjects.eoaccess.EOGeneralAdaptorException;
+import com.webobjects.eoaccess.EOJoin;
+import com.webobjects.eoaccess.EOModel;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EOObjectNotAvailableException;
+import com.webobjects.eoaccess.EOProperty;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eoaccess.EOSQLExpression;
+import com.webobjects.eoaccess.EOSQLExpressionFactory;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOAndQualifier;
+import com.webobjects.eocontrol.EOClassDescription;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOFaultHandler;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOGlobalID;
+import com.webobjects.eocontrol.EOKeyGlobalID;
+import com.webobjects.eocontrol.EOKeyValueQualifier;
+import com.webobjects.eocontrol.EOObjectStoreCoordinator;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSData;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSSet;
+import com.webobjects.foundation._NSDelegate;
+import com.webobjects.jdbcadaptor.JDBCPlugIn;
+
+import er.extensions.appserver.ERXSession;
+import er.extensions.eof.listener.ERXEOExecutionListenerDumbImpl;
+import er.extensions.eof.listener.IERXEOExecutionListener;
+import er.extensions.foundation.ERXArrayUtilities;
+import er.extensions.foundation.ERXDictionaryUtilities;
+import er.extensions.foundation.ERXProperties;
+import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.foundation.ERXThreadStorage;
+import er.extensions.foundation.ERXUtilities;
+import er.extensions.foundation.ERXValueUtilities;
+import er.extensions.jdbc.ERXSQLHelper;
+import er.extensions.statistics.ERXStats;
+import er.extensions.statistics.ERXStats.Group;
 
 /**
  * Collection of EOAccess related utilities.
@@ -36,9 +87,9 @@ public class ERXEOAccessUtilities {
     /** SQL logger */
     private static Logger sqlLoggingLogger = null;
 
-    private static final AtomicReference<ERXEOExecutionListener> listener = new AtomicReference<ERXEOExecutionListener>(new ERXEOExecutionListenerDumbImpl());
+    private static final AtomicReference<IERXEOExecutionListener> listener = new AtomicReference<IERXEOExecutionListener>(new ERXEOExecutionListenerDumbImpl());
 
-    public static void setListener(ERXEOExecutionListener aListener) {
+    public static void setListener(IERXEOExecutionListener aListener) {
         listener.set(aListener);
     }
 
