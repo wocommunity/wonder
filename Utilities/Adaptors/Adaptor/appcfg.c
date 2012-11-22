@@ -63,7 +63,7 @@ int gethostname(char *name, int namelen);
 
 #if	defined(WIN32)
 #ifndef _MSC_VER // SWK old WO4.5 headerfile
-#if !defined(MINGW64)
+#if !defined(MINGW64) && !defined(MINGW32)
 #include <winnt-pdo.h>
 #endif
 #endif

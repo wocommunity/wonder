@@ -31,7 +31,7 @@ and limitations under the License.
  All the decoded bits will already be in the headers.
  end client certificate support **/
 
-#if defined(MINGW64)
+#if defined(MINGW64) || defined(MINGW32)
 #define MS_BOOL WINBOOL
 #endif
 
@@ -110,7 +110,7 @@ MS_BOOL WINAPI DllMain( HANDLE hinst, ULONG reason, LPVOID ptr)
    return TRUE;
 }
 
-__declspec(dllexport) MS_BOOL GetExtensionVersion (HSE_VERSION_INFO *pVer)
+__declspec(dllexport) MS_BOOL __stdcall GetExtensionVersion (HSE_VERSION_INFO *pVer)
 {
    pVer->dwExtensionVersion = CURRENT_WOF_VERSION_MAJOR;
    pVer->dwExtensionVersion = (pVer->dwExtensionVersion << 16 ) | CURRENT_WOF_VERSION_MINOR;
@@ -584,7 +584,7 @@ static int readContentData(HTTPRequest *req, void *dataBuffer, int dataSize, int
 /*
  *	the thing that gets called...
  */
-__declspec(dllexport) DWORD HttpExtensionProc(EXTENSION_CONTROL_BLOCK *p)
+__declspec(dllexport) DWORD __stdcall HttpExtensionProc(EXTENSION_CONTROL_BLOCK *p)
 {
    HTTPRequest *req;
    HTTPResponse *resp = NULL;
