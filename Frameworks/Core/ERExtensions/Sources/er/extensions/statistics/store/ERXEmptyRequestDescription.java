@@ -1,11 +1,11 @@
 package er.extensions.statistics.store;
 
-public class EmptyRequestDescription implements RequestDescription {
+public class ERXEmptyRequestDescription implements IERXRequestDescription {
 
     public static final String ERROR_STRING = "Error-during-context-description";
     private String descriptionString = ERROR_STRING;
 
-    public EmptyRequestDescription(String descriptionString) {
+    public ERXEmptyRequestDescription(String descriptionString) {
         if (descriptionString != null) {
             this.descriptionString = descriptionString;
         }

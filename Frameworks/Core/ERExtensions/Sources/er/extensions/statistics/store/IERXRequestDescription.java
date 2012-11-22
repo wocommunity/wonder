@@ -1,6 +1,6 @@
 package er.extensions.statistics.store;
 
-public interface RequestDescription {
+public interface IERXRequestDescription {
 
     public String getComponentName();
 
