@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -61,6 +62,8 @@ import com.webobjects.foundation._NSDelegate;
 import com.webobjects.jdbcadaptor.JDBCPlugIn;
 
 import er.extensions.appserver.ERXSession;
+import er.extensions.eof.listener.ERXEOExecutionListenerDumbImpl;
+import er.extensions.eof.listener.IERXEOExecutionListener;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXDictionaryUtilities;
 import er.extensions.foundation.ERXProperties;
@@ -83,6 +86,12 @@ public class ERXEOAccessUtilities {
     
     /** SQL logger */
     private static Logger sqlLoggingLogger = null;
+
+    private static final AtomicReference<IERXEOExecutionListener> listener = new AtomicReference<IERXEOExecutionListener>(new ERXEOExecutionListenerDumbImpl());
+
+    public static void setListener(IERXEOExecutionListener aListener) {
+        listener.set(aListener);
+    }
 
     /**
      * Finds an entity that is contained in a string. This is used a lot in
@@ -1260,6 +1269,7 @@ public class ERXEOAccessUtilities {
                	statement = statement.replaceAll("((t0|T0)\\.[a-zA-Z0-9_]+\\,\\s*)*(t0|T0)\\.[a-zA-Z0-9_\\.]+\\s+FROM\\s+", "t0.* FROM ");
             	ERXStats.addDurationForKey(millisecondsNeeded, Group.SQL, entityName + ": " +statement);
             }
+            listener.get().log(millisecondsNeeded, entityName);
             if (needsLog) {
                 String logString = createLogString(channel, expression, millisecondsNeeded);
         		if (logString.length() > maxLength) {
