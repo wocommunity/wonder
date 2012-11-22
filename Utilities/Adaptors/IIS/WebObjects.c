@@ -31,7 +31,7 @@ and limitations under the License.
  All the decoded bits will already be in the headers.
  end client certificate support **/
 
-#if defined(MINGW64) || defined(MINGW32)
+#if defined(MINGW)
 #define MS_BOOL WINBOOL
 #endif
 

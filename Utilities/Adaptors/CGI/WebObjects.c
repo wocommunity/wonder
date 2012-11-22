@@ -52,7 +52,7 @@ and limitations under the License.
 #include <signal.h>
 #else
 #include <winsock.h>
-#if !defined(MINGW64) && !defined(MINGW32)
+#if !defined(MINGW)
 #include <winnt-pdo.h>
 #endif
 #include <io.h>	/* setmode() */
