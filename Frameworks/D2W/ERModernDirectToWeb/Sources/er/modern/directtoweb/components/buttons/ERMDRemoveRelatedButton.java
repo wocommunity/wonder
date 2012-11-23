@@ -52,7 +52,6 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
 		public static final String classForRemoveDialogButton = "classForRemoveDialogButton";
 	}
 	
-	private Boolean _showDeleteButton;
 	private Boolean _showRemoveButton;
 	private String _deleteButtonLabel;
 	private String _removeButtonClass;
@@ -208,10 +207,7 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
      * The delete button is only shown if isEntityDeletable returns true
      */
     public Boolean showDeleteButton() {
-    	if (_showDeleteButton == null) {
-    		_showDeleteButton = new Boolean(canDelete() && ERXValueUtilities.booleanValue(valueForBinding("isEntityDeletable")));
-    	}
-    	return _showDeleteButton;
+    	return new Boolean(canDelete() && ERXValueUtilities.booleanValue(valueForBinding("isEntityDeletable")));
     }
     
     /**
