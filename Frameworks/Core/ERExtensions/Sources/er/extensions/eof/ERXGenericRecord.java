@@ -1060,7 +1060,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 */
 	@Override
 	public Object handleQueryWithUnboundKey(String key) {
-        if (!isDeletedEO()) {
+        if (!isDeletedEO() && editingContext() != null) {
             NSDictionary pkDict = EOUtilities.primaryKeyForObject(editingContext(), this);
             if (pkDict == null) {
                 // This will be the case for new unsaved objects, so just
