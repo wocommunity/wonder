@@ -62,8 +62,7 @@ public abstract class ERXShutdownHook extends Thread {
 	
 	/**
 	 * Call this in your app constructor if you have no other shutdown hooks. If you don't call
-	 * anything, this class will not be loaded at all, thus the master shutdown hook in the
-	 * static block above will not work.
+	 * anything, this class will not be loaded at all and won't work.
 	 * 
 	 * {@link ERXApplication} calls this, so no need to do this if you're extending that.
 	 */
