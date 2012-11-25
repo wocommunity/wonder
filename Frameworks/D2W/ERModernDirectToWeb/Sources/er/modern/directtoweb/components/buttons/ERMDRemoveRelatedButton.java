@@ -77,7 +77,8 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
      */
     public WOActionResults removeAction() {
     	WOActionResults result = null;
-    	dataSource().deleteObject(object());
+    	dataSource().deleteObject(object());    	
+    	d2wContext().takeValueForKey(null, ERMDDeleteButton.Keys.objectPendingDeletion);
     	postDeleteNotification();
     	return result;
     }
