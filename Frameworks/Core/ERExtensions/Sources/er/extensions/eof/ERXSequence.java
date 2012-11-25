@@ -165,7 +165,7 @@ public class ERXSequence {
     		
     			pk = resultSet.getLong(VALUE_COLUMN_NAME);
 				String updateStatement = _factory.expressionForEntity(null).assembleUpdateStatementWithRow(null, null, tableList, updateList, whereClause);
-    			con.createStatement().executeQuery(updateStatement);
+    			con.createStatement().executeUpdate(updateStatement);
     		} else {
     			pk = createRow(con, increment);
     		}
