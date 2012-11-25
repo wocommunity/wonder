@@ -138,6 +138,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	protected boolean _rowFlip = false;
 
 	/** Returns the display group, creating one if there is none present. */
+	@Override
 	public WODisplayGroup displayGroup() {
 		if (_displayGroup == null) {
 			createDisplayGroup();
@@ -192,6 +193,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	 * Checks if the entity is read only, meaning that you can't edit it's
 	 * objects.
 	 */
+	@Override
 	public boolean isEntityReadOnly() {
 		boolean flag = super.isEntityReadOnly();
 		flag = !ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("isEntityEditable"), !flag);
@@ -199,6 +201,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 		return flag;
 	}
 
+	@Override
 	public boolean isEntityEditable() {
 		return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("isEntityEditable"), false);
 	}
@@ -251,6 +254,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	}
 
 	/** The currently selected object. */
+	@Override
 	public EOEnterpriseObject selectedObject() {
 		return (EOEnterpriseObject) displayGroup().selectedObject();
 	}
@@ -259,6 +263,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	 * Sets currently selected object. Pushes the value to the display group,
 	 * clearing the selection if needed.
 	 */
+	@Override
 	public void setSelectedObject(EOEnterpriseObject eo) {
 		if (eo != null)
 			displayGroup().selectObject(eo);
@@ -301,7 +306,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	}
 
 	/** * end of reimplementation */
-
+	@Override
 	public String urlForCurrentState() {
 		return context().directActionURLForActionNamed(d2wContext().dynamicPage(), null).replaceAll("&amp;", "&");
 	}
@@ -340,6 +345,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 
 	// This will allow d2w pages to be listed on a per configuration basis in
 	// stats collecting.
+	@Override
 	public String descriptionForResponse(WOResponse aResponse, WOContext aContext) {
 		String descriptionForResponse = (String) d2wContext().valueForKey("pageConfiguration");
 		/*
@@ -394,7 +400,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	 * @param sortKey the sort key to validate
 	 * @return true if the sort key is valid, false if not
 	 */
-	protected boolean isValidSortKey(NSArray displayPropertyKeys, String sortKey) {
+	protected boolean isValidSortKey(NSArray<String> displayPropertyKeys, String sortKey) {
 	  boolean validSortOrdering = false;
 	  try {
 	    if (displayPropertyKeys.containsObject(sortKey) || entity().anyAttributeNamed(sortKey) != null || ERXEOAccessUtilities.attributePathForKeyPath(entity(), sortKey).count() > 0) {
@@ -408,13 +414,13 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	  
 	  if (!validSortOrdering) {
 	    log.warn("Sort key '" + sortKey + "' is not in display keys, attributes or non-flattened key paths for the entity '" + entity().name() + "'.");
-	    validSortOrdering = false;
+		    validSortOrdering = false;
+		  }
+		  return validSortOrdering;
 	  }
-	  return validSortOrdering;
-  }
 
 	@SuppressWarnings("unchecked")
-  public NSArray<EOSortOrdering> sortOrderings() {
+	public NSArray<EOSortOrdering> sortOrderings() {
 		NSArray<EOSortOrdering> sortOrderings = null;
 		if (userPreferencesCanSpecifySorting()) {
 			sortOrderings = (NSArray<EOSortOrdering>) userPreferencesValueForPageConfigurationKey("sortOrdering");
@@ -449,6 +455,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 		return null;
 	}
 
+	@Override
 	public void takeValuesFromRequest(WORequest r, WOContext c) {
 		setupPhase();
 		super.takeValuesFromRequest(r, c);
@@ -482,12 +489,14 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 		}
 	}
 	
+	@Override
 	public WOActionResults invokeAction(WORequest r, WOContext c) {
 		setupPhase();
 		fetchIfNecessary();
 		return super.invokeAction(r, c);
 	}
 
+	@Override
 	public void appendToResponse(WOResponse r, WOContext c) {
 		setupPhase();
 		_rowFlip = true;
@@ -502,6 +511,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 
 	protected Object dataSourceState;
 
+	@Override
 	public void setDataSource(EODataSource eodatasource) {
 		EODatabaseDataSource ds = (eodatasource instanceof EODatabaseDataSource) ? (EODatabaseDataSource) eodatasource : null;
 		Object newDataSourceState = null;
@@ -670,6 +680,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	 * Should we show the cancel button? It's only visible when we have a
 	 * nextPage set up.
 	 */
+	@Override
 	public boolean showCancel() {
 		return nextPage() != null;
 	}

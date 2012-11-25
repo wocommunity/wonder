@@ -87,7 +87,7 @@ public class ERXIFrame extends WOHTMLDynamicElement {
 			src = (String) _src.valueInComponent(component);
 		}
 		else {
-			src = (String) context.componentActionURL();
+			src = context.componentActionURL();
 		}
 		response.appendContentString(" src=\"");
     	response.appendContentHTMLAttributeValue(src);

@@ -22,10 +22,14 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.appserver.ERXApplication;
-import er.extensions.appserver.ERXSession;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXObjectStoreCoordinator;
 import er.extensions.foundation.ERXProperties;
+import er.extensions.statistics.store.ERXDumbStatisticsStoreListener;
+import er.extensions.statistics.store.IERXStatisticsStoreListener;
+import er.extensions.statistics.store.ERXEmptyRequestDescription;
+import er.extensions.statistics.store.ERXNormalRequestDescription;
+import er.extensions.statistics.store.IERXRequestDescription;
 
 /**
  * Enhances the normal stats store with a bunch of useful things which get
@@ -46,7 +50,7 @@ import er.extensions.foundation.ERXProperties;
  * @property er.extensions.ERXStatisticsStore.milliSeconds.fatal defaults to 5 minutes
  *
  * @author ak
- * @author kieran (Oct 14, 2009) - minor changes to capture thread name in middle of the request (useful for {@link ERXSession#threadName()}}
+ * @author kieran (Oct 14, 2009) - minor changes to capture thread name in middle of the request (useful for {@link er.extensions.appserver.ERXSession#threadName()}}
  */
 public class ERXStatisticsStore extends WOStatisticsStore {
 
@@ -58,7 +62,23 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 		return _timer;
 	}
 
-	/**
+    private final IERXStatisticsStoreListener listener;
+
+    public ERXStatisticsStore() {
+        listener = new ERXDumbStatisticsStoreListener();
+    }
+
+    /**
+     * Create a statistics store with a custom listener. For example this listener might
+     * notify an external system when a response is very slow in coming.
+     * 
+     * @param listener a customer listener to do something 'special' when requests are slow
+     */
+    public ERXStatisticsStore(IERXStatisticsStoreListener listener) {
+        this.listener = listener;
+    }
+
+    /**
 	 * Thread that checks each second for running requests and makes a snapshot
 	 * after a certain amount of time has expired.
 	 * 
@@ -102,36 +122,27 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 				if (hasTimerStarted()) {
 					requestTime = System.currentTimeMillis() - time();
 				}
-				Thread currentThread = Thread.currentThread();
-				Map<Thread, StackTraceElement[]> traces = _fatalTraces.remove(currentThread);
-				Map<Thread, String> names = _fatalTracesNames.remove(currentThread);
-				if (traces == null) {
-					traces = _errorTraces.remove(currentThread);
-					names = _errorTracesNames.remove(currentThread);
-				}
-				if (traces == null) {
-					traces = _warnTraces.remove(currentThread);
-					names = _warnTracesNames.remove(currentThread);
-				}
-				String trace = stringFromTraces(traces, names);
-				synchronized (_requestThreads) {
-					_requestThreads.remove(Thread.currentThread());
-				}
+				
+				// Don't get the traces string if we have already logged all
+				// of the stacks within the last 10s. All of this logging
+				// could just makes it worse for an application that is 
+				// already struggling.
+				String trace = " - (skipped stack traces)";
 				long currentTime = System.currentTimeMillis();
-				if(currentTime - _lastLog > 10000) {
-					return;
+				if (currentTime - _lastLog > 10000) {
+					trace = stringFromTraces();
+					_lastLog = currentTime;
 				}
-				_lastLog = currentTime;
+			
+                IERXRequestDescription requestDescription = descriptionObjectForContext(aContext, aString);
+                listener.log(requestTime, requestDescription);
 				if (requestTime > _maximumRequestFatalTime) {
-					String requestDescription = aContext == null ? aString : descriptionForContext(aContext);
 					log.fatal("Request did take too long : " + requestTime + "ms request was: " + requestDescription + trace);
 				}
 				else if (requestTime > _maximumRequestErrorTime) {
-					String requestDescription = aContext == null ? aString : descriptionForContext(aContext);
 					log.error("Request did take too long : " + requestTime + "ms request was: " + requestDescription + trace);
 				}
 				else if (requestTime > _maximumRequestWarnTime) {
-					String requestDescription = aContext == null ? aString : descriptionForContext(aContext);
 					log.warn("Request did take too long : " + requestTime + "ms request was: " + requestDescription + trace);
 				}
 			}
@@ -141,7 +152,30 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 			}
 		}
 
-		private String stringFromTraces(Map<Thread, StackTraceElement[]> traces, Map<Thread, String> names) {
+		private String stringFromTraces() {
+			String result;
+			Thread currentThread = Thread.currentThread();
+			Map<Thread, StackTraceElement[]> traces = _fatalTraces.remove(currentThread);
+			Map<Thread, String> names = _fatalTracesNames.remove(currentThread);
+			if (traces == null) {
+				traces = _errorTraces.remove(currentThread);
+				names = _errorTracesNames.remove(currentThread);
+			}
+			if (traces == null) {
+				traces = _warnTraces.remove(currentThread);
+				names = _warnTracesNames.remove(currentThread);
+			}
+
+			result = stringFromTracesAndNames(traces, names);
+			
+			synchronized (_requestThreads) {
+				_requestThreads.remove(Thread.currentThread());
+			}
+			
+			return result;
+		}
+
+		private String stringFromTracesAndNames(Map<Thread, StackTraceElement[]> traces, Map<Thread, String> names) {
 			String trace = null;
 			if (traces != null) {
 				String capturedThreadName = null;
@@ -200,23 +234,31 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 			}
 		}
 
-		public String descriptionForContext(WOContext aContext) {
-			try {
-				WOComponent component = aContext.page();
-				String componentName = component != null ? component.name() : "NoNameComponent";
-				String additionalInfo = "(no additional Info)";
-				WORequest request = aContext.request();
-				String requestHandler = request != null ? request.requestHandlerKey() : "NoRequestHandler";
-				if (!requestHandler.equals("wo")) {
-					additionalInfo = additionalInfo + aContext.request().uri();
-				}
-				return componentName + "-" + requestHandler + additionalInfo;
-			}
-			catch (RuntimeException e) {
-				log.error("Cannot get context description since received exception " + e, e);
-			}
-			return "Error-during-context-description";
+		public String descriptionForContext(WOContext aContext, String string) {
+			return descriptionObjectForContext(aContext, string).toString();
 		}
+
+        public IERXRequestDescription descriptionObjectForContext(WOContext aContext, String string) {
+            if (aContext != null) {
+                try {
+                    WOComponent component = aContext.page();
+                    String componentName = component != null ? component.name() : "NoNameComponent";
+                    String additionalInfo = "(no additional Info)";
+                    WORequest request = aContext.request();
+                    String requestHandler = request != null ? request.requestHandlerKey() : "NoRequestHandler";
+                    if (!requestHandler.equals("wo")) {
+                        additionalInfo = additionalInfo + aContext.request().uri();
+                    }
+                    return new ERXNormalRequestDescription(componentName, requestHandler, additionalInfo);
+                }
+                catch (RuntimeException e) {
+                    log.error("Cannot get context description since received exception " + e, e);
+                }
+            }
+            return new ERXEmptyRequestDescription(string);
+        }
+
+
 
 		public void run() {
 			Thread.currentThread().setName("ERXStopWatchTimer");
@@ -238,6 +280,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 	            requestThreads.putAll(_requestThreads);
 			}
 			if (!requestThreads.isEmpty()) {
+                int deadlocksCount = 0;
 				Map traces = null; 
 				for (Iterator iterator = requestThreads.keySet().iterator(); iterator.hasNext();) {
 					Thread thread = (Thread) iterator.next();
@@ -267,13 +310,15 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 							_fatalTraces.put(thread, traces);
 							_fatalTracesNames.put(thread, names);
 							String message = "Request is taking too long, possible deadlock: " + time + " ms ";
-							message += stringFromTraces(traces, names);
+							message += stringFromTracesAndNames(traces, names);
 							message += "EC info:\n" + ERXEC.outstandingLockDescription();
 							message += "OSC info:\n" + ERXObjectStoreCoordinator.outstandingLockDescription();
 							log.fatal(message);
+                            deadlocksCount++;
 						}
 					}
 				}
+                listener.deadlock(deadlocksCount);
 			}
 		}
 

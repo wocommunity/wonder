@@ -161,14 +161,14 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 			}
 		}
 		
-		public void setAttributesToFetch(NSArray attributes) {
+		public void setAttributesToFetch(NSArray<EOAttribute> attributes) {
 			_attributes = attributes;
 			int j;
 			if (_attributes == null || (j = _attributes.count()) == 0)
 				return;
 			ERXJDBCColumn columns[] = new ERXJDBCColumn[j];
 			for (int i = 0; i < j; i++)
-				columns[i] = newERXJDBCColumn((EOAttribute) _attributes.objectAtIndex(i), this, i + 1, _resultSet);
+				columns[i] = newERXJDBCColumn(_attributes.objectAtIndex(i), this, i + 1, _resultSet);
 
 			_selectedColumns = new NSArray(columns);
 		}
@@ -205,6 +205,7 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 		/**
 		 * Overridden to post a notification when the operations were performed.
 		 */
+		@Override
 		public void performAdaptorOperations(NSArray ops) {
 			super.performAdaptorOperations(ops);
 			ERXAdaptorOperationWrapper.adaptorOperationsDidPerform(ops);

@@ -28,11 +28,12 @@ public class ERD2WCustomDisplayBoolean extends D2WDisplayBoolean {
         super(context);
     }
     
-    protected NSArray _choicesNames;
+    protected NSArray<String> _choicesNames;
     
-    public NSArray choicesNames() {
+    @SuppressWarnings("unchecked")
+	public NSArray<String> choicesNames() {
          if (_choicesNames == null)
-             _choicesNames = (NSArray)d2wContext().valueForKey("choicesNames");
+             _choicesNames = (NSArray<String>)d2wContext().valueForKey("choicesNames");
          return _choicesNames;
      }
 

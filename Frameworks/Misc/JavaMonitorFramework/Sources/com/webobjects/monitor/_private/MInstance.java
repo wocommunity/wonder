@@ -786,10 +786,10 @@ public class MInstance extends MObject {
                 WOMailDelivery mailer = WOMailDelivery.sharedInstance();
                 String fromAddress = siteConfig().emailReturnAddr();
                 NSArray toAddress = null;
-                String subject = new String("App stopped running: " + displayName());
+                String subject = "App stopped running: " + displayName();
                 String bodyText = message;
                 if (fromAddress != null) {
-                    fromAddress = new String("root@" + _host.name());
+                    fromAddress = "root@" + _host.name();
                 }
                 if (_application.notificationEmailAddr() != null) {
                     toAddress = NSArray.componentsSeparatedByString(_application.notificationEmailAddr(), ",");
@@ -867,7 +867,7 @@ public class MInstance extends MObject {
         anArray.addObject("-WOLifebeatEnabled");
         anArray.addObject("YES");
         anArray.addObject("-WOLifebeatDestinationPort");
-        anArray.addObject(new String(WOApplication.application().lifebeatDestinationPort() + ""));
+        anArray.addObject(String.valueOf(WOApplication.application().lifebeatDestinationPort()));
 
         // application stuff
         String adaptorString = toNullOrString(_application.adaptor());

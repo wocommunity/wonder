@@ -29,10 +29,10 @@ public class FocusText extends ERXWOText {
 	public FocusText(String tagname, NSDictionary nsdictionary, WOElement woelement) {
 		super(tagname, nsdictionary, woelement);
 
-		_selectAll = (WOAssociation) _associations.removeObjectForKey("selectAll");
-		_focus = (WOAssociation) _associations.removeObjectForKey("focus");
-		_onEnter = (WOAssociation) _associations.removeObjectForKey("onEnter");
-		_onKeyPress = (WOAssociation) _associations.removeObjectForKey("onkeypress");
+		_selectAll = _associations.removeObjectForKey("selectAll");
+		_focus = _associations.removeObjectForKey("focus");
+		_onEnter = _associations.removeObjectForKey("onEnter");
+		_onKeyPress = _associations.removeObjectForKey("onkeypress");
 	}
 
   public String id(WOComponent component, WOContext context) {

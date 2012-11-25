@@ -104,6 +104,7 @@ public class ERMDBatchSizeControl extends ERDCustomComponent {
 	 * <p>
 	 * Defaults to ERXLocalizer.currentLocalizer()
 	 */
+    @Override
     public ERXLocalizer localizer() {
 		if (_localizer == null) {
 			_localizer = (ERXLocalizer)objectValueForBinding(Keys.localizer, ERXLocalizer.currentLocalizer());

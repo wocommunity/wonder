@@ -22,7 +22,7 @@ public class ERXTimedGenericContainer extends WOGenericContainer {
     public ERXTimedGenericContainer(String name, NSDictionary associations, WOElement template) {
         super(name, associations, template);
 
-        _statsKey = (WOAssociation)_associations.removeObjectForKey("statsKey");
+        _statsKey = _associations.removeObjectForKey("statsKey");
     }
     
     @Override

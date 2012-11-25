@@ -5,11 +5,10 @@ import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 
 import er.directtoweb.assignments.ERDLocalizableAssignmentInterface;
-import er.directtoweb.assignments.ERDLocalizedAssignment;
 import er.extensions.localization.ERXLocalizer;
 
 /**
- * Same as {@link ERDLocalizedAssignment}, except that firing is delayed.
+ * Same as {@link er.directtoweb.assignments.ERDLocalizedAssignment}, except that firing is delayed.
  */
 public class ERDDelayedLocalizedAssignment extends ERDDelayedAssignment implements ERDLocalizableAssignmentInterface {
 	/**

@@ -362,7 +362,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	
 	/**
 	 * 
-	 * @deprecated replaced by {@link ERXResponseRewriter}
+	 * @deprecated replaced by {@link er.extensions.appserver.ERXResponseRewriter}
 	 */
 	@Deprecated
 	public static String _htmlCloseHeadTag() {
@@ -370,7 +370,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	}
 	
 	/**
-	 * @deprecated replaced by {@link ERXResponseRewriter}
+	 * @deprecated replaced by {@link er.extensions.appserver.ERXResponseRewriter}
 	 */
 	@Deprecated
 	public static void insertInResponseBeforeTag(WOContext context, WOResponse response, String content, String tag, TagMissingBehavior tagMissingBehavior) {
@@ -378,7 +378,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	}
 	
 	/**
-	 * @deprecated replaced by {@link ERXResponseRewriter}
+	 * @deprecated replaced by {@link er.extensions.appserver.ERXResponseRewriter}
 	 */
 	@Deprecated
 	public static void addScriptResourceInHead(WOContext context, WOResponse response, String framework, String fileName) {
@@ -386,7 +386,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	}
 	
 	/**
-	 * @deprecated replaced by {@link ERXResponseRewriter}
+	 * @deprecated replaced by {@link er.extensions.appserver.ERXResponseRewriter}
 	 */
 	@Deprecated
 	public static void addStylesheetResourceInHead(WOContext context, WOResponse response, String framework, String fileName) {
@@ -394,7 +394,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	}
 	
 	/**
-	 * @deprecated replaced by {@link ERXResponseRewriter}
+	 * @deprecated replaced by {@link er.extensions.appserver.ERXResponseRewriter}
 	 */
 	@Deprecated
 	public static void addScriptCodeInHead(WOContext context, WOResponse response, String script) {
@@ -402,7 +402,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	}
 	
 	/**
-	 * @deprecated replaced by {@link ERXResponseRewriter}
+	 * @deprecated replaced by {@link er.extensions.appserver.ERXResponseRewriter}
 	 */
 	@Deprecated
 	public static void addScriptCodeInHead(WOContext context, WOResponse response, String script, String scriptName) {
@@ -410,7 +410,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	}
 	
 	/**
-	 * @deprecated replaced by {@link ERXResponseRewriter}
+	 * @deprecated replaced by {@link er.extensions.appserver.ERXResponseRewriter}
 	 */
 	@Deprecated
 	public static void addResourceInHead(WOContext context, WOResponse response, String framework, String fileName, String startTag, String endTag) {
@@ -418,7 +418,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	}
 	
 	/**
-	 * @deprecated replaced by {@link ERXResponseRewriter}
+	 * @deprecated replaced by {@link er.extensions.appserver.ERXResponseRewriter}
 	 */
 	@Deprecated
 	public static void addResourceInHead(WOContext context, WOResponse response, String framework, String fileName, String startTag, String endTag, TagMissingBehavior tagMissingBehavior) {

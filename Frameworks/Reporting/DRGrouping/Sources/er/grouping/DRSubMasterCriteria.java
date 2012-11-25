@@ -17,7 +17,7 @@ import er.extensions.foundation.ERXValueUtilities;
  * into a set of ranges, if required.
  */
  
-public class DRSubMasterCriteria extends Object  {
+public class DRSubMasterCriteria {
 
     /** Logging support */
     protected static final Logger log = Logger.getLogger(DRSubMasterCriteria.class);

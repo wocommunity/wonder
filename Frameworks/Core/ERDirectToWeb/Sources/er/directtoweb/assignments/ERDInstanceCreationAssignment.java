@@ -19,7 +19,7 @@ import er.directtoweb.assignments.delayed.ERDDelayedObjectCreationAssignment;
  * Assignment used to create objects on the fly. You use this by
  * specifing the class name as a string, ie "foo.bar.MyClass". This
  * will create an instance of the MyClass object.
- * @deprecated use {@link ERDDelayedObjectCreationAssignment}
+ * @deprecated use {@link er.directtoweb.assignments.delayed.ERDDelayedObjectCreationAssignment}
  */
 @Deprecated
 public class ERDInstanceCreationAssignment extends ERDDelayedAssignment {
@@ -66,7 +66,7 @@ public class ERDInstanceCreationAssignment extends ERDDelayedAssignment {
     public ERDInstanceCreationAssignment (String key, Object value) { super(key,value); }
 
     /**
-     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This
      * assignment depends upon the context key: "entity.name". This array 
      * of keys is used when constructing the 
      * significant keys for the passed in keyPath.

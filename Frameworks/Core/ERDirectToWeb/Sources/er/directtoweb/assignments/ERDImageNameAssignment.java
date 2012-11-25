@@ -58,7 +58,7 @@ public class ERDImageNameAssignment extends ERDAssignment implements ERDLocaliza
     public ERDImageNameAssignment (String key, Object value) { super(key,value); }
 
     /**
-     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This
      * assignment depends upon the context keys: "baseImageDirectory", "sectionKey",
      * and "tabKey". This array of keys is used when constructing the 
      * significant keys for the passed in keyPath.

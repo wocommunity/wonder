@@ -26,6 +26,7 @@ public interface ERDQueryPageInterface extends QueryPageInterface {
     /**
      * Returns the query datasource. Not having this is annoying...
      */
+    @Override
     public EODataSource queryDataSource();
     
 }

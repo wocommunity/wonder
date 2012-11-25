@@ -128,7 +128,7 @@ public class AjaxUtils {
 	}
 
 	/**
-	 * Calls ERXWOContext.addScriptResourceInHead with "Ajax" framework
+	 * Calls {@link ERXResponseRewriter#addScriptResourceInHead(WOContext, WOResponse, String, String)} with "Ajax" framework
 	 * 
 	 * @param context 
 	 * @param response 
@@ -139,7 +139,7 @@ public class AjaxUtils {
 	}
 
 	/**
-	 * Calls ERXWOContext.addStylesheetResourceInHead
+	 * Calls {@link ERXResponseRewriter#addStylesheetResourceInHead(WOContext, WOResponse, String, String)}
 	 * 
 	 * @param context 
 	 * @param response 
@@ -151,7 +151,7 @@ public class AjaxUtils {
 	}
 
 	/**
-	 * Calls ERXWOContext.addStylesheetResourceInHead with "Ajax" framework
+	 * Calls {@link ERXResponseRewriter#addStylesheetResourceInHead(WOContext, WOResponse, String, String)} with "Ajax" framework
 	 * 
 	 * @param context 
 	 * @param response 
@@ -200,7 +200,7 @@ public class AjaxUtils {
 	}
 
 	/**
-	 * Calls ERXWOContext.addScriptCodeInHead.
+	 * Calls {@link er.extensions.appserver.ERXResponseRewriter#addScriptCodeInHead(WOResponse, WOContext, String)}.
 	 * 
 	 * @param response 
 	 * @param context 
@@ -211,7 +211,7 @@ public class AjaxUtils {
 	}
 
 	/**
-	 * @deprecated use {@link ERXStringUtilities#safeIdentifierName(String)}
+	 * @deprecated use {@link er.extensions.foundation.ERXStringUtilities#safeIdentifierName(String)}
 	 */
 	@Deprecated
 	public static String toSafeElementID(String elementID) {
@@ -255,7 +255,7 @@ public class AjaxUtils {
 	}
 
 	/**
-	 * Returns an AjaxResponse with the given javascript as the body of the response.
+	 * Returns an {@link er.ajax.AjaxResponse} with the given javascript as the body of the response.
 	 * 
 	 * @param context the WOContext
 	 * @param javascript the javascript to send

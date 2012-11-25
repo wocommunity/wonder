@@ -52,12 +52,12 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 		if(_value == null || !_value.isValueSettable())
 			throw new WODynamicElementCreationException("<" + getClass().getName() + "> 'value' attribute not present or is a constant");
 		
-		_formatter = (WOAssociation)_associations.removeObjectForKey("formatter");
-		_dateFormat = (WOAssociation)_associations.removeObjectForKey("dateformat");
-		_numberFormat = (WOAssociation)_associations.removeObjectForKey("numberformat");
-		_useDecimalNumber = (WOAssociation)_associations.removeObjectForKey("useDecimalNumber");
-		_blankIsNull = (WOAssociation)_associations.removeObjectForKey("blankIsNull");
-		_readonly = (WOAssociation)_associations.removeObjectForKey("readonly");
+		_formatter = _associations.removeObjectForKey("formatter");
+		_dateFormat = _associations.removeObjectForKey("dateformat");
+		_numberFormat = _associations.removeObjectForKey("numberformat");
+		_useDecimalNumber = _associations.removeObjectForKey("useDecimalNumber");
+		_blankIsNull = _associations.removeObjectForKey("blankIsNull");
+		_readonly = _associations.removeObjectForKey("readonly");
 		
 		if(_dateFormat != null && _numberFormat != null) {
 			throw new WODynamicElementCreationException("<" + getClass().getName() + "> Cannot have 'dateFormat' and 'numberFormat' attributes at the same time.");

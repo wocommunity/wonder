@@ -57,8 +57,8 @@ import er.extensions.localization.ERXLocalizer;
  * Principle class of the ERDirectToWeb framework.
  * This class is loaded when the NSBundle of this 
  * framework is loaded. When loaded this class configures
- * the directtoweb runtime to use the {@link ERD2WModel} and 
- * {@link ERD2WFactory} subclasses instead of the default
+ * the directtoweb runtime to use the {@link er.directtoweb.ERD2WModel} and
+ * {@link er.directtoweb.ERD2WFactory} subclasses instead of the default
  * implementations. See each class for a description of the 
  * additions/improvements made to the base implementation.
  * This class also has a bunch of utility methods that are

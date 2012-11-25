@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Enumeration;
 
+import org.apache.commons.lang.CharEncoding;
+
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
@@ -45,7 +47,7 @@ public class ERXLocalizationEditor extends WOComponent {
 	public NSMutableDictionary currentEntry;
 	public String selectedFramework;
 	public String selectedFilename;
-	public String UNSET = new String("***UNSET***");
+	public String UNSET = "***UNSET***";
 	public WODisplayGroup displayGroup;
 	public String keyToAdd;
 	
@@ -57,8 +59,9 @@ public class ERXLocalizationEditor extends WOComponent {
         displayGroup.setDefaultStringMatchFormat("*%@*");
         displayGroup.setDefaultStringMatchOperator(EOQualifier.QualifierOperatorCaseInsensitiveLike.name());
     }
-    
-    public void awake () {
+
+    @Override
+    public void awake() {
     	super.awake();
     	this.keyToAdd = null;
     	if (this.displayGroup != null) {
@@ -188,7 +191,7 @@ public class ERXLocalizationEditor extends WOComponent {
      		if(!newDict.equals(dict)) {
      			throw new IllegalStateException("Data wasn't equal when comparing before save");
      		} else if(url != null) {
-     			ERXFileUtilities.stringToFile(result, new File(url.getFile()), ERXProperties.stringForKeyWithDefault("er.extensions.ERXLocalizationEditor.endoding", "UTF-16BE"));
+     			ERXFileUtilities.stringToFile(result, new File(url.getFile()), ERXProperties.stringForKeyWithDefault("er.extensions.ERXLocalizationEditor.endoding", CharEncoding.UTF_16BE));
      		}
     	}
     }

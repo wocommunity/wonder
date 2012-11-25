@@ -17,7 +17,7 @@ import com.webobjects.eocontrol.EOQualifierEvaluation;
  * 
  */
 
-public class ERDNullQualifier extends Object implements EOQualifierEvaluation {
+public class ERDNullQualifier implements EOQualifierEvaluation {
 
     private String _keyPath;
     

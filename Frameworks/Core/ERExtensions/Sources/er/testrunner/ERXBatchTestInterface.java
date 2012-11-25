@@ -20,7 +20,7 @@ import org.apache.log4j.Logger;
  * 
  */
 
-public class ERXBatchTestInterface extends Object implements ERXTestListener {
+public class ERXBatchTestInterface implements ERXTestListener {
 
     /** logging support */
     public static final Logger log = Logger.getLogger(ERXBatchTestInterface.class);

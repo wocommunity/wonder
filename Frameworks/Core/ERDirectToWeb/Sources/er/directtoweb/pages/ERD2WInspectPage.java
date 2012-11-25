@@ -6,8 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.pages;
 
-import java.util.Enumeration;
-
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOComponent;
@@ -75,13 +73,14 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
 
 	protected static final String firstResponderContainerName = "FirstResponderContainer";
 
+	@Override
     public String urlForCurrentState() {
-    	NSDictionary dict = null;
+    	NSDictionary<String, Object> dict = null;
     	String actionName = d2wContext().dynamicPage();
     	if(object() != null) {
     		String primaryKeyString = ERXEOControlUtilities.primaryKeyStringForObject(object());
     		if(primaryKeyString != null) {
-    			dict = new NSDictionary(primaryKeyString, "__key");
+    			dict = new NSDictionary<String, Object>(primaryKeyString, "__key");
     		}
     	}
     	return context().directActionURLForActionNamed(actionName, dict).replaceAll("&amp;", "&");
@@ -89,12 +88,19 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
 
     
     protected boolean _objectWasSaved;
+
+    @Override
     public boolean objectWasSaved() { return _objectWasSaved; }
 
     private WOComponent _previousPage;
+
+	@Override
     public WOComponent previousPage() { return _previousPage;}
+
+	@Override
     public void setPreviousPage(WOComponent existingPageName) { _previousPage = existingPageName; }
 
+	@Override
     public WOComponent nextPage() { return nextPage(true); }
 
     public WOComponent nextPage(boolean doConfirm) {
@@ -157,9 +163,12 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     public boolean shouldShowActionButtons() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldShowActionButtons")); }
     public boolean shouldShowCancelButton() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldShowCancelButton")); }
     public boolean shouldShowSubmitButton() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldShowSubmitButton")); }
+
+	@Override
     public boolean showCancel() { return super.showCancel() && shouldShowCancelButton(); }
     public boolean doesNotHaveForm() { return !ERXValueUtilities.booleanValue(d2wContext().valueForKey("hasForm")); }
 
+	@Override
     public void setObject(EOEnterpriseObject eoenterpriseobject) {
         super.setObject(eoenterpriseobject);
     }
@@ -171,12 +180,11 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     //		 on the eo.  In this case you sould write a the following rule:
     //		pageConfiguration = 'Foo' && tabKey = 'Bar' => validationKeys = "(validateXY)"
     public void performAdditionalValidations() {
-        NSArray validationKeys = (NSArray)d2wContext().valueForKey("validationKeys");
+        NSArray<String> validationKeys = (NSArray<String>)d2wContext().valueForKey("validationKeys");
         if (validationKeys != null && validationKeys.count() > 0) {
             if (log.isDebugEnabled())
                 log.debug("Validating Keys: " + validationKeys + " on eo: " + object());
-            for (Enumeration e = validationKeys.objectEnumerator(); e.hasMoreElements();) {
-                String validationKey = (String)e.nextElement();
+            for (String validationKey : validationKeys) {
                 try {
                     object().valueForKeyPath(validationKey);
                 } catch (NSValidation.ValidationException ev) {
@@ -186,6 +194,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
         }
     }
 
+	@Override
     public void takeValuesFromRequest(WORequest request, WOContext context) {
         super.takeValuesFromRequest(request, context);
         if (isEditing() && errorMessages.count() == 0) {
@@ -201,7 +210,10 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     public boolean shouldRevertChanges() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldRevertChanges")); }
     public boolean shouldSaveChanges() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldSaveChanges")); }
     public boolean shouldValidateBeforeSave() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldValidateBeforeSave")); }
+
+	@Override
     public boolean shouldCollectValidationExceptions() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldCollectValidationExceptions")); }
+
     public boolean shouldRecoverFromOptimisticLockingFailure() { return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("shouldRecoverFromOptimisticLockingFailure"), false); }
     public boolean shouldRevertUponSaveFailure() { return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("shouldRevertUponSaveFailure"), false); }
 

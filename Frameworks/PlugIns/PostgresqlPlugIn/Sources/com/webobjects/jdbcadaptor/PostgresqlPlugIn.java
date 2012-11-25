@@ -87,7 +87,7 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
    * @return jdbcInfo dictionary
    */
   @Override
-  public NSDictionary jdbcInfo() {
+  public NSDictionary<String, Object> jdbcInfo() {
     // you can swap this code out to write the property list out in order
     // to get a fresh copy of the JDBCInfo.plist.
 //    try {
@@ -100,7 +100,7 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
 //      throw new IllegalStateException("problem writing JDBCInfo.plist",e);
 //    }
 
-    NSDictionary jdbcInfo;
+    NSDictionary<String, Object> jdbcInfo;
     // have a look at the JDBC connection URL to see if the flag has been set to
     // specify that the hard-coded jdbcInfo information should be used.
     if(shouldUseBundledJdbcInfo()) {
@@ -114,13 +114,20 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
       }
 
       try {
-        jdbcInfo = (NSDictionary) NSPropertyListSerialization.propertyListFromData(new NSData(jdbcInfoStream, 2048), "US-ASCII");
+        jdbcInfo = (NSDictionary<String, Object>) NSPropertyListSerialization.propertyListFromData(new NSData(jdbcInfoStream, 2048), "US-ASCII");
       }
       catch (IOException e) {
         throw new RuntimeException("Failed to load 'JDBCInfo.plist' from this plugin jar.", e);
       }
-    }
-    else {
+      finally {
+        try {
+          jdbcInfoStream.close();
+        }
+        catch (IOException e) {
+          // ignore
+        }
+      }
+    } else {
       jdbcInfo = super.jdbcInfo();
     }
     return jdbcInfo;
@@ -190,7 +197,7 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
           expression.setStatement(sql.toString());
           channel.evaluateExpression(expression);
           try {
-            NSDictionary row;
+            NSDictionary<String, Object> row;
             while ((row = channel.fetchRow()) != null) {
               Enumeration pksEnum = row.allValues().objectEnumerator();
               while (pksEnum.hasMoreElements()) {

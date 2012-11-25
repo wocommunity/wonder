@@ -74,7 +74,7 @@ public class ERXArrayFaultCache {
             EOKeyGlobalID sourceGid = handler.sourceGlobalID();
             EOEditingContext ec = handler.editingContext();
             synchronized (cache) {
-                NSDictionary entries = (NSDictionary) relationshipCacheEntriesForEntity(sourceGid.entityName(), handler.relationshipName());
+                NSDictionary entries = relationshipCacheEntriesForEntity(sourceGid.entityName(), handler.relationshipName());
                 if(entries != null) {
                     NSArray gids = (NSArray) entries.objectForKey(sourceGid);
                     if(gids != null) {

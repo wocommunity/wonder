@@ -18,7 +18,7 @@ import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
 
-public class StatsUtilities extends Object  {
+public class StatsUtilities {
     public static NSTimestampFormatter dateFormatter = new NSTimestampFormatter("%Y:%m:%d:%H:%M:%S %Z");
 
     static public Integer totalTransactionsForApplication(MApplication anApp) {

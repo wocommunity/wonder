@@ -25,7 +25,7 @@ import com.webobjects.foundation.NSPathUtilities;
  *
  *	@author GammaStream Technologies, Inc.
  */
-public final class GSVModel extends Object implements WOXMLCoding {
+public final class GSVModel implements WOXMLCoding {
 
 
     /********************************  STATIC  ********************************/

@@ -36,6 +36,7 @@ import java.util.jar.JarFile;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.commons.lang.CharEncoding;
 import org.apache.log4j.Appender;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Logger;
@@ -753,7 +754,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 						if (urlAsString.contains(mainBundleName + ".jar")) {
 							try {
-								propertiesPath = new URL(URLDecoder.decode(urlAsString, "UTF-8"));
+								propertiesPath = new URL(URLDecoder.decode(urlAsString, CharEncoding.UTF_8));
 								userPropertiesPath = new URL(propertiesPath.toExternalForm() + userName);
 							}
 							catch (MalformedURLException exception) {
@@ -818,6 +819,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 	private String stringFromJar(String jar, String path) {
 		JarFile f;
+		InputStream is = null;
 		try {
 			if (!new File(jar).exists()) {
 				ERXApplication.log.warn("Will not process jar '" + jar + "' because it cannot be found ...");
@@ -826,7 +828,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			f = new JarFile(jar);
 			JarEntry e = (JarEntry) f.getEntry(path);
 			if (e != null) {
-				InputStream is = f.getInputStream(e);
+				is = f.getInputStream(e);
 				ByteArrayOutputStream bout = new ByteArrayOutputStream();
 				int read = -1;
 				byte[] buf = new byte[1024 * 50];
@@ -834,7 +836,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 					bout.write(buf, 0, read);
 				}
 
-				String content = new String(bout.toByteArray(), "UTF-8");
+				String content = new String(bout.toByteArray(), CharEncoding.UTF_8);
 				return content;
 			}
 			return null;
@@ -844,6 +846,16 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		}
 		catch (IOException e1) {
 			throw NSForwardException._runtimeExceptionForThrowable(e1);
+		}
+		finally {
+			if (is != null) {
+				try {
+					is.close();
+				}
+				catch (IOException e) {
+					// ignore
+				}
+			}
 		}
 	}
 	}
@@ -1100,7 +1112,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		// Fix for 3190479 URI encoding should always be UTF8
 		// See http://www.w3.org/International/O-URL-code.html
 		// For WO 5.1.x users, please comment this statement to compile.
-		com.webobjects.appserver._private.WOURLEncoder.WO_URL_ENCODING = "UTF-8";
+		com.webobjects.appserver._private.WOURLEncoder.WO_URL_ENCODING = CharEncoding.UTF_8;
 
 		// WO 5.1 specific patches
 		if (ERXProperties.webObjectsVersionAsDouble() < 5.2d) {

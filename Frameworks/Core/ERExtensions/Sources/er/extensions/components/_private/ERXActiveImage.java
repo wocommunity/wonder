@@ -19,7 +19,7 @@ public class ERXActiveImage extends ActiveImage {
 
     public ERXActiveImage(String tag, NSDictionary associations, WOElement element) {
         super(tag, associations, element);
-        _alt = (WOAssociation) _associations.removeObjectForKey("alt");
+        _alt = _associations.removeObjectForKey("alt");
      }
 
     protected void appendConstantAttributesToResponse(WOResponse woresponse, WOContext wocontext) {
