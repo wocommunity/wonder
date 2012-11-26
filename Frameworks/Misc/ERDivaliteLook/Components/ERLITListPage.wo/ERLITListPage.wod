@@ -78,7 +78,7 @@ AttributeRepetition: WORepetition {
 
 AttributeDisplay: WOSwitchComponent {
  	WOComponentName = d2wContext.componentName;
- 	localContext = localContext;
+ 	localContext = d2wContext;
  	object = object;
 }
 

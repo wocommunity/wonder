@@ -62,7 +62,7 @@ PageWrapper: WOSwitchComponent {
 QueryAnyField: D2WQueryAnyField {
 	_unroll = true;
 	displayGroup = displayGroup;
-	localContext = localContext;
+	localContext = d2wContext;
 }
 
 QueryForm: WOForm {

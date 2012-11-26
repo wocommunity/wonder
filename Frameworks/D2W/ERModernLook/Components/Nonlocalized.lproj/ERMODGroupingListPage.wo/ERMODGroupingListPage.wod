@@ -27,7 +27,7 @@ ListNotEmpty: WOConditional {
 
 ListPageRepetition: WOSwitchComponent {
 	WOComponentName = d2wContext.repetitionComponentName;
-	d2wContext = localContext;
+	d2wContext = d2wContext;
 	displayGroup = displayGroup;
 }
 

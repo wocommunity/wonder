@@ -32,7 +32,7 @@ ExtraRow : WOGenericContainer {
 
 InspectRepetition : ERDInspectPageRepetition {
 	object = d2wContext.object;
-	d2wContext = localContext;
+	d2wContext = d2wContext;
 	displayPropertyKeys = currentSection.keys;
 }
 

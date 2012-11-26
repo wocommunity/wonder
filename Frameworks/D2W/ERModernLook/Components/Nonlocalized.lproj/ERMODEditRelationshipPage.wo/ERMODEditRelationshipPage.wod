@@ -120,14 +120,14 @@ RepetitionUpdateContainer : AjaxUpdateContainer {
 
 ToManyListRepetition: WOSwitchComponent {
     WOComponentName = d2wContext.toManyRepetitionComponentName;
-    d2wContext = localContext;
+    d2wContext = d2wContext;
     displayGroup = relationshipDisplayGroup;
     updateContainerID = d2wContext.idForRepetitionContainer;
 }
 
 ToOneListRepetition: WOSwitchComponent {
     WOComponentName = d2wContext.toOneRepetitionComponentName;
-    d2wContext = localContext;
+    d2wContext = d2wContext;
     displayGroup = relationshipDisplayGroup;
     updateContainerID = d2wContext.idForRepetitionContainer;
 }

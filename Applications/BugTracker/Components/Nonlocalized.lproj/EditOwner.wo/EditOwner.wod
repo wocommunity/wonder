@@ -23,7 +23,7 @@ BackToOriginator3: ERXJSPopupSelector {
 }
 
 EditRel: ERD2WEditToOneRelationship {
-  localContext=localContext;
+  localContext= d2wContext;
   object=object;
 }
 

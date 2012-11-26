@@ -1,5 +1,5 @@
 BugIsRead: D2WDisplayBoolean {
-	localContext = localContext;
+	localContext = d2wContext;
 	object = object;
 }
 
