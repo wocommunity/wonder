@@ -1839,7 +1839,7 @@ public class ERXEOAccessUtilities {
 	 		}
 		}
 		else {
-	 		NSMutableArray<EOGlobalID> gids = new NSMutableArray<EOGlobalID>();
+			NSMutableSet<EOGlobalID> gids = new NSMutableSet<EOGlobalID>();
 	 		
 			NSMutableArray objectsWithUnfaultedRelationships = new NSMutableArray();
 			EOEntity destinationEntity = relationship.destinationEntity();
@@ -1887,7 +1887,7 @@ public class ERXEOAccessUtilities {
 			// fetching of abstract entities very effectively.  We instead want to create
 			// our own GID and batch fetch the GIDs ourselves.
 			if (gids.count() > 0) {
-				ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(editingContext, gids, ! skipFaultedRelationships);
+				ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(editingContext, gids.allObjects(), ! skipFaultedRelationships);
 			}
 		}
 
