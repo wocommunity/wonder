@@ -194,12 +194,7 @@ public class ERJGroupsSynchronizer extends ERXRemoteSynchronizer {
   }
 
   public void _applicationWillTerminateNotification(NSNotification notification) {
-    try {
       cleanUpJChannel(_channel);
-    }
-    catch (Throwable e) {
-      ERXRemoteSynchronizer.log.error("Error cleaning up ERJgroupsSynchronizer JChannel", e);
-    }
   }
 
   private static class ERJGroupsCleanupTask extends ERXShutdownHook {
