@@ -27,10 +27,10 @@ import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXObjectStoreCoordinator;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.statistics.store.ERXDumbStatisticsStoreListener;
-import er.extensions.statistics.store.IERXStatisticsStoreListener;
 import er.extensions.statistics.store.ERXEmptyRequestDescription;
 import er.extensions.statistics.store.ERXNormalRequestDescription;
 import er.extensions.statistics.store.IERXRequestDescription;
+import er.extensions.statistics.store.IERXStatisticsStoreListener;
 
 /**
  * Enhances the normal stats store with a bunch of useful things which get
@@ -124,6 +124,22 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 					requestTime = System.currentTimeMillis() - time();
 				}
 				
+				Thread currentThread = Thread.currentThread();
+				Map<Thread, StackTraceElement[]> traces = _fatalTraces.remove(currentThread);
+				Map<Thread, String> names = _fatalTracesNames.remove(currentThread);
+				if (traces == null) {
+					traces = _errorTraces.remove(currentThread);
+					names = _errorTracesNames.remove(currentThread);
+				}
+				if (traces == null) {
+					traces = _warnTraces.remove(currentThread);
+					names = _warnTracesNames.remove(currentThread);
+				}
+				
+				synchronized (_requestThreads) {
+					_requestThreads.remove(Thread.currentThread());
+				}
+				
 				// Don't get the traces string if we have already logged all
 				// of the stacks within the last 10s. All of this logging
 				// could just makes it worse for an application that is 
@@ -131,7 +147,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 				String trace = " - (skipped stack traces)";
 				long currentTime = System.currentTimeMillis();
 				if (currentTime - _lastLog > 10000) {
-					trace = stringFromTraces();
+					trace = stringFromTracesAndNames(traces, names);
 					_lastLog = currentTime;
 				}
 			
@@ -151,29 +167,6 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 				// AK: pretty important we don't mess up here
 				log.error(ex, ex);
 			}
-		}
-
-		private String stringFromTraces() {
-			String result;
-			Thread currentThread = Thread.currentThread();
-			Map<Thread, StackTraceElement[]> traces = _fatalTraces.remove(currentThread);
-			Map<Thread, String> names = _fatalTracesNames.remove(currentThread);
-			if (traces == null) {
-				traces = _errorTraces.remove(currentThread);
-				names = _errorTracesNames.remove(currentThread);
-			}
-			if (traces == null) {
-				traces = _warnTraces.remove(currentThread);
-				names = _warnTracesNames.remove(currentThread);
-			}
-
-			result = stringFromTracesAndNames(traces, names);
-			
-			synchronized (_requestThreads) {
-				_requestThreads.remove(Thread.currentThread());
-			}
-			
-			return result;
 		}
 
 		private String stringFromTracesAndNames(Map<Thread, StackTraceElement[]> traces, Map<Thread, String> names) {
