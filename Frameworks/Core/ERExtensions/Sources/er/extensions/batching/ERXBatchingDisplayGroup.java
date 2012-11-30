@@ -345,8 +345,10 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 		if (rowCount == -1) {
 			if (isBatching()) {
 				rowCount = ERXEOAccessUtilities.rowCountForFetchSpecification(dataSource().editingContext(), fetchSpecification());
-			} else {
+			} else if (dataSource() != null) {
 				rowCount = dataSource().fetchObjects().count();
+			} else if (allObjects() != null) {
+				rowCount = allObjects().count();
 			}
 			if (shouldRememberRowCount()) {
 				_rowCount = rowCount;
