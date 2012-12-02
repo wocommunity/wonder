@@ -18,6 +18,7 @@ import javax.xml.transform.stream.StreamResult;
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 
+import org.apache.commons.lang.CharEncoding;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -47,7 +48,7 @@ public class DocTest extends TestCase {
     assertNull(doc.declaration());
     assertEquals(0, doc.children().size());
 
-    ERXML.Declaration declaration = ERXML.declaration("1.0", "UTF-8");
+    ERXML.Declaration declaration = ERXML.declaration("1.0", CharEncoding.UTF_8);
     doc.setDeclaration(declaration);
     assertNotNull(doc.declaration());
     assertEquals(declaration, doc.declaration());
@@ -56,7 +57,7 @@ public class DocTest extends TestCase {
 
     doc.setDeclaration(null);
     doc.root("root");
-    ERXML.Declaration declaration2 = ERXML.declaration("1.0", "UTF-8");
+    ERXML.Declaration declaration2 = ERXML.declaration("1.0", CharEncoding.UTF_8);
     doc.setDeclaration(declaration2);
     assertNotNull(doc.declaration());
     assertEquals(declaration2, doc.declaration());
@@ -64,7 +65,7 @@ public class DocTest extends TestCase {
     assertEquals(declaration2, doc.children().get(0));
     assertEquals(doc.root(), doc.children().get(1));
 
-    ERXML.Declaration declaration3 = ERXML.declaration("1.0", "UTF-8");
+    ERXML.Declaration declaration3 = ERXML.declaration("1.0", CharEncoding.UTF_8);
     doc.setDeclaration(declaration3);
     assertNotNull(doc.declaration());
     assertEquals(declaration3, doc.declaration());

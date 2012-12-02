@@ -23,6 +23,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang.CharEncoding;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 import org.xml.sax.SAXException;
@@ -181,7 +182,7 @@ public class Utils {
 
     static String urlencode(String unencoded) {
         try {
-            return URLEncoder.encode(unencoded, "UTF-8");
+            return URLEncoder.encode(unencoded, CharEncoding.UTF_8);
         } catch (UnsupportedEncodingException e) {
             // should never happen
             throw new RuntimeException("Could not url encode to UTF-8", e);

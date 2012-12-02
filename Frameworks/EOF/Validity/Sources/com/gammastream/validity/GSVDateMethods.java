@@ -17,7 +17,7 @@ import com.webobjects.foundation.NSTimestamp;
  * 
  *	@author GammaStream Technologies, Inc.
  */
-public class GSVDateMethods extends Object {
+public class GSVDateMethods {
 
     /**
      *	One of the many 'mutators' which never fail, unless of course, an exception is thrown.

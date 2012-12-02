@@ -3,7 +3,6 @@ package er.extensions.components;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
-import com.webobjects.foundation.NSArray;
 
 import er.extensions.foundation.ERXStringUtilities;
 
@@ -34,7 +33,7 @@ public class ERXFlashMovie extends ERXStatelessComponent {
 
 	public String flashVars() {
 		String result = "";
-		for(String key : ((NSArray<String>)bindingKeys())) {
+		for (String key : bindingKeys()) {
 			if(key.startsWith("?")) {
 				String flashKey = key.substring(1);
 				Object value = null;

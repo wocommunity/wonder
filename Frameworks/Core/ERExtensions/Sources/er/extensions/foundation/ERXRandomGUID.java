@@ -118,7 +118,7 @@ import java.util.Random;
  * @version 1.2.1 11/05/02
  * @author Marc A. Mnich
  */
-public class ERXRandomGUID extends Object {
+public class ERXRandomGUID {
 
     public String valueBeforeMD5 = "";
     public String valueAfterMD5 = "";

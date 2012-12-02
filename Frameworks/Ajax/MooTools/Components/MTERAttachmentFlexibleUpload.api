@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="MTERAttachmentFlexibleUpload.java" wocomponentcontent="true">
+
+        <binding name="attachment"/>
+        <binding name="editingContext"/>
+    </wo>
+</wodefinitions>

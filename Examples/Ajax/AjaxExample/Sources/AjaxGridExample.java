@@ -2,6 +2,8 @@
 
 import java.util.*;
 
+import org.apache.commons.lang.CharEncoding;
+
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
@@ -22,7 +24,7 @@ public class AjaxGridExample extends WOComponent {
 
 	private NSMutableArray sampleData() {
 		NSData data = new NSData(application().resourceManager().bytesForResourceNamed("AjaxGridExampleTestData.plist", null, NSArray.EmptyArray));
-		NSMutableArray sampleData = new NSMutableArray((NSArray) NSPropertyListSerialization.propertyListFromData(data, "UTF-8"));
+		NSMutableArray sampleData = new NSMutableArray((NSArray) NSPropertyListSerialization.propertyListFromData(data, CharEncoding.UTF_8));
 		Random random = new Random(new NSTimestamp().getNanos());
 		for (int i = 0; i < sampleData.count(); i++) {
 			NSMutableDictionary<String,Object> row = (NSMutableDictionary<String,Object>) sampleData.objectAtIndex(i);
@@ -38,7 +40,7 @@ public class AjaxGridExample extends WOComponent {
 	public NSMutableDictionary configData() {
 		if (configData == null) {
 			NSData data = new NSData(application().resourceManager().bytesForResourceNamed("AjaxGridExampleConfiguration.plist", null, NSArray.EmptyArray));
-			configData = new NSMutableDictionary((NSDictionary) NSPropertyListSerialization.propertyListFromData(data, "UTF-8"));
+			configData = new NSMutableDictionary((NSDictionary) NSPropertyListSerialization.propertyListFromData(data, CharEncoding.UTF_8));
 		}
 
 		return configData;

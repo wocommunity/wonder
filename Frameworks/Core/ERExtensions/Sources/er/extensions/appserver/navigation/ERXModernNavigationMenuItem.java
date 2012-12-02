@@ -129,9 +129,8 @@ public class ERXModernNavigationMenuItem extends ERXStatelessComponent {
                 NSMutableDictionary bindings = navigationItem().queryBindings().mutableClone();
                 bindings.setObjectForKey(context().contextID(), "__cid");
                 return context().directActionURLForActionNamed(navigationItem().directActionName(), bindings);
-            } else {
-                return context().componentActionURL();
             }
+            return context().componentActionURL();
         }
 
         // If the user specified some javascript, put that into the HREF and return it

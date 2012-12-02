@@ -73,7 +73,7 @@ public class ERDDelayedConditionalAssignment extends ERDDelayedAssignment implem
 
     public NSArray _dependentKeys;
     /**
-     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This
      * assignment depends upon all of the qualifier keys from the formed
      * qualifier of the value of this assignment. This array of keys is 
      * used when constructing the significant keys for the passed in keyPath.

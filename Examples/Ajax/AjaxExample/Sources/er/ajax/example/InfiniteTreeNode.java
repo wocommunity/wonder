@@ -37,16 +37,19 @@ public class InfiniteTreeNode {
 	}
 
 	public static class Delegate implements AjaxTreeModel.Delegate {
+		@Override
 		public NSArray childrenTreeNodes(Object node) {
 			InfiniteTreeNode treeNode = (InfiniteTreeNode) node;
 			return treeNode.childrenTreeNodes();
 		}
 
+		@Override
 		public boolean isLeaf(Object node) {
 			InfiniteTreeNode treeNode = (InfiniteTreeNode) node;
 			return treeNode.childrenTreeNodes() == null;
 		}
 
+		@Override
 		public Object parentTreeNode(Object node) {
 			InfiniteTreeNode treeNode = (InfiniteTreeNode) node;
 			if (treeNode == null) {

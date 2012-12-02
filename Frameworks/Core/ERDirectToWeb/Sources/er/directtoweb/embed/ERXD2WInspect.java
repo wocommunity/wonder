@@ -34,6 +34,7 @@ public class ERXD2WInspect extends D2WInspect {
 
     public ERXD2WInspect(WOContext context) { super(context); }
     
+    @Override
     public void validationFailedWithException(Throwable e, Object value, String keyPath) {
         parent().validationFailedWithException(e, value, keyPath);
     }
@@ -41,6 +42,7 @@ public class ERXD2WInspect extends D2WInspect {
      * Calling super is a bad thing in 5.2 when used as an embedded inspect. Also causes
      * errors when using deserialized components in 5.4.3
      */
+    @Override
     public void awake() {}
     
     public String entityName() {

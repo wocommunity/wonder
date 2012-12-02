@@ -22,6 +22,7 @@ import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
 
+import er.extensions.appserver.ERXShutdownHook;
 import er.extensions.eof.ERXDatabase;
 import er.extensions.eof.ERXObjectStoreCoordinatorSynchronizer.IChangeListener;
 import er.extensions.eof.ERXObjectStoreCoordinatorSynchronizer.RemoteChange;
@@ -171,7 +172,7 @@ public class ERJGroupsSynchronizer extends ERXRemoteSynchronizer {
     }
 
     if (ERXProperties.booleanForKeyWithDefault("er.extensions.jgroupsSynchronizer.useShutdownHook", true)) {
-      Runtime.getRuntime().addShutdownHook(new Thread(new JGroupsCleanupTask(_channel), "ERJGroupsCleanupThread"));
+      new ERJGroupsCleanupTask(_channel);
     }
   }
 
@@ -193,22 +194,18 @@ public class ERJGroupsSynchronizer extends ERXRemoteSynchronizer {
   }
 
   public void _applicationWillTerminateNotification(NSNotification notification) {
-    try {
       cleanUpJChannel(_channel);
-    }
-    catch (Throwable e) {
-      ERXRemoteSynchronizer.log.error("Error cleaning up ERJgroupsSynchronizer JChannel", e);
-    }
   }
 
-  private static class JGroupsCleanupTask implements Runnable {
+  private static class ERJGroupsCleanupTask extends ERXShutdownHook {
     private final JChannel channel;
 
-    public JGroupsCleanupTask(JChannel channel) {
+    public ERJGroupsCleanupTask(JChannel channel) {
+      super("JGroups Cleanup");
       this.channel = channel;
     }
 
-    public void run() {
+    public void hook() {
       cleanUpJChannel(channel);
     }
   }

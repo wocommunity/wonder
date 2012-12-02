@@ -153,9 +153,7 @@ public class ERXJDBCConnectionAnalyzer {
 				dumpClasspath();
 				throw new RuntimeException("JDBC Connection Analysis: Missing plugin or driver");
 			}
-			else {
-				ERXJDBCConnectionAnalyzer.log.info("WARNING: using generic JDBCPlugIn.");
-			}
+			ERXJDBCConnectionAnalyzer.log.info("WARNING: using generic JDBCPlugIn.");
 		}
 
 		/** ensure [targetPlugIn_created] targetPlugIn() != null; * */

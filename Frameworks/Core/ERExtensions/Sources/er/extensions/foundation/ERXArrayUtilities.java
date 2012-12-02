@@ -42,7 +42,7 @@ import er.extensions.eof.ERXKey;
 /**
  * Collection of {@link com.webobjects.foundation.NSArray NSArray} utilities.
  */
-public class ERXArrayUtilities extends Object {
+public class ERXArrayUtilities {
 	
 	   private static Logger log = Logger.getLogger(ERXArrayUtilities.class);
 

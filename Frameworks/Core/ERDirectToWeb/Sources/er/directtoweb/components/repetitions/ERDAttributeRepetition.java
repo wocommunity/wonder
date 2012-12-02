@@ -69,8 +69,8 @@ public class ERDAttributeRepetition extends ERDCustomComponent {
         return !booleanValueForBinding("hidePropertyName");
     }
 
-    public NSArray displayPropertyKeys() {
-        return (NSArray)valueForBinding("displayPropertyKeys");
+    public NSArray<String> displayPropertyKeys() {
+        return (NSArray<String>)valueForBinding("displayPropertyKeys");
     }
 
     public boolean hasSections() {

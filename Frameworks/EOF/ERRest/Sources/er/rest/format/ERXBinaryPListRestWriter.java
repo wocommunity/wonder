@@ -2,6 +2,8 @@ package er.rest.format;
 
 import java.io.ByteArrayOutputStream;
 
+import org.apache.commons.lang.CharEncoding;
+
 import com.webobjects.foundation.NSData;
 
 import er.extensions.foundation.ERXPropertyListSerialization;
@@ -20,7 +22,7 @@ public class ERXBinaryPListRestWriter implements IERXRestWriter {
 		appendHeadersToResponse(node, response, context);
 		Object object = node.toNSCollection(delegate);
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		ERXPropertyListSerialization.writePropertyListToStream(object, out, ERXPropertyListSerialization.PListFormat.NSPropertyListBinaryFormat_v1_0, "UTF-8");
+		ERXPropertyListSerialization.writePropertyListToStream(object, out, ERXPropertyListSerialization.PListFormat.NSPropertyListBinaryFormat_v1_0, CharEncoding.UTF_8);
 		response.appendContentData(new NSData(out.toByteArray()));
 	}
 }

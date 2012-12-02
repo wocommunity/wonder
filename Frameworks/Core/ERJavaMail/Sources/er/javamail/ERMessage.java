@@ -23,7 +23,7 @@ import com.webobjects.foundation.NSDictionary;
  * ERMessage はメール・メッセージを表現します
  * </span>
  */
-public class ERMessage extends Object {
+public class ERMessage {
 	/**
 	 * <span class="en">
 	 * Defines a delegate interface for receiving notifications

@@ -86,6 +86,7 @@ public class D2WPage extends D2WComponent {
 		return (b == null) || (b.equals(D2WModel.One));
 	}
 
+	@Override
 	public WOAssociation replacementAssociationForAssociation(WOAssociation oldAssociation, String oldBinding,
 			DTWTemplate aTemplate, WOContext aContext) {
 		if ((oldBinding.equals("border")) || (oldBinding.equals("d2wContext.border"))
@@ -96,6 +97,7 @@ public class D2WPage extends D2WComponent {
 		return super.replacementAssociationForAssociation(oldAssociation, oldBinding, aTemplate, aContext);
 	}
 
+	@Override
 	public String descriptionForResponse(WOResponse r, WOContext c) {
 		return "D2W-" + pageTitle();
 	}

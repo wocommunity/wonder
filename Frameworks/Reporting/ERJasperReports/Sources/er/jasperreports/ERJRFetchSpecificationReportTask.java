@@ -16,7 +16,7 @@ import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 
 import er.extensions.appserver.ERXApplication;
-import er.extensions.concurrency.ERXTaskPercentComplete;
+import er.extensions.concurrency.IERXPercentComplete;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.foundation.ERXAssert;
@@ -28,9 +28,8 @@ import er.extensions.foundation.ERXAssert;
  * A convenient Builder pattern inner class is provided too.
  * 
  * @author kieran
- *
  */
-public class ERJRFetchSpecificationReportTask implements Callable<File>, ERXTaskPercentComplete {
+public class ERJRFetchSpecificationReportTask implements Callable<File>, IERXPercentComplete {
 	private static final Logger log = Logger.getLogger(ERJRFetchSpecificationReportTask.class);
 	
 	private File reportFile;
@@ -143,7 +142,7 @@ public class ERJRFetchSpecificationReportTask implements Callable<File>, ERXTask
 	}
 
 	/* (non-Javadoc)
-	 * @see wk.foundation.concurrent.TaskPercentComplete#percentComplete()
+	 * @see er.extensions.concurrency.IERXPercentComplete#percentComplete()
 	 * 
 	 * Some whacky logic just so the user can be comfortable that we are making some progress.
 	 */

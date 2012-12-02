@@ -13,7 +13,9 @@ import er.extensions.eof.ERXEC;
  * {@link Runnable} and/or {@link Callable} tasks.
  * 
  * @author kieran
+ * @deprecated use {@link ERXTask} instead
  */
+@Deprecated
 public class ERXAbstractTask {
 
 	volatile private EOObjectStore _parentObjectStore;

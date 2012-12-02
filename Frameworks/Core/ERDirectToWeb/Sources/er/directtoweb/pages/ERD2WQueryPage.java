@@ -320,6 +320,7 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
         return returnPage != null ? returnPage : nextPage();
     }
 
+    @Override
     public boolean showCancel() {
         return nextPage() != null;
     }
@@ -330,6 +331,7 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
      * the {@link #defaultQueryDataSource()} is returned.
      * @return the prepared data source
      */
+    @Override
     public EODataSource queryDataSource() {
         if (_wasCancelled) {
             return null;

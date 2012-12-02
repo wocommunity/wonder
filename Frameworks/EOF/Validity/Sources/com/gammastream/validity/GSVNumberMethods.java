@@ -12,7 +12,7 @@ import com.webobjects.foundation.NSLog;
  * 
  *	@author GammaStream Technologies, Inc.
  */
-public class GSVNumberMethods extends Object {
+public class GSVNumberMethods {
 
     /**
      *	For programatic purposes, we include this constant which is used for the <code>compareTo</code> method.
