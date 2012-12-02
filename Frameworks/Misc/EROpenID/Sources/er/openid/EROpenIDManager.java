@@ -147,37 +147,10 @@ public class EROpenIDManager {
     public String returnToUrl(WORequest request, WOContext context) {
       String returnToUrl;
       boolean requireSecureReturnURL = ERXProperties.booleanForKeyWithDefault("er.openid.requireSecureReturnURL", true);
-      if (ERXApplication.isWO54()) {
-        try {
-          if (requireSecureReturnURL) {
-            Method directActionURLForActionNamedMethod = context.getClass().getMethod("directActionURLForActionNamed", new Class[] { String.class, NSDictionary.class, boolean.class, boolean.class });
-            returnToUrl = (String) directActionURLForActionNamedMethod.invoke(context, new Object[] { "ERODirectAction/openIDResponse", null, Boolean.TRUE, Boolean.TRUE });
-          }
-          else {
-            returnToUrl = context.directActionURLForActionNamed("ERODirectAction/openIDResponse", new NSDictionary());
-          }
-        }
-        catch (Exception e) {
-          throw new RuntimeException("directActionURLForActionNamed failed.", e);
-        }
-      }
-      else {
-        context.generateCompleteURLs();
-        try {
-          if (requireSecureReturnURL) {
-            Method _directActionURLMethod = context.getClass().getMethod("_directActionURL", new Class[] { String.class, NSDictionary.class, boolean.class });
-            returnToUrl = (String) _directActionURLMethod.invoke(context, new Object[] { "ERODirectAction/openIDResponse", null, Boolean.TRUE });
-          }
-          else {
-            returnToUrl = context.directActionURLForActionNamed("ERODirectAction/openIDResponse", new NSDictionary());
-          }
-        }
-        catch (Exception e) {
-          throw new RuntimeException("_directActionURL failed.", e);
-        }
-        finally {
-          context.generateRelativeURLs();
-        }
+      if (requireSecureReturnURL) {
+        returnToUrl = context.directActionURLForActionNamed("ERODirectAction/openIDResponse", null, true, true);
+      } else {
+        returnToUrl = context.directActionURLForActionNamed("ERODirectAction/openIDResponse", NSDictionary.EmptyDictionary);
       }
       EROpenIDManager.log.debug("Return to URL: " + returnToUrl);
       return returnToUrl;

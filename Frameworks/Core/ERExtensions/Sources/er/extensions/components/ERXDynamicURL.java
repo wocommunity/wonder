@@ -1,17 +1,17 @@
 package er.extensions.components;
 
+import com.webobjects.appserver.WODynamicURL;
 import com.webobjects.foundation._NSDelegate;
-
-import er.extensions.appserver.ERXApplication;
 
 /**
  * 5.3/5.4-safe wrapper around a WODynamicURL (which changed classes).
  * 
  * @author mschrag
+ * @deprecated use {@link WODynamicURL} instead
  */
+@Deprecated
 public class ERXDynamicURL {
 	private _NSDelegate _delegate;
-	private Object _dynamicUrl;
 
 	/**
 	 * Construct an ERXDynamicURL.
@@ -19,19 +19,7 @@ public class ERXDynamicURL {
 	 * @param dynamicUrl a WODynamicURL (either from the 5.3 or the 5.4 package)
 	 */
 	public ERXDynamicURL(Object dynamicUrl) {
-		try {
-			if (ERXApplication.isWO54()) {
-				_delegate = new _NSDelegate(Class.forName("com.webobjects.appserver.WODynamicURL"));
-			}
-			else {
-				_delegate = new _NSDelegate(Class.forName("com.webobjects.appserver._private.WODynamicURL"));
-			}
-			_dynamicUrl = dynamicUrl;
-			_delegate.setDelegate(_dynamicUrl);
-		}
-		catch (Throwable t) {
-			throw new RuntimeException("Failed to create ERXDynamicURL.", t);
-		}
+		_delegate = new _NSDelegate(WODynamicURL.class, dynamicUrl);
 	}
 
 	/**

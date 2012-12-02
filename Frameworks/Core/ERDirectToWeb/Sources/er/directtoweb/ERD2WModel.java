@@ -741,19 +741,6 @@ public class ERD2WModel extends D2WModel {
         }
     }
 
-    //AK: this is probably never called in WO > 5.2
-    public Vector modelFilesInBundles () {
-    	Vector modelFiles = super.modelFilesInBundles();
-    	if (!_hasAddedExtraModelFiles) {
-    		NSArray<URL> additionalModelURLs = additionalModelURLs();
-    		for (URL url : additionalModelURLs) {
-    			modelFiles.add(url.getFile());
-    		}
-    		_hasAddedExtraModelFiles = true;
-    	}
-    	return modelFiles;
-    }
-
     private boolean _hasAddedExtraModelFiles=false;
 
     /**

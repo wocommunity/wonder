@@ -347,8 +347,10 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @see #webObjectsVersionAsDouble
      * @see ERXStringUtilities#removeExtraDotsFromVersionString
      * </span>
+     * @deprecated Wonder is used with WO 5.4 only
      */ 
     @SuppressWarnings("javadoc")
+    @Deprecated
 	public static String webObjectsVersion() {
         if (_webObjectsVersion == null) {
             _webObjectsVersion = versionStringForFrameworkNamed("JavaWebObjects");
@@ -383,8 +385,10 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * 
      * @see #webObjectsVersion
      * </span>
+     * @deprecated Wonder is used with WO 5.4 only
      */
     @SuppressWarnings("javadoc")
+    @Deprecated
 	public static double webObjectsVersionAsDouble() {
         if (_webObjectsVersionDouble == 0.0d) {
             String woVersionString = ERXStringUtilities.removeExtraDotsFromVersionString(webObjectsVersion());
@@ -417,8 +421,10 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      *  
      *  @return true もし、バージョン番号が5.2以上であれば
      * </span>
+     * @deprecated Wonder is used with WO 5.4 only
      */
     @SuppressWarnings("javadoc")
+    @Deprecated
 	public static boolean webObjectsVersionIs52OrHigher() {
         if(ERXProperties.booleanForKey("er.extensions.ERXProperties.checkOldVersions")) {
             return webObjectsVersionAsDouble() >= 5.2d;
@@ -439,8 +445,10 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * 
      * @return true もし、バージョン番号が5.22以上であれば
      * </span>
+     * @deprecated Wonder is used with WO 5.4 only
      */
     @SuppressWarnings("javadoc")
+    @Deprecated
 	public static boolean webObjectsVersionIs522OrHigher() {
         if(ERXProperties.booleanForKey("er.extensions.ERXProperties.checkOldVersions")) {
             String webObjectsVersion = webObjectsVersion();
