@@ -281,7 +281,7 @@ public class WOHelperFunctionParser {
 					frameworkName = helperFunctionName.substring(0, helperFunctionDotIndex);
 					helperFunctionName = helperFunctionName.substring(helperFunctionDotIndex + 1);
 				}
-				StringBuffer ognlKeyPath = new StringBuffer();
+				StringBuilder ognlKeyPath = new StringBuilder();
 				ognlKeyPath.append("~");
 				ognlKeyPath.append("@" + WOHelperFunctionRegistry.class.getName() + "@registry()._helperInstanceForFrameworkNamed(#this, \"");
 				ognlKeyPath.append(helperFunctionName);
@@ -308,7 +308,7 @@ public class WOHelperFunctionParser {
 	}
 
 	protected String prettyDeclaration(WODeclaration declaration) {
-		StringBuffer declarationStr = new StringBuffer();
+		StringBuilder declarationStr = new StringBuilder();
 		if (declaration == null) {
 			declarationStr.append("[none]");
 		}

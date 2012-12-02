@@ -13,7 +13,7 @@ import com.webobjects.foundation.NSMutableArray;
  *
  *	@author GammaStream Technologies, Inc.
  */
-public final class GSVAttribute extends Object implements WOXMLCoding {
+public final class GSVAttribute implements WOXMLCoding {
 
     //persistant attribute attributes
     private GSVEntity entity;

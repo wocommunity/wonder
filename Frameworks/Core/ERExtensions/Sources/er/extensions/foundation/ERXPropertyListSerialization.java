@@ -37,6 +37,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.apache.commons.lang.CharEncoding;
 import org.apache.xml.serialize.OutputFormat;
 import org.apache.xml.serialize.XMLSerializer;
 import org.w3c.dom.Document;
@@ -855,7 +856,7 @@ public class ERXPropertyListSerialization {
 									if (!Character.isWhitespace(_curChars.charAt(i)))
 										stringbuffer.append(_curChars.charAt(i));
 
-								byte abyte0[] = stringbuffer.toString().getBytes("US-ASCII");
+								byte abyte0[] = stringbuffer.toString().getBytes(CharEncoding.US_ASCII);
 								byte abyte64[] = _NSBase64.decode(abyte0);
 								if (abyte64 != null && abyte64.length > 0) {
 									lastNode.setValue(new NSData(abyte64));
@@ -1424,7 +1425,7 @@ public class ERXPropertyListSerialization {
 			if (obj instanceof String)
 				return obj;
 			if (obj instanceof StringBuffer)
-				return new String((StringBuffer) obj);
+				return ((StringBuffer) obj).toString();
 			if (obj instanceof NSData)
 				return ((NSData) obj).clone();
 			if (obj instanceof NSArray<?>) {
@@ -2357,7 +2358,7 @@ public class ERXPropertyListSerialization {
 			if (obj instanceof String)
 				return obj;
 			if (obj instanceof StringBuffer)
-				return new String((StringBuffer) obj);
+				return ((StringBuffer) obj).toString();
 			if (obj instanceof NSData)
 				return ((NSData) obj).clone();
 			if (obj instanceof NSArray<?>) {
@@ -4741,9 +4742,9 @@ public class ERXPropertyListSerialization {
 		 * @throws IOException
 		 */
 		private void parseAsciiString(byte[] bytes, int index, int count) throws IOException {
-			String encoding = "UTF-8";
-			if (Charset.isSupported("ASCII")) {
-				encoding = "ASCII";
+			String encoding = CharEncoding.UTF_8;
+			if (Charset.isSupported("ASCII")) { // CHECKME isn't ASCII mandatory for any JVM?
+				encoding = CharEncoding.US_ASCII;
 			}
 			objectTable.add(new String(bytes, index, count, encoding));
 		}
@@ -4864,9 +4865,9 @@ public class ERXPropertyListSerialization {
 		 * @throws IOException
 		 */
 		private void parseUnicodeString(byte[] bytes, int index, int count) throws IOException {
-			String encoding = "UTF-8";
-			if (Charset.isSupported("UTF-16BE")) {
-				encoding = "UTF-16BE";
+			String encoding = CharEncoding.UTF_8;
+			if (Charset.isSupported("UTF-16BE")) { // CHECKME isn't UTF-16BE mandatory for any JVM?
+				encoding = CharEncoding.UTF_16BE;
 			}
 			// The count is teh number of char not the number of bytes. With UTF-16BE there is 2 bytes per char.
 			objectTable.add(new String(bytes, index, count * 2, encoding));
@@ -5060,7 +5061,7 @@ public class ERXPropertyListSerialization {
 		private byte[] encodeString(String value) {
 			try {
 				NSMutableData data = new NSMutableData(value.length() * 2);
-				String encoding = "UTF-8";
+				String encoding = CharEncoding.UTF_8;
 				// This is kind of funky we do a first encoding to see if we can get away with ASCII encoding
 				// This is true if UTF-8 encoding yield the same length as the char count.
 				byte[] theBytes = value.getBytes(encoding);
@@ -5069,7 +5070,7 @@ public class ERXPropertyListSerialization {
 					data.appendBytes(this.encodeCount(value.length(), Type.kCFBinaryPlistMarkerASCIIString));
 				} else {
 					if (Charset.isSupported("UTF-16BE")) {
-						encoding = "UTF-16BE";
+						encoding = CharEncoding.UTF_16BE;
 					}
 					theBytes = value.getBytes(encoding);
 					data.appendBytes(this.encodeCount(value.length(), Type.kCFBinaryPlistMarkerUnicode16String));
@@ -5914,7 +5915,7 @@ public class ERXPropertyListSerialization {
 	 */
 	@Deprecated
 	public static <K, V> NSDictionary<K, V> dictionaryWithInputStream(InputStream is) {
-		return dictionaryWithInputStream(is, "UTF-8");
+		return dictionaryWithInputStream(is, CharEncoding.UTF_8);
 	}
 	
 	/**

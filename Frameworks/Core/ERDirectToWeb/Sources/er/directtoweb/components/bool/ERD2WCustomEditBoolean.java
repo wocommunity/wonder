@@ -30,14 +30,16 @@ public class ERD2WCustomEditBoolean extends D2WEditBoolean {
  
     protected NSArray<String> _choicesNames;
     
+   	@Override
     public void reset(){
         super.reset();
         _choicesNames = null;
     }
 
-    public NSArray<String> choicesNames() {
+    @SuppressWarnings("unchecked")
+	public NSArray<String> choicesNames() {
         if(_choicesNames == null) {
-            _choicesNames = (NSArray)d2wContext().valueForKey("choicesNames");
+            _choicesNames = (NSArray<String>)d2wContext().valueForKey("choicesNames");
         }
         return _choicesNames;
     }

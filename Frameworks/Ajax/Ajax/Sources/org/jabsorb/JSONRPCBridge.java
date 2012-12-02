@@ -1284,10 +1284,7 @@ public class JSONRPCBridge implements Serializable
       {
         return obj;
       }
-      else
-      {
-        return arr;
-      }
+      return arr;
     }
     catch (Exception e)
     {
@@ -1316,10 +1313,7 @@ public class JSONRPCBridge implements Serializable
     {
       return ((JSONArray)prev).get(idx);
     }
-    else
-    {
-      throw new JSONException("not an array");
-    }
+    throw new JSONException("not an array");
   }
 
   /**
@@ -1341,10 +1335,7 @@ public class JSONRPCBridge implements Serializable
     {
       return ((JSONObject)prev).get(ref);
     }
-    else
-    {
-      throw new JSONException("not an object");
-    }
+    throw new JSONException("not an object");
   }
 
   /**

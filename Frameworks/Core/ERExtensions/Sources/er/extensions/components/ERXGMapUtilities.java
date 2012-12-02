@@ -3,6 +3,8 @@ package er.extensions.components;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import org.apache.commons.lang.CharEncoding;
+
 import com.webobjects.appserver.WOHTTPConnection;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.foundation.NSDictionary;
@@ -46,7 +48,7 @@ public class ERXGMapUtilities {
 		WOHTTPConnection connection = new WOHTTPConnection("maps.google.com", 80);
 		String encodedAddress = "";
 		try {
-			encodedAddress = URLEncoder.encode(address, "UTF-8");
+			encodedAddress = URLEncoder.encode(address, CharEncoding.UTF_8);
 		}
 		catch (UnsupportedEncodingException e) {
 			e.printStackTrace();

@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 import java.text.ParseException;
 import java.util.Enumeration;
 
+import org.apache.commons.lang.CharEncoding;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOComponent;
@@ -759,7 +760,7 @@ public class ERDSavedQueriesComponent extends WOComponent {
 	    requestParams.setObjectForKey(pageConfiguration(), RequestParams.PageConfiguration);
 	    requestParams.setObjectForKey(d2wContext().entity().name(), RequestParams.EntityName);
 	    try {
-	        requestParams.setObjectForKey(URLEncoder.encode(selectedSavedQuery.name(), "UTF-8"), RequestParams.SavedQueryName);
+	        requestParams.setObjectForKey(URLEncoder.encode(selectedSavedQuery.name(), CharEncoding.UTF_8), RequestParams.SavedQueryName);
 	    } catch(UnsupportedEncodingException e) {
 	        log.warn("error generating bookmarkable url", e);
 	    }

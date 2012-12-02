@@ -34,7 +34,7 @@ public class ERXDatabaseConsole extends WOComponent {
     }
 
     public WOComponent executeQuery() {
-        EOModel m = (EOModel)EOModelGroup.defaultGroup().models().objectAtIndex(0);
+        EOModel m = EOModelGroup.defaultGroup().models().objectAtIndex(0);
         con = ERXJDBCConnectionBroker.connectionBrokerForModel(m).getConnection();
         try {
             con.setAutoCommit(false);
@@ -75,7 +75,7 @@ public class ERXDatabaseConsole extends WOComponent {
     }
     
     public WOComponent executeUpdate() {
-        EOModel m = (EOModel)EOModelGroup.defaultGroup().models().objectAtIndex(0);
+        EOModel m = EOModelGroup.defaultGroup().models().objectAtIndex(0);
         con = ERXJDBCConnectionBroker.connectionBrokerForModel(m).getConnection();
         try {
             Statement s = con.createStatement();

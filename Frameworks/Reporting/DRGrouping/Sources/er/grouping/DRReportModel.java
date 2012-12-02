@@ -15,7 +15,7 @@ import er.extensions.eof.ERXConstant;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
-public class DRReportModel extends Object  {
+public class DRReportModel {
     private static Logger log = Logger.getLogger(DRReportModel.class);
 
     public static final String DRReportModelUpdateNotification = "DRReportModelUpdate";

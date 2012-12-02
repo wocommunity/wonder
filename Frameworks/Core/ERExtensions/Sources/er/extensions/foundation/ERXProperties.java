@@ -347,8 +347,10 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @see #webObjectsVersionAsDouble
      * @see ERXStringUtilities#removeExtraDotsFromVersionString
      * </span>
+     * @deprecated Wonder is used with WO 5.4 only
      */ 
     @SuppressWarnings("javadoc")
+    @Deprecated
 	public static String webObjectsVersion() {
         if (_webObjectsVersion == null) {
             _webObjectsVersion = versionStringForFrameworkNamed("JavaWebObjects");
@@ -383,8 +385,10 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * 
      * @see #webObjectsVersion
      * </span>
+     * @deprecated Wonder is used with WO 5.4 only
      */
     @SuppressWarnings("javadoc")
+    @Deprecated
 	public static double webObjectsVersionAsDouble() {
         if (_webObjectsVersionDouble == 0.0d) {
             String woVersionString = ERXStringUtilities.removeExtraDotsFromVersionString(webObjectsVersion());
@@ -417,8 +421,10 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      *  
      *  @return true もし、バージョン番号が5.2以上であれば
      * </span>
+     * @deprecated Wonder is used with WO 5.4 only
      */
     @SuppressWarnings("javadoc")
+    @Deprecated
 	public static boolean webObjectsVersionIs52OrHigher() {
         if(ERXProperties.booleanForKey("er.extensions.ERXProperties.checkOldVersions")) {
             return webObjectsVersionAsDouble() >= 5.2d;
@@ -439,8 +445,10 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * 
      * @return true もし、バージョン番号が5.22以上であれば
      * </span>
+     * @deprecated Wonder is used with WO 5.4 only
      */
     @SuppressWarnings("javadoc")
+    @Deprecated
 	public static boolean webObjectsVersionIs522OrHigher() {
         if(ERXProperties.booleanForKey("er.extensions.ERXProperties.checkOldVersions")) {
             String webObjectsVersion = webObjectsVersion();
@@ -1152,7 +1160,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * <span class="ja">
      * 	指定プロパティー名とデフォルト暗号化方法 (propertyName.encrypted=true) を使って復元されている値を戻します。
      * 	例えば、my.password を取得する場合、my.password.encrypted=true も設定されていれば、
-     * 	my.password は復元する時にデフォルト暗号化方法 {@link ERXCrypto.defaultCrypter} を使用します。
+     * 	my.password は復元する時にデフォルト暗号化方法 {@link er.extensions.crypting.ERXCrypto.defaultCrypter} を使用します。
      * 
      * 	@param propertyName - プロパティー名
      * 
@@ -1168,7 +1176,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * <span class="en">
      * If the <code>propertyName.encrypted</code> property is set to true, returns
      * the plain text value of the given property name, after decrypting it with the
-     * {@link ERXCrypto.defaultCrypter}. For instance, if you are requesting
+     * {@link er.extensions.crypting.ERXCrypto.defaultCrypter}. For instance, if you are requesting
      * my.password and <code>my.password.encrypted</code> is set to true,
      * the value of <code>my.password</code> will be sent to the default crypter's
      * decrypt() method.
@@ -1182,7 +1190,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * <span class="ja">
      * 	指定プロパティー名とデフォルト暗号化方法 (propertyName.encrypted=true) を使って復元されている値を戻します。
      * 	例えば、my.password を取得する場合、my.password.encrypted=true も設定されていれば、
-     * 	my.password は復元する時にデフォルト暗号化方法 {@link ERXCrypto.defaultCrypter} を使用します。
+     * 	my.password は復元する時にデフォルト暗号化方法 {@link er.extensions.crypting.ERXCrypto.defaultCrypter} を使用します。
      * 
      * 	@param propertyName - プロパティー名
      * 	@param defaultValue - プロパティーが無ければ、デフォルト値
@@ -1210,7 +1218,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     /**
      * <span class="en">
      * Returns the decrypted value for the given property name using the
-     * {@link ERXCrypto.defaultCrypter}. This is slightly different than
+     * {@link er.extensions.crypting.ERXCrypto.defaultCrypter}. This is slightly different than
      * decryptedStringWithKeyWithDefault in that it does not require  the encrypted
      * property to be set.
      *  
@@ -1223,7 +1231,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * <span class="ja">
      * 	指定プロパティー名とデフォルト暗号化方法 (propertyName.encrypted=true) を使って復元されている値を戻します。
      * 	例えば、my.password を取得する場合、my.password.encrypted=true も設定されていれば、
-     * 	my.password は復元する時にデフォルト暗号化方法 {@link ERXCrypto.defaultCrypter} を使用します。
+     * 	my.password は復元する時にデフォルト暗号化方法 {@link er.extensions.crypting.ERXCrypto.defaultCrypter} を使用します。
      *  
      * 	@param propertyName - プロパティー名
      * 	@param defaultValue - プロパティーが無ければ、暗号化されているデフォルト値
@@ -1464,7 +1472,8 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * 	@throws java.io.IOException if the file is not found or cannot be read
      * </span>
      */
-    public static Properties propertiesFromFile(File file) throws java.io.IOException {
+    @SuppressWarnings("javadoc")
+	public static Properties propertiesFromFile(File file) throws java.io.IOException {
         if (file == null)
             throw new IllegalStateException("Attempting to get properties for a null file!");
         ERXProperties._Properties prop = new ERXProperties._Properties();
@@ -2724,13 +2733,11 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 							computedProperties = operator.compute(key.substring(0, key.length() - operatorKeyWithAt.length()), value, null);
 							break;
 						}
-						else {
-							int keyIndex = key.indexOf(operatorKeyWithAt + ".");
-							if (keyIndex != -1) {
-								operator = ERXProperties.operators.objectForKey(operatorKey);
-								computedProperties = operator.compute(key.substring(0, keyIndex), value, key.substring(keyIndex + operatorKeyWithAt.length() + 1));
-								break;
-							}
+						int keyIndex = key.indexOf(operatorKeyWithAt + ".");
+						if (keyIndex != -1) {
+							operator = ERXProperties.operators.objectForKey(operatorKey);
+							computedProperties = operator.compute(key.substring(0, keyIndex), value, key.substring(keyIndex + operatorKeyWithAt.length() + 1));
+							break;
 						}
 					}
 

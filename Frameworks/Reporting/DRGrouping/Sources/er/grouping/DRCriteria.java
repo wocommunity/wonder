@@ -17,7 +17,7 @@ import com.webobjects.foundation.*;
  * For alpha DRCriteria. the value is a long word filled with z's ({@link MAXSTRING})
  * and the same with one z concatenated, respectively.
  */
-public class DRCriteria extends Object  {
+public class DRCriteria {
     private static final Logger log = Logger.getLogger(DRCriteria.class);
 
     protected NSDictionary _valueDict;

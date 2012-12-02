@@ -642,7 +642,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 
 	public String componentsJoinedByString(String separator) {
 		Object[] objects = objectsNoCopy();
-		StringBuffer buffer = new StringBuffer(objects.length * 32);
+		StringBuilder buffer = new StringBuilder(objects.length * 32);
 		for (int i = 0; i < objects.length; i++) {
 			if (i > 0 && separator != null) {
 				buffer.append(separator);
@@ -650,7 +650,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 			buffer.append(objects[i].toString());
 		}
 
-		return new String(buffer);
+		return buffer.toString();
 	}
 
 	public static NSArray<String> componentsSeparatedByString(String string, String separator) {
@@ -853,7 +853,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		if(count() == 0) {
 			return "()";
 		}
-		StringBuffer buffer = new StringBuffer(128);
+		StringBuilder buffer = new StringBuilder(128);
 		buffer.append("(");
 		Object[] objects = objectsNoCopy();
 		for (int i = 0; i < objects.length; i++) {
@@ -875,7 +875,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		}
 
 		buffer.append(")");
-		return new String(buffer);
+		return buffer.toString();
 	}
 
 	protected boolean _mustRecomputeHash() {

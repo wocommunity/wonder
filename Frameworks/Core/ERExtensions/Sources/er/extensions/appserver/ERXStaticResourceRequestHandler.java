@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLDecoder;
 
+import org.apache.commons.lang.CharEncoding;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
@@ -150,7 +151,7 @@ public class ERXStaticResourceRequestHandler extends WORequestHandler {
 				if (request.userInfo() != null && !request.userInfo().containsKey("HttpServletRequest")) {
 					/* PATH_INFO is already decoded by the servlet container */
 					path = path.replace('+', ' ');
-					path = URLDecoder.decode(path, "UTF-8");
+					path = URLDecoder.decode(path, CharEncoding.UTF_8);
 				}
 				file = new File(path);
 				length = file.length();

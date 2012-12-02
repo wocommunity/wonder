@@ -56,6 +56,7 @@ public abstract class ERXEqualator {
     //
     
     private static class _SafeEqualsEqualator extends ERXEqualator {
+        public _SafeEqualsEqualator() {}
 
         public boolean objectIsEqualToObject(Object o1, Object o2) {
             return ERXExtensions.safeEquals(o1, o2);
@@ -63,22 +64,17 @@ public abstract class ERXEqualator {
     }
     
     private static class _EOEqualsEqualator extends ERXEqualator {
-        
+        public _EOEqualsEqualator() {}
+
         public boolean objectIsEqualToObject(Object o1, Object o2) {
-            boolean result;
-            
             if ( (o1 != null && ! (o1 instanceof EOEnterpriseObject)) || (o2 != null && ! (o2 instanceof EOEnterpriseObject)) ) {
                 throw new RuntimeException("Unable to compare objects because both objects need to be EOEnterpriseObjects.  " +
                                            "o1: " + o1 + " (class: " + o1.getClass() + "), o2: " + o2 + " (class: " + o2.getClass() + ").");
             }
-            else {
-                final EOEnterpriseObject eo1 = (EOEnterpriseObject)o1;
-                final EOEnterpriseObject eo2 = (EOEnterpriseObject)o2;
-                
-                result = ERXEOControlUtilities.eoEquals(eo1, eo2);
-            }
+            final EOEnterpriseObject eo1 = (EOEnterpriseObject)o1;
+            final EOEnterpriseObject eo2 = (EOEnterpriseObject)o2;
             
-            return result;
+            return ERXEOControlUtilities.eoEquals(eo1, eo2);
         }
     }
 }

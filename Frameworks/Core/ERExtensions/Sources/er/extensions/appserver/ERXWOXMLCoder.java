@@ -4,6 +4,8 @@ import java.io.UnsupportedEncodingException;
 import java.sql.Date;
 import java.util.Enumeration;
 
+import org.apache.commons.lang.CharEncoding;
+
 import com.webobjects.appserver.xml.WOXMLCoder;
 import com.webobjects.appserver.xml.WOXMLDecoder;
 import com.webobjects.appserver.xml.WOXMLException;
@@ -113,7 +115,7 @@ public class ERXWOXMLCoder extends WOXMLCoder {
             WOXMLDecoder decoder = WOXMLDecoder.decoderWithMapping(mappingUrl);
             XMLData data;
             try {
-            	data = (XMLData) decoder.decodeRootObject(new NSData(string.getBytes("UTF-8")));
+            	data = (XMLData) decoder.decodeRootObject(new NSData(string.getBytes(CharEncoding.UTF_8)));
             } catch (UnsupportedEncodingException e) {
                 throw NSForwardException._runtimeExceptionForThrowable(e);
             }

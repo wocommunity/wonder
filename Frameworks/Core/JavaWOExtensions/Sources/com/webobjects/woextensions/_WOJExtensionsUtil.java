@@ -19,7 +19,7 @@ import com.webobjects.foundation.NSMutableArray;
  *  woextensions の private クラス
  * </span>
  */
-public class _WOJExtensionsUtil extends Object {
+public class _WOJExtensionsUtil {
 
     public static boolean booleanValue(Object associationValue) {
         boolean associationEvaluation = true;

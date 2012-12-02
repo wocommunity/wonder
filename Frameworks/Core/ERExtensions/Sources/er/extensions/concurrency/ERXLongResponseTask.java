@@ -322,7 +322,6 @@ public interface ERXLongResponseTask extends Runnable {
 		/**
 		 * Default implementation that controls the pages returned on each iteration.
 		 */
-		
 		public WOComponent nextPage() {
 			Exception e = exception();
 			if (e != null) {
@@ -332,9 +331,8 @@ public interface ERXLongResponseTask extends Runnable {
 			if (isDone()) {
 				if (isCancelled()) {
 					return cancelPageForStatus(status());
-				} else {
-					return pageForResult(result());
 				}
+				return pageForResult(result());
 			}
 			return refreshPageForStatus(status());
 		}

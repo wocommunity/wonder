@@ -3,6 +3,9 @@ package er.ajax;
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
+import er.extensions.appserver.ERXHttpStatusCodes;
+import er.extensions.appserver.ERXResponse;
+
 /**
  * Simple component to ping the session in the background.  It can do two things.  The first is
  * to execute JavaScript if the session is no longer valid. The default action is to close the window
@@ -99,12 +102,12 @@ public class AjaxSessionPing extends AjaxDynamicElement {
          * @return bare HTTP response with status set
          */
         public WOActionResults pingSessionAction() {
-            WOResponse response = new WOResponse();
-            boolean hasValidSession = existingSession() != null;
-            if (hasValidSession) {
+            ERXResponse response = new ERXResponse();
+            if (existingSession() != null) {
                 session();
+            } else {
+            	response.setStatus(ERXHttpStatusCodes.MULTIPLE_CHOICES); // CHECKME is that really the appropriate status code?
             }
-            response.setStatus(hasValidSession ? 200 : 300);
             return response;
         }
 

@@ -12,7 +12,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 /* DRRecordGroup.h created by Administrator on Sun 01-Nov-1998 */
 //#import <WebObjects/WebObjects.h>
-public class DRRecordGroup extends Object  {
+public class DRRecordGroup {
     private Logger log = Logger.getLogger(DRRecordGroup.class);
 
     protected DRCriteria _criteria;

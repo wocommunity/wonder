@@ -7,6 +7,7 @@ import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODynamicElementCreationException;
+import com.webobjects.appserver._private.WOFileUpload;
 import com.webobjects.foundation.NSDictionary;
 
 import er.extensions.appserver.ERXBrowserFactory;
@@ -21,7 +22,11 @@ import er.extensions.appserver.ERXWOContext;
  *</ul>
  *
  * @author ak on Wed Oct 09 2002
+ * @project ERExtensions
+ * @deprecated use {@link WOFileUpload} as parent class
  */
+// CHECKME is that class obsolete as the cause of its presence was a bug fixed in WO 5.2 or should some logic be maintained?
+@Deprecated
 public class ERXWOFileUpload extends com.webobjects.appserver._private.WOFileUpload {
 
     /** logging support */

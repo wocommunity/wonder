@@ -83,11 +83,8 @@ public class _NSWeakMutableArray extends _NSWeakMutableCollection implements Ser
 		processQueue();
 		if (object == null) {
 			throw new IllegalArgumentException("Attempt to insert null into an _NSWeakMutableArray");
-		} else {
-			array.addObject(new _NSWeakMutableCollection._NSWeakMutableCollectionReference(object, queue));
-
-			return;
 		}
+		array.addObject(new _NSWeakMutableCollection._NSWeakMutableCollectionReference(object, queue));
 	}
 
 	public void addReference(WeakReference object) {
@@ -99,10 +96,8 @@ public class _NSWeakMutableArray extends _NSWeakMutableCollection implements Ser
 		processQueue();
 		if (object == null || array.count() == 0) {
 			return;
-		} else {
-			array.removeObject(new _NSWeakMutableCollection._NSWeakMutableCollectionReference(object, queue));
-			return;
 		}
+		array.removeObject(new _NSWeakMutableCollection._NSWeakMutableCollectionReference(object, queue));
 	}
 
 	public void removeReference(Object object) {

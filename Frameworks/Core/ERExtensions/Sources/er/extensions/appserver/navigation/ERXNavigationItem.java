@@ -69,7 +69,7 @@ public class ERXNavigationItem implements Serializable {
 
 	public ERXNavigationItem(NSDictionary values) {
 		// set uniqueID
-		_uniqueID = new String("id" + counter);
+		_uniqueID = "id" + counter;
 		counter++;
 		if (values != null) {
 			if (log.isDebugEnabled())

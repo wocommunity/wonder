@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>wonder</groupId>
     <artifactId>wonder</artifactId>
-    <version>5.7-SNAPSHOT</version>
+    <version>5.9-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Project Wonder</name>
     <url>http://wiki.objectstyle.org/confluence/display/WONDER/Home</url>
@@ -503,6 +503,11 @@
                 <version>1.6</version>
             </dependency>
             <dependency>
+    			<groupId>commons-io</groupId>
+    			<artifactId>commons-io</artifactId>
+    			<version>2.2</version>
+			</dependency>
+            <dependency>
                 <groupId>commons-httpclient</groupId>
                 <artifactId>commons-httpclient</artifactId>
                 <version>3.0.1</version>
@@ -673,7 +678,7 @@
 			<dependency>
 				<groupId>com.drewnoakes</groupId>
 				<artifactId>metadata-extractor</artifactId>
-				<version>2.3.1</version>
+				<version>2.6.2</version>
 			</dependency>
             <dependency>
                 <groupId>org.neo4j</groupId>

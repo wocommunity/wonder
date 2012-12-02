@@ -52,7 +52,7 @@ public class PFSummary implements PFProfiler.Delegate {
             String uuid = UUID.randomUUID().toString();
             PFProfiler.setStatsWithID(rootStats, uuid);
 
-            StringBuffer profileString = new StringBuffer();
+            StringBuilder profileString = new StringBuilder();
             profileString.append("Profiler: " + String.format("%.2f", total) + "ms; ");
             profileString.append("SQL: " + DecimalFormat.getPercentInstance().format(sqlDurationPercent) + " (" + sqlCount + "); ");
             profileString.append("D2W: " + DecimalFormat.getPercentInstance().format(d2wDurationPercent) + " (" + d2wCount + "); ");

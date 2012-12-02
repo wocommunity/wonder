@@ -29,7 +29,7 @@ import er.directtoweb.assignments.defaults.ERDDefaultModelAssignment;
  * not find it is that it uses the Model to find out the EOAttribute 
  * and starts from A. Following the relationship b, gives a B, and 
  * asking B for an attribute named k returns nil and you lose.
- * @deprecated use {@link ERDDefaultModelAssignment}
+ * @deprecated use {@link er.directtoweb.assignments.defaults.ERDDefaultModelAssignment}
 */
 //	Note that these assignments require that the object is pushed into the context.  Look
 //	on some of the ERInspectPage setObject methods we push the object into the context.
@@ -62,7 +62,7 @@ public class ERDSmartAttributeAssignment extends ERDAssignment {
     }
     
     /**
-     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This
      * assignment depends upon the context keys: "object.entityName" and 
      * "propertyKey". This array of keys is used when constructing the 
      * significant keys for the passed in keyPath.

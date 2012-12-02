@@ -4,7 +4,7 @@ import com.webobjects.foundation.NSArray;
 
 /* DRValue.h created by Administrator on Sun 01-Nov-1998 */
 //#import <WebObjects/WebObjects.h>
-public class DRValue extends Object  {
+public class DRValue {
 
     protected DRRecord _record;
     protected DRAttribute _attribute;

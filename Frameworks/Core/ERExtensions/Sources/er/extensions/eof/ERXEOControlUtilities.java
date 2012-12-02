@@ -196,12 +196,6 @@ public class ERXEOControlUtilities {
      	if(ec == null) throw new IllegalArgumentException("EO must live in an EC");
      	
         boolean isNewObject = ERXEOControlUtilities.isNewObject(eo);
-        
-        // Check for old EOF bug and do nothing as we can't localInstance
-        // anything here
-        if (ERXProperties.webObjectsVersionAsDouble() < 5.21d && isNewObject) {
-            return eo;
-        }
 
         T localObject = eo;
         
@@ -1600,7 +1594,7 @@ public class ERXEOControlUtilities {
     	if (isDeep) {
     		EOModelGroup modelGroup = ERXEOAccessUtilities.modelGroup(editingContext);
     		EOEntity rootEntity = modelGroup.entityNamed(entityName);
-    		for (EOEntity subEntity : (NSArray<EOEntity>)rootEntity.subEntities()) {
+    		for (EOEntity subEntity : rootEntity.subEntities()) {
     			entityNames.addObject(subEntity.name());
     		}
     	}
@@ -2552,7 +2546,7 @@ public class ERXEOControlUtilities {
 	 */
 	private static void ensureSortOrdering(EOEditingContext ec, NSArray<? extends EOGlobalID> gids, NSMutableArray<? extends EOEnterpriseObject> objects) {
 		for (int i = 0; i < objects.size(); i++) {
-			EOEnterpriseObject object = (EOEnterpriseObject) objects.objectAtIndex(i);
+			EOEnterpriseObject object = objects.objectAtIndex(i);
 
 			EOGlobalID gid = gids.objectAtIndex(i);
 
@@ -2561,7 +2555,7 @@ public class ERXEOControlUtilities {
 			}
 
 			for (int j = i + 1; j < objects.size(); j++) {
-				if (gid.equals(ec.globalIDForObject((EOEnterpriseObject) objects.objectAtIndex(j)))) {
+				if (gid.equals(ec.globalIDForObject(objects.objectAtIndex(j)))) {
 					ERXArrayUtilities.swapObjectsAtIndexesInArray(objects, i, j);
 
 					break;

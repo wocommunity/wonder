@@ -190,9 +190,9 @@ public class Application extends ERXApplication  {
         }
 
         //JMX Support
-		_jmxPort = (String)System.getProperty("WOJMXPort");
-		_jmxAccessFile = (String)System.getProperty("WOJMXAccessFile");
-		_jmxPasswordFile = (String)System.getProperty("WOJMXPasswordFile");
+		_jmxPort = System.getProperty("WOJMXPort");
+		_jmxAccessFile = System.getProperty("WOJMXAccessFile");
+		_jmxPasswordFile = System.getProperty("WOJMXPasswordFile");
 		if (_jmxPort != null) {
 			registerMBean(SiteConfig.getInstance(), "WotaskdJMXMBean",  "SiteConfigMBean");
 			setupRemoteMonitoring();

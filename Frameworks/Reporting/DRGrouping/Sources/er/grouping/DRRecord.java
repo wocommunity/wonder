@@ -4,7 +4,7 @@ import java.util.*;
 
 import com.webobjects.foundation.*;
 
-public class DRRecord extends Object  {
+public class DRRecord {
 
     protected NSKeyValueCodingAdditions _rawRecord;
     protected DRReportModel _model;

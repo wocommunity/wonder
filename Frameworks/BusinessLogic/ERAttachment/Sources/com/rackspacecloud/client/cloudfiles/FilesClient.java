@@ -28,6 +28,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.net.URLCodec;
+import org.apache.commons.lang.CharEncoding;
 import org.apache.commons.lang.text.StrTokenizer;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -3265,7 +3266,7 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
 		}
 		
 		private String makeURI(String base, List<NameValuePair> parameters) {
-			return base + "?" + URLEncodedUtils.format(parameters, "UTF-8");
+			return base + "?" + URLEncodedUtils.format(parameters, CharEncoding.UTF_8);
 		}
 		
 		/*
