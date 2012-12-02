@@ -28,6 +28,9 @@
 	<classpathentry exported="true" kind="lib" path="Libraries/poi-3.5-FINAL-20090928.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/jpa.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/xml-apis-ext.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/jasperreports-3.7.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/jasperreports-4.7.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/jasperreports-applet-4.7.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/jasperreports-fonts-4.7.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/jasperreports-javaflow-4.7.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
