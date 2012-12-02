@@ -206,23 +206,6 @@ public class ERXResponse extends WOResponse {
 	}
 
 	/**
-	 * The original _appendTagAttributeAndValue would skip null values, but not
-	 * blank values, which would produce html like &lt;div style = ""&gt;. This
-	 * implementation also skips blank values.
-	 * 
-	 * @param name attribute name
-	 * @param value attribute value
-	 * @param escape <code>true</code> if value should be escaped
-	 */
-	// REMOVEME as of WO5.4.3 this seems not necessary anymore
-	@Override
-	public void _appendTagAttributeAndValue(String name, String value, boolean escape) {
-		if (value != null) {
-			super._appendTagAttributeAndValue(name, value, escape);
-		}
-	}
-
-	/**
 	 * Overridden to <b>not</b> call super if trying to download an attachment
 	 * to IE.
 	 * 

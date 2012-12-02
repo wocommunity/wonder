@@ -196,12 +196,6 @@ public class ERXEOControlUtilities {
      	if(ec == null) throw new IllegalArgumentException("EO must live in an EC");
      	
         boolean isNewObject = ERXEOControlUtilities.isNewObject(eo);
-        
-        // Check for old EOF bug and do nothing as we can't localInstance
-        // anything here
-        if (ERXProperties.webObjectsVersionAsDouble() < 5.21d && isNewObject) {
-            return eo;
-        }
 
         T localObject = eo;
         

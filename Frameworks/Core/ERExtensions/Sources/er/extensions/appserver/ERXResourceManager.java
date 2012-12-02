@@ -172,8 +172,7 @@ public class ERXResourceManager extends WOResourceManager {
 			}
 			String encoded = WOURLEncoder.encode(fileURL);
 			String key = WOApplication.application().resourceRequestHandlerKey();
-			if (WOApplication.application()._rapidTurnaroundActiveForAnyProject() && WOApplication.application().isDirectConnectEnabled() && ERXApplication.isWO54()) {
-				// AK: 5.4
+			if (WOApplication.application()._rapidTurnaroundActiveForAnyProject() && WOApplication.application().isDirectConnectEnabled()) {
 				key = "_wr_";
 			}
 			WOContext context = (WOContext) request.valueForKey("context");

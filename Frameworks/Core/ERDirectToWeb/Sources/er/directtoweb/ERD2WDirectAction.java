@@ -241,14 +241,8 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
 
     public WOComponent previousPageFromRequest() {
         String cid = context().request().stringFormValueForKey(contextIDKey);
-        if(cid == null) return context().page();
-        WOComponent comp = session().restorePageForContextID(cid);
-        // (ak) we need to put the component to sleep again
-    	// Michael Bushkov: WO5.4.3 tracks all awakened components so no need to call this manually
-        if(comp != null && !ERXApplication.isWO54()) {
-            comp._sleepInContext(comp.context());
-        }
-        return comp;
+        if (cid == null) return context().page();
+        return session().restorePageForContextID(cid);
     }
 
     public String keyPathFromRequest() {
