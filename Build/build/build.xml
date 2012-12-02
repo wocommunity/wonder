@@ -1329,19 +1329,19 @@
         to add your own, add a target definition above and choose the correct group below
      -->
 
-    <target name="common.frameworks.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, Ajax.all, ERDirectToWeb.all, ERNeutralLook.all, ERSelenium.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERIndexing.all, ERChronic.all, ERCaching.all, ERCaptcha.all, ERProfiling.all, EROpenID.all, ERPDFGeneration.all, ERJGroupsSynchronizer.all, ERRest.all, ERAttachment.all, ERTaggable.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all, ERWorkerChannel.all, BTBusinessLogic.all, JavaMemoryAdaptor.all, JavaNeo4JAdaptor.all, JavaRESTAdaptor.all, JavaFSAdaptor.all, JavaERJDBCAdaptor.all, WOLips.all, WOJRebel.all, ERMoviesLogic.all, SnapshotExplorer.all, ERDivaliteLook.all, ERJasperReports.all, ERAttributeExtension.all, ERWOAdaptor.all, ERCayenne.all, ERCayenne.all, ERDistribution.all, MooTools.all, ERJQueryMobile.all, ERPersistentSessionStorage.all, ERQuartzScheduler.all, ERXiss.all, ERFirebug.all" />
+    <target name="common.frameworks.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, Ajax.all, ERDirectToWeb.all, ERNeutralLook.all, ERSelenium.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERIndexing.all, ERChronic.all, ERCaptcha.all, ERProfiling.all, EROpenID.all, ERPDFGeneration.all, ERJGroupsSynchronizer.all, ERRest.all, ERAttachment.all, ERTaggable.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all, BTBusinessLogic.all, JavaMemoryAdaptor.all, JavaNeo4JAdaptor.all, JavaFSAdaptor.all, JavaERJDBCAdaptor.all, WOLips.all, WOJRebel.all, ERMoviesLogic.all, SnapshotExplorer.all, ERJasperReports.all, ERAttributeExtension.all, ERWOAdaptor.all, ERCayenne.all, ERCayenne.all, ERDistribution.all, MooTools.all, ERJQueryMobile.all, ERPersistentSessionStorage.all, ERQuartzScheduler.all, ERXiss.all, ERFirebug.all" />
 
     <target name="common.applications.all" depends="BugTracker.all, ERMailer.all, Uber.all, SecretPal.all, ERXTest.all, PluginTest.all, WOTested.all" />
-
-    <target name="common.examples.all" depends="ERSeleniumExample.all, ERIndexingExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, AjaxExample2.all, YUIExample.all, EROpenIDExample.all, JavaRESTAdaptorExample.all, ERDivaliteExample.all, TickTockMan.all, ERComponentTour.all, ERRestRouteExample.all, Movies.all, ERWebSocketExample.all, ERJasperReportsExample.all, BackgroundTasks.all, ERCayenneExample.all, ERDistributionExampleModel.all, ERDistributionExampleServer.all, ERDistributionExampleClient.all, MooToolsExample.all, ERPDFExamples.all, JqueryMobileExample.all, TextSearchDemo.all" />
+    
+	<target name="common.examples.all" depends="ERSeleniumExample.all, ERIndexingExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, AjaxExample2.all, TickTockMan.all, ERComponentTour.all, ERRestRouteExample.all, Movies.all, ERWebSocketExample.all, ERJasperReportsExample.all, BackgroundTasks.all, ERCayenneExample.all, ERDistributionExampleModel.all, ERDistributionExampleServer.all, ERDistributionExampleClient.all, MooToolsExample.all, ERPDFExamples.all, JqueryMobileExample.all, TextSearchDemo.all" />
 
     <target name="dynareporting.frameworks.all" depends="DRGrouping.all, WRReporting.all" />
-    <target name="dynareporting.examples.all" depends="DocsByExample.all, DynaReporter.all, DRGroupingTest.all" />
+    <target name="dynareporting.examples.all" depends="DocsByExample.all, DynaReporter.all" />
 
     <target name="excelgeneration.frameworks.all" depends="ExcelGenerator.all" />
 
-    <target name="ajax.frameworks.all" depends="YUI.all, AjaxLook.all, ERIUI.all, GoogleChart.all, ERCoolComponents.all, ERJQuery.all, ERPrototaculous.all, ERDivaLook.all, ERModernDirectToWeb.all, ERModernLook.all, ERModernDefaultSkin.all" />
-    <target name="ajax.examples.all" depends="AjaxExample.all, AjaxExample2.all, YUIExample.all, AjaxLookExample.all, ERIUIExample.all, ERDivaLookExample.all, ERModernMoviesDemo.all" />
+    <target name="ajax.frameworks.all" depends="GoogleChart.all, ERCoolComponents.all, ERJQuery.all, ERPrototaculous.all, ERModernDirectToWeb.all, ERModernLook.all, ERModernDefaultSkin.all" />
+    <target name="ajax.examples.all" depends="AjaxExample.all, AjaxExample2.all, ERModernMoviesDemo.all" />
 
     <target name="plugins.all" depends="PostgresqlPlugIn.all,FrontBasePlugIn.all,DerbyPlugIn.all,EROraclePlugIn.all,H2PlugIn.all,MySQLPlugIn.all,DB2PlugIn.all" />
 
@@ -1353,7 +1353,7 @@
     <target name="woadaptors.all" depends="ERIMAdaptor.all, ERWOAdaptor.all" />
     <target name="experimental.all" depends="DevStudio.all" />
 
-    <target name="_frameworks.all" depends="common.frameworks.all, excelgeneration.frameworks.all, ajax.frameworks.all, woadaptors.all, validity.frameworks.all, plugins.all, paypal.frameworks.all, dynareporting.frameworks.all, woadaptors.all, JavaMonitorFramework.all">
+    <target name="_frameworks.all" depends="common.frameworks.all, excelgeneration.frameworks.all, ajax.frameworks.all, woadaptors.all, plugins.all, paypal.frameworks.all, dynareporting.frameworks.all, woadaptors.all, JavaMonitorFramework.all">
      </target>
 
     <target name="patch.frameworks.5431">
@@ -1377,9 +1377,11 @@
         <antcall target="patch.frameworks.${wonder.patch}" />
      </target>
 
-    <target name="applications.all" depends="DevStudio.all, common.applications.all, validity.applications.all, JavaMonitor.all, wotaskd.all"/>
-    <target name="examples.all" depends="common.examples.all, validity.examples.all, dynareporting.examples.all, ajax.examples.all, experimental.all"/>
+    <target name="applications.all" depends="common.applications.all, JavaMonitor.all, wotaskd.all"/>
+    <target name="examples.all" depends="common.examples.all, ajax.examples.all"/>
     <target name="tests.all" depends="ERXTest.all, PluginTest.all"/> <!-- TODO include ERRestTest, TestAdaptor, JavaNeo4JAdaptorTest.all -->
+    <target name="archives.frameworks.all" depends="YUI.all, validity.frameworks.all, JavaRESTAdaptor.all, ERWorkerChannel.all, AjaxLook.all, ERIUI.all, ERCaching.all, ERDivaLook.all, ERDivaliteLook.all" />
+    <target name="archives.examples.all" depends="YUIExample.all, ERIUIExample.all, ERDivaLookExample.all, JavaRESTAdaptorExample.all, ERDivaliteExample.all, DRGroupingTest.all, DevStudio.all, dynareporting.examples.all, AjaxLookExample.all, validity.applications.all, validity.examples.all, EROpenIDExample.all " />
 
     <target name="all.run" depends="frameworks.all, applications.all, examples.all"/>
 
