@@ -111,8 +111,8 @@ public class ERXSQLHelper {
 	 * 
 	 * @param entities
 	 *            a NSArray containing the entities for which create table
-	 *            statements should be generated or null if all entities in the
-	 *            model should be used.
+	 *            statements should be generated or <code>null</code> if all entities
+	 *            in the model should be used.
 	 * @param modelName
 	 *            the name of the EOModel
 	 * @param optionsCreate

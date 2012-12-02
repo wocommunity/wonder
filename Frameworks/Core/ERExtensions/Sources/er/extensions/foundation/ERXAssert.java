@@ -177,11 +177,11 @@ public class ERXAssert {
     }
 
     public void isFalse(boolean value) {
-        if(value == true) fail("expected false");
+        if(value) fail("expected false");
     }
 
     public void isFalse(String message, boolean value) {
-        if(value == true) fail(message, "expected false");
+        if(value) fail(message, "expected false");
     }
 
     public void isNull(Object value) {

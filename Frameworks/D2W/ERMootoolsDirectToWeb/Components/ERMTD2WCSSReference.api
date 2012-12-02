@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="ERMTD2WCSSReference.java" wocomponentcontent="true">
+
+        <binding name="includeRuleStylesheets"/>
+    </wo>
+</wodefinitions>

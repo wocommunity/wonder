@@ -14,7 +14,6 @@ package com.webobjects.monitor.application;
  */
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
-import com.webobjects.foundation.NSLog;
 
 public class Main extends MonitorComponent {
     private static final long serialVersionUID = -6041828876924813157L;

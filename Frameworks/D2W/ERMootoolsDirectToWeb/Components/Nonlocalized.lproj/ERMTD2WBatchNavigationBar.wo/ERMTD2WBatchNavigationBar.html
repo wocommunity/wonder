@@ -1,0 +1,22 @@
+<wo name = "BatchNavigationContainer">
+	<wo name = "HasMultiplePagesConditional">
+		<wo name = "BatchNavigationListContainer">
+			<wo name = "HasPreviousPageConditional">
+				<wo name = "BatchNavigationListItem">
+					<wo name = "PreviousPageAction"><wo name="PreviousLabel"/></wo>
+				</wo>
+			</wo>
+			<wo name = "PageNumberRepetition">
+				<wo name = "BatchNavigationNumberedListItem">
+					<wo name = "IsPageNumberConditional">
+						<wo name = "SelectPageAction"><wo name = "PageNumber"/></wo>				
+					</wo>
+					<wo name = "IsEllipsisConditional"><a href="#">...</a></wo>
+				</wo>
+			</wo>
+			<wo name = "HasNextPageConditional">
+				<wo name = "NextPageAction"><wo name="NextLabel"/></wo> 
+			</wo>
+		</wo>	
+	</wo>
+</wo>

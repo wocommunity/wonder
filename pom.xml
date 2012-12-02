@@ -503,6 +503,11 @@
                 <version>1.6</version>
             </dependency>
             <dependency>
+    			<groupId>commons-io</groupId>
+    			<artifactId>commons-io</artifactId>
+    			<version>2.2</version>
+			</dependency>
+            <dependency>
                 <groupId>commons-httpclient</groupId>
                 <artifactId>commons-httpclient</artifactId>
                 <version>3.0.1</version>
@@ -673,7 +678,7 @@
 			<dependency>
 				<groupId>com.drewnoakes</groupId>
 				<artifactId>metadata-extractor</artifactId>
-				<version>2.3.1</version>
+				<version>2.6.2</version>
 			</dependency>
             <dependency>
                 <groupId>org.neo4j</groupId>
