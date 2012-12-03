@@ -99,22 +99,8 @@ public class ERXSubmitButton extends WOInput {
         _action = _associations.removeObjectForKey("action");
         _actionClass = _associations.removeObjectForKey("actionClass");
         _directActionName = _associations.removeObjectForKey("directActionName");
-        
-        // hack for 5.4
-        if (ERXApplication.isWO54()) {
-        	_class = (WOAssociation) nsdictionary.valueForKey("class");
-        }
-        else {
-        	_class = _associations.removeObjectForKey("class");
-        }
-
-        // hack for 5.4
-        if (ERXApplication.isWO54()) {
-        	_id = (WOAssociation) nsdictionary.valueForKey("id");
-        }
-        else {
-        	_id = _associations.removeObjectForKey("id");
-        }
+        _class = (WOAssociation) nsdictionary.valueForKey("class");
+        _id = (WOAssociation) nsdictionary.valueForKey("id");
 
         if(_action != null && _action.isValueConstant())
             throw new WODynamicElementCreationException("<" + getClass().getName() + ">'action' is a constant.");
