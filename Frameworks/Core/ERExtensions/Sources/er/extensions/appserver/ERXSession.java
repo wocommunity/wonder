@@ -64,8 +64,12 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
   /** logging support */
   public static final Logger log = Logger.getLogger(ERXSession.class);
 
-  /** Notification name that is posted after a session wakes up. */
-  // DELETEME: Now we can use SessionDidRestoreNotification
+  /**
+   * Notification name that is posted after a session wakes up.
+   * 
+   * @deprecated use {@link WOSession#SessionDidRestoreNotification} instead
+   */
+  @Deprecated
   public static final String SessionWillAwakeNotification = "SessionWillAwakeNotification";
   /**
    * Notification name that is posted when a session is about to sleep.
