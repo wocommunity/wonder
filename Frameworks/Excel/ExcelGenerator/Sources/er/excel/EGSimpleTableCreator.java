@@ -229,7 +229,11 @@ public class EGSimpleTableCreator {
 			case HSSFCell.CELL_TYPE_FORMULA:
 			value = cell.getCellFormula();
 			break;
-
+			
+			case HSSFCell.CELL_TYPE_BOOLEAN:
+			value = cell.getBooleanCellValue();
+			break;
+			
 			default:
 			value = cell.getStringCellValue();
 			break;
