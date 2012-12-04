@@ -15,6 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.NDC;
 
@@ -240,6 +241,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     /**
      * Overridden to unlock the page's editingContext, if there is any present.
      */
+    @Override
     public void sleep() {
         if (_context != null) {
             _context.unlock();
@@ -361,7 +363,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     /** Sets the d2wContext for this page */
 	@Override
     public void setLocalContext(D2WContext newValue) {
-        if (ERXExtensions.safeDifferent(newValue, _localContext)) {
+        if (ObjectUtils.notEqual(newValue, _localContext)) {
             // HACK ALERT: this next line is made necessary by the
             // brain-damageness of
             // D2WComponent.setLocalContext, which holds on to the first non
@@ -1023,7 +1025,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         }
     }
 
-    /** Helper method to calulate the tab key array */
+    /** Helper method to calculate the tab key array */
     protected static NSArray tabSectionsContentsFromRuleResult(NSArray tabSectionContentsFromRule) {
         NSMutableArray tabSectionsContents = new NSMutableArray();
 
@@ -1147,6 +1149,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * has been explicitly set.
      * @return The page's next page delegate.
      */
+    @Override
     public NextPageDelegate nextPageDelegate() {
         if (_nextPageDelegate == null) {
             _nextPageDelegate = (NextPageDelegate) d2wContext().valueForKey("nextPageDelegate");
@@ -1154,6 +1157,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         return _nextPageDelegate;
     }
 
+    @Override
     public void setNextPageDelegate(NextPageDelegate nextpagedelegate) {
         _nextPageDelegate = nextpagedelegate;
     }
@@ -1166,7 +1170,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     /**
      * Returns the pageController for this page. If there is none given yet,
      * tries to create one by querying the key "pageController" from the
-     * d2wContext. The most conventient way to set and use a pageController is
+     * d2wContext. The most convenient way to set and use a pageController is
      * via the rule system:<code><pre>
      *  100: (entity.name='WebSite') and (task = 'list') =&gt; pageController = &quot;ListWebSiteController&quot; [er.directtoweb.ERDDelayedObjectCreationAssignment]
      *  100: (entity.name='WebSite') =&gt; actions = {left = (editAction, controllerAction);}
@@ -1222,6 +1226,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         _pageController = aPageController;
     }
 
+    @Override
     public boolean showCancel() {
         return _nextPageDelegate != null || _nextPage != null;
     }
@@ -1241,6 +1246,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
 	 *
 	 * @return the name of the page wrapper
 	 */
+    @Override
 	public String pageWrapperName() {
 		String name = (String)d2wContext().valueForKey(D2WModel._PageWrapperNameKey);
 		
