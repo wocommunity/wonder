@@ -21,7 +21,6 @@
 	<classpathentry kind="con" path="WOFramework/ERXPartialBaseModel"/>
 	<classpathentry kind="con" path="WOFramework/ERXPartialsExampleModel"/>
 	<classpathentry kind="con" path="WOFramework/WOLips"/>
-	<classpathentry kind="con" path="WOFramework/ERDirectToRest"/>
 	<classpathentry kind="con" path="WOFramework/ERModernLook"/>
 	<classpathentry kind="con" path="WOFramework/ERModernDefaultSkin"/>
 	<classpathentry kind="con" path="WOFramework/ERCoolComponents"/>
