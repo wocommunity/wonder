@@ -6,11 +6,11 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.components;
 
+import org.apache.commons.lang.ObjectUtils;
+
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
-
-import er.extensions.ERXExtensions;
 
 /**
  * Sets a key value when the hyperlink is clicked.<br />
@@ -43,6 +43,6 @@ public class ERXHyperlinkKeyValueSetter extends WOComponent {
     
     public boolean disabled() {
     	Object val = valueForBinding("binding");
-    	return ERXExtensions.safeEquals(val, valueForBinding("value"));
+    	return ObjectUtils.equals(val, valueForBinding("value"));
     }
 }

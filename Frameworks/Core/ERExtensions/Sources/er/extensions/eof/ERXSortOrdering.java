@@ -1,12 +1,11 @@
 package er.extensions.eof;
 
+import org.apache.commons.lang.ObjectUtils;
+
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSSelector;
-
-import er.extensions.ERXExtensions;
-
 
 /**
  * <p>
@@ -126,7 +125,7 @@ public class ERXSortOrdering extends EOSortOrdering {
 	public boolean equals(Object obj) {
 		if (obj instanceof ERXSortOrdering) {
 			ERXSortOrdering other = (ERXSortOrdering)obj;
-			return ERXExtensions.safeEquals(key(), other.key()) && ERXExtensions.safeEquals(selector(), other.selector());
+			return ObjectUtils.equals(key(), other.key()) && ObjectUtils.equals(selector(), other.selector());
 		}
 		return false;
 	}

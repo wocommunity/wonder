@@ -12,6 +12,7 @@ import java.io.ObjectOutputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
@@ -52,7 +53,6 @@ import er.directtoweb.ERD2WFactory;
 import er.directtoweb.delegates.ERDDeletionDelegate;
 import er.directtoweb.interfaces.ERDEditObjectDelegate;
 import er.directtoweb.interfaces.ERDListPageInterface;
-import er.extensions.ERXExtensions;
 import er.extensions.appserver.ERXComponentActionRedirector;
 import er.extensions.appserver.ERXDisplayGroup;
 import er.extensions.appserver.ERXSession;
@@ -184,7 +184,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	 * display.
 	 */
 	public void editingContextDidSaveChanges(NSNotification notif) {
-	    if(ERXExtensions.safeEquals(sessionID(), ERXSession.currentSessionID())) {
+	    if (ObjectUtils.equals(sessionID(), ERXSession.currentSessionID())) {
 	        _hasToUpdate = true;
 	    }
 	}
@@ -533,7 +533,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 			// sort order keys required it leads to a KVC error later on. We fix
 			// this here to re-init
 			// the sort ordering from the rules.
-			if (old != null && eodatasource != null && ERXExtensions.safeDifferent(eodatasource.classDescriptionForObjects(), old.classDescriptionForObjects())) {
+			if (old != null && eodatasource != null && ObjectUtils.notEqual(eodatasource.classDescriptionForObjects(), old.classDescriptionForObjects())) {
 				setSortOrderingsOnDisplayGroup(sortOrderings(), displayGroup());
 			}
 		}

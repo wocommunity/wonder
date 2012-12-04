@@ -1,12 +1,13 @@
 package er.extensions.woextensions;
 
+import org.apache.commons.lang.ObjectUtils;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.ERXExtensions;
 import er.extensions.components.ERXArrayChooser;
 import er.extensions.eof.ERXEOControlUtilities;
 
@@ -44,7 +45,7 @@ public class WOToOneRelationship extends ERXArrayChooser {
         Object realSourceObject = realSourceObject();
         
         Object currentValue = NSKeyValueCoding.Utility.valueForKey(realSourceObject, realRelationshipKey);
-        if(!ERXExtensions.safeEquals(value, currentValue)) {
+        if (ObjectUtils.notEqual(value, currentValue)) {
             if(realSourceObject instanceof EOEnterpriseObject) {
                 EOEnterpriseObject eo = (EOEnterpriseObject)realSourceObject;
                 if(value instanceof EOEnterpriseObject) {

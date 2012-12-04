@@ -1,5 +1,7 @@
 package er.modern.look.pages;
 
+import org.apache.commons.lang.ObjectUtils;
+
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WContext;
@@ -8,7 +10,6 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 
 import er.directtoweb.ERD2WContainer;
 import er.directtoweb.pages.templates.ERD2WTabInspectPageTemplate;
-import er.extensions.ERXExtensions;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.foundation.ERXValueUtilities;
@@ -130,7 +131,7 @@ public class ERMODTabInspectPage extends ERD2WTabInspectPageTemplate {
 		D2WContext result = super.d2wContext();
 		if (_previousTaskContext == null) {
 			_previousTaskContext = result.task();
-		} else if (ERXExtensions.safeDifferent(_previousTaskContext, result.task())) {
+		} else if (ObjectUtils.notEqual(_previousTaskContext, result.task())) {
 			clearTabSectionsContents();
 			_previousTaskContext = result.task();
 		}

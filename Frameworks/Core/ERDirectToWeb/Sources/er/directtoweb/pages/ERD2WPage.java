@@ -15,6 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.NDC;
 
@@ -361,7 +362,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     /** Sets the d2wContext for this page */
 	@Override
     public void setLocalContext(D2WContext newValue) {
-        if (ERXExtensions.safeDifferent(newValue, _localContext)) {
+        if (ObjectUtils.notEqual(newValue, _localContext)) {
             // HACK ALERT: this next line is made necessary by the
             // brain-damageness of
             // D2WComponent.setLocalContext, which holds on to the first non

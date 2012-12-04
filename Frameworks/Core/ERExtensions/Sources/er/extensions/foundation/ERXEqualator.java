@@ -7,9 +7,10 @@
 
 package er.extensions.foundation;
 
+import org.apache.commons.lang.ObjectUtils;
+
 import com.webobjects.eocontrol.EOEnterpriseObject;
 
-import er.extensions.ERXExtensions;
 import er.extensions.eof.ERXEOControlUtilities;
 
 /**
@@ -59,7 +60,7 @@ public abstract class ERXEqualator {
         public _SafeEqualsEqualator() {}
 
         public boolean objectIsEqualToObject(Object o1, Object o2) {
-            return ERXExtensions.safeEquals(o1, o2);
+            return ObjectUtils.equals(o1, o2);
         }
     }
     
