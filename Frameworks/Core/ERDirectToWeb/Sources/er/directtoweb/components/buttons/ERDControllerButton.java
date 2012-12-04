@@ -45,7 +45,8 @@ public class ERDControllerButton extends ERDActionButton implements ERDBranchInt
     public String cssForChoice() {
     	String css = (String) branch.objectForKey("branchClass");
     	if(css == null) {
-    		css = "";
+    		css = (String)valueForBinding("branchClass");
+    		css = css != null ? css  : "";
     	}
     	css += " " + ERXSubmitButton.STYLE_PREFIX + branch.objectForKey("branchName");
     	if(css.length() ==0 ) {

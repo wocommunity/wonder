@@ -49,7 +49,6 @@ import er.extensions.appserver.ERXWOContext;
 import er.extensions.eof.ERXConstant;
 import er.extensions.formatters.ERXNumberFormatter;
 import er.extensions.formatters.ERXTimestampFormatter;
-import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXDictionaryUtilities;
 import er.extensions.foundation.ERXFileNotificationCenter;
 import er.extensions.foundation.ERXFileUtilities;

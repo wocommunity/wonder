@@ -1,15 +1,10 @@
 package er.pdfexamples.xsl.test;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.StringReader;
-import java.net.URL;
 import java.util.Date;
-import java.util.Scanner;
 
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;

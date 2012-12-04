@@ -1,0 +1,38 @@
+ERAttachmentFlexibleEditor : WOSwitchComponent {
+	// Using WOSwitchComponent to prevent dependency on ERAttachment framework
+	WOComponentName = d2wContext.editAttachmentComponent;
+	masterObject = object;
+	relationshipKey = key;
+	viewHeight = ^attachmentViewHeight;
+	viewWidth = ^attachmentViewWidth;
+	injectDefaultCSS = ^attachmentInjectDefaultCSS;
+	configurationName = ^attachmentConfigurationName;
+	editorCancelLabel = ^attachmentEditorCancelLabel;
+	editorEditLabel = ^attachmentEditorCancelLabel;
+	editorCancelButtonClass = ^attachmentEditorCancelButtonClass;
+	editorEditButtonClass = ^attachmentEditorEditButtonClass;
+	id = ^attachmentId;
+	storageType = ^attachmentStorageType;
+	uploadAllowCancel = ^attachmentUploadAllowCancel;
+	uploadCancelButtonClass = ^attachmentUploadCancelButtonClass;
+	uploadCancelLabel =^attachmentUploadCancelLabel;
+	uploadCanceledAction = ^attachmentUploadCanceledAction;
+	uploadCanceledFunction = ^attachmentUploadCanceledFunction;
+	uploadCancelingText = ^attachmentUploadCancelingText;
+	uploadClearClass = ^attachmentUploadClearClass;
+	uploadDialogHeaderText = ^attachmentUploadDialogHeaderText;
+	uploadFailedAction = ^attachmentUploadFailedAction;
+	uploadFailedFunction = ^attachmentUploadFailedFunction;
+	uploadFinishedFunction = ^attachmentUploadFinishedFunction;
+	uploadMimeType =^attachmentUploadMimeType;
+	uploadOwnerID = ^attachmentUploadOwnerID;
+	uploadHeight = ^attachmentUploadHeight;
+	uploadRefreshTime = ^attachmentUploadRefreshTime;
+	uploadSelectFileButtonClass = ^attachmentUploadSelectFileButtonClass;
+	uploadSelectFileLabel = ^attachmentUploadSelectFileLabel;
+	uploadStartedFunction = ^attachmentUploadStartedFunction;
+	uploadWidth = ^attachmentUploadWidth;
+	viewAllowDownload = ^attachmentViewAllowDownload;
+	viewShowAttachmentLink = ^attachmentViewShowAttachmentLink;
+	viewShowFileName = ^attachmentViewShowFileName;
+}

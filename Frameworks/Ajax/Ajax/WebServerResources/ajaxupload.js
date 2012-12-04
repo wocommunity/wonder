@@ -404,6 +404,14 @@
                 div.style.filter = "alpha(opacity=0)";
             }            
             
+            if (this._settings.onClickBefore) {
+	            /* using prototype.js API which is much simpler */
+	            Event.observe(input, 'click', function(event) {
+	            	if (event == null) event = window.event;
+	            	if (!eval(self._settings.onClickBefore)) Event.stop(event);
+	            });
+	        }
+            
             addEvent(input, 'change', function(){
                  
                 if ( ! input || input.value === ''){                
@@ -435,7 +443,10 @@
                 // We use visibility instead of display to fix problem with Safari 4
                 // The problem is that the value of input doesn't change if it 
                 // has display none when user selects a file           
-                self._input.parentNode.style.visibility = 'hidden';
+                //
+                // mhast: this causes a MAJOR issue in IE 8 when using onClickBefore
+                //        removing it does not seem to have any negative effects
+                //input.parentNode.style.visibility = 'hidden';
 
             });   
                         

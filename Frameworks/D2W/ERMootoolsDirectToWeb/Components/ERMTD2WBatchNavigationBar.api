@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERMTD2WBatchNavigationBar" wocomponentcontent="false">    <binding name="displayGroup"/>
+        <validation message="'displayGroup' is a required binding.">
+            <unbound name="displayGroup"/>
+        </validation>
+    </wo>
+</wodefinitions>

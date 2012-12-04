@@ -25,7 +25,6 @@ import com.webobjects.foundation.NSKeyValueCoding;
 
 import er.bugtracker.pages.ReportPage;
 import er.directtoweb.ERD2WFactory;
-import er.directtoweb.delegates.ERDObjectWasCreatedDelegate;
 import er.directtoweb.interfaces.ERDQueryPageInterface;
 import er.directtoweb.pages.ERD2WInspectPage;
 import er.directtoweb.pages.ERD2WQueryPage;

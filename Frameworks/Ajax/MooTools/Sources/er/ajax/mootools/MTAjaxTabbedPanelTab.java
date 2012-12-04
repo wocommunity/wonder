@@ -51,7 +51,7 @@ public class MTAjaxTabbedPanelTab extends AjaxDynamicElement {
     	if (isVisble(component)) {
             response.appendContentString("<li id=\"");
             response.appendContentString((String)id().valueInComponent(component) + "_panel");
-            response.appendContentString("\" updateUrl=\"");
+            response.appendContentString("\" data-updateUrl=\"");
             response.appendContentString(AjaxUtils.ajaxComponentActionUrl(aContext));
     		response.appendContentString("\"");
     		if(isSelected(component)) {

@@ -23,7 +23,7 @@ public final class FSAdaptorContext extends EOAdaptorContext {
     }
 
     public void commitTransaction() {
-        if (_hasTransaction == true) {
+        if (_hasTransaction) {
             _hasTransaction = false;
             this.transactionDidCommit();
         }
