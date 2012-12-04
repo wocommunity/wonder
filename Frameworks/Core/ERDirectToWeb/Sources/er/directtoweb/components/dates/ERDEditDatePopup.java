@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.components.dates;
 
+import java.util.TimeZone;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.foundation.NSTimestamp;
@@ -52,4 +54,8 @@ public class ERDEditDatePopup extends ERDEditDatePopupCommon {
             parent().validationFailedWithException(e,date,key());           
         }
     }
+    
+    public Object timeZoneString() {
+      return TimeZone.getDefault().getDisplayName(true, TimeZone.SHORT);
+  }
 }
