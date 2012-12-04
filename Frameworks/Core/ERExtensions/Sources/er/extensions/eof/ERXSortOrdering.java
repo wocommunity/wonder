@@ -122,6 +122,7 @@ public class ERXSortOrdering extends EOSortOrdering {
 	 * @param obj the Object to compare to
 	 * @return <code>true</code> if obj is an EOSortOrder with the same key and selector as this object
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof ERXSortOrdering) {
 			ERXSortOrdering other = (ERXSortOrdering)obj;

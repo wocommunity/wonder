@@ -425,6 +425,7 @@ public class ERXValidationException extends NSValidation.ValidationException imp
         return ERXValidation.localizedDisplayNameForKey(eoObject() != null ? eoObject().classDescription() : null, key, localizer);
     }
 
+    @Override
     public int hashCode() {
     	return (type() == null ? 1 : type().hashCode()) * (key() == null ? 1 : key().hashCode()) * (object() == null ? 1 : object().hashCode()) * (value() == null ? 1 : value().hashCode()) * (additionalExceptions() == null ? 1 : additionalExceptions().hashCode()); 
     }
@@ -434,7 +435,7 @@ public class ERXValidationException extends NSValidation.ValidationException imp
      * @return description of the validation exception
      */
     @Override
-	public boolean equals(Object anotherObject) {
+    public boolean equals(Object anotherObject) {
         if(anotherObject != null && anotherObject instanceof ERXValidationException) {
             ERXValidationException ex = (ERXValidationException)anotherObject;
             return ObjectUtils.equals(type(), ex.type()) && ObjectUtils.equals(key(), ex.key()) && ObjectUtils.equals(object(), ex.object())
@@ -442,8 +443,7 @@ public class ERXValidationException extends NSValidation.ValidationException imp
         }
         return super.equals(anotherObject);
     }
-    
-    
+
     /**
      * Returns the formatted description of the validation exception
      * without calling <code>getMessage</code>.

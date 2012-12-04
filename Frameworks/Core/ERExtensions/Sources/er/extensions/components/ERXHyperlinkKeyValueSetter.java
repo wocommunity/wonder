@@ -34,13 +34,14 @@ public class ERXHyperlinkKeyValueSetter extends WOComponent {
         super(aContext);
     }
 
+    @Override
     public boolean isStateless() { return true; }
-    
+
     public WOActionResults action() {
         setValueForBinding(valueForBinding("value"), "binding");
         return (WOActionResults) (canGetValueForBinding("action") ? valueForBinding("action") : null);
     }
-    
+
     public boolean disabled() {
     	Object val = valueForBinding("binding");
     	return ObjectUtils.equals(val, valueForBinding("value"));

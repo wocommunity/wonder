@@ -75,7 +75,7 @@ public class ERXKeyValueCodingUtilities {
                     for (int i = 0; i < fields.length && !found; i++) {
                         Field current = fields[i];
                         if(current.getName().equals(key)) {
-                        	// AK: should have a check for existance of KeyValueCodingProtectedAccessor here
+                        	// AK: should have a check for existence of KeyValueCodingProtectedAccessor here
                         	// AK: disabled, only for testing
                         	// boolean isAccessible = current.isAccessible();
                         	// current.setAccessible(true);

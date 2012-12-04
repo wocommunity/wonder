@@ -12,10 +12,10 @@ import er.extensions.components.ERXArrayChooser;
 import er.extensions.eof.ERXEOControlUtilities;
 
 /**
- * Back port from WO 5 WOExtensions. This component is binding compatible, but not source compatible.<br />
+ * Back port from WO 5 WOExtensions. This component is binding compatible, but not source compatible.
+ * 
  * @author ak 
  */
-
 public class WOToOneRelationship extends ERXArrayChooser {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -29,12 +29,14 @@ public class WOToOneRelationship extends ERXArrayChooser {
     public WOToOneRelationship(WOContext aContext)  {
         super(aContext);
     }
-    
+
+    @Override
     public void reset() {
         super.reset();
         _selection = null;
     }
 
+    @Override
     public void awake() {
         super.awake();
        _selection = null;
@@ -128,7 +130,8 @@ public class WOToOneRelationship extends ERXArrayChooser {
         }
         return selection;
     }
-    
+
+    @Override
     public NSArray theList() {
         if (_list==null) {
             _list = super.theList();

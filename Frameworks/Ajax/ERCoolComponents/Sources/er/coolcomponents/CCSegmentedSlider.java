@@ -1,4 +1,3 @@
-
 package er.coolcomponents;
 
 import org.apache.commons.lang.ObjectUtils;
@@ -14,7 +13,6 @@ import er.ajax.AjaxUtils;
 import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.components.ERXComponent;
 import er.extensions.foundation.ERXStringUtilities;
-
 
 /**
  * CCSegmentedSlider provides a picker for an enumerated type inspired by the iPhone on/off slider. The bindings are

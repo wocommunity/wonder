@@ -537,7 +537,6 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 				setSortOrderingsOnDisplayGroup(sortOrderings(), displayGroup());
 			}
 		}
-		
 	}
 
 	protected void willUpdate() {

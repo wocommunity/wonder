@@ -137,6 +137,4 @@ public class ERMODTabInspectPage extends ERD2WTabInspectPageTemplate {
 		}
 		return super.d2wContext();
 	}
-
-
 }

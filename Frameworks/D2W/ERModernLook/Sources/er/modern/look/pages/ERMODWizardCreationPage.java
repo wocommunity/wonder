@@ -198,5 +198,4 @@ public class ERMODWizardCreationPage extends ERD2WWizardCreationPageTemplate {
 		}
 		return super.d2wContext();
 	}
-
 }
