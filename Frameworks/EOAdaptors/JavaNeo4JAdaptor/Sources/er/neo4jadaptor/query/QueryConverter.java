@@ -14,6 +14,7 @@ import com.webobjects.foundation.NSSelector;
 
 import er.extensions.eof.qualifiers.ERXInQualifier;
 import er.neo4jadaptor.ersatz.webobjects.NSTranslator;
+import er.neo4jadaptor.query.expression.sentence.operators.ComparisonOperator;
 
 /**
  * Converts {@link EOQualifier}s to custom type of queries.
@@ -24,36 +25,6 @@ import er.neo4jadaptor.ersatz.webobjects.NSTranslator;
  */
 public abstract class QueryConverter <ClauseType> {
 
-	public static enum ComparisonOperator {
-		LESS_THAN("<"),
-		LESS_OR_EQUAL("<="),
-		GREATER_THAN(">"),
-		GREATER_OR_EQUAL(">="), 
-		EQUAL("="),
-		/**
-		 * Case sensitive match using wildcards
-		 */
-		LIKE("like"),
-		/**
-		 * Case insensitive match using wildcards
-		 */
-		ILIKE("ilike"),
-		/**
-		 * Regular expression match
-		 */
-		MATCHES("matches");
-		
-		private final String asString;
-		
-		private ComparisonOperator(String asString) {
-			this.asString = asString;
-		}
-		
-		@Override
-		public String toString() {
-			return asString;
-		}
-	}
 	
 	/**
 	 * @param entity

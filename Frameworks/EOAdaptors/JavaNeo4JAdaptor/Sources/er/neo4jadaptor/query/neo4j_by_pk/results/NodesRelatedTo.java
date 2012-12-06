@@ -24,16 +24,12 @@ public class NodesRelatedTo implements Results<Node> {
 	@SuppressWarnings("unused")
 	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(NodesRelatedTo.class);
 
-	private final Results<Node> relatedTo;
-	private final RelationshipType relationshipType; 
+	final Cursor<Relationship> relationshipsIterator;
 	
 	public NodesRelatedTo(Results<Node> relatedTo, EORelationship rel) {
-		this.relatedTo = relatedTo;
-		this.relationshipType = Neo4JUtils.getRelationshipType(rel);
-	}
-	
-	public Cursor<Node> iterator() {
-		final Cursor<Node> nodeCursor = relatedTo.iterator();
+		final RelationshipType relationshipType = Neo4JUtils.getRelationshipType(rel);
+		
+		final Cursor<Node> nodeCursor = relatedTo;
 		
 		Cursor<Cursor<Relationship>> twoLevelIt = new Cursor<Cursor<Relationship>>() {
 			public void remove() {
@@ -56,25 +52,22 @@ public class NodesRelatedTo implements Results<Node> {
 			}
 		};
 		
-		final Cursor<Relationship> relationshipsIterator = new FlattenedCursor<Relationship>(twoLevelIt);
-		
-		
-		return new Cursor<Node>() {
-			public boolean hasNext() {
-				return relationshipsIterator.hasNext();
-			}
-			
-			public void close() {
-				relationshipsIterator.close();
-			}
+		relationshipsIterator = new FlattenedCursor<Relationship>(twoLevelIt);
+	}
+	
+	public boolean hasNext() {
+		return relationshipsIterator.hasNext();
+	}
+	
+	public void close() {
+		relationshipsIterator.close();
+	}
 
-			public Node next() {
-				return relationshipsIterator.next().getStartNode();
-			}
+	public Node next() {
+		return relationshipsIterator.next().getStartNode();
+	}
 
-			public void remove() {
-				relationshipsIterator.remove();
-			}
-		};
+	public void remove() {
+		relationshipsIterator.remove();
 	}
 }

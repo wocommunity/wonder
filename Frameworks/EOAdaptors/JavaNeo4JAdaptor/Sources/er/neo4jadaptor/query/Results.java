@@ -7,12 +7,11 @@ import er.neo4jadaptor.utils.cursor.Cursor;
 
 
 /**
- * Provides iterator for the search results.
+ * Marker interface for the search results cursor.
  * 
  * @author Jedrzej Sobanski
  *
  * @param <T>
  */
-public interface Results <T extends PropertyContainer> {
-	public Cursor<T> iterator();
+public interface Results <T extends PropertyContainer> extends Cursor<T> {
 }
