@@ -10,6 +10,7 @@ import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
@@ -233,7 +234,10 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
                 String appName, String daName,
                 boolean relative, String suffix) {
         StringBuffer result = new StringBuffer(ADAPTOR_PREFIX_MARKER);
-        result.append(".woa/wa/");
+        result.append(WOApplication.application().applicationExtension());
+        result.append('/');
+        result.append(WOApplication.application().directActionRequestHandlerKey());
+        result.append('/');
         result.append(daName);
         result.append('?');
 

@@ -197,7 +197,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 		// Note: If you configured the adaptor's WebObjectsAlias to something other than the default, 
 		// make sure to also set your WOAdaptorURL property to match.  Otherwise, asking the new context 
 		// the path to a direct action or component action URL will give an incorrect result.
-		String requestUrl = app.cgiAdaptorURL() + "/" + app.name() + ".woa";
+		String requestUrl = app.cgiAdaptorURL() + "/" + app.name() + app.applicationExtension();
 		try {
 			URL url = new URL(requestUrl);
 			requestUrl = url.getPath(); // Get just the part of the URL that is relative to the server root.

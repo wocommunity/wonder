@@ -890,9 +890,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		String appUrl;
 		if (application().isDirectConnectEnabled()) {
 			appUrl = adapterUrl.replace("/cgi", ":" + application().port() + "/cgi");
-			appUrl += "/" + application().name() + ".woa";
+			appUrl += "/" + application().name() + application().applicationExtension();
 		} else {
-			appUrl = adapterUrl + "/" + application().name() + ".woa/-" + application().port();
+			appUrl = adapterUrl + "/" + application().name() + application().applicationExtension() + "/-" + application().port();
 		}
 		
 		URL url;
@@ -1212,7 +1212,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	    _replaceApplicationPathReplace = ERXProperties.stringForKey("er.extensions.ERXApplication.replaceApplicationPath.replace");
 	    
 	    if (_replaceApplicationPathPattern == null && rewriteDirectConnectURL()) {
-	    	_replaceApplicationPathPattern = "/cgi-bin/WebObjects/" + name() + ".woa";
+	    	_replaceApplicationPathPattern = "/cgi-bin/WebObjects/" + name() + applicationExtension();
 	        if (_replaceApplicationPathReplace == null) {
 	        	_replaceApplicationPathReplace = "";
 	        }
