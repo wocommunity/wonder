@@ -23,7 +23,6 @@ import er.extensions.foundation.ERXTimestampUtilities;
  * @binding displayGroup
  * @binding key
  */
-
 public class ERXQueryRecentDates extends WOComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -52,23 +51,24 @@ public class ERXQueryRecentDates extends WOComponent {
         "3 months",
         "6 months"
     };
-    private final static Integer[] indices={
+    private static NSArray<Integer> indexes = new NSArray<Integer>(
         ERXConstant.ZeroInteger,
         ERXConstant.OneInteger,
         ERXConstant.TwoInteger,
         ERXConstant.integerForInt(3),
         ERXConstant.integerForInt(4),
         ERXConstant.integerForInt(5),
-        ERXConstant.integerForInt(6) };
-    private static NSArray indexes=new NSArray(indices);
+        ERXConstant.integerForInt(6)
+    );
 
-    public NSArray indexes() { return indexes; }
+    public NSArray<Integer> indexes() { return indexes; }
     public Integer dateItem;
 
     public String displayString() {
         return daysAgoString[dateItem.intValue()];
     }
 
+    // FIXME the return type should be Integer
     public Object date() {
         int found=0;
         NSTimestamp dateFromQueryMin=(NSTimestamp)displayGroup.queryMatch().valueForKey(key);
@@ -93,10 +93,9 @@ public class ERXQueryRecentDates extends WOComponent {
         if(howManyDaysAgo==0) {
             displayGroup.queryMatch().removeObjectForKey(key);
             displayGroup.queryOperator().removeObjectForKey(key);
-	}
-        else {
+        } else {
             displayGroup.queryMatch().takeValueForKey(now.timestampByAddingGregorianUnits(0,0,-howManyDaysAgo,0,0,0), key);
-            displayGroup.queryOperator().takeValueForKey(">", key);	    
-	}
+            displayGroup.queryOperator().takeValueForKey(">", key);
+        }
     }
 }

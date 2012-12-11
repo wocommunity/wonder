@@ -217,6 +217,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 		ERXThreadStorage.takeValueForKey(userInfo, ERXWOContext.CONTEXT_DICTIONARY_KEY);
 	}
 
+	@Override
 	public NSDictionary userInfo() {
 		return mutableUserInfo();
 	}
@@ -685,7 +686,9 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	 * Workaround for missing componentActionUrl(String) in 5.3.
 	 * @param context
 	 * @return ajax action URL
+	 * @deprecated use {@link #componentActionURL(String)} instead
 	 */
+	@Deprecated
 	public static String ajaxActionUrl(WOContext context) {
 		String url = context.componentActionURL().replaceFirst( "/" + WOApplication.application().componentRequestHandlerKey() + "/", "/" +ERXApplication.erAjaxRequestHandlerKey() + "/");
 		return url;

@@ -1224,6 +1224,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * If mod_rewrite is being used we don't want the adaptor prefix being part of the redirect.
 	 * @see com.webobjects.appserver.WOApplication#_newLocationForRequest(com.webobjects.appserver.WORequest)
 	 */
+	@Override
 	public String _newLocationForRequest(WORequest aRequest) {
 		return _rewriteURL(super._newLocationForRequest(aRequest));
 	}
@@ -1518,6 +1519,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * 
 	 * @author ak
 	 */
+	@Override
 	public WOComponentDefinition _componentDefinition(String s, NSArray nsarray) {
 		if(ERXProperties.booleanForKeyWithDefault("er.extensions.ERXApplication.fixCachingEnabled", true)) {
 			// _expectedLanguages already contains all the languages in all projects, so
@@ -1627,7 +1629,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	/**
 	 * Overridden to fix that direct connect apps can't refuse new sessions.
 	 */
-
 	@Override
 	public synchronized void refuseNewSessions(boolean value) {
 		boolean success = false;
