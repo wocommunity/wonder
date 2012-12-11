@@ -15,7 +15,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSTimestamp;
 
 import er.extensions.eof.ERXConstant;
-import er.extensions.foundation.ERXTimestampUtility;
+import er.extensions.foundation.ERXTimestampUtilities;
 
 /**
  * Nice for adjusting the query specs for dates on a display group.<br />
@@ -74,7 +74,7 @@ public class ERXQueryRecentDates extends WOComponent {
         NSTimestamp dateFromQueryMin=(NSTimestamp)displayGroup.queryMatch().valueForKey(key);
         if (dateFromQueryMin!=null) {
             NSTimestamp now=new NSTimestamp();
-            int d = (int)ERXTimestampUtility.differenceByDay(dateFromQueryMin, now);
+            int d = (int)ERXTimestampUtilities.differenceByDay(dateFromQueryMin, now);
             if (d>0) {
                 for (int i=0;i<daysAgoArray.length-1;i++) {
                     if (d>=daysAgoArray[i] && d<= daysAgoArray[i+1]) {

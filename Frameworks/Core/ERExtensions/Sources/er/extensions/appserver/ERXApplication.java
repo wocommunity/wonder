@@ -109,7 +109,7 @@ import er.extensions.foundation.ERXPatcher;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXRuntimeUtilities;
 import er.extensions.foundation.ERXThreadStorage;
-import er.extensions.foundation.ERXTimestampUtility;
+import er.extensions.foundation.ERXTimestampUtilities;
 import er.extensions.localization.ERXLocalizer;
 import er.extensions.migration.ERXMigrator;
 import er.extensions.statistics.ERXStats;
@@ -1398,7 +1398,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				log.info("Instance will not live past " + timeToDie + ":00.");
 				NSLog.out.appendln("Instance will not live past " + timeToDie + ":00.");
 				NSTimestamp now = new NSTimestamp();
-				int s = (timeToDie - ERXTimestampUtility.hourOfDay(now)) * 3600 - ERXTimestampUtility.minuteOfHour(now) * 60;
+				int s = (timeToDie - ERXTimestampUtilities.hourOfDay(now)) * 3600 - ERXTimestampUtilities.minuteOfHour(now) * 60;
 				if (s < 0)
 					s += 24 * 3600; // how many seconds to the deadline
 	
