@@ -230,7 +230,7 @@ public class EGSimpleWorkbookHelper {
 	public String writeToTemp() {
 		File file = null;
 		try {
-			file = File.createTempFile(null, ".xls");
+			file = File.createTempFile("eg_", ".xls");
 		} catch (java.io.IOException e) {
 			return null;
 		}
