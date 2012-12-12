@@ -384,7 +384,9 @@ public class ERLuceneAdaptorChannel extends EOAdaptorChannel {
 			} else {
 				field = null;
 			}
-			field.setValue(stringValue);
+			if (field != null) {
+				field.setValue(stringValue);
+			}
 			return field;
 		}
 

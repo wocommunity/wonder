@@ -184,6 +184,9 @@ public class ERXRandomGUID {
             md5 = MessageDigest.getInstance("MD5");
         } catch (NoSuchAlgorithmException e) {
             System.out.println("Error: " + e);
+            valueBeforeMD5 = "";
+            valueAfterMD5 = "";
+            return;
         }
 
         try {

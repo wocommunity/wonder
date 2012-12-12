@@ -86,7 +86,7 @@ public class FilesUtil
                 logger.warn("Unable to load properties file.", e);
             }
         }
-        return props.getProperty(key);
+        return props != null ? props.getProperty(key) : null;
     }
 
 
@@ -109,7 +109,7 @@ public class FilesUtil
                 logger.warn("Unable to load properties file.", e);
             }
         }
-        return props.getProperty(key, defaultValue);
+        return props != null ? props.getProperty(key, defaultValue) : defaultValue;
     }
 
 
