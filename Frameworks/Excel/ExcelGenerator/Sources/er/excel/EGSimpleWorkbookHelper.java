@@ -1,6 +1,7 @@
 package er.excel;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -255,6 +256,12 @@ public class EGSimpleWorkbookHelper {
 			_workbook.write(stream);
 		} catch (java.io.IOException e) {
 			return false;
+		} finally {
+			try {
+				stream.close();
+			} catch (IOException e) {
+				// ignore
+			}
 		}
 		return true;
 	}
