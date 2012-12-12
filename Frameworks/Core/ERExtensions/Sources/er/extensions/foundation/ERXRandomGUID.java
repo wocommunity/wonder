@@ -10,6 +10,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Random;
 
+import org.apache.log4j.Logger;
+
 /**
  * <p>
  * In the multitude of java GUID generators, I found none that guaranteed
@@ -119,7 +121,7 @@ import java.util.Random;
  * @author Marc A. Mnich
  */
 public class ERXRandomGUID {
-
+    private static Logger log = Logger.getLogger(ERXRandomGUID.class);
     public String valueBeforeMD5 = "";
     public String valueAfterMD5 = "";
     private static Random myRand;
@@ -141,7 +143,7 @@ public class ERXRandomGUID {
         try {
             s_id = InetAddress.getLocalHost().toString();
         } catch (UnknownHostException e) {
-            e.printStackTrace();
+            log.error(e, e);
         }
 
     }
@@ -183,7 +185,7 @@ public class ERXRandomGUID {
         try {
             md5 = MessageDigest.getInstance("MD5");
         } catch (NoSuchAlgorithmException e) {
-            System.out.println("Error: " + e);
+            log.error(e, e);
             valueBeforeMD5 = "";
             valueAfterMD5 = "";
             return;
@@ -225,7 +227,7 @@ public class ERXRandomGUID {
             valueAfterMD5 = sb.toString();
 
         } catch (Exception e) {
-            System.out.println("Error:" + e);
+            log.error(e, e);
         }
     }
 
