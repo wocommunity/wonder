@@ -102,15 +102,14 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 
 	public Object unmarshall(SerializerState state, Class clazz, Object o) throws UnmarshallException {
 		try {
-			JSONObject jso = (JSONObject) o;
-			JSONObject eoDict = jso;
-			if(jso.has("eo")) {
-				jso.getJSONObject("eo");
-			}
-			if (eoDict == null) {
+			if (o == null) {
 				throw new UnmarshallException("eo missing");
 			}
-			String gidString = jso.getString("gid");
+			JSONObject eoDict = (JSONObject) o;
+			if(eoDict.has("eo")) {
+				eoDict.getJSONObject("eo");
+			}
+			String gidString = eoDict.getString("gid");
 			if (gidString == null) {
 				throw new UnmarshallException("gid missing");
 			}
