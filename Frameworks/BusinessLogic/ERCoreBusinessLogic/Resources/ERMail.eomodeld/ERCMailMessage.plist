@@ -127,6 +127,7 @@
     primaryKeyAttributes = (id); 
     relationships = (
         {
+            deleteRule = EODeleteRuleCascade; 
             destination = ERCMessageAttachment; 
             isToMany = Y; 
             joinSemantic = EOInnerJoin; 
