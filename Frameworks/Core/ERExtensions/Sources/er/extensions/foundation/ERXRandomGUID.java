@@ -19,13 +19,13 @@ import org.apache.log4j.Logger;
  * MACs, IP addresses, time elements, and sequential numbers. GUIDs are not
  * expected to be random and most often are easy/possible to guess given a
  * sample from a given generator. SQL Server, for example generates GUID that
- * are unique but sequencial within a given instance.
+ * are unique but sequential within a given instance.
  * </p>
  * 
  * <p>
  * GUIDs can be used as security devices to hide things such as files within a
  * filesystem where listings are unavailable (e.g. files that are served up from
- * a Web server with indexing turned off). This may be desireable in cases where
+ * a Web server with indexing turned off). This may be desirable in cases where
  * standard authentication is not appropriate. In this scenario, the RandomGUIDs
  * are used as directories. Another example is the use of GUIDs for primary keys
  * in a database where you want to ensure that the keys are secret. Random GUIDs
@@ -34,7 +34,7 @@ import org.apache.log4j.Logger;
  * </p>
  * 
  * <p>
- * There are many other possiblities of using GUIDs in the realm of security and
+ * There are many other possibilities of using GUIDs in the realm of security and
  * encryption where the element of randomness is important. This class was
  * written for these purposes but can also be used as a general purpose GUID
  * generator as well.
@@ -72,9 +72,9 @@ import org.apache.log4j.Logger;
  * </p>
  * 
  * <p>
- * Using the secure random option, this class compies with the statistical
+ * Using the secure random option, this class complies with the statistical
  * random number generator tests specified in FIPS 140-2, Security Requirements
- * for Cryptographic Modules, secition 4.9.1.
+ * for Cryptographic Modules, section 4.9.1.
  * </p>
  * 
  * <p>
@@ -201,8 +201,8 @@ public class ERXRandomGUID {
                 rand = myRand.nextLong();
             }
 
-            // This StringBuffer can be a long as you need; the MD5
-            // hash will always return 128 bits.  You can change
+            // This StringBuilder can be a long as you need; the MD5
+            // hash will always return 128 bits. You can change
             // the seed to include anything you want here.
             // You could even stream a file through the MD5 making
             // the odds of guessing it at least as great as that
@@ -238,6 +238,7 @@ public class ERXRandomGUID {
 	 * 
 	 * @return a {@code String} representation of this object
 	 */
+    @Override
     public String toString() {
         String raw = valueAfterMD5.toUpperCase();
         StringBuilder sb = new StringBuilder();

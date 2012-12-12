@@ -94,6 +94,7 @@ public class FilesUtil
      * Look up a property from the properties file.
      *
      * @param key The name of the property to be found
+     * @param defaultValue The default value if property is null
      * @return The value of the property
      */
     public static String getProperty(final String key, final String defaultValue)
@@ -116,7 +117,7 @@ public class FilesUtil
     /**
      * Looks up the value of a key from the properties file and converts it to an integer.
      *
-     * @param key
+     * @param key The name of the property to be found
      * @return The value of that key
      */
     public static int getIntProperty(final String key)
