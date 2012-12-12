@@ -180,7 +180,6 @@ public class ERXRandomGUID {
 	 */
     private void getRandomGUID(boolean secure) {
         MessageDigest md5 = null;
-        StringBuffer sbValueBeforeMD5 = new StringBuffer();
 
         try {
             md5 = MessageDigest.getInstance("MD5");
@@ -192,6 +191,7 @@ public class ERXRandomGUID {
         }
 
         try {
+            StringBuilder sbValueBeforeMD5 = new StringBuilder();
             long time = System.currentTimeMillis();
             long rand = 0;
 
@@ -217,7 +217,7 @@ public class ERXRandomGUID {
             md5.update(valueBeforeMD5.getBytes());
 
             byte[] array = md5.digest();
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             for (int j = 0; j < array.length; ++j) {
                 int b = array[j] & 0xFF;
                 if (b < 0x10) sb.append('0');
@@ -240,15 +240,15 @@ public class ERXRandomGUID {
 	 */
     public String toString() {
         String raw = valueAfterMD5.toUpperCase();
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append(raw.substring(0, 8));
-        sb.append("-");
+        sb.append('-');
         sb.append(raw.substring(8, 12));
-        sb.append("-");
+        sb.append('-');
         sb.append(raw.substring(12, 16));
-        sb.append("-");
+        sb.append('-');
         sb.append(raw.substring(16, 20));
-        sb.append("-");
+        sb.append('-');
         sb.append(raw.substring(20));
 
         return sb.toString();
