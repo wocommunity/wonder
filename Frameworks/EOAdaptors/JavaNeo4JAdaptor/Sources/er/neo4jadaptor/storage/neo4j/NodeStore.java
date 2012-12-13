@@ -55,12 +55,13 @@ public class NodeStore implements Store<Ersatz, Neo4JErsatz> {
 		if (pkValue == null) {
 			// it happens in case of inserts of rows with attributes like "NeededByEOF0" which seem not to be real rows.
 			log.warn("Primary key value is null for " + row + ". Ignoring it (not sure if it's correct behaviour)");
+			return null;
 		}
 		if (pkValue != null && false == pkValue instanceof NodeNumber) {
 			throw new IllegalStateException("Value for primary key " + entity.name() + "." + pk.name() + " was set manually. This adaptor only supports inserts where primary keys aren't set on insert time.");
 		}
 		
-		long id = ((NodeNumber) row.get(pk)).longValue();
+		long id = ((NodeNumber) pkValue).longValue();
 		final Node node = db.getNodeById(id);
 		
 		if (spaceManager.isPermanent(node)) {
