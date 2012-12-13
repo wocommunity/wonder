@@ -109,7 +109,7 @@ import er.extensions.foundation.ERXPatcher;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXRuntimeUtilities;
 import er.extensions.foundation.ERXThreadStorage;
-import er.extensions.foundation.ERXTimestampUtility;
+import er.extensions.foundation.ERXTimestampUtilities;
 import er.extensions.localization.ERXLocalizer;
 import er.extensions.migration.ERXMigrator;
 import er.extensions.statistics.ERXStats;
@@ -890,9 +890,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		String appUrl;
 		if (application().isDirectConnectEnabled()) {
 			appUrl = adapterUrl.replace("/cgi", ":" + application().port() + "/cgi");
-			appUrl += "/" + application().name() + ".woa";
+			appUrl += "/" + application().name() + application().applicationExtension();
 		} else {
-			appUrl = adapterUrl + "/" + application().name() + ".woa/-" + application().port();
+			appUrl = adapterUrl + "/" + application().name() + application().applicationExtension() + "/-" + application().port();
 		}
 		
 		URL url;
@@ -1212,7 +1212,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	    _replaceApplicationPathReplace = ERXProperties.stringForKey("er.extensions.ERXApplication.replaceApplicationPath.replace");
 	    
 	    if (_replaceApplicationPathPattern == null && rewriteDirectConnectURL()) {
-	    	_replaceApplicationPathPattern = "/cgi-bin/WebObjects/" + name() + ".woa";
+	    	_replaceApplicationPathPattern = "/cgi-bin/WebObjects/" + name() + applicationExtension();
 	        if (_replaceApplicationPathReplace == null) {
 	        	_replaceApplicationPathReplace = "";
 	        }
@@ -1224,6 +1224,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * If mod_rewrite is being used we don't want the adaptor prefix being part of the redirect.
 	 * @see com.webobjects.appserver.WOApplication#_newLocationForRequest(com.webobjects.appserver.WORequest)
 	 */
+	@Override
 	public String _newLocationForRequest(WORequest aRequest) {
 		return _rewriteURL(super._newLocationForRequest(aRequest));
 	}
@@ -1398,7 +1399,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				log.info("Instance will not live past " + timeToDie + ":00.");
 				NSLog.out.appendln("Instance will not live past " + timeToDie + ":00.");
 				NSTimestamp now = new NSTimestamp();
-				int s = (timeToDie - ERXTimestampUtility.hourOfDay(now)) * 3600 - ERXTimestampUtility.minuteOfHour(now) * 60;
+				int s = (timeToDie - ERXTimestampUtilities.hourOfDay(now)) * 3600 - ERXTimestampUtilities.minuteOfHour(now) * 60;
 				if (s < 0)
 					s += 24 * 3600; // how many seconds to the deadline
 	
@@ -1422,28 +1423,34 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		}
 	}
 
+	@Override
+	public WORequest createRequest(String aMethod, String aURL, String anHTTPVersion, Map<String, ? extends List<String>> someHeaders, NSData aContent, Map<String, Object> someInfo) {
+		// Workaround for #3428067 (Apache Server Side Include module will feed
+		// "INCLUDED" as the HTTP version, which causes a request object not to
+		// be created by an exception.
+		if (anHTTPVersion == null || anHTTPVersion.startsWith("INCLUDED")) {
+			anHTTPVersion = "HTTP/1.0";
+		}
+		
+		// Workaround for Safari on Leopard bug (post followed by redirect to GET incorrectly has content-type header).
+		// The content-type header makes the WO parser only look at the content. Which is empty.
+		// http://lists.macosforge.org/pipermail/webkit-unassigned/2007-November/053847.html
+		// http://jira.atlassian.com/browse/JRA-13791
+		if ("GET".equalsIgnoreCase(aMethod) && someHeaders != null && someHeaders.get("content-type") != null) {
+			someHeaders.remove("content-type");
+		}
+
+		if (rewriteDirectConnectURL()) {
+			aURL = adaptorPath() + name() + applicationExtension() + aURL;
+		}
+
+		return new ERXRequest(aMethod, aURL, anHTTPVersion, someHeaders, aContent, someInfo);
+	}
+
 	/**
-	 * Creates the request object for this loop. Calls _createRequest(). For WO
-	 * 5.3.
+	 * @deprecated use {@link #createRequest(String, String, String, Map, NSData, Map)} instead
 	 */
 	@Deprecated
-	public WORequest createRequest(String aMethod, String aURL, String anHTTPVersion, NSDictionary someHeaders, NSData aContent, NSDictionary someInfo) {
-		return _createRequest(aMethod, aURL, anHTTPVersion, someHeaders, aContent, someInfo);
-	}
-
-	/**
-	 * Creates the request object for this loop. Calls _createRequest(). For WO
-	 * 5.4.
-	 */
-	@Override
-	public WORequest createRequest(String method, String aurl, String anHTTPVersion, Map<String, ? extends List<String>> someHeaders, NSData content, Map<String, Object> someInfo) {
-		return _createRequest(method, aurl, anHTTPVersion, (someHeaders != null ? new NSDictionary<String, Object>(someHeaders, true) : null), content, (someInfo != null ? new NSDictionary<String, Object>(someInfo, true) : null));
-	}
-
-	/**
-	 * Bottleneck for WORequest creation in WO 5.3 and 5.4 to use an
-	 * {@link ERXRequest} object that fixes a bug with localization.
-	 */
 	protected WORequest _createRequest(String aMethod, String aURL, String anHTTPVersion, NSDictionary someHeaders, NSData aContent, NSDictionary someInfo) {
 		// Workaround for #3428067 (Apache Server Side Include module will feed
 		// "INCLUDED" as the HTTP version, which causes a request object not to
@@ -1512,6 +1519,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * 
 	 * @author ak
 	 */
+	@Override
 	public WOComponentDefinition _componentDefinition(String s, NSArray nsarray) {
 		if(ERXProperties.booleanForKeyWithDefault("er.extensions.ERXApplication.fixCachingEnabled", true)) {
 			// _expectedLanguages already contains all the languages in all projects, so
@@ -1621,7 +1629,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	/**
 	 * Overridden to fix that direct connect apps can't refuse new sessions.
 	 */
-
 	@Override
 	public synchronized void refuseNewSessions(boolean value) {
 		boolean success = false;

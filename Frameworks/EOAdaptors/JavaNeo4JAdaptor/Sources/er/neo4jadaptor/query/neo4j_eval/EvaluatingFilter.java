@@ -23,6 +23,10 @@ public class EvaluatingFilter<T extends PropertyContainer> implements Results<T>
 
 	@SuppressWarnings("unchecked")
 	private static final EvaluationQueryConverter<?> generator = new EvaluationQueryConverter();
+
+	private T next;
+	private Cursor<T> it;
+	private boolean hasFinished = false;
 	
 	private final Results<T> wrapped;
 	private final Evaluator<T> eval;
@@ -38,73 +42,59 @@ public class EvaluatingFilter<T extends PropertyContainer> implements Results<T>
 	private EvaluatingFilter(Results<T> wrapped, Evaluator<T> eval) {
 		this.wrapped = wrapped;
 		this.eval = eval;
+		this.it = wrapped;
 	}
 	
-	public Cursor<T> iterator() {
-		return new EvaluatingFacetResults(wrapped.iterator());
+	public boolean hasNext() {
+		if (hasFinished) {
+			return false;
+		} else if (next == null) {
+			next = calculateNext();
+			
+			if (next == null) {
+				hasFinished = true;
+			}
+			
+		}
+		return next != null;
+	}
+
+	public void close() {
+		it.close();
 	}
 	
-	private final class EvaluatingFacetResults implements Cursor<T> {
-		private T next;
-		private Cursor<T> it;
-		private boolean hasFinished = false;
+	public T next() {
+		T result = next;
 		
-		private EvaluatingFacetResults(Cursor<T> it) {
-			this.it = it;
-		}
+		next = null;
 		
-		public boolean hasNext() {
-			if (hasFinished) {
-				return false;
-			} else if (next == null) {
-				next = calculateNext();
-				
-				if (next == null) {
-					hasFinished = true;
+		return result;
+	}
+	
+	private T calculateNext() {
+		while (it.hasNext()) {
+			T candidate = it.next();
+			
+			if (eval.evaluate(candidate)) {
+				countHits++;
+				if (log.isDebugEnabled()) {
+					log.debug("Evaluating " + candidate + " with " + eval + ", result: match");
 				}
-				
-			}
-			return next != null;
-		}
-
-		public void close() {
-			it.close();
-		}
-		
-		public T next() {
-			T result = next;
-			
-			next = null;
-			
-			return result;
-		}
-		
-		private T calculateNext() {
-			while (it.hasNext()) {
-				T candidate = it.next();
-				
-				if (eval.evaluate(candidate)) {
-					countHits++;
-					if (log.isDebugEnabled()) {
-						log.debug("Evaluating " + candidate + " with " + eval + ", result: match");
-					}
-					return candidate;
-				} else {
-					countMisses++;
-					if (log.isDebugEnabled()) {
-						log.debug("Evaluating " + candidate + " with " + eval + ", result: miss");
-					}
+				return candidate;
+			} else {
+				countMisses++;
+				if (log.isDebugEnabled()) {
+					log.debug("Evaluating " + candidate + " with " + eval + ", result: miss");
 				}
 			}
-			if (log.isDebugEnabled() && countMisses > 0) {
-				log.debug("Had " + countHits + " hits vs. " + countMisses + " misses for " + wrapped);
-			}
-			return null;
 		}
+		if (log.isDebugEnabled() && countMisses > 0) {
+			log.debug("Had " + countHits + " hits vs. " + countMisses + " misses for " + wrapped);
+		}
+		return null;
+	}
 
-		public void remove() {
-			throw new UnsupportedOperationException();
-		}
-		
+	public void remove() {
+		throw new UnsupportedOperationException();
 	}
 }

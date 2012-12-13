@@ -215,7 +215,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      */ 
     @SuppressWarnings("javadoc")
 	public static String versionStringForApplication() {
-        return valueFromPlistBundleWithKey(NSBundle.mainBundle(), "CustomInfo.plist", "CFBundleShortVersionString");
+        return valueFromPlistBundleWithKey(NSBundle.mainBundle(), "../Info.plist", "CFBundleShortVersionString");
     }
 
     /** 
@@ -254,7 +254,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      */ 
     @SuppressWarnings("javadoc")
 	public static String versionStringForFrameworkNamed(String frameworkName) {
-        return valueFromPlistBundleWithKey(NSBundle.bundleForName(frameworkName), "CustomInfo.plist", "CFBundleShortVersionString");
+        return valueFromPlistBundleWithKey(NSBundle.bundleForName(frameworkName), "Info.plist", "CFBundleShortVersionString");
     }
 
     /**

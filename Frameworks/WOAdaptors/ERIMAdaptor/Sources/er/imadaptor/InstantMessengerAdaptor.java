@@ -321,7 +321,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 				if (responseMessage != null) {
 					responseMessage = responseMessage.trim();
 				}
-				if (responseMessage.length() > 0) {
+				if (responseMessage != null && responseMessage.length() > 0) {
 					if (log.isInfoEnabled()) {
 						log.info("Sending message to '" + buddyName + "': " + responseMessage);
 					}
