@@ -91,7 +91,7 @@ public class NodeStore implements Store<Ersatz, Neo4JErsatz> {
 		
 		id = EOUtilities.convertToAttributeType(pk, id);
 		
-		NSMutableDictionary<EOAttribute, Object> dict = new NSMutableDictionary<EOAttribute, Object>(new NodeNumber(id.longValue()), pk);
+		NSMutableDictionary<EOAttribute, Object> dict = new NSMutableDictionary<EOAttribute, Object>(new NodeNumber(id), pk);
 		
 		return NSDictionaryErsatz.fromDictionary(dict);
 	}
@@ -141,30 +141,40 @@ public class NodeStore implements Store<Ersatz, Neo4JErsatz> {
 	 * those where primary key value is set manually.
 	 */
 	public static final class NodeNumber extends Number {
-		private final long number;
+		private final Number number;
 		
-		private NodeNumber(long number) {
+		private NodeNumber(Number number) {
 			this.number = number;
 		}
 		
 		@Override
 		public int intValue() {
-			return (int) number;
+			return number.intValue();
 		}
 
 		@Override
 		public long longValue() {
-			return number;
+			return number.longValue();
 		}
 
 		@Override
 		public float floatValue() {
-			return number;
+			return number.floatValue();
 		}
 
 		@Override
 		public double doubleValue() {
-			return number;
+			return number.doubleValue();
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			return number.equals(obj);
+		}
+		
+		@Override
+		public int hashCode() {
+			return number.hashCode();
 		}
 		
 		@Override
