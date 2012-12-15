@@ -2,21 +2,36 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>wonder.frameworks</groupId>
-		<artifactId>plugins</artifactId>
-		<version>5.4-SNAPSHOT</version>
+		<artifactId>ajax</artifactId>
+		<version>5.9-SNAPSHOT</version>
 	</parent>
-	<groupId>wonder.plugins</groupId>
-	<artifactId>DB2PlugIn</artifactId>
-	<name>DB2 PlugIn</name>
+	<groupId>wonder.ajax</groupId>
+	<artifactId>MooTools</artifactId>
+	<name>MooTools Framework</name>
 	<packaging>woframework</packaging>
+	<build>
+		<sourceDirectory>Sources</sourceDirectory>
+	</build>
 	<dependencies>
 		<dependency>
-			<groupId>com.webobjects</groupId>
-			<artifactId>JavaJDBCAdaptor</artifactId>
+			<groupId>wonder.core</groupId>
+			<artifactId>ERExtensions</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>wonder.core</groupId>
+			<artifactId>ERFoundation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>wonder.ajax</groupId>
+			<artifactId>Ajax</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>wonder.businesslogic</groupId>
+			<artifactId>ERAttachment</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.webobjects</groupId>
-			<artifactId>JavaEOAccess</artifactId>
+			<artifactId>JavaWebObjects</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.webobjects</groupId>
@@ -27,7 +42,4 @@
 			<artifactId>JavaEOControl</artifactId>
 		</dependency>
 	</dependencies>
-	<build>
-		<sourceDirectory>Sources</sourceDirectory>
-	</build>
 </project>

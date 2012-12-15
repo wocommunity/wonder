@@ -13,11 +13,16 @@
 	<modules>
 		<module>ERCalendar</module>
 		<module>ERCaptcha</module>
+		<module>ERCayenne</module>
+		<module>ERDistribution</module>
 		<module>ERChronic</module>
 		<module>ERFirebug</module>
 		<module>ERPDFGeneration</module>
+		<module>ERPersistentSessionStorage</module>
 		<module>ERProfiling</module>
+		<module>ERQuartzScheduler</module>
 		<module>ERSelenium</module>
+		<module>ERXiss</module>
 		<module>JavaMonitorFramework</module>
 		<module>SnapshotExplorer</module>
 		<module>WOJRebel</module>

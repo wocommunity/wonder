@@ -16,5 +16,6 @@
 		<module>ERJQueryMobile</module>
 		<module>ERPrototaculous</module>
 		<module>GoogleChart</module>
+		<module>MooTools</module>
 	</modules>
 </project>

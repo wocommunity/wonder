@@ -15,5 +15,6 @@
 		<module>ERModernDefaultSkin</module>
 		<module>ERModernDirectToWeb</module>
 		<module>ERModernLook</module>
+		<module>ERMootoolsDirectToWeb</module>
 	</modules>
 </project>
