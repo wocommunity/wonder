@@ -8,7 +8,9 @@ all: WebObjects.dll
 
 ifeq "MINGW" "$(OS)"
 WebObjects.dll: WebObjects.o ${COMMON_OBJFILES}
-	${CC} -shared -o WebObjects.dll WebObjects.o ${COMMON_OBJFILES} ${LIBS}
+	${CC} -Wl,--kill-at -shared -o WebObjects.dll WebObjects.o ${COMMON_OBJFILES} ${LIBS}
+# Alternative linking for mingw32
+#	dllwrap  --add-stdcall-alias -def=WebObjects.def --dllname=$@ --driver-name=$(CC) WebObjects.o ${COMMON_OBJFILES} ${LIBS}
 else
 WebObjects.dll: WebObjects.o ${COMMON_OBJFILES}
 	${NEXT_ROOT}/Developer/Libraries/gcc-lib/i386-nextpdo-winnt3.5/2.7.2.1/ld.exe -nodefaultlib -align:0x1000 -dll -o WebObjects.dll WebObjects.o ${COMMON_OBJFILES}  msvcrt.lib kernel32.lib wsock32.lib advapi32.lib
