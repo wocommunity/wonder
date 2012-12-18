@@ -444,6 +444,7 @@ static int ac_prepareToModifyConfig()
    /* this will block others out from changing the config for CONFIG_LEASE_TIME seconds */
    configTimes->configChangeTime = currentTime;
    configuredInstances = (int *)WOCALLOC(instanceListSize, sizeof(int));
+	
    return 0;
 }
 
@@ -1078,61 +1079,85 @@ static char *file_config(const char *path, time_t *mtime, int *len)
  * Send all of the requests in one loop and then read the replies in another.
  */
 static void readServerConfig() {
-   int i;
-   net_fd s;
-   net_fd netfdList[WA_MAX_CONFIG_SERVERS];
-   int len = 0;
-   char *buffer;
-   char content_type[CONTENT_TYPE_LENGTH_MAX];
-   WebObjects_config_handler *parser;
-
-   /* Send the requests for configuration info and hang onto the net_fd's being used. */
-   for (i=0; i < WA_MAX_CONFIG_SERVERS; i++) {
-      netfdList[i] = 0;
-      if (configServers[i].host[0]) {
-         s = _contactServer(&configServers[i]);
-         if(s)
-            netfdList[i] = s;
-      }
-   }
-
-   /* Read the configuration information from each server. */
-   for (i=0; i < WA_MAX_CONFIG_SERVERS; i++) {
-      if (configServers[i].host[0]) {
-         int deleteServer = 0;
-         if (netfdList[i]) {
-            /* get the list of instances for this host. */
-            WOLog(WO_INFO, "Preparing to read config for host: %s", configServers[i].host);
-
-            buffer = _retrieveServerInfo(&configServers[i], netfdList[i], &len, content_type);
-            if (buffer == NULL)
-            {
-               deleteServer = 1;
-            } else if (buffer != NOT_MODIFIED_CONFIG) {
-               parser = parserForType(content_type);
-               if (parser)
-               {
-                  if (parser->parseConfiguration(buffer, len))
-                     WOLog(WO_ERR, "Failed parsing configuration");
-               } else {
-                  WOLog(WO_ERR, "No parser for file type %s", content_type);
-               }
-               WOFREE(buffer);
-            }
-         } else
-            deleteServer = 1;
-         if (deleteServer)
-         {
-            if (configMethod == CM_MCAST)
-            {
-               WOLog(WO_INFO, "Deleting config server %s:%d (couldn't read config).", configServers[i].host, configServers[i].port);
-               memset(&configServers[i], 0, sizeof(ConfigServer));
-            } else {
-               WOLog(WO_INFO, "Config server %s:%d didn't respond.", configServers[i].host, configServers[i].port);
-            }
-         }
-      }
-   }
+	int i;
+	net_fd s;
+	int len = 0;
+	char *buffer[WA_MAX_CONFIG_SERVERS];
+	char content_type[CONTENT_TYPE_LENGTH_MAX];
+	WebObjects_config_handler *parser;
+	boolean oneOrMoreModified = 0;
+	boolean oneOrMoreUnModified = 0;
+   
+	/* Send the requests for configuration info and hang onto the net_fd's being used. */
+	for (i=0; i < WA_MAX_CONFIG_SERVERS; i++) {
+		if (configServers[i].host[0]) {
+			s = _contactServer(&configServers[i]);
+			if(s)  {
+				WOLog(WO_INFO, "Preparing to read config for host: %s", configServers[i].host);
+				buffer[i] = _retrieveServerInfo(&configServers[i], s, &len, content_type);
+				if(buffer[i] == NOT_MODIFIED_CONFIG)
+					oneOrMoreUnModified = 1;
+				else if(buffer[i] !=NULL)
+					oneOrMoreModified  = 1;
+			}
+		}
+	}
+   
+	if(oneOrMoreModified && oneOrMoreUnModified) {
+		for (i=0; i < WA_MAX_CONFIG_SERVERS; i++) {
+			if (configServers[i].host[0] && buffer[i] == NOT_MODIFIED_CONFIG) {
+				configServers[i].lastModifiedTime[0] = 0;
+				s = _contactServer(&configServers[i]);
+				if(s)  {
+					WOLog(WO_INFO, "Preparing to read config again for host (unmodified content): %s", configServers[i].host);
+					buffer[i] = _retrieveServerInfo(&configServers[i], s, &len, content_type);
+					if(buffer[i] !=NULL)
+						oneOrMoreModified  = 1;
+				}
+			}
+		}
+	}
+   
+	if(!oneOrMoreModified) {
+		int i;
+		for(i=0;i<instanceListSize;i++)
+			configuredInstances[i] = 1;
+		WOLog(WO_INFO, "All settings are unmodified");
+		return;
+	}
+   
+	
+	/* Read the configuration information from each server. */
+	for (i=0; i < WA_MAX_CONFIG_SERVERS; i++) {
+		if (configServers[i].host[0]) {
+			int deleteServer = 0;
+			if (buffer[i] == NULL)
+			{
+				deleteServer = 1;
+			} else {
+				parser = parserForType(content_type);
+				if (parser)
+				{
+					if (parser->parseConfiguration(buffer[i], len))
+						WOLog(WO_ERR, "Failed parsing configuration");
+				} else {
+					WOLog(WO_ERR, "No parser for file type %s", content_type);
+				}
+				WOFREE(buffer[i]);
+				buffer[i] = NULL;
+			}
+			if (deleteServer)
+			{
+				if (configMethod == CM_MCAST)
+				{
+					WOLog(WO_INFO, "Deleting config server %s:%d (couldn't read config).", configServers[i].host, configServers[i].port);
+					memset(&configServers[i], 0, sizeof(ConfigServer));
+				} else {
+					WOLog(WO_INFO, "Config server %s:%d didn't respond.", configServers[i].host, configServers[i].port);
+				}
+			}
+		}
+	}
 }
 
 /* Send a GET request to a server requesting its configuration info. */
@@ -1160,10 +1185,10 @@ static net_fd _contactServer(ConfigServer *server) {
    strcat(request_str, " HTTP/1.0\n");
    req.request_str = request_str;
    req.headers = st_new(2);
-/*   if (server->lastModifiedTime[0]) {
+   if (server->lastModifiedTime[0]) {
       req_addHeader(&req,HTTP_IFMODIFIEDSINCE,server->lastModifiedTime, STR_COPYVALUE|STR_FREEVALUE);
    }
-*/   if (req_sendRequest(&req, s) != 0) {
+   if (req_sendRequest(&req, s) != 0) {
       transport->close_connection(s);
       s = NULL;
    }
