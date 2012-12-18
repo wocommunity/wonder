@@ -1097,7 +1097,7 @@ static void readServerConfig() {
 				buffer[i] = _retrieveServerInfo(&configServers[i], s, &len, content_type);
 				if(buffer[i] == NOT_MODIFIED_CONFIG)
 					oneOrMoreUnModified = 1;
-				else if(buffer[i] !=NULL)
+				else // No response has to be treated as modification, too
 					oneOrMoreModified  = 1;
 			}
 		}
@@ -1111,8 +1111,7 @@ static void readServerConfig() {
 				if(s)  {
 					WOLog(WO_INFO, "Preparing to read config again for host (unmodified content): %s", configServers[i].host);
 					buffer[i] = _retrieveServerInfo(&configServers[i], s, &len, content_type);
-					if(buffer[i] !=NULL)
-						oneOrMoreModified  = 1;
+					oneOrMoreModified  = 1;
 				}
 			}
 		}
