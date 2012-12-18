@@ -1081,12 +1081,12 @@ static char *file_config(const char *path, time_t *mtime, int *len)
 static void readServerConfig() {
 	int i;
 	net_fd s;
-	int len = 0;
+	int len[WA_MAX_CONFIG_SERVERS];
 	char *buffer[WA_MAX_CONFIG_SERVERS];
-	char content_type[CONTENT_TYPE_LENGTH_MAX];
+	char content_type[WA_MAX_CONFIG_SERVERS][CONTENT_TYPE_LENGTH_MAX];
 	WebObjects_config_handler *parser;
-	boolean oneOrMoreModified = 0;
-	boolean oneOrMoreUnModified = 0;
+	int oneOrMoreModified = 0;
+	int oneOrMoreUnModified = 0;
    
 	/* Send the requests for configuration info and hang onto the net_fd's being used. */
 	for (i=0; i < WA_MAX_CONFIG_SERVERS; i++) {
@@ -1094,7 +1094,7 @@ static void readServerConfig() {
 			s = _contactServer(&configServers[i]);
 			if(s)  {
 				WOLog(WO_INFO, "Preparing to read config for host: %s", configServers[i].host);
-				buffer[i] = _retrieveServerInfo(&configServers[i], s, &len, content_type);
+				buffer[i] = _retrieveServerInfo(&configServers[i], s, &len[i], content_type[i]);
 				if(buffer[i] == NOT_MODIFIED_CONFIG)
 					oneOrMoreUnModified = 1;
 				else // No response has to be treated as modification, too
@@ -1110,7 +1110,7 @@ static void readServerConfig() {
 				s = _contactServer(&configServers[i]);
 				if(s)  {
 					WOLog(WO_INFO, "Preparing to read config again for host (unmodified content): %s", configServers[i].host);
-					buffer[i] = _retrieveServerInfo(&configServers[i], s, &len, content_type);
+					buffer[i] = _retrieveServerInfo(&configServers[i], s, &len[i], content_type[i]);
 					oneOrMoreModified  = 1;
 				}
 			}
@@ -1134,13 +1134,13 @@ static void readServerConfig() {
 			{
 				deleteServer = 1;
 			} else {
-				parser = parserForType(content_type);
+				parser = parserForType(content_type[i]);
 				if (parser)
 				{
-					if (parser->parseConfiguration(buffer[i], len))
+					if (parser->parseConfiguration(buffer[i], len[i]))
 						WOLog(WO_ERR, "Failed parsing configuration");
 				} else {
-					WOLog(WO_ERR, "No parser for file type %s", content_type);
+					WOLog(WO_ERR, "No parser for file type %s", content_type[i]);
 				}
 				WOFREE(buffer[i]);
 				buffer[i] = NULL;
