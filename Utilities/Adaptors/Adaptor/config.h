@@ -73,7 +73,7 @@ typedef int  intptr_t;
 #define WA_MAX_ADDITIONAL_ARGS_LENGTH	0	/* maximum length of the additional args, including the null */
 #define WA_LB_MAX_NAME_LENGTH		16	/* maximum length of a load balancing routine's name, including the null */
 #define WA_APP_LB_INFO_SIZE		4	/* size in bytes to reserve for load balancing info in WOApp */
-#ifdef _MSC_VER // SWK changed from 8 to 16 cause VS2005 uses _time_t_64
+#if defined(_MSC_VER) || defined(MINGW)  // SWK changed from 8 to 16 cause VS2005 uses _time_t_64
 #define WA_INST_LB_INFO_SIZE		16	/* size in bytes to reserve for load balancing info in WOInstance */
 #else
 #define WA_INST_LB_INFO_SIZE		16	/* size in bytes to reserve for load balancing info in WOInstance */
