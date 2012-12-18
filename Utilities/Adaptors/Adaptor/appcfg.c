@@ -1160,10 +1160,10 @@ static net_fd _contactServer(ConfigServer *server) {
    strcat(request_str, " HTTP/1.0\n");
    req.request_str = request_str;
    req.headers = st_new(2);
-   if (server->lastModifiedTime[0]) {
+/*   if (server->lastModifiedTime[0]) {
       req_addHeader(&req,HTTP_IFMODIFIEDSINCE,server->lastModifiedTime, STR_COPYVALUE|STR_FREEVALUE);
    }
-   if (req_sendRequest(&req, s) != 0) {
+*/   if (req_sendRequest(&req, s) != 0) {
       transport->close_connection(s);
       s = NULL;
    }
