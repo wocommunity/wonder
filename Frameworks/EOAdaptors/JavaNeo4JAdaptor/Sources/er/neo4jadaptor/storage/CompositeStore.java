@@ -36,7 +36,9 @@ public class CompositeStore <Type extends PropertyContainer> implements Store<Er
 	public Neo4JErsatz insert(Ersatz row) {
 		Neo4JErsatz newNeo = neoStore.insert(row);
 		
-		luceneStore.insert(newNeo);
+		if (newNeo != null) {
+			luceneStore.insert(newNeo);
+		}
 		
 		return newNeo;
 	}
