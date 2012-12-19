@@ -4,5 +4,7 @@
     <binding name="theme"/>
         <binding name="content-theme"/>
     <binding defaults="Boolean" name="collapsed"/>
+    <binding defaults="Boolean" name="inset"/>
+        <binding defaults="Boolean" name="mini"/>
     </wo>
 </wodefinitions>

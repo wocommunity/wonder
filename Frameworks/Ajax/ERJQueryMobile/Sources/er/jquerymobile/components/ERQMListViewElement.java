@@ -1,11 +1,11 @@
 package er.jquerymobile.components;
 
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 
-import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.*;
 
-import er.extensions.eof.ERXConstant;
-import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.eof.*;
+import er.extensions.foundation.*;
 
 /**
  * LI within a listview
@@ -69,6 +69,10 @@ public class ERQMListViewElement extends ERQMInputBaseComponent {
     return booleanValueForBinding("isDivider", false);
   }
 
+  public String dataRel() {
+	return (booleanValueForBinding("isDialogCall", false))?"dialog":null;
+  }
+
   public boolean hasAction() {
     return hasBinding("action");
   }
@@ -118,7 +122,9 @@ public class ERQMListViewElement extends ERQMInputBaseComponent {
   public boolean hasAutomaticDivider() {
     boolean b = booleanValueForBinding("automaticDivider", false);
     if(b)
-      filtertext();
+	{
+		filtertext();
+	}
 
     return b;
   }
@@ -145,7 +151,7 @@ public class ERQMListViewElement extends ERQMInputBaseComponent {
     if(!ERXStringUtilities.stringIsNullOrEmpty(s)) {
       sb.append("data-icon='" + s + "' ");
     }
-
+    
     return sb.toString();
   }
 }

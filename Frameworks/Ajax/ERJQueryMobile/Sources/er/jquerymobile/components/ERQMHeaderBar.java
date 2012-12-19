@@ -1,10 +1,10 @@
 package er.jquerymobile.components;
 
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 
-import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.*;
 
-import er.extensions.components.ERXStatelessComponent;
+import er.extensions.components.*;
 
 /**
  * data-role  header これを設定することでヘッダーになります。
@@ -51,4 +51,6 @@ public class ERQMHeaderBar extends ERXStatelessComponent {
     return hasBinding("rightButton-linkResource");
   }
 
-}
+  public boolean hasBackButtonAction() {
+	    return hasBinding("backButton-action");
+	  }}
