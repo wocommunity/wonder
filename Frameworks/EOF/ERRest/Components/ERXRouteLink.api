@@ -9,5 +9,7 @@
     <binding name="entityName"/>
         <binding name="queryDictionary"/>
     <binding name="format"/>
+    <binding name="target"/>
+    <binding name="string"/>
     </wo>
 </wodefinitions>

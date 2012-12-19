@@ -274,7 +274,7 @@ public class MTAjaxDraggable extends AjaxComponent {
 			form = "document." + form;
 		}
 
-		return "function(element, droppable) { if(droppable) { element.destroy(); MTAUL.update("+updateContainerID+", { updateUrl: " + actionUrl + "}, " + contextID + " + '.' + " + elementID + ", null); }}";
+		return "function(element, droppable) { if(droppable) { element.destroy(); MTAUL.update("+updateContainerID+", { data-updateUrl: " + actionUrl + "}, " + contextID + " + '.' + " + elementID + ", null); }}";
 	}	
 	*/
 	

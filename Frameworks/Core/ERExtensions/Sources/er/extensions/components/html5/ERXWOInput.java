@@ -10,6 +10,7 @@ import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.appserver._private.WOInput;
 import com.webobjects.foundation.NSDictionary;
 
+import er.extensions.appserver.ERXResponse;
 import er.extensions.foundation.ERXKeyValueCodingUtilities;
 import er.extensions.foundation.ERXPatcher;
 
@@ -104,7 +105,7 @@ public class ERXWOInput extends WOInput {
    */
   @Override
   public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-    WOResponse newResponse = ERXPatcher.DynamicElementsPatches.cleanupXHTML ? new WOResponse() : woresponse;
+    WOResponse newResponse = ERXPatcher.DynamicElementsPatches.cleanupXHTML ? new ERXResponse() : woresponse;
     super.appendToResponse(newResponse, wocontext);
 
     ERXPatcher.DynamicElementsPatches.processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));

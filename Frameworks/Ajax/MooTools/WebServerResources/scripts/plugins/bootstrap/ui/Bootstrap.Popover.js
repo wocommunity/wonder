@@ -3,14 +3,14 @@
 
 name: Bootstrap.Popover
 
-description: A simple tooltip (yet larger than twipsy) implementation that works with the Twitter Bootstrap css framework.
+description: A simple tooltip (yet larger than Bootstrap.Tooltip) implementation that works with the Twitter Bootstrap css framework.
 
 authors: [Aaron Newton]
 
 license: MIT-style license.
 
 requires:
- - /Bootstrap.Twipsy
+ - /Bootstrap.Tooltip
 
 provides: Bootstrap.Popover
 
@@ -19,7 +19,7 @@ provides: Bootstrap.Popover
 
 Bootstrap.Popover = new Class({
 
-	Extends: Bootstrap.Twipsy,
+	Extends: Bootstrap.Tooltip,
 
 	options: {
 		location: 'right',
@@ -38,10 +38,10 @@ Bootstrap.Popover = new Class({
 			this.tip = new Element('div.popover').addClass(this.options.location)
 				 .adopt(new Element('div.arrow'))
 				 .adopt(
-				   new Element('div.inner').adopt(
-				     new Element('h3.title', { html: this.options.getTitle.apply(this, [this.element]) || this.options.fallback })
+				   new Element('div.popover-inner').adopt(
+				     new Element('h3.popover-title', { html: this.options.getTitle.apply(this, [this.element]) || this.options.fallback })
 				   ).adopt(
-				     new Element('div.content').adopt(
+				     new Element('div.popover-content').adopt(
 				       new Element('p', { html: this.options.getContent.apply(this, [this.element])})
 				     )
 				   )

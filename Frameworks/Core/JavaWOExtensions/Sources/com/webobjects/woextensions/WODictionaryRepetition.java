@@ -28,6 +28,7 @@ public class WODictionaryRepetition extends WOComponent {
         super(aContext);
     }
 
+    @Override
     public boolean isStateless() {
         return true;
     }
@@ -38,6 +39,7 @@ public class WODictionaryRepetition extends WOComponent {
         _keyList = null;
     }
 
+    @Override
     public void reset()  {
         _invalidateCaches();
     }

@@ -15,6 +15,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+import org.apache.commons.lang.CharEncoding;
 import org.apache.log4j.Logger;
 
 import com.webobjects.foundation.NSData;
@@ -117,8 +118,8 @@ public class ERXCompressionUtilities {
 
 	public static String gunzipString(String source) {
 		try {
-			byte[] b = gunzipByteArray(source.getBytes("UTF-8"));
-			return new String(b, "UTF-8");
+			byte[] b = gunzipByteArray(source.getBytes(CharEncoding.UTF_8));
+			return new String(b, CharEncoding.UTF_8);
 		}
 		catch (UnsupportedEncodingException e) {
 			return null;
@@ -129,7 +130,7 @@ public class ERXCompressionUtilities {
 		try {
 			byte[] b = gunzipByteArray(input);
 
-			return new String(b, "UTF-8");
+			return new String(b, CharEncoding.UTF_8);
 		}
 		catch (UnsupportedEncodingException e) {
 			return null;
@@ -138,7 +139,7 @@ public class ERXCompressionUtilities {
 
 	public static byte[] gzipStringAsByteArray(String source) {
 		try {
-			return gzipByteArray(source.getBytes("UTF-8"));
+			return gzipByteArray(source.getBytes(CharEncoding.UTF_8));
 		}
 		catch (UnsupportedEncodingException e) {
 			return null;
@@ -267,7 +268,7 @@ public class ERXCompressionUtilities {
 
 	public static String deflateString(String source) {
 		try {
-			return new String(deflateByteArray(source.getBytes("UTF-8")), "UTF-8");
+			return new String(deflateByteArray(source.getBytes(CharEncoding.UTF_8)), CharEncoding.UTF_8);
 		}
 		catch (UnsupportedEncodingException e) {
 			return null;
@@ -276,8 +277,8 @@ public class ERXCompressionUtilities {
 
 	public static String inflateString(String source) {
 		try {
-			byte[] b = inflateByteArray(source.getBytes("UTF-8"));
-			return new String(b, "UTF-8");
+			byte[] b = inflateByteArray(source.getBytes(CharEncoding.UTF_8));
+			return new String(b, CharEncoding.UTF_8);
 		}
 		catch (UnsupportedEncodingException e) {
 			return null;

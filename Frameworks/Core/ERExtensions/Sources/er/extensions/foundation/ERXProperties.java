@@ -58,9 +58,6 @@ import er.extensions.net.ERXTcpIp;
  * <li>in the eclipse launcher or on the command-line</li>
  * </ul>
  * 
- * TODO - If this would fallback to calling the System getProperty, we
- * could ask that Project Wonder frameworks only use this class.
- * 
  * @property er.extensions.ERXProperties.RetainDefaultsEnabled
  * </span>
  * 
@@ -71,6 +68,15 @@ import er.extensions.net.ERXTcpIp;
  * 
  * @property er.extensions.ERXProperties.RetainDefaultsEnabled
  * </span>
+ * 
+ * @property NSProperties.useLoadtimeAppSpecifics Default is true.
+ * 
+ * TODO - Neither of these property names are standard. Should be camel-case and proper prefix.
+ * 
+ * TODO - What character sets can you use in property names? Only ISO-8859-1? UTF-8?
+ * 
+ * TODO - If this would fallback to calling the System getProperty, we could ask that Project Wonder frameworks only use this class.
+ * 
  */
 public class ERXProperties extends Properties implements NSKeyValueCoding {
 	/**
@@ -85,6 +91,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     
     private static Boolean RetainDefaultsEnabled;
     private static String UndefinedMarker = "-undefined-";
+
     /** logging support */
     public final static Logger log = Logger.getLogger(ERXProperties.class);
     private static final Map AppSpecificPropertyNames = new HashMap(128);
@@ -117,7 +124,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * <p>
      * The new behavior will analyze all properties after being loaded from their source, and create
      * (or update) generic properties for each application specific one. So, if we are MyApp,
-     * foo.bar.MyApp=4 will originate a new property foo.bar=4 (or, is foo.bar already exists,
+     * foo.bar.MyApp=4 will originate a new property foo.bar=4 (or, if foo.bar already exists,
      * update its value to 4). foo.bar.MyApp is also kept, because we cannot be sure foo.bar.MyApp
      * is an app specific property or a regular property with an ambiguous name.
      * </p>
@@ -128,6 +135,16 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * </p> 
      */
     public static final boolean _useLoadtimeAppSpecifics;
+
+    /**
+     * Set in flattenPropertyNames().
+     *
+     * The flattenPropertyNames() method is called from ERXSystem.updateProperties(), 
+     *     which is called from ERXConfigurationManager.loadConfiguration(),
+     *         which is called from ERXExtensions.finishInitialization(),
+     *             which is registered to be called at ApplicationDidFinishLaunching-time by ERXApplication.
+     */
+    private String _appNameSuffix;
 
     static {
        _useLoadtimeAppSpecifics = ERXValueUtilities.booleanValueWithDefault(System.getProperty("NSProperties.useLoadtimeAppSpecifics"), true);
@@ -198,7 +215,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      */ 
     @SuppressWarnings("javadoc")
 	public static String versionStringForApplication() {
-        return valueFromPlistBundleWithKey(NSBundle.mainBundle(), "CustomInfo.plist", "CFBundleShortVersionString");
+        return valueFromPlistBundleWithKey(NSBundle.mainBundle(), "../Info.plist", "CFBundleShortVersionString");
     }
 
     /** 
@@ -237,7 +254,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      */ 
     @SuppressWarnings("javadoc")
 	public static String versionStringForFrameworkNamed(String frameworkName) {
-        return valueFromPlistBundleWithKey(NSBundle.bundleForName(frameworkName), "CustomInfo.plist", "CFBundleShortVersionString");
+        return valueFromPlistBundleWithKey(NSBundle.bundleForName(frameworkName), "Info.plist", "CFBundleShortVersionString");
     }
 
     /**
@@ -330,8 +347,10 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @see #webObjectsVersionAsDouble
      * @see ERXStringUtilities#removeExtraDotsFromVersionString
      * </span>
+     * @deprecated Wonder is used with WO 5.4 only
      */ 
     @SuppressWarnings("javadoc")
+    @Deprecated
 	public static String webObjectsVersion() {
         if (_webObjectsVersion == null) {
             _webObjectsVersion = versionStringForFrameworkNamed("JavaWebObjects");
@@ -366,8 +385,10 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * 
      * @see #webObjectsVersion
      * </span>
+     * @deprecated Wonder is used with WO 5.4 only
      */
     @SuppressWarnings("javadoc")
+    @Deprecated
 	public static double webObjectsVersionAsDouble() {
         if (_webObjectsVersionDouble == 0.0d) {
             String woVersionString = ERXStringUtilities.removeExtraDotsFromVersionString(webObjectsVersion());
@@ -400,8 +421,10 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      *  
      *  @return true もし、バージョン番号が5.2以上であれば
      * </span>
+     * @deprecated Wonder is used with WO 5.4 only
      */
     @SuppressWarnings("javadoc")
+    @Deprecated
 	public static boolean webObjectsVersionIs52OrHigher() {
         if(ERXProperties.booleanForKey("er.extensions.ERXProperties.checkOldVersions")) {
             return webObjectsVersionAsDouble() >= 5.2d;
@@ -422,8 +445,10 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * 
      * @return true もし、バージョン番号が5.22以上であれば
      * </span>
+     * @deprecated Wonder is used with WO 5.4 only
      */
     @SuppressWarnings("javadoc")
+    @Deprecated
 	public static boolean webObjectsVersionIs522OrHigher() {
         if(ERXProperties.booleanForKey("er.extensions.ERXProperties.checkOldVersions")) {
             String webObjectsVersion = webObjectsVersion();
@@ -1135,7 +1160,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * <span class="ja">
      * 	指定プロパティー名とデフォルト暗号化方法 (propertyName.encrypted=true) を使って復元されている値を戻します。
      * 	例えば、my.password を取得する場合、my.password.encrypted=true も設定されていれば、
-     * 	my.password は復元する時にデフォルト暗号化方法 {@link ERXCrypto.defaultCrypter} を使用します。
+     * 	my.password は復元する時にデフォルト暗号化方法 {@link er.extensions.crypting.ERXCrypto.defaultCrypter} を使用します。
      * 
      * 	@param propertyName - プロパティー名
      * 
@@ -1151,7 +1176,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * <span class="en">
      * If the <code>propertyName.encrypted</code> property is set to true, returns
      * the plain text value of the given property name, after decrypting it with the
-     * {@link ERXCrypto.defaultCrypter}. For instance, if you are requesting
+     * {@link er.extensions.crypting.ERXCrypto.defaultCrypter}. For instance, if you are requesting
      * my.password and <code>my.password.encrypted</code> is set to true,
      * the value of <code>my.password</code> will be sent to the default crypter's
      * decrypt() method.
@@ -1165,7 +1190,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * <span class="ja">
      * 	指定プロパティー名とデフォルト暗号化方法 (propertyName.encrypted=true) を使って復元されている値を戻します。
      * 	例えば、my.password を取得する場合、my.password.encrypted=true も設定されていれば、
-     * 	my.password は復元する時にデフォルト暗号化方法 {@link ERXCrypto.defaultCrypter} を使用します。
+     * 	my.password は復元する時にデフォルト暗号化方法 {@link er.extensions.crypting.ERXCrypto.defaultCrypter} を使用します。
      * 
      * 	@param propertyName - プロパティー名
      * 	@param defaultValue - プロパティーが無ければ、デフォルト値
@@ -1193,7 +1218,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     /**
      * <span class="en">
      * Returns the decrypted value for the given property name using the
-     * {@link ERXCrypto.defaultCrypter}. This is slightly different than
+     * {@link er.extensions.crypting.ERXCrypto.defaultCrypter}. This is slightly different than
      * decryptedStringWithKeyWithDefault in that it does not require  the encrypted
      * property to be set.
      *  
@@ -1206,7 +1231,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * <span class="ja">
      * 	指定プロパティー名とデフォルト暗号化方法 (propertyName.encrypted=true) を使って復元されている値を戻します。
      * 	例えば、my.password を取得する場合、my.password.encrypted=true も設定されていれば、
-     * 	my.password は復元する時にデフォルト暗号化方法 {@link ERXCrypto.defaultCrypter} を使用します。
+     * 	my.password は復元する時にデフォルト暗号化方法 {@link er.extensions.crypting.ERXCrypto.defaultCrypter} を使用します。
      *  
      * 	@param propertyName - プロパティー名
      * 	@param defaultValue - プロパティーが無ければ、暗号化されているデフォルト値
@@ -1447,7 +1472,8 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * 	@throws java.io.IOException if the file is not found or cannot be read
      * </span>
      */
-    public static Properties propertiesFromFile(File file) throws java.io.IOException {
+    @SuppressWarnings("javadoc")
+	public static Properties propertiesFromFile(File file) throws java.io.IOException {
         if (file == null)
             throw new IllegalStateException("Attempting to get properties for a null file!");
         ERXProperties._Properties prop = new ERXProperties._Properties();
@@ -2707,13 +2733,11 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 							computedProperties = operator.compute(key.substring(0, key.length() - operatorKeyWithAt.length()), value, null);
 							break;
 						}
-						else {
-							int keyIndex = key.indexOf(operatorKeyWithAt + ".");
-							if (keyIndex != -1) {
-								operator = ERXProperties.operators.objectForKey(operatorKey);
-								computedProperties = operator.compute(key.substring(0, keyIndex), value, key.substring(keyIndex + operatorKeyWithAt.length() + 1));
-								break;
-							}
+						int keyIndex = key.indexOf(operatorKeyWithAt + ".");
+						if (keyIndex != -1) {
+							operator = ERXProperties.operators.objectForKey(operatorKey);
+							computedProperties = operator.compute(key.substring(0, keyIndex), value, key.substring(keyIndex + operatorKeyWithAt.length() + 1));
+							break;
 						}
 					}
 
@@ -2753,6 +2777,9 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 	 * 
 	 * @param properties Properties to update
 	 */
+// xxxxxxxxxxxxxxxxxxx
+// This is more complex than it needs to be. Can just use endsWith....
+//
 	public static void flattenPropertyNames(Properties properties) {
 	    if (_useLoadtimeAppSpecifics == false) {
 	        return;

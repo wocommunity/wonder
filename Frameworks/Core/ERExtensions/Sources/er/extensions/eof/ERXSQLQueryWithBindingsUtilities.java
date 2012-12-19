@@ -365,11 +365,10 @@ public class ERXSQLQueryWithBindingsUtilities {
     private static EODatabaseContext databaseContextForEntityName( EOEditingContext ec, String entityName ) {
         EOModelGroup group = EOUtilities.modelGroup( ec );
         EOModel model = group.entityNamed(entityName).model();
-        if( model != null ) {
-            return EODatabaseContext.registeredDatabaseContextForModel(model, ec);
-        } else {
+        if (model == null) {
             throw new RuntimeException("Entity named " + entityName + " not found in the model group.");
         }
+        return EODatabaseContext.registeredDatabaseContextForModel(model, ec);
     }
     
     /**
@@ -384,12 +383,9 @@ public class ERXSQLQueryWithBindingsUtilities {
     private static EODatabaseContext databaseContextForModelName(EOEditingContext ec, String modelName) {
         EOModelGroup group = EOUtilities.modelGroup( ec );
         EOModel model = group.modelNamed(modelName);
-        if( model != null ) {
-            return EODatabaseContext.registeredDatabaseContextForModel(model, ec);
-        } else {
+        if (model == null) {
             throw new RuntimeException("Model " + modelName + " not found in the model group.");
         }
+        return EODatabaseContext.registeredDatabaseContextForModel(model, ec);
     }
-
-    
 }

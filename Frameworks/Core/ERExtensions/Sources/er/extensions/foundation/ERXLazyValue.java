@@ -2,11 +2,11 @@ package er.extensions.foundation;
 
 import java.util.UUID;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 
-import er.extensions.ERXExtensions;
 import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.appserver.ERXWOContext;
 
@@ -84,7 +84,7 @@ public class ERXLazyValue<T> {
 	}
 
 	/**
-	 * Forecfully invalidates the lazy value, regardless of the state of the
+	 * Forcefully invalidates the lazy value, regardless of the state of the
 	 * invalidator.
 	 */
 	public synchronized void invalidate() {
@@ -357,7 +357,7 @@ public class ERXLazyValue<T> {
 
 		public boolean shouldInvalidate() {
 			Object currentCacheKey = cacheKey();
-			return !ERXExtensions.safeEquals(_lastCacheKey, currentCacheKey);
+			return ObjectUtils.notEqual(_lastCacheKey, currentCacheKey);
 		}
 	}
 

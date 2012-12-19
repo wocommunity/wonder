@@ -14,7 +14,7 @@ import er.extensions.foundation.ERXArrayUtilities;
  * Can be used as a repetition in list pages.
  *
  * @author ak on Mon Sep 01 2003
- * @project ERDirectToWeb
+ * 
  * @d2wKey componentName
  * @d2wKey object
  * @d2wKey extraListComponentName
@@ -58,6 +58,7 @@ public class ERDListPageRepetition extends ERDAttributeRepetition {
         return actions == null ? NO_ACTIONS : actions;
     }
     
+    @Override
     public NSArray sectionsContents() {
     	NSArray result = super.sectionsContents();
     	if(result.count() == 1) {

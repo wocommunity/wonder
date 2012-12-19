@@ -197,7 +197,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 		// Note: If you configured the adaptor's WebObjectsAlias to something other than the default, 
 		// make sure to also set your WOAdaptorURL property to match.  Otherwise, asking the new context 
 		// the path to a direct action or component action URL will give an incorrect result.
-		String requestUrl = app.cgiAdaptorURL() + "/" + app.name() + ".woa";
+		String requestUrl = app.cgiAdaptorURL() + "/" + app.name() + app.applicationExtension();
 		try {
 			URL url = new URL(requestUrl);
 			requestUrl = url.getPath(); // Get just the part of the URL that is relative to the server root.
@@ -217,6 +217,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 		ERXThreadStorage.takeValueForKey(userInfo, ERXWOContext.CONTEXT_DICTIONARY_KEY);
 	}
 
+	@Override
 	public NSDictionary userInfo() {
 		return mutableUserInfo();
 	}
@@ -245,10 +246,14 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	@Override
 	public String _urlWithRequestHandlerKey(String requestHandlerKey, String requestHandlerPath, String queryString, boolean secure) {
 		_preprocessURL();
-		String url = super._urlWithRequestHandlerKey(requestHandlerKey, requestHandlerPath, queryString, secure);
-		if (!ERXApplication.isWO54()) {
-			url = _postprocessURL(url);
-		}
+		return super._urlWithRequestHandlerKey(requestHandlerKey, requestHandlerPath, queryString, secure);
+	}
+	
+	@Override
+	public String _urlWithRequestHandlerKey(String requestHandlerKey, String requestHandlerPath, String queryString, boolean isSecure, int somePort) {
+		_preprocessURL();
+		String url = super._urlWithRequestHandlerKey(requestHandlerKey, requestHandlerPath, queryString, isSecure, somePort);
+		url = _postprocessURL(url);
 		return url;
 	}
 
@@ -362,7 +367,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	
 	/**
 	 * 
-	 * @deprecated replaced by {@link ERXResponseRewriter}
+	 * @deprecated replaced by {@link er.extensions.appserver.ERXResponseRewriter}
 	 */
 	@Deprecated
 	public static String _htmlCloseHeadTag() {
@@ -370,7 +375,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	}
 	
 	/**
-	 * @deprecated replaced by {@link ERXResponseRewriter}
+	 * @deprecated replaced by {@link er.extensions.appserver.ERXResponseRewriter}
 	 */
 	@Deprecated
 	public static void insertInResponseBeforeTag(WOContext context, WOResponse response, String content, String tag, TagMissingBehavior tagMissingBehavior) {
@@ -378,7 +383,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	}
 	
 	/**
-	 * @deprecated replaced by {@link ERXResponseRewriter}
+	 * @deprecated replaced by {@link er.extensions.appserver.ERXResponseRewriter}
 	 */
 	@Deprecated
 	public static void addScriptResourceInHead(WOContext context, WOResponse response, String framework, String fileName) {
@@ -386,7 +391,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	}
 	
 	/**
-	 * @deprecated replaced by {@link ERXResponseRewriter}
+	 * @deprecated replaced by {@link er.extensions.appserver.ERXResponseRewriter}
 	 */
 	@Deprecated
 	public static void addStylesheetResourceInHead(WOContext context, WOResponse response, String framework, String fileName) {
@@ -394,7 +399,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	}
 	
 	/**
-	 * @deprecated replaced by {@link ERXResponseRewriter}
+	 * @deprecated replaced by {@link er.extensions.appserver.ERXResponseRewriter}
 	 */
 	@Deprecated
 	public static void addScriptCodeInHead(WOContext context, WOResponse response, String script) {
@@ -402,7 +407,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	}
 	
 	/**
-	 * @deprecated replaced by {@link ERXResponseRewriter}
+	 * @deprecated replaced by {@link er.extensions.appserver.ERXResponseRewriter}
 	 */
 	@Deprecated
 	public static void addScriptCodeInHead(WOContext context, WOResponse response, String script, String scriptName) {
@@ -410,7 +415,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	}
 	
 	/**
-	 * @deprecated replaced by {@link ERXResponseRewriter}
+	 * @deprecated replaced by {@link er.extensions.appserver.ERXResponseRewriter}
 	 */
 	@Deprecated
 	public static void addResourceInHead(WOContext context, WOResponse response, String framework, String fileName, String startTag, String endTag) {
@@ -418,7 +423,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	}
 	
 	/**
-	 * @deprecated replaced by {@link ERXResponseRewriter}
+	 * @deprecated replaced by {@link er.extensions.appserver.ERXResponseRewriter}
 	 */
 	@Deprecated
 	public static void addResourceInHead(WOContext context, WOResponse response, String framework, String fileName, String startTag, String endTag, TagMissingBehavior tagMissingBehavior) {
@@ -486,23 +491,11 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	 * @param secure
 	 *            whether or not the URL should be HTTPS
 	 * @return the URL to the given direct action
+	 * @deprecated use non-static {@link #_directActionURL(String, NSDictionary, boolean, int, boolean)} instead
 	 */
+	@Deprecated
 	public static String _directActionURL(WOContext context, String actionName, NSDictionary queryParams, boolean secure) {
-		try {
-			String directActionURL;
-			if (ERXApplication.isWO54()) {
-				Method _directActionURLMethod = context.getClass().getMethod("_directActionURL", new Class[] { String.class, NSDictionary.class, boolean.class, int.class, boolean.class });
-				directActionURL = (String) _directActionURLMethod.invoke(context, new Object[] { actionName, queryParams, Boolean.valueOf(secure), Integer.valueOf(0), Boolean.FALSE });
-			}
-			else {
-				Method _directActionURLMethod = context.getClass().getMethod("_directActionURL", new Class[] { String.class, NSDictionary.class, boolean.class });
-				directActionURL = (String) _directActionURLMethod.invoke(context, new Object[] { actionName, queryParams, Boolean.valueOf(secure) });
-			}
-			return directActionURL;
-		}
-		catch (Exception e) {
-			throw new NSForwardException(e);
-		}
+		return context._directActionURL(actionName, queryParams, secure, 0, false);
 	}
 
 	/**
@@ -693,7 +686,9 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	 * Workaround for missing componentActionUrl(String) in 5.3.
 	 * @param context
 	 * @return ajax action URL
+	 * @deprecated use {@link #componentActionURL(String)} instead
 	 */
+	@Deprecated
 	public static String ajaxActionUrl(WOContext context) {
 		String url = context.componentActionURL().replaceFirst( "/" + WOApplication.application().componentRequestHandlerKey() + "/", "/" +ERXApplication.erAjaxRequestHandlerKey() + "/");
 		return url;

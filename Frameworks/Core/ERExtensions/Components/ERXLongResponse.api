@@ -5,7 +5,7 @@
 		<binding name="task"/>
 		<binding name="refreshInterval"/>
 
-		<validation message="&apos;task&apos; is a required binding">
+		<validation message="'task' is a required binding">
 			<unbound name="task"/>
 		</validation>
 	</wo>

@@ -41,7 +41,6 @@ import com.webobjects.foundation.NSTimestampFormatter;
  * @author 	Johan Carlberg <johan@oops.se>
  * @version 	1.0, 2002-09-30
  */
-
 public class ERPublishCalendarPage extends WOComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -55,7 +54,6 @@ public class ERPublishCalendarPage extends WOComponent {
     protected final int maxLineLength = 75;
     public static String newline = System.getProperty("line.separator");
 
-    /** @TypeInfo er.calendar.ERCalendarEvent */
     protected NSMutableArray events;
     public ERCalendarEvent event;
     protected NSTimestamp eventTimestamp;
@@ -95,11 +93,11 @@ public class ERPublishCalendarPage extends WOComponent {
     public void appendToResponse (WOResponse aResponse, WOContext aContext)
     {
 	eventTimestamp = new NSTimestamp();
-	aResponse.setContentEncoding ("UTF-8");
+	aResponse.setContentEncoding("UTF-8");
 	super.appendToResponse (aResponse, aContext);
 	aResponse.setHeader ("text/calendar","content-type");
 	try {
-	    aResponse.setContent (new NSData (foldLongLinesInString (new String (aResponse.content().bytes(), "UTF-8")).getBytes ("UTF-8")));
+	    aResponse.setContent(new NSData(foldLongLinesInString(new String(aResponse.content().bytes(), "UTF-8")).getBytes("UTF-8")));
 	} catch (java.io.UnsupportedEncodingException exception) {
 	    // If encoding is not supported, content of response is left unmodified
 	    // (although exceptions will be thrown elsewhere if UTF-8 is unsupported).
@@ -150,7 +148,6 @@ public class ERPublishCalendarPage extends WOComponent {
 	events.removeObjectsInArray (eventsArray);
     }
 
-    /** @TypeInfo er.calendar.ERCalendarEvent */
     public NSMutableArray events() {
 	return events;
     }

@@ -6,8 +6,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOOrQualifier;
 import com.webobjects.eocontrol.EOQualifier;
@@ -49,11 +47,7 @@ import er.extensions.validation.ERXValidationFactory;
  * @author <a href="mailto:maxmuller@mac.com">Max Muller</a>
  */
 public class ERJavaMail extends ERXFrameworkPrincipal {
-
 	public final static Class<?> REQUIRES[] = new Class[] { ERXExtensions.class };
-
-	/** Class logger */
-	private static final Logger log = Logger.getLogger(ERJavaMail.class);
 
 	static {
 		setUpFrameworkPrincipalClass(ERJavaMail.class);
@@ -131,6 +125,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	@Override
 	public void finishInitialization() {
 		initializeFrameworkFromSystemProperties();
+		log.debug("ERJavaMail loaded");
 	}
 
 	/**

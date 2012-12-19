@@ -236,6 +236,8 @@ public abstract class AjaxUpload extends WOComponent {
 								tempFile = ERXFileUtilities.writeInputStreamToTempFile(anInputStream, context.session().sessionID(), ".tmp");
 							} catch (IOException e) {
 								throw new RuntimeException("Couldn't write input stream to temp file: " + e);
+							} finally {
+								try { anInputStream.close(); } catch (IOException e) {}
 							}
 						} else {
 							OutputStream anOutputStream = (OutputStream) valueForBinding(Bindings.outputStream);
@@ -243,6 +245,9 @@ public abstract class AjaxUpload extends WOComponent {
 								ERXFileUtilities.writeInputStreamToOutputStream(anInputStream, anOutputStream);
 							} catch (IOException e) {
 								throw new RuntimeException("Couldn't write input stream to output stream: " + e);
+							} finally {
+								try { anOutputStream.close(); } catch (IOException e) {}
+								try { anInputStream.close(); } catch (IOException e2) {}
 							}
 						}
 
@@ -268,6 +273,8 @@ public abstract class AjaxUpload extends WOComponent {
 					}
 					catch (IOException e) {
 						throw new RuntimeException("Error skipping empty file upload: " + e);
+					} finally {
+						try { anInputStream.close(); } catch (IOException e2) {}
 					}
 				}
 			}

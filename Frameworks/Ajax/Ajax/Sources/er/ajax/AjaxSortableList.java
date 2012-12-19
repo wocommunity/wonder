@@ -100,10 +100,12 @@ public class AjaxSortableList extends AjaxComponent {
     return listItemID;
   }
 
+  @Override
   public boolean synchronizesVariablesWithBindings() {
     return false;
   }
 
+  @Override
   public void appendToResponse(WOResponse response, WOContext context) {
     _actionUrl = AjaxUtils.ajaxComponentActionUrl(context);
     if (hasBinding("id")) {
@@ -141,7 +143,7 @@ public class AjaxSortableList extends AjaxComponent {
   }
 
   public String onUpdate() {
-    StringBuffer onUpdateBuffer = new StringBuffer();
+	StringBuilder onUpdateBuffer = new StringBuilder();
     onUpdateBuffer.append("function(container) {");
     // onComplete:ajaxResponse
     String containerID = (String) valueForBinding("id");

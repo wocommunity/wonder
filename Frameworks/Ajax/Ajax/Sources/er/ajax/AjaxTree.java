@@ -68,6 +68,7 @@ public class AjaxTree extends WOComponent {
 		super(context);
 	}
 
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}
@@ -101,6 +102,7 @@ public class AjaxTree extends WOComponent {
 		}
 	}
 
+	@Override
 	public void reset() {
 		super.reset();
 	}
@@ -125,18 +127,21 @@ public class AjaxTree extends WOComponent {
 		setItem(treeModel().rootTreeNode());
 	}
 
+	@Override
 	public void appendToResponse(WOResponse aResponse, WOContext aContext) {
 		resetTree();
 		super.appendToResponse(aResponse, aContext);
 		resetTree();
 	}
 
+	@Override
 	public void takeValuesFromRequest(WORequest aRequest, WOContext aContext) {
 		resetTree();
 		super.takeValuesFromRequest(aRequest, aContext);
 		resetTree();
 	}
 
+	@Override
 	public WOActionResults invokeAction(WORequest aRequest, WOContext aContext) {
 		resetTree();
 		WOActionResults results = super.invokeAction(aRequest, aContext);
@@ -278,7 +283,7 @@ public class AjaxTree extends WOComponent {
 	}
 
 	public String nodeItem() {
-		StringBuffer nodeItem = new StringBuffer();
+		StringBuilder nodeItem = new StringBuilder();
 		nodeItem.append("<li");
 		if (hasBinding("itemID")) {
 			String itemID = (String) valueForBinding("itemID");

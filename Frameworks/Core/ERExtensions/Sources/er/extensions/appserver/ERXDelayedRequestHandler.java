@@ -240,8 +240,7 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 					if (url == null) {
 						return createErrorResponse(request);
 					}
-					response = new WOResponse();
-					response.setStatus(302);
+					response = new ERXResponse(ERXHttpStatusCodes.FOUND);
 					response.setHeader(url, "location");
 					// refresh entry, so it doesn't time out
 					_urls.setObjectForKey(url, id);
@@ -392,7 +391,7 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 	 * @param url
 	 */
 	protected WOResponse createRefreshResponse(WORequest request, String url) {
-		WOResponse result = new WOResponse();
+		ERXResponse result = new ERXResponse();
 		result.setHeader(refresh() + "; url=" + url + "\"", "refresh");
 		// ak: create a simple template
 		result.appendContentString("<html>\n<head>\n<meta http-equiv=\"refresh\" content=\"" + refresh() + "; url=" + url + "\">\n");

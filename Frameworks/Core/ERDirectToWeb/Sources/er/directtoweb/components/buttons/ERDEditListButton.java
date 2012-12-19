@@ -18,7 +18,6 @@ import er.extensions.eof.ERXConstant;
 import er.extensions.localization.ERXLocalizer;
 import er.extensions.validation.ERXExceptionHolder;
 
-
 /**
  * Nice component used for editing a toMany relationship by taking the user to another page to pick which objects belong in the relationship.<br />
  * 
@@ -31,7 +30,6 @@ import er.extensions.validation.ERXExceptionHolder;
  * @binding numberOfColumns
  * @binding object
  */
-
 public class ERDEditListButton extends ERDCustomEditComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -69,7 +67,6 @@ public class ERDEditListButton extends ERDCustomEditComponent {
         return _editButtonName;
     }
     
-    /** @TypeInfo Object */
     private String _choices;
     public String choices(){
         if (_choices==null)

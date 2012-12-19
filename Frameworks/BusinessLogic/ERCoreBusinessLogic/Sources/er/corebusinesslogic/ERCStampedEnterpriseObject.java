@@ -126,7 +126,6 @@ public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
      * issue introduced by looking up the entity() in touch(), so we can roll it back out.
      * 
      * @return whether or not read-only entities should be touched (defaults to false)
-     * @property er.corebusinesslogic.ERCStampedEnterpriseObject.touchReadOnlyEntities
      */
     protected static boolean touchReadOnlyEntities() {
         if (_touchReadOnlyEntities == null) {

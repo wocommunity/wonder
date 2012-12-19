@@ -1,3 +1,7 @@
+##  Properies Info
+er.extensions.load.Properties.framework.ERExtensions=load
+er.extensions.ERExtensions.hasLocalization=true
+
 
 # ERExtensions Framework Properties
 
@@ -645,6 +649,11 @@ er.extensions.stackTrace.skipPatternsFile=StackTraceSkipPatterns-Normal.plist
 # Components 
 #########################################################################
 er.extensions.ERXWOForm.multipleSubmitDefault=true
+
+#########################################################################
+# ERXLocalizationEditor 
+#########################################################################
+er.extensions.ERXLocalizationEditor.endoding=UTF-16BE
 
 #########################################################################
 # SSL DirectConnect

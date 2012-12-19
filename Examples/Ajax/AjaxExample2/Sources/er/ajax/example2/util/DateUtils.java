@@ -207,7 +207,7 @@ public class DateUtils {
   }
 
   public static String getDurationAsString(NSTimestamp _startTime, NSTimestamp _endTime) {
-    StringBuffer buff = new StringBuffer();
+	StringBuilder buff = new StringBuilder();
     long seconds = getDurationInSeconds(_startTime, _endTime);
     long hours = seconds / 3600;
     long minutes = (seconds % 3600) / 60;

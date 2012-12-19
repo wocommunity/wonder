@@ -8,7 +8,6 @@ import wowodc.background.utilities.Utilities;
  * A basic Runnable that runs for a fixed period of time and finds Prime numbers.
  * 
  * @author kieran
- * 
  */
 public class T01T02SimpleBackgroundTask implements Runnable {
 	
@@ -33,7 +32,5 @@ public class T01T02SimpleBackgroundTask implements Runnable {
 		}
 		
 		log.info("Task complete. Checked for primes in " + i + " numbers.");
-
 	}
-
 }

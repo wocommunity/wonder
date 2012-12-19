@@ -134,7 +134,7 @@ public class QueryStringAuthGenerator {
     }
 
     public String makeBareURL(String bucket, String key) {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         if (this.isSecure) {
             buffer.append("https://");
         } else {
@@ -162,7 +162,7 @@ public class QueryStringAuthGenerator {
         String canonicalString = Utils.makeCanonicalString(method, path, headers, ""+expires);
         String encodedCanonical = Utils.encode(this.awsSecretAccessKey, canonicalString, true);
 
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         if (this.isSecure) {
             buffer.append("https://");
         } else {

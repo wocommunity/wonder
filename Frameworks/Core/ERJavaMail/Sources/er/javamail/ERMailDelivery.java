@@ -19,6 +19,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
 import javax.mail.internet.MimeMultipart;
 
+import org.apache.commons.lang.CharEncoding;
 import org.apache.log4j.Logger;
 
 import com.webobjects.foundation.NSArray;
@@ -109,7 +110,7 @@ public abstract class ERMailDelivery {
 	private NSDictionary<String, Object> _userInfo;
 	private String _contextString;
 
-	public static final String DefaultCharset = System.getProperty("er.javamail.defaultEncoding", "UTF-8");
+	public static final String DefaultCharset = System.getProperty("er.javamail.defaultEncoding", CharEncoding.UTF_8);
 	public String _charset = DefaultCharset;
 
 	/** Designated constructor */
@@ -266,6 +267,9 @@ public abstract class ERMailDelivery {
 	 * <span class="ja">
 	 * メール・アドレスと名前を InternetAddress としてインスタンス化と戻します
 	 * </span>
+	 * 
+	 * @return address object
+	 * @throws AddressException if parsing of email failed
 	 */
 	protected InternetAddress internetAddressWithEmailAndPersonal(String email, String personal) throws AddressException {
 		InternetAddress address = null;
@@ -457,6 +461,8 @@ public abstract class ERMailDelivery {
 	 * <span class="ja">
 	 * カレント・メッセージ・インスタンスの題名をセットします
 	 * </span>
+	 * @param subject subject string
+	 * @throws MessagingException if the charset conversion of the subject fails
 	 */
 	public void setSubject(String subject) throws MessagingException {
 		this.mimeMessage().setSubject(ERMailUtils.encodeString(subject, this.charset()));

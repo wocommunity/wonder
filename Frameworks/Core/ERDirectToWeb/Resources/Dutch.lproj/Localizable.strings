@@ -114,4 +114,17 @@
 	"is" = "is";
 	"like" = "bevat";
 	"starts with" = "begint met";
+	"Hint.SampleText" = "Attribute Information";
+	"ERD2WDebugFlags.LOG4J" = "Log4J";
+	"ERD2WDebugFlags.D2W" = "D2W";
+	"ERD2WDebugFlags.CSS" = "CSS";
+	"ERD2WDebugFlags.SQL" = "Toggle SQL";
+	"ERD2WDebugFlags.CLEAR" = "Clear D2W Cache";
+	"ERD2WDebugFlags.METRICS" = "Page Metrics";
+	"ERD2WDebugFlags.SHOW" = "Show Details";
+	"ERD2WDebugFlags.HIDE" = "Hide Details";
+	"ERD2WDebugFlags.DUMP" = "Created keys";
+	"ERD2WDebugFlags.LOCALIZE" = "Localization";
+	"ERD2WDebugFlags.STATS" = "WOStats";
+	"ERD2WDebugFlags.RUN" = "Run Test";	
 }

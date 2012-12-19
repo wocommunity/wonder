@@ -3,13 +3,13 @@ import com.sun.javadoc.*;
 import java.util.Map;
 
 /**
- * Abstract Taglet class for our binding and D2W keys
+ * Abstract Taglet class for our binding and D2W keys.
+ *
  * @author ak
  */
-
 public abstract class AbstractTaglet implements Taglet {
-    
-    public abstract String getName();    
+    public abstract String getName();  
+  
     public abstract String getHeader();    
 
     public boolean inField() {
@@ -43,7 +43,10 @@ public abstract class AbstractTaglet implements Taglet {
     /**
      * Given the <code>Tag</code> representation of this custom
      * tag, return its string representation.
-     * @param tag   the <code>Tag</code> representation of this custom tag.
+     * 
+     * @param tag
+     *            the <code>Tag</code> representation of this custom tag
+     * @return string representation of the <code>Tag</code>
      */
     public String toString(Tag tag) {
         return toString(new Tag[] {tag});
@@ -51,9 +54,9 @@ public abstract class AbstractTaglet implements Taglet {
     
     private String bindingName(Tag tag) {
         String result = tag.text();
-        if(result != null) {
+        if (result != null) {
             int space = result.indexOf(" ");
-            if(space >= 0) {
+            if (space >= 0) {
                 result = result.substring(0, space);
             }
         }
@@ -62,9 +65,9 @@ public abstract class AbstractTaglet implements Taglet {
     
     private String bindingDescription(Tag tag) {
         String result = tag.text();
-        if(result != null) {
+        if (result != null) {
             int space = result.indexOf(" ");
-            if(space >= 0) {
+            if (space >= 0) {
                 result = result.substring(space);
             }
         }
@@ -74,31 +77,34 @@ public abstract class AbstractTaglet implements Taglet {
     /**
      * Given an array of <code>Tag</code>s representing this custom
      * tag, return its string representation.
-     * @param tags  the array of <code>Tag</code>s representing of this custom tag.
+     * 
+     * @param tags
+     *            the array of <code>Tag</code>s representing of this custom tag
+     * @return string representation of the <code>Tag</code>s
      */
     public String toString(Tag[] tags) {
         if (tags.length == 0) {
             return null;
         }
-        String result = "";
-        result += "<TABLE BORDER=\"1\" WIDTH=\"100%\" CELLPADDING=\"3\" CELLSPACING=\"0\" SUMMARY=\"\">";
-        result += "<TR BGCOLOR=\"#CCCCFF\" CLASS=\"TableHeadingColor\">";
-        result += "<TD COLSPAN=2><FONT SIZE=\"+2\">";
-        result += "<B>"+getHeader()+"</B></FONT></TD>";
-        result += "</TR>";
+        StringBuilder sb = new StringBuilder();
+        sb.append("<TABLE BORDER=\"1\" WIDTH=\"100%\" CELLPADDING=\"3\" CELLSPACING=\"0\" SUMMARY=\"\">");
+        sb.append("<TR BGCOLOR=\"#CCCCFF\" CLASS=\"TableHeadingColor\">");
+        sb.append("<TD COLSPAN=2><FONT SIZE=\"+2\">");
+        sb.append("<B>" + getHeader() + "</B></FONT></TD>");
+        sb.append("</TR>");
         for (int i = 0; i < tags.length; i++) {
-            result += "<TR BGCOLOR=\"white\" CLASS=\"TableRowColor\">";
-            result += "<TD ALIGN=\"right\" VALIGN=\"top\" WIDTH=\"1%\"><FONT SIZE=\"-1\">";
-            result += "<CODE>";
-            result += bindingName(tags[i]);
-            result += "</CODE></FONT></TD>";
-            result += "<TD>";
-            result += bindingDescription(tags[i]);
-            result += "<BR>";
-            result += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>";
-            result += "</TR>";
+            sb.append("<TR BGCOLOR=\"white\" CLASS=\"TableRowColor\">");
+            sb.append("<TD ALIGN=\"right\" VALIGN=\"top\" WIDTH=\"1%\"><FONT SIZE=\"-1\">");
+            sb.append("<CODE>");
+            sb.append(bindingName(tags[i]));
+            sb.append("</CODE></FONT></TD>");
+            sb.append("<TD>");
+            sb.append(bindingDescription(tags[i]));
+            sb.append("<BR>");
+            sb.append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>");
+            sb.append("</TR>");
         }
-        return result + "</TABLE>\n";
+        sb.append("</TABLE>\n");
+        return sb.toString();
     }
 }
-

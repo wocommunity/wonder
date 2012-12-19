@@ -13,13 +13,12 @@ import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.foundation.NSArray;
 
 import er.directtoweb.assignments.ERDAssignment;
-import er.directtoweb.assignments.ERDComputingAssignmentInterface;
 import er.directtoweb.assignments.ERDLocalizableAssignmentInterface;
 import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * Beautify the propertyKey name in a better way.<br />
- * @deprecated use {@link ERDDefaultDisplayNameAssignment}
+ * @deprecated use {@link er.directtoweb.assignments.defaults.ERDDefaultDisplayNameAssignment}
  */
 @Deprecated
 public class ERDDefaultPropertyNameAssignment extends ERDAssignment implements ERDLocalizableAssignmentInterface {
@@ -64,7 +63,7 @@ public class ERDDefaultPropertyNameAssignment extends ERDAssignment implements E
     public ERDDefaultPropertyNameAssignment (String key, Object value) { super(key,value); }
 
     /**
-     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This
      * assignment depends upon the context key: "propertyKey". This array 
      * of keys is used when constructing the 
      * significant keys for the passed in keyPath.

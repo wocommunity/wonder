@@ -2,6 +2,7 @@ package er.selenium;
 
 import java.io.File;
 
+import org.apache.commons.lang.CharEncoding;
 import org.apache.log4j.Logger;
 
 import er.extensions.foundation.ERXFileUtilities;
@@ -30,7 +31,7 @@ public class SeleniumTestFileProcessor {
 		}
 		
     	try {
-    		String fileContents = ERXFileUtilities.stringFromFile(testFile, "UTF-8");
+    		String fileContents = ERXFileUtilities.stringFromFile(testFile, CharEncoding.UTF_8);
     		SeleniumTest result = importer.process(fileContents);
     		if (filter != null) {
     			result = filter.processTest(result);

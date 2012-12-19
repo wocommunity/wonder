@@ -1,4 +1,5 @@
 package er.extensions.components;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -39,6 +40,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSForwardException;
 
+import er.extensions.appserver.ERXResponse;
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXSimpleTemplateParser;
 
@@ -63,10 +65,9 @@ import er.extensions.foundation.ERXSimpleTemplateParser;
  * @binding data will be set to the transformed data (optional)
  * @binding stream will be set to the transformed data (optional)
  * @binding nocache flag that if set creates a new transformer instead of using the one in the cache. Useful when deleloping the stylesheet. 
+ *  
  * @author ak on 07.04.05
- * @project ERExtensions
  */
-
 public class ERXSLTWrapper extends ERXNonSynchronizingComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -164,10 +165,11 @@ public class ERXSLTWrapper extends ERXNonSynchronizingComponent {
 	 * Overridden to get use apply the XLST transformation on the content.
 	 * @throws TransformerException 
 	 */
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		start = System.currentTimeMillis(); current = start;
 		if (isEnabled()) {
-			WOResponse newResponse = new WOResponse();
+			ERXResponse newResponse = new ERXResponse();
 			newResponse.setContentEncoding(response.contentEncoding());
 
 			super.appendToResponse(newResponse, context);
@@ -233,9 +235,7 @@ public class ERXSLTWrapper extends ERXNonSynchronizingComponent {
 		private static final Logger log       = Logger.getLogger(TemplatePool.class);
 		private ERXSimpleTemplateParser templateParser = new ERXSimpleTemplateParser("?", false);
 
-		private TemplatePool() {
-			// nothing
-		}
+		protected TemplatePool() {}
 
 		public Map getTemplates() {
 			return templates;

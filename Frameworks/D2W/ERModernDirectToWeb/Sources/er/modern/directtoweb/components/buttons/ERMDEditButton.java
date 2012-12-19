@@ -26,7 +26,6 @@ import er.extensions.foundation.ERXValueUtilities;
  * @d2wKey editButtonLabel
  * 
  * @author davidleber
- * @project ERModernDirectToWeb
  */
 public class ERMDEditButton extends ERMDActionButton {
 	

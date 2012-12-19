@@ -2,4 +2,6 @@ Link : WOHyperlink {
   href = linkURL;
   class = ^class;
   style = ^style;
+  target = ^target;
+  string = ^string;
 }

@@ -34,10 +34,12 @@ public class WOSortOrder extends WOComponent {
         super(aContext);
     }
 
+    @Override
     public boolean isStateless() {
         return true;
     }
 
+    @Override
     public void reset()  {
         _invalidateCaches();
     }

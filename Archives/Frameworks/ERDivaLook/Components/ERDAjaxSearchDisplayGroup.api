@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+    <wo class="ERDAjaxSearchDisplayGroup" wocomponentcontent="false">    <binding name="displayGroup"/>
+        <validation message="'displayGroup' is a required binding.">
+            <unbound name="displayGroup"/>
+        </validation>
+    <binding name="d2wContext"/>
+        <validation message="'d2wContext' is a required binding.">
+            <unbound name="d2wContext"/>
+        </validation>
+    </wo>
+</wodefinitions>

@@ -12,6 +12,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 
 import er.extensions.eof.ERXConstant;
+import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * Radio button list with lots of more options.<br />
@@ -29,7 +30,6 @@ import er.extensions.eof.ERXConstant;
  * @binding cellWidth
  * @binding tableOtherTagString
  */
-
 public class ERXRadioButtonMatrix extends ERXStatelessComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -50,6 +50,7 @@ public class ERXRadioButtonMatrix extends ERXStatelessComponent {
     protected Number index;
     protected Object uniqueID;
 
+    @Override
     public void reset() {
         invalidateCaches();
     }
@@ -100,6 +101,17 @@ public class ERXRadioButtonMatrix extends ERXStatelessComponent {
         return "";
     }
 
+	public String otherTagStringForRadioButton() {
+    	boolean isDisabled = disabled();
+    	boolean isChecked = !ERXStringUtilities.stringIsNullOrEmpty(isCurrentItemSelected());
+        	return (isDisabled ? "disabled" : "") + (isDisabled && isChecked? " " : "") + (isChecked ? "checked" : "");
+	}
+
+    public boolean disabled() {
+    	return booleanValueForBinding("disabled", false);
+    }
+
+    @Override
     public void awake() {
         super.awake();
         uniqueID = valueForBinding("uniqueID");
@@ -115,10 +127,12 @@ public class ERXRadioButtonMatrix extends ERXStatelessComponent {
         uniqueID=null;
     }
 
+    @Override
     public void appendToResponse(WOResponse aResponse, WOContext aContext) {
         super.appendToResponse(aResponse, aContext);
     }
 
+    @Override
     public void takeValuesFromRequest(WORequest aRequest, WOContext aContext) {
         setSelection(aRequest.stringFormValueForKey(uniqueID()));
         super.takeValuesFromRequest(aRequest, aContext);
@@ -133,9 +147,8 @@ public class ERXRadioButtonMatrix extends ERXStatelessComponent {
         
         if(v != null) {
             return v;
-        } else {
-            return DEFAULT_PADDING;
         }
+        return DEFAULT_PADDING;
     }
 
     public Object cellspacing() {
@@ -143,9 +156,7 @@ public class ERXRadioButtonMatrix extends ERXStatelessComponent {
 
         if(v != null) {
             return v;
-        } else {
-            return DEFAULT_SPACING;
         }
+        return DEFAULT_SPACING;
     }
-
 }

@@ -1,6 +1,4 @@
-/**
- * 
- */
+
 package com.webobjects.jdbcadaptor;
 
 import java.util.Arrays;
@@ -49,19 +47,16 @@ import com.webobjects.foundation._NSStringUtilities;
  * not intended according to the code.
  * </p>
  * <p>
- * To have this class enabled as the runtime MySQLExpression define the
- * following property.
- * </p>
  * <p>
- * com.webobjects.jdbcadaptor.MySQLExpression.enable=true
- * </p>
- * <p>
- * To summarise:
+ * To summarise, if this class is enabled:
  * </p>
  * <ul>
  * <li>LIKE UPPER(foo) becomes LIKE foo
  * <li>LIKE foo becomes LIKE BINARY foo
  * </ul>
+ * 
+ * @property com.webobjects.jdbcadaptor.MySQLExpression.enable set to <code>true</code> to enable this class and change the behavior of the
+ * <code>like</code> operator to be case-insensitive.
  * 
  * @author ldeck
  */

@@ -19,9 +19,7 @@ import er.directtoweb.interfaces.ERDPickPageInterface;
  * @d2wKey sample sample d2w key
  *
  * @author ak on Fri Sep 05 2003
- * @project ERDirectToWeb
  */
-
 public class ERDSelectAllButton extends ERDActionButton {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -42,6 +40,7 @@ public class ERDSelectAllButton extends ERDActionButton {
     }
 
     /** Utility to return the enclosing pick page, if there is one. */
+    @Override
     protected ERDPickPageInterface parentPickPage() {
         return (ERDPickPageInterface)enclosingPageOfClass(ERDPickPageInterface.class);
     }

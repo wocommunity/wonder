@@ -110,6 +110,7 @@ public class AjaxAutoComplete extends AjaxComponent {
     /**
      * Overridden to set the IDs for the field and the div tag.
      */
+    @Override
     public void awake() {
         super.awake();
         divName = safeElementID() + "_div";
@@ -117,6 +118,7 @@ public class AjaxAutoComplete extends AjaxComponent {
         indicatorName = safeElementID() + "_indicator";
     }
     
+    @Override
     public void sleep() {
     	divName = null;
     	fieldName = null;
@@ -127,15 +129,9 @@ public class AjaxAutoComplete extends AjaxComponent {
     /**
      * Overridden because the component is stateless
      */
+    @Override
     public boolean isStateless() {
         return true;
-    }
-
-    /**
-     * Overridden because the component does not synch with the bindings.
-     */
-    public boolean synchronizesVariablesWithBindings() {
-        return false;
     }
 
     public String indicator() {
@@ -171,6 +167,7 @@ public class AjaxAutoComplete extends AjaxComponent {
     /**
      * Overridden to add the initialization javascript for the auto completer.
      */
+    @Override
     public void appendToResponse(WOResponse res, WOContext ctx) {
         super.appendToResponse(res, ctx);
 		boolean isDisabled = hasBinding("disabled") && ((Boolean) valueForBinding("disabled")).booleanValue();
@@ -215,7 +212,7 @@ public class AjaxAutoComplete extends AjaxComponent {
     }
 
 	String listeJS() {
-		StringBuffer str = new StringBuffer();
+		StringBuilder str = new StringBuilder();
 		str.append("new Array(");
 		NSArray list = (NSArray) valueForBinding("list");
 		int max = list.count();
@@ -238,7 +235,7 @@ public class AjaxAutoComplete extends AjaxComponent {
 			str.append("\"");
 		}
 		str.append(")");
-		return String.valueOf(str);
+		return str.toString();
 	}		
 
     /**
@@ -309,10 +306,6 @@ public class AjaxAutoComplete extends AjaxComponent {
     	setValueForBinding(strValue, "value");
     }
     
-    public void takeValuesFromRequest(WORequest request, WOContext context) {
-    	super.takeValuesFromRequest(request, context);
-    }
-
     protected void appendItemToResponse(Object value, WOElement child, boolean hasItem, WOResponse response, WOContext context) {
         response.appendContentString("<li>");
         if(hasItem && child != null) {

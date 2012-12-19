@@ -1,4 +1,5 @@
 package er.extensions.components;
+
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;
@@ -10,9 +11,7 @@ import com.webobjects.appserver.WOContext;
  * @binding escapeHTML escape HTML
  *
  * @author ak on Sat Sep 27 2003
- * @project ERExtensions
  */
-
 public class ERXStringHolder extends ERXStatelessComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -43,6 +42,8 @@ public class ERXStringHolder extends ERXStatelessComponent {
     public void setEscapeHTML(boolean value) {
         _escapeHTML = value ? Boolean.TRUE : Boolean.FALSE;
     }
+
+    @Override
     public void reset() {
         _value = null;
         _escapeHTML = Boolean.FALSE;

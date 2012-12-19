@@ -250,7 +250,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 				throw new WODynamicElementCreationException("You cannot specify an effect without an updateContainerID.");
 			}
 			
-			StringBuffer effectBuffer = new StringBuffer();
+			StringBuilder effectBuffer = new StringBuilder();
 			effectBuffer.append("function() { new " + AjaxUpdateLink.fullEffectName(effect) + "('" + updateContainerID + "', {  queue:'end'");
 			if (duration != null) {
 				effectBuffer.append(", duration: ");

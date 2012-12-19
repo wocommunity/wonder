@@ -26,12 +26,14 @@ public class WOTable extends WOComponent {
     public int currentCol;
     protected int _rowCount;
     protected int _colCount;
+    public int currentItemIndex;
 
     public WOTable(WOContext aContext)  {
         super(aContext);
         _resetInternalCaches();
     }
 
+    @Override
     public boolean isStateless() {
         return true;
     }
@@ -120,6 +122,7 @@ public class WOTable extends WOComponent {
         if (canSetValueForBinding("index")) {
             setValueForBinding(Integer.valueOf(index), "index");
         }
+        currentItemIndex++;
     }
 
     public void setCurrentCol(Number newValue){
@@ -133,14 +136,17 @@ public class WOTable extends WOComponent {
         _colCount=-1;
         currentCol=-1;
         currentRow=-1;
+        currentItemIndex = 0;
         _maxColumns = -1;
     }
 
+    @Override
     public void takeValuesFromRequest(WORequest aRequest, WOContext aContext)  {
         _resetInternalCaches();
         super.takeValuesFromRequest(aRequest, aContext);
     }
 
+    @Override
     public void reset() {
         _resetInternalCaches();
     }

@@ -1,5 +1,7 @@
 package er.modern.look.pages;
 
+import org.apache.commons.lang.ObjectUtils;
+
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WContext;
@@ -8,7 +10,6 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 
 import er.directtoweb.ERD2WContainer;
 import er.directtoweb.pages.templates.ERD2WTabInspectPageTemplate;
-import er.extensions.ERXExtensions;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.foundation.ERXValueUtilities;
@@ -34,7 +35,13 @@ import er.extensions.foundation.ERXValueUtilities;
  * @author davidleber
  */
 public class ERMODTabInspectPage extends ERD2WTabInspectPageTemplate {
-	
+  /**
+   * Do I need to update serialVersionUID?
+   * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+   * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+   */
+  private static final long serialVersionUID = 1L;
+
 	public interface Keys extends ERD2WTabInspectPageTemplate.Keys{
 		public static final String task = "task";
 		public static final String inlineTask = "inlineTask";
@@ -124,12 +131,10 @@ public class ERMODTabInspectPage extends ERD2WTabInspectPageTemplate {
 		D2WContext result = super.d2wContext();
 		if (_previousTaskContext == null) {
 			_previousTaskContext = result.task();
-		} else if (ERXExtensions.safeDifferent(_previousTaskContext, result.task())) {
+		} else if (ObjectUtils.notEqual(_previousTaskContext, result.task())) {
 			clearTabSectionsContents();
 			_previousTaskContext = result.task();
 		}
 		return super.d2wContext();
 	}
-
-
 }

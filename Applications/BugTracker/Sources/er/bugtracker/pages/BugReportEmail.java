@@ -6,6 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 
 package er.bugtracker.pages;
+
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
@@ -19,7 +20,6 @@ public class BugReportEmail extends WOComponent {
         super(aContext);
     }
 
-    /** @TypeInfo er.bugtracker.Bug */
     public NSArray unreadBugs;
     public People owner;
     public Bug bug;   

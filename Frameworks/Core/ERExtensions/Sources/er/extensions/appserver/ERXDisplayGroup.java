@@ -1,5 +1,6 @@
 package er.extensions.appserver;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WODisplayGroup;
@@ -16,7 +17,6 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSSet;
 
-import er.extensions.ERXExtensions;
 import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.eof.ERXS;
 
@@ -28,7 +28,7 @@ import er.extensions.eof.ERXS;
  * <li>clears out the sort ordering when the datasource changes. This is a cure fix to prevent errors when using switch components.</li>
  * </ul>
  * @author ak
- * @param <T> 
+ * @param <T> data type of the displaygroup's objects
  */
 public class ERXDisplayGroup<T> extends WODisplayGroup {
 	/**
@@ -267,7 +267,7 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	public void setDataSource(EODataSource ds) {
 		EODataSource old = dataSource();
 		super.setDataSource(ds);
-		if(old != null && ds != null && ERXExtensions.safeDifferent(old.classDescriptionForObjects(), ds.classDescriptionForObjects())) {
+		if(old != null && ds != null && ObjectUtils.notEqual(old.classDescriptionForObjects(), ds.classDescriptionForObjects())) {
 			setSortOrderings(NSArray.EmptyArray);
 		}
 	}
@@ -307,14 +307,14 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 
 	/**
 	 * Overridden to log a message when more than one sort order exists. Useful to track down errors.
-	 * @param nsarray the proposed EOSortOrdering objects
+	 * @param sortOrderings the proposed EOSortOrdering objects
 	 */
 	@Override
-	public void setSortOrderings(NSArray nsarray) {
-		super.setSortOrderings(nsarray);
-		if(nsarray != null && nsarray.count() > 1) {
-			if(log.isDebugEnabled()) {
-				log.debug("More than one sort order: " + nsarray);
+	public void setSortOrderings(NSArray<EOSortOrdering> sortOrderings) {
+		super.setSortOrderings(sortOrderings);
+		if (sortOrderings != null && sortOrderings.count() > 1) {
+			if (log.isDebugEnabled()) {
+				log.debug("More than one sort order: " + sortOrderings);
 			}
 		}
 	}

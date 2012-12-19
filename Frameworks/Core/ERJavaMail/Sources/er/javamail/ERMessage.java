@@ -23,7 +23,7 @@ import com.webobjects.foundation.NSDictionary;
  * ERMessage はメール・メッセージを表現します
  * </span>
  */
-public class ERMessage extends Object {
+public class ERMessage {
 	/**
 	 * <span class="en">
 	 * Defines a delegate interface for receiving notifications
@@ -168,7 +168,7 @@ public class ERMessage extends Object {
 			limitteredAddresses = allAddresses;
 		}
 
-		StringBuffer result = new StringBuffer();
+		StringBuilder result = new StringBuilder();
 		result.append(ERMailUtils.convertInternetAddressesToNSArray(limitteredAddresses).componentsJoinedByString(", "));
 		if (0 < maxAddresses && maxAddresses < allAddresses.length) {
 			result.append(", and ");
@@ -187,7 +187,7 @@ public class ERMessage extends Object {
 	}
 
 	public String allRecipientsAsString(boolean includeBcc, int maxAddresses) throws MessagingException {
-		StringBuffer recipients = new StringBuffer();
+		StringBuilder recipients = new StringBuilder();
 		String addresses = recipientsAsString(Message.RecipientType.TO, maxAddresses);
 		if (addresses != null && addresses.length() > 0)
 			recipients.append("To: ").append(addresses);
@@ -206,7 +206,7 @@ public class ERMessage extends Object {
 
 	@Override
 	public String toString() {
-		StringBuffer sbuf = new StringBuffer();
+		StringBuilder sbuf = new StringBuilder();
 		sbuf.append("<").append(getClass().getName()).append(" ");
 		if (_message == null) {
 			sbuf.append("No mime message is set.");

@@ -33,7 +33,10 @@ import er.extensions.foundation.ERXStringUtilities;
  * @property er.extensions.loadOnDemand if <code>true</code>, javascript files included in Ajax responses will be loaded on-demand (defaults to <code>true</code>) 
  * @property er.ajax.secureResources if <code>true</code>, load all resources with https (default false) 
  * @property er.ajax.AJComponent.htmlCloseHead the tag to insert in front of (defaults to &lt;/head&gt;)
- * @property er.extensions.ERXResponseRewriter.javascriptTypeAttribute if <code>true</code>, <i>type="text/javascript"</i> will be added to injected script tags (defaults <code>true</code>)
+ * @property er.extensions.ERXResponseRewriter.javascriptTypeAttribute if <code>true</code>, <i>type="text/javascript"</i>
+ *           will be added to injected script tags (defaults <code>false</code>). For valid HTML you have to set this to
+ *           <code>true</code> for HTML4 and XHTML but HTML5 will default to <i>text/javascript</i> if that attribute
+ *           is missing.
  */
 public class ERXResponseRewriter {
 	public static final Logger log = Logger.getLogger(ERXResponseRewriter.class);
@@ -732,5 +735,29 @@ public class ERXResponseRewriter {
 			}
 		}
 		return inserted;
+	}
+	
+	/**
+	 * Appends a script tag with or without type attribute depending on the
+	 * corresponding property value.
+	 * 
+	 * @param response response object to add opening script tag to
+	 */
+	public static void appendScriptTagOpener(WOResponse response) {
+		boolean appendTypeAttribute = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXResponseRewriter.javascriptTypeAttribute", false);
+		if (appendTypeAttribute) {
+			response.appendContentString("<script type=\"text/javascript\">");
+		} else {
+			response.appendContentString("<script>");
+		}
+	}
+	
+	/**
+	 * Appends the closing script tag to the given response.
+	 * 
+	 * @param response response object to add closing script tag to
+	 */
+	public static void appendScriptTagCloser(WOResponse response) {
+		response.appendContentString("</script>");
 	}
 }

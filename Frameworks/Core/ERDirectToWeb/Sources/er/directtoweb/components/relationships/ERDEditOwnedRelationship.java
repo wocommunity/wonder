@@ -220,7 +220,7 @@ public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
         return (WOComponent)epi;
     }
 
-    static class CreateEOWithChoicesDelegate extends Object implements NextPageDelegate {
+    static class CreateEOWithChoicesDelegate implements NextPageDelegate {
         protected String entityNameForNewInstances;
         protected String currentPageConfiguration;
         protected String postCreateNextPageDelegateKey = null;
@@ -300,7 +300,7 @@ public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
     // This delegate is used to make sure that the object makes it to the database, ie if the user was in a childEC when they
     // hit the edit button or add button, then the change would only be propogated to the session's ec not to the db
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    static class PostSaveDelegate extends Object implements NextPageDelegate {
+    static class PostSaveDelegate implements NextPageDelegate {
         NSDictionary postRelationshipKeys;
         EOEnterpriseObject object;
         EOEnterpriseObject savedObject;

@@ -6,7 +6,7 @@ import com.webobjects.foundation.*;
 
 import er.extensions.foundation.ERXValueUtilities;
 
-public class DRMasterCriteria extends Object  {
+public class DRMasterCriteria {
 
     //
     // userInfo used for convenience by higher code to asscociate

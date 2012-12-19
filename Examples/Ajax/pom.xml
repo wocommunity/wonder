@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>wonder.examples</groupId>
 		<artifactId>examples</artifactId>
-		<version>5.7-SNAPSHOT</version>
+		<version>5.9-SNAPSHOT</version>
 	</parent>
 	<artifactId>ajax</artifactId>
 	<packaging>pom</packaging>
@@ -12,9 +12,7 @@
 	<modules>
 		<module>AjaxExample</module>
 		<module>AjaxExample2</module>
-		<module>AjaxLookExample</module>
 		<module>ERDivaLookExample</module>
 		<module>ERIUIExample</module>
-		<module>YUIExample</module>
 	</modules>
 </project>

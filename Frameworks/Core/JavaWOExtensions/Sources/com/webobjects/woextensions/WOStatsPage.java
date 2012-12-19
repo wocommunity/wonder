@@ -97,6 +97,7 @@ public class WOStatsPage extends WOComponent {
         maxActionCount = _maxServedForDictionary(directActionsDict);
     }
 
+    @Override
     public void appendToResponse(WOResponse aResponse, WOContext aContext)  {
         // ** This should probably be somewhere else.
         _initIvars();

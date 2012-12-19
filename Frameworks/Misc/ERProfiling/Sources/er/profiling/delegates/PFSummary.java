@@ -52,7 +52,7 @@ public class PFSummary implements PFProfiler.Delegate {
             String uuid = UUID.randomUUID().toString();
             PFProfiler.setStatsWithID(rootStats, uuid);
 
-            StringBuffer profileString = new StringBuffer();
+            StringBuilder profileString = new StringBuilder();
             profileString.append("Profiler: " + String.format("%.2f", total) + "ms; ");
             profileString.append("SQL: " + DecimalFormat.getPercentInstance().format(sqlDurationPercent) + " (" + sqlCount + "); ");
             profileString.append("D2W: " + DecimalFormat.getPercentInstance().format(d2wDurationPercent) + " (" + d2wCount + "); ");
@@ -152,9 +152,9 @@ public class PFSummary implements PFProfiler.Delegate {
             response.appendContentString("<a href=\"javascript:void(0);\" onClick=\"window.open('" + context.completeURLWithRequestHandlerKey("profiler", "heat", "", false, 0)
                     + "','heat','width=1,height=1')\">");
             if (PFHeatMap.isHeatEnabled()) {
-                response.appendContentString("heat on");
+                response.appendContentString("heat is on");
             } else {
-                response.appendContentString("heat off");
+                response.appendContentString("heat is off");
             }
             response.appendContentString("</a>");
 

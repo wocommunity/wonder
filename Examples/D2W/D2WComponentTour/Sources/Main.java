@@ -20,6 +20,7 @@ import er.directtoweb.ERD2WModel;
 import er.directtoweb.pages.ERD2WPage;
 import er.extensions.ERXExtensions;
 import er.extensions.eof.ERXConstant;
+import er.extensions.foundation.ERXStringUtilities;
 
 public class Main extends ERD2WPage {
 
@@ -38,7 +39,7 @@ public class Main extends ERD2WPage {
     
     private void setTaskEntity(String task, EOEntity entity) {
     	D2WContext c = ERD2WContext.newContext(session());
-    	c.setDynamicPage(ERXExtensions.capitalize(task) + entity.name());
+    	c.setDynamicPage(ERXStringUtilities.capitalize(task) + entity.name());
     	c.setTask(task);
     	c.setEntity(entity);
     	c.setTask(task);

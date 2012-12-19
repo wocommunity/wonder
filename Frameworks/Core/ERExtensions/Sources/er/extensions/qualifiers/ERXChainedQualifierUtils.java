@@ -7,7 +7,6 @@ import com.webobjects.foundation.NSMutableArray;
  * ERXQ
  * 
  * @author mschrag
- * 
  */
 public class ERXChainedQualifierUtils {
 	/**
@@ -36,8 +35,12 @@ public class ERXChainedQualifierUtils {
 	/**
 	 * Returns a new qualifier that represents the original qualifier not'd.
 	 * 
+	 * @param originalQualifier
+	 *            the qualifier to negate
 	 * @return an ERXNotQualifier
+	 * @deprecated use {@link er.extensions.eof.ERXQ#not(EOQualifier)} instead
 	 */
+	@Deprecated
 	public static ERXNotQualifier not(EOQualifier originalQualifier) {
 		return new ERXNotQualifier(originalQualifier);
 	}
@@ -64,5 +67,4 @@ public class ERXChainedQualifierUtils {
 		}
 		return new ERXOrQualifier(newQualifiers);
 	}
-
 }

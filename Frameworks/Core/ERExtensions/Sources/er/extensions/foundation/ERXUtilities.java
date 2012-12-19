@@ -212,12 +212,9 @@ public class ERXUtilities {
             EORelationship rel = srcentity.relationshipNamed(key);
             if (rel == null) {
                 break;
-
-            } else {
-                srcentity = rel.destinationEntity();
-                keyPath = ERXStringUtilities.keyPathWithoutFirstProperty(keyPath);
-                
             }
+            srcentity = rel.destinationEntity();
+            keyPath = ERXStringUtilities.keyPathWithoutFirstProperty(keyPath);
         }
         NSDictionary d = new NSDictionary(new Object[]{srcentity, keyPath}, new Object[]{"entity", "keyPath"});
         return d;
@@ -336,7 +333,9 @@ public class ERXUtilities {
      * @param includeAbstracts determines if abstract entities should
      *		be included in the returned array
      * @return all of the sub-entities for a given entity.
+     * @deprecated user {@link ERXEOAccessUtilities#allSubEntitiesForEntity(EOEntity, boolean)} instead
      */
+    @Deprecated
     public static NSArray allSubEntitiesForEntity(EOEntity entity, boolean includeAbstracts) {
         NSMutableArray entities = new NSMutableArray();
         if (entity != null) {
@@ -356,7 +355,9 @@ public class ERXUtilities {
      * find the root entity.
      * @param entity to find the root parent
      * @return root parent entity
+     * @deprecated use {@link ERXEOAccessUtilities#rootEntityForEntity(EOEntity)} instead
      */
+    @Deprecated
     public static EOEntity rootParentEntityForEntity(EOEntity entity) {
         EOEntity root = entity;
         while (root!=null && root.parentEntity() != null)
@@ -364,14 +365,16 @@ public class ERXUtilities {
         return root;
     }
     /** caches date formatter the first time it is used */
+    @Deprecated
     private static NSTimestampFormatter _gregorianDateFormatterForJavaDate;
     /**
      * Utility method to return a standard timestamp
      * formatter for the default string representation
      * of java dates.
      * @return timestamp formatter for java dates.
+     * @deprecated use {@link ERXTimestampUtilities#gregorianDateFormatterForJavaDate()} instead
      */
-    // MOVEME: Should move to ERXTimestampUtilities
+    @Deprecated
     public static NSTimestampFormatter gregorianDateFormatterForJavaDate() {
         if (_gregorianDateFormatterForJavaDate == null)
             _gregorianDateFormatterForJavaDate = new NSTimestampFormatter("%a %b %d %H:%M:%S %Z %Y");

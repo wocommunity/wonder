@@ -29,7 +29,7 @@ import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
-public class WOExceptionParser extends Object {
+public class WOExceptionParser {
     protected NSMutableArray _stackTrace;
     protected Throwable _exception;
     protected String _message;
@@ -48,7 +48,7 @@ public class WOExceptionParser extends Object {
         NSBundle bundle;
         String path, content;
         NSDictionary dic = null;
-        NSMutableArray allBundles = new NSMutableArray(NSBundle.frameworkBundles());
+        NSMutableArray<NSBundle> allBundles = new NSMutableArray<NSBundle>(NSBundle.frameworkBundles());
         NSMutableArray ignored = new NSMutableArray();
 
         for (Enumeration enumerator = allBundles.objectEnumerator(); enumerator.hasMoreElements(); ) {
@@ -164,7 +164,7 @@ public class WOExceptionParser extends Object {
         } catch (java.io.IOException e) {
             return null;
         } finally {
-            if (f != null) {
+            if (fis != null) {
                 try {
                     fis.close();
                 } catch (java.io.IOException e) {
@@ -173,15 +173,12 @@ public class WOExceptionParser extends Object {
                         NSLog.debug.appendln(e);
                     }
                 }
-
-                f = null;
             }
         }
 
         if (bytesRead == 0)
             return null;
-        else
-            return new String(data);
+        return new String(data);
     }
 
     /**
@@ -210,7 +207,7 @@ public class WOExceptionParser extends Object {
         } catch (IOException e) {
             throw NSForwardException._runtimeExceptionForThrowable(e);
         } finally {
-            if (f != null) {
+            if (fis != null) {
                 try {
                     fis.close();
                 } catch (IOException e) {
@@ -219,8 +216,6 @@ public class WOExceptionParser extends Object {
                         NSLog.debug.appendln(e);
                     }
                 }
-
-                f = null;
             }
 
         }

@@ -182,9 +182,6 @@ public class AjaxTreeModel {
 		else if (node != null) {
 			parentTreeNode = NSKeyValueCodingAdditions.Utility.valueForKeyPath(node, _parentTreeNodeKeyPath);
 		}
-		else {
-			parentTreeNode = null;
-		}
 		return parentTreeNode;
 	}
 

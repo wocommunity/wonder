@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="Sources"/>
+	<classpathentry exported="true" kind="con" path="WOFramework/ERExtensions"/>
+	<classpathentry exported="true" kind="con" path="WOFramework/ERJars"/>
+	<classpathentry exported="true" kind="con" path="WOFramework/Ajax"/>
+	<classpathentry exported="true" kind="con" path="WOFramework/ERDirectToWeb"/>
+	<classpathentry exported="true" kind="con" path="WOFramework/YUI"/>
+	<classpathentry exported="true" kind="con" path="WOFramework/JavaWOExtensions"/>
+	<classpathentry exported="true" kind="con" path="WOFramework/BTBusinessLogic"/>
+	<classpathentry exported="true" kind="con" path="WOFramework/ERCoreBusinessLogic"/>
+	<classpathentry exported="true" kind="con" path="WOFramework/JavaDirectToWeb"/>
+	<classpathentry exported="true" kind="con" path="WOFramework/JavaDTWGeneration"/>
+	<classpathentry exported="true" kind="con" path="WOFramework/JavaEOAccess"/>
+	<classpathentry exported="true" kind="con" path="WOFramework/JavaEOControl"/>
+	<classpathentry exported="true" kind="con" path="WOFramework/JavaEOProject"/>
+	<classpathentry exported="true" kind="con" path="WOFramework/JavaFoundation"/>
+	<classpathentry exported="true" kind="con" path="WOFramework/JavaJDBCAdaptor"/>
+	<classpathentry exported="true" kind="con" path="WOFramework/JavaWebObjects"/>
+	<classpathentry exported="true" kind="con" path="WOFramework/JavaXML"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="WOFramework/ERJavaMail"/>
+	<classpathentry kind="con" path="WOFramework/ERAttachment"/>
+	<classpathentry kind="con" path="WOFramework/ERPrototypes"/>
+	<classpathentry kind="con" path="WOFramework/AjaxLook"/>
+	<classpathentry kind="con" path="WOFramework/ERTaggable"/>
+	<classpathentry kind="con" path="WOFramework/JavaMemoryAdaptor"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

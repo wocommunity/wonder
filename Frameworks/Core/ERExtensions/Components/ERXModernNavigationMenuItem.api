@@ -4,7 +4,7 @@
 
 		<binding name="navigationItem"/>
 
-		<validation message="&apos;navigationItem&apos; is a required binding">
+		<validation message="'navigationItem' is a required binding">
 			<unbound name="navigationItem"/>
 		</validation>
 	</wo>

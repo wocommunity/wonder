@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import org.apache.commons.lang.CharEncoding;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
@@ -82,106 +83,134 @@ public class ERXStringUtilities {
      * a single entry for English.
      */
     private static NSArray _defaultTargetDisplayLanguages = new NSArray(DEFAULT_TARGET_DISPLAY_LANGUAGE);
-    
-    /**
-     * Java port of the distance algorithm.
-     *
-     * The code below comes from the following post on http://mail.python.org
-     * Fuzzy string matching
-     *   Magnus L. Hetland mlh@idt.ntnu.no
-     *   27 Aug 1999 15:51:03 +0200
-     *
-     *  Explanation of the distance algorithm...
-     *
-     *  The algorithm:
-     *
-     *  def distance(a,b):
-     *   c = {}
-     *  n = len(a); m = len(b)
-     *
-     *  for i in range(0,n+1):
-     *  c[i,0] = i
-     *  for j in range(0,m+1):
-     *  c[0,j] = j
-     *
-     *  for i in range(1,n+1):
-     *  for j in range(1,m+1):
-     *  x = c[i-1,j]+1
-     *  y = c[i,j-1]+1
-     *  if a[i-1] == b[j-1]:
-     *    z = c[i-1,j-1]
-     *  else:
-     *    z = c[i-1,j-1]+1
-     *  c[i,j] = min(x,y,z)
-     *  return c[n,m]
-     *
-     *  It calculates the following: Given two strings, a and b, and three
-     *  operations, adding, subtracting and exchanging single characters, what
-     *  is the minimal number of steps needed to translate a into b?
-     *
-     *  The method is based on the following idea:
-     *
-     *  We want to find the distance between a[:x] and b[:y]. To do this, we
-     *  first calculate
-     *
-     *  1) the distance between a[:x-1] and b[:y], adding the cost of a
-     *  subtract-operation, used to get from a[:x] to a[:z-1];
-     *
-     *  2) the distance between a[:x] and b[:y-1], adding the cost of an
-     *  addition-operation, used to get from b[:y-1] to b[:y];
-     *
-     *  3) the distance between a[:x-1] and b[:y-1], adding the cost of a
-     *  *possible* exchange of the letter b[y] (with a[x]).
-     *
-     *  The cost of the subtraction and addition operations are 1, while the
-     *  exchange operation has a cost of 1 if a[x] and b[y] are different, and
-     *  0 otherwise.
-     *
-     *  After calculating these costs, we choose the least one of them
-     * (since we want to use the best solution.)
-     *
-     *  Instead of doing this recursively, i.e. calculating ourselves "back"
-     *  from the final value, we build a cost-matrix c containing the optimal
-     *  costs, so we can reuse them when calculating the later values. The
-     *  costs c[i,0] (from string of length n to empty string) are all i, and
-     *  correspondingly all c[0,j] (from empty string to string of length j)
-     *  are j.
-     *
-     *  Finally, the cost of translating between the full strings a and b
-     *  (c[n,m]) is returned.
-     *
-     *  I guess that ought to cover it...
-     * --------------------------
-     * @param a first string
-     * @param b second string
-     * @return the distance between the two strings
-     */
+
+	/**
+	 * Returns the <a
+	 * href="http://en.wikipedia.org/wiki/Levenshtein_distance">Levenshtein
+	 * distance</a> between {@code a} and {@code b} as a {@code double}. (This
+	 * method is being retained for backwards compatibility, and will be removed
+	 * at some future point. New code should use
+	 * {@link #levenshteinDistance(String, String)}.)
+	 * 
+	 * @param a
+	 *            first string
+	 * @param b
+	 *            second string
+	 * @return Levenshtein distance between {@code a} and {@code b}
+	 * @deprecated Use {@link #levenshteinDistance(String, String)}, which
+	 *             correctly returns an {@code int} result
+	 */
+    @Deprecated
     public static double distance(String a, String b) {
-        int n = a.length();
-        int m = b.length();
-        int c[][] = new int[n+1][m+1];
-        for(int i = 0; i<=n; i++){
-            c[i][0] = i;
-        }
-        for(int j = 0; j<=m; j++){
-            c[0][j] = j;
-        }
-        for(int i = 1; i<=n; i++){
-            for(int j = 1; j<=m; j++){
-                int x = c[i-1][j] + 1;
-                int y = c[i][j-1] + 1;
-                int z = 0;
-                if(a.charAt(i-1) == b.charAt(j-1))
-                    z = c[i-1][j-1];
-                else
-                    z = c[i-1][j-1] + 1;
-                int temp = Math.min(x,y);
-                c[i][j] = Math.min(z, temp);
-            }
-        }
-        return c[n][m];
+    	return levenshteinDistance(a, b);
     }
 
+	/**
+	 * <p>
+	 * Returns the <a
+	 * href="http://en.wikipedia.org/wiki/Levenshtein_distance">Levenshtein
+	 * distance</a> between {@code a} and {@code b}. This code is based on <a
+	 * href
+	 * ="http://mail.python.org/pipermail/python-list/1999-August/006031.html"
+	 * >some Python code posted to a mailing list</a> by Magnus L. Hetland
+	 * &lt;mlh@idt.ntnu.no&gt;, and assumed to be in the public domain.
+	 * </p>
+	 * 
+	 * <h3>Algorithm</h3>
+	 * 
+	 * <pre>
+	 * <code>def distance(a,b):
+	 *   c = {}
+	 *   n = len(a); m = len(b)
+	 * 
+	 *   for i in range(0,n+1):
+	 *     c[i,0] = i
+	 *   for j in range(0,m+1):
+	 *     c[0,j] = j
+	 * 
+	 *   for i in range(1,n+1):
+	 *     for j in range(1,m+1):
+	 *       x = c[i-1,j]+1
+	 *       y = c[i,j-1]+1
+	 *       if a[i-1] == b[j-1]:
+	 *         z = c[i-1,j-1]
+	 *       else:
+	 *         z = c[i-1,j-1]+1
+	 *       c[i,j] = min(x,y,z)
+	 *   return c[n,m]</code>
+	 * </pre>
+	 * 
+	 * <p>
+	 * It calculates the following: Given two strings, {@code a} and {@code b},
+	 * and three operations, adding, subtracting and exchanging single
+	 * characters, what is the minimal number of steps needed to translate
+	 * {@code a} into {@code b}? The method is based on the following idea. We
+	 * want to find the distance between {@code a[:x]} and {@code b[:y]}. To do
+	 * this, we first calculate:
+	 * </p>
+	 * 
+	 * <ol>
+	 * <li>the distance between {@code a[:x-1]} and {@code b[:y]}, adding the
+	 * cost of a subtract-operation, used to get from {@code a[:x]} to
+	 * {@code a[:z-1]};</li>
+	 * <li>the distance between {@code a[:x]} and {@code b[:y-1]}, adding the
+	 * cost of an addition-operation, used to get from {@code b[:y-1]} to
+	 * {@code b[:y]};</li>
+	 * <li>the distance between {@code a[:x-1]} and {@code b[:y-1]}, adding the
+	 * cost of a <em>possible</em> exchange of the letter {@code b[y]} (with
+	 * {@code a[x]}).</li>
+	 * </ol>
+	 * 
+	 * <p>
+	 * The cost of the subtraction and addition operations are 1, while the
+	 * exchange operation has a cost of 1 if {@code a[x]} and {@code b[y]} are
+	 * different, and 0 otherwise. After calculating these costs, we choose the
+	 * least one of them (since we want to use the best solution.)
+	 * </p>
+	 * 
+	 * <p>
+	 * Instead of doing this recursively, i.e. calculating ourselves "back" from
+	 * the final value, we build a cost-matrix {@code c} containing the optimal
+	 * costs, so we can reuse them when calculating the later values. The costs
+	 * {@code c[i,0]} (from string of length {@code n} to empty string) are all
+	 * {@code i}, and correspondingly all {@code c[0,j]} (from empty string to
+	 * string of length {@code j}) are {@code j}. Finally, the cost of
+	 * translating between the full strings {@code a} and {@code b} (
+	 * {@code c[n,m]}) is returned.
+	 * </p>
+	 * 
+	 * @param a
+	 *            first string
+	 * @param b
+	 *            second string
+	 * @return the distance between the two strings
+	 */
+	public static int levenshteinDistance(String a, String b) {
+		int n = a.length();
+		int m = b.length();
+		int c[][] = new int[n + 1][m + 1];
+		for (int i = 0; i <= n; i++) {
+			c[i][0] = i;
+		}
+		for (int j = 0; j <= m; j++) {
+			c[0][j] = j;
+		}
+		for (int i = 1; i <= n; i++) {
+			for (int j = 1; j <= m; j++) {
+				int x = c[i - 1][j] + 1;
+				int y = c[i][j - 1] + 1;
+				int z = 0;
+				if (a.charAt(i - 1) == b.charAt(j - 1))
+					z = c[i - 1][j - 1];
+				else
+					z = c[i - 1][j - 1] + 1;
+				int temp = Math.min(x, y);
+				c[i][j] = Math.min(z, temp);
+			}
+		}
+		return c[n][m];
+	}
+    
     /** holds the base adjustment for fuzzy matching */
     // FIXME: Not thread safe
     // MOVEME: Needs to go with the fuzzy matching stuff
@@ -473,7 +502,7 @@ public class ERXStringUtilities {
     }
 
     /**
-     * Retrives a given string for a given name, extension
+     * Retrieves a given string for a given name, extension
      * and bundle.
      * @param name of the resource
      * @param extension of the resource, example: txt or rtf
@@ -487,12 +516,17 @@ public class ERXStringUtilities {
         }
         path = bundle.resourcePathForLocalizedResourceNamed(name + (extension == null || extension.length() == 0 ? "" : "." + extension), null);
         if(path != null) {
+        	InputStream stream = null;
             try {
-                InputStream stream = bundle.inputStreamForResourcePath(path);
+                stream = bundle.inputStreamForResourcePath(path);
                 byte bytes[] = ERXFileUtilities.bytesFromInputStream(stream);
                 return new String(bytes);
             } catch (IOException e) {
                 log.warn("IOException when stringFromResource(" + name + "." + extension + " in bundle " + bundle.name());
+            } finally {
+            	if (stream != null) {
+            		try { stream.close(); } catch (IOException e) {}
+            	}
             }
         }
         return null;
@@ -577,10 +611,10 @@ public class ERXStringUtilities {
     }
 
     /** 
-     * Locate the the first numeric character in the given string. 
+     * Locate the the first numeric character in the given string.
+     * 
      * @param str string to scan
-     *
-     * @return position in int. -1 for not found. 
+     * @return position in string or -1 if no numeric found 
      */ 
     public static int indexOfNumericInString(String str) {
         return indexOfNumericInString(str, 0);
@@ -588,10 +622,11 @@ public class ERXStringUtilities {
         
     /** 
      * Locate the the first numeric character 
-     * after <code>fromIndex</code> in the given string. 
+     * after <code>fromIndex</code> in the given string.
+     * 
      * @param str string to scan
-     *
-     * @return position in int. -1 for not found. 
+     * @param fromIndex index position from where to start
+     * @return position in string or -1 if no numeric found
      */ 
     public static int indexOfNumericInString(String str, int fromIndex) {
         if (str == null)  throw new IllegalArgumentException("String cannot be null.");
@@ -709,11 +744,13 @@ public class ERXStringUtilities {
     }    
 
     /**
-     * Removes the spaces in a given String
-     * @return string removing all spaces in it.
+     * Removes the spaces in a given string.
+     * 
+     * @param aString string to remove spaces from
+     * @return string without spaces
      */
-    public static String escapeSpace(String aString){
-        NSArray parts = NSArray.componentsSeparatedByString(aString," ");
+    public static String escapeSpace(String aString) {
+        NSArray<String> parts = NSArray.componentsSeparatedByString(aString, " ");
         return parts.componentsJoinedByString("");
     }
 
@@ -745,18 +782,17 @@ public class ERXStringUtilities {
 
         // If the string has no different char, then return the string as is,
         // otherwise create a lowercase version in a char array.
-        if (different == -1)
+        if (different == -1) {
             return str;
-        else {
-            char[] chars = new char[len];
-            str.getChars(0, len, chars, 0);
-            // (Note we start at different, not at len.)
-            for(int j = different; j >= 0; j--) {
-                chars[j] = Character.toLowerCase(chars[j]);
-            }
-
-            return new String(chars);
         }
+        char[] chars = new char[len];
+        str.getChars(0, len, chars, 0);
+        // (Note we start at different, not at len.)
+        for(int j = different; j >= 0; j--) {
+            chars[j] = Character.toLowerCase(chars[j]);
+        }
+
+        return new String(chars);
     }
 
     /**
@@ -986,8 +1022,7 @@ public class ERXStringUtilities {
         Character.UnicodeBlock block = Character.UnicodeBlock.of(c);
         if (block != null  &&  Character.UnicodeBlock.BASIC_LATIN.equals(block)) 
             return String.valueOf(c);
-        else 
-            return toHexString(c);
+        return toHexString(c);
     }
 
     public static String escapeNonBasicLatinChars(String str) {
@@ -1103,8 +1138,10 @@ public class ERXStringUtilities {
     }
     
     /**
-     * Converts a even-length, hex-encoded String to a byte array. 
-     * @param hexString
+     * Converts a even-length, hex-encoded String to a byte array.
+     * 
+     * @param hexString hex string to convert
+     * @return byte array of given hex string
      */
     public static byte[] hexStringToByteArray(String hexString) {
     	int length = hexString.length();
@@ -1259,8 +1296,10 @@ public class ERXStringUtilities {
     }
     
     /**
-     * Converts ThisIsATest to this_is_a_test
-     * @param camelString the StringWithCaps
+     * Converts a string in camel case to an underscore representation.
+     * 
+     * @param camelString string to convert
+     * @param lowercase if all uppercase characters should be converted to lowercase
      * @return the string_with_underscores
      */
     public static String camelCaseToUnderscore(String camelString, boolean lowercase) {
@@ -1545,8 +1584,9 @@ public class ERXStringUtilities {
      }
 
   
-      /** Returns a String by invoking toString() on each object from the array. After each toString() call
-       * the separator is appended to the buffer
+      /**
+       * Returns a String by invoking toString() on each object from the array. After each toString() call
+       * the separator is appended to the buffer.
        * 
        * @param array an object array from which to get a nice String representation
        * @param separator a separator which is displayed between the objects toString() value
@@ -1564,7 +1604,10 @@ public class ERXStringUtilities {
       }
 
     /**
-     * creates a readable debug string for some data types (dicts, arrays, adaptorOperations, databaseOperations)
+     * Creates a readable debug string for some data types (dicts, arrays, adaptorOperations, databaseOperations).
+     * 
+     * @param object the object to dump
+     * @return string representation of the given object
      */
     public static String dumpObject(Object object) {
 		StringBuffer sb = new StringBuffer(4000);
@@ -1572,7 +1615,8 @@ public class ERXStringUtilities {
 		return sb.toString();
 	}
 
-	/** Checks if any of the characters specified in characters is contained in the string
+	/**
+	 * Checks if any of the characters specified in characters is contained in the string
 	 * specified by source.
 	 * 
 	 * @param source the String which might contain characters
@@ -1589,7 +1633,8 @@ public class ERXStringUtilities {
 		return false;
 	}
 
-	/** removes any character which is not in characters from the source string
+	/**
+	 * Removes any character which is not in characters from the source string.
 	 * 
 	 * @param source the string which will be modified
 	 * @param characters the characters that are allowed to be in source
@@ -1607,7 +1652,8 @@ public class ERXStringUtilities {
 		return buf.toString();
 	}
 	
-	/** removes any character which is in characters from the source string
+	/**
+	 * Removes any character which is in characters from the source string.
 	 * 
 	 * @param source the string which will be modified
 	 * @param characters the characters that are not allowed to be in source
@@ -1678,7 +1724,7 @@ public class ERXStringUtilities {
 	else {
 	  	try {
 	  		if(encoding == null) {
-	  			encoding = "UTF-8";
+	  			encoding = CharEncoding.UTF_8;
 	  		}
 			bytes = ERXFileUtilities.md5(new ByteArrayInputStream(str.getBytes(encoding)));
 		}
@@ -2073,7 +2119,7 @@ public class ERXStringUtilities {
      * @param string string to convert
      */
     public static byte[] toUTF8Bytes(String string) {
-    	return toBytes(string, "UTF-8");
+    	return toBytes(string, CharEncoding.UTF_8);
     }
 
     /**
@@ -2099,7 +2145,7 @@ public class ERXStringUtilities {
      * @param bytes string to convert
      */
     public static String fromUTF8Bytes(byte bytes[]) {
-    	return fromBytes(bytes, "UTF-8");
+    	return fromBytes(bytes, CharEncoding.UTF_8);
     }
 
     /**

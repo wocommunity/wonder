@@ -26,7 +26,6 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.monitor._private.MInstance;
-import com.webobjects.monitor._private.MSiteConfig;
 
 public class LifebeatRequestHandler extends WORequestHandler {
     

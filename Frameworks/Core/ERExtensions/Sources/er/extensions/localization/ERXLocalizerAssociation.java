@@ -7,11 +7,21 @@ import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import er.extensions.foundation.ERXStringUtilities;
 
 /**
+ * <span class="en">
  * Localizes the value it is bound to. Can handle both <code>loc:value="SomeKey"</code> and
  * <code>loc:value=someReturnValue</code> syntax.
- * Install with <br><br><code> WOOgnl.setAssociationClassForPrefix(ERXLocalizerAssociation.class, "loc");</code>
- * @author ak
+ * Install with <br /><br /><code> WOOgnl.setAssociationClassForPrefix(ERXLocalizerAssociation.class, "loc");</code>
+ * </span>
  * 
+ * <span class="ja">
+ * バインディングされている値をローカライズします。
+ * 次の記述に対応しています：
+ * <code>loc:value="SomeKey"</code>　と <code>loc:value=someReturnValue</code>
+ * <br>
+ * インストール<br /><br /><code>WOOgnl.setAssociationClassForPrefix(ERXLocalizerAssociation.class, "loc");</code>
+ * </span>
+ * 
+ * @author ak
  */
 public class ERXLocalizerAssociation extends WOAssociation {
 
@@ -39,6 +49,7 @@ public class ERXLocalizerAssociation extends WOAssociation {
 		return _isConstant;
 	}
 	
+	@Override
 	public Object valueInComponent(WOComponent wocomponent) {
 		String key = null;
 		if(_isConstant) {

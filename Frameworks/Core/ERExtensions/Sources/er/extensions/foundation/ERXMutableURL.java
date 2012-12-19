@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import org.apache.commons.lang.CharEncoding;
+
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
@@ -298,9 +300,9 @@ public class ERXMutableURL {
 					if (key == null || key.length() == 0) {
 						throw new MalformedURLException("The query string parameter '" + queryStringToken + " has an empty key in '" + queryParameters + "'.");
 					}
-					key = URLDecoder.decode(key, "UTF-8");
+					key = URLDecoder.decode(key, CharEncoding.UTF_8);
 					if (value != null) {
-						value = URLDecoder.decode(value, "UTF-8");
+						value = URLDecoder.decode(value, CharEncoding.UTF_8);
 					}
 					addQueryParameter(key, value);
 				}
@@ -478,7 +480,7 @@ public class ERXMutableURL {
 	 * 
 	 * @param key
 	 *            the key to lookup
-	 * @return the query parmeters for the given key
+	 * @return the query parameters for the given key
 	 */
 	public synchronized List<String> queryParameters(String key) {
 		return _queryParameters.get(key);
@@ -489,7 +491,7 @@ public class ERXMutableURL {
 	 * 
 	 * @param key
 	 *            the key to lookup
-	 * @return the first query parmeter for the given key
+	 * @return the first query parameter for the given key
 	 */
 	public synchronized String queryParameter(String key) {
 		String queryParameter = null;
@@ -581,16 +583,16 @@ public class ERXMutableURL {
 				String key = queryParameter.getKey();
 				Iterator<String> valuesIter = queryParameter.getValue().iterator();
 				if (!valuesIter.hasNext()) {
-					sb.append(URLEncoder.encode(key, "UTF-8"));
+					sb.append(URLEncoder.encode(key, CharEncoding.UTF_8));
 				}
 				while (valuesIter.hasNext()) {
 					String value = valuesIter.next();
-					sb.append(URLEncoder.encode(key, "UTF-8"));
+					sb.append(URLEncoder.encode(key, CharEncoding.UTF_8));
 					if (value != null) {
 						if (key.length() > 0) {
 							sb.append('=');
 						}
-						sb.append(URLEncoder.encode(value, "UTF-8"));
+						sb.append(URLEncoder.encode(value, CharEncoding.UTF_8));
 					}
 					if (valuesIter.hasNext()) {
 						sb.append('&');

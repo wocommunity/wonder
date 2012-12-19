@@ -75,7 +75,7 @@ var MTAjaxUpdateContainer = {
 	registerPeriodic: function(id, canStop, stopped, options) {
 		
 		var el = $(id);
-		var url = el.get('updateUrl');
+		var url = el.get('data-updateUrl');
 		var updater;
 		if(!canStop) {
 
@@ -111,8 +111,15 @@ var MTAjaxUpdateContainer = {
 			alert('There is no element on this page with the id "' + id + '".');
 		}
 		
-		var actionUrl = updateElement.get('updateUrl');
-		actionUrl = actionUrl.addQueryParameters('__updateID=' + id);
+		var actionUrl = updateElement.get('data-updateUrl');
+		if (options && options['_r']) {
+			actionUrl = actionUrl.addQueryParameters('_r='+ id);
+		}
+		else {
+			actionUrl = actionUrl.addQueryParameters('_u='+ id);
+		}
+		actionUrl = actionUrl.addQueryParameters(new Date().getTime());
+
 //		new Ajax.Updater(id, actionUrl, AjaxOptions.defaultOptions(options));
 		new Request.HTML(Object.merge(MTAjaxOptions.defaultOptions(options), {
 			update : $(id),
@@ -139,7 +146,7 @@ var MTAjaxUpdateLink = {
 		if(updateElement == null) {
 			alert('There is no element on this page with the id "' + id + '".');
 		}
-		MTAjaxUpdateLink._update(id, updateElement.get('updateUrl'), options, elementID, queryParams);
+		MTAjaxUpdateLink._update(id, updateElement.get('data-updateUrl'), options, elementID, queryParams);
 	},
 	
 	_update: function(id, actionUrl, options, elementID, queryParams) {
@@ -192,7 +199,8 @@ var MTAjaxSubmitButton = {
 		return options;
 	},
 	
-	generateActionUrl: function(id, form, queryParams) {
+	generateActionUrl: function(id, form, queryParams, options) {
+
 		var actionUrl = form.action;
 		
 		if(queryParams != null) {
@@ -202,9 +210,14 @@ var MTAjaxSubmitButton = {
 		actionUrl = actionUrl.replace('/wo/', '/ajax/');
 		
 		if(id != null) {
-			actionUrl = actionUrl.addQueryParameters('__updateID=' + id);
+			if (options && options['_r']) {
+				actionUrl = actionUrl.addQueryParameters('_r=' + id);
+			}
+			else {
+				actionUrl = actionUrl.addQueryParameters('_u=' + id);
+			}
 		}
-		
+		actionUrl = actionUrl.addQueryParameters(new Date().getTime());		
 		return actionUrl;
 
 	},
@@ -271,7 +284,8 @@ var MTAjaxSubmitButton = {
 		if(updateElement == null) {
 			alert('There is no element on this page with the id "' + id + '".');
 		}
-		var finalUrl = MTAjaxSubmitButton.generateActionUrl(id, form, queryParams);
+		var finalUrl = MTAjaxSubmitButton.generateActionUrl(id, form, queryParams,options);
+		console.log(finalUrl);
 		var finalOptions = MTAjaxSubmitButton.processOptions(form, options);
 		new Request.HTML(Object.merge({
 				update : id,
@@ -282,7 +296,7 @@ var MTAjaxSubmitButton = {
 
 	request : function(form, queryParams, options) {
 		
-		var finalUrl = MTAjaxSubmitButton.generateActionUrl(null, form, queryParams);
+		var finalUrl = MTAjaxSubmitButton.generateActionUrl(null, form, queryParams, options);
 		var finalOptions = MTAjaxSubmitButton.processOptions(form, options);
 
 		new Request.HTML(Object.merge({
@@ -510,5 +524,24 @@ var MTAjaxDraggable = new Class({
 
 var MTAD = MTAjaxDraggable;
 
+var MTAjaxUtils = {
+	toggleClassName: function(element, className, toggled) {
+		element = document.id(element);
+		if (toggled) {
+			element.addClass(className);
+		}
+		else {
+			element.removeClass(className);
+		}
+	},
+	
+	decode: function(input) {
+		var e = document.createElement('div');
+		e.innerHTML = input;
+		return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;	
+	}
+
+	
+};
 
 

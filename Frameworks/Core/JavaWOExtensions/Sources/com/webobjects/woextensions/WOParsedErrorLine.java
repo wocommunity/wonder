@@ -21,7 +21,7 @@ package com.webobjects.woextensions;
  * the index of this closing parenthesis.
  */
 
-public class WOParsedErrorLine extends Object {
+public class WOParsedErrorLine {
     protected String _packageName;
     protected String _className;
     protected String _methodName;
@@ -120,6 +120,7 @@ public class WOParsedErrorLine extends Object {
         return _line;
     }
     
+    @Override
     public String toString() {
         String lineInfo = (_line >= 0) ? String.valueOf( _line) : "No line info due to compiled code";
         String fileInfo = (_line >= 0) ? _fileName : "Compiled code no file info";

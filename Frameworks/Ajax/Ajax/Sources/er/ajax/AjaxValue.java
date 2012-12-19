@@ -120,7 +120,7 @@ public class AjaxValue {
 		else if (type == AjaxOption.ARRAY) {
 			if (_value instanceof NSArray) {
 				NSArray arrayValue = (NSArray) _value;
-				StringBuffer sb = new StringBuffer();
+				StringBuilder sb = new StringBuilder();
 				sb.append("[");
 				Enumeration objEnum = arrayValue.objectEnumerator();
 				while (objEnum.hasMoreElements()) {
@@ -140,7 +140,7 @@ public class AjaxValue {
 		else if (type == AjaxOption.DICTIONARY) {
 			if (_value instanceof NSDictionary) {
 				NSDictionary dictValue = (NSDictionary) _value;
-				StringBuffer sb = new StringBuffer();
+				StringBuilder sb = new StringBuilder();
 				sb.append("{");
 				Enumeration keyEnum = dictValue.keyEnumerator();
 				while (keyEnum.hasMoreElements()) {
@@ -168,7 +168,7 @@ public class AjaxValue {
 					strValue = new AjaxValue(AjaxOption.STRING, arrayValue.objectAtIndex(0)).javascriptValue();
 				}
 				else if (count > 0) {
-					StringBuffer sb = new StringBuffer();
+					StringBuilder sb = new StringBuilder();
 					sb.append("[");
 					Enumeration objEnum = arrayValue.objectEnumerator();
 					while (objEnum.hasMoreElements()) {

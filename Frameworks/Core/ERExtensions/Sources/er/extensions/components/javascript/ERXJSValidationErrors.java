@@ -1,4 +1,5 @@
 package er.extensions.components.javascript;
+
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOComponent;
@@ -18,9 +19,7 @@ import er.extensions.validation.ERXValidationException;
  * @binding sample sample binding explanation
  *
  * @author ak on Fri May 02 2003
- * @project ERExtensions
  */
-
 public class ERXJSValidationErrors extends ERXStatelessComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -44,6 +43,8 @@ public class ERXJSValidationErrors extends ERXStatelessComponent {
     }
 
     public String callback() { return "parent." + _callback; }
+    
+    @Override
     public void awake() {
         String key = context().request().stringFormValueForKey("_vkey");
         String value = context().request().stringFormValueForKey("_vvalue");
@@ -97,17 +98,12 @@ public class ERXJSValidationErrors extends ERXStatelessComponent {
         } catch (NSValidation.ValidationException ex1) {
             _errors = ex1.getMessage();
         } finally {        
-            if(eo != null && eo.editingContext() != null)
+            if (eo != null && eo.editingContext() != null) {
                 eo.editingContext().unlock();
-            if(page != null) {
-                // we cheat here because calling sleep() is not enough...
-            	// Michael Bushkov: WO5.4.3 tracks all awakened components so no need to call this manually
-            	if (!ERXApplication.isWO54()) {
-            		page._sleepInContext(page.context());
-            	}
             }
         }
     }
     
+    @Override
     public void reset() { _errors = null; _callback = null;}
 }

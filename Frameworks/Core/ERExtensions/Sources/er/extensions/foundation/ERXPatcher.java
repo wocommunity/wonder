@@ -128,9 +128,6 @@ public class ERXPatcher {
 		if (ERXProperties.booleanForKeyWithDefault("er.extensions.WOSwitchComponent.patch", true)) {
 			ERXPatcher.setClassForName(ERXSwitchComponent.class, "WOSwitchComponent");
 		}
-		if (!ERXApplication.isWO54() || ERXProperties.booleanForKey("er.extensions.WOConditional.patch")) {
-			ERXPatcher.setClassForName(ERXWOConditional.class, "WOConditional");
-		}
 		
 		// RM XHTML strict compliance
 		ERXPatcher.setClassForName(DynamicElementsPatches.JavaScript.class, "WOJavaScript");
@@ -187,7 +184,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
@@ -236,7 +233,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
@@ -258,7 +255,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, null);
@@ -280,7 +277,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, null);
@@ -302,7 +299,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, null);
@@ -310,23 +307,6 @@ public class ERXPatcher {
 					woresponse.appendContentString(newResponse.contentString());
 				}
 			}
-			
-			// WO 5.4: 5.4 returns false for this
-			protected boolean hasContent() {
-				return !ERXApplication.isWO54();
-			}
-			
-			// WO 5.4: 5.4 already does this, but for 5.3, if you want to use WOImage's with
-			// PDF generation, you need XHTML output
-		    protected void _appendOpenTagToResponse(WOResponse response, WOContext context) {
-		        response.appendContentCharacter('<');
-		        response.appendContentString(elementName());
-		        appendAttributesToResponse(response, context);
-		        if(!hasContent() || ERXResponse.isXHTML(response)) {
-		            response.appendContentString(" /");
-		        }
-		        response.appendContentCharacter('>');
-		    }
 		}
 
 		public static class ActiveImage extends WOActiveImage {
@@ -346,7 +326,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
@@ -373,7 +353,7 @@ public class ERXPatcher {
 
 			public TextField(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_readonly = (WOAssociation) _associations.removeObjectForKey("readonly");
+				_readonly = _associations.removeObjectForKey("readonly");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -385,7 +365,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
@@ -415,7 +395,7 @@ public class ERXPatcher {
 
 			public Text(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_readonly = (WOAssociation) _associations.removeObjectForKey("readonly");
+				_readonly = _associations.removeObjectForKey("readonly");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -427,7 +407,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
@@ -470,7 +450,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
@@ -557,7 +537,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
@@ -642,7 +622,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
@@ -664,7 +644,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
@@ -749,7 +729,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
@@ -764,7 +744,7 @@ public class ERXPatcher {
 
 			public HiddenField(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_readonly = (WOAssociation) _associations.removeObjectForKey("readonly");
+				_readonly = _associations.removeObjectForKey("readonly");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -776,7 +756,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
@@ -813,7 +793,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
@@ -828,7 +808,7 @@ public class ERXPatcher {
 
 			public PasswordField(String aName, NSDictionary associations, WOElement element) {
 				super(aName, associations, element);
-				_readonly = (WOAssociation) _associations.removeObjectForKey("readonly");
+				_readonly = _associations.removeObjectForKey("readonly");
 			}
 
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -840,7 +820,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
@@ -877,7 +857,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
@@ -899,7 +879,7 @@ public class ERXPatcher {
 			}
 
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-				WOResponse newResponse = cleanupXHTML ? new WOResponse() : woresponse;
+				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
 
 				processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
@@ -1122,11 +1102,8 @@ public class ERXPatcher {
 
 				if ( isWhiteSpace(ch) || ch == '>' ) {
 					break;
-
 				}
-				else {
-					tagName.append(ch);
-				}
+				tagName.append(ch);
 			}
 
 			buf.append(tagName);
@@ -1206,11 +1183,8 @@ public class ERXPatcher {
 
 					if (hasQuotes) {
 						return i;
-
 					}
-					else {
-						hasQuotes = true;
-					}
+					hasQuotes = true;
 
 				case ' ':
 
@@ -1256,9 +1230,8 @@ public class ERXPatcher {
 					if( afterWhiteSpace ) {
 						buf.append(attName).append("=\"").append(attName).append("\"");
 						return i - 2;
-					} else {
-						attName.append(ch);
 					}
+					attName.append(ch);
 				}
 			}
 
@@ -1336,9 +1309,7 @@ public class ERXPatcher {
 				return buf.toString();
 
 			}
-			else {
-				return atts;
-			}
+			return atts;
 		}
 
 		private static final StringBuffer getBuffer(String src, int len, StringBuffer buf) {
@@ -1350,11 +1321,8 @@ public class ERXPatcher {
 				}
 
 				return ret;
-
 			}
-			else {
-				return buf;
-			}
+			return buf;
 		}
 
 	}

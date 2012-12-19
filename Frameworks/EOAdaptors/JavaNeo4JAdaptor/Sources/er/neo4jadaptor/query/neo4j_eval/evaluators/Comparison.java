@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 import org.neo4j.graphdb.PropertyContainer;
 
-import er.neo4jadaptor.query.QueryConverter.ComparisonOperator;
+import er.neo4jadaptor.query.expression.sentence.operators.ComparisonOperator;
 import er.neo4jadaptor.query.neo4j_eval.Cost;
 import er.neo4jadaptor.query.neo4j_eval.retrievers.Retriever;
 
@@ -105,7 +105,7 @@ public class Comparison <T extends PropertyContainer> implements Evaluator<T> {
 				throw new UnsupportedOperationException();
 			}
 			
-			if (comparisonResult == true) {
+			if (comparisonResult) {
 				// terminate early
 				return true;
 			}

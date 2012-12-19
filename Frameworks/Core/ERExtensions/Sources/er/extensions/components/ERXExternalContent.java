@@ -1,10 +1,12 @@
 package er.extensions.components;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Enumeration;
 
+import org.apache.commons.lang.CharEncoding;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;
@@ -22,9 +24,7 @@ import er.extensions.foundation.ERXFileUtilities;
  * @binding encoding content encoding to use.
  *
  * @author ak on 31.10.05
- * @project ERExtensions
  */
-
 public class ERXExternalContent extends ERXStatelessComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -83,7 +83,7 @@ public class ERXExternalContent extends ERXStatelessComponent {
     			encoding = (String)valueForBinding("encoding");
     		}
     		if(encoding == null) {
-    			encoding = "UTF-8";
+    			encoding = CharEncoding.UTF_8;
     		}
     		InputStream stream = connection.getInputStream();
     		byte bytes[] = ERXFileUtilities.bytesFromInputStream(stream);
@@ -95,9 +95,9 @@ public class ERXExternalContent extends ERXStatelessComponent {
     	return result;
     }
     
+    @Override
     public void appendToResponse(WOResponse response, WOContext arg1) {
     	String content = contentString();
     	response.appendContentString(content);
     }
-    
  }

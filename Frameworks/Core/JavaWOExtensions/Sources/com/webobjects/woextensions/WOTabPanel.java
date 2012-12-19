@@ -29,8 +29,6 @@ import com.webobjects.foundation.NSKeyValueCodingAdditions;
 
 
  */
-
-
 public class WOTabPanel extends WOComponent
 {
 	/**
@@ -59,6 +57,7 @@ public class WOTabPanel extends WOComponent
         _tabNameKey=null;
     }
 
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }
@@ -165,7 +164,8 @@ public class WOTabPanel extends WOComponent
             return 2;
     }
 
-    public void appendToResponse(WOResponse aResponse, WOContext aContext)  {
+    @Override
+    public void appendToResponse(WOResponse aResponse, WOContext aContext) {
         _tabs=null;
         currentTab=null;
         _selectedTab=null;

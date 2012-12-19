@@ -10,6 +10,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TimeZone;
 
+import org.apache.commons.lang.CharEncoding;
+
 import com.webobjects.eocontrol.changeNotification.EOChangeNotificationOptions;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
@@ -885,7 +887,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 
 		case FactoryMethodArgumentIsString:
 			try {
-				value = _valueFactoryMethod.invoke(valueFactoryClass()==null?_valueClass:valueFactoryClass(), _NSStringUtilities.stringForBytes(bytes, "UTF-8"));
+				value = _valueFactoryMethod.invoke(valueFactoryClass()==null?_valueClass:valueFactoryClass(), _NSStringUtilities.stringForBytes(bytes, CharEncoding.UTF_8));
 				if (!NSLog.debugLoggingAllowedForLevelAndGroups(NSLog.DebugLevelInformational, NSLog.DebugGroupDatabaseAccess))
 					break;
 				if (NSLog.debugLoggingAllowedForLevel(NSLog.DebugLevelDetailed))
@@ -923,7 +925,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 				_valueClass = stringClass;
 		}
 		if (_valueClass == stringClass) {
-			String result = _NSStringUtilities.stringForBytes(bytes, 0, length, "UTF-8");
+			String result = _NSStringUtilities.stringForBytes(bytes, 0, length, CharEncoding.UTF_8);
 			if (NSLog.debugLoggingAllowedForLevelAndGroups(NSLog.DebugLevelInformational, NSLog.DebugGroupDatabaseAccess))
 				if (NSLog.debugLoggingAllowedForLevel(NSLog.DebugLevelDetailed))
 					NSLog.debug.appendln(new RuntimeException("Deprecated implicit bytes->String conversion.  Assuming UTF-8 encoding."));
@@ -932,7 +934,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 			return result;
 		}
 		if (_valueClass == stringClass || _argumentType == 1 || _valueFactoryMethod == null) {
-			value = _NSStringUtilities.stringForBytes(bytes, 0, length, "UTF-8");
+			value = _NSStringUtilities.stringForBytes(bytes, 0, length, CharEncoding.UTF_8);
 			if (NSLog.debugLoggingAllowedForLevelAndGroups(NSLog.DebugLevelInformational, NSLog.DebugGroupDatabaseAccess))
 				if (NSLog.debugLoggingAllowedForLevel(NSLog.DebugLevelDetailed))
 					NSLog.debug.appendln(new RuntimeException("Deprecated implicit bytes->String conversion.  Assuming UTF-8 encoding."));
@@ -1045,7 +1047,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 
 		case FactoryMethodArgumentIsBytes:
 			try {
-				value = _valueFactoryMethod.invoke(valueFactoryClass()==null?_valueClass:valueFactoryClass(), _NSStringUtilities.bytesForString(str, "UTF-8"));
+				value = _valueFactoryMethod.invoke(valueFactoryClass()==null?_valueClass:valueFactoryClass(), _NSStringUtilities.bytesForString(str, CharEncoding.UTF_8));
 				if (!NSLog.debugLoggingAllowedForLevelAndGroups(NSLog.DebugLevelInformational, NSLog.DebugGroupDatabaseAccess))
 					break;
 				if (NSLog.debugLoggingAllowedForLevel(NSLog.DebugLevelDetailed))
@@ -1065,7 +1067,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 
 		case FactoryMethodArgumentIsData:
 			try {
-				value = _valueFactoryMethod.invoke(valueFactoryClass()==null?_valueClass:valueFactoryClass(), new NSData(str, "UTF-8"));
+				value = _valueFactoryMethod.invoke(valueFactoryClass()==null?_valueClass:valueFactoryClass(), new NSData(str, CharEncoding.UTF_8));
 				if (!NSLog.debugLoggingAllowedForLevelAndGroups(NSLog.DebugLevelInformational, NSLog.DebugGroupDatabaseAccess))
 					break;
 				if (NSLog.debugLoggingAllowedForLevel(NSLog.DebugLevelDetailed))
@@ -1509,7 +1511,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 	public String relationshipPath() {
 		if (!isFlattened())
 			return null;
-		StringBuffer relPath = new StringBuffer();
+		StringBuilder relPath = new StringBuilder();
 		int iCount = _definitionArray.count() - 1;
 		for (int i = 0; i < iCount; i++) {
 			if (i > 0)
@@ -1517,7 +1519,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 			relPath.append(((EORelationship) _definitionArray.objectAtIndex(i)).name());
 		}
 
-		return new String(relPath);
+		return relPath.toString();
 	}
 
 	EOAttribute targetAttribute() {

@@ -16,8 +16,8 @@ public class WOEventDisplay extends WODirectAction {
         super(aRequest);
     }
 
-    public WOActionResults defaultAction()
-    {
+    @Override
+    public WOActionResults defaultAction() {
         return pageWithName("WOEventDisplayPage");
     }
 }

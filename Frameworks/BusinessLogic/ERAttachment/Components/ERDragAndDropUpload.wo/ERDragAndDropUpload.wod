@@ -1,0 +1,53 @@
+ActionURL: WOString {
+	value = postURL;
+}
+
+CompleteAllFunction: WOString {
+	value = ^completeAllFunction;
+	valueWhenEmpty = "false";
+}
+
+CompleteFunction: WOString {
+	value = ^completeFunction;
+	valueWhenEmpty = "false";
+}
+
+Content: WOComponentContent {
+	
+}
+
+DropTarget: WOGenericContainer {
+	elementName = "div";
+	id = dropTargetID;
+	class = "dndUpload";
+	omitTags = ^disabled;
+}
+
+DropTargetID: WOString {
+	value = dropTargetID;
+}
+
+Enabled: WOConditional {
+	condition = ^disabled;
+	negate = true;
+}
+
+EnterFunction: WOString {
+	value = ^enterFunction;
+	valueWhenEmpty = "false";
+}
+
+ErrorFunction: WOString {
+	value = ^errorFunction;
+	valueWhenEmpty = "false";
+}
+
+ExitFunction: WOString {
+	value = ^exitFunction;
+	valueWhenEmpty = "false";
+}
+
+OverFunction: WOString {
+	value = ^overFunction;
+	valueWhenEmpty = "false";
+}

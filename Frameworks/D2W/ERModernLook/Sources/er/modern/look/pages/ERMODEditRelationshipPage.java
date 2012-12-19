@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import org.apache.commons.lang.ObjectUtils;
+
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
@@ -28,7 +30,6 @@ import com.webobjects.foundation.NSSelector;
 
 import er.directtoweb.pages.ERD2WEditRelationshipPage;
 import er.directtoweb.pages.ERD2WPage;
-import er.extensions.ERXExtensions;
 import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOAccessUtilities;
@@ -54,7 +55,13 @@ import er.modern.directtoweb.interfaces.ERMEditRelationshipPageInterface;
  * @author davidleber
  */
 public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelationshipPageInterface, SelectPageInterface {
-	
+  /**
+   * Do I need to update serialVersionUID?
+   * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+   * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+   */
+  private static final long serialVersionUID = 1L;
+
 	public interface Keys extends ERD2WEditRelationshipPage.Keys {
 		public static String parentPageConfiguration = "parentPageConfiguration";
 		public static String inlineTask = "inlineTask";
@@ -91,10 +98,11 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
     @Override
     public void awake() {
     	_dataSource = null;
-    	NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("relatedObjectDidChange", ERXConstant.NotificationClassArray), ERMDActionButton.BUTTON_PERFORMED_DELETE_ACTION, null);
+    	NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector<Void>("relatedObjectDidChange", ERXConstant.NotificationClassArray), ERMDActionButton.BUTTON_PERFORMED_DELETE_ACTION, null);
     	super.awake();
     }
     
+    @Override
     public void sleep() {
     	NSNotificationCenter.defaultCenter().removeObserver(this, ERMDActionButton.BUTTON_PERFORMED_DELETE_ACTION, null);
     	super.sleep();
@@ -257,6 +265,7 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	/**
 	 * Sets the current selected Object. Required by the SelectPageInterface
 	 */
+    @Override
 	public void setSelectedObject(EOEnterpriseObject eo) {
 		_selectedObject = eo;
 	}
@@ -269,6 +278,7 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	 * 
 	 * @return NSArray containing the master object (index 0) and relationship key (index 1).
 	 */
+    @Override
 	public NSArray<?> masterObjectAndRelationshipKey() {
 		return new NSArray<Object>(new Object[] { masterObject(), relationshipKey() });
 	}
@@ -280,6 +290,7 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	 * 
 	 * @param a an NSArray containing the master object (index 0) and relationship key (index 1).
 	 */
+    @Override
 	public void setMasterObjectAndRelationshipKey(NSArray<?> a) {
 		setMasterObjectAndRelationshipKey((EOEnterpriseObject)a.objectAtIndex(0), (String)a.objectAtIndex(1));
 	}
@@ -290,10 +301,11 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	 * @param eo the master object, an EOEnterpriseObject
 	 * @param relationshipKey
 	 */
+    @Override
 	public void setMasterObjectAndRelationshipKey(EOEnterpriseObject eo, String relationshipKey) {
 		// only do this if the eo and relationshipKey have changed;
 		if (relationshipKey != null && eo != null) {
-			if (ERXExtensions.safeDifferent(relationshipKey(), relationshipKey) ||
+			if (ObjectUtils.notEqual(relationshipKey(), relationshipKey) ||
 					(masterObject() != null && !ERXEOControlUtilities.eoEquals(masterObject(), eo))) {
 //				NSLog.out.appendln("***ERMODEditRelationshipPage.setMasterObjectAndRelationshipKey: "
 //								+ "HAS CHANGES; " + eo + " - " + masterObject() + "  " + relationshipKey + " - " + relationshipKey() +"***");
@@ -324,7 +336,7 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	// SORT ORDERING
 	
 	@SuppressWarnings("unchecked")
-  public NSArray<EOSortOrdering> sortOrderings() {
+	public NSArray<EOSortOrdering> sortOrderings() {
 		NSArray<EOSortOrdering> sortOrderings = null;
 		if (userPreferencesCanSpecifySorting()) {
 			sortOrderings = (NSArray<EOSortOrdering>) userPreferencesValueForPageConfigurationKey(Keys.userPreferencesSortOrdering);
@@ -421,6 +433,7 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
      * 
      * @return EODataSource an EODetailDataSource created from the masterObject and relationshipKey.
      */
+    @Override
     public EODataSource dataSource() {
     	if (_dataSource == null) {
 			_dataSource = ERXEOControlUtilities.dataSourceForObjectAndKey(masterObject(), relationshipKey());
@@ -428,6 +441,7 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 		return _dataSource;
     }
     
+    @Override
     public void setDataSource(EODataSource ds) {
     	_dataSource = ds;
     }

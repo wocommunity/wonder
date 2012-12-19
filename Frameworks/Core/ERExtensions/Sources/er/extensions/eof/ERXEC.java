@@ -30,7 +30,6 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.eocontrol.EOObjectStore;
-import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.eocontrol.EOSharedEditingContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -860,7 +859,7 @@ public class ERXEC extends EOEditingContext {
 	}
 
 	@Override
-	public NSArray updatedObjects() {
+	public NSArray<EOEnterpriseObject> updatedObjects() {
 		boolean wasAutoLocked = autoLock("updatedObjects");
 		try {
 			return super.updatedObjects();
@@ -882,7 +881,7 @@ public class ERXEC extends EOEditingContext {
 	}
 
 	@Override
-	public NSArray insertedObjects() {
+	public NSArray<EOEnterpriseObject> insertedObjects() {
 		boolean wasAutoLocked = autoLock("insertedObjects");
 		try {
 			return super.insertedObjects();
@@ -893,7 +892,7 @@ public class ERXEC extends EOEditingContext {
 	}
 
 	@Override
-	public NSArray deletedObjects() {
+	public NSArray<EOEnterpriseObject> deletedObjects() {
 		boolean wasAutoLocked = autoLock("deletedObjects");
 		try {
 			return super.deletedObjects();

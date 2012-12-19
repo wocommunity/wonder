@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+        <wo class="ERIUIPreference.java" wocomponentcontent="true">
+
+        <binding name="label"/>
+		    <validation message="'label' is a required binding.">
+            <unbound name="label"/>
+        </validation>
+    </wo>
+</wodefinitions>

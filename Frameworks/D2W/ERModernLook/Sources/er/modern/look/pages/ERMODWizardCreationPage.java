@@ -1,5 +1,7 @@
 package er.modern.look.pages;
 
+import org.apache.commons.lang.ObjectUtils;
+
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -12,7 +14,6 @@ import com.webobjects.foundation.NSNotificationCenter;
 import er.directtoweb.ERD2WContainer;
 import er.directtoweb.pages.ERD2WWizardCreationPage;
 import er.directtoweb.pages.templates.ERD2WWizardCreationPageTemplate;
-import er.extensions.ERXExtensions;
 import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.eof.ERXGenericRecord;
 import er.extensions.foundation.ERXValueUtilities;
@@ -35,7 +36,13 @@ import er.extensions.foundation.ERXValueUtilities;
  * @author davidleber
  */
 public class ERMODWizardCreationPage extends ERD2WWizardCreationPageTemplate {
-	
+  /**
+   * Do I need to update serialVersionUID?
+   * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+   * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+   */
+  private static final long serialVersionUID = 1L;
+
 	public interface Keys extends ERD2WWizardCreationPageTemplate.Keys{
 		public static final String useAjaxControlsWhenEmbedded = "useAjaxControlsWhenEmbedded";
 		public static final String parentPageConfiguration = "parentPageConfiguration";
@@ -185,11 +192,10 @@ public class ERMODWizardCreationPage extends ERD2WWizardCreationPageTemplate {
 		D2WContext result = super.d2wContext();
 		if (_cachedEntity == null) {
 			_cachedEntity = result.entity();
-		} else if (ERXExtensions.safeDifferent(_cachedEntity, result.entity())) {
+		} else if (ObjectUtils.notEqual(_cachedEntity, result.entity())) {
 			clearTabSectionsContents();
 			_cachedEntity = result.entity();
 		}
 		return super.d2wContext();
 	}
-
 }

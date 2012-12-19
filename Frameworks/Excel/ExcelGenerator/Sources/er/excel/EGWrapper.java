@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
+import org.apache.commons.lang.CharEncoding;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;
@@ -12,6 +13,7 @@ import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 
+import er.extensions.appserver.ERXResponse;
 import er.extensions.components.ERXComponentUtilities;
 import er.extensions.components.ERXNonSynchronizingComponent;
 
@@ -30,11 +32,12 @@ public class EGWrapper extends ERXNonSynchronizingComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-    /** logging support */
-    private static final Logger log = Logger.getLogger(EGWrapper.class);
+	/** logging support */
+	private static final Logger log = Logger.getLogger(EGWrapper.class);
+    
 	private String _fileName;
 	private NSDictionary _styles;
-    private NSDictionary _fonts;
+	private NSDictionary _fonts;
     
     /**
      * Public constructor
@@ -79,10 +82,10 @@ public class EGWrapper extends ERXNonSynchronizingComponent {
     	_fonts = value;
     }
     
-
+    @Override
     public void appendToResponse(WOResponse response, WOContext context) {
         if (isEnabled()) {
-            WOResponse newResponse = new WOResponse();
+            ERXResponse newResponse = new ERXResponse();
 
             super.appendToResponse(newResponse, context);
 
@@ -93,7 +96,7 @@ public class EGWrapper extends ERXNonSynchronizingComponent {
             }
             byte[] bytes;
             try {
-                bytes = contentString.getBytes("UTF-8");
+                bytes = contentString.getBytes(CharEncoding.UTF_8);
             } catch (UnsupportedEncodingException e) {
                 throw new NSForwardException(e, "Can't convert string to UTF-8...you should get a better VM");
             }
@@ -112,11 +115,15 @@ public class EGWrapper extends ERXNonSynchronizingComponent {
                 }
                 response.appendContentString(contentString);
             } else {
-                response.appendContentData(data);
                 String fileName = fileName();
                 if(fileName == null) {
                     fileName = "results.xls";
                 }
+                
+                response.disableClientCaching();
+                response.appendHeader(String.valueOf( data.length()), "Content-Length" );
+                response.setContent(data); // Changed by ishimoto because it was sooooo buggy and didn't work in Japanese
+
                 response.setHeader("inline; filename=\"" + fileName + "\"", "content-disposition");
                 response.setHeader("application/vnd.ms-excel", "content-type");
             }

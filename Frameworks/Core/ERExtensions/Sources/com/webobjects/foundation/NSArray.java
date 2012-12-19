@@ -16,17 +16,27 @@ import java.util.ListIterator;
 import java.util.Vector;
 
 /**
+ * <span class="en">
  * NSArray re-implementation to support JDK 1.5 templates. Use with
+ * </span>
+ * 
+ * <span class="ja">
+ * JDK 1.5 テンプレートをサポートする為の再実装。使用は
+ * </span>
+ * 
  * <pre>
- * NSArray&lt;Bug&gt; bugs = ds.fetchObjects();
+ * NSArray<Bug> bugs = ds.fetchObjects();
  * 
  * for(Bug : bugs) {
  * 	  ...
  * }</pre>
  *
- * @param <E> type of array contents
+ * @param <E> - type of array contents
  */
 public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValueCoding, NSKeyValueCodingAdditions, _NSFoundationCollection, List<E> {
+  
+  static final long serialVersionUID = -3789592578296478260L;
+
 	public static class _AvgNumberOperator extends _Operator implements Operator {
 
 		public Object compute(NSArray<?> values, String keyPath) {
@@ -148,11 +158,9 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		public abstract Object compute(NSArray<?> nsarray, String s);
 	}
 
-	@SuppressWarnings("unchecked")
 	public static final Class _CLASS = _NSUtilitiesExtra._classWithFullySpecifiedNamePrime("com.webobjects.foundation.NSArray");
 
 	public static final int NotFound = -1;
-	@SuppressWarnings("unchecked")
 	public static final NSArray EmptyArray = new NSArray<Object>();
 	private static final char _OperatorIndicatorChar = '@';
 	public static final String CountOperatorName = "count";
@@ -160,7 +168,6 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 	public static final String MinimumOperatorName = "min";
 	public static final String SumOperatorName = "sum";
 	public static final String AverageOperatorName = "avg";
-	static final long serialVersionUID = -3789592578296478260L;
 	private static final String SerializationValuesFieldKey = "objects";
 	private static NSMutableDictionary<String, Operator> _operators = new NSMutableDictionary<String, Operator>(8);
 	protected static final int _NSArrayClassHashCode = _CLASS.hashCode();
@@ -635,7 +642,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 
 	public String componentsJoinedByString(String separator) {
 		Object[] objects = objectsNoCopy();
-		StringBuffer buffer = new StringBuffer(objects.length * 32);
+		StringBuilder buffer = new StringBuilder(objects.length * 32);
 		for (int i = 0; i < objects.length; i++) {
 			if (i > 0 && separator != null) {
 				buffer.append(separator);
@@ -643,7 +650,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 			buffer.append(objects[i].toString());
 		}
 
-		return new String(buffer);
+		return buffer.toString();
 	}
 
 	public static NSArray<String> componentsSeparatedByString(String string, String separator) {
@@ -846,7 +853,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		if(count() == 0) {
 			return "()";
 		}
-		StringBuffer buffer = new StringBuffer(128);
+		StringBuilder buffer = new StringBuilder(128);
 		buffer.append("(");
 		Object[] objects = objectsNoCopy();
 		for (int i = 0; i < objects.length; i++) {
@@ -868,7 +875,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		}
 
 		buffer.append(")");
-		return new String(buffer);
+		return buffer.toString();
 	}
 
 	protected boolean _mustRecomputeHash() {
@@ -893,7 +900,6 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		initFromObjects(values, 0, values.length, true, false);
 	}
 
-	@SuppressWarnings("unused")
 	private Object readResolve() throws ObjectStreamException {
 		if (getClass() == _CLASS && count() == 0) {
 			return EmptyArray;

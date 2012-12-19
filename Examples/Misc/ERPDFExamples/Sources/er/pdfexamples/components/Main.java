@@ -3,12 +3,8 @@ package er.pdfexamples.components;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
-import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WOResponse;
-import com.webobjects.foundation.NSData;
 
-import er.extensions.appserver.ERXResponse;
 import er.extensions.components.ERXComponent;
 
 public class Main extends ERXComponent {

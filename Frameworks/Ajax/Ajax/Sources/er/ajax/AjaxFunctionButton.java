@@ -37,9 +37,9 @@ public class AjaxFunctionButton extends WOHTMLDynamicElement {
 
 	public AjaxFunctionButton(String aName, NSDictionary associations, WOElement template) {
 		super("input", AjaxFunctionButton.processAssociations(associations), template);
-		_disabled = (WOAssociation) _associations.removeObjectForKey("disabled");
-		_action = (WOAssociation) _associations.removeObjectForKey("action");
-		_updateContainerID = (WOAssociation) _associations.removeObjectForKey("updateContainerID");
+		_disabled = _associations.removeObjectForKey("disabled");
+		_action = _associations.removeObjectForKey("action");
+		_updateContainerID = _associations.removeObjectForKey("updateContainerID");
 		if (_associations.objectForKey("onclick") != null && _action != null) {
 			throw new WODynamicElementCreationException("You cannot bind both 'action' and 'onclick' at the same time.");
 		}

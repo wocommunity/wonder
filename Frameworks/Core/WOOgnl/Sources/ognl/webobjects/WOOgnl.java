@@ -26,6 +26,7 @@ import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver._private.WOBindingNameAssociation;
 import com.webobjects.appserver._private.WOConstantValueAssociation;
 import com.webobjects.appserver._private.WOKeyValueAssociation;
+import com.webobjects.appserver.parser.WOComponentTemplateParser;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
@@ -37,13 +38,30 @@ import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation._NSUtilities;
 
 /**
+ * <span class="en">
  * WOOgnl provides a template parser that support WOOgnl associations, Helper Functions, Inline Bindings, and Binding Debugging. 
  * 
+ * @property ognl.active - defaults to true, if false ognl support is disabled
+ * @property ognl.inlineBindings - if true, inline bindings are supported in component templates
+ * @property ognl.parseStandardTags - if true, you can use inline bindings in regular html tags, but requires well-formed templates
+ * @property ognl.debugSupport - if true, debug metadata is included in all bindings (but binding debug is not automatically turned on) 
+ * </span>
+ * 
+ * <span class="ja">
+ * WOOgnlはテンプレートパーサーに対して、OGNL (Object Graph Navigation Language)機能のヘルプ機能/インラインbinding/bindingデバッグ等の機能を提供する。
+ * 
+ * OGNL (Object Graph Navigation Language) は，Javaオブジェクトのプロパティにアクセス（setting/getting）する式言語です。
+ * Javaオブジェクトのプロパティにアクセスするほか、直接メソッドを呼び出すことなどが可能です。
+ * 2010-10-09 日本語追加 by A10
+ * 
+ * @property ognl.active - デフォルト値はtrue、falseにするとognl機能は無効。
+ * @property ognl.inlineBindings - trueにするとコンポーネントテンプレートでのインライン・バインディング機能になる。
+ * @property ognl.parseStandardTags - trueにするとhtmlタグ内でのインライン・バインディングが使用できる。しかし、正確なテンプレートを必要とする。
+ * @property ognl.debugSupport - trueにするとデバッグ用のメタデータが全てのバインディングに追加される。 (しかし、この機能は自動では追加されない) 
+ * </span>
+ * 
  * @author mschrag
- * @property ognl.active defaults to true, if false ognl support is disabled
- * @property ognl.inlineBindings if true, inline bindings are supported in component templates
- * @property ognl.parseStandardTags if true, you can use inline bindings in regular html tags, but requires well-formed templates
- * @property ognl.debugSupport if true, debug metadata is included in all bindings (but binding debug is not automatically turned on) 
+ * 
  */
 public class WOOgnl {
 	public static Logger log = Logger.getLogger(WOOgnl.class);
@@ -109,19 +127,6 @@ public class WOOgnl {
 		return h;
 	}
 
-	// Borrowed from ERXApplication, but we can't depend on ERX
-	private boolean isWO54() {
-		boolean isWO54;
-		try {
-			WOApplication.class.getMethod("getWebObjectsVersion", new Class[0]);
-			isWO54 = true;
-		}
-		catch (Exception e) {
-			isWO54 = false;
-		}
-		return isWO54;
-	}
-
 	public void configureWOForOgnl() {
 		// Configure runtime.
 		// Configure foundation classes.
@@ -135,25 +140,8 @@ public class WOOgnl {
 		OgnlRuntime.setElementsAccessor(NSSet.class, e);
 		// Register template parser
 		if (hasProperty("ognl.active", "true")) {
-			String parserClassName;
-			if (isWO54()) {
-				parserClassName = System.getProperty("ognl.parserClassName", "ognl.helperfunction.WOHelperFunctionParser54");
-				try {
-					Class.forName("com.webobjects.appserver.parser.WOComponentTemplateParser").getMethod("setWOHTMLTemplateParserClassName", String.class).invoke(null, parserClassName);
-				}
-				catch (Exception e1) {
-					throw new RuntimeException("Failed to set the template parser to WOHelperFunctionParser54.", e1);
-				}
-			}
-			else {
-				parserClassName = System.getProperty("ognl.parserClassName", "ognl.helperfunction.WOHelperFunctionParser53");
-				try {
-					Class.forName("com.webobjects.appserver._private.WOParser").getMethod("setWOHTMLTemplateParserClassName", String.class).invoke(null, parserClassName);
-				}
-				catch (Exception e1) {
-					throw new RuntimeException("Failed to set the template parser to WOHelperFunctionParser53.", e1);
-				}
-			}
+			String parserClassName = System.getProperty("ognl.parserClassName", "ognl.helperfunction.WOHelperFunctionParser54");
+			WOComponentTemplateParser.setWOHTMLTemplateParserClassName(parserClassName);
 			if (hasProperty("ognl.inlineBindings", "false")) {
 				WOHelperFunctionTagRegistry.setAllowInlineBindings(true);
 			}
