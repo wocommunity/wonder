@@ -24,5 +24,6 @@
 	<classpathentry kind="con" path="WOFramework/ERPrototypes"/>
 	<classpathentry kind="con" path="WOFramework/AjaxLook"/>
 	<classpathentry kind="con" path="WOFramework/ERTaggable"/>
+	<classpathentry kind="con" path="WOFramework/JavaMemoryAdaptor"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

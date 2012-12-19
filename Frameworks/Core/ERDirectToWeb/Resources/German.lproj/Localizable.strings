@@ -4,6 +4,7 @@
 	"CouldNotSavePleaseReapply" = "Ihre \U00c4nderungen konnten nicht gesichert werden. Der/die @@displayNameForEntity@@ wurde von einem anderen Benutzer ver\U00e4ndert und Ihre \U00c4nderungen wurden verworfen. Bitte versuchen Sie es erneut.";
 	"ends with" = "ends with";
 	"ERD2W.addButtonLabel" = "Anlegen";
+	"ERD2W.advancedFindButtonLabel" = "Mehr...";
 	"ERD2W.cancelButtonLabel" = "Abbrechen";
 	"ERD2W.cancelCreationMessage" = "<b>Wollen Sie das Anlegen von @@displayNameForEntity@@ abbrechen?</b><br /><br />Mit <b>OK</b> verwerfen Sie alle \U00c4nderungen, mit <b>Abbrechen</b> k\U00f6nnen Sie weiter bearbeiten.";
 	"ERD2W.clearButtonLabel" = "L\U00f6schen";
@@ -108,4 +109,17 @@
 	"is" = "ist";
 	"like" = "enth\U00e4lt";
 	"starts with" = "beginnt mit";
+	"Hint.SampleText" = "Attribute Information";
+	"ERD2WDebugFlags.LOG4J" = "Log4J";
+	"ERD2WDebugFlags.D2W" = "D2W";
+	"ERD2WDebugFlags.CSS" = "CSS";
+	"ERD2WDebugFlags.SQL" = "Toggle SQL";
+	"ERD2WDebugFlags.CLEAR" = "Clear D2W Cache";
+	"ERD2WDebugFlags.METRICS" = "Page Metrics";
+	"ERD2WDebugFlags.SHOW" = "Show Details";
+	"ERD2WDebugFlags.HIDE" = "Hide Details";
+	"ERD2WDebugFlags.DUMP" = "Created keys";
+	"ERD2WDebugFlags.LOCALIZE" = "Localization";
+	"ERD2WDebugFlags.STATS" = "WOStats";
+	"ERD2WDebugFlags.RUN" = "Run Test";	
 }

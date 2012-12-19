@@ -166,8 +166,14 @@ var AjaxOnDemand = {
 	},
 	
 	loadCSS: function(css) {
-		new Ajax.Request(css, { method: 'get', asynchronous: false, onComplete: AjaxOnDemand.loadedCSS });
-	},
+        var link=document.createElement("link");
+        link.setAttribute("rel", "stylesheet");
+        link.setAttribute("type", "text/css");
+        link.setAttribute("href", css);
+        if (typeof link!="undefined") {
+            document.getElementsByTagName("head")[0].appendChild(link);
+        }
+    },
 	
 	loadedCSS: function(request) {
 		var inlineStyle = new Element("style", {"type": "text/css"});
@@ -233,7 +239,7 @@ var AjaxOptions = {
 
 var AjaxUpdateContainer = {
 	registerPeriodic: function(id, canStop, stopped, options) {
-		var url = $(id).getAttribute('updateUrl');
+		var url = $(id).getAttribute('data-updateUrl');
 		var updater;
 		if (!canStop) {
 			updater = new Ajax.PeriodicalUpdater(id, url, options);
@@ -310,7 +316,7 @@ var AjaxUpdateContainer = {
 		if (updateElement == null) {
 			alert('There is no element on this page with the id "' + id + '".');
 		}
-		var actionUrl = updateElement.getAttribute('updateUrl');
+		var actionUrl = updateElement.getAttribute('data-updateUrl');
 		if (options && options['_r']) {
 			actionUrl = actionUrl.addQueryParameters('_r='+ id);
 		}
@@ -336,7 +342,7 @@ var AjaxUpdateLink = {
 		if (updateElement == null) {
 			alert('There is no element on this page with the id "' + id + '".');
 		}
-		AjaxUpdateLink._update(id, updateElement.getAttribute('updateUrl'), options, elementID, queryParams);
+		AjaxUpdateLink._update(id, updateElement.getAttribute('data-updateUrl'), options, elementID, queryParams);
 	},
 	
 	_update: function(id, actionUrl, options, elementID, queryParams) {
@@ -703,7 +709,7 @@ AjaxPeriodicUpdater.prototype = {
 	},
 	
 	start: function() {
-		var actionUrl = $(this.id).getAttribute('updateUrl');
+		var actionUrl = $(this.id).getAttribute('data-updateUrl');
 		actionUrl = actionUrl.addQueryParameters('_u='+ id);
 		this.updater = new Ajax.PeriodicalUpdater(this.id, actionUrl, { evalScripts: true, frequency: 2.0 });
 	},

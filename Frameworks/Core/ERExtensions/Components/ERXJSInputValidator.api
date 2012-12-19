@@ -5,11 +5,11 @@
 		<binding name="keyName"/>
 		<binding name="entityName"/>
 
-		<validation message="&apos;keyName&apos; is a required binding">
+		<validation message="'keyName' is a required binding">
 			<unbound name="keyName"/>
 		</validation>
 
-		<validation message="&apos;entityName&apos; is a required binding">
+		<validation message="'entityName' is a required binding">
 			<unbound name="entityName"/>
 		</validation>
 	</wo>

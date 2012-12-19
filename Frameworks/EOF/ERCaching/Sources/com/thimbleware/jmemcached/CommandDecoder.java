@@ -15,18 +15,21 @@
  */
 package com.thimbleware.jmemcached;
 
-import static com.thimbleware.jmemcached.CommandDecoder.SessionState.*;
-import org.apache.mina.common.ByteBuffer;
-import org.apache.mina.common.IoSession;
-import org.apache.mina.filter.codec.ProtocolDecoderOutput;
-import org.apache.mina.filter.codec.demux.MessageDecoderAdapter;
-import org.apache.mina.filter.codec.demux.MessageDecoderResult;
+import static com.thimbleware.jmemcached.CommandDecoder.SessionState.ERROR;
+import static com.thimbleware.jmemcached.CommandDecoder.SessionState.READY;
+import static com.thimbleware.jmemcached.CommandDecoder.SessionState.WAITING_FOR_DATA;
 
 import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.mina.common.ByteBuffer;
+import org.apache.mina.common.IoSession;
+import org.apache.mina.filter.codec.ProtocolDecoderOutput;
+import org.apache.mina.filter.codec.demux.MessageDecoderAdapter;
+import org.apache.mina.filter.codec.demux.MessageDecoderResult;
 
 /**
  * MINA MessageDecoderAdapter responsible for parsing inbound lines from the memcached protocol session.
@@ -54,6 +57,13 @@ public final class CommandDecoder extends MessageDecoderAdapter {
      * Object for holding the current session status.
      */
     final class SessionStatus implements Serializable {
+    	/**
+    	 * Do I need to update serialVersionUID?
+    	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+    	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+    	 */
+    	private static final long serialVersionUID = 1L;
+
         // the state the session is in
         public SessionState state;
 

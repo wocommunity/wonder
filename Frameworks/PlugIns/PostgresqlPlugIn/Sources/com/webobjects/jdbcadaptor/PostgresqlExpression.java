@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Enumeration;
 
 import com.webobjects.eoaccess.EOAttribute;
@@ -84,7 +85,7 @@ public class PostgresqlExpression extends JDBCExpression {
     private static Method _bigDecimalToString = null;
 
     /**
-     * If true, don't use typecasting, ie: 'some text'::varcchar(255)
+     * If true, don't use typecasting, ie: 'some text'::varchar(255)
      */
     private Boolean _disableTypeCasting = null;
     
@@ -96,7 +97,7 @@ public class PostgresqlExpression extends JDBCExpression {
     /**
      * Holds array of join clauses.
      */
-    private NSMutableArray _alreadyJoined = new NSMutableArray();
+    private NSMutableArray<JoinClause> _alreadyJoined = new NSMutableArray<JoinClause>();
     
     /**
      * Fetch spec limit ivar
@@ -158,6 +159,7 @@ public class PostgresqlExpression extends JDBCExpression {
     /**
      * Overridden to fix an issue with NStimestamp classes and "T" value-typed attributes. 
      */
+    @Override
     public NSMutableDictionary bindVariableDictionaryForAttribute(EOAttribute eoattribute, Object obj) {
         NSMutableDictionary result =  super.bindVariableDictionaryForAttribute(eoattribute, obj);
         if((obj instanceof NSTimestamp) && (isTimestampAttribute(eoattribute))) {
@@ -174,12 +176,13 @@ public class PostgresqlExpression extends JDBCExpression {
     }
 
     /**
-     * Overriden to not call the super implementation.
+     * Overridden to not call the super implementation.
      * 
      * @param leftName  the table name on the left side of the clause
      * @param rightName the table name on the right side of the clause
      * @param semantic  the join semantic
      */
+    @Override
     public void addJoinClause(String leftName,
                               String rightName,
                               int semantic) {
@@ -187,7 +190,7 @@ public class PostgresqlExpression extends JDBCExpression {
     }
     
     /**
-     * Overriden to contruct a valid SQL92 JOIN clause as opposed to
+     * Overridden to construct a valid SQL92 JOIN clause as opposed to
      * the Oracle-like SQL the superclass produces.
      *
      * @param leftName  the table name on the left side of the clause
@@ -195,6 +198,7 @@ public class PostgresqlExpression extends JDBCExpression {
      * @param semantic  the join semantic
      * @return  the join clause
      */
+    @Override
     public String assembleJoinClause(String leftName,
                                      String rightName,
                                      int semantic) {
@@ -205,7 +209,7 @@ public class PostgresqlExpression extends JDBCExpression {
         String leftAlias = leftName.substring(0, leftName.indexOf("."));
         String rightAlias = rightName.substring(0, rightName.indexOf("."));
         
-        NSArray k;
+        NSArray<String> k;
         EOEntity rightEntity;
         EOEntity leftEntity;
         String relationshipKey = null;
@@ -232,7 +236,7 @@ public class PostgresqlExpression extends JDBCExpression {
             ? relationshipKey
             : relationshipKey.substring( relationshipKey.lastIndexOf( "." ) + 1 );
         r = rightEntity.anyRelationshipNamed( relationshipKey );
-        // fix from Michael M�ller for the case Foo.fooBars.bar has a Bar.foo relationship (instead of Bar.foos)
+        // fix from Michael Müller for the case Foo.fooBars.bar has a Bar.foo relationship (instead of Bar.foos)
         if( r == null || r.destinationEntity() != leftEntity ) {
             r = leftEntity.anyRelationshipNamed( relationshipKey );
         }
@@ -248,7 +252,7 @@ public class PostgresqlExpression extends JDBCExpression {
         }
         JoinClause jc = new JoinClause();
         
-        jc.table1 = leftTable + " " + leftAlias;
+        jc.setTable1(leftTable, leftAlias);
         
         switch (semantic) {
             case EORelationship.LeftOuterJoin:
@@ -266,11 +270,11 @@ public class PostgresqlExpression extends JDBCExpression {
         }
         
         jc.table2 = rightTable + " " + rightAlias;
-        NSArray joins = r.joins();
+        NSArray<EOJoin> joins = r.joins();
         int joinsCount = joins.count();
-        NSMutableArray joinStrings = new NSMutableArray( joinsCount );
+        NSMutableArray<String> joinStrings = new NSMutableArray<String>(joinsCount);
         for( int i = 0; i < joinsCount; i++ ) {
-            EOJoin currentJoin = (EOJoin)joins.objectAtIndex(i);
+            EOJoin currentJoin = joins.objectAtIndex(i);
             String left;
             String right;
             if(enableIdentifierQuoting()) {
@@ -291,7 +295,7 @@ public class PostgresqlExpression extends JDBCExpression {
     }
     
     /**
-     * Overriden to handle correct placements of join conditions and 
+     * Overridden to handle correct placements of join conditions and 
      * to handle DISTINCT fetches with compareCaseInsensitiveA(De)scending sort orders.
      *
      * @param attributes    the attributes to select
@@ -306,6 +310,7 @@ public class PostgresqlExpression extends JDBCExpression {
      * @param lockClause    the SQL lock clause
      * @return  the select statement
      */
+    @Override
     public String assembleSelectStatementWithAttributes(NSArray attributes,
                                                         boolean lock,
                                                         EOQualifier qualifier,
@@ -317,7 +322,7 @@ public class PostgresqlExpression extends JDBCExpression {
                                                         String joinClause,
                                                         String orderByClause,
                                                         String lockClause) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append(selectString);
         sb.append(columnList);
         // AK: using DISTINCT with ORDER BY UPPER(foo) is an error if it is not also present in the columns list...
@@ -375,6 +380,7 @@ public class PostgresqlExpression extends JDBCExpression {
      * @param attribute the EOattribute
      * @return  the PostgreSQL specific type string for <code>attribute</code>
      */
+    @Override
     public String columnTypeStringForAttribute( EOAttribute attribute ) {
       String externalType = attribute.externalType();
         if (externalType != null && externalType.endsWith( "[]" ) ) {
@@ -394,11 +400,11 @@ public class PostgresqlExpression extends JDBCExpression {
      * @return  the entity at the end of the keypath
      */
     private EOEntity entityForKeyPath(String keyPath) {
-        NSArray keys = NSArray.componentsSeparatedByString(keyPath, ".");
+        NSArray<String> keys = NSArray.componentsSeparatedByString(keyPath, ".");
         EOEntity ent = entity();
         
         for (int i = 0; i < keys.count(); i++) {
-            String k = (String)keys.objectAtIndex(i);
+            String k = keys.objectAtIndex(i);
             EORelationship rel = ent.anyRelationshipNamed(k);
             if (rel == null) {
                 // it may be an attribute 
@@ -420,6 +426,7 @@ public class PostgresqlExpression extends JDBCExpression {
      * @param eoattribute   the attribute associated with <code>obj</code>
      * @return  the formatted string
      */
+    @Override
     public String formatValueForAttribute(Object obj, EOAttribute eoattribute) {
         String value;
         if(obj instanceof NSData) {
@@ -508,19 +515,20 @@ public class PostgresqlExpression extends JDBCExpression {
         	// AK: I don't really like this, but we might want to prevent infinite recursion
         	try {
         		Object adaptorValue = eoattribute.adaptorValueByConvertingAttributeValue(obj);
+        		if(adaptorValue instanceof Date && !(adaptorValue instanceof NSTimestamp)) {
+        			//Support joda classes
+        			Date date = (Date)adaptorValue;
+        			adaptorValue = new NSTimestamp(date);
+        		}
         		if(adaptorValue instanceof NSData || adaptorValue instanceof NSTimestamp
         				|| adaptorValue instanceof String || adaptorValue instanceof Number 
         				|| adaptorValue instanceof Boolean) {
         			value = formatValueForAttribute(adaptorValue, eoattribute);
         		} else {
-        			//NSLog.err.appendln(this.getClass().getName() +  ": Can't convert: " + obj + ":" + obj.getClass() + " -> " + adaptorValue + ":" +adaptorValue.getClass() );
-              //value = obj.toString();
-              throw new IllegalArgumentException(this.getClass().getName() +  ": Can't convert: " + obj + ":" + obj.getClass() + " -> " + adaptorValue + ":" +adaptorValue.getClass());
+        			throw new IllegalArgumentException(this.getClass().getName() +  ": Can't convert: " + obj + ":" + obj.getClass() + " -> " + adaptorValue + ":" +adaptorValue.getClass());
         		}
         	} catch(Exception ex) {
-        	  throw new IllegalArgumentException(this.getClass().getName() +  ": Exception while converting " + obj.getClass().getName(), ex);
-        		//NSLog.err.appendln(ex);
-        		//value = obj.toString();
+        		throw new IllegalArgumentException(this.getClass().getName() +  ": Exception while converting " + obj.getClass().getName(), ex);
         	}
         }
         return value;
@@ -589,14 +597,15 @@ public class PostgresqlExpression extends JDBCExpression {
      * Overrides the parent implementation to compose the final string
      * expression for the join clauses.
      */
+    @Override
     public String joinClauseString() {
-        NSMutableDictionary seenIt = new NSMutableDictionary();
-        StringBuffer sb = new StringBuffer();
+        NSMutableDictionary<String, Boolean> seenIt = new NSMutableDictionary<String, Boolean>();
+        StringBuilder sb = new StringBuilder();
         JoinClause jc;
         EOSortOrdering.sortArrayUsingKeyOrderArray
-            ( _alreadyJoined, new NSArray( EOSortOrdering.sortOrderingWithKey( "sortKey", EOSortOrdering.CompareCaseInsensitiveAscending ) ) );
+            ( _alreadyJoined, new NSArray<EOSortOrdering>( EOSortOrdering.sortOrderingWithKey( "sortKey", EOSortOrdering.CompareCaseInsensitiveAscending ) ) );
         if (_alreadyJoined.count() > 0) {
-            jc = (JoinClause)_alreadyJoined.objectAtIndex(0);
+            jc = _alreadyJoined.objectAtIndex(0);
             
             sb.append(jc);
             seenIt.setObjectForKey(Boolean.TRUE, jc.table1);
@@ -604,7 +613,7 @@ public class PostgresqlExpression extends JDBCExpression {
         }
         
         for (int i = 1; i < _alreadyJoined.count(); i++) {
-            jc = (JoinClause)_alreadyJoined.objectAtIndex(i);
+            jc = _alreadyJoined.objectAtIndex(i);
             
             sb.append(jc.op);
             if (seenIt.objectForKey(jc.table1) == null) {
@@ -632,6 +641,7 @@ public class PostgresqlExpression extends JDBCExpression {
      * @param destinationColumns    the destination columns for the constraints
      */
     @SuppressWarnings("unchecked")
+    @Override
 	public void prepareConstraintStatementForRelationship(EORelationship relationship, NSArray sourceColumns, NSArray destinationColumns) {
 		
     	EOEntity entity = relationship.entity();
@@ -655,21 +665,19 @@ public class PostgresqlExpression extends JDBCExpression {
 		if (sourceModel != destModel && !sourceModel.connectionDictionary().equals(destModel.connectionDictionary())) {
 			throw new IllegalArgumentException((new StringBuilder()).append("prepareConstraintStatementForRelationship unable to create a constraint for ").append(relationship.name()).append(" because the source and destination entities reside in different databases").toString());
 		} 
-		else {
-			setStatement((new StringBuilder())
-					.append("ALTER TABLE ")
-					.append(sqlStringForSchemaObjectName(entity.externalName()))
-					.append(" ADD CONSTRAINT ")
-					.append(quoteIdentifier(constraintName))
-					.append(" FOREIGN KEY (")
-					.append(sourceKeyList)
-					.append(") REFERENCES ")
-					.append(sqlStringForSchemaObjectName(relationship.destinationEntity().externalName()))
-					.append(" (")
-					.append(destinationKeyList)
-					.append(") INITIALLY DEFERRED")
-					.toString());
-		}
+		setStatement((new StringBuilder())
+				.append("ALTER TABLE ")
+				.append(sqlStringForSchemaObjectName(entity.externalName()))
+				.append(" ADD CONSTRAINT ")
+				.append(quoteIdentifier(constraintName))
+				.append(" FOREIGN KEY (")
+				.append(sourceKeyList)
+				.append(") REFERENCES ")
+				.append(sqlStringForSchemaObjectName(relationship.destinationEntity().externalName()))
+				.append(" (")
+				.append(destinationKeyList)
+				.append(") INITIALLY DEFERRED")
+				.toString());
 	}
     
     /**
@@ -679,10 +687,9 @@ public class PostgresqlExpression extends JDBCExpression {
      * 
      * @return array of quoted or unquoted strings, depends on enableIdentifierQuoting
      */
-    @SuppressWarnings("unchecked")
-	private NSArray quoteArrayContents (NSArray a) {
+	private NSArray<String> quoteArrayContents(NSArray<String> a) {
     	Enumeration enumeration = a.objectEnumerator();
-    	NSMutableArray result = new NSMutableArray();
+    	NSMutableArray<String> result = new NSMutableArray<String>();
     	while (enumeration.hasMoreElements()) {
     		String identifier = (String) enumeration.nextElement();
     		String quotedString = this.quoteIdentifier(identifier);
@@ -698,7 +705,7 @@ public class PostgresqlExpression extends JDBCExpression {
      * 
      * @return quoted or unquoted string (check with enableIdentifierQuoting)
      */
-    private String quoteIdentifier (String identifier) {
+    private String quoteIdentifier(String identifier) {
    		return this.externalNameQuoteCharacter() + identifier + this.externalNameQuoteCharacter();
     }
     
@@ -706,21 +713,23 @@ public class PostgresqlExpression extends JDBCExpression {
     /**
      * Overridden so we can get the fetch limit from the fetchSpec.
      *
-     * @param nsarray   the array of attributes
-     * @param flag  locking flag
+     * @param attributes   the array of attributes
+     * @param lock  locking flag
      * @param eofetchspecification  the fetch specification
      */
-    public void prepareSelectExpressionWithAttributes(NSArray nsarray, boolean flag, EOFetchSpecification eofetchspecification) {
+    @Override
+    public void prepareSelectExpressionWithAttributes(NSArray<EOAttribute> attributes, boolean lock, EOFetchSpecification eofetchspecification) {
         if(!eofetchspecification.promptsAfterFetchLimit()) {
             _fetchLimit = eofetchspecification.fetchLimit();
         }
-        super.prepareSelectExpressionWithAttributes(nsarray, flag, eofetchspecification);
+        super.prepareSelectExpressionWithAttributes(attributes, lock, eofetchspecification);
     }
     
     /**
      * Overridden because Postgres uses "|" instead of "\" like any
      * other database system.
      */
+    @Override
     public char sqlEscapeChar() {
         return SQL_ESCAPE_CHAR;
     }
@@ -729,6 +738,7 @@ public class PostgresqlExpression extends JDBCExpression {
      * Overridden because PostgreSQL does not use the default quote character in EOSQLExpression.externalNameQuoteCharacter() which is an empty string.
      * 
      */
+    @Override
     public String externalNameQuoteCharacter() { 
         return (enableIdentifierQuoting() ? EXTERNAL_NAME_QUOTE_CHARACTER : ""); 
     }
@@ -755,6 +765,7 @@ public class PostgresqlExpression extends JDBCExpression {
       return shouldAllowNull;
     }
 
+    @Override
     public void addCreateClauseForAttribute(EOAttribute attribute) {
       NSDictionary userInfo = attribute.userInfo();
       Object defaultValue = null;
@@ -780,15 +791,14 @@ public class PostgresqlExpression extends JDBCExpression {
      * cug: Quick hack for bug in WebObjects 5.4 where the "not null" statement is added without a space, 
      * and "addCreateClauseForAttribute" is not called anymore. Will probably change.
      */
-    public String allowsNullClauseForConstraint(boolean allowsNull)
-    {
+    @Override
+    public String allowsNullClauseForConstraint(boolean allowsNull) {
         if(allowsNull)
             return "";
         Object value = jdbcInfo().objectForKey("NON_NULLABLE_COLUMNS");
         if(value != null && value.equals("T"))
             return " NOT NULL";
-        else
-            return "";
+        return "";
     }
    
     /**
@@ -798,6 +808,7 @@ public class PostgresqlExpression extends JDBCExpression {
      * @param attribute the attribute (column name) to be converted to a SQL string
      * @return SQL string for the attribute
      */
+    @Override
     public String sqlStringForAttribute(EOAttribute attribute) {
         String sql = null;
         if ( attribute.isDerived() || useAliases() || attribute.columnName() == null || !enableIdentifierQuoting()) {
@@ -815,6 +826,7 @@ public class PostgresqlExpression extends JDBCExpression {
      * 
      * @return  the SQL string for the table names
      */
+    @Override
     public String tableListWithRootEntity(EOEntity entity) {
         String sql = null;
         if ( useAliases()) {
@@ -835,6 +847,7 @@ public class PostgresqlExpression extends JDBCExpression {
      * @param data  the data to be converted to a SQL string
      * @return  the SQL string for raw data
      */
+    @Override
     public String sqlStringForData(NSData data) {
         int length = data.length();
         byte bytes[] = data.bytes();
@@ -849,7 +862,7 @@ public class PostgresqlExpression extends JDBCExpression {
     }
         
     /**
-     * Overriden so we can put a regex-match qualifier in the display groups
+     * Overridden so we can put a regex-match qualifier in the display groups
      * query bindings. You can bind '~*' or '~' to queryOperator.someKey and '.*foo' to
      * queryMatch.someKey and will get the correct results.
      *
@@ -857,7 +870,8 @@ public class PostgresqlExpression extends JDBCExpression {
      * @param value the value to be associated with <code>selector</code>
      * @return  the SQL operator string
      */
-    public String sqlStringForSelector(NSSelector selector, Object value){
+    @Override
+    public String sqlStringForSelector(NSSelector selector, Object value) {
         if(CASE_INSENSITIVE_REGEX_OPERATOR.name().equals( selector.name() ) || REGEX_OPERATOR.name().equals( selector.name() ) ) {
             return selector.name();
         }
@@ -879,6 +893,7 @@ public class PostgresqlExpression extends JDBCExpression {
      * @param v the value
      * @param kp    the keypath associated with the value
      */
+    @Override
     public String sqlStringForValue(Object v, String kp) {
         if(disableTypeCasting()) {
             return super.sqlStringForValue(v,kp);
@@ -891,6 +906,11 @@ public class PostgresqlExpression extends JDBCExpression {
         	EOEntity kpEntity = entityForKeyPath(kp);
         	attribute = kpEntity.attributeNamed(kp.substring(lastDotIdx+1));
         }
+        // AK: inet6 addresses get handed down as "xxx:xxx:...:xxx%y", not "xxx:xxx:...:xxx/y"
+        // note that this might break if you hand over a host name that contains percent chars (not sure if possible)
+    	if(attribute != null && "inet".equals(attribute.externalType()) && v != null && v.toString().indexOf('%') > 0) {
+    		v = v.toString().replace('%', '/');
+    	}
         if(attribute != null && v != null && v != NSKeyValueCoding.NullValue) {
         	String s = columnTypeStringForAttribute(attribute);
         	return super.sqlStringForValue(v, kp) + "::" + s;
@@ -904,29 +924,41 @@ public class PostgresqlExpression extends JDBCExpression {
      * helps <code>PostgresqlExpression</code> to assemble
      * the correct join clause.
      */
-    public class JoinClause {
+    public static class JoinClause {
         String table1;
         String op;
         String table2;
         String joinCondition;
+    	String sortKey;
         
+    	@Override
         public String toString() {
             return table1 + op + table2 + joinCondition;
         }
         
-        public boolean equals( Object obj ) {
-            if( obj == null || !(obj instanceof JoinClause) ) {
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null || !(obj instanceof JoinClause)) {
                 return false;
             }
-            return toString().equals( obj.toString() );
+            return toString().equals(obj.toString());
         }
         
+    	public void setTable1(String leftTable, String leftAlias) {
+    		table1 = leftTable + " " + leftAlias;
+    		sortKey = leftAlias.substring(1);
+    		if (sortKey.length() < 2) {
+    			// add padding for cases with >9 joins
+    			sortKey = " " + sortKey;
+    		}
+    	}
+
         /**
          * Property that makes this class "sortable". 
          * Needed to correctly assemble a join clause.
          */
         public String sortKey() {
-            return table1.substring( table1.indexOf( " " ) + 1 );
+        	return sortKey;
         }
     }
     
@@ -953,8 +985,9 @@ public class PostgresqlExpression extends JDBCExpression {
     }
     
     /**
-     * Overriddden to return the negated value of {@link #disableBindVariables()}.
+     * Overridden to return the negated value of {@link #disableBindVariables()}.
      */
+    @Override
     public boolean useBindVariables() {
         return !disableBindVariables();
     }
@@ -963,6 +996,7 @@ public class PostgresqlExpression extends JDBCExpression {
      * Overridden to set the <code>disableBindVariables</code> value correctly.
      * @param value
      */
+    @Override
     public void setUseBindVariables(boolean value) {
     	_disableBindVariables = (value ? Boolean.FALSE : Boolean.TRUE);
     }
@@ -970,6 +1004,7 @@ public class PostgresqlExpression extends JDBCExpression {
     /**
      * Overridden to return true only if bind variables are enabled or the is a data type.
      */
+    @Override
     public boolean shouldUseBindVariableForAttribute(EOAttribute attribute) {
         return useBindVariables() || isDataAttribute(attribute);
     }
@@ -977,6 +1012,7 @@ public class PostgresqlExpression extends JDBCExpression {
     /**
      * Overridden to return true only if bind variables are enabled or the is a data type.
      */
+    @Override
     public boolean mustUseBindVariableForAttribute(EOAttribute attribute) {
     	return useBindVariables() || isDataAttribute(attribute);
      }
@@ -992,7 +1028,7 @@ public class PostgresqlExpression extends JDBCExpression {
         int begin, end;
         int oldLength = old.length();
         int length = buffer.length();
-        StringBuffer convertedString = new StringBuffer(length + 100);
+        StringBuilder convertedString = new StringBuilder(length + 100);
 
         begin = 0;
         while(begin < length)

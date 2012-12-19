@@ -1,4 +1,5 @@
 package er.extensions.components;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -63,11 +64,16 @@ import er.extensions.foundation.ERXSimpleTemplateParser;
  * @binding data will be set to the transformed data (optional)
  * @binding stream will be set to the transformed data (optional)
  * @binding nocache flag that if set creates a new transformer instead of using the one in the cache. Useful when deleloping the stylesheet. 
+ *  
  * @author ak on 07.04.05
- * @project ERExtensions
  */
-
 public class ERXSLTWrapper extends ERXNonSynchronizingComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/** logging support */
 	private static final Logger log = Logger.getLogger(ERXSLTWrapper.class);
@@ -158,6 +164,7 @@ public class ERXSLTWrapper extends ERXNonSynchronizingComponent {
 	 * Overridden to get use apply the XLST transformation on the content.
 	 * @throws TransformerException 
 	 */
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		start = System.currentTimeMillis(); current = start;
 		if (isEnabled()) {

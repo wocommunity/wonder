@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+    <wo class="ERCFFileUpload" wocomponentcontent="false">    <binding name="container"/>
+        <validation message="'container' is a required binding.">
+            <unbound name="container"/>
+        </validation>
+    <binding name="configurationName"/>
+    
+        
+    <binding name="attachment"/>
+        <validation message="'attachment' is a required binding.">
+            <unbound name="attachment"/>
+        </validation>
+    <binding name="editingContext"/>
+    </wo>
+</wodefinitions>

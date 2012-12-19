@@ -23,6 +23,13 @@ import com.webobjects.foundation.NSTimestampFormatter;
 
 @SuppressWarnings("deprecation")
 public class ERXOrdinalDateFormatter extends NSTimestampFormatter {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private final Pattern ORDINAL_PATTERN = Pattern.compile("(?:([1-3]?[0-9])(?:st|nd|rd|th))");
 	
 	public ERXOrdinalDateFormatter() {

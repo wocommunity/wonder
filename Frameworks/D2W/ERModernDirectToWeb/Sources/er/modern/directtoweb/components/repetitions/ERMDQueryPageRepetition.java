@@ -8,7 +8,6 @@ import er.extensions.foundation.ERXStringUtilities;
 /**
  * Modern QueryPage repetition.
  * 
- * @project ERModernDirectToWeb
  * @d2wKey componentName
  * @d2wKey hidePropertyName
  * @d2wKey propertyNameComponentName
@@ -20,7 +19,6 @@ import er.extensions.foundation.ERXStringUtilities;
  * @d2wKey classForAttributeRepetitionWrapper
  * 
  * @author davidleber
- *
  */
 public class ERMDQueryPageRepetition extends ERDQueryPageRepetition {
 	

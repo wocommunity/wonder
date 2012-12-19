@@ -10,7 +10,7 @@ import com.webobjects.foundation.NSArray;
  * Grouping list that can be used as a repetition in list pages.
  *
  * @author ak on 31.10.05
- * @project ERDirectToWeb
+ * 
  * @d2wKey justification
  * @d2wKey componentName
  * @d2wKey propertyKey
@@ -24,6 +24,12 @@ import com.webobjects.foundation.NSArray;
  * @d2wKey object
  */
 public class ERDGroupingListPageRepetition extends ERDListPageRepetition {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/** logging support */
 	private static final Logger log = Logger.getLogger(ERDGroupingListPageRepetition.class);
@@ -37,6 +43,7 @@ public class ERDGroupingListPageRepetition extends ERDListPageRepetition {
 	}
 	
 	/** component does not synchronize it's variables */
+	@Override
 	public boolean synchronizesVariablesWithBindings() { return false; }
 	
 	

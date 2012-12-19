@@ -39,6 +39,13 @@ import er.extensions.components.ERXComponentUtilities;
  * @author mschrag
  */
 public class AjaxProgressBar extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public static final String AJAX_PROGRESSES_KEY = "_ajaxProgresses";
 
 	private String _id;
@@ -52,6 +59,7 @@ public class AjaxProgressBar extends WOComponent {
 		super(context);
 	}
 
+	@Override
 	public void appendToResponse(WOResponse aResponse, WOContext aContext) {
 		super.appendToResponse(aResponse, aContext);
 		AjaxUtils.addScriptResourceInHead(aContext, aResponse, "prototype.js");
@@ -59,6 +67,7 @@ public class AjaxProgressBar extends WOComponent {
 		AjaxUtils.addScriptResourceInHead(aContext, aResponse, "wonder.js");
 	}
 
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}

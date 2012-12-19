@@ -18,8 +18,14 @@ import er.extensions.foundation.ERXValueUtilities;
  *          &copy; 2006 OS communications informatiques, inc. http://www.os.ca
  *          Tous droits réservés.
  */
-
 public abstract class AjaxComponent extends WOComponent implements IAjaxElement {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     public AjaxComponent(WOContext context) {
         super(context);
     }
@@ -60,7 +66,7 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
     }
     
 	public Object valueForBinding(String name, Object defaultValue, WOComponent component) {
-		return valueForBinding(name, (Object)defaultValue);
+		return valueForBinding(name, defaultValue);
 	}
 
     protected void addScriptResourceInHead(WOResponse _response, String _fileName) {
@@ -83,7 +89,12 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
      * Execute the request, if it's coming from our action, then invoke the
      * ajax handler and put the key <code>AJAX_REQUEST_KEY</code> in the
      * request userInfo dictionary (<code>request.userInfo()</code>).
+     * 
+     * @param request the request
+     * @param context context of the transaction
+     * @return a WOActionResults containing the result of the request
      */
+    @Override
     public WOActionResults invokeAction(WORequest request, WOContext context) {
         Object result;
         if (shouldHandleRequest(request, context)) {
@@ -123,7 +134,11 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
 
     /**
      * Overridden to call {@link #addRequiredWebResources(WOResponse)}.
+     * 
+     * @param res the HTTP response that an application returns to a Web server to complete a cycle of the request-response loop
+     * @param ctx context of a transaction
      */
+    @Override
     public void appendToResponse(WOResponse res, WOContext ctx) {
         super.appendToResponse(res, ctx);
         addRequiredWebResources(res);

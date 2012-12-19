@@ -19,6 +19,7 @@ import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
 import er.extensions.foundation.ERXFileUtilities;
+import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
 /**
@@ -30,6 +31,12 @@ import er.extensions.localization.ERXLocalizer;
  * @author ak
  */
 public class ERXLocalizationEditor extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public String currentLanguage;
 	public String currentFilename;
@@ -180,10 +187,8 @@ public class ERXLocalizationEditor extends WOComponent {
      		NSDictionary newDict = (NSDictionary) NSPropertyListSerialization.propertyListFromString(result);
      		if(!newDict.equals(dict)) {
      			throw new IllegalStateException("Data wasn't equal when comparing before save");
-     		} else {
-     			if(url != null) {
-     				ERXFileUtilities.stringToFile(result, new File(url.getFile()));
-     			}
+     		} else if(url != null) {
+     			ERXFileUtilities.stringToFile(result, new File(url.getFile()), ERXProperties.stringForKeyWithDefault("er.extensions.ERXLocalizationEditor.endoding", "UTF-16BE"));
      		}
     	}
     }

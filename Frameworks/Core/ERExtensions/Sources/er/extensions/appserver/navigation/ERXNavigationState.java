@@ -6,6 +6,7 @@
 //
 package er.extensions.appserver.navigation;
 
+import java.io.Serializable;
 import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
@@ -18,7 +19,13 @@ import com.webobjects.foundation.NSRange;
 import er.extensions.foundation.ERXValueUtilities;
 
 /** Please read "Documentation/Navigation.html" to fnd out how to use the navigation components.*/
-public class ERXNavigationState {
+public class ERXNavigationState implements Serializable {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** logging support */
     public static final Logger log = Logger.getLogger(ERXNavigationState.class);
@@ -139,6 +146,9 @@ public class ERXNavigationState {
                         if (children == null)
                             log.warn("For nav core object: " + levelRoot + " and child binding: " + levelRoot.childrenBinding()
                                      + " couldn't find children for choice key: " + (String)o);
+                    } else if (o instanceof Boolean) {
+                    	String s = Boolean.toString((Boolean)o);
+                    	children = (NSArray)levelRoot.childrenChoices().objectForKey(s);
                     } else {
                         log.warn("For nav core object: " + levelRoot + " and child binding: " + levelRoot.childrenBinding()
                                  + " recieved binding object: " + o);

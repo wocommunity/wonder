@@ -38,6 +38,12 @@ import com.webobjects.foundation.NSMutableArray;
  *  </span>
  */
 public class WOCheckboxMatrix extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public Object currentItem;
     public int index;
@@ -48,6 +54,7 @@ public class WOCheckboxMatrix extends WOComponent {
         super(aContext);
     }
     
+    @Override
     public boolean isStateless() {
         return true;
     }
@@ -80,7 +87,6 @@ public class WOCheckboxMatrix extends WOComponent {
         // ** This is where we accept the formValues.  Kind of weird.
         NSMutableArray aSelectionsArray = new NSMutableArray();
         if (aFormValuesArray != null) {
-            Number anIndex = null;
             Enumeration anIndexEnumerator = aFormValuesArray.objectEnumerator();
             NSArray anItemList = (NSArray)_WOJExtensionsUtil.valueForBindingOrNull("list",this);
             if (anItemList == null) {
@@ -88,8 +94,7 @@ public class WOCheckboxMatrix extends WOComponent {
             }
             int anItemCount = anItemList.count();
             while (anIndexEnumerator.hasMoreElements()) {
-                anIndex = new Integer((String)anIndexEnumerator.nextElement());
-                int i = anIndex.intValue();
+                int i = Integer.parseInt((String)anIndexEnumerator.nextElement());
                 if (i < anItemCount) {
                     Object anObject = anItemList.objectAtIndex(i);
                     aSelectionsArray.addObject(anObject);
@@ -118,6 +123,7 @@ public class WOCheckboxMatrix extends WOComponent {
         currentItem = null;
     }
 
+    @Override
     public void reset()  {
         _invalidateCaches();
     }

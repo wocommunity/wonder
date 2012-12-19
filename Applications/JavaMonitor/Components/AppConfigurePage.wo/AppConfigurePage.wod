@@ -31,6 +31,7 @@ InstDefaultsForm: WOForm {
 
 AppSettingsForm: WOForm {
 	multipleSubmit = true;
+	id = "appSettingsForm";
 }
 
 AppName: WOString {
@@ -344,6 +345,7 @@ SmtpHostConfigured: WOConditional {
 StatisticsPasswordField: WOTextField {
 	size = "20";
 	value = appDefaults.statisticsPassword;
+	id = "statsPassword";
 }
 
 String1: WOString {

@@ -1,4 +1,5 @@
 package er.extensions.concurrency;
+
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
@@ -18,11 +19,17 @@ import er.extensions.eof.ERXConstant;
  * via either the bindings or explicitely.
  *
  * @binding task implementation of ERXLongResponseTask
+ * 
  * @author ak on Tue Feb 03 2004
- * @project ERExtensions
  */
-
 public class ERXLongResponse extends ERXNonSynchronizingComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     static String WOMetaRefreshSenderId = "WOMetaRefresh";
 
     /** logging support */
@@ -62,13 +69,14 @@ public class ERXLongResponse extends ERXNonSynchronizingComponent {
     	return _refreshInterval.intValue();
     }
     public void setRefreshInterval(int value) {
-    	_refreshInterval = new Integer(value);
+    	_refreshInterval = Integer.valueOf(value);
     }
     
     public WOComponent refresh() {
     	return task().nextPage();
     }
     
+    @Override
     public void appendToResponse(WOResponse aResponse, WOContext aContext)  {
         if (!_performingAction) {
             _performingAction = true;
@@ -95,6 +103,7 @@ public class ERXLongResponse extends ERXNonSynchronizingComponent {
         super.appendToResponse(aResponse, aContext);
     }
 
+    @Override
     public WOActionResults invokeAction(WORequest aRequest, WOContext aContext)  {
         if (aContext.senderID().equals(WOMetaRefreshSenderId)) {
             // We recognized the elementID that was set for the meta refresh.

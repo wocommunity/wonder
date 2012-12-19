@@ -19,10 +19,14 @@ import er.directtoweb.interfaces.ERDPickPageInterface;
  * @d2wKey sample sample d2w key
  *
  * @author ak on Fri Sep 05 2003
- * @project ERDirectToWeb
  */
-
 public class ERDSelectAllButton extends ERDActionButton {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** logging support */
     private static final Logger log = Logger.getLogger(ERDSelectAllButton.class);
@@ -36,6 +40,7 @@ public class ERDSelectAllButton extends ERDActionButton {
     }
 
     /** Utility to return the enclosing pick page, if there is one. */
+    @Override
     protected ERDPickPageInterface parentPickPage() {
         return (ERDPickPageInterface)enclosingPageOfClass(ERDPickPageInterface.class);
     }

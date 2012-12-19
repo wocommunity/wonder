@@ -333,7 +333,7 @@ public class JSONRPCBridge implements Serializable
    */
   private static String argSignature(JSONArray arguments)
   {
-    StringBuffer buf = new StringBuffer();
+	StringBuilder buf = new StringBuilder();
     for (int i = 0; i < arguments.length(); i += 1)
     {
       if (i > 0)
@@ -386,7 +386,7 @@ public class JSONRPCBridge implements Serializable
   private static String argSignature(Method method)
   {
     Class param[] = method.getParameterTypes();
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
     for (int i = 0; i < param.length; i++)
     {
       if (i > 0)
@@ -589,7 +589,7 @@ public class JSONRPCBridge implements Serializable
     }
     else
     {
-      if ((oi = resolveObject(new Integer(objectID))) == null)
+      if ((oi = resolveObject(Integer.valueOf(objectID))) == null)
       {
         return new JSONRPCResult(JSONRPCResult.CODE_ERR_NOMETHOD, requestId,
             JSONRPCResult.MSG_ERR_NOMETHOD);

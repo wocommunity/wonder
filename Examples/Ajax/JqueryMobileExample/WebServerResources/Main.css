@@ -1,0 +1,32 @@
+body {
+	background-color: #d7e1e3;
+}
+
+.logo {
+	right: 0;
+	top: 0;
+	position: absolute;
+	width: 403px;
+	height: 96px;
+	background: url(woa/pwonder.png) no-repeat;
+}
+
+.menu {
+	margin-top: 80px;
+	margin-left: 150px;
+	font-size: 20px;
+	line-height: 27px;
+}
+
+.menu a {
+	text-decoration: none;
+	text-shadow: silver 1px 1px 2px;
+}
+
+
+.woa {
+	width: 715px;
+	height: 313px;
+	background-image: url(woa/woa.png);
+	margin-left: 120px;
+}

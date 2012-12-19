@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERQMListView" wocomponentcontent="true">    <binding defaults="Boolean" name="isNumberedList"/>
+    <binding name="theme"/>
+    <binding defaults="Boolean" name="inset"/>
+    <binding defaults="Boolean" name="filter"/>
+    
+    <binding name="split-icon"/>
+    <binding name="split-theme"/>
+    <binding name="divider-theme"/>
+    <binding name="filterString"/>
+    <binding name="countBubble-theme"/>
+    </wo>
+</wodefinitions>

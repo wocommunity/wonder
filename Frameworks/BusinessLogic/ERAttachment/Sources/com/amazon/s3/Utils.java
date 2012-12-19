@@ -22,11 +22,10 @@ import java.util.TreeMap;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.apache.commons.codec.binary.Base64;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 import org.xml.sax.SAXException;
-
-import sun.misc.BASE64Encoder;
 
 public class Utils {
     static final String METADATA_PREFIX = "x-amz-meta-";
@@ -53,7 +52,7 @@ public class Utils {
     static String makeCanonicalString(String method, String resource,
                                              Map headers, String expires)
     {
-        StringBuffer buf = new StringBuffer();
+    	StringBuilder buf = new StringBuilder();
         buf.append(method + "\n");
 
         // Add all interesting headers to a list, then sort them.  "Interesting"
@@ -157,7 +156,7 @@ public class Utils {
         }
 
         // Compute the HMAC on the digest, and set it.
-        String b64 = new BASE64Encoder().encode(mac.doFinal(canonicalString.getBytes()));
+        String b64 = Base64.encodeBase64String(mac.doFinal(canonicalString.getBytes()));
 
         if (urlencode) {
             return urlencode(b64);
@@ -167,7 +166,7 @@ public class Utils {
     }
 
     static String pathForListOptions(String bucket, String prefix, String marker, Integer maxKeys) {
-        StringBuffer path = new StringBuffer(bucket);
+    	StringBuilder path = new StringBuilder(bucket);
         path.append("?");
 
         // these two params must be url encoded
@@ -210,7 +209,7 @@ public class Utils {
      * @return String of all headers, with commas.
      */
     private static String concatenateList(List values) {
-        StringBuffer buf = new StringBuffer();
+    	StringBuilder buf = new StringBuilder();
         for (int i = 0, size = values.size(); i < size; ++ i) {
             buf.append(((String)values.get(i)).replaceAll("\n", "").trim());
             if (i != (size - 1)) {

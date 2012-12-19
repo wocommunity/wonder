@@ -71,7 +71,7 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
                         int counter = 0;
                         for (int index = 0; index < count; index++) {
                             File aFile = (File) someFiles.objectAtIndex(index);
-                            if (aFile.delete() == true)
+                            if (aFile.delete())
                                 counter++;
                         }
                         return counter;
@@ -112,7 +112,7 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
                 if (aPath != null) {
                     File aFile = new File(aPath);
                     try {
-                        if (anEntity.externalName().equals("FSDirectory") == true)
+                        if (anEntity.externalName().equals("FSDirectory"))
                             aFile.mkdirs();
                         else
                             aFile.createNewFile();
@@ -267,7 +267,7 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
                     System.out.println("filteredArrayWithEntity: " + anEntity.name() + "/" + anEntityName + " --- " + anArray);
                 if (!anEntityName.equals("FSItem")) {
                     Boolean isDirectory = Boolean.FALSE;
-                    if (anEntityName.equals("FSDirectory") == true)
+                    if (anEntityName.equals("FSDirectory"))
                         isDirectory = Boolean.TRUE;
                     anArray = (EOQualifier.filteredArrayWithQualifier(anArray, new EOKeyValueQualifier("isDirectory", (EOQualifier.QualifierOperatorEqual), isDirectory)));
                 }

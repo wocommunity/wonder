@@ -12,11 +12,19 @@ import com.webobjects.appserver.WOContext;
 
 public class WOMetaRefresh extends WOComponent
 {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 
     public WOMetaRefresh(WOContext aContext)  {
         super(aContext);
     }
 
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }
@@ -27,7 +35,7 @@ public class WOMetaRefresh extends WOComponent
         // contentString = aSeconds+";url="+aUrl;
         Object aSeconds = valueForBinding("seconds");
         String aUrl = context().componentActionURL();
-        StringBuffer buffer = new StringBuffer(40); //reasonable value
+        StringBuilder buffer = new StringBuilder(40); //reasonable value
         if (aSeconds != null) {
             buffer.append(aSeconds.toString());
         } else {

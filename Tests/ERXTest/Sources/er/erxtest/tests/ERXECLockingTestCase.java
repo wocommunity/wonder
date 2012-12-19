@@ -157,7 +157,7 @@ public class ERXECLockingTestCase extends ERXTestCase {
                     return r;
                 }
                 
-            }, 1);
+            }, 20);
         } catch (TimeoutException e) {
             fail(e.getMessage());
         }

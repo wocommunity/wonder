@@ -107,9 +107,9 @@ public class NSMutableArray extends NSArray {
     }
 
     /**
-     * @deprecated Method replaceObjectAtIndex is deprecated
+     * @deprecated use {@link #replaceObjectAtIndex(Object, int)}
      */
-
+    @Deprecated
     public void replaceObjectAtIndex(int index, Object object) {
         replaceObjectAtIndex(object, index);
     }

@@ -13,6 +13,13 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
 public class JSValidatedField extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private static Random _random = new Random();
 
 	public String uniqueID;
@@ -21,6 +28,7 @@ public class JSValidatedField extends WOComponent {
         super(aContext);
     }
 
+    @Override
     public void awake() {
         // We need to give each image a unique name, with considerations that there might be
         // more than ImageFlyover per page.
@@ -30,6 +38,7 @@ public class JSValidatedField extends WOComponent {
     }
 
 
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }

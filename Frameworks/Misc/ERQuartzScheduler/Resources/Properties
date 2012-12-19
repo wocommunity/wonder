@@ -1,0 +1,13 @@
+##  Properies Info	
+er.extensions.load.Properties.framework.ERQuartzScheduler=load
+er.extensions.ERQuartzScheduler.hasLocalization=true
+
+# All the below properties can be set or overridden in  your project.
+
+fr.sophiacom.ynp.schedulerService.schedulerServiceToLaunch=true 
+# sleepduration unit is minute
+fr.sophiacom.corason.scheduler.COJobSupervisor.sleepduration=5 
+#fr.sophiacom.ynp.schedulerService.COJobListener.sendingmail=false
+#fr.sophiacom.ynp.schedulerService.COJobListener.from=fromEmail
+#fr.sophiacom.ynp.schedulerService.COJobListener.to=toEmail
+fr.sophiacom.ynp.schedulerService.COJobListener.defaultLanguage=English

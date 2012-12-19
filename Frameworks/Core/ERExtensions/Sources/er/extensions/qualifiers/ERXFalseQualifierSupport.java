@@ -5,6 +5,9 @@ import com.webobjects.eoaccess.EOQualifierSQLGeneration;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eocontrol.EOQualifier;
 
+/**
+ * SQL generation support for {@link ERXFalseQualifier}.
+ */
 public class ERXFalseQualifierSupport extends EOQualifierSQLGeneration.Support {
 	public String sqlStringForSQLExpression(EOQualifier qualifier, EOSQLExpression expression) {
 		return "0=1";

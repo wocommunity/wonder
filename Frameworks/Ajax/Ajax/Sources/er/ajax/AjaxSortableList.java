@@ -51,6 +51,13 @@ import com.webobjects.foundation.NSRange;
  *
  */
 public class AjaxSortableList extends AjaxComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
   private String _id;
   private String _actionUrl;
   private String _sortOrderKeyName;
@@ -93,10 +100,12 @@ public class AjaxSortableList extends AjaxComponent {
     return listItemID;
   }
 
+  @Override
   public boolean synchronizesVariablesWithBindings() {
     return false;
   }
 
+  @Override
   public void appendToResponse(WOResponse response, WOContext context) {
     _actionUrl = AjaxUtils.ajaxComponentActionUrl(context);
     if (hasBinding("id")) {
@@ -134,7 +143,7 @@ public class AjaxSortableList extends AjaxComponent {
   }
 
   public String onUpdate() {
-    StringBuffer onUpdateBuffer = new StringBuffer();
+	StringBuilder onUpdateBuffer = new StringBuilder();
     onUpdateBuffer.append("function(container) {");
     // onComplete:ajaxResponse
     String containerID = (String) valueForBinding("id");

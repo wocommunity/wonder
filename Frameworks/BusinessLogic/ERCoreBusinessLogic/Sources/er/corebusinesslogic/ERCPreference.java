@@ -14,6 +14,13 @@ import er.extensions.eof.EOEnterpriseObjectClazz;
 import er.extensions.eof.ERXQ;
 
 public class ERCPreference extends _ERCPreference {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     static final Logger log = Logger.getLogger(ERCPreference.class);
     private final static String VALUE="_V";
 

@@ -5,15 +5,25 @@
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
 package er.excel;
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
-import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.hssf.util.*;
-import org.apache.poi.poifs.filesystem.*;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXKeyValueCodingUtilities;
@@ -21,7 +31,7 @@ import er.extensions.foundation.ERXKeyValueCodingUtilities;
 /**
  * Dumps a workbook into the "HTML" needed to re-create it by the EGSimpleTableParser.
  * Uses the property list <code>Codes.plist</code> to re-create the needed class constant
- * dictionary, so the output uses <code>ALING_GENERAL</code> instead of <code>0</code>.
+ * dictionary, so the output uses <code>ALIGN_GENERAL</code> instead of <code>0</code>.
  * @author ak
  */
 public class EGSimpleTableCreator {
@@ -168,7 +178,7 @@ public class EGSimpleTableCreator {
 	 */
 	private void appendSheet(HSSFSheet sheet, String name) {
 		_html.append("<table");
-		appendAttribute("border", new Integer(1));
+		appendAttribute("border", Integer.valueOf(1));
 		appendAttribute("name", name);
 		appendValueForKey(sheet, "defaultRowHeightInPoints");
 		appendValueForKey(sheet, "defaultColumnWidth");
@@ -187,7 +197,7 @@ public class EGSimpleTableCreator {
 		_html.append("\t<tr");
 		appendValueForKey(row, "heightInPoints");
 		_html.append(">\n");
-		for(short i = 0; i < row.getPhysicalNumberOfCells(); i++) {
+		for(int i = 0; i < row.getPhysicalNumberOfCells(); i++) {
 			HSSFCell cell = row.getCell(i);
 			appendCell(cell);
 		}

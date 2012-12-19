@@ -1,4 +1,5 @@
 package er.extensions.components;
+
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;
@@ -10,10 +11,14 @@ import com.webobjects.appserver.WOContext;
  * @binding escapeHTML escape HTML
  *
  * @author ak on Sat Sep 27 2003
- * @project ERExtensions
  */
-
 public class ERXStringHolder extends ERXStatelessComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** logging support */
     private static final Logger log = Logger.getLogger(ERXStringHolder.class);
@@ -37,6 +42,8 @@ public class ERXStringHolder extends ERXStatelessComponent {
     public void setEscapeHTML(boolean value) {
         _escapeHTML = value ? Boolean.TRUE : Boolean.FALSE;
     }
+
+    @Override
     public void reset() {
         _value = null;
         _escapeHTML = Boolean.FALSE;

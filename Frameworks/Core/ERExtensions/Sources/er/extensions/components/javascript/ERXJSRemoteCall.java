@@ -1,4 +1,5 @@
 package er.extensions.components.javascript;
+
 import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
@@ -17,10 +18,14 @@ import er.extensions.foundation.ERXValueUtilities;
  * @binding sample sample binding explanation
  *
  * @author ak on Fri May 02 2003
- * @project ERExtensions
  */
-
 public class ERXJSRemoteCall extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** logging support */
     private static final Logger log = Logger.getLogger(ERXJSRemoteCall.class);
@@ -41,10 +46,16 @@ public class ERXJSRemoteCall extends WOComponent {
     }
 
     /** component does not synchronize it's variables */
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
+    
+    @Override
     public String name() { return (String)valueForBinding("name");}
+    
     public String frameName() { return name() + "Frame";}
+    
     public String actionClass() { return (String)valueForBinding("actionClass");}
+    
     public String url() {
         if(_url == null)
             _url = context().directActionURLForActionNamed((actionClass() == null ? "" : actionClass() + "/") + name(), arguments());
@@ -72,6 +83,7 @@ public class ERXJSRemoteCall extends WOComponent {
         return _parameters;
     }
     
+    @Override
     public void reset() {
         _arguments = null;
         _parameters = null;

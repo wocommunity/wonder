@@ -12,7 +12,7 @@ import com.webobjects.appserver.WODisplayGroup;
  * @d2wKey sample sample d2w key
  *
  * @author ak on Mon Sep 01 2003
- * @project ERDirectToWeb
+ * 
  * @d2wKey componentName
  * @d2wKey colSpan
  * @d2wKey rowSpan
@@ -26,6 +26,12 @@ import com.webobjects.appserver.WODisplayGroup;
  * @d2wKey useHorizontalLayoutTables
  */
 public class ERDQueryPageRepetition extends ERDAttributeRepetition {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** logging support */
     private static final Logger log = Logger.getLogger(ERDQueryPageRepetition.class);
@@ -39,8 +45,8 @@ public class ERDQueryPageRepetition extends ERDAttributeRepetition {
     }
 
     /** component does not synchronize it's variables */
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
-
 
     public WODisplayGroup displayGroup() {
         return (WODisplayGroup)valueForBinding("displayGroup");

@@ -13,20 +13,25 @@ import com.webobjects.foundation.NSMutableDictionary;
 import er.extensions.appserver.ERXWOContext;
 
 public class AjaxAccordion extends AjaxComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
   private String _accordionID;
   
   public AjaxAccordion(WOContext context) {
     super(context);
   }
 
+  @Override
   public boolean isStateless() {
     return true;
   }
 
-  public boolean synchronizesVariablesWithBindings() {
-    return false;
-  }
-
+  @Override
   public void appendToResponse(WOResponse response, WOContext context) {
     _accordionID = (String) valueForBinding("id", ERXWOContext.safeIdentifierName(context, true) + "Accordion");
     super.appendToResponse(response, context);

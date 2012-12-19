@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERQMRadioList" wocomponentcontent="true">    <binding name="list"/>
+        <binding name="item"/>
+        <validation message="'item' is a required binding.">
+            <unbound name="item"/>
+        </validation>
+        <validation message="'item' must be bound to a settable value">
+            <unsettable name="item"/>
+        </validation>
+    <validation message="'list' is a required binding.">
+            <unbound name="list"/>
+        </validation>
+    <binding name="selection"/>
+    <binding name="string"/>
+    <binding defaults="Boolean" name="isHorizontal"/>
+    <binding defaults="Boolean" name="mini"/>
+    <binding defaults="Boolean" name="disabled"/>
+    </wo>
+</wodefinitions>

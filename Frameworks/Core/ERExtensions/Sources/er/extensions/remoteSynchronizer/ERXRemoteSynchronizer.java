@@ -5,7 +5,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
@@ -70,20 +69,18 @@ public abstract class ERXRemoteSynchronizer {
 	private static final int STRING_TYPE = 6;
 
 	private IChangeListener _listener;
-	private NSSet _includeEntityNames;
-	private NSSet _excludeEntityNames;
+	private NSSet<String> _includeEntityNames;
+	private NSSet<String> _excludeEntityNames;
 
 	public ERXRemoteSynchronizer(IChangeListener listener) {
 		_listener = listener;
 		String includeEntityNames = ERXProperties.stringForKey("er.extensions.remoteSynchronizer.includeEntities");
-		NSArray includeEntityNamesArray = null;
 		if (includeEntityNames != null) {
-			_includeEntityNames = new NSSet(NSArray.componentsSeparatedByString(includeEntityNames, ",").toArray());
+			_includeEntityNames = new NSSet<String>(NSArray.componentsSeparatedByString(includeEntityNames, ","));
 		}
-		NSArray excludeEntityNamesArray = null;
 		String excludeEntityNames = ERXProperties.stringForKey("er.extensions.remoteSynchronizer.excludeEntities");
 		if (excludeEntityNames != null) {
-			_excludeEntityNames = new NSSet(NSArray.componentsSeparatedByString(excludeEntityNames, ",").toArray());
+			_excludeEntityNames = new NSSet<String>(NSArray.componentsSeparatedByString(excludeEntityNames, ","));
 		}
 	}
 
@@ -116,8 +113,8 @@ public abstract class ERXRemoteSynchronizer {
 		else if (messageType == ERXRemoteSynchronizer.TO_MANY_UPDATE) {
 			EOGlobalID sourceGID = readGID(dis);
 			String name = dis.readUTF();
-			NSArray addedGIDs = readGIDs(dis);
-			NSArray removedGIDs = readGIDs(dis);
+			NSArray<EOGlobalID> addedGIDs = readGIDs(dis);
+			NSArray<EOGlobalID> removedGIDs = readGIDs(dis);
 			boolean removeAll = dis.readBoolean();
 			ERXDatabase.ToManySnapshotUpdated change = new ERXDatabase.ToManySnapshotUpdated(sourceGID, name, addedGIDs, removedGIDs, removeAll);
 			if (log.isDebugEnabled()) {
@@ -150,8 +147,8 @@ public abstract class ERXRemoteSynchronizer {
 		else if (cacheChange instanceof ERXDatabase.ToManySnapshotUpdated) {
 			dos.writeByte(ERXRemoteSynchronizer.TO_MANY_UPDATE);
 			ERXDatabase.ToManySnapshotUpdated toManyChange = (ERXDatabase.ToManySnapshotUpdated) cacheChange;
-			NSArray addedGIDs = toManyChange.addedGIDs();
-			NSArray removedGIDs = toManyChange.removedGIDs();
+			NSArray<EOGlobalID> addedGIDs = toManyChange.addedGIDs();
+			NSArray<EOGlobalID> removedGIDs = toManyChange.removedGIDs();
 			writeGID(dos, toManyChange.gid());
 			dos.writeUTF(toManyChange.name());
 			writeGIDs(dos, addedGIDs);
@@ -170,12 +167,11 @@ public abstract class ERXRemoteSynchronizer {
 		writeGID(dos, cacheChange.gid());
 	}
 
-	protected void writeGIDs(DataOutputStream dos, NSArray gids) throws IOException {
+	protected void writeGIDs(DataOutputStream dos, NSArray<EOGlobalID> gids) throws IOException {
 		int count = (gids == null) ? 0 : gids.count();
 		dos.writeByte(count);
 		if (count > 0) {
-			for (Enumeration gidsEnum = gids.objectEnumerator(); gidsEnum.hasMoreElements();) {
-				EOGlobalID gid = (EOGlobalID) gidsEnum.nextElement();
+			for (EOGlobalID gid : gids) {
 				writeGID(dos, gid);
 			}
 		}
@@ -229,8 +225,8 @@ public abstract class ERXRemoteSynchronizer {
 		}
 	}
 
-	protected NSArray readGIDs(DataInputStream dis) throws IOException {
-		NSMutableArray gids = new NSMutableArray();
+	protected NSArray<EOGlobalID> readGIDs(DataInputStream dis) throws IOException {
+		NSMutableArray<EOGlobalID> gids = new NSMutableArray<EOGlobalID>();
 		int gidCount = dis.readByte();
 		for (int gidNum = 0; gidNum < gidCount; gidNum++) {
 			EOGlobalID gid = readGID(dis);
@@ -265,16 +261,16 @@ public abstract class ERXRemoteSynchronizer {
 		Object obj;
 		int keyType = dis.readByte();
 		if (keyType == ERXRemoteSynchronizer.BYTE_TYPE) {
-			obj = new Byte(dis.readByte());
+			obj = Byte.valueOf(dis.readByte());
 		}
 		else if (keyType == ERXRemoteSynchronizer.SHORT_TYPE) {
-			obj = new Short(dis.readShort());
+			obj = Short.valueOf(dis.readShort());
 		}
 		else if (keyType == ERXRemoteSynchronizer.INT_TYPE) {
-			obj = new Integer(dis.readInt());
+			obj = Integer.valueOf(dis.readInt());
 		}
 		else if (keyType == ERXRemoteSynchronizer.LONG_TYPE) {
-			obj = new Long(dis.readLong());
+			obj = Long.valueOf(dis.readLong());
 		}
 		else if (keyType == ERXRemoteSynchronizer.DATA_TYPE) {
 			int size = dis.readByte();
@@ -302,22 +298,23 @@ public abstract class ERXRemoteSynchronizer {
 		return shouldSynchronizeEntity;
 	}
 
-	public NSDictionary globalIDsGroupedByEntity(NSArray gids) {
+	public NSDictionary<String, NSSet<EOGlobalID>> globalIDsGroupedByEntity(NSArray<EOGlobalID> gids) {
 		if (gids == null) {
 			return NSDictionary.EmptyDictionary;
 		}
-		NSMutableDictionary result = new NSMutableDictionary();
-		Enumeration gidsEnum = gids.objectEnumerator();
-		while (gidsEnum.hasMoreElements()) {
-			EOKeyGlobalID gid = (EOKeyGlobalID) gidsEnum.nextElement();
-			String entityName = gid.entityName();
-			if (shouldSynchronizeEntity(entityName)) {
-				NSMutableSet globalIDsForEntity = (NSMutableSet) result.objectForKey(entityName);
-				if (globalIDsForEntity == null) {
-					globalIDsForEntity = new NSMutableSet();
-					result.setObjectForKey(globalIDsForEntity, entityName);
+		NSMutableDictionary<String, NSSet<EOGlobalID>> result = new NSMutableDictionary<String, NSSet<EOGlobalID>>();
+		for (EOGlobalID gid : gids) {
+			if (gid instanceof EOKeyGlobalID) {
+				EOKeyGlobalID keyGID = (EOKeyGlobalID)gid;
+				String entityName = keyGID.entityName();
+				if (shouldSynchronizeEntity(entityName)) {
+					NSMutableSet<EOGlobalID> globalIDsForEntity = (NSMutableSet<EOGlobalID>) result.objectForKey(entityName);
+					if (globalIDsForEntity == null) {
+						globalIDsForEntity = new NSMutableSet<EOGlobalID>();
+						result.setObjectForKey(globalIDsForEntity, entityName);
+					}
+					globalIDsForEntity.addObject(keyGID);
 				}
-				globalIDsForEntity.addObject(gid);
 			}
 		}
 		return result.immutableClone();
@@ -327,16 +324,14 @@ public abstract class ERXRemoteSynchronizer {
 		_listener.addChange(remoteChange);
 	}
 
-	protected NSArray filteredCacheChanges(NSArray cacheChanges) {
-		NSArray filteredCacheChanges;
+	protected NSArray<ERXDatabase.CacheChange> filteredCacheChanges(NSArray<ERXDatabase.CacheChange> cacheChanges) {
+		NSArray<ERXDatabase.CacheChange> filteredCacheChanges;
 		if (_includeEntityNames == null && (_excludeEntityNames == null || _excludeEntityNames.count() == 0)) {
 			filteredCacheChanges = cacheChanges;
 		}
 		else {
-			NSMutableArray mutableFilteredCacheChanges = new NSMutableArray();
-			int cacheChangeCount = cacheChanges.count();
-			for (int i = 0; i < cacheChangeCount; i ++) {
-				ERXDatabase.CacheChange cacheChange = (ERXDatabase.CacheChange)cacheChanges.objectAtIndex(i);
+			NSMutableArray<ERXDatabase.CacheChange> mutableFilteredCacheChanges = new NSMutableArray<ERXDatabase.CacheChange>();
+			for (ERXDatabase.CacheChange cacheChange : cacheChanges) {
 				EOGlobalID gid = cacheChange.gid();
 				if (gid instanceof EOKeyGlobalID) {
 					EOKeyGlobalID keyGID = (EOKeyGlobalID)gid;
@@ -357,11 +352,11 @@ public abstract class ERXRemoteSynchronizer {
 
 	public abstract void listen() throws Throwable;
 
-	public void writeCacheChanges(int transactionID, NSArray cacheChanges) throws Throwable {
+	public void writeCacheChanges(int transactionID, NSArray<ERXDatabase.CacheChange> cacheChanges) throws Throwable {
 		_writeCacheChanges(transactionID, filteredCacheChanges(cacheChanges));
 	}
 	
-	protected abstract void _writeCacheChanges(int transactionID, NSArray cacheChanges) throws Throwable;
+	protected abstract void _writeCacheChanges(int transactionID, NSArray<ERXDatabase.CacheChange> cacheChanges) throws Throwable;
 
 	public static class RefByteArrayOutputStream extends ByteArrayOutputStream {
 		public byte[] buffer() {

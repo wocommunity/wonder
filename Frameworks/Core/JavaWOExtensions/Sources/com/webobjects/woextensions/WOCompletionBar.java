@@ -14,6 +14,13 @@ import com.webobjects.appserver.WOResponse;
 // This component should be made stateless
 
 public class WOCompletionBar extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     protected int _cachedPercentValue;
     public int value;
     public int showedValue;
@@ -30,6 +37,7 @@ public class WOCompletionBar extends WOComponent {
         super(aContext);
     }
     
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }
@@ -47,6 +55,7 @@ public class WOCompletionBar extends WOComponent {
         return result;
     }
     
+    @Override
     public void appendToResponse(WOResponse aResponse, WOContext aContext)  {
         Object v = valueForBinding("value");
         valueMin = _intValue("valueMin",0);

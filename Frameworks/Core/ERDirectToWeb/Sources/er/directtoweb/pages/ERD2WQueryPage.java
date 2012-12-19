@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.pages;
 
+import java.util.Enumeration;
+
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
@@ -36,8 +38,6 @@ import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
 
-import java.util.Enumeration;
-
 /**
  * Superclass for all query pages.<br />
  * In addition to the rest of the goodies of ERD2WPage, it lets you save and
@@ -59,6 +59,12 @@ import java.util.Enumeration;
  * @d2wKey canQueryPropertyForNullValues
  */
 public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     protected WODisplayGroup displayGroup;
 
@@ -93,6 +99,13 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
         }
     }
     
+  /**
+   * <span class="ja">
+   * ディスプレイ・グループの全クエリ設定を取り除きます。
+   * 
+   * @return カレント・ページ
+   * </span>
+   */
     public WOComponent clearAction() {
         displayGroup().queryBindings().removeAllObjects();
         displayGroup().queryMin().removeAllObjects();
@@ -389,8 +402,17 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
     }
 
     /**
+     * <span class="en">
      * Gets the query validation delegate.
+     * 
      * @return the query validation delegate
+     * </span>
+     * 
+     * <span class="ja">
+     * クエリ検証デリゲートを戻します。
+     * 
+     * @return クエリ検証デリゲート
+     * </span>
      */
     public ERDQueryValidationDelegate queryValidationDelegate() {
         if (null == queryValidationDelegate) {
@@ -400,8 +422,17 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
     }
 
     /**
+     * <span class="en">
      * Sets the query validation delegate.
+     * 
      * @param delegate to use as the query validation delegate
+     * </span>
+     * 
+     * <span class="ja">
+     * クエリ検証デリゲートをセットします。
+     * 
+     * @param delegate -　クエリ検証デリゲート (@see ERDQueryValidationDelegate)
+     * </span>
      */
     public void setQueryValidationDelegate(ERDQueryValidationDelegate delegate) {
         queryValidationDelegate = delegate;

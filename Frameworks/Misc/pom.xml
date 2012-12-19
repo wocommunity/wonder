@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>wonder.frameworks</groupId>
 		<artifactId>frameworks</artifactId>
-		<version>5.6-SNAPSHOT</version>
+		<version>5.7-SNAPSHOT</version>
 	</parent>
 	<artifactId>misc</artifactId>
 	<packaging>pom</packaging>
@@ -16,6 +16,7 @@
 		<module>ERChronic</module>
 		<module>ERDirectToRest</module>
 		<module>ERDivaliteLook</module>
+		<module>ERFirebug</module>
 		<module>EROpenID</module>
 		<module>ERPDFGeneration</module>
 		<module>ERProfiling</module>

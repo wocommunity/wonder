@@ -16,7 +16,7 @@ import er.extensions.appserver.ERXWOContext;
  * Class for DirectToWeb Component ERDAttributeRepetition.
  *
  * @author ak on Mon Sep 01 2003
- * @project ERDirectToWeb
+ * 
  * @d2wKey sectionKey
  * @d2wKey displayNameForPageConfiguration
  * @d2wKey pageConfiguration
@@ -25,6 +25,12 @@ import er.extensions.appserver.ERXWOContext;
  * @d2wKey sectionsContents
  */
 public class ERDAttributeRepetition extends ERDCustomComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** logging support */
     private static final Logger log = Logger.getLogger(ERDAttributeRepetition.class);
@@ -38,6 +44,7 @@ public class ERDAttributeRepetition extends ERDCustomComponent {
     }
     
     /** component does not synchronize it's variables */
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     public String sectionTitle() {
@@ -112,11 +119,15 @@ public class ERDAttributeRepetition extends ERDCustomComponent {
         //}
         return _sectionsContents;
     }
+    
+    @Override
     public void appendToResponse(WOResponse r, WOContext c) {
         //HACK ak we should clean this on every step of the phase or not cache at all...
         _sectionsContents=null;
         super.appendToResponse(r,c);
     }
+    
+    @Override
     public void awake() {
         //HACK ak we should clean this on every step of the phase or not cache at all...
         _sectionsContents=null;

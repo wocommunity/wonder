@@ -12,11 +12,14 @@ package com.webobjects.monitor.application;
  IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION, MODIFICATION AND/OR DISTRIBUTION OF THE APPLE SOFTWARE, HOWEVER CAUSED AND WHETHER UNDER THEORY OF CONTRACT, TORT (INCLUDING NEGLIGENCE), STRICT LIABILITY OR OTHERWISE, EVEN IF APPLE HAS BEEN  ADVISED OF THE POSSIBILITY OF 
  SUCH DAMAGE.
  */
+import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.monitor._private.MObject;
 import com.webobjects.monitor._private.String_Extensions;
+
+import er.extensions.appserver.ERXRedirect;
 
 public class ConfigurePage extends MonitorComponent {
     public String backupNote;
@@ -67,6 +70,9 @@ public class ConfigurePage extends MonitorComponent {
 
     public String customSchedulerName;
 
+    public String adaptorInfoUsername;
+    public String adaptorInfoPassword;
+    
     public String loadSchedulerSelection() {
         if ((theApplication != null) && (siteConfig().scheduler() != null)) {
             int indexOfScheduler = MObject.loadSchedulerArrayValues.indexOfObject(siteConfig().scheduler());
@@ -129,4 +135,13 @@ public class ConfigurePage extends MonitorComponent {
 		return (ConfigurePage) context.page().pageWithName(ConfigurePage.class.getName());
 	}
 
+    public WOActionResults adaptorInfoLoginClicked() {
+    	String url = siteConfig().woAdaptor() + "/WOAdaptorInfo?" + adaptorInfoUsername + "+" + adaptorInfoPassword;
+    	if (url.startsWith("http://"))
+    		url = url.replaceFirst("http://", "https://");
+    	ERXRedirect redirect = pageWithName(ERXRedirect.class);
+    	redirect.setUrl(url);
+    	return redirect;
+    }
+    
 }

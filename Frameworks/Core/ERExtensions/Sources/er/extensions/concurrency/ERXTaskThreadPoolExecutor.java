@@ -15,7 +15,6 @@ import org.apache.log4j.Logger;
 import er.extensions.eof.ERXEC;
 
 /**
-<<<<<<< HEAD
  * This is a custom {@link ThreadPoolExecutor} subclass whose purpose in life is
  * <ul>
  * <li>to ensure that we initialize {@link ERXTaskThread} status before task execution and reset status after execution,
@@ -97,9 +96,9 @@ public class ERXTaskThreadPoolExecutor extends ThreadPoolExecutor {
 			}
 		}
 
-		if (r instanceof ERXExecutionStateTransition) {
-			((ERXExecutionStateTransition)r).beforeExecute();
-		} //~ if (r instanceof ERXExecutionStateTransition)
+		if (r instanceof IERXExecutionStateTransition) {
+			((IERXExecutionStateTransition)r).beforeExecute();
+		} //~ if (r instanceof IERXExecutionStateTransition)
 
 		super.beforeExecute(t, r);
 	}
@@ -113,17 +112,30 @@ public class ERXTaskThreadPoolExecutor extends ThreadPoolExecutor {
 			ERXTaskThread thread = (ERXTaskThread)Thread.currentThread();
 			thread.setTask(null);
 			thread.stopStopWatch();
-			String elapsedTime = thread.elapsedTime();
-			if (log.isDebugEnabled())
+			if (log.isDebugEnabled()) {
+				String elapsedTime = thread.elapsedTime();
 				log.debug("Finished executing " + (r == null ? "null" : r) + " after " + elapsedTime);
+			}
 		}
 
-		if (r instanceof ERXExecutionStateTransition) {
-			((ERXExecutionStateTransition)r).afterExecute();
-		} //~ if (r instanceof ERXExecutionStateTransition)
+		if (r instanceof IERXExecutionStateTransition) {
+			((IERXExecutionStateTransition)r).afterExecute();
+		} //~ if (r instanceof IERXExecutionStateTransition)
 		
-		// Safety net to unlock any locked EC's at the end of this task's operation in this thread
-		ERXEC.unlockAllContextsForCurrentThread();
+		if (shouldUnlockContexts(r)) {
+			// Safety net to unlock any locked EC's at the end of this task's operation in this thread
+			ERXEC.unlockAllContextsForCurrentThread();
+		}
 	}
-
+	
+	private boolean shouldUnlockContexts(Runnable r) {
+		if (r instanceof ERXFutureTask) {
+			Object task = ((ERXFutureTask)r).task();
+			if (task instanceof ERXTask || task instanceof ERXTimerTask) {
+				// these two classes already call ERXApplication._endRequest() at the end
+				return false;
+			}
+		}
+		return true;
+	}
 }

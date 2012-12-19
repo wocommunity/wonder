@@ -25,8 +25,7 @@ import er.extensions.eof.ERXConstant;
 import er.extensions.logging.ERXLogger;
 
 /** 
- * <code>Configuration Manager</code> handles rapid turnaround for 
- * system configuration as well as swizzling of the EOModel connection 
+ * Handles rapid turnaround for system configuration as well as swizzling of the EOModel connection
  * dictionaries. 
  * <p>
  * <strong>Placing configuration parameters</strong>
@@ -357,7 +356,7 @@ public class ERXConfigurationManager {
      * Path to the web server's document root.
      * This implementation tries first to resolve the
      * <code>application.name()+ "DocumentRoot"</code> property value,
-     * then the <code>ERXDocumentRoot</> property before
+     * then the <code>ERXDocumentRoot</code> property before
      * getting the <code>DocumentRoot</code> key in your WebServerConfig.plist in the
      * JavaWebObjects bundle.
      * @return to the web server's document root.

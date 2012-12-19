@@ -109,7 +109,7 @@ public class ERXStats {
 	 */
 	public static void initStatistics() {
 		ERXThreadStorage.takeValueForKey(Boolean.TRUE, ERXStats.STATS_INITIALIZED_KEY);
-		ERXThreadStorage.takeValueForKey(new Long(System.currentTimeMillis()), ERXStats.STATS_START_TIME_KEY);
+		ERXThreadStorage.takeValueForKey(Long.valueOf(System.currentTimeMillis()), ERXStats.STATS_START_TIME_KEY);
 		ERXThreadStorage.removeValueForKey(ERXStats.STATS_LAST_TIME_KEY);
 		ERXThreadStorage.removeValueForKey(ERXStats.STATS_KEY);
 	}
@@ -354,7 +354,7 @@ public class ERXStats {
 								(lastTime != null ? ", last log " + (currentTime - lastTime.longValue()) + " ms": "" ) + 
 								", total cnt/sum: " + statistics.allValues().valueForKeyPath("@sum.count") + "/" + statistics.allValues().valueForKeyPath("@sum.sum") +
 								" (cnt/sum : min/max/avg|trace cnt -> key) = " + result);
-						ERXThreadStorage.takeValueForKey(new Long(currentTime), ERXStats.STATS_LAST_TIME_KEY);
+						ERXThreadStorage.takeValueForKey(Long.valueOf(currentTime), ERXStats.STATS_LAST_TIME_KEY);
 					}
 				}
 			}

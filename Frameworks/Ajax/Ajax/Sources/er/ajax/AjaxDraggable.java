@@ -72,6 +72,13 @@ import com.webobjects.foundation.NSMutableDictionary;
  *          Set binding to "'someID'" to scroll the element with ID "someID"
  */
 public class AjaxDraggable extends AjaxComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
   private static final String COMPONENT_DRAGGABLES_MAP_KEY = "AjaxComponentDraggablesMap";
   private String _id;
 
@@ -79,23 +86,22 @@ public class AjaxDraggable extends AjaxComponent {
     super(context);
   }
   
+  @Override
   public void awake() {
       super.awake();
   }
 
+  @Override
   public void reset() {
       _id = null;
       super.reset();
   }
 
+  @Override
   public boolean isStateless() {
     return true;
   }
 
-  public boolean synchronizesVariablesWithBindings() {
-    return false;
-  }
-  
   public static Object draggableObjectForPage(WOComponent page, String draggableID) {
     Object droppedObject = null;
     Map componentDraggablesMap = (Map)page.context().session().objectForKey(AjaxDraggable.COMPONENT_DRAGGABLES_MAP_KEY);
@@ -108,6 +114,7 @@ public class AjaxDraggable extends AjaxComponent {
     return droppedObject;
   }
   
+  @Override
   public void appendToResponse(WOResponse res, WOContext ctx) {
     if (canGetValueForBinding("draggableObject")) {
       Object draggableObject = valueForBinding("draggableObject");
@@ -192,5 +199,4 @@ public class AjaxDraggable extends AjaxComponent {
   public WOActionResults handleRequest(WORequest request, WOContext context) {
     return null;
   }
-
 }

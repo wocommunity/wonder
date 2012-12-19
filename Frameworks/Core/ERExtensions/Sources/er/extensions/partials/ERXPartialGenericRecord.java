@@ -14,17 +14,25 @@ import er.extensions.eof.ERXGenericRecord;
 
 /**
  * <p>
- * For overview information on partials, read the package.html in er.extensions.partials.
+ * For overview information on partials, read the {@code package.html} in
+ * {@code er.extensions.partials}.
  * </p>
  * 
  * <p>
- * ERXPartialGenericRecord is the base class of any entity that allows itself to be extended
- * with partials.
+ * {@code ERXPartialGenericRecord} is the base class of any entity that allows
+ * itself to be extended with partials.
  * </p>
- *  
+ * 
  * @author mschrag
  */
 public class ERXPartialGenericRecord extends ERXGenericRecord {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private NSDictionary<Class, ERXPartial> _partials;
 
 	@SuppressWarnings("unchecked")
@@ -195,7 +203,9 @@ public class ERXPartialGenericRecord extends ERXGenericRecord {
 	public Object validateTakeValueForKeyPath(Object value, String keyPath) throws ValidationException {
 		Object result = super.validateTakeValueForKeyPath(value, keyPath);
 		for (ERXPartial partial : _partials()) {
-			result = partial.validateTakeValueForKeyPath(value, keyPath);
+			if (partial.isPartialKeypath(keyPath)) {
+				result = partial.validateTakeValueForKeyPath(value, keyPath);
+			}
 		}
 		return result;
 	}

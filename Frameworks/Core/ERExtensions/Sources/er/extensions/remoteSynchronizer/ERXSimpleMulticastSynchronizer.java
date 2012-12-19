@@ -11,7 +11,7 @@ import java.net.MulticastSocket;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Arrays;
-import java.util.Enumeration;
+import java.util.Iterator;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.foundation.NSArray;
@@ -61,12 +61,12 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 	private boolean _listening;
 	private int _maxSendPacketSize;
 	private int _maxReceivePacketSize;
-	private NSArray _whitelist;
-	private NSMutableDictionary _incomingCacheChanges;
+	private NSArray<String> _whitelist;
+	private NSMutableDictionary<String, RemoteChange> _incomingCacheChanges;
 
 	public ERXSimpleMulticastSynchronizer(IChangeListener listener) throws IOException {
 		super(listener);
-		_incomingCacheChanges = new NSMutableDictionary();
+		_incomingCacheChanges = new NSMutableDictionary<String, RemoteChange>();
 		String localBindAddressStr = ERXProperties.stringForKey("er.extensions.multicastSynchronizer.localBindAddress");
 		if (localBindAddressStr == null) {
 			_localBindAddress = WOApplication.application().hostAddress();
@@ -176,7 +176,7 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 							short transactionSize = dis.readShort();
 							String identifierHex = ERXStringUtilities.byteArrayToHexString(identifier);
 							String transactionIdentifierStr = identifierHex + "-" + transactionID;
-							RemoteChange remoteChange = (RemoteChange) _incomingCacheChanges.objectForKey(transactionIdentifierStr);
+							RemoteChange remoteChange = _incomingCacheChanges.objectForKey(transactionIdentifierStr);
 							if (remoteChange == null) {
 								remoteChange = new RemoteChange(identifierHex, transactionID, transactionSize);
 								_incomingCacheChanges.setObjectForKey(remoteChange, transactionIdentifierStr);
@@ -207,11 +207,11 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 		listenThread.start();
 	}
 
-	protected void _writeCacheChanges(int transactionID, NSArray cacheChanges) throws IOException {
+	protected void _writeCacheChanges(int transactionID, NSArray<ERXDatabase.CacheChange> cacheChanges) throws IOException {
 		short transactionSize = (short) cacheChanges.count();
 		short transactionNum = 0;
-		for (Enumeration cacheChangesEnum = cacheChanges.objectEnumerator(); cacheChangesEnum.hasMoreElements(); transactionNum++) {
-			ERXDatabase.CacheChange cacheChange = (ERXDatabase.CacheChange) cacheChangesEnum.nextElement();
+		for (Iterator<ERXDatabase.CacheChange> iter = cacheChanges.iterator(); iter.hasNext(); transactionNum++) {
+			ERXDatabase.CacheChange cacheChange = iter.next();
 			writeCacheChange(cacheChange, transactionID, transactionNum, transactionSize);
 		}
 	}
@@ -229,7 +229,7 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 		dos.flush();
 		_multicastSocket.send(baos.createDatagramPacket());
 		if (ERXRemoteSynchronizer.log.isDebugEnabled()) {
-			ERXRemoteSynchronizer.log.info("Multicast instance " + ERXStringUtilities.byteArrayToHexString(_identifier) + ": Writing " + cacheChange);
+			ERXRemoteSynchronizer.log.debug("Multicast instance " + ERXStringUtilities.byteArrayToHexString(_identifier) + ": Writing " + cacheChange);
 		}
 	}
 

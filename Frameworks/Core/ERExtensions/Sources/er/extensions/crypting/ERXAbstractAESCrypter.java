@@ -167,7 +167,7 @@ public abstract class ERXAbstractAESCrypter implements ERXCrypterInterface {
 		byte[] decodedBytes = null;
 
 		try {
-			decodedBytes = ERXCrypto.base64urlDecode(cryptedText);
+			decodedBytes = ERXCrypto.base64Decode(cryptedText);
 		}
 		catch (IOException e1) {
 			e1.printStackTrace();

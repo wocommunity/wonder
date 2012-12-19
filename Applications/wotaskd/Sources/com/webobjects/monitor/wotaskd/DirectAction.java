@@ -53,7 +53,7 @@ public class DirectAction extends WODirectAction  {
     static private Object[] appQueryKeys;
     static private Object[] instanceQueryKeys;
     static private NSDictionary successElement;
-    static private Object[] errorKeys;
+    static public Object[] errorKeys;
     static private String _accessDenied;
     static private String _invalidPassword;
     static private String _invalidXML;
@@ -915,7 +915,7 @@ public class DirectAction extends WODirectAction  {
         aResponse.appendContentString(xml);
         aResponse.setHeader("text/xml", "content-type");
         aResponse.setHeader(aFormat.format(new NSTimestamp()), "Last-Modified");
-        if (NSLog.debugLoggingAllowedForLevelAndGroups(NSLog.DebugLevelInformational, NSLog.DebugGroupDeployment))
+        if (NSLog.debugLoggingAllowedForLevelAndGroups(NSLog.DebugLevelDetailed, NSLog.DebugGroupDeployment))
             NSLog.debug.appendln("woConfigAction returned: " + xml);
 
         return aResponse;

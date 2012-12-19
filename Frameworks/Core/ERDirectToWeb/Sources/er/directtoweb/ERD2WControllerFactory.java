@@ -45,8 +45,9 @@ import er.extensions.foundation.ERXPatcher;
 will spare you a lot of work.
 
  * The ERD2WControllerFactory is not heavily tested and the API might change. Especially that the controller subclasses are inner classes of this factory is subject to change. Feedback would be very welcome. 
+ *  
  * @author ak on Tue Apr 08 2003
- * @project AHApp
+ * 
  * @d2wKey pageConfiguration
  */
 public class ERD2WControllerFactory extends ERD2WFactory {
@@ -113,6 +114,13 @@ public class ERD2WControllerFactory extends ERD2WFactory {
     }
     
     public static class ERD2WController extends ERDBranchDelegate {
+    	/**
+    	 * Do I need to update serialVersionUID?
+    	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+    	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+    	 */
+    	private static final long serialVersionUID = 1L;
+
         protected WOSession session;
         protected WOComponent finalPage;
         protected D2WContext d2wContext;
@@ -174,6 +182,13 @@ public class ERD2WControllerFactory extends ERD2WFactory {
     }
     
     public static class ERCCore extends ERD2WController {        
+    	/**
+    	 * Do I need to update serialVersionUID?
+    	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+    	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+    	 */
+    	private static final long serialVersionUID = 1L;
+
         public ERCCore() {
         }
 
@@ -202,6 +217,7 @@ public class ERD2WControllerFactory extends ERD2WFactory {
             return wocomponent;
         }
 
+        @Override
         public WOComponent firstPage() {
             return runWithPageConfiguration((String)d2wContext().valueForKey("pageConfiguration"));
         }
@@ -221,6 +237,13 @@ public class ERD2WControllerFactory extends ERD2WFactory {
     }
 
     public static class ERCSingleObject extends ERCCore {
+    	/**
+    	 * Do I need to update serialVersionUID?
+    	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+    	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+    	 */
+    	private static final long serialVersionUID = 1L;
+
         protected Object pk;
         protected EOEnterpriseObject object;
         protected EOEditingContext editingContext;
@@ -229,6 +252,7 @@ public class ERD2WControllerFactory extends ERD2WFactory {
             super();
         }
         
+        @Override
         public WOComponent runWithPageConfiguration(String value) {
             WOComponent start = super.runWithPageConfiguration(value);
             start.takeValueForKey(object(), "object");
@@ -267,6 +291,13 @@ public class ERD2WControllerFactory extends ERD2WFactory {
     }
 
     public static class ERCInspect extends ERCSingleObject {
+    	/**
+    	 * Do I need to update serialVersionUID?
+    	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+    	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+    	 */
+    	private static final long serialVersionUID = 1L;
+
         public ERCInspect() {
             super();
         }
@@ -282,6 +313,13 @@ public class ERD2WControllerFactory extends ERD2WFactory {
     }
     
     public static class ERCEdit extends ERCSingleObject {
+    	/**
+    	 * Do I need to update serialVersionUID?
+    	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+    	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+    	 */
+    	private static final long serialVersionUID = 1L;
+
         public ERCEdit() {
             super();
         }
@@ -304,12 +342,20 @@ public class ERD2WControllerFactory extends ERD2WFactory {
     }
     
     public static class ERCCreate extends ERCEdit {
+    	/**
+    	 * Do I need to update serialVersionUID?
+    	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+    	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+    	 */
+    	private static final long serialVersionUID = 1L;
+
         public EOEditingContext ec;
         
         public ERCCreate() {
             super();
         }
         
+        @Override
         public WOComponent runWithPageConfiguration(String value) {
             WOComponent start = super.runWithPageConfiguration(value);
             EOEnterpriseObject eo;
@@ -323,6 +369,13 @@ public class ERD2WControllerFactory extends ERD2WFactory {
     }
     
     public static class ERCQuery extends ERCCore { // implements firstPage()
+    	/**
+    	 * Do I need to update serialVersionUID?
+    	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+    	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+    	 */
+    	private static final long serialVersionUID = 1L;
+
         protected EODataSource dataSource;
 
         public ERCQuery() {

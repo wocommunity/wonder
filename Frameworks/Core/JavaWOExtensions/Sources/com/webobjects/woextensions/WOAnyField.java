@@ -19,6 +19,13 @@ import com.webobjects.foundation.NSNumberFormatter;
 import com.webobjects.foundation.NSTimestampFormatter;
 
 public class WOAnyField extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     protected static final String DEFAULT_DATE_FORMAT = "YYYY/MM/DD";
     protected static final String DEFAULT_NUMBER_FORMAT = "0";
 
@@ -53,10 +60,7 @@ public class WOAnyField extends WOComponent {
         selectedKeyItem = aSelectedKeyItem;
     }
 
-    public boolean synchronizesVariablesWithBindings() {
-        return false;
-    }
-
+    @Override
     public boolean isStateless() {
         return true;
     }
@@ -220,11 +224,13 @@ public class WOAnyField extends WOComponent {
         _displayGroup = null;
     }
 
+    @Override
     public void finalize() throws Throwable {
         super.finalize();
         invalidateCaches();
     }
 
+    @Override
     public void reset() {
         invalidateCaches();
     }

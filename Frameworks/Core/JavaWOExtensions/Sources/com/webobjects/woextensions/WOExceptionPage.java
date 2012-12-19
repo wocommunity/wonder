@@ -14,17 +14,25 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 
 public class WOExceptionPage extends WOComponent {
-    public Throwable exception;
-    protected NSArray _reasonLines;
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
+    public transient Throwable exception;
+    protected NSArray<String> _reasonLines;
     public String currentReasonLine;
 
-    public WOExceptionParser error;
-    public WOParsedErrorLine errorline;
+    public transient WOExceptionParser error;
+    public transient WOParsedErrorLine errorline;
 
     public WOExceptionPage(WOContext aContext)  {
         super(aContext);
     }
 
+    @Override
     public boolean isEventLoggingEnabled() {
         return false;
     }
@@ -34,6 +42,7 @@ public class WOExceptionPage extends WOComponent {
         exception = newException;
     }
 
+    @Override
     public WOResponse generateResponse() {
         WOResponse response = super.generateResponse();
         // we don't need the exception to stick around if we leave the page
@@ -46,13 +55,13 @@ public class WOExceptionPage extends WOComponent {
         return WOApplication.application().isDebuggingEnabled();
     }
 
-    public NSArray reasonLines() {
+    public NSArray<String> reasonLines() {
         if (null==_reasonLines) {
             String aMessage = exception.getMessage();
             if (aMessage!=null) {
                 _reasonLines = NSArray.componentsSeparatedByString(exception.getMessage(), "\n");
             } else {
-                _reasonLines = new NSArray();
+                _reasonLines = new NSArray<String>();
             }
         }
         return _reasonLines;
@@ -64,12 +73,12 @@ public class WOExceptionPage extends WOComponent {
     }*/
     
     public String errorMessage() {
-        // Construct the error message that should be display in ProjectBuilder
-        StringBuffer buffer = new StringBuffer(128);
+        // Construct the error message that should be displayed in ProjectBuilder
+        StringBuilder buffer = new StringBuilder(128);
         buffer.append("Error : ");
         buffer.append(exception.getClass().getName());
         buffer.append(" - Reason :");
         buffer.append(exception.getMessage());
-        return new String(buffer);
+        return buffer.toString();
     }
 }

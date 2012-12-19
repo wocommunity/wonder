@@ -22,6 +22,13 @@ import er.extensions.components.ERXComponentUtilities;
  * @binding snap if true, and min/max is set, this will set "values" to be the list of integer values
  */
 public class AjaxSlider extends AjaxComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private static final Logger log = Logger.getLogger(AjaxSlider.class);
 
     private String _trackerId;
@@ -34,20 +41,15 @@ public class AjaxSlider extends AjaxComponent {
     /**
      * Overridden because the component is stateless
      */
+    @Override
     public boolean isStateless() {
         return true;
     }
 
     /**
-     * Overridden because the component does not synch with the bindings.
-     */
-    public boolean synchronizesVariablesWithBindings() {
-        return false;
-    }
-
-    /**
      * Overridden to add the initialization javascript for the auto completer.
      */
+    @Override
     public void appendToResponse(WOResponse res, WOContext ctx) {
         super.appendToResponse(res, ctx);
         _trackerId = safeElementID() + "_tracker";
@@ -84,12 +86,12 @@ public class AjaxSlider extends AjaxComponent {
         } else {
         	new AjaxOption("onSlide", AjaxOption.SCRIPT).addToDictionary(this, options);
          }
-        Number min = (Number)valueForBinding("minimum", new Integer(0));
-        Number max = (Number)valueForBinding("maximum", new Integer(100));
+        Number min = (Number)valueForBinding("minimum", Integer.valueOf(0));
+        Number max = (Number)valueForBinding("maximum", Integer.valueOf(100));
         options.setObjectForKey("$R(" + min + "," + max + ")", "range");
 
         if (min != null && max != null && ERXComponentUtilities.booleanValueForBinding(this, "snap")) {
-          StringBuffer valuesBuffer = new StringBuffer();
+          StringBuilder valuesBuffer = new StringBuilder();
           valuesBuffer.append("[");
           for (int i = min.intValue(); i <= max.intValue(); i ++ ) {
             valuesBuffer.append(i);
@@ -124,6 +126,7 @@ public class AjaxSlider extends AjaxComponent {
     	addScriptResourceInHead(res, "slider.js");
     }
 
+    @Override
     public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
     	try {
 	    		String format = (String) valueForBinding("numberformat", "0");
@@ -146,5 +149,4 @@ public class AjaxSlider extends AjaxComponent {
     	}
     	return result;
     }
-
 }

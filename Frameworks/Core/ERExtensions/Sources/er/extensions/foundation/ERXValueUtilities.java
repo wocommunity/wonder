@@ -1,5 +1,7 @@
 package er.extensions.foundation;
+
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.foundation.NSArray;
@@ -21,10 +23,9 @@ import er.extensions.components.ERXComponentUtilities;
  * (or one containing only whitespace) is given, then
  * the string is assumed to be null. This is because
  * D2W is not able to give back null values anymore.
+ * 
  * @author ak on Mon Oct 28 2002
- * @project ERExtensions
  */
-
 public class ERXValueUtilities {
 	/**
 	 * Returns whether or not the given object is null or NSKVC.Null.
@@ -41,8 +42,9 @@ public class ERXValueUtilities {
      * @param component the component to evaluate the binding on
      * @param def the default value if the binding value is null
      * @return the boolean value of the binding
-     * @deprecated use ERXComponentUtilities.booleanValueForBinding(component, binding, def)
+     * @deprecated use {@link ERXComponentUtilities#booleanValueForBinding(WOComponent, String, boolean)}
      */
+    @Deprecated
     public static boolean booleanValueForBindingOnComponentWithDefault(String binding, WOComponent component, boolean def) {
         return ERXComponentUtilities.booleanValueForBinding(component, binding, def);
     }
@@ -752,4 +754,86 @@ public class ERXValueUtilities {
 		}
 		return result;
 	}
+
+	/**
+	 * <span class="ja">
+	 * 	複数の文字列を文字列配列として返す
+	 * 
+	 * 	@param anyStrings - 複数の文字列
+	 * 
+	 * 	@return String[] 指定された文字列が無いときは null
+	 * 
+	 * 	@author A10 nettani
+	 * </span>
+	 */    
+	public static String[] stringsToStringArray(String ... anyStrings) {
+		int aryLen = anyStrings.length;
+		if(aryLen <= 0) return null;
+		ArrayList<String> strlist = new ArrayList<String>();
+		String wkStr = null;
+		for(int loop = 0; loop < aryLen; loop++){
+			wkStr = anyStrings[loop];
+			//System.out.println("***++++++******** anyStrings[" + loop + "] = " + wkStr);
+			if((wkStr != null) && (wkStr.length() > 0))
+				strlist.add(wkStr);
+		}
+		if(strlist.isEmpty()){
+			return null;
+		} 
+		//return (String[]) strlist.toArray();		// Stringにキャスト出来ない時があるので
+		aryLen = strlist.size();
+		String[] wkStrs = new String[aryLen];
+		for(int loop = 0; loop < aryLen; loop++){
+			wkStrs[loop] = strlist.get(loop);
+		}
+		return wkStrs;
+	}
+
+	/**
+	 * <span class="ja">
+	 * 	複数のオブジェクトをオブジェクト配列として返す
+	 * 
+	 * 	@param anyObjects - 複数のオブジェクト
+	 * 
+	 * 	@return Object[] 指定された文字列が無いときはnull
+	 * 
+	 * 	@author A10 nettani
+	 * </span>
+	 */    
+	public static Object[] objectsToObjectArray(Object ... anyObjects) {
+		int aryLen = anyObjects.length;
+		if(aryLen <= 0) return null;
+		ArrayList<Object> objlist = new ArrayList<Object>();
+		Object wkObj = null;
+		for(int loop = 0; loop < aryLen; loop++){
+			wkObj = anyObjects[loop];
+			if(wkObj != null)
+				objlist.add(wkObj);
+		}
+		if(objlist.isEmpty()){
+			return null;
+		}
+		return objlist.toArray();
+	}
+
+	/**
+	 * <span class="ja">
+	 * 	文字列配列を「,」で連結して返す。
+	 * 
+	 * 	@param sa - 文字列配列
+	 * 
+	 * 	@return 連結した文字配列
+	 * </span>
+	 */
+	public static String stringArrayToString(String[] sa) {
+		if((sa == null) || (sa.length <= 0)) return null;
+		StringBuffer sbuff = new StringBuffer();
+		int len = sa.length;
+		for(int loop = 0; loop < len; loop++){
+			sbuff.append(sa[loop]);
+			if((loop +1) < len) sbuff.append(",");
+		}
+		return (sbuff.length() > 0)? sbuff.toString(): null;
+	}
+
 }

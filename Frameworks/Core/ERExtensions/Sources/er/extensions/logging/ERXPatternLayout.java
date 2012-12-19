@@ -30,14 +30,14 @@ import er.extensions.foundation.ERXUtilities;
 
 /**
  * The ERXPatternLayout adds some additional (and needed) layout options. The
- * first is by specifing an '@' character a full backtrace will be logged as
- * part of the log event. The second is by specifing an '$' char the current
+ * first is by specifying an '@' character a full backtrace will be logged as
+ * part of the log event. The second is by specifying an '$' char the current
  * application name of the WOApplication will be logged as part of the log
- * event. Finally by specifing an '#' char the current port number on which the
+ * event. Finally by specifying an '#' char the current port number on which the
  * primary adaptor listens to will be logged as part of the log event.
  * 
  * <pre>
- * WebObjects Applicaion Info Patterns
+ * WebObjects Application Info Patterns
  * Example: %W{n[i:p s]} -- MyApp[9300:2001 28] 
  * 
  * n: application name
@@ -349,7 +349,7 @@ class ERXPatternParser extends PatternParser {
 
 	/**
 	 * The <code>AppInfoPatternConverter</code> is useful for logging various
-	 * info about the WebObjects applicaiton instance. See
+	 * info about the WebObjects application instance. See
 	 * {@link ERXPatternLayout} for example/supported partterns.
 	 */
 	private class AppInfoPatternConverter extends PatternConverter {
@@ -462,7 +462,7 @@ class ERXPatternParser extends PatternParser {
 	 * The <code>JavaVMInfoPatternConverter</code> is useful for logging various
 	 * info about the Java runtime and Virtual Machine that is running the
 	 * application instance. See {@link ERXPatternLayout} for example/supported
-	 * partterns.
+	 * patterns.
 	 */
 	private class JavaVMInfoPatternConverter extends PatternConverter {
 
@@ -490,7 +490,7 @@ class ERXPatternParser extends PatternParser {
 
 		/**
 		 * Holds the default labels for the values. Note that the template
-		 * parser will put "-" for undefined values by defauilt.
+		 * parser will put "-" for undefined values by default.
 		 */
 		private final NSDictionary _defaultLabels = null;
 

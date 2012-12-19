@@ -1,0 +1,112 @@
+<html>
+	<head>
+		<title>ERTaggable</title>
+		<META http-equiv="Content-Type" content="text/html; charset=UTF8">
+	</head>
+	<body>
+		<p>ERTaggable は エンティティにタグ対応を追加する Rails より移植され、EOF として扱いやすいフレームワークに仕上がりました。</p>
+
+		<h2>作成開始</h2>
+		<p>例えば、モデル "MyModel" が "Person" エンティティ（タグ対応予定）があることで説明します。</p>
+		<ol>
+			<li>ヘルパー・スーパークラスを使用して、マイグレションを作成します：
+				<pre>
+					public class MyModel0 extends ERTaggableEntity0 {
+					 	public MyModel0() {
+					 		super(Person.ENTITY_NAME);
+					 	}
+					}
+				</pre>
+			</li>
+			
+			<li>アプリケーション・コンストラクタでタグ使用を登録します：
+				<pre>
+					ERTaggableEntity.registerTaggable(Person.ENTITY_NAME);
+				</pre>
+			</li>
+	
+			<li>便利メソッドを Person クラスに追加します。（オプション、あると使いやすくなる）
+				<pre>
+					public ERTaggable&lt;Person&gt; taggable() {
+						return ERTaggable.taggable(this);
+					}
+					
+					public static ERTaggableEntity&lt;Person&gt; taggableEntity() {
+						return ERTaggableEntity.taggableEntity(Person.ENTITY_NAME);
+					}
+				</pre>
+			</li>
+
+			<li>タグをコードでアクセスする場合：
+				<pre>
+					Person mike = Person.createPerson(editingContext, "Mike Schrag");
+					ERTaggable&lt;Person&gt; taggableMike = mike.taggable();
+					taggableMike.addTags("mike employee important");
+		
+					NSArray&lt;Person&gt; matchingPeople = Person.taggableEntity().fetchTaggedWith(editingContext, "employee");
+			
+					NSDictionary&lt;EOEntity, NSArray&lt;? extends ERXGenericRecord&gt;&gt; matchingItems = ERTaggableEntity.fetchAllTaggedWith(editingContext, "mike");
+				</pre>
+			</li>
+
+			<li>タグクラウドの場合：
+				<pre>
+					&lt;wo:ERTagCloud entityName="Person" tag="$tag" tagClass="$tagClass" cache="$false"&gt;
+						&lt;wo:WOGenericContainer elementName="span" class="$tagClass"&gt;&lt;wo:str value = "$tag" /&gt;&lt;/wo:WOGenericContainer&gt;
+					&lt;/wo:ERTagCloud&gt;
+				</pre>
+			</li>
+			
+			<li>タグ編集フィールド
+				<pre>
+					&lt;wo:ERTagField taggable="$person.taggable" /&gt;
+				</pre>
+			</li>
+		</ol>
+
+		<h2>さらに</h2>
+		<p>上記の魔法を使用するのではなく、独自でパッチを与えることも可能です：</p>
+		<ul>
+
+			<li>
+				デフォルトでは全エンティティが同じタグ名を共有します。
+				あるエンティティを別カスタム ERTag サブクラスとして登録することで、独自のテーブルに保存させることが可能です。
+				This is generally only an issue if you need to provide tag completion and you want to restrict the set of completion offerings.  Note that
+				hooking to a custom ERTag table also requires that you use the optional constructor on the migration
+				superclass to specify the name of that entity.
+			</li>
+	
+			<li>
+				By default, tags are normalized by trimming and lowercasing them.  You can override the tag
+				normalizer that is used by setting it on your ERTaggableEntity.
+			</li>
+			
+			<li>
+				You MUST register your taggable entities prior to attempting any tagging operations.  The framework 
+				will throw an exception scolding you if you do not.
+			</li>
+	
+			<li>
+				By default, your EOModels are modified on-the-fly to inject tagging support into them.  If you don't
+				like magic, you can instead manually create the join entity between your entity and the ERTag
+				entity. You MUST also create a flattened to-many relationship from your entity to the ERTag table
+				through your join entity. If you name that relationship anything other than "tags" (or you use a
+				custom ERTag entity), you must specify the relationship name when you register the entity.
+			</li>
+		
+			<li>
+				Tags are unique and shared. To ensure this, ERTag commits new tag names in a separate transaction.
+				This can lead to a potentially undesirable (yet mostly harmless) side effect where new tag names
+				may be committed even though you roll back your editing context.  Only tag names have this 
+				behavior, not tag relationships on your entities.
+			</li>
+	
+			<li>
+				If you don't want to use the migration, you need to create a join table that contains 
+				a "your entity id" (named item_[your pk column name] for each pk attribute) and an 
+				ERTagID foreign key (named tag_id).  You can name the columns whatever you want if you also
+				manually create the join entity in your EOModel.
+			</li>
+		</ul>
+	</body>
+</html>

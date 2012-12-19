@@ -18,6 +18,13 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSSelector;
 
 public class WOSortOrderManyKey extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     protected String _currentKey;
     protected String _selectedKey;
     // ** Internal Caching
@@ -31,10 +38,12 @@ public class WOSortOrderManyKey extends WOComponent {
       return _currentKey;
     }
 
+    @Override
     public boolean isStateless() {
         return true;
     }
 
+    @Override
     public void reset()  {
         _currentKey=null;
         _selectedKey=null;

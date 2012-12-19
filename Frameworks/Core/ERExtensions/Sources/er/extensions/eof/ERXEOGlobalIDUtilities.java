@@ -284,7 +284,7 @@ public class ERXEOGlobalIDUtilities {
 	    			}
 	    		}
 	    		if (qualifiers.count() > 0) {
-		    		EOQualifier qualifier = new EOOrQualifier(qualifiers);
+		    		EOQualifier qualifier = qualifiers.count() > 1 ? new EOOrQualifier(qualifiers) : qualifiers.lastObject();
 		    		EOFetchSpecification fetchSpec = new EOFetchSpecification(entityName, qualifier, null);
 		    		fetchSpec.setRefreshesRefetchedObjects(refreshesRefetchedObjects);
 		    		NSArray<EOEnterpriseObject> details = ec.objectsWithFetchSpecification(fetchSpec);

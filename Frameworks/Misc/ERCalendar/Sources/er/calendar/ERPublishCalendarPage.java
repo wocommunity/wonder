@@ -1,8 +1,19 @@
 package er.calendar;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Enumeration;
+import java.util.GregorianCalendar;
+
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSData;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSTimeZone;
+import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSTimestampFormatter;
 
 /**
  * ERPublishCalendarPage is a WebObjects component for dynamically
@@ -30,14 +41,19 @@ import java.util.*;
  * @author 	Johan Carlberg <johan@oops.se>
  * @version 	1.0, 2002-09-30
  */
-
 public class ERPublishCalendarPage extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     protected String calendarName;
     protected String calendarTimeZone;
     protected final int maxLineLength = 75;
     public static String newline = System.getProperty("line.separator");
 
-    /** @TypeInfo er.calendar.ERCalendarEvent */
     protected NSMutableArray events;
     public ERCalendarEvent event;
     protected NSTimestamp eventTimestamp;
@@ -132,7 +148,6 @@ public class ERPublishCalendarPage extends WOComponent {
 	events.removeObjectsInArray (eventsArray);
     }
 
-    /** @TypeInfo er.calendar.ERCalendarEvent */
     public NSMutableArray events() {
 	return events;
     }
@@ -274,7 +289,7 @@ public class ERPublishCalendarPage extends WOComponent {
 	GregorianCalendar calendarDate = new GregorianCalendar();
 
 	calendarDate.setTime (event.startTime());
-	return new Integer (calendarDate.get (Calendar.MONTH) + 1);
+	return Integer.valueOf(calendarDate.get(Calendar.MONTH) + 1);
     }
 
     /**
@@ -286,7 +301,7 @@ public class ERPublishCalendarPage extends WOComponent {
 	String byDay = "";
 
 	if (event.repeatDayOfWeekInMonth() != 0) {
-	    byDay = new Integer (event.repeatDayOfWeekInMonth()).toString();
+	    byDay = Integer.valueOf(event.repeatDayOfWeekInMonth()).toString();
 	}
 	switch (event.repeatDayOfWeek()) {
 	    case Calendar.SUNDAY:

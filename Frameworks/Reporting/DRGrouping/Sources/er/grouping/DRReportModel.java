@@ -3,10 +3,9 @@ package er.grouping;
 import java.io.*;
 import java.util.*;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.xml.sax.*;
-
-import sun.misc.*;
 
 import com.webobjects.appserver.xml.*;
 import com.webobjects.eocontrol.*;
@@ -123,7 +122,7 @@ public class DRReportModel extends Object  {
     static public NSArray possibleValues(NSDictionary smcdict) {
         //NSArray rawpossVals = (NSArray)smcdict.objectForKey("possibleValues");
         Object rawpossVals = smcdict.objectForKey("possibleValues");
-        String non = (String)smcdict.objectForKey("nonNumberOrDate");
+        //String non = (String)smcdict.objectForKey("nonNumberOrDate");
 
         if (rawpossVals == null) {
             return null;
@@ -133,12 +132,7 @@ public class DRReportModel extends Object  {
         
         if (rawpossVals instanceof String) {
             WOXMLDecoder decoder = WOXMLDecoder.decoder();
-            BASE64Decoder base64 = new BASE64Decoder();
-            String xmlString = "";
-            try {
-                xmlString = new String(base64.decodeBuffer((String)rawpossVals));
-            } catch(IOException ex) {
-            }
+            String xmlString = new String(Base64.decodeBase64((String) rawpossVals));
             log.info("xmlString: " + xmlString);
             StringReader stringReader = new StringReader(xmlString);
             InputSource is = new InputSource(stringReader);
@@ -253,8 +247,7 @@ public class DRReportModel extends Object  {
                 if (smc.nonNumberOrDate()) {
                     smcDict.setObjectForKey("true", "nonNumberOrDate");
                     String passValsXMLString = WOXMLCoder.coder().encodeRootObjectForKey(smc.rawPossibleValues(), "XML");
-                    BASE64Encoder base64 = new BASE64Encoder();
-                    String base64XML = base64.encodeBuffer(passValsXMLString.getBytes());
+                    String base64XML = Base64.encodeBase64String(passValsXMLString.getBytes());
                     smcDict.setObjectForKey(base64XML, "possibleValues");
                 }else{
                     smcDict.setObjectForKey(smc.rawPossibleValues(), "possibleValues");
@@ -450,7 +443,7 @@ public class DRReportModel extends Object  {
 
         }
 
-        Number dpthKey = new Integer(_attributeListDepth);
+        Number dpthKey = Integer.valueOf(_attributeListDepth);
         //OWDebug.println(1, "dpthKey:"+dpthKey);
         NSMutableArray lst = (NSMutableArray)_flatAttributeDepthDict.objectForKey(dpthKey);
 
@@ -489,7 +482,7 @@ public class DRReportModel extends Object  {
         int cnt = depthKeys.count();
 
         for (i = 0; i < cnt; i++) {
-            Number ky = new Integer(i);
+            Number ky = Integer.valueOf(i);
             //OWDebug.println(1, "ky:"+ ky);
             NSArray attsForDepth = (NSArray)_flatAttributeDepthDict.objectForKey(ky);
             Enumeration anEnum = attsForDepth.objectEnumerator();

@@ -284,6 +284,12 @@ import er.extensions.foundation.ERXValueUtilities;
  * @author chill
  */
 public class AjaxGrid extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private WODisplayGroup displayGroup; // binding
 	private NSMutableArray selectedObjects; // binding
@@ -347,6 +353,7 @@ public class AjaxGrid extends WOComponent {
 	/**
 	 * @return false, AjaxGrid is manually synchronized
 	 */
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}
@@ -354,6 +361,7 @@ public class AjaxGrid extends WOComponent {
 	/**
 	 * Adds movecolumns.js to the header.
 	 */
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		super.appendToResponse(response, context);
 		AjaxUtils.addScriptResourceInHead(context, response, "AjaxGrid.js");
@@ -819,7 +827,7 @@ public class AjaxGrid extends WOComponent {
 	 * @return ID to be used on AjaxUpdateLink bound to sortOrderUpdated() for currentColumn()
 	 */
 	public String currentColumnID() {
-		StringBuffer b = new StringBuffer(tableID());
+		StringBuilder b = new StringBuilder(tableID());
 		b.append("_SortBy_");
 		b.append(ERXStringUtilities.safeIdentifierName((String)currentColumn().objectForKey(TITLE)));
 		b.append(isCurrentColumnSortedAscending() ? "_Descending" : "_Ascending");

@@ -6,10 +6,9 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb.embed;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WList;
+import com.webobjects.directtoweb.NextPageDelegate;
 import com.webobjects.eocontrol.EOArrayDataSource;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EODataSource;
@@ -17,6 +16,7 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 
+import er.directtoweb.delegates.ERD2WEmbeddedComponentActionDelegate;
 import er.extensions.foundation.ERXArrayUtilities;
 
 // Only difference between this component and D2WList is that this one uses ERD2WSwitchComponent
@@ -32,8 +32,13 @@ import er.extensions.foundation.ERXArrayUtilities;
  */
 
 public class ERXD2WList extends D2WList {
-    Logger log = Logger.getLogger(ERXD2WList.class);
-    
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     protected EOArrayDataSource _dataSource = null;
 
     public ERXD2WList(WOContext context) {
@@ -72,5 +77,17 @@ public class ERXD2WList extends D2WList {
                 _dataSource.setArray(nsarray);
         }
         return _dataSource;
+    }
+
+    public void validationFailedWithException(Throwable e, Object value, String keyPath) {
+        parent().validationFailedWithException(e, value, keyPath);
+    }
+
+    /**
+     * Overridden to support serialization
+     */
+    @Override
+    public NextPageDelegate newPageDelegate() {
+    	return ERD2WEmbeddedComponentActionDelegate.instance;
     }
 }

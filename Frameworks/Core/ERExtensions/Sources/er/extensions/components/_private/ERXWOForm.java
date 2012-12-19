@@ -53,7 +53,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * the form tag.
  * <li> it adds a default submit button at the start of the form, so that your
  * user can simply press return without any javascript gimmicks.
- * <li> the <code>id<code> binding can override the <code>name</code> binding.
+ * <li> the <code>id</code> binding can override the <code>name</code> binding.
  * </ul>
  * This subclass is installed when the frameworks loads.
  * 
@@ -245,10 +245,10 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 			for (Enumeration enumeration = hiddenFields.keyEnumerator(); enumeration.hasMoreElements();) {
 				String s = (String) enumeration.nextElement();
 				Object obj = hiddenFields.objectForKey(s);
-				response._appendContentAsciiString("<div style=\"display:none\"><input type=\"hidden\"");
+				response._appendContentAsciiString("<input type=\"hidden\"");
 				response._appendTagAttributeAndValue("name", s, true);
 				response._appendTagAttributeAndValue("value", obj.toString(), true);
-				response._appendContentAsciiString(" /></div>\n");
+				response._appendContentAsciiString(" />\n");
 			}
 
 		}

@@ -63,6 +63,13 @@ public final class LRUCache<ID_TYPE, ITEM_TYPE> {
          * Creates a linked hash map which expels old elements on declared criterion
          */
         items = new LinkedHashMap<ID_TYPE, CacheEntry<ITEM_TYPE>>(INITIAL_TABLE_SIZE) {
+        	/**
+        	 * Do I need to update serialVersionUID?
+        	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+        	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+        	 */
+        	private static final long serialVersionUID = 1L;
+
             protected boolean removeEldestEntry(Map.Entry<ID_TYPE, CacheEntry<ITEM_TYPE>> eldest) {
             	if ((maximumSize > 0 && (size + ceilingSize > maximumSize)) || (maximumItems > 0 && size() > maximumItems)) {
                     size -= eldest.getValue().size;

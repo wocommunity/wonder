@@ -40,6 +40,13 @@ import er.extensions.components._private.ERXWOForm;
  * @author mschrag
  */
 public class AjaxDroppable extends AjaxComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
   private String _draggableIDKeyName;
   private String _actionUrl;
   private String _elementID;
@@ -48,19 +55,18 @@ public class AjaxDroppable extends AjaxComponent {
     super(_context);
   }
 
+  @Override
   public void awake() {
     super.awake();
     _draggableIDKeyName = safeElementID() + "_draggableID";
   }
 
+  @Override
   public boolean isStateless() {
     return true;
   }
 
-  public boolean synchronizesVariablesWithBindings() {
-    return false;
-  }
-
+  @Override
   public void appendToResponse(WOResponse response, WOContext context) {
     _actionUrl = AjaxUtils.ajaxComponentActionUrl(context());
     _elementID = context.elementID();
@@ -154,5 +160,4 @@ public class AjaxDroppable extends AjaxComponent {
     }
     return null;
   }
-
 }

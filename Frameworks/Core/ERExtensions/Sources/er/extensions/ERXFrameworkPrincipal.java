@@ -7,12 +7,10 @@
 package er.extensions;
 
 import java.lang.reflect.Field;
-import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
 import com.webobjects.foundation.NSForwardException;
-import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotification;
@@ -75,8 +73,8 @@ public abstract class ERXFrameworkPrincipal {
     protected final Logger log = Logger.getLogger(getClass());
 
     /** holds the mapping between framework principals classes and ERXFrameworkPrincipal objects */
-    protected static final NSMutableDictionary  initializedFrameworks = new NSMutableDictionary();
-    protected static final NSMutableArray  launchingFrameworks = new NSMutableArray();
+    protected static final NSMutableDictionary<String, ERXFrameworkPrincipal> initializedFrameworks = new NSMutableDictionary<String, ERXFrameworkPrincipal>();
+    protected static final NSMutableArray<ERXFrameworkPrincipal> launchingFrameworks = new NSMutableArray<ERXFrameworkPrincipal>();
 
     public static class Observer {
         
@@ -92,10 +90,9 @@ public abstract class ERXFrameworkPrincipal {
          */
         public final void willFinishInitialization(NSNotification n) {
             NSNotificationCenter.defaultCenter().removeObserver(this, ERXApplication.ApplicationDidCreateNotification, null);
-            for (Enumeration enumerator = launchingFrameworks.objectEnumerator(); enumerator.hasMoreElements();) {
-                ERXFrameworkPrincipal principal = (ERXFrameworkPrincipal) enumerator.nextElement();
+            for (ERXFrameworkPrincipal principal : launchingFrameworks) {
                 principal.finishInitialization();
-                NSLog.debug.appendln("Finished initialization after launch: " + principal);
+                ERXApplication.log.debug("Finished initialization after launch: " + principal);
             }
         }
         
@@ -111,8 +108,7 @@ public abstract class ERXFrameworkPrincipal {
          */
         public final void didFinishInitialization(NSNotification n) {
             NSNotificationCenter.defaultCenter().removeObserver(this);
-            for (Enumeration enumerator = launchingFrameworks.objectEnumerator(); enumerator.hasMoreElements();) {
-                ERXFrameworkPrincipal principal = (ERXFrameworkPrincipal) enumerator.nextElement();
+            for (ERXFrameworkPrincipal principal : launchingFrameworks) {
                 principal.didFinishInitialization();
             }
         }
@@ -171,7 +167,7 @@ public abstract class ERXFrameworkPrincipal {
                     // nothing
                     // NSLog.debug.appendln("No requirements: " + c.getName());
                 } catch (IllegalAccessException e) {
-                    NSLog.err.appendln("Can't read field REQUIRES from " + c.getName() + ", check if it is 'public static Class[] REQUIRES= new Class[] {...}' in this class");
+                    ERXApplication.log.error("Can't read field REQUIRES from " + c.getName() + ", check if it is 'public static Class[] REQUIRES= new Class[] {...}' in this class");
                     throw NSForwardException._runtimeExceptionForThrowable(e);
                 }
                 if(initializedFrameworks.objectForKey(c.getName()) == null) {
@@ -179,13 +175,11 @@ public abstract class ERXFrameworkPrincipal {
                 	initializedFrameworks.setObjectForKey(principal,c.getName());
                 	principal.initialize();
                 	launchingFrameworks.addObject(principal);
-                	NSLog.debug.appendln("Initialized : " + c.getName());
-                	//System.out.println("Initialized : " + c.getName());
+                	ERXApplication.log.debug("Initialized : " + c.getName());
                 }
 
             } else {
-                NSLog.debug.appendln("Was already inited: " + c.getName());
-                //System.out.println("Was already inited : " + c.getName());
+            	ERXApplication.log.debug("Was already inited: " + c.getName());
             }
         } catch (InstantiationException e) {
             throw NSForwardException._runtimeExceptionForThrowable(e);
@@ -195,8 +189,7 @@ public abstract class ERXFrameworkPrincipal {
     }
 
     /**
-     * Called directly after the contructor.
-     *
+     * Called directly after the constructor.
      */
     protected void initialize() {
         // empty
@@ -221,4 +214,27 @@ public abstract class ERXFrameworkPrincipal {
     public String toString() {
       return ERXStringUtilities.lastPropertyKeyInKeyPath(getClass().getName());
     }
+    
+  /**
+   * <span class="ja">
+   * 指定フレームワークがインストールされているかどうかを確認します。
+   * 
+   * @return ある場合には true が戻ります。
+   * </span>
+   */
+  public static boolean hasFrameworkInstalled(String frameworkName) {
+    if(ERXStringUtilities.stringIsNullOrEmpty(frameworkName)) {
+      return false;
+    }
+
+    for (ERXFrameworkPrincipal frameworkPrincipal : ERXFrameworkPrincipal.launchingFrameworks) {
+      String s = frameworkPrincipal.toString();
+      if(frameworkName.equalsIgnoreCase(s)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
 }

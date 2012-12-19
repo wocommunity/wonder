@@ -42,6 +42,12 @@ import er.extensions.localization.ERXLocalizer;
  * @author cug - Sep 20, 2007
  */
 public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * the batchnumbers to display, cached in this instance, resetted after completion
@@ -143,8 +149,8 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 				// TODO cug: showing 9 page numbers right now as a default, maybe make this configurable
 
 				NSMutableDictionary<String, Object> entry = new NSMutableDictionary<String, Object>();
-				entry.setObjectForKey(new Integer(batchIndex), "batchNumber");
-				entry.setObjectForKey(new Integer(batchIndex).toString(), "batchString");
+				entry.setObjectForKey(Integer.valueOf(batchIndex), "batchNumber");
+				entry.setObjectForKey(Integer.valueOf(batchIndex).toString(), "batchString");
 				entry.setObjectForKey(Boolean.FALSE, "disable");
 
 				tmpArray.addObject(entry);
@@ -157,8 +163,8 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 				// we add page number 1 at the start and some dots between 1 and the other numbers
 
 				NSMutableDictionary<String, Object> entry = new NSMutableDictionary<String, Object>();
-				entry.setObjectForKey(new Integer(1), "batchNumber");
-				entry.setObjectForKey(new Integer(1).toString(), "batchString");
+				entry.setObjectForKey(Integer.valueOf(1), "batchNumber");
+				entry.setObjectForKey(Integer.valueOf(1).toString(), "batchString");
 				entry.setObjectForKey(Boolean.FALSE, "disabled");
 
 				tmpArray.insertObjectAtIndex(entry, 0);
@@ -167,7 +173,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 					// there are batches hidden, so we add the dots in here
 
 					entry = new NSMutableDictionary<String, Object>();
-					entry.setObjectForKey(new Integer(0), "batchNumber");
+					entry.setObjectForKey(Integer.valueOf(0), "batchNumber");
 					entry.setObjectForKey("...", "batchString");
 					entry.setObjectForKey(Boolean.TRUE, "disabled");
 
@@ -184,7 +190,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 				NSMutableDictionary<String, Object> entry = new NSMutableDictionary<String, Object>();
 
 				entry = new NSMutableDictionary<String, Object>();
-				entry.setObjectForKey(new Integer(0), "batchNumber");
+				entry.setObjectForKey(Integer.valueOf(0), "batchNumber");
 				entry.setObjectForKey("...", "batchString");
 				entry.setObjectForKey(Boolean.TRUE, "disabled");
 
@@ -245,7 +251,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * @return the previous batch number
 	 */
 	public Integer previousBatch() {
-		return new Integer(this.currentBatchIndex().intValue() - 1);
+		return Integer.valueOf(this.currentBatchIndex().intValue() - 1);
 	}
 
 	/**
@@ -254,7 +260,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * @return the number for the next batch
 	 */
 	public Integer nextBatch() {
-		return new Integer(this.currentBatchIndex().intValue() + 1);
+		return Integer.valueOf(this.currentBatchIndex().intValue() + 1);
 	}
 
 	/**
@@ -262,7 +268,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * 
 	 */
 	public Integer lastBatch() {
-		return new Integer(this.numberOfBatches(numberOfObjects().intValue(), batchSize()));
+		return Integer.valueOf(this.numberOfBatches(numberOfObjects().intValue(), batchSize()));
 	}
 
 	/**
@@ -345,7 +351,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * @return the batch size 
 	 */
 	public Integer batchSize() {
-		return new Integer(this.intValueForBinding(BATCH_SIZE_KEY, defaultBatchSize));
+		return Integer.valueOf(this.intValueForBinding(BATCH_SIZE_KEY, defaultBatchSize));
 	}
 
 	/**
@@ -363,7 +369,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * @return total number of objects
 	 */
 	public Integer numberOfObjects() {
-		return new Integer(this.intValueForBinding(NUMBER_OF_OBJECTS_KEY, 0));
+		return Integer.valueOf(this.intValueForBinding(NUMBER_OF_OBJECTS_KEY, 0));
 	}
 
 	/**
@@ -381,7 +387,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * @return the current batch index
 	 */
 	public Integer currentBatchIndex() {
-		return new Integer(this.intValueForBinding(CURRENT_BATCH_INDEX_KEY, 0));
+		return Integer.valueOf(this.intValueForBinding(CURRENT_BATCH_INDEX_KEY, 0));
 	}
 
 	/**

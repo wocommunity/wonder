@@ -264,8 +264,8 @@ public class AjaxProgress {
 	/**
 	 * Convenience method for copying a stream and tracking it with this progress model.
 	 * 
-	 * @param inputStream the inputstream to copy from
-	 * @param outputStream the outputstream to copy to
+	 * @param inputStream the input stream to copy from
+	 * @param outputStream the output stream to copy to
 	 * @param maxSize the maximum size to read
 	 * @throws IOException if there is a failure
 	 */

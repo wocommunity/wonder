@@ -22,13 +22,13 @@ import er.extensions.appserver.IERXPerformWOAction;
 import er.extensions.appserver.IERXPerformWOActionForResult;
 import er.extensions.concurrency.ERXExecutorService;
 import er.extensions.concurrency.ERXFutureTask;
-import er.extensions.concurrency.ERXTaskPercentComplete;
+import er.extensions.concurrency.IERXPercentComplete;
 import er.extensions.concurrency.IERXStoppable;
 import er.extensions.foundation.ERXAssert;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXRuntimeUtilities;
-import er.extensions.foundation.ERXStatusInterface;
 import er.extensions.foundation.ERXStopWatch;
+import er.extensions.foundation.IERXStatus;
 
 /**
  * A generic long response page that controls the execution of and provides user feedback on a long
@@ -56,9 +56,9 @@ import er.extensions.foundation.ERXStopWatch;
  * <li>
  * Create a {@link Runnable} task, or a {@link Callable} task, that returns some result.
  * 	<ol>
- *    <li>Optionally implement the {@link ERXStatusInterface} interface (just one method to return status message) 
+ *    <li>Optionally implement the {@link IERXStatus} interface (just one method to return status message) 
  *    to have the task's status displayed in the long response page.
- *    <li>Optionally implement the {@link ERXTaskPercentComplete} interface (just one method to return percentage complete)
+ *    <li>Optionally implement the {@link IERXPercentComplete} interface (just one method to return percentage complete)
  *    to have a progress bar and a percentage complete automatically displayed in the long response page.
  *    <li>Optionally implement the {@link IERXStoppable} interface to allow stopping of the task by the user.
  *    </ol>
@@ -106,7 +106,7 @@ import er.extensions.foundation.ERXStopWatch;
  * <p>The following properties can be used to implement additional custom behavior:
  * <dl>
  * <dt><code>er.coolcomponents.CCAjaxLongResponsePage.defaultStatus</code></dt>
- * 	<dd>This determines the default status text when the task does not implement {@link ERXStatusInterface}</dd>
+ * 	<dd>This determines the default status text when the task does not implement {@link IERXStatus}</dd>
  * <dt><code>er.coolcomponents.CCAjaxLongResponsePage.refreshInterval</code></dt>
  * 	<dd>This value in seconds determines a custom refresh interval for the update container on the page. The default is 2 seconds</dd>
  * <dt><code>er.coolcomponents.CCAjaxLongResponsePage.nextPageForErrorResultControllerClassName</code></dt>
@@ -118,6 +118,13 @@ import er.extensions.foundation.ERXStopWatch;
  *
  */
 public class CCAjaxLongResponsePage extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     static final Logger log = Logger.getLogger(CCAjaxLongResponsePage.class);
 	
 	// Constants to determine the CSS stylesheet used for the long response page for this app

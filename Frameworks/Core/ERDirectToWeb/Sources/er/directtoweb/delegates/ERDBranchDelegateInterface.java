@@ -6,6 +6,8 @@
 //
 package er.directtoweb.delegates;
 
+import java.io.Serializable;
+
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.NextPageDelegate;
 import com.webobjects.foundation.NSArray;
@@ -14,7 +16,7 @@ import com.webobjects.foundation.NSArray;
  * Extension of the NextPageDelegate to provide branch 
  * choices from the delegate to the template.
  */
-public interface ERDBranchDelegateInterface extends NextPageDelegate {
+public interface ERDBranchDelegateInterface extends NextPageDelegate, Serializable {
 
     /**
      * Calculates which branches to show in the display first

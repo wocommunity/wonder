@@ -13,18 +13,27 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.foundation.NSArray;
 
 public class WOTable extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     protected NSArray _list;
     protected int _maxColumns;
     public int currentRow;
     public int currentCol;
     protected int _rowCount;
     protected int _colCount;
+    public int currentItemIndex;
 
     public WOTable(WOContext aContext)  {
         super(aContext);
         _resetInternalCaches();
     }
 
+    @Override
     public boolean isStateless() {
         return true;
     }
@@ -105,14 +114,15 @@ public class WOTable extends WOComponent {
         Object item = index < aList.count() ? aList.objectAtIndex(index) : null;
         setValueForBinding(item, "item");
         if (canSetValueForBinding("row")) {
-            setValueForBinding(new Integer(currentRow), "row");
+            setValueForBinding(Integer.valueOf(currentRow), "row");
         }
         if (canSetValueForBinding("col")) {
-            setValueForBinding(new Integer(currentCol), "col");
+            setValueForBinding(Integer.valueOf(currentCol), "col");
         }
         if (canSetValueForBinding("index")) {
-            setValueForBinding(new Integer(index), "index");
+            setValueForBinding(Integer.valueOf(index), "index");
         }
+        currentItemIndex++;
     }
 
     public void setCurrentCol(Number newValue){
@@ -126,14 +136,17 @@ public class WOTable extends WOComponent {
         _colCount=-1;
         currentCol=-1;
         currentRow=-1;
+        currentItemIndex = 0;
         _maxColumns = -1;
     }
 
+    @Override
     public void takeValuesFromRequest(WORequest aRequest, WOContext aContext)  {
         _resetInternalCaches();
         super.takeValuesFromRequest(aRequest, aContext);
     }
 
+    @Override
     public void reset() {
         _resetInternalCaches();
     }

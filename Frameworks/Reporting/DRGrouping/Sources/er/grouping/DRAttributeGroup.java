@@ -72,7 +72,7 @@ public class DRAttributeGroup extends DRAttribute  {
         }
 
         if (flatAttributeDepthDict != null) {
-            dpthKey = new Integer(attributeListDepth);
+            dpthKey = Integer.valueOf(attributeListDepth);
             lst = (NSMutableArray)flatAttributeDepthDict.objectForKey(dpthKey);
             if (lst == null) {
                 lst = new NSMutableArray();
@@ -92,7 +92,7 @@ public class DRAttributeGroup extends DRAttribute  {
             this.flatListForAttributeDepthDictionary(att, attributeListDepth, flatAttributeDepthDict);
         }
         if (flatAttributeDepthDict != null && this.showTotal()) {
-            Number dpthKey = new Integer(attributeListDepth);
+            Number dpthKey = Integer.valueOf(attributeListDepth);
             NSMutableArray lst = (NSMutableArray)flatAttributeDepthDict.objectForKey(dpthKey);
             if (lst == null) {
                 lst = new NSMutableArray();

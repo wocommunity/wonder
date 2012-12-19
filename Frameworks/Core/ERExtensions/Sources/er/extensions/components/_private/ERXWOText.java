@@ -1,4 +1,5 @@
 package er.extensions.components._private;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
@@ -12,9 +13,7 @@ import er.extensions.foundation.ERXPatcher;
  * But use <code>WOText</code> instead.
  * 
  * @author ak on Tue Oct 15 2002
- * @project ERExtensions
  */
-
 public class ERXWOText extends ERXPatcher.DynamicElementsPatches.Text {
     /**
      * Public constructor
@@ -25,9 +24,9 @@ public class ERXWOText extends ERXPatcher.DynamicElementsPatches.Text {
     }
 
     /** Overridden from WOInput to not append the <code>value</code> attribute. */
+    @Override
     protected void _appendValueAttributeToResponse(WOResponse woresponse,
                                                    WOContext wocontext) {
         /* empty */
     }
-    
 }

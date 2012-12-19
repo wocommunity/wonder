@@ -1,11 +1,10 @@
 Content: WOComponentContent {
 }
 
-
 RadioButton: WOGenericElement {
 	elementName = "input";
 	name = uniqueID;
-	otherTagString = isCurrentItemSelected;
+	otherTagString = otherTagStringForRadioButton;
 	type = "radio";
 	value = index;
 }

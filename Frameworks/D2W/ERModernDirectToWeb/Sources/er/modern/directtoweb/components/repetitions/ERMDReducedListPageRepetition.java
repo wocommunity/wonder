@@ -6,7 +6,6 @@ import com.webobjects.appserver.WOContext;
  * Non table based (UL) list page repetition. Displays without labels. Suitable for reduced
  * list display.
  *
- * @project ERModernDirectToWeb
  * @d2wKey componentName
  * @d2wKey object
  * @d2wKey pageConfiguration

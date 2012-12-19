@@ -87,6 +87,13 @@ import er.extensions.appserver.ERXResponseRewriter;
  *          Tous droits réservés.
  */
 public class AjaxProxy extends AjaxComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private static final Logger log = Logger.getLogger(AjaxProxy.class);
 
 	public AjaxProxy(WOContext context) {
@@ -96,15 +103,9 @@ public class AjaxProxy extends AjaxComponent {
 	/**
 	 * Overridden because the component is stateless
 	 */
+	@Override
 	public boolean isStateless() {
 		return true;
-	}
-
-	/**
-	 * Overridden because the component does not synch with the bindings.
-	 */
-	public boolean synchronizesVariablesWithBindings() {
-		return false;
 	}
 
 	/**

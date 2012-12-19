@@ -7,7 +7,6 @@
 package er.extensions.components;
 
 import com.webobjects.appserver.WOAssociation;
-import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 
@@ -16,7 +15,6 @@ import er.extensions.components._private.ERXSubmitButton;
 import er.extensions.foundation.ERXPatcher;
 import er.extensions.foundation.ERXValueUtilities;
 
-// A Submit button that can be used stand alone.
 /**
  * A stand alone submit button to be used as an action button.
  *
@@ -35,16 +33,23 @@ import er.extensions.foundation.ERXValueUtilities;
             use javascript code to set "document.location", which does not submit
             the form the button is in. The default value is <code>false</code>.
  * @binding name If is null takes context.elementID
+ * @binding class the CSS class for the button
+ * @binding style the CSS style for the button
+ * @binding id the id for the button
  */
-public class ERXSingleButton extends WOComponent {
+public class ERXSingleButton extends ERXStatelessComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     public ERXSingleButton(WOContext aContext) {
         super(aContext);
     }
 
-    public boolean isStateless() { return true; }
-
-    // determines wether this component will output its own form or not
+    // determines whether this component will output its own form or not
     public boolean useForm() {
         boolean result=hasBinding("doNotUseForm") ? !ERXValueUtilities.booleanValue(valueForBinding("doNotUseForm")) : true;
         // however, if the form does not have to be submitted AND javascript is enabled, no need for a form
@@ -56,6 +61,7 @@ public class ERXSingleButton extends WOComponent {
         return result;
     }
 
+    @Deprecated
     public String buttonCssClass() {
     	String css = (String) valueForBinding("css");
     	if(css == null) {
@@ -77,6 +83,7 @@ public class ERXSingleButton extends WOComponent {
     	return ERXPatcher.classForName("WOSubmitButton").equals(ERXSubmitButton.class);
     }
     
+    @Override
     public void appendToResponse(WOResponse aResponse, WOContext aContext) {
     	if(useButton()) {
     		ERXSubmitButton.appendIEButtonFixToResponse(aContext, aResponse);
@@ -88,6 +95,7 @@ public class ERXSingleButton extends WOComponent {
         return hasBinding("shouldSubmitForm") ? ERXValueUtilities.booleanValue(valueForBinding("shouldSubmitForm")) : false;
     }
     
+    @Override
     public String componentName() {
         return hasBinding("name") ? String.valueOf(valueForBinding("name")) : context().elementID();
     }
@@ -113,5 +121,5 @@ public class ERXSingleButton extends WOComponent {
         }
         return !shouldSubmitForm() ? "javascript:document.location='"+ url +"'; return false;" : "";
     }
-
 }
+

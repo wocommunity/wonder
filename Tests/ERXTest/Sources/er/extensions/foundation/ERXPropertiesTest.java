@@ -573,4 +573,31 @@ public class ERXPropertiesTest extends ERXTestCase {
     assertEquals(ERXProperties.stringForKey(ERXPropertiesTest.Key), ERXProperties.stringForKey(ERXPropertiesTest.Key));
     assertEquals(value, ERXProperties.stringForKey(ERXPropertiesTest.Key));
   }
+  
+  public void testHasKey() {
+	  ERXPropertiesTest.setCachingEnabled(false);
+	  ERXPropertiesTest.removePropertyForKey(ERXPropertiesTest.Key);
+	  assertFalse(ERXProperties.hasKey(ERXPropertiesTest.Key));
+	  assertFalse(ERXProperties.hasKey(ERXPropertiesTest.Key, true));
+	  assertFalse(ERXProperties.hasKey(ERXPropertiesTest.Key, false));
+	  
+	  ERXPropertiesTest._setProperty(ERXPropertiesTest.Key, "");
+	  assertTrue(ERXProperties.hasKey(ERXPropertiesTest.Key));
+	  assertFalse(ERXProperties.hasKey(ERXPropertiesTest.Key, true));
+	  assertTrue(ERXProperties.hasKey(ERXPropertiesTest.Key, false));
+	  
+	  ERXPropertiesTest._setProperty(ERXPropertiesTest.Key, "foo");
+	  assertTrue(ERXProperties.hasKey(ERXPropertiesTest.Key));
+	  assertTrue(ERXProperties.hasKey(ERXPropertiesTest.Key, true));
+	  assertTrue(ERXProperties.hasKey(ERXPropertiesTest.Key, false));
+	  
+	  ERXPropertiesTest.setCachingEnabled(true);
+	  ERXPropertiesTest.removePropertyForKey(ERXPropertiesTest.Key);
+	  assertFalse(ERXProperties.hasKey(ERXPropertiesTest.Key));
+	  assertFalse(ERXProperties.hasKey(ERXPropertiesTest.Key));
+
+	  ERXPropertiesTest._setProperty(ERXPropertiesTest.Key, "foo");
+	  assertTrue(ERXProperties.hasKey(ERXPropertiesTest.Key));
+	  assertTrue(ERXProperties.hasKey(ERXPropertiesTest.Key));
+  }
 }

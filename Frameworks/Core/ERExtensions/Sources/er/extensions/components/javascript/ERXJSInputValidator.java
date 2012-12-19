@@ -1,4 +1,5 @@
 package er.extensions.components.javascript;
+
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
@@ -27,10 +28,15 @@ import er.extensions.components._private.ERXWOTextField;
  * @binding disabled disable the validation
  *
  * @author ak on Fri May 02 2003
- * @project ERExtensions
  */
-
 public class ERXJSInputValidator extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     public static class Action extends WODirectAction {
         public Action(WORequest r) { super(r); }
         /**
@@ -56,8 +62,10 @@ public class ERXJSInputValidator extends WOComponent {
     }
 
     /** component does not synchronize it's variables */
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
+    @Override
     public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
         super.appendToResponse(woresponse, wocontext);
         NSMutableArray array = (NSMutableArray)ERXWOContext.contextDictionary().objectForKey("elementArray");

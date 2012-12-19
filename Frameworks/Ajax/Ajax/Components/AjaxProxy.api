@@ -7,7 +7,7 @@
 		<binding name="proxy"/>
 		<binding name="proxyName"/>
 
-		<validation message="&apos;name&apos; is a required binding">
+		<validation message="'name' is a required binding">
 			<unbound name="name"/>
 		</validation>
 	</wo>

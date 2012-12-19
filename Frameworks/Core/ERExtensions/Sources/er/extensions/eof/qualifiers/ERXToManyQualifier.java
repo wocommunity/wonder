@@ -49,6 +49,13 @@ import er.extensions.qualifiers.ERXKeyValueQualifier;
  */
 
 public class ERXToManyQualifier extends ERXKeyValueQualifier implements Cloneable {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     /** register SQL generation support for the qualifier */
     static {
         EOQualifierSQLGeneration.Support.setSupportForClass(new ToManyQualifierSQLGenerationSupport(), ERXToManyQualifier.class);
@@ -91,7 +98,7 @@ public class ERXToManyQualifier extends ERXKeyValueQualifier implements Cloneabl
     }
 
     /**
-     * Description of the qualfier.
+     * Description of the qualifier.
      * @return description of the key and which elements it
      *		should contain.
      */
@@ -122,7 +129,7 @@ public class ERXToManyQualifier extends ERXKeyValueQualifier implements Cloneabl
             super();
         }
 
-        protected static void appendColumnForAttributeToStringBuffer(EOAttribute attribute, StringBuffer sb) {
+        protected static void appendColumnForAttributeToStringBuilder(EOAttribute attribute, StringBuilder sb) {
             sb.append(attribute.entity().externalName());
             sb.append('.');
             sb.append(attribute.columnName());
@@ -132,7 +139,7 @@ public class ERXToManyQualifier extends ERXKeyValueQualifier implements Cloneabl
         @SuppressWarnings("unchecked")
 		public String sqlStringForSQLExpression(EOQualifier eoqualifier, EOSQLExpression e) {
             ERXToManyQualifier qualifier = (ERXToManyQualifier)eoqualifier;
-            StringBuffer result=new StringBuffer();
+            StringBuilder result = new StringBuilder();
             EOEntity targetEntity=e.entity();
 
             NSArray<String> toManyKeys=NSArray.componentsSeparatedByString(qualifier.key(),".");
@@ -158,7 +165,7 @@ public class ERXToManyQualifier extends ERXKeyValueQualifier implements Cloneabl
                 join= secondHopRelationship.joins().objectAtIndex(0); // assumes 1 join
                 EOAttribute secondHopSourceAttribute=join.sourceAttribute();
 
-                NSMutableArray<String> lastStopPKeyPath=new NSMutableArray<String>(toManyKeys);
+                NSMutableArray<String> lastStopPKeyPath = toManyKeys.mutableClone();
                 lastStopPKeyPath.removeLastObject();
                 lastStopPKeyPath.addObject(firstHopRelationship.name());
                 lastStopPKeyPath.addObject(targetAttribute.name());
@@ -184,7 +191,7 @@ public class ERXToManyQualifier extends ERXKeyValueQualifier implements Cloneabl
 
                 result.append(" WHERE ");
 
-                appendColumnForAttributeToStringBuffer(sourceAttribute,result);
+                appendColumnForAttributeToStringBuilder(sourceAttribute, result);
                 result.append('=');
                 result.append(e.sqlStringForAttributeNamed(firstHopRelationshipKeyPath));
                 
@@ -214,7 +221,7 @@ public class ERXToManyQualifier extends ERXKeyValueQualifier implements Cloneabl
                     result.append(") ");
                 }
                 result.append(" GROUP BY ");
-                appendColumnForAttributeToStringBuffer(sourceAttribute,result);
+                appendColumnForAttributeToStringBuilder(sourceAttribute, result);
 
                 result.append(" HAVING COUNT(*)");
                 if (qualifier.minCount() <= 0) {

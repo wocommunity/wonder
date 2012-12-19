@@ -1,0 +1,25 @@
+{
+    EOModelVersion = "2.1"; 
+    adaptorName = JDBC; 
+    connectionDictionary = {
+        URL = "jdbc:FrontBase://localhost/ERXPartials"; 
+        password = test; 
+        username = erxpartial; 
+    }; 
+    entities = (
+        {className = "er.example.erxpartials.model.Company"; name = Company; }, 
+        {className = "er.example.erxpartials.model.Department"; name = Department; }, 
+        {
+            className = "er.example.erxpartials.model.EmployeeType"; 
+            name = EmployeeType; 
+        }, 
+        {
+            className = "er.example.erxpartials.model.Partial_AuthenticatedPerson"; 
+            name = "Partial_AuthenticatedPerson"; 
+        }, 
+        {
+            className = "er.example.erxpartials.model.Partial_EmployeePerson"; 
+            name = "Partial_EmployeePerson"; 
+        }
+    ); 
+}

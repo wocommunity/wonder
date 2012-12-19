@@ -319,8 +319,10 @@ public class ERXJDBCUtilities {
 									tempFile.delete();
 
 							continue;
+						} finally {
+							try { bis.close(); } catch (IOException e) {}
 						}
-						FileInputStream fis;
+						FileInputStream fis = null;
 						try {
 							fis = new FileInputStream(tempFile);
 						}
@@ -332,6 +334,10 @@ public class ERXJDBCUtilities {
 									tempFile.delete();
 
 							continue;
+						} finally {
+							if (fis != null) {
+								try { fis.close(); } catch (IOException e) {}
+							}
 						}
 						upps.setBinaryStream(i + 1, fis, (int) tempFile.length());
 						tempfilesToDelete.addObject(tempFile);
@@ -437,7 +443,7 @@ public class ERXJDBCUtilities {
 	}
 
 	/**
-	 * @see ERXJDBCUtilities._copyDatabaseDefinedByEOModelAndConnectionDictionaryToDatabaseWithConnectionDictionary(EOModel, NSDictionary, NSDictionary)
+	 * @see ERXJDBCUtilities#_copyDatabaseDefinedByEOModelAndConnectionDictionaryToDatabaseWithConnectionDictionary(EOModel, NSDictionary, NSDictionary)
 	 * @param modelGroup
 	 *            the model group to copy
 	 * @param sourceDict
@@ -696,8 +702,9 @@ public class ERXJDBCUtilities {
 	 * @return the number of rows updated
 	 * @throws SQLException
 	 *             if there is a problem
-	 * @deprecated use executeUpdateScript with the boolean param
+	 * @deprecated use {@link #executeUpdateScript(EOAdaptorChannel, String, boolean)}
 	 */
+    @Deprecated
 	public static int executeUpdateScriptIgnoringErrors(EOAdaptorChannel channel, String script) throws SQLException {
 		return ERXJDBCUtilities.executeUpdateScript(channel, script, true);
 	}

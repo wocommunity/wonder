@@ -25,14 +25,23 @@ import er.extensions.foundation.ERXProperties;
  * @binding apiKey apiKey to use for the map, if you want to ovverride the property below
  * @property ajax.google.maps.apiKey an api key you can get from http://www.google.com/apis/maps/ . If your app runs on http://ip:port/cgi-bin/WebObjects/GoogleMaps.woa, register the key for http://ip:port/cgi-bin/WebObjects/ . Using a fixed WO port is recommended (unless you want to get a new api key everytime you restart your server). AjaxGMaps will not work without an Api Key. 
  */
+
+@Deprecated
 public class AjaxGMap extends AjaxComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private String _id;
 
 	public AjaxGMap(WOContext context) {
 		super(context);
-
 	}
 
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}

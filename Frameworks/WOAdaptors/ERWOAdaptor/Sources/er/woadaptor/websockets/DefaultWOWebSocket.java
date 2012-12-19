@@ -1,8 +1,9 @@
 package er.woadaptor.websockets;
 
 import org.jboss.netty.channel.Channel;
-import org.jboss.netty.handler.codec.http.websocket.DefaultWebSocketFrame;
-import org.jboss.netty.handler.codec.http.websocket.WebSocketFrame;
+import org.jboss.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
+import org.jboss.netty.handler.codec.http.websocketx.TextWebSocketFrame;
+import org.jboss.netty.handler.codec.http.websocketx.WebSocketFrame;
 
 import com.webobjects.appserver.WOSession;
 
@@ -45,11 +46,15 @@ public class DefaultWOWebSocket implements WebSocket {
 	public void receiveFrame(WebSocketFrame frame) {
 		ERXApplication._startRequest();
 		try {
-			if(frame.isText()) {
-				receive(frame.getTextData());
-			} else if(frame.isBinary() && frame.getBinaryData().hasArray()) {
+			if(frame instanceof TextWebSocketFrame) {
+				TextWebSocketFrame textFrame = (TextWebSocketFrame)frame;
+				receive(textFrame.getText());
+			} else if(frame instanceof BinaryWebSocketFrame && frame.getBinaryData().hasArray()) {
 				//Not supported. May change drastically.
 				receive(frame.getBinaryData().array());
+			} else {
+				String message = String.format("%s frame types not supported", frame.getClass().getName());
+				throw new UnsupportedOperationException(message);
 			}
 		} finally {
 			ERXApplication._endRequest();
@@ -68,8 +73,7 @@ public class DefaultWOWebSocket implements WebSocket {
 	}
 
 	public void send(String message) {
-		//FIXME break long messages into smaller pieces?
-		WebSocketFrame frame = new DefaultWebSocketFrame(message);
+		WebSocketFrame frame = new TextWebSocketFrame(message);
 		channel().write(frame);
 	}
 

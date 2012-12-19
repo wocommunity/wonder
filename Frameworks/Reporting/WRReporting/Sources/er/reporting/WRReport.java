@@ -583,7 +583,7 @@ public class WRReport extends WOComponent  {
 
     public boolean showIndentCell() {
         int oldCnt;
-        Number oldCount = (Number)_indexDict.objectForKey(new Integer(vheadingIndex()));
+        Number oldCount = (Number)_indexDict.objectForKey(Integer.valueOf(vheadingIndex()));
 
         if (oldCount == null) {
             oldCnt = 0;
@@ -598,7 +598,7 @@ public class WRReport extends WOComponent  {
 
         }
 
-        _indexDict.setObjectForKey(new Integer(oldCnt), new Integer(vheadingIndex()));
+        _indexDict.setObjectForKey(Integer.valueOf(oldCnt), Integer.valueOf(vheadingIndex()));
 
         if (oldCnt == 0) {
             return true;
@@ -683,7 +683,7 @@ public class WRReport extends WOComponent  {
 
 
     public NSArray attributeListAtDepth() {
-        Number ky = new Integer(depth);
+        Number ky = Integer.valueOf(depth);
         //log.debug( "ky:"+ky);
         NSArray a = (NSArray)this.attributeListDict().objectForKey(ky);
         //log.debug( "a:"+a);

@@ -28,7 +28,6 @@ public class GroupingOnly extends WOComponent {
         s.setReportModel(mod);
     }
 
-    /** @TypeInfo Movie */
     public Movie aMovie;
     public DRRecordGroup aDRRecordGroup;
 
@@ -55,7 +54,6 @@ public class GroupingOnly extends WOComponent {
         return null;
     }
     
-    /** @TypeInfo DRRecordGroup */
     public NSArray recordGroups() {
         Session s = (Session)session();
         NSArray recGrps = new NSArray();
@@ -66,5 +64,4 @@ public class GroupingOnly extends WOComponent {
         }
         return recGrps;
     }
-
 }

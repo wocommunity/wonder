@@ -10,6 +10,7 @@ import java.util.NoSuchElementException;
 import java.util.RandomAccess;
 import java.util.Vector;
 /**
+ * <span class="en">
  * Bugfix reimplementation of NSMutableArray. To be able to use this class, the framework this class resides in must be
  * before JavaFoundation.framework in your classpath. <br />
  * It fixes a lot of issues:
@@ -19,16 +20,36 @@ import java.util.Vector;
  * <li>fixes a bug when the actual objects were handed out replaceObjectAtIndex()
  * <li>fixes a bug when the iterator method wasn't firing a fault in <code>_EOCheapCopyMutableArray</code>
  * </ul>
+ * 
  * Once these issues are resolved in a WO distribution, this class will go away and the Apple 
  * supplied will will be used again without changes in code on your side. <br />
+ * 
+ * @param <E> type of array contents
+ * </span>
+ * 
+ * <span class="ja">
+ * NSMutableArray のバッグフィックス再実装。
+ * このクラスを使用する為には現フレームワークのクラスパスが JavaFoundation.framework の前にある必要があります。<br>
+ * 
+ * 次の問題を対応しています:
+ * <ul>
+ * <li>正しいコレクション・メソッドの実装：<code>anArray.add(anObject)</code> が可能
+ * <li>大きなレコード・セットの場合でのスピード改良で EOF が早くなるのです
+ * <li>実際のオブジェクトが replaceObjectAtIndex() の外で処理されるバッグフィックス
+ * <li><code>_EOCheapCopyMutableArray</code> でのフォルトはトリーガされない問題のバッグフィックス
+ * </ul>
+ * 
+ * @param <E> type of array contents
+ * </span>
+ * 
  * @author ak
  */
 public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
 
-	@SuppressWarnings({ "hiding", "unchecked" })
+  static final long serialVersionUID = -3909373569895711876L;
+  
 	public static final Class _CLASS = _NSUtilitiesExtra._classWithFullySpecifiedNamePrime("com.webobjects.foundation.NSMutableArray");
     
-    static final long serialVersionUID = -3909373569895711876L;
 
     public static final Object ERX_MARKER = "Wonder";
 
@@ -185,9 +206,9 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
     }
 
     /**
-     * @deprecated Method replaceObjectAtIndex is deprecated
+     * @deprecated use {@link #replaceObjectAtIndex(Object, int)}
      */
-
+    @Deprecated
     public void replaceObjectAtIndex(int index, E object) {
         replaceObjectAtIndex(object, index);
     }
@@ -707,6 +728,13 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
 }
 
 class SubList<E> extends NSMutableArray<E> {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     NSMutableArray<E> l;
     int offset;
     int size;

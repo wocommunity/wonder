@@ -1,4 +1,5 @@
 package er.extensions.components;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -22,10 +23,14 @@ import er.extensions.foundation.ERXFileUtilities;
  * @binding encoding content encoding to use.
  *
  * @author ak on 31.10.05
- * @project ERExtensions
  */
-
 public class ERXExternalContent extends ERXStatelessComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     /** logging support */
     private static final Logger log = Logger.getLogger(ERXExternalContent.class);
@@ -89,9 +94,9 @@ public class ERXExternalContent extends ERXStatelessComponent {
     	return result;
     }
     
+    @Override
     public void appendToResponse(WOResponse response, WOContext arg1) {
     	String content = contentString();
     	response.appendContentString(content);
     }
-    
  }

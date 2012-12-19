@@ -12,6 +12,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 
 import er.extensions.eof.ERXConstant;
+import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * Radio button list with lots of more options.<br />
@@ -31,6 +32,12 @@ import er.extensions.eof.ERXConstant;
  */
 
 public class ERXRadioButtonMatrix extends ERXStatelessComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
 
     private static final Integer DEFAULT_PADDING = ERXConstant.ZeroInteger;
     private static final Integer DEFAULT_SPACING = ERXConstant.ZeroInteger;
@@ -92,6 +99,16 @@ public class ERXRadioButtonMatrix extends ERXStatelessComponent {
         }
 
         return "";
+    }
+
+	public String otherTagStringForRadioButton() {
+    	boolean isDisabled = disabled();
+    	boolean isChecked = !ERXStringUtilities.stringIsNullOrEmpty(isCurrentItemSelected());
+        	return (isDisabled ? "disabled" : "") + (isDisabled && isChecked? " " : "") + (isChecked ? "checked" : "");
+	}
+
+    public boolean disabled() {
+    	return booleanValueForBinding("disabled", false);
     }
 
     public void awake() {

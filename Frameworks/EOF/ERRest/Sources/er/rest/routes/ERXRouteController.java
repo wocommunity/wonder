@@ -73,13 +73,13 @@ import er.rest.util.ERXRestTransactionRequestAdaptor;
  * methods for manipulating restful requests and responses (update(..), create(..), requestNode(), response(..), etc) ,
  * and it supports multiple formats for you.
  * 
- * @property ERXRest.accessControlAllowRequestHeaders
- * @property ERXRest.accessControlAllowRequestMethods
- * @property ERXRest.defaultFormat
- * @property ERXRest.strictMode
+ * @property ERXRest.accessControlAllowRequestHeaders See https://developer.mozilla.org/En/HTTP_access_control#Access-Control-Allow-Headers
+ * @property ERXRest.accessControlAllowRequestMethods See https://developer.mozilla.org/En/HTTP_access_control#Access-Control-Allow-Methods
+ * @property ERXRest.defaultFormat (default "xml") Allow you to set the default format for all of your REST controllers
+ * @property ERXRest.strictMode (default "true") If set to true, status code in the response will be 405 Not Allowed, if set to false, status code will be 404 Not Found
  * @property ERXRest.allowWindowNameCrossDomainTransport
- * @property ERXRest.accessControlMaxAge
- * @property ERXRest.accessControlAllowOrigin
+ * @property ERXRest.accessControlMaxAge (default 1728000) This header indicates how long the results of a preflight request can be cached. See https://developer.mozilla.org/En/HTTP_access_control#Access-Control-Max-Age
+ * @property ERXRest.accessControlAllowOrigin Set the value to '*' to enable all origins. See https://developer.mozilla.org/En/HTTP_access_control#Access-Control-Allow-Origin
  *
  * @author mschrag
  */
@@ -228,6 +228,10 @@ public class ERXRouteController extends WODirectAction {
 	 *             if the security check fails
 	 */
 	protected void checkAccess() throws SecurityException {
+	}
+
+	public void _setEditingContent(EOEditingContext ec) {
+		_editingContext = ec;
 	}
 
 	/**
@@ -1141,6 +1145,17 @@ public class ERXRouteController extends WODirectAction {
 		String str = format().toString(errorMessage, null, null);
 		WOResponse response = stringResponse(str);
 		response.setStatus(status);	
+		if (format().equals(ERXRestFormat.json())) {
+			response.setHeader("application/json", "Content-Type");
+		} else if (format().equals(ERXRestFormat.xml())) { 
+			response.setHeader("text/xml", "Content-Type");
+		} else if (format().equals(ERXRestFormat.plist())) { 
+			response.setHeader("text/plist", "Content-Type");
+		} else if (format().equals(ERXRestFormat.bplist())) { 
+			response.setHeader("application/x-plist", "Content-Type");
+		} else {
+			response.setHeader("application/json", "Content-Type");			
+		}
 		log.error("Request failed: " + request().uri(), t);
 		return response;
 	}
@@ -1571,10 +1586,10 @@ public class ERXRouteController extends WODirectAction {
 		Throwable meaningfulThrowble = ERXExceptionUtilities.getMeaningfulThrowable(t);
 		boolean isStrictMode = ERXProperties.booleanForKeyWithDefault("ERXRest.strictMode", true);
 		if (meaningfulThrowble instanceof ObjectNotAvailableException || meaningfulThrowble instanceof FileNotFoundException || meaningfulThrowble instanceof NoSuchElementException) {
-			results = errorResponse(meaningfulThrowble, WOMessage.HTTP_STATUS_NOT_FOUND);
+			results = errorResponse(meaningfulThrowble, ERXHttpStatusCodes.NOT_FOUND);
 		}
 		else if (meaningfulThrowble instanceof SecurityException) {
-			results = errorResponse(meaningfulThrowble, WOMessage.HTTP_STATUS_FORBIDDEN);
+			results = errorResponse(meaningfulThrowble, ERXHttpStatusCodes.STATUS_FORBIDDEN);
 		}
 		else if (meaningfulThrowble instanceof ERXNotAllowedException) {
 			results = errorResponse(ERXHttpStatusCodes.METHOD_NOT_ALLOWED);
@@ -1583,7 +1598,7 @@ public class ERXRouteController extends WODirectAction {
 			results = errorResponse(meaningfulThrowble, ERXHttpStatusCodes.BAD_REQUEST);
 		}
 		else {
-			results = errorResponse(meaningfulThrowble, WOMessage.HTTP_STATUS_INTERNAL_ERROR);
+			results = errorResponse(meaningfulThrowble,ERXHttpStatusCodes.INTERNAL_ERROR);
 		}
 		// MS: Should we jam the exception in the response userInfo so the transaction adaptor can rethrow the real exception?
 		return results;
@@ -1627,6 +1642,22 @@ public class ERXRouteController extends WODirectAction {
 				processedResults = response;
 			}
 		}
+		if (allowJSONP()) {
+			if (this.format().equals(ERXRestFormat.json())) {
+				String callbackMethodName = request().stringFormValueForKey("callback");
+				if (callbackMethodName != null) {
+					WOResponse response = results.generateResponse();
+					String content = response.contentString();
+					if (content != null) {
+						content = content.replaceAll("\n", "");
+						content = ERXStringUtilities.escapeJavascriptApostrophes(content);
+					}
+					response.setContent(callbackMethodName + "(" + content + ");");
+					response.setHeader("text/javascript", "Content-Type");
+					processedResults = response;				
+				}
+			}
+		}
 		return processedResults;
 	}
 	
@@ -1637,6 +1668,15 @@ public class ERXRouteController extends WODirectAction {
 	 */
 	protected boolean allowWindowNameCrossDomainTransport() {
 		return ERXProperties.booleanForKeyWithDefault("ERXRest.allowWindowNameCrossDomainTransport", false);
+	}
+	
+	/**
+	 * Returns whether or not JSONP (JSON with Padding) is allowed.
+	 * 
+	 * @return whether or not JSONP (JSON with Padding) is allowed
+	 */
+	protected boolean allowJSONP() {
+		return ERXProperties.booleanForKeyWithDefault("ERXRest.allowJSONP", false);
 	}
 	
 	/**
@@ -1764,11 +1804,11 @@ public class ERXRouteController extends WODirectAction {
 	public <T extends ERXRouteController> T controller(Class<T> controllerClass) {
 		try {
 			T controller = requestHandler().controller(controllerClass, request(), context());
-			controller._route = _route;
-			controller._editingContext = _editingContext;
-			controller._routeKeys = _routeKeys;
-			controller._objects = _objects;
-			controller._options = _options;
+			controller._setRoute(_route);
+			controller._setEditingContent(_editingContext);
+			controller._setRouteKeys(_routeKeys);
+			controller._setRouteObjects(_objects);
+			controller.setOptions(_options);
 			return controller;
 		}
 		catch (Exception e) {

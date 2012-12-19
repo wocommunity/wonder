@@ -11,10 +11,18 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
 public class WXBar extends WOComponent {
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
     public WXBar(WOContext aContext)  {
         super(aContext);
     }
 
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         // Do not sync with the bindings
         return false;
@@ -43,7 +51,7 @@ public class WXBar extends WOComponent {
         } else {
             try {
                 if (aPercentageString != null) {
-                    aPercentage = (new Double(aPercentageString.toString())).doubleValue();
+                    aPercentage = Double.parseDouble(aPercentageString.toString());
                 }
             } catch (NumberFormatException e) {
                 throw new IllegalStateException("WXBar - problem parsing int from fullWidth and percentage bindings "+e);

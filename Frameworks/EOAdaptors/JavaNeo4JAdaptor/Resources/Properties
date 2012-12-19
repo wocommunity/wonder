@@ -1,0 +1,39 @@
+##  Properies Info
+er.extensions.load.Properties.framework.JavaNeo4JAdaptor=load
+er.extensions.JavaNeo4JAdaptor.hasLocalization=false
+
+
+log4j.logger.er.neo4jadaptor.database.pool=INFO
+
+
+# one of values: embedded-read-only | embedded-writable | highly-available
+neo4j.pool.database.type=embedded-writable
+
+# Neo4J database configuration
+neo4j.pool.database.config={cache_type=weak; use_memory_mapped_buffers=true; dump_configuration=true;}
+
+# If set to true then will fetch all nodes/relationships and try to load their properties into memory. 
+# Defaults to false. 
+neo4j.pool.doWarmUp=false
+
+
+
+
+
+
+
+###########################
+# Neo4J High Availability #
+###########################
+
+# Neo4J HA feature is available in enterprise version and requires a different license, however
+# this framework should still be able to support HA if one has appropriate license, therefore
+# we construct HA database using reflection, as otherwise neo4j-ha jar file would need to be
+# included. Here we specify HA database class name. This value is valid for Neo4J version 1.7.
+neo4j.pool.database.highly-available.class=org.neo4j.kernel.HighlyAvailableGraphDatabase
+
+# Name of a property in database config dictionary, that contains server_id value
+neo4j.pool.database.highly-available.server-id-config-key=ha.server_id
+
+# This is only HA config proposal
+# neo4j.pool.database.config={ha.server_id=1; ha.server=localhost:6001; ha.coordinators=localhost:2181; ha.pull_interval=30; }

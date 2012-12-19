@@ -106,6 +106,8 @@ public class DB2PlugIn extends JDBCPlugIn {
       }
       catch (IOException e) {
         throw new RuntimeException("Failed to load 'JDBCInfo.plist' from this plugin jar.", e);
+      } finally {
+    	  try { jdbcInfoStream.close(); } catch (IOException e) {}
       }
     }
     else {
@@ -174,10 +176,10 @@ public class DB2PlugIn extends JDBCPlugIn {
                 Number pkObj = (Number)pksEnum.nextElement();
                 Number pk;
                 if (isIntType) {
-                  pk = new Integer(pkObj.intValue());
+                  pk = Integer.valueOf(pkObj.intValue());
                 }
                 else {
-                  pk = new Long(pkObj.longValue());
+                  pk = Long.valueOf(pkObj.longValue());
                 }
                 results.addObject(new NSDictionary(pk, attrName));
               }            

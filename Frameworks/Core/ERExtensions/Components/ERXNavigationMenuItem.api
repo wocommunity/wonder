@@ -6,7 +6,7 @@
 		<binding name="javascriptFunction"/>
 		<binding name="level"/>
 
-		<validation message="&apos;navigationItem&apos; or &apos;navigationItemName&apos; are required">
+		<validation message="'navigationItem' or 'navigationItemName' are required">
 			<unbound name="navigationItem"/>
 			<unbound name="navigationItemName"/>
 		</validation>

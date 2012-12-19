@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <wodefinitions>
     <wo class="MTAjaxPingUpdate" wocomponentcontent="true">    <binding name="cacheKey"/>
         <validation message="'cacheKey' is a required binding.">
