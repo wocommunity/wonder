@@ -1,10 +1,10 @@
 package er.jquerymobile.components;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOContext;
 
-import er.extensions.components.*;
+import er.extensions.components.ERXStatelessComponent;
 
 /**
  * data-role  header これを設定することでヘッダーになります。

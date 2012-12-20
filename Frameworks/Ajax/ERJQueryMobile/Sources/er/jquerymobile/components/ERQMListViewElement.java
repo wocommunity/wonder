@@ -1,11 +1,11 @@
 package er.jquerymobile.components;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOContext;
 
-import er.extensions.eof.*;
-import er.extensions.foundation.*;
+import er.extensions.eof.ERXConstant;
+import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * LI within a listview
