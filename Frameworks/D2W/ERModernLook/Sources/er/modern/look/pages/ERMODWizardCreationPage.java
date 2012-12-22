@@ -193,7 +193,8 @@ public class ERMODWizardCreationPage extends ERD2WWizardCreationPageTemplate {
 			_cachedEntity = result.entity();
 		} else if (ERXExtensions.safeDifferent(_cachedEntity, result.entity())) {
 			clearTabSectionsContents();
-			_cachedEntity = result.entity();
+			result.takeValueForKey(null, "tabSectionsContents");
+		    _cachedEntity = result.entity();
 		}
 		return super.d2wContext();
 	}
