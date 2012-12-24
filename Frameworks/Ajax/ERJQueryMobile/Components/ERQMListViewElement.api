@@ -15,5 +15,7 @@
     <binding defaults="Boolean" name="automaticDivider"/>
     <binding defaults="Boolean" name="isInputContainer"/>
     <binding name="linkResource"/>
+    <binding defaults="Boolean" name="isDialogCall"/>
+    <binding name="queryDictionary"/>
     </wo>
 </wodefinitions>

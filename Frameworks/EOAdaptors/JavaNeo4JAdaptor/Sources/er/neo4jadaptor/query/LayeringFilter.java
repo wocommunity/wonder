@@ -46,6 +46,7 @@ public class LayeringFilter <T extends PropertyContainer> extends Filter<T> {
 		this.firstLine = filters.get(0);
 	}
 	
+	@Override
 	public Results<T> doFilter(GraphDatabaseService db, EOEntity entity, EOQualifier qualifier) {
 		Results<T> ret = firstLine.doFilter(db, entity, qualifier);
 		

@@ -1440,6 +1440,10 @@ public class JSONRPCBridge implements Serializable
   {
     Method method[];
 
+    if (methodMap == null) {
+        return null;
+    }
+
     // first, match soley by the method name and number of arguments passed in
     // if there is a single match, return the single match
     // if there is no match at all, return null
