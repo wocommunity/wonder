@@ -18,13 +18,13 @@ USER=appserver
 case "$1" in
     start)
         echo -n "Starting JavaMonitor: "
-        su $USER -c "$NEXT_ROOT/Local/Library/WebObjects/JavaApplications/JavaMonitor.woa/JavaMonitor -WOPort 56789 &"
+		su $USER -c "$NEXT_ROOT/Local/Library/WebObjects/JavaApplications/JavaMonitor.woa/JavaMonitor -WOPort 56789 &"
         echo
         ;;
     stop)
-        echo -n "Shutting down JavaMonitor: "
-        MONITOR_PID=`ps aux | awk '/WOPort 56789/ && !/awk/ {print $2}'`
-        kill $MONITOR_PID
+		echo -n "Shutting down JavaMonitor: "
+		MONITOR_PID=`ps aux | awk '/WOPort 56789/ && !/awk/ {print $2}'`
+		kill $MONITOR_PID
         echo
         ;;
     restart)
