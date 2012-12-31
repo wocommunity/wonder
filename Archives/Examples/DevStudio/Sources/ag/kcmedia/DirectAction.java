@@ -39,7 +39,7 @@ public class DirectAction extends ERXDirectAction {
     public WOComponent methodsAction() {
         WOComponent nextPage = pageWithName("StringHolder");
         nextPage.takeValueForKey(selectedClass().methods() +"", "string");
-        nextPage.takeValueForKey(new Boolean(true), "isDocumentation");
+        nextPage.takeValueForKey(Boolean.valueOf(true), "isDocumentation");
 
         return nextPage;
     }
@@ -47,7 +47,7 @@ public class DirectAction extends ERXDirectAction {
         WOComponent nextPage = pageWithName("StringHolder");
         if(selectedClass() != null || true)
             nextPage.takeValueForKey(selectedClass().sourceCode(), "string");
-        nextPage.takeValueForKey(new Boolean(false), "isDocumentation");
+        nextPage.takeValueForKey(Boolean.valueOf(false), "isDocumentation");
         return nextPage;
     }
     public WOComponent docsAction() {
@@ -56,7 +56,7 @@ public class DirectAction extends ERXDirectAction {
             nextPage = pageWithName("StringHolder");
             if(selectedClass() != null)
                 nextPage.takeValueForKey(selectedClass().documentation(), "string");
-            nextPage.takeValueForKey(new Boolean(true), "isDocumentation");
+            nextPage.takeValueForKey(Boolean.valueOf(true), "isDocumentation");
         } else {
             nextPage = pageWithName("WORedirect");
             if(selectedClass() != null)

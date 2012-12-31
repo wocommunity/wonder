@@ -467,7 +467,7 @@ public class DirectAction extends WODirectAction  {
             } else if (queryWotaskdString.equals("HOST")) {
                 // query - host.runningInstancesCount_W
                 if (hostResponse == null) {
-                    Integer runningInstances = new Integer(0);
+                    Integer runningInstances = Integer.valueOf(0);
                     String processorType = System.getProperties().getProperty("os.arch");
                     String operatingSystem = System.getProperties().getProperty("os.name") + " " + System.getProperties().getProperty("os.version");
 

@@ -87,7 +87,7 @@ public class JSONExample extends com.webobjects.appserver.WOComponent {
 
 		private NSArray<Object> complexData = new NSArray<Object>(
 				// AK: new json doesn't handle this
-				new Object[] { TEST1, TEST2, TEST1, new Integer(0), "test", new NSTimestamp(), NSPropertyListSerialization.propertyListFromString("<0000c0a8004a0000d2f5480400000113c81c0584c55806fa>"
+				new Object[] { TEST1, TEST2, TEST1, Integer.valueOf(0), "test", new NSTimestamp(), NSPropertyListSerialization.propertyListFromString("<0000c0a8004a0000d2f5480400000113c81c0584c55806fa>"
 				) });
 
 		public NSArray complexData() {

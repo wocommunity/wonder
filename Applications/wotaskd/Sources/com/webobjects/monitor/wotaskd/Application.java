@@ -88,7 +88,7 @@ public class Application extends ERXApplication  {
             if (super.port().intValue() > 0) {
                 _port = super.port();
             } else {
-                _port = new Integer(1085);
+                _port = Integer.valueOf(1085);
             }
             _intPort = _port.intValue();
         }

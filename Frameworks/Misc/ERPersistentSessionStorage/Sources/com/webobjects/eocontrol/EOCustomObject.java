@@ -1177,7 +1177,7 @@ public abstract class EOCustomObject implements EOEnterpriseObject, EODeferredFa
 		if (this.__readOnly == null) {
 			EOClassDescription aDescription = classDescription();
 			if (aDescription != null)
-				this.__readOnly = new Boolean(aDescription.isEntityReadOnly());
+				this.__readOnly = Boolean.valueOf(aDescription.isEntityReadOnly());
 			else {
 				this.__readOnly = Boolean.FALSE;
 			}

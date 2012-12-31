@@ -51,7 +51,7 @@ public class Main extends ERD2WPage {
     	if("Boolean".equals(entityName)) {
     		value = Boolean.TRUE;
     	} else if("Integer".equals(entityName)) {
-    		value = new Integer("12345");
+    		value = Integer.valueOf("12345");
     	} else if("Decimal".equals(entityName)) {
     		value = new BigDecimal("1234.1234");
     	} else if("String".equals(entityName)) {

@@ -251,13 +251,13 @@ public class DRCriteria {
                     if (subMcs.count() > 1 || _masterCriteria.isString()) {
                         scr = MAXSTRING;
                     } else {
-                        scr = new Double(MAXNUMBER+1);
+                        scr = Double.valueOf(MAXNUMBER+1);
                     }
                 } else if (_valueDict.objectForKey("TOTAL") != null) {
                     if (subMcs.count() > 1 || _masterCriteria.isString()) {
                         scr = MAXSTRING.concat("z");
                     } else {
-                        scr = new Double(MAXNUMBER+2);
+                        scr = Double.valueOf(MAXNUMBER+2);
                     }
                 } else if (subMcs.count() > 1) {
                     scr = this.label().toLowerCase();
@@ -266,11 +266,11 @@ public class DRCriteria {
                     //OWDebug.println(1, "v:"+v);
                     try{
                         if (v instanceof String)
-                            scr = new Double((String)v);
+                            scr = Double.valueOf((String)v);
                         else
                             scr = DRValueConverter.converter().numberForValue(v);
                     } catch(NumberFormatException e) {
-                        scr = new Double(-1.0*MAXNUMBER);
+                        scr = Double.valueOf(-1.0*MAXNUMBER);
                     }
                 } else if(rawVal instanceof String){
                     scr = ((String)rawVal).toLowerCase();

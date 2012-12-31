@@ -221,7 +221,7 @@ public class ChartReport extends Report {
     }
     
     public Dataset datasetForAttribute() {
-        Integer attribTotalKey = new Integer(model().flatAttributeList().indexOfObject(attrib));
+        Integer attribTotalKey = Integer.valueOf(model().flatAttributeList().indexOfObject(attrib));
         return dataset(attribTotalKey);
     }
     

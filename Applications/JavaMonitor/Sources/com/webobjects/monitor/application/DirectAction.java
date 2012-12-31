@@ -64,7 +64,7 @@ public class DirectAction extends WODirectAction {
         NSMutableDictionary<String, Object> result = new NSMutableDictionary<String, Object>();
         result.setObjectForKey(app.name(), "applicationName");
         NSArray<MInstance> allInstances = app.instanceArray();
-        result.setObjectForKey(new Integer(allInstances.count()), "configuredInstances");
+        result.setObjectForKey(Integer.valueOf(allInstances.count()), "configuredInstances");
         
         int runningInstances = 0;
         int refusingInstances = 0;
@@ -78,8 +78,8 @@ public class DirectAction extends WODirectAction {
                 refusingInstances++;
             }
         }
-        result.setObjectForKey(new Integer(runningInstances), "runningInstances");
-        result.setObjectForKey(new Integer(refusingInstances), "refusingInstances");
+        result.setObjectForKey(Integer.valueOf(runningInstances), "runningInstances");
+        result.setObjectForKey(Integer.valueOf(refusingInstances), "refusingInstances");
         
         result.setObjectForKey(nonNull(app.instanceArray().valueForKeyPath("@sum.activeSessionsValue")), "sumSessions");
         result.setObjectForKey(nonNull(app.instanceArray().valueForKeyPath("@max.activeSessionsValue")), "maxSessions");

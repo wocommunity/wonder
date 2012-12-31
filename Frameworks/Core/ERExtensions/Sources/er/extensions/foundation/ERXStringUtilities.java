@@ -282,7 +282,7 @@ public class ERXStringUtilities {
                      Math.min((double)name.length(), (double)comparedString.length())*adjustement ) ||
                     (distance(cleanedName, cleanedComparedString) <=
                      Math.min((double)cleanedName.length(), (double)cleanedComparedString.length())*adjustement)){
-                    dico.setObjectForKey( new Double(distance(name, comparedString)), _DISTANCE );
+                    dico.setObjectForKey( Double.valueOf(distance(name, comparedString)), _DISTANCE );
                     NSDictionary<String, Object> pkValues = new NSDictionary<String, Object>(dico.objectsForKeys(pks, NSKeyValueCoding.NullValue ), pks);
                     dico.setObjectForKey( EOUtilities.faultWithPrimaryKey( ec, entityName, pkValues ), eoKey );
                     results.addObject( dico );
@@ -301,7 +301,7 @@ public class ERXStringUtilities {
                             Math.min((double)name.length(), (double)comparedString.length())*adjustement) ||
                            (distance(cleanedName, comparedString) <=
                             Math.min((double)cleanedName.length(), (double)comparedString.length())*adjustement)){
-                            dico.setObjectForKey( new Double(distance(name, comparedString)), _DISTANCE );
+                            dico.setObjectForKey( Double.valueOf(distance(name, comparedString)), _DISTANCE );
                             NSDictionary<String, Object> pkValues = new NSDictionary<String, Object>(dico.objectsForKeys(pks, NSKeyValueCoding.NullValue ), pks);
                             dico.setObjectForKey( EOUtilities.faultWithPrimaryKey( ec, entityName, pkValues ), eoKey );
                             results.addObject( dico );

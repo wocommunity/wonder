@@ -175,7 +175,7 @@ public final class WBUtilities  {
             NSDictionary pDict = (NSDictionary)EOUtilities.primaryKeyForObject(object.editingContext(), object);
             return (Number)pDict.objectForKey(key);
         }
-        return new Integer(0);
+        return Integer.valueOf(0);
     }
 
 }
