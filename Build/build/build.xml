@@ -816,7 +816,7 @@
             <param name="project.type" value="application" />
             <param name="project.principal.class" value="Application" />
             <param name="project.name" value="EROpenIDExample" />
-            <param name="project.dir" value="Examples/Misc/EROpenIDExample" />
+            <param name="project.dir" value="Archives/Examples/EROpenIDExample" />
 
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/EROpenID" />
         </antcall>
@@ -862,7 +862,7 @@
           <param name="project.type" value="application" />
           <param name="project.principal.class" value="er.iui.example.Application" />
           <param name="project.name" value="ERIUIExample" />
-          <param name="project.dir" value="Examples/Ajax/ERIUIExample" />
+          <param name="project.dir" value="Archives/Examples/ERIUIExample" />
 
           <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERIUI/Ajax/WOOgnl" />
       </antcall>
@@ -961,7 +961,7 @@
             <param name="project.type" value="application" />
             <param name="project.principal.class" value="Application" />
             <param name="project.name" value="ERDivaLookExample" />
-            <param name="project.dir" value="Examples/Ajax/ERDivaLookExample" />
+            <param name="project.dir" value="Archives/Examples/ERDivaLookExample" />
 
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax/ERDivaLook/ERPrototaculous/H2PlugIn/ERMoviesLogic/ERAttachment/ERTaggable" />
@@ -983,7 +983,7 @@
             <param name="project.type" value="application" />
             <param name="project.principal.class" value="er.divalite.example.Application" />
             <param name="project.name" value="ERDivaliteExample" />
-            <param name="project.dir" value="Examples/D2W/ERDivaliteExample" />
+            <param name="project.dir" value="Archives/Examples/ERDivaliteExample" />
 
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/ERDivaliteLook/H2PlugIn/ERMoviesLogic/ERAttachment/ERTaggable" />
