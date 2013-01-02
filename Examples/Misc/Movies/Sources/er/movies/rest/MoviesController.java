@@ -72,7 +72,7 @@ public class MoviesController extends ERXDefaultRouteController {
 	}
 	
 	protected ERXRestFormat defaultFormat() {
-		return ERXRestFormat.JSON;
+		return ERXRestFormat.json();
 	}
 	
 }

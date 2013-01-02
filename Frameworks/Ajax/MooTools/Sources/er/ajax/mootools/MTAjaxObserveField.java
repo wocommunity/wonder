@@ -189,7 +189,7 @@ public class MTAjaxObserveField extends AjaxDynamicElement {
 			if (result == null) {
 				result = handleRequest(request, context);
 			}
-			AjaxUtils.updateMutableUserInfoWithAjaxInfo(context);
+			ERXAjaxApplication.enableShouldNotStorePage();
 		} else {
 			result = invokeChildrenAction(request, context);
 		}

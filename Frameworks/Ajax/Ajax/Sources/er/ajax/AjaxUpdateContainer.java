@@ -285,14 +285,12 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 	}
 
 	public static String updateContainerID(WORequest request) {
-		NSDictionary userInfo = AjaxUtils.mutableUserInfo(request);
-		String updateContainerID = (String) userInfo.objectForKey(ERXAjaxApplication.KEY_UPDATE_CONTAINER_ID);
-		return updateContainerID;
+		return (String) ERXWOContext.contextDictionary().objectForKey(ERXAjaxApplication.KEY_UPDATE_CONTAINER_ID);
 	}
 
 	public static void setUpdateContainerID(WORequest request, String updateContainerID) {
 		if (updateContainerID != null) {
-			AjaxUtils.mutableUserInfo(request).setObjectForKey(updateContainerID, ERXAjaxApplication.KEY_UPDATE_CONTAINER_ID);
+			ERXWOContext.contextDictionary().setObjectForKey(updateContainerID, ERXAjaxApplication.KEY_UPDATE_CONTAINER_ID);
 		}
 	}
 

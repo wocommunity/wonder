@@ -7,14 +7,13 @@ import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.appserver.ERXResponse;
+import er.extensions.appserver.ERXWOContext;
 import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.appserver.ajax.ERXAjaxApplication.ERXAjaxResponseDelegate;
-import er.extensions.foundation.ERXKeyValueCodingUtilities;
 
 /**
  * AjaxResponse provides support for performing an AjaxUpdate in the same response
@@ -62,7 +61,7 @@ public class AjaxResponse extends ERXResponse {
 			try {
 				CharSequence originalContent = _content;
 				_content = new StringBuilder();
-				NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(_request);
+				NSMutableDictionary userInfo = ERXWOContext.contextDictionary();
 				userInfo.setObjectForKey(Boolean.TRUE, AjaxResponse.AJAX_UPDATE_PASS);
 				WOActionResults woactionresults = WOApplication.application().invokeAction(_request, _context);
 				_content.append(originalContent);
@@ -86,8 +85,7 @@ public class AjaxResponse extends ERXResponse {
 	}
 	
 	public static boolean isAjaxUpdatePass(WORequest request) {
-		NSDictionary userInfo = AjaxUtils.mutableUserInfo(request);
-		return userInfo != null && userInfo.valueForKey(AjaxResponse.AJAX_UPDATE_PASS) != null;
+		return ERXWOContext.contextDictionary().valueForKey(AjaxResponse.AJAX_UPDATE_PASS) != null;
 	}
 	
 	/**

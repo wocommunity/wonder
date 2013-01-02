@@ -315,7 +315,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
       AjaxUpdateContainer.setUpdateContainerID(worequest, updateContainerID);
       wocontext.setActionInvoked(true);
       result = handleRequest(worequest, wocontext);
-      AjaxUtils.updateMutableUserInfoWithAjaxInfo(wocontext);
+      ERXAjaxApplication.enableShouldNotStorePage();
     }
     
     return result;

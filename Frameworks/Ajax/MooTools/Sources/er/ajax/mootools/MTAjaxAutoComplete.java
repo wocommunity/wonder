@@ -18,6 +18,7 @@ import er.ajax.AjaxComponent;
 import er.ajax.AjaxOption;
 import er.ajax.AjaxOptions;
 import er.ajax.AjaxUtils;
+import er.extensions.appserver.ERXWOContext;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
@@ -113,7 +114,7 @@ public class MTAjaxAutoComplete extends AjaxComponent {
 				String listJS = null;
 				if (isLocalSharedList) {
 					String varName = (String) valueForBinding("localSharedVarName");
-					NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(res);
+					NSMutableDictionary userInfo = ERXWOContext.contextDictionary();
 					if (userInfo.objectForKey(varName) == null) {
 						String ljs = listeJS();
 						AjaxUtils.addScriptCodeInHead(res, ctx, "var " + varName + " = " + ljs + ";");

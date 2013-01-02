@@ -368,7 +368,7 @@ public class MTAjaxSubmitButton extends AjaxDynamicElement {
 			MTAjaxUpdateContainer.setUpdateContainerID(worequest, updateContainerID);
 			wocontext.setActionInvoked(true);
 			result = handleRequest(worequest, wocontext);
-			AjaxUtils.updateMutableUserInfoWithAjaxInfo(wocontext);
+			ERXAjaxApplication.enableShouldNotStorePage();
 		}
 
 		return result;

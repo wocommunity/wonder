@@ -16,6 +16,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 import er.ajax.json.JSONBridge;
 import er.extensions.appserver.ERXResponseRewriter;
+import er.extensions.appserver.ERXWOContext;
 
 /**
  * Handles javascript-java communication (client-server) between the javascript world running in a web browser and the
@@ -117,7 +118,7 @@ public class AjaxProxy extends AjaxComponent {
 	protected void addRequiredWebResources(WOResponse res) {
 		addScriptResourceInHead(res, "jsonrpc.js");
 
-		NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(context().response());
+		NSMutableDictionary userInfo = ERXWOContext.contextDictionary();
 		String name = (String) valueForBinding("name");
 		String key = "JSONRPC_" + name;
 		Object oldValue = userInfo.objectForKey(key);
