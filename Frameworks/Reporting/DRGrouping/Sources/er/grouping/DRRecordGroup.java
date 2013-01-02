@@ -134,7 +134,7 @@ public class DRRecordGroup {
                                     private Double total;
                                     public double total() {
                                         if(total == null) { 
-                                            total = new Double(attribute().computeFromRawRecords(rawRecords));
+                                            total = Double.valueOf(attribute().computeFromRawRecords(rawRecords));
                                         }
                                         return total.doubleValue();
                                     }

@@ -94,7 +94,7 @@ ChosenCaseString: WOString {
  ==========================
 
 public Object chosenCase() {
-    Object objects = new Object[] {"Fourth", "Third", "First", new Integer(2), "dummy"};
+    Object objects = new Object[] {"Fourth", "Third", "First", Integer.valueOf(2), "dummy"};
     return objects[(new Random()).nextInt(objects.length)];
 }
 

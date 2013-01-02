@@ -12,9 +12,7 @@
 	<modules>
 		<module>AjaxExample</module>
 		<module>AjaxExample2</module>
-		<module>AjaxLookExample</module>
 		<module>ERDivaLookExample</module>
 		<module>ERIUIExample</module>
-		<module>YUIExample</module>
 	</modules>
 </project>

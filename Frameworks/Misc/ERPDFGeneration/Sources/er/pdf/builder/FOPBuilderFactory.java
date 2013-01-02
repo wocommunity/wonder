@@ -15,11 +15,11 @@ public class FOPBuilderFactory {
 	}
 
 	public static FOPBuilder newBuilder(String outputType) throws Exception {
-		if (outputType == null || outputType == MimeConstants.MIME_PDF) {
+		if (MimeConstants.MIME_PDF.equals(outputType)) {
 			return new Fop2PdfImpl();
 		}
 		
-		if ( outputType == MimeConstants.MIME_EPS) {
+		if (MimeConstants.MIME_EPS.equals(outputType)) {
 			return new Fop2EpsImpl();
 		}
 		

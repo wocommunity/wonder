@@ -59,7 +59,7 @@ public class Session extends ERXSession {
 		// New session
 		if (previousSeqId == 0) {
 			if (transactions().valueForKeyPath("@min.seqId") != null) {
-				previousSeqId = new Integer(transactions().valueForKeyPath("@min.seqId").toString());
+				previousSeqId = Integer.valueOf(transactions().valueForKeyPath("@min.seqId").toString());
 				previousSeqId = previousSeqId - 1;
 			}
 		}

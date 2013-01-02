@@ -68,7 +68,7 @@ public class TimeZonesPage extends WOComponent {
 				TimeZone tz = TimeZone.getTimeZone(id);
 
 				NSArray<String> keys = new NSArray<String>(new String[] { ID_KEY, NAME_KEY, DST_KEY, OFF_KEY } );
-				NSArray<Object> vals = new NSArray<Object>(new Object[] { id, tz.getDisplayName(), new Integer(tz.getDSTSavings()), new Integer(tz.getRawOffset()) } );
+				NSArray<Object> vals = new NSArray<Object>(new Object[] { id, tz.getDisplayName(), Integer.valueOf(tz.getDSTSavings()), Integer.valueOf(tz.getRawOffset()) } );
 				NSDictionary foundValues = new NSDictionary(vals,keys);
 
 				zonesHash.takeValueForKey(foundValues, id);

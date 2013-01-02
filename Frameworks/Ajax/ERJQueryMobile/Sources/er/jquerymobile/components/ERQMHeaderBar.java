@@ -51,4 +51,6 @@ public class ERQMHeaderBar extends ERXStatelessComponent {
     return hasBinding("rightButton-linkResource");
   }
 
-}
+  public boolean hasBackButtonAction() {
+	    return hasBinding("backButton-action");
+	  }}

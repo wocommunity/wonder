@@ -88,7 +88,7 @@ public class ERXDividingNumberFormatter extends NSNumberFormatter {
         } else {
             double d = n.doubleValue();
             d /= (double)factor;
-            return super.format(new Double(d), arg1, arg2);
+            return super.format(Double.valueOf(d), arg1, arg2);
         }
     }
 }

@@ -234,7 +234,7 @@ public class Bug extends _Bug implements Markable {
         }
 
         protected EOQualifier qualifierForRead(boolean flag) {
-            return new EOKeyValueQualifier(Key.IS_READ, EOQualifier.QualifierOperatorEqual, new Boolean(flag));
+            return new EOKeyValueQualifier(Key.IS_READ, EOQualifier.QualifierOperatorEqual, Boolean.valueOf(flag));
         }
         
         protected EOQualifier qualifierForPerson(People owner) {

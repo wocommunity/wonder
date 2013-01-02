@@ -9,13 +9,13 @@ package er.extensions.eof;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAdaptor;
@@ -46,8 +46,6 @@ import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation._NSArrayUtilities;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
 
-import er.extensions.ERXExtensions;
-import er.extensions.appserver.ERXApplication;
 import er.extensions.foundation.ERXConfigurationManager;
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXPatcher;
@@ -559,7 +557,7 @@ public class ERXModelGroup extends EOModelGroup {
 						EOAttribute sourceAttribute = join.sourceAttribute();
 						EOAttribute destinationAttribute = join.destinationAttribute();
 						if (sourceAttribute != null && destinationAttribute != null) {
-							if (!ERXExtensions.safeEquals(sourceAttribute.className(), destinationAttribute.className()) || !ERXExtensions.safeEquals(sourceAttribute.valueType(), destinationAttribute.valueType())) {
+							if (ObjectUtils.notEqual(sourceAttribute.className(), destinationAttribute.className()) || ObjectUtils.notEqual(sourceAttribute.valueType(), destinationAttribute.valueType())) {
 								if (!ERXProperties.booleanForKey("er.extensions.ERXModelGroup." + sourceAttribute.entity().name() + "." + sourceAttribute.name() + ".ignoreTypeMismatch")) {
 									throw new RuntimeException("The attribute " + sourceAttribute.name() + " in " + sourceAttribute.entity().name() + " (" + sourceAttribute.className() + ", " + sourceAttribute.valueType() + ") is a foreign key to " + destinationAttribute.name() + " in " + destinationAttribute.entity().name() + " (" + destinationAttribute.className() + ", " + destinationAttribute.valueType() + ") but their class names or value types do not match.  If this is actually OK, you can set er.extensions.ERXModelGroup." + sourceAttribute.entity().name() + "." + sourceAttribute.name() + ".ignoreTypeMismatch=true in your Properties file.");
 								}
@@ -925,7 +923,7 @@ public class ERXModelGroup extends EOModelGroup {
 			EOModel otherModel = (EOModel)modelsEnum.nextElement();
 			if (otherModel != model) {
 				NSDictionary otherConnectionDictionary = otherModel.connectionDictionary();
-				if (otherConnectionDictionary != null && ERXExtensions.safeEquals(newConnectionDictionary.objectForKey("adaptorName"), otherConnectionDictionary.objectForKey("adaptorName"))) {
+				if (otherConnectionDictionary != null && ObjectUtils.equals(newConnectionDictionary.objectForKey("adaptorName"), otherConnectionDictionary.objectForKey("adaptorName"))) {
 					boolean valuesThatMatterMatch = true;
 					for (int keyNum = 0; valuesThatMatterMatch && keyNum < keysThatMatter.length; keyNum ++) {
 						String thisValue = (String)newConnectionDictionary.objectForKey(keysThatMatter[keyNum]);
@@ -1279,7 +1277,7 @@ public class ERXModelGroup extends EOModelGroup {
 		}
 	}
 
-	private static final NSArray _prototypeKeys = new NSArray(new Object[] { "externalType", "columnName", "readOnly", ERXApplication.isWO54()?"className":"valueClassName", "valueType", "width", "precision", "scale", "writeFormat", "readFormat", "userInfo", "serverTimeZone", "valueFactoryMethodName", "adaptorValueConversionMethodName", "factoryMethodArgumentType", "allowsNull", "parameterDirection", "_internalInfo" });
+	private static final NSArray _prototypeKeys = new NSArray(new Object[] { "externalType", "columnName", "readOnly", "className", "valueType", "width", "precision", "scale", "writeFormat", "readFormat", "userInfo", "serverTimeZone", "valueFactoryMethodName", "adaptorValueConversionMethodName", "factoryMethodArgumentType", "allowsNull", "parameterDirection", "_internalInfo" });
 
 	public static NSArray _prototypeKeys() {
 		return _prototypeKeys;
@@ -1294,18 +1292,6 @@ public class ERXModelGroup extends EOModelGroup {
 	}
 
 	public static boolean _isKeyEnumOverriden(EOAttribute att, int key) {
-		if (!ERXApplication.isWO54()) {
-			// 5.4 - API changed
-			try {
-				Method isKeyEnumOverriddenMethod = att.getClass().getMethod("_isKeyEnumOverriden", new Class[] { int.class });
-				Boolean isKeyEnumOverridden = (Boolean)isKeyEnumOverriddenMethod.invoke(att, new Object[] { Integer.valueOf(key) });
-				return isKeyEnumOverridden.booleanValue();
-			}
-			catch (Exception e) {
-				throw new RuntimeException("_isKeyEnumOverridden failed.", e);
-			}
-		}
-		
 		boolean result = false;
 		if(att.prototype() != null) {
 			Map characteristics = (Map) NSKeyValueCoding.Utility.valueForKey(att, "overwrittenCharacteristics");

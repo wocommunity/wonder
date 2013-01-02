@@ -103,7 +103,7 @@ public class ERCloudFilesAttachment extends _ERCloudFilesAttachment {
     if (connectionTimeOut == null) {
       connectionTimeOut = ERXProperties.decryptedStringForKeyWithDefault("er.attachment.cf.connectionTimeOut", "5000");
     }
-    return new Integer(connectionTimeOut);
+    return Integer.valueOf(connectionTimeOut);
   }
   
   public String acl() {

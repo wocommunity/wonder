@@ -135,7 +135,7 @@ public class ERCFFileUpload extends ERXComponent {
     if (connectionTimeOut == null) {
       connectionTimeOut = ERXProperties.decryptedStringForKeyWithDefault("er.attachment.cf.connectionTimeOut", "5000");
     }
-    return new Integer(connectionTimeOut);
+    return Integer.valueOf(connectionTimeOut);
   }
   
   public void _uploadSucceeded() throws IOException, FilesException, HttpException {
@@ -152,7 +152,7 @@ public class ERCFFileUpload extends ERXComponent {
       cloudFilesConnection().createContainer(container());
     } finally {
       String mimeType = mimeType(uploadedFile.getName());
-      Long fileSize = new Long(uploadedFile.length());
+      Long fileSize = Long.valueOf(uploadedFile.length());
       
       cloudFilesConnection().storeObjectAs(container(), uploadedFile, mimeType, NSPathUtilities.lastPathComponent(_filePath));
       URL urlToFile = new URL(cloudFilesConnection().getStorageURL() + "/" + container() + "/" + NSPathUtilities.lastPathComponent(_filePath));

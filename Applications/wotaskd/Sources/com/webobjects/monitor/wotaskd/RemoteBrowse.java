@@ -47,7 +47,7 @@ public class RemoteBrowse extends WODirectAction  {
         int anArrayCount = rootStrings.length;
         NSMutableArray rootArray = new NSMutableArray(anArrayCount);
         for (int i = 0; i < anArrayCount; i++) {
-            NSDictionary aFileDict = new NSDictionary(new Object[]{rootStrings[i] , "NSFileTypeDirectory" , new Long(0)}, fileKeys);
+            NSDictionary aFileDict = new NSDictionary(new Object[]{rootStrings[i] , "NSFileTypeDirectory" , Long.valueOf(0)}, fileKeys);
             rootArray.addObject(aFileDict);
         }
 
@@ -89,10 +89,10 @@ public class RemoteBrowse extends WODirectAction  {
 
             if (subfile.isDirectory()) {
                 aFileType = "NSFileTypeDirectory";
-                aFileSize = new Long(0);
+                aFileSize = Long.valueOf(0);
             } else {
                 aFileType = "NSFileTypeRegular";
-                aFileSize = new Long(subfile.length());
+                aFileSize = Long.valueOf(subfile.length());
             }
 
             aFileDict = new NSDictionary(new Object[]{aFile , aFileType , aFileSize}, fileKeys);

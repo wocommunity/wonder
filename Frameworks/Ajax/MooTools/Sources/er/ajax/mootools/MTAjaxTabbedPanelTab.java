@@ -114,7 +114,7 @@ public class MTAjaxTabbedPanelTab extends AjaxDynamicElement {
 	 */
 	public void setIsSelected(WOComponent component, boolean isTabSelected) {
 		if (isSelected != null && isSelected.isValueSettableInComponent(component)) {
-			isSelected.setValue(new Boolean(isTabSelected), component);
+			isSelected.setValue(Boolean.valueOf(isTabSelected), component);
 		}
 	}
 

@@ -86,7 +86,7 @@ public class StatsUtilities {
 
                     if (aTrans.intValue() > 0) {
                         aValue = (String)aStatsDict.valueForKey("avgTransactionTime");
-                        Float aTime = new Float(aValue);
+                        Float aTime = Float.valueOf(aValue);
                         aTotalTime = aTotalTime + (aTrans.intValue() * aTime.floatValue());
                         aTotalTrans = aTotalTrans + (aTrans.intValue());
                     }
@@ -100,7 +100,7 @@ public class StatsUtilities {
             aTotalAvg = aTotalTime / aTotalTrans;
         }
 
-        return new Float(aTotalAvg);
+        return Float.valueOf(aTotalAvg);
     }
 
 
@@ -123,7 +123,7 @@ public class StatsUtilities {
 
                      if (aTrans.intValue() > 0) {
                          String idleString = (String)aStatsDict.valueForKey("averageIdlePeriod");
-                         Float aTime = new Float(idleString);
+                         Float aTime = Float.valueOf(idleString);
                          aTotalTime = aTotalTime + (aTrans.intValue() * aTime.floatValue());
                          aTotalTrans = aTotalTrans + (aTrans.intValue());
                      }
@@ -137,7 +137,7 @@ public class StatsUtilities {
             aTotalAvg = aTotalTime / aTotalTrans;
         }
 
-        return new Float(aTotalAvg);
+        return Float.valueOf(aTotalAvg);
     }
 
     static public Float actualTransactionsPerSecondForApplication(MApplication anApp) {
@@ -181,7 +181,7 @@ public class StatsUtilities {
             }
             anOverallRate = anOverallRate + anInstRate;
         }
-        return new Float(anOverallRate);
+        return Float.valueOf(anOverallRate);
     }
     
 }

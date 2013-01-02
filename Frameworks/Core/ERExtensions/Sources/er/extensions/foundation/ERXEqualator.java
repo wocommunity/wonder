@@ -1,15 +1,9 @@
-//
-//  ERXEqualator.java
-//  ERExtensions
-//
-//  Created by Jonathan B. Leffert on 5/19/05.
-//
-
 package er.extensions.foundation;
+
+import org.apache.commons.lang.ObjectUtils;
 
 import com.webobjects.eocontrol.EOEnterpriseObject;
 
-import er.extensions.ERXExtensions;
 import er.extensions.eof.ERXEOControlUtilities;
 
 /**
@@ -18,6 +12,8 @@ import er.extensions.eof.ERXEOControlUtilities;
  * be equal in one context (within an array, for example) while not changing the meaning of
  * equality in another (by overriding equals()).  This is especially useful for doing
  * non-editing-context-sensitive equality checks between EOs.
+ * 
+ * @author Jonathan B. Leffert
  */
 public abstract class ERXEqualator {
 
@@ -59,7 +55,7 @@ public abstract class ERXEqualator {
         public _SafeEqualsEqualator() {}
 
         public boolean objectIsEqualToObject(Object o1, Object o2) {
-            return ERXExtensions.safeEquals(o1, o2);
+            return ObjectUtils.equals(o1, o2);
         }
     }
     

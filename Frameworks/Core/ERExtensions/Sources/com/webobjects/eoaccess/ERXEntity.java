@@ -84,7 +84,7 @@ public class ERXEntity extends EOEntity {
 	 * @see com.webobjects.eoaccess.EOEntity#hasExternalName()
 	 * @since 5.4.1
 	 */
-	//@Override introduced with 5.4.1
+	@Override
 	public boolean hasExternalName() {
 		// (ldeck) radar://6592526 fix for 5.4.3 regression which assumed that any parent entity that is abstract has no external name!
 		return externalName() != null && externalName().trim().length() > 0;
