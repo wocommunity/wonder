@@ -54,7 +54,8 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 		boolean renderContainer = !booleanValueForBinding("optional", false, component) || AjaxUpdateContainer.currentUpdateContainerID() == null;
 		return renderContainer;
 	}
-	
+
+	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		if (shouldRenderContainer(context.component())) {
 			String previousUpdateContainerID = AjaxUpdateContainer.currentUpdateContainerID();
@@ -71,6 +72,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 		}
 	}
 
+	@Override
 	public WOActionResults invokeAction(WORequest request, WOContext context) {
 		WOActionResults results;
 		if (shouldRenderContainer(context.component())) {
@@ -161,6 +163,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 		return options;
 	}
 
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		WOComponent component = context.component();
 		if (!shouldRenderContainer(component)) {
@@ -276,6 +279,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 		return null;
 	}
 
+	@Override
 	protected String _containerID(WOContext context) {
 		String id = (String) valueForBinding("id", context.component());
 		if (id == null) {

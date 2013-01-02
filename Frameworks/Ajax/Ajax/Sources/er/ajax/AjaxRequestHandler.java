@@ -13,7 +13,8 @@ public class AjaxRequestHandler extends WOComponentRequestHandler {
 	public AjaxRequestHandler() {
 		AjaxRequestHandler.setUseAjaxRequestHandler(true);
 	}
-	
+
+	@Override
 	public WOResponse handleRequest(WORequest request) {
 		ERXAjaxApplication.enableShouldNotStorePage();
 		WOResponse response = super.handleRequest(request);

@@ -34,7 +34,8 @@ public class WOLToolBar extends WOComponent {
   public WOLToolBar(WOContext context) {
     super(context);
   }
-  
+
+  @Override
   public void appendToResponse(WOResponse response, WOContext context) {
 	  super.appendToResponse(response, context);
 	  if(ERXApplication.erxApplication().isDevelopmentMode()) {

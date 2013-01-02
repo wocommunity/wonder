@@ -471,6 +471,8 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * Something useful could be:
    * 
    * <blockquote><code>return session().sessionID() + valueForKeyPath("user.username");</code></blockquote>
+   * 
+   * @return name of the current thread
    */
   public String threadName() {
     return Thread.currentThread().getName();
@@ -572,6 +574,8 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
   
   /**
    * Bringing application into KVC.
+   * 
+   * @return the application object
    */
   public ERXApplication application() {
 	  return ERXApplication.erxApplication();

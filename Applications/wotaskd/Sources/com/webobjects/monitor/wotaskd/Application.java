@@ -75,14 +75,17 @@ public class Application extends ERXApplication  {
     	ERXApplication.main(argv, Application.class);
     }
 
+    @Override
     public String defaultRequestHandlerClassName() {
         return "com.webobjects.appserver._private.WODirectActionRequestHandler";
     }
 
+    @Override
     public String name() {
         return "wotaskd";
     }
 
+    @Override
     public Number port() {
         if (_port == null) {
             if (super.port().intValue() > 0) {
@@ -103,6 +106,7 @@ public class Application extends ERXApplication  {
         return _multicastAddress;
     }
 
+    @Override
     public boolean allowsConcurrentRequestHandling() {
         return true;
     }
@@ -233,6 +237,7 @@ public class Application extends ERXApplication  {
 	 * @param strDomainName - Domain name required for creating the ObjectName of the MBean
 	 * @param strMBeanName  - Name of the MBean
 	 */
+	@Override
 	public void registerMBean(Object objMBean, String strDomainName, String strMBeanName) throws IllegalArgumentException{
 		if (objMBean == null)
 			throw new IllegalArgumentException("Error: Could not register null to PlatformMbeanServer.");
@@ -274,6 +279,7 @@ public class Application extends ERXApplication  {
 	 * name is passed as null.
 	 * @return _mbsDomain  - String containing the Domain name to be used while registering the MBean
 	 */
+	@Override
     public String getJMXDomain() {
 		if (_mbsDomain == null) {
 			_mbsDomain = this.host() + "." + this.name() + "." + this.port();
@@ -324,6 +330,7 @@ public class Application extends ERXApplication  {
 	 * This methods returns the platform MBean Server from the Factory
 	 * @return _mbeanServer  - The platform MBeanServer 
 	 */
+	@Override
 	public MBeanServer getMBeanServer() throws IllegalAccessException {
 		if (_mbeanServer == null) {
 			_mbeanServer = ManagementFactory.getPlatformMBeanServer();	
@@ -349,6 +356,7 @@ public class Application extends ERXApplication  {
     // sleep will check if there have been changes to the siteConfig.
     // if so, it will write the new siteConfig to disk as SiteConfig.xml
     // if requested, it will also write the new adaptorConfig to disk as WOConfig.xml
+    @Override
     public void sleep() {
         _lock.startReading();
         try {
@@ -374,6 +382,7 @@ public class Application extends ERXApplication  {
     }
 
     // cleans up after the Application (specifically the ListenThread)
+    @Override
     public void finalize() throws Throwable {
         listenThread.closeRequestSocket();
         listenThread.stop();
@@ -391,6 +400,7 @@ public class Application extends ERXApplication  {
 
     // overridden dispatch of requests, for faster lifebeat checking
     // if it's a lifebeat, we return a null response, and that should close the socket immediately
+    @Override
     public WOResponse dispatchRequest(WORequest aRequest) {
         WORequestHandler aHandler = handlerForRequest(aRequest);
         if ( (aHandler != null) && (aHandler == _lifebeatRequestHandler) ) {
@@ -544,6 +554,7 @@ public class Application extends ERXApplication  {
             System.exit(1);
         }
 
+        @Override
         public void run() {
             createRequestSocket();
             NSLog.debug.appendln("Created UDP socket; listening for requests...");

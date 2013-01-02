@@ -54,6 +54,7 @@ public class AjaxResponse extends ERXResponse {
 		_context = context;
 	}
 
+	@Override
 	public WOResponse generateResponse() {
 		if (AjaxUpdateContainer.hasUpdateContainerID(_request)) {
 			String originalSenderID = _context.senderID();
@@ -148,7 +149,19 @@ public class AjaxResponse extends ERXResponse {
 	}
 	
 	/**
-	 * Convenience method that calls <code>AjaxUtils.updateDomElement</code> with this request. 
+	 * Convenience method that calls <code>AjaxUtils.updateDomElement</code> with this request.
+	 * 
+	 * @param id
+	 *            ID of the DOM element to update
+	 * @param value
+	 *            The new value
+	 * @param numberFormat
+	 *            optional number format to format the value with
+	 * @param dateFormat
+	 *            optional date format to format the value with
+	 * @param valueWhenEmpty
+	 *            string to use when value is null
+	 * 
 	 * @see er.ajax.AjaxUtils#updateDomElement(WOResponse, String, Object, String, String, String)
 	 */
 	public void updateDomElement(String id, Object value, String numberFormat, String dateFormat, String valueWhenEmpty) {
@@ -156,7 +169,12 @@ public class AjaxResponse extends ERXResponse {
 	}
 
 	/**
-	 * Convenience method that calls <code>updateDomElement</code> with no formatters and no valueWhenEmpty string. 
+	 * Convenience method that calls <code>updateDomElement</code> with no formatters and no valueWhenEmpty string.
+	 * 
+	 * @param id
+	 *            ID of the DOM element to update
+	 * @param value
+	 *            The new value
 	 */
 	public void updateDomElement(String id, Object value) {
 		updateDomElement(id, value, null, null, null);

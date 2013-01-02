@@ -77,7 +77,9 @@ public abstract class ERXAjaxApplication extends WOApplication {
 	 * @see com.webobjects.appserver.WOApplication#takeValuesFromRequest(com.webobjects.appserver.WORequest, com.webobjects.appserver.WOContext)
 	 *
 	 * @param request
+	 *            the current request
 	 * @param context
+	 *            the context
 	 */
 	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {

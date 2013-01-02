@@ -343,10 +343,11 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 
 	/**
 	 * Create an error page when the future wasn't found anymore. This happens
-	 * hen the user backtracks and it is no longer in the cache. Note that the
+	 * when the user backtracks and it is no longer in the cache. Note that the
 	 * session has not been awakened.
 	 * 
-	 * @param request
+	 * @param request the current request
+	 * @return error response
 	 */
 	@SuppressWarnings("unchecked")
 	protected WOResponse createErrorResponse(WORequest request) {
@@ -387,8 +388,9 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 	 * Create a refresh page. Note that the session has not been awakened yet
 	 * and you probably shouldn't do it either.
 	 * 
-	 * @param request
-	 * @param url
+	 * @param request the current request
+	 * @param url URL to open after refresh
+	 * @return refresh page response
 	 */
 	protected WOResponse createRefreshResponse(WORequest request, String url) {
 		ERXResponse result = new ERXResponse();
@@ -412,7 +414,9 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 	}
 
 	/**
-	 * Returns the refresh time in seconds for the message page;
+	 * Returns the refresh time in seconds for the message page.
+	 * 
+	 * @return the refresh time in seconds
 	 */
 	protected int refresh() {
 		return _refreshTimeSeconds;
@@ -421,6 +425,8 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 	/**
 	 * Returns the maximum time in milliseconds for allowed for a request before
 	 * returning the message page.
+	 * 
+	 * @return the maximum request time in milliseconds
 	 */
 	protected int maxRequestTimeMillis() {
 		return _maxRequestTimeMillis;
@@ -428,6 +434,8 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 
 	/**
 	 * Returns all active delayed requests.
+	 * 
+	 * @return array of delayed requests
 	 */
 	public NSArray<DelayedRequest> activeRequests() {
 		NSMutableArray<DelayedRequest> result = new NSMutableArray<DelayedRequest>();

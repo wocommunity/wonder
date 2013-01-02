@@ -183,5 +183,4 @@ public class StatsUtilities {
         }
         return Float.valueOf(anOverallRate);
     }
-    
 }
