@@ -105,7 +105,9 @@ public class AjaxUtils {
 	 * already one.
 	 * 
 	 * @param message
+	 * @deprecated user {@link ERXWOContext#contextDictionary()} instead
 	 */
+	@Deprecated
 	public static NSMutableDictionary mutableUserInfo(WOMessage message) {
 		return ERXWOContext.contextDictionary();
 	}
@@ -237,7 +239,9 @@ public class AjaxUtils {
 	 * 
 	 * @param context - WOContext
 	 * </span>
+	 * @deprecated use {@link ERXAjaxApplication#enableShouldNotStorePage()} instead
 	 */
+	@Deprecated
 	public static void updateMutableUserInfoWithAjaxInfo(WOContext context) {
 		AjaxUtils.updateMutableUserInfoWithAjaxInfo(context.response());
 	}
@@ -248,10 +252,11 @@ public class AjaxUtils {
 	 * 
 	 * @param message - WOMessage
 	 * </span>
+	 * @deprecated use {@link ERXAjaxApplication#enableShouldNotStorePage()} instead
 	 */
+	@Deprecated
 	public static void updateMutableUserInfoWithAjaxInfo(WOMessage message) {
-		NSMutableDictionary dict = AjaxUtils.mutableUserInfo(message);
-		dict.takeValueForKey(ERXAjaxSession.DONT_STORE_PAGE, ERXAjaxSession.DONT_STORE_PAGE);
+		ERXWOContext.contextDictionary().takeValueForKey(ERXAjaxSession.DONT_STORE_PAGE, ERXAjaxSession.DONT_STORE_PAGE);
 	}
 
 	/**

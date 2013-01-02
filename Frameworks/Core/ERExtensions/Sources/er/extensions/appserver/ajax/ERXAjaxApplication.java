@@ -267,6 +267,13 @@ public abstract class ERXAjaxApplication extends WOApplication {
 	}
 
 	/**
+	 * Set flag on current context to not store the current page.
+	 */
+	public static void enableShouldNotStorePage() {
+		ERXWOContext.contextDictionary().takeValueForKey(ERXAjaxSession.DONT_STORE_PAGE, ERXAjaxSession.DONT_STORE_PAGE);
+	}
+
+	/**
 	 * <span class="en">
 	 * Return whether or not the given request is an Ajax request.
 	 * 
