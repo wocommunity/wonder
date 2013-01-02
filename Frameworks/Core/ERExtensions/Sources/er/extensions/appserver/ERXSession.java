@@ -22,7 +22,6 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;

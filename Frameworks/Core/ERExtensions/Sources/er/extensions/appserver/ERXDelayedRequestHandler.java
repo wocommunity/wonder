@@ -125,7 +125,7 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 		}
 
 		public boolean cancel() {
-			long start = System.currentTimeMillis();
+			// long start = System.currentTimeMillis();
 			synchronized (this) {
 				if (_currentThread != null) {
 					ERXRuntimeUtilities.addThreadInterrupt(_currentThread, "ERXDelayedRequestHandler: stop requested " + this);
@@ -356,7 +356,7 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 		// dirty trick: use a non-existing context id to get the page-expired
 		// reply.
 		String url = request.applicationURLPrefix() + "/wo" + args + "/9999999999.0";
-		WORequest expired = app.createRequest("GET", url, "HTTP/1.0", (Map) request.headers(), null, null);
+		WORequest expired = app.createRequest("GET", url, "HTTP/1.0", request.headers(), null, null);
 		WOResponse result = app.dispatchRequestImmediately(expired);
 		return result;
 	}
