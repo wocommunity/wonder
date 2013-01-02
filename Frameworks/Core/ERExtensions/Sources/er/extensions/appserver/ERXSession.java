@@ -174,7 +174,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
      * registers this observer object for 
      * {@link er.extensions.localization.ERXLocalizer#LocalizationDidResetNotification}
      */
-    private void registerForLocalizationDidResetNotification() {
+    protected void registerForLocalizationDidResetNotification() {
       NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("localizationDidReset", ERXConstant.NotificationClassArray), ERXLocalizer.LocalizationDidResetNotification, null);
     }
   }
