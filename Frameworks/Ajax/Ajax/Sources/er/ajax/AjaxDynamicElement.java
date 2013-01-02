@@ -38,7 +38,7 @@ public abstract class AjaxDynamicElement extends ERXDynamicElement implements IA
 		WOActionResults result = null;
 		if (shouldHandleRequest(request, context)) {
 			result = handleRequest(request, context);
-			AjaxUtils.updateMutableUserInfoWithAjaxInfo(context);
+			ERXAjaxApplication.enableShouldNotStorePage();
         	if (ERXAjaxApplication.shouldIgnoreResults(request, context, result)) {
         		log.warn("An Ajax request attempted to return the page, which is almost certainly an error.");
         		result = null;

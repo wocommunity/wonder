@@ -42,7 +42,7 @@ public class WBModule extends WOComponent {
     public Number borderWidth(){
         Number n = (Number)this.valueForBinding("borderWidth");
         if(n == null){
-            n = new Integer(2);
+            n = Integer.valueOf(2);
         }
         return n;
     }

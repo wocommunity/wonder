@@ -69,6 +69,10 @@ public class ERQMListViewElement extends ERQMInputBaseComponent {
     return booleanValueForBinding("isDivider", false);
   }
 
+  public String dataRel() {
+	return (booleanValueForBinding("isDialogCall", false))?"dialog":null;
+  }
+
   public boolean hasAction() {
     return hasBinding("action");
   }
@@ -118,7 +122,9 @@ public class ERQMListViewElement extends ERQMInputBaseComponent {
   public boolean hasAutomaticDivider() {
     boolean b = booleanValueForBinding("automaticDivider", false);
     if(b)
-      filtertext();
+	{
+		filtertext();
+	}
 
     return b;
   }
@@ -145,7 +151,7 @@ public class ERQMListViewElement extends ERQMInputBaseComponent {
     if(!ERXStringUtilities.stringIsNullOrEmpty(s)) {
       sb.append("data-icon='" + s + "' ");
     }
-
+    
     return sb.toString();
   }
 }

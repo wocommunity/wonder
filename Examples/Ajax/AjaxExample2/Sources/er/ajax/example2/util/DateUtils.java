@@ -183,7 +183,7 @@ public class DateUtils {
   public static NSArray<Integer> years(int _year, int _offset, int _count) {
     NSMutableArray<Integer> years = new NSMutableArray<Integer>();
     for (int i = 0; i < _count; i++) {
-      years.addObject(new Integer(_year + _offset + i));
+      years.addObject(Integer.valueOf(_year + _offset + i));
     }
     return years;
   }

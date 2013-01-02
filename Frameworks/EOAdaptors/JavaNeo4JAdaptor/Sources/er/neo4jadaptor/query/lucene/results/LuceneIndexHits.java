@@ -18,6 +18,7 @@ public class LuceneIndexHits <Type extends PropertyContainer> extends IteratorCu
 		this.hits = hits;
 	}
 
+	@Override
 	public void close() {
 		if (log.isDebugEnabled()) {
 			log.debug("Closing lucene hits");

@@ -5,7 +5,9 @@ ACTION : ERXHyperlinkResource {
 	data-transition = ^transition;
 	data-role = isButton;
 	data-rel = "dialog";
+	data-mini = ^mini;
 	data-icon = ^icon;
+	data-iconpos = ^iconpos;
 	data-theme = ^theme;
 }
 
@@ -16,6 +18,8 @@ LINK : ERXHyperlinkResource {
 	data-transition = ^transition;
 	data-role = isButton;
 	data-rel = "dialog";
+	data-mini = ^mini;
 	data-icon = ^icon;
+	data-iconpos = ^iconpos;
 	data-theme = ^theme;
 }

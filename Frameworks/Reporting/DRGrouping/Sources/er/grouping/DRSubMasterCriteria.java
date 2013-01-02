@@ -439,7 +439,7 @@ public class DRSubMasterCriteria {
             return nvts;
         } else if (val instanceof Number) {
             v = DRValueConverter.converter().doubleForValue(val) + delta;
-            return (new Double(v));
+            return (Double.valueOf(v));
         }
 
         v = DRValueConverter.converter().doubleForValue(val) + delta;

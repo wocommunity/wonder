@@ -472,6 +472,7 @@ public class MInstance extends MObject {
         return values;
     }
 
+    @Override
     public String toString() {
         if (false) {
             return (values.toString() + " " + "lastRegistration = " + _lastRegistration + " " + "state = " + state
@@ -937,12 +938,14 @@ public class MInstance extends MObject {
     /** ******* */
 
     /** ******** Overridden Methods for Scheduling ********* */
+    @Override
     public void setValues(NSMutableDictionary newValues) {
         super.setValues(newValues);
         if (isScheduled())
             calculateNextScheduledShutdown();
     }
 
+    @Override
     public void updateValues(NSDictionary aDict) {
         super.updateValues(aDict);
         if (isScheduled())

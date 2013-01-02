@@ -175,7 +175,7 @@ public abstract class AjaxGridNavBar extends WOComponent {
 		// If we round this instead, the slider movement is more inutuitive,
 		// especially with smaller batch sizes.
 		if (newValue instanceof BigDecimal) {
-			int roundedIndex = new Float(((BigDecimal) newValue).floatValue() + 0.5).intValue();
+			int roundedIndex = Float.valueOf(((BigDecimal) newValue).floatValue() + 0.5f).intValue();
 			displayGroup().setCurrentBatchIndex(roundedIndex);
 		}
 		else {

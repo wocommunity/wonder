@@ -43,8 +43,8 @@ public class Main extends ERXComponent {
 
             keys = new NSArray<String>(new String[] { "name", "rank", "songs" });
 
-            NSDictionary<String,Object> record01 = new NSDictionary<String,Object>(new NSArray<Object>(new Object[] { "The Beatles", new Integer(1), songSet01 }), keys);
-            NSDictionary<String,Object> record02 = new NSDictionary<String,Object>(new NSArray<Object>(new Object[] { "Cat Power", new Integer(2), songSet02 }), keys);
+            NSDictionary<String,Object> record01 = new NSDictionary<String,Object>(new NSArray<Object>(new Object[] { "The Beatles", Integer.valueOf(1), songSet01 }), keys);
+            NSDictionary<String,Object> record02 = new NSDictionary<String,Object>(new NSArray<Object>(new Object[] { "Cat Power", Integer.valueOf(2), songSet02 }), keys);
 
             _performers = new NSMutableArray<NSDictionary<String,Object>>();
 

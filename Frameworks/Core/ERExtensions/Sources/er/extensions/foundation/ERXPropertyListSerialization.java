@@ -79,7 +79,7 @@ import com.webobjects.foundation._NSUtilities;
  *JSON Serialization Example:
  *
  * <pre>
- * NSDictionary dict<String,Object> = new NSDictionary<String,Object>(new String[] { "one", "two" }, new Object[] {new Integer(1), new Integer(2)});
+ * NSDictionary dict<String,Object> = new NSDictionary<String,Object>(new String[] { "one", "two" }, new Object[] {Integer.valueOf(1), Integer.valueOf(2)});
  * String jsonString = ERXPropertyListSerialization.jsonStringFromPropertyList(dict);
  * </pre>
  *

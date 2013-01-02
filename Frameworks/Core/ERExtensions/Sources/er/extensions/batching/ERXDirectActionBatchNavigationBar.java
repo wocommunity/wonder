@@ -441,7 +441,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * @return the value for the binding
 	 */
 	public Boolean showPageString() {
-		return new Boolean(this.booleanValueForBinding(SHOW_PAGE_STRING_KEY, false));
+		return Boolean.valueOf(this.booleanValueForBinding(SHOW_PAGE_STRING_KEY, false));
 	}
 
 	/**
@@ -492,7 +492,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * @return true for showing the numbers, defaults to true
 	 */
 	public Boolean showPageNumbers() {
-		return new Boolean(this.booleanValueForBinding(SHOW_PAGE_NUMBERS, true));
+		return Boolean.valueOf(this.booleanValueForBinding(SHOW_PAGE_NUMBERS, true));
 	}
 
 	/**

@@ -53,7 +53,7 @@ public class DRValueConverter {
    
     public Number numberForValue(Object v) {
         double vv = doubleForValue(v);
-        Number scr = new Double(vv);
+        Number scr = Double.valueOf(vv);
         return scr;
     }
     

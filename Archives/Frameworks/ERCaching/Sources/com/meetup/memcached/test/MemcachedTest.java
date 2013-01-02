@@ -74,8 +74,8 @@ public class MemcachedTest {
 
 		int i = 0;
 		while (i < threads) {
-			if (threadInfo.containsKey(new Integer(i))) {
-				System.out.println( threadInfo.get( new Integer( i ) ) );
+			if (threadInfo.containsKey(Integer.valueOf(i))) {
+				System.out.println( threadInfo.get( Integer.valueOf( i ) ) );
 				i++;
 			}
 			else {
@@ -145,7 +145,7 @@ public class MemcachedTest {
 			avg = (float) elapse / runs;
 			result.append("\nthread " + threadNum + ": runs: " + runs + " gets of obj " + (size/1024) + "KB -- avg time per req " + avg + " ms (total: " + elapse + " ms)");
 
-			threadInfo.put(new Integer(threadNum), result);
+			threadInfo.put(Integer.valueOf(threadNum), result);
 		}
 	}
 }

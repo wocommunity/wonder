@@ -114,7 +114,7 @@ public class DirectAction extends ERD2WDirectAction {
                 clearPrimaryKey = clearPrimaryKey.trim();
                 ec.lock();
                 try {
-                    Integer clearPrimaryKeyInt = new Integer(clearPrimaryKey);
+                    Integer clearPrimaryKeyInt = Integer.valueOf(clearPrimaryKey);
                     user = (People) People.clazz.objectWithPrimaryKeyValue(ec, clearPrimaryKeyInt);
                 } catch (NumberFormatException NFe) {
                     // WOApplication.application().logString(NFe.toString());
@@ -148,7 +148,7 @@ public class DirectAction extends ERD2WDirectAction {
             EOEditingContext ec = ERXEC.newEditingContext();
             ec.lock();
             try {
-                Integer bugId = new Integer(numberFromRequest);
+                Integer bugId = Integer.valueOf(numberFromRequest);
                 Bug bug =  (Bug)Bug.clazz.objectWithPrimaryKeyValue(ec, bugId);
                 if (bug == null) {
                     result = errorPage("Bug not found", session);

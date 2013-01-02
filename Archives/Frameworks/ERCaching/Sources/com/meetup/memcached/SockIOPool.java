@@ -63,7 +63,7 @@ import org.apache.log4j.Logger;
  *  <pre>
  *	static {
  *		String[] serverlist = { "cache0.server.com:12345", "cache1.server.com:12345" };
- *		Integer[] weights   = { new Integer(5), new Integer(2) };
+ *		Integer[] weights   = { Integer.valueOf(5), Integer.valueOf(2) };
  *		
  *		SockIOPool pool = SockIOPool.getInstance();
  *		pool.setServers(serverlist);
@@ -75,7 +75,7 @@ import org.apache.log4j.Logger;
  *  <pre>
  *	static {
  *		String[] serverlist     = { "cache0.server.com:12345", "cache1.server.com:12345" };
- *		Integer[] weights       = { new Integer(5), new Integer(2) };	
+ *		Integer[] weights       = { Integer.valueOf(5), Integer.valueOf(2) };	
  *		int initialConnections  = 10;
  *		int minSpareConnections = 5;
  *		int maxSpareConnections = 50;	
