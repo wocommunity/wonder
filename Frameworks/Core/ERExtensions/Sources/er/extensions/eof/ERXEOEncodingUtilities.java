@@ -165,7 +165,7 @@ public class ERXEOEncodingUtilities {
         } else {
             entityGroup.addObjectsFromArray((NSArray)groups.objectForKey(entityName));            
         }
-        return entityGroup != null ? entityGroup : NSArray.EmptyArray;
+        return entityGroup;
     }
     
     /**
