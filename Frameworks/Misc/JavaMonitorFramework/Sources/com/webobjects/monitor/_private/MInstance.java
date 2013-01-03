@@ -1098,11 +1098,7 @@ public class MInstance extends MObject {
     /** ******* */
 
     public void setRefusingNewSessions(boolean isRefusingNewSessions) {
-        if (isRefusingNewSessions) {
-            // NSLog.debug.appendln(this + " setRefusingNewSessions: " + isRefusingNewSessions);
-        } else {
-            // NSLog.debug.appendln(this + " setRefusingNewSessions: " + false);
-        }
+        // NSLog.debug.appendln(this + " setRefusingNewSessions: " + isRefusingNewSessions);
         this.isRefusingNewSessions = isRefusingNewSessions;
     }
 

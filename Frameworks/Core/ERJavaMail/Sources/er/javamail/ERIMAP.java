@@ -70,7 +70,7 @@ public class ERIMAP {
 	 * @return A array of ERMessage.
 	 */
 	public NSArray<ERMessage> getMessages(IMAPFolder folder) throws MessagingException {
-		return this.getMessages(folder,1,folder.getMessageCount());
+		return getMessages(folder, 1, folder.getMessageCount());
 	}	
 	
 	/*

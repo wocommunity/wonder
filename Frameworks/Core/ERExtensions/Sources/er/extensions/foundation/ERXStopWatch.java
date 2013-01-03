@@ -133,15 +133,15 @@ public class ERXStopWatch {
      *             if the StopWatch is already running.
      */
     public void start() {
-        if (this.runningState == STATE_STOPPED) {
+        if (runningState == STATE_STOPPED) {
             throw new IllegalStateException("Stopwatch must be reset before being restarted. ");
         }
-        if (this.runningState != STATE_UNSTARTED) {
+        if (runningState != STATE_UNSTARTED) {
             throw new IllegalStateException("Stopwatch already started. ");
         }
-        this.startTime = System.nanoTime();
-        this.startTimeMillis = System.currentTimeMillis();
-        this.runningState = STATE_RUNNING;
+        startTime = System.nanoTime();
+        startTimeMillis = System.currentTimeMillis();
+        runningState = STATE_RUNNING;
     }
 
     /**
@@ -157,13 +157,13 @@ public class ERXStopWatch {
      *             if the StopWatch is not running.
      */
     public void stop() {
-        if (this.runningState != STATE_RUNNING && this.runningState != STATE_SUSPENDED) {
+        if (runningState != STATE_RUNNING && runningState != STATE_SUSPENDED) {
             throw new IllegalStateException("Stopwatch is not running. ");
         }
-        if (this.runningState == STATE_RUNNING) {
-            this.stopTime = System.nanoTime();
+        if (runningState == STATE_RUNNING) {
+            stopTime = System.nanoTime();
         }
-        this.runningState = STATE_STOPPED;
+        runningState = STATE_STOPPED;
     }
 
     /**
@@ -176,8 +176,8 @@ public class ERXStopWatch {
      * </p>
      */
     public void reset() {
-        this.runningState = STATE_UNSTARTED;
-        this.splitState = STATE_UNSPLIT;
+        runningState = STATE_UNSTARTED;
+        splitState = STATE_UNSPLIT;
     }
 
     /**
@@ -194,11 +194,11 @@ public class ERXStopWatch {
      *             if the StopWatch is not running.
      */
     public void split() {
-        if (this.runningState != STATE_RUNNING) {
+        if (runningState != STATE_RUNNING) {
             throw new IllegalStateException("Stopwatch is not running. ");
         }
-        this.stopTime = System.nanoTime();
-        this.splitState = STATE_SPLIT;
+        stopTime = System.nanoTime();
+        splitState = STATE_SPLIT;
     }
 
     /**
@@ -215,10 +215,10 @@ public class ERXStopWatch {
      *             if the StopWatch has not been split.
      */
     public void unsplit() {
-        if (this.splitState != STATE_SPLIT) {
+        if (splitState != STATE_SPLIT) {
             throw new IllegalStateException("Stopwatch has not been split. ");
         }
-        this.splitState = STATE_UNSPLIT;
+        splitState = STATE_UNSPLIT;
     }
 
     /**
@@ -235,11 +235,11 @@ public class ERXStopWatch {
      *             if the StopWatch is not currently running.
      */
     public void suspend() {
-        if (this.runningState != STATE_RUNNING) {
+        if (runningState != STATE_RUNNING) {
             throw new IllegalStateException("Stopwatch must be running to suspend. ");
         }
-        this.stopTime = System.nanoTime();
-        this.runningState = STATE_SUSPENDED;
+        stopTime = System.nanoTime();
+        runningState = STATE_SUSPENDED;
     }
 
     /**
@@ -256,11 +256,11 @@ public class ERXStopWatch {
      *             if the StopWatch has not been suspended.
      */
     public void resume() {
-        if (this.runningState != STATE_SUSPENDED) {
+        if (runningState != STATE_SUSPENDED) {
             throw new IllegalStateException("Stopwatch must be suspended to resume. ");
         }
-        this.startTime += (System.nanoTime() - this.stopTime);
-        this.runningState = STATE_RUNNING;
+        startTime += (System.nanoTime() - stopTime);
+        runningState = STATE_RUNNING;
     }
 
     /**
@@ -293,12 +293,12 @@ public class ERXStopWatch {
      * @since 3.0
      */
     public long getNanoTime() {
-        if (this.runningState == STATE_STOPPED || this.runningState == STATE_SUSPENDED) {
-            return this.stopTime - this.startTime;
-        } else if (this.runningState == STATE_UNSTARTED) {
+        if (runningState == STATE_STOPPED || runningState == STATE_SUSPENDED) {
+            return stopTime - startTime;
+        } else if (runningState == STATE_UNSTARTED) {
             return 0;
-        } else if (this.runningState == STATE_RUNNING) {
-            return System.nanoTime() - this.startTime;
+        } else if (runningState == STATE_RUNNING) {
+            return System.nanoTime() - startTime;
         }
         throw new RuntimeException("Illegal running state has occured. ");
     }
@@ -338,10 +338,10 @@ public class ERXStopWatch {
      * @since 3.0
      */
     public long getSplitNanoTime() {
-        if (this.splitState != STATE_SPLIT) {
+        if (splitState != STATE_SPLIT) {
             throw new IllegalStateException("Stopwatch must be split to get the split time. ");
         }
-        return this.stopTime - this.startTime;
+        return stopTime - startTime;
     }
 
     /**
@@ -353,11 +353,11 @@ public class ERXStopWatch {
      * @since 2.4
      */
     public long getStartTime() {
-        if (this.runningState == STATE_UNSTARTED) {
+        if (runningState == STATE_UNSTARTED) {
             throw new IllegalStateException("Stopwatch has not been started");
         }
         // System.nanoTime is for elapsed time
-        return this.startTimeMillis;
+        return startTimeMillis;
     }
 //
 //    /**

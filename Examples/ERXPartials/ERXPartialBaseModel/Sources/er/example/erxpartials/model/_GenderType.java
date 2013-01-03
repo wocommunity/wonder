@@ -1,4 +1,4 @@
-// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to GenderType.java instead.
+// DO NOT EDIT.  Make changes to GenderType.java instead.
 package er.example.erxpartials.model;
 
 import com.webobjects.eoaccess.*;
@@ -36,18 +36,18 @@ public abstract class _GenderType extends  ERXGenericRecord {
   }
 
   public String name() {
-    return (String) storedValueForKey("name");
+    return (String) storedValueForKey(_GenderType.NAME_KEY);
   }
 
   public void setName(String value) {
     if (_GenderType.LOG.isDebugEnabled()) {
     	_GenderType.LOG.debug( "updating name from " + name() + " to " + value);
     }
-    takeStoredValueForKey(value, "name");
+    takeStoredValueForKey(value, _GenderType.NAME_KEY);
   }
 
   public NSArray<er.example.erxpartials.model.Person> persons() {
-    return (NSArray<er.example.erxpartials.model.Person>)storedValueForKey("persons");
+    return (NSArray<er.example.erxpartials.model.Person>)storedValueForKey(_GenderType.PERSONS_KEY);
   }
 
   public NSArray<er.example.erxpartials.model.Person> persons(EOQualifier qualifier) {
@@ -68,7 +68,7 @@ public abstract class _GenderType extends  ERXGenericRecord {
         fullQualifier = inverseQualifier;
       }
       else {
-        NSMutableArray qualifiers = new NSMutableArray();
+        NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
         qualifiers.addObject(qualifier);
         qualifiers.addObject(inverseQualifier);
         fullQualifier = new EOAndQualifier(qualifiers);
@@ -89,11 +89,11 @@ public abstract class _GenderType extends  ERXGenericRecord {
   }
   
   public void addToPersons(er.example.erxpartials.model.Person object) {
-    includeObjectIntoPropertyWithKey(object, "persons");
+    includeObjectIntoPropertyWithKey(object, _GenderType.PERSONS_KEY);
   }
 
   public void removeFromPersons(er.example.erxpartials.model.Person object) {
-    excludeObjectFromPropertyWithKey(object, "persons");
+    excludeObjectFromPropertyWithKey(object, _GenderType.PERSONS_KEY);
   }
 
   public void addToPersonsRelationship(er.example.erxpartials.model.Person object) {
@@ -104,7 +104,7 @@ public abstract class _GenderType extends  ERXGenericRecord {
     	addToPersons(object);
     }
     else {
-    	addObjectToBothSidesOfRelationshipWithKey(object, "persons");
+    	addObjectToBothSidesOfRelationshipWithKey(object, _GenderType.PERSONS_KEY);
     }
   }
 
@@ -116,27 +116,27 @@ public abstract class _GenderType extends  ERXGenericRecord {
     	removeFromPersons(object);
     }
     else {
-    	removeObjectFromBothSidesOfRelationshipWithKey(object, "persons");
+    	removeObjectFromBothSidesOfRelationshipWithKey(object, _GenderType.PERSONS_KEY);
     }
   }
 
   public er.example.erxpartials.model.Person createPersonsRelationship() {
-    EOClassDescription eoClassDesc = EOClassDescription.classDescriptionForEntityName("Person");
+    EOClassDescription eoClassDesc = EOClassDescription.classDescriptionForEntityName( er.example.erxpartials.model.Person.ENTITY_NAME );
     EOEnterpriseObject eo = eoClassDesc.createInstanceWithEditingContext(editingContext(), null);
     editingContext().insertObject(eo);
-    addObjectToBothSidesOfRelationshipWithKey(eo, "persons");
+    addObjectToBothSidesOfRelationshipWithKey(eo, _GenderType.PERSONS_KEY);
     return (er.example.erxpartials.model.Person) eo;
   }
 
   public void deletePersonsRelationship(er.example.erxpartials.model.Person object) {
-    removeObjectFromBothSidesOfRelationshipWithKey(object, "persons");
+    removeObjectFromBothSidesOfRelationshipWithKey(object, _GenderType.PERSONS_KEY);
     editingContext().deleteObject(object);
   }
 
   public void deleteAllPersonsRelationships() {
-    Enumeration objects = persons().immutableClone().objectEnumerator();
+    Enumeration<er.example.erxpartials.model.Person> objects = persons().immutableClone().objectEnumerator();
     while (objects.hasMoreElements()) {
-      deletePersonsRelationship((er.example.erxpartials.model.Person)objects.nextElement());
+      deletePersonsRelationship(objects.nextElement());
     }
   }
 
@@ -148,6 +148,10 @@ public abstract class _GenderType extends  ERXGenericRecord {
     return eo;
   }
 
+  public static ERXFetchSpecification<GenderType> fetchSpec() {
+    return new ERXFetchSpecification<GenderType>(_GenderType.ENTITY_NAME, null, null, false, true, null);
+  }
+
   public static NSArray<GenderType> fetchAllGenderTypes(EOEditingContext editingContext) {
     return _GenderType.fetchAllGenderTypes(editingContext, null);
   }
@@ -157,9 +161,9 @@ public abstract class _GenderType extends  ERXGenericRecord {
   }
 
   public static NSArray<GenderType> fetchGenderTypes(EOEditingContext editingContext, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings) {
-    EOFetchSpecification fetchSpec = new EOFetchSpecification(_GenderType.ENTITY_NAME, qualifier, sortOrderings);
+    ERXFetchSpecification<GenderType> fetchSpec = new ERXFetchSpecification<GenderType>(_GenderType.ENTITY_NAME, qualifier, sortOrderings);
     fetchSpec.setIsDeep(true);
-    NSArray<GenderType> eoObjects = (NSArray<GenderType>)editingContext.objectsWithFetchSpecification(fetchSpec);
+    NSArray<GenderType> eoObjects = fetchSpec.fetchObjects(editingContext);
     return eoObjects;
   }
 
@@ -175,7 +179,7 @@ public abstract class _GenderType extends  ERXGenericRecord {
       eoObject = null;
     }
     else if (count == 1) {
-      eoObject = (GenderType)eoObjects.objectAtIndex(0);
+      eoObject = eoObjects.objectAtIndex(0);
     }
     else {
       throw new IllegalStateException("There was more than one GenderType that matched the qualifier '" + qualifier + "'.");
@@ -196,7 +200,7 @@ public abstract class _GenderType extends  ERXGenericRecord {
   }
 
   public static GenderType localInstanceIn(EOEditingContext editingContext, GenderType eo) {
-    GenderType localInstance = (eo == null) ? null : (GenderType)EOUtilities.localInstanceOfObject(editingContext, eo);
+    GenderType localInstance = (eo == null) ? null : ERXEOControlUtilities.localInstanceOfObject(editingContext, eo);
     if (localInstance == null && eo != null) {
       throw new IllegalStateException("You attempted to localInstance " + eo + ", which has not yet committed.");
     }

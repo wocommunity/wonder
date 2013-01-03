@@ -78,7 +78,7 @@ public class FilesContainer
         if (client != null)
         {
             if(objects == null) {
-            	objects = client.listObjects(this.name);            
+            	objects = client.listObjects(name);
             }
             return objects;
         }
@@ -106,7 +106,7 @@ public class FilesContainer
         if (client != null)
         {
             if(objects == null) {
-            	objects = client.listObjects(this.name, path);            
+            	objects = client.listObjects(name, path);
             }
             return objects;
         }
@@ -129,7 +129,7 @@ public class FilesContainer
     {
         if (client != null)
         {
-            return client.getContainerInfo(this.name);
+            return client.getContainerInfo(name);
         }
         else
         {
@@ -145,7 +145,7 @@ public class FilesContainer
      */
     public FilesClient getClient()
     {
-        return this.client;                
+        return client;
     }
 
     /**
@@ -188,7 +188,7 @@ public class FilesContainer
     {
         if (client != null)
         {
-        	client.createContainer(this.name);
+        	client.createContainer(name);
         }
         else
             logger.fatal("This Container has no FilesClient defined !");

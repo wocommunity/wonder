@@ -114,6 +114,7 @@ public class Application extends ERXApplication  {
     public MSiteConfig siteConfig() {
         return _siteConfig;
     }
+
     public void setSiteConfig(MSiteConfig aConfig) {
         // Don't need to call dataHasChanged, since a new MSiteConfig is already dirty
         _siteConfig = aConfig;
@@ -282,7 +283,7 @@ public class Application extends ERXApplication  {
 	@Override
     public String getJMXDomain() {
 		if (_mbsDomain == null) {
-			_mbsDomain = this.host() + "." + this.name() + "." + this.port();
+			_mbsDomain = host() + "." + name() + "." + port();
 		}
 		return _mbsDomain;
     }
@@ -561,5 +562,4 @@ public class Application extends ERXApplication  {
             listenForRequests();
         }
     }
-    
 }

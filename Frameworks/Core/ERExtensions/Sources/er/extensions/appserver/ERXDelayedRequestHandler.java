@@ -1,6 +1,5 @@
 package er.extensions.appserver;
 
-import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
@@ -41,7 +40,6 @@ import er.extensions.foundation.ERXRuntimeUtilities;
  * </ul>
  * 
  * @author ak
- * 
  */
 public class ERXDelayedRequestHandler extends WORequestHandler {
 

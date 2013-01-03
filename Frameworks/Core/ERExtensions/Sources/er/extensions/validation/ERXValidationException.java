@@ -455,7 +455,7 @@ public class ERXValidationException extends NSValidation.ValidationException imp
             return "<" + getClass().getName() + " object: " + object() + "; propertyKey: " + propertyKey() + "; type: " + type() + "; additionalExceptions: " + additionalExceptions() + ">";
         }
         catch (Throwable t) {
-            return "<" + getClass().getName() + " object of type " + ((this.object() == null) ? "null" : this.object().getClass().getSimpleName()) + "; propertyKey: " + propertyKey() + "; type: " + type() + "; additionalExceptions: " + additionalExceptions() + ">";
+            return "<" + getClass().getName() + " object of type " + ((object() == null) ? "null" : object().getClass().getSimpleName()) + "; propertyKey: " + propertyKey() + "; type: " + type() + "; additionalExceptions: " + additionalExceptions() + ">";
         }
     }
 }

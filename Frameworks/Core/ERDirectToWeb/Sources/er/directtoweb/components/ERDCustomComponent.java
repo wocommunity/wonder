@@ -141,6 +141,7 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
      * <span class="en">Validation Support. Passes errors to the parent. </span>
      * <span class="ja">Validation Support. エラーを親コンポーネントに渡す</span>
      */
+    @Override
     public void validationFailedWithException (Throwable e, Object value, String keyPath) {
         parent().validationFailedWithException(e,value,keyPath);
     }
@@ -177,6 +178,7 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
      * そうでなければ、スーパークラスをバインディングが非 null であるようにチェックします
      * </span>
      */
+    @Override
     public boolean hasBinding(String binding) {
         // FIXME:  Turn this check off in production
         if (synchronizesVariablesWithBindings()) {
@@ -188,7 +190,7 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
     /** Utility to dump some debug info about this component and its parent */
     protected void logDebugInfo() {
         if (log.isDebugEnabled()) {
-            log.debug("***** ERDCustomComponent: this: " + this.getClass().getName());
+            log.debug("***** ERDCustomComponent: this: " + getClass().getName());
             log.debug("***** ERDCustomComponent: parent(): + (" + ((parent() == null) ? "null" : parent().getClass().getName()) + ")");
             log.debug("                      " + parent());
             log.debug("***** ERDCustomComponent: parent() instanceof ERDCustomComponent == " + (parent() instanceof ERDCustomComponent));
@@ -249,6 +251,7 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
      * バインディングを次の順で取得を試す：コンポーネント、d2wContext、親コンポーネント、オプション・バインディング・ディクショナリー
      * </span>
      */
+    @Override
     public Object valueForBinding(String binding) {
         Object value=null;
         logDebugInfo();
@@ -329,6 +332,7 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
     }
 
     /** Overridden from superclass to turn on component synching, which is the default. */
+    @Override
     public boolean synchronizesVariablesWithBindings() { return true; }
 
     /** Is D2W debugging enabled. */
@@ -381,6 +385,7 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
         return (D2WPage)component;
     }
 
+    @Override
     public void appendToResponse(WOResponse r, WOContext c) {
         if(!ERDirectToWeb.shouldRaiseException(false)) {
             // in the case where we are non-synchronizing but not stateless, make sure we pull again

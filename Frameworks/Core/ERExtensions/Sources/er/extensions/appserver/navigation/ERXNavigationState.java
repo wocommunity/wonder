@@ -86,8 +86,8 @@ public class ERXNavigationState implements Serializable {
         }
     }
     public String stateAsString() {
-        if (this.state() != null) {
-            return this.state().componentsJoinedByString(".");
+        if (state() != null) {
+            return state().componentsJoinedByString(".");
         }
         return null;
     }

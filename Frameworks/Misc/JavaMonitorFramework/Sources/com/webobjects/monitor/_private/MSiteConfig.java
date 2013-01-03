@@ -439,7 +439,7 @@ public class MSiteConfig extends MObject {
     		_passwordDictionary = new NSMutableDictionary<String, NSMutableArray<String>>();
     		_passwordDictionary.setObjectForKey(new NSMutableArray<String>(""), "password");
     	}
-        String aPassword = this.password();
+        String aPassword = password();
         if (_oldPasswordSet) {
             if (_oldPassword != null) {
                 _passwordDictionary.takeValueForKey(new NSMutableArray<String>(_oldPassword), "password");

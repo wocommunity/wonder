@@ -73,21 +73,21 @@ public abstract class ERXMigration implements IERXMigration {
 	public void downgrade(EOEditingContext editingContext, EOAdaptorChannel channel, EOModel model) throws Throwable {
 		String sqlString = null;
 		if (useDatabaseSpecificMigrations()) {
-			sqlString = this.getSQLForMigration(this.getClass().getSimpleName() + "_" + ERXJDBCUtilities.databaseProductName(channel) + "_Downgrade.migration");
+			sqlString = getSQLForMigration(getClass().getSimpleName() + "_" + ERXJDBCUtilities.databaseProductName(channel) + "_Downgrade.migration");
 		}
 		else {
-			sqlString = this.getSQLForMigration(this.getClass().getSimpleName() + "_Downgrade.migration");
+			sqlString = getSQLForMigration(getClass().getSimpleName() + "_Downgrade.migration");
 		}
 
 		if (sqlString != null) {
-			log.info("Applying migration for: " + this.getClass().getName());
+			log.info("Applying migration for: " + getClass().getName());
 			ERXJDBCUtilities.executeUpdateScript(channel, sqlString);
 		}
 		else {
 			if (useDatabaseSpecificMigrations()) {
-				throw new ERXMigrationFailedException("No downgrade for migration: " + this.getClass().getName() + "found for database: " + ERXJDBCUtilities.databaseProductName(channel));
+				throw new ERXMigrationFailedException("No downgrade for migration: " + getClass().getName() + "found for database: " + ERXJDBCUtilities.databaseProductName(channel));
 			}
-			throw new ERXMigrationFailedException("No downgrade for migration: " + this.getClass().getName());
+			throw new ERXMigrationFailedException("No downgrade for migration: " + getClass().getName());
 		}
 
 	}
@@ -99,21 +99,21 @@ public abstract class ERXMigration implements IERXMigration {
 
 		String sqlString = null;
 		if (useDatabaseSpecificMigrations()) {
-			sqlString = this.getSQLForMigration(this.getClass().getSimpleName() + "_" + ERXJDBCUtilities.databaseProductName(channel) + "_Upgrade.migration");
+			sqlString = getSQLForMigration(getClass().getSimpleName() + "_" + ERXJDBCUtilities.databaseProductName(channel) + "_Upgrade.migration");
 		}
 		else {
-			sqlString = this.getSQLForMigration(this.getClass().getSimpleName() + "_Upgrade.migration");
+			sqlString = getSQLForMigration(getClass().getSimpleName() + "_Upgrade.migration");
 		}
 
 		if (sqlString != null) {
-			log.info("Applying migration for: " + this.getClass().getName());
+			log.info("Applying migration for: " + getClass().getName());
 			ERXJDBCUtilities.executeUpdateScript(channel, sqlString);
 		}
 		else {
 			if (useDatabaseSpecificMigrations()) {
-				throw new ERXMigrationFailedException("No upgrade for migration: " + this.getClass().getName() + " found for database: " + ERXJDBCUtilities.databaseProductName(channel));
+				throw new ERXMigrationFailedException("No upgrade for migration: " + getClass().getName() + " found for database: " + ERXJDBCUtilities.databaseProductName(channel));
 			}
-			throw new ERXMigrationFailedException("No upgrade for migration: " + this.getClass().getName() + " found.");
+			throw new ERXMigrationFailedException("No upgrade for migration: " + getClass().getName() + " found.");
 		}
 	}
 
@@ -125,14 +125,14 @@ public abstract class ERXMigration implements IERXMigration {
 	 */
 	protected String getSQLForMigration(String migrationName) {
 		NSBundle bundle;
-		String migrationBundleName = this.migrationBundleName();
+		String migrationBundleName = migrationBundleName();
 		if (migrationBundleName == null) {
 			bundle = NSBundle.bundleForClass(getClass());
 		}
 		else {
-			bundle = NSBundle.bundleForName(this.migrationBundleName());
+			bundle = NSBundle.bundleForName(migrationBundleName());
 			if (bundle == null) {
-				bundle = NSBundle._appBundleForName(this.migrationBundleName());
+				bundle = NSBundle._appBundleForName(migrationBundleName());
 			}
 		}
 		NSArray<String> resourcePaths = bundle.resourcePathsForResources("migration", null);
@@ -163,11 +163,11 @@ public abstract class ERXMigration implements IERXMigration {
 	}
 
 	protected boolean useDatabaseSpecificMigrations() {
-		if (this._useDatabaseSpecificMigrations == null) {
-			this._useDatabaseSpecificMigrations = Boolean.valueOf(
+		if (_useDatabaseSpecificMigrations == null) {
+			_useDatabaseSpecificMigrations = Boolean.valueOf(
 					ERXProperties.booleanForKeyWithDefault("er.extensions.migration.ERXMigration.useDatabaseSpecificMigrations", false));
 		}
-		return this._useDatabaseSpecificMigrations.booleanValue();
+		return _useDatabaseSpecificMigrations.booleanValue();
 	}
 
 }

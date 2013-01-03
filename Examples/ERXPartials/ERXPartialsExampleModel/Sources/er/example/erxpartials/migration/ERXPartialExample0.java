@@ -1,7 +1,5 @@
 package er.example.erxpartials.migration;
 
-import java.math.BigDecimal;
-
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
