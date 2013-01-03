@@ -1056,7 +1056,7 @@
             <param name="project.name" value="ERModernDirectToWeb" />
             <param name="project.dir" value="Frameworks/D2W/ERModernDirectToWeb" />
             <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/Ajax/ERCoolComponents" />
         </antcall>
     </target>
     
