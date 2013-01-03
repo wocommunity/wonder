@@ -4,12 +4,13 @@ import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.client.utils.URIUtils;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
@@ -68,13 +69,13 @@ public class ERXHttpGetData extends ERXHttpDataObjectBase {
     // Ste the Path
     // Constructs a {@link URI} using all the parameters.
     if(queryParams() == null || queryParams().isEmpty()) {
-      setURI(URIUtils.createURI(scheme(), hostname(), port(), path(), null, null));
+      setURI(new URIBuilder().setScheme(scheme()).setHost(hostname()).setPort(port()).setPath(path()).build());
     } else {
       setURI(URIUtils.createURI(scheme(), hostname(), port(), path(), URLEncodedUtils.format(queryParams(), sendEncoding()), null));
     }
 
     // create Threadsafe Client
-    ClientConnectionManager connMgr = new ThreadSafeClientConnManager(params, supportedSchemes);
+    ClientConnectionManager connMgr = new PoolingClientConnectionManager(supportedSchemes);
 
     // Create default httpClient
     DefaultHttpClient httpclient = new DefaultHttpClient(connMgr, params);

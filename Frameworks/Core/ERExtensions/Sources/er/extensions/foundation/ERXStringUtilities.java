@@ -278,11 +278,11 @@ public class ERXStringUtilities {
             if( value!=null && value instanceof String){
                 String comparedString = ((String)value).toUpperCase();
                 String cleanedComparedString = cleaner.cleanStringForFuzzyMatching(comparedString);
-                if( (distance(name, comparedString) <=
+                if( (levenshteinDistance(name, comparedString) <=
                      Math.min((double)name.length(), (double)comparedString.length())*adjustement ) ||
-                    (distance(cleanedName, cleanedComparedString) <=
+                    (levenshteinDistance(cleanedName, cleanedComparedString) <=
                      Math.min((double)cleanedName.length(), (double)cleanedComparedString.length())*adjustement)){
-                    dico.setObjectForKey( Double.valueOf(distance(name, comparedString)), _DISTANCE );
+                    dico.setObjectForKey( Double.valueOf(levenshteinDistance(name, comparedString)), _DISTANCE );
                     NSDictionary<String, Object> pkValues = new NSDictionary<String, Object>(dico.objectsForKeys(pks, NSKeyValueCoding.NullValue ), pks);
                     dico.setObjectForKey( EOUtilities.faultWithPrimaryKey( ec, entityName, pkValues ), eoKey );
                     results.addObject( dico );
@@ -297,11 +297,11 @@ public class ERXStringUtilities {
                     Vector v = (Vector)plist;
                     for(int i = 0; i< v.size(); i++){
                         String comparedString = ((String)v.elementAt(i)).toUpperCase();
-                        if((distance(name, comparedString) <=
+                        if((levenshteinDistance(name, comparedString) <=
                             Math.min((double)name.length(), (double)comparedString.length())*adjustement) ||
-                           (distance(cleanedName, comparedString) <=
+                           (levenshteinDistance(cleanedName, comparedString) <=
                             Math.min((double)cleanedName.length(), (double)comparedString.length())*adjustement)){
-                            dico.setObjectForKey( Double.valueOf(distance(name, comparedString)), _DISTANCE );
+                            dico.setObjectForKey( Double.valueOf(levenshteinDistance(name, comparedString)), _DISTANCE );
                             NSDictionary<String, Object> pkValues = new NSDictionary<String, Object>(dico.objectsForKeys(pks, NSKeyValueCoding.NullValue ), pks);
                             dico.setObjectForKey( EOUtilities.faultWithPrimaryKey( ec, entityName, pkValues ), eoKey );
                             results.addObject( dico );

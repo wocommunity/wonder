@@ -29,7 +29,6 @@ import com.webobjects.foundation.NSTimestampFormatter;
 import er.extensions.crypting.ERXCrypto;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXProperties;
-import er.extensions.foundation.ERXUtilities;
 
 /**
  * 
@@ -157,7 +156,7 @@ public class ERXEOEncodingUtilities {
 	EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);        
 	NSMutableArray entityGroup = new NSMutableArray();
         if (entity != null && entity.isAbstractEntity()) {
-            for (Enumeration e = ERXUtilities.allSubEntitiesForEntity(entity, false).objectEnumerator(); e.hasMoreElements();) {
+            for (Enumeration e = ERXEOAccessUtilities.allSubEntitiesForEntity(entity, false).objectEnumerator(); e.hasMoreElements();) {
                 EOEntity subEntity = (EOEntity)e.nextElement();
                 NSArray aGroup = (NSArray)groups.objectForKey(subEntity.name());
                 if (aGroup != null)
