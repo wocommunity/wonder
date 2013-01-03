@@ -308,7 +308,7 @@ public abstract class ERXRemoteNotificationCenter extends NSNotificationCenter {
 
 	/**
 	 * Set the default center
-	 * @param center
+	 * @param center the notification center to use as default
 	 */
 	public static void setDefaultCenter(ERXRemoteNotificationCenter center) {
 		_sharedInstance = center;
@@ -316,7 +316,7 @@ public abstract class ERXRemoteNotificationCenter extends NSNotificationCenter {
 
 	/**
 	 * Post a notification to the local app only.
-	 * @param notification
+	 * @param notification the notification
 	 */
 	public void postLocalNotification(NSNotification notification) {
 		super.postNotification(notification);
@@ -324,13 +324,14 @@ public abstract class ERXRemoteNotificationCenter extends NSNotificationCenter {
 
 	/**
 	 * Post a notification to the remote listeners.
-	 * @param notification
+	 * @param notification the notification
 	 */
 	protected abstract void postRemoteNotification(NSNotification notification);
 
 	/**
 	 * Overridden to call {@link #postRemoteNotification(NSNotification)}.
 	 */
+	@Override
 	public void postNotification(NSNotification notification) {
 		postRemoteNotification(notification);
 	}

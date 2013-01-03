@@ -314,7 +314,7 @@ public class ERXStringUtilities {
         if( sortOrderings != null ) {
             results = (NSMutableArray<NSMutableDictionary<String, Object>>) EOSortOrdering.sortedArrayUsingKeyOrderArray(results, sortOrderings);
         }
-        return (NSArray) results.valueForKey( eoKey );        
+        return (NSArray) results.valueForKey( eoKey );
     }
     
     /**

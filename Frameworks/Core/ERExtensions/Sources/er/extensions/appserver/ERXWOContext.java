@@ -1,9 +1,3 @@
-//
-// ERXWOContext.java
-// Project armehaut
-//
-// Created by ak on Mon Apr 01 2002
-//
 package er.extensions.appserver;
 
 import java.net.MalformedURLException;
@@ -111,14 +105,14 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	}
 
 	/**
-	 * Implemented so the the thread checks if it should get interrupted.
+	 * Implemented so that the thread checks if it should get interrupted.
 	 * 
-	 * @param wocomponent
+	 * @param component the current component
 	 */
 	@Override
-	public void _setCurrentComponent(WOComponent wocomponent) {
+	public void _setCurrentComponent(WOComponent component) {
 		ERXRuntimeUtilities.checkThreadInterrupt();
-		super._setCurrentComponent(wocomponent);
+		super._setCurrentComponent(component);
 	}
 	
 	@Override

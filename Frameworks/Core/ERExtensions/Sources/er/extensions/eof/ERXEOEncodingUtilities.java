@@ -1,9 +1,3 @@
-//
-// ERXEOEncodingUtilities.java
-// Project ERExtensions
-//
-// Created by max on Sun Sep 29 2002
-//
 package er.extensions.eof;
 
 import java.util.Enumeration;
@@ -153,8 +147,8 @@ public class ERXEOEncodingUtilities {
     public static NSArray enterpriseObjectsForEntityNamedFromFormValues(EOEditingContext ec, String entityName, NSDictionary formValues) {
         NSArray formValueObjects = decodeEnterpriseObjectsFromFormValues(ec, formValues);
         NSDictionary groups = ERXArrayUtilities.arrayGroupedByKeyPath(formValueObjects, "entityName");
-	EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);        
-	NSMutableArray entityGroup = new NSMutableArray();
+        EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
+        NSMutableArray entityGroup = new NSMutableArray();
         if (entity != null && entity.isAbstractEntity()) {
             for (Enumeration e = ERXEOAccessUtilities.allSubEntitiesForEntity(entity, false).objectEnumerator(); e.hasMoreElements();) {
                 EOEntity subEntity = (EOEntity)e.nextElement();
@@ -163,7 +157,7 @@ public class ERXEOEncodingUtilities {
                     entityGroup.addObjectsFromArray(aGroup);
             }
         } else {
-            entityGroup.addObjectsFromArray((NSArray)groups.objectForKey(entityName));            
+            entityGroup.addObjectsFromArray((NSArray)groups.objectForKey(entityName));
         }
         return entityGroup;
     }

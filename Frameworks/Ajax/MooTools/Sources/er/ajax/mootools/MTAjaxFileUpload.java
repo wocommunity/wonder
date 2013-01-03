@@ -102,6 +102,7 @@ public class MTAjaxFileUpload extends WOComponent {
 		return _requestHandlerKey;
 	}
 
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}

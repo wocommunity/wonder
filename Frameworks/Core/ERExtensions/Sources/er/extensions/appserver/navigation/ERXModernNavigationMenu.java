@@ -47,6 +47,7 @@ public class ERXModernNavigationMenu extends ERXStatelessComponent {
         super(context);
     }
 
+    @Override
     public void reset() {
         _menuIsSetUp = false;
         _renderLevelCount = 0;
@@ -99,17 +100,19 @@ public class ERXModernNavigationMenu extends ERXStatelessComponent {
         return ERXNavigationManager.manager().rootNavigationItem();
     }
 
-
+    @Override
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         setUpMenu();
         super.takeValuesFromRequest(r,c);
     }
 
+    @Override
     public void appendToResponse(WOResponse r, WOContext c) {
         setUpMenu();
         super.appendToResponse(r,c);
     }
 
+    @Override
     public WOActionResults invokeAction(WORequest r, WOContext c) {
         WOActionResults results=null;
         setUpMenu();
@@ -121,7 +124,4 @@ public class ERXModernNavigationMenu extends ERXStatelessComponent {
         }
         return results;
     }
-
-
-
 }

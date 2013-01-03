@@ -1,13 +1,14 @@
 package er.prototaculous.widgets;
 
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver._private.WOFileUpload;
 
 /**
  * Encapsulation of http://valums.com/ajax-upload/ implemented like WOFileUpload
- * @see WOFileUpload		API/binding compatible with WOFileUpload. Additionally:
+ * API/binding compatible with WOFileUpload.
+ * @see WOFileUpload
  * 
  * @author mendis
- *
  */
 public class AjaxUploadButton extends AjaxUpload {
 

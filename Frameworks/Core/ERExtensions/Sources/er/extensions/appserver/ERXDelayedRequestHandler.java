@@ -40,7 +40,6 @@ import er.extensions.foundation.ERXRuntimeUtilities;
  * </ul>
  * 
  * @author ak
- * 
  */
 public class ERXDelayedRequestHandler extends WORequestHandler {
 

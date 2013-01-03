@@ -45,7 +45,7 @@ public class ERXHttpGetData extends ERXHttpDataObjectBase {
   // Methods
   //***********************************************************
 
-  public void execute() throws Exception {		
+  public void execute() throws Exception {
 
     // Create Http Host
     // Holds all of the variables needed to describe an HTTP connection to a host. This includes remote host name, port and scheme.
@@ -113,6 +113,6 @@ public class ERXHttpGetData extends ERXHttpDataObjectBase {
     // When HttpClient instance is no longer needed, 
     // shut down the connection manager to ensure
     // immediate deallocation of all system resources
-    httpclient.getConnectionManager().shutdown();        
+    httpclient.getConnectionManager().shutdown();
   }
 }

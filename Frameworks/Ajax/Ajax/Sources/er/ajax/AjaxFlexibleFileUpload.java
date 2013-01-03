@@ -575,6 +575,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	/**
 	 * Hook for add-in action called when an upload succeeds.
 	 */
+	@Override
 	public WOActionResults uploadSucceeded() {
 		WOActionResults result = super.uploadSucceeded();
 		clearUploadProgress();
@@ -704,6 +705,7 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 * 
 	 * @return string value for 'uploadLabel' binding
 	 */
+	@Override
 	public String uploadLabel() {
 		if (_uploadLabel == null) {
 			_uploadLabel = localizedStringForBinding(Keys.uploadLabel, "Upload");
