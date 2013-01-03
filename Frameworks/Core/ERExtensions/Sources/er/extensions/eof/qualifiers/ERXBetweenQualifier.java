@@ -122,6 +122,7 @@ public class ERXBetweenQualifier extends ERXKeyValueQualifier implements EOQuali
         * Gets the key to qualify against.
         * @return qualifier key
         */
+    @Override
     public String key() {
         return _key;
     }
@@ -175,6 +176,7 @@ public class ERXBetweenQualifier extends ERXKeyValueQualifier implements EOQuali
         * the given set.
         * @param aSet to add the qualification key to.
         */
+    @Override
     public void addQualifierKeysToSet(NSMutableSet aSet) {
         if ( aSet != null )
         {
@@ -194,7 +196,8 @@ public class ERXBetweenQualifier extends ERXKeyValueQualifier implements EOQuali
         * @param someBindings some bindings
         * @param requiresAll tells if the qualifier requires all bindings
         * @return clone of the current qualifier.
-        */    
+        */
+    @Override
     public EOQualifier qualifierWithBindings(NSDictionary someBindings, boolean requiresAll) {
         return (EOQualifier) clone();
     }
@@ -206,6 +209,7 @@ public class ERXBetweenQualifier extends ERXKeyValueQualifier implements EOQuali
         *		against.
         */
     // FIXME: Should do something here...
+    @Override
     public void validateKeysWithRootClassDescription(EOClassDescription aClassDescription) {
     }
 
@@ -316,6 +320,7 @@ public class ERXBetweenQualifier extends ERXKeyValueQualifier implements EOQuali
         * @return if the given object is within the boundries of
         *         the qualifier.
         */
+    @Override
     public boolean evaluateWithObject(Object anObject) {
         if ( ( anObject != null ) && ( anObject instanceof NSKeyValueCoding ) ) {
             String	aKey = key();
@@ -363,10 +368,12 @@ public class ERXBetweenQualifier extends ERXKeyValueQualifier implements EOQuali
         * Implementation of the Clonable interface.
         * @return clone of the qualifier
         */
+    @Override
     public Object clone() {
         return new ERXBetweenQualifier(key(), minimumValue(), maximumValue());
     }
-    
+
+    @Override
     public String toString() {
         return "(" + _key + " between " + valueStringForValue(_minimumValue) + " and " + valueStringForValue(_maximumValue) + ")";
     }
@@ -389,6 +396,7 @@ public class ERXBetweenQualifier extends ERXKeyValueQualifier implements EOQuali
         return  valueString;
     }
 
+    @Override
     public Class classForCoder() {
     	return getClass();
     }
@@ -400,12 +408,14 @@ public class ERXBetweenQualifier extends ERXKeyValueQualifier implements EOQuali
 		return new ERXBetweenQualifier(key, minimumValue, maximumValue);
 	}
 
+	@Override
 	public void encodeWithCoder(NSCoder coder) {
 		coder.encodeObject(key());
 		coder.encodeObject(minimumValue());
 		coder.encodeObject(maximumValue());
 	}
 
+	@Override
 	public void encodeWithKeyValueArchiver(EOKeyValueArchiver archiver) {
 		archiver.encodeObject(key(), "key");
 		archiver.encodeObject(minimumValue(), "minimumValue");

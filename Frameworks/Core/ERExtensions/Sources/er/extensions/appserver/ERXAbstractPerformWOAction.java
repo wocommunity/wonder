@@ -18,7 +18,6 @@ import er.extensions.appserver.ERXWOContext;
  * is performing an action.
  *
  * @author kieran
- *
  */
 public abstract class ERXAbstractPerformWOAction implements IERXPerformWOAction {
     // Used for logging only
@@ -48,6 +47,6 @@ public abstract class ERXAbstractPerformWOAction implements IERXPerformWOAction 
     public WOContext context() {
         return ERXWOContext.currentContext();
     }
-    
+
     public abstract WOActionResults performAction();
 }

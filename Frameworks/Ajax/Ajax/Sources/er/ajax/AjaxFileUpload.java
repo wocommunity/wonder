@@ -349,7 +349,7 @@ public class AjaxFileUpload extends WOComponent {
 				}
 				else {
 					renamedFile = false;
-					progress.setFailure(new Exception ("Could not rename file."));
+					progress.setFailure(new Exception("Could not rename file."));
 					return uploadFailed();
 				}
 				

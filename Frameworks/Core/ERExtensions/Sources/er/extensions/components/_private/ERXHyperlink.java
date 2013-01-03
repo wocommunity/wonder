@@ -1,9 +1,3 @@
-/*
- * Created on Jan 27, 2004
- *
- * To change the template for this generated file go to
- * Window - Preferences - Java - Code Generation - Code and Comments
- */
 package er.extensions.components._private;
 
 import org.apache.log4j.Logger;
@@ -61,6 +55,7 @@ public class ERXHyperlink extends WOHyperlink {
      * Overridden to perform the logging, propagating the action to subelements and returning the
      * current page if an empty page is returned from super.
      */
+    @Override
     public WOActionResults invokeAction(WORequest request, WOContext context) {
         WOActionResults result = super.invokeAction(request, context);
         if(result != null && (result instanceof WONoContentElement)) {

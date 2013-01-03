@@ -9,8 +9,7 @@ import com.webobjects.foundation.NSArray;
  * If only one item in the collection, the juggling is bypassed and that same item is returned every time.
  * 
  * @author kieran
- * @param <E> 
- *
+ * @param <E> class of the collection's items
  */
 public class ERXRoundRobinCollection<E> {
 	private final NSArray<E> _collection;

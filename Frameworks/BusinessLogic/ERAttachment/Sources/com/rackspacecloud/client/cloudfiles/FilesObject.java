@@ -336,7 +336,7 @@ public class FilesObject
         else if (size > kb)
             return (size/kb) +" KB";
         else
-            return getSize ()+" Bytes";
+            return getSize() + " Bytes";
 
     }
 

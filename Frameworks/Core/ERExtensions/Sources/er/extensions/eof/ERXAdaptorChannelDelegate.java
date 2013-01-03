@@ -120,7 +120,7 @@ public class ERXAdaptorChannelDelegate {
 	 * <code>er.extensions.ERXSQLExpressionTracker.collectLastStatements</code>
 	 * set to true to collect executed statements.
 	 */
-	public synchronized void dumpLastStatements () {
+	public synchronized void dumpLastStatements() {
 		log.info("******* dumping collected SQL statements *******");
 		if (_lastStatements != null) {
 			for (int i = 0; i < _lastStatements.size(); i++) {
@@ -142,7 +142,7 @@ public class ERXAdaptorChannelDelegate {
 	 * @author cug - Jun 20, 2007
 	 * @return The last collected SQL statements.
 	 */
-	public LinkedList<String> lastStatements () {
+	public LinkedList<String> lastStatements() {
 		return _lastStatements;
 	}
 }

@@ -881,7 +881,7 @@ public class FilesClient
      * @throws IOException   There was an IO error doing network communication
      * @throws HttpException There was an error with the HTTP protocol
      */
-    public boolean containerExists (String container) throws IOException, HttpException
+    public boolean containerExists(String container) throws IOException, HttpException
     {
         try {
         	getContainerInfo(container);

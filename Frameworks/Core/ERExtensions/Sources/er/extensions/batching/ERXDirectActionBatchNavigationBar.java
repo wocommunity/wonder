@@ -67,7 +67,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	/**
 	 * Standard constructor
 	 * 
-	 * @param context
+	 * @param context the current context
 	 */
 	public ERXDirectActionBatchNavigationBar(WOContext context) {
 		super(context);
@@ -430,7 +430,7 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	/**
 	 * Set the class name for the surrounding div
 	 * 
-	 * @param cssClass
+	 * @param cssClass CSS class for container element
 	 */
 	public void setContainerCssClass(String cssClass) {
 		takeValueForKey(cssClass, CONTAINER_CSS_CLASS_KEY);

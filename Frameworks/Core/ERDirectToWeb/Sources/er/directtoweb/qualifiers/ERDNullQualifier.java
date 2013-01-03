@@ -39,5 +39,6 @@ public class ERDNullQualifier implements EOQualifierEvaluation {
     }
     
     public java.lang.String description() { return toString(); }
+    @Override
     public java.lang.String toString() { return "NullQualifier: " + _keyPath + " is null."; }
 }

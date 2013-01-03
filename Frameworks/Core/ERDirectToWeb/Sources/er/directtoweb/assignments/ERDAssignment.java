@@ -157,6 +157,7 @@ public abstract class ERDAssignment extends Assignment implements ERDComputingAs
      * @param c current D2W context
      * @return result of firing the assignment.
      */
+    @Override
     public Object fire(D2WContext c) {
         Object result = null;
         try {

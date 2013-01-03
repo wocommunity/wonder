@@ -44,10 +44,12 @@ public class ERDEmptyListMessage extends ERDCustomComponent {
 		};
 	}
 
+	@Override
 	public final boolean isStateless() {
 		return true;
 	}
 
+	@Override
 	public final boolean synchronizesVariablesWithBindings() {
 		return false;
 	}

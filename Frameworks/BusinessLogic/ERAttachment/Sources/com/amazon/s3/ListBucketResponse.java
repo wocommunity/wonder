@@ -66,14 +66,17 @@ public class ListBucketResponse extends Response {
             currText = new StringBuffer();
         }
 
+        @Override
         public void startDocument() {
             // ignore
         }
 
+        @Override
         public void endDocument() {
             // ignore
         }
 
+        @Override
         public void startElement(String uri, String name, String qName, Attributes attrs) {
             if (name.equals("Contents")) {
                 currEntry = new ListEntry();
@@ -82,6 +85,7 @@ public class ListBucketResponse extends Response {
             }
         }
 
+        @Override
         public void endElement(String uri, String name, String qName) {
             if (name.equals("Contents")) {
                 entries.add(currEntry);
@@ -107,6 +111,7 @@ public class ListBucketResponse extends Response {
             currText = new StringBuffer();
         }
 
+        @Override
         public void characters(char ch[], int start, int length) {
             currText.append(ch, start, length);
         }

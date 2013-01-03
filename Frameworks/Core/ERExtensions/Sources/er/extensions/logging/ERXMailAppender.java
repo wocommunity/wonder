@@ -489,6 +489,7 @@ public class ERXMailAppender extends AppenderSkeleton {
      * Where the actual logging event is processed and a
      * mail message is generated.
      * @param event logging event
+     * @return mail body
      */
     public String composeMessage(LoggingEvent event) {
         String result;

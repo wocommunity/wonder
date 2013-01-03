@@ -227,10 +227,12 @@ public abstract class EOCustomObject implements EOEnterpriseObject, EODeferredFa
 		return this;
 	}
 
+	@Override
 	public final boolean equals(Object other) {
 		return this == other;
 	}
 
+	@Override
 	public int hashCode() {
 		if (this.__hashCodeCache == 0) {
 			this.__hashCodeCache = super.hashCode();
@@ -238,6 +240,7 @@ public abstract class EOCustomObject implements EOEnterpriseObject, EODeferredFa
 		return this.__hashCodeCache;
 	}
 
+	@Override
 	public String toString() {
 		return eoDescription();
 	}
@@ -1191,6 +1194,7 @@ public abstract class EOCustomObject implements EOEnterpriseObject, EODeferredFa
 			super(targetClass, key, field, valueAccessor);
 		}
 
+		@Override
 		public Object valueInObject(Object object) {
 			Object value = super.valueInObject(object);
 			return value != null ? ((EOEnterpriseObject) object).willReadRelationship(value) : null;
@@ -1203,11 +1207,13 @@ public abstract class EOCustomObject implements EOEnterpriseObject, EODeferredFa
 			super(targetClass, key, field, valueAccessor);
 		}
 
+		@Override
 		public Object valueInObject(Object object) {
 			((EOEnterpriseObject) object).willRead();
 			return super.valueInObject(object);
 		}
 
+		@Override
 		protected void _setValidatedValueInObject(Object value, Object object) throws IllegalAccessException {
 			((EOEnterpriseObject) object).willChange();
 			super._setValidatedValueInObject(value, object);
@@ -1220,11 +1226,13 @@ public abstract class EOCustomObject implements EOEnterpriseObject, EODeferredFa
 			super(targetClass, key, field, valueClass, valueAccessor);
 		}
 
+		@Override
 		public Object valueInObject(Object object) {
 			((EOEnterpriseObject) object).willRead();
 			return super.valueInObject(object);
 		}
 
+		@Override
 		protected void _setValidatedValueInObject(Object value, Object object) throws IllegalAccessException {
 			((EOEnterpriseObject) object).willChange();
 			super._setValidatedValueInObject(value, object);
@@ -1236,11 +1244,13 @@ public abstract class EOCustomObject implements EOEnterpriseObject, EODeferredFa
 			super(targetClass, key, field, valueAccessor);
 		}
 
+		@Override
 		public Object valueInObject(Object object) {
 			((EOEnterpriseObject) object).willRead();
 			return super.valueInObject(object);
 		}
 
+		@Override
 		protected void _setValidatedValueInObject(Object value, Object object) throws IllegalAccessException {
 			((EOEnterpriseObject) object).willChange();
 			super._setValidatedValueInObject(value, object);

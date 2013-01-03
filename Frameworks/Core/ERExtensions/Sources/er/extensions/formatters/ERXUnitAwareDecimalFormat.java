@@ -169,6 +169,7 @@ public class ERXUnitAwareDecimalFormat extends DecimalFormat implements Cloneabl
         }
 
         private String _toString;
+        @Override
         public String toString() {
             if (_toString == null)
                 _toString = "<" + getClass().getName() + " "
