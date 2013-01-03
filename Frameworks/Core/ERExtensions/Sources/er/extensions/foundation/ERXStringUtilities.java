@@ -1099,7 +1099,7 @@ public class ERXStringUtilities {
 
     public static String toHexString(char c) {
     	StringBuilder result = new StringBuilder("\u005C\u005Cu9999".length());
-        String u = Long.toHexString((int) c).toUpperCase();
+        String u = Long.toHexString(c).toUpperCase();
         switch (u.length()) {
             case 1:   result.append("\u005C\u005Cu000");  break;
             case 2:   result.append("\u005C\u005Cu00");   break;

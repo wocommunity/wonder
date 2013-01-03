@@ -206,7 +206,7 @@ public class ERXNumberFormatter extends NSNumberFormatter {
         char[] filteredChars = new char[chars.length];
         int count = 0;
         for (int i = 0; i < chars.length; i++) {
-            if (_ignoredChars.indexOf((int)chars[i]) < 0) {
+            if (_ignoredChars.indexOf(chars[i]) < 0) {
                 filteredChars[count++] = chars[i];
             }
         }

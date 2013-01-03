@@ -15,7 +15,6 @@ import er.ajax.AjaxFileUpload;
 import er.ajax.AjaxUploadProgress;
 import er.ajax.AjaxUtils;
 import er.extensions.appserver.ERXRequest;
-import er.extensions.appserver.ERXWOContext;
 import er.extensions.components.ERXComponentUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;

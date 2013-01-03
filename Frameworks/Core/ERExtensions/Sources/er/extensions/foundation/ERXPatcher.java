@@ -43,7 +43,6 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation._NSUtilities;
 
-import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXResponse;
 import er.extensions.appserver.ERXSession;
 import er.extensions.appserver.ERXWOContext;
@@ -51,7 +50,6 @@ import er.extensions.components._private.ERXHyperlink;
 import er.extensions.components._private.ERXSubmitButton;
 import er.extensions.components._private.ERXSwitchComponent;
 import er.extensions.components._private.ERXWOFileUpload;
-import er.extensions.components.conditionals.ERXWOConditional;
 import er.extensions.woextensions.WOToManyRelationship;
 import er.extensions.woextensions.WOToOneRelationship;
 
