@@ -89,7 +89,7 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
      * @return returns the value for binding: <b>entityNameSeparator</b>
      */
     public String entityNameSeparator() {
-        String separator = (String)this.valueForBinding("entityNameSeparator");
+        String separator = (String)valueForBinding("entityNameSeparator");
         if (separator == null)
             separator = ERXEOEncodingUtilities.entityNameSeparator();
         return separator;
@@ -171,14 +171,14 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
         // Compose the direct action name from the bindings
         // Typically, something like "DirectActionClass/actionMethod".
         // Keep consistency with directActionName semantics as it is defined in directActionHref static method
-        if(this.hasBinding("actionClass")) {
+        if(hasBinding("actionClass")) {
             StringBuffer daBuffer = new StringBuffer();
-            daBuffer.append(this.valueForBinding("actionClass"));
+            daBuffer.append(valueForBinding("actionClass"));
             daBuffer.append('/');
-            daBuffer.append(this.valueForBinding("directActionName"));
+            daBuffer.append(valueForBinding("directActionName"));
             directActionName = daBuffer.toString();
         } else {
-            directActionName = (String)this.valueForBinding("directActionName");
+            directActionName = (String)valueForBinding("directActionName");
         }
 
         if((directActionName == null) || (directActionName.length() == 0))
@@ -197,11 +197,11 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
             formValuesObjects = allObjectsForFormValues();
 
         // Compose and return the final url
-        return directActionHyperlink(this.context(),
-                this.shouldEncryptObjectFormValues(), formValuesObjects, entityNameSeparator(),
+        return directActionHyperlink(context(),
+                shouldEncryptObjectFormValues(), formValuesObjects, entityNameSeparator(),
 		encryptedBindingDict, unencryptedBindingDict,
-                this.application().name(), directActionName,
-                this.relative(), null);
+                application().name(), directActionName,
+                relative(), null);
     }
 	
     // Class methods -------------------------------------------------

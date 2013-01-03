@@ -2855,7 +2855,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
                 }
 
                 // Detect mutually recursing props files by tracking what we've already loaded:
-                String existingIncludeProps = this.getProperty(_Properties.IncludePropsKey);
+                String existingIncludeProps = getProperty(_Properties.IncludePropsKey);
                 if (existingIncludeProps == null) {
                 	existingIncludeProps = "";
                 }
@@ -2872,7 +2872,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 
                 try {
                     log.info("_Properties.load(): Including props file: " + propsFile);
-					this.load(propsFile);
+					load(propsFile);
 				} catch (IOException e) {
 					throw new RuntimeException("Failed to load the property file '" + value + "'.", e);
 				}

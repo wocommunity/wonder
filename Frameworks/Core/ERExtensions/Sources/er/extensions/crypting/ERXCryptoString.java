@@ -5,7 +5,7 @@ public class ERXCryptoString implements Comparable<ERXCryptoString> {
 	private final String value;
 	
 	public ERXCryptoString(String clearText) {
-		this.value = clearText==null?"":clearText;
+		value = clearText == null ? "" : clearText;
 	}
 	
 	public static ERXCryptoString createInstanceFromCryptoString(String encryptedString) {

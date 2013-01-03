@@ -205,17 +205,17 @@ public class WOHelperFunctionHTMLParser {
 					}
 				}
 			}
-			else if (!token.startsWith("</") && this._stackDict.containsKey(tokenPart)) {
+			else if (!token.startsWith("</") && _stackDict.containsKey(tokenPart)) {
 				// standard opening tag
-				Stack stack = (Stack) this._stackDict.objectForKey(tokenPart);
-				if (this._stackDict != null && stack != null) {
+				Stack stack = (Stack) _stackDict.objectForKey(tokenPart);
+				if (_stackDict != null && stack != null) {
 					stack.push(tokenPart);
-					this._stackDict.setObjectForKey(stack, tokenPart);
+					_stackDict.setObjectForKey(stack, tokenPart);
 				}
 			}
 			else if (token.startsWith("</")) {
 				// closing tag
-				Stack stack = (Stack) this._stackDict.objectForKey(tokenParts[0].substring(2));
+				Stack stack = (Stack) _stackDict.objectForKey(tokenParts[0].substring(2));
 				if (stack != null && !stack.empty()) {
 					String stackContent = (String) stack.pop();
 					if (stackContent.equals(WO_REPLACEMENT_MARKER)) {

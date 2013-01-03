@@ -38,6 +38,6 @@ public class ERDNullQualifier implements EOQualifierEvaluation {
         return result;
     }
     
-    public java.lang.String description() { return this.toString(); }
+    public java.lang.String description() { return toString(); }
     public java.lang.String toString() { return "NullQualifier: " + _keyPath + " is null."; }
 }

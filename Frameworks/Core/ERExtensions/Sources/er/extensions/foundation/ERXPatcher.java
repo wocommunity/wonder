@@ -201,7 +201,7 @@ public class ERXPatcher {
 			public WOActionResults invokeAction(WORequest arg0, WOContext arg1) {
 				WOActionResults result = super.invokeAction(arg0, arg1);
 				if (result != null && _action != null && ERXSession.anySession() != null) {
-					ERXSession.anySession().setObjectForKey(this.toString(), "ERXActionLogging");
+					ERXSession.anySession().setObjectForKey(toString(), "ERXActionLogging");
 				}
 				return result;
 			}
@@ -355,7 +355,7 @@ public class ERXPatcher {
 			public WOActionResults invokeAction(WORequest arg0, WOContext arg1) {
 				WOActionResults result = super.invokeAction(arg0, arg1);
 				if (result != null && ERXSession.anySession() != null) {
-					ERXSession.anySession().setObjectForKey(this.toString(), "ERXActionLogging");
+					ERXSession.anySession().setObjectForKey(toString(), "ERXActionLogging");
 				}
 				return result;
 			}

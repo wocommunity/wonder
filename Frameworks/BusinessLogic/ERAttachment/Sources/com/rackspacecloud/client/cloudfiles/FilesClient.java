@@ -254,10 +254,10 @@ public class FilesClient
     {
         this.account = account;
         if (account != null && account.length() > 0) {
-        	this.authenticationURL = FilesUtil.getProperty("auth_url")+VERSION+"/"+account+FilesUtil.getProperty("auth_url_post");
+        	authenticationURL = FilesUtil.getProperty("auth_url")+VERSION+"/"+account+FilesUtil.getProperty("auth_url_post");
         }
         else {
-        	this.authenticationURL = FilesUtil.getProperty("auth_url");
+        	authenticationURL = FilesUtil.getProperty("auth_url");
         }
     }
 
@@ -299,7 +299,7 @@ public class FilesClient
         }
         method.abort();
 
-        return this.isLoggedin;
+        return isLoggedin;
     }
     
 
@@ -370,7 +370,7 @@ public class FilesClient
      */
     public List<FilesContainerInfo> listContainersInfo(int limit, String marker) throws IOException, HttpException, FilesAuthorizationException, FilesException
     {
-    	if (!this.isLoggedin()) {
+    	if (!isLoggedin()) {
     		throw new FilesAuthorizationException("You must be logged in", null, null);
     	}
     	HttpGet method = null;
@@ -512,7 +512,7 @@ public class FilesClient
      */
     public List<FilesContainer> listContainers(int limit, String marker) throws IOException, HttpException, FilesException
     {
-    	if (!this.isLoggedin()) {
+    	if (!isLoggedin()) {
        		throw new FilesAuthorizationException("You must be logged in", null, null);
     	}
     	HttpGet method = null;
@@ -613,7 +613,7 @@ public class FilesClient
          */
         public List<FilesObject> listObjectsStartingWith (String container, String startsWith, String path, int limit, String marker, Character delimiter) throws IOException, FilesException
         {
-    	if (!this.isLoggedin()) {
+    	if (!isLoggedin()) {
        		throw new FilesAuthorizationException("You must be logged in", null, null);
     	}
     	if (!isValidContainerName(container))  {
@@ -884,7 +884,7 @@ public class FilesClient
     public boolean containerExists (String container) throws IOException, HttpException
     {
         try {
-        	this.getContainerInfo(container);
+        	getContainerInfo(container);
         	return true;
         }
         catch(FilesException fnfe) {
@@ -904,7 +904,7 @@ public class FilesClient
      */
    public FilesAccountInfo getAccountInfo() throws IOException, HttpException, FilesAuthorizationException, FilesException
    {
-    	if (this.isLoggedin()) {
+    	if (isLoggedin()) {
     		HttpHead method = null;
 
     		try {
@@ -958,7 +958,7 @@ public class FilesClient
      */
     public FilesContainerInfo getContainerInfo (String container) throws IOException, HttpException, FilesException
     {
-    	if (this.isLoggedin())
+    	if (isLoggedin())
     	{
     		if (isValidContainerName(container))
     		{
@@ -1023,7 +1023,7 @@ public class FilesClient
      */
     public void createContainer(String name) throws IOException, HttpException, FilesAuthorizationException, FilesException
     {
-    	if (this.isLoggedin())
+    	if (isLoggedin())
     	{
     		if (isValidContainerName(name))
     		{
@@ -1087,7 +1087,7 @@ public class FilesClient
      */
     public boolean deleteContainer(String name) throws IOException, HttpException, FilesAuthorizationException, FilesInvalidNameException, FilesNotFoundException, FilesContainerNotEmptyException
     {
-    	if (this.isLoggedin())
+    	if (isLoggedin())
     	{
     		if (isValidContainerName(name))
     		{
@@ -1154,7 +1154,7 @@ public class FilesClient
     public String cdnEnableContainer(String name) throws IOException, HttpException, FilesException
     {
     	String returnValue = null;
-    	if (this.isLoggedin())
+    	if (isLoggedin())
     	{
     		if (isValidContainerName(name))
     		{
@@ -1232,7 +1232,7 @@ public class FilesClient
     throws IOException, HttpException, FilesException
     {
     	String returnValue = null;
-    	if (this.isLoggedin())
+    	if (isLoggedin())
     	{
     		if (isValidContainerName(name))
     		{
@@ -1561,7 +1561,7 @@ public class FilesClient
      */
     public List<String> listCdnContainers(int limit, String marker) throws IOException, HttpException, FilesException
     {
-    	if (this.isLoggedin())
+    	if (isLoggedin())
     	{
     		HttpGet method = null;
     		try {
@@ -1788,7 +1788,7 @@ public class FilesClient
      */
     public List<FilesCDNContainer> listCdnContainerInfo(int limit, String marker) throws IOException, HttpException, FilesException
     {
-    	if (this.isLoggedin())
+    	if (isLoggedin())
     	{
     		HttpGet method = null;
     		try {
@@ -1954,7 +1954,7 @@ public class FilesClient
     public boolean createManifestObject(String container, String contentType, String name, String manifest, Map<String,String> metadata, IFilesTransferCallback callback) throws IOException, HttpException, FilesException
     {
     	byte[] arr = new byte[0];
-    	if (this.isLoggedin())
+    	if (isLoggedin())
     	{
     		String objName	 =  name;
     		if (isValidContainerName(container) && isValidObjectName(objName))
@@ -2104,7 +2104,7 @@ public class FilesClient
      */
     public String storeObjectAs (String container, File obj, String contentType, String name, Map<String,String> metadata, IFilesTransferCallback callback) throws IOException, HttpException, FilesException
     {
-    	if (this.isLoggedin())
+    	if (isLoggedin())
     	{
     		if (isValidContainerName(container) && isValidObjectName(name) )
     		{
@@ -2238,7 +2238,7 @@ public class FilesClient
      */
     public boolean storeObject(String container, byte obj[], String contentType, String name, Map<String,String> metadata, IFilesTransferCallback callback) throws IOException, HttpException, FilesException
     {
-    	if (this.isLoggedin())
+    	if (isLoggedin())
     	{
     		String objName	 =  name;
     		if (isValidContainerName(container) && isValidObjectName(objName))
@@ -2337,7 +2337,7 @@ public class FilesClient
      */
     public String storeStreamedObject(String container, InputStream data, String contentType, String name, Map<String,String> metadata) throws IOException, HttpException, FilesException
     {
-    	if (this.isLoggedin())
+    	if (isLoggedin())
     	{
 			String objName	 =  name;
 			if (isValidContainerName(container) && isValidObjectName(objName))
@@ -2402,7 +2402,7 @@ public class FilesClient
     */
 public String storeObjectAs(String container, String name, HttpEntity entity, Map<String,String> metadata, String md5sum) throws IOException, HttpException, FilesException
     {
-    	if (this.isLoggedin())
+    	if (isLoggedin())
     	{
 			String objName	 =  name;
 			if (isValidContainerName(container) && isValidObjectName(objName))
@@ -2483,7 +2483,7 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
                              String destObjName)
         throws HttpException, IOException {
         String etag = null;
-        if (this.isLoggedin()) {
+        if (isLoggedin()) {
 
             if (isValidContainerName(sourceContainer) &&
                 isValidObjectName(sourceObjName) &&
@@ -2566,7 +2566,7 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
      */
     public void deleteObject (String container, String objName) throws IOException, FilesNotFoundException, HttpException, FilesException
     {
-    	if (this.isLoggedin())
+    	if (isLoggedin())
     	{
     		if (isValidContainerName(container) && isValidObjectName(objName))
     		{
@@ -2634,7 +2634,7 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
     public FilesObjectMetaData getObjectMetaData (String container, String objName) throws IOException, FilesNotFoundException, HttpException, FilesAuthorizationException, FilesInvalidNameException
     {
     	FilesObjectMetaData metaData;
-    	if (this.isLoggedin())
+    	if (isLoggedin())
     	{
     		if (isValidContainerName(container) && isValidObjectName(objName))
     		{
@@ -2722,7 +2722,7 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
      */
     public byte[] getObject (String container, String objName) throws IOException, HttpException, FilesAuthorizationException, FilesInvalidNameException, FilesNotFoundException
     {
-    	if (this.isLoggedin())
+    	if (isLoggedin())
     	{
     		if (isValidContainerName(container) && isValidObjectName(objName))
     		{
@@ -2778,7 +2778,7 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
      */
     public InputStream getObjectAsStream (String container, String objName) throws IOException, HttpException, FilesAuthorizationException, FilesInvalidNameException, FilesNotFoundException
     {
-    	if (this.isLoggedin())
+    	if (isLoggedin())
     	{
     		if (isValidContainerName(container) && isValidObjectName(objName))
     		{
@@ -2834,7 +2834,7 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
 
     public InputStream getObjectAsRangedStream (String container, String objName, long offset, long length) throws IOException, HttpException, FilesAuthorizationException, FilesInvalidNameException, FilesNotFoundException
     {
-    	if (this.isLoggedin())
+    	if (isLoggedin())
     	{
     		if (isValidContainerName(container) && isValidObjectName(objName))
     		{

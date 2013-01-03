@@ -63,9 +63,9 @@ public class ERXLocalizationEditor extends WOComponent {
     @Override
     public void awake() {
     	super.awake();
-    	this.keyToAdd = null;
-    	if (this.displayGroup != null) {
-    		this.displayGroup.setSelectedObject(null);
+    	keyToAdd = null;
+    	if (displayGroup != null) {
+    		displayGroup.setSelectedObject(null);
     	}
     }
 
@@ -254,7 +254,7 @@ public class ERXLocalizationEditor extends WOComponent {
      * 
      */
     public WOComponent addEntry () {
-    	if (this.keyToAdd != null && this.data != null && this.displayGroup != null) {
+    	if (keyToAdd != null && data != null && displayGroup != null) {
 	    	NSMutableDictionary entry = new NSMutableDictionary();
 	    	
 	    	entry.setObjectForKey(keyToAdd, "key");
@@ -263,13 +263,13 @@ public class ERXLocalizationEditor extends WOComponent {
 	    		entry.setObjectForKey(UNSET, this.availableLanguages().objectAtIndex(i));
 	    	}
 	    	
-	    	this.data.addObject(entry);
-	    	this.displayGroup.setObjectArray(data);
-	    	this.displayGroup.qualifyDataSource();
-	    	this.displayGroup.setSelectedObject(entry);
-	    	this.displayGroup.displayBatchContainingSelectedObject();
+	    	data.addObject(entry);
+	    	displayGroup.setObjectArray(data);
+	    	displayGroup.qualifyDataSource();
+	    	displayGroup.setSelectedObject(entry);
+	    	displayGroup.displayBatchContainingSelectedObject();
     	}
-    	return this.context().page();
+    	return context().page();
     }
     
     /**
@@ -277,11 +277,11 @@ public class ERXLocalizationEditor extends WOComponent {
      * 
      */
     public WOComponent removeEntry () {
-    	if (this.currentEntry != null) {
-    		this.data.removeObject(currentEntry);
-    		this.displayGroup.setObjectArray(data);
-    		this.displayGroup.qualifyDisplayGroup();
+    	if (currentEntry != null) {
+    		data.removeObject(currentEntry);
+    		displayGroup.setObjectArray(data);
+    		displayGroup.qualifyDisplayGroup();
     	}
-    	return this.context().page();
+    	return context().page();
     }
 }

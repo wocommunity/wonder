@@ -164,7 +164,7 @@ public class ERXUnitAwareDecimalFormat extends DecimalFormat implements Cloneabl
         public void takeValueForKey(Object value, String key) {
             throw new NSKeyValueCoding.UnknownKeyException("Can't take the value " + value 
                         + " for the key " + key 
-                        + " since " + this.getClass().getName() + " is immutable.", 
+                        + " since " + getClass().getName() + " is immutable.", 
                         value, key);
         }
 

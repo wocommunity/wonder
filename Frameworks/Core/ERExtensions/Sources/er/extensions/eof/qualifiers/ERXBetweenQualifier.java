@@ -105,9 +105,9 @@ public class ERXBetweenQualifier extends ERXKeyValueQualifier implements EOQuali
         // Just to make EOKeyValueQualifier happy
         super(aKey, EOQualifier.QualifierOperatorEqual, aMinimumValue);
         
-        this.setKey( aKey );
-        this.setMinimumValue( aMinimumValue );
-        this.setMaximumValue( aMaximumValue );
+        setKey( aKey );
+        setMinimumValue( aMinimumValue );
+        setMaximumValue( aMaximumValue );
     }
 
     //	===========================================================================
@@ -178,7 +178,7 @@ public class ERXBetweenQualifier extends ERXKeyValueQualifier implements EOQuali
     public void addQualifierKeysToSet(NSMutableSet aSet) {
         if ( aSet != null )
         {
-            String	aKey = this.key();
+            String	aKey = key();
 
             if ( aKey != null )
             {
@@ -196,7 +196,7 @@ public class ERXBetweenQualifier extends ERXKeyValueQualifier implements EOQuali
         * @return clone of the current qualifier.
         */    
     public EOQualifier qualifierWithBindings(NSDictionary someBindings, boolean requiresAll) {
-        return (EOQualifier) this.clone();
+        return (EOQualifier) clone();
     }
 
     /**
@@ -318,15 +318,15 @@ public class ERXBetweenQualifier extends ERXKeyValueQualifier implements EOQuali
         */
     public boolean evaluateWithObject(Object anObject) {
         if ( ( anObject != null ) && ( anObject instanceof NSKeyValueCoding ) ) {
-            String	aKey = this.key();
-            Object	aMinimumValue = this.minimumValue();
-            Object	aMaximumValue = this.maximumValue();
+            String	aKey = key();
+            Object	aMinimumValue = minimumValue();
+            Object	aMaximumValue = maximumValue();
 
             if ( ( aKey != null ) && ( aMinimumValue != null ) && ( aMaximumValue != null ) ) {
                 Object	aValue = ( (NSKeyValueCoding) anObject ).valueForKey( aKey );
 
                 if ( aValue != null ) {
-                    NSComparator	aComparator = this.comparatorForObject( aValue );
+                    NSComparator	aComparator = comparatorForObject( aValue );
 
                     if ( aComparator != null ) {
                         boolean	containsObject = false;
@@ -364,7 +364,7 @@ public class ERXBetweenQualifier extends ERXKeyValueQualifier implements EOQuali
         * @return clone of the qualifier
         */
     public Object clone() {
-        return new ERXBetweenQualifier(this.key(), this.minimumValue(), this.maximumValue());
+        return new ERXBetweenQualifier(key(), minimumValue(), maximumValue());
     }
     
     public String toString() {

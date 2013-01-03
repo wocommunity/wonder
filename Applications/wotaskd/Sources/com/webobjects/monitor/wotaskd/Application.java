@@ -282,7 +282,7 @@ public class Application extends ERXApplication  {
 	@Override
     public String getJMXDomain() {
 		if (_mbsDomain == null) {
-			_mbsDomain = this.host() + "." + this.name() + "." + this.port();
+			_mbsDomain = host() + "." + name() + "." + port();
 		}
 		return _mbsDomain;
     }

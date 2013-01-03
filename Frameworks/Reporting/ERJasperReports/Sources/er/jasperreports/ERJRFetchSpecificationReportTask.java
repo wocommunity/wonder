@@ -113,7 +113,7 @@ public class ERJRFetchSpecificationReportTask implements Callable<File>, IERXPer
 		reportFile = null;
 		
 		if (log.isDebugEnabled())
-			log.debug("Starting JasperReportTask: " + this.toString());
+			log.debug("Starting JasperReportTask: " + toString());
 		EOEditingContext ec = ERXEC.newEditingContext();
 		ec.lock();
 		try {

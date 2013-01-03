@@ -188,7 +188,7 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
     /** Utility to dump some debug info about this component and its parent */
     protected void logDebugInfo() {
         if (log.isDebugEnabled()) {
-            log.debug("***** ERDCustomComponent: this: " + this.getClass().getName());
+            log.debug("***** ERDCustomComponent: this: " + getClass().getName());
             log.debug("***** ERDCustomComponent: parent(): + (" + ((parent() == null) ? "null" : parent().getClass().getName()) + ")");
             log.debug("                      " + parent());
             log.debug("***** ERDCustomComponent: parent() instanceof ERDCustomComponent == " + (parent() instanceof ERDCustomComponent));

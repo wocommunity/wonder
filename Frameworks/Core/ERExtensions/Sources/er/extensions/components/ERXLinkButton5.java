@@ -180,7 +180,7 @@ public class ERXLinkButton5 extends WOHTMLDynamicElement {
 				}
 			}
 			if (result != null && ERXSession.anySession() != null) {
-				ERXSession.anySession().setObjectForKey(this.toString(), "ERXActionLogging");
+				ERXSession.anySession().setObjectForKey(toString(), "ERXActionLogging");
 			}
 		}
 		return result;

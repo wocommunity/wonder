@@ -363,7 +363,7 @@ public class FilesObject
 	 * @return True if the "object" is really a directory.
 	 */
 	public boolean isDirectory() {
-		return this.size == 0 && "application/directory".equals(this.mimeType);
+		return size == 0 && "application/directory".equals(mimeType);
 	}
 	
 	/**

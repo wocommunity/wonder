@@ -99,14 +99,14 @@ public class ERXCachingWrapper extends ERXStatelessComponent {
     	}
 
 		public boolean isActive() {
-			return System.currentTimeMillis() - (this.insertTime + this.duration) < 0;
+			return System.currentTimeMillis() - (insertTime + duration) < 0;
 		}
 		
 		public String content(WOContext arg1) {
-			if(this.sessionID != null) {
-				return content.replaceAll(this.sessionID, arg1.session().sessionID());
+			if(sessionID != null) {
+				return content.replaceAll(sessionID, arg1.session().sessionID());
 			}
-			return this.content;
+			return content;
 		}
     }
 

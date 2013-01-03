@@ -51,17 +51,17 @@ public class ERXD2WList extends D2WList {
     public void awake() {}
 
     public EODataSource dataSource() {
-        if (this.hasBinding("dataSource") && this.valueForBinding("list") == null)
-            return (EODataSource) this.valueForBinding("dataSource");
-        if (this.hasBinding("list")) {
-            NSArray nsarray = (NSArray) this.valueForBinding("list");
+        if (hasBinding("dataSource") && valueForBinding("list") == null)
+            return (EODataSource) valueForBinding("dataSource");
+        if (hasBinding("list")) {
+            NSArray nsarray = (NSArray) valueForBinding("list");
             nsarray = ERXArrayUtilities.removeNullValues(nsarray);
             EOEditingContext eoeditingcontext
                 = (nsarray != null && nsarray.count() > 0
                    ? ((EOEnterpriseObject) nsarray.objectAtIndex(0))
                    .editingContext()
                    : null);
-            String entityName = (String) this.valueForBinding("entityName");
+            String entityName = (String) valueForBinding("entityName");
             if(entityName == null) {
                 entityName = (nsarray != null && nsarray.count() > 0
                               ? ((EOEnterpriseObject) nsarray.objectAtIndex(0))

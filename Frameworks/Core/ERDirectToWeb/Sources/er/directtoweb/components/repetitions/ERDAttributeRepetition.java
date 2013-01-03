@@ -97,7 +97,7 @@ public class ERDAttributeRepetition extends ERDCustomComponent {
         if (log.isDebugEnabled())
             log.debug("currentSectionKeys (from alternateKeyInfo):" +
                       keys);
-        keys = keys == null ? (NSArray)this.currentSection().keys : keys;
+        keys = keys == null ? (NSArray)currentSection().keys : keys;
         if (log.isDebugEnabled())
             log.debug("Setting sectionKey and keys: " + _currentSection.name + keys);
         return keys;

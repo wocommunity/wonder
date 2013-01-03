@@ -31,7 +31,7 @@ public class _EventComparator extends NSComparator {
     @Override
     public int compare(Object e1, Object e2) throws NSComparator.ComparisonException {
         if (!(e1 instanceof EOEvent) || !(e2 instanceof EOEvent) || (e1 == null) || (e2 == null))
-            throw new NSComparator.ComparisonException("<"+this.getClass().getName()+" Unable to compare EOEvents. Either one of the arguments is not a EOEvent or is null. Comparison was made with " + e1 + " and " + e2 + "." );
+            throw new NSComparator.ComparisonException("<"+getClass().getName()+" Unable to compare EOEvents. Either one of the arguments is not a EOEvent or is null. Comparison was made with " + e1 + " and " + e2 + "." );
 
         int result = ((EOEvent)e1)._compareDuration((EOEvent)e2);
         return _compareAscending ? result : 0 - result;  
