@@ -115,6 +115,7 @@ public abstract class ERXRemoteNotificationCenter extends NSNotificationCenter {
 			dos.write(_identifier);
 			dos.writeByte(JOIN);
 			dos.flush();
+			dos.close();
 			_multicastSocket.send(baos.createDatagramPacket());
 			listen();
 		}
@@ -128,6 +129,7 @@ public abstract class ERXRemoteNotificationCenter extends NSNotificationCenter {
 			dos.write(_identifier);
 			dos.writeByte(LEAVE);
 			dos.flush();
+			dos.close();
 			_multicastSocket.send(baos.createDatagramPacket());
 			_multicastSocket.leaveGroup(_multicastGroup, _localNetworkInterface);
 			_listening = false;
