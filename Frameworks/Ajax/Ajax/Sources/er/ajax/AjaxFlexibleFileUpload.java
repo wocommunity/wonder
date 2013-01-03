@@ -521,8 +521,8 @@ public class AjaxFlexibleFileUpload extends AjaxFileUpload {
 	 * @return url sent to the iframe to cancel
 	 */
 	public String cancelUrl() {
-		NSDictionary<String,Boolean> queryParams = new NSDictionary<String,Boolean>(Boolean.FALSE, WOApplication.application().sessionIdKey());
-		String url = ERXWOContext._directActionURL(context(), "ERXDirectAction/closeHTTPSession", queryParams, ERXRequest.isRequestSecure(context().request()));
+		NSDictionary<String, Object> queryParams = new NSDictionary<String, Object>(Boolean.FALSE, WOApplication.application().sessionIdKey());
+		String url = context()._directActionURL("ERXDirectAction/closeHTTPSession", queryParams, ERXRequest.isRequestSecure(context().request()), 0, false);
 		if (log.isDebugEnabled()) log.debug("URL: " + url);
 		return url;
 	}

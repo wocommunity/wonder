@@ -551,7 +551,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	 *            if <code>false</code>, removes session ID from query parameters
 	 * @return the constructed direct action URL
 	 */
-	public static String directActionUrl(WOContext context, String directActionName, NSDictionary<String, ? extends Object> queryParameters, Boolean secure, boolean includeSessionID) {
+	public static String directActionUrl(WOContext context, String directActionName, NSDictionary<String, Object> queryParameters, Boolean secure, boolean includeSessionID) {
 		return ERXWOContext.directActionUrl(context, null, null, null, directActionName, queryParameters, secure, includeSessionID);
 	}
 
@@ -579,7 +579,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	 * @return the constructed direct action URL
 	 */
 	public static String directActionUrl(WOContext context, String host, Integer port, String path, String directActionName, String key, Object value, Boolean secure, boolean includeSessionID) {
-		NSDictionary<String, ? extends Object> queryParameters = null;
+		NSDictionary<String, Object> queryParameters = null;
 		if (key != null && value != null) {
 			queryParameters = new NSDictionary<String, Object>(value, key);
 		}
@@ -607,7 +607,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	 *            if <code>false</code>, removes session ID from query parameters
 	 * @return the constructed direct action URL
 	 */
-	public static String directActionUrl(WOContext context, String host, Integer port, String path, String directActionName, NSDictionary<String, ? extends Object> queryParameters, Boolean secure, boolean includeSessionID) {
+	public static String directActionUrl(WOContext context, String host, Integer port, String path, String directActionName, NSDictionary<String, Object> queryParameters, Boolean secure, boolean includeSessionID) {
 		boolean completeUrls;
 
 		boolean currentlySecure = ERXRequest.isRequestSecure(context.request());
@@ -629,7 +629,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 			ERXMutableURL mu = new ERXMutableURL();
 			boolean customPath = (path != null && path.length() > 0);
 			if (!customPath) {
-				mu.setURL(ERXWOContext._directActionURL(context, directActionName, queryParameters, secureBool));
+				mu.setURL(context._directActionURL(directActionName, queryParameters, secureBool, 0, false));
 				if (!includeSessionID) {
 					mu.removeQueryParameter(WOApplication.application().sessionIdKey());
 				}

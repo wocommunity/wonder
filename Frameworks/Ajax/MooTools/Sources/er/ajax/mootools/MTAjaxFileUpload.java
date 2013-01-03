@@ -383,7 +383,7 @@ public class MTAjaxFileUpload extends WOComponent {
 	}
 
 	public String srcUrl() {
-		return ERXWOContext._directActionURL(context(), "ERXDirectAction/empty", null, ERXRequest.isRequestSecure(context().request()));
+		return context()._directActionURL("ERXDirectAction/empty", null, ERXRequest.isRequestSecure(context().request()), 0, false);
 	}
 
 }
