@@ -29,6 +29,10 @@
 			<artifactId>Ajax</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>wonder.ajax</groupId>
+    		<artifactId>ERCoolComponents</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.webobjects</groupId>
 			<artifactId>JavaWebObjects</artifactId>
 		</dependency>
