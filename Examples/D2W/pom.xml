@@ -13,7 +13,6 @@
 
 	<modules>
 		<module>D2WComponentTour</module>
-		<module>ERDivaliteExample</module>
 		<module>ERModernMoviesDemo</module>
 		<module>ERMovies</module>
 	</modules>

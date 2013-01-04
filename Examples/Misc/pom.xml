@@ -14,7 +14,6 @@
 	<modules>
 		<module>ERComponentTour</module>
 		<module>ERIndexingExample</module>
-		<module>EROpenIDExample</module>
 		<module>ERRestRouteExample</module>
 		<module>ERSeleniumExample</module>
 		<module>TickTockMan</module>

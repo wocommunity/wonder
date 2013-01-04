@@ -12,7 +12,5 @@
 	<modules>
 		<module>AjaxExample</module>
 		<module>AjaxExample2</module>
-		<module>ERDivaLookExample</module>
-		<module>ERIUIExample</module>
 	</modules>
 </project>
