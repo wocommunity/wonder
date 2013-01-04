@@ -11,6 +11,7 @@ import er.example.erxpartials.model.EmployeeType;
 import er.example.erxpartials.model.Partial_AuthenticatedPerson;
 import er.example.erxpartials.model.Person;
 import er.example.erxpartials.util.StringUtil;
+import er.extensions.crypting.ERXCrypto;
 import er.extensions.migration.ERXMigrationDatabase;
 import er.extensions.migration.ERXMigrationTable;
 import er.extensions.migration.ERXModelVersion;
@@ -91,7 +92,7 @@ public class ERXPartialExample0 extends ERXMigrationDatabase.Migration implement
 		  Partial_AuthenticatedPerson auth = aPerson.partialForClass(Partial_AuthenticatedPerson.class);
 		  auth.setLastLoginDate(new NSTimestamp());
 		  auth.setUsername( aPerson.firstName().toLowerCase() + "." + aPerson.lastName().toLowerCase() );
-		  auth.setPassword( StringUtil.encryptString(auth.username()) );
+		  auth.setPassword( ERXCrypto.base64HashedString(auth.username()) );
 	  }
   }
 }
