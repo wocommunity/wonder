@@ -10,7 +10,6 @@ import er.example.erxpartials.model.Department;
 import er.example.erxpartials.model.EmployeeType;
 import er.example.erxpartials.model.Partial_AuthenticatedPerson;
 import er.example.erxpartials.model.Person;
-import er.example.erxpartials.util.StringUtil;
 import er.extensions.crypting.ERXCrypto;
 import er.extensions.migration.ERXMigrationDatabase;
 import er.extensions.migration.ERXMigrationTable;
