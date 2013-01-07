@@ -1,7 +1,7 @@
 Summary: womonitor manage your wotaskd instances.
 Name: womonitor
 Version: 6
-Release: 381
+Release: 0
 Prefix: /opt/Local/Library/WebObjects/JavaApplications
 BuildArch: noarch
 Group: Project Wonder/Deployment

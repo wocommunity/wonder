@@ -1,7 +1,7 @@
 Summary: wotaskd manage the application instances running on your application hosts.
 Name: wotaskd
 Version: 6
-Release: 380
+Release: 0
 Prefix: /opt/Local/Library/WebObjects/JavaApplications
 BuildArch: noarch
 Group: Project Wonder/Deployment
