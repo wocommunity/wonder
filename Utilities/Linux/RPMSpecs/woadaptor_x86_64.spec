@@ -5,7 +5,7 @@ Release: 0
 Prefix: /
 BuildArch: x86_64
 Group: Project Wonder/Deployment
-Source: rpm_builds
+Source: master
 URL: http://wiki.wocommunity.org/
 Vendor: WOCommunity Association
 Packager: Pascal Robert <info@wocommunity.org>
@@ -20,7 +20,7 @@ woadaptor is a Apache 2.2 module that act as a bridge between your
 Web server (Apache) and your wotaskd instances.
 
 %prep
-%setup -q -n wonder-rpm_builds
+%setup -q -n wonder-master
 # This tells ant to install software in a specific directory.
 cat << EOF >> build.properties
 base.path=%{buildroot}%{_libdir}/httpd/modules/
@@ -35,8 +35,8 @@ make CC=gcc
 rm -Rf %{buildroot}
 mkdir -p %{buildroot}%{_libdir}/httpd/modules/
 mkdir -p %{buildroot}/etc/httpd/conf.d/
-%{__cp} $RPM_BUILD_DIR/wonder-rpm_builds/Utilities/Adaptors/Apache2.2/mod_WebObjects.so %{buildroot}%{_libdir}/httpd/modules/
-%{__cp} $RPM_BUILD_DIR/wonder-rpm_builds/Utilities/Adaptors/Apache2.2/apache.conf %{buildroot}/etc/httpd/conf.d/webobjects.conf
+%{__cp} $RPM_BUILD_DIR/wonder-master/Utilities/Adaptors/Apache2.2/mod_WebObjects.so %{buildroot}%{_libdir}/httpd/modules/
+%{__cp} $RPM_BUILD_DIR/wonder-master/Utilities/Adaptors/Apache2.2/apache.conf %{buildroot}/etc/httpd/conf.d/webobjects.conf
 
 %clean
 rm -rf %{buildroot}

@@ -5,7 +5,7 @@ Release: 0
 Prefix: /opt/Local/Library/WebObjects/JavaApplications
 BuildArch: noarch
 Group: Project Wonder/Deployment
-Source: rpm_builds
+Source: master
 URL: http://wiki.wocommunity.org/
 Vendor: WOCommunity Association
 Packager: Pascal Robert <info@wocommunity.org>
@@ -21,7 +21,7 @@ By default, a wotaskd process running on port 1085 is configured as a service on
 supported platforms.
 
 %prep
-%setup -q -n wonder-rpm_builds
+%setup -q -n wonder-master
 # This tells ant to install software in a specific directory.
 cat << EOF >> build.properties
 base.path=%{buildroot}/opt/Local/Library/WebObjects/JavaApplications
@@ -35,7 +35,7 @@ rm -Rf %{buildroot}
 mkdir -p %{buildroot}/opt/Local/Library/WebObjects/JavaApplications
 mkdir -p %{buildroot}/etc/init.d/
 %{__cp} -Rip $RPM_BUILD_DIR/wotaskd.woa %{buildroot}/opt/Local/Library/WebObjects/JavaApplications
-%{__cp} $RPM_BUILD_DIR/wonder-rpm_builds/Utilities/Linux/StartupScripts/RedHat/wotaskd %{buildroot}/etc/init.d/wotaskd
+%{__cp} $RPM_BUILD_DIR/wonder-master/Utilities/Linux/StartupScripts/RedHat/wotaskd %{buildroot}/etc/init.d/wotaskd
 mkdir %{buildroot}/opt/Local/Library/WebObjects/Applications
 mkdir %{buildroot}/opt/Local/Library/WebObjects/Configuration
 mkdir %{buildroot}/opt/Local/Library/WebObjects/Logs

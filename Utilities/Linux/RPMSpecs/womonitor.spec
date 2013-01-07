@@ -5,7 +5,7 @@ Release: 0
 Prefix: /opt/Local/Library/WebObjects/JavaApplications
 BuildArch: noarch
 Group: Project Wonder/Deployment
-Source: rpm_builds
+Source: master
 URL: http://wiki.wocommunity.org/
 Vendor: WOCommunity Association
 Packager: Pascal Robert <info@wocommunity.org>
@@ -17,7 +17,7 @@ Project Wonder Deployment uses womonitor to manage your wotaskd instances.
 The management is done by a Web interface, running on port 56789. 
 
 %prep
-%setup -q -n wonder-rpm_builds
+%setup -q -n wonder-master
 # This tells ant to install software in a specific directory.
 cat << EOF >> build.properties
 base.path=%{buildroot}/opt/Local/Library/WebObjects/JavaApplications
@@ -31,7 +31,7 @@ rm -Rf %{buildroot}
 mkdir -p %{buildroot}/opt/Local/Library/WebObjects/JavaApplications
 mkdir -p %{buildroot}/etc/init.d/
 %{__cp} -Rip $RPM_BUILD_DIR/JavaMonitor.woa %{buildroot}/opt/Local/Library/WebObjects/JavaApplications
-%{__cp} $RPM_BUILD_DIR/wonder-rpm_builds/Utilities/Linux/StartupScripts/RedHat/womonitor %{buildroot}/etc/init.d/womonitor
+%{__cp} $RPM_BUILD_DIR/wonder-master/Utilities/Linux/StartupScripts/RedHat/womonitor %{buildroot}/etc/init.d/womonitor
 mkdir %{buildroot}/opt/Local/Library/WebObjects/Applications
 mkdir %{buildroot}/opt/Local/Library/WebObjects/Configuration
 mkdir %{buildroot}/opt/Local/Library/WebObjects/Logs
