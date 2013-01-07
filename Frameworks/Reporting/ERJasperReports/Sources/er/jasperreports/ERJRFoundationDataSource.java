@@ -91,7 +91,7 @@ public class ERJRFoundationDataSource implements JRDataSource {
 	}
 	
 	public boolean getFilterNulls() {
-		return this.filterNulls;
+		return filterNulls;
 	}
 	
 	public void setFilterNulls(boolean filters) {

@@ -352,7 +352,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
 					}
 				}
 			}
-			return new NSArray<EOSQLExpression>(_expressionForString(new StringBuilder().append("CREATE TABLE ").append(this.formatTableName(entityGroup.objectAtIndex(0).externalName())).append(" (").append(aStatement.toString()).append(")").toString()));
+			return new NSArray<EOSQLExpression>(_expressionForString(new StringBuilder().append("CREATE TABLE ").append(formatTableName(entityGroup.objectAtIndex(0).externalName())).append(" (").append(aStatement.toString()).append(")").toString()));
 		}
 		return NSArray.EmptyArray;
 	}

@@ -72,7 +72,7 @@ public class ERPPieChart extends ERPChart {
     	public void setValue(Comparable key, Number value) {
     	    if(getIndex(key) >= 0) {
     	        Number oldValue = getValue(key);
-    	        value = new Double(value.doubleValue() + oldValue.doubleValue());
+    	        value = Double.valueOf(value.doubleValue() + oldValue.doubleValue());
     	    }
     	    super.setValue(key, value);
     	}

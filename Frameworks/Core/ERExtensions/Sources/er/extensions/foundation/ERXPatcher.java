@@ -43,7 +43,6 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation._NSUtilities;
 
-import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXResponse;
 import er.extensions.appserver.ERXSession;
 import er.extensions.appserver.ERXWOContext;
@@ -51,7 +50,6 @@ import er.extensions.components._private.ERXHyperlink;
 import er.extensions.components._private.ERXSubmitButton;
 import er.extensions.components._private.ERXSwitchComponent;
 import er.extensions.components._private.ERXWOFileUpload;
-import er.extensions.components.conditionals.ERXWOConditional;
 import er.extensions.woextensions.WOToManyRelationship;
 import er.extensions.woextensions.WOToOneRelationship;
 
@@ -155,6 +153,7 @@ public class ERXPatcher {
 				super(aName, associations, element);
 			}
 
+			@Override
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
 				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
@@ -173,6 +172,7 @@ public class ERXPatcher {
 			 * Appends the attribute "value" to the response. First tries to get a localized version and if that fails,
 			 * uses the supplied value as the default
 			 */
+			@Override
 			protected void _appendValueAttributeToResponse(WOResponse response, WOContext context) {
 				if (_value != null) {
 					String valueString = _valueStringInContext(context);
@@ -183,6 +183,7 @@ public class ERXPatcher {
 				}
 			}
 
+			@Override
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
 				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
@@ -196,10 +197,11 @@ public class ERXPatcher {
 			/*
 			 * logs the action name into session's dictionary with a key = ERXActionLogging
 			 */
+			@Override
 			public WOActionResults invokeAction(WORequest arg0, WOContext arg1) {
 				WOActionResults result = super.invokeAction(arg0, arg1);
 				if (result != null && _action != null && ERXSession.anySession() != null) {
-					ERXSession.anySession().setObjectForKey(this.toString(), "ERXActionLogging");
+					ERXSession.anySession().setObjectForKey(toString(), "ERXActionLogging");
 				}
 				return result;
 			}
@@ -212,6 +214,7 @@ public class ERXPatcher {
 				super(aName, associations, element);
 			}
 
+			@Override
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
 				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
@@ -221,6 +224,7 @@ public class ERXPatcher {
 			 * Appends the attribute "value" to the response. First tries to get a localized version and if that fails,
 			 * uses the supplied value as the default
 			 */
+			@Override
 			protected void _appendValueAttributeToResponse(WOResponse response, WOContext context) {
 				if (_value != null) {
 					Object object = _value.valueInComponent(context.component());
@@ -232,6 +236,7 @@ public class ERXPatcher {
 				}
 			}
 
+			@Override
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
 				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
@@ -249,11 +254,13 @@ public class ERXPatcher {
 				super(aName, associations, element);
 			}
 
+			@Override
 			public void appendAttributesToResponse(WOResponse woresponse, WOContext wocontext) {
 				super.appendAttributesToResponse(woresponse, wocontext);
 				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
 			}
 
+			@Override
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
 				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
@@ -271,11 +278,13 @@ public class ERXPatcher {
 				super(aName, associations, element);
 			}
 
+			@Override
 			public void appendAttributesToResponse(WOResponse woresponse, WOContext wocontext) {
 				super.appendAttributesToResponse(woresponse, wocontext);
 				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
 			}
 
+			@Override
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
 				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
@@ -293,11 +302,13 @@ public class ERXPatcher {
 				super(aName, associations, element);
 			}
 
+			@Override
 			public void appendAttributesToResponse(WOResponse woresponse, WOContext wocontext) {
 				super.appendAttributesToResponse(woresponse, wocontext);
 				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
 			}
 
+			@Override
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
 				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
@@ -315,6 +326,7 @@ public class ERXPatcher {
 				super(aName, associations, element);
 			}
 
+			@Override
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
 			}
@@ -325,6 +337,7 @@ public class ERXPatcher {
 				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
 			}
 
+			@Override
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
 				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
@@ -338,10 +351,11 @@ public class ERXPatcher {
 			/*
 			 * logs the action name into session's dictionary with a key = ERXActionLogging if log is set to debug.
 			 */
+			@Override
 			public WOActionResults invokeAction(WORequest arg0, WOContext arg1) {
 				WOActionResults result = super.invokeAction(arg0, arg1);
 				if (result != null && ERXSession.anySession() != null) {
-					ERXSession.anySession().setObjectForKey(this.toString(), "ERXActionLogging");
+					ERXSession.anySession().setObjectForKey(toString(), "ERXActionLogging");
 				}
 				return result;
 			}
@@ -356,6 +370,7 @@ public class ERXPatcher {
 				_readonly = _associations.removeObjectForKey("readonly");
 			}
 
+			@Override
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
 				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
@@ -364,6 +379,7 @@ public class ERXPatcher {
 				}
 			}
 
+			@Override
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
 				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
@@ -398,6 +414,7 @@ public class ERXPatcher {
 				_readonly = _associations.removeObjectForKey("readonly");
 			}
 
+			@Override
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
 				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
@@ -406,6 +423,7 @@ public class ERXPatcher {
 				}
 			}
 
+			@Override
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
 				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
@@ -439,6 +457,7 @@ public class ERXPatcher {
 				_loggedSlow = suppressValueBindingSlow;
 			}
 
+			@Override
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
 				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
@@ -449,6 +468,7 @@ public class ERXPatcher {
 			protected void _appendValueAttributeToResponse(WOResponse response, WOContext context) {
 			}
 
+			@Override
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
 				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
@@ -531,11 +551,13 @@ public class ERXPatcher {
 				_loggedSlow = suppressValueBindingSlow;
 			}
 
+			@Override
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
 				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
 			}
 
+			@Override
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
 				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
@@ -616,11 +638,13 @@ public class ERXPatcher {
 				super(aName, associations, element);
 			}
 
+			@Override
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
 				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
 			}
 
+			@Override
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
 				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
@@ -638,11 +662,13 @@ public class ERXPatcher {
 				super(aName, associations, element);
 			}
 
+			@Override
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
 				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
 			}
 
+			@Override
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
 				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
@@ -723,11 +749,13 @@ public class ERXPatcher {
 				super(aName, associations, element);
 			}
 
+			@Override
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
 				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
 			}
 
+			@Override
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
 				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
@@ -747,6 +775,7 @@ public class ERXPatcher {
 				_readonly = _associations.removeObjectForKey("readonly");
 			}
 
+			@Override
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
 				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
@@ -755,6 +784,7 @@ public class ERXPatcher {
 				}
 			}
 
+			@Override
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
 				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
@@ -787,11 +817,13 @@ public class ERXPatcher {
 				super(aName, associations, element);
 			}
 
+			@Override
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
 				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
 			}
 
+			@Override
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
 				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
@@ -811,6 +843,7 @@ public class ERXPatcher {
 				_readonly = _associations.removeObjectForKey("readonly");
 			}
 
+			@Override
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
 				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
@@ -819,6 +852,7 @@ public class ERXPatcher {
 				}
 			}
 
+			@Override
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
 				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
@@ -851,11 +885,13 @@ public class ERXPatcher {
 				super(aName, associations, element);
 			}
 
+			@Override
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
 				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
 			}
 
+			@Override
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
 				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);
@@ -873,11 +909,13 @@ public class ERXPatcher {
 				super(aName, associations, element);
 			}
 
+			@Override
 			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 				super._appendNameAttributeToResponse(woresponse, wocontext);
 				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
 			}
 
+			@Override
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
 				WOResponse newResponse = cleanupXHTML ? new ERXResponse() : woresponse;
 				super.appendToResponse(newResponse, wocontext);

@@ -103,7 +103,7 @@ public class Main extends WOComponent  {
         attribArray2.addObject(attGrp);
         smcList2.addObject(DRSubMasterCriteria.withKeyUseMethodUseTimeFormatFormatPossibleValuesUseTypeGroupEdgesPossibleValues("dateReleased", false, false, null, "useRange", true, new NSArray(new Object[]{new NSTimestamp().timestampByAddingGregorianUnits(-25, 0, 0, 0, 0, 0) , new NSTimestamp().timestampByAddingGregorianUnits(-11, 0, 0, 0, 0, 0)})));
         smcList.addObject(DRSubMasterCriteria.withKeyUseMethodUseTimeFormatFormatPossibleValuesUseTypeGroupEdgesPossibleValues("category", false, false, null, "usePredefined", false, new NSArray(new Object[]{"Action" , "Drama" , "Cult"})));
-        smcList3.addObject(DRSubMasterCriteria.withKeyUseMethodUseTimeFormatFormatPossibleValuesUseTypeGroupEdgesPossibleValues("revenue", false, false, null, "useRange", true, new NSArray(new Object[]{(new Double(500.0)) , (new Double(500000.0)) , (new Double(10000000.0)) , (new Double(14400000.0))})));
+        smcList3.addObject(DRSubMasterCriteria.withKeyUseMethodUseTimeFormatFormatPossibleValuesUseTypeGroupEdgesPossibleValues("revenue", false, false, null, "useRange", true, new NSArray(new Object[]{(Double.valueOf(500.0)) , (Double.valueOf(500000.0)) , (Double.valueOf(10000000.0)) , (Double.valueOf(14400000.0))})));
         critArray2.addObject(DRMasterCriteria.withSubMasterCriteriaUserInfo(smcList, null));
         critArray2.addObject(DRMasterCriteria.withSubMasterCriteriaUserInfo(smcList2, null));
         critArray2.addObject(DRMasterCriteria.withSubMasterCriteriaUserInfo(smcList3, null));

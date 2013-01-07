@@ -45,7 +45,7 @@ public class UnitTests {
     }
 
     public static void test2() {
-        mc.set( "foo", new Integer( Integer.MAX_VALUE ) );
+        mc.set( "foo", Integer.valueOf( Integer.MAX_VALUE ) );
         Integer i = (Integer)mc.get( "foo" );
         assertTrue(i.intValue() == Integer.MAX_VALUE);
         log.debug( "+ store/retrieve Integer type test passed" );
@@ -81,35 +81,35 @@ public class UnitTests {
     }
 
     public static void test7() {
-        mc.set( "foo", new Short( (short)100 ) );
+        mc.set( "foo", Short.valueOf( (short)100 ) );
         Short o = (Short)mc.get( "foo" );
         assertTrue(o.shortValue() == 100);
         log.debug( "+ store/retrieve Short type test passed" );
     }
 
     public static void test8() {
-        mc.set( "foo", new Long( Long.MAX_VALUE ) );
+        mc.set( "foo", Long.valueOf( Long.MAX_VALUE ) );
         Long o = (Long)mc.get( "foo" );
         assertTrue(o.longValue() == Long.MAX_VALUE);
         log.debug( "+ store/retrieve Long type test passed" );
     }
 
     public static void test9() {
-        mc.set( "foo", new Double( 1.1 ) );
+        mc.set( "foo", Double.valueOf( 1.1 ) );
         Double o = (Double)mc.get( "foo" );
         assertTrue(o.doubleValue() == 1.1);
         log.debug( "+ store/retrieve Double type test passed" );
     }
 
     public static void test10() {
-        mc.set( "foo", new Float( 1.1f ) );
+        mc.set( "foo", Float.valueOf( 1.1f ) );
         Float o = (Float)mc.get( "foo" );
         assertTrue(o.floatValue() == 1.1f);
         log.debug( "+ store/retrieve Float type test passed" );
     }
 
     public static void test11() {
-        mc.set( "foo", new Integer( 100 ), new Date( System.currentTimeMillis() ));
+        mc.set( "foo", Integer.valueOf( 100 ), new Date( System.currentTimeMillis() ));
         try { Thread.sleep( 1000 ); } catch ( Exception ex ) { }
         assertTrue(mc.get( "foo" ) == null);
         log.debug( "+ store/retrieve w/ expiration test passed" );
@@ -136,7 +136,7 @@ public class UnitTests {
 
     public static void test14() {
         assertTrue(!mc.keyExists( "foobar123" ));
-        mc.set( "foobar123", new Integer( 100000) );
+        mc.set( "foobar123", Integer.valueOf( 100000) );
         assertTrue(mc.keyExists( "foobar123" ));
         log.debug( "+ store/retrieve test passed" );
 
@@ -244,7 +244,7 @@ public class UnitTests {
     }
 
     public static void test23() {
-        TestClass tc = new TestClass( "foo", "bar", new Integer( 32 ) );
+        TestClass tc = new TestClass( "foo", "bar", Integer.valueOf( 32 ) );
         mc.set( "foo", tc );
         assertTrue(tc.equals( (TestClass)mc.get( "foo" ) ));
         log.debug( "+ store/retrieve serialized object test passed" );

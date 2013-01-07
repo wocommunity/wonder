@@ -248,11 +248,11 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	private boolean _updateInverseRelationships = ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships;
 
 	public Logger getClassLog() {
-		Logger classLog = classLogs.objectForKey(this.getClass());
+		Logger classLog = classLogs.objectForKey(getClass());
 		if (classLog == null) {
 			synchronized (classLogs) {
-				classLog = Logger.getLogger(this.getClass());
-				classLogs.setObjectForKey(classLog, this.getClass());
+				classLog = Logger.getLogger(getClass());
+				classLogs.setObjectForKey(classLog, getClass());
 			}
 		}
 		return classLog;

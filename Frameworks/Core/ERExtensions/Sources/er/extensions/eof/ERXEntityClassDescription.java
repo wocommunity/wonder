@@ -999,7 +999,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         }
 
         public void setValueInObject(EOEnterpriseObject eo) {
-            Object defaultValue = this.stringValue;
+            Object defaultValue = stringValue;
             if(stringValue.startsWith("@threadStorage.")) {
                 String keyPath = stringValue.substring("@threadStorage.".length());
                 defaultValue = ERXThreadStorage.valueForKeyPath(keyPath);
@@ -1041,7 +1041,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         }
 
         public void setValueInObject(EOEnterpriseObject eo) {
-            Object defaultValue = this.stringValue;
+            Object defaultValue = stringValue;
             EOEditingContext ec = eo.editingContext();
 
             if(stringValue.charAt(0) == '@') { // computed key

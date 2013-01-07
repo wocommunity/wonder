@@ -503,8 +503,8 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 		fetchIfNecessary();
 
 		// GN: reset the displayed batch if it is out of range
-		if (this.displayGroup() != null && this.displayGroup().currentBatchIndex() > this.displayGroup().batchCount()) {
-			this.displayGroup().setCurrentBatchIndex(1);
+		if (displayGroup() != null && displayGroup().currentBatchIndex() > displayGroup().batchCount()) {
+			displayGroup().setCurrentBatchIndex(1);
 		}
 		super.appendToResponse(r, c);
 	}

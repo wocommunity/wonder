@@ -711,7 +711,7 @@ public class AppDetailPage extends MonitorComponent {
 
     public Float actualRatePerMinute() {
         Float aNumber = StatsUtilities.actualTransactionsPerSecondForApplication(myApplication());
-        return new Float((aNumber.floatValue() * 60));
+        return Float.valueOf((aNumber.floatValue() * 60));
     }
 
     /** ******* */

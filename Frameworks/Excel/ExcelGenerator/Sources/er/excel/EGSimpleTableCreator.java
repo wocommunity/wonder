@@ -223,7 +223,7 @@ public class EGSimpleTableCreator {
 		Object value = null;
 		switch(cellType) {
 			case HSSFCell.CELL_TYPE_NUMERIC:
-			value = new Double(cell.getNumericCellValue());
+			value = Double.valueOf(cell.getNumericCellValue());
 			break;
 			
 			case HSSFCell.CELL_TYPE_FORMULA:

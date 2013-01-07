@@ -77,7 +77,9 @@ public abstract class ERXAjaxApplication extends WOApplication {
 	 * @see com.webobjects.appserver.WOApplication#takeValuesFromRequest(com.webobjects.appserver.WORequest, com.webobjects.appserver.WOContext)
 	 *
 	 * @param request
+	 *            the current request
 	 * @param context
+	 *            the context
 	 */
 	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
@@ -264,6 +266,13 @@ public abstract class ERXAjaxApplication extends WOApplication {
 		// not to cache the page.
 		boolean shouldNotStorePage = (shouldNotStorePage(response) || shouldNotStorePage(request) || isAjaxSubmit(request)) && !forceStorePage(response);
 		return shouldNotStorePage;
+	}
+
+	/**
+	 * Set flag on current context to not store the current page.
+	 */
+	public static void enableShouldNotStorePage() {
+		ERXWOContext.contextDictionary().takeValueForKey(ERXAjaxSession.DONT_STORE_PAGE, ERXAjaxSession.DONT_STORE_PAGE);
 	}
 
 	/**

@@ -197,7 +197,7 @@ public class WOOgnl {
 						}
 					}
 				}
-				if (isConstant && keyPath != null && keyPath.startsWith(ognlBindingFlag())) {
+				if (isConstant && keyPath.startsWith(ognlBindingFlag())) {
 					String ognlExpression = keyPath.substring(ognlBindingFlag().length(), keyPath.length());
 					if (ognlExpression.length() > 0) {
 						WOAssociation newAssociation = new WOOgnlAssociation(ognlExpression);

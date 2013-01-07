@@ -59,10 +59,10 @@ public class SerializingTranscoder extends BaseSerializingTranscoder
 					rv=Byte.valueOf(tu.decodeByte(data));
 					break;
 				case SPECIAL_FLOAT:
-					rv=new Float(Float.intBitsToFloat(tu.decodeInt(data)));
+					rv=Float.valueOf(Float.intBitsToFloat(tu.decodeInt(data)));
 					break;
 				case SPECIAL_DOUBLE:
-					rv=new Double(Double.longBitsToDouble(tu.decodeLong(data)));
+					rv=Double.valueOf(Double.longBitsToDouble(tu.decodeLong(data)));
 					break;
 				case SPECIAL_BYTEARRAY:
 					rv=data;

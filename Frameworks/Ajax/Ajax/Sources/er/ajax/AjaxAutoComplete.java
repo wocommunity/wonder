@@ -15,6 +15,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.appserver.ERXWOContext;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
@@ -179,7 +180,7 @@ public class AjaxAutoComplete extends AjaxComponent {
 				String listJS = null;
 				if (isLocalSharedList) {
 					String varName = (String) valueForBinding("localSharedVarName");
-					NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(res);
+					NSMutableDictionary userInfo = ERXWOContext.contextDictionary();
 					if (userInfo.objectForKey(varName) == null) {
 						String ljs = listeJS();
 						AjaxUtils.addScriptCodeInHead(res, ctx, "var " + varName + " = " + ljs + ";");

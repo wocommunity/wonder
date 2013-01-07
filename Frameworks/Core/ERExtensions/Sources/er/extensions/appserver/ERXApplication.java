@@ -95,7 +95,6 @@ import er.extensions.components._private.ERXActiveImage;
 import er.extensions.components._private.ERXWOForm;
 import er.extensions.components._private.ERXWORepetition;
 import er.extensions.components._private.ERXWOString;
-import er.extensions.components._private.ERXWOText;
 import er.extensions.components._private.ERXWOTextField;
 import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXDatabaseContextDelegate;

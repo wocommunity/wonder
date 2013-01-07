@@ -52,7 +52,7 @@ public class JavaBrowser extends WOComponent {
         }
         WOComponent nextPage = pageWithName("StringHolder");
         nextPage.takeValueForKey(content, "string");
-        nextPage.takeValueForKey(new Boolean(!showCode), "isDocumentation");
+        nextPage.takeValueForKey(Boolean.valueOf(!showCode), "isDocumentation");
         
         return nextPage;
     }

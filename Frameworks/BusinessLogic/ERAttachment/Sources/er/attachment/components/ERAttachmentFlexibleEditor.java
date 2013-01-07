@@ -375,7 +375,7 @@ public class ERAttachmentFlexibleEditor extends ERXNonSynchronizingComponent {
 	 */
     public String id() {
     	if (_id == null) {
-			_id = stringValueForBinding("id", ERXWOContext.safeIdentifierName(this.context(), true));
+			_id = stringValueForBinding("id", ERXWOContext.safeIdentifierName(context(), true));
 		}
 		return _id;
     }

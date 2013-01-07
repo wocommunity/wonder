@@ -58,6 +58,7 @@ public interface ERXLongResponseTask extends Runnable {
 			return _task;
 		}
 
+		@Override
 		public void run() {
 			try {
 				super.run();
@@ -265,7 +266,7 @@ public interface ERXLongResponseTask extends Runnable {
 			try {
 				if(_thread == null) {
 					_thread = new WorkerThread(this);
-                    _thread.setName(this.toString());
+                    _thread.setName(toString());
 				}
 				if(!_thread.isAlive()) {
 					_thread.start();

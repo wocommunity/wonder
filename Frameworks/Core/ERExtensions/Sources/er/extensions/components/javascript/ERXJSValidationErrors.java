@@ -9,7 +9,6 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSValidation;
 
-import er.extensions.appserver.ERXApplication;
 import er.extensions.components.ERXStatelessComponent;
 import er.extensions.validation.ERXValidationException;
 

@@ -32,7 +32,7 @@ import org.apache.log4j.Logger;
  * Code that performs class casting will throw ClassCastExceptions when
  * setSerialize is enabled. For example:
  * 
- *     mc.set( "foo", new Integer( 1 ) ); Integer output = (Integer)mc.get("foo");
+ *     mc.set( "foo", Integer.valueOf( 1 ) ); Integer output = (Integer)mc.get("foo");
  * 
  * Will work just file when setSerialize is true but when its false will just throw
  * a ClassCastException.
@@ -394,7 +394,7 @@ public class NativeHandler {
 	
 	protected static Float decodeFloat( byte[] b ) throws Exception {
 		Integer l = decodeInteger( b );
-		return new Float( Float.intBitsToFloat( l.intValue() ) );
+		return Float.valueOf( Float.intBitsToFloat( l.intValue() ) );
 	}
 	
 	protected static Short decodeShort( byte[] b ) throws Exception {
@@ -403,7 +403,7 @@ public class NativeHandler {
 	
 	protected static Double decodeDouble( byte[] b ) throws Exception {
 		Long l = decodeLong( b );
-		return new Double( Double.longBitsToDouble( l.longValue() ) );
+		return Double.valueOf( Double.longBitsToDouble( l.longValue() ) );
 	}
 	
 	protected static Date decodeDate( byte[] b ) {

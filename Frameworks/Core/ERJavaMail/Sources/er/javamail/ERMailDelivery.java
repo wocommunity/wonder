@@ -217,9 +217,9 @@ public abstract class ERMailDelivery {
 	 * </span>
 	 */
 	public void newMail() {
-		this._attachments().removeAllObjects();
-		this._inlineAttachments().removeAllObjects();
-		this.setMimeMessage(new MimeMessage(this.session()));
+		_attachments().removeAllObjects();
+		_inlineAttachments().removeAllObjects();
+		setMimeMessage(new MimeMessage(session()));
 	}
 
 	protected MimeMessage mimeMessage() {
@@ -231,11 +231,11 @@ public abstract class ERMailDelivery {
 	}
 
 	public void addAttachment(ERMailAttachment attachment) {
-		this._attachments().addObject(attachment);
+		_attachments().addObject(attachment);
 	}
 
 	public void addInlineAttachment(ERMailAttachment attachment) {
-		this._inlineAttachments().addObject(attachment);
+		_inlineAttachments().addObject(attachment);
 	}
 
 	protected NSMutableArray<ERMailAttachment> _inlineAttachments() {
@@ -245,7 +245,7 @@ public abstract class ERMailDelivery {
 	}
 
 	public NSArray<ERMailAttachment> inlineAttachments() {
-		return this._inlineAttachments();
+		return _inlineAttachments();
 	}
 
 	protected NSMutableArray<ERMailAttachment> _attachments() {
@@ -255,12 +255,12 @@ public abstract class ERMailDelivery {
 	}
 
 	public NSArray<ERMailAttachment> attachments() {
-		return this._attachments();
+		return _attachments();
 	}
 
 	public void removeAttachment(ERMailAttachment attachment) {
-		this._attachments().removeObject(attachment);
-		this._inlineAttachments().removeObject(attachment);
+		_attachments().removeObject(attachment);
+		_inlineAttachments().removeObject(attachment);
 	}
 	
 	/** 
@@ -279,7 +279,7 @@ public abstract class ERMailDelivery {
 			address.setAddress(email);
 
 			try {
-				address.setPersonal(personal, this.charset());
+				address.setPersonal(personal, charset());
 			}
 			catch (java.io.UnsupportedEncodingException ex) {
 				// set the string anyway.
@@ -321,8 +321,8 @@ public abstract class ERMailDelivery {
 	 * </span>
 	 */
 	public void setFromAddress(String fromAddress, String personalName) throws MessagingException, AddressException {
-		InternetAddress address = this.internetAddressWithEmailAndPersonal(fromAddress, personalName);
-		this.mimeMessage().setFrom(address);
+		InternetAddress address = internetAddressWithEmailAndPersonal(fromAddress, personalName);
+		mimeMessage().setFrom(address);
 	}
 
 	/** 
@@ -331,7 +331,7 @@ public abstract class ERMailDelivery {
 	 * </span>
 	 */
 	public void setToAddress(String toAddress) throws MessagingException, AddressException {
-		this.setToAddress(toAddress, null);
+		setToAddress(toAddress, null);
 	}
 
 	/** 
@@ -344,7 +344,7 @@ public abstract class ERMailDelivery {
 	 * </span>
 	 */
 	public void setToAddress(String toAddress, String personalName) throws MessagingException, AddressException {
-		InternetAddress address = this.internetAddressWithEmailAndPersonal(toAddress, personalName);
+		InternetAddress address = internetAddressWithEmailAndPersonal(toAddress, personalName);
 		setInternetAddresses(new NSArray<InternetAddress>(address), Message.RecipientType.TO);
 	}
 
@@ -397,8 +397,8 @@ public abstract class ERMailDelivery {
 	 * </span>
 	 */
 	public void setReplyToAddress(String toAddress, String personalName) throws MessagingException, AddressException {
-		InternetAddress addresses[] = new InternetAddress[] { this.internetAddressWithEmailAndPersonal(toAddress, personalName) };
-		this.mimeMessage().setReplyTo(addresses);
+		InternetAddress addresses[] = new InternetAddress[] { internetAddressWithEmailAndPersonal(toAddress, personalName) };
+		mimeMessage().setReplyTo(addresses);
 	}
 
 	/** 
@@ -465,7 +465,7 @@ public abstract class ERMailDelivery {
 	 * @throws MessagingException if the charset conversion of the subject fails
 	 */
 	public void setSubject(String subject) throws MessagingException {
-		this.mimeMessage().setSubject(ERMailUtils.encodeString(subject, this.charset()));
+		mimeMessage().setSubject(ERMailUtils.encodeString(subject, charset()));
 	}
 
 	/**
@@ -484,7 +484,7 @@ public abstract class ERMailDelivery {
 	 * </span>
 	 */
 	public void setXMailerHeader(String xMailer) throws MessagingException {
-		this.mimeMessage().setHeader("X-Mailer", xMailer);
+		mimeMessage().setHeader("X-Mailer", xMailer);
 	}
 
 	/**
@@ -501,7 +501,7 @@ public abstract class ERMailDelivery {
 	 * </span>
 	 */
 	public String xMailerHeader() throws MessagingException {
-		String[] headers = this.mimeMessage().getHeader("X-Mailer");
+		String[] headers = mimeMessage().getHeader("X-Mailer");
 		return headers != null && headers.length > 0 ? headers[0] : null;
 	}
 	
@@ -513,7 +513,7 @@ public abstract class ERMailDelivery {
 	 *            value to set
 	 */
 	public void setAdditionalHeader(String headerKey, String value) throws MessagingException {
-		this.mimeMessage().setHeader(headerKey, value);
+		mimeMessage().setHeader(headerKey, value);
 	}
 
 	/**
@@ -534,7 +534,7 @@ public abstract class ERMailDelivery {
 		message.setDelegate(_delegate);
 		message.setUserInfo(_userInfo);
 		message.setContextString(_contextString);
-		MimeMessage mimeMessage = this.mimeMessage();
+		MimeMessage mimeMessage = mimeMessage();
 		try {
 			Address[] bccRecipients = mimeMessage.getRecipients(RecipientType.BCC);
 			if (bccRecipients != null && bccRecipients.length > 0) {
@@ -602,9 +602,9 @@ public abstract class ERMailDelivery {
 				return;
 			}
 
-			this.finishMessagePreparation();
+			finishMessagePreparation();
 			ERMailSender sender = ERMailSender.sharedMailSender();
-			ERMessage message = this.buildMessage();
+			ERMessage message = buildMessage();
 
 			if (shouldBlock)
 				sender.sendMessageNow(message);
@@ -638,15 +638,15 @@ public abstract class ERMailDelivery {
 			throw new NSForwardException(e);
 		}
 		finally {
-			this.setMimeMessage(null);
+			setMimeMessage(null);
 		}
 	}
 
 	protected void finishMessagePreparation() throws MessagingException {
-		DataHandler messageDataHandler = this.prepareMail();
+		DataHandler messageDataHandler = prepareMail();
 
 		// Add all the attachements to the javamail message
-		if (this.attachments().count() > 0) {
+		if (attachments().count() > 0) {
 			// Create a Multipart that will hold the prepared multipart and the attachments
 			MimeMultipart multipart = new MimeMultipart();
 
@@ -658,26 +658,26 @@ public abstract class ERMailDelivery {
 			multipart.addBodyPart(mainBodyPart);
 
 			// add each attachments to the former multipart
-			for (ERMailAttachment attachment : this.attachments()) {
+			for (ERMailAttachment attachment : attachments()) {
 				BodyPart bp = attachment.getBodyPart();
 				bp.setDisposition(Part.ATTACHMENT);
 				multipart.addBodyPart(bp);
 			}
 
-			this.mimeMessage().setContent(multipart);
+			mimeMessage().setContent(multipart);
 		}
 		else {
-			this.mimeMessage().setDataHandler(messageDataHandler);
+			mimeMessage().setDataHandler(messageDataHandler);
 		}
 
 		// If the xMailer property has not been set, check if one has been provided
 		// in the System properties
-		if ((this.xMailerHeader() == null) && (ERJavaMail.sharedInstance().defaultXMailerHeader() != null)) {
-			this.setXMailerHeader(ERJavaMail.sharedInstance().defaultXMailerHeader());
+		if ((xMailerHeader() == null) && (ERJavaMail.sharedInstance().defaultXMailerHeader() != null)) {
+			setXMailerHeader(ERJavaMail.sharedInstance().defaultXMailerHeader());
 		}
 
-		this.mimeMessage().setSentDate(new Date());
-		this.mimeMessage().saveChanges();
+		mimeMessage().setSentDate(new Date());
+		mimeMessage().saveChanges();
 	}
 
 	/**
@@ -700,7 +700,7 @@ public abstract class ERMailDelivery {
 			internetAddresses[i] = (InternetAddress) addresses.objectAtIndex(i);
 		}
 
-		this.mimeMessage().setRecipients(type, internetAddresses);
+		mimeMessage().setRecipients(type, internetAddresses);
 	}
 
 	/**
@@ -723,7 +723,7 @@ public abstract class ERMailDelivery {
 			return;
 		}
 		InternetAddress[] addresses = ERMailUtils.convertNSArrayToInternetAddresses(addressesArray);
-		this.mimeMessage().setRecipients(type, addresses);
+		mimeMessage().setRecipients(type, addresses);
 	}
 
 	/**
@@ -751,7 +751,7 @@ public abstract class ERMailDelivery {
 			newDictionary.takeValueForKey(addressesDictionary.objectForKey(key), key);
 		}
 		InternetAddress[] addresses = ERMailUtils.convertNSDictionaryToInternetAddresses(newDictionary.immutableClone(), charset());
-		this.mimeMessage().setRecipients(type, addresses);
+		mimeMessage().setRecipients(type, addresses);
 	}
 
 	/**

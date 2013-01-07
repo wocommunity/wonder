@@ -20,15 +20,17 @@ import er.extensions.foundation.ERXArrayUtilities;
 
 /**
  * This component adds javascript to a page to grab the system time zone
- * from the browser. The information is then sent to the session using
- * an ajax call.  It determines a time zone based on minutes offset from
+ * from the browser and write the time zone to the <code>timeZone</code>
+ * attribute of the session via a call to the <code>setTimeZone()</code>
+ * method. The information is sent to the session using an ajax call.
+ * This code determines a time zone based on minutes offset from
  * GMT, whether the time zone observes DST, and if DST, whether the time
  * zone is in the northern or southern hemisphere. Since there may be more
  * than one time zone that matches these values, the array of possible
  * values is compared against an array of preferred values if one is
  * supplied.  If no preferred values are supplied, the zone selected is
  * pulled from the list of possible options in no particular order. Use
- * of an ERXSession is expected/required.
+ * of an {@link ERXSession} is expected/required.
  * 
  * @binding preferredTimeZones an array of preferred TimeZone objects. This
  * array takes precedence over the preferredTimeZoneIDs binding.

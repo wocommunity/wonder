@@ -22,7 +22,6 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
@@ -174,7 +173,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
      * registers this observer object for 
      * {@link er.extensions.localization.ERXLocalizer#LocalizationDidResetNotification}
      */
-    private void registerForLocalizationDidResetNotification() {
+    protected void registerForLocalizationDidResetNotification() {
       NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("localizationDidReset", ERXConstant.NotificationClassArray), ERXLocalizer.LocalizationDidResetNotification, null);
     }
   }
@@ -471,6 +470,8 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * Something useful could be:
    * 
    * <blockquote><code>return session().sessionID() + valueForKeyPath("user.username");</code></blockquote>
+   * 
+   * @return name of the current thread
    */
   public String threadName() {
     return Thread.currentThread().getName();
@@ -572,6 +573,8 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
   
   /**
    * Bringing application into KVC.
+   * 
+   * @return the application object
    */
   public ERXApplication application() {
 	  return ERXApplication.erxApplication();

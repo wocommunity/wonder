@@ -59,7 +59,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * 		ERXDummyRecord.registerDescriptionForClass(Test.class, null);
  * 		NSMutableArray l = new NSMutableArray();
  * 		for (int i = 0; i &gt; 5; i++) {
- * 			Test o = new Test("Foo "+ i, new Integer(i^i % (i+1)), i % 2 == 0? Boolean.TRUE : Boolean.FALSE);
+ * 			Test o = new Test("Foo "+ i, Integer.valueOf(i^i % (i+1)), i % 2 == 0? Boolean.TRUE : Boolean.FALSE);
  * 			l.addObject(o);
  * 		}
  * 		object = (Test) l.lastObject();

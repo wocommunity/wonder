@@ -27,7 +27,7 @@ public class TaskInfoController extends ERXRouteController {
 
   public WOActionResults createAction() throws Throwable {
     TaskInfo taskInfo = ERXEOControlUtilities.createAndInsertObject(editingContext(), TaskInfo.class);
-    taskInfo.setDuration(new Long(15000));
+    taskInfo.setDuration(Long.valueOf(15000));
     taskInfo.setStartNumber(Utilities.newStartNumber());
     taskInfo.setStartTime(new NSTimestamp());
 

@@ -72,8 +72,8 @@ public class ERQueue<T> extends Vector<T> {
 	 * </span>
 	 */
 	public T push(T item) throws SizeOverflowException {
-		if ((_maxSize == 0) || (this.size() < _maxSize)) {
-			this.addElement(item);
+		if ((_maxSize == 0) || (size() < _maxSize)) {
+			addElement(item);
 		}
 		else {
 			throw new SizeOverflowException();
@@ -89,8 +89,8 @@ public class ERQueue<T> extends Vector<T> {
 	 * </span>
 	 */
 	public synchronized T pop() {
-		T element = this.elementAt(0);
-		this.removeElementAt(0);
+		T element = elementAt(0);
+		removeElementAt(0);
 		return element;
 	}
 
@@ -102,7 +102,7 @@ public class ERQueue<T> extends Vector<T> {
 	 * </span>
 	 */
 	public synchronized T peek() {
-		return this.elementAt(0);
+		return elementAt(0);
 	}
 
 	/**
@@ -113,7 +113,7 @@ public class ERQueue<T> extends Vector<T> {
 	 * </span>
 	 */
 	public boolean empty() {
-		return (this.size() == 0);
+		return size() == 0;
 	}
 
 	/**
@@ -126,6 +126,6 @@ public class ERQueue<T> extends Vector<T> {
 	 * </span>
 	 */
 	public synchronized int search(Object o) {
-		return this.indexOf(o);
+		return indexOf(o);
 	}
 }

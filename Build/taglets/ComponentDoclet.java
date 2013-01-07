@@ -592,7 +592,7 @@ public class ComponentDoclet extends com.sun.javadoc.Doclet {
             out.write("</TABLE>\n");
             out.write("</TD>\n");
             out.write("<TD ALIGN=\"right\" VALIGN=\"top\" ROWSPAN=3><EM>\n");
-            out.write("<em>Project Wonder 5.0</em></EM>\n");
+            out.write("<em>Project Wonder 6.0</em></EM>\n");
             out.write("</TD>\n");
             out.write("</TR>\n");
             out.write("\n");

@@ -51,7 +51,7 @@ public class ERDDelayedRuleAssignment extends ERDDelayedAssignment {
      */
     public Object fireNow(D2WContext c) {
         Object result = null;
-        NSArray rules = (NSArray)this.value();
+        NSArray rules = (NSArray)value();
         Enumeration ruleEnumerator = rules.objectEnumerator();
         Rule rule;
         while (ruleEnumerator.hasMoreElements()) {

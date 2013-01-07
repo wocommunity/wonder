@@ -209,7 +209,7 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
      */
     public Boolean showDeleteButton() {
     	if (_showDeleteButton == null) {
-    		_showDeleteButton = new Boolean(canDelete() && ERXValueUtilities.booleanValue(valueForBinding("isEntityDeletable")));
+    		_showDeleteButton = Boolean.valueOf(canDelete() && ERXValueUtilities.booleanValue(valueForBinding("isEntityDeletable")));
     	}
     	return _showDeleteButton;
     }
