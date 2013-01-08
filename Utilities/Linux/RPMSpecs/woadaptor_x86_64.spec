@@ -1,7 +1,7 @@
 Summary: woadaptor is a Apache 2.2 module to connect to wotaskd.
 Name: woadaptor
 Version: 6
-Release: 0
+Release: 1
 Prefix: /
 BuildArch: x86_64
 Group: Project Wonder/Deployment
@@ -11,9 +11,11 @@ Vendor: WOCommunity Association
 Packager: Pascal Robert <info@wocommunity.org>
 License: NetStruxr Public Software License
 BuildRoot: %{_builddir}/%{name}-root
-Requires: httpd >= 2.2.0
+Requires: httpd >= 2.2.0, jdk
+Requires: httpd < 2.4.0
 BuildPrereq: gcc, make, sed >= 4.1.4
 BuildRequires: httpd-devel >= 2.2.0
+BuildRequires: httpd-devel < 2.4.0
 
 %description
 woadaptor is a Apache 2.2 module that act as a bridge between your
