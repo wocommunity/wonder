@@ -11,7 +11,7 @@ Vendor: WOCommunity Association
 Packager: Pascal Robert <info@wocommunity.org>
 License: NetStruxr Public Software License
 BuildRoot: %{_builddir}/%{name}-root
-Requires: httpd >= 2.2.0, jdk
+Requires: httpd >= 2.2.0
 Requires: httpd < 2.4.0
 BuildPrereq: gcc, make, sed >= 4.1.4
 BuildRequires: httpd-devel >= 2.2.0
