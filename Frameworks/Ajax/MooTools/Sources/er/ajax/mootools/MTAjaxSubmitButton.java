@@ -106,6 +106,7 @@ public class MTAjaxSubmitButton extends AjaxDynamicElement {
 
 	}
 
+	@Override
 	public void addRequiredWebResources(WOResponse response, WOContext context) {
 		MTAjaxUtils.addScriptResourceInHead(context, context.response(), "MooTools", MTAjaxUtils.MOOTOOLS_CORE_JS);
 		MTAjaxUtils.addScriptResourceInHead(context, context.response(), "MooTools", MTAjaxUtils.MOOTOOLS_MORE_JS);
@@ -120,7 +121,7 @@ public class MTAjaxSubmitButton extends AjaxDynamicElement {
 		MTAjaxUtils.addScriptResourceInHead(context, context.response(), "MooTools", MTAjaxUtils.MOOTOOLS_WONDER_JS);
 	}
 
-
+	@Override
 	@SuppressWarnings("rawtypes")
 	public void appendToResponse(WOResponse response, WOContext context) {
 
@@ -355,6 +356,7 @@ public class MTAjaxSubmitButton extends AjaxDynamicElement {
 
 	}	
 
+	@Override
 	public WOActionResults invokeAction(WORequest worequest, WOContext wocontext) {
 
 		WOActionResults result = null;
@@ -368,12 +370,13 @@ public class MTAjaxSubmitButton extends AjaxDynamicElement {
 			MTAjaxUpdateContainer.setUpdateContainerID(worequest, updateContainerID);
 			wocontext.setActionInvoked(true);
 			result = handleRequest(worequest, wocontext);
-			AjaxUtils.updateMutableUserInfoWithAjaxInfo(wocontext);
+			ERXAjaxApplication.enableShouldNotStorePage();
 		}
 
 		return result;
 	}
 
+	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 
 		WOComponent component = context.component();
@@ -401,6 +404,5 @@ public class MTAjaxSubmitButton extends AjaxDynamicElement {
 
 		return result;
 	}
-
 
 }

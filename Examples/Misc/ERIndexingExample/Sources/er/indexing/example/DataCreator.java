@@ -88,7 +88,7 @@ public class DataCreator {
 
 					String sqlScript = syncFactory.schemaCreationScriptForEntities(eomodel.entities(), options);
 					log.info("Creating tables: " + eomodel.name());
-					ERXJDBCUtilities.executeUpdateScriptIgnoringErrors(channel, sqlScript);
+					ERXJDBCUtilities.executeUpdateScript(channel, sqlScript, true);
 				}
 			} catch (SQLException ex) {
 				log.error("Can't update: " + ex, ex);

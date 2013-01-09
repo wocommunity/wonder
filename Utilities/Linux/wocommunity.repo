@@ -1,0 +1,7 @@
+[wocommunity]
+name=WOCommunity
+baseurl=http://packages.wocommunity.org/CentOS/$releasever/
+enabled=1
+gpgcheck=0
+#gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6-LocalRepo
+protect=0

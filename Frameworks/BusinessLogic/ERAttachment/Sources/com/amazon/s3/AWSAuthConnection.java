@@ -574,10 +574,10 @@ public class AWSAuthConnection {
 
 		String canonicalString = Utils.makeCanonicalString(method, resource,
 				connection.getRequestProperties());
-		String encodedCanonical = Utils.encode(this.awsSecretAccessKey,
+		String encodedCanonical = Utils.encode(awsSecretAccessKey,
 				canonicalString, false);
 		connection.setRequestProperty("Authorization", "AWS "
-				+ this.awsAccessKeyId + ":" + encodedCanonical);
+				+ awsAccessKeyId + ":" + encodedCanonical);
 	}
 
 	/**
@@ -587,8 +587,8 @@ public class AWSAuthConnection {
 	 *            The resource name (bucketName + "/" + key).
 	 */
 	private URL makeURL(String resource) throws MalformedURLException {
-		String protocol = this.isSecure ? "https" : "http";
-		return new URL(protocol, this.server, this.port, "/" + resource);
+		String protocol = isSecure ? "https" : "http";
+		return new URL(protocol, server, port, "/" + resource);
 	}
 
 	/**

@@ -1,4 +1,4 @@
-// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to Person.java instead.
+// DO NOT EDIT.  Make changes to Person.java instead.
 package er.example.erxpartials.model;
 
 import com.webobjects.eoaccess.*;
@@ -38,33 +38,33 @@ public abstract class _Person extends er.extensions.partials.ERXPartialGenericRe
   }
 
   public String firstName() {
-    return (String) storedValueForKey("firstName");
+    return (String) storedValueForKey(_Person.FIRST_NAME_KEY);
   }
 
   public void setFirstName(String value) {
     if (_Person.LOG.isDebugEnabled()) {
     	_Person.LOG.debug( "updating firstName from " + firstName() + " to " + value);
     }
-    takeStoredValueForKey(value, "firstName");
+    takeStoredValueForKey(value, _Person.FIRST_NAME_KEY);
   }
 
   public String lastName() {
-    return (String) storedValueForKey("lastName");
+    return (String) storedValueForKey(_Person.LAST_NAME_KEY);
   }
 
   public void setLastName(String value) {
     if (_Person.LOG.isDebugEnabled()) {
     	_Person.LOG.debug( "updating lastName from " + lastName() + " to " + value);
     }
-    takeStoredValueForKey(value, "lastName");
+    takeStoredValueForKey(value, _Person.LAST_NAME_KEY);
   }
 
   public er.example.erxpartials.model.GenderType genderType() {
-    return (er.example.erxpartials.model.GenderType)storedValueForKey("genderType");
+    return (er.example.erxpartials.model.GenderType)storedValueForKey(_Person.GENDER_TYPE_KEY);
   }
   
   public void setGenderType(er.example.erxpartials.model.GenderType value) {
-    takeStoredValueForKey(value, "genderType");
+    takeStoredValueForKey(value, _Person.GENDER_TYPE_KEY);
   }
 
   public void setGenderTypeRelationship(er.example.erxpartials.model.GenderType value) {
@@ -77,10 +77,10 @@ public abstract class _Person extends er.extensions.partials.ERXPartialGenericRe
     else if (value == null) {
     	er.example.erxpartials.model.GenderType oldValue = genderType();
     	if (oldValue != null) {
-    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, "genderType");
+    		removeObjectFromBothSidesOfRelationshipWithKey(oldValue, _Person.GENDER_TYPE_KEY);
       }
     } else {
-    	addObjectToBothSidesOfRelationshipWithKey(value, "genderType");
+    	addObjectToBothSidesOfRelationshipWithKey(value, _Person.GENDER_TYPE_KEY);
     }
   }
   
@@ -95,6 +95,10 @@ public abstract class _Person extends er.extensions.partials.ERXPartialGenericRe
     return eo;
   }
 
+  public static ERXFetchSpecification<Person> fetchSpec() {
+    return new ERXFetchSpecification<Person>(_Person.ENTITY_NAME, null, null, false, true, null);
+  }
+
   public static NSArray<Person> fetchAllPersons(EOEditingContext editingContext) {
     return _Person.fetchAllPersons(editingContext, null);
   }
@@ -104,9 +108,9 @@ public abstract class _Person extends er.extensions.partials.ERXPartialGenericRe
   }
 
   public static NSArray<Person> fetchPersons(EOEditingContext editingContext, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings) {
-    EOFetchSpecification fetchSpec = new EOFetchSpecification(_Person.ENTITY_NAME, qualifier, sortOrderings);
+    ERXFetchSpecification<Person> fetchSpec = new ERXFetchSpecification<Person>(_Person.ENTITY_NAME, qualifier, sortOrderings);
     fetchSpec.setIsDeep(true);
-    NSArray<Person> eoObjects = (NSArray<Person>)editingContext.objectsWithFetchSpecification(fetchSpec);
+    NSArray<Person> eoObjects = fetchSpec.fetchObjects(editingContext);
     return eoObjects;
   }
 
@@ -122,7 +126,7 @@ public abstract class _Person extends er.extensions.partials.ERXPartialGenericRe
       eoObject = null;
     }
     else if (count == 1) {
-      eoObject = (Person)eoObjects.objectAtIndex(0);
+      eoObject = eoObjects.objectAtIndex(0);
     }
     else {
       throw new IllegalStateException("There was more than one Person that matched the qualifier '" + qualifier + "'.");
@@ -143,7 +147,7 @@ public abstract class _Person extends er.extensions.partials.ERXPartialGenericRe
   }
 
   public static Person localInstanceIn(EOEditingContext editingContext, Person eo) {
-    Person localInstance = (eo == null) ? null : (Person)EOUtilities.localInstanceOfObject(editingContext, eo);
+    Person localInstance = (eo == null) ? null : ERXEOControlUtilities.localInstanceOfObject(editingContext, eo);
     if (localInstance == null && eo != null) {
       throw new IllegalStateException("You attempted to localInstance " + eo + ", which has not yet committed.");
     }

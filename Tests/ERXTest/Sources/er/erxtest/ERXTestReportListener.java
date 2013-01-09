@@ -96,7 +96,7 @@ public class ERXTestReportListener extends RunListener {
 
                         if (verbose) {
                             for (int idx = 0; idx < bytesRead; idx++) {
-                                String num = Integer.toHexString((int)(bytes[idx] & 0xff));
+                                String num = Integer.toHexString(bytes[idx] & 0xff);
                                 while (num.length() < 2) { num = "0"+num; }
                                 System.out.print(" "+num);
                             }
@@ -114,7 +114,7 @@ public class ERXTestReportListener extends RunListener {
             StringBuilder str = new StringBuilder();
 
             for (int idx = 0; idx < digest.length; idx++) {
-                String num = Integer.toHexString((int)(digest[idx] & 0xff));
+                String num = Integer.toHexString(digest[idx] & 0xff);
                 while (num.length() < 2) { num = "0"+num; }
                 str.append(num);
             }

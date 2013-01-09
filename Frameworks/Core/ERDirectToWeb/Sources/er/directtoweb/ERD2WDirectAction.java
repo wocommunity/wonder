@@ -49,7 +49,6 @@ import com.webobjects.foundation.NSTimestampFormatter;
 import er.directtoweb.interfaces.ERDErrorPageInterface;
 import er.directtoweb.pages.ERD2WEditableListPage;
 import er.directtoweb.pages.ERD2WQueryPage;
-import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXDirectAction;
 import er.extensions.appserver.ERXHttpStatusCodes;
 import er.extensions.appserver.ERXResponse;

@@ -135,12 +135,12 @@ public class QueryStringAuthGenerator {
 
     public String makeBareURL(String bucket, String key) {
         StringBuilder buffer = new StringBuilder();
-        if (this.isSecure) {
+        if (isSecure) {
             buffer.append("https://");
         } else {
             buffer.append("http://");
         }
-        buffer.append(this.server).append(":").append(this.port).append("/").append(bucket);
+        buffer.append(server).append(":").append(port).append("/").append(bucket);
         buffer.append("/").append(Utils.urlencode(key));
 
         return buffer.toString();
@@ -160,16 +160,16 @@ public class QueryStringAuthGenerator {
         expires /= 1000;
 
         String canonicalString = Utils.makeCanonicalString(method, path, headers, ""+expires);
-        String encodedCanonical = Utils.encode(this.awsSecretAccessKey, canonicalString, true);
+        String encodedCanonical = Utils.encode(awsSecretAccessKey, canonicalString, true);
 
         StringBuilder buffer = new StringBuilder();
-        if (this.isSecure) {
+        if (isSecure) {
             buffer.append("https://");
         } else {
             buffer.append("http://");
         }
 
-        buffer.append(this.server).append(":").append(this.port).append("/").append(path);
+        buffer.append(server).append(":").append(port).append("/").append(path);
 
         if (path.indexOf('?') == -1) {
             // no other query parameters
@@ -181,7 +181,7 @@ public class QueryStringAuthGenerator {
 
         buffer.append("Signature=").append(encodedCanonical);
         buffer.append("&Expires=").append(expires);
-        buffer.append("&AWSAccessKeyId=").append(this.awsAccessKeyId);
+        buffer.append("&AWSAccessKeyId=").append(awsAccessKeyId);
 
         return buffer.toString();
     }

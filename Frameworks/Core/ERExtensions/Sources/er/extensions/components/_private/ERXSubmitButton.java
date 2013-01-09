@@ -14,7 +14,6 @@ import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.appserver._private.WOInput;
 import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXBrowser;
 import er.extensions.appserver.ERXBrowserFactory;
 import er.extensions.appserver.ERXWOContext;

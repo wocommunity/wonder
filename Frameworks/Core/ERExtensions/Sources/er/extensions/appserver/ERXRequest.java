@@ -160,7 +160,7 @@ public class ERXRequest extends WORequest {
         if (_browserLanguages == null) {
         	NSMutableArray<String> languageKeys = new NSMutableArray<String>();
             NSArray<String> fixedLanguages = null;
-            String string = this.headerForKey("accept-language");
+            String string = headerForKey("accept-language");
             if (string != null) {
                 NSArray<String> rawLanguages = NSArray.componentsSeparatedByString(string, ",");
                 fixedLanguages = fixAbbreviationArray(rawLanguages);

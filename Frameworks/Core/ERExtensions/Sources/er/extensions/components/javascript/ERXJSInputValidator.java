@@ -15,8 +15,8 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.appserver.ERXWOContext;
-import er.extensions.components._private.ERXWOText;
 import er.extensions.components._private.ERXWOTextField;
+import er.extensions.foundation.ERXPatcher.DynamicElementsPatches.Text;
 
 /**
  * Client side part of the JavaScript validation.
@@ -104,7 +104,7 @@ public class ERXJSInputValidator extends WOComponent {
         Class clazz = classForCurrentItem();
         boolean canBlur = WOText.class.isAssignableFrom(clazz);
         canBlur |= WOTextField.class.isAssignableFrom(clazz);
-        canBlur |= ERXWOText.class.isAssignableFrom(clazz);
+        canBlur |= Text.class.isAssignableFrom(clazz);
         canBlur |= ERXWOTextField.class.isAssignableFrom(clazz);
         return canBlur;
     }

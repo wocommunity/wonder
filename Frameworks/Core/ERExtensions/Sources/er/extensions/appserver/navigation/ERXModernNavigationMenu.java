@@ -47,6 +47,7 @@ public class ERXModernNavigationMenu extends ERXStatelessComponent {
         super(context);
     }
 
+    @Override
     public void reset() {
         _menuIsSetUp = false;
         _renderLevelCount = 0;
@@ -72,14 +73,11 @@ public class ERXModernNavigationMenu extends ERXStatelessComponent {
                     if (navigationState != null && navigationState.count() > 0) {
                         navigationState().setState(navigationState);
                     } else {
-                        o = (NSArray)navigationContext().valueForKey("additionalNavigationState");
+                        o = navigationContext().valueForKey("additionalNavigationState");
                         o = (o == null ? NSArray.EmptyArray : o);
                         NSArray additionalNavigationState = (o instanceof NSArray ? (NSArray)o : NSArray.componentsSeparatedByString(o.toString(), "."));
                         if (additionalNavigationState != null && additionalNavigationState.count() > 0) {
-                            if (additionalNavigationState != null && additionalNavigationState.count() > 0)
-                                navigationState().setAdditionalState(additionalNavigationState);
-                            else
-                                navigationState().setAdditionalState(null);
+                            navigationState().setAdditionalState(additionalNavigationState);
                         } else if (ERXValueUtilities.booleanValue(navigationContext().valueForKey("shouldResetNavigationState"))) {
                             navigationState().setState(NSArray.EmptyArray);
                         }
@@ -102,17 +100,19 @@ public class ERXModernNavigationMenu extends ERXStatelessComponent {
         return ERXNavigationManager.manager().rootNavigationItem();
     }
 
-
+    @Override
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         setUpMenu();
         super.takeValuesFromRequest(r,c);
     }
 
+    @Override
     public void appendToResponse(WOResponse r, WOContext c) {
         setUpMenu();
         super.appendToResponse(r,c);
     }
 
+    @Override
     public WOActionResults invokeAction(WORequest r, WOContext c) {
         WOActionResults results=null;
         setUpMenu();
@@ -124,7 +124,4 @@ public class ERXModernNavigationMenu extends ERXStatelessComponent {
         }
         return results;
     }
-
-
-
 }

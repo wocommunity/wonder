@@ -678,15 +678,15 @@ public class DirectAction extends WODirectAction  {
 
                     NSMutableDictionary newStats = new NSMutableDictionary(5);
 
-                    newStats.takeValueForKey((String) statistics.valueForKey("StartedAt"), "startedAt");
+                    newStats.takeValueForKey(statistics.valueForKey("StartedAt"), "startedAt");
 
                     NSDictionary tempDict = (NSDictionary) statistics.valueForKey("Transactions");
-                    newStats.takeValueForKey((String) tempDict.valueForKey("Transactions"), "transactions");
-                    newStats.takeValueForKey((String) tempDict.valueForKey("Avg. Transaction Time"), "avgTransactionTime");
-                    newStats.takeValueForKey((String) tempDict.valueForKey("Avg. Idle Time"), "averageIdlePeriod");
+                    newStats.takeValueForKey(tempDict.valueForKey("Transactions"), "transactions");
+                    newStats.takeValueForKey(tempDict.valueForKey("Avg. Transaction Time"), "avgTransactionTime");
+                    newStats.takeValueForKey(tempDict.valueForKey("Avg. Idle Time"), "averageIdlePeriod");
 
                     tempDict = (NSDictionary) statistics.valueForKey("Sessions");
-                    newStats.takeValueForKey((String) tempDict.valueForKey("Current Active Sessions"), "activeSessions");
+                    newStats.takeValueForKey(tempDict.valueForKey("Current Active Sessions"), "activeSessions");
 
                     anInstance.setStatistics(newStats);
                 } catch (Exception e) {
@@ -703,7 +703,6 @@ public class DirectAction extends WODirectAction  {
 
 
     private void syncSiteConfig(NSDictionary config) {
-        NSDictionary newConfig = config;
         Application theApplication = (Application) WOApplication.application();
         MSiteConfig aConfig = theApplication.siteConfig();
 

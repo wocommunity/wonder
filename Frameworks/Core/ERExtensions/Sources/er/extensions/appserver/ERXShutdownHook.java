@@ -84,7 +84,7 @@ public abstract class ERXShutdownHook extends Thread {
 	 */
 	public ERXShutdownHook( String hookName ) {
 		this();
-		this.name = hookName;
+		name = hookName;
 	}
 
 	@Override

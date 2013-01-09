@@ -7,14 +7,13 @@ import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.appserver.ERXResponse;
+import er.extensions.appserver.ERXWOContext;
 import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.appserver.ajax.ERXAjaxApplication.ERXAjaxResponseDelegate;
-import er.extensions.foundation.ERXKeyValueCodingUtilities;
 
 /**
  * AjaxResponse provides support for performing an AjaxUpdate in the same response
@@ -55,6 +54,7 @@ public class AjaxResponse extends ERXResponse {
 		_context = context;
 	}
 
+	@Override
 	public WOResponse generateResponse() {
 		if (AjaxUpdateContainer.hasUpdateContainerID(_request)) {
 			String originalSenderID = _context.senderID();
@@ -62,7 +62,7 @@ public class AjaxResponse extends ERXResponse {
 			try {
 				CharSequence originalContent = _content;
 				_content = new StringBuilder();
-				NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(_request);
+				NSMutableDictionary userInfo = ERXWOContext.contextDictionary();
 				userInfo.setObjectForKey(Boolean.TRUE, AjaxResponse.AJAX_UPDATE_PASS);
 				WOActionResults woactionresults = WOApplication.application().invokeAction(_request, _context);
 				_content.append(originalContent);
@@ -86,8 +86,7 @@ public class AjaxResponse extends ERXResponse {
 	}
 	
 	public static boolean isAjaxUpdatePass(WORequest request) {
-		NSDictionary userInfo = AjaxUtils.mutableUserInfo(request);
-		return userInfo != null && userInfo.valueForKey(AjaxResponse.AJAX_UPDATE_PASS) != null;
+		return ERXWOContext.contextDictionary().valueForKey(AjaxResponse.AJAX_UPDATE_PASS) != null;
 	}
 	
 	/**
@@ -150,7 +149,19 @@ public class AjaxResponse extends ERXResponse {
 	}
 	
 	/**
-	 * Convenience method that calls <code>AjaxUtils.updateDomElement</code> with this request. 
+	 * Convenience method that calls <code>AjaxUtils.updateDomElement</code> with this request.
+	 * 
+	 * @param id
+	 *            ID of the DOM element to update
+	 * @param value
+	 *            The new value
+	 * @param numberFormat
+	 *            optional number format to format the value with
+	 * @param dateFormat
+	 *            optional date format to format the value with
+	 * @param valueWhenEmpty
+	 *            string to use when value is null
+	 * 
 	 * @see er.ajax.AjaxUtils#updateDomElement(WOResponse, String, Object, String, String, String)
 	 */
 	public void updateDomElement(String id, Object value, String numberFormat, String dateFormat, String valueWhenEmpty) {
@@ -158,7 +169,12 @@ public class AjaxResponse extends ERXResponse {
 	}
 
 	/**
-	 * Convenience method that calls <code>updateDomElement</code> with no formatters and no valueWhenEmpty string. 
+	 * Convenience method that calls <code>updateDomElement</code> with no formatters and no valueWhenEmpty string.
+	 * 
+	 * @param id
+	 *            ID of the DOM element to update
+	 * @param value
+	 *            The new value
 	 */
 	public void updateDomElement(String id, Object value) {
 		updateDomElement(id, value, null, null, null);

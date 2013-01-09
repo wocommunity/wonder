@@ -167,7 +167,7 @@ public class StatsUtilities {
                     try {
                         // Important! This relies on the fact that the stats will deliver startdate based on GMT, since new NSTimestamp is also base on GMT!
                         aDate = (NSTimestamp)StatsUtilities.dateFormatter.parseObject(aStartDate);
-                        aRunningTime = (float) aDate.timeIntervalSinceTimestamp(new NSTimestamp());
+                        aRunningTime = (aDate.getTime() - System.currentTimeMillis()) / 1000;
                     } catch (java.text.ParseException ex) {
                         aRunningTime = (float) 0.0;
                         NSLog.err.appendln("Format error in StatsUtilities: " + aStartDate);
@@ -183,5 +183,4 @@ public class StatsUtilities {
         }
         return Float.valueOf(anOverallRate);
     }
-    
 }
