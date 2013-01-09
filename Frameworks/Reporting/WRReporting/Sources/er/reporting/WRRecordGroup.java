@@ -279,7 +279,7 @@ public class WRRecordGroup extends WOComponent  {
                 }
             }
         }
-        Number nm = new Double(doubleValue);
+        Number nm = Double.valueOf(doubleValue);
         String formatString = (String)valueForBinding("formatForSingleTotal");
         NSNumberFormatter formatter = ERXNumberFormatter.numberFormatterForPattern(formatString);
         return formatter.format(nm);

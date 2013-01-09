@@ -224,7 +224,7 @@ public class ERDEditFile extends ERDCustomEditComponent {
         String filePath = ( tmpPath.exists() ) ? tmpPath.getAbsolutePath() : System.getProperty( "user.dir" );
 
         // Create the output path for the file on the application server
-        return new String( filePath + File.separator + lastPartOfFileName());
+        return filePath + File.separator + lastPartOfFileName();
     }
 
     public NSData fileContentz() {

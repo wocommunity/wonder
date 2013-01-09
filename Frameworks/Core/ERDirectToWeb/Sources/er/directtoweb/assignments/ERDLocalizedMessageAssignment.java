@@ -4,7 +4,7 @@ import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import er.directtoweb.assignments.delayed.ERDDelayedLocalizedAssignment;
 
 /**
- * @deprecated  use {@link ERDDelayedLocalizedAssignment}
+ * @deprecated  use {@link er.directtoweb.assignments.delayed.ERDDelayedLocalizedAssignment}
  */
 @Deprecated
 public class ERDLocalizedMessageAssignment extends ERDDelayedLocalizedAssignment {

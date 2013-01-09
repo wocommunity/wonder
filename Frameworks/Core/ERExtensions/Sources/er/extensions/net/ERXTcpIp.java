@@ -25,7 +25,7 @@ import er.extensions.foundation.ERXValueUtilities;
  * 	特に TCP/IP
  * </span>
  */
-public class ERXTcpIp extends Object {
+public class ERXTcpIp {
 
 	protected static final Logger log = Logger.getLogger(ERXTcpIp.class);
 

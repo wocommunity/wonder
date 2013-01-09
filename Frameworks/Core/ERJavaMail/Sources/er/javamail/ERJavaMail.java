@@ -6,8 +6,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOOrQualifier;
 import com.webobjects.eocontrol.EOQualifier;
@@ -49,11 +47,7 @@ import er.extensions.validation.ERXValidationFactory;
  * @author <a href="mailto:maxmuller@mac.com">Max Muller</a>
  */
 public class ERJavaMail extends ERXFrameworkPrincipal {
-
 	public final static Class<?> REQUIRES[] = new Class[] { ERXExtensions.class };
-
-	/** Class logger */
-	private static final Logger log = Logger.getLogger(ERJavaMail.class);
 
 	static {
 		setUpFrameworkPrincipalClass(ERJavaMail.class);
@@ -131,6 +125,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	@Override
 	public void finishInitialization() {
 		initializeFrameworkFromSystemProperties();
+		log.debug("ERJavaMail loaded");
 	}
 
 	/**
@@ -147,12 +142,12 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	public void initializeFrameworkFromSystemProperties() {
 		// Centralize mails ?
 		boolean centralize = ERXProperties.booleanForKey("er.javamail.centralize");
-		this.setCentralize(centralize);
+		setCentralize(centralize);
 		log.debug("er.javamail.centralize: " + centralize);
 
 		String adminEmail = System.getProperty("er.javamail.adminEmail");
 		if (isValidEmail(adminEmail)) {
-			this.setAdminEmail(adminEmail);
+			setAdminEmail(adminEmail);
 			log.debug("er.javamail.adminEmail: " + _adminEmail);
 		}
 		else if (centralize) {
@@ -161,32 +156,32 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 
 		// JavaMail Debug Enabled ?
 		boolean debug = ERXProperties.booleanForKey("er.javamail.debugEnabled");
-		this.setDebugEnabled(debug);
+		setDebugEnabled(debug);
 		log.debug("er.javamail.debugEnabled: " + debug);
 
 		// Number of messages that the sender queue can hold at a time
 		int queueSize = ERXProperties.intForKey("er.javamail.senderQueue.size");
 		if (queueSize >= 1)
-			this.setSenderQueueSize(queueSize);
+			setSenderQueueSize(queueSize);
 		log.debug("er.javamail.senderQueue.size: " + queueSize);
 
 		// Time to wait when sender if overflowed
 		int milliswait = ERXProperties.intForKey("er.javamail.milliSecondsWaitIfSenderOverflowed");
 		if (milliswait > 1000)
-			this.setMilliSecondsWaitIfSenderOverflowed(milliswait);
+			setMilliSecondsWaitIfSenderOverflowed(milliswait);
 		log.debug("er.javamail.milliSecondsWaitIfSenderOverflowed: " + milliswait);
 
 		// Smtp host
-		this.setupSmtpHostSafely();
+		setupSmtpHostSafely();
 
-		this.setDefaultSession(this.newSession());
+		setDefaultSession(newSession());
 
-		if (this.defaultSession() == null)
+		if (defaultSession() == null)
 			log.warn("Unable to create default mail session!");
 
 		// Default X-Mailer header
-		this.setDefaultXMailerHeader(System.getProperty("er.javamail.XMailerHeader"));
-		log.debug("er.javamail.XMailHeader: " + this.defaultXMailerHeader());
+		setDefaultXMailerHeader(System.getProperty("er.javamail.XMailerHeader"));
+		log.debug("er.javamail.XMailHeader: " + defaultXMailerHeader());
 	}
 
 	/**
@@ -307,7 +302,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * </span>
 	 */
 	public void setDefaultSession(javax.mail.Session session) {
-		session.setDebug(this.debugEnabled());
+		session.setDebug(debugEnabled());
 		_defaultSession = session;
 	}
 
@@ -423,7 +418,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 		if (_delegate != null) {
 			_delegate.didCreateSession(session);
 		}
-		session.setDebug(this.debugEnabled());
+		session.setDebug(debugEnabled());
 		return session;
 	}
 
@@ -722,7 +717,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 */
 	public String validateEmail(EOEnterpriseObject object, String key, String email) {
 		if (email != null) {
-			if (!this.isValidEmail(email))
+			if (!isValidEmail(email))
 				throw ERXValidationFactory.defaultFactory().createException(object, key, email, "malformedEmail");
 		}
 
@@ -830,7 +825,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * </span>
 	 */
 	public boolean hasWhiteList() {
-		return this.whiteListEmailAddressPatterns().count() > 0;
+		return whiteListEmailAddressPatterns().count() > 0;
 	}
 
 	/**
@@ -847,7 +842,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * </span>
 	 */
 	public boolean hasBlackList() {
-		return this.blackListEmailAddressPatterns().count() > 0;
+		return blackListEmailAddressPatterns().count() > 0;
 	}
 
 	/**
@@ -906,7 +901,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 */
 	public EOOrQualifier whiteListQualifier() {
 		if (whiteListQualifier == null) {
-			whiteListQualifier = this.qualifierArrayForEmailPatterns(this.whiteListEmailAddressPatterns());
+			whiteListQualifier = qualifierArrayForEmailPatterns(whiteListEmailAddressPatterns());
 		}
 		return whiteListQualifier;
 	}
@@ -926,7 +921,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 */
 	public EOOrQualifier blackListQualifier() {
 		if (blackListQualifier == null) {
-			blackListQualifier = this.qualifierArrayForEmailPatterns(this.blackListEmailAddressPatterns());
+			blackListQualifier = qualifierArrayForEmailPatterns(blackListEmailAddressPatterns());
 		}
 		return blackListQualifier;
 	}
@@ -976,21 +971,21 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 */
 	public NSArray<String> filterEmailAddresses(NSArray<String> emailAddresses) {
 		NSMutableArray<String> filteredAddresses = null;
-		if ((emailAddresses != null) && (emailAddresses.count() > 0) && (this.hasWhiteList() || this.hasBlackList())) {
+		if ((emailAddresses != null) && (emailAddresses.count() > 0) && (hasWhiteList() || hasBlackList())) {
 			filteredAddresses = new NSMutableArray<String>(emailAddresses);
 
 			if (log.isDebugEnabled()) {
 				log.debug("Filtering email addresses: " + filteredAddresses);
 			}
 
-			if (this.hasWhiteList()) {
+			if (hasWhiteList()) {
 				EOQualifier.filterArrayWithQualifier(filteredAddresses, whiteListQualifier());
 				if (log.isDebugEnabled()) {
 					log.debug("White list qualifier: " + whiteListQualifier() + " after filtering: " + filteredAddresses);
 				}
 			}
 
-			if (this.hasBlackList()) {
+			if (hasBlackList()) {
 				@SuppressWarnings("unchecked")
 				NSArray<String> filteredOutAddresses = EOQualifier.filteredArrayWithQualifier(filteredAddresses, blackListQualifier());
 				if (filteredOutAddresses.count() > 0)

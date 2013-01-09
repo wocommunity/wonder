@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.CharEncoding;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
@@ -38,7 +39,7 @@ import er.extensions.foundation.ERXProperties;
  * 
  * @author ishimoto
  */
-public abstract class ERXHttpDataObjectBase extends Object {
+public abstract class ERXHttpDataObjectBase {
 
   protected static final Logger log = Logger.getLogger(ERXHttpDataObjectBase.class);
 
@@ -55,7 +56,7 @@ public abstract class ERXHttpDataObjectBase extends Object {
   public static String SCHEME_HTTP = "http";
   public static String SCHEME_HTTPS = "https";
 
-  public static String ENCODING_UTF8 = "UTF-8";
+  public static String ENCODING_UTF8 = CharEncoding.UTF_8;
   public static String ENCODING_SJIS = "Shift_JIS";
 
   public static HttpVersion HTTP_1_0 = HttpVersion.HTTP_1_0;

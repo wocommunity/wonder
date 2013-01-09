@@ -1,4 +1,5 @@
 package er.extensions.components;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
@@ -17,7 +18,7 @@ import com.webobjects.foundation.NSTimeZone;
 import com.webobjects.foundation.NSTimestamp;
 
 import er.extensions.eof.ERXConstant;
-import er.extensions.foundation.ERXTimestampUtility;
+import er.extensions.foundation.ERXTimestampUtilities;
 
 /**
  * Works much the same as a {@link WODisplayGroup}.
@@ -43,7 +44,7 @@ public class ERXDateGrouper extends WODisplayGroup {
     public static final int YEAR = Calendar.YEAR;
 
     static NSMutableDictionary cachedDays = new NSMutableDictionary();
-    static int currentYear = ERXTimestampUtility.yearOfCommonEra(new NSTimestamp());
+    static int currentYear = ERXTimestampUtilities.yearOfCommonEra(new NSTimestamp());
 
     protected NSArray _objects;
     protected String _dateKeyPath;
@@ -75,13 +76,13 @@ public class ERXDateGrouper extends WODisplayGroup {
         return displayedObjects().count() == 0;
     }
     public boolean isToday() {
-        return ERXTimestampUtility.differenceByDay(today(), currentDate()) == 0;
+        return ERXTimestampUtilities.differenceByDay(today(), currentDate()) == 0;
     }
     public boolean isSelectedDate() {
-        return ERXTimestampUtility.differenceByDay(selectedDate(), currentDate()) == 0;
+        return ERXTimestampUtilities.differenceByDay(selectedDate(), currentDate()) == 0;
     }
     public boolean isInMonth() {
-        return ERXTimestampUtility.differenceByDay(firstDateInSameMonth(), currentDate()) >= 0 && ERXTimestampUtility.differenceByDay(firstDateInNextMonth(), currentDate()) < 0;
+        return ERXTimestampUtilities.differenceByDay(firstDateInSameMonth(), currentDate()) >= 0 && ERXTimestampUtilities.differenceByDay(firstDateInNextMonth(), currentDate()) < 0;
     }
     public String dateKeyPath() { return _dateKeyPath; }
     public void setDateKeyPath(String value) {
@@ -129,16 +130,16 @@ public class ERXDateGrouper extends WODisplayGroup {
         int value = 0;
         switch(groupingMode()) {
             case DAY:
-                value = ERXTimestampUtility.dayOfCommonEra(date) - currentYear * 365;
+                value = ERXTimestampUtilities.dayOfCommonEra(date) - currentYear * 365;
                 break;
             case MONTH:
-                value = ERXTimestampUtility.yearOfCommonEra(date) * 12 + ERXTimestampUtility.monthOfYear(date) - currentYear * 12;
+                value = ERXTimestampUtilities.yearOfCommonEra(date) * 12 + ERXTimestampUtilities.monthOfYear(date) - currentYear * 12;
                 break;
             case WEEK:
-                value = ERXTimestampUtility.yearOfCommonEra(date) * 53 + ERXTimestampUtility.monthOfYear(date) - currentYear * 53;
+                value = ERXTimestampUtilities.yearOfCommonEra(date) * 53 + ERXTimestampUtilities.monthOfYear(date) - currentYear * 53;
                 break;
             case YEAR:
-                value = ERXTimestampUtility.yearOfCommonEra(date) - currentYear;
+                value = ERXTimestampUtilities.yearOfCommonEra(date) - currentYear;
                 break;
         }
         return ERXConstant.integerForInt(value);
@@ -188,8 +189,8 @@ public class ERXDateGrouper extends WODisplayGroup {
         return dates;
     }
     protected NSTimestamp _firstDateInSameWeek(NSTimestamp value) {
-        int dayOfWeek = ERXTimestampUtility.dayOfWeek(value);
-        int dayOfYear = ERXTimestampUtility.dayOfYear(value);
+        int dayOfWeek = ERXTimestampUtilities.dayOfWeek(value);
+        int dayOfYear = ERXTimestampUtilities.dayOfYear(value);
         if(log.isDebugEnabled()) {
             log.debug("dayOfYear: " + dayOfYear);
             log.debug("dayOfWeek: " + dayOfWeek);
@@ -197,19 +198,19 @@ public class ERXDateGrouper extends WODisplayGroup {
         }
         int startOfWeek = weekStartsMonday() ? Calendar.MONDAY : Calendar.SUNDAY;
         if(dayOfWeek == startOfWeek) {
-        	return _dateForDayInYear(ERXTimestampUtility.yearOfCommonEra(value), ERXTimestampUtility.dayOfYear(value));
+        	return _dateForDayInYear(ERXTimestampUtilities.yearOfCommonEra(value), ERXTimestampUtilities.dayOfYear(value));
         }
 		int offset = !weekStartsMonday() ? 1 : (dayOfWeek == Calendar.SUNDAY ? -5 : 2);
-		return _dateForDayInYear(ERXTimestampUtility.yearOfCommonEra(value), ERXTimestampUtility.dayOfYear(value) - dayOfWeek + offset);
+		return _dateForDayInYear(ERXTimestampUtilities.yearOfCommonEra(value), ERXTimestampUtilities.dayOfYear(value) - dayOfWeek + offset);
     }
     protected NSTimestamp _firstDateInSameMonth(NSTimestamp value) {
-        int dayOfMonth = ERXTimestampUtility.dayOfMonth(value);
-        int dayOfYear = ERXTimestampUtility.dayOfYear(value);
+        int dayOfMonth = ERXTimestampUtilities.dayOfMonth(value);
+        int dayOfYear = ERXTimestampUtilities.dayOfYear(value);
         if(log.isDebugEnabled()) {
             log.debug("dayOfYear: " + dayOfYear);
             log.debug("dayOfMonth: " + dayOfMonth);
         }
-        return _dateForDayInYear(ERXTimestampUtility.yearOfCommonEra(value), ERXTimestampUtility.dayOfYear(value) - dayOfMonth + 1);
+        return _dateForDayInYear(ERXTimestampUtilities.yearOfCommonEra(value), ERXTimestampUtilities.dayOfYear(value) - dayOfMonth + 1);
     }
     public NSTimestamp firstDateInSameMonth() {
         if(_firstDateInSameMonth == null) {
@@ -225,8 +226,8 @@ public class ERXDateGrouper extends WODisplayGroup {
     }
     protected NSArray _weekDatesForDate(NSTimestamp week) {
         NSTimestamp startDate = _firstDateInSameWeek(week);
-        int startOffset = ERXTimestampUtility.dayOfYear(startDate);
-        int year = ERXTimestampUtility.yearOfCommonEra(startDate);
+        int startOffset = ERXTimestampUtilities.dayOfYear(startDate);
+        int year = ERXTimestampUtilities.yearOfCommonEra(startDate);
         return _datesForYearStartDays(year, startOffset, 7);
     }
 
@@ -243,13 +244,13 @@ public class ERXDateGrouper extends WODisplayGroup {
             NSTimestamp startDate = firstDateInSameMonth();
             NSTimestamp endDate = firstDateInNextMonth();
             startDate = _firstDateInSameWeek(startDate);
-            int year =  ERXTimestampUtility.yearOfCommonEra(startDate);
-            int startOffset = ERXTimestampUtility.dayOfYear(startDate);
+            int year =  ERXTimestampUtilities.yearOfCommonEra(startDate);
+            int startOffset = ERXTimestampUtilities.dayOfYear(startDate);
             for(int i = 0; i < 6; i ++) {
                 NSMutableArray weekDates = new NSMutableArray();
                 for(int j = 0; j < 7; j ++) {
                     NSTimestamp day = _dateForDayInYear(year, startOffset + i * 7 + j);
-                    if(j == 0 && ERXTimestampUtility.differenceByDay(endDate, day) >= 0) {
+                    if(j == 0 && ERXTimestampUtilities.differenceByDay(endDate, day) >= 0) {
                         return _datesForWeeksForCurrentMonth;
                     }
                     weekDates.addObject(day);
@@ -266,7 +267,7 @@ public class ERXDateGrouper extends WODisplayGroup {
         NSArray result = _datesForCurrentWeek;
         if(result == null) {
         	// The weekOfMonth result is one based, not zero based
-            int weekOfMonth = ERXTimestampUtility.weekOfMonth(selectedDate()) - 1;
+            int weekOfMonth = ERXTimestampUtilities.weekOfMonth(selectedDate()) - 1;
             // if the first week of the month has less than Calendar.getMinimalDaysInFirstWeek() (usually 4 days), 
             // the week belongs to the previous month. The weekOfMonth variable will then contain -1.
             if (weekOfMonth == -1) {
@@ -278,12 +279,12 @@ public class ERXDateGrouper extends WODisplayGroup {
         return result;
     }
     public NSArray datesForCurrentMonth() {
-        NSTimestamp startDate = currentDate().timestampByAddingGregorianUnits(0, 0, -ERXTimestampUtility.dayOfMonth(currentDate()) + 1, 0, 0, 0);
-        int year = ERXTimestampUtility.yearOfCommonEra(startDate);
-        int startOffset = ERXTimestampUtility.dayOfYear(startDate);
+        NSTimestamp startDate = currentDate().timestampByAddingGregorianUnits(0, 0, -ERXTimestampUtilities.dayOfMonth(currentDate()) + 1, 0, 0, 0);
+        int year = ERXTimestampUtilities.yearOfCommonEra(startDate);
+        int startOffset = ERXTimestampUtilities.dayOfYear(startDate);
         int daysInMonth = 31;
-        if(ERXTimestampUtility.monthOfYear(startDate) != 12) {
-            daysInMonth = ERXTimestampUtility.dayOfYear(startDate.timestampByAddingGregorianUnits(0, 1, -1, 0, 0, 0)) - startOffset + 1;
+        if(ERXTimestampUtilities.monthOfYear(startDate) != 12) {
+            daysInMonth = ERXTimestampUtilities.dayOfYear(startDate.timestampByAddingGregorianUnits(0, 1, -1, 0, 0, 0)) - startOffset + 1;
         }
         return _datesForYearStartDays(year, startOffset, daysInMonth);
     }

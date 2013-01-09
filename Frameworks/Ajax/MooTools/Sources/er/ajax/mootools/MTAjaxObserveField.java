@@ -82,11 +82,12 @@ public class MTAjaxObserveField extends AjaxDynamicElement {
 		NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
 		return options;
 
-	}	    
-	
+	}
+
+	@Override
 	@SuppressWarnings("rawtypes")
 	public void appendToResponse(WOResponse response, WOContext context) {
-		
+
 		super.appendToResponse(response, context);
 		
 		WOComponent component = context.component();
@@ -95,7 +96,7 @@ public class MTAjaxObserveField extends AjaxDynamicElement {
 		NSMutableDictionary options = createAjaxOptions(component);
 		boolean fullSubmit = booleanValueForBinding("fullSubmit", false, component);
 		boolean observeFieldDescendents;
-
+		
 		if (observeFieldID != null) {
 			observeFieldDescendents = false;
 		}
@@ -189,13 +190,14 @@ public class MTAjaxObserveField extends AjaxDynamicElement {
 			if (result == null) {
 				result = handleRequest(request, context);
 			}
-			AjaxUtils.updateMutableUserInfoWithAjaxInfo(context);
+			ERXAjaxApplication.enableShouldNotStorePage();
 		} else {
 			result = invokeChildrenAction(request, context);
 		}
 		return result;
 	}
 
+	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 	    WOResponse response = AjaxUtils.createResponse(request, context);
 		return response;

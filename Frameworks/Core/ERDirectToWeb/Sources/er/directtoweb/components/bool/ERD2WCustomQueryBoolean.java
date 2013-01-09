@@ -39,7 +39,7 @@ public class ERD2WCustomQueryBoolean extends D2WQueryBoolean {
 
     /** logging support */
     private static final Logger log = Logger.getLogger(ERD2WCustomQueryBoolean.class);
-    protected NSArray _choicesNames;
+    protected NSArray<String> _choicesNames;
 	
     /**
      * Public constructor
@@ -49,21 +49,25 @@ public class ERD2WCustomQueryBoolean extends D2WQueryBoolean {
         super(context);
     }
 
-    public NSArray<String> choicesNames() {
+    @SuppressWarnings("unchecked")
+	public NSArray<String> choicesNames() {
         if (_choicesNames == null)
-            _choicesNames = (NSArray)d2wContext().valueForKey("choicesNames");
+            _choicesNames = (NSArray<String>)d2wContext().valueForKey("choicesNames");
         return _choicesNames;
     }
 
+	@Override
     public void reset(){
         super.reset();
         _choicesNames = null;
     }
     
+	@Override
     public Object value() {
         return displayGroup().queryMatch().valueForKey(propertyKey());
     }
 
+	@Override
     public void setValue(Object obj) {
         displayGroup().queryOperator().removeObjectForKey(propertyKey());
         displayGroup().queryMatch().removeObjectForKey(propertyKey());
@@ -96,8 +100,9 @@ public class ERD2WCustomQueryBoolean extends D2WQueryBoolean {
         return choicesNames().count() > 2;
     }
 
+	@Override
     public String displayString() {
-        NSArray choicesNames = choicesNames();
+        NSArray<String> choicesNames = choicesNames();
         String result;
         if(choicesNames == null) {
             result = super.displayString();

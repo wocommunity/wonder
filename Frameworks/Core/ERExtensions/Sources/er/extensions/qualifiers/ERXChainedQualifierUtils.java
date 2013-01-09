@@ -3,8 +3,6 @@ package er.extensions.qualifiers;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.eof.ERXQ;
-
 /**
  * ERXQ
  * 
@@ -40,7 +38,7 @@ public class ERXChainedQualifierUtils {
 	 * @param originalQualifier
 	 *            the qualifier to negate
 	 * @return an ERXNotQualifier
-	 * @deprecated use {@link ERXQ#not(EOQualifier)} instead
+	 * @deprecated use {@link er.extensions.eof.ERXQ#not(EOQualifier)} instead
 	 */
 	@Deprecated
 	public static ERXNotQualifier not(EOQualifier originalQualifier) {

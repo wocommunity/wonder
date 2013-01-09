@@ -472,6 +472,7 @@ public class MInstance extends MObject {
         return values;
     }
 
+    @Override
     public String toString() {
         if (false) {
             return (values.toString() + " " + "lastRegistration = " + _lastRegistration + " " + "state = " + state
@@ -642,9 +643,8 @@ public class MInstance extends MObject {
         Integer lb = lifebeatInterval();
         if (lb == null) {
             return 30 * _siteConfig._appIsDeadMultiplier;
-        } else {
-            return lb.intValue() * _siteConfig._appIsDeadMultiplier;
         }
+        return lb.intValue() * _siteConfig._appIsDeadMultiplier;
     }
 
     public boolean isRunning_W() {
@@ -657,24 +657,21 @@ public class MInstance extends MObject {
             if (currentTime < finishStartingByTime) {
                 if (currentTime > cutOffTime) {
                     return false;
-                } else {
-                    state = MObject.ALIVE;
-                    return true;
                 }
+                state = MObject.ALIVE;
+                return true;
                 // I'm finished trying to start
-            } else {
-                // I've received a lifebeat in time
-                if (currentTime > cutOffTime) {
-                    addDeath();
-                    sendDeathNotificationEmail();
-                    setShouldDie(false);
-                    state = MObject.DEAD;
-                    return false;
-                } else {
-                    state = MObject.ALIVE;
-                    return true;
-                }
             }
+            // I've received a lifebeat in time
+            if (currentTime > cutOffTime) {
+                addDeath();
+                sendDeathNotificationEmail();
+                setShouldDie(false);
+                state = MObject.DEAD;
+                return false;
+            }
+            state = MObject.ALIVE;
+            return true;
         } else if (state == MObject.ALIVE) {
             if (currentTime > cutOffTime) {
                 addDeath();
@@ -682,9 +679,8 @@ public class MInstance extends MObject {
                 setShouldDie(false);
                 state = MObject.DEAD;
                 return false;
-            } else {
-                return true;
             }
+            return true;
         } else if (state == MObject.CRASHING) {
             addDeath();
             sendDeathNotificationEmail();
@@ -694,11 +690,10 @@ public class MInstance extends MObject {
             if (currentTime > cutOffTime) {
                 state = MObject.DEAD;
                 return false;
-            } else {
-                // KH - I've returned to life - what should I do?
-                state = MObject.ALIVE;
-                return true;
             }
+            // KH - I've returned to life - what should I do?
+            state = MObject.ALIVE;
+            return true;
         }
     }
 
@@ -792,10 +787,10 @@ public class MInstance extends MObject {
                 WOMailDelivery mailer = WOMailDelivery.sharedInstance();
                 String fromAddress = siteConfig().emailReturnAddr();
                 NSArray toAddress = null;
-                String subject = new String("App stopped running: " + displayName());
+                String subject = "App stopped running: " + displayName();
                 String bodyText = message;
                 if (fromAddress != null) {
-                    fromAddress = new String("root@" + _host.name());
+                    fromAddress = "root@" + _host.name();
                 }
                 if (_application.notificationEmailAddr() != null) {
                     toAddress = NSArray.componentsSeparatedByString(_application.notificationEmailAddr(), ",");
@@ -842,9 +837,8 @@ public class MInstance extends MObject {
     private String toNullOrString(Object o) {
         if (o != null) {
             return o.toString();
-        } else {
-            return null;
         }
+        return null;
     }
 
     public NSArray commandLineArgumentsAsArray() {
@@ -874,7 +868,7 @@ public class MInstance extends MObject {
         anArray.addObject("-WOLifebeatEnabled");
         anArray.addObject("YES");
         anArray.addObject("-WOLifebeatDestinationPort");
-        anArray.addObject(new String(WOApplication.application().lifebeatDestinationPort() + ""));
+        anArray.addObject(String.valueOf(WOApplication.application().lifebeatDestinationPort()));
 
         // application stuff
         String adaptorString = toNullOrString(_application.adaptor());
@@ -944,12 +938,14 @@ public class MInstance extends MObject {
     /** ******* */
 
     /** ******** Overridden Methods for Scheduling ********* */
+    @Override
     public void setValues(NSMutableDictionary newValues) {
         super.setValues(newValues);
         if (isScheduled())
             calculateNextScheduledShutdown();
     }
 
+    @Override
     public void updateValues(NSDictionary aDict) {
         super.updateValues(aDict);
         if (isScheduled())
@@ -1102,11 +1098,7 @@ public class MInstance extends MObject {
     /** ******* */
 
     public void setRefusingNewSessions(boolean isRefusingNewSessions) {
-        if (isRefusingNewSessions) {
-            // NSLog.debug.appendln(this + " setRefusingNewSessions: " + isRefusingNewSessions);
-        } else {
-            // NSLog.debug.appendln(this + " setRefusingNewSessions: " + false);
-        }
+        // NSLog.debug.appendln(this + " setRefusingNewSessions: " + isRefusingNewSessions);
         this.isRefusingNewSessions = isRefusingNewSessions;
     }
 

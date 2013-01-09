@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODynamicURL;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WORequestHandler;
 import com.webobjects.appserver.WOResponse;
@@ -22,7 +23,6 @@ import com.webobjects.foundation.NSLog;
 
 import er.attachment.model.ERAttachment;
 import er.attachment.processors.ERAttachmentProcessor;
-import er.extensions.components.ERXDynamicURL;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOGlobalIDUtilities;
 import er.extensions.foundation.ERXStringUtilities;
@@ -86,7 +86,7 @@ public class ERAttachmentRequestHandler extends WORequestHandler {
         WOApplication.application().restoreSessionWithID(sessionId, context);
       }
       try {
-        ERXDynamicURL url = new ERXDynamicURL(request._uriDecomposed());
+        WODynamicURL url = request._uriDecomposed();
         String requestHandlerPath = url.requestHandlerPath();
         Matcher idMatcher = Pattern.compile("^id/(\\d+)/").matcher(requestHandlerPath);
         String idStr;

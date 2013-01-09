@@ -67,7 +67,7 @@ public class PageInstaller {
 
     static String dotsForPath(String path) {
         int count = 0;
-        final String base = "dist/wonder-5.0/Documentation/api";
+        final String base = "dist/wonder-6.0/Documentation/api";
 
         String str = path;
 
@@ -134,9 +134,9 @@ public class PageInstaller {
             System.out.println("property[\""+name+"\"] -> \""+p.getProperty(name)+"\"");
         }
         */
-       if (!"wonder-5.0".equals(System.getProperty("wonder.version"))) System.exit(0);
+       if (!"wonder-6.0".equals(System.getProperty("wonder.version"))) System.exit(0);
 
-       String root = System.getProperty("wonder.root")+"/dist/wonder-5.0/Documentation/api/";
+       String root = System.getProperty("wonder.root")+"/dist/wonder-6.0/Documentation/api/";
 
        (new File("components.html")).renameTo(new File(root+"components.html"));
        (new File("components.txt")).renameTo(new File(root+"components.txt"));

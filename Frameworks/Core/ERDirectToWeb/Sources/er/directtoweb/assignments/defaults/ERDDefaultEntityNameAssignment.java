@@ -15,7 +15,6 @@ import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.foundation.NSArray;
 
 import er.directtoweb.assignments.ERDAssignment;
-import er.directtoweb.assignments.ERDComputingAssignmentInterface;
 import er.directtoweb.assignments.ERDLocalizableAssignmentInterface;
 import er.extensions.foundation.ERXStringUtilities;
 
@@ -24,7 +23,7 @@ import er.extensions.foundation.ERXStringUtilities;
 //		keys passing in the current keyPath.
 /**
  * Beautify the entity name.<br />
- * @deprecated for entityName, use {@link ERDDefaultModelAssignment}, for displayNameForEntity and displayNameForDestinationEntity use {@link ERDDefaultDisplayNameAssignment}
+ * @deprecated for entityName, use {@link er.directtoweb.assignments.defaults.ERDDefaultModelAssignment}, for displayNameForEntity and displayNameForDestinationEntity use {@link er.directtoweb.assignments.defaults.ERDDefaultDisplayNameAssignment}
  */
 @Deprecated
 public class ERDDefaultEntityNameAssignment extends ERDAssignment implements ERDLocalizableAssignmentInterface {
@@ -70,7 +69,7 @@ public class ERDDefaultEntityNameAssignment extends ERDAssignment implements ERD
     public ERDDefaultEntityNameAssignment (String key, Object value) { super(key,value); }
 
     /**
-     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This
      * assignment depends upon the context key: "entity.name". This array 
      * of keys is used when constructing the 
      * significant keys for the passed in keyPath.

@@ -92,8 +92,12 @@ public class ERXLongResponse extends ERXNonSynchronizingComponent {
             // If the response is done and finished quickly (before the first branch of this conditional is invoked),
             // make sure to refresh the page immediately.
             String modifiedDynamicUrl = aContext.urlWithRequestHandlerKey(WOApplication.application().componentRequestHandlerKey(), null, null);
-
-            String header = interval + ";url=" +modifiedDynamicUrl+ "/" + aContext.session().sessionID()+ "/" +aContext.contextID()+ "." +WOMetaRefreshSenderId;
+            String query = "";
+            if (modifiedDynamicUrl.contains("?")) {
+            	query = modifiedDynamicUrl.substring(modifiedDynamicUrl.indexOf("?"));
+            	modifiedDynamicUrl = modifiedDynamicUrl.substring(0, modifiedDynamicUrl.indexOf("?"));
+            }
+            String header = interval + ";url=" +modifiedDynamicUrl+ "/" + aContext.session().sessionID()+ "/" +aContext.contextID()+ "." +WOMetaRefreshSenderId + query;
 
             aResponse.setHeader(header, "Refresh");
             if((doneButNotRefreshed)) {

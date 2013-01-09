@@ -15,7 +15,6 @@ import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSValidation;
 
 import er.extensions.ERXExtensions;
-import er.extensions.crypting.ERXCrypto;
 import er.extensions.foundation.ERXPatcher;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXSelectorUtilities;
@@ -470,7 +469,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
 
     /**
      * Takes the primary key of the object and encrypts it
-     * with the blowfish cipher using {@link ERXCrypto ERXCrypto}.
+     * with the blowfish cipher using {@link er.extensions.crypting.ERXCrypto ERXCrypto}.
      * @return blowfish encrypted primary key
      */
     public abstract String encryptedPrimaryKey();

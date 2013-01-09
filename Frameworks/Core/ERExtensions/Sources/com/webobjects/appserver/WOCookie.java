@@ -111,7 +111,7 @@ public class WOCookie implements NSKeyValueCoding, com.webobjects.foundation.NSK
 	}
 
 	String _headerString(final boolean isRequest) {
-		StringBuffer header = new StringBuffer(140);
+		StringBuilder header = new StringBuilder(140);
 		header.append(_name);
 		header.append('=');
 		if (_value != null && _value.indexOf(' ') != -1 && (!_value.startsWith("\"") || !_value.endsWith("\""))) {
@@ -155,7 +155,7 @@ public class WOCookie implements NSKeyValueCoding, com.webobjects.foundation.NSK
 				header.append("; HttpOnly");
 			}
 		}
-		return new String(header);
+		return header.toString();
 	}
 
 	public String name() {

@@ -33,7 +33,7 @@ public class GetResponse extends Response {
 		if (connection.getResponseCode() < 400) {
 			Map metadata = extractMetadata(connection);
 			byte[] body = slurpInputStream(connection.getInputStream());
-			this.object = new S3Object(body, metadata);
+			object = new S3Object(body, metadata);
 		}
 	}
 

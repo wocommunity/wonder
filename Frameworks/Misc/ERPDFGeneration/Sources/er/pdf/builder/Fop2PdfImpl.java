@@ -110,7 +110,7 @@ public class Fop2PdfImpl implements FOPBuilder {
 			Transformer tx = txfac.newTransformer(new SAXSource(new InputSource(Fop2PdfImpl.class.getClassLoader().getResourceAsStream(_fopxslLocation))));
 			tx.setParameter("versionParam", "2.0");
 
-			Source src = new StreamSource(new StringReader(this._xmlToTransform));
+			Source src = new StreamSource(new StringReader(_xmlToTransform));
 			Result res = new SAXResult(fop.getDefaultHandler());
 
 			tx.transform(src, res);

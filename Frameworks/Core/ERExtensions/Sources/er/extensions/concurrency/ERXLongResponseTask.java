@@ -58,6 +58,7 @@ public interface ERXLongResponseTask extends Runnable {
 			return _task;
 		}
 
+		@Override
 		public void run() {
 			try {
 				super.run();
@@ -265,7 +266,7 @@ public interface ERXLongResponseTask extends Runnable {
 			try {
 				if(_thread == null) {
 					_thread = new WorkerThread(this);
-                    _thread.setName(this.toString());
+                    _thread.setName(toString());
 				}
 				if(!_thread.isAlive()) {
 					_thread.start();
@@ -322,7 +323,6 @@ public interface ERXLongResponseTask extends Runnable {
 		/**
 		 * Default implementation that controls the pages returned on each iteration.
 		 */
-		
 		public WOComponent nextPage() {
 			Exception e = exception();
 			if (e != null) {
@@ -332,9 +332,8 @@ public interface ERXLongResponseTask extends Runnable {
 			if (isDone()) {
 				if (isCancelled()) {
 					return cancelPageForStatus(status());
-				} else {
-					return pageForResult(result());
 				}
+				return pageForResult(result());
 			}
 			return refreshPageForStatus(status());
 		}

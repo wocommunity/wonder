@@ -13,6 +13,8 @@ import java.text.DecimalFormatSymbols;
 import java.util.Enumeration;
 import java.util.Locale;
 
+import org.apache.commons.lang.CharEncoding;
+
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
@@ -126,7 +128,7 @@ public class PayPalSingleItemHyperlink extends PayPalSingleItemLinkBase {
         String output = null;
         if (input != null) {
           try {
-              output = URLEncoder.encode(input, "UTF-8");
+              output = URLEncoder.encode(input, CharEncoding.UTF_8);
           } catch (UnsupportedEncodingException uee) {
               NSLog.err.appendln("Could not URL encode input string.  Error: " + uee.getMessage());
           }

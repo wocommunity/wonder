@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
+import org.apache.commons.lang.CharEncoding;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;
@@ -12,6 +13,7 @@ import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 
+import er.extensions.appserver.ERXResponse;
 import er.extensions.components.ERXComponentUtilities;
 import er.extensions.components.ERXNonSynchronizingComponent;
 
@@ -83,7 +85,7 @@ public class EGWrapper extends ERXNonSynchronizingComponent {
     @Override
     public void appendToResponse(WOResponse response, WOContext context) {
         if (isEnabled()) {
-            WOResponse newResponse = new WOResponse();
+            ERXResponse newResponse = new ERXResponse();
 
             super.appendToResponse(newResponse, context);
 
@@ -94,7 +96,7 @@ public class EGWrapper extends ERXNonSynchronizingComponent {
             }
             byte[] bytes;
             try {
-                bytes = contentString.getBytes("UTF-8");
+                bytes = contentString.getBytes(CharEncoding.UTF_8);
             } catch (UnsupportedEncodingException e) {
                 throw new NSForwardException(e, "Can't convert string to UTF-8...you should get a better VM");
             }

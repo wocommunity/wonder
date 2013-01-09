@@ -27,6 +27,8 @@ import com.webobjects.monitor._private.MInstance;
 import com.webobjects.monitor._private.MSiteConfig;
 import com.webobjects.monitor.application.WOTaskdHandler.ErrorCollector;
 
+import er.extensions.appserver.ERXResponse;
+
 public class DirectAction extends WODirectAction {
 
     public DirectAction(WORequest aRequest) {
@@ -62,7 +64,7 @@ public class DirectAction extends WODirectAction {
         NSMutableDictionary<String, Object> result = new NSMutableDictionary<String, Object>();
         result.setObjectForKey(app.name(), "applicationName");
         NSArray<MInstance> allInstances = app.instanceArray();
-        result.setObjectForKey(new Integer(allInstances.count()), "configuredInstances");
+        result.setObjectForKey(Integer.valueOf(allInstances.count()), "configuredInstances");
         
         int runningInstances = 0;
         int refusingInstances = 0;
@@ -76,8 +78,8 @@ public class DirectAction extends WODirectAction {
                 refusingInstances++;
             }
         }
-        result.setObjectForKey(new Integer(runningInstances), "runningInstances");
-        result.setObjectForKey(new Integer(refusingInstances), "refusingInstances");
+        result.setObjectForKey(Integer.valueOf(runningInstances), "runningInstances");
+        result.setObjectForKey(Integer.valueOf(refusingInstances), "refusingInstances");
         
         result.setObjectForKey(nonNull(app.instanceArray().valueForKeyPath("@sum.activeSessionsValue")), "sumSessions");
         result.setObjectForKey(nonNull(app.instanceArray().valueForKeyPath("@max.activeSessionsValue")), "maxSessions");
@@ -97,7 +99,7 @@ public class DirectAction extends WODirectAction {
     }
     
     public WOResponse statisticsAction() {
-        WOResponse response = new WOResponse();
+        ERXResponse response = new ERXResponse();
         String pw = context().request().stringFormValueForKey("pw");
         if(siteConfig().compareStringWithPassword(pw)) {
             WOTaskdHandler handler = new WOTaskdHandler(new ErrorCollector() {

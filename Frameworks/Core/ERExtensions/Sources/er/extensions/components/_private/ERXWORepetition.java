@@ -235,12 +235,12 @@ public class ERXWORepetition extends WODynamicGroup {
 	 * @param message 
 	 **/
 	protected void _failCreation(String message) {
-		throw new WODynamicElementCreationException("<" + this.getClass().getName() + "> " + message);
+		throw new WODynamicElementCreationException("<" + getClass().getName() + "> " + message);
 	}
 
 	@Override
 	public String toString() {
-		return new StringBuilder().append("<").append(this.getClass().getName())
+		return new StringBuilder().append("<").append(getClass().getName())
 				.append(" list: ").append(_list != null ? _list.toString() : "null")
 				.append(" item: ").append(_item != null ? _item.toString() : "null")
 				.append(" count: ").append(_count != null ? _count.toString() : "null")

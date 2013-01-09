@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.apache.commons.lang.CharEncoding;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
@@ -171,8 +172,7 @@ public class ERXResourceManager extends WOResourceManager {
 			}
 			String encoded = WOURLEncoder.encode(fileURL);
 			String key = WOApplication.application().resourceRequestHandlerKey();
-			if (WOApplication.application()._rapidTurnaroundActiveForAnyProject() && WOApplication.application().isDirectConnectEnabled() && ERXApplication.isWO54()) {
-				// AK: 5.4
+			if (WOApplication.application()._rapidTurnaroundActiveForAnyProject() && WOApplication.application().isDirectConnectEnabled()) {
 				key = "_wr_";
 			}
 			WOContext context = (WOContext) request.valueForKey("context");
@@ -389,7 +389,7 @@ public class ERXResourceManager extends WOResourceManager {
 	}
 	
 	private static NSDictionary<String, String> _additionalMimeTypes() {
-		NSDictionary<String, String> plist = (NSDictionary<String, String>)ERXFileUtilities.readPropertyListFromFileInFramework("AdditionalMimeTypes.plist", "ERExtensions", null, "UTF-8");
+		NSDictionary<String, String> plist = (NSDictionary<String, String>)ERXFileUtilities.readPropertyListFromFileInFramework("AdditionalMimeTypes.plist", "ERExtensions", null, CharEncoding.UTF_8);
 		return plist;
 	}
 }

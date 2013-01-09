@@ -11,6 +11,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Vector;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOEntity;
@@ -34,7 +35,6 @@ import com.webobjects.foundation.NSRange;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSSet;
 
-import er.extensions.ERXExtensions;
 import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXGenericRecord;
 import er.extensions.eof.ERXKey;
@@ -42,7 +42,7 @@ import er.extensions.eof.ERXKey;
 /**
  * Collection of {@link com.webobjects.foundation.NSArray NSArray} utilities.
  */
-public class ERXArrayUtilities extends Object {
+public class ERXArrayUtilities {
 	
 	   private static Logger log = Logger.getLogger(ERXArrayUtilities.class);
 
@@ -912,7 +912,7 @@ public class ERXArrayUtilities extends Object {
                     final Object theValue = NSKeyValueCodingAdditions.Utility.valueForKeyPath(theObject, keyPath);
                     final boolean theValueIsNull = theValue == null || theValue == NSKeyValueCoding.NullValue;
 
-                    if ( (theValueIsNull && valueToLookForIsNull) || ERXExtensions.safeEquals(valueToLookFor, theValue) )
+                    if ( (theValueIsNull && valueToLookForIsNull) || ObjectUtils.equals(valueToLookFor, theValue) )
                         a.addObject(theObject);
                 }
             }

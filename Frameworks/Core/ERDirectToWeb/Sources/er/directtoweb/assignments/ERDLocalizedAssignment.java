@@ -61,7 +61,7 @@ public class ERDLocalizedAssignment extends ERDAssignment implements ERDLocaliza
     public ERDLocalizedAssignment (String key, Object value) { super(key,value); }
 
     /**
-     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This
      * assignment depends upon the template keys from the value of this assignment.
      * This array of keys is used when constructing the
      * significant keys for the passed in keyPath.

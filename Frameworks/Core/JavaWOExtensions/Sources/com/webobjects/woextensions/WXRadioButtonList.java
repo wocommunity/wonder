@@ -92,6 +92,6 @@ public class WXRadioButtonList extends WOComponent {
     
     public void setIndex(int i) {
     	index = i;
-    	setValueForBinding(index, Bindings.index);
+    	setValueForBinding(Integer.valueOf(index), Bindings.index);
     }
 }

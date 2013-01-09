@@ -690,7 +690,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
      * {@link ERXValidationException} and that is
      * thrown.
      * @param obj enterprise object to be deleted
-     * @throws validation exception
+     * @throws NSValidation.ValidationException validation exception
      */
     public void validateObjectForDelete(EOEnterpriseObject obj) throws NSValidation.ValidationException {
         try {
@@ -729,7 +729,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                 } else {
                     EOModel model = _entity.model();
                     if(model == null) {
-                        model = (EOModel)ERXEOAccessUtilities.modelGroup(null).models().lastObject();
+                        model = ERXEOAccessUtilities.modelGroup(null).models().lastObject();
                     }
                     model.addEntity(_entity);
                     log.warn("Added <" + _entity.name() + "> to default model group.");
@@ -752,7 +752,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
      * {@link ERXValidationException} and that is
      * thrown.
      * @param obj enterprise object to be deleted
-     * @throws validation exception
+     * @throws NSValidation.ValidationException validation exception
      */
     public void validateObjectForUpdate(EOEnterpriseObject obj) throws NSValidation.ValidationException {
         try {
@@ -777,7 +777,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
      * {@link ERXValidationException} and that is
      * thrown.
      * @param obj enterprise object to be deleted
-     * @throws validation exception
+     * @throws NSValidation.ValidationException validation exception
      */
     public void validateObjectForInsert(EOEnterpriseObject obj) throws NSValidation.ValidationException {
         try {
@@ -807,7 +807,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
      * @param obj value to be validated
      * @param s property key to validate the value
      *		against.
-     * @throws validation exception
+     * @throws NSValidation.ValidationException validation exception
      */
     public Object validateValueForKey(Object obj, String s) throws NSValidation.ValidationException {
         Object validated = null;
@@ -839,7 +839,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
      * {@link ERXValidationException} and that is
      * thrown. 
      * @param obj enterprise object to be saved
-     * @throws validation exception
+     * @throws NSValidation.ValidationException validation exception
      */
 
     public void validateObjectForSave(EOEnterpriseObject obj) throws NSValidation.ValidationException {
@@ -999,7 +999,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         }
 
         public void setValueInObject(EOEnterpriseObject eo) {
-            Object defaultValue = this.stringValue;
+            Object defaultValue = stringValue;
             if(stringValue.startsWith("@threadStorage.")) {
                 String keyPath = stringValue.substring("@threadStorage.".length());
                 defaultValue = ERXThreadStorage.valueForKeyPath(keyPath);
@@ -1041,7 +1041,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         }
 
         public void setValueInObject(EOEnterpriseObject eo) {
-            Object defaultValue = this.stringValue;
+            Object defaultValue = stringValue;
             EOEditingContext ec = eo.editingContext();
 
             if(stringValue.charAt(0) == '@') { // computed key
@@ -1204,9 +1204,8 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             Throwable targetException = e4.getTargetException();
             if (targetException instanceof NSValidation.ValidationException) {
                 throw (NSValidation.ValidationException)targetException;
-            } else {
-                log.error("an exception occured in validityValidateEOObjectOnSave", e4);
             }
+            log.error("an exception occured in validityValidateEOObjectOnSave", e4);
         }
     }
 

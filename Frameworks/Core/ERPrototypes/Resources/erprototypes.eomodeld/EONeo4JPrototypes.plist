@@ -1,0 +1,445 @@
+{
+    attributes = (
+        {
+            columnName = ""; 
+            externalType = NUMBER; 
+            name = amount; 
+            precision = 38; 
+            scale = 2; 
+            valueClassName = NSDecimalNumber; 
+            valueType = B; 
+        }, 
+        {columnName = ""; externalType = BLOB; name = blob; valueClassName = NSData; }, 
+        {
+            adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
+            adaptorValueConversionMethodName = blobArray; 
+            columnName = ""; 
+            externalType = object; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsData; 
+            name = blobArray; 
+            valueClassName = "com.webobjects.foundation.NSArray"; 
+            valueFactoryClassName = "er.prototypes.ValueFactory"; 
+            valueFactoryMethodName = blobArray; 
+        }, 
+        {
+            adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
+            adaptorValueConversionMethodName = blobDictionary; 
+            columnName = ""; 
+            externalType = BLOB; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsData; 
+            name = blobDictionary; 
+            valueClassName = "com.webobjects.foundation.NSDictionary"; 
+            valueFactoryClassName = "er.prototypes.ValueFactory"; 
+            valueFactoryMethodName = blobDictionary; 
+        }, 
+        {
+            adaptorValueConversionMethodName = toString; 
+            columnName = ""; 
+            externalType = VARCHAR2; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
+            name = boolean; 
+            valueClassName = "java.lang.Boolean"; 
+            valueFactoryMethodName = valueOf; 
+            width = 5; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = CHAR; 
+            name = charFlag; 
+            valueClassName = NSString; 
+            valueType = c; 
+            width = 1; 
+        }, 
+        {
+            adaptorValueConversionMethodName = toCryptoString; 
+            columnName = ""; 
+            externalType = VARCHAR2; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
+            name = cryptoString; 
+            valueClassName = "er.extensions.crypting.ERXCryptoString"; 
+            valueFactoryMethodName = createInstanceFromCryptoString; 
+            width = 100; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = NUMBER; 
+            name = currencyAmount; 
+            precision = 38; 
+            scale = 4; 
+            valueClassName = NSDecimalNumber; 
+            valueType = B; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = DATE; 
+            name = date; 
+            valueClassName = NSCalendarDate; 
+            valueType = D; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = DATE; 
+            name = dateTime; 
+            valueClassName = NSCalendarDate; 
+            valueType = T; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = NUMBER; 
+            name = doubleNumber; 
+            valueClassName = NSNumber; 
+            valueType = d; 
+        }, 
+        {
+            adaptorValueConversionMethodName = toString; 
+            columnName = ""; 
+            externalType = VARCHAR2; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
+            name = duration; 
+            userInfo = {modificationDate = "2002-08-21 22:42:33 +0200"; }; 
+            valueClassName = "javax.xml.datatype.Duration"; 
+            valueFactoryClassName = "er.prototypes.ValueFactory"; 
+            valueFactoryMethodName = duration; 
+            width = 28; 
+        }, 
+        {
+            columnName = eofKey; 
+            externalType = RAW; 
+            name = eofKey; 
+            valueClassName = NSData; 
+            width = 24; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = NUMBER; 
+            name = flag; 
+            valueClassName = NSNumber; 
+            valueType = c; 
+        }, 
+        {
+            adaptorValueConversionMethodName = asString; 
+            columnName = ""; 
+            externalType = VARCHAR2; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
+            name = globalID; 
+            valueClassName = "er.extensions.eof.ERXKeyGlobalID"; 
+            valueFactoryMethodName = fromString; 
+            width = 255; 
+        }, 
+        {
+            columnName = id; 
+            externalType = NUMBER; 
+            name = id; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            adaptorValueConversionMethodName = toString; 
+            columnName = ""; 
+            externalType = NUMBER; 
+            name = intBoolean; 
+            valueClassName = NSNumber; 
+            valueType = c; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = NUMBER; 
+            name = intNumber; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = VARCHAR2; 
+            name = ipAddress; 
+            valueClassName = NSString; 
+            width = 39; 
+        }, 
+        {
+            adaptorValueConversionMethodName = name; 
+            columnName = ""; 
+            externalType = VARCHAR2; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
+            name = javaEnum; 
+            valueClassName = "java.lang.Enum"; 
+            valueFactoryMethodName = valueOf; 
+            width = 50; 
+        }, 
+        {
+            adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
+            adaptorValueConversionMethodName = jodaDateTime; 
+            columnName = ""; 
+            externalType = TIMESTAMP; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsDate; 
+            name = jodaDateTime; 
+            valueClassName = "org.joda.time.DateTime"; 
+            valueFactoryClassName = "er.prototypes.ValueFactory"; 
+            valueFactoryMethodName = jodaDateTime; 
+            valueType = T; 
+        }, 
+        {
+            adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
+            adaptorValueConversionMethodName = jodaLocalDate; 
+            columnName = ""; 
+            externalType = DATE; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsDate; 
+            name = jodaLocalDate; 
+            valueClassName = "org.joda.time.LocalDate"; 
+            valueFactoryClassName = "er.prototypes.ValueFactory"; 
+            valueFactoryMethodName = jodaLocalDate; 
+            valueType = D; 
+        }, 
+        {
+            adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
+            adaptorValueConversionMethodName = jodaLocalDateTime; 
+            columnName = ""; 
+            externalType = TIMESTAMP; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsDate; 
+            name = jodaLocalDateTime; 
+            valueClassName = "org.joda.time.LocalDateTime"; 
+            valueFactoryClassName = "er.prototypes.ValueFactory"; 
+            valueFactoryMethodName = jodaLocalDateTime; 
+            valueType = T; 
+        }, 
+        {
+            adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
+            adaptorValueConversionMethodName = jodaLocalTime; 
+            columnName = ""; 
+            externalType = TIMESTAMP; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsDate; 
+            name = jodaLocalTime; 
+            valueClassName = "org.joda.time.LocalTime"; 
+            valueFactoryClassName = "er.prototypes.ValueFactory"; 
+            valueFactoryMethodName = jodaLocalTime; 
+            valueType = t; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = NUMBER; 
+            name = longNumber; 
+            valueClassName = NSNumber; 
+            valueType = l; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = BLOB; 
+            name = longText; 
+            valueClassName = NSString; 
+        }, 
+        {
+            adaptorValueConversionMethodName = toBlob; 
+            columnName = ""; 
+            externalType = BLOB; 
+            name = mutableArray; 
+            valueClassName = "er.extensions.foundation.ERXMutableArray"; 
+            valueFactoryMethodName = fromBlob; 
+        }, 
+        {
+            adaptorValueConversionMethodName = toBlob; 
+            columnName = ""; 
+            externalType = BLOB; 
+            name = mutableDictionary; 
+            valueClassName = "er.extensions.foundation.ERXMutableDictionary"; 
+            valueFactoryMethodName = fromBlob; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = VARCHAR2; 
+            name = osType; 
+            valueClassName = NSString; 
+            width = 4; 
+        }, 
+        {
+            adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
+            adaptorValueConversionMethodName = serializable; 
+            columnName = ""; 
+            externalType = BLOB; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsBytes; 
+            name = serializable; 
+            valueClassName = "java.io.Serializable"; 
+            valueFactoryClassName = "er.prototypes.ValueFactory"; 
+            valueFactoryMethodName = serializable; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = VARCHAR2; 
+            name = shortString; 
+            valueClassName = NSString; 
+            width = 50; 
+        }, 
+        {
+            adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
+            adaptorValueConversionMethodName = stringArray; 
+            columnName = ""; 
+            externalType = BLOB; 
+            name = stringArray; 
+            valueClassName = "com.webobjects.foundation.NSArray"; 
+            valueFactoryClassName = "er.prototypes.ValueFactory"; 
+            valueFactoryMethodName = stringArray; 
+            valueType = c; 
+        }, 
+        {
+            adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
+            adaptorValueConversionMethodName = stringDictionary; 
+            columnName = ""; 
+            externalType = BLOB; 
+            name = stringDictionary; 
+            valueClassName = "com.webobjects.foundation.NSDictionary"; 
+            valueFactoryClassName = "er.prototypes.ValueFactory"; 
+            valueFactoryMethodName = stringDictionary; 
+            valueType = c; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = CHAR; 
+            name = type; 
+            valueClassName = NSString; 
+            valueType = c; 
+            width = 4; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = VARCHAR2; 
+            name = varchar10; 
+            valueClassName = NSString; 
+            width = 10; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = VARCHAR2; 
+            name = varchar100; 
+            valueClassName = NSString; 
+            width = 100; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = VARCHAR2; 
+            name = varchar1000; 
+            valueClassName = NSString; 
+            width = 1000; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = VARCHAR2; 
+            name = varchar16; 
+            valueClassName = NSString; 
+            width = 16; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = VARCHAR2; 
+            name = varchar255; 
+            valueClassName = NSString; 
+            width = 255; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = VARCHAR2; 
+            name = varchar50; 
+            valueClassName = NSString; 
+            width = 50; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = CLOB; 
+            name = varcharLarge; 
+            valueClassName = NSString; 
+        }
+    ); 
+    attributesUsedForLocking = (
+        amount, 
+        blob, 
+        boolean, 
+        charFlag, 
+        flag, 
+        id, 
+        intBoolean, 
+        intNumber, 
+        ipAddress, 
+        javaEnum, 
+        longText, 
+        mutableArray, 
+        mutableDictionary, 
+        osType, 
+        shortString, 
+        type, 
+        varchar10, 
+        varchar100, 
+        varchar16, 
+        varchar50, 
+        varcharLarge
+    ); 
+    className = EOGenericRecord; 
+    classProperties = (
+        amount, 
+        blob, 
+        blobArray, 
+        blobDictionary, 
+        boolean, 
+        charFlag, 
+        cryptoString, 
+        currencyAmount, 
+        date, 
+        dateTime, 
+        doubleNumber, 
+        duration, 
+        flag, 
+        globalID, 
+        intBoolean, 
+        intNumber, 
+        ipAddress, 
+        javaEnum, 
+        jodaDateTime, 
+        jodaLocalDate, 
+        jodaLocalDateTime, 
+        jodaLocalTime, 
+        longNumber, 
+        longText, 
+        mutableArray, 
+        mutableDictionary, 
+        osType, 
+        serializable, 
+        shortString, 
+        stringArray, 
+        stringDictionary, 
+        type, 
+        varchar10, 
+        varchar100, 
+        varchar1000, 
+        varchar16, 
+        varchar255, 
+        varchar50, 
+        varcharLarge
+    ); 
+    externalName = EONeo4JPrototypes; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {
+        "_clientClassPropertyNames" = (
+            charFlag, 
+            cryptoString, 
+            date, 
+            dateTime, 
+            doubleNumber, 
+            duration, 
+            flag, 
+            intNumber, 
+            jodaLocalDate, 
+            jodaLocalDateTime, 
+            jodaLocalTime, 
+            longNumber, 
+            longText, 
+            osType, 
+            shortString, 
+            varchar10, 
+            varchar100, 
+            varchar1000, 
+            varchar16, 
+            varchar255, 
+            varchar50, 
+            varcharLarge
+        ); 
+    }; 
+    isAbstractEntity = Y; 
+    name = EONeo4JPrototypes; 
+    primaryKeyAttributes = (eofKey, id); 
+}

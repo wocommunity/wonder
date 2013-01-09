@@ -1,6 +1,7 @@
 package er.excel;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -180,7 +181,7 @@ public class EGSimpleWorkbookHelper {
 	}
 
 	public Number numberAtLocation(int rownum, int colnum) {
-		return new Double(this.cellAtLocation(rownum, colnum).getNumericCellValue());
+		return Double.valueOf(this.cellAtLocation(rownum, colnum).getNumericCellValue());
 	}
 
 	public void setNumberAtLocation(Number value, int rownum, int colnum) {
@@ -230,7 +231,7 @@ public class EGSimpleWorkbookHelper {
 	public String writeToTemp() {
 		File file = null;
 		try {
-			file = File.createTempFile(null, ".xls");
+			file = File.createTempFile("eg_", ".xls");
 		} catch (java.io.IOException e) {
 			return null;
 		}
@@ -255,6 +256,12 @@ public class EGSimpleWorkbookHelper {
 			_workbook.write(stream);
 		} catch (java.io.IOException e) {
 			return false;
+		} finally {
+			try {
+				stream.close();
+			} catch (IOException e) {
+				// ignore
+			}
 		}
 		return true;
 	}

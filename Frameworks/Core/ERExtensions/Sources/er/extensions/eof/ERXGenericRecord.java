@@ -6,6 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.eof;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAttribute;
@@ -31,7 +32,6 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSValidation;
 
-import er.extensions.ERXExtensions;
 import er.extensions.crypting.ERXCrypto;
 import er.extensions.eof.ERXDatabaseContextDelegate.AutoBatchFaultingEnterpriseObject;
 import er.extensions.foundation.ERXArrayUtilities;
@@ -248,11 +248,11 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	private boolean _updateInverseRelationships = ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships;
 
 	public Logger getClassLog() {
-		Logger classLog = classLogs.objectForKey(this.getClass());
+		Logger classLog = classLogs.objectForKey(getClass());
 		if (classLog == null) {
 			synchronized (classLogs) {
-				classLog = Logger.getLogger(this.getClass());
-				classLogs.setObjectForKey(classLog, this.getClass());
+				classLog = Logger.getLogger(getClass());
+				classLogs.setObjectForKey(classLog, getClass());
 			}
 		}
 		return classLog;
@@ -842,7 +842,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 */
 	public boolean hasKeyChangedFromCommittedSnapshotFromValue(String key, Object oldValue) {
 		NSDictionary<String, Object> d = changesFromCommittedSnapshot();
-		return d.containsKey(key) && ERXExtensions.safeEquals(oldValue, committedSnapshotValueForKey(key));
+		return d.containsKey(key) && ObjectUtils.equals(oldValue, committedSnapshotValueForKey(key));
 	}
 
 	/**
@@ -856,7 +856,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 */
 	public boolean hasKeyChangedFromCommittedSnapshotFromValueToNewValue(String key, Object oldValue, Object newValue) {
 		NSDictionary<String, Object> d = changesFromCommittedSnapshot();
-		return d.containsKey(key) && ERXExtensions.safeEquals(newValue, d.objectForKey(key)) && ERXExtensions.safeEquals(oldValue, committedSnapshotValueForKey(key));
+		return d.containsKey(key) && ObjectUtils.equals(newValue, d.objectForKey(key)) && ObjectUtils.equals(oldValue, committedSnapshotValueForKey(key));
 	}
 
 	/**
@@ -869,7 +869,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 */
 	public boolean hasKeyChangedFromCommittedSnapshotToValue(String key, Object newValue) {
 		NSDictionary<String, Object> d = changesFromCommittedSnapshot();
-		return d.containsKey(key) && ERXExtensions.safeEquals(newValue, d.objectForKey(key));
+		return d.containsKey(key) && ObjectUtils.equals(newValue, d.objectForKey(key));
 	}
 
 	public boolean parentObjectStoreIsObjectStoreCoordinator() {

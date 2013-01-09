@@ -16,7 +16,7 @@ import com.webobjects.foundation.*;
  * @version 	1.0, 2002-09-30
  */
 
-public class ERSimpleEvent extends Object implements ERCalendarEvent {
+public class ERSimpleEvent implements ERCalendarEvent {
     protected NSTimestamp endTime;
     protected NSTimestamp startTime;
     protected String status;

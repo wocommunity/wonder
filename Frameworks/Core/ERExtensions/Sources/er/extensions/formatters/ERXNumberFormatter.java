@@ -139,6 +139,7 @@ public class ERXNumberFormatter extends NSNumberFormatter {
 	 * <code>'(' . operatorChar . factor . [';' scale ] . '=)' normalFormatterString</code>
 	 * @see com.webobjects.foundation.NSNumberFormatter#setPattern(java.lang.String)
 	 */
+	@Override
 	public void setPattern(String pattern) {
 		int offset = pattern == null ? -1 : pattern.indexOf("=)");
 		if(offset != -1) {
@@ -201,12 +202,13 @@ public class ERXNumberFormatter extends NSNumberFormatter {
      * @param aString to be parsed
      * @return the parsed object
      */
+    @Override
     public Object parseObject(String aString) throws java.text.ParseException {
         char[] chars = aString.toCharArray();
         char[] filteredChars = new char[chars.length];
         int count = 0;
         for (int i = 0; i < chars.length; i++) {
-            if (_ignoredChars.indexOf((int)chars[i]) < 0) {
+            if (_ignoredChars.indexOf(chars[i]) < 0) {
                 filteredChars[count++] = chars[i];
             }
         }
@@ -224,7 +226,7 @@ public class ERXNumberFormatter extends NSNumberFormatter {
         	if(result instanceof BigInteger && !(result instanceof BigDecimal)) {
         		result = new BigInteger("" + newValue.intValue());
         	} else {
-        		result = newValue;       		
+        		result = newValue;
         	}
         }
         return result;
@@ -234,6 +236,7 @@ public class ERXNumberFormatter extends NSNumberFormatter {
      * Overridden to perform optional conversions on the value given.
      * @see java.text.Format#format(java.lang.Object, java.lang.StringBuffer, java.text.FieldPosition)
      */
+    @Override
     public StringBuffer format(Object value, StringBuffer buffer, FieldPosition position) {
     	if (value instanceof Number && _operator != null) {
     		BigDecimal newValue = null;
@@ -251,7 +254,7 @@ public class ERXNumberFormatter extends NSNumberFormatter {
     		}
     		
      		newValue = performFormat(newValue);
-     		value = newValue;       		
+     		value = newValue;
     	}
     	return super.format(value, buffer, position);
     }

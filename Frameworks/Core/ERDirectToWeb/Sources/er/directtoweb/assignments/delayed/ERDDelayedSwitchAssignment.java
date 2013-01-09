@@ -46,7 +46,7 @@ public class ERDDelayedSwitchAssignment extends ERDDelayedAssignment implements 
 
     public NSArray dependentKeys(String keyPath) {
         if (_dependentKeys==null) {
-            NSDictionary conditionAssignment = (NSDictionary)this.value();
+            NSDictionary conditionAssignment = (NSDictionary)value();
             String qualFormat =
                 (String)conditionAssignment.objectForKey("qualifierFormat");
             NSArray args = (NSArray)conditionAssignment.objectForKey("args");
@@ -63,7 +63,7 @@ public class ERDDelayedSwitchAssignment extends ERDDelayedAssignment implements 
 
     public Object fireNow(D2WContext c) {
         Object result = null;
-        NSDictionary conditionAssignment = (NSDictionary)this.value();
+        NSDictionary conditionAssignment = (NSDictionary)value();
         String qualFormat =
             (String)conditionAssignment.objectForKey("qualifierFormat");
         NSDictionary switchDictionary = (NSDictionary)conditionAssignment.objectForKey("switch");

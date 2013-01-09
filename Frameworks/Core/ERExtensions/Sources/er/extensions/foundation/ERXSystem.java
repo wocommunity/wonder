@@ -59,7 +59,7 @@ public class ERXSystem implements NSKeyValueCoding, NSKeyValueCodingAdditions {
 	 * @return the converted value
 	 */
 	public static String getProperty(String key, Properties properties) {
-	    String originalValue = (String) properties.getProperty(key);
+	    String originalValue = properties.getProperty(key);
 	    return ERXSimpleTemplateParser.parseTemplatedStringWithObject(originalValue, properties);
 	}
 

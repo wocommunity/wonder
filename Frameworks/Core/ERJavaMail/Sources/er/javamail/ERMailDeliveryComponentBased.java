@@ -45,7 +45,7 @@ public abstract class ERMailDeliveryComponentBased extends ERMailDelivery {
 	 */
 	@Deprecated
 	public void setWOComponentContent(WOComponent component) {
-		this.setComponent(component);
+		setComponent(component);
 	}
 
 	/** 

@@ -36,6 +36,7 @@ import java.util.jar.JarFile;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.commons.lang.CharEncoding;
 import org.apache.log4j.Appender;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Logger;
@@ -94,7 +95,6 @@ import er.extensions.components._private.ERXActiveImage;
 import er.extensions.components._private.ERXWOForm;
 import er.extensions.components._private.ERXWORepetition;
 import er.extensions.components._private.ERXWOString;
-import er.extensions.components._private.ERXWOText;
 import er.extensions.components._private.ERXWOTextField;
 import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXDatabaseContextDelegate;
@@ -108,7 +108,7 @@ import er.extensions.foundation.ERXPatcher;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXRuntimeUtilities;
 import er.extensions.foundation.ERXThreadStorage;
-import er.extensions.foundation.ERXTimestampUtility;
+import er.extensions.foundation.ERXTimestampUtilities;
 import er.extensions.localization.ERXLocalizer;
 import er.extensions.migration.ERXMigrator;
 import er.extensions.statistics.ERXStats;
@@ -159,9 +159,6 @@ import er.extensions.statistics.ERXStats;
  * @property er.extensions.ERXApplication.allowMultipleDevInstances
  */
 public abstract class ERXApplication extends ERXAjaxApplication implements ERXGracefulShutdown.GracefulApplication {
-
-	private static Boolean isWO54 = null;
-
 	/** logging support */
 	public static final Logger log = Logger.getLogger(ERXApplication.class);
 
@@ -489,10 +486,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 							jarLibs += jar + File.pathSeparator;
 						}
 						String bundle = jar.replaceAll(".*?[/\\\\](\\w+)\\.framework.*", "$1");
-						String excludes = "(JavaVM)";
-						if (isWO54()) {
-							excludes = "(JavaVM|JavaWebServicesSupport|JavaEODistribution|JavaWebServicesGeneration|JavaWebServicesClient)";
-						}
+						String excludes = "(JavaVM|JavaWebServicesSupport|JavaEODistribution|JavaWebServicesGeneration|JavaWebServicesClient)";
 						if (bundle.matches("^\\w+$") && !bundle.matches(excludes)) {
 							String info = jar.replaceAll("(.*?[/\\\\]\\w+\\.framework/Resources/).*", "$1Info.plist");
 							if (new File(info).exists()) {
@@ -558,9 +552,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 										System.err.println("Skipping '" + projectFile + "': " + t);
 									}
 									break;
-								} else {
-									debugMsg("Skipping, no project: " + projectFile);
 								}
+								debugMsg("Skipping, no project: " + projectFile);
 							}
 						}
 					}
@@ -649,9 +642,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		 * 
 		 * @param n
 		 */
-
-		
-		
 		public void bundleDidLoad(NSNotification n) {
 			NSBundle bundle = (NSBundle) n.object();
 			if (allFrameworks.contains(bundle.name())) {
@@ -754,7 +744,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 						if (urlAsString.contains(mainBundleName + ".jar")) {
 							try {
-								propertiesPath = new URL(URLDecoder.decode(urlAsString, "UTF-8"));
+								propertiesPath = new URL(URLDecoder.decode(urlAsString, CharEncoding.UTF_8));
 								userPropertiesPath = new URL(propertiesPath.toExternalForm() + userName);
 							}
 							catch (MalformedURLException exception) {
@@ -819,6 +809,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 	private String stringFromJar(String jar, String path) {
 		JarFile f;
+		InputStream is = null;
 		try {
 			if (!new File(jar).exists()) {
 				ERXApplication.log.warn("Will not process jar '" + jar + "' because it cannot be found ...");
@@ -827,7 +818,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			f = new JarFile(jar);
 			JarEntry e = (JarEntry) f.getEntry(path);
 			if (e != null) {
-				InputStream is = f.getInputStream(e);
+				is = f.getInputStream(e);
 				ByteArrayOutputStream bout = new ByteArrayOutputStream();
 				int read = -1;
 				byte[] buf = new byte[1024 * 50];
@@ -835,7 +826,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 					bout.write(buf, 0, read);
 				}
 
-				String content = new String(bout.toByteArray(), "UTF-8");
+				String content = new String(bout.toByteArray(), CharEncoding.UTF_8);
 				return content;
 			}
 			return null;
@@ -845,6 +836,16 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		}
 		catch (IOException e1) {
 			throw NSForwardException._runtimeExceptionForThrowable(e1);
+		}
+		finally {
+			if (is != null) {
+				try {
+					is.close();
+				}
+				catch (IOException e) {
+					// ignore
+				}
+			}
 		}
 	}
 	}
@@ -888,9 +889,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		String appUrl;
 		if (application().isDirectConnectEnabled()) {
 			appUrl = adapterUrl.replace("/cgi", ":" + application().port() + "/cgi");
-			appUrl += "/" + application().name() + ".woa";
+			appUrl += "/" + application().name() + application().applicationExtension();
 		} else {
-			appUrl = adapterUrl + "/" + application().name() + ".woa/-" + application().port();
+			appUrl = adapterUrl + "/" + application().name() + application().applicationExtension() + "/-" + application().port();
 		}
 		
 		URL url;
@@ -1037,22 +1038,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			ClassLoader loader = AppClassLoader.getAppClassLoader();
 			Thread.currentThread().setContextClassLoader(loader);
 		}
-		if (!ERXApplication.isWO54()) {
-			Class arrayClass = NSMutableArray.class;
-			try {
-				Field f = arrayClass.getField("ERX_MARKER");
-			}
-			catch (NoSuchFieldException e) {
-				System.err.println("No ERX_MARKER field in NSMutableArray found. \nThis means your class path is incorrect. Adjust it so that ERExtensions come before JavaFoundation.");
-				System.exit(1);
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
 		ERXConfigurationManager.defaultManager().setCommandLineArguments(argv);
 		ERXFrameworkPrincipal.setUpFrameworkPrincipalClass(ERXExtensions.class);
 		// NSPropertiesCoordinator.loadProperties();
+		ERXShutdownHook.useMe();
 	}
 
 	/**
@@ -1064,19 +1053,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	public void installPatches() {
 		ERXPatcher.installPatches();
 		if (contextClassName().equals("WOContext")) {
-			if (ERXApplication.isWO54()) {
-				setContextClassName("ERXWOContext54");
-			}
-			else {
-				setContextClassName(ERXWOContext.class.getName());
-			}
+			setContextClassName(ERXWOContext.class.getName());
 		}
 		if (contextClassName().equals("WOServletContext") || contextClassName().equals("com.webobjects.jspservlet.WOServletContext")) {
-			if (ERXApplication.isWO54()) {
-				setContextClassName("ERXWOServletContext54");
-			} else {
-				setContextClassName(ERXWOServletContext.class.getName());
-			}
+			setContextClassName(ERXWOServletContext.class.getName());
 		}
 
 		ERXPatcher.setClassForName(ERXWOForm.class, "WOForm");
@@ -1097,23 +1077,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		}
 
 		// ERXPatcher.setClassForName(ERXSubmitButton.class, "WOSubmitButton");
-
-		// Fix for 3190479 URI encoding should always be UTF8
-		// See http://www.w3.org/International/O-URL-code.html
-		// For WO 5.1.x users, please comment this statement to compile.
-		com.webobjects.appserver._private.WOURLEncoder.WO_URL_ENCODING = "UTF-8";
-
-		// WO 5.1 specific patches
-		if (ERXProperties.webObjectsVersionAsDouble() < 5.2d) {
-			// ERXWOText contains a patch for WOText to not include the value
-			// attribute (#2948062). Fixed in WO 5.2
-			ERXPatcher.setClassForName(ERXWOText.class, "WOText");
-
-		}
-		// ERXWOFileUpload returns a better warning than throwing a
-		// ClassCastException.
-		// Fixed in WO 5.2
-		// ERXPatcher.setClassForName(ERXWOFileUpload.class, "WOFileUpload");
 	}
 
 	@Override
@@ -1248,7 +1211,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	    _replaceApplicationPathReplace = ERXProperties.stringForKey("er.extensions.ERXApplication.replaceApplicationPath.replace");
 	    
 	    if (_replaceApplicationPathPattern == null && rewriteDirectConnectURL()) {
-	    	_replaceApplicationPathPattern = "/cgi-bin/WebObjects/" + name() + ".woa";
+	    	_replaceApplicationPathPattern = "/cgi-bin/WebObjects/" + name() + applicationExtension();
 	        if (_replaceApplicationPathReplace == null) {
 	        	_replaceApplicationPathReplace = "";
 	        }
@@ -1260,6 +1223,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * If mod_rewrite is being used we don't want the adaptor prefix being part of the redirect.
 	 * @see com.webobjects.appserver.WOApplication#_newLocationForRequest(com.webobjects.appserver.WORequest)
 	 */
+	@Override
 	public String _newLocationForRequest(WORequest aRequest) {
 		return _rewriteURL(super._newLocationForRequest(aRequest));
 	}
@@ -1434,7 +1398,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				log.info("Instance will not live past " + timeToDie + ":00.");
 				NSLog.out.appendln("Instance will not live past " + timeToDie + ":00.");
 				NSTimestamp now = new NSTimestamp();
-				int s = (timeToDie - ERXTimestampUtility.hourOfDay(now)) * 3600 - ERXTimestampUtility.minuteOfHour(now) * 60;
+				int s = (timeToDie - ERXTimestampUtilities.hourOfDay(now)) * 3600 - ERXTimestampUtilities.minuteOfHour(now) * 60;
 				if (s < 0)
 					s += 24 * 3600; // how many seconds to the deadline
 	
@@ -1458,29 +1422,34 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		}
 	}
 
-	/**
-	 * Creates the request object for this loop. Calls _createRequest(). For WO
-	 * 5.3.
-	 */
-	@SuppressWarnings("all") // Suppress @Override warning for 5.4
-	public WORequest createRequest(String aMethod, String aURL, String anHTTPVersion, NSDictionary someHeaders, NSData aContent, NSDictionary someInfo) {
-		return _createRequest(aMethod, aURL, anHTTPVersion, someHeaders, aContent, someInfo);
+	@Override
+	public WORequest createRequest(String aMethod, String aURL, String anHTTPVersion, Map<String, ? extends List<String>> someHeaders, NSData aContent, Map<String, Object> someInfo) {
+		// Workaround for #3428067 (Apache Server Side Include module will feed
+		// "INCLUDED" as the HTTP version, which causes a request object not to
+		// be created by an exception.
+		if (anHTTPVersion == null || anHTTPVersion.startsWith("INCLUDED")) {
+			anHTTPVersion = "HTTP/1.0";
+		}
+		
+		// Workaround for Safari on Leopard bug (post followed by redirect to GET incorrectly has content-type header).
+		// The content-type header makes the WO parser only look at the content. Which is empty.
+		// http://lists.macosforge.org/pipermail/webkit-unassigned/2007-November/053847.html
+		// http://jira.atlassian.com/browse/JRA-13791
+		if ("GET".equalsIgnoreCase(aMethod) && someHeaders != null && someHeaders.get("content-type") != null) {
+			someHeaders.remove("content-type");
+		}
+
+		if (rewriteDirectConnectURL()) {
+			aURL = adaptorPath() + name() + applicationExtension() + aURL;
+		}
+
+		return new ERXRequest(aMethod, aURL, anHTTPVersion, someHeaders, aContent, someInfo);
 	}
 
 	/**
-	 * Creates the request object for this loop. Calls _createRequest(). For WO
-	 * 5.4.
+	 * @deprecated use {@link #createRequest(String, String, String, Map, NSData, Map)} instead
 	 */
-	@SuppressWarnings("all")
-	// Suppress @Override warning for 5.3
-	public WORequest createRequest(String method, String aurl, String anHTTPVersion, Map<String, ? extends List<String>> someHeaders, NSData content, Map<String, Object> someInfo) {
-		return _createRequest(method, aurl, anHTTPVersion, (someHeaders != null ? new NSDictionary<String, Object>(someHeaders, true) : null), content, (someInfo != null ? new NSDictionary<String, Object>(someInfo, true) : null));
-	}
-
-	/**
-	 * Bottleneck for WORequest creation in WO 5.3 and 5.4 to use an
-	 * {@link ERXRequest} object that fixes a bug with localization.
-	 */
+	@Deprecated
 	protected WORequest _createRequest(String aMethod, String aURL, String anHTTPVersion, NSDictionary someHeaders, NSData aContent, NSDictionary someInfo) {
 		// Workaround for #3428067 (Apache Server Side Include module will feed
 		// "INCLUDED" as the HTTP version, which causes a request object not to
@@ -1549,6 +1518,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * 
 	 * @author ak
 	 */
+	@Override
 	public WOComponentDefinition _componentDefinition(String s, NSArray nsarray) {
 		if(ERXProperties.booleanForKeyWithDefault("er.extensions.ERXApplication.fixCachingEnabled", true)) {
 			// _expectedLanguages already contains all the languages in all projects, so
@@ -1658,7 +1628,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	/**
 	 * Overridden to fix that direct connect apps can't refuse new sessions.
 	 */
-
 	@Override
 	public synchronized void refuseNewSessions(boolean value) {
 		boolean success = false;
@@ -1838,6 +1807,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	// NOTE: if you use WO 5.1, comment out this method, otherwise it won't
 	// compile.
+	// CHECKME this was created for WO 5.2, do we still need this for 5.4.3?
 	@Override
 	public WOResponse handleActionRequestError(WORequest aRequest, Exception exception, String reason, WORequestHandler aHandler, String actionClassName, String actionName, Class actionClass, WOAction actionInstance) {
 		WOContext context = actionInstance != null ? actionInstance.context() : null;
@@ -2274,18 +2244,11 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * Returns true if this app is running in WO 5.4.
 	 * 
 	 * @return true if this app is running in WO 5.4
+	 * @deprecated Wonder is used with WO 5.4 only
 	 */
+	@Deprecated
 	public static boolean isWO54() {
-		if (ERXApplication.isWO54 == null) {
-			try {
-				Method getWebObjectsVersionMethod = WOApplication.class.getMethod("getWebObjectsVersion", new Class[0]);
-				ERXApplication.isWO54 = Boolean.TRUE;
-			}
-			catch (Exception e) {
-				ERXApplication.isWO54 = Boolean.FALSE;
-			}
-		}
-		return ERXApplication.isWO54.booleanValue();
+		return true;
 	}
 
 	/**
@@ -2851,7 +2814,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * Returns whether or not binding debugging is enabled for the given component
 	 * 
 	 * @param componentName the component name
-	 * @return whether or not binding debugging is enabled for the given componen
+	 * @return whether or not binding debugging is enabled for the given component
 	 */
 	public boolean debugEnabledForComponent(String componentName) {
 		return _debugComponents.containsObject(componentName);
@@ -2869,7 +2832,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * @return the request handler key for ajax.
 	 */
 	public static String erAjaxRequestHandlerKey() {
-		return ERXApplication.isWO54() ? "ja": "ajax";
+		return "ja";
 	}
 	
 	/**

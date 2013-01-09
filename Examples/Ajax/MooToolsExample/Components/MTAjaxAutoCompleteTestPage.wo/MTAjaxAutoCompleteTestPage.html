@@ -1,0 +1,102 @@
+<wo:Main pageTitle = "Auto Complete Test Page">
+ <style type="text/css">
+	.auto_complete {
+	  position:absolute;
+	  width:250px;
+	  background-color:white;
+	  border:1px solid #888;
+	  margin:0px;
+	  padding:0px;
+	}
+	ul.contacts  {
+	  list-style-type: none;
+	  margin:0px;
+	  padding:0px;
+	}
+	ul.contacts li.selected { 
+	   background-color: #ffb; 
+	}
+	li.contact {
+	  list-style-type: none;
+	  display:block;
+	  margin:0;
+	  padding:2px;
+	  height:32px;
+	}
+	li.contact div.image {
+	  float:left;
+	  width:32px;
+	  height:32px;
+	  margin-right:8px;
+	}
+	li.contact div.name {
+	  font-weight:bold;
+	  font-size:12px;
+	  line-height:1.2em;
+	}
+	li.contact div.email {
+	  font-size:10px;
+	  color:#888;
+	}
+	#list {
+	  margin:0;
+	  margin-top:10px;
+	  padding:0;
+	  list-style-type: none;
+	  width:250px;
+	}
+	#list li {
+	  margin:0;
+	  margin-bottom:4px;
+	  padding:5px;
+	  border:1px solid #888;
+	  cursor:move;
+	}
+	.auto_complete {
+	  width: 350px;
+	  background: #fff;
+	}
+	.auto_complete ul {
+	    border:1px solid #888;
+	    margin:0;
+	    padding:0;
+	    width:100%;
+	    list-style-type:none;
+	}
+	.auto_complete ul li {
+	    margin:0;
+	    padding:3px;
+	}
+	.auto_complete ul li.selected { 
+	    background-color: #ffb; 
+	}
+	.auto_complete ul strong.highlight { 
+	    color: #800; 
+	    margin:0;
+	    padding:0;
+	}
+</style>
+
+	<h2>Auto Compelte Test Page</h2>
+	<hr/>
+	<p>I created a MooTools version of AutoCompleter.Base, Ajax.Autocompleter and Autocompleter.Local check out AutoCompleter.js</p>
+
+	<webobject name = "WOForm">
+	    <label>Simple field, just the values gets displayed:</label>
+	    <span id="simpleComplete"><webobject name="SimpleAjaxAutoComplete"></webobject></span>
+	    <br />
+		<label>Complex field, using component content to render:</label>
+		<span id="complexComplete">
+			<webobject name="ComplexAjaxAutoComplete">
+				<span class="name">
+					<webobject name="Item"></webobject>
+					<span class="informal"> 
+						(<webobject name="ItemLength"></webobject> chars)
+					</span>
+				</span>
+			</webobject>
+		</span>
+		<webobject name = "SubmitButton"/>
+	</webobject>
+
+</wo:Main>
