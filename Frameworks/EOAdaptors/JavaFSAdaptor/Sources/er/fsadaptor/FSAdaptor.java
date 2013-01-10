@@ -1,7 +1,3 @@
-
-/* FSAdaptor - Decompiled by JODE
- * Visit http://jode.sourceforge.net/
- */
 package er.fsadaptor;
 
 import com.webobjects.eoaccess.EOAdaptor;
@@ -17,7 +13,7 @@ public final class FSAdaptor extends EOAdaptor {
     }
 
     public void assertConnectionDictionaryIsValid() {
-        System.out.println(this.connectionDictionary());
+        System.out.println(connectionDictionary());
     }
 
     public EOAdaptorContext createAdaptorContext() {
