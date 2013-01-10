@@ -286,19 +286,28 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
                     String columnName = anAttribute.columnName();
                     Object aValue = null;
                     if ("content".equals(columnName)) {
+                        InputStream in = null;
                         try {
                             String path = aFile.getAbsolutePath();
-                            InputStream in = new FileInputStream(path);
+                            in = new FileInputStream(path);
                             int length = in.available();
                             if (length == 0) {
                                 aValue = "";
+                            } else {
+                                byte buffer[] = new byte[length];
+                                in.read(buffer);
+                                aValue = new String(buffer);
                             }
-                            byte buffer[] = new byte[length];
-                            in.read(buffer);
-                            in.close();
-                            aValue = new String(buffer);
                         } catch (IOException ex) {
                             System.err.println("dictionaryForFileWithAttributes : (" + aFile.getName() + ") " + ex);
+                        } finally {
+                            if (in != null) {
+                                try {
+                                    in.close();
+                                } catch (IOException e) {
+                                    // ignore
+                                }
+                            }
                         }
                     } else if ("realFile".equals(columnName)) {
                         aValue = aFile;
