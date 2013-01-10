@@ -76,7 +76,7 @@ import er.extensions.foundation.IERXStatus;
  * In your component action, simply create an instance of this long response page just as you would
  *    create any other page.
  * </li><li>
- * Push in an instance of your Runnable (or Callable) task into the long response page using {@link CCAjaxLongResponsePage#setLongRunningCallable(Callable)}
+ * Push in an instance of your Runnable (or Callable) task into the long response page using {@link CCAjaxLongResponsePage#setTask(Object)}
  * </li><li>
  * Optionally push in your custom next page controller for execution when the task is finished using {@link #setNextPageForResultController(IERXPerformWOActionForResult)}
  * </li><li>

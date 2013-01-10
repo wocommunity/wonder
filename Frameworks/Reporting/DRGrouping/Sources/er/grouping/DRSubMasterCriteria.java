@@ -190,7 +190,7 @@ public class DRSubMasterCriteria {
     }
 
     /**
-     * Decides if the extration is by method or instance variable.
+     * Decides if the extraction is by method or instance variable.
      * If this returns true, then only methods will be used to extract
      * values from the raw objects, not their instance variables.
      */
@@ -205,7 +205,7 @@ public class DRSubMasterCriteria {
      * Decides if the {@link #format()} given is used to convert dates
      * into strings before comparison or just compare {@link NSTimestamp}.
      * If you set this, you should also set a valid {@link NSTimestampFormatter}
-     * pattern in {@link format()}.
+     * pattern in {@link #format()}.
      */
     public boolean useTimeFormat() {
         return _useTimeFormat;
