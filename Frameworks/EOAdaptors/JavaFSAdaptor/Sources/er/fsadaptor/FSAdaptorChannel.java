@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import com.webobjects.eoaccess.EOAdaptorChannel;
@@ -221,7 +222,7 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
         throw new IllegalArgumentException("FSAdaptorChannel.updateValuesInRowsDescribedByQualifier: null row.");
     }
 
-    private String defaultModelPath() {
+    private URL defaultModelUrl() {
         Class aClass = this.getClass();
         String aClassName = aClass.getName();
         String aResourceName = "/" + aClassName.replace('.', '/') + ".class";
@@ -237,12 +238,16 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
             if (anIndex != -1)
                 aPath = aPath.substring(0, anIndex);
             File aFile = new File(aPath);
-            File aModelFile = new File(new File(aFile.getParent()).getParent() + "/FS", "FS.eomodeld");
-            if (debug)
+            File aModelFile = new File(aFile.getParentFile().getParent() + "/FS", DefaultModelName);
+            if (debug) {
                 System.out.println(aFile);
-            if (debug)
                 System.out.println(aModelFile);
-            return aModelFile.getAbsolutePath();
+            }
+            try {
+                return aModelFile.toURI().toURL();
+            } catch (MalformedURLException e) {
+                System.out.println(e);
+            }
         }
         return null;
     }
@@ -251,8 +256,8 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
         return new NSArray(TableNames);
     }
 
-    public EOModel describeModelWithTableNames(NSArray anArray) {
-        return new EOModel(defaultModelPath());
+    public EOModel describeModelWithTableNames(NSArray tableNames) {
+        return new EOModel(defaultModelUrl());
     }
 
     private NSArray filteredArrayWithEntity(NSArray anArray, EOEntity anEntity) {
