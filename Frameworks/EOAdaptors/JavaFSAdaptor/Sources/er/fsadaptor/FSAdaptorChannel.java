@@ -1,7 +1,3 @@
-
-/* FSAdaptorChannel - Decompiled by JODE
- * Visit http://jode.sourceforge.net/
- */
 package er.fsadaptor;
 
 import java.io.File;
@@ -293,9 +289,6 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
                         try {
                             String path = aFile.getAbsolutePath();
                             InputStream in = new FileInputStream(path);
-
-                            if (null == in)
-                                throw new RuntimeException("The file '" + path + "' can not be opened.");
                             int length = in.available();
                             if (length == 0) {
                                 aValue = "";
