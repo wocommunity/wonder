@@ -33,19 +33,19 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
 
     private boolean _isOpen = false;
 
-    private NSArray _attributes = null;
+    private NSArray<EOAttribute> _attributes = null;
 
-    private final NSMutableArray _files = new NSMutableArray();
+    private final NSMutableArray<File> _files = new NSMutableArray<File>();
 
     public FSAdaptorChannel(EOAdaptorContext aContext) {
         super(aContext);
     }
 
-    private NSMutableArray files() {
+    private NSMutableArray<File> files() {
         return _files;
     }
 
-    public NSArray attributesToFetch() {
+    public NSArray<EOAttribute> attributesToFetch() {
         return _attributes;
     }
 
@@ -60,14 +60,14 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
     public int deleteRowsDescribedByQualifier(EOQualifier aQualifier, EOEntity anEntity) {
         if (aQualifier != null) {
             if (anEntity != null) {
-                NSArray someFiles = FSQualifierHandler.filesWithQualifier(aQualifier, rootDirectory(anEntity));
+                NSArray<File> someFiles = FSQualifierHandler.filesWithQualifier(aQualifier, rootDirectory(anEntity));
                 if (someFiles != null) {
                     someFiles = filteredArrayWithEntity(someFiles, anEntity);
                     if (someFiles != null) {
                         int count = someFiles.count();
                         int counter = 0;
                         for (int index = 0; index < count; index++) {
-                            File aFile = (File) someFiles.objectAtIndex(index);
+                            File aFile = someFiles.objectAtIndex(index);
                             if (aFile.delete())
                                 counter++;
                         }
@@ -81,7 +81,7 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
         throw new IllegalArgumentException("FSAdaptorChannel.deleteRowsDescribedByQualifier: null qualifier.");
     }
 
-    public NSArray describeResults() {
+    public NSArray<EOAttribute> describeResults() {
         return _attributes;
     }
 
@@ -93,8 +93,8 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
         throw new UnsupportedOperationException("FSAdaptorChannel.executeStoredProcedure");
     }
 
-    public NSMutableDictionary fetchRow() {
-        File aFile = (File) files().lastObject();
+    public NSMutableDictionary<String, Object> fetchRow() {
+        File aFile = files().lastObject();
         if (aFile != null) {
             files().removeLastObject();
             return dictionaryForFileWithAttributes(aFile, attributesToFetch());
@@ -102,7 +102,7 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
         return null;
     }
 
-    public void insertRow(NSDictionary aRow, EOEntity anEntity) {
+    public void insertRow(NSDictionary<String, Object> aRow, EOEntity anEntity) {
         if (aRow != null) {
             if (anEntity != null) {
                 String aPath = (String) aRow.objectForKey("absolutePath");
@@ -150,7 +150,7 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
         return root;
     }
 
-    public void selectAttributes(NSArray someAttributes, EOFetchSpecification aFetchSpecification, boolean shouldLock, EOEntity anEntity) {
+    public void selectAttributes(NSArray<EOAttribute> someAttributes, EOFetchSpecification aFetchSpecification, boolean shouldLock, EOEntity anEntity) {
         if (anEntity == null)
             throw new IllegalArgumentException("FSAdaptorChannel.selectAttributes: null entity.");
         if (someAttributes == null)
@@ -167,19 +167,19 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
         if (debug)
             System.out.println("*****selectAttributes: " + entityName + "--" + aFetchSpecification.entityName() + "--" + aFetchSpecification);
         // if(true) throw new RuntimeException();
-        NSArray someFiles = (FSQualifierHandler.filesWithQualifier(qualifier, rootDirectory(anEntity)));
+        NSArray<File> someFiles = FSQualifierHandler.filesWithQualifier(qualifier, rootDirectory(anEntity));
 
         if (someFiles != null) {
-            NSArray someSortOrderings = aFetchSpecification.sortOrderings();
+            NSArray<EOSortOrdering> someSortOrderings = aFetchSpecification.sortOrderings();
             if (someSortOrderings != null)
-                someFiles = (EOSortOrdering.sortedArrayUsingKeyOrderArray(someFiles, someSortOrderings));
+                someFiles = EOSortOrdering.sortedArrayUsingKeyOrderArray(someFiles, someSortOrderings);
             someFiles = filteredArrayWithEntity(someFiles, anEntity);
             if (someFiles != null)
                 files().addObjectsFromArray(someFiles);
         }
     }
 
-    public void setAttributesToFetch(NSArray someAttributes) {
+    public void setAttributesToFetch(NSArray<EOAttribute> someAttributes) {
         if (someAttributes != null)
             _attributes = someAttributes;
         else
@@ -190,13 +190,13 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
         if (aRow != null) {
             if (aQualifier != null) {
                 if (anEntity != null) {
-                    NSArray someFiles = FSQualifierHandler.filesWithQualifier(aQualifier, rootDirectory(anEntity));
+                    NSArray<File> someFiles = FSQualifierHandler.filesWithQualifier(aQualifier, rootDirectory(anEntity));
                     if (someFiles != null) {
                         someFiles = filteredArrayWithEntity(someFiles, anEntity);
                         if (someFiles != null) {
                             int count = someFiles.count();
                             for (int index = 0; index < count; index++) {
-                                File aFile = (File) someFiles.objectAtIndex(index);
+                                File aFile = someFiles.objectAtIndex(index);
                                 NSArray someKeys = aRow.allKeys();
                                 int keyCount = someKeys.count();
 
@@ -252,10 +252,12 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
         return null;
     }
 
+    @Override
     public NSArray describeTableNames() {
         return new NSArray(TableNames);
     }
 
+    @Override
     public EOModel describeModelWithTableNames(NSArray tableNames) {
         return new EOModel(defaultModelUrl());
     }
@@ -281,13 +283,11 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
         throw new IllegalArgumentException("FSAdaptorChannel.filteredArrayWithEntity: null array.");
     }
 
-    private NSMutableDictionary dictionaryForFileWithAttributes(File aFile, NSArray someAttributes) {
+    private NSMutableDictionary<String, Object> dictionaryForFileWithAttributes(File aFile, NSArray<EOAttribute> someAttributes) {
         if (aFile != null) {
             if (someAttributes != null) {
-                NSMutableDictionary aDictionary = new NSMutableDictionary();
-                int count = someAttributes.count();
-                for (int index = 0; index < count; index++) {
-                    EOAttribute anAttribute = (EOAttribute) someAttributes.objectAtIndex(index);
+                NSMutableDictionary<String, Object> aDictionary = new NSMutableDictionary<String, Object>();
+                for (EOAttribute anAttribute : someAttributes) {
                     String columnName = anAttribute.columnName();
                     Object aValue = null;
                     if ("content".equals(columnName)) {
