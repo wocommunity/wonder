@@ -1620,6 +1620,8 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 			}
 		}
 
+		optionalPropertiesLoader(ERXSystem.getProperty("user.name"), propertiesPaths, projectsInfo);
+		
         /** /etc/WebObjects/AppName/Properties -- per-Application-per-Machine properties */
         String applicationMachinePropertiesPath = ERXProperties.applicationMachinePropertiesPath("Properties");
     	addIfPresent("Application-Machine Properties", applicationMachinePropertiesPath, propertiesPaths, projectsInfo);
@@ -1631,8 +1633,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         /** Properties.<userName> -- per-Application-per-User properties */
         String applicationUserPropertiesPath = ERXProperties.applicationUserProperties();
     	addIfPresent("Application-User Properties", applicationUserPropertiesPath, propertiesPaths, projectsInfo);
-        
-        optionalPropertiesLoader(ERXSystem.getProperty("user.name"), propertiesPaths, projectsInfo);
 
         /*  Report the result */
 		if (reportLoggingEnabled && projectsInfo.count() > 0 && log.isInfoEnabled()) {
