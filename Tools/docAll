@@ -1,0 +1,22 @@
+#!/bin/sh
+
+if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+    echo ""
+    echo "Builds the Wonder javadoc. See the ReadMe.txt for more info."
+    echo ""
+    echo "Use of the \"-orange\" parameter requires one to check out http://github.com/rkiddy/Orange"
+    echo ""
+    exit 0
+fi
+
+if [ ! -d logs ]; then
+    mkdir logs
+fi
+
+if [ "$1" = "-orange" ]; then
+    script logs/log_docAll_`date +%Y%m%d_%H%M%S`.txt ant -Dextra.javadoc.dir=../Orange docs
+else
+    script logs/log_docAll_`date +%Y%m%d_%H%M%S`.txt ant docs
+fi
+
+exit 0
