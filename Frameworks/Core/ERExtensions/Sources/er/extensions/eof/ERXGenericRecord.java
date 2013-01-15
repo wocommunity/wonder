@@ -975,6 +975,10 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 				.append(" pk:\"").append(primaryKey()).append("\">").toString();
 	}
 
+	/**
+	 * @deprecated use {@link #toString()} instead
+	 */
+	@Deprecated
 	public String description() {
 		return toString();
 	}

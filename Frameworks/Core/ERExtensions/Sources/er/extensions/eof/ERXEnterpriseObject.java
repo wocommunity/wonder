@@ -550,7 +550,9 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
     /**
      * Cover method to return <code>toString</code>.
      * @return the results of calling toString.
+     * @deprecated use {@link #toString()} instead
      */
+    @Deprecated
     public abstract String description();
 
     /**
