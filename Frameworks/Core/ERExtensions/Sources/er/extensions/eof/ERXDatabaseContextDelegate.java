@@ -62,6 +62,8 @@ import er.extensions.statistics.ERXStats.Group;
 public class ERXDatabaseContextDelegate {
 	
 	public static final String DatabaseContextFailedToFetchObject = "DatabaseContextFailedToFetchObject";
+	public static final String ERX_ADAPTOR_EXCEPTIONS_REGEX = "er.extensions.ERXDatabaseContextDelegate.Exceptions.regex";
+	public static final String ERX_ADAPTOR_EXCEPTIONS_REGEX_DEFAULT = ".*_obtainOpenChannel.*";
 	
     public static class ObjectNotAvailableException extends EOObjectNotAvailableException {
     	/**
@@ -171,6 +173,11 @@ public class ERXDatabaseContextDelegate {
 	 * driver, as opposed to the cooked EOGeneralAdaptorException you get from
 	 * EOF. To see the exceptions trace, set the logger
 	 * er.transaction.adaptor.Exceptions to DEBUG.
+	 * To configure other exception messages to trigger database reconnection
+	 * from this method set property er.extensions.ERXDatabaseContextDelegate.Exceptions.regex
+	 * to a Java regular expression to match the exception message(s) you wish
+	 * to trigger the database reconnection. The default messages is:
+	 * ".*_obtainOpenChannel.*".
 	 * 
 	 * @param databaseContext the current database context
 	 * @param throwable the original exception
@@ -180,18 +187,15 @@ public class ERXDatabaseContextDelegate {
 		if(!reportingError.canEnter(databaseContext)) return true;
 		try {
 			if(exLog.isDebugEnabled()) {
+				exLog.debug("Exception message: '" + throwable.getMessage() + "'");
 				exLog.debug("Database Exception occured: " + throwable, throwable);
 			} else if(exLog.isInfoEnabled()) {
+				exLog.info("Exception message: '" + throwable.getMessage() + "'");
 				exLog.info("Database Exception occured: " + throwable);
 			}
-			boolean handled = false;
-			try {
-				handled = ERXSQLHelper.newSQLHelper(databaseContext).handleDatabaseException(databaseContext, throwable);
-			} catch(RuntimeException e) {
-				databaseContext.rollbackChanges();
-				throw e;
-			}
-			if(!handled && throwable.getMessage() != null && throwable.getMessage().indexOf("_obtainOpenChannel") != -1) {
+			String exceptionsRegex = ERXProperties.stringForKeyWithDefault(ERX_ADAPTOR_EXCEPTIONS_REGEX, ERX_ADAPTOR_EXCEPTIONS_REGEX_DEFAULT);
+			boolean handled = ERXSQLHelper.newSQLHelper(databaseContext).handleDatabaseException(databaseContext, throwable);
+			if(!handled && throwable.getMessage() != null && exceptionsRegex.matches(throwable.getMessage())) {
 				NSArray models = databaseContext.database().models();
 				for(Enumeration e = models.objectEnumerator(); e.hasMoreElements(); ) {
 					EOModel model = (EOModel)e.nextElement();
