@@ -16,5 +16,6 @@
     	<binding defaults="Boolean" name="hideLabel"/>
     <binding defaults="Boolean" name="mini"/>
     <binding name="name"/>
+    <binding name="id"/>
     </wo>
 </wodefinitions>
