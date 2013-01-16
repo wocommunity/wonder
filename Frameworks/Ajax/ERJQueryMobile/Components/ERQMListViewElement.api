@@ -17,5 +17,6 @@
     <binding name="linkResource"/>
     <binding defaults="Boolean" name="isDialogCall"/>
     <binding name="queryDictionary"/>
+    <binding name="id"/>
     </wo>
 </wodefinitions>
