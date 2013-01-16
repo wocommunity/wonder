@@ -107,10 +107,9 @@ public class ERXTolerantSaver {
             re = _save(ec, writeAnyWay, merge);
             if (re == null || re.indexOf("deadlock") == -1) {
                 break;
-            } else {
-                try { Thread.sleep(100); } catch (InterruptedException e) {}
-                log.error("got deadlock, trying to save again");
             }
+            try { Thread.sleep(100); } catch (InterruptedException e) {}
+            log.error("got deadlock, trying to save again");
         }
         return re;
     }
@@ -120,8 +119,7 @@ public class ERXTolerantSaver {
         //this works for frontbase, add other indexOf statements for db's like oracle, ...
         if (stackTrace.indexOf("multiple transaction conflict detected") != -1) {
             return "deadlock";
-        } else {
-            return "";
         }
+        return "";
     }
 }

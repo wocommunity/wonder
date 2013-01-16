@@ -14,12 +14,11 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
 import er.directtoweb.ERD2WContainer;
-import er.directtoweb.pages.ERD2WTabInspectPage;
 
 /**
  * Assignment used to construct and cache the 
  * tab sections containers used with tab insepct
- * pages. See {@link ERD2WTabInspectPage} for 
+ * pages. See {@link er.directtoweb.pages.ERD2WTabInspectPage} for
  * information on the formats of a tab section. 
  */
 // FIXME: Should subclass Assignment instead
@@ -58,7 +57,7 @@ public class ERDTabSectionsContentsAssignment extends ERDAssignment {
     public ERDTabSectionsContentsAssignment (String key, Object value) { super(key,value); }
 
     /**
-     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This
      * assignment is not dependent on any context keys.
      * @return empty array.
      */
@@ -67,9 +66,9 @@ public class ERDTabSectionsContentsAssignment extends ERDAssignment {
     /**
      * Called when firing this assignment with the key-path:
      * <b>tabSectionsContents</b>. Constructs an array of 
-     * {@link ERD2WContainer}s representing each tab and
+     * {@link er.directtoweb.ERD2WContainer}s representing each tab and
      * optionally another array of containers representing 
-     * each section. See {@link ERD2WTabInspectPage} for the
+     * each section. See {@link er.directtoweb.pages.ERD2WTabInspectPage} for the
      * exact format of the tabs and sections.
      * @return array of containers for each tab
      */

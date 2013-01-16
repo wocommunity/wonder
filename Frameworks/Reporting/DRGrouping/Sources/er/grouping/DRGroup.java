@@ -5,7 +5,7 @@ import java.util.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 
-public class DRGroup extends Object  {
+public class DRGroup {
 
     protected DRReportModel _reportModel;
     protected DRMasterCriteria _masterCriteria;

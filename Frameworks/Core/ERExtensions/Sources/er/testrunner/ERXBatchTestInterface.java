@@ -20,7 +20,7 @@ import org.apache.log4j.Logger;
  * 
  */
 
-public class ERXBatchTestInterface extends Object implements ERXTestListener {
+public class ERXBatchTestInterface implements ERXTestListener {
 
     /** logging support */
     public static final Logger log = Logger.getLogger(ERXBatchTestInterface.class);
@@ -95,9 +95,8 @@ public class ERXBatchTestInterface extends Object implements ERXTestListener {
     private Logger userLog() {
         if (_userLog == null) {
             return log;
-        } else {
-            return _userLog;
         }
+        return _userLog;
     }
     
     public synchronized void print() {

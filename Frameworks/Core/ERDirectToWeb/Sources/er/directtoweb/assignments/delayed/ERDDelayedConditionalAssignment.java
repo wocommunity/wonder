@@ -73,7 +73,7 @@ public class ERDDelayedConditionalAssignment extends ERDDelayedAssignment implem
 
     public NSArray _dependentKeys;
     /**
-     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This
      * assignment depends upon all of the qualifier keys from the formed
      * qualifier of the value of this assignment. This array of keys is 
      * used when constructing the significant keys for the passed in keyPath.
@@ -84,9 +84,9 @@ public class ERDDelayedConditionalAssignment extends ERDDelayedAssignment implem
         if (_dependentKeys==null) {
             NSDictionary conditionAssignment;
             try {
-               conditionAssignment = (NSDictionary)this.value();
+               conditionAssignment = (NSDictionary)value();
             } catch (ClassCastException e) {
-                log.error("expected a NSDictionary object but received "+this.value(), e);
+                log.error("expected a NSDictionary object but received "+value(), e);
                 throw e;
             }
             String qualFormat =
@@ -108,7 +108,7 @@ public class ERDDelayedConditionalAssignment extends ERDDelayedAssignment implem
      */
     public Object fireNow(D2WContext c) {
         Object result = null;
-        NSDictionary conditionAssignment = (NSDictionary)this.value();
+        NSDictionary conditionAssignment = (NSDictionary)value();
         String qualFormat =
             (String)conditionAssignment.objectForKey("qualifierFormat");
         NSArray args = (NSArray)conditionAssignment.objectForKey("args");

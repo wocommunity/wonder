@@ -26,8 +26,8 @@ public class Bucket {
     public Date creationDate;
 
     public Bucket() {
-        this.name = null;
-        this.creationDate = null;
+        name = null;
+        creationDate = null;
     }
 
     public Bucket(String name, Date creationDate) {
@@ -36,6 +36,6 @@ public class Bucket {
     }
 
     public String toString() {
-        return this.name;
+        return name;
     }
 }

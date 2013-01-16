@@ -8,6 +8,7 @@ package er.corebusinesslogic;
 
 import java.util.Enumeration;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eocontrol.EOEditingContext;
@@ -23,7 +24,6 @@ import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSSelector;
 
-import er.extensions.ERXExtensions;
 import er.extensions.batching.ERXBatchNavigationBar;
 import er.extensions.components.ERXSortOrder;
 import er.extensions.eof.ERXConstant;
@@ -181,7 +181,7 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
             if (pref != null) {
                 if (value != null) {
                     String encodedValue = encodedValue(value);
-                    if (ERXExtensions.safeDifferent(encodedValue,pref.valueForKey("value"))) {
+                    if (ObjectUtils.notEqual(encodedValue, pref.valueForKey("value"))) {
                         if (log.isDebugEnabled())
                             log.debug("Updating preference "+u+": "+key+"="+encodedValue);
                         pref.takeValueForKey(encodedValue,"value");

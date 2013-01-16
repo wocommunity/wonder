@@ -111,8 +111,8 @@ public class AdminApplicationsPage extends ApplicationsPage {
     			if (hour > endScheduleWindow)
     				hour = beginScheduleWindow;
     			MInstance minstance = (MInstance) enumeration.nextElement();
-    			minstance.setSchedulingHourlyStartTime(new Integer(hour));
-    			minstance.setSchedulingInterval(new Integer(interval));
+    			minstance.setSchedulingHourlyStartTime(Integer.valueOf(hour));
+    			minstance.setSchedulingInterval(Integer.valueOf(interval));
     			processedInstance(minstance);
     			hour++;
     		}
@@ -125,7 +125,7 @@ public class AdminApplicationsPage extends ApplicationsPage {
             if (hour > endScheduleWindow)
             		hour = beginScheduleWindow;
             MInstance minstance = (MInstance) enumeration.nextElement();
-            minstance.setSchedulingDailyStartTime(new Integer(hour));
+            minstance.setSchedulingDailyStartTime(Integer.valueOf(hour));
             processedInstance(minstance);
             hour++;
         }
@@ -138,8 +138,8 @@ public class AdminApplicationsPage extends ApplicationsPage {
 			if (hour > endScheduleWindow)
 				hour = beginScheduleWindow;
 			MInstance minstance = (MInstance) enumeration.nextElement();
-			minstance.setSchedulingWeeklyStartTime(new Integer(hour));
-			minstance.setSchedulingStartDay(new Integer(startDay));
+			minstance.setSchedulingWeeklyStartTime(Integer.valueOf(hour));
+			minstance.setSchedulingStartDay(Integer.valueOf(startDay));
 			processedInstance(minstance);
 			hour++;
 		}

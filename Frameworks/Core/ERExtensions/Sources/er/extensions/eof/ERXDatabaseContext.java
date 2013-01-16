@@ -39,6 +39,7 @@ public class ERXDatabaseContext extends EODatabaseContext {
 		_fetching.set(Boolean.valueOf(fetching));
 	}
 
+	@Override
 	public NSArray objectsForSourceGlobalID(EOGlobalID gid, String name, EOEditingContext context) {
 		NSArray results;
 		boolean fetching = isFetching();
@@ -56,6 +57,7 @@ public class ERXDatabaseContext extends EODatabaseContext {
 		return results;
 	}
 
+	@Override
 	public NSArray _objectsWithFetchSpecificationEditingContext(EOFetchSpecification fetchSpec, EOEditingContext context) {
 		NSArray results;
 		boolean fetching = isFetching();
@@ -73,11 +75,13 @@ public class ERXDatabaseContext extends EODatabaseContext {
 		return results;
 	}
 	
+	@Override
 	public void _followFetchSpecification(EOFetchSpecification fetchSpec, String relationshipName, NSArray sourceObjects, EOEditingContext context) {
 		fetchSpec = ERXEOAccessHelper.adjustPrefetching(this, fetchSpec, relationshipName, sourceObjects, context);
 		super._followFetchSpecification(fetchSpec, relationshipName, sourceObjects, context);
 	}
 
+	@Override
 	public void _verifyNoChangesToReadonlyEntity(EODatabaseOperation dbOp) {
 		EOEntity entity = dbOp.entity();
 		if (entity.isReadOnly()) {
@@ -95,9 +99,7 @@ public class ERXDatabaseContext extends EODatabaseContext {
 				if (!dbOp.dbSnapshot().equals(dbOp.newRow())) {
 					throw new IllegalStateException("cannot update '" + dbOp.rowDiffsForAttributes(entity.attributes()).allKeys() + "' keys on object:" + dbOp.object() + " that corresponds to read-only entity: " + entity.name() + " in databaseContext " + this);
 				}
-				else {
-					return;
-				}
+				return;
 			}
 		}
 		// HACK: ak these methods are protected, so we call them via KVC
@@ -121,9 +123,7 @@ public class ERXDatabaseContext extends EODatabaseContext {
 					if (att.isReadOnly()) {
 						throw new IllegalStateException("cannot update read-only key '" + key + "' on object:" + dbOp.object() + " of entity: " + entity.name() + " in databaseContext " + this);
 					}
-					else {
-						throw new IllegalStateException("cannot update primary-key '" + key + "' from '" + dbSnapshot.objectForKey(key) + "' to '" + newRow.objectForKey(key) + "' on object:" + dbOp.object() + " of entity: " + entity.name() + " in databaseContext " + this);
-					}
+					throw new IllegalStateException("cannot update primary-key '" + key + "' from '" + dbSnapshot.objectForKey(key) + "' to '" + newRow.objectForKey(key) + "' on object:" + dbOp.object() + " of entity: " + entity.name() + " in databaseContext " + this);
 				}
 			}
 

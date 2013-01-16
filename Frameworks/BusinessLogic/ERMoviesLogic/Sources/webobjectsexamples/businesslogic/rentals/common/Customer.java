@@ -123,11 +123,11 @@ public class Customer extends EOGenericRecord {
 	}
 
 	public String fullName() {
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder buffer = new StringBuilder();
 		buffer.append(firstName());
 		buffer.append(' ');
 		buffer.append(lastName());
-		return new String(buffer);
+		return buffer.toString();
 	}
 
 	@SuppressWarnings("unchecked")

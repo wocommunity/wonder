@@ -60,13 +60,9 @@ public class WOHelperFunctionClassKeyValueCoding {
 				if (_NSUtilities._isClassABoolean(valueClass)) {
 					return new _BooleanFieldBinding(objectClass, key, field, valueAccessor);
 				}
-				else {
-					return new _FieldBinding(objectClass, key, field, valueAccessor);
-				}
+				return new _FieldBinding(objectClass, key, field, valueAccessor);
 			}
-			else {
-				return null;
-			}
+			return null;
 		}
 
 		  private static final Class _noArgumentTypes[] = new Class[0];
@@ -81,7 +77,6 @@ public class WOHelperFunctionClassKeyValueCoding {
 				  }
 				  catch (NoSuchMethodException exception) {
 					  NSLog._conditionallyLogPrivateException(exception);
-					  method = null;
 				  }
 				  catch (SecurityException exception) {
 					  NSLog._conditionallyLogPrivateException(exception);
@@ -98,7 +93,6 @@ public class WOHelperFunctionClassKeyValueCoding {
 		    		}
 		    		catch (NoSuchMethodException exception) {
 		    			NSLog._conditionallyLogPrivateException(exception);
-		    			method = null;
 		    		}
 		    		catch (SecurityException exception) {
 		    			NSLog._conditionallyLogPrivateException(exception);
@@ -130,13 +124,9 @@ public class WOHelperFunctionClassKeyValueCoding {
 				if (_NSUtilities._isClassABoolean(valueClass)) {
 					return new _BooleanMethodBinding(objectClass, key, method, valueAccessor);
 				}
-				else {
-					return new _MethodBinding(objectClass, key, method, valueAccessor);
-				}
+				return new _MethodBinding(objectClass, key, method, valueAccessor);
 			}
-			else {
-				return null;
-			}
+			return null;
 		}
 
 		public static _KeyBinding _methodKeySetBinding(Class objectClass, String key, String methodName) {
@@ -151,13 +141,9 @@ public class WOHelperFunctionClassKeyValueCoding {
 				if (_NSUtilities._isClassABoolean(valueClass)) {
 					return new _BooleanMethodBinding(objectClass, key, method, valueAccessor);
 				}
-				else {
-					return new _MethodBinding(objectClass, key, method, valueAccessor);
-				}
+				return new _MethodBinding(objectClass, key, method, valueAccessor);
 			}
-			else {
-				return null;
-			}
+			return null;
 		}
 
 		private static _KeyBinding _createKeyBindingForKey(Class objectClass, String key, int lookupOrder[], boolean trueForSetAndFalseForGet) {
@@ -184,7 +170,7 @@ public class WOHelperFunctionClassKeyValueCoding {
 					switch (lookup) {
 					case 0:
 
-						StringBuffer methodNameBuffer = new StringBuffer(key.length() + 3);
+						StringBuilder methodNameBuffer = new StringBuilder(key.length() + 3);
 
 						methodNameBuffer.append(trueForSetAndFalseForGet ? "set" : "get");
 
@@ -192,7 +178,7 @@ public class WOHelperFunctionClassKeyValueCoding {
 
 						methodNameBuffer.append(key.substring(1));
 
-						String methodName = new String(methodNameBuffer);
+						String methodName = methodNameBuffer.toString();
 
 						if (trueForSetAndFalseForGet) {
 							keyBinding = keyBindingCreationCallbackObject == null ? _methodKeySetBinding(objectClass, key, methodName) : keyBindingCreationCallbackObject._methodKeySetBinding(key, methodName);
@@ -207,14 +193,14 @@ public class WOHelperFunctionClassKeyValueCoding {
 								methodNameBuffer.append("is");
 								methodNameBuffer.append(Character.toUpperCase(key.charAt(0)));
 								methodNameBuffer.append(key.substring(1));
-								methodName = new String(methodNameBuffer);
+								methodName = methodNameBuffer.toString();
 								keyBinding = keyBindingCreationCallbackObject == null ? _methodKeyGetBinding(objectClass, key, methodName) : keyBindingCreationCallbackObject._methodKeyGetBinding(key, methodName);
 							}
 						}
 						break;
 					case 1:
 
-						StringBuffer underbarMethodNameBuffer = new StringBuffer(key.length() + 4);
+						StringBuilder underbarMethodNameBuffer = new StringBuilder(key.length() + 4);
 
 						underbarMethodNameBuffer.append(trueForSetAndFalseForGet ? "_set" : "_get");
 
@@ -222,7 +208,7 @@ public class WOHelperFunctionClassKeyValueCoding {
 
 						underbarMethodNameBuffer.append(key.substring(1));
 
-						String underbarMethodName = new String(underbarMethodNameBuffer);
+						String underbarMethodName = underbarMethodNameBuffer.toString();
 
 						if (trueForSetAndFalseForGet) {
 							keyBinding = keyBindingCreationCallbackObject == null ? _methodKeySetBinding(objectClass, key, underbarMethodName) : keyBindingCreationCallbackObject._methodKeySetBinding(key, underbarMethodName);
@@ -233,7 +219,7 @@ public class WOHelperFunctionClassKeyValueCoding {
 								underbarMethodNameBuffer.setLength(0);
 								underbarMethodNameBuffer.append("_");
 								underbarMethodNameBuffer.append(key);
-								underbarMethodName = new String(underbarMethodNameBuffer);
+								underbarMethodName = underbarMethodNameBuffer.toString();
 								keyBinding = keyBindingCreationCallbackObject == null ? _methodKeyGetBinding(objectClass, key, underbarMethodName) : keyBindingCreationCallbackObject._methodKeyGetBinding(key, underbarMethodName);
 							}
 							if (keyBinding == null) {
@@ -241,7 +227,7 @@ public class WOHelperFunctionClassKeyValueCoding {
 								underbarMethodNameBuffer.append("_is");
 								underbarMethodNameBuffer.append(Character.toUpperCase(key.charAt(0)));
 								underbarMethodNameBuffer.append(key.substring(1));
-								underbarMethodName = new String(underbarMethodNameBuffer);
+								underbarMethodName = underbarMethodNameBuffer.toString();
 								keyBinding = keyBindingCreationCallbackObject == null ? _methodKeyGetBinding(objectClass, key, underbarMethodName) : keyBindingCreationCallbackObject._methodKeyGetBinding(key, underbarMethodName);
 							}
 						}
@@ -256,11 +242,11 @@ public class WOHelperFunctionClassKeyValueCoding {
 						if (canAccessFieldsDirectly) {
 							keyBinding = keyBindingCreationCallbackObject == null ? _fieldKeyBinding(objectClass, key, key) : keyBindingCreationCallbackObject._fieldKeyBinding(key, key);
 							if (keyBinding == null) {
-								StringBuffer fieldNameBuffer = new StringBuffer(key.length() + 2);
+								StringBuilder fieldNameBuffer = new StringBuilder(key.length() + 2);
 								fieldNameBuffer.append("is");
 								fieldNameBuffer.append(Character.toUpperCase(key.charAt(0)));
 								fieldNameBuffer.append(key.substring(1));
-								String fieldName = new String(fieldNameBuffer);
+								String fieldName = fieldNameBuffer.toString();
 								keyBinding = keyBindingCreationCallbackObject == null ? _fieldKeyBinding(objectClass, key, fieldName) : keyBindingCreationCallbackObject._fieldKeyBinding(key, fieldName);
 							}
 						}
@@ -273,17 +259,17 @@ public class WOHelperFunctionClassKeyValueCoding {
 						}
 
 						if (canAccessFieldsDirectly) {
-							StringBuffer underbarFieldNameBuffer = new StringBuffer(key.length() + 3);
+							StringBuilder underbarFieldNameBuffer = new StringBuilder(key.length() + 3);
 							underbarFieldNameBuffer.append("_");
 							underbarFieldNameBuffer.append(key);
-							String underbarFieldName = new String(underbarFieldNameBuffer);
+							String underbarFieldName = underbarFieldNameBuffer.toString();
 							keyBinding = keyBindingCreationCallbackObject == null ? _fieldKeyBinding(objectClass, key, underbarFieldName) : keyBindingCreationCallbackObject._fieldKeyBinding(key, underbarFieldName);
 							if (keyBinding == null) {
 								underbarFieldNameBuffer.setLength(0);
 								underbarFieldNameBuffer.append("_is");
 								underbarFieldNameBuffer.append(Character.toUpperCase(key.charAt(0)));
 								underbarFieldNameBuffer.append(key.substring(1));
-								underbarFieldName = new String(underbarFieldNameBuffer);
+								underbarFieldName = underbarFieldNameBuffer.toString();
 								keyBinding = keyBindingCreationCallbackObject == null ? _fieldKeyBinding(objectClass, key, underbarFieldName) : keyBindingCreationCallbackObject._fieldKeyBinding(key, underbarFieldName);
 							}
 						}
@@ -372,17 +358,13 @@ public class WOHelperFunctionClassKeyValueCoding {
 			if (index < 0) {
 				return WOHelperFunctionClassKeyValueCoding.DefaultImplementation._keyGetBindingForKey(objectClass, keyPath);
 			}
-			else {
-				String key = keyPath.substring(0, index);
-				_KeyBinding keyBinding = WOHelperFunctionClassKeyValueCoding.DefaultImplementation._keyGetBindingForKey(objectClass, key);
-				return keyBinding != null ? WOHelperFunctionClassKeyValueCoding.DefaultImplementation.keyGetBindingForKeyPath(keyBinding.valueType(), keyPath.substring(index + 1)) : null;
-			}
-
+			String key = keyPath.substring(0, index);
+			_KeyBinding keyBinding = WOHelperFunctionClassKeyValueCoding.DefaultImplementation._keyGetBindingForKey(objectClass, key);
+			return keyBinding != null ? WOHelperFunctionClassKeyValueCoding.DefaultImplementation.keyGetBindingForKeyPath(keyBinding.valueType(), keyPath.substring(index + 1)) : null;
 		}
 
 		DefaultImplementation() {
 			throw new IllegalStateException("Cannot instantiate an instance of class " + getClass().getName());
 		}
 	}
-
 }

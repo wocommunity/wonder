@@ -245,7 +245,7 @@ public class ERXSQLHelper {
 		
 		NSMutableArray<EOEntity> foreignKeyEntities = entities.mutableClone();
 		for (EOEntity entity : entities) {
-			for (EORelationship relationship : (NSArray<EORelationship>)entity.relationships()) {
+			for (EORelationship relationship : entity.relationships()) {
 				if (!relationship.isToMany()) {
 					EOEntity destinationEntity = relationship.destinationEntity();
 					if (destinationEntity.model() != entity.model()) {
@@ -293,7 +293,7 @@ public class ERXSQLHelper {
 	 * 
 	 * @param entities
 	 *            a NSArray containing the entities for which create table
-	 *            statements should be generated or null if all entitites in the
+	 *            statements should be generated or null if all entities in the
 	 *            model should be used.
 	 * @param modelName
 	 *            the name of the EOModel
@@ -311,7 +311,7 @@ public class ERXSQLHelper {
 	 * 
 	 * @param entities
 	 *            a NSArray containing the entities for which create table
-	 *            statements should be generated or null if all entitites in the
+	 *            statements should be generated or null if all entities in the
 	 *            model should be used.
 	 * @param model
 	 *            the EOModel
@@ -367,7 +367,7 @@ public class ERXSQLHelper {
 	 * 
 	 * @param entities
 	 *            a NSArray containing the entities for which create table
-	 *            statements should be generated or null if all entitites in the
+	 *            statements should be generated or null if all entities in the
 	 *            model should be used.
 	 * @param databaseContext
 	 *            the databaseContext
@@ -1267,7 +1267,7 @@ public class ERXSQLHelper {
 
 		int maxPerQuery = maximumElementPerInClause(e.entity());
 
-		// Need to wrap this SQL in parens if there are multiple grougps
+		// Need to wrap this SQL in parenthesis if there are multiple groups
 		if (valueArray.count() > maxPerQuery) {
 			sb.append(" ( ");
 		}

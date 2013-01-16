@@ -7,6 +7,7 @@ import java.nio.charset.Charset;
 
 import java.util.zip.GZIPOutputStream;
 
+import org.apache.commons.lang.CharEncoding;
 import org.junit.Assert;
 
 import com.webobjects.foundation.NSArray;
@@ -15,9 +16,9 @@ import er.erxtest.ERXTestCase;
 
 public class ERXFileUtilitiesTest extends ERXTestCase {
 
-    private static final String defaultCharsetName = "UTF-8";
+    private static final String defaultCharsetName = CharEncoding.UTF_8;
 
-    private static final String alternateCharsetName = "ISO-8859-1";
+    private static final String alternateCharsetName = CharEncoding.ISO_8859_1;
 
     public void testSetDefaultCharset() {
 

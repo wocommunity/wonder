@@ -21,7 +21,7 @@ package com.webobjects.woextensions;
  * the index of this closing parenthesis.
  */
 
-public class WOParsedErrorLine extends Object {
+public class WOParsedErrorLine {
     protected String _packageName;
     protected String _className;
     protected String _methodName;

@@ -48,7 +48,7 @@ public class GetStreamResponse extends Response {
 		super(connection);
 		if (connection.getResponseCode() < 400) {
 			Map metadata = extractMetadata(connection);
-			this.object = new S3StreamObject(connection.getInputStream(),
+			object = new S3StreamObject(connection.getInputStream(),
 					metadata);
 		}
 	}

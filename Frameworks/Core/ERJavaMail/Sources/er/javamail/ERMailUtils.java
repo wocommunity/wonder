@@ -33,7 +33,7 @@ import er.extensions.appserver.ERXApplication;
  * @author <a href="mailto:tuscland@mac.com">Camille Troillard</a>
  * @version $Id$
  */
-public class ERMailUtils extends Object {
+public class ERMailUtils {
 
 	/** The class logger. */
 	private static Logger log = Logger.getLogger(ERMailUtils.class);

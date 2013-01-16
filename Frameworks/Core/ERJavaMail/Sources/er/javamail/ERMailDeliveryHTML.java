@@ -131,8 +131,8 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased {
 
 	protected String htmlContent() {
 		String htmlContent = null;
-		if (this.component() != null) {
-			htmlContent = this.componentContentString();
+		if (component() != null) {
+			htmlContent = componentContentString();
 		}
 		else {
 			htmlContent = _htmlContent;
@@ -157,7 +157,7 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased {
 		MimeBodyPart textPart = null;
 		MimeBodyPart htmlPart = null;
 
-		this.mimeMessage().setSentDate(new Date());
+		mimeMessage().setSentDate(new Date());
 		multipart = new MimeMultipart("alternative");
 
 		// set the plain text part
@@ -179,7 +179,7 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased {
 		htmlPart = new MimeBodyPart();
 
 		// Set the content of the html part
-		htmlPart.setContent(this.htmlContent(), "text/html; charset=\"" + charset() + "\"");
+		htmlPart.setContent(htmlContent(), "text/html; charset=\"" + charset() + "\"");
 
 		// Inline attachements
 		if (inlineAttachments().count() == 0) {
@@ -191,7 +191,7 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased {
 			relatedMultiparts.addBodyPart(htmlPart);
 
 			// add each inline attachments to the message
-			for (ERMailAttachment attachment : this.inlineAttachments()) {
+			for (ERMailAttachment attachment : inlineAttachments()) {
 				BodyPart bp = attachment.getBodyPart();
 				relatedMultiparts.addBodyPart(bp);
 			}

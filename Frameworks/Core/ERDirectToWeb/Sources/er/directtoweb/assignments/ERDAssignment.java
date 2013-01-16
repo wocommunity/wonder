@@ -157,6 +157,7 @@ public abstract class ERDAssignment extends Assignment implements ERDComputingAs
      * @param c current D2W context
      * @return result of firing the assignment.
      */
+    @Override
     public Object fire(D2WContext c) {
         Object result = null;
         try {
@@ -170,7 +171,7 @@ public abstract class ERDAssignment extends Assignment implements ERDComputingAs
             + e.getTargetException()+ " assignment was " + this + "\n\n" + "Target exception backtrace: "
             + ERXUtilities.stackTrace(e.getTargetException()));
         } catch (Exception e) {
-            log.error("Exception occurred in ERDAssignment of class: " + this.getClass().getName() 
+            log.error("Exception occurred in ERDAssignment of class: " + getClass().getName() 
             + ": " + e.toString() + " keyForMethodLookup(): " + keyForMethodLookup(c) + " assignment was " + this);
         }
         return result;

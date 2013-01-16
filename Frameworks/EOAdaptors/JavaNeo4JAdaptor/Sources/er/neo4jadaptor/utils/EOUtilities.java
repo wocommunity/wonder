@@ -110,6 +110,7 @@ public class EOUtilities {
 		Iterator<Ersatz> it = list.iterator();
 		
 		return new IteratorCursor<Ersatz>(it) {
+			@Override
 			public void close() {
 				c.close();
 			};

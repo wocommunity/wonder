@@ -341,10 +341,9 @@ public class ERXJDBCConnectionBroker implements ERXJDBCAdaptor.ConnectionBroker 
                         connection.lock();
                         result = connection.getConnection();
                         return result;
-                    } else {
-                        loop++;
-                        roundRobin++;
                     }
+                    loop++;
+                    roundRobin++;
                 }
             } while ((!gotOne) && (loop <= activeConnections));
 
@@ -510,7 +509,7 @@ public class ERXJDBCConnectionBroker implements ERXJDBCAdaptor.ConnectionBroker 
     
         private long creationDate;
     
-        private ConnectionWrapper(ERXJDBCConnectionBroker broker) throws SQLException {
+        public ConnectionWrapper(ERXJDBCConnectionBroker broker) throws SQLException {
             this.broker = broker;
             this.connection = broker.createConnection();
             this.status = FREE;

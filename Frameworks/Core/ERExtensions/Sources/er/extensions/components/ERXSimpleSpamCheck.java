@@ -2,11 +2,12 @@ package er.extensions.components;
 
 import java.util.UUID;
 
+import org.apache.commons.lang.ObjectUtils;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.foundation.NSValidation;
 
-import er.extensions.ERXExtensions;
 import er.extensions.foundation.ERXStringUtilities;
 
 /**
@@ -60,7 +61,7 @@ public class ERXSimpleSpamCheck extends ERXComponent {
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		if (context.wasFormSubmitted()) {
 			super.takeValuesFromRequest(request, context);
-			if (!ERXExtensions.safeEquals(_expectedSpamCheck, _spamCheck)) {
+			if (ObjectUtils.notEqual(_expectedSpamCheck, _spamCheck)) {
 				validationFailedWithException(new NSValidation.ValidationException("Spam check failed."), this, ERXSimpleSpamCheck.SPAM_CHECK_KEY);
 				setValueForBinding(Boolean.FALSE, "valid");
 			}

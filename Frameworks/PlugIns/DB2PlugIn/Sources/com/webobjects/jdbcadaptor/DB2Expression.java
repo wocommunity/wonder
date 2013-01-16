@@ -84,7 +84,7 @@ public class DB2Expression extends JDBCExpression {
     public DB2Expression(EOEntity entity) {
         super(entity);
 
-    	if (this.useLowercaseForCaseInsensitiveLike()) {
+    	if (useLowercaseForCaseInsensitiveLike()) {
     		_upperFunctionName = "LOWER";
     	}
 }
@@ -467,10 +467,10 @@ public class DB2Expression extends JDBCExpression {
         				|| adaptorValue instanceof Boolean) {
         			value = formatValueForAttribute(adaptorValue, eoattribute);
         		} else {
-        			throw new IllegalArgumentException(this.getClass().getName() +  ": Can't convert: " + obj + ":" + obj.getClass() + " -> " + adaptorValue + ":" +adaptorValue.getClass());
+        			throw new IllegalArgumentException(getClass().getName() +  ": Can't convert: " + obj + ":" + obj.getClass() + " -> " + adaptorValue + ":" +adaptorValue.getClass());
         		}
         	} catch(Exception ex) {
-        	  throw new IllegalArgumentException(this.getClass().getName() +  ": Exception while converting " + obj.getClass().getName(), ex);
+        	  throw new IllegalArgumentException(getClass().getName() +  ": Exception while converting " + obj.getClass().getName(), ex);
         	}
         }
         return value;
@@ -601,8 +601,8 @@ public class DB2Expression extends JDBCExpression {
 		
 		// quotes the identifier in the array
 		
-		String sourceKeyList = this.quoteArrayContents(sourceColumns).componentsJoinedByString(", ");
-		String destinationKeyList = this.quoteArrayContents(destinationColumns).componentsJoinedByString(", ");
+		String sourceKeyList = quoteArrayContents(sourceColumns).componentsJoinedByString(", ");
+		String destinationKeyList = quoteArrayContents(destinationColumns).componentsJoinedByString(", ");
 		
 		EOModel sourceModel = entity.model();
 		EOModel destModel = relationship.destinationEntity().model();
@@ -636,7 +636,7 @@ public class DB2Expression extends JDBCExpression {
     	NSMutableArray<String> result = new NSMutableArray<String>();
     	while (enumeration.hasMoreElements()) {
     		String identifier = (String) enumeration.nextElement();
-    		String quotedString = this.quoteIdentifier(identifier);
+    		String quotedString = quoteIdentifier(identifier);
     		result.addObject(quotedString);
     	}
     	return result;
@@ -650,7 +650,7 @@ public class DB2Expression extends JDBCExpression {
      * @return quoted or unquoted string (check with enableIdentifierQuoting)
      */
     private String quoteIdentifier(String identifier) {
-   		return this.externalNameQuoteCharacter() + identifier + this.externalNameQuoteCharacter();
+   		return externalNameQuoteCharacter() + identifier + externalNameQuoteCharacter();
     }
     
     
@@ -702,10 +702,10 @@ public class DB2Expression extends JDBCExpression {
       String allowsNullClauseForConstraint = allowsNullClauseForConstraint(shouldAllowNull(attribute));
       String sql;
       if (defaultValue == null) {
-          sql = _NSStringUtilities.concat(this.quoteIdentifier(attribute.columnName()), " ", columnTypeStringForAttribute(attribute), " ", allowsNullClauseForConstraint);
+          sql = _NSStringUtilities.concat(quoteIdentifier(attribute.columnName()), " ", columnTypeStringForAttribute(attribute), " ", allowsNullClauseForConstraint);
       }
       else {
-          sql = _NSStringUtilities.concat(this.quoteIdentifier(attribute.columnName()), " ", columnTypeStringForAttribute(attribute), " DEFAULT ", formatValueForAttribute(defaultValue, attribute), " ", allowsNullClauseForConstraint);
+          sql = _NSStringUtilities.concat(quoteIdentifier(attribute.columnName()), " ", columnTypeStringForAttribute(attribute), " DEFAULT ", formatValueForAttribute(defaultValue, attribute), " ", allowsNullClauseForConstraint);
       }
       appendItemToListString(sql, _listString());
     }

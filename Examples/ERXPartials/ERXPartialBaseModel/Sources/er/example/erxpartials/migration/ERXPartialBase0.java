@@ -3,7 +3,6 @@ package er.example.erxpartials.migration;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSTimestamp;
 
 import er.example.erxpartials.model.GenderType;
 import er.example.erxpartials.model.Person;

@@ -120,7 +120,7 @@ public class ERXWOTestResult extends WOComponent {
         ERXWOTestResult report = (ERXWOTestResult)WOApplication.application().pageWithName("ERXWOTestResult", new WOContext(new WORequest(null,null,null,null,null,null)));
         report.takeValueForKey(bti.testResult(), "testResult");
         report.takeValueForKey(bti.errorMessage(), "errorMessage");
-        report.takeValueForKey(new Long(bti.runTime()), "runTime");
+        report.takeValueForKey(Long.valueOf(bti.runTime()), "runTime");
         report.takeValueForKey(bti.test(), "test");
         report.takeValueForKey(bti.showExceptions() ? Boolean.TRUE : Boolean.FALSE, "showExceptions");
         return report;

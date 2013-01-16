@@ -35,6 +35,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSTimestamp;
 
 import er.extensions.appserver.ERXDirectAction;
+import er.extensions.appserver.ERXResponse;
 
 /**
  * Default handler class, gets replaced by the startup process.
@@ -69,7 +70,7 @@ public class SeleniumAction extends ERXDirectAction {
 
     
     protected WOResponse dictionaryResponse(NSDictionary<?,?> dict) {
-        WOResponse response = new WOResponse();
+        ERXResponse response = new ERXResponse();
         response.appendContentString("<html><body>");
         for (Enumeration<?> e = dict.keyEnumerator(); e.hasMoreElements();) {
             Object key = e.nextElement();
@@ -81,9 +82,7 @@ public class SeleniumAction extends ERXDirectAction {
     }
     
     protected WOResponse stringResponse(String s) {
-        WOResponse response = new WOResponse();
-        response.appendContentString(s);
-        return response;  	
+        return new ERXResponse(s);  	
     }
   
     // @Deprecated

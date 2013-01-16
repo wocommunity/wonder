@@ -13,7 +13,6 @@ import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.foundation.NSArray;
 
 import er.directtoweb.assignments.ERDAssignment;
-import er.directtoweb.assignments.ERDComputingAssignmentInterface;
 
 /**
  * This assignment calculates default page configuration
@@ -57,7 +56,7 @@ public class ERDDefaultConfigurationNameAssignment extends ERDAssignment {
     public ERDDefaultConfigurationNameAssignment (String key, Object value) { super(key,value); }
 
     /**
-     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This
      * assignment depends upon the context keys: "entity.name" and 
      * "object.entityName". This array of keys is used when constructing the 
      * significant keys for the passed in keyPath.

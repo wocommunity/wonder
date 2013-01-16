@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>wonder.frameworks</groupId>
 		<artifactId>frameworks</artifactId>
-		<version>5.7-SNAPSHOT</version>
+		<version>6.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>misc</artifactId>
 	<packaging>pom</packaging>
@@ -13,15 +13,16 @@
 	<modules>
 		<module>ERCalendar</module>
 		<module>ERCaptcha</module>
+		<module>ERCayenne</module>
+		<module>ERDistribution</module>
 		<module>ERChronic</module>
-		<module>ERDirectToRest</module>
-		<module>ERDivaliteLook</module>
 		<module>ERFirebug</module>
-		<module>EROpenID</module>
 		<module>ERPDFGeneration</module>
+		<module>ERPersistentSessionStorage</module>
 		<module>ERProfiling</module>
+		<module>ERQuartzScheduler</module>
 		<module>ERSelenium</module>
-		<module>ERWorkerChannel</module>
+		<module>ERXiss</module>
 		<module>JavaMonitorFramework</module>
 		<module>SnapshotExplorer</module>
 		<module>WOJRebel</module>

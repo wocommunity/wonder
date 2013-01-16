@@ -17,7 +17,7 @@ import com.webobjects.eocontrol.EOQualifierEvaluation;
  * 
  */
 
-public class ERDNullQualifier extends Object implements EOQualifierEvaluation {
+public class ERDNullQualifier implements EOQualifierEvaluation {
 
     private String _keyPath;
     
@@ -38,6 +38,7 @@ public class ERDNullQualifier extends Object implements EOQualifierEvaluation {
         return result;
     }
     
-    public java.lang.String description() { return this.toString(); }
+    public java.lang.String description() { return toString(); }
+    @Override
     public java.lang.String toString() { return "NullQualifier: " + _keyPath + " is null."; }
 }

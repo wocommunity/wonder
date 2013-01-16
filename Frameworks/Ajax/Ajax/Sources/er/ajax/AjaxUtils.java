@@ -66,7 +66,9 @@ public class AjaxUtils {
 	 * keep-alive and flags it as a Ajax request by adding an AJAX_REQUEST_KEY header. You can check this header in the
 	 * session to decide if you want to save the request or not.
 	 * 
-	 * @param context
+	 * @param request the current request
+	 * @param context the current context
+	 * @return a new Ajax response
 	 */
 	public static AjaxResponse createResponse(WORequest request, WOContext context) {
 		AjaxResponse response = null;
@@ -105,18 +107,24 @@ public class AjaxUtils {
 	 * already one.
 	 * 
 	 * @param message
+	 * @deprecated user {@link ERXWOContext#contextDictionary()} instead
 	 */
+	@Deprecated
 	public static NSMutableDictionary mutableUserInfo(WOMessage message) {
 		return ERXWOContext.contextDictionary();
 	}
 
 	/**
-	 * Adds a script tag with a correct resource url in the html head tag if it isn't already present in the response.
+	 * Adds a script tag with a correct resource URL in the HTML head tag if it isn't already present in the response.
 	 * 
-	 * @param context 
+	 * @param context
+	 *            the context
 	 * @param response
-	 * @param framework 
+	 *            the response
+	 * @param framework
+	 *            the framework that contains the file
 	 * @param fileName
+	 *            the name of the javascript file to add
 	 */
 	public static void addScriptResourceInHead(WOContext context, WOResponse response, String framework, String fileName) {
 		String processedFileName = fileName;
@@ -128,34 +136,44 @@ public class AjaxUtils {
 	}
 
 	/**
-	 * Calls ERXWOContext.addScriptResourceInHead with "Ajax" framework
+	 * Calls {@link #addScriptResourceInHead(WOContext, WOResponse, String, String)} with "Ajax" as framework.
 	 * 
-	 * @param context 
-	 * @param response 
-	 * @param fileName 
+	 * @param context
+	 *            the context
+	 * @param response
+	 *            the response
+	 * @param fileName
+	 *            the name of the javascript file to add
 	 */
 	public static void addScriptResourceInHead(WOContext context, WOResponse response, String fileName) {
 		AjaxUtils.addScriptResourceInHead(context, response, "Ajax", fileName);
 	}
 
 	/**
-	 * Calls ERXWOContext.addStylesheetResourceInHead
+	 * Calls {@link ERXResponseRewriter#addStylesheetResourceInHead(WOResponse, WOContext, String, String)}
 	 * 
-	 * @param context 
-	 * @param response 
-	 * @param framework 
-	 * @param fileName 
+	 * @param context
+	 *            the context
+	 * @param response
+	 *            the response
+	 * @param framework
+	 *            the framework that contains the file
+	 * @param fileName
+	 *            the name of the CSS file to add
 	 */
 	public static void addStylesheetResourceInHead(WOContext context, WOResponse response, String framework, String fileName) {
 		ERXResponseRewriter.addStylesheetResourceInHead(response, context, framework, fileName);
 	}
 
 	/**
-	 * Calls ERXWOContext.addStylesheetResourceInHead with "Ajax" framework
+	 * Calls {@link #addStylesheetResourceInHead(WOContext, WOResponse, String, String)} with "Ajax" as framework.
 	 * 
-	 * @param context 
-	 * @param response 
-	 * @param fileName 
+	 * @param context
+	 *            the context
+	 * @param response
+	 *            the response
+	 * @param fileName
+	 *            the name of the CSS file to add
 	 */
 	public static void addStylesheetResourceInHead(WOContext context, WOResponse response, String fileName) {
 		AjaxUtils.addStylesheetResourceInHead(context, response, "Ajax", fileName);
@@ -200,18 +218,21 @@ public class AjaxUtils {
 	}
 
 	/**
-	 * Calls ERXWOContext.addScriptCodeInHead.
+	 * Calls {@link er.extensions.appserver.ERXResponseRewriter#addScriptCodeInHead(WOResponse, WOContext, String)}.
 	 * 
-	 * @param response 
-	 * @param context 
-	 * @param script 
+	 * @param response
+	 *            the response to write into
+	 * @param context
+	 *            the context
+	 * @param script
+	 *            the javascript code to insert
 	 */
 	public static void addScriptCodeInHead(WOResponse response, WOContext context, String script) {
 		ERXResponseRewriter.addScriptCodeInHead(response, context, script);
 	}
 
 	/**
-	 * @deprecated use {@link ERXStringUtilities#safeIdentifierName(String)}
+	 * @deprecated use {@link er.extensions.foundation.ERXStringUtilities#safeIdentifierName(String)}
 	 */
 	@Deprecated
 	public static String toSafeElementID(String elementID) {
@@ -237,7 +258,9 @@ public class AjaxUtils {
 	 * 
 	 * @param context - WOContext
 	 * </span>
+	 * @deprecated use {@link ERXAjaxApplication#enableShouldNotStorePage()} instead
 	 */
+	@Deprecated
 	public static void updateMutableUserInfoWithAjaxInfo(WOContext context) {
 		AjaxUtils.updateMutableUserInfoWithAjaxInfo(context.response());
 	}
@@ -248,14 +271,15 @@ public class AjaxUtils {
 	 * 
 	 * @param message - WOMessage
 	 * </span>
+	 * @deprecated use {@link ERXAjaxApplication#enableShouldNotStorePage()} instead
 	 */
+	@Deprecated
 	public static void updateMutableUserInfoWithAjaxInfo(WOMessage message) {
-		NSMutableDictionary dict = AjaxUtils.mutableUserInfo(message);
-		dict.takeValueForKey(ERXAjaxSession.DONT_STORE_PAGE, ERXAjaxSession.DONT_STORE_PAGE);
+		ERXWOContext.contextDictionary().takeValueForKey(ERXAjaxSession.DONT_STORE_PAGE, ERXAjaxSession.DONT_STORE_PAGE);
 	}
 
 	/**
-	 * Returns an AjaxResponse with the given javascript as the body of the response.
+	 * Returns an {@link er.ajax.AjaxResponse} with the given javascript as the body of the response.
 	 * 
 	 * @param context the WOContext
 	 * @param javascript the javascript to send

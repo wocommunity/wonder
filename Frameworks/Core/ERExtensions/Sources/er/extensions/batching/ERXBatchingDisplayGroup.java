@@ -345,8 +345,10 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 		if (rowCount == -1) {
 			if (isBatching()) {
 				rowCount = ERXEOAccessUtilities.rowCountForFetchSpecification(dataSource().editingContext(), fetchSpecification());
-			} else {
+			} else if (dataSource() != null) {
 				rowCount = dataSource().fetchObjects().count();
+			} else if (allObjects() != null) {
+				rowCount = allObjects().count();
 			}
 			if (shouldRememberRowCount()) {
 				_rowCount = rowCount;
@@ -485,7 +487,7 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	public Object fetch() {
 		if (isBatching()) {
 			_NSDelegate delegate = null;
-			if (this.delegate() != null) {
+			if (delegate() != null) {
 				delegate = new _NSDelegate(WODisplayGroup.Delegate.class, delegate());
 				if (delegate.respondsTo("displayGroupShouldFetch") && !delegate.booleanPerform("displayGroupShouldFetch", this)) {
 		            return null;

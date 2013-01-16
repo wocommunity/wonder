@@ -14,7 +14,7 @@ import javax.mail.MessagingException;
 import javax.mail.AuthenticationFailedException;
 import javax.mail.FolderNotFoundException;
 
-public class ERIMAP extends Object {
+public class ERIMAP {
 
 	private IMAPStore imapStore;
 	
@@ -70,7 +70,7 @@ public class ERIMAP extends Object {
 	 * @return A array of ERMessage.
 	 */
 	public NSArray<ERMessage> getMessages(IMAPFolder folder) throws MessagingException {
-		return this.getMessages(folder,1,folder.getMessageCount());
+		return getMessages(folder, 1, folder.getMessageCount());
 	}	
 	
 	/*

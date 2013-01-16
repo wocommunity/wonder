@@ -3,7 +3,6 @@ package er.example.erxpartials.components;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
-import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.directtoweb.D2W;
 
 public class Main extends WOComponent {

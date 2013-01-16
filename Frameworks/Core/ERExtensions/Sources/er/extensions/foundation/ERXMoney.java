@@ -38,6 +38,7 @@ public class ERXMoney {
     value = Math.round(rs * money.scale());
     return this;
   }
+
   public ERXMoney set(final ERXMoney  rs) {
     value = rs.value;
     return this;
@@ -109,7 +110,7 @@ public class ERXMoney {
 
   @Override
   public int hashCode () {
-    return (new Long(value)).hashCode();
+    return (Long.valueOf(value)).hashCode();
   }
 
   //********************************************************************

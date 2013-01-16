@@ -166,7 +166,8 @@ public class ERXLinkButton extends WOHTMLDynamicElement {
 			throw new WODynamicElementCreationException((new StringBuilder()).append("<").append(getClass().getName()).append("> 'action' is a constant.").toString());
 		}	
 	}
-	
+
+	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		//Do nothing
 	}
@@ -175,6 +176,7 @@ public class ERXLinkButton extends WOHTMLDynamicElement {
 	 * Overridden to perform the logging, propagating the action to sub-elements and returning the
 	 * current page if an empty page is returned from super.
 	 */
+	@Override
 	public WOActionResults invokeAction(WORequest request, WOContext context) {
 		boolean submit = submitInContext(context);
 		WOActionResults result = submit?invokeButtonAction(request, context):invokeLinkAction(request, context);
@@ -190,7 +192,7 @@ public class ERXLinkButton extends WOHTMLDynamicElement {
 				}
 			}
 			if (result != null && ERXSession.anySession() != null) {
-				ERXSession.anySession().setObjectForKey(this.toString(), "ERXActionLogging");
+				ERXSession.anySession().setObjectForKey(toString(), "ERXActionLogging");
 			}
 		}
 		return result;
@@ -256,7 +258,8 @@ public class ERXLinkButton extends WOHTMLDynamicElement {
 		}
 		return invokedElement;
 	}
-	
+
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		super.appendToResponse(response, context);
 		if(submitInContext(context)) {
@@ -279,7 +282,8 @@ public class ERXLinkButton extends WOHTMLDynamicElement {
 			}
 		}
 	}
-	
+
+	@Override
 	public void appendChildrenToResponse(WOResponse response, WOContext context) {
 		_appendButtonOpenTagToResponse(response, context);
 		super.appendChildrenToResponse(response, context);
@@ -288,7 +292,8 @@ public class ERXLinkButton extends WOHTMLDynamicElement {
 		}
 		_appendButtonCloseTagToResponse(response, context);
 	}
-	
+
+	@Override
 	public void appendAttributesToResponse(WOResponse response, WOContext context) {
 		super.appendAttributesToResponse(response, context);
 		if(!submitInContext(context) && !isDisabledInContext(context)) {
@@ -307,7 +312,8 @@ public class ERXLinkButton extends WOHTMLDynamicElement {
 			_appendRelToResponse(response, context);
 		}
 	}
-	
+
+	@Override
 	protected void _appendOpenTagToResponse(WOResponse response, WOContext context) {
 		if(useIEConditionalsInContext(context) && submitInContext(context)) {
 			_appendNotIEOpenTagToResponse(response, context);
@@ -317,9 +323,9 @@ public class ERXLinkButton extends WOHTMLDynamicElement {
 			_appendIEStringToResponse(response, context);
 			_appendNotIEOpenTagToResponse(response, context);
 		}
-
 	}
-	
+
+	@Override
 	protected void _appendCloseTagToResponse(WOResponse response, WOContext context) {
 		if(useIEConditionalsInContext(context) && !submitInContext(context)) {
 			_appendNotIECloseTagToResponse(response, context);
@@ -494,7 +500,8 @@ public class ERXLinkButton extends WOHTMLDynamicElement {
 			}
 		}
 	}
-	
+
+	@Override
     public String classInContext(WOContext context) {
         String value = super.classInContext(context);
         if(defaultButtonClass) {
@@ -583,7 +590,8 @@ public class ERXLinkButton extends WOHTMLDynamicElement {
 		}
 		return value.toString();
 	}
-	
+
+	@Override
 	public String toString() {
 		return (new StringBuilder()).append("<").append(getClass().getName()).append(" action: ").append(_action).append(" actionClass: ").append(_actionClass).append(" href: ").append(_href).append(" value: ").append(_value).append(" queryDictionary: ").append(_queryDictionary).append(" otherQueryAssociations: ").append(_otherQueryAssociations).append(" pageName: ").append(_pageName).append(" fragmentIdentifier: ").append(_fragmentIdentifier).append(" disabled: ").append(_disabled).append(" secure: ").append(_secure).append(">").toString();
 	}
@@ -602,6 +610,7 @@ public class ERXLinkButton extends WOHTMLDynamicElement {
 	 * Overriding to prevent exceptions when actionClass or directActionName 
 	 * are bound, but resolve to null.
 	 */
+	@Override
 	protected String computeActionStringInContext(WOAssociation actionClass, WOAssociation directActionName, WOContext aContext) {
 
 		WOComponent aComponent = aContext.component();

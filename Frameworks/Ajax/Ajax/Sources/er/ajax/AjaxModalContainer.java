@@ -155,7 +155,7 @@ public class AjaxModalContainer extends AjaxDynamicElement {
         }
         response.appendContentString("</a>");
         if (AjaxUtils.isAjaxRequest(context.request())) {
-	        NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(response);
+	        NSMutableDictionary userInfo = ERXWOContext.contextDictionary();
 	        if (!userInfo.containsKey("er.ajax.AjaxModalContainer.init")) {
 	            AjaxUtils.appendScriptHeader(response);
 	            response.appendContentString("iBox.init()");

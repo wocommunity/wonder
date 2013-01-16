@@ -17,7 +17,7 @@ import er.extensions.foundation.ERXValueUtilities;
  * into a set of ranges, if required.
  */
  
-public class DRSubMasterCriteria extends Object  {
+public class DRSubMasterCriteria {
 
     /** Logging support */
     protected static final Logger log = Logger.getLogger(DRSubMasterCriteria.class);
@@ -439,7 +439,7 @@ public class DRSubMasterCriteria extends Object  {
             return nvts;
         } else if (val instanceof Number) {
             v = DRValueConverter.converter().doubleForValue(val) + delta;
-            return (new Double(v));
+            return (Double.valueOf(v));
         }
 
         v = DRValueConverter.converter().doubleForValue(val) + delta;

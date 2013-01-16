@@ -18,6 +18,8 @@ import java.io.UnsupportedEncodingException;
 
 import java.security.SecureRandom;
 
+import org.apache.commons.lang.CharEncoding;
+
 /**
  * BCrypt implements OpenBSD-style Blowfish password hashing using
  * the scheme described in "A Future-Adaptable Password Scheme" by
@@ -418,7 +420,7 @@ public class BCrypt {
 
 	/**
 	 * Look up the 3 bits base64-encoded by the specified character,
-	 * range-checking againt conversion table
+	 * range-checking against conversion table
 	 * @param x	the base64-encoded value
 	 * @return	the decoded value of x
 	 */
@@ -508,7 +510,7 @@ public class BCrypt {
 	}
 
 	/**
-	 * Cycically extract a word of key material
+	 * Cyclically extract a word of key material
 	 * @param data	the string to extract the data from
 	 * @param offp	a "pointer" (as a one-entry array) to the
 	 * current offset into data
@@ -529,7 +531,7 @@ public class BCrypt {
 	}
 
 	/**
-	 * Initialise the Blowfish key schedule
+	 * Initialize the Blowfish key schedule
 	 */
 	private void init_key() {
 		P = P_orig.clone();
@@ -671,7 +673,7 @@ public class BCrypt {
 
 		real_salt = salt.substring(off + 3, off + 25);
 		try {
-			passwordb = (password + (minor >= 'a' ? "\000" : "")).getBytes("UTF-8");
+			passwordb = (password + (minor >= 'a' ? "\000" : "")).getBytes(CharEncoding.UTF_8);
 		} catch (UnsupportedEncodingException uee) {
 			throw new AssertionError("UTF-8 is not supported");
 		}

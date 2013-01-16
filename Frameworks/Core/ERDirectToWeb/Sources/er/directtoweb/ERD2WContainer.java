@@ -39,6 +39,7 @@ public class ERD2WContainer implements Serializable {
         keys = new NSMutableArray(newKeys);
     }
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         if (displayName != null && displayName.trim().length() > 0) {

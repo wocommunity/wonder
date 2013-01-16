@@ -37,6 +37,8 @@ import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotificationCenter;
 
+import er.extensions.appserver.ERXHttpStatusCodes;
+import er.extensions.appserver.ERXResponse;
 import er.extensions.foundation.ERXFileUtilities;
 
 /**
@@ -58,7 +60,7 @@ public class SeleniumTestRunnerProxy extends WORequestHandler {
     // @Override
     public WOResponse handleRequest(WORequest request) {
         if(!ERSelenium.testsEnabled()) {
-            return new WOResponse();
+            return new ERXResponse(ERXHttpStatusCodes.STATUS_FORBIDDEN);
         }
  
     	NSArray pathElements = request.requestHandlerPathArray();
@@ -75,7 +77,7 @@ public class SeleniumTestRunnerProxy extends WORequestHandler {
 		log.debug("Processing file '" + filePath + "'");
 		
 		/*
-		 * Syncrhonization mistakes are possible here, but not fatal at all.
+		 * Synchronization mistakes are possible here, but not fatal at all.
 		 * At the worst case the file will be read 2-or-more times instead of 1 (if process 1
 		 * checks that the file is not cached and process 2 does the same check before
 		 * process 1 has updated the cache).
@@ -109,7 +111,7 @@ public class SeleniumTestRunnerProxy extends WORequestHandler {
 	    	}
 		}
     	
-		WOResponse response = new WOResponse();
+		ERXResponse response = new ERXResponse();
 		response.setHeader(cachedFile.mimeType, "content-type");
 		response.setContent(cachedFile.data);
 		

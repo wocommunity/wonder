@@ -170,7 +170,7 @@ public class ERXHyperlinkResource extends WOHTMLDynamicElement {
 	}
 
 	protected void _appendQueryStringToResponse(WOResponse aResponse, WOContext aContext, String aRequestHandlerPath, boolean htmlEscapeURL, boolean defaultIncludeSessionID) {
-		NSDictionary<String, Object> aQueryDict = this.computeQueryDictionaryInContext(aRequestHandlerPath != null ? aRequestHandlerPath : "", _queryDictionary, _otherQueryAssociations,
+		NSDictionary<String, Object> aQueryDict = computeQueryDictionaryInContext(aRequestHandlerPath != null ? aRequestHandlerPath : "", _queryDictionary, _otherQueryAssociations,
 				defaultIncludeSessionID, aContext);
 		if (aQueryDict.count() > 0) {
 			String aQueryString = WOCGIFormValues.getInstance().encodeAsCGIFormValues(aQueryDict, htmlEscapeURL);
@@ -187,7 +187,7 @@ public class ERXHyperlinkResource extends WOHTMLDynamicElement {
 	}
 
 	protected void _appendFragmentToResponse(WOResponse aResponse, WOContext aContext) {
-		String fragmentIdentifier = this.fragmentIdentifierInContext(aContext);
+		String fragmentIdentifier = fragmentIdentifierInContext(aContext);
 		if (fragmentIdentifier.length() > 0) {
 			aResponse.appendContentCharacter('#');
 			aResponse.appendContentString(fragmentIdentifier);
@@ -195,7 +195,7 @@ public class ERXHyperlinkResource extends WOHTMLDynamicElement {
 	}
 
 	protected void _appendCGIActionURLToResponse(WOResponse aResponse, WOContext aContext, boolean htmlEscapeURL, String actionPath) {
-		NSDictionary<String, Object> aQueryDict = this.computeQueryDictionaryInContext(actionPath, _queryDictionary, _otherQueryAssociations, true, aContext);
+		NSDictionary<String, Object> aQueryDict = computeQueryDictionaryInContext(actionPath, _queryDictionary, _otherQueryAssociations, true, aContext);
 		aResponse.appendContentString(aContext._directActionURL(actionPath, aQueryDict, secureInContext(aContext), 0, htmlEscapeURL));
 		_appendFragmentToResponse(aResponse, aContext);
 	}
@@ -203,8 +203,8 @@ public class ERXHyperlinkResource extends WOHTMLDynamicElement {
 	protected void _appendComponentActionURLToResponse(WOResponse response, WOContext context, boolean escapeHTML) {
 		String actionURL = context.componentActionURL(WOApplication.application().componentRequestHandlerKey(), secureInContext(context));
 		response.appendContentString(actionURL);
-		this._appendQueryStringToResponse(response, context, actionURL, escapeHTML, true);
-		this._appendFragmentToResponse(response, context);
+		_appendQueryStringToResponse(response, context, actionURL, escapeHTML, true);
+		_appendFragmentToResponse(response, context);
 	}
 
 	/**
@@ -232,8 +232,8 @@ public class ERXHyperlinkResource extends WOHTMLDynamicElement {
 			// This is a non relative url already.
 			response.appendContentString(staticURL);
 		}    
-		this._appendQueryStringToResponse(response, context, staticURL, escapeHTML, false);
-		this._appendFragmentToResponse(response, context);
+		_appendQueryStringToResponse(response, context, staticURL, escapeHTML, false);
+		_appendFragmentToResponse(response, context);
 	}
 
 	protected void _appendOpeningHrefToResponse(WOResponse response, WOContext context) {
@@ -241,13 +241,13 @@ public class ERXHyperlinkResource extends WOHTMLDynamicElement {
 		response.appendContentString(WOHTMLAttribute.Href);
 		response.appendContentCharacter('=');
 		response.appendContentCharacter('"');
-		String prefix = this.prefixInContext(context);
+		String prefix = prefixInContext(context);
 		if (prefix.length() > 0)
 			response.appendContentString(prefix);
 	}
 
 	protected void _appendClosingHrefToResponse(WOResponse response, WOContext context) {
-		String suffix = this.suffixInContext(context);
+		String suffix = suffixInContext(context);
 		if (suffix.length() > 0)
 			response.appendContentString(suffix);
 		response.appendContentCharacter('"');
@@ -306,11 +306,11 @@ public class ERXHyperlinkResource extends WOHTMLDynamicElement {
 	@Override
 	public void appendAttributesToResponse(WOResponse aResponse, WOContext aContext) {
 		super.appendAttributesToResponse(aResponse, aContext);
-		this._appendOpeningHrefToResponse(aResponse, aContext);
+		_appendOpeningHrefToResponse(aResponse, aContext);
 
 		if (_action != null) {
-			this._appendComponentActionURLToResponse(aResponse, aContext, true);
-			this._appendClosingHrefToResponse(aResponse, aContext);
+			_appendComponentActionURLToResponse(aResponse, aContext, true);
+			_appendClosingHrefToResponse(aResponse, aContext);
 			return;
 		} 
 
@@ -319,15 +319,15 @@ public class ERXHyperlinkResource extends WOHTMLDynamicElement {
 			if(!ERXStringUtilities.stringIsNullOrEmpty(uri)) {
 
 				if(uri.startsWith("http://") || uri.startsWith("https://") || uri.startsWith("static://")) {
-					this._appendStaticURLToResponse(aResponse, aContext, true, urlForHyperlinkResource(aContext, uri));
-					this._appendClosingHrefToResponse(aResponse, aContext);
-					this._appendDataAjaxFalseToResponse(aResponse, aContext);
+					_appendStaticURLToResponse(aResponse, aContext, true, urlForHyperlinkResource(aContext, uri));
+					_appendClosingHrefToResponse(aResponse, aContext);
+					_appendDataAjaxFalseToResponse(aResponse, aContext);
 					return;
 				} 
 
 				if(uri.startsWith("page://")) {
-					this._appendStaticURLToResponse(aResponse, aContext, true, urlForHyperlinkResource(aContext, uri));
-					this._appendClosingHrefToResponse(aResponse, aContext);
+					_appendStaticURLToResponse(aResponse, aContext, true, urlForHyperlinkResource(aContext, uri));
+					_appendClosingHrefToResponse(aResponse, aContext);
 					return;
 				}
 
@@ -348,30 +348,30 @@ public class ERXHyperlinkResource extends WOHTMLDynamicElement {
 
 					if ((actionClass != null) || (directActionName != null)) {
 						String actionPath = computeActionStringInContext(actionClass, directActionName, aContext);
-						this._appendCGIActionURLToResponse(aResponse, aContext, true, actionPath); 
+						_appendCGIActionURLToResponse(aResponse, aContext, true, actionPath); 
 					}          
-					this._appendClosingHrefToResponse(aResponse, aContext);
-					this._appendDataAjaxFalseToResponse(aResponse, aContext);
+					_appendClosingHrefToResponse(aResponse, aContext);
+					_appendDataAjaxFalseToResponse(aResponse, aContext);
 					return;
 				}
 
 				if(uri.startsWith("rest://") || uri.startsWith("ra://")) {
-					this._appendStaticURLToResponse(aResponse, aContext, true, urlForHyperlinkResource(aContext, uri));
-					this._appendClosingHrefToResponse(aResponse, aContext);
-					this._appendDataAjaxFalseToResponse(aResponse, aContext);
+					_appendStaticURLToResponse(aResponse, aContext, true, urlForHyperlinkResource(aContext, uri));
+					_appendClosingHrefToResponse(aResponse, aContext);
+					_appendDataAjaxFalseToResponse(aResponse, aContext);
 					return;
 				}
 
 				if(uri.startsWith("cms://")) {
-					this._appendStaticURLToResponse(aResponse, aContext, true, urlForHyperlinkResource(aContext, uri));
-					this._appendClosingHrefToResponse(aResponse, aContext);
-					this._appendDataAjaxFalseToResponse(aResponse, aContext);
+					_appendStaticURLToResponse(aResponse, aContext, true, urlForHyperlinkResource(aContext, uri));
+					_appendClosingHrefToResponse(aResponse, aContext);
+					_appendDataAjaxFalseToResponse(aResponse, aContext);
 					return;
 				}
 
 			}
 		} 
-		this._appendClosingHrefToResponse(aResponse, aContext);
+		_appendClosingHrefToResponse(aResponse, aContext);
 	}
 
 	//********************************************************************

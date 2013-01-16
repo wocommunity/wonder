@@ -15,6 +15,9 @@ import com.webobjects.monitor._private.MInstance;
 import com.webobjects.monitor._private.MObject;
 import com.webobjects.monitor._private.MSiteConfig;
 
+import er.extensions.appserver.ERXHttpStatusCodes;
+import er.extensions.appserver.ERXResponse;
+
 /**
  * <p>
  * The following direct actions were added to Monitor. They might be useful for
@@ -336,8 +339,7 @@ public class AdminAction extends WODirectAction {
     }
 
     public WOActionResults infoAction() {
-        WOResponse woresponse = new WOResponse();
-        woresponse.setStatus(200);
+        ERXResponse woresponse = new ERXResponse();
         String result = "";
         for (Enumeration enumeration = instances.objectEnumerator(); enumeration.hasMoreElements();) {
             MInstance minstance = (MInstance) enumeration.nextElement();
@@ -378,9 +380,7 @@ public class AdminAction extends WODirectAction {
     }
 
     public WOActionResults runningAction() {
-        WOResponse woresponse = new WOResponse();
-        woresponse.setContent("YES");
-        woresponse.setStatus(200);
+        ERXResponse woresponse = new ERXResponse("YES");
         String num = (String) context().request().formValueForKey("num");
     	int numberOfInstancesRequested = -1;
         if (num != null && !num.equals("") && !num.equalsIgnoreCase("all")) {
@@ -402,30 +402,26 @@ public class AdminAction extends WODirectAction {
         }
         if ((numberOfInstancesRequested == -1 && instancesAlive < instances.count()) || instancesAlive < numberOfInstancesRequested) {
         	woresponse.setContent("NO");
-            woresponse.setStatus(417);
+            woresponse.setStatus(ERXHttpStatusCodes.EXPECTATION_FAILED);
         }
         return woresponse;
     }
 
     public WOActionResults stoppedAction() {
-        WOResponse woresponse = new WOResponse();
-        woresponse.setContent("YES");
-        woresponse.setStatus(200);
+        ERXResponse woresponse = new ERXResponse("YES");
         for (Enumeration enumeration = instances.objectEnumerator(); enumeration.hasMoreElements();) {
             MInstance minstance = (MInstance) enumeration.nextElement();
             if (minstance.state == MObject.DEAD)
                 continue;
             woresponse.setContent("NO");
-            woresponse.setStatus(417);
+            woresponse.setStatus(ERXHttpStatusCodes.EXPECTATION_FAILED);
             break;
         }
         return woresponse;
     }
 
     public WOActionResults bounceAction() {
-        WOResponse woresponse = new WOResponse();
-        woresponse.setContent("OK");
-        woresponse.setStatus(200);
+        ERXResponse woresponse = new ERXResponse("OK");
         String bouncetype = (String) context().request().formValueForKey("bouncetype");
         String maxwaitString = (String) context().request().formValueForKey("maxwait");
         if (bouncetype == null || bouncetype == "" || bouncetype.equalsIgnoreCase("graceful")) {
@@ -444,7 +440,7 @@ public class AdminAction extends WODirectAction {
         	applicationsPage().bounceRolling(applications);
         } else {
         	woresponse.setContent("Unknown bouncetype");
-            woresponse.setStatus(406);
+            woresponse.setStatus(ERXHttpStatusCodes.NOT_ACCEPTABLE);
         }
         return woresponse;
     }
@@ -611,7 +607,7 @@ public class AdminAction extends WODirectAction {
     }
 
     public WOActionResults performActionNamed(String s) {
-        WOResponse woresponse = new WOResponse();
+        WOResponse woresponse = new ERXResponse();
         if (!siteConfig().isPasswordRequired() || siteConfig().compareStringWithPassword(context().request().stringFormValueForKey("pw"))) {
             try {
                 WOActionResults woactionresults = performMonitorActionNamed(s);
@@ -619,18 +615,17 @@ public class AdminAction extends WODirectAction {
                     woresponse = (WOResponse) woactionresults;
                 } else {
                     woresponse.setContent("OK");
-                    woresponse.setStatus(200);
                 }
             } catch (DirectActionException directactionexception) {
                 woresponse.setStatus(directactionexception.status);
                 woresponse.setContent(s + " action failed: " + directactionexception.getMessage());
             } catch (Exception throwable) {
-                woresponse.setStatus(500);
+                woresponse.setStatus(ERXHttpStatusCodes.INTERNAL_ERROR);
                 woresponse.setContent(s + " action failed: " + throwable.getMessage() + ". See Monitor's log for a stack trace.");
                 throwable.printStackTrace();
             }
         } else {
-            woresponse.setStatus(403);
+            woresponse.setStatus(ERXHttpStatusCodes.STATUS_FORBIDDEN);
             woresponse.setContent("Monitor is password protected - password missing or incorrect.");
         }
         return woresponse;

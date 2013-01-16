@@ -193,7 +193,7 @@ public class AjaxExpansion extends AjaxComponent {
 
 	/**
 	 * Returns an escaped version of {@link #string()} using
-	 * {@link ERXStringUtilities#escapeJavascriptApostrophes(String)}.
+	 * {@link er.extensions.foundation.ERXStringUtilities#escapeJavascriptApostrophes(String)}.
 	 * 
 	 * @return escaped string
 	 */

@@ -160,7 +160,7 @@ public  class ERXRequest extends WORequest {
         if (_browserLanguages == null) {
         	NSMutableArray<String> languageKeys = new NSMutableArray<String>();
             NSArray<String> fixedLanguages = null;
-            String string = this.headerForKey("accept-language");
+            String string = headerForKey("accept-language");
             if (string != null) {
                 NSArray<String> rawLanguages = NSArray.componentsSeparatedByString(string, ",");
                 fixedLanguages = fixAbbreviationArray(rawLanguages);
@@ -341,6 +341,7 @@ public  class ERXRequest extends WORequest {
     }
 
     private static class _LanguageComparator extends NSComparator {
+        public _LanguageComparator() {}
 
         private static float quality(String languageString) {
             float result=0f;

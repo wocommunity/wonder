@@ -11,14 +11,13 @@ import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.foundation.NSArray;
 
 import er.directtoweb.assignments.ERDAssignment;
-import er.directtoweb.assignments.ERDComputingAssignmentInterface;
 import er.directtoweb.assignments.ERDLocalizableAssignmentInterface;
 import er.directtoweb.assignments.ERDLocalizedAssignment;
 
 // FIXME: Should be renamed ERDDefaultLocalizedMessageAssignment.
 /**
  * Message assignment used when hitting a cancel button, just a little "Are you sure?" kind of thing.<br />
- * @deprecated use {@link ERDLocalizedAssignment}
+ * @deprecated use {@link er.directtoweb.assignments.ERDLocalizedAssignment}
  */
 @Deprecated
 public class ERDDefaultCancelCreationMessageAssignment extends ERDAssignment implements ERDLocalizableAssignmentInterface {
@@ -60,7 +59,7 @@ public class ERDDefaultCancelCreationMessageAssignment extends ERDAssignment imp
     public ERDDefaultCancelCreationMessageAssignment (String key, Object value) { super(key,value); }
 
     /**
-     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This
      * assignment depends upon the context key: "entity.name". This array 
      * of keys is used when constructing the 
      * significant keys for the passed in keyPath.

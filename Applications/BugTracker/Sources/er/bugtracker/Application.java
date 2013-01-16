@@ -16,7 +16,6 @@ import er.extensions.appserver.navigation.ERXNavigationManager;
 import er.extensions.components._private.ERXSubmitButton;
 import er.extensions.foundation.ERXPatcher;
 import er.extensions.foundation.ERXProperties;
-import er.rest.entityDelegates.ERXRestRequestHandler;
 
 public class Application extends ERXApplication {
 
@@ -34,7 +33,6 @@ public class Application extends ERXApplication {
     public Application() {
         ERXNavigationManager.manager().configureNavigation();
         setContextClassName("er.extensions.appserver.ERXWOContext");
-        registerRequestHandler(ERXRestRequestHandler.createUnsafeRequestHandler(false, false), "rest");
         registerRequestHandler(new ERXDelayedRequestHandler(), ERXDelayedRequestHandler.KEY);
         setPageRefreshOnBacktrackEnabled(true);
         ERXPatcher.setClassForName(ERXSubmitButton.class, "WOSubmitButton");
