@@ -1,9 +1,3 @@
-/*
- * Created on Jan 27, 2004
- *
- * To change the template for this generated file go to
- * Window - Preferences - Java - Code Generation - Code and Comments
- */
 package er.extensions.components._private;
 
 import org.apache.log4j.Logger;
@@ -17,7 +11,6 @@ import com.webobjects.appserver._private.WOHyperlink;
 import com.webobjects.appserver._private.WONoContentElement;
 import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXSession;
 import er.extensions.foundation.ERXProperties;
 
@@ -62,6 +55,7 @@ public class ERXHyperlink extends WOHyperlink {
      * Overridden to perform the logging, propagating the action to subelements and returning the
      * current page if an empty page is returned from super.
      */
+    @Override
     public WOActionResults invokeAction(WORequest request, WOContext context) {
         WOActionResults result = super.invokeAction(request, context);
         if(result != null && (result instanceof WONoContentElement)) {
@@ -75,7 +69,7 @@ public class ERXHyperlink extends WOHyperlink {
             }
         }
         if (result != null && ERXSession.anySession() != null) {
-        	ERXSession.anySession().setObjectForKey(this.toString(), "ERXActionLogging");
+        	ERXSession.anySession().setObjectForKey(toString(), "ERXActionLogging");
         }
         return result;
     }

@@ -65,7 +65,7 @@ import org.apache.log4j.Logger;
  *	MemcachedClient mc = new MemcachedClient();
  *	String key   = "cacheKey1";	
  *	Object value = SomeClass.getObject();	
- *	Integer hash = new Integer(45);	
+ *	Integer hash = Integer.valueOf(45);	
  *	mc.set(key, value, hash);
  * </pre> 
  * The set method shown above will always set the object in the cache.<br/>
@@ -84,14 +84,14 @@ import org.apache.log4j.Logger;
  * <pre>
  *	MemcachedClient mc = new MemcachedClient();
  *	String key   = "cacheKey1";	
- *	Integer hash = new Integer(45);	
+ *	Integer hash = Integer.valueOf(45);	
  *	mc.delete(key, hashCode);
  * </pre> 
  * <h3>To store a counter and then increment or decrement that counter:</h3>
  * <pre>
  *	MemcachedClient mc = new MemcachedClient();
  *	String key   = "counterKey";	
- *	mc.storeCounter(key, new Integer(100));
+ *	mc.storeCounter(key, Integer.valueOf(100));
  *	System.out.println("counter after adding      1: " mc.incr(key));	
  *	System.out.println("counter after adding      5: " mc.incr(key, 5));	
  *	System.out.println("counter after subtracting 4: " mc.decr(key, 4));	
@@ -101,8 +101,8 @@ import org.apache.log4j.Logger;
  * <pre>
  *	MemcachedClient mc = new MemcachedClient();
  *	String key   = "counterKey";	
- *	Integer hash = new Integer(45);	
- *	mc.storeCounter(key, new Integer(100), hash);
+ *	Integer hash = Integer.valueOf(45);	
+ *	mc.storeCounter(key, Integer.valueOf(100), hash);
  *	System.out.println("counter after adding      1: " mc.incr(key, 1, hash));	
  *	System.out.println("counter after adding      5: " mc.incr(key, 5, hash));	
  *	System.out.println("counter after subtracting 4: " mc.decr(key, 4, hash));	
@@ -118,7 +118,7 @@ import org.apache.log4j.Logger;
  * <pre>
  *	MemcachedClient mc = new MemcachedClient();
  *	String key   = "key";	
- *	Integer hash = new Integer(45);	
+ *	Integer hash = Integer.valueOf(45);	
  *	Object value = mc.get(key, hash);	
  * </pre> 
  * <h3>To retrieve an multiple objects from the cache</h3>
@@ -131,7 +131,7 @@ import org.apache.log4j.Logger;
  * <pre>
  *	MemcachedClient mc = new MemcachedClient();
  *	String[] keys      = { "key", "key1", "key2" };
- *	Integer[] hashes   = { new Integer(45), new Integer(32), new Integer(44) };
+ *	Integer[] hashes   = { Integer.valueOf(45), Integer.valueOf(32), Integer.valueOf(44) };
  *	Map&lt;Object&gt; values = mc.getMulti(keys, hashes);
  * </pre> 
  * <h3>To flush all items in server(s)</h3>

@@ -86,7 +86,7 @@ public class NSTimestampHelper {
       buffer.append(":");
       
       int minute = calendar.get(Calendar.MINUTE);
-      buffer.append(String.format("%02d", minute));
+      buffer.append(String.format("%02d", Integer.valueOf(minute)));
       buffer.append("");
       
       if(calendar.get(Calendar.AM_PM) == Calendar.PM) {
@@ -129,7 +129,7 @@ public class NSTimestampHelper {
 	    buffer.append(":");
 	    
 	    int minute = calendar.get(Calendar.MINUTE);
-	    buffer.append(String.format("%02d", minute));
+	    buffer.append(String.format("%02d", Integer.valueOf(minute)));
 	    buffer.append("");
 	    
 	    if(calendar.get(Calendar.AM_PM) == Calendar.PM) {

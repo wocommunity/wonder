@@ -120,6 +120,7 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 		dos.writeShort(0);
 		dos.writeByte(ERXSimpleMulticastSynchronizer.JOIN);
 		dos.flush();
+		dos.close();
 		_multicastSocket.send(baos.createDatagramPacket());
 	}
 
@@ -135,11 +136,13 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 		dos.writeShort(0);
 		dos.writeByte(ERXSimpleMulticastSynchronizer.LEAVE);
 		dos.flush();
+		dos.close();
 		_multicastSocket.send(baos.createDatagramPacket());
 		_multicastSocket.leaveGroup(_multicastGroup, _localNetworkInterface);
 		_listening = false;
 	}
-	
+
+	@Override
 	protected boolean handleMessageType(int messageType, RemoteChange remoteChange, DataInputStream dis) {
 		boolean handled = false;
 		if (messageType == ERXSimpleMulticastSynchronizer.JOIN) {
@@ -227,6 +230,7 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 		dos.writeShort(transactionSize);
 		_writeCacheChange(dos, cacheChange);
 		dos.flush();
+		dos.close();
 		_multicastSocket.send(baos.createDatagramPacket());
 		if (ERXRemoteSynchronizer.log.isDebugEnabled()) {
 			ERXRemoteSynchronizer.log.debug("Multicast instance " + ERXStringUtilities.byteArrayToHexString(_identifier) + ": Writing " + cacheChange);

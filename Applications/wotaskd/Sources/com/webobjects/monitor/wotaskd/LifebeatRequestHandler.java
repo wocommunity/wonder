@@ -58,8 +58,6 @@ public class LifebeatRequestHandler extends WORequestHandler {
     }
 
     public WOResponse handleRequest(WORequest aRequest) {
-        WOResponse aResponse  = null;
-
         // Sadly, we do regenerate in the case of random lifebeats. Hopefully this won't be too often.
         // Didn't pull this out so that we can rely on isUsingWebServer to catch some bad requests
         if ( (!aRequest.isUsingWebServer()) && (WOHostUtilities.isLocalInetAddress(aRequest._originatingAddress(), true)) ) {
@@ -68,9 +66,8 @@ public class LifebeatRequestHandler extends WORequestHandler {
                 synchronized(lock) {
                     return _handleRequest(aRequest);
                 }
-            } else {
-                return _handleRequest(aRequest);
             }
+            return _handleRequest(aRequest);
         }
         return null;
     }
@@ -168,9 +165,8 @@ public class LifebeatRequestHandler extends WORequestHandler {
                 instance.updateRegistration(new NSTimestamp());
                 // This call will reset shouldDie status!;
                 return !instance.shouldDieAndReset();
-            } else {
-                ((Application) WOApplication.application()).localMonitor().registerUnknownInstance(instanceName, host, port);
             }
+            ((Application) WOApplication.application()).localMonitor().registerUnknownInstance(instanceName, host, port);
         } finally {
             theApplication._lock.endReading();
         }

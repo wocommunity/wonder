@@ -161,7 +161,7 @@ public class ERXUtilities {
     }
 
     /**
-     * @deprecated see {@link ERXEOAccessUtilities.makeEditableSharedEntityNamed(String)}
+     * @deprecated see {@link ERXEOAccessUtilities#makeEditableSharedEntityNamed(String)}
      */
     @Deprecated
     public static void makeEditableSharedEntityNamed(String entityName) {
@@ -169,7 +169,7 @@ public class ERXUtilities {
     }
 
     /**
-     * @deprecated see {@link ERXEOControlUtilities.dataSourceForArray(NSArray)}
+     * @deprecated see {@link ERXEOControlUtilities#dataSourceForArray(NSArray)}
      */
     @Deprecated
     public static EOArrayDataSource dataSourceForArray(NSArray array) {

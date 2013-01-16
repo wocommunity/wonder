@@ -487,7 +487,7 @@ public class ERXBatchingDisplayGroup<T> extends ERXDisplayGroup<T> {
 	public Object fetch() {
 		if (isBatching()) {
 			_NSDelegate delegate = null;
-			if (this.delegate() != null) {
+			if (delegate() != null) {
 				delegate = new _NSDelegate(WODisplayGroup.Delegate.class, delegate());
 				if (delegate.respondsTo("displayGroupShouldFetch") && !delegate.booleanPerform("displayGroupShouldFetch", this)) {
 		            return null;

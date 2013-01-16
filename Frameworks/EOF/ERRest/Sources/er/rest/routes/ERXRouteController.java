@@ -1644,7 +1644,7 @@ public class ERXRouteController extends WODirectAction {
 			}
 		}
 		if (allowJSONP()) {
-			if (this.format().equals(ERXRestFormat.json())) {
+			if (format().equals(ERXRestFormat.json())) {
 				String callbackMethodName = request().stringFormValueForKey("callback");
 				if (callbackMethodName != null) {
 					WOResponse response = results.generateResponse();

@@ -181,7 +181,7 @@ public class EGSimpleWorkbookHelper {
 	}
 
 	public Number numberAtLocation(int rownum, int colnum) {
-		return new Double(this.cellAtLocation(rownum, colnum).getNumericCellValue());
+		return Double.valueOf(this.cellAtLocation(rownum, colnum).getNumericCellValue());
 	}
 
 	public void setNumberAtLocation(Number value, int rownum, int colnum) {

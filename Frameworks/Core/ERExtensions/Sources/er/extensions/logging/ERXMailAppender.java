@@ -376,7 +376,7 @@ public class ERXMailAppender extends AppenderSkeleton {
             LogLog.error("Attempting to log an event with a null domain name and a null from address!");
         } else if (toAddressesAsArray().count() == 0) {
             LogLog.error("Attempting to log with an empty array of toAddresses");
-        } else if (this.layout == null) {
+        } else if (layout == null) {
             LogLog.warn("Attempting to log an event to an ERCMailMessageAppender without a layout specified.");
         } else {
             conditionsChecked = true;
@@ -460,7 +460,7 @@ public class ERXMailAppender extends AppenderSkeleton {
             result.setObjectForKey(composeTitle, "errorMessage");
         }
 
-        String message = this.layout.format(event);
+        String message = layout.format(event);
         if(message != null) {
             result.setObjectForKey(message, "formattedMessage");
         }
@@ -489,6 +489,7 @@ public class ERXMailAppender extends AppenderSkeleton {
      * Where the actual logging event is processed and a
      * mail message is generated.
      * @param event logging event
+     * @return mail body
      */
     public String composeMessage(LoggingEvent event) {
         String result;
@@ -516,7 +517,7 @@ public class ERXMailAppender extends AppenderSkeleton {
                 }
             }
         } else {
-            result = this.layout.format(event);
+            result = layout.format(event);
             result = result + "\n" + ERXUtilities.stackTrace();
         }
         return result;

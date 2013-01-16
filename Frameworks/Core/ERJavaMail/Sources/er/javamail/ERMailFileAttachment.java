@@ -78,12 +78,12 @@ public class ERMailFileAttachment extends ERMailAttachment {
 	@Override
 	protected BodyPart getBodyPart() throws MessagingException {
 		MimeBodyPart bp = new MimeBodyPart();
-		DataSource ds = new FileDataSource((File) this.content());
+		DataSource ds = new FileDataSource((File) content());
 		bp.setDataHandler(new DataHandler(ds));
 
-		if (this.contentID() != null)
-			bp.setHeader("Content-ID", this.contentID());
-		bp.setFileName(this.fileName());
+		if (contentID() != null)
+			bp.setHeader("Content-ID", contentID());
+		bp.setFileName(fileName());
 
 		return bp;
 	}

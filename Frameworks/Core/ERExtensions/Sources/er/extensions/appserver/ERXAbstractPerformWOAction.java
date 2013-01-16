@@ -18,7 +18,6 @@ import er.extensions.appserver.ERXWOContext;
  * is performing an action.
  *
  * @author kieran
- *
  */
 public abstract class ERXAbstractPerformWOAction implements IERXPerformWOAction {
     // Used for logging only
@@ -30,13 +29,13 @@ public abstract class ERXAbstractPerformWOAction implements IERXPerformWOAction 
         if (log.isDebugEnabled()) {
             WOContext context = ERXWOContext.currentContext();
             pageNameThatCreated = (context == null ? "Unknown" : context.page().name());
-            log.info("Controller named '" + this.getClass().getName() + "' just instantiated in page named '" + pageNameThatCreated + "'");
+            log.info("Controller named '" + getClass().getName() + "' just instantiated in page named '" + pageNameThatCreated + "'");
         }
     }
 
     public <T extends WOComponent> T pageWithName(Class<T> componentClass) {
         if (log.isDebugEnabled())
-            log.debug("Controller named '" + this.getClass().getName()
+            log.debug("Controller named '" + getClass().getName()
                             + "' which was originally created on " + pageNameThatCreated
                             + "' is creating pageWithName '" + componentClass.getName()
                             + "' while performing action in page '"
@@ -48,6 +47,6 @@ public abstract class ERXAbstractPerformWOAction implements IERXPerformWOAction 
     public WOContext context() {
         return ERXWOContext.currentContext();
     }
-    
+
     public abstract WOActionResults performAction();
 }

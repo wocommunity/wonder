@@ -1620,6 +1620,8 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 			}
 		}
 
+		optionalPropertiesLoader(ERXSystem.getProperty("user.name"), propertiesPaths, projectsInfo);
+		
         /** /etc/WebObjects/AppName/Properties -- per-Application-per-Machine properties */
         String applicationMachinePropertiesPath = ERXProperties.applicationMachinePropertiesPath("Properties");
     	addIfPresent("Application-Machine Properties", applicationMachinePropertiesPath, propertiesPaths, projectsInfo);
@@ -1631,8 +1633,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         /** Properties.<userName> -- per-Application-per-User properties */
         String applicationUserPropertiesPath = ERXProperties.applicationUserProperties();
     	addIfPresent("Application-User Properties", applicationUserPropertiesPath, propertiesPaths, projectsInfo);
-        
-        optionalPropertiesLoader(ERXSystem.getProperty("user.name"), propertiesPaths, projectsInfo);
 
         /*  Report the result */
 		if (reportLoggingEnabled && projectsInfo.count() > 0 && log.isInfoEnabled()) {
@@ -2855,7 +2855,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
                 }
 
                 // Detect mutually recursing props files by tracking what we've already loaded:
-                String existingIncludeProps = this.getProperty(_Properties.IncludePropsKey);
+                String existingIncludeProps = getProperty(_Properties.IncludePropsKey);
                 if (existingIncludeProps == null) {
                 	existingIncludeProps = "";
                 }
@@ -2872,7 +2872,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 
                 try {
                     log.info("_Properties.load(): Including props file: " + propsFile);
-					this.load(propsFile);
+					load(propsFile);
 				} catch (IOException e) {
 					throw new RuntimeException("Failed to load the property file '" + value + "'.", e);
 				}

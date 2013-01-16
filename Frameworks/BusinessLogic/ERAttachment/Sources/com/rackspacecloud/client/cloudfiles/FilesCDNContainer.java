@@ -90,7 +90,7 @@ public class FilesCDNContainer {
 		return referrerACL;
 	}
 	/**
-	 * @param refererACL the refererACL to set
+	 * @param referrerACL the refererACL to set
 	 */
 	public void setReferrerACL(String referrerACL) {
 		this.referrerACL = "".equals(referrerACL) ? null : referrerACL;
@@ -159,7 +159,7 @@ public class FilesCDNContainer {
 
 	/**
 	 * 
-	 * @param sstreamingURL the streamingURL to set
+	 * @param streamingURL the streamingURL to set
 	 */
 	void setStreamingURL(String streamingURL) {
 		this.streamingURL = streamingURL;

@@ -234,11 +234,11 @@ public class AjaxInPlace extends WOComponent {
 	}
 	
   public boolean button() {
-    return AjaxUtils.booleanValueForBinding("button", true, _keyAssociations, parent());
+    return ERXComponentUtilities.booleanValueForBinding("button", true, _keyAssociations, parent());
   }
 
 	public boolean submitOnSave() {
-		return AjaxUtils.booleanValueForBinding("submitOnSave", true, _keyAssociations, parent());
+		return ERXComponentUtilities.booleanValueForBinding("submitOnSave", true, _keyAssociations, parent());
 	}
 
 	public boolean linkOnSave() {

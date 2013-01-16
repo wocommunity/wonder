@@ -185,7 +185,7 @@ public class AjaxObserveField extends AjaxDynamicElement {
 			if (result == null) {
 				result = handleRequest(worequest, wocontext);
 			}
-			AjaxUtils.updateMutableUserInfoWithAjaxInfo(wocontext);
+			ERXAjaxApplication.enableShouldNotStorePage();
 		} else {
 			result = invokeChildrenAction(worequest, wocontext);
 		}

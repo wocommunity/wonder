@@ -52,7 +52,7 @@ public class ERQSSchedulerAppHelper
      * When JavaMonitor tells us to terminate, all jobs must be removed.  The application won't actually terminate
      * until all jobs are done.
      *
-     * @see #isTerminating()
+     * @see #isTerminating(boolean)
      */
 	public static void _terminateFromMonitor()
     {

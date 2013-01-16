@@ -255,7 +255,7 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
 
 	public boolean omitLabelSpanTag() {
 		if (_omitLabelSpanTag == null) {
-			_omitLabelSpanTag = new Boolean(!ERXProperties.booleanForKeyWithDefault("er.extensions.ERXNavigationManager.includeLabelSpanTag", false));
+			_omitLabelSpanTag = Boolean.valueOf(!ERXProperties.booleanForKeyWithDefault("er.extensions.ERXNavigationManager.includeLabelSpanTag", false));
 		}
 		return _omitLabelSpanTag;
 	}

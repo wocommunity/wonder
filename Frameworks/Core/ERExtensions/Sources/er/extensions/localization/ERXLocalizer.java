@@ -580,7 +580,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
    * <span class="ja">
    * 使用可能な言語を配列でセットする
    * 
-   * @param value　-　使用可能な言語のNSArray
+   * @param value - 使用可能な言語のNSArray
    * </span>
    */
 	public static void setAvailableLanguages(NSArray<String> value) {

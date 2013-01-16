@@ -708,7 +708,7 @@ public class ERXECTest extends ERXTestCase {
 	}
 
 	/**
-	 * Test method for {@link er.extensions.eof.ERXEC#factory()}.
+	 * Test method for {@link er.extensions.eof.ERXEC#_factory()}.
 	 */
 	public void _testFactory() {
 		fail("Not yet implemented");
