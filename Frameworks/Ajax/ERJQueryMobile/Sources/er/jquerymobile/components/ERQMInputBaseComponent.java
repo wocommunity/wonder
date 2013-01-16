@@ -25,8 +25,9 @@ public class ERQMInputBaseComponent extends ERXNonSynchronizingComponent {
   //********************************************************************
 
   public String javaScriptElementID() {
-    if(ERXStringUtilities.stringIsNullOrEmpty(elementID))
-      elementID = context().javaScriptElementID();
+    if(ERXStringUtilities.stringIsNullOrEmpty(elementID)) {
+		elementID = stringValueForBinding("id", context().javaScriptElementID());
+	}
 
     return elementID;
   }
