@@ -3,6 +3,6 @@ Selector: ERXBooleanSelector {
 	noString = stringForNo;
 	noSelectionString = stringForNull;
 	selection = value;
-	uiMode = "radio";
+	uiMode = uiMode;
 }
 

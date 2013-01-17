@@ -117,4 +117,12 @@ public class ERD2WCustomQueryBoolean extends D2WQueryBoolean {
         }
         return ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(result);
     }
+
+    public String uiMode() {
+    	String uiMode = "radio";
+    	if(d2wContext().valueForKey("uiMode") != null) {
+    		uiMode = (String) d2wContext().valueForKey("uiMode");
+    	}
+    	return uiMode;
+    }
 }
