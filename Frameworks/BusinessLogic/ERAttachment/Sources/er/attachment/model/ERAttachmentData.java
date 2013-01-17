@@ -23,8 +23,6 @@ public class ERAttachmentData extends _ERAttachmentData {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	@SuppressWarnings("unused")
 	private static Logger log = Logger.getLogger( ERAttachmentData.class );
-	
-	public ERAttachmentData() {
-	}
 }

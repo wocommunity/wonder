@@ -33,13 +33,11 @@ public class ERS3Attachment extends _ERS3Attachment {
 	private static final long serialVersionUID = 1L;
 
 	public static final String STORAGE_TYPE = "s3";
+	@SuppressWarnings("unused")
 	private static Logger log = Logger.getLogger(ERS3Attachment.class);
 
 	private File _pendingUploadFile;
 	private boolean _pendingDelete;
-	
-	public ERS3Attachment() {
-	}
 
 	public void _setPendingUploadFile(File pendingUploadFile, boolean pendingDelete) {
 		_pendingUploadFile = pendingUploadFile;

@@ -80,6 +80,7 @@ public class DB2Expression extends JDBCExpression {
      * Overridden to remove the rtrim usage. The original implementation
      * will remove every trailing space from character based column which 
      * should not be OK for DB2.
+     * @param entity entity for this expression
      */
     public DB2Expression(EOEntity entity) {
         super(entity);
@@ -818,7 +819,7 @@ public class DB2Expression extends JDBCExpression {
     }
     
     /**
-     * Overridden to return the negated value of {@link #disableBindVariables()}.
+     * Overridden to return the negated value of <code>disableBindVariables</code>.
      */
     @Override
     public boolean useBindVariables() {
@@ -827,7 +828,7 @@ public class DB2Expression extends JDBCExpression {
     
     /**
      * Overridden to set the <code>disableBindVariables</code> value correctly.
-     * @param value
+     * @param value new value
      */
     @Override
     public void setUseBindVariables(boolean value) {

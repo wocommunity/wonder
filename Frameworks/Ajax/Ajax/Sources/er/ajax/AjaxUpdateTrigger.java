@@ -41,6 +41,7 @@ public class AjaxUpdateTrigger extends WODynamicElement {
 		_resetAfterUpdate = (WOAssociation) associations.objectForKey("resetAfterUpdate");
 	}
 
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		super.appendToResponse(response, context);
 		WOComponent component = context.component();

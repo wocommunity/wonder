@@ -2627,7 +2627,7 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
      * @return The object's metadata
      * @throws IOException   There was an IO error doing network communication
      * @throws HttpException There was an error with the HTTP protocol
-     * @throws FilesAuthorizationException The Client's Login was invalid.  
+     * @throws FilesAuthorizationException The Client's Login was invalid
      * @throws FilesInvalidNameException The container or object name was not valid
      * @throws FilesNotFoundException The file was not found
      */

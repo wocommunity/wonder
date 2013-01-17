@@ -42,7 +42,7 @@ import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 /**
- * The ERXSession aguments the regular WOSession object
+ * The ERXSession arguments the regular WOSession object
  * by adding a few nice additions. Of interest, notifications
  * are now posted when a session when a session
  * goes to sleep, David Neumann's browser backtracking detection

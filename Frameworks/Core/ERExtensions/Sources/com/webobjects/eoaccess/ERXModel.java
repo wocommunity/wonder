@@ -103,7 +103,7 @@ public class ERXModel extends EOModel {
 	/**
 	 * Utility for getting all the attributes off an entity. If the entity is null, an empty array is returned.
 	 * 
-	 * @param entity
+	 * @param entity an entity
 	 * @return array of attributes from the given entity
 	 */
 	private static NSArray<EOAttribute> attributesFromEntity(EOEntity entity) {
@@ -189,7 +189,7 @@ public class ERXModel extends EOModel {
 	/**
 	 * Utility for getting all names from an array of attributes.
 	 * 
-	 * @param attributes
+	 * @param attributes array of attributes
 	 * @return array of attribute names
 	 */
 	private static NSArray<String> namesForAttributes(NSArray<? extends EOAttribute> attributes) {
@@ -300,6 +300,7 @@ public class ERXModel extends EOModel {
 	
 	/**
 	 * Defaults to false as returned by {@link #isUseExtendedPrototypesEnabled()}.
+	 * @return <code>true</code> if extended prototypes are used
 	 * @see #isUseExtendedPrototypesEnabled()
 	 */
 	protected boolean useExtendedPrototypes() {

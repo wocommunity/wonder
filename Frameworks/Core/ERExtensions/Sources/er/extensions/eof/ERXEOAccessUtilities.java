@@ -212,6 +212,7 @@ public class ERXEOAccessUtilities {
     // ENHANCEME: Need a non-oracle specific way of doing this. Should poke
     // around at
     //		the adaptor level and see if we can't find something better.
+    @Deprecated
     public static Number getNextValFromSequenceNamed(EOEditingContext ec, String modelName, String sequenceName) {
     	EODatabaseContext dbContext = EOUtilities.databaseContextForModelNamed(ec, modelName);
     	return ERXSQLHelper.newSQLHelper(dbContext).getNextValFromSequenceNamed(ec, modelName, sequenceName);
@@ -743,6 +744,7 @@ public class ERXEOAccessUtilities {
      *         tables
      * @deprecated
      */
+    @Deprecated
     public static String createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray entities, String modelName, NSDictionary optionsCreate) {
         EODatabaseContext dc = EOUtilities.databaseContextForModelNamed(ERXEC.newEditingContext(), modelName);
         return ERXSQLHelper.newSQLHelper(dc).createSchemaSQLForEntitiesInModelWithNameAndOptions(entities, modelName, optionsCreate);
@@ -757,6 +759,7 @@ public class ERXEOAccessUtilities {
      * @return a sql script
      * @deprecated
      */
+    @Deprecated
     public static String createSchemaSQLForEntitiesWithOptions(NSArray entities, EODatabaseContext databaseContext, NSDictionary optionsCreate) {
     	return ERXSQLHelper.newSQLHelper(databaseContext).createSchemaSQLForEntitiesWithOptions(entities, databaseContext, optionsCreate);
     }
@@ -789,6 +792,7 @@ public class ERXEOAccessUtilities {
      *         tables
      * @deprecated
      */
+    @Deprecated
     public static String createSchemaSQLForEntitiesInModelWithName(NSArray entities, String modelName) {
     	EODatabaseContext databaseContext = EOUtilities.databaseContextForModelNamed(ERXEC.newEditingContext(), modelName);
     	return ERXSQLHelper.newSQLHelper(databaseContext).createSchemaSQLForEntitiesInModelWithName(entities, modelName);
@@ -811,6 +815,7 @@ public class ERXEOAccessUtilities {
      *         tables
      * @deprecated
      */
+    @Deprecated
     public static String createSchemaSQLForEntitiesInDatabaseContext(NSArray entities, EODatabaseContext databaseContext, boolean create, boolean drop) {
     	return ERXSQLHelper.newSQLHelper(databaseContext).createSchemaSQLForEntitiesInDatabaseContext(entities, databaseContext, create, drop);
     }
@@ -818,6 +823,7 @@ public class ERXEOAccessUtilities {
     /**
      * @deprecated
      */
+    @Deprecated
     public static String createIndexSQLForEntitiesForOracle(NSArray entities) {
         NSMutableArray a = new NSMutableArray();
         a.addObject("BLOB");
@@ -828,6 +834,7 @@ public class ERXEOAccessUtilities {
     /**
      * @deprecated
      */
+    @Deprecated
     public static String createIndexSQLForEntities(NSArray entities) {
         return createIndexSQLForEntities(entities, null);
     }
@@ -835,6 +842,7 @@ public class ERXEOAccessUtilities {
     /**
      * @deprecated
      */
+    @Deprecated
     public static String createIndexSQLForEntities(NSArray entities, NSArray externalTypesToIgnore) {
         EOEntity ent = (EOEntity)entities.objectAtIndex(0);
         String modelName = ent.model().name();
@@ -1047,6 +1055,7 @@ public class ERXEOAccessUtilities {
      * Creates a where clause string " someKey IN ( someValue1,...)". Can migrate keyPaths.
      * @deprecated
      */
+    @Deprecated
     public static String sqlWhereClauseStringForKey(EOSQLExpression e, String key, NSArray valueArray) {
     	return ERXSQLHelper.newSQLHelper(e).sqlWhereClauseStringForKey(e, key, valueArray);
     }
