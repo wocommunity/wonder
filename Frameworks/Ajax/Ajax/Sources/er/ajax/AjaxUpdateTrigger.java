@@ -12,6 +12,8 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
+import er.extensions.components.ERXComponentUtilities;
+
 /**
  * AjaxUpdateTrigger is useful if you have multiple containers on a page
  * that are controlled by a central parent component.  AjaxUpdateTrigger
@@ -49,7 +51,7 @@ public class AjaxUpdateTrigger extends WODynamicElement {
 			while (updateContainerIDEnum.hasMoreElements()) {
 				String updateContainerID = (String) updateContainerIDEnum.nextElement();
 				// PROTOTYPE FUNCTIONS
-				Object evalScripts = AjaxUtils.valueForBinding("evalScripts", "true", _associations, component);
+				Object evalScripts = ERXComponentUtilities.valueForBinding("evalScripts", "true", _associations, component);
 				response.appendContentString("if ($wi('" + updateContainerID + "')) { ");
 				response.appendContentString("new Ajax.Updater('" + updateContainerID + "', $wi('" + updateContainerID + "').getAttribute('data-updateUrl'), {" + " evalScripts: " + evalScripts + ", insertion: Element.update, method: 'get' });\n");
 				response.appendContentString(" }");
