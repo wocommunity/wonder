@@ -6,8 +6,14 @@
 //
 package er.wopaypal;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WODirectAction;
+import com.webobjects.appserver.WOHTTPConnection;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSNotificationCenter;
 
 import er.extensions.foundation.ERXProperties;
 

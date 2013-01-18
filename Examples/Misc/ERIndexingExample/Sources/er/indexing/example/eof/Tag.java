@@ -1,6 +1,6 @@
 package er.indexing.example.eof;
 
-import com.webobjects.eocontrol.*;
+import com.webobjects.eocontrol.EOEditingContext;
 
 public class Tag extends _Tag {
 

@@ -1,15 +1,26 @@
 package er.grouping;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.StringReader;
+import java.util.Enumeration;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
-import org.xml.sax.*;
+import org.xml.sax.InputSource;
 
-import com.webobjects.appserver.xml.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.xml.WOXMLCoder;
+import com.webobjects.appserver.xml.WOXMLDecoder;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation._NSStringUtilities;
 
 import er.extensions.eof.ERXConstant;
 import er.extensions.foundation.ERXStringUtilities;

@@ -1,8 +1,11 @@
 package er.grouping;
 
-import java.util.*;
+import java.util.Enumeration;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
+import com.webobjects.foundation.NSMutableArray;
 
 public class DRRecord {
 

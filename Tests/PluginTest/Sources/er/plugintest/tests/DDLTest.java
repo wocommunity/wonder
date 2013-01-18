@@ -1,12 +1,14 @@
 package er.plugintest.tests;
 
-import java.sql.*;
+import java.sql.SQLException;
 
-import com.webobjects.eoaccess.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eoaccess.EOAdaptorChannel;
+import com.webobjects.foundation.NSForwardException;
 
-import er.extensions.eof.*;
-import er.extensions.jdbc.*;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOAccessUtilities;
+import er.extensions.jdbc.ERXJDBCUtilities;
+import er.extensions.jdbc.ERXSQLHelper;
 
 public class DDLTest extends PluginTest {
 

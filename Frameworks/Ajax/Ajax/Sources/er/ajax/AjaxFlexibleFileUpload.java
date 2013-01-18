@@ -11,9 +11,6 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.ajax.AjaxFileUpload;
-import er.ajax.AjaxUploadProgress;
-import er.ajax.AjaxUtils;
 import er.extensions.appserver.ERXRequest;
 import er.extensions.components.ERXComponentUtilities;
 import er.extensions.foundation.ERXValueUtilities;

@@ -1,5 +1,5 @@
 package er.reporting;
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOContext;
 
 /**
  * Class for Wonder Component WRNestedCellsLayout.

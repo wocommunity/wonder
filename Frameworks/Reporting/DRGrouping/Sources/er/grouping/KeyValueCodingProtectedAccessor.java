@@ -6,11 +6,13 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.grouping;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSKeyValueCoding;
 
 public class KeyValueCodingProtectedAccessor extends NSKeyValueCoding.ValueAccessor {
 

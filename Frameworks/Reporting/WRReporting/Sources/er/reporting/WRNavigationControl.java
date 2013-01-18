@@ -1,10 +1,15 @@
 package er.reporting;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.components.ERXStatelessComponent;
-import er.grouping.*;
+import er.grouping.DRCriteria;
+import er.grouping.DRGroup;
+import er.grouping.DRMasterCriteria;
+import er.grouping.DRReportModel;
 
 public class WRNavigationControl extends ERXStatelessComponent {
     public DRReportModel model;

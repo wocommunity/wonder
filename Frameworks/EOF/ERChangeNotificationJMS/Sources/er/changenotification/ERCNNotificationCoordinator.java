@@ -6,12 +6,19 @@
 //
 package er.changenotification;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+import javax.jms.Topic;
+import javax.jms.TopicConnection;
 
-import javax.jms.*;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.eoaccess.EODatabaseContext;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOObjectStoreCoordinator;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSSelector;
 
 /**
  * ERCNNotificationCoordinator is the primary controller of the change 

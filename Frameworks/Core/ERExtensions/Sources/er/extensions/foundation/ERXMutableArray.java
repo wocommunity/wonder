@@ -14,13 +14,13 @@ import java.util.Vector;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSCoder;
 import com.webobjects.foundation.NSComparator;
+import com.webobjects.foundation.NSComparator.ComparisonException;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSRange;
 import com.webobjects.foundation.NSSelector;
-import com.webobjects.foundation.NSComparator.ComparisonException;
 
 /**
  * Custom subclass of NSMutableArray. Implements {@link java.util.List} and can

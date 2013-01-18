@@ -2,8 +2,9 @@
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSLog;
 
 import er.ajax.json.JSONRequestHandler;
 import er.extensions.appserver.ERXApplication;

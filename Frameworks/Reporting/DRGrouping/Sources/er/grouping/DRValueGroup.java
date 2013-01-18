@@ -1,8 +1,9 @@
 package er.grouping;
 
-import java.util.*;
+import java.util.Enumeration;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
 
 /* DRValueGroup.h created by Administrator on Sun 01-Nov-1998 */
 //#import <WebObjects/WebObjects.h>

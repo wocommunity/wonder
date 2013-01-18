@@ -1,7 +1,7 @@
 package com.webobjects.jdbcadaptor;
 
-import com.webobjects.eoaccess.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eoaccess.EOSynchronizationFactory;
+import com.webobjects.foundation.NSForwardException;
 
 public class DB2ForISeriesPlugIn extends DB2PlugIn {
 

@@ -1,17 +1,20 @@
 package er.plugintest.tests;
 
-import java.io.*;
-import java.sql.*;
+import java.io.IOException;
+import java.sql.SQLException;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
-import com.webobjects.eoaccess.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eoaccess.EOAdaptorChannel;
+import com.webobjects.eoaccess.EOModel;
+import com.webobjects.foundation.NSForwardException;
 
-import er.extensions.eof.*;
-import er.extensions.foundation.*;
-import er.extensions.jdbc.*;
-import er.testrunner.*;
+import er.extensions.eof.ERXEC;
+import er.extensions.eof.ERXEOAccessUtilities;
+import er.extensions.eof.ERXModelGroup;
+import er.extensions.foundation.ERXFileUtilities;
+import er.extensions.jdbc.ERXJDBCUtilities;
+import er.testrunner.ERXTestCase;
 
 public class PluginTest extends ERXTestCase {
 

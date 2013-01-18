@@ -2,12 +2,19 @@ package er.reporting;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSNumberFormatter;
 
 import er.extensions.formatters.ERXNumberFormatter;
 import er.extensions.foundation.ERXValueUtilities;
-import er.grouping.*;
+import er.grouping.DRRecord;
+import er.grouping.DRRecordGroup;
+import er.grouping.DRReportModel;
+import er.grouping.DRValue;
 
 /**
  * Contains a cell in the table that {@link WRReport} has set up.

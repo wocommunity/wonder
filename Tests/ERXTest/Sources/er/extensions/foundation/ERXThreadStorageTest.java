@@ -4,16 +4,13 @@ import java.util.Map;
 
 import junit.framework.Assert;
 
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 
-import com.webobjects.eocontrol.EOEnterpriseObject;
-import com.webobjects.eocontrol.EOEditingContext;
-
-import er.extensions.eof.ERXEC;
-
 import er.erxtest.ERXTestCase;
-
 import er.erxtest.model.Company;
+import er.extensions.eof.ERXEC;
 
 public class ERXThreadStorageTest extends ERXTestCase {
 

@@ -6,13 +6,26 @@
 //
 package er.changenotification;
 
-import com.webobjects.foundation.*;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Properties;
+import java.util.Timer;
+import java.util.TimerTask;
 
-import java.util.*;
-import java.text.*;
+import javax.jms.ConnectionMetaData;
+import javax.jms.ExceptionListener;
+import javax.jms.JMSException;
+import javax.jms.Topic;
+import javax.jms.TopicConnection;
+import javax.jms.TopicConnectionFactory;
+import javax.naming.CommunicationException;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NameNotFoundException;
+import javax.naming.NamingException;
 
-import javax.naming.*;
-import javax.jms.*;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSTimestamp;
 
 class ERCNConnectionKeeper implements ExceptionListener {
 

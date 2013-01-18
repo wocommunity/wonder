@@ -6,6 +6,10 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.eof.qualifiers;
 
+import java.util.Enumeration;
+
+import org.apache.log4j.Logger;
+
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
@@ -27,9 +31,8 @@ import com.webobjects.foundation.NSCoding;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableSet;
+
 import er.extensions.foundation.ERXStringUtilities;
-import java.util.Enumeration;
-import org.apache.log4j.Logger;
 
 /**
  * A qualifier that qualifies using an EXISTS clause.

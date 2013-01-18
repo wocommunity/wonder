@@ -1,23 +1,19 @@
 
 package er.erxtest;
 
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Vector;
-
-import java.io.OutputStreamWriter;
-
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-
-import java.security.cert.X509Certificate;
-
 
 import org.junit.runner.Description;
 import org.junit.runner.Result;

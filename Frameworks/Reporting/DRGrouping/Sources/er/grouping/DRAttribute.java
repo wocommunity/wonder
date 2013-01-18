@@ -2,7 +2,10 @@ package er.grouping;
 
 import ognl.webobjects.WOOgnl;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
 /**
  * DRAttributes are to display what EOAttributes are to the back-end.  

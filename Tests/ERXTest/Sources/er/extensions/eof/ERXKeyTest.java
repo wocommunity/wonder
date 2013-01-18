@@ -18,9 +18,7 @@ import er.erxtest.model.Company;
 import er.erxtest.model.Employee;
 import er.erxtest.model.Paycheck;
 import er.erxtest.model.Role;
-
 import er.extensions.foundation.ERXArrayUtilities;
-import er.extensions.eof.ERXEOAccessUtilities;
 
 public class ERXKeyTest extends ERXTestCase {
 

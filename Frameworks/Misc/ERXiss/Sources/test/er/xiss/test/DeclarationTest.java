@@ -1,8 +1,9 @@
 package er.xiss.test;
 
+import junit.framework.TestCase;
+
 import org.apache.commons.lang.CharEncoding;
 
-import junit.framework.TestCase;
 import er.xiss.ERXML;
 
 public class DeclarationTest extends TestCase {

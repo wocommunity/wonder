@@ -1,10 +1,16 @@
 package er.reporting;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 
 import er.extensions.foundation.ERXValueUtilities;
-import er.grouping.*;
+import er.grouping.DRAttribute;
+import er.grouping.DRGroup;
+import er.grouping.DRReportModel;
 
 public class WRAttributeGroup extends WOComponent {
 

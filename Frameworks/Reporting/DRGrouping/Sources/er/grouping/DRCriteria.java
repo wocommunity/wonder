@@ -1,10 +1,14 @@
 package er.grouping;
 
-import java.text.*;
+import java.text.Format;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSTimestampFormatter;
 
 /**
  * The "value" for the {@link DRMasterCriteria}. For example, given

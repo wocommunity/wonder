@@ -4,6 +4,7 @@ import org.apache.commons.lang.ObjectUtils;
 
 import com.webobjects.eocontrol.EOEnterpriseObject;
 
+import er.extensions.ERXExtensions;
 import er.extensions.eof.ERXEOControlUtilities;
 
 /**

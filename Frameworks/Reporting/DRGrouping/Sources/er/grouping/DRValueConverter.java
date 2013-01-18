@@ -2,7 +2,8 @@ package er.grouping;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSTimestamp;
 
 /**
  * Converts values. The main reason for this class is to provide a

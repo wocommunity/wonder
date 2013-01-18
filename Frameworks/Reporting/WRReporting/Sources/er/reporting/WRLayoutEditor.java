@@ -2,10 +2,11 @@ package er.reporting;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
 
-import er.grouping.*;
+import er.grouping.DRGroup;
 
 public class WRLayoutEditor extends WOComponent  {
     /** logging support */

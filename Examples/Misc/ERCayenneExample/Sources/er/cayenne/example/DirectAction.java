@@ -3,9 +3,8 @@ package er.cayenne.example;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WORequest;
 
-import er.extensions.appserver.ERXDirectAction;
-
 import er.cayenne.example.components.Main;
+import er.extensions.appserver.ERXDirectAction;
 
 public class DirectAction extends ERXDirectAction {
 	public DirectAction(WORequest request) {

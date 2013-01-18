@@ -4,7 +4,6 @@ import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver._private.WODynamicGroup;

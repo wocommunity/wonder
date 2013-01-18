@@ -1,6 +1,8 @@
 package er.reporting;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
 
 public class WRNestedList extends WOComponent  {
 

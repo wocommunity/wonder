@@ -6,11 +6,14 @@
 //
 package er.changenotification;
 
-import com.webobjects.foundation.*;
+import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.naming.Context;
-import java.util.regex.*;
-import java.util.*;
+
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSLog;
 
 public abstract class ERCNConfiguration {
 

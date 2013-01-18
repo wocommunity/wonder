@@ -6,10 +6,16 @@
 //
 package er.wopaypal;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import java.text.*; // for number formatting
-import java.util.*; // for Enumeration
+import java.text.DecimalFormat;
+import java.util.Enumeration;
+
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
 
 /**
  * PayPalSingleItemFormLink is a WOComponent that implements a form to submit a
