@@ -86,7 +86,7 @@ public class WXCheckboxList extends WOComponent {
     }
     
     private String _id() {
-    	if (_id == null) _id = hasBinding(Bindings.id) ? (String)  valueForBinding(Bindings.id) : context().elementID();	// RM: FIXME: convert to javascriptElementID() in WO 5.4
+    	if (_id == null) _id = hasBinding(Bindings.id) ? (String)  valueForBinding(Bindings.id) : context().javaScriptElementID();
     	return _id;
     }
     

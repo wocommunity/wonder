@@ -101,7 +101,7 @@ public class ERCaptcha extends WOComponent {
 
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		super.takeValuesFromRequest(request, context);
-		if (context._wasFormSubmitted()) {
+		if (context.wasFormSubmitted()) {
 			Boolean validated = Boolean.FALSE;
 			try {
 				validated = ERCaptcha.captchaService().validateResponseForID(context.elementID(), _response);

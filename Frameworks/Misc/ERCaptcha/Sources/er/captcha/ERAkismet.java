@@ -48,7 +48,7 @@ public class ERAkismet extends ERXComponent {
 	}
 
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
-		if (context._wasFormSubmitted()) {
+		if (context.wasFormSubmitted()) {
 			super.takeValuesFromRequest(request, context);
 
 			String apiKey = ERXProperties.stringForKey("er.captcha.akismet.apiKey");

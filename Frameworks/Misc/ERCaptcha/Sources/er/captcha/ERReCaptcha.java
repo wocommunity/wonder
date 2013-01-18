@@ -97,7 +97,7 @@ public class ERReCaptcha extends ERXNonSynchronizingComponent {
 
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		super.takeValuesFromRequest(request, context);
-		if (context._wasFormSubmitted()) {
+		if (context.wasFormSubmitted()) {
 			String challenge = request.stringFormValueForKey("recaptcha_challenge_field");
 			if (challenge == null) {
 				challenge = "";
