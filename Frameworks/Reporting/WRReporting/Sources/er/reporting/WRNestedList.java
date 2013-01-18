@@ -16,6 +16,7 @@ public class WRNestedList extends WOComponent  {
      * OFF synchronization.
      */
 
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }
@@ -81,6 +82,7 @@ public class WRNestedList extends WOComponent  {
     }
 
 
+    @Override
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         //Abort call to super to save all this processing time
     }

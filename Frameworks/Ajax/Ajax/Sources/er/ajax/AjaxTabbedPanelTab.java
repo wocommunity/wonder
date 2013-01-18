@@ -68,6 +68,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
     /**
      * Creates the panes.
      */
+    @Override
     public void appendToResponse(WOResponse aResponse, WOContext aContext)
     {
     	WOComponent component = aContext.component();
@@ -105,6 +106,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
     /** 
      * Do nothing if not visible. 
      */
+    @Override
     public void takeValuesFromRequest(WORequest request, WOContext context)
     {
     	if (isVisble(context.component()) && (isSelected ==  null || isSelected(context.component())) ) {
@@ -115,6 +117,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
     /** 
      * Do nothing if not visible. 
      */
+    @Override
     public WOActionResults invokeAction(WORequest request, WOContext context)
     {
     	if (isVisble(context.component())) {
@@ -145,6 +148,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
     	}
     }
 
+	@Override
 	protected void addRequiredWebResources(WOResponse response, WOContext context) {
 	}
 
@@ -152,6 +156,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
 	 * The pane content is rendered when an Ajax request is received.
 	 * @return the children rendered as HTML
 	 */
+	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		WOResponse response = null;
 		String didSelect = request.stringFormValueForKey("didSelect");
@@ -174,6 +179,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
 	 * @param context WOContext response is being returned in
 	 * @return ID to cache this Ajax response under
 	 */
+	@Override
 	protected String _containerID(WOContext context) {
 		return tabIdInComponent(context.component()) + "_panel";
 	}

@@ -31,6 +31,7 @@ public class PageHeader extends ERDCustomComponent {
         return (String) valueForBinding("displayNameForPageConfiguration");
     }
     
+    @Override
     public boolean synchronizesVariablesWithBindings() {
     	return false;
     }

@@ -48,8 +48,10 @@ public class ERDList extends ERDCustomEditComponent {
 
     public ERDList(WOContext context) { super(context); }
 
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
+    @Override
     public void reset() {
         list = null;
         super.reset();
@@ -131,6 +133,7 @@ public class ERDList extends ERDCustomEditComponent {
         return hasBinding("erD2WListOmitCenterTag") ? booleanValueForBinding("erD2WListOmitCenterTag") : false;
     }
     
+    @Override
     public Object valueForKey(String key) {
         Object o = super.valueForKey(key);
         if (key.indexOf("emptyListMessage")!=-1) {
@@ -138,6 +141,7 @@ public class ERDList extends ERDCustomEditComponent {
         } 
         return o;
     }
+    @Override
     public Object valueForBinding(String key) {
         Object o = super.valueForBinding(key);
         if (key.indexOf("emptyListMessage")!=-1) {

@@ -20,6 +20,7 @@ public class WOHelperFunctionParser54 extends WOComponentTemplateParser {
 		_delegate = new WOHelperFunctionParser(HTMLString, declarationString, languages);
 	}
 
+	@Override
 	public WOElement parse() throws WODeclarationFormatException, WOHTMLFormatException, ClassNotFoundException {
 		try {
 			return _delegate.parse();

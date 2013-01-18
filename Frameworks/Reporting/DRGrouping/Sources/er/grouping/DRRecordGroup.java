@@ -132,6 +132,7 @@ public class DRRecordGroup {
                                 final NSArray rawRecords = rawRecordList();
                                 totalValue = new DRValue(0, val.attribute()) {
                                     private Double total;
+                                    @Override
                                     public double total() {
                                         if(total == null) { 
                                             total = Double.valueOf(attribute().computeFromRawRecords(rawRecords));
@@ -278,6 +279,7 @@ public class DRRecordGroup {
 
     }
 
+    @Override
     public String toString() {
         return ""+(super.toString())+"-lc:"+(_lookUpCoordinates)+"-"+(recordList().count())+"-"+(_recordGroupDict.toString());
     }

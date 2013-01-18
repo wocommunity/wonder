@@ -100,6 +100,7 @@ public class ERXSequence {
 		    _modelName=modelName;
 		}
 		
+		@Override
 		public long nextValue(long increment) {
 			if (increment != 1) {
 				throw new IllegalArgumentException("NativeDatabaseSequence only supports incrementing 1 at a time.");
@@ -107,6 +108,7 @@ public class ERXSequence {
 			return ERXSQLHelper.newSQLHelper(_editingContext, _modelName).getNextValFromSequenceNamed(_editingContext, _modelName, name()).longValue();
 		}
 		
+		@Override
 		protected long increment() {
 			return 1L;
 		}
@@ -194,6 +196,7 @@ public class ERXSequence {
 			con.createStatement().executeUpdate(alterTableStatement);
 		}
 		
+		@Override
 		protected long increasedMaxValue(long increment) {
 	        
 	        Connection con = broker().getConnection();
@@ -255,6 +258,7 @@ public class ERXSequence {
 			_entityName = entityName;
 		}
 		
+		@Override
 		protected long createRow(Connection con, long increment) throws SQLException {
 			EOEntity entity = ERXEOAccessUtilities.rootEntityForEntityNamed(_entityName);
 			String tableName = entity.externalName();

@@ -22,6 +22,7 @@ public class WRNavigationControl extends ERXStatelessComponent {
         super(context);
     }
 
+    @Override
     public void reset() {
         super.reset();
         group = null;

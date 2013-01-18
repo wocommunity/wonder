@@ -35,6 +35,7 @@ public class Bucket {
         this.creationDate = creationDate;
     }
 
+    @Override
     public String toString() {
         return name;
     }

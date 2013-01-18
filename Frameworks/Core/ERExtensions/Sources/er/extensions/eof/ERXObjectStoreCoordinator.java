@@ -108,6 +108,7 @@ public class ERXObjectStoreCoordinator extends EOObjectStoreCoordinator {
 	 * Overridden to emit log messages and push this instance to the locked
 	 * editing contexts in this thread.
 	 */
+	@Override
 	public void lock() {
 		boolean tracing = ERXEC.markOpenLocks();
 		if (tracing) {
@@ -124,6 +125,7 @@ public class ERXObjectStoreCoordinator extends EOObjectStoreCoordinator {
 	 * Overridden to emit log messages and pull this instance from the locked
 	 * editing contexts in this thread.
 	 */
+	@Override
 	public void unlock() {
 		boolean tracing = ERXEC.markOpenLocks();
 		if (lockingThread != null && lockingThread != Thread.currentThread()) {

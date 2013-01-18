@@ -60,6 +60,7 @@ public class EOGenericRecord extends EOCustomObject {
 		return __classDescription();
 	}
 
+	@Override
 	public NSKeyValueCoding._KeyBinding _otherStorageBinding(String key) {
 		boolean lazyBindingNeeded = false;
 		EOClassDescription classDescription = classDescription();

@@ -74,7 +74,9 @@ public D2WPick(WOContext context) { super(context); }
     }
 
     // Need to do this so that the action binding is not mandatory
+    @Override
     public NextPageDelegate actionPageDelegate() { return _D2WPickActionDelegate.instance; }
+    @Override
     public NextPageDelegate newPageDelegate() { return _D2WPickActionDelegate.instance; }
     
 /*    public EODataSource dataSource() {

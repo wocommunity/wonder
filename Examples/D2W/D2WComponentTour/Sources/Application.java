@@ -23,9 +23,11 @@ public class Application extends ERXApplication {
         // as we only need a bit of reference data anyway, we just fake we fetched...
         ERXEC.setFactory(new ERXEC.DefaultFactory() {
 
+			@Override
 			protected EOEditingContext _createEditingContext(EOObjectStore parent) {
 				return new ERXEC(parent) {
 
+					@Override
 					public NSArray objectsWithFetchSpecification(EOFetchSpecification eofetchspecification, EOEditingContext eoeditingcontext) {
 						NSMutableArray result = new NSMutableArray();
 						for (int i = 0; i < 5; i++) {

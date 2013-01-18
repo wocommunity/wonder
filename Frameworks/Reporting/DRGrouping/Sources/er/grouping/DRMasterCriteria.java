@@ -335,6 +335,7 @@ public class DRMasterCriteria {
         return _keyDesc;
     }
 
+    @Override
     public String toString() {
         return "<DRMasterCriteria label: \"" + label() + "\"; shouldTotal: " + shouldTotal() + "; subCriterias: " + subCriteriaList() + " >";
     }

@@ -12,6 +12,7 @@ public class DirectAction extends WODirectAction {
 		super(request);
 	}
 
+	@Override
 	public WOActionResults defaultAction() {
 		return pageWithName(Main.class.getName());
 	}

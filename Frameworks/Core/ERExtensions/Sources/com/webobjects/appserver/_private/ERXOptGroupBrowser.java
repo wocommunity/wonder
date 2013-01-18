@@ -47,6 +47,7 @@ public class ERXOptGroupBrowser extends Browser {
 	
 
 
+    @Override
     public void appendChildrenToResponse(WOResponse response, WOContext context)
     {
          WOComponent parent = context.component();

@@ -30,6 +30,7 @@ public class MTAjaxSortableList extends AjaxComponent {
         super(context);
     }
 
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 
 		_actionUrl = AjaxUtils.ajaxComponentActionUrl(context);
@@ -207,6 +208,7 @@ public class MTAjaxSortableList extends AjaxComponent {
 	}
 
 
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}

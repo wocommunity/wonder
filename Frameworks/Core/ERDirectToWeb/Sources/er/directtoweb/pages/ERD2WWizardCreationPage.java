@@ -71,6 +71,7 @@ public class ERD2WWizardCreationPage extends ERD2WTabInspectPage {
     }
 
     // Setting the tab has the effect of setting the tabKey in the d2wContext.
+    @Override
     public void appendToResponse(WOResponse response, WOContext context) {
         setCurrentTab(tabSectionsContents().objectAtIndex(_currentStep-1));
         super.appendToResponse(response, context);
@@ -89,12 +90,14 @@ public class ERD2WWizardCreationPage extends ERD2WTabInspectPage {
          return ""+(tabKeys().count()+4);
      }
      */
+    @Override
     public WOComponent printerFriendlyVersion() {
         WOComponent result=ERD2WFactory.erFactory().printerFriendlyPageForD2WContext(d2wContext(),session());
         ((EditPageInterface)result).setObject(object());
         return result;
     }
 
+    @Override
     public WOComponent cancelAction() {
         WOComponent result=null;
         if (_currentStep>1 && ERXEOControlUtilities.isNewObject(object())) { // only show this if we've been through more than one page

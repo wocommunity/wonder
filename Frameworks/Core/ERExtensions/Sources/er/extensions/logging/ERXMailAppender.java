@@ -398,6 +398,7 @@ public class ERXMailAppender extends AppenderSkeleton {
      *
      * @param event current logging event
      */
+    @Override
     public void append(LoggingEvent event) {
         if (conditionsChecked || checkConditions()) {
             if(event.getLevel().equals(Level.ERROR) 

@@ -782,6 +782,7 @@ public class DRReportModel {
         //[self flatListForAttributeList];
     }
 
+    @Override
     public String toString() {
         return _groups.toString();
     }

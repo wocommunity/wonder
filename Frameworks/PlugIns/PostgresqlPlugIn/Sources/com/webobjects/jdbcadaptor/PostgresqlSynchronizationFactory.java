@@ -30,6 +30,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
         super(adaptor);
     }
     
+	@Override
 	public String _columnCreationClauseForAttribute(EOAttribute attribute) {
 		return addCreateClauseForAttribute(attribute).toString();
 	}
@@ -473,6 +474,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
     }
 */
 
+    @Override
     public String schemaCreationScriptForEntities(NSArray allEntities, NSDictionary options)
     {
 /* 741*/        StringBuffer result = new StringBuffer();
@@ -486,6 +488,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
 /* 751*/        return result.toString();
     }
 
+    @Override
     public NSArray schemaCreationStatementsForEntities(NSArray allEntities, NSDictionary options)
     {
 /* 879*/        NSMutableArray result = new NSMutableArray();

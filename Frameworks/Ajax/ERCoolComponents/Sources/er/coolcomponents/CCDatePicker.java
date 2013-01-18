@@ -97,6 +97,7 @@ public class CCDatePicker extends ERXStatelessComponent {
      * @see er.extensions.components.ERXNonSynchronizingComponent#appendToResponse(com.webobjects.appserver.WOResponse, com.webobjects.appserver.WOContext)
      * @see ERXResponseRewriter#addScriptResourceInHead(WOResponse, WOContext, String, String)
      */
+    @Override
     public void appendToResponse(WOResponse response, WOContext context)
     {
     	if (booleanValueForBinding("injectStylesheet")) {

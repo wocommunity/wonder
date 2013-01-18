@@ -66,6 +66,7 @@ public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler 
     	return request.requestHandlerPath() != null && request.requestHandlerPath().toLowerCase().indexOf("stats") >= 0;
     }
     
+    @Override
     public WOResponse handleRequest(WORequest request) {
         WOResponse response = null;
         

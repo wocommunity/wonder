@@ -299,6 +299,7 @@ public class AjaxTreeModel {
 			return _parent;
 		}
 
+		@Override
 		public int hashCode() {
 			int hashCode;
 			if (_userObject == null) {
@@ -313,6 +314,7 @@ public class AjaxTreeModel {
 			return hashCode;
 		}
 
+		@Override
 		public boolean equals(Object obj) {
 			boolean equals;
 			if (obj instanceof WrapperNode) {

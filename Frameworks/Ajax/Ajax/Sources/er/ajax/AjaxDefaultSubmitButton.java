@@ -61,6 +61,7 @@ public class AjaxDefaultSubmitButton extends AjaxSubmitButton
         super(name, associations, children);
     }
 
+    @Override
     public void appendToResponse(WOResponse response, WOContext context) {
         WOComponent component = context.component();
 

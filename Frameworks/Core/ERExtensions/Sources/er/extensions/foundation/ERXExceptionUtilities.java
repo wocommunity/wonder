@@ -53,6 +53,7 @@ public class ERXExceptionUtilities {
 			super(cause);
 		}
 
+		@Override
 		public void printStackTrace(PrintWriter s) {
 			s.println("[stack trace already printed]");
 		}

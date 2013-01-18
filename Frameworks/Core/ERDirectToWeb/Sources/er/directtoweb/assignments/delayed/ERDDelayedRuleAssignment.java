@@ -49,6 +49,7 @@ public class ERDDelayedRuleAssignment extends ERDDelayedAssignment {
      * This method is called whenever the propertyKey is requested,
      * but the value in the cache is actually a rule.
      */
+    @Override
     public Object fireNow(D2WContext c) {
         Object result = null;
         NSArray rules = (NSArray)value();

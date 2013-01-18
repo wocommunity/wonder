@@ -64,6 +64,7 @@ public abstract class ERCNConfiguration {
             return _minorVersionString;
         }
 
+        @Override
         public String toString() {
             return _majorVersion + "." + _minorVersionString;
         }

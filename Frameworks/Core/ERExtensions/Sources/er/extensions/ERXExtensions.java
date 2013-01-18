@@ -169,6 +169,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * the {@link ERXCompilerProxy} and {@link ERXValidationFactory}.
      * This delegate is configured when this framework is loaded.
      */
+    @Override
     protected void initialize() {
     	NSNotificationCenter.defaultCenter().addObserver(this,
     			new NSSelector("bundleDidLoad", ERXConstant.NotificationClassArray),
@@ -250,6 +251,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * launching. Here is where log4j is configured for rapid
      * turn around and the validation template system is configured.
      */
+    @Override
     public void finishInitialization() {
     	ERXJDBCAdaptor.registerJDBCAdaptor();
         // AK: we now setup the properties three times. At startup, in ERX.init
@@ -342,6 +344,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
             return support;
         }
         
+        @Override
         public String sqlStringForSQLExpression(EOQualifier eoqualifier, EOSQLExpression e) {
         	try {
         		return supportForQualifier(eoqualifier).sqlStringForSQLExpression(eoqualifier, e);
@@ -352,11 +355,13 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         	}
         }
 
+        @Override
         public EOQualifier schemaBasedQualifierWithRootEntity(EOQualifier eoqualifier, EOEntity eoentity) {
             EOQualifier result = supportForQualifier(eoqualifier).schemaBasedQualifierWithRootEntity(eoqualifier, eoentity);
             return result;
         }
 
+        @Override
         public EOQualifier qualifierMigratedFromEntityRelationshipPath(EOQualifier eoqualifier, EOEntity eoentity, String s) {
             return supportForQualifier(eoqualifier).qualifierMigratedFromEntityRelationshipPath(eoqualifier, eoentity, s);
         }

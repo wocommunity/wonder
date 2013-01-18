@@ -147,6 +147,7 @@ public class ERXJDBCConnectionBroker implements ERXJDBCAdaptor.ConnectionBroker 
         setup(dict, DEFAULTMAXCHECKOUTSECONDS);
     }
 
+    @Override
     public String toString() {
         return "<" +getClass().getName() +
         ": dbDriver = " + dbDriver +
@@ -230,6 +231,7 @@ public class ERXJDBCConnectionBroker implements ERXJDBCAdaptor.ConnectionBroker 
              * application fails to close a Statement). This method acts as fault
              * tolerance for bad connection/statement programming.
              */
+            @Override
             public void run() {
                 while (true) {
                     synchronized (wrappers) {
@@ -264,6 +266,7 @@ public class ERXJDBCConnectionBroker implements ERXJDBCAdaptor.ConnectionBroker 
              * 
              * @see #destroy(int)
              */
+            @Override
             public void destroy() {
                 try {
                     ERXJDBCConnectionBroker.this.destroy(10000);
@@ -516,6 +519,7 @@ public class ERXJDBCConnectionBroker implements ERXJDBCAdaptor.ConnectionBroker 
             lockTime = 0;
         }
     
+        @Override
         public String toString() {
             return getClass().getName()  +
             ": connection = " + connection +

@@ -33,12 +33,14 @@ public class ERDQuickSearch extends ERDCustomComponent {
 		super(context);
 	}
 
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
         return false;
     }
 
     public String searchValue;
     
+    @Override
     public void appendToResponse(WOResponse r, WOContext c) {
     	searchValue = defaultValue();
     	super.appendToResponse(r, c);

@@ -32,6 +32,7 @@ public class WRAttributeListEditor extends WOComponent implements DRAttributeEdi
     }
 
 
+    @Override
     public void reset() {
         _attributeList = null;
     }

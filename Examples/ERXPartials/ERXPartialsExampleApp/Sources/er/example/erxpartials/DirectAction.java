@@ -21,10 +21,12 @@ public class DirectAction extends ERD2WDirectAction {
      * @param pageConfiguration
      * @return
      */
+    @Override
     protected boolean allowPageConfiguration(String pageConfiguration) {
         return false;
     }
 
+    @Override
     public WOActionResults defaultAction() {
         return pageWithName(Main.class.getName());
     }

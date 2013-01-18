@@ -245,6 +245,7 @@ public class MTAjaxAutoComplete extends AjaxComponent {
 	 * pushes it up to the parent and pulls the "list" binding. The parent is
 	 * responsible for returning a list with some items that match the current value.
 	 */
+	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		// String inputString = request.contentString();
 

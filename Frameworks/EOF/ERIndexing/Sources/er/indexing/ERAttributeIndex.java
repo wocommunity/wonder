@@ -15,6 +15,7 @@ public class ERAttributeIndex extends ERIndex {
 
     protected class AttributeTransactionHandler extends TransactionHandler {
         
+        @Override
         public void _handleChanges(NSNotification n) {
             EOEditingContext ec = (EOEditingContext) n.object();
             if (ec.parentObjectStore() == ec.rootObjectStore()) {

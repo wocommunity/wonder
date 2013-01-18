@@ -58,6 +58,7 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
      * the actual item starts with the new one. This leads to ListRecentBug stying selected, even when 
      * the user goes to an edit page.
      */
+    @Override
     public WOComponent pageWithContextTaskEntity(D2WContext d2wcontext, String task, String entity, WOContext wocontext) {
     	WOComponent nextPage = super.pageWithContextTaskEntity(d2wcontext, task, entity, wocontext);
     	if (nextPage instanceof D2WPage) {
@@ -186,7 +187,6 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
         }
         page.setNextPageDelegate(new NextPageDelegate() {
 
-			// @Override
 			public WOComponent nextPage(WOComponent arg0) {
 				if(page.objectWasSaved()) {
 					session().finishSignUp();

@@ -23,6 +23,7 @@ public class DRAttributeGroup extends DRAttribute  {
         return attributeGroup;
     }
 
+    @Override
     public void resetDefaults() {
         super.resetDefaults();
         _attributes = new NSMutableArray();
@@ -48,14 +49,17 @@ public class DRAttributeGroup extends DRAttribute  {
              (NSDictionary)dictionary.objectForKey("userInfo"));
     }
 
+    @Override
     public boolean showTotal() {
         return _shouldTotal;
     }
 
+    @Override
     public boolean isGroup() {
         return _isGroup;
     }
 
+    @Override
     public NSMutableArray attributes() {
         return _attributes;
     }
@@ -85,6 +89,7 @@ public class DRAttributeGroup extends DRAttribute  {
         }
     }
 
+    @Override
     protected NSArray flatAttributesWithDepthDictionary(int attributeListDepth, NSMutableDictionary flatAttributeDepthDict) {
         DRAttribute att;
         Enumeration anEnum = _attributes.objectEnumerator();
@@ -110,10 +115,12 @@ public class DRAttributeGroup extends DRAttribute  {
         flatAttributesWithDepthDictionary(0, null);
     }
 
+    @Override
     public NSArray flatAttributes() {
         return _flatAttributes;
     }
 
+    @Override
     public NSArray flatAttributesTotal() {
         if (_flatAttributesTotal == null) {
             DRAttribute att;
@@ -129,6 +136,7 @@ public class DRAttributeGroup extends DRAttribute  {
         return _flatAttributesTotal;
     }
 
+    @Override
     public String toString() {
         return "<DRAttributeGroup keyPath:\"" + keyPath() + "\"; label:\"" + label() + "\"; attributes: " + attributes() + "; >";
     }

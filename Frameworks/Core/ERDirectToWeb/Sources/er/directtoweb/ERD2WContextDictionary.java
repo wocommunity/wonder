@@ -282,6 +282,7 @@ public class ERD2WContextDictionary {
     	return NSPropertyListSerialization.stringFromPropertyList(dictionary());
     }
     
+    @Override
     public String toString() {
     	return context() + ": " + dictionaryString();
     }

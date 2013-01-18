@@ -44,6 +44,7 @@ public class Application extends ERXApplication {
         D2W.setFactory(new Factory());
     }
 
+    @Override
     public void finishInitialization() {
         if(ERXProperties.booleanForKeyWithDefault("BugTracker.processMails", false)) {
             reader = new MailReader(null);

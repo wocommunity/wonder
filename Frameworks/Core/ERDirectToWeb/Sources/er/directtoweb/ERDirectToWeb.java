@@ -84,6 +84,7 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
     	setUpFrameworkPrincipalClass (ERDirectToWeb.class);
     }
 
+    @Override
     public void finishInitialization() {
         fixClasses();
         ERD2WModel model=ERD2WModel.erDefaultModel();        // force initialization

@@ -40,6 +40,7 @@ public class DB2PlugIn extends JDBCPlugIn {
   /**
    * Name of the driver.
    */
+  @Override
   public String defaultDriverName() {
       return "com.ibm.db2.jcc.DB2Driver";
   }
@@ -47,6 +48,7 @@ public class DB2PlugIn extends JDBCPlugIn {
   /**
    * Name of the database.
    */
+  @Override
   public String databaseProductName() {
     return "DB2";
   }
@@ -57,6 +59,7 @@ public class DB2PlugIn extends JDBCPlugIn {
    * it loads models.</P>
    * @return the name of the plugin.
    */
+  @Override
   public String name() {
     return "DB2";
   }
@@ -85,6 +88,7 @@ public class DB2PlugIn extends JDBCPlugIn {
    * framework and this can be used as a hard-coded equivalent.
    * </P> 
    */
+  @Override
   public NSDictionary jdbcInfo() {
     // you can swap this code out to write the property list out in order
     // to get a fresh copy of the JDBCInfo.plist.
@@ -130,6 +134,7 @@ public class DB2PlugIn extends JDBCPlugIn {
    * Returns a "pure java" synchronization factory.
    * Useful for testing purposes.
    */
+  @Override
   public EOSynchronizationFactory createSynchronizationFactory() {
     try {
       return new DB2SynchronizationFactory(adaptor());
@@ -142,6 +147,7 @@ public class DB2PlugIn extends JDBCPlugIn {
   /**                                                                                                                                                         
    * Expression class to create. We have custom code, so we need our own class.                                                                               
    */
+  @Override
   public Class defaultExpressionClass() {
     return DB2Expression.class;
   }
@@ -155,6 +161,7 @@ public class DB2PlugIn extends JDBCPlugIn {
    * @param channel open JDBCChannel
    * @return NSArray of NSDictionary where each dictionary corresponds to a unique  primary key value
    */
+  @Override
   public NSArray newPrimaryKeys(int count, EOEntity entity, JDBCChannel channel) {
     if (isPrimaryKeyGenerationNotSupported(entity)) {
       return null;

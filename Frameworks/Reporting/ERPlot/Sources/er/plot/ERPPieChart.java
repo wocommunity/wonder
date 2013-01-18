@@ -86,6 +86,7 @@ public class ERPPieChart extends ERPChart {
         super(context);
     }
     
+    @Override
     public String nameKey() {
         if(_nameKey == null) {
             _nameKey = (String)valueForBinding("nameKey");
@@ -94,6 +95,7 @@ public class ERPPieChart extends ERPChart {
         return _nameKey;
     }
 
+    @Override
     public String valueKey() {
         if(_valueKey == null) {
             _valueKey = (String)valueForBinding("valueKey");
@@ -102,6 +104,7 @@ public class ERPPieChart extends ERPChart {
         return _valueKey;
     }
 
+    @Override
     protected Dataset createDataset() {
         AccumulatingPieDataset dataset = new AccumulatingPieDataset();
          for(Enumeration<?> items = items().objectEnumerator(); items.hasMoreElements(); ) {
@@ -113,6 +116,7 @@ public class ERPPieChart extends ERPChart {
         return dataset;
     }
     
+    @Override
     public JFreeChart createChart() {
         JFreeChart chart = null;
         PieDataset dataset = (PieDataset)dataset();
@@ -131,6 +135,7 @@ public class ERPPieChart extends ERPChart {
         return chart;
     }
 
+    @Override
     protected NSArray<String> supportedTypes() {
         return SUPPORTED_TYPES;
     }

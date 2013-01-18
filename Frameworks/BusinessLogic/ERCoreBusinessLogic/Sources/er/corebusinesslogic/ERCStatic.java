@@ -173,10 +173,12 @@ public class ERCStatic extends _ERCStatic {
 
     public static ERCStaticClazz clazz = new ERCStaticClazz();
 
+    @Override
     public String toString() {
         return entityName()+": "+key()+"="+value();
     }
 
+    @Override
     public String userPresentableDescription() {
         return toString();
     }    

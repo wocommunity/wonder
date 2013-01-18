@@ -30,6 +30,7 @@ public class Bug extends _Bug implements Markable {
     protected boolean _componentChanged;
     protected boolean _ownerChanged;
 
+    @Override
     public void init(EOEditingContext ec) {
         super.init(ec);
         setPriority(Priority.MEDIUM);
@@ -93,6 +94,7 @@ public class Bug extends _Bug implements Markable {
     }
 
     // FIXME:(ak) now *what* is this supposed to do???
+    @Override
     public void setComponent(Component value) {
         willChange();
         Component oldComponent = component();
@@ -106,6 +108,7 @@ public class Bug extends _Bug implements Markable {
         }
     }
 
+    @Override
     public void setOwner(People value) {
         willChange();
         People oldOwner = owner();
@@ -119,6 +122,7 @@ public class Bug extends _Bug implements Markable {
         }
     }
 
+	@Override
 	public void setState(State newState) {
         willChange();
         State oldState = state();
@@ -152,11 +156,13 @@ public class Bug extends _Bug implements Markable {
         return null;
     }
 
+    @Override
     public void validateForInsert() {
         super.validateForInsert();
         validateTargetReleaseForNewBugs();
     }
 
+    @Override
     public void validateForUpdate() {
         if (_componentChanged && component()!=null && !_ownerChanged) {
             setOwner(component().owner());
@@ -196,6 +202,7 @@ public class Bug extends _Bug implements Markable {
 		return ERXArrayUtilities.sortedArraySortedWithKey(comments(), Comment.Key.DATE_SUBMITTED);
 	}
 
+    @Override
     public void didUpdate() {
         super.didUpdate();
         _newText=null;

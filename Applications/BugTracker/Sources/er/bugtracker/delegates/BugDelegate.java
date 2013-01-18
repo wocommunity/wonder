@@ -10,6 +10,7 @@ import er.bugtracker.State;
 
 public class BugDelegate extends BranchDelegate {
 
+    @Override
     protected NSArray defaultBranchChoices(D2WContext context) {
         NSArray result = super.defaultBranchChoices(context);
         log.debug("in: " + result);

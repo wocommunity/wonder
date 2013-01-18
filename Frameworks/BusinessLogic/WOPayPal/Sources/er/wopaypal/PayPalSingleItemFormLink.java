@@ -148,6 +148,7 @@ public class PayPalSingleItemFormLink extends
      * 
      * @return NSArray
      */
+    @Override
     protected NSArray additionalBindingList() {
         NSMutableArray bindingsArray = new NSMutableArray();
         bindingsArray.addObjectsFromArray(new NSArray(new Object[] { "useImageButton"}));

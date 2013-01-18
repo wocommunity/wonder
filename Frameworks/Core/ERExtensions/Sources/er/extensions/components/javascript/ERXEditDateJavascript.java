@@ -40,6 +40,7 @@ public class ERXEditDateJavascript extends ERXStatelessComponent {
 		super(context);
 	}
 
+	@Override
 	public void awake() {
 		elementID = context().elementID().replace('.', '_');
 	}
@@ -50,6 +51,7 @@ public class ERXEditDateJavascript extends ERXStatelessComponent {
      * @see er.extensions.components.ERXNonSynchronizingComponent#appendToResponse(com.webobjects.appserver.WOResponse, com.webobjects.appserver.WOContext)
      * @see ERXResponseRewriter#addScriptResourceInHead(WOResponse, WOContext, String, String)
      */
+    @Override
     public void appendToResponse(WOResponse response, WOContext context)
     {
         ERXResponseRewriter.addScriptResourceInHead(response, context, "ERExtensions", "date-picker.js");
@@ -76,6 +78,7 @@ public class ERXEditDateJavascript extends ERXStatelessComponent {
 		setValueForBinding(value, "dateString");
 	}
 
+	@Override
 	public String name() {
 		return "datebox" + elementID;
 	}

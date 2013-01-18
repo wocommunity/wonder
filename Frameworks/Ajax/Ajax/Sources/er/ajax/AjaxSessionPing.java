@@ -42,6 +42,7 @@ public class AjaxSessionPing extends AjaxDynamicElement {
     /**
      * Appends script to start Ajax.ActivePeriodicalUpdater to the response.
      */
+    @Override
     public void appendToResponse(WOResponse response, WOContext context) {
     	super.appendToResponse(response, context);
         WOComponent component = context.component();
@@ -79,6 +80,7 @@ public class AjaxSessionPing extends AjaxDynamicElement {
     /**
      * Unused.
      */
+    @Override
     public WOActionResults handleRequest(WORequest request, WOContext context) {
         return null;
     }
@@ -87,6 +89,7 @@ public class AjaxSessionPing extends AjaxDynamicElement {
     /**
      * Uses Prototype and Wonder
      */
+    @Override
     protected void addRequiredWebResources(WOResponse response, WOContext context) {
         addScriptResourceInHead(context, response, "prototype.js");
         addScriptResourceInHead(context, response, "wonder.js");

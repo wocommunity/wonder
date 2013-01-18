@@ -123,14 +123,18 @@ public class ERXTestReportListener extends RunListener {
         return fixed;
     }
 
+    @Override
     public void testRunStarted(Description description) { start = System.currentTimeMillis(); }
 
+    @Override
     public void testStarted(Description description) { }
 
+    @Override
     public void testFailure(Failure failure) { }
 
     private static java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+    @Override
     public void testRunFinished(Result result) {
 
         String contact = System.getProperty("wo.test.emailAddress");

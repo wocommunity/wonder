@@ -173,6 +173,7 @@ public class ERXNavigationState implements Serializable {
         return children;
     }
 
+    @Override
     public String toString() {
         return "\"" + stateAsString() + "\"";
     }

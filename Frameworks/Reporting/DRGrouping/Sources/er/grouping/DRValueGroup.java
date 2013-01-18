@@ -72,14 +72,17 @@ public class DRValueGroup extends DRValue  {
 
     }
 
+    @Override
     public NSArray flatValues() {
         return _flatValues;
     }
 
+    @Override
     public boolean isGroup() {
         return _isGroup;
     }
 
+    @Override
     public double total() {
         return _total;
     }

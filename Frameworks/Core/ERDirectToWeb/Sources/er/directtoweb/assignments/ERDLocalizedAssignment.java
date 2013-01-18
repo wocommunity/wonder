@@ -81,6 +81,7 @@ public class ERDLocalizedAssignment extends ERDAssignment implements ERDLocaliza
         return ERXArrayUtilities.arrayWithoutDuplicates(dependentKeys);
     }
 
+    @Override
     public Object fire(D2WContext c) {
         String key = (String)value();
         if (log.isDebugEnabled()) {

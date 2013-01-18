@@ -263,6 +263,7 @@ public class CCRating extends AjaxDynamicElement {
      * @param context WOContext used to determine component used in
      * @return optional value for id, or calculated value if unbound
      */
+    @Override
     public String id(WOContext context) {
         return (String) valueForBinding("id", ERXWOContext.safeIdentifierName(context, false), context.component());
     }

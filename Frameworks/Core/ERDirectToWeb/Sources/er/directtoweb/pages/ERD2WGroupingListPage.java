@@ -35,6 +35,7 @@ public class ERD2WGroupingListPage extends ERD2WListPage {
     public Object sublistSection;
 
     // the sorting will come only from the rules
+    @Override
     public boolean userPreferencesCanSpecifySorting() { 
         return false;
     }
@@ -64,6 +65,7 @@ public class ERD2WGroupingListPage extends ERD2WListPage {
         sublist = value;
     }
     // we don't ever want to batch for printerFriendly
+    @Override
     public int numberOfObjectsPerBatch() { 
         return ("printerFriendly".equals(d2wContext().valueForKey("subTask"))? 0 : super.numberOfObjectsPerBatch()); 
     }

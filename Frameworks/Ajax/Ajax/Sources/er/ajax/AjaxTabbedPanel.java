@@ -121,6 +121,7 @@ public class AjaxTabbedPanel extends AjaxDynamicElement {
     /**
      * Creates the tabs and pane control.
      */
+    @Override
     public void appendToResponse(WOResponse response, WOContext context) {
         WOComponent component = context.component();
         String idString = (String) id.valueInComponent(component);
@@ -223,6 +224,7 @@ public class AjaxTabbedPanel extends AjaxDynamicElement {
     }
 
 
+	@Override
 	protected void addRequiredWebResources(WOResponse response, WOContext context) {
 		AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
 		// Wonder is not needed by this component, but it is often used when Ajax components are used
@@ -233,6 +235,7 @@ public class AjaxTabbedPanel extends AjaxDynamicElement {
 	}
 
 
+	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		return null;
 	}

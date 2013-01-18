@@ -120,6 +120,7 @@ public class ERXDummyRecord extends EOCustomObject {
 			object = o;
 		}
 
+		@Override
 		public boolean equals(Object obj) {
 			if (obj instanceof GlobalID) {
 				GlobalID gid = (GlobalID) obj;
@@ -128,10 +129,12 @@ public class ERXDummyRecord extends EOCustomObject {
 			return false;
 		}
 
+		@Override
 		public int hashCode() {
 			return System.identityHashCode(object);
 		}
 
+		@Override
 		public boolean isTemporary() {
 			return true;
 		}
@@ -143,17 +146,20 @@ public class ERXDummyRecord extends EOCustomObject {
 			super(null, key);
 		}
 
+		@Override
 		public Object valueInObject(Object object) {
 			ERXDummyRecord eo = (ERXDummyRecord) object;
 			return NSKeyValueCoding.Utility.valueForKey(eo.object(), _key);
 		}
 
+		@Override
 		public void setValueInObject(Object value, Object object) {
 			ERXDummyRecord eo = (ERXDummyRecord) object;
 			NSKeyValueCoding.Utility.takeValueForKey(eo.object(), value, _key);
 		}
 	}
 
+	@Override
 	public NSKeyValueCoding._KeyBinding _otherStorageBinding(String key) {
 		NSKeyValueCoding._KeyBinding result = new ProxyBinding(key);
 		return result;

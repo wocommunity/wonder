@@ -91,6 +91,7 @@ public class WRReport extends WOComponent  {
       throw new IllegalStateException("There is a component bound to this variable and it doesn't exist.  If you need this component to work, please look at what this is supposed to do and submit a patch.");
     }
     
+    @Override
     public void finalize() throws Throwable {
         NSNotificationCenter.defaultCenter().removeObserver(this);
         super.finalize();
@@ -109,6 +110,7 @@ public class WRReport extends WOComponent  {
         return _reportStyles;
     }
 
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }
@@ -130,6 +132,7 @@ public class WRReport extends WOComponent  {
         }
     }
 
+    @Override
     public void awake() {
         _model = null;
         _vheadingIndex = 0;
@@ -146,10 +149,12 @@ public class WRReport extends WOComponent  {
     }
 
     
+    @Override
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         super.takeValuesFromRequest(r, c);
     }
 
+    @Override
     public void appendToResponse(WOResponse r, WOContext c) {
         initializeDimensionArrayFromBindings();
         super.appendToResponse(r, c);

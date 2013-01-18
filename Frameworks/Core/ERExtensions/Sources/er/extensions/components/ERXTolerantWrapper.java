@@ -41,6 +41,7 @@ public class ERXTolerantWrapper extends WODynamicGroup {
 		return tolerant;
 	}
 
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		WOComponent component = context.component();
 		if (isTolerant(component)) {
@@ -58,6 +59,7 @@ public class ERXTolerantWrapper extends WODynamicGroup {
 		}
 	}
 
+	@Override
 	public WOActionResults invokeAction(WORequest request, WOContext context) {
 		WOComponent component = context.component();
 		if (isTolerant(component)) {
@@ -73,6 +75,7 @@ public class ERXTolerantWrapper extends WODynamicGroup {
 		return super.invokeAction(request, context);
 	}
 
+	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		WOComponent component = context.component();
 		if (isTolerant(component)) {

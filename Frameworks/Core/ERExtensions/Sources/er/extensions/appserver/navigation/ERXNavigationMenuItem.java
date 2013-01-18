@@ -66,6 +66,7 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
     	return null;
     }
     
+    @Override
     public void reset() {
         _navigationItem = null;
         _navigationState = null;

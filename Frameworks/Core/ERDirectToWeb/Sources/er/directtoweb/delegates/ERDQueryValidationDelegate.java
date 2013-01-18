@@ -247,6 +247,7 @@ public abstract class ERDQueryValidationDelegate {
         /**
          * @inheritDoc
          */
+        @Override
         public void validateQueryValues(ERD2WQueryPage sender) {
             queryPage = sender;
             

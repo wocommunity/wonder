@@ -447,6 +447,7 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
      * implementation catches NoSuchMethodException more or less silently, so be
      * sure to turn on logging.
      */
+    @Override
     public WOActionResults performActionNamed(String anActionName) {
         WOActionResults newPage = null;
         try {

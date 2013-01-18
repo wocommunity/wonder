@@ -52,6 +52,7 @@ public class ERXNavigationMenu extends ERXStatelessComponent {
         super(context);
     }
 
+    @Override
     public void reset() {
         _level1Items=null;
         _level2Items=null;
@@ -132,16 +133,19 @@ public class ERXNavigationMenu extends ERXStatelessComponent {
         return children;
     }
 
+    @Override
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         setUpMenu();
         super.takeValuesFromRequest(r,c);
     }
 
+    @Override
     public void appendToResponse(WOResponse r, WOContext c) {
         setUpMenu();
         super.appendToResponse(r,c);
     }
 
+    @Override
     public WOActionResults invokeAction(WORequest r, WOContext c) {
         WOActionResults results=null;
         setUpMenu();

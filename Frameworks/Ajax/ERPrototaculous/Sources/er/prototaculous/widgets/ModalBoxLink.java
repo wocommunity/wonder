@@ -38,6 +38,7 @@ public class ModalBoxLink extends ModalBox {
     }
     
     // accessors
+    @Override
     protected NSArray<String> _options() {
     	NSMutableArray<String> params = new NSMutableArray<String>(super._options());
     	

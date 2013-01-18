@@ -193,6 +193,7 @@ public class ERDEditFile extends ERDCustomEditComponent {
         didUpload = false;
     }
     
+    @Override
     public boolean isStateless() {
         return false;
     }

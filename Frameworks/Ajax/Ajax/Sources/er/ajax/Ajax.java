@@ -31,6 +31,7 @@ public class Ajax extends ERXFrameworkPrincipal {
     /**
      * This is called directly only for when ERXApplication is sub-classed.
      */
+	@Override
 	public void finishInitialization() {
 		WOApplication application = WOApplication.application();
 		if (!AjaxRequestHandler.useAjaxRequestHandler()) {

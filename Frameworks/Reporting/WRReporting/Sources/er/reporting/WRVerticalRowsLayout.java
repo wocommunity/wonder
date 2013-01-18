@@ -19,6 +19,7 @@ public class WRVerticalRowsLayout extends WRReport {
     }
 
     /** component does not synchronize it's variables */
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
 }

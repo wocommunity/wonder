@@ -17,6 +17,7 @@ public class DB2ForISeriesPlugIn extends DB2PlugIn {
 	  /**
 	   * Name of the driver.
 	   */
+	  @Override
 	  public String defaultDriverName() {
 	      return "com.ibm.as400.access.AS400JDBCDriver";
 	  }
@@ -25,6 +26,7 @@ public class DB2ForISeriesPlugIn extends DB2PlugIn {
 	   * Returns a "pure java" synchronization factory.
 	   * Useful for testing purposes.
 	   */
+	  @Override
 	  @SuppressWarnings("deprecation")
 	public EOSynchronizationFactory createSynchronizationFactory() {
 	    try {

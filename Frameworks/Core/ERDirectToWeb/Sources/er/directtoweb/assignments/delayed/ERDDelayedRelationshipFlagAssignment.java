@@ -34,6 +34,7 @@ public class ERDDelayedRelationshipFlagAssignment extends ERDDelayedAssignment {
     public ERDDelayedRelationshipFlagAssignment(EOKeyValueUnarchiver u) { super(u); }
     public ERDDelayedRelationshipFlagAssignment(String key, Object value) { super(key,value); }
 
+    @Override
     public Object fireNow(D2WContext c) {
         String path = keyPath();
         if("displayPropertyKeys".equals(path)) {

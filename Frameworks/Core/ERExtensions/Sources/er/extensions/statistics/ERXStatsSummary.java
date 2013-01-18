@@ -92,6 +92,7 @@ public class ERXStatsSummary extends ERXStatelessComponent {
         return statsTypes().count() > 0;
     }
 
+    @Override
     public void reset() {
         super.reset();
         currentType = null;

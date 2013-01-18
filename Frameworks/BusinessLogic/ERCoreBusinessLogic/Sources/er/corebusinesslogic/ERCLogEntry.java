@@ -24,6 +24,7 @@ public class ERCLogEntry extends _ERCLogEntry {
         super();
     }
 
+    @Override
     public void init(EOEditingContext ec) {
         super.init(ec);
         setCreated(new NSTimestamp());

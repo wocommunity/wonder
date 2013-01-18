@@ -155,12 +155,12 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 			super._moveObjectAtIndexToIndex(sourceIndex, destIndex);
 		}
 
-		//@Override
+		@Override
 		public synchronized void addObject(Object object) {
 			super.addObject((V) object);
 		}
 
-		//@Override
+		@Override
 		public synchronized void addObjects(Object... objects) {
 			super.addObjects((V[])objects);
 		}
@@ -366,7 +366,7 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 			return super.objectEnumerator();
 		}
 
-		//@Override
+		@Override
 		public synchronized V[] objects() {
 			return (V[])super.objects();
 		}
@@ -376,7 +376,7 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 			return super.objects(range);
 		}
 
-		//@Override
+		@Override
 		protected synchronized V[] objectsNoCopy() {
 			return (V[]) super.objectsNoCopy();
 		}

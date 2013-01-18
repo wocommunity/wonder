@@ -72,6 +72,7 @@ public class ERXResponseComponent extends ERXStatelessComponent {
 		_component = results;
 	}
 
+	@Override
 	public void appendToResponse(WOResponse aResponse, WOContext aContext) {
 		aContext._setResponse(aResponse);
 		aResponse.setContent(_response.content());

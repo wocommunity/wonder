@@ -80,6 +80,7 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
         return 2*displayPropertyKeys().count()+2;
     }
 
+    @Override
     public int numberOfObjectsPerBatch() {
         // if we are not showing the nav bar, do not batch the display group (since user will have no way to navigate batches)
         if (!ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("showBanner"), true)) {
@@ -132,22 +133,27 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
 
     public String dummy;
 
+    @Override
     public boolean showCancel() {
         return _nextPage!=null;
     }
 
+    @Override
     public boolean isEntityInspectable() {
         return isEntityReadOnly() && ERXValueUtilities.booleanValue(d2wContext().valueForKey("isEntityInspectable"));
     }
 
+    @Override
     public void setObject(EOEnterpriseObject eo) {
         super.setObject(eo);
     }
 
+    @Override
     public WOComponent backAction() {
         return super.backAction();
     }
 
+    @Override
     public WOComponent nextPage() {
         return (nextPageDelegate() != null) ? nextPageDelegate().nextPage(this) : super.nextPage();
     }
@@ -219,6 +225,7 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
         return backAction();
     }
 
+    @Override
     public void validationFailedWithException (Throwable e, Object value, String keyPath) {
         if (value != null) {
             ERXValidation.validationFailedWithException(e, value, keyPath, errorDictionaryForObject(value), propertyKey(), ERXLocalizer.currentLocalizer(), d2wContext().entity(), shouldSetFailedValidationValue());
@@ -226,6 +233,7 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
         super.validationFailedWithException(e, value, keyPath);
     }
 
+    @Override
     public void clearValidationFailed(){
         super.clearValidationFailed();
         setErrorMessage(null);
@@ -239,6 +247,7 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
         return null;
     }
 
+    @Override
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         // Need to make sure that we have a clean slate, every time
         clearValidationFailed();
@@ -307,10 +316,12 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
             _unboundKeyDictionary = new NSMutableDictionary();
         }
 
+        @Override
         public Object handleQueryWithUnboundKey(String key) {
             return _unboundKeyDictionary.objectForKey(key);
         }
 
+        @Override
         public void handleTakeValueForUnboundKey(Object value, String key) {
             _unboundKeyDictionary.takeValueForKey(value, key);
         }

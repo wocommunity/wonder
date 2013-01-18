@@ -16,6 +16,7 @@ public class DirectAction extends WODirectAction {
         super(aRequest);
     }
 
+    @Override
     public WOActionResults defaultAction() {
         return pageWithName("Main");
     }

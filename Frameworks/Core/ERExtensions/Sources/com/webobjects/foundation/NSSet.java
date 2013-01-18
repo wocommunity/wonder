@@ -227,6 +227,7 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		throw new UnsupportedOperationException("clear is not a supported operation in com.webobjects.foundation.NSSet");
 	}
 
+	@Override
 	public Object clone() {
 		return this;
 	}
@@ -283,6 +284,7 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		return (NSSet<T>) EmptySet;
 	}
 
+	@Override
 	public boolean equals(Object object) {
 		if (object == this) {
 			return true;
@@ -460,6 +462,7 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		return objects;
 	}
 
+	@Override
 	public String toString() {
 		StringBuilder buffer = new StringBuilder(128);
 		buffer.append("(");

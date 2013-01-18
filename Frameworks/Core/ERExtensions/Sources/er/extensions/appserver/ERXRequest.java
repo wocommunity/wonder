@@ -101,6 +101,7 @@ public class ERXRequest extends WORequest {
      * @see WOContext#completeURLWithRequestHandlerKey(String, String, String, String, boolean, int)
      * @see WORequest#_completeURLPrefix(StringBuffer, boolean, int)
      */
+	@Override
 	public String _serverName() {
 		String serverName = headerForKey("x-webobjects-servlet-server-name");
 
@@ -145,6 +146,7 @@ public class ERXRequest extends WORequest {
         return isBrowserFormValueEncodingOverrideEnabled.booleanValue();
     }
 
+    @Override
     public WOContext context() {
     	return _context();
     }
@@ -256,6 +258,7 @@ public class ERXRequest extends WORequest {
      * 
      * @return whether or not this request is secure
      */
+    @Override
     public boolean isSecure() {
     	return ERXRequest.isRequestSecure(this);
     }

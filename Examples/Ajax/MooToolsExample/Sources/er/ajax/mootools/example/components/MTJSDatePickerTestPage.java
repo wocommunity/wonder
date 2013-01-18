@@ -16,6 +16,7 @@ public class MTJSDatePickerTestPage extends Main {
         _updateTime();
 	}
 
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		super.appendToResponse(response, context);
 		MTAjaxUtils.addStylesheetResourceInHead(context, response, "app", "datepicker_dashboard/datepicker_dashboard.css");

@@ -36,6 +36,7 @@ import com.webobjects.foundation.NSMutableArray;
 public class SeleniumTest implements Cloneable {	
     
 	public static abstract class Element implements Cloneable {
+		@Override
 		public abstract Element clone();
 	}
 	
@@ -56,10 +57,12 @@ public class SeleniumTest implements Cloneable {
 			return value;
 		}
 		
+		@Override
 		public Comment clone() {
 			return new Comment(value);
 		}
 		
+		@Override
 		public String toString() {
 			return getClass().getCanonicalName() + ": " + value;
 		}
@@ -130,10 +133,12 @@ public class SeleniumTest implements Cloneable {
 			return result.toString();
 		}
 		
+		@Override
 		public MetaCommand clone() {
 			return new MetaCommand(name, arguments);
 		}
 		
+		@Override
 		public String toString() {
 			StringBuilder builder = new StringBuilder(getClass().getCanonicalName() + ": ");
 			builder.append("@" + name + " ");
@@ -187,10 +192,12 @@ public class SeleniumTest implements Cloneable {
 			return value;
 		}
 		
+		@Override
 		public Command clone() {
 			return new Command(name, target, value);
 		}
 		
+		@Override
 		public String toString() {
 			return getClass().getCanonicalName() + ": name='" + name + "', target='" + target + "', value='" + value + "'";
 		}
@@ -233,6 +240,7 @@ public class SeleniumTest implements Cloneable {
 		this.name = name;
 	}
 	
+	@Override
 	public Object clone() {
 		return new SeleniumTest(name, elements);
 	}

@@ -96,6 +96,7 @@ public class ERDDelayedObjectCreationAssignment extends ERDDelayedAssignment {
      * @param context current context
      * @return newly created object
      */
+    @Override
     public Object fireNow(D2WContext context) {
         Object createdObject = null;
         try {

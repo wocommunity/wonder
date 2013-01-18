@@ -86,12 +86,14 @@ public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
 
     protected EOEditingContext localContext;
 
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     public ERDEditOwnedRelationship(WOContext c) {
         super(c);
     }
 
+    @Override
     public void awake() {
         _selectionList = null;
     }
@@ -351,6 +353,7 @@ public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
             this.displayName = displayName;
             this.entityName = entityName;
         }
+        @Override
         public String toString() { return displayName; }
     }
 

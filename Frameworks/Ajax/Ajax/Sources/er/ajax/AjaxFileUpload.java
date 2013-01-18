@@ -109,6 +109,7 @@ public class AjaxFileUpload extends WOComponent {
 		AjaxUtils.addScriptResourceInHead(aContext, aResponse, "wonder.js");
 	}
 
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}

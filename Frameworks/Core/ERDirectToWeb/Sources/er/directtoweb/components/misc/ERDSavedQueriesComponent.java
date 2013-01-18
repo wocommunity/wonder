@@ -324,6 +324,7 @@ public class ERDSavedQueriesComponent extends WOComponent {
             setQueryBindings((NSDictionary) decodeDictionaryWithEOs((NSDictionary)unarchiver.decodeObjectForKey("queryBindings")));
 		}
 
+		@Override
 		public String toString() {
 			return "SavedQuery: " + hashCode() + " dict=" + dict;
 		}
@@ -439,10 +440,12 @@ public class ERDSavedQueriesComponent extends WOComponent {
 	public static class _TimestampSupport extends EOKeyValueArchiving.Support {
 		private static NSTimestampFormatter _formatter = new NSTimestampFormatter("%Y-%m-%d %H:%M:%S");
 
+		@Override
 		public void encodeWithKeyValueArchiver(Object receiver, EOKeyValueArchiver archiver) {
 			archiver.encodeObject(_formatter.format(receiver), "value");
 		}
 
+		@Override
 		public Object decodeObjectWithKeyValueUnarchiver(EOKeyValueUnarchiver unarchiver) {
 			try {
 				return _formatter.parseObject((String) unarchiver.decodeObjectForKey("value"));

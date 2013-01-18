@@ -77,6 +77,7 @@ public class ERXLanguageMenu extends ERXStatelessComponent {
 		super(context);
 	}
 
+	@Override
 	public void reset() {
 		super.reset();
 		_languageOption = null;

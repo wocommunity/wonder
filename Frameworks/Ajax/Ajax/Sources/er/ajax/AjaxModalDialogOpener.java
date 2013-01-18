@@ -139,12 +139,14 @@ public class AjaxModalDialogOpener extends AjaxComponent {
 		return (String) valueForBinding("dialogId");
 	}
 	
+	@Override
 	protected void addRequiredWebResources(WOResponse res) {
 	}
 	
 	/**
 	 * Runs action and returns success status if enabled, otherwise returns failed status.
 	 */
+	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		if( booleanValueForBinding("enabled", true)) {
 			valueForBinding("action");

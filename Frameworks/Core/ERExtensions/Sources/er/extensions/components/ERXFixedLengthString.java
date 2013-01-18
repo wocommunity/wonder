@@ -78,6 +78,7 @@ public class ERXFixedLengthString extends ERXStatelessComponent {
     /**
      * Resets cached instance variables.
      */
+    @Override
     public void reset() {
         super.reset();
         valueWasTrimmed = false;

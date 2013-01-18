@@ -70,6 +70,7 @@ public class ERXKeyTest extends ERXTestCase {
 	private static final NSArray<Integer> simpleNumbers = new NSArray<Integer>(Integer.valueOf(1),Integer.valueOf(2),Integer.valueOf(3),Integer.valueOf(4),Integer.valueOf(5));
 
 	
+	@Override
 	@Before
 	public void setUp() throws Exception {
 		ec = ERXEC.newEditingContext();
@@ -130,6 +131,7 @@ public class ERXKeyTest extends ERXTestCase {
 		ec.saveChanges();		
 	}
 
+	@Override
 	@After
 	public void tearDown() throws Exception {
 		roles = null;

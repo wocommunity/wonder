@@ -68,6 +68,7 @@ public class ERXRemoteShell extends WOComponent {
         super(context);
     }
 
+    @Override
     public void appendToResponse(WOResponse r, WOContext c) {
         if (session().objectForKey("ERXRemoteShell.enabled") != null) {
             dir = "";

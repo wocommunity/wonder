@@ -202,6 +202,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
      * Called when it is time to finish the
      * initialization of the framework.
      */
+    @Override
     public void finishInitialization() {
         ERCAuditTrailHandler.initialize();
         ERCStampedEnterpriseObject.initialize();

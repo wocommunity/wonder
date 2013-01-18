@@ -53,6 +53,7 @@ public class MTStyledPopUpButton extends ERXStatelessComponent {
     	_id = null;
     }
 	
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
         if(selectionIsDefined() && selectedValueIsDefined()) {
         	throw new IllegalArgumentException("You must specify either selection or selectedValue.");
@@ -129,6 +130,7 @@ public class MTStyledPopUpButton extends ERXStatelessComponent {
 		_id = id;
 	}
 
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}

@@ -55,6 +55,7 @@ public class WRReportEditor extends WOComponent implements DRMasterCriteriaEditi
     }
 
 
+    @Override
     public void reset() {
         _masterCriteria = null;
         _masterCriteriaList = null;
@@ -62,12 +63,14 @@ public class WRReportEditor extends WOComponent implements DRMasterCriteriaEditi
     }
 
 
+    @Override
     public void awake() {
         //[self reset];
         super.awake();
     }
 
 
+    @Override
     public void appendToResponse(WOResponse r, WOContext c) {
         //[self reset];
         super.appendToResponse(r, c);

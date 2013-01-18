@@ -41,6 +41,7 @@ public class BTBusinessLogic extends ERXFrameworkPrincipal {
         return sharedInstance;
     }
 
+    @Override
     public void finishInitialization() {
         EOEditingContext ec = ERXEC.newEditingContext();
         ec.lock();

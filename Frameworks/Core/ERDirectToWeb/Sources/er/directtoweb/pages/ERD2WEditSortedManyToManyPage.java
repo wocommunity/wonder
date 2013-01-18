@@ -492,6 +492,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
         return result;
     }
 
+    @Override
     public void appendToResponse(WOResponse r, WOContext c){
         if(((ERXSession)session()).javaScriptEnabled()){
             StringBuffer result = new StringBuffer();

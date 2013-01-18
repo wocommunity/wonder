@@ -831,6 +831,7 @@ public class DirectAction extends WODirectAction  {
         } catch (InterruptedException ie) {}
     }
 
+    @Override
     public WOActionResults defaultAction() {
         // KH - make this faster as well :)
         Application theApplication = (Application) WOApplication.application();

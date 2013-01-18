@@ -532,6 +532,7 @@ public class DRSubMasterCriteria {
         return _keyDesc;
     }
 
+    @Override
     public String toString() {
         return "<DRSubMasterCriteria key: \"" + key() + "\"; label: \"" + label() + "\"; >";
     }

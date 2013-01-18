@@ -78,7 +78,7 @@ public class ERSelenium extends ERXFrameworkPrincipal {
         return isDevMode || ERXProperties.booleanForKeyWithDefault("SeleniumTestsEnabled", false);
     }
 
-    // @Override
+    @Override
     public void finishInitialization() {
         // TODO: check for multithreading/synchronization issued with factory
         // instance() method

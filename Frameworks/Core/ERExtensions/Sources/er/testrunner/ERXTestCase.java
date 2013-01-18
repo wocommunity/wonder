@@ -45,6 +45,7 @@ public class ERXTestCase extends TestCase {
         super(name);
     }
 
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         persistentRootObjects = new NSMutableArray();
@@ -82,6 +83,7 @@ public class ERXTestCase extends TestCase {
         return !(globalId == null || globalId.isTemporary());
     }
 
+    @Override
     protected void tearDown() throws Exception {
         editingContext().revert();
         try {
@@ -94,6 +96,7 @@ public class ERXTestCase extends TestCase {
         super.tearDown();
     }
 
+    @Override
     public void runBare() throws Throwable {
         // We only want to see tearDown exceptions if runTest worked without exception
         setUp();

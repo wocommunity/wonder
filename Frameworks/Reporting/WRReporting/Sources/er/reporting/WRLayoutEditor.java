@@ -33,6 +33,7 @@ public class WRLayoutEditor extends WOComponent  {
         return _reportStyles;
     }
 
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }

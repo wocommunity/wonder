@@ -211,6 +211,7 @@ public abstract class ERXFrameworkPrincipal {
     	// Do nothing
     }
     
+    @Override
     public String toString() {
       return ERXStringUtilities.lastPropertyKeyInKeyPath(getClass().getName());
     }

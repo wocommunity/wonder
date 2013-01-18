@@ -179,6 +179,7 @@ public class ERCNNotificationCoordinator {
         _isTerminated = true;
     }
 
+    @Override
     public void finalize() throws Throwable {
         if (! _isTerminated)   terminate();
         super.finalize();

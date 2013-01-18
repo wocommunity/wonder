@@ -210,6 +210,7 @@ public class ERXUnitAwareDecimalFormat extends DecimalFormat implements Cloneabl
         this.unitPrefixArray = unitPrefixArray;
     }
 
+    @Override
     public StringBuffer format(double number, StringBuffer toAppendTo, FieldPosition fieldPosition) {
         StringBuffer result = toAppendTo;
         UnitPrefix unitPrefix = UnitPrefix.findAppropriatePrefix(number, unitPrefixArray);
@@ -225,6 +226,7 @@ public class ERXUnitAwareDecimalFormat extends DecimalFormat implements Cloneabl
         return result; 
     }
     
+    @Override
     public StringBuffer format(long number, StringBuffer toAppendTo, FieldPosition fieldPosition) {
         return format((double)number, toAppendTo, fieldPosition);
     }

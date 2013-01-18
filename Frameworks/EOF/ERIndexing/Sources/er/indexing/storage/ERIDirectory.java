@@ -313,6 +313,7 @@ public class ERIDirectory extends _ERIDirectory {
 	public interface Key extends _ERIDirectory.Key {
 	}
 
+	@Override
 	public void init(EOEditingContext ec) {
 		super.init(ec);
 	}

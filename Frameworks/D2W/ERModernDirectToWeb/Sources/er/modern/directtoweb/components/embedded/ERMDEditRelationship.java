@@ -34,6 +34,7 @@ public class ERMDEditRelationship extends ERDCustomEditComponent {
         super(context);
     }
     
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
     
     public NSDictionary<String,String> settings() {

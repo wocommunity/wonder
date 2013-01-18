@@ -32,6 +32,7 @@ public abstract class UJACResource extends WOHTMLDynamicElement {
     }
   }
 
+  @Override
   public void appendAttributesToResponse(WOResponse response, WOContext context) {
     WOComponent component = context.component();
     String href = (String)_source.valueInComponent(component);

@@ -203,6 +203,7 @@ public class DirectAction extends ERD2WDirectAction {
         return entranceTemplate(result);
     }
 
+    @Override
     public WOActionResults defaultAction() {
         // the reason for this redirect is that the session cookie and the
         // 'remember my login cookie'
@@ -213,6 +214,7 @@ public class DirectAction extends ERD2WDirectAction {
         return page;
     }
 
+    @Override
     public WOActionResults logoutAction() {
     	WORedirect redirect = (WORedirect) pageWithName("WORedirect");
     	redirect.setUrl(context().directActionURLForActionNamed("entrance", null));
