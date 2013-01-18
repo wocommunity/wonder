@@ -168,7 +168,7 @@ public class ERCMailDelivery {
                                                        String message,
                                                        NSArray filePaths,
                                                        EOEditingContext ec) {
-        ERCMailMessage mailMessage = this.composeEmail(from, to, cc, bcc, title, message, ec);
+        ERCMailMessage mailMessage = composeEmail(from, to, cc, bcc, title, message, ec);
 
         for (Enumeration filePathEnumerator = filePaths.objectEnumerator();
              filePathEnumerator.hasMoreElements();) {

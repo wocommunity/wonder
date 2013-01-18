@@ -135,7 +135,7 @@ public class ERXMailAppender extends AppenderSkeleton {
      */
     public void setQualifier(String qualifier) {
         this.qualifier = qualifier;
-        this.realQualifier = null;
+        realQualifier = null;
     }
     
     /**

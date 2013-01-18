@@ -120,7 +120,7 @@ public class ERD2WWizardCreationPage extends ERD2WTabInspectPage {
     // !! note this inner class is not static, which may cause cycles and leaks
     class _confirmCancellationDelegate implements NextPageDelegate {
         public WOComponent nextPage(WOComponent sender) {
-            return ERD2WWizardCreationPage.this.superCancelAction();
+            return superCancelAction();
         }
     }
 

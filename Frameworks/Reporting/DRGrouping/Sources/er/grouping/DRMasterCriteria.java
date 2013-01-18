@@ -74,11 +74,11 @@ public class DRMasterCriteria {
         _userInfo.setObjectForKey(" to ", "rangeSeparator");
         _userInfo.setObjectForKey("|", "compoundSeparator");
         _userInfo.addEntriesFromDictionary(info);
-        _useStringMatchForLookup = this.decideLookupMethod(_subCriteriaList);
-        _isPreset = this.decideIsPreset(_subCriteriaList);
+        _useStringMatchForLookup = decideLookupMethod(_subCriteriaList);
+        _isPreset = decideIsPreset(_subCriteriaList);
 
-        if (this.isPreset()) {
-            this.criteriaWithPossibleValues();
+        if (isPreset()) {
+            criteriaWithPossibleValues();
         }
 
         return this;
@@ -161,15 +161,15 @@ public class DRMasterCriteria {
     }
 
     public NSDictionary valueDictRecord(DRRecord rec) {
-        return this.valueDictFromValuesRecord(null, rec);
+        return valueDictFromValuesRecord(null, rec);
     }
 
     public NSDictionary valueDictFromValues(NSDictionary vlDict) {
-        return this.valueDictFromValuesRecord(vlDict, null);
+        return valueDictFromValuesRecord(vlDict, null);
     }
 
     public void criteriaWithPossibleValueList(NSDictionary vlDict) {
-        NSDictionary valueDict = this.valueDictFromValues(vlDict);
+        NSDictionary valueDict = valueDictFromValues(vlDict);
         String lookupKey = (String)valueDict.objectForKey("lookupKey");
         DRCriteria crit = DRCriteria.withMasterCriteriaValueDict(this, valueDict);
         _criteriaLookupDict.setObjectForKey(crit, lookupKey);
@@ -193,10 +193,10 @@ public class DRMasterCriteria {
 
             if (count == 0) {
                 //////////NSLog(@"DRMasterCriteria: walkPresets:possibleValues: count == 0");
-                this.criteriaWithPossibleValueList(moreVlDict);
+                criteriaWithPossibleValueList(moreVlDict);
             } else {
                 //////////NSLog(@"DRMasterCriteria: walkPresets:possibleValues: count _NOT== 0");
-                this.walkPresetsPossibleValues(newPresets, moreVlDict);
+                walkPresetsPossibleValues(newPresets, moreVlDict);
             }
 
         }
@@ -204,9 +204,9 @@ public class DRMasterCriteria {
     }
 
     private void criteriaWithPossibleValues() {
-        this.walkPresetsPossibleValues(_subCriteriaList, new NSDictionary());
+        walkPresetsPossibleValues(_subCriteriaList, new NSDictionary());
 
-        if (this.isPreset()) {
+        if (isPreset()) {
             DRSubMasterCriteria smc = (DRSubMasterCriteria)_subCriteriaList.objectAtIndex(0);
 
             if (!smc.groupEdges()) {
@@ -235,7 +235,7 @@ public class DRMasterCriteria {
     }
 
     public void groupRecordRecordGroupsDictGroupParent(DRRecord rec, NSMutableDictionary recGrpDict, DRGroup grp, DRRecordGroup parent) {
-        DRRecordGroup recGrp = this.findRecordGroupForRecordGroupsDictGroupParent(rec, recGrpDict, grp, parent);
+        DRRecordGroup recGrp = findRecordGroupForRecordGroupsDictGroupParent(rec, recGrpDict, grp, parent);
 
         if (recGrp != null) {
             recGrp.recordList().addObject(rec);
@@ -246,11 +246,11 @@ public class DRMasterCriteria {
     public DRRecordGroup findRecordGroupForRecordGroupsDictGroupParent(DRRecord rec, NSMutableDictionary recGrpDict, DRGroup grp, DRRecordGroup parent) {
         //OWDebug.println(1, "entered");
         DRRecordGroup recGrp = null;
-        NSDictionary valueDict = this.valueDictRecord(rec);
+        NSDictionary valueDict = valueDictRecord(rec);
 
         //OWDebug.println(1, "valueDict:"+valueDict);
         //OWDebug.println(1, "this.isPreset():"+this.isPreset());
-        if (valueDict==null && !this.isPreset()) {
+        if (valueDict==null && !isPreset()) {
             return null;
         }
         //if(valueDict==null){
@@ -266,7 +266,7 @@ public class DRMasterCriteria {
         }
 
         //OWDebug.println(1, "crit:"+crit);
-        if (crit==null && this.isPreset()) {
+        if (crit==null && isPreset()) {
             //OWDebug.println(1, "is preset AND no crit found");
             crit = (DRCriteria)_criteriaLookupDict.objectForKey("|Other|");
             //OWDebug.println(1, "should be OTHER crit:"+crit);

@@ -29,7 +29,7 @@ public class FilesContainer
     public FilesContainer(String name, List<FilesObject> objs, FilesClient client)
     {
         this.name = name;
-        this.objects = objs;
+        objects = objs;
         this.client = client;
     }
 

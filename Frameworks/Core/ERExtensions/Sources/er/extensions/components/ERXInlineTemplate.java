@@ -261,8 +261,8 @@ public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
 		private Object _version;
 
 		public CacheEntry(Object version, WOElement element) {
-			this._version = version;
-			this._element = element;
+			_version = version;
+			_element = element;
 		}
 
 		public WOElement element() {

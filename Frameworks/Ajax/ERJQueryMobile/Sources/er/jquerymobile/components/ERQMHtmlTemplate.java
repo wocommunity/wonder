@@ -77,7 +77,7 @@ public class ERQMHtmlTemplate extends ERXStatelessComponent {
   public boolean hastTemplateInComponent() {
     boolean result = false;
 
-    WOElement content =  this._childTemplate();
+    WOElement content =  _childTemplate();
     if (content instanceof WODynamicGroup) {
       WODynamicGroup group = (WODynamicGroup) content;
       for(Enumeration<WOElement> e = group.childrenElements().objectEnumerator(); e.hasMoreElements() && !result ; ) {

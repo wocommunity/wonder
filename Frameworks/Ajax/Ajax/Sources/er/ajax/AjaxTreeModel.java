@@ -221,8 +221,8 @@ public class AjaxTreeModel {
 		public DepthFirstEnumeration(Object rootNode, boolean enumerateClosedNodes) {
 			_rootNode = rootNode;
 			_enumerateClosedNodes = enumerateClosedNodes;
-			if (_enumerateClosedNodes || AjaxTreeModel.this.isExpanded(rootNode)) {
-				_childrenEnumeration = AjaxTreeModel.this.childrenTreeNodes(rootNode).objectEnumerator();
+			if (_enumerateClosedNodes || isExpanded(rootNode)) {
+				_childrenEnumeration = childrenTreeNodes(rootNode).objectEnumerator();
 			}
 			_subtreeEnumeration = NSArray.EmptyArray.objectEnumerator();
 		}

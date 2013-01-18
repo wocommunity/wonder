@@ -237,7 +237,7 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
 		}
 		localObj.addObjectToBothSidesOfRelationshipWithKey(relatedObject, propertyKey());
 		
-		epi.setNextPage(this.context().page());
+		epi.setNextPage(context().page());
 		epi.setObject(relatedObject);
 		
 		// Null out the current searchValue so when we come back, it regenerates
@@ -270,7 +270,7 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
 		if (extraQualifier() != null) {
 			qual = ERXQ.and(qual, extraQualifier());
 		}
-		if (this.useFetch() && ERXStringUtilities.stringIsNullOrEmpty(restrictedChoiceKey())) {
+		if (useFetch() && ERXStringUtilities.stringIsNullOrEmpty(restrictedChoiceKey())) {
 	        if(restrictingFetchSpecificationName() != null) {
 	        	qual = ERXQ.and(qual, restrictingFetchSpec().qualifier());
 	        }
@@ -409,7 +409,7 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
 	
 	public String searchTermSelectedFunctionName() {
 		if (_safeElementID == null) {
-			_safeElementID =ERXStringUtilities.safeIdentifierName(this.context().elementID());
+			_safeElementID =ERXStringUtilities.safeIdentifierName(context().elementID());
 		}
 		return "ermdtorlu_" + _safeElementID + "CompleteFunction";
 	}

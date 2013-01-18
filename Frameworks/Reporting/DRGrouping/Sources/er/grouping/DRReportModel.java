@@ -89,7 +89,7 @@ public class DRReportModel {
             
         }
 
-        this.setOrderings(arr);
+        setOrderings(arr);
         //OWDebug.println(1, "orderings:"+arr);
     }
 
@@ -350,7 +350,7 @@ public class DRReportModel {
 
     public void buildGrandTotal() {
         DRRecordGroup rg = DRRecordGroup.withCriteriaGroupParent(null, null, null);
-        this.registerRecordGroupWithCoordinates(rg, new NSDictionary());
+        registerRecordGroupWithCoordinates(rg, new NSDictionary());
         rg.recordList().addObjectsFromArray(_records);
         //OWDebug.println(1, "buildGrandTotal: rg:"+ rg);
     }
@@ -362,7 +362,7 @@ public class DRReportModel {
         _attributeList = aAttribList;
         _criteriaList = aCritArray;
         _registeredRecordGroups = new NSMutableDictionary();
-        _records = this.recordsForRawRecords(_rawRecords);
+        _records = recordsForRawRecords(_rawRecords);
         _vList = new NSMutableArray();
         _hList = new NSMutableArray();
         _zList = new NSMutableArray();
@@ -370,19 +370,19 @@ public class DRReportModel {
         _flatAttributeListTotal = new NSMutableArray();
         _flatAttributeDepthDict = new NSMutableDictionary();
         _flatAttributeListTotalDict = new NSMutableDictionary();
-        dict = this.groupsWithCriteriaArray(aCritArray);
+        dict = groupsWithCriteriaArray(aCritArray);
         _groups = (NSArray)dict.objectForKey("groups");
         _groupDict = (NSDictionary)dict.objectForKey("lookup");
         _vList.addObjectsFromArray(_groups);
-        this.groupAllRecordGroups();
+        groupAllRecordGroups();
         log.debug("ABOUT TO GET flatListForAttributeList");
-        this.flatListForAttributeList();
+        flatListForAttributeList();
         log.debug("ABOUT TO GET flatListForAttributeListTotals");
-        this.flatListForAttributeListTotals();
+        flatListForAttributeListTotals();
         log.debug("flatAttributeList: "+ _flatAttributeList);
         log.debug("flatAttributeListTotal: "+_flatAttributeListTotal);
-        this.buildGrandTotal();
-        this.buildOrderings();
+        buildGrandTotal();
+        buildOrderings();
         
         NSSelector synchModelSelector = new NSSelector("synchModel", ERXConstant.NotificationClassArray);
         
@@ -393,12 +393,12 @@ public class DRReportModel {
 
     public void synchModel() {
         log.info("synchModel()");
-        this.computeRecordValuesForRecords(this.records());
-        this.makeRecordGroupsStaleTotal();
-        this.flatListForAttributeList();
-        this.flatListForAttributeListTotals();
-        this.buildGrandTotal();
-        this.buildOrderings();
+        computeRecordValuesForRecords(records());
+        makeRecordGroupsStaleTotal();
+        flatListForAttributeList();
+        flatListForAttributeListTotals();
+        buildGrandTotal();
+        buildOrderings();
     }
 
     public void synchModel(NSNotification notification) {
@@ -479,7 +479,7 @@ public class DRReportModel {
             while (anEnum.hasMoreElements()) {
                 DRAttribute att = (DRAttribute)anEnum.nextElement();
                 //OWDebug.println(1, "att:"+att);
-                this.flatListForAttribute(att);
+                flatListForAttribute(att);
             }
         }
 
@@ -534,7 +534,7 @@ public class DRReportModel {
 
         }
 
-        this.getFlatAttributeDepthDictTotals();
+        getFlatAttributeDepthDictTotals();
         //OWDebug.println(1, "_flatAttributeListTotalDict:"+ _flatAttributeListTotalDict);
     }
 
@@ -630,27 +630,27 @@ public class DRReportModel {
 
     public NSArray dimensionForName(String dim) {
         if (dim == null) {
-            return this.vList();
+            return vList();
         }
 
         if (dim.equals("H")) {
-            return this.hList();
+            return hList();
         }
 
         if (dim.equals("Z")) {
-            return this.zList();
+            return zList();
         }
 
         if (dim.equals("V")) {
-            return this.vList();
+            return vList();
         }
 
-        return this.vList();
+        return vList();
     }
 
     public void moveUpDimension(DRGroup vGroup, boolean up, String dim) {
         int cnt;
-        NSMutableArray dims = (NSMutableArray)this.dimensionForName(dim);
+        NSMutableArray dims = (NSMutableArray)dimensionForName(dim);
         int cur = dims.indexOfObject(vGroup);
         dims.removeObject(vGroup);
         cnt = dims.count();
@@ -804,7 +804,7 @@ public class DRReportModel {
     }
 
     public void registerRecordGroupWithCoordinates(DRRecordGroup recGrp, NSDictionary coordDict) {
-        String coordKey = this.coordinateKey(coordDict);
+        String coordKey = coordinateKey(coordDict);
         _registeredRecordGroups.setObjectForKey(recGrp, coordKey);
     }
 
@@ -816,7 +816,7 @@ public class DRReportModel {
     }
 
     public DRRecordGroup recordGroupForCoordinates(NSDictionary coordDict) {
-        String coordKey = this.coordinateKey(coordDict);
+        String coordKey = coordinateKey(coordDict);
         DRRecordGroup recordGroup = (DRRecordGroup)_registeredRecordGroups.objectForKey(coordKey);
         return recordGroup;
     }

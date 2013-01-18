@@ -41,13 +41,13 @@ public class FilesCDNContainer {
 	
 	public FilesCDNContainer(String cdnURL, String sslUrl) {
 		this.cdnURL = cdnURL;
-		this.sslURL = sslUrl;
+		sslURL = sslUrl;
 	}
 	
 	public FilesCDNContainer(String cdnURL, String sslUrl, String streamingUrl) {
 		this.cdnURL = cdnURL;
-		this.sslURL = sslUrl;
-		this.streamingURL = streamingUrl;
+		sslURL = sslUrl;
+		streamingURL = streamingUrl;
 	}
 	
 	public FilesCDNContainer(String name, boolean enabled, int ttl, boolean retainLogs) {
@@ -154,7 +154,7 @@ public class FilesCDNContainer {
 	 * @return The  Streaming URL for accessing content in this container via the CDN
 	 */
 	public String getStreamingURL() {
-		return this.streamingURL;
+		return streamingURL;
 	}
 
 	/**

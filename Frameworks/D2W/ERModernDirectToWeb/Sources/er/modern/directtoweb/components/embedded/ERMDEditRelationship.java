@@ -47,7 +47,7 @@ public class ERMDEditRelationship extends ERDCustomEditComponent {
 	// AJAX UTILITIES
 	public String uniqueId() {
 		if (_uniqueId == null) {
-			_uniqueId = ERXStringUtilities.safeIdentifierName(this.context().contextID());
+			_uniqueId = ERXStringUtilities.safeIdentifierName(context().contextID());
 		}
 		return _uniqueId;
 	}

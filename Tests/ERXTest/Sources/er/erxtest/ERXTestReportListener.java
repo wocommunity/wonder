@@ -59,7 +59,7 @@ public class ERXTestReportListener extends RunListener {
 
         ClassLoader loader = this.getClass().getClassLoader();
 
-        ArrayList<String> found = this.listLoadedClasses(loader);
+        ArrayList<String> found = listLoadedClasses(loader);
 
         ArrayList<String> fixed = new ArrayList<String>();
 

@@ -511,9 +511,9 @@ public class ERXJDBCConnectionBroker implements ERXJDBCAdaptor.ConnectionBroker 
     
         public ConnectionWrapper(ERXJDBCConnectionBroker broker) throws SQLException {
             this.broker = broker;
-            this.connection = broker.createConnection();
-            this.status = FREE;
-            this.lockTime = 0;
+            connection = broker.createConnection();
+            status = FREE;
+            lockTime = 0;
         }
     
         public String toString() {
@@ -529,7 +529,7 @@ public class ERXJDBCConnectionBroker implements ERXJDBCAdaptor.ConnectionBroker 
         }
 
         public void setConnection(Connection connection) {
-            this.creationDate = (new Date()).getTime();
+            creationDate = (new Date()).getTime();
             this.connection = connection;
         }
     

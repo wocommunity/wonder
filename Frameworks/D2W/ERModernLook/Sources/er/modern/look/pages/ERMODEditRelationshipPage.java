@@ -489,7 +489,7 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	}
 
 	public void setMasterObject(EOEnterpriseObject masterObject) {
-		this._masterObject = masterObject;
+		_masterObject = masterObject;
 	}
 	
 	/** Checks if the current list is empty. */

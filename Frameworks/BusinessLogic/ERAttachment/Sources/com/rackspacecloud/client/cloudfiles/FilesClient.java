@@ -148,10 +148,10 @@ public class FilesClient
             authUrl = FilesUtil.getProperty("auth_url");
         }
         if(account != null && account.length() > 0) {
-            this.authenticationURL = authUrl + VERSION + "/" + account + FilesUtil.getProperty("auth_url_post");
+            authenticationURL = authUrl + VERSION + "/" + account + FilesUtil.getProperty("auth_url_post");
         }
         else {
-            this.authenticationURL = authUrl;
+            authenticationURL = authUrl;
         }
         this.connectionTimeOut = connectionTimeOut;
 
@@ -159,7 +159,7 @@ public class FilesClient
 
         if(logger.isDebugEnabled()) {
             logger.debug("UserName: " + this.username);
-            logger.debug("AuthenticationURL: " + this.authenticationURL);
+            logger.debug("AuthenticationURL: " + authenticationURL);
             logger.debug("ConnectionTimeOut: " + this.connectionTimeOut);
         }
      }
@@ -318,7 +318,7 @@ public class FilesClient
     {
     	isLoggedin   = true;
     	this.storageURL = storageURL;
-    	this.cdnManagementURL = cdnManagmentUrl;
+    	cdnManagementURL = cdnManagmentUrl;
     	this.authToken = authToken;
     	return true;
     }
@@ -3113,7 +3113,7 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
      */
     public void setUserName(String userName)
     {
-    	this.username = userName;
+    	username = userName;
     }
 
     /**

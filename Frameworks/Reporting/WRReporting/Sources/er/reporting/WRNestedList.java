@@ -77,7 +77,7 @@ public class WRNestedList extends WOComponent  {
     }
 
     public boolean notSublistConditional() {
-        return !this.hasBinding("showParentContent");
+        return !hasBinding("showParentContent");
     }
 
 

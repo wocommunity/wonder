@@ -212,7 +212,7 @@ public class MTAjaxSortableList extends AjaxComponent {
 	}
 
 	public void setId(String id) {
-		this._id = id;
+		_id = id;
 	}
 
 	public String getId() {
@@ -230,7 +230,7 @@ public class MTAjaxSortableList extends AjaxComponent {
 	 * @param var the var to set
 	 */
 	public void setVar(String var) {
-		this._var = var;
+		_var = var;
 	}	
 
 }

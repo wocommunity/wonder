@@ -117,12 +117,12 @@ public class WRReportEditor extends WOComponent implements DRMasterCriteriaEditi
 
         while (en.hasMoreElements()) {
             DRMasterCriteria amc = (DRMasterCriteria)en.nextElement();
-            NSArray smcList = this.newSubCriteriaListFromMC(amc);
-            this.replaceMCWith(amc, smcList);
+            NSArray smcList = newSubCriteriaListFromMC(amc);
+            replaceMCWith(amc, smcList);
         }
 
         if (masterCriteriaUpdateAction != null) {
-            return this.performParentAction(masterCriteriaUpdateAction);
+            return performParentAction(masterCriteriaUpdateAction);
         }
 
         return null;
@@ -134,7 +134,7 @@ public class WRReportEditor extends WOComponent implements DRMasterCriteriaEditi
         NSMutableArray smcList = new NSMutableArray();
         smcList.addObject(DRSubMasterCriteria.withKeyUseMethodUseTimeFormatFormatPossibleValuesUseTypeGroupEdgesPossibleValues("category", false, false, null, null, false, null));
         arr.addObject(DRMasterCriteria.withSubMasterCriteriaUserInfo(smcList, null));
-        this.setMasterCriteriaList(arr);
+        setMasterCriteriaList(arr);
         //[self resetGroups]
         return null;
     }
@@ -158,8 +158,8 @@ public class WRReportEditor extends WOComponent implements DRMasterCriteriaEditi
 
 
     public Object deleteMC() {
-        NSMutableArray arr = this.newArraySans(masterCriteriaList(), masterCriteria());
-        this.setMasterCriteriaList(arr);
+        NSMutableArray arr = newArraySans(masterCriteriaList(), masterCriteria());
+        setMasterCriteriaList(arr);
         //[self resetGroups]
         return null;
     }
@@ -170,7 +170,7 @@ public class WRReportEditor extends WOComponent implements DRMasterCriteriaEditi
         int indx = arr.indexOfObject(oldMC);
         arr.insertObjectAtIndex(DRMasterCriteria.withSubMasterCriteriaUserInfo(smcList, oldMC.userInfo()), indx);
         arr.removeObject(oldMC);
-        this.setMasterCriteriaList(arr);
+        setMasterCriteriaList(arr);
     }
 
 

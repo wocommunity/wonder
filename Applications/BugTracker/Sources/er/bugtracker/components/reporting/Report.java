@@ -33,7 +33,7 @@ public class Report extends WRReport {
     }
 
     public String classAttributeTd() {
-        return "WRAttribute" + depth + "Total" + this.totalCount();
+        return "WRAttribute" + depth + "Total" + totalCount();
     }
 
     public NSTimestamp startDate() {
@@ -45,8 +45,8 @@ public class Report extends WRReport {
     }
 
     public DRRecordGroup recordGroup() {
-        NSDictionary crds = this.currentCoordinates();
-        DRRecordGroup drg = this.model().recordGroupForCoordinates(crds);
+        NSDictionary crds = currentCoordinates();
+        DRRecordGroup drg = model().recordGroupForCoordinates(crds);
         return drg;
     }
 }

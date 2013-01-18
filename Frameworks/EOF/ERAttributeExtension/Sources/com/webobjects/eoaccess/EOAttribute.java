@@ -36,7 +36,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 		private String _externalName;
 
 		Characteristic(String externalName) {
-			this._externalName = externalName;
+			_externalName = externalName;
 		}
 
 		public String externalName() {

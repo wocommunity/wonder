@@ -1545,7 +1545,7 @@ public class ERXArrayUtilities {
     	private boolean isPop;
     	
     	public StandardDeviationOperator(boolean isPopulation) {
-    		this.isPop = isPopulation;
+    		isPop = isPopulation;
     	}
     	
         /**

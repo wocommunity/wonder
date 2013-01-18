@@ -82,7 +82,7 @@ public class SeleniumTest implements Cloneable {
 			assert(name != null);
 			
 			this.name = name;
-			this.arguments = new NSMutableArray<String>();
+			arguments = new NSMutableArray<String>();
 		}
 		
 		public MetaCommand(String name, NSArray<String> arguments) {
@@ -202,7 +202,7 @@ public class SeleniumTest implements Cloneable {
 	
 	public SeleniumTest(String name) {
 		this.name = name;
-		this.elements = new NSMutableArray<Element>();
+		elements = new NSMutableArray<Element>();
 	}
 	
 	public SeleniumTest(String name, NSArray<Element> elements) {

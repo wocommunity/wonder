@@ -78,21 +78,21 @@ public class JOscarInstantMessenger extends AbstractInstantMessenger {
 
 	protected class BuddyChangeListener implements GlobalBuddyInfoListener {
 		public void buddyInfoChanged(BuddyInfoManager buddyinfomanager, Screenname screenname, BuddyInfo buddyinfo, PropertyChangeEvent propertychangeevent) {
-			JOscarInstantMessenger.this.buddyListModified();
+			buddyListModified();
 		}
 
 		public void newBuddyInfo(BuddyInfoManager buddyinfomanager, Screenname screenname, BuddyInfo buddyinfo) {
-			JOscarInstantMessenger.this.buddyListModified();
+			buddyListModified();
 		}
 
 		public void receivedStatusUpdate(BuddyInfoManager buddyinfomanager, Screenname screenname, BuddyInfo buddyinfo) {
-			JOscarInstantMessenger.this.buddyListModified();
+			buddyListModified();
 		}
 	}
 
 	protected class IcbmHandler implements IcbmListener {
 		public void buddyInfoUpdated(IcbmService service, Screenname sn, IcbmBuddyInfo buddyInfo) {
-			JOscarInstantMessenger.this.buddyListModified();
+			buddyListModified();
 		}
 
 		public void newConversation(IcbmService service, Conversation conv) {
@@ -323,7 +323,7 @@ public class JOscarInstantMessenger extends AbstractInstantMessenger {
 		}
 
 		public void gotMessage(Conversation c, MessageInfo minfo) {
-			JOscarInstantMessenger.this.fireMessageReceived(minfo.getFrom().getNormal(), minfo.getMessage().getMessageBody());
+			fireMessageReceived(minfo.getFrom().getNormal(), minfo.getMessage().getMessageBody());
 		}
 
 		public void gotOtherEvent(Conversation conversation, ConversationEventInfo event) {

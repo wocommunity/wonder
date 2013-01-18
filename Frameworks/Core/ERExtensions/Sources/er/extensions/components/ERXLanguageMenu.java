@@ -98,7 +98,7 @@ public class ERXLanguageMenu extends ERXStatelessComponent {
 	 *            the languageOption to set
 	 */
 	public void setLanguageOption(String languageOption) {
-		this._languageOption = languageOption;
+		_languageOption = languageOption;
 	}
 
 	/**

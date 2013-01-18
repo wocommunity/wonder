@@ -67,19 +67,19 @@ public class WRAttributeListEditor extends WOComponent implements DRAttributeEdi
 
         arr.insertObjectAtIndex(newAtt, curDex);
         arr.removeObjectAtIndex(curDex+1);
-        this.setAttributeList(arr);
+        setAttributeList(arr);
     }
 
 
     public void addObjectToList() {
         NSMutableArray arr = new NSMutableArray(attributeList());
         arr.addObject(DRAttribute.withKeyPathFormatLabelTotalUserInfo("keypath", null, "Label", false, null));
-        this.setAttributeList(arr);
+        setAttributeList(arr);
     }
 
 
     public Object add() {
-        this.addObjectToList();
+        addObjectToList();
         return null;
     }
 
@@ -109,7 +109,7 @@ public class WRAttributeListEditor extends WOComponent implements DRAttributeEdi
     public NSArray moveUpArray(DRAttribute member, boolean up, NSArray arr1) {
         int cnt;
         int cur = arr1.indexOfObject(member);
-        NSMutableArray arr = this.newArraySans(arr1, member);
+        NSMutableArray arr = newArraySans(arr1, member);
         cnt = arr.count();
 
         if (up) {
@@ -137,20 +137,20 @@ public class WRAttributeListEditor extends WOComponent implements DRAttributeEdi
 
 
     public void deleteSubAttribute(DRAttribute subAttribute) {
-        this.setAttributeList(this.newArraySans(attributeList(), subAttribute));
+        setAttributeList(newArraySans(attributeList(), subAttribute));
     }
 
 
     public void moveSubAttributeUp(DRAttribute subAtt, boolean up) {
-        this.setAttributeList(this.moveUpArray(subAtt, up, attributeList()));
+        setAttributeList(moveUpArray(subAtt, up, attributeList()));
     }
 
 
     public Object regenReport() {
-        this.resetAttributes();
+        resetAttributes();
 
         if (attributeUpdateAction != null) {
-            return this.performParentAction(attributeUpdateAction);
+            return performParentAction(attributeUpdateAction);
         }
 
         return null;

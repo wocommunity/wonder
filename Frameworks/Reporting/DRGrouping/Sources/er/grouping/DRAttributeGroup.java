@@ -92,9 +92,9 @@ public class DRAttributeGroup extends DRAttribute  {
         attributeListDepth = attributeListDepth + 1;
         while (anEnum.hasMoreElements()) {
             att = (DRAttribute)anEnum.nextElement();
-            this.flatListForAttributeDepthDictionary(att, attributeListDepth, flatAttributeDepthDict);
+            flatListForAttributeDepthDictionary(att, attributeListDepth, flatAttributeDepthDict);
         }
-        if (flatAttributeDepthDict != null && this.showTotal()) {
+        if (flatAttributeDepthDict != null && showTotal()) {
             Number dpthKey = Integer.valueOf(attributeListDepth);
             NSMutableArray lst = (NSMutableArray)flatAttributeDepthDict.objectForKey(dpthKey);
             if (lst == null) {
@@ -107,7 +107,7 @@ public class DRAttributeGroup extends DRAttribute  {
     }
 
     protected void flatListForAttributeList() {
-        this.flatAttributesWithDepthDictionary(0, null);
+        flatAttributesWithDepthDictionary(0, null);
     }
 
     public NSArray flatAttributes() {
@@ -117,7 +117,7 @@ public class DRAttributeGroup extends DRAttribute  {
     public NSArray flatAttributesTotal() {
         if (_flatAttributesTotal == null) {
             DRAttribute att;
-            Enumeration anEnum = this.flatAttributes().objectEnumerator();
+            Enumeration anEnum = flatAttributes().objectEnumerator();
             _flatAttributesTotal = new NSMutableArray();
             while (anEnum.hasMoreElements()) {
                 att = (DRAttribute)anEnum.nextElement();

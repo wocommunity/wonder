@@ -92,10 +92,10 @@ public class ERXCachingWrapper extends ERXStatelessComponent {
     	private String sessionID;
     	
     	public Entry(String aContent, long aDuration, String aSessionID) {
-    		this.insertTime = System.currentTimeMillis();
-    		this.content = aContent;
-    		this.duration = aDuration;
-    		this.sessionID = aSessionID;
+    		insertTime = System.currentTimeMillis();
+    		content = aContent;
+    		duration = aDuration;
+    		sessionID = aSessionID;
     	}
 
 		public boolean isActive() {

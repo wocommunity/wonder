@@ -126,7 +126,7 @@ public class MTStyledPopUpButton extends ERXStatelessComponent {
 	 * @param id the id to set
 	 */
 	public void setId(String id) {
-		this._id = id;
+		_id = id;
 	}
 
 	public boolean synchronizesVariablesWithBindings() {

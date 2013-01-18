@@ -18,7 +18,7 @@ public class Application extends ERXApplication {
     }
 
     public Application() {
-        NSLog.out.appendln("Welcome to " + this.name() + " !");
+        NSLog.out.appendln("Welcome to " + name() + " !");
         // AK: I'm *way* to lazy to figure out how to set up a real DB so everyone can use it
         // as we only need a bit of reference data anyway, we just fake we fetched...
         ERXEC.setFactory(new ERXEC.DefaultFactory() {

@@ -68,23 +68,23 @@ public class WRNavigationControl extends ERXStatelessComponent {
     
     public void moveGroupToList(String dest) {
         if("Z".equals(dest)) {
-            this.model().addToZList(group);
+            model().addToZList(group);
             updateZList(group);
         } else if("H".equals(dest)) {
-            this.model().addToHList(group);
+            model().addToHList(group);
         } else {
-            this.model().addToVList(group);
+            model().addToVList(group);
         }
     }
     
     
     public WOComponent down() {
-        this.model().moveUpDimension(group, false, listLabel());
+        model().moveUpDimension(group, false, listLabel());
         return null;
     }
 
     public WOComponent up() {
-        this.model().moveUpDimension(group, true, listLabel());
+        model().moveUpDimension(group, true, listLabel());
         return null;
     }
 
@@ -182,7 +182,7 @@ public class WRNavigationControl extends ERXStatelessComponent {
 
 
     public boolean showZDimensions() {
-        if (this.model().zList().count() > 0 && "Z".equals(listLabel())) {
+        if (model().zList().count() > 0 && "Z".equals(listLabel())) {
             return true;
         }
         return false;

@@ -23,7 +23,7 @@ public class NodeToJoinRelationshipRetriever extends RelationshipRetriever<Node,
 	private final RelationshipType relationshipType;
 	
 	public NodeToJoinRelationshipRetriever(EORelationship rel) {
-		this.relationshipType = DynamicRelationshipType.withName(rel.destinationEntity().name());
+		relationshipType = DynamicRelationshipType.withName(rel.destinationEntity().name());
 	}
 	
 	public Iterator<Relationship> retrieve(Node node) {

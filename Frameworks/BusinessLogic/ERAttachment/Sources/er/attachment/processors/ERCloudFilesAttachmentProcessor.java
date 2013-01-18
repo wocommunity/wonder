@@ -297,8 +297,7 @@ public class ERCloudFilesAttachmentProcessor extends
 				}
 
 				try {
-					ERCloudFilesAttachmentProcessor.this
-							.performUpload(uploadedFile, originalFileName,
+					performUpload(uploadedFile, originalFileName,
 									bucket, key, mimeType, attachment);
 
 					_editingContext.lock();
@@ -308,15 +307,15 @@ public class ERCloudFilesAttachmentProcessor extends
 					} finally {
 						_editingContext.unlock();
 					}
-					if (ERCloudFilesAttachmentProcessor.this.delegate() != null) {
-						ERCloudFilesAttachmentProcessor.this.delegate()
+					if (delegate() != null) {
+						delegate()
 								.attachmentAvailable(
 										ERCloudFilesAttachmentProcessor.this,
 										attachment);
 					}
 				} catch (Throwable t) {
-					if (ERCloudFilesAttachmentProcessor.this.delegate() != null) {
-						ERCloudFilesAttachmentProcessor.this.delegate()
+					if (delegate() != null) {
+						delegate()
 								.attachmentNotAvailable(
 										ERCloudFilesAttachmentProcessor.this,
 										attachment,
@@ -330,8 +329,8 @@ public class ERCloudFilesAttachmentProcessor extends
 					}
 				}
 			} else {
-				if (ERCloudFilesAttachmentProcessor.this.delegate() != null) {
-					ERCloudFilesAttachmentProcessor.this.delegate()
+				if (delegate() != null) {
+					delegate()
 							.attachmentNotAvailable(
 									ERCloudFilesAttachmentProcessor.this,
 									attachment,

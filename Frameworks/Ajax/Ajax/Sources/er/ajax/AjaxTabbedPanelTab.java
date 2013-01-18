@@ -244,7 +244,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
     }
 
 	public void setParentId(WOAssociation aParentId) {
-		this.parentId = aParentId;
+		parentId = aParentId;
 	}
 
 	public WOAssociation parentId() {
@@ -252,7 +252,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
 	}
 
 	public void setTabNumber(WOAssociation aTabNumber) {
-		this.tabNumber = aTabNumber;
+		tabNumber = aTabNumber;
 	}
 
 	public WOAssociation tabNumber() {

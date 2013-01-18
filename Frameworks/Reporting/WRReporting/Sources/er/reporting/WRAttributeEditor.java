@@ -66,26 +66,26 @@ public class WRAttributeEditor extends WOComponent implements DRAttributeEditing
     public WOComponent deleteSubAttribute() {
         //log.debug( "attribute:"+ _attribute);
         //log.debug( "about to call parent");
-        DRAttributeEditing prt = (DRAttributeEditing)this.parent();
+        DRAttributeEditing prt = (DRAttributeEditing)parent();
         prt.deleteSubAttribute(_attribute);
         return null;
     }
 
 
     public void moveSubAttributeUp(DRAttribute subAtt, boolean up) {
-        this.moveUp(subAtt, up);
+        moveUp(subAtt, up);
     }
 
 
     public WOComponent down() {
-        DRAttributeEditing prt = (DRAttributeEditing)this.parent();
+        DRAttributeEditing prt = (DRAttributeEditing)parent();
         prt.moveSubAttributeUp(_attribute, false);
         return null;
     }
 
 
     public WOComponent up() {
-        DRAttributeEditing prt = (DRAttributeEditing)this.parent();
+        DRAttributeEditing prt = (DRAttributeEditing)parent();
         prt.moveSubAttributeUp(_attribute, true);
         return null;
     }
@@ -108,7 +108,7 @@ public class WRAttributeEditor extends WOComponent implements DRAttributeEditing
 
 
     public WOComponent toggleGroup() {
-        DRAttributeEditing prt = (DRAttributeEditing)this.parent();
+        DRAttributeEditing prt = (DRAttributeEditing)parent();
         prt.toggleGroupInList(_attribute);
         return null;
     }
@@ -121,7 +121,7 @@ public class WRAttributeEditor extends WOComponent implements DRAttributeEditing
 
 
     public WOComponent add() {
-        this.addObjectToList();
+        addObjectToList();
         return null;
     }
 

@@ -92,7 +92,7 @@ public class DRAttribute {
         super();
         _userInfo = new NSMutableDictionary();
         //_emptyArray = new NSMutableArray();
-        this.resetDefaults();
+        resetDefaults();
     }
 
     public void resetDefaults() {
@@ -102,10 +102,10 @@ public class DRAttribute {
         _isGroup = false;
         _isPlaceHolderTotal = false;
         _isTotal = false;
-        this.setFormat("");
-        this.setKeyPath(null);
-        this.setLabel(null);
-        this.setAttributeGroup(null);
+        setFormat("");
+        setKeyPath(null);
+        setLabel(null);
+        setAttributeGroup(null);
     }
 
     public String keyPath() {

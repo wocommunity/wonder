@@ -20,7 +20,7 @@ public class OutputStreamWrapper extends OutputStream {
 	private long bytesTransfered = 0;
 	
 	public OutputStreamWrapper(OutputStream os, IFilesTransferCallback callback) {
-		this.stream = os;
+		stream = os;
 		this.callback = callback;
 	}
 

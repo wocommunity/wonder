@@ -191,7 +191,7 @@ public class DRCriteria {
         Object high = dict.objectForKey("H");
         Object low = dict.objectForKey("L");
 
-        String calFormat = this.calendarFormatForDates();
+        String calFormat = calendarFormatForDates();
         Format formatter = DRCriteria.formatterForFormat(calFormat);
 
         if (high instanceof NSTimestamp) {
@@ -206,7 +206,7 @@ public class DRCriteria {
             lowString = low.toString();
         }
         
-        lbl = lbl + lowString + this.rangeSeparator() + highString;
+        lbl = lbl + lowString + rangeSeparator() + highString;
         return lbl;
     }
 
@@ -222,13 +222,13 @@ public class DRCriteria {
                 Object rawVal = _valueDict.objectForKey(smc.keyDesc());
 
                 if (rawVal instanceof NSDictionary) {
-                    lbl = lbl.concat(this.labelForDict((NSDictionary)rawVal));
+                    lbl = lbl.concat(labelForDict((NSDictionary)rawVal));
                 } else {
                     lbl = lbl.concat(smc.lookUpKeyForValue(rawVal));
                 }
 
                 if (!(i == (cnt-1))) {
-                    lbl = lbl.concat(this.compoundSeparator());
+                    lbl = lbl.concat(compoundSeparator());
                 }
 
             }
@@ -264,7 +264,7 @@ public class DRCriteria {
                         scr = Double.valueOf(MAXNUMBER+2);
                     }
                 } else if (subMcs.count() > 1) {
-                    scr = this.label().toLowerCase();
+                    scr = label().toLowerCase();
                 } else if (rawVal instanceof NSDictionary) {
                     Object v = ((NSDictionary)rawVal).objectForKey("L");
                     //OWDebug.println(1, "v:"+v);

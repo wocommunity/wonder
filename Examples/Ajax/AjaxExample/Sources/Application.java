@@ -18,7 +18,7 @@ public class Application extends ERXApplication {
 
 	public Application() {
 		super();
-		log.info("Welcome to " + this.name() + " !");
+		log.info("Welcome to " + name() + " !");
 		/* ** put your initialization code in here ** */
 		setAllowsConcurrentRequestHandling(true);
 		setDefaultRequestHandler(requestHandlerForKey(directActionRequestHandlerKey()));

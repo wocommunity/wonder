@@ -71,7 +71,7 @@ public class PayPalSingleItemFormLink extends
 
         while (enumeration.hasMoreElements()) {
             String key = (String) enumeration.nextElement();
-            if (this.valueForKey(key) != null) {
+            if (valueForKey(key) != null) {
                 if (key.equals("payPalBusinessName")) {
                     boundValues.addObject(new NSDictionary(new Object[] { payPalBusinessName, "business"},
                             new Object[] {"value", "key"}));

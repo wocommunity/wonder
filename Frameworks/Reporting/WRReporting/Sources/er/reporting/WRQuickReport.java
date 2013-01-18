@@ -121,7 +121,7 @@ public class WRQuickReport extends WOComponent  {
         if (super.hasBinding("plistString")) {
             return (String)super.valueForBinding("plistString");
         } else {
-            if (this.hasBinding("pathString")) {
+            if (hasBinding("pathString")) {
                 String p = (String)super.valueForBinding("pathString");
                 log.debug( "p:"+p);
                 String plist = ERXStringUtilities.stringWithContentsOfFile(p);
@@ -137,7 +137,7 @@ public class WRQuickReport extends WOComponent  {
             if (super.hasBinding("modelDictionary")) {
                 _modelDictionary = (NSDictionary)super.valueForBinding("modelDictionary");
             } else {
-                String plistString = this.plistString();
+                String plistString = plistString();
 
                 if (plistString != null) {
                     _modelDictionary = (NSDictionary)NSPropertyListSerialization.propertyListFromString(plistString);

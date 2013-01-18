@@ -229,7 +229,7 @@ public class ERIDirectory extends _ERIDirectory {
 			file = ERIFile.clazz.createAndInsertObject(editingContext());
 			file.setName(s);
 			file.setDirectory(ERIDirectory.this);
-			ERIDirectory.this.addToFiles(file);
+			addToFiles(file);
 			editingContext().saveChanges();
 			return file;
 		}

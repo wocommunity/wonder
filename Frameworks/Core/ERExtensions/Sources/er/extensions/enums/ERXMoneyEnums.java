@@ -53,8 +53,8 @@ public enum ERXMoneyEnums {
     this.decimal_point = decimal_point;
     this.group_separator = group_separator;
     this.scale = scale;
-    this.formatter = formatterCreator();
-    this.simpleFormatter = simpleFormatterCreator();
+    formatter = formatterCreator();
+    simpleFormatter = simpleFormatterCreator();
   } 
 
   /** Full Name for Localize */

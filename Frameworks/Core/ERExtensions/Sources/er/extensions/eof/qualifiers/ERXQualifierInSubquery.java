@@ -103,8 +103,8 @@ public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQ
 		if(relationshipName != null) {
 			this.relationshipName = relationshipName;
 			EORelationship rel = ERXEOAccessUtilities.entityNamed(null, entityName).relationshipNamed(relationshipName);
-			this.attributeName = rel.sourceAttributes().lastObject().name();
-			this.destinationAttName = rel.destinationAttributes().lastObject().name();
+			attributeName = rel.sourceAttributes().lastObject().name();
+			destinationAttName = rel.destinationAttributes().lastObject().name();
 		}
 	}
 
