@@ -71,6 +71,7 @@ public class ERDCustomQueryComponent extends ERDCustomComponent implements ERXEx
         }
     }
 
+    @Override
     public void reset() {
         super.reset();
         _displayGroup = null;

@@ -20,7 +20,6 @@ import com.webobjects.foundation.NSArray;
  * @binding condition A boolean
  * @binding negate A boolean
  */
-
 public class ERXUnreadMarker extends WOComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -35,9 +34,11 @@ public class ERXUnreadMarker extends WOComponent {
 
     /////////////////////////////////  log4j category  /////////////////////////////////
     public static Logger log = Logger.getLogger(ERXUnreadMarker.class);
-    
+
+    @Override
     public boolean isStateless() { return true; }
 
+    @Override
     public void reset() { super.reset(); initialized=false; }
     
     private boolean initialized=false;

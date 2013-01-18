@@ -19,7 +19,6 @@ import er.extensions.eof.ERXConstant;
  * Used to edit a number as if it where a number of years and a number of months.<br />
  * 
  */
-
 public class ERDEditYearsMonths extends ERDCustomEditComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -30,7 +29,9 @@ public class ERDEditYearsMonths extends ERDCustomEditComponent {
 
     public ERDEditYearsMonths(WOContext context) { super(context); }
 
+    @Override
     public boolean isStateless() { return true; }
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     public final static NSMutableArray _yearList=new NSMutableArray();
@@ -64,6 +65,7 @@ public class ERDEditYearsMonths extends ERDCustomEditComponent {
         return numberOfMonths;
     }
 
+    @Override
     public void takeValuesFromRequest(WORequest q, WOContext c) throws NSValidation.ValidationException {
         super.takeValuesFromRequest(q,c);
         int yearMonths = numberOfMonths != null ? numberOfMonths.intValue() : 0;

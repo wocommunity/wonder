@@ -66,8 +66,12 @@ public class ERDEditDatePopupCommon extends ERDCustomEditComponent {
 
     protected String time;
 
+    @Override
     public boolean isStateless() { return true; }
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
+
+    @Override
     public void reset() {
         super.reset();
         yearList = null;

@@ -45,6 +45,8 @@ public class ERXListDisplay extends WOComponent {
     protected NSArray list;
     protected String finalSeparator;
     protected String separator;
+
+    @Override
     public boolean isStateless() { return true; }
 
     public boolean escapeHTML() {
@@ -106,7 +108,8 @@ public class ERXListDisplay extends WOComponent {
         }
         return separator;
     }
-    
+
+    @Override
     public void reset() {
         super.reset();
         list = null;

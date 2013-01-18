@@ -17,7 +17,6 @@ import er.grouping.*;
  * for the report component as the <code>reportComponentName</code>
  * binding.
  */
-
 public class WRRecordGroup extends WOComponent  {
     /** logging support */
     private static final Logger log = Logger.getLogger(WRRecordGroup.class);
@@ -47,6 +46,7 @@ public class WRRecordGroup extends WOComponent  {
     }
 
     /** Resets cached values. */
+    @Override
     public void reset() {
         _totalToShow = null;
         _recordGroup = null;
@@ -65,10 +65,12 @@ public class WRRecordGroup extends WOComponent  {
     }
 
     /** Component is stateless, and your subclasses should be so, too. */
+    @Override
     public boolean isStateless() {
         return true;
     }
 
+    @Override
     public void appendToResponse(WOResponse r, WOContext c) {
         super.appendToResponse(r, c);
     }
@@ -144,7 +146,7 @@ public class WRRecordGroup extends WOComponent  {
         return true;
     }
 
-
+    @Override
     public String toString() {
         return this.recordGroup().totals().toString();
     }

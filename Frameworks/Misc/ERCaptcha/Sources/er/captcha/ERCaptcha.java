@@ -99,6 +99,7 @@ public class ERCaptcha extends WOComponent {
 		return _response;
 	}
 
+	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		super.takeValuesFromRequest(request, context);
 		if (context.wasFormSubmitted()) {
@@ -116,6 +117,7 @@ public class ERCaptcha extends WOComponent {
 		}
 	}
 
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		if (_captcha == null) {
 			try {

@@ -21,7 +21,6 @@ import er.extensions.appserver.ERXWOContext;
  * @see AjaxRequest
  *   
  * @author mendis
- *
  */
 public class AjaxRequestButton extends AjaxRequest {
     public AjaxRequestButton(WOContext context) {

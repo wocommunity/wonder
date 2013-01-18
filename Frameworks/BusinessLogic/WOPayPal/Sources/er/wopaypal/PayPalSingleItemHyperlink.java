@@ -1,9 +1,3 @@
-//
-// PayPalSingleItemHyperlink.java: Class file for WO Component 'PayPalSingleItemHyperlink'
-// Project WOPayPal
-//
-// Created by travis on Sat Feb 09 2002
-//
 package er.wopaypal;
 
 import java.io.UnsupportedEncodingException;
@@ -42,6 +36,7 @@ public class PayPalSingleItemHyperlink extends PayPalSingleItemLinkBase {
      *
      * @return boolean
      */
+    @Override
     public boolean isStateless() { return true; }
 
     /** Assembles the url to send to PayPal for the single item purchase
@@ -162,6 +157,7 @@ public class PayPalSingleItemHyperlink extends PayPalSingleItemLinkBase {
 
     /** Resets the values pulled from the WOComponent to null.
      */
+    @Override
     public void reset() {
         Enumeration enumeration = baseBindingList().objectEnumerator();
 
@@ -184,6 +180,7 @@ public class PayPalSingleItemHyperlink extends PayPalSingleItemLinkBase {
      * @param r WOResponse
      * @param c WOContext
      */
+    @Override
     public void appendToResponse(WOResponse r, WOContext c) {
         pullBindings();
         super.appendToResponse(r,c);
@@ -194,6 +191,7 @@ public class PayPalSingleItemHyperlink extends PayPalSingleItemLinkBase {
      * @param r WORequest
      * @param c WOContext
      */
+    @Override
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         pullBindings();
         super.takeValuesFromRequest(r,c);
@@ -205,6 +203,7 @@ public class PayPalSingleItemHyperlink extends PayPalSingleItemLinkBase {
      * @param c WOContext
      * @return WOActionResults
      */
+    @Override
     public WOActionResults invokeAction(WORequest r, WOContext c) {
         pullBindings();
         return super.invokeAction(r,c);

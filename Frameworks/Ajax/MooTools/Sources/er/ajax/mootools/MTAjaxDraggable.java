@@ -70,16 +70,19 @@ public class MTAjaxDraggable extends AjaxComponent {
         super(context);
     }
 
+	@Override
 	public void reset() {
 		_id = null;
 		super.reset();
 	}
 
+	@Override
 	public void awake() {
 		super.awake();
 		_draggableIDKeyName = safeElementID() + "_draggableID";
 	}
 
+	@Override
 	public boolean isStateless() {
 		return true;
 	}
@@ -98,6 +101,7 @@ public class MTAjaxDraggable extends AjaxComponent {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 
 		_actionUrl = AjaxUtils.ajaxComponentActionUrl(context());
@@ -319,7 +323,4 @@ public class MTAjaxDraggable extends AjaxComponent {
 		}
 		return null;
 	}
-
-	
-	
 }

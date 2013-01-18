@@ -9,7 +9,6 @@ import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.appserver.ERXWOContext;
 
-
 /**
  * Encapsulation of http://www.wildbit.com/labs/modalbox/ (a re-implementation of AjaxModalDialog)
  * This component extends api of WOSubmitButton
@@ -23,7 +22,6 @@ import er.extensions.appserver.ERXWOContext;
  * 								Default is true
  * 
  * FIXME		Form value taking
- *
  */
 public class ModalBoxButton extends ModalBox {
 	private static boolean _serializeForm = true;
@@ -58,7 +56,7 @@ public class ModalBoxButton extends ModalBox {
     	return "Modalbox.show('" + href() + "', " + options() + "); return false;";
     }
     
-    @Override    
+    @Override
     protected NSArray<String> _options() {
     	NSMutableArray<String> params = new NSMutableArray<String>(super._options());
     	

@@ -11,7 +11,6 @@ import com.webobjects.appserver.WOActionResults;
  * Encapsulates http://www.stickmanlabs.com/lightwindow 2.0
  *
  * Extending the api of WOSubmitButton
- *
  * 
  * @author mendis
  */

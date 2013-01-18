@@ -42,6 +42,7 @@ public class PayPalSingleItemFormLink extends
      * 
      * @return boolean
      */
+    @Override
     public boolean isStateless() {
         return true;
     }
@@ -172,6 +173,7 @@ public class PayPalSingleItemFormLink extends
     /**
      * Resets the values pulled from the WOComponent to null.
      */
+    @Override
     public void reset() {
         Enumeration enumeration = baseBindingList().objectEnumerator();
 
@@ -199,6 +201,7 @@ public class PayPalSingleItemFormLink extends
      * @param c
      *            WOContext
      */
+    @Override
     public void appendToResponse(WOResponse r, WOContext c) {
         pullBindings();
         super.appendToResponse(r, c);
@@ -214,6 +217,7 @@ public class PayPalSingleItemFormLink extends
      * @param c
      *            WOContext
      */
+    @Override
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         pullBindings();
         super.takeValuesFromRequest(r, c);
@@ -230,6 +234,7 @@ public class PayPalSingleItemFormLink extends
      *            WOContext
      * @return WOActionResults
      */
+    @Override
     public WOActionResults invokeAction(WORequest r, WOContext c) {
         pullBindings();
         return super.invokeAction(r, c);

@@ -44,9 +44,12 @@ public class ERDLinkToViewList extends ERDCustomEditComponent {
     
     public static final Logger log = Logger.getLogger(ERDLinkToViewList.class);
 
+    @Override
     public boolean isStateless() { return true; }
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
+    @Override
     public void reset() {
         super.reset();
         _list = null;

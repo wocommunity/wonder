@@ -541,10 +541,12 @@ public class ERDSavedQueriesComponent extends WOComponent {
 	}
 
 	/** component does not synchronize variables */
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}
 
+	@Override
 	public void sleep() {
 		needsAutoSubmit = false;
 		super.sleep();

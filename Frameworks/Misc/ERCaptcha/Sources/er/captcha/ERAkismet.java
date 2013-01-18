@@ -43,10 +43,12 @@ public class ERAkismet extends ERXComponent {
 		super(context);
 	}
 
+	@Override
 	public boolean isStateless() {
 		return true;
 	}
 
+	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		if (context.wasFormSubmitted()) {
 			super.takeValuesFromRequest(request, context);

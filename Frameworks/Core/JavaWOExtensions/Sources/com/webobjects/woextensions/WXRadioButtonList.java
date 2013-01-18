@@ -9,7 +9,6 @@ import com.webobjects.appserver._private.WORadioButtonList;
  * 
  * @see WORadioButtonList
  * @author mendis
- *
  */
 public class WXRadioButtonList extends WOComponent {
 	/**
@@ -74,7 +73,7 @@ public class WXRadioButtonList extends WOComponent {
     }
     
     public String elementName() {
-    	return hasBinding(Bindings.name) ? (String) valueForBinding(Bindings.name) : _id();		
+    	return hasBinding(Bindings.name) ? (String) valueForBinding(Bindings.name) : _id();
     }
     
     public String id() {

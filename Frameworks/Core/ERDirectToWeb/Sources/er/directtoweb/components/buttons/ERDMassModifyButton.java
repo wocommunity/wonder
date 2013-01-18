@@ -45,6 +45,7 @@ public class ERDMassModifyButton extends WOComponent {
 
     public ERDMassModifyButton(WOContext context) { super(context); }
 
+    @Override
     public boolean isStateless() { return true; }
     public D2WContext d2wContext() { return (D2WContext)valueForBinding("d2wContext"); }
 
@@ -90,6 +91,7 @@ public class ERDMassModifyButton extends WOComponent {
     }
 
     private static class _MassModificatorDelegate extends _MassModificatorConfirmationDelegate {
+        @Override
         public WOComponent nextPage(WOComponent sender) {
             WOComponent result=nextPage;
             if (eo.editingContext()!=null) { // save was clicked

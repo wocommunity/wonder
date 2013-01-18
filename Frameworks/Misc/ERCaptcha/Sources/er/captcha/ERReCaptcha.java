@@ -93,6 +93,7 @@ public class ERReCaptcha extends ERXNonSynchronizingComponent {
 		return html;
 	}
 
+	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		super.takeValuesFromRequest(request, context);
 		if (context.wasFormSubmitted()) {
