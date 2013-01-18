@@ -186,6 +186,7 @@ public class PayPalSingleItemFormLink extends
             String key = (String) enumeration.nextElement();
             takeValueForKey(null, key);
         }
+        super.reset();
     }
 
     /**

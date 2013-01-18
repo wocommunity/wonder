@@ -43,6 +43,7 @@ public class ERXRepeatingTable extends WOComponent {
 
 	public void reset() {
 		_repeatingList = null;
+		super.reset();
 	}
 
 	private NSMutableArray _repeatingList;

@@ -61,6 +61,7 @@ public class WRRecordGroup extends WOComponent  {
         _coordinates = null;
         _totalDict = null;
         _totalCount = -1;
+        super.reset();
     }
 
     /** Component is stateless, and your subclasses should be so, too. */

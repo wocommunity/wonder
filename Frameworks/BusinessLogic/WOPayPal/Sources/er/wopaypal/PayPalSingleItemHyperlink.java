@@ -176,6 +176,7 @@ public class PayPalSingleItemHyperlink extends PayPalSingleItemLinkBase {
             String key = (String) enumeration.nextElement();
             takeValueForKey(null, key);
         }
+        super.reset();
     }
 
     /** Overrides the default behavior and tells the Component to synchronize its ivar values with those bound to the WOComponent's bindings by calling pullBindings()

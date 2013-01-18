@@ -26,6 +26,7 @@ public class WRAttributeGroup extends WOComponent  {
         _totalsOnly = null;
         _model = null;
         _groups = null;
+        super.reset();
     }
 
     public boolean isStateless() {
