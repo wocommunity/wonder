@@ -134,7 +134,7 @@ public class PayPalAction extends WODirectAction {
             	NSNotificationCenter.defaultCenter().postNotification(PayPalNotificationListener.InvalidPayPalPaymentReceivedNotification, ppIPNRequest);
             } else {
                 // received unaccepted response content string value -- log error and incoming i.p. address
-                NSLog.err.appendln("PayPalAction->ipnAction: PayPal transaction validation returned unaccepted validation status from i.p: " + (((String)ppIPNRequest.headerForKey("REMOTE_ADDR") != null) ? (String)ppIPNRequest.headerForKey("REMOTE_ADDR") : "- unknown -"));
+                NSLog.err.appendln("PayPalAction->ipnAction: PayPal transaction validation returned unaccepted validation status from i.p: " + ((ppIPNRequest.headerForKey("REMOTE_ADDR") != null) ? (String)ppIPNRequest.headerForKey("REMOTE_ADDR") : "- unknown -"));
             }
         } else {
             NSLog.err.appendln("PayPalAction->ipnAction: PayPal transaction validation connection failed.");
@@ -152,7 +152,7 @@ public class PayPalAction extends WODirectAction {
      * @return WOComponent for successful PayPal transactions
      */
     public WOActionResults returnAction() {
-        String componentName = (String)System.getProperty("SuccessfulPayPalTransactionComponent");
+        String componentName = System.getProperty("SuccessfulPayPalTransactionComponent");
         if (componentName == null || componentName.equals("")) {
             componentName = "SuccessfulPayPalTransaction";
         }
@@ -168,7 +168,7 @@ public class PayPalAction extends WODirectAction {
      * @return WOComponent for cancelled PayPal transactions
      */
     public WOActionResults cancelAction() {
-        String componentName = (String)System.getProperty("CancelledPayPalTransactionComponent");
+        String componentName = System.getProperty("CancelledPayPalTransactionComponent");
         if (componentName == null || componentName.equals("")) {
             componentName = "CancelledPayPalTransaction";
         }

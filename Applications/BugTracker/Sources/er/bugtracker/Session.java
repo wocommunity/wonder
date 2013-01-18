@@ -227,7 +227,7 @@ public class Session extends ERXSession {
     
     public String navigationRootChoice() {
     	
-    	People user = (People) user();
+    	People user = user();
     	
     	if(user != null && user.isActive()) {
     		if(user.isAdmin()) {

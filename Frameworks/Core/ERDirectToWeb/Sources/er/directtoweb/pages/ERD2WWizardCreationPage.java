@@ -72,7 +72,7 @@ public class ERD2WWizardCreationPage extends ERD2WTabInspectPage {
 
     // Setting the tab has the effect of setting the tabKey in the d2wContext.
     public void appendToResponse(WOResponse response, WOContext context) {
-        setCurrentTab((ERD2WContainer)tabSectionsContents().objectAtIndex(_currentStep-1));
+        setCurrentTab(tabSectionsContents().objectAtIndex(_currentStep-1));
         super.appendToResponse(response, context);
     }
 

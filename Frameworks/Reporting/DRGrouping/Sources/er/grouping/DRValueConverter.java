@@ -38,7 +38,7 @@ public class DRValueConverter {
             scr = vv.doubleValue();
         } else if (v instanceof NSTimestamp) {
             NSTimestamp vv = (NSTimestamp)v;
-            scr = (double)vv.getTime() / 1000.0;
+            scr = vv.getTime() / 1000.0;
         } else if(v == NSKeyValueCoding.NullValue) {
             scr = 0.0;
         } else {

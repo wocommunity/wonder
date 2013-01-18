@@ -32,7 +32,7 @@ public class TestItemState extends _TestItemState {
     	}
 
     	public TestItemState sharedStateForKey(String key) {
-            return (TestItemState)objectWithPrimaryKeyValue(EOSharedEditingContext.defaultSharedEditingContext(), key);
+            return objectWithPrimaryKeyValue(EOSharedEditingContext.defaultSharedEditingContext(), key);
         }
 
         public void initializeSharedData() {

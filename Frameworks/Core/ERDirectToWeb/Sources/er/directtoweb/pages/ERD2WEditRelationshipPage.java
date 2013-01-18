@@ -116,7 +116,7 @@ public class ERD2WEditRelationshipPage extends D2WEditRelationshipPage {
     }
 
     public WOComponent removeFromToOneRelationshipAction() {
-        dataSource().deleteObject((EOEnterpriseObject) object().valueForKeyPath(_relationshipKey));
+        dataSource().deleteObject(object().valueForKeyPath(_relationshipKey));
         relationshipDisplayGroup.fetch();
         return null;
     }

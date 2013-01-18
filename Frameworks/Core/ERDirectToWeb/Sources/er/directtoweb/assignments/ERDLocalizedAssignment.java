@@ -84,7 +84,7 @@ public class ERDLocalizedAssignment extends ERDAssignment implements ERDLocaliza
     public Object fire(D2WContext c) {
         String key = (String)value();
         if (log.isDebugEnabled()) {
-            String format = (String)ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(key);
+            String format = ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(key);
             log.debug("Fire for template \"" + key + "\": " + format);
         }
         return ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject(key, c);

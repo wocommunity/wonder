@@ -192,7 +192,7 @@ public class ERD2WSwitchComponent extends D2WSwitchComponent {
 	}
 
 	private WOAssociation associationWithName(String name) {
-		WOAssociation result = (WOAssociation) _keyAssociations.objectForKey(name);
+		WOAssociation result = _keyAssociations.objectForKey(name);
 		if (result == null) {
 			NSLog.err.appendln((new StringBuilder()).append("DirectToWeb - association with name ").append(name)
 					.append(" not found on ").append(this).toString());

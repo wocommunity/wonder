@@ -58,7 +58,7 @@ public class ERDMassModifyButton extends WOComponent {
         public WOComponent nextPage(WOComponent sender) {
             WOComponent result=nextPage;
             if (eo.editingContext()!=null) { // save was clicked
-                ConfirmPageInterface confirmPage = (ConfirmPageInterface)D2W.factory().confirmPageForEntityNamed(entityName,
+                ConfirmPageInterface confirmPage = D2W.factory().confirmPageForEntityNamed(entityName,
                         sender.session());
                 _MassModificatorDelegate cb=new _MassModificatorDelegate();
                 NSMutableArray keys = new NSMutableArray();

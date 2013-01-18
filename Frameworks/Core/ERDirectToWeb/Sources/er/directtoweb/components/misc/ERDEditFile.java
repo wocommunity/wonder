@@ -64,27 +64,27 @@ public class ERDEditFile extends ERDCustomEditComponent {
     }
     
     public String selectMessage() {
-        String result = (String)localizedValueForBinding("selectMessage");
+        String result = localizedValueForBinding("selectMessage");
         return result;
     }
     
     public String uploadMessage() {
-        String result = (String)localizedValueForBinding("uploadMessage");
+        String result = localizedValueForBinding("uploadMessage");
         return result;
     }
     
     public String selectButton() {
-        String result = (String)localizedValueForBinding("selectButton");
+        String result = localizedValueForBinding("selectButton");
         return result;
     }
     
     public String uploadButton() {
-        String result = (String)localizedValueForBinding("uploadButton");
+        String result = localizedValueForBinding("uploadButton");
         return result;
     }
     
     public String deleteButton() {
-        String result = (String)localizedValueForBinding("deleteButton");
+        String result = localizedValueForBinding("deleteButton");
         return result;
     }
     

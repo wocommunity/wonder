@@ -59,7 +59,7 @@ public class ERDDelayedRuleAssignment extends ERDDelayedAssignment {
             EOQualifierEvaluation eval = rule.lhs();
             log.debug("Qualifier eval: \n" + eval);
             if (eval.evaluateWithObject(c)) {
-                result = ((Assignment)rule.rhs()).value();
+                result = rule.rhs().value();
                 log.debug("RHS value: " +  result);
                 break;
             }

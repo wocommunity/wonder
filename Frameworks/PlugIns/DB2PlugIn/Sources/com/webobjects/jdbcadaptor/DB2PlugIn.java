@@ -160,7 +160,7 @@ public class DB2PlugIn extends JDBCPlugIn {
       return null;
     }
     
-    EOAttribute attribute = (EOAttribute) entity.primaryKeyAttributes().lastObject();
+    EOAttribute attribute = entity.primaryKeyAttributes().lastObject();
     String attrName = attribute.name();
     boolean isIntType = "i".equals(attribute.valueType());
 
@@ -245,7 +245,7 @@ public class DB2PlugIn extends JDBCPlugIn {
    * @return  yes/no
    */
   protected boolean isPrimaryKeyGenerationNotSupported(EOEntity entity) {
-    return entity.primaryKeyAttributes().count() > 1 || ((EOAttribute) entity.primaryKeyAttributes().lastObject()).adaptorValueType() != EOAttribute.AdaptorNumberType;
+    return entity.primaryKeyAttributes().count() > 1 || entity.primaryKeyAttributes().lastObject().adaptorValueType() != EOAttribute.AdaptorNumberType;
   }
 
 }

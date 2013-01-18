@@ -107,7 +107,7 @@ public class ERDAttributeRepetition extends ERDCustomComponent {
         //if (_sectionsContents == null || true) {
             NSArray sectionsContentsFromRule=(NSArray)d2wContext().valueForKey("sectionsContents");
             if (sectionsContentsFromRule==null) {
-                sectionsContentsFromRule=(NSArray)displayPropertyKeys();
+                sectionsContentsFromRule=displayPropertyKeys();
             }
             if (sectionsContentsFromRule == null)
                 throw new RuntimeException("Couldn't find sectionsContents or displayPropertyKeys in d2wContext: " + d2wContext().valueForKey("pageConfiguration"));

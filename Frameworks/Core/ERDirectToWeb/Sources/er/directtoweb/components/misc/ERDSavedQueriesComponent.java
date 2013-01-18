@@ -360,7 +360,7 @@ public class ERDSavedQueriesComponent extends WOComponent {
             EOAttribute primaryKeyAttribute;
             EOEnterpriseObject eo = null;
             if (entity != null) {
-                primaryKeyAttribute = ERXArrayUtilities.firstObject((NSArray<EOAttribute>)entity.primaryKeyAttributes());
+                primaryKeyAttribute = ERXArrayUtilities.firstObject(entity.primaryKeyAttributes());
                 Object primaryKeyObject = pk;
                 if (log.isDebugEnabled()) log.debug("decodeEO with dict: " + dictionary);
 

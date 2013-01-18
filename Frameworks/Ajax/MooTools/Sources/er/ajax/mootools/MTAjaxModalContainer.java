@@ -286,7 +286,7 @@ public class MTAjaxModalContainer extends AjaxDynamicElement {
 		WOComponent component = context.component();
 		
 		WOResponse response = null;
-		WOAssociation action = (WOAssociation)associations().objectForKey("action");
+		WOAssociation action = associations().objectForKey("action");
 		if(action != null) {
 			action.valueInComponent(component);
 		}

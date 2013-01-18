@@ -199,7 +199,7 @@ public class MTAjaxDraggable extends AjaxComponent {
 	
 	public String variableName() {
 		if(_variableName == null) {
-			_variableName = (String)valueForStringBinding("variableName",  "mtAD" + ERXWOContext.safeIdentifierName(context(), true));
+			_variableName = valueForStringBinding("variableName",  "mtAD" + ERXWOContext.safeIdentifierName(context(), true));
 		}		
 		return _variableName;
 	}

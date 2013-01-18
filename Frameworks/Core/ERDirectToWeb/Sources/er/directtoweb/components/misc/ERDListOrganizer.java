@@ -98,7 +98,7 @@ public class ERDListOrganizer extends ERDCustomEditComponent {
                         NSMutableArray tmp = new NSMutableArray();
                         tmp.addObject(DEFAULT_PAIR);
                         tmp.addObjectsFromArray(chosenObjects);
-                        chosenObjects = (NSArray)tmp;
+                        chosenObjects = tmp;
                     }
                     chosenKeyPaths = keyPathsArray.componentsJoinedByString ( "," );
                 }else {
@@ -126,7 +126,7 @@ public class ERDListOrganizer extends ERDCustomEditComponent {
                     result.addObject(keyPath);
             }
             if(log.isDebugEnabled()) log.debug("result = "+result);
-            String value = NSPropertyListSerialization.stringFromPropertyList((NSArray)result);
+            String value = NSPropertyListSerialization.stringFromPropertyList(result);
             try{
                 object().validateTakeValueForKeyPath(value, key());
             } catch (NSValidation.ValidationException v) {

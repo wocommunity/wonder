@@ -125,7 +125,7 @@ public class ERDDefaultModelAssignment extends ERDAssignment {
     public Object smartDefaultRows(D2WContext c) {
         int i = attributeWidthAsInt(c);
         int j = smartDefaultAttributeWidthAsInt(c);
-        int k = j == 0 ? i : (int)((double)(i / j) + 0.5D);
+        int k = j == 0 ? i : (int)(i / j + 0.5D);
         if(k > 8) k = 8;
         return String.valueOf(k);
     }

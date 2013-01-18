@@ -86,7 +86,7 @@ public class ERIMAP {
 		if (folder.isOpen()) {
 			MimeMessage[] messages = (MimeMessage[])folder.getMessages(firstMsg, lastMsg);
 			for (int index = 0; index < messages.length; index++) {
-				MimeMessage mimeMessage = (MimeMessage)messages[index];
+				MimeMessage mimeMessage = messages[index];
 				ERMessage message = new ERMessage();
 				message.setMimeMessage(mimeMessage);
 				emails.add(message);

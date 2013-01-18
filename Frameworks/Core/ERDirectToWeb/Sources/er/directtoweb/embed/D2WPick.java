@@ -40,7 +40,7 @@ public D2WPick(WOContext context) { super(context); }
 
         public static NextPageDelegate instance=new _D2WPickActionDelegate ();
         public WOComponent nextPage(WOComponent sender) {
-            WOComponent target = (WOComponent)D2WEmbeddedComponent.findTarget(sender);
+            WOComponent target = D2WEmbeddedComponent.findTarget(sender);
             WOComponent nextPage = null;
             if (target.hasBinding("branchDelegate")) {
                 ERDBranchDelegate delegate = (ERDBranchDelegate)target.valueForBinding("branchDelegate");

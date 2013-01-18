@@ -52,7 +52,7 @@ public class ERDDelayedRelationshipFlagAssignment extends ERDDelayedAssignment {
                     }
                     if(objects != null) {
                         for (Enumeration e = objects.objectEnumerator(); e.hasMoreElements();) {
-                            Object o = (Object) e.nextElement();
+                            Object o = e.nextElement();
                             result.addObject(key + ".@" + o);
                         }
                     }

@@ -33,7 +33,7 @@ public class Priority extends _Priority {
     	}
     	
         public Priority sharedStateForKey(String key) {
-            return (Priority)objectWithPrimaryKeyValue(EOSharedEditingContext.defaultSharedEditingContext(), key);
+            return objectWithPrimaryKeyValue(EOSharedEditingContext.defaultSharedEditingContext(), key);
         }
 
         public void initializeSharedData() {

@@ -46,7 +46,7 @@ public class People extends _People implements ERCoreUserInterface {
         private EOGlobalID documenter;
 
         public People anyUser(EOEditingContext ec) {
-            return (People) allObjects(ec).lastObject();
+            return allObjects(ec).lastObject();
         }
 
         public People defaultDocumenter(EOEditingContext ec) {

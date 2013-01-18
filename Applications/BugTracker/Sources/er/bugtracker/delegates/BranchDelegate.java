@@ -63,7 +63,7 @@ public class BranchDelegate extends ERDBranchDelegate {
         epi.setMessage(message);
         epi.setCancelPage(sender.context().page());
         epi.setConfirmDelegate(new ERDDeletionDelegate(eo, sender.context().page()));
-        return (WOComponent) epi;
+        return epi;
     }
 
     public WOComponent edit(WOComponent sender) {

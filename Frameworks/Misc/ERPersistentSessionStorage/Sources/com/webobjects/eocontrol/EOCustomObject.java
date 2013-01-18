@@ -343,7 +343,7 @@ public abstract class EOCustomObject implements EOEnterpriseObject, EODeferredFa
 		}
 
 		while (tokCount-- > 0) {
-			String key = (String) toOneRelationshipKeys.objectAtIndex(tokCount);
+			String key = toOneRelationshipKeys.objectAtIndex(tokCount);
 			Object value = storedValueForKey(key);
 			if (value != null) {
 				snapshot.setObjectForKey(value, key);

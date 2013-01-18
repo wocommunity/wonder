@@ -88,7 +88,7 @@ public class ERXMultiplyingNumberFormatter extends NSNumberFormatter {
             return super.format(b, arg1, arg2);
         } else {
             double d = n.doubleValue();
-            d *= (double)factor;
+            d *= factor;
             return super.format(Double.valueOf(d), arg1, arg2);
         }
     }

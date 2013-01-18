@@ -416,7 +416,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
  					throw new NSKeyValueCoding.UnknownKeyException("There is no key named '" + key._name + "' with a child index " + key._index + " on this node.", this, key._name);
  				}
  				else {
- 					ERXRestRequestNode indexChild = (ERXRestRequestNode)child.children().objectAtIndex(key._index);
+ 					ERXRestRequestNode indexChild = child.children().objectAtIndex(key._index);
  					if (indexChild.children().count() == 0) {
  						value = indexChild.value();
  					}
@@ -473,7 +473,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 				addChild(new ERXRestRequestNode(null, false));
 			}
 		}
-		return (ERXRestRequestNode)_children.objectAtIndex(index);
+		return _children.objectAtIndex(index);
 	}
 
 	/**
@@ -917,7 +917,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 		}
 		
 		Set<ERXKey> visitedKeys = new HashSet<ERXKey>();
-		for (String attributeName : (NSArray<String>) classDescription.attributeKeys()) {
+		for (String attributeName : classDescription.attributeKeys()) {
 			// if (attribute.isClassProperty()) {
 			ERXKey<Object> key = new ERXKey<Object>(attributeName);
 			if (keyFilter.matches(key, ERXKey.Type.Attribute)) {
@@ -927,7 +927,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 			// }
 		}
 
-		for (String relationshipName : (NSArray<String>) classDescription.toOneRelationshipKeys()) {
+		for (String relationshipName : classDescription.toOneRelationshipKeys()) {
 			// if (relationship.isClassProperty()) {
 			ERXKey<Object> key = new ERXKey<Object>(relationshipName);
 			if (keyFilter.matches(key, ERXKey.Type.ToOneRelationship)) {
@@ -937,7 +937,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 			// }
 		}
 
-		for (String relationshipName : (NSArray<String>) classDescription.toManyRelationshipKeys()) {
+		for (String relationshipName : classDescription.toManyRelationshipKeys()) {
 			// if (relationship.isClassProperty()) {
 			ERXKey<Object> key = new ERXKey<Object>(relationshipName);
 			if (keyFilter.matches(key, ERXKey.Type.ToManyRelationship)) {

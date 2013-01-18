@@ -129,7 +129,7 @@ public class WOStatsPage extends WOComponent {
 
     public long detailPercent() {
         double aTransactionsCount = ((Number)transactions.objectForKey("Transactions") ).doubleValue();
-        double aDetailCount = (double)detailCount();
+        double aDetailCount = detailCount();
         if (aTransactionsCount > 0L) {
             return (long)((aDetailCount / aTransactionsCount) * 100);
         } else {

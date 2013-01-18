@@ -68,7 +68,7 @@ public class ERDListPageRepetition extends ERDAttributeRepetition {
             return NSArray.EmptyArray;
         }
         ERD2WContainer pair = (ERD2WContainer) result.objectAtIndex(0);
-    	return (NSArray) new NSArray(pair);
+    	return new NSArray(pair);
     }
     
     public NSArray itemSectionsContents() {

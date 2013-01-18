@@ -722,7 +722,7 @@ public class ERD2WModel extends D2WModel {
                     try {
                         EOQualifier cache = qualifierInCache((EOQualifier)q);
                         if (cache != null && cache != q) {
-                            r.setLhs((EOQualifier)cache);
+                            r.setLhs(cache);
                             //r.setLhs((EOQualifierEvaluation)cache);
                             replacedQualifiers++;
                             //uniquedQualifiers++;
@@ -849,7 +849,7 @@ public class ERD2WModel extends D2WModel {
         if (cachedQualifier == null) {
             NSMutableArray qualifiers = null;
             for (int c = 0; c < q.qualifiers().count(); c++) {
-                EOQualifier q1 = (EOQualifier)q.qualifiers().objectAtIndex(c);
+                EOQualifier q1 = q.qualifiers().objectAtIndex(c);
                 EOQualifier cache = qualifierInCache(q1);
                 if (cache != null) {
                     if (qualifiers == null) {
@@ -889,7 +889,7 @@ public class ERD2WModel extends D2WModel {
         if (cachedQualifier == null) {
             NSMutableArray qualifiers = null;
             for (int c = 0; c < q.qualifiers().count(); c++) {
-                EOQualifier q1 = (EOQualifier)q.qualifiers().objectAtIndex(c);
+                EOQualifier q1 = q.qualifiers().objectAtIndex(c);
                 EOQualifier cache = qualifierInCache(q1);
                 if (cache != null) {
                     if (qualifiers == null) {

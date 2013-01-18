@@ -130,7 +130,7 @@ public class ERCMailDelivery {
             log.debug("Email message: " + message);
         }
         if (usesMail()) {
-            mailMessage = (ERCMailMessage)ERCMailMessage.mailMessageClazz().createAndInsertObject(ec);
+            mailMessage = ERCMailMessage.mailMessageClazz().createAndInsertObject(ec);
             String safeTitle = title != null ? ( title.length() > 200 ? title.substring(0,198) : title ) : null;
             mailMessage.setTitle(safeTitle);
             mailMessage.setFromAddress(from);
@@ -173,7 +173,7 @@ public class ERCMailDelivery {
         for (Enumeration filePathEnumerator = filePaths.objectEnumerator();
              filePathEnumerator.hasMoreElements();) {
             String filePath = (String)filePathEnumerator.nextElement();
-            ERCMessageAttachment attachment = (ERCMessageAttachment)ERCMessageAttachment.messageAttachmentClazz().createAndInsertObject(ec);
+            ERCMessageAttachment attachment = ERCMessageAttachment.messageAttachmentClazz().createAndInsertObject(ec);
             attachment.setFilePath(filePath);
             mailMessage.addToBothSidesOfAttachments(attachment);
         }

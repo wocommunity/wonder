@@ -32,7 +32,7 @@ public class PayPalNotificationLogger {
     }
 
     public void processInvalidPaypalTransaction(WORequest aRequest) {
-        NSLog.out.appendln("PaypalNotificationLogger: Invalid Paypal transaction: " + aRequest.formValueForKey("txn_id") + " from i.p.: " + (((String)aRequest.headerForKey("REMOTE_ADDR") != null) ? (String)aRequest.headerForKey("REMOTE_ADDR") : "- unknown -"));
+        NSLog.out.appendln("PaypalNotificationLogger: Invalid Paypal transaction: " + aRequest.formValueForKey("txn_id") + " from i.p.: " + ((aRequest.headerForKey("REMOTE_ADDR") != null) ? (String)aRequest.headerForKey("REMOTE_ADDR") : "- unknown -"));
     }
 
     public void processPendingPaypalTransaction(WORequest aRequest) {

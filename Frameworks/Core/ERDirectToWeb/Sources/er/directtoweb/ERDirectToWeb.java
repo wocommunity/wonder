@@ -625,6 +625,6 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
     		String key = (String)e.nextElement();
     		result.addObject(new ERXKeyValuePair(key, ERDirectToWeb.displayNameForPropertyKey(key, entityForReportName)));
     	}
-    	return (NSArray)result;
+    	return result;
     }
 }

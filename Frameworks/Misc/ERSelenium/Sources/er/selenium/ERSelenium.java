@@ -68,7 +68,7 @@ public class ERSelenium extends ERXFrameworkPrincipal {
 
     public ERSelenium sharedInstance() {
         if (sharedInstance == null) {
-            sharedInstance = (ERSelenium) ERXFrameworkPrincipal.sharedInstance(ERSelenium.class);
+            sharedInstance = ERXFrameworkPrincipal.sharedInstance(ERSelenium.class);
         }
         return sharedInstance;
     }

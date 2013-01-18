@@ -36,7 +36,7 @@ public class BTBusinessLogic extends ERXFrameworkPrincipal {
     static BTBusinessLogic sharedInstance;
     public static BTBusinessLogic sharedInstance() {
         if(sharedInstance == null) {
-            sharedInstance = (BTBusinessLogic)ERXFrameworkPrincipal.sharedInstance(BTBusinessLogic.class);
+            sharedInstance = ERXFrameworkPrincipal.sharedInstance(BTBusinessLogic.class);
         }
         return sharedInstance;
     }

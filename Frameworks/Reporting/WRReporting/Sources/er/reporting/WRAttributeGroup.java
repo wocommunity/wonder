@@ -54,7 +54,7 @@ public class WRAttributeGroup extends WOComponent {
 
     public boolean totalsOnly() {
         if (_totalsOnly == null) {
-            Object v = (Object)valueForBinding("totalsOnly");
+            Object v = valueForBinding("totalsOnly");
             if (ERXValueUtilities.booleanValue(v)) {
                 _totalsOnly = Boolean.TRUE;
             } else {

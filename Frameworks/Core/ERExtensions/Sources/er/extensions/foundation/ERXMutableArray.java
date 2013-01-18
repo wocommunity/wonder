@@ -202,7 +202,7 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 
 		@Override
 		public synchronized V removeLastObject() {
-			return (V)super.removeLastObject();
+			return super.removeLastObject();
 		}
 
 		@Override
@@ -237,7 +237,7 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 
 		@Override
 		public synchronized V replaceObjectAtIndex(V object, int index) {
-			return (V)super.replaceObjectAtIndex(object, index);
+			return super.replaceObjectAtIndex(object, index);
 		}
 
 		@Override

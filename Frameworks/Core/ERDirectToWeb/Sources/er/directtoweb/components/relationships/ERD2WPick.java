@@ -84,7 +84,7 @@ public class ERD2WPick extends ERDCustomEditComponent {
         public static NextPageDelegate instance=new _D2WPickActionDelegate ();
         
         public WOComponent nextPage(WOComponent sender) {
-            WOComponent target = (WOComponent)D2WEmbeddedComponent.findTarget(sender);
+            WOComponent target = D2WEmbeddedComponent.findTarget(sender);
             return ((ERDBranchDelegate)target.valueForBinding("branchDelegate")).nextPage(sender);
         }
     }

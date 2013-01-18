@@ -239,6 +239,6 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
         } else {
             objects = NSArray.EmptyArray;
         }
-        setSelectedObjects((NSArray)objects);
+        setSelectedObjects(objects);
      }
 }

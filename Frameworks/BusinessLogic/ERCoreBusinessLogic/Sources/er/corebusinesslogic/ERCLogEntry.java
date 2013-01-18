@@ -40,7 +40,7 @@ public class ERCLogEntry extends _ERCLogEntry {
         public ERCLogEntry createLogEntryLinkedToEO(EOEnterpriseObject type, String text, 
                 EOEnterpriseObject eo, String relationshipKey) {
             EOEditingContext editingContext = eo.editingContext();
-            ERCLogEntry logEntry = (ERCLogEntry) ERCLogEntry.clazz.createAndInsertObject(editingContext);
+            ERCLogEntry logEntry = ERCLogEntry.clazz.createAndInsertObject(editingContext);
             if (type != null) {
                 // CHECKME: (ak) what's type supposed to do??
                 // logEntry.addObjectToBothSidesOfRelationshipWithKey(type,"type");

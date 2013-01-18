@@ -57,7 +57,7 @@ public class ERDQuickSearch extends ERDCustomComponent {
             if(listConfigurationName != null) {
                 lpi = (ListPageInterface) D2W.factory().pageForConfigurationNamed(listConfigurationName, session());
             } else {
-                lpi = (ListPageInterface) D2W.factory().listPageForEntityNamed(entityName, session());
+                lpi = D2W.factory().listPageForEntityNamed(entityName, session());
             }
             lpi.setDataSource(ds);
             lpi.setNextPage(context().page());

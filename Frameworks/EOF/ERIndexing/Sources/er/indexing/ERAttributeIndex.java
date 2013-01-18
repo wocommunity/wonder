@@ -22,10 +22,10 @@ public class ERAttributeIndex extends ERIndex {
                 String notificationName = n.name();
                 if (notificationName.equals(ERXEC.EditingContextWillSaveChangesNotification)) {
                     ec.processRecentChanges();
-                    NSArray inserted = (NSArray) ec.insertedObjects();
-                    NSArray updated = (NSArray) ec.updatedObjects();
+                    NSArray inserted = ec.insertedObjects();
+                    NSArray updated = ec.updatedObjects();
                     updated = ERXArrayUtilities.arrayMinusArray(updated, inserted);
-                    NSArray deleted = (NSArray) ec.deletedObjects();
+                    NSArray deleted = ec.deletedObjects();
 
                     Transaction transaction = new Transaction(ec);
 

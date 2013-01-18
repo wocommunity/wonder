@@ -313,7 +313,7 @@ public class ERCMailMessage extends _ERCMailMessage {
     public String text() {
     	String value = null;
     	if (contentGzipped()) {
-    		value = (String)storedGzippedValueForKey("textCompressed");
+    		value = storedGzippedValueForKey("textCompressed");
     	} else {
     		value = (String)storedValueForKey(Key.TEXT);
     	}

@@ -171,10 +171,10 @@ public class ERXJDBCConnectionBroker implements ERXJDBCAdaptor.ConnectionBroker 
         	dbDriver = plugIn.defaultDriverName();
         }
 
-        minimumConnections = ERXValueUtilities.intValueWithDefault((String) dict.objectForKey("minConnections"), ERXProperties.intForKeyWithDefault("er.extensions.ERXJDBCConnectionBroker.minConnections", 1));
-		maximumConnections = ERXValueUtilities.intValueWithDefault((String) dict.objectForKey("maxConnections"), ERXProperties.intForKeyWithDefault("er.extensions.ERXJDBCConnectionBroker.maxConnections", 1));
-		maxCheckoutMillis = ERXValueUtilities.intValueWithDefault((String) dict.objectForKey("maxCheckout"), ERXProperties.intForKeyWithDefault("er.extensions.ERXJDBCConnectionBroker.maxCheckout", maxCheckoutSecond)) * 1000;
-		maxConnectionMillis = ERXValueUtilities.bigDecimalValueWithDefault((String) dict.objectForKey("connectionRecycle"), BigDecimal.valueOf(1)).longValue() * 86400000;
+        minimumConnections = ERXValueUtilities.intValueWithDefault(dict.objectForKey("minConnections"), ERXProperties.intForKeyWithDefault("er.extensions.ERXJDBCConnectionBroker.minConnections", 1));
+		maximumConnections = ERXValueUtilities.intValueWithDefault(dict.objectForKey("maxConnections"), ERXProperties.intForKeyWithDefault("er.extensions.ERXJDBCConnectionBroker.maxConnections", 1));
+		maxCheckoutMillis = ERXValueUtilities.intValueWithDefault(dict.objectForKey("maxCheckout"), ERXProperties.intForKeyWithDefault("er.extensions.ERXJDBCConnectionBroker.maxCheckout", maxCheckoutSecond)) * 1000;
+		maxConnectionMillis = ERXValueUtilities.bigDecimalValueWithDefault(dict.objectForKey("connectionRecycle"), BigDecimal.valueOf(1)).longValue() * 86400000;
         
         if (maxConnectionMillis < 30000) { // Recycle no less than 30 seconds.
             maxConnectionMillis = 30000;

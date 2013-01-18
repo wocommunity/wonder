@@ -61,7 +61,7 @@ public class ERD2WEditToManyRelationship extends D2WEditToManyRelationship {
             return valueForKeyPath(restrictedChoiceKey);
         String fetchSpecName=(String)d2wContext().valueForKey("restrictingFetchSpecification");
         if(fetchSpecName != null) {
-            EORelationship relationship = ERXUtilities.relationshipWithObjectAndKeyPath((EOEnterpriseObject)object(), (String)d2wContext().valueForKey("propertyKey"));
+            EORelationship relationship = ERXUtilities.relationshipWithObjectAndKeyPath(object(), (String)d2wContext().valueForKey("propertyKey"));
             if(relationship != null)
                 return EOUtilities.objectsWithFetchSpecificationAndBindings(object().editingContext(), relationship.destinationEntity().name(),fetchSpecName,null);
         }

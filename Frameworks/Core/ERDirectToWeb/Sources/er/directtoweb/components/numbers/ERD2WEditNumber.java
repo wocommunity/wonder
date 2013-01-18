@@ -54,7 +54,7 @@ public class ERD2WEditNumber extends D2WEditNumber {
         if (_numberFormatter == null) {
             _numberFormatter = ERXNumberFormatter.numberFormatterForPattern(formatter());
         }
-        return (java.text.Format)_numberFormatter;
+        return _numberFormatter;
     }
 
     public Object validateTakeValueForKeyPath (Object anObject, String aPath) throws NSValidation.ValidationException {

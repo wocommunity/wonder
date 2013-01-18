@@ -41,7 +41,7 @@ public class Bug extends _Bug implements Markable {
         setOwner(People.clazz.currentUser(editingContext()));
         setDateSubmitted(new NSTimestamp());
         setDateModified(new NSTimestamp());
-        Comment comment = (Comment) Comment.clazz.createAndInsertObject(ec);
+        Comment comment = Comment.clazz.createAndInsertObject(ec);
         comment.setOriginator(originator());
         comment.setBug(this);
     }
@@ -55,7 +55,7 @@ public class Bug extends _Bug implements Markable {
 		ec.lock();
 		try {
 			People people = (People) ERCoreBusinessLogic.actor(ec);
-			Bug copy = (Bug) ERXEOControlUtilities.localInstanceOfObject(ec, this);
+			Bug copy = ERXEOControlUtilities.localInstanceOfObject(ec, this);
 			if(copy != null && !copy.isRead() && copy.owner().equals(people)) {
 				copy.setIsRead(true);
 				ec.saveChanges();
@@ -184,7 +184,7 @@ public class Bug extends _Bug implements Markable {
 	public void setNewText(String newValue) {
 		_newText = newValue;
 		if (newValue != null && newValue.length() > 0) {
-			Comment comment = (Comment) Comment.clazz.createAndInsertObject(editingContext());
+			Comment comment = Comment.clazz.createAndInsertObject(editingContext());
 			comment.setBug(this);
             comment.setTextDescription(newValue);
 			addToComments(comment);
