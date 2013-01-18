@@ -51,6 +51,7 @@ public class ERD2WPick extends ERDCustomEditComponent {
     // Keeps kvc happy
     public EODataSource _datasource;
 
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     // This is fine because we only use the D2WPick component if list() > 0;
@@ -75,6 +76,7 @@ public class ERD2WPick extends ERDCustomEditComponent {
         return hasBinding("erD2WListOmitCenterTag") ? booleanValueForBinding("erD2WListOmitCenterTag") : false;
     }
 
+    @Override
     public D2WContext d2wContext() { return D2WUtils.makeSubContextForDynamicPageNamed((String)valueForBinding("listConfigurationName"), session()); }
     public void setD2wContext(Object value) { }
 
@@ -84,7 +86,7 @@ public class ERD2WPick extends ERDCustomEditComponent {
         public static NextPageDelegate instance=new _D2WPickActionDelegate ();
         
         public WOComponent nextPage(WOComponent sender) {
-            WOComponent target = (WOComponent)D2WEmbeddedComponent.findTarget(sender);
+            WOComponent target = D2WEmbeddedComponent.findTarget(sender);
             return ((ERDBranchDelegate)target.valueForBinding("branchDelegate")).nextPage(sender);
         }
     }

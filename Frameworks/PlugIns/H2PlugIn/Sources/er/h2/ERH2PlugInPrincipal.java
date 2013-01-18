@@ -1,7 +1,7 @@
 package er.h2;
 
-import com.webobjects.jdbcadaptor._H2PlugIn;
 import com.webobjects.jdbcadaptor.JDBCPlugIn;
+import com.webobjects.jdbcadaptor._H2PlugIn;
 
 /**
  * This principal class registers the _H2PlugIn class as the PlugIn

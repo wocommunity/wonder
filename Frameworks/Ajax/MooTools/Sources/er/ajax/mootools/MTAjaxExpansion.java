@@ -11,6 +11,7 @@ public class MTAjaxExpansion extends AjaxExpansion {
         super(context);
     }
 
+	@Override
 	protected void addRequiredWebResources(WOResponse response) {
 		MTAjaxUtils.addScriptResourceInHead(context(), response, "MooTools", MTAjaxUtils.MOOTOOLS_CORE_JS);
 		MTAjaxUtils.addScriptResourceInHead(context(), response, "MooTools", MTAjaxUtils.MOOTOOLS_WONDER_JS);

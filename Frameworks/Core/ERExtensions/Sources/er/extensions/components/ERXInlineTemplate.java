@@ -87,6 +87,7 @@ public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
 		super(context);
 	}
 
+	@Override
 	public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
 		if (_deferredError != null) {
 			woresponse.appendContentString(_deferredError.formatWithTemplate(errorTemplate()));
@@ -114,6 +115,7 @@ public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
 		return booleanValueForBinding(DEFAULT_TO_DYNAMIC_BINDINGS_BINDING, true);
 	}
 	
+	@Override
 	public void takeValueForKeyPath(Object value, String keyPath) {
 		try {
 			NSMutableArray<String> keyPathComponents = NSArray.componentsSeparatedByString(keyPath, ".").mutableClone();
@@ -154,6 +156,7 @@ public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
 		}
 	}
 
+	@Override
 	public Object valueForKeyPath(String keyPath) {
 		try {
 			NSMutableArray<String> keyPathComponents = NSArray.componentsSeparatedByString(keyPath, ".").mutableClone();
@@ -200,14 +203,17 @@ public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
 		}
 	}
 
+	@Override
 	public void takeValueForKey(Object obj, String s) {
 		takeValueForKeyPath(obj, s);
 	}
 
+	@Override
 	public Object valueForKey(String s) {
 		return valueForKeyPath(s);
 	}
 
+	@Override
 	public WOElement template() {
 		try {
 			WOElement element = null;
@@ -261,8 +267,8 @@ public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
 		private Object _version;
 
 		public CacheEntry(Object version, WOElement element) {
-			this._version = version;
-			this._element = element;
+			_version = version;
+			_element = element;
 		}
 
 		public WOElement element() {

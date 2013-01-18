@@ -180,6 +180,7 @@ public class ERXGroupingFetchSpecification<T extends NSDictionary> extends ERXFe
 	 * Type-safe method to fetch the rows for this fetch spec.
 	 * @param ec
 	 */
+	@Override
 	public NSArray<T> fetchObjects(EOEditingContext ec) {
 		NSArray oldKeyPaths = rawRowKeyPaths();
 		try {

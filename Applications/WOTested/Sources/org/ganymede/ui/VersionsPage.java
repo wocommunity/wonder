@@ -17,9 +17,9 @@ public class VersionsPage extends ERXComponent {
         super(context);
     }
 
-    public EOEnterpriseObject result1 = (this.results().size() > 0) ? this.results().get(0) : null;
+    public EOEnterpriseObject result1 = (results().size() > 0) ? results().get(0) : null;
 
-    public EOEnterpriseObject result2 = (this.results().size() > 1) ? this.results().get(1) : null;
+    public EOEnterpriseObject result2 = (results().size() > 1) ? results().get(1) : null;
 
     public EOEnterpriseObject aResult;
 

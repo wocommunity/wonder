@@ -1842,6 +1842,7 @@ public class ERXSQLHelper {
 			return externalType;
 		}
 		
+		@Override
 		public boolean reassignExternalTypeForValueTypeOverride(EOAttribute attribute) {
 			return false;
 		}
@@ -1922,10 +1923,12 @@ public class ERXSQLHelper {
 			return sql != null && !sql.startsWith("--");
 		}
 
+		@Override
 		public int varcharLargeJDBCType() {
 			return Types.CLOB;
 		}
 
+		@Override
 		public int varcharLargeColumnWidth() {
 			return 0;
 		}
@@ -2041,6 +2044,7 @@ public class ERXSQLHelper {
 			return "ALTER TABLE \"" + tableName + "\" ADD CONSTRAINT \"" + indexName + "\" UNIQUE(\"" + new NSArray<String>(columnNames).componentsJoinedByString("\", \"") + "\") DEFERRABLE INITIALLY DEFERRED";
 		}
 
+		@Override
 		public String sqlForCreateIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
 			NSMutableArray<String> columnNames = columnNamesFromColumnIndexes(columnIndexes);
 			return "CREATE INDEX \""+indexName+"\" ON \""+tableName+"\" (\""+new NSArray<String>(columnNames).componentsJoinedByString("\", \"")+"\")";
@@ -2104,6 +2108,7 @@ public class ERXSQLHelper {
 		 * 
 		 * @return regex pattern that indicates this line is an SQL comment
 		 */
+		@Override
 		protected Pattern commentPattern() {
 			return Pattern.compile("^--");
 		}
@@ -2509,6 +2514,7 @@ public class ERXSQLHelper {
 		 * 
 		 * @return regex pattern that indicates this line is an SQL comment
 		 */
+		@Override
 		protected Pattern commentPattern() {
 			return Pattern.compile("^--");
 		}
@@ -2651,6 +2657,7 @@ public class ERXSQLHelper {
 			return "dbupdater";
 		}
 		
+		@Override
 		public boolean reassignExternalTypeForValueTypeOverride(EOAttribute attribute) {
 			return false;
 		}

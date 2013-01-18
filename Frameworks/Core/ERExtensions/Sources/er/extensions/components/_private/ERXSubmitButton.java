@@ -196,14 +196,14 @@ public class ERXSubmitButton extends WOInput {
                 if(worequest.formValueForKey(nameInContext(wocontext, wocomponent)) != null) {
                     wocontext.setActionInvoked(true);
                     if(_action != null)
-                        obj = (WOActionResults)_action.valueInComponent(wocomponent);
+                        obj = _action.valueInComponent(wocomponent);
                     if(obj == null)
                         obj = wocontext.page();
                 }
             } else {
                 wocontext.setActionInvoked(true);
                 if(_action != null)
-                    obj = (WOActionResults)_action.valueInComponent(wocomponent);
+                    obj = _action.valueInComponent(wocomponent);
                 if(obj == null)
                     obj = wocontext.page();
             }

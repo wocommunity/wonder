@@ -114,7 +114,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
             }
             if (ipi instanceof ERDFollowPageInterface)
                 ((ERDFollowPageInterface)ipi).setPreviousPage(context().page());
-            return (WOComponent)ipi;
+            return ipi;
         }
         WOComponent result = nextPageFromDelegate();
     	if(result == null) {

@@ -90,6 +90,7 @@ public class ERPublishCalendarPage extends WOComponent {
      * @param aResponse  the HTTP response that an application returns to a Web server to complete a cycle of the request-response loop
      * @param aContext   context of a transaction
      */
+    @Override
     public void appendToResponse (WOResponse aResponse, WOContext aContext)
     {
 	eventTimestamp = new NSTimestamp();

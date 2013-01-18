@@ -16,9 +16,9 @@ public class Comparison extends Sentence {
 	private final Object value;
 	
 	public Comparison(Collection<EORelationship> rels, EOAttribute att, ComparisonOperator op, Object val) {
-		this.relationships = rels;
-		this.attribute = att;
-		this.operator = op;
-		this.value = val;
+		relationships = rels;
+		attribute = att;
+		operator = op;
+		value = val;
 	}
 }

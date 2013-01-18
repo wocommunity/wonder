@@ -54,6 +54,7 @@ public abstract class FSQualifierHandler {
             /* empty */
         }
 
+        @Override
         protected Class type() {
             return EOKeyValueQualifier.class;
         }
@@ -104,6 +105,7 @@ public abstract class FSQualifierHandler {
             throw new IllegalArgumentException("FSQualifierHandler.KeyValue.addParentFilesWithQualifierToSet: null qualifier.");
         }
 
+        @Override
         protected void addFilesMatchingQualifierToSet(EOQualifier aQualifier, NSMutableSet<File> aSet) {
             if (aQualifier != null) {
                 if (aSet != null) {
@@ -122,10 +124,12 @@ public abstract class FSQualifierHandler {
             /* empty */
         }
 
+        @Override
         protected Class type() {
             return EONotQualifier.class;
         }
 
+        @Override
         protected void addFilesMatchingQualifierToSet(EOQualifier aQualifier, NSMutableSet<File> aSet) {
             if (aQualifier != null) {
                 if (aSet != null) {
@@ -143,10 +147,12 @@ public abstract class FSQualifierHandler {
             /* empty */
         }
 
+        @Override
         protected Class type() {
             return EOOrQualifier.class;
         }
 
+        @Override
         protected void addFilesMatchingQualifierToSet(EOQualifier aQualifier, NSMutableSet<File> aSet) {
             if (aQualifier != null) {
                 if (aSet != null) {
@@ -171,10 +177,12 @@ public abstract class FSQualifierHandler {
             /* empty */
         }
 
+        @Override
         protected Class type() {
             return EOAndQualifier.class;
         }
 
+        @Override
         protected void addFilesMatchingQualifierToSet(EOQualifier aQualifier, NSMutableSet<File> aSet) {
             if (aQualifier != null) {
                 if (aSet != null) {

@@ -20,6 +20,7 @@ public class ERDEditRelationship extends ERDCustomEditComponent {
 		super(context);
 	}
 	
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}

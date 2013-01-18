@@ -32,7 +32,7 @@ public class NodesWithIds implements Results<Node> {
 			}
 		}
 		
-		this.nodeIdsIt = Collections.unmodifiableCollection(nodeIds).iterator();
+		nodeIdsIt = Collections.unmodifiableCollection(nodeIds).iterator();
 		this.db = db;
 	}
 	

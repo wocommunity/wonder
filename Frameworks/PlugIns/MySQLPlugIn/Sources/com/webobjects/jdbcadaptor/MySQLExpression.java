@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOKeyComparisonQualifier;
@@ -80,8 +81,8 @@ public class MySQLExpression
 	public MySQLExpression( EOEntity entity )
 	{
 		super( entity );
-		this.upperFunctionNameRegex = Pattern.compile( "\\Q" + this._upperFunctionName + "\\E\\(([^\\)]+)\\)" );
-		this.likeOperatorRegex = Pattern.compile( "([Ll][Ii][Kk][Ee])" );
+		upperFunctionNameRegex = Pattern.compile( "\\Q" + _upperFunctionName + "\\E\\(([^\\)]+)\\)" );
+		likeOperatorRegex = Pattern.compile( "([Ll][Ii][Kk][Ee])" );
 	}
 	
 	/**
@@ -103,7 +104,7 @@ public class MySQLExpression
 			    .append( " failed because attribute identified by key '" )
 			    .append( sortOrdering.key() )
 			    .append( "' was not reachable from from entity '" )
-			    .append( this._entity.name() )
+			    .append( _entity.name() )
 			    .append( "'" )
 			    .toString() );
 		}
@@ -136,7 +137,7 @@ public class MySQLExpression
 	
 	protected Pattern likeOperatorRegex()
 	{
-		return this.likeOperatorRegex;
+		return likeOperatorRegex;
 	}
 	
 	protected String replaceStringForCaseInsensitiveLike( String string )
@@ -189,7 +190,7 @@ public class MySQLExpression
 		{
 			return "(1=1)";
 		}
-		EOAttribute att = this._entity._attributeForPath( leftKey );
+		EOAttribute att = _entity._attributeForPath( leftKey );
 		String leftKeyString = sqlStringForAttributeNamed( leftKey );
 		if ( leftKeyString == null )
 		{
@@ -201,12 +202,12 @@ public class MySQLExpression
 			    .append( " failed because attribute identified by key '" )
 			    .append( leftKey )
 			    .append( "' was not reachable from from entity '" )
-			    .append( this._entity.name() )
+			    .append( _entity.name() )
 			    .append( "'" )
 			    .toString() );
 		}
 		leftKeyString = formatSQLString( leftKeyString, att.readFormat() );
-		att = this._entity._attributeForPath( rightKey );
+		att = _entity._attributeForPath( rightKey );
 		String rightKeyString = sqlStringForAttributeNamed( rightKey );
 		if ( rightKeyString == null )
 		{
@@ -218,7 +219,7 @@ public class MySQLExpression
 			    .append( " failed because attribute identified by key '" )
 			    .append( rightKey )
 			    .append( "' was not reachable from from entity '" )
-			    .append( this._entity.name() )
+			    .append( _entity.name() )
 			    .append( "'" )
 			    .toString() );
 		}
@@ -227,8 +228,8 @@ public class MySQLExpression
 			rightKeyString = formatSQLString( rightKeyString, att.readFormat() );
 			String operatorString = sqlStringForSelector( qualifier.selector(), null );
 			
-			EOAttribute leftAttribute = this._entity._attributeForPath( leftKey );
-			EOAttribute rightAttribute = this._entity._attributeForPath( rightKey );
+			EOAttribute leftAttribute = _entity._attributeForPath( leftKey );
+			EOAttribute rightAttribute = _entity._attributeForPath( rightKey );
 			
 			NSSelector qualifierSelector = qualifier.selector();
 			boolean isLike =
@@ -262,7 +263,7 @@ public class MySQLExpression
 			    .append( " failed because attribute identified by key '" )
 			    .append( key )
 			    .append( "' was not reachable from from entity '" )
-			    .append( this._entity.name() )
+			    .append( _entity.name() )
 			    .append( "'" )
 			    .toString() );
 		}
@@ -280,7 +281,7 @@ public class MySQLExpression
 			    .toString() );
 		}
 		
-		EOAttribute attribute = this._entity._attributeForPath( key );
+		EOAttribute attribute = _entity._attributeForPath( key );
 		
 		keyString = formatSQLString( keyString, attribute.readFormat() );
 		NSSelector qualifierSelector = qualifier.selector();
@@ -329,7 +330,7 @@ public class MySQLExpression
 	
 	protected Pattern upperFunctionNameRegex()
 	{
-		return this.upperFunctionNameRegex;
+		return upperFunctionNameRegex;
 	}
 	
 }

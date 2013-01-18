@@ -33,6 +33,7 @@ public class ERXJDBCColumn extends JDBCColumn {
 		super(aChannel);
 	}
 
+	@Override
 	public void takeInputValue(Object arg0, int arg1, boolean arg2) {
 		try {
 			super.takeInputValue(arg0, arg1, arg2);
@@ -49,6 +50,7 @@ public class ERXJDBCColumn extends JDBCColumn {
 		}
 	}
 
+	@Override
 	Object _fetchValue(boolean flag) {
 		if (_rs == null || _column < 1)
 			throw new JDBCAdaptorException(" *** JDBCColumn : trying to fetchValue on a null ResultSet [" + _rs

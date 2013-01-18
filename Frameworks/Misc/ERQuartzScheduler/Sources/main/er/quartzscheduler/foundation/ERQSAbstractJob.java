@@ -28,8 +28,8 @@ public class ERQSAbstractJob implements Job
 
 	public void execute(final JobExecutionContext jobexecutioncontext) throws JobExecutionException 
 	{
-		this.schedulerFPInstance = (ERQSSchedulerServiceFrameworkPrincipal) jobexecutioncontext.getMergedJobDataMap().get(ERQSSchedulerServiceFrameworkPrincipal.INSTANCE_KEY);
-		this.jobContext = jobexecutioncontext;
+		schedulerFPInstance = (ERQSSchedulerServiceFrameworkPrincipal) jobexecutioncontext.getMergedJobDataMap().get(ERQSSchedulerServiceFrameworkPrincipal.INSTANCE_KEY);
+		jobContext = jobexecutioncontext;
 
 		if (log.isDebugEnabled())
 		{

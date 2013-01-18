@@ -34,11 +34,13 @@ public class ERSessionInfo extends er.persistentsessionstorage.model.eogen._ERSe
 	 * Initializes the EO. This is called when an EO is created, not when it is
 	 * inserted into an EC.
 	 */
+	@Override
 	public void init(EOEditingContext ec) {
 		super.init(ec);
 		setIntLock(Integer.valueOf(0));
 	}
 	
+	@Override
 	public void willUpdate() {
 		super.willUpdate();
 		Integer lock = Integer.valueOf(intLock().intValue() + 1);

@@ -16,7 +16,7 @@ public class Application extends ERXApplication {
   }
 
   public Application() {
-    System.out.println("Welcome to " + this.name() + "!");
+    System.out.println("Welcome to " + name() + "!");
   }
 
   @Override

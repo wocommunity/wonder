@@ -31,6 +31,7 @@ public class ERMD2WEditRelationshipHeader extends ERMD2WHeader {
     }
     
     // FIXME switch to using a localized template
+    @Override
     public String headerString() {
     	if (_headerString == null) {
     	    if (object() != null) {

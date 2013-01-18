@@ -46,19 +46,23 @@ public class ERD2WCheatSheet extends D2WComponent {
 		}
 	}
 
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}
 	
+	@Override
 	public D2WContext localContext() {
 		_localContext = (D2WContext) valueForBinding("localContext");
         return _localContext;
     }
 	
+	@Override
 	public D2WContext d2wContext() {
         return localContext();
     }
 
+	@Override
 	public EOEnterpriseObject object() {
 		return (EOEnterpriseObject) d2wContext().valueForKey("object");
 	}

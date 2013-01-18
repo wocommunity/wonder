@@ -131,6 +131,7 @@ public class PayPalSingleItemHyperlink extends PayPalSingleItemLinkBase {
      *
      * @return NSArray
      */
+    @Override
     protected NSArray additionalBindingList() {
         NSMutableArray bindingArray = new NSMutableArray(); // super.bindingList();
         bindingArray.addObjectsFromArray(new NSArray(new Object[] {}));

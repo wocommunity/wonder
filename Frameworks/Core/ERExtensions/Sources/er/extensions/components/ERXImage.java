@@ -23,6 +23,7 @@ public class ERXImage extends ERXStatelessComponent {
         super(context);
     }
 
+    @Override
     public void reset() {
         super.reset();
         src = null;

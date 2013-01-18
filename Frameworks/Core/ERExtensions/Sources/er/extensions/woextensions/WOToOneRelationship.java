@@ -92,6 +92,7 @@ public class WOToOneRelationship extends ERXArrayChooser {
         }
     }
 
+    @Override
     public NSArray currentValues() {
     	Object current = selection();
     	return current == null ? NSArray.EmptyArray : new NSArray(current);
@@ -144,6 +145,7 @@ public class WOToOneRelationship extends ERXArrayChooser {
         return _list;
     }
 
+    @Override
     protected boolean isSingleSelection() {
         return true;
     }

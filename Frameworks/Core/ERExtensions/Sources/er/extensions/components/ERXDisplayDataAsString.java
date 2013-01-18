@@ -29,6 +29,7 @@ public class ERXDisplayDataAsString extends WOComponent {
     }
 
     public String _string;
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     public String string() {

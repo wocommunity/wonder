@@ -7,7 +7,9 @@
 
 package er.wopaypal;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSSelector;
 
 import er.extensions.foundation.ERXProperties;
 

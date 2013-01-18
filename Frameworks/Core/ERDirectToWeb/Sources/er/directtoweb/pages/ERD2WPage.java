@@ -999,10 +999,10 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
             //If firstTab is not null, then try to find the tab named firstTab
         	Integer tabIndex = (Integer) d2wContext().valueForKey(Keys.tabIndex);
             if(tabIndex!=null && tabIndex.intValue() <= tabSectionsContents().count()){
-                setCurrentTab((ERD2WContainer)tabSectionsContents().objectAtIndex(tabIndex.intValue()));
+                setCurrentTab(tabSectionsContents().objectAtIndex(tabIndex.intValue()));
             }
             if(_currentTab==null)
-                setCurrentTab((ERD2WContainer)tabSectionsContents().objectAtIndex(0));
+                setCurrentTab(tabSectionsContents().objectAtIndex(0));
         }
         return _currentTab;
     }

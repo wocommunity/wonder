@@ -1,11 +1,10 @@
 package er.pdf;
 
-import org.apache.commons.lang.CharEncoding;
-import org.apache.log4j.Logger;
-
 import java.io.ByteArrayOutputStream;
 import java.util.Map;
 
+import org.apache.commons.lang.CharEncoding;
+import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOAssociation;

@@ -30,6 +30,7 @@ public class WOToManyRelationship extends ERXArrayChooser {
     super(aContext);
   }
 
+  @Override
   public void reset() {
     super.reset();
     _selections = null;
@@ -86,6 +87,7 @@ public class WOToManyRelationship extends ERXArrayChooser {
     updateSourceObject(selections);
   }
 
+    @Override
     public NSArray currentValues() {
     	NSArray current = selections();
     	return current == null ? NSArray.EmptyArray : current;
@@ -111,6 +113,7 @@ public class WOToManyRelationship extends ERXArrayChooser {
     	return _selections;
     }
 
+    @Override
     protected boolean isSingleSelection() {
     return false;
   }

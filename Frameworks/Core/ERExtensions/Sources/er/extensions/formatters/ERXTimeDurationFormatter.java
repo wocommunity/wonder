@@ -62,9 +62,9 @@ public class ERXTimeDurationFormatter extends NumberFormat {
 	public ERXTimeDurationFormatter(TimeUnit timeUnit, boolean showLargestUnitOnly, boolean omitSecondsPart) {
 		super();
 		
-		this._timeUnit = timeUnit;
-		this._showLargestUnitOnly = showLargestUnitOnly;
-		this._omitSecondsPart = omitSecondsPart;
+		_timeUnit = timeUnit;
+		_showLargestUnitOnly = showLargestUnitOnly;
+		_omitSecondsPart = omitSecondsPart;
 	}
 	
 

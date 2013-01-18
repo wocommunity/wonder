@@ -91,6 +91,7 @@ public class ERXDatabaseConsole extends WOComponent {
     }
 
     
+    @Override
     public void appendToResponse(WOResponse r, WOContext c) {
         if (session().objectForKey("ERXDatabaseConsole.enabled") != null) {
             super.appendToResponse(r, c);

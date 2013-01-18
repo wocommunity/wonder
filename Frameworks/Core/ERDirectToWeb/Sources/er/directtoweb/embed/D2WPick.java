@@ -40,7 +40,7 @@ public D2WPick(WOContext context) { super(context); }
 
         public static NextPageDelegate instance=new _D2WPickActionDelegate ();
         public WOComponent nextPage(WOComponent sender) {
-            WOComponent target = (WOComponent)D2WEmbeddedComponent.findTarget(sender);
+            WOComponent target = D2WEmbeddedComponent.findTarget(sender);
             WOComponent nextPage = null;
             if (target.hasBinding("branchDelegate")) {
                 ERDBranchDelegate delegate = (ERDBranchDelegate)target.valueForBinding("branchDelegate");
@@ -74,7 +74,9 @@ public D2WPick(WOContext context) { super(context); }
     }
 
     // Need to do this so that the action binding is not mandatory
+    @Override
     public NextPageDelegate actionPageDelegate() { return _D2WPickActionDelegate.instance; }
+    @Override
     public NextPageDelegate newPageDelegate() { return _D2WPickActionDelegate.instance; }
     
 /*    public EODataSource dataSource() {

@@ -4,13 +4,13 @@
 
 package com.rackspacecloud.client.cloudfiles;
 
-import org.apache.http.HttpException;
-import org.apache.log4j.Logger;
-
-import java.util.List;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
+
+import org.apache.http.HttpException;
+import org.apache.log4j.Logger;
 
 public class FilesContainer
 {
@@ -29,7 +29,7 @@ public class FilesContainer
     public FilesContainer(String name, List<FilesObject> objs, FilesClient client)
     {
         this.name = name;
-        this.objects = objs;
+        objects = objs;
         this.client = client;
     }
 

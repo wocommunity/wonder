@@ -1,5 +1,7 @@
 package er.extensions.eof.qualifiers;
 
+import junit.framework.TestCase;
+
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
@@ -7,8 +9,6 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
 import er.extensions.eof.ERXQ;
-
-import junit.framework.TestCase;
 
 public class ERXQTest extends TestCase {
 	public void testExtractKeyValueQualifiers() {

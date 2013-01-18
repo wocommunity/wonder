@@ -88,7 +88,7 @@ public class ERXEORestDelegate extends ERXAbstractRestDelegate {
 	public Object objectOfEntityWithID(EOClassDescription entity, Object id, ERXRestContext context) {
 		EOEntity eoEntity = ((EOEntityClassDescription) entity).entity();
 		String strPKValue = String.valueOf(id);
-		Object pkValue = ((EOAttribute) eoEntity.primaryKeyAttributes().objectAtIndex(0)).validateValue(strPKValue);
+		Object pkValue = eoEntity.primaryKeyAttributes().objectAtIndex(0).validateValue(strPKValue);
 		EOEditingContext editingContext = context.editingContext();
 		if (editingContext == null) {
 			throw new IllegalArgumentException("There was no editing context attached to this rest context.");

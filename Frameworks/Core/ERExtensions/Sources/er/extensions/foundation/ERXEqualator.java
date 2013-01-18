@@ -4,6 +4,7 @@ import org.apache.commons.lang.ObjectUtils;
 
 import com.webobjects.eocontrol.EOEnterpriseObject;
 
+import er.extensions.ERXExtensions;
 import er.extensions.eof.ERXEOControlUtilities;
 
 /**
@@ -54,6 +55,7 @@ public abstract class ERXEqualator {
     private static class _SafeEqualsEqualator extends ERXEqualator {
         public _SafeEqualsEqualator() {}
 
+        @Override
         public boolean objectIsEqualToObject(Object o1, Object o2) {
             return ObjectUtils.equals(o1, o2);
         }
@@ -62,6 +64,7 @@ public abstract class ERXEqualator {
     private static class _EOEqualsEqualator extends ERXEqualator {
         public _EOEqualsEqualator() {}
 
+        @Override
         public boolean objectIsEqualToObject(Object o1, Object o2) {
             if ( (o1 != null && ! (o1 instanceof EOEnterpriseObject)) || (o2 != null && ! (o2 instanceof EOEnterpriseObject)) ) {
                 throw new RuntimeException("Unable to compare objects because both objects need to be EOEnterpriseObjects.  " +

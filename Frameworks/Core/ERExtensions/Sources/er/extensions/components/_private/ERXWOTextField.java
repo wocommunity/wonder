@@ -64,10 +64,12 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 		}
 	}
 	
+	@Override
 	public String type() {
 		return "text";
 	}
 	   
+    @Override
     protected boolean isDisabledInContext(WOContext context) {
     	WOAssociation disabled = (WOAssociation) ERXKeyValueCodingUtilities.privateValueForKey(this, "_disabled");
     	return disabled != null && disabled.booleanValueInComponent(context.component());
@@ -77,6 +79,7 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
     	return _readonly != null && _readonly.booleanValueInComponent(context.component());
     }
 
+	@Override
 	public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
 		WOComponent component = wocontext.component();
 		if(!isDisabledInContext(wocontext) && wocontext.wasFormSubmitted() && !isReadonlyInContext(wocontext)) {
@@ -169,6 +172,7 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 		}
 	}
 
+	@Override
 	protected void _appendValueAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 		WOComponent component = wocontext.component();
 		Object valueInComponent = _value.valueInComponent(component);
@@ -247,9 +251,11 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 		}
 	}
 
+	@Override
 	protected void _appendCloseTagToResponse(WOResponse woresponse, WOContext wocontext) {
 	}
 
+	@Override
 	public String toString() {
 		StringBuffer stringbuffer = new StringBuffer();
 		stringbuffer.append("<");
@@ -265,6 +271,7 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 	/**
 	 * Overridden to make output XML compatible.
 	 */
+    @Override
     public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
         WOResponse newResponse = ERXPatcher.DynamicElementsPatches.cleanupXHTML ? new ERXResponse() : woresponse;
         super.appendToResponse(newResponse, wocontext);

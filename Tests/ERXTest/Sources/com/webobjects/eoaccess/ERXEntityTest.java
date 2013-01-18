@@ -30,6 +30,7 @@ public class ERXEntityTest extends ERXTestCase {
 	String modelName;
 	EOModel model;
 
+	@Override
 	public void setUp() throws Exception {
 		super.setUp();
 

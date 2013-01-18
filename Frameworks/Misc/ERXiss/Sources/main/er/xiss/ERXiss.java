@@ -23,6 +23,7 @@ public class ERXiss extends ERXFrameworkPrincipal {
     setUpFrameworkPrincipalClass(ERXiss.class);
   }
 
+  @Override
   public void finishInitialization() {
     log.debug("ERXiss loaded");
   }

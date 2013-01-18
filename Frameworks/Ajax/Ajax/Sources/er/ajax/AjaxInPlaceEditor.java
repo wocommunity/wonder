@@ -83,6 +83,7 @@ public class AjaxInPlaceEditor extends AjaxDynamicElement {
     return options;
   }
 
+  @Override
   public void appendToResponse(WOResponse response, WOContext context) {
     WOComponent component = context.component();
     String id;
@@ -125,6 +126,7 @@ public class AjaxInPlaceEditor extends AjaxDynamicElement {
     AjaxUtils.appendScriptFooter(response);
   }
 
+  @Override
   protected void addRequiredWebResources(WOResponse response, WOContext context) {
     AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
     AjaxUtils.addScriptResourceInHead(context, response, "builder.js");
@@ -135,6 +137,7 @@ public class AjaxInPlaceEditor extends AjaxDynamicElement {
   }
 
   // Formatting/Parsing method "inspired by" WOTextField
+  @Override
   public WOActionResults handleRequest(WORequest request, WOContext context) {
     WOComponent component = context.component();
     String strValue = request.stringFormValueForKey("value");

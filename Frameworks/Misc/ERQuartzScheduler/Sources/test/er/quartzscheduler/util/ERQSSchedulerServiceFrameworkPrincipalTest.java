@@ -18,7 +18,6 @@ import org.quartz.SchedulerException;
 
 import er.quartzscheduler.foundation.ERQSJobListener;
 import er.quartzscheduler.foundation.ERQSJobSupervisor;
-import er.quartzscheduler.util.ERQSSchedulerServiceFrameworkPrincipal;
 
 public class ERQSSchedulerServiceFrameworkPrincipalTest 
 {

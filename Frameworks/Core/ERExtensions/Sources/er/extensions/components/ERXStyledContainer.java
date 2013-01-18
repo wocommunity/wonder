@@ -55,6 +55,7 @@ public class ERXStyledContainer extends WOGenericContainer {
 		}
 	}
 
+	@Override
 	 public void appendAttributesToResponse(WOResponse woresponse, WOContext wocontext) {
 		 super.appendAttributesToResponse(woresponse, wocontext);
 		 WOComponent component = wocontext.component();

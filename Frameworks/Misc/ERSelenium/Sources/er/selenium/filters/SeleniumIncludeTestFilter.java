@@ -48,8 +48,8 @@ public class SeleniumIncludeTestFilter extends SeleniumTestFilterHelper implemen
 		
 		throw new RuntimeException("Included path not found: " + name);
 	}
-	
-//	 @Override
+
+	@Override
 	protected void processTestElements(NSMutableArray<SeleniumTest.Element> elements) {
 		int includeCount = 0;
 		int i = 0;

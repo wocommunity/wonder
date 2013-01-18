@@ -51,10 +51,12 @@ public class ERXWOPasswordField extends WOInput {
 	_readonly = _associations.removeObjectForKey("readonly");
   }
 
+  @Override
   protected String type() {
     return "password";
   }
   
+  @Override
   protected boolean isDisabledInContext(WOContext context) {
   	WOAssociation disabled = (WOAssociation) ERXKeyValueCodingUtilities.privateValueForKey(this, "_disabled");
   	return disabled != null && disabled.booleanValueInComponent(context.component());
@@ -64,6 +66,7 @@ public class ERXWOPasswordField extends WOInput {
   	return _readonly != null && _readonly.booleanValueInComponent(context.component());
   }
 
+  @Override
   public void takeValuesFromRequest(WORequest request, WOContext context) {
     WOComponent component = context.component();
     if (!isDisabledInContext(context) && context.wasFormSubmitted() && !isReadonlyInContext(context)) {
@@ -98,6 +101,7 @@ public class ERXWOPasswordField extends WOInput {
     return hiddenValue;
   }
 
+  @Override
   protected void _appendValueAttributeToResponse(WOResponse response, WOContext context) {
     WOComponent component = context.component();
     String hiddenValue = hiddenValueInContext(context, component);
@@ -109,6 +113,7 @@ public class ERXWOPasswordField extends WOInput {
     }
   }
 
+  @Override
   protected void _appendCloseTagToResponse(WOResponse response, WOContext context) {
   }
 }

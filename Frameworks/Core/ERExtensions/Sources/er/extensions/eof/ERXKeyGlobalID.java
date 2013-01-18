@@ -1,5 +1,6 @@
 package er.extensions.eof;
 
+import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOKeyGlobalID;
 import com.webobjects.foundation.NSData;
 

@@ -45,6 +45,7 @@ public class ListEntry {
      */
     public Owner owner;
 
+    @Override
     public String toString() {
         return key;
     }

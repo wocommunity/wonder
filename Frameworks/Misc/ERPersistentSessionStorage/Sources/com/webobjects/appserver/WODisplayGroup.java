@@ -1437,6 +1437,7 @@ public class WODisplayGroup implements NSKeyValueCoding, NSKeyValueCoding.ErrorH
 			NSKeyValueCoding.DefaultImplementation.unableToSetNullForKey(this, key);
 	}
 
+	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("<");

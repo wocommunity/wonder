@@ -21,22 +21,26 @@ public class KeyValueCodingProtectedAccessor extends NSKeyValueCoding.ValueAcces
 
     public KeyValueCodingProtectedAccessor() { super(); }
 
+    @Override
     public Object fieldValue(Object object, Field field) throws IllegalArgumentException, IllegalAccessException {
         //log.warn("FieldValue, field: " + field.toString() + " object: " + object.toString());
         return field.get(object);
     }
 
+    @Override
     public void setFieldValue(Object object, Field field, Object value) throws IllegalArgumentException, IllegalAccessException {
         //log.warn("SetFieldValue, field: " + field.toString() + " value: " + value + " object: " + object.toString());
         field.set(object, value);
     }
 
+    @Override
     public Object methodValue(Object object, Method method) throws IllegalArgumentException, IllegalAccessException,
         InvocationTargetException {
             //log.warn("MethodValue, method: " + method.toString() + " object: " + object.toString());
             return method.invoke(object,  (Object[])null);
         }
 
+    @Override
     public void setMethodValue(Object object, Method method, Object value) throws IllegalArgumentException, IllegalAccessException,
         InvocationTargetException {
             //log.warn("SetMethodValue, method: " + method.toString() + " value: " + value + " object: " + object.toString());

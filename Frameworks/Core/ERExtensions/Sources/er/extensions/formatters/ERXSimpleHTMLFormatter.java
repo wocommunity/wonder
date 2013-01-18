@@ -95,6 +95,7 @@ public class ERXSimpleHTMLFormatter extends java.text.Format {
      * @param fp ignored parameter
      * @return buffer after having the format appended to it.
      */
+    @Override
     public StringBuffer format(Object object, StringBuffer buffer, FieldPosition fp) {
         // The value of fp does not matter in this case.
         return buffer.append(applyFormat(object));
@@ -124,6 +125,7 @@ public class ERXSimpleHTMLFormatter extends java.text.Format {
      * @param inString HTML string
      * @return ASCII-fied string
      */
+    @Override
     public Object parseObject(String inString) throws java.text.ParseException {
         String newString;
 
@@ -143,6 +145,7 @@ public class ERXSimpleHTMLFormatter extends java.text.Format {
      * @param p current parsing position
      * @return ASCII representation of the string
      */
+    @Override
     public Object parseObject(String string, ParsePosition p) {
         int index = p.getIndex();
         String substring = string.substring(index);

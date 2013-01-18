@@ -61,6 +61,7 @@ public class ERDDelayedSwitchAssignment extends ERDDelayedAssignment implements 
     }
 
 
+    @Override
     public Object fireNow(D2WContext c) {
         Object result = null;
         NSDictionary conditionAssignment = (NSDictionary)value();

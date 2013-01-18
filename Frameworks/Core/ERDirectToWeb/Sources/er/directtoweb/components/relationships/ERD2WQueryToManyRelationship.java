@@ -71,6 +71,7 @@ public class ERD2WQueryToManyRelationship extends D2WQueryToManyRelationship {
         return ERXValueUtilities.booleanValue(d2wContext().valueForKey("matchesAllValues"));
     }
 
+    @Override
     public void setValue(Object newValue) {
         if(hasMultipleSelection()) {
             if (newValue instanceof NSArray) {

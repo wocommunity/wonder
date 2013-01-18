@@ -48,11 +48,11 @@ public class Fop2PdfImpl implements FOPBuilder {
 	}
 
 	public void setXSL(String fopxslLocation) {
-		this._fopxslLocation = fopxslLocation;
+		_fopxslLocation = fopxslLocation;
 	}
 
 	public void setXML(String xmlToTransform) {
-		this._xmlToTransform = xmlToTransform;
+		_xmlToTransform = xmlToTransform;
 
 	}
 
@@ -138,7 +138,7 @@ public class Fop2PdfImpl implements FOPBuilder {
 	}
 
 	public void setConfiguration(NSMutableDictionary<String, Object> config) {
-		this._config = config;
+		_config = config;
 	}
 
 }

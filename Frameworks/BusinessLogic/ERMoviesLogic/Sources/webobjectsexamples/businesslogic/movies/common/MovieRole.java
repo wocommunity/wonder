@@ -35,10 +35,12 @@ public class MovieRole extends _MovieRole {
 		}
 	}
 
+	@Override
 	public String roleName() {
 		return (String) (storedValueForKey(RoleNameKey));
 	}
 
+	@Override
 	public void setRoleName(String value) {
 		takeStoredValueForKey(value, RoleNameKey);
 	}

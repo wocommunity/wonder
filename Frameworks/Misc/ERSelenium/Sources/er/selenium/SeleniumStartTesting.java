@@ -70,8 +70,8 @@ public class SeleniumStartTesting extends WODirectAction {
         // url = url.replaceFirst(".*?selenium-core/TestRunner.html", "chrome://selenium-ide/content/selenium/TestRunner.html");
         return url;
 	}
-	
-	// @Override
+
+	@Override
 	public WOActionResults defaultAction() {
 		return runAction();
 	}
@@ -102,6 +102,7 @@ public class SeleniumStartTesting extends WODirectAction {
         return result(null, false);
     }
 
+    @Override
     public WOActionResults performActionNamed(String anActionName) {
         if(!ERSelenium.testsEnabled()) {
             return new ERXResponse(ERXHttpStatusCodes.STATUS_FORBIDDEN);

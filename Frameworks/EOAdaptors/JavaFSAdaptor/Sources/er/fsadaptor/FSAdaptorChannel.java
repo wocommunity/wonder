@@ -45,18 +45,22 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
         return _files;
     }
 
+    @Override
     public NSArray<EOAttribute> attributesToFetch() {
         return _attributes;
     }
 
+    @Override
     public void cancelFetch() {
         files().removeAllObjects();
     }
 
+    @Override
     public void closeChannel() {
         _isOpen = false;
     }
 
+    @Override
     public int deleteRowsDescribedByQualifier(EOQualifier aQualifier, EOEntity anEntity) {
         if (aQualifier != null) {
             if (anEntity != null) {
@@ -81,18 +85,22 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
         throw new IllegalArgumentException("FSAdaptorChannel.deleteRowsDescribedByQualifier: null qualifier.");
     }
 
+    @Override
     public NSArray<EOAttribute> describeResults() {
         return _attributes;
     }
 
+    @Override
     public void evaluateExpression(EOSQLExpression anExpression) {
         throw new UnsupportedOperationException("FSAdaptorChannel.evaluateExpression");
     }
 
+    @Override
     public void executeStoredProcedure(EOStoredProcedure aStoredProcedure, NSDictionary someValues) {
         throw new UnsupportedOperationException("FSAdaptorChannel.executeStoredProcedure");
     }
 
+    @Override
     public NSMutableDictionary<String, Object> fetchRow() {
         File aFile = files().lastObject();
         if (aFile != null) {
@@ -102,6 +110,7 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
         return null;
     }
 
+    @Override
     public void insertRow(NSDictionary<String, Object> aRow, EOEntity anEntity) {
         if (aRow != null) {
             if (anEntity != null) {
@@ -125,20 +134,24 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
         throw new IllegalArgumentException("FSAdaptorChannel.insertRow: null row.");
     }
 
+    @Override
     public boolean isFetchInProgress() {
         if (files().count() > 0)
             return true;
         return false;
     }
 
+    @Override
     public boolean isOpen() {
         return _isOpen;
     }
 
+    @Override
     public void openChannel() {
         _isOpen = true;
     }
 
+    @Override
     public NSDictionary returnValuesForLastStoredProcedureInvocation() {
         throw new UnsupportedOperationException("FSAdaptorChannel.returnValuesForLastStoredProcedureInvocation");
     }
@@ -150,6 +163,7 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
         return root;
     }
 
+    @Override
     public void selectAttributes(NSArray<EOAttribute> someAttributes, EOFetchSpecification aFetchSpecification, boolean shouldLock, EOEntity anEntity) {
         if (anEntity == null)
             throw new IllegalArgumentException("FSAdaptorChannel.selectAttributes: null entity.");
@@ -179,6 +193,7 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
         }
     }
 
+    @Override
     public void setAttributesToFetch(NSArray<EOAttribute> someAttributes) {
         if (someAttributes != null)
             _attributes = someAttributes;
@@ -186,6 +201,7 @@ public final class FSAdaptorChannel extends EOAdaptorChannel {
             throw new IllegalArgumentException("FSAdaptorChannel.setAttributesToFetch: null attributes.");
     }
 
+    @Override
     public int updateValuesInRowsDescribedByQualifier(NSDictionary aRow, EOQualifier aQualifier, EOEntity anEntity) {
         if (aRow != null) {
             if (aQualifier != null) {

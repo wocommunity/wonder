@@ -93,10 +93,12 @@ public class SeleniumTestResults extends WODirectAction {
     	return new ERXResponse(report());
     }
     
+    @Override
     public WOActionResults defaultAction() {
         return processReport(null);
     }
 
+    @Override
     public WOActionResults performActionNamed(String actionName) {
         if(!ERSelenium.testsEnabled()) {
             return new ERXResponse(ERXHttpStatusCodes.STATUS_FORBIDDEN);

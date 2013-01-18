@@ -142,7 +142,7 @@ public class ERXNavigationState implements Serializable {
                     if (o != null && o instanceof NSArray)
                         children = (NSArray)o;
                     else if (o != null && o instanceof String) {
-                        children = (NSArray)levelRoot.childrenChoices().objectForKey((String)o);
+                        children = (NSArray)levelRoot.childrenChoices().objectForKey(o);
                         if (children == null)
                             log.warn("For nav core object: " + levelRoot + " and child binding: " + levelRoot.childrenBinding()
                                      + " couldn't find children for choice key: " + (String)o);
@@ -173,6 +173,7 @@ public class ERXNavigationState implements Serializable {
         return children;
     }
 
+    @Override
     public String toString() {
         return "\"" + stateAsString() + "\"";
     }

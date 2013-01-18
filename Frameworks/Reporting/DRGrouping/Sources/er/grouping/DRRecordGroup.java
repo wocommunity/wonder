@@ -43,7 +43,7 @@ public class DRRecordGroup {
         DRCriteria crit = prnt.criteria();
         dict.setObjectForKey(crit, crit.masterCriteria().keyDesc());
         if (nextParent != null) {
-            this.coordsFromRecGroupDictionary(nextParent, dict);
+            coordsFromRecGroupDictionary(nextParent, dict);
         }
     }
 
@@ -53,7 +53,7 @@ public class DRRecordGroup {
             return dict;
         }
         if (_parent != null) {
-            this.coordsFromRecGroupDictionary(_parent, dict);
+            coordsFromRecGroupDictionary(_parent, dict);
         }
         dict.setObjectForKey(_criteria, _criteria.masterCriteria().keyDesc());
         return dict;
@@ -63,7 +63,7 @@ public class DRRecordGroup {
         _criteria = c;
         _group = grp;
         _parent = recGrp;
-        _lookUpCoordinates = this.buildLookUpCoordinates();
+        _lookUpCoordinates = buildLookUpCoordinates();
         DRRecordGroup preexistrg = null;
         if(_group != null){
             preexistrg = _group.reportModel().recordGroupForCoordinates(_lookUpCoordinates);
@@ -114,7 +114,7 @@ public class DRRecordGroup {
         //AK: there are two types of totals, the one is the simple sum we had earlier,
         // it gets stored in the _totals under (index number of the current record*index number of 
         if (_staleTotal) {
-            for(Enumeration en = this.recordList().objectEnumerator(); en.hasMoreElements(); ) {
+            for(Enumeration en = recordList().objectEnumerator(); en.hasMoreElements(); ) {
                 int i = 0;
                 DRRecord rec = (DRRecord)en.nextElement();
                 NSArray flatlist = rec.flatValueList();
@@ -132,6 +132,7 @@ public class DRRecordGroup {
                                 final NSArray rawRecords = rawRecordList();
                                 totalValue = new DRValue(0, val.attribute()) {
                                     private Double total;
+                                    @Override
                                     public double total() {
                                         if(total == null) { 
                                             total = Double.valueOf(attribute().computeFromRawRecords(rawRecords));
@@ -163,12 +164,12 @@ public class DRRecordGroup {
 
     public NSArray totalList() {
         if (_totalList == null) {
-            int cnt = this.totals().allKeys().count();
+            int cnt = totals().allKeys().count();
             int i;
             NSMutableArray totList = new NSMutableArray();
 
             for (i = 0; i < cnt; i++) {
-                totList.addObject(this.totals().objectForKey(Integer.valueOf(i)));
+                totList.addObject(totals().objectForKey(Integer.valueOf(i)));
             }
             _totalList = new NSArray(totList);
         }
@@ -191,7 +192,7 @@ public class DRRecordGroup {
     public NSArray rawRecordList() {
         if (_rawRecordList == null) {
             NSMutableArray rawRecs = new NSMutableArray();
-            NSArray recs = this.sortedRecordList();
+            NSArray recs = sortedRecordList();
             Enumeration en = recs.objectEnumerator();
 
             while (en.hasMoreElements()) {
@@ -250,13 +251,13 @@ public class DRRecordGroup {
             DRMasterCriteria mc = (DRMasterCriteria)groupList.objectAtIndex(0);
             DRGroup grp = (DRGroup)groupLookUpDict.objectForKey(mc.keyDesc());
 
-            if (!this.childrenFromGroupCriteriaList(grp)) {
-                this.groupByInto(this.recordList(), grp.masterCriteria(), this.recordGroupDict());
+            if (!childrenFromGroupCriteriaList(grp)) {
+                groupByInto(recordList(), grp.masterCriteria(), recordGroupDict());
             }
 
             // loop over each RecordGroup and send groupSubRecordGroup:(NSArray *)groupList
             // but only count is > 1
-            Enumeration anEnum = this.children().objectEnumerator();
+            Enumeration anEnum = children().objectEnumerator();
 
             while (anEnum.hasMoreElements()) {
                 DRRecordGroup rg = (DRRecordGroup)anEnum.nextElement();
@@ -273,13 +274,14 @@ public class DRRecordGroup {
         Enumeration anEnum = recs.objectEnumerator();
         while (anEnum.hasMoreElements()) {
             DRRecord rec = (DRRecord)anEnum.nextElement();
-            amc.groupRecordRecordGroupsDictGroupParent(rec, recGrpDict, this.group(), this);
+            amc.groupRecordRecordGroupsDictGroupParent(rec, recGrpDict, group(), this);
         }
 
     }
 
+    @Override
     public String toString() {
-        return ""+(super.toString())+"-lc:"+(_lookUpCoordinates)+"-"+(this.recordList().count())+"-"+(_recordGroupDict.toString());
+        return ""+(super.toString())+"-lc:"+(_lookUpCoordinates)+"-"+(recordList().count())+"-"+(_recordGroupDict.toString());
     }
 
     public boolean staleTotal() {

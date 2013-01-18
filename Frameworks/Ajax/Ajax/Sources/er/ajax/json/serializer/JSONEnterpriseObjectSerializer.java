@@ -41,6 +41,7 @@ public class JSONEnterpriseObjectSerializer extends AbstractSerializer {
 		return _JSONClasses;
 	}
 
+	@Override
 	public boolean canSerialize(Class clazz, Class jsonClazz) {
 		return (super.canSerialize(clazz, jsonClazz) || ((jsonClazz == null || jsonClazz == JSONObject.class) && IJSONEnterpriseObject.class.isAssignableFrom(clazz)));
 	}

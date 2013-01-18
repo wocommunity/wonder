@@ -73,7 +73,7 @@ public class ERMODRequiredWrapper extends ERMODComponent {
 	}
 
 	public void setWatchedContainerID(String id) {
-		this._watchedContainerID = id;
+		_watchedContainerID = id;
 	}
 	
 	/**

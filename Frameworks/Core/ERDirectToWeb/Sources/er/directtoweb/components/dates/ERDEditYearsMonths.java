@@ -40,7 +40,7 @@ public class ERDEditYearsMonths extends ERDCustomEditComponent {
             _yearList.addObject(ERXConstant.integerForInt(i));
         }
     }
-    public NSArray yearList(){ return (NSArray)_yearList; }
+    public NSArray yearList(){ return _yearList; }
 
     public final static NSMutableArray _monthList=new NSMutableArray();
     static {
@@ -48,14 +48,14 @@ public class ERDEditYearsMonths extends ERDCustomEditComponent {
             _monthList.addObject(ERXConstant.integerForInt(i));
         }
     }
-    public NSArray monthList() { return (NSArray)_monthList; }
+    public NSArray monthList() { return _monthList; }
 
     public Number totalNumberOfMonths() {
         return objectPropertyValue()!=null ?(Number)objectPropertyValue(): ERXConstant.ZeroInteger;
     }
     protected Integer numberOfYears;
     public Integer numberOfYears() {
-        numberOfYears=(Integer)yearList().objectAtIndex((int)totalNumberOfMonths().intValue()/12);
+        numberOfYears=(Integer)yearList().objectAtIndex(totalNumberOfMonths().intValue()/12);
         return numberOfYears;
     }
 

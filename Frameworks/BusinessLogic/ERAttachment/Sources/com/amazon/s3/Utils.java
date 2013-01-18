@@ -24,9 +24,9 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.CharEncoding;
+import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
-import org.xml.sax.SAXException;
 
 public class Utils {
     static final String METADATA_PREFIX = "x-amz-meta-";

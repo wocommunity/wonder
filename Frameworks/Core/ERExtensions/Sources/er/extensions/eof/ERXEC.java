@@ -1417,6 +1417,7 @@ public class ERXEC extends EOEditingContext {
 	}
 
 	/** @deprecated use {@link #saveChanges()} */
+    @Override
     @Deprecated
 	public void saveChanges(Object obj) {
 		boolean wasAutoLocked = autoLock("saveChanges");

@@ -78,7 +78,7 @@ public class ERXNextPageForResultWOAction extends ERXAbstractPerformWOAction imp
 	 * @see er.extensions.appserver.IERXPerformWOActionForResult#setResult(java.lang.Object)
 	 */
 	public void setResult(Object result) {
-		this._result = result;
+		_result = result;
 
 	}
 

@@ -67,7 +67,7 @@ public class ERMODQueryPage extends ERD2WQueryPageTemplate {
 		WOComponent page = super.returnAction();
 		boolean useAjaxWhenEmbedded = ERXValueUtilities.booleanValue(d2wContext().valueForKey(Keys.useAjaxControlsWhenEmbedded));
 		if (useAjaxWhenEmbedded) {
-			if (this.parent() != null) {
+			if (parent() != null) {
 				D2WPage parent = (D2WPage)ERD2WUtilities.enclosingPageOfClass(this, D2WPage.class);
 				if (parent != null) 
 					parent.takeValueForKeyPath(null, "d2wContext.inlineTask");

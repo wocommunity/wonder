@@ -6,7 +6,7 @@
 //
 package er.wopaypal;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOContext;
 
 /** PayPalAddToCartHyperlink is a WOComponent that allows you to embed text, an image, etc. inside the hyperlink, or assign the string through through its bindings.
  * 

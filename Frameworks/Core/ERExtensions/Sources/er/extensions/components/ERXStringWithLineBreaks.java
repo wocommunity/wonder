@@ -57,6 +57,7 @@ public class ERXStringWithLineBreaks extends ERXStatelessComponent {
 	/**
 	 * Nulls out cached instance variable: _value
 	 */
+    @Override
     public void reset() {
         super.reset();
         _value = null;

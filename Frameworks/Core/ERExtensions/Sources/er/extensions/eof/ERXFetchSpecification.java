@@ -285,6 +285,7 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 		if(qualifier != null) {
 			ERXQualifierTraversal traversal = new ERXQualifierTraversal() {
 
+				@Override
 				protected void visit(EOQualifierEvaluation q) {
 					sb.append(q.getClass().getName());
 				}
