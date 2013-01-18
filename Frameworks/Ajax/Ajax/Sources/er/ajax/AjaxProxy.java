@@ -115,6 +115,7 @@ public class AjaxProxy extends AjaxComponent {
 	 * 
 	 * @param res the response to write into
 	 */
+	@Override
 	protected void addRequiredWebResources(WOResponse res) {
 		addScriptResourceInHead(res, "jsonrpc.js");
 
@@ -153,6 +154,7 @@ public class AjaxProxy extends AjaxComponent {
 	}
 
 	/** Ask the an JSONRPCBridge object to handle the json request. */
+	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		WOResponse response = AjaxUtils.createResponse(request, context);
 

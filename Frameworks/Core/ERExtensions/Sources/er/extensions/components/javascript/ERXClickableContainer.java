@@ -54,6 +54,7 @@ public class ERXClickableContainer extends WOGenericContainer {
 		return mutableAssociations;
 	}
 
+	@Override
 	public void appendAttributesToResponse(WOResponse response, WOContext context) {
 		super.appendAttributesToResponse(response, context);
 		WOComponent component = context.component();

@@ -21,6 +21,7 @@ public class ERNEUWizardCreationPage extends ERD2WWizardCreationPage {
         throw new UnsupportedOperationException("Not implemented");
     }
 
+    @Override
     public String defaultRowspan() {
 	return ""+(currentSection()!=null && currentSection().keys!=null ? currentSection().keys.count() : 0)+4;
 	//return ""+(currentSection().keys.count()+4);

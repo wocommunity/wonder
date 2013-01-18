@@ -148,7 +148,7 @@ public class ERMDDeleteButton extends ERMDActionButton {
      * Utility method to post the delete notification to the parent component
      */
     public void postDeleteNotification() {
-    	Object obj = this.parentD2WPage();
+    	Object obj = parentD2WPage();
     	String OBJECT_KEY = "object";
     	NSMutableDictionary<String, Object> userInfo = new NSMutableDictionary<String, Object>(obj, OBJECT_KEY);
 		if (dataSource() instanceof EODetailDataSource) {

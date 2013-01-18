@@ -58,10 +58,12 @@ public class ERXPrimaryKeyListQualifier extends ERXInQualifier {
      */
     public static class Support extends EOQualifierSQLGeneration._KeyValueQualifierSupport {
 
+        @Override
         public String sqlStringForSQLExpression(EOQualifier eoqualifier, EOSQLExpression e) {
             return super.sqlStringForSQLExpression(eoqualifier, e);
         }
 
+        @Override
         public EOQualifier schemaBasedQualifierWithRootEntity(EOQualifier eoqualifier, EOEntity eoentity) {
             EOQualifier result = null;
             EOKeyValueQualifier qualifier = (EOKeyValueQualifier)eoqualifier;
@@ -84,6 +86,7 @@ public class ERXPrimaryKeyListQualifier extends ERXInQualifier {
             return result;
         }
 
+        @Override
         public EOQualifier qualifierMigratedFromEntityRelationshipPath(EOQualifier eoqualifier, EOEntity eoentity, String s) {
             return super.qualifierMigratedFromEntityRelationshipPath(eoqualifier, eoentity, s);
         }
@@ -135,6 +138,7 @@ public class ERXPrimaryKeyListQualifier extends ERXInQualifier {
      * Implementation of the Cloneable interface.
      * @return cloned primary key list qualifier.
      */
+    @Override
     public Object clone() {
         return new ERXPrimaryKeyListQualifier(key(), (NSArray)value(), true);
     }

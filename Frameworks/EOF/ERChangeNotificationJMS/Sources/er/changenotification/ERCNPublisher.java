@@ -6,9 +6,17 @@
 //
 package er.changenotification;
 
-import com.webobjects.foundation.*;
+import javax.jms.DeliveryMode;
+import javax.jms.JMSException;
+import javax.jms.ObjectMessage;
+import javax.jms.Session;
+import javax.jms.Topic;
+import javax.jms.TopicConnection;
+import javax.jms.TopicPublisher;
+import javax.jms.TopicSession;
 
-import javax.jms.*;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSNotification;
 
 /** 
  * ERCNPublisher sends change notifications to other application instances via 

@@ -25,8 +25,8 @@
 
 package com.amazon.s3;
 
-import java.net.HttpURLConnection;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;

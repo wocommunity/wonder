@@ -1,5 +1,9 @@
 package er.extensions.components.javascript;
 
+import java.util.Enumeration;
+
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -7,13 +11,11 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+
 import er.extensions.components.ERXNonSynchronizingComponent;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXEqualator;
 import er.extensions.foundation.ERXStringUtilities;
-import org.apache.log4j.Logger;
-
-import java.util.Enumeration;
 
 /**
  * A fancy to-many relationship editor component.

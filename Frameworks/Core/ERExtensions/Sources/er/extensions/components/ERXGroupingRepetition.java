@@ -181,6 +181,7 @@ public class ERXGroupingRepetition extends ERXStatelessComponent {
         setValueForBinding(_itemsPerSection.objectForKey(keyForSection(_sectionItem)), "subList");
     }
     
+    @Override
     public void reset() {
         _sections=null;
         _splitArrays=null;

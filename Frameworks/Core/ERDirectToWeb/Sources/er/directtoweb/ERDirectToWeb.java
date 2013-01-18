@@ -84,6 +84,7 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
     	setUpFrameworkPrincipalClass (ERDirectToWeb.class);
     }
 
+    @Override
     public void finishInitialization() {
         fixClasses();
         ERD2WModel model=ERD2WModel.erDefaultModel();        // force initialization
@@ -625,6 +626,6 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
     		String key = (String)e.nextElement();
     		result.addObject(new ERXKeyValuePair(key, ERDirectToWeb.displayNameForPropertyKey(key, entityForReportName)));
     	}
-    	return (NSArray)result;
+    	return result;
     }
 }

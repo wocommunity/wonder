@@ -184,6 +184,7 @@ public class ERIFile extends _ERIFile {
         log.debug("Did delete: " + name() + "->" + length());
     }
     
+    @Override
     public void init(EOEditingContext ec) {
         super.init(ec);
         ERIFileContent content = ERIFileContent.clazz.createAndInsertObject(ec);

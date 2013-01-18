@@ -1610,6 +1610,7 @@ public class ERXEOAccessUtilities {
             final EOQualifier qualifier) {
         final EOEntity entity = entityNamed(ec, entityName);
         ChannelAction action = new ChannelAction() {
+            @Override
             protected int doPerform(EOAdaptorChannel channel) {
                 return channel.deleteRowsDescribedByQualifier(qualifier, entity);
             }
@@ -1630,6 +1631,7 @@ public class ERXEOAccessUtilities {
             final EOQualifier qualifier, final NSDictionary newValues) {
         final EOEntity entity = entityNamed(ec, entityName);
         ChannelAction action = new ChannelAction() {
+            @Override
             protected int doPerform(EOAdaptorChannel channel) {
                 return channel.updateValuesInRowsDescribedByQualifier(newValues, qualifier, entity);
             }
@@ -1647,6 +1649,7 @@ public class ERXEOAccessUtilities {
             final NSDictionary newValues) {
         final EOEntity entity = entityNamed(ec, entityName);
         ChannelAction action = new ChannelAction() {
+            @Override
             protected int doPerform(EOAdaptorChannel channel) {
             	channel.insertRow(newValues, entity);
                 return 1;
@@ -1665,6 +1668,7 @@ public class ERXEOAccessUtilities {
             final Collection<? extends NSDictionary<String, ?>> newValues) {
         final EOEntity entity = entityNamed(ec, entityName);
         ChannelAction action = new ChannelAction() {
+            @Override
             protected int doPerform(EOAdaptorChannel channel) {
             	int insert = 0;
             	for (NSDictionary dictionary : newValues) {
@@ -1687,6 +1691,7 @@ public class ERXEOAccessUtilities {
 		final NSMutableArray result = new NSMutableArray();
 		final EOEntity entity = entityNamed(ec, entityName);
 		ChannelAction action = new ChannelAction() {
+			@Override
 			protected int doPerform(EOAdaptorChannel channel) {
 				NSArray keys = channel.primaryKeysForNewRowsWithEntity(count, entity);
 				result.addObjectsFromArray(keys);

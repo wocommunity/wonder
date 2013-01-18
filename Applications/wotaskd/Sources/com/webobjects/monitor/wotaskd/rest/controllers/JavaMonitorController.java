@@ -22,31 +22,37 @@ public class JavaMonitorController extends ERXDefaultRouteController {
 	  return (Application )WOApplication.application();
 	}
 
+	@Override
 	public WOActionResults createAction() throws Throwable {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public WOActionResults destroyAction() throws Throwable {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public WOActionResults indexAction() throws Throwable {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public WOActionResults newAction() throws Throwable {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public WOActionResults showAction() throws Throwable {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public WOActionResults updateAction() throws Throwable {
 		// TODO Auto-generated method stub
 		return null;

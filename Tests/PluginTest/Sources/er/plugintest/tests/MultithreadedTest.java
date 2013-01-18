@@ -1,14 +1,15 @@
 package er.plugintest.tests;
 
-import java.util.*;
+import java.util.ArrayList;
 
-import org.apache.commons.lang.*;
-import org.apache.commons.lang.math.*;
+import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang.math.RandomUtils;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSArray;
 
-import er.extensions.eof.*;
-import er.plugintest.model.*;
+import er.extensions.eof.ERXEC;
+import er.plugintest.model.City;
+import er.plugintest.model.Country;
 
 public class MultithreadedTest extends PluginTest {
 

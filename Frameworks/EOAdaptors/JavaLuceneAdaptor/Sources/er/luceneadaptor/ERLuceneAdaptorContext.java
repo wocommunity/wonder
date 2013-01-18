@@ -65,6 +65,7 @@ public class ERLuceneAdaptorContext extends EOAdaptorContext {
 		return pk;
 	}
 
+	@Override
 	public ERLuceneAdaptor adaptor() {
 		return (ERLuceneAdaptor) super.adaptor();
 	}

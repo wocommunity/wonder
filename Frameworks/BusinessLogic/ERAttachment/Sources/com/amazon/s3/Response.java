@@ -9,8 +9,8 @@
 
 package com.amazon.s3;
 
-import java.net.HttpURLConnection;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 
 /**
  * The parent class of all other Responses.  This class keeps track of the

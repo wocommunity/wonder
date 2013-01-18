@@ -62,6 +62,7 @@ public class ERXWOString extends WODynamicElement {
                 + "> ( cannot have 'dateFormat' and 'numberFormat' or 'formatter' attributes at the same time."); }
     }
 
+    @Override
     public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
         WOComponent component = wocontext.component();
         Object valueInComponent = null;

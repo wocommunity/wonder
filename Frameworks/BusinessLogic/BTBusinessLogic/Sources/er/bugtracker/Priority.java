@@ -19,6 +19,7 @@ public class Priority extends _Priority {
         super();
     }
 
+    @Override
     public void init(EOEditingContext ec) {
         super.init(ec);
     }
@@ -28,12 +29,13 @@ public class Priority extends _Priority {
     
     public static class PriorityClazz extends _PriorityClazz {
 
+    	@Override
     	public NSArray allObjects(EOEditingContext ec) {
     		return new NSArray(new Object[] {CRITICAL, HIGH, MEDIUM, LOW});
     	}
     	
         public Priority sharedStateForKey(String key) {
-            return (Priority)objectWithPrimaryKeyValue(EOSharedEditingContext.defaultSharedEditingContext(), key);
+            return objectWithPrimaryKeyValue(EOSharedEditingContext.defaultSharedEditingContext(), key);
         }
 
         public void initializeSharedData() {

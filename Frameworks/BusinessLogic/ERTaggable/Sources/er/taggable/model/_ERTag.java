@@ -25,6 +25,7 @@ public abstract class _ERTag extends er.extensions.eof.ERXGenericRecord {
 
   private static Logger LOG = Logger.getLogger(_ERTag.class);
 
+  @Override
   public ERTag localInstanceIn(EOEditingContext editingContext) {
     ERTag localInstance = (ERTag)EOUtilities.localInstanceOfObject(editingContext, this);
     if (localInstance == null) {

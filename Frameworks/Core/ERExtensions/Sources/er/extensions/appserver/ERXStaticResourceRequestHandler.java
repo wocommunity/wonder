@@ -96,6 +96,7 @@ public class ERXStaticResourceRequestHandler extends WORequestHandler {
 		return _documentRoot;
 	}
 
+	@Override
 	public WOResponse handleRequest(WORequest request) {
 		WOResponse response = null;
 		FileInputStream is = null;

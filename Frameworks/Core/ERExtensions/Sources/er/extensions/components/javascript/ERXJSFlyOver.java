@@ -21,6 +21,7 @@ public class ERXJSFlyOver extends ERXStatelessComponent {
         super(context);
     }
 
+    @Override
     public void reset() {
         super.reset();
         _linkId = null;

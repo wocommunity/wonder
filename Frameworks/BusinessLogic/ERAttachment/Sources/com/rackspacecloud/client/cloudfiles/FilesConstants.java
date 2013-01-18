@@ -4,8 +4,9 @@
 
 package com.rackspacecloud.client.cloudfiles;
 
-import java.util.Properties;
 import java.io.IOException;
+import java.util.Properties;
+
 import org.apache.log4j.Logger;
 
 public class FilesConstants

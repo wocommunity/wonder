@@ -121,6 +121,7 @@ public class ERDDelayedNonNullConditionalAssignment extends ERDDelayedAssignment
      *		null.
      */
     // FIXME: Should check for NSKeyValueCoding.NullValue
+    @Override
     public Object fireNow(D2WContext c) {
         Object result = null;
         String keyPath;

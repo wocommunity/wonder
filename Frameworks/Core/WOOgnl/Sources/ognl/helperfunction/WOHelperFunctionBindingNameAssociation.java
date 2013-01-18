@@ -26,6 +26,7 @@ public class WOHelperFunctionBindingNameAssociation extends WOBindingNameAssocia
 		}
 	}
 
+	@Override
 	protected String _debugDescription() {
 		return _parentBindingName;
 	}

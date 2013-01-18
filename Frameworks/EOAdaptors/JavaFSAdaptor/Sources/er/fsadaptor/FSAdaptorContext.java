@@ -11,6 +11,7 @@ public final class FSAdaptorContext extends EOAdaptorContext {
         super(anAdaptor);
     }
 
+    @Override
     public void beginTransaction() {
         if (!_hasTransaction) {
             _hasTransaction = true;
@@ -18,6 +19,7 @@ public final class FSAdaptorContext extends EOAdaptorContext {
         }
     }
 
+    @Override
     public void commitTransaction() {
         if (_hasTransaction) {
             _hasTransaction = false;
@@ -25,14 +27,17 @@ public final class FSAdaptorContext extends EOAdaptorContext {
         }
     }
 
+    @Override
     public EOAdaptorChannel createAdaptorChannel() {
         return new FSAdaptorChannel(this);
     }
 
+    @Override
     public void handleDroppedConnection() {
         /* empty */
     }
 
+    @Override
     public void rollbackTransaction() {
         throw new UnsupportedOperationException("FSAdaptorContext.rollbackTransaction");
     }

@@ -12,6 +12,7 @@ public class RequirementType extends _RequirementType {
         super();
     }
 
+    @Override
     public void init(EOEditingContext ec) {
         super.init(ec);
     }

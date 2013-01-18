@@ -1,7 +1,15 @@
 package er.ajax;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODirectAction;
+import com.webobjects.appserver.WOElement;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.appserver.ERXHttpStatusCodes;
 import er.extensions.appserver.ERXResponse;
@@ -34,6 +42,7 @@ public class AjaxSessionPing extends AjaxDynamicElement {
     /**
      * Appends script to start Ajax.ActivePeriodicalUpdater to the response.
      */
+    @Override
     public void appendToResponse(WOResponse response, WOContext context) {
     	super.appendToResponse(response, context);
         WOComponent component = context.component();
@@ -71,6 +80,7 @@ public class AjaxSessionPing extends AjaxDynamicElement {
     /**
      * Unused.
      */
+    @Override
     public WOActionResults handleRequest(WORequest request, WOContext context) {
         return null;
     }
@@ -79,6 +89,7 @@ public class AjaxSessionPing extends AjaxDynamicElement {
     /**
      * Uses Prototype and Wonder
      */
+    @Override
     protected void addRequiredWebResources(WOResponse response, WOContext context) {
         addScriptResourceInHead(context, response, "prototype.js");
         addScriptResourceInHead(context, response, "wonder.js");

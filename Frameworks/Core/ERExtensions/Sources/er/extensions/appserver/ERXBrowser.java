@@ -514,6 +514,7 @@ public abstract class ERXBrowser implements NSKeyValueCoding {
     }
 
     private String _toString;
+    @Override
     public String toString() {
         if (_toString == null) {
             _toString = "<" + getClass().getName() 

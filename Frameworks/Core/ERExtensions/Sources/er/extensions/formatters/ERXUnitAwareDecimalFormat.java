@@ -182,12 +182,12 @@ public class ERXUnitAwareDecimalFormat extends DecimalFormat implements Cloneabl
     
     public ERXUnitAwareDecimalFormat() {
         super();
-        this.unitPrefixArray = NSArray.EmptyArray;
+        unitPrefixArray = NSArray.EmptyArray;
     }
     
     public ERXUnitAwareDecimalFormat(String unitName) {
         super();
-        this.unitPrefixArray = UnitPrefix.unitPrefixArrayForUnit(unitName);
+        unitPrefixArray = UnitPrefix.unitPrefixArrayForUnit(unitName);
     }
     
     public ERXUnitAwareDecimalFormat(NSArray unitPrefixArray) {
@@ -197,12 +197,12 @@ public class ERXUnitAwareDecimalFormat extends DecimalFormat implements Cloneabl
 
     public ERXUnitAwareDecimalFormat(String pattern, DecimalFormatSymbols symbols) {
         super(pattern, symbols);
-        this.unitPrefixArray = NSArray.EmptyArray;
+        unitPrefixArray = NSArray.EmptyArray;
     }
 
     public ERXUnitAwareDecimalFormat(String pattern, DecimalFormatSymbols symbols, String unitName) {
         super(pattern, symbols);
-        this.unitPrefixArray = UnitPrefix.unitPrefixArrayForUnit(unitName);
+        unitPrefixArray = UnitPrefix.unitPrefixArrayForUnit(unitName);
     }
 
     public ERXUnitAwareDecimalFormat(String pattern, DecimalFormatSymbols symbols, NSArray unitPrefixArray) {
@@ -210,6 +210,7 @@ public class ERXUnitAwareDecimalFormat extends DecimalFormat implements Cloneabl
         this.unitPrefixArray = unitPrefixArray;
     }
 
+    @Override
     public StringBuffer format(double number, StringBuffer toAppendTo, FieldPosition fieldPosition) {
         StringBuffer result = toAppendTo;
         UnitPrefix unitPrefix = UnitPrefix.findAppropriatePrefix(number, unitPrefixArray);
@@ -225,6 +226,7 @@ public class ERXUnitAwareDecimalFormat extends DecimalFormat implements Cloneabl
         return result; 
     }
     
+    @Override
     public StringBuffer format(long number, StringBuffer toAppendTo, FieldPosition fieldPosition) {
         return format((double)number, toAppendTo, fieldPosition);
     }

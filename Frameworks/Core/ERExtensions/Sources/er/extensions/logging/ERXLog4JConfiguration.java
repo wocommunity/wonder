@@ -434,6 +434,7 @@ public class ERXLog4JConfiguration extends WOComponent {
     	return result;
     }
 
+    @Override
     public void appendToResponse(WOResponse response, WOContext context) {
         if (session().objectForKey("ERXLog4JConfiguration.enabled") != null) {
             super.appendToResponse(response, context);
@@ -485,6 +486,7 @@ public class ERXLog4JConfiguration extends WOComponent {
         return PageSection.LOGGERS == _activeSection ? "active" : null;
     }
 
+    @Override
     public void awake() {
         super.awake();
 

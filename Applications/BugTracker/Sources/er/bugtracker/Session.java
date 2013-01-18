@@ -123,6 +123,7 @@ public class Session extends ERXSession {
             super("reports");
         }
         
+        @Override
         public Object handleQueryWithUnboundKey(String key) {
             String keyPath = ERXStringUtilities.capitalize(key);
             return Factory.bugTracker().reportForName("Report" +  keyPath);
@@ -145,6 +146,7 @@ public class Session extends ERXSession {
         setStoresIDsInCookies(true);
     }
 
+    @Override
     public void setDefaultEditingContext(EOEditingContext newEc) {
         super.setDefaultEditingContext(newEc);
     }
@@ -194,6 +196,7 @@ public class Session extends ERXSession {
         ERCoreBusinessLogic.setActor(user());
     }
     
+    @Override
     public void awake() {
         super.awake();
         if (user() != null) {
@@ -205,6 +208,7 @@ public class Session extends ERXSession {
     	return user() != null;
     }
 
+    @Override
     public void sleep() {
         ERCoreBusinessLogic.setActor(null);
         super.sleep();
@@ -227,7 +231,7 @@ public class Session extends ERXSession {
     
     public String navigationRootChoice() {
     	
-    	People user = (People) user();
+    	People user = user();
     	
     	if(user != null && user.isActive()) {
     		if(user.isAdmin()) {

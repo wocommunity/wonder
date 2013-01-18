@@ -20,9 +20,6 @@ import org.quartz.Trigger;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
-import er.quartzscheduler.foundation.ERQSJob;
-import er.quartzscheduler.foundation.ERQSJobDescription;
-import er.quartzscheduler.foundation.ERQSJobSupervisor;
 import er.quartzscheduler.util.ERQSSchedulerFP4Test;
 
 public class ERQSJobSupervisorTest {

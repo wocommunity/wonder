@@ -47,6 +47,7 @@ public class SeleniumCompositeTestFilter extends SeleniumTestFilterHelper implem
 		return testFilters;
 	}
 	
+	@Override
 	public SeleniumTest processTest(SeleniumTest test) {
 		log.debug("processing " + testFilters.count() + " filters in chain");
 		for (SeleniumTestFilter filter : testFilters) {

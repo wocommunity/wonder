@@ -69,6 +69,7 @@ public class ERXJobLoadBalancer {
         public int _index;
         public int _modulo;
         public JobSet(int i, int m) { _index=i; _modulo=m; }  
+        @Override
         public String toString() { return index()+" mod "+modulo(); }
         
         public int index() { return _index; }
@@ -90,6 +91,7 @@ public class ERXJobLoadBalancer {
         String _type;
         String _id;
         public WorkerIdentification(String t, String i) { _type = t; _id=i; } 
+        @Override
         public String toString() { return type()+"-"+id(); }
         public String id() { return _id; }
         public String type() { return _type; }

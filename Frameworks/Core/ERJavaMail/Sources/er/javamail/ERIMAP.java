@@ -6,13 +6,15 @@
 
 package er.javamail;
 
-import com.webobjects.foundation.*;
-import javax.mail.internet.MimeMessage;
-import com.sun.mail.imap.IMAPStore;
-import com.sun.mail.imap.IMAPFolder;
-import javax.mail.MessagingException;
 import javax.mail.AuthenticationFailedException;
 import javax.mail.FolderNotFoundException;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
+import com.sun.mail.imap.IMAPFolder;
+import com.sun.mail.imap.IMAPStore;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
 
 public class ERIMAP {
 
@@ -84,7 +86,7 @@ public class ERIMAP {
 		if (folder.isOpen()) {
 			MimeMessage[] messages = (MimeMessage[])folder.getMessages(firstMsg, lastMsg);
 			for (int index = 0; index < messages.length; index++) {
-				MimeMessage mimeMessage = (MimeMessage)messages[index];
+				MimeMessage mimeMessage = messages[index];
 				ERMessage message = new ERMessage();
 				message.setMimeMessage(mimeMessage);
 				emails.add(message);

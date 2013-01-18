@@ -58,6 +58,7 @@ public class MTJSSlider extends AjaxDynamicElement {
 		super(name, associations, children);
 	}
 
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 
 		// TODO Auto-generated method stub

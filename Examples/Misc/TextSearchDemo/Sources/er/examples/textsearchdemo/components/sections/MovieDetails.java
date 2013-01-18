@@ -33,7 +33,7 @@ public class MovieDetails extends TSCommonComponent {
 	@SuppressWarnings("unchecked")
 	public String movieTalent() {
 		StringBuffer talent = new StringBuffer();
-		NSArray<Talent> actors = (NSArray<Talent>)this.valueForKeyPath("movie.roles.talent");
+		NSArray<Talent> actors = (NSArray<Talent>)valueForKeyPath("movie.roles.talent");
 		if (actors != null) {
 			for (Talent actor : actors) {
 				if (talent.length() != 0) {
@@ -48,7 +48,7 @@ public class MovieDetails extends TSCommonComponent {
 	@SuppressWarnings("unchecked")
 	public String movieDirectors() {
 		StringBuffer talent = new StringBuffer();
-		NSArray<Talent> directors = (NSArray<Talent>)this.valueForKeyPath("movie.directors");
+		NSArray<Talent> directors = (NSArray<Talent>)valueForKeyPath("movie.directors");
 		if (directors != null) {
 			for (Talent actor : directors) {
 				if (talent.length() != 0) {

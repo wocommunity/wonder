@@ -66,12 +66,14 @@ public abstract class AbstractBatchingList extends AbstractList implements IBatc
     }
   }
 
+  @Override
   public Object get(int index) {
     ensurePageLoaded(index);
     Object obj = getFromPage(index - _pageSize * (_pageIndex - 1));
     return obj;
   }
 
+  @Override
   public int size() {
     ensurePageLoaded(-1);
     int totalCount = getTotalCount();

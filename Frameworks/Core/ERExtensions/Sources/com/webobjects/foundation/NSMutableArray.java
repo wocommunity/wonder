@@ -101,6 +101,7 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
       super(list, range, ignoreNull);
     }
 
+	@Override
 	protected void _initializeWithCapacity(int capacity) {
 		_capacity = capacity;
 		_objectsCache = null;
@@ -136,6 +137,7 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
     	// no op
     }
     
+    @Override
     protected void _setCount(int count) {
     	_count = count;
     }
@@ -395,14 +397,17 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
         }
     }
 
+    @Override
     public Object clone() {
         return new NSMutableArray<E>(this);
     }
 
+    @Override
     public NSArray<E> immutableClone() {
         return new NSArray<E>(this);
     }
 
+    @Override
     public NSMutableArray<E> mutableClone() {
         return (NSMutableArray<E>) clone();
     }

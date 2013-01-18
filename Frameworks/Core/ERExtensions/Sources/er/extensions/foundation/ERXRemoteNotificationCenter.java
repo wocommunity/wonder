@@ -135,6 +135,7 @@ public abstract class ERXRemoteNotificationCenter extends NSNotificationCenter {
 			_listening = false;
 		}
 
+		@Override
 		protected void postRemoteNotification(NSNotification notification) {
 			try {
 				MulticastByteArrayOutputStream baos = new MulticastByteArrayOutputStream();

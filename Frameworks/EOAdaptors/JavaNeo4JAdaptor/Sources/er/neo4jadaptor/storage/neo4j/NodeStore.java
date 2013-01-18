@@ -44,7 +44,7 @@ public class NodeStore implements Store<Ersatz, Neo4JErsatz> {
 		
 		this.entity = entity;
 		this.db = db;
-		this.pk = EOUtilities.primaryKeyAttribute(entity);
+		pk = EOUtilities.primaryKeyAttribute(entity);
 		this.spaceManager = spaceManager;
 		this.tempNodePool = tempNodePool;
 	}

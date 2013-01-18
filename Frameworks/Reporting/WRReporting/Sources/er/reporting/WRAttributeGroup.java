@@ -1,10 +1,16 @@
 package er.reporting;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 
 import er.extensions.foundation.ERXValueUtilities;
-import er.grouping.*;
+import er.grouping.DRAttribute;
+import er.grouping.DRGroup;
+import er.grouping.DRReportModel;
 
 public class WRAttributeGroup extends WOComponent {
 
@@ -35,12 +41,12 @@ public class WRAttributeGroup extends WOComponent {
 
     @Override
     public void awake() {
-        this.reset();
+        reset();
     }
 
     public DRReportModel model() {
         if (_model == null) {
-            _model = (DRReportModel)this.valueForBinding("model");
+            _model = (DRReportModel)valueForBinding("model");
         }
         return _model;
     }
@@ -48,7 +54,7 @@ public class WRAttributeGroup extends WOComponent {
 
     public boolean totalsOnly() {
         if (_totalsOnly == null) {
-            Object v = (Object)this.valueForBinding("totalsOnly");
+            Object v = valueForBinding("totalsOnly");
             if (ERXValueUtilities.booleanValue(v)) {
                 _totalsOnly = Boolean.TRUE;
             } else {
@@ -60,36 +66,36 @@ public class WRAttributeGroup extends WOComponent {
 
     @Override
     public void appendToResponse(WOResponse r, WOContext c) {
-        this.reset();
+        reset();
         super.appendToResponse(r, c);
     }
 
 
     public NSDictionary attributeListDict() {
-        if (this.totalsOnly()) {
-            return this.model().flatAttributeListTotalDict();
+        if (totalsOnly()) {
+            return model().flatAttributeListTotalDict();
         }
 
-        return this.model().flatAttributeDepthDict();
+        return model().flatAttributeDepthDict();
     }
 
 
     public int depthCount() {
         //log.debug( "attributeListDict():"+attributeListDict());
-        return this.attributeListDict().allKeys().count();
+        return attributeListDict().allKeys().count();
     }
 
 
     public NSArray attributeListAtDepth() {
         Number ky = Integer.valueOf(depth);
-        return (NSArray)this.attributeListDict().objectForKey(ky);
+        return (NSArray)attributeListDict().objectForKey(ky);
     }
 
 
     public int colSpan() {
         int cls;
 
-        if (this.totalsOnly()) {
+        if (totalsOnly()) {
             cls = attrib.flatAttributesTotal().count();
         } else {
             cls = attrib.flatAttributes().count();
@@ -109,7 +115,7 @@ public class WRAttributeGroup extends WOComponent {
             return 1;
         }
 
-        return this.depthCount()-depth;
+        return depthCount()-depth;
     }
 
 
@@ -119,7 +125,7 @@ public class WRAttributeGroup extends WOComponent {
 
     public NSArray groups() {
         if (_groups == null) {
-            _groups = (NSArray)this.valueForBinding("groups");
+            _groups = (NSArray)valueForBinding("groups");
 
             if (_groups == null) {
                 _groups = new NSArray();

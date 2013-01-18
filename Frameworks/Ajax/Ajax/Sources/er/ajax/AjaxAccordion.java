@@ -61,11 +61,13 @@ public class AjaxAccordion extends AjaxComponent {
     return options;
   }
 
+  @Override
   protected void addRequiredWebResources(WOResponse response) {
     addScriptResourceInHead(response, "prototype.js");
     addScriptResourceInHead(response, "rico.js");
   }
 
+  @Override
   public WOActionResults handleRequest(WORequest request, WOContext context) {
     return null;
   }

@@ -52,7 +52,7 @@ public class Session extends ERXSession {
 	}
 
 	public void setMaxSeqId(int seqId) {
-		this.maxSeqId = seqId;
+		maxSeqId = seqId;
 	}
 	
 	public int previousSeqId() {

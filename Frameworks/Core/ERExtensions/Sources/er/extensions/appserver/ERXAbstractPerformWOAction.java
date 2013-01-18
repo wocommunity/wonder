@@ -6,9 +6,6 @@ import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
-import er.extensions.appserver.ERXApplication;
-import er.extensions.appserver.ERXWOContext;
-
 /**
  * An abstract class that provides convenience methods that are available in WOComponent and WODirectAction. This
  * can be sub-classed for component or direct action delegates that want the convenience of having these commonly used methods

@@ -692,6 +692,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
      * @param obj enterprise object to be deleted
      * @throws NSValidation.ValidationException validation exception
      */
+    @Override
     public void validateObjectForDelete(EOEnterpriseObject obj) throws NSValidation.ValidationException {
         try {
             if (useValidity()) {
@@ -713,6 +714,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
      * Overridden to perform a check if the entity is still in a model group.
      * This can happen if you remove the entity, clone it to change things and re-add it afterwards.
      */
+    @Override
     public EOEntity entity() {
         checkEntity();
         return super.entity();
@@ -740,6 +742,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         }
     }
     
+    @Override
     public EOEnterpriseObject createInstanceWithEditingContext(EOEditingContext ec, EOGlobalID gid) {
         checkEntity();
         return super.createInstanceWithEditingContext(ec, gid);
@@ -809,6 +812,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
      *		against.
      * @throws NSValidation.ValidationException validation exception
      */
+    @Override
     public Object validateValueForKey(Object obj, String s) throws NSValidation.ValidationException {
         Object validated = null;
         if (log.isDebugEnabled())
@@ -842,6 +846,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
      * @throws NSValidation.ValidationException validation exception
      */
 
+    @Override
     public void validateObjectForSave(EOEnterpriseObject obj) throws NSValidation.ValidationException {
         try {
             if (useValidity()) {
@@ -955,6 +960,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
      * @param key to be converted
      * @return pretty display name
      */
+    @Override
     public String displayNameForKey(String key) {
     	if (ERXLocalizer.isLocalizationEnabled()) {
     		return ERXLocalizer.currentLocalizer().localizedDisplayNameForKey(this, key);
@@ -1156,6 +1162,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         }
     }
 
+    @Override
     public void awakeObjectFromInsertion(EOEnterpriseObject eo, EOEditingContext ec) {
         super.awakeObjectFromInsertion(eo, ec);
         setDefaultValuesInObject(eo, ec);
@@ -1169,6 +1176,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
     	return key;
     }
 
+    @Override
     public String inverseForRelationshipKey(String relationshipKey) {
         String result = null;
         EORelationship relationship = entity().relationshipNamed(relationshipKey);
@@ -1259,6 +1267,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         return sharedGSVEngineInstance;
     }
 
+	@Override
 	public Class _enforcedKVCNumberClassForKey(String key) {
 		EOAttribute attribute = entity().attributeNamed(key);
 		if(attribute != null && attribute.userInfo() != null) {

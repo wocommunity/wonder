@@ -1,6 +1,7 @@
 package er.extensions.components._ajax;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
 
 import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.components.ERXErrorDictionaryPanel;

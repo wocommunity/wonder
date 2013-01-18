@@ -1,6 +1,7 @@
 package er.calendar;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSTimestamp;
 
 /**
  * ERSimpleEvent is an simple implementation of an event class,

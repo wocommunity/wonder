@@ -679,6 +679,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
       log.debug("Session has been deserialized: " + toString());
   }
 
+  @Override
   public NSTimestamp _birthDate() {
 	  return super._birthDate();
   }

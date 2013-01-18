@@ -13,6 +13,7 @@ public class ListPageDelegate extends ERDBranchDelegate {
         return (Session)sender.session();
     }
 
+    @Override
     protected NSArray defaultBranchChoices(D2WContext context) {
         NSArray result = super.defaultBranchChoices(context);
         return result;

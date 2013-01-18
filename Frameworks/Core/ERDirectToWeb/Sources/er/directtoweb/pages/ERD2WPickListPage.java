@@ -78,6 +78,7 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
      * 
      * @return if we have a nextPage set
      */
+    @Override
     public boolean showCancel() {
         return ((!(nextPageDelegate() instanceof ERDBranchDelegate)) && nextPage() != null) || cancelPage() !=null;
     }
@@ -98,10 +99,12 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
         setSelectedObjects(selectedObjects);
     }
 
+    @Override
     public NSArray selectedObjects() {
         return super.selectedObjects();
     }
 
+    @Override
     public void setSelectedObjects(NSArray selectedObjects) {
         super.setSelectedObjects(selectedObjects);
     }
@@ -118,6 +121,7 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
         _cancelPage = cp;
     }
 
+    @Override
     public WOComponent backAction() {
         if(_masterObject != null) {
             EOEditingContext ec = _masterObject.editingContext();
@@ -137,11 +141,13 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
     }
 
     // Called by ERD2WListPage before the display group is updated
+    @Override
     protected void willUpdate() {
         super.willUpdate();
     }
     
     // Called by ERD2WListPage after the display group is updated
+    @Override
     protected void didUpdate() {
         super.didUpdate();
         // update our selection, so that we don't have any objects selected that are not visible on any page
@@ -239,6 +245,6 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
         } else {
             objects = NSArray.EmptyArray;
         }
-        setSelectedObjects((NSArray)objects);
+        setSelectedObjects(objects);
      }
 }

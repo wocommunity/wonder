@@ -123,6 +123,7 @@ public class ERXModernizr extends ERXStatelessComponent {
 	/**
 	 * Overridden to capture the modernizr data being sent from the client.
 	 */
+	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		super.takeValuesFromRequest(request, context);
 		if(shouldPostData()) {

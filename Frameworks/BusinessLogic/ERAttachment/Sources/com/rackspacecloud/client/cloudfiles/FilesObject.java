@@ -4,11 +4,15 @@
 
 package com.rackspacecloud.client.cloudfiles;
 
-import org.apache.log4j.Logger;
-import org.apache.http.HttpException;
-
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
+
+import org.apache.http.HttpException;
+import org.apache.log4j.Logger;
 
 public class FilesObject
 {

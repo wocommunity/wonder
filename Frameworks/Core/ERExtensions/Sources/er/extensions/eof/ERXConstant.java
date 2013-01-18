@@ -260,6 +260,7 @@ public abstract class ERXConstant {
 		/**
 		 * Number interface implementation, returns the value.
 		 */
+		@Override
 		public final double doubleValue() {
 			return intValue();
 		}
@@ -267,6 +268,7 @@ public abstract class ERXConstant {
 		/**
 		 * Number interface implementation, returns the value.
 		 */
+		@Override
 		public final float floatValue() {
 			return intValue();
 		}
@@ -274,6 +276,7 @@ public abstract class ERXConstant {
 		/**
 		 * Number interface implementation, returns the value.
 		 */
+		@Override
 		public final int intValue() {
 			return _value;
 		}
@@ -281,6 +284,7 @@ public abstract class ERXConstant {
 		/**
 		 * Number interface implementation, returns the value.
 		 */
+		@Override
 		public final long longValue() {
 			return intValue();
 		}
@@ -288,6 +292,7 @@ public abstract class ERXConstant {
 		/**
 		 * Returns the value.
 		 */
+		@Override
 		public final int hashCode() {
 			return _value;
 		}
@@ -301,6 +306,7 @@ public abstract class ERXConstant {
 			return name() + " (" + intValue() +  ")";
 		}
 		
+		@Override
 		public String toString() {
 			return getClass().getName() + ": " + userPresentableDescription();
 		}
@@ -312,6 +318,7 @@ public abstract class ERXConstant {
 		/**
 		 * Overridden to compare by value.
 		 */
+		@Override
 		public final boolean equals(Object otherObject) {
 			if(otherObject == null) {
 				return false;
@@ -381,6 +388,7 @@ public abstract class ERXConstant {
 			return name() + " (" + value() +  ")";
 		}
 		
+		@Override
 		public String toString() {
 			return getClass().getName() + ": " + userPresentableDescription();
 		}
@@ -438,6 +446,7 @@ public abstract class ERXConstant {
 			return name();
 		}
 		
+		@Override
 		public String toString() {
 			return getClass().getName() + ": " + userPresentableDescription();
 		}

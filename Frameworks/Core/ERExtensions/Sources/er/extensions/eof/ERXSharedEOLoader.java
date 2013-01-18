@@ -113,6 +113,7 @@ public class ERXSharedEOLoader {
                                                          null);
     }
 
+    @Override
     public void finalize() throws Throwable {
         NSNotificationCenter.defaultCenter().removeObserver(this);
         super.finalize();

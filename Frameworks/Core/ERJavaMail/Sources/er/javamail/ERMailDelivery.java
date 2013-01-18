@@ -697,7 +697,7 @@ public abstract class ERMailDelivery {
 
 		InternetAddress[] internetAddresses = new InternetAddress[addresses.count()];
 		for (int i = 0; i < addresses.count(); i++) {
-			internetAddresses[i] = (InternetAddress) addresses.objectAtIndex(i);
+			internetAddresses[i] = addresses.objectAtIndex(i);
 		}
 
 		mimeMessage().setRecipients(type, internetAddresses);

@@ -286,7 +286,7 @@ public class ERXMacBinarySwissArmyKnife {
     public long
         getUIntAt( int offset )
     {
-            long value = 0xFFFFFFFFL & (long) getIntAt( offset );
+            long value = 0xFFFFFFFFL & getIntAt( offset );
             return ( value );
     }
 

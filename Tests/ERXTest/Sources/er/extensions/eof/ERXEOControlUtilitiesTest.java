@@ -22,6 +22,7 @@ import er.erxtest.model.Employee;
 
 public class ERXEOControlUtilitiesTest extends ERXTestCase {
 
+	@Override
 	@Before
 	public void setUp() throws Exception {
 		ERXTestUtilities.deleteAllObjects();

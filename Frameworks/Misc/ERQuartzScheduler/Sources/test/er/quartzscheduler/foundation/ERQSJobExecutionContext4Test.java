@@ -24,7 +24,7 @@ public class ERQSJobExecutionContext4Test implements JobExecutionContext
 
 	public ERQSJobExecutionContext4Test()
 	{
-		this.withScheduler = false;
+		withScheduler = false;
 	}
 
 	/**

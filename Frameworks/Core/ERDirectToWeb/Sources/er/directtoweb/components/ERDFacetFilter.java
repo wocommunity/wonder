@@ -71,7 +71,7 @@ public class ERDFacetFilter extends ERDCustomQueryComponent {
 
 	public NSArray<EOEnterpriseObject> allObjects() {
 		if(_allObjects == null && allKeys() != null) {
-			_allObjects = (NSArray<EOEnterpriseObject>) displayGroup().allObjects();
+			_allObjects = displayGroup().allObjects();
 			values.removeAllObjects();
 			selectedValues.removeAllObjects();
 			for (String keyPath : allKeys()) {

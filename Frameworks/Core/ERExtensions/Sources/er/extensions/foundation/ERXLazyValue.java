@@ -411,6 +411,7 @@ public class ERXLazyValue<T> {
 			return ERXThreadStorage.valueForKey(_key);
 		}
 
+		@Override
 		public void setCacheKey(Object value) {
 			ERXThreadStorage.takeValueForKey(value, _key);
 		}
@@ -436,6 +437,7 @@ public class ERXLazyValue<T> {
 			return ERXResponseRewriter.pageUserInfo(ERXWOContext.currentContext()).objectForKey(_key);
 		}
 
+		@Override
 		public void setCacheKey(Object value) {
 			ERXResponseRewriter.pageUserInfo(ERXWOContext.currentContext()).setObjectForKey(value, _key);
 		}
@@ -462,6 +464,7 @@ public class ERXLazyValue<T> {
 			return ERXResponseRewriter.ajaxPageUserInfo(ERXWOContext.currentContext()).objectForKey(_key);
 		}
 
+		@Override
 		public void setCacheKey(Object value) {
 			ERXResponseRewriter.ajaxPageUserInfo(ERXWOContext.currentContext()).setObjectForKey(value, _key);
 		}

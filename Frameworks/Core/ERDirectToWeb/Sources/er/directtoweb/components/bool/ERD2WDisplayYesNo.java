@@ -22,6 +22,7 @@ public class ERD2WDisplayYesNo extends ERD2WCustomDisplayBoolean {
         super(context);
     }
     
+    @Override
     public NSArray<String> choicesNames() {
         return choicesNames;
     }

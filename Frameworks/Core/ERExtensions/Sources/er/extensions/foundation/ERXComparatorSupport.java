@@ -1,8 +1,8 @@
 package er.extensions.foundation;
 
 import com.webobjects.foundation.NSComparator;
-import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSComparator.ComparisonException;
+import com.webobjects.foundation.NSKeyValueCoding;
 
 /**
  * Useful methods when working with NSComparator. 

@@ -10,7 +10,6 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 
-
 import com.webobjects.eoaccess.EORelationship;
 
 import er.neo4jadaptor.ersatz.neo4j.Neo4JUtils;
@@ -27,11 +26,11 @@ public class NodeToNodeRetriever extends RelationshipRetriever<Node, Node> {
 	
 	public NodeToNodeRetriever(EORelationship rel) {
 		if (rel.isToMany()) {
-			this.relationshipType = Neo4JUtils.getRelationshipType(rel.inverseRelationship());
-			this.direction = Direction.INCOMING;
+			relationshipType = Neo4JUtils.getRelationshipType(rel.inverseRelationship());
+			direction = Direction.INCOMING;
 		} else {
-			this.relationshipType = Neo4JUtils.getRelationshipType(rel);
-			this.direction = Direction.OUTGOING;
+			relationshipType = Neo4JUtils.getRelationshipType(rel);
+			direction = Direction.OUTGOING;
 		}
 	}
 	

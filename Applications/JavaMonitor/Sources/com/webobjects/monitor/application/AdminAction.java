@@ -606,6 +606,7 @@ public class AdminAction extends WODirectAction {
         return WOTaskdHandler.siteConfig();
     }
 
+    @Override
     public WOActionResults performActionNamed(String s) {
         WOResponse woresponse = new ERXResponse();
         if (!siteConfig().isPasswordRequired() || siteConfig().compareStringWithPassword(context().request().stringFormValueForKey("pw"))) {

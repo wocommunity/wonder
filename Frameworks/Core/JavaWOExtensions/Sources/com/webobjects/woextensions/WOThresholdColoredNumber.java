@@ -41,7 +41,7 @@ public class WOThresholdColoredNumber extends WOComponent
         Object bindingValue = valueForBinding(theBinding);
         if (bindingValue != null) {
             if (bindingValue instanceof String) {
-                return (Number) Long.valueOf((String) bindingValue);
+                return Long.valueOf((String) bindingValue);
             }
             if (bindingValue instanceof Number) {
                 return (Number) bindingValue;

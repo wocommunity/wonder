@@ -51,6 +51,7 @@ public class ERD2WDisplayURL extends D2WDisplayString {
      * using the D2W key <code>urlTarget</code>.
      * @return the target of the hyperlink
      */
+    @Override
     public String target() {
         String target = (String)d2wContext().valueForKey("urlTarget");
         return target != null ? target : "_blank";

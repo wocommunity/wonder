@@ -19,6 +19,7 @@ public class ReadMarker extends D2WComponent {
         super(c);
     }
     
+    @Override
     public void appendToResponse(WOResponse aResponse, WOContext aContext) {
         if(context().page() instanceof InspectPageInterface) {
             EOEnterpriseObject eo = object();

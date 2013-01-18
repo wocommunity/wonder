@@ -359,11 +359,11 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
             context = ERD2WContext.newContext(session());
             context.setDynamicPage(anActionName);
         }
-        EOEntity entity = (EOEntity)context.entity();
+        EOEntity entity = context.entity();
 
         if(entity != null) {
             String entityName = entity.name();
-            String taskName = (String)context.task();
+            String taskName = context.task();
 
             if(newPage instanceof EditPageInterface && taskName.equals("edit")) {
                 prepareEditPage(context, (EditPageInterface)newPage, entityName);
@@ -381,7 +381,7 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
         } else if(newPage instanceof ErrorPageInterface) {
             prepareErrorPage(context, (ErrorPageInterface)newPage);
         }
-        return (WOActionResults)newPage;
+        return newPage;
     }
 
     /**
@@ -447,6 +447,7 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
      * implementation catches NoSuchMethodException more or less silently, so be
      * sure to turn on logging.
      */
+    @Override
     public WOActionResults performActionNamed(String anActionName) {
         WOActionResults newPage = null;
         try {
