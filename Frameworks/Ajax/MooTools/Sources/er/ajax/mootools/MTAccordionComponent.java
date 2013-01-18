@@ -17,10 +17,6 @@ public class MTAccordionComponent extends AjaxComponent {
 		return true;
 	}
 
-	public boolean synchronizesVariablesWithBindings() {
-		return false;
-	}
-
 	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		return null;

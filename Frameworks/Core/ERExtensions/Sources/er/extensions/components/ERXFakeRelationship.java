@@ -74,9 +74,6 @@ public class ERXFakeRelationship extends WOComponent {
         super(context);
     }
 
-    public boolean isStateless() {
-        return false;
-    }
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }

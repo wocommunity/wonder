@@ -42,10 +42,6 @@ public class ERDLinkToEditObject extends ERDCustomEditComponent {
     	return false;
     }
 
-    public void reset() {
-    	super.reset();
-    }
-    
     public Object displayValue() {
         Object value = objectKeyPathValue();
         if (value instanceof EOEnterpriseObject) {

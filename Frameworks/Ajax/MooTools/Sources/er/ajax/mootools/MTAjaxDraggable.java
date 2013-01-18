@@ -84,10 +84,6 @@ public class MTAjaxDraggable extends AjaxComponent {
 		return Boolean.TRUE;
 	}
 
-	public boolean synchronizesVariablesWithBindings() {
-		return Boolean.FALSE;
-	}	
-	
 	@SuppressWarnings("rawtypes")
 	public static Object draggableObjectForPage(WOComponent page, String draggableID) {
 		Object droppedObject = null;

@@ -33,11 +33,6 @@ public class ModalBoxButton extends ModalBox {
     }
     
     @Override
-    public boolean synchronizesVariablesWithBindings() {
-    	return false;
-    }
-    
-    @Override
     public boolean isStateless() {
     	return true;
     }

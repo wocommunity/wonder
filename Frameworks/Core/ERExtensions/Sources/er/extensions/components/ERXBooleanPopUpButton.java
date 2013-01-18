@@ -41,9 +41,4 @@ public class ERXBooleanPopUpButton extends ERXComponent {
 	public boolean isStateless() {
 		return true;
 	}
-	
-	@Override
-	public boolean synchronizesVariablesWithBindings() {
-		return false;
-	}
 }

@@ -63,18 +63,9 @@ public class WRRecordGroup extends WOComponent  {
         _totalCount = -1;
     }
 
-    /** Component does not synchronize with bindings, and your subclasses should be doing so, too. */
-    public final boolean synchronizesVariablesWithBindings() {
-        return false;
-    }
-
     /** Component is stateless, and your subclasses should be so, too. */
     public boolean isStateless() {
         return true;
-    }
-    
-    public void sleep() {
-        //this.reset();
     }
 
     public void appendToResponse(WOResponse r, WOContext c) {

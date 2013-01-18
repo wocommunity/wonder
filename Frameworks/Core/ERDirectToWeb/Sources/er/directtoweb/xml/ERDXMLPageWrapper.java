@@ -25,5 +25,4 @@ public class ERDXMLPageWrapper extends WOComponent {
     public ERDXMLPageWrapper(WOContext context) { super(context); }
 
     public boolean isStateless() { return true; }
-    public boolean synchronizesVariablesWithBindings() { return false; }
 }

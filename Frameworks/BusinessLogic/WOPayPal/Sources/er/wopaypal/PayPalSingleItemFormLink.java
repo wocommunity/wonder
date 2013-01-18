@@ -47,16 +47,6 @@ public class PayPalSingleItemFormLink extends
     }
 
     /**
-     * Tells the component not to synchronize its binding values. This means we
-     * have to do it manually.
-     * 
-     * @return boolean
-     */
-    public boolean synchronizesVariablesWithBindings() {
-        return false;
-    }
-
-    /**
      * NSArray of binding values presented in the way PayPal expects them. This
      * array will be used in the WOComponent (in a WORepetition) to pass values
      * to a series of hidden fields in the form that gets submitted to PayPal.

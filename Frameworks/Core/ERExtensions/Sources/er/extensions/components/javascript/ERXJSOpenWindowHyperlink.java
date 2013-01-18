@@ -38,7 +38,6 @@ public class ERXJSOpenWindowHyperlink extends WOComponent {
     public static final Logger log = Logger.getLogger(ERXJSOpenWindowHyperlink.class);
 
     public boolean isStateless() { return true; }
-    public boolean synchronizesVariablesWithBindings() { return false; }
 
     public boolean isDirectAction() {
         return valueForBinding("directActionName") != null;

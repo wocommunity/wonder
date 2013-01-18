@@ -35,9 +35,6 @@ public class ERDEditDatePopupOrNull extends ERDEditDatePopupCommon {
     public String empty() { return empty; }
     public String date() { return date; }
 
-    public boolean isStateless() { return true; }
-    public boolean synchronizesVariablesWithBindings() { return false; }
-
     public Object timeZoneString() {
         return TimeZone.getDefault().getDisplayName(true, TimeZone.SHORT);
     }

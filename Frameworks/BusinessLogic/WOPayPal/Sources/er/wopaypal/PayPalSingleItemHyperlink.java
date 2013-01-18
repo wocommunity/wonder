@@ -43,11 +43,6 @@ public class PayPalSingleItemHyperlink extends PayPalSingleItemLinkBase {
      * @return boolean
      */
     public boolean isStateless() { return true; }
-    /** Tells the component not to synchronize its binding values.  This means we have to do it manually.
-     *
-     * @return boolean
-     */
-    public boolean synchronizesVariablesWithBindings() { return false; }
 
     /** Assembles the url to send to PayPal for the single item purchase
      *

@@ -22,10 +22,6 @@ public class LightWindowButton extends LightWindow {
         super(context);
     }
     
-    @Override
-    public boolean synchronizesVariablesWithBindings() {
-    	return false;
-    }
     
     @Override
     public boolean isStateless() {

@@ -44,7 +44,6 @@ public class ERXDebugMarker extends WOComponent {
     }
     
     public boolean isStateless() { return true; }
-    public boolean synchronizesVariablesWithBindings() { return false; }
 
     private DebugPageProvider _debugPageProvider;
     public DebugPageProvider debugPageProvider() {

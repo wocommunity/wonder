@@ -12,7 +12,7 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.foundation.NSValidation;
 
 import er.extensions.appserver.ERXRequest;
-import er.extensions.components.ERXComponent;
+import er.extensions.components.ERXNonSynchronizingComponent;
 import er.extensions.components.ERXSimpleSpamCheck;
 import er.extensions.foundation.ERXProperties;
 
@@ -36,7 +36,7 @@ import er.extensions.foundation.ERXProperties;
  * 
  * @author mschrag
  */
-public class ERReCaptcha extends ERXComponent {
+public class ERReCaptcha extends ERXNonSynchronizingComponent {
 	/**
 	 * Do I need to update serialVersionUID?
 	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
@@ -54,10 +54,6 @@ public class ERReCaptcha extends ERXComponent {
 	 */
 	public ERReCaptcha(WOContext context) {
 		super(context);
-	}
-
-	public boolean synchronizesVariablesWithBindings() {
-		return false;
 	}
 
 	/**

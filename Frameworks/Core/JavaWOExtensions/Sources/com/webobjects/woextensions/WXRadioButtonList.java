@@ -26,10 +26,6 @@ public class WXRadioButtonList extends WOComponent {
 	public int index;
 	private String _id;
     
-    @Override
-    public boolean synchronizesVariablesWithBindings() {
-    	return false;
-    }
     
     @Override
     public boolean isStateless() {

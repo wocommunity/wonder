@@ -28,10 +28,6 @@ public class WRAttributeGroup extends WOComponent  {
         _groups = null;
     }
 
-    public boolean synchronizesVariablesWithBindings() {
-        return false;
-    }
-
     public boolean isStateless() {
         return true;
     }

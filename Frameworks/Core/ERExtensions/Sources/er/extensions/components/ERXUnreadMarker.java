@@ -36,7 +36,6 @@ public class ERXUnreadMarker extends WOComponent {
     /////////////////////////////////  log4j category  /////////////////////////////////
     public static Logger log = Logger.getLogger(ERXUnreadMarker.class);
     
-    public boolean synchronizesVariablesWithBindings() { return false; }
     public boolean isStateless() { return true; }
 
     public void reset() { super.reset(); initialized=false; }

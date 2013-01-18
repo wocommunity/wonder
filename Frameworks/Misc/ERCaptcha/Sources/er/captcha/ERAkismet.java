@@ -43,10 +43,6 @@ public class ERAkismet extends ERXComponent {
 		super(context);
 	}
 
-	public boolean synchronizesVariablesWithBindings() {
-		return false;
-	}
-
 	public boolean isStateless() {
 		return true;
 	}

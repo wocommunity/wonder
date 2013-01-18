@@ -545,11 +545,6 @@ public class ERDSavedQueriesComponent extends WOComponent {
 		return false;
 	}
 
-	/** component is not stateless */
-	public boolean isStateless() {
-		return false;
-	}
-
 	public void sleep() {
 		needsAutoSubmit = false;
 		super.sleep();

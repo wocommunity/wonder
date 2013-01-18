@@ -39,11 +39,6 @@ public class ERXRouteURL extends ERXComponent {
 		return true;
 	}
 
-	@Override
-	public boolean synchronizesVariablesWithBindings() {
-		return false;
-	}
-
 	public Object record() {
 		return valueForBinding("record");
 	}
