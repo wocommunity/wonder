@@ -30,6 +30,7 @@ public class Application extends ERXApplication {
    /**
     * @deprecated We need to remove the call to ERXRestRequestHandler
     */
+    @Deprecated
     public Application() {
         ERXNavigationManager.manager().configureNavigation();
         setContextClassName("er.extensions.appserver.ERXWOContext");
