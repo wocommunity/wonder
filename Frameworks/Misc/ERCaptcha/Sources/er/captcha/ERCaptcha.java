@@ -118,8 +118,6 @@ public class ERCaptcha extends WOComponent {
 
 	public void appendToResponse(WOResponse response, WOContext context) {
 		if (_captcha == null) {
-			byte[] captchaChallengeAsJpeg = null;
-			ByteArrayOutputStream captchaOutputStream = new ByteArrayOutputStream();
 			try {
 				BufferedImage challenge = ERCaptcha.captchaService().getImageChallengeForID(context.elementID());
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();

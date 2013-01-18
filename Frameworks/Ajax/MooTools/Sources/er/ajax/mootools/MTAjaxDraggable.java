@@ -81,7 +81,7 @@ public class MTAjaxDraggable extends AjaxComponent {
 	}
 
 	public boolean isStateless() {
-		return Boolean.TRUE;
+		return true;
 	}
 
 	@SuppressWarnings("rawtypes")

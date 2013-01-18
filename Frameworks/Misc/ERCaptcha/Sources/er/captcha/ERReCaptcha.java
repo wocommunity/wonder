@@ -44,8 +44,6 @@ public class ERReCaptcha extends ERXNonSynchronizingComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private String _html;
-
 	/**
 	 * Constructs a new ERReCaptcha component.
 	 * 
@@ -122,7 +120,6 @@ public class ERReCaptcha extends ERXNonSynchronizingComponent {
 			else {
 				setValueForBinding(Boolean.TRUE, "valid");
 			}
-			_html = null;
 		}
 	}
 }
