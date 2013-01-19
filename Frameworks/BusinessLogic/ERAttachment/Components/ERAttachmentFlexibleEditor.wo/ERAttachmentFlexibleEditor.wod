@@ -59,7 +59,7 @@ ERAttachmentLink : ERAttachmentLink {
   attachment = viewerAttachment;
   download = allowDownload;
   configurationName = ^configurationName;
-  target = ^viewLinkTarget;
+  target = ^viewTarget;
 }
 
 OriginalFileName : WOString {
