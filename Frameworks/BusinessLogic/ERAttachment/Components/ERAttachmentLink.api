@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
 	<wo class="ERAttachmentLink" wocomponentcontent="true">
 		<binding name="attachment"/>
@@ -11,5 +11,6 @@
 			<unbound name="attachment"/>
 		</validation>
 	<binding defaults="Boolean" name="download"/>
+    <binding name="target"/>
     </wo>
 </wodefinitions>
