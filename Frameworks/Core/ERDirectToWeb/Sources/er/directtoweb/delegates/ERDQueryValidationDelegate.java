@@ -141,8 +141,7 @@ public abstract class ERDQueryValidationDelegate {
     }
 
     /**
-     * Determines if the D2W context contains a validation definition for the provided
-     * {@see ValidationKeys validation key}.
+     * Determines if the D2W context contains a validation definition for the provided validation key}.
      * @param key to check
      * @return true if a validation definition for the given key exists
      */

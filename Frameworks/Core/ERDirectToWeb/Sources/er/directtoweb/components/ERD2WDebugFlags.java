@@ -104,7 +104,7 @@ public class ERD2WDebugFlags extends WOComponent {
 
     /**
      * Allow users to override when the debug flags show.  Defaults to showing when the application is running in
-     * {@link ERXApplication#isDevelopmentMode development mode}, i.e. is not deployed to production.
+     * {@link er.extensions.appserver.ERXApplication#isDevelopmentMode development mode}, i.e. is not deployed to production.
      * @return true when the debug flags should be displayed
      */
     public boolean shouldShow() {
