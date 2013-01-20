@@ -266,23 +266,18 @@ public class ERXUtilities {
     }
     
     /**
+     * @deprecated Replaced by {@link ERXArrayUtilities#intersectingElements(NSArray, NSArray)}
+     * 
      * Performs a basic intersection between two arrays.
      * @param array1 first array
      * @param array2 second array
      * @return array containing the intersecting elements of
      *		the two arrays.
      */
+    @Deprecated
     // MOVEME: Should move to ERXArrayUtilities
     public static NSArray intersectingElements(NSArray array1, NSArray array2) {
-        NSArray intersection = null;
-        if (array1 != null && array2 != null && array1.count() > 0 && array2.count() > 0) {
-            NSMutableSet set1 = new NSMutableSet();
-            NSMutableSet set2 = new NSMutableSet();
-            set1.addObjectsFromArray(array1);
-            set2.addObjectsFromArray(array2);
-            intersection = (set1.setByIntersectingSet(set2)).allObjects();
-        }
-        return intersection != null ? intersection : NSArray.EmptyArray;
+    	return ERXArrayUtilities.intersectingElements(array1, array2);
     }
 
     /**
