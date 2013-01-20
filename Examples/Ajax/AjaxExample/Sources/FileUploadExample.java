@@ -15,7 +15,6 @@ public class FileUploadExample extends WOComponent {
 		super(context);
 		_progress = new AjaxProgress(100);
 		Thread progressThread = new Thread(new Runnable() {
-			@Override
 			public void run() {
 				for (int i = 0; i < _progress.maximum(); i++) {
 					_progress.setValue(i);

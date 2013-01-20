@@ -265,7 +265,6 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	/**
 	 * Sets the current selected Object. Required by the SelectPageInterface
 	 */
-    @Override
 	public void setSelectedObject(EOEnterpriseObject eo) {
 		_selectedObject = eo;
 	}
@@ -278,7 +277,6 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	 * 
 	 * @return NSArray containing the master object (index 0) and relationship key (index 1).
 	 */
-    @Override
 	public NSArray<?> masterObjectAndRelationshipKey() {
 		return new NSArray<Object>(new Object[] { masterObject(), relationshipKey() });
 	}
@@ -290,7 +288,6 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	 * 
 	 * @param a an NSArray containing the master object (index 0) and relationship key (index 1).
 	 */
-    @Override
 	public void setMasterObjectAndRelationshipKey(NSArray<?> a) {
 		setMasterObjectAndRelationshipKey((EOEnterpriseObject)a.objectAtIndex(0), (String)a.objectAtIndex(1));
 	}
@@ -301,7 +298,6 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	 * @param eo the master object, an EOEnterpriseObject
 	 * @param relationshipKey
 	 */
-    @Override
 	public void setMasterObjectAndRelationshipKey(EOEnterpriseObject eo, String relationshipKey) {
 		// only do this if the eo and relationshipKey have changed;
 		if (relationshipKey != null && eo != null) {
