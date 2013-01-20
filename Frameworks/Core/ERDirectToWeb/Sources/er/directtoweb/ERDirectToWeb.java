@@ -304,7 +304,9 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
     	return ERXValueUtilities.booleanValue(context.valueForKey(key));
     }
 
-    // DELETEME: This is duplicated from ERExtensions
+    /**
+     * @deprecated This is duplicated from {link: er.extensions.ERXExtensions#userInfoUnit(EOEnterpriseObject, String)}
+     */
     public static String userInfoUnit(EOEnterpriseObject object, String key) {
         // return the unit stored in the userInfo dictionary of the appropriate EOAttribute
         EOEntity entity=null;

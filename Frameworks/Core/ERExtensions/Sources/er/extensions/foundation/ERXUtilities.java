@@ -464,7 +464,6 @@ public class ERXUtilities {
         public boolean invoke(Object ctx);
     }
 
-    // DELETEME: These are not needed now that all of the distant stuff works again.
     /** @deprecated use {@link NSTimestamp#DistantFuture} */
     @Deprecated
     public static final NSTimestamp DISTANT_FUTURE = new NSTimestamp(2999,1,1,1,1,1,TimeZone.getDefault());
