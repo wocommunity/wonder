@@ -60,7 +60,7 @@ public class Fop2PdfImpl implements FOPBuilder {
 	 * some basic defaults for configuring the fop agent. This should be
 	 * property driven, but I'll do that later (yeah... right)
 	 * 
-	 * @return
+	 * @return a configuration dictionary
 	 */
 	public NSDictionary<String, Object> agentDefaults() {
 		NSMutableDictionary<String, Object> d = new NSMutableDictionary<String, Object>();
