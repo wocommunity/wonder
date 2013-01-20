@@ -33,7 +33,7 @@ public abstract class CayenneApplication extends ERXApplication {
 	 * 
 	 * return new ServerRuntime("cayenne-MyDomain.xml");
 	 * 
-	 * @return
+	 * @return a org.apache.cayenne.configuration.server.ServerRuntime object
 	 */
 	protected abstract ServerRuntime createRuntime();
 
@@ -56,7 +56,7 @@ public abstract class CayenneApplication extends ERXApplication {
 	/**
 	 * New ObjectContext instances can be obtained by calling this method from anywhere in the application.
 	 * 
-	 * @return
+	 * @return a org.apache.cayenne.ObjectContext object
 	 */
 	public ObjectContext newObjectContext() {
 		return runtime.getContext();
