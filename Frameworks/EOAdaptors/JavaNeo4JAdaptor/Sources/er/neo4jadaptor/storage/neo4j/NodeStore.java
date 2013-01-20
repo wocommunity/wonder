@@ -137,7 +137,7 @@ public class NodeStore implements Store<Ersatz, Neo4JErsatz> {
 	
 
 	/**
-	 * Only used to distinguish primary key values being result of a {@link NodeStore#newPrimaryKey()} call from
+	 * Only used to distinguish primary key values being result of a {@link newPrimaryKey()} call from
 	 * those where primary key value is set manually.
 	 */
 	public static final class NodeNumber extends Number {
