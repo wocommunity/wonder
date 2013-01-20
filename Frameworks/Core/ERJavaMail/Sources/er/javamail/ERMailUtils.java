@@ -214,7 +214,7 @@ public class ERMailUtils {
 	 * This method sets the values found in a dictionary into the session's state dictionary. This method is useful when
 	 * one want to transfer current session's state into a newly created session (for example when sending a mail whose
 	 * page has been instantiated with {@link #instantiatePage(String, NSDictionary)} or
-	 * {@link ERXApplication#instantiatePage(String)}.)
+	 * {@link er.extensions.appserver.ERXApplication#instantiatePage(String)}.)
 	 * 
 	 * @param dict
 	 *            a <code>NSDictionary</code> value containing the values we want to set in the session parameter.

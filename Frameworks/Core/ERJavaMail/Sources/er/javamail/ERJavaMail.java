@@ -615,7 +615,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * <span class="ja">
 	 * 接続の為の SMTP プロトコールを設定します。 (smtp or smtps)
 	 * 
-	 * @param smtpProtocol - SMTP プロトコール名
+	 * @param contextString - SMTP プロトコール名
 	 * </span>
 	 */
 	public String smtpProtocolForContext(String contextString) {
