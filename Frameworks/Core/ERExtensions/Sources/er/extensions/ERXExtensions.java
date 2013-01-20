@@ -493,40 +493,10 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
    }
 
     /**
-     * Removes all of the HTML tags from a given string.
-     * Note: this is a very simplistic implementation
-     * and will most likely not work with complex HTML.
-     * Note: for actual conversion of HTML tags into regular
-     * strings have a look at {@link ERXSimpleHTMLFormatter}
-     * @param s html string
-     * @return string with all of its html tags removed
+     * @deprecated Please use ERXStringUtilities.removeHTMLTagsFromString(String) directly
      */
-    // FIXME: this is so simplistic it will break if you sneeze
-    // MOVEME: ERXStringUtilities 
     public static String removeHTMLTagsFromString(String s) {
-        StringBuffer result=new StringBuffer();
-        if (s != null && s.length()>0) {
-            int position=0;
-            while (position<s.length()) {
-                int indexOfOpeningTag=s.indexOf("<",position);
-                if (indexOfOpeningTag!=-1) {
-                    if (indexOfOpeningTag!=position)
-                        result.append(s.substring(position, indexOfOpeningTag));
-                    position=indexOfOpeningTag+1;
-                } else {
-                    result.append(s.substring(position, s.length()));
-                    position=s.length();
-                }
-                int indexOfClosingTag=s.indexOf(">",position);
-                if (indexOfClosingTag!=-1) {
-                    position= indexOfClosingTag +1;
-                } else {
-                    result.append(s.substring(position, s.length()));
-                    position=s.length();
-                }
-            }
-        }
-        return ERXStringUtilities.replaceStringByStringInString("&nbsp;"," ",result.toString());
+    	return ERXStringUtilities.removeHTMLTagsFromString(s);
     }
 
     /**

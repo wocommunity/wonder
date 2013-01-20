@@ -27,6 +27,6 @@ public class ERD2WDisplayTextFromHTML extends D2WDisplayString {
     public ERD2WDisplayTextFromHTML(WOContext context) {super(context);}
     
     public String textString() {
-        return ERXExtensions.removeHTMLTagsFromString((String)objectPropertyValue());
+        return ERXStringUtilities.removeHTMLTagsFromString((String)objectPropertyValue());
     }
 }
