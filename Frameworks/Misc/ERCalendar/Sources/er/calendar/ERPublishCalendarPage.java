@@ -214,7 +214,7 @@ public class ERPublishCalendarPage extends WOComponent {
     /**
      * @return  status of the current event, backslash escaped
      *		for inclusion in iCalendar document.
-     * @see     ERCalendarEvent#status
+     * @see     ERCalendarEvent#status()
      */
     public String escapedEventStatus()
     {
@@ -224,7 +224,7 @@ public class ERPublishCalendarPage extends WOComponent {
     /**
      * @return  summary of the current event, backslash escaped
      *		for inclusion in iCalendar document.
-     * @see     ERCalendarEvent#summary
+     * @see     ERCalendarEvent#summary()
      */
     public String escapedEventSummary()
     {
@@ -257,7 +257,7 @@ public class ERPublishCalendarPage extends WOComponent {
      *		"WEEKLY", "DAILY", "HOURLY", "MINUTELY", "SECONDLY" depending
      *		on the value returned by {@link ERCalendarEvent#repeatFrequency
      *		repeatFrequency}.
-     * @see	ERCalendarEvent#repeatFrequency
+     * @see	ERCalendarEvent#repeatFrequency()
      */
     public String eventRepeatFrequency()
     {

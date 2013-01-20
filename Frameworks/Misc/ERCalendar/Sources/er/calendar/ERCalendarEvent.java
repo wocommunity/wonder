@@ -30,7 +30,7 @@ public interface ERCalendarEvent {
      *		<code>true</code> if this event is a whole-day
      *		event without a specific starting and ending hour
      *		and minute.
-     * @see	ERSimpleEvent#wholeDay
+     * @see	ERSimpleEvent#wholeDay()
      */
     public boolean wholeDay();
 
@@ -57,7 +57,7 @@ public interface ERCalendarEvent {
      *          calendar event is supposed to increase every time
      *		any information in the event is modified, so that
      *		updates to events can be ordered.
-     * @see     ERSimpleEvent#sequence
+     * @see     ERSimpleEvent#sequence()
      */
     public int sequence();
 
@@ -100,7 +100,7 @@ public interface ERCalendarEvent {
      *		itself or otherwise) such that the generator of the
      *		message identifier can guarantee the uniqueness of the left
      *		hand side within the scope of that domain.
-     * @see     ERSimpleEvent#sequence
+     * @see     ERSimpleEvent#sequence()
      */
     public String uniqueId();
 
