@@ -72,10 +72,8 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
     //AK: what are these used for? They do nothing?
     protected Integer _tabNumber;
 
-    @Override
     public Integer tabNumber(){ return _tabNumber;}
 
-    @Override
     public void setTabNumber(Integer newTabNumber){ _tabNumber  = newTabNumber;}
 
     @Override

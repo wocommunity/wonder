@@ -298,7 +298,6 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * 
      * @return url for the current page
      */
-	@Override
     public String urlForCurrentState() {
         return context().directActionURLForActionNamed(d2wContext().dynamicPage(), null).replaceAll("&amp;", "&");
     }
@@ -436,7 +435,6 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * Clears all of the collected validation exceptions. Implementation of the
      * {@link ERXExceptionHolder} interface.
      */
-	@Override
     public void clearValidationFailed() {
         errorMessages.removeAllObjects();
         errorKeyOrder.removeAllObjects();
@@ -684,7 +682,6 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     protected NSMutableDictionary _userInfo = new NSMutableDictionary();
 
     /** Implementation of the {@link ERDUserInfoInterface} */
-	@Override
     public NSMutableDictionary userInfo() {
         return _userInfo;
     }
@@ -829,7 +826,6 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * @return user selected branch name.
      */
     // ENHANCEME: Should be localized
-	@Override
     public String branchName() {
         if (branch() != null) {
             return (String) branch().valueForKey(ERDBranchDelegate.BRANCH_NAME);
