@@ -43,10 +43,10 @@ import er.quartzscheduler.util.ERQSSchedulerServiceFrameworkPrincipal;
  * When the job has been executed, the listener logs information and can send an email. The content of the log and 
  * the email are identical.
  * 
- * @see jobToBeExecuted
- * @see jobWasExecuted
- * @see sendMail
- * @see logResult
+ * @see #jobToBeExecuted
+ * @see #jobWasExecuted
+ * @see #sendMail
+ * @see #logResult
  */
 public class ERQSJobListener extends ERQSAbstractListener implements JobListener
 {
@@ -411,7 +411,7 @@ public class ERQSJobListener extends ERQSAbstractListener implements JobListener
 	 * If the duration is less than 180s, the duration is expressed in seconds otherwise there is a conversion in mn.
 	 * 
 	 * @param duration
-	 * @return
+	 * @return the formatted duration
 	 */
 	protected String formattedDuration(final long duration) {
 		long durationInMinute = 0;
@@ -429,7 +429,7 @@ public class ERQSJobListener extends ERQSAbstractListener implements JobListener
 	 * Utility method.
 	 * 
 	 * @param date
-	 * @return
+	 * @return the date in NSTimestamp format
 	 */
 	protected NSTimestamp dateToNSTimestamp(final Date date)
 	{

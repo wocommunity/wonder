@@ -101,7 +101,6 @@ public class ERQSAbstractJob implements Job
 	 * Helper method to set a log message displayed through the web UI when the job is running. <p>
 	 * It's used also when the job ends up to display and send a log message by email.
 	 * 
-	 * @param jobContext
 	 * @param message
 	 */
 	public void setResultMessage(final String message) 
