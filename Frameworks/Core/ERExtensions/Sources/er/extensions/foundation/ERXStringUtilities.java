@@ -2394,6 +2394,38 @@ public class ERXStringUtilities {
         }
         return ERXStringUtilities.replaceStringByStringInString("&nbsp;"," ",result.toString());
     }
+    
+    /**
+     * Returns the value stripped from HTML tags if <b>escapeHTML</b> is false.
+     * This makes sense because it is not terribly useful to have half-finished tags in your code.
+     * Note that the "length" of the resulting string is not very exact.
+     * FIXME: we could remove extra whitespace and character entities here
+     * @return value stripped from tags.
+     */
+    public static String strippedValue(String value, int length) {
+        if(value == null || value.length() < 1)
+            return null;
+        StringTokenizer tokenizer = new StringTokenizer(value, "<", false);
+        int token = value.charAt(0) == '<' ? 0 : 1;
+        String nextPart = null;
+        StringBuffer result = new StringBuffer();
+        int currentLength = result.length();
+        while (tokenizer.hasMoreTokens() && currentLength < length && currentLength < value.length()) {
+            if(token == 0)
+                nextPart = tokenizer.nextToken(">");
+            else {
+                nextPart = tokenizer.nextToken("<");
+                if(nextPart.length() > 0  && nextPart.charAt(0) == '>')
+                    nextPart = nextPart.substring(1);
+            }
+            if (nextPart != null && token != 0) {
+                result.append(nextPart);
+                currentLength += nextPart.length();
+            }
+            token = 1 - token;
+        }
+        return result.toString();
+    }
 	
 	/**
 	 * @deprecated use {@link #stripHtml(String, boolean)}
