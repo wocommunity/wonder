@@ -9,7 +9,7 @@ package er.directtoweb.components.strings;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WDisplayString;
 
-import er.extensions.ERXExtensions;
+import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * Extracts text from html and displays the text.<br />
