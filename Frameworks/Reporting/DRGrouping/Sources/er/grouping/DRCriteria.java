@@ -17,8 +17,8 @@ import com.webobjects.foundation.NSTimestampFormatter;
  * Some DRCriteria have very high scores and so always end up on the bottom;
  * for example: "OTHER" and "TOTAL". <br />
  * For numeric DRCriteria, the value is a really huge number and
- * 1 + a really huge number ({@link MAXNUMBER}), respectively.
- * For alpha DRCriteria. the value is a long word filled with z's ({@link MAXSTRING})
+ * 1 + a really huge number ({@link #MAXNUMBER}), respectively.
+ * For alpha DRCriteria. the value is a long word filled with z's ({@link #MAXSTRING})
  * and the same with one z concatenated, respectively.
  */
 public class DRCriteria {

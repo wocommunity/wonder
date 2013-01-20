@@ -248,7 +248,7 @@ public class DRSubMasterCriteria {
     }
 
     /**
-     * When {@link useTimeFormat()} is set, then date values
+     * When {@link #useTimeFormat()} is set, then date values
      * will be converted to a string before a comparison by using this format.
      * The string can be any valid {@link NSTimestampFormatter} string,
      * which means that you can also use {@link java.util.DateFormatter}
@@ -521,10 +521,10 @@ public class DRSubMasterCriteria {
         return _possibleUseTypes;
     }
 
-    /** Holds the description for the {@link key}. */
+    /** Holds the description for the {@link #key()}. */
     private String _keyDesc = null;
 
-    /** Returns the description for the {@link key}. */
+    /** Returns the description for the {@link #key()}. */
     public String keyDesc() {
         if(_keyDesc == null) {
             _keyDesc = super.toString();
