@@ -286,7 +286,7 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	/**
 	 * Sets the master object and relationship key.
 	 * Takes an NSArray containing the master object (index 0) and relationship key (index 1).
-	 * Required by the {@link ERMEditRelationhsipPageInterface}
+	 * Required by the {@link ERMEditRelationshipPageInterface}
 	 * 
 	 * @param a an NSArray containing the master object (index 0) and relationship key (index 1).
 	 */
