@@ -4,7 +4,6 @@ import org.apache.commons.lang.ObjectUtils;
 
 import com.webobjects.eocontrol.EOEnterpriseObject;
 
-import er.extensions.ERXExtensions;
 import er.extensions.eof.ERXEOControlUtilities;
 
 /**
@@ -24,13 +23,13 @@ public abstract class ERXEqualator {
     
     /**
      * Provides a safe equality check that won't throw if one or both of the objects is null.
-     * @see ERXExtensions#safeEquals(Object, Object)
+     * @see er.extensions.ERXExtensions#safeEquals(Object, Object)
      */
     public static final ERXEqualator SafeEqualsEqualator = new _SafeEqualsEqualator();
     
     /**
      * Provides EO equality checks regardless of the editing context the objects are registered in.
-     * @see ERXEOControlUtilities#eoEquals(EOEnterpriseObject, EOEnterpriseObject)
+     * @see er.extensions.eof.ERXEOControlUtilities#eoEquals(EOEnterpriseObject, EOEnterpriseObject)
      */
     public static final ERXEqualator EOEqualsEqualator = new _EOEqualsEqualator();
     

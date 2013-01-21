@@ -225,7 +225,7 @@ public class ERMailUtils {
 	 * <span class="ja">
 	 * このメソッドはディクショナリー内で見つかる値をセッション状態ディクショナリーにセットします。
 	 * このメソッドはカレント・セッションを新セッションに移行する時に有効です。
-	 * （たとえば、{@link #instantiatePage(String, NSDictionary)} や {@link ERXApplication#instantiatePage(String)}
+	 * （たとえば、{@link #instantiatePage(String, NSDictionary)} や {@link er.extensions.appserver.ERXApplication#instantiatePage(String)}
 	 * でインスタンス化されているページを送信する場合に有効です。）
 	 * 
 	 * @param dict - セッションに設定する情報を持つ <code>NSDictionary</code> 

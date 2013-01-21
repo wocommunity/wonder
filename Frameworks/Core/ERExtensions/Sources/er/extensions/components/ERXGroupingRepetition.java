@@ -149,7 +149,6 @@ public class ERXGroupingRepetition extends ERXStatelessComponent {
     /**
      * @param splitArrays
      * @param section
-     * @return
      */
     private Object keyForSection(Object section) {
         Object sectionKey = NULL;

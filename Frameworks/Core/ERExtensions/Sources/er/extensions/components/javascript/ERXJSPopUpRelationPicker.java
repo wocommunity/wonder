@@ -461,7 +461,6 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
 
     /**
      * @param aParent
-     * @return
      */
     private boolean isSelectedParent(Object aParent) {
         return parentSelection().containsObject(aParent);
@@ -469,7 +468,6 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
 
     /**
      * @param aChild
-     * @return
      */
     private boolean isSelectedChild(Object aChild) {
         return childrenSelection().containsObject(aChild);

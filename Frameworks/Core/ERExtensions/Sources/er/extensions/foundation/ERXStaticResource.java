@@ -122,7 +122,7 @@ public class ERXStaticResource {
 	 * <span class="en">
 	 * Create a Compete URL
 	 * 
-	 * @param context - WOContext
+	 * @param aWOContext - WOContext
 	 * 
 	 * @return complete URL
 	 * </span>
@@ -130,7 +130,7 @@ public class ERXStaticResource {
 	 * <span class="ja">
 	 * 完全な URL を作成して戻します。
 	 * 
-	 * @param context - コンテキスト
+	 * @param aWOContext - コンテキスト
 	 * 
 	 * @return 完全な URL を戻す
 	 * </span>

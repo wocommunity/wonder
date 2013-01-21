@@ -178,7 +178,6 @@ public interface ERXLongResponseTask extends Runnable {
 		/**
 		 * Returns a current status. This can be any object and will given 
 		 * again to you to divine the next step.
-		 * @return 
 		 */
 		public Object status() {
 			return _status;
@@ -194,7 +193,6 @@ public interface ERXLongResponseTask extends Runnable {
 		
 		/**
 		 * Returns the exception that may have occurred in the {@link #run()} method.
-		 * @return 
 		 */
 		protected Exception exception() {
 			return _exception;
@@ -294,7 +292,6 @@ public interface ERXLongResponseTask extends Runnable {
 		 * Note that is the place where you can call {@link ERXLongResponse#setRefreshInterval(int)} to
 		 * set the next refresh time.
 		 * @param aStatus
-		 * @return 
 		 */
 		protected WOComponent refreshPageForStatus(Object aStatus)  {
 			return longResponse().context().page();

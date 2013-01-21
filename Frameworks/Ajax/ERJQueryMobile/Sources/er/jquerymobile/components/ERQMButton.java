@@ -56,7 +56,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * Specify the background image for the HD icon file and set the background size to 18x18 pixels which will fit the 36 pixel 
  * icon into the same 18 pixel space. The media query block can wrap multiple icon rules:
  * 
- * @media only screen and (-webkit-min-device-pixel-ratio: 2) {
+ * {@literal @}media only screen and (-webkit-min-device-pixel-ratio: 2) {
  *  .ui-icon-myapp-email {
  *    background-image: url("app-icon-email-highres.png");
  *    background-size: 18px 18px;

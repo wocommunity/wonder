@@ -13,8 +13,7 @@ import er.extensions.foundation.ERXPatcher;
  * But use <code>WOText</code> instead.
  * 
  * @author ak on Tue Oct 15 2002
- * @project ERExtensions
- * @deprecated use {@link ERXPatcher.DynamicElementsPatches.Text} as parent class instead
+ * @deprecated use {@link er.extensions.foundation.ERXPatcher.DynamicElementsPatches.Text} as parent class instead
  */
 @Deprecated
 public class ERXWOText extends ERXPatcher.DynamicElementsPatches.Text {

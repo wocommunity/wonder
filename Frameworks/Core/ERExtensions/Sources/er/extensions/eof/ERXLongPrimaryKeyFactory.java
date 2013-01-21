@@ -303,7 +303,6 @@ public class ERXLongPrimaryKeyFactory {
 	 * first
 	 * 
 	 * @param ename
-	 * @return
 	 */
 	private long maxIdFromTable(String ename) {
 		EOEntity entity = EOModelGroup.defaultGroup().entityNamed(ename);

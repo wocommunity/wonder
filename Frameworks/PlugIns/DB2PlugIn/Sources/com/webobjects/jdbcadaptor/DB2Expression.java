@@ -95,7 +95,6 @@ public class DB2Expression extends JDBCExpression {
      * <code>com.webobjects.jdbcadaptor.DB2Expression.enableBooleanQuoting</code>
      * to enable or disable quoting (default) of boolean items.
      * 
-     * @return
      */
     private boolean enableBooleanQuoting() {
         if(_enableBooleanQuoting == null) {
@@ -111,7 +110,6 @@ public class DB2Expression extends JDBCExpression {
      * field names. Required if names which are case sensitive or reserved words
      * or have special characters.
      * 
-     * @return
      */
     private boolean enableIdentifierQuoting() {
         if(_enableIdentifierQuoting == null) {
@@ -482,7 +480,6 @@ public class DB2Expression extends JDBCExpression {
      * From what I understand, you will only need this if you disable bind variables.
      * @param value
      * @param eoattribute
-     * @return
      * @author ak
      */
     private String fixBigDecimal(BigDecimal value, EOAttribute eoattribute) {
@@ -513,7 +510,6 @@ public class DB2Expression extends JDBCExpression {
     /**
      * Helper to check for timestamp columns that have a "D" value type.
      * @param eoattribute
-     * @return
      */
     private boolean isDateAttribute(EOAttribute eoattribute) {
         return "D".equals(eoattribute.valueType());
@@ -522,7 +518,6 @@ public class DB2Expression extends JDBCExpression {
     /**
      * Helper to check for timestamp columns that have a "T" value type.
      * @param eoattribute
-     * @return
      */
     private boolean isTimestampAttribute(EOAttribute eoattribute) {
         return "T".equals(eoattribute.valueType());
@@ -531,7 +526,6 @@ public class DB2Expression extends JDBCExpression {
     /**
      * Helper to check for data columns that are not keys.
      * @param eoattribute
-     * @return
      */
     private boolean isDataAttribute(EOAttribute attribute) {
         return (attribute.className().equals("com.webobjects.foundation.NSData") ||
@@ -809,7 +803,6 @@ public class DB2Expression extends JDBCExpression {
     /**
      * Checks the system property <code>com.webobjects.jdbcadaptor.DB2Expression.disableBindVariables</code> to enable
      * or disable bind variables in general.
-     * @return
      */
     private boolean disableBindVariables() {
     	if (_disableBindVariables == null) {
@@ -888,8 +881,6 @@ public class DB2Expression extends JDBCExpression {
      * Checks the system property
      * <code>com.webobjects.jdbcadaptor.DB2Expression.useLowercaseForCaseInsensitiveLike</code>
      * to use the "lower" function for caseInsensitive compares
-     * 
-     * @return
      */
     private boolean useLowercaseForCaseInsensitiveLike() {
 		if (_useLowercaseForCaseInsensitiveLike == null) {

@@ -22,7 +22,6 @@ import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.appserver.ajax.ERXAjaxSession;
-import er.extensions.components.ERXComponentUtilities;
 import er.extensions.formatters.ERXNumberFormatter;
 import er.extensions.formatters.ERXTimestampFormatter;
 import er.extensions.foundation.ERXProperties;

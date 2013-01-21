@@ -22,7 +22,6 @@ import er.extensions.appserver.ERXWOContext;
  *</ul>
  *
  * @author ak on Wed Oct 09 2002
- * @project ERExtensions
  * @deprecated use {@link WOFileUpload} as parent class
  */
 // CHECKME is that class obsolete as the cause of its presence was a bug fixed in WO 5.2 or should some logic be maintained?

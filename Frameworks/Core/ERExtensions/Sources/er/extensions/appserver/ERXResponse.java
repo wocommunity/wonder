@@ -225,7 +225,7 @@ public class ERXResponse extends WOResponse {
 	}
 
 	/**
-	 * @see #disablePageCaching()
+	 * @see #DisablePageCachingKey
 	 * @return <code>true</code> if disablePageCaching() has been called for
 	 *         this response
 	 */

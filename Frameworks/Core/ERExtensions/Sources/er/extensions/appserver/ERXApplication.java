@@ -2187,7 +2187,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	/**
 	 * Override to perform any last minute cleanup before the application
 	 * terminates. See
-	 * {@link er.extensions.ERXGracefulShutdown ERXGracefulShutdown} for where
+	 * {@link er.extensions.components.ERXGracefulShutdown ERXGracefulShutdown} for where
 	 * this is called if signal handling is enabled. Default implementation
 	 * calls terminate.
 	 */

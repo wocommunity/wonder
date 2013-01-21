@@ -707,7 +707,7 @@ public class ERXEOAccessUtilities {
      * @return a <code>String</code> containing SQL statements to create
 	 *         tables
      * 
-     * @see createSchemaSQLForEntitiesInModelWithNameAndOptions
+     * @see er.extensions.jdbc.ERXSQLHelper#createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray, String, NSDictionary)
      */
     public static String createSchemaSQLForEntitiesInModelWithNameAndOptionsForOracle9(NSArray entities, String modelName, NSDictionary optionsCreate) {
         EODatabaseContext dc = EOUtilities.databaseContextForModelNamed(ERXEC.newEditingContext(), modelName);

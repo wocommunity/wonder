@@ -441,7 +441,7 @@ public class ERXStringUtilities {
      * @param s string to caclulate an Integer from
      * @return parsed Integer from the string or null
      *		if the string is not correctly formed.
-     * @see ERXConstant#integerForString(String)
+     * @see er.extensions.eof.ERXConstant#integerForString(String)
      */
     public static Integer integerWithString(String s) {
         try {

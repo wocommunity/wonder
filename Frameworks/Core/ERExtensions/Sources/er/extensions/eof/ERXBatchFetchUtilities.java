@@ -89,26 +89,24 @@ public class ERXBatchFetchUtilities {
     }
 
 	/**
-	 * Shortcut for batch fetching a single keypath and returns returns the fetched values. 
+	 * Shortcut for batch fetching a single keypath and returns the fetched values. 
 	 * Defaults skipFaultedSourceObjects to true
 	 * @see #batchFetch(NSArray, NSArray, boolean)
 	 * 
      * @param sourceObjects the array of source object to fault keypaths on.
      * @param keypath the keypath to fault
-	 * @return 
 	 */
     public static NSArray batchFetchAndRetrieve(NSArray sourceObjects, String keypath) {
 		return ERXBatchFetchUtilities.batchFetchAndRetrieve(sourceObjects, keypath, true);
     }
 
 	/**
-	 * Shortcut for batch fetching a single keypath and returns returns the fetched values. 
+	 * Shortcut for batch fetching a single keypath and returns the fetched values. 
 	 * @see #batchFetch(NSArray, NSArray, boolean)
 	 * 
      * @param sourceObjects the array of source object to fault keypaths on.
      * @param keypath the keypath to fault
      * @param skipFaultedSourceObjects if true, all source objects that already have their relationships faulted will be skipped
-	 * @return 
 	 */
     public static NSArray batchFetchAndRetrieve(NSArray sourceObjects, String keypath, boolean skipFaultedSourceObjects) {
     	ERXBatchFetchUtilities.batchFetch(sourceObjects, keypath, skipFaultedSourceObjects);

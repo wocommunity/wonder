@@ -45,7 +45,7 @@ import er.extensions.foundation.ERXValueUtilities;
  * <dt>connectionRecycle</dt>
  * <dd>Number of days a connection should stay active, default 1.0</dd>
  * </dl>
- * The {@link er.extensions.components.ERXConfigurationManager} adds these entries to each
+ * The {@link er.extensions.foundation.ERXConfigurationManager} adds these entries to each
  * EOModels connectionDictionary.<br/>
  * Usage: check out a connection: <br/><code>
  * <pre>

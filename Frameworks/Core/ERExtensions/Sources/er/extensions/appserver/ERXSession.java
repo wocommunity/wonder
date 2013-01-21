@@ -295,7 +295,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * @return   NSArray of language name strings available 
    *           for this particular session
    * @see      #availableLanguagesForTheApplication 
-   * @see      ERXRequest#browserLanguages
+   * @see      ERXRequest#browserLanguages()
    * @see      er.extensions.localization.ERXLocalizer#availableLanguages
    */
   public NSArray availableLanguagesForThisSession() {

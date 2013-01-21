@@ -627,7 +627,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 
 	/**
 	 * Returns the entity for the current object. Defers to
-	 * {@link ERXEOAccessUtilities#entityNamed ERXEOAccessUtilities.entityNamed()}
+	 * {@link ERXEOAccessUtilities#entityNamed(EOEditingContext, String) ERXEOAccessUtilities.entityNamed()}
 	 * for the actual work.
 	 * 
 	 * @return EOEntity for the current object
@@ -1002,7 +1002,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	}
 
 	/**
-	 * @deprecated use {@link ERXGenericRecord#isNewObject()}
+	 * @deprecated use {@link #isNewObject()}
 	 */
 	@SuppressWarnings("dep-ann")
     @Deprecated

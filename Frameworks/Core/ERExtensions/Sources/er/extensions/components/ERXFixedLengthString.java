@@ -6,8 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.components;
 
-import java.util.StringTokenizer;
-
 import com.webobjects.appserver.WOContext;
 
 import er.extensions.foundation.ERXStringUtilities;
@@ -134,7 +132,7 @@ public class ERXFixedLengthString extends ERXStatelessComponent {
      * This makes sense because it is not terribly useful to have half-finished tags in your code.
      * Note that the "length" of the resulting string is not very exact.
      * 
-     * @see ERXStringUtilities#strippedValue(String, int)
+     * @see er.extensions.foundation.ERXStringUtilities#strippedValue(String, int)
      * 
      * @return value stripped from tags.
      */

@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -537,7 +536,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param s string to capitalize
      * @return capitalized string if the first char is a
      *		lowercase character.
-     * @deprecated use {@link ERXStringUtilities#capitalize(String)}
+     * @deprecated use {@link er.extensions.foundation.ERXStringUtilities#capitalize(String)}
      */
     @Deprecated
     public static String capitalize(String s) {
