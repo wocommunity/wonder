@@ -54,7 +54,7 @@ public abstract class ERClientApplication {
 
 	/**
 	 * Should return the name of the package where your EOEnterpriseObject classes are located
-	 * @return
+	 * @return the name of the package
 	 */
 	protected abstract String modelPackageName();
 	
