@@ -4,10 +4,6 @@ import er.extensions.ERXFrameworkPrincipal;
 
 public class ERXiss extends ERXFrameworkPrincipal {
 
-  //********************************************************************
-  //  フレームワーク情報
-  //********************************************************************
-
   public static String frameworkName() {
     return "ERXiss";
   }

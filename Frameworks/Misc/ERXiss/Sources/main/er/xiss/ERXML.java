@@ -29,7 +29,7 @@ import com.webobjects.foundation.NSTimestamp;
  */
 public class ERXML {
 
-  /** バージョンID */
+  /** Version ID */
   public static final NSTimestamp versionDate = new NSTimestamp(2009, 11, 24, 0, 0, 0, NSTimeZone.systemTimeZone());
 
   /**
