@@ -40,7 +40,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * as the parameter and returns a shared instance of browser object. 
  * You actually wouldn't have to call this function by yourself 
  * because <code>ERXSession</code> and <code>ERXDirectAction</code> 
- * provide {@link ERXSession#browser browser}</code> method 
+ * provide {@link ERXSession#browser() browser}</code> method 
  * that returns a browser object for the current request for you.
  * <p>
  * Note that <code>ERXSession</code> and <code>ERXDirectAction</code> 

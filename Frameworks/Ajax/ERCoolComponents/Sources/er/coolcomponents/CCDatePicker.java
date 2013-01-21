@@ -95,7 +95,7 @@ public class CCDatePicker extends ERXStatelessComponent {
      * Adds date-picker.js to the header or includes it in an Ajax friendly manner.
      *
      * @see er.extensions.components.ERXNonSynchronizingComponent#appendToResponse(com.webobjects.appserver.WOResponse, com.webobjects.appserver.WOContext)
-     * @see ERXResponseRewriter#addScriptResourceInHead(WOResponse, WOContext, String, String)
+     * @see er.extensions.appserver.ERXResponseRewriter#addScriptResourceInHead(WOResponse, WOContext, String, String)
      */
     @Override
     public void appendToResponse(WOResponse response, WOContext context)

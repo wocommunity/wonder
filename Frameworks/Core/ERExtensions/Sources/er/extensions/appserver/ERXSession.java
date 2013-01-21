@@ -285,9 +285,9 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * Returns the NSArray of language names available for 
    * this particular session. 
    * The resulting array is an intersect of web browser's 
-   * language array ({@link ERXRequest#browserLanguages}) 
+   * language array ({@link ERXRequest#browserLanguages()}) 
    * and localizer's available language array 
-   * ({@link er.extensions.localization.ERXLocalizer#availableLanguages}).
+   * ({@link er.extensions.localization.ERXLocalizer#availableLanguages()}).
    * <p>
    * Note that the order of the resulting language names  
    * is not defined at this moment.

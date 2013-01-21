@@ -39,7 +39,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * application.
  * <p>
  * {@link ERXSession} holds a browser object that represent the web browser for
- * that session and {@link ERXSession#browser browser()} method returns the
+ * that session and {@link ERXSession#browser() browser()} method returns the
  * object.
  * <p>
  * To access <code>ERXBasicBrowser</code>'s boolean questions from <code>WOConditionals</code>
@@ -47,7 +47,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * to their condition bindings.
  * <p>
  * {@link ERXDirectAction} also holds a browser object for the current request.
- * Use its {@link ERXDirectAction#browser browser()} method to access the
+ * Use its {@link ERXDirectAction#browser() browser()} method to access the
  * object from a session-less direct action.
  * 
  * 

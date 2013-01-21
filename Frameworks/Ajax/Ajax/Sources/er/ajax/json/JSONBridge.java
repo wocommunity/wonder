@@ -60,7 +60,7 @@ public class JSONBridge extends JSONRPCBridge {
 	/**
 	 * Factory to create a json bridge.
 	 * 
-	 * @return 
+	 * @return a instance of a JSONBridge
 	 */
 	public static JSONBridge createBridge() {
 		_initializeBridge();

@@ -26,7 +26,7 @@ import er.extensions.foundation.ERXProperties;
  * 
  * <p>To allow for extended prototypes set
  * <code>er.extensions.ERXModel.useExtendedPrototypes=true</code>.
- * Note: this may be incompatible with {@link ERXModelGroup#flattenPrototypes}.</p>
+ * Note: this may be incompatible with {@link er.extensions.eof.ERXModelGroup#flattenPrototypes}.</p>
  * 
  * <p>The existence of prototype entities based on specific conventions
  * is checked and the attributes of those prototype entities are added to the model's
@@ -198,7 +198,7 @@ public class ERXModel extends EOModel {
 	
 	/**
 	 * Defaults to false.
-	 * Note: when enabled, this may be incompatible with {@link ERXModelGroup#flattenPrototypes}.
+	 * Note: when enabled, this may be incompatible with {@link er.extensions.eof.ERXModelGroup#flattenPrototypes}.
 	 * @return the boolean property value for <code>er.extensions.ERXModel.useExtendedPrototypes</code>.
 	 */
 	public static boolean isUseExtendedPrototypesEnabled() {

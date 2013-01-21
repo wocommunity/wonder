@@ -166,7 +166,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * Handling call all of the <code>did*</code> methods on
      * {@link ERXGenericRecord} subclasses after an editing context
      * has been saved. This delegate is also responsible for configuring
-     * the {@link ERXCompilerProxy} and {@link ERXValidationFactory}.
+     * {@link ERXValidationFactory}.
      * This delegate is configured when this framework is loaded.
      */
     @Override
@@ -537,7 +537,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param s string to capitalize
      * @return capitalized string if the first char is a
      *		lowercase character.
-     *@deprecated use {@link ERXStringUtilities#capitalize(String)}
+     * @deprecated use {@link ERXStringUtilities#capitalize(String)}
      */
     @Deprecated
     public static String capitalize(String s) {
@@ -551,7 +551,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param howMany number of its
      * @param language target language
      * @return plurified string
-     * @deprecated use {@link ERXLocalizer#localizerForLanguage(String)} then {@link ERXLocalizer#plurifiedString(String, int)}
+     * @deprecated use {@link er.extensions.localization.ERXLocalizer#localizerForLanguage(String)} then {@link er.extensions.localization.ERXLocalizer#plurifiedString(String, int)}
      */
     @Deprecated
     public static String plurify(String s, int howMany, String language) {
@@ -585,7 +585,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param v1 first object
      * @param v2 second object
      * @return <code>true</code> if they are not equal, <code>false</code> if they are
-     * @deprecated user {@link ObjectUtils#notEqual(Object, Object)} instead
+     * @deprecated use {@link ObjectUtils#equals(Object, Object)} instead
      */
     @Deprecated
     public static boolean safeDifferent(Object v1, Object v2) {
@@ -597,7 +597,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * an integer.
      * @param s string to be parsed
      * @return if the string can be parsed into an int
-     * @deprecated use {@link ERXStringUtilities#stringIsParseableInteger(String)}
+     * @deprecated use {@link er.extensions.foundation.ERXStringUtilities#stringIsParseableInteger(String)}
      */
     @Deprecated
     public static boolean stringIsParseableInteger(String s) {
@@ -614,7 +614,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * string can not be parsed then 0 is returned.
      * @param s string to be parsed.
      * @return int from the string or 0 if un-parsable.
-     * @deprecated use {@link ERXValueUtilities#intValue(Object)}
+     * @deprecated use {@link er.extensions.foundation.ERXValueUtilities#intValue(Object)}
      */
     @Deprecated
     public static int intFromParseableIntegerString(String s) {
@@ -632,7 +632,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param s2 to be inserted
      * @param s string to have the replacement done on it
      * @return string after having all of the replacement done.
-     * @deprecated use {@link ERXStringUtilities#replaceStringByStringInString(String, String, String)}
+     * @deprecated use {@link er.extensions.foundation.ERXStringUtilities#replaceStringByStringInString(String, String, String)}
      */
     @Deprecated
     public static String substituteStringByStringInString(String s1, String s2, String s) {
@@ -644,7 +644,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * Method used to retrieve the shared instance of the
      * html formatter.
      * @return shared instance of the html formatter
-     * @deprecated use {@link ERXSimpleHTMLFormatter#formatter()}
+     * @deprecated use {@link er.extensions.formatters.ERXSimpleHTMLFormatter#formatter()}
      */
     @Deprecated
     public static ERXSimpleHTMLFormatter htmlFormatter() { return ERXSimpleHTMLFormatter.formatter(); }
@@ -688,7 +688,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param f file to get the bytes from
      * @throws IOException if things go wrong
      * @return byte array of the file.
-     * @deprecated user {@link ERXFileUtilities#bytesFromFile(File)}
+     * @deprecated use {@link er.extensions.foundation.ERXFileUtilities#bytesFromFile(File)}
      */
     @Deprecated
     public static byte[] bytesFromFile(File f) throws IOException {
@@ -701,7 +701,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param f file to read
      * @throws IOException if things go wrong
      * @return string representation of that file.
-     * @deprecated use {@link ERXFileUtilities#stringFromFile(File)}
+     * @deprecated use {@link er.extensions.foundation.ERXFileUtilities#stringFromFile(File)}
      */
     @Deprecated
     public static String stringFromFile(File f) throws IOException {
@@ -714,7 +714,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param encoding to be used, null will use the default
      * @throws IOException if things go wrong
      * @return string representation of the file.
-     * @deprecated user {@link ERXFileUtilities#stringFromFile(File, String)}
+     * @deprecated user {@link er.extensions.foundation.ERXFileUtilities#stringFromFile(File, String)}
      */
     @Deprecated
     public static String stringFromFile(File f, String encoding) throws IOException {
@@ -729,7 +729,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param frameworkName name of the framework, null or "app"
      *		for the application bundle
      * @return the <code>lastModified</code> method of the file object
-     * @deprecated use {@link ERXFileUtilities#lastModifiedDateForFileInFramework(String, String)}
+     * @deprecated use {@link er.extensions.foundation.ERXFileUtilities#lastModifiedDateForFileInFramework(String, String)}
      */
     @Deprecated
     public static long lastModifiedDateForFileInFramework(String fileName, String frameworkName) {
@@ -743,7 +743,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      *		'app' for the application bundle.
      * @return de-serialized object from the plist formatted file
      *		specified.
-     * @deprecated use {@link ERXFileUtilities#readPropertyListFromFileInFramework(String, String)}
+     * @deprecated use {@link er.extensions.foundation.ERXFileUtilities#readPropertyListFromFileInFramework(String, String)}
      */
     @Deprecated
     public static Object readPropertyListFromFileinFramework(String fileName, String aFrameWorkName) {
@@ -759,7 +759,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param languageList language list search order
      * @return de-serialized object from the plist formatted file
      *		specified.
-     * @deprecated use {@link ERXFileUtilities#readPropertyListFromFileInFramework(String, String, NSArray)}
+     * @deprecated use {@link er.extensions.foundation.ERXFileUtilities#readPropertyListFromFileInFramework(String, String, NSArray)}
      */
     @Deprecated
     public static Object readPropertyListFromFileInFramework(String fileName,
@@ -1020,7 +1020,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     }
 
     /**
-     * @deprecated Please use {@link ERXStringUtilities#cleanString}
+     * @deprecated Use {@link er.extensions.foundation.ERXStringUtilities#cleanString}
      * @param newString 
      * @param toBeCleaneds 
      * @return results of ERXStringUtilities.cleanString
@@ -1283,7 +1283,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * </p>
      * <p><b>Note 2:</b>
      *  this will set NSBundle's mainBundle to the referenced bundle loaded via
-     *  {@link ERXRuntimeUtilities#loadBundleIfNeeded(URI)} if found.
+     *  {@link er.extensions.foundation.ERXRuntimeUtilities#loadBundleIfNeeded(File)} if found.
      * </p>
      * 
      * <p>This is equivalent to calling <code>initEOF(mainBundleFolder, args, assertsBundleExists, false, true)</code>.</p>
@@ -1325,7 +1325,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * </p>
      * <p><b>Note 2:</b>
      *  this will set NSBundle's mainBundle to the referenced bundle loaded via
-     *  {@link ERXRuntimeUtilities#loadBundleIfNeeded(URI)} if found.
+     *  {@link er.extensions.foundation.ERXRuntimeUtilities#loadBundleIfNeeded(File)} if found.
      * </p>
      * 
      * @param mainBundleFile the archive file or directory of your main bundle
@@ -1335,9 +1335,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param fallbackToUserDirAsBundle falls back to current dir if the mainBundleFile does not exist
      * @throws NSForwardException if the given bundle doesn't satisfy the given assertions or
      *  		ERXRuntimeUtilities.loadBundleIfNeeded or ERXApplication.setup fails.
-     * @see ERXRuntimeUtilities#loadBundleIfNeeded(URI)
+     * @see er.extensions.foundation.ERXRuntimeUtilities#loadBundleIfNeeded(File)
      * @see NSBundle#_setMainBundle(NSBundle)
-     * @see ERXApplication#setup(String[])
+     * @see er.extensions.appserver.ERXApplication#setup(String[])
      * @see #bundleDidLoad(NSNotification)
      */
     public static void initEOF(final File mainBundleFile, String[] args, boolean assertsBundleExists, boolean assertsBundleIsWOApplicationFolder, boolean fallbackToUserDirAsBundle) {
