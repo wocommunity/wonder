@@ -183,11 +183,24 @@ public class ERS3Attachment extends _ERS3Attachment {
 	}
 
 	public QueryStringAuthGenerator queryStringAuthGenerator() {
-		return new QueryStringAuthGenerator(accessKeyID(), secretAccessKey(), false);
+		String host = ERXProperties.stringForKey("er.attachment." + configurationName() + ".s3.host");
+		if (host == null) {
+			host = ERXProperties.stringForKey("er.attachment.s3.host");
+		}
+		if (host == null)
+			return new QueryStringAuthGenerator(accessKeyID(), secretAccessKey(), false);
+		else
+			return new QueryStringAuthGenerator(accessKeyID(), secretAccessKey(), false, host);
 	}
 
 	public AWSAuthConnection awsConnection() {
-		AWSAuthConnection conn = new AWSAuthConnection(accessKeyID(), secretAccessKey(), true);
-		return conn;
+		String host = ERXProperties.stringForKey("er.attachment." + configurationName() + ".s3.host");
+		if (host == null) {
+			host = ERXProperties.stringForKey("er.attachment.s3.host");
+		}
+		if (host == null)
+			return new AWSAuthConnection(accessKeyID(), secretAccessKey(), true);
+		else
+			return new AWSAuthConnection(accessKeyID(), secretAccessKey(), true, host);
 	}
 }
