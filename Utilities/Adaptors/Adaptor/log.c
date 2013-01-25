@@ -237,7 +237,7 @@ void WOLog(int level, const char *format, ...)
 #if defined(Netscape)
       log_error(0,"WebObjects",NULL,NULL,str->text);
 #elif defined(APACHE)
-      ap_log_error(APLOG_MARK, APLOG_ERR, 0, _webobjects_server, str->text);
+      ap_log_error(APLOG_MARK, APLOG_ERR, 0, _webobjects_server, "%s", str->text);
 #elif defined(IIS)
       /*
        *	again, we're stymied because we don't have a ptr to the
