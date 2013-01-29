@@ -34,7 +34,6 @@ public class MTAjaxAutoComplete extends AjaxComponent {
 
 	@Override
 	protected void addRequiredWebResources(WOResponse res) {
-		// TODO Auto-generated method stub
 		MTAjaxUtils.addScriptResourceInHead(context(), res, "MooTools", MTAjaxUtils.MOOTOOLS_CORE_JS);
 		MTAjaxUtils.addScriptResourceInHead(context(), res, "MooTools", "scripts/plugins/autocomplete/AutoCompleter.js");
 	}
@@ -42,6 +41,7 @@ public class MTAjaxAutoComplete extends AjaxComponent {
 	/**
 	 * Overridden to set the IDs for the field and the div tag.
 	 */
+	@Override
 	public void awake() {
 		super.awake();
 		divName = safeElementID() + "_div";
@@ -49,6 +49,7 @@ public class MTAjaxAutoComplete extends AjaxComponent {
 		indicatorName = safeElementID() + "_indicator";
 	}
 
+	@Override
 	public void sleep() {
 		divName = null;
 		fieldName = null;
@@ -59,15 +60,9 @@ public class MTAjaxAutoComplete extends AjaxComponent {
 	/**
 	 * Overridden because the component is stateless
 	 */
+	@Override
 	public boolean isStateless() {
 		return true;
-	}
-
-	/**
-	 * Overridden because the component does not synch with the bindings.
-	 */
-	public boolean synchronizesVariablesWithBindings() {
-		return false;
 	}
 
 	public String indicator() {
@@ -103,6 +98,7 @@ public class MTAjaxAutoComplete extends AjaxComponent {
 	/**
 	 * Overridden to add the initialization javascript for the auto completer.
 	 */
+	@Override
 	public void appendToResponse(WOResponse res, WOContext ctx) {
 		super.appendToResponse(res, ctx);
 		boolean isDisabled = hasBinding("disabled") && ((Boolean) valueForBinding("disabled")).booleanValue();
@@ -228,10 +224,6 @@ public class MTAjaxAutoComplete extends AjaxComponent {
 		setValueForBinding(strValue, "value");
 	}
 
-	public void takeValuesFromRequest(WORequest request, WOContext context) {
-		super.takeValuesFromRequest(request, context);
-	}
-
 	protected void appendItemToResponse(Object value, WOElement child, boolean hasItem, WOResponse response, WOContext context) {
 		response.appendContentString("<li>");
 		if(hasItem && child != null) {
@@ -253,6 +245,7 @@ public class MTAjaxAutoComplete extends AjaxComponent {
 	 * pushes it up to the parent and pulls the "list" binding. The parent is
 	 * responsible for returning a list with some items that match the current value.
 	 */
+	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		// String inputString = request.contentString();
 

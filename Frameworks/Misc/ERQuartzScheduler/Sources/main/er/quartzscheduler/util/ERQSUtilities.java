@@ -55,13 +55,13 @@ public class ERQSUtilities
 		public COJobInstanciationException(final String message, final ErrorType type) 
 		{
 			super(message);
-			this.errorType = type;
+			errorType = type;
 		}
 
 		public COJobInstanciationException(final String msg, final ErrorType type, final Throwable cause)
 		{
 			super(msg, cause);
-			this.errorType = type;
+			errorType = type;
 		}
 
 		public Throwable getUnderlyingException()

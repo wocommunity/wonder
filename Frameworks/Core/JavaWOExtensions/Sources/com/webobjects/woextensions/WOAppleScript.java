@@ -10,7 +10,7 @@ package com.webobjects.woextensions;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
-/** @Deprecated
+/** @deprecated
     The WOAppleScript component is deprecated.
 */
 @Deprecated

@@ -28,7 +28,6 @@ import er.extensions.localization.ERXLocalizer;
  * The coices can be either given as an NSDictionary with {key1=val1;key2=val2...}, an NSArray of
  * NSDictionaries with ({key1=val1;},{key2=val2;}...) or a means not yet clear to me (ak:).
  */
-
 public class ERDEditStringWithChoices extends ERDCustomEditComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -45,7 +44,9 @@ public class ERDEditStringWithChoices extends ERDCustomEditComponent {
     public String entityForReportName;
     public ERXKeyValuePair currentElement;
 
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
+    @Override
     public boolean isStateless() { return true; }
     
     protected NSArray _availableElements;
@@ -88,6 +89,7 @@ public class ERDEditStringWithChoices extends ERDCustomEditComponent {
         return _availableElements;
     }
 
+    @Override
     public void reset(){
         super.reset();
         _availableElements = null;
@@ -117,6 +119,7 @@ public class ERDEditStringWithChoices extends ERDCustomEditComponent {
    }
 
     /** Extends the parent implementation in order to force validation. */
+    @Override
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         super.takeValuesFromRequest(r,c);
         if (c.wasFormSubmitted()) {

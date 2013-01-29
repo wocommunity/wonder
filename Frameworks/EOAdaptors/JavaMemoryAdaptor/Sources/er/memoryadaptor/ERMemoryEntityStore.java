@@ -30,6 +30,7 @@ public class ERMemoryEntityStore extends EREntityStore {
   @Override
   public ERMemoryEntityStore transactionStore() {
     ERMemoryEntityStore cloneStore = new ERMemoryEntityStore() {
+      @Override
       public int nextSequence() { 
         return ERMemoryEntityStore.this.nextSequence(); 
       }

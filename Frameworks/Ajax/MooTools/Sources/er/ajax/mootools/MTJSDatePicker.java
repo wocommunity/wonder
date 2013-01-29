@@ -11,7 +11,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import er.ajax.AjaxComponent;
 import er.ajax.AjaxOption;
 
-/*
+/**
  * @binding pickerClass - default (datepicker) CSS class for the main datepicker container element.
  * @binding toggleElements - default (null) Toggle your datepicker by clicking another element. Specify as a MooTools selector. The resulting elements are mapped to the selected datepickers by index (the 1st toggle works for the 1st input, the 2nd toggle works for the 2nd input, etc.)
  * @binding days - default (['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']) - Labels for the days, allows for localization.
@@ -33,15 +33,14 @@ import er.ajax.AjaxOption;
  * @binding onShow default null - function to fire onShow
  * @binding onCancel default null function to fire onCancel
  * @binding onSelect default null function to fire onSelect
-
  */
-
 public class MTJSDatePicker extends AjaxComponent {
 
 	public MTJSDatePicker(WOContext context) {
 		super(context);
 	}
 
+	@Override
 	public boolean isStateless() {
 		return true;
 	}
@@ -58,7 +57,6 @@ public class MTJSDatePicker extends AjaxComponent {
 
 	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -124,7 +122,5 @@ public class MTJSDatePicker extends AjaxComponent {
 		options.takeValueForKey(format(), "format");
 		options.takeValueForKey(format(), "inputOutputFormat");
 		return options;
-
-	}	
-
+	}
 }

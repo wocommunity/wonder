@@ -39,6 +39,7 @@ public class NSArraySerializer extends AbstractSerializer {
 	 */
 	private static Class[] _JSONClasses = new Class[] { JSONObject.class };
 
+	@Override
 	public boolean canSerialize(Class clazz, Class jsonClazz) {
 		return (super.canSerialize(clazz, jsonClazz) || ((jsonClazz == null || jsonClazz == JSONObject.class) && NSArray.class.isAssignableFrom(clazz)));
 	}

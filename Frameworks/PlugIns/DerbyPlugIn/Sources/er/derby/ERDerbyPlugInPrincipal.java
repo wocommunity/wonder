@@ -1,7 +1,7 @@
 package er.derby;
 
-import com.webobjects.jdbcadaptor._DerbyPlugIn;
 import com.webobjects.jdbcadaptor.JDBCPlugIn;
+import com.webobjects.jdbcadaptor._DerbyPlugIn;
 
 /**
  * 5.4 declares the same class name for the DerbyPlugIn. If your classpath isn't

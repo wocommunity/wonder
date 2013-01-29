@@ -5,13 +5,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 import com.webobjects.foundation.NSKeyValueCoding;
-import com.webobjects.foundation.NSLog;
-import com.webobjects.foundation.NSMutableDictionary;
-import com.webobjects.foundation.NSMutableSet;
-import com.webobjects.foundation._NSReflectionUtilities;
-import com.webobjects.foundation._NSThreadsafeMutableDictionary;
-import com.webobjects.foundation._NSThreadsafeMutableSet;
-import com.webobjects.foundation._NSUtilities;
 import com.webobjects.foundation.NSKeyValueCoding.ValueAccessor;
 import com.webobjects.foundation.NSKeyValueCoding._BooleanFieldBinding;
 import com.webobjects.foundation.NSKeyValueCoding._BooleanMethodBinding;
@@ -21,6 +14,13 @@ import com.webobjects.foundation.NSKeyValueCoding._MethodBinding;
 import com.webobjects.foundation.NSKeyValueCoding._NumberFieldBinding;
 import com.webobjects.foundation.NSKeyValueCoding._NumberMethodBinding;
 import com.webobjects.foundation.NSKeyValueCoding._ReflectionKeyBindingCreation.Callback;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation._NSReflectionUtilities;
+import com.webobjects.foundation._NSThreadsafeMutableDictionary;
+import com.webobjects.foundation._NSThreadsafeMutableSet;
+import com.webobjects.foundation._NSUtilities;
 
 /**
  * WOHelperFunctionClassKeyValueCoding is basically just like NSKVC except that

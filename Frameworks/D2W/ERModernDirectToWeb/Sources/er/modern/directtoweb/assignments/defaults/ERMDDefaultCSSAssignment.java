@@ -72,7 +72,6 @@ public class ERMDDefaultCSSAssignment extends ERDAssignment {
      * @return array of context keys this assignment depends upon.
      */
     @SuppressWarnings("rawtypes")
-    @Override
 	public NSArray dependentKeys(String keyPath) {
         return (NSArray)keys.valueForKey(keyPath);
     }

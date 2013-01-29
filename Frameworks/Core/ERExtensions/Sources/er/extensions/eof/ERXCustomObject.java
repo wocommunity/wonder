@@ -590,9 +590,10 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
         return "<" + getClass().getName() + " pk:\""+ pk + "\">";
     }
 
-    /* (non-Javadoc)
-     * @see er.extensions.ERXEnterpriseObject#description()
+    /**
+     * @deprecated use {@link #toString()} instead
      */
+    @Deprecated
     public String description() { return toString(); }
     
     /* (non-Javadoc)

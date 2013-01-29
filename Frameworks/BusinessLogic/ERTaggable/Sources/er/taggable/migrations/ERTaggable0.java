@@ -3,8 +3,8 @@ package er.taggable.migrations;
 import com.webobjects.eocontrol.EOEditingContext;
 
 import er.extensions.migration.ERXMigrationDatabase;
-import er.extensions.migration.ERXMigrationTable;
 import er.extensions.migration.ERXMigrationDatabase.Migration;
+import er.extensions.migration.ERXMigrationTable;
 
 /**
  * ERTaggable0 creates the ERTag table.

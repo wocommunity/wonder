@@ -138,7 +138,6 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	protected boolean _rowFlip = false;
 
 	/** Returns the display group, creating one if there is none present. */
-	@Override
 	public WODisplayGroup displayGroup() {
 		if (_displayGroup == null) {
 			createDisplayGroup();
@@ -254,7 +253,6 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	}
 
 	/** The currently selected object. */
-	@Override
 	public EOEnterpriseObject selectedObject() {
 		return (EOEnterpriseObject) displayGroup().selectedObject();
 	}
@@ -263,7 +261,6 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	 * Sets currently selected object. Pushes the value to the display group,
 	 * clearing the selection if needed.
 	 */
-	@Override
 	public void setSelectedObject(EOEnterpriseObject eo) {
 		if (eo != null)
 			displayGroup().selectObject(eo);

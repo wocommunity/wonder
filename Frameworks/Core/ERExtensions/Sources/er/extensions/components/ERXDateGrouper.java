@@ -94,14 +94,17 @@ public class ERXDateGrouper extends WODisplayGroup {
         _groupingMode = value;
         _reset();
     }
+    @Override
     public NSArray allObjects() {
         return super.allObjects();
     }
+    @Override
     public void setObjectArray(NSArray value) {
         _groupedObjects = null;
         _reset();
         super.setObjectArray(value);
     }
+    @Override
     public void setDataSource(EODataSource value) {
         _groupedObjects = null;
         _reset();
@@ -166,6 +169,7 @@ public class ERXDateGrouper extends WODisplayGroup {
         return _groupedObjects;
     }
 
+    @Override
     public NSArray displayedObjects() {
         NSArray _displayedObjects = (NSArray)_groupedObjects().objectForKey(_groupingKeyForDate(currentDate()));
         return _displayedObjects == null ? NSArray.EmptyArray : _displayedObjects;

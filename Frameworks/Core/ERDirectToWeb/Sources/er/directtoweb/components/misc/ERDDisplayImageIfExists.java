@@ -25,6 +25,7 @@ public class ERDDisplayImageIfExists extends ERDCustomEditComponent {
 	private static final long serialVersionUID = 1L;
 
     public ERDDisplayImageIfExists(WOContext context) { super(context); }
+    @Override
     public boolean synchronizesVariablesWithBindings() {
     	return false;
     }

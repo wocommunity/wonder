@@ -48,6 +48,7 @@ public class ERXJSTwoLevelEditToOneRelationship extends WOComponent {
 
 
  */
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     public NSArray parentList() {

@@ -57,6 +57,7 @@ public class LifebeatRequestHandler extends WORequestHandler {
         DieResponse.setHTTPVersion("HTTP/1.0");
     }
 
+    @Override
     public WOResponse handleRequest(WORequest aRequest) {
         // Sadly, we do regenerate in the case of random lifebeats. Hopefully this won't be too often.
         // Didn't pull this out so that we can rely on isUsingWebServer to catch some bad requests

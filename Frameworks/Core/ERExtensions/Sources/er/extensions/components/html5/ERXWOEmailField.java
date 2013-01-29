@@ -58,6 +58,7 @@ public class ERXWOEmailField extends ERXWOInput {
     return "email";
   }
 
+  @Override
   protected void _appendValueAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
     WOComponent component = wocontext.component();
 

@@ -39,6 +39,7 @@ public class ERXRegExQualifier extends ERXKeyValueQualifier {
 		super(aKey, MatchesSelector, aValue);
 	}
 
+	@Override
 	public boolean evaluateWithObject(Object object) {
 		Object objectValue = NSKeyValueCodingAdditions.Utility.valueForKeyPath(object, key());
 		if(objectValue instanceof String) {
@@ -70,16 +71,19 @@ public class ERXRegExQualifier extends ERXKeyValueQualifier {
 		}
 
 
+		@Override
 		public String sqlStringForSQLExpression(EOQualifier eoqualifier, EOSQLExpression e) {
 			String result = sqlStringForKeyValueQualifier((EOKeyValueQualifier)eoqualifier, e);
 			return result;
 		}
 
+		@Override
 		public EOQualifier schemaBasedQualifierWithRootEntity(EOQualifier qualifier, EOEntity entity) {
 			EOQualifier result = super.schemaBasedQualifierWithRootEntity(qualifier, entity);
 			return result;
 		}
 
+		@Override
 		public EOQualifier qualifierMigratedFromEntityRelationshipPath(EOQualifier qualifier, EOEntity entity, String s) {
 			EOQualifier result = super.qualifierMigratedFromEntityRelationshipPath(qualifier, entity, s);
 			return result;

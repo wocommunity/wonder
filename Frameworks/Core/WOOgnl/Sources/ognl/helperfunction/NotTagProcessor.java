@@ -10,6 +10,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @author mschrag
  */
 public class NotTagProcessor extends WOTagProcessor {
+	@Override
 	public WODeclaration createDeclaration(String elementName, String elementType, NSMutableDictionary associations) {
 		String newElementType = "ERXWOConditional";
 		if (associations.objectForKey("negate") != null) {

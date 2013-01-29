@@ -52,7 +52,7 @@ public class Neo4JContext <T extends Ersatz> extends EOAdaptorContext {
 	public void beginTransaction() {
 		if (! hasOpenTransaction()) {
 			tx = getDatabase().beginTx();
-			this.transactionDidBegin();
+			transactionDidBegin();
 		}
 	}
 
@@ -65,7 +65,7 @@ public class Neo4JContext <T extends Ersatz> extends EOAdaptorContext {
 		} finally {
 			try {
 				tx.finish();
-				this.transactionDidCommit();
+				transactionDidCommit();
 			} finally {
 				tx = null;
 			}
@@ -91,6 +91,6 @@ public class Neo4JContext <T extends Ersatz> extends EOAdaptorContext {
 				tx.finish();
 			}
 		}
-		this.transactionDidRollback();
+		transactionDidRollback();
 	}
 }

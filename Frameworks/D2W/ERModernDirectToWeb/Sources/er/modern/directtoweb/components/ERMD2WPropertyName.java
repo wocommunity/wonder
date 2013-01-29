@@ -47,6 +47,7 @@ public class ERMD2WPropertyName extends ERD2WPropertyName {
 		return isEditing() ? d2wContext().displayNameForProperty() : null;
 	}
 	
+	@Override
 	public boolean isEditing() {
 		String task = d2wContext().task();
 		return "edit".equals(task) || "query".equals(task);

@@ -67,6 +67,7 @@ public class ERD2WQueryToOneRelationship extends D2WQueryToOneRelationship {
         return this;
     }
 
+    @Override
     public void setValue(Object newValue) {
         if(hasMultipleSelection()) {
             if (newValue instanceof NSArray) {

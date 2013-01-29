@@ -18,11 +18,11 @@ import com.webobjects.foundation.NSDictionary;
  * branching result from a rule resolution. The value of this 
  * assignment must be a dictionary that has the following keys: 
  *
- * @dictionarykey nonNullKeyPath key path to be tested for nullality
+ * dictionary key "nonNullKeyPath": key path to be tested for nullality
  *		off of the current D2W context.
- * @dictionarykey trueValue value to be returned if the key path is
+ * dictionary key "trueValue": value to be returned if the key path is
  *		not null.
- * @dictionarykey falseValue value to be returned if the key path is
+ * dictionary key "falseValue": value to be returned if the key path is
  *		null.
  *
  * Because this assignment is a delayed assignment the above condition 
@@ -121,6 +121,7 @@ public class ERDDelayedNonNullConditionalAssignment extends ERDDelayedAssignment
      *		null.
      */
     // FIXME: Should check for NSKeyValueCoding.NullValue
+    @Override
     public Object fireNow(D2WContext c) {
         Object result = null;
         String keyPath;

@@ -32,6 +32,7 @@ public class ERXNSLogLog4jBridge extends /* NSLog.Logger */ NSLog.PrintStreamLog
        // setIsEnabled(true);
     }
 
+    @Override
     public void appendln(Object obj) {
         if (isEnabled()) {
             if (obj == null)   obj = "";
@@ -52,6 +53,7 @@ public class ERXNSLogLog4jBridge extends /* NSLog.Logger */ NSLog.PrintStreamLog
         }
     }
     
+    @Override
     public void setIsEnabled(boolean enabled) {
         super.setIsEnabled(enabled);
         if (type == DEBUG && !ERXProperties.booleanForKeyWithDefault("er.extensions.ERXNSLogLog4jBridge.ignoreNSLogSettings", false)) {
@@ -59,6 +61,7 @@ public class ERXNSLogLog4jBridge extends /* NSLog.Logger */ NSLog.PrintStreamLog
         }
     }
 
+    @Override
     public void setAllowedDebugLevel(int debugLevel) {
         super.setAllowedDebugLevel(debugLevel);
 
@@ -67,10 +70,12 @@ public class ERXNSLogLog4jBridge extends /* NSLog.Logger */ NSLog.PrintStreamLog
         }
     }
 
+    @Override
     public void appendln() {
         appendln(""); // Assuming people will always put "%n" at the end of the layout pattern.  
     }
 
+    @Override
     public void flush() {
     }
 }

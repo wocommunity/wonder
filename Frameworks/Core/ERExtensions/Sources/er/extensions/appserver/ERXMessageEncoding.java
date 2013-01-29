@@ -191,6 +191,7 @@ public class ERXMessageEncoding implements Serializable {
     }
 
     private String _toString;
+    @Override
     public String toString() {
         if (_toString == null) {
             _toString = "<" + getClass().getName() 

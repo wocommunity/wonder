@@ -114,7 +114,7 @@ public class EvaluationQueryConverter <T extends PropertyContainer> extends Quer
 	
 	@Override
 	public Evaluator<T> fullQuery(EOEntity entity, EOQualifier qualifier) {
-		return (Evaluator<T>) convert(entity, qualifier);
+		return convert(entity, qualifier);
 	}
 
 	@Override

@@ -344,7 +344,7 @@ public class MTAjaxFileUpload extends WOComponent {
 				else {
 					renamedFile = false;
 					progress.setFailure(new Exception ("Could not rename file."));
-					return this.uploadFailed();
+					return uploadFailed();
 				}
 				
 				if (renamedFile) {
@@ -368,7 +368,7 @@ public class MTAjaxFileUpload extends WOComponent {
 		catch (Throwable t) {
 			t.printStackTrace();
 			progress.setFailure(t);
-			return this.uploadFailed();
+			return uploadFailed();
 		}
 		finally {
 			uploadFinished();

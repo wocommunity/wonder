@@ -31,6 +31,7 @@ public class ERCAuditTrailEntry extends _ERCAuditTrailEntry {
     public interface Key extends _ERCAuditTrailEntry.Key {
     }
 
+    @Override
     public void init(EOEditingContext ec) {
         super.init(ec);
         EOEnterpriseObject user = ERCoreBusinessLogic.actor(ec);

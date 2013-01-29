@@ -94,7 +94,7 @@ public class TimeZonesPage extends WOComponent {
 	}
 
 	public WOComponent timeDisplayNow() {
-		WOComponent nextPage = this.pageWithName("TimeDisplayNow");
+		WOComponent nextPage = pageWithName("TimeDisplayNow");
 		nextPage.takeValueForKey(timeZoneId, "timeZoneID");
 		return nextPage;
 	}

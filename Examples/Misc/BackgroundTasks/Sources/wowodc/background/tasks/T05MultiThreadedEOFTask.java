@@ -19,8 +19,8 @@ import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSTimestamp;
 
-import er.extensions.concurrency.ERXAbstractTask;
 import er.extensions.concurrency.ERXExecutorService;
+import er.extensions.concurrency.ERXTask;
 import er.extensions.concurrency.IERXPercentComplete;
 import er.extensions.concurrency.IERXStoppable;
 import er.extensions.eof.ERXEOControlUtilities;
@@ -46,7 +46,7 @@ import er.extensions.foundation.IERXStatus;
  * 
  * @author kieran
  */
-public class T05MultiThreadedEOFTask extends ERXAbstractTask implements Callable<EOGlobalID>, IERXStatus , IERXPercentComplete, IERXStoppable {
+public class T05MultiThreadedEOFTask extends ERXTask<EOGlobalID> implements Callable<EOGlobalID>, IERXStatus , IERXPercentComplete, IERXStoppable {
 	
 	private static final Logger log = Logger.getLogger(T05MultiThreadedEOFTask.class);
 	
@@ -108,7 +108,8 @@ public class T05MultiThreadedEOFTask extends ERXAbstractTask implements Callable
 	
 	private EOGlobalID _resultGid;
 
-	public EOGlobalID call() throws Exception {
+	@Override
+	public EOGlobalID _call() throws Exception {
 		// Start at zero to gauge performance rate with different numbers of threads and OSCs
 		//_startNumber = Utilities.newStartNumber();
 		_elapsedTime = 0;
@@ -190,7 +191,7 @@ public class T05MultiThreadedEOFTask extends ERXAbstractTask implements Callable
 			}
 			
 			// Complete the stats
-			// Refresh it sinece the object has been already updated (its relationship) and saved on ChildThreads
+			// Refresh it since the object has been already updated (its relationship) and saved on ChildThreads
 			ERXEOControlUtilities.refreshObject(taskInfo);
 			taskInfo.setEndNumber(_endNumber);
 			taskInfo.setEndTime(new NSTimestamp());
@@ -270,7 +271,7 @@ public class T05MultiThreadedEOFTask extends ERXAbstractTask implements Callable
 	 * 
 	 * @author kieran
 	 */
-	private class ChildPrimeTask extends ERXAbstractTask implements Runnable, IERXStatus , IERXPercentComplete {
+	private class ChildPrimeTask extends ERXTask implements Runnable, IERXStatus, IERXPercentComplete {
 		
 		private final int _childID;
 		private EOGlobalID _childTaskInfoGID = null;
@@ -298,7 +299,8 @@ public class T05MultiThreadedEOFTask extends ERXAbstractTask implements Callable
 			return "Checking " + _childCurrentNumber + " in range " + _childFromNumber + " - " + _childToNumber;
 		}
 
-		public void run() {
+		@Override
+		public void _run() {
 			EOEditingContext ec = newEditingContext();
 			ec.lock();
 			try {

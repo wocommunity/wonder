@@ -21,11 +21,11 @@ import er.extensions.logging.ERXPatternLayout;
 
 /**
  * Very simple template parser.  For example if you have the delimiter:
- * @@, then a possible template might look like: "Hello, @@name@@.  How are
+ * {@literal @}{@literal @}, then a possible template might look like: "Hello, {@literal @}{@literal @}name{@literal @}{@literal @}.  How are
  * you feeling today?",  In this case the object will get asked for the
  * value name. This works with key-paths as well.
  * 
- * @property er.extensions.ERXSimpleTemplateParser.useOldDelimiter if false, only @@ delimeters are supported (defaults to true)
+ * @property er.extensions.ERXSimpleTemplateParser.useOldDelimiter if false, only {@literal @}{@literal @} delimeters are supported (defaults to true)
  */
 public class ERXSimpleTemplateParser {
 

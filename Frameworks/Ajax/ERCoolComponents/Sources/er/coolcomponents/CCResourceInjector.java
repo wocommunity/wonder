@@ -32,8 +32,9 @@ public class CCResourceInjector extends ERXStatelessComponent {
      * Assumes that if the isScript binding is null or false resource is a css file.
      *
      * @see er.extensions.components.ERXNonSynchronizingComponent#appendToResponse(com.webobjects.appserver.WOResponse, com.webobjects.appserver.WOContext)
-     * @see ERXResponseRewriter#addScriptResourceInHead(WOResponse, WOContext, String, String)
+     * @see er.extensions.appserver.ERXResponseRewriter#addScriptResourceInHead(WOResponse, WOContext, String, String)
      */
+    @Override
     public void appendToResponse(WOResponse response, WOContext context)
     {
     	String framework = stringValueForBinding("framework", "app");

@@ -38,6 +38,7 @@ public class ERXJDBCPlugInUtilities {
             eRXEntityOrder = ordering;
         }
 
+        @Override
         public int compare(Object object1, Object object2) throws NSComparator.ComparisonException {
             EOEntity entity1 = (EOEntity) ((NSArray)object1).objectAtIndex(0);
             EOEntity entity2 = (EOEntity) ((NSArray)object2).objectAtIndex(0);

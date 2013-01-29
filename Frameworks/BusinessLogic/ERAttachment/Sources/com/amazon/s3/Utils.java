@@ -24,9 +24,9 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.CharEncoding;
+import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
-import org.xml.sax.SAXException;
 
 public class Utils {
     static final String METADATA_PREFIX = "x-amz-meta-";
@@ -49,6 +49,11 @@ public class Utils {
     /**
      * Calculate the canonical string.  When expires is non-null, it will be
      * used instead of the Date header.
+     * @param method 
+     * @param resource 
+     * @param headers 
+     * @param expires 
+     * @return canoncical string
      */
     static String makeCanonicalString(String method, String resource,
                                              Map headers, String expires)
@@ -125,11 +130,10 @@ public class Utils {
 
     /**
      * Calculate the HMAC/SHA1 on a string.
-     * @param data Data to sign
-     * @param passcode Passcode to sign it with
+     * @param awsSecretAccessKey passcode to sign with
+     * @param canonicalString string to sign
+     * @param urlencode <code>true</code> to urlencode the result
      * @return Signature
-     * @throws NoSuchAlgorithmException If the algorithm does not exist.  Unlikely
-     * @throws InvalidKeyException If the key is invalid.
      */
     static String encode(String awsSecretAccessKey, String canonicalString,
                                 boolean urlencode)

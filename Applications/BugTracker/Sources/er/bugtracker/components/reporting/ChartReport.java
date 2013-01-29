@@ -113,6 +113,7 @@ public class ChartReport extends Report {
         super(context);
     }
     
+    @Override
     public void awake() {
         super.awake();
     }

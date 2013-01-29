@@ -1,8 +1,11 @@
 package er.grouping;
 
-import java.util.*;
+import java.util.Enumeration;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.foundation.ERXValueUtilities;
 
@@ -20,6 +23,7 @@ public class DRAttributeGroup extends DRAttribute  {
         return attributeGroup;
     }
 
+    @Override
     public void resetDefaults() {
         super.resetDefaults();
         _attributes = new NSMutableArray();
@@ -45,14 +49,17 @@ public class DRAttributeGroup extends DRAttribute  {
              (NSDictionary)dictionary.objectForKey("userInfo"));
     }
 
+    @Override
     public boolean showTotal() {
         return _shouldTotal;
     }
 
+    @Override
     public boolean isGroup() {
         return _isGroup;
     }
 
+    @Override
     public NSMutableArray attributes() {
         return _attributes;
     }
@@ -82,6 +89,7 @@ public class DRAttributeGroup extends DRAttribute  {
         }
     }
 
+    @Override
     protected NSArray flatAttributesWithDepthDictionary(int attributeListDepth, NSMutableDictionary flatAttributeDepthDict) {
         DRAttribute att;
         Enumeration anEnum = _attributes.objectEnumerator();
@@ -89,9 +97,9 @@ public class DRAttributeGroup extends DRAttribute  {
         attributeListDepth = attributeListDepth + 1;
         while (anEnum.hasMoreElements()) {
             att = (DRAttribute)anEnum.nextElement();
-            this.flatListForAttributeDepthDictionary(att, attributeListDepth, flatAttributeDepthDict);
+            flatListForAttributeDepthDictionary(att, attributeListDepth, flatAttributeDepthDict);
         }
-        if (flatAttributeDepthDict != null && this.showTotal()) {
+        if (flatAttributeDepthDict != null && showTotal()) {
             Number dpthKey = Integer.valueOf(attributeListDepth);
             NSMutableArray lst = (NSMutableArray)flatAttributeDepthDict.objectForKey(dpthKey);
             if (lst == null) {
@@ -104,17 +112,19 @@ public class DRAttributeGroup extends DRAttribute  {
     }
 
     protected void flatListForAttributeList() {
-        this.flatAttributesWithDepthDictionary(0, null);
+        flatAttributesWithDepthDictionary(0, null);
     }
 
+    @Override
     public NSArray flatAttributes() {
         return _flatAttributes;
     }
 
+    @Override
     public NSArray flatAttributesTotal() {
         if (_flatAttributesTotal == null) {
             DRAttribute att;
-            Enumeration anEnum = this.flatAttributes().objectEnumerator();
+            Enumeration anEnum = flatAttributes().objectEnumerator();
             _flatAttributesTotal = new NSMutableArray();
             while (anEnum.hasMoreElements()) {
                 att = (DRAttribute)anEnum.nextElement();
@@ -126,6 +136,7 @@ public class DRAttributeGroup extends DRAttribute  {
         return _flatAttributesTotal;
     }
 
+    @Override
     public String toString() {
         return "<DRAttributeGroup keyPath:\"" + keyPath() + "\"; label:\"" + label() + "\"; attributes: " + attributes() + "; >";
     }

@@ -85,11 +85,13 @@ public class ERXAssert {
         }
     }
     protected static class IllegalArgumentHandler extends ThrowingHandler {
+        @Override
         protected void raise(String message) {
             throw new IllegalArgumentException(message);
         }
     }
     protected static class IllegalStateHandler extends ThrowingHandler {
+        @Override
         protected void raise(String message) {
             throw new IllegalStateException(message);
         }

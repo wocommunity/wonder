@@ -212,7 +212,7 @@ public class ERXEnterpriseObjectArrayCache<T extends EOEnterpriseObject> {
                    return null;
                 }
             }
-            NSArray<T> eos = (NSArray<T>) ERXEOControlUtilities.faultsForGlobalIDs(ec, gids);
+            NSArray<T> eos = ERXEOControlUtilities.faultsForGlobalIDs(ec, gids);
             return eos;
 		}
     }

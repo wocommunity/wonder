@@ -41,6 +41,7 @@ public class ERDEditDateJavascript extends ERDCustomEditComponent {
     protected String _formatter;
     protected NSTimestampFormatter _dateFormatter;
     
+    @Override
     public void appendToResponse(WOResponse r, WOContext c){
         NSTimestamp date = (NSTimestamp)objectPropertyValue();
         if(date != null) {
@@ -59,6 +60,7 @@ public class ERDEditDateJavascript extends ERDCustomEditComponent {
     	return dateString;
     }
     
+    @Override
     public void takeValuesFromRequest (WORequest request, WOContext context) {
         super.takeValuesFromRequest (request,context);
         NSTimestamp date = null;

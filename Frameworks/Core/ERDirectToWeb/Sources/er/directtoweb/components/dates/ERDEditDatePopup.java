@@ -37,6 +37,7 @@ public class ERDEditDatePopup extends ERDEditDatePopupCommon {
 
     public ERDEditDatePopup(WOContext context) { super(context); }
     
+    @Override
     public void takeValuesFromRequest (WORequest request, WOContext context) {
         super.takeValuesFromRequest (request,context);
         NSTimestamp date = null;

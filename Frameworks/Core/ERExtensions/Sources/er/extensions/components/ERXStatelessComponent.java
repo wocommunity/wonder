@@ -67,6 +67,7 @@ public abstract class ERXStatelessComponent extends ERXNonSynchronizingComponent
      * @return result of evaluating binding as a boolean.
      * @deprecated use {@link #booleanValueForBinding(String, boolean)}
      */
+    @Override
     // CHECKME: from the name of the method, one would think that
     // ERXValueUtilities.booleanValueForBindingOnComponentWithDefault
     // would be the correct method to use, but after reading the comment there, I'm not sure.

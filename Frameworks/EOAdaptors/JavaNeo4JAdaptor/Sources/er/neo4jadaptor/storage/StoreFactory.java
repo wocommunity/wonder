@@ -43,7 +43,7 @@ public class StoreFactory {
 	private StoreFactory(GraphDatabaseService db, NodeSpaceManager spaceManager) {
 		this.db = db;
 		this.spaceManager = spaceManager;
-		this.tempNodePool = new TemporaryNodePool(db, spaceManager);
+		tempNodePool = new TemporaryNodePool(db, spaceManager);
 	}
 
 	/**

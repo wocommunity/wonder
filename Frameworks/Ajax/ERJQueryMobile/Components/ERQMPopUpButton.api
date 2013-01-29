@@ -19,5 +19,6 @@
     <binding name="displayString"/>
     <binding defaults="Boolean" name="disabled"/>
     <binding name="noSelectionString"/>
+    <binding name="id"/>
     </wo>
 </wodefinitions>

@@ -19,10 +19,12 @@ public class Report extends WRReport {
     }
 
     /** component does not synchronize it's variables */
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }
 
+    @Override
     public Object handleQueryWithUnboundKey(String key) {
         log.error("handleQueryWithUnboundKey: " + key, new RuntimeException("Stacktrace"));
         return null;
@@ -32,8 +34,9 @@ public class Report extends WRReport {
         log.error(key);
     }
 
+    @Override
     public String classAttributeTd() {
-        return "WRAttribute" + depth + "Total" + this.totalCount();
+        return "WRAttribute" + depth + "Total" + totalCount();
     }
 
     public NSTimestamp startDate() {
@@ -44,9 +47,10 @@ public class Report extends WRReport {
         return (NSTimestamp) valueForBinding("endDate");
     }
 
+    @Override
     public DRRecordGroup recordGroup() {
-        NSDictionary crds = this.currentCoordinates();
-        DRRecordGroup drg = this.model().recordGroupForCoordinates(crds);
+        NSDictionary crds = currentCoordinates();
+        DRRecordGroup drg = model().recordGroupForCoordinates(crds);
         return drg;
     }
 }

@@ -932,9 +932,6 @@ public class ERXArrayUtilitiesTest extends ERXTestCase {
     //
     public void _testDictionaryOfObjectsIndexedByKeyPathThrowOnCollision() {
 
-        // XXX http://issues.objectstyle.org/jira/browse/WONDER-371
-        // XXX ERXArrayUtilities testDictionaryOfObjectsIndexedByKeyPathThrowOnCollision() does not handle null array parameter as documented
-        //
         //Assert.assertEquals(NSDictionary.EmptyDictionary, ERXArrayUtilities.dictionaryOfObjectsIndexedByKeyPathThrowOnCollision(nullList, "name", true));
         //Assert.assertEquals(NSDictionary.EmptyDictionary, ERXArrayUtilities.dictionaryOfObjectsIndexedByKeyPathThrowOnCollision(nullList, "name", false));
 

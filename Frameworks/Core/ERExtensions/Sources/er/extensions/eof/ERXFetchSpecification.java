@@ -174,7 +174,7 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	 * Sets a list of attribute keys to be fetched as raw data. Uses two params for backwards
 	 * compatibility as a <code>setRawRowKeyPaths(null)</code> would be ambiguous otherwise.
 	 * 
-	 * @see ERXFetchSpecification#setRawRowKeyPaths(NSArray)
+	 * @see #setRawRowKeyPaths(NSArray)
 	 * @param keyPath 
 	 * @param keyPaths list of attribute keys
 	 */
@@ -285,6 +285,7 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 		if(qualifier != null) {
 			ERXQualifierTraversal traversal = new ERXQualifierTraversal() {
 
+				@Override
 				protected void visit(EOQualifierEvaluation q) {
 					sb.append(q.getClass().getName());
 				}

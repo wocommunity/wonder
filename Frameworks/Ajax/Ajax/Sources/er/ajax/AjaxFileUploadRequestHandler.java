@@ -49,6 +49,7 @@ public class AjaxFileUploadRequestHandler extends WORequestHandler {
 		_maxUploadSize = maxUploadSize;
 	}
 
+	@Override
 	public WOResponse handleRequest(WORequest request) {
 		WOApplication application = WOApplication.application();
 		application.awake();

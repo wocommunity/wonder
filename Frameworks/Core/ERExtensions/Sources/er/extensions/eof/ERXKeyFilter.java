@@ -160,7 +160,6 @@ public class ERXKeyFilter {
 	/**
 	 * Returns the key that is mapped to from the given input key.
 	 * 
-	 * @param <T> the type of the key (which doesn't change)
 	 * @param fromKey the key to map from
 	 * @return the key that maps to the given key
 	 */

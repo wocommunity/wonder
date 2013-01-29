@@ -48,6 +48,7 @@ public class AjaxFunctionButton extends WOHTMLDynamicElement {
 		}
 	}
 	
+	@Override
 	protected boolean hasContent() {
 		return false;
 	}
@@ -56,6 +57,7 @@ public class AjaxFunctionButton extends WOHTMLDynamicElement {
 		return _disabled != null && _disabled.booleanValueInComponent(context.component());
 	}
 
+	@Override
 	public void appendAttributesToResponse(WOResponse response, WOContext context) {
 		super.appendAttributesToResponse(response, context);
 		if (!isDisabled(context)) {

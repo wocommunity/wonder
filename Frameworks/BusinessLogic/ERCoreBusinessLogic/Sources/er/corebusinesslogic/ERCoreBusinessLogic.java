@@ -92,7 +92,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
      */
     public static ERCoreBusinessLogic sharedInstance() {
         if (sharedInstance == null) {
-            sharedInstance = (ERCoreBusinessLogic)ERXFrameworkPrincipal.sharedInstance(ERCoreBusinessLogic.class);
+            sharedInstance = ERXFrameworkPrincipal.sharedInstance(ERCoreBusinessLogic.class);
         }
         return sharedInstance;
     }
@@ -123,7 +123,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
             EOEditingContext actorEc = actor.editingContext();
             actorEc.lock();
             try {
-            	EOEnterpriseObject localActor = (EOEnterpriseObject)ERXEOControlUtilities.localInstanceOfObject(ec, actor);
+            	EOEnterpriseObject localActor = ERXEOControlUtilities.localInstanceOfObject(ec, actor);
             	try {
             		if(actor instanceof ERCoreUserInterface) {
             			NSArray prefs = ((ERCoreUserInterface)actor).preferences();
@@ -202,6 +202,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
      * Called when it is time to finish the
      * initialization of the framework.
      */
+    @Override
     public void finishInitialization() {
         ERCAuditTrailHandler.initialize();
         ERCStampedEnterpriseObject.initialize();
@@ -227,7 +228,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
     public void addPreferenceRelationshipToActorEntity(String entityName) {
         EOEntity entity  = EOModelGroup.defaultGroup().entityNamed(entityName);
         if(entity != null && entity.primaryKeyAttributeNames().count() == 1) {
-            addPreferenceRelationshipToActorEntity(entityName, (String) entity.primaryKeyAttributeNames().lastObject());
+            addPreferenceRelationshipToActorEntity(entityName, entity.primaryKeyAttributeNames().lastObject());
         } else {
             throw new IllegalArgumentException("Entity is not suitable: " + entityName);
         }

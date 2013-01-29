@@ -1,6 +1,6 @@
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOComponent;
 
-import er.extensions.appserver.*;
+import er.extensions.appserver.ERXSession;
 
 /**
  * Everything related to saving pages is handled now in ERXSession.

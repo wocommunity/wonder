@@ -42,7 +42,7 @@ import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 /**
- * The ERXSession aguments the regular WOSession object
+ * The ERXSession arguments the regular WOSession object
  * by adding a few nice additions. Of interest, notifications
  * are now posted when a session when a session
  * goes to sleep, David Neumann's browser backtracking detection
@@ -285,9 +285,9 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * Returns the NSArray of language names available for 
    * this particular session. 
    * The resulting array is an intersect of web browser's 
-   * language array ({@link ERXRequest#browserLanguages}) 
+   * language array ({@link ERXRequest#browserLanguages()}) 
    * and localizer's available language array 
-   * ({@link er.extensions.localization.ERXLocalizer#availableLanguages}).
+   * ({@link er.extensions.localization.ERXLocalizer#availableLanguages()}).
    * <p>
    * Note that the order of the resulting language names  
    * is not defined at this moment.
@@ -295,7 +295,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * @return   NSArray of language name strings available 
    *           for this particular session
    * @see      #availableLanguagesForTheApplication 
-   * @see      ERXRequest#browserLanguages
+   * @see      ERXRequest#browserLanguages()
    * @see      er.extensions.localization.ERXLocalizer#availableLanguages
    */
   public NSArray availableLanguagesForThisSession() {
@@ -679,6 +679,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
       log.debug("Session has been deserialized: " + toString());
   }
 
+  @Override
   public NSTimestamp _birthDate() {
 	  return super._birthDate();
   }

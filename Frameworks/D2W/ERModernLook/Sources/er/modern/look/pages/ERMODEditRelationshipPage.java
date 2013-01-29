@@ -125,7 +125,7 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	public WOComponent newObjectAction() {
 		EOEditingContext newEc = ERXEC.newEditingContext(masterObject().editingContext());
 		EOClassDescription relatedObjectClassDescription = masterObject().classDescriptionForDestinationKey(relationshipKey());
-		EOEnterpriseObject relatedObject = (EOEnterpriseObject)EOUtilities.createAndInsertInstance(newEc, relatedObjectClassDescription.entityName());
+		EOEnterpriseObject relatedObject = EOUtilities.createAndInsertInstance(newEc, relatedObjectClassDescription.entityName());
 		EOEnterpriseObject localObj = EOUtilities.localInstanceOfObject(relatedObject.editingContext(), masterObject());
 		if (localObj instanceof ERXGenericRecord) {
 			((ERXGenericRecord)localObj).setValidatedWhenNested(false);
@@ -265,7 +265,6 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	/**
 	 * Sets the current selected Object. Required by the SelectPageInterface
 	 */
-    @Override
 	public void setSelectedObject(EOEnterpriseObject eo) {
 		_selectedObject = eo;
 	}
@@ -278,7 +277,6 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	 * 
 	 * @return NSArray containing the master object (index 0) and relationship key (index 1).
 	 */
-    @Override
 	public NSArray<?> masterObjectAndRelationshipKey() {
 		return new NSArray<Object>(new Object[] { masterObject(), relationshipKey() });
 	}
@@ -286,11 +284,10 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	/**
 	 * Sets the master object and relationship key.
 	 * Takes an NSArray containing the master object (index 0) and relationship key (index 1).
-	 * Required by the {@link ERMEditRelationhsipPageInterface}
+	 * Required by the {@link ERMEditRelationshipPageInterface}
 	 * 
 	 * @param a an NSArray containing the master object (index 0) and relationship key (index 1).
 	 */
-    @Override
 	public void setMasterObjectAndRelationshipKey(NSArray<?> a) {
 		setMasterObjectAndRelationshipKey((EOEnterpriseObject)a.objectAtIndex(0), (String)a.objectAtIndex(1));
 	}
@@ -301,7 +298,6 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	 * @param eo the master object, an EOEnterpriseObject
 	 * @param relationshipKey
 	 */
-    @Override
 	public void setMasterObjectAndRelationshipKey(EOEnterpriseObject eo, String relationshipKey) {
 		// only do this if the eo and relationshipKey have changed;
 		if (relationshipKey != null && eo != null) {
@@ -489,7 +485,7 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	}
 
 	public void setMasterObject(EOEnterpriseObject masterObject) {
-		this._masterObject = masterObject;
+		_masterObject = masterObject;
 	}
 	
 	/** Checks if the current list is empty. */

@@ -42,16 +42,19 @@ public class AjaxTextHinter extends AjaxDynamicElement {
 		super(name, associations, children);
 	}
 
+	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		return null;
 	}
 
+	@Override
 	protected void addRequiredWebResources(WOResponse response, WOContext context) {
 		addScriptResourceInHead(context, response, "prototype.js");
 		addScriptResourceInHead(context, response, "behaviour.js");
 		addScriptResourceInHead(context, response, "wonder.js");
 	}
 	
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		super.appendToResponse(response, context);
 		String name = (String) valueForBinding("form", context.component());

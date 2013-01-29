@@ -363,6 +363,7 @@ public class ERXComponentRequestHandler extends WORequestHandler
 		return aResponse;
 	}
 
+	@Override
 	public WOResponse handleRequest(WORequest aRequest)
 	{
 		WOApplication anApplication = WOApplication.application();

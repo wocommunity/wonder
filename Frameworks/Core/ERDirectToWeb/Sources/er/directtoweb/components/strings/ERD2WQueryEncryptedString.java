@@ -40,6 +40,7 @@ public class ERD2WQueryEncryptedString extends D2WQueryStringComponent {
         return (ERXCrypterInterface)d2wContext().valueForKey("crypter");
     }
 
+    @Override
     public void takeValuesFromRequest(WORequest request, WOContext context) {
         super.takeValuesFromRequest(request, context);
         if(clearValue!=null){

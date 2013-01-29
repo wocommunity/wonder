@@ -7,7 +7,6 @@ import er.directtoweb.components.ERDCustomComponent;
 /**
  * A silly simple component to show a horizontal rule
  */
-
 public class ERDSpacer extends ERDCustomComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -18,6 +17,8 @@ public class ERDSpacer extends ERDCustomComponent {
 
     public ERDSpacer(WOContext context) { super(context); }
 
+    @Override
     public final boolean isStateless() { return true; }
+    @Override
     public final boolean synchronizesVariablesWithBindings() { return false; }
 }

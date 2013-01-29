@@ -16,7 +16,6 @@ import er.extensions.foundation.ERXArrayUtilities;
  * Used to display a an NSArray of the form "A, B and C", useful for toMany relationships  or propertyKeys that return arrays.<br />
  * RENAMEME: ERDDisplayList
  */
-
 public class ERD2WDisplayList extends ERDCustomEditComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -26,8 +25,11 @@ public class ERD2WDisplayList extends ERDCustomEditComponent {
 	private static final long serialVersionUID = 1L;
 
     public ERD2WDisplayList(WOContext context) { super(context); }
-    
+
+    @Override
     public boolean isStateless() { return true; }
+
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     public NSArray listToDisplay() {

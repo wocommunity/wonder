@@ -459,11 +459,11 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	/**
 	 * Returns a javascript-safe version of the given element ID.
 	 * 
-	 * @see ERXStringUtilities#safeIdentifierName(String, String, char)
+	 * @see er.extensions.foundation.ERXStringUtilities#safeIdentifierName(String)
 	 * @param elementID
 	 *            the element ID
 	 * @return a javascript-safe version (i.e. "_1_2_3_10")
-	 * @deprecated user {@link ERXStringUtilities#safeIdentifierName(String)}
+	 * @deprecated user {@link er.extensions.foundation.ERXStringUtilities#safeIdentifierName(String)}
 	 */
 	@Deprecated
 	public static String toSafeElementID(String elementID) {

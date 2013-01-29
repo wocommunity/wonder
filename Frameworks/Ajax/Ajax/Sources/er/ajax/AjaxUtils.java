@@ -22,7 +22,6 @@ import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.appserver.ajax.ERXAjaxSession;
-import er.extensions.components.ERXComponentUtilities;
 import er.extensions.formatters.ERXNumberFormatter;
 import er.extensions.formatters.ERXTimestampFormatter;
 import er.extensions.foundation.ERXProperties;
@@ -107,7 +106,7 @@ public class AjaxUtils {
 	 * already one.
 	 * 
 	 * @param message
-	 * @deprecated user {@link ERXWOContext#contextDictionary()} instead
+	 * @deprecated use {@link er.extensions.appserver.ERXWOContext#contextDictionary()} instead
 	 */
 	@Deprecated
 	public static NSMutableDictionary mutableUserInfo(WOMessage message) {
@@ -150,7 +149,7 @@ public class AjaxUtils {
 	}
 
 	/**
-	 * Calls {@link ERXResponseRewriter#addStylesheetResourceInHead(WOResponse, WOContext, String, String)}
+	 * Calls {@link er.extensions.appserver.ERXResponseRewriter#addStylesheetResourceInHead(WOResponse, WOContext, String, String)}
 	 * 
 	 * @param context
 	 *            the context
@@ -258,7 +257,7 @@ public class AjaxUtils {
 	 * 
 	 * @param context - WOContext
 	 * </span>
-	 * @deprecated use {@link ERXAjaxApplication#enableShouldNotStorePage()} instead
+	 * @deprecated use {@link er.extensions.appserver.ajax.ERXAjaxApplication#enableShouldNotStorePage()} instead
 	 */
 	@Deprecated
 	public static void updateMutableUserInfoWithAjaxInfo(WOContext context) {
@@ -271,7 +270,7 @@ public class AjaxUtils {
 	 * 
 	 * @param message - WOMessage
 	 * </span>
-	 * @deprecated use {@link ERXAjaxApplication#enableShouldNotStorePage()} instead
+	 * @deprecated use {@link er.extensions.appserver.ajax.ERXAjaxApplication#enableShouldNotStorePage()} instead
 	 */
 	@Deprecated
 	public static void updateMutableUserInfoWithAjaxInfo(WOMessage message) {
@@ -341,7 +340,7 @@ public class AjaxUtils {
 	}
 
 	/**
-	 * @deprecated use {@link ERXComponentUtilities#hasBinding(String, NSDictionary)} instead
+	 * @deprecated use {@link er.extensions.components.ERXComponentUtilities#hasBinding(String, NSDictionary)} instead
 	 */
 	@Deprecated
 	public static boolean hasBinding(String name, NSDictionary<String, WOAssociation> associations) {
@@ -349,7 +348,7 @@ public class AjaxUtils {
 	}
 	
 	/**
-	 * @deprecated use {@link ERXComponentUtilities#bindingNamed(String, NSDictionary)} instead
+	 * @deprecated use {@link er.extensions.components.ERXComponentUtilities#bindingNamed(String, NSDictionary)} instead
 	 */
 	@Deprecated
 	public static WOAssociation bindingNamed(String name, NSDictionary<String, WOAssociation> associations) {
@@ -357,7 +356,7 @@ public class AjaxUtils {
 	}
 	
 	/**
-	 * @deprecated use {@link ERXComponentUtilities#valueForBinding(String, Object, NSDictionary, WOComponent)} instead
+	 * @deprecated use {@link er.extensions.components.ERXComponentUtilities#valueForBinding(String, Object, NSDictionary, WOComponent)} instead
 	 */
 	@Deprecated
 	public static Object valueForBinding(String name, Object defaultValue, NSDictionary<String, WOAssociation> associations, WOComponent component) {
@@ -369,7 +368,7 @@ public class AjaxUtils {
 	}
 	
 	/**
-	 * @deprecated use {@link ERXComponentUtilities#stringValueForBinding(String, String, NSDictionary, WOComponent)} instead
+	 * @deprecated use {@link er.extensions.components.ERXComponentUtilities#stringValueForBinding(String, String, NSDictionary, WOComponent)} instead
 	 */
 	@Deprecated
 	public static String stringValueForBinding(String name, String defaultValue, NSDictionary<String, WOAssociation> associations, WOComponent component) {
@@ -381,7 +380,7 @@ public class AjaxUtils {
 	}
 
 	/**
-	 * @deprecated use {@link ERXComponentUtilities#stringValueForBinding(String, NSDictionary, WOComponent)} instead
+	 * @deprecated use {@link er.extensions.components.ERXComponentUtilities#stringValueForBinding(String, NSDictionary, WOComponent)} instead
 	 */
 	@Deprecated
 	public static String stringValueForBinding(String name, NSDictionary<String, WOAssociation> associations, WOComponent component) {
@@ -393,7 +392,7 @@ public class AjaxUtils {
 	}
 
 	/**
-	 * @deprecated use {@link ERXComponentUtilities#valueForBinding(String, NSDictionary, WOComponent)} instead
+	 * @deprecated use {@link er.extensions.components.ERXComponentUtilities#valueForBinding(String, NSDictionary, WOComponent)} instead
 	 */
 	@Deprecated
 	public static Object valueForBinding(String name, NSDictionary<String, WOAssociation> associations, WOComponent component) {
@@ -405,7 +404,7 @@ public class AjaxUtils {
 	}
 
 	/**
-	 * @deprecated use {@link ERXComponentUtilities#booleanValueForBinding(String, boolean, NSDictionary, WOComponent)} instead
+	 * @deprecated use {@link er.extensions.components.ERXComponentUtilities#booleanValueForBinding(String, boolean, NSDictionary, WOComponent)} instead
 	 */
 	@Deprecated
 	public static boolean booleanValueForBinding(String name, boolean defaultValue, NSDictionary<String, WOAssociation> associations, WOComponent component) {
@@ -417,7 +416,7 @@ public class AjaxUtils {
 	}
 
 	/**
-	 * @deprecated use {@link ERXComponentUtilities#setValueForBinding(Object, String, NSDictionary, WOComponent)} instead
+	 * @deprecated use {@link er.extensions.components.ERXComponentUtilities#setValueForBinding(Object, String, NSDictionary, WOComponent)} instead
 	 */
 	@Deprecated
 	public static void setValueForBinding(Object value, String name, NSDictionary<String, WOAssociation> associations, WOComponent component) {

@@ -47,8 +47,8 @@ public class EOGenericRecord extends EOCustomObject {
 		if (classDescription == null) {
 			throw new IllegalArgumentException("A class description of a generic record cannot be null");
 		}
-		this.__classDescription = classDescription;
-		this.__dictionary = this.__classDescription._newDictionaryForProperties();
+		__classDescription = classDescription;
+		__dictionary = __classDescription._newDictionaryForProperties();
 	}
 
 	@Override
@@ -60,6 +60,7 @@ public class EOGenericRecord extends EOCustomObject {
 		return __classDescription();
 	}
 
+	@Override
 	public NSKeyValueCoding._KeyBinding _otherStorageBinding(String key) {
 		boolean lazyBindingNeeded = false;
 		EOClassDescription classDescription = classDescription();
@@ -87,8 +88,8 @@ public class EOGenericRecord extends EOCustomObject {
 			}
 		}
 
-		if ((this.__dictionary instanceof _EOMutableKnownKeyDictionary)) {
-			NSKeyValueCoding._KeyBinding keyBinding = ((_EOMutableKnownKeyDictionary) this.__dictionary).initializer()
+		if ((__dictionary instanceof _EOMutableKnownKeyDictionary)) {
+			NSKeyValueCoding._KeyBinding keyBinding = ((_EOMutableKnownKeyDictionary) __dictionary).initializer()
 					._genericRecordKeyBindingForKey(key, lazyBindingNeeded, enforcedNumberOrBooleanClass);
 			if (keyBinding != null) {
 				return keyBinding;
@@ -181,7 +182,7 @@ public class EOGenericRecord extends EOCustomObject {
 
 		public _DictionaryBinding(String key, Class<?> enforcedNumberOrBooleanClass) {
 			super(null, key);
-			this._enforcedNumberOrBooleanClass = enforcedNumberOrBooleanClass;
+			_enforcedNumberOrBooleanClass = enforcedNumberOrBooleanClass;
 		}
 
 		@Override
@@ -189,7 +190,7 @@ public class EOGenericRecord extends EOCustomObject {
 			EOGenericRecord genericRecord = (EOGenericRecord) object;
 			genericRecord.willRead();
 
-			Object value = genericRecord.__dictionary.objectForKey(this._key);
+			Object value = genericRecord.__dictionary.objectForKey(_key);
 			return value == NSKeyValueCoding.NullValue ? null : value;
 		}
 
@@ -201,17 +202,17 @@ public class EOGenericRecord extends EOCustomObject {
 			Object convertedValue = value;
 			if (convertedValue == null) {
 				convertedValue = NSKeyValueCoding.NullValue;
-			} else if (this._enforcedNumberOrBooleanClass != null) {
+			} else if (_enforcedNumberOrBooleanClass != null) {
 				try {
 					convertedValue = _NSUtilities.convertNumberOrBooleanIntoCompatibleValue(convertedValue,
-							this._enforcedNumberOrBooleanClass);
+							_enforcedNumberOrBooleanClass);
 				} catch (ClassCastException exception) {
 					NSLog._conditionallyLogPrivateException(exception);
 				}
 
 			}
 
-			genericRecord.__dictionary.setObjectForKey(convertedValue, this._key);
+			genericRecord.__dictionary.setObjectForKey(convertedValue, _key);
 		}
 	}
 }

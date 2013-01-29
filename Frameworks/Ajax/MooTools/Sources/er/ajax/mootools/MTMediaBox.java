@@ -20,6 +20,7 @@ public class MTMediaBox extends AjaxDynamicElement {
 		super(name, associations, template);
     }
 
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		
 		WOComponent component = context.component();

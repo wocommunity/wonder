@@ -77,19 +77,19 @@ public abstract class EOCustomObject implements EOEnterpriseObject, EODeferredFa
 			new ObjectStreamField(SerializationPropertiesFieldKey, _NSUtilities._ObjectClass), };
 
 	public final EOEditingContext __editingContext() {
-		return this.__editingContext;
+		return __editingContext;
 	}
 
 	public final void __setEditingContext(EOEditingContext ec) {
-		this.__editingContext = ec;
+		__editingContext = ec;
 	}
 
 	public final EOClassDescription __classDescription() {
-		if (this.__classDescription == null) {
-			this.__classDescription = EOClassDescription.classDescriptionForClass(getClass());
-			this.__readOnly = null;
+		if (__classDescription == null) {
+			__classDescription = EOClassDescription.classDescriptionForClass(getClass());
+			__readOnly = null;
 		}
-		return this.__classDescription;
+		return __classDescription;
 	}
 
 	/*
@@ -104,114 +104,114 @@ public abstract class EOCustomObject implements EOEnterpriseObject, EODeferredFa
 	}
 
 	public void __setClassDescription(EOClassDescription cd) {
-		this.__classDescription = cd;
-		this.__readOnly = null;
+		__classDescription = cd;
+		__readOnly = null;
 	}
 
 	public final EOGlobalID __globalID() {
-		return this.__gid;
+		return __gid;
 	}
 
 	public final void __setGlobalID(EOGlobalID gid) {
-		this.__gid = gid;
+		__gid = gid;
 	}
 
 	public final NSDictionary __originalSnapshot() {
-		return this.__originalSnapshot;
+		return __originalSnapshot;
 	}
 
 	public final void __setOriginalSnapshot(NSDictionary os) {
-		this.__originalSnapshot = os;
+		__originalSnapshot = os;
 	}
 
 	public final NSDictionary __lastSnapshot() {
-		return this.__lastSnapshot;
+		return __lastSnapshot;
 	}
 
 	public final void __setLastSnapshot(NSDictionary ls) {
-		this.__lastSnapshot = ls;
+		__lastSnapshot = ls;
 	}
 
 	public final int __retainCount() {
-		return this.__retainCount;
+		return __retainCount;
 	}
 
 	public final void __setRetainCount(int rc) {
-		this.__retainCount = rc;
+		__retainCount = rc;
 	}
 
 	public final boolean __isInitialized() {
-		return (this.__flags & kInitializedMask) != 0;
+		return (__flags & kInitializedMask) != 0;
 	}
 
 	public final void __setInitialized(boolean inited) {
 		if (inited)
-			this.__flags |= kInitializedMask;
+			__flags |= kInitializedMask;
 		else
-			this.__flags &= ~kInitializedMask;
+			__flags &= ~kInitializedMask;
 	}
 
 	public final boolean __isShared() {
-		return (this.__flags & kSharedMask) != 0;
+		return (__flags & kSharedMask) != 0;
 	}
 
 	public final void __setShared(boolean shared) {
 		if (shared)
-			this.__flags |= kSharedMask;
+			__flags |= kSharedMask;
 		else
-			this.__flags &= ~kSharedMask;
+			__flags &= ~kSharedMask;
 	}
 
 	public final boolean __hasAuxillaryObservers() {
-		return (this.__flags & kAuxObserverMask) != 0;
+		return (__flags & kAuxObserverMask) != 0;
 	}
 
 	public final void __setAuxillaryObservers(boolean hao) {
 		if (hao)
-			this.__flags |= kAuxObserverMask;
+			__flags |= kAuxObserverMask;
 		else
-			this.__flags &= ~kAuxObserverMask;
+			__flags &= ~kAuxObserverMask;
 	}
 
 	public boolean __hasPendingChanges() {
-		return (this.__flags & kPendingChangesMask) != 0;
+		return (__flags & kPendingChangesMask) != 0;
 	}
 
 	public void __clearPendingChanges() {
-		this.__flags &= ~kPendingChangesMask;
+		__flags &= ~kPendingChangesMask;
 	}
 
 	public boolean __hasPendingUpdate() {
-		return (this.__flags & kPendingUpdatesMask) != 0;
+		return (__flags & kPendingUpdatesMask) != 0;
 	}
 
 	public void __setPendingUpdate(boolean changed) {
 		if (changed)
-			this.__flags |= kPendingUpdatesMask;
+			__flags |= kPendingUpdatesMask;
 		else
-			this.__flags &= ~kPendingUpdatesMask;
+			__flags &= ~kPendingUpdatesMask;
 	}
 
 	public final boolean __isPendingInsertion() {
-		return (this.__flags & kPendingInsertionMask) != 0;
+		return (__flags & kPendingInsertionMask) != 0;
 	}
 
 	public final void __setPendingInsertion(boolean inserted) {
 		if (inserted)
-			this.__flags |= kPendingInsertionMask;
+			__flags |= kPendingInsertionMask;
 		else
-			this.__flags &= ~kPendingInsertionMask;
+			__flags &= ~kPendingInsertionMask;
 	}
 
 	public final boolean __isPendingDeletion() {
-		return (this.__flags & kPendingDeletionMask) != 0;
+		return (__flags & kPendingDeletionMask) != 0;
 	}
 
 	public final void __setPendingDeletion(boolean deleted) {
 		if (deleted)
-			this.__flags |= kPendingDeletionMask;
+			__flags |= kPendingDeletionMask;
 		else
-			this.__flags &= ~kPendingDeletionMask;
+			__flags &= ~kPendingDeletionMask;
 	}
 
 	@Deprecated
@@ -220,7 +220,7 @@ public abstract class EOCustomObject implements EOEnterpriseObject, EODeferredFa
 	}
 
 	public EOCustomObject() {
-		this.__readOnly = null;
+		__readOnly = null;
 	}
 
 	public final Object opaqueState() {
@@ -234,10 +234,10 @@ public abstract class EOCustomObject implements EOEnterpriseObject, EODeferredFa
 
 	@Override
 	public int hashCode() {
-		if (this.__hashCodeCache == 0) {
-			this.__hashCodeCache = super.hashCode();
+		if (__hashCodeCache == 0) {
+			__hashCodeCache = super.hashCode();
 		}
-		return this.__hashCodeCache;
+		return __hashCodeCache;
 	}
 
 	@Override
@@ -312,7 +312,7 @@ public abstract class EOCustomObject implements EOEnterpriseObject, EODeferredFa
 		if (cd != null) {
 			cd.awakeObjectFromInsertion(this, ec);
 		}
-		this.__readOnly = null;
+		__readOnly = null;
 	}
 
 	public void awakeFromFetch(EOEditingContext ec) {
@@ -320,7 +320,7 @@ public abstract class EOCustomObject implements EOEnterpriseObject, EODeferredFa
 		if (cd != null) {
 			cd.awakeObjectFromFetch(this, ec);
 		}
-		this.__readOnly = null;
+		__readOnly = null;
 	}
 
 	public NSDictionary<String, Object> snapshot() {
@@ -343,7 +343,7 @@ public abstract class EOCustomObject implements EOEnterpriseObject, EODeferredFa
 		}
 
 		while (tokCount-- > 0) {
-			String key = (String) toOneRelationshipKeys.objectAtIndex(tokCount);
+			String key = toOneRelationshipKeys.objectAtIndex(tokCount);
 			Object value = storedValueForKey(key);
 			if (value != null) {
 				snapshot.setObjectForKey(value, key);
@@ -746,11 +746,11 @@ public abstract class EOCustomObject implements EOEnterpriseObject, EODeferredFa
 
 	public void willRead() {
 		if (!__isShared()) {
-			if (this.__faultHandler == null)
+			if (__faultHandler == null)
 				return;
 		} else {
 			synchronized (this) {
-				if (this.__faultHandler == null) {
+				if (__faultHandler == null) {
 					return;
 				}
 			}
@@ -758,8 +758,8 @@ public abstract class EOCustomObject implements EOEnterpriseObject, EODeferredFa
 
 		EOEditingContext ec = editingContext();
 		if (ec == null) {
-			if ((this.__faultHandler instanceof EOEditingContext._EOInvalidFaultHandler)) {
-				this.__faultHandler.completeInitializationOfObject(this);
+			if ((__faultHandler instanceof EOEditingContext._EOInvalidFaultHandler)) {
+				__faultHandler.completeInitializationOfObject(this);
 			}
 			throw new IllegalStateException(
 					"Attempt to access an EO that has either not been inserted into any EOEditingContext or its EOEditingContext has already been disposed");
@@ -768,12 +768,12 @@ public abstract class EOCustomObject implements EOEnterpriseObject, EODeferredFa
 		ec.lockObjectStore();
 		try {
 			synchronized (this) {
-				if (this.__faultHandler == null) {
+				if (__faultHandler == null) {
 					ec.unlockObjectStore();
 					return;
 				}
 			}
-			this.__faultHandler.completeInitializationOfObject(this);
+			__faultHandler.completeInitializationOfObject(this);
 		} finally {
 			ec.unlockObjectStore();
 		}
@@ -781,39 +781,39 @@ public abstract class EOCustomObject implements EOEnterpriseObject, EODeferredFa
 
 	public boolean isFault() {
 		if (!__isShared()) {
-			return this.__faultHandler != null;
+			return __faultHandler != null;
 		}
 		synchronized (this) {
-			return this.__faultHandler != null;
+			return __faultHandler != null;
 		}
 	}
 
 	public void clearFault() {
 		if (!__isShared())
-			this.__faultHandler = null;
+			__faultHandler = null;
 		else
 			synchronized (this) {
-				this.__faultHandler = null;
+				__faultHandler = null;
 			}
 	}
 
 	public void turnIntoFault(EOFaultHandler handler) {
 		if (!__isShared())
-			this.__faultHandler = handler;
+			__faultHandler = handler;
 		else {
 			synchronized (this) {
-				this.__faultHandler = handler;
+				__faultHandler = handler;
 			}
 		}
-		this.__readOnly = null;
+		__readOnly = null;
 	}
 
 	public EOFaultHandler faultHandler() {
 		if (!__isShared()) {
-			return this.__faultHandler;
+			return __faultHandler;
 		}
 		synchronized (this) {
-			return this.__faultHandler;
+			return __faultHandler;
 		}
 	}
 
@@ -1144,7 +1144,7 @@ public abstract class EOCustomObject implements EOEnterpriseObject, EODeferredFa
 
 		editingContext = (EOEditingContext) fields.get(SerializationEditingContextFieldKey, null);
 
-		this.__unarchivedResultingEnterpriseObject = this;
+		__unarchivedResultingEnterpriseObject = this;
 		if (editingContext == null) {
 			NSArray values = (NSArray) fields.get(SerializationPropertiesFieldKey, null);
 			if (values != null) {
@@ -1162,30 +1162,30 @@ public abstract class EOCustomObject implements EOEnterpriseObject, EODeferredFa
 			}
 			Object other = editingContext.objectForGlobalID(gid);
 			if (other != null) {
-				this.__unarchivedResultingEnterpriseObject = other;
+				__unarchivedResultingEnterpriseObject = other;
 			} else if (gid.isTemporary())
 				editingContext.recordObject(this, gid);
 			else
-				this.__unarchivedResultingEnterpriseObject = editingContext.faultForGlobalID(gid, editingContext);
+				__unarchivedResultingEnterpriseObject = editingContext.faultForGlobalID(gid, editingContext);
 		}
 	}
 
 	protected Object readResolve() throws ObjectStreamException {
-		Object temp = this.__unarchivedResultingEnterpriseObject;
-		this.__unarchivedResultingEnterpriseObject = null;
+		Object temp = __unarchivedResultingEnterpriseObject;
+		__unarchivedResultingEnterpriseObject = null;
 		return temp;
 	}
 
 	public boolean isReadOnly() {
-		if (this.__readOnly == null) {
+		if (__readOnly == null) {
 			EOClassDescription aDescription = classDescription();
 			if (aDescription != null)
-				this.__readOnly = Boolean.valueOf(aDescription.isEntityReadOnly());
+				__readOnly = Boolean.valueOf(aDescription.isEntityReadOnly());
 			else {
-				this.__readOnly = Boolean.FALSE;
+				__readOnly = Boolean.FALSE;
 			}
 		}
-		return this.__readOnly != null ? this.__readOnly.booleanValue() : false;
+		return __readOnly != null ? __readOnly.booleanValue() : false;
 	}
 
 	public static class _LazyFieldBinding extends EOCustomObject._FieldBinding {

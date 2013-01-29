@@ -41,7 +41,9 @@ public class ERDActionBar extends ERDCustomEditComponent implements ERDBranchInt
     }
 
     /** component does not synchronize it's variables */
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
+    @Override
     public boolean isStateless() { return true; }
 
     /** find the next non-null NextPageDelegate in the component tree, break if there is a D2WPage found beforehand */
@@ -69,6 +71,8 @@ public class ERDActionBar extends ERDCustomEditComponent implements ERDBranchInt
     public WOComponent performAction() {
         return nextPageFromParent();
     }
+
+    @Override
     public void reset() {
         super.reset();
         branch = null;
@@ -138,6 +142,7 @@ public class ERDActionBar extends ERDCustomEditComponent implements ERDBranchInt
         return branchDelegate() != null && branchChoices().count() > 0;
     }
 
+    @Override
     public void validationFailedWithException(Throwable theException,Object theValue, String theKeyPath) {
         parent().validationFailedWithException(theException, theValue, theKeyPath);
         if(log.isInfoEnabled())

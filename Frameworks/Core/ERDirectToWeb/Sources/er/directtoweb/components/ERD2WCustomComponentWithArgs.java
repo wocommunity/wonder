@@ -53,10 +53,12 @@ public class ERD2WCustomComponentWithArgs extends D2WCustomComponent implements 
     // Done this way so that subClasses can always get the original valueForBinding.
     public Object originalValueForBinding(String binding) { return super.valueForBinding(binding); }
     
+    @Override
     public Object valueForBinding(String binding) {
         return hasBinding(binding) ? originalValueForBinding(binding) : nonCachingContext().valueForKey(binding);
     }
 
+    @Override
     public void validationFailedWithException (Throwable e, Object value, String keyPath) {
         parent().validationFailedWithException(e,value,keyPath);
     }

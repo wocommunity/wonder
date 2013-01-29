@@ -16,7 +16,7 @@ import java.util.Set;
  * <p>on a single line. After you see this line in the application's log file, you can be
  * pretty sure that the process is indeed terminated. This notification works even if
  * there are no other shutdown hooks registered, if you ensure that this class is
- * loaded at all, e.g. by calling the no-op {@link useMe} method somewhere
+ * loaded at all, e.g. by calling the no-op {@link #useMe()} method somewhere
  * ({@link ERXApplication} does this for you if you extend that).</p>
  * 
  * <p>Usage (e.g. in your Application class constructor):</p>

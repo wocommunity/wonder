@@ -36,6 +36,7 @@ public class ERMemoryAdaptorChannel extends EOAdaptorChannel {
     _fetchIndex = -1;
   }
   
+  @Override
   @Deprecated
   public NSDictionary primaryKeyForNewRowWithEntity(EOEntity entity) {
     return adaptorContext()._newPrimaryKey(null, entity);

@@ -13,7 +13,6 @@ import er.directtoweb.components.ERDCustomComponent;
 /**
  * Used to display sections as images instead of text.<br />
  */
-
 public class ERDSectionImage extends ERDCustomComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -24,6 +23,8 @@ public class ERDSectionImage extends ERDCustomComponent {
 
     public ERDSectionImage(WOContext context) { super(context); }
 
+    @Override
     public boolean isStateless() { return true; }
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 }

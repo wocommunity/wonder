@@ -32,6 +32,7 @@ public class ERDEditableList extends ERDList {
         super(context);
     }
     
+    @Override
     public void reset() {
     	detailDataSource = null;
     	closedLabelString = null;

@@ -17,7 +17,6 @@ import com.webobjects.foundation.NSValidation;
  * Allows the choice to not specify a date.<br />
  * 
  */
-
 public class ERDEditDatePopupOrNull extends ERDEditDatePopupCommon {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -35,9 +34,6 @@ public class ERDEditDatePopupOrNull extends ERDEditDatePopupCommon {
     public String empty() { return empty; }
     public String date() { return date; }
 
-    public boolean isStateless() { return true; }
-    public boolean synchronizesVariablesWithBindings() { return false; }
-
     public Object timeZoneString() {
         return TimeZone.getDefault().getDisplayName(true, TimeZone.SHORT);
     }
@@ -50,6 +46,7 @@ public class ERDEditDatePopupOrNull extends ERDEditDatePopupCommon {
         return _radioValue;
     }
 
+    @Override
     public void reset(){
         super.reset();
         _radioValue = null;
@@ -59,6 +56,7 @@ public class ERDEditDatePopupOrNull extends ERDEditDatePopupCommon {
 
     public String radioBoxGroupName() { return ("DateOrNullGroup_"+key()); }
 
+    @Override
     public void takeValuesFromRequest (WORequest request, WOContext context) {
         super.takeValuesFromRequest (request,context);
         if (context.wasFormSubmitted()) {

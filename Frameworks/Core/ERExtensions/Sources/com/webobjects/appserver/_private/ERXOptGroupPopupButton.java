@@ -55,6 +55,7 @@ public class ERXOptGroupPopupButton extends PopUpButton
     }
     
 
+    @Override
     public void appendChildrenToResponse(WOResponse response, WOContext context)
     {
          WOComponent parent = context.component();

@@ -67,6 +67,7 @@ public class ERCMailMessageAppender extends ERXMailAppender {
     }
 
     /** Overridden because we want to use our own page */
+    @Override
     public String getExceptionPageName() {
         String name = super.getExceptionPageName();
         if(name == null) {
@@ -79,6 +80,7 @@ public class ERCMailMessageAppender extends ERXMailAppender {
      * Overridden to add the Actor into the dictionary.
      * @param event logging event
      */
+    @Override
     public NSMutableDictionary composeExceptionPageDictionary(LoggingEvent event) {
         NSMutableDictionary result = super.composeExceptionPageDictionary(event);
         result.setObjectForKey(ERCoreBusinessLogic.actor(),"actor");
@@ -89,6 +91,7 @@ public class ERCMailMessageAppender extends ERXMailAppender {
      * mail message is generated.
      * @param event logging event
      */
+    @Override
     public void subAppend(LoggingEvent event) {
         if (editingContext().hasChanges()) {
             LogLog.error("ERProblemMailMessageAppender: editingContext has changes -- infinite loop detected");

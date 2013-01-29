@@ -35,6 +35,7 @@ public class ERCaptchaEngine extends ListImageCaptchaEngine {
 	public ERCaptchaEngine() {
 	}
 
+	@Override
 	protected void buildInitialFactories() {
 		WaterFilter water = new WaterFilter();
 		water.setAmplitude(1);

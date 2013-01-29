@@ -45,6 +45,7 @@ public class ERDMassModifyButton extends WOComponent {
 
     public ERDMassModifyButton(WOContext context) { super(context); }
 
+    @Override
     public boolean isStateless() { return true; }
     public D2WContext d2wContext() { return (D2WContext)valueForBinding("d2wContext"); }
 
@@ -57,7 +58,7 @@ public class ERDMassModifyButton extends WOComponent {
         public WOComponent nextPage(WOComponent sender) {
             WOComponent result=nextPage;
             if (eo.editingContext()!=null) { // save was clicked
-                ConfirmPageInterface confirmPage = (ConfirmPageInterface)D2W.factory().confirmPageForEntityNamed(entityName,
+                ConfirmPageInterface confirmPage = D2W.factory().confirmPageForEntityNamed(entityName,
                         sender.session());
                 _MassModificatorDelegate cb=new _MassModificatorDelegate();
                 NSMutableArray keys = new NSMutableArray();
@@ -90,6 +91,7 @@ public class ERDMassModifyButton extends WOComponent {
     }
 
     private static class _MassModificatorDelegate extends _MassModificatorConfirmationDelegate {
+        @Override
         public WOComponent nextPage(WOComponent sender) {
             WOComponent result=nextPage;
             if (eo.editingContext()!=null) { // save was clicked

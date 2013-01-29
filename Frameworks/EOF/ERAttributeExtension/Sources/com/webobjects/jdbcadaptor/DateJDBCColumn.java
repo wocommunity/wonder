@@ -24,6 +24,7 @@ public class DateJDBCColumn extends ERXJDBCColumn {
 		super(aChannel);
 	}
 
+	@Override
 	Object _fetchValue(boolean flag) {
 		if (_rs == null || _column < 1) {
 			throw new JDBCAdaptorException(" *** JDBCColumn : trying to fetchValue on a null ResultSet [" + _rs + "] or unknow col [" + _column + "]!!", null);

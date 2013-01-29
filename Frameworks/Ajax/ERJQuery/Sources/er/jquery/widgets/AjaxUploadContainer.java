@@ -8,7 +8,7 @@ import com.webobjects.appserver.WOContext;
  * @author mendis
  *
  *	This version is for uploads not in forms. And can be any element.
- * @see er.prototaculous.AjaxUploadContainer 	jQuery compatible version
+ * @see er.prototaculous.widgets.AjaxUploadContainer 	jQuery compatible version
  *
  */
 public class AjaxUploadContainer extends AjaxUpload {

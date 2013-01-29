@@ -112,9 +112,17 @@ public class ERD2WCustomQueryBoolean extends D2WQueryBoolean {
 	        if(choicesIndex >= choicesNames.count()) {
 	            result = super.displayString();
 	        } else {
-	        	result = (String)choicesNames.objectAtIndex(choicesIndex);
+	        	result = choicesNames.objectAtIndex(choicesIndex);
 	        }
         }
         return ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(result);
+    }
+
+    public String uiMode() {
+    	String uiMode = "radio";
+    	if(d2wContext().valueForKey("uiMode") != null) {
+    		uiMode = (String) d2wContext().valueForKey("uiMode");
+    	}
+    	return uiMode;
     }
 }

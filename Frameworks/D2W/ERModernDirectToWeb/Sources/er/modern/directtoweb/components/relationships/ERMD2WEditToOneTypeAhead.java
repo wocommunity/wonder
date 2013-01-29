@@ -230,14 +230,14 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
         
 		EditPageInterface epi = (EditPageInterface)D2W.factory().pageForConfigurationNamed(createPageConfigurationName, session());
 		EOEditingContext newEc = ERXEC.newEditingContext(object().editingContext());
-		EOEnterpriseObject relatedObject = (EOEnterpriseObject)EOUtilities.createAndInsertInstance(newEc, destinationEntityName());
+		EOEnterpriseObject relatedObject = EOUtilities.createAndInsertInstance(newEc, destinationEntityName());
 		EOEnterpriseObject localObj = ERXEOControlUtilities.localInstanceOfObject(relatedObject.editingContext(), object());
 		if (localObj instanceof ERXGenericRecord) {
 			((ERXGenericRecord)localObj).setValidatedWhenNested(false);
 		}
 		localObj.addObjectToBothSidesOfRelationshipWithKey(relatedObject, propertyKey());
 		
-		epi.setNextPage(this.context().page());
+		epi.setNextPage(context().page());
 		epi.setObject(relatedObject);
 		
 		// Null out the current searchValue so when we come back, it regenerates
@@ -270,7 +270,7 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
 		if (extraQualifier() != null) {
 			qual = ERXQ.and(qual, extraQualifier());
 		}
-		if (this.useFetch() && ERXStringUtilities.stringIsNullOrEmpty(restrictedChoiceKey())) {
+		if (useFetch() && ERXStringUtilities.stringIsNullOrEmpty(restrictedChoiceKey())) {
 	        if(restrictingFetchSpecificationName() != null) {
 	        	qual = ERXQ.and(qual, restrictingFetchSpec().qualifier());
 	        }
@@ -300,14 +300,14 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
 
 	public String sortKey() {
 		if (_sortKey == null) {
-			_sortKey = (String)stringValueForBinding(Keys.sortKey);
+			_sortKey = stringValueForBinding(Keys.sortKey);
 		}
 		return _sortKey;
 	}
 
 	public String propertyKey() {
 		if (_propertyKey == null) {
-			_propertyKey = (String)stringValueForBinding(Keys.propertyKey);
+			_propertyKey = stringValueForBinding(Keys.propertyKey);
 		}
 		return _propertyKey;
 	}
@@ -322,7 +322,7 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
     		_allItems = (NSArray<EOEnterpriseObject>)restrictedChoiceList();
     		if (_allItems == null) {
     			EOFetchSpecification fetchSpec = new EOFetchSpecification(destinationEntityName(), null, null);
-    			_allItems = (NSArray<EOEnterpriseObject>)ec().objectsWithFetchSpecification(fetchSpec);
+    			_allItems = ec().objectsWithFetchSpecification(fetchSpec);
     		}
 		}
 		return _allItems;
@@ -384,7 +384,7 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
             return valueForKeyPath(restrictedChoiceKey);
         String fetchSpecName = stringValueForBinding(Keys.restrictingFetchSpecification);
         if(fetchSpecName != null) {
-            EORelationship relationship = ERXUtilities.relationshipWithObjectAndKeyPath((EOEnterpriseObject)object(),
+            EORelationship relationship = ERXUtilities.relationshipWithObjectAndKeyPath(object(),
                                                                                         (String)d2wContext().valueForKey(Keys.propertyKey));
             return EOUtilities.objectsWithFetchSpecificationAndBindings(object().editingContext(), relationship.destinationEntity().name(),fetchSpecName,null);
         }
@@ -409,7 +409,7 @@ public class ERMD2WEditToOneTypeAhead extends ERDCustomEditComponent {
 	
 	public String searchTermSelectedFunctionName() {
 		if (_safeElementID == null) {
-			_safeElementID =ERXStringUtilities.safeIdentifierName(this.context().elementID());
+			_safeElementID =ERXStringUtilities.safeIdentifierName(context().elementID());
 		}
 		return "ermdtorlu_" + _safeElementID + "CompleteFunction";
 	}

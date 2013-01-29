@@ -69,8 +69,7 @@ public class ERXPartialExample0 extends ERXMigrationDatabase.Migration implement
 		partial_EmployeePersonTable.addForeignKey("employeeTypeID", "EmployeeType", "id");
 		departmentTable.addForeignKey("companyID", "Company", "id");
   }
-  
-  //@Override
+
   public void postUpgrade(EOEditingContext ec, EOModel model) throws Throwable {
 	  EmployeeType employee = EmployeeType.createEmployeeType(ec, "Employee");
 	  EmployeeType contract = EmployeeType.createEmployeeType(ec, "Contractor");

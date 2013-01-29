@@ -6,8 +6,11 @@
 //
 package er.wopaypal;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSLog;
 
 /** PayPalSingleItemLinkBase is the abstract superclass for most of the PayPal components.  It contains the bulk of the values that PayPal is interested in, and the list of bindings that those values correlate to.
  */

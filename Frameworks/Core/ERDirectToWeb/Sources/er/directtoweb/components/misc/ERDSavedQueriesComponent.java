@@ -324,6 +324,7 @@ public class ERDSavedQueriesComponent extends WOComponent {
             setQueryBindings((NSDictionary) decodeDictionaryWithEOs((NSDictionary)unarchiver.decodeObjectForKey("queryBindings")));
 		}
 
+		@Override
 		public String toString() {
 			return "SavedQuery: " + hashCode() + " dict=" + dict;
 		}
@@ -360,7 +361,7 @@ public class ERDSavedQueriesComponent extends WOComponent {
             EOAttribute primaryKeyAttribute;
             EOEnterpriseObject eo = null;
             if (entity != null) {
-                primaryKeyAttribute = ERXArrayUtilities.firstObject((NSArray<EOAttribute>)entity.primaryKeyAttributes());
+                primaryKeyAttribute = ERXArrayUtilities.firstObject(entity.primaryKeyAttributes());
                 Object primaryKeyObject = pk;
                 if (log.isDebugEnabled()) log.debug("decodeEO with dict: " + dictionary);
 
@@ -439,10 +440,12 @@ public class ERDSavedQueriesComponent extends WOComponent {
 	public static class _TimestampSupport extends EOKeyValueArchiving.Support {
 		private static NSTimestampFormatter _formatter = new NSTimestampFormatter("%Y-%m-%d %H:%M:%S");
 
+		@Override
 		public void encodeWithKeyValueArchiver(Object receiver, EOKeyValueArchiver archiver) {
 			archiver.encodeObject(_formatter.format(receiver), "value");
 		}
 
+		@Override
 		public Object decodeObjectWithKeyValueUnarchiver(EOKeyValueUnarchiver unarchiver) {
 			try {
 				return _formatter.parseObject((String) unarchiver.decodeObjectForKey("value"));
@@ -541,15 +544,12 @@ public class ERDSavedQueriesComponent extends WOComponent {
 	}
 
 	/** component does not synchronize variables */
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}
 
-	/** component is not stateless */
-	public boolean isStateless() {
-		return false;
-	}
-
+	@Override
 	public void sleep() {
 		needsAutoSubmit = false;
 		super.sleep();

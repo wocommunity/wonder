@@ -18,8 +18,8 @@ public class ERXRestClassDescriptionFactory {
 
 	public static String _guessMismatchedCaseEntityName(String mismatchedCaseEntityName) {
 		String guessedEntityName = null;
-		for (EOModel model : (NSArray<EOModel>)EOModelGroup.defaultGroup().models()) {
-			for (EOEntity entity : (NSArray<EOEntity>)model.entities()) {
+		for (EOModel model : EOModelGroup.defaultGroup().models()) {
+			for (EOEntity entity : model.entities()) {
 				if (entity.name().equalsIgnoreCase(mismatchedCaseEntityName)) {
 					guessedEntityName = entity.name();
 					break;

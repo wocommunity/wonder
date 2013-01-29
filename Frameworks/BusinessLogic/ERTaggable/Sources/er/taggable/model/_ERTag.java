@@ -1,27 +1,27 @@
 // DO NOT EDIT.  Make changes to ERTag.java instead.
 package er.taggable.model;
 
-import com.webobjects.eoaccess.EOUtilities;
-import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOKeyValueQualifier;
-import com.webobjects.eocontrol.EOQualifier;
-import com.webobjects.eocontrol.EOSortOrdering;
-import com.webobjects.foundation.NSArray;
-import java.util.NoSuchElementException;
+import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
+import java.math.*;
+import java.util.*;
 import org.apache.log4j.Logger;
-import er.extensions.eof.ERXEOControlUtilities;
-import er.extensions.eof.ERXFetchSpecification;
-import er.extensions.eof.ERXKey;
 
+import er.extensions.eof.*;
+import er.extensions.foundation.*;
+
+@SuppressWarnings("all")
 public abstract class _ERTag extends er.extensions.eof.ERXGenericRecord {
-
   public static final String ENTITY_NAME = "ERTag";
 
   // Attribute Keys
   public static final ERXKey<String> NAME = new ERXKey<String>("name");
+  // Relationship Keys
 
   // Attributes
   public static final String NAME_KEY = NAME.key();
+  // Relationships
 
   private static Logger LOG = Logger.getLogger(_ERTag.class);
 
@@ -44,8 +44,9 @@ public abstract class _ERTag extends er.extensions.eof.ERXGenericRecord {
     takeStoredValueForKey(value, _ERTag.NAME_KEY);
   }
 
+
   public static ERTag createERTag(EOEditingContext editingContext) {
-    ERTag eo = (ERTag) EOUtilities.createAndInsertInstance(editingContext, _ERTag.ENTITY_NAME);
+    ERTag eo = (ERTag) EOUtilities.createAndInsertInstance(editingContext, _ERTag.ENTITY_NAME);    
     return eo;
   }
 

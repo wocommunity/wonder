@@ -13,7 +13,7 @@ public class PageWrapper extends ERXStatelessComponent {
     }
 
 	public boolean showBackButton() {
-		return !( this.context().page().name().equals( Main.class.getName() ) );
+		return !( context().page().name().equals( Main.class.getName() ) );
 	}
 
 	public WOActionResults returnAction() {

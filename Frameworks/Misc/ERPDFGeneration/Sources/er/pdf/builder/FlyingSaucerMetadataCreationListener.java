@@ -114,7 +114,7 @@ public class FlyingSaucerMetadataCreationListener extends DefaultPDFCreationList
 				(Enumeration<String>) headMetaTags.propertyNames();
 
 		while (e.hasMoreElements()) {
-			String key = (String) e.nextElement();
+			String key = e.nextElement();
 			PdfString val =
 					new PdfString(headMetaTags.getProperty(key),
 							PdfObject.TEXT_UNICODE);

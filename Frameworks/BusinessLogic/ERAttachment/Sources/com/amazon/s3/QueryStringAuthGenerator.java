@@ -60,8 +60,8 @@ public class QueryStringAuthGenerator {
         this.server = server;
         this.port = port;
 
-        this.expiresIn = DEFAULT_EXPIRES_IN;
-        this.expires = null;
+        expiresIn = DEFAULT_EXPIRES_IN;
+        expires = null;
     }
 
     public void setExpires(long millisSinceEpoch) {
@@ -148,8 +148,8 @@ public class QueryStringAuthGenerator {
 
     private String generateURL(String method, String path, Map headers) {
         long expires = 0L;
-        if (this.expiresIn != null) {
-            expires = System.currentTimeMillis() + this.expiresIn.longValue();
+        if (expiresIn != null) {
+            expires = System.currentTimeMillis() + expiresIn.longValue();
         } else if (this.expires != null) {
             expires = this.expires.longValue();
         } else {

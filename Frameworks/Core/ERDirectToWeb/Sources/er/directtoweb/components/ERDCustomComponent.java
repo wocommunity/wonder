@@ -333,7 +333,7 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
 
     /** Overridden from superclass to turn on component synching, which is the default. */
     @Override
-    public boolean synchronizesVariablesWithBindings() { return true; }
+    public boolean synchronizesVariablesWithBindings() { return true; } // CHECKME why then does this class subclass ERXNonSynchronizingComponent?
 
     /** Is D2W debugging enabled. */
     public boolean d2wDebuggingEnabled() {

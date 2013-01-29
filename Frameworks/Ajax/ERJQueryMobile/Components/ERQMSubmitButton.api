@@ -10,5 +10,6 @@
     <binding defaults="Boolean" name="mini"/>
     <binding name="actionClass"/>
     <binding name="directActionName"/>
+    <binding name="id"/>
     </wo>
 </wodefinitions>

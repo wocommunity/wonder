@@ -25,6 +25,7 @@ import er.extensions.foundation.ERXThreadStorage;
 
 public class ERXThreadStorageAppender extends AppenderSkeleton {
 
+	@Override
 	public void append(LoggingEvent event) {
 		if (ERXSession.session() != null) {
 			StringBuffer buf = buffer();

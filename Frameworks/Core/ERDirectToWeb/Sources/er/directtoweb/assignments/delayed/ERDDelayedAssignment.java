@@ -41,6 +41,7 @@ public abstract class ERDDelayedAssignment extends Assignment  {
     public ERDDelayedAssignment(String key, Object value) { super(key,value); }
 
     // ENHANCEME: Might want to make this method final
+    @Override
     public Object fire(D2WContext c) { return this; }
     
     /**

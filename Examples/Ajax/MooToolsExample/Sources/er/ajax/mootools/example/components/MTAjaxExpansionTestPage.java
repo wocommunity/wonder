@@ -14,6 +14,7 @@ public class MTAjaxExpansionTestPage extends Main {
         super(context);
     }
 
+    @Override
     public void appendToResponse(WOResponse response, WOContext context) {
     	super.appendToResponse(response, context);
     	MTAjaxUtils.addStylesheetResourceInHead(context, response, "app", "css/ToggleDetails.css");

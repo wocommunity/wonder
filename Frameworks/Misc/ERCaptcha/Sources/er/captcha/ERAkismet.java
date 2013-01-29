@@ -43,16 +43,14 @@ public class ERAkismet extends ERXComponent {
 		super(context);
 	}
 
-	public boolean synchronizesVariablesWithBindings() {
-		return false;
-	}
-
+	@Override
 	public boolean isStateless() {
 		return true;
 	}
 
+	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
-		if (context._wasFormSubmitted()) {
+		if (context.wasFormSubmitted()) {
 			super.takeValuesFromRequest(request, context);
 
 			String apiKey = ERXProperties.stringForKey("er.captcha.akismet.apiKey");

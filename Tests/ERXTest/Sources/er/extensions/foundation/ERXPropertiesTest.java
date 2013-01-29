@@ -9,7 +9,6 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
 import er.erxtest.ERXTestCase;
-import er.extensions.foundation.ERXProperties;
 
 public class ERXPropertiesTest extends ERXTestCase {
   public void test() throws IOException {

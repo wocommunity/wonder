@@ -10,7 +10,6 @@ import er.extensions.foundation.ERXStringUtilities;
  * and wraps the buttons in an ActionList UL.
  * 
  * @author david
- *
  */
 public class ERMDActionBar extends ERDActionBar {
 	

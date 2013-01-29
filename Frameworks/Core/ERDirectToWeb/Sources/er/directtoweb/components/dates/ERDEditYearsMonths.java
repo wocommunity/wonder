@@ -19,7 +19,6 @@ import er.extensions.eof.ERXConstant;
  * Used to edit a number as if it where a number of years and a number of months.<br />
  * 
  */
-
 public class ERDEditYearsMonths extends ERDCustomEditComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -30,7 +29,9 @@ public class ERDEditYearsMonths extends ERDCustomEditComponent {
 
     public ERDEditYearsMonths(WOContext context) { super(context); }
 
+    @Override
     public boolean isStateless() { return true; }
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     public final static NSMutableArray _yearList=new NSMutableArray();
@@ -39,7 +40,7 @@ public class ERDEditYearsMonths extends ERDCustomEditComponent {
             _yearList.addObject(ERXConstant.integerForInt(i));
         }
     }
-    public NSArray yearList(){ return (NSArray)_yearList; }
+    public NSArray yearList(){ return _yearList; }
 
     public final static NSMutableArray _monthList=new NSMutableArray();
     static {
@@ -47,14 +48,14 @@ public class ERDEditYearsMonths extends ERDCustomEditComponent {
             _monthList.addObject(ERXConstant.integerForInt(i));
         }
     }
-    public NSArray monthList() { return (NSArray)_monthList; }
+    public NSArray monthList() { return _monthList; }
 
     public Number totalNumberOfMonths() {
         return objectPropertyValue()!=null ?(Number)objectPropertyValue(): ERXConstant.ZeroInteger;
     }
     protected Integer numberOfYears;
     public Integer numberOfYears() {
-        numberOfYears=(Integer)yearList().objectAtIndex((int)totalNumberOfMonths().intValue()/12);
+        numberOfYears=(Integer)yearList().objectAtIndex(totalNumberOfMonths().intValue()/12);
         return numberOfYears;
     }
 
@@ -64,6 +65,7 @@ public class ERDEditYearsMonths extends ERDCustomEditComponent {
         return numberOfMonths;
     }
 
+    @Override
     public void takeValuesFromRequest(WORequest q, WOContext c) throws NSValidation.ValidationException {
         super.takeValuesFromRequest(q,c);
         int yearMonths = numberOfMonths != null ? numberOfMonths.intValue() : 0;

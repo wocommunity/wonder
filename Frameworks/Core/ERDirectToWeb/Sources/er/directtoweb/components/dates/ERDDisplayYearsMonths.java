@@ -26,7 +26,9 @@ public class ERDDisplayYearsMonths extends ERDCustomEditComponent {
 
     public ERDDisplayYearsMonths(WOContext context) {super(context);}
 
+    @Override
     public boolean isStateless() { return true; }
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     public Number totalNumberOfMonths() { return objectKeyPathValue()!=null ?(Number)objectKeyPathValue(): ERXConstant.ZeroInteger; }

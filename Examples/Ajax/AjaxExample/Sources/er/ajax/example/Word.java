@@ -10,7 +10,7 @@ public class Word {
 
 	public Word(String name) {
 		this.name = name;
-		this.value = name.length();
+		value = name.length();
 	}
 
 	@Override

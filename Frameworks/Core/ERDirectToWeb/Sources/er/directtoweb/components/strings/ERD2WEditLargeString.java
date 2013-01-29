@@ -92,17 +92,20 @@ public class ERD2WEditLargeString extends D2WEditLargeString {
       return false;
     }
 
+    @Override
     public void validationFailedWithException(Throwable theException, Object theValue, String theKeyPath) {
         // This is for number formatting exceptions
         String keyPath = theKeyPath.equals("value") ? propertyKey() : theKeyPath;
         parent().validationFailedWithException(theException, theValue, keyPath);
     }
 
+    @Override
     public Object validateTakeValueForKeyPath(Object value, String keyPath) throws ValidationException {
         value = fixValue(value);
         return super.validateTakeValueForKeyPath(value, keyPath);
     }
 
+    @Override
     public void setValue(Object value) {
         value = fixValue(value);
         super.setValue(value);
