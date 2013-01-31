@@ -11,7 +11,6 @@ import com.webobjects.foundation.NSMutableArray;
  * 
  * @see WOCheckBoxList
  * @author mendis
- *
  */
 public class WXCheckboxList extends WOComponent {
 	/**
@@ -26,11 +25,6 @@ public class WXCheckboxList extends WOComponent {
 	
     public WXCheckboxList(WOContext context) {
         super(context);
-    }
-    
-    @Override
-    public boolean synchronizesVariablesWithBindings() {
-    	return false;
     }
     
     @Override
@@ -58,7 +52,6 @@ public class WXCheckboxList extends WOComponent {
 	}
     
     // accesors
-    @SuppressWarnings("unchecked")
 	private NSArray selections() {
     	return (NSArray) valueForBinding(Bindings.selections);
     }
@@ -83,7 +76,7 @@ public class WXCheckboxList extends WOComponent {
     }
     
     public String elementName() {
-    	return hasBinding(Bindings.name) ? (String) valueForBinding(Bindings.name) : _id();		
+    	return hasBinding(Bindings.name) ? (String) valueForBinding(Bindings.name) : _id();
     }
     
     public String id() {
@@ -91,7 +84,7 @@ public class WXCheckboxList extends WOComponent {
     }
     
     private String _id() {
-    	if (_id == null) _id = hasBinding(Bindings.id) ? (String)  valueForBinding(Bindings.id) : context().elementID();	// RM: FIXME: convert to javascriptElementID() in WO 5.4
+    	if (_id == null) _id = hasBinding(Bindings.id) ? (String)  valueForBinding(Bindings.id) : context().javaScriptElementID();
     	return _id;
     }
     

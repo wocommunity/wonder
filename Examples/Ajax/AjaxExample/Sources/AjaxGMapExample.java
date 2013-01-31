@@ -1,6 +1,8 @@
 
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 
 public class AjaxGMapExample extends WOComponent {
 

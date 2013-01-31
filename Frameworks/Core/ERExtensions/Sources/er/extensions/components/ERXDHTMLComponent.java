@@ -27,6 +27,7 @@ public class ERXDHTMLComponent extends ERXStatelessComponent {
         super(context);
     }
 
+    @Override
     public void reset() {
         super.reset();
         varName = null;

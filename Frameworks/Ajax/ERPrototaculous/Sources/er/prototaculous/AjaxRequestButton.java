@@ -21,16 +21,10 @@ import er.extensions.appserver.ERXWOContext;
  * @see AjaxRequest
  *   
  * @author mendis
- *
  */
 public class AjaxRequestButton extends AjaxRequest {
     public AjaxRequestButton(WOContext context) {
         super(context);
-    }
-    
-    @Override
-    public boolean synchronizesVariablesWithBindings() {
-    	return false;
     }
     
     @Override

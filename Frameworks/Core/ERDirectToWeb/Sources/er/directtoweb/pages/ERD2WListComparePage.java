@@ -66,6 +66,7 @@ public class ERD2WListComparePage extends ERD2WListPage {
     }
 
     private NSArray _displayPropertyKeys;
+    @Override
     public NSArray displayPropertyKeys() {
         if (_displayPropertyKeys == null) {
             _displayPropertyKeys = (NSArray)d2wContext().valueForKey("displayPropertyKeys");
@@ -89,6 +90,7 @@ public class ERD2WListComparePage extends ERD2WListPage {
         d2wContext().takeValueForKey(null, "propertyKey");
     }
 
+    @Override
     public void appendToResponse(WOResponse response, WOContext context) {
         prepare();
         super.appendToResponse(response, context);

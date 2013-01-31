@@ -3,12 +3,12 @@ package er.rest.format;
 import java.util.Date;
 import java.util.Set;
 
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-
 import net.sf.json.JsonConfig;
 import net.sf.json.processors.JsonValueProcessor;
 import net.sf.json.processors.JsonValueProcessorMatcher;
+
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSTimestamp;

@@ -43,6 +43,7 @@ public class ERDEditListButton extends ERDCustomEditComponent {
     public EOEnterpriseObject item;
     protected NextPageDelegate _nextPageDelegate;
 
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     

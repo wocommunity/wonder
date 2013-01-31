@@ -21,7 +21,6 @@ import com.webobjects.appserver.WOContext;
  * @binding action optional action
  * @binding class optional css class name
  */
-
 public class ERXHyperlinkKeyValueSetter extends WOComponent {
 	/**
 	 * Do I need to update serialVersionUID?

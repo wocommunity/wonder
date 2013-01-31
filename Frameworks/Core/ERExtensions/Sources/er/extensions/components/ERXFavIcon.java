@@ -43,6 +43,7 @@ public class ERXFavIcon extends WOHTMLDynamicElement {
 		}
 	}
 
+	@Override
 	public void appendAttributesToResponse(WOResponse response, WOContext context) {
 		WOComponent component = context.component();
 		String href;
@@ -72,6 +73,7 @@ public class ERXFavIcon extends WOHTMLDynamicElement {
 		super.appendAttributesToResponse(response, context);
 	}
 	
+	@Override
 	protected boolean hasContent() { return false; }
 	
 }

@@ -25,5 +25,6 @@ public class ERD2WInspect extends ERDCustomEditComponent {
 
     public ERD2WInspect(WOContext context) { super(context); }
     
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 }

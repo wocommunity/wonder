@@ -2,12 +2,19 @@ package er.reporting;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSNumberFormatter;
 
 import er.extensions.formatters.ERXNumberFormatter;
 import er.extensions.foundation.ERXValueUtilities;
-import er.grouping.*;
+import er.grouping.DRRecord;
+import er.grouping.DRRecordGroup;
+import er.grouping.DRReportModel;
+import er.grouping.DRValue;
 
 /**
  * Contains a cell in the table that {@link WRReport} has set up.
@@ -17,7 +24,6 @@ import er.grouping.*;
  * for the report component as the <code>reportComponentName</code>
  * binding.
  */
-
 public class WRRecordGroup extends WOComponent  {
     /** logging support */
     private static final Logger log = Logger.getLogger(WRRecordGroup.class);
@@ -47,6 +53,7 @@ public class WRRecordGroup extends WOComponent  {
     }
 
     /** Resets cached values. */
+    @Override
     public void reset() {
         _totalToShow = null;
         _recordGroup = null;
@@ -61,22 +68,16 @@ public class WRRecordGroup extends WOComponent  {
         _coordinates = null;
         _totalDict = null;
         _totalCount = -1;
-    }
-
-    /** Component does not synchronize with bindings, and your subclasses should be doing so, too. */
-    public final boolean synchronizesVariablesWithBindings() {
-        return false;
+        super.reset();
     }
 
     /** Component is stateless, and your subclasses should be so, too. */
+    @Override
     public boolean isStateless() {
         return true;
     }
-    
-    public void sleep() {
-        //this.reset();
-    }
 
+    @Override
     public void appendToResponse(WOResponse r, WOContext c) {
         super.appendToResponse(r, c);
     }
@@ -85,7 +86,7 @@ public class WRRecordGroup extends WOComponent  {
     /** Returns the {@link DRRecordGroup} from the bindings. */
     public DRRecordGroup recordGroup() {
         if (_recordGroup == null) {
-            _recordGroup = (DRRecordGroup)this.valueForBinding("recordGroup");
+            _recordGroup = (DRRecordGroup)valueForBinding("recordGroup");
         }
         return _recordGroup;
     }
@@ -97,7 +98,7 @@ public class WRRecordGroup extends WOComponent  {
      */
     public String displayType() {
         if (_displayType == null) {
-            _displayType = (String)this.valueForBinding("displayType");
+            _displayType = (String)valueForBinding("displayType");
             if (_displayType == null) {
                 _displayType = "TOTALS";
             }
@@ -107,7 +108,7 @@ public class WRRecordGroup extends WOComponent  {
 
     public String noTotalLabel() {
         if (_noTotalLabel == null) {
-            _noTotalLabel = (String)this.valueForBinding("noTotalLabel");
+            _noTotalLabel = (String)valueForBinding("noTotalLabel");
             if (_noTotalLabel == null) {
                 _noTotalLabel = "-";
             }
@@ -117,7 +118,7 @@ public class WRRecordGroup extends WOComponent  {
 
     public String reportStyle() {
         if (_reportStyle == null) {
-            _reportStyle = (String)this.valueForBinding("reportStyle");
+            _reportStyle = (String)valueForBinding("reportStyle");
             if (_reportStyle == null) {
                 _reportStyle = "NESTED_CELLS";
             }
@@ -127,7 +128,7 @@ public class WRRecordGroup extends WOComponent  {
 
 
     public NSArray records() {
-        return this.recordGroup().sortedRecordList();
+        return recordGroup().sortedRecordList();
     }
 
 
@@ -135,7 +136,7 @@ public class WRRecordGroup extends WOComponent  {
         //log.debug( "entered");
         if(recordGroup() == null)
             return NSArray.EmptyArray;
-        return this.recordGroup().totalList();
+        return recordGroup().totalList();
     }
 
     public double totalValueTotal() {
@@ -146,20 +147,20 @@ public class WRRecordGroup extends WOComponent  {
     }
 
     public boolean nototals() {
-        if (this.totals().count() > 0) {
+        if (totals().count() > 0) {
             return false;
         }
         return true;
     }
 
-
+    @Override
     public String toString() {
-        return this.recordGroup().totals().toString();
+        return recordGroup().totals().toString();
     }
 
     public DRReportModel model() {
         if (_model == null) {
-            _model = (DRReportModel)this.valueForBinding("model");
+            _model = (DRReportModel)valueForBinding("model");
         }
         return _model;
     }
@@ -216,7 +217,7 @@ public class WRRecordGroup extends WOComponent  {
 
 
     public boolean showTotalsOnlyAsTable() {
-        if (this.showTotalsOnly() && this.showAsTable()) {
+        if (showTotalsOnly() && showAsTable()) {
             return true;
         }
         return false;
@@ -224,7 +225,7 @@ public class WRRecordGroup extends WOComponent  {
 
 
     public boolean showTotalsOnlyAsCells() {
-        if (this.showTotalsOnly() && !this.showAsTable()) {
+        if (showTotalsOnly() && !showAsTable()) {
             return true;
         }
         return false;
@@ -232,7 +233,7 @@ public class WRRecordGroup extends WOComponent  {
 
 
     public boolean showRecordTableAsCells() {
-        if (this.showRecordTable() && !this.showAsTable()) {
+        if (showRecordTable() && !showAsTable()) {
             return true;
         }
         return false;
@@ -240,7 +241,7 @@ public class WRRecordGroup extends WOComponent  {
 
 
     public boolean showRecordTableAsTable() {
-        if (this.showRecordTable() && this.showAsTable()) {
+        if (showRecordTable() && showAsTable()) {
             return true;
         }
         return false;
@@ -254,7 +255,7 @@ public class WRRecordGroup extends WOComponent  {
 
     public String totalToShow() {
         if (_totalToShow == null) {
-            _totalToShow = (String)this.valueForBinding("totalToShow");
+            _totalToShow = (String)valueForBinding("totalToShow");
         }
         return _totalToShow;
     }
@@ -263,19 +264,19 @@ public class WRRecordGroup extends WOComponent  {
     public String singleTotal() {
         if(recordGroup() == null)
             return noTotalLabel();
-        String totalKey = this.totalToShow();
+        String totalKey = totalToShow();
 
         double doubleValue = 0.0;
         
         if(totalKey != null) {
-            NSArray tots = this.recordGroup().totalList();
+            NSArray tots = recordGroup().totalList();
             
             if (tots != null && tots.count() > 0) {
-                DRValue v = this.recordGroup().totalForKey(this.totalToShow());
+                DRValue v = recordGroup().totalForKey(totalToShow());
                 if(v != null) {
                     doubleValue = v.total();
                 } else {
-                    return this.noTotalLabel();
+                    return noTotalLabel();
                 }
             }
         }
@@ -287,12 +288,12 @@ public class WRRecordGroup extends WOComponent  {
 
 
     public int nototalsrowspan() {
-        return this.model().flatAttributeListTotal().count();
+        return model().flatAttributeListTotal().count();
     }
 
 
     public boolean hDimsUsed() {
-        if (this.model().hList().count() > 0) {
+        if (model().hList().count() > 0) {
             return true;
         }
         return false;
@@ -300,7 +301,7 @@ public class WRRecordGroup extends WOComponent  {
 
 
     public boolean useVerticalReportStyle() {
-        String style = this.reportStyle();
+        String style = reportStyle();
         if ("VERTICAL_ROWS".equals(style)) {
             return true;
         }
@@ -309,21 +310,21 @@ public class WRRecordGroup extends WOComponent  {
 
     public NSDictionary totalDict() {
         if (_totalDict == null) {
-            _totalDict = (NSDictionary)this.valueForBinding("totalDict");
+            _totalDict = (NSDictionary)valueForBinding("totalDict");
         }
         return _totalDict;
     }
 
     public NSDictionary coordinates() {
         if (_coordinates == null) {
-            _coordinates = (NSDictionary)this.valueForBinding("coordinates");
+            _coordinates = (NSDictionary)valueForBinding("coordinates");
         }
         return _coordinates;
     }
 
     public NSArray colors() {
         if (_colors == null) {
-            _colors = (NSArray)this.valueForBinding("colors");
+            _colors = (NSArray)valueForBinding("colors");
             if(_colors == null) {
                 _colors = NSArray.EmptyArray;
             }
@@ -333,7 +334,7 @@ public class WRRecordGroup extends WOComponent  {
 
     public int totalCount() {
         if(_totalCount == -1) {
-            NSDictionary d = this.totalDict();
+            NSDictionary d = totalDict();
             if (d == null) {
                 _totalCount = 0;
             } else {
@@ -344,28 +345,28 @@ public class WRRecordGroup extends WOComponent  {
     }
 
     public boolean isNotTotalGroup() {
-        if (this.totalCount() > 0) {
+        if (totalCount() > 0) {
             return false;
         }
         return true;
     }
 
     public NSDictionary attributeListDict() {
-        if (this.totalsOnly()) {
-            return this.model().flatAttributeListTotalDict();
+        if (totalsOnly()) {
+            return model().flatAttributeListTotalDict();
         }
 
-        return this.model().flatAttributeDepthDict();
+        return model().flatAttributeDepthDict();
     }
 
 
     public int depthCount() {
-        return this.attributeListDict().allKeys().count();
+        return attributeListDict().allKeys().count();
     }
 
 
     public int colspanForAllAttribs() {
-        return this.model().flatAttributeList().count();
+        return model().flatAttributeList().count();
     }
 
     /*

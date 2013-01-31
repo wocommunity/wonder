@@ -53,14 +53,14 @@ public class DictClient implements Serializable
 
     public DictClient()
     {
-	this.host = DEFAULT_HOST;
-	this.port = DEFAULT_PORT;
+	host = DEFAULT_HOST;
+	port = DEFAULT_PORT;
     }
 
     public DictClient(String host)
     {
 	this.host = host;
-	this.port = DEFAULT_PORT;
+	port = DEFAULT_PORT;
     }
 
     public DictClient(String host , int port)

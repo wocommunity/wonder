@@ -87,9 +87,9 @@ public class ERWOMailDelivery {
 	 * @param toEmailAddresses
 	 *            Destination email address. Required.
 	 * @param bccEmailAddresses
-	 *            Array of Strings containing additional addressed to BCC. Null OK.
+	 *            Array of Strings containing additional addressed to BCC. Can be null.
 	 * @param subject
-	 *            Subject the the message. Null OK.
+	 *            Subject the message. Can be null.
 	 * @param message
 	 *            Body the the message. Required.
 	 * @param sendNow

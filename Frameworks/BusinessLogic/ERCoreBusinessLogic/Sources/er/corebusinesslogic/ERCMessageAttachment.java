@@ -24,6 +24,7 @@ public class ERCMessageAttachment extends _ERCMessageAttachment {
         super();
     }
 
+    @Override
     public void init(EOEditingContext ec) {
         super.init(ec);
     }

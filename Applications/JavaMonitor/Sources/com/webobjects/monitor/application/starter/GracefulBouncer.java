@@ -29,6 +29,7 @@ public class GracefulBouncer extends ApplicationStarter {
         super(app);
     }
 
+    @Override
     protected void bounce() throws InterruptedException {
 
         NSArray<MInstance> instances = application().instanceArray().immutableClone();

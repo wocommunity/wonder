@@ -26,6 +26,7 @@ public class ERDatabaseAttachment extends _ERDatabaseAttachment {
 	private static final long serialVersionUID = 1L;
 
   public static final String STORAGE_TYPE = "db";
+  @SuppressWarnings("unused")
   private static Logger log = Logger.getLogger(ERDatabaseAttachment.class);
 
   public ERDatabaseAttachment() {

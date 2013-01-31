@@ -4,6 +4,6 @@ public class Negation extends Sentence {
 	private final Sentence wrapped;
 	
 	public Negation(Sentence toNegate) {
-		this.wrapped = toNegate;
+		wrapped = toNegate;
 	}
 }

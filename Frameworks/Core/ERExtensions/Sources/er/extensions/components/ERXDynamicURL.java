@@ -23,14 +23,14 @@ public class ERXDynamicURL {
 	}
 
 	/**
-	 * @see com.webobjects.appserver(\._private|)WODynamicURL.requestHandlerPath()
+	 * @see com.webobjects.appserver._private.WODynamicURL#requestHandlerPath()
 	 */
 	public String requestHandlerPath() {
 		return (String) _delegate.perform("requestHandlerPath");
 	}
 
 	/**
-	 * @see com.webobjects.appserver(\._private|)WODynamicURL.queryString()
+	 * @see com.webobjects.appserver._private.WODynamicURL#queryString()
 	 */
 	public String queryString() {
 		return (String) _delegate.perform("queryString");

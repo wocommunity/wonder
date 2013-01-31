@@ -54,6 +54,7 @@ public class AjaxBusySpinner extends AjaxComponent {
 		return true;
 	}
 
+	@Override
 	protected void addRequiredWebResources(WOResponse res) {
 		addScriptResourceInHead(res, "prototype.js");
 		addScriptResourceInHead(res, "effects.js");
@@ -103,6 +104,7 @@ public class AjaxBusySpinner extends AjaxComponent {
 		return json.toString();
 	}
 
+	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		return null;
 	}

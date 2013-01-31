@@ -317,7 +317,7 @@ public class ERXCrypto {
 	}
 
 	/**
-	 * @deprecated use {@link ERXStringUtilities#byteArrayToHexString(byte[])}
+	 * @deprecated use {@link er.extensions.foundation.ERXStringUtilities#byteArrayToHexString(byte[])}
 	 */
 	@Deprecated
 	public static String bytesToString(byte[] bytes) {

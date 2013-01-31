@@ -9,7 +9,6 @@ import er.directtoweb.components.ERDCustomComponent;
  * 
  * @binding displayNameForSectionKey
  */
-
 public class ERDSectionText extends ERDCustomComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -20,6 +19,8 @@ public class ERDSectionText extends ERDCustomComponent {
 
     public ERDSectionText(WOContext context) { super(context); }
 
+    @Override
     public boolean isStateless() { return true; }
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 }

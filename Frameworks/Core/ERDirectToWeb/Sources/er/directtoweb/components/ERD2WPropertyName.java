@@ -49,6 +49,7 @@ public class ERD2WPropertyName extends ERD2WStatelessComponent {
         super(context); 
     }
 
+    @Override
     public String displayNameForProperty() {
         if(_displayNameForProperty == null) {
             _displayNameForProperty = (String)d2wContext().valueForKey("displayNameForProperty");
@@ -56,6 +57,7 @@ public class ERD2WPropertyName extends ERD2WStatelessComponent {
         return _displayNameForProperty;
     }
     
+    @Override
     public void reset() {
         super.reset();
         _displayNameForProperty = null;
@@ -117,6 +119,7 @@ public class ERD2WPropertyName extends ERD2WStatelessComponent {
     	return ERXValueUtilities.booleanValue(d2wContext().valueForKey("displayRequiredMarker"));
     }
 
+    @Override
     public void takeValuesFromRequest(WORequest r, WOContext c) {
     	// no form values in here!
     }

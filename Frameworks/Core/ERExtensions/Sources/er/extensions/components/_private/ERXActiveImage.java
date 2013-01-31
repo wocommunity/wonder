@@ -22,6 +22,7 @@ public class ERXActiveImage extends ActiveImage {
         _alt = _associations.removeObjectForKey("alt");
      }
 
+    @Override
     protected void appendConstantAttributesToResponse(WOResponse woresponse, WOContext wocontext) {
         super.appendConstantAttributesToResponse(woresponse, wocontext);
         if(_alt != null) {

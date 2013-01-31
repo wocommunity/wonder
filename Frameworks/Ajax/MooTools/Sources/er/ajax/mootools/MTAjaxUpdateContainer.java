@@ -79,6 +79,7 @@ public class MTAjaxUpdateContainer extends AjaxUpdateContainer {
 		MTAjaxUtils.addScriptResourceInHead(context, context.response(), "MooTools", MTAjaxUtils.MOOTOOLS_WONDER_JS);
 	}
 	
+	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public NSDictionary createAjaxOptions(WOComponent component) {
 
@@ -135,6 +136,7 @@ public class MTAjaxUpdateContainer extends AjaxUpdateContainer {
 	}	
 	
 
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 
 		WOComponent component = context.component();

@@ -299,6 +299,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     super.appendToResponse(response, context);
   }
 
+  @Override
   protected void addRequiredWebResources(WOResponse res, WOContext context) {
     addScriptResourceInHead(context, res, "prototype.js");
 	addScriptResourceInHead(context, res, "effects.js");
@@ -323,6 +324,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     return result;
   }
 
+  @Override
   public WOActionResults handleRequest(WORequest request, WOContext context) {
 	   WOComponent component = context.component();
 	   WOActionResults result = (WOActionResults) valueForBinding("action", component);

@@ -23,13 +23,13 @@ public abstract class ERXEqualator {
     
     /**
      * Provides a safe equality check that won't throw if one or both of the objects is null.
-     * @see ERXExtensions#safeEquals(Object, Object)
+     * @see er.extensions.ERXExtensions#safeEquals(Object, Object)
      */
     public static final ERXEqualator SafeEqualsEqualator = new _SafeEqualsEqualator();
     
     /**
      * Provides EO equality checks regardless of the editing context the objects are registered in.
-     * @see ERXEOControlUtilities#eoEquals(EOEnterpriseObject, EOEnterpriseObject)
+     * @see er.extensions.eof.ERXEOControlUtilities#eoEquals(EOEnterpriseObject, EOEnterpriseObject)
      */
     public static final ERXEqualator EOEqualsEqualator = new _EOEqualsEqualator();
     
@@ -54,6 +54,7 @@ public abstract class ERXEqualator {
     private static class _SafeEqualsEqualator extends ERXEqualator {
         public _SafeEqualsEqualator() {}
 
+        @Override
         public boolean objectIsEqualToObject(Object o1, Object o2) {
             return ObjectUtils.equals(o1, o2);
         }
@@ -62,6 +63,7 @@ public abstract class ERXEqualator {
     private static class _EOEqualsEqualator extends ERXEqualator {
         public _EOEqualsEqualator() {}
 
+        @Override
         public boolean objectIsEqualToObject(Object o1, Object o2) {
             if ( (o1 != null && ! (o1 instanceof EOEnterpriseObject)) || (o2 != null && ! (o2 instanceof EOEnterpriseObject)) ) {
                 throw new RuntimeException("Unable to compare objects because both objects need to be EOEnterpriseObjects.  " +

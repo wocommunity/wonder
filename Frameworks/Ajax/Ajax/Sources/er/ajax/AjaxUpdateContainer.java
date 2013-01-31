@@ -44,6 +44,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 	/**
 	 * Adds all required resources.
 	 */
+	@Override
 	protected void addRequiredWebResources(WOResponse response, WOContext context) {
 		addScriptResourceInHead(context, response, "prototype.js");
 		addScriptResourceInHead(context, response, "effects.js");
@@ -250,6 +251,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 		}
 	}
 
+	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		WOComponent component = context.component();
 		String id = _containerID(context);

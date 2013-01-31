@@ -1,8 +1,10 @@
 package er.cayenne.example;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.apache.cayenne.query.*;
+import org.apache.cayenne.query.Ordering;
+import org.apache.cayenne.query.SortOrder;
 
 /**
  * Provides support for defining Orderings in a "chain". Especially useful in combination with "Key".

@@ -5,7 +5,6 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 
-
 import com.webobjects.eoaccess.EORelationship;
 
 import er.neo4jadaptor.ersatz.neo4j.Neo4JUtils;

@@ -135,6 +135,7 @@ public class MailReader extends Thread {
         
     }
 
+    @Override
     public void run() {
         while (running) {
             try {

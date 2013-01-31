@@ -33,6 +33,7 @@ public class ERXCloneableThreadLocal extends InheritableThreadLocal {
      * @param parentValue local object to the parent thread.
      * @return a cloned value of the parent if not null.
      */
+    @Override
     protected Object childValue(Object parentValue) {
         Object child = null;
         if (parentValue != null) {

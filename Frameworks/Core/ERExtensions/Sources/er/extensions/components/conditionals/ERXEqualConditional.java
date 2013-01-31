@@ -44,6 +44,7 @@ public class ERXEqualConditional extends ERXWOConditional {
      * <code>==</code> comparision then tests with an <code>equals</code> comparision.
      * @return equality of the two bindings.
      */
+    @Override
     public boolean conditionInComponent(WOComponent component) {
         Object v1= _value1.valueInComponent(component);
         Object v2= _value2.valueInComponent(component);

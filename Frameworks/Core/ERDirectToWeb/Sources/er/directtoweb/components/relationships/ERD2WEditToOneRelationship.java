@@ -48,6 +48,7 @@ public class ERD2WEditToOneRelationship extends D2WEditToOneRelationship {
     }
     
     // Validation Support
+    @Override
     public void validationFailedWithException (Throwable e, Object value, String keyPath) {
         parent().validationFailedWithException(e,value,keyPath);
     }
@@ -58,7 +59,7 @@ public class ERD2WEditToOneRelationship extends D2WEditToOneRelationship {
             return valueForKeyPath(restrictedChoiceKey);
         String fetchSpecName=(String)d2wContext().valueForKey("restrictingFetchSpecification");
         if(fetchSpecName != null) {
-            EORelationship relationship = ERXUtilities.relationshipWithObjectAndKeyPath((EOEnterpriseObject)object(),
+            EORelationship relationship = ERXUtilities.relationshipWithObjectAndKeyPath(object(),
                                                                                         (String)d2wContext().valueForKey("propertyKey"));
             return EOUtilities.objectsWithFetchSpecificationAndBindings(object().editingContext(), relationship.destinationEntity().name(),fetchSpecName,null);
         }

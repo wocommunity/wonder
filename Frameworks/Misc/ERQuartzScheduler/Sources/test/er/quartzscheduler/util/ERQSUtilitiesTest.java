@@ -8,7 +8,6 @@ import org.junit.Test;
 
 import er.quartzscheduler.foundation.ERQSJob4Test;
 import er.quartzscheduler.foundation.ERQSJobDescription4Test;
-import er.quartzscheduler.util.ERQSUtilities;
 import er.quartzscheduler.util.ERQSUtilities.COJobInstanciationException;
 
 public class ERQSUtilitiesTest 

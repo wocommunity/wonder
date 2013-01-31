@@ -41,7 +41,7 @@ public class ERCListHelpText extends ERXStatelessComponent {
        	try {
        		ERCHelpText text = ERCHelpText.clazz.helpTextForKey(ec, key);
        		if(text == null) {
-       			text = (ERCHelpText) ERCHelpText.clazz.createAndInsertObject(ec);
+       			text = ERCHelpText.clazz.createAndInsertObject(ec);
        			text.setKey(key);
        		}
        		EditPageInterface page = D2W.factory().editPageForEntityNamed(ERCHelpText.ENTITY, session());

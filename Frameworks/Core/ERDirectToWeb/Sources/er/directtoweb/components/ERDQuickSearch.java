@@ -33,12 +33,14 @@ public class ERDQuickSearch extends ERDCustomComponent {
 		super(context);
 	}
 
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
         return false;
     }
 
     public String searchValue;
     
+    @Override
     public void appendToResponse(WOResponse r, WOContext c) {
     	searchValue = defaultValue();
     	super.appendToResponse(r, c);
@@ -57,7 +59,7 @@ public class ERDQuickSearch extends ERDCustomComponent {
             if(listConfigurationName != null) {
                 lpi = (ListPageInterface) D2W.factory().pageForConfigurationNamed(listConfigurationName, session());
             } else {
-                lpi = (ListPageInterface) D2W.factory().listPageForEntityNamed(entityName, session());
+                lpi = D2W.factory().listPageForEntityNamed(entityName, session());
             }
             lpi.setDataSource(ds);
             lpi.setNextPage(context().page());

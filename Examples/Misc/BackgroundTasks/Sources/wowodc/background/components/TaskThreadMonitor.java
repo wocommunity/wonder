@@ -3,10 +3,10 @@ package wowodc.background.components;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
-import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 
+import er.extensions.components.ERXStatelessComponent;
 import er.extensions.concurrency.ERXFutureTask;
 import er.extensions.concurrency.ERXTaskInfo;
 import er.extensions.concurrency.ERXTaskThread;
@@ -19,7 +19,7 @@ import er.extensions.foundation.IERXStatus;
  *
  * @author kieran
  */
-public class TaskThreadMonitor extends WOComponent {
+public class TaskThreadMonitor extends ERXStatelessComponent {
 	
 	@SuppressWarnings("unused")
 	private static final Logger log = Logger.getLogger(TaskThreadMonitor.class);
@@ -75,18 +75,6 @@ public class TaskThreadMonitor extends WOComponent {
 		return loopTaskItem().task().toString();
 	}
 
-	@Override
-	public boolean synchronizesVariablesWithBindings() {
-		// makes this component non-synchronizing
-		return false;
-	}
-
-	@Override
-	public boolean isStateless() {
-		// makes this component stateless
-		return true;
-	}
-	
 	@Override
 	public void reset() {
 		super.reset();

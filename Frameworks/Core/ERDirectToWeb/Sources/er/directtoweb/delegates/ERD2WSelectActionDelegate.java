@@ -19,7 +19,6 @@ public class ERD2WSelectActionDelegate implements NextPageDelegate, Serializable
 
 	public static final ERD2WSelectActionDelegate instance = new ERD2WSelectActionDelegate();
 
-	@Override
 	public WOComponent nextPage(WOComponent sender) {
 		WOComponent target = D2WEmbeddedComponent.findTarget(sender);
 		if(target.hasBinding("selectedObject")){

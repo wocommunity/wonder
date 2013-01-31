@@ -87,7 +87,7 @@ public abstract class WOLongResponsePage extends WOComponent implements Runnable
     }
 
     public double refreshInterval() {
-        return (double)_refreshInterval;
+        return _refreshInterval;
     }
 
 

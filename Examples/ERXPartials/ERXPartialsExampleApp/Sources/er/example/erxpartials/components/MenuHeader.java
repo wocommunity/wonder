@@ -1,8 +1,12 @@
 package er.example.erxpartials.components;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORedirect;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.D2WPage;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.appserver.navigation.ERXNavigationManager;
 import er.extensions.appserver.navigation.ERXNavigationState;

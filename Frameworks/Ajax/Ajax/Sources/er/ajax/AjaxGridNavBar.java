@@ -140,9 +140,7 @@ public abstract class AjaxGridNavBar extends WOComponent {
 		super(context);
 	}
 
-	/**
-	 * @return false, AjaxGridNavBar is stateless and manually synchronized
-	 */
+	@Override
 	public boolean isStateless() {
 		return true;
 	}

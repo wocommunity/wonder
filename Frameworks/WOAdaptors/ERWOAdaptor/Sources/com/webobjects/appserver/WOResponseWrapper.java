@@ -50,17 +50,14 @@ public class WOResponseWrapper implements HttpResponse {
 		wrapping = response;
 	}
 
-	@Override
 	public HttpResponseStatus getStatus() {
 		return HttpResponseStatus.valueOf(wrapping.status());
 	}
 
-	@Override
 	public void setStatus(HttpResponseStatus status) {
 		wrapping.setStatus(status.getCode());
 	}
 
-	@Override
 	public void addHeader(String name, Object value) {
 		if (value != null) {
 			if (value instanceof String) {
@@ -69,17 +66,14 @@ public class WOResponseWrapper implements HttpResponse {
 		}
 	}
 
-	@Override
 	public void clearHeaders() {
 		wrapping._httpHeaders = null;
 	}
 
-	@Override
 	public boolean containsHeader(String name) {
 		return wrapping.hasHeaderForKey(name);
 	}
 
-	@Override
 	public ChannelBuffer getContent() {
 		if(_content == null) {
 			// set content string
@@ -117,18 +111,15 @@ public class WOResponseWrapper implements HttpResponse {
 	}
 
 	@Deprecated
-	@Override
 	public long getContentLength() {
 		return HttpHeaders.getContentLength(this);
 	}
 
 	@Deprecated
-	@Override
 	public long getContentLength(long defaultValue) {
 		return HttpHeaders.getContentLength(this, defaultValue);
 	}
 
-	@Override
 	public String getHeader(String name) {
 		if (name.equals(Names.COOKIE)) {
 			// Encode the cookie.
@@ -143,12 +134,10 @@ public class WOResponseWrapper implements HttpResponse {
 		} else return wrapping.headerForKey(name);
 	}
 
-	@Override
 	public Set<String> getHeaderNames() {
 		return new NSSet<String>(wrapping.headerKeys());
 	}
     
-	@Override
 	public List<Map.Entry<String, String>> getHeaders() {
 		List<Map.Entry<String, String>> headers = new LinkedList<Map.Entry<String, String>>();
 		
@@ -162,53 +151,44 @@ public class WOResponseWrapper implements HttpResponse {
 		return headers;
 	}
 
-	@Override
 	public List<String> getHeaders(String name) {
 		return wrapping.headersForKey(name);
 	}
 
-	@Override
 	public HttpVersion getProtocolVersion() {
 		return HttpVersion.valueOf(wrapping.httpVersion());
 	}
 
-	@Override
 	public boolean isChunked() {
 		return false;
 	}
 
-	@Override
 	public boolean isKeepAlive() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
 	public void removeHeader(String name) {
 		wrapping.removeHeadersForKey(name);
 	}
 
-	@Override
 	public void setChunked(boolean chunked) {
 		// TODO Checkme - irrelevant for http response
 		log.error("Trying to set http response content");
 	}
 
-	@Override
 	public void setContent(ChannelBuffer content) {
 		if (content != null) {
 			_content = content;
 		} else _content = ChannelBuffers.EMPTY_BUFFER;
 	}
 
-	@Override
 	public void setHeader(String name, Object value) {
 		if (value != null) {
 			wrapping.setHeader(value.toString(), name);
 		} else wrapping.setHeader(null, name);
 	}
 
-	@Override
 	public void setHeader(String name, Iterable<?> values) {
 		if (values != null) {
 			NSArray<String> value = new NSArray(values);
@@ -216,7 +196,6 @@ public class WOResponseWrapper implements HttpResponse {
 		} else wrapping.setHeader(null, name);
 	}
 
-	@Override
 	public void setProtocolVersion(HttpVersion version) {
 		wrapping.setHTTPVersion(version.getText());
 	}

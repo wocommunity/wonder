@@ -24,6 +24,7 @@ public class ERDDisplayTemplateString extends ERDCustomComponent {
         return (String) valueForBinding("templateString");
     }
     
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }

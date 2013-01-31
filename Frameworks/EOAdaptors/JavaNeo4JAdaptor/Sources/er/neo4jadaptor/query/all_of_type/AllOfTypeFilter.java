@@ -25,7 +25,7 @@ public class AllOfTypeFilter <Type extends PropertyContainer> extends Filter <Ty
 	private Results<Type> allOfType(GraphDatabaseService db, EOEntity entity) {
 		Index<Type> index = (Index<Type>) IndexProvider.instance.getIndexForEntity(db, entity);
 		
-		return new ObjectsOfType((Index<Type>) index, entity);
+		return new ObjectsOfType(index, entity);
 	}
 	
 	@Override

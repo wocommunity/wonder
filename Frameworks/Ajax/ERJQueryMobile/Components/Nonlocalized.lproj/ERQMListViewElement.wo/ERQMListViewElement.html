@@ -1,9 +1,9 @@
 <wo:if condition="$hasAutomaticDivider">
   <wo:if condition="$autoDivider">
-    <li data-role="list-divider"><wo:str value="$firstLetter" /></li>
+    <wo:genericContainer elementName="li" data-role="list-divider" id="$javaScriptElementID" ><wo:str value="$firstLetter" /></wo:genericContainer>
   </wo:if>
 </wo:if>
-<wo:genericContainer elementName="li" otherTagString="$html">
+<wo:genericContainer elementName="li" otherTagString="$html" id="$javaScriptElementID" >
   <wo:if condition="$hasAction">
     <wo:ERXHyperlinkResource action="$^action" data-rel="$dataRel" queryDictionary = "$^queryDictionary">
       <wo:content />

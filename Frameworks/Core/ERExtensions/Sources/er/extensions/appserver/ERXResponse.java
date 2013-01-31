@@ -225,7 +225,7 @@ public class ERXResponse extends WOResponse {
 	}
 
 	/**
-	 * @see #disablePageCaching()
+	 * @see #DisablePageCachingKey
 	 * @return <code>true</code> if disablePageCaching() has been called for
 	 *         this response
 	 */
@@ -241,6 +241,7 @@ public class ERXResponse extends WOResponse {
 	 * @param key
 	 *            key to add value under
 	 */
+	@Override
 	public void setUserInfoForKey(Object value, String key) {
 		/**
 		 * require [valid_value] value != null; [valid_key] key != null;
@@ -260,6 +261,7 @@ public class ERXResponse extends WOResponse {
 	 *            key to return value from userInfo() for
 	 * @return value from {@link #userInfo()} for key, or <code>null</code> if not available
 	 */
+	@Override
 	public Object userInfoForKey(String key) {
 		/** require [valid_key] key != null; **/
 		return userInfo() != null ? userInfo().objectForKey(key) : null;

@@ -36,6 +36,7 @@ public class ERXPluralString extends ERXStatelessComponent {
         return localizer().plurifiedString(value, c!=null ? c.intValue() : 0);
     }
 
+    @Override
     public ERXLocalizer localizer() {
         ERXLocalizer l=(ERXLocalizer)valueForBinding("localizer");
         return l!=null ? l : ERXLocalizer.currentLocalizer();

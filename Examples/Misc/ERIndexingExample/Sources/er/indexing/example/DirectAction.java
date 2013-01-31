@@ -33,10 +33,12 @@ public class DirectAction extends ERD2WDirectAction {
      * @param pageConfiguration
      * @return
      */
+    @Override
     protected boolean allowPageConfiguration(String pageConfiguration) {
         return true;
     }
 
+    @Override
     public WOActionResults defaultAction() {
         //testIndexing();
         NSDictionary dict = new NSDictionary("TestValue", "TestKey");

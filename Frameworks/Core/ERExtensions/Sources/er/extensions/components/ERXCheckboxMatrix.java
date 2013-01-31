@@ -22,7 +22,6 @@ import com.webobjects.foundation.NSSet;
 
 import er.extensions.foundation.ERXArrayUtilities;
 
-// ported from WebScript - Corrected nil context problem.
 /**
  * Works around a webscript bug.<br />
  * 
@@ -47,7 +46,6 @@ import er.extensions.foundation.ERXArrayUtilities;
  * @binding itemID optional ID for each checkbox element
  * @binding disabled
  */
-
 public class ERXCheckboxMatrix extends ERXNonSynchronizingComponent {
 	/**
 	 * Do I need to update serialVersionUID?

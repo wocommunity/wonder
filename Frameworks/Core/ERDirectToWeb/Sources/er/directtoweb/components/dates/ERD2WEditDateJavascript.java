@@ -7,7 +7,10 @@
 package er.directtoweb.components.dates;
 
 import com.webobjects.appserver.WOContext;
-// REMOVEME: use ERDEditDateJavascript
+
+/**
+ * @deprecated Use {link ERDEditDateJavascript} directly
+ */
 public class ERD2WEditDateJavascript extends ERDEditDateJavascript {
 	/**
 	 * Do I need to update serialVersionUID?

@@ -61,6 +61,7 @@ public class ERXTabPanel extends WOTabPanel  {
     	return Integer.valueOf(id < 0 ? -id : id);
     }
     
+    @Override
     public void switchSubmitTab() {
         Object result = null;
 
@@ -209,6 +210,7 @@ public class ERXTabPanel extends WOTabPanel  {
     }
     
 
+    @Override
     public void appendToResponse(WOResponse aResponse, WOContext aContext)  {
         _useLinkForTabSwitch=null;
         super.appendToResponse(aResponse, aContext);

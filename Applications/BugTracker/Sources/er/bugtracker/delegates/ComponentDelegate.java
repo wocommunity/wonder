@@ -5,6 +5,7 @@ import com.webobjects.foundation.NSArray;
 
 public class ComponentDelegate extends BranchDelegate {
 
+    @Override
     protected NSArray defaultBranchChoices(D2WContext context) {
         return super.defaultBranchChoices(context);
     }

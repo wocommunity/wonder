@@ -24,7 +24,6 @@ import com.webobjects.foundation.NSMutableArray;
  * @binding maxColumns
  * @binding cellBackgroundColor
  */
-
 public class ERXRepeatingTable extends WOComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -37,12 +36,15 @@ public class ERXRepeatingTable extends WOComponent {
 		super(aContext);
 	}
 
+	@Override
 	public boolean isStateless() {
 		return true;
 	}
 
+	@Override
 	public void reset() {
 		_repeatingList = null;
+		super.reset();
 	}
 
 	private NSMutableArray _repeatingList;

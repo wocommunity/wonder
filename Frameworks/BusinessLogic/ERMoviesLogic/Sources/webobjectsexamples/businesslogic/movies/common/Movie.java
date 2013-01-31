@@ -22,26 +22,26 @@ public class Movie extends _Movie {
     @SuppressWarnings("all")
     public String content() {
     	if (log.isDebugEnabled()) {
-    		log.debug( "Movie.searchableContent: " + this.title() );
+    		log.debug( "Movie.searchableContent: " + title() );
     	}
     	StringBuffer buffer = new StringBuffer();
     	
-    	buffer.append(this.title());
+    	buffer.append(title());
     	buffer.append(" ");
     	
-    	String studioName = (String)this.valueForKeyPath(Movie.STUDIO.dot(Studio.NameKey).toString());
+    	String studioName = (String)valueForKeyPath(Movie.STUDIO.dot(Studio.NameKey).toString());
     	if (studioName != null) {
     		buffer.append(studioName);
     		buffer.append(" ");
     	}
     	
-		NSArray directorNames = (NSArray)this.valueForKeyPath(Movie.DIRECTORS.dot("fullName").toString());
+		NSArray directorNames = (NSArray)valueForKeyPath(Movie.DIRECTORS.dot("fullName").toString());
 		if (directorNames != null && directorNames.count() > 0) {
 			buffer.append(directorNames.componentsJoinedByString(" "));
 			buffer.append(" ");
 		}
 		
-		NSArray talentNames = (NSArray)this.valueForKeyPath(Movie.ROLES.dot(MovieRole.TALENT).dot("fullName").toString());
+		NSArray talentNames = (NSArray)valueForKeyPath(Movie.ROLES.dot(MovieRole.TALENT).dot("fullName").toString());
 		if (talentNames != null && talentNames.count() > 0) {
 			String talentNamesString = talentNames.componentsJoinedByString(" ");
 			NSLog.out.appendln( "Movie.searchableContent: talent names: " + talentNamesString);

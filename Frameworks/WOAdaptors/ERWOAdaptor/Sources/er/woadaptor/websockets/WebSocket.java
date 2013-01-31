@@ -24,7 +24,7 @@ public interface WebSocket {
 	/**
 	 * Method used to write WebSocketFrames to this socket's channel
 	 * 
-	 * @param message The message to send
+	 * @param frame The message to send
 	 */
 	public void sendFrame(WebSocketFrame frame);
 }

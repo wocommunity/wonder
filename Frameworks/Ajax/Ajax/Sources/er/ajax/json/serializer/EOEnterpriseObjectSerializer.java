@@ -221,13 +221,13 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 	 * to be an exposed primary or foreign key and not copied. Such attributes are set to null. See
 	 * exposedKeyAttributeNames for details on how this is determined. It can be used when creating custom
 	 * implementations of the duplicate() method in EOCopyable.
-	 * @param state 
-	 * 
+	 * @param state
+	 *            object that holds the sate of the serialization
 	 * @param source
 	 *            the EOEnterpriseObject to copy attribute values from
 	 * @param destination
 	 *            the EOEnterpriseObject to copy attribute values to
-	 * @throws MarshallException 
+	 * @throws MarshallException if conversion failed
 	 */
 	public void addAttributes(SerializerState state, EOEnterpriseObject source, JSONObject destination) throws MarshallException {
 		boolean useEO = false;
@@ -300,9 +300,9 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 
 	/**
 	 * Override to return whether or not a new entity can be inserted.
-	 * @param entityName
+	 * @param entityName name of an entity
 	 * 
-	 * @return 
+	 * @return <code>true</code> if entity is insertable
 	 */
 	protected boolean _canInsert(String entityName) {
 		return ERXProperties.booleanForKeyWithDefault("er.ajax.json." + entityName + ".canInsert", false);
@@ -310,9 +310,9 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 
 	/**
 	 * Override to return the appropriate attribute names.
-	 * @param eo
+	 * @param eo enterprise object
 	 * 
-	 * @return 
+	 * @return array of attribute names
 	 */
 	protected NSArray<String> _readableAttributeNames(EOEnterpriseObject eo) {
 		return EOEnterpriseObjectSerializer.readableAttributeNames(eo);
@@ -320,9 +320,9 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 
 	/**
 	 * Override to return the appropriate attribute names.
-	 * @param eo
+	 * @param eo enterprise object
 	 * 
-	 * @return 
+	 * @return array of attribute names
 	 */
 	protected NSArray<String> _writableAttributeNames(EOEnterpriseObject eo) {
 		return EOEnterpriseObjectSerializer.writableAttributeNames(eo);
@@ -330,7 +330,9 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 
 	/**
 	 * Override to return the appropriate relationship names.
-	 * @param eo
+	 * @param eo enterprise object
+	 * 
+	 * @return array of relationship names
 	 */
 	protected NSArray<String> _includedRelationshipNames(EOEnterpriseObject eo) {
 		return EOEnterpriseObjectSerializer.includedRelationshipNames(eo);

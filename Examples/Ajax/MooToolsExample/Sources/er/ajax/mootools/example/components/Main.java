@@ -14,7 +14,7 @@ public class Main extends ERXComponent {
 	}
 
 	public void setTask(Task task) {
-		this._task = task;
+		_task = task;
 	}
 
 	public Task task() {

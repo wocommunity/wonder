@@ -28,6 +28,7 @@ public class ERD2WDisplayToOne extends D2WDisplayToOne {
 
     public ERD2WDisplayToOne(WOContext context) { super(context); }
     
+    @Override
     public Object toOneDescription() {
         Object description = super.toOneDescription();
         return description != null ? description : ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault((String) d2wContext().valueForKey("noSelectionString"));

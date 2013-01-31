@@ -9,13 +9,13 @@
 
 package com.amazon.s3;
 
-import java.net.HttpURLConnection;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 
 /**
  * A Response object returned from AWSAuthConnection.get(). Exposes the

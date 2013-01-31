@@ -55,7 +55,7 @@ public class SeleniumRepeatExpanderTestFilter extends SeleniumTestFilterHelper i
 		
 		int repetitionCount = -1;
 		for (int i = repeatIndex + 1; i < doneIndex; ++i) {
-			SeleniumTest.Element element = (SeleniumTest.Element)elements.get(i);
+			SeleniumTest.Element element = elements.get(i);
 			if (element instanceof SeleniumTest.MetaCommand) {
 				SeleniumTest.MetaCommand metaCommand = (SeleniumTest.MetaCommand)element;
 				String mcName = metaCommand.getName();
@@ -65,7 +65,7 @@ public class SeleniumRepeatExpanderTestFilter extends SeleniumTestFilterHelper i
 					}
 
 					int relTargetIndex = i + 1 - repeatIndex;
-					loopData.setObjectForKey(new LoopData((NSArray<String>)metaCommand.arguments(), relTargetIndex, mcName.equals("values") ? LoopData.PlacementType.Value : LoopData.PlacementType.Target), Integer.valueOf(relTargetIndex));
+					loopData.setObjectForKey(new LoopData(metaCommand.arguments(), relTargetIndex, mcName.equals("values") ? LoopData.PlacementType.Value : LoopData.PlacementType.Target), Integer.valueOf(relTargetIndex));
 					repetitionCount = metaCommand.arguments().count();
 					elements.set(i, new SeleniumTest.Comment('#' + mcName));
 				}
@@ -91,7 +91,7 @@ public class SeleniumRepeatExpanderTestFilter extends SeleniumTestFilterHelper i
 				LoopData data = loopData.objectForKey(Integer.valueOf(i - repeatIndex));
 				
 				if (data != null) {
-					SeleniumTest.Command newCommand = (Command)((SeleniumTest.Command)elements.objectAtIndex(i)).clone();
+					SeleniumTest.Command newCommand = ((SeleniumTest.Command)elements.objectAtIndex(i)).clone();
 					switch (data.placement) {
 					case Target:
 						elements.insertObjectAtIndex(new SeleniumTest.Comment("#target " + data.values.get(j)), insertIndex++);
@@ -112,8 +112,8 @@ public class SeleniumRepeatExpanderTestFilter extends SeleniumTestFilterHelper i
 			}
 		}
 	}
-	
-	// @Override
+
+	@Override
 	protected void processTestElements(NSMutableArray<Element> elements) {
 		int repeatIndex = -1;
 		boolean shouldProcess;
@@ -121,7 +121,7 @@ public class SeleniumRepeatExpanderTestFilter extends SeleniumTestFilterHelper i
 		do {
 			shouldProcess = false;
 			for (int i = 0; i < elements.count(); ++ i) {
-				SeleniumTest.Element element = (SeleniumTest.Element)elements.get(i);
+				SeleniumTest.Element element = elements.get(i);
 				if (element instanceof SeleniumTest.MetaCommand) {
 					SeleniumTest.MetaCommand metaCommand = (SeleniumTest.MetaCommand)element;
 					if (metaCommand.getName().equals("repeat")) {

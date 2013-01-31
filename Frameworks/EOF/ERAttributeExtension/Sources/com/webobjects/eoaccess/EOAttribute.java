@@ -36,7 +36,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 		private String _externalName;
 
 		Characteristic(String externalName) {
-			this._externalName = externalName;
+			_externalName = externalName;
 		}
 
 		public String externalName() {
@@ -150,10 +150,12 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 		_valueTypeClassName = "";
 	}
 
+	@Override
 	public String name() {
 		return _name;
 	}
 
+	@Override
 	public String toString() {
 		return _toString(0);
 	}
@@ -180,6 +182,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 		return aLog.toString();
 	}
 
+	@Override
 	public EOEntity entity() {
 		return _parent;
 	}
@@ -1508,6 +1511,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 		return _sourceToDestinationKeyMap;
 	}
 
+	@Override
 	public String relationshipPath() {
 		if (!isFlattened())
 			return null;
@@ -1859,15 +1863,13 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 		_setPrimaryKeyAttributesSelector = new NSSelector("setPrimaryKeyAttributes", _NSUtilities._ArrayClassArray);
 		valueClasses = (new Class[] { Number.class, String.class, NSData.class, NSTimestamp._CLASS });
 	}
-	
-	// @Override
+
 	public void setChangeNotificationOptions(
 			EOChangeNotificationOptions changeNotificationOptions) {
 		// AK: method from 5.4.3.1
 		
 	}
 
-	// @Override
 	public EOChangeNotificationOptions changeNotificationOptions() {
 		// AK: method from 5.4.3.1
 		return null;

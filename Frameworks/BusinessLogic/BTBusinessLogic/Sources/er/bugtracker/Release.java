@@ -17,6 +17,7 @@ public class Release extends _Release {
         super();
     }
 
+    @Override
     public void init(EOEditingContext ec) {
         super.init(ec);
         setIsOpen(true);

@@ -134,6 +134,7 @@ public class AjaxDroppable extends AjaxComponent {
 	  return onDropBuffer.toString();
   }
 
+  @Override
   protected void addRequiredWebResources(WOResponse res) {
     addScriptResourceInHead(res, "prototype.js");
 	addScriptResourceInHead(res, "effects.js");
@@ -141,6 +142,7 @@ public class AjaxDroppable extends AjaxComponent {
 	addScriptResourceInHead(res, "wonder.js");
   }
 
+  @Override
   public WOActionResults handleRequest(WORequest request, WOContext context) {
 	AjaxUpdateContainer.setUpdateContainerID(request, (String) valueForBinding("updateContainerID"));
     String droppedDraggableID = request.stringFormValueForKey(_draggableIDKeyName);

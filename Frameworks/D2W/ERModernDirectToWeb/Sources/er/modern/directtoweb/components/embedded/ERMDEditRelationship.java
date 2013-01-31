@@ -34,6 +34,7 @@ public class ERMDEditRelationship extends ERDCustomEditComponent {
         super(context);
     }
     
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
     
     public NSDictionary<String,String> settings() {
@@ -47,7 +48,7 @@ public class ERMDEditRelationship extends ERDCustomEditComponent {
 	// AJAX UTILITIES
 	public String uniqueId() {
 		if (_uniqueId == null) {
-			_uniqueId = ERXStringUtilities.safeIdentifierName(this.context().contextID());
+			_uniqueId = ERXStringUtilities.safeIdentifierName(context().contextID());
 		}
 		return _uniqueId;
 	}

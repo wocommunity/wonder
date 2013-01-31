@@ -9,7 +9,7 @@ public class BinaryJoined extends Sentence {
 	private final BinaryOperator operator;
 	
 	public BinaryJoined(BinaryOperator op, Collection<Sentence> components) {
-		this.operator = op;
+		operator = op;
 		this.components = components;
 	}
 }

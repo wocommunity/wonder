@@ -56,6 +56,7 @@ public class Main extends MonitorComponent {
         return pageWithName(ApplicationsPage.class.getName());
     }
     
+    @Override
     public String message() {
     	if (_message == null) {
     		_message = ((Session)session()).message();

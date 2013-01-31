@@ -122,7 +122,7 @@ public class ERXArrayUtilities {
      * @return a dictionary where the keys are the grouped values and the
      *          objects are arrays of the objects that have that value.
      *          Objects for which the key path returns null will be grouped
-     *          with the key {@link NULL_GROUPING_KEY}
+     *          with the key {@link #NULL_GROUPING_KEY}
      */
     public static <K, V> NSDictionary<K, NSArray<V>> arrayGroupedByKeyPath(NSArray<V> objects, ERXKey<K> keyPath) {
         return arrayGroupedByKeyPath(objects, (keyPath == null) ? null : keyPath.key());
@@ -155,7 +155,7 @@ public class ERXArrayUtilities {
      * @return a dictionary where the keys are the grouped values and the
      * 		objects are arrays of the objects that have that value.
      *		Objects for which the key path returns null will be grouped 
-     *          with the key {@link NULL_GROUPING_KEY}
+     *          with the key {@link #NULL_GROUPING_KEY}
      */
     public static <K, V> NSDictionary<K, NSArray<V>> arrayGroupedByKeyPath(NSArray<V> objects, String keyPath) {
         return arrayGroupedByKeyPath(objects,keyPath,true,null);
@@ -185,7 +185,7 @@ public class ERXArrayUtilities {
      * @return a dictionary where the keys are the grouped values and the
      *          objects are arrays of the objects that have that value.
      *          Objects for which the key path returns null will be grouped
-     *          with the key {@link NULL_GROUPING_KEY}
+     *          with the key {@link #NULL_GROUPING_KEY}
      */
     public static <T, K, V> NSDictionary<K, NSArray<V>> arrayGroupedByKeyPath(NSArray<T> objects, ERXKey<K> keyPath, boolean includeNulls, ERXKey<V> valueKeyPath) {
         return arrayGroupedByKeyPath(objects, (keyPath == null) ? null : keyPath.key(), includeNulls, (valueKeyPath == null) ? null : valueKeyPath.key());
@@ -221,7 +221,7 @@ public class ERXArrayUtilities {
      * @return a dictionary where the keys are the grouped values and the
      *          objects are arrays of the objects that have that value.
      *          Objects for which the key path returns null will be grouped
-     *          with the key {@link NULL_GROUPING_KEY}
+     *          with the key {@link #NULL_GROUPING_KEY}
      */
     public static <T, K, V> NSDictionary<K, NSArray<V>> arrayGroupedByKeyPath(NSArray<T> objects, String keyPath, boolean includeNulls, String valueKeyPath) {
         return arrayGroupedByKeyPath(objects, keyPath, (includeNulls) ? (K)NULL_GROUPING_KEY : null, valueKeyPath);
@@ -252,7 +252,7 @@ public class ERXArrayUtilities {
      * @return a dictionary where the keys are the grouped values and the
      *          objects are arrays of the objects that have that value.
      *          Objects for which the key path returns null will be grouped
-     *          with the key {@link NULL_GROUPING_KEY}
+     *          with the key {@link #NULL_GROUPING_KEY}
      */
     public static <T, K, V> NSDictionary<K, NSArray<V>> arrayGroupedByKeyPath(NSArray<T> objects, ERXKey<K> keyPath, K nullGroupingKey, ERXKey<V> valueKeyPath) {
         return arrayGroupedByKeyPath(objects, (keyPath == null) ? null : keyPath.key(), nullGroupingKey, (valueKeyPath == null) ? null : valueKeyPath.key());
@@ -289,7 +289,7 @@ public class ERXArrayUtilities {
      * @return a dictionary where the keys are the grouped values and the
      *          objects are arrays of the objects that have that value.
      *          Objects for which the key path returns null will be grouped
-     *          with the key {@link NULL_GROUPING_KEY}
+     *          with the key {@link #NULL_GROUPING_KEY}
      */
     @SuppressWarnings("unchecked")
     public static NSDictionary arrayGroupedByKeyPath(NSArray objects, String keyPath, Object nullGroupingKey, String valueKeyPath) {
@@ -1405,7 +1405,7 @@ public class ERXArrayUtilities {
      * left if it is the last key in the path.  Otherwise it applies to the end 
      * of the keypath to its right.  It should not be followed by an array or 
      * any other array operators.  This is because it does not call 
-     * {@link com.webobjects.foundation.NSArray#valueForKeyPath() valueForKeyPath} on 
+     * {@link com.webobjects.foundation.NSArray#valueForKeyPath(String) valueForKeyPath} on 
      * the array to its left, but instead loops through the values of the array 
      * to its left, calling 
      * {@link com.webobjects.foundation.NSKeyValueCodingAdditions.Utility#valueForKeyPath(Object, String) valueForKeyPath}
@@ -1493,7 +1493,7 @@ public class ERXArrayUtilities {
      * left if it is the last key in the path.  Otherwise it applies to the end 
      * of the keypath to its right.  It should not be followed by an array or 
      * any other array operators.  This is because it does not call 
-     * {@link com.webobjects.foundation.NSArray#valueForKeyPath() valueForKeyPath} on 
+     * {@link com.webobjects.foundation.NSArray#valueForKeyPath(String) valueForKeyPath} on 
      * the array to its left, but instead loops through the values of the array 
      * to its left, calling 
      * {@link com.webobjects.foundation.NSKeyValueCodingAdditions.Utility#valueForKeyPath(Object, String) valueForKeyPath}
@@ -1534,7 +1534,7 @@ public class ERXArrayUtilities {
      * left if it is the last key in the path.  Otherwise it applies to the end 
      * of the keypath to its right.  It should not be followed by an array or 
      * any other array operators.  This is because it does not call 
-     * {@link com.webobjects.foundation.NSArray#valueForKeyPath() valueForKeyPath} on 
+     * {@link com.webobjects.foundation.NSArray#valueForKeyPath(String) valueForKeyPath} on 
      * the array to its left, but instead loops through the values of the array 
      * to its left, calling 
      * {@link com.webobjects.foundation.NSKeyValueCodingAdditions.Utility#valueForKeyPath(Object, String) valueForKeyPath}
@@ -1545,7 +1545,7 @@ public class ERXArrayUtilities {
     	private boolean isPop;
     	
     	public StandardDeviationOperator(boolean isPopulation) {
-    		this.isPop = isPopulation;
+    		isPop = isPopulation;
     	}
     	
         /**
@@ -2155,7 +2155,7 @@ public class ERXArrayUtilities {
     }
 
     /**
-     * Just like the method {@link NSArray#sortedArrayUsingComparator(NSComparator)}, 
+     * Just like the method {@link com.webobjects.foundation.NSArray#sortedArrayUsingComparator(NSComparator)}, 
      * except it catches the NSComparator.ComparisonException and, if thrown,
      * it wraps it in a runtime exception.  Returns null when passed null for array.
      * @param array 

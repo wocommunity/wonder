@@ -119,6 +119,7 @@ public class MTAjaxTabbedPanel extends AjaxDynamicElement {
         }
     }
 	
+    @Override
     public void appendToResponse(WOResponse response, WOContext context) {
     	
         WOComponent component = context.component();
@@ -221,6 +222,7 @@ public class MTAjaxTabbedPanel extends AjaxDynamicElement {
     	return "mtTabbedPanel" + ERXWOContext.safeIdentifierName(context, true);
     }
     
+	@Override
 	protected void addRequiredWebResources(WOResponse response, WOContext context) {
 		MTAjaxUtils.addScriptResourceInHead(context, context.response(), "MooTools", MTAjaxUtils.MOOTOOLS_CORE_JS);
 		MTAjaxUtils.addScriptResourceInHead(context, context.response(), "MooTools", MTAjaxUtils.MOOTOOLS_MORE_JS);

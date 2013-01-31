@@ -52,7 +52,7 @@ public class ERXStringListPicker extends WOComponent {
 
     public Object selection() {
         if (_selection==null && list().count() > 0)
-                _selection = (String)list().objectAtIndex(0);
+                _selection = list().objectAtIndex(0);
         return _selection;
     }
     

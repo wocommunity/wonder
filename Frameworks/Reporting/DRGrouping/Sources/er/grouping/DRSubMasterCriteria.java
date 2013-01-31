@@ -1,11 +1,18 @@
 package er.grouping;
 
-import java.text.*;
-import java.util.*;
+import java.text.Format;
+import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSTimestampFormatter;
 
 import er.extensions.foundation.ERXValueUtilities;
 
@@ -190,7 +197,7 @@ public class DRSubMasterCriteria {
     }
 
     /**
-     * Decides if the extration is by method or instance variable.
+     * Decides if the extraction is by method or instance variable.
      * If this returns true, then only methods will be used to extract
      * values from the raw objects, not their instance variables.
      */
@@ -205,7 +212,7 @@ public class DRSubMasterCriteria {
      * Decides if the {@link #format()} given is used to convert dates
      * into strings before comparison or just compare {@link NSTimestamp}.
      * If you set this, you should also set a valid {@link NSTimestampFormatter}
-     * pattern in {@link format()}.
+     * pattern in {@link #format()}.
      */
     public boolean useTimeFormat() {
         return _useTimeFormat;
@@ -241,7 +248,7 @@ public class DRSubMasterCriteria {
     }
 
     /**
-     * When {@link useTimeFormat()} is set, then date values
+     * When {@link #useTimeFormat()} is set, then date values
      * will be converted to a string before a comparison by using this format.
      * The string can be any valid {@link NSTimestampFormatter} string,
      * which means that you can also use {@link java.util.DateFormatter}
@@ -514,10 +521,10 @@ public class DRSubMasterCriteria {
         return _possibleUseTypes;
     }
 
-    /** Holds the description for the {@link key}. */
+    /** Holds the description for the {@link #key()}. */
     private String _keyDesc = null;
 
-    /** Returns the description for the {@link key}. */
+    /** Returns the description for the {@link #key()}. */
     public String keyDesc() {
         if(_keyDesc == null) {
             _keyDesc = super.toString();
@@ -525,6 +532,7 @@ public class DRSubMasterCriteria {
         return _keyDesc;
     }
 
+    @Override
     public String toString() {
         return "<DRSubMasterCriteria key: \"" + key() + "\"; label: \"" + label() + "\"; >";
     }

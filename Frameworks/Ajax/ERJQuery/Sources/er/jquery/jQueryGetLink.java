@@ -33,11 +33,6 @@ public class jQueryGetLink extends jQueryGet {
     }
     
     @Override
-    public boolean synchronizesVariablesWithBindings() {
-    	return false;
-    }
-    
-    @Override
     public boolean isStateless() {
     	return true;
     }

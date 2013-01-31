@@ -34,6 +34,7 @@ public abstract class ERXWOLongResponsePage extends WOLongResponsePage {
 		return (T) WOApplication.application().pageWithName(componentClass.getName(), context);
 	}
 	
+	@Override
 	public void run() {
 		ERXApplication._startRequest();
 		try {

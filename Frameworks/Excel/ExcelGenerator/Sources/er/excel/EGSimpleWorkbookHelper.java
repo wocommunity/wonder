@@ -109,7 +109,7 @@ public class EGSimpleWorkbookHelper {
 	 * set on a sheet, its default name is "Sheet#", with "#" being the number of the sheet.
 	 */
 	public void switchToSheetWithName(String name) {
-		HSSFSheet sheet = this.sheetWithName(name);
+		HSSFSheet sheet = sheetWithName(name);
 		if (sheet == null) {
 			sheet = _workbook.createSheet(name);
 			sheets.add(sheet);
@@ -160,7 +160,7 @@ public class EGSimpleWorkbookHelper {
 
 	
 	public HSSFCell cellAtLocation(int rownum, int colnum) {
-		HSSFSheet sheet = this.currentSheet();
+		HSSFSheet sheet = currentSheet();
 
 		HSSFRow row = sheet.getRow(rownum);
 		if (row == null) row = sheet.createRow(rownum);
@@ -168,7 +168,7 @@ public class EGSimpleWorkbookHelper {
 		HSSFCell cell = row.getCell(colnum);
 		if (cell == null) row.createCell(colnum);
 
-		return this.currentSheet().getRow(rownum).getCell(colnum);
+		return currentSheet().getRow(rownum).getCell(colnum);
 	}
 
 	public HSSFCell cellAtLocation(int rownum, String columnName) {
@@ -236,7 +236,7 @@ public class EGSimpleWorkbookHelper {
 			return null;
 		}
 		if (file == null) return null;
-		return (this.write(file.getName())) ? file.getName() : null;
+		return (write(file.getName())) ? file.getName() : null;
 	}
 
 	/**

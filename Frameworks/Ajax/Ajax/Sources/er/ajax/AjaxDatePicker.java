@@ -318,6 +318,7 @@ public class AjaxDatePicker extends AjaxComponent {
     /**
      * Includes calendar.css and calendar.js.
      */
+	@Override
 	protected void addRequiredWebResources(WOResponse response) {
 		ERXResponseRewriter.addScriptResourceInHead(response, context(), "Ajax", "prototype.js");
 		ERXResponseRewriter.addScriptResourceInHead(response, context(), "Ajax", "wonder.js");
@@ -329,6 +330,7 @@ public class AjaxDatePicker extends AjaxComponent {
 	/**
 	 * No action so nothing for us to handle.
 	 */
+	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		return null;
 	}

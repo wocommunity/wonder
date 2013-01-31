@@ -53,6 +53,7 @@ public class ERMTD2WEditAttachment extends ERDCustomEditComponent {
         super(context);
     }
 
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}

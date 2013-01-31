@@ -58,6 +58,7 @@ public class ERXWOUrlField extends ERXWOInput {
     return "url";
   }
 
+  @Override
   protected void _appendValueAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
     WOComponent component = wocontext.component();
 

@@ -9,8 +9,8 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 
-import er.ajax.example.Word;
 import er.ajax.example.ExampleDataFactory;
+import er.ajax.example.Word;
 
 public class UpdateDisplayGroupExample extends WOComponent {
 	private static final Logger log = Logger.getLogger(UpdateDisplayGroupExample.class);

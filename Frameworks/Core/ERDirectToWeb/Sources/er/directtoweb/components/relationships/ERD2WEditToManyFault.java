@@ -46,6 +46,7 @@ public class ERD2WEditToManyFault extends D2WEditToManyFault {
      * 
      * @return page to edit the relationship
      */
+    @Override
     public WOComponent editValues() {
         WOComponent editPage = null;
         String editRelationshipConfigurationName = (String)d2wContext().valueForKey("editRelationshipConfigurationName");

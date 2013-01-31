@@ -19,6 +19,7 @@ public class ERXMappingObjectStream extends ObjectInputStream {
 		super(inputstream);
 	}
 
+	@Override
 	protected Class<?> resolveClass(ObjectStreamClass objectstreamclass) throws IOException, ClassNotFoundException {
 		Class<?> result = null;
 		if(objectstreamclass.getName().equals("er.extensions.ERXMutableArray")) {

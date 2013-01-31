@@ -29,7 +29,7 @@ public class Main extends ERD2WPage {
     public Main(WOContext context) {
         super(context);
         setEditingContext(session().defaultEditingContext());
-        entities = ((EOModel) EOModelGroup.defaultGroup().models().lastObject()).entities();
+        entities = EOModelGroup.defaultGroup().models().lastObject().entities();
         displayGroup = new WODisplayGroup();
         setTaskEntity("edit", EOUtilities.entityNamed(editingContext(), "String"));
     }

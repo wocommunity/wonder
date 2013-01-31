@@ -295,7 +295,6 @@ public class _H2PlugIn extends JDBCPlugIn {
 		 * Helper to check for timestamp columns that have a "D" value type.
 		 *
 		 * @param eoattribute
-		 * @return
 		 */
 		private boolean isDateAttribute(final EOAttribute eoattribute) {
 			return eoattribute != null && "D".equals(eoattribute.valueType());
@@ -305,7 +304,6 @@ public class _H2PlugIn extends JDBCPlugIn {
 		 * Helper to check for timestamp columns that have a "T" value type.
 		 *
 		 * @param eoattribute
-		 * @return
 		 */
 		private boolean isTimestampAttribute(final EOAttribute eoattribute) {
 			return eoattribute != null && "T".equals(eoattribute.valueType());
