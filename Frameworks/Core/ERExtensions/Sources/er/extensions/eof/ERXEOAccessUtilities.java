@@ -1586,7 +1586,7 @@ public class ERXEOAccessUtilities {
                         throw ex;
                     } 
                 } finally {
-                    if(!wasOpen) {
+                    if (!wasOpen && channel != null) {
                         channel.closeChannel();
                     }
                     dbc.unlock();
