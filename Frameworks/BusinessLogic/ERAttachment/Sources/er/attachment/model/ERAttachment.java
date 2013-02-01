@@ -44,10 +44,7 @@ public abstract class ERAttachment extends _ERAttachment {
   private boolean isInNestedEditingContext() {
 	  return isInNestedEditingContext(editingContext());
   }
-  
-  public ERAttachment() {
-  }
-  
+
   @Override
   public void didInsert() {
     super.didInsert();
@@ -153,7 +150,7 @@ public abstract class ERAttachment extends _ERAttachment {
     		ERAttachmentProcessor.processorForType(this).deleteAttachment(this);
     	}
     	catch (Throwable e) {
-    		ERAttachment.log.error("Failed to delete attachment '" + primaryKey() + "'.", e);
+    		log.error("Failed to delete attachment '" + primaryKey() + "'.", e);
     	}
     }
   }

@@ -1,8 +1,11 @@
 package er.grouping;
 
-import java.util.*;
+import java.util.Enumeration;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
+import com.webobjects.foundation.NSMutableArray;
 
 public class DRRecord {
 
@@ -22,12 +25,12 @@ public class DRRecord {
         _valueList.removeAllObjects();
         _flatValueList.removeAllObjects();
         //OWDebug.println(1, "entered");
-        if(this.attributeList() != null){
-            Enumeration anEnum = this.attributeList().objectEnumerator();
+        if(attributeList() != null){
+            Enumeration anEnum = attributeList().objectEnumerator();
             while (anEnum.hasMoreElements()) {
                 DRAttribute att = (DRAttribute)anEnum.nextElement();
                 //OWDebug.println(1, "att:"+att);
-                DRValue val = this.valueForAttributeRecord(att, this);
+                DRValue val = valueForAttributeRecord(att, this);
                 //OWDebug.println(1, "val:"+val);
                 _valueList.addObject(val);
             }
@@ -55,7 +58,7 @@ public class DRRecord {
         _model = aMod;
         _valueList = new NSMutableArray();
         _flatValueList = new NSMutableArray();
-        this.populateValueList();
+        populateValueList();
         return this;
     }
 
@@ -84,7 +87,7 @@ public class DRRecord {
     }
 
     public NSArray attributeList() {
-        return this.model().attributeList();
+        return model().attributeList();
     }
 
 }

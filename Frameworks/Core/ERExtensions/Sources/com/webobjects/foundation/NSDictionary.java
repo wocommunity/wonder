@@ -54,10 +54,12 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 			return (Q)NSDictionary.this.put((K)getKey(), (V)value);
 		}
 
+		@Override
 		public boolean equals(Object o) {
 			return _entryKey == null && ((Map.Entry<P, Q>) o).getKey() == null && getKey().equals(((Map.Entry<P, Q>) o).getKey()) && getValue().equals(((Map.Entry<P, Q>) o).getValue());
 		}
 
+		@Override
 		public int hashCode() {
 			return _entryKey == null ? System.identityHashCode(this) : _entryKey.hashCode();
 		}
@@ -430,6 +432,7 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		return _equalsDictionary(otherDictionary);
 	}
 
+	@Override
 	public boolean equals(Object object) {
 		if (object == this) {
 			return true;
@@ -531,10 +534,12 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		return _NSDictionaryClassHashCode;
 	}
 
+	@Override
 	public int hashCode() {
 		return _NSDictionaryClassHashCode ^ count();
 	}
 
+	@Override
 	public Object clone() {
 		return this;
 	}
@@ -547,6 +552,7 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		return new NSMutableDictionary<K, V>(this);
 	}
 
+	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder(128);
 		sb.append('{');

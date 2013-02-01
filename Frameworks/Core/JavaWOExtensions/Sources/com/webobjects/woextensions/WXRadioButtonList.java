@@ -9,7 +9,6 @@ import com.webobjects.appserver._private.WORadioButtonList;
  * 
  * @see WORadioButtonList
  * @author mendis
- *
  */
 public class WXRadioButtonList extends WOComponent {
 	/**
@@ -26,10 +25,6 @@ public class WXRadioButtonList extends WOComponent {
 	public int index;
 	private String _id;
     
-    @Override
-    public boolean synchronizesVariablesWithBindings() {
-    	return false;
-    }
     
     @Override
     public boolean isStateless() {
@@ -78,7 +73,7 @@ public class WXRadioButtonList extends WOComponent {
     }
     
     public String elementName() {
-    	return hasBinding(Bindings.name) ? (String) valueForBinding(Bindings.name) : _id();		
+    	return hasBinding(Bindings.name) ? (String) valueForBinding(Bindings.name) : _id();
     }
     
     public String id() {
@@ -86,7 +81,7 @@ public class WXRadioButtonList extends WOComponent {
     }
     
     private String _id() {
-    	if (_id == null) _id = hasBinding(Bindings.id) ? (String)  valueForBinding(Bindings.id) : context().elementID();	// RM: FIXME: convert to javascriptElementID() in WO 5.4
+    	if (_id == null) _id = hasBinding(Bindings.id) ? (String) valueForBinding(Bindings.id) : context().javaScriptElementID();
     	return _id;
     }
     

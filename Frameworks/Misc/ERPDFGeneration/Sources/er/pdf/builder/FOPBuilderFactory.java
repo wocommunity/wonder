@@ -8,7 +8,7 @@ public class FOPBuilderFactory {
 	/**
 	 * default to pdf builder. I don't know why, I just feel like it, ok? Get off my back man!
 	 * 
-	 * @return
+	 * @return a new instance of FOPBuilder
 	 */
 	public static FOPBuilder newBuilder() {
 		return new Fop2PdfImpl();

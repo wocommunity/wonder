@@ -81,6 +81,7 @@ public class ReportPage extends ERD2WPage {
         return context().page();
     }
     
+    @Override
     public void appendToResponse(WOResponse response, WOContext context) {
         super.appendToResponse(response, context);
         if(reportData != null) {

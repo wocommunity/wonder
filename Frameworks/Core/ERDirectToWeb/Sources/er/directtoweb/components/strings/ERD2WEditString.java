@@ -49,6 +49,7 @@ public class ERD2WEditString extends D2WEditString {
 
     public ERD2WEditString(WOContext context) { super(context); }
     
+    @Override
     public void validationFailedWithException(Throwable theException,Object theValue, String theKeyPath) {
         // This is for number formatting exceptions
         String keyPath = theKeyPath.equals("value") ? propertyKey() : theKeyPath;

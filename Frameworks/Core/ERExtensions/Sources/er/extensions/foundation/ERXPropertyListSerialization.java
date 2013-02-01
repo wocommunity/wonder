@@ -5832,13 +5832,13 @@ public class ERXPropertyListSerialization {
 			case NSPropertyListBinaryFormat_v1_0:
 				_BinaryPListParser parser = new _BinaryPListParser();
 				if (plist instanceof Map<?, ?>) {
-					parser.writePropertyListToStream((Map<?, ?>)plist, out);
+					parser.writePropertyListToStream(plist, out);
 				} else if (plist instanceof NSDictionary) {
-	                parser.writePropertyListToStream((NSDictionary)plist, out);
+	                parser.writePropertyListToStream(plist, out);
 				} else if (plist instanceof List<?>) {
-					parser.writePropertyListToStream((List<?>) plist, out);
+					parser.writePropertyListToStream(plist, out);
                 } else if (plist instanceof NSArray) {
-                    parser.writePropertyListToStream((NSArray)plist, out);
+                    parser.writePropertyListToStream(plist, out);
 				}
 				break;
 

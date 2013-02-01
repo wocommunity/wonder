@@ -1,23 +1,19 @@
 
 package er.erxtest;
 
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Vector;
-
-import java.io.OutputStreamWriter;
-
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-
-import java.security.cert.X509Certificate;
-
 
 import org.junit.runner.Description;
 import org.junit.runner.Result;
@@ -63,7 +59,7 @@ public class ERXTestReportListener extends RunListener {
 
         ClassLoader loader = this.getClass().getClassLoader();
 
-        ArrayList<String> found = this.listLoadedClasses(loader);
+        ArrayList<String> found = listLoadedClasses(loader);
 
         ArrayList<String> fixed = new ArrayList<String>();
 
@@ -127,14 +123,18 @@ public class ERXTestReportListener extends RunListener {
         return fixed;
     }
 
+    @Override
     public void testRunStarted(Description description) { start = System.currentTimeMillis(); }
 
+    @Override
     public void testStarted(Description description) { }
 
+    @Override
     public void testFailure(Failure failure) { }
 
     private static java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+    @Override
     public void testRunFinished(Result result) {
 
         String contact = System.getProperty("wo.test.emailAddress");

@@ -20,14 +20,14 @@ public class Main extends ERXComponent {
 	public WOActionResults combinePdfStreams() {
 
 		CombineTheStreams combined = pageWithName(CombineTheStreams.class);
-		WOContext ctx = this.context();
+		WOContext ctx = context();
 
-		SimplePDFGeneration1 spg = (SimplePDFGeneration1) this.application().pageWithName(SimplePDFGeneration1.class.getName(), ctx);
+		SimplePDFGeneration1 spg = (SimplePDFGeneration1) application().pageWithName(SimplePDFGeneration1.class.getName(), ctx);
 		combined.pdfsToCombine.add(spg.generateResponse().content().stream());
 		spg = null;
 		
-		ctx = this.context();
-		SimpleXML2FOP2PDF1 sxp = (SimpleXML2FOP2PDF1) this.application().pageWithName(SimpleXML2FOP2PDF1.class.getName(), ctx);
+		ctx = context();
+		SimpleXML2FOP2PDF1 sxp = (SimpleXML2FOP2PDF1) application().pageWithName(SimpleXML2FOP2PDF1.class.getName(), ctx);
 		combined.pdfsToCombine.add(sxp.generateResponse().content().stream());
 		sxp = null;
 

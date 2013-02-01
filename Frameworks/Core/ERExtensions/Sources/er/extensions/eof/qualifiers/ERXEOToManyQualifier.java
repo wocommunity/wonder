@@ -28,7 +28,7 @@ public class ERXEOToManyQualifier extends ERXToManyQualifier implements Cloneabl
     }
 
     /**
-     * @deprecated use {@link ERXEOAccessUtilities#primaryKeysForObjects(NSArray)}
+     * @deprecated use {@link er.extensions.eof.ERXEOAccessUtilities#primaryKeysForObjects(NSArray)}
      */
      @Deprecated
     public static NSArray primaryKeysForObjectsFromSameEntity(NSArray eos) {
@@ -36,7 +36,7 @@ public class ERXEOToManyQualifier extends ERXToManyQualifier implements Cloneabl
     }
 
     /**
-     * @deprecated use {@link ERXEOAccessUtilities#snapshotsForObjectsFromRelationshipNamed(NSArray, String)}
+     * @deprecated use {@link er.extensions.eof.ERXEOAccessUtilities#snapshotsForObjectsFromRelationshipNamed(NSArray, String)}
      */
      @Deprecated
     public static NSArray primaryKeysForObjectsFromSameEntity(String relKey, NSArray eos) {

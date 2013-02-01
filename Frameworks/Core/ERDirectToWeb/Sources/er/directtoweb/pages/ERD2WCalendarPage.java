@@ -33,6 +33,7 @@ public class ERD2WCalendarPage extends ERD2WListPage {
         super(c);
     }
 
+    @Override
     public WODisplayGroup displayGroup() {
         if(_displayGroup == null) {
             ERXDateGrouper grouper = new ERXDateGrouper();
@@ -52,6 +53,7 @@ public class ERD2WCalendarPage extends ERD2WListPage {
         return (ERXDateGrouper)displayGroup();
     }
 
+    @Override
     public int numberOfObjectsPerBatch() {
         return 0;	// we want all the objects in one batch
     }

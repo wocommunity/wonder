@@ -52,6 +52,7 @@ public class ERDDebuggingHelp extends WOComponent implements ERXDebugMarker.Debu
 	
     public ERDDebuggingHelp(WOContext context) { super(context); }
 
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
     
     public boolean showHelp() {

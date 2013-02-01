@@ -32,6 +32,7 @@ public class ERXEOAccessUtilitiesTest extends ERXTestCase {
 		super(adaptorName);
 	}
 
+	@Override
 	public void setUp() throws Exception {
 		super.setUp();
 

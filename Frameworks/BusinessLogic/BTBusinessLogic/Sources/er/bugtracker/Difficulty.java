@@ -12,6 +12,7 @@ public class Difficulty extends _Difficulty {
         super();
     }
 
+    @Override
     public void init(EOEditingContext ec) {
         super.init(ec);
     }

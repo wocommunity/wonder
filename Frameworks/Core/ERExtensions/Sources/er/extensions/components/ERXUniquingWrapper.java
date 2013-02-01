@@ -40,12 +40,14 @@ public class ERXUniquingWrapper extends WODynamicGroup {
 		return value != null ? value.toString() : "" + hashCode();
 	}
 
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		context.appendElementIDComponent(id(context.component()));
 		super.appendToResponse(response, context);
 		context.deleteLastElementIDComponent();
 	}
 
+	@Override
 	public WOActionResults invokeAction(WORequest request, WOContext context) {
 		context.appendElementIDComponent(id(context.component()));
 		WOActionResults result = super.invokeAction(request, context);
@@ -53,6 +55,7 @@ public class ERXUniquingWrapper extends WODynamicGroup {
 		return result;
 	}
 
+	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		context.appendElementIDComponent(id(context.component()));
 		super.takeValuesFromRequest(request, context);

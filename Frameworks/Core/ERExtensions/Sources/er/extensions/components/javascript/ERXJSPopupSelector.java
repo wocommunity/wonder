@@ -24,7 +24,6 @@ import er.extensions.components._private.ERXWOForm;
  * @binding popupName
  * @binding doNotAddOneToComputedIndex" defaults="Boolean
  */
-
 public class ERXJSPopupSelector extends WOComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -40,6 +39,7 @@ public class ERXJSPopupSelector extends WOComponent {
 		super(aContext);
 	}
 
+	@Override
 	public boolean isStateless() {
 		return true;
 	}

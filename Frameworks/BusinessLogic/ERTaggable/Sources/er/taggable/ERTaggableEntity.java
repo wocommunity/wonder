@@ -233,8 +233,8 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
   @SuppressWarnings("unchecked")
   public static NSArray<EOEntity> taggableEntities() {
     NSMutableArray<EOEntity> taggableEntities = new NSMutableArray<EOEntity>();
-    for (EOModel model : (NSArray<EOModel>) EOModelGroup.defaultGroup().models()) {
-      for (EOEntity entity : (NSArray<EOEntity>) model.entities()) {
+    for (EOModel model : EOModelGroup.defaultGroup().models()) {
+      for (EOEntity entity : model.entities()) {
         if (ERTaggableEntity.isTaggable(entity)) {
           taggableEntities.addObject(entity);
         }
@@ -253,7 +253,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
   @SuppressWarnings("unchecked")
   public static EORelationship tagsRelationshipForEntity(EOEntity entity, EOEntity tagEntity) {
     EORelationship tagsRelationship = null;
-    for (EORelationship relationship : (NSArray<EORelationship>) entity.relationships()) {
+    for (EORelationship relationship : entity.relationships()) {
       if (relationship.isFlattened() && tagEntity.name().equals(relationship.destinationEntity().name())) {
         tagsRelationship = relationship;
         break;
@@ -365,7 +365,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
       joinToItemRelationship.setToMany(false);
       joinToItemRelationship.setJoinSemantic(EORelationship.InnerJoin);
       joinEntity.addRelationship(joinToItemRelationship);
-      for (EOAttribute itemPrimaryKey : (NSArray<EOAttribute>) entity.primaryKeyAttributes()) {
+      for (EOAttribute itemPrimaryKey : entity.primaryKeyAttributes()) {
         EOAttribute itemFKAttribute = new EOAttribute();
         itemFKAttribute.setExternalType(itemPrimaryKey.externalType());
         itemFKAttribute.setValueType(itemPrimaryKey.valueType());
@@ -388,7 +388,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
       joinToTagRelationship.setToMany(false);
       joinToTagRelationship.setJoinSemantic(EORelationship.InnerJoin);
       joinEntity.addRelationship(joinToTagRelationship);
-      for (EOAttribute tagPrimaryKey : (NSArray<EOAttribute>) tagEntity.primaryKeyAttributes()) {
+      for (EOAttribute tagPrimaryKey : tagEntity.primaryKeyAttributes()) {
         EOAttribute tagFKAttribute = new EOAttribute();
         tagFKAttribute.setExternalType(tagPrimaryKey.externalType());
         tagFKAttribute.setValueType(tagPrimaryKey.valueType());
@@ -979,7 +979,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
     // it on the end and hope for the best.
     tagsSqlExpression.setStatement(tagsSqlExpression.statement() + " ORDER BY tagCount DESC");
 
-    for (EOAttribute attribute : (NSArray<EOAttribute>) _entity.primaryKeyAttributes()) {
+    for (EOAttribute attribute : _entity.primaryKeyAttributes()) {
       sqlHelper.removeSelectFromExpression(attribute, tagsSqlExpression);
       tagsFetchAttributes.removeObject(attribute);
     }

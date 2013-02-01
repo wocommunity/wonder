@@ -1,12 +1,18 @@
 // $LastChangedRevision: 5773 $ DO NOT EDIT.  Make changes to Person.java instead.
 package er.rest.model;
 
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
-import java.math.*;
-import java.util.*;
+import java.util.NoSuchElementException;
+
 import org.apache.log4j.Logger;
+
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOGenericRecord;
+import com.webobjects.eocontrol.EOKeyValueQualifier;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
 
 @SuppressWarnings("all")
 public abstract class _Person extends  EOGenericRecord {

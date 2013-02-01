@@ -1690,7 +1690,7 @@ public class ERXSQLHelper {
 		 * This method checks each foreign key constraint name and if it is
 		 * longer than 30 characters its replaced with a unique name.
 		 * 
-		 * @see createSchemaSQLForEntitiesInModelWithNameAndOptions
+		 * @see ERXSQLHelper#createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray, String, NSDictionary)
 		 */
 		@Override
 		public String createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray<EOEntity> entities, String modelName, NSDictionary optionsCreate) {
@@ -1842,6 +1842,7 @@ public class ERXSQLHelper {
 			return externalType;
 		}
 		
+		@Override
 		public boolean reassignExternalTypeForValueTypeOverride(EOAttribute attribute) {
 			return false;
 		}
@@ -1922,10 +1923,12 @@ public class ERXSQLHelper {
 			return sql != null && !sql.startsWith("--");
 		}
 
+		@Override
 		public int varcharLargeJDBCType() {
 			return Types.CLOB;
 		}
 
+		@Override
 		public int varcharLargeColumnWidth() {
 			return 0;
 		}
@@ -2041,6 +2044,7 @@ public class ERXSQLHelper {
 			return "ALTER TABLE \"" + tableName + "\" ADD CONSTRAINT \"" + indexName + "\" UNIQUE(\"" + new NSArray<String>(columnNames).componentsJoinedByString("\", \"") + "\") DEFERRABLE INITIALLY DEFERRED";
 		}
 
+		@Override
 		public String sqlForCreateIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
 			NSMutableArray<String> columnNames = columnNamesFromColumnIndexes(columnIndexes);
 			return "CREATE INDEX \""+indexName+"\" ON \""+tableName+"\" (\""+new NSArray<String>(columnNames).componentsJoinedByString("\", \"")+"\")";
@@ -2104,6 +2108,7 @@ public class ERXSQLHelper {
 		 * 
 		 * @return regex pattern that indicates this line is an SQL comment
 		 */
+		@Override
 		protected Pattern commentPattern() {
 			return Pattern.compile("^--");
 		}
@@ -2136,7 +2141,7 @@ public class ERXSQLHelper {
 		 * of elements in the IN is greater than 1,000.  For larger sizes, the correct number for this method to return seems to depend on the
 		 * number of rows in the tables.  1/5th of the table size may be a good place to start looking for the upper bound.
 		 * 
-		 * @see ERXSQLHelper#maximumElementPerInClause()
+		 * @see ERXSQLHelper#maximumElementPerInClause(EOEntity)
 		 * 
 		 * @param entity EOEntity that can be used to fine-tune the result
 		 * @return database specific limit, or or most efficient number, of elements in an IN clause in a statement
@@ -2362,7 +2367,7 @@ public class ERXSQLHelper {
 		 * Creates unique index; stolen from the derby helper
 		 * 
 		 * @author cug - Jun 24, 2008
-		 * @see er.extensions.ERXSQLHelper#sqlForCreateUniqueIndex(java.lang.String, java.lang.String, er.extensions.ERXSQLHelper.ColumnIndex[])
+		 * @see ERXSQLHelper#sqlForCreateUniqueIndex(String, String, ColumnIndex...)
 		 */
 		@Override
 		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
@@ -2479,7 +2484,7 @@ public class ERXSQLHelper {
 		
 		/** 
 		 * Creates unique index; stolen from the derby helper
-		 * @see er.extensions.ERXSQLHelper#sqlForCreateUniqueIndex(java.lang.String, java.lang.String, er.extensions.ERXSQLHelper.ColumnIndex[])
+		 * @see ERXSQLHelper#sqlForCreateUniqueIndex(String, String, ColumnIndex...)
 		 */
 		@Override
 		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
@@ -2509,6 +2514,7 @@ public class ERXSQLHelper {
 		 * 
 		 * @return regex pattern that indicates this line is an SQL comment
 		 */
+		@Override
 		protected Pattern commentPattern() {
 			return Pattern.compile("^--");
 		}
@@ -2651,6 +2657,7 @@ public class ERXSQLHelper {
 			return "dbupdater";
 		}
 		
+		@Override
 		public boolean reassignExternalTypeForValueTypeOverride(EOAttribute attribute) {
 			return false;
 		}

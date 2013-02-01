@@ -16,6 +16,7 @@ public class Framework extends _Framework {
         super();
     }
 
+    @Override
     public void init(EOEditingContext ec) {
         super.init(ec);
     }

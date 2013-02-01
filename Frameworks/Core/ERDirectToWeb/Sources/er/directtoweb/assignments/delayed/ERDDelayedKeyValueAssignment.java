@@ -84,6 +84,7 @@ public class ERDDelayedKeyValueAssignment extends ERDDelayedAssignment implement
      *		called on the current context with the
      *		value of this assignment.
      */
+    @Override
     public Object fireNow(D2WContext c) { 
         return c.valueForKeyPath((String)value()); 
     }

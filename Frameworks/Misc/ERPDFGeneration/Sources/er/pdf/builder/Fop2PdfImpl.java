@@ -48,11 +48,11 @@ public class Fop2PdfImpl implements FOPBuilder {
 	}
 
 	public void setXSL(String fopxslLocation) {
-		this._fopxslLocation = fopxslLocation;
+		_fopxslLocation = fopxslLocation;
 	}
 
 	public void setXML(String xmlToTransform) {
-		this._xmlToTransform = xmlToTransform;
+		_xmlToTransform = xmlToTransform;
 
 	}
 
@@ -60,7 +60,7 @@ public class Fop2PdfImpl implements FOPBuilder {
 	 * some basic defaults for configuring the fop agent. This should be
 	 * property driven, but I'll do that later (yeah... right)
 	 * 
-	 * @return
+	 * @return a configuration dictionary
 	 */
 	public NSDictionary<String, Object> agentDefaults() {
 		NSMutableDictionary<String, Object> d = new NSMutableDictionary<String, Object>();
@@ -138,7 +138,7 @@ public class Fop2PdfImpl implements FOPBuilder {
 	}
 
 	public void setConfiguration(NSMutableDictionary<String, Object> config) {
-		this._config = config;
+		_config = config;
 	}
 
 }

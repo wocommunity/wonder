@@ -141,6 +141,7 @@ public class ERXEOFAppender extends AppenderSkeleton {
      *
      * @param event current logging event
      */
+    @Override
     public void append(LoggingEvent event) {
         if (conditionsChecked || checkConditions()) {
             subAppend(event);

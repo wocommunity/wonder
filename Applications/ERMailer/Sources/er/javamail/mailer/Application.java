@@ -51,6 +51,7 @@ public class Application extends ERXApplication {
      * daemon frequency which is specified in the property:
      * <b>er.javamail.mailer.ERBatchMailerDaemonFrequency</b>
      */
+    @Override
     public void didFinishLaunching() {
         if (ERXProperties.booleanForKey("er.javamail.mailer.ERTestSendingMail"));
             testSendingMail();

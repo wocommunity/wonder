@@ -56,8 +56,8 @@ public class SeleniumTestRunnerProxy extends WORequestHandler {
     public SeleniumTestRunnerProxy() {
         super();
     }
-    
-    // @Override
+
+    @Override
     public WOResponse handleRequest(WORequest request) {
         if(!ERSelenium.testsEnabled()) {
             return new ERXResponse(ERXHttpStatusCodes.STATUS_FORBIDDEN);

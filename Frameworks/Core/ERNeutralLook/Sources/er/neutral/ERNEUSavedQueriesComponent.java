@@ -1,11 +1,11 @@
 package er.neutral;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
 
 import er.directtoweb.components.misc.ERDSavedQueriesComponent;
-
-import org.apache.log4j.Logger;
 
 /**
  * This Component will store the forms values in the displayGroup of a Query Page into user preferences

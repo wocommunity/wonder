@@ -11,7 +11,6 @@ import com.webobjects.appserver.WOContext;
 
 import er.extensions.foundation.ERXStringUtilities;
 
-// Stateless confirm panel
 /**
  * Stateless implementation of JSConfirmPanel.*<br />
  *
@@ -24,7 +23,6 @@ import er.extensions.foundation.ERXStringUtilities;
  * @binding style style of the link
  * @binding disabled whether or not this link is disabled
  */
-
 public class ERXJSConfirmPanel extends WOComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -37,7 +35,7 @@ public class ERXJSConfirmPanel extends WOComponent {
         super(aContext);
     }
 
-    public boolean synchronizesVariablesWithBindings() { return false; }
+    @Override
     public boolean isStateless() { return true; }
 
     public String confirmMessage() { return "return confirm('" +

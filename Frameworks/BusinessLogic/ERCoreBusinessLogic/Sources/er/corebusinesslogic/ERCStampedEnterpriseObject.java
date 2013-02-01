@@ -79,6 +79,7 @@ public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
 
     public EOEnterpriseObject insertionLogEntry=null;
     
+    @Override
     public void init(EOEditingContext ec) {
         super.init(ec);
         if (this instanceof ERCLogEntryInterface) {
@@ -100,17 +101,20 @@ public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
         setLastModified(t);
     }
 
+    @Override
     public void willInsert() {
         super.willInsert();
         touch();
         setCreated(lastModified());
     }
 
+    @Override
     public void willUpdate() {
         super.willUpdate();
         touch();
     }
 
+    @Override
     public void willDelete() {
         // this in theory should not have much effect
         // however EOF seems to have trouble with some cascade configuration

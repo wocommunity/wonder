@@ -22,6 +22,7 @@ public class ERMailerTimerTask extends TimerTask {
     /**
      * Processes the outgoing mail.
      */
+    @Override
     public void run() {
         if (log.isDebugEnabled()) log.debug("Timer firing to process outgoing mail.");
 

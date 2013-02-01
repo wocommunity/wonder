@@ -30,6 +30,7 @@ public class Application extends ERXApplication {
    /**
     * @deprecated We need to remove the call to ERXRestRequestHandler
     */
+    @Deprecated
     public Application() {
         ERXNavigationManager.manager().configureNavigation();
         setContextClassName("er.extensions.appserver.ERXWOContext");
@@ -44,6 +45,7 @@ public class Application extends ERXApplication {
         D2W.setFactory(new Factory());
     }
 
+    @Override
     public void finishInitialization() {
         if(ERXProperties.booleanForKeyWithDefault("BugTracker.processMails", false)) {
             reader = new MailReader(null);

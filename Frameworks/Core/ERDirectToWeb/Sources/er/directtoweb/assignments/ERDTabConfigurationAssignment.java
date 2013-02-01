@@ -53,5 +53,6 @@ public class ERDTabConfigurationAssignment extends ERDDefaultConfigurationNameAs
      */
     public ERDTabConfigurationAssignment(String key, Object value) { super(key,value); }
 
+    @Override
     public Object inspectConfigurationName(D2WContext c) { return "InspectTab" + (c.valueForKey("object") != null ?((EOEnterpriseObject)c.valueForKey("object")).entityName() :                                                                                         c.entity().name()); }
 }

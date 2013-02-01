@@ -96,7 +96,7 @@ public class ERXEntity extends EOEntity {
 	 * @param classDescription - the EOClassDescription to associate with the receiver.
 	 */
 	public void setClassDescription(EOClassDescription classDescription) {
-		this._classDescription = classDescription;
+		_classDescription = classDescription;
 	}
 
 	/**

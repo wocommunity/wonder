@@ -118,6 +118,7 @@ public class AjaxSortableList extends AjaxComponent {
     super.appendToResponse(response, context);
   }
 
+  @Override
   protected void addRequiredWebResources(WOResponse res) {
     addScriptResourceInHead(res, "prototype.js");
     addScriptResourceInHead(res, "effects.js");
@@ -160,6 +161,7 @@ public class AjaxSortableList extends AjaxComponent {
     return onUpdateBuffer.toString();
   }
 
+  @Override
   public WOActionResults handleRequest(WORequest request, WOContext context) {
     if (!canGetValueForBinding("list")) {
       throw new IllegalArgumentException("You must specify a readable 'list'.");

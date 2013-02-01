@@ -20,12 +20,10 @@ public class DefaultWOWebSocket implements WebSocket {
 		return channel;
 	}
 	
-	@Override
 	public void didClose() {
 		//Do nothing
 	}
 
-	@Override
 	public void didUpgrade() {
 		//Do nothing
 	}
@@ -42,7 +40,6 @@ public class DefaultWOWebSocket implements WebSocket {
 	 */
 	public void init(WOSession session) {}
 	
-	@Override
 	public void receiveFrame(WebSocketFrame frame) {
 		ERXApplication._startRequest();
 		try {
@@ -61,7 +58,6 @@ public class DefaultWOWebSocket implements WebSocket {
 		}
 	}
 	
-	@Override
 	public void sendFrame(WebSocketFrame frame) {
 		channel().write(frame);
 	}

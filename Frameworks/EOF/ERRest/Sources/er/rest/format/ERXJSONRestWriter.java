@@ -2,7 +2,6 @@ package er.rest.format;
 
 import net.sf.json.JSONSerializer;
 import net.sf.json.JsonConfig;
-
 import er.rest.ERXRestContext;
 import er.rest.ERXRestRequestNode;
 import er.rest.ERXRestUtils;

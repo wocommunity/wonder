@@ -49,69 +49,86 @@ public class ERLuceneSynchronizationFactory extends EOSynchronizationFactory imp
 		return new NSArray(expression);
 	}
 
+	@Override
 	public void appendExpressionToScript(EOSQLExpression arg0, StringBuffer arg1) {
 	}
 
+	@Override
 	public NSArray createDatabaseStatementsForConnectionDictionary(NSDictionary arg0, NSDictionary arg1) {
 		return noopExpressions();
 	}
 
+	@Override
 	public NSArray createTableStatementsForEntityGroup(NSArray arg0) {
 		return noopExpressions();
 	}
 
+	@Override
 	public NSArray createTableStatementsForEntityGroups(NSArray arg0) {
 		return noopExpressions();
 	}
 
+	@Override
 	public NSArray dropDatabaseStatementsForConnectionDictionary(NSDictionary arg0, NSDictionary arg1) {
 		return noopExpressions();
 	}
 
+	@Override
 	public NSArray dropPrimaryKeySupportStatementsForEntityGroup(NSArray arg0) {
 		return noopExpressions();
 	}
 
+	@Override
 	public NSArray dropPrimaryKeySupportStatementsForEntityGroups(NSArray arg0) {
 		return noopExpressions();
 	}
 
+	@Override
 	public NSArray dropTableStatementsForEntityGroup(NSArray arg0) {
 		return noopExpressions();
 	}
 
+	@Override
 	public NSArray dropTableStatementsForEntityGroups(NSArray arg0) {
 		return noopExpressions();
 	}
 
+	@Override
 	public NSArray foreignKeyConstraintStatementsForRelationship(EORelationship arg0) {
 		return noopExpressions();
 	}
 
+	@Override
 	public NSArray primaryKeyConstraintStatementsForEntityGroup(NSArray arg0) {
 		return noopExpressions();
 	}
 
+	@Override
 	public NSArray primaryKeyConstraintStatementsForEntityGroups(NSArray arg0) {
 		return noopExpressions();
 	}
 
+	@Override
 	public NSArray primaryKeySupportStatementsForEntityGroup(NSArray arg0) {
 		return noopExpressions();
 	}
 
+	@Override
 	public NSArray primaryKeySupportStatementsForEntityGroups(NSArray arg0) {
 		return noopExpressions();
 	}
 
+	@Override
 	public String schemaCreationScriptForEntities(NSArray arg0, NSDictionary arg1) {
 		return "--";
 	}
 
+	@Override
 	public NSArray schemaCreationStatementsForEntities(NSArray arg0, NSDictionary arg1) {
 		return noopExpressions();
 	}
 
+	@Override
 	public NSArray statementsToInsertColumnForAttribute(EOAttribute attribute, NSDictionary options) {
 		return noopExpressions();
 	}

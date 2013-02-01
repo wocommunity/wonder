@@ -321,7 +321,7 @@ public class ERIndex {
         }
 
         TransactionHandler handler() {
-            return ERIndex.this._handler;
+            return _handler;
         }
     }
    
@@ -413,7 +413,7 @@ public class ERIndex {
 
     private Directory _indexDirectory;
 
-    private NSDictionary<String, IndexAttribute> _attributes = (NSDictionary<String, IndexAttribute>) NSDictionary.EmptyDictionary;
+    private NSDictionary<String, IndexAttribute> _attributes = NSDictionary.EmptyDictionary;
 
     private final String _name;
 
@@ -807,7 +807,7 @@ public class ERIndex {
     public ERDocument documentForId(int docId, float score) {
     	ERDocument doc = null;
     	try {
-    		Document _doc = this.indexSearcher().doc(docId);
+    		Document _doc = indexSearcher().doc(docId);
     		doc = new ERDocument(_doc, score);
     	} catch (IOException e) {
     		throw NSForwardException._runtimeExceptionForThrowable(e);

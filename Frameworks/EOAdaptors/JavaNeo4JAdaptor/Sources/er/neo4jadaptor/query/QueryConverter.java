@@ -122,7 +122,7 @@ public abstract class QueryConverter <ClauseType> {
 	 * @param key
 	 * @param operator
 	 * @param value
-	 * @return
+	 * @return a ClauseType object
 	 */
 	protected abstract ClauseType comparison(EOEntity entity, String key, ComparisonOperator operator, Object value);
 	

@@ -1,7 +1,7 @@
 package com.frontbase;
 
-import com.webobjects.jdbcadaptor._FrontBasePlugIn;
 import com.webobjects.jdbcadaptor.JDBCPlugIn;
+import com.webobjects.jdbcadaptor._FrontBasePlugIn;
 
 /**
  * <span class="en">

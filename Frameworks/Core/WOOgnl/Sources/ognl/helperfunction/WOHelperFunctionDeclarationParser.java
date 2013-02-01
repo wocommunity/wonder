@@ -40,6 +40,7 @@ public class WOHelperFunctionDeclarationParser {
 		return declarations;
 	}
 
+	@Override
 	public String toString() {
 		return "<WOHelperFunctionDeclarationParser quotedStrings = " + _quotedStrings.toString() + ">";
 	}

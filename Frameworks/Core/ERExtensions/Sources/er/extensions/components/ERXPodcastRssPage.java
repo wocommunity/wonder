@@ -2,8 +2,6 @@ package er.extensions.components;
 
 import com.webobjects.appserver.WOContext;
 
-import er.extensions.components.ERXRssPage;
-
 /**
  * Simple podcast RSS feed provider. The actual item goes into the component content. Based on ERXRssPage.
  * Some of the attributes are iTunes specific (see http://www.apple.com/itunes/podcasts/specs.html)

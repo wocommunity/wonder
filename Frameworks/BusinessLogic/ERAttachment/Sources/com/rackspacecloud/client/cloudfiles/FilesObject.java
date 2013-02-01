@@ -4,11 +4,15 @@
 
 package com.rackspacecloud.client.cloudfiles;
 
-import org.apache.log4j.Logger;
-import org.apache.http.HttpException;
-
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
+
+import org.apache.http.HttpException;
+import org.apache.log4j.Logger;
 
 public class FilesObject
 {
@@ -106,10 +110,10 @@ public class FilesObject
 
     /**
      * @return The MIME type of the object, pulled from the server
-     * @throws HttpException
-     * @throws IOException
-     * @throws FilesAuthorizationException 
-     * @throws FilesInvalidNameException 
+     * @throws HttpException if there was an error communicating with the server
+     * @throws IOException There was an I/O exception communicating with the server or writing the file.
+     * @throws FilesAuthorizationException The Client's Login was invalid
+     * @throws FilesInvalidNameException The container or object name was not valid
      */
     public String getMimeType() throws HttpException, IOException, FilesAuthorizationException, FilesInvalidNameException
     {
@@ -131,10 +135,10 @@ public class FilesObject
      * Get's the MD5 Checksum for this object 
      * 
      * @return The MD5 checksum, returned as a base 16 encoded string
-     * @throws HttpException
-     * @throws IOException
-     * @throws FilesAuthorizationException 
-     * @throws FilesInvalidNameException 
+     * @throws HttpException if there was an error communicating with the server
+     * @throws IOException There was an I/O exception communicating with the server or writing the file.
+     * @throws FilesAuthorizationException The Client's Login was invalid
+     * @throws FilesInvalidNameException The container or object name was not valid
      */
     public String getMd5sum() throws HttpException, IOException, FilesAuthorizationException, FilesInvalidNameException
     {
@@ -157,10 +161,10 @@ public class FilesObject
      * Returns the size of the object, in bytes
      * 
      * @return The size of the object in bytes
-     * @throws HttpException
-     * @throws IOException
-     * @throws FilesAuthorizationException 
-     * @throws FilesInvalidNameException 
+     * @throws HttpException if there was an error communicating with the server
+     * @throws IOException There was an I/O exception communicating with the server or writing the file.
+     * @throws FilesAuthorizationException The Client's Login was invalid
+     * @throws FilesInvalidNameException The container or object name was not valid
      */
     public long getSize() throws HttpException, IOException, FilesAuthorizationException, FilesInvalidNameException
     {
@@ -186,10 +190,10 @@ public class FilesObject
      * @param localFile The file
      * @return The number of bytes written
      * @throws FileNotFoundException Could not find the local file (does the path to it exist?)
-     * @throws HttpException There was an error communicating with the server
+     * @throws HttpException if there was an error communicating with the server
      * @throws IOException There was an I/O exception communicating with the server or writing the file.
-     * @throws FilesAuthorizationException 
-     * @throws FilesInvalidNameException 
+     * @throws FilesAuthorizationException The Client's Login was invalid
+     * @throws FilesInvalidNameException The container or object name was not valid
      */
     public long writeObjectToFile (File localFile) throws FileNotFoundException, HttpException, IOException, FilesAuthorizationException, FilesInvalidNameException
     {
@@ -227,8 +231,8 @@ public class FilesObject
      * @return An inputStream that will return the contents of the object
      * @throws HttpException There was an error communicating with the server
      * @throws IOException There was an I/O exception communicating with the server or writing the file.
-     * @throws FilesAuthorizationException 
-     * @throws FilesInvalidNameException 
+     * @throws FilesAuthorizationException The Client's Login was invalid
+     * @throws FilesInvalidNameException The container or object name was not valid
      */
     public InputStream getObjectAsStream() throws HttpException, IOException, FilesAuthorizationException, FilesInvalidNameException
     {
@@ -239,11 +243,11 @@ public class FilesObject
      * Download the contents of the object
      * 
      * @return The content of the object
-     * @throws HttpException There was an error communicating with the server
+     * @throws HttpException if there was an error communicating with the server
      * @throws IOException There was an I/O exception communicating with the server or writing the file.
-     * @throws FilesAuthorizationException 
-     * @throws FilesInvalidNameException 
-     * @throws FilesNotFoundException 
+     * @throws FilesAuthorizationException The Client's Login was invalid
+     * @throws FilesInvalidNameException The container or object name was not valid
+     * @throws FilesNotFoundException The container does not exist
      */
     public byte[] getObject() throws HttpException, IOException, FilesAuthorizationException, FilesInvalidNameException, FilesNotFoundException
     {
@@ -254,10 +258,10 @@ public class FilesObject
      * Return any metadata associated with this object
      * 
      * @return The metadata
-     * @throws HttpException There was an error communicating with the server
+     * @throws HttpException if there was an error communicating with the server
      * @throws IOException There was an I/O exception communicating with the server or writing the file.
-     * @throws FilesAuthorizationException 
-     * @throws FilesInvalidNameException 
+     * @throws FilesAuthorizationException The Client's Login was invalid
+     * @throws FilesInvalidNameException The container or object name was not valid
      */
     public FilesObjectMetaData getMetaData() throws HttpException, IOException, FilesAuthorizationException, FilesInvalidNameException
     {
@@ -316,8 +320,8 @@ public class FilesObject
      * @return The size of the object as a human readable string.
      * @throws HttpException There was an error communicating with the server
      * @throws IOException There was an I/O exception communicating with the server or writing the file.
-     * @throws FilesAuthorizationException 
-     * @throws FilesInvalidNameException 
+     * @throws FilesAuthorizationException The Client's Login was invalid
+     * @throws FilesInvalidNameException The container or object name was not valid
      */
     public String getSizeString () throws HttpException, IOException, FilesAuthorizationException, FilesInvalidNameException
     {
@@ -342,6 +346,10 @@ public class FilesObject
 
 	/**
 	 * @return the lastModified
+	 * @throws HttpException if there was an error communicating with the server
+	 * @throws IOException There was an I/O exception communicating with the server or writing the file.
+	 * @throws FilesAuthorizationException The Client's Login was invalid
+	 * @throws FilesInvalidNameException The container or object name was not valid
 	 */
 	public String getLastModified() throws HttpException, IOException, FilesAuthorizationException, FilesInvalidNameException
 	{
@@ -370,9 +378,9 @@ public class FilesObject
 	 * 
 	 * @return The CDN url for the object (if its container has been CDN enabled), null if 
 	 *         the container hasn't been CDN enabled.
-	 * @throws HttpException 
-	 * @throws IOException 
-	 * @throws FilesException 
+	 * @throws HttpException if there was an error communicating with the server
+	 * @throws IOException There was an I/O exception communicating with the server or writing the file.
+	 * @throws FilesException There was an error talking to the CloudFiles Server
 	 */
 	public String getCDNURL () throws FilesException, IOException, HttpException  {
 		try {

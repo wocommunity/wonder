@@ -17,6 +17,6 @@ public class DirectAction extends ERXDirectAction {
 	}
 	
 	public WOActionResults pageAction() {
-		return pageWithName((String)this.request().formValueForKey("p"));
+		return pageWithName((String)request().formValueForKey("p"));
 	}
 }

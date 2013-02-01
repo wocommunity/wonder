@@ -57,18 +57,21 @@ public class AjaxFunctionLink extends WOHTMLDynamicElement {
 		return _disabled != null && _disabled.booleanValueInComponent(context.component());
 	}
 
+	@Override
 	protected void _appendOpenTagToResponse(WOResponse response, WOContext context) {
 		if (!isDisabled(context)) {
 			super._appendOpenTagToResponse(response, context);
 		}
 	}
 
+	@Override
 	protected void _appendCloseTagToResponse(WOResponse response, WOContext context) {
 		if (!isDisabled(context)) {
 			super._appendCloseTagToResponse(response, context);
 		}
 	}
 
+	@Override
 	public void appendAttributesToResponse(WOResponse response, WOContext context) {
 		super.appendAttributesToResponse(response, context);
 		if (!isDisabled(context)) {

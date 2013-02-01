@@ -128,6 +128,7 @@ public class ERDDelayedExtraQualifierAssignment extends ERDDelayedAssignment {
         return result;
     }
 
+    @Override
     public Object fireNow(D2WContext c) {
         Object result = null;
         Object value = value();

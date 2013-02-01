@@ -1,8 +1,8 @@
 package er.ajax.mootools.example.components;
 
+import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.appserver.WOActionResults;
 
 import er.extensions.foundation.ERXStringUtilities;
 

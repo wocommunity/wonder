@@ -27,7 +27,6 @@ import er.extensions.foundation.ERXArrayUtilities;
  * @binding key
  * @binding showBrackets
  */
-
 public class ERDDisplayMailTo extends ERDCustomEditComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -40,10 +39,13 @@ public class ERDDisplayMailTo extends ERDCustomEditComponent {
     
     protected String _displayString, _email;
     protected Boolean _showBrackets;
-    
+
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
+    @Override
     public boolean isStateless() { return true; }
 
+    @Override
     public void reset() {
          super.reset();
         _displayString = null;

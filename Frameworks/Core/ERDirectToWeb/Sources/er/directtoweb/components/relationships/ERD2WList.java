@@ -35,6 +35,7 @@ public class ERD2WList extends ERDCustomEditComponent {
         super(context);
     }
 
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     public NSArray list() {

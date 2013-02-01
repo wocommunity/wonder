@@ -8,7 +8,6 @@ import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.appserver.ERXWOContext;
 
-
 /**
  * An Ajax.Updater as a button (that also submits the form and form values).
  * <p>
@@ -25,11 +24,6 @@ import er.extensions.appserver.ERXWOContext;
 public class AjaxUpdaterButton extends AjaxUpdater {
     public AjaxUpdaterButton(WOContext context) {
         super(context);
-    }
-    
-    @Override
-    public boolean synchronizesVariablesWithBindings() {
-    	return false;
     }
     
     @Override

@@ -30,6 +30,7 @@ public class ERD2WKeyMapper extends ERD2WStatelessComponent {
 
     public ERD2WKeyMapper(WOContext context) { super(context); }
     
+    @Override
     public void reset() {
         super.reset();
         _mappedKey=null;
@@ -57,6 +58,7 @@ public class ERD2WKeyMapper extends ERD2WStatelessComponent {
         return (mk==null || mk.length()>0) && propertyKey()!=null;
     }
     
+    @Override
     public void appendToResponse(WOResponse r, WOContext c) {
         if (renderMe()) {
             String originalKey=propertyKey();
@@ -66,6 +68,7 @@ public class ERD2WKeyMapper extends ERD2WStatelessComponent {
         }
     }
 
+    @Override
     public void takeValuesFromRequest(WORequest q, WOContext c) {
         // no form in here -- so do nothing -- do not call super
     }

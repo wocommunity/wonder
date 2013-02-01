@@ -21,7 +21,6 @@ import er.extensions.foundation.ERXDictionaryUtilities;
  * Given an action opens the action in a new window.<br />
  * 
  */
-
 public class ERXJSOpenWindowHyperlink extends WOComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -37,8 +36,8 @@ public class ERXJSOpenWindowHyperlink extends WOComponent {
     ///** logging support *//
     public static final Logger log = Logger.getLogger(ERXJSOpenWindowHyperlink.class);
 
+    @Override
     public boolean isStateless() { return true; }
-    public boolean synchronizesVariablesWithBindings() { return false; }
 
     public boolean isDirectAction() {
         return valueForBinding("directActionName") != null;

@@ -131,7 +131,7 @@ public class DRValue {
             return 0.0;
         }
 
-        Object val = this.val();
+        Object val = val();
 
         if (val != null) {
             return DRValueConverter.converter().doubleForValue(val);

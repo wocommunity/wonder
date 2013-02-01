@@ -24,7 +24,7 @@ import com.webobjects.foundation.NSRange;
 /**
  * Utility direct action class that provides a bunch of nice utility methods
  * if the direct action is accessed via a path direct action. See
- * {@class ERXPathDirectActionRequestHandler ERXPathDirectActionRequestHandler}
+ * {@link ERXPathDirectActionRequestHandler ERXPathDirectActionRequestHandler}
  * for more information.
  */
 public class ERXPathDirectAction extends WODirectAction {

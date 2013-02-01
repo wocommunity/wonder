@@ -7,7 +7,6 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
-
 import com.webobjects.foundation.NSDictionary;
 
 /**
@@ -69,6 +68,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
     /**
      * Creates the panes.
      */
+    @Override
     public void appendToResponse(WOResponse aResponse, WOContext aContext)
     {
     	WOComponent component = aContext.component();
@@ -106,6 +106,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
     /** 
      * Do nothing if not visible. 
      */
+    @Override
     public void takeValuesFromRequest(WORequest request, WOContext context)
     {
     	if (isVisble(context.component()) && (isSelected ==  null || isSelected(context.component())) ) {
@@ -116,6 +117,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
     /** 
      * Do nothing if not visible. 
      */
+    @Override
     public WOActionResults invokeAction(WORequest request, WOContext context)
     {
     	if (isVisble(context.component())) {
@@ -146,6 +148,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
     	}
     }
 
+	@Override
 	protected void addRequiredWebResources(WOResponse response, WOContext context) {
 	}
 
@@ -153,6 +156,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
 	 * The pane content is rendered when an Ajax request is received.
 	 * @return the children rendered as HTML
 	 */
+	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		WOResponse response = null;
 		String didSelect = request.stringFormValueForKey("didSelect");
@@ -175,6 +179,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
 	 * @param context WOContext response is being returned in
 	 * @return ID to cache this Ajax response under
 	 */
+	@Override
 	protected String _containerID(WOContext context) {
 		return tabIdInComponent(context.component()) + "_panel";
 	}
@@ -245,7 +250,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
     }
 
 	public void setParentId(WOAssociation aParentId) {
-		this.parentId = aParentId;
+		parentId = aParentId;
 	}
 
 	public WOAssociation parentId() {
@@ -253,7 +258,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
 	}
 
 	public void setTabNumber(WOAssociation aTabNumber) {
-		this.tabNumber = aTabNumber;
+		tabNumber = aTabNumber;
 	}
 
 	public WOAssociation tabNumber() {

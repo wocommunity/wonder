@@ -349,6 +349,7 @@ public class ERXNavigationItem implements Serializable {
 		return _hasActivity;
 	}
 
+	@Override
 	public String toString() {
 		return "< " + name() + " >";
 	}

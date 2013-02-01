@@ -14,7 +14,6 @@ import er.directtoweb.components.ERDCustomComponent;
  * Used to display a tab as text.<br />
  * 
  */
-
 public class ERDTabText extends ERDCustomComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -25,6 +24,8 @@ public class ERDTabText extends ERDCustomComponent {
 
     public ERDTabText(WOContext context) { super(context); }
 
+    @Override
     public boolean isStateless() { return true; }
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 }

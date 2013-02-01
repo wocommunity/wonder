@@ -1078,7 +1078,7 @@ public class ERXEOControlUtilities {
      * Fetches a shared enterprise object for a given fetch
      * specification from the default shared editing context.
      *
-     * @param fetch specification on the shared object
+     * @param fetchSpec specification on the shared object
      * @param entityName name of the shared entity
      * @return the shared enterprise object fetch by the fetch spec named.
      */
@@ -1090,7 +1090,7 @@ public class ERXEOControlUtilities {
      * Fetches a shared enterprise object from the default shared editing context
      * given the name of a fetch specification.
      *
-     * @param fetchSpec name of the fetch specification on the shared object.
+     * @param fetchSpecName name of the fetch specification on the shared object.
      * @param entityName name of the shared entity
      * @return the shared enterprise object fetch by the fetch spec named.
      */
@@ -1189,7 +1189,7 @@ public class ERXEOControlUtilities {
 
     /**
      * Utility method to generate a new primary key for an object. Calls
-     * {@link #newPrimaryKeyForObjectFromClassProperties(EOEnterpriseObject)} and if that returns null,
+     * {@link #newPrimaryKeyDictionaryForObjectFromClassProperties(EOEnterpriseObject)} and if that returns null,
      * {@link #newPrimaryKeyDictionaryForEntityNamed(EOEditingContext, String)}
      * @return new primary key dictionary or null if a failure occured.
      */

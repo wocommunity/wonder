@@ -4,7 +4,6 @@ import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver._private.WODynamicGroup;
@@ -78,11 +77,11 @@ public class ERQMHtmlTemplate extends ERXStatelessComponent {
   public boolean hastTemplateInComponent() {
     boolean result = false;
 
-    WOElement content =  this._childTemplate();
+    WOElement content =  _childTemplate();
     if (content instanceof WODynamicGroup) {
       WODynamicGroup group = (WODynamicGroup) content;
       for(Enumeration<WOElement> e = group.childrenElements().objectEnumerator(); e.hasMoreElements() && !result ; ) {
-        WOElement current = (WOElement) e.nextElement();
+        WOElement current = e.nextElement();
         if(current instanceof ERXWOTemplate) {
           result = true;
         }

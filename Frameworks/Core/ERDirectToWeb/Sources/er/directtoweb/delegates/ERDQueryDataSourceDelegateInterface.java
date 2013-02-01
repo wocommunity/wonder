@@ -13,7 +13,7 @@ import com.webobjects.eocontrol.EODataSource;
 import er.directtoweb.pages.ERD2WQueryPage;
 
 /**
- * A delegate interface that allows the implentation to customize the {@link ERD2WQueryPage#queryDataSource()} 
+ * A delegate interface that allows the implentation to customize the {@link er.directtoweb.pages.ERD2WQueryPage#queryDataSource()} 
  * that will be passed from the <code>sender</code> Query page to its List results page and invoked by it to 
  * display the query results.
  */

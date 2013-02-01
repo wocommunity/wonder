@@ -69,6 +69,7 @@ public class WOCollapsibleComponentContent extends WOComponent {
         }
     }
 
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }

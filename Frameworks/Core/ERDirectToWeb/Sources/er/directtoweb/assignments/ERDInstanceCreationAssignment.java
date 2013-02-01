@@ -75,6 +75,7 @@ public class ERDInstanceCreationAssignment extends ERDDelayedAssignment {
      */
     public NSArray dependentKeys(String keyPath) { return _DEPENDENT_KEYS; }
 
+    @Override
     public Object fireNow(D2WContext c) {
         Object o = null;
         Object value = value();

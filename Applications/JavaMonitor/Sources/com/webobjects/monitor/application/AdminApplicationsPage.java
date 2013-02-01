@@ -275,6 +275,7 @@ public class AdminApplicationsPage extends ApplicationsPage {
         }
 	}
 	
+    @Override
     public WOComponent bounceClicked() {
         AppDetailPage page = AppDetailPage.create(context(), currentApplication);
         page = (AppDetailPage) page.bounceClicked();
@@ -363,6 +364,7 @@ public class AdminApplicationsPage extends ApplicationsPage {
         }
     }
 
+    @Override
     public WOComponent addApplicationClicked() {
         String s = null;
         WOComponent result = null;

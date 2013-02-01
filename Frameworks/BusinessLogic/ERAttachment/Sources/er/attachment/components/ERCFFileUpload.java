@@ -55,7 +55,7 @@ public class ERCFFileUpload extends ERXComponent {
   }
   
   public void setConfigurationName(String configurationName) {
-    this._configurationName = configurationName;
+    _configurationName = configurationName;
   }
   
   public String container() {

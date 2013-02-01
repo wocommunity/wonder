@@ -119,6 +119,7 @@ public class AjaxSlider extends AjaxComponent {
     /**
      * Adds all required resources.
      */
+    @Override
     protected void addRequiredWebResources(WOResponse res) {
         addScriptResourceInHead(res, "prototype.js");
     	addScriptResourceInHead(res, "effects.js");
@@ -140,6 +141,7 @@ public class AjaxSlider extends AjaxComponent {
 		super.takeValuesFromRequest(worequest, wocontext);
 	}
 
+    @Override
     public WOActionResults handleRequest(WORequest worequest, WOContext wocontext) {
     	WOResponse result = AjaxUtils.createResponse(worequest, wocontext);
     	String mode = worequest.stringFormValueForKey("ajaxSlideTrigger");

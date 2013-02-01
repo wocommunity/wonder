@@ -18,7 +18,6 @@ import er.directtoweb.components.ERDCustomQueryComponent;
  * Custom query component that let's the user select from an arbitrary list.<br />
  * 
  */
-
 public class ERD2WPickFromList extends ERDCustomQueryComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -33,7 +32,9 @@ public class ERD2WPickFromList extends ERDCustomQueryComponent {
     public Object item; 
 
     // can't be stateless!
+    @Override
     public boolean isStateless() { return false; }
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     private String _sharedEOsEntityName;
@@ -55,7 +56,7 @@ public class ERD2WPickFromList extends ERDCustomQueryComponent {
             result=EOUtilities.objectsForEntityNamed(EOSharedEditingContext.defaultSharedEditingContext(),
                                                      sharedEOsEntityName());
         } else {
-            result=(NSArray)valueForBinding("list");            
+            result=(NSArray)valueForBinding("list");
         }
         return result;
     }

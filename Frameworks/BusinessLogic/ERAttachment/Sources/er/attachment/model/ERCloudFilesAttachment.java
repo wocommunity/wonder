@@ -19,8 +19,8 @@ import er.extensions.foundation.ERXProperties;
  */
 public class ERCloudFilesAttachment extends _ERCloudFilesAttachment {
   @SuppressWarnings("unused")
-  public static final String STORAGE_TYPE = "cf";
   private static Logger log = Logger.getLogger(ERCloudFilesAttachment.class);
+  public static final String STORAGE_TYPE = "cf";
 
   private File _pendingUploadFile;
   private boolean _pendingDelete;

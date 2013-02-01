@@ -28,6 +28,7 @@ public abstract class ERXTimerTask extends TimerTask {
 	 * appear to be in a request, and cleans up
 	 * resources at the end of the request.
 	 */
+	@Override
 	public final void run() {
 		ERXApplication._startRequest();
 		try {

@@ -19,10 +19,12 @@ public class AjaxBehaviour extends AjaxDynamicElement {
 		super(name, associations, children);
 	}
 
+	@Override
 	protected void addRequiredWebResources(WOResponse response, WOContext context) {
 		AjaxUtils.addScriptResourceInHead(context, response, "behaviour.js");
 	}
 	
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		super.appendToResponse(response, context);
 		boolean includeScriptTag = booleanValueForBinding("includeScriptTag", true, context.component());
@@ -37,6 +39,7 @@ public class AjaxBehaviour extends AjaxDynamicElement {
 		}
 	}
 
+	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		return null;
 	}

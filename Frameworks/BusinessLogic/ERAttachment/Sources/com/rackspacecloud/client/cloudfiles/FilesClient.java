@@ -148,10 +148,10 @@ public class FilesClient
             authUrl = FilesUtil.getProperty("auth_url");
         }
         if(account != null && account.length() > 0) {
-            this.authenticationURL = authUrl + VERSION + "/" + account + FilesUtil.getProperty("auth_url_post");
+            authenticationURL = authUrl + VERSION + "/" + account + FilesUtil.getProperty("auth_url_post");
         }
         else {
-            this.authenticationURL = authUrl;
+            authenticationURL = authUrl;
         }
         this.connectionTimeOut = connectionTimeOut;
 
@@ -159,7 +159,7 @@ public class FilesClient
 
         if(logger.isDebugEnabled()) {
             logger.debug("UserName: " + this.username);
-            logger.debug("AuthenticationURL: " + this.authenticationURL);
+            logger.debug("AuthenticationURL: " + authenticationURL);
             logger.debug("ConnectionTimeOut: " + this.connectionTimeOut);
         }
      }
@@ -318,7 +318,7 @@ public class FilesClient
     {
     	isLoggedin   = true;
     	this.storageURL = storageURL;
-    	this.cdnManagementURL = cdnManagmentUrl;
+    	cdnManagementURL = cdnManagmentUrl;
     	this.authToken = authToken;
     	return true;
     }
@@ -2627,7 +2627,7 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
      * @return The object's metadata
      * @throws IOException   There was an IO error doing network communication
      * @throws HttpException There was an error with the HTTP protocol
-     * @throws FilesAuthorizationException The Client's Login was invalid.  
+     * @throws FilesAuthorizationException The Client's Login was invalid
      * @throws FilesInvalidNameException The container or object name was not valid
      * @throws FilesNotFoundException The file was not found
      */
@@ -3113,7 +3113,7 @@ public String storeObjectAs(String container, String name, HttpEntity entity, Ma
      */
     public void setUserName(String userName)
     {
-    	this.username = userName;
+    	username = userName;
     }
 
     /**

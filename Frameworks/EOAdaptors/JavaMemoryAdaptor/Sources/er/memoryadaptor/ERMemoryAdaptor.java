@@ -70,6 +70,7 @@ public class ERMemoryAdaptor extends EOAdaptor {
 	}
 
 	// MS: This has to return null to prevent a stack overflow in 5.4.
+	@Override
 	public EOSynchronizationFactory schemaSynchronizationFactory() {
 		return null;
 	}

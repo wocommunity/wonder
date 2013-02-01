@@ -186,7 +186,7 @@ public class JSONRPCBridge implements Serializable
     public ObjectInstance(Object o)
     {
       this.o = o;
-      this.clazz = o.getClass();
+      clazz = o.getClass();
     }
 
     /**

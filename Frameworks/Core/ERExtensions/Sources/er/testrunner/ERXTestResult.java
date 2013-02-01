@@ -34,11 +34,13 @@ public class ERXTestResult extends TestResult {
         _failures = new NSMutableArray();
     }
 
+    @Override
     public synchronized void addError(Test test, Throwable t) {
         super.addError(test, t);
         _errors.addObject(fErrors.get(fErrors.size() -1));
     }
     
+    @Override
     public synchronized void addFailure(Test test, AssertionFailedError t) {
         super.addFailure(test, t);
         _failures.addObject(fFailures.get(fFailures.size() - 1));

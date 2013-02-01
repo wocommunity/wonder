@@ -38,6 +38,7 @@ public class AjaxBusyIndicator extends AjaxComponent {
 		return true;
 	}
 
+	@Override
 	protected void addRequiredWebResources(WOResponse res) {
 		addScriptResourceInHead(res, "prototype.js");
 		addScriptResourceInHead(res, "effects.js");
@@ -72,6 +73,7 @@ public class AjaxBusyIndicator extends AjaxComponent {
 		return (String) valueForBinding("onComplete", "null");
 	}
 
+	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		return null;
 	}

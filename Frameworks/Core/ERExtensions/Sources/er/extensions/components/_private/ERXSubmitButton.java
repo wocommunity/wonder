@@ -106,37 +106,28 @@ public class ERXSubmitButton extends WOInput {
         if(_action != null && _directActionName != null || _action != null && _actionClass != null)
             throw new WODynamicElementCreationException("<" + getClass().getName() + "> Either 'action' and 'directActionName' both exist, or 'action' and 'actionClass' both exist ");
     }
-    	   
+
+    @Override
     protected boolean isDisabledInContext(WOContext context) {
     	WOAssociation disabled = (WOAssociation) ERXKeyValueCodingUtilities.privateValueForKey(this, "_disabled");
     	return disabled != null && disabled.booleanValueInComponent(context.component());
     }
 
+    @Override
     protected String type() {
         return "submit";
     }
 
+    @Override
     public String toString() {
         return "<ERXSubmitButton  action: " + (_action == null ? "null" : _action.toString()) + " actionClass: " + (_actionClass == null ? "null" : _actionClass.toString()) + ">";
-    }
-
-
-    public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
-    	//System.out.println(worequest.formValues());
-    	/*WOComponent wocomponent = wocontext.component();
-    	if(!disabledInComponent(wocomponent) && wocontext._wasFormSubmitted()) {
-    		String s1 = nameInContext(wocontext, wocomponent);
-    		if(s1 != null) {
-    			String s = worequest.stringFormValueForKey(s1);
-    			_value.setValue(s, wocomponent);
-    		}
-    	}*/
     }
 
     protected String elementName(WOContext wocontext) {
     	return elementName();
     }
-    
+
+    @Override
     protected void _appendOpenTagToResponse(WOResponse woresponse, WOContext wocontext) {
     	if (useIEFix) appendIEButtonFixToResponse(wocontext, woresponse);
     	woresponse.appendContentCharacter('<');
@@ -144,7 +135,8 @@ public class ERXSubmitButton extends WOInput {
     	appendAttributesToResponse(woresponse, wocontext);
     	woresponse.appendContentCharacter('>');
      }
-    
+
+    @Override
     public void appendAttributesToResponse(WOResponse woresponse, WOContext wocontext) {
     	appendConstantAttributesToResponse(woresponse, wocontext);
     	appendNonURLAttributesToResponse(woresponse, wocontext);
@@ -181,18 +173,21 @@ public class ERXSubmitButton extends WOInput {
     		woresponse._appendTagAttributeAndValue("onclick", "document.location.href='" + action + "'; return false;", false);
     	}
     }
-    
+
+    @Override
 	protected void _appendTypeAttributeToResponse(WOResponse response, WOContext context) {
 		if(type() != null && type().length() > 0)
 			response._appendTagAttributeAndValue("type", type(), false);
 	}
 
+    @Override
     protected void _appendCloseTagToResponse(WOResponse woresponse, WOContext wocontext) {
     	woresponse._appendContentAsciiString("</");
     	woresponse._appendContentAsciiString(elementName(wocontext));
     	woresponse.appendContentCharacter('>');
     }
 
+    @Override
     public WOActionResults invokeAction(WORequest worequest, WOContext wocontext) {
         Object obj = null;
         WOComponent wocomponent = wocontext.component();
@@ -201,14 +196,14 @@ public class ERXSubmitButton extends WOInput {
                 if(worequest.formValueForKey(nameInContext(wocontext, wocomponent)) != null) {
                     wocontext.setActionInvoked(true);
                     if(_action != null)
-                        obj = (WOActionResults)_action.valueInComponent(wocomponent);
+                        obj = _action.valueInComponent(wocomponent);
                     if(obj == null)
                         obj = wocontext.page();
                 }
             } else {
                 wocontext.setActionInvoked(true);
                 if(_action != null)
-                    obj = (WOActionResults)_action.valueInComponent(wocomponent);
+                    obj = _action.valueInComponent(wocomponent);
                 if(obj == null)
                     obj = wocontext.page();
             }
@@ -220,7 +215,8 @@ public class ERXSubmitButton extends WOInput {
         String s = computeActionStringInContext(_actionClass, _directActionName, wocontext);
         return s;
     }
-    
+
+    @Override
     public void appendChildrenToResponse(WOResponse woresponse, WOContext wocontext) {
         if(hasChildrenElements()) {
             super.appendChildrenToResponse(woresponse, wocontext);
@@ -233,6 +229,7 @@ public class ERXSubmitButton extends WOInput {
         }
     }
 
+    @Override
     protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
         if(_directActionName != null || _actionClass != null)
             woresponse._appendTagAttributeAndValue("name", _actionClassAndName(wocontext), false);
@@ -240,6 +237,7 @@ public class ERXSubmitButton extends WOInput {
             super._appendNameAttributeToResponse(woresponse, wocontext);
     }
 
+    @Override
     public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
     	if(wocontext == null || woresponse == null) {
     		return;

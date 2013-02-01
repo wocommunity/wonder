@@ -2,7 +2,10 @@ package er.grouping;
 
 import ognl.webobjects.WOOgnl;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
 /**
  * DRAttributes are to display what EOAttributes are to the back-end.  
@@ -89,7 +92,7 @@ public class DRAttribute {
         super();
         _userInfo = new NSMutableDictionary();
         //_emptyArray = new NSMutableArray();
-        this.resetDefaults();
+        resetDefaults();
     }
 
     public void resetDefaults() {
@@ -99,10 +102,10 @@ public class DRAttribute {
         _isGroup = false;
         _isPlaceHolderTotal = false;
         _isTotal = false;
-        this.setFormat("");
-        this.setKeyPath(null);
-        this.setLabel(null);
-        this.setAttributeGroup(null);
+        setFormat("");
+        setKeyPath(null);
+        setLabel(null);
+        setAttributeGroup(null);
     }
 
     public String keyPath() {
@@ -205,6 +208,7 @@ public class DRAttribute {
         return _isComputed;
     }
     
+     @Override
      public String toString() {
         return "<DRAttribute label:\"" + label() + "\"; keyPath:\"" + keyPath() + "\"; format:\"" + format() + "\"; >";
     }

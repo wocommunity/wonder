@@ -72,6 +72,7 @@ public class ERDEntityAssignment extends Assignment implements ERDComputingAssig
      */
     public NSArray dependentKeys(String keyPath) { return _DEPENDENT_KEYS; }
 
+    @Override
     public Object fire(D2WContext c) {
         Object result = null;
         Object value = value();

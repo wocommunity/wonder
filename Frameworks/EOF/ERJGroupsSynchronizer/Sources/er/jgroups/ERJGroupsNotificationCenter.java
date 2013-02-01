@@ -70,7 +70,8 @@ public class ERJGroupsNotificationCenter extends ERXRemoteNotificationCenter {
         _channel.setOpt(Channel.LOCAL, Boolean.FALSE);
         _channel.connect(_groupName);
         _channel.setReceiver(new ExtendedReceiverAdapter() {
-            // @Override
+
+            @Override
             public void receive(Message message) {
                 try {
                     byte[] buffer = message.getBuffer();
@@ -93,7 +94,7 @@ public class ERJGroupsNotificationCenter extends ERXRemoteNotificationCenter {
                 }
             }
 
-            // @Override
+            @Override
             public void viewAccepted(View view) {
                 // System.out.println(".viewAccepted: " + view);
             }
@@ -115,6 +116,7 @@ public class ERJGroupsNotificationCenter extends ERXRemoteNotificationCenter {
         }
     }
 
+    @Override
     public void postRemoteNotification(NSNotification notification) {
         try {
             writeNotification(notification);

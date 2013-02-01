@@ -21,6 +21,7 @@ public class WOHelperFunctionKeyValueAssociation extends WOKeyValueAssociation {
 		super.setValue(obj, wocomponent);
 	}
 
+	@Override
 	protected String _debugDescription() {
 		return keyPath();
 	}

@@ -2,7 +2,6 @@ package er.neo4jadaptor.query.neo4j_eval;
 
 import org.neo4j.graphdb.PropertyContainer;
 
-
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOQualifier;
 

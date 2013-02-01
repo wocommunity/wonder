@@ -69,8 +69,7 @@ public abstract class ERDAssignment extends Assignment implements ERDComputingAs
      * Gets the localizer for a given context.
      * The default implementation just returns
      * the localizer for the current session of
-     * the given context. This method belongs to
-     * {@link ERDLocaizableInterface}.
+     * the given context. 
      * @param c current context
      * @return localizer for the preferred language
      *		of the session. 
@@ -83,8 +82,7 @@ public abstract class ERDAssignment extends Assignment implements ERDComputingAs
      * Returns a localized value for a given key in a given
      * context if localization is enabled. This implementation
      * calls <code>localizedStringForKeyWithDefault</code> on the
-     * localizer for the given context. This method belongs to 
-     * {@link ERDLocalizableInterface}.
+     * localizer for the given context. 
      * @param key to be looked up on the context
      * @param c current context
      * @return localized version of the given key returning the key 
@@ -101,8 +99,7 @@ public abstract class ERDAssignment extends Assignment implements ERDComputingAs
      * Returns a localized value for a given key in a given
      * context if localization is enabled. This implementation
      * calls <code>valueForKeyPath</code> on the
-     * localizer for the given context. This method belongs to 
-     * {@link ERDLocaizableInterface}.
+     * localizer for the given context. 
      * @param key to be looked up on the context
      * @param c current context
      * @return localized version of the given key if localization .
