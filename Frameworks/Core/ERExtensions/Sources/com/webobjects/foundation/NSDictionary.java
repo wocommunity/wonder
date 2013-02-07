@@ -15,6 +15,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import er.extensions.eof.ERXKey;
+
 /**
  * <span class="en">
  * NSDictionary reimplementation to support JDK 1.5 templates. Use with
@@ -38,7 +40,7 @@ import java.util.Set;
  */
 public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NSKeyValueCoding, NSKeyValueCodingAdditions, _NSFoundationCollection, Map<K, V> {
   
-  static final long serialVersionUID = 2886170486405617806L;
+  static final long serialVersionUID = 2886170486405617807L;
 
 	public class _JavaNSDictionaryMapEntry<P, Q> implements java.util.Map.Entry<P, Q> {
 
@@ -710,4 +712,64 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 	public static final boolean CheckForNull = true;
 	public static final boolean IgnoreNull = true;
 	private static final ObjectStreamField[] serialPersistentFields = { new ObjectStreamField(SerializationKeysFieldKey, _objectArrayClass), new ObjectStreamField(SerializationValuesFieldKey, _objectArrayClass) };
+
+	/**
+	 * A type-safe wrapper for {@link #valueForKeyPath(String)} that simply
+	 * calls {@code valueForKeyPath(erxKey.key())} and attempts to cast the
+	 * result to {@code V}. If the value returned cannot be cast it will throw a
+	 * {@link ClassCastException}.
+	 * 
+	 * @param erxKey
+	 * @return an object of Type {@code V}
+	 * @author David Avendasora
+	 */
+	public V valueForERXKeyPath(ERXKey<V> erxKey) {
+		return (V) valueForKeyPath(erxKey.key());
+	}
+
+	/**
+	 * A type-safe wrapper for {@link #valueForKey(String)} that simply
+	 * calls {@code valueForKeyPath(erxKey.key())} and attempts to cast the
+	 * result to {@code V}. If the value returned cannot be cast it will throw a
+	 * {@link ClassCastException}.
+	 * 
+	 * @param erxKey
+	 * @return an object of Type {@code V}
+	 * @see #objectForKey(Object)
+	 * @author David Avendasora
+	 */
+	public V valueForERXKey(ERXKey<V> erxKey) {
+		return (V) valueForKeyPath(erxKey.key());
+	}
+
+	/**
+	 * A type-safe wrapper for {@link #takeValueForKey(Object, String)} that
+	 * ensures the {@code value} matches the {@code erxKey}'s Type. The key is the
+	 * {@code String} returned by {@link ERXKey#key()} so values can be
+	 * retrieved using either {@link #valueForKeyPath(String)} or
+	 * {@link #valueForERXKey(ERXKey)}.
+	 * 
+	 * @param value
+	 * @param erxKey
+	 * @author David Avendasora
+	 */
+	public void takeValueForERXKey(V value, ERXKey<V> erxKey) {
+		takeValueForKeyPath(value, erxKey.key());
+	}
+
+	/**
+	 * A type-safe wrapper for {@link #takeValueForKeyPath(Object, String)} that
+	 * ensures the {@code value} matches the {@code erxKey}'s Type. The keyPath is
+	 * the {@code String} returned by {@link ERXKey#key()} so values can be
+	 * retrieved using either {@link #valueForKey(String)} or
+	 * {@link #valueForERXKey(ERXKey)}.
+	 * 
+	 * @param value
+	 * @param erxKey
+	 * @author David Avendasora
+	 */
+	public void takeValueForERXKeyPath(V value, ERXKey<V> erxKey) {
+		takeValueForKeyPath(value, erxKey.key());
+	}
+
 }

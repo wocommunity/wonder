@@ -127,7 +127,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 * @param key
 	 */
 	@SuppressWarnings("unchecked")
-	public final <T> T valueForKey(ERXKey<T> key) {
+	public final <T> T valueForERXKey(ERXKey<T> key) {
 		return (T)valueForKeyPath(key.key());
 	}
 
@@ -137,7 +137,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 * @param value
 	 * @param key
 	 */
-	public final <T> void takeValueForKey(Object value, ERXKey<T> key) {
+	public final <T> void takeValueForERXKey(Object value, ERXKey<T> key) {
 		takeValueForKeyPath(value, key.key());
 	}
 	
@@ -813,7 +813,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 		return ERXEOControlUtilities.localInstanceOfObject(ec, this);
 	}
 
-	public NSArray<EOEnterpriseObject> localInstancesOf(NSArray<EOEnterpriseObject> eos) {
+	public <T extends EOEnterpriseObject> NSArray<T> localInstancesOf(NSArray<T> eos) {
 		return ERXEOControlUtilities.localInstancesOfObjects(editingContext(), eos);
 	}
 
