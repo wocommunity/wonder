@@ -7,6 +7,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -2427,6 +2428,24 @@ public class ERXArrayUtilities {
 		result += " )";
 
 		return result;
+	}
+
+
+	public static <T> T requiredOneFilteredArrayWithQualifierEvaluation(NSArray<T> array, EOQualifier qualifier) {
+		NSArray<T> results = requiredFilteredArrayWithQualifierEvaluation(array, qualifier);
+		if (results.count() > 1) {
+			throw new NoSuchElementException("There was more than one element in the array " + array.toString() + " that matched the qualifier '" + qualifier + "'.");
+		}
+		T result = results.lastObject();
+		return result;
+	}
+
+	public static <T> NSArray<T> requiredFilteredArrayWithQualifierEvaluation(NSArray<T> array, EOQualifierEvaluation qualifier) {
+		NSArray<T> results = filteredArrayWithQualifierEvaluation(array, qualifier);
+		if (results.isEmpty()) {
+			throw new IllegalStateException("There were no elements in the array " + array.toString() + " that matched the qualifier '" + qualifier + "'.");
+		}
+		return results;
 	}
 
 }

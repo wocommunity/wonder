@@ -67,6 +67,10 @@ public class ERXRadioButtonMatrix extends ERXStatelessComponent {
     public Number index() {
         return index;
     }
+    
+    public boolean disabled() {
+    	return booleanValueForBinding("disabled", false);
+    }
 
     public void setIndex(Number newIndex) {
         index = newIndex;
@@ -106,10 +110,6 @@ public class ERXRadioButtonMatrix extends ERXStatelessComponent {
     	boolean isChecked = !ERXStringUtilities.stringIsNullOrEmpty(isCurrentItemSelected());
         	return (isDisabled ? "disabled" : "") + (isDisabled && isChecked? " " : "") + (isChecked ? "checked" : "");
 	}
-
-    public boolean disabled() {
-    	return booleanValueForBinding("disabled", false);
-    }
 
     @Override
     public void awake() {

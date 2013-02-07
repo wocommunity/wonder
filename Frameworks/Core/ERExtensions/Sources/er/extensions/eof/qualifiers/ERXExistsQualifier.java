@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOJoin;
 import com.webobjects.eoaccess.EOProperty;
 import com.webobjects.eoaccess.EOQualifierSQLGeneration;
 import com.webobjects.eoaccess.EORelationship;
@@ -29,9 +30,14 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSCoder;
 import com.webobjects.foundation.NSCoding;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableSet;
 
+import com.webobjects.foundation.NSKeyValueCoding.UnknownKeyException;
+
+import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXStringUtilities;
 
 /**
@@ -41,7 +47,7 @@ import er.extensions.foundation.ERXStringUtilities;
  *
  * <code>select t0.ID, t0.ATT_1, ... t0.ATT_N from FIRST_TABLE t0 where EXISTS (select t1.ID from ANOTHER_TABLE where t1.ATT_1 = ? and t1.FIRST_TABLE_ID = t0.ID)</code>
  *
- * @author Travis Cripps
+ * @author Travis Cripps, Aaron Rosenzweig
  */
 public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCoding, EOKeyValueArchiving {
 	/**
@@ -52,6 +58,11 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
 	private static final long serialVersionUID = 1L;
 
 	public static final Logger log = Logger.getLogger(ERXExistsQualifier.class);
+	public static final String EXISTS_ALIAS = "exists";
+	// an EXISTS can be rewritten as an IN and vice versa. Which is faster depends 
+	// on both the database and the data itself. If one is slow for you, try the other 
+	// by flipping this boolean flag.
+	protected boolean usesInQualInstead = false;
 
     /** Register SQL generation support for the qualifier. */
     static {
@@ -86,6 +97,18 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
 		this.baseKeyPath = baseKeyPath;
 	}
 
+    /**
+	 * Public three argument constructor. Use this constructor when you want to try converting the EXISTS into an IN clause
+	 * @param subqualifier sub qualifier
+	 * @param baseKeyPath to the entity to which the subqualifier will be applied.  Note that this should end in a
+     * relationship rather than an attribute, e.g., the key path from an Employee might be <code>department.division</code>.
+     * @param usesInQualInstead when true will convert the EXISTS clause into an IN clause - to be used if it makes the query plan faster.
+	 */
+    public ERXExistsQualifier(EOQualifier subqualifier, String baseKeyPath, boolean usesInQualInstead) {
+		this(subqualifier, baseKeyPath);
+		setUsesInQualInstead(usesInQualInstead);
+	}
+    
     /**
      * Gets the subqualifier that will be applied in the exists clause.
      * @return the subqualifier
@@ -185,24 +208,29 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
             String sourceTableAlias = "t0"; // The alias for the the source table of the baseKeyPath from the main query.
             String destTableAlias; // The alias for the table used in the subquery.
             if (!srcEntity.equals(baseEntity)) { // The exists clause is applied to the different table.
-                String sourceKeyPath = ERXStringUtilities.keyPathWithoutLastProperty(baseKeyPath);
-                sqlStringForAttributeNamedInExpression(sourceKeyPath, expression);
                 sqlStringForAttributeNamedInExpression(baseKeyPath, expression);
-                sourceTableAlias = (String)expression.aliasesByRelationshipPath().valueForKey(sourceKeyPath);
                 destTableAlias = (String)expression.aliasesByRelationshipPath().valueForKey(baseKeyPath);
                 if (null == destTableAlias) {
-                    destTableAlias = "t" + (expression.aliasesByRelationshipPath().count()); // The first entry = "t0".
+                    destTableAlias = EXISTS_ALIAS + (expression.aliasesByRelationshipPath().count()); // The first entry = "t0".
                     expression.aliasesByRelationshipPath().takeValueForKey(destTableAlias, baseKeyPath);
                 }
             } else { // The exists clause is applied to the base table.
-                destTableAlias = "t" + expression.aliasesByRelationshipPath().count(); // Probably "t1"
+                destTableAlias = EXISTS_ALIAS + expression.aliasesByRelationshipPath().count(); // Probably "t1"
             }
 
-            EOAttribute sourceKeyAttribute = srcEntity.primaryKeyAttributes().lastObject();
-            String sourceKey = expression.sqlStringForAttribute(sourceKeyAttribute);
-
-            EOAttribute destKeyAttribute = relationship.destinationAttributes().lastObject();
-            String destKey = expression.sqlStringForAttribute(destKeyAttribute);
+            String srcEntityForeignKey = null;
+            NSArray<EOAttribute> sourceAttributes = relationship.sourceAttributes();
+            if (sourceAttributes != null && sourceAttributes.count() > 0) {
+                EOAttribute fk = sourceAttributes.lastObject();
+                srcEntityForeignKey = expression.sqlStringForAttribute(fk);
+            } else {
+            	// (AR) could not find relationship from source object into "exists" clause, use primary key then instead
+                EOAttribute pk = srcEntity.primaryKeyAttributes().lastObject();
+                srcEntityForeignKey = expression.sqlStringForAttribute(pk);
+            }
+            
+            EOJoin parentChildJoin = ERXArrayUtilities.firstObject(relationship.joins());
+            String destEntityForeignKey = ".\"" + parentChildJoin.destinationAttribute().columnName() + "\"";
             
             EOQualifier qual = EOQualifierSQLGeneration.Support._schemaBasedQualifierWithRootEntity(subqualifier, destEntity);
             EOFetchSpecification fetchSpecification = new EOFetchSpecification(destEntity.name(), qual, null, false, true, null);
@@ -211,7 +239,6 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
             EOSQLExpressionFactory factory = context.database().adaptor().expressionFactory();
 
             EOSQLExpression subExpression = factory.expressionForEntity(destEntity);
-            subExpression.aliasesByRelationshipPath().setObjectForKey(destTableAlias, "");
             subExpression.setUseAliases(true);
             subExpression.prepareSelectExpressionWithAttributes(destEntity.primaryKeyAttributes(), false, fetchSpecification);
 
@@ -219,13 +246,73 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
                 expression.addBindVariableDictionary((NSDictionary)bindEnumeration.nextElement());
             }
 
-            StringBuilder sb = new StringBuilder();
-            sb.append(" EXISTS ( ");
-            sb.append(ERXStringUtilities.replaceStringByStringInString("t0.", destTableAlias + ".", subExpression.statement()));
-            sb.append(" AND ");
-            sb.append(ERXStringUtilities.replaceStringByStringInString("t0.", destTableAlias + ".", destKey));
-            sb.append(" = ");
-            sb.append(ERXStringUtilities.replaceStringByStringInString("t0.", sourceTableAlias + ".", sourceKey));
+            String subExprStr = subExpression.statement();
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("t0.", EXISTS_ALIAS + "0.", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("t0 ", EXISTS_ALIAS + "0 ", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("T0.", EXISTS_ALIAS + "0.", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("T0 ", EXISTS_ALIAS + "0 ", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("t1.", EXISTS_ALIAS + "1.", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("t1 ", EXISTS_ALIAS + "1 ", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("T1.", EXISTS_ALIAS + "1.", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("T1 ", EXISTS_ALIAS + "1 ", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("t2.", EXISTS_ALIAS + "2.", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("t2 ", EXISTS_ALIAS + "2 ", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("T2.", EXISTS_ALIAS + "2.", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("T2 ", EXISTS_ALIAS + "2 ", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("t3.", EXISTS_ALIAS + "3.", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("t3 ", EXISTS_ALIAS + "3 ", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("T3.", EXISTS_ALIAS + "3.", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("T3 ", EXISTS_ALIAS + "3 ", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("t4.", EXISTS_ALIAS + "4.", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("t4 ", EXISTS_ALIAS + "4 ", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("T4.", EXISTS_ALIAS + "4.", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("T4 ", EXISTS_ALIAS + "4 ", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("t5.", EXISTS_ALIAS + "5.", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("t5 ", EXISTS_ALIAS + "5 ", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("T5.", EXISTS_ALIAS + "5.", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("T5 ", EXISTS_ALIAS + "5 ", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("t6.", EXISTS_ALIAS + "6.", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("t6 ", EXISTS_ALIAS + "6 ", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("T6.", EXISTS_ALIAS + "6.", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("T6 ", EXISTS_ALIAS + "6 ", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("t7.", EXISTS_ALIAS + "7.", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("t7 ", EXISTS_ALIAS + "7 ", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("T7.", EXISTS_ALIAS + "7.", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("T7 ", EXISTS_ALIAS + "7 ", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("t8.", EXISTS_ALIAS + "8.", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("t8 ", EXISTS_ALIAS + "8 ", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("T8.", EXISTS_ALIAS + "8.", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("T8 ", EXISTS_ALIAS + "8 ", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("t9.", EXISTS_ALIAS + "9.", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("t9 ", EXISTS_ALIAS + "9 ", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("T9.", EXISTS_ALIAS + "9.", subExprStr);
+            subExprStr = ERXStringUtilities.replaceStringByStringInString("T9 ", EXISTS_ALIAS + "9 ", subExprStr);
+            
+            StringBuffer sb = new StringBuffer();
+            if (existsQualifier.usesInQualInstead()) {
+            	// (AR) Write the IN clause
+                sb.append(srcEntityForeignKey);
+                sb.append(" IN ( ");
+                
+                // (AR) Rewrite first SELECT part of subExprStr
+                EOAttribute destPK = destEntity.primaryKeyAttributes().lastObject();
+                String destEntityPrimaryKey = expression.sqlStringForAttribute(destPK);
+                int indexOfFirstPeriod = destEntityPrimaryKey.indexOf(".");
+                destEntityPrimaryKey = destEntityPrimaryKey.substring(indexOfFirstPeriod);
+                subExprStr = ERXStringUtilities.replaceStringByStringInString(
+                		"SELECT " + EXISTS_ALIAS + "0" + destEntityPrimaryKey + " FROM", 
+                		"SELECT " + EXISTS_ALIAS + "0" + destEntityForeignKey + " FROM", 
+                		subExprStr);
+            } else {
+                sb.append(" EXISTS ( ");
+            }
+            sb.append(subExprStr);
+            if ( ! existsQualifier.usesInQualInstead()) {
+                sb.append(" AND ");
+                sb.append(EXISTS_ALIAS + "0" + destEntityForeignKey);
+                sb.append(" = ");
+                sb.append(ERXStringUtilities.replaceStringByStringInString("t0.", sourceTableAlias + ".", srcEntityForeignKey));
+            }
             sb.append(" ) ");
             return sb.toString();
         }
@@ -253,38 +340,39 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
                 if (null == att) { return null; }
                 return expression.sqlStringForAttribute(att);
             }
-                for (int i = 0; i < numPieces - 1; i++) {
-                    rel = entity.anyRelationshipNamed(pieces.objectAtIndex(i));
-                    if (null == rel) {
-                        return null;
-                    }
-                    path.addObject(rel);
-                    entity = rel.destinationEntity();
-                }
-
-                String key = pieces.lastObject();
-                if (entity.anyRelationshipNamed(key) != null) { // Test first for a relationship.
-                    rel = entity.anyRelationshipNamed(key);
-                    if (rel.isFlattened()) {
-                        String relPath = rel.relationshipPath();
-                        for (String relPart : NSArray.componentsSeparatedByString(relPath, ".")) {
-                            rel = entity.anyRelationshipNamed(relPart);
-                            path.addObject(rel);
-                            entity = rel.destinationEntity();
-                        }
-                    } else {
-                        path.addObject(rel);
-                    }
-                    att = rel.destinationAttributes().lastObject();
-                } else { // The test for an attribute.
-                    att = entity.anyAttributeNamed(key);
-                }
-
-                if (null == att) {
+            
+            for (int i = 0; i < numPieces - 1; i++) {
+                rel = entity.anyRelationshipNamed(pieces.objectAtIndex(i));
+                if (null == rel) {
                     return null;
                 }
-                path.addObject(att);
+                path.addObject(rel);
+                entity = rel.destinationEntity();
+            }
 
+            String key = pieces.lastObject();
+            if (entity.anyRelationshipNamed(key) != null) { // Test first for a relationship.
+                rel = entity.anyRelationshipNamed(key);
+                if (rel.isFlattened()) {
+                    String relPath = rel.relationshipPath();
+                    for (String relPart : NSArray.componentsSeparatedByString(relPath, ".")) {
+                        rel = entity.anyRelationshipNamed(relPart);
+                        path.addObject(rel);
+                        entity = rel.destinationEntity();
+                    }
+                } else {
+                    path.addObject(rel);
+                }
+                att = rel.destinationAttributes().lastObject();
+            } else { // The test for an attribute.
+                att = entity.anyAttributeNamed(key);
+            }
+
+            if (null == att) {
+                return null;
+            }
+            path.addObject(att);
+            
             return expression.sqlStringForAttributePath(path);
         }
 
@@ -328,7 +416,7 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
 	 */
 	@Override
 	public Object clone() {
-		return new ERXExistsQualifier(subqualifier, baseKeyPath);
+		return new ERXExistsQualifier(subqualifier, baseKeyPath, usesInQualInstead());
 	}
 
     public Class classForCoder() {
@@ -355,6 +443,45 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
 		return new ERXExistsQualifier(
 				(EOQualifier)unarchiver.decodeObjectForKey("subqualifier"),
 				(String)unarchiver.decodeObjectForKey("baseKeyPath"));
+	}
+	
+	@Override
+	public boolean evaluateWithObject(Object object) {
+		boolean match = false;
+		NSKeyValueCodingAdditions obj = (NSKeyValueCodingAdditions) object;
+		if (obj != null && subqualifier != null) {
+			NSKeyValueCodingAdditions finalObj = (NSKeyValueCodingAdditions) obj.valueForKeyPath(baseKeyPath);
+			if (finalObj != null) {
+				if (finalObj instanceof NSArray) {
+					NSArray<NSKeyValueCoding> objArray = (NSArray<NSKeyValueCoding>) finalObj;
+					objArray = ERXArrayUtilities.removeNullValues(objArray);
+					if (objArray != null && objArray.count() > 0) {
+						for (NSKeyValueCoding objInArray : objArray) {
+							try {
+								if (subqualifier.evaluateWithObject(objInArray)) {
+									match = true;
+									break;
+								}
+							} catch (UnknownKeyException unknownE) {
+								// ignore unknown keys because those objects wouldn't
+								// lead to a usable result.
+							}
+						}
+					}
+				} else {
+					match = subqualifier.evaluateWithObject(finalObj);
+				}
+			}
+		}
+		return match;
+	}
+
+	public boolean usesInQualInstead() {
+		return usesInQualInstead;
+	}
+
+	public void setUsesInQualInstead(boolean usesInQualInstead) {
+		this.usesInQualInstead = usesInQualInstead;
 	}
 	
 }
