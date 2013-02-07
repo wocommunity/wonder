@@ -15,6 +15,11 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
 
+import com.webobjects.eocontrol.EOKeyValueCoding;
+
+import er.extensions.eof.ERXKey;
+import er.extensions.foundation.ERXArrayUtilities;
+
 /**
  * <span class="en">
  * NSArray re-implementation to support JDK 1.5 templates. Use with
@@ -1074,5 +1079,78 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 			}
 			throw NSForwardException._runtimeExceptionForThrowable(e);
 		}
+	}
+	
+	/**
+	 * A type-safe wrapper for {@link #valueForKeyPath(String)} that simply
+	 * calls {@code valueForKeyPath(erxKey.key())} and attempts to cast the
+	 * result to {@code NSArray<T>}. If the value returned cannot be cast it
+	 * will throw a {@link ClassCastException}.
+	 * 
+	 * @param <T>
+	 *            the Type of elements in the returned {@code NSArray}
+	 * @param erxKey
+	 * @return an {@code NSArray} of {@code T} objects.
+	 * @author David Avendasora
+	 */
+	public <T> NSArray<T> valueForERXKeyPath(ERXKey<T> erxKey) {
+		return (NSArray<T>) valueForKeyPath(erxKey.key());
+	}
+
+	/**
+	 * A type-safe wrapper for {@link #valueForKeyPath(String)} that calls
+	 * {@code valueForKeyPath(erxKey, true, true, true)}
+	 * 
+	 * @param <T>
+	 *            the Type of elements in the returned {@code NSArray}
+	 * @param erxKey
+	 * @return an {@code NSArray} of {@code T} objects.
+	 * @author David Avendasora
+	 */
+	public <T> NSArray<T> valueForERXKey(ERXKey<T> erxKey) {
+		return valueForERXKey(erxKey, true, true, true);
+	}
+
+	/**
+	 * <p>
+	 * A type-safe wrapper for {@link #valueForKeyPath(String)} that calls
+	 * {@code valueForKeyPath(erxKey.key())} and attempts to cast the result to
+	 * {@code NSArray<T>}.
+	 * </p>
+	 * <p>
+	 * Then, depending upon the parameters, removes
+	 * {@link NSKeyValueCoding.Null} elements, flattens any {@link NSArray}
+	 * elements and then filters out duplicate values.
+	 * </p>
+	 * <p>
+	 * <b>If the value cannot be cast it will throw a {@link ClassCastException}
+	 * .</b>
+	 * </p>
+	 * 
+	 * @param <T>
+	 *            the Type of elements in the returned {@code NSArray}
+	 * @param erxKey
+	 * @param removeNulls
+	 *            if {@code true} all {@link NSKeyValueCoding.Null} elements
+	 *            will be removed
+	 * @param distinct
+	 *            if {@code true} all duplicate elements will be removed
+	 * @param flatten
+	 *            if {@code true} all {@link NSArray} elements will be flattened
+	 * @return an {@code NSArray} of {@code T} objects.
+	 * @author David Avendasora
+	 */
+	public <T> NSArray<T> valueForERXKey(ERXKey<T> erxKey, boolean removeNulls, boolean distinct, boolean flatten) {
+		NSArray<T> values = (NSArray<T>) valueForKeyPath(erxKey.key());
+		if (removeNulls) {
+			values = ERXArrayUtilities.removeNullValues(values);
+		}
+		if (flatten && erxKey.isToManyRelationship()) {
+			values = ERXArrayUtilities.flatten(values);
+		}
+		if (distinct) {
+			values = ERXArrayUtilities.distinct(values);
+		}
+		return values;
 	}
 }
