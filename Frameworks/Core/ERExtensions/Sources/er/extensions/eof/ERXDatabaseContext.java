@@ -1,5 +1,7 @@
 package er.extensions.eof;
 
+import java.io.File;
+
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAttribute;
@@ -7,15 +9,23 @@ import com.webobjects.eoaccess.EODatabase;
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EODatabaseOperation;
 import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModel;
+import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.ERXEOAccessHelper;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOGlobalID;
+import com.webobjects.eocontrol.EOObjectStoreCoordinator;
+import com.webobjects.eocontrol.EOSharedEditingContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 
+import er.extensions.foundation.ERXArrayUtilities;
+
 public class ERXDatabaseContext extends EODatabaseContext {
+
+	public static final String FETCH_ALL_FETCH_SPEC_NAME = "FetchAll";
 
 	/** general logging */
 	public static final Logger log = Logger.getLogger(ERXDatabaseContext.class);
@@ -129,4 +139,48 @@ public class ERXDatabaseContext extends EODatabaseContext {
 
 		}
 	}
+
+	/**
+	 * Method to manually load (or reload) all shared EOs by iterating through all the models
+	 * 
+	 * @param sharedEC
+	 * 
+	 * @author David Avendasora
+	 * @since Jul 13, 2012
+	 */
+	public static synchronized void loadSharedObjects(EOSharedEditingContext sharedEC) {
+		if (sharedEC != null) {
+			EOModelGroup modelGroup = EOModelGroup.defaultGroup();
+			NSArray<EOModel> models = modelGroup.models().immutableClone();
+			for (EOModel model : models) {
+				String modelFileName = model.name() + ".eomodeld";
+				NSArray<EOEntity> entitiesWithSharedObjects = model.entitiesWithSharedObjects().immutableClone();
+				for (EOEntity entity : entitiesWithSharedObjects) {
+					String entityFileName = modelFileName + File.pathSeparator + entity.name() + ".plist";
+					NSArray<String> sharedObjectFetchSpecNames = entity.sharedObjectFetchSpecificationNames();
+					if (sharedObjectFetchSpecNames.containsObject(FETCH_ALL_FETCH_SPEC_NAME)) {
+						sharedObjectFetchSpecNames = new NSArray<String>(FETCH_ALL_FETCH_SPEC_NAME);
+					}
+					for (String fetchSpecName : sharedObjectFetchSpecNames) {
+						String fetchSpecFileName = modelFileName + File.pathSeparator + entity.name() + ".fspec";
+						EOFetchSpecification fetchSpec = entity.fetchSpecificationNamed(fetchSpecName);
+						if (fetchSpec != null) {
+							// no need to lock because the
+							// bindObjectsWithFetchSpecification(EOFetchSpecification, String)
+							// method is thread safe.
+							sharedEC.bindObjectsWithFetchSpecification(fetchSpec, fetchSpecName);
+						}
+						else {
+						log.warn("Problem found in Entity \"" + entity.name() + "\": \"" 
+								+ fetchSpecName + "\" is listed in the \"sharedObjectFetchSpecificationNames\" element of the \"" 
+								+ entityFileName + "\" file, but there is no corresponding \"" 
+								+ fetchSpecName + "\" element in the \"" 
+								+ fetchSpecFileName + "\" file.");
+						}
+					}
+				}
+			}
+		}
+	}
+	
 }

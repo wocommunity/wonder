@@ -62,8 +62,11 @@ import com.webobjects.appserver.WOTimer;
 import com.webobjects.appserver._private.WOComponentDefinition;
 import com.webobjects.appserver._private.WODeployedBundle;
 import com.webobjects.appserver._private.WOProperties;
+import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.eocontrol.EOObserverCenter;
+import com.webobjects.eocontrol.EOSharedEditingContext;
 import com.webobjects.eocontrol.EOTemporaryGlobalID;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
@@ -97,6 +100,7 @@ import er.extensions.components._private.ERXWORepetition;
 import er.extensions.components._private.ERXWOString;
 import er.extensions.components._private.ERXWOTextField;
 import er.extensions.eof.ERXConstant;
+import er.extensions.eof.ERXDatabaseContext;
 import er.extensions.eof.ERXDatabaseContextDelegate;
 import er.extensions.eof.ERXEC;
 import er.extensions.formatters.ERXFormatterFactory;
@@ -289,6 +293,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * Tracks whether or not _addAdditionalAdaptors has been called yet.
 	 */
 	protected boolean _initializedAdaptors = false;
+
+	private boolean _isSharedObjectLoadingEnabledCachedValue;
 
 	/**
 	 * Copies the props from the command line to the static dict
@@ -1160,6 +1166,11 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		Long timestampLag = Long.getLong("EOEditingContextDefaultFetchTimestampLag");
 		if (timestampLag != null)
 			EOEditingContext.setDefaultFetchTimestampLag(timestampLag.longValue());
+		
+		Integer pageCacheSizeProperty = Integer.getInteger("WOSetPageCacheSize");
+		if (pageCacheSizeProperty != null) {
+			setPageCacheSize(pageCacheSizeProperty.intValue());
+		}
 
 		String defaultEncoding = System.getProperty("er.extensions.ERXApplication.DefaultEncoding");
 		if (defaultEncoding != null) {
@@ -1291,21 +1302,28 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	public final void finishInitialization(NSNotification n) {
 		finishInitialization();
+		boolean useSharedEditingContext = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXEC.useSharedEditingContext", true);
+		EODatabaseContext.setSharedObjectLoadingEnabled(useSharedEditingContext);
 		if (ERXMigrator.shouldMigrateAtStartup()) {
 			ERXMigrator migrator = migrator();
 			migrationsWillRun(migrator);
 			migrator.migrateToLatest();
 			migrationsDidRun(migrator);
 		}
-    NSNotificationCenter.defaultCenter().postNotification(new NSNotification(ERXApplication.ApplicationDidFinishInitializationNotification, this));
+		NSNotificationCenter.defaultCenter().postNotification(new NSNotification(ERXApplication.ApplicationDidFinishInitializationNotification, this));
 	}
-	
+
 	/**
 	 * Called prior to migrations running.
 	 * @param migrator the migrator that will be used
 	 */
 	protected void migrationsWillRun(ERXMigrator migrator) {
-		// DO NOTHING
+		log.info("Migrations will run");
+		_isSharedObjectLoadingEnabledCachedValue = ERXDatabaseContext.isSharedObjectLoadingEnabled();
+		if (ERXDatabaseContext.isSharedObjectLoadingEnabled()) {
+			log.info("Disabling sharedObjectLoading so migrations can run without tripping it");
+			ERXDatabaseContext.setSharedObjectLoadingEnabled(false);
+		}
 	}
 	
 	/**
@@ -1313,7 +1331,14 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * @param migrator the migrator that was used
 	 */
 	protected void migrationsDidRun(ERXMigrator migrator) {
-		// DO NOTHING
+		if (_isSharedObjectLoadingEnabledCachedValue) {
+			log.info("Re-enabling sharedObjectLoading");
+			ERXDatabaseContext.setSharedObjectLoadingEnabled(true);
+			EOSharedEditingContext sharedEC = EOSharedEditingContext._defaultSharedEditingContext();
+			log.info("Loading sharedObjects into EOSharedEditingContext '" + sharedEC + "' now.");
+			ERXDatabaseContext.loadSharedObjects(sharedEC);
+		}
+		log.info("Migrations did run");
 	}
 
 	/**
