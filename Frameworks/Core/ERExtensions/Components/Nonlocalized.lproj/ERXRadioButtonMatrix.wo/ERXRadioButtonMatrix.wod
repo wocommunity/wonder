@@ -9,6 +9,15 @@ RadioButton: WOGenericElement {
 	value = index;
 }
 
+RadioButtonDisabled: WOGenericElement {
+    elementName = "input";
+    name = uniqueID;
+    otherTagString = isCurrentItemSelected;
+    type = "radio";
+    value = index;
+    disabled = true;
+}
+
 RadioButtonRepetition: ERXTable {
 	cellpadding = cellpadding;
 	cellspacing = cellspacing;
