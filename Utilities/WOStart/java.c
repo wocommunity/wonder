@@ -144,7 +144,7 @@ static int noExitErrorMessage = 0;
  * Entry point.
  */
 int
-Java_Main(int argc, char ** argv)
+Java_Main(int argc, char ** argv, char *javaCommand)
 {
     JavaVM *vm = 0;
     JNIEnv *env = 0;
@@ -204,7 +204,8 @@ Java_Main(int argc, char ** argv)
     CreateExecutionEnvironment(&argc, &argv,
 			       jrepath, sizeof(jrepath),
 			       jvmpath, sizeof(jvmpath),
-			       original_argv);
+			       original_argv,
+				   javaCommand);
     ifn.CreateJavaVM = 0;
     ifn.GetDefaultJavaVMInitArgs = 0;
 
@@ -536,10 +537,17 @@ CheckJvmType(int *pargc, char ***argv, jboolean speculative) {
  	if (arg[0] != '-') break;
 #endif
 
+    if (_launcher_debug) {
+		printf(" check argument %s for vm type\n", arg);
+	}
  	/* Did the user pass an explicit VM type? */
 	i = KnownVMIndex(arg);
 	if (i >= 0) {
-	    jvmtype = knownVMs[jvmidx = i].name + 1; /* skip the - */
+		if (_launcher_debug) {
+			printf(" vm index for arg %s = %d\n", arg, i);
+		}
+
+		jvmtype = knownVMs[jvmidx = i].name + 1; /* skip the - */
 	    isVMType = 1;
 	    *pargc = *pargc - 1;
 	}
@@ -1296,6 +1304,9 @@ AddApplicationOptions()
     int size, i;
     int strlenHome;
 
+	// not needed for WOStart
+	return JNI_FALSE;
+
     s = getenv("CLASSPATH");
     if (s) {
 	/* 40 for -Denv.class.path= */
@@ -1304,11 +1315,11 @@ AddApplicationOptions()
 	AddOption(envcp, NULL);
     }
 
-    if (!GetApplicationHome(home, sizeof(home))) {
+/*    if (!GetApplicationHome(home, sizeof(home))) {
 	ReportErrorMessage("Can't determine application home", JNI_TRUE);
 	return JNI_FALSE;
     }
-
+*/
     /* 40 for '-Dapplication.home=' */
     apphome = (char *)MemAlloc(strlen(home) + 40);
     sprintf(apphome, "-Dapplication.home=%s", home);
