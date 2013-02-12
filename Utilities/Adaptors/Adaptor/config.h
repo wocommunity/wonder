@@ -167,7 +167,10 @@ const char *adaptor_valueForKey(const char *option);
 #define WOSENDTIMEOUT		"sendTimeout"		/* send timeout */
 #define WORECVTIMEOUT		"recvTimeout"		/* receive timeout */
 #define WOCNCTTIMEOUT		"cnctTimeout"		/* connect timeout */
-#define WOREFUSENEWSESSIONS     "refuseNewSessions"
+
+#if defined(SUPPORT_REFUSENEWSESSION_ATTR)
+  #define WOREFUSENEWSESSIONS     "refuseNewSessions"
+#endif
 
 /* This one is defined above, but included again here to be complete. */
 /*#define WOADDITIONALARGS	"additionalArgs"*/	/* Additional args */

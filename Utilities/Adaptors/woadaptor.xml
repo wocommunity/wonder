@@ -59,6 +59,7 @@ Attributes:
     refuseNewSessions=STRING
         YES -> instance will get no new sessions from scheduler
         NO (default) -> instance will get new sessions
+        This Attribute is only available, when activated in make.config
     Attribute values here specify instance scope settings.
 
 -->

@@ -680,7 +680,9 @@ static void updateInstanceKey(const char *key, const char *value, _WOInstance *i
 {
    int changed = 0;
 
+#if defined(SUPPORT_REFUSENEWSESSION_ATTR)
    instance->refuseNewSessions = 0;
+#endif
 
    if (strcmp(key, WOINSTANCENUMBER) == 0)
       changed = updateStringSetting(key, instance->instanceNumber, value, WA_MAX_INSTANCE_NUMBER_LENGTH);
@@ -700,13 +702,16 @@ static void updateInstanceKey(const char *key, const char *value, _WOInstance *i
       changed = updateNumericSetting(key, (int*)&instance->recvTimeout, value);
    else if (strcmp(key, WOCNCTTIMEOUT) == 0)
       changed = updateNumericSetting(key, (int*)&instance->connectTimeout, value);
+#if defined(SUPPORT_REFUSENEWSESSION_ATTR)
    else if (strcmp(key, WOREFUSENEWSESSIONS) == 0)
    {
       if(strcmp(value, "YES") == 0)
          instance->refuseNewSessions = 1;
       else
          instance->refuseNewSessions = 0;
-   } else
+   }
+#endif
+   else
    {
       /* The setting was not recognized. Log and ignore it. */
       WOLog(WO_INFO, "Unknown attribute in instance config: \"%s\", value = \"%s\"", key, value);
@@ -754,7 +759,9 @@ static int ac_updateInstance(_WOApp *app, int appIndex, strtbl *instanceSettings
          instance->connectTimeout = CONN_TIMEOUT;
          instance->sendTimeout = SEND_TIMEOUT;
          instance->recvTimeout = RECV_TIMEOUT;
+#if defined(SUPPORT_REFUSENEWSESSION_ATTR)
          instance->refuseNewSessions = 0;
+#endif
       }
       if (instance != NULL)
       {
@@ -1264,7 +1271,10 @@ void ac_buildInstanceList(String *content, WOApp *app, scheduler_t scheduler, co
    *hasRegisteredInstances = 0;
    /* set up the table header */
    str_appendLiteral(content, "<table cellspacing=10><tr align=center>"
-                     "<th>inst</th><th>host</th><th>port</th><th>active<br>reqs</th><th>served</th><th>conn&nbsp;pool<br>&nbsp;peak/reused</th><th>cto&nbsp;/ sto&nbsp;/ rto</th><th>send/rcv buf</th><th>refusing<br>timeout</th><th>dead<br>timeout</th><th>refuse new<br>sessions</th>");
+                     "<th>inst</th><th>host</th><th>port</th><th>active<br>reqs</th><th>served</th><th>conn&nbsp;pool<br>&nbsp;peak/reused</th><th>cto&nbsp;/ sto&nbsp;/ rto</th><th>send/rcv buf</th><th>refusing<br>timeout</th><th>dead<br>timeout</th>");
+#if defined(SUPPORT_REFUSENEWSESSION_ATTR)
+  str_appendLiteral(content, "<th>refuse new<br>sessions</th>");
+#endif
 
    /* We may need an additional column in here, but we won't know until after we walk the instances. */
    /* Insert the header now, and if we don't need it we will overwrite it later with whitespace. */
@@ -1303,8 +1313,11 @@ void ac_buildInstanceList(String *content, WOApp *app, scheduler_t scheduler, co
                str_appendf(content, "<td><a href=\"http://%s:%d%s/%s.woa\" TARGET=\"_blank\">%d</a></td>", inst->host, inst->port, adaptor_url, app->name, inst->port);
             else
                str_appendf(content, "<td>%d</td>", inst->port);
-            str_appendf(content, "<td>%d</td><td>%d</td><td>%d/%d</td><td>%d/%d/%d</td><td>%d/%d</td><td>%d</td><td>%d</td><td>%s</td>",
-                        inst->pendingResponses, inst->requests, inst->peakPoolSize, inst->reusedPoolConnectionCount, inst->connectTimeout,inst->sendTimeout,inst->recvTimeout, inst->sendSize, inst->recvSize, newSessionsTimeout, deadTimeout, (inst->refuseNewSessions == 1) ? "YES" : "NO");
+            str_appendf(content, "<td>%d</td><td>%d</td><td>%d/%d</td><td>%d/%d/%d</td><td>%d/%d</td><td>%d</td><td>%d</td>",
+                        inst->pendingResponses, inst->requests, inst->peakPoolSize, inst->reusedPoolConnectionCount, inst->connectTimeout,inst->sendTimeout,inst->recvTimeout, inst->sendSize, inst->recvSize, newSessionsTimeout, deadTimeout);
+#if defined(SUPPORT_REFUSENEWSESSION_ATTR)
+            str_appendf(content, "<td>%s</td>", (inst->refuseNewSessions == 1) ? "YES" : "NO");
+#endif
             if (WA_MAX_ADDITIONAL_ARGS_LENGTH > 0 && inst->additionalArgs[0] != 0)
             {
                hasAdditionalArgs = 1;
