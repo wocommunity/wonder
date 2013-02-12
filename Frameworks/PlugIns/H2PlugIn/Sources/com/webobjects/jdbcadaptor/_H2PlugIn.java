@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.sql.Blob;
 import java.sql.Clob;
@@ -22,6 +23,8 @@ import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.synchronization.EOSchemaGenerationOptions;
 import com.webobjects.eoaccess.synchronization.EOSchemaSynchronization;
 import com.webobjects.eoaccess.synchronization.EOSchemaSynchronizationFactory;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSData;
@@ -32,6 +35,8 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation.NSRange;
+import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation._NSStringUtilities;
 
@@ -141,6 +146,16 @@ public class _H2PlugIn extends JDBCPlugIn {
 	}
 
 	public static class H2Expression extends JDBCExpression {
+		/**
+		 * Fetch spec limit ivar
+		 */
+		private int _fetchLimit;
+		
+		/**
+		 * Fetch spec range ivar
+		 */
+		private NSRange _fetchRange;
+		private final NSSelector<NSRange> _fetchRangeSelector = new NSSelector<NSRange>("fetchRange");
 
 		public H2Expression(final EOEntity entity) {
 			super(entity);
@@ -307,6 +322,98 @@ public class _H2PlugIn extends JDBCPlugIn {
 		 */
 		private boolean isTimestampAttribute(final EOAttribute eoattribute) {
 			return eoattribute != null && "T".equals(eoattribute.valueType());
+		}
+
+		/**
+		 * Overridden so we can get the fetch limit from the fetchSpec.
+		 *
+		 * @param attributes the array of attributes
+		 * @param lock locking flag
+		 * @param fetchSpec the fetch specification
+		 */
+		@Override
+		public void prepareSelectExpressionWithAttributes(NSArray<EOAttribute> attributes, boolean lock, EOFetchSpecification fetchSpec) {
+			try {
+				_fetchRange = _fetchRangeSelector.invoke(fetchSpec);
+				// We will get an error when not using our custom ERXFetchSpecification subclass
+				// We could have added ERExtensions to the classpath and checked for instanceof, but I thought
+				// this is a little cleaner since people may be using this PlugIn and not Wonder in some legacy apps.
+			} catch (IllegalArgumentException e) {
+				// ignore
+			} catch (IllegalAccessException e) {
+				// ignore
+			} catch (InvocationTargetException e) {
+				// ignore
+			} catch (NoSuchMethodException e) {
+				// ignore
+			}
+			// Only check for fetchLimit if fetchRange is not provided.
+			if (_fetchRange == null && !fetchSpec.promptsAfterFetchLimit()) {
+				_fetchLimit = fetchSpec.fetchLimit();
+			}
+			if (_fetchRange != null) {
+				// if we have a fetch range disable the limit
+				fetchSpec.setFetchLimit(0);
+			}
+			super.prepareSelectExpressionWithAttributes(attributes, lock, fetchSpec);
+		}
+
+		@Override
+		public String assembleSelectStatementWithAttributes(NSArray attributes, boolean lock, EOQualifier qualifier, NSArray fetchOrder, String selectString, String columnList, String tableList, String whereClause, String joinClause, String orderByClause, String lockClause) {
+			int size = selectString.length() + columnList.length() + tableList.length() + 7;
+			if (lockClause != null && lockClause.length() != 0) {
+				size += lockClause.length() + 1;
+			}
+			if (whereClause != null && whereClause.length() != 0) {
+				size += whereClause.length() + 7;
+			}
+			if (joinClause != null && joinClause.length() != 0) {
+				size += joinClause.length() + 7;
+			}
+			if (orderByClause != null && orderByClause.length() != 0) {
+				size += orderByClause.length() + 10;
+			}
+			StringBuilder sb = new StringBuilder(size);
+			sb.append(selectString);
+			sb.append(columnList);
+			sb.append(" FROM ");
+			sb.append(tableList);
+			
+			if (whereClause != null && whereClause.length() != 0) {
+				sb.append(" WHERE ");
+				sb.append(whereClause);
+			}
+			if (joinClause != null && joinClause.length() != 0) {
+				if (whereClause != null && whereClause.length() != 0) {
+					sb.append(" AND ");
+				} else {
+					sb.append(" WHERE ");
+				}
+				sb.append(joinClause);
+			}
+			
+			if (orderByClause != null && orderByClause.length() != 0) {
+				sb.append(" ORDER BY ");
+				sb.append(orderByClause);
+			}
+			
+			// fetchRange overrides fetchLimit
+			if (_fetchRange != null) {
+				sb.append(" LIMIT ");
+				sb.append(_fetchRange.length());
+				sb.append(" OFFSET ");
+				sb.append(_fetchRange.location());
+			} else if (_fetchLimit != 0) {
+				sb.append(" LIMIT ");
+				sb.append(_fetchLimit);
+			}
+			
+			if (lockClause != null && lockClause.length() != 0) {
+				sb.append(' ');
+				sb.append(lockClause);
+			}
+			
+			return sb.toString();
 		}
 	}
 
