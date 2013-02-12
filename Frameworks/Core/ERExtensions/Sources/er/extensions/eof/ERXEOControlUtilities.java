@@ -699,9 +699,9 @@ public class ERXEOControlUtilities {
     public static NSArray primaryKeyValuesInRange(EOEditingContext ec, EOFetchSpecification spec, int start, int end) {
         EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, spec.entityName());
         NSArray<String> pkNames = entity.primaryKeyAttributeNames();
-        spec.setFetchesRawRows(true);
-        spec.setRawRowKeyPaths(pkNames);
-    	EOFetchSpecification clonedFetchSpec = (EOFetchSpecification)spec.clone();
+        EOFetchSpecification clonedFetchSpec = (EOFetchSpecification)spec.clone();
+        clonedFetchSpec.setFetchesRawRows(true);
+        clonedFetchSpec.setRawRowKeyPaths(pkNames);
         if (clonedFetchSpec instanceof ERXFetchSpecification) {
             // remove any range setting as we will explicitly set start and end limit
             ((ERXFetchSpecification)clonedFetchSpec).setFetchRange(null);
