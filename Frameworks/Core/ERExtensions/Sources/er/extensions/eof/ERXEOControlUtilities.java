@@ -702,6 +702,10 @@ public class ERXEOControlUtilities {
         spec.setFetchesRawRows(true);
         spec.setRawRowKeyPaths(pkNames);
     	EOFetchSpecification clonedFetchSpec = (EOFetchSpecification)spec.clone();
+        if (clonedFetchSpec instanceof ERXFetchSpecification) {
+            // remove any range setting as we will explicitly set start and end limit
+            ((ERXFetchSpecification)clonedFetchSpec).setFetchRange(null);
+        }
         EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecification(ec, clonedFetchSpec, start, end);
         NSDictionary<String, EOSQLExpression> hints = new NSDictionary<String, EOSQLExpression>(sql, EODatabaseContext.CustomQueryExpressionHintKey);
         clonedFetchSpec.setHints(hints);
