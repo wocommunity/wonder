@@ -23,6 +23,7 @@ import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSRange;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation._NSStringUtilities;
@@ -113,7 +114,13 @@ public class PostgresqlExpression extends JDBCExpression {
      * Fetch spec limit ivar
      */
     private int _fetchLimit;
-     
+
+    /**
+     * Fetch spec range ivar
+     */
+    private NSRange _fetchRange;
+    private final NSSelector<NSRange> _fetchRangeSelector = new NSSelector<NSRange>("fetchRange");
+
     private Boolean _enableIdentifierQuoting;
     
     private Boolean _enableBooleanQuoting;
@@ -378,10 +385,16 @@ public class PostgresqlExpression extends JDBCExpression {
             sb.append(" ");
             sb.append(lockClause);
         }
-        if (_fetchLimit != 0) {
+        // fetchRange overrides fetchLimit
+        if (_fetchRange != null) {
+            sb.append(" LIMIT ");
+            sb.append(_fetchRange.length());
+            sb.append(" OFFSET ");
+            sb.append(_fetchRange.location());
+        } else if (_fetchLimit != 0) {
             sb.append(" LIMIT ");
             sb.append(_fetchLimit);
-        }        
+        }
         return sb.toString();
     }
     
@@ -726,16 +739,35 @@ public class PostgresqlExpression extends JDBCExpression {
     /**
      * Overridden so we can get the fetch limit from the fetchSpec.
      *
-     * @param attributes   the array of attributes
-     * @param lock  locking flag
-     * @param eofetchspecification  the fetch specification
+     * @param attributes the array of attributes
+     * @param lock locking flag
+     * @param fetchSpec the fetch specification
      */
     @Override
-    public void prepareSelectExpressionWithAttributes(NSArray<EOAttribute> attributes, boolean lock, EOFetchSpecification eofetchspecification) {
-        if(!eofetchspecification.promptsAfterFetchLimit()) {
-            _fetchLimit = eofetchspecification.fetchLimit();
+    public void prepareSelectExpressionWithAttributes(NSArray<EOAttribute> attributes, boolean lock, EOFetchSpecification fetchSpec) {
+        try {
+            _fetchRange = _fetchRangeSelector.invoke(fetchSpec);
+            // We will get an error when not using our custom ERXFetchSpecification subclass
+            // We could have added ERExtensions to the classpath and checked for instanceof, but I thought
+            // this is a little cleaner since people may be using this PlugIn and not Wonder in some legacy apps.
+        } catch (IllegalArgumentException e) {
+            // ignore
+        } catch (IllegalAccessException e) {
+            // ignore
+        } catch (InvocationTargetException e) {
+            // ignore
+        } catch (NoSuchMethodException e) {
+            // ignore
         }
-        super.prepareSelectExpressionWithAttributes(attributes, lock, eofetchspecification);
+        // Only check for fetchLimit if fetchRange is not provided.
+        if (_fetchRange == null && !fetchSpec.promptsAfterFetchLimit()) {
+            _fetchLimit = fetchSpec.fetchLimit();
+        }
+        if (_fetchRange != null) {
+            // if we have a fetch range disable the limit
+            fetchSpec.setFetchLimit(0);
+        }
+        super.prepareSelectExpressionWithAttributes(attributes, lock, fetchSpec);
     }
     
     /**
