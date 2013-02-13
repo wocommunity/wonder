@@ -1001,7 +1001,10 @@ Form.Element.ExtendedEventObserver = Class.create(Form.Element.EventObserver, {
         case 'text':
           Event.observe(element, 'change', this.onElementEvent.bind(this));
           if (this.actOnKeyUp)
+          {
 	          Event.observe(element, 'keyup', this.onElementEvent.bind(this));
+	          Event.observe(element, 'blur', this.onElementEvent.bind(this));
+          }
           break;
         default:
           Event.observe(element, 'change', this.onElementEvent.bind(this));
