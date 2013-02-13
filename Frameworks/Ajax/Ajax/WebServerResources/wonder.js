@@ -392,7 +392,10 @@ var AjaxSubmitButton = {
 				actionUrl = actionUrl.addQueryParameters('_r=' + id);
 			}
 			else {
-				actionUrl = actionUrl.addQueryParameters('_u=' + id);
+				if(id.indexOf(",") >= 0)
+					actionUrl = actionUrl.addQueryParameters('_ul=' + id);
+				else
+					actionUrl = actionUrl.addQueryParameters('_u=' + id);
 			}
 		}
 		actionUrl = actionUrl.addQueryParameters(new Date().getTime());
@@ -448,13 +451,17 @@ var AjaxSubmitButton = {
 	},
 	
 	update: function(id, form, queryParams, options) {
-		var updateElement = $(id);
+	    var firstId = id;
+	    var updateElementlist = id.split(",");
+		if(updateElementlist.length > 1)
+			firstId = updateElementlist[0];   
+		var updateElement = $(firstId);
 		if (updateElement == null) {
 			alert('There is no element on this page with the id "' + id + '".');
 		}
 		var finalUrl = AjaxSubmitButton.generateActionUrl(id, form, queryParams, options);
 		var finalOptions = AjaxSubmitButton.processOptions(form, options);
-		new Ajax.Updater(id, finalUrl, finalOptions);
+		new Ajax.Updater(firstId, finalUrl, finalOptions);
 	},
 	
 	request: function(form, queryParams, options) {

@@ -1,5 +1,8 @@
 package er.ajax;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
@@ -10,6 +13,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSRange;
 
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.appserver.ajax.ERXAjaxApplication;
@@ -29,6 +33,7 @@ import er.extensions.foundation.ERXValueUtilities;
  * @binding optional set to true if you want the container tags to be skipped if this is already in an update container (similar to ERXOptionalForm). 
  *                   If optional is true and there is a container, it's as if this AUC doesn't exist, and only its children will render to the page. 
  * 
+ * @binding disabled set to true if you do not want the update container to be rendered at all (defaults to false)
  * @binding frequency the frequency (in seconds) of a periodic update
  * @binding decay a multiplier (default is one) applied to the frequency if the response of the update is unchanged
  * @binding stopped determines whether a periodic update container loads as stopped.
@@ -45,13 +50,22 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 	 */
 	@Override
 	protected void addRequiredWebResources(WOResponse response, WOContext context) {
-		addScriptResourceInHead(context, response, "prototype.js");
-		addScriptResourceInHead(context, response, "effects.js");
-		addScriptResourceInHead(context, response, "wonder.js");
+		if (shouldRenderContainer(context.component())) {
+			addScriptResourceInHead(context, response, "prototype.js");
+			addScriptResourceInHead(context, response, "effects.js");
+			addScriptResourceInHead(context, response, "wonder.js");
+		}
 	}
 
 	protected boolean shouldRenderContainer(WOComponent component) {
-		boolean renderContainer = !booleanValueForBinding("optional", false, component) || AjaxUpdateContainer.currentUpdateContainerID() == null;
+		boolean renderContainer = false;
+		if(!booleanValueForBinding("disabled", false, component)) 
+		{
+			// if 'disabled' == false: old behaviour:
+			renderContainer = 
+				!booleanValueForBinding("optional", false, component) || 
+				AjaxUpdateContainer.currentUpdateContainerID() == null;
+		}
 		return renderContainer;
 	}
 
@@ -166,6 +180,10 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		WOComponent component = context.component();
+		List<String> updateContainerIDList = updateContainerIDList(context.request());
+		boolean markContentRange = response instanceof AjaxResponse && updateContainerIDList != null && updateContainerIDList.contains(valueForBinding("id", component));
+		int contentLength1 = 0;
+				
 		if (!shouldRenderContainer(component)) {
 			if (hasChildrenElements()) {
 				appendChildrenToResponse(response, context);
@@ -185,9 +203,17 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 				appendTagAttributeToResponse(response, "data-updateUrl", AjaxUtils.ajaxComponentActionUrl(context));
 				// appendTagAttributeToResponse(response, "woElementID", context.elementID());
 				response.appendContentString(">");
+
+				if(markContentRange)
+					contentLength1 = ((AjaxResponse)response).contentLength();
+
 				if (hasChildrenElements()) {
 					appendChildrenToResponse(response, context);
 				}
+				
+				if(markContentRange)
+					setRangeForContainerID(context.request(), (String) valueForBinding("id", component), new NSRange(contentLength1, ((AjaxResponse)response).contentLength() - contentLength1));
+				
 				response.appendContentString("</" + elementName + ">");
 
 				super.appendToResponse(response, context);
@@ -273,6 +299,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 			response.appendContentString(onRefreshComplete);
 			AjaxUtils.appendScriptFooter(response);
 		}
+		
 		if (AjaxModalDialog.isInDialog(context)) {
 			AjaxUtils.appendScriptHeader(response);
 			response.appendContentString("AMD.contentUpdated();");
@@ -296,9 +323,43 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 
 	public static void setUpdateContainerID(WORequest request, String updateContainerID) {
 		if (updateContainerID != null) {
-			ERXWOContext.contextDictionary().setObjectForKey(updateContainerID, ERXAjaxApplication.KEY_UPDATE_CONTAINER_ID);
+			if(updateContainerID.indexOf(",") >= 0)
+				AjaxUtils.mutableUserInfo(request).setObjectForKey(Arrays.asList(updateContainerID.split(",")), CONTAINER_LIST_KEY);
+			else
+				AjaxUtils.mutableUserInfo(request).setObjectForKey(updateContainerID, ERXAjaxApplication.KEY_UPDATE_CONTAINER_ID);
 		}
 	}
+	
+	public static List<String> updateContainerIDList(WORequest request)
+	{
+		NSDictionary userInfo = AjaxUtils.mutableUserInfo(request);
+		return (List<String>) userInfo.objectForKey(CONTAINER_LIST_KEY);
+	}
+	
+	public static void setRangeForContainerID(WORequest request, String updateContainerID, NSRange range)
+	{
+		NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(request);
+		NSMutableDictionary<String, NSRange> rangeDict = (NSMutableDictionary<String, NSRange>) userInfo.objectForKey(CONTAINER_RANGEDICT_KEY);
+		if(rangeDict == null)
+		{
+			rangeDict = new NSMutableDictionary<String, NSRange>();
+			userInfo.setObjectForKey(rangeDict, CONTAINER_RANGEDICT_KEY);
+		}
+		
+		rangeDict.setObjectForKey(range, updateContainerID);
+	}
+	
+	public static NSRange rangeForContainerID(WORequest request, String updateContainerID)
+	{
+		NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(request);
+		NSMutableDictionary<String, NSRange> rangeDict = (NSMutableDictionary<String, NSRange>) userInfo.objectForKey(CONTAINER_RANGEDICT_KEY);
+		if(rangeDict != null)
+			return rangeDict.objectForKey(updateContainerID);
+		return null;
+	}
+	
+	private static final String CONTAINER_LIST_KEY = "_ul";
+	private static final String CONTAINER_RANGEDICT_KEY = "_rd";
 
 	public static boolean hasUpdateContainerID(WORequest request) {
 		return AjaxUpdateContainer.updateContainerID(request) != null;
@@ -322,7 +383,24 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 	}
 
 	public static String updateContainerID(AjaxDynamicElement element, String bindingName, WOComponent component) {
-		String updateContainerID = (String) element.valueForBinding("updateContainerID", component);
+        Object valueForBinding = element.valueForBinding("updateContainerID", component);
+        String updateContainerID = null;        
+        if(valueForBinding instanceof String)
+            updateContainerID = (String) valueForBinding;
+        if(valueForBinding instanceof List<?>)
+        {
+            StringBuilder sb = new StringBuilder();
+            boolean first = true;
+            for(String s : (List<? extends String>)valueForBinding)
+            {
+                if(!first)
+                    sb.append(',');
+                else
+                    first = false;
+                sb.append(s);
+            }
+            updateContainerID = sb.toString();
+        }
 		return AjaxUpdateContainer.updateContainerID(updateContainerID);
 	}
 

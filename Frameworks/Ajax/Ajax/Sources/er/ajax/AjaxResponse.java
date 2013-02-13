@@ -1,6 +1,7 @@
 package er.ajax;
 
 import java.util.Enumeration;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSRange;
 
 import er.extensions.appserver.ERXResponse;
 import er.extensions.appserver.ERXWOContext;
@@ -58,7 +60,7 @@ public class AjaxResponse extends ERXResponse {
 		_context = context;
 	}
 
-	@Override
+	@SuppressWarnings("cast")
 	public WOResponse generateResponse() {
 		if (AjaxUpdateContainer.hasUpdateContainerID(_request)) {
 			String originalSenderID = _context.senderID();
@@ -68,7 +70,7 @@ public class AjaxResponse extends ERXResponse {
 				_content = new StringBuilder();
 				NSMutableDictionary userInfo = ERXWOContext.contextDictionary();
 				userInfo.setObjectForKey(Boolean.TRUE, AjaxResponse.AJAX_UPDATE_PASS);
-				WOActionResults woactionresults = WOApplication.application().invokeAction(_request, _context);
+				WOApplication.application().invokeAction(_request, _context);
 				_content.append(originalContent);
 				if (_responseAppenders != null) {
 					Enumeration responseAppendersEnum = _responseAppenders.objectEnumerator();
@@ -77,16 +79,63 @@ public class AjaxResponse extends ERXResponse {
 						responseAppender.appendToResponse(this, _context);
 					}
 				}
-				if (_contentLength() == 0) {
+				
+				int length = ((CharSequence)_content).length();
+				if (length == 0) {
 					setStatus(HTTP_STATUS_INTERNAL_ERROR);
 					log.warn("You performed an Ajax update, but no response was generated. A common cause of this is that you spelled your updateContainerID wrong.  You specified a container ID '" + AjaxUpdateContainer.updateContainerID(_request) + "'."); 
 				}
+				
 			}
 			finally {
 				_context._setSenderID(originalSenderID);
 			}
+		} else
+		{
+			List<String> updateContainerIDList = AjaxUpdateContainer.updateContainerIDList(_context.request());
+
+			if(updateContainerIDList != null)
+			{
+				WOApplication.application().appendToResponse(this, _context);
+
+				StringBuilder c2 = new StringBuilder();
+				boolean firstUC = true;
+
+				for(String id : updateContainerIDList)
+				{
+					NSRange r = AjaxUpdateContainer.rangeForContainerID(_request, id);
+
+					if(r != null)
+					{
+						StringBuilder c = new StringBuilder(_content.substring(r.location(), r.location()+r.length()));
+						fixLeadingWhiteSpaces(c);
+
+						if(firstUC)
+						{
+							c2.append(c);
+							firstUC = false;
+						} else
+						{
+							c2.append("\n<script>\n");
+							c2.append("Element.update('" + id + "'," + AjaxValue.javaScriptAndHTMLEscaped(c) + ");");
+							c2.append("\n</script>\n");
+						}
+					}
+				}
+
+				if (((Object)_content) instanceof StringBuffer)
+					ERXKeyValueCodingUtilities.takePrivateValueForKey(this, new StringBuffer(c2),  "_content");
+				else
+					ERXKeyValueCodingUtilities.takePrivateValueForKey(this, c2,  "_content");
+			}
 		}
+
 		return this;
+	}
+
+	public int contentLength()
+	{
+		return _content.length();
 	}
 	
 	public static boolean isAjaxUpdatePass(WORequest request) {
@@ -153,32 +202,22 @@ public class AjaxResponse extends ERXResponse {
 	}
 	
 	/**
-	 * Convenience method that calls <code>AjaxUtils.updateDomElement</code> with this request.
-	 * 
-	 * @param id
-	 *            ID of the DOM element to update
-	 * @param value
-	 *            The new value
-	 * @param numberFormat
-	 *            optional number format to format the value with
-	 * @param dateFormat
-	 *            optional date format to format the value with
-	 * @param valueWhenEmpty
-	 *            string to use when value is null
-	 * 
-	 * @see er.ajax.AjaxUtils#updateDomElement(WOResponse, String, Object, String, String, String)
+	 * Convenience method that calls <code>AjaxUtils.updateDomElement</code> with this request. 
+	 * @param id 
+	 * @param value 
+	 * @param numberFormat 
+	 * @param dateFormat 
+	 * @param valueWhenEmpty 
+	 * @see AjaxUtils#updateDomElement
 	 */
 	public void updateDomElement(String id, Object value, String numberFormat, String dateFormat, String valueWhenEmpty) {
 		AjaxUtils.updateDomElement(this, id, value, numberFormat, dateFormat, valueWhenEmpty);
 	}
 
 	/**
-	 * Convenience method that calls <code>updateDomElement</code> with no formatters and no valueWhenEmpty string.
-	 * 
-	 * @param id
-	 *            ID of the DOM element to update
-	 * @param value
-	 *            The new value
+	 * Convenience method that calls <code>updateDomElement</code> with no formatters and no valueWhenEmpty string. 
+	 * @param id 
+	 * @param value 
 	 */
 	public void updateDomElement(String id, Object value) {
 		updateDomElement(id, value, null, null, null);
