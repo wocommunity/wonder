@@ -24,6 +24,7 @@ import er.extensions.foundation.ERXProperties;
  * @binding id the HTML ID of this submit button
  * @binding class the HTML class of this submit button
  * @binding style the HTML style of this submit button
+ * @binding tabindex tab index of this submit button
  * @binding title the HTML title of this submit button
  * @binding onClick arbitrary Javascript to execute when the client clicks the button
  * @binding onClickBefore if the given function returns true, the onClick is executed.  This is to support confirm(..) dialogs. 
@@ -276,6 +277,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	    appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
 	    appendTagAttributeToResponse(response, "style", valueForBinding("style", component));
 	    appendTagAttributeToResponse(response, "id", valueForBinding("id", component));
+	    appendTagAttributeToResponse(response, "tabindex", valueForBinding("tabindex", component));
 	    appendTagAttributeToResponse(response, "title", valueForBinding("title", component));
     	if (functionName == null) {
     		appendTagAttributeToResponse(response, "onclick", onClickBuffer.toString());
