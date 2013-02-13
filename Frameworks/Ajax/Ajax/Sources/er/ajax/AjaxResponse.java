@@ -14,7 +14,6 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSRange;
-
 import er.extensions.appserver.ERXResponse;
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.appserver.ajax.ERXAjaxApplication;
@@ -60,7 +59,7 @@ public class AjaxResponse extends ERXResponse {
 		_context = context;
 	}
 
-	@SuppressWarnings("cast")
+	@Override
 	public WOResponse generateResponse() {
 		if (AjaxUpdateContainer.hasUpdateContainerID(_request)) {
 			String originalSenderID = _context.senderID();
@@ -108,7 +107,8 @@ public class AjaxResponse extends ERXResponse {
 					if(r != null)
 					{
 						StringBuilder c = new StringBuilder(_content.substring(r.location(), r.location()+r.length()));
-
+						fixLeadingWhiteSpaces(c);
+						
 						if(firstUC)
 						{
 							c2.append(c);
@@ -126,12 +126,21 @@ public class AjaxResponse extends ERXResponse {
 			}
 		}
 
+		if(isHTML())
+			fixLeadingWhiteSpaces(_content);
+
 		return this;
 	}
 
 	public int contentLength()
 	{
 		return _content.length();
+	}
+
+	private void fixLeadingWhiteSpaces(StringBuilder sb)
+	{
+		while(sb.length() > 0 && Character.isWhitespace(sb.charAt(0)))
+			sb.deleteCharAt(0);
 	}
 	
 	public static boolean isAjaxUpdatePass(WORequest request) {
