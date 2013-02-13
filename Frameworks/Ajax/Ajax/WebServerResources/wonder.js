@@ -463,15 +463,15 @@ var AjaxSubmitButton = {
 		new Ajax.Request(finalUrl, finalOptions);
 	},
 	
-	observeDescendentFields: function(updateContainerID, containerID, observeFieldFrequency, partial, observeDelay, options) {
+	observeDescendentFields: function(updateContainerID, containerID, observeFieldFrequency, partial, observeDelay, options, actOnKeyUp) {
     $(containerID).descendants().find(function(element) {
       if (element.type != 'hidden' && ['input', 'select', 'textarea'].include(element.tagName.toLowerCase())) {
-      	AjaxSubmitButton.observeField(updateContainerID, element, observeFieldFrequency, partial, observeDelay, options);
+      	AjaxSubmitButton.observeField(updateContainerID, element, observeFieldFrequency, partial, observeDelay, options, actOnKeyUp);
       }
     });
 	},
 	
-	observeField: function(updateContainerID, formFieldID, observeFieldFrequency, partial, observeDelay, options) {
+	observeField: function(updateContainerID, formFieldID, observeFieldFrequency, partial, observeDelay, options, actOnKeyUp) {
 		var submitFunction;
 		if (partial) {
 			// We need to cheat and make the WOForm that contains the form action appear to have been
@@ -510,7 +510,7 @@ var AjaxSubmitButton = {
 	    	new Form.Element.RadioButtonObserver($(formFieldID), submitFunction);
 			}
 			else {
-	    	new Form.Element.EventObserver($(formFieldID), submitFunction);
+	    	new Form.Element.ExtendedEventObserver($(formFieldID), submitFunction, actOnKeyUp);
 			}
 		}
 		else {
@@ -976,6 +976,33 @@ Form.Element.RadioButtonObserver = Class.create(Form.Element.EventObserver, {
 	  this.callback(this.element, value);
   	this.lastValue = value;
   }
+});
+
+Form.Element.ExtendedEventObserver = Class.create(Form.Element.EventObserver, {
+  initialize: function($super, element, callback, actOnKeyUp) {
+    this.actOnKeyUp = actOnKeyUp;
+    $super(element, callback);
+  },
+
+  registerCallback: function(element) {
+    if (element.type) {
+      switch (element.type.toLowerCase()) {
+        case 'checkbox':
+        case 'radio':
+          Event.observe(element, 'click', this.onElementEvent.bind(this));
+          break;
+        case 'text':
+          Event.observe(element, 'change', this.onElementEvent.bind(this));
+          if (this.actOnKeyUp)
+	          Event.observe(element, 'keyup', this.onElementEvent.bind(this));
+          break;
+        default:
+          Event.observe(element, 'change', this.onElementEvent.bind(this));
+          break;
+      }
+    }
+  }
+
 });
 
 var AjaxBusy = {

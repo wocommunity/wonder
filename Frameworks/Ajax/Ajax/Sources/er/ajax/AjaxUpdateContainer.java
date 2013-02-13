@@ -230,7 +230,8 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 
 					if (observeFieldID != null) {
 						boolean fullSubmit = booleanValueForBinding("fullSubmit", false, component);
-						AjaxObserveField.appendToResponse(response, context, this, observeFieldID, false, id, fullSubmit, createObserveFieldOptions(component));
+						boolean actOnKeyUp = booleanValueForBinding("actOnKeyUp", false, component);
+						AjaxObserveField.appendToResponse(response, context, this, observeFieldID, false, id, fullSubmit, createObserveFieldOptions(component), actOnKeyUp);
 					}
 
 					response.appendContentString("AUC.register('" + id + "'");
