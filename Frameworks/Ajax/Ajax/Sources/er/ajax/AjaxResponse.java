@@ -108,7 +108,6 @@ public class AjaxResponse extends ERXResponse {
 					if(r != null)
 					{
 						StringBuilder c = new StringBuilder(_content.substring(r.location(), r.location()+r.length()));
-						fixLeadingWhiteSpaces(c);
 
 						if(firstUC)
 						{
@@ -123,10 +122,7 @@ public class AjaxResponse extends ERXResponse {
 					}
 				}
 
-				if (((Object)_content) instanceof StringBuffer)
-					ERXKeyValueCodingUtilities.takePrivateValueForKey(this, new StringBuffer(c2),  "_content");
-				else
-					ERXKeyValueCodingUtilities.takePrivateValueForKey(this, c2,  "_content");
+				_content = c2;
 			}
 		}
 

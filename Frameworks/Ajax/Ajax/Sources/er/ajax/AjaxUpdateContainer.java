@@ -383,24 +383,25 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 	}
 
 	public static String updateContainerID(AjaxDynamicElement element, String bindingName, WOComponent component) {
-        Object valueForBinding = element.valueForBinding("updateContainerID", component);
-        String updateContainerID = null;        
-        if(valueForBinding instanceof String)
-            updateContainerID = (String) valueForBinding;
-        if(valueForBinding instanceof List<?>)
-        {
-            StringBuilder sb = new StringBuilder();
-            boolean first = true;
-            for(String s : (List<? extends String>)valueForBinding)
-            {
-                if(!first)
-                    sb.append(',');
-                else
-                    first = false;
-                sb.append(s);
-            }
-            updateContainerID = sb.toString();
-        }
+		Object valueForBinding = element.valueForBinding("updateContainerID", component);
+		String updateContainerID = null;
+
+		if(valueForBinding instanceof String)
+			updateContainerID = (String) valueForBinding;
+		if(valueForBinding instanceof List<?>)
+		{
+			StringBuilder sb = new StringBuilder();
+			boolean first = true;
+			for(String s : (List<? extends String>)valueForBinding)
+			{
+				if(!first)
+					sb.append(',');
+				else
+					first = false;
+				sb.append(s);
+			}
+			updateContainerID = sb.toString();
+		}
 		return AjaxUpdateContainer.updateContainerID(updateContainerID);
 	}
 
