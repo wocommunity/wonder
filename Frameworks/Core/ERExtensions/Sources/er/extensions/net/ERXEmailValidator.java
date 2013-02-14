@@ -222,6 +222,10 @@ public final class ERXEmailValidator implements Serializable {
 	 * @return true if the hostName is valid, false if no hostName or MX record
 	 *         is found, null if lookup times out
 	 * @throws NamingException
+	 * 
+	 * @deprecated this method will throw mysterious NullPointerExceptions if used
+	 * in a loop. Evidently, something about the DirContext is not as thread safe
+	 * as the javadocs claim. Do not use it.
 	 */
 	public static Boolean isValidDomainString(String hostName, long timeout) {
 		if (timeout < 1) {
@@ -262,11 +266,13 @@ public final class ERXEmailValidator implements Serializable {
 	 * @param def
 	 *            default value if timeout occurs
 	 * @return true if the email passes both validations
+	 * 
+	 * @deprecated Deprecated because it relies on {@link ERXEmailValidator#isValidDomainString(String, long)}
 	 */
 	public boolean isValidEmailAddress(String email, long timeout, boolean def) {
 		if (isValidEmailString(email)) {
 			String hostName = hostNameForEmailString(email);
-			Boolean value = isValidDomainString(hostName, timeout);
+			Boolean value = ERXEmailValidator.isValidDomainString(hostName, timeout);
 			return ERXValueUtilities.booleanValueWithDefault(value, def);
 		}
 		return false;
