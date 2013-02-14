@@ -100,6 +100,24 @@ public final class ERXEmailValidator implements Serializable {
 	private final String mailbox;
 	private final String patternString;
 	private final Pattern validPattern;
+	
+	/**
+	 * This second validator exists because there is an issue with validating
+	 * addresses that allowQuotedIdentifiers that have no quoting and a long
+	 * mailbox name. Example: blahblahblahblahblahblahblah@blah.com
+	 * 
+	 * It seems that after about 25 chars, the regular expression matching
+	 * takes exponentially longer to match the string. The same address with
+	 * quoting does not exhibit the problem. 
+	 * Ex. "Blah blah" <blahblahblahblahblahblahblah@blah.com>
+	 * 
+	 * Nor does using a validator that does not allow quoted identifiers. In
+	 * order to work around this problem, a second internal validator is
+	 * created when allowQuotedIdentifiers is true. This internal validator
+	 * does not allow quoted identifiers. It is tried first and only if it
+	 * returns false is the full regular expression used.
+	 */
+	private final ERXEmailValidator _internal;
 
 	/**
 	 * 
@@ -128,6 +146,11 @@ public final class ERXEmailValidator implements Serializable {
 		mailbox = nameAddr + "|" + addrSpec;
 		patternString = allowQuotedIdentifiers ? mailbox : addrSpec;
 		validPattern = Pattern.compile(patternString);
+		
+		/*
+		 * See javadoc for the _internal ivar
+		 */
+		_internal = allowQuotedIdentifiers?new ERXEmailValidator(false, allowDomainLiterals):null;
 	}
 
 	/**
@@ -140,6 +163,12 @@ public final class ERXEmailValidator implements Serializable {
 	 *         otherwise.
 	 */
 	public boolean isValidEmailString(String email) {
+		/*
+		 * See javadoc for the _internal ivar
+		 */
+		if(_internal != null && _internal.isValidEmailString(email)) {
+			return true;
+		}
 		return email != null && validPattern.matcher(email).matches();
 	}
 
