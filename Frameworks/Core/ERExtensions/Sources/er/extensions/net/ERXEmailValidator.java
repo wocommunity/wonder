@@ -283,6 +283,7 @@ public final class ERXEmailValidator implements Serializable {
 		String hostName = StringUtils.substringAfterLast(email, "@");
 		// handle domain literals and quoted identifiers
 		hostName = StringUtils.trimToEmpty(hostName);
+		if(hostName.isEmpty()) { return hostName; }
 		int lastIndex = hostName.length() - 1;
 		if (hostName.lastIndexOf('>') == lastIndex) {
 			hostName = hostName.substring(0, lastIndex);
