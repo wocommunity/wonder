@@ -372,10 +372,9 @@ public interface ERXCopyable<T extends ERXCopyable> extends ERXEnterpriseObject 
 	 */
 	public static class Utility {
 
-		protected static NSMutableDictionary<String, NSArray<String>> _exposedPKAndFKAttributeNameDictionary = null;
-		protected static NSMutableDictionary<String, NSArray<EOAttribute>> _exposedPKAndFKAttributeDictionary = null;
-		protected static NSMutableDictionary<String, NSArray<EOAttribute>> _classAttributesDictionary = null;
-		protected static NSMutableDictionary<String, NSArray<EORelationship>> _classRelationshipsDictionary = null;
+		protected static volatile NSMutableDictionary<String, NSArray<EOAttribute>> _exposedPKAndFKAttributeDictionary = null;
+		protected static volatile NSMutableDictionary<String, NSArray<EOAttribute>> _classAttributesDictionary = null;
+		protected static volatile NSMutableDictionary<String, NSArray<EORelationship>> _classRelationshipsDictionary = null;
 
 		/**
 		 * Returns the entity for the current object. Defers to
@@ -575,7 +574,7 @@ public interface ERXCopyable<T extends ERXCopyable> extends ERXEnterpriseObject 
 		 * @return an array of {@link EOAttribute}s that are designated as class
 		 *         attributes in the {@code entity}
 		 */
-		public static NSArray<EORelationship> classRelationships(EOEntity entity) {
+		public static synchronized NSArray<EORelationship> classRelationships(EOEntity entity) {
 			String entityName = entity.name();
 			if (Utility._classRelationshipsDictionary == null) {
 				Utility._classRelationshipsDictionary = new NSMutableDictionary<String, NSArray<EORelationship>>();
@@ -741,7 +740,7 @@ public interface ERXCopyable<T extends ERXCopyable> extends ERXEnterpriseObject 
 		 * @return an array of attribute names from the {@code EOEntity} of
 		 *         source that are used in forming relationships.
 		 **/
-		public static <T extends ERXCopyable> NSArray<EOAttribute> exposedPKAndFKAttributes(T source) {
+		public static synchronized <T extends ERXCopyable> NSArray<EOAttribute> exposedPKAndFKAttributes(T source) {
 			EOEntity entity = Utility.entity(source);
 			String entityName = entity.name();
 			if (Utility._exposedPKAndFKAttributeDictionary == null) {
@@ -770,7 +769,7 @@ public interface ERXCopyable<T extends ERXCopyable> extends ERXEnterpriseObject 
 		 * @return an array of {@link EOAttribute}s that are designated as class
 		 *         attributes in the {@code entity}
 		 */
-		public static NSArray<EOAttribute> classAttributes(EOEntity entity) {
+		public static synchronized NSArray<EOAttribute> classAttributes(EOEntity entity) {
 			String entityName = entity.name();
 			if (Utility._classAttributesDictionary == null) {
 				Utility._classAttributesDictionary = new NSMutableDictionary<String, NSArray<EOAttribute>>();
