@@ -50,7 +50,7 @@ import er.extensions.foundation.ERXArrayUtilities;
  * 
  * &#064;Override
  * public MyEntity duplicate(NSMutableDictionary&lt;EOGlobalID, ERXCopyable&lt;?&gt;&gt; copiedObjects) {
- * 	MyEntity duplicate = ERXCopyable.Utility.modelCopy(copiedObjects, (MyEntity) this);
+ * 	MyEntity duplicate = ERXCopyable.Utility.deepCopy(copiedObjects, (MyEntity) this);
  * 	return duplicate;
  * }
  * </pre>
@@ -79,7 +79,7 @@ import er.extensions.foundation.ERXArrayUtilities;
  * 
  * &#064;Override
  * public MyGenericRecord duplicate(NSMutableDictionary&lt;EOGlobalID, ERXCopyable&lt;?&gt;&gt; copiedObjects) {
- * 	MyGenericRecord duplicate = ERXCopyable.Utility.modelCopy(copiedObjects, this);
+ * 	MyGenericRecord duplicate = ERXCopyable.Utility.deepCopy(copiedObjects, this);
  * 	return duplicate;
  * }
  * </pre>
@@ -140,9 +140,6 @@ import er.extensions.foundation.ERXArrayUtilities;
  * 
  * @param <T>
  *            the specific subclass of {@code ERXCopyable} that is being copied
- * @param <R>
- *            the specific subclass of {@link ERXCopyable} of each of the copied
- *            object's relationships
  * 
  * @author Chuck Hill
  * @author Sacha Mallais
