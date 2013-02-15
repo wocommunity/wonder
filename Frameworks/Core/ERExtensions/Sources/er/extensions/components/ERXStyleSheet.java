@@ -81,11 +81,20 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 
 		@Override
 		public WOActionResults performActionNamed( String name ) {
-			WOResponse response = ERXStyleSheet.cache( session() ).objectForKey( name );
-			String md5 = ERXStringUtilities.md5Hex( response.contentString(), null );
-			String queryMd5 = response.headerForKey( "checksum" );
-			if (ObjectUtils.equals(md5, queryMd5)) {
-				//TODO check for last-whatever time and return not modified if not changed
+			ERXExpiringCache<String, WOResponse> cache = ERXStyleSheet.cache( session() ); 
+			WOResponse response = cache.objectForKey( name );
+			if (response != null) {
+				String md5 = ERXStringUtilities.md5Hex( response.contentString(), null );
+				String queryMd5 = response.headerForKey( "checksum" );
+				if (ObjectUtils.equals(md5, queryMd5)) {
+					//TODO check for last-whatever time and return not modified if not changed
+				}
+			} else {
+				log.error("ERXStyleSheet.performActionNamed() \"response\" was unexpectedly null");
+				log.error("ERXStyleSheet.performActionNamed() \"session\" -> " + session());
+				log.error("ERXStyleSheet.performActionNamed() \"cache key\" -> " + name);
+				log.error("ERXStyleSheet.performActionNamed() \"cache\" -> " + cache);
+				log.error("ERXStyleSheet.performActionNamed() \"isStale\" -> " + cache.isStale(name));
 			}
 			return response;
 		}
