@@ -279,13 +279,10 @@ public class ERXExpiringCache<K, V> {
 				for (Enumeration<K> keyEnum = _backingDictionary.keyEnumerator(); keyEnum.hasMoreElements();) {
 					K key = keyEnum.nextElement();
 					Entry<V> entry = entryForKey(key);
-					// ak: add 10 seconds as a safety margin
-					// we need this because the entry could be requested
-					// when we just checked and noticed it is ok
-					// (AR): It's wrong to add, subtracting 10 instead.
-					// had this been adding 10 sec. then a cache of 10 or less
-					// would never work. That's how I found this bug.
-					if (entry.isStale(now - 10L * 1000, ERXExpiringCache.NO_VERSION)) {
+					// (AR): It's wrong to add 10 seconds, subtracting 10 makes objects
+					// live longer but this really isn't necessary. It appears
+					// no "fudge factor" is needed.
+					if (entry.isStale(now, ERXExpiringCache.NO_VERSION)) {
 						removeEntryForKey(entry, key);
 					}
 				}
