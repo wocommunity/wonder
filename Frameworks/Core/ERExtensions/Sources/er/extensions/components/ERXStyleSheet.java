@@ -117,13 +117,18 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 					log.warn("ERXStyleSheet.performActionNamed() \"session\" -> " + session());
 					log.warn("ERXStyleSheet.performActionNamed() \"cache key\" -> " + name);
 					log.warn("ERXStyleSheet.performActionNamed() \"cache\" -> " + cache);
-					log.warn("ERXStyleSheet.performActionNamed() \"isStale\" -> " + cache.isStale(name));
+					if (cache != null) {
+						log.warn("ERXStyleSheet.performActionNamed() \"isStale\" -> " + cache.isStale(name));
+					}
+					
 				} else {
 					log.error("ERXStyleSheet.performActionNamed() \"response\" was unexpectedly null");
 					log.error("ERXStyleSheet.performActionNamed() \"session\" -> " + session());
 					log.error("ERXStyleSheet.performActionNamed() \"cache key\" -> " + name);
 					log.error("ERXStyleSheet.performActionNamed() \"cache\" -> " + cache);
-					log.error("ERXStyleSheet.performActionNamed() \"isStale\" -> " + cache.isStale(name));
+					if (cache != null) {
+						log.error("ERXStyleSheet.performActionNamed() \"isStale\" -> " + cache.isStale(name));
+					}
 				}
 			}							
 			
