@@ -104,28 +104,28 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 			ERXExpiringCache<String, WOResponse> cache = ERXStyleSheet.cache( session() );
 			if (cache != null) {
 				response = cache.objectForKey( name );
-
-				if (response == null) {
-					NSMutableDictionary<String, WOResponse> failSafeCache = ERXStyleSheet.failSafeCache( session() );
-					if (failSafeCache != null) {
-						response = failSafeCache.objectForKey( name );
-					}
-					
-					if (response != null) {
-						log.warn("ERXStyleSheet.performActionNamed() \"response\" was unexpectedly null but failSafeCache had a valid response.");
-						log.warn("ERXStyleSheet.performActionNamed() \"session\" -> " + session());
-						log.warn("ERXStyleSheet.performActionNamed() \"cache key\" -> " + name);
-						log.warn("ERXStyleSheet.performActionNamed() \"cache\" -> " + cache);
-						log.warn("ERXStyleSheet.performActionNamed() \"isStale\" -> " + cache.isStale(name));
-					} else {
-						log.error("ERXStyleSheet.performActionNamed() \"response\" was unexpectedly null");
-						log.error("ERXStyleSheet.performActionNamed() \"session\" -> " + session());
-						log.error("ERXStyleSheet.performActionNamed() \"cache key\" -> " + name);
-						log.error("ERXStyleSheet.performActionNamed() \"cache\" -> " + cache);
-						log.error("ERXStyleSheet.performActionNamed() \"isStale\" -> " + cache.isStale(name));
-					}
-				}				
 			}
+			
+			if (response == null) {
+				NSMutableDictionary<String, WOResponse> failSafeCache = ERXStyleSheet.failSafeCache( session() );
+				if (failSafeCache != null) {
+					response = failSafeCache.objectForKey( name );
+				}
+				
+				if (response != null) {
+					log.warn("ERXStyleSheet.performActionNamed() \"response\" was unexpectedly null but failSafeCache had a valid response.");
+					log.warn("ERXStyleSheet.performActionNamed() \"session\" -> " + session());
+					log.warn("ERXStyleSheet.performActionNamed() \"cache key\" -> " + name);
+					log.warn("ERXStyleSheet.performActionNamed() \"cache\" -> " + cache);
+					log.warn("ERXStyleSheet.performActionNamed() \"isStale\" -> " + cache.isStale(name));
+				} else {
+					log.error("ERXStyleSheet.performActionNamed() \"response\" was unexpectedly null");
+					log.error("ERXStyleSheet.performActionNamed() \"session\" -> " + session());
+					log.error("ERXStyleSheet.performActionNamed() \"cache key\" -> " + name);
+					log.error("ERXStyleSheet.performActionNamed() \"cache\" -> " + cache);
+					log.error("ERXStyleSheet.performActionNamed() \"isStale\" -> " + cache.isStale(name));
+				}
+			}							
 			
 			if (response != null) {
 				String md5 = ERXStringUtilities.md5Hex( response.contentString(), null );
