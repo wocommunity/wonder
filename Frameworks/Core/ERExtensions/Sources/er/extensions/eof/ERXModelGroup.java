@@ -25,6 +25,7 @@ import com.webobjects.eoaccess.EOJoin;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eoaccess.ERXEntity;
 import com.webobjects.eoaccess.ERXModel;
 import com.webobjects.eocontrol.EOKeyValueCodingAdditions;
 import com.webobjects.foundation.NSArray;
@@ -116,6 +117,7 @@ import er.extensions.jdbc.ERXSQLHelper;
  * @property er.extensions.ERXModelGroup.prototypeModelNames defines the names of the models that are prototypes. They get put in front of the model load order. The default is <code>(erprototypes)</code>.
  * @property er.extensions.ERXModelGroup.raiseOnUnmatchingConnectionDictionaries defaut is true
  * @property er.extensions.ERXModelGroup.sqlDumpDirectory
+ * @property er.extensions.ERXModelGroup.advertiseRelationshipsOfSubentities if <code>true</code> will put relationships of subentities into the hidden relationships of the parent entity
  * @property [MODEL_NAME].DBConnectionRecycle
  * @property [MODEL_NAME].DBDebugLevel
  * @property [MODEL_NAME].DBLogPath
@@ -132,7 +134,7 @@ public class ERXModelGroup extends EOModelGroup {
 	/** logging support */
 	public static final Logger log = Logger.getLogger(ERXModelGroup.class);
 	
-	private Hashtable cache;
+	private Hashtable<EOEntity, Integer> cache;
 
 	/**
 	 * Key for languages, can be either in properties or in the model object's user info.
@@ -142,6 +144,8 @@ public class ERXModelGroup extends EOModelGroup {
 	protected static final boolean patchModelsOnLoad = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXModelGroup.patchModelsOnLoad", false);
 	
 	protected static final boolean flattenPrototypes = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXModelGroup.flattenPrototypes", true);
+	
+	protected static final boolean advertiseRelationshipsOfSubentities = ERXProperties.booleanForKey("er.extensions.ERXModelGroup.advertiseRelationshipsOfSubentities");
 	
 	protected NSArray<String> _prototypeModelNames = ERXProperties.componentsSeparatedByStringWithDefault("er.extensions.ERXModelGroup.prototypeModelNames", "," ,new NSArray<String>(ERXProperties.stringForKeyWithDefault("er.extensions.ERXModelGroup.prototypeModelName", "erprototypes")));
 
@@ -158,7 +162,7 @@ public class ERXModelGroup extends EOModelGroup {
 	 * Default public constructor
 	 */
 	public ERXModelGroup() {
-		cache = new Hashtable();
+		cache = new Hashtable<EOEntity, Integer>();
 	}
 
 	/**
@@ -270,6 +274,13 @@ public class ERXModelGroup extends EOModelGroup {
 		}
 
 		checkForMismatchedJoinTypes();
+		
+		if (advertiseRelationshipsOfSubentities) {
+			NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("advertiseRelationshipsOfSubentities", ERXConstant.NotificationClassArray), EOModelGroup.ModelAddedNotification, null);
+			for (EOModel model : models()) {
+				updateHiddenRelationshipsOfEntitiesInModel(model);
+			}
+		}
 	}
 	
 	static {
@@ -603,7 +614,7 @@ public class ERXModelGroup extends EOModelGroup {
 	 * @return either the userInfo.entityCode or 0 if no entry could be found
 	 */
 	public int entityCode(EOEntity entity) {
-		Integer cachedValue = (Integer) cache.get(entity);
+		Integer cachedValue = cache.get(entity);
 		if (cachedValue == null) {
 			NSDictionary d = entity.userInfo();
 			if (d == null)
@@ -650,6 +661,30 @@ public class ERXModelGroup extends EOModelGroup {
 	public void modelAddedHandler(NSNotification n) {
 		EOModel model = (EOModel) n.object();
 		resetConnectionDictionaryInModel(model);
+	}
+
+	/**
+	 * Called when a model is loaded. This will call
+	 * <code>updateHiddenRelationshipsForInheritance</code> on all
+	 * entities within the added model.
+	 * 
+	 * @param n
+	 *            notification posted when a model is loaded. The object is the model.
+	 * @see ERXEntity#updateHiddenRelationshipsForInheritance()
+	 */
+	public void advertiseRelationshipsOfSubentities(NSNotification n) {
+		EOModel model = (EOModel) n.object();
+		if (advertiseRelationshipsOfSubentities) {
+			updateHiddenRelationshipsOfEntitiesInModel(model);
+		}
+	}
+
+	private void updateHiddenRelationshipsOfEntitiesInModel(EOModel model) {
+		for (EOEntity entity : model.entities()) {
+			if (entity instanceof ERXEntity) {
+				((ERXEntity) entity).updateHiddenRelationshipsForInheritance();
+			}
+		}
 	}
 
 	private static String getProperty(String key, String alternateKey, String defaultValue) {

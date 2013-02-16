@@ -599,6 +599,10 @@ dbMinConnectionsGLOBAL=1
 # er.extensions.ERXModelGroup.modelClassName = com.webobjects.eoaccess.ERXModel
 # er.extensions.ERXModel.useExtendedPrototypes = true
 
+## Enable this to be able to qualify an entity that has subentities when the qualifier includes
+## relationships that are not defined on the root entity. WO does this already for attributes.
+# er.extensions.ERXModelGroup.advertiseRelationshipsOfSubentities=true
+
 #########################################################################
 # ERXMigrator 
 #########################################################################
