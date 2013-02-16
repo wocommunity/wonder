@@ -11,6 +11,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXResourceManager;
@@ -74,6 +75,24 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 		return cache;
 	}
 
+	/**
+	 * (AR) The "failSafeCache" is to help alleviate a race condition. There are times when the direct action is called and 
+	 * it looks in the expiringCache to find nothing and then returns a null response. This is an extra effort to at least
+	 * return something intelligent back.
+	 * 
+	 * @param session
+	 * @return
+	 */
+	protected static NSMutableDictionary<String, WOResponse> failSafeCache( WOSession session ) {
+		String FAIL_SAFE_CACHE_KEY = "ERXStylesheet.failSafeCache";
+		NSMutableDictionary<String, WOResponse> cache = (NSMutableDictionary<String, WOResponse>)session.objectForKey( FAIL_SAFE_CACHE_KEY );
+		if( cache == null ) {
+			cache = new NSMutableDictionary<String, WOResponse>();
+			session.setObjectForKey( cache, FAIL_SAFE_CACHE_KEY );
+		}
+		return cache;
+	}
+	
 	public static class Sheet extends WODirectAction {
 		public Sheet( WORequest worequest ) {
 			super( worequest );
@@ -81,21 +100,40 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 
 		@Override
 		public WOActionResults performActionNamed( String name ) {
-			ERXExpiringCache<String, WOResponse> cache = ERXStyleSheet.cache( session() ); 
-			WOResponse response = cache.objectForKey( name );
+			WOResponse response = null;
+			ERXExpiringCache<String, WOResponse> cache = ERXStyleSheet.cache( session() );
+			if (cache != null) {
+				response = cache.objectForKey( name );
+
+				if (response == null) {
+					NSMutableDictionary<String, WOResponse> failSafeCache = ERXStyleSheet.failSafeCache( session() );
+					if (failSafeCache != null) {
+						response = failSafeCache.objectForKey( name );
+					}
+					
+					if (response != null) {
+						log.warn("ERXStyleSheet.performActionNamed() \"response\" was unexpectedly null but failSafeCache had a valid response.");
+						log.warn("ERXStyleSheet.performActionNamed() \"session\" -> " + session());
+						log.warn("ERXStyleSheet.performActionNamed() \"cache key\" -> " + name);
+						log.warn("ERXStyleSheet.performActionNamed() \"cache\" -> " + cache);
+						log.warn("ERXStyleSheet.performActionNamed() \"isStale\" -> " + cache.isStale(name));
+					} else {
+						log.error("ERXStyleSheet.performActionNamed() \"response\" was unexpectedly null");
+						log.error("ERXStyleSheet.performActionNamed() \"session\" -> " + session());
+						log.error("ERXStyleSheet.performActionNamed() \"cache key\" -> " + name);
+						log.error("ERXStyleSheet.performActionNamed() \"cache\" -> " + cache);
+						log.error("ERXStyleSheet.performActionNamed() \"isStale\" -> " + cache.isStale(name));
+					}
+				}				
+			}
+			
 			if (response != null) {
 				String md5 = ERXStringUtilities.md5Hex( response.contentString(), null );
 				String queryMd5 = response.headerForKey( "checksum" );
 				if (ObjectUtils.equals(md5, queryMd5)) {
 					//TODO check for last-whatever time and return not modified if not changed
 				}
-			} else {
-				log.error("ERXStyleSheet.performActionNamed() \"response\" was unexpectedly null");
-				log.error("ERXStyleSheet.performActionNamed() \"session\" -> " + session());
-				log.error("ERXStyleSheet.performActionNamed() \"cache key\" -> " + name);
-				log.error("ERXStyleSheet.performActionNamed() \"cache\" -> " + cache);
-				log.error("ERXStyleSheet.performActionNamed() \"isStale\" -> " + cache.isStale(name));
-			}
+			} 
 			return response;
 		}
 	}
@@ -214,6 +252,7 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 				wocontext._setResponse( originalResponse );
 				cachedResponse.setHeader( "text/css", "content-type" );
 				cache.setObjectForKey( cachedResponse, key );
+				failSafeCache( session() ).setObjectForKey( cachedResponse, key );
 				md5 = ERXStringUtilities.md5Hex( cachedResponse.contentString(), null );
 				cachedResponse.setHeader( md5, "checksum" );
 			}
