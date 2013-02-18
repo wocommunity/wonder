@@ -57,7 +57,7 @@ public class AjaxModalDialogOpener extends AjaxComponent {
 	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
 	 */
 	private static final long serialVersionUID = 1L;
-
+	
 	/**
 	 * Call this, from the action method only, to prevent the dialog from opening.  If there is an onFailure 
 	 * callback, it will get executed.  This is also called internally if <code>enabled</code> is bound and 

@@ -47,7 +47,7 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 	}
 
 	public static class MySQLExpression extends JDBCExpression {
-		
+
 		// Lazy initialized constants
 		private static class CONFIG {
 			// Turning on identifier quoting allows the use of reserved words for identifier (table, field, etc.) names
@@ -104,7 +104,7 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 		 * Overridden because MySQL does not use the default quote character in
 		 * EOSQLExpression.externalNameQuoteCharacter() which is an empty
 		 * string.
-		 * 
+		 *
 		 * Note that quoting is disabled by default and can be enabled by setting property <code>com.webobjects.jdbcadaptor.MySQLExpression.enableIdentifierQuoting</code> to true.
 		 */
 		@Override
@@ -194,7 +194,7 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 			if (joinClause != null && joinClause.length() > 0) {
 				buffer.append(joinClause);
 			} else {
-				buffer.append(tableList);
+			buffer.append(tableList);
 			}
 
 			if (whereClause != null && whereClause.length() > 0) {
@@ -220,7 +220,7 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 
 			return buffer.toString();
 		}
-		
+
 		/**
 		 * Overriden to contruct a valid SQL92 JOIN clause as opposed to the
 		 * Oracle-like SQL the superclass produces.

@@ -172,7 +172,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
 		public static final String firstResponderKey = "firstResponderKey";
         
     }
-    
+
     /** logging support */
     public final static Logger log = Logger.getLogger(ERD2WPage.class);
 
@@ -389,7 +389,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     protected NSMutableArray<String> keyPathsWithValidationExceptions = new NSMutableArray<String>();
 
     protected String errorMessage = "";
-    
+
     protected ValidationDelegate validationDelegate;
     
     protected boolean validationDelegateInited;
@@ -535,7 +535,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
             parent().validationFailedWithException(e, value, keyPath);
         }
     }
-    
+
     public ValidationDelegate validationDelegate() {
     	if(!validationDelegateInited && _localContext != null && shouldCollectValidationExceptions()) {
     		// initialize validation delegate

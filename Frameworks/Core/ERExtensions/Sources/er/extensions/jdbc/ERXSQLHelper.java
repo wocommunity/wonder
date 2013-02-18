@@ -2289,7 +2289,7 @@ public class ERXSQLHelper {
 		protected String sqlForGetNextValFromSequencedNamed(String sequenceName) {
 			return "select NEXTVAL('" + sequenceName + "') as key"; 
 		}
-
+		
 		@Override
 		public String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
 			return sql + " LIMIT " + (end - start) + " OFFSET " + start;

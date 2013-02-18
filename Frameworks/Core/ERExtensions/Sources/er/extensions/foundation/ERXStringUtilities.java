@@ -1562,24 +1562,24 @@ public class ERXStringUtilities {
     }
 
     /**
-     * Returns a string from the input stream using the default
-     * encoding.
-     * @param in stream to read
-     * @return string representation of the stream.
+         * Returns a string from the input stream using the default
+          * encoding.
+          * @param in stream to read
+          * @return string representation of the stream.
      * @throws IOException if things go wrong
-     */
+      */
      public static String stringFromInputStream(InputStream in) throws IOException {
          return new String(ERXFileUtilities.bytesFromInputStream(in));
      }
 
      /**
       * Returns a string from the input stream using the default
-      * encoding.
-      * @param in stream to read
-      * @param encoding to be used, null will use the default
-      * @return string representation of the stream.
+       * encoding.
+       * @param in stream to read
+       * @param encoding to be used, null will use the default
+       * @return string representation of the stream.
       * @throws IOException if things go wrong
-      */
+   */
      public static String stringFromInputStream(InputStream in, String encoding) throws IOException {
          return new String(ERXFileUtilities.bytesFromInputStream(in), encoding);
      }
@@ -2337,9 +2337,9 @@ public class ERXStringUtilities {
 	 * @return the string without HTML characters in it
 	 */
 	public static String stripHtml(String str, boolean convertChars) {
-		String stripped = str;
-		if (stripped != null) {
-			stripped = stripped.replaceAll("<[^>]*>", " ");
+ 		String stripped = str;
+ 		if (stripped != null) {
+ 			stripped = stripped.replaceAll("<[^>]*>", " ");
 			if(convertChars) {
 				stripped = stripped.replaceAll("\\s+", " ");
 				stripped = stripped.replaceAll("&#8217;", "'");
@@ -2353,7 +2353,7 @@ public class ERXStringUtilities {
 				stripped = stripped.replaceAll("&#174;", "(C)");
 				stripped = stripped.replaceAll("&#174;", "(R)");
 				stripped = stripped.replaceAll("&#8482;", "(TM)");
-				stripped = stripped.trim();
+			stripped = stripped.trim();
 			}
 		}
 		return stripped;
@@ -2702,7 +2702,7 @@ public class ERXStringUtilities {
 		}
 		return sum % 10 == 0;
 	}
-	
+
 	/**
 	* Returns a string trimmed about at the max lenght you define without truncating the last word and adding "..." (if necessary)
 	* 

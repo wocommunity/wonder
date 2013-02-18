@@ -39,7 +39,7 @@ public class ERXPrimaryKeyListQualifier extends ERXInQualifier {
 	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
 	 */
 	private static final long serialVersionUID = 1L;
-
+    
     /** logging support */
     protected static final Logger log = Logger.getLogger(ERXPrimaryKeyListQualifier.class);
 

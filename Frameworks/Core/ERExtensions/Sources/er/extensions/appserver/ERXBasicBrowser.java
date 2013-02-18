@@ -71,7 +71,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * <p><strong>IE WIndows 6.02</strong><br>
  * user-agent = (Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0));
  * </span>
- * 
+ *  
  * <span class="ja">
  * <code>ERXBasicBrowser</code> はブラウザ・オブジェクトを定義する {@link ERXBrowser} の明確なサブクラスです。
  * ブラウザ・オブジェクトはカレント・リクエスト・レスポンス・ループの Webブラウザを表します。

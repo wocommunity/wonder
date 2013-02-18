@@ -10563,7 +10563,7 @@ var AjaxOnDemand = {
         if (typeof link!="undefined") {
             document.getElementsByTagName("head")[0].appendChild(link);
         }
-    },
+	},
 	
 	loadedCSS: function(request) {
 		var inlineStyle = new Element("style", {"type": "text/css"});

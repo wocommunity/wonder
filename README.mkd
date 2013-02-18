@@ -60,3 +60,8 @@ Binaries
 --------------------
 
 Binaries can be downloaded from the [community build server](http://jenkins.wocommunity.org/job/Wonder/)
+
+Changelog
+--------------------
+
+You can find a [changelog](https://github.com/projectwonder/wonder/wiki/Changelog) in the Wiki section on Github.
