@@ -25,7 +25,7 @@ public class ERXTestCase extends TestCase {
 	}
 
 	public static String adaptorName() {
-		return com.webobjects.eoaccess.EOModelGroup.defaultGroup().modelNamed("ERXTest").adaptorName();
+		return com.webobjects.eoaccess.EOModelGroup.defaultGroup().modelNamed(ERXTestSuite.ERXTEST_MODEL).adaptorName();
 	}
 
 	public static void assertEquals(Collection<?> arg0, Collection<?> arg1) {
