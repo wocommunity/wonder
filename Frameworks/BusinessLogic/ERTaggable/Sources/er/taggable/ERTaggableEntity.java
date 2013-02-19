@@ -691,31 +691,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
    */
   @SuppressWarnings("unchecked")
   public NSArray<T> fetchTaggedWith(EOEditingContext editingContext, ERTag.Inclusion inclusion, int limit, Object tags, EOQualifier additionalQualifier) {
-    NSArray<String> tagNames = splitTagNames(tags);
-    if (tagNames.count() == 0) {
-      throw new IllegalArgumentException("No tags were passed in.");
-    }
-
-    ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(_entity.model());
-
-    EOQualifier qualifier = new ERXKey<ERTag>(_tagsRelationship.name()).append(ERTag.NAME).in(tagNames);
-    if (additionalQualifier != null) {
-      qualifier = ERXQ.and(qualifier, additionalQualifier);
-    }
-    NSArray<EOSortOrdering> sortOrderings = null;
-    EOFetchSpecification fetchSpec = new EOFetchSpecification(_entity.name(), qualifier, sortOrderings);
-
-    EOSQLExpression sqlExpression = sqlHelper.sqlExpressionForFetchSpecification(editingContext, fetchSpec, 0, limit);
-    sqlHelper.addGroupByClauseToExpression(editingContext, fetchSpec, sqlExpression);
-    if (inclusion == ERTag.Inclusion.ALL) {
-      sqlHelper.addHavingCountClauseToExpression(EOQualifier.QualifierOperatorEqual, tagNames.count(), sqlExpression);
-    }
-
-    NSArray<NSDictionary> rawRows = ERXEOAccessUtilities.rawRowsForSQLExpression(editingContext, _entity.model(), sqlExpression, sqlHelper.attributesToFetchForEntity(fetchSpec, _entity));
-    NSArray<T> objs;
-    objs = ERXEOControlUtilities.faultsForRawRowsFromEntity(editingContext, rawRows, _entity.name());
-    objs = ERXEOControlUtilities.objectsForFaultWithSortOrderings(editingContext, objs, fetchSpec.sortOrderings());
-    return objs;
+	  return this.fetchTaggedWith(editingContext, inclusion, limit, tags, additionalQualifier, null);
   }
   
   /**
