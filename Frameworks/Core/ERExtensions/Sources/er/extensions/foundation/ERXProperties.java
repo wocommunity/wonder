@@ -98,9 +98,11 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 
     /** WebObjects version number as string */
     private static String _webObjectsVersion;
-    
     /** WebObjects version number as double */ 
     private static double _webObjectsVersionDouble;
+
+    /** Wonder version number as string */
+    private static String _wonderVersion;
 
     /** 
     * <span class="en">Internal cache of type converted values to avoid reconverting attributes that are asked for frequently</span> 
@@ -168,11 +170,9 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 
     /**
      * <span class="en">
-     * Puts handy properties such as <code>com.webobjects.version</code> 
-     * into the system properties. This method is called when 
-     * the framework is initialized  
-     * (when WOApplication.ApplicationWillFinishLaunchingNotification 
-     * is posted.)
+     * Puts handy properties such as <code>com.webobjects.version</code> and <code>er.extensions.version</code> 
+     * into the system properties. This method is called when the framework is initialized  
+     * (when WOApplication.ApplicationWillFinishLaunchingNotification is posted.)
      * </span>
      * 
      * <span class="ja">
@@ -184,6 +184,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      */
     public static void populateSystemProperties() {
         System.setProperty("com.webobjects.version", webObjectsVersion());
+        System.setProperty("er.extensions.version", wonderVersion());
     }
 
     /** 
@@ -408,6 +409,26 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         }
         return _webObjectsVersionDouble;
     }
+
+    /** 
+     * <span class="en">
+     * Returns the Wonder version as string.<br/><br/>
+     * This method was introduced in version "6.0.1" of Wonder so Strings returned with values of
+     * "6.0.1" or 'later' ("6.0.2", "6.1.0", etc) will be explicitly correct. If this method cannot 
+     * determine the Wonder version it will return "6.0.0".
+     * 
+     * @return Wonder version number as string
+     * </span>
+     */ 
+    public static String wonderVersion() {
+        if (_wonderVersion == null) {
+            _wonderVersion = ERXProperties.versionStringForFrameworkNamed("ERExtensions");
+            if (_wonderVersion.equals(""))
+                _wonderVersion = "6.0.0";
+        }
+
+        return _wonderVersion;
+      }
 
     /**
      * <span class="en">
