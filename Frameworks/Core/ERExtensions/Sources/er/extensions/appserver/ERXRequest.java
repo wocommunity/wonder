@@ -283,7 +283,7 @@ public class ERXRequest extends WORequest {
         	stringbuffer.append("http://");
         }
    		stringbuffer.append(serverName);
-   		if(portStr != null && ((secure && !"443".equals(portStr)) || (!secure && !"80".equals(portStr)))) {
+   		if(portStr != null && WOApplication.application().isDirectConnectEnabled() && ((secure && !"443".equals(portStr)) || (!secure && !"80".equals(portStr)))) {
    			stringbuffer.append(':');
    			stringbuffer.append(portStr);
         }
