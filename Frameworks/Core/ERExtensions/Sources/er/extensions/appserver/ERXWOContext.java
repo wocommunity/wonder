@@ -35,6 +35,8 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	private static Observer observer;
 	private boolean _generateCompleteURLs;
 	private boolean _generateCompleteResourceURLs;
+	
+	private static final boolean IS_DEV = ERXApplication.isDevelopmentModeSafe();
 
 	public static final String CONTEXT_KEY = "wocontext";
 	public static final String CONTEXT_DICTIONARY_KEY = "ERXWOContext.dict";
@@ -686,4 +688,14 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 		return url;
 	}
 	
+	@Override
+	protected String relativeURLWithRequestHandlerKey(String requestHandlerKey, String requestHandlerPath, String queryString) {
+		String result = super.relativeURLWithRequestHandlerKey(requestHandlerKey, requestHandlerPath, queryString);
+		if(IS_DEV && !WOApplication.application().isDirectConnectEnabled()) {
+			String extension = WOApplication.application().applicationExtension();
+			Number port = WOApplication.application().port();
+			result = result.replace(extension, extension + "/-" + port);
+		}
+		return result;
+	}
 }
