@@ -78,6 +78,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSPathUtilities;
 import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSRange;
@@ -2843,4 +2844,47 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		NSNotificationCenter.defaultCenter().postNotification(ApplicationWillTerminateNotification, this);
 		super.terminate();
 	}
+	
+	/**
+	 * Overriden and unchenged, in needed because it's private
+	 */
+    private WORequestHandler _staticResourceRequestHandler() {
+        return requestHandlerForKey("_wr_");
+    }
+    
+	/**
+	 * Fixes a bug that would prevent properly loading of static resurces that have attributes at the end of the path
+	 */ 
+    @Override
+    public WORequestHandler handlerForRequest(WORequest aRequest)
+    {
+    	String aRequestHandlerKey = aRequest.requestHandlerKey();
+    	WORequestHandler aRequestHandler = requestHandlerForKey(aRequestHandlerKey);
+
+    	if (aRequestHandler == null) {
+    		WORequestHandler staticResourceRequestHandler = _staticResourceRequestHandler();
+    		if (staticResourceRequestHandler != null) {
+    			String uri = aRequest.uri();
+    			uri = uri.indexOf("?") != -1 ? uri.substring(0, uri.indexOf("?")) : uri; //actual fix
+    			String extension = NSPathUtilities.pathExtension(uri);
+
+    			if ((extension != null) && (extension.length() > 1)) {
+    				String fileType = extension.toLowerCase();
+    				WOResourceManager resourceManager = resourceManager();
+    				NSDictionary contentTypesDictionary = resourceManager._contentTypesDictionary();
+
+    				if (contentTypesDictionary.objectForKey(fileType) != null) {
+    					aRequestHandler = staticResourceRequestHandler;
+    				}
+    			}
+    		}
+    	}
+
+    	if (aRequestHandler == null) {
+    		aRequestHandler = defaultRequestHandler();
+    	}
+
+    	return aRequestHandler;
+    }
+    
 }
