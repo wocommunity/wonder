@@ -341,6 +341,7 @@ public class ERXResponseRewriter {
 	 * @return whether or not the content was inserted
 	 */
 	public static boolean insertInResponseBeforeTag(WOResponse response, WOContext context, String content, String tag, TagMissingBehavior tagMissingBehavior) {
+		boolean insertCssBeforeScript = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXResponseRewriter.insertCssBeforeScript", false);
 		boolean inserted = false;
 		String responseContent = response.contentString();
 		int tagIndex;
@@ -355,10 +356,13 @@ public class ERXResponseRewriter {
 		}
 		if (tagIndex >= 0) {
 			int insertIndex = tagIndex;
-			if (content.toLowerCase().startsWith("<link") || content.toLowerCase().startsWith("<style")) {
-				int scriptIndex = responseContent.toLowerCase().indexOf("<script");
-				if (scriptIndex > 0 && scriptIndex < insertIndex) {
-					insertIndex = scriptIndex;
+			if(insertCssBeforeScript)
+			{
+				if (content.toLowerCase().startsWith("<link") || content.toLowerCase().startsWith("<style")) {
+					int scriptIndex = responseContent.toLowerCase().indexOf("<script");
+					if (scriptIndex > 0 && scriptIndex < insertIndex) {
+						insertIndex = scriptIndex;
+					}
 				}
 			}
 			response.setContent(ERXStringUtilities.insertString(responseContent, content, insertIndex));
