@@ -67,9 +67,10 @@ WOShouldUseSpawn=true
 
 
 # The TCP port on which the built-in SSH/SCP server will run on
-er.wotaskd.sshPort = 6022
+er.wotaskd.sshd.port=6022
 
-
+# Enable or disable the built-in SSH/SCP server
+er.wotaskd.sshd.enabled=true
 
 log4j.rootCategory=INFO, A1
 

@@ -241,19 +241,23 @@ public class Application extends ERXApplication  {
 
         ERXRouteRequestHandler.register(restHandler);
         
-        SshServer sshd = SshServer.setUpDefaultServer();
-        sshd.setPort(ERXProperties.intForKeyWithDefault("er.wotaskd.sshPort", 6022));
-        sshd.setPasswordAuthenticator(new SshPasswordAuthenticator());
-        sshd.setKeyPairProvider(new SimpleGeneratorHostKeyProvider("hostkey.ser"));
-        sshd.setCommandFactory(new ScpCommandFactory());
-        sshd.setSubsystemFactories(Arrays.<NamedFactory<Command>>asList(new SftpSubsystem.Factory()));
-        sshd.setShellFactory(new ProcessShellFactory(new String[] { "/bin/bash", "-i", "-l" }));
-        try {
-          sshd.start();
-        }
-        catch (IOException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
+        boolean isSSHServerEnabled = ERXProperties.booleanForKeyWithDefault("er.wotaskd.ssh.enabled", false);
+        
+        if (isSSHServerEnabled) {
+          SshServer sshd = SshServer.setUpDefaultServer();
+          sshd.setPort(ERXProperties.intForKeyWithDefault("er.wotaskd.ssh.port", 6022));
+          sshd.setPasswordAuthenticator(new SshPasswordAuthenticator());
+          sshd.setKeyPairProvider(new SimpleGeneratorHostKeyProvider("hostkey.ser"));
+          sshd.setCommandFactory(new ScpCommandFactory());
+          sshd.setSubsystemFactories(Arrays.<NamedFactory<Command>>asList(new SftpSubsystem.Factory()));
+          sshd.setShellFactory(new ProcessShellFactory(new String[] { "/bin/bash", "-i", "-l" }));
+          try {
+            sshd.start();
+          }
+          catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+          }
         }
     }
     
