@@ -692,9 +692,11 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	protected String relativeURLWithRequestHandlerKey(String requestHandlerKey, String requestHandlerPath, String queryString) {
 		String result = super.relativeURLWithRequestHandlerKey(requestHandlerKey, requestHandlerPath, queryString);
 		if(IS_DEV && !WOApplication.application().isDirectConnectEnabled()) {
-			String extension = WOApplication.application().applicationExtension();
-			Number port = WOApplication.application().port();
-			result = result.replace(extension, extension + "/-" + port);
+			String extension = "." + WOApplication.application().applicationExtension();
+			String replace = extension + "/-" + WOApplication.application().port();
+			if(!result.contains(replace) && result.contains(extension)) {
+				result = result.replace(extension, replace);
+			}
 		}
 		return result;
 	}
