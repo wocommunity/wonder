@@ -38,6 +38,7 @@ mkdir -p %{buildroot}%{_libdir}/httpd/modules/
 mkdir -p %{buildroot}/etc/httpd/conf.d/
 %{__cp} $RPM_BUILD_DIR/wonder-integration/Utilities/Adaptors/Apache2.4/mod_WebObjects.so %{buildroot}%{_libdir}/httpd/modules/
 %{__cp} $RPM_BUILD_DIR/wonder-integration/Utilities/Adaptors/Apache2.4/apache.conf %{buildroot}/etc/httpd/conf.d/webobjects.conf
+sed -i 's"^ScriptAlias /cgi-bin/"## ScriptAlias /cgi-bin/"' /etc/httpd/conf/httpd.conf
 
 %clean
 rm -rf %{buildroot}
