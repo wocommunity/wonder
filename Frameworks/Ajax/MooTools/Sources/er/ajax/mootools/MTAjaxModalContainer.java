@@ -36,6 +36,7 @@ public class MTAjaxModalContainer extends AjaxDynamicElement {
         super(name, associations, children);
     }
 
+    @Override
     public void appendToResponse(WOResponse response, WOContext context) {
 
 		WOComponent component = context.component();
@@ -224,6 +225,7 @@ public class MTAjaxModalContainer extends AjaxDynamicElement {
     	super.appendToResponse(response, context);
     }
 	
+	@Override
 	protected String _containerID(WOContext context) {
 		String id = (String) valueForBinding("id", context.component());
 		return id;
@@ -286,7 +288,7 @@ public class MTAjaxModalContainer extends AjaxDynamicElement {
 		WOComponent component = context.component();
 		
 		WOResponse response = null;
-		WOAssociation action = (WOAssociation)associations().objectForKey("action");
+		WOAssociation action = associations().objectForKey("action");
 		if(action != null) {
 			action.valueInComponent(component);
 		}

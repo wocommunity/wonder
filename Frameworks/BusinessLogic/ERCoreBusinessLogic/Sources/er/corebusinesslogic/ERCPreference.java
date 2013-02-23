@@ -28,11 +28,13 @@ public class ERCPreference extends _ERCPreference {
         super();
     }
 
+    @Override
     public void init(EOEditingContext ec) {
         super.init(ec);
     }
     
     
+    @Override
     public String userPresentableDescription() {
         return key() + ": " + decodedValue();
     }

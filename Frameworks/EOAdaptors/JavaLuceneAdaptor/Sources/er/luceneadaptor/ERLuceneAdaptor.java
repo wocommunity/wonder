@@ -48,7 +48,7 @@ public class ERLuceneAdaptor extends EOAdaptor {
 	@Override
 	public void setConnectionDictionary(NSDictionary dictionary) {
 		if (dictionary == null) {
-			super.setConnectionDictionary((NSDictionary<String, Object>) NSDictionary.EmptyDictionary);
+			super.setConnectionDictionary(NSDictionary.EmptyDictionary);
 		} else {
 			super.setConnectionDictionary(dictionary);
 		}
@@ -135,6 +135,7 @@ public class ERLuceneAdaptor extends EOAdaptor {
 	}
 
 	// MS: This has to return null to prevent a stack overflow in 5.4.
+	@Override
 	public EOSynchronizationFactory schemaSynchronizationFactory() {
 		return null;
 	}

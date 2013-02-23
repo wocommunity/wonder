@@ -16,8 +16,6 @@ import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
 
 import er.extensions.foundation.ERXProperties;
-import er.quartzscheduler.foundation.ERQSJob;
-import er.quartzscheduler.foundation.ERQSJobListener;
 
 public class ERQSJobListenerTest 
 {

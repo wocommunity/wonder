@@ -1,6 +1,8 @@
 package er.reporting;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
 
 public class WRNestedList extends WOComponent  {
 
@@ -14,6 +16,7 @@ public class WRNestedList extends WOComponent  {
      * OFF synchronization.
      */
 
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }
@@ -75,10 +78,11 @@ public class WRNestedList extends WOComponent  {
     }
 
     public boolean notSublistConditional() {
-        return !this.hasBinding("showParentContent");
+        return !hasBinding("showParentContent");
     }
 
 
+    @Override
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         //Abort call to super to save all this processing time
     }

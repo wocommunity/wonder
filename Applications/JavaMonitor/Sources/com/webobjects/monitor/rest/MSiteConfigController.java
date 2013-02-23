@@ -15,6 +15,7 @@ public class MSiteConfigController extends JavaMonitorController {
 		super(request);
 	}
 	
+	@Override
 	public WOActionResults updateAction() throws Throwable {
 		checkPassword();
 		if (siteConfig().hostArray().count() == 0) {

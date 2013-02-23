@@ -1,8 +1,9 @@
 package er.grouping;
 
-import java.util.*;
+import java.util.Enumeration;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
 
 /* DRValueGroup.h created by Administrator on Sun 01-Nov-1998 */
 //#import <WebObjects/WebObjects.h>
@@ -40,11 +41,11 @@ public class DRValueGroup extends DRValue  {
         _flatValues = new NSMutableArray();
         _record = rec;
         _attribute = att;
-        this.buildSubValues();
+        buildSubValues();
     }
 
     private void buildSubValues() {
-        NSArray attrs = this.attribute().attributes();
+        NSArray attrs = attribute().attributes();
         Enumeration anEnum = attrs.objectEnumerator();
 
         while (anEnum.hasMoreElements()) {
@@ -52,11 +53,11 @@ public class DRValueGroup extends DRValue  {
             DRValue val;
 
             if (att.isGroup()) {
-                val = DRValueGroup.withRecordAttribute(this.record(), att);
+                val = DRValueGroup.withRecordAttribute(record(), att);
                 NSArray vals = val.flatValues();
                 _flatValues.addObjectsFromArray(vals);
             } else {
-                val = DRValue.withRecordAttribute(this.record(), att);
+                val = DRValue.withRecordAttribute(record(), att);
                 _flatValues.addObject(val);
             }
 
@@ -65,20 +66,23 @@ public class DRValueGroup extends DRValue  {
             _values.addObject(val);
         }
 
-        if (this.attribute().shouldTotal()) {
-            _flatValues.addObject(DRValue.withTotalAttribute(_total, this.attribute()));
+        if (attribute().shouldTotal()) {
+            _flatValues.addObject(DRValue.withTotalAttribute(_total, attribute()));
         }
 
     }
 
+    @Override
     public NSArray flatValues() {
         return _flatValues;
     }
 
+    @Override
     public boolean isGroup() {
         return _isGroup;
     }
 
+    @Override
     public double total() {
         return _total;
     }

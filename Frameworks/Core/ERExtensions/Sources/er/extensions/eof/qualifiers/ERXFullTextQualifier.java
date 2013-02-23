@@ -174,9 +174,10 @@ public class ERXFullTextQualifier extends EOQualifier implements Cloneable, EOQu
 		while (keyPathTokenizer.hasMoreElements()) {
 			String key = keyPathTokenizer.nextToken();
 			if (keyPathTokenizer.hasMoreElements()) {
-				classDescription = classDescription.classDescriptionForDestinationKey(key);
+				EOClassDescription sourceClassDescription = classDescription;
+				classDescription = sourceClassDescription.classDescriptionForDestinationKey(key);
 				if (classDescription == null) {
-					throw new IllegalStateException("Invalid key '" + key + "' for entity '" + classDescription.entityName() + "'.");
+					throw new IllegalStateException("Invalid key '" + key + "' for entity '" + sourceClassDescription.entityName() + "'.");
 				}
 			}
 			else {

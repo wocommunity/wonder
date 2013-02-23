@@ -1,11 +1,11 @@
 <wo:if condition="$hasAutomaticDivider">
   <wo:if condition="$autoDivider">
-    <li data-role="list-divider"><wo:str value="$firstLetter" /></li>
+    <wo:genericContainer elementName="li" data-role="list-divider" id="$javaScriptElementID" ><wo:str value="$firstLetter" /></wo:genericContainer>
   </wo:if>
 </wo:if>
-<wo:genericContainer elementName="li" otherTagString="$html">
+<wo:genericContainer elementName="li" otherTagString="$html" id="$javaScriptElementID" >
   <wo:if condition="$hasAction">
-    <wo:ERXHyperlinkResource action="$^action">
+    <wo:ERXHyperlinkResource action="$^action" data-rel="$dataRel" queryDictionary = "$^queryDictionary">
       <wo:content />
       <wo:if condition="$hasSideText">
         <p class="ui-li-aside"><wo:str value="$sideText" escapeHTML="false" /></p>
@@ -14,7 +14,7 @@
   </wo:if>
   <wo:else>
     <wo:if condition="$hasLinkResource">
-      <wo:ERXHyperlinkResource linkResource="$^linkResource">
+      <wo:ERXHyperlinkResource linkResource="$^linkResource" data-rel="$dataRel" queryDictionary = "$^queryDictionary">
         <wo:content />
         <wo:if condition="$hasSideText">
           <p class="ui-li-aside"><wo:str value="$sideText" escapeHTML="false" /></p>

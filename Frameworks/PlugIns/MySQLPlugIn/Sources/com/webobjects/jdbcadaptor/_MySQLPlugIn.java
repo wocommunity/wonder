@@ -492,6 +492,8 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 			/**
 			 * Property that makes this class "sortable" by left table ID. Needed to correctly
 			 * assemble a join clause.
+			 * 
+			 * @return sort key
 			 */
 			public int sortKey() {
 				return _leftTableID;

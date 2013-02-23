@@ -59,4 +59,11 @@ public class ERMDHasChangesMarker extends ERDHasChangesMarker {
 		_indicatorFileName = name;
 	}
     
+	@Override
+	public void reset() {
+		_indicatorFileName = null;
+		_indicatorFrameworkName = null;
+		super.reset();
+	}
+
 }

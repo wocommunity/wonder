@@ -52,6 +52,7 @@ public class ERXNavigationMenu extends ERXStatelessComponent {
         super(context);
     }
 
+    @Override
     public void reset() {
         _level1Items=null;
         _level2Items=null;
@@ -80,7 +81,7 @@ public class ERXNavigationMenu extends ERXStatelessComponent {
                     if (navigationState != null && navigationState.count() > 0) {
                         navigationState().setState(navigationState);                    
                     } else {
-                        o = (NSArray)navigationContext().valueForKey("additionalNavigationState");
+                        o = navigationContext().valueForKey("additionalNavigationState");
                         o = (o == null ? NSArray.EmptyArray : o);
                         NSArray additionalNavigationState = (o instanceof NSArray ? (NSArray)o : NSArray.componentsSeparatedByString(o.toString(), "."));
                         if (additionalNavigationState != null && additionalNavigationState.count() > 0) {
@@ -132,16 +133,19 @@ public class ERXNavigationMenu extends ERXStatelessComponent {
         return children;
     }
 
+    @Override
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         setUpMenu();
         super.takeValuesFromRequest(r,c);
     }
 
+    @Override
     public void appendToResponse(WOResponse r, WOContext c) {
         setUpMenu();
         super.appendToResponse(r,c);
     }
 
+    @Override
     public WOActionResults invokeAction(WORequest r, WOContext c) {
         WOActionResults results=null;
         setUpMenu();

@@ -37,7 +37,7 @@ public class FilesContainerInfo
     FilesContainerInfo(String name, int containerCount, long totalSize)
     {
     	this.name = name;
-        this.objectCount = containerCount;
+        objectCount = containerCount;
         this.totalSize = totalSize;
     }
 

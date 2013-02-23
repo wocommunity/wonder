@@ -10,7 +10,7 @@ import com.webobjects.eocontrol.EOKeyValueUnarchiver;
  * Note: As they mirror the default configurations, the assignment class is separate (and a subclass).
  * This means that the default configurations can be overridden in the rules more gracefully.
  * 
- * @see ERDDefaultConfigurationNameAssignment
+ * @see er.directtoweb.assignments.defaults.ERDDefaultConfigurationNameAssignment
  * 
  * @author mendis
  */

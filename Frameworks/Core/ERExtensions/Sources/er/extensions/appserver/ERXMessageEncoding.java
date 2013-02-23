@@ -128,7 +128,7 @@ public class ERXMessageEncoding implements Serializable {
             String key = (String)e.nextElement();
             d.setObjectForKey(newDefaultEncoding, key);
         }
-        _setLanguagesAndDefaultEncodings((NSDictionary)d);
+        _setLanguagesAndDefaultEncodings(d);
     }
 
     public static String defaultEncodingForLanguage(String language) {
@@ -147,7 +147,7 @@ public class ERXMessageEncoding implements Serializable {
         
         NSMutableDictionary d = new NSMutableDictionary(_languagesAndDefaultEncodings);
         d.setObjectForKey(encoding, language);
-        _languagesAndDefaultEncodings = (NSDictionary)d;
+        _languagesAndDefaultEncodings = d;
     }
 
     public static void setEncodingToResponse(WOResponse response, String encoding) {
@@ -191,6 +191,7 @@ public class ERXMessageEncoding implements Serializable {
     }
 
     private String _toString;
+    @Override
     public String toString() {
         if (_toString == null) {
             _toString = "<" + getClass().getName() 

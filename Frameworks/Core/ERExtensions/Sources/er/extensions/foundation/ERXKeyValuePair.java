@@ -50,6 +50,7 @@ public class ERXKeyValuePair<K, V> {
      */
     public V value() { return _value; }
     
+    @Override
     public boolean equals( Object object ) {
         if( object instanceof ERXKeyValuePair ) {
             ERXKeyValuePair kvp = (ERXKeyValuePair) object;
@@ -59,10 +60,12 @@ public class ERXKeyValuePair<K, V> {
         return false;
     }
     
+    @Override
     public int hashCode() {
         return (key() != null ? key().hashCode() : 1) * (value() != null ? value().hashCode() : 1);
     }
     
+    @Override
     public String toString() {
         return "[ "+ key() +": "+ value() +" ]";
     }

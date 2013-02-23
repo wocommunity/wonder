@@ -58,6 +58,7 @@ public interface ERXLongResponseTask extends Runnable {
 			return _task;
 		}
 
+		@Override
 		public void run() {
 			try {
 				super.run();
@@ -191,7 +192,7 @@ public interface ERXLongResponseTask extends Runnable {
 		}
 		
 		/**
-		 * Returns the exception that may have occurred in the {@link run()} method.
+		 * Returns the exception that may have occurred in the {@link #run()} method.
 		 */
 		protected Exception exception() {
 			return _exception;
@@ -211,7 +212,7 @@ public interface ERXLongResponseTask extends Runnable {
 		}
 
 		/**
-		 * The abstract result object that has been returned by {@link performAction()}.
+		 * The abstract result object that has been returned by {@link #performAction()}.
 		 */
 		protected Object result() {
 			return _result;
@@ -231,7 +232,7 @@ public interface ERXLongResponseTask extends Runnable {
 
 		/**
 		 * Checks if the task was stopped externally.
-		 * @return true if {@link stop()} was called.
+		 * @return true if {@link #stop()} was called.
 		 */
 		protected boolean isCancelled() {
 			return _cancelled;
@@ -248,7 +249,7 @@ public interface ERXLongResponseTask extends Runnable {
 		/**
 		 * Stops the task. This just sets the cancel flag. Its up to you
 		 * to check in your task if you are interruptable. So you should
-		 * check {@link isCancelled()} in your {@link performAction()}.
+		 * check {@link #isCancelled()} in your {@link #performAction()}.
 		 */
 		public void stop() {
 			synchronized(this) {
@@ -258,14 +259,14 @@ public interface ERXLongResponseTask extends Runnable {
 		}
 
 		/**
-		 * Default implementation of the {@link ERXLongResponseTask.start()} method.
+		 * Default implementation of the {@link ERXLongResponseTask#start()} method.
 		 * Creates a new thread unless there already exists one.
 		 */
 		public void start() {
 			try {
 				if(_thread == null) {
 					_thread = new WorkerThread(this);
-                    _thread.setName(this.toString());
+                    _thread.setName(toString());
 				}
 				if(!_thread.isAlive()) {
 					_thread.start();
@@ -279,7 +280,7 @@ public interface ERXLongResponseTask extends Runnable {
 		 * Override this to return an exception page suitable for the 
 		 * given exception. This implementation just re-throws the exception.
 		 * @param exception
-		 * @return page for the exceptino
+		 * @return page for the exception
 		 */
 		protected WOComponent pageForException(Exception exception) {
 			throw new NSForwardException(exception, "<WOLongResponsePage> Exception occurred in long response thread: "+exception.toString());
@@ -288,7 +289,7 @@ public interface ERXLongResponseTask extends Runnable {
 		/**
 		 * Override this to return and modify the refresh page.
 		 * This is called while the task is still running. 
-		 * Note that is the place where you can call {@link ERXLongResponse.setRefreshInterval(int)} to
+		 * Note that is the place where you can call {@link ERXLongResponse#setRefreshInterval(int)} to
 		 * set the next refresh time.
 		 * @param aStatus
 		 */
@@ -300,9 +301,9 @@ public interface ERXLongResponseTask extends Runnable {
 		 * Override this to return the page after the task was completed without 
 		 * beeing stopped. Whether or not this counts as a success should
 		 * be divined from the result object. This is the same object you 
-		 * return after being asked for {@link result()}.
+		 * return after being asked for {@link #result()}.
 		 * @param aResult some result object
-		 * @return result page for successfu completion
+		 * @return result page for successful completion
 		 */
 		protected WOComponent pageForResult(Object aResult)  {
 			return longResponse().context().page();
@@ -322,7 +323,6 @@ public interface ERXLongResponseTask extends Runnable {
 		/**
 		 * Default implementation that controls the pages returned on each iteration.
 		 */
-		
 		public WOComponent nextPage() {
 			Exception e = exception();
 			if (e != null) {
@@ -332,9 +332,8 @@ public interface ERXLongResponseTask extends Runnable {
 			if (isDone()) {
 				if (isCancelled()) {
 					return cancelPageForStatus(status());
-				} else {
-					return pageForResult(result());
 				}
+				return pageForResult(result());
 			}
 			return refreshPageForStatus(status());
 		}

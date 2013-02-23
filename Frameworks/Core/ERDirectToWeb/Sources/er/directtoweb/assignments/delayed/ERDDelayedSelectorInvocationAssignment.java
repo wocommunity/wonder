@@ -67,6 +67,7 @@ public class ERDDelayedSelectorInvocationAssignment extends ERDDelayedAssignment
         return DefaultImplementation.dependentKeys(this, keyPath);
     }
 
+    @Override
     public Object fireNow(D2WContext c) {
         return DefaultImplementation.fire(this, c);
     }

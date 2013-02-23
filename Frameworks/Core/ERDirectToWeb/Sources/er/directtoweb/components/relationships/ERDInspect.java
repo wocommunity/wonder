@@ -31,6 +31,7 @@ public class ERDInspect extends ERDCustomEditComponent {
         super(context);
     }
     
+    @Override
     public boolean synchronizesVariablesWithBindings() { 
         return false; 
     }

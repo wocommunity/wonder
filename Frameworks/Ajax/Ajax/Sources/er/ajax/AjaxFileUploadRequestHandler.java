@@ -49,6 +49,7 @@ public class AjaxFileUploadRequestHandler extends WORequestHandler {
 		_maxUploadSize = maxUploadSize;
 	}
 
+	@Override
 	public WOResponse handleRequest(WORequest request) {
 		WOApplication application = WOApplication.application();
 		application.awake();
@@ -102,9 +103,11 @@ public class AjaxFileUploadRequestHandler extends WORequestHandler {
 						}
 					}
 
-					NSArray<String> contentType = (NSArray<String>)formData.headers().valueForKey("content-type");
-					if (contentType != null) {
-						progress.setContentType(contentType.objectAtIndex(0));
+					if (formData != null) {
+						NSArray<String> contentType = (NSArray<String>)formData.headers().valueForKey("content-type");
+						if (contentType != null) {
+							progress.setContentType(contentType.objectAtIndex(0));
+						}
 					}
 					
 					try {
@@ -134,6 +137,16 @@ public class AjaxFileUploadRequestHandler extends WORequestHandler {
 			catch (Throwable t) {
 				log.error("Upload failed",t);
 				response.appendContentString("Failed: " + t.getMessage());
+			}
+			finally {
+				if (uploadInputStream != null) {
+					try {
+						uploadInputStream.close();
+					}
+					catch (IOException e) {
+						// ignore
+					}
+				}
 			}
 			return response;
 		}

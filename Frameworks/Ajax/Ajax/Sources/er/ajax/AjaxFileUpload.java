@@ -109,6 +109,7 @@ public class AjaxFileUpload extends WOComponent {
 		AjaxUtils.addScriptResourceInHead(aContext, aResponse, "wonder.js");
 	}
 
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}
@@ -349,8 +350,8 @@ public class AjaxFileUpload extends WOComponent {
 				}
 				else {
 					renamedFile = false;
-					progress.setFailure(new Exception ("Could not rename file."));
-					return this.uploadFailed();
+					progress.setFailure(new Exception("Could not rename file."));
+					return uploadFailed();
 				}
 				
 				if (renamedFile) {
@@ -374,7 +375,7 @@ public class AjaxFileUpload extends WOComponent {
 		catch (Throwable t) {
 			t.printStackTrace();
 			progress.setFailure(t);
-			return this.uploadFailed();
+			return uploadFailed();
 		}
 		finally {
 			uploadFinished();
@@ -390,6 +391,6 @@ public class AjaxFileUpload extends WOComponent {
 	}
 
 	public String srcUrl() {
-		return ERXWOContext._directActionURL(context(), "ERXDirectAction/empty", null, ERXRequest.isRequestSecure(context().request()));
+		return context()._directActionURL("ERXDirectAction/empty", null, ERXRequest.isRequestSecure(context().request()), 0, false);
 	}
 }

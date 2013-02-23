@@ -221,6 +221,7 @@ public abstract class ERXEntityOrder
             eRXEntityOrder = ordering;
         }
 
+        @Override
         public int compare(Object object1, Object object2) throws NSComparator.ComparisonException {
             EOEntity entity1 = (EOEntity) object1;
             EOEntity entity2 = (EOEntity) object2;
@@ -244,6 +245,7 @@ public abstract class ERXEntityOrder
             eRXEntityOrder = ordering;
         }
 
+        @Override
         public int compare(Object object1, Object object2) throws NSComparator.ComparisonException {
             EOEntity entity1 = (EOEntity) object1;
             EOEntity entity2 = (EOEntity) object2;

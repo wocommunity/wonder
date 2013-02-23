@@ -433,6 +433,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	 *
 	 * @return null or dialog contents
 	 */
+	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		WOActionResults response = null;
 		String modalBoxAction = NSPathUtilities.pathExtension(context.senderID());
@@ -759,6 +760,7 @@ public class AjaxModalDialog extends AjaxComponent {
 	/**
 	 * @see er.ajax.AjaxComponent#addRequiredWebResources(com.webobjects.appserver.WOResponse)
 	 */
+	@Override
 	protected void addRequiredWebResources(WOResponse response) {
 		addScriptResourceInHead(response, "prototype.js");
 		addScriptResourceInHead(response, "wonder.js");

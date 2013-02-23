@@ -67,6 +67,7 @@ public class AjaxPushRequestHandler extends WORequestHandler {
 	 * 
 	 * @param request the request
 	 */
+	@Override
 	public WOResponse handleRequest(WORequest request) {
 		String sessionID = request.sessionID();
 		String name = request.requestHandlerPath();

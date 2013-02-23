@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -61,6 +62,8 @@ import com.webobjects.foundation._NSDelegate;
 import com.webobjects.jdbcadaptor.JDBCPlugIn;
 
 import er.extensions.appserver.ERXSession;
+import er.extensions.eof.listener.ERXEOExecutionListenerDumbImpl;
+import er.extensions.eof.listener.IERXEOExecutionListener;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXDictionaryUtilities;
 import er.extensions.foundation.ERXProperties;
@@ -83,6 +86,12 @@ public class ERXEOAccessUtilities {
     
     /** SQL logger */
     private static Logger sqlLoggingLogger = null;
+
+    private static final AtomicReference<IERXEOExecutionListener> listener = new AtomicReference<IERXEOExecutionListener>(new ERXEOExecutionListenerDumbImpl());
+
+    public static void setListener(IERXEOExecutionListener aListener) {
+        listener.set(aListener);
+    }
 
     /**
      * Finds an entity that is contained in a string. This is used a lot in
@@ -203,6 +212,7 @@ public class ERXEOAccessUtilities {
     // ENHANCEME: Need a non-oracle specific way of doing this. Should poke
     // around at
     //		the adaptor level and see if we can't find something better.
+    @Deprecated
     public static Number getNextValFromSequenceNamed(EOEditingContext ec, String modelName, String sequenceName) {
     	EODatabaseContext dbContext = EOUtilities.databaseContextForModelNamed(ec, modelName);
     	return ERXSQLHelper.newSQLHelper(dbContext).getNextValFromSequenceNamed(ec, modelName, sequenceName);
@@ -697,7 +707,7 @@ public class ERXEOAccessUtilities {
      * @return a <code>String</code> containing SQL statements to create
 	 *         tables
      * 
-     * @see createSchemaSQLForEntitiesInModelWithNameAndOptions
+     * @see er.extensions.jdbc.ERXSQLHelper#createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray, String, NSDictionary)
      */
     public static String createSchemaSQLForEntitiesInModelWithNameAndOptionsForOracle9(NSArray entities, String modelName, NSDictionary optionsCreate) {
         EODatabaseContext dc = EOUtilities.databaseContextForModelNamed(ERXEC.newEditingContext(), modelName);
@@ -710,7 +720,7 @@ public class ERXEOAccessUtilities {
      * 
      * @param entities
      *            a NSArray containing the entities for which create table
-     *            statements should be generated or null if all entitites in the
+     *            statements should be generated or null if all entities in the
      *            model should be used.
      * @param modelName
      *            the name of the EOModel
@@ -734,6 +744,7 @@ public class ERXEOAccessUtilities {
      *         tables
      * @deprecated
      */
+    @Deprecated
     public static String createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray entities, String modelName, NSDictionary optionsCreate) {
         EODatabaseContext dc = EOUtilities.databaseContextForModelNamed(ERXEC.newEditingContext(), modelName);
         return ERXSQLHelper.newSQLHelper(dc).createSchemaSQLForEntitiesInModelWithNameAndOptions(entities, modelName, optionsCreate);
@@ -748,6 +759,7 @@ public class ERXEOAccessUtilities {
      * @return a sql script
      * @deprecated
      */
+    @Deprecated
     public static String createSchemaSQLForEntitiesWithOptions(NSArray entities, EODatabaseContext databaseContext, NSDictionary optionsCreate) {
     	return ERXSQLHelper.newSQLHelper(databaseContext).createSchemaSQLForEntitiesWithOptions(entities, databaseContext, optionsCreate);
     }
@@ -758,7 +770,7 @@ public class ERXEOAccessUtilities {
      * 
      * @param entities
      *            a NSArray containing the entities for which create table
-     *            statements should be generated or null if all entitites in the
+     *            statements should be generated or null if all entities in the
      *            model should be used.
      * @param modelName
      *            the name of the EOModel <br/><br/>This method uses the
@@ -780,6 +792,7 @@ public class ERXEOAccessUtilities {
      *         tables
      * @deprecated
      */
+    @Deprecated
     public static String createSchemaSQLForEntitiesInModelWithName(NSArray entities, String modelName) {
     	EODatabaseContext databaseContext = EOUtilities.databaseContextForModelNamed(ERXEC.newEditingContext(), modelName);
     	return ERXSQLHelper.newSQLHelper(databaseContext).createSchemaSQLForEntitiesInModelWithName(entities, modelName);
@@ -791,7 +804,7 @@ public class ERXEOAccessUtilities {
      * 
      * @param entities
      *            a NSArray containing the entities for which create table
-     *            statements should be generated or null if all entitites in the
+     *            statements should be generated or null if all entities in the
      *            model should be used.
      * @param databaseContext
      *            the databaseContext
@@ -802,6 +815,7 @@ public class ERXEOAccessUtilities {
      *         tables
      * @deprecated
      */
+    @Deprecated
     public static String createSchemaSQLForEntitiesInDatabaseContext(NSArray entities, EODatabaseContext databaseContext, boolean create, boolean drop) {
     	return ERXSQLHelper.newSQLHelper(databaseContext).createSchemaSQLForEntitiesInDatabaseContext(entities, databaseContext, create, drop);
     }
@@ -809,6 +823,7 @@ public class ERXEOAccessUtilities {
     /**
      * @deprecated
      */
+    @Deprecated
     public static String createIndexSQLForEntitiesForOracle(NSArray entities) {
         NSMutableArray a = new NSMutableArray();
         a.addObject("BLOB");
@@ -819,6 +834,7 @@ public class ERXEOAccessUtilities {
     /**
      * @deprecated
      */
+    @Deprecated
     public static String createIndexSQLForEntities(NSArray entities) {
         return createIndexSQLForEntities(entities, null);
     }
@@ -826,6 +842,7 @@ public class ERXEOAccessUtilities {
     /**
      * @deprecated
      */
+    @Deprecated
     public static String createIndexSQLForEntities(NSArray entities, NSArray externalTypesToIgnore) {
         EOEntity ent = (EOEntity)entities.objectAtIndex(0);
         String modelName = ent.model().name();
@@ -913,7 +930,7 @@ public class ERXEOAccessUtilities {
     		EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
     		EORelationship relationship = entity.relationshipNamed(relKey);
     		if(relationship.sourceAttributes().count() == 1) {
-    			EOAttribute attribute = (EOAttribute) relationship.sourceAttributes().lastObject();
+    			EOAttribute attribute = relationship.sourceAttributes().lastObject();
     			EODatabaseContext context = EOUtilities.databaseContextForModelNamed(ec, entity.model().name());
     			String name = attribute.name();
     			for (Enumeration e = eos.objectEnumerator(); e.hasMoreElements();) {
@@ -1038,6 +1055,7 @@ public class ERXEOAccessUtilities {
      * Creates a where clause string " someKey IN ( someValue1,...)". Can migrate keyPaths.
      * @deprecated
      */
+    @Deprecated
     public static String sqlWhereClauseStringForKey(EOSQLExpression e, String key, NSArray valueArray) {
     	return ERXSQLHelper.newSQLHelper(e).sqlWhereClauseStringForKey(e, key, valueArray);
     }
@@ -1205,6 +1223,12 @@ public class ERXEOAccessUtilities {
         return externalNamesForEntity(EOModelGroup.defaultGroup().entityNamed(entityName), includeParentEntities);
     }
 
+    /**
+     * Walks all of the parentEntity relationships to
+     * find the root entity.
+     * @param entity to find the root parent
+     * @return root parent entity
+     */
     public static EOEntity rootEntityForEntity(EOEntity entity) {
         while (entity.parentEntity() != null) {
             entity = entity.parentEntity();
@@ -1212,6 +1236,12 @@ public class ERXEOAccessUtilities {
         return entity;
     }
 
+    /**
+     * Walks all of the parentEntity relationships to
+     * find the root entity.
+     * @param entityName to find the root parent
+     * @return root parent entity
+     */
     public static EOEntity rootEntityForEntityNamed(String entityName) {
         return rootEntityForEntity(EOModelGroup.defaultGroup().entityNamed(entityName));
     }
@@ -1260,6 +1290,7 @@ public class ERXEOAccessUtilities {
                	statement = statement.replaceAll("((t0|T0)\\.[a-zA-Z0-9_]+\\,\\s*)*(t0|T0)\\.[a-zA-Z0-9_\\.]+\\s+FROM\\s+", "t0.* FROM ");
             	ERXStats.addDurationForKey(millisecondsNeeded, Group.SQL, entityName + ": " +statement);
             }
+            listener.get().log(millisecondsNeeded, entityName);
             if (needsLog) {
                 String logString = createLogString(channel, expression, millisecondsNeeded);
         		if (logString.length() > maxLength) {
@@ -1555,7 +1586,7 @@ public class ERXEOAccessUtilities {
                         throw ex;
                     } 
                 } finally {
-                    if(!wasOpen) {
+                    if (!wasOpen && channel != null) {
                         channel.closeChannel();
                     }
                     dbc.unlock();
@@ -1579,6 +1610,7 @@ public class ERXEOAccessUtilities {
             final EOQualifier qualifier) {
         final EOEntity entity = entityNamed(ec, entityName);
         ChannelAction action = new ChannelAction() {
+            @Override
             protected int doPerform(EOAdaptorChannel channel) {
                 return channel.deleteRowsDescribedByQualifier(qualifier, entity);
             }
@@ -1599,6 +1631,7 @@ public class ERXEOAccessUtilities {
             final EOQualifier qualifier, final NSDictionary newValues) {
         final EOEntity entity = entityNamed(ec, entityName);
         ChannelAction action = new ChannelAction() {
+            @Override
             protected int doPerform(EOAdaptorChannel channel) {
                 return channel.updateValuesInRowsDescribedByQualifier(newValues, qualifier, entity);
             }
@@ -1616,6 +1649,7 @@ public class ERXEOAccessUtilities {
             final NSDictionary newValues) {
         final EOEntity entity = entityNamed(ec, entityName);
         ChannelAction action = new ChannelAction() {
+            @Override
             protected int doPerform(EOAdaptorChannel channel) {
             	channel.insertRow(newValues, entity);
                 return 1;
@@ -1634,6 +1668,7 @@ public class ERXEOAccessUtilities {
             final Collection<? extends NSDictionary<String, ?>> newValues) {
         final EOEntity entity = entityNamed(ec, entityName);
         ChannelAction action = new ChannelAction() {
+            @Override
             protected int doPerform(EOAdaptorChannel channel) {
             	int insert = 0;
             	for (NSDictionary dictionary : newValues) {
@@ -1656,6 +1691,7 @@ public class ERXEOAccessUtilities {
 		final NSMutableArray result = new NSMutableArray();
 		final EOEntity entity = entityNamed(ec, entityName);
 		ChannelAction action = new ChannelAction() {
+			@Override
 			protected int doPerform(EOAdaptorChannel channel) {
 				NSArray keys = channel.primaryKeysForNewRowsWithEntity(count, entity);
 				result.addObjectsFromArray(keys);
@@ -1817,7 +1853,7 @@ public class ERXEOAccessUtilities {
 	 		}
 		}
 		else {
-	 		NSMutableArray<EOGlobalID> gids = new NSMutableArray<EOGlobalID>();
+			NSMutableSet<EOGlobalID> gids = new NSMutableSet<EOGlobalID>();
 	 		
 			NSMutableArray objectsWithUnfaultedRelationships = new NSMutableArray();
 			EOEntity destinationEntity = relationship.destinationEntity();
@@ -1865,7 +1901,7 @@ public class ERXEOAccessUtilities {
 			// fetching of abstract entities very effectively.  We instead want to create
 			// our own GID and batch fetch the GIDs ourselves.
 			if (gids.count() > 0) {
-				ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(editingContext, gids, ! skipFaultedRelationships);
+				ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(editingContext, gids.allObjects(), ! skipFaultedRelationships);
 			}
 		}
 
@@ -2308,21 +2344,48 @@ public class ERXEOAccessUtilities {
 	}
 
 	/**
+	 * Utility method used to find all of the non-abstract sub entities
+	 * for a given entity including itself.
 	 * @param ec editing context
-	 * @param rootEntity
+	 * @param rootEntity to walk all of the <code>subEntities</code>
+	 *            relationships
 	 * @return a list of all concrete entities that inherit from rootEntity,
 	 *         including rootEntity itself if it is concrete.
 	 */
 	public static NSArray<EOEntity> entityHierarchyForEntity(EOEditingContext ec, EOEntity rootEntity) {
 		NSMutableArray<EOEntity> entities = new NSMutableArray<EOEntity>();
-	
-		if (!rootEntity.isAbstractEntity()) {
-			entities.add(rootEntity);
+
+		if (rootEntity != null) {
+			if (!rootEntity.isAbstractEntity()) {
+				entities.add(rootEntity);
+			}
+			for (EOEntity subEntity : rootEntity.subEntities()) {
+				entities.addAll(allSubEntitiesForEntity(subEntity, false));
+			}
 		}
-		@SuppressWarnings("unchecked")
-		NSArray<EOEntity> subEntities = rootEntity.subEntities();
-		for (EOEntity subEntity : subEntities) {
-			entities.addAll(entityHierarchyForEntity(ec, subEntity));
+		return entities.immutableClone();
+	}
+
+	/**
+	 * Utility method used to find all of the sub entities
+	 * for a given entity.
+	 * @param rootEntity to walk all of the <code>subEntities</code>
+	 *            relationships
+	 * @param includeAbstracts determines if abstract entities should
+	 *            be included in the returned array
+	 * @return all of the sub-entities for a given entity.
+	 */
+	public static NSArray<EOEntity> allSubEntitiesForEntity(EOEntity rootEntity, boolean includeAbstracts) {
+		NSMutableArray<EOEntity> entities = new NSMutableArray<EOEntity>();
+		if (rootEntity != null) {
+			for (EOEntity subEntity : rootEntity.subEntities()) {
+				if (!subEntity.isAbstractEntity() || includeAbstracts) {
+					entities.addObject(subEntity);
+				}
+				if (subEntity.subEntities().count() > 0) {
+					entities.addAll(allSubEntitiesForEntity(subEntity, includeAbstracts));
+				}
+			}
 		}
 		return entities.immutableClone();
 	}

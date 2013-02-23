@@ -14,10 +14,10 @@ import com.webobjects.foundation.NSPathUtilities;
 
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXRuntimeUtilities;
-import er.extensions.foundation.ERXStringUtilities;
-import er.extensions.foundation.ERXSystem;
 import er.extensions.foundation.ERXRuntimeUtilities.Result;
 import er.extensions.foundation.ERXRuntimeUtilities.TimeoutException;
+import er.extensions.foundation.ERXStringUtilities;
+import er.extensions.foundation.ERXSystem;
 
 /**
  *
@@ -68,6 +68,7 @@ public class ERXRemoteShell extends WOComponent {
         super(context);
     }
 
+    @Override
     public void appendToResponse(WOResponse r, WOContext c) {
         if (session().objectForKey("ERXRemoteShell.enabled") != null) {
             dir = "";

@@ -58,6 +58,7 @@ public class MTAjaxUpdateLink extends AjaxUpdateLink {
 		super(name, associations, children);
 	}
 
+	@Override
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected NSMutableDictionary<String, Object> createAjaxOptions(WOComponent component) {
 		
@@ -88,6 +89,7 @@ public class MTAjaxUpdateLink extends AjaxUpdateLink {
 		
 	}		
 	
+	@Override
 	public void addRequiredWebResources(WOResponse response, WOContext context) {
 		MTAjaxUtils.addScriptResourceInHead(context, context.response(), "MooTools", MTAjaxUtils.MOOTOOLS_CORE_JS);
 		MTAjaxUtils.addScriptResourceInHead(context, context.response(), "MooTools", MTAjaxUtils.MOOTOOLS_MORE_JS);
@@ -102,6 +104,7 @@ public class MTAjaxUpdateLink extends AjaxUpdateLink {
 		MTAjaxUtils.addScriptResourceInHead(context, context.response(), "MooTools", MTAjaxUtils.MOOTOOLS_WONDER_JS);
 	}
 	
+	@Override
 	public String onClick(WOContext context, boolean generateFunctionWrapper) {
 		
 		WOComponent component = context.component();

@@ -37,13 +37,9 @@ public class ERXBooleanPopUpButton extends ERXComponent {
 	public String noString() {
 		return stringValueForBinding("noString", "No");
 	}
-	
+
+	@Override
 	public boolean isStateless() {
 		return true;
-	}
-	
-	@Override
-	public boolean synchronizesVariablesWithBindings() {
-		return false;
 	}
 }

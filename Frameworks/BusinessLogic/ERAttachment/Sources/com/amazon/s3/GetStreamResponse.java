@@ -25,8 +25,8 @@
 
 package com.amazon.s3;
 
-import java.net.HttpURLConnection;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
@@ -48,7 +48,7 @@ public class GetStreamResponse extends Response {
 		super(connection);
 		if (connection.getResponseCode() < 400) {
 			Map metadata = extractMetadata(connection);
-			this.object = new S3StreamObject(connection.getInputStream(),
+			object = new S3StreamObject(connection.getInputStream(),
 					metadata);
 		}
 	}

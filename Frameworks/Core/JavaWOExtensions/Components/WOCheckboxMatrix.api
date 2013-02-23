@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
 	<wo class="WOCheckboxMatrix" wocomponentcontent="true">
                 <image path="WOCheckboxMatrix.tiff"/>
@@ -15,5 +15,6 @@
 		<validation message="'item' is a required binding">
 			<unbound name="item"/>
 		</validation>
-	</wo>
+	<binding name="disabled"/>
+    </wo>
 </wodefinitions>

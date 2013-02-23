@@ -1,9 +1,3 @@
-//
-// ERDDHTMLComponent.java: Class file for WO Component 'ERDDHTMLComponent'
-// Project simple
-//
-// Created by ak on Wed Mar 20 2002
-//
 package er.directtoweb.components.strings;
 
 import org.apache.log4j.Logger;
@@ -36,14 +30,17 @@ public class ERDDHTMLComponent extends ERDCustomEditComponent {
         super(context);
     }
 
+    @Override
     public boolean isStateless() {
 	return false;
     }
 
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }
 
+    @Override
     public void reset() {
         super.reset();
         varName = null;
@@ -57,7 +54,8 @@ public class ERDDHTMLComponent extends ERDCustomEditComponent {
 	}
 	return varName;
     }
-    
+
+    @Override
     public void takeValuesFromRequest(WORequest q, WOContext c) throws NSValidation.ValidationException {
         super.takeValuesFromRequest(q,c);
         try {

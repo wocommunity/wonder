@@ -116,9 +116,9 @@ public class AWSAuthConnection {
 	 * @param headers
 	 *            A Map of String to List of Strings representing the http
 	 *            headers to pass (can be null).
-	 * @param metadata
-	 *            A Map of String to List of Strings representing the s3
-	 *            metadata for this bucket (can be null).
+	 * @return the response object
+	 * @throws MalformedURLException 
+	 * @throws IOException 
 	 */
 	public Response createBucket(String bucket, Map headers)
 			throws MalformedURLException, IOException {
@@ -140,6 +140,9 @@ public class AWSAuthConnection {
 	 * @param headers
 	 *            A Map of String to List of Strings representing the http
 	 *            headers to pass (can be null).
+	 * @return the response object
+	 * @throws MalformedURLException 
+	 * @throws IOException 
 	 */
 	public ListBucketResponse listBucket(String bucket, String prefix,
 			String marker, Integer maxKeys, Map headers)
@@ -156,6 +159,9 @@ public class AWSAuthConnection {
 	 * @param headers
 	 *            A Map of String to List of Strings representing the http
 	 *            headers to pass (can be null).
+	 * @return the response object
+	 * @throws MalformedURLException 
+	 * @throws IOException 
 	 */
 	public Response deleteBucket(String bucket, Map headers)
 			throws MalformedURLException, IOException {
@@ -174,6 +180,9 @@ public class AWSAuthConnection {
 	 * @param headers
 	 *            A Map of String to List of Strings representing the http
 	 *            headers to pass (can be null).
+	 * @return the response object
+	 * @throws MalformedURLException 
+	 * @throws IOException 
 	 */
 	public Response put(String bucket, String key, S3Object object, Map headers)
 			throws MalformedURLException, IOException {
@@ -207,6 +216,9 @@ public class AWSAuthConnection {
 	 * @param headers
 	 *            A Map of String to List of Strings representing the http
 	 *            headers to pass (can be null).
+	 * @return the response object
+	 * @throws MalformedURLException 
+	 * @throws IOException 
 	 */
 	public Response putStream(String bucket, String key, S3StreamObject object,
 			Map headers) throws MalformedURLException, IOException {
@@ -247,6 +259,9 @@ public class AWSAuthConnection {
 	 * @param headers
 	 *            A Map of String to List of Strings representing the http
 	 *            headers to pass (can be null).
+	 * @return the response object
+	 * @throws MalformedURLException 
+	 * @throws IOException 
 	 */
 	public GetResponse get(String bucket, String key, Map headers)
 			throws MalformedURLException, IOException {
@@ -272,6 +287,9 @@ public class AWSAuthConnection {
 	 * @param headers
 	 *            A Map of String to List of Strings representing the http
 	 *            headers to pass (can be null).
+	 * @return the response object
+	 * @throws MalformedURLException 
+	 * @throws IOException 
 	 */
 	public GetStreamResponse getStream(String bucket, String key, Map headers)
 			throws MalformedURLException, IOException {
@@ -297,6 +315,9 @@ public class AWSAuthConnection {
 	 * @param headers
 	 *            A Map of String to List of Strings representing the http
 	 *            headers to pass (can be null).
+	 * @return the response object
+	 * @throws MalformedURLException 
+	 * @throws IOException 
 	 */
 	public GetResponse getTorrent(String bucket, String key, Map headers)
 			throws MalformedURLException, IOException {
@@ -322,6 +343,9 @@ public class AWSAuthConnection {
 	 * @param headers
 	 *            A Map of String to List of Strings representing the http
 	 *            headers to pass (can be null).
+	 * @return the response object
+	 * @throws MalformedURLException 
+	 * @throws IOException 
 	 */
 	public Response delete(String bucket, String key, Map headers)
 			throws MalformedURLException, IOException {
@@ -343,6 +367,9 @@ public class AWSAuthConnection {
 	 * @param headers
 	 *            A Map of String to List of Strings representing the http
 	 *            headers to pass (can be null).
+	 * @return the response object
+	 * @throws MalformedURLException 
+	 * @throws IOException 
 	 */
 	public GetResponse getBucketACL(String bucket, Map headers)
 			throws MalformedURLException, IOException {
@@ -359,6 +386,9 @@ public class AWSAuthConnection {
 	 * @param headers
 	 *            A Map of String to List of Strings representing the http
 	 *            headers to pass (can be null).
+	 * @return the response object
+	 * @throws MalformedURLException 
+	 * @throws IOException 
 	 */
 	public GetResponse getACL(String bucket, String key, Map headers)
 			throws MalformedURLException, IOException {
@@ -383,6 +413,9 @@ public class AWSAuthConnection {
 	 * @param headers
 	 *            A Map of String to List of Strings representing the http
 	 *            headers to pass (can be null).
+	 * @return the response object
+	 * @throws MalformedURLException 
+	 * @throws IOException 
 	 */
 	public Response putBucketACL(String bucket, String aclXMLDoc, Map headers)
 			throws MalformedURLException, IOException {
@@ -401,6 +434,9 @@ public class AWSAuthConnection {
 	 * @param headers
 	 *            A Map of String to List of Strings representing the http
 	 *            headers to pass (can be null).
+	 * @return the response object
+	 * @throws MalformedURLException 
+	 * @throws IOException 
 	 */
 	public Response putACL(String bucket, String key, String aclXMLDoc,
 			Map headers) throws MalformedURLException, IOException {
@@ -428,6 +464,9 @@ public class AWSAuthConnection {
 	 * @param headers
 	 *            A Map of String to List of Strings representing the http
 	 *            headers to pass (can be null).
+	 * @return the response object
+	 * @throws MalformedURLException 
+	 * @throws IOException 
 	 */
 	public ListAllMyBucketsResponse listAllMyBuckets(Map headers)
 			throws MalformedURLException, IOException {
@@ -574,10 +613,10 @@ public class AWSAuthConnection {
 
 		String canonicalString = Utils.makeCanonicalString(method, resource,
 				connection.getRequestProperties());
-		String encodedCanonical = Utils.encode(this.awsSecretAccessKey,
+		String encodedCanonical = Utils.encode(awsSecretAccessKey,
 				canonicalString, false);
 		connection.setRequestProperty("Authorization", "AWS "
-				+ this.awsAccessKeyId + ":" + encodedCanonical);
+				+ awsAccessKeyId + ":" + encodedCanonical);
 	}
 
 	/**
@@ -587,12 +626,13 @@ public class AWSAuthConnection {
 	 *            The resource name (bucketName + "/" + key).
 	 */
 	private URL makeURL(String resource) throws MalformedURLException {
-		String protocol = this.isSecure ? "https" : "http";
-		return new URL(protocol, this.server, this.port, "/" + resource);
+		String protocol = isSecure ? "https" : "http";
+		return new URL(protocol, server, port, "/" + resource);
 	}
 
 	/**
 	 * Generate an rfc822 date for use in the Date HTTP header.
+	 * @return date as string
 	 */
 	public static String httpDate() {
 		final String DateFormat = "EEE, dd MMM yyyy HH:mm:ss ";

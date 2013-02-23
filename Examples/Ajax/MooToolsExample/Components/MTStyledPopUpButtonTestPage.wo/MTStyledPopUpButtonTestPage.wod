@@ -1,0 +1,27 @@
+DirectActionSubmitButton : WOSubmitButton {
+	class = "btn btn-primary";
+	directActionName = "PageAction/MTStyledPopUpButtonTestPage";
+}
+
+MTStyledPopUpButton : MTStyledPopUpButton {
+	item = item;
+	list = list;
+	selection = selectedItem;
+	showImages = false;
+	onShow = "function() { console.log('showing popup options...') }";
+}
+
+MTStyledSelectedValuePopUpButton : MTStyledPopUpButton { 
+	item = item;
+	list = list;
+	name = "FavFruit";
+	selectedValue = selectedItem;
+	showImages = false;
+	onShow = "function() { console.log('showing popup options...') }";
+	value = item;
+}
+
+SubmitButton : WOSubmitButton {
+	action = selectFruit;
+	class = "btn btn-primary";
+}

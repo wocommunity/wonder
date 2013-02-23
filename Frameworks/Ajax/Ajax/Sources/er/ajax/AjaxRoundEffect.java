@@ -38,11 +38,13 @@ public class AjaxRoundEffect extends AjaxDynamicElement {
     _idAssociation = (WOAssociation) associations.objectForKey("id");
   }
 
+  @Override
   protected void addRequiredWebResources(WOResponse response, WOContext context) {
     addScriptResourceInHead(context, response, "prototype.js");
     addScriptResourceInHead(context, response, "rico.js");
   }
 
+  @Override
   public WOActionResults handleRequest(WORequest request, WOContext context) {
     return null;
   }
@@ -59,6 +61,7 @@ public class AjaxRoundEffect extends AjaxDynamicElement {
     return options;
   }
 
+  @Override
   public void appendToResponse(WOResponse response, WOContext context) {
     super.appendToResponse(response, context);
     WOComponent component = context.component();

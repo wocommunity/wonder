@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
 
@@ -22,9 +23,9 @@ import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSRange;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestamp;
-import com.webobjects.foundation.NSTimestampFormatter;
 import com.webobjects.foundation._NSStringUtilities;
 
 /**
@@ -70,14 +71,24 @@ public class PostgresqlExpression extends JDBCExpression {
     private static final String EXTERNAL_NAME_QUOTE_CHARACTER = "\"";   
     
     /**
-     * formatter to use when handling date columns
+     * Formatter to use when handling date columns. Each thread has its own copy.
      */
-    private static final NSTimestampFormatter DATE_FORMATTER = new NSTimestampFormatter("%Y-%m-%d");
+    private static final ThreadLocal<SimpleDateFormat> DATE_FORMATTER = new ThreadLocal<SimpleDateFormat>() {
+        @Override
+        protected SimpleDateFormat initialValue() {
+            return new SimpleDateFormat("''yyyy-MM-dd''");
+        }
+    };
 
     /**
-     * formatter to use when handling timestamps
+     * Formatter to use when handling timestamp columns. Each thread has its own copy.
      */
-    private static final NSTimestampFormatter TIMESTAMP_FORMATTER = new NSTimestampFormatter("%Y-%m-%d %H:%M:%S.%F");
+    private static final ThreadLocal<SimpleDateFormat> TIMESTAMP_FORMATTER = new ThreadLocal<SimpleDateFormat>() {
+        @Override
+        protected SimpleDateFormat initialValue() {
+            return new SimpleDateFormat("''yyyy-MM-dd HH:mm:ss.SSS''");
+        }
+    };
 
     /**
      * Method to get the string value from a BigDecimals from.
@@ -103,7 +114,13 @@ public class PostgresqlExpression extends JDBCExpression {
      * Fetch spec limit ivar
      */
     private int _fetchLimit;
-     
+
+    /**
+     * Fetch spec range ivar
+     */
+    private NSRange _fetchRange;
+    private final NSSelector<NSRange> _fetchRangeSelector = new NSSelector<NSRange>("fetchRange");
+
     private Boolean _enableIdentifierQuoting;
     
     private Boolean _enableBooleanQuoting;
@@ -118,7 +135,7 @@ public class PostgresqlExpression extends JDBCExpression {
     public PostgresqlExpression(EOEntity entity) {
         super(entity);
 
-    	if (this.useLowercaseForCaseInsensitiveLike()) {
+    	if (useLowercaseForCaseInsensitiveLike()) {
     		_upperFunctionName = "LOWER";
     	}
     	
@@ -215,7 +232,6 @@ public class PostgresqlExpression extends JDBCExpression {
         String relationshipKey = null;
         EORelationship r;
         
-        
         if (leftAlias.equals("t0")) {
             leftEntity = entity();
         } else {
@@ -230,6 +246,9 @@ public class PostgresqlExpression extends JDBCExpression {
             k = aliasesByRelationshipPath().allKeysForObject(rightAlias);
             relationshipKey = k.count()>0? (String)k.lastObject() : "";
             rightEntity = entityForKeyPath(relationshipKey);
+        }
+        if (relationshipKey == null) {
+        	throw new IllegalStateException("Could not determine relationship for join.");
         }
         int dotIndex = relationshipKey.indexOf( "." );
         relationshipKey = dotIndex == -1
@@ -366,10 +385,16 @@ public class PostgresqlExpression extends JDBCExpression {
             sb.append(" ");
             sb.append(lockClause);
         }
-        if (_fetchLimit != 0) {
+        // fetchRange overrides fetchLimit
+        if (_fetchRange != null) {
+            sb.append(" LIMIT ");
+            sb.append(_fetchRange.length());
+            sb.append(" OFFSET ");
+            sb.append(_fetchRange.location());
+        } else if (_fetchLimit != 0) {
             sb.append(" LIMIT ");
             sb.append(_fetchLimit);
-        }        
+        }
         return sb.toString();
     }
     
@@ -432,9 +457,9 @@ public class PostgresqlExpression extends JDBCExpression {
         if(obj instanceof NSData) {
             value = sqlStringForData((NSData)obj);
         } else if((obj instanceof NSTimestamp) && isTimestampAttribute(eoattribute)) {
-            value = "'" + TIMESTAMP_FORMATTER.format(obj) + "'";
+            value = TIMESTAMP_FORMATTER.get().format(obj);
         } else if((obj instanceof NSTimestamp) && isDateAttribute(eoattribute)) {
-            value = "'" + DATE_FORMATTER.format(obj) + "'";
+            value = DATE_FORMATTER.get().format(obj);
         } else if(obj instanceof String) {
             value = formatStringValue((String)obj);
         } else if(obj instanceof Number) {
@@ -525,10 +550,10 @@ public class PostgresqlExpression extends JDBCExpression {
         				|| adaptorValue instanceof Boolean) {
         			value = formatValueForAttribute(adaptorValue, eoattribute);
         		} else {
-        			throw new IllegalArgumentException(this.getClass().getName() +  ": Can't convert: " + obj + ":" + obj.getClass() + " -> " + adaptorValue + ":" +adaptorValue.getClass());
+        			throw new IllegalArgumentException(getClass().getName() +  ": Can't convert: " + obj + ":" + obj.getClass() + " -> " + adaptorValue + ":" +adaptorValue.getClass());
         		}
         	} catch(Exception ex) {
-        		throw new IllegalArgumentException(this.getClass().getName() +  ": Exception while converting " + obj.getClass().getName(), ex);
+        		throw new IllegalArgumentException(getClass().getName() +  ": Exception while converting " + obj.getClass().getName(), ex);
         	}
         }
         return value;
@@ -568,7 +593,8 @@ public class PostgresqlExpression extends JDBCExpression {
 
     /**
      * Helper to check for timestamp columns that have a "D" value type.
-     * @param eoattribute
+     * @param eoattribute attribute to check
+     * @return <code>true</code> if of type Date
      */
     private boolean isDateAttribute(EOAttribute eoattribute) {
         return "D".equals(eoattribute.valueType());
@@ -576,7 +602,8 @@ public class PostgresqlExpression extends JDBCExpression {
 
     /**
      * Helper to check for timestamp columns that have a "T" value type.
-     * @param eoattribute
+     * @param eoattribute attribute to check
+     * @return <code>true</code> if of type Timestamp
      */
     private boolean isTimestampAttribute(EOAttribute eoattribute) {
         return "T".equals(eoattribute.valueType());
@@ -584,7 +611,8 @@ public class PostgresqlExpression extends JDBCExpression {
 
     /**
      * Helper to check for data columns that are not keys.
-     * @param eoattribute
+     * @param eoattribute attribute to check
+     * @return <code>true</code> if of type Data
      */
     private boolean isDataAttribute(EOAttribute attribute) {
         return (attribute.className().equals("com.webobjects.foundation.NSData") ||
@@ -629,7 +657,6 @@ public class PostgresqlExpression extends JDBCExpression {
         return sb.toString();
     }
     
-    
     /**
      * Overrides the parent implementation to add an <code>INITIALLY DEFERRED</code> to the generated statement.
      * Useful you want to generate the schema-building SQL from a pure java environment.
@@ -657,8 +684,8 @@ public class PostgresqlExpression extends JDBCExpression {
 		
 		// quotes the identifier in the array
 		
-		String sourceKeyList = this.quoteArrayContents(sourceColumns).componentsJoinedByString(", ");
-		String destinationKeyList = this.quoteArrayContents(destinationColumns).componentsJoinedByString(", ");
+		String sourceKeyList = quoteArrayContents(sourceColumns).componentsJoinedByString(", ");
+		String destinationKeyList = quoteArrayContents(destinationColumns).componentsJoinedByString(", ");
 		
 		EOModel sourceModel = entity.model();
 		EOModel destModel = relationship.destinationEntity().model();
@@ -692,7 +719,7 @@ public class PostgresqlExpression extends JDBCExpression {
     	NSMutableArray<String> result = new NSMutableArray<String>();
     	while (enumeration.hasMoreElements()) {
     		String identifier = (String) enumeration.nextElement();
-    		String quotedString = this.quoteIdentifier(identifier);
+    		String quotedString = quoteIdentifier(identifier);
     		result.addObject(quotedString);
     	}
     	return result;
@@ -706,23 +733,41 @@ public class PostgresqlExpression extends JDBCExpression {
      * @return quoted or unquoted string (check with enableIdentifierQuoting)
      */
     private String quoteIdentifier(String identifier) {
-   		return this.externalNameQuoteCharacter() + identifier + this.externalNameQuoteCharacter();
+   		return externalNameQuoteCharacter() + identifier + externalNameQuoteCharacter();
     }
-    
     
     /**
      * Overridden so we can get the fetch limit from the fetchSpec.
      *
-     * @param attributes   the array of attributes
-     * @param lock  locking flag
-     * @param eofetchspecification  the fetch specification
+     * @param attributes the array of attributes
+     * @param lock locking flag
+     * @param fetchSpec the fetch specification
      */
     @Override
-    public void prepareSelectExpressionWithAttributes(NSArray<EOAttribute> attributes, boolean lock, EOFetchSpecification eofetchspecification) {
-        if(!eofetchspecification.promptsAfterFetchLimit()) {
-            _fetchLimit = eofetchspecification.fetchLimit();
+    public void prepareSelectExpressionWithAttributes(NSArray<EOAttribute> attributes, boolean lock, EOFetchSpecification fetchSpec) {
+        try {
+            _fetchRange = _fetchRangeSelector.invoke(fetchSpec);
+            // We will get an error when not using our custom ERXFetchSpecification subclass
+            // We could have added ERExtensions to the classpath and checked for instanceof, but I thought
+            // this is a little cleaner since people may be using this PlugIn and not Wonder in some legacy apps.
+        } catch (IllegalArgumentException e) {
+            // ignore
+        } catch (IllegalAccessException e) {
+            // ignore
+        } catch (InvocationTargetException e) {
+            // ignore
+        } catch (NoSuchMethodException e) {
+            // ignore
         }
-        super.prepareSelectExpressionWithAttributes(attributes, lock, eofetchspecification);
+        // Only check for fetchLimit if fetchRange is not provided.
+        if (_fetchRange == null && !fetchSpec.promptsAfterFetchLimit()) {
+            _fetchLimit = fetchSpec.fetchLimit();
+        }
+        if (_fetchRange != null) {
+            // if we have a fetch range disable the limit
+            fetchSpec.setFetchLimit(0);
+        }
+        super.prepareSelectExpressionWithAttributes(attributes, lock, fetchSpec);
     }
     
     /**
@@ -750,9 +795,9 @@ public class PostgresqlExpression extends JDBCExpression {
         EOEntity entity = attribute.entity();
         EOEntity parentEntity = entity.parentEntity();
         String externalName = entity.externalName();
-        if (externalName != null) {
+        if (externalName != null && parentEntity != null) {
           // If you have a parent entity and that parent entity shares your table name, then you're single table inheritance
-          boolean singleTableInheritance = (parentEntity != null && externalName.equals(parentEntity.externalName()));
+          boolean singleTableInheritance = externalName.equals(parentEntity.externalName());
           if (singleTableInheritance) {
             EOAttribute parentAttribute = parentEntity.attributeNamed(attribute.name());
             if (parentAttribute == null) {
@@ -778,14 +823,13 @@ public class PostgresqlExpression extends JDBCExpression {
       String allowsNullClauseForConstraint = allowsNullClauseForConstraint(shouldAllowNull(attribute));
       String sql;
       if (defaultValue == null) {
-          sql = _NSStringUtilities.concat(this.quoteIdentifier(attribute.columnName()), " ", columnTypeStringForAttribute(attribute), " ", allowsNullClauseForConstraint);
+          sql = _NSStringUtilities.concat(quoteIdentifier(attribute.columnName()), " ", columnTypeStringForAttribute(attribute), " ", allowsNullClauseForConstraint);
       }
       else {
-          sql = _NSStringUtilities.concat(this.quoteIdentifier(attribute.columnName()), " ", columnTypeStringForAttribute(attribute), " DEFAULT ", formatValueForAttribute(defaultValue, attribute), " ", allowsNullClauseForConstraint);
+          sql = _NSStringUtilities.concat(quoteIdentifier(attribute.columnName()), " ", columnTypeStringForAttribute(attribute), " DEFAULT ", formatValueForAttribute(defaultValue, attribute), " ", allowsNullClauseForConstraint);
       }
       appendItemToListString(sql, _listString());
     }
-
 
     /**
      * cug: Quick hack for bug in WebObjects 5.4 where the "not null" statement is added without a space, 
@@ -838,7 +882,6 @@ public class PostgresqlExpression extends JDBCExpression {
         return sql;
     }
     
-
     /**
      * Overridden because the original version throws an exception when the
      * data contains negative byte values. 
@@ -998,7 +1041,7 @@ public class PostgresqlExpression extends JDBCExpression {
      */
     @Override
     public void setUseBindVariables(boolean value) {
-    	_disableBindVariables = (value ? Boolean.FALSE : Boolean.TRUE);
+    	_disableBindVariables = Boolean.valueOf(!value);
     }
 
     /**
@@ -1074,6 +1117,6 @@ public class PostgresqlExpression extends JDBCExpression {
 	 * the default function
 	 */
 	private String customFunctionForStringComparison() {
-		return System.getProperty(this.getClass().getName() + ".customFunctionForStringComparison");
+		return System.getProperty(getClass().getName() + ".customFunctionForStringComparison");
 	}
 }

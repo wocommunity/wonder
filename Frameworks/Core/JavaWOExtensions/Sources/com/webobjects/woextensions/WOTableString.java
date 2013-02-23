@@ -20,7 +20,7 @@ import com.webobjects.foundation.NSTimestampFormatter;
  */
 
 /**
- * @Deprecated
+ * @deprecated
  * WOTableString is no longer supported
  */
 @Deprecated

@@ -18,7 +18,7 @@ import er.extensions.foundation.ERXValueUtilities;
  * capabilities a client browser has and then posts those values back
  * to the server to store them on the session. To use it, just drop it
  * in your page wrapper. For storage, this component relies on the
- * {@link ERXSession#objectStore()}. At the moment the modernizr data
+ * {@link er.extensions.appserver.ERXSession#objectStore()}. At the moment the modernizr data
  * is stored on the session, a notification is fired using the session
  * as the notification object. This is to permit logging of modernizr data
  * for later analysis. It also permits you to copy the modernizer data
@@ -27,7 +27,7 @@ import er.extensions.foundation.ERXValueUtilities;
  * 
  * <p>It is recommended that in your ERXSession subclass, you set
  * <code>_javaScriptEnabled == Boolean.FALSE;</code> in the constructor.  
- * By default, it will be set to true when {@link ERXSession#javaScriptEnabled()} 
+ * By default, it will be set to true when {@link er.extensions.appserver.ERXSession#javaScriptEnabled()} 
  * is called. This component will set the value to true whenever the 
  * modernizr data updates as a result of an ajax call... thus ensuring 
  * no false positives.</p>
@@ -123,6 +123,7 @@ public class ERXModernizr extends ERXStatelessComponent {
 	/**
 	 * Overridden to capture the modernizr data being sent from the client.
 	 */
+	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		super.takeValuesFromRequest(request, context);
 		if(shouldPostData()) {

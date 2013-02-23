@@ -43,10 +43,10 @@ import er.quartzscheduler.util.ERQSSchedulerServiceFrameworkPrincipal;
  * When the job has been executed, the listener logs information and can send an email. The content of the log and 
  * the email are identical.
  * 
- * @see jobToBeExecuted
- * @see jobWasExecuted
- * @see sendMail
- * @see logResult
+ * @see #jobToBeExecuted
+ * @see #jobWasExecuted
+ * @see #sendMail
+ * @see #logResult
  */
 public class ERQSJobListener extends ERQSAbstractListener implements JobListener
 {
@@ -126,7 +126,7 @@ public class ERQSJobListener extends ERQSAbstractListener implements JobListener
 	 * Called by the Scheduler after a JobDetail  has been executed <p>
 	 * It retrieve the ERQSJobDescription object from the datamap and updates the object.<br>
 	 * It also send an email if <code>er.quartzscheduler.ERQSJobListener.sendingmail=true</code><p>
-	 * @see #recipients(ERQSJobDescription, boolean)
+	 * @see #recipients(JobExecutionContext, boolean)
 	 */
 	public void jobWasExecuted(final JobExecutionContext jobexecutioncontext, final JobExecutionException jobexecutionexception) 
 	{
@@ -224,7 +224,7 @@ public class ERQSJobListener extends ERQSAbstractListener implements JobListener
 	 * </ul>
 	 * @see ERQSJobDescription#recipients(boolean)
 	 * 
-	 * @param aJobDescription
+	 * @param jobexecutioncontext
 	 * @param jobRanSuccessfully
 	 * @return a list of recipients
 	 */
@@ -319,6 +319,7 @@ public class ERQSJobListener extends ERQSAbstractListener implements JobListener
 	 * <i>It took 90s.</i>
 	 * 
 	 * @param jobexecutioncontext (used to get the job duration)
+	 * @param errorMsg 
 	 * @return subject
 	 */
 	protected String getMailContent(final JobExecutionContext jobexecutioncontext, final String errorMsg)
@@ -410,7 +411,7 @@ public class ERQSJobListener extends ERQSAbstractListener implements JobListener
 	 * If the duration is less than 180s, the duration is expressed in seconds otherwise there is a conversion in mn.
 	 * 
 	 * @param duration
-	 * @return
+	 * @return the formatted duration
 	 */
 	protected String formattedDuration(final long duration) {
 		long durationInMinute = 0;
@@ -428,7 +429,7 @@ public class ERQSJobListener extends ERQSAbstractListener implements JobListener
 	 * Utility method.
 	 * 
 	 * @param date
-	 * @return
+	 * @return the date in NSTimestamp format
 	 */
 	protected NSTimestamp dateToNSTimestamp(final Date date)
 	{

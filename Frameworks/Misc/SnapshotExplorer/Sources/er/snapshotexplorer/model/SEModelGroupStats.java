@@ -44,7 +44,7 @@ public class SEModelGroupStats {
   protected void ensureModelsLoaded() {
     if (_modelStats == null) {
       _modelStats = new NSMutableDictionary<String, SEModelStats>();
-      for (EOModel model : (NSArray<EOModel>) _modelGroup.models()) {
+      for (EOModel model : _modelGroup.models()) {
         SEModelStats modelStats = new SEModelStats(model);
         _modelStats.setObjectForKey(modelStats, model.name());
       }

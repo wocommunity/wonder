@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import org.apache.commons.lang.ObjectUtils;
+
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
@@ -28,7 +30,6 @@ import com.webobjects.foundation.NSSelector;
 
 import er.directtoweb.pages.ERD2WEditRelationshipPage;
 import er.directtoweb.pages.ERD2WPage;
-import er.extensions.ERXExtensions;
 import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXEOAccessUtilities;
@@ -97,10 +98,11 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
     @Override
     public void awake() {
     	_dataSource = null;
-    	NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("relatedObjectDidChange", ERXConstant.NotificationClassArray), ERMDActionButton.BUTTON_PERFORMED_DELETE_ACTION, null);
+    	NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector<Void>("relatedObjectDidChange", ERXConstant.NotificationClassArray), ERMDActionButton.BUTTON_PERFORMED_DELETE_ACTION, null);
     	super.awake();
     }
     
+    @Override
     public void sleep() {
     	NSNotificationCenter.defaultCenter().removeObserver(this, ERMDActionButton.BUTTON_PERFORMED_DELETE_ACTION, null);
     	super.sleep();
@@ -123,7 +125,7 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	public WOComponent newObjectAction() {
 		EOEditingContext newEc = ERXEC.newEditingContext(masterObject().editingContext());
 		EOClassDescription relatedObjectClassDescription = masterObject().classDescriptionForDestinationKey(relationshipKey());
-		EOEnterpriseObject relatedObject = (EOEnterpriseObject)EOUtilities.createAndInsertInstance(newEc, relatedObjectClassDescription.entityName());
+		EOEnterpriseObject relatedObject = EOUtilities.createAndInsertInstance(newEc, relatedObjectClassDescription.entityName());
 		EOEnterpriseObject localObj = EOUtilities.localInstanceOfObject(relatedObject.editingContext(), masterObject());
 		if (localObj instanceof ERXGenericRecord) {
 			((ERXGenericRecord)localObj).setValidatedWhenNested(false);
@@ -282,7 +284,7 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	/**
 	 * Sets the master object and relationship key.
 	 * Takes an NSArray containing the master object (index 0) and relationship key (index 1).
-	 * Required by the {@link ERMEditRelationhsipPageInterface}
+	 * Required by the {@link ERMEditRelationshipPageInterface}
 	 * 
 	 * @param a an NSArray containing the master object (index 0) and relationship key (index 1).
 	 */
@@ -299,7 +301,7 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	public void setMasterObjectAndRelationshipKey(EOEnterpriseObject eo, String relationshipKey) {
 		// only do this if the eo and relationshipKey have changed;
 		if (relationshipKey != null && eo != null) {
-			if (ERXExtensions.safeDifferent(relationshipKey(), relationshipKey) ||
+			if (ObjectUtils.notEqual(relationshipKey(), relationshipKey) ||
 					(masterObject() != null && !ERXEOControlUtilities.eoEquals(masterObject(), eo))) {
 //				NSLog.out.appendln("***ERMODEditRelationshipPage.setMasterObjectAndRelationshipKey: "
 //								+ "HAS CHANGES; " + eo + " - " + masterObject() + "  " + relationshipKey + " - " + relationshipKey() +"***");
@@ -330,7 +332,7 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	// SORT ORDERING
 	
 	@SuppressWarnings("unchecked")
-  public NSArray<EOSortOrdering> sortOrderings() {
+	public NSArray<EOSortOrdering> sortOrderings() {
 		NSArray<EOSortOrdering> sortOrderings = null;
 		if (userPreferencesCanSpecifySorting()) {
 			sortOrderings = (NSArray<EOSortOrdering>) userPreferencesValueForPageConfigurationKey(Keys.userPreferencesSortOrdering);
@@ -427,6 +429,7 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
      * 
      * @return EODataSource an EODetailDataSource created from the masterObject and relationshipKey.
      */
+    @Override
     public EODataSource dataSource() {
     	if (_dataSource == null) {
 			_dataSource = ERXEOControlUtilities.dataSourceForObjectAndKey(masterObject(), relationshipKey());
@@ -434,6 +437,7 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 		return _dataSource;
     }
     
+    @Override
     public void setDataSource(EODataSource ds) {
     	_dataSource = ds;
     }
@@ -481,7 +485,7 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	}
 
 	public void setMasterObject(EOEnterpriseObject masterObject) {
-		this._masterObject = masterObject;
+		_masterObject = masterObject;
 	}
 	
 	/** Checks if the current list is empty. */

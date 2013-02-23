@@ -10,8 +10,6 @@ import com.webobjects.directtoweb.Assignment;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 
-import er.directtoweb.assignments.delayed.ERDDelayedKeyValueAssignment;
-
 /**
  * Piece of crap. This assignment works around the 
  * fact that KeyValueAssignment isn't public (and should be).
@@ -21,7 +19,7 @@ import er.directtoweb.assignments.delayed.ERDDelayedKeyValueAssignment;
  * assignment will be cached the first time this assignment is
  * fired. To have a key value assignment that does not cache 
  * the value returned the first time have a look at
- * {@link ERDDelayedKeyValueAssignment}.
+ * {@link er.directtoweb.assignments.delayed.ERDDelayedKeyValueAssignment}.
  */
 public class ERDKeyValueAssignment extends Assignment {
 	/**
@@ -71,6 +69,7 @@ public class ERDKeyValueAssignment extends Assignment {
      * @return result of resolving the key path off of the 
      * 		context. 
      */
+    @Override
     public Object fire(D2WContext d2wcontext) {
         return d2wcontext.valueForKeyPath((String)value());
     }

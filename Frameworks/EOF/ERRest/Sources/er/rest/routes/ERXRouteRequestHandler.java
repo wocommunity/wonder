@@ -395,10 +395,10 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	/**
 	 * Calls the static method 'addRoutes(entityName, routeRequetHandler)' on the route controller for the given entity
 	 * name, giving it the opportunity to add routes for this entity. Additionally, this method looks for all methods
-	 * annotated with @Path or @Paths annotations and adds the corresponding routes. If no addRoutes method is found and
+	 * annotated with {@literal @}Path or {@literal @}Paths annotations and adds the corresponding routes. If no addRoutes method is found and
 	 * no
 	 * 
-	 * @Path annotated methods exist, it will log a warning and add default routes instead.
+	 * {@literal @}Path annotated methods exist, it will log a warning and add default routes instead.
 	 * 
 	 * @param entityName
 	 *            the name of the entity
@@ -410,9 +410,9 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	/**
 	 * Calls the static method 'addRoutes(entityName, routeRequetHandler)' on the given route controller class, giving
 	 * it the opportunity to add routes for the given entity. Additionally, this method looks for all methods annotated
-	 * with @Path or @Paths annotations and adds the corresponding routes. If no addRoutes method is found and no
+	 * with {@literal @}Path or {@literal @}Paths annotations and adds the corresponding routes. If no addRoutes method is found and no
 	 * 
-	 * @Path annotated methods exist, it will log a warning and add default routes instead.
+	 * {@literal @}Path annotated methods exist, it will log a warning and add default routes instead.
 	 * 
 	 * @param entityName
 	 *            the name of the entity
@@ -424,8 +424,8 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	}
 
 	/**
-	 * This method looks for all methods annotated with @Path or @Paths annotations and adds the corresponding routes. 
-	 * If no addRoutes method is found and no @Path annotated methods exist, it will log a warning and add default routes instead.
+	 * This method looks for all methods annotated with {@literal @}Path or {@literal @}Paths annotations and adds the corresponding routes. 
+	 * If no addRoutes method is found and no {@literal @}Path annotated methods exist, it will log a warning and add default routes instead.
 	 * This is the variant to use if you have a controller that has no logical entity associated with it.
 	 * 
 	 * @param routeControllerClass
@@ -495,7 +495,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 		}
 
 		if (addDefaultRoutesIfNoDeclaredRoutesFound && !declaredRoutesFound) {
-			ERXRouteRequestHandler.log.warn("No 'addRoutes(entityName, routeRequetHandler)' method and no @Path designations found on '" + routeControllerClass.getSimpleName() + "'. Registering default routes instead.");
+			ERXRouteRequestHandler.log.warn("No 'addRoutes(entityName, routeRequetHandler)' method and no Path designations found on '" + routeControllerClass.getSimpleName() + "'. Registering default routes instead.");
 			addDefaultRoutes(entityName, routeControllerClass);
 		}
 	}
@@ -714,7 +714,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	
 	/**
 	 * @param method
-	 * @param pattern
+	 * @param urlPattern
 	 * @return the first route matching <code>method</code> and <code>pattern</code>.
 	 */
 	protected ERXRoute routeForMethodAndPattern(ERXRoute.Method method, String urlPattern) {
@@ -727,7 +727,7 @@ public class ERXRouteRequestHandler extends WODirectActionRequestHandler {
 	}
 	
 	/**
-	 * Checks for an existing route that matches the {@link ERXRoute.Method} and {@link ERXRoute#routePattern()} of <code>route</code> and
+	 * Checks for an existing route that matches the {@link er.rest.routes.ERXRoute.Method} and {@link er.rest.routes.ERXRoute#routePattern()} of <code>route</code> and
 	 * yet has a different controller or action mapping.
 	 * @param route
 	 */

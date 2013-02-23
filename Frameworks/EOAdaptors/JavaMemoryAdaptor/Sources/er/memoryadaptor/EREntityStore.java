@@ -4,8 +4,6 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
 
-//import ognl.Ognl;
-
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOGeneralAdaptorException;

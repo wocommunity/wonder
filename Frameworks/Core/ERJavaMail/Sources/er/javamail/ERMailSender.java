@@ -187,8 +187,8 @@ public class ERMailSender implements Runnable {
 	public void sendMessageNow(ERMessage message) {
 		Transport transport = null;
 		try {
-			transport = this._connectedTransportForSession(ERJavaMail.sharedInstance().sessionForContext(message.contextString()), ERJavaMail.sharedInstance().smtpProtocolForContext(message.contextString()), false);
-			this._sendMessageNow(message, transport);
+			transport = _connectedTransportForSession(ERJavaMail.sharedInstance().sessionForContext(message.contextString()), ERJavaMail.sharedInstance().smtpProtocolForContext(message.contextString()), false);
+			_sendMessageNow(message, transport);
 		}
 		catch (MessagingException e) {
 			if (log.isDebugEnabled()) {
@@ -274,7 +274,7 @@ public class ERMailSender implements Runnable {
 				_stats.incrementErrorCount();
 
 				NSArray<String> invalidEmails = ERMailUtils.convertInternetAddressesToNSArray(e.getInvalidAddresses());
-				this.notifyInvalidEmails(invalidEmails);
+				notifyInvalidEmails(invalidEmails);
 				message._invalidRecipients(invalidEmails);
 
 				exception = e;
@@ -373,7 +373,7 @@ public class ERMailSender implements Runnable {
 		                    if (transport == null) {
 		                        Session session = ERJavaMail.sharedInstance().newSessionForMessage(message);
 		                    	try {
-		                    		transport = this._connectedTransportForSession(session, smtpProtocol, true);
+		                    		transport = _connectedTransportForSession(session, smtpProtocol, true);
 		                    	}
 		                    	catch (MessagingException e) {
 			        				message._deliveryFailed(e);
@@ -395,12 +395,12 @@ public class ERMailSender implements Runnable {
 		                        throw new RuntimeException ("Unable to connect transport.", e);
 		                    }
 							try {
-								this._sendMessageNow(message, transport);
+								_sendMessageNow(message, transport);
 							} catch(SendFailedException ex) {
 								log.error("Can't send message: " + message + ": " + ex, ex);
 							}
 							// if (useSenderDelay) {
-							// this.wait (senderDelayMillis);
+							//     wait (senderDelayMillis);
 							// }
 							// Here we get all the exceptions that are
 							// not 'SendFailedException's.
@@ -496,7 +496,7 @@ public class ERMailSender implements Runnable {
 		 * </span>
 		 */
 		public synchronized void reset() {
-			String savedStatsString = this.toString();
+			String savedStatsString = toString();
 			errorCount = 0;
 			mailCount = 0;
 			_peakMemoryUsage = 0.0d;
@@ -604,7 +604,7 @@ public class ERMailSender implements Runnable {
 		 */
 		@Override
 		public String toString() {
-			return "<" + this.getClass().getName() + " lastResetTime: " + lastResetTime() + ", mailCount: " + mailCount() + ", errorCount: " + errorCount() + ", currentQueueSize: " + currentQueueSize() + ", peakMemoryUsage: " + formattedPeakMemoryUsage() + ">";
+			return "<" + getClass().getName() + " lastResetTime: " + lastResetTime() + ", mailCount: " + mailCount() + ", errorCount: " + errorCount() + ", currentQueueSize: " + currentQueueSize() + ", peakMemoryUsage: " + formattedPeakMemoryUsage() + ">";
 		}
 	}
 }

@@ -15,7 +15,7 @@ import er.directtoweb.assignments.defaults.ERDDefaultConfigurationNameAssignment
 // MOVEME: ERDConfigurationAssignment
 /**
  * Generated pageConfigurations that will use the tab inspect templates.<br />
- * @deprecated use {@link ERDDefaultConfigurationNameAssignment} with key inspectTabConfigurationName
+ * @deprecated use {@link er.directtoweb.assignments.defaults.ERDDefaultConfigurationNameAssignment} with key inspectTabConfigurationName
  */
 @Deprecated
 public class ERDTabConfigurationAssignment extends ERDDefaultConfigurationNameAssignment {
@@ -53,5 +53,6 @@ public class ERDTabConfigurationAssignment extends ERDDefaultConfigurationNameAs
      */
     public ERDTabConfigurationAssignment(String key, Object value) { super(key,value); }
 
+    @Override
     public Object inspectConfigurationName(D2WContext c) { return "InspectTab" + (c.valueForKey("object") != null ?((EOEnterpriseObject)c.valueForKey("object")).entityName() :                                                                                         c.entity().name()); }
 }

@@ -23,9 +23,8 @@ import org.apache.fop.apps.FopFactory;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.xml.sax.InputSource;
-
 import org.apache.xmlgraphics.util.MimeConstants;
+import org.xml.sax.InputSource;
 
 /**
  * This is just a stub class that can be called directly (outside the context of

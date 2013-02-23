@@ -57,6 +57,7 @@ public class AjaxModalContainer extends AjaxDynamicElement {
     	return context.elementID().equals(context.senderID());
     }
     
+    @Override
     public WOActionResults invokeAction(WORequest worequest, WOContext wocontext) {
         WOComponent component = wocontext.component();
     	if (!booleanValueForBinding("ajax", false, component)) {
@@ -68,6 +69,7 @@ public class AjaxModalContainer extends AjaxDynamicElement {
         return super.invokeAction(worequest, wocontext);
     }
 
+    @Override
     public void appendToResponse(WOResponse response, WOContext context) {
         WOComponent component = context.component();
         String linkID = (String)valueForBinding("id", component);
@@ -155,7 +157,7 @@ public class AjaxModalContainer extends AjaxDynamicElement {
         }
         response.appendContentString("</a>");
         if (AjaxUtils.isAjaxRequest(context.request())) {
-	        NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(response);
+	        NSMutableDictionary userInfo = ERXWOContext.contextDictionary();
 	        if (!userInfo.containsKey("er.ajax.AjaxModalContainer.init")) {
 	            AjaxUtils.appendScriptHeader(response);
 	            response.appendContentString("iBox.init()");
@@ -185,6 +187,7 @@ public class AjaxModalContainer extends AjaxDynamicElement {
         super.appendToResponse(response, context);
     }
 
+    @Override
     protected void addRequiredWebResources(WOResponse response, WOContext context) {
     	addScriptResourceInHead(context, response, "prototype.js");
     	addScriptResourceInHead(context, response, "ibox/ibox.js");
@@ -199,11 +202,13 @@ public class AjaxModalContainer extends AjaxDynamicElement {
     	addStylesheetResourceInHead(context, response, skinCSS);
     }
 
+	@Override
 	protected String _containerID(WOContext context) {
 		String id = (String) valueForBinding("id", context.component());
 		return id;
 	}
 
+    @Override
     public WOActionResults handleRequest(WORequest request, WOContext context) {
         WOComponent component = context.component();
 

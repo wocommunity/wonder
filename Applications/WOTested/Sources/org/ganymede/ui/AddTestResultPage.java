@@ -21,6 +21,7 @@ public class AddTestResultPage extends ERXComponent {
         super(context);
     }
 
+    @Override
     public void awake() {
 
         EOEditingContext ec = ERXEC.newEditingContext();

@@ -15,6 +15,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.appserver.ERXWOContext;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
@@ -179,7 +180,7 @@ public class AjaxAutoComplete extends AjaxComponent {
 				String listJS = null;
 				if (isLocalSharedList) {
 					String varName = (String) valueForBinding("localSharedVarName");
-					NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(res);
+					NSMutableDictionary userInfo = ERXWOContext.contextDictionary();
 					if (userInfo.objectForKey(varName) == null) {
 						String ljs = listeJS();
 						AjaxUtils.addScriptCodeInHead(res, ctx, "var " + varName + " = " + ljs + ";");
@@ -241,6 +242,7 @@ public class AjaxAutoComplete extends AjaxComponent {
     /**
      * Adds all required resources.
      */
+    @Override
     protected void addRequiredWebResources(WOResponse res) {
 		boolean isDisabled = hasBinding("disabled") && ((Boolean) valueForBinding("disabled")).booleanValue();
 		if ( !isDisabled ) {
@@ -327,6 +329,7 @@ public class AjaxAutoComplete extends AjaxComponent {
      * pushes it up to the parent and pulls the "list" binding. The parent is
      * responsible for returning a list with some items that match the current value.
      */
+    @Override
      public WOActionResults handleRequest(WORequest request, WOContext context) {
         // String inputString = request.contentString();
         String fieldValue = context.request().stringFormValueForKey(fieldName);

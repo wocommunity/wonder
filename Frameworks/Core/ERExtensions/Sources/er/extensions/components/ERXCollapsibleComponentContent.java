@@ -39,6 +39,7 @@ public class ERXCollapsibleComponentContent extends WOCollapsibleComponentConten
     protected String _closedImageFileName, _openedImageFileName, _framework;
     protected boolean _isFrameworkSet = false;
     
+    @Override
     public String openedImageFileName()  {
         if (_openedImageFileName==null) {
             if (hasBinding("openedImageFileName")) {
@@ -50,6 +51,7 @@ public class ERXCollapsibleComponentContent extends WOCollapsibleComponentConten
         return _openedImageFileName;
     }
 
+    @Override
     public String closedImageFileName()  {
         if (_closedImageFileName==null) {
             if (hasBinding("closedImageFileName")) {
@@ -61,6 +63,7 @@ public class ERXCollapsibleComponentContent extends WOCollapsibleComponentConten
         return _closedImageFileName;
     }
 
+    @Override
     public String framework() {
         if (!_isFrameworkSet) {
             _isFrameworkSet = true;

@@ -121,10 +121,4 @@ public class Neo4JNodeErsatz extends Neo4JErsatz {
 		// remove the node itself
 		getNode().delete();
 	}
-
-
-
-
-
-
 }

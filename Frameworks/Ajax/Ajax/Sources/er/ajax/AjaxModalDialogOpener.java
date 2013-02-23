@@ -74,7 +74,8 @@ public class AjaxModalDialogOpener extends AjaxComponent {
     public AjaxModalDialogOpener(WOContext context) {
         super(context);
     }
-    
+
+    @Override
     public boolean isStateless() {
     	return true;
     }
@@ -84,6 +85,7 @@ public class AjaxModalDialogOpener extends AjaxComponent {
 	 *
 	 * @see er.ajax.AjaxComponent#appendToResponse(com.webobjects.appserver.WOResponse, com.webobjects.appserver.WOContext)
 	 */
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		if( ! booleanValueForBinding("enabled", true)) {
 			return;
@@ -137,12 +139,14 @@ public class AjaxModalDialogOpener extends AjaxComponent {
 		return (String) valueForBinding("dialogId");
 	}
 	
+	@Override
 	protected void addRequiredWebResources(WOResponse res) {
 	}
 	
 	/**
 	 * Runs action and returns success status if enabled, otherwise returns failed status.
 	 */
+	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		if( booleanValueForBinding("enabled", true)) {
 			valueForBinding("action");
@@ -177,5 +181,4 @@ public class AjaxModalDialogOpener extends AjaxComponent {
 
 		return AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
 	}
-
 }

@@ -11,7 +11,6 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
 import er.directtoweb.assignments.ERDAssignment;
-import er.directtoweb.assignments.ERDComputingAssignmentInterface;
 import er.directtoweb.assignments.ERDLocalizableAssignmentInterface;
 import er.extensions.foundation.ERXDictionaryUtilities;
 import er.extensions.foundation.ERXStringUtilities;
@@ -50,7 +49,7 @@ public class ERDDefaultDisplayNameAssignment extends ERDAssignment implements ER
     });
 
     /**
-     * Implementation of the {@link ERDComputingAssignmentInterface}. This array
+     * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This array
      * of keys is used when constructing the
      * significant keys for the passed in keyPath.
      * @param keyPath to compute significant keys for.
@@ -174,7 +173,7 @@ public class ERDDefaultDisplayNameAssignment extends ERDAssignment implements ER
             pageConfiguration = taskName.substring(0,1).toUpperCase() + taskName.substring(1) + (entityName != null ? entityName : "");
         }
         String localizerKey = "Pages." + pageConfiguration;
-        String result = (String) ERXLocalizer.currentLocalizer().localizedStringForKey(localizerKey);
+        String result = ERXLocalizer.currentLocalizer().localizedStringForKey(localizerKey);
         if(false) {
            	String task = c.task();
            	String subTask = (String) c.valueForKey("subTask");

@@ -140,7 +140,7 @@ public class ERCAuditTrailHandler {
         EOEditingContext ec = (EOEditingContext) n.object();
         if (ec.parentObjectStore() instanceof EOObjectStoreCoordinator) {
             ec.processRecentChanges();
-            NSArray<EOEnterpriseObject> insertedObjects = (NSArray) ec.insertedObjects().immutableClone();
+            NSArray<EOEnterpriseObject> insertedObjects = ec.insertedObjects().immutableClone();
             for (EOEnterpriseObject eo : insertedObjects) {
                 if(ERCAuditTrailEntry.clazz.entityName().equals(eo.entityName())) {
                     ec.deleteObject(eo);
@@ -150,8 +150,8 @@ public class ERCAuditTrailHandler {
                 }
             }
             ec.processRecentChanges();
-            NSArray updatedObjects = (NSArray) ec.updatedObjects();
-            NSArray deletedObjects = (NSArray) ec.deletedObjects();
+            NSArray updatedObjects = ec.updatedObjects();
+            NSArray deletedObjects = ec.deletedObjects();
             handleSave(ec, EOEditingContext.InsertedKey, insertedObjects);
             handleSave(ec, EOEditingContext.UpdatedKey, updatedObjects);
             handleSave(ec, EOEditingContext.DeletedKey, deletedObjects);

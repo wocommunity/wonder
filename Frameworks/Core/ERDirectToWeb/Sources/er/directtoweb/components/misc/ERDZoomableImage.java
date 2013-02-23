@@ -80,7 +80,7 @@ public class ERDZoomableImage extends ERXStatelessComponent {
     }
     
     /**
-     * @return {@link Boolean} true, if {@link ERDZoomableImage#thumnailSrc()} returns an empty or null string
+     * @return {@link Boolean} true, if {@link #thumnailSrc()} returns an empty or null string
      *                         false, otherwise
      */
     public boolean isThumbnailSrcNullOrEmpty() {

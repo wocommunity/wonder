@@ -38,6 +38,7 @@ import com.webobjects.foundation._NSUtilities;
 
 import er.extensions.appserver.ERXHttpStatusCodes;
 import er.extensions.appserver.ERXRequest;
+import er.extensions.appserver.ERXResponse;
 import er.extensions.eof.ERXDatabaseContextDelegate.ObjectNotAvailableException;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXKey;
@@ -1643,7 +1644,7 @@ public class ERXRouteController extends WODirectAction {
 			}
 		}
 		if (allowJSONP()) {
-			if (this.format().equals(ERXRestFormat.json())) {
+			if (format().equals(ERXRestFormat.json())) {
 				String callbackMethodName = request().stringFormValueForKey("callback");
 				if (callbackMethodName != null) {
 					WOResponse response = results.generateResponse();
@@ -1739,7 +1740,7 @@ public class ERXRouteController extends WODirectAction {
 	 * @return the response
 	 */
 	public WOActionResults optionsAction() throws Throwable {
-		WOResponse response = new WOResponse();
+		ERXResponse response = new ERXResponse();
 		String accessControlAllowOrigin = accessControlAllowOrigin();
 		if (accessControlAllowOrigin != null) {
 			response.setHeader(accessControlAllowOrigin, "Access-Control-Allow-Origin");

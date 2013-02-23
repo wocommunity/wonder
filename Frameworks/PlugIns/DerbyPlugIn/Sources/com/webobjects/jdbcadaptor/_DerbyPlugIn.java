@@ -151,12 +151,12 @@ public class _DerbyPlugIn extends JDBCPlugIn {
 						value = formatValueForAttribute(adaptorValue, eoattribute);
 					}
 					else {
-						NSLog.err.appendln(this.getClass().getName() + ": Can't convert: " + obj + ":" + obj.getClass() + " -> " + adaptorValue + ":" + adaptorValue.getClass());
+						NSLog.err.appendln(getClass().getName() + ": Can't convert: " + obj + ":" + obj.getClass() + " -> " + adaptorValue + ":" + adaptorValue.getClass());
 						value = obj.toString();
 					}
 				}
 				catch (Exception ex) {
-					NSLog.err.appendln(this.getClass().getName() + ": Exception while converting " + obj.getClass().getName());
+					NSLog.err.appendln(getClass().getName() + ": Exception while converting " + obj.getClass().getName());
 					NSLog.err.appendln(ex);
 					value = obj.toString();
 				}

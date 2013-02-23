@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -20,6 +19,7 @@ import java.util.Random;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
@@ -30,13 +30,12 @@ import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EOQualifierSQLGeneration;
+import com.webobjects.eoaccess.EOQualifierSQLGeneration.Support;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eoaccess.ERXEntityDependencyOrderingDelegate;
 import com.webobjects.eoaccess.ERXModel;
-import com.webobjects.eoaccess.EOQualifierSQLGeneration.Support;
-import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
@@ -48,8 +47,6 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSLog;
-import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
@@ -168,9 +165,10 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * Handling call all of the <code>did*</code> methods on
      * {@link ERXGenericRecord} subclasses after an editing context
      * has been saved. This delegate is also responsible for configuring
-     * the {@link ERXCompilerProxy} and {@link ERXValidationFactory}.
+     * {@link ERXValidationFactory}.
      * This delegate is configured when this framework is loaded.
      */
+    @Override
     protected void initialize() {
     	NSNotificationCenter.defaultCenter().addObserver(this,
     			new NSSelector("bundleDidLoad", ERXConstant.NotificationClassArray),
@@ -193,7 +191,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         	ERXSystem.updateProperties();
  
     		// AK: enable this when we're ready
-        	// WOEncodingDetector.sharedInstance().setFallbackEncoding("UTF-8");
+        	// WOEncodingDetector.sharedInstance().setFallbackEncoding(CharEncoding.UTF_8);
         	
         	// GN: configure logging with optional custom subclass of ERXLogger
         	String className = ERXProperties.stringForKey("er.extensions.erxloggerclass"); 
@@ -252,6 +250,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * launching. Here is where log4j is configured for rapid
      * turn around and the validation template system is configured.
      */
+    @Override
     public void finishInitialization() {
     	ERXJDBCAdaptor.registerJDBCAdaptor();
         // AK: we now setup the properties three times. At startup, in ERX.init
@@ -344,6 +343,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
             return support;
         }
         
+        @Override
         public String sqlStringForSQLExpression(EOQualifier eoqualifier, EOSQLExpression e) {
         	try {
         		return supportForQualifier(eoqualifier).sqlStringForSQLExpression(eoqualifier, e);
@@ -354,11 +354,13 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         	}
         }
 
+        @Override
         public EOQualifier schemaBasedQualifierWithRootEntity(EOQualifier eoqualifier, EOEntity eoentity) {
             EOQualifier result = supportForQualifier(eoqualifier).schemaBasedQualifierWithRootEntity(eoqualifier, eoentity);
             return result;
         }
 
+        @Override
         public EOQualifier qualifierMigratedFromEntityRelationshipPath(EOQualifier eoqualifier, EOEntity eoentity, String s) {
             return supportForQualifier(eoqualifier).qualifierMigratedFromEntityRelationshipPath(eoqualifier, eoentity, s);
         }
@@ -373,33 +375,6 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      */
     public void configureAdaptorContext(NSNotification n) {
         ERXExtensions.configureAdaptorContext();
-    }
-    
-    /**
-     * This method is called every time a session times
-     * out. It allows us to release references to all the
-     * editing contexts that were created when that particular
-     * session was active.
-     * Not used in WO 5.2+
-     * @param n notification that contains the session ID.
-     * @deprecated not needed anymore in WO 5.4
-     */
-    @Deprecated
-    public void sessionDidTimeOut(NSNotification n) {
-        String sessionID=(String)n.object();
-        ERXExtensions.sessionDidTimeOut(sessionID);
-    }
-
-    /**
-     * This is needed for WO pre-5.2 when ec's were not
-     * retained by their eos. Not called in 5.2+ systems.
-     * @param n notification posted when an ec is created
-     * @deprecated not needed anymore in WO 5.4
-     */
-    @Deprecated
-    public void editingContextDidCreate(NSNotification n) {
-        EOEditingContext ec = (EOEditingContext)n.object();
-        ERXExtensions.retainEditingContextForCurrentSession(ec);
     }
     
     /**
@@ -517,107 +492,10 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
    }
 
     /**
-     * Retaining the editing contexts explicitly until the session that was active
-     * when they were created goes away
-     * this hopefully will go some way towards avoiding the 'attempted to send'
-     * message to EO whose EditingContext is gone. Only used in pre-5.2 systems.
+     * @deprecated Please use ERXStringUtilities.removeHTMLTagsFromString(String) directly
      */
-    @Deprecated
-    private static NSMutableDictionary _editingContextsPerSession;
-    
-    /**
-     * This method is called when a session times out.
-     * Calling this method will release references to
-     * all editing contexts that were created when this
-     * session was active. This method is only called in
-     * pre-WO 5.2 versions of WebObjects.
-     * @param sessionID of the session that timed out
-     * @deprecated not needed anymore in WO 5.4
-     */
-    @Deprecated
-    public static void sessionDidTimeOut(String sessionID) {
-        if (sessionID != null) {
-            if (_editingContextsPerSession != null) {
-                if (_log.isDebugEnabled()) {
-                    NSArray a=(NSArray)_editingContextsPerSession.objectForKey(sessionID);
-                    _log.debug("Session "+sessionID+" is timing out ");
-                    _log.debug("Found "+ ((a == null) ? 0 : a.count()) + " editing context(s)");
-                }
-                NSArray ecs = (NSArray)_editingContextsPerSession.removeObjectForKey(sessionID);
-                // Just helping things along.
-                if (ecs != null && ecs.count() > 0) {
-                    for (Enumeration ecEnumerator = ecs.objectEnumerator(); ecEnumerator.hasMoreElements();) {
-                        ((EOEditingContext)ecEnumerator.nextElement()).dispose();
-                    }
-                }                
-            }
-        }
-    }
-
-    /**
-     * Retains an editing context for the current session. This is only needed or
-     * used for versions of WO pre-5.2. If you use ERXEC to create your editing
-     * contexts then you never need to call this method yourself.
-     * @param ec to be retained.
-     * @deprecated not needed anymore in WO 5.4
-     */
-    @Deprecated
-    public static void retainEditingContextForCurrentSession(EOEditingContext ec) {
-         WOSession s= ERXSession.session();
-         if (s != null) {
-             if (_editingContextsPerSession == null) {
-                 _editingContextsPerSession = new NSMutableDictionary();
-             }
-             NSMutableArray a = (NSMutableArray)_editingContextsPerSession.objectForKey(s.sessionID());
-             if (a == null) {
-                 a = new NSMutableArray();
-                 _editingContextsPerSession.setObjectForKey(a, s.sessionID());
-                 if (_log.isDebugEnabled())
-                	 _log.debug("Creating array for "+s.sessionID());
-             }
-             a.addObject(ec);
-             if (_log.isDebugEnabled())
-            	 _log.debug("Added new ec to array for "+s.sessionID());
-         } else if (_log.isDebugEnabled()) {
-        	 _log.debug("Editing Context created with null session.");
-         }
-    }
-
-    /**
-     * Removes all of the HTML tags from a given string.
-     * Note: this is a very simplistic implementation
-     * and will most likely not work with complex HTML.
-     * Note: for actual conversion of HTML tags into regular
-     * strings have a look at {@link ERXSimpleHTMLFormatter}
-     * @param s html string
-     * @return string with all of its html tags removed
-     */
-    // FIXME: this is so simplistic it will break if you sneeze
-    // MOVEME: ERXStringUtilities 
     public static String removeHTMLTagsFromString(String s) {
-        StringBuffer result=new StringBuffer();
-        if (s != null && s.length()>0) {
-            int position=0;
-            while (position<s.length()) {
-                int indexOfOpeningTag=s.indexOf("<",position);
-                if (indexOfOpeningTag!=-1) {
-                    if (indexOfOpeningTag!=position)
-                        result.append(s.substring(position, indexOfOpeningTag));
-                    position=indexOfOpeningTag+1;
-                } else {
-                    result.append(s.substring(position, s.length()));
-                    position=s.length();
-                }
-                int indexOfClosingTag=s.indexOf(">",position);
-                if (indexOfClosingTag!=-1) {
-                    position= indexOfClosingTag +1;
-                } else {
-                    result.append(s.substring(position, s.length()));
-                    position=s.length();
-                }
-            }
-        }
-        return ERXStringUtilities.replaceStringByStringInString("&nbsp;"," ",result.toString());
+    	return ERXStringUtilities.removeHTMLTagsFromString(s);
     }
 
     /**
@@ -658,7 +536,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param s string to capitalize
      * @return capitalized string if the first char is a
      *		lowercase character.
-     *@deprecated use {@link ERXStringUtilities#capitalize(String)}
+     * @deprecated use {@link er.extensions.foundation.ERXStringUtilities#capitalize(String)}
      */
     @Deprecated
     public static String capitalize(String s) {
@@ -672,7 +550,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param howMany number of its
      * @param language target language
      * @return plurified string
-     * @deprecated use {@link ERXLocalizer#localizerForLanguage(String)} then {@link ERXLocalizer#plurifiedString(String, int)}
+     * @deprecated use {@link er.extensions.localization.ERXLocalizer#localizerForLanguage(String)} then {@link er.extensions.localization.ERXLocalizer#plurifiedString(String, int)}
      */
     @Deprecated
     public static String plurify(String s, int howMany, String language) {
@@ -689,7 +567,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param v1 first object
      * @param v2 second object
      * @return <code>true</code> if they are equal, <code>false</code> if not
+     * @deprecated use {@link ObjectUtils#equals(Object, Object)} instead
      */
+    @Deprecated
     public static boolean safeEquals(Object v1, Object v2) {
         return v1==v2 || (v1!=null && v2!=null && v1.equals(v2));
     }
@@ -704,7 +584,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param v1 first object
      * @param v2 second object
      * @return <code>true</code> if they are not equal, <code>false</code> if they are
+     * @deprecated use {@link ObjectUtils#equals(Object, Object)} instead
      */
+    @Deprecated
     public static boolean safeDifferent(Object v1, Object v2) {
         return v1 != v2 && (v1 == null || v2 == null || !v1.equals(v2));
     }
@@ -714,7 +596,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * an integer.
      * @param s string to be parsed
      * @return if the string can be parsed into an int
-     * @deprecated use {@link ERXStringUtilities#stringIsParseableInteger(String)}
+     * @deprecated use {@link er.extensions.foundation.ERXStringUtilities#stringIsParseableInteger(String)}
      */
     @Deprecated
     public static boolean stringIsParseableInteger(String s) {
@@ -731,7 +613,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * string can not be parsed then 0 is returned.
      * @param s string to be parsed.
      * @return int from the string or 0 if un-parsable.
-     * @deprecated use {@link ERXValueUtilities#intValue(Object)}
+     * @deprecated use {@link er.extensions.foundation.ERXValueUtilities#intValue(Object)}
      */
     @Deprecated
     public static int intFromParseableIntegerString(String s) {
@@ -749,7 +631,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param s2 to be inserted
      * @param s string to have the replacement done on it
      * @return string after having all of the replacement done.
-     * @deprecated use {@link ERXStringUtilities#replaceStringByStringInString(String, String, String)}
+     * @deprecated use {@link er.extensions.foundation.ERXStringUtilities#replaceStringByStringInString(String, String, String)}
      */
     @Deprecated
     public static String substituteStringByStringInString(String s1, String s2, String s) {
@@ -761,7 +643,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * Method used to retrieve the shared instance of the
      * html formatter.
      * @return shared instance of the html formatter
-     * @deprecated use {@link ERXSimpleHTMLFormatter#formatter()}
+     * @deprecated use {@link er.extensions.formatters.ERXSimpleHTMLFormatter#formatter()}
      */
     @Deprecated
     public static ERXSimpleHTMLFormatter htmlFormatter() { return ERXSimpleHTMLFormatter.formatter(); }
@@ -805,7 +687,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param f file to get the bytes from
      * @throws IOException if things go wrong
      * @return byte array of the file.
-     * @deprecated user {@link ERXFileUtilities#bytesFromFile(File)}
+     * @deprecated use {@link er.extensions.foundation.ERXFileUtilities#bytesFromFile(File)}
      */
     @Deprecated
     public static byte[] bytesFromFile(File f) throws IOException {
@@ -818,7 +700,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param f file to read
      * @throws IOException if things go wrong
      * @return string representation of that file.
-     * @deprecated use {@link ERXFileUtilities#stringFromFile(File)}
+     * @deprecated use {@link er.extensions.foundation.ERXFileUtilities#stringFromFile(File)}
      */
     @Deprecated
     public static String stringFromFile(File f) throws IOException {
@@ -831,7 +713,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param encoding to be used, null will use the default
      * @throws IOException if things go wrong
      * @return string representation of the file.
-     * @deprecated user {@link ERXFileUtilities#stringFromFile(File, String)}
+     * @deprecated user {@link er.extensions.foundation.ERXFileUtilities#stringFromFile(File, String)}
      */
     @Deprecated
     public static String stringFromFile(File f, String encoding) throws IOException {
@@ -846,7 +728,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param frameworkName name of the framework, null or "app"
      *		for the application bundle
      * @return the <code>lastModified</code> method of the file object
-     * @deprecated use {@link ERXFileUtilities#lastModifiedDateForFileInFramework(String, String)}
+     * @deprecated use {@link er.extensions.foundation.ERXFileUtilities#lastModifiedDateForFileInFramework(String, String)}
      */
     @Deprecated
     public static long lastModifiedDateForFileInFramework(String fileName, String frameworkName) {
@@ -860,7 +742,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      *		'app' for the application bundle.
      * @return de-serialized object from the plist formatted file
      *		specified.
-     * @deprecated use {@link ERXFileUtilities#readPropertyListFromFileInFramework(String, String)}
+     * @deprecated use {@link er.extensions.foundation.ERXFileUtilities#readPropertyListFromFileInFramework(String, String)}
      */
     @Deprecated
     public static Object readPropertyListFromFileinFramework(String fileName, String aFrameWorkName) {
@@ -876,7 +758,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param languageList language list search order
      * @return de-serialized object from the plist formatted file
      *		specified.
-     * @deprecated use {@link ERXFileUtilities#readPropertyListFromFileInFramework(String, String, NSArray)}
+     * @deprecated use {@link er.extensions.foundation.ERXFileUtilities#readPropertyListFromFileInFramework(String, String, NSArray)}
      */
     @Deprecated
     public static Object readPropertyListFromFileInFramework(String fileName,
@@ -1137,27 +1019,13 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     }
 
     /**
-     * Given an initial string and an array of substrings, 
-     * Removes any occurrences of any of the substrings
-     * from the initial string. Used in conjunction with
-     * fuzzy matching.
-     * @param newString initial string from which to remove other strings
-     * @param toBeCleaneds array of substrings to be removed from the initial string.
-     * @return cleaned string.
+     * @deprecated Use {@link er.extensions.foundation.ERXStringUtilities#cleanString}
+     * @param newString 
+     * @param toBeCleaneds 
+     * @return results of ERXStringUtilities.cleanString
      */
-    // MOVEME: Either ERXStringUtilities or fuzzy matching stuff
-    // FIXME: Should use a StringBuffer instead of creating strings all over the place.
     public static String cleanString(String newString, NSArray<String> toBeCleaneds) {
-        String result=newString;
-        if (newString!=null) {
-            for(Enumeration e = toBeCleaneds.objectEnumerator(); e.hasMoreElements();){
-                String toBeCleaned = (String)e.nextElement();
-                if(newString.toUpperCase().indexOf(toBeCleaned)>-1){
-                    result=newString.substring(0, newString.toUpperCase().indexOf(toBeCleaned));
-                }
-            }
-        }
-        return result;
+    	return ERXStringUtilities.cleanString(newString, toBeCleaneds);
     }
 
     /**
@@ -1414,7 +1282,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * </p>
      * <p><b>Note 2:</b>
      *  this will set NSBundle's mainBundle to the referenced bundle loaded via
-     *  {@link ERXRuntimeUtilities#loadBundleIfNeeded(URI)} if found.
+     *  {@link er.extensions.foundation.ERXRuntimeUtilities#loadBundleIfNeeded(File)} if found.
      * </p>
      * 
      * <p>This is equivalent to calling <code>initEOF(mainBundleFolder, args, assertsBundleExists, false, true)</code>.</p>
@@ -1456,7 +1324,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * </p>
      * <p><b>Note 2:</b>
      *  this will set NSBundle's mainBundle to the referenced bundle loaded via
-     *  {@link ERXRuntimeUtilities#loadBundleIfNeeded(URI)} if found.
+     *  {@link er.extensions.foundation.ERXRuntimeUtilities#loadBundleIfNeeded(File)} if found.
      * </p>
      * 
      * @param mainBundleFile the archive file or directory of your main bundle
@@ -1466,9 +1334,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param fallbackToUserDirAsBundle falls back to current dir if the mainBundleFile does not exist
      * @throws NSForwardException if the given bundle doesn't satisfy the given assertions or
      *  		ERXRuntimeUtilities.loadBundleIfNeeded or ERXApplication.setup fails.
-     * @see ERXRuntimeUtilities#loadBundleIfNeeded(URI)
+     * @see er.extensions.foundation.ERXRuntimeUtilities#loadBundleIfNeeded(File)
      * @see NSBundle#_setMainBundle(NSBundle)
-     * @see ERXApplication#setup(String[])
+     * @see er.extensions.appserver.ERXApplication#setup(String[])
      * @see #bundleDidLoad(NSNotification)
      */
     public static void initEOF(final File mainBundleFile, String[] args, boolean assertsBundleExists, boolean assertsBundleIsWOApplicationFolder, boolean fallbackToUserDirAsBundle) {

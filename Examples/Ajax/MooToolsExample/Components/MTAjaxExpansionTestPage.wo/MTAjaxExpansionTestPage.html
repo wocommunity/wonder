@@ -1,0 +1,64 @@
+<wo:Main pageTitle = "Ajax Expansion Demonstration">
+	<h2>Ajax Expansion...</h2>
+	<hr />
+	<p>
+		AjaxExpansion provides an easy way to make expansion areas that appear and disappear by clicking a link (for instance, expandable options areas).
+	</p>
+	<p>
+		Should work like the original.
+	</p>
+	<p>
+		TODO: Work on the effects.
+	</p>
+	<hr/>
+	<div class = "personInfo">
+		<h1><wo:WOImage src = "img/avatar.png"/> Brazil Nut</h1>
+		<wo:MTAjaxUpdateContainer id = "profile" class = "profile">
+			<wo:if condition = "$optionsVisible">
+				<wo:MTAjaxUpdateLink action = "$toggleOptions" updateContainerID = "profile"><wo:WOImage filename = "img/triangleDown.gif"/> profile</wo:MTAjaxUpdateLink>
+				<dl>
+					<dt>Phone Number</dt>
+					<dd>
+						808.EAT.BRDS
+					</dd>
+
+					<dt>Address</dt>
+					<dd>
+						123 MaccaDangDang Hwy.<br/>
+						Maui, HI 96761
+					</dd>
+
+					<dt>URL</dt>
+					<dd>
+						<a href = "http://kahalawai.com/">http://kahalawai.com/</a>
+					</dd>
+				</dl>
+			</wo:if>
+			<wo:else>
+				<wo:MTAjaxUpdateLink action = "$toggleOptions" updateContainerID = "profile"><wo:WOImage filename = "img/triangleRight.gif"/> profile</wo:MTAjaxUpdateLink>
+			</wo:else>
+		</wo:MTAjaxUpdateContainer>
+	</div>
+	<div class = "personInfo">
+		<h1><wo:WOImage src = "img/avatar2.png"/> Coco Nut</h1>
+		<wo:MTAjaxExpansion id="profile2" class="profile" string="profile">
+				<dl>
+					<dt>Phone Number</dt>
+					<dd>
+						808.EAT.BRDS
+					</dd>
+
+					<dt>Address</dt>
+					<dd>
+						123 MaccaDangDang Hwy.<br/>
+						Maui, HI 96761
+					</dd>
+
+					<dt>URL</dt>
+					<dd>
+						<a href = "http://kahalawai.com/">http://kahalawai.com/</a>
+					</dd>
+				</dl>
+		</wo:MTAjaxExpansion>
+	</div>
+</wo:Main>

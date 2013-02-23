@@ -86,6 +86,7 @@ public class ERXPathDirectActionRequestHandler extends ERXDirectActionRequestHan
 	 *		   greater than 2, and tries to divine the meaning of paths when there
 	 *		   are only one or 2 path components.
 	 */
+	@Override
 	public NSArray getRequestHandlerPathForRequest(WORequest aRequest) {
 		NSArray paths = super.getRequestHandlerPathForRequest(aRequest);
 		NSMutableArray temp = new NSMutableArray();

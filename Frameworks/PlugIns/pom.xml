@@ -4,16 +4,18 @@
 	<parent>
 		<groupId>wonder.frameworks</groupId>
 		<artifactId>frameworks</artifactId>
-		<version>5.7-SNAPSHOT</version>
+		<version>6.0.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>plugins</artifactId>
 	<packaging>pom</packaging>
 	<name>Plugins Frameworks</name>
 	<modules>
+		<module>DB2PlugIn</module>
 		<module>DerbyPlugIn</module>
 		<module>EROraclePlugIn</module>
 		<module>FrontBasePlugIn</module>
 		<module>H2PlugIn</module>
+		<module>MySQLPlugIn</module>
 		<module>PostgresqlPlugIn</module>
 	</modules>
 </project>

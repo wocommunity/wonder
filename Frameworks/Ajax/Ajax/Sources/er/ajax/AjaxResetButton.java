@@ -4,7 +4,6 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 
-
 /**
  * Simple submit button wrapper around Prototypes Form.reset('formID');.  Does a client side
  * reset (to original values or to blank / no selection) of all of a form's inputs.
@@ -37,6 +36,7 @@ public class AjaxResetButton extends WOComponent {
     /**
      * @return <code>true</code>
      */
+    @Override
     public boolean isStateless() {
         return true;
     }
@@ -44,6 +44,7 @@ public class AjaxResetButton extends WOComponent {
     /**
      * Adds prototype.js to the header.
      */
+    @Override
     public void appendToResponse(WOResponse response, WOContext context) {
         super.appendToResponse(response, context);
         AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");

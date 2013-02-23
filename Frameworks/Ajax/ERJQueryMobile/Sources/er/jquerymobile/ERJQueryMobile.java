@@ -37,6 +37,7 @@ public class ERJQueryMobile extends ERXFrameworkPrincipal {
     System.out.println("doing now " + frameworkName() + ".initialize() for setup the Framework.");
   }
 
+  @Override
   public void finishInitialization() {
     // ログ・サポート
     _log = Logger.getLogger(ERXExtensions.class);

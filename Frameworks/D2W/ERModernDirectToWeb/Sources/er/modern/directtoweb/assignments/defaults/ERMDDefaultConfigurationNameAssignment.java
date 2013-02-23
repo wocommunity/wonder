@@ -5,7 +5,6 @@ import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
-import er.directtoweb.assignments.ERDComputingAssignmentInterface;
 import er.directtoweb.assignments.defaults.ERDDefaultConfigurationNameAssignment;
 import er.extensions.foundation.ERXDictionaryUtilities;
 
@@ -13,16 +12,18 @@ import er.extensions.foundation.ERXDictionaryUtilities;
  * This assignment calculates default page configuration
  * names for the current entity in the context.
  */
-public class ERMDDefaultConfigurationNameAssignment extends ERDDefaultConfigurationNameAssignment{
+public class ERMDDefaultConfigurationNameAssignment extends ERDDefaultConfigurationNameAssignment {
+
+	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("unchecked")
-	protected static final NSDictionary keys = ERXDictionaryUtilities.dictionaryWithObjectsAndKeys( new Object [] {
-			new NSArray(new Object[] {"propertyKey", "object.entityName", "entity.name"}), "queryEmbeddedConfigurationName",
-			new NSArray(new Object[] {"propertyKey", "object.entityName", "entity.name"}), "createEmbeddedConfigurationName",
-			new NSArray(new Object[] {"propertyKey", "object.entityName", "entity.name"}), "selectEmbeddedConfigurationName",
-			new NSArray(new Object[] {"propertyKey", "object.entityName", "entity.name"}), "pickEmbeddedConfigurationName",
-			new NSArray(new Object[] {"propertyKey", "object.entityName", "entity.name"}), "editRelationshipEmbeddedConfigurationName",
-			new NSArray(new Object[] {"propertyKey", "object.entityName", "entity.name", "inlineTask"}), "inlineConfigurationName"
+	protected static final NSDictionary<String, Object> keys = ERXDictionaryUtilities.dictionaryWithObjectsAndKeys( new Object [] {
+			new NSArray<String>(new String[] {"propertyKey", "object.entityName", "entity.name"}), "queryEmbeddedConfigurationName",
+			new NSArray<String>(new String[] {"propertyKey", "object.entityName", "entity.name"}), "createEmbeddedConfigurationName",
+			new NSArray<String>(new String[] {"propertyKey", "object.entityName", "entity.name"}), "selectEmbeddedConfigurationName",
+			new NSArray<String>(new String[] {"propertyKey", "object.entityName", "entity.name"}), "pickEmbeddedConfigurationName",
+			new NSArray<String>(new String[] {"propertyKey", "object.entityName", "entity.name"}), "editRelationshipEmbeddedConfigurationName",
+			new NSArray<String>(new String[] {"propertyKey", "object.entityName", "entity.name", "inlineTask"}), "inlineConfigurationName"
 			});
 	
     /**
@@ -52,16 +53,17 @@ public class ERMDDefaultConfigurationNameAssignment extends ERDDefaultConfigurat
     public ERMDDefaultConfigurationNameAssignment (String key, Object value) { super(key,value); }
 
     /**
-     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This
      * assignment depends upon the context keys: "entity.name" and 
      * "object.entityName". This array of keys is used when constructing the 
      * significant keys for the passed in keyPath.
      * @param keyPath to compute significant keys for. 
      * @return array of context keys this assignment depends upon.
      */
+    @Override
     @SuppressWarnings("unchecked")
 	public NSArray<String> dependentKeys(String keyPath) { 
-    	return (NSArray)keys.valueForKeyPath(keyPath);
+    	return (NSArray<String>)keys.valueForKeyPath(keyPath);
     }
     
     /**
@@ -82,6 +84,7 @@ public class ERMDDefaultConfigurationNameAssignment extends ERDDefaultConfigurat
      * @param c current D2W context
      * @return default edit page configuration name
      */
+    @Override
     public Object createEmbeddedConfigurationName(D2WContext c) {
     	return "CreateEmbedded" + entityNameForContext(c);
     }
@@ -115,6 +118,7 @@ public class ERMDDefaultConfigurationNameAssignment extends ERDDefaultConfigurat
      * @param c current D2W context
      * @return default edit page configuration name
      */
+    @Override
     public Object editRelationshipEmbeddedConfigurationName(D2WContext c) {
     	return "EditRelationshipEmbedded" + entityNameForContext(c);
     }

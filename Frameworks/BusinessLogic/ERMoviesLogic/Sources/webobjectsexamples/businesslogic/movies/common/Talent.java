@@ -33,24 +33,27 @@ public class Talent extends _Talent {
 		super();
 	}
 
+	@Override
 	public String firstName() {
 		return (String) (storedValueForKey(FirstNameKey));
 	}
 
+	@Override
 	public String lastName() {
 		return (String) (storedValueForKey(LastNameKey));
 	}
 
+	@Override
 	public NSArray roles() {
 		return (NSArray) (storedValueForKey(RolesKey));
 	}
 
 	public String fullName() {
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder buffer = new StringBuilder();
 		buffer.append(firstName());
 		buffer.append(' ');
 		buffer.append(lastName());
-		return new String(buffer);
+		return buffer.toString();
 	}
 
 	public NSArray moviesStarredIn() {

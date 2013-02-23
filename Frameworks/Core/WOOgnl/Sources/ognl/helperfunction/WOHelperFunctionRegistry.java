@@ -7,9 +7,9 @@ import java.util.NoSuchElementException;
 
 import org.apache.log4j.Logger;
 
+import com.webobjects.foundation.NSKeyValueCoding._KeyBinding;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation._NSUtilities;
-import com.webobjects.foundation.NSKeyValueCoding._KeyBinding;
 
 /**
  * HelperFunctionRegistry provides a central point for registering and resolving helper functions.

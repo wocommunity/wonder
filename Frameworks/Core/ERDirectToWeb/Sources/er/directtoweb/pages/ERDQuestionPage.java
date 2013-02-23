@@ -37,11 +37,13 @@ public class ERDQuestionPage extends ERD2WMessagePage implements ConfirmPageInte
     public void setCancelNextPage(WOComponent page) { setCancelPage(page); }
 
     /** @deprecated use confirmAction() */
+    @Deprecated
     public WOComponent okClicked() {
         return confirmAction();        
     }
 
     /** @deprecated use cancelAction() */
+    @Deprecated
     public WOComponent cancelClicked() {
         return cancelAction();        
     }

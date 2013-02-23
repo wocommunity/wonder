@@ -84,6 +84,7 @@ TaskClassSimpleName : WOString {
 
 FutureStatus : WOString {
   value = future.status;
+  escapeHTML = false;
 }
 
 DefaultStatus : WOString {

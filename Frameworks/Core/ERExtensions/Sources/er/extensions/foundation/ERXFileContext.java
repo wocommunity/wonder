@@ -68,9 +68,8 @@ public class ERXFileContext {
 	public String path() {
 		if (_file == null) {
 			return null;
-		} else {
-			return _file.getAbsolutePath();
-		} // ~ if (_file == null)
+		}
+		return _file.getAbsolutePath();
 	}
 
 	/**
@@ -97,9 +96,8 @@ public class ERXFileContext {
 		if (_clientFileName == null) {
 			if (_file == null) {
 				return null;
-			} else {
-				return _file.getName();
-			} // ~ if (_file == null)
+			}
+			return _file.getName();
 		} // ~ if (_clientFileName == null)
 		return _clientFileName;
 	}

@@ -15,7 +15,6 @@ import com.webobjects.foundation.NSTimestamp;
  * Printer friendly page wrapper.<br />
  * 
  */
-
 public class ERDPrinterFriendlyWrapper extends WOComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -26,6 +25,7 @@ public class ERDPrinterFriendlyWrapper extends WOComponent {
 
     public ERDPrinterFriendlyWrapper(WOContext context) { super(context); }
 
+    @Override
     public boolean isStateless() { return true; }
 
     public NSTimestamp now() { return new NSTimestamp(); } 

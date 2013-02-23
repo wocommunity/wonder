@@ -44,7 +44,7 @@ public class ERXRestSchema {
 			entity = ((EOEntityClassDescription) classDescription).entity();
 		}
 
-		for (String attributeName : (NSArray<String>) classDescription.attributeKeys()) {
+		for (String attributeName : classDescription.attributeKeys()) {
 			ERXKey<Object> key = new ERXKey<Object>(attributeName);
 			if (filter.matches(key, ERXKey.Type.Attribute)) {
 				EOAttribute attribute = null;
@@ -94,7 +94,7 @@ public class ERXRestSchema {
 			}
 		}
 
-		for (String toOneRelationshipName : (NSArray<String>) classDescription.toOneRelationshipKeys()) {
+		for (String toOneRelationshipName : classDescription.toOneRelationshipKeys()) {
 			ERXKey<Object> key = new ERXKey<Object>(toOneRelationshipName);
 			if (filter.matches(key, ERXKey.Type.ToOneRelationship)) {
 				EOClassDescription destinationClassDescription = classDescription.classDescriptionForDestinationKey(key.key());
@@ -113,7 +113,7 @@ public class ERXRestSchema {
 			}
 		}
 
-		for (String toManyRelationshipName : (NSArray<String>) classDescription.toManyRelationshipKeys()) {
+		for (String toManyRelationshipName : classDescription.toManyRelationshipKeys()) {
 			ERXKey<Object> key = new ERXKey<Object>(toManyRelationshipName);
 			if (filter.matches(key, ERXKey.Type.ToManyRelationship)) {
 				EOClassDescription destinationClassDescription = classDescription.classDescriptionForDestinationKey(key.key());

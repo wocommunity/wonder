@@ -110,11 +110,14 @@ public abstract class ERDCustomEditComponent extends ERDCustomComponent {
         }
         return object;
     }
-    
+
+    @Override
     public boolean isStateless() { return false; }
+    @Override
     public boolean synchronizesVariablesWithBindings() { return true; }
 
     /** Used by stateful but non-synching subclasses */
+    @Override
     public void resetCachedBindingsInStatefulComponent() {
         super.resetCachedBindingsInStatefulComponent();
         object = null;
@@ -123,6 +126,7 @@ public abstract class ERDCustomEditComponent extends ERDCustomComponent {
     }
 
     // Used by stateless subclasses
+    @Override
     public void reset() {
         super.reset();
         object = null;

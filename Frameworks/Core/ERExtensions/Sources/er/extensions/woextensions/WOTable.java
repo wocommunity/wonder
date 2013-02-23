@@ -61,6 +61,7 @@ public class WOTable extends WOComponent {
         _resetInternalCaches();
     }
 
+    @Override
     public boolean isStateless() {
         return true;
     }
@@ -159,11 +160,13 @@ public class WOTable extends WOComponent {
         _maxColumns = -1;
     }
 
+    @Override
     public void takeValuesFromRequest(WORequest aRequest, WOContext aContext)  {
         _resetInternalCaches();
         super.takeValuesFromRequest(aRequest, aContext);
     }
 
+    @Override
     public void reset() {
         _resetInternalCaches();
     }

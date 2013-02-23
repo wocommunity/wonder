@@ -1,0 +1,121 @@
+{
+    rules = (
+        {
+            author = 10; 
+            class = "com.webobjects.directtoweb.Assignment"; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = batchNavigationContainerClassName; 
+                value = pagination; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = batchNavigationContainerElementName; 
+                value = div; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = batchNavigationBarPreviousPageActionClassName; 
+                value = ""; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = batchNavigationListContainerClassName; 
+                value = ""; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = batchNavigationListContainerElementName; 
+                value = ul; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = batchNavigationListItemElementName; 
+                value = li; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = batchNavigationCurrentListItemClassName; 
+                value = active; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = propertyNameEditingLabelElementName; 
+                value = label; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = propertyNameEditingLabelDefaultClassName; 
+                value = "control-label"; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = propertyNameInspectLabelElementName; 
+                value = span; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = editAttachmentComponent; 
+                value = ERAttachmentFlexibleEditor; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = headerContainerElementName; 
+                value = h1; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = headerContainerClassName; 
+                value = ""; 
+            }; 
+        }
+    ); 
+}

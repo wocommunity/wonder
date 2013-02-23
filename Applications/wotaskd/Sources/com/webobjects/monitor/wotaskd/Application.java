@@ -88,27 +88,30 @@ public class Application extends ERXApplication  {
     	ERXApplication.main(argv, Application.class);
     }
 
+    @Override
     public String defaultRequestHandlerClassName() {
         return "com.webobjects.appserver._private.WODirectActionRequestHandler";
     }
 
+    @Override
     public String name() {
         return "wotaskd";
     }
 
+    @Override
     public Number port() {
         if (_port == null) {
             if (super.port().intValue() > 0) {
                 _port = super.port();
             } else {
-                _port = new Integer(1085);
+                _port = Integer.valueOf(1085);
             }
             _intPort = _port.intValue();
         }
         return _port;
     }
 
-    private int intPort() {
+    protected int intPort() {
         return _intPort;
     }
 
@@ -116,6 +119,7 @@ public class Application extends ERXApplication  {
         return _multicastAddress;
     }
 
+    @Override
     public boolean allowsConcurrentRequestHandling() {
         return true;
     }
@@ -123,6 +127,7 @@ public class Application extends ERXApplication  {
     public MSiteConfig siteConfig() {
         return _siteConfig;
     }
+
     public void setSiteConfig(MSiteConfig aConfig) {
         // Don't need to call dataHasChanged, since a new MSiteConfig is already dirty
         _siteConfig = aConfig;
@@ -203,9 +208,9 @@ public class Application extends ERXApplication  {
         }
 
         //JMX Support
-		_jmxPort = (String)System.getProperty("WOJMXPort");
-		_jmxAccessFile = (String)System.getProperty("WOJMXAccessFile");
-		_jmxPasswordFile = (String)System.getProperty("WOJMXPasswordFile");
+		_jmxPort = System.getProperty("WOJMXPort");
+		_jmxAccessFile = System.getProperty("WOJMXAccessFile");
+		_jmxPasswordFile = System.getProperty("WOJMXPasswordFile");
 		if (_jmxPort != null) {
 			registerMBean(SiteConfig.getInstance(), "WotaskdJMXMBean",  "SiteConfigMBean");
 			setupRemoteMonitoring();
@@ -269,6 +274,7 @@ public class Application extends ERXApplication  {
 	 * @param strDomainName - Domain name required for creating the ObjectName of the MBean
 	 * @param strMBeanName  - Name of the MBean
 	 */
+	@Override
 	public void registerMBean(Object objMBean, String strDomainName, String strMBeanName) throws IllegalArgumentException{
 		if (objMBean == null)
 			throw new IllegalArgumentException("Error: Could not register null to PlatformMbeanServer.");
@@ -310,9 +316,10 @@ public class Application extends ERXApplication  {
 	 * name is passed as null.
 	 * @return _mbsDomain  - String containing the Domain name to be used while registering the MBean
 	 */
+	@Override
     public String getJMXDomain() {
 		if (_mbsDomain == null) {
-			_mbsDomain = this.host() + "." + this.name() + "." + this.port();
+			_mbsDomain = host() + "." + name() + "." + port();
 		}
 		return _mbsDomain;
     }
@@ -360,6 +367,7 @@ public class Application extends ERXApplication  {
 	 * This methods returns the platform MBean Server from the Factory
 	 * @return _mbeanServer  - The platform MBeanServer 
 	 */
+	@Override
 	public MBeanServer getMBeanServer() throws IllegalAccessException {
 		if (_mbeanServer == null) {
 			_mbeanServer = ManagementFactory.getPlatformMBeanServer();	
@@ -385,6 +393,7 @@ public class Application extends ERXApplication  {
     // sleep will check if there have been changes to the siteConfig.
     // if so, it will write the new siteConfig to disk as SiteConfig.xml
     // if requested, it will also write the new adaptorConfig to disk as WOConfig.xml
+    @Override
     public void sleep() {
         _lock.startReading();
         try {
@@ -410,6 +419,7 @@ public class Application extends ERXApplication  {
     }
 
     // cleans up after the Application (specifically the ListenThread)
+    @Override
     public void finalize() throws Throwable {
         listenThread.closeRequestSocket();
         listenThread.stop();
@@ -422,11 +432,12 @@ public class Application extends ERXApplication  {
             anHTTPVersion = MObject._HTTP1;
             aURL = aURL.substring(0, (aURL.length() - MObject._HTTP1.length() - 1) );
         }
-        return super._createRequest(aMethod, aURL, anHTTPVersion, someHeaders, aContent, someInfo);
+        return super.createRequest(aMethod, aURL, anHTTPVersion, someHeaders, aContent, someInfo);
     }
 
     // overridden dispatch of requests, for faster lifebeat checking
     // if it's a lifebeat, we return a null response, and that should close the socket immediately
+    @Override
     public WOResponse dispatchRequest(WORequest aRequest) {
         WORequestHandler aHandler = handlerForRequest(aRequest);
         if ( (aHandler != null) && (aHandler == _lifebeatRequestHandler) ) {
@@ -580,11 +591,11 @@ public class Application extends ERXApplication  {
             System.exit(1);
         }
 
+        @Override
         public void run() {
             createRequestSocket();
             NSLog.debug.appendln("Created UDP socket; listening for requests...");
             listenForRequests();
         }
     }
-    
 }

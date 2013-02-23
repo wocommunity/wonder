@@ -1,5 +1,8 @@
 package er.directtoweb.delegates;
 
+import java.math.BigDecimal;
+import java.util.Enumeration;
+
 import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eoaccess.EOAttribute;
@@ -10,13 +13,11 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSValidation;
+
 import er.directtoweb.pages.ERD2WQueryPage;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.validation.ERXValidationFactory;
-
-import java.math.BigDecimal;
-import java.util.Enumeration;
 
 /**
  * <p>A delegate class for validating user inputs before a query is executed.  Validation rules are derived from the D2W
@@ -140,8 +141,7 @@ public abstract class ERDQueryValidationDelegate {
     }
 
     /**
-     * Determines if the D2W context contains a validation definition for the provided
-     * {@see ValidationKeys validation key}.
+     * Determines if the D2W context contains a validation definition for the provided validation key}.
      * @param key to check
      * @return true if a validation definition for the given key exists
      */
@@ -246,6 +246,7 @@ public abstract class ERDQueryValidationDelegate {
         /**
          * @inheritDoc
          */
+        @Override
         public void validateQueryValues(ERD2WQueryPage sender) {
             queryPage = sender;
             

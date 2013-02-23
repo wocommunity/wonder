@@ -25,6 +25,7 @@ public class ERD2WQueryOperator extends QueryOperatorComponent {
         super(context);
     }
 
+    @Override
     public void reset() {
         super.reset();
         queryOperators = null;

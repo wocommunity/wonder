@@ -22,7 +22,6 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
 import er.directtoweb.assignments.ERDAssignment;
-import er.directtoweb.assignments.ERDComputingAssignmentInterface;
 import er.extensions.eof.ERXConstant;
 import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.foundation.ERXDictionaryUtilities;
@@ -72,7 +71,7 @@ public class ERDDefaultModelAssignment extends ERDAssignment {
     });
 
     /**
-     * Implementation of the {@link ERDComputingAssignmentInterface}. This array
+     * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This array
      * of keys is used when constructing the
      * significant keys for the passed in keyPath.
      * @param keyPath to compute significant keys for.
@@ -126,7 +125,7 @@ public class ERDDefaultModelAssignment extends ERDAssignment {
     public Object smartDefaultRows(D2WContext c) {
         int i = attributeWidthAsInt(c);
         int j = smartDefaultAttributeWidthAsInt(c);
-        int k = j == 0 ? i : (int)((double)(i / j) + 0.5D);
+        int k = j == 0 ? i : (int)(i / j + 0.5D);
         if(k > 8) k = 8;
         return String.valueOf(k);
     }

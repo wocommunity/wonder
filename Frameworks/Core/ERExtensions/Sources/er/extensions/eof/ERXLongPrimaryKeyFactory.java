@@ -203,16 +203,16 @@ public class ERXLongPrimaryKeyFactory {
 	/**
 	 * returns a new primary key for the specified entity.
 	 * 
-	 * @param ename,
+	 * @param entityName
 	 *            the entity name for which this method should return a new
 	 *            primary key
-	 * @param count,
+	 * @param count
 	 *            the number of times the method should try to get a value from
 	 *            the database if something went wrong (a deadlock in the db for
 	 *            example -> high traffic with multiple instances)
-	 * @param increaseBy,
+	 * @param increasePkBy
 	 *            if > 1 then the value in the database is increased by this
-	 *            factor. This is usefull to 'get' 10000 pk values at once for
+	 *            factor. This is useful to 'get' 10000 pk values at once for
 	 *            caching. Removes a lot of db roundtrips.
 	 * @return a new pk values for the specified entity.
 	 */
@@ -303,8 +303,6 @@ public class ERXLongPrimaryKeyFactory {
 	 * first
 	 * 
 	 * @param ename
-	 * @param pk
-	 * @return
 	 */
 	private long maxIdFromTable(String ename) {
 		EOEntity entity = EOModelGroup.defaultGroup().entityNamed(ename);
@@ -347,7 +345,7 @@ public class ERXLongPrimaryKeyFactory {
 	 * Returns a new integer based PkValue for the specified entity. If the
 	 * cache is empty it is refilled again.
 	 * 
-	 * @param ename,
+	 * @param ename
 	 *            the entity name for which this method should return a new
 	 *            primary key
 	 * 
@@ -371,7 +369,7 @@ public class ERXLongPrimaryKeyFactory {
 	 * specified entity name. If there is no Stack a new Stack object will be
 	 * created.
 	 * 
-	 * @param ename,
+	 * @param ename
 	 *            the name of the entity for which this method should return the
 	 *            Stack
 	 * @return the Stack with primary key values for the specified entity.
@@ -389,9 +387,9 @@ public class ERXLongPrimaryKeyFactory {
 	 * creates x primary key values for the specified entity and updates the
 	 * database, where x is the number specified in increaseBy
 	 * 
-	 * @param s,
+	 * @param s
 	 *            the stack into which the pk values should be inserted
-	 * @param ename,
+	 * @param ename
 	 *            the entity name for which the pk values should be generated
 	 */
 	private void fillPkCache(Stack s, String ename) {

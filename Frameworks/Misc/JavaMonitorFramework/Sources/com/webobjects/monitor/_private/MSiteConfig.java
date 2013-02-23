@@ -21,8 +21,6 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import org.apache.log4j.Logger;
@@ -49,6 +47,7 @@ import com.webobjects.foundation._NSStringUtilities;
 import com.webobjects.foundation._NSThreadsafeMutableArray;
 import com.webobjects.foundation._NSThreadsafeMutableDictionary;
 
+import er.extensions.appserver.ERXRequest;
 import er.extensions.foundation.ERXFileUtilities;
 
 
@@ -371,11 +370,7 @@ public class MSiteConfig extends MObject {
     }
 
     public boolean isPasswordRequired() {
-        if (password() != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return password() != null;
     }
 
     // setPassword(value) is in the 'values' accessors
@@ -405,19 +400,16 @@ public class MSiteConfig extends MObject {
     public boolean compareStringWithPassword(String aString) {
         String _encryptedPassword = password();
         
-        if ( ((aString == null) && (_encryptedPassword != null)) || ((aString != null) && (_encryptedPassword == null)) ) {
-            // if one is null, and the other isn't, no match
-            return false;
-        } else if ( (aString == null) && (_encryptedPassword == null) ) {
+        if (aString == null && _encryptedPassword == null) {
             // if both are null, match
             return true;
-        } else if ( ((aString.length() == 0) && (_encryptedPassword == null)) || ((_encryptedPassword.length() == 0) && (aString == null)) ){
-            // if one is blank, and the other is null, match
-            return true;
+        } else if (aString == null || _encryptedPassword == null) {
+            // if one is null, and the other isn't, no match
+            return false;
         } else {	// do all the calculations
             // extract random portion of the encrypted password
             String fudgetoo_part = _encryptedPassword.substring(0, 4);
-            // encyrpt the new string using the random bit from the old string
+            // encrypt the new string using the random bit from the old string
             String encrypted_string = encryptStringWithKey(aString, fudgetoo_part);
             // compare keys and return
             return encrypted_string.equals(_encryptedPassword);
@@ -447,14 +439,13 @@ public class MSiteConfig extends MObject {
     		_passwordDictionary = new NSMutableDictionary<String, NSMutableArray<String>>();
     		_passwordDictionary.setObjectForKey(new NSMutableArray<String>(""), "password");
     	}
-        String aPassword = this.password();
+        String aPassword = password();
         if (_oldPasswordSet) {
             if (_oldPassword != null) {
                 _passwordDictionary.takeValueForKey(new NSMutableArray<String>(_oldPassword), "password");
                 return _passwordDictionary;
-            } else {
-                return NSDictionary.emptyDictionary();
             }
+            return NSDictionary.emptyDictionary();
         }
         if (aPassword != null) {
             _passwordDictionary.takeValueForKey(aPassword, "password");
@@ -474,7 +465,7 @@ public class MSiteConfig extends MObject {
         NSDictionary monitorRequest = new NSDictionary<String, String>("SITE", "queryWotaskd");
         NSData content = new NSData( (new _JavaMonitorCoder()).encodeRootObjectForKey(monitorRequest, "monitorRequest") );
 
-        WORequest aRequest = new WORequest(MObject._POST, MObject.directActionString, MObject._HTTP1, (Map<String, ? extends List<String>>) NSDictionary.EmptyDictionary, content, null);
+        WORequest aRequest = new ERXRequest(MObject._POST, MObject.directActionString, MObject._HTTP1, NSDictionary.EmptyDictionary, content, null);
         WOResponse aResponse = null;
 
         try {
@@ -510,9 +501,8 @@ public class MSiteConfig extends MObject {
         NSDictionary queryWotaskdResponse = (NSDictionary) xmlDict.valueForKey("queryWotaskdResponse");
         if (queryWotaskdResponse != null) {
             return new MSiteConfig((NSDictionary) queryWotaskdResponse.valueForKey("SiteConfig"));
-        } else {
-            return new MSiteConfig(null);
         }
+        return new MSiteConfig(null);
     }
 
 
@@ -600,11 +590,7 @@ public class MSiteConfig extends MObject {
 
         String _fS = File.separator;
 
-        if (_configDirectoryPath != null) {
-            return _configDirectoryPath;
-        }
-        else {
-
+        if (_configDirectoryPath == null) {
             _configDirectoryPath = System.getProperty("WODeploymentConfigurationDirectory");
             if (_configDirectoryPath != null) {
                 NSLog.debug.appendln("WODeploymentConfigurationDirectory set to non-default: "+_configDirectoryPath);
@@ -924,7 +910,7 @@ public class MSiteConfig extends MObject {
     /********** Archiving Support **********/
     // KH - speed this up by uniquing the strings
     public String generateAdaptorConfigXML(boolean onlyIncludeRunningInstances, boolean shouldIncludeUnregisteredInstances) {
-        StringBuffer sb = new StringBuffer("<?xml version=\"1.0\" encoding=\"ASCII\"?>\n<adaptor>\n");
+        StringBuilder sb = new StringBuilder("<?xml version=\"1.0\" encoding=\"ASCII\"?>\n<adaptor>\n");
 
         for (Enumeration e = applicationArray().objectEnumerator(); e.hasMoreElements(); ) {
             MApplication anApp = (MApplication) e.nextElement();
@@ -1097,6 +1083,7 @@ public class MSiteConfig extends MObject {
         return SiteConfig;
     }
     
+    @Override
     public String toString() {
         return
         values.toString() + "\n" +
@@ -1218,9 +1205,8 @@ public class MSiteConfig extends MObject {
         MHost aHost = hostWithName(hostName);
         if (aHost == null) {
             return null;
-        } else {
-            return aHost.instanceWithPort(port);
         }
+        return aHost.instanceWithPort(port);
     }
     
     public MInstance instanceWithHostAndPort(String name, InetAddress host, String port) {
@@ -1229,13 +1215,12 @@ public class MSiteConfig extends MObject {
             MHost aHost = hostWithAddress(host);
             if (aHost == null) {
                 return null;
-            } else {
-                MInstance anInstance = aHost.instanceWithPort(anIntPort);
-                if (anInstance != null) {
-                    if (anInstance.applicationName().equals(name)) {
-                        return anInstance;
-                    }                       
-                }
+            }
+            MInstance anInstance = aHost.instanceWithPort(anIntPort);
+            if (anInstance != null) {
+                if (anInstance.applicationName().equals(name)) {
+                    return anInstance;
+                }                       
             }
         } catch (Exception e) {
             log.error("Exception getting instance: " + host + " + " + port, e);

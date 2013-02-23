@@ -25,6 +25,7 @@ public class TalentPhoto extends _TalentPhoto {
 		super();
 	}
 
+	@Override
 	public void setPhoto(NSData data) {
 		willChange();
 		takeStoredValueForKey(((data != null) && (data.length() != 0)) ? data : null, PhotoKey);

@@ -73,18 +73,21 @@ public class ERXBatchNavigationBar extends ERXStatelessComponent {
         super(aContext);
     }
     
+    @Override
     public void awake() {
     	super.awake();
     	wasInForm = context().isInForm();
     	_threadStorageKey = "ERXBatchNavigationBar_numberOfObjectsPerBatch_" + context().elementID();
     }
 
+    @Override
     public void reset() {
         super.reset();
         _displayGroup = null;
         _threadStorageKey=null;
     }
     
+    @Override
     public void appendToResponse(WOResponse response, WOContext context) {
     	// set the numberOfObjectsPerBatch
         Number newNumberOfObjectsPerBatch = (Number) ERXThreadStorage.valueForKey(_threadStorageKey);

@@ -12,7 +12,7 @@ import er.directtoweb.assignments.ERDAssignment;
 
 
 /**
- * @deprecated use {@link ERDDefaultModelAssignment}
+ * @deprecated use {@link er.directtoweb.assignments.defaults.ERDDefaultModelAssignment}
  */
 @Deprecated
 public class ERDDefaultsAssignment extends ERDDefaultModelAssignment {

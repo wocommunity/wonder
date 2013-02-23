@@ -46,6 +46,7 @@ public class AjaxGMap extends AjaxComponent {
 		return false;
 	}
 
+	@Override
 	protected void addRequiredWebResources(WOResponse response) {
 		String mapApiJsFilename = "http://maps.google.com/maps?file=api&amp;v=2&amp;key=" + apiKey();
 		addScriptResourceInHead(response, mapApiJsFilename);
@@ -66,6 +67,7 @@ public class AjaxGMap extends AjaxComponent {
 		return valueForStringBinding("apiKey", ERXProperties.stringForKey("ajax.google.maps.apiKey"));
 	}
 
+	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		return null;
 	}

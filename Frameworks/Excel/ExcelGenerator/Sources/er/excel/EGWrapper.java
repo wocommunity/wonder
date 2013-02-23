@@ -4,7 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
+import org.apache.commons.lang.CharEncoding;
 import org.apache.log4j.Logger;
+import org.xml.sax.SAXParseException;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
@@ -12,6 +14,7 @@ import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 
+import er.extensions.appserver.ERXResponse;
 import er.extensions.components.ERXComponentUtilities;
 import er.extensions.components.ERXNonSynchronizingComponent;
 
@@ -83,7 +86,7 @@ public class EGWrapper extends ERXNonSynchronizingComponent {
     @Override
     public void appendToResponse(WOResponse response, WOContext context) {
         if (isEnabled()) {
-            WOResponse newResponse = new WOResponse();
+            ERXResponse newResponse = new ERXResponse();
 
             super.appendToResponse(newResponse, context);
 
@@ -94,39 +97,73 @@ public class EGWrapper extends ERXNonSynchronizingComponent {
             }
             byte[] bytes;
             try {
-                bytes = contentString.getBytes("UTF-8");
+                bytes = contentString.getBytes(CharEncoding.UTF_8);
             } catch (UnsupportedEncodingException e) {
                 throw new NSForwardException(e, "Can't convert string to UTF-8...you should get a better VM");
             }
             InputStream stream = new ByteArrayInputStream(bytes);
 
             EGSimpleTableParser parser = new EGSimpleTableParser(stream, fonts(), styles());
-            NSData data = parser.data();
-            if((hasBinding("data") && canSetValueForBinding("data")) ||
-               (hasBinding("stream") && canSetValueForBinding("stream"))
-               ) {
-                if(hasBinding("data")) {
-                    setValueForBinding(data, "data");
-                }
-                if(hasBinding("stream")) {
-                    setValueForBinding(data.stream(), "stream");
-                }
-                response.appendContentString(contentString);
-            } else {
-                String fileName = fileName();
-                if(fileName == null) {
-                    fileName = "results.xls";
-                }
-                
-                response.disableClientCaching();
-                response.appendHeader(String.valueOf( data.length()), "Content-Length" );
-                response.setContent(data); // Changed by ishimoto because it was sooooo buggy and didn't work in Japanese
-
-                response.setHeader("inline; filename=\"" + fileName + "\"", "content-disposition");
-                response.setHeader("application/vnd.ms-excel", "content-type");
-            }
+            try {
+	            NSData data = parser.data();
+	            if((hasBinding("data") && canSetValueForBinding("data")) ||
+	               (hasBinding("stream") && canSetValueForBinding("stream"))
+	               ) {
+	                if(hasBinding("data")) {
+	                    setValueForBinding(data, "data");
+	                }
+	                if(hasBinding("stream")) {
+	                    setValueForBinding(data.stream(), "stream");
+	                }
+	                response.appendContentString(contentString);
+	            } else {
+	                String fileName = fileName();
+	                if(fileName == null) {
+	                    fileName = "results.xls";
+	                }
+	                
+	                response.disableClientCaching();
+	                response.appendHeader(String.valueOf( data.length()), "Content-Length" );
+	                response.setContent(data); // Changed by ishimoto because it was sooooo buggy and didn't work in Japanese
+	
+	                response.setHeader("inline; filename=\"" + fileName + "\"", "content-disposition");
+	                response.setHeader("application/vnd.ms-excel", "content-type");
+	            }
+    		} catch (Exception ex) {
+    			if (ex.getCause() instanceof SAXParseException) {
+    				SAXParseException parseException = (SAXParseException)ex.getCause();
+    				String logMessage = "'"+context().page().getClass().getName()+"' caused a SAXParseException";
+    				logMessage += "\nMessage: '"+parseException.getMessage()+"'";
+    				// weird but true, getLineNumber is off by 1 (for display purposes I think - mhast)
+    				logMessage += "\nLine   : "+(parseException.getLineNumber() - 1);
+    				logMessage += "\nColumn : "+parseException.getColumnNumber();
+    				logMessage += "\n--- content begin ---";
+    				logMessage += addLineNumbers(contentString);
+    				logMessage += "--- content end ---";
+    				log.error(logMessage);
+    				throw new NSForwardException(ex);
+    			}
+    			// else don't handle exception just pass it forward
+    			else {
+    				throw new NSForwardException(ex);
+    			}
+    		}
         } else {
             super.appendToResponse(response, context);
         }
     }
+    
+	protected String addLineNumbers(String in) {
+		String out = "";
+		int i = 1, beginIndex = 0;
+		int endIndex = in.indexOf('\n');
+		while (endIndex != -1) {
+			out += in.substring(beginIndex, endIndex+1);
+			beginIndex = endIndex+1;
+			endIndex = in.indexOf('\n', beginIndex);
+			// only want to add line numbers if we have a next newline
+			if (endIndex != -1) out +=  (i++) + " ";
+		}
+		return out;
+	}
 }

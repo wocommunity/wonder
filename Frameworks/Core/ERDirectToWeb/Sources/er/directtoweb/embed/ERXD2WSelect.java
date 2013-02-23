@@ -43,8 +43,10 @@ public class ERXD2WSelect extends D2WSelect {
     	return ERD2WSelectActionDelegate.instance;
     }
     
-    /**
-     * Calling super causes errors when using deserialized components in 5.4.3
-     */
-    public void awake() {}
+	/**
+	 * Calling super causes errors when using deserialized components in 5.4.3
+	 */
+	@Override
+	public void awake() {
+	}
 }

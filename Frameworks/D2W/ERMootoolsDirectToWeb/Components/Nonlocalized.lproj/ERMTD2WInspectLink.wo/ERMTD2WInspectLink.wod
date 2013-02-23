@@ -1,0 +1,8 @@
+AttributeValue : WOString {
+	value = objectPropertyValue;
+}
+
+InspectLink : WOHyperlink {
+	action = objectPropertyValue;
+	class = d2wContext.inspectLinkClass;
+}

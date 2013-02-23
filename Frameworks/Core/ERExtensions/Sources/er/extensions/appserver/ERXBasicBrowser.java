@@ -39,7 +39,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * application.
  * <p>
  * {@link ERXSession} holds a browser object that represent the web browser for
- * that session and {@link ERXSession#browser browser()} method returns the
+ * that session and {@link ERXSession#browser() browser()} method returns the
  * object.
  * <p>
  * To access <code>ERXBasicBrowser</code>'s boolean questions from <code>WOConditionals</code>
@@ -47,7 +47,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * to their condition bindings.
  * <p>
  * {@link ERXDirectAction} also holds a browser object for the current request.
- * Use its {@link ERXDirectAction#browser browser()} method to access the
+ * Use its {@link ERXDirectAction#browser() browser()} method to access the
  * object from a session-less direct action.
  * 
  * 
@@ -246,10 +246,12 @@ public class ERXBasicBrowser extends ERXBrowser {
         }
     }
 
+    @Override
     public String browserName() {
         return _browserName;
     }
 
+    @Override
     public String version() {
         return _version;
     }
@@ -259,10 +261,12 @@ public class ERXBasicBrowser extends ERXBrowser {
     	return _majorVersion;
     }
 
+    @Override
     public String mozillaVersion() {
         return _mozillaVersion;
     }
 
+    @Override
     public String platform() {
         return _platform;
     }
@@ -285,50 +289,62 @@ public class ERXBasicBrowser extends ERXBrowser {
         return _cpu;
     }
 
+    @Override
     public NSDictionary userInfo() {
         return _userInfo;
     }
 
+    @Override
     public boolean isUnknownBrowser() {
         return _isUnknownBrowser;
     }
 
+    @Override
     public boolean isRobot() {
         return _isRobot;
     }
 
+    @Override
     public boolean isICab() {
         return _isICab;
     }
 
+    @Override
     public boolean isIE() {
         return _isIE;
     }
 
+    @Override
     public boolean isNetscape() {
         return _isNetscape;
     }
 
+    @Override
     public boolean isNotNetscape() {
         return !_isNetscape;
     }
 
+    @Override
     public boolean isOmniWeb() {
         return _isOmniWeb;
     }
 
+    @Override
     public boolean isOpera() {
         return _isOpera;
     }
 
+    @Override
     public boolean isSafari() {
         return _isSafari;
     }
 
+    @Override
     public boolean isFirefox() {
         return _isFirefox;
     }
 
+    @Override
     public boolean isChrome() {
         return _isChrome;
     }
@@ -344,89 +360,110 @@ public class ERXBasicBrowser extends ERXBrowser {
         return _isMozilla;
     }
 
+    @Override
     public boolean isMozilla50Compatible() {
         return _isMozillaVersion50;
     }
 
+    @Override
     public boolean isMozilla45Compatible() {
         return _isMozillaVersion45;
     }
 
+    @Override
     public boolean isMozilla40Compatible() {
         return _isMozillaVersion40 || _isMozillaVersion45;
     }
 
+    @Override
     public boolean isVersion9() {
         return _isVersion9;
     }
 
+    @Override
     public boolean isVersion8() {
         return _isVersion8;
     }
 
+    @Override
     public boolean isVersion7() {
         return _isVersion7;
     }
 
+    @Override
     public boolean isVersion6() {
         return _isVersion6;
     }
 
+    @Override
     public boolean isVersion5() {
         return _isVersion5;
     }
 
+    @Override
     public boolean isVersion51() {
         return _isVersion51;
     }
 
     // Netscape 4.5 to 4.7 is very different from 4.0
     // NOTE: 4.6 and 4.7 fell into this group
+    @Override
     public boolean isVersion45() {
         return _isVersion45;
     }
 
     // IE 4.1 for Mac is somewhat different from 4.0
+    @Override
     public boolean isVersion41() {
         return _isVersion41;
     }
 
+    @Override
     public boolean isVersion40() {
         return _isVersion40;
     }
 
+    @Override
     public boolean isVersion4() {
         return _isVersion4;
     }
 
+    @Override
     public boolean isVersion3() {
         return _isVersion3;
     }
 
+    @Override
     public boolean isVersion2() {
         return _isVersion2;
     }
 
+    @Override
     public boolean isUnknownPlatform() {
         return _isUnknownPlatform;
     }
 
+    @Override
     public boolean isMacOS() {
         return _isMacOS;
     }
 
+    @Override
     public boolean isWindows() {
         return _isWindows;
     }
 
+    @Override
     public boolean isLinux() {
         return _isLinux;
     }
 
+    @Override
     public boolean isIPhone() {
         return _isIPhone;
     }
     
+    @Override
     public boolean isIPad() {
 		return _isIPad;
 	}
@@ -436,6 +473,7 @@ public class ERXBasicBrowser extends ERXBrowser {
      * 
      * @return the gecko revision of the browser or {@link ERXBrowser#NO_GECKO}.
      */
+    @Override
     public String geckoRevision() {
         return _geckoRevision;
     }

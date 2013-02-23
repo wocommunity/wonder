@@ -1,0 +1,56 @@
+.erxHoverArea {
+	/*padding:3px 0;*/
+	/* border: solid black thin; */
+	/*text-align:center;*/
+	/*font-size: 70%;*/
+	position: relative;
+    display: -moz-inline-box;
+    display: inline-block;
+}
+
+/* target IE7 and below. These two definitions must be done seperately. Together they create a true inline block for IE. */
+*:first-child+html .erxHoverArea,
+* html .erxHoverArea {
+	/*IE hack, http://www.brunildo.org/test/InlineBlockLayout.html*/
+	display: inline-block;
+}
+
+*:first-child+html .erxHoverArea,
+* html .erxHoverArea {
+	/*IE hack, http://www.brunildo.org/test/InlineBlockLayout.html*/
+	display: inline;
+}
+
+.erxHoverArea div.erxToolTip,
+.erxHoverArea div.erxToolTipJS,
+#erxToolTipContents {
+	padding: .8em;
+	/*margin-top: 3px;*/
+	border: 1px solid #000;
+	background-color: #EEE;
+	color: #000;
+	/*font-size: 50%;*/
+	font-weight: normal;
+	position: absolute;
+	text-align: left;
+	z-index: 2000000;
+	white-space: normal;
+}
+
+.erxHoverArea div.erxToolTip,
+.erxHoverArea div.erxToolTipJS {
+	display: none;
+}
+
+/* target IE7 and below. This fixes the z index stack order bug*/
+*:first-child+html div.erxHoverArea:hover,
+* html div.erxHoverArea:hover {
+	border: 0px solid white; 
+	/* width: 99%; */
+	z-index: 1;
+}
+
+div.erxHoverArea:hover div.erxToolTip {
+	display: block;
+}
+

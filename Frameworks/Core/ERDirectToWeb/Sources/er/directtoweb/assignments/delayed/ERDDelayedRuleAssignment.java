@@ -49,9 +49,10 @@ public class ERDDelayedRuleAssignment extends ERDDelayedAssignment {
      * This method is called whenever the propertyKey is requested,
      * but the value in the cache is actually a rule.
      */
+    @Override
     public Object fireNow(D2WContext c) {
         Object result = null;
-        NSArray rules = (NSArray)this.value();
+        NSArray rules = (NSArray)value();
         Enumeration ruleEnumerator = rules.objectEnumerator();
         Rule rule;
         while (ruleEnumerator.hasMoreElements()) {
@@ -59,7 +60,7 @@ public class ERDDelayedRuleAssignment extends ERDDelayedAssignment {
             EOQualifierEvaluation eval = rule.lhs();
             log.debug("Qualifier eval: \n" + eval);
             if (eval.evaluateWithObject(c)) {
-                result = ((Assignment)rule.rhs()).value();
+                result = rule.rhs().value();
                 log.debug("RHS value: " +  result);
                 break;
             }

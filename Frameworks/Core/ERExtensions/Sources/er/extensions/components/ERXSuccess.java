@@ -13,7 +13,6 @@ import com.webobjects.appserver.WOContext;
  * "Success" string<br />
  * 
  */
-
 public class ERXSuccess extends WOComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -26,8 +25,8 @@ public class ERXSuccess extends WOComponent {
         super(context);
     }
 
+    @Override
     public boolean isStateless() {
         return true;
     }
-    
 }

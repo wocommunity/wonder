@@ -30,6 +30,7 @@ public class MTAjaxSortableList extends AjaxComponent {
         super(context);
     }
 
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 
 		_actionUrl = AjaxUtils.ajaxComponentActionUrl(context);
@@ -207,12 +208,13 @@ public class MTAjaxSortableList extends AjaxComponent {
 	}
 
 
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}
 
 	public void setId(String id) {
-		this._id = id;
+		_id = id;
 	}
 
 	public String getId() {
@@ -230,7 +232,7 @@ public class MTAjaxSortableList extends AjaxComponent {
 	 * @param var the var to set
 	 */
 	public void setVar(String var) {
-		this._var = var;
+		_var = var;
 	}	
 
 }

@@ -15,7 +15,6 @@ import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSValidation;
 
 import er.extensions.ERXExtensions;
-import er.extensions.crypting.ERXCrypto;
 import er.extensions.foundation.ERXPatcher;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXSelectorUtilities;
@@ -172,54 +171,63 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
     }
 
     public static Processor FlushCachesProcessor = new Processor() {
+        @Override
         protected void perform(EOEditingContext ec, ERXEnterpriseObject eo) {
             eo.flushCaches();
         }
     };
 
     public static Processor WillInsertProcessor = new Processor() {
+        @Override
         protected void perform(EOEditingContext ec, ERXEnterpriseObject eo) {
             eo.willInsert();
         }
     };
 
     public static Processor DidInsertProcessor = new Processor() {
+        @Override
         protected void perform(EOEditingContext ec, ERXEnterpriseObject eo) {
             eo.didInsert();
         }
     };
 
     public static Processor WillUpdateProcessor = new Processor() {
+        @Override
         protected void perform(EOEditingContext ec, ERXEnterpriseObject eo) {
             eo.willUpdate();
         }
     };
 
     public static Processor DidUpdateProcessor = new Processor() {
+        @Override
         protected void perform(EOEditingContext ec, ERXEnterpriseObject eo) {
             eo.didUpdate();
         }
     };
 
     public static Processor WillDeleteProcessor = new Processor() {
+        @Override
         protected void perform(EOEditingContext ec, ERXEnterpriseObject eo) {
             eo.willDelete();
         }
     };
 
     public static Processor DidDeleteProcessor = new Processor() {
+        @Override
         protected void perform(EOEditingContext ec, ERXEnterpriseObject eo) {
             eo.didDelete(ec);
         }
     };
 
     public static Processor WillRevertProcessor = new Processor() {
+        @Override
         protected void perform(EOEditingContext ec, ERXEnterpriseObject eo) {
             eo.willRevert();
         }
     };
 
     public static Processor DidRevertProcessor = new Processor() {
+        @Override
         protected void perform(EOEditingContext ec, ERXEnterpriseObject eo) {
             eo.didRevert(ec);
         }
@@ -470,7 +478,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
 
     /**
      * Takes the primary key of the object and encrypts it
-     * with the blowfish cipher using {@link ERXCrypto ERXCrypto}.
+     * with the blowfish cipher using {@link er.extensions.crypting.ERXCrypto ERXCrypto}.
      * @return blowfish encrypted primary key
      */
     public abstract String encryptedPrimaryKey();
@@ -551,7 +559,9 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
     /**
      * Cover method to return <code>toString</code>.
      * @return the results of calling toString.
+     * @deprecated use {@link #toString()} instead
      */
+    @Deprecated
     public abstract String description();
 
     /**

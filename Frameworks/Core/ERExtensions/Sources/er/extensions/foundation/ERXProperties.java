@@ -215,7 +215,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      */ 
     @SuppressWarnings("javadoc")
 	public static String versionStringForApplication() {
-        return valueFromPlistBundleWithKey(NSBundle.mainBundle(), "CustomInfo.plist", "CFBundleShortVersionString");
+        return valueFromPlistBundleWithKey(NSBundle.mainBundle(), "../Info.plist", "CFBundleShortVersionString");
     }
 
     /** 
@@ -233,9 +233,9 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      *                  <code>CFBundleShortVersionString</code> in its
      *                  <code>info.plist</code> resource.
      *                  
-     * @see #versionStringForApplication
-     * @see #webObjectsVersion
-     * @see ERXStringUtilities#removeExtraDotsFromVersionString
+     * @see #versionStringForApplication()
+     * @see #webObjectsVersion()
+     * @see ERXStringUtilities#removeExtraDotsFromVersionString(String)
      * </span>
      * 
      * <span class="ja">
@@ -247,14 +247,14 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * 
      * @return バージョン番号を文字列として戻ります。フレームワークが見つからない場合には null-string が戻ります。
      * 
-     * @see #versionStringForApplication
-     * @see #webObjectsVersion
-     * @see ERXStringUtilities#removeExtraDotsFromVersionString
+     * @see #versionStringForApplication()
+     * @see #webObjectsVersion()
+     * @see ERXStringUtilities#removeExtraDotsFromVersionString(String)
      * </span>
      */ 
     @SuppressWarnings("javadoc")
 	public static String versionStringForFrameworkNamed(String frameworkName) {
-        return valueFromPlistBundleWithKey(NSBundle.bundleForName(frameworkName), "CustomInfo.plist", "CFBundleShortVersionString");
+        return valueFromPlistBundleWithKey(NSBundle.bundleForName(frameworkName), "Info.plist", "CFBundleShortVersionString");
     }
 
     /**
@@ -333,8 +333,8 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * 
      * @return WebObjects version number as string
      * 
-     * @see #webObjectsVersionAsDouble
-     * @see ERXStringUtilities#removeExtraDotsFromVersionString
+     * @see #webObjectsVersionAsDouble()
+     * @see ERXStringUtilities#removeExtraDotsFromVersionString(String)
      * </span>
      * 
      * <span class="ja">
@@ -344,11 +344,13 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * 
      * @return WebObjects バージョン番号を String として戻ります。
      * 
-     * @see #webObjectsVersionAsDouble
-     * @see ERXStringUtilities#removeExtraDotsFromVersionString
+     * @see #webObjectsVersionAsDouble()
+     * @see ERXStringUtilities#removeExtraDotsFromVersionString(String)
      * </span>
+     * @deprecated Wonder is used with WO 5.4 only
      */ 
     @SuppressWarnings("javadoc")
+    @Deprecated
 	public static String webObjectsVersion() {
         if (_webObjectsVersion == null) {
             _webObjectsVersion = versionStringForFrameworkNamed("JavaWebObjects");
@@ -383,8 +385,10 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * 
      * @see #webObjectsVersion
      * </span>
+     * @deprecated Wonder is used with WO 5.4 only
      */
     @SuppressWarnings("javadoc")
+    @Deprecated
 	public static double webObjectsVersionAsDouble() {
         if (_webObjectsVersionDouble == 0.0d) {
             String woVersionString = ERXStringUtilities.removeExtraDotsFromVersionString(webObjectsVersion());
@@ -417,8 +421,10 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      *  
      *  @return true もし、バージョン番号が5.2以上であれば
      * </span>
+     * @deprecated Wonder is used with WO 5.4 only
      */
     @SuppressWarnings("javadoc")
+    @Deprecated
 	public static boolean webObjectsVersionIs52OrHigher() {
         if(ERXProperties.booleanForKey("er.extensions.ERXProperties.checkOldVersions")) {
             return webObjectsVersionAsDouble() >= 5.2d;
@@ -439,8 +445,10 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * 
      * @return true もし、バージョン番号が5.22以上であれば
      * </span>
+     * @deprecated Wonder is used with WO 5.4 only
      */
     @SuppressWarnings("javadoc")
+    @Deprecated
 	public static boolean webObjectsVersionIs522OrHigher() {
         if(ERXProperties.booleanForKey("er.extensions.ERXProperties.checkOldVersions")) {
             String webObjectsVersion = webObjectsVersion();
@@ -1152,7 +1160,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * <span class="ja">
      * 	指定プロパティー名とデフォルト暗号化方法 (propertyName.encrypted=true) を使って復元されている値を戻します。
      * 	例えば、my.password を取得する場合、my.password.encrypted=true も設定されていれば、
-     * 	my.password は復元する時にデフォルト暗号化方法 {@link ERXCrypto.defaultCrypter} を使用します。
+     * 	my.password は復元する時にデフォルト暗号化方法 {@link er.extensions.crypting.ERXCrypto#defaultCrypter()} を使用します。
      * 
      * 	@param propertyName - プロパティー名
      * 
@@ -1168,7 +1176,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * <span class="en">
      * If the <code>propertyName.encrypted</code> property is set to true, returns
      * the plain text value of the given property name, after decrypting it with the
-     * {@link ERXCrypto.defaultCrypter}. For instance, if you are requesting
+     * {@link er.extensions.crypting.ERXCrypto#defaultCrypter()}. For instance, if you are requesting
      * my.password and <code>my.password.encrypted</code> is set to true,
      * the value of <code>my.password</code> will be sent to the default crypter's
      * decrypt() method.
@@ -1182,7 +1190,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * <span class="ja">
      * 	指定プロパティー名とデフォルト暗号化方法 (propertyName.encrypted=true) を使って復元されている値を戻します。
      * 	例えば、my.password を取得する場合、my.password.encrypted=true も設定されていれば、
-     * 	my.password は復元する時にデフォルト暗号化方法 {@link ERXCrypto.defaultCrypter} を使用します。
+     * 	my.password は復元する時にデフォルト暗号化方法 {@link er.extensions.crypting.ERXCrypto#defaultCrypter()} を使用します。
      * 
      * 	@param propertyName - プロパティー名
      * 	@param defaultValue - プロパティーが無ければ、デフォルト値
@@ -1210,7 +1218,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     /**
      * <span class="en">
      * Returns the decrypted value for the given property name using the
-     * {@link ERXCrypto.defaultCrypter}. This is slightly different than
+     * {@link er.extensions.crypting.ERXCrypto#defaultCrypter()}. This is slightly different than
      * decryptedStringWithKeyWithDefault in that it does not require  the encrypted
      * property to be set.
      *  
@@ -1223,7 +1231,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * <span class="ja">
      * 	指定プロパティー名とデフォルト暗号化方法 (propertyName.encrypted=true) を使って復元されている値を戻します。
      * 	例えば、my.password を取得する場合、my.password.encrypted=true も設定されていれば、
-     * 	my.password は復元する時にデフォルト暗号化方法 {@link ERXCrypto.defaultCrypter} を使用します。
+     * 	my.password は復元する時にデフォルト暗号化方法 {@link er.extensions.crypting.ERXCrypto#defaultCrypter()} を使用します。
      *  
      * 	@param propertyName - プロパティー名
      * 	@param defaultValue - プロパティーが無ければ、暗号化されているデフォルト値
@@ -1464,7 +1472,8 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * 	@throws java.io.IOException if the file is not found or cannot be read
      * </span>
      */
-    public static Properties propertiesFromFile(File file) throws java.io.IOException {
+    @SuppressWarnings("javadoc")
+	public static Properties propertiesFromFile(File file) throws java.io.IOException {
         if (file == null)
             throw new IllegalStateException("Attempting to get properties for a null file!");
         ERXProperties._Properties prop = new ERXProperties._Properties();
@@ -1611,6 +1620,8 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 			}
 		}
 
+		optionalPropertiesLoader(ERXSystem.getProperty("user.name"), propertiesPaths, projectsInfo);
+		
         /** /etc/WebObjects/AppName/Properties -- per-Application-per-Machine properties */
         String applicationMachinePropertiesPath = ERXProperties.applicationMachinePropertiesPath("Properties");
     	addIfPresent("Application-Machine Properties", applicationMachinePropertiesPath, propertiesPaths, projectsInfo);
@@ -1622,8 +1633,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         /** Properties.<userName> -- per-Application-per-User properties */
         String applicationUserPropertiesPath = ERXProperties.applicationUserProperties();
     	addIfPresent("Application-User Properties", applicationUserPropertiesPath, propertiesPaths, projectsInfo);
-        
-        optionalPropertiesLoader(ERXSystem.getProperty("user.name"), propertiesPaths, projectsInfo);
 
         /*  Report the result */
 		if (reportLoggingEnabled && projectsInfo.count() > 0 && log.isInfoEnabled()) {
@@ -1745,7 +1754,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * Apply the current configuration to the supplied properties.
      * @param source
      * @param commandLine
-     * @return
+     * @return the applied properties
      */
     public static Properties applyConfiguration(Properties source, Properties commandLine) {
 
@@ -1934,7 +1943,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * Returns the application-specific variant properties for the given bundle.
      * @param userName 
      * @param bundleName 
-     * @return 
+     * @return the application-specific variant properties for the given bundle.
      */
     public static String variantPropertiesInBundle(String userName, String bundleName) {
     	String applicationUserPropertiesPath = null;
@@ -1951,7 +1960,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * <span class="en">
      * Returns the application-specific user properties.
      * 
-     * @return 
+     * @return the application-specific user properties
      * </span>
      * 
      * <span class="ja">
@@ -2724,13 +2733,11 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 							computedProperties = operator.compute(key.substring(0, key.length() - operatorKeyWithAt.length()), value, null);
 							break;
 						}
-						else {
-							int keyIndex = key.indexOf(operatorKeyWithAt + ".");
-							if (keyIndex != -1) {
-								operator = ERXProperties.operators.objectForKey(operatorKey);
-								computedProperties = operator.compute(key.substring(0, keyIndex), value, key.substring(keyIndex + operatorKeyWithAt.length() + 1));
-								break;
-							}
+						int keyIndex = key.indexOf(operatorKeyWithAt + ".");
+						if (keyIndex != -1) {
+							operator = ERXProperties.operators.objectForKey(operatorKey);
+							computedProperties = operator.compute(key.substring(0, keyIndex), value, key.substring(keyIndex + operatorKeyWithAt.length() + 1));
+							break;
 						}
 					}
 
@@ -2848,7 +2855,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
                 }
 
                 // Detect mutually recursing props files by tracking what we've already loaded:
-                String existingIncludeProps = this.getProperty(_Properties.IncludePropsKey);
+                String existingIncludeProps = getProperty(_Properties.IncludePropsKey);
                 if (existingIncludeProps == null) {
                 	existingIncludeProps = "";
                 }
@@ -2865,7 +2872,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 
                 try {
                     log.info("_Properties.load(): Including props file: " + propsFile);
-					this.load(propsFile);
+					load(propsFile);
 				} catch (IOException e) {
 					throw new RuntimeException("Failed to load the property file '" + value + "'.", e);
 				}

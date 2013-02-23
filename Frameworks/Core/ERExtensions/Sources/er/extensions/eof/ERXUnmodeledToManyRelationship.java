@@ -9,14 +9,6 @@ import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.eof.ERXEOAccessUtilities;
-import er.extensions.eof.ERXEOControlUtilities;
-import er.extensions.eof.ERXEnterpriseObject;
-import er.extensions.eof.ERXFetchSpecification;
-import er.extensions.eof.ERXKey;
-import er.extensions.eof.ERXQ;
-import er.extensions.eof.ERXS;
-
 /**
  * A class than is composited into an EO to provide common toMany functionality
  * for the case where the toMany cannot be modeled in EOF due to the unusually

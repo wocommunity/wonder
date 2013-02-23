@@ -1,6 +1,6 @@
-
 package er.coolcomponents;
 
+import org.apache.commons.lang.ObjectUtils;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
@@ -10,11 +10,9 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.ajax.AjaxUtils;
-import er.extensions.ERXExtensions;
 import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.components.ERXComponent;
 import er.extensions.foundation.ERXStringUtilities;
-
 
 /**
  * CCSegmentedSlider provides a picker for an enumerated type inspired by the iPhone on/off slider. The bindings are
@@ -111,7 +109,7 @@ public class CCSegmentedSlider extends ERXComponent {
 	public boolean isChecked() {
 		Object selection = valueForBinding("selection");
 		Object item = valueForBinding("item");
-		return ERXExtensions.safeEquals(selection, item);
+		return ObjectUtils.equals(selection, item);
 	}
 
 

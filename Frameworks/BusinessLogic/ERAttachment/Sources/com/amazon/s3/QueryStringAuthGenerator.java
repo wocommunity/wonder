@@ -60,8 +60,8 @@ public class QueryStringAuthGenerator {
         this.server = server;
         this.port = port;
 
-        this.expiresIn = DEFAULT_EXPIRES_IN;
-        this.expires = null;
+        expiresIn = DEFAULT_EXPIRES_IN;
+        expires = null;
     }
 
     public void setExpires(long millisSinceEpoch) {
@@ -134,13 +134,13 @@ public class QueryStringAuthGenerator {
     }
 
     public String makeBareURL(String bucket, String key) {
-        StringBuffer buffer = new StringBuffer();
-        if (this.isSecure) {
+        StringBuilder buffer = new StringBuilder();
+        if (isSecure) {
             buffer.append("https://");
         } else {
             buffer.append("http://");
         }
-        buffer.append(this.server).append(":").append(this.port).append("/").append(bucket);
+        buffer.append(server).append(":").append(port).append("/").append(bucket);
         buffer.append("/").append(Utils.urlencode(key));
 
         return buffer.toString();
@@ -148,8 +148,8 @@ public class QueryStringAuthGenerator {
 
     private String generateURL(String method, String path, Map headers) {
         long expires = 0L;
-        if (this.expiresIn != null) {
-            expires = System.currentTimeMillis() + this.expiresIn.longValue();
+        if (expiresIn != null) {
+            expires = System.currentTimeMillis() + expiresIn.longValue();
         } else if (this.expires != null) {
             expires = this.expires.longValue();
         } else {
@@ -160,16 +160,16 @@ public class QueryStringAuthGenerator {
         expires /= 1000;
 
         String canonicalString = Utils.makeCanonicalString(method, path, headers, ""+expires);
-        String encodedCanonical = Utils.encode(this.awsSecretAccessKey, canonicalString, true);
+        String encodedCanonical = Utils.encode(awsSecretAccessKey, canonicalString, true);
 
-        StringBuffer buffer = new StringBuffer();
-        if (this.isSecure) {
+        StringBuilder buffer = new StringBuilder();
+        if (isSecure) {
             buffer.append("https://");
         } else {
             buffer.append("http://");
         }
 
-        buffer.append(this.server).append(":").append(this.port).append("/").append(path);
+        buffer.append(server).append(":").append(port).append("/").append(path);
 
         if (path.indexOf('?') == -1) {
             // no other query parameters
@@ -181,7 +181,7 @@ public class QueryStringAuthGenerator {
 
         buffer.append("Signature=").append(encodedCanonical);
         buffer.append("&Expires=").append(expires);
-        buffer.append("&AWSAccessKeyId=").append(this.awsAccessKeyId);
+        buffer.append("&AWSAccessKeyId=").append(awsAccessKeyId);
 
         return buffer.toString();
     }

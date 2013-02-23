@@ -34,7 +34,8 @@ public class WOLToolBar extends WOComponent {
   public WOLToolBar(WOContext context) {
     super(context);
   }
-  
+
+  @Override
   public void appendToResponse(WOResponse response, WOContext context) {
 	  super.appendToResponse(response, context);
 	  if(ERXApplication.erxApplication().isDevelopmentMode()) {
@@ -72,7 +73,7 @@ public class WOLToolBar extends WOComponent {
       WOApplication application = WOApplication.application();
       Method setDebugMethod = application.getClass().getMethod("setDebugEnabledForComponent", boolean.class, WOComponent.class);
       _debugEnabled = !_debugEnabled;
-      setDebugMethod.invoke(application, _debugEnabled, context().page());
+      setDebugMethod.invoke(application, Boolean.valueOf(_debugEnabled), context().page());
     }
     catch (Throwable t) {
       NSLog.debug.appendln("Your application does not have a setDebugEnabledForComopnent(boolean, WOComponent) method.");

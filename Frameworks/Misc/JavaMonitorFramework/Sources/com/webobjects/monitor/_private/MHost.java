@@ -31,6 +31,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation._NSThreadsafeMutableArray;
 
+import er.extensions.appserver.ERXResponse;
 import er.extensions.foundation.ERXProperties;
 
 public class MHost extends MObject {
@@ -180,6 +181,7 @@ public class MHost extends MObject {
         return values;
     }
 
+    @Override
     public String toString() {
         if (false) {
             return values.toString() + " " + "address = " + _address + " " + "runningInstances = " + runningInstances
@@ -203,10 +205,7 @@ public class MHost extends MObject {
     }
 
     public boolean isPortInUse(Integer port) {
-        if (instanceWithPort(port) == null)
-            return false;
-        else
-            return true;
+        return instanceWithPort(port) != null;
     }
 
     // KH - this is probably slow :)
@@ -385,8 +384,7 @@ public class MHost extends MObject {
             if (willChange) {
                 _siteConfig.hostErrorArray.addObjectIfAbsent(this);
             }
-            aResponse = new WOResponse();
-            aResponse.setContent(errorResponse);
+            aResponse = new ERXResponse(errorResponse);
         } else {
             // if we successfully synced, clear the error dictionary
             if (isSync && isAvailable) {

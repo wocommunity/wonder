@@ -1,7 +1,6 @@
 package er.pdfexamples.components;
 
 import com.webobjects.appserver.WOContext;
-
 import com.webobjects.foundation.NSTimestamp;
 
 

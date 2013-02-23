@@ -7,7 +7,6 @@ import com.webobjects.foundation.NSDictionary;
 
 import er.extensions.appserver.ERXWOContext;
 
-
 /**
  * An Ajax.Updater as a link
  * @see AjaxUpdater
@@ -22,11 +21,6 @@ import er.extensions.appserver.ERXWOContext;
 public class AjaxUpdaterLink extends AjaxUpdater {	
     public AjaxUpdaterLink(WOContext context) {
         super(context);
-    }
-    
-    @Override
-    public boolean synchronizesVariablesWithBindings() {
-    	return false;
     }
     
     @Override

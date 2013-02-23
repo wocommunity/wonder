@@ -39,11 +39,6 @@ public class ERXRouteURL extends ERXComponent {
 		return true;
 	}
 
-	@Override
-	public boolean synchronizesVariablesWithBindings() {
-		return false;
-	}
-
 	public Object record() {
 		return valueForBinding("record");
 	}
@@ -66,7 +61,7 @@ public class ERXRouteURL extends ERXComponent {
 		boolean includeSessionID = context().hasSession() && context().session().storesIDsInURLs();
 
 		NSMutableDictionary<String, Object> queryParameters = new NSMutableDictionary<String, Object>();
-		for (String bindingKey : (NSArray<String>) bindingKeys()) {
+		for (String bindingKey : bindingKeys()) {
 			if (bindingKey.startsWith("?")) {
 				Object value = valueForBinding(bindingKey);
 				String key = bindingKey.substring(1);

@@ -1,17 +1,17 @@
 package er.extensions.statistics;
 
+import java.util.Enumeration;
+
 import com.webobjects.appserver.WOContext;
-import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSComparator;
-import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.components.ERXStatelessComponent;
-import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXArrayUtilities;
-
-import java.util.Enumeration;
+import er.extensions.foundation.ERXStringUtilities;
 
 /**
  * A component to display a summary of collected stats.
@@ -92,6 +92,7 @@ public class ERXStatsSummary extends ERXStatelessComponent {
         return statsTypes().count() > 0;
     }
 
+    @Override
     public void reset() {
         super.reset();
         currentType = null;

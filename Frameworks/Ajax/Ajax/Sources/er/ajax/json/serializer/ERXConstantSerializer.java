@@ -39,6 +39,7 @@ public class ERXConstantSerializer extends AbstractSerializer {
 		return _JSONClasses;
 	}
 
+	@Override
 	public boolean canSerialize(Class clazz, Class jsonClazz) {
 		return (super.canSerialize(clazz, jsonClazz) || ((jsonClazz == null || jsonClazz == JSONObject.class) && ERXConstant.Constant.class.isAssignableFrom(clazz)));
 	}

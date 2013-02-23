@@ -42,5 +42,6 @@ public class ERXD2WQuery extends D2WQuery {
 		return ERD2WQueryActionDelegate.instance;
 	}
 
+	@Override
 	public void awake() {}
 }

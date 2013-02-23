@@ -40,6 +40,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSForwardException;
 
+import er.extensions.appserver.ERXResponse;
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXSimpleTemplateParser;
 
@@ -168,7 +169,7 @@ public class ERXSLTWrapper extends ERXNonSynchronizingComponent {
 	public void appendToResponse(WOResponse response, WOContext context) {
 		start = System.currentTimeMillis(); current = start;
 		if (isEnabled()) {
-			WOResponse newResponse = new WOResponse();
+			ERXResponse newResponse = new ERXResponse();
 			newResponse.setContentEncoding(response.contentEncoding());
 
 			super.appendToResponse(newResponse, context);
@@ -234,9 +235,7 @@ public class ERXSLTWrapper extends ERXNonSynchronizingComponent {
 		private static final Logger log       = Logger.getLogger(TemplatePool.class);
 		private ERXSimpleTemplateParser templateParser = new ERXSimpleTemplateParser("?", false);
 
-		private TemplatePool() {
-			// nothing
-		}
+		protected TemplatePool() {}
 
 		public Map getTemplates() {
 			return templates;

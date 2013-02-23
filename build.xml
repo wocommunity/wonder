@@ -73,6 +73,36 @@
             <property name="build.action" value="web" />
         </ant>
     </target>
+    
+    <target name="archives.frameworks">
+        <ant antFile="Build/build/build.xml" target="archives.frameworks.all">
+            <property name="build.action" value="build" />
+            <property name="include.source" value="true" />
+        </ant>
+    </target>
+    <target name="archives.frameworks.install">
+        <ant antFile="Build/build/build.xml" target="archives.frameworks.all">
+            <property name="build.action" value="install" />
+        </ant>
+        <ant antFile="Build/build/build.xml" target="archives.frameworks.all">
+            <property name="build.action" value="web" />
+        </ant>
+    </target>
+    
+    <target name="archives.examples">
+        <ant antFile="Build/build/build.xml" target="archives.examples.all">
+            <property name="build.action" value="build" />
+            <property name="wonder.development" value="false" />
+        </ant>
+    </target>
+    <target name="archives.examples.install">
+        <ant antFile="Build/build/build.xml" target="archives.examples.all">
+            <property name="build.action" value="install" />
+        </ant>
+        <ant antFile="Build/build/build.xml" target="archives.examples.all">
+            <property name="build.action" value="web" />
+        </ant>
+    </target>
 
     <target name="build" depends="frameworks,applications,examples" />
 
@@ -97,7 +127,7 @@
     <target name="docs">
         <ant antFile="Build/build/build-doc.xml" target="api">
             <property name="dist.base" value="dist" />
-            <property name="project.version" value="5.0" />
+            <property name="project.version" value="6.0" />
         </ant>
     </target>
 
@@ -110,7 +140,7 @@
     <target name="dist">
         <ant antFile="Build/build/build.xml" target="dist">
             <property name="dist.base" value="dist" />
-            <property name="project.version" value="5.0" />
+            <property name="project.version" value="6.0" />
         </ant>
     </target>
 

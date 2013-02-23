@@ -1,5 +1,9 @@
 package er.extensions.components.javascript;
 
+import java.util.Enumeration;
+
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -7,13 +11,11 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+
 import er.extensions.components.ERXNonSynchronizingComponent;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXEqualator;
 import er.extensions.foundation.ERXStringUtilities;
-import org.apache.log4j.Logger;
-
-import java.util.Enumeration;
 
 /**
  * A fancy to-many relationship editor component.
@@ -57,10 +59,12 @@ public class ERXJSToManyRelationshipEditor extends ERXNonSynchronizingComponent 
         super(context);
     }
 
+    @Override
     public boolean isStateless() {
         return true;
     }
 
+    @Override
     public void reset() {
         invalidateCaches();
     }
@@ -133,10 +137,12 @@ public class ERXJSToManyRelationshipEditor extends ERXNonSynchronizingComponent 
         _editorContextID = null;
     }
 
+    @Override
     public void sleep() {
         invalidateCaches();
     }
 
+    @Override
     public void appendToResponse(WOResponse aResponse, WOContext aContext) {
         invalidateCaches();
         super.appendToResponse(aResponse, aContext);
@@ -182,9 +188,8 @@ public class ERXJSToManyRelationshipEditor extends ERXNonSynchronizingComponent 
     private int indexOfObjectInArrayUsingERXEOControlUtilitiesEOEquals(Object anObject, NSArray anArray) {
         if (anObject instanceof EOEnterpriseObject) {
             return ERXArrayUtilities.indexOfObjectUsingEqualator(anArray, anObject, ERXEqualator.EOEqualsEqualator);
-        } else {
-            return anArray.indexOfObject(anObject);
         }
+        return anArray.indexOfObject(anObject);
     }
 
     /**

@@ -1,0 +1,73 @@
+BatchNavigationContainer : WOGenericContainer {
+	class = d2wContext.batchNavigationContainerClassName;
+	elementName = d2wContext.batchNavigationContainerElementName; 
+}
+
+BatchNavigationListContainer : WOGenericContainer {
+	class = d2wContext.batchNavigationListContainerClassName;
+	elementName = d2wContext.batchNavigationListContainerElementName;
+}
+
+BatchNavigationListItem : WOGenericContainer {
+	class = batchNavigationListItemClassName;
+	elementName = d2wContext.batchNavigationListItemElementName;
+}
+
+BatchNavigationNumberedListItem : WOGenericContainer {
+	class = batchNavigationListItemClassName;
+	elementName = d2wContext.batchNavigationListItemElementName;
+}
+
+HasMultiplePagesConditional : WOConditional {
+	condition = hasMultiplePages;
+}
+
+HasNextPageConditional : WOConditional {
+	condition = hasNextPage;
+}
+
+HasPreviousPageConditional : WOConditional {
+	condition = hasPreviousPage;
+}
+
+IsEllipsisConditional : WOConditional {
+	condition = repetitionPageNumber.pageNumber;
+	negate = true;
+}
+
+IsPageNumberConditional : WOConditional {
+	condition = repetitionPageNumber.pageNumber;
+}
+
+NextPageAction : AjaxUpdateLink {
+	action = nextPage;
+	class = "paginatorNext";
+	updateContainerID = updateContainerID;
+}
+
+NextLabel : ERXLocalizedString {
+	value = "ERXFlickrBatchNavigation.next";
+}
+
+PageNumber : WOString {
+	value = repetitionPageNumber.pageNumber;
+}
+
+PageNumberRepetition : WORepetition {
+	list = pageNumbers;
+	item = repetitionPageNumber;
+}
+
+PreviousPageAction : MTAjaxUpdateLink {
+	action = previousPage;
+	class = d2wContext.batchNavigationBarPreviousPageActionClassName;
+}
+
+PreviousLabel : ERXLocalizedString {
+	value = "ERXFlickrBatchNavigation.previous";
+}
+
+SelectPageAction : MTAjaxUpdateLink {
+	action = selectPage;
+	updateContainerID = updateContainerID;
+}

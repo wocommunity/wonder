@@ -164,12 +164,14 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
         }
     }
 
+    @Override
     public void takeValuesFromRequest(WORequest request, WOContext context) {
         super.takeValuesFromRequest(request, context);
         substituteValueForNullableQueryKeys();
         saveQueryBindings();
     }
 
+    @Override
     public void appendToResponse(WOResponse response, WOContext context) {
         loadQueryBindings();
         super.appendToResponse(response, context);
@@ -204,6 +206,7 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
         }
     }
 
+    @Override
     public void awake() {
         super.awake();
     }
@@ -320,6 +323,7 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
         return returnPage != null ? returnPage : nextPage();
     }
 
+    @Override
     public boolean showCancel() {
         return nextPage() != null;
     }

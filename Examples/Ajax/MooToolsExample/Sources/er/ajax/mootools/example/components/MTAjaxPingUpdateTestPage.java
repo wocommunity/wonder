@@ -24,7 +24,7 @@ public class MTAjaxPingUpdateTestPage extends Main {
 	}
 
 	public void setRandomStrings(NSMutableArray<String> randomStrings) {
-		this._randomStrings = randomStrings;
+		_randomStrings = randomStrings;
 	}
 
     public class RandomStringThread implements Runnable {

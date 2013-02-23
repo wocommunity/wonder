@@ -56,6 +56,7 @@ public class ERXJSSubmitFunction extends WODynamicElement {
     _disabled = (WOAssociation) associations.objectForKey("disabled");
   }
 
+  @Override
   public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
   }
 
@@ -83,6 +84,7 @@ public class ERXJSSubmitFunction extends WODynamicElement {
     return _disabled != null && _disabled.booleanValueInComponent(component);
   }
 
+  @Override
   public WOActionResults invokeAction(WORequest request, WOContext context) {
     Object obj = null;
     WOComponent component = context.component();
@@ -111,6 +113,7 @@ public class ERXJSSubmitFunction extends WODynamicElement {
     return (WOActionResults) obj;
   }
 
+  @Override
   public void appendToResponse(WOResponse response, WOContext context) {
     super.appendToResponse(response, context);
 

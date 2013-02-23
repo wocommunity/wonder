@@ -124,10 +124,10 @@ public class ERMailDataAttachment extends ERMailAttachment {
 			}
 		}
 
-		if (this.contentID() != null) {
-			bp.setHeader("Content-ID", this.contentID());
+		if (contentID() != null) {
+			bp.setHeader("Content-ID", contentID());
 		}
-		bp.setFileName(this.fileName());
+		bp.setFileName(fileName());
 		return bp;
 	}
 }

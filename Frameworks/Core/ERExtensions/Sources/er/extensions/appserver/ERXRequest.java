@@ -29,7 +29,7 @@ import er.extensions.localization.ERXLocalizer;
  * Subclass of WORequest that fixes several Bugs.
  * The ID's are #2924761 and #2961017. It can also be extended to handle
  * #2957558 ("de-at" is converted to "German" instead of "German_Austria").
- * The request is created via {@link ERXApplication#createRequest(String,String,String, NSDictionary,NSData,NSDictionary)}.
+ * The request is created via {@link ERXApplication#createRequest(String, String, String, Map, NSData, Map)}.
  */
 public class ERXRequest extends WORequest {
 
@@ -101,6 +101,7 @@ public class ERXRequest extends WORequest {
      * @see WOContext#completeURLWithRequestHandlerKey(String, String, String, String, boolean, int)
      * @see WORequest#_completeURLPrefix(StringBuffer, boolean, int)
      */
+	@Override
 	public String _serverName() {
 		String serverName = headerForKey("x-webobjects-servlet-server-name");
 
@@ -145,12 +146,13 @@ public class ERXRequest extends WORequest {
         return isBrowserFormValueEncodingOverrideEnabled.booleanValue();
     }
 
+    @Override
     public WOContext context() {
     	return _context();
     }
     
     /** Returns a cooked version of the languages the user has set in his Browser.
-     * Adds "Nonlocalized" and {@link ERXLocalizer#defaultLanguage()} if not
+     * Adds "Nonlocalized" and {@link er.extensions.localization.ERXLocalizer#defaultLanguage()} if not
      * already present. Transforms regionalized en_us to English_US as a key.
      * @return cooked version of user's languages
      */
@@ -160,7 +162,7 @@ public class ERXRequest extends WORequest {
         if (_browserLanguages == null) {
         	NSMutableArray<String> languageKeys = new NSMutableArray<String>();
             NSArray<String> fixedLanguages = null;
-            String string = this.headerForKey("accept-language");
+            String string = headerForKey("accept-language");
             if (string != null) {
                 NSArray<String> rawLanguages = NSArray.componentsSeparatedByString(string, ",");
                 fixedLanguages = fixAbbreviationArray(rawLanguages);
@@ -256,6 +258,7 @@ public class ERXRequest extends WORequest {
      * 
      * @return whether or not this request is secure
      */
+    @Override
     public boolean isSecure() {
     	return ERXRequest.isRequestSecure(this);
     }
@@ -280,7 +283,7 @@ public class ERXRequest extends WORequest {
         	stringbuffer.append("http://");
         }
    		stringbuffer.append(serverName);
-   		if(portStr != null && ((secure && !"443".equals(portStr)) || (!secure && !"80".equals(portStr)))) {
+   		if(portStr != null && WOApplication.application().isDirectConnectEnabled() && ((secure && !"443".equals(portStr)) || (!secure && !"80".equals(portStr)))) {
    			stringbuffer.append(':');
    			stringbuffer.append(portStr);
         }
@@ -341,6 +344,7 @@ public class ERXRequest extends WORequest {
     }
 
     private static class _LanguageComparator extends NSComparator {
+        public _LanguageComparator() {}
 
         private static float quality(String languageString) {
             float result=0f;

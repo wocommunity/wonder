@@ -135,18 +135,22 @@ public class ERMailSenderTest extends TestCase {
 			}
 		}
 
+		@Override
 		public void connect() throws MessagingException {
 		// DO NOTHING
 		}
 
+		@Override
 		public void connect(String host, int port, String user, String password) throws MessagingException {
 		// DO NOTHING
 		}
 
+		@Override
 		public void connect(String user, String password) throws MessagingException {
 		// DO NOTHING
 		}
 
+		@Override
 		public void connect(String host, String user, String password) throws MessagingException {
 		// DO NOTHING
 		}
