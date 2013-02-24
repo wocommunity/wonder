@@ -241,11 +241,11 @@ public class Application extends ERXApplication  {
 
         ERXRouteRequestHandler.register(restHandler);
         
-        boolean isSSHServerEnabled = ERXProperties.booleanForKeyWithDefault("er.wotaskd.ssh.enabled", false);
+        boolean isSSHServerEnabled = ERXProperties.booleanForKeyWithDefault("er.wotaskd.sshd.enabled", false);
         
         if (isSSHServerEnabled) {
           SshServer sshd = SshServer.setUpDefaultServer();
-          sshd.setPort(ERXProperties.intForKeyWithDefault("er.wotaskd.ssh.port", 6022));
+          sshd.setPort(ERXProperties.intForKeyWithDefault("er.wotaskd.sshd.port", 6022));
           sshd.setPasswordAuthenticator(new SshPasswordAuthenticator());
           sshd.setKeyPairProvider(new SimpleGeneratorHostKeyProvider("hostkey.ser"));
           sshd.setCommandFactory(new ScpCommandFactory());
