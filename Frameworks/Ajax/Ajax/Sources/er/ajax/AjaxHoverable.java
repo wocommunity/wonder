@@ -54,6 +54,7 @@ public class AjaxHoverable extends WOComponent {
         super(context);
     }
 
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
         return false;
 	}
@@ -62,7 +63,8 @@ public class AjaxHoverable extends WOComponent {
 		AjaxUtils.addStylesheetResourceInHead(context, response, AJAX_FRAMEWORK_NAME, LOCAL_CSS_FILE);
 		AjaxUtils.addScriptResourceInHead(context, response, AJAX_FRAMEWORK_NAME, LOCAL_JS_FILE);
 	}
-	
+
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		addWebResourcesInHead(response, context);
 		super.appendToResponse(response, context);
@@ -238,5 +240,4 @@ public class AjaxHoverable extends WOComponent {
 	public boolean isAjaxRequest() {
 		return AjaxUtils.isAjaxRequest(context().request());
 	}
-	
 }

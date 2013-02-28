@@ -229,17 +229,6 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 
     		ERXEntityClassDescription.registerDescription();
     		ERXPartialInitializer.registerModelGroupListener();
-    		if (!ERXProperties.webObjectsVersionIs52OrHigher()) {
-    			NSNotificationCenter.defaultCenter().addObserver(this,
-    					new NSSelector("sessionDidTimeOut", ERXConstant.NotificationClassArray),
-    					WOSession.SessionDidTimeOutNotification,
-    					null);
-    			NSNotificationCenter.defaultCenter().addObserver(this,
-    					new NSSelector("editingContextDidCreate",
-    							ERXConstant.NotificationClassArray),
-    							ERXEC.EditingContextDidCreateNotification,
-    							null);                    
-    		}
     	} catch (Exception e) {
     		throw NSForwardException._runtimeExceptionForThrowable(e);
     	}
