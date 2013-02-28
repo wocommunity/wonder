@@ -9,7 +9,6 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 
-import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.foundation.ERXStringUtilities;
 
 /**
