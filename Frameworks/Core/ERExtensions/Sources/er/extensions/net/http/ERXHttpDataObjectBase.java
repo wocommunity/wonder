@@ -244,11 +244,11 @@ public abstract class ERXHttpDataObjectBase {
 
   protected Scheme createScheme() {
     if(SCHEME_HTTPS.equals(scheme())) {
-      return new Scheme(scheme(), SSLSocketFactory.getSocketFactory(), HTTPS_PORT);
+      return new Scheme(scheme(), HTTPS_PORT, SSLSocketFactory.getSocketFactory());
     } else if(port() == -1) {
-      return new Scheme(scheme(), PlainSocketFactory.getSocketFactory(), HTTP_PORT);
+      return new Scheme(scheme(), HTTP_PORT, PlainSocketFactory.getSocketFactory());
     } else {
-      return new Scheme(scheme(), PlainSocketFactory.getSocketFactory(), port());
+      return new Scheme(scheme(), port(), PlainSocketFactory.getSocketFactory());
     }
   }
 
