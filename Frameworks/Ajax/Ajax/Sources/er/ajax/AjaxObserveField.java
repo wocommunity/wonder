@@ -131,6 +131,9 @@ public class AjaxObserveField extends AjaxDynamicElement {
 		AjaxUtils.appendScriptFooter(response);
 	}
 
+	public static void appendToResponse(WOResponse response, WOContext context, AjaxDynamicElement element, String observeFieldID, boolean observeDescendentFields, String updateContainerID, boolean fullSubmit, NSMutableDictionary options) {
+		appendToResponse(response, context, element, observeFieldID, observeDescendentFields, updateContainerID, fullSubmit, options, false);
+	}
 	public static void appendToResponse(WOResponse response, WOContext context, AjaxDynamicElement element, String observeFieldID, boolean observeDescendentFields, String updateContainerID, boolean fullSubmit, NSMutableDictionary options, boolean actOnKeyUp) {
 		WOComponent component = context.component();
 		String submitButtonName = nameInContext(context, component, element);
