@@ -9,7 +9,6 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 
-import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.foundation.ERXStringUtilities;
 
 /**
@@ -44,10 +43,18 @@ public class AjaxHoverable extends WOComponent {
 	
 	protected String _idStr = null;
 
+	/**
+	 * Do I need to update serialVersionUID?
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public AjaxHoverable(WOContext context) {
         super(context);
     }
 
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
         return false;
 	}
@@ -56,7 +63,8 @@ public class AjaxHoverable extends WOComponent {
 		AjaxUtils.addStylesheetResourceInHead(context, response, AJAX_FRAMEWORK_NAME, LOCAL_CSS_FILE);
 		AjaxUtils.addScriptResourceInHead(context, response, AJAX_FRAMEWORK_NAME, LOCAL_JS_FILE);
 	}
-	
+
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		addWebResourcesInHead(response, context);
 		super.appendToResponse(response, context);
@@ -232,5 +240,4 @@ public class AjaxHoverable extends WOComponent {
 	public boolean isAjaxRequest() {
 		return AjaxUtils.isAjaxRequest(context().request());
 	}
-	
 }

@@ -20,7 +20,6 @@ import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSSelector;
 
 import er.extensions.ERXExtensions;
-import er.extensions.appserver.ERXApplication;
 import er.extensions.eof.ERXConstant;
 import er.extensions.logging.ERXLogger;
 

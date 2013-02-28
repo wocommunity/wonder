@@ -7,7 +7,6 @@ import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.ERD2WContext;
 import com.webobjects.eoaccess.EODatabaseDataSource;
 import com.webobjects.eoaccess.EOEntity;
-import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEnterpriseObject;

@@ -11,7 +11,6 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotificationCenter;
 
-import er.directtoweb.ERD2WContainer;
 import er.directtoweb.pages.ERD2WWizardCreationPage;
 import er.directtoweb.pages.templates.ERD2WWizardCreationPageTemplate;
 import er.extensions.eof.ERXEOControlUtilities;
