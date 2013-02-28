@@ -14,8 +14,8 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXExtensions;
 import er.extensions.eof.ERXEnterpriseObject;
+import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 /**
@@ -89,10 +89,10 @@ public class ERXErrorDictionaryPanel extends ERXStatelessComponent {
     private final static String eliminable = "Could not save your changes: null";
     private final static String couldNotSave = "Could not save your changes: ";
     public static String massageErrorMessage(String initialMessage, String displayErrorKey) {
-        String result=ERXExtensions.substituteStringByStringInString("EOValidationException:",
+        String result=ERXStringUtilities.replaceStringByStringInString("EOValidationException:",
                                                                     "",
                                                                     initialMessage);
-        if (displayErrorKey!=null) result=ERXExtensions.substituteStringByStringInString(ERXEnterpriseObject.KEY_MARKER,
+        if (displayErrorKey!=null) result=ERXStringUtilities.replaceStringByStringInString(ERXEnterpriseObject.KEY_MARKER,
                                                                                         displayErrorKey,
                                                                                         result);
         
