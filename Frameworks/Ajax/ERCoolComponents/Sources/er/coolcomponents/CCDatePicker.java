@@ -4,10 +4,12 @@ import java.text.SimpleDateFormat;
 
 import org.apache.log4j.Logger;
 
+import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSValidation.ValidationException;
 
 import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXResponseRewriter;
@@ -277,5 +279,24 @@ public class CCDatePicker extends ERXStatelessComponent {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
 		return formatter.format(ts);
 	}
+
+    /**
+     * Overridden so that parent will handle in the same manner as if this were a dynamic element.
+     * @param t the exception thrown during validation
+     * @param value the given value to be validated
+     * @param keyPath the key path associated with this value, identifies the property of an object
+     */
+	@Override
+    public void validationFailedWithException(Throwable t, Object value, String keyPath) {
+    	if (keyPath != null && "<none>".equals(keyPath) && t instanceof ValidationException) {
+    		ValidationException e = (ValidationException) t;
+    		WOAssociation valueAssociation = (WOAssociation) _keyAssociations.valueForKey("value");
+    		if (valueAssociation != null) {
+    			keyPath = valueAssociation.keyPath();
+    		}
+    		t = new ValidationException(e.getMessage(), e.object(), keyPath);
+    	}
+    	parent().validationFailedWithException(t, value, keyPath);
+    }
 
 }
