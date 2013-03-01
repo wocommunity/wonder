@@ -105,10 +105,7 @@ public class CCDatePicker extends ERXStatelessComponent {
     		String cssFilename = stringValueForBinding("cssFile", CSS_FILENAME);
     		ERXResponseRewriter.addStylesheetResourceInHead(response, context, framework, cssFilename);
     	}
-    	//(AR) do not know how to generate minified js file. Added event notifications to the "lg.js"
-    	// file that makes this date picker compatible with AjaxObserveField.
-    	//String datepickerjsName = ERXApplication.isDevelopmentModeSafe() ? "datepicker_lg.js" : "datepicker.js";
-    	String datepickerjsName = "datepicker_lg.js";
+        String datepickerjsName = ERXApplication.isDevelopmentModeSafe() ? "datepicker_lg.js" : "datepicker.js";
         ERXResponseRewriter.addScriptResourceInHead(response, context, FRAMEWORK_NAME, datepickerjsName);
         String langScript = ERXLocalizer.currentLocalizer().languageCode() + ".js";
         ERXResponseRewriter.addScriptResourceInHead(response, context, FRAMEWORK_NAME, "lang/" + langScript);
