@@ -4,13 +4,13 @@
             allowsNull = Y; 
             columnName = "BCC_ADDR"; 
             name = bccAddresses; 
-            prototypeName = varchar1000; 
+            prototypeName = varcharLarge; 
         }, 
         {
             allowsNull = Y; 
             columnName = "CC_ADDR"; 
             name = ccAddresses; 
-            prototypeName = varchar1000; 
+            prototypeName = varcharLarge; 
         }, 
         {
             columnName = "CONTENT_GZIPPED"; 
@@ -79,7 +79,7 @@
             prototypeName = blob; 
         }, 
         {columnName = TITLE; name = title; prototypeName = varchar255; }, 
-        {columnName = "TO_ADDR"; name = toAddresses; prototypeName = varchar1000; }, 
+        {columnName = "TO_ADDR"; name = toAddresses; prototypeName = varcharLarge; }, 
         {
             allowsNull = Y; 
             columnName = "X_MAILER"; 
@@ -89,6 +89,7 @@
     ); 
     attributesUsedForLocking = (
         bccAddresses, 
+        ccAddresses, 
         contentGzipped, 
         fromAddress, 
         id, 
