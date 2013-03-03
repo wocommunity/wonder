@@ -170,9 +170,11 @@ public class ERXConfigurationManager {
     }
     
     /** 
-     * Returns com.webobjects.foundation.NSProperties.getProperties(). 
+     * Returns the command line arguments as Properties. 
+     * {@link er.extensions.appserver.ERXApplication#main(String[], Class)} sets this value. 
      * 
-     * @return the default properties
+     * @return the command line arguments as a String[]
+     * @see #setCommandLineArguments(String[])
      */
     public Properties defaultProperties() {
         return (Properties) _defaultProperties.clone();
