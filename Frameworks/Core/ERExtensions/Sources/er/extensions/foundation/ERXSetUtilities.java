@@ -3,6 +3,10 @@ package er.extensions.foundation;
 import java.util.Enumeration;
 
 import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSComparator;
+import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSSet;
 
@@ -54,4 +58,52 @@ public class ERXSetUtilities {
 		set.setSet(ERXSetUtilities.filteredSetWithQualifier(set, qualifier));
 	}
 
+	/**
+	 * Takes an unordered set and creates a sorted array from its elements.
+	 * 
+	 * @param <T>
+	 *            type of set contents
+	 * @param set
+	 *            the set containing the elements to sort
+	 * @param orderings
+	 *            the sort orderings
+	 * @return an array with sorted elements
+	 */
+	public static <T> NSArray<T> sortedArrayFromSet(NSSet<T> set, NSArray<EOSortOrdering> orderings) {
+		return EOSortOrdering.sortedArrayUsingKeyOrderArray(set.allObjects(), orderings);
+	}
+
+	/**
+	 * Takes an unordered set and creates a sorted array from its elements.
+	 * 
+	 * @param <T>
+	 *            type of set contents
+	 * @param set
+	 *            the set containing the elements to sort
+	 * @param orderings
+	 *            list of sort orderings
+	 * @return an array with sorted elements
+	 */
+	public static <T> NSArray<T> sortedArrayFromSet(NSSet<T> set, EOSortOrdering... orderings) {
+		return sortedArrayFromSet(set, new NSArray<EOSortOrdering>(orderings));
+	}
+
+	/**
+	 * Takes an unordered set and creates a sorted array from its elements.
+	 * 
+	 * @param <T>
+	 *            type of set contents
+	 * @param set
+	 *            the set containing the elements to sort
+	 * @param comparator
+	 *            a comparator
+	 * @return an array with sorted elements
+	 * @throws NSComparator.ComparisonException if comparator cannot sort these elements
+	 * @throws IllegalArgumentException if comparator is <code>null</code>
+	 */
+	public static <T> NSArray<T> sortedArrayFromSet(NSSet<T> set, NSComparator comparator) throws NSComparator.ComparisonException {
+		NSMutableArray<T> array = new NSMutableArray<T>((T[]) set.toArray());
+		array.sortUsingComparator(comparator);
+		return array;
+	}
 }
