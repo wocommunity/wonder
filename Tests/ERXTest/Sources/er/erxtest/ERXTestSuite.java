@@ -6,6 +6,9 @@ import er.extensions.ERXExtensions;
 import er.extensions.foundation.ERXStringUtilitiesTest;
 
 public class ERXTestSuite {
+
+  public static final String ERXTEST_MODEL = "ERXTest";
+
   public static void initialize() {
     ERXExtensions.initApp(Application.class, new String[0]);
     // just provided so TestCase can touch this class to get the static block

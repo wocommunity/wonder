@@ -18,7 +18,7 @@ USER=appserver
 case "$1" in
     start)
         echo -n "Starting wotaskd: "
-        su $USER -c "$NEXT_ROOT/Local/Library/WebObjects/JavaApplications/wotaskd.woa/wotaskd -WOPort 1085 &"
+        su $USER -c "$NEXT_ROOT/Local/Library/WebObjects/JavaApplications/wotaskd.woa/wotaskd -WOPort 1085 -er.wotaskd.sshd.enabled true &"
         echo
         ;;
     stop)

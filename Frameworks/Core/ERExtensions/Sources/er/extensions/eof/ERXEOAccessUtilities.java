@@ -2098,9 +2098,12 @@ public class ERXEOAccessUtilities {
 		relationship.setDeleteRule(deleteRule);
 		relationship.setIsMandatory(isMandatory);
 		relationship.setPropagatesPrimaryKey(shouldPropagatePrimaryKey);
-		if (isClassProperty) {
-			NSMutableArray<EOProperty> classProperties = sourceEntity.classProperties().mutableClone();
+		NSMutableArray<EOProperty> classProperties = sourceEntity.classProperties().mutableClone();
+		if (isClassProperty && !classProperties.containsObject(relationship)) {
 			classProperties.addObject(relationship);
+			sourceEntity.setClassProperties(classProperties);
+		} else if (!isClassProperty && classProperties.containsObject(relationship)) {
+			classProperties.removeObject(relationship);
 			sourceEntity.setClassProperties(classProperties);
 		}
 		if(log.isDebugEnabled())

@@ -107,6 +107,24 @@ public class ERXEntity extends EOEntity {
 		return ERXSingleValueID.globalIDWithEntityName(name(), values);
 	}
 
+	public NSArray<EOAttribute> classAttributes() {
+		NSMutableArray<EOAttribute> found = new NSMutableArray<EOAttribute>();
+		for (String name : (NSArray<String>)this.classPropertyNames()) {
+			if (this.attributeNamed(name) != null)
+				found.add(this.attributeNamed(name));
+		}
+		return found.immutableClone();
+	}
+
+	public NSArray<EORelationship> classRelationships() {
+                NSMutableArray<EORelationship> found = new NSMutableArray<EORelationship>();
+		for (String name : (NSArray<String>)this.classPropertyNames()) {
+			if (this.relationshipNamed(name) != null)
+				found.add(this.relationshipNamed(name));
+		}
+		return found.immutableClone();
+	}
+
 	/**
 	 * Registers all relationships of subentities as hidden relationships. This enables you
 	 * to create qualifiers on a parent entity that includes relationships that are only

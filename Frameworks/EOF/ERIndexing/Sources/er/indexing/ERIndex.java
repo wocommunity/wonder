@@ -450,7 +450,7 @@ public class ERIndex {
     }
     
     protected Analyzer analyzer() {
-        PerFieldAnalyzerWrapper wrapper = new PerFieldAnalyzerWrapper(new StandardAnalyzer());
+        PerFieldAnalyzerWrapper wrapper = new PerFieldAnalyzerWrapper(new StandardAnalyzer(Version.LUCENE_24));
         for (IndexAttribute attribute : attributes()) {
             wrapper.addAnalyzer(attribute.name(), attribute.analyzer());
         }

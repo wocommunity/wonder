@@ -1025,6 +1025,9 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 				setAssociatedObject(null);
 			}
 			else {
+				if (_name == null) {
+					_name = classDescription.entityName();
+				}
 				setValue(obj);
 				setAssociatedObject(obj);
 			}

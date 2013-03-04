@@ -21,7 +21,7 @@ import er.extensions.crypting.ERXCrypto;
 import er.extensions.qualifiers.ERXQualifierTraversal;
 
 /**
- * Extended fetch specification. 
+ * Extended fetch specification.
  * <ul>
  * <li>has an identifier for caching</li>
  * <li>type-safe, can fetch objects of a certain type</li>
@@ -32,9 +32,10 @@ import er.extensions.qualifiers.ERXQualifierTraversal;
  * @param <T> the type of objects this fetch spec will return
  */
 public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetchSpecification {
+
 	/**
 	 * Do I need to update serialVersionUID?
-	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
+	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the
 	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
 	 */
 	private static final long serialVersionUID = 1L;
@@ -42,7 +43,11 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	private NSMutableDictionary _userInfo;
 	private boolean _includeEditingContextChanges;
 	private NSRange _fetchRange;
-	
+
+	public static EOFetchSpecification fetchSpec(String entityName, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings, boolean usesDistinct, boolean isDeep, NSDictionary hints) {
+		return new ERXFetchSpecification(entityName, qualifier, sortOrderings, usesDistinct, isDeep, hints);
+	}
+
 	public ERXFetchSpecification(String entityName, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings, boolean usesDistinct, boolean isDeep, NSDictionary hints) {
 		super(entityName, qualifier, sortOrderings, usesDistinct, isDeep, hints);
 	}
@@ -70,17 +75,17 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 
 	/**
 	 * Constructs a new fetch specification for the given entity with isDeep = true.
-	 * 
-	 * @param entityName the name of the entity 
+	 *
+	 * @param entityName the name of the entity
 	 */
 	public ERXFetchSpecification(String entityName) {
 		super(entityName, null, null, false, true, null);
 	}
-	
+
 	/**
 	 * When true, objectsWithFetchSpecification will include newly inserted objects, newly removed objects, and newly updated
 	 * objects in your fetch results (@see ERXEOControlUtilities.objectsWithQualifier).
-	 * 
+	 *
 	 * @param includeEditingContextChanges whether or not to include editing context changes
 	 */
 	public void setIncludeEditingContextChanges(boolean includeEditingContextChanges) {
@@ -89,7 +94,7 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	
 	/**
 	 * Returns whether or not to include editing context changes.
-	 * 
+	 *
 	 * @return whether or not to include editing context changes
 	 */
 	public boolean includeEditingContextChanges() {
@@ -98,7 +103,7 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 
 	/**
 	 * Sets a arbitrary value.
-	 * 
+	 *
 	 * @param value
 	 * @param key
 	 */
@@ -109,7 +114,7 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 
 	/**
 	 * Gets an arbitrary value.
-	 * 
+	 *
 	 * @param key
 	 * @return object for given key
 	 */
@@ -119,11 +124,11 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	
 	/**
 	 * Gets the user info.
-	 * 
+	 *
 	 * @return user info dictionary
 	 */
 	public NSDictionary userInfo() {
-		return _userInfo == null ? NSDictionary.EmptyDictionary : _userInfo.immutableClone(); 
+		return _userInfo == null ? NSDictionary.EmptyDictionary : _userInfo.immutableClone();
 	}
 	
 	public NSRange fetchRange() {
@@ -133,7 +138,7 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	/**
 	 * Defines a batch range that should be applied to the SQL statement. Only useful if the database plugin supports it and as an alternative to fetchLimit.
 	 * The SQL generation behavior when both a fetchLimit and a fetchRange are specified is undefined and dependent on the individual database plugin.
-	 * 
+	 *
 	 * @param range
 	 */
 	public void setFetchRange(NSRange range) {
@@ -142,7 +147,7 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	
 	/**
 	 * Type-safe method to fetch objects for this fetch spec.
-	 * 
+	 *
 	 * @param ec
 	 * @return object array
 	 */
@@ -152,7 +157,7 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	
 	/**
 	 * Type-safe method to fetch raw rows.
-	 * 
+	 *
 	 * @param ec
 	 * @return array of raw row dictionaries
 	 */
@@ -173,9 +178,9 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	/**
 	 * Sets a list of attribute keys to be fetched as raw data. Uses two params for backwards
 	 * compatibility as a <code>setRawRowKeyPaths(null)</code> would be ambiguous otherwise.
-	 * 
+	 *
 	 * @see #setRawRowKeyPaths(NSArray)
-	 * @param keyPath 
+	 * @param keyPath
 	 * @param keyPaths list of attribute keys
 	 */
 	public void setRawRowKeyPaths(String keyPath, String... keyPaths) {
@@ -192,7 +197,7 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 
 	/**
 	 * Collects all relevant attributes and the bindings and returns a key suitable for caching.
-	 * 
+	 *
 	 * @return identifier string
 	 */
 	public String identifier() {
@@ -214,7 +219,7 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	
 	/**
 	 * Sets the qualifier on this fetch specification and returns "this" for chaining.
-	 * 
+	 *
 	 * @param qualifier the qualifier to set
 	 * @return this
 	 */
@@ -225,7 +230,7 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	
 	/**
 	 * Sets the sort orderings on this fetch specification and returns "this" for chaining.
-	 * 
+	 *
 	 * @param sortOrderings the sort orderings to set
 	 * @return this
 	 */
@@ -236,7 +241,7 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	
 	/**
 	 * Sets the sort orderings on this fetch specification and returns "this" for chaining.
-	 * 
+	 *
 	 * @param sortOrdering the sort ordering to set
 	 * @return this
 	 */
@@ -247,7 +252,7 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	
 	/**
 	 * Converts a normal fetch spec to an ERX one that returns instances of T.
-	 * 
+	 *
 	 * @param <T>
 	 * @param fs
 	 * @param clazz
@@ -262,7 +267,7 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	
 	/**
 	 * Converts a normal fetch spec to an ERX one.
-	 * 
+	 *
 	 * @param <T>
 	 * @param fs
 	 * @return converted fetch spec
@@ -276,7 +281,7 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	
 	/**
 	 * Helper to create a string from a qualifier.
-	 * 
+	 *
 	 * @param qualifier
 	 * @return qualifier string
 	 */
@@ -326,7 +331,7 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	
 	/**
 	 * Builds an identifier for the given fetch spec which is suitable for caching.
-	 * 
+	 *
 	 * @param fs
 	 * @return fetch spec string
 	 */
