@@ -822,23 +822,23 @@ Ajax.StoppedPeriodicalUpdater = Class.create(Ajax.Base, {
 });
 
 var AjaxHintedText = {
-    register: function(tag, id) {
-      $$(tag + "#" + id).each(function(script, index) {
-          Element.select($(script), 'input', 'textarea').each(function(el, index) {
-              AjaxHintedText.textBehaviour(el);
-          });
-          Element.select($(script), 'form').each(function(form, index) {
-              AjaxHintedText.formBehaviour(form);     
-          });
-      });
-    },
+    register: function(tag, id) {
+      $$(tag + "#" + id).each(function(script, index) {
+          Element.select($(script), 'input', 'textarea').each(function(el, index) {
+              AjaxHintedText.textBehaviour(el);
+          });
+          Element.select($(script), 'form').each(function(form, index) {
+              AjaxHintedText.formBehaviour(form);     
+          });
+      });
+    },
     registerForm : function(formselector) {
-      $$(formselector).each(function(form,index) {
-            Element.select(form,'input','textarea').each(function(el, index) {
-              AjaxHintedText.textBehaviour(el);
-          });
-          AjaxHintedText.formBehaviour(form);     
-      });
+      $$(formselector).each(function(form,index) {
+            Element.select(form,'input','textarea').each(function(el, index) {
+              AjaxHintedText.textBehaviour(el);
+          });
+          AjaxHintedText.formBehaviour(form);     
+      });
     },
     textBehaviour : function(e) {
         if(!e.getAttribute('default')) {
@@ -855,7 +855,7 @@ var AjaxHintedText = {
               }
         }
         e.showTextValue = function() {
-            Element.removeClassName(e, 'ajax-hinted-text-with-default');
+            Element.removeClassName(e, 'ajax-hinted-text-with-default');
             if(e.value.replace(/[\r\n]/g, "") == e.getAttribute('default').replace(/[\r\n]/g, "")) {
                 e.value = "";
             }
