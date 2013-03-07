@@ -846,7 +846,6 @@ var AjaxHintedText = {
         }
         e.setAttribute('default', unescape(e.getAttribute('default')));
         e.showDefaultValue = function() {
-            if(e.value == "") {
             if(e.value == "" ||
                e.value.replace(/[\r\n]/g, "") == e.getAttribute('default').replace(/[\r\n]/g, "")) {
                 Element.addClassName(e, 'ajax-hinted-text-with-default');
