@@ -240,7 +240,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 		}
 		log.debug("er.javamail.smtpHost: " + smtpHost);
 		
-		String port = ERXProperties.stringForKeyWithDefault("er.javamail.smtpPort" + contextSuffix, ERXProperties.stringForKey("er.javamail.smtpPost"));
+		String port = ERXProperties.stringForKeyWithDefault("er.javamail.smtpPort" + contextSuffix, ERXProperties.stringForKey("er.javamail.smtpPort"));
 		if (port != null && port.length() > 0) {
 			properties.setProperty("mail." + smtpProtocol + ".port" , port);
 			log.debug("ERJavaMail will use smtp port: " + port);
