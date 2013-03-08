@@ -687,6 +687,13 @@ public class ERXStringUtilities {
      * @return string after having all of the replacement done.
      */
     public static String replaceStringByStringInString(String old, String newString, String buffer) {
+        if (buffer == null || buffer.length() == 0) {
+            return "";
+        } else if (old == null || old.length() == 0) {
+            return buffer;
+        } else if (newString == null) {
+            newString = "";
+        }
         int begin, end;
         int oldLength = old.length();
         int length = buffer.length();
