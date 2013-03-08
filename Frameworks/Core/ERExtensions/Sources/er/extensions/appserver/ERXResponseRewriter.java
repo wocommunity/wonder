@@ -341,14 +341,15 @@ public class ERXResponseRewriter {
 	 * @return whether or not the content was inserted
 	 */
 	public static boolean insertInResponseBeforeTag(WOResponse response, WOContext context, String content, String tag, TagMissingBehavior tagMissingBehavior) {
-		boolean insertCssBeforeScript = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXResponseRewriter.insertCssBeforeScript", false);
 		boolean inserted = false;
 		String responseContent = response.contentString();
 		int tagIndex;
+		String responseContentLC = responseContent.toLowerCase();
+
 		if (tag != null) {
 			tagIndex = responseContent.indexOf(tag);
 			if (tagIndex < 0) {
-				tagIndex = responseContent.toLowerCase().indexOf(tag.toLowerCase());
+				tagIndex = responseContentLC.indexOf(tag.toLowerCase());
 			}
 		}
 		else {
@@ -356,15 +357,23 @@ public class ERXResponseRewriter {
 		}
 		if (tagIndex >= 0) {
 			int insertIndex = tagIndex;
-			if(insertCssBeforeScript)
+
+			String contentLC = content.toLowerCase();
+			if (contentLC.startsWith("<link") || contentLC.startsWith("<style")) 
 			{
-				if (content.toLowerCase().startsWith("<link") || content.toLowerCase().startsWith("<style")) {
-					int scriptIndex = responseContent.toLowerCase().indexOf("<script");
-					if (scriptIndex > 0 && scriptIndex < insertIndex) {
+				int scriptIndex = responseContentLC.indexOf("<script");
+				if (scriptIndex > 0 && scriptIndex < insertIndex) {
+					// check whether we are within a html comment (including conditional comments), if so,
+					// insert right before the conditional comment
+					int cStartIndex = responseContent.lastIndexOf("<!--", scriptIndex);
+					int cEndIndex = responseContent.lastIndexOf("-->", scriptIndex);
+					if(cStartIndex == -1 || cEndIndex > cStartIndex)
 						insertIndex = scriptIndex;
-					}
+					else
+						insertIndex = cStartIndex;
 				}
 			}
+
 			response.setContent(ERXStringUtilities.insertString(responseContent, content, insertIndex));
 			inserted = true;
 		}
