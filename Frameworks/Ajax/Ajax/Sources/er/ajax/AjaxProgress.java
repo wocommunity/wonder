@@ -133,7 +133,7 @@ public class AjaxProgress {
 	 * @return whether or not this procedure has started
 	 */
 	public boolean isStarted() {
-		return _value > 0;
+		return _value > 0 || isDone();
 	}
 
 	/**

@@ -8,7 +8,10 @@ import java.util.regex.Pattern;
 
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOKeyGlobalID;
+
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 /**
@@ -101,5 +104,23 @@ public class ERXEntity extends EOEntity {
 	@Override
 	protected EOKeyGlobalID _globalIDWithoutTypeCoercion(Object[] values) {
 		return ERXSingleValueID.globalIDWithEntityName(name(), values);
+	}
+
+	public NSArray<EOAttribute> classAttributes() {
+		NSMutableArray<EOAttribute> found = new NSMutableArray<EOAttribute>();
+		for (String name : (NSArray<String>)this.classPropertyNames()) {
+			if (this.attributeNamed(name) != null)
+				found.add(this.attributeNamed(name));
+		}
+		return found.immutableClone();
+	}
+
+	public NSArray<EORelationship> classRelationships() {
+                NSMutableArray<EORelationship> found = new NSMutableArray<EORelationship>();
+		for (String name : (NSArray<String>)this.classPropertyNames()) {
+			if (this.relationshipNamed(name) != null)
+				found.add(this.relationshipNamed(name));
+		}
+		return found.immutableClone();
 	}
 }

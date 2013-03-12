@@ -686,22 +686,26 @@ public class ERXEOControlUtilities {
     
     /**
      * Returns an {@link com.webobjects.foundation.NSArray NSArray} containing the primary keys from the resulting rows starting
-     * at start and stopping at end using a custom SQL, derived from the SQL
+     * at <i>start</i> and stopping at <i>end</i> using a custom SQL, derived from the SQL
      * which the {@link com.webobjects.eocontrol.EOFetchSpecification EOFetchSpecification} would use normally {@link com.webobjects.eocontrol.EOFetchSpecification#setHints(NSDictionary) setHints()}
      *
      * @param ec editing context to fetch objects into
      * @param spec fetch specification for the fetch
-     * @param start
-     * @param end
+     * @param start the starting row number
+     * @param end the last row number
      *
      * @return primary keys in the given range
      */
-    public static NSArray primaryKeyValuesInRange(EOEditingContext ec, EOFetchSpecification spec, int start, int end) {
+    public static NSArray<NSDictionary<String, Object>> primaryKeyValuesInRange(EOEditingContext ec, EOFetchSpecification spec, int start, int end) {
         EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, spec.entityName());
         NSArray<String> pkNames = entity.primaryKeyAttributeNames();
-        spec.setFetchesRawRows(true);
-        spec.setRawRowKeyPaths(pkNames);
-    	EOFetchSpecification clonedFetchSpec = (EOFetchSpecification)spec.clone();
+        EOFetchSpecification clonedFetchSpec = (EOFetchSpecification)spec.clone();
+        clonedFetchSpec.setFetchesRawRows(true);
+        clonedFetchSpec.setRawRowKeyPaths(pkNames);
+        if (clonedFetchSpec instanceof ERXFetchSpecification) {
+            // remove any range setting as we will explicitly set start and end limit
+            ((ERXFetchSpecification)clonedFetchSpec).setFetchRange(null);
+        }
         EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecification(ec, clonedFetchSpec, start, end);
         NSDictionary<String, EOSQLExpression> hints = new NSDictionary<String, EOSQLExpression>(sql, EODatabaseContext.CustomQueryExpressionHintKey);
         clonedFetchSpec.setHints(hints);

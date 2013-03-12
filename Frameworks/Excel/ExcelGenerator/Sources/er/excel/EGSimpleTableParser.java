@@ -407,6 +407,21 @@ public class EGSimpleTableParser {
     								log.info(e1);
     							}
     							
+    						case HSSFCell.CELL_TYPE_BOOLEAN:
+    							cell.setCellType(cellType.intValue());
+    							if (value != null) {
+    								try {
+    									Integer integer = Integer.parseInt(value.toString());
+    									cell.setCellValue(integer > 0);
+    								} catch (NumberFormatException ex) {
+    									if (log.isDebugEnabled()) {
+    										log.debug(ex.getMessage(), ex);
+    									}
+    	    							cell.setCellValue(new Boolean(value.toString()));
+    								}
+    							}
+    							break;
+    							
     						case HSSFCell.CELL_TYPE_STRING:
 							default:
 								cell.setCellType(cellType.intValue());
