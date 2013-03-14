@@ -41,5 +41,6 @@ public class ERXEmailValidatorTest extends ERXTestCase {
 		Assert.assertEquals("gmail.com", ERXEmailValidator.hostNameForEmailString("tom@gmail.com"));
 		Assert.assertEquals("74.125.224.182", ERXEmailValidator.hostNameForEmailString("tom@[74.125.224.182]"));
 		Assert.assertEquals("74.125.224.182", ERXEmailValidator.hostNameForEmailString("\"Thomas Thomson\" < tom@[	74.125.224.182 ]>"));
+		Assert.assertEquals("", ERXEmailValidator.hostNameForEmailString("thomas"));
 	}
 }

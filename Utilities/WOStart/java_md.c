@@ -32,7 +32,7 @@
 static jboolean GetPublicJREHome(char *path, jint pathsize);
 static jboolean GetJVMPath(const char *jrepath, const char *jvmtype,
 			   char *jvmpath, jint jvmpathsize);
-static jboolean GetJREPath(char *path, jint pathsize);
+static jboolean GetJREPath(char *path, jint pathsize, char *javaCommand);
 
 const char *
 GetArch()
@@ -57,11 +57,12 @@ CreateExecutionEnvironment(int *_argc,
 			   jint so_jrepath,
 			   char jvmpath[],
 			   jint so_jvmpath,
-			   char **original_argv) {
+			   char **original_argv,
+			   char *javaCommand) {
    char * jvmtype;
 
     /* Find out where the JRE is that we will be using. */
-    if (!GetJREPath(jrepath, so_jrepath)) {
+    if (!GetJREPath(jrepath, so_jrepath, javaCommand)) {
 	ReportErrorMessage("Error: could not find Java 2 Runtime Environment.",
 			   JNI_TRUE);
 	exit(2);
@@ -93,12 +94,12 @@ CreateExecutionEnvironment(int *_argc,
  * Find path to JRE based on .exe's location or registry settings.
  */
 jboolean
-GetJREPath(char *path, jint pathsize)
+GetJREPath(char *path, jint pathsize, char *javaCommand)
 {
     char javadll[MAXPATHLEN];
     struct stat s;
 
-    if (GetApplicationHome(path, pathsize)) {
+    if (GetJREHome(path, pathsize, javaCommand)) {
 	/* Is JRE co-located with the application? */
 	sprintf(javadll, "%s\\bin\\" JAVA_DLL, path);
 	if (stat(javadll, &s) == 0) {
@@ -193,20 +194,30 @@ GetXUsagePath(char *buf, jint bufsize)
 }
 
 /*
- * If app is "c:\foo\bin\javac", then put "c:\foo" into buf.
+ * javaCommand is separate parameter, supply a path to java.exe
+ * If javaCommand is "c:\foo\bin\java", then put "c:\foo" into buf.
  */
 jboolean
-GetApplicationHome(char *buf, jint bufsize)
+GetJREHome(char *buf, jint bufsize, char *javaCommand)
 {
     char *cp;
-    GetModuleFileName(0, buf, bufsize);
+	
+	if(javaCommand == NULL)
+		return JNI_FALSE;
+
+	strcpy(buf, javaCommand);
+	if(strrchr(buf, '\\') == 0)
+		return JNI_FALSE;
+	
     *strrchr(buf, '\\') = '\0'; /* remove .exe file name */
+
     if ((cp = strrchr(buf, '\\')) == 0) {
-	/* This happens if the application is in a drive root, and
-	 * there is no bin directory. */
-	buf[0] = '\0';
-	return JNI_FALSE;
+		/* This happens if the application is in a drive root, and
+		 * there is no bin directory. */
+		buf[0] = '\0';
+		return JNI_FALSE;
     }
+
     *cp = '\0';  /* remove the bin\ part */
     return JNI_TRUE;
 }
@@ -232,6 +243,7 @@ WinMain(HINSTANCE inst, HINSTANCE previnst, LPSTR cmdline, int cmdshow)
 		    /* Same for 1.5.0, 1.5.1, 1.5.2 etc. */
 #define DOTRELEASE  "1.5"
 #define DOTRELEASE6  "1.6"
+#define DOTRELEASE7  "1.7"
 #define JRE_KEY	    "Software\\JavaSoft\\Java Runtime Environment"
 
 static jboolean
@@ -270,9 +282,10 @@ GetPublicJREHome(char *buf, jint bufsize)
     }
 
     if (strcmp(version, DOTRELEASE) != 0 &&
-		strcmp(version, DOTRELEASE6) != 0) {
+		strcmp(version, DOTRELEASE6) != 0 &&
+		strcmp(version, DOTRELEASE7) != 0) {
 	fprintf(stderr, "Registry key '" JRE_KEY "\\CurrentVersion'\nhas "
-		"value '%s', but '" DOTRELEASE "' or '" DOTRELEASE6 "' is required.\n", version);
+		"value '%s', but '" DOTRELEASE "' or '" DOTRELEASE6 "' or '" DOTRELEASE7 "' is required.\n", version);
 	RegCloseKey(key);
 	return JNI_FALSE;
     }

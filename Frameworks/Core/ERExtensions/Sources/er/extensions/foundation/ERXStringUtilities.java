@@ -2789,4 +2789,15 @@ public class ERXStringUtilities {
         return result;
     }
 	
+	public static boolean isBlank(String value) {
+		boolean isBlank = false;
+		if (value == null || value.trim().length() == 0) {
+			isBlank = true;
+		}
+		return isBlank;
+	}
+	
+	public static boolean isNotBlank(String value) {
+		return ! isBlank(value);
+	}
 }
