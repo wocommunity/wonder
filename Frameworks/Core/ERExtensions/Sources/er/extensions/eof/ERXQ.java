@@ -14,6 +14,7 @@ import com.webobjects.foundation.NSSelector;
 
 import er.extensions.eof.qualifiers.ERXInQualifier;
 import er.extensions.eof.qualifiers.ERXRegExQualifier;
+import er.extensions.eof.qualifiers.ERXSoundexQualifier;
 import er.extensions.eof.qualifiers.ERXToManyQualifier;
 import er.extensions.qualifiers.ERXAndQualifier;
 import er.extensions.qualifiers.ERXFalseQualifier;
@@ -1132,5 +1133,21 @@ public class ERXQ {
   			result = new EONotQualifier(replacedQualifier);
   		}
 		return result;
+	}
+	
+	/**
+	 * There aren't any equivalent, but is in the same family than ERXKeyValueQualifier(key, EOQualifier.QualifierOperatorLike, value);<br /><br />
+	 * Search for a value that sounds like...
+	 * <br>
+	 * <b>NOTE:</b>
+	 * <br><u>MIGTH BE DATABASE DEPENDANT</u>, this syntax has been validated against Oracle 10+
+	 * @param aKey 
+	 * 			  attribute to search against
+	 * @param aValue
+	 *            a value that sounds like...
+	 * @return the qualifier
+	 */
+	public static ERXKeyValueQualifier soundex(final String aKey, final String aValue) {
+		return new ERXSoundexQualifier(aKey, aValue);
 	}
 }
