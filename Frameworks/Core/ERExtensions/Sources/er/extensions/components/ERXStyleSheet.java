@@ -143,7 +143,7 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 	public String styleSheetKey() {
 		String result = stringValueForBinding("key");
 		if( result == null ) {
-			result = context().session().sessionID();
+			result = session().sessionID();
 		}
 		return result;
 	}
@@ -213,7 +213,7 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 			href = wocontext.directActionURLForActionNamed( Sheet.class.getName() + "/" + key, query, wocontext.request().isSecure(), 0, false );
 		}
 
-		response._appendContentAsciiString( "<link " );
+		response._appendContentAsciiString( "<link" );
 
 		response._appendTagAttributeAndValue( "rel", "stylesheet", false );
 		response._appendTagAttributeAndValue( "type", "text/css", false );
