@@ -47,6 +47,8 @@ public class ERXNumberFormatter extends NSNumberFormatter {
     private Integer _scale;
     private BigDecimal _factor;
 	private String _operator;
+    private String _stringForNegativeInfinity = "-Inf";
+    private String _stringForPositiveInfinity = "+Inf";
 	 
     /**
      * Returns the default shared instance
@@ -256,6 +258,48 @@ public class ERXNumberFormatter extends NSNumberFormatter {
      		newValue = performFormat(newValue);
      		value = newValue;
     	}
+    	// handling for NaN and Infinity
+    	if (value instanceof Double) {
+    		Double doubleValue = (Double) value;
+    		if (doubleValue.isNaN()) {
+    			return buffer.append(stringForNotANumber());
+    		} else if (doubleValue == Double.NEGATIVE_INFINITY) {
+    			return buffer.append(stringForNegativeInfinity());
+    		} else if (doubleValue == Double.POSITIVE_INFINITY) {
+    			return buffer.append(stringForPositiveInfinity());
+    		}
+    	} else if (value instanceof Float) {
+    		Float floatValue = (Float) value;
+    		if (floatValue.isNaN()) {
+    			return buffer.append(stringForNotANumber());
+    		} else if (floatValue == Float.NEGATIVE_INFINITY) {
+    			return buffer.append(stringForNegativeInfinity());
+    		} else if (floatValue == Float.POSITIVE_INFINITY) {
+    			return buffer.append(stringForPositiveInfinity());
+    		}
+    	}
     	return super.format(value, buffer, position);
     }
+
+    public String stringForNegativeInfinity() {
+    	return _stringForNegativeInfinity;
+    }
+
+	public void setStringForNegativeInfinity(String newString) {
+		if (newString == null) {
+			throw new IllegalArgumentException("The string for Negative Infinity must not be null");
+		}
+		this._stringForNegativeInfinity = newString;
+	}
+
+    public String stringForPositiveInfinity() {
+    	return _stringForPositiveInfinity;
+    }
+
+	public void setStringForPositiveInfinity(String newString) {
+		if (newString == null) {
+			throw new IllegalArgumentException("The string for Positive Infinity must not be null");
+		}
+		this._stringForPositiveInfinity = newString;
+	}
 }
