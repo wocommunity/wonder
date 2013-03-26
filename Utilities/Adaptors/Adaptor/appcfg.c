@@ -63,7 +63,9 @@ int gethostname(char *name, int namelen);
 
 #if	defined(WIN32)
 #ifndef _MSC_VER // SWK old WO4.5 headerfile
+#if !defined(MINGW)
 #include <winnt-pdo.h>
+#endif
 #endif
 #include <io.h>
 #else
@@ -442,6 +444,7 @@ static int ac_prepareToModifyConfig()
    /* this will block others out from changing the config for CONFIG_LEASE_TIME seconds */
    configTimes->configChangeTime = currentTime;
    configuredInstances = (int *)WOCALLOC(instanceListSize, sizeof(int));
+	
    return 0;
 }
 
@@ -676,6 +679,11 @@ static void updateAppKey(const char *key, const char *value, _WOApp *app)
 static void updateInstanceKey(const char *key, const char *value, _WOInstance *instance)
 {
    int changed = 0;
+
+#if defined(SUPPORT_REFUSENEWSESSION_ATTR)
+   instance->refuseNewSessions = 0;
+#endif
+
    if (strcmp(key, WOINSTANCENUMBER) == 0)
       changed = updateStringSetting(key, instance->instanceNumber, value, WA_MAX_INSTANCE_NUMBER_LENGTH);
    else if (strcmp(key, WOHOST) == 0)
@@ -694,7 +702,17 @@ static void updateInstanceKey(const char *key, const char *value, _WOInstance *i
       changed = updateNumericSetting(key, (int*)&instance->recvTimeout, value);
    else if (strcmp(key, WOCNCTTIMEOUT) == 0)
       changed = updateNumericSetting(key, (int*)&instance->connectTimeout, value);
-   else {
+#if defined(SUPPORT_REFUSENEWSESSION_ATTR)
+   else if (strcmp(key, WOREFUSENEWSESSIONS) == 0)
+   {
+      if(strcmp(value, "YES") == 0)
+         instance->refuseNewSessions = 1;
+      else
+         instance->refuseNewSessions = 0;
+   }
+#endif
+   else
+   {
       /* The setting was not recognized. Log and ignore it. */
       WOLog(WO_INFO, "Unknown attribute in instance config: \"%s\", value = \"%s\"", key, value);
    }
@@ -741,6 +759,9 @@ static int ac_updateInstance(_WOApp *app, int appIndex, strtbl *instanceSettings
          instance->connectTimeout = CONN_TIMEOUT;
          instance->sendTimeout = SEND_TIMEOUT;
          instance->recvTimeout = RECV_TIMEOUT;
+#if defined(SUPPORT_REFUSENEWSESSION_ATTR)
+         instance->refuseNewSessions = 0;
+#endif
       }
       if (instance != NULL)
       {
@@ -1065,61 +1086,84 @@ static char *file_config(const char *path, time_t *mtime, int *len)
  * Send all of the requests in one loop and then read the replies in another.
  */
 static void readServerConfig() {
-   int i;
-   net_fd s;
-   net_fd netfdList[WA_MAX_CONFIG_SERVERS];
-   int len = 0;
-   char *buffer;
-   char content_type[CONTENT_TYPE_LENGTH_MAX];
-   WebObjects_config_handler *parser;
-
-   /* Send the requests for configuration info and hang onto the net_fd's being used. */
-   for (i=0; i < WA_MAX_CONFIG_SERVERS; i++) {
-      netfdList[i] = 0;
-      if (configServers[i].host[0]) {
-         s = _contactServer(&configServers[i]);
-         if(s)
-            netfdList[i] = s;
-      }
-   }
-
-   /* Read the configuration information from each server. */
-   for (i=0; i < WA_MAX_CONFIG_SERVERS; i++) {
-      if (configServers[i].host[0]) {
-         int deleteServer = 0;
-         if (netfdList[i]) {
-            /* get the list of instances for this host. */
-            WOLog(WO_INFO, "Preparing to read config for host: %s", configServers[i].host);
-
-            buffer = _retrieveServerInfo(&configServers[i], netfdList[i], &len, content_type);
-            if (buffer == NULL)
-            {
-               deleteServer = 1;
-            } else if (buffer != NOT_MODIFIED_CONFIG) {
-               parser = parserForType(content_type);
-               if (parser)
-               {
-                  if (parser->parseConfiguration(buffer, len))
-                     WOLog(WO_ERR, "Failed parsing configuration");
-               } else {
-                  WOLog(WO_ERR, "No parser for file type %s", content_type);
-               }
-               WOFREE(buffer);
-            }
-         } else
-            deleteServer = 1;
-         if (deleteServer)
-         {
-            if (configMethod == CM_MCAST)
-            {
-               WOLog(WO_INFO, "Deleting config server %s:%d (couldn't read config).", configServers[i].host, configServers[i].port);
-               memset(&configServers[i], 0, sizeof(ConfigServer));
-            } else {
-               WOLog(WO_INFO, "Config server %s:%d didn't respond.", configServers[i].host, configServers[i].port);
-            }
-         }
-      }
-   }
+	int i;
+	net_fd s;
+	int len[WA_MAX_CONFIG_SERVERS];
+	char *buffer[WA_MAX_CONFIG_SERVERS];
+	char content_type[WA_MAX_CONFIG_SERVERS][CONTENT_TYPE_LENGTH_MAX];
+	WebObjects_config_handler *parser;
+	int oneOrMoreModified = 0;
+	int oneOrMoreUnModified = 0;
+   
+	/* Send the requests for configuration info and hang onto the net_fd's being used. */
+	for (i=0; i < WA_MAX_CONFIG_SERVERS; i++) {
+		if (configServers[i].host[0]) {
+			s = _contactServer(&configServers[i]);
+			if(s)  {
+				WOLog(WO_INFO, "Preparing to read config for host: %s", configServers[i].host);
+				buffer[i] = _retrieveServerInfo(&configServers[i], s, &len[i], content_type[i]);
+				if(buffer[i] == NOT_MODIFIED_CONFIG)
+					oneOrMoreUnModified = 1;
+				else // No response has to be treated as modification, too
+					oneOrMoreModified  = 1;
+			}
+		}
+	}
+   
+	if(oneOrMoreModified && oneOrMoreUnModified) {
+		for (i=0; i < WA_MAX_CONFIG_SERVERS; i++) {
+			if (configServers[i].host[0] && buffer[i] == NOT_MODIFIED_CONFIG) {
+				configServers[i].lastModifiedTime[0] = 0;
+				s = _contactServer(&configServers[i]);
+				if(s)  {
+					WOLog(WO_INFO, "Preparing to read config again for host (unmodified content): %s", configServers[i].host);
+					buffer[i] = _retrieveServerInfo(&configServers[i], s, &len[i], content_type[i]);
+					oneOrMoreModified  = 1;
+				}
+			}
+		}
+	}
+   
+	if(!oneOrMoreModified) {
+		int i;
+		for(i=0;i<instanceListSize;i++)
+			configuredInstances[i] = 1;
+		WOLog(WO_INFO, "All settings are unmodified");
+		return;
+	}
+   
+	
+	/* Read the configuration information from each server. */
+	for (i=0; i < WA_MAX_CONFIG_SERVERS; i++) {
+		if (configServers[i].host[0]) {
+			int deleteServer = 0;
+			if (buffer[i] == NULL)
+			{
+				deleteServer = 1;
+			} else {
+				parser = parserForType(content_type[i]);
+				if (parser)
+				{
+					if (parser->parseConfiguration(buffer[i], len[i]))
+						WOLog(WO_ERR, "Failed parsing configuration");
+				} else {
+					WOLog(WO_ERR, "No parser for file type %s", content_type[i]);
+				}
+				WOFREE(buffer[i]);
+				buffer[i] = NULL;
+			}
+			if (deleteServer)
+			{
+				if (configMethod == CM_MCAST)
+				{
+					WOLog(WO_INFO, "Deleting config server %s:%d (couldn't read config).", configServers[i].host, configServers[i].port);
+					memset(&configServers[i], 0, sizeof(ConfigServer));
+				} else {
+					WOLog(WO_INFO, "Config server %s:%d didn't respond.", configServers[i].host, configServers[i].port);
+				}
+			}
+		}
+	}
 }
 
 /* Send a GET request to a server requesting its configuration info. */
@@ -1227,7 +1271,10 @@ void ac_buildInstanceList(String *content, WOApp *app, scheduler_t scheduler, co
    *hasRegisteredInstances = 0;
    /* set up the table header */
    str_appendLiteral(content, "<table cellspacing=10><tr align=center>"
-              "<th>inst</th><th>host</th><th>port</th><th>active<br>reqs</th><th>served</th><th>conn&nbsp;pool<br>&nbsp;peak/reused</th><th>cto&nbsp;/ sto&nbsp;/ rto</th><th>send/rcv buf</th><th>refusing<br>timeout</th><th>dead<br>timeout</th>");
+                     "<th>inst</th><th>host</th><th>port</th><th>active<br>reqs</th><th>served</th><th>conn&nbsp;pool<br>&nbsp;peak/reused</th><th>cto&nbsp;/ sto&nbsp;/ rto</th><th>send/rcv buf</th><th>refusing<br>timeout</th><th>dead<br>timeout</th>");
+#if defined(SUPPORT_REFUSENEWSESSION_ATTR)
+  str_appendLiteral(content, "<th>refuse new<br>sessions</th>");
+#endif
 
    /* We may need an additional column in here, but we won't know until after we walk the instances. */
    /* Insert the header now, and if we don't need it we will overwrite it later with whitespace. */
@@ -1268,6 +1315,9 @@ void ac_buildInstanceList(String *content, WOApp *app, scheduler_t scheduler, co
                str_appendf(content, "<td>%d</td>", inst->port);
             str_appendf(content, "<td>%d</td><td>%d</td><td>%d/%d</td><td>%d/%d/%d</td><td>%d/%d</td><td>%d</td><td>%d</td>",
                         inst->pendingResponses, inst->requests, inst->peakPoolSize, inst->reusedPoolConnectionCount, inst->connectTimeout,inst->sendTimeout,inst->recvTimeout, inst->sendSize, inst->recvSize, newSessionsTimeout, deadTimeout);
+#if defined(SUPPORT_REFUSENEWSESSION_ATTR)
+            str_appendf(content, "<td>%s</td>", (inst->refuseNewSessions == 1) ? "YES" : "NO");
+#endif
             if (WA_MAX_ADDITIONAL_ARGS_LENGTH > 0 && inst->additionalArgs[0] != 0)
             {
                hasAdditionalArgs = 1;

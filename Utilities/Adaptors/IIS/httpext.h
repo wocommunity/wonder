@@ -62,6 +62,18 @@ typedef   LPVOID  HCONN;
 #define   HSE_REQ_SEND_RESPONSE_HEADER             ( HSE_REQ_BASE + 3 )
 #define   HSE_REQ_DONE_WITH_SESSION                ( HSE_REQ_BASE + 4 )
 #define   HSE_REQ_END_RESERVED                     1000
+#define   HSE_REQ_IO_COMPLETION                    (HSE_REQ_END_RESERVED + 5)
+#define   HSE_REQ_CLOSE_CONNECTION                 (HSE_REQ_END_RESERVED + 17)
+
+/*
+ * Flags for IO Functions, supported for IO Funcs.
+ *  TF means ServerSupportFunction( HSE_REQ_TRANSMIT_FILE)
+ */
+
+# define HSE_IO_SYNC                      0x00000001   // for WriteClient
+# define HSE_IO_ASYNC                     0x00000002   // for WriteClient/TF
+# define HSE_IO_DISCONNECT_AFTER_SEND     0x00000004   // for TF
+# define HSE_IO_SEND_HEADERS              0x00000008   // for TF
 
 /*
 * passed to GetExtensionVersion

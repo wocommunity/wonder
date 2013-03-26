@@ -1,6 +1,6 @@
 /*
 
- Copyright � 2000 - 2007 Apple, Inc. All Rights Reserved.
+ Copyright 2000 - 2007 Apple, Inc. All Rights Reserved.
 
  The contents of this file constitute Original Code as defined in and are
  subject to the Apple Public Source License Version 1.1 (the 'License').
@@ -19,13 +19,13 @@
 
  */
 /*
- *	See the Apache source for Apache copyright information.
+ *  See the Apache source for Apache copyright information.
  *
- *	WebObjects server adaptor Apache 2.2.x API module.
- *	This port to Apache 2.2.x by Travis Cripps July, 2006 (tcrippsatgmaildotcom)
+ *  WebObjects server adaptor Apache 2.2.x API module.
+ *  This port to Apache 2.2.x by Travis Cripps July, 2006 (tcrippsatgmaildotcom)
  *
- *	This adaptor forwards WebObjects requests to the WebObjects application
- *	server from within the Apache server.
+ *  This adaptor forwards WebObjects requests to the WebObjects application
+ *  server from within the Apache server.
  *
  *      To configure the adaptor, the following "httpd.conf"/"apache.conf"
  *      directives are used:
@@ -53,7 +53,7 @@
 #include "httperrors.h"
 
 
-#if	defined(WIN32)
+#if defined(WIN32)
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <io.h>
@@ -65,7 +65,7 @@
 #include <http_request.h>
 #include <http_log.h>
 #include <http_main.h>
-#include <http_core.h>		/* this is not recommended by Apache */
+#include <http_core.h>      /* this is not recommended by Apache */
 #include <http_protocol.h>
 #include <string.h>
 
@@ -82,20 +82,20 @@
 #endif
 
 
-#define WEBOBJECTSALIAS 				"/cgi-bin/" WEBOBJECTS
-#define	WEBOBJECTS_MAGIC_TYPE			"application/x-httpd-webobjects"
-#define WebObjectsDocRoot				"WebObjectsDocumentRoot"
-#define WebObjectsAlias					"WebObjectsAlias"
-#define WebObjectsConfig				"WebObjectsConfig"
-#define WebObjectsAdaptorInfo			"WebObjectsAdaptorInfo"
-#define WebObjectsAdminUsername			"WebObjectsAdminUsername"
-#define WebObjectsAdminPassword			"WebObjectsAdminPassword"
-#define WebObjectsLog					"WebObjectsLog"
-#define WebObjectsOptions				"WebObjectsOptions"
+#define WEBOBJECTSALIAS                 "/cgi-bin/" WEBOBJECTS
+#define WEBOBJECTS_MAGIC_TYPE           "application/x-httpd-webobjects"
+#define WebObjectsDocRoot               "WebObjectsDocumentRoot"
+#define WebObjectsAlias                 "WebObjectsAlias"
+#define WebObjectsConfig                "WebObjectsConfig"
+#define WebObjectsAdaptorInfo           "WebObjectsAdaptorInfo"
+#define WebObjectsAdminUsername         "WebObjectsAdminUsername"
+#define WebObjectsAdminPassword         "WebObjectsAdminPassword"
+#define WebObjectsLog                   "WebObjectsLog"
+#define WebObjectsOptions               "WebObjectsOptions"
 
 /*
- *	this is to enable logging to Apache's log
- *	we set it whenever we see a server rec
+ *  this is to enable logging to Apache's log
+ *  we set it whenever we see a server rec
  */
 server_rec *_webobjects_server;
 
@@ -113,9 +113,9 @@ extern module AP_MODULE_DECLARE_DATA WebObjects_module;
  * This modules per-server configuration structure.
  */
 typedef struct _WebObjects_config {
-    const char *root;				/* normally Documents/WebObjects or htdocs/WebObjects */
-    const char *WebObjects_alias;	/* normally "WebObjects" */
-    strtbl *options;				/* configuration options */
+    const char *root;               /* normally Documents/WebObjects or htdocs/WebObjects */
+    const char *WebObjects_alias;   /* normally "WebObjects" */
+    strtbl *options;                /* configuration options */
 } WebObjects_config;
 
 
@@ -137,15 +137,15 @@ static APR_OPTIONAL_FN_TYPE(ssl_is_https) *optfn_is_https = NULL;
  */
 static int req_is_https(request_rec *r)
 {
-	int is_https;
+    int is_https;
 
-	if (!optfn_is_https) {
-		optfn_is_https = APR_RETRIEVE_OPTIONAL_FN(ssl_is_https);
-	}
+    if (!optfn_is_https) {
+        optfn_is_https = APR_RETRIEVE_OPTIONAL_FN(ssl_is_https);
+    }
 
-	is_https = optfn_is_https && optfn_is_https(r->connection);
+    is_https = optfn_is_https && optfn_is_https(r->connection);
 
-	return is_https;
+    return is_https;
 }
 
 
@@ -158,24 +158,24 @@ static int req_is_https(request_rec *r)
  */
 static const char *req_ssl_var_lookup(request_rec *r, char *var_name)
 {
-	if (!optfn_ssl_var_lookup) {
-		optfn_ssl_var_lookup = APR_RETRIEVE_OPTIONAL_FN(ssl_var_lookup);
-	}
+    if (!optfn_ssl_var_lookup) {
+        optfn_ssl_var_lookup = APR_RETRIEVE_OPTIONAL_FN(ssl_var_lookup);
+    }
 
-	if (optfn_ssl_var_lookup) {
-		const char *val;
-		val = optfn_ssl_var_lookup(r->pool,
-								r->server,
-								r->connection,
-								r,
-								var_name);
-		if (val) {
-			return val;
-		}
-	}
+    if (optfn_ssl_var_lookup) {
+        const char *val;
+        val = optfn_ssl_var_lookup(r->pool,
+                                r->server,
+                                r->connection,
+                                r,
+                                var_name);
+        if (val) {
+            return val;
+        }
+    }
 
-	/* variable not found, or mod_ssl is not loaded */
-	return NULL;
+    /* variable not found, or mod_ssl is not loaded */
+    return NULL;
 }
 
 
@@ -268,11 +268,13 @@ static const char *setOption3(cmd_parms *cmd, void *keys, const char *v1, const 
 
 
 /*
- *	see add_common_vars() for a peek at how mod_cgi sets up the environment
- *	array
+ *  see add_common_vars() for a peek at how mod_cgi sets up the environment
+ *  array
  */
 static int copyTableEntries(void *req, const char *key, const char *val) {
-    req_addHeader((HTTPRequest *)req, key, val, 0);
+    if(strcmp(key, "SSL_SERVER_CERT") != 0 &&
+        strcmp(key, "SSL_CLIENT_CERT") != 0)
+        req_addHeader((HTTPRequest *)req, key, val, 0);
     return 1;
 }
 
@@ -293,7 +295,7 @@ static void copyHeaders(request_rec *r, HTTPRequest *req) {
     const char *rem_logname;
 
     /*
-     *	some we can copy blindly
+     *  some we can copy blindly
      */
     apr_table_do(copyTableEntries, (void *)req, hdrs, NULL);
 
@@ -303,43 +305,43 @@ static void copyHeaders(request_rec *r, HTTPRequest *req) {
 
 
 #ifdef APACHE_SECURITY_ENABLED
-	/******client cert support***** */
+    /******client cert support***** */
 
-	if (req_is_https(r)) {
-		const char *hdrValue;
-		const char *cert;
-		int certLen = 0;
+    if (req_is_https(r)) {
+        const char *hdrValue;
+        const char *cert;
+        int certLen = 0;
 
-		WOLog(WO_DBG,"We have ssl");
+        WOLog(WO_DBG,"We have ssl");
 
-		hdrValue = 0;
-		cert = 0;
+        hdrValue = 0;
+        cert = 0;
 
-		hdrValue = req_ssl_var_lookup(r, "SSL_CLIENT_S_DN");
-		req_addHeader(req, "SSL_CLIENT_CERT_CN", hdrValue, 0);
+        hdrValue = req_ssl_var_lookup(r, "SSL_CLIENT_S_DN");
+        req_addHeader(req, "SSL_CLIENT_CERT_CN", hdrValue, 0);
 
-		// Get the protocol version from r and add it to the req.
-		hdrValue = req_ssl_var_lookup(r, "SSL_PROTOCOL");
-		req_addHeader(req, "SSL_PROTOCOL_VERSION", hdrValue, 0);
+        // Get the protocol version from r and add it to the req.
+        hdrValue = req_ssl_var_lookup(r, "SSL_PROTOCOL");
+        req_addHeader(req, "SSL_PROTOCOL_VERSION", hdrValue, 0);
 
-		// Get the ssl cert.
-		cert = req_ssl_var_lookup(r, "SSL_CLIENT_CERT");
-		/* the cert length */
-		certLen = strlen(cert);
+        // Get the ssl cert.
+        cert = req_ssl_var_lookup(r, "SSL_CLIENT_CERT");
+        /* the cert length */
+        certLen = strlen(cert);
 
-		// Make sure the cert is a valid length; < 1 is probably not valid.
-		if (certLen < 1) {
-			WOLog(WO_ERR, "invalid certificate length: %d ", certLen);
-		} else {
-			// Alloc space for the base64 encoded form of the cert.
-			char *encodedHdr = apr_pcalloc(r->pool, apr_base64_encode_len(certLen));
+        // Make sure the cert is a valid length; < 1 is probably not valid.
+        if (certLen < 1) {
+            WOLog(WO_ERR, "invalid certificate length: %d ", certLen);
+        } else {
+            // Alloc space for the base64 encoded form of the cert.
+            char *encodedHdr = apr_pcalloc(r->pool, apr_base64_encode_len(certLen));
 
-			// Convert the cert to base64 and add it to the headers if successful.
-			if ( apr_base64_encode(encodedHdr, cert, certLen) ) {
-				req_addHeader(req, "SSL_CLIENT_CERT", encodedHdr, 0);
-			}
-			//WOLog(WO_DBG, "This is what I got: %s\n", encodedHdr);
-		}
+            // Convert the cert to base64 and add it to the headers if successful.
+            if ( apr_base64_encode(encodedHdr, cert, certLen) ) {
+                req_addHeader(req, "SSL_CLIENT_CERT", encodedHdr, 0);
+            }
+            //WOLog(WO_DBG, "This is what I got: %s\n", encodedHdr);
+        }
 
     } // end if (req_is_https)
 
@@ -347,7 +349,7 @@ static void copyHeaders(request_rec *r, HTTPRequest *req) {
 #endif /* APACHE_SECURITY_ENABLED */
 
     /*
-     *	collect up the server specific headers
+     *  collect up the server specific headers
      */
 #if defined(APACHE_SERVERSIGNATURE)
     req_addHeader(req, "SERVER_SIGNATURE", ap_psignature("", r), 0);
@@ -375,30 +377,30 @@ static void copyHeaders(request_rec *r, HTTPRequest *req) {
     }
 
     if (r->user != NULL) {
-		req_addHeader(req, "REMOTE_USER", r->user, 0);
+        req_addHeader(req, "REMOTE_USER", r->user, 0);
     }
 
     if (r->ap_auth_type != NULL) {
-		req_addHeader(req, "AUTH_TYPE", r->ap_auth_type, 0);
+        req_addHeader(req, "AUTH_TYPE", r->ap_auth_type, 0);
     }
 
     rem_logname = (char *)ap_get_remote_logname(r);
     if (rem_logname != NULL) {
-		req_addHeader(req, "REMOTE_IDENT", rem_logname, 0);
+        req_addHeader(req, "REMOTE_IDENT", rem_logname, 0);
     }
 
     /*
-     *	Apache custom responses.  If we have redirected, add special headers
+     *  Apache custom responses.  If we have redirected, add special headers
      */
-	if (r->prev) {
-		if (r->prev->args) {
-			req_addHeader(req, "REDIRECT_QUERY_STRING", r->prev->args, 0);
-		}
+    if (r->prev) {
+        if (r->prev->args) {
+            req_addHeader(req, "REDIRECT_QUERY_STRING", r->prev->args, 0);
+        }
 
-		if (r->prev->uri) {
-			req_addHeader(req, "REDIRECT_URL", r->prev->uri, 0);
-		}
-	}
+        if (r->prev->uri) {
+            req_addHeader(req, "REDIRECT_URL", r->prev->uri, 0);
+        }
+    }
 
     return;
 }
@@ -420,7 +422,7 @@ static void sendResponse(request_rec *r, HTTPResponse *resp) {
     char status[500];
 
     /*
-     *	collect up the headers
+     *  collect up the headers
      */
     st_perform(resp->headers, gethdr, r);
 
@@ -428,30 +430,42 @@ static void sendResponse(request_rec *r, HTTPResponse *resp) {
     r->status_line = status;
     r->status = resp->status;
     if (r->content_type == NULL) {
-	r->content_type = "text/html";
+    r->content_type = "text/html";
     }
 
-    ap_set_content_length(r, resp->content_length);
+   if((resp->flags & RESP_LENGTH_EXPLICIT) == RESP_LENGTH_EXPLICIT)
+        ap_set_content_length(r, resp->content_length);
 
 
     /*
-     *	actually transmit the response to the client
+     *  actually transmit the response to the client
      */
     /* This should cause Apache to send the headers */
     ap_rflush(r);
 
     /* resp->content_valid will be 0 for HEAD requests and empty responses */
-    if ( (!r->header_only) && (resp->content_valid) ) {
-        while (resp->content_read < resp->content_length)
+    if ( (!r->header_only) && (resp->content_valid) )
+    {
+        while (resp->content_read < resp->content_length &&
+            (resp->flags & RESP_LENGTH_INVALID) != RESP_LENGTH_INVALID)
         {
-			ap_rwrite(resp->content, resp->content_valid, r);
-			if (r->connection->aborted) {
-				break;
-			}
-            if (resp_getResponseContent(resp, 1) == -1)
-			{
-				break;
-			}
+            int count;
+
+            ap_rwrite(resp->content, resp->content_valid, r);
+            if (r->connection->aborted) {
+                break;
+            }
+
+            count = resp_getResponseContent(resp, 1);
+            if(count > 0)
+            {
+             // 2009/06/09: handle situations where content_length is wrong or
+             //             unset.  Read as much data as possible from the
+             //             WebObjects application and send the data to the
+             //             client-side.
+            resp->content_read += count;
+            resp->content_valid = count;
+            }
         }
 
         ap_rwrite(resp->content, resp->content_valid, r);
@@ -499,7 +513,7 @@ static int readContentData(HTTPRequest *req, void *dataBuffer, int dataSize, int
     }
 
     if (total_len_read == 0) {
-	WOLog(WO_WARN, "readContentData(): returning zero bytes of content data");
+    WOLog(WO_WARN, "readContentData(): returning zero bytes of content data");
     }
 
     return total_len_read;
@@ -597,10 +611,10 @@ static void *WebObjects_create_config(apr_pool_t *p, server_rec *s)
 
 /*
  *
- *	A good time to read configuration files, etc....
+ *  A good time to read configuration files, etc....
  *
- *	We get the WebObjects.xml file path from the configuration.  The default is
- *	to assume it's in the apache conf directory.
+ *  We get the WebObjects.xml file path from the configuration.  The default is
+ *  to assume it's in the apache conf directory.
  *
  */
 static int WebObjects_post_config(apr_pool_t *pconf, apr_pool_t *plog,
@@ -612,7 +626,7 @@ static int WebObjects_post_config(apr_pool_t *pconf, apr_pool_t *plog,
         wc = (WebObjects_config *)ap_get_module_config(s->module_config, &WebObjects_module);
 
         /*
-         *	allow other bits of the adaptor to pick up the options
+         *  allow other bits of the adaptor to pick up the options
          */
 
         if (init_adaptor(wc->options) == 0)
@@ -632,23 +646,23 @@ static int WebObjects_post_config(apr_pool_t *pconf, apr_pool_t *plog,
 
 
 /*
- *	called when Apache forks a new child server
+ *  called when Apache forks a new child server
  */
 static void WebObjects_child_init(apr_pool_t *p, server_rec *s) {
     _webobjects_server = s;
 
     /*
-     *	anything else?
-     *    ac_readConfiguration();	force the configs to be checked
+     *  anything else?
+     *    ac_readConfiguration();   force the configs to be checked
      */
     return;
 }
 
 
 /*
- *	WebObjectsAlias name translation.
+ *  WebObjectsAlias name translation.
  *
- *	Look for our key & if found, schedule our handler...
+ *  Look for our key & if found, schedule our handler...
  */
 int WebObjects_translate(request_rec *r) {
     WebObjects_config *wc;
@@ -663,7 +677,7 @@ int WebObjects_translate(request_rec *r) {
 #ifndef _MSC_VER // SWK changed url = WOURLComponents_Initializer; to memset(&url,0,sizeof(WOURLComponents));
         url = WOURLComponents_Initializer;
 #else
-		memset(&url,0,sizeof(WOURLComponents));
+        memset(&url,0,sizeof(WOURLComponents));
 #endif
         urlerr = WOParseApplicationName(&url, r->uri);
         if (urlerr != WOURLOK && !((urlerr == WOURLInvalidApplicationName) && ac_authorizeAppListing(&url))) {
@@ -678,7 +692,7 @@ int WebObjects_translate(request_rec *r) {
 
 
         /*
-         *	we'll take it - mark our handler...
+         *  we'll take it - mark our handler...
          */
         r->handler = (char *)apr_pstrdup(r->pool, WEBOBJECTS);
         r->filename = (char *)apr_pstrdup(r->pool, r->uri);
@@ -711,16 +725,16 @@ static int WebObjects_handler (request_rec *r)
     const char *docroot;
     WOURLError urlerr;
 #ifdef _MSC_VER // SWK changed url = WOURLComponents_Initializer;
-	memset(&wc,0,sizeof(WOURLComponents));
+    memset(&wc,0,sizeof(WOURLComponents));
 #endif
-    /* 	We have to do a check here to see if our handler should process the request.
-	The WebObjects_translate phase should  have marked the request to be handled
-	by WebObjects if it matched the Adaptor's WebObjects alias.
-	Is this the best way to do this?  Can another module override our r->handler setting?
-	*/
-	if (NULL == r->handler || strcasecmp(r->handler, WEBOBJECTS) != 0) {
-		WOLog(WO_DBG, "WebObjects_handler declined! %s", r->uri);
-		return DECLINED;
+    /*  We have to do a check here to see if our handler should process the request.
+    The WebObjects_translate phase should  have marked the request to be handled
+    by WebObjects if it matched the Adaptor's WebObjects alias.
+    Is this the best way to do this?  Can another module override our r->handler setting?
+    */
+    if (NULL == r->handler || strcasecmp(r->handler, WEBOBJECTS) != 0) {
+        WOLog(WO_DBG, "WebObjects_handler declined! %s", r->uri);
+        return DECLINED;
     }
 
     _webobjects_server = r->server;
@@ -773,19 +787,19 @@ static int WebObjects_handler (request_rec *r)
     /* See http://www.apache.org/docs/misc/client_block_api.html for doc on this stuff. */
     retval = ap_setup_client_block(r, REQUEST_CHUNKED_ERROR);
     if (retval != 0) {
-	return retval;
+    return retval;
     }
 
 
     /*
-     *	build the request ....
+     *  build the request ....
      */
     req = req_new(r->method, NULL);
     req->shouldProcessUrl = shouldProcessUrl;
-    req->api_handle = r;				/* stash this in case it's needed */
+    req->api_handle = r;                /* stash this in case it's needed */
 
     /*
-     *	validate the method
+     *  validate the method
      */
     reqerr = req_validateMethod(req);
     if (reqerr) {
@@ -794,12 +808,12 @@ static int WebObjects_handler (request_rec *r)
     }
 
     /*
-     *	copy the headers..
+     *  copy the headers..
      */
     copyHeaders(r, req);
 
     /*
-     *	get form data if any
+     *  get form data if any
      *   assume that POSTs with content length will be reformatted to GETs later
      */
     if ((req->content_length > 0) && ap_should_client_block(r) ) {
@@ -807,8 +821,8 @@ static int WebObjects_handler (request_rec *r)
         req->getMoreContent = (req_getMoreContentCallback)readContentData;
 
         if (req->content_buffer_size == 0) {
-	    return die(r, ALLOCATION_FAILURE, HTTP_SERVER_ERROR);
-	}
+        return die(r, ALLOCATION_FAILURE, HTTP_SERVER_ERROR);
+    }
 
         if (readContentData(req, req->content, req->content_buffer_size, 1) == -1) {
             req_free(req);
@@ -821,15 +835,15 @@ static int WebObjects_handler (request_rec *r)
     wc.queryString.length = r->args ? strlen(r->args) : 0;
 
     /*
-     *	find path to webobjects apps
+     *  find path to webobjects apps
      */
     conf = (WebObjects_config *)ap_get_module_config(r->per_dir_config, &WebObjects_module);
     docroot = (conf && (conf->root != NULL)) ? conf->root : (char *)ap_document_root(r);
 
     /*
-     *	message the application & collect the response
+     *  message the application & collect the response
      *
-     *	note that handleRequest free()'s the 'req' for us
+     *  note that handleRequest free()'s the 'req' for us
      */
 
     resp = tr_handleRequest(req, r->uri, &wc, r->protocol, docroot);
@@ -840,13 +854,13 @@ static int WebObjects_handler (request_rec *r)
         resp_free(resp);
         retval = OK;
     } else {
-	retval = DECLINED;
+    retval = DECLINED;
     }
 
     req_free(req);
 
 #if defined(FINDLEAKS)
-    showleaks();		/* reveal any leaks in the adaptor */
+    showleaks();        /* reveal any leaks in the adaptor */
 #endif
 
     return retval;
@@ -875,11 +889,11 @@ static void WebObjects_register_hooks (apr_pool_t *p)
  */
 module AP_MODULE_DECLARE_DATA WebObjects_module =
 {
-    STANDARD20_MODULE_STUFF, 	// standard stuff; no need to mess with this.
-    NULL, 			// create per-directory configuration structures - we do not.
-    NULL, 			// merge per-directory - no need to merge if we are not creating anything.
-    WebObjects_create_config, 	// create per-server configuration structures.
-    NULL, 			// merge per-server.
-    WebObjects_cmds, 		// configuration directive handlers
-    WebObjects_register_hooks 	// request handlers
+    STANDARD20_MODULE_STUFF,    // standard stuff; no need to mess with this.
+    NULL,           // create per-directory configuration structures - we do not.
+    NULL,           // merge per-directory - no need to merge if we are not creating anything.
+    WebObjects_create_config,   // create per-server configuration structures.
+    NULL,           // merge per-server.
+    WebObjects_cmds,        // configuration directive handlers
+    WebObjects_register_hooks   // request handlers
 };
