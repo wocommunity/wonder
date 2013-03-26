@@ -59,7 +59,9 @@ typedef struct _HTTPRequest {
         int shouldProcessUrl;
 #ifdef IIS
         /* for IIS we have to keep track of how much we have read */
-        int total_len_read;
+        // 2009/04/27: IIS is using DWORD in the API layer and a DWORD
+        //             is an "unsigned long" value:
+        unsigned long total_len_read;
 #endif
 } HTTPRequest;
 
