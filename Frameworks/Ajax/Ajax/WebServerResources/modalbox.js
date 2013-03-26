@@ -459,7 +459,10 @@ Modalbox.Methods = {
 						this.currFocused--;
 					}
 				}
-				this.focusableElements[this.currFocused].focus();
+
+				var focusedElement = this.focusableElements[this.currFocused];
+				if(focusedElement) focusedElement.focus();
+
 				break;			
 			case Event.KEY_ESC:
 				// CH: Add Esc key handling start
