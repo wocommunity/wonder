@@ -18,6 +18,8 @@ import er.extensions.formatters.ERXTimestampFormatter;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * Wrapper around http://www.frequency-decoder.com/2009/09/09/unobtrusive-date-picker-widget-v5/
  * 
@@ -136,22 +138,22 @@ public class CCDatePicker extends ERXStatelessComponent {
 	 */
 	public String dateFormatString() {
 		String result = dateformat();
-		result = ERXStringUtilities.replaceStringByStringInString("-", "-ds", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%a", "-D", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%A", "-l", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%b", "-M", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%B", "-F", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%d", "-d", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%e", "-j", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%m", "-m", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%y", "-y", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%Y", "-Y", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%w", "-w", result);
+		result = StringUtils.replace("-", "-ds", result);
+		result = StringUtils.replace("%a", "-D", result);
+		result = StringUtils.replace("%A", "-l", result);
+		result = StringUtils.replace("%b", "-M", result);
+		result = StringUtils.replace("%B", "-F", result);
+		result = StringUtils.replace("%d", "-d", result);
+		result = StringUtils.replace("%e", "-j", result);
+		result = StringUtils.replace("%m", "-m", result);
+		result = StringUtils.replace("%y", "-y", result);
+		result = StringUtils.replace("%Y", "-Y", result);
+		result = StringUtils.replace("%w", "-w", result);
 		
-		result = ERXStringUtilities.replaceStringByStringInString(" ", "-sp", result);
-		result = ERXStringUtilities.replaceStringByStringInString(".", "-dt", result);
-		result = ERXStringUtilities.replaceStringByStringInString("/", "-sl", result);
-		result = ERXStringUtilities.replaceStringByStringInString(",", "-cc", result);
+		result = StringUtils.replace(" ", "-sp", result);
+		result = StringUtils.replace(".", "-dt", result);
+		result = StringUtils.replace("/", "-sl", result);
+		result = StringUtils.replace(",", "-cc", result);
 		
 		if (result.indexOf("-") == 0) {
 			// strip off leading "-"
