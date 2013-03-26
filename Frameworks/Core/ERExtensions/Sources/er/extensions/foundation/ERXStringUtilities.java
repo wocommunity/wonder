@@ -32,6 +32,7 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
@@ -185,7 +186,9 @@ public class ERXStringUtilities {
 	 * @param b
 	 *            second string
 	 * @return the distance between the two strings
+	 * @deprecated use {@link StringUtils#getLevenshteinDistance(String, String)} instead
 	 */
+	@Deprecated
 	public static int levenshteinDistance(String a, String b) {
 		int n = a.length();
 		int m = b.length();
@@ -685,7 +688,9 @@ public class ERXStringUtilities {
      * @param newString to be inserted
      * @param buffer string to have the replacement done on it
      * @return string after having all of the replacement done.
+     * @deprecated use {@link StringUtils#replace(String, String, String)} instead
      */
+    @Deprecated
     public static String replaceStringByStringInString(String old, String newString, String buffer) {
         int begin, end;
         int oldLength = old.length();
@@ -720,7 +725,9 @@ public class ERXStringUtilities {
      * @param replacementString the string with which to replace stringToReplace.
      * @return sourceString with stringToReplace replaced with replacementString if it
      *         existed in sourceString.  otherwise, sourceString is returned.
+     * @deprecated use {@link StringUtils#replaceOnce(String, String, String)} instead
      */
+    @Deprecated
     public static String stringByReplacingFirstOccurrenceOfStringWithString(final String sourceString, final String stringToReplace, final String replacementString) {
         final int indexOfMatch = sourceString.indexOf(stringToReplace);
         final String result;
