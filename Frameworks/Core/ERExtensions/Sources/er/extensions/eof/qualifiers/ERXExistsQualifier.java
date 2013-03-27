@@ -288,6 +288,33 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
             subExprStr = ERXStringUtilities.replaceStringByStringInString("T9.", EXISTS_ALIAS + "9.", subExprStr);
             subExprStr = ERXStringUtilities.replaceStringByStringInString("T9 ", EXISTS_ALIAS + "9 ", subExprStr);
             
+            // (AR) Note that the "space" character separates simple "t0 " from being part of a password hash or other 
+            // valid data. It has never been 100% but generally true that you are replacing a table alias when we had 
+            // a trailing space for match and replace. This fails when the "t0" is the last breath of subExprStr so 
+            // let us match and replace at the end of the string now.
+            
+            if (subExprStr.endsWith("t0") || subExprStr.endsWith("T0")) {
+            	subExprStr = subExprStr.substring(0, subExprStr.length() - 2) + EXISTS_ALIAS + "0";
+            } else if (subExprStr.endsWith("t1") || subExprStr.endsWith("T1")) {
+            	subExprStr = subExprStr.substring(0, subExprStr.length() - 2) + EXISTS_ALIAS + "1";
+            } else if (subExprStr.endsWith("t2") || subExprStr.endsWith("T2")) {
+            	subExprStr = subExprStr.substring(0, subExprStr.length() - 2) + EXISTS_ALIAS + "2";
+            } else if (subExprStr.endsWith("t3") || subExprStr.endsWith("T3")) {
+            	subExprStr = subExprStr.substring(0, subExprStr.length() - 2) + EXISTS_ALIAS + "3";
+            } else if (subExprStr.endsWith("t4") || subExprStr.endsWith("T4")) {
+            	subExprStr = subExprStr.substring(0, subExprStr.length() - 2) + EXISTS_ALIAS + "4";
+            } else if (subExprStr.endsWith("t5") || subExprStr.endsWith("T5")) {
+            	subExprStr = subExprStr.substring(0, subExprStr.length() - 2) + EXISTS_ALIAS + "5";
+            } else if (subExprStr.endsWith("t6") || subExprStr.endsWith("T6")) {
+            	subExprStr = subExprStr.substring(0, subExprStr.length() - 2) + EXISTS_ALIAS + "6";
+            } else if (subExprStr.endsWith("t7") || subExprStr.endsWith("T7")) {
+            	subExprStr = subExprStr.substring(0, subExprStr.length() - 2) + EXISTS_ALIAS + "7";
+            } else if (subExprStr.endsWith("t8") || subExprStr.endsWith("T8")) {
+            	subExprStr = subExprStr.substring(0, subExprStr.length() - 2) + EXISTS_ALIAS + "8";
+            } else if (subExprStr.endsWith("t9") || subExprStr.endsWith("T9")) {
+            	subExprStr = subExprStr.substring(0, subExprStr.length() - 2) + EXISTS_ALIAS + "9";
+            }
+            
             StringBuffer sb = new StringBuffer();
             if (existsQualifier.usesInQualInstead()) {
             	// (AR) Write the IN clause
@@ -308,7 +335,16 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
             }
             sb.append(subExprStr);
             if ( ! existsQualifier.usesInQualInstead()) {
-                sb.append(" AND ");
+            	String examineBuffer = sb.toString();
+            	examineBuffer = examineBuffer.substring(0, examineBuffer.length() - 1);
+            	if (examineBuffer.endsWith(EXISTS_ALIAS)) {
+            		// (AR) If we end with a table alias we must add a "where" clause
+                    sb.append(" WHERE ");
+            	} else {
+            		// (AR) there was already a where clause so we must add a "and"
+                    sb.append(" AND ");
+            	}
+            	
                 sb.append(EXISTS_ALIAS + "0" + destEntityForeignKey);
                 sb.append(" = ");
                 sb.append(ERXStringUtilities.replaceStringByStringInString("t0.", sourceTableAlias + ".", srcEntityForeignKey));
