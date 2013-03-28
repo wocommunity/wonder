@@ -23,17 +23,17 @@ public class MTAjaxTabbedPanelTab extends AjaxDynamicElement {
 	private WOAssociation isVisible;
 	private WOAssociation accesskey;
 
-	public MTAjaxTabbedPanelTab(String aName, NSDictionary associations, WOElement template) {
+	public MTAjaxTabbedPanelTab(String aName, NSDictionary<String, WOAssociation> associations, WOElement template) {
 		super(aName, associations, template);
 
 		content = template;
-		name = (WOAssociation) associations.objectForKey("name");
-		id = (WOAssociation) associations.objectForKey("id");
-		isSelected = (WOAssociation) associations.objectForKey("isSelected");
-		refreshOnSelect = (WOAssociation) associations.objectForKey("refreshOnSelect");
-		onLoad = (WOAssociation) associations.objectForKey("onLoad");
-		isVisible = (WOAssociation) associations.objectForKey("isVisible");
-		accesskey = (WOAssociation)associations.objectForKey("accesskey");
+		name = associations.objectForKey("name");
+		id = associations.objectForKey("id");
+		isSelected = associations.objectForKey("isSelected");
+		refreshOnSelect = associations.objectForKey("refreshOnSelect");
+		onLoad = associations.objectForKey("onLoad");
+		isVisible = associations.objectForKey("isVisible");
+		accesskey = associations.objectForKey("accesskey");
 
 		if (name == null) {
 			throw new RuntimeException("name binding is required");

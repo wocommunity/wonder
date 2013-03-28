@@ -8,6 +8,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.ajax.AjaxOption;
+import er.ajax.AjaxUtils;
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.components.ERXStatelessComponent;
 
@@ -40,6 +41,8 @@ import er.extensions.components.ERXStatelessComponent;
  */
 public class MTStyledPopUpButton extends ERXStatelessComponent {
 
+	private static final long serialVersionUID = 1L;
+
 	private String _id;
 	private NSArray<Object> _list;
 	
@@ -61,7 +64,7 @@ public class MTStyledPopUpButton extends ERXStatelessComponent {
 		MTAjaxUtils.addScriptResourceInHead(context, response, "MooTools", MTAjaxUtils.MOOTOOLS_CORE_JS);
 		MTAjaxUtils.addScriptResourceInHead(context, response, "MooTools", "scripts/plugins/fancyselect/FancySelect.js");
 		if(useDefaultCss()) {
-			MTAjaxUtils.addStylesheetResourceInHead(context, response, "MooTools", "scripts/plugins/fancyselect/FancySelect.css");
+			AjaxUtils.addStylesheetResourceInHead(context, response, "MooTools", "scripts/plugins/fancyselect/FancySelect.css");
 		}
 		super.appendToResponse(response, context);
 	}
@@ -91,10 +94,10 @@ public class MTStyledPopUpButton extends ERXStatelessComponent {
 		Boolean useDefaultCss = (Boolean)valueForBinding("useDefaultCss");
 	
 		if(useDefaultCss == null) {
-			useDefaultCss = true;
+			useDefaultCss = Boolean.TRUE;
 		}
 		
-		return useDefaultCss;
+		return useDefaultCss.booleanValue();
 
 	}
 	
@@ -134,7 +137,8 @@ public class MTStyledPopUpButton extends ERXStatelessComponent {
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}
-	
+
+	@SuppressWarnings("unchecked")
 	public NSArray<Object> list() {
 		if(_list == null) {
 			_list = (NSArray<Object>)valueForBinding("list");
