@@ -9,6 +9,8 @@ import er.ajax.AjaxComponent;
 
 public class MTAccordionComponent extends AjaxComponent {
 
+	private static final long serialVersionUID = 1L;
+
 	public MTAccordionComponent(WOContext context) {
         super(context);
     }

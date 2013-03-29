@@ -105,7 +105,7 @@ public class ERAttachmentFlexibleEditor extends ERXNonSynchronizingComponent {
 		public static final String editorEditLabel = "editorEditLabel";
 		public static final String editorCancelLabel = "editorCancelLabel";
 		public static final String uploadDialogHeaderText = "uploadDialogHeaderText";
-	};
+	}
 	
 	private String _id;
 	private ERAttachment _newAttachment;
