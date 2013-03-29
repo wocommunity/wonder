@@ -388,7 +388,7 @@ public class WOToManyRelationship extends WOComponent {
 
             if (isMandatory() && theList().count() > 0) {
                 Object anObject = theList().objectAtIndex(0);
-                aTempValue = new NSArray(anObject);
+                aTempValue = new NSArray<Object>(anObject);
             }
             else {
                 aTempValue = null;
@@ -412,7 +412,7 @@ public class WOToManyRelationship extends WOComponent {
                 if (theList().count() > 0) {
                     Object anObject = theList().objectAtIndex(0);
 
-                    set_privateSelections(new NSArray(anObject));
+                    set_privateSelections(new NSArray<Object>(anObject));
                 }
 
             }
@@ -423,7 +423,7 @@ public class WOToManyRelationship extends WOComponent {
     }
 
     public NSArray theList() {
-        NSMutableArray aSortedArray;
+        NSMutableArray<EOEnterpriseObject> aSortedArray;
 
         // ** This is cached because WOBrowser and WOCheckBoxList
         // ** might ask for list many times.
