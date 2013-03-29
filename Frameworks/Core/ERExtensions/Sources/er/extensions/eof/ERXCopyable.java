@@ -685,24 +685,37 @@ public interface ERXCopyable<T extends ERXCopyable> extends ERXEnterpriseObject 
 			NSArray<ERXCopyable> destinationInitialRelatedObjects = ((NSArray<ERXCopyable>) destination.valueForKey(relationshipName)).immutableClone();
 			ERXCopyable.copyLogger.debug("Copying " + originals.count() + " object(s) for relationship " + relationshipName);
 
-			for (T original : originals) {
-				T copy = (T) original.copy(copiedObjects);
+			try {
+				for (T original : originals) {
+					T copy = (T) original.copy(copiedObjects);
 
-				/*
-				 * This is a tricky part. Making the copy in the previous line
-				 * may have already added objects to the relationship that we
-				 * are about to set. We need to check for this so that we do not
-				 * create duplicated relationships.
-				 */
-				if (!destinationInitialRelatedObjects.containsObject(copy)) {
-					ERXCopyable.copyLogger.debug("Adding " + copy.userPresentableDescription() + " to " + relationshipName + " of " + destination.userPresentableDescription());
-					if (inverseRelationshipName == null) {
-						destination.addObjectToBothSidesOfRelationshipWithKey(copy, relationshipName);
-					}
-					else {
-						copy.addObjectToBothSidesOfRelationshipWithKey(destination, inverseRelationshipName);
+					/*
+					 * This is a tricky part. Making the copy in the previous line
+					 * may have already added objects to the relationship that we
+					 * are about to set. We need to check for this so that we do not
+					 * create duplicated relationships.
+					 */
+					if (!destinationInitialRelatedObjects.containsObject(copy)) {
+						ERXCopyable.copyLogger.debug("Adding " + copy.userPresentableDescription() + " to " + relationshipName + " of " + destination.userPresentableDescription());
+						if (inverseRelationshipName == null) {
+							destination.addObjectToBothSidesOfRelationshipWithKey(copy, relationshipName);
+						}
+						else {
+							copy.addObjectToBothSidesOfRelationshipWithKey(destination, inverseRelationshipName);
+						}
 					}
 				}
+			}
+			catch (ClassCastException e) {
+				String message = source.entityName() 
+						+ " does not impliment " 
+						+ ERXCopyable.class.getCanonicalName() 
+						+ ". If you are using the Standard mode, you must manually add the implements clause to the class delcaration in " 
+						+ source.getClass().getSimpleName() 
+						+ ".java. If you are using the \"Model\" mode you must have an 'ERXCopyable = Model' entry in " 
+						+ source.entityName() 
+						+ "'s UserInfo dictionary in the EOModel.";
+				throw new ClassCastException(message);
 			}
 		}
 
