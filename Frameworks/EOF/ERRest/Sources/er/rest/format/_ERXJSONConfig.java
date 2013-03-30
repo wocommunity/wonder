@@ -60,7 +60,7 @@ public class _ERXJSONConfig {
 			return ERXRestUtils.coerceValueToString(obj, _context);
 		}
 	}
-	
+
 	public static class JodaTimeProcessor implements JsonValueProcessor {
 		private ERXRestContext _context;
 		

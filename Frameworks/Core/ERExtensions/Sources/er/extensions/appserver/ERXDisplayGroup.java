@@ -190,7 +190,7 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 		}
 		return super.setSelectionIndexes(nsarray);
 	}
-	
+
 	/**
 	 * Extends the current selection by the given object.
 	 * @param object object to add to the selection

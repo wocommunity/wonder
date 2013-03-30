@@ -2492,7 +2492,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	    }
 		return processedURL;
 	}
-	
+
 	/**
 	 * This method is called by ERXResourceManager and provides the application a hook
 	 * to rewrite generated URLs for resources.

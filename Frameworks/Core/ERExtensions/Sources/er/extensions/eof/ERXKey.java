@@ -1690,7 +1690,7 @@ public class ERXKey<T> {
 	public ERXOrQualifier inObjects(T... values) {
 		return ERXQ.inObjects(_key, values);
 	}
-	
+
 	/**
 	 * Equivalent to a new ERXAndQualifier of
 	 * EONotQualifier(EOKeyValueQualifier) with key equals value for each value.

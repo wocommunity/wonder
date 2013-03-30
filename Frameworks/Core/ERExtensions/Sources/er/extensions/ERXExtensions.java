@@ -357,7 +357,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     }
 
     /**
-     * This method is called every time the configuration file
+     * This method is called everytime the configuration file
      * is changed. This allows for turning SQL debugging on and
      * off at runtime.
      * @param n notification posted when the configuration file
