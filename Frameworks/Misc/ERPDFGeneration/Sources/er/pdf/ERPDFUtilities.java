@@ -3,6 +3,7 @@ package er.pdf;
 import org.apache.log4j.Logger;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Map;
 
 
@@ -11,6 +12,7 @@ import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.pdf.builder.FOPBuilder;
@@ -134,7 +136,7 @@ public class ERPDFUtilities {
       os.close();
       return new NSData(os.toByteArray());
     } catch (Exception e) {
-      throw com.webobjects.foundation.NSForwardException._runtimeExceptionForThrowable(e);
+      throw NSForwardException._runtimeExceptionForThrowable(e);
     }
   }
   
@@ -146,9 +148,10 @@ public class ERPDFUtilities {
 	 * 
 	 * @param xml a string of xml to be passed into the transformation process 
 	 * @param fopxsl the location of the xml->fo transform sheet (should be in the classpath)
+	 * @param encoding
 	 * @param config dictionary of additional configuration elements for the fop engine 
 	 * @return NSData raw pdf file contents
-	 * @throws Throwable java.io.IOException 
+	 * @throws Throwable IOException 
 	 */
 	public static NSData xml2Fop2Pdf(String xml, String fopxsl, NSDictionary<String, Object> config) throws Throwable {
 		if (logger.isDebugEnabled()) {
@@ -170,10 +173,10 @@ public class ERPDFUtilities {
 				logger.debug("xml2Fop2Pdf(String, String, NSDictionary<String,Object>) - end - return value=" + returnNSData); //$NON-NLS-1$
 			}
 			return returnNSData;
-		} catch (java.io.IOException e) {
+		} catch (IOException e) {
 			logger.error("xml2Fop2Pdf(String, String, NSDictionary<String,Object>)", e); //$NON-NLS-1$
 
-			throw com.webobjects.foundation.NSForwardException._runtimeExceptionForThrowable(e);
+			throw NSForwardException._runtimeExceptionForThrowable(e);
 		}
 	}
 

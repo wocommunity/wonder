@@ -10,8 +10,6 @@ import java.io.StringReader;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.text.MessageFormat;
-import java.text.ParseException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,13 +19,11 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorChannel;
-import com.webobjects.eoaccess.EOAdaptorOperation;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabase;
 import com.webobjects.eoaccess.EODatabaseChannel;
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
-import com.webobjects.eoaccess.EOGeneralAdaptorException;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOQualifierSQLGeneration;
 import com.webobjects.eoaccess.EORelationship;
@@ -51,7 +47,6 @@ import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation._NSUtilities;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
-import com.webobjects.jdbcadaptor.JDBCAdaptorException;
 import com.webobjects.jdbcadaptor.JDBCPlugIn;
 
 import er.extensions.eof.ERXConstant;
@@ -61,8 +56,6 @@ import er.extensions.eof.ERXModelGroup;
 import er.extensions.eof.qualifiers.ERXFullTextQualifier;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXStringUtilities;
-import er.extensions.validation.ERXValidationException;
-import er.extensions.validation.ERXValidationFactory;
 
 /**
  * ERXSQLHelper provides support for additional database-vender-specific
@@ -111,7 +104,7 @@ public class ERXSQLHelper {
 	 * 
 	 * @param entities
 	 *            a NSArray containing the entities for which create table
-	 *            statements should be generated or null if all entities in the
+	 *            statements should be generated or null if all entitites in the
 	 *            model should be used.
 	 * @param modelName
 	 *            the name of the EOModel
@@ -128,7 +121,7 @@ public class ERXSQLHelper {
 	/**
 	 * Reimplementation that does not try to the shared objects. You should exit
 	 * soon after calling this, as it may or may not leave channels open. It is
-	 * simply to generate sql.
+	 * simply to geenrate sql.
 	 * 
 	 * @param model
 	 * @param coordinator
@@ -158,7 +151,7 @@ public class ERXSQLHelper {
 	 * 
 	 * @param entities
 	 *            a NSArray containing the entities for which create table
-	 *            statements should be generated or null if all entities in the
+	 *            statements should be generated or null if all entitites in the
 	 *            model should be used.
 	 * @param model
 	 *            the EOModel
@@ -532,7 +525,7 @@ public class ERXSQLHelper {
 	}
 
 	/**
-	 * Returns the list of attributes to fetch for a fetch spec. The entity is
+	 * Returns the last of attributes to fetch for a fetch spec. The entity is
 	 * passed in here because it has likely already been looked up for the
 	 * particular fetch spec.
 	 * 
@@ -642,7 +635,7 @@ public class ERXSQLHelper {
 		}
 		EOSQLExpression sqlExpr = sqlFactory.selectStatementForAttributes(attributes, false, spec, entity);
 		String sql = sqlExpr.statement();
-		if (spec.hints() != null && !spec.hints().isEmpty() && spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey) != null) {
+		if(spec.hints() != null && !spec.hints().isEmpty() && !(spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey) == null)) {
 			Object hint = spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey);
 			sql = customQueryExpressionHintAsString(hint);
 		}
@@ -690,32 +683,11 @@ public class ERXSQLHelper {
 	 * @return the generated read format
 	 */
 	public String readFormatForAggregateFunction(String functionName, String columnName, String aggregateName) {
-		return readFormatForAggregateFunction(functionName, columnName, aggregateName, false);
-	}
-	
-	/**
-	 * Returns the attribute read format for an aggregate function for a
-	 * particular column with a name.
-	 * 
-	 * @param functionName
-	 *            the aggregate function to generate
-	 * @param columnName
-	 *            the column name to aggregate on
-	 * @param aggregateName
-	 *            the name to assign to the aggregate result
-	 * @param usesDistinct
-	 *            <code>true</code> if function should be used on distinct values
-	 * @return the generated read format
-	 */
-	public String readFormatForAggregateFunction(String functionName, String columnName, String aggregateName, boolean usesDistinct) {
-		StringBuilder sb = new StringBuilder();
+		StringBuffer sb = new StringBuffer();
 		sb.append(functionName);
-		sb.append('(');
-		if (usesDistinct) {
-			sb.append("distinct ");
-		}
+		sb.append("(");
 		sb.append(columnName);
-		sb.append(')');
+		sb.append(")");
 		if (aggregateName != null) {
 			sb.append(" AS ");
 			sb.append(aggregateName);
@@ -1131,27 +1103,30 @@ public class ERXSQLHelper {
 		if (spec.hints() == null || spec.hints().isEmpty() || spec.hints().valueForKey(EODatabaseContext.CustomQueryExpressionHintKey) == null) {
 			// no hints
 			if (spec.fetchLimit() > 0 || spec.sortOrderings() != null) {
-				boolean usesDistinct = spec.usesDistinct();
+				boolean usesDistinct=spec.usesDistinct();
 				spec = new EOFetchSpecification(spec.entityName(), spec.qualifier(), null);
 				spec.setUsesDistinct(usesDistinct);
 			}
 
 			EOSQLExpression sqlExpression = sqlExpressionForFetchSpecification(ec, spec, 0, -1);
 			String statement = sqlExpression.statement();
-			String listString = sqlExpression.listString();
+			int index = statement.toLowerCase().indexOf(" from ");
 
 			String countExpression;
 			if (spec.usesDistinct()) {
-				NSArray<String> primaryKeyAttributeNames = entity.primaryKeyAttributeNames();
+				NSArray primaryKeyAttributeNames = entity.primaryKeyAttributeNames();
 				if (primaryKeyAttributeNames.count() > 1)
 					log.warn("Composite primary keys are currently unsupported in rowCountForFetchSpecification, when the spec uses distinct");
-				String pkAttributeName = primaryKeyAttributeNames.lastObject();
+				String pkAttributeName = (String) primaryKeyAttributeNames.lastObject();
 				String pkColumnName = entity.attributeNamed(pkAttributeName).columnName();
-				countExpression = "count(distinct " + quoteColumnName("t0." + pkColumnName) + ") ";
-			} else {
+				countExpression = "count(distinct " +
+						quoteColumnName("t0." + pkColumnName) 
+						+ ") ";
+			}
+			else {
 				countExpression = "count(*) ";
 			}
-			statement = statement.replace(listString, countExpression);
+			statement = (new StringBuilder()).append("select ").append(countExpression).append(statement.substring(index, statement.length())).toString();
 			sqlExpression.setStatement(statement);
 			sql = statement;
 			result = ERXEOAccessUtilities.rawRowsForSQLExpression(ec, model.name(), sqlExpression);
@@ -1287,7 +1262,7 @@ public class ERXSQLHelper {
 				// EOAttribute.adaptorValueByConvertingAttributeValue() doesn't
 				// actually return a suitable value
 				if (value instanceof ERXConstant.NumberConstant) {
-					value = Long.valueOf(((Number) value).longValue());
+					value = new Long(((Number) value).longValue());
 				}
 				else {
 					value = formatValueForAttribute(e, value, attribute, key);
@@ -2260,14 +2235,7 @@ public class ERXSQLHelper {
 	}
 
 	public static class PostgresqlSQLHelper extends ERXSQLHelper {
-		/**
-		 * The exception state string for unique constraint exceptions.
-		 * 
-		 * @see <a href="http://www.postgresql.org/docs/9.1/static/errcodes-appendix.html">Error codes</a>
-		 */
-		public static final String UNIQUE_CONSTRAINT_EXCEPTION_STATE = "23505";
 
-		public static final String UNIQUE_CONSTRAINT_MESSAGE_FORMAT = "ERROR: duplicate key value violates unique constraint \"{0}\"\n  Detail: Key ({1})=({2}) already exists.";
 		/**
 		 * Overriden to prevent the external time types set in 
 		 * {@link #externalTypeForJDBCType(JDBCAdaptor, int)} from being reset.
@@ -2283,6 +2251,20 @@ public class ERXSQLHelper {
 		@Override
 		protected String sqlForGetNextValFromSequencedNamed(String sequenceName) {
 			return "select NEXTVAL('" + sequenceName + "') as key"; 
+		}
+		
+		@Override
+		protected String formatValueForAttribute(EOSQLExpression expression, Object value, EOAttribute attribute, String key) {
+			// The Postgres Expression has a problem using bind variables so we
+			// have to get the formatted
+			// SQL string for a value instead. All Apple provided plugins must
+			// use the bind variables
+			// however. Frontbase can go either way
+			// MS: is expression always instanceof PostgresExpression for
+			// postgres?
+			// boolean isPostgres =
+			// e.getClass().getName().equals("com.webobjects.jdbcadaptor.PostgresqlExpression");
+			return expression.formatValueForAttribute(value, attribute);
 		}
 
 		@Override
@@ -2392,39 +2374,7 @@ public class ERXSQLHelper {
 		public int varcharLargeColumnWidth() {
 			return -1;
 		}
-		
-		@Override
-		public boolean handleDatabaseException(EODatabaseContext databaseContext, Throwable throwable) {
-			if (throwable instanceof EOGeneralAdaptorException) {
-				EOGeneralAdaptorException gae = (EOGeneralAdaptorException) throwable;
-				if (gae.userInfo() != null) {
-					EOAdaptorOperation failedOperation = (EOAdaptorOperation) gae.userInfo().objectForKey(EOAdaptorChannel.FailedAdaptorOperationKey);
-					if (failedOperation != null) {
-						Throwable t = failedOperation.exception();
-						if (t instanceof JDBCAdaptorException) {
-							JDBCAdaptorException jdbcEx = (JDBCAdaptorException) t;
-							SQLException sqlEx = jdbcEx.sqlException();
-							if (sqlEx != null && UNIQUE_CONSTRAINT_EXCEPTION_STATE.equals(sqlEx.getSQLState())) {
-								String message = sqlEx.getMessage();
-								MessageFormat format = new MessageFormat(UNIQUE_CONSTRAINT_MESSAGE_FORMAT);
-								try {
-									Object[] objs = format.parse(message);
-									String idx = (String) objs[0];
-									ERXValidationFactory factory = ERXValidationFactory.defaultFactory();
-									String method = "UniqueConstraintException." + idx;
-									ERXValidationException ex = factory.createCustomException(null, method);
-									databaseContext.rollbackChanges();
-									throw ex;
-								} catch (ParseException e) {
-									log.warn("Error parsing unique constraint exception message: " + message);
-								}
-							}
-						}
-					}
-				}
-			}
-			return false;
-		}
+
 	}
 	
 	public static class FirebirdSQLHelper extends ERXSQLHelper {

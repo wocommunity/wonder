@@ -1,0 +1,54 @@
+@CHARSET "UTF-8";
+
+body {
+	margin: 3em 10%;
+	font-family: Helvetica, Arial, sans-serif;
+}
+
+h1,h2,h3,h4,h5 {color #ac0000;}
+
+h3 {
+	margin-top: 2em;
+	padding: 4px 0;
+	text-align: right;
+	text-transform: uppercase;
+	border-bottom: 1px solid #ac0000;
+}
+
+h4 {margin: 0;}
+
+p {
+	margin: .2em; 0;
+	padding: .5em;
+}
+
+dl {
+	font-size: medium;
+}
+
+dl dt {
+	font-weight: bold;
+}
+
+dl dd {
+	margin-bottom: 2em;
+}
+
+code {
+	font-family: monospace;
+	font-weight: bold;
+	font-style: normal;
+	color: green;
+}
+
+#left,#right,#footer,#header {
+	display: none;
+}
+
+#pagenumber:before {
+	content: counter(page);
+}
+
+#pagecount:before {
+	content: counter(pages);
+}

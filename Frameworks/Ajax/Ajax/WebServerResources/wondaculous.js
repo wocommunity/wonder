@@ -612,7 +612,7 @@ Object.extend(String.prototype, (function() {
   }
 
   function evalScripts() {
-    return this.extractScripts().map(function(script) { return eval(script); });
+    return this.extractScripts().map(function(script) { return eval(script) });
   }
 
   function escapeHTML() {
@@ -10210,9 +10210,7 @@ Modalbox.Methods = {
 	// CH: done
 	
 	_preventScroll: function(event) { // Disabling scrolling by "space" key
-	  var el = event.element();
-		if (!["input", "textarea", "select", "button"].include(el.tagName.toLowerCase())
-				&& !(el.contentEditable == 'true' || el.contentEditable == ''))
+		if (!["input", "textarea", "select", "button"].include(event.element().tagName.toLowerCase()))
 			event.stop();
 	},
 	
@@ -10556,14 +10554,8 @@ var AjaxOnDemand = {
 	},
 	
 	loadCSS: function(css) {
-        var link=document.createElement("link");
-        link.setAttribute("rel", "stylesheet");
-        link.setAttribute("type", "text/css");
-        link.setAttribute("href", css);
-        if (typeof link!="undefined") {
-            document.getElementsByTagName("head")[0].appendChild(link);
-        }
-    },
+		new Ajax.Request(css, { method: 'get', asynchronous: false, onComplete: AjaxOnDemand.loadedCSS });
+	},
 	
 	loadedCSS: function(request) {
 		var inlineStyle = new Element("style", {"type": "text/css"});

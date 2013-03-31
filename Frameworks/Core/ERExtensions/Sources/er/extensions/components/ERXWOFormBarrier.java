@@ -6,6 +6,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver._private.WODynamicGroup;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
@@ -18,58 +19,58 @@ import com.webobjects.foundation.NSMutableArray;
  * 
  * @author mschrag
  */
-public class ERXWOFormBarrier extends ERXDynamicElement {
-	public ERXWOFormBarrier(String name, NSDictionary<String, WOAssociation> associations, WOElement template) {
-		super(name, associations, template);
+public class ERXWOFormBarrier extends WODynamicGroup {
+	public ERXWOFormBarrier(String aName, NSDictionary<String, WOAssociation> someAssociations, WOElement template) {
+		super(aName, someAssociations, template);
 	}
 
-	public ERXWOFormBarrier(String name, NSDictionary<String, WOAssociation> associations, NSMutableArray<WOElement> children) {
-		super(name, associations, children);
+	public ERXWOFormBarrier(String aName, NSDictionary<String, WOAssociation> someAssociations, NSMutableArray<WOElement> children) {
+		super(aName, someAssociations, children);
 	}
 
 	@Override
-	public void appendToResponse(WOResponse response, WOContext context) {
-		boolean wasInForm = context.isInForm();
-		boolean wasFormSubmitted = context.wasFormSubmitted();
-		context.setInForm(false);
-		context.setFormSubmitted(false);
+	public void appendToResponse(WOResponse aResponse, WOContext aContext) {
+		boolean wasInForm = aContext.isInForm();
+		boolean wasFormSubmitted = aContext.wasFormSubmitted();
+		aContext.setInForm(false);
+		aContext.setFormSubmitted(false);
 		try {
-			super.appendToResponse(response, context);
+			super.appendToResponse(aResponse, aContext);
 		}
 		finally {
-			context.setInForm(wasInForm);
-			context.setFormSubmitted(wasFormSubmitted);
+			aContext.setInForm(wasInForm);
+			aContext.setFormSubmitted(wasFormSubmitted);
 		}
 	}
 
 	@Override
-	public void takeValuesFromRequest(WORequest request, WOContext context) {
-		boolean wasInForm = context.isInForm();
-		boolean wasFormSubmitted = context.wasFormSubmitted();
-		context.setInForm(false);
-		context.setFormSubmitted(false);
+	public void takeValuesFromRequest(WORequest aRequest, WOContext aContext) {
+		boolean wasInForm = aContext.isInForm();
+		boolean wasFormSubmitted = aContext.wasFormSubmitted();
+		aContext.setInForm(false);
+		aContext.setFormSubmitted(false);
 		try {
-			super.takeValuesFromRequest(request, context);
+			super.takeValuesFromRequest(aRequest, aContext);
 		}
 		finally {
-			context.setInForm(wasInForm);
-			context.setFormSubmitted(wasFormSubmitted);
+			aContext.setInForm(wasInForm);
+			aContext.setFormSubmitted(wasFormSubmitted);
 		}
 	}
 
 	@Override
-	public WOActionResults invokeAction(WORequest request, WOContext context) {
-		boolean wasInForm = context.isInForm();
-		boolean wasFormSubmitted = context.wasFormSubmitted();
-		context.setInForm(false);
-		context.setFormSubmitted(false);
+	public WOActionResults invokeAction(WORequest aRequest, WOContext aContext) {
+		boolean wasInForm = aContext.isInForm();
+		boolean wasFormSubmitted = aContext.wasFormSubmitted();
+		aContext.setInForm(false);
+		aContext.setFormSubmitted(false);
 		try {
-			WOActionResults results = super.invokeAction(request, context);
+			WOActionResults results = super.invokeAction(aRequest, aContext);
 			return results;
 		}
 		finally {
-			context.setInForm(wasInForm);
-			context.setFormSubmitted(wasFormSubmitted);
+			aContext.setInForm(wasInForm);
+			aContext.setFormSubmitted(wasFormSubmitted);
 		}
 	}
 }

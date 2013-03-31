@@ -1,6 +1,7 @@
 package er.pdf.builder;
 
 import java.io.OutputStream;
+import java.net.URL;
 
 import org.apache.fop.apps.MimeConstants;
 
@@ -22,26 +23,31 @@ public class Fop2EpsImpl implements FOPBuilder {
 		throw new Exception("Not implemented yet");
 	}
 
+	@Override
 	public void setXSL(String fopxsl) {
 		// TODO Auto-generated method stub
 
 	}
 
+	@Override
 	public void setXML(String xmlToTransform) {
 		// TODO Auto-generated method stub
 
 	}
 
+	@Override
 	public void createDocument(OutputStream os) {
 		// TODO Auto-generated method stub
 
 	}
 
+	@Override
 	public void setConfiguration(NSMutableDictionary<String, Object> config) {
 		// TODO Auto-generated method stub
 
 	}
 
+	@Override
 	public void createDocument(OutputStream os, NSDictionary<String, Object> agentAttributes) throws Throwable {
 		// TODO Auto-generated method stub
 		

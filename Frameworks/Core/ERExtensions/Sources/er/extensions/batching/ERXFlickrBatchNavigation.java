@@ -1,7 +1,5 @@
 package er.extensions.batching;
 
-import java.io.Serializable;
-
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
@@ -41,13 +39,6 @@ import er.extensions.localization.ERXLocalizer;
  * @binding numberOfObjectsPerBatch (if you don't provide a displayGroup) the number of objects per batch (page)
  */
 public class ERXFlickrBatchNavigation extends ERXComponent {
-	/**
-	 * Do I need to update serialVersionUID?
-	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
-	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
-	 */
-	private static final long serialVersionUID = 1L;
-
 	private int _lastPageCount;
 	private int _lastPageSize;
 	private int _lastCurrentPageNumber;
@@ -272,14 +263,7 @@ public class ERXFlickrBatchNavigation extends ERXComponent {
 		}
 	}
 
-	public static class PageNumber implements Serializable {
-		/**
-		 * Do I need to update serialVersionUID?
-		 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
-		 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
-		 */
-		private static final long serialVersionUID = 1L;
-
+	public static class PageNumber {
 		private Integer _pageNumber;
 		private boolean _ellipsis;
 
@@ -392,7 +376,7 @@ public class ERXFlickrBatchNavigation extends ERXComponent {
 	public NSArray<? extends Number> possibleBatchSizes() {
 		Object value = valueForBinding("batchSizes");
 		if(value == null) {
-			return new NSArray<Integer>(new Integer[] {Integer.valueOf(10), Integer.valueOf(50), Integer.valueOf(100), Integer.valueOf(0)});
+			return new NSArray<Integer>(new Integer[] {10, 50, 100, 0});
 		}
 		NSMutableArray<Integer> result = new NSMutableArray<Integer>();
 		if (value instanceof String) {

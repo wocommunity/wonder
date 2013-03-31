@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>wonder.frameworks</groupId>
 		<artifactId>frameworks</artifactId>
-		<version>5.7-SNAPSHOT</version>
+		<version>5.6-SNAPSHOT</version>
 	</parent>
 	<artifactId>ajax</artifactId>
 	<packaging>pom</packaging>
@@ -16,7 +16,6 @@
 		<module>ERDivaLook</module>
 		<module>ERIUI</module>
 		<module>ERJQuery</module>
-		<module>ERJQueryMobile</module>
 		<module>ERPrototaculous</module>
 		<module>GoogleChart</module>
 		<module>YUI</module>

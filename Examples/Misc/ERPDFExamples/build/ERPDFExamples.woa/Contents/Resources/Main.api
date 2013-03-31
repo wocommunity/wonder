@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+        <wo class="Main.java" wocomponentcontent="false">
+        <binding defaults="Boolean" name="usePrintCss"/>
+    </wo>
+</wodefinitions>

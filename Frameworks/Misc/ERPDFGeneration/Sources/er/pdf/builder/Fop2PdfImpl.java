@@ -1,7 +1,11 @@
 package er.pdf.builder;
 
+import java.io.File;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Date;
 
 import javax.xml.transform.Result;
@@ -47,10 +51,12 @@ public class Fop2PdfImpl implements FOPBuilder {
 
 	}
 
+	@Override
 	public void setXSL(String fopxslLocation) {
 		this._fopxslLocation = fopxslLocation;
 	}
 
+	@Override
 	public void setXML(String xmlToTransform) {
 		this._xmlToTransform = xmlToTransform;
 
@@ -70,10 +76,12 @@ public class Fop2PdfImpl implements FOPBuilder {
 		return d.immutableClone();
 	}
 
+	@Override
 	public void createDocument(OutputStream os) throws Throwable {
 		createDocument(os, agentDefaults());
 	}
 
+	@Override
 	public void createDocument(OutputStream os, NSDictionary<String, Object> agentAttributes) throws Throwable {
 		if (logger.isDebugEnabled()) {
 			logger.debug("createDocument(OutputStream os=" + os + ", NSDictionary<String,Object> agentAttributes=" + agentAttributes + ") - start"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -137,6 +145,7 @@ public class Fop2PdfImpl implements FOPBuilder {
 		}
 	}
 
+	@Override
 	public void setConfiguration(NSMutableDictionary<String, Object> config) {
 		this._config = config;
 	}

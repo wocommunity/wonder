@@ -78,6 +78,6 @@ public class ERXClamAvVirusScanner extends ERXVirusScanner {
 		if (status == -1) {
 			throw new IllegalStateException("No file nor stream was scanned yet!");
 		}
-		return status == 0;
+		return status == 0 ? true : false;
 	}
 }
