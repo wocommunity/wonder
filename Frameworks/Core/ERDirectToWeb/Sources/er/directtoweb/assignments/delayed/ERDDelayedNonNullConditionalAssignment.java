@@ -11,14 +11,17 @@ import org.apache.log4j.Logger;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSDictionary;
+
+import er.extensions.eof.ERXKey;
+import er.extensions.foundation.ERXValueUtilities;
+import er.extensions.localization.ERXLocalizer;
 
 /**
  * The delayed non-null conditional is a way to provide a 
  * branching result from a rule resolution. The value of this 
  * assignment must be a dictionary that has the following keys: 
  *
- * dictionary key "nonNullKeyPath": key path to be tested for nullality
+ * dictionary key "nonNullKeyPath": key path to be tested for nullability
  *		off of the current D2W context.
  * dictionary key "trueValue": value to be returned if the key path is
  *		not null.
@@ -26,7 +29,7 @@ import com.webobjects.foundation.NSDictionary;
  *		null.
  *
  * Because this assignment is a delayed assignment the above condition 
- * will be evaluated everytime that the D2W fired rule cache resolves to
+ * will be evaluated every time that the D2W fired rule cache resolves to
  * a rule of this class.</br>
  * <br/>
  * Example usage. Let's imagine that a User has a relationship called
@@ -51,7 +54,6 @@ import com.webobjects.foundation.NSDictionary;
  *	falseValue = "Rented House";</br>
  * }<br/></code>
  */
- // ENHANCEME: Should add a dictionarykey to support both localization and negating.
 public class ERDDelayedNonNullConditionalAssignment extends ERDDelayedAssignment {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -59,6 +61,12 @@ public class ERDDelayedNonNullConditionalAssignment extends ERDDelayedAssignment
 	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private static final ERXKey<String> NON_NULL_KEY_PATH = new ERXKey<String>("nonNullKeyPath");
+	private static final ERXKey<String> TRUE_VALUE = new ERXKey<String>("trueValue");
+	private static final ERXKey<String> FALSE_VALUE = new ERXKey<String>("falseValue");
+	private static final ERXKey<String> NEGATE = new ERXKey<String>("negate");
+	private static final ERXKey<String> LOCALIZE = new ERXKey<String>("localize");
 
     /** logging support */
     public final static Logger log = Logger.getLogger("er.directtoweb.rules.DelayedNonNullConditionalAssigment");
@@ -99,9 +107,8 @@ public class ERDDelayedNonNullConditionalAssignment extends ERDDelayedAssignment
      * @param keyPath to compute significant keys for. 
      * @return array of context keys this assignment depends upon.
      */
-    public NSArray dependentKeys(String keyPath) {
-        NSDictionary conditionAssignment = (NSDictionary)value();
-        return new NSArray(conditionAssignment.valueForKey("nonNullKeyPath"));
+    public NSArray<String> dependentKeys(String keyPath) {
+        return new NSArray<String>(NON_NULL_KEY_PATH.valueInObject(value()));
     }
 
     /**
@@ -120,16 +127,18 @@ public class ERDDelayedNonNullConditionalAssignment extends ERDDelayedAssignment
      *		depending on if the key path is non-null or
      *		null.
      */
-    // FIXME: Should check for NSKeyValueCoding.NullValue
     @Override
     public Object fireNow(D2WContext c) {
-        Object result = null;
-        String keyPath;
-        String resultKey;
-        NSDictionary conditionAssignment = (NSDictionary)value();
-        keyPath = (String)conditionAssignment.valueForKey("nonNullKeyPath");
-        resultKey = c.valueForKeyPath(keyPath) == null ? "falseValue" : "trueValue";
-        result = conditionAssignment.objectForKey(resultKey);
+    	Object result = null;
+        String keyPath = NON_NULL_KEY_PATH.valueInObject(value());
+        boolean negate = ERXValueUtilities.booleanValue(NEGATE.valueInObject(value()));
+        boolean localize = ERXValueUtilities.booleanValue(LOCALIZE.valueInObject(value()));
+        ERXKey<String> resultKey = ERXValueUtilities.isNull(c.valueForKeyPath(keyPath)) && !negate ? FALSE_VALUE:TRUE_VALUE;
+        result = resultKey.valueInObject(value());
+        if(localize) {
+        	String key = (String) result;
+            result = ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject(key, c);
+        }
         if (log.isDebugEnabled()) log.debug("ResultKey:  " + resultKey + " = " + result);
         return result;
     }
