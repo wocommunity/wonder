@@ -113,8 +113,6 @@ public class ERDDelayedNonNullConditionalAssignment extends ERDDelayedAssignment
 	 * @param value
 	 *            of the assignment
 	 */
-	// FIXME: Should put a check in that the value dictionary has all of the
-	// correct keys.
 	public ERDDelayedNonNullConditionalAssignment(String key, Object value) {
 		super(key, value);
 	}
