@@ -17,22 +17,25 @@ import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 /**
- * The delayed non-null conditional is a way to provide a 
+ * <p>The delayed non-null conditional is a way to provide a 
  * branching result from a rule resolution. The value of this 
- * assignment must be a dictionary that has the following keys: 
- *
- * dictionary key "nonNullKeyPath": key path to be tested for nullability
- *		off of the current D2W context.
- * dictionary key "trueValue": value to be returned if the key path is
- *		not null.
- * dictionary key "falseValue": value to be returned if the key path is
- *		null.
- *
- * Because this assignment is a delayed assignment the above condition 
+ * assignment must be a dictionary that has the following keys:</p>
+ * <dl>
+ * <dt>dictionary key "nonNullKeyPath":</dt> <dd>key path to be tested for nullability
+ *		off of the current D2W context.</dd>
+ * <dt>dictionary key "trueValue":</dt> <dd>value to be returned if the key path is
+ *		not null.</dd>
+ * <dt>dictionary key "falseValue":</dt> <dd>value to be returned if the key path is
+ *		null.</dd>
+ * <dt>dictionary key "negate":</dt> <dd>if true, returns trueValue when null and 
+ * 		falseValue when not null.</dd>
+ * <dt>dictionary key "localize":</dt> <dd>if true, localizes the result before returning it</dd>
+ * </dl>
+ * <p>Because this assignment is a delayed assignment the above condition 
  * will be evaluated every time that the D2W fired rule cache resolves to
- * a rule of this class.</br>
- * <br/>
- * Example usage. Let's imagine that a User has a relationship called
+ * a rule of this class.</p>
+ * 
+ * <p>Example usage. Let's imagine that a User has a relationship called
  * <code>toOwnedHouse</code> this relationship is only set if the User is
  * a home owner. Now let's imagine that we have a page configuration 
  * for displaying information about a User. One of the propertyKeys
@@ -44,7 +47,7 @@ import er.extensions.localization.ERXLocalizer;
  * owner. The usual approach would be to create two page configurations and
  * set the displayNameForProperty to be different for each of these page
  * configurations. However by using a DelayedNonNullConditionalAssignment
- * we will only have to use a single page configuration. Using this rule:
+ * we will only have to use a single page configuration. Using this rule:</p>
  *
  * pageConfguration = 'InspectUser' AND propertyKey = 'residence' =>
  *	displayNameForProperty =</br><code> 
