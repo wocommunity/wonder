@@ -161,8 +161,9 @@ public class ERDDelayedNonNullConditionalAssignment extends ERDDelayedAssignment
 			String key = (String) result;
 			result = ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject(key, c);
 		}
-		if (log.isDebugEnabled())
+		if (log.isDebugEnabled()) {
 			log.debug("ResultKey:  " + resultKey + " = " + result);
+		}
 		return result;
 	}
 }
