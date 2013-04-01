@@ -139,13 +139,13 @@ public class ERDDelayedNonNullConditionalAssignment extends ERDDelayedAssignment
 	 * method is called each time this Assignment is resolved from the rule
 	 * firing cache. For the non-null conditional the dictionary key
 	 * 'nonNullKeyPath' is checked against the current context. If the key path
-	 * is indeed non-null then the object returned by the dictionarykey
+	 * is indeed non-null then the object returned by the dictionary key
 	 * 'trueValue' will be returned otherwise the object returned by the
-	 * dictionarykey 'falseValue' will be returned.
+	 * dictionary key 'falseValue' will be returned.
 	 * 
 	 * @param c
 	 *            current D2W context
-	 * @return Either the 'trueValeue' or 'falseValue' depending on if the key
+	 * @return Either the 'trueValue' or 'falseValue' depending on if the key
 	 *         path is non-null or null.
 	 */
 	@Override
