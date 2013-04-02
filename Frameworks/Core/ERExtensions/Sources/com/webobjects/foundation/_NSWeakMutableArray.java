@@ -22,7 +22,7 @@ public class _NSWeakMutableArray extends _NSWeakMutableCollection implements Ser
 	static {
 		serialPersistentFields = (new ObjectStreamField[] { new ObjectStreamField("objects", ((Object) (_NSUtilities._NoObjectArray)).getClass()) });
 	}
-	public static final Class _CLASS = _NSUtilities._classWithFullySpecifiedName("com.webobjects.foundation._NSWeakMutableArray");
+	public static final Class<?> _CLASS = _NSUtilities._classWithFullySpecifiedName("com.webobjects.foundation._NSWeakMutableArray");
 
 	static final long serialVersionUID = -2060217327L;
 

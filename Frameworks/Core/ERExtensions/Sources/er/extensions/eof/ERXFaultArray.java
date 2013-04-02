@@ -137,14 +137,13 @@ public class ERXFaultArray<T extends EOEnterpriseObject> extends NSArray<T> {
 			public void remove() {
 				throw new UnsupportedOperationException();
 			}
-			
 		};
 	}
 	
 	@Override
-	public Enumeration objectEnumerator() {
+	public Enumeration<T> objectEnumerator() {
 		return new Enumeration<T>() {
-			
+
 			int index = 0;
 
 			public boolean hasMoreElements() {
@@ -154,7 +153,6 @@ public class ERXFaultArray<T extends EOEnterpriseObject> extends NSArray<T> {
 			public T nextElement() {
 				return objectAtIndex(index++);
 			}
-			
 		};
 	}
 	
@@ -175,8 +173,8 @@ public class ERXFaultArray<T extends EOEnterpriseObject> extends NSArray<T> {
 	}
 	
 	@Override
-	protected Object[] _objects() {
-		Object[] result = new Object[count()];
+	protected T[] _objects() {
+		T[] result = (T[]) new Object[count()];
 		for (int i = 0; i < count(); i++) {
 			result[i] = objectAtIndex(i);
 		}
@@ -189,7 +187,7 @@ public class ERXFaultArray<T extends EOEnterpriseObject> extends NSArray<T> {
 	
 	@Override
 	public Object clone() {
-		ERXFaultArray other = new ERXFaultArray(_editingContext, NSArray.EmptyArray);
+		ERXFaultArray<T> other = new ERXFaultArray<T>(_editingContext, NSArray.EmptyArray);
 		other._array = _array;
 		return other;
 	}

@@ -3,7 +3,6 @@ package com.webobjects.foundation;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.ObjectStreamException;
 import java.io.ObjectStreamField;
 import java.io.Serializable;
 import java.util.Collection;
@@ -38,7 +37,7 @@ import java.util.Set;
  */
 public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NSKeyValueCoding, NSKeyValueCodingAdditions, _NSFoundationCollection, Map<K, V> {
   
-  static final long serialVersionUID = 2886170486405617806L;
+	private static final long serialVersionUID = 2886170486405617806L;
 
 	public class _JavaNSDictionaryMapEntry<P, Q> implements java.util.Map.Entry<P, Q> {
 
@@ -50,11 +49,13 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 			return _entryValue;
 		}
 
+		@SuppressWarnings("unchecked")
 		public Q setValue(Q value) {
 			return (Q)NSDictionary.this.put((K)getKey(), (V)value);
 		}
 
 		@Override
+		@SuppressWarnings("unchecked")
 		public boolean equals(Object o) {
 			return _entryKey == null && ((Map.Entry<P, Q>) o).getKey() == null && getKey().equals(((Map.Entry<P, Q>) o).getKey()) && getValue().equals(((Map.Entry<P, Q>) o).getValue());
 		}
@@ -144,11 +145,13 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 					_flags = null;
 				}
 				else {
-					Object[] oldObjects = _objects;
-					Object[] oldKeys = _keys;
+					V[] oldObjects = _objects;
+					K[] oldKeys = _keys;
 					byte[] oldFlags = _flags;
-					Object[] newObjects = new Object[newSize];
-					Object[] newKeys = new Object[newSize];
+					@SuppressWarnings("unchecked")
+					V[] newObjects = (V[]) new Object[newSize];
+					@SuppressWarnings("unchecked")
+					K[] newKeys = (K[]) new Object[newSize];
 					byte[] newFlags = new byte[newSize];
 					for (int i = 0; i < oldSize; i++) {
 						if ((oldFlags[i] & 0xffffffc0) == -128) {
@@ -321,16 +324,18 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		}
 	}
 
-	protected Object[] keysNoCopy() {
+	@SuppressWarnings("unchecked")
+	protected K[] keysNoCopy() {
 		if (_keysCache == null) {
-			_keysCache = _count != 0 ? _NSCollectionPrimitives.keysInHashTable(_keys, _objects, _flags, _capacity, _hashtableBuckets) : _NSCollectionPrimitives.EmptyArray;
+			_keysCache = (K[]) (_count != 0 ? _NSCollectionPrimitives.keysInHashTable(_keys, _objects, _flags, _capacity, _hashtableBuckets) : _NSCollectionPrimitives.EmptyArray);
 		}
 		return _keysCache;
 	}
 
-	protected Object[] objectsNoCopy() {
+	@SuppressWarnings("unchecked")
+	protected V[] objectsNoCopy() {
 		if (_objectsCache == null) {
-			_objectsCache = _count != 0 ? _NSCollectionPrimitives.valuesInHashTable(_keys, _objects, _flags, _capacity, _hashtableBuckets) : _NSCollectionPrimitives.EmptyArray;
+			_objectsCache = (V[]) (_count != 0 ? _NSCollectionPrimitives.valuesInHashTable(_keys, _objects, _flags, _capacity, _hashtableBuckets) : _NSCollectionPrimitives.EmptyArray);
 			_entrySetCache = null;
 		}
 		return _objectsCache;
@@ -345,42 +350,38 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 	}
 
 	public Hashtable<K, V> hashtable() {
-		Object[] keys = keysNoCopy();
+		K[] keys = keysNoCopy();
 		int c = keys.length;
 		Hashtable<K, V> hashtable = new Hashtable<K, V>(c <= 0 ? 1 : c);
 		for (int i = 0; i < c; i++) {
-			hashtable.put((K)keys[i], objectForKey(keys[i]));
+			hashtable.put(keys[i], objectForKey(keys[i]));
 		}
-
 		return hashtable;
 	}
 
 	public HashMap<K, V> hashMap() {
-		Object[] keys = keysNoCopy();
+		K[] keys = keysNoCopy();
 		int c = keys.length;
 		HashMap<K, V> map = new HashMap<K, V>(c <= 0 ? 1 : c);
 		for (int i = 0; i < c; i++) {
-			map.put((K)keys[i], objectForKey(keys[i]));
+			map.put(keys[i], objectForKey(keys[i]));
 		}
-
 		return map;
 	}
 
 	public NSArray<K> allKeysForObject(Object object) {
 		if (object != null) {
-			Object[] keys = keysNoCopy();
+			K[] keys = keysNoCopy();
 			NSMutableArray<K> array = new NSMutableArray<K>(keys.length);
 			for (int i = 0; i < keys.length; i++) {
 				Object compareObject = objectForKey(keys[i]);
 				if (object == compareObject || object.equals(compareObject)) {
-					array.addObject((K) keys[i]);
+					array.addObject(keys[i]);
 				}
 			}
-
 			return array;
 		}
-		
-		return NSArray.EmptyArray;
+		return NSArray.emptyArray();
 	}
 
 	public NSArray<V> objectsForKeys(NSArray<? extends K> keys, V notFoundMarker) {
@@ -397,11 +398,9 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 					array.addObject(notFoundMarker);
 				}
 			}
-
 			return array;
 		}
-		
-		return NSArray.EmptyArray;
+		return NSArray.emptyArray();
 	}
 
 	private boolean _equalsDictionary(NSDictionary<?, ?> otherDictionary) {
@@ -417,7 +416,6 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 				return false;
 			}
 		}
-
 		return true;
 	}
 
@@ -428,10 +426,10 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		if (otherDictionary == this) {
 			return true;
 		}
-
 		return _equalsDictionary(otherDictionary);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean equals(Object object) {
 		if (object == this) {
@@ -444,24 +442,20 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		return false;
 	}
 
-	@SuppressWarnings("unchecked")
 	public NSArray<K> allKeys() {
-		return new NSArray(keysNoCopy());
+		return new NSArray<K>(keysNoCopy());
 	}
 
-	@SuppressWarnings("unchecked")
 	public NSArray<V> allValues() {
-		return new NSArray(objectsNoCopy());
+		return new NSArray<V>(objectsNoCopy());
 	}
 
-	@SuppressWarnings("unchecked")
 	public Enumeration<K> keyEnumerator() {
-		return new _NSCollectionEnumerator(_keys, _flags, _count);
+		return new _NSCollectionEnumerator<K>(_keys, _flags, _count);
 	}
 
-	@SuppressWarnings("unchecked")
 	public Enumeration<V> objectEnumerator() {
-		return new _NSCollectionEnumerator(_objects, _flags, _count);
+		return new _NSCollectionEnumerator<V>(_objects, _flags, _count);
 	}
 
 	public Object valueForKey(String key) {
@@ -489,7 +483,6 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		if (flattenedKeyPresent != null) {
 			return flattenedKeyPresent;
 		}
-
 		return NSKeyValueCodingAdditions.DefaultImplementation.valueForKeyPath(this, keyPath);
 	}
 
@@ -497,10 +490,11 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		NSKeyValueCodingAdditions.DefaultImplementation.takeValueForKeyPath(this, value, keyPath);
 	}
 
-	public Class classForCoder() {
+	public Class<?> classForCoder() {
 		return _CLASS;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static final <K, V> NSDictionary<K, V> emptyDictionary() {
 		return NSDictionary.EmptyDictionary;
 	}
@@ -513,7 +507,6 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 			keys[i] = coder.decodeObject();
 			objects[i] = coder.decodeObject();
 		}
-
 		return new NSDictionary<Object, Object>(objects, keys);
 	}
 
@@ -526,7 +519,6 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 				coder.encodeObject(keys[i]);
 				coder.encodeObject(objectForKey(keys[i]));
 			}
-
 		}
 	}
 
@@ -604,11 +596,10 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		initFromKeyValues(values, keys, CheckForNull);
 	}
 
-	private Object readResolve() throws ObjectStreamException {
+	private Object readResolve() {
 		if (getClass() == _CLASS && count() == 0) {
 			return EmptyDictionary;
 		}
-		
 		return this;
 	}
 
@@ -650,12 +641,12 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 
 	public Set<K> keySet() {
 		if (_keySetCache == null) {
-			Object[] currKeys = keysNoCopy();
+			K[] currKeys = keysNoCopy();
 			if (currKeys != null && currKeys.length > 0) {
-				_keySetCache = new NSSet<K>((K[]) currKeys);
+				_keySetCache = new NSSet<K>(currKeys);
 			}
 			else {
-				_keySetCache = NSSet.EmptySet;
+				_keySetCache = NSSet.emptySet();
 			}
 		}
 		return _keySetCache;
@@ -669,16 +660,16 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		if (_entrySetCache == null) {
 			_entrySetCache = _initMapEntrySet();
 		}
-		
 		return _entrySetCache;
 	}
 
 	private Set<Map.Entry<K, V>> _initMapEntrySet() {
-		Object[] keys = keysNoCopy();
+		K[] keys = keysNoCopy();
 		int length = keys.length;
+		@SuppressWarnings("unchecked")
 		_JavaNSDictionaryMapEntry<K, V>[] set = new _JavaNSDictionaryMapEntry[length];
 		for (int i = 0; i < length; i++) {
-			K key = (K) keys[i];
+			K key = keys[i];
 			V object = objectForKey(key);
 			_JavaNSDictionaryMapEntry<K, V> current = new _JavaNSDictionaryMapEntry<K, V>(key, object);
 			set[i] = current;
@@ -687,20 +678,21 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		return new NSSet<Map.Entry<K, V>>(set);
 	}
 
-	public static final Class _CLASS = _NSUtilitiesExtra._classWithFullySpecifiedNamePrime("com.webobjects.foundation.NSDictionary");
-	public static final Class _MAP_ENTRY_CLASS = _NSUtilitiesExtra._classWithFullySpecifiedNamePrime("com.webobjects.foundation.NSDictionary$_JavaNSDictionaryMapEntry");
-	public static final NSDictionary EmptyDictionary = new NSDictionary();
+	public static final Class<?> _CLASS = _NSUtilitiesExtra._classWithFullySpecifiedNamePrime("com.webobjects.foundation.NSDictionary");
+	public static final Class<?> _MAP_ENTRY_CLASS = _NSUtilitiesExtra._classWithFullySpecifiedNamePrime("com.webobjects.foundation.NSDictionary$_JavaNSDictionaryMapEntry");
+	@SuppressWarnings("rawtypes")
+	public static final NSDictionary EmptyDictionary = new NSDictionary<Object, Object>();
     private static final String SerializationKeysFieldKey = "keys";
     private static final String SerializationValuesFieldKey = "objects";
 	private static final Class<?> _objectArrayClass = ((Object) (new Object[0])).getClass();
 	protected transient int _capacity;
 	protected transient int _hashtableBuckets;
 	protected transient int _count;
-	protected Object[] _objects;
-	protected transient Object[] _objectsCache;
+	protected V[] _objects;
+	protected transient V[] _objectsCache;
 	protected transient byte[] _flags;
-	protected Object[] _keys;
-	protected transient Object[] _keysCache;
+	protected K[] _keys;
+	protected transient K[] _keysCache;
 	protected transient int _hashCache;
 	protected transient int _deletionLimit;
 	protected static int _NSDictionaryClassHashCode = _CLASS.hashCode();

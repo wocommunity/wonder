@@ -98,7 +98,7 @@ public class NSMutableSet<E> extends NSSet<E> {
 	}
 
 	public E removeObject(Object object) {
-		Object result = null;
+		E result = null;
 		if (object != null && count() != 0) {
 			result = _NSCollectionPrimitives.removeValueInHashTable(object, _objects, _objects, _flags);
 			if (result != null) {
@@ -110,12 +110,13 @@ public class NSMutableSet<E> extends NSSet<E> {
 				_objectsCache = null;
 			}
 		}
-		return (E) result;
+		return result;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void removeAllObjects() {
 		if (count() != 0) {
-			_objects = new Object[_hashtableBuckets];
+			_objects = (E[]) new Object[_hashtableBuckets];
 			_flags = new byte[_hashtableBuckets];
 			_setCount(0);
 			_objectsCache = null;
@@ -127,7 +128,7 @@ public class NSMutableSet<E> extends NSSet<E> {
 		if (otherSet != this) {
 			removeAllObjects();
 			if (otherSet != null) {
-				E[] objects = (E[])otherSet.objectsNoCopy();
+				E[] objects = otherSet.objectsNoCopy();
 				for (int i = 0; i < objects.length; i++) {
 					addObject(objects[i]);
 				}
@@ -138,7 +139,7 @@ public class NSMutableSet<E> extends NSSet<E> {
 
 	public void addObjectsFromArray(NSArray<? extends E> array) {
 		if (array != null) {
-			E[] objects = (E[])array.objectsNoCopy();
+			E[] objects = array.objectsNoCopy();
 			for (int i = 0; i < objects.length; i++) {
 				addObject(objects[i]);
 			}
@@ -152,7 +153,7 @@ public class NSMutableSet<E> extends NSSet<E> {
 				removeAllObjects();
 				return;
 			}
-			E[] objects = (E[])objectsNoCopy();
+			E[] objects = objectsNoCopy();
 			for (int i = 0; i < objects.length; i++) {
 				if (otherSet.member(objects[i]) == null) {
 					removeObject(objects[i]);
@@ -183,7 +184,7 @@ public class NSMutableSet<E> extends NSSet<E> {
 		if (otherSet == null || otherSet.count() == 0 || otherSet == this) {
 			return;
 		}
-		E[] objects = (E[])otherSet.objectsNoCopy();
+		E[] objects = otherSet.objectsNoCopy();
 		for (int i = 0; i < objects.length; i++) {
 			addObject(objects[i]);
 		}
@@ -200,12 +201,13 @@ public class NSMutableSet<E> extends NSSet<E> {
 		return new NSSet<E>(this);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public NSMutableSet<E> mutableClone() {
 		return (NSMutableSet<E>) clone();
 	}
 
-	public static final Class _CLASS = _NSUtilities._classWithFullySpecifiedName("com.webobjects.foundation.NSMutableSet");
+	public static final Class<?> _CLASS = _NSUtilities._classWithFullySpecifiedName("com.webobjects.foundation.NSMutableSet");
 
 	@Override
 	public boolean add(E o) {
@@ -232,7 +234,6 @@ public class NSMutableSet<E> extends NSSet<E> {
 				updated = true;
 			}
 		}
-
 		return updated;
 	}
 
@@ -290,9 +291,9 @@ public class NSMutableSet<E> extends NSSet<E> {
 
         public E next() {
             try {
-                Object next = objectsNoCopy()[cursor];
+                E next = objectsNoCopy()[cursor];
                 lastRet = cursor++;
-                return (E)next;
+                return next;
             } catch (IndexOutOfBoundsException e) {
                 throw new NoSuchElementException();
             }

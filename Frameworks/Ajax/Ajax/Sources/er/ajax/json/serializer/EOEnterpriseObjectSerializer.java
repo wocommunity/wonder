@@ -4,6 +4,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.WeakHashMap;
 
 import org.jabsorb.JSONSerializer;
@@ -58,9 +59,9 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 	protected static final NSMutableDictionary<String, NSArray<String>> writableAttributeNames = new NSMutableDictionary<String, NSArray<String>>();
 	protected static final NSMutableDictionary<String, NSArray<String>> includedRelationshipNames = new NSMutableDictionary<String, NSArray<String>>();
 
-	private static Class[] _serializableClasses = new Class[] { EOEnterpriseObject.class };
+	private static Class<?>[] _serializableClasses = new Class[] { EOEnterpriseObject.class };
 
-	private static Class[] _JSONClasses = new Class[] { JSONObject.class };
+	private static Class<?>[] _JSONClasses = new Class[] { JSONObject.class };
 
 	private EOEditingContextFactory _editingContextFactory;
 
@@ -79,15 +80,15 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 		}
 	}
 
-	public Class[] getSerializableClasses() {
+	public Class<?>[] getSerializableClasses() {
 		return _serializableClasses;
 	}
 
-	public Class[] getJSONClasses() {
+	public Class<?>[] getJSONClasses() {
 		return _JSONClasses;
 	}
 
-	protected boolean _canSerialize(Class clazz, Class jsonClazz) {
+	protected boolean _canSerialize(Class<?> clazz, Class<?> jsonClazz) {
 		return super.canSerialize(clazz, jsonClazz);
 	}
 
@@ -156,8 +157,8 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 				if (eo != null) {
 					NSArray<String> attributeNames = _writableAttributeNames(eo);
 					NSArray<String> relationshipNames = _includedRelationshipNames(eo);
-					for (Iterator iterator = eoDict.keys(); iterator.hasNext();) {
-						String key = (String) iterator.next();
+					for (Iterator<String> iterator = eoDict.keys(); iterator.hasNext();) {
+						String key = iterator.next();
 						if(!("javaClass".equals(key) || "gid".equals(key))) {
 							Object value = eoDict.get(key);
 							Object obj = ser.unmarshall(state, null, value);
@@ -242,8 +243,8 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 			NSArray<String> attributeNames = _readableAttributeNames(source);
 			NSArray<String> relationshipNames = _includedRelationshipNames(source);
 			
-			for (Enumeration e = attributeNames.objectEnumerator(); e.hasMoreElements();) {
-				String key = (String) e.nextElement();
+			for (Enumeration<String> e = attributeNames.objectEnumerator(); e.hasMoreElements();) {
+				String key = e.nextElement();
 				Object jsonValue;
 				if(cd.toManyRelationshipKeys().containsObject(key)) {
 					if (relationshipNames.containsObject(key)) {
@@ -481,12 +482,11 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public static EOEditingContext editingContextForKey(String key) {
 		Map<EOEditingContext, String> contexts = contexts();
 		synchronized (contexts) {
-			for (Iterator iterator = contexts.entrySet().iterator(); iterator.hasNext();) {
-				Map.Entry<EOEditingContext, String> entry = (Map.Entry<EOEditingContext, String>) iterator.next();
+			for (Iterator<Entry<EOEditingContext, String>> iterator = contexts.entrySet().iterator(); iterator.hasNext();) {
+				Map.Entry<EOEditingContext, String> entry = iterator.next();
 				if(entry.getValue().equals(key)) {
 					return entry.getKey();
 				}
@@ -494,5 +494,4 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 			return null;
 		}
 	}
-	
 }

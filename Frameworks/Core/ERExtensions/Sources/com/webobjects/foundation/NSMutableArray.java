@@ -46,16 +46,15 @@ import java.util.Vector;
  */
 public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
 
-  static final long serialVersionUID = -3909373569895711876L;
-  
-	public static final Class _CLASS = _NSUtilitiesExtra._classWithFullySpecifiedNamePrime("com.webobjects.foundation.NSMutableArray");
-    
+	private static final long serialVersionUID = -3909373569895711876L;
+
+	public static final Class<?> _CLASS = _NSUtilitiesExtra._classWithFullySpecifiedNamePrime("com.webobjects.foundation.NSMutableArray");
 
     public static final Object ERX_MARKER = "Wonder";
 
     protected transient int modCount = 0;
 	protected transient int _capacity;
-	protected transient Object[] _objectsCache;
+	protected transient E[] _objectsCache;
 	protected transient int _count;
 
     public NSMutableArray() {
@@ -108,6 +107,7 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
 		super._initializeWithCapacity(capacity);
 	}
 	
+	@SuppressWarnings("unchecked")
 	protected void _ensureCapacity(int capacity) {
 		if (capacity > _capacity) {
 			if (capacity == 0) {
@@ -121,8 +121,8 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
 						capacity = testCapacity;
 					}
 				}
-				Object[] objs = _objects();
-				objs = objs != null ? _NSCollectionPrimitives.copyArray(objs, capacity) : new Object[capacity];
+				E[] objs = _objects();
+				objs = objs != null ? _NSCollectionPrimitives.copyArray(objs, capacity) : (E[]) new Object[capacity];
 				_setObjects(objs);
 			}
 			_capacity = capacity;
@@ -162,11 +162,11 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
     }
     
     @Override
- 	protected Object[] objectsNoCopy() {
+ 	protected E[] objectsNoCopy() {
 		if (_objectsCache == null) {
 			int count = count();
 			if (count == 0) {
-				_objectsCache = _NSCollectionPrimitives.EmptyArray;
+				_objectsCache = _NSCollectionPrimitives.emptyArray();
 			}
 			else if (_count == _capacity) {
 				_objectsCache = _objects();
@@ -237,14 +237,14 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
         int count = count();
         if (index >= 0 && index < count) {
             count--;
-            Object[] objs = _objects();
-            Object result = objs[index];
+            E[] objs = _objects();
+            E result = objs[index];
             if (index < count)
                 System.arraycopy(objs, index + 1, objs, index, count - index);
             objs[count] = null;
             _setCount(count);
             clearCache();
-            return (E) result;
+            return result;
         }
         if (count == 0)
             throw new IndexOutOfBoundsException("Array is empty");
@@ -252,9 +252,10 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
         throw new IndexOutOfBoundsException("Index (" + index + ") out of bounds [0, " + (count - 1) + "]");
     }
 
-    public void removeAllObjects() {
+    @SuppressWarnings("unchecked")
+	public void removeAllObjects() {
         if (count() > 0) {
-			_setObjects(new Object[_capacity]);
+			_setObjects((E[]) new Object[_capacity]);
             _setCount(0);
             clearCache();
         }
@@ -274,7 +275,7 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
 
     public void addObjectsFromArray(NSArray<? extends E> otherArray) {
         if (otherArray != null)
-            addObjects((E[])otherArray.objectsNoCopy());
+			addObjects(otherArray.objectsNoCopy());
     }
 
     public void replaceObjectsInRange(NSRange range, NSArray<? extends E> otherArray, NSRange otherRange) {
@@ -407,7 +408,8 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
         return new NSArray<E>(this);
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public NSMutableArray<E> mutableClone() {
         return (NSMutableArray<E>) clone();
     }
@@ -462,11 +464,11 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
         }
         int count = count();
         if (index >= 0 && index < count) {
-            Object[] objs = _objects();
-            Object result = objs[index];
+            E[] objs = _objects();
+            E result = objs[index];
             objs[index] = object;
             clearCache();
-            return (E) result;
+            return result;
         }
         
         throw new IllegalArgumentException("Index (" + index + ") out of bounds [0, " + (count - 1) + "]");
@@ -514,7 +516,8 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
     /**
      * Bugfix for the broken implementation in NSArray.
      */
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public <T> T[] toArray(T[] array) {
     	int i = size();
     	if (array.length < i) {
@@ -553,7 +556,8 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
         return true;
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public boolean addAll(Collection<? extends E> collection) {
         addObjects((E[]) collection.toArray());
         return true;
@@ -709,7 +713,8 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
             return cursor - 1;
         }
 
-        public void set(Object o) {
+        @SuppressWarnings("unchecked")
+		public void set(Object o) {
             if (lastRet == NotFound)
                 throw new IllegalStateException();
             checkForComodification();
@@ -722,7 +727,8 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
             }
         }
 
-        public void add(Object o) {
+        @SuppressWarnings("unchecked")
+		public void add(Object o) {
             checkForComodification();
 
             try {
@@ -735,11 +741,9 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
         }
     }
 
-    @SuppressWarnings("cast")
     @Override
     public List<E> subList(int fromIndex, int toIndex) {
-        return (this instanceof RandomAccess ? new RandomAccessSubList<E>(this,
-                fromIndex, toIndex) : new SubList<E>(this, fromIndex, toIndex));
+		return new RandomAccessSubList<E>(this, fromIndex, toIndex);
     }
 
     protected void removeRange(int fromIndex, int toIndex) {
