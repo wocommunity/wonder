@@ -1,8 +1,7 @@
-#Tue Jul 29 15:47:25 PDT 2008
 eclipse.preferences.version=1
 editor_save_participant_org.eclipse.jdt.ui.postsavelistener.cleanup=false
 formatter_profile=_Project Wonder
-formatter_settings_version=10
+formatter_settings_version=12
 org.eclipse.jdt.ui.ignorelowercasenames=true
 org.eclipse.jdt.ui.importorder=java;javax;org;com;
 org.eclipse.jdt.ui.ondemandthreshold=99
