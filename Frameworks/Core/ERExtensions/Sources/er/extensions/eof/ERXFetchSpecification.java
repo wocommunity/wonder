@@ -45,7 +45,7 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	private NSRange _fetchRange;
 
 	public static EOFetchSpecification fetchSpec(String entityName, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings, boolean usesDistinct, boolean isDeep, NSDictionary hints) {
-		return (EOFetchSpecification)(new ERXFetchSpecification(entityName, qualifier, sortOrderings, usesDistinct, isDeep, hints));
+		return new ERXFetchSpecification(entityName, qualifier, sortOrderings, usesDistinct, isDeep, hints);
 	}
 
 	public ERXFetchSpecification(String entityName, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings, boolean usesDistinct, boolean isDeep, NSDictionary hints) {

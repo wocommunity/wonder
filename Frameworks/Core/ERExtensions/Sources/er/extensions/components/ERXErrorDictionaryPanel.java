@@ -8,14 +8,16 @@ package er.extensions.components;
 
 import java.util.Enumeration;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXExtensions;
 import er.extensions.eof.ERXEnterpriseObject;
+import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 /**
@@ -89,12 +91,10 @@ public class ERXErrorDictionaryPanel extends ERXStatelessComponent {
     private final static String eliminable = "Could not save your changes: null";
     private final static String couldNotSave = "Could not save your changes: ";
     public static String massageErrorMessage(String initialMessage, String displayErrorKey) {
-        String result=ERXExtensions.substituteStringByStringInString("EOValidationException:",
-                                                                    "",
-                                                                    initialMessage);
-        if (displayErrorKey!=null) result=ERXExtensions.substituteStringByStringInString(ERXEnterpriseObject.KEY_MARKER,
-                                                                                        displayErrorKey,
-                                                                                        result);
+        String result = StringUtils.replace(initialMessage, "EOValidationException:", "");
+        if (displayErrorKey!=null) {
+        	result = StringUtils.replace(result, ERXEnterpriseObject.KEY_MARKER, displayErrorKey);
+        }
         
         if (result!=null) {
             if (result.endsWith("is not allowed to be null.") ||
