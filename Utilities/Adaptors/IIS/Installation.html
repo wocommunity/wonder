@@ -6,7 +6,7 @@
 
 <BR>
 <CENTER>
-<H2>Microsoft IIS Web Server ISAPI Adaptor for WebObjects</H2>
+<H2>Microsoft IIS 5-6 Web Server ISAPI Adaptor for WebObjects</H2>
 </CENTER>
 <HR>
 <P>
@@ -14,6 +14,7 @@ Please familiarize yourself with your WebServer's documentation <A HREF="http://
 </P>
 <P>
 To install this adaptor, copy the file <CODE>WebObjects.dll</CODE> to your web server's scripts directory.  The adaptor will be loaded into the server the first time a request of the form <CODE>http://.../scripts/WebObjects.dll</CODE> is made.  It will remain active in the server until you stop the server.
+On IIS6 take care to register WebObjects.dll as registered WebServer extension.
 </P>
 <P>
 ISAPI doesn't provide any specific way to pass information into the adaptor, so the Registry is used. Modifying the Registry should only be done by an experienced Windows NT/2000 Adminstrator. To do so, from the Start Menu, choose Run ... and type in "regedit" and return.
@@ -71,5 +72,15 @@ Here are some other registry entries recognized by the ISAPI adaptor. The values
 	"DOCUMENT_ROOT".
 </PRE>
 Setting WOUSERNAME to "public" allows anyone to see the WOAdaptorInfo page.
+
+<H2>Microsoft IIS 7.x Web Server ISAPI Adaptor for WebObjects</H2>
+
+Additionally to the tasks mentioned above, you have to take care that ISAPI-extensions are installed.
+WebObjects.dll has to be registered unter CGI-/ISAPI-Restrictions. Unter Handler-Mappings, enable DLL-Exection.
+
+By using MINGW you can build WebObjects-Adaptor as 32bit and as 64bit-DLL.
+
+The 32-Bit-DLL will run fine on 32-Bit IIS and 64-Bit-DLL will run fine on 64-Bit IIS.<br/>
+When you intend to use the 32-Bit-DLL with an 64-Bit IIS, take care to configure the application pool to run in 32 bit mode and configure all registry keys named above in the Wow6432Node.
 </BODY>
 </HTML>

@@ -112,9 +112,9 @@ public class WOSortOrder extends WOComponent {
         int anIndex = 0;
         EOSortOrdering aSortOrdering = null;
         WODisplayGroup aDisplayGroup = displayGroup();
-        NSArray sortOrderings = aDisplayGroup.sortOrderings();
+        NSArray<EOSortOrdering> sortOrderings = aDisplayGroup.sortOrderings();
         if (sortOrderings!=null) {
-            NSMutableArray aSortOrderingArray = sortOrderings.mutableClone();
+            NSMutableArray<EOSortOrdering> aSortOrderingArray = sortOrderings.mutableClone();
             Enumeration anEnumerator = aSortOrderingArray.objectEnumerator();
             while (anEnumerator.hasMoreElements()) {
                 aSortOrdering = (EOSortOrdering) anEnumerator.nextElement();
@@ -131,12 +131,12 @@ public class WOSortOrder extends WOComponent {
     protected void _makePrimarySortOrderingWithSelector(NSSelector aSelector) {
         String aKey = key();
         WODisplayGroup aDisplayGroup = displayGroup();
-        NSArray sortOrderings = aDisplayGroup.sortOrderings();
-        NSMutableArray aSortOrderingArray;
+        NSArray<EOSortOrdering> sortOrderings = aDisplayGroup.sortOrderings();
+        NSMutableArray<EOSortOrdering> aSortOrderingArray;
         if (sortOrderings!=null) {
-            aSortOrderingArray = new NSMutableArray(sortOrderings);
+            aSortOrderingArray = new NSMutableArray<EOSortOrdering>(sortOrderings);
         } else {
-            aSortOrderingArray = new NSMutableArray();
+            aSortOrderingArray = new NSMutableArray<EOSortOrdering>();
         }
         EOSortOrdering aNewSortOrdering = EOSortOrdering.sortOrderingWithKey(aKey, aSelector);
         aSortOrderingArray.insertObjectAtIndex(aNewSortOrdering, 0);
