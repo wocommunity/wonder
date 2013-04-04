@@ -137,7 +137,7 @@ public class ERXDirectAction extends WODirectAction {
     }
     
     /**
-     * Direct access to reset the stats by giving over the password in the "pw" parameter. This
+     * Direct access to reset the stats by giving over the password in the "pw" parameter.  This
      * calls ERXStats.reset();
      * 
      * @return statistics page

@@ -32,6 +32,7 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
@@ -185,7 +186,9 @@ public class ERXStringUtilities {
 	 * @param b
 	 *            second string
 	 * @return the distance between the two strings
+	 * @deprecated use {@link StringUtils#getLevenshteinDistance(String, String)} instead
 	 */
+	@Deprecated
 	public static int levenshteinDistance(String a, String b) {
 		int n = a.length();
 		int m = b.length();
@@ -685,7 +688,9 @@ public class ERXStringUtilities {
      * @param newString to be inserted
      * @param buffer string to have the replacement done on it
      * @return string after having all of the replacement done.
+     * @deprecated use {@link StringUtils#replace(String, String, String)} instead
      */
+    @Deprecated
     public static String replaceStringByStringInString(String old, String newString, String buffer) {
         int begin, end;
         int oldLength = old.length();
@@ -720,7 +725,9 @@ public class ERXStringUtilities {
      * @param replacementString the string with which to replace stringToReplace.
      * @return sourceString with stringToReplace replaced with replacementString if it
      *         existed in sourceString.  otherwise, sourceString is returned.
+     * @deprecated use {@link StringUtils#replaceOnce(String, String, String)} instead
      */
+    @Deprecated
     public static String stringByReplacingFirstOccurrenceOfStringWithString(final String sourceString, final String stringToReplace, final String replacementString) {
         final int indexOfMatch = sourceString.indexOf(stringToReplace);
         final String result;
@@ -1562,24 +1569,24 @@ public class ERXStringUtilities {
     }
 
     /**
-     * Returns a string from the input stream using the default
-     * encoding.
-     * @param in stream to read
-     * @return string representation of the stream.
+         * Returns a string from the input stream using the default
+          * encoding.
+          * @param in stream to read
+          * @return string representation of the stream.
      * @throws IOException if things go wrong
-     */
+      */
      public static String stringFromInputStream(InputStream in) throws IOException {
          return new String(ERXFileUtilities.bytesFromInputStream(in));
      }
 
      /**
       * Returns a string from the input stream using the default
-      * encoding.
-      * @param in stream to read
-      * @param encoding to be used, null will use the default
-      * @return string representation of the stream.
+       * encoding.
+       * @param in stream to read
+       * @param encoding to be used, null will use the default
+       * @return string representation of the stream.
       * @throws IOException if things go wrong
-      */
+   */
      public static String stringFromInputStream(InputStream in, String encoding) throws IOException {
          return new String(ERXFileUtilities.bytesFromInputStream(in), encoding);
      }
@@ -2337,9 +2344,9 @@ public class ERXStringUtilities {
 	 * @return the string without HTML characters in it
 	 */
 	public static String stripHtml(String str, boolean convertChars) {
-		String stripped = str;
-		if (stripped != null) {
-			stripped = stripped.replaceAll("<[^>]*>", " ");
+ 		String stripped = str;
+ 		if (stripped != null) {
+ 			stripped = stripped.replaceAll("<[^>]*>", " ");
 			if(convertChars) {
 				stripped = stripped.replaceAll("\\s+", " ");
 				stripped = stripped.replaceAll("&#8217;", "'");
@@ -2353,7 +2360,7 @@ public class ERXStringUtilities {
 				stripped = stripped.replaceAll("&#174;", "(C)");
 				stripped = stripped.replaceAll("&#174;", "(R)");
 				stripped = stripped.replaceAll("&#8482;", "(TM)");
-				stripped = stripped.trim();
+			stripped = stripped.trim();
 			}
 		}
 		return stripped;
@@ -2702,7 +2709,7 @@ public class ERXStringUtilities {
 		}
 		return sum % 10 == 0;
 	}
-	
+
 	/**
 	* Returns a string trimmed about at the max lenght you define without truncating the last word and adding "..." (if necessary)
 	* 

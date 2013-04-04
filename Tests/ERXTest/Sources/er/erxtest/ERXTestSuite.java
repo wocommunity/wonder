@@ -53,7 +53,7 @@ public class ERXTestSuite {
     suite.addTestSuite(er.extensions.formatters.ERXOrdinalDateFormatterTests.class);
     
     suite.addTestSuite(er.extensions.jdbc.MicrosoftSQLHelperTest.class);
-    
+
     suite.addTestSuite(er.extensions.net.ERXEmailValidatorTest.class);
 
     if (ERXTestCase.adaptorName().equals("Memory")) {
@@ -99,7 +99,7 @@ public class ERXTestSuite {
     suite.addTestSuite(er.chronic.HandlerTest.class);
     suite.addTestSuite(er.chronic.RepeaterWeekendTest.class);
     suite.addTestSuite(er.chronic.NumerizerTest.class);
-    
+
     suite.addTestSuite(er.extensions.crypting.TestBCrypt.class);
 
     return suite;

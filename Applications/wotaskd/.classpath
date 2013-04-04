@@ -13,5 +13,9 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="WOFramework/ERRest"/>
 	<classpathentry kind="con" path="WOFramework/JavaWOExtensions"/>
+	<classpathentry kind="lib" path="Libraries/bcprov-jdk15-140.jar"/>
+	<classpathentry kind="lib" path="Libraries/mina-core-2.0.4.jar"/>
+	<classpathentry kind="lib" path="Libraries/sshd-core-0.7.0.jar"/>
+	<classpathentry kind="lib" path="Libraries/sshd-pam-0.7.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

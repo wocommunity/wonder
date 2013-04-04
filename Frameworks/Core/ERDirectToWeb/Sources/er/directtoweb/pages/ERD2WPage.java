@@ -172,7 +172,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
 		public static final String firstResponderKey = "firstResponderKey";
         
     }
-    
+
     /** logging support */
     public final static Logger log = Logger.getLogger(ERD2WPage.class);
 
@@ -309,14 +309,14 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
 	@Override
     public void setObject(EOEnterpriseObject eo) {
         setEditingContext((eo != null) ? eo.editingContext() : null);
-        // for SmartAssignment
-        d2wContext().takeValueForKey(eo, Keys.object);
+
         /*
          * Storing the EO in the D2WComponent field prevents serialization. The
          * ec must be serialized before the EO. So we store the value in the
          * context instead.
+         * 
+         * also, for SmartAssignment
          */
-        //super.setObject(eo);
         d2wContext().takeValueForKey(eo, Keys.object);
     }
     
@@ -389,7 +389,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     protected NSMutableArray<String> keyPathsWithValidationExceptions = new NSMutableArray<String>();
 
     protected String errorMessage = "";
-    
+
     protected ValidationDelegate validationDelegate;
     
     protected boolean validationDelegateInited;
@@ -535,7 +535,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
             parent().validationFailedWithException(e, value, keyPath);
         }
     }
-    
+
     public ValidationDelegate validationDelegate() {
     	if(!validationDelegateInited && _localContext != null && shouldCollectValidationExceptions()) {
     		// initialize validation delegate

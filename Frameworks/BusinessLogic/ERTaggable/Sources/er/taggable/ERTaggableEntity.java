@@ -691,6 +691,23 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
    */
   @SuppressWarnings("unchecked")
   public NSArray<T> fetchTaggedWith(EOEditingContext editingContext, ERTag.Inclusion inclusion, int limit, Object tags, EOQualifier additionalQualifier) {
+	  return this.fetchTaggedWith(editingContext, inclusion, limit, tags, additionalQualifier, null);
+  }
+  
+  /**
+   * Fetches the sorted list of objects of this entity type that are tagged
+   * with the given tags. 
+   * 
+   * @param editingContext the editing context to fetch into
+   * @param tags the tags to search (String to tokenize, NSArray<String>, etc)
+   * @param inclusion find matches for ANY tags or ALL tags provided
+   * @param limit limit the number of results to be returned (-1 for unlimited)
+   * @param additionalQualifier an additional qualifier to chain in
+   * @param sortOrderings sort orderings for the fetch spec
+   * @return the array of matching eos
+   */
+  @SuppressWarnings("unchecked")
+  public NSArray<T> fetchTaggedWith(EOEditingContext editingContext, ERTag.Inclusion inclusion, int limit, Object tags, EOQualifier additionalQualifier, NSArray<EOSortOrdering> sortOrderings) {
     NSArray<String> tagNames = splitTagNames(tags);
     if (tagNames.count() == 0) {
       throw new IllegalArgumentException("No tags were passed in.");
@@ -702,7 +719,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
     if (additionalQualifier != null) {
       qualifier = ERXQ.and(qualifier, additionalQualifier);
     }
-    NSArray<EOSortOrdering> sortOrderings = null;
+    
     EOFetchSpecification fetchSpec = new EOFetchSpecification(_entity.name(), qualifier, sortOrderings);
 
     EOSQLExpression sqlExpression = sqlHelper.sqlExpressionForFetchSpecification(editingContext, fetchSpec, 0, limit);

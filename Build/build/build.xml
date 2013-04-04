@@ -1114,7 +1114,7 @@
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}" />
         </antcall>
     </target>
-    
+
     <target name="JavaNeo4JAdaptor.all">
         <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="" />

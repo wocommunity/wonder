@@ -10,7 +10,6 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WEditToOneRelationship;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOUtilities;
-import com.webobjects.eocontrol.EOEnterpriseObject;
 
 import er.extensions.foundation.ERXUtilities;
 

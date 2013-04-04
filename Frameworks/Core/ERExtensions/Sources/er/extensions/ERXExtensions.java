@@ -20,6 +20,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
@@ -229,17 +230,6 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 
     		ERXEntityClassDescription.registerDescription();
     		ERXPartialInitializer.registerModelGroupListener();
-    		if (!ERXProperties.webObjectsVersionIs52OrHigher()) {
-    			NSNotificationCenter.defaultCenter().addObserver(this,
-    					new NSSelector("sessionDidTimeOut", ERXConstant.NotificationClassArray),
-    					WOSession.SessionDidTimeOutNotification,
-    					null);
-    			NSNotificationCenter.defaultCenter().addObserver(this,
-    					new NSSelector("editingContextDidCreate",
-    							ERXConstant.NotificationClassArray),
-    							ERXEC.EditingContextDidCreateNotification,
-    							null);                    
-    		}
     	} catch (Exception e) {
     		throw NSForwardException._runtimeExceptionForThrowable(e);
     	}
@@ -367,7 +357,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     }
 
     /**
-     * This method is called every time the configuration file
+     * This method is called everytime the configuration file
      * is changed. This allows for turning SQL debugging on and
      * off at runtime.
      * @param n notification posted when the configuration file
@@ -631,7 +621,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param s2 to be inserted
      * @param s string to have the replacement done on it
      * @return string after having all of the replacement done.
-     * @deprecated use {@link er.extensions.foundation.ERXStringUtilities#replaceStringByStringInString(String, String, String)}
+     * @deprecated use {@link StringUtils#replace(String, String, String)} instead
      */
     @Deprecated
     public static String substituteStringByStringInString(String s1, String s2, String s) {
