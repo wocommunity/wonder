@@ -1023,7 +1023,7 @@ public class ERXFileUtilities {
                         if (deleteOriginals) {
                             renameTo(srcFile, dstFile);
                         } else {
-                            if (dstFile.exists() || dstFile.mkdirs())
+                            if (dstFile.mkdirs())
                                 copyFilesFromDirectory(srcFile, dstFile, deleteOriginals, replaceExistingFiles, recursiveCopy, filter);
                             else
                                 log.error("Error creating directories for destination \""+dstDirectory.getPath()+"\"");
