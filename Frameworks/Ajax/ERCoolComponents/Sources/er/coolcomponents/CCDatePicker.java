@@ -8,6 +8,7 @@ import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
+//import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSValidation.ValidationException;
 
@@ -138,22 +139,23 @@ public class CCDatePicker extends ERXStatelessComponent {
 	 */
 	public String dateFormatString() {
 		String result = dateformat();
-		result = StringUtils.replace("-", "-ds", result);
-		result = StringUtils.replace("%a", "-D", result);
-		result = StringUtils.replace("%A", "-l", result);
-		result = StringUtils.replace("%b", "-M", result);
-		result = StringUtils.replace("%B", "-F", result);
-		result = StringUtils.replace("%d", "-d", result);
-		result = StringUtils.replace("%e", "-j", result);
-		result = StringUtils.replace("%m", "-m", result);
-		result = StringUtils.replace("%y", "-y", result);
-		result = StringUtils.replace("%Y", "-Y", result);
-		result = StringUtils.replace("%w", "-w", result);
 		
-		result = StringUtils.replace(" ", "-sp", result);
-		result = StringUtils.replace(".", "-dt", result);
-		result = StringUtils.replace("/", "-sl", result);
-		result = StringUtils.replace(",", "-cc", result);
+		result = StringUtils.replace(result, "-", "-ds");
+		result = StringUtils.replace(result, "%a", "-D");
+		result = StringUtils.replace(result, "%A", "-l");
+		result = StringUtils.replace(result, "%b", "-M");
+		result = StringUtils.replace(result, "%B", "-F");
+		result = StringUtils.replace(result, "%d", "-d");
+		result = StringUtils.replace(result, "%e", "-j");
+		result = StringUtils.replace(result, "%m", "-m");
+		result = StringUtils.replace(result, "%y", "-y");
+		result = StringUtils.replace(result, "%Y", "-Y");
+		result = StringUtils.replace(result, "%w", "-w");
+		result = StringUtils.replace(result, " ", "-sp");
+		result = StringUtils.replace(result, ".", "-dt");
+		result = StringUtils.replace(result, "/", "-sl");
+		result = StringUtils.replace(result, ",", "-cc");
+
 		
 		if (result.indexOf("-") == 0) {
 			// strip off leading "-"
@@ -162,7 +164,6 @@ public class CCDatePicker extends ERXStatelessComponent {
 		
 //		NSLog.out.appendln("dateformat: " + result);
 		return result;
-		
 	}
 	
 	public String datePickerCreateScript() {
