@@ -142,8 +142,8 @@ public class AjaxAutoComplete extends AjaxComponent {
     	return indicator;
     }
     
-    protected NSDictionary createAjaxOptions() {
-      NSMutableArray ajaxOptionsArray = new NSMutableArray();
+    protected NSDictionary<String, String> createAjaxOptions() {
+      NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<AjaxOption>();
       ajaxOptionsArray.addObject(new AjaxOption("tokens", AjaxOption.STRING_ARRAY));
       ajaxOptionsArray.addObject(new AjaxOption("frequency", AjaxOption.NUMBER));
       ajaxOptionsArray.addObject(new AjaxOption("minChars", AjaxOption.NUMBER));
@@ -160,7 +160,7 @@ public class AjaxAutoComplete extends AjaxComponent {
       ajaxOptionsArray.addObject(new AjaxOption("partialChars", AjaxOption.NUMBER));
       ajaxOptionsArray.addObject(new AjaxOption("ignoreCase", AjaxOption.BOOLEAN));
       ajaxOptionsArray.addObject(new AjaxOption("activateOnFocus", AjaxOption.BOOLEAN));
-      NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
+      NSMutableDictionary<String, String> options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
       return options;
     }
    
@@ -179,7 +179,8 @@ public class AjaxAutoComplete extends AjaxComponent {
 				String listJS = null;
 				if (isLocalSharedList) {
 					String varName = (String) valueForBinding("localSharedVarName");
-					NSMutableDictionary userInfo = ERXWOContext.contextDictionary();
+					@SuppressWarnings("unchecked")
+					NSMutableDictionary<String, String> userInfo = ERXWOContext.contextDictionary();
 					if (userInfo.objectForKey(varName) == null) {
 						String ljs = listeJS();
 						AjaxUtils.addScriptCodeInHead(res, ctx, "var " + varName + " = " + ljs + ";");
@@ -214,7 +215,8 @@ public class AjaxAutoComplete extends AjaxComponent {
 	String listeJS() {
 		StringBuilder str = new StringBuilder();
 		str.append("new Array(");
-		NSArray list = (NSArray) valueForBinding("list");
+		@SuppressWarnings("unchecked")
+		NSArray<Object> list = (NSArray<Object>) valueForBinding("list");
 		int max = list.count();
 		String cnt = "";
 		boolean hasItem = hasBinding("item");
@@ -289,10 +291,11 @@ public class AjaxAutoComplete extends AjaxComponent {
     	if (hasBinding("selection")) {
             Object selection = null;
             if (strValue != null) {
-	    		NSArray values = (NSArray) valueForBinding("list");
+				@SuppressWarnings("unchecked")
+	    		NSArray<Object> values = (NSArray<Object>) valueForBinding("list");
 		        int maxItems = maxItems();
 		        int itemsCount = 0;
-		        for(Enumeration e = values.objectEnumerator(); e.hasMoreElements() && itemsCount++ < maxItems;) {
+		        for(Enumeration<Object> e = values.objectEnumerator(); e.hasMoreElements() && itemsCount++ < maxItems;) {
 		            Object value = e.nextElement();
 	                setValueForBinding(value, "item");
 	            	String displayString = displayStringForValue(value);
@@ -343,12 +346,14 @@ public class AjaxAutoComplete extends AjaxComponent {
         WOElement child = _childTemplate();
         boolean hasItem = hasBinding("item");
         if (values instanceof NSArray) {
-	        for(Enumeration valueEnum = ((NSArray)values).objectEnumerator(); valueEnum.hasMoreElements() && itemsCount++ < maxItems;) {
+	        for(@SuppressWarnings("unchecked")
+			Enumeration<Object> valueEnum = ((NSArray<Object>)values).objectEnumerator(); valueEnum.hasMoreElements() && itemsCount++ < maxItems;) {
 	        	appendItemToResponse(valueEnum.nextElement(), child, hasItem, response, context);
 	        }
         }
         else if (values instanceof List) {
-	        for(Iterator iter = ((List)values).iterator(); iter.hasNext() && itemsCount++ < maxItems;) {
+	        for(@SuppressWarnings("unchecked")
+			Iterator<Object> iter = ((List<Object>)values).iterator(); iter.hasNext() && itemsCount++ < maxItems;) {
 	        	appendItemToResponse(iter.next(), child, hasItem, response, context);
 	        }
         }

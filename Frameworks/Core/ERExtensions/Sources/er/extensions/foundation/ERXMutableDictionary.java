@@ -21,6 +21,7 @@ import com.webobjects.foundation.NSPropertyListSerialization;
  * Adds {@link java.util.Map} functionality to NSMutableDictionary and has
  * helpers to en- and decode from database field.
  * <code>ERPrototype name = mutableDictionary</code>
+ * @param <K> 
  * @param <V>
  */
 public class ERXMutableDictionary<K,V> extends NSMutableDictionary<K,V> {
@@ -46,8 +47,7 @@ public class ERXMutableDictionary<K,V> extends NSMutableDictionary<K,V> {
 		return toBlob((NSDictionary<?,?>) dict);
 	}
 
-	@SuppressWarnings("unchecked")
-	public static NSDictionary fromBlob(NSData d) {
+	public static NSDictionary<?, ?> fromBlob(NSData d) {
 		try {
 			ByteArrayInputStream bis = new ByteArrayInputStream(d.bytes());
 			ObjectInputStream ois = new ERXMappingObjectStream(bis);
@@ -65,9 +65,8 @@ public class ERXMutableDictionary<K,V> extends NSMutableDictionary<K,V> {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public static NSDictionary fromPropertyList(String plist) {
-		NSDictionary<Object,Object> dict = (NSDictionary) NSPropertyListSerialization.propertyListFromString(plist);
+	public static NSDictionary<?, ?> fromPropertyList(String plist) {
+		NSDictionary<?,?> dict = (NSDictionary<?,?>) NSPropertyListSerialization.propertyListFromString(plist);
 		return new ERXMutableDictionary<Object,Object>(dict);
 	}
 
@@ -113,6 +112,7 @@ public class ERXMutableDictionary<K,V> extends NSMutableDictionary<K,V> {
 
 	/**
 	 * @param key
+	 * @return boolean value
 	 */
 	public Boolean booleanObjectForKey(K key) {
 		Object o = objectForKey(key);
@@ -129,7 +129,6 @@ public class ERXMutableDictionary<K,V> extends NSMutableDictionary<K,V> {
 	 * @author ak
 	 * 
 	 */
-
 	public static class ThreadSafeDictionary<K,V> extends ERXMutableDictionary<K,V> {
 		/**
 		 * Do I need to update serialVersionUID?
@@ -218,8 +217,7 @@ public class ERXMutableDictionary<K,V> extends NSMutableDictionary<K,V> {
 		}
 
 		@Override
-		@SuppressWarnings("unchecked")
-		public synchronized Class classForCoder() {
+		public synchronized Class<?> classForCoder() {
 			return super.classForCoder();
 		}
 
@@ -245,13 +243,12 @@ public class ERXMutableDictionary<K,V> extends NSMutableDictionary<K,V> {
 
 		@Override
 		public synchronized HashMap<K,V> hashMap() {
-			Object keys[] = keysNoCopy();
+			K keys[] = keysNoCopy();
 			int c = keys.length;
 			HashMap<K,V> map = new HashMap<K,V>(c <= 0 ? 1 : c);
 			for (int i = 0; i < c; i++) {
-				map.put((K)keys[i], objectForKey(keys[i]));
+				map.put(keys[i], objectForKey(keys[i]));
 			}
-
 			return map;
 		}
 
@@ -271,7 +268,7 @@ public class ERXMutableDictionary<K,V> extends NSMutableDictionary<K,V> {
 		}
 
 		@Override
-		public synchronized Object[] keysNoCopy() {
+		public synchronized K[] keysNoCopy() {
 			return super.keysNoCopy();
 		}
 
@@ -291,7 +288,7 @@ public class ERXMutableDictionary<K,V> extends NSMutableDictionary<K,V> {
 		}
 
 		@Override
-		public synchronized Object[] objectsNoCopy() {
+		public synchronized V[] objectsNoCopy() {
 			return super.objectsNoCopy();
 		}
 
@@ -345,6 +342,7 @@ public class ERXMutableDictionary<K,V> extends NSMutableDictionary<K,V> {
 	 *            the dictionary to make thread-safe
 	 * @return a thread-safe dictionary
 	 */
+	@SuppressWarnings("unchecked")
 	public static <T,U> NSDictionary<T,U> synchronizedDictionary(NSDictionary<? extends T, ? extends U> dict) {
 		if (!(dict instanceof NSMutableDictionary)) {
 			return (NSDictionary<T, U>) dict;

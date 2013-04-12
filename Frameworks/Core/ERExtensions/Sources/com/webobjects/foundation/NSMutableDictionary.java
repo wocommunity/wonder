@@ -27,10 +27,9 @@ import java.util.Map;
  * @param <V>
  *            type of value contents
  */
-@SuppressWarnings("unchecked")
 public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
   
-  static final long serialVersionUID = 6690723083816355576L;
+	static final long serialVersionUID = 6690723083816355576L;
 
 	//TODO iterator.remove() throws unimplemented
 
@@ -95,7 +94,7 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 	}
 
 	public V removeObjectForKey(Object key) {
-		Object result = null;
+		V result = null;
 		if (key == null) {
 			throw new IllegalArgumentException("Attempt to remove null key from an " + getClass().getName() + ".");
 		}
@@ -113,13 +112,14 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 				_keySetCache = null;
 			}
 		}
-		return (V) result;
+		return result;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void removeAllObjects() {
 		if (_count != 0) {
-			_objects = new Object[_hashtableBuckets];
-			_keys = new Object[_hashtableBuckets];
+			_objects = (V[]) new Object[_hashtableBuckets];
+			_keys = (K[]) new Object[_hashtableBuckets];
 			_flags = new byte[_hashtableBuckets];
 			_count = 0;
 			_objectsCache = null;
@@ -141,24 +141,23 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 
 	public void addEntriesFromDictionary(NSDictionary<? extends K, ? extends V> otherDictionary) {
 		if (otherDictionary != null) {
-			Object[] keys = otherDictionary.keysNoCopy();
+			K[] keys = otherDictionary.keysNoCopy();
 			for (int i = 0; i < keys.length; i++) {
-				setObjectForKey(otherDictionary.objectForKey(keys[i]), (K)keys[i]);
+				setObjectForKey(otherDictionary.objectForKey(keys[i]), keys[i]);
 			}
-
 		}
 	}
 
 	public void removeObjectsForKeys(NSArray<? extends K> keys) {
 		if (keys != null) {
-			Object[] keysArray = keys.objectsNoCopy();
+			K[] keysArray = keys.objectsNoCopy();
 			for (int i = 0; i < keysArray.length; i++) {
 				removeObjectForKey(keysArray[i]);
 			}
-
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void takeValueForKey(Object value, String key) {
 		if (value != null) {
@@ -179,12 +178,13 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 		return new NSDictionary<K, V>(this);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public NSMutableDictionary<K, V> mutableClone() {
 		return (NSMutableDictionary<K, V>) clone();
 	}
 
-	public static final Class _CLASS = _NSUtilitiesExtra._classWithFullySpecifiedNamePrime("com.webobjects.foundation.NSMutableDictionary");
+	public static final Class<?> _CLASS = _NSUtilitiesExtra._classWithFullySpecifiedNamePrime("com.webobjects.foundation.NSMutableDictionary");
 
 	/**
 	 * Associate the <tt>value</tt> with <tt>key</tt> in this map. If the
@@ -232,7 +232,7 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 	 */
 	@Override
 	public void putAll(Map<? extends K, ? extends V> m) {
-		addEntriesFromDictionary(new NSDictionary(m, IgnoreNull));
+		addEntriesFromDictionary(new NSDictionary<K, V>(m, IgnoreNull));
 	}
 
 	/**

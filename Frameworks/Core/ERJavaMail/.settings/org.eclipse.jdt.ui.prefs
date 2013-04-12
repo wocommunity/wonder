@@ -1,7 +1,6 @@
-#Thu Oct 19 15:58:36 EDT 2006
 eclipse.preferences.version=1
 formatter_profile=_Project Wonder
-formatter_settings_version=10
+formatter_settings_version=12
 org.eclipse.jdt.ui.ignorelowercasenames=true
 org.eclipse.jdt.ui.importorder=java;javax;org;com;
 org.eclipse.jdt.ui.ondemandthreshold=99

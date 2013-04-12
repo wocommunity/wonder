@@ -3,7 +3,6 @@ package com.webobjects.foundation;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.ObjectStreamException;
 import java.io.ObjectStreamField;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -35,7 +34,7 @@ import java.util.Vector;
  */
 public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValueCoding, NSKeyValueCodingAdditions, _NSFoundationCollection, List<E> {
   
-  static final long serialVersionUID = -3789592578296478260L;
+	private static final long serialVersionUID = -3789592578296478260L;
 
 	public static class _AvgNumberOperator extends _Operator implements Operator {
 
@@ -64,7 +63,6 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 			for (int i = 0; i < objects.length; i++) {
 				min = _minOrMaxValue(min, _operationValue(objects[i], keyPath), false);
 			}
-
 			return min;
 		}
 	}
@@ -77,7 +75,6 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 			for (int i = 0; i < objects.length; i++) {
 				max = _minOrMaxValue(max, _operationValue(objects[i], keyPath), true);
 			}
-
 			return max;
 		}
 	}
@@ -110,10 +107,10 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 					sum = sum.add(value);
 				}
 			}
-
 			return sum;
 		}
 
+		@SuppressWarnings("unchecked")
 		Object _minOrMaxValue(Object referenceValue, Object compareValue, boolean trueForMaxAndFalseForMin) {
 			if (referenceValue == null) {
 				return compareValue;
@@ -158,9 +155,10 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		public abstract Object compute(NSArray<?> nsarray, String s);
 	}
 
-	public static final Class _CLASS = _NSUtilitiesExtra._classWithFullySpecifiedNamePrime("com.webobjects.foundation.NSArray");
+	public static final Class<?> _CLASS = _NSUtilitiesExtra._classWithFullySpecifiedNamePrime("com.webobjects.foundation.NSArray");
 
 	public static final int NotFound = -1;
+	@SuppressWarnings("rawtypes")
 	public static final NSArray EmptyArray = new NSArray<Object>();
 	private static final char _OperatorIndicatorChar = '@';
 	public static final String CountOperatorName = "count";
@@ -171,7 +169,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 	private static final String SerializationValuesFieldKey = "objects";
 	private static NSMutableDictionary<String, Operator> _operators = new NSMutableDictionary<String, Operator>(8);
 	protected static final int _NSArrayClassHashCode = _CLASS.hashCode();
-	protected Object[] _objects;
+	protected E[] _objects;
 	protected transient int _hashCache;
 	private transient boolean _recomputeHashCode = true;
 	public static final boolean CheckForNull = true;
@@ -214,8 +212,9 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	protected void _initializeWithCapacity(int capacity) {
-		_setObjects(capacity <= 0 ? null : new Object[capacity]);
+		_setObjects(capacity <= 0 ? null : (E[]) new Object[capacity]);
 		_setCount(0);
 		_setMustRecomputeHash(true);
 	}
@@ -347,7 +346,8 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
     	initFromList(list, range != null ? range.location() : 0, range != null ? range.length() : 0, 0, true, ignoreNull);
     }
 
-    public NSArray(Vector<? extends E> vector, NSRange range, boolean ignoreNull) {
+    @SuppressWarnings("unchecked")
+	public NSArray(Vector<? extends E> vector, NSRange range, boolean ignoreNull) {
     	this((List<E>)vector, range, ignoreNull);
     }
 
@@ -357,17 +357,18 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 //    	}
     }
      
-	protected Object[] _objects() {
+	protected E[] _objects() {
 		return _objects;
 	}
 
-	protected void _setObjects(Object[] objects) {
+	protected void _setObjects(E[] objects) {
 		_objects = objects;
 	}
 
-	protected Object[] objectsNoCopy() {
-		Object[] objs = _objects();
-		return objs != null ? objs : _NSCollectionPrimitives.EmptyArray;
+	@SuppressWarnings("unchecked")
+	protected E[] objectsNoCopy() {
+		E[] objs = _objects();
+		return objs != null ? objs : (E[]) _NSCollectionPrimitives.EmptyArray;
 	}
 
 	public int count() {
@@ -377,7 +378,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 	public E objectAtIndex(int index) {
 		int count = count();
 		if (index >= 0 && index < count) {
-			return (E)_objects()[index];
+			return _objects()[index];
 		}
 		if (count == 0) {
 			throw new IllegalArgumentException("Array is empty");
@@ -396,6 +397,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		return new NSArray<E>(objects, 0, count + 1, false, false);
 	}
 
+	@SuppressWarnings("unchecked")
 	public NSArray<E> arrayByAddingObjectsFromArray(NSArray<? extends E> otherArray) {
 		if (otherArray != null) {
 			int count = count();
@@ -435,21 +437,19 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 
 	public Vector<E> vector() {
 		Vector<E> vector = new Vector<E>();
-		E[] objects = (E[])objectsNoCopy();
+		E[] objects = objectsNoCopy();
 		for (int i = 0; i < objects.length; i++) {
 			vector.addElement(objects[i]);
 		}
-
 		return vector;
 	}
 
 	public ArrayList<E> arrayList() {
-		E[] objects = (E[])objectsNoCopy();
+		E[] objects = objectsNoCopy();
 		ArrayList<E> list = new ArrayList<E>(objects.length);
 		for (int i = 0; i < objects.length; i++) {
 			list.add(objects[i]);
 		}
-
 		return list;
 	}
 
@@ -466,10 +466,10 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		}
 		int otherCount = otherArray.count();
 		if (otherCount > 0) {
-			Object[] objects = objectsNoCopy();
+			E[] objects = objectsNoCopy();
 			for (int i = 0; i < objects.length; i++) {
 				if (otherArray.containsObject(objects[i])) {
-					return (E)objects[i];
+					return objects[i];
 				}
 			}
 
@@ -481,7 +481,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 	 * @deprecated use {@link #objects()} or {@link #objectsNoCopy()}
 	 */
 	@Deprecated
-	public void getObjects(Object[] objects) {
+	public void getObjects(E[] objects) {
 		if (objects == null) {
 			throw new IllegalArgumentException("Object buffer cannot be null");
 		}
@@ -492,7 +492,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 	 * @deprecated use {@link #objects(NSRange)}
 	 */
 	@Deprecated
-	public void getObjects(Object[] objects, NSRange range) {
+	public void getObjects(E[] objects, NSRange range) {
 		if (objects == null) {
 			throw new IllegalArgumentException("Object buffer cannot be null");
 		}
@@ -513,9 +513,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 				if (!identical && object.equals(objects[i])) {
 					return i;
 				}
-
 			}
-
 		}
 		return NotFound;
 	}
@@ -562,7 +560,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 
 	public NSArray<E> subarrayWithRange(NSRange range) {
 		if (range == null) {
-			return EmptyArray;
+			return emptyArray();
 		}
 		return new NSArray<E>(objectsNoCopy(), range.location(), range.length(), false, false);
 	}
@@ -612,23 +610,20 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		return false;
 	}
 
-	@SuppressWarnings("unchecked")
 	public Enumeration<E> objectEnumerator() {
-		return new _NSJavaArrayEnumerator(objectsNoCopy(), count(), false);
+		return new _NSJavaArrayEnumerator<E>(objectsNoCopy(), count(), false);
 	}
 
-	@SuppressWarnings("unchecked")
 	public Enumeration<E> reverseObjectEnumerator() {
-		return new _NSJavaArrayEnumerator(objectsNoCopy(), count(), true);
+		return new _NSJavaArrayEnumerator<E>(objectsNoCopy(), count(), true);
 	}
 
 	/**
 	 * @deprecated Method sortedArrayUsingSelector is deprecated
 	 */
 	@Deprecated
-	@SuppressWarnings("unchecked")
-	public NSArray sortedArrayUsingSelector(NSSelector selector) throws NSComparator.ComparisonException {
-		NSMutableArray array = new NSMutableArray(this);
+	public NSArray<E> sortedArrayUsingSelector(NSSelector<E> selector) throws NSComparator.ComparisonException {
+		NSMutableArray<E> array = new NSMutableArray<E>(this);
 		NSComparator comparator = new NSComparator._NSSelectorComparator(selector);
 		array.sortUsingComparator(comparator);
 		return array;
@@ -649,7 +644,6 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 			}
 			buffer.append(objects[i].toString());
 		}
-
 		return buffer.toString();
 	}
 
@@ -787,8 +781,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		NSKeyValueCodingAdditions.DefaultImplementation.takeValueForKeyPath(this, value, keyPath);
 	}
 
-	@SuppressWarnings("unchecked")
-	public Class classForCoder() {
+	public Class<?> classForCoder() {
 		return _CLASS;
 	}
 
@@ -800,11 +793,11 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		coder.encodeObjects(objectsNoCopy());
 	}
 
-	public void makeObjectsPerformSelector(NSSelector selector, Object... parameters) {
+	public void makeObjectsPerformSelector(NSSelector<E> selector, Object... parameters) {
 		if (selector == null) {
 			throw new IllegalArgumentException("Selector cannot be null");
 		}
-		Object[] objects = objectsNoCopy();
+		E[] objects = objectsNoCopy();
 		for (int i = 0; i < objects.length; i++) {
 			NSSelector._safeInvokeSelector(selector, objects[i], parameters);
 		}
@@ -900,7 +893,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		initFromObjects(values, 0, values.length, true, false);
 	}
 
-	private Object readResolve() throws ObjectStreamException {
+	private Object readResolve() {
 		if (getClass() == _CLASS && count() == 0) {
 			return EmptyArray;
 		}
@@ -930,15 +923,15 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		return containsObject(element);
 	}
 
-	@SuppressWarnings("unchecked")
 	public Iterator<E> iterator() {
-		return new _NSJavaArrayListIterator(objectsNoCopy(), count());
+		return new _NSJavaArrayListIterator<E>(objectsNoCopy(), count());
 	}
 
 	public Object[] toArray() {
 		return objects();
 	}
 
+	@SuppressWarnings("unchecked")
 	public <T> T[] toArray(T[] objects) {
 		if (objects == null) {
 		  throw new NullPointerException("List.toArray() cannot have a null parameter");
@@ -973,16 +966,14 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		return true;
 	}
 
-	@SuppressWarnings("unchecked")
 	public ListIterator<E> listIterator() {
-		Object[] objs = objectsNoCopy();
-		return new _NSJavaArrayListIterator(objs, count());
+		E[] objs = objectsNoCopy();
+		return new _NSJavaArrayListIterator<E>(objs, count());
 	}
 
-	@SuppressWarnings("unchecked")
 	public ListIterator<E> listIterator(int index) {
-		Object[] objs = objectsNoCopy();
-		return new _NSJavaArrayListIterator(objs, count(), index);
+		E[] objs = objectsNoCopy();
+		return new _NSJavaArrayListIterator<E>(objs, count(), index);
 	}
 
 	public E get(int index) {
@@ -1055,6 +1046,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		return subarrayWithRange(new NSRange(fromIndex, (toIndex - fromIndex)));
 	}
 
+	@SuppressWarnings("unchecked")
 	public static final <T> NSArray<T> emptyArray() {
 		return EmptyArray;
 	}
