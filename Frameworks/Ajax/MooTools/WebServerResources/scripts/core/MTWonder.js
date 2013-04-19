@@ -326,7 +326,7 @@ var MTAjaxSubmitButton = {
 		} else if (updateContainerID != null) {
 			submitFunction = function(element, value) {
 				if(!options.onBeforeSubmit || options.onBeforeSubmit(formFieldID)) {
-					MTASB.update(updateContainerID, $(formFieldID), null, options);
+					MTASB.update(updateContainerID, $(formFieldID).form, null, options);
 				}
 			}
 		} else {
