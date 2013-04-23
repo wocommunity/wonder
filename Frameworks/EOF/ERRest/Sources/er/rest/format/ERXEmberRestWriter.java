@@ -8,20 +8,19 @@ public class ERXEmberRestWriter extends ERXJSONRestWriter {
 	protected ERXRestRequestNode processNode(ERXRestRequestNode node) {
 		ERXRestRequestNode rootNode = new ERXRestRequestNode(null, true);
 
-		//ERXRestRequestNode recordsNode = new ERXRestRequestNode(ERXRestNameRegistry.registry().externalNameForInternalName(node.type()), false);
 		//ERXRestRequestNode recordsNode = new ERXRestRequestNode("content", false);
 		//recordsNode.setArray(false);
 		//rootNode.addChild(recordsNode);
 
-		ERXRestRequestNode recordsNode = rootNode;
+		//ERXRestRequestNode recordsNode = rootNode;
 		
 		if (node.isArray()) {
 			for (ERXRestRequestNode child : node.children()) {
-				recordsNode.addChild(child);
+				rootNode.addChild(child);
 			}
 		}
 		else {
-			recordsNode.addChild(node);
+			rootNode.addChild(node);
 		}
 
 		/*
