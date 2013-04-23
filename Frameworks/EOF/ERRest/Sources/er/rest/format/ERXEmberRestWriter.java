@@ -1,5 +1,6 @@
 package er.rest.format;
 
+import er.extensions.localization.ERXLocalizer;
 import er.rest.ERXRestNameRegistry;
 import er.rest.ERXRestRequestNode;
 
@@ -10,11 +11,7 @@ public class ERXEmberRestWriter extends ERXJSONRestWriter {
 		ERXRestRequestNode rootNode = new ERXRestRequestNode(null, true);
 
 		if(node.isArray()) {
-			System.out.println("isArray");
-			//ERXRestRequestNode recordsNode = new ERXRestRequestNode(ERXRestNameRegistry.registry().externalNameForInternalName(node.type()), false);
-			
-			ERXRestRequestNode recordsNode = new ERXRestRequestNode("lots", false);
-			
+			ERXRestRequestNode recordsNode = new ERXRestRequestNode(ERXRestNameRegistry.registry().externalNameForInternalName( ERXLocalizer.englishLocalizer().plurifiedString(node.childAtIndex(0).type(), 2 )  ), false);
 			recordsNode.setArray(true);
 			rootNode.addChild(recordsNode);
 
@@ -24,7 +21,6 @@ public class ERXEmberRestWriter extends ERXJSONRestWriter {
 			}
 		}
 		else {		
-			System.out.println("not array");
 			rootNode.addChild(node);
 		}
 
