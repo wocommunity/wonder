@@ -39,10 +39,10 @@ public class ERXRestFormat {
 		ERXRestFormat.registerFormatNamed(new ERXFormRestParser(), new ERXJSONRestWriter(), new ERXRestFormatDelegate(), ERXRestFormat.FORM_KEY, "application/x-www-form-urlencoded");
 	}
 
-	private String _name;
-	private IERXRestParser _parser;
-	private IERXRestWriter _writer;
-	private ERXRestFormat.Delegate _delegate;
+	private final String _name;
+	private final IERXRestParser _parser;
+	private final IERXRestWriter _writer;
+	private final ERXRestFormat.Delegate _delegate;
 
 	// These are going to be killed soon ...
 	@Deprecated
