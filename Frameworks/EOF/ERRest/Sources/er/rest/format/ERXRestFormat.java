@@ -13,6 +13,10 @@ import er.extensions.eof.ERXKeyFilter;
 import er.rest.ERXRestContext;
 import er.rest.ERXRestRequestNode;
 
+/**
+ * The ERXRestFormat class encapsulates the details of message formatting. As such it encapsulates the request parser, response formatter, format name and response mime type.
+ *
+ */
 public class ERXRestFormat {
 	public static final String HTML_KEY = "html";
 	public static final String JSON_KEY = "json";
@@ -286,6 +290,10 @@ public class ERXRestFormat {
 		return format;
 	}
 
+	/**
+	 * An ERXRestFormat.Delegate is one component of an ERXRestFormat and is used to customize an ERXRequestNode
+	 * after parsing in the context of reading a request or before writing in the context of a response generation.
+	 */
 	public static interface Delegate {
 		public void nodeDidParse(ERXRestRequestNode node);
 
