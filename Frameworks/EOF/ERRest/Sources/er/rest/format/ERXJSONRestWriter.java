@@ -16,8 +16,8 @@ public class ERXJSONRestWriter implements IERXRestWriter {
 
 	// Lazily initialized static constants
 	private static class CONSTANTS {
-		static boolean SHOULD_PRETTY_PRINT = ERXProperties.booleanForKeyWithDefault("er.rest.format.ERXJSONRestWriter.shouldPrettyPrint", false);
-		static int PRETTY_PRINT_INDENT = ERXProperties.intForKeyWithDefault("er.rest.format.ERXJSONRestWriter.prettyPrintIndent", 2);
+		final static boolean SHOULD_PRETTY_PRINT = ERXProperties.booleanForKeyWithDefault("er.rest.format.ERXJSONRestWriter.shouldPrettyPrint", false);
+		final static int PRETTY_PRINT_INDENT = ERXProperties.intForKeyWithDefault("er.rest.format.ERXJSONRestWriter.prettyPrintIndent", 2);
 	}
 
 	public ERXJSONRestWriter() {
