@@ -3,6 +3,7 @@ package er.extensions.eof;
 import junit.framework.Assert;
 
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSSet;
@@ -42,6 +43,18 @@ public class ERXEOAccessUtilitiesTest extends ERXTestCase {
 
 	public ERXEOAccessUtilitiesTest(String adaptorName) {
 		super(adaptorName);
+	}
+
+	private static final NSDictionary<String,NSArray<String>> skipTestsForAdaptor;
+
+	static {
+		NSMutableDictionary<String,NSArray<String>> skips = new NSMutableDictionary<String,NSArray<String>>();
+
+		NSArray<String> memorySkips = new NSArray<String>(new String[] { "testRawRowsForSQLExpressionEOEditingContextStringEOSQLExpression" } );
+		skips.setObjectForKey(memorySkips, "Memory");
+                skips.setObjectForKey(NSArray.EmptyArray, "JDBC");
+
+		skipTestsForAdaptor = skips.immutableClone();
 	}
 
 	@Override
@@ -215,29 +228,30 @@ public class ERXEOAccessUtilitiesTest extends ERXTestCase {
 	public void testRawRowsForSQLExpressionEOEditingContextStringEOSQLExpression() {
 
 		EOAdaptor adaptor = EOAdaptor.adaptorWithName(EOModelGroup.defaultGroup().modelNamed(ERXTestSuite.ERXTEST_MODEL).adaptorName());
-                EOSQLExpressionFactory factory = new EOSQLExpressionFactory(adaptor);
+		if (skipTestsForAdaptor.objectForKey(adaptor.name()).contains("testRawRowsForSQLExpressionEOEditingContextStringEOSQLExpression")) return;
+		EOSQLExpressionFactory factory = new EOSQLExpressionFactory(adaptor);
 		NSArray<EOEntity> entities = EOModelGroup.defaultGroup().modelNamed(ERXTestSuite.ERXTEST_MODEL).entities();
-
 		NSMutableDictionary<String,Number> counts = new NSMutableDictionary<String,Number>();
 
-                for (EOEntity entity : entities) {
+		for (EOEntity entity : entities) {
 			EOSQLExpression sqlExp = factory.selectStatementForAttributes(entity.attributes(),
-							false,
-							new EOFetchSpecification(entity.name(), null, null),
-							entity);
+								false,
+								new EOFetchSpecification(entity.name(), null, null),
+								entity);
 			NSArray rows = ERXEOAccessUtilities.rawRowsForSQLExpression(ec, ERXTestSuite.ERXTEST_MODEL, sqlExp);
+
 			counts.setObjectForKey(rows.size(), entity.name());
 		}
 
-                ERXTestUtilities.createCompanyAnd3Employees();
+		ERXTestUtilities.createCompanyAnd3Employees();
 
 		NSMutableSet<String> hasMore = new NSMutableSet<String>();
 
 		for (EOEntity entity : entities) {
 			EOSQLExpression sqlExp = factory.selectStatementForAttributes(entity.attributes(),
-							false,
-							new EOFetchSpecification(entity.name(), null, null),
-							entity);
+								false,
+								new EOFetchSpecification(entity.name(), null, null),
+								entity);
 			NSArray rows = ERXEOAccessUtilities.rawRowsForSQLExpression(ec, ERXTestSuite.ERXTEST_MODEL, sqlExp);
 
 			if ( ! counts.containsKey(entity.name()))
