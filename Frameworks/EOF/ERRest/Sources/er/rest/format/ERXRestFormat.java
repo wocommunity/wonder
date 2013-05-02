@@ -40,7 +40,7 @@ public class ERXRestFormat {
 		ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXSproutCoreRestWriter(), new ERXRestFormatDelegate("guid", "type", "nil", true, true, false, false), ERXRestFormat.SPROUTCORE_KEY, "application/sc");
 		ERXRestFormat.registerFormatNamed(new ERXFormRestParser(), new ERXJSONRestWriter(), new ERXRestFormatDelegate(), ERXRestFormat.FORM_KEY, "application/x-www-form-urlencoded");
 	
-		ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXEmberRestWriter(), new ERXRestFormatDelegate("id", "type", "nil", true, true, true, false), ERXRestFormat.EMBER_KEY, "application/json");
+		ERXRestFormat.registerFormatNamed(new ERXEmberRestParser(), new ERXEmberRestWriter(), new ERXRestFormatDelegate("id", "type", "nil", true, true, true, false), ERXRestFormat.EMBER_KEY, "application/json");
 
 	}
 
@@ -68,7 +68,8 @@ public class ERXRestFormat {
 	public static final ERXRestFormat GIANDUIA_PERSISTENT_STORE = ERXRestFormat.formatNamed("gndp");
 	@Deprecated
 	public static final ERXRestFormat SPROUTCORE = ERXRestFormat.formatNamed(ERXRestFormat.SPROUTCORE_KEY);
-	
+	@Deprecated
+	public static final ERXRestFormat EMBER = ERXRestFormat.formatNamed(ERXRestFormat.EMBER_KEY);
 	    
 	/**
 	 * Returns the registered html form format.
@@ -96,6 +97,16 @@ public class ERXRestFormat {
 	public static ERXRestFormat json() {
 		return formatNamed(ERXRestFormat.JSON_KEY);
 	}
+
+	/**
+	 * Returns the registered ember format.
+	 * 
+	 * @return the registered ember format
+	 */
+	public static ERXRestFormat ember() {
+		return formatNamed(ERXRestFormat.EMBER_KEY);
+	}
+	
 	
 	/**
 	 * Returns the registered plist format.
