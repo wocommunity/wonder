@@ -3,8 +3,6 @@ package er.directtoweb.interfaces;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 
-import er.directtoweb.pages.ERD2WListPage;
-
 
 /**
  * this defines a mechanism to bridge editObjectAction() in ERD2WListPage to
@@ -14,7 +12,7 @@ import er.directtoweb.pages.ERD2WListPage;
  */
 public interface ERDEditObjectDelegate {
     /**
-     * this method will be called from {@link ERD2WListPage#editObjectAction()}
+     * this method will be called from {@link er.directtoweb.pages.ERD2WListPage#editObjectAction()}
      * and the implemetation of this method should return a edit page 
      * for the object thats passed in.
      * @param object - object to be edited

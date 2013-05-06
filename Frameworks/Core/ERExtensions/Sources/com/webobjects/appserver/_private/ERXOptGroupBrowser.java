@@ -33,10 +33,10 @@ public class ERXOptGroupBrowser extends Browser {
     
 	public ERXOptGroupBrowser(String arg0, NSDictionary arg1, WOElement arg2) {
 		super(arg0, arg1, arg2);
-        group = (WOAssociation)_associations.removeObjectForKey("group");
-        label = (WOAssociation)_associations.removeObjectForKey("label");
-        itemStyle = (WOAssociation)_associations.removeObjectForKey("itemStyle");
-        itemClass = (WOAssociation)_associations.removeObjectForKey("itemClass");
+        group = _associations.removeObjectForKey("group");
+        label = _associations.removeObjectForKey("label");
+        itemStyle = _associations.removeObjectForKey("itemStyle");
+        itemClass = _associations.removeObjectForKey("itemClass");
         
         if (group == null)
         {
@@ -47,6 +47,7 @@ public class ERXOptGroupBrowser extends Browser {
 	
 
 
+    @Override
     public void appendChildrenToResponse(WOResponse response, WOContext context)
     {
          WOComponent parent = context.component();

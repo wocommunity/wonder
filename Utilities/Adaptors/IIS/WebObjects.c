@@ -31,6 +31,10 @@ and limitations under the License.
  All the decoded bits will already be in the headers.
  end client certificate support **/
 
+#if defined(MINGW)
+#define MS_BOOL WINBOOL
+#endif
+
 #include "config.h"
 #include "womalloc.h"
 #include "request.h"
@@ -50,6 +54,7 @@ and limitations under the License.
 
 
 #include <windows.h>
+#include <winbase.h>
 #include <string.h>
 #include <stdio.h>
 #include <malloc.h>
@@ -66,6 +71,18 @@ and limitations under the License.
 client certificate support **/
 
 #define	CRLF	"\r\n"
+
+// 2009/04/29: how many zero bytes data packages at a stretch should be ignored 
+//             before we assume a ReadClient problem (0 would be faster, but could
+//             be dangerous - please check if a zero bytes result is possible in a 
+//             "normal" operation mode).
+#define MAGIC_LEN_ZERO_LIMIT 100
+
+// 2009/06/08: wait a little bit to give IIS time to perform all required
+//             clean-up operations.  Please feel free to set this value to 
+//             '0' if you think (or even know) that a sleep operation isn't 
+//             necessary after an HSE_REQ_CLOSE_CONNECTION event.
+#define HSE_REQ_CLOSE_CONNECTION_CLEANUP_SLEEP 250
 
 char *WA_adaptorName = "IIS";
 
@@ -93,7 +110,7 @@ MS_BOOL WINAPI DllMain( HANDLE hinst, ULONG reason, LPVOID ptr)
    return TRUE;
 }
 
-__declspec(dllexport) MS_BOOL GetExtensionVersion (HSE_VERSION_INFO *pVer)
+__declspec(dllexport) MS_BOOL __stdcall GetExtensionVersion (HSE_VERSION_INFO *pVer)
 {
    pVer->dwExtensionVersion = CURRENT_WOF_VERSION_MAJOR;
    pVer->dwExtensionVersion = (pVer->dwExtensionVersion << 16 ) | CURRENT_WOF_VERSION_MINOR;
@@ -102,15 +119,57 @@ __declspec(dllexport) MS_BOOL GetExtensionVersion (HSE_VERSION_INFO *pVer)
    return TRUE;
 }
 
+/**
+ * 2009/06/09:
+ * Closes client socket connection.
+ */
+static MS_BOOL closeClientConnection(EXTENSION_CONTROL_BLOCK *p, HTTPResponse *resp)
+{
+   MS_BOOL result = FALSE;
+
+   // closing is easy, because the adaptor operates in SYNC mode and
+   // we have not to handle asynchronous read/write operations!
+   WOLog(WO_INFO, "Closing client socket connection...");
+   if(p->ServerSupportFunction(p->ConnID, HSE_REQ_CLOSE_CONNECTION,
+                               NULL, NULL, NULL))
+   {
+      // Note found on MSDN:
+      //   'HSE_REQ_CLOSE_CONNECTION closes the client socket connection
+      //   immediately, but IIS takes a small amount of time to handle the
+      //   threads in the thread pool before the connection can be completely
+      //   removed.'
+      // Therefore: wait a little bit to give IIS time to perform all required
+      // clean-up operations.
+      //
+      // Note for a future version: Is sleep necessary/wise or is it
+      // counterproductive?  And if closing is wise: which is the optimal
+      // value for the sleep call?
+      DWORD cleanupSleepPeriod = HSE_REQ_CLOSE_CONNECTION_CLEANUP_SLEEP;
+      if(cleanupSleepPeriod > 0)
+      {
+         WOLog(WO_INFO, "... and wait %d ms for client socket termination.", cleanupSleepPeriod);
+         Sleep(cleanupSleepPeriod);
+      }
+      result = TRUE;
+   }
+   else
+   {
+      WOLog(WO_ERR, "Cannot close client socket connection - error code %d.",
+            GetLastError());
+   }
+
+   return result;
+}
+
 static void sendResponse(EXTENSION_CONTROL_BLOCK *p, HTTPResponse *resp)
 {
    String *resphdrs;
    char status[128];
+   int browserStatus = 0;
    DWORD len;
 
    p->dwHttpStatusCode = resp->status;
    sprintf(status, "%d %s",resp->status, resp->statusMsg);
-
 
    /*
     *	send the headers (collected into one buffer)
@@ -125,22 +184,106 @@ static void sendResponse(EXTENSION_CONTROL_BLOCK *p, HTTPResponse *resp)
       if (p->ServerSupportFunction(p->ConnID, HSE_REQ_SEND_RESPONSE_HEADER,
                                    status, &len, (LPDWORD)resphdrs->text) != TRUE)
       {
+         browserStatus = -1;
          WOLog(WO_ERR,"Failed to send response headers (%d)", GetLastError());
       } else {
          len = 2;
-         if (p->WriteClient(p->ConnID, CRLF, &len, 0) != TRUE)
+         // 2009/06/10: The 4th. parameter is only allowed to be '0' if
+         //             this code would belong to a filter plugin.  But
+         //             this code realizes an IIS extension and therefore
+         //             only HSE_IO_SYNC and ..._ASYNC is allowed!
+         if (p->WriteClient(p->ConnID, CRLF, &len, HSE_IO_SYNC) != TRUE)
+         {
+            browserStatus = -1;
             WOLog(WO_ERR,"Failed to send \\r\\n (%d)", GetLastError());
-         /*
-          *	send the content data
-          */
-         len = resp->content_length;
-         if (len && (p->WriteClient(p->ConnID, resp->content, &len, 0) != TRUE))
-            WOLog(WO_ERR,"Failed to send content (%d)", GetLastError());
+         }
+
+         /* resp->content_valid will be 0 for HEAD requests and empty responses */
+         if (resp->content_valid) {
+            int count;
+            while (resp->content_read < resp->content_length &&
+                   (resp->flags & RESP_LENGTH_INVALID) != RESP_LENGTH_INVALID &&
+                   browserStatus == 0) {
+                len = resp->content_valid;
+                // 2009/06/10: The 4th. parameter is only allowed to be '0' if
+                //             this code would belong to a filter plugin.  But
+                //             this code realizes an IIS extension and therefore
+                //             only HSE_IO_SYNC and ..._ASYNC is allowed!
+                if (len && (p->WriteClient(p->ConnID, resp->content, &len, HSE_IO_SYNC) != TRUE))
+                {
+                   browserStatus = -1;
+                   WOLog(WO_ERR,"Failed to send content (%d)", GetLastError());
+                }
+
+                if(browserStatus == 0)
+                {
+                   // read next response chunk from the WebObjects application
+                   count = resp_getResponseContent(resp, 1);
+                   if(count > 0)
+                   {
+                       // 2009/06/09: handle situations where content_length is wrong or
+                       //             unset.  Read as much data as possible from the
+                       //             WebObjects application and send the data to the
+                       //             client-side.
+                      resp->content_read += count;
+                      resp->content_valid = count;
+                   }
+                   if(count != 0)
+                   {
+                      // 2009/04/30: error while reading response content (this can happen
+                      //             if the instance dies during sending the response - e.g.
+                      //             during a file download - or if the content_length is
+                      //             wrong/unset).  Stop the loop to avoid endless looping!
+                      WOLog(WO_WARN, "sendResponse(): received an incomplete data package.  Please look for a dead instance or adjust content-length value.");
+                   }
+                }
+            }
+            if(browserStatus == 0)
+            {
+               len = resp->content_valid;
+               // 2009/06/10: The 4th. parameter is only allowed to be '0' if
+               //             this code would belong to a filter plugin.  But
+               //             this code realizes an IIS extension and therefore
+               //             only HSE_IO_SYNC and ..._ASYNC is allowed!
+               if (len && (p->WriteClient(p->ConnID, resp->content, &len, HSE_IO_SYNC) != TRUE))
+               {
+                  browserStatus = -1;
+                  WOLog(WO_ERR,"Failed to send content (%d)", GetLastError());
+               }
+            }
+         }
       }
       str_free(resphdrs);
    } /* else? return warning */
 
-    return;
+   if(resp->content_read < resp->content_length)
+   {
+      // 2009/06/08: in case of an unset/wrong content length value, we
+      //             must close the client socket connection to signalize
+      //             the client application the end-of-stream.
+      closeClientConnection(p, resp);
+
+      if(resp->keepConnection != 0)
+      {
+         // 2009/04/30: it is possible, that the user (=browser) cancels the last started
+         //             request.  The existing mechanism of the nbsocket.c implementation
+         //             (starting a reset operation that cleans/consumes the remaining
+         //             content of the socket buffer) fails sometimes in such situations.
+         //             E.g. during an huge file download, the reset operation doesn't consume
+         //             the complete download stream (such a behaviour would be very expensive!),
+         //             but only the local socket buffer.  If such a connection is reused
+         //             in another request-response-cycle, the adaptor/browser gets unexpected
+         //             data garbage.  This can lead to situations, where the adaptor marks an
+         //             existing and fully functional instance as death.  Therefore: dump
+         //             such connections!
+         WOLog(WO_INFO, "Forget the existing connection.");
+         resp->keepConnection = 0;
+         resp->flags |= RESP_CLOSE_CONNECTION;
+         // after calling the resp_free function, the connection doesn't longer exist!
+      }
+   }
+
+   return;
 }
 
 static DWORD die_resp(EXTENSION_CONTROL_BLOCK *p, HTTPResponse *resp)
@@ -153,7 +296,7 @@ static DWORD die_resp(EXTENSION_CONTROL_BLOCK *p, HTTPResponse *resp)
 static DWORD die(EXTENSION_CONTROL_BLOCK *p, const char *msg, int status)
 {
    HTTPResponse *resp;
-   WOLog(WO_ERR,"WebObjects",NULL,NULL,"Aborting request - %s",msg);
+   WOLog(WO_ERR,"Sending aborting request - %s",msg);
    resp = resp_errorResponse(msg, status);
    return die_resp(p, resp);
 }
@@ -182,17 +325,22 @@ static void copyHeaderForServerVariable(char *var, EXTENSION_CONTROL_BLOCK *p, H
     char *buf, *value, stackBuf[2048];
     DWORD bufsz = sizeof(stackBuf), pos;
 
-    //WOLog(WO_DBG, "reading buffer for server variable %s", var);
+    WOLog(WO_DBG, "reading buffer for server variable %s", var);
     if (p->GetServerVariable(p->ConnID, var, stackBuf, &bufsz) == TRUE) {
         buf = stackBuf;
     } else {
-        //WOLog(WO_DBG, "buffer too small; need %d", bufsz);
-        buf = WOMALLOC(bufsz);
-        if (p->GetServerVariable(p->ConnID, var, buf, &bufsz) != TRUE) {
-            WOFREE(buf);
-            WOLog(WO_ERR, "Could not get header.");
-            return;
-        }
+        if(GetLastError() == 122) // ERROR_INSUFFICIENT_BUFFER
+        {
+            WOLog(WO_DBG, "buffer too small; need %d", bufsz);
+            buf = WOMALLOC(bufsz);
+            if (p->GetServerVariable(p->ConnID, var, buf, &bufsz) != TRUE)
+            {
+                WOFREE(buf);
+                WOLog(WO_ERR, "Could not get header.");
+                return;
+            }
+        } else
+            return; // header not set
     }
 
     if (buf) {
@@ -302,7 +450,13 @@ static void copyHeadersAllRaw(EXTENSION_CONTROL_BLOCK *p, HTTPRequest *req) {
                         }
                     } while (pos < bufsz && buf[pos] != 0);
                 }
-                //WOLog(WO_DBG, "found key=\"%s\", value=\"%s\"", key, value ? value : "(NULL)");
+
+                // do not pass connection setting from client to WO app as this interferes
+                //  with our own connection pooling
+                if (strcasecmp(key, CONNECTION) == 0)
+                    continue;
+                
+                WOLog(WO_DBG, "found key=\"%s\", value=\"%s\"", key, value ? value : "(NULL)");
                 if (value)
                     req_addHeader(req, key, value, STR_COPYKEY|STR_COPYVALUE);
                 else
@@ -342,7 +496,87 @@ static void copyHeaders(EXTENSION_CONTROL_BLOCK *p, HTTPRequest *req) {
     // Get the headers returned by ALL_RAW
     copyHeadersAllRaw(p, req);
     // Get everything else
-    copyHeadersServerVariables(iis_http_headers, p, req);
+    copyHeadersServerVariables((char **)iis_http_headers, p, req); // mstoll 13.10.2005 cast added
+}
+
+
+
+static int readContentData(HTTPRequest *req, void *dataBuffer, int dataSize, int mustFill)
+{
+    EXTENSION_CONTROL_BLOCK *p = (EXTENSION_CONTROL_BLOCK *)req->api_handle;
+    DWORD len_remaining = dataSize;
+    DWORD total_len_read = 0;
+    char *buffer = (char *)dataBuffer;
+    MS_BOOL readStatus;
+    unsigned int lenZeroCounter = 0;
+
+    DWORD len;
+    if(p->cbAvailable > req->total_len_read)
+    {
+        len = p->cbAvailable - req->total_len_read;
+        if(len > dataSize) len = dataSize;
+        memcpy(buffer, p->lpbData + req->total_len_read, len);
+        
+        total_len_read += len;
+        len_remaining -= len;
+    }
+
+    /*
+     * IIS has a weird (or is it convenient?) data queuing mechanism...
+     */
+    while(len_remaining > 0 &&
+          (mustFill || total_len_read == 0))
+    {
+        len = len_remaining;
+        readStatus = p->ReadClient (p->ConnID,buffer + total_len_read, &len);
+        if(readStatus == TRUE)
+        {
+           // 2009/04/29: avoid endless loops, because the ReadClient function
+           //             will return TRUE but with zero bytes read if the
+           //             socket on which the server is listening to the client
+           //             is closed!!!
+           lenZeroCounter =
+              ((len == 0)? (lenZeroCounter + 1) : 0);
+           if(lenZeroCounter > MAGIC_LEN_ZERO_LIMIT)
+           {
+               readStatus = FALSE;
+           }
+        }
+
+        if(readStatus != TRUE)
+        {
+           if(lenZeroCounter > MAGIC_LEN_ZERO_LIMIT)
+           {
+              WOLog(WO_ERR,"ReadClient failed (client socket closed?).");
+           }
+           else
+           {
+              WOLog(WO_ERR,"ReadClient failed");
+           }
+           die(p, INV_FORM_DATA, HTTP_BAD_REQUEST);
+           return -1;
+        }
+
+        total_len_read += len;
+        len_remaining -= len;
+    }
+
+    // still required? - BEGIN
+    if (req_HeaderForKey(req, CONTENT_LENGTH) == NULL) {
+       char *length;
+       length = (char *)WOMALLOC(32);
+       if (length)
+       {
+          sprintf(length,"%d",req->content_length);
+          req_addHeader(req, CONTENT_LENGTH, length, STR_FREEVALUE);
+       }
+       if (p->lpszContentType != NULL)
+          req_addHeader(req, CONTENT_TYPE, p->lpszContentType, 0);
+    }
+    // still required? - END
+
+    req->total_len_read += total_len_read;
+    return total_len_read;
 }
 
 
@@ -350,7 +584,7 @@ static void copyHeaders(EXTENSION_CONTROL_BLOCK *p, HTTPRequest *req) {
 /*
  *	the thing that gets called...
  */
-__declspec(dllexport) DWORD HttpExtensionProc(EXTENSION_CONTROL_BLOCK *p)
+__declspec(dllexport) DWORD __stdcall HttpExtensionProc(EXTENSION_CONTROL_BLOCK *p)
 {
    HTTPRequest *req;
    HTTPResponse *resp = NULL;
@@ -402,6 +636,12 @@ __declspec(dllexport) DWORD HttpExtensionProc(EXTENSION_CONTROL_BLOCK *p)
     *	build the request...
     */
    req = req_new(p->lpszMethod, NULL);
+   req->api_handle = p;
+
+   /*
+    *	get the headers....
+    */
+   copyHeaders(p, req);
 
    /*
     *	validate the method
@@ -414,56 +654,26 @@ __declspec(dllexport) DWORD HttpExtensionProc(EXTENSION_CONTROL_BLOCK *p)
    }
 
    /*
-    *	get the headers....
-    */
-   copyHeaders(p, req);
-
-   /*
     *	get form data if any
     *   assume that POSTs with content length will be reformatted to GETs later
     */
    req->content_length = p->cbTotalBytes;
    if (req->content_length > 0)
    {
-      char *buffer = WOMALLOC(req->content_length);
+      req_allocateContent(req, req->content_length, 1);
+      req->getMoreContent = (req_getMoreContentCallback)readContentData;
+      req->total_len_read = 0;
 
-      if (p->cbAvailable > 0)
-         memcpy(buffer, p->lpbData, p->cbAvailable);
-
-      /*
-       * IIS has a weird (or is it convenient?) data queuing mechanism...
-       */
-      if (req->content_length > p->cbAvailable) {
-          DWORD len;
-          DWORD totalLength, fetchedLength;
-
-          len = req->content_length - p->cbAvailable;
-          totalLength = len;
-          fetchedLength = 0;
-
-          while (fetchedLength < totalLength) {
-              len = totalLength - fetchedLength;
-
-              if (p->ReadClient (p->ConnID,buffer + p->cbAvailable + fetchedLength, &len) != TRUE) {
-                  WOFREE(buffer);
-                  req_free(req);
-                  return die(p, INV_FORM_DATA, HTTP_BAD_REQUEST);
-              }
-
-              fetchedLength += len;
-          }
+      if (req->content_buffer_size == 0)
+      {
+          WOFREE(uri); /* this has to be freed before a return in this function */
+          req_free(req);
+          return die(p, ALLOCATION_FAILURE, HTTP_SERVER_ERROR);
       }
-      req->content = buffer;
-      if (req_HeaderForKey(req, CONTENT_LENGTH) == NULL) {
-         char *length;
-         length = (char *)WOMALLOC(32);
-         if (length)
-         {
-            sprintf(length,"%d",req->content_length);
-            req_addHeader(req, CONTENT_LENGTH, length, STR_FREEVALUE);
-         }
-         if (p->lpszContentType != NULL)
-            req_addHeader(req, CONTENT_TYPE, p->lpszContentType, 0);
+      if (readContentData(req, req->content, req->content_buffer_size, 1) == -1) {
+         WOFREE(uri); /* this has to be freed before a return in this function */
+         req_free(req);
+         return die(p, WOURLstrerror(WOURLInvalidPostData), HTTP_BAD_REQUEST);
       }
    }
 
@@ -479,7 +689,6 @@ __declspec(dllexport) DWORD HttpExtensionProc(EXTENSION_CONTROL_BLOCK *p)
     */
    if (resp == NULL) {
       /* if no error so far... */
-      req->api_handle = p;			/* stash this... */
       server_protocol = getHeader(p, CGI_SERVER_PROTOCOL);
       resp = tr_handleRequest(req, uri, &wc, server_protocol, NULL);
       WOFREE(server_protocol);
@@ -495,7 +704,7 @@ __declspec(dllexport) DWORD HttpExtensionProc(EXTENSION_CONTROL_BLOCK *p)
 #if defined(FINDLEAKS)
       showleaks();
 #endif
-   return HSE_STATUS_SUCCESS;
+      return HSE_STATUS_SUCCESS;
 }
 
 
@@ -508,13 +717,14 @@ typedef struct _regthing {
 } regthing;
 
 static const regthing options[] = {
-   { "WOUSERNAME", WOUSERNAME },
-   { "WOPASSWORD", WOPASSWORD },
-   { "CONF_INTERVAL", WOCNFINTVL },
-   { "CONF_URL", WOCONFIG },
-   { "LOG_PATH", WOLOGPATH },
-   { "WEBOBJECTS_OPTIONS", WOOPTIONS },
-   { NULL, NULL }
+    { "WOUSERNAME", WOUSERNAME },
+    { "WOPASSWORD", WOPASSWORD },
+    { "CONF_INTERVAL", WOCNFINTVL },
+    { "CONF_URL", WOCONFIG },
+    { "LOG_FLAG", WOLOGFLAG },
+    { "LOG_PATH", WOLOGPATH },
+    { "WEBOBJECTS_OPTIONS", WOOPTIONS },
+    { NULL, NULL }
 };
 #define	MAX_VAL_LENGTH	4096
 

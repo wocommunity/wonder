@@ -34,12 +34,12 @@ To be proficent in developing web applications with Project Wonder, the followin
 Getting Started
 --------------------
 
-If you are new to Project Wonder you should look at the community's [Getting Started Guide](http://wiki.wocommunity.org/display/WONDER/Getting+Started)
+If you are new to Project Wonder you should look at the community's [Getting Started Guide](http://wiki.wocommunity.org/display/documentation/Home)
 
 Wiki
 --------------------
 
-Check the [community wiki](http://wiki.wocommunity.org/display/WONDER/Home) for more details on Project Wonder.
+Check the [community wiki](http://wiki.wocommunity.org/display/documentation/Home) for more details on Project Wonder.
 
 Typical Deployment Stack
 -------------------------
@@ -60,3 +60,8 @@ Binaries
 --------------------
 
 Binaries can be downloaded from the [community build server](http://jenkins.wocommunity.org/job/Wonder/)
+
+Changelog
+--------------------
+
+You can find a [changelog](https://github.com/projectwonder/wonder/wiki/Changelog) in the Wiki section on Github.

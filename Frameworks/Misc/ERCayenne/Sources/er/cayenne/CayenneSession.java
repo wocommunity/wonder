@@ -31,7 +31,7 @@ public class CayenneSession extends ERXSession {
 
 	/**
 	 * Returns the ObjectContext that is tied to the lifespan of the Session. Created on first access.
-	 * @return
+	 * @return a org.apache.cayenne.ObjectContext object
 	 */
 	public ObjectContext defaultObjectContext() {
 		if (objectContext == null) {

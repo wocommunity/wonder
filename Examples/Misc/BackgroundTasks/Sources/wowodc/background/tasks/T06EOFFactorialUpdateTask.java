@@ -15,7 +15,7 @@ import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSTimestamp;
 
-import er.extensions.concurrency.ERXAbstractTask;
+import er.extensions.concurrency.ERXTask;
 import er.extensions.concurrency.IERXPercentComplete;
 import er.extensions.concurrency.IERXStoppable;
 import er.extensions.eof.ERXFetchSpecification;
@@ -32,7 +32,7 @@ import er.extensions.foundation.IERXStatus;
  * 
  * @author kieran
  */
-public class T06EOFFactorialUpdateTask extends ERXAbstractTask implements Callable<EOGlobalID>, IERXStatus , IERXPercentComplete, IERXStoppable {
+public class T06EOFFactorialUpdateTask extends ERXTask<EOGlobalID> implements Callable<EOGlobalID>, IERXStatus , IERXPercentComplete, IERXStoppable {
 	
 	private static final Logger log = Logger.getLogger(T06EOFFactorialUpdateTask.class);
 	
@@ -71,8 +71,8 @@ public class T06EOFFactorialUpdateTask extends ERXAbstractTask implements Callab
 	
 	private final EOGlobalID _taskInfoGID;
 
-	public EOGlobalID call() {
-
+	@Override
+	public EOGlobalID _call() {
 		_elapsedTime = 0;
 		Format wholeNumberFormatter = new DecimalFormat("#,##0");
 		

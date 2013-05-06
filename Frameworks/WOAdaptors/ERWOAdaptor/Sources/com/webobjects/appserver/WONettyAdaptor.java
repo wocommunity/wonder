@@ -195,6 +195,7 @@ public class WONettyAdaptor extends WOAdaptor {
 		
 		private WebSocketServerHandshaker handshaker;
 
+		@Override
 		public void channelClosed(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
 			super.channelClosed(ctx, e);
 			NSNotificationCenter.defaultCenter().postNotification(WebSocketStore.CHANNEL_CLOSED_NOTIFICATION, ctx.getChannel());

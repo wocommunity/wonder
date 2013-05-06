@@ -31,7 +31,6 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORedirect;
 import com.webobjects.appserver.WORequest;
-import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSSelector;
 
 import er.extensions.appserver.ERXHttpStatusCodes;
@@ -71,8 +70,8 @@ public class SeleniumStartTesting extends WODirectAction {
         // url = url.replaceFirst(".*?selenium-core/TestRunner.html", "chrome://selenium-ide/content/selenium/TestRunner.html");
         return url;
 	}
-	
-	// @Override
+
+	@Override
 	public WOActionResults defaultAction() {
 		return runAction();
 	}
@@ -103,6 +102,7 @@ public class SeleniumStartTesting extends WODirectAction {
         return result(null, false);
     }
 
+    @Override
     public WOActionResults performActionNamed(String anActionName) {
         if(!ERSelenium.testsEnabled()) {
             return new ERXResponse(ERXHttpStatusCodes.STATUS_FORBIDDEN);

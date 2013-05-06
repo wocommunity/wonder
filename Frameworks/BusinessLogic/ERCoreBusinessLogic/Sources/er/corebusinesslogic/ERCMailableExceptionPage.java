@@ -39,6 +39,7 @@ public class ERCMailableExceptionPage extends WOComponent {
         super(aContext);
     }
 
+    @Override
     public boolean isEventLoggingEnabled() {
         return false;
     }

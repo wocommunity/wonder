@@ -47,6 +47,7 @@ public class ERD2WQueryNonNull extends QueryComponent {
         }
         return label;
     }
+    @Override
     public Object value() { 
         Object value = displayGroup().queryMatch().valueForKey(propertyKey());
         Object operator = displayGroup().queryOperator().valueForKey(propertyKey());
@@ -60,6 +61,7 @@ public class ERD2WQueryNonNull extends QueryComponent {
         }
     }
 
+    @Override
     public void setValue(Object newValue) {
         if (newValue==DONT_CARE_VALUE) {
             displayGroup().queryMatch().takeValueForKey(null, propertyKey());

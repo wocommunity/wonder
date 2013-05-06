@@ -1,9 +1,3 @@
-//
-// EditOrCreateDirectors.java: Class file for WO Component 'EditOrCreateDirectors'
-// Project ERMovies
-//
-// Created by max on Mon Mar 10 2003
-//
 package er.examples.movies;
 
 import com.webobjects.appserver.WOComponent;

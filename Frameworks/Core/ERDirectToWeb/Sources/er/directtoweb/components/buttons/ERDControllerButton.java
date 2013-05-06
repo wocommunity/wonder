@@ -82,6 +82,7 @@ public class ERDControllerButton extends ERDActionButton implements ERDBranchInt
         return nextPageFromParent();
     }
     
+    @Override
     public void reset() {
         super.reset();
         branch = null;
@@ -150,6 +151,7 @@ public class ERDControllerButton extends ERDActionButton implements ERDBranchInt
         return branchDelegate() != null && branchChoices().count() > 0;
     }
 
+    @Override
     public void validationFailedWithException(Throwable theException,Object theValue, String theKeyPath) {
         parent().validationFailedWithException(theException, theValue, theKeyPath);
         log.info("" + theException + theValue + theKeyPath);

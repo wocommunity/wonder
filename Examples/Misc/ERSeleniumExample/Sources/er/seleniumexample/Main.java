@@ -11,6 +11,6 @@ public class Main extends WOComponent {
     }
 
     public WOComponent showAction() {
-    	return (Message)pageWithName(Message.class.getName());
+    	return pageWithName(Message.class.getName());
     }
 }

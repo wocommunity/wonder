@@ -10,7 +10,7 @@ endif
 
 # By default, only build CGI adaptor.
 ifeq "" "$(ADAPTORS)"
-ADAPTORS = CGI
+ADAPTORS = CGI IIS
 endif
 
 COMMON_TARGETS = Adaptor/make.preamble Adaptor/make.postamble
@@ -48,9 +48,12 @@ Apache2::
 Apache2.2::
 	cd Apache2.2 ; ${MAKE}
 
+Apache2.4::
+	cd Apache2.4 ; ${MAKE}
+
 IIS::
 	cd IIS ; ${MAKE}
 
 NSAPI::
 	cd NSAPI ; ${MAKE}
-	
+

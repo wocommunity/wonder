@@ -38,6 +38,7 @@ public class ERXKeepAliveResponse extends ERXResponse {
 	public ERXKeepAliveResponse() {
 		//setHeader("keep-alive", "connection");
 		setContentStream(new InputStream() {
+			@Override
 			public int read() throws IOException {
 				synchronized (_queue) {
 					if (_current != null && _currentIndex >= _current.length) {

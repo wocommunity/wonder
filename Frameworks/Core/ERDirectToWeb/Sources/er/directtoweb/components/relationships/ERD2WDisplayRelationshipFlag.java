@@ -53,6 +53,7 @@ public class ERD2WDisplayRelationshipFlag extends D2WDisplayBoolean {
         super(context);
     }
 
+    @Override
     public Object objectPropertyValue() {
         String propertyKey = d2wContext().propertyKey();
         int index = propertyKey.indexOf(".@");

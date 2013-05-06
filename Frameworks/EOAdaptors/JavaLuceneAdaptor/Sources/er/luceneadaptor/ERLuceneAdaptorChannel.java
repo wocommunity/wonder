@@ -384,7 +384,9 @@ public class ERLuceneAdaptorChannel extends EOAdaptorChannel {
 			} else {
 				field = null;
 			}
-			field.setValue(stringValue);
+			if (field != null) {
+				field.setValue(stringValue);
+			}
 			return field;
 		}
 
@@ -432,6 +434,7 @@ public class ERLuceneAdaptorChannel extends EOAdaptorChannel {
 		return _searcher;
 	}
 
+	@Override
 	@Deprecated
 	public NSDictionary primaryKeyForNewRowWithEntity(EOEntity entity) {
 		return adaptorContext()._newPrimaryKey(null, entity);

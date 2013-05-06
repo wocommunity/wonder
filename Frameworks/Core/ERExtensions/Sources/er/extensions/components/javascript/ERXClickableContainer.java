@@ -34,9 +34,9 @@ public class ERXClickableContainer extends WOGenericContainer {
 	
 	public ERXClickableContainer(String name, NSDictionary associations, WOElement template) {
 		super(name, ERXClickableContainer._processAssociations(associations), template);
-		_actionClass = (WOAssociation) _associations.removeObjectForKey("actionClass");
-		_directActionName = (WOAssociation) _associations.removeObjectForKey("directActionName");
-		_disabled = (WOAssociation) _associations.removeObjectForKey("disabled");
+		_actionClass = _associations.removeObjectForKey("actionClass");
+		_directActionName = _associations.removeObjectForKey("directActionName");
+		_disabled = _associations.removeObjectForKey("disabled");
 	}
 
 	protected static NSDictionary _processAssociations(NSDictionary associations) {
@@ -54,6 +54,7 @@ public class ERXClickableContainer extends WOGenericContainer {
 		return mutableAssociations;
 	}
 
+	@Override
 	public void appendAttributesToResponse(WOResponse response, WOContext context) {
 		super.appendAttributesToResponse(response, context);
 		WOComponent component = context.component();

@@ -18,6 +18,7 @@ import com.webobjects.foundation.NSData;
 import er.erxtest.ERXTestCase;
 import er.erxtest.ERXTestUtilities;
 import er.erxtest.model.Company;
+import er.erxtest.model.Employee;
 
 public class ERXECTest extends ERXTestCase {
 
@@ -50,6 +51,30 @@ public class ERXECTest extends ERXTestCase {
         Assert.assertNotNull(ec3);
 
         Assert.assertEquals(parentEC3, ec3.parentObjectStore());
+    }
+    
+    public void testNestedECs() {
+    	try {
+	    	EOEditingContext ec = ERXEC.newEditingContext();
+    		Company c = (Company) EOUtilities.createAndInsertInstance(ec, Company.ENTITY_NAME);
+    		c.setName("Name");
+    		ec.saveChanges();
+    		EOEditingContext nested = ERXEC.newEditingContext(ec);
+    		Company nestC = c.localInstanceIn(nested);
+    		Employee e = (Employee) EOUtilities.createAndInsertInstance(nested, Employee.ENTITY_NAME);
+    		e.setFirstName("First");
+    		e.setLastName("Last");
+    		e.setManager(Boolean.FALSE);
+    		e.addObjectToBothSidesOfRelationshipWithKey(nestC, Employee.COMPANY_KEY);
+    		nested.saveChanges();
+    		ec.saveChanges();
+	    	System.gc();
+    		c.delete();
+    		ec.saveChanges();
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    		Assert.fail(e.getMessage());
+    	}
     }
     
     public void testSerializablilty() throws IOException, ClassNotFoundException {
@@ -708,7 +733,7 @@ public class ERXECTest extends ERXTestCase {
 	}
 
 	/**
-	 * Test method for {@link er.extensions.eof.ERXEC#factory()}.
+	 * Test method for {@link er.extensions.eof.ERXEC#_factory()}.
 	 */
 	public void _testFactory() {
 		fail("Not yet implemented");

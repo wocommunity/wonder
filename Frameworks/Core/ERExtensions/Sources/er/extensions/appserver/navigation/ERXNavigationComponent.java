@@ -25,6 +25,7 @@ public abstract class ERXNavigationComponent extends WOComponent {
         super(context);
     }
     
+    @Override
     public void appendToResponse(WOResponse r, WOContext c) {
         ERXNavigationState state = ERXNavigationManager.manager().navigationStateForSession(session());
         if (shouldSetNavigationState()) {

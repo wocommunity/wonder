@@ -66,7 +66,7 @@ public class WOAggregateEventRow extends WOEventRow {
      */
     public EOEvent event()
     {
-        return (EOEvent)object().events().objectAtIndex(0);
+        return object().events().objectAtIndex(0);
     }
 
     /** 

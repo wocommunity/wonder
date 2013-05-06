@@ -243,6 +243,9 @@ Note: Deleting an attachment that is in the unavailable state may result in the 
 	
 	<dt>er.attachment.s3.bucket / er.attachment.[configurationName].s3.bucket</dt>
 	<dd>(required) The name of the bucket to store and retrieve attachments into.  The bucket must already exist in your S3 account.</dd> 
+	
+	<dt>er.attachment.s3.host / er.attachment.[configurationName].s3.host</dt>
+	<dd>(optional) Defaults to s3.amazonaws.com. Use this property if your bucket is not in the default region. For example put s3-eu-west-1.amazonaws.com for EU(Ireland).</dd> 
 
 	<dt>er.attachment.s3.key / er.attachment.[configurationName].s3.key</dt>
 	<dd>(optional) The name of the file to store in the S3 bucket.  This is evaluated as a path template.  The default value is "${pk}${ext}".</dd>

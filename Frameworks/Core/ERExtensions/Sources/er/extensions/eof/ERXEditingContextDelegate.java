@@ -22,7 +22,7 @@ import er.extensions.foundation.ERXProperties;
  * other delegates subclass this delegate. The main
  * delegate that is used is {@link ERXDefaultEditingContextDelegate}.
  */
-public class ERXEditingContextDelegate extends Object implements java.io.Serializable {
+public class ERXEditingContextDelegate implements java.io.Serializable {
 	/**
 	 * Do I need to update serialVersionUID?
 	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 

@@ -235,9 +235,7 @@ public class ERXSLTWrapper extends ERXNonSynchronizingComponent {
 		private static final Logger log       = Logger.getLogger(TemplatePool.class);
 		private ERXSimpleTemplateParser templateParser = new ERXSimpleTemplateParser("?", false);
 
-		private TemplatePool() {
-			// nothing
-		}
+		protected TemplatePool() {}
 
 		public Map getTemplates() {
 			return templates;

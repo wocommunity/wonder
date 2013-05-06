@@ -61,6 +61,7 @@ public class ERD2WQueryStringWithChoices extends ERD2WQueryStringOperator {
         return _choices;
     }
     
+    @Override
     public void reset(){
         super.reset();
         _choices = null;

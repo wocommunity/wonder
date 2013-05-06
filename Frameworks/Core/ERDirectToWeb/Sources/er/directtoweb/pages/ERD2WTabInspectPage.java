@@ -72,10 +72,8 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
     //AK: what are these used for? They do nothing?
     protected Integer _tabNumber;
 
-    @Override
     public Integer tabNumber(){ return _tabNumber;}
 
-    @Override
     public void setTabNumber(Integer newTabNumber){ _tabNumber  = newTabNumber;}
 
     @Override
@@ -187,7 +185,7 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
             int currentIndex = tabSectionsContents().indexOfObject(currentTab());
             if (tabSectionsContents().count() >= currentIndex + 2 && currentIndex >= 0) {
                 NSNotificationCenter.defaultCenter().postNotification(WILL_SWITCH_TAB, this);
-                setCurrentTab((ERD2WContainer)tabSectionsContents().objectAtIndex(currentIndex + 1));
+                setCurrentTab(tabSectionsContents().objectAtIndex(currentIndex + 1));
             }
             else
                 log.warn("Attempting to move to next tab when current index is: " + currentIndex + " and tab count: " +
@@ -200,7 +198,7 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
         if (switchTabAction()) {
             int currentIndex = tabSectionsContents().indexOfObject(currentTab());
             if (tabSectionsContents().count() >= currentIndex && currentIndex > 0)
-                setCurrentTab((ERD2WContainer)tabSectionsContents().objectAtIndex(currentIndex - 1));
+                setCurrentTab(tabSectionsContents().objectAtIndex(currentIndex - 1));
             else
                 log.warn("Attempting to move to previous tab when current index is: " + currentIndex + " and tab count: " +
                          tabSectionsContents().count());

@@ -48,6 +48,7 @@ public class Session extends ERXSession implements ErrorCollector {
         return WOTaskdHandler.siteConfig();
     }
 
+    @Override
     public void appendToResponse(WOResponse aResponse, WOContext aContext) {
         // Check to make sure they have logged in if it is required
         MSiteConfig aMonitorConfig = siteConfig();

@@ -30,6 +30,7 @@ public class ERIAttributeGroup extends _ERIAttributeGroup {
     public interface Key extends _ERIAttributeGroup.Key {
     }
 
+    @Override
     public void init(EOEditingContext ec) {
         super.init(ec);
     }

@@ -1,6 +1,5 @@
 package er.jasperreports;
 
-
 import java.util.Enumeration;
 
 import net.sf.jasperreports.engine.JRDataSource;
@@ -19,8 +18,6 @@ import er.extensions.foundation.ERXAssert;
 import er.extensions.foundation.ERXProperties;
 
 
-
-
 /**
  *	Takes an an NSArray of {@link NSKeyValueCodingAdditions} (think keypaths) objects
  * 
@@ -30,7 +27,6 @@ public class ERJRFoundationDataSource implements JRDataSource {
 	public final static String REPORT_KEYPATH_SEPARATOR = ERXProperties.stringForKeyWithDefault("er.jasperreports.keyPathSeparator", "_");
 	private final static String WEBOBJECTS_KEYPATH_SEPARATOR = ".";
 	
-	@SuppressWarnings("unused")
 	private static final Logger log = Logger.getLogger(ERJRFoundationDataSource.class);
 	
 	/** 
@@ -91,11 +87,11 @@ public class ERJRFoundationDataSource implements JRDataSource {
 	}
 	
 	public boolean getFilterNulls() {
-		return this.filterNulls;
+		return filterNulls;
 	}
 	
 	public void setFilterNulls(boolean filters) {
-		this.filterNulls = filters;
+		filterNulls = filters;
 	}
 	
 	/* (non-Javadoc)

@@ -61,7 +61,7 @@ public class ERDSortedManyToManyAssignment extends ERDAssignment {
     public ERDSortedManyToManyAssignment(EOKeyValueUnarchiver unarchiver) { super(unarchiver); }
 
     /**
-        * Implementation of the {@link ERDComputingAssignmentInterface}. This
+        * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This
      * assignment depends upon the context keys: "propertyKey" and
      * "keyWhenRelationship". This array of keys is used when constructing the
      * significant keys for the passed in keyPath.

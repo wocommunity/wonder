@@ -28,35 +28,38 @@ public class ERXBooleanSelector extends ERXStatelessComponent {
 
 	private final NSArray<Boolean> _options = new NSArray<Boolean>(new Boolean[] { Boolean.TRUE, Boolean.FALSE });
 
-    public static class BooleanProxy implements Serializable {
-    	/**
-    	 * Do I need to update serialVersionUID?
-    	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
-    	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
-    	 */
-    	private static final long serialVersionUID = 1L;
+	public static class BooleanProxy implements Serializable {
+		/**
+		 * Do I need to update serialVersionUID?
+		 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the
+		 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
+		 */
+		private static final long serialVersionUID = 1L;
 
-        private final Boolean _value;
-       
-        BooleanProxy(Boolean value) {
-            _value = value;
-        }
-    	
-       	public Boolean value() {
-            return _value;
-    	}
-       	
-       	public String toString() {
-            return _value != null ? _value.toString() : null;
-    	}
-       	
-       	public int hashCode() {
-       		return _value == null ? 0 : _value.hashCode();
-       	}
+		private final Boolean _value;
 
-    	public boolean equals(Object other) {
-            return other == _value || (other != null && ((BooleanProxy)other).value() == _value);
-    	}
+		BooleanProxy(Boolean value) {
+			_value = value;
+		}
+
+		public Boolean value() {
+			return _value;
+		}
+
+		@Override
+		public String toString() {
+			return _value != null ? _value.toString() : null;
+		}
+
+		@Override
+		public int hashCode() {
+			return _value == null ? 0 : _value.hashCode();
+		}
+
+		@Override
+		public boolean equals(Object other) {
+			return other == _value || (other != null && ((BooleanProxy) other).value() == _value);
+		}
     }
     
     private static final BooleanProxy TRUE = new BooleanProxy(Boolean.TRUE);
@@ -74,7 +77,11 @@ public class ERXBooleanSelector extends ERXStatelessComponent {
 	}
 
 	public String noSelectionString() {
-		return stringValueForBinding("noSelectionString", null);
+		String noSelectionString = stringValueForBinding("noSelectionString");
+		if(noSelectionString != null) {
+			noSelectionString = ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(noSelectionString);
+		}
+		return noSelectionString;
 	}
 
 	public String displayString() {
@@ -86,7 +93,7 @@ public class ERXBooleanSelector extends ERXStatelessComponent {
 			displayString = ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(stringValueForBinding("noString", "No"));
 		}
 		else {
-			displayString = ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(noSelectionString());
+			displayString = noSelectionString();
 		}
 		return displayString;
 	}
@@ -94,7 +101,7 @@ public class ERXBooleanSelector extends ERXStatelessComponent {
 	public String uiMode() {
 		return stringValueForBinding("uiMode", "popup");
 	}
-	
+
 	public boolean isPopup() {
 		return "popup".equals(uiMode());
 	}
@@ -106,7 +113,7 @@ public class ERXBooleanSelector extends ERXStatelessComponent {
 	public boolean isRadio() {
 		return "radio".equals(uiMode());
 	}
-	
+
 	public Object proxySelection() {
 		Boolean value = (Boolean) valueForBinding("selection");
 		if(value == null) return NULL;
@@ -128,7 +135,7 @@ public class ERXBooleanSelector extends ERXStatelessComponent {
 	public NSArray<Boolean> options() {
 		return _options;
 	}
-	
+
 	@Override
 	public void reset() {
 		_option = null;

@@ -18,7 +18,6 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
 import er.directtoweb.assignments.ERDAssignment;
-import er.directtoweb.assignments.ERDComputingAssignmentInterface;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
 
@@ -75,7 +74,7 @@ public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
     public ERDDefaultsEmbeddedAssignment (String key, Object value) { super(key,value); }
     
     /**
-     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This
      * assignment depends upon the context keys: "propertyKey", "object.entityName",
      * and "embeddedEntityName". This array of keys is used when constructing the 
      * significant keys for the passed in keyPath.
@@ -94,6 +93,7 @@ public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
      * @param c a D2W context
      * @return localizer for the session stored in the context.
      */
+    @Override
     public ERXLocalizer localizerForContext(D2WContext c) {
         return ERXLocalizer.currentLocalizer();
     }
@@ -227,6 +227,7 @@ public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
      * @return key for method lookup, in this case the 
      *		<code>value</code> of the assignment is returned.
      */
+    @Override
     public String keyForMethodLookup(D2WContext c) {
         return (String)value();
     }

@@ -18,10 +18,13 @@ import er.ajax.AjaxComponent;
 import er.ajax.AjaxOption;
 import er.ajax.AjaxOptions;
 import er.ajax.AjaxUtils;
+import er.extensions.appserver.ERXWOContext;
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.foundation.ERXValueUtilities;
 
 public class MTAjaxAutoComplete extends AjaxComponent {
+
+	private static final long serialVersionUID = 1L;
 
 	public String divName;
 	public String fieldName;
@@ -33,7 +36,6 @@ public class MTAjaxAutoComplete extends AjaxComponent {
 
 	@Override
 	protected void addRequiredWebResources(WOResponse res) {
-		// TODO Auto-generated method stub
 		MTAjaxUtils.addScriptResourceInHead(context(), res, "MooTools", MTAjaxUtils.MOOTOOLS_CORE_JS);
 		MTAjaxUtils.addScriptResourceInHead(context(), res, "MooTools", "scripts/plugins/autocomplete/AutoCompleter.js");
 	}
@@ -41,6 +43,7 @@ public class MTAjaxAutoComplete extends AjaxComponent {
 	/**
 	 * Overridden to set the IDs for the field and the div tag.
 	 */
+	@Override
 	public void awake() {
 		super.awake();
 		divName = safeElementID() + "_div";
@@ -48,6 +51,7 @@ public class MTAjaxAutoComplete extends AjaxComponent {
 		indicatorName = safeElementID() + "_indicator";
 	}
 
+	@Override
 	public void sleep() {
 		divName = null;
 		fieldName = null;
@@ -58,15 +62,9 @@ public class MTAjaxAutoComplete extends AjaxComponent {
 	/**
 	 * Overridden because the component is stateless
 	 */
+	@Override
 	public boolean isStateless() {
 		return true;
-	}
-
-	/**
-	 * Overridden because the component does not synch with the bindings.
-	 */
-	public boolean synchronizesVariablesWithBindings() {
-		return false;
 	}
 
 	public String indicator() {
@@ -77,8 +75,8 @@ public class MTAjaxAutoComplete extends AjaxComponent {
 		return indicator;
 	}
 
-	protected NSDictionary createAjaxOptions() {
-		NSMutableArray ajaxOptionsArray = new NSMutableArray();
+	protected NSDictionary<String, String> createAjaxOptions() {
+		NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<AjaxOption>();
 		ajaxOptionsArray.addObject(new AjaxOption("tokens", AjaxOption.STRING_ARRAY));
 		ajaxOptionsArray.addObject(new AjaxOption("frequency", AjaxOption.NUMBER));
 		ajaxOptionsArray.addObject(new AjaxOption("minChars", AjaxOption.NUMBER));
@@ -95,13 +93,14 @@ public class MTAjaxAutoComplete extends AjaxComponent {
 		ajaxOptionsArray.addObject(new AjaxOption("partialChars", AjaxOption.NUMBER));
 		ajaxOptionsArray.addObject(new AjaxOption("ignoreCase", AjaxOption.BOOLEAN));
 		ajaxOptionsArray.addObject(new AjaxOption("activateOnFocus", AjaxOption.BOOLEAN));
-		NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
+		NSMutableDictionary<String, String> options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
 		return options;
 	}
 
 	/**
 	 * Overridden to add the initialization javascript for the auto completer.
 	 */
+	@Override
 	public void appendToResponse(WOResponse res, WOContext ctx) {
 		super.appendToResponse(res, ctx);
 		boolean isDisabled = hasBinding("disabled") && ((Boolean) valueForBinding("disabled")).booleanValue();
@@ -113,7 +112,8 @@ public class MTAjaxAutoComplete extends AjaxComponent {
 				String listJS = null;
 				if (isLocalSharedList) {
 					String varName = (String) valueForBinding("localSharedVarName");
-					NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(res);
+					@SuppressWarnings("unchecked")
+					NSMutableDictionary<String, String> userInfo = ERXWOContext.contextDictionary();
 					if (userInfo.objectForKey(varName) == null) {
 						String ljs = listeJS();
 						AjaxUtils.addScriptCodeInHead(res, ctx, "var " + varName + " = " + ljs + ";");
@@ -148,7 +148,8 @@ public class MTAjaxAutoComplete extends AjaxComponent {
 	String listeJS() {
 		StringBuffer str = new StringBuffer();
 		str.append("new Array(");
-		NSArray list = (NSArray) valueForBinding("list");
+		@SuppressWarnings("unchecked")
+		NSArray<Object> list = (NSArray<Object>) valueForBinding("list");
 		int max = list.count();
 		String cnt = "";
 		boolean hasItem = hasBinding("item");
@@ -209,10 +210,11 @@ public class MTAjaxAutoComplete extends AjaxComponent {
 		if (hasBinding("selection")) {
 			Object selection = null;
 			if (strValue != null) {
-				NSArray values = (NSArray) valueForBinding("list");
+				@SuppressWarnings("unchecked")
+				NSArray<Object> values = (NSArray<Object>) valueForBinding("list");
 				int maxItems = maxItems();
 				int itemsCount = 0;
-				for(Enumeration e = values.objectEnumerator(); e.hasMoreElements() && itemsCount++ < maxItems;) {
+				for(Enumeration<Object> e = values.objectEnumerator(); e.hasMoreElements() && itemsCount++ < maxItems;) {
 					Object value = e.nextElement();
 					setValueForBinding(value, "item");
 					String displayString = displayStringForValue(value);
@@ -225,10 +227,6 @@ public class MTAjaxAutoComplete extends AjaxComponent {
 			setValueForBinding(selection, "selection");
 		}
 		setValueForBinding(strValue, "value");
-	}
-
-	public void takeValuesFromRequest(WORequest request, WOContext context) {
-		super.takeValuesFromRequest(request, context);
 	}
 
 	protected void appendItemToResponse(Object value, WOElement child, boolean hasItem, WOResponse response, WOContext context) {
@@ -252,6 +250,7 @@ public class MTAjaxAutoComplete extends AjaxComponent {
 	 * pushes it up to the parent and pulls the "list" binding. The parent is
 	 * responsible for returning a list with some items that match the current value.
 	 */
+	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		// String inputString = request.contentString();
 
@@ -267,12 +266,14 @@ public class MTAjaxAutoComplete extends AjaxComponent {
 		WOElement child = _childTemplate();
 		boolean hasItem = hasBinding("item");
 		if (values instanceof NSArray) {
-			for(Enumeration valueEnum = ((NSArray)values).objectEnumerator(); valueEnum.hasMoreElements() && itemsCount++ < maxItems;) {
+			for(@SuppressWarnings("unchecked")
+			Enumeration<Object> valueEnum = ((NSArray<Object>)values).objectEnumerator(); valueEnum.hasMoreElements() && itemsCount++ < maxItems;) {
 				appendItemToResponse(valueEnum.nextElement(), child, hasItem, response, context);
 			}
 		}
 		else if (values instanceof List) {
-			for(Iterator iter = ((List)values).iterator(); iter.hasNext() && itemsCount++ < maxItems;) {
+			for(@SuppressWarnings("unchecked")
+			Iterator<Object> iter = ((List<Object>)values).iterator(); iter.hasNext() && itemsCount++ < maxItems;) {
 				appendItemToResponse(iter.next(), child, hasItem, response, context);
 			}
 		}

@@ -82,7 +82,6 @@ public class AjaxDatePicker extends AjaxComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	
     private static final NSArray<String> _dayNames = new NSArray<String>(new String[] {"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"}); 
     private static final NSArray<String> _monthNames = new NSArray<String>(new String[] {"January","February","March","April","May","June","July","August","September","October","November","December"}); 
 
@@ -319,6 +318,7 @@ public class AjaxDatePicker extends AjaxComponent {
     /**
      * Includes calendar.css and calendar.js.
      */
+	@Override
 	protected void addRequiredWebResources(WOResponse response) {
 		ERXResponseRewriter.addScriptResourceInHead(response, context(), "Ajax", "prototype.js");
 		ERXResponseRewriter.addScriptResourceInHead(response, context(), "Ajax", "wonder.js");
@@ -330,12 +330,13 @@ public class AjaxDatePicker extends AjaxComponent {
 	/**
 	 * No action so nothing for us to handle.
 	 */
+	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		return null;
 	}
     	
     /**
-     * Overridden so that parent will handle in the same manner as if this were a dynamic element.
+     * Overridden so that parent will handle in the same manner as if this were a dynamic element. 
      * @param t the exception thrown during validation
      * @param value the given value to be validated
      * @param keyPath the key path associated with this value, identifies the property of an object

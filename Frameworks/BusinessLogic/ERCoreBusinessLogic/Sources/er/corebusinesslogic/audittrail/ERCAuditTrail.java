@@ -68,6 +68,7 @@ public class ERCAuditTrail extends _ERCAuditTrail {
         super();
     }
     
+    @Override
     public void init(EOEditingContext ec) {
         super.init(ec);
         setIsDeleted(false);

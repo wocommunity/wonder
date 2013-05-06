@@ -634,7 +634,7 @@ public class ERXQ {
 		}
 		return new ERXOrQualifier(qualifiers);
 	}
-	
+
 	/**
 	 * Equivalent to a new ERXAndQualifier of
 	 * EONotQualifier(EOKeyValueQualifier) with key equals value for each value.

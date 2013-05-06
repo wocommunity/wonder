@@ -100,8 +100,6 @@ public interface ERQSJobDescription
 	/**
 	 * jobInfos is used to pass information when the job will run.<p>
 	 * All key/value pair will be given to the job.
-	 * 
-	 * @param map informations that can be passed to the running job.
 	 */
 	Map<String, Object> jobInfos();
 }

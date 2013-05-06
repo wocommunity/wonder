@@ -81,7 +81,7 @@ public class ERD2WEditToManyFaultList extends D2WEditToManyFault {
     @Override
     public WOComponent editValues() {
         String targetEntityName = relationship().destinationEntity().name();
-        EditRelationshipPageInterface editPage = (EditRelationshipPageInterface) D2W.factory().editRelationshipPageForEntityNamed(targetEntityName, session());
+        EditRelationshipPageInterface editPage = D2W.factory().editRelationshipPageForEntityNamed(targetEntityName, session());
         editPage.setMasterObjectAndRelationshipKey(object(), propertyKey());
         editPage.setNextPage(context().page());
         return (WOComponent)editPage;

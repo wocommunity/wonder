@@ -18,6 +18,7 @@ ACTION : WOSubmitButton {
 	data-iconpos = ^iconpos;
 	otherTagString = miniVersion;
 	data-ajax = "false";
+	id = javaScriptElementID;
 }
 
 
@@ -32,4 +33,5 @@ DIRECTACTION : WOSubmitButton {
 	data-inline = ^inline;
 	data-iconpos = ^iconpos;
 	otherTagString = miniVersion;
+	id = javaScriptElementID;
 }

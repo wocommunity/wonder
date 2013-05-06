@@ -44,7 +44,7 @@ public class RelationshipStore implements Store<Ersatz, Neo4JErsatz> {
 	public RelationshipStore(GraphDatabaseService db, EOEntity entity) {
 		this.db = db;
 		this.entity = entity;
-		this.relationshipType = DynamicRelationshipType.withName(entity.name());
+		relationshipType = DynamicRelationshipType.withName(entity.name());
 		
 		NSArray<EOAttribute> pks = entity.primaryKeyAttributes();
 		

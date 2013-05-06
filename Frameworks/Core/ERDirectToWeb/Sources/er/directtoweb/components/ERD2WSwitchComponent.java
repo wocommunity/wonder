@@ -60,6 +60,7 @@ public class ERD2WSwitchComponent extends D2WSwitchComponent {
      * Calling super is a bad thing with 5.2. Will perform binding checks that
      * shouldn't be done.
      */
+    @Override
     public void awake() {
     }
 
@@ -95,17 +96,20 @@ public class ERD2WSwitchComponent extends D2WSwitchComponent {
         if (currentPageConfiguration != null) _pageConfiguration = currentPageConfiguration;
     }
 
+    @Override
     public void appendToResponse(WOResponse r, WOContext c) {
         maybeResetCaches();
         super.appendToResponse(r, c);
     }
 
+    @Override
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         maybeResetCaches();
         super.takeValuesFromRequest(r, c);
     }
 
     private D2WContext _context;
+    @Override
     public D2WContext subContext() {
         if (_context == null) {
             String s = hasBinding("_dynamicPage") ? (String) valueForBinding("_dynamicPage") : null;
@@ -153,10 +157,12 @@ public class ERD2WSwitchComponent extends D2WSwitchComponent {
         return d2wcontext;
     }
 
+    @Override
     public void validationFailedWithException(Throwable e, Object value, String keyPath) {
         parent().validationFailedWithException(e, value, keyPath);
     }
     
+	@Override
 	public NSDictionary extraBindings() {
 		if(extraBindings == null) {
 			extraBindings = new NSMutableDictionary<String, Object>(16);
@@ -179,6 +185,7 @@ public class ERD2WSwitchComponent extends D2WSwitchComponent {
 		return extraBindings;
 	}
 
+	@Override
 	public void setExtraBindings(Object newValue) {
 		extraBindings = (NSMutableDictionary) newValue;
 		Enumeration e = possibleBindings.elements();
@@ -192,7 +199,7 @@ public class ERD2WSwitchComponent extends D2WSwitchComponent {
 	}
 
 	private WOAssociation associationWithName(String name) {
-		WOAssociation result = (WOAssociation) _keyAssociations.objectForKey(name);
+		WOAssociation result = _keyAssociations.objectForKey(name);
 		if (result == null) {
 			NSLog.err.appendln((new StringBuilder()).append("DirectToWeb - association with name ").append(name)
 					.append(" not found on ").append(this).toString());

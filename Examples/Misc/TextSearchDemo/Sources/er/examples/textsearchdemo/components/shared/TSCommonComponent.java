@@ -11,7 +11,7 @@ public class TSCommonComponent extends ERXComponent {
 	
 	public TSCommonComponent(WOContext context) {
 		super(context);
-		_backPage = this.context().page();
+		_backPage = context().page();
 	}
 
 	public WOComponent backPage() {

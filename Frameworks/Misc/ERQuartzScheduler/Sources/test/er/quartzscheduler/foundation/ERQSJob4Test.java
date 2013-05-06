@@ -1,7 +1,5 @@
 package er.quartzscheduler.foundation;
 
-import er.quartzscheduler.foundation.ERQSJob;
-import er.quartzscheduler.foundation.ERQSJobDescription;
 
 public class ERQSJob4Test extends ERQSJob {
 

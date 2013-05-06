@@ -44,10 +44,12 @@ public class ERDEmptyListMessage extends ERDCustomComponent {
 		};
 	}
 
+	@Override
 	public final boolean isStateless() {
 		return true;
 	}
 
+	@Override
 	public final boolean synchronizesVariablesWithBindings() {
 		return false;
 	}
@@ -58,8 +60,8 @@ public class ERDEmptyListMessage extends ERDCustomComponent {
      * 
      */
     public boolean showCreateObjectLink () {
-    	boolean enabledFromRule = ERXValueUtilities.booleanValue(this.d2wContext().valueForKey("showCreateObjectLink"));
-    	boolean entityExists = (this.d2wContext().entity() != null && this.d2wContext().entity().name() != null);
+    	boolean enabledFromRule = ERXValueUtilities.booleanValue(d2wContext().valueForKey("showCreateObjectLink"));
+    	boolean entityExists = (d2wContext().entity() != null && d2wContext().entity().name() != null);
     	
     	return entityExists && enabledFromRule;
     }
@@ -70,7 +72,7 @@ public class ERDEmptyListMessage extends ERDCustomComponent {
     public WOComponent createObject () {
         WOComponent nextPage = null;
         try {
-            EditPageInterface epi = D2W.factory().editPageForNewObjectWithEntityNamed(this.d2wContext().entity().name(), session());
+            EditPageInterface epi = D2W.factory().editPageForNewObjectWithEntityNamed(d2wContext().entity().name(), session());
             epi.setNextPage(context().page());
             nextPage = (WOComponent) epi;
         } catch (IllegalArgumentException e) {

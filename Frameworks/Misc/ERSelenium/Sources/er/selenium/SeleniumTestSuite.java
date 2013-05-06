@@ -39,13 +39,13 @@ public class SeleniumTestSuite extends WODirectAction {
 	public SeleniumTestSuite(WORequest request) {
 		super(request);
 	}
-	
-	// @Override
+
+	@Override
 	public WOActionResults defaultAction() {
 	    return pageWithName(SeleniumTestSuitePage.class.getName());
 	}
-		
-	// @Override
+
+	@Override
 	public WOActionResults performActionNamed(String anActionName) {
 	    if(!ERSelenium.testsEnabled()) {
 	        return new ERXResponse(ERXHttpStatusCodes.STATUS_FORBIDDEN);

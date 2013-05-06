@@ -4,13 +4,13 @@ import java.util.Collection;
 
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.MatchAllDocsQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TermRangeQuery;
 import org.apache.lucene.search.WildcardQuery;
-import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.regex.RegexQuery;
 
 import com.webobjects.eoaccess.EOAttribute;
@@ -21,6 +21,7 @@ import com.webobjects.eocontrol.EOQualifier;
 import er.neo4jadaptor.ersatz.lucene.LuceneErsatz;
 import er.neo4jadaptor.ersatz.lucene.LuceneTranslator;
 import er.neo4jadaptor.query.QueryConverter;
+import er.neo4jadaptor.query.expression.sentence.operators.ComparisonOperator;
 import er.neo4jadaptor.storage.lucene.LuceneStore;
 
 /**
@@ -102,7 +103,7 @@ public class LuceneQueryConverter extends QueryConverter<Query> {
 		}
 	}
 	
-	private Query rangeQuery(String key, EOAttribute att, QueryConverter.ComparisonOperator operator, Object value) {
+	private Query rangeQuery(String key, EOAttribute att, ComparisonOperator operator, Object value) {
 		String min = null;
 		String max = null;
 		boolean minInclusive = false;
@@ -121,10 +122,10 @@ public class LuceneQueryConverter extends QueryConverter<Query> {
 			break;
 		}
 		
-		if (QueryConverter.ComparisonOperator.LESS_OR_EQUAL.equals(operator)) {
+		if (ComparisonOperator.LESS_OR_EQUAL.equals(operator)) {
 			maxInclusive = true;
 		}
-		if (QueryConverter.ComparisonOperator.GREATER_OR_EQUAL.equals(operator)) {
+		if (ComparisonOperator.GREATER_OR_EQUAL.equals(operator)) {
 			minInclusive = true;
 		}
 		
@@ -132,7 +133,7 @@ public class LuceneQueryConverter extends QueryConverter<Query> {
 	}
 	
 	@Override
-	protected Query comparison(EOEntity entity, String key, QueryConverter.ComparisonOperator operator, Object value) {
+	protected Query comparison(EOEntity entity, String key, ComparisonOperator operator, Object value) {
 		EOAttribute att = entity.attributeNamed(key);
 		String luceneValue = LuceneTranslator.instance.fromNeutralValue(value, att);
 		

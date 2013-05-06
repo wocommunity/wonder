@@ -35,6 +35,7 @@ public class D2WOgnlAssignment extends Assignment {
 		super(key, value);
 	}
 
+	@Override
 	public Object fire(D2WContext c) {
 		// MS: This used to be in WOOGNL, but it required everyone who used WOOGNL to
 		// bring in all the D2W frameworks.  I've moved this over to ERD2W instead,

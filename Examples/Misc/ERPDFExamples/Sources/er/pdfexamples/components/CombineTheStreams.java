@@ -1,9 +1,9 @@
 package er.pdfexamples.components;
 
-import org.apache.log4j.Logger;
-
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+
+import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;

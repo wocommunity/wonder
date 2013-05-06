@@ -52,22 +52,24 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 		if(_value == null || !_value.isValueSettable())
 			throw new WODynamicElementCreationException("<" + getClass().getName() + "> 'value' attribute not present or is a constant");
 		
-		_formatter = (WOAssociation)_associations.removeObjectForKey("formatter");
-		_dateFormat = (WOAssociation)_associations.removeObjectForKey("dateformat");
-		_numberFormat = (WOAssociation)_associations.removeObjectForKey("numberformat");
-		_useDecimalNumber = (WOAssociation)_associations.removeObjectForKey("useDecimalNumber");
-		_blankIsNull = (WOAssociation)_associations.removeObjectForKey("blankIsNull");
-		_readonly = (WOAssociation)_associations.removeObjectForKey("readonly");
+		_formatter = _associations.removeObjectForKey("formatter");
+		_dateFormat = _associations.removeObjectForKey("dateformat");
+		_numberFormat = _associations.removeObjectForKey("numberformat");
+		_useDecimalNumber = _associations.removeObjectForKey("useDecimalNumber");
+		_blankIsNull = _associations.removeObjectForKey("blankIsNull");
+		_readonly = _associations.removeObjectForKey("readonly");
 		
 		if(_dateFormat != null && _numberFormat != null) {
 			throw new WODynamicElementCreationException("<" + getClass().getName() + "> Cannot have 'dateFormat' and 'numberFormat' attributes at the same time.");
 		}
 	}
 	
+	@Override
 	public String type() {
 		return "text";
 	}
 	   
+    @Override
     protected boolean isDisabledInContext(WOContext context) {
     	WOAssociation disabled = (WOAssociation) ERXKeyValueCodingUtilities.privateValueForKey(this, "_disabled");
     	return disabled != null && disabled.booleanValueInComponent(context.component());
@@ -77,6 +79,7 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
     	return _readonly != null && _readonly.booleanValueInComponent(context.component());
     }
 
+	@Override
 	public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
 		WOComponent component = wocontext.component();
 		if(!isDisabledInContext(wocontext) && wocontext.wasFormSubmitted() && !isReadonlyInContext(wocontext)) {
@@ -169,6 +172,7 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 		}
 	}
 
+	@Override
 	protected void _appendValueAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
 		WOComponent component = wocontext.component();
 		Object valueInComponent = _value.valueInComponent(component);
@@ -247,9 +251,11 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 		}
 	}
 
+	@Override
 	protected void _appendCloseTagToResponse(WOResponse woresponse, WOContext wocontext) {
 	}
 
+	@Override
 	public String toString() {
 		StringBuffer stringbuffer = new StringBuffer();
 		stringbuffer.append("<");
@@ -265,6 +271,7 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 	/**
 	 * Overridden to make output XML compatible.
 	 */
+    @Override
     public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
         WOResponse newResponse = ERXPatcher.DynamicElementsPatches.cleanupXHTML ? new ERXResponse() : woresponse;
         super.appendToResponse(newResponse, wocontext);

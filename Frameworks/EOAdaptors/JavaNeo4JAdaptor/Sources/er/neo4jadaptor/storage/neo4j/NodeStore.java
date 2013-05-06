@@ -7,7 +7,7 @@ import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
 
 import er.neo4jadaptor.ersatz.Ersatz;
 import er.neo4jadaptor.ersatz.neo4j.Neo4JErsatz;
@@ -44,17 +44,28 @@ public class NodeStore implements Store<Ersatz, Neo4JErsatz> {
 		
 		this.entity = entity;
 		this.db = db;
-		this.pk = EOUtilities.primaryKeyAttribute(entity);
+		pk = EOUtilities.primaryKeyAttribute(entity);
 		this.spaceManager = spaceManager;
 		this.tempNodePool = tempNodePool;
 	}
 	
 	public Neo4JErsatz insert(Ersatz row) {
-		long id = ((Number) row.get(pk)).longValue();
+		Object pkValue = row.get(pk);
+		
+		if (pkValue == null) {
+			// it happens in case of inserts of rows with attributes like "NeededByEOF0" which seem not to be real rows.
+			log.warn("Primary key value is null for " + row + ". Ignoring it (not sure if it's correct behaviour)");
+			return null;
+		}
+		if (pkValue != null && false == pkValue instanceof NodeNumber) {
+			throw new IllegalStateException("Value for primary key " + entity.name() + "." + pk.name() + " was set manually. This adaptor only supports inserts where primary keys aren't set on insert time.");
+		}
+		
+		long id = ((NodeNumber) pkValue).longValue();
 		final Node node = db.getNodeById(id);
 		
 		if (spaceManager.isPermanent(node)) {
-			throw new IllegalStateException("Inserted row already exists in permanent space");
+			throw new IllegalStateException("Node with id=" + id + " already exists in permanent space");
 		} else {			
 			spaceManager.setIsPermanent(node, entity);
 		}
@@ -80,7 +91,7 @@ public class NodeStore implements Store<Ersatz, Neo4JErsatz> {
 		
 		id = EOUtilities.convertToAttributeType(pk, id);
 		
-		NSDictionary<EOAttribute, Object> dict = new NSDictionary<EOAttribute, Object>(id, pk);
+		NSMutableDictionary<EOAttribute, Object> dict = new NSMutableDictionary<EOAttribute, Object>(new NodeNumber(id), pk);
 		
 		return NSDictionaryErsatz.fromDictionary(dict);
 	}
@@ -123,4 +134,53 @@ public class NodeStore implements Store<Ersatz, Neo4JErsatz> {
 			throw new RuntimeException(e);
 		}
 	}
+	
+
+	/**
+	 * Only used to distinguish primary key values being result of a {@link #newPrimaryKey()} call from
+	 * those where primary key value is set manually.
+	 */
+	public static final class NodeNumber extends Number {
+		private final Number number;
+		
+		private NodeNumber(Number number) {
+			this.number = number;
+		}
+		
+		@Override
+		public int intValue() {
+			return number.intValue();
+		}
+
+		@Override
+		public long longValue() {
+			return number.longValue();
+		}
+
+		@Override
+		public float floatValue() {
+			return number.floatValue();
+		}
+
+		@Override
+		public double doubleValue() {
+			return number.doubleValue();
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			return number.equals(obj);
+		}
+		
+		@Override
+		public int hashCode() {
+			return number.hashCode();
+		}
+		
+		@Override
+		public String toString() {
+			return Long.toString(longValue());
+		}
+	}
+	
 }

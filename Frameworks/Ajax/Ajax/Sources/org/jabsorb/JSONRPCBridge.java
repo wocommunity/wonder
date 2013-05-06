@@ -186,7 +186,7 @@ public class JSONRPCBridge implements Serializable
     public ObjectInstance(Object o)
     {
       this.o = o;
-      this.clazz = o.getClass();
+      clazz = o.getClass();
     }
 
     /**
@@ -1439,6 +1439,10 @@ public class JSONRPCBridge implements Serializable
       JSONArray arguments)
   {
     Method method[];
+
+    if (methodMap == null) {
+        return null;
+    }
 
     // first, match soley by the method name and number of arguments passed in
     // if there is a single match, return the single match

@@ -40,6 +40,7 @@ public class ERDIsKindOfEntityQualifier extends BooleanQualifier {
         _keyPath=(String)u.decodeObjectForKey("keyPath");
     }
 
+    @Override
     public boolean evaluateWithObject(Object o) {
         // FIXME here -- this could be sth else..
         D2WContext c=(D2WContext)o;
@@ -51,5 +52,6 @@ public class ERDIsKindOfEntityQualifier extends BooleanQualifier {
         return e.name().equals(_entityName) ? true : (e.parentEntity()!= null ? isKindOfEntity(e.parentEntity()) : false);
     }
 
+    @Override
     public String toString() { return _keyPath+" isKindOfEntity "+_entityName; }    
 }

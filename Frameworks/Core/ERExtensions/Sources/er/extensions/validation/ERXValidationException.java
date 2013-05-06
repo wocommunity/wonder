@@ -6,6 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.validation;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOMessage;
@@ -18,7 +19,6 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSValidation;
 import com.webobjects.foundation.NSValidation.ValidationException;
 
-import er.extensions.ERXExtensions;
 import er.extensions.localization.ERXLocalizer;
 
 /**
@@ -425,6 +425,7 @@ public class ERXValidationException extends NSValidation.ValidationException imp
         return ERXValidation.localizedDisplayNameForKey(eoObject() != null ? eoObject().classDescription() : null, key, localizer);
     }
 
+    @Override
     public int hashCode() {
     	return (type() == null ? 1 : type().hashCode()) * (key() == null ? 1 : key().hashCode()) * (object() == null ? 1 : object().hashCode()) * (value() == null ? 1 : value().hashCode()) * (additionalExceptions() == null ? 1 : additionalExceptions().hashCode()); 
     }
@@ -434,16 +435,15 @@ public class ERXValidationException extends NSValidation.ValidationException imp
      * @return description of the validation exception
      */
     @Override
-	public boolean equals(Object anotherObject) {
+    public boolean equals(Object anotherObject) {
         if(anotherObject != null && anotherObject instanceof ERXValidationException) {
             ERXValidationException ex = (ERXValidationException)anotherObject;
-            return ERXExtensions.safeEquals(type(), ex.type()) && ERXExtensions.safeEquals(key(), ex.key()) && ERXExtensions.safeEquals(object(), ex.object())
-                && ERXExtensions.safeEquals(value(), ex.value()) && ERXExtensions.safeEquals(additionalExceptions(), ex.additionalExceptions());
+            return ObjectUtils.equals(type(), ex.type()) && ObjectUtils.equals(key(), ex.key()) && ObjectUtils.equals(object(), ex.object())
+                && ObjectUtils.equals(value(), ex.value()) && ObjectUtils.equals(additionalExceptions(), ex.additionalExceptions());
         }
         return super.equals(anotherObject);
     }
-    
-    
+
     /**
      * Returns the formatted description of the validation exception
      * without calling <code>getMessage</code>.
@@ -455,7 +455,7 @@ public class ERXValidationException extends NSValidation.ValidationException imp
             return "<" + getClass().getName() + " object: " + object() + "; propertyKey: " + propertyKey() + "; type: " + type() + "; additionalExceptions: " + additionalExceptions() + ">";
         }
         catch (Throwable t) {
-            return "<" + getClass().getName() + " object of type " + ((this.object() == null) ? "null" : this.object().getClass().getSimpleName()) + "; propertyKey: " + propertyKey() + "; type: " + type() + "; additionalExceptions: " + additionalExceptions() + ">";
+            return "<" + getClass().getName() + " object of type " + ((object() == null) ? "null" : object().getClass().getSimpleName()) + "; propertyKey: " + propertyKey() + "; type: " + type() + "; additionalExceptions: " + additionalExceptions() + ">";
         }
     }
 }

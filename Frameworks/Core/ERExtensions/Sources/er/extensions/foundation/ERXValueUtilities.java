@@ -42,7 +42,7 @@ public class ERXValueUtilities {
      * @param component the component to evaluate the binding on
      * @param def the default value if the binding value is null
      * @return the boolean value of the binding
-     * @deprecated use {@link ERXComponentUtilities#booleanValueForBinding(WOComponent, String, boolean)}
+     * @deprecated use {@link er.extensions.components.ERXComponentUtilities#booleanValueForBinding(WOComponent, String, boolean)}
      */
     @Deprecated
     public static boolean booleanValueForBindingOnComponentWithDefault(String binding, WOComponent component, boolean def) {

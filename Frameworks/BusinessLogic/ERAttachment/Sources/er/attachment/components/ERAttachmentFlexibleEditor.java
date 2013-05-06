@@ -105,7 +105,7 @@ public class ERAttachmentFlexibleEditor extends ERXNonSynchronizingComponent {
 		public static final String editorEditLabel = "editorEditLabel";
 		public static final String editorCancelLabel = "editorCancelLabel";
 		public static final String uploadDialogHeaderText = "uploadDialogHeaderText";
-	};
+	}
 	
 	private String _id;
 	private ERAttachment _newAttachment;
@@ -375,7 +375,7 @@ public class ERAttachmentFlexibleEditor extends ERXNonSynchronizingComponent {
 	 */
     public String id() {
     	if (_id == null) {
-			_id = stringValueForBinding("id", ERXWOContext.safeIdentifierName(this.context(), true));
+			_id = stringValueForBinding("id", ERXWOContext.safeIdentifierName(context(), true));
 		}
 		return _id;
     }

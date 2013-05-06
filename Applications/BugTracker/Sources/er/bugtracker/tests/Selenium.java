@@ -57,7 +57,7 @@ public class Selenium extends SeleniumAction  {
 	
 	private People addTestPeople(boolean isAdmin) {
 		EOEditingContext ec = ERXEC.newEditingContext();
-		People people = (People) People.clazz.createAndInsertObject(ec);
+		People people = People.clazz.createAndInsertObject(ec);
 		people.setName(NAME);
 		people.setLogin(USERNAME);
 		people.setPassword(PASSWORD);

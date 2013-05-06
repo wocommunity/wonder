@@ -89,6 +89,7 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
 
     protected abstract boolean isSingleSelection();
 
+    @Override
     public void reset() {
         super.reset();
         _sourceEntityName = null;
@@ -483,6 +484,7 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
     }
     
 
+    @Override
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         // we want to pass the validation here for the case where we are creating a new object
         // and are given isMandatory=0 on a mandatory relationship to force users to pick one..

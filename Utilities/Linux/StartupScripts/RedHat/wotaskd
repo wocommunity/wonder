@@ -1,0 +1,44 @@
+#!/bin/bash
+ 
+# chkconfig: - 90 20
+# description: Provides wotaskd service
+ 
+# Source function library.
+. /etc/rc.d/init.d/functions
+ 
+NEXT_ROOT="/opt"
+export NEXT_ROOT
+ 
+PATH="/bin:/usr/bin:/usr/java/latest/bin"
+export PATH
+ 
+USER=appserver
+ 
+# See how we were called.
+case "$1" in
+    start)
+        echo -n "Starting wotaskd: "
+        su $USER -c "$NEXT_ROOT/Local/Library/WebObjects/JavaApplications/wotaskd.woa/wotaskd -WOPort 1085 -er.wotaskd.sshd.enabled true &"
+        echo
+        ;;
+    stop)
+        echo -n "Shutting down wotaskd: "
+        WOTASKD_PID=`ps aux | awk '/WOPort 1085/ && !/awk/ {print $2}'`
+        kill $WOTASKD_PID
+        echo
+        ;;
+    restart)
+        $0 stop
+        $0 start
+        ;;
+    *)
+        echo -n "Usage: $0 {start|stop|restart}"
+        exit 1
+esac
+ 
+if [ $# -gt 1 ]; then
+    shift
+    $0 $*
+fi
+ 
+exit 0

@@ -1,5 +1,7 @@
 package er.extensions.qualifiers;
 
+import java.util.NoSuchElementException;
+
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;

@@ -50,6 +50,7 @@ public class ERXEntityFKConstraintOrder extends ERXEntityOrder
      *
      * @return a dictionary keyed on dependencyKeyFor(EOEntity)
      */
+    @Override
     protected NSDictionary dependenciesByEntity() {
         logger.debug("Building dependency list");
 
@@ -75,7 +76,7 @@ public class ERXEntityFKConstraintOrder extends ERXEntityOrder
 
         if (logger.isTraceEnabled()) {
             for (int i = 0; i < allEntities().count(); i++) {
-                EOEntity entity = (EOEntity) allEntities().objectAtIndex(i);
+                EOEntity entity = allEntities().objectAtIndex(i);
                 logger.trace("Entity " + entity.name() + " is referenced by " + entitiesDependentOn(dependencyList, entity));
             }
         }
@@ -131,6 +132,7 @@ public class ERXEntityFKConstraintOrder extends ERXEntityOrder
      *
      * @return key for <code>entity</code> into dependency dictionary returned by <code>dependenciesByEntity()</code>
      */
+    @Override
     protected String dependencyKeyFor(EOEntity entity) {
         if (entity.externalName() == null) {
             return "Abstract Dummy Entity";

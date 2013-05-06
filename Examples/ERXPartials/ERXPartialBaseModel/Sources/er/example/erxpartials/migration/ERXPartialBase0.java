@@ -3,7 +3,6 @@ package er.example.erxpartials.migration;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSTimestamp;
 
 import er.example.erxpartials.model.GenderType;
 import er.example.erxpartials.model.Person;
@@ -41,8 +40,7 @@ public class ERXPartialBase0 extends ERXMigrationDatabase.Migration implements I
 
 		personTable.addForeignKey("genderTypeID", "GenderType", "id");
   }
-  
-  //@Override
+
   public void postUpgrade(EOEditingContext ec, EOModel model) throws Throwable {
 	  GenderType female = GenderType.createGenderType(ec, "Female");
 	  GenderType male = GenderType.createGenderType(ec, "Male");

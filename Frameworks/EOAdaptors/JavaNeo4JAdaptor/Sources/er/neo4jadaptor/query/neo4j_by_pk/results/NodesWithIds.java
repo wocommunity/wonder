@@ -9,7 +9,6 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.NotFoundException;
 
 import er.neo4jadaptor.query.Results;
-import er.neo4jadaptor.utils.cursor.Cursor;
 
 /**
  * Returns nodes with specified IDs.
@@ -21,7 +20,9 @@ public class NodesWithIds implements Results<Node> {
 	@SuppressWarnings("unused")
 	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(NodesWithIds.class);
 
-	private final Collection<Number> nodeIds;
+	private final Iterator<Number> nodeIdsIt;
+	private Node next;
+	
 	private final GraphDatabaseService db;
 	
 	public NodesWithIds(GraphDatabaseService db, Collection<? extends Number> nodeIds) {
@@ -31,51 +32,43 @@ public class NodesWithIds implements Results<Node> {
 			}
 		}
 		
-		this.nodeIds = Collections.unmodifiableCollection(nodeIds);
+		nodeIdsIt = Collections.unmodifiableCollection(nodeIds).iterator();
 		this.db = db;
 	}
 	
-	public Cursor<Node> iterator() {
-		final Iterator<Number> it = nodeIds.iterator();
+	private void calculateNext() {
+		while (nodeIdsIt.hasNext()) {
+			long id = nodeIdsIt.next().longValue();
+			
+			try {
+				next = db.getNodeById(id);
+				return;
+			} catch (NotFoundException e) {
+				// ignore
+			}
+		}
+	}
+	
+	public void close() {
+		// do nothing
+	}
+	
+	public boolean hasNext() {
+		if (next == null) {
+			calculateNext();
+		}
+		return next != null;
+	}
+
+	public Node next() {
+		Node ret = next;
 		
-		return new Cursor<Node>() {
-			Node next;
-			
-			private void calculateNext() {
-				while (it.hasNext()) {
-					long id = it.next().longValue();
-					
-					try {
-						next = db.getNodeById(id);
-						return;
-					} catch (NotFoundException e) {
-						// ignore
-					}
-				}
-			}
-			
-			public void close() {
-				// do nothing
-			}
-			
-			public boolean hasNext() {
-				if (next == null) {
-					calculateNext();
-				}
-				return next != null;
-			}
+		next = null;
+		
+		return ret;
+	}
 
-			public Node next() {
-				Node ret = next;
-				
-				next = null;
-				
-				return ret;
-			}
-
-			public void remove() {
-				it.remove();
-			}
-		};
+	public void remove() {
+		nodeIdsIt.remove();
 	}
 }

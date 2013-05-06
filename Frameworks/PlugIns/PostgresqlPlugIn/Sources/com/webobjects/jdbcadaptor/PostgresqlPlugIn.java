@@ -238,7 +238,7 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
             channel.cancelFetch();
           }
           // timc 2006-11-06 row.objectForKey("COUNT") returns BigDecimal not Long
-          //if( new Long( 0 ).equals( row.objectForKey( "COUNT" ) ) ) {
+          //if( Long.valueOf( 0 ).equals( row.objectForKey( "COUNT" ) ) ) {
           Number numCount = (Number) row.objectForKey("COUNT");
           if (numCount != null && numCount.longValue() == 0L) {
             EOSynchronizationFactory f = createSynchronizationFactory();

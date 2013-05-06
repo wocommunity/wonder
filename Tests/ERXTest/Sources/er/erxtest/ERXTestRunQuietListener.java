@@ -16,8 +16,10 @@ public class ERXTestRunQuietListener extends RunListener {
 
 	int loop = 0;
 
+	@Override
 	public void testRunStarted(Description description) { start = System.currentTimeMillis(); }
 
+	@Override
 	public void testStarted(Description description) {
 		attempted++;
 		if ((loop % 100) == 0) System.out.println("");
@@ -25,8 +27,10 @@ public class ERXTestRunQuietListener extends RunListener {
 		loop++;
 	}
 
+	@Override
 	public void testFailure(Failure failure) { System.out.print("x"); failed++; }
 
+	@Override
 	public void testRunFinished(Result result) {
 		long end = System.currentTimeMillis();
 

@@ -1,18 +1,20 @@
 package er.ajax;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSSelector;
 
-import er.extensions.*;
+import er.extensions.ERXFrameworkPrincipal;
 import er.extensions.appserver.ajax.ERXAjaxApplication;
 import er.extensions.eof.ERXConstant;
 
 public class Ajax extends ERXFrameworkPrincipal {
 	public static Class[] REQUIRES = new Class[0];
 	public static final Logger log = Logger.getLogger(Ajax.class);
-	
+
     static {
         setUpFrameworkPrincipalClass(Ajax.class);
     }
@@ -29,6 +31,7 @@ public class Ajax extends ERXFrameworkPrincipal {
     /**
      * This is called directly only for when ERXApplication is sub-classed.
      */
+	@Override
 	public void finishInitialization() {
 		WOApplication application = WOApplication.application();
 		if (!AjaxRequestHandler.useAjaxRequestHandler()) {

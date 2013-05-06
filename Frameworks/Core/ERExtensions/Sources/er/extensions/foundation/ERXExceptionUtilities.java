@@ -15,7 +15,6 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 /**
@@ -54,6 +53,7 @@ public class ERXExceptionUtilities {
 			super(cause);
 		}
 
+		@Override
 		public void printStackTrace(PrintWriter s) {
 			s.println("[stack trace already printed]");
 		}

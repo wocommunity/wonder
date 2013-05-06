@@ -29,7 +29,6 @@ import er.extensions.foundation.ERXKeyValuePair;
  * 
  */
 // CHECKME: this can't ever have worked? Why Strings?
-
 public class ERDListOrganizer extends ERDCustomEditComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -56,7 +55,7 @@ public class ERDListOrganizer extends ERDCustomEditComponent {
     private final static ERXKeyValuePair DEFAULT_PAIR=new ERXKeyValuePair(DASH, DASHES);
     private final static NSArray DEFAULT_ARRAY=new NSArray(DEFAULT_PAIR);
 
-    
+    @Override
     public void reset() {
         super.reset();
         chosenKeyPaths = null;
@@ -68,7 +67,9 @@ public class ERDListOrganizer extends ERDCustomEditComponent {
         chosenObject = null;
     }
 
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
+    @Override
     public boolean isStateless() { return true; }
 
     public NSArray availableElements() {
@@ -81,7 +82,7 @@ public class ERDListOrganizer extends ERDCustomEditComponent {
                                                              entityForReportName);
     }
 
-    
+    @Override
     public void appendToResponse(WOResponse r, WOContext c){
         if(chosenKeyPaths == null){
             chosenKeyPaths = "";
@@ -97,7 +98,7 @@ public class ERDListOrganizer extends ERDCustomEditComponent {
                         NSMutableArray tmp = new NSMutableArray();
                         tmp.addObject(DEFAULT_PAIR);
                         tmp.addObjectsFromArray(chosenObjects);
-                        chosenObjects = (NSArray)tmp;
+                        chosenObjects = tmp;
                     }
                     chosenKeyPaths = keyPathsArray.componentsJoinedByString ( "," );
                 }else {
@@ -111,6 +112,7 @@ public class ERDListOrganizer extends ERDCustomEditComponent {
         super.appendToResponse(r,c);
     }
 
+    @Override
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         super.takeValuesFromRequest(r, c);
         NSMutableArray result = new NSMutableArray();
@@ -124,7 +126,7 @@ public class ERDListOrganizer extends ERDCustomEditComponent {
                     result.addObject(keyPath);
             }
             if(log.isDebugEnabled()) log.debug("result = "+result);
-            String value = NSPropertyListSerialization.stringFromPropertyList((NSArray)result);
+            String value = NSPropertyListSerialization.stringFromPropertyList(result);
             try{
                 object().validateTakeValueForKeyPath(value, key());
             } catch (NSValidation.ValidationException v) {

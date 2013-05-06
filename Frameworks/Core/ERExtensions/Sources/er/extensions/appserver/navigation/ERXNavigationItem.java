@@ -195,7 +195,7 @@ public class ERXNavigationItem implements Serializable {
 	public NSArray childItemsInContext(NSKeyValueCodingAdditions context) {
 		NSArray children = null;
 
-		NSArray childrenConditions = this.childrenConditions();
+		NSArray childrenConditions = childrenConditions();
 		boolean hasChildrenConditions = childrenConditions.count() != 0;
 		boolean meetsChildrenConditions = true;
 		if (hasChildrenConditions) {
@@ -213,7 +213,7 @@ public class ERXNavigationItem implements Serializable {
 			 * aren't any children conditions
 			 */
 			if (children() != null) {
-				children = this.children();
+				children = children();
 			}
 			else if (childrenBinding() != null) {
 				Object o = context.valueForKeyPath(childrenBinding());
@@ -349,6 +349,7 @@ public class ERXNavigationItem implements Serializable {
 		return _hasActivity;
 	}
 
+	@Override
 	public String toString() {
 		return "< " + name() + " >";
 	}

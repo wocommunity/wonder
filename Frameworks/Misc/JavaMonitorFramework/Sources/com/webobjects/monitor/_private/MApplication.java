@@ -335,6 +335,7 @@ public class MApplication extends MObject {
     /********** Archiving Support **********/
     public NSDictionary dictionaryForArchive() { return values; }
 
+    @Override
     public String toString() {
         if(false) {
             return values.toString();

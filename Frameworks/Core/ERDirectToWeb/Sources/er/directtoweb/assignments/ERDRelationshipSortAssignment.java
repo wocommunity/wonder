@@ -16,7 +16,7 @@ import er.directtoweb.assignments.defaults.ERDDefaultModelAssignment;
 /**
  * Relationship sort assignment that works with the new caching 
  * scheme. Should only ever need one of these assignments.
- * @deprecated use {@link ERDDefaultModelAssignment}
+ * @deprecated use {@link er.directtoweb.assignments.defaults.ERDDefaultModelAssignment}
  */
 @Deprecated
 public class ERDRelationshipSortAssignment extends ERDAssignment {
@@ -60,7 +60,7 @@ public class ERDRelationshipSortAssignment extends ERDAssignment {
     public ERDRelationshipSortAssignment(EOKeyValueUnarchiver unarchiver) { super(unarchiver); }
 
     /**
-     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This
      * assignment depends upon the context keys: "propertyKey" and 
      * "keyWhenRelationship". This array of keys is used when constructing the 
      * significant keys for the passed in keyPath.

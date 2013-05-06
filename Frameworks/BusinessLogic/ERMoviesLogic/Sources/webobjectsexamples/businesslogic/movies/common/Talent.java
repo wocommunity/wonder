@@ -33,14 +33,17 @@ public class Talent extends _Talent {
 		super();
 	}
 
+	@Override
 	public String firstName() {
 		return (String) (storedValueForKey(FirstNameKey));
 	}
 
+	@Override
 	public String lastName() {
 		return (String) (storedValueForKey(LastNameKey));
 	}
 
+	@Override
 	public NSArray roles() {
 		return (NSArray) (storedValueForKey(RolesKey));
 	}

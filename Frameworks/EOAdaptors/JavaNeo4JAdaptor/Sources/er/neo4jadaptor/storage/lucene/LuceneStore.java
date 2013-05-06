@@ -80,7 +80,7 @@ public class LuceneStore <Type extends PropertyContainer> implements Store<Neo4J
 			log.debug("Fetching " + entity.name() + " where " + q);
 		}
 		
-		return new LinkingCursor(result.iterator(), entity);
+		return new LinkingCursor(result, entity);
 	}
 	
 	public Ersatz newPrimaryKey() {

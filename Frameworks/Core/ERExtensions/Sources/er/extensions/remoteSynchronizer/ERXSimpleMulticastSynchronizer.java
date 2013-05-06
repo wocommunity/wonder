@@ -107,6 +107,7 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 		_multicastSocket.bind(new InetSocketAddress(_multicastPort));
 	}
 
+	@Override
 	public void join() throws IOException {
 		if (ERXRemoteSynchronizer.log.isInfoEnabled()) {
 			ERXRemoteSynchronizer.log.info("Multicast instance " + ERXStringUtilities.byteArrayToHexString(_identifier) + " joining.");
@@ -120,9 +121,11 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 		dos.writeShort(0);
 		dos.writeByte(ERXSimpleMulticastSynchronizer.JOIN);
 		dos.flush();
+		dos.close();
 		_multicastSocket.send(baos.createDatagramPacket());
 	}
 
+	@Override
 	public void leave() throws IOException {
 		if (ERXRemoteSynchronizer.log.isInfoEnabled()) {
 			ERXRemoteSynchronizer.log.info("Multicast instance " + ERXStringUtilities.byteArrayToHexString(_identifier) + " leaving.");
@@ -135,11 +138,13 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 		dos.writeShort(0);
 		dos.writeByte(ERXSimpleMulticastSynchronizer.LEAVE);
 		dos.flush();
+		dos.close();
 		_multicastSocket.send(baos.createDatagramPacket());
 		_multicastSocket.leaveGroup(_multicastGroup, _localNetworkInterface);
 		_listening = false;
 	}
-	
+
+	@Override
 	protected boolean handleMessageType(int messageType, RemoteChange remoteChange, DataInputStream dis) {
 		boolean handled = false;
 		if (messageType == ERXSimpleMulticastSynchronizer.JOIN) {
@@ -151,6 +156,7 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 		return handled;
 	}
 
+	@Override
 	public void listen() throws IOException {
 		Thread listenThread = new Thread(new Runnable() {
 			public void run() {
@@ -207,6 +213,7 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 		listenThread.start();
 	}
 
+	@Override
 	protected void _writeCacheChanges(int transactionID, NSArray<ERXDatabase.CacheChange> cacheChanges) throws IOException {
 		short transactionSize = (short) cacheChanges.count();
 		short transactionNum = 0;
@@ -227,6 +234,7 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 		dos.writeShort(transactionSize);
 		_writeCacheChange(dos, cacheChange);
 		dos.flush();
+		dos.close();
 		_multicastSocket.send(baos.createDatagramPacket());
 		if (ERXRemoteSynchronizer.log.isDebugEnabled()) {
 			ERXRemoteSynchronizer.log.debug("Multicast instance " + ERXStringUtilities.byteArrayToHexString(_identifier) + ": Writing " + cacheChange);

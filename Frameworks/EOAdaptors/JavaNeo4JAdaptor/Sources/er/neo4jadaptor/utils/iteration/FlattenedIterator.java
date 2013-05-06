@@ -30,7 +30,7 @@ public class FlattenedIterator <V> implements Iterator<V> {
 		while (! internalHasNext() && it.hasNext()) {
 			internal = it.next();
 		}
-		return internal.hasNext();
+		return internal != null && internal.hasNext();
 	}
 	
 	public V next() {

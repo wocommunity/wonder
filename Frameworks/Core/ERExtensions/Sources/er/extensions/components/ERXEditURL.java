@@ -18,7 +18,6 @@ import com.webobjects.appserver.WOContext;
  * the default value is http://www.
  * @binding size A integer to set the size of the text field
  */
-
 public class ERXEditURL extends WOComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -31,6 +30,7 @@ public class ERXEditURL extends WOComponent {
         super(aContext);
     }
 
+    @Override
     public boolean isStateless() { return true; }
     public final static String DEFAULT="http://www.";
 

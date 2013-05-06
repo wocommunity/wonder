@@ -1,8 +1,9 @@
 package er.example.erxpartials.components;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.D2WPage;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.D2WPage;
 
 public class PageWrapper extends WOComponent {
 

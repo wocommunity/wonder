@@ -16,7 +16,6 @@ import er.directtoweb.components.ERDCustomQueryComponent;
  * Custom query component that let's the user select from a set of shared eos.<br />
  * 
  */
-
 public class ERD2WPickFromEntities extends ERDCustomQueryComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -33,7 +32,9 @@ public class ERD2WPickFromEntities extends ERDCustomQueryComponent {
     public Object item; 
 
     // can't be stateless!
+    @Override
     public boolean isStateless() { return false; }
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     public NSArray list() { return (NSArray)valueForBinding("list"); }

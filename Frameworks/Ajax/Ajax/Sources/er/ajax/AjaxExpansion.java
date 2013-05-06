@@ -193,7 +193,7 @@ public class AjaxExpansion extends AjaxComponent {
 
 	/**
 	 * Returns an escaped version of {@link #string()} using
-	 * {@link ERXStringUtilities#escapeJavascriptApostrophes(String)}.
+	 * {@link er.extensions.foundation.ERXStringUtilities#escapeJavascriptApostrophes(String)}.
 	 * 
 	 * @return escaped string
 	 */
@@ -204,6 +204,7 @@ public class AjaxExpansion extends AjaxComponent {
     /**
      * Adds required resources for this component.
      */
+	@Override
 	protected void addRequiredWebResources(WOResponse response) {
 		addScriptResourceInHead(response, "prototype.js");
 		addScriptResourceInHead(response, "effects.js");
@@ -215,6 +216,7 @@ public class AjaxExpansion extends AjaxComponent {
 	 * 
 	 * @return {@code null}
 	 */
+	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		return null;
 	}

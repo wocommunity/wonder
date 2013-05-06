@@ -35,7 +35,6 @@ import er.extensions.eof.ERXConstant;
  * @binding tableWidth
  * @binding otherTagString
  */
-
 public class ERXLayoutTable extends WOComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -58,6 +57,7 @@ public class ERXLayoutTable extends WOComponent {
         _resetInternalCaches();
     }
 
+    @Override
     public boolean isStateless() {
         return true;
     }
@@ -203,11 +203,13 @@ public class ERXLayoutTable extends WOComponent {
         _colCounts = null;
     }
 
+    @Override
     public void takeValuesFromRequest(WORequest aRequest, WOContext aContext)  {
         _resetInternalCaches();
         super.takeValuesFromRequest(aRequest, aContext);
      }
 
+    @Override
     public void reset() {
         _resetInternalCaches();
         setValueForBinding(null, "item");

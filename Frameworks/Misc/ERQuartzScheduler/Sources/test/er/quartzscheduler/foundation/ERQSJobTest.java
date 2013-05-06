@@ -9,7 +9,6 @@ import org.quartz.JobExecutionException;
 
 import com.webobjects.foundation.NSTimestamp;
 
-import er.quartzscheduler.foundation.ERQSJob;
 import er.quartzscheduler.util.ERQSSchedulerFP4Test;
 
 public class ERQSJobTest 

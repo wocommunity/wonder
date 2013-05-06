@@ -17,5 +17,6 @@
     <binding name="name"/>
     <binding defaults="Boolean" name="mini"/>
     <binding name="countryNumber"/>
+    <binding name="id"/>
     </wo>
 </wodefinitions>

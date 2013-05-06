@@ -37,6 +37,7 @@ public class SPPerson extends _SPPerson {
 		return wishes(SPWish.SUGGESTED_BY.is(SPWish.SUGGESTED_FOR));
 	}
 
+	@Override
 	public NSArray<SPWish> suggestions() {
 		return wishes(SPWish.SUGGESTED_BY.isNot(SPWish.SUGGESTED_FOR));
 	}

@@ -20,10 +20,12 @@ public class FlattenedCursor <V> extends FlattenedIterator<V> implements Cursor<
 		}
 	}
 
+	@Override
 	protected Cursor<? extends Iterator<V>> external() {
 		return (Cursor<? extends Iterator<V>>) super.external();
 	}
 
+	@Override
 	protected Cursor<V> internal() {
 		return (Cursor<V>) super.internal();
 	}

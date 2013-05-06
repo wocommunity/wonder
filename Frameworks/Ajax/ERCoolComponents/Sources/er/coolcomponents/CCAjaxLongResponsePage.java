@@ -65,7 +65,7 @@ import er.extensions.foundation.IERXStatus;
  * </li>
  * <li>If you don't just want the originating page to be returned (default behavior) then
  *    <ol>
- *    <li>Create a simple class that implements @link {@link IERXPerformWOActionForResult} interface, or use {@link ERXNextPageForResultWOAction}, which
+ *    <li>Create a simple class that implements @link {@link er.extensions.appserver.IERXPerformWOActionForResult} interface, or use {@link er.extensions.appserver.ERXNextPageForResultWOAction}, which
  *    provides a fairly generic implementation of that interface
  *    <li>This controller class will get the result pushed into it when the task is complete. If the
  *    task threw an uncaught error during execution, then the error is pushed in as the result.
@@ -76,7 +76,7 @@ import er.extensions.foundation.IERXStatus;
  * In your component action, simply create an instance of this long response page just as you would
  *    create any other page.
  * </li><li>
- * Push in an instance of your Runnable (or Callable) task into the long response page using {@link CCAjaxLongResponsePage#setLongRunningCallable(Callable)}
+ * Push in an instance of your Runnable (or Callable) task into the long response page using {@link #setTask(Object)}
  * </li><li>
  * Optionally push in your custom next page controller for execution when the task is finished using {@link #setNextPageForResultController(IERXPerformWOActionForResult)}
  * </li><li>

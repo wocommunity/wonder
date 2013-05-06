@@ -5,7 +5,6 @@ import com.webobjects.appserver.WOContext;
 /**
  * Stateless variant of {@link ERXInlineTemplate}.
  * @author th
- *
  */
 public class ERXStatelessInlineTemplate extends ERXInlineTemplate {
 	/**
@@ -20,15 +19,13 @@ public class ERXStatelessInlineTemplate extends ERXInlineTemplate {
     }
     
     /** component is stateless */
+    @Override
     public boolean isStateless() { return true; }
 
-    /* (non-Javadoc)
-     * @see com.webobjects.appserver.WOComponent#reset()
-     */
+    @Override
     public void reset() {
         super.reset();
         _dynamicBindings = null;
         _deferredError = null;
     }
-
 }

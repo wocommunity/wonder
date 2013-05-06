@@ -7,7 +7,6 @@ import java.util.regex.Pattern;
 
 import org.neo4j.graphdb.PropertyContainer;
 
-
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EORelationship;
@@ -15,6 +14,7 @@ import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 
 import er.neo4jadaptor.query.QueryConverter;
+import er.neo4jadaptor.query.expression.sentence.operators.ComparisonOperator;
 import er.neo4jadaptor.query.neo4j_eval.evaluators.AlwaysTrue;
 import er.neo4jadaptor.query.neo4j_eval.evaluators.BoolEvaluator;
 import er.neo4jadaptor.query.neo4j_eval.evaluators.Comparison;
@@ -45,7 +45,7 @@ public class EvaluationQueryConverter <T extends PropertyContainer> extends Quer
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	protected Evaluator<T> comparison(EOEntity entity, String key, er.neo4jadaptor.query.QueryConverter.ComparisonOperator operator, Object value) {
+	protected Evaluator<T> comparison(EOEntity entity, String key, ComparisonOperator operator, Object value) {
 		Retriever<T, ?> retriever = buildRetriever(entity, key);
 		
 		if (operator.equals(ComparisonOperator.LIKE) || operator.equals(ComparisonOperator.ILIKE)) {
@@ -114,7 +114,7 @@ public class EvaluationQueryConverter <T extends PropertyContainer> extends Quer
 	
 	@Override
 	public Evaluator<T> fullQuery(EOEntity entity, EOQualifier qualifier) {
-		return (Evaluator<T>) convert(entity, qualifier);
+		return convert(entity, qualifier);
 	}
 
 	@Override

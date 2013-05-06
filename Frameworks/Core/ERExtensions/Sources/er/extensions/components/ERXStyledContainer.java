@@ -37,13 +37,13 @@ public class ERXStyledContainer extends WOGenericContainer {
 	
 	public ERXStyledContainer(String name, NSDictionary associations, WOElement template) {
 		super(name, associations, template);
-		_style = (WOAssociation) _associations.removeObjectForKey("style");
+		_style = _associations.removeObjectForKey("style");
 		_styles = new NSMutableDictionary();
 		for (Enumeration enumerator = _associations.keyEnumerator(); enumerator.hasMoreElements();) {
 			String key = (String) enumerator.nextElement();
 			if(key.startsWith("style.")) {
 				String styleKey = key.substring(6);
-				WOAssociation association = (WOAssociation) _associations.removeObjectForKey(key);
+				WOAssociation association = _associations.removeObjectForKey(key);
 				if("background-image.type".equals(styleKey)) {
 					_mimeType = association;
 				} else if("unit".equals(styleKey)) {
@@ -55,6 +55,7 @@ public class ERXStyledContainer extends WOGenericContainer {
 		}
 	}
 
+	@Override
 	 public void appendAttributesToResponse(WOResponse woresponse, WOContext wocontext) {
 		 super.appendAttributesToResponse(woresponse, wocontext);
 		 WOComponent component = wocontext.component();

@@ -6,12 +6,12 @@
 //
 package er.neutral;
 
+import java.util.Enumeration;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 
 import er.directtoweb.pages.ERD2WPickListPage;
-
-import java.util.Enumeration;
 
 public class ERNEUPickListPage extends ERD2WPickListPage {
 

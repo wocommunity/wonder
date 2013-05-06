@@ -1,6 +1,7 @@
 package er.excel;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -108,7 +109,7 @@ public class EGSimpleWorkbookHelper {
 	 * set on a sheet, its default name is "Sheet#", with "#" being the number of the sheet.
 	 */
 	public void switchToSheetWithName(String name) {
-		HSSFSheet sheet = this.sheetWithName(name);
+		HSSFSheet sheet = sheetWithName(name);
 		if (sheet == null) {
 			sheet = _workbook.createSheet(name);
 			sheets.add(sheet);
@@ -159,7 +160,7 @@ public class EGSimpleWorkbookHelper {
 
 	
 	public HSSFCell cellAtLocation(int rownum, int colnum) {
-		HSSFSheet sheet = this.currentSheet();
+		HSSFSheet sheet = currentSheet();
 
 		HSSFRow row = sheet.getRow(rownum);
 		if (row == null) row = sheet.createRow(rownum);
@@ -167,7 +168,7 @@ public class EGSimpleWorkbookHelper {
 		HSSFCell cell = row.getCell(colnum);
 		if (cell == null) row.createCell(colnum);
 
-		return this.currentSheet().getRow(rownum).getCell(colnum);
+		return currentSheet().getRow(rownum).getCell(colnum);
 	}
 
 	public HSSFCell cellAtLocation(int rownum, String columnName) {
@@ -180,7 +181,7 @@ public class EGSimpleWorkbookHelper {
 	}
 
 	public Number numberAtLocation(int rownum, int colnum) {
-		return new Double(this.cellAtLocation(rownum, colnum).getNumericCellValue());
+		return Double.valueOf(this.cellAtLocation(rownum, colnum).getNumericCellValue());
 	}
 
 	public void setNumberAtLocation(Number value, int rownum, int colnum) {
@@ -230,12 +231,12 @@ public class EGSimpleWorkbookHelper {
 	public String writeToTemp() {
 		File file = null;
 		try {
-			file = File.createTempFile(null, ".xls");
+			file = File.createTempFile("eg_", ".xls");
 		} catch (java.io.IOException e) {
 			return null;
 		}
 		if (file == null) return null;
-		return (this.write(file.getName())) ? file.getName() : null;
+		return (write(file.getName())) ? file.getName() : null;
 	}
 
 	/**
@@ -255,6 +256,12 @@ public class EGSimpleWorkbookHelper {
 			_workbook.write(stream);
 		} catch (java.io.IOException e) {
 			return false;
+		} finally {
+			try {
+				stream.close();
+			} catch (IOException e) {
+				// ignore
+			}
 		}
 		return true;
 	}

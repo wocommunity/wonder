@@ -1145,7 +1145,7 @@ public class ERXRouteController extends WODirectAction {
 		}
 		String str = format().toString(errorMessage, null, null);
 		WOResponse response = stringResponse(str);
-		response.setStatus(status);
+		response.setStatus(status);	
 		if (format().equals(ERXRestFormat.json())) {
 			response.setHeader("application/json", "Content-Type");
 		} else if (format().equals(ERXRestFormat.xml())) { 
@@ -1644,7 +1644,7 @@ public class ERXRouteController extends WODirectAction {
 			}
 		}
 		if (allowJSONP()) {
-			if (this.format().equals(ERXRestFormat.json())) {
+			if (format().equals(ERXRestFormat.json())) {
 				String callbackMethodName = request().stringFormValueForKey("callback");
 				if (callbackMethodName != null) {
 					WOResponse response = results.generateResponse();

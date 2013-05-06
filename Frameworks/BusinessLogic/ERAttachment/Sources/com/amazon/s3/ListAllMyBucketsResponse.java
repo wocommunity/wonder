@@ -18,10 +18,10 @@ import java.util.List;
 import java.util.SimpleTimeZone;
 
 import org.xml.sax.Attributes;
-import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * Returned by AWSAuthConnection.listAllMyBuckets().
@@ -37,13 +37,13 @@ public class ListAllMyBucketsResponse extends Response {
         super(connection);
         if (connection.getResponseCode() < 400) {
             try {
-                XMLReader xr = Utils.createXMLReader();;
+                XMLReader xr = Utils.createXMLReader();
                 ListAllMyBucketsHandler handler = new ListAllMyBucketsHandler();
                 xr.setContentHandler(handler);
                 xr.setErrorHandler(handler);
 
                 xr.parse(new InputSource(connection.getInputStream()));
-                this.entries = handler.getEntries();
+                entries = handler.getEntries();
             } catch (SAXException e) {
                 throw new RuntimeException("Unexpected error parsing ListAllMyBuckets xml", e);
             }
@@ -60,46 +60,51 @@ public class ListAllMyBucketsResponse extends Response {
         public ListAllMyBucketsHandler() {
             super();
             entries = new ArrayList();
-            this.iso8601Parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-            this.iso8601Parser.setTimeZone(new SimpleTimeZone(0, "GMT"));
-            this.currText = new StringBuffer();
+            iso8601Parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            iso8601Parser.setTimeZone(new SimpleTimeZone(0, "GMT"));
+            currText = new StringBuffer();
         }
 
+        @Override
         public void startDocument() {
             // ignore
         }
 
+        @Override
         public void endDocument() {
             // ignore
         }
 
+        @Override
         public void startElement(String uri, String name, String qName, Attributes attrs) {
             if (name.equals("Bucket")) {
-                this.currBucket = new Bucket();
+                currBucket = new Bucket();
             }
         }
 
+        @Override
         public void endElement(String uri, String name, String qName) {
             if (name.equals("Bucket")) {
-                this.entries.add(this.currBucket);
+                entries.add(currBucket);
             } else if (name.equals("Name")) {
-                this.currBucket.name = this.currText.toString();
+                currBucket.name = currText.toString();
             } else if (name.equals("CreationDate")) {
                 try {
-                    this.currBucket.creationDate = this.iso8601Parser.parse(this.currText.toString());
+                    currBucket.creationDate = iso8601Parser.parse(currText.toString());
                 } catch (ParseException e) {
                     throw new RuntimeException("Unexpected date format in list bucket output", e);
                 }
             }
-            this.currText = new StringBuffer();
+            currText = new StringBuffer();
         }
 
+        @Override
         public void characters(char ch[], int start, int length) {
-            this.currText.append(ch, start, length);
+            currText.append(ch, start, length);
         }
 
         public List getEntries() {
-            return this.entries;
+            return entries;
         }
     }
 }

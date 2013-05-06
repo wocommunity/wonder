@@ -1,17 +1,18 @@
 package er.prototaculous.widgets;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.appserver.ERXWOContext;
-
-import com.webobjects.appserver.WOActionResults;
 
 /**
  * Encapsulates http://www.stickmanlabs.com/lightwindow 2.0
  *
  * Extending the api of WOSubmitButton
- *
  * 
  * @author mendis
  */
@@ -22,10 +23,6 @@ public class LightWindowButton extends LightWindow {
         super(context);
     }
     
-    @Override
-    public boolean synchronizesVariablesWithBindings() {
-    	return false;
-    }
     
     @Override
     public boolean isStateless() {
