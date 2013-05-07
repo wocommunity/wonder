@@ -53,7 +53,6 @@ var erxToolTip=function(){
 			t.style.display = 'block';
 			b.style.display = 'block';
 		}
-		if(tt.offsetWidth > maxw){tt.style.width = maxw + 'px'}
 		
 		// (Aaron) Use Prototype and the erxHoverArea action element
 		hoverActionElem = hoverActionElement;

@@ -1,6 +1,7 @@
 package er.ajax.mootools;
 
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
@@ -54,14 +55,12 @@ import er.extensions.appserver.ERXWOContext;
 
 public class MTJSSlider extends AjaxDynamicElement {
 	
-    public MTJSSlider(String name, NSDictionary associations, WOElement children) {
+    public MTJSSlider(String name, NSDictionary<String, WOAssociation> associations, WOElement children) {
 		super(name, associations, children);
 	}
 
 	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
-
-		// TODO Auto-generated method stub
 
 		WOComponent component = context.component();
 		String sliderID = (String)valueForBinding("id", ERXWOContext.safeIdentifierName(context, true) + "Slider", component);

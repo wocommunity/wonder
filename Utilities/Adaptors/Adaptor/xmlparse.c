@@ -36,7 +36,9 @@ and limitations under the License.
 #include <sys/types.h>
 #ifdef WIN32
 #ifndef _MSC_VER // SWK old // SWK old WO4.5 headerfile
+#if !defined(MINGW)
 #include <winnt-pdo.h>
+#endif
 #endif
 #ifndef strncasecmp
 #define strncasecmp _strnicmp

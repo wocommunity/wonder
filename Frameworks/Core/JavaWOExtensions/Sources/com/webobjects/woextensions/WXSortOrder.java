@@ -103,22 +103,24 @@ public class WXSortOrder extends WOComponent {
         return null;
     }
 
-    protected NSArray _sortOrderingArray() {
-        return (NSArray)_WOJExtensionsUtil.valueForBindingOrNull("sortOrderings",this);
+    @SuppressWarnings("unchecked")
+	protected NSArray<EOSortOrdering> _sortOrderingArray() {
+        return (NSArray<EOSortOrdering>)_WOJExtensionsUtil.valueForBindingOrNull("sortOrderings",this);
     }
 
-    protected NSMutableArray XX_sortOrderingArray() {
+    @SuppressWarnings("unchecked")
+	protected NSMutableArray<EOSortOrdering> XX_sortOrderingArray() {
         WODisplayGroup displayGroup = displayGroup();
-        NSArray orderingArray;
+        NSArray<EOSortOrdering> orderingArray;
         if (null!=displayGroup)
             orderingArray = displayGroup.sortOrderings();
         else
-            orderingArray = (NSArray)_WOJExtensionsUtil.valueForBindingOrNull("sortOrderings",this);
+            orderingArray = (NSArray<EOSortOrdering>)_WOJExtensionsUtil.valueForBindingOrNull("sortOrderings",this);
 
         if (null==orderingArray) {
-            orderingArray = new NSMutableArray();
+            orderingArray = new NSMutableArray<EOSortOrdering>();
         } else {
-            orderingArray = new NSMutableArray(orderingArray);
+            orderingArray = new NSMutableArray<EOSortOrdering>(orderingArray);
         }
 
         if (null!=displayGroup)
@@ -127,7 +129,7 @@ public class WXSortOrder extends WOComponent {
             setValueForBinding(orderingArray, "sortOrderings");
         }
 
-        return (NSMutableArray)orderingArray;
+        return (NSMutableArray<EOSortOrdering>)orderingArray;
     }
 
     protected void _removeOrderingWithKey(String aKey) {
@@ -146,7 +148,7 @@ public class WXSortOrder extends WOComponent {
     }
 
     protected void _makePrimaryOrderingWithSelector(NSSelector aSelector) {
-        NSMutableArray orderingArray = (NSMutableArray)_sortOrderingArray();
+        NSMutableArray<EOSortOrdering> orderingArray = (NSMutableArray<EOSortOrdering>)_sortOrderingArray();
         EOSortOrdering aNewOrdering = EOSortOrdering.sortOrderingWithKey(key(), 
             aSelector);
         orderingArray.insertObjectAtIndex(aNewOrdering, 0);

@@ -49,6 +49,7 @@ import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -2126,7 +2127,8 @@ public class FilesClient
     				if (useETag) {
     					method.setHeader(FilesConstants.E_TAG, md5Sum (obj));
     				}
-    				method.setEntity( new RequestEntityWrapper(new FileEntity (obj, contentType), callback));
+    				ContentType ct = ContentType.create(contentType);
+    				method.setEntity(new RequestEntityWrapper(new FileEntity(obj, ct), callback));
     				for(String key : metadata.keySet()) {
     					method.setHeader(FilesConstants.X_OBJECT_META + key, sanitizeForURI(metadata.get(key)));
     				}
@@ -2141,7 +2143,7 @@ public class FilesClient
     	    				if (useETag) {
     	    					method.setHeader(FilesConstants.E_TAG, md5Sum (obj));
     	    				}
-    	    				method.setEntity( new RequestEntityWrapper(new FileEntity (obj, contentType), callback));
+    	    				method.setEntity(new RequestEntityWrapper(new FileEntity(obj, ct), callback));
     	    				for(String key : metadata.keySet()) {
     	    					method.setHeader(FilesConstants.X_OBJECT_META + key, sanitizeForURI(metadata.get(key)));
     	    				}

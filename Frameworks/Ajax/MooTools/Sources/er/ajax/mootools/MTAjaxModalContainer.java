@@ -32,7 +32,7 @@ public class MTAjaxModalContainer extends AjaxDynamicElement {
 	private String _updateContainerID = null;
 	private String _url = null;
 
-	public MTAjaxModalContainer(String name, NSDictionary associations, WOElement children) {
+	public MTAjaxModalContainer(String name, NSDictionary<String, WOAssociation> associations, WOElement children) {
         super(name, associations, children);
     }
 
@@ -109,9 +109,9 @@ public class MTAjaxModalContainer extends AjaxDynamicElement {
 		response.appendContentString(linkElementName);
 		response.appendContentString(">");
 
-		Boolean autoWrapContent = (Boolean)valueForBinding("autoWrapContent", true, component);
-		Boolean showFooter = (Boolean)valueForBinding("showFooter", true, component);
-		Boolean showTitle = (Boolean)valueForBinding("showTitle", true, component);
+		Boolean autoWrapContent = (Boolean)valueForBinding("autoWrapContent", Boolean.TRUE, component);
+		Boolean showFooter = (Boolean)valueForBinding("showFooter", Boolean.TRUE, component);
+		Boolean showTitle = (Boolean)valueForBinding("showTitle", Boolean.TRUE, component);
 		String modalClassNames = (String)valueForBinding("modalClassNames", "modal fade", component);
 		_updateContainerID = null;
 		if(_url.startsWith("#")) {
@@ -123,7 +123,7 @@ public class MTAjaxModalContainer extends AjaxDynamicElement {
 	        response.appendContentString(">");
 	    	
 	        String title = stringValueForBinding("title", component);
-	        if(showTitle && title != null) {
+	        if(showTitle.booleanValue() && title != null) {
 		        response.appendContentString("\n\t<div class=\"modal-header\">");
 		        response.appendContentString("\n\t\t<a class=\"close\" data-dismiss=\"modal\">x</a>");
 		        response.appendContentString("\n\t\t<h3>");
@@ -132,17 +132,17 @@ public class MTAjaxModalContainer extends AjaxDynamicElement {
 		        response.appendContentString("\n\t</div>");
 	        }
 
-	        if(autoWrapContent) {
+	        if(autoWrapContent.booleanValue()) {
 		        response.appendContentString("\n\t<div class=\"modal-body\">");
 	        }
 	        
 	        appendChildrenToResponse(response, context);
 
-	        if(autoWrapContent) {
+	        if(autoWrapContent.booleanValue()) {
 		        response.appendContentString("\n\t</div>");
 	        }
 	        
-	        if(showFooter) {
+	        if(showFooter.booleanValue()) {
 		        response.appendContentString("\n\t<div class=\"modal-footer\">");
 		        response.appendContentString("\n\t\t<a href=\"#\" class=\"dismiss btn\">Close</a>");	
 		        response.appendContentString("\n\t</div>");
@@ -159,7 +159,7 @@ public class MTAjaxModalContainer extends AjaxDynamicElement {
 	        response.appendContentString(">");
 
 	        String title = stringValueForBinding("title", component);
-	        if(showTitle && title != null) {
+	        if(showTitle.booleanValue() && title != null) {
 		        response.appendContentString("\n\t<div class=\"modal-header\">");
 		        response.appendContentString("\n\t\t<a class=\"close\" data-dismiss=\"modal\">x</a>");
 		        response.appendContentString("\n\t\t<h3>");
@@ -168,7 +168,7 @@ public class MTAjaxModalContainer extends AjaxDynamicElement {
 		        response.appendContentString("\n\t</div>");
 	        }
 
-	        if(autoWrapContent) {
+	        if(autoWrapContent.booleanValue()) {
 	        	String modalBodyID = stringValueForBinding("modalBodyID", component);
 	        	if(modalBodyID == null) {
 	        		modalBodyID = "modalBody" + ERXWOContext.safeIdentifierName(context, false);
@@ -180,11 +180,11 @@ public class MTAjaxModalContainer extends AjaxDynamicElement {
 	        	
 	        }
 
-	        if(autoWrapContent) {
+	        if(autoWrapContent.booleanValue()) {
 		        response.appendContentString("\n\t</div>");
 	        }
 	        
-	        if(showFooter) {
+	        if(showFooter.booleanValue()) {
 		        response.appendContentString("\n\t<div class=\"modal-footer\">");
 		        response.appendContentString("\n\t\t<a href=\"#\" class=\"dismiss btn\">Close</a>");	
 		        response.appendContentString("\n\t</div>");
@@ -276,8 +276,8 @@ public class MTAjaxModalContainer extends AjaxDynamicElement {
 		MTAjaxUtils.addScriptResourceInHead(context, context.response(), "MooTools", MTAjaxUtils.MOOTOOLS_WONDER_JS);
 
 		Boolean useDefaultCSS = (Boolean)valueForBinding("useDefaultCSS", Boolean.TRUE, context.component());
-		if(useDefaultCSS) {
-			MTAjaxUtils.addStylesheetResourceInHead(context, context.response(), "MooTools", "scripts/plugins/bootstrap/modal/modal.css");
+		if(useDefaultCSS.booleanValue()) {
+			AjaxUtils.addStylesheetResourceInHead(context, context.response(), "MooTools", "scripts/plugins/bootstrap/modal/modal.css");
 		}
 
 	}

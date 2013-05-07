@@ -19,7 +19,6 @@ import com.webobjects.directtoweb.NextPageDelegate;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotificationCenter;
 
-import er.directtoweb.ERD2WContainer;
 import er.directtoweb.ERD2WFactory;
 import er.directtoweb.delegates.ERDPageDelegate;
 import er.extensions.eof.ERXEOControlUtilities;

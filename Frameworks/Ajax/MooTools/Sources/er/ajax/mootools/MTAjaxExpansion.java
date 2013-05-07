@@ -7,6 +7,8 @@ import er.ajax.AjaxExpansion;
 
 public class MTAjaxExpansion extends AjaxExpansion {
     
+	private static final long serialVersionUID = 1L;
+
 	public MTAjaxExpansion(WOContext context) {
         super(context);
     }

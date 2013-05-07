@@ -28,6 +28,8 @@ and limitations under the License.
 #include <stdio.h>		/* sprintf() */
 #include <string.h>
 #include <ctype.h>
+#include <limits.h>
+
 
 #ifdef WIN32
 int strcasecmp(const char *, const char *);
@@ -147,6 +149,11 @@ void resp_addHeader(HTTPResponse *resp, String *rawhdr)
     *   is freed, in resp_free().
     */
    for (key = rawhdr->text, value = key; *value != ':'; value++) {
+      if(*value == '\0') // mstoll 13.10.2005 check added
+      {
+         WOLog(WO_ERR,"Header without ':': %s", rawhdr->text);
+         break;
+      }
       if (isupper((int)*value))
          *value = tolower((int)*value);				/* ... and change to lowercase. */
    }
@@ -158,13 +165,24 @@ void resp_addHeader(HTTPResponse *resp, String *rawhdr)
    }
 
    st_add(resp->headers, key, value, 0);
-
+   
    /*
     *	scan inline for content-length
     */
    if ((resp->content_length == 0) && ((strcasecmp(CONTENT_LENGTH,key) == 0) || strcasecmp("content_length", key) == 0))
    {
+      // 2009/06/10: an explicit content-length value is available.
+      //             Update response flag information:
+      resp->flags |= RESP_LENGTH_EXPLICIT;
       resp->content_length = atoi(value);
+      WOLog(WO_INFO,"content-length was set expl.: %d", resp->content_length);
+   }
+
+   if (((strcasecmp(CONTENT_TYPE,key) == 0) || strcasecmp("content_type", key) == 0))
+   {
+      // 2011/11/16: an explicit content-type value is available.
+      //             Update response flag information:
+      resp->flags |= RESP_CONTENT_TYPE_SET;
    }
 
    return;
@@ -196,7 +214,30 @@ HTTPResponse *resp_getResponseHeaders(WOConnection *instanceConnection, WOInstan
    while ((response = transport->recvline(instanceConnection->fd)) != NULL) {
       if (response->length == 0)
          break;
+      WOLog(WO_DBG,"Header read: %s", response->text); // mstoll 13.10.2005 debug output added
       resp_addHeader(resp, response);
+   }
+   if((resp->flags & RESP_LENGTH_EXPLICIT) != RESP_LENGTH_EXPLICIT)
+   {
+      if((resp->flags & RESP_CONTENT_TYPE_SET) != RESP_CONTENT_TYPE_SET)
+      {
+         // no content type: no body, so content-length is implicit 0
+         resp->content_length = 0;
+      } else {
+         // 2009/06/10: no content-length defined.  To be able to process the
+         //             request although, we set the maximum allowed value and close
+         //             the client socket communication if the end-of-response-
+         //             stream was reached.  The maximum allowed value is UINT_MAX,
+         //             because resp->content_length is defined as "unsigned".
+         //             But the function used to convert a content-length string
+         //             returns an int and assignments like
+         //                 int value = resp->content_length;
+         //             can be found in the adaptor source code.  Therefore, we
+         //             should better use INT_MAX!
+         resp->content_length = INT_MAX;
+         WOLog(WO_WARN, "Response doesn't specify a content-length: assuming %u bytes!",
+               resp->content_length);
+      }
    }
    if (response)
       str_free(response);
@@ -227,14 +268,25 @@ int resp_getResponseContent(HTTPResponse *resp, int allowStreaming)
          amountToRead = resp->content_buffer_size;
       count = transport->recvbytes(resp->instanceConnection->fd, resp->content, amountToRead);
       if (count != amountToRead) {
-         WOLog(WO_ERR, "Error receiving content (expected %d bytes, got %d)", amountToRead, count);
+         // 2009/06/09: either the content length was wrong, unset or the
+         //             application has died.  Please use the return value
+         //             to resolve this situation in the caller method (if
+         //             desired): this method returns 0 on success, -1 if no
+         //             data was received from the WebObjects application and
+         //             > 0 if an incomplete data package was received (the
+         //             return value describes the number of received bytes
+         //             in such a situation).
+         WOLog(WO_WARN, "Received an unexpected number of bytes (expected %d bytes, got %d)",
+               amountToRead, count);
          resp->content_valid = 0;
-         ret = -1;
+         ret = ((count == 0)? -1 : count);
       } else {
          resp->content_read += amountToRead;
          resp->content_valid = amountToRead;
       }
    }
+   if(ret != 0) resp->flags |= RESP_LENGTH_INVALID;
+
    return ret;
 }
 
