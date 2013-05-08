@@ -1378,7 +1378,7 @@ public class ERXEOAccessUtilities {
      * @author ak
      * @param attributes 
      * @param values 
-     * @return qualifier
+     * @return qualifier. EOAndQualifier for 2 or more elements in <code>attributes</code>, EOKeyValueQualifier for a single element <code>attributes</code> array, <code>null</code> when <code>attributes</code> is null or empty.
      */
     public static EOQualifier qualifierFromAttributes(NSArray<EOAttribute> attributes, NSDictionary values) {
         EOQualifier result = null;
@@ -1388,7 +1388,8 @@ public class ERXEOAccessUtilities {
                 Object value = values.objectForKey(key.name());
                 qualifiers.addObject(new EOKeyValueQualifier(key.name(), EOQualifier.QualifierOperatorEqual, value));
             }
-            result = new EOAndQualifier(qualifiers);
+            // Don't wrap in an AND qualifier if there is only one qualifier
+            result = (qualifiers.count() == 1 ? qualifiers.objectAtIndex(0) : new EOAndQualifier(qualifiers));
         }
         return result;
     }
