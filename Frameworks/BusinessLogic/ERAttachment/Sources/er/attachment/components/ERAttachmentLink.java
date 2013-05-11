@@ -28,6 +28,7 @@ import er.extensions.foundation.ERXStringUtilities;
  * @binding id (optional) the html element id
  * @binding style (optional) the css inline style
  * @binding download if true, the attachment will be downloaded instead of inlined
+ * @binding target (optional) specifies where to open the linked attachment
  */
 public class ERAttachmentLink extends WODynamicGroup {
   private WOAssociation _attachment;
