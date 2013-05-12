@@ -14,24 +14,14 @@
             name = newBlobValueId; 
             prototypeName = id; 
         }, 
-        {
-            allowsNull = Y; 
-            columnName = "NEW_VALUES"; 
-            name = newValues; 
-            prototypeName = varchar1000; 
-        }, 
+        {columnName = "NEW_VALUES"; name = newValues; prototypeName = varcharLarge; }, 
         {
             allowsNull = Y; 
             columnName = "OLD_BLOB_VALUE_ID"; 
             name = oldBlobValueId; 
             prototypeName = id; 
         }, 
-        {
-            allowsNull = Y; 
-            columnName = "OLD_VALUES"; 
-            name = oldValues; 
-            prototypeName = varchar1000; 
-        }, 
+        {columnName = "OLD_VALUES"; name = oldValues; prototypeName = varcharLarge; }, 
         {allowsNull = N; columnName = "TRAIL_ID"; name = trailId; prototypeName = id; }, 
         {
             adaptorValueConversionMethodName = value; 
