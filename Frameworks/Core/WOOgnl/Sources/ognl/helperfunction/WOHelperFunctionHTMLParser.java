@@ -27,6 +27,7 @@ public class WOHelperFunctionHTMLParser {
 	private static final String WO_COLON_END_TAG = "</wo:";
 	private static final String WO_COLON_START_TAG = "<wo:";
 	private static final String WO_REPLACEMENT_MARKER = "__REPL__";
+	private static final String XML_CDATA_START_TAG = "<![CDATA[";
 
 	private static boolean _parseStandardTags = false;
 	private NSMutableDictionary _stackDict;
@@ -175,8 +176,9 @@ public class WOHelperFunctionHTMLParser {
 	private String checkToken(String token) {
 		String original = new String(token);
 		try {
-			if (token == null || token.toLowerCase().startsWith(WEBOBJECT_START_TAG) || token.toLowerCase().startsWith(WO_COLON_START_TAG) || token.toLowerCase().startsWith(WO_START_TAG) ) {
-				// we return immediately, if it is a webobject token
+			if (token == null || token.toLowerCase().startsWith(WEBOBJECT_START_TAG) || token.toLowerCase().startsWith(WO_COLON_START_TAG) || token.toLowerCase().startsWith(WO_START_TAG)
+					|| token.toLowerCase().startsWith(XML_CDATA_START_TAG) ) {
+				// we return immediately, if it is a webobject token or CDATA tag
 				return token;
 			}
 
