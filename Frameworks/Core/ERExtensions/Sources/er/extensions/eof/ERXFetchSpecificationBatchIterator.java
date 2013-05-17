@@ -366,6 +366,7 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
             if (fetchSpecification.prefetchingRelationshipKeyPaths() != null) {
             	batchFS.setPrefetchingRelationshipKeyPaths(fetchSpecification.prefetchingRelationshipKeyPaths());
             }
+            batchFS.setRefreshesRefetchedObjects(fetchSpecification.refreshesRefetchedObjects());
             batchFS.setRawRowKeyPaths(fetchSpecification.rawRowKeyPaths());
             nextBatch = ec.objectsWithFetchSpecification(batchFS);
 
