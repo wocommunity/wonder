@@ -285,7 +285,6 @@ var MTAjaxSubmitButton = {
 			alert('There is no element on this page with the id "' + id + '".');
 		}
 		var finalUrl = MTAjaxSubmitButton.generateActionUrl(id, form, queryParams,options);
-		console.log(finalUrl);
 		var finalOptions = MTAjaxSubmitButton.processOptions(form, options);
 		new Request.HTML(Object.merge({
 				update : id,
