@@ -761,8 +761,8 @@
     </distributionManagement>
 
     <scm>
-        <connection>scm:git:git@github.com:projectwonder/wonder.gitt</connection>
-        <url>scm:git:git@github.com:projectwonder/wonder.git</url>
-        <developerConnection>scm:git:git@github.com:projectwonder/wonder.git</developerConnection>
+        <connection>scm:git:git@github.com:wocommunity/wonder.git</connection>
+        <url>scm:git:git@github.com:wocommunity/wonder.git</url>
+        <developerConnection>scm:git:git@github.com:wocommunity/wonder.git</developerConnection>
     </scm>
 </project>
