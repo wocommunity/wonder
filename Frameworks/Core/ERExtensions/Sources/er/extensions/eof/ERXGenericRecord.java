@@ -39,6 +39,7 @@ import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXDictionaryUtilities;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXUtilities;
+import er.extensions.foundation.UUIDUtilities;
 import er.extensions.localization.ERXLocalizer;
 import er.extensions.validation.ERXValidationException;
 import er.extensions.validation.ERXValidationFactory;
@@ -88,6 +89,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 
 	/** holds all subclass related Logger's */
 	private static final NSMutableDictionary<Class, Logger> classLogs = new NSMutableDictionary<Class, Logger>();
+
+	private static final Object uuidPrototypeName = "uuid";
 
 	public static boolean shouldTrimSpaces() {
 		return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXGenericRecord.shouldTrimSpaces", false);
@@ -749,12 +752,35 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 						_primaryKeyDictionary = compositePrimaryKey;
 					}
 					else {
-						_primaryKeyDictionary = ERXEOControlUtilities.newPrimaryKeyDictionaryForObject(this);
+						_primaryKeyDictionary = createUuidPrimaryKey(primaryKeyAttributes);
+						if (_primaryKeyDictionary == null) {
+							_primaryKeyDictionary = ERXEOControlUtilities.newPrimaryKeyDictionaryForObject(this);
+						}
 					}
 				}
 			}
+			else { // inTransaction
+				EOEntity entity = entity();
+				NSArray<EOAttribute> primaryKeyAttributes = entity.primaryKeyAttributes();
+				_primaryKeyDictionary = createUuidPrimaryKey(primaryKeyAttributes);
+			}
 		}
 		return _primaryKeyDictionary;
+	}
+
+	/**
+	 * Create a primary key if the entity primary key is an attribute with uuid prototype.
+	 * @param primaryKeyAttributes
+	 * @return the primary key dictionary or null if the primary key is not a uuid.
+	 */
+	private NSDictionary<String, Object> createUuidPrimaryKey(NSArray<EOAttribute> primaryKeyAttributes) {
+		if (primaryKeyAttributes.count() == 1) {
+			EOAttribute primaryKeyAttribute = primaryKeyAttributes.objectAtIndex(0);			
+			if (primaryKeyAttribute.prototypeName().equals(uuidPrototypeName)) {
+				return new NSDictionary<String, Object>(UUIDUtilities.generateAsNSData(), primaryKeyAttribute.name());
+			}
+		}
+		return null;
 	}
 	
 	/**

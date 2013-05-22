@@ -60,6 +60,7 @@ import er.extensions.eof.ERXEOAccessUtilities.DatabaseContextOperation;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXDictionaryUtilities;
 import er.extensions.foundation.ERXKeyValueCodingUtilities;
+import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.jdbc.ERXSQLHelper;
 import er.extensions.validation.ERXValidationException;
 import er.extensions.validation.ERXValidationFactory;
@@ -1307,6 +1308,10 @@ public class ERXEOControlUtilities {
             return null;
         if(pk instanceof String || pk instanceof Number) {
             return pk.toString();
+        }
+        if (pk instanceof NSData) {
+        	byte[] pkBytes = ((NSData)pk)._bytesNoCopy();
+			return ERXStringUtilities.byteArrayToHexString(pkBytes);
         }
         return NSPropertyListSerialization.stringFromPropertyList(pk);
     }
