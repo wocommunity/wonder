@@ -15,7 +15,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="Libraries/ashwood-2.0.jar"/>
 	<classpathentry kind="lib" path="Libraries/commons-collections-3.1.jar"/>
-	<classpathentry kind="lib" path="Libraries/commons-logging-1.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/cayenne-server-3.1M3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
