@@ -365,9 +365,9 @@ public class ERXValidationFactory {
             ERXValidationException erve = convertException(e);
             if (erve != null)
                 erveAdditionalExceptions.addObject(erve);
+            }
+            return erveAdditionalExceptions;
         }
-        return erveAdditionalExceptions;
-    }
     
     /**
      * Entry point for generating an exception message
@@ -435,12 +435,12 @@ public class ERXValidationFactory {
                 targetLanguage = ERXLocalizer.currentLocalizer() != null ? ERXLocalizer.currentLocalizer().language() : ERXLocalizer.defaultLanguage();
             }
             
-            if (log.isDebugEnabled())
+            if (log.isDebugEnabled ())
                 log.debug("templateForException with entityName: " + entityName + "; property: " + property + "; type: " + type + "; targetLanguage: " + targetLanguage);
             ERXMultiKey k = new ERXMultiKey (new Object[] {entityName, property,
                 type,targetLanguage});
             template = _cache.get(k);
-            // Not in the cache. Simple resolving.
+            // Not in the cache.  Simple resolving.
             if (template == null) {
                 template = templateForEntityPropertyType(entityName, property, type, targetLanguage);
                 _cache.put(k, template);
@@ -501,7 +501,7 @@ public class ERXValidationFactory {
      * @param delimiter to be set
      */
     public void setTemplateDelimiter(String delimiter) { _delimiter = delimiter; }
-    
+
     /**
      * Method used to configure the validation factory
      * for operation. This method is called on the default

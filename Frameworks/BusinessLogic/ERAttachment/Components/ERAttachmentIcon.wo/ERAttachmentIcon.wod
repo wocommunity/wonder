@@ -13,4 +13,5 @@ Link : ERAttachmentLink {
 	class = ^class;
 	style  = ^style;
 	configurationName = ^configurationName;
+	target = ^target;
 }

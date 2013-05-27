@@ -76,13 +76,13 @@ public class MTAjaxTabbedPanel extends AjaxDynamicElement {
     private WOAssociation onLoad;
     private WOAssociation onSelect;
 	
-	public MTAjaxTabbedPanel(String name, NSDictionary associations, WOElement template) {
+	public MTAjaxTabbedPanel(String name, NSDictionary<String, WOAssociation> associations, WOElement template) {
         super(name, associations, template);
         content = template;
-        id = (WOAssociation) associations.objectForKey("id");
-        busyDiv = (WOAssociation) associations.objectForKey("busyDiv");
-        onLoad = (WOAssociation) associations.objectForKey("onLoad");
-        onSelect = (WOAssociation) associations.objectForKey("onSelect");
+        id = associations.objectForKey("id");
+        busyDiv = associations.objectForKey("busyDiv");
+        onLoad = associations.objectForKey("onLoad");
+        onSelect = associations.objectForKey("onSelect");
         findTabs((WODynamicGroup)template);
 
         if (id == null)
@@ -100,9 +100,9 @@ public class MTAjaxTabbedPanel extends AjaxDynamicElement {
     private void findTabs(WODynamicGroup template)  {
     	if (template == null || template.childrenElements() == null) return;
 
-        NSArray children = template.childrenElements();
+        NSArray<WOElement> children = template.childrenElements();
         for (int i = 0; i < children.count(); i++) {
-            WOElement child = (WOElement)children.objectAtIndex(i);
+            WOElement child = children.objectAtIndex(i);
             if (child instanceof MTAjaxTabbedPanelTab) {
             	MTAjaxTabbedPanelTab childTab = (MTAjaxTabbedPanelTab)child;
 

@@ -209,9 +209,9 @@ function change(){
 window.onload=change;
 </script>
 <em>Project Wonder ${project.version}</em>]]></header>
-            <bottom><![CDATA[Copyright &#169; 2002 &#8211; 2012  Project Wonder.]]></bottom>
+            <bottom><![CDATA[Copyright &#169; 2002 &#8211; 2013 Project Wonder.]]></bottom>
             <footer><![CDATA[Last updated: ${updated.date} &#149; ${updated.time}]]></footer>
-            <link href="http://docs.oracle.com/javase/1.5/docs/api/"/>
+            <link href="http://docs.oracle.com/javase/1.5.0/docs/api/"/>
             <link href="http://wocommunity.org/documents/javadoc/WebObjects/5.4.2/" packagelistLoc="${wonder.root}/Build/build/webobjects-package-list"/>
             <link href="http://logging.apache.org/log4j/1.2/apidocs/"/>
             <link href="http://junit.sourceforge.net/javadoc/"/>

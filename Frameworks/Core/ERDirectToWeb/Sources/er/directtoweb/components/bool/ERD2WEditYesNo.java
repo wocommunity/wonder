@@ -23,7 +23,7 @@ public class ERD2WEditYesNo extends ERD2WCustomEditBoolean {
 	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
 	 */
 	private static final long serialVersionUID = 1L;
-
+    
     public static Logger log = Logger.getLogger(ERD2WEditYesNo.class);
 
     public ERD2WEditYesNo(WOContext context) {

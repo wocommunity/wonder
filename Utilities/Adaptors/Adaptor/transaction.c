@@ -611,10 +611,23 @@ static HTTPResponse *_runRequest(WOAppReq *app, WOAppHandle woappHandle, WOInsta
       /* go ahead and read the first chunk of response data */
       if (resp && req->method != HTTP_HEAD_METHOD)
       {
-         if (resp_getResponseContent(resp, 1) == -1)
+         int count = resp_getResponseContent(resp, 1);
+         if (count == -1)
          {
             resp_free(resp);
             resp = NULL;
+         }
+         else
+         {
+            // 2009/06/09: handle situations where content_length is wrong or
+            //             unset.  Read as much data as possible from the
+            //             WebObjects application and send the data to the
+            //             client-side.
+            if(count > 0)
+            {
+               resp->content_read += count;
+               resp->content_valid = count;
+            }
          }
       }
 
@@ -690,6 +703,13 @@ static HTTPResponse *_runRequest(WOAppReq *app, WOAppHandle woappHandle, WOInsta
                ac_unlockInstance(instHandle);
             }
             retryRequest++;
+            if(req->haveReadStreamedData)
+            {
+                // 2009/04/28: in case of streaming operation, the request
+                //             isn't fully available after a connection reset! 
+                app->error = err_response;
+                retryRequest = 0;
+            }
             if (retryRequest == 1)
                WOLog(WO_INFO, "retrying request due to connection reset");
          } else

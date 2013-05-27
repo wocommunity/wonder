@@ -29,7 +29,7 @@ import er.extensions.foundation.ERXMutableURL;
  * Ajax リクエストなどでとても有効です。例えば、全ページのリロード（普段はアクション・メソッドのコール）へポイントします。
  * リダイレクトが Ajax リクエストの場合にはスクリプト・タグの document.location.href で URL 生成されます。
  * </span>
- *
+ * 
  * @author mschrag
  */
 public class ERXRedirect extends WOComponent {

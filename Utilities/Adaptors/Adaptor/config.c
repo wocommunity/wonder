@@ -104,6 +104,7 @@ int init_adaptor(struct _strtbl *options)
 {
     const char *logPath = NULL;
     const char *logLevel = NULL;
+    const char *logFlag = NULL;
     const char *stateFile = DEFAULT_STATE_FILE;
     const char *s;
     char *sharedS;
@@ -119,10 +120,11 @@ int init_adaptor(struct _strtbl *options)
     if (options) {
         logPath = st_valueFor(options, WOLOGPATH);
         logLevel = st_valueFor(options, WOLOGLEVEL);
+        logFlag = st_valueFor(options, WOLOGFLAG);
     }
 
     /* We initialize the logging subsystem early on, in order to get the log messages ... */
-    WOLog_init(logPath, logLevel);
+    WOLog_init(logPath, logFlag, logLevel);
 
     /* Initialize the string stuff early too, so we can log the config dictionary. */
     if (ret == 0)

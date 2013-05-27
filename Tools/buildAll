@@ -11,7 +11,7 @@ if [ ! -f "Build/build/build.xml" ]; then
     echo ""
     echo "Please execute from within a checked-out Wonder directory. For example, you can do:"
     echo ""
-    echo "    % git clone https://github.com/projectwonder/wonder"
+    echo "    % git clone https://github.com/wocommunity/wonder"
     echo "    % cd wonder"
     echo "    % ./Tools/buildAll"
     echo ""

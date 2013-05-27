@@ -54,7 +54,7 @@ import er.extensions.foundation.ERXStringUtilities;
 public class MTAjaxUpdateLink extends AjaxUpdateLink {
 
 	
-	public MTAjaxUpdateLink(String name, NSDictionary associations, WOElement children) {
+	public MTAjaxUpdateLink(String name, NSDictionary<String, WOAssociation> associations, WOElement children) {
 		super(name, associations, children);
 	}
 
@@ -94,10 +94,10 @@ public class MTAjaxUpdateLink extends AjaxUpdateLink {
 		MTAjaxUtils.addScriptResourceInHead(context, context.response(), "MooTools", MTAjaxUtils.MOOTOOLS_CORE_JS);
 		MTAjaxUtils.addScriptResourceInHead(context, context.response(), "MooTools", MTAjaxUtils.MOOTOOLS_MORE_JS);
 		Boolean useSpinner = (Boolean)valueForBinding("useSpinner", Boolean.FALSE, context.component());
-		if(useSpinner) {
+		if(useSpinner.booleanValue()) {
 			Boolean useDefaultSpinnerClass = (Boolean)valueForBinding("defaultSpinnerClass", Boolean.TRUE, context.component());
-			if(useDefaultSpinnerClass) {
-				MTAjaxUtils.addStylesheetResourceInHead(context, context.response(), "MooTools", "scripts/plugins/spinner/spinner.css");
+			if(useDefaultSpinnerClass.booleanValue()) {
+				AjaxUtils.addStylesheetResourceInHead(context, context.response(), "MooTools", "scripts/plugins/spinner/spinner.css");
 			}
 		}
 		

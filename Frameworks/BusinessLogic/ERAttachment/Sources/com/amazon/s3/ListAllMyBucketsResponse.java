@@ -37,7 +37,7 @@ public class ListAllMyBucketsResponse extends Response {
         super(connection);
         if (connection.getResponseCode() < 400) {
             try {
-                XMLReader xr = Utils.createXMLReader();;
+                XMLReader xr = Utils.createXMLReader();
                 ListAllMyBucketsHandler handler = new ListAllMyBucketsHandler();
                 xr.setContentHandler(handler);
                 xr.setErrorHandler(handler);

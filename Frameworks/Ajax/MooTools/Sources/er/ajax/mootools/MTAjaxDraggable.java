@@ -58,6 +58,8 @@ import er.extensions.components.ERXComponentUtilities;
 
 public class MTAjaxDraggable extends AjaxComponent {
 
+	private static final long serialVersionUID = 1L;
+
 	private static final String COMPONENT_DRAGGABLES_MAP_KEY = "AjaxComponentDraggablesMap";
 	private String _id;
 	private String _variableName;

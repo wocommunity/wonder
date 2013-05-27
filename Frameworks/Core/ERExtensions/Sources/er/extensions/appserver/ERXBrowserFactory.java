@@ -271,7 +271,7 @@ public class ERXBrowserFactory {
      * @return ERXBrowser サブクラスの名前; デフォルト <code>"er.extensions.appserver.ERXBasicBrowser"</code>
      * </span>
      * 
-     * @see #setBrowserClassName
+     * @see	#setBrowserClassName
      */
     @SuppressWarnings("javadoc")
     public String browserClassName() { return _browserClassName; }
@@ -280,7 +280,7 @@ public class ERXBrowserFactory {
      * <span class="en">
      * Sets the name of the {@link ERXBrowser} subclass.
      * 
-     * @param name  the name of the ERXBrowser subclass; ignored if null
+     * @param name	the name of the ERXBrowser subclass; ignored if null
      * </span>
      * 
      * <span class="ja">
@@ -289,8 +289,8 @@ public class ERXBrowserFactory {
      * @param name - ERXBrowser サブクラスの名前; null の場合は無視
      * </span>
      * 
-     * @see   #browserClassName
-     * @see   #createBrowser
+     * @see		#browserClassName
+     * @see		#createBrowser
      */
     public void setBrowserClassName(String name) { 
         if (name != null  &&  name.length() > 0) 
@@ -322,7 +322,7 @@ public class ERXBrowserFactory {
      * 
      * @param request - WORequest
      * 
-     * @return a shared browser object
+     * @return 		a shared browser object
      * </span>
      * 
      * <span class="ja">
@@ -399,7 +399,7 @@ public class ERXBrowserFactory {
      * </span>
      */
      @SuppressWarnings("javadoc")
-   public synchronized ERXBrowser getBrowserInstance(String browserName, String version, String mozillaVersion, 
+    public synchronized ERXBrowser getBrowserInstance(String browserName, String version, String mozillaVersion, 
                                                 String platform, NSDictionary userInfo) {
         String key = _computeKey(browserName, version, mozillaVersion, platform, userInfo);
         ERXBrowser browser = (ERXBrowser)_browserPool().objectForKey(key);
@@ -441,8 +441,8 @@ public class ERXBrowserFactory {
      * @return <code>ERXBrowser</code> を明確なサブクラスとして持つ新規ブラウザ・オブジェクト
      * </span>
      * 
-     * @see #setBrowserClassName
-     * @see #browserClassName
+     * @see	#setBrowserClassName
+     * @see	#browserClassName
      */
     @SuppressWarnings("javadoc")
     public synchronized ERXBrowser createBrowser(String browserName, String version, String mozillaVersion,
