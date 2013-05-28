@@ -114,7 +114,7 @@ public class ERXPartialInitializer {
 								primaryAttribute.awakeWithPropertyList(attributePropertyList);
 								partialEntity.addAttribute(primaryAttribute);
 								
-								// add 'classProperties' we will remove to a list
+								// add 'classProperties' we will remove later
 								if(!partialExtensionEntityClassPropertiesName.contains(primaryAttribute.name())) {
 									removeList.add(primaryAttribute); // classProperties fix
 								}
@@ -138,6 +138,8 @@ public class ERXPartialInitializer {
 							partialEntity.setClassProperties(partialEntityClassProperties.immutableClone());
 						}
 
+						NSMutableArray<EORelationship> removeRelationshipsList = new NSMutableArray<EORelationship>(); // classProperties fix
+
 						Enumeration partialRelationships = partialExtensionEntity.relationships().objectEnumerator();
 						while (partialRelationships.hasMoreElements()) {
 							EORelationship partialRelationship = (EORelationship) partialRelationships.nextElement();
@@ -148,10 +150,29 @@ public class ERXPartialInitializer {
 								EORelationship primaryRelationship = new EORelationship(relationshipPropertyList, partialEntity);
 								primaryRelationship.awakeWithPropertyList(relationshipPropertyList);
 								partialEntity.addRelationship(primaryRelationship);
+
+								// add 'classProperties' we will remove later
+								if(!partialExtensionEntityClassPropertiesName.contains(primaryRelationship.name())) {
+								  removeRelationshipsList.add(primaryRelationship); // classProperties fix
+								}
 							}
 							else {
 								ERXModelGroup.log.debug("Skipping partial relationship " + partialExtensionEntity.name() + "." + partialRelationship.name() + " because " + partialEntity.name() + " already has a relationship of the same name.");
 							}
+						}
+
+						// remove it from the parent Entity
+						if(removeRelationshipsList.count() > 0) { // classProperties fix
+						  NSMutableArray<EOProperty> partialEntityClassProperties = partialEntity.classProperties().mutableClone();
+						  for (EORelationship relationship : removeRelationshipsList) {
+							for (int i = partialEntityClassProperties.count() - 1; i >= 0; i--) {
+							  if(relationship.name().equalsIgnoreCase(partialEntityClassProperties.objectAtIndex(i).name())) {
+								partialEntityClassProperties.removeObjectAtIndex(i);
+							  }
+							}
+						  }
+						  ERXArrayUtilities.sortArrayWithKey(partialEntityClassProperties, "name");
+						  partialEntity.setClassProperties(partialEntityClassProperties.immutableClone());
 						}
 
 						NSMutableArray<Class<ERXPartial>> partialsForEntity = _partialsForEntity.objectForKey(partialEntity);
