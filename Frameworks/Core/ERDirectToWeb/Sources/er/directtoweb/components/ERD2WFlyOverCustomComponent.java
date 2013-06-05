@@ -37,10 +37,6 @@ public class ERD2WFlyOverCustomComponent extends D2WCustomComponent {
         super(context);
     }
 
-    /** component does not synchronize it's variables */
-    @Override
-    public boolean synchronizesVariablesWithBindings() { return false; }
-    
     @Override
     public boolean isStateless() { return true; }
 

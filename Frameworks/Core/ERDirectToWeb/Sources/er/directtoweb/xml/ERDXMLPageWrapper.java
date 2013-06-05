@@ -13,7 +13,6 @@ import com.webobjects.appserver.WOContext;
  * page wrapper in xml.<br />
  * 
  */
-
 public class ERDXMLPageWrapper extends WOComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -24,6 +23,6 @@ public class ERDXMLPageWrapper extends WOComponent {
 
     public ERDXMLPageWrapper(WOContext context) { super(context); }
 
+    @Override
     public boolean isStateless() { return true; }
-    public boolean synchronizesVariablesWithBindings() { return false; }
 }

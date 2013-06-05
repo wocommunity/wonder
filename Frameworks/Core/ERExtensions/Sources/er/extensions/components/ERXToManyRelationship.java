@@ -57,6 +57,7 @@ public class ERXToManyRelationship extends WOToManyRelationship {
         super(context);
     }
     
+    @Override
     public NSArray selections() {
         if (_selections == null && canGetValueForBinding("selectedObjects")) {
             NSArray selectedObjects = (NSArray)valueForBinding("selectedObjects");
@@ -66,6 +67,7 @@ public class ERXToManyRelationship extends WOToManyRelationship {
         return super.selections();
     }
 
+    @Override
     public EODataSource dataSource() {
         if (_dataSource==null) {
             _dataSource = super.dataSource();
@@ -78,6 +80,7 @@ public class ERXToManyRelationship extends WOToManyRelationship {
         return _dataSource;
     }
 
+    @Override
     public boolean isBrowser() {
         return !(isCheckBox() || isJSEditor()); // Browser is the default.
     }

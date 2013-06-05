@@ -1,0 +1,45 @@
+#!/bin/sh
+
+if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+    echo ""
+    echo "Builds specific parts of the Wonder frameworks. Usually one can use the name of the framework, appliction, or"
+    echo "example, with a \".all\" at the end, and this target will build just that. See the ReadMe.txt for more info."
+    echo ""
+    exit 0
+fi
+
+if [ "$1" = "" ]; then
+    echo ""
+    echo "Please give me a target, one or more of: ant clean frameworks applications examples tests tests.run."
+    echo "One can also provide the namename of a project with \".all\" appended, such as \"ERExtensions.all\"."
+    echo ""
+    exit 0
+fi
+
+if [ ! -f "Build/build/build.xml" ]; then
+    echo ""
+    echo "Please execute from within a checked-out Wonder directory. For example, you can do:"
+    echo ""
+    echo "    % git clone https://github.com/wocommunity/wonder"
+    echo "    % cd wonder"
+    echo "    % ./Tools/buildAll"
+    echo ""
+    exit 0
+fi
+
+if [ ! -d logs ]; then
+    mkdir logs
+fi
+
+chmod +w Frameworks/Misc/WOJRebel/manifest.mf
+chmod +w Frameworks/Ajax/Ajax/WebServerResources/wondaculous.js
+
+script logs/log_buildOnly_`date +%Y%m%d_%H%M%S`.txt ant -buildfile Build/build/build.xml -Dbuild.action=build -Dwonder.patch=54 $*
+
+git checkout Frameworks/Misc/WOJRebel/manifest.mf
+chmod -w Frameworks/Misc/WOJRebel/manifest.mf
+
+git checkout Frameworks/Ajax/Ajax/WebServerResources/wondaculous.js
+chmod -w Frameworks/Ajax/Ajax/WebServerResources/wondaculous.js
+
+exit 0

@@ -40,14 +40,14 @@ public class DRValue {
     public DRValue(double tot, DRAttribute att) {
         super();
         _isTotal = true;
-        _totalValue = new Double(tot);
+        _totalValue = Double.valueOf(tot);
         _attribute = att;
         _rawTotal = tot;
     }
 
     public DRValue initAsNull() {
         _isNull = true;
-        _totalValue = new Double(0);
+        _totalValue = Double.valueOf(0);
         _rawTotal = 0.0;
         return this;
     }
@@ -131,7 +131,7 @@ public class DRValue {
             return 0.0;
         }
 
-        Object val = this.val();
+        Object val = val();
 
         if (val != null) {
             return DRValueConverter.converter().doubleForValue(val);
@@ -144,7 +144,7 @@ public class DRValue {
         // only mutable id 'isTotal'
 
         if (_isTotal) {
-            _totalValue = new Double(tot);
+            _totalValue = Double.valueOf(tot);
             _rawTotal = tot;
         }
 

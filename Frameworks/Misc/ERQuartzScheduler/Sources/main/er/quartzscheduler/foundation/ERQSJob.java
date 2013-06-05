@@ -28,8 +28,8 @@ public abstract class ERQSJob extends ERQSAbstractJob implements InterruptableJo
 	 * getJobContext() returns the jobContext after execute() is called.<p>
 	 * To be sure that any exception will be catched, _execute() call in surround by a try/catch block. 
 	 * 
-	 * @param jobContext passed by the scheduler
-	 * @see http://quartz-scheduler.org/documentation/best-practices
+	 * @param jobexecutioncontext passed by the scheduler
+	 * @see <a href="http://quartz-scheduler.org/documentation/best-practices">http://quartz-scheduler.org/documentation/best-practices</a>
 	 */
 	@Override
 	public final void execute(final JobExecutionContext jobexecutioncontext) throws JobExecutionException
@@ -149,8 +149,8 @@ public abstract class ERQSJob extends ERQSAbstractJob implements InterruptableJo
 	
     /**
      * Called by the <code>{@link Scheduler}</code> when a user interrupts the <code>Job</code>.
-     * 
-     * @return void (nothing) if job interrupt is successful.
+     * return void (nothing) if job interrupt is successful.
+     *
      * @throws JobExecutionException
      *           if there is an exception while interrupting the job.
      */

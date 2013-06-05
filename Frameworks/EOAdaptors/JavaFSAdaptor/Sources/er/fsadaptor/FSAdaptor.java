@@ -1,7 +1,3 @@
-
-/* FSAdaptor - Decompiled by JODE
- * Visit http://jode.sourceforge.net/
- */
 package er.fsadaptor;
 
 import com.webobjects.eoaccess.EOAdaptor;
@@ -16,30 +12,37 @@ public final class FSAdaptor extends EOAdaptor {
         super(aName);
     }
 
+    @Override
     public void assertConnectionDictionaryIsValid() {
-        System.out.println(this.connectionDictionary());
+        System.out.println(connectionDictionary());
     }
 
+    @Override
     public EOAdaptorContext createAdaptorContext() {
         return new FSAdaptorContext(this);
     }
 
+    @Override
     public Class defaultExpressionClass() {
         throw new UnsupportedOperationException("FSAdaptor.defaultExpressionClass");
     }
 
+    @Override
     public EOSQLExpressionFactory expressionFactory() {
         throw new UnsupportedOperationException("FSAdaptor.expressionFactory");
     }
 
+    @Override
     public boolean isValidQualifierType(String aTypeName, EOModel aModel) {
         return true;
     }
 
+    @Override
     public EOSchemaGeneration synchronizationFactory() {
         throw new UnsupportedOperationException("FSAdaptor.synchronizationFactory");
     }
 
+    @Override
     public EOSynchronizationFactory schemaSynchronizationFactory() {
       throw new UnsupportedOperationException("FSAdaptor.schemaSynchronizationFactory");
     }

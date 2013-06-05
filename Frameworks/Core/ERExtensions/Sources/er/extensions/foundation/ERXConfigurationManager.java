@@ -20,7 +20,6 @@ import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSSelector;
 
 import er.extensions.ERXExtensions;
-import er.extensions.appserver.ERXApplication;
 import er.extensions.eof.ERXConstant;
 import er.extensions.logging.ERXLogger;
 
@@ -149,7 +148,7 @@ public class ERXConfigurationManager {
     
     /** 
      * Returns the command line arguments. 
-     * {@link ERXApplication#main} sets this value. 
+     * {@link er.extensions.appserver.ERXApplication#main(String[], Class)} sets this value. 
      * 
      * @return the command line arguments as a String[]
      * @see #setCommandLineArguments
@@ -160,10 +159,10 @@ public class ERXConfigurationManager {
     
     /** 
      * Returns the command line arguments as Properties. 
-     * {@link ERXApplication#main} sets this value. 
+     * {@link er.extensions.appserver.ERXApplication#main(String[], Class)} sets this value. 
      * 
      * @return the command line arguments as a String[]
-     * @see #setCommandLineArguments
+     * @see #setCommandLineArguments(String[])
      */
     public Properties commandLineArgumentProperties() {
         return (Properties) _commandLineArgumentProperties.clone();
@@ -171,10 +170,10 @@ public class ERXConfigurationManager {
     
     /** 
      * Returns the command line arguments as Properties. 
-     * {@link ERXApplication#main} sets this value. 
+     * {@link er.extensions.appserver.ERXApplication#main(String[], Class)} sets this value. 
      * 
      * @return the command line arguments as a String[]
-     * @see #setCommandLineArguments
+     * @see #setCommandLineArguments(String[])
      */
     public Properties defaultProperties() {
         return (Properties) _defaultProperties.clone();
@@ -182,10 +181,10 @@ public class ERXConfigurationManager {
     
     /** 
      * Sets the command line arguments. 
-     * {@link ERXApplication#main} will call this method 
+     * {@link er.extensions.appserver.ERXApplication#main(String[], Class)} will call this method 
      * when the application starts up. 
      * 
-     * @see #commandLineArguments
+     * @see #commandLineArguments()
      */
     public void setCommandLineArguments(String [] newCommandLineArguments) {
     	_commandLineArguments = newCommandLineArguments;
@@ -310,7 +309,7 @@ public class ERXConfigurationManager {
     /** 
      * Updates the configuration from the current configuration and 
      * posts {@link #ConfigurationDidChangeNotification}. It also  
-     * calls {@link ERXLogger#configureLogging} to reconfigure 
+     * calls {@link er.extensions.logging.ERXLogger#configureLoggingWithSystemProperties()} to reconfigure 
      * the logging system. 
      * <p>
      * The configuration files: Properties and WebObjects.properties 

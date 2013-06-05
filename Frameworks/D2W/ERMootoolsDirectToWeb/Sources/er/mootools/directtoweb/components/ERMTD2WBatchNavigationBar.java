@@ -18,7 +18,7 @@ public class ERMTD2WBatchNavigationBar extends AjaxFlickrBatchNavigation {
 	}
 
 	public void setD2wContext(D2WContext d2wContext) {
-		this._d2wContext = d2wContext;
+		_d2wContext = d2wContext;
 	}
 
 	public String batchNavigationListItemClassName() {

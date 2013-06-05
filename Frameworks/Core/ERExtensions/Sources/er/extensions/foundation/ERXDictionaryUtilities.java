@@ -255,6 +255,7 @@ public class ERXDictionaryUtilities {
              dictionary = aDictionary;
          }
 
+        @Override
         public int compare(Object key1, Object key2) throws ComparisonException {
             Object value1 = dictionary.objectForKey(key1);
             Object value2 = dictionary.objectForKey(key2);

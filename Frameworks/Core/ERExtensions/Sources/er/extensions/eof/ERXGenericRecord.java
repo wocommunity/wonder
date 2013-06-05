@@ -6,6 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.eof;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAttribute;
@@ -31,7 +32,6 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSValidation;
 
-import er.extensions.ERXExtensions;
 import er.extensions.crypting.ERXCrypto;
 import er.extensions.eof.ERXDatabaseContextDelegate.AutoBatchFaultingEnterpriseObject;
 import er.extensions.foundation.ERXArrayUtilities;
@@ -81,6 +81,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private transient EOEntity _entity;
 
 	/** holds all subclass related Logger's */
 	private static final NSMutableDictionary<Class, Logger> classLogs = new NSMutableDictionary<Class, Logger>();
@@ -248,11 +250,11 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	private boolean _updateInverseRelationships = ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships;
 
 	public Logger getClassLog() {
-		Logger classLog = classLogs.objectForKey(this.getClass());
+		Logger classLog = classLogs.objectForKey(getClass());
 		if (classLog == null) {
 			synchronized (classLogs) {
-				classLog = Logger.getLogger(this.getClass());
-				classLogs.setObjectForKey(classLog, this.getClass());
+				classLog = Logger.getLogger(getClass());
+				classLogs.setObjectForKey(classLog, getClass());
 			}
 		}
 		return classLog;
@@ -627,13 +629,16 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 
 	/**
 	 * Returns the entity for the current object. Defers to
-	 * {@link ERXEOAccessUtilities#entityNamed ERXEOAccessUtilities.entityNamed()}
+	 * {@link ERXEOAccessUtilities#entityNamed(EOEditingContext, String) ERXEOAccessUtilities.entityNamed()}
 	 * for the actual work.
 	 * 
 	 * @return EOEntity for the current object
 	 */
 	public EOEntity entity() {
-		return ERXEOAccessUtilities.entityNamed(editingContext(), entityName());
+		if(_entity == null) {
+			_entity = ERXEOAccessUtilities.entityNamed(editingContext(), entityName());
+		}
+		return _entity;
 	}
 
 	/** caches the primary key dictionary for the given object */
@@ -842,7 +847,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 */
 	public boolean hasKeyChangedFromCommittedSnapshotFromValue(String key, Object oldValue) {
 		NSDictionary<String, Object> d = changesFromCommittedSnapshot();
-		return d.containsKey(key) && ERXExtensions.safeEquals(oldValue, committedSnapshotValueForKey(key));
+		return d.containsKey(key) && ObjectUtils.equals(oldValue, committedSnapshotValueForKey(key));
 	}
 
 	/**
@@ -856,7 +861,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 */
 	public boolean hasKeyChangedFromCommittedSnapshotFromValueToNewValue(String key, Object oldValue, Object newValue) {
 		NSDictionary<String, Object> d = changesFromCommittedSnapshot();
-		return d.containsKey(key) && ERXExtensions.safeEquals(newValue, d.objectForKey(key)) && ERXExtensions.safeEquals(oldValue, committedSnapshotValueForKey(key));
+		return d.containsKey(key) && ObjectUtils.equals(newValue, d.objectForKey(key)) && ObjectUtils.equals(oldValue, committedSnapshotValueForKey(key));
 	}
 
 	/**
@@ -869,7 +874,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 */
 	public boolean hasKeyChangedFromCommittedSnapshotToValue(String key, Object newValue) {
 		NSDictionary<String, Object> d = changesFromCommittedSnapshot();
-		return d.containsKey(key) && ERXExtensions.safeEquals(newValue, d.objectForKey(key));
+		return d.containsKey(key) && ObjectUtils.equals(newValue, d.objectForKey(key));
 	}
 
 	public boolean parentObjectStoreIsObjectStoreCoordinator() {
@@ -975,6 +980,10 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 				.append(" pk:\"").append(primaryKey()).append("\">").toString();
 	}
 
+	/**
+	 * @deprecated use {@link #toString()} instead
+	 */
+	@Deprecated
 	public String description() {
 		return toString();
 	}
@@ -998,7 +1007,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	}
 
 	/**
-	 * @deprecated use {@link ERXGenericRecord#isNewObject()}
+	 * @deprecated use {@link #isNewObject()}
 	 */
 	@SuppressWarnings("dep-ann")
     @Deprecated
@@ -1060,22 +1069,20 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 */
 	@Override
 	public Object handleQueryWithUnboundKey(String key) {
-        if (!isDeletedEO() && editingContext() != null) {
-            NSDictionary pkDict = EOUtilities.primaryKeyForObject(editingContext(), this);
-            if (pkDict == null) {
-                // This will be the case for new unsaved objects, so just
-                // check if the user was using a key that is valid as a primary
-                // key attribute
-                if (entity().primaryKeyAttributeNames().contains(key)) {
-                    // Valid hidden PK key, so return null since PK is still
-                    // essentially null.
-                    return null;
-                }
-            } else if (pkDict.allKeys().contains(key)) {
-                // Valid PK key, so return the atribute value.
-                return pkDict.valueForKey(key);
-            }
-        }
+		// Handles primary key attribute values
+		if(entity().primaryKeyAttributeNames().contains(key)) {
+			// Deleted object. Return null.
+			if(editingContext() == null) {
+				return null;
+			}
+			NSDictionary pkDict = EOUtilities.primaryKeyForObject(editingContext(), this);
+			// New object. Return null.
+			if(pkDict == null) {
+				return null;
+			}
+			// Return value for key
+			return pkDict.objectForKey(key);
+		}
 		return super.handleQueryWithUnboundKey(key);
 	}
 	

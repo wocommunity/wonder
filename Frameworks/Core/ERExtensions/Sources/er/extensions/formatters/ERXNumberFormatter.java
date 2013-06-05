@@ -47,6 +47,8 @@ public class ERXNumberFormatter extends NSNumberFormatter {
     private Integer _scale;
     private BigDecimal _factor;
 	private String _operator;
+    private String _stringForNegativeInfinity = "-Inf";
+    private String _stringForPositiveInfinity = "+Inf";
 	 
     /**
      * Returns the default shared instance
@@ -139,6 +141,7 @@ public class ERXNumberFormatter extends NSNumberFormatter {
 	 * <code>'(' . operatorChar . factor . [';' scale ] . '=)' normalFormatterString</code>
 	 * @see com.webobjects.foundation.NSNumberFormatter#setPattern(java.lang.String)
 	 */
+	@Override
 	public void setPattern(String pattern) {
 		int offset = pattern == null ? -1 : pattern.indexOf("=)");
 		if(offset != -1) {
@@ -201,12 +204,13 @@ public class ERXNumberFormatter extends NSNumberFormatter {
      * @param aString to be parsed
      * @return the parsed object
      */
+    @Override
     public Object parseObject(String aString) throws java.text.ParseException {
         char[] chars = aString.toCharArray();
         char[] filteredChars = new char[chars.length];
         int count = 0;
         for (int i = 0; i < chars.length; i++) {
-            if (_ignoredChars.indexOf((int)chars[i]) < 0) {
+            if (_ignoredChars.indexOf(chars[i]) < 0) {
                 filteredChars[count++] = chars[i];
             }
         }
@@ -224,7 +228,7 @@ public class ERXNumberFormatter extends NSNumberFormatter {
         	if(result instanceof BigInteger && !(result instanceof BigDecimal)) {
         		result = new BigInteger("" + newValue.intValue());
         	} else {
-        		result = newValue;       		
+        		result = newValue;
         	}
         }
         return result;
@@ -234,6 +238,7 @@ public class ERXNumberFormatter extends NSNumberFormatter {
      * Overridden to perform optional conversions on the value given.
      * @see java.text.Format#format(java.lang.Object, java.lang.StringBuffer, java.text.FieldPosition)
      */
+    @Override
     public StringBuffer format(Object value, StringBuffer buffer, FieldPosition position) {
     	if (value instanceof Number && _operator != null) {
     		BigDecimal newValue = null;
@@ -251,8 +256,50 @@ public class ERXNumberFormatter extends NSNumberFormatter {
     		}
     		
      		newValue = performFormat(newValue);
-     		value = newValue;       		
+     		value = newValue;
+    	}
+    	// handling for NaN and Infinity
+    	if (value instanceof Double) {
+    		Double doubleValue = (Double) value;
+    		if (doubleValue.isNaN()) {
+    			return buffer.append(stringForNotANumber());
+    		} else if (doubleValue == Double.NEGATIVE_INFINITY) {
+    			return buffer.append(stringForNegativeInfinity());
+    		} else if (doubleValue == Double.POSITIVE_INFINITY) {
+    			return buffer.append(stringForPositiveInfinity());
+    		}
+    	} else if (value instanceof Float) {
+    		Float floatValue = (Float) value;
+    		if (floatValue.isNaN()) {
+    			return buffer.append(stringForNotANumber());
+    		} else if (floatValue == Float.NEGATIVE_INFINITY) {
+    			return buffer.append(stringForNegativeInfinity());
+    		} else if (floatValue == Float.POSITIVE_INFINITY) {
+    			return buffer.append(stringForPositiveInfinity());
+    		}
     	}
     	return super.format(value, buffer, position);
     }
+
+    public String stringForNegativeInfinity() {
+    	return _stringForNegativeInfinity;
+    }
+
+	public void setStringForNegativeInfinity(String newString) {
+		if (newString == null) {
+			throw new IllegalArgumentException("The string for Negative Infinity must not be null");
+		}
+		this._stringForNegativeInfinity = newString;
+	}
+
+    public String stringForPositiveInfinity() {
+    	return _stringForPositiveInfinity;
+    }
+
+	public void setStringForPositiveInfinity(String newString) {
+		if (newString == null) {
+			throw new IllegalArgumentException("The string for Positive Infinity must not be null");
+		}
+		this._stringForPositiveInfinity = newString;
+	}
 }

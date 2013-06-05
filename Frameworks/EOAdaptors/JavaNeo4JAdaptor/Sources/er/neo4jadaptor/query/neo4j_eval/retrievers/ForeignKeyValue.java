@@ -32,14 +32,14 @@ public class ForeignKeyValue implements Retriever<PropertyContainer, Number> {
 	private final EOAttribute srcAttribute;
 	
 	public ForeignKeyValue(EORelationship rel) {
-		this.relationshipType = Neo4JUtils.getRelationshipType(rel);
+		relationshipType = Neo4JUtils.getRelationshipType(rel);
 		
 		NSArray<EOAttribute> srcAtts = rel.sourceAttributes();
 		
 		if (srcAtts.count() != 1) {
 			throw new IllegalArgumentException();
 		}
-		this.srcAttribute = srcAtts.get(0);
+		srcAttribute = srcAtts.get(0);
 	}
 
 	private Iterator<Number> retrieveFromProperties(PropertyContainer container) {		

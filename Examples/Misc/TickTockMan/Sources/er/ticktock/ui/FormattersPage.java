@@ -93,7 +93,7 @@ public class FormattersPage extends WOComponent {
 
 	public String currentFormattedNST() {
 		NSTimestampFormatter formatter = new NSTimestampFormatter(currentNSTFormat);
-		return formatter.format(this.currentTS());
+		return formatter.format(currentTS());
 	}
 
 	public NSArray sdfKeys = new NSArray(new Object[] { "G", "y", "M", "w", "W", "D", "d", "F", "E", "a", "H", "k", "K", "h", "m", "s", "S", "z", "Z"} );
@@ -108,10 +108,10 @@ public class FormattersPage extends WOComponent {
 
 	public String currentFormattedSDF() {
 		SimpleDateFormat formatter = new SimpleDateFormat(currentSDFFormat);
-		return formatter.format(this.currentTS());
+		return formatter.format(currentTS());
 	}
 
-	public String dateString = this.currentTS().toString();
+	public String dateString = currentTS().toString();
 
 	public String setDateMessage;
 

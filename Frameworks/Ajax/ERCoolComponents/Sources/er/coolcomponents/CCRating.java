@@ -1,10 +1,20 @@
 package er.coolcomponents;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOElement;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
-import er.ajax.*;
-import er.extensions.appserver.*;
+import er.ajax.AjaxConstantOption;
+import er.ajax.AjaxDynamicElement;
+import er.ajax.AjaxOption;
+import er.ajax.AjaxOptions;
+import er.ajax.AjaxUtils;
+import er.extensions.appserver.ERXWOContext;
 
 
 /**
@@ -253,6 +263,7 @@ public class CCRating extends AjaxDynamicElement {
      * @param context WOContext used to determine component used in
      * @return optional value for id, or calculated value if unbound
      */
+    @Override
     public String id(WOContext context) {
         return (String) valueForBinding("id", ERXWOContext.safeIdentifierName(context, false), context.component());
     }

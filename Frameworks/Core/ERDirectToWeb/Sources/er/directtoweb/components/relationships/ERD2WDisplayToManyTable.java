@@ -33,6 +33,7 @@ public class ERD2WDisplayToManyTable extends D2WDisplayToManyTable {
         super(context);
     }
 
+    @Override
     public WOComponent inspectAction() {
         if(item!=null){
             String inspectConfigurationName=(String)d2wContext().valueForKey("inspectConfigurationName");

@@ -47,6 +47,7 @@ public class ERDDelayedLocalizedAssignment extends ERDDelayedAssignment implemen
      */
     public ERDDelayedLocalizedAssignment (String key, Object value) { super(key,value); }
 
+    @Override
     public Object fireNow(D2WContext c) {
         String key = (String)value();
         if (log.isDebugEnabled()) {

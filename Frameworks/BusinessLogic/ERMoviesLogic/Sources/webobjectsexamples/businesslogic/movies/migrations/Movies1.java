@@ -13,6 +13,7 @@ public class Movies1 extends ERAttachmentMigration {
 		super("movie", "poster_AttachmentID", true);
 	}
 
+	@Override
 	public NSArray<ERXModelVersion> modelDependencies() {
 		return null;
 	}

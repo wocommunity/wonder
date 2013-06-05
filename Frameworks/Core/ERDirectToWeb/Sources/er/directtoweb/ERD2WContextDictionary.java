@@ -217,7 +217,7 @@ public class ERD2WContextDictionary {
 
     protected void addPropertyKeys(NSMutableDictionary componentLevelKeys, NSArray array) {
         for(Enumeration e = array.objectEnumerator(); e.hasMoreElements(); ) {
-            Object o = (Object)e.nextElement();
+            Object o = e.nextElement();
             if(o instanceof NSArray) {
                 addPropertyKeys(componentLevelKeys, (NSArray)o);
             } else {
@@ -259,7 +259,7 @@ public class ERD2WContextDictionary {
         for(Enumeration e = keys.objectEnumerator(); e.hasMoreElements(); ) {
             Object o = e.nextElement();
             if(o instanceof NSArray) {
-                addRulesForPropertyKeys(level, rules, (NSArray)keys);
+                addRulesForPropertyKeys(level, rules, keys);
             } else {
                 String propertyKey = (String)o;
                 NSDictionary values = (NSDictionary)dictionary().valueForKeyPath("componentLevelKeys." + propertyKey);
@@ -282,6 +282,7 @@ public class ERD2WContextDictionary {
     	return NSPropertyListSerialization.stringFromPropertyList(dictionary());
     }
     
+    @Override
     public String toString() {
     	return context() + ": " + dictionaryString();
     }

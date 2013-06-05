@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
 
+import org.apache.commons.lang.ObjectUtils;
+
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
@@ -15,7 +17,6 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.ERXExtensions;
 import er.extensions.eof.ERXConstant;
 
 /**
@@ -74,7 +75,7 @@ public class ERXKeyValueCodingUtilities {
                     for (int i = 0; i < fields.length && !found; i++) {
                         Field current = fields[i];
                         if(current.getName().equals(key)) {
-                        	// AK: should have a check for existance of KeyValueCodingProtectedAccessor here
+                        	// AK: should have a check for existence of KeyValueCodingProtectedAccessor here
                         	// AK: disabled, only for testing
                         	// boolean isAccessible = current.isAccessible();
                         	// current.setAccessible(true);
@@ -301,12 +302,12 @@ public class ERXKeyValueCodingUtilities {
     		}
     		
     		if (keyValueCodingObject != null) {
-    			if (ERXExtensions.safeDifferent(value, keyValueCodingObject.valueForKey(key))) {
+    			if (ObjectUtils.notEqual(value, keyValueCodingObject.valueForKey(key))) {
     				keyValueCodingObject.takeValueForKey(value, key);
     			}
     		}
     		else {
-    			if (ERXExtensions.safeDifferent(value, NSKeyValueCoding.DefaultImplementation.valueForKey(object, key))) {
+    			if (ObjectUtils.notEqual(value, NSKeyValueCoding.DefaultImplementation.valueForKey(object, key))) {
     				NSKeyValueCoding.DefaultImplementation.takeValueForKey(object, value, key);
     			}
     		}

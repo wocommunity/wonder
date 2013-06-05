@@ -19,7 +19,6 @@ import com.webobjects.directtoweb.NextPageDelegate;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotificationCenter;
 
-import er.directtoweb.ERD2WContainer;
 import er.directtoweb.ERD2WFactory;
 import er.directtoweb.delegates.ERDPageDelegate;
 import er.extensions.eof.ERXEOControlUtilities;
@@ -71,8 +70,9 @@ public class ERD2WWizardCreationPage extends ERD2WTabInspectPage {
     }
 
     // Setting the tab has the effect of setting the tabKey in the d2wContext.
+    @Override
     public void appendToResponse(WOResponse response, WOContext context) {
-        setCurrentTab((ERD2WContainer)tabSectionsContents().objectAtIndex(_currentStep-1));
+        setCurrentTab(tabSectionsContents().objectAtIndex(_currentStep-1));
         super.appendToResponse(response, context);
     }
 
@@ -89,12 +89,14 @@ public class ERD2WWizardCreationPage extends ERD2WTabInspectPage {
          return ""+(tabKeys().count()+4);
      }
      */
+    @Override
     public WOComponent printerFriendlyVersion() {
         WOComponent result=ERD2WFactory.erFactory().printerFriendlyPageForD2WContext(d2wContext(),session());
         ((EditPageInterface)result).setObject(object());
         return result;
     }
 
+    @Override
     public WOComponent cancelAction() {
         WOComponent result=null;
         if (_currentStep>1 && ERXEOControlUtilities.isNewObject(object())) { // only show this if we've been through more than one page
@@ -120,7 +122,7 @@ public class ERD2WWizardCreationPage extends ERD2WTabInspectPage {
     // !! note this inner class is not static, which may cause cycles and leaks
     class _confirmCancellationDelegate implements NextPageDelegate {
         public WOComponent nextPage(WOComponent sender) {
-            return ERD2WWizardCreationPage.this.superCancelAction();
+            return superCancelAction();
         }
     }
 

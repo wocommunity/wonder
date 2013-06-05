@@ -106,11 +106,11 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      * @see er.extensions.ERXEnterpriseObject#getClassLog()
      */
     public Logger getClassLog() {
-        Logger classLog = classLogs.objectForKey(this.getClass());
+        Logger classLog = classLogs.objectForKey(getClass());
         if ( classLog == null) {
             synchronized(classLogs) {
-                classLog = Logger.getLogger(this.getClass());
-                classLogs.setObjectForKey(classLog, this.getClass());
+                classLog = Logger.getLogger(getClass());
+                classLogs.setObjectForKey(classLog, getClass());
             }
         }
         return classLog;
@@ -590,9 +590,10 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
         return "<" + getClass().getName() + " pk:\""+ pk + "\">";
     }
 
-    /* (non-Javadoc)
-     * @see er.extensions.ERXEnterpriseObject#description()
+    /**
+     * @deprecated use {@link #toString()} instead
      */
+    @Deprecated
     public String description() { return toString(); }
     
     /* (non-Javadoc)
@@ -621,7 +622,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
     }
 
     /**
-     * @deprecated use {@link ERXGenericRecord#isNewObject() ERXGenericRecord#isNewObject}
+        * @deprecated use {@link ERXGenericRecord#isNewObject() ERXGenericRecord#isNewObject}
      */
     @Deprecated
     public boolean isNewEO() {

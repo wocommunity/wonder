@@ -1,6 +1,6 @@
 package er.reporting;
 
-import er.grouping.*;
+import er.grouping.DRAttribute;
 
 public interface DRAttributeEditing  {
 

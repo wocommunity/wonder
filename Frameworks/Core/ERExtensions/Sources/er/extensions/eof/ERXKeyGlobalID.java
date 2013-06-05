@@ -1,5 +1,6 @@
 package er.extensions.eof;
 
+import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOKeyGlobalID;
 import com.webobjects.foundation.NSData;
 
@@ -8,8 +9,8 @@ import er.extensions.foundation.ERXStringUtilities;
 /**
  * Serializable Global ID class. You can use this as a custom attribute value type.
  * Note that a EOKeyGlobalID and an ERXKeyGlobalID are never equals! 
- * This especially means, that you shouldn't pass as ERXKeyGlobalID in eg. {@link EOEditingContext#faultForGlobalID}.
- * Instead use the EOKeyGlobalID you get via {@link ERXKeyGlobalID#globalID()}. 
+ * This especially means, that you shouldn't pass as ERXKeyGlobalID in eg. {@link com.webobjects.eocontrol.EOEditingContext#faultForGlobalID(com.webobjects.eocontrol.EOGlobalID, EOEditingContext)}.
+ * Instead use the EOKeyGlobalID you get via {@link #globalID()}. 
  * @author ak
  *
  */

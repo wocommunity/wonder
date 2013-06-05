@@ -53,6 +53,7 @@ public class ERD2WEditRelationshipPage extends D2WEditRelationshipPage {
     /**
      * Overridden because the action bound should not return null.
      */
+    @Override
     public WOComponent queryAction() {
         WOComponent nextPage = super.queryAction();
         if(nextPage == null) {
@@ -64,6 +65,7 @@ public class ERD2WEditRelationshipPage extends D2WEditRelationshipPage {
     /**
      * Overridden because the action bound should not return null.
      */
+    @Override
     public WOComponent selectAction() {
         WOComponent nextPage = super.selectAction();
         if (ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("returnOnSelect"), false)) {
@@ -93,6 +95,7 @@ public class ERD2WEditRelationshipPage extends D2WEditRelationshipPage {
         return result;
     }
     
+    @Override
     public void setMasterObjectAndRelationshipKey(EOEnterpriseObject eo, String relationshipKey) {
         EOEditingContext ec = ERXEC.newEditingContext(eo.editingContext(), false); // no validation;
         setEditingContext(ec);
@@ -111,12 +114,14 @@ public class ERD2WEditRelationshipPage extends D2WEditRelationshipPage {
         setPropertyKey(displayKey());
     }
 
+    @Override
     public String displayNameForRelationshipKey() {
         return Services.capitalize(_relationshipKey);
     }
 
+    @Override
     public WOComponent removeFromToOneRelationshipAction() {
-        dataSource().deleteObject((EOEnterpriseObject) object().valueForKeyPath(_relationshipKey));
+        dataSource().deleteObject(object().valueForKeyPath(_relationshipKey));
         relationshipDisplayGroup.fetch();
         return null;
     }
@@ -135,6 +140,7 @@ public class ERD2WEditRelationshipPage extends D2WEditRelationshipPage {
      *
      * @return true if the entity is considered read-only
      */
+    @Override
     public boolean isEntityReadOnly() {
         boolean flag = super.isEntityReadOnly(); // First, check super's implementation.
         

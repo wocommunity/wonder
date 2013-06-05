@@ -48,6 +48,7 @@ public class ERXD2WEditRelationship extends D2WEmbeddedComponent {
     /**
      * Causes errors when using deserialized components in 5.4.3
      */
+    @Override
     public void awake() {}
     
     /**

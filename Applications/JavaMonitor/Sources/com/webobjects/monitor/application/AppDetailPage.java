@@ -559,7 +559,7 @@ public class AppDetailPage extends MonitorComponent {
     private WOComponent newDetailPage() {
         AppDetailPage nextPage = AppDetailPage.create(context(), myApplication());
         nextPage.displayGroup.setSelectedObjects(displayGroup.selectedObjects());
-        nextPage.showDetailStatistics = this.showDetailStatistics;
+        nextPage.showDetailStatistics = showDetailStatistics;
         if (currentBouncer() != null &&
         		!"Finished".equals(currentBouncer().status()) && 
         		!currentBouncer().errors().isEmpty()) {
@@ -711,7 +711,7 @@ public class AppDetailPage extends MonitorComponent {
 
     public Float actualRatePerMinute() {
         Float aNumber = StatsUtilities.actualTransactionsPerSecondForApplication(myApplication());
-        return new Float((aNumber.floatValue() * 60));
+        return Float.valueOf((aNumber.floatValue() * 60));
     }
 
     /** ******* */

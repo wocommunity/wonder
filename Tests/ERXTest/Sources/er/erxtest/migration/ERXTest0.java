@@ -3,8 +3,8 @@ package er.erxtest.migration;
 import com.webobjects.eocontrol.EOEditingContext;
 
 import er.extensions.migration.ERXMigrationDatabase;
-import er.extensions.migration.ERXMigrationTable;
 import er.extensions.migration.ERXMigrationDatabase.Migration;
+import er.extensions.migration.ERXMigrationTable;
 
 public class ERXTest0 extends Migration {
   @Override

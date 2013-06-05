@@ -26,7 +26,7 @@ ifeq "" "$(NS_ROOT)"
 ERROR = NS_ROOT not defined. You must specify the path to the Netscape installation in make.config.
 endif
 
-CFLAGS = $(ARCH_CFLAGS) -I../Adaptor -I$(NS_ROOT)/include $(DEBUG_FLAG) -DMULTITHREADED_ADAPTOR -D$(SERVERAPI) -D$(OS) -DDISABLE_SHARED_MEMORY
+CFLAGS += $(ARCH_CFLAGS) -I../Adaptor -I$(NS_ROOT)/include $(DEBUG_FLAG) -DMULTITHREADED_ADAPTOR -D$(SERVERAPI) -D$(OS) -DDISABLE_SHARED_MEMORY
 
 all: $(ERROR) $(ADAPTOR)
 

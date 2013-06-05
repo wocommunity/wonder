@@ -6,6 +6,7 @@ import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.foundation.NSTimestamp;
 
 import er.neo4jadaptor.ersatz.Translator;
+import er.neo4jadaptor.storage.neo4j.NodeStore;
 
 /**
  * Encodes {@link java.util.Date} types as {@link java.lang.Long} values being number of milliseconds in the original date.
@@ -25,6 +26,8 @@ public class Neo4JTranslator implements Translator {
 			Date date = (Date) value;
 
 			return date.getTime();
+		} else if (value instanceof NodeStore.NodeNumber) {
+			return ((Number) value).longValue();
 		} else {
 			return value;
 		}

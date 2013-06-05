@@ -64,7 +64,6 @@ import er.extensions.eof.ERXEOAccessUtilities.DatabaseContextOperation;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXDictionaryUtilities;
 import er.extensions.foundation.ERXKeyValueCodingUtilities;
-import er.extensions.foundation.ERXProperties;
 import er.extensions.jdbc.ERXSQLHelper;
 import er.extensions.validation.ERXValidationException;
 import er.extensions.validation.ERXValidationFactory;
@@ -196,12 +195,6 @@ public class ERXEOControlUtilities {
      	if(ec == null) throw new IllegalArgumentException("EO must live in an EC");
      	
         boolean isNewObject = ERXEOControlUtilities.isNewObject(eo);
-        
-        // Check for old EOF bug and do nothing as we can't localInstance
-        // anything here
-        if (ERXProperties.webObjectsVersionAsDouble() < 5.21d && isNewObject) {
-            return eo;
-        }
 
         T localObject = eo;
         
@@ -693,22 +686,26 @@ public class ERXEOControlUtilities {
     
     /**
      * Returns an {@link com.webobjects.foundation.NSArray NSArray} containing the primary keys from the resulting rows starting
-     * at start and stopping at end using a custom SQL, derived from the SQL
+     * at <i>start</i> and stopping at <i>end</i> using a custom SQL, derived from the SQL
      * which the {@link com.webobjects.eocontrol.EOFetchSpecification EOFetchSpecification} would use normally {@link com.webobjects.eocontrol.EOFetchSpecification#setHints(NSDictionary) setHints()}
      *
      * @param ec editing context to fetch objects into
      * @param spec fetch specification for the fetch
-     * @param start
-     * @param end
+     * @param start the starting row number
+     * @param end the last row number
      *
      * @return primary keys in the given range
      */
-    public static NSArray primaryKeyValuesInRange(EOEditingContext ec, EOFetchSpecification spec, int start, int end) {
+    public static NSArray<NSDictionary<String, Object>> primaryKeyValuesInRange(EOEditingContext ec, EOFetchSpecification spec, int start, int end) {
         EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, spec.entityName());
         NSArray<String> pkNames = entity.primaryKeyAttributeNames();
-        spec.setFetchesRawRows(true);
-        spec.setRawRowKeyPaths(pkNames);
-    	EOFetchSpecification clonedFetchSpec = (EOFetchSpecification)spec.clone();
+        EOFetchSpecification clonedFetchSpec = (EOFetchSpecification)spec.clone();
+        clonedFetchSpec.setFetchesRawRows(true);
+        clonedFetchSpec.setRawRowKeyPaths(pkNames);
+        if (clonedFetchSpec instanceof ERXFetchSpecification) {
+            // remove any range setting as we will explicitly set start and end limit
+            ((ERXFetchSpecification)clonedFetchSpec).setFetchRange(null);
+        }
         EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecification(ec, clonedFetchSpec, start, end);
         NSDictionary<String, EOSQLExpression> hints = new NSDictionary<String, EOSQLExpression>(sql, EODatabaseContext.CustomQueryExpressionHintKey);
         clonedFetchSpec.setHints(hints);
@@ -1085,7 +1082,7 @@ public class ERXEOControlUtilities {
      * Fetches a shared enterprise object for a given fetch
      * specification from the default shared editing context.
      *
-     * @param fetch specification on the shared object
+     * @param fetchSpec specification on the shared object
      * @param entityName name of the shared entity
      * @return the shared enterprise object fetch by the fetch spec named.
      */
@@ -1097,7 +1094,7 @@ public class ERXEOControlUtilities {
      * Fetches a shared enterprise object from the default shared editing context
      * given the name of a fetch specification.
      *
-     * @param fetchSpec name of the fetch specification on the shared object.
+     * @param fetchSpecName name of the fetch specification on the shared object.
      * @param entityName name of the shared entity
      * @return the shared enterprise object fetch by the fetch spec named.
      */
@@ -1196,7 +1193,7 @@ public class ERXEOControlUtilities {
 
     /**
      * Utility method to generate a new primary key for an object. Calls
-     * {@link #newPrimaryKeyForObjectFromClassProperties(EOEnterpriseObject)} and if that returns null,
+     * {@link #newPrimaryKeyDictionaryForObjectFromClassProperties(EOEnterpriseObject)} and if that returns null,
      * {@link #newPrimaryKeyDictionaryForEntityNamed(EOEditingContext, String)}
      * @return new primary key dictionary or null if a failure occured.
      */

@@ -10,7 +10,6 @@ import com.webobjects.foundation.NSArray;
 import er.quartzscheduler.foundation.ERQSJobDescription;
 import er.quartzscheduler.foundation.ERQSMyJobListener;
 import er.quartzscheduler.foundation.ERQSMySupervisor;
-import er.quartzscheduler.util.ERQSSchedulerServiceFrameworkPrincipal;
 
 @ERQSMyJobListener("er.quartzscheduler.foundation.ERQSJobListener")
 @ERQSMySupervisor("er.quartzscheduler.foundation.ERQSJobSupervisor")

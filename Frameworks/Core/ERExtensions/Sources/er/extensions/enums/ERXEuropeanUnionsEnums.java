@@ -14,7 +14,7 @@ public enum ERXEuropeanUnionsEnums {
    */
   public String fullName() {
     StringBuilder sb = new StringBuilder();
-    sb.append(this.getClass().getSimpleName());
+    sb.append(getClass().getSimpleName());
     sb.append(NSKeyValueCodingAdditions.KeyPathSeparator);
     sb.append(name());
     return sb.toString();

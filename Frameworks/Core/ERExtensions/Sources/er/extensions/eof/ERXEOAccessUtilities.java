@@ -212,6 +212,7 @@ public class ERXEOAccessUtilities {
     // ENHANCEME: Need a non-oracle specific way of doing this. Should poke
     // around at
     //		the adaptor level and see if we can't find something better.
+    @Deprecated
     public static Number getNextValFromSequenceNamed(EOEditingContext ec, String modelName, String sequenceName) {
     	EODatabaseContext dbContext = EOUtilities.databaseContextForModelNamed(ec, modelName);
     	return ERXSQLHelper.newSQLHelper(dbContext).getNextValFromSequenceNamed(ec, modelName, sequenceName);
@@ -706,7 +707,7 @@ public class ERXEOAccessUtilities {
      * @return a <code>String</code> containing SQL statements to create
 	 *         tables
      * 
-     * @see createSchemaSQLForEntitiesInModelWithNameAndOptions
+     * @see er.extensions.jdbc.ERXSQLHelper#createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray, String, NSDictionary)
      */
     public static String createSchemaSQLForEntitiesInModelWithNameAndOptionsForOracle9(NSArray entities, String modelName, NSDictionary optionsCreate) {
         EODatabaseContext dc = EOUtilities.databaseContextForModelNamed(ERXEC.newEditingContext(), modelName);
@@ -743,6 +744,7 @@ public class ERXEOAccessUtilities {
      *         tables
      * @deprecated
      */
+    @Deprecated
     public static String createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray entities, String modelName, NSDictionary optionsCreate) {
         EODatabaseContext dc = EOUtilities.databaseContextForModelNamed(ERXEC.newEditingContext(), modelName);
         return ERXSQLHelper.newSQLHelper(dc).createSchemaSQLForEntitiesInModelWithNameAndOptions(entities, modelName, optionsCreate);
@@ -757,6 +759,7 @@ public class ERXEOAccessUtilities {
      * @return a sql script
      * @deprecated
      */
+    @Deprecated
     public static String createSchemaSQLForEntitiesWithOptions(NSArray entities, EODatabaseContext databaseContext, NSDictionary optionsCreate) {
     	return ERXSQLHelper.newSQLHelper(databaseContext).createSchemaSQLForEntitiesWithOptions(entities, databaseContext, optionsCreate);
     }
@@ -789,6 +792,7 @@ public class ERXEOAccessUtilities {
      *         tables
      * @deprecated
      */
+    @Deprecated
     public static String createSchemaSQLForEntitiesInModelWithName(NSArray entities, String modelName) {
     	EODatabaseContext databaseContext = EOUtilities.databaseContextForModelNamed(ERXEC.newEditingContext(), modelName);
     	return ERXSQLHelper.newSQLHelper(databaseContext).createSchemaSQLForEntitiesInModelWithName(entities, modelName);
@@ -811,6 +815,7 @@ public class ERXEOAccessUtilities {
      *         tables
      * @deprecated
      */
+    @Deprecated
     public static String createSchemaSQLForEntitiesInDatabaseContext(NSArray entities, EODatabaseContext databaseContext, boolean create, boolean drop) {
     	return ERXSQLHelper.newSQLHelper(databaseContext).createSchemaSQLForEntitiesInDatabaseContext(entities, databaseContext, create, drop);
     }
@@ -818,6 +823,7 @@ public class ERXEOAccessUtilities {
     /**
      * @deprecated
      */
+    @Deprecated
     public static String createIndexSQLForEntitiesForOracle(NSArray entities) {
         NSMutableArray a = new NSMutableArray();
         a.addObject("BLOB");
@@ -828,6 +834,7 @@ public class ERXEOAccessUtilities {
     /**
      * @deprecated
      */
+    @Deprecated
     public static String createIndexSQLForEntities(NSArray entities) {
         return createIndexSQLForEntities(entities, null);
     }
@@ -835,6 +842,7 @@ public class ERXEOAccessUtilities {
     /**
      * @deprecated
      */
+    @Deprecated
     public static String createIndexSQLForEntities(NSArray entities, NSArray externalTypesToIgnore) {
         EOEntity ent = (EOEntity)entities.objectAtIndex(0);
         String modelName = ent.model().name();
@@ -1047,6 +1055,7 @@ public class ERXEOAccessUtilities {
      * Creates a where clause string " someKey IN ( someValue1,...)". Can migrate keyPaths.
      * @deprecated
      */
+    @Deprecated
     public static String sqlWhereClauseStringForKey(EOSQLExpression e, String key, NSArray valueArray) {
     	return ERXSQLHelper.newSQLHelper(e).sqlWhereClauseStringForKey(e, key, valueArray);
     }
@@ -1369,7 +1378,7 @@ public class ERXEOAccessUtilities {
      * @author ak
      * @param attributes 
      * @param values 
-     * @return qualifier
+     * @return qualifier. EOAndQualifier for 2 or more elements in <code>attributes</code>, EOKeyValueQualifier for a single element <code>attributes</code> array, <code>null</code> when <code>attributes</code> is null or empty.
      */
     public static EOQualifier qualifierFromAttributes(NSArray<EOAttribute> attributes, NSDictionary values) {
         EOQualifier result = null;
@@ -1379,7 +1388,8 @@ public class ERXEOAccessUtilities {
                 Object value = values.objectForKey(key.name());
                 qualifiers.addObject(new EOKeyValueQualifier(key.name(), EOQualifier.QualifierOperatorEqual, value));
             }
-            result = new EOAndQualifier(qualifiers);
+            // Don't wrap in an AND qualifier if there is only one qualifier
+            result = (qualifiers.count() == 1 ? qualifiers.objectAtIndex(0) : new EOAndQualifier(qualifiers));
         }
         return result;
     }
@@ -1577,7 +1587,7 @@ public class ERXEOAccessUtilities {
                         throw ex;
                     } 
                 } finally {
-                    if(!wasOpen) {
+                    if (!wasOpen && channel != null) {
                         channel.closeChannel();
                     }
                     dbc.unlock();
@@ -1601,6 +1611,7 @@ public class ERXEOAccessUtilities {
             final EOQualifier qualifier) {
         final EOEntity entity = entityNamed(ec, entityName);
         ChannelAction action = new ChannelAction() {
+            @Override
             protected int doPerform(EOAdaptorChannel channel) {
                 return channel.deleteRowsDescribedByQualifier(qualifier, entity);
             }
@@ -1621,6 +1632,7 @@ public class ERXEOAccessUtilities {
             final EOQualifier qualifier, final NSDictionary newValues) {
         final EOEntity entity = entityNamed(ec, entityName);
         ChannelAction action = new ChannelAction() {
+            @Override
             protected int doPerform(EOAdaptorChannel channel) {
                 return channel.updateValuesInRowsDescribedByQualifier(newValues, qualifier, entity);
             }
@@ -1638,6 +1650,7 @@ public class ERXEOAccessUtilities {
             final NSDictionary newValues) {
         final EOEntity entity = entityNamed(ec, entityName);
         ChannelAction action = new ChannelAction() {
+            @Override
             protected int doPerform(EOAdaptorChannel channel) {
             	channel.insertRow(newValues, entity);
                 return 1;
@@ -1656,6 +1669,7 @@ public class ERXEOAccessUtilities {
             final Collection<? extends NSDictionary<String, ?>> newValues) {
         final EOEntity entity = entityNamed(ec, entityName);
         ChannelAction action = new ChannelAction() {
+            @Override
             protected int doPerform(EOAdaptorChannel channel) {
             	int insert = 0;
             	for (NSDictionary dictionary : newValues) {
@@ -1678,6 +1692,7 @@ public class ERXEOAccessUtilities {
 		final NSMutableArray result = new NSMutableArray();
 		final EOEntity entity = entityNamed(ec, entityName);
 		ChannelAction action = new ChannelAction() {
+			@Override
 			protected int doPerform(EOAdaptorChannel channel) {
 				NSArray keys = channel.primaryKeysForNewRowsWithEntity(count, entity);
 				result.addObjectsFromArray(keys);
@@ -1839,7 +1854,7 @@ public class ERXEOAccessUtilities {
 	 		}
 		}
 		else {
-	 		NSMutableArray<EOGlobalID> gids = new NSMutableArray<EOGlobalID>();
+			NSMutableSet<EOGlobalID> gids = new NSMutableSet<EOGlobalID>();
 	 		
 			NSMutableArray objectsWithUnfaultedRelationships = new NSMutableArray();
 			EOEntity destinationEntity = relationship.destinationEntity();
@@ -1887,7 +1902,7 @@ public class ERXEOAccessUtilities {
 			// fetching of abstract entities very effectively.  We instead want to create
 			// our own GID and batch fetch the GIDs ourselves.
 			if (gids.count() > 0) {
-				ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(editingContext, gids, ! skipFaultedRelationships);
+				ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(editingContext, gids.allObjects(), ! skipFaultedRelationships);
 			}
 		}
 
@@ -2084,9 +2099,12 @@ public class ERXEOAccessUtilities {
 		relationship.setDeleteRule(deleteRule);
 		relationship.setIsMandatory(isMandatory);
 		relationship.setPropagatesPrimaryKey(shouldPropagatePrimaryKey);
-		if (isClassProperty) {
-			NSMutableArray<EOProperty> classProperties = sourceEntity.classProperties().mutableClone();
+		NSMutableArray<EOProperty> classProperties = sourceEntity.classProperties().mutableClone();
+		if (isClassProperty && !classProperties.containsObject(relationship)) {
 			classProperties.addObject(relationship);
+			sourceEntity.setClassProperties(classProperties);
+		} else if (!isClassProperty && classProperties.containsObject(relationship)) {
+			classProperties.removeObject(relationship);
 			sourceEntity.setClassProperties(classProperties);
 		}
 		if(log.isDebugEnabled())

@@ -9,14 +9,13 @@ package er.extensions.components;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
-// Subclasses in look frameworks provide custom images for manditory fields.
+// Subclasses in look frameworks provide custom images for mandatory fields.
 /**
  * Displays a mandatory field marker. Extended in look frameworks to provide custom images.<br />
  * 
  * @binding condition If the condition returns true, will display a '*', if false, it will
  *		display a transparent 1x1 pixel
  */
-
 public class ERXMandatoryFieldMarker extends WOComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -29,6 +28,6 @@ public class ERXMandatoryFieldMarker extends WOComponent {
         super(aContext);
     }
 
-    public boolean synchronizesVariablesWithBindings() { return false; }
+    @Override
     public boolean isStateless() { return true; }
 }

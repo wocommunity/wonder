@@ -3,7 +3,6 @@ package er.neo4jadaptor.query.neo4j_eval.retrievers;
 
 import org.neo4j.graphdb.PropertyContainer;
 
-
 import com.webobjects.eoaccess.EORelationship;
 
 import er.neo4jadaptor.query.neo4j_eval.Cost;

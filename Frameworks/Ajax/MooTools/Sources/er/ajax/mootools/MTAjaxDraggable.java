@@ -58,6 +58,8 @@ import er.extensions.components.ERXComponentUtilities;
 
 public class MTAjaxDraggable extends AjaxComponent {
 
+	private static final long serialVersionUID = 1L;
+
 	private static final String COMPONENT_DRAGGABLES_MAP_KEY = "AjaxComponentDraggablesMap";
 	private String _id;
 	private String _variableName;
@@ -70,24 +72,23 @@ public class MTAjaxDraggable extends AjaxComponent {
         super(context);
     }
 
+	@Override
 	public void reset() {
 		_id = null;
 		super.reset();
 	}
 
+	@Override
 	public void awake() {
 		super.awake();
 		_draggableIDKeyName = safeElementID() + "_draggableID";
 	}
 
+	@Override
 	public boolean isStateless() {
-		return Boolean.TRUE;
+		return true;
 	}
 
-	public boolean synchronizesVariablesWithBindings() {
-		return Boolean.FALSE;
-	}	
-	
 	@SuppressWarnings("rawtypes")
 	public static Object draggableObjectForPage(WOComponent page, String draggableID) {
 		Object droppedObject = null;
@@ -102,6 +103,7 @@ public class MTAjaxDraggable extends AjaxComponent {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 
 		_actionUrl = AjaxUtils.ajaxComponentActionUrl(context());
@@ -199,7 +201,7 @@ public class MTAjaxDraggable extends AjaxComponent {
 	
 	public String variableName() {
 		if(_variableName == null) {
-			_variableName = (String)valueForStringBinding("variableName",  "mtAD" + ERXWOContext.safeIdentifierName(context(), true));
+			_variableName = valueForStringBinding("variableName",  "mtAD" + ERXWOContext.safeIdentifierName(context(), true));
 		}		
 		return _variableName;
 	}
@@ -323,7 +325,4 @@ public class MTAjaxDraggable extends AjaxComponent {
 		}
 		return null;
 	}
-
-	
-	
 }

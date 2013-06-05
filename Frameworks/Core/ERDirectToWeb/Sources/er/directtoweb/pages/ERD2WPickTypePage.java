@@ -140,6 +140,7 @@ public class ERD2WPickTypePage extends ERD2WPage implements ERDPickPageInterface
         return displayName != null ? displayName : " <null> ";
     }
 
+    @Override
     public WOComponent nextPage() {
         if (selections.count() == 0 && selectionManditory()) {
             errorMessage = choiceErrorMessage() != null ? choiceErrorMessage() : "Please make a selection before continuing";

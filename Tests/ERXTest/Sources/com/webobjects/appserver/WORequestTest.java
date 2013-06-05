@@ -96,6 +96,7 @@ public class WORequestTest extends ERXTestCase {
 
 		public String str;
 
+		@Override
 		public String formValueForKey(String aKey) {
 			Object value = valueForKey(aKey);
 			return (value != null) ? value.toString() : null;

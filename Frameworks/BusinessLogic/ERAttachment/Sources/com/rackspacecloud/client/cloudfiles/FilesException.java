@@ -4,8 +4,8 @@
 package com.rackspacecloud.client.cloudfiles;
 
 import org.apache.http.Header;
-import org.apache.http.StatusLine;
 import org.apache.http.HttpException;
+import org.apache.http.StatusLine;
 
 /**
  * @author lvaughn

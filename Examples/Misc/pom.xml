@@ -12,15 +12,10 @@
 	<name>Misc Examples</name>
 
 	<modules>
-		<module>DevStudio</module>
 		<module>ERComponentTour</module>
 		<module>ERIndexingExample</module>
-		<module>EROpenIDExample</module>
 		<module>ERRestRouteExample</module>
 		<module>ERSeleniumExample</module>
-		<module>JavaRESTAdaptorExample</module>
-		<module>RestExample</module>
 		<module>TickTockMan</module>
-		<module>ValidityExample</module>
 	</modules>
 </project>

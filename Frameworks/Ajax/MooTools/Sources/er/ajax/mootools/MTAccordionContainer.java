@@ -33,8 +33,9 @@ import er.extensions.appserver.ERXWOContext;
  *	@binding onBackground - (function: signature = function(toggler, element) {}) a method that is called on the container that is closed.
  *
  */
-
 public class MTAccordionContainer extends AjaxComponent {
+
+	private static final long serialVersionUID = 1L;
 
 	private String _accordionID;
 	
@@ -52,6 +53,7 @@ public class MTAccordionContainer extends AjaxComponent {
 	
 	}
 
+	@Override
 	public boolean isStateless() {
 		return true;
 	}
@@ -93,7 +95,6 @@ public class MTAccordionContainer extends AjaxComponent {
 
 	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

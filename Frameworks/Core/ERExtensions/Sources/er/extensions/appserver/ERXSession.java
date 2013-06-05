@@ -22,7 +22,6 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
@@ -43,7 +42,7 @@ import er.extensions.foundation.ERXValueUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 /**
- * The ERXSession aguments the regular WOSession object
+ * The ERXSession arguments the regular WOSession object
  * by adding a few nice additions. Of interest, notifications
  * are now posted when a session when a session
  * goes to sleep, David Neumann's browser backtracking detection
@@ -64,8 +63,12 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
   /** logging support */
   public static final Logger log = Logger.getLogger(ERXSession.class);
 
-  /** Notification name that is posted after a session wakes up. */
-  // DELETEME: Now we can use SessionDidRestoreNotification
+  /**
+   * Notification name that is posted after a session wakes up.
+   * 
+   * @deprecated use {@link WOSession#SessionDidRestoreNotification} instead
+   */
+  @Deprecated
   public static final String SessionWillAwakeNotification = "SessionWillAwakeNotification";
   /**
    * Notification name that is posted when a session is about to sleep.
@@ -170,7 +173,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
      * registers this observer object for 
      * {@link er.extensions.localization.ERXLocalizer#LocalizationDidResetNotification}
      */
-    private void registerForLocalizationDidResetNotification() {
+    protected void registerForLocalizationDidResetNotification() {
       NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("localizationDidReset", ERXConstant.NotificationClassArray), ERXLocalizer.LocalizationDidResetNotification, null);
     }
   }
@@ -282,9 +285,9 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * Returns the NSArray of language names available for 
    * this particular session. 
    * The resulting array is an intersect of web browser's 
-   * language array ({@link ERXRequest#browserLanguages}) 
+   * language array ({@link ERXRequest#browserLanguages()}) 
    * and localizer's available language array 
-   * ({@link er.extensions.localization.ERXLocalizer#availableLanguages}).
+   * ({@link er.extensions.localization.ERXLocalizer#availableLanguages()}).
    * <p>
    * Note that the order of the resulting language names  
    * is not defined at this moment.
@@ -292,7 +295,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * @return   NSArray of language name strings available 
    *           for this particular session
    * @see      #availableLanguagesForTheApplication 
-   * @see      ERXRequest#browserLanguages
+   * @see      ERXRequest#browserLanguages()
    * @see      er.extensions.localization.ERXLocalizer#availableLanguages
    */
   public NSArray availableLanguagesForThisSession() {
@@ -467,6 +470,8 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * Something useful could be:
    * 
    * <blockquote><code>return session().sessionID() + valueForKeyPath("user.username");</code></blockquote>
+   * 
+   * @return name of the current thread
    */
   public String threadName() {
     return Thread.currentThread().getName();
@@ -568,6 +573,8 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
   
   /**
    * Bringing application into KVC.
+   * 
+   * @return the application object
    */
   public ERXApplication application() {
 	  return ERXApplication.erxApplication();
@@ -672,6 +679,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
       log.debug("Session has been deserialized: " + toString());
   }
 
+  @Override
   public NSTimestamp _birthDate() {
 	  return super._birthDate();
   }
@@ -747,23 +755,10 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
   }
 
   protected void _convertSessionCookiesToSecure(WOResponse response) {
-	    if(storesIDsInCookies() && !ERXRequest._isSecureDisabled()) {
+	    if (storesIDsInCookies() && !ERXRequest._isSecureDisabled()) {
 			for (WOCookie cookie : response.cookies()) {
-				String sessionIdKey;
-				String instanceIdKey;
-				if (ERXApplication.isWO54()) {
-					try {
-						sessionIdKey = (String)WOApplication.class.getMethod("sessionIdKey").invoke(WOApplication.application());
-						instanceIdKey = (String)WOApplication.class.getMethod("instanceIdKey").invoke(WOApplication.application());
-					}
-					catch (Throwable e) {
-						throw new NSForwardException(e);
-					}
-				}
-				else {
-					sessionIdKey = WORequest.SessionIDKey;
-					instanceIdKey = WORequest.InstanceKey;
-				}
+				String sessionIdKey = application().sessionIdKey();
+				String instanceIdKey = application().instanceIdKey();
 				String cookieName = cookie.name();
 				if (sessionIdKey.equals(cookieName) || instanceIdKey.equals(cookieName)) {
 					 cookie.setIsSecure(true);
@@ -775,21 +770,8 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
   protected void _convertSessionCookiesToHttpOnly(final WOResponse response) {
       if (storesIDsInCookies()) {
           for (WOCookie cookie : response.cookies()) {
-              String sessionIdKey;
-              String instanceIdKey;
-              if (ERXApplication.isWO54()) {
-                  try {
-                      sessionIdKey = (String) WOApplication.class.getMethod("sessionIdKey").invoke(
-                              WOApplication.application());
-                      instanceIdKey = (String) WOApplication.class.getMethod("instanceIdKey").invoke(
-                              WOApplication.application());
-                  } catch (Throwable e) {
-                      throw new NSForwardException(e);
-                  }
-              } else {
-                  sessionIdKey = WORequest.SessionIDKey;
-                  instanceIdKey = WORequest.InstanceKey;
-              }
+              String sessionIdKey = application().sessionIdKey();
+              String instanceIdKey = application().instanceIdKey();
               String cookieName = cookie.name();
               if (sessionIdKey.equals(cookieName) || instanceIdKey.equals(cookieName)) {
                   cookie.setIsHttpOnly(true);

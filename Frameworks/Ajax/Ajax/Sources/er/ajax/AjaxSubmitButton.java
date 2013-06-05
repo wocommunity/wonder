@@ -132,6 +132,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	AjaxUpdateContainer.expandInsertionFromOptions(options, element, component);
   }
 
+  @Override
   public void appendToResponse(WOResponse response, WOContext context) {
     WOComponent component = context.component();
 
@@ -298,12 +299,14 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     super.appendToResponse(response, context);
   }
 
+  @Override
   protected void addRequiredWebResources(WOResponse res, WOContext context) {
     addScriptResourceInHead(context, res, "prototype.js");
 	addScriptResourceInHead(context, res, "effects.js");
     addScriptResourceInHead(context, res, "wonder.js");
   }
 
+  @Override
   public WOActionResults invokeAction(WORequest worequest, WOContext wocontext) {
     WOActionResults result = null;
     WOComponent wocomponent = wocontext.component();
@@ -315,12 +318,13 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
       AjaxUpdateContainer.setUpdateContainerID(worequest, updateContainerID);
       wocontext.setActionInvoked(true);
       result = handleRequest(worequest, wocontext);
-      AjaxUtils.updateMutableUserInfoWithAjaxInfo(wocontext);
+      ERXAjaxApplication.enableShouldNotStorePage();
     }
     
     return result;
   }
 
+  @Override
   public WOActionResults handleRequest(WORequest request, WOContext context) {
 	   WOComponent component = context.component();
 	   WOActionResults result = (WOActionResults) valueForBinding("action", component);

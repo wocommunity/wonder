@@ -109,7 +109,7 @@ public class ERPOFCChart extends ERXStatelessComponent {
 	/** @return a safe element name element. */
 	public String safeElementID() {
 		if (_safeElementID == null) {
-			_safeElementID = ERXStringUtilities.safeIdentifierName(this.context().elementID());
+			_safeElementID = ERXStringUtilities.safeIdentifierName(context().elementID());
 			log.debug("safeElementID = " + _safeElementID);
 		}
 		return _safeElementID;

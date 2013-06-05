@@ -25,5 +25,6 @@ public class ERCUserPreferencesAssignment extends Assignment {
     public ERCUserPreferencesAssignment (EOKeyValueUnarchiver u) { super(u); }
     public ERCUserPreferencesAssignment (String key, Object value) { super(key,value); }
 
+    @Override
     public Object fire(D2WContext c) { return ERCoreUserPreferences.userPreferences(); }
 }

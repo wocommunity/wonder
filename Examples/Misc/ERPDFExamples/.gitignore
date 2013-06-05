@@ -1,6 +1,3 @@
-target
-bin
 build
-*.xcodeproj
-*.pbxproj
-ant.*
+bin
+

@@ -69,6 +69,7 @@ public class ERDKeyValueAssignment extends Assignment {
      * @return result of resolving the key path off of the 
      * 		context. 
      */
+    @Override
     public Object fire(D2WContext d2wcontext) {
         return d2wcontext.valueForKeyPath((String)value());
     }

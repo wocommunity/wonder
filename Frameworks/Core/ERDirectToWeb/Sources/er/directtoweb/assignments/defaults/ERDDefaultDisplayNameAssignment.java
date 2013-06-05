@@ -173,7 +173,7 @@ public class ERDDefaultDisplayNameAssignment extends ERDAssignment implements ER
             pageConfiguration = taskName.substring(0,1).toUpperCase() + taskName.substring(1) + (entityName != null ? entityName : "");
         }
         String localizerKey = "Pages." + pageConfiguration;
-        String result = (String) ERXLocalizer.currentLocalizer().localizedStringForKey(localizerKey);
+        String result = ERXLocalizer.currentLocalizer().localizedStringForKey(localizerKey);
         if(false) {
            	String task = c.task();
            	String subTask = (String) c.valueForKey("subTask");

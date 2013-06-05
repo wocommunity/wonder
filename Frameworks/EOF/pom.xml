@@ -11,11 +11,9 @@
 	<name>EOF Frameworks</name>
 	<modules>
 		<module>ERAttributeExtension</module>
-		<module>ERCaching</module>
 		<module>ERChangeNotificationJMS</module>
 		<module>ERIndexing</module>
 		<module>ERJGroupsSynchronizer</module>
 		<module>ERRest</module>
-		<module>Validity</module>
 	</modules>
 </project>

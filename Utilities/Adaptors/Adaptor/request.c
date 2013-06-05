@@ -129,10 +129,16 @@ void req_reformatRequest(HTTPRequest *req, WOAppReq *app, WOURLComponents *wc, c
    ComposeURL(req->request_str + strlen(req->request_str), wc, req->shouldProcessUrl);
 
    strcat(req->request_str," ");
-   if (http_version) {
-      strcat(req->request_str,http_version);
+   if (http_version)
+   {
+       strcat(req->request_str,http_version);
+       if (strcasecmp(http_version,"HTTP/1.1") == 0)
+       {
+           req_addHeader(req, "Host", app->host, 0);
+       }
    } else {
-      strcat(req->request_str,default_http_version);
+       strcat(req->request_str,default_http_version);
+       req_addHeader(req, "Host", app->host, 0);
    }
    strcat(req->request_str,"\r\n");
 
@@ -208,6 +214,110 @@ typedef struct {
 } SendHeadersInfo;
 
 
+#ifdef WIN32
+// see http://support.apple.com/kb/TA26907:
+// WebObjects 5.1: How to Improve Performance of IIS Adaptor on
+// Microsoft Windows
+static void req_appendHeader(const char *key, const char *val, String *headers) 
+{
+   int valLength = strlen(val);
+   while (val[valLength - 1] == '\r' || val[valLength - 1] == '\n') 
+   {
+      valLength--;
+   }
+   str_append(headers, key);
+   str_appendLiteral(headers, ": ");
+   str_appendLength(headers, val, valLength);
+   str_appendLiteral(headers, "\r\n");
+}
+
+int req_sendRequest(HTTPRequest *req, net_fd socket) 
+{
+   struct iovec *buffers;
+   int bufferCount, appStatus;
+   int browserStatus = 0;
+   String *headersString;
+
+   buffers = WOMALLOC(3 * sizeof(struct iovec));
+
+   headersString = str_create(req->request_str, 0);
+   if (headersString) 
+   {
+      st_perform(req->headers, (st_perform_callback)req_appendHeader, headersString);
+   }
+   buffers[0].iov_base = headersString->text;
+   buffers[0].iov_len = headersString->length;
+   buffers[1].iov_base = "\r\n";
+   buffers[1].iov_len = 2;
+   bufferCount = 2;
+   if (req->content_length > 0) 
+   {
+      bufferCount++;
+      buffers[2].iov_base = req->content;
+      buffers[2].iov_len = req->content_buffer_size;
+   }
+   appStatus = transport->sendBuffers(socket, buffers, bufferCount);
+   str_free(headersString);
+
+   /* If we are streaming the content data, continue until we have sent everything. */
+   /* Note that we reuse buffers, and the existing content-data buffer. */
+   if (req->content_length > req->content_buffer_size)
+   {
+      int total_sent = req->content_buffer_size;
+      int len_read, amount_to_read;
+      req->haveReadStreamedData = 1;
+      while (total_sent < req->content_length)
+      {
+         amount_to_read = req->content_length - total_sent;
+         if (amount_to_read > req->content_buffer_size)
+            amount_to_read = req->content_buffer_size;
+         len_read = req->getMoreContent(req, req->content, amount_to_read, 0);
+         if (len_read > 0)
+         {
+            if(appStatus == 0)
+            {
+               buffers[0].iov_base = req->content;
+               buffers[0].iov_len = len_read;
+               appStatus = transport->sendBuffers(socket, buffers, 1);
+               // 2009/04/28: in case of a transport error, carry on with reading
+               //             incoming input stream (= browser data).  That way,
+               //             the browser (hopefully) switch to the receive mode
+               //             after sending the complete request and receives/shows
+               //             the adaptor error message (old behaviour: endless
+               //             sending/uploading view).
+               if(appStatus != 0)
+               {
+                  WOLog(WO_ERR, "Failed to send streamed content.");
+               }
+            }
+            total_sent += len_read;
+         } else if (len_read < 0) {
+            WOLog(WO_ERR, "Failed to read streamed content.");
+            browserStatus = -1;
+            break;
+         }
+      }
+   }
+   WOFREE(buffers);
+   if(browserStatus != 0) WOLog(WO_ERR, "error receiving request");
+   if (appStatus == 0)
+   {
+      // 2009/04/30: as long as we haven't received any error message from
+      //             the instance, flush the socket to complete the data
+      //             transfer!
+      appStatus = transport->flush_connection(socket);
+   }
+   else
+      WOLog(WO_ERR, "error sending request");
+
+   return
+       ((appStatus != 0)
+          ? appStatus
+          : browserStatus);
+}
+
+#else
+
 static void setupIOVec(const char *key, const char *value, struct iovec **iov)
 {
    (*iov)->iov_base = (void *)key;
@@ -281,6 +391,8 @@ int req_sendRequest(HTTPRequest *req, net_fd socket)
 
    return result;
 }
+
+#endif
 
 
 static const char * const GET_METHOD = "GET";

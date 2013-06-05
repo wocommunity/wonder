@@ -44,10 +44,12 @@ public class ERD2WStatelessCustomComponentWithArgs extends ERD2WStatelessCompone
     // Done this way so that subClasses can always get the original valueForBinding.
     public Object originalValueForBinding(String binding) { return super.valueForBinding(binding); }
 
+    @Override
     public Object valueForBinding(String binding) {
         return hasBinding(binding) ? originalValueForBinding(binding) : d2wContext().valueForKey(binding);
     }
 
+    @Override
     public void validationFailedWithException (Throwable e, Object value, String keyPath) {
         parent().validationFailedWithException(e,value,keyPath);
     }
@@ -57,6 +59,7 @@ public class ERD2WStatelessCustomComponentWithArgs extends ERD2WStatelessCompone
             ((ERXExceptionHolder)parent()).clearValidationFailed();
     }
 
+    @Override
     public void reset() {
         _extraBindings=null;
         super.reset();

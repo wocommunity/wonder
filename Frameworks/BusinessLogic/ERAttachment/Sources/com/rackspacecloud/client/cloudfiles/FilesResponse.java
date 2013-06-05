@@ -4,15 +4,15 @@
 
 package com.rackspacecloud.client.cloudfiles;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.apache.http.Header;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.apache.http.util.EntityUtils;
-import org.apache.http.HttpEntity;
 import org.apache.log4j.Logger;
-
-import java.io.IOException;
-import java.io.InputStream;
 
 public class FilesResponse
 {
@@ -22,7 +22,7 @@ public class FilesResponse
     private static Logger logger = Logger.getLogger(FilesResponse.class);
 
     /**
-     * @param method The HttpMethod that generated this response
+     * @param response the HTTP response that generated this response
      */
     public FilesResponse (HttpResponse response)
     {
@@ -186,7 +186,7 @@ public class FilesResponse
      * Returns the response body as text
      * 
      * @return The response body
-     * @throws IOException
+     * @throws IOException if an error occurs reading the input stream
      */
     public String getResponseBodyAsString () throws IOException
     {
@@ -197,7 +197,7 @@ public class FilesResponse
      * Get the response body as a Stream
      * 
      * @return An input stream that will return the response body when read
-     * @throws IOException
+     * @throws IOException if the stream could not be created
      */
     public InputStream getResponseBodyAsStream () throws IOException
     {
@@ -208,7 +208,7 @@ public class FilesResponse
      * Get the body of the response as a byte array
      *
      * @return The body of the response.
-     * @throws IOException
+     * @throws IOException if an error occurs reading the input stream
      */
     public byte[] getResponseBody () throws IOException
     {

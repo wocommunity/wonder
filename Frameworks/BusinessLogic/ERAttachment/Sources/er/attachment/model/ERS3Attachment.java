@@ -33,13 +33,11 @@ public class ERS3Attachment extends _ERS3Attachment {
 	private static final long serialVersionUID = 1L;
 
 	public static final String STORAGE_TYPE = "s3";
+	@SuppressWarnings("unused")
 	private static Logger log = Logger.getLogger(ERS3Attachment.class);
 
 	private File _pendingUploadFile;
 	private boolean _pendingDelete;
-	
-	public ERS3Attachment() {
-	}
 
 	public void _setPendingUploadFile(File pendingUploadFile, boolean pendingDelete) {
 		_pendingUploadFile = pendingUploadFile;
@@ -185,11 +183,24 @@ public class ERS3Attachment extends _ERS3Attachment {
 	}
 
 	public QueryStringAuthGenerator queryStringAuthGenerator() {
-		return new QueryStringAuthGenerator(accessKeyID(), secretAccessKey(), false);
+		String host = ERXProperties.stringForKey("er.attachment." + configurationName() + ".s3.host");
+		if (host == null) {
+			host = ERXProperties.stringForKey("er.attachment.s3.host");
+		}
+		if (host == null)
+			return new QueryStringAuthGenerator(accessKeyID(), secretAccessKey(), false);
+		else
+			return new QueryStringAuthGenerator(accessKeyID(), secretAccessKey(), false, host);
 	}
 
 	public AWSAuthConnection awsConnection() {
-		AWSAuthConnection conn = new AWSAuthConnection(accessKeyID(), secretAccessKey(), true);
-		return conn;
+		String host = ERXProperties.stringForKey("er.attachment." + configurationName() + ".s3.host");
+		if (host == null) {
+			host = ERXProperties.stringForKey("er.attachment.s3.host");
+		}
+		if (host == null)
+			return new AWSAuthConnection(accessKeyID(), secretAccessKey(), true);
+		else
+			return new AWSAuthConnection(accessKeyID(), secretAccessKey(), true, host);
 	}
 }

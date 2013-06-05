@@ -67,14 +67,14 @@ public class ERXAdaptorChannelDelegate {
     }
 
 	public void adaptorChannelDidEvaluateExpression(EOAdaptorChannel channel, EOSQLExpression expression) {
-		if (this.collectLastStatements()) {
+		if (collectLastStatements()) {
 			// this collects the last 10 statements executed for dumping them  
 			if (_lastStatements == null) {
 				_lastStatements = new LinkedList<String>();
 			}
 			_lastStatements.addLast(ERXEOAccessUtilities.createLogString(channel, expression, System.currentTimeMillis() - _lastMilliseconds));
 			
-			while (_lastStatements.size() > this.numberOfStatementsToCollect()) {
+			while (_lastStatements.size() > numberOfStatementsToCollect()) {
 				_lastStatements.removeFirst();
 			}
 		}
@@ -120,16 +120,16 @@ public class ERXAdaptorChannelDelegate {
 	 * <code>er.extensions.ERXSQLExpressionTracker.collectLastStatements</code>
 	 * set to true to collect executed statements.
 	 */
-	public synchronized void dumpLastStatements () {
+	public synchronized void dumpLastStatements() {
 		log.info("******* dumping collected SQL statements *******");
-		if (this._lastStatements != null) {
+		if (_lastStatements != null) {
 			for (int i = 0; i < _lastStatements.size(); i++) {
 				log.info(_lastStatements.get(i));
 			}
 		}
 		else {
 			log.info("No collected statements available.");
-			if (!this._collectLastStatements.booleanValue()) {
+			if (!_collectLastStatements.booleanValue()) {
 				log.info("You have to set the property 'er.extensions.ERXSQLExpressionTracker.collectLastStatements = true'. to make this feature work.");
 			}
 		}
@@ -142,7 +142,7 @@ public class ERXAdaptorChannelDelegate {
 	 * @author cug - Jun 20, 2007
 	 * @return The last collected SQL statements.
 	 */
-	public LinkedList<String> lastStatements () {
-		return this._lastStatements;
+	public LinkedList<String> lastStatements() {
+		return _lastStatements;
 	}
 }

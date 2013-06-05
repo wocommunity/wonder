@@ -580,7 +580,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
    * <span class="ja">
    * 使用可能な言語を配列でセットする
    * 
-   * @param value　-　使用可能な言語のNSArray
+   * @param value - 使用可能な言語のNSArray
    * </span>
    */
 	public static void setAvailableLanguages(NSArray<String> value) {
@@ -1176,8 +1176,8 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
   /**
    * <span class="ja">
    * キーを使って、ローカライズ・オブジェクトを戻します
-   * @ キーパス <code>session.localizer.@locale.getLanguage</code> で
-   * キーファイルを探すかわりに ERXLocalicer メソッドを実行します。
+   * {@literal @} キーパス <code>session.localizer.{@literal @}locale.getLanguage</code> で
+   * キーファイルを探すかわりに ERXLocalizer メソッドを実行します。
    * @param key - キー
    * 
    * @return ローカライズ済みオブジェクト又は @ キーパス
@@ -1202,17 +1202,17 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 
 	/**
 	 * <span class="en">
-	 * Returns the localized value for a key. An @ keypath such as 
-	 * <code>session.localizer.@locale.getLanguage</code> indicates that
+	 * Returns the localized value for a key. An {@literal @} keypath such as 
+	 * <code>session.localizer.{@literal @}locale.getLanguage</code> indicates that
 	 * the methods on ERXLocalizer itself should be called instead of
-	 * searching the strings file for a '@locale.getLanguage' key.
+	 * searching the strings file for a '{@literal @}locale.getLanguage' key.
 	 * @param key the keyPath string
 	 * @return a localized string value or the object value of the @ keyPath
 	 * </span>
 	 * 
    * <span class="ja">
    * キーを使って、ローカライズ・オブジェクトを戻します
-   * @ キーパス <code>session.localizer.@locale.getLanguage</code> で
+   * {@literal @} キーパス <code>session.localizer.@locale.getLanguage</code> で
    * キーファイルを探すかわりに ERXLocalicer メソッドを実行します。
    * @param key - キー
    * 

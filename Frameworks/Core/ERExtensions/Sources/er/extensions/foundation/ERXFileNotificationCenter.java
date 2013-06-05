@@ -95,6 +95,7 @@ public class ERXFileNotificationCenter {
      * {@link com.webobjects.foundation.NSNotificationCenter NSNotificationCenter}. 
      * Not doing this will cause exceptions.
      */
+    @Override
     public void finalize() throws Throwable {
         NSNotificationCenter.defaultCenter().removeObserver(this);
         super.finalize();

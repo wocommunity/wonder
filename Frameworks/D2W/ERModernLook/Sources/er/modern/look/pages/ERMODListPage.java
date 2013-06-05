@@ -77,7 +77,7 @@ public class ERMODListPage extends ERD2WListPageTemplate implements ListPageInte
 			}
 		}
 		if (useAjaxWhenEmbedded) {
-			if (this.parent() != null) {
+			if (parent() != null) {
 				D2WPage parent = (D2WPage)ERD2WUtilities.enclosingPageOfClass(this, D2WPage.class);
 				if (parent != null) 
 					parent.takeValueForKeyPath(null, "d2wContext.inlineTask");

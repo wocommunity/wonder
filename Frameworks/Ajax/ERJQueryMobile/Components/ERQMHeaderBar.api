@@ -15,5 +15,7 @@
     
     <binding name="rightButton-linkResource"/>
     <binding name="backButton-action"/>
+    <binding name="backButton-iconpos"/>
+        <binding name="rightButton-iconpos"/>
     </wo>
 </wodefinitions>

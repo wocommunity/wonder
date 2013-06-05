@@ -164,12 +164,14 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
         }
     }
 
+    @Override
     public void takeValuesFromRequest(WORequest request, WOContext context) {
         super.takeValuesFromRequest(request, context);
         substituteValueForNullableQueryKeys();
         saveQueryBindings();
     }
 
+    @Override
     public void appendToResponse(WOResponse response, WOContext context) {
         loadQueryBindings();
         super.appendToResponse(response, context);
@@ -204,6 +206,7 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
         }
     }
 
+    @Override
     public void awake() {
         super.awake();
     }
@@ -331,7 +334,6 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
      * the {@link #defaultQueryDataSource()} is returned.
      * @return the prepared data source
      */
-    @Override
     public EODataSource queryDataSource() {
         if (_wasCancelled) {
             return null;

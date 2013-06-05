@@ -15,6 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.NDC;
 
@@ -171,7 +172,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
 		public static final String firstResponderKey = "firstResponderKey";
         
     }
-    
+
     /** logging support */
     public final static Logger log = Logger.getLogger(ERD2WPage.class);
 
@@ -240,6 +241,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     /**
      * Overridden to unlock the page's editingContext, if there is any present.
      */
+    @Override
     public void sleep() {
         if (_context != null) {
             _context.unlock();
@@ -296,7 +298,6 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * 
      * @return url for the current page
      */
-	@Override
     public String urlForCurrentState() {
         return context().directActionURLForActionNamed(d2wContext().dynamicPage(), null).replaceAll("&amp;", "&");
     }
@@ -308,14 +309,14 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
 	@Override
     public void setObject(EOEnterpriseObject eo) {
         setEditingContext((eo != null) ? eo.editingContext() : null);
-        // for SmartAssignment
-        d2wContext().takeValueForKey(eo, Keys.object);
+
         /*
          * Storing the EO in the D2WComponent field prevents serialization. The
          * ec must be serialized before the EO. So we store the value in the
          * context instead.
+         * 
+         * also, for SmartAssignment
          */
-        //super.setObject(eo);
         d2wContext().takeValueForKey(eo, Keys.object);
     }
     
@@ -361,7 +362,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     /** Sets the d2wContext for this page */
 	@Override
     public void setLocalContext(D2WContext newValue) {
-        if (ERXExtensions.safeDifferent(newValue, _localContext)) {
+        if (ObjectUtils.notEqual(newValue, _localContext)) {
             // HACK ALERT: this next line is made necessary by the
             // brain-damageness of
             // D2WComponent.setLocalContext, which holds on to the first non
@@ -388,7 +389,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     protected NSMutableArray<String> keyPathsWithValidationExceptions = new NSMutableArray<String>();
 
     protected String errorMessage = "";
-    
+
     protected ValidationDelegate validationDelegate;
     
     protected boolean validationDelegateInited;
@@ -434,7 +435,6 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * Clears all of the collected validation exceptions. Implementation of the
      * {@link ERXExceptionHolder} interface.
      */
-	@Override
     public void clearValidationFailed() {
         errorMessages.removeAllObjects();
         errorKeyOrder.removeAllObjects();
@@ -535,7 +535,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
             parent().validationFailedWithException(e, value, keyPath);
         }
     }
-    
+
     public ValidationDelegate validationDelegate() {
     	if(!validationDelegateInited && _localContext != null && shouldCollectValidationExceptions()) {
     		// initialize validation delegate
@@ -682,7 +682,6 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     protected NSMutableDictionary _userInfo = new NSMutableDictionary();
 
     /** Implementation of the {@link ERDUserInfoInterface} */
-	@Override
     public NSMutableDictionary userInfo() {
         return _userInfo;
     }
@@ -827,7 +826,6 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * @return user selected branch name.
      */
     // ENHANCEME: Should be localized
-	@Override
     public String branchName() {
         if (branch() != null) {
             return (String) branch().valueForKey(ERDBranchDelegate.BRANCH_NAME);
@@ -901,7 +899,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         NSArray keys = (NSArray) d2wContext().valueForKey(Keys.alternateKeyInfo);
         if (log.isDebugEnabled())
             log.debug("currentSectionKeys (from alternateKeyInfo):" + keys);
-        keys = keys == null ? (NSArray) this.currentSection().keys : keys;
+        keys = keys == null ? (NSArray) currentSection().keys : keys;
         if (log.isDebugEnabled())
             log.debug("Setting sectionKey and keys: " + _currentSection.name + keys);
         return keys;
@@ -997,10 +995,10 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
             //If firstTab is not null, then try to find the tab named firstTab
         	Integer tabIndex = (Integer) d2wContext().valueForKey(Keys.tabIndex);
             if(tabIndex!=null && tabIndex.intValue() <= tabSectionsContents().count()){
-                setCurrentTab((ERD2WContainer)tabSectionsContents().objectAtIndex(tabIndex.intValue()));
+                setCurrentTab(tabSectionsContents().objectAtIndex(tabIndex.intValue()));
             }
             if(_currentTab==null)
-                setCurrentTab((ERD2WContainer)tabSectionsContents().objectAtIndex(0));
+                setCurrentTab(tabSectionsContents().objectAtIndex(0));
         }
         return _currentTab;
     }
@@ -1023,7 +1021,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         }
     }
 
-    /** Helper method to calulate the tab key array */
+    /** Helper method to calculate the tab key array */
     protected static NSArray tabSectionsContentsFromRuleResult(NSArray tabSectionContentsFromRule) {
         NSMutableArray tabSectionsContents = new NSMutableArray();
 
@@ -1147,6 +1145,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * has been explicitly set.
      * @return The page's next page delegate.
      */
+    @Override
     public NextPageDelegate nextPageDelegate() {
         if (_nextPageDelegate == null) {
             _nextPageDelegate = (NextPageDelegate) d2wContext().valueForKey("nextPageDelegate");
@@ -1154,6 +1153,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         return _nextPageDelegate;
     }
 
+    @Override
     public void setNextPageDelegate(NextPageDelegate nextpagedelegate) {
         _nextPageDelegate = nextpagedelegate;
     }
@@ -1166,7 +1166,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     /**
      * Returns the pageController for this page. If there is none given yet,
      * tries to create one by querying the key "pageController" from the
-     * d2wContext. The most conventient way to set and use a pageController is
+     * d2wContext. The most convenient way to set and use a pageController is
      * via the rule system:<code><pre>
      *  100: (entity.name='WebSite') and (task = 'list') =&gt; pageController = &quot;ListWebSiteController&quot; [er.directtoweb.ERDDelayedObjectCreationAssignment]
      *  100: (entity.name='WebSite') =&gt; actions = {left = (editAction, controllerAction);}
@@ -1222,6 +1222,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         _pageController = aPageController;
     }
 
+    @Override
     public boolean showCancel() {
         return _nextPageDelegate != null || _nextPage != null;
     }
@@ -1241,6 +1242,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
 	 *
 	 * @return the name of the page wrapper
 	 */
+    @Override
 	public String pageWrapperName() {
 		String name = (String)d2wContext().valueForKey(D2WModel._PageWrapperNameKey);
 		

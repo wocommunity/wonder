@@ -93,6 +93,7 @@ public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
      * @param c a D2W context
      * @return localizer for the session stored in the context.
      */
+    @Override
     public ERXLocalizer localizerForContext(D2WContext c) {
         return ERXLocalizer.currentLocalizer();
     }
@@ -226,6 +227,7 @@ public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
      * @return key for method lookup, in this case the 
      *		<code>value</code> of the assignment is returned.
      */
+    @Override
     public String keyForMethodLookup(D2WContext c) {
         return (String)value();
     }

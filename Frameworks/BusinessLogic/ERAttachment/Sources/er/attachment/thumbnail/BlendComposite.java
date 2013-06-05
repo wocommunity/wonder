@@ -181,7 +181,7 @@ public final class BlendComposite implements Composite {
 
         private BlendingContext(BlendComposite composite) {
             this.composite = composite;
-            this.blender = Blender.getBlenderFor(composite);
+            blender = Blender.getBlenderFor(composite);
         }
 
         public void dispose() {

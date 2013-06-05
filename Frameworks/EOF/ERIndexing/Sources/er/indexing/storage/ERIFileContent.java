@@ -24,6 +24,7 @@ public class ERIFileContent extends _ERIFileContent {
      * Initializes the EO. This is called when an EO is created, not when it is 
      * inserted into an EC.
      */
+    @Override
     public void init(EOEditingContext ec) {
         super.init(ec);
     }

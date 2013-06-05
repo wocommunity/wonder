@@ -1,9 +1,6 @@
 package com.webobjects.eoaccess;
 
 import junit.framework.Assert;
-
-import com.webobjects.eoaccess.ERXModel;
-
 import er.erxtest.ERXTestCase;
 
 public class ERXModelTest extends ERXTestCase {

@@ -162,7 +162,7 @@ public class ERXLoremIpsumGenerator {
    * <span class="ja">
    * Lorem Ipsum テキストより指定段落を戻します。
    * 
-   * @param number - 欲しい段落の番号。数値 0-9 間
+   * @param numberOfParagraphs - 欲しい段落の番号。数値 0-9 間
    * 
    * @return Lorem Ipsum テキストより段落
    * </span>
@@ -186,7 +186,7 @@ public class ERXLoremIpsumGenerator {
    * <span class="ja">
    * Lorem Ipsum テキストより指定個数文のランダム段落を戻します。
    * 
-   * @param numParagraphs - 指定個数文の段落
+   * @param numberOfParagraphs - 指定個数文の段落
    * 
    * @return Lorem Ipsum テキストより複数の段落、書く段落は空行で区切られる
    * </span>
@@ -254,7 +254,7 @@ public class ERXLoremIpsumGenerator {
    * <b>sentenceNumber</b> が段落の文数より、大きい場合は最初に戻って計算される。
    * 
    * @param paragraph - 段落
-   * @param sentenceNumber - 文番号
+   * @param numberOfSentences - 文番号
    * 
    * @return 指定段落 paragraph より、指定の文番号 sentenceNumber の文
    * </span>
@@ -286,7 +286,7 @@ public class ERXLoremIpsumGenerator {
    * <span class="ja">
    * Lorem Ipsum テキストより指定 numberSentences 番号の文を戻します
    * 
-   * @param numberSentences - 選択される文
+   * @param numberOfSentences - 選択される文
    * 
    * @return Lorem Ipsum テキストより指定 numberSentences 番号の文
    * </span>
@@ -331,7 +331,7 @@ public class ERXLoremIpsumGenerator {
    * <span class="ja">
    * Lorem Ipsum テキストより小文字で始まるランダム・ワードを numWords 数戻します。（スペース句切れ）
    * 
-   * @param numWords - ワード数
+   * @param numberOfWords - ワード数
    * 
    * @return スペース句切れの数ワード
    * </span>

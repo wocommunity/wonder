@@ -39,6 +39,7 @@ public class _NSWeakMutableArray extends _NSWeakMutableCollection implements Ser
 		array = new NSMutableArray(capacity);
 	}
 
+	@Override
 	public NSArray allObjects() {
 		processQueue();
 		NSMutableArray list = new NSMutableArray(array.count());
@@ -53,6 +54,7 @@ public class _NSWeakMutableArray extends _NSWeakMutableCollection implements Ser
 		return list.immutableClone();
 	}
 
+	@Override
 	public int count() {
 		return array.count();
 	}
@@ -67,18 +69,22 @@ public class _NSWeakMutableArray extends _NSWeakMutableCollection implements Ser
 		return -1;
 	}
 
+	@Override
 	public Object[] objects() {
 		return allObjects().objects();
 	}
 
+	@Override
 	public Enumeration objectEnumerator() {
 		return new _NSWeakMutableCollection._NSWeakMutableCollectionEnumerator(array.objectEnumerator());
 	}
 
+	@Override
 	public Enumeration referenceEnumerator() {
 		return array.objectEnumerator();
 	}
 
+	@Override
 	public void addObject(Object object) {
 		processQueue();
 		if (object == null) {
@@ -87,11 +93,13 @@ public class _NSWeakMutableArray extends _NSWeakMutableCollection implements Ser
 		array.addObject(new _NSWeakMutableCollection._NSWeakMutableCollectionReference(object, queue));
 	}
 
+	@Override
 	public void addReference(WeakReference object) {
 		processQueue();
 		array.addObject(object);
 	}
 
+	@Override
 	public void removeObject(Object object) {
 		processQueue();
 		if (object == null || array.count() == 0) {
@@ -100,19 +108,23 @@ public class _NSWeakMutableArray extends _NSWeakMutableCollection implements Ser
 		array.removeObject(new _NSWeakMutableCollection._NSWeakMutableCollectionReference(object, queue));
 	}
 
+	@Override
 	public void removeReference(Object object) {
 		processQueue();
 		array.removeObject(object);
 	}
 
+	@Override
 	protected void __removeReference(Reference object) {
 		array.removeObject(object);
 	}
 
+	@Override
 	public void removeAllObjects() {
 		array.removeAllObjects();
 	}
 
+	@Override
 	public String toString() {
 		processQueue();
 		StringBuilder buffer = new StringBuilder(128);

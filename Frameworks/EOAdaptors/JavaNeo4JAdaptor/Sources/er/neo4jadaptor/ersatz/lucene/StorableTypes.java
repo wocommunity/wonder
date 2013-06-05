@@ -8,7 +8,6 @@ import java.util.Map;
 
 import org.apache.lucene.util.NumericUtils;
 
-
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.foundation.NSTimestamp;
 

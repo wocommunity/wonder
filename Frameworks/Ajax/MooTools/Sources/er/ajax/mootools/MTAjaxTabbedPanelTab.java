@@ -23,17 +23,17 @@ public class MTAjaxTabbedPanelTab extends AjaxDynamicElement {
 	private WOAssociation isVisible;
 	private WOAssociation accesskey;
 
-	public MTAjaxTabbedPanelTab(String aName, NSDictionary associations, WOElement template) {
+	public MTAjaxTabbedPanelTab(String aName, NSDictionary<String, WOAssociation> associations, WOElement template) {
 		super(aName, associations, template);
 
 		content = template;
-		name = (WOAssociation) associations.objectForKey("name");
-		id = (WOAssociation) associations.objectForKey("id");
-		isSelected = (WOAssociation) associations.objectForKey("isSelected");
-		refreshOnSelect = (WOAssociation) associations.objectForKey("refreshOnSelect");
-		onLoad = (WOAssociation) associations.objectForKey("onLoad");
-		isVisible = (WOAssociation) associations.objectForKey("isVisible");
-		accesskey = (WOAssociation)associations.objectForKey("accesskey");
+		name = associations.objectForKey("name");
+		id = associations.objectForKey("id");
+		isSelected = associations.objectForKey("isSelected");
+		refreshOnSelect = associations.objectForKey("refreshOnSelect");
+		onLoad = associations.objectForKey("onLoad");
+		isVisible = associations.objectForKey("isVisible");
+		accesskey = associations.objectForKey("accesskey");
 
 		if (name == null) {
 			throw new RuntimeException("name binding is required");
@@ -44,6 +44,7 @@ public class MTAjaxTabbedPanelTab extends AjaxDynamicElement {
     /**
      * Creates the panes.
      */
+    @Override
     public void appendToResponse(WOResponse response, WOContext aContext)
     {
     	WOComponent component = aContext.component();
@@ -78,6 +79,7 @@ public class MTAjaxTabbedPanelTab extends AjaxDynamicElement {
 	/** 
 	 * Do nothing if not visible. 
 	 */
+	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context)
 	{
 		if (isVisble(context.component()) && (isSelected ==  null || isSelected(context.component())) ) {
@@ -88,6 +90,7 @@ public class MTAjaxTabbedPanelTab extends AjaxDynamicElement {
 	/** 
 	 * Do nothing if not visible. 
 	 */
+	@Override
 	public WOActionResults invokeAction(WORequest request, WOContext context)
 	{
 		if (isVisble(context.component())) {
@@ -114,10 +117,11 @@ public class MTAjaxTabbedPanelTab extends AjaxDynamicElement {
 	 */
 	public void setIsSelected(WOComponent component, boolean isTabSelected) {
 		if (isSelected != null && isSelected.isValueSettableInComponent(component)) {
-			isSelected.setValue(new Boolean(isTabSelected), component);
+			isSelected.setValue(Boolean.valueOf(isTabSelected), component);
 		}
 	}
 
+	@Override
 	protected void addRequiredWebResources(WOResponse response, WOContext context) {
 	}
 
@@ -125,6 +129,7 @@ public class MTAjaxTabbedPanelTab extends AjaxDynamicElement {
 	 * The pane content is rendered when an Ajax request is received.
 	 * @return the children rendered as HTML
 	 */
+	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		WOResponse response = null;
 		String didSelect = request.stringFormValueForKey("didSelect");
@@ -147,6 +152,7 @@ public class MTAjaxTabbedPanelTab extends AjaxDynamicElement {
 	 * @param context WOContext response is being returned in
 	 * @return ID to cache this Ajax response under
 	 */
+	@Override
 	protected String _containerID(WOContext context) {
 		return (String)id().valueInComponent(context.component()) + "_panel";
 	}

@@ -19,6 +19,7 @@ public class ERXAdaptorOpComparator extends EOAdaptorOpComparator {
 	}
 
 	
+    @Override
     public int compare(Object object1, Object object2)
     	throws com.webobjects.foundation.NSComparator.ComparisonException {
 

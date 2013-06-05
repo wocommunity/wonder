@@ -15,7 +15,6 @@
 		<module>ERMailer</module>
 		<module>JavaMonitor</module>
 		<module>Uber</module>
-		<module>ValidityModeler</module>
 		<module>wotaskd</module>
 	</modules>
 </project>

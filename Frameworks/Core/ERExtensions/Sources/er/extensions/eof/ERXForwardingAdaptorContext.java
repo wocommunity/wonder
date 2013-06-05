@@ -90,7 +90,11 @@ public class ERXForwardingAdaptorContext extends EOAdaptorContext {
 		_forwardedContext.rollbackTransaction();
 	}
 
+	/**
+	 * @deprecated use {@link #hasOpenTransaction()} instead
+	 */
 	@Override
+	@Deprecated
 	public int transactionNestingLevel() {
 		return _forwardedContext.transactionNestingLevel();
 	}
@@ -170,6 +174,7 @@ public class ERXForwardingAdaptorContext extends EOAdaptorContext {
 	}
 
 	@Override
+	@Deprecated
 	public boolean canNestTransactions() {
 		return _forwardedContext.canNestTransactions();
 	}

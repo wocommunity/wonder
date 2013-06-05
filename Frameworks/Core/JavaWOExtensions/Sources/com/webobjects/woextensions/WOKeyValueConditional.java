@@ -48,7 +48,7 @@ public class WOKeyValueConditional extends WOComponent {
             } else if (thisNegate instanceof Integer) {
                 _negate = (((Integer) thisNegate).intValue() == 0) ? 0 : 1;
             } else if (thisNegate instanceof String) {
-                _negate = (new Boolean((String) thisNegate)).booleanValue() ? 1 : 0;
+                _negate = (Boolean.valueOf((String) thisNegate)).booleanValue() ? 1 : 0;
             } else {
                 _negate = 0;
             }

@@ -27,9 +27,4 @@ public class ERXModelDoc extends WOComponent {
   public boolean isStateless() {
     return true;
   }
-
-  @Override
-  public boolean synchronizesVariablesWithBindings() {
-    return false;
-  }
 }

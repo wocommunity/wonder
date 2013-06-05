@@ -18,15 +18,14 @@
 	<classpathentry kind="con" path="WOFramework/WOOgnl"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="WOFramework/Ajax"/>
-	<classpathentry kind="con" path="WOFramework/ERXPartialBaseModel"/>
-	<classpathentry kind="con" path="WOFramework/ERXPartialsExampleModel"/>
 	<classpathentry kind="con" path="WOFramework/WOLips"/>
-	<classpathentry kind="con" path="WOFramework/ERDirectToRest"/>
 	<classpathentry kind="con" path="WOFramework/ERModernLook"/>
 	<classpathentry kind="con" path="WOFramework/ERModernDefaultSkin"/>
 	<classpathentry kind="con" path="WOFramework/ERCoolComponents"/>
 	<classpathentry kind="con" path="WOFramework/ERRest"/>
 	<classpathentry kind="con" path="WOFramework/ERModernDirectToWeb"/>
 	<classpathentry kind="con" path="WOFramework/H2PlugIn"/>
+	<classpathentry kind="con" path="WOFramework/ERXPartialsExampleModel"/>
+	<classpathentry kind="con" path="WOFramework/ERXPartialBaseModel"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

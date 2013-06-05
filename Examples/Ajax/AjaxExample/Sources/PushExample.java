@@ -36,7 +36,6 @@ public class PushExample extends WOComponent {
 	private static Set<String> _pushSessionIDs = Collections.synchronizedSet(new HashSet<String>());
 
 	private static Thread _pushThread = new Thread(new Runnable() {
-		@Override
 		public void run() {
 			boolean running = true;
 			while (running) {

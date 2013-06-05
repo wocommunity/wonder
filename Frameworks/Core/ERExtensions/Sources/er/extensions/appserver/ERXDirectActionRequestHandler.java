@@ -66,6 +66,7 @@ public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler 
     	return request.requestHandlerPath() != null && request.requestHandlerPath().toLowerCase().indexOf("stats") >= 0;
     }
     
+    @Override
     public WOResponse handleRequest(WORequest request) {
         WOResponse response = null;
         
@@ -76,6 +77,7 @@ public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler 
         if (ERXWOResponseCache.sharedInstance().isEnabled()) {
             try {
                 // Caching scheme for 5.2 applications. Will uncomment once we are building 5.2 only ERExtensions
+            	// CHECKME
                 Object[] actionClassAndName = getRequestActionClassAndNameForPath(getRequestHandlerPathForRequest(request));
                 //Object[] actionClassAndName = null;
                 if (actionClassAndName != null && actionClassAndName.length == 3) {
@@ -110,7 +112,7 @@ public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler 
 						if (app.sessionStore().restoreSessionWithID(request.sessionID(), request) == null) {
         					response = generateRequestRefusal(request);
         					// AK: should be a permanent redirect, as the session is gone for good. 
-        					// However, the adaptor checks explictely on 302 so we return that...
+        					// However, the adaptor checks explicitly on 302 so we return that...
         					// It shouldn't matter which instance we go to now.
         					response.setStatus(302);
         				}

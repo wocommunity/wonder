@@ -179,6 +179,7 @@ public class LocalMonitor extends ProtoLocalMonitor  {
     }
 
     // this actually only returns unregistered applications
+    @Override
     public StringBuffer generateAdaptorConfigXML() {
         StringBuffer sb = null;
 
@@ -396,6 +397,7 @@ public class LocalMonitor extends ProtoLocalMonitor  {
 
     /********** Controlling Instances **********/
     // Returns null if success
+    @Override
     public String startInstance(MInstance anInstance) {
         MSiteConfig aConfig = theApplication.siteConfig();
         if (anInstance == null)
@@ -445,6 +447,7 @@ public class LocalMonitor extends ProtoLocalMonitor  {
         return null;
     }
 
+    @Override
     public WOResponse terminateInstance(MInstance anInstance) throws MonitorException {
         if (!anInstance.isRunning_W()) return null;
         
@@ -465,6 +468,7 @@ public class LocalMonitor extends ProtoLocalMonitor  {
         return sendInstanceRequest(anInstance, xmlDict);
     }
 
+    @Override
     public WOResponse stopInstance(MInstance anInstance) throws MonitorException {
         if (!anInstance.isRunning_W()) return null;
         
@@ -492,6 +496,7 @@ public class LocalMonitor extends ProtoLocalMonitor  {
         return sendInstanceRequest(anInstance, xmlDict);
     }
 
+    @Override
     public WOResponse queryInstance(MInstance anInstance) throws MonitorException {
         catchInstanceErrors(anInstance);
         NSDictionary xmlDict = createInstanceRequestDictionary(null, "STATISTICS", anInstance);
@@ -536,9 +541,8 @@ public class LocalMonitor extends ProtoLocalMonitor  {
             if (ne.originalException() instanceof IOException) {
                 anInstance.failedToConnect();
                 throw new MonitorException(_hostName + ": Timeout while connecting to " + anInstance.displayName());
-            } else {
-                throw ne;
             }
+            throw ne;
         } catch (MonitorException me) {
             anInstance.failedToConnect();
             throw me;

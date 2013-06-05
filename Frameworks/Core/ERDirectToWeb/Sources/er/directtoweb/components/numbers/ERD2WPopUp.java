@@ -42,7 +42,7 @@ public class ERD2WPopUp extends ERD2WStatelessComponent {
 			arr.addObject(ERXConstant.integerForInt(5));
 			result = arr;
 		}
-		return (NSArray)result;
+		return result;
 	}
 
 	public Object choice() {

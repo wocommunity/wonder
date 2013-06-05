@@ -32,6 +32,7 @@ public class ERXJSAutoClosePage extends WOComponent {
     }
     
     /** component is stateless */
+    @Override
     public boolean isStateless() { return true; }
     
     

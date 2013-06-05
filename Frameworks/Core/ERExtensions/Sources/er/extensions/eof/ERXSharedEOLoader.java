@@ -113,6 +113,7 @@ public class ERXSharedEOLoader {
                                                          null);
     }
 
+    @Override
     public void finalize() throws Throwable {
         NSNotificationCenter.defaultCenter().removeObserver(this);
         super.finalize();
@@ -209,7 +210,7 @@ public class ERXSharedEOLoader {
                     log.debug("Shared EO loading complete: no objects loaded.");
                 }
             } catch (Exception e) {
-                log.error("Exception occurred with model: " + currentModel.name() + "\n" + e + ERXUtilities.stackTrace());
+                log.error("Exception occurred with model: " + (currentModel != null ? currentModel.name() : "<null>" ) + "\n" + e + ERXUtilities.stackTrace());
                 // no matter what happens, un-register for notifications.
                 NSNotificationCenter.defaultCenter().removeObserver(this, EOAdaptorContext.AdaptorContextBeginTransactionNotification, null);
                 if (_didChangeDebugSetting) {

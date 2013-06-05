@@ -128,9 +128,9 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
             throw new RuntimeException("ERXFetchSpecificationBatchIterator: Currently only single primary key entities are supported.");
         }
 
-        this.primaryKeyAttributeName = ((EOAttribute)primaryKeyAttributes.lastObject()).name();
+        primaryKeyAttributeName = ((EOAttribute)primaryKeyAttributes.lastObject()).name();
         this.fetchSpecification = (EOFetchSpecification) fetchSpecification.clone();
-        this.primaryKeys = pkeys;
+        primaryKeys = pkeys;
         setEditingContext(ec != null ? ec : ERXEC.newEditingContext());
         setBatchSize(batchSize);
         setFiltersBatches(false);
@@ -366,6 +366,7 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
             if (fetchSpecification.prefetchingRelationshipKeyPaths() != null) {
             	batchFS.setPrefetchingRelationshipKeyPaths(fetchSpecification.prefetchingRelationshipKeyPaths());
             }
+            batchFS.setRefreshesRefetchedObjects(fetchSpecification.refreshesRefetchedObjects());
             batchFS.setRawRowKeyPaths(fetchSpecification.rawRowKeyPaths());
             nextBatch = ec.objectsWithFetchSpecification(batchFS);
 

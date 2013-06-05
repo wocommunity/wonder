@@ -63,7 +63,7 @@ public class ERDQualifierTraversal {
             } else if (q instanceof EONotQualifier) {
                 EONotQualifier nq = (EONotQualifier)q;
                 cb.traverseNotQualifier((EONotQualifier)q);
-                result = traverseQualifier((EOQualifierEvaluation)nq.qualifier(),cb) ? Boolean.TRUE : Boolean.FALSE;
+                result = traverseQualifier(nq.qualifier(),cb) ? Boolean.TRUE : Boolean.FALSE;
             } else if (q instanceof EOKeyValueQualifier) {
                 result=cb.traverseKeyValueQualifier((EOKeyValueQualifier)q) ? Boolean.TRUE : Boolean.FALSE;
             } else if (q instanceof EOKeyComparisonQualifier) {

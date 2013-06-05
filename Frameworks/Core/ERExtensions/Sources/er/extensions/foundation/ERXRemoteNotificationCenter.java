@@ -115,6 +115,7 @@ public abstract class ERXRemoteNotificationCenter extends NSNotificationCenter {
 			dos.write(_identifier);
 			dos.writeByte(JOIN);
 			dos.flush();
+			dos.close();
 			_multicastSocket.send(baos.createDatagramPacket());
 			listen();
 		}
@@ -128,11 +129,13 @@ public abstract class ERXRemoteNotificationCenter extends NSNotificationCenter {
 			dos.write(_identifier);
 			dos.writeByte(LEAVE);
 			dos.flush();
+			dos.close();
 			_multicastSocket.send(baos.createDatagramPacket());
 			_multicastSocket.leaveGroup(_multicastGroup, _localNetworkInterface);
 			_listening = false;
 		}
 
+		@Override
 		protected void postRemoteNotification(NSNotification notification) {
 			try {
 				MulticastByteArrayOutputStream baos = new MulticastByteArrayOutputStream();
@@ -306,7 +309,7 @@ public abstract class ERXRemoteNotificationCenter extends NSNotificationCenter {
 
 	/**
 	 * Set the default center
-	 * @param center
+	 * @param center the notification center to use as default
 	 */
 	public static void setDefaultCenter(ERXRemoteNotificationCenter center) {
 		_sharedInstance = center;
@@ -314,7 +317,7 @@ public abstract class ERXRemoteNotificationCenter extends NSNotificationCenter {
 
 	/**
 	 * Post a notification to the local app only.
-	 * @param notification
+	 * @param notification the notification
 	 */
 	public void postLocalNotification(NSNotification notification) {
 		super.postNotification(notification);
@@ -322,13 +325,14 @@ public abstract class ERXRemoteNotificationCenter extends NSNotificationCenter {
 
 	/**
 	 * Post a notification to the remote listeners.
-	 * @param notification
+	 * @param notification the notification
 	 */
 	protected abstract void postRemoteNotification(NSNotification notification);
 
 	/**
 	 * Overridden to call {@link #postRemoteNotification(NSNotification)}.
 	 */
+	@Override
 	public void postNotification(NSNotification notification) {
 		postRemoteNotification(notification);
 	}

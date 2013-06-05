@@ -102,8 +102,7 @@ public class SeleniumAction extends ERXDirectAction {
         return stringResponse(ERSelenium.ACTION_COMMAND_FAILED_MESSAGE + " " + s);
     }
 
-	
-	// @Override
+    @Override
     public WOActionResults performActionNamed(String anActionName) {
     	log.debug("Selenium Action: " + anActionName);
         WOActionResults result = null;

@@ -38,6 +38,7 @@ public class ERXJSOpenWindowSubmitButton extends ERXJSOpenWindowHyperlink {
     }
 
     // this 
+    @Override
     public String contextComponentActionURL() {
         return _contextComponentActionURL;
     }

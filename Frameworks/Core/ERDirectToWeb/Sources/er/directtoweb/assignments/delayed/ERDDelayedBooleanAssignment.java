@@ -78,6 +78,7 @@ public class ERDDelayedBooleanAssignment extends ERDDelayedAssignment implements
         return new NSArray(booleanConditions.objectForKey("conditionKey"));
     }
 
+    @Override
     public Object fireNow(D2WContext c) {
         NSDictionary booleanConditions = (NSDictionary)value();
         if (log.isDebugEnabled())

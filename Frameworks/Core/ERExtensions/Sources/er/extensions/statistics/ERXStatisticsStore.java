@@ -21,15 +21,14 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.appserver.ERXApplication;
 import er.extensions.eof.ERXEC;
 import er.extensions.eof.ERXObjectStoreCoordinator;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.statistics.store.ERXDumbStatisticsStoreListener;
-import er.extensions.statistics.store.IERXStatisticsStoreListener;
 import er.extensions.statistics.store.ERXEmptyRequestDescription;
 import er.extensions.statistics.store.ERXNormalRequestDescription;
 import er.extensions.statistics.store.IERXRequestDescription;
+import er.extensions.statistics.store.IERXStatisticsStoreListener;
 
 /**
  * Enhances the normal stats store with a bunch of useful things which get
@@ -123,6 +122,22 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 					requestTime = System.currentTimeMillis() - time();
 				}
 				
+				Thread currentThread = Thread.currentThread();
+				Map<Thread, StackTraceElement[]> traces = _fatalTraces.remove(currentThread);
+				Map<Thread, String> names = _fatalTracesNames.remove(currentThread);
+				if (traces == null) {
+					traces = _errorTraces.remove(currentThread);
+					names = _errorTracesNames.remove(currentThread);
+				}
+				if (traces == null) {
+					traces = _warnTraces.remove(currentThread);
+					names = _warnTracesNames.remove(currentThread);
+				}
+				
+				synchronized (_requestThreads) {
+					_requestThreads.remove(Thread.currentThread());
+				}
+				
 				// Don't get the traces string if we have already logged all
 				// of the stacks within the last 10s. All of this logging
 				// could just makes it worse for an application that is 
@@ -130,7 +145,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 				String trace = " - (skipped stack traces)";
 				long currentTime = System.currentTimeMillis();
 				if (currentTime - _lastLog > 10000) {
-					trace = stringFromTraces();
+					trace = stringFromTracesAndNames(traces, names);
 					_lastLog = currentTime;
 				}
 			
@@ -150,29 +165,6 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 				// AK: pretty important we don't mess up here
 				log.error(ex, ex);
 			}
-		}
-
-		private String stringFromTraces() {
-			String result;
-			Thread currentThread = Thread.currentThread();
-			Map<Thread, StackTraceElement[]> traces = _fatalTraces.remove(currentThread);
-			Map<Thread, String> names = _fatalTracesNames.remove(currentThread);
-			if (traces == null) {
-				traces = _errorTraces.remove(currentThread);
-				names = _errorTracesNames.remove(currentThread);
-			}
-			if (traces == null) {
-				traces = _warnTraces.remove(currentThread);
-				names = _warnTracesNames.remove(currentThread);
-			}
-
-			result = stringFromTracesAndNames(traces, names);
-			
-			synchronized (_requestThreads) {
-				_requestThreads.remove(Thread.currentThread());
-			}
-			
-			return result;
 		}
 
 		private String stringFromTracesAndNames(Map<Thread, StackTraceElement[]> traces, Map<Thread, String> names) {
@@ -258,8 +250,6 @@ public class ERXStatisticsStore extends WOStatisticsStore {
             return new ERXEmptyRequestDescription(string);
         }
 
-
-
 		public void run() {
 			Thread.currentThread().setName("ERXStopWatchTimer");
 			boolean done = false;
@@ -281,9 +271,8 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 			}
 			if (!requestThreads.isEmpty()) {
                 int deadlocksCount = 0;
-				Map traces = null; 
-				for (Iterator iterator = requestThreads.keySet().iterator(); iterator.hasNext();) {
-					Thread thread = (Thread) iterator.next();
+				Map<Thread, StackTraceElement[]> traces = null; 
+				for (Thread thread : requestThreads.keySet()) {
 					Long time = requestThreads.get(thread);
 					if (time != null) {
 						time = System.currentTimeMillis() - time;
@@ -291,14 +280,14 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 							if(traces == null) {
 								traces = Thread.getAllStackTraces();
 							}
-							Map names = getCurrentThreadNames(traces.keySet());
+							Map<Thread, String> names = getCurrentThreadNames(traces.keySet());
 							_warnTraces.put(thread, traces);
 						}
 						if (time > _maximumRequestErrorTime/2 && _errorTraces.get(thread) == null) {
 							if(traces == null) {
 								traces = Thread.getAllStackTraces();
 							}
-							Map names = getCurrentThreadNames(traces.keySet());
+							Map<Thread, String> names = getCurrentThreadNames(traces.keySet());
 							_errorTraces.put(thread, traces);
 							_errorTracesNames.put(thread, names);
 						}
@@ -306,7 +295,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 							if(traces == null) {
 								traces = Thread.getAllStackTraces();
 							}
-							Map names = getCurrentThreadNames(traces.keySet());
+							Map<Thread, String> names = getCurrentThreadNames(traces.keySet());
 							_fatalTraces.put(thread, traces);
 							_fatalTracesNames.put(thread, names);
 							String message = "Request is taking too long, possible deadlock: " + time + " ms ";
@@ -322,7 +311,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 			}
 		}
 
-		private Map getCurrentThreadNames(Set<Thread> keySet) {
+		private Map<Thread, String> getCurrentThreadNames(Set<Thread> keySet) {
 			Map names = new HashMap<Thread, String>();
 			for (Thread thread : keySet) {
 				names.put(thread, thread.getName());
@@ -332,23 +321,23 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 
 	}
 
+	@Override
 	public NSDictionary statistics() {
 		NSDictionary stats = super.statistics();
-		if (ERXApplication.isWO54()) {
-			NSMutableDictionary fixed = stats.mutableClone();
-			for (Enumeration enumerator = stats.keyEnumerator(); enumerator.hasMoreElements();) {
-				Object key = enumerator.nextElement();
-				Object value = stats.objectForKey(key);
-				fixed.setObjectForKey(fix(value), key);
-			}
-			stats = fixed;
+		NSMutableDictionary fixed = stats.mutableClone();
+		for (Enumeration enumerator = stats.keyEnumerator(); enumerator.hasMoreElements();) {
+			Object key = enumerator.nextElement();
+			Object value = stats.objectForKey(key);
+			fixed.setObjectForKey(fix(value), key);
 		}
+		stats = fixed;
 		return stats;
 		
 	}
 
-	protected NSMutableArray sessions = new NSMutableArray<WOSession>();
+	protected NSMutableArray<WOSession> sessions = new NSMutableArray<WOSession>();
 
+	@Override
 	protected void _applicationCreatedSession(WOSession wosession) {
 		synchronized (this) {
 			sessions.addObject(wosession);
@@ -356,6 +345,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 		}
 	}
 
+	@Override
 	protected void _sessionTerminating(WOSession wosession) {
 		synchronized (this) {
 			super._sessionTerminating(wosession);
@@ -363,7 +353,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 		}
 	}
 
-	public NSArray activeSession() {
+	public NSArray<WOSession> activeSession() {
 		return sessions;
 	}
 
@@ -375,31 +365,37 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 		timer().endTimer(null, aString);
 	}
 
+	@Override
 	public void applicationWillHandleComponentActionRequest() {
 		startTimer();
 		super.applicationWillHandleComponentActionRequest();
 	}
 
+	@Override
 	public void applicationDidHandleComponentActionRequestWithPageNamed(String aString) {
 		endTimer(aString);
 		super.applicationDidHandleComponentActionRequestWithPageNamed(aString);
 	}
 
+	@Override
 	public void applicationWillHandleDirectActionRequest() {
 		startTimer();
 		super.applicationWillHandleDirectActionRequest();
 	}
 
+	@Override
 	public void applicationDidHandleDirectActionRequestWithActionNamed(String aString) {
 		endTimer(aString);
 		super.applicationDidHandleDirectActionRequestWithActionNamed(aString);
 	}
 
+	@Override
 	public void applicationWillHandleWebServiceRequest() {
 		startTimer();
 		super.applicationWillHandleWebServiceRequest();
 	}
 
+	@Override
 	public void applicationDidHandleWebServiceRequestWithActionNamed(String aString) {
 		endTimer(aString);
 		super.applicationDidHandleWebServiceRequestWithActionNamed(aString);

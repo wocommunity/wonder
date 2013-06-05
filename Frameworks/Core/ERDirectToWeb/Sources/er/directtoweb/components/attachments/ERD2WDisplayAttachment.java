@@ -8,7 +8,7 @@ import com.webobjects.directtoweb.D2WComponent;
  * 
  * The configurationName is computed: 'Entity.propertyKey'
  * The properties for this configuration name must be set:
- * @see {http://webobjects.mdimension.com/hudson/job/Wonder53/javadoc/er/attachment/package-summary.html}
+ * @see <a href="http://jenkins.wocommunity.org/job/Wonder/javadoc/er/attachment/package-summary.html">http://jenkins.wocommunity.org/job/Wonder/javadoc/er/attachment/package-summary.html</a>
  * 
  * @author mendis
  * @d2wKey size

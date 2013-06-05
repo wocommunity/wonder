@@ -26,6 +26,6 @@ public class TimeMeNow extends WOComponent {
 		if (endMillis == 0L)
 			return 0;
 		else
-			return (new Long((endMillis - startMillis) / 1000)).intValue() + 1;
+			return (Long.valueOf((endMillis - startMillis) / 1000)).intValue() + 1;
 	}
 }

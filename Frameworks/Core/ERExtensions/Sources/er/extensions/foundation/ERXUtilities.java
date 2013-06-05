@@ -26,7 +26,6 @@ import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
-import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation.NSTimestamp;
@@ -50,7 +49,7 @@ public class ERXUtilities {
     public static final Logger log = Logger.getLogger(ERXUtilities.class);
 
     /**
-     * @deprecated use {@link ERXEOControlUtilities#addObjectToObjectOnBothSidesOfRelationshipWithKey(EOEnterpriseObject, EOEnterpriseObject, String)}
+     * @deprecated use {@link er.extensions.eof.ERXEOControlUtilities#addObjectToObjectOnBothSidesOfRelationshipWithKey(EOEnterpriseObject, EOEnterpriseObject, String)}
      */
     @Deprecated
     public static void addObjectToObjectOnBothSidesOfRelationshipWithKey(EOEnterpriseObject addedObject, EOEnterpriseObject referenceObject, String key) {
@@ -58,7 +57,7 @@ public class ERXUtilities {
     }
 
     /**
-     * @deprecated use {@link ERXEOControlUtilities#createAndInsertObject(EOEditingContext, String)}
+     * @deprecated use {@link er.extensions.eof.ERXEOControlUtilities#createAndInsertObject(EOEditingContext, String)}
      */
     @Deprecated
     public static EOEnterpriseObject createEO(String entityName, EOEditingContext editingContext) {
@@ -66,7 +65,7 @@ public class ERXUtilities {
     }
     
     /**
-     * @deprecated use {@link ERXEOControlUtilities#createAndInsertObject(EOEditingContext, String, NSDictionary)}
+     * @deprecated use {@link er.extensions.eof.ERXEOControlUtilities#createAndInsertObject(EOEditingContext, String, NSDictionary)}
      */
     @Deprecated 
     public static EOEnterpriseObject createEO(String entityName,
@@ -76,7 +75,7 @@ public class ERXUtilities {
     }
 
     /**
-     * @deprecated use {@link ERXEOControlUtilities#createAndAddObjectToRelationship(EOEditingContext, EOEnterpriseObject, String, String, NSDictionary)}
+     * @deprecated use {@link er.extensions.eof.ERXEOControlUtilities#createAndAddObjectToRelationship(EOEditingContext, EOEnterpriseObject, String, String, NSDictionary)}
      */
     @Deprecated
     public static EOEnterpriseObject createEOLinkedToEO(String entityName,
@@ -87,7 +86,7 @@ public class ERXUtilities {
     }
 
     /**
-     * @deprecated use {@link ERXEOControlUtilities#createAndAddObjectToRelationship(EOEditingContext, EOEnterpriseObject, String, String, NSDictionary)}
+     * @deprecated use {@link er.extensions.eof.ERXEOControlUtilities#createAndAddObjectToRelationship(EOEditingContext, EOEnterpriseObject, String, String, NSDictionary)}
      */
     @Deprecated
     public static EOEnterpriseObject createEOLinkedToEO(String entityName,
@@ -99,7 +98,7 @@ public class ERXUtilities {
     }
 
     /**
-     * @deprecated use {@link ERXEOControlUtilities#localInstanceOfObject(EOEditingContext, EOEnterpriseObject)}
+     * @deprecated use {@link er.extensions.eof.ERXEOControlUtilities#localInstanceOfObject(EOEditingContext, EOEnterpriseObject)}
      */
     @Deprecated
     public static EOEnterpriseObject localInstanceOfObject(EOEditingContext ec, EOEnterpriseObject eo) {
@@ -107,7 +106,7 @@ public class ERXUtilities {
     }
 
     /**
-     * @deprecated use {@link ERXEOControlUtilities#localInstancesOfObjects(EOEditingContext, NSArray)}
+     * @deprecated use {@link er.extensions.eof.ERXEOControlUtilities#localInstancesOfObjects(EOEditingContext, NSArray)}
      */
     @Deprecated
     public static NSArray localInstancesOfObjects(EOEditingContext ec, NSArray eos) {
@@ -115,7 +114,7 @@ public class ERXUtilities {
     }    
 
     /**
-     * @deprecated use {@link ERXEOControlUtilities#sharedObjectWithFetchSpec(String, String)}
+     * @deprecated use {@link er.extensions.eof.ERXEOControlUtilities#sharedObjectWithFetchSpec(String, String)}
      */
     @Deprecated
     public static EOEnterpriseObject sharedObjectWithFetchSpec(String fetchSpec, String entityName) {
@@ -123,7 +122,7 @@ public class ERXUtilities {
     }
 
     /**
-     * @deprecated use {@link ERXEOControlUtilities#sharedObjectWithPrimaryKey(String, Object)}
+     * @deprecated use {@link er.extensions.eof.ERXEOControlUtilities#sharedObjectWithPrimaryKey(String, Object)}
      */
     @Deprecated
     public static EOEnterpriseObject sharedObjectWithPrimaryKey(Object pk, String entityName) {
@@ -131,7 +130,7 @@ public class ERXUtilities {
     }
     
     /**
-     * @deprecated use {@link ERXEOAccessUtilities#primaryKeyDictionaryForEntity(EOEditingContext, String)}
+     * @deprecated use {@link er.extensions.eof.ERXEOAccessUtilities#primaryKeyDictionaryForEntity(EOEditingContext, String)}
      */
     @Deprecated
     public static NSDictionary primaryKeyDictionaryForEntity(EOEditingContext ec, String entityName) {
@@ -161,7 +160,7 @@ public class ERXUtilities {
     }
 
     /**
-     * @deprecated see {@link ERXEOAccessUtilities.makeEditableSharedEntityNamed(String)}
+     * @deprecated see {@link er.extensions.eof.ERXEOAccessUtilities#makeEditableSharedEntityNamed(String)}
      */
     @Deprecated
     public static void makeEditableSharedEntityNamed(String entityName) {
@@ -169,7 +168,7 @@ public class ERXUtilities {
     }
 
     /**
-     * @deprecated see {@link ERXEOControlUtilities.dataSourceForArray(NSArray)}
+     * @deprecated see {@link er.extensions.eof.ERXEOControlUtilities#dataSourceForArray(NSArray)}
      */
     @Deprecated
     public static EOArrayDataSource dataSourceForArray(NSArray array) {
@@ -266,23 +265,17 @@ public class ERXUtilities {
     }
     
     /**
+     * @deprecated Replaced by {@link ERXArrayUtilities#intersectingElements(NSArray, NSArray)}
+     * 
      * Performs a basic intersection between two arrays.
      * @param array1 first array
      * @param array2 second array
      * @return array containing the intersecting elements of
      *		the two arrays.
      */
-    // MOVEME: Should move to ERXArrayUtilities
+    @Deprecated
     public static NSArray intersectingElements(NSArray array1, NSArray array2) {
-        NSArray intersection = null;
-        if (array1 != null && array2 != null && array1.count() > 0 && array2.count() > 0) {
-            NSMutableSet set1 = new NSMutableSet();
-            NSMutableSet set2 = new NSMutableSet();
-            set1.addObjectsFromArray(array1);
-            set2.addObjectsFromArray(array2);
-            intersection = (set1.setByIntersectingSet(set2)).allObjects();
-        }
-        return intersection != null ? intersection : NSArray.EmptyArray;
+    	return ERXArrayUtilities.intersectingElements(array1, array2);
     }
 
     /**
@@ -333,7 +326,7 @@ public class ERXUtilities {
      * @param includeAbstracts determines if abstract entities should
      *		be included in the returned array
      * @return all of the sub-entities for a given entity.
-     * @deprecated user {@link ERXEOAccessUtilities#allSubEntitiesForEntity(EOEntity, boolean)} instead
+     * @deprecated user {@link er.extensions.eof.ERXEOAccessUtilities#allSubEntitiesForEntity(EOEntity, boolean)} instead
      */
     @Deprecated
     public static NSArray allSubEntitiesForEntity(EOEntity entity, boolean includeAbstracts) {
@@ -355,7 +348,7 @@ public class ERXUtilities {
      * find the root entity.
      * @param entity to find the root parent
      * @return root parent entity
-     * @deprecated use {@link ERXEOAccessUtilities#rootEntityForEntity(EOEntity)} instead
+     * @deprecated use {@link er.extensions.eof.ERXEOAccessUtilities#rootEntityForEntity(EOEntity)} instead
      */
     @Deprecated
     public static EOEntity rootParentEntityForEntity(EOEntity entity) {
@@ -364,9 +357,11 @@ public class ERXUtilities {
             root = root.parentEntity();
         return root;
     }
+    
     /** caches date formatter the first time it is used */
     @Deprecated
     private static NSTimestampFormatter _gregorianDateFormatterForJavaDate;
+    
     /**
      * Utility method to return a standard timestamp
      * formatter for the default string representation
@@ -464,7 +459,6 @@ public class ERXUtilities {
         public boolean invoke(Object ctx);
     }
 
-    // DELETEME: These are not needed now that all of the distant stuff works again.
     /** @deprecated use {@link NSTimestamp#DistantFuture} */
     @Deprecated
     public static final NSTimestamp DISTANT_FUTURE = new NSTimestamp(2999,1,1,1,1,1,TimeZone.getDefault());

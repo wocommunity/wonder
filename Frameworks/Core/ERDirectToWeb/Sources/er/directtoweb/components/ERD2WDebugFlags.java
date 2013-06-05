@@ -1,11 +1,3 @@
-//
-// ERD2WDebugFlags.java: Class file for WO Component 'ERD2WDebugFlags'
-// Project ERDirectToWeb
-//
-// Created by patrice on Wed Jul 24 2002
-//
-
-
 package er.directtoweb.components;
 
 import org.apache.log4j.Level;
@@ -22,14 +14,11 @@ import er.extensions.appserver.ERXApplication;
 import er.extensions.components.ERXComponentUtilities;
 import er.extensions.foundation.ERXProperties;
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////
-// This component can be used in the wrapper of a D2W app to provide convenient development time 
-//  (as flagged by WOCachingEnabled) access to
-//	the log4j configuration
-//	ERD2WDebuggingEnabled
-///////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
+/**
+ * This component can be used in the wrapper of a D2W app to provide convenient development time 
+ * (as flagged by WOCachingEnabled) access to the log4j configuration
+ * ERD2WDebuggingEnabled
+ */
 public class ERD2WDebugFlags extends WOComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -115,7 +104,7 @@ public class ERD2WDebugFlags extends WOComponent {
 
     /**
      * Allow users to override when the debug flags show.  Defaults to showing when the application is running in
-     * {@link ERXApplication#isDevelopmentMode development mode}, i.e. is not deployed to production.
+     * {@link er.extensions.appserver.ERXApplication#isDevelopmentMode development mode}, i.e. is not deployed to production.
      * @return true when the debug flags should be displayed
      */
     public boolean shouldShow() {

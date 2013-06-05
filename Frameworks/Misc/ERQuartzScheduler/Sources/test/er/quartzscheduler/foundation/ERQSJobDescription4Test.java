@@ -8,8 +8,6 @@ import java.util.Map;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSTimestamp;
 
-import er.quartzscheduler.foundation.ERQSJobDescription;
-
 public class ERQSJobDescription4Test implements ERQSJobDescription
 {
 	public static final String DEF_JOB_NAME = "jobName";

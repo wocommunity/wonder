@@ -177,18 +177,18 @@ public class ERXTestUtilities {
 		ec.lock();
 		try {
 			Company c = (Company) EOUtilities.createAndInsertInstance(ec, Company.ENTITY_NAME);
-			c.setName("Disney World");
+			c.setName(randomName("Disney World"));
 			Employee e1 = c.createEmployeesRelationship();
-			e1.setFirstName("Mickey");
-			e1.setLastName("Mouse");
+			e1.setFirstName(randomName("Mickey"));
+			e1.setLastName(randomName("Mouse"));
 			e1.setManager(Boolean.FALSE);
 			Employee e2 = c.createEmployeesRelationship();
-			e2.setFirstName("Donald");
-			e2.setLastName("Duck");
+			e2.setFirstName(randomName("Donald"));
+			e2.setLastName(randomName("Duck"));
 			e2.setManager(Boolean.FALSE);
 			Employee e3 = c.createEmployeesRelationship();
-			e3.setFirstName("Goofy");
-			e3.setLastName("Dog");
+			e3.setFirstName(randomName("Goofy"));
+			e3.setLastName(randomName("Dog"));
 			e3.setManager(Boolean.FALSE);
 			
 			// Give Mickey a paycheck

@@ -123,6 +123,7 @@ public class ERD2WFactory extends D2W {
         return _privateContext;
     }
 
+    @Override
     public NSArray visibleEntityNames(WOSession s) {
         return D2WUtils.visibleEntityNames(privateContext(s));
     }

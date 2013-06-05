@@ -26,7 +26,6 @@ import er.extensions.qualifiers.ERXPrefixQualifierTraversal;
  * </p>
  * 
  * <pre>
- * &lt;code&gt;
  * public class Person extends ERXGenericRecord {
  *   ...
  *   public static final ERXKey&lt;Country&gt; country = new ERXKey&lt;Country&gt;(Person.COUNTRY_KEY);
@@ -37,7 +36,6 @@ import er.extensions.qualifiers.ERXPrefixQualifierTraversal;
  *   Country germany = ...;
  *   NSTimestamp someRandomDate = ...;
  *   EOQualifier qualifier = Person.country.is(germany).and(Person.birthDate.after(someRandomDate));
- * &lt;/code&gt;
  * </pre>
  * 
  * @param <T> the type of the value of this key
@@ -1692,7 +1690,7 @@ public class ERXKey<T> {
 	public ERXOrQualifier inObjects(T... values) {
 		return ERXQ.inObjects(_key, values);
 	}
-	
+
 	/**
 	 * Equivalent to a new ERXAndQualifier of
 	 * EONotQualifier(EOKeyValueQualifier) with key equals value for each value.

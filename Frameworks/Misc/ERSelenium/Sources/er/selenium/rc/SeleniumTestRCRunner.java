@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 
 import com.thoughtworks.selenium.HttpCommandProcessor;
 import com.thoughtworks.selenium.SeleniumException;
-import com.webobjects.foundation.NSArray;
 
 import er.selenium.SeleniumTest;
 
@@ -24,7 +23,7 @@ public class SeleniumTestRCRunner {
 	public void run(SeleniumTest test) {
 		int processedCommands = 0;
 		try {
-			for (SeleniumTest.Element element : (NSArray<SeleniumTest.Element>)test.elements()) {
+			for (SeleniumTest.Element element : test.elements()) {
 				if (element instanceof SeleniumTest.Command) {
 					SeleniumTest.Command command = (SeleniumTest.Command)element;
 					log.debug("original command: " + command);

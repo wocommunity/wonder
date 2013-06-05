@@ -34,6 +34,7 @@ public class ERDDelayedRelationshipFlagAssignment extends ERDDelayedAssignment {
     public ERDDelayedRelationshipFlagAssignment(EOKeyValueUnarchiver u) { super(u); }
     public ERDDelayedRelationshipFlagAssignment(String key, Object value) { super(key,value); }
 
+    @Override
     public Object fireNow(D2WContext c) {
         String path = keyPath();
         if("displayPropertyKeys".equals(path)) {
@@ -52,7 +53,7 @@ public class ERDDelayedRelationshipFlagAssignment extends ERDDelayedAssignment {
                     }
                     if(objects != null) {
                         for (Enumeration e = objects.objectEnumerator(); e.hasMoreElements();) {
-                            Object o = (Object) e.nextElement();
+                            Object o = e.nextElement();
                             result.addObject(key + ".@" + o);
                         }
                     }

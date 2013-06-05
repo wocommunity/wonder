@@ -52,6 +52,7 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
 		public static final String classForRemoveDialogButton = "classForRemoveDialogButton";
 	}
 	
+	private Boolean _showDeleteButton;
 	private Boolean _showRemoveButton;
 	private String _deleteButtonLabel;
 	private String _removeButtonClass;
@@ -68,6 +69,7 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
      * to be used in an edit form, the final commit will be handled buy the user save.
      * 
      */
+    @Override
     public WOActionResults deleteAction() {
     	return deleteObjectWithFinalCommit(false);
     }
@@ -77,8 +79,7 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
      */
     public WOActionResults removeAction() {
     	WOActionResults result = null;
-    	dataSource().deleteObject(object());    	
-    	d2wContext().takeValueForKey(null, ERMDDeleteButton.Keys.objectPendingDeletion);
+    	dataSource().deleteObject(object());
     	postDeleteNotification();
     	return result;
     }
@@ -90,6 +91,7 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
      * <p>
      * Defaults to "Remove"
      */
+    @Override
     public String buttonLabel() {
     	if (_buttonLabel == null) {
 			_buttonLabel = stringValueForBinding(Keys.removeButtonLabel, "Remove");
@@ -100,6 +102,7 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
     /**
      * CSS class for the Remove button.
      */
+	@Override
 	public String buttonClass() {
 		String result = null;
 		if (  hasAnyAction() && !showDialog() ) {
@@ -116,6 +119,7 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
      * Defaults to "Button ObjButton DeleteObjButton"
      * 
 	 */
+	@Override
 	public String activeButtonClass() {
 		if (_buttonClass == null) {
 			_buttonClass = stringValueForBinding(Keys.classForRemoveObjButton, "Button ObjButton DeleteObjButton");
@@ -129,6 +133,7 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
      * Defaults to "Button ObjButton DisabledObjButton DisabledDeleteObjButton"
      * 
 	 */
+	@Override
 	public String disabledButtonClass() {
 		if (_disabledButtonClass == null) {
 			_disabledButtonClass = stringValueForBinding(Keys.classForDisabledRemoveObjButton, "Button ObjButton DisabledObjButton DisabledDeleteObjButton");
@@ -208,7 +213,10 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
      * The delete button is only shown if isEntityDeletable returns true
      */
     public Boolean showDeleteButton() {
-    	return new Boolean(canDelete() && ERXValueUtilities.booleanValue(valueForBinding("isEntityDeletable")));
+    	if (_showDeleteButton == null) {
+    		_showDeleteButton = Boolean.valueOf(canDelete() && ERXValueUtilities.booleanValue(valueForBinding("isEntityDeletable")));
+    	}
+    	return _showDeleteButton;
     }
     
     /**
@@ -220,6 +228,7 @@ public class ERMDRemoveRelatedButton extends ERMDDeleteButton {
      * 		confirmRemoveRelatedMessage
      * 		confirmDeleteRelatedMessage
      */
+    @Override
     public String dialogMessage() {
     	if (_dialogMessage == null) {
     		Object result = null;

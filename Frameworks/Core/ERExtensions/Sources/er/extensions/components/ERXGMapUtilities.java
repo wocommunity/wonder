@@ -109,6 +109,7 @@ public class ERXGMapUtilities {
 			return longitude;
 		}
 
+		@Override
 		public String toString() {
 			return "(longitude: " + longitude + ", latitude: " + latitude + ")";
 		}

@@ -75,6 +75,7 @@ public class ERCaptcha extends WOComponent {
 		super(context);
 	}
 
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}
@@ -99,9 +100,10 @@ public class ERCaptcha extends WOComponent {
 		return _response;
 	}
 
+	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		super.takeValuesFromRequest(request, context);
-		if (context._wasFormSubmitted()) {
+		if (context.wasFormSubmitted()) {
 			Boolean validated = Boolean.FALSE;
 			try {
 				validated = ERCaptcha.captchaService().validateResponseForID(context.elementID(), _response);
@@ -116,10 +118,9 @@ public class ERCaptcha extends WOComponent {
 		}
 	}
 
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		if (_captcha == null) {
-			byte[] captchaChallengeAsJpeg = null;
-			ByteArrayOutputStream captchaOutputStream = new ByteArrayOutputStream();
 			try {
 				BufferedImage challenge = ERCaptcha.captchaService().getImageChallengeForID(context.elementID());
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();

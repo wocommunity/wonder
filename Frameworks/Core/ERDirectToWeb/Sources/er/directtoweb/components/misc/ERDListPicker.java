@@ -65,7 +65,7 @@ public class ERDListPicker extends ERDCustomEditComponent {
     public WOComponent add() {
         NSArray existingList=(NSArray)objectKeyPathValue();
         if (!existingList.containsObject(item)&&item!=null)
-            ((EOEnterpriseObject)object()).addObjectToBothSidesOfRelationshipWithKey(item,key());        
+            object().addObjectToBothSidesOfRelationshipWithKey(item,key());        
         return listComponent();
     }
 }

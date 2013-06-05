@@ -39,14 +39,17 @@ public class ERXSingleValueID extends EOKeyGlobalID {
 		_value = value != null ? value : NSKeyValueCoding.NullValue;
 	}
 
+	@Override
 	public Object[] keyValues() {
 		return new Object[] {_value};
 	}
 
+	@Override
 	public Object[] _keyValuesNoCopy() {
 		return keyValues();
 	}
 
+	@Override
 	public final int keyCount() {
 		return 1;
 	}
@@ -76,6 +79,7 @@ public class ERXSingleValueID extends EOKeyGlobalID {
 		return result.toString();
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 		if (obj == this)
 			return true;

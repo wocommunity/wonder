@@ -1,8 +1,8 @@
 package er.reporting;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSArray;
 
-import er.grouping.*;
+import er.grouping.DRMasterCriteria;
 
 public interface DRMasterCriteriaEditing  {
 

@@ -27,7 +27,7 @@ import er.extensions.foundation.ERXThreadStorage;
  * <code><pre>
  *  public WOComponent myAction() {
  *      WOComponent nextPage = pageWithName("Main");
- *      nextPage.takeValueForKey(new Integer(100), "someValue");
+ *      nextPage.takeValueForKey(Integer.valueOf(100), "someValue");
  *      return nextPage;
  *  }
  * 
@@ -37,7 +37,7 @@ import er.extensions.foundation.ERXThreadStorage;
  *  public class Main extends WOComponent implements ERXComponentActionRedirector.Restorable {
  *      static Logger log = Logger.getLogger(Main.class);
  * 
- *      public Integer someValue = new Integer(10);
+ *      public Integer someValue = Integer.valueOf(10);
  * 
  *      public Main(WOContext aContext) {
  *          super(aContext);
@@ -45,7 +45,7 @@ import er.extensions.foundation.ERXThreadStorage;
  *      
  *      // this page has a "Increment Some Value" link to itself which just doubles the current value
  *      public WOComponent addAction() {
- *          someValue = new Integer(someValue.intValue()*2);
+ *          someValue = Integer.valueOf(someValue.intValue()*2);
  *          log.info(someValue);
  *          return this;
  *      }

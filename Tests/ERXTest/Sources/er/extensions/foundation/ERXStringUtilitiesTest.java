@@ -1,6 +1,6 @@
 package er.extensions.foundation;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import junit.framework.JUnit4TestAdapter;
 
 import org.junit.After;

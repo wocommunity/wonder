@@ -35,6 +35,7 @@ public class ERDConfirmObjectWasSavedDelegate extends ERDConfirmObjectDelegate {
         super(eo, confirmPageName, delegate, delegate);
     }
 
+    @Override
     public WOComponent nextPage(WOComponent sender) {
         boolean wasSaved = true;
         if (sender instanceof ERDObjectSaverInterface)

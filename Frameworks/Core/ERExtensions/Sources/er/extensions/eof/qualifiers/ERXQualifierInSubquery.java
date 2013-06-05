@@ -103,8 +103,8 @@ public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQ
 		if(relationshipName != null) {
 			this.relationshipName = relationshipName;
 			EORelationship rel = ERXEOAccessUtilities.entityNamed(null, entityName).relationshipNamed(relationshipName);
-			this.attributeName = rel.sourceAttributes().lastObject().name();
-			this.destinationAttName = rel.destinationAttributes().lastObject().name();
+			attributeName = rel.sourceAttributes().lastObject().name();
+			destinationAttName = rel.destinationAttributes().lastObject().name();
 		}
 	}
 
@@ -134,6 +134,7 @@ public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQ
 	 *            of qualifier keys
 	 */
 	// FIXME: Should do something here ...
+	@Override
 	public void addQualifierKeysToSet(NSMutableSet aSet) {
 	}
 
@@ -148,6 +149,7 @@ public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQ
 	 *            tells if the qualifier requires all bindings
 	 * @return clone of the current qualifier.
 	 */
+	@Override
 	public EOQualifier qualifierWithBindings(NSDictionary someBindings, boolean requiresAll) {
 		return (EOQualifier) clone();
 	}
@@ -159,6 +161,7 @@ public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQ
 	 *            to validation the qualifier keys against.
 	 */
 	// FIXME: Should do something here ...
+	@Override
 	public void validateKeysWithRootClassDescription(EOClassDescription aClassDescription) {
 	}
 
@@ -257,6 +260,7 @@ public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQ
 	 * 
 	 * @return human readable description of the qualifier.
 	 */
+	@Override
 	public String toString() {
 		return " <" + getClass().getName() + "> '" + qualifier.toString() + "'";
 	}
@@ -266,6 +270,7 @@ public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQ
 	 * 
 	 * @return cloned qualifier.
 	 */
+	@Override
 	public Object clone() {
 		if(relationshipName != null) {
 			return new ERXQualifierInSubquery(qualifier, entityName, relationshipName);
