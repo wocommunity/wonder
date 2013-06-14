@@ -11,11 +11,11 @@ er.extensions.ERXEC.useSharedEditingContext=false
 er.extensions.ERXEnterpriseObject.applyRestrictingQualifierOnInsert=true
 er.extensions.ERXEnterpriseObject.updateInverseRelationships=true
 dbConnectServerGLOBAL=localhost
-dbConnectURLGLOBAL=jdbc:h2:mem:
-dbConnectUserGLOBAL=h2user
+dbConnectURLGLOBAL=jdbc:postgresql://localhost/ERXPartials
+dbConnectUserGLOBAL=postgres
 dbConnectPasswordGLOBAL=
-dbConnectPluginGLOBAL=H2PlugIn
-dbConnectDriverGLOBAL=org.h2.Driver
+dbConnectPluginGLOBAL=PostgresqlPlugIn
+dbConnectDriverGLOBAL=org.postgresql.Driver
 
 # Migrations
 er.migration.migrateAtStartup=true

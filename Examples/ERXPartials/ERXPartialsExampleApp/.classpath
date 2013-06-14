@@ -24,8 +24,9 @@
 	<classpathentry kind="con" path="WOFramework/ERCoolComponents"/>
 	<classpathentry kind="con" path="WOFramework/ERRest"/>
 	<classpathentry kind="con" path="WOFramework/ERModernDirectToWeb"/>
-	<classpathentry kind="con" path="WOFramework/H2PlugIn"/>
+	<classpathentry kind="con" path="WOFramework/PostgresqlPlugIn"/>
 	<classpathentry kind="con" path="WOFramework/ERXPartialsExampleModel"/>
 	<classpathentry kind="con" path="WOFramework/ERXPartialBaseModel"/>
+	<classpathentry kind="lib" path="Libraries/postgresql-8.3-603.jdbc3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
