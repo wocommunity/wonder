@@ -23,6 +23,8 @@ import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOKeyValueArchiver;
 import com.webobjects.eocontrol.EOKeyValueArchiving;
+import com.webobjects.eocontrol.EOKeyValueCoding;
+import com.webobjects.eocontrol.EOKeyValueCodingAdditions;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.eocontrol.EOQualifier;
@@ -59,6 +61,9 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
 
 	public static final Logger log = Logger.getLogger(ERXExistsQualifier.class);
 	public static final String EXISTS_ALIAS = "exists";
+	public static final boolean UseSQLInClause = true;
+	public static final boolean UseSQLExistsClause = false;
+
 	// an EXISTS can be rewritten as an IN and vice versa. Which is faster depends 
 	// on both the database and the data itself. If one is slow for you, try the other 
 	// by flipping this boolean flag.
@@ -91,10 +96,27 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
 	 * @param baseKeyPath to the entity to which the subqualifier will be applied.  Note that this should end in a
      * relationship rather than an attribute, e.g., the key path from an Employee might be <code>department.division</code>.
 	 */
-    public ERXExistsQualifier(EOQualifier subqualifier, String baseKeyPath) {
+	public ERXExistsQualifier(EOQualifier subqualifier, String baseKeyPath) {
 		super();
-		this.subqualifier = subqualifier;
-		this.baseKeyPath = baseKeyPath;
+		/*
+		 * HACK ALERT!! ERXExistsQualifier is broken when passed a keypath. It
+		 * would compare the PK of the baseTable to the PK of the related table.
+		 * I was not able to figure out how to modify the existing logic with
+		 * any amount of confidence that it wouldn't somehow break in some other
+		 * way. This recursion "fixes" the problem by creating Multiple nested
+		 * "in" clauses in the SQL code, which is not the most elegant, readable
+		 * or likely efficient SQL.
+		 */
+		if (baseKeyPath != null && baseKeyPath.contains(EOKeyValueCodingAdditions.KeyPathSeparator)) {
+			String tailPath = ERXStringUtilities.keyPathWithoutFirstProperty(baseKeyPath);
+			subqualifier = new ERXExistsQualifier(subqualifier, tailPath, UseSQLInClause); // must use "in" clause otherwise sub-select table aliases (exists0) collide
+			this.subqualifier = subqualifier; // use the new "nested" ERXExistsQualifier
+			this.baseKeyPath = ERXStringUtilities.firstPropertyKeyInKeyPath(baseKeyPath);
+		}
+		else {
+			this.subqualifier = subqualifier;
+			this.baseKeyPath = baseKeyPath;
+		}
 	}
 
     /**
