@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.components;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOMessage;
 
@@ -85,10 +87,10 @@ public class ERXStringWithLineBreaks extends ERXStatelessComponent {
             result = (value instanceof String) ? (String)value : value.toString();
             result = WOMessage.stringByEscapingHTMLString(result);
             // FIXME: This could be optimized
-            result = ERXStringUtilities.replaceStringByStringInString("\r\n", "\r", result);
-            result = ERXStringUtilities.replaceStringByStringInString("\n", "\r", result);
-            result = ERXStringUtilities.replaceStringByStringInString("\r", br(), result);
-            result = ERXStringUtilities.replaceStringByStringInString("\t", tabs(), result);
+            result = StringUtils.replace(result, "\r\n", "\r");
+            result = StringUtils.replace(result, "\n", "\r");
+            result = StringUtils.replace(result, "\r", br());
+            result = StringUtils.replace(result, "\t", tabs());
         }
         return result;
     }
