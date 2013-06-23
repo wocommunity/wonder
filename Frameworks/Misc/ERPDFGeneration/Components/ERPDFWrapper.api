@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
     <wo class="ERPDFWrapper" wocomponentcontent="true">    
       <binding defaults="Boolean" name="isSecure"/>
@@ -7,5 +7,6 @@
       <binding name="fonts"/>
       <binding name="framework"/>
       <binding name="additionalPDFs"/>
+    <binding defaults="Boolean" name="downloadable"/>
     </wo>
 </wodefinitions>

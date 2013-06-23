@@ -66,7 +66,8 @@ public class ERPDFWrapper extends ERXDynamicElement implements WOActionResults {
       NSData data = responseAsPdf(response, context);
       
       String filename = stringValueForBinding("filename", "result.pdf", component);
-      response.setHeader("inline; filename=\"" + filename + "\"", "content-disposition");
+      boolean downloadable = booleanValueForBinding("downloadable", component);
+      response.setHeader((downloadable ? "attachment": "inline") + "; filename=\"" + filename + "\"", "content-disposition");
       response.setHeader("application/pdf", "Content-Type");
       response.setHeader(String.valueOf(data.length()), "Content-Length");
       response.setContent(data);
@@ -87,7 +88,14 @@ public class ERPDFWrapper extends ERXDynamicElement implements WOActionResults {
     }
     
     NSData data = ERPDFUtilities.htmlAsPdf(response.contentString(), response.contentEncoding(), resourceUrlPrefix, config);
-    return appendPDFs(data, context);
+    data = appendPDFs(data, context);
+    String filename = stringValueForBinding("filename", "result.pdf", component);
+    boolean downloadable = booleanValueForBinding("downloadable", component);
+    response.setHeader((downloadable ? "attachment": "inline") + "; filename=\"" + filename + "\"", "content-disposition");
+    response.setHeader("application/pdf", "Content-Type");
+    response.setHeader(String.valueOf(data.length()), "Content-Length");
+    response.setContent(data);
+    return data;
   }
   
   /**
