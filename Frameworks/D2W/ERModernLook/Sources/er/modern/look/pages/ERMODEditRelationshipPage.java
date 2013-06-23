@@ -90,6 +90,7 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 	public boolean isRelationshipToMany;
 	public WOComponent nextPage;
 	public NextPageDelegate nextPageDelegate;
+	private Integer _batchSize;
 	
 	public ERMODEditRelationshipPage(WOContext context) {
         super(context);
@@ -461,13 +462,33 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 			String count = (String)d2wContext().valueForKey("defaultBatchSize");
 			if (count != null) {
 				int intCount = Integer.parseInt(count);
-				_relationshipDisplayGroup.setNumberOfObjectsPerBatch(intCount);
+				_relationshipDisplayGroup.setNumberOfObjectsPerBatch(numberOfObjectsPerBatch());
 			}
 			
 		}
 		return _relationshipDisplayGroup;
 	}
 
+	 public int numberOfObjectsPerBatch() {
+	    if (_batchSize == null) {
+	      if (shouldShowBatchNavigation()) {
+	      int batchSize = ERXValueUtilities.intValueWithDefault(d2wContext().valueForKey("defaultBatchSize"), 0);
+	      Object batchSizePref = userPreferencesValueForPageConfigurationKey("batchSize");
+	      if (batchSizePref != null) {
+	        if (log.isDebugEnabled()) {
+	            log.debug("batchSize User Preference: " + batchSizePref);
+	        }
+	        batchSize = ERXValueUtilities.intValueWithDefault(batchSizePref, batchSize);
+	      }
+	      _batchSize = ERXConstant.integerForInt(batchSize);
+	      } else {
+	        // We are not showing the batch nav, so we need to display all results.
+	        _batchSize = ERXConstant.ZeroInteger;
+	      }
+	    }
+	    return _batchSize.intValue();
+	  }
+	 
 	public void setRelationshipDisplayGroup(WODisplayGroup relationshipDisplayGroup) {
 		_relationshipDisplayGroup = relationshipDisplayGroup;
 	}
@@ -532,5 +553,15 @@ public class ERMODEditRelationshipPage extends ERD2WPage implements ERMEditRelat
 			d2wContext().takeValueForKey(inlineTask, "inlineTask");
 		}
 	}
+	
+	/**
+	 * Determines if the batch navigation should be shown.  It can be explicitly disabled by setting the D2W key 
+	 * <code>showBatchNavigation</code> to false.
+	 * @return true if the batch navigation should be shown
+	 */
+	public boolean  shouldShowBatchNavigation() {
+	  return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("showBatchNavigation"), true);
+	}
+
 
 }
