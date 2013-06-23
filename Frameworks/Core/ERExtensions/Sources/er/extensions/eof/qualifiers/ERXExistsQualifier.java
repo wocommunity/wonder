@@ -8,6 +8,7 @@ package er.extensions.eof.qualifiers;
 
 import java.util.Enumeration;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAttribute;
@@ -221,11 +222,11 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
 
             StringBuilder sb = new StringBuilder();
             sb.append(" EXISTS ( ");
-            sb.append(ERXStringUtilities.replaceStringByStringInString("t0.", destTableAlias + ".", subExpression.statement()));
+            sb.append(StringUtils.replace(subExpression.statement(), "t0.", destTableAlias + "."));
             sb.append(" AND ");
-            sb.append(ERXStringUtilities.replaceStringByStringInString("t0.", destTableAlias + ".", destKey));
+            sb.append(StringUtils.replace(destKey, "t0.", destTableAlias + "."));
             sb.append(" = ");
-            sb.append(ERXStringUtilities.replaceStringByStringInString("t0.", sourceTableAlias + ".", sourceKey));
+            sb.append(StringUtils.replace(sourceKey, "t0.", sourceTableAlias + "."));
             sb.append(" ) ");
             return sb.toString();
         }

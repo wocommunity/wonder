@@ -6,6 +6,7 @@
 //
 package er.extensions.appserver.navigation;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOComponent;
@@ -124,7 +125,7 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
 
             // Make sure there are no extra quotations marks - replace them with apostrophes
             String theFunction = (String)valueForBinding("javascriptFunction");
-            return ERXStringUtilities.replaceStringByStringInString("\"", "'", theFunction);
+            return StringUtils.replace(theFunction, "\"", "'");
         }
 
         return null;
