@@ -3,6 +3,8 @@ package er.extensions.components;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
@@ -130,7 +132,7 @@ public class ERXRemoteShell extends WOComponent {
     }
 
     private static String[] buildCommandArray(String command) {
-        String newCommand = ERXStringUtilities.replaceStringByStringInString("\\\"", alternativeQuote, command);
+        String newCommand = StringUtils.replace(command, "\\\"", alternativeQuote);
         NSMutableArray a = new NSMutableArray();
         StringBuffer buf = new StringBuffer();
         int length = newCommand.length();

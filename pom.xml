@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>wonder</groupId>
     <artifactId>wonder</artifactId>
-    <version>6.0.3-SNAPSHOT</version>
+    <version>6.1.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Project Wonder</name>
     <url>http://wiki.objectstyle.org/confluence/display/WONDER/Home</url>
@@ -469,8 +469,8 @@
             </dependency>
             <dependency>
                 <groupId>jgroups</groupId>
-                <artifactId>jgroups-all</artifactId>
-                <version>2.4.1</version>
+                <artifactId>jgroups</artifactId>
+                <version>2.6.8.GA</version>
             </dependency>
             <dependency>
                 <groupId>commons-logging</groupId>
@@ -761,8 +761,8 @@
     </distributionManagement>
 
     <scm>
-        <connection>scm:git:git@github.com:projectwonder/wonder.gitt</connection>
-        <url>scm:git:git@github.com:projectwonder/wonder.git</url>
-        <developerConnection>scm:git:git@github.com:projectwonder/wonder.git</developerConnection>
+        <connection>scm:git:git@github.com:wocommunity/wonder.git</connection>
+        <url>scm:git:git@github.com:wocommunity/wonder.git</url>
+        <developerConnection>scm:git:git@github.com:wocommunity/wonder.git</developerConnection>
     </scm>
 </project>

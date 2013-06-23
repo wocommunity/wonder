@@ -15,6 +15,7 @@ import er.extensions.components.ERXStatelessComponent;
  * @binding size the icon size - 16, 32, or 64
  * @binding attachment the attachment to display
  * @binding configurationName (optional) the configuration name for this attachment (see top level documentation)
+ * @binding target (optional) specifies where to open the linked attachment
  */
 public class ERAttachmentIcon extends ERXStatelessComponent {
 	/**
