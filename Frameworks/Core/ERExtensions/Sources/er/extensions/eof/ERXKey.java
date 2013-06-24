@@ -2217,4 +2217,19 @@ public class ERXKey<T> {
 	public ERXSortOrderings dot(NSArray<EOSortOrdering> sortOrderings) {
 		return prefix(sortOrderings);
 	}
+	
+	/**
+	 * Search for a value that sounds like what your searching for.<br /><br /> 
+	 * Ex: Membre.QualAmdInfoNom.soundex("vaillant") would give you: Valentine, Violante, Valente, Villandré, Valentin, Vaillant, Valenti 
+	 * <br>
+	 * <b>NOTE:</b>
+	 * <br><u>MIGTH BE DATABASE DEPENDANT</u>, this syntax has been validated against Oracle 10+
+	 * 
+	 * @param aValue
+	 *            a value that sounds like...
+	 * @return the qualifier
+	 */
+	public ERXKeyValueQualifier soundex(final String aValue) {
+		return ERXQ.soundex(_key, aValue);
+	}
 }
