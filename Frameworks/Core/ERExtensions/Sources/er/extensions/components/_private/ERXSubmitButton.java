@@ -123,6 +123,19 @@ public class ERXSubmitButton extends WOInput {
         return "<ERXSubmitButton  action: " + (_action == null ? "null" : _action.toString()) + " actionClass: " + (_actionClass == null ? "null" : _actionClass.toString()) + ">";
     }
 
+
+    public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
+    	//System.out.println(worequest.formValues());
+    	/*WOComponent wocomponent = wocontext.component();
+    	if(!disabledInComponent(wocomponent) && wocontext._wasFormSubmitted()) {
+    		String s1 = nameInContext(wocontext, wocomponent);
+    		if(s1 != null) {
+    			String s = worequest.stringFormValueForKey(s1);
+    			_value.setValue(s, wocomponent);
+    		}
+    	}*/
+    }
+
     protected String elementName(WOContext wocontext) {
     	return elementName();
     }
