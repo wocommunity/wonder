@@ -941,7 +941,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 			@Override
 			public boolean equals(Object other) {
-				return ((Entry) other).size() == size();
+				if (other != null && other instanceof Entry) {
+					return ((Entry) other).size() == size();
+				}
+				return false;
 			}
 
 			@Override
