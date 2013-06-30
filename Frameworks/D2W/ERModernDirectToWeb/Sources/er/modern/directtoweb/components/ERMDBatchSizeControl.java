@@ -13,7 +13,7 @@ import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
 
 /**
- * A modern batch size controll that uses an AjaxInplaceEditor to edit
+ * A modern batch size control that uses an AjaxInplaceEditor to edit
  * the batch size.
  * 
  * @d2wKey itemString
@@ -132,7 +132,14 @@ public class ERMDBatchSizeControl extends ERDCustomComponent {
 	 */
 	public String batchSizeFieldID() {
 		if (_batchSizeFieldID == null) {
-			_batchSizeFieldID = "BSIF" + ERXStringUtilities.safeIdentifierName(context().contextID());;
+		  /*
+		   * the original contextID fails to provide a unique ID when there are multiple 
+		   * to-many relationships on the same edit page
+		   * 
+		   * Ted
+		   */
+//      _batchSizeFieldID = "BSIF" + ERXStringUtilities.safeIdentifierName(context().contextID());;
+			_batchSizeFieldID = "BSIF" + ERXStringUtilities.safeIdentifierName(context().elementID());;
 		}
 		return _batchSizeFieldID;
 	}
