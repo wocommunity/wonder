@@ -20,6 +20,7 @@ public enum ERXMoneyEnums {
   CZK("koruna", "haléř", "Kč", "", ",", ".", 100), /* Czech Republic */
   DKK("krone", "øre", "kr", "", ",", ".", 100), /* Denmark */
   EUR("euro", "cent", "€", "", ",", ".", 100), /* Europian Union */
+  GBP("pound", "penny", "£", "", ",", ".", 100), /* Great Britain */
   HRK("kuna", "lipa", "kn", "", ",", ".", 100), /* Croatia */
   HUF("forint", "fillér", "Ft", "", ",", ".", 100), /* Hungary */
   LTL("litas", "centas", "Lt", "", ",", ".", 100), /* Republic of Lithuania */
