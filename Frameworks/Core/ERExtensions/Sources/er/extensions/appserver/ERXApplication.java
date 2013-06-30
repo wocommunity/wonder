@@ -2851,6 +2851,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * Override default implementation that returns {".dll", ".exe"} and therefor prohibits IIS
 	 * as WebServer.
 	 */
+	@Override
     public String[] adaptorExtensions() {
         return myAppExtensions;
     }
