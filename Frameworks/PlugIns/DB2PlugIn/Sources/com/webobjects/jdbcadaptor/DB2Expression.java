@@ -414,7 +414,7 @@ public class DB2Expression extends JDBCExpression {
                 }
               }
               else if (convertedObj instanceof String) {
-                String str = (String)obj;
+                String str = (String)convertedObj;
                 String valueType = eoattribute.valueType();
                 if (valueType == null || "i".equals(valueType)) {
                   return String.valueOf(Integer.parseInt(str));
