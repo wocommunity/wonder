@@ -42,7 +42,6 @@ public class ERXResourceManager extends WOResourceManager {
 	private WODeployedBundle TheAppProjectBundle;
 	private _NSThreadsafeMutableDictionary<String, WOURLValuedElementData> _urlValuedElementsData;
 	private IVersionManager _versionManager;
-	private static final NSDictionary<String, String> _mimeTypes = _additionalMimeTypes();
 
 	protected ERXResourceManager() {
 		TheAppProjectBundle = _initAppBundle();
@@ -380,7 +379,7 @@ public class ERXResourceManager extends WOResourceManager {
 	public String contentTypeForResourceNamed(String aResourcePath) {
 		String aPathExtension = NSPathUtilities.pathExtension(aResourcePath);
 		if(aPathExtension != null && aPathExtension.length() != 0) {
-			String mime = _mimeTypes.objectForKey(aPathExtension.toLowerCase());
+			String mime = DelayedLoadingHelper.getMimetypes().objectForKey(aPathExtension.toLowerCase());
 			if(mime != null) {
 				return mime;
 			}
@@ -388,8 +387,15 @@ public class ERXResourceManager extends WOResourceManager {
 		return super.contentTypeForResourceNamed(aResourcePath);
 	}
 	
-	private static NSDictionary<String, String> _additionalMimeTypes() {
-		NSDictionary<String, String> plist = (NSDictionary<String, String>)ERXFileUtilities.readPropertyListFromFileInFramework("AdditionalMimeTypes.plist", "ERExtensions", null, CharEncoding.UTF_8);
-		return plist;
+	private static class DelayedLoadingHelper {
+		private static final NSDictionary<String, String> _mimeTypes = _additionalMimeTypes();		
+
+		private static NSDictionary<String, String> _additionalMimeTypes() {
+			NSDictionary<String, String> plist = (NSDictionary<String, String>)ERXFileUtilities.readPropertyListFromFileInFramework("AdditionalMimeTypes.plist", "ERExtensions", null, CharEncoding.UTF_8);
+			return plist;
+		}
+		public static NSDictionary<String, String> getMimetypes() {
+			return _mimeTypes;
+		}
 	}
 }
