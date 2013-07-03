@@ -16,6 +16,17 @@ import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation._NSStringUtilities;
 
+/**
+ * Replacement of the WODeployedBundle which adds:
+ * <ul>
+ * <li> Determines whether the Bundle is embedded within the Main Bundle 
+ * <li> If so, mark the state and the name of embedding main bundle
+ * <li> Resource URLs for embedded Frameworks are automatically adapted to refer to the embedded Framework, 
+ *      rather than to the Frameworks base URL
+ * </ul>
+ * 
+ * @author mstoll
+ */
 public class ERXDeployedBundle extends WODeployedBundle {
 
     private final NSMutableDictionary _myURLs;
@@ -24,6 +35,11 @@ public class ERXDeployedBundle extends WODeployedBundle {
     private boolean isEmbeddedFramework = false;
     private String embeddingWrapperName = null;
     
+    /**
+     * Initializer, determines by comparing bundle paths whether bundle is embedded. 
+     * 
+     * @param nsb the given NSBundle
+     */
     public ERXDeployedBundle(NSBundle nsb)
     {
     	super(nsb);
@@ -49,6 +65,13 @@ public class ERXDeployedBundle extends WODeployedBundle {
         return aURL;
     }
     
+    /**
+     *  Get cached URL for relative path within current bundle. If URL not yet in cache,
+     *  create one, taking into account whether the current Bundle is embedded within main Bundle
+	 * 
+     * @param aRelativePath a relative path to a resource within current Bundle
+     * @return The URL path to the resource
+     */
     private String _cachedURL(String aRelativePath)
     {
         String aURL = null;
