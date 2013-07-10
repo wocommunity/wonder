@@ -292,7 +292,9 @@ public class ERXDateGrouper extends WODisplayGroup {
         }
         return _datesForYearStartDays(year, startOffset, daysInMonth);
     }
-
+    public void goToToday() {
+        setSelectedDate(today());
+    }
     public void nextMonth() {
         setSelectedDate(selectedDate().timestampByAddingGregorianUnits(0, 1, 0, 0, 0, 0));
     }
