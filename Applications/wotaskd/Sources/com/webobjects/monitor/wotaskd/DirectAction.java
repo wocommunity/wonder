@@ -52,7 +52,7 @@ public class DirectAction extends WODirectAction  {
     static private Object[] hostQueryKeys;
     static private Object[] appQueryKeys;
     static private Object[] instanceQueryKeys;
-    static private NSDictionary successElement;
+    static public NSDictionary successElement;
     static public Object[] errorKeys;
     static private String _accessDenied;
     static private String _invalidPassword;
