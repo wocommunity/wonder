@@ -11,7 +11,6 @@ import com.webobjects.monitor._private.MObject;
 import com.webobjects.monitor._private.MonitorException;
 import com.webobjects.monitor.wotaskd.DirectAction;
 
-import er.extensions.appserver.ERXHttpStatusCodes;
 import er.extensions.eof.ERXKeyFilter;
 import er.extensions.eof.ERXQ;
 
@@ -182,6 +181,11 @@ public class MApplicationController extends JavaMonitorController {
     return response(status, ERXKeyFilter.filterWithAll());
   }
   
+  private WOActionResults successResponse() {
+      NSDictionary element = DirectAction.successElement;
+      return response(element, ERXKeyFilter.filterWithAttributes());    
+  }
+  
   public WOActionResults stopAction() throws MonitorException {
     checkPassword();
     for (MInstance minstance: instancesArray()) {
@@ -191,7 +195,7 @@ public class MApplicationController extends JavaMonitorController {
           throw new MonitorException("No response to STOP " + minstance.displayName());
       }
     }
-    return response(ERXHttpStatusCodes.OK);    
+    return successResponse();    
   }
   
   public WOActionResults startAction() {
@@ -210,7 +214,7 @@ public class MApplicationController extends JavaMonitorController {
         }    
       }
     }
-    return response(ERXHttpStatusCodes.OK);    
+    return successResponse();    
   }
   
   public WOActionResults forceQuitAction() throws MonitorException {
@@ -219,7 +223,7 @@ public class MApplicationController extends JavaMonitorController {
       if (application().localMonitor().terminateInstance(minstance) == null)
         throw new MonitorException("No response to STOP " + minstance.displayName());
     }
-    return response(ERXHttpStatusCodes.OK);
+    return successResponse();
   }
 
   public ERXKeyFilter instanceFilter() {
