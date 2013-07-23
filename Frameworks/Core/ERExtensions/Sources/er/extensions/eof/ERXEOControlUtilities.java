@@ -2059,8 +2059,8 @@ public class ERXEOControlUtilities {
         for (Enumeration e=ERXEOControlUtilities.stringAttributeListForEntityNamed(object.editingContext(), object.entityName()).objectEnumerator(); e.hasMoreElements();) {
             String key=(String)e.nextElement();
             String value=(String)object.storedValueForKey(key);
-            if (!EOUtilities.entityForObject(object.editingContext(), object).attributeNamed(key).isReadOnly()) {
-                if (value!=null) {
+            if (value!=null) {
+                if (!EOUtilities.entityForObject(object.editingContext(), object).attributeNamed(key).isReadOnly()) {
                     String trimmedValue=value.trim();
                     if (trimmedValue.length()!=value.length())
                         object.takeStoredValueForKey(trimmedValue,key);
