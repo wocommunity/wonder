@@ -8,7 +8,13 @@ import er.chronic.utils.Span;
 import er.chronic.utils.Time;
 
 public class ParseSpanTest extends TestCase {
-  public static final Calendar TIME_2006_08_16_14_00_00 = Time.construct(2006, 8, 16, 14, 0, 0, 0);
+
+  private static ThreadLocal<Calendar> TIME_2006_08_16_14_00_00_TS = new ThreadLocal<Calendar>() {
+	  public Calendar initialValue() {
+		  return Time.construct(2006, 8, 16, 14, 0, 0, 0);
+	  }
+  };
+  public static Calendar TIME_2006_08_16_14_00_00() { return TIME_2006_08_16_14_00_00_TS.get(); }
 
   @Override
   protected void setUp() throws Exception {
@@ -40,7 +46,7 @@ public class ParseSpanTest extends TestCase {
   }
 
   public Span parse_now(String string, Options options) {
-    options.setNow(TIME_2006_08_16_14_00_00);
+    options.setNow(TIME_2006_08_16_14_00_00());
     options.setCompatibilityMode(true);
     options.setGuess(false); // we want a range rather than a point time
     options.setContext(Pointer.PointerType.NONE);

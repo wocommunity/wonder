@@ -920,8 +920,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * @author ak
 	 */
 	public static class JarChecker {
-		private static final Logger log = Logger.getLogger(JarChecker.class);
-
 		private static class Entry {
 			long _size;
 			String _jar;
@@ -941,7 +939,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 			@Override
 			public boolean equals(Object other) {
-				return ((Entry) other).size() == size();
+				if (other != null && other instanceof Entry) {
+					return ((Entry) other).size() == size();
+				}
+				return false;
 			}
 
 			@Override

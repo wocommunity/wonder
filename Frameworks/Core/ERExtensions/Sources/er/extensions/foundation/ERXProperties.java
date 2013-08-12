@@ -563,7 +563,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         final String propertyName = getApplicationSpecificPropertyName(s);
 		NSArray value;
 		Object cachedValue = _cache.get(propertyName);
-		if (cachedValue == UndefinedMarker) {
+		if (UndefinedMarker.equals(cachedValue)) {
 			value = defaultValue;
 		} else if (cachedValue instanceof NSArray) {
 			value = (NSArray) cachedValue;
@@ -632,7 +632,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         final String propertyName = getApplicationSpecificPropertyName(s);
         boolean value;
 		Object cachedValue = _cache.get(propertyName);
-		if (cachedValue == UndefinedMarker) {
+		if (UndefinedMarker.equals(cachedValue)) {
 			value = defaultValue;
 		} else if (cachedValue instanceof Boolean) {
 			value = ((Boolean) cachedValue).booleanValue();
@@ -702,7 +702,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         final String propertyName = getApplicationSpecificPropertyName(s);
 		NSDictionary value;
 		Object cachedValue = _cache.get(propertyName);
-		if (cachedValue == UndefinedMarker) {
+		if (UndefinedMarker.equals(cachedValue)) {
 			value = defaultValue;
 		} else if (cachedValue instanceof NSDictionary) {
 			value = (NSDictionary) cachedValue;
@@ -740,7 +740,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     public static boolean hasKey(String key, boolean ignoreEmptyValue) {
     	final String propertyName = getApplicationSpecificPropertyName(key);
     	Object cachedValue = _cache.get(propertyName);
-    	if (cachedValue == null || cachedValue == UndefinedMarker) {
+    	if (cachedValue == null || UndefinedMarker.equals(cachedValue)) {
     		String value = ERXSystem.getProperty(key);
     		return value != null && !(ignoreEmptyValue && value.length() == 0);
     	}
@@ -893,7 +893,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         final String propertyName = getApplicationSpecificPropertyName(s);
 
         Object value = _cache.get(propertyName);
-        if (value == UndefinedMarker) {
+        if (UndefinedMarker.equals(value)) {
             return defaultValue;
         }
         if (value instanceof BigDecimal) {
@@ -935,7 +935,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         final String propertyName = getApplicationSpecificPropertyName(s);
 		int value;
 		Object cachedValue = _cache.get(propertyName);
-		if (cachedValue == UndefinedMarker) {
+		if (UndefinedMarker.equals(cachedValue)) {
 			value = defaultValue;
 		} else if (cachedValue instanceof Integer) {
 			value = ((Integer) cachedValue).intValue();
@@ -979,7 +979,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         final String propertyName = getApplicationSpecificPropertyName(s);
 		long value;
 		Object cachedValue = _cache.get(propertyName);
-		if (cachedValue == UndefinedMarker) {
+		if (UndefinedMarker.equals(cachedValue)) {
 			value = defaultValue;
 		} else if (cachedValue instanceof Long) {
 			value = ((Long) cachedValue).longValue();
@@ -1024,7 +1024,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 
 		float value;
 		Object cachedValue = _cache.get(propertyName);
-		if (cachedValue == UndefinedMarker) {
+		if (UndefinedMarker.equals(cachedValue)) {
 			value = defaultValue;
 		} else if (cachedValue instanceof Float) {
 			value = ((Float) cachedValue).floatValue();
@@ -1069,7 +1069,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 
 		double value;
 		Object cachedValue = _cache.get(propertyName);
-		if (cachedValue == UndefinedMarker) {
+		if (UndefinedMarker.equals(cachedValue)) {
 			value = defaultValue;
 		} else if (cachedValue instanceof Double) {
 			value = ((Double) cachedValue).doubleValue();

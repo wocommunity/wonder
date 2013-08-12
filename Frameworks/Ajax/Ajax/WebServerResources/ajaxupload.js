@@ -351,6 +351,7 @@
                 // is clickable and it is located at
                 // the right side of the input
                 'right' : 0,
+                'height' : '100%',
                 'margin' : 0,
                 'padding' : 0,
                 'fontSize' : '480px',
