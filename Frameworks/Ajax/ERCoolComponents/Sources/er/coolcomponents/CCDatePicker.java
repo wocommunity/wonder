@@ -1,5 +1,6 @@
 package er.coolcomponents;
 
+import java.text.Format;
 import java.text.SimpleDateFormat;
 
 import org.apache.log4j.Logger;
@@ -10,6 +11,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 //import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSTimestampFormatter;
 import com.webobjects.foundation.NSValidation.ValidationException;
 
 import er.extensions.appserver.ERXApplication;
@@ -32,6 +34,7 @@ import org.apache.commons.lang.StringUtils;
  * @binding cssFile name of the css file (defaults to datepicker.css)
  * @binding cssFramework name of the framework containing the css file (defaults to ERModernDirectToWeb)
  * @binding dateformat string containing the date format for the field
+ * @binding customDateFormatter an optional custom dateFormatter to be used in addition to a dateformat String. Note: The dateformat string is always used for Javascript. Note 2: You may want a custom formatter to prevent dates of certain types such as too far in the past or future for your DB to understand.
  * @binding injectStylesheet choose whether to dynamically inject the datepicker.css at component load. 
  * 			if used in a ajax loaded component, it may be safer to load this manually.
  * 
@@ -123,6 +126,15 @@ public class CCDatePicker extends ERXStatelessComponent {
 			format = ERXTimestampFormatter.DEFAULT_PATTERN;
 		}
 		return format;
+	}
+	
+	public Format customDateFormatter() {
+		Format formatter = (Format) valueForBinding("customDateFormatter");
+		return formatter;
+	}
+	
+	public boolean hasCustomDateFormatter() {
+		return customDateFormatter() != null;
 	}
 
 	@Override
