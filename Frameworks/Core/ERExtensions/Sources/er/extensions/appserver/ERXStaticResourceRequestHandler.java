@@ -4,9 +4,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URLDecoder;
+import java.net.URI;
+import java.net.URISyntaxException;
 
-import org.apache.commons.lang.CharEncoding;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
@@ -151,8 +151,7 @@ public class ERXStaticResourceRequestHandler extends WORequestHandler {
 				path = path.replaceAll("\\?.*", "");
 				if (request.userInfo() != null && !request.userInfo().containsKey("HttpServletRequest")) {
 					/* PATH_INFO is already decoded by the servlet container */
-					path = path.replace('+', ' ');
-					path = URLDecoder.decode(path, CharEncoding.UTF_8);
+					path = new URI(path).getPath();
 				}
 				file = new File(path);
 				length = file.length();
@@ -164,6 +163,9 @@ public class ERXStaticResourceRequestHandler extends WORequestHandler {
 				if (!uri.toLowerCase().endsWith("/favicon.ico")) {
 					log.info("Unable to get contents of file '" + file + "' for uri: " + uri);
 				}
+			}
+			catch (URISyntaxException e) {
+				log.info("The URI '" + uri + "' is invalid.'");
 			}
 		} else {
 			log.error("Can't fetch relative path: " + uri);
