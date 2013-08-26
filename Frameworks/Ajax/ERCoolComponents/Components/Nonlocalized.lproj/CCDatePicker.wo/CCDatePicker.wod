@@ -7,6 +7,24 @@ DateField : WOTextField {
   tabindex = ^tabindex;
 }
 
+DateFieldWithCustomFormatter : WOTextField {
+  value = value;
+  formatter = customDateFormatter;
+  class = dateFormatString;
+  onclick = datePickerOpenScript;
+  id = elementID;
+  tabindex = ^tabindex;
+}
+
 DatePickerCreateScript : WOString {
   value = datePickerCreateScript;
+}
+
+ifCustomDateFormatter : WOConditional {
+	condition = hasCustomDateFormatter;
+}
+
+ifDateFormatPatternString : WOConditional {
+	condition = hasCustomDateFormatter;
+	negate = true;
 }
