@@ -3,6 +3,7 @@ package er.extensions.qualifiers;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOQualifierVariable;
+import com.webobjects.eocontrol.EOQualifier.ComparisonSupport;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
@@ -13,6 +14,7 @@ import com.webobjects.foundation._NSStringUtilities;
 import er.extensions.eof.ERXQ;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXProperties;
+import er.extensions.qualifiers.ERXKeyValueQualifier.PROPERTIES;
 
 /**
  * ERXKeyValueQualifier is a chainable extension of EOKeyValueQualifier.
@@ -79,26 +81,39 @@ public class ERXKeyValueQualifier extends EOKeyValueQualifier implements IERXCha
 	 * an array of discrete objects. In that case the object is evaluated against a flattened array which gives the same result as SQL evaluation.
 	 * 
 	 * Since legacy code may depend on workarounds to the incorrect behavior, this patch can be disabled by setting the property <code>er.extensions.ERXKeyValueQualifier.Contains.flatten</code> to <code>false</code>
+	 * 
+	 * As well as to handle case of in-memory evaluation of selector except QualifierOperatorContains over a toMany relationship key path.
 	 */
 	@Override
 	public boolean evaluateWithObject(Object object) {
+		boolean retVal = false;
 		Object objectValue = NSKeyValueCodingAdditions.Utility.valueForKeyPath(object, _key);
 
 		if (_value instanceof EOQualifierVariable) {
 			throw new IllegalStateException("Error evaluating qualifier with key " + _key + ", selector " + _selector + ", value " + _value + " - value must be substitued for variable before evaluating");
 		}
 
-		if (_selector.equals(EOQualifier.QualifierOperatorCaseInsensitiveLike)) {
-			if (_lowercaseCache == null) {
-				_lowercaseCache = (_value != NSKeyValueCoding.NullValue) ? (_value.toString()).toLowerCase() : "";
+		if(objectValue != null && objectValue instanceof NSArray){
+			//Flatten in case we have array of arrays
+			if (_selector.equals(EOQualifier.QualifierOperatorContains) && PROPERTIES.shouldFlattenValueObject) {
+				objectValue = ERXArrayUtilities.flatten((NSArray<?>) objectValue);
+				retVal = ComparisonSupport.compareValues(objectValue, _value, _selector);
+			} else {
+				//Fix for toMany relationship when comparing an non-array object (i.e. String or Integer) with an array and was always return false
+				for(int i = 0; i < ((NSArray)objectValue).count() && !retVal; i++){
+					if(_selector.equals(EOQualifier.QualifierOperatorCaseInsensitiveLike)){
+						if(_lowercaseCache == null) {
+							_lowercaseCache = _value == NSKeyValueCoding.NullValue ? "" : _value.toString().toLowerCase();
+						}
+						retVal = _NSStringUtilities.stringMatchesPattern(((NSArray)objectValue).get(i) == NSKeyValueCoding.NullValue ? "" : ((NSArray)objectValue).get(i).toString(), _lowercaseCache, true);
+					} else {
+						retVal = ComparisonSupport.compareValues(((NSArray)objectValue).get(i), _value, _selector);
+					}
+				}
 			}
-			return _NSStringUtilities.stringMatchesPattern(((objectValue != null) && (objectValue != NSKeyValueCoding.NullValue)) ? objectValue.toString() : "", _lowercaseCache, true);
+		} else {
+			retVal = super.evaluateWithObject(object);
 		}
-		
-		// Flatten in case we have array of arrays
-		if (_selector.equals(EOQualifier.QualifierOperatorContains) && PROPERTIES.shouldFlattenValueObject && objectValue != null && objectValue instanceof NSArray) {
-			objectValue = ERXArrayUtilities.flatten((NSArray<?>) objectValue);
-		}
-		return ComparisonSupport.compareValues((objectValue != null) ? objectValue : NSKeyValueCoding.NullValue, _value, _selector);
+		return retVal;
 	}
 }
