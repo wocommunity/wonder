@@ -168,15 +168,15 @@ public class ERXMoney {
   }
   
   public ERXMoney divSet(final ERXMoney rs) {
-    Math.round(value /= rs.value);
-    return this;
+	  value = Math.round(value / rs.value);
+	  return this;
   }
   public ERXMoney divSet(final double rs) {
-    Math.round(value /= rs);
-    return this;
+	  value = Math.round(value / rs);
+	  return this;
   }
   public ERXMoney divSet(final BigDecimal rs) {
-	  Math.round(value /= rs.doubleValue());
+	  value = Math.round(value / rs.doubleValue());
 	  return this;
   }
 
