@@ -45,6 +45,11 @@ public class ERXMoney {
     return this;
   }
 
+  public ERXMoney set(final BigDecimal rs) {
+	  value = Math.round(rs.doubleValue() * money.scale());
+	  return this;
+  }
+  
   public ERXMoney set(final ERXMoney  rs) {
     value = rs.value;
     return this;
@@ -135,6 +140,7 @@ public class ERXMoney {
 	  value += rs.doubleValue() * money.scale();
 	  return this;
   }
+  
   public ERXMoney subSet(final ERXMoney  rs) {
     value -= rs.value;
     return this;
@@ -143,6 +149,11 @@ public class ERXMoney {
     value -= rs * money.scale();
     return this;
   }
+  public ERXMoney subSet(final BigDecimal rs){
+	  value -= rs.doubleValue() * money.scale();
+	  return this;
+  }
+  
   public ERXMoney mpySet(final ERXMoney rs) {
     value *= rs.value;
     return this;
@@ -151,6 +162,11 @@ public class ERXMoney {
     value *= rs;
     return this;
   }
+  public ERXMoney mpySet(final BigDecimal rs) {
+	  value *= rs.doubleValue();
+	  return this;
+  }
+  
   public ERXMoney divSet(final ERXMoney rs) {
     Math.round(value /= rs.value);
     return this;
@@ -158,6 +174,10 @@ public class ERXMoney {
   public ERXMoney divSet(final double rs) {
     Math.round(value /= rs);
     return this;
+  }
+  public ERXMoney divSet(final BigDecimal rs) {
+	  Math.round(value /= rs.doubleValue());
+	  return this;
   }
 
   public ERXMoney minusSet() {
