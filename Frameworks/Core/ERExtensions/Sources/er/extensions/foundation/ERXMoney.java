@@ -59,7 +59,7 @@ public class ERXMoney {
   }
 
   public short cents() {
-    return (short)((value * 100) / money.scale() - (100 * wholeUnits()));
+    return (short) ((value * 100) / money.scale() - (100 * wholeUnits()));
   }
 
   //********************************************************************
@@ -74,7 +74,7 @@ public class ERXMoney {
   }
 
   public short sign() {
-    return (short)(value > 0 ?  1 : value < 0 ? -1 : 0);
+    return (short) (value > 0 ?  1 : value < 0 ? -1 : 0);
   }
 
   //********************************************************************
