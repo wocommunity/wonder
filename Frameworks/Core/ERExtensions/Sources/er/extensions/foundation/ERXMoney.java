@@ -203,7 +203,9 @@ public class ERXMoney {
 
   private static short log10(long x) {
     short result; // of decimal digits in an integer
-    for (result=0; x>=10; result++, x/=10); // Decimal "shift" and count
+    for (result=0; x>=10; result++, x/=10) {
+    	// Decimal "shift" and count
+    }
     return result;
   }
 
@@ -249,7 +251,9 @@ public class ERXMoney {
     }
 
     if (rest > 0) { // Test for fractional pennies    
-      while ((rest *= 10) < money.scale());  // (rest *= power(10,log10(money.scale()))) 
+      while ((rest *= 10) < money.scale()) {
+    	  // (rest *= power(10,log10(money.scale()))) 
+      }
       result = result + (rest/money.scale()); // Append fractional pennies, if any
     }
     if (negative) { // Restore original sign
