@@ -59,12 +59,18 @@ public class ERXMoney {
   //	Accessors
   //********************************************************************
 
-  public long  wholeUnits() {
+  public long wholeUnits() {
     return value / money.scale();
   }
 
   public short cents() {
     return (short) ((value * 100) / money.scale() - (100 * wholeUnits()));
+  }
+
+  public BigDecimal asBigDecimal() {
+      int centScale = log10(money.scale());
+      String centString = "00000000" + cents();
+	  return new BigDecimal(wholeUnits() + "." + centString.substring(centString.length() - centScale, centString.length()));
   }
 
   //********************************************************************
