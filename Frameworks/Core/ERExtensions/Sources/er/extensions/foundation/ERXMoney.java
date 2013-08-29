@@ -1,5 +1,7 @@
 package er.extensions.foundation;
 
+import java.math.BigDecimal;
+
 import er.extensions.enums.ERXMoneyEnums;
 
 /**
@@ -25,9 +27,13 @@ public class ERXMoney {
     value = x.value;
   }
 
-  public ERXMoney(final double x, ERXMoneyEnums money) {
+  public ERXMoney(final BigDecimal x, ERXMoneyEnums currency) {
+	  this(x.doubleValue(), currency);
+  }
+  
+  public ERXMoney(final double x, ERXMoneyEnums currency) {
     value = Math.round(x * money.scale());
-    this.money = money;
+    this.money = currency;
   }
 
   //********************************************************************
