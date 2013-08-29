@@ -186,6 +186,15 @@ public class ERXMoney {
 	  return this;
   }
 
+  public ERXMoney percentSet(final double rs) {
+	  value = Math.round((double) value / 100 * rs);
+	  return this;
+  }
+  public ERXMoney percentSet(final BigDecimal rs) {
+	  value = Math.round((double) value / 100 * rs.doubleValue());
+	  return this;
+  }
+  
   public ERXMoney minusSet() {
     value = - value;
     return this;
