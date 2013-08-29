@@ -205,50 +205,53 @@ public class ERXMoney {
 
   @Override
   public String toString () {
-    boolean negative = (value < 0);        //  Remember original sign
-    value = negative ? -value : value;     //  Discard sign temporarily
-    long    whole = wholeUnits();          //  Separate arg. into whole
-    short   cents = cents();               //    and fractional monetary units
-    short   rest  = (short)(value - (cents + 100 * whole) * money.scale() / 100);
+    boolean negative = (value < 0); // Remember original sign
+    value = negative ? -value : value; // Discard sign temporarily
+    long whole = wholeUnits(); // Separate arg. into whole
+    short cents = cents(); // and fractional monetary units
+    short rest  = (short) (value - (cents + 100 * whole) * money.scale() / 100);
 
-    String result = (negative ? "-" : ""); //  Insert prefix minus, if needed
-    result = result + money.prefixSymbol();  //  Insert dollar sign or equiv.
+    String result = (negative ? "-" : ""); // Insert prefix minus, if needed
+    result = result + money.prefixSymbol();  // Insert dollar sign or equiv.
 
-    long divisors[] = { 1, 1000, 1000000, (long)1E9, (long)1E12,(long)1E15, (long)1E18};
+    long divisors[] = { 1, 1000, 1000000, (long) 1E9, (long) 1E12,(long) 1E15, (long) 1E18 };
     int group_no  = log10(whole) / 3;
     int group_val = (int)(whole / divisors[group_no]);
 
-    result = result + group_val;            // Append leftmost 3-digits
+    result = result + group_val; // Append leftmost 3-digits
 
-    while (group_no > 0) {                    // For each remaining 3-digit group
-      result = result + money.group_separator();    // Insert punctuation   
+    while (group_no > 0) { // For each remaining 3-digit group
+      result = result + money.group_separator(); // Insert punctuation   
       whole -= group_val * divisors[group_no--]; // Compute new remainder
-      group_val = (short)(whole/divisors[group_no]); // Get next 3-digit value
-      if (group_val < 100)
-        result = result + "0"; // Insert embedded 0's
-      if (group_val <  10)
-        result = result + "0"; //   as needed
-      result = result + group_val;                  // Append group value
+      group_val = (short) (whole/divisors[group_no]); // Get next 3-digit value
+      if (group_val < 100) {
+    	  result = result + "0"; // Insert embedded 0's
+      }
+      if (group_val <  10) {
+    	  result = result + "0"; // as needed
+      }
+      result = result + group_val; // Append group value
     }
 
-    //  Append the fractional portion
+    // Append the fractional portion
     if(money.scale() > 1) {
-      result = result + money.decimal_point();   //    Append decimal point
+      result = result + money.decimal_point(); // Append decimal point
 
       int centScale = log10(money.scale());
       String centString = "00000000" + cents;
 
-      //  Append cents value
+      // Append cents value
       result += centString.substring(centString.length() - centScale, centString.length());
     }
 
-    if (rest > 0) {                    //    Test for fractional pennies    
-      while ((rest *= 10) < money.scale());  //    (rest *= power(10,log10(money.scale()))) 
-      result = result + (rest/money.scale()); //    Append fractional pennies, if any
+    if (rest > 0) { // Test for fractional pennies    
+      while ((rest *= 10) < money.scale());  // (rest *= power(10,log10(money.scale()))) 
+      result = result + (rest/money.scale()); // Append fractional pennies, if any
     }
-    if (negative)    					//    Restore original sign
+    if (negative) { // Restore original sign
       value = - value;
-
-    return result + money.suffixSymbol();        //    Append final symbol, if any
+    }
+    
+    return result + money.suffixSymbol(); // Append final symbol, if any
   }
 }
