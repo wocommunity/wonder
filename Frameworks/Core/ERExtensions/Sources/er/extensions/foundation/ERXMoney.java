@@ -58,7 +58,7 @@ public class ERXMoney {
     return value / money.scale();
   }
 
-  public short cents () {
+  public short cents() {
     return (short)((value * 100) / money.scale() - (100 * wholeUnits()));
   }
 
@@ -81,23 +81,23 @@ public class ERXMoney {
   //	Relational (predicate) operations
   //********************************************************************
 
-  public boolean equals (final ERXMoney rs) {
+  public boolean equals(final ERXMoney rs) {
     return value == rs.value;
   }
-  public boolean lessThan (final ERXMoney rs) {
+  public boolean lessThan(final ERXMoney rs) {
     return value <  rs.value;
   }
-  public boolean greaterThan (final ERXMoney rs) {
+  public boolean greaterThan(final ERXMoney rs) {
     return value >  rs.value;
   }
 
-  public boolean equals (final double rs) {
+  public boolean equals(final double rs) {
     return value == rs * money.scale();
   }
-  public boolean lessThan (final double rs) {
+  public boolean lessThan(final double rs) {
     return value < rs * money.scale();
   }
-  public boolean greaterThan (final double rs) {
+  public boolean greaterThan(final double rs) {
     return value > rs * money.scale();
   }
 
@@ -106,16 +106,16 @@ public class ERXMoney {
   //********************************************************************
 
   @Override
-  public boolean equals (final Object rs) {
-    return rs instanceof ERXMoney && ((ERXMoney)rs).value == value;
+  public boolean equals(final Object rs) {
+    return (rs instanceof ERXMoney) && (((ERXMoney) rs).value == value);
   }
 
-  public int compareTo (final Object rs) {
-    return sub((ERXMoney)rs).sign();
+  public int compareTo(final Object rs) {
+    return sub((ERXMoney) rs).sign();
   }
 
   @Override
-  public int hashCode () {
+  public int hashCode() {
     return (Long.valueOf(value)).hashCode();
   }
 
@@ -123,39 +123,39 @@ public class ERXMoney {
   //	Arithmetic operations
   //********************************************************************
 
-  public ERXMoney addSet (final ERXMoney rs) {
+  public ERXMoney addSet(final ERXMoney rs) {
     value += rs.value;
     return this;
   }
-  public ERXMoney  addSet (final double rs) {
+  public ERXMoney addSet(final double rs) {
     value += rs * money.scale();
     return this;
   }
-  public ERXMoney  addSet (final BigDecimal rs) {
+  public ERXMoney addSet(final BigDecimal rs) {
 	  value += rs.doubleValue() * money.scale();
 	  return this;
   }
-  public ERXMoney  subSet (final ERXMoney  rs) {
+  public ERXMoney subSet(final ERXMoney  rs) {
     value -= rs.value;
     return this;
   }
-  public ERXMoney  subSet (final double rs){
+  public ERXMoney subSet(final double rs){
     value -= rs * money.scale();
     return this;
   }
-  public ERXMoney  mpySet (final ERXMoney rs) {
+  public ERXMoney mpySet(final ERXMoney rs) {
     value *= rs.value;
     return this;
   }
-  public ERXMoney  mpySet (final double rs) {
+  public ERXMoney mpySet(final double rs) {
     value *= rs;
     return this;
   }
-  public ERXMoney  divSet (final ERXMoney rs) {
+  public ERXMoney divSet(final ERXMoney rs) {
     Math.round(value /= rs.value);
     return this;
   }
-  public ERXMoney  divSet (final double rs) {
+  public ERXMoney divSet(final double rs) {
     Math.round(value /= rs);
     return this;
   }
@@ -165,35 +165,35 @@ public class ERXMoney {
     return this;
   }
 
-  public ERXMoney add (final ERXMoney rs) {
+  public ERXMoney add(final ERXMoney rs) {
     return new ERXMoney(this).addSet(rs);
   }
-  public ERXMoney add (final double rs) {
+  public ERXMoney add(final double rs) {
     return new ERXMoney(this).addSet(rs);
   }
 
-  public ERXMoney sub (final ERXMoney rs) {
+  public ERXMoney sub(final ERXMoney rs) {
     return new ERXMoney(this).subSet(rs);
   }
-  public ERXMoney sub (final double rs) {
+  public ERXMoney sub(final double rs) {
     return new ERXMoney(this).subSet(rs);
   }
 
-  public ERXMoney mpy (final ERXMoney rs) {
+  public ERXMoney mpy(final ERXMoney rs) {
     return new ERXMoney(this).mpySet(rs);
   }
-  public ERXMoney mpy (final double rs) {
+  public ERXMoney mpy(final double rs) {
     return new ERXMoney(this).mpySet(rs);
   }
 
-  public ERXMoney div (final ERXMoney rs) {
+  public ERXMoney div(final ERXMoney rs) {
     return new ERXMoney(this).divSet(rs);
   }
-  public ERXMoney div (final double rs) {
+  public ERXMoney div(final double rs) {
     return new ERXMoney(this).divSet(rs);
   }
 
-  public ERXMoney  minus() {
+  public ERXMoney minus() {
     return new ERXMoney(this).minusSet();
   }
 
@@ -208,7 +208,7 @@ public class ERXMoney {
   }
 
   @Override
-  public String toString () {
+  public String toString() {
     boolean negative = (value < 0); // Remember original sign
     value = negative ? -value : value; // Discard sign temporarily
     long whole = wholeUnits(); // Separate arg. into whole
