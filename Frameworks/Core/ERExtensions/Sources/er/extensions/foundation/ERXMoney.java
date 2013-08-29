@@ -32,7 +32,7 @@ public class ERXMoney {
   }
   
   public ERXMoney(final double x, ERXMoneyEnums currency) {
-    value = Math.round(x * money.scale());
+    value = Math.round(x * currency.scale());
     this.money = currency;
   }
 
