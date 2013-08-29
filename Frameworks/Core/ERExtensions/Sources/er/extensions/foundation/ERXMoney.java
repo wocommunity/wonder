@@ -131,6 +131,10 @@ public class ERXMoney {
     value += rs * money.scale();
     return this;
   }
+  public ERXMoney  addSet (final BigDecimal rs) {
+	  value += rs.doubleValue() * money.scale();
+	  return this;
+  }
   public ERXMoney  subSet (final ERXMoney  rs) {
     value -= rs.value;
     return this;
