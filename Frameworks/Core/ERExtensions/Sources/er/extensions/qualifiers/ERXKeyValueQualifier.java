@@ -3,7 +3,6 @@ package er.extensions.qualifiers;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOQualifierVariable;
-import com.webobjects.eocontrol.EOQualifier.ComparisonSupport;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
@@ -14,7 +13,6 @@ import com.webobjects.foundation._NSStringUtilities;
 import er.extensions.eof.ERXQ;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXProperties;
-import er.extensions.qualifiers.ERXKeyValueQualifier.PROPERTIES;
 
 /**
  * ERXKeyValueQualifier is a chainable extension of EOKeyValueQualifier.
