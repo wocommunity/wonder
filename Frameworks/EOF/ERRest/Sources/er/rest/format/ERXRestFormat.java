@@ -40,7 +40,7 @@ public class ERXRestFormat {
 		ERXRestFormat.registerFormatNamed(new ERXJSONRestParser(), new ERXSproutCoreRestWriter(), new ERXRestFormatDelegate("guid", "type", "nil", true, true, false, false), ERXRestFormat.SPROUTCORE_KEY, "application/sc");
 		ERXRestFormat.registerFormatNamed(new ERXFormRestParser(), new ERXJSONRestWriter(), new ERXRestFormatDelegate(), ERXRestFormat.FORM_KEY, "application/x-www-form-urlencoded");
 	
-		ERXRestFormat.registerFormatNamed(new ERXEmberRestParser(), new ERXEmberRestWriter(), new ERXRestFormatDelegate("id", "type", "nil", true, true, true, false), ERXRestFormat.EMBER_KEY, "application/json");
+		ERXRestFormat.registerFormatNamed(new ERXEmberRestParser(), new ERXEmberRestWriter(), new ERXRestFormatDelegate("id", "type", "nil", true, true, false, false), ERXRestFormat.EMBER_KEY, "application/json");
 
 	}
 
