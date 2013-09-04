@@ -12,9 +12,7 @@ import er.rest.ERXRestUtils;
 
 public class ERXEmberRestParser implements IERXRestParser {
 	public static ERXRestRequestNode createRequestNodeForJSON(String name, JSON json, boolean rootNode, ERXRestFormat.Delegate delegate) {
-		System.out.println("Ember Parser started!!!!!");
 		ERXRestRequestNode requestNode = new ERXRestRequestNode(name, rootNode);
-
 		if (json instanceof JSONNull) {
 			// just leave the value null
 		}
@@ -92,7 +90,6 @@ public class ERXEmberRestParser implements IERXRestParser {
 			rootRequestNode = new ERXRestRequestNode(null, true);
 			rootRequestNode.setNull(true);
 		}
-
 		return rootRequestNode;
 	}
 }

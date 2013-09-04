@@ -15,7 +15,7 @@ public class ERXEmberRestWriter extends ERXJSONRestWriter {
 				recordsNode.addChild(child);
 			}
 		}
-		else {		
+		else {
 			rootNode.addChild(node);
 		}
 		return rootNode;
