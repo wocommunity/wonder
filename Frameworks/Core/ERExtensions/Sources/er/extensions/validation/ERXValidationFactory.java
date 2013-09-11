@@ -525,9 +525,23 @@ public class ERXValidationFactory {
      * Finds a template for a given entity, property key, exception type and target
      * language. This method provides the defaulting behaviour needed to handle model
      * thrown validation exceptions.
+     * 
+     * Structure of ValidationTemplate file
+     * 	{
+     * 		"entityName.property.type" = "the customized validation message goes here";
+     * 		"entityName.property" = "the customized validation message goes here";
+     * 		"property.type" = "the customized validation message goes here";
+     * 		"entityName.type" = "the customized validation message goes here";
+     * 		"property" = "the customized validation message that applies to every exception for this property";
+     * 		"type" = "the customized validation message that applies to every exception of this type";
+     * 	}
+     * 
+     * The code below is written so that it will prioritize finding each "template" row in the order
+     * indicated above.
+     * 
      * @param entityName name of the entity
      * @param property key name
-     * @param type validation exception type
+     * @param type validation exception type such as "NullPointerException"
      * @param targetLanguage target language name
      * @return a template for the given set of parameters
      */
@@ -541,17 +555,25 @@ public class ERXValidationFactory {
         // 1st try the whole string.
         String template = templateForKeyPath(entityName + "." + property + "." + type, targetLanguage);
         // 2nd try everything minus the type.
-        if (template == null)
+        if (template == null) {
             template = templateForKeyPath(entityName + "." + property, targetLanguage);
+        }
         // 3rd try property plus type
-        if (template == null)
+        if (template == null) {
             template = templateForKeyPath(property + "." + type, targetLanguage);
-        // 4th try just property
-        if (template == null)
+        }
+        // 4th try entity plus type. Example: entityName.NullPointerException
+        if (template == null) {
+            template = templateForKeyPath(entityName + "." + type, targetLanguage);
+        }
+        // 5th try just property
+        if (template == null) {
             template = templateForKeyPath(property, targetLanguage);
-        // 5th try just type
-        if (template == null)
+        }
+        // 6th try just type. Example: NullPointerException
+        if (template == null) {
             template = templateForKeyPath(type, targetLanguage);
+        }
         if (template == null) {
             template = UNDEFINED_VALIDATION_TEMPLATE + " entity \"" + entityName + "\" property \"" + property + "\" type \"" + type + "\" target language \"" + targetLanguage + "\"";
             log.error(template, new Throwable());
