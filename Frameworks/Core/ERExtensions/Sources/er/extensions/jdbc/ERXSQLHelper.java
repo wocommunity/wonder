@@ -2282,6 +2282,18 @@ public class ERXSQLHelper {
 		public int varcharLargeColumnWidth() {
 			return -1;
 		}
+
+		@Override
+		protected String sqlForCountDistinct(EOEntity entity) {
+			NSArray<String> primaryKeyAttributeNames = entity.primaryKeyAttributeNames();
+			NSMutableArray<String> pkColumnNames = new NSMutableArray<String>(primaryKeyAttributeNames.size());
+
+			for (String pkAttributeName : primaryKeyAttributeNames) {
+				pkColumnNames.add(quoteColumnName("t0." + entity.attributeNamed(pkAttributeName).columnName()));
+			}
+
+			return "count(distinct " + StringUtils.join(pkColumnNames, ", ") + ") ";
+		}
 	}
 
 	public static class PostgresqlSQLHelper extends ERXSQLHelper {
