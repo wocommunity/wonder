@@ -1142,12 +1142,7 @@ public class ERXSQLHelper {
 
 			String countExpression;
 			if (spec.usesDistinct()) {
-				NSArray<String> primaryKeyAttributeNames = entity.primaryKeyAttributeNames();
-				if (primaryKeyAttributeNames.count() > 1)
-					log.warn("Composite primary keys are currently unsupported in rowCountForFetchSpecification, when the spec uses distinct");
-				String pkAttributeName = primaryKeyAttributeNames.lastObject();
-				String pkColumnName = entity.attributeNamed(pkAttributeName).columnName();
-				countExpression = "count(distinct " + quoteColumnName("t0." + pkColumnName) + ") ";
+				countExpression = sqlForCountDistinct(entity);
 			} else {
 				countExpression = "count(*) ";
 			}
@@ -1193,7 +1188,31 @@ public class ERXSQLHelper {
 		}
 		return rowCount;
 	}
-	
+
+	/**
+	 * Returns the SQL to count the distinct number of rows. The general implementation doesn't
+	 * support composite primary keys and chooses only one primary key column when formatting the
+	 * SQL expression.
+	 * <p>
+	 * Concrete classes may override this implementation to add support for composite
+	 * primary keys according to their database specific SQL syntax.
+	 *
+	 * @param entity the base entity used in this query
+	 * @return the formatted SQL count using distinct for the given entity
+	 */
+	protected String sqlForCountDistinct(EOEntity entity) {
+		NSArray<String> primaryKeyAttributeNames = entity.primaryKeyAttributeNames();
+
+		if (primaryKeyAttributeNames.count() > 1) {
+			log.warn("Composite primary keys are currently unsupported in rowCountForFetchSpecification, when the spec uses distinct");
+		}
+
+		String pkAttributeName = primaryKeyAttributeNames.lastObject();
+		String pkColumnName = entity.attributeNamed(pkAttributeName).columnName();
+
+		return "count(distinct " + quoteColumnName("t0." + pkColumnName) + ") ";
+	}
+
 	/**
 	 * Returns the syntax for using the given query as an aliased subquery in a from-clause.
 	 * 
