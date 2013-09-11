@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAdaptor;
@@ -2448,6 +2449,18 @@ public class ERXSQLHelper {
 				}
 			}
 			return false;
+		}
+
+		@Override
+		protected String sqlForCountDistinct(EOEntity entity) {
+			NSArray<String> primaryKeyAttributeNames = entity.primaryKeyAttributeNames();
+			NSMutableArray<String> pkColumnNames = new NSMutableArray<String>(primaryKeyAttributeNames.size());
+
+			for (String pkAttributeName : primaryKeyAttributeNames) {
+				pkColumnNames.add(quoteColumnName("t0." + entity.attributeNamed(pkAttributeName).columnName()));
+			}
+
+			return "count(distinct (" + StringUtils.join(pkColumnNames, ", ") + ")) ";
 		}
 	}
 	
