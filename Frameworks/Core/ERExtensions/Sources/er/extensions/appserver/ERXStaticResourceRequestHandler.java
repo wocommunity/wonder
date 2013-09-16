@@ -165,7 +165,7 @@ public class ERXStaticResourceRequestHandler extends WORequestHandler {
 				}
 			}
 			catch (URISyntaxException e) {
-				log.info("The URI '" + uri + "' is invalid.'");
+				log.info("Unable to get file for '"+uri+"' because the URI is invalid.'");
 			}
 		} else {
 			log.error("Can't fetch relative path: " + uri);
