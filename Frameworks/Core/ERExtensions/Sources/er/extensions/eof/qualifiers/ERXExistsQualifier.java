@@ -8,6 +8,7 @@ package er.extensions.eof.qualifiers;
 
 import java.util.Enumeration;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAttribute;
@@ -269,46 +270,46 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
             }
 
             String subExprStr = subExpression.statement();
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("t0.", EXISTS_ALIAS + "0.", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("t0 ", EXISTS_ALIAS + "0 ", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("T0.", EXISTS_ALIAS + "0.", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("T0 ", EXISTS_ALIAS + "0 ", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("t1.", EXISTS_ALIAS + "1.", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("t1 ", EXISTS_ALIAS + "1 ", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("T1.", EXISTS_ALIAS + "1.", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("T1 ", EXISTS_ALIAS + "1 ", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("t2.", EXISTS_ALIAS + "2.", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("t2 ", EXISTS_ALIAS + "2 ", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("T2.", EXISTS_ALIAS + "2.", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("T2 ", EXISTS_ALIAS + "2 ", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("t3.", EXISTS_ALIAS + "3.", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("t3 ", EXISTS_ALIAS + "3 ", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("T3.", EXISTS_ALIAS + "3.", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("T3 ", EXISTS_ALIAS + "3 ", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("t4.", EXISTS_ALIAS + "4.", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("t4 ", EXISTS_ALIAS + "4 ", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("T4.", EXISTS_ALIAS + "4.", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("T4 ", EXISTS_ALIAS + "4 ", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("t5.", EXISTS_ALIAS + "5.", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("t5 ", EXISTS_ALIAS + "5 ", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("T5.", EXISTS_ALIAS + "5.", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("T5 ", EXISTS_ALIAS + "5 ", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("t6.", EXISTS_ALIAS + "6.", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("t6 ", EXISTS_ALIAS + "6 ", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("T6.", EXISTS_ALIAS + "6.", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("T6 ", EXISTS_ALIAS + "6 ", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("t7.", EXISTS_ALIAS + "7.", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("t7 ", EXISTS_ALIAS + "7 ", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("T7.", EXISTS_ALIAS + "7.", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("T7 ", EXISTS_ALIAS + "7 ", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("t8.", EXISTS_ALIAS + "8.", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("t8 ", EXISTS_ALIAS + "8 ", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("T8.", EXISTS_ALIAS + "8.", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("T8 ", EXISTS_ALIAS + "8 ", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("t9.", EXISTS_ALIAS + "9.", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("t9 ", EXISTS_ALIAS + "9 ", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("T9.", EXISTS_ALIAS + "9.", subExprStr);
-            subExprStr = ERXStringUtilities.replaceStringByStringInString("T9 ", EXISTS_ALIAS + "9 ", subExprStr);
+            subExprStr = StringUtils.replace(subExprStr, "t0.", EXISTS_ALIAS + "0.");
+            subExprStr = StringUtils.replace(subExprStr, "t0 ", EXISTS_ALIAS + "0 ");
+            subExprStr = StringUtils.replace(subExprStr, "T0.", EXISTS_ALIAS + "0.");
+            subExprStr = StringUtils.replace(subExprStr, "T0 ", EXISTS_ALIAS + "0 ");
+            subExprStr = StringUtils.replace(subExprStr, "t1.", EXISTS_ALIAS + "1.");
+            subExprStr = StringUtils.replace(subExprStr, "t1 ", EXISTS_ALIAS + "1 ");
+            subExprStr = StringUtils.replace(subExprStr, "T1.", EXISTS_ALIAS + "1.");
+            subExprStr = StringUtils.replace(subExprStr, "T1 ", EXISTS_ALIAS + "1 ");
+            subExprStr = StringUtils.replace(subExprStr, "t2.", EXISTS_ALIAS + "2.");
+            subExprStr = StringUtils.replace(subExprStr, "t2 ", EXISTS_ALIAS + "2 ");
+            subExprStr = StringUtils.replace(subExprStr, "T2.", EXISTS_ALIAS + "2.");
+            subExprStr = StringUtils.replace(subExprStr, "T2 ", EXISTS_ALIAS + "2 ");
+            subExprStr = StringUtils.replace(subExprStr, "t3.", EXISTS_ALIAS + "3.");
+            subExprStr = StringUtils.replace(subExprStr, "t3 ", EXISTS_ALIAS + "3 ");
+            subExprStr = StringUtils.replace(subExprStr, "T3.", EXISTS_ALIAS + "3.");
+            subExprStr = StringUtils.replace(subExprStr, "T3 ", EXISTS_ALIAS + "3 ");
+            subExprStr = StringUtils.replace(subExprStr, "t4.", EXISTS_ALIAS + "4.");
+            subExprStr = StringUtils.replace(subExprStr, "t4 ", EXISTS_ALIAS + "4 ");
+            subExprStr = StringUtils.replace(subExprStr, "T4.", EXISTS_ALIAS + "4.");
+            subExprStr = StringUtils.replace(subExprStr, "T4 ", EXISTS_ALIAS + "4 ");
+            subExprStr = StringUtils.replace(subExprStr, "t5.", EXISTS_ALIAS + "5.");
+            subExprStr = StringUtils.replace(subExprStr, "T5.", EXISTS_ALIAS + "5.");
+            subExprStr = StringUtils.replace(subExprStr, "t5 ", EXISTS_ALIAS + "5 ");
+            subExprStr = StringUtils.replace(subExprStr, "T5 ", EXISTS_ALIAS + "5 ");
+            subExprStr = StringUtils.replace(subExprStr, "t6.", EXISTS_ALIAS + "6.");
+            subExprStr = StringUtils.replace(subExprStr, "t6 ", EXISTS_ALIAS + "6 ");
+            subExprStr = StringUtils.replace(subExprStr, "T6.", EXISTS_ALIAS + "6.");
+            subExprStr = StringUtils.replace(subExprStr, "T6 ", EXISTS_ALIAS + "6 ");
+            subExprStr = StringUtils.replace(subExprStr, "t7.", EXISTS_ALIAS + "7.");
+            subExprStr = StringUtils.replace(subExprStr, "t7 ", EXISTS_ALIAS + "7 ");
+            subExprStr = StringUtils.replace(subExprStr, "T7.", EXISTS_ALIAS + "7.");
+            subExprStr = StringUtils.replace(subExprStr, "T7 ", EXISTS_ALIAS + "7 ");
+            subExprStr = StringUtils.replace(subExprStr, "t8.", EXISTS_ALIAS + "8.");
+            subExprStr = StringUtils.replace(subExprStr, "t8 ", EXISTS_ALIAS + "8 ");
+            subExprStr = StringUtils.replace(subExprStr, "T8.", EXISTS_ALIAS + "8.");
+            subExprStr = StringUtils.replace(subExprStr, "T8 ", EXISTS_ALIAS + "8 ");
+            subExprStr = StringUtils.replace(subExprStr, "t9.", EXISTS_ALIAS + "9.");
+            subExprStr = StringUtils.replace(subExprStr, "t9 ", EXISTS_ALIAS + "9 ");
+            subExprStr = StringUtils.replace(subExprStr, "T9.", EXISTS_ALIAS + "9.");
+            subExprStr = StringUtils.replace(subExprStr, "T9 ", EXISTS_ALIAS + "9 ");
             
             // (AR) Note that the "space" character separates simple "t0 " from being part of a password hash or other 
             // valid data. It has never been 100% but generally true that you are replacing a table alias when we had 
@@ -348,10 +349,10 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
                 String destEntityPrimaryKey = expression.sqlStringForAttribute(destPK);
                 int indexOfFirstPeriod = destEntityPrimaryKey.indexOf(".");
                 destEntityPrimaryKey = destEntityPrimaryKey.substring(indexOfFirstPeriod);
-                subExprStr = ERXStringUtilities.replaceStringByStringInString(
+                subExprStr = StringUtils.replace(
+                		subExprStr,
                 		"SELECT " + EXISTS_ALIAS + "0" + destEntityPrimaryKey + " FROM", 
-                		"SELECT " + EXISTS_ALIAS + "0" + destEntityForeignKey + " FROM", 
-                		subExprStr);
+                		"SELECT " + EXISTS_ALIAS + "0" + destEntityForeignKey + " FROM");
             } else {
                 sb.append(" EXISTS ( ");
             }
@@ -369,7 +370,7 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
             	
                 sb.append(EXISTS_ALIAS + "0" + destEntityForeignKey);
                 sb.append(" = ");
-                sb.append(ERXStringUtilities.replaceStringByStringInString("t0.", sourceTableAlias + ".", srcEntityForeignKey));
+                sb.append(StringUtils.replace(srcEntityForeignKey, "t0.", sourceTableAlias + "."));
             }
             sb.append(" ) ");
             return sb.toString();
