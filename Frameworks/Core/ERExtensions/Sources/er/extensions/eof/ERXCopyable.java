@@ -1,5 +1,7 @@
 package er.extensions.eof;
 
+import java.util.UUID;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -210,7 +212,17 @@ public interface ERXCopyable<T extends ERXCopyable> extends ERXEnterpriseObject 
 		 * value to the <em>current</em> date and time using
 		 * {@code new NSTimestamp()}
 		 */
-		CURRENT_TIMESTAMP("CurrentTimestamp");
+		CURRENT_TIMESTAMP("CurrentTimestamp"),
+
+		/**
+		 * <em>For attributes only.</em> Stored as "
+		 * {@code ERXCopyable.CopyType = UUID;}" in the {@link EOAttribute}'s
+		 * UserInfo dictionary. This setting <b>does not</b> copy the
+		 * {@code original}'s value. It sets the {@code copy}'s value to a newly
+		 * generated {@link java.util.UUID} using
+		 * {@link java.util.UUID#randomUUID()}
+		 */
+		UUID("UUID");
 
 		private final String _type;
 
@@ -1293,6 +1305,9 @@ public interface ERXCopyable<T extends ERXCopyable> extends ERXEnterpriseObject 
 			case CURRENT_TIMESTAMP:
 				destination.takeStoredValueForKey(new NSTimestamp(), attributeName);
 				break;
+			case UUID:
+				destination.takeStoredValueForKey(UUID.randomUUID(), attributeName);
+				break;
 			case NULLIFY:
 				destination.takeStoredValueForKey(null, attributeName);
 				break;
@@ -1415,7 +1430,7 @@ public interface ERXCopyable<T extends ERXCopyable> extends ERXEnterpriseObject 
 		public static NSArray<CopyType> copyTypes(EOProperty property) {
 			NSArray<CopyType> validCopyTypes;
 			if (property instanceof EOAttribute) {
-				validCopyTypes = new NSArray<CopyType>(CopyType.NULLIFY, CopyType.CURRENT_TIMESTAMP, CopyType.REFERENCE);
+				validCopyTypes = new NSArray<CopyType>(CopyType.NULLIFY, CopyType.CURRENT_TIMESTAMP, CopyType.REFERENCE, CopyType.UUID);
 			}
 			else {
 				validCopyTypes = new NSArray<CopyType>(CopyType.NULLIFY, CopyType.REFERENCE, CopyType.SHALLOW, CopyType.DEEP);
