@@ -810,15 +810,15 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 		return allNullDict;
 	}
 
-	public EOEnterpriseObject localInstanceOf(EOEnterpriseObject eo) {
+	public <T extends EOEnterpriseObject> T localInstanceOf(T eo) {
 		return ERXEOControlUtilities.localInstanceOfObject(editingContext(), eo);
 	}
 
-	public EOEnterpriseObject localInstanceIn(EOEditingContext ec) {
-		return ERXEOControlUtilities.localInstanceOfObject(ec, this);
+	public <T extends EOEnterpriseObject> T localInstanceIn(EOEditingContext ec) {
+		return (T) ERXEOControlUtilities.localInstanceOfObject(ec, this);
 	}
 
-	public NSArray<EOEnterpriseObject> localInstancesOf(NSArray<EOEnterpriseObject> eos) {
+	public <T extends EOEnterpriseObject> NSArray<T> localInstancesOf(NSArray<T> eos) {
 		return ERXEOControlUtilities.localInstancesOfObjects(editingContext(), eos);
 	}
 
