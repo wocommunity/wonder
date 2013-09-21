@@ -814,8 +814,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 		return ERXEOControlUtilities.localInstanceOfObject(editingContext(), eo);
 	}
 
-	public <T extends EOEnterpriseObject> T localInstanceIn(EOEditingContext ec) {
-		return (T) ERXEOControlUtilities.localInstanceOfObject(ec, this);
+	public EOEnterpriseObject localInstanceIn(EOEditingContext ec) {
+		return ERXEOControlUtilities.localInstanceOfObject(ec, this);
 	}
 
 	public <T extends EOEnterpriseObject> NSArray<T> localInstancesOf(NSArray<T> eos) {
