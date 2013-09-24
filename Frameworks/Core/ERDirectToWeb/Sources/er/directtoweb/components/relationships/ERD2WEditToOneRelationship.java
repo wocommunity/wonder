@@ -19,7 +19,6 @@ import er.extensions.foundation.ERXUtilities;
  * @d2wKey restrictedChoiceKey keypath off the component that returns the list of objects to display
  * @d2wKey restrictingFetchSpecification name of the fetchSpec to use for the list of objects.
  * @d2wKey sortKey
- * @d2wKey isMandatory
  * @d2wKey numCols
  * @d2wKey propertyKey
  * @d2wKey size

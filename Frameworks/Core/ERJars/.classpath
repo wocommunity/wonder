@@ -6,15 +6,19 @@
 	<classpathentry exported="true" kind="lib" path="Libraries/erxservletadaptor.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/junit-4.10.jar" sourcepath="LibrarySources/junit-4.10-src.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/icu4j-3_8_1.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/slf4j-api-1.6.6.jar" sourcepath="LibrarySources/slf4j-api-1.6.6-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/slf4j-log4j12-1.6.6.jar" sourcepath="LibrarySources/slf4j-log4j12-1.6.6-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/ognl-2.6.7.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/log4j-1.2.17.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/commons-codec-1.6.jar" sourcepath="LibrarySources/commons-codec-1.6-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/joda-time-2.1.jar" sourcepath="LibrarySources/joda-time-2.1-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/commons-cli-1.2.jar" sourcepath="LibrarySources/commons-cli-1.2-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/commons-io-2.2.jar" sourcepath="LibrarySources/commons-io-2.2-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/httpclient-4.2.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/httpcore-4.2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/commons-logging-1.1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/fluent-hc-4.2.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/httpclient-4.2.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/httpclient-cache-4.2.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/httpcore-4.2.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/httpmime-4.2.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/slf4j-api-1.7.5.jar" sourcepath="LibrarySources/slf4j-api-1.7.5-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/slf4j-log4j12-1.7.5.jar" sourcepath="LibrarySources/slf4j-log4j12-1.7.5-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/joda-time-2.2.jar" sourcepath="LibrarySources/joda-time-2.2-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

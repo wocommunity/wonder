@@ -15,23 +15,33 @@ import er.extensions.formatters.ERXDecimalFormatSymbols;
 public enum ERXMoneyEnums {
 
   BAM("marka", "fening", "KM", "", ",", ".", 100), /* Bosnia-Herzegowina */
+  BDT("taka", "poisha", "৳", "", ",", ".", 100), /* Bangladeshi taka */
   BGN("lev", "stotinki", "лв", "", ",", ".", 100), /* Bulgaria */
   CAD("dollar", "cent", "＄", "", ".", ",", 100), /* Canada */
   CZK("koruna", "haléř", "Kč", "", ",", ".", 100), /* Czech Republic */
   DKK("krone", "øre", "kr", "", ",", ".", 100), /* Denmark */
   EUR("euro", "cent", "€", "", ",", ".", 100), /* Europian Union */
+  GBP("pound", "penny", "£", "", ",", ".", 100), /* Great Britain */
+  HKD("dollar", "cent", "$", "", ",", ".", 100), /* Hong Kong dollar */
   HRK("kuna", "lipa", "kn", "", ",", ".", 100), /* Croatia */
   HUF("forint", "fillér", "Ft", "", ",", ".", 100), /* Hungary */
+  INR("rupee", "paisa", "₹", "", ",", ".", 100), /* Indian rupee */
+  KRW("won", "", "₩", "", ",", ".", 1), /* South Korean won */
   LTL("litas", "centas", "Lt", "", ",", ".", 100), /* Republic of Lithuania */
   LVL("lats", "santīms", "Ls", "s", ",", ".", 100), /* Republic of Latvia */
+  MYR("ringgit", "sen", "RM", "", ",", ".", 100), /* Malaysian ringgit */
+  PHP("peso", "sentimo", "₱", "", ",", ".", 100), /* Philippine peso */
   PLN("złoty", "grosz", "zł", "", ",", ".", 100), /* Poland */
   RON("lei", "bani", "", "", ",", ".", 100), /* Rumania */
   RSD("dinar", "para", "РСД", "", ",", ".", 100), /* Serbia */
   RUB("ruble", "kopek", "руб", "", ",", ".", 100), /* Russia */
   SDG("pound", "qirush", "", "", ",", ".", 100), /* Sudan */
+  SGD("dollar", "cent", "S$", "", ",", ".", 100), /* Singapore dollar */
   SYP("pound", "piastre", "", "", ",", ".", 100), /* Syrian Arab Republic */
+  TWD("dollars", "cents", "＄", "", ".", ",", 100), /* New Taiwan dollar */
   UAH("hryvnia", "kopiyka", "₴", "", ",", ".", 100), /* Ukraine */
   USD("dollar", "cent", "＄", "", ".", ",", 100), /* USA */
+  VND("dong", "hào", "₫", "", ",", ".", 100), /* Vietnamese dong */
   YEN("yen", "", "￥", "", ".", ",", 1); /* Japan */
 
   //********************************************************************

@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>wonder.frameworks</groupId>
 		<artifactId>ajax</artifactId>
-		<version>6.0.3-SNAPSHOT</version>
+		<version>6.1.1-SNAPSHOT</version>
 	</parent>
 
 	<groupId>wonder.ajax</groupId>

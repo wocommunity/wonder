@@ -70,7 +70,7 @@ public class AjaxFileUpload extends WOComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private static boolean _requestHandlerRegistered = false;
+	private static volatile boolean _requestHandlerRegistered = false;
 
 	private String _id;
 	protected boolean _uploadStarted;

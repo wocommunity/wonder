@@ -27,6 +27,7 @@ public class WOHelperFunctionHTMLParser {
 	private static final String WO_COLON_END_TAG = "</wo:";
 	private static final String WO_COLON_START_TAG = "<wo:";
 	private static final String WO_REPLACEMENT_MARKER = "__REPL__";
+	private static final String XML_CDATA_START_TAG = "<![CDATA[";
 
 	private static boolean _parseStandardTags = false;
 	private NSMutableDictionary _stackDict;
@@ -173,13 +174,18 @@ public class WOHelperFunctionHTMLParser {
 	 * @return a rewritten token if it has an inline binding or a closing tag, if it belongs to a rewritten token
 	 */
 	private String checkToken(String token) {
+		if (token == null) {
+			return token;
+		}
+		String tokenLowerCase = token.toLowerCase();
+		if (tokenLowerCase.startsWith(WEBOBJECT_START_TAG) || tokenLowerCase.startsWith(WO_COLON_START_TAG) || tokenLowerCase.startsWith(WO_START_TAG)
+				|| tokenLowerCase.startsWith(XML_CDATA_START_TAG)) {
+			// we return immediately, if it is a webobject token or CDATA tag
+			return token;
+		}
+		
 		String original = new String(token);
 		try {
-			if (token == null || token.toLowerCase().startsWith(WEBOBJECT_START_TAG) || token.toLowerCase().startsWith(WO_COLON_START_TAG) || token.toLowerCase().startsWith(WO_START_TAG) ) {
-				// we return immediately, if it is a webobject token
-				return token;
-			}
-
 			String[] tokenParts = token.split(" ");
 			String tokenPart = tokenParts[0].substring(1);
 

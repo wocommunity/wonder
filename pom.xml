@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>wonder</groupId>
     <artifactId>wonder</artifactId>
-    <version>6.0.3-SNAPSHOT</version>
+    <version>6.1.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Project Wonder</name>
     <url>http://wiki.objectstyle.org/confluence/display/WONDER/Home</url>
@@ -20,6 +20,7 @@
     <properties>
         <!-- VERY BAD PRACTICE: But there are broken tests -->
         <maven.test.skip>true</maven.test.skip>
+        <skip.apple.frameworks>true</skip.apple.frameworks>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <webobjects.version>5.4.3</webobjects.version>
@@ -82,7 +83,7 @@
                 <artifactId>maven-wolifecycle-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
-                    <skipAppleProvidedFrameworks>true</skipAppleProvidedFrameworks>
+                    <skipAppleProvidedFrameworks>${skip.apple.frameworks}</skipAppleProvidedFrameworks>
                 </configuration>
             </plugin>
             <plugin>
@@ -336,6 +337,26 @@
                 <version>1.4.1</version>
             </dependency>
             <dependency>
+                <groupId>com.sun.mail</groupId>
+                <artifactId>imap</artifactId>
+                <version>1.4.5</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.mail</groupId>
+                <artifactId>smtp</artifactId>
+                <version>1.4.5</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.mail</groupId>
+                <artifactId>dsn</artifactId>
+                <version>1.4.5</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.mail</groupId>
+                <artifactId>pop3</artifactId>
+                <version>1.4.5</version>
+            </dependency>
+            <dependency>
                 <groupId>jdom</groupId>
                 <artifactId>jdom</artifactId>
                 <version>1.0</version>
@@ -469,8 +490,8 @@
             </dependency>
             <dependency>
                 <groupId>jgroups</groupId>
-                <artifactId>jgroups-all</artifactId>
-                <version>2.4.1</version>
+                <artifactId>jgroups</artifactId>
+                <version>2.6.8.GA</version>
             </dependency>
             <dependency>
                 <groupId>commons-logging</groupId>
@@ -761,8 +782,8 @@
     </distributionManagement>
 
     <scm>
-        <connection>scm:git:git@github.com:projectwonder/wonder.gitt</connection>
-        <url>scm:git:git@github.com:projectwonder/wonder.git</url>
-        <developerConnection>scm:git:git@github.com:projectwonder/wonder.git</developerConnection>
+        <connection>scm:git:git@github.com:wocommunity/wonder.git</connection>
+        <url>scm:git:git@github.com:wocommunity/wonder.git</url>
+        <developerConnection>scm:git:git@github.com:wocommunity/wonder.git</developerConnection>
     </scm>
 </project>

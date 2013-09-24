@@ -2,11 +2,10 @@
 <classpath>
 	<classpathentry kind="src" path="Sources"/>
 	<classpathentry kind="lib" path="Libraries/commons-collections-3.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/jcaptcha-all-1.0-RC3.jar"/>
-	<classpathentry kind="lib" path="Libraries/recaptcha4j-0.0.7.jar"/>
 	<classpathentry kind="lib" path="Libraries/akismet-java-1.02.jar"/>
+	<classpathentry kind="lib" path="Libraries/recaptcha4j-0.0.8.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/jcaptcha-1.0-all.jar"/>
 	<classpathentry kind="lib" path="Libraries/commons-httpclient-3.0.1.jar"/>
-	<classpathentry kind="lib" path="Libraries/commons-logging-1.03.jar"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/ERExtensions"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/ERJars"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/JavaWebObjects"/>
