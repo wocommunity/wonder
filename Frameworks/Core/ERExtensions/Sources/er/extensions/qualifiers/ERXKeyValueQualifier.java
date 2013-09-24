@@ -4,6 +4,7 @@ import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOQualifierVariable;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
@@ -30,6 +31,7 @@ public class ERXKeyValueQualifier extends EOKeyValueQualifier implements IERXCha
 	// Lazy static initialization
 	private static class PROPERTIES {
 		static boolean shouldFlattenValueObject = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXKeyValueQualifier.Contains.flatten", true);
+		static boolean enableArrayElementComparison = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXKeyValueQualifier.arrayElementComparison", true);
 	}
 
 	public ERXKeyValueQualifier(String key, NSSelector selector, Object value) {
@@ -79,26 +81,39 @@ public class ERXKeyValueQualifier extends EOKeyValueQualifier implements IERXCha
 	 * an array of discrete objects. In that case the object is evaluated against a flattened array which gives the same result as SQL evaluation.
 	 * 
 	 * Since legacy code may depend on workarounds to the incorrect behavior, this patch can be disabled by setting the property <code>er.extensions.ERXKeyValueQualifier.Contains.flatten</code> to <code>false</code>
+	 *
+	 * Legacy WebObjects code is not handling comparison of NSArray with _value except over ualifierOperatorContains selector correctly. This is a fix for legacy code to correctly filter a NSArray with _value.
+	 * This implementation can be disabled by setting the property <code>er.extensions.ERXKeyValueQualifier.arrayElementComparison</code> to <code>false</code>
+	 * 
 	 */
 	@Override
 	public boolean evaluateWithObject(Object object) {
-		Object objectValue = NSKeyValueCodingAdditions.Utility.valueForKeyPath(object, _key);
+		boolean retVal = false;
 
 		if (_value instanceof EOQualifierVariable) {
-			throw new IllegalStateException("Error evaluating qualifier with key " + _key + ", selector " + _selector + ", value " + _value + " - value must be substitued for variable before evaluating");
+			throw new IllegalStateException(new StringBuffer("Error evaluating qualifier with key ").append(_key).append(", selector ").append(_selector).append(", value ").append(_value).append(" - value must be substitued for variable before evaluating").toString());
 		}
 
-		if (_selector.equals(EOQualifier.QualifierOperatorCaseInsensitiveLike)) {
-			if (_lowercaseCache == null) {
-				_lowercaseCache = (_value != NSKeyValueCoding.NullValue) ? (_value.toString()).toLowerCase() : "";
-			}
-			return _NSStringUtilities.stringMatchesPattern(((objectValue != null) && (objectValue != NSKeyValueCoding.NullValue)) ? objectValue.toString() : "", _lowercaseCache, true);
+		if(object == null){
+			throw new IllegalArgumentException(new StringBuffer("Error evaluating qualifier with key ").append(_key).append(", selector ").append(_selector).append(", value ").append(_value).append(" - object cannot be null").toString());
 		}
-		
+
+		Object objectValue = NSKeyValueCodingAdditions.Utility.valueForKeyPath(object, _key);
 		// Flatten in case we have array of arrays
-		if (_selector.equals(EOQualifier.QualifierOperatorContains) && PROPERTIES.shouldFlattenValueObject && objectValue != null && objectValue instanceof NSArray) {
+		if(objectValue != null && objectValue instanceof NSArray && EOQualifier.QualifierOperatorContains.equals(_selector) && PROPERTIES.shouldFlattenValueObject){
 			objectValue = ERXArrayUtilities.flatten((NSArray<?>) objectValue);
+			retVal = EOQualifier.ComparisonSupport.compareValues(objectValue, _value, _selector);
+		} else if(objectValue != null && objectValue instanceof NSArray && PROPERTIES.enableArrayElementComparison){
+			//flatten the array
+			objectValue = ERXArrayUtilities.flatten((NSArray<?>) objectValue);
+			//loop through the flattened array and compare each element with _value
+			for(int i = 0; i < ((NSArray)objectValue).count() && !retVal; i++){
+				NSDictionary<String, Object> newObject = new NSDictionary<String, Object>(((NSArray)objectValue).get(i), _key);
+				retVal = super.evaluateWithObject(newObject);
+			}
+		} else {
+			retVal = super.evaluateWithObject(object);
 		}
-		return ComparisonSupport.compareValues((objectValue != null) ? objectValue : NSKeyValueCoding.NullValue, _value, _selector);
+		return retVal;
 	}
 }
