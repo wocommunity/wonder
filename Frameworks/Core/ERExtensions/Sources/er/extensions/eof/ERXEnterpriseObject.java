@@ -511,7 +511,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
      * @param eo to local instance
      * @return an EO in the same editing context as the caller.
      */
-    public abstract EOEnterpriseObject localInstanceOf(EOEnterpriseObject eo);
+    public abstract <T extends EOEnterpriseObject> T localInstanceOf(T eo);
 
     /**
      * Returns this EO in the supplied editing context.
@@ -519,7 +519,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
      * @param ec editing context to local instance in
      * @return this EO in the supplied editing context.
      */
-    public abstract EOEnterpriseObject localInstanceIn(EOEditingContext ec);
+	public EOEnterpriseObject localInstanceIn(EOEditingContext ec);
 
     /**
      * Returns an array of EOs in the same editing context as the caller.
@@ -527,7 +527,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
      * @param eos array of EOs to local instance
      * @return array of EOs in the same editing context as the caller.
      */
-    public abstract NSArray<EOEnterpriseObject> localInstancesOf(NSArray<EOEnterpriseObject> eos);
+    public abstract <T extends EOEnterpriseObject> NSArray<T> localInstancesOf(NSArray<T> eos);
 
     /**
      * Computes the current set of changes that this object has from the
