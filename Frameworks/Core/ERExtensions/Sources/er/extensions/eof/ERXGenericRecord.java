@@ -143,7 +143,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 		takeValueForKeyPath(value, key.key());
 	}
 	
-	private String localizedKey(String key) {
+	protected String localizedKey(String key) {
 		EOClassDescription cd = classDescription();
 		if (cd instanceof ERXEntityClassDescription) {
 			return ((ERXEntityClassDescription) cd).localizedKey(key);
@@ -810,7 +810,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 		return allNullDict;
 	}
 
-	public EOEnterpriseObject localInstanceOf(EOEnterpriseObject eo) {
+	public <T extends EOEnterpriseObject> T localInstanceOf(T eo) {
 		return ERXEOControlUtilities.localInstanceOfObject(editingContext(), eo);
 	}
 
@@ -818,7 +818,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 		return ERXEOControlUtilities.localInstanceOfObject(ec, this);
 	}
 
-	public NSArray<EOEnterpriseObject> localInstancesOf(NSArray<EOEnterpriseObject> eos) {
+	public <T extends EOEnterpriseObject> NSArray<T> localInstancesOf(NSArray<T> eos) {
 		return ERXEOControlUtilities.localInstancesOfObjects(editingContext(), eos);
 	}
 
@@ -1338,15 +1338,15 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 * @author mschrag
 	 */
 	public static class InverseRelationshipUpdater {
-	    private static boolean updateInverseRelationships = ERXProperties.booleanForKey("er.extensions.ERXEnterpriseObject.updateInverseRelationships");
+	    protected static boolean updateInverseRelationships = ERXProperties.booleanForKey("er.extensions.ERXEnterpriseObject.updateInverseRelationships");
 
 	    /**
 	     * Toggles the global setting for updating inverse relationships.
 	     * 
-	     * @param updateInverseRelationships if true, inverse relationships are automatically updated
+	     * @param value if true, inverse relationships are automatically updated
 	     */
-	    public static void setUpdateInverseRelationships(boolean updateInverseRelationships) {
-	    	ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships = updateInverseRelationships;
+	    public static void setUpdateInverseRelationships(boolean value) {
+	    	ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships = value;
 		}
 	    
 	    /**
