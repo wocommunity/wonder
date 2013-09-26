@@ -23,7 +23,6 @@ public class ERXRestFormat {
 	public static final String XML_KEY = "xml";
 	public static final String FORM_KEY = "form";
 	public static final String BINARY_PLIST_KEY = "bplist";
-	
 	public static final String EMBER_KEY = "ember";
 
 	private static Map<String, ERXRestFormat> _formats = new ConcurrentHashMap<String, ERXRestFormat>();
