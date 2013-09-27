@@ -27,7 +27,7 @@ public class ERXEmberRestWriter extends ERXJSONRestWriter {
 				for(ERXRestRequestNode subChild : child.children()) {
 					if(subChild.isArray() ) {
 						if(subChild.children().size() > 300) {
-							String url = "/cgi-bin/WebObjects/auction.woa/ra/" + rootObjectName + "/" + child.id() + "/" + subChild.name();
+							String url = "/" + rootObjectName + "/" + child.id() + "/" + subChild.name();
 							linksNode.addChild(new ERXRestRequestNode(subChild.name(), url, false) );
 							nodesToRemove.add(subChild);
 						}
@@ -77,7 +77,7 @@ public class ERXEmberRestWriter extends ERXJSONRestWriter {
 				if(subChild.isArray() ) {
 					if(subChild.children().size() > 300) {
 						nodesToRemove.add(subChild);
-						String url = "/cgi-bin/WebObjects/auction.woa/ra/" + rootObjectName + "/" + node.id() + "/" + subChild.name();
+						String url = "/" + rootObjectName + "/" + node.id() + "/" + subChild.name();
 						linksNode.addChild(new ERXRestRequestNode(subChild.name(), url, false) );
 					}
 					else {
