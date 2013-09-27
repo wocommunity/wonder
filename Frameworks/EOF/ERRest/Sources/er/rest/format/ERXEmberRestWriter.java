@@ -31,7 +31,7 @@ public class ERXEmberRestWriter extends ERXJSONRestWriter {
 				for(ERXRestRequestNode subChild : child.children()) {
 					if(subChild.isArray() ) {
 						if(subChild.children().size() > 300) {
-							String url = "/" + rootObjectName + "/" + node.id() + "/" + subChild.name();
+							String url = "/cgi-bin/WebObjects/auction.woa/ra/" + rootObjectName + "/" + node.id() + "/" + subChild.name();
 							linksNode.addChild(new ERXRestRequestNode(subChild.name(), url, false) );
 							nodesToRemove.add(subChild);
 						}
@@ -66,15 +66,17 @@ public class ERXEmberRestWriter extends ERXJSONRestWriter {
 			//rootObjectName = ERXStringUtilities.uncapitalize( ERXRestNameRegistry.registry().externalNameForInternalName( ERXLocalizer.englishLocalizer().plurifiedString(node.childAtIndex(0).type(), 2)));
 			rootObjectName = ERXStringUtilities.uncapitalize(node.type());
 			ERXRestRequestNode linksNode = new ERXRestRequestNode("links", false);
+			nodesToAdd = new NSMutableArray<ERXRestRequestNode>();
+			nodesToRemove = new NSMutableArray<ERXRestRequestNode>();
 			for(ERXRestRequestNode subChild : node.children()) {
-				nodesToAdd = new NSMutableArray<ERXRestRequestNode>();
-				nodesToRemove = new NSMutableArray<ERXRestRequestNode>();
+				
 				if(subChild.isArray() ) {
-					if(subChild.children().size() > 300) {
-						String url = "/" + rootObjectName + "/" + node.id() + "/" + subChild.name();
-						linksNode.addChild(new ERXRestRequestNode(subChild.name(), url, false) );
+				//	if(subChild.children().size() > 300) {
 						nodesToRemove.add(subChild);
-					}
+						String url = "/cgi-bin/WebObjects/auction.woa/ra/" + rootObjectName + "/" + node.id() + "/" + subChild.name();
+						linksNode.addChild(new ERXRestRequestNode(subChild.name(), url, false) );
+						
+				/*	}
 					else {
 						// save ids in a new array
 						ERXRestRequestNode newSubChild = new ERXRestRequestNode(subChild.name(), false);
@@ -86,11 +88,12 @@ public class ERXEmberRestWriter extends ERXJSONRestWriter {
 						}
 						nodesToRemove.add(subChild);
 						
-					}
+					}*/
 					
 				}
 			}
 			//remove nodes
+			 
 			for(ERXRestRequestNode nodeToRemove : nodesToRemove) {
 				node.removeChildNamed(nodeToRemove.name());
 			}
