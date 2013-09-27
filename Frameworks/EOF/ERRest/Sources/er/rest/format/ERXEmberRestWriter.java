@@ -1,6 +1,5 @@
 package er.rest.format;
 
-import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.foundation.ERXStringUtilities;
@@ -10,10 +9,8 @@ import er.rest.ERXRestRequestNode;
 
 public class ERXEmberRestWriter extends ERXJSONRestWriter {
 	protected ERXRestRequestNode processNode(ERXRestRequestNode node) {
-		System.out.println("running " + node.name());
 		ERXRestRequestNode rootNode = new ERXRestRequestNode(null, true);
 		String rootObjectName = ERXStringUtilities.uncapitalize( ERXRestNameRegistry.registry().externalNameForInternalName( ERXLocalizer.englishLocalizer().plurifiedString(node.childAtIndex(0).type(), 2)));
-		String relationsShipObjectName = ERXStringUtilities.uncapitalize(node.childAtIndex(0).type());
 		ERXRestRequestNode recordsNode = new ERXRestRequestNode(rootObjectName, false);
 		NSMutableArray<ERXRestRequestNode> nodesToAdd = null;
 		NSMutableArray<ERXRestRequestNode> nodesToRemove = null;
@@ -26,7 +23,6 @@ public class ERXEmberRestWriter extends ERXJSONRestWriter {
 				nodesToAdd = new NSMutableArray<ERXRestRequestNode>();
 				nodesToRemove = new NSMutableArray<ERXRestRequestNode>();
 				//linksNode.setArray(true);
-				System.out.println("child:" + child.name());
 				recordsNode.addChild(child);
 				for(ERXRestRequestNode subChild : child.children()) {
 					if(subChild.isArray() ) {
@@ -49,14 +45,12 @@ public class ERXEmberRestWriter extends ERXJSONRestWriter {
 					} else {
 					 
 						if(subChild.id() != null) {
-							System.out.println("subChild: " + subChild.name() + " " + subChild.id());
 						 	ERXRestRequestNode newSubChild = new ERXRestRequestNode(subChild.name(), subChild.id(), false);
 						 	nodesToAdd.add(newSubChild);
 						 	//Object id = subChild.id();
 							//newSubChild.addChild(new ERXRestRequestNode(null, id, false));
 							nodesToRemove.add(subChild);
 						}
-						 
 					} 
 				}
 				if(linksNode.children().size() > 0) {
@@ -80,13 +74,11 @@ public class ERXEmberRestWriter extends ERXJSONRestWriter {
 			nodesToAdd = new NSMutableArray<ERXRestRequestNode>();
 			nodesToRemove = new NSMutableArray<ERXRestRequestNode>();
 			for(ERXRestRequestNode subChild : node.children()) {
-				
 				if(subChild.isArray() ) {
 					if(subChild.children().size() > 300) {
 						nodesToRemove.add(subChild);
 						String url = "/cgi-bin/WebObjects/auction.woa/ra/" + rootObjectName + "/" + node.id() + "/" + subChild.name();
 						linksNode.addChild(new ERXRestRequestNode(subChild.name(), url, false) );
-						
 					}
 					else {
 						// save ids in a new array
@@ -105,14 +97,11 @@ public class ERXEmberRestWriter extends ERXJSONRestWriter {
 					if(subChild.id() != null) {
 					 	ERXRestRequestNode newSubChild = new ERXRestRequestNode(subChild.name(), subChild.id(), false);
 					 	nodesToAdd.add(newSubChild);
-					 	//Object id = subChild.id();
-						//newSubChild.addChild(new ERXRestRequestNode(null, id, false));
 						nodesToRemove.add(subChild);
 					}
 				} 
 			}
 			//remove nodes
-			 
 			for(ERXRestRequestNode nodeToRemove : nodesToRemove) {
 				node.removeChildNamed(nodeToRemove.name());
 			}
@@ -123,7 +112,6 @@ public class ERXEmberRestWriter extends ERXJSONRestWriter {
 			if(linksNode.children().size() > 0) {
 				node.addChild(linksNode);
 			}
-		
 		}
 		return rootNode;
 	}
