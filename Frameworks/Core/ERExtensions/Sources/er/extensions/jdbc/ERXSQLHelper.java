@@ -1428,7 +1428,8 @@ public class ERXSQLHelper {
 	 *             if there is a problem reading the stream
 	 */
 	public NSArray<String> splitSQLStatementsFromInputStream(InputStream is) throws IOException {
-		return splitSQLStatements(ERXStringUtilities.stringFromInputStream(is));
+		String encoding = System.getProperty("file.encoding");
+		return splitSQLStatements(ERXStringUtilities.stringIsNullOrEmpty(encoding) ? ERXStringUtilities.stringFromInputStream(is) : ERXStringUtilities.stringFromInputStream(is, encoding));
 	}
 
 	/**
