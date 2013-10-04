@@ -97,8 +97,13 @@ public class ERXRestFormatDelegate implements ERXRestFormat.Delegate {
 			}
 		} else {
 			// KL CODE
-			if(node.isRootNode()) {
-				node.setName(ERXStringUtilities.uncapitalize(ERXRestNameRegistry.registry().externalNameForInternalName(node.name())));
+			try {
+				if(node.isRootNode()) {
+					node.setName(ERXStringUtilities.uncapitalize(ERXRestNameRegistry.registry().externalNameForInternalName(node.name())));
+				}
+			} catch(Exception e) {
+				System.out.println("kl");
+				e.printStackTrace();
 			}
 		}
 
