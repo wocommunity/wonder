@@ -11,6 +11,11 @@ public class ERXEmberRestWriter extends ERXJSONRestWriter {
 	protected ERXRestRequestNode processNode(ERXRestRequestNode node) {
 		ERXRestRequestNode rootNode = new ERXRestRequestNode(null, true);
 		String rootObjectName = ERXStringUtilities.uncapitalize( ERXRestNameRegistry.registry().externalNameForInternalName( ERXLocalizer.englishLocalizer().plurifiedString(node.childAtIndex(0).type(), 2)));
+		System.out.println("rootObjectName:" + rootObjectName);
+		if(rootObjectName == null) {
+			System.out.println("!!!!!!!! null key setting to aaa");
+			rootObjectName = "aaa";
+		}
 		ERXRestRequestNode recordsNode = new ERXRestRequestNode(rootObjectName, false);
 		NSMutableArray<ERXRestRequestNode> nodesToAdd = null;
 		NSMutableArray<ERXRestRequestNode> nodesToRemove = null;
@@ -43,7 +48,6 @@ public class ERXEmberRestWriter extends ERXJSONRestWriter {
 							nodesToRemove.add(subChild);
 						}
 					} else {
-					 
 						if(subChild.id() != null) {
 						 	ERXRestRequestNode newSubChild = new ERXRestRequestNode(subChild.name(), subChild.id(), false);
 						 	nodesToAdd.add(newSubChild);
@@ -70,6 +74,7 @@ public class ERXEmberRestWriter extends ERXJSONRestWriter {
 			rootNode.addChild(node);
 			//rootObjectName = ERXStringUtilities.uncapitalize( ERXRestNameRegistry.registry().externalNameForInternalName( ERXLocalizer.englishLocalizer().plurifiedString(node.childAtIndex(0).type(), 2)));
 			rootObjectName = ERXStringUtilities.uncapitalize(node.type());
+			System.out.println("NOT ARRAY rooObjectName" + rootObjectName);
 			ERXRestRequestNode linksNode = new ERXRestRequestNode("links", false);
 			nodesToAdd = new NSMutableArray<ERXRestRequestNode>();
 			nodesToRemove = new NSMutableArray<ERXRestRequestNode>();

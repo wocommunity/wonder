@@ -90,15 +90,19 @@ public class ERXRestFormatDelegate implements ERXRestFormat.Delegate {
 	public void nodeWillWrite(ERXRestRequestNode node) {
 		if (node.isRootNode() && node.isArray()) {
 			if (_pluralNames) {
+				System.out.println("nodebame: " + node.name());
 				node.setName(ERXRestNameRegistry.registry().externalNameForInternalName(ERXLocalizer.englishLocalizer().plurifiedString(node.name(), 2)));
 			}
 			else {
+				System.out.println("nodebame: " + node.name());
 				node.setName(ERXRestNameRegistry.registry().externalNameForInternalName(node.name()));
 			}
 		} else {
 			// KL CODE
 			if(node.isRootNode()) {
-				node.setName(ERXStringUtilities.uncapitalize(ERXRestNameRegistry.registry().externalNameForInternalName(node.name())));
+				if(node.name() != null) {
+					node.setName(ERXStringUtilities.uncapitalize(ERXRestNameRegistry.registry().externalNameForInternalName(node.name())));
+				}
 			}
 		}
 
