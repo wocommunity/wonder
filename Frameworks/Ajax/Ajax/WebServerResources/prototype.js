@@ -1468,7 +1468,7 @@ var Hash = Class.create(Enumerable, (function() {
 
     value = value.gsub(/(\r)?\n/, '\r\n');
     value = encodeURIComponent(value);
-    value = value.gsub(/%20/, '+');
+  	value = value.gsub(/%20/, '+'); // Why reencoding spaces already encoded by encodeURIComponent? This one does not seems to harm.
     return key + '=' + value;
   }
 
@@ -5808,7 +5808,8 @@ var Form = {
       accumulator = function(result, key, value) {
         value = value.gsub(/(\r)?\n/, '\r\n');
         value = encodeURIComponent(value);
-        value = value.gsub(/%20/, '+');
+        //value = value.gsub(/%20/, '+'); // Why reencoding spaces already encoded by encodeURIComponent? 
+        // With scriptaculous, the space where double encoded to %2B and decoded as +.
         return result + (result ? '&' : '') + encodeURIComponent(key) + '=' + value;
       }
     }
