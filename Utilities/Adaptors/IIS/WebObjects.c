@@ -602,6 +602,14 @@ __declspec(dllexport) DWORD __stdcall HttpExtensionProc(EXTENSION_CONTROL_BLOCK 
       return HSE_STATUS_ERROR;
    }
    
+   // Deactivate IIS 7 stream buffering
+   p->ServerSupportFunction (p->ConnID,
+      HSE_REQ_SET_FLUSH_FLAG,
+      (LPVOID) TRUE,
+      NULL,
+      NULL
+      );
+
    /*
     *	extract WebObjects request components from URI
     */
