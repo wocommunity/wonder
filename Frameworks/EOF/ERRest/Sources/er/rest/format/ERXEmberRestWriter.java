@@ -10,18 +10,18 @@ import er.rest.ERXRestRequestNode;
 public class ERXEmberRestWriter extends ERXJSONRestWriter {
 	protected ERXRestRequestNode processNode(ERXRestRequestNode node) {
 		ERXRestRequestNode rootNode = new ERXRestRequestNode(null, true);
-		String rootObjectName = ERXStringUtilities.uncapitalize( ERXRestNameRegistry.registry().externalNameForInternalName( ERXLocalizer.englishLocalizer().plurifiedString(node.childAtIndex(0).type(), 2)));
-		System.out.println("rootObjectName:" + rootObjectName);
-		if(rootObjectName == null) {
-			System.out.println("!!!!!!!! null key setting to aaa");
-			rootObjectName = "aaa";
-		}
-		ERXRestRequestNode recordsNode = new ERXRestRequestNode(rootObjectName, false);
+		String rootObjectName;
 		NSMutableArray<ERXRestRequestNode> nodesToAdd = null;
 		NSMutableArray<ERXRestRequestNode> nodesToRemove = null;
 		if(node.isArray()) {
+			rootObjectName = ERXStringUtilities.uncapitalize( ERXRestNameRegistry.registry().externalNameForInternalName( ERXLocalizer.englishLocalizer().plurifiedString(node.childAtIndex(0).type(), 2)));
+			ERXRestRequestNode recordsNode = new ERXRestRequestNode(rootObjectName, false);
 			recordsNode.setArray(true);
 			rootNode.addChild(recordsNode);
+			if(rootObjectName == null) {
+				System.out.println("!!!!!!!! null key setting to aaa");
+				rootObjectName = "aaa";
+			}
 			for (ERXRestRequestNode child : node.children()) {
 				//links 
 				ERXRestRequestNode linksNode = new ERXRestRequestNode("links", false);
@@ -72,9 +72,7 @@ public class ERXEmberRestWriter extends ERXJSONRestWriter {
 		}
 		else {  
 			rootNode.addChild(node);
-			//rootObjectName = ERXStringUtilities.uncapitalize( ERXRestNameRegistry.registry().externalNameForInternalName( ERXLocalizer.englishLocalizer().plurifiedString(node.childAtIndex(0).type(), 2)));
 			rootObjectName = ERXStringUtilities.uncapitalize(node.type());
-			System.out.println("NOT ARRAY rooObjectName" + rootObjectName);
 			ERXRestRequestNode linksNode = new ERXRestRequestNode("links", false);
 			nodesToAdd = new NSMutableArray<ERXRestRequestNode>();
 			nodesToRemove = new NSMutableArray<ERXRestRequestNode>();
