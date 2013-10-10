@@ -6,6 +6,7 @@
 //
 package er.extensions.components.javascript;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;
@@ -95,11 +96,11 @@ public class ERXEditDateJavascript extends ERXStatelessComponent {
 
 	public static String formatterStringForScript(String format) {
 		String result = format;
-		result = ERXStringUtilities.replaceStringByStringInString("%Y", "yyyy", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%y", "yy", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%m", "MM", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%d", "dd", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%b", "MON", result);
+		result = StringUtils.replace(result, "%Y", "yyyy");
+		result = StringUtils.replace(result, "%y", "yy");
+		result = StringUtils.replace(result, "%m", "MM");
+		result = StringUtils.replace(result, "%d", "dd");
+		result = StringUtils.replace(result, "%b", "MON");
 		return result;
 	}
 }

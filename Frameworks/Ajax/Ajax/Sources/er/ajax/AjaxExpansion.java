@@ -23,9 +23,10 @@ import er.extensions.foundation.ERXStringUtilities;
  * </p>
  * 
  * <p>
- * If you want to use something fancier than a string as link label, you can put
- * an {@link ERXWOTemplate} with {@code templateName='label'} inside the
- * component. If present, that will replace the label provided by the
+ * You can use an {@code openedLabel} and {@code closedLabel} binding to change
+ * the link text. Or, if you want to use something fancier than a string as link
+ * label, you can put an {@link ERXWOTemplate} with {@code templateName='label'}
+ * inside the component. If present, that will replace the label provided by the
  * {@code string} binding.
  * </p>
  * 

@@ -16,7 +16,6 @@
 	<classpathentry exported="true" kind="lib" path="Libraries/commons-beanutils-1.8.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/commons-collections-2.1.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/commons-digester-1.7.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/commons-logging-1.0.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/commons-javaflow-20060411.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/jxl-2.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/jfreechart-1.0.12.jar"/>

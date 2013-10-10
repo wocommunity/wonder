@@ -11,6 +11,7 @@ package er.extensions.components.javascript;
 
 import java.util.Enumeration;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;
@@ -118,7 +119,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
 
     protected void updateVarNames() {
         String elementID = context().elementID();
-        elementID = ERXStringUtilities.replaceStringByStringInString(".", "_", elementID);
+        elementID = StringUtils.replace(elementID,  ".", "_");
         pickerName = "picker_"+ elementID;
         parentSelectName = "parent_" + elementID;
         childSelectName = "child_" + elementID;

@@ -91,6 +91,9 @@ public class AjaxFileUploadRequestHandler extends WORequestHandler {
 					if (context._requestSessionID() != null) {
 						session = WOApplication.application().restoreSessionWithID(sessionId, context);
 					}
+					if (session == null) {
+						throw new Exception("No valid session!");
+					}
 					File tempFile = File.createTempFile("AjaxFileUpload", ".tmp", _tempFileFolder);
 					tempFile.deleteOnExit();
 					AjaxUploadProgress progress = new AjaxUploadProgress(uploadIdentifier, tempFile, uploadFileName, streamLength);

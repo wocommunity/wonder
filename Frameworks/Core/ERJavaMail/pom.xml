@@ -13,7 +13,7 @@
 		<sourceDirectory>Sources</sourceDirectory>
 	</build>
 	<dependencies>
-	<dependency>
+		<dependency>
 			<groupId>wonder.core</groupId>
 			<artifactId>ERExtensions</artifactId>
 		</dependency>
@@ -40,6 +40,26 @@
 		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>imap</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>smtp</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>dsn</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>pop3</artifactId>
+			<optional>true</optional>
 		</dependency>
 	</dependencies>
 </project>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="Sources"/>
-	<classpathentry kind="lib" path="Libraries/commons-logging.jar"/>
 	<classpathentry kind="lib" path="Libraries/jgroups-2.6.8.jar"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/ERExtensions"/>
 	<classpathentry exported="true" kind="con" path="WOFramework/ERJars"/>

@@ -2358,17 +2358,18 @@ public class ERXEOAccessUtilities {
 	 */
 	public static NSArray<EOEntity> entityHierarchyForEntity(EOEditingContext ec, EOEntity rootEntity) {
 		NSMutableArray<EOEntity> entities = new NSMutableArray<EOEntity>();
-
-		if (rootEntity != null) {
-			if (!rootEntity.isAbstractEntity()) {
-				entities.add(rootEntity);
-			}
-			for (EOEntity subEntity : rootEntity.subEntities()) {
-				entities.addAll(allSubEntitiesForEntity(subEntity, false));
-			}
+	
+		if (!rootEntity.isAbstractEntity()) {
+			entities.add(rootEntity);
+		}
+		@SuppressWarnings("unchecked")
+		NSArray<EOEntity> subEntities = rootEntity.subEntities();
+		for (EOEntity subEntity : subEntities) {
+			entities.addAll(entityHierarchyForEntity(ec, subEntity));
 		}
 		return entities.immutableClone();
 	}
+	
 
 	/**
 	 * Utility method used to find all of the sub entities
