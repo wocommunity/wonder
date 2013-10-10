@@ -6,8 +6,6 @@
 //
 package er.extensions.components;
 
-import org.apache.commons.lang.StringUtils;
-
 import com.webobjects.appserver.WOContext;
 
 import er.extensions.foundation.ERXStringUtilities;
@@ -43,8 +41,8 @@ public class ERXDHTMLComponent extends ERXStatelessComponent {
 	if(varName == null) {
             varName = (String)valueForBinding("varName");
             if(varName == null)
-                varName = "dhtml_" + StringUtils.replace("" + context().elementID().hashCode(), "-", "_");
-            varName = StringUtils.replace(varName, ".", "_");
+                varName = "dhtml_" + ERXStringUtilities.replaceStringByStringInString("-", "_", "" + context().elementID().hashCode());
+            varName = ERXStringUtilities.replaceStringByStringInString(".", "_", varName);
 	}
 	return varName;
     }

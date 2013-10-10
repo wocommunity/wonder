@@ -11,6 +11,5 @@
 			<unbound name="attachment"/>
 		</validation>
 	<binding name="size"/>
-	<binding name="target"/>
     </wo>
 </wodefinitions>

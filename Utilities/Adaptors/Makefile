@@ -10,7 +10,7 @@ endif
 
 # By default, only build CGI adaptor.
 ifeq "" "$(ADAPTORS)"
-ADAPTORS = CGI IIS
+ADAPTORS = CGI
 endif
 
 COMMON_TARGETS = Adaptor/make.preamble Adaptor/make.postamble

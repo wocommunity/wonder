@@ -103,24 +103,22 @@ public class WXSortOrder extends WOComponent {
         return null;
     }
 
-    @SuppressWarnings("unchecked")
-	protected NSArray<EOSortOrdering> _sortOrderingArray() {
-        return (NSArray<EOSortOrdering>)_WOJExtensionsUtil.valueForBindingOrNull("sortOrderings",this);
+    protected NSArray _sortOrderingArray() {
+        return (NSArray)_WOJExtensionsUtil.valueForBindingOrNull("sortOrderings",this);
     }
 
-    @SuppressWarnings("unchecked")
-	protected NSMutableArray<EOSortOrdering> XX_sortOrderingArray() {
+    protected NSMutableArray XX_sortOrderingArray() {
         WODisplayGroup displayGroup = displayGroup();
-        NSArray<EOSortOrdering> orderingArray;
+        NSArray orderingArray;
         if (null!=displayGroup)
             orderingArray = displayGroup.sortOrderings();
         else
-            orderingArray = (NSArray<EOSortOrdering>)_WOJExtensionsUtil.valueForBindingOrNull("sortOrderings",this);
+            orderingArray = (NSArray)_WOJExtensionsUtil.valueForBindingOrNull("sortOrderings",this);
 
         if (null==orderingArray) {
-            orderingArray = new NSMutableArray<EOSortOrdering>();
+            orderingArray = new NSMutableArray();
         } else {
-            orderingArray = new NSMutableArray<EOSortOrdering>(orderingArray);
+            orderingArray = new NSMutableArray(orderingArray);
         }
 
         if (null!=displayGroup)
@@ -129,7 +127,7 @@ public class WXSortOrder extends WOComponent {
             setValueForBinding(orderingArray, "sortOrderings");
         }
 
-        return (NSMutableArray<EOSortOrdering>)orderingArray;
+        return (NSMutableArray)orderingArray;
     }
 
     protected void _removeOrderingWithKey(String aKey) {
@@ -148,7 +146,7 @@ public class WXSortOrder extends WOComponent {
     }
 
     protected void _makePrimaryOrderingWithSelector(NSSelector aSelector) {
-        NSMutableArray<EOSortOrdering> orderingArray = (NSMutableArray<EOSortOrdering>)_sortOrderingArray();
+        NSMutableArray orderingArray = (NSMutableArray)_sortOrderingArray();
         EOSortOrdering aNewOrdering = EOSortOrdering.sortOrderingWithKey(key(), 
             aSelector);
         orderingArray.insertObjectAtIndex(aNewOrdering, 0);

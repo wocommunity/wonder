@@ -21,8 +21,6 @@ import er.ajax.AjaxUtils;
 
 public class MTAjaxSortableList extends AjaxComponent {
     
-	private static final long serialVersionUID = 1L;
-
 	private String _id;
 	private String _actionUrl;
 	private String _sortOrderKeyName;
@@ -85,10 +83,10 @@ public class MTAjaxSortableList extends AjaxComponent {
 
 		String listItemIDKeyPath = (String) valueForBinding("listItemIDKeyPath");
 		Object listItemIDArrayObj = request.formValues().objectForKey(_sortOrderKeyName + "[]");
-		NSArray<String> listItemIDArray;
+		NSArray listItemIDArray;
 
 		if (listItemIDArrayObj instanceof NSArray) {
-			listItemIDArray = (NSArray<String>) listItemIDArrayObj;
+			listItemIDArray = (NSArray) listItemIDArrayObj;
 		}
 		else if (listItemIDArrayObj instanceof String) {
 			String listItemIDStr = (String) listItemIDArrayObj;
@@ -123,7 +121,7 @@ public class MTAjaxSortableList extends AjaxComponent {
 		int listItemIDCount = listItemIDArray.count();
 		for(int listItemIDIndex = 0; listItemIDIndex < listItemIDCount; listItemIDIndex++) {
 
-			String itemID = listItemIDArray.objectAtIndex(listItemIDIndex);
+			String itemID = (String) listItemIDArray.objectAtIndex(listItemIDIndex);
 			NSRange itemPageRange;
 
 			if(mutableList) {

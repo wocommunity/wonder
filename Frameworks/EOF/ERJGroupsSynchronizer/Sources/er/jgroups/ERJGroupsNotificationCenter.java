@@ -46,7 +46,7 @@ public class ERJGroupsNotificationCenter extends ERXRemoteNotificationCenter {
 
     private JChannel _channel;
 
-    private static volatile ERJGroupsNotificationCenter _sharedInstance;
+    private static ERJGroupsNotificationCenter _sharedInstance;
 
     protected ERJGroupsNotificationCenter() throws ChannelException {
         String jgroupsPropertiesFile = ERXProperties.stringForKey("er.extensions.jgroupsNotificationCenter.properties");

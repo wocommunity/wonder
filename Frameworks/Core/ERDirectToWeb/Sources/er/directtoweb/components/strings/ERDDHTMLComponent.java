@@ -1,6 +1,5 @@
 package er.directtoweb.components.strings;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;
@@ -49,8 +48,8 @@ public class ERDDHTMLComponent extends ERDCustomEditComponent {
     
     public String varName()  {
 	if(varName == null) {
-	    varName = StringUtils.replace("dhtml-" + context().elementID().hashCode() + "-" + key(), "-", "_");
-	    varName = StringUtils.replace(varName, ".", "_");
+	    varName = ERXStringUtilities.replaceStringByStringInString("-", "_", "dhtml-" + context().elementID().hashCode() + "-" + key());
+	    varName = ERXStringUtilities.replaceStringByStringInString(".", "_", varName);
 	    log.debug(varName);
 	}
 	return varName;

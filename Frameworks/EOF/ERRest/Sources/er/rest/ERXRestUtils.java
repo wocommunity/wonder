@@ -11,6 +11,7 @@ import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import com.ibm.icu.util.TimeZone;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntityClassDescription;
 import com.webobjects.eocontrol.EOClassDescription;
@@ -18,6 +19,7 @@ import com.webobjects.eocontrol.EOKeyValueCoding;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation.NSTimeZone;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
 import com.webobjects.foundation._NSUtilities;
@@ -153,14 +155,17 @@ public class ERXRestUtils {
 				timestampFormat = ERXProperties.stringForKey("er.rest.timestampFormat");
 				if (timestampFormat == null) {
 					if (spaces) {
-						timestampFormat = ERXProperties.stringForKeyWithDefault("er.rest.timestampFormat.secondary", "%Y-%m-%d %H:%M:%S %Z");
+						timestampFormat = ERXProperties.stringForKeyWithDefault("er.rest.timestampFormat.secondary", "yyyy-MM-dd HH:mm:ss z");
 					}
 					else {
-						timestampFormat = ERXProperties.stringForKeyWithDefault("er.rest.timestampFormat.primary", "%Y-%m-%dT%H:%M:%SZ");
+						timestampFormat = ERXProperties.stringForKeyWithDefault("er.rest.timestampFormat.primary", "yyyy-MM-dd'T'HH:mm:ssZ");
 					}
 				}
 			}
-			timestampFormatter = new NSTimestampFormatter(timestampFormat);
+		 //	timestampFormatter = new NSTimestampFormatter(timestampFormat);
+		 //	((NSTimestampFormatter) timestampFormatter).setDefaultFormatTimeZone(NSTimeZone.localTimeZone()); 
+			timestampFormatter =  new SimpleDateFormat(timestampFormat);
+		 
 		}
 		return timestampFormatter;
 	}
@@ -176,7 +181,7 @@ public class ERXRestUtils {
 						dateFormat = ERXProperties.stringForKeyWithDefault("er.rest.dateFormat.secondary", "yyyy-MM-dd HH:mm:ss z");
 					}
 					else {
-						dateFormat = ERXProperties.stringForKeyWithDefault("er.rest.dateFormat.primary", "yyyy-MM-dd'T'HH:mm:ss'Z'");
+						dateFormat = ERXProperties.stringForKeyWithDefault("er.rest.dateFormat.primary", "yyyy-MM-dd'T'HH:mm:ssZ");
 					}
 				}
 			}

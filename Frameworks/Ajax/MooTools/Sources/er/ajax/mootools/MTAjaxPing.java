@@ -27,9 +27,6 @@ import er.ajax.AjaxPing;
  */
 
 public class MTAjaxPing extends AjaxPing {
-
-	private static final long serialVersionUID = 1L;
-
     public MTAjaxPing(WOContext context) {
         super(context);
     }

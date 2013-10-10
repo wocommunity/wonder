@@ -1,6 +1,5 @@
 package er.ajax.mootools;
 
-import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
@@ -58,7 +57,7 @@ import er.extensions.foundation.ERXValueUtilities;
 
 public class MTAjaxUpdateContainer extends AjaxUpdateContainer {
 
-	public MTAjaxUpdateContainer(String name, NSDictionary<String, WOAssociation> associations, WOElement children) {
+	public MTAjaxUpdateContainer(String name, NSDictionary associations, WOElement children) {
 		super(name, associations, children);
 	}
 
@@ -71,17 +70,17 @@ public class MTAjaxUpdateContainer extends AjaxUpdateContainer {
 		MTAjaxUtils.addScriptResourceInHead(context, context.response(), "MooTools", MTAjaxUtils.MOOTOOLS_CORE_JS);
 		MTAjaxUtils.addScriptResourceInHead(context, context.response(), "MooTools", MTAjaxUtils.MOOTOOLS_MORE_JS);
 		Boolean useSpinner = (Boolean)valueForBinding("useSpinner", Boolean.FALSE, context.component());
-		if(useSpinner.booleanValue()) {
+		if(useSpinner) {
 			Boolean useDefaultSpinnerClass = (Boolean)valueForBinding("defaultSpinnerClass", Boolean.TRUE, context.component());
-			if(useDefaultSpinnerClass.booleanValue()) {
-				AjaxUtils.addStylesheetResourceInHead(context, context.response(), "MTAjax", "scripts/plugins/spinner/spinner.css");
+			if(useDefaultSpinnerClass) {
+				MTAjaxUtils.addStylesheetResourceInHead(context, context.response(), "MTAjax", "scripts/plugins/spinner/spinner.css");
 			}
 		}
 		MTAjaxUtils.addScriptResourceInHead(context, context.response(), "MooTools", MTAjaxUtils.MOOTOOLS_WONDER_JS);
 	}
 	
 	@Override
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public NSDictionary createAjaxOptions(WOComponent component) {
 
 		NSMutableArray<AjaxOption> ajaxOptionsArray = new NSMutableArray<AjaxOption>();
@@ -151,17 +150,17 @@ public class MTAjaxUpdateContainer extends AjaxUpdateContainer {
 
 		else {
 			
-			String previousUpdateContainerID = AjaxUpdateContainer.currentUpdateContainerID();
+			String previousUpdateContainerID = MTAjaxUpdateContainer.currentUpdateContainerID();
 			try {
 
 				String elementName = (String) valueForBinding("elementName", "div", component);
 				String id = _containerID(context);
-				AjaxUpdateContainer.setCurrentUpdateContainerID(_containerID(context));
+				MTAjaxUpdateContainer.setCurrentUpdateContainerID(_containerID(context));
 				response.appendContentString("<" + elementName + " ");
 				appendTagAttributeToResponse(response, "id", id);
 				appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
 				appendTagAttributeToResponse(response, "style", valueForBinding("style", component));
-				appendTagAttributeToResponse(response, "data-updateUrl", AjaxUtils.ajaxComponentActionUrl(context));
+				appendTagAttributeToResponse(response, "data-updateUrl", MTAjaxUtils.ajaxComponentActionUrl(context));
 				response.appendContentString(">");
 			
 				if(hasChildrenElements()) {
@@ -181,7 +180,7 @@ public class MTAjaxUpdateContainer extends AjaxUpdateContainer {
 				boolean skipFunction = frequency == null && observeFieldID == null && booleanValueForBinding("skipFunction", false, component);
 
 				if(!skipFunction) {
-					AjaxUtils.appendScriptHeader(response);
+					MTAjaxUtils.appendScriptHeader(response);
 					if(frequency != null) {
 						boolean isNotZero = true;
 						try {
@@ -224,7 +223,7 @@ public class MTAjaxUpdateContainer extends AjaxUpdateContainer {
 				
 				
 			} finally {
-				AjaxUpdateContainer.setCurrentUpdateContainerID(previousUpdateContainerID);
+				MTAjaxUpdateContainer.setCurrentUpdateContainerID(previousUpdateContainerID);
 			}
 			
 		}

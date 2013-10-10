@@ -41,8 +41,6 @@ import er.extensions.components.ERXComponentUtilities;
 
 public class MTAjaxProgressBar extends WOComponent {
 
-	private static final long serialVersionUID = 1L;
-
 	private String _id;
 	private boolean _running;
 	private AjaxProgress _progress;

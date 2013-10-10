@@ -285,6 +285,7 @@ var MTAjaxSubmitButton = {
 			alert('There is no element on this page with the id "' + id + '".');
 		}
 		var finalUrl = MTAjaxSubmitButton.generateActionUrl(id, form, queryParams,options);
+		console.log(finalUrl);
 		var finalOptions = MTAjaxSubmitButton.processOptions(form, options);
 		new Request.HTML(Object.merge({
 				update : id,
@@ -325,7 +326,7 @@ var MTAjaxSubmitButton = {
 		} else if (updateContainerID != null) {
 			submitFunction = function(element, value) {
 				if(!options.onBeforeSubmit || options.onBeforeSubmit(formFieldID)) {
-					MTASB.update(updateContainerID, $(formFieldID).form, null, options);
+					MTASB.update(updateContainerID, $(formFieldID), null, options);
 				}
 			}
 		} else {

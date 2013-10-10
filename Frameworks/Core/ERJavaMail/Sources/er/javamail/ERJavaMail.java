@@ -850,6 +850,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 			}
 
 			if (hasBlackList()) {
+				@SuppressWarnings("unchecked")
 				NSArray<String> filteredOutAddresses = EOQualifier.filteredArrayWithQualifier(filteredAddresses, blackListQualifier());
 				if (filteredOutAddresses.count() > 0)
 					filteredAddresses.removeObjectsInArray(filteredOutAddresses);

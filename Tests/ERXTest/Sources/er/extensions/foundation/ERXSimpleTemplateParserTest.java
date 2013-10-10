@@ -51,6 +51,7 @@ public class ERXSimpleTemplateParserTest extends ERXTestCase {
 		assertEquals("The LAZY brown FOX jumped over the fence", result);
 	}
 	
+	@SuppressWarnings("unused")
 	public static class Animal implements NSKeyValueCodingAdditions {
 		
 		public Animal() { }
@@ -80,6 +81,7 @@ public class ERXSimpleTemplateParserTest extends ERXTestCase {
 		public void takeValueForKeyPath(Object paramObject, String paramString) { }
 	}
 	
+	@SuppressWarnings("unused")
 	public static class AnimalHolder implements NSKeyValueCodingAdditions {
 		
 		public AnimalHolder() { }
@@ -110,4 +112,6 @@ public class ERXSimpleTemplateParserTest extends ERXTestCase {
 			return _animal;
 		}
 	}
+	
+	
 }

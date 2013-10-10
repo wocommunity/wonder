@@ -69,7 +69,7 @@ public class ERXTestReportListener extends RunListener {
         try {
             md = java.security.MessageDigest.getInstance("SHA-1");
         } catch (java.security.NoSuchAlgorithmException nsae) {
-        	throw new IllegalArgumentException(nsae);
+            System.out.println(nsae.getMessage());
         }
 
         for (String aClassName : found) {
@@ -217,17 +217,16 @@ public class ERXTestReportListener extends RunListener {
                     ((HttpsURLConnection)connection).setSSLSocketFactory(sslSocketFactory);
                 }
 
-                if (connection != null) {
-                	connection.setDoOutput(true);
+                connection.setDoOutput(true);
 
-                	OutputStreamWriter osWriter = new OutputStreamWriter(connection.getOutputStream());
+                OutputStreamWriter osWriter = new OutputStreamWriter(connection.getOutputStream());
 
-                	osWriter.write(allParams.toString());
+                osWriter.write(allParams.toString());
 
-                	osWriter.close();
+                osWriter.close();
 
-                	int httpResponse = connection.getResponseCode();
-                }
+                int httpResponse = connection.getResponseCode();
+
             } catch (java.io.IOException ioe) {
                 System.out.println("Test results not submitted. No worries.\n"+ioe);
             } catch (java.security.NoSuchAlgorithmException nsae) {

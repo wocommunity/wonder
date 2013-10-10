@@ -48,9 +48,7 @@ and limitations under the License.
 #include <time.h>
 #if defined(WIN32)
 #ifndef _MSC_VER // SWK old // SWK old WO4.5 headerfile
-#if !defined(MINGW)
 #include <winnt-pdo.h>
-#endif
 #endif
 #include <windows.h>
 #include <io.h>
@@ -73,7 +71,7 @@ and limitations under the License.
  */
 extern server_rec *_webobjects_server;
 #elif defined(IIS)
-// #include <httpext.h> // deactivated anyway
+#include <httpext.h>
 /*
  *	to log properly into IIS's error.lgo
  */
@@ -103,7 +101,7 @@ const char * const WOLogLevel[] = {"Debug", "Info", "Warn",  "Error", "User", ""
 
 static int baselevel = WO_DBG;
 
-void WOLog_init(const char *logfile, const char *logflag, const char *level)
+void WOLog_init(const char *logfile, const char *level)
 {
    int i;
    int fd;
@@ -114,11 +112,7 @@ void WOLog_init(const char *logfile, const char *logflag, const char *level)
     *	the file we stat() to see if we should log
     */
 #ifndef	ALWAYS_LOG
-   if (logflag != NULL) {
-       strcpy(logFlag, logflag);
-   } else {
-       sprintf(logFlag,"%s/%s",tmp(),LOG_FLAG);
-   }
+   sprintf(logFlag,"%s/%s",tmp(),LOG_FLAG);
 #endif
 
    /*

@@ -307,13 +307,7 @@ public class MSiteConfig extends MObject {
     /********** Password Methods **********/
     private static Random _randomGenerator = new Random();
 
-    static public long myrand() {
-        long nextLong = _randomGenerator.nextLong();
-        while (nextLong == Long.MIN_VALUE) {
-            nextLong = _randomGenerator.nextLong();
-        }
-        return Math.abs(nextLong);
-    }
+    static public long myrand() { return Math.abs(_randomGenerator.nextLong()); }
 
     public String encryptStringWithKey(String to_be_encrypted, String aKey) {
         String encrypted_value = "";

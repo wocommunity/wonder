@@ -1,7 +1,6 @@
 package er.ajax.mootools;
 
 import com.webobjects.appserver.WOActionResults;
-import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
@@ -56,7 +55,7 @@ import er.extensions.appserver.ajax.ERXAjaxApplication;
 
 public class MTAjaxObserveField extends AjaxDynamicElement {
 	
-    public MTAjaxObserveField(String name, NSDictionary<String, WOAssociation> associations, WOElement children) {
+    public MTAjaxObserveField(String name, NSDictionary associations, WOElement children) {
 		super(name, associations, children);
 	}
 
@@ -166,7 +165,7 @@ public class MTAjaxObserveField extends AjaxDynamicElement {
 		if(useSpinner) {
 			Boolean useDefaultSpinnerClass = (Boolean)valueForBinding("defaultSpinnerClass", Boolean.TRUE, context.component());
 			if(useDefaultSpinnerClass) {
-				AjaxUtils.addStylesheetResourceInHead(context, context.response(), "MooTools", "scripts/plugins/spinner/spinner.css");
+				MTAjaxUtils.addStylesheetResourceInHead(context, context.response(), "MooTools", "scripts/plugins/spinner/spinner.css");
 			}
 		}
 		

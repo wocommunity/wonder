@@ -9,7 +9,6 @@ package er.extensions.formatters;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import er.extensions.foundation.ERXStringUtilities;
@@ -116,9 +115,9 @@ public class ERXSimpleHTMLFormatter extends java.text.Format {
             return null;
 
         // Convert tabs in the argument (which must be a String) to HTML spacers.
-        newString = StringUtils.replace((String)anObject, ASCIITab, HTMLTab());
+        newString = ERXStringUtilities.replaceStringByStringInString(ASCIITab, HTMLTab(), (String)anObject);
         // Convert new-lines in the argument (which must be a String) to HTML breaks.
-        return StringUtils.replace(newString, ASCIIReturn, HTMLReturn);
+        return ERXStringUtilities.replaceStringByStringInString(ASCIIReturn, HTMLReturn, newString);
     }
 
     /**
@@ -134,9 +133,9 @@ public class ERXSimpleHTMLFormatter extends java.text.Format {
             return null;
 
         // Convert new-lines in the argument (which must be a String) to HTML breaks.
-        newString = StringUtils.replace(inString, HTMLReturn, ASCIIReturn);
+        newString = ERXStringUtilities.replaceStringByStringInString(HTMLReturn, ASCIIReturn, inString);
         // Convert tabs in the argument (which must be a String) to HTML spacers.
-        return StringUtils.replace(newString, HTMLTab(), ASCIITab);
+        return ERXStringUtilities.replaceStringByStringInString(HTMLTab(), ASCIITab, newString);
     }
 
     /**

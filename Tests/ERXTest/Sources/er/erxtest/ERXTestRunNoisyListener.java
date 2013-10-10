@@ -18,11 +18,16 @@ public class ERXTestRunNoisyListener extends RunListener {
 	public void testStarted(Description description) { attempted++; }
 	@Override
 	public void testFailure(Failure failure) {
-		System.out.print("\n"+failure+" FAILED\n");
+		System.out.print("\n\n");
+		System.out.print(failure+"\n\n");
+		System.out.print(failure.getDescription()+"\n\n");
+		System.out.print(failure.getException().getMessage()+"\n\n");
+		failure.getException().printStackTrace();
+		System.out.print("\n\n");
 		failed++;
 	}
 	@Override
-	public void testFinished(Description description) { System.out.println(description.toString()); }
+	public void testFinished(Description description) { }
 
 	@Override
 	public void testRunFinished(Result result) {

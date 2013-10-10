@@ -7,8 +7,6 @@ LOG=/Library/WebObjects/Logs/SpawnOfWotaskd.log
 
 if [ -f /tmp/logWebObjects ]; then 
 
-	mkdir -p `dirname "$LOG"`
-
 	echo "************" >>${LOG}
 	echo "date: `date`" >>${LOG}
 	echo "args: $@" >>${LOG}

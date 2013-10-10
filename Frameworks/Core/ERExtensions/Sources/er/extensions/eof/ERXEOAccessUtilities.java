@@ -1378,7 +1378,7 @@ public class ERXEOAccessUtilities {
      * @author ak
      * @param attributes 
      * @param values 
-     * @return qualifier. EOAndQualifier for 2 or more elements in <code>attributes</code>, EOKeyValueQualifier for a single element <code>attributes</code> array, <code>null</code> when <code>attributes</code> is null or empty.
+     * @return qualifier
      */
     public static EOQualifier qualifierFromAttributes(NSArray<EOAttribute> attributes, NSDictionary values) {
         EOQualifier result = null;
@@ -1388,8 +1388,7 @@ public class ERXEOAccessUtilities {
                 Object value = values.objectForKey(key.name());
                 qualifiers.addObject(new EOKeyValueQualifier(key.name(), EOQualifier.QualifierOperatorEqual, value));
             }
-            // Don't wrap in an AND qualifier if there is only one qualifier
-            result = (qualifiers.count() == 1 ? qualifiers.objectAtIndex(0) : new EOAndQualifier(qualifiers));
+            result = new EOAndQualifier(qualifiers);
         }
         return result;
     }
@@ -2358,18 +2357,17 @@ public class ERXEOAccessUtilities {
 	 */
 	public static NSArray<EOEntity> entityHierarchyForEntity(EOEditingContext ec, EOEntity rootEntity) {
 		NSMutableArray<EOEntity> entities = new NSMutableArray<EOEntity>();
-	
-		if (!rootEntity.isAbstractEntity()) {
-			entities.add(rootEntity);
-		}
-		@SuppressWarnings("unchecked")
-		NSArray<EOEntity> subEntities = rootEntity.subEntities();
-		for (EOEntity subEntity : subEntities) {
-			entities.addAll(entityHierarchyForEntity(ec, subEntity));
+
+		if (rootEntity != null) {
+			if (!rootEntity.isAbstractEntity()) {
+				entities.add(rootEntity);
+			}
+			for (EOEntity subEntity : rootEntity.subEntities()) {
+				entities.addAll(allSubEntitiesForEntity(subEntity, false));
+			}
 		}
 		return entities.immutableClone();
 	}
-	
 
 	/**
 	 * Utility method used to find all of the sub entities

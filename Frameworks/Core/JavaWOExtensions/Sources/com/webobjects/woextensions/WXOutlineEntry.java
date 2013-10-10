@@ -73,8 +73,7 @@ public class WXOutlineEntry extends WOComponent {
     }
 
     public WOComponent toggleExpansion() {
-        @SuppressWarnings("unchecked")
-		NSArray<Object> selectionPath = (NSArray<Object>)_WOJExtensionsUtil.valueForBindingOrNull("selectionPath",this);
+        NSArray selectionPath = (NSArray)_WOJExtensionsUtil.valueForBindingOrNull("selectionPath",this);
 
         selectionPath = selectionPath.subarrayWithRange(new NSRange(0, _nestingLevel));
 

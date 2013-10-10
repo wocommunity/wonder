@@ -291,9 +291,14 @@ public class JSONRequestHandler extends WORequestHandler {
 							contextSession._appendCookieToResponse(response);
 						}
 					}
-					response.appendContentString(output.toString());
-					response._finalizeInContext(context);
-					response.disableClientCaching();
+					if (output != null) {
+						response.appendContentString(output.toString());
+					}
+
+					if (response != null) {
+						response._finalizeInContext(context);
+						response.disableClientCaching();
+					}
 				}
 				finally {
 					try {

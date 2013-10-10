@@ -22,5 +22,4 @@
 				cnctTimeout CDATA #IMPLIED
 				sendBufSize CDATA #IMPLIED
 				recvBufSize CDATA #IMPLIED
-				refuseNewSessions CDATA #IMPLIED
 				additionalArgs CDATA #IMPLIED>

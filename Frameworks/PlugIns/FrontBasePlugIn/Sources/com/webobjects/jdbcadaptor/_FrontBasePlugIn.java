@@ -69,7 +69,6 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 	static final String _frontbaseStoredProcedureCatalogPattern = System.getProperty("jdbcadaptor.frontbase.storedProcedureCatalogPattern", null);
 	static final String _frontbaseStoredProcedureSchemaPattern = System.getProperty("jdbcadaptor.frontbase.storedProcedureSchemaPattern", null);
 	static final String _frontbaseSqlStatementForGettingTableNames = System.getProperty("jdbcadaptor.frontbase.sqlStatementForGettingTableNames", null);
-	static final String _frontbaseContainsOperatorFix = System.getProperty("jdbcadaptor.frontbase.frontbaseContainsOperatorFix", null);
 
 	public _FrontBasePlugIn(JDBCAdaptor jdbcadaptor) {
 		super(jdbcadaptor);
@@ -1269,21 +1268,9 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 		EOQualifier qualifier() {
 			return _qualifier;
 		}
-		
-		@Override
-		public String sqlStringForSelector(NSSelector selector, Object value) {
-			String retStr = null;
-			
-			if (_frontbaseContainsOperatorFix == null) {
-				retStr = sqlStringForSelectorTreatingContainsAsLike(selector, value);
-			} else {
-				retStr = super.sqlStringForSelector(selector, value);
-			}
-			
-			return retStr;
-		}
 
-		protected String sqlStringForSelectorTreatingContainsAsLike(NSSelector qualifierOperator, Object value) {
+		@Override
+		public String sqlStringForSelector(NSSelector qualifierOperator, Object value) {
 			if (qualifierOperator.equals(EOQualifier.QualifierOperatorContains))
 				if (value == NSKeyValueCoding.NullValue)
 					return "is";
@@ -1655,12 +1642,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			column = formatSQLString(column, _entity._attributeForPath(attrubute).readFormat());
 			NSSelector nsselector = eokeyvaluequalifier.selector();
 
-			boolean flag = false;
-			if (_frontbaseContainsOperatorFix == null) {
-				flag = nsselector.equals(EOQualifier.QualifierOperatorLike) || nsselector.equals(EOQualifier.QualifierOperatorCaseInsensitiveLike) || nsselector.equals(EOQualifier.QualifierOperatorContains);
-			} else {
-				flag = nsselector.equals(EOQualifier.QualifierOperatorLike) || nsselector.equals(EOQualifier.QualifierOperatorCaseInsensitiveLike);
-			}
+			boolean flag = nsselector.equals(EOQualifier.QualifierOperatorLike) || nsselector.equals(EOQualifier.QualifierOperatorCaseInsensitiveLike) || nsselector.equals(EOQualifier.QualifierOperatorContains);
 
 			if (flag) {
 				qualifier = sqlPatternFromShellPattern(qualifier.toString());

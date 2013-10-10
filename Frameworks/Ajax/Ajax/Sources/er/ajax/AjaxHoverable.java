@@ -76,10 +76,6 @@ public class AjaxHoverable extends WOComponent {
 		if (ERXStringUtilities.isNotBlank(userDefined)) {
 			classes += " " + userDefined;
 		}
-		
-		if (showHoverable()) {
-			classes += " showHoverable";
-		}
 		return classes;
 	}
 	

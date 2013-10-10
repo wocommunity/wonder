@@ -640,7 +640,10 @@ public class ERXJDBCConnectionBroker implements ERXJDBCAdaptor.ConnectionBroker 
                 try {
                     c.isClosed();
                     c.setReadOnly(false);
-                    c.createStatement().executeQuery(pingStatement);
+                    ResultSet rs = c.createStatement().executeQuery(pingStatement);
+                    if(rs == null) {
+                    	// nothing
+                    }
                 } catch (SQLException e) {
                     log.error("Could not ping connection " + c + ", reason: " + e.getMessage(), e);
                 } finally {

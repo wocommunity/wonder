@@ -10,7 +10,6 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 import er.ajax.AjaxComponent;
 import er.ajax.AjaxOption;
-import er.ajax.AjaxUtils;
 
 /**
  * @binding pickerClass - default (datepicker) CSS class for the main datepicker container element.
@@ -37,8 +36,6 @@ import er.ajax.AjaxUtils;
  */
 public class MTJSDatePicker extends AjaxComponent {
 
-	private static final long serialVersionUID = 1L;
-
 	public MTJSDatePicker(WOContext context) {
 		super(context);
 	}
@@ -52,9 +49,9 @@ public class MTJSDatePicker extends AjaxComponent {
 	protected void addRequiredWebResources(WOResponse res) {
 		MTAjaxUtils.addScriptResourceInHead(context(), res, "MooTools", MTAjaxUtils.MOOTOOLS_CORE_JS);
 		MTAjaxUtils.addScriptResourceInHead(context(), res, "MooTools", "scripts/plugins/datepicker/datepicker.js");
-		boolean useDefaultCSS = booleanValueForBinding("useDefaultCSS", true);
+		Boolean useDefaultCSS = booleanValueForBinding("useDefaultCSS", true);
 		if(useDefaultCSS) {
-			AjaxUtils.addStylesheetResourceInHead(context(), res, "MooTools", "scripts/plugins/datepicker/datepicker.css");
+			MTAjaxUtils.addStylesheetResourceInHead(context(), res, "MooTools", "scripts/plugins/datepicker/datepicker.css");
 		}
 	}
 

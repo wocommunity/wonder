@@ -1197,7 +1197,8 @@ public class ERXStringUtilities {
     public static String removeExtraDotsFromVersionString(String version) {
         int floatingPointIndex = version.indexOf("."); 
         if (floatingPointIndex >= 0  &&  floatingPointIndex + 1 < version.length()) {
-            String minorVersion = StringUtils.replace(version.substring(floatingPointIndex + 1), ".", "");
+            String minorVersion = ERXStringUtilities.replaceStringByStringInString(".", "", 
+                                        version.substring(floatingPointIndex + 1));
             version = version.substring(0, floatingPointIndex + 1) + minorVersion;
         }
         return version;
@@ -2398,7 +2399,7 @@ public class ERXStringUtilities {
                 }
             }
         }
-        return StringUtils.replace(result.toString(), "&nbsp;"," ");
+        return ERXStringUtilities.replaceStringByStringInString("&nbsp;"," ",result.toString());
     }
     
     /**

@@ -45,19 +45,12 @@ and limitations under the License.
 }
 #else
 #define DEBUGWAIT
-
-#ifndef _INTPTR_T_DEFINED
-typedef int  intptr_t;
-#define _INTPTR_T_DEFINED
 #endif
 
-#endif
+#define	CURRENT_WOF_VERSION_MAJOR	4
+#define CURRENT_WOF_VERSION_MINOR	5
 
-
-#define CURRENT_WOF_VERSION_MAJOR	4
-#define CURRENT_WOF_VERSION_MINOR	6
-
-#define ADAPTOR_VERSION			"4.6"
+#define ADAPTOR_VERSION			"4.5.1"
 
 /* Used to turn the value of a macro into a string literal */
 #define _Str(x) #x
@@ -73,7 +66,7 @@ typedef int  intptr_t;
 #define WA_MAX_ADDITIONAL_ARGS_LENGTH	0	/* maximum length of the additional args, including the null */
 #define WA_LB_MAX_NAME_LENGTH		16	/* maximum length of a load balancing routine's name, including the null */
 #define WA_APP_LB_INFO_SIZE		4	/* size in bytes to reserve for load balancing info in WOApp */
-#if defined(_MSC_VER) || defined(MINGW)  // SWK changed from 8 to 16 cause VS2005 uses _time_t_64
+#ifdef _MSC_VER // SWK changed from 8 to 16 cause VS2005 uses _time_t_64
 #define WA_INST_LB_INFO_SIZE		16	/* size in bytes to reserve for load balancing info in WOInstance */
 #else
 #define WA_INST_LB_INFO_SIZE		16	/* size in bytes to reserve for load balancing info in WOInstance */
@@ -143,7 +136,6 @@ const char *adaptor_valueForKey(const char *option);
 #define	WOCNFINTVL	"confinterval"		/* WebObjectsConfig	  */
 #define	WOLOGPATH	"logPath"	 	/* WebObjectsLog */
 #define	WOLOGLEVEL	"logLevel"		/* WebObjectsLog */
-#define	WOLOGFLAG	"logFlag"		/* WebObjectsLog */
 #define	WOSTATEFILE	"stateFile"		/* WebObjectsStateFile */
 #define WOOPTIONS       "options"               /* additional adaptor options string */
 #define WODOMAIN        "domainname"            /* domain name to use in links to the adaptor */
@@ -167,11 +159,6 @@ const char *adaptor_valueForKey(const char *option);
 #define WOSENDTIMEOUT		"sendTimeout"		/* send timeout */
 #define WORECVTIMEOUT		"recvTimeout"		/* receive timeout */
 #define WOCNCTTIMEOUT		"cnctTimeout"		/* connect timeout */
-
-#if defined(SUPPORT_REFUSENEWSESSION_ATTR)
-  #define WOREFUSENEWSESSIONS     "refuseNewSessions"
-#endif
-
 /* This one is defined above, but included again here to be complete. */
 /*#define WOADDITIONALARGS	"additionalArgs"*/	/* Additional args */
 

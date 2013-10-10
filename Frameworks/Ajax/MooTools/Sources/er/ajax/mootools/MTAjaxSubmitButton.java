@@ -1,7 +1,6 @@
 package er.ajax.mootools;
 
 import com.webobjects.appserver.WOActionResults;
-import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
@@ -68,7 +67,7 @@ public class MTAjaxSubmitButton extends AjaxDynamicElement {
 	// MS: If you change this value, make sure to change it in ERXAjaxApplication and in wonder.js
 	public static final String KEY_PARTIAL_FORM_SENDER_ID = "_partialSenderID";
 
-	public MTAjaxSubmitButton(String name, NSDictionary<String, WOAssociation> associations, WOElement children) {
+	public MTAjaxSubmitButton(String name, NSDictionary associations, WOElement children) {
 		super(name, associations, children);
 	}
 
@@ -112,10 +111,10 @@ public class MTAjaxSubmitButton extends AjaxDynamicElement {
 		MTAjaxUtils.addScriptResourceInHead(context, context.response(), "MooTools", MTAjaxUtils.MOOTOOLS_CORE_JS);
 		MTAjaxUtils.addScriptResourceInHead(context, context.response(), "MooTools", MTAjaxUtils.MOOTOOLS_MORE_JS);
 		Boolean useSpinner = (Boolean)valueForBinding("useSpinner", Boolean.FALSE, context.component());
-		if(useSpinner.booleanValue()) {
+		if(useSpinner) {
 			Boolean useDefaultSpinnerClass = (Boolean)valueForBinding("defaultSpinnerClass", Boolean.TRUE, context.component());
-			if(useDefaultSpinnerClass.booleanValue()) {
-				AjaxUtils.addStylesheetResourceInHead(context, context.response(), "MooTools", "scripts/plugins/spinner/spinner.css");
+			if(useDefaultSpinnerClass) {
+				MTAjaxUtils.addStylesheetResourceInHead(context, context.response(), "MooTools", "scripts/plugins/spinner/spinner.css");
 			}
 		}
 

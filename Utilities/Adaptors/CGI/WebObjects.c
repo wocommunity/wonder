@@ -1,6 +1,6 @@
 /*
 
-Copyright 2000-2007 Apple, Inc. All Rights Reserved.
+Copyright © 2000-2007 Apple, Inc. All Rights Reserved.
 
 The contents of this file constitute Original Code as defined in and are
 subject to the Apple Public Source License Version 1.1 (the 'License').
@@ -20,12 +20,12 @@ and limitations under the License.
 */
 
 /*
- *  CGI - the 'simplest' case of an adaptor API.
+ *	CGI - the 'simplest' case of an adaptor API.
  *
- *  Headers are passed in as environment variables (char **envp).
- *  Form data is available at stdin.
+ *	Headers are passed in as environment variables (char **envp).
+ *	Form data is available at stdin.
  *
- *  Response is returned via stdout.
+ *	Response is returned via stdout.
  *
  */
 #include "config.h"
@@ -52,9 +52,7 @@ and limitations under the License.
 #include <signal.h>
 #else
 #include <winsock.h>
-#if !defined(MINGW)
 #include <winnt-pdo.h>
-#endif
 #include <io.h>	/* setmode() */
 #include <fcntl.h>
 #endif
@@ -65,10 +63,10 @@ and limitations under the License.
 
 static const char *documentRoot();
 
-#define CGI_SCRIPT_NAME "SCRIPT_NAME"
-#define CGI_PATH_INFO "PATH_INFO"
-#define CGI_SERVER_PROTOCOL "SERVER_PROTOCOL"
-#define CGI_DOCUMENT_ROOT "DOCUMENT_ROOT"
+#define CGI_SCRIPT_NAME	"SCRIPT_NAME"
+#define	CGI_PATH_INFO	"PATH_INFO"
+#define	CGI_SERVER_PROTOCOL	"SERVER_PROTOCOL"
+#define	CGI_DOCUMENT_ROOT "DOCUMENT_ROOT"
 #define WO_CONFIG_URL "WO_CONFIG_URL"
 #define WO_ADAPTOR_INFO_USERNAME "WO_ADAPTOR_INFO_USERNAME"
 #define WO_ADAPTOR_INFO_PASSWORD "WO_ADAPTOR_INFO_PASSWORD"
@@ -78,18 +76,18 @@ char *WA_adaptorName = "CGI";
 static unsigned int freeValueNeeded=0;
 
 /*
- *  the CGI1.1 spec says:
+ *	the CGI1.1 spec says:
  *
- *  "For Unix compatible operating systems, the following are defined:
- *  ...
- *  Character set
- *    The US-ASCII character set is used for the definition of
- *    environment variable names and header field names; the newline
- *    (NL) sequence is LF; servers SHOULD also accept CR LF as a
- *    newline.
- *  ..."
+ *	"For Unix compatible operating systems, the following are defined:
+ *	...
+ *	Character set
+ *		The US-ASCII character set is used for the definition of
+ *		environment variable names and header field names; the newline
+ *		(NL) sequence is LF; servers SHOULD also accept CR LF as a
+ *		newline.
+ *	..."
  */
-#define CRLF  "\r\n"
+#define	CRLF	"\r\n"
 
 /*
  * BEGIN Support for getting the client's certificate.
@@ -125,7 +123,7 @@ char *make_cert_one_line(char *value) {
  */
 
 /*
- *  send response to server
+ *	send response to server
  */
 static void sendResponse(HTTPResponse *resp)
 {
@@ -146,35 +144,18 @@ static void sendResponse(HTTPResponse *resp)
 #ifndef PROFILE
    /* resp->content_valid will be 0 for HEAD requests and empty responses */
    if (resp->content_valid) {
-      int count;
-
-      while (resp->content_read < resp->content_length &&
-             (resp->flags & RESP_LENGTH_INVALID) != RESP_LENGTH_INVALID) {
+      while (resp->content_read < resp->content_length) {
          fwrite(resp->content,sizeof(char),resp->content_valid,stdout);
-         count = resp_getResponseContent(resp, 1);
-         if(count > 0)
+         if (resp_getResponseContent(resp, 1) == -1)
          {
-            // 2009/06/09: handle situations where content_length is wrong or
-            //             unset. Read as much data as possible from the
-            //             WebObjects application and send the data to the
-            //             client-side.
-            resp->content_read += count;
-            resp->content_valid = count;
+         	break;
          }
-         if(count != 0)
-         {
-            // 2009/04/30: error while reading response content (this can happen
-            //             if the instance dies during sending the response - e.g.
-            //             during a file download - or if the content_length is
-            //             wrong/unset). Stop the loop to avoid endless looping!
-            WOLog(WO_WARN, "sendResponse(): received an incomplete data package. Please look for a dead instance or adjust content-length value.");
-         }
-        }
-        fwrite(resp->content,sizeof(char),resp->content_valid,stdout);
+      }
+      fwrite(resp->content,sizeof(char),resp->content_valid,stdout);
    }
    fflush(stdout);
 #endif
-   return;    
+   return;		
 }
 
 static void die_resp(HTTPResponse *resp)
@@ -206,8 +187,8 @@ static int readContentData(HTTPRequest *req, void *buffer, int dataSize, int mus
 
 
 
-#ifdef  PROFILE
-int doit(int argc, char *argv[], char **envp);  /* forward */
+#ifdef	PROFILE
+int doit(int argc, char *argv[], char **envp);	/* forward */
 
 int main(int argc, char *argv[], char **envp) {
    int i;
@@ -218,7 +199,7 @@ int main(int argc, char *argv[], char **envp) {
 int doit(int argc, char *argv[], char **envp) {
 #else
    /*
-    * the request handler...
+    *	the request handler...
     */
    int main(int argc, char *argv[], char **envp) {
 #endif
@@ -293,7 +274,7 @@ int doit(int argc, char *argv[], char **envp) {
       }
 
       /*
-       *  extract WebObjects application name from URI
+       *	extract WebObjects application name from URI
        */
 
       url = WOMALLOC(strlen(path_info) + strlen(script_name) + 1);
@@ -320,12 +301,12 @@ int doit(int argc, char *argv[], char **envp) {
       }
 
       /*
-       *  build the request...
+       *	build the request...
        */
       req = req_new( getenv("REQUEST_METHOD"), NULL);
 
       /*
-       *  validate the method
+       *	validate the method
        */
       reqerr = req_validateMethod(req);
       if (reqerr) {
@@ -333,9 +314,9 @@ int doit(int argc, char *argv[], char **envp) {
       }
 
       /*
-       *  copy the headers.  This looks wierd... all we're doing is copying
-       *  *every* environment variable into our headers.  It may be beyond
-       *  the spec, but more information probably won't hurt.
+       *	copy the headers.  This looks wierd... all we're doing is copying
+       *	*every* environment variable into our headers.  It may be beyond
+       *	the spec, but more information probably won't hurt.
        */
       while (envp && *envp) {
          char *key, *value;
@@ -344,7 +325,7 @@ int doit(int argc, char *argv[], char **envp) {
 
          for (value = key; *value && !isspace((int)*value) && (*value != '='); value++) {}
          if (*value) {
-            *value++ = '\0';  /* null terminate 'key' */
+            *value++ = '\0';	/* null terminate 'key' */
          }
          while (*value && (isspace((int)*value) || (*value == '='))) {
             value++;
@@ -373,12 +354,12 @@ int doit(int argc, char *argv[], char **envp) {
          /*  END Support for getting the client's certificate  */
 
          WOFREE(key);
-         envp++;      /* next env variable */
+         envp++;			/* next env variable */
       }
 
       /*
-       *  get form data if any
-       *  assume that POSTs with content length will be reformatted to GETs later
+       *	get form data if any
+       *	assume that POSTs with content length will be reformatted to GETs later
        */
       if (req->content_length > 0) {
          req_allocateContent(req, req->content_length, 1);
@@ -405,13 +386,13 @@ int doit(int argc, char *argv[], char **envp) {
       }
 
       /*
-       *  message the application & collect the response
+       *	message the application & collect the response
        */
       resp = tr_handleRequest(req, url, &wc, getenv(CGI_SERVER_PROTOCOL), documentRoot());
 
       if (resp != NULL) {
          sendResponse(resp);
-         resp_free(resp);   /* dump the response */
+         resp_free(resp);		/* dump the response */
       }
 
       WOFREE(url);
@@ -454,6 +435,6 @@ int doit(int argc, char *argv[], char **envp) {
          return path;
       else {
          WOLog(WO_ERR,"Can't find document root in CGI variables");
-         return "/usr/local/apache/htdocs";   /* this is bad.... */
+         return "/usr/local/apache/htdocs";		/* this is bad.... */
       }
 }

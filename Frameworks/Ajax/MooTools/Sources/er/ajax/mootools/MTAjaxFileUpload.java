@@ -70,8 +70,6 @@ import er.extensions.foundation.ERXFileUtilities;
 
 public class MTAjaxFileUpload extends WOComponent {
 
-	private static final long serialVersionUID = 1L;
-
 	private static boolean _requestHandlerRegistered = false;
 
 	private String _id;
