@@ -82,7 +82,7 @@ public class WOLClickToOpen extends WOComponent {
         Boolean debugEnabled = (Boolean) debugEnabledMethod.invoke(application, componentName);
 
         Method setDebugEnabledMethod = application.getClass().getMethod("setDebugEnabledForComponent", boolean.class, String.class);
-        setDebugEnabledMethod.invoke(application, !debugEnabled.booleanValue(), componentName);
+        setDebugEnabledMethod.invoke(application, Boolean.valueOf(!debugEnabled.booleanValue()), componentName);
       }
       catch (Throwable e) {
         e.printStackTrace();

@@ -68,6 +68,7 @@ public class AjaxOptions extends WODynamicElement {
     _children = children;
   }
 
+  @Override
   public void appendToResponse(WOResponse response, WOContext context) {
     response.appendContentCharacter('{');
     NSMutableDictionary options = _bindings;

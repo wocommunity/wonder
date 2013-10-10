@@ -25,6 +25,8 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSPathUtilities;
 
+import er.extensions.appserver.ERXResponse;
+
 public class RemoteBrowse extends WODirectAction  {
     private Object[] fileKeys = new Object[]{"file" , "fileType" , "fileSize"};
     private File[] roots;
@@ -47,7 +49,7 @@ public class RemoteBrowse extends WODirectAction  {
         int anArrayCount = rootStrings.length;
         NSMutableArray rootArray = new NSMutableArray(anArrayCount);
         for (int i = 0; i < anArrayCount; i++) {
-            NSDictionary aFileDict = new NSDictionary(new Object[]{rootStrings[i] , "NSFileTypeDirectory" , new Long(0)}, fileKeys);
+            NSDictionary aFileDict = new NSDictionary(new Object[]{rootStrings[i] , "NSFileTypeDirectory" , Long.valueOf(0)}, fileKeys);
             rootArray.addObject(aFileDict);
         }
 
@@ -89,10 +91,10 @@ public class RemoteBrowse extends WODirectAction  {
 
             if (subfile.isDirectory()) {
                 aFileType = "NSFileTypeDirectory";
-                aFileSize = new Long(0);
+                aFileSize = Long.valueOf(0);
             } else {
                 aFileType = "NSFileTypeRegular";
-                aFileSize = new Long(subfile.length());
+                aFileSize = Long.valueOf(subfile.length());
             }
 
             aFileDict = new NSDictionary(new Object[]{aFile , aFileType , aFileSize}, fileKeys);
@@ -112,37 +114,36 @@ public class RemoteBrowse extends WODirectAction  {
 
     public WOResponse getPathAction() {
         WORequest aRequest = request();
-        WOResponse aResponse = new WOResponse();
+        ERXResponse aResponse = new ERXResponse();
 
         if (aRequest.isUsingWebServer())  {
             aResponse.setStatus(WOMessage.HTTP_STATUS_FORBIDDEN);
             aResponse.appendContentString("Access Denied");
             return aResponse;
-        } else {
-            String aPath = aRequest.headerForKey("filepath");
-            boolean showFiles = (aRequest.headerForKey("showFiles") != null) ? true : false;
-
-            // looking for roots, or root listing of only 1 root
-            if (aPath == null && !singleRoot) {
-                aResponse.appendContentString(xmlRoots);
-                aResponse.setHeader("YES", "isRoots");
-            } else {
-                if (aPath == null) aPath = rootStrings[0];
-                NSArray anArray = fileListForStartingPath(aPath, showFiles);
-
-                if (anArray == null) {
-                    aResponse.appendContentString("ERROR");
-                } else {
-                    _JavaMonitorCoder aCoder = new _JavaMonitorCoder();
-                    String anXMLString = null;
-                    anXMLString = aCoder.encodeRootObjectForKey(anArray, "pathArray");
-                    anXMLString = (anXMLString) + " \r\n";
-                    aResponse.appendContentString(anXMLString);
-                    aResponse.setHeader(aPath, "filepath");
-                }
-            }
-            return aResponse;
         }
+        String aPath = aRequest.headerForKey("filepath");
+        boolean showFiles = (aRequest.headerForKey("showFiles") != null) ? true : false;
+
+        // looking for roots, or root listing of only 1 root
+        if (aPath == null && !singleRoot) {
+            aResponse.appendContentString(xmlRoots);
+            aResponse.setHeader("YES", "isRoots");
+        } else {
+            if (aPath == null) aPath = rootStrings[0];
+            NSArray anArray = fileListForStartingPath(aPath, showFiles);
+
+            if (anArray == null) {
+                aResponse.appendContentString("ERROR");
+            } else {
+                _JavaMonitorCoder aCoder = new _JavaMonitorCoder();
+                String anXMLString = null;
+                anXMLString = aCoder.encodeRootObjectForKey(anArray, "pathArray");
+                anXMLString = (anXMLString) + " \r\n";
+                aResponse.appendContentString(anXMLString);
+                aResponse.setHeader(aPath, "filepath");
+            }
+        }
+        return aResponse;
     }
 
 }

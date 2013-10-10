@@ -13,6 +13,7 @@ import java.security.SecureRandom;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 
+import org.apache.commons.lang.CharEncoding;
 import org.apache.log4j.Logger;
 
 import com.webobjects.foundation.NSForwardException;
@@ -160,7 +161,7 @@ public class ERXDESCrypter implements ERXCrypterInterface {
 		try {
 			Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
 			cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-			byte[] stringBytes = clearText.getBytes("UTF-8");
+			byte[] stringBytes = clearText.getBytes(CharEncoding.UTF_8);
 			stringBytes = ERXCompressionUtilities.deflateByteArray(stringBytes);
 			byte[] raw = cipher.doFinal(stringBytes);
 			String encBase64String = ERXCrypto.base64Encode(raw);

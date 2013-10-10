@@ -149,8 +149,7 @@ public class ERXMacBinarySwissArmyKnife {
     private static String formatExplained( int format ) {
         if ( format > 0 )
             return ( "MacBinary-" + format );
-        else
-            return ( errorText[ -format ] );
+        return ( errorText[ -format ] );
     }
 
     public boolean isMacBinary(NSData fileData) {
@@ -287,7 +286,7 @@ public class ERXMacBinarySwissArmyKnife {
     public long
         getUIntAt( int offset )
     {
-            long value = 0xFFFFFFFFL & (long) getIntAt( offset );
+            long value = 0xFFFFFFFFL & getIntAt( offset );
             return ( value );
     }
 

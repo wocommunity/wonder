@@ -37,10 +37,8 @@ public class ERFileAttachment extends _ERFileAttachment {
 	private static final long serialVersionUID = 1L;
 
   public static final String STORAGE_TYPE = "file";
+  @SuppressWarnings("unused")
   private static Logger log = Logger.getLogger(ERFileAttachment.class);
-
-  public ERFileAttachment() {
-  }
 
   @Override
   public void awakeFromInsertion(EOEditingContext editingContext) {

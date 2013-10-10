@@ -24,7 +24,6 @@ import er.extensions.eof.ERXEOControlUtilities;
  * Confirming an action template.<br />
  * 
  */
-
 public class ERDConfirmMessage extends ERDCustomEditComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -39,13 +38,17 @@ public class ERDConfirmMessage extends ERDCustomEditComponent {
     public final static Logger log = Logger.getLogger(ERDConfirmMessage.class);
     
     public String message;
-    
+
+    @Override
     public boolean isStateless() { return true; }
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     // Ok to do this, if they enter text then everything is A OK.
+    @Override
     public void awake() { message = hasBinding("defaultMessage") ? (valueForBinding("defaultMessage") == null ? "" : (String)valueForBinding("defaultMessage")) : ""; }
-    
+
+    @Override
     public void reset() {
         super.reset();
         _confirmMessageKey = null;
@@ -122,7 +125,8 @@ public class ERDConfirmMessage extends ERDCustomEditComponent {
         }
         return _confirmMessageTextfieldMaxlength;
     }
-    
+
+    @Override
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         super.takeValuesFromRequest(r, c);
         if (list().count() > 0) {

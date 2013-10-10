@@ -1,6 +1,7 @@
 package er.ajax.mootools;
 
 import com.webobjects.appserver.WOContext;
+
 import er.ajax.AjaxPingUpdate;
 
 /**
@@ -21,6 +22,9 @@ import er.ajax.AjaxPingUpdate;
  */
 
 public class MTAjaxPingUpdate extends AjaxPingUpdate {
+
+	private static final long serialVersionUID = 1L;
+
     public MTAjaxPingUpdate(WOContext context) {
         super(context);
     }

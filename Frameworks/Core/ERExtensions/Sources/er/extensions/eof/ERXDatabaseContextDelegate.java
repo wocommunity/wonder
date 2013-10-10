@@ -35,8 +35,8 @@ import com.webobjects.eocontrol.EOKeyGlobalID;
 import com.webobjects.eocontrol.EOSharedEditingContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSNotificationCenter;
 
@@ -525,6 +525,7 @@ public class ERXDatabaseContextDelegate {
     }
     
     private class ReentranceProtector {
+    	public ReentranceProtector() {}
     	
     	private NSMutableArray<EODatabaseContext> _accessing = new NSMutableArray<EODatabaseContext>();
     	

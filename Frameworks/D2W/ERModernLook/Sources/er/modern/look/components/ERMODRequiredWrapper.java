@@ -73,7 +73,7 @@ public class ERMODRequiredWrapper extends ERMODComponent {
 	}
 
 	public void setWatchedContainerID(String id) {
-		this._watchedContainerID = id;
+		_watchedContainerID = id;
 	}
 	
 	/**
@@ -109,7 +109,7 @@ public class ERMODRequiredWrapper extends ERMODComponent {
 	 */
 	public Boolean showHelp() {
 		if (_showHelp == null) {
-			_showHelp = new Boolean(d2wContext().valueForKey("parentConfigurationName") != null);
+			_showHelp = Boolean.valueOf(d2wContext().valueForKey("parentConfigurationName") != null);
 		}
 		return _showHelp;
 	}

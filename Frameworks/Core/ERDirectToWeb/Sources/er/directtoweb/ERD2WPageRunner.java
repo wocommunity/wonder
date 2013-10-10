@@ -6,7 +6,6 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.directtoweb.ConfirmPageInterface;
 import com.webobjects.directtoweb.D2W;
@@ -18,6 +17,7 @@ import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 
+import er.extensions.appserver.ERXResponse;
 import er.extensions.appserver.ERXSession;
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.eof.ERXEC;
@@ -82,7 +82,7 @@ public class ERD2WPageRunner {
 					} else {
 						log.info("Unsupported: " + pageName + " -> " + page.name());
 					}
-					page.appendToResponse(new WOResponse(), context);
+					page.appendToResponse(new ERXResponse(), context);
 				} finally {
 					ec.unlock();
 				}

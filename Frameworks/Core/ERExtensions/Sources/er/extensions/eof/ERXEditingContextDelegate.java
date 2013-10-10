@@ -22,7 +22,7 @@ import er.extensions.foundation.ERXProperties;
  * other delegates subclass this delegate. The main
  * delegate that is used is {@link ERXDefaultEditingContextDelegate}.
  */
-public class ERXEditingContextDelegate extends Object implements java.io.Serializable {
+public class ERXEditingContextDelegate implements java.io.Serializable {
 	/**
 	 * Do I need to update serialVersionUID?
 	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
@@ -71,22 +71,18 @@ public class ERXEditingContextDelegate extends Object implements java.io.Seriali
                 log.warn("Found null delegate. I will fix this for now by setting it to ERXExtensions.defaultDelegate");
                 ERXEC._factory().setDefaultDelegateOnEditingContext(editingContext);
                 return true;
-            } else {
-                throw new IllegalStateException("Found null delegate. You can disable this check by setting er.extensions.ERXRaiseOnMissingEditingContextDelegate=false in your WebObjects.properties");
             }
+            throw new IllegalStateException("Found null delegate. You can disable this check by setting er.extensions.ERXRaiseOnMissingEditingContextDelegate=false in your WebObjects.properties");
         }
-        if (delegate!=null && !(delegate instanceof ERXEditingContextDelegate)) {
+        if (!(delegate instanceof ERXEditingContextDelegate)) {
             boolean _raiseOnMissingEditingContextDelegate = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXRaiseOnMissingEditingContextDelegate", true);
             if(!_raiseOnMissingEditingContextDelegate) {
                 log.warn("Found unexpected delegate class: "+delegate.getClass().getName());
                 return true;
-            } else {
-                throw new IllegalStateException("Found unexpected delegate class. You can disable this check by setting er.extensions.ERXRaiseOnMissingEditingContextDelegate=false in your WebObjects.properties");
             }
+            throw new IllegalStateException("Found unexpected delegate class. You can disable this check by setting er.extensions.ERXRaiseOnMissingEditingContextDelegate=false in your WebObjects.properties");
         }
         return false;
-        
     }
-    
 }
 

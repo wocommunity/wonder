@@ -5,8 +5,6 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOMessage;
 import com.webobjects.appserver.WOResourceManager;
 
-import er.extensions.components.ERXStatelessComponent;
-
 /**
  * Thin wrapper for Clippy (http://github.com/mojombo/clippy) as used by, for example, github.
  * 

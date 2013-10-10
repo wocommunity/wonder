@@ -171,6 +171,9 @@ public class ERXEC extends EOEditingContext {
 	private static final NSSelector EditingContextWillRevertObjectsDelegateSelector = new NSSelector("editingContextWillRevertObjects", new Class[] { EOEditingContext.class, NSArray.class, NSArray.class, NSArray.class });
 	private static final NSSelector EditingContextDidRevertObjectsDelegateSelector = new NSSelector("editingContextDidRevertObjects", new Class[] { EOEditingContext.class, NSArray.class, NSArray.class, NSArray.class });
 	private static final NSSelector EditingContextDidFailSaveChangesDelegateSelector = new NSSelector("editingContextDidFailSaveChanges", new Class[] { EOEditingContext.class, EOGeneralAdaptorException.class });
+	
+	private static final String ERXECProcessQueuedNotificationsNotification = "processQueuedNotifications";
+	public static final NSSelector ERXECProcessQueuedNotificationsSelector = ERXSelectorUtilities.notificationSelector("processQueuedNotificationsNotification");
 
 	/**
 	 * @return the value of the <code>er.extensions.ERXEC.editingContextClassName</code> property, which
@@ -1417,6 +1420,7 @@ public class ERXEC extends EOEditingContext {
 	}
 
 	/** @deprecated use {@link #saveChanges()} */
+    @Override
     @Deprecated
 	public void saveChanges(Object obj) {
 		boolean wasAutoLocked = autoLock("saveChanges");
@@ -1483,7 +1487,20 @@ public class ERXEC extends EOEditingContext {
 	@Override
 	public void _objectsChangedInStore(NSNotification nsnotification) {
 		ERXEnterpriseObject.FlushCachesProcessor.perform(this, (NSArray) nsnotification.userInfo().objectForKey("objects"));
-		if (savingChanges) {
+		
+		/*
+		 * Check to see if this context, or any parent context, is saving changes. 
+		 * If so, queue up the notifications.
+		 */
+		boolean isSavingChanges = savingChanges;
+		EOObjectStore parent = parentObjectStore();
+		while(!isSavingChanges && parent instanceof ERXEC) {
+			ERXEC parentEc = (ERXEC) parent;
+			isSavingChanges = parentEc.savingChanges;
+			parent = parentEc.parentObjectStore();
+		}
+		
+		if (isSavingChanges) {
 			synchronized (queuedNotifications) {
 				queuedNotifications.addObject(nsnotification);
 			}
@@ -1566,6 +1583,11 @@ public class ERXEC extends EOEditingContext {
 		for (NSNotification notification : queuedNotificationsClone) {
 			_objectsChangedInStore(notification);
 		}
+		NSNotificationCenter.defaultCenter().postNotification(ERXECProcessQueuedNotificationsNotification, this);
+	}
+	
+	public void processQueuedNotificationsNotification(NSNotification n) {
+		processQueuedNotifications();
 	}
 
 	/**
@@ -1731,6 +1753,10 @@ public class ERXEC extends EOEditingContext {
 				ec.unlock();
 			}
 			NSNotificationCenter.defaultCenter().postNotification(EditingContextDidCreateNotification, ec);
+			if(objectStore instanceof ERXEC) {
+				ERXEC parent = (ERXEC)objectStore;
+				NSNotificationCenter.defaultCenter().addObserver(ec, ERXECProcessQueuedNotificationsSelector, ERXECProcessQueuedNotificationsNotification, parent);
+			}
 			return ec;
 		}
 

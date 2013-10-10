@@ -14,13 +14,13 @@ import java.util.Vector;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSCoder;
 import com.webobjects.foundation.NSComparator;
+import com.webobjects.foundation.NSComparator.ComparisonException;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSRange;
 import com.webobjects.foundation.NSSelector;
-import com.webobjects.foundation.NSComparator.ComparisonException;
 
 /**
  * Custom subclass of NSMutableArray. Implements {@link java.util.List} and can
@@ -155,12 +155,12 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 			super._moveObjectAtIndexToIndex(sourceIndex, destIndex);
 		}
 
-		//@Override
+		@Override
 		public synchronized void addObject(Object object) {
 			super.addObject((V) object);
 		}
 
-		//@Override
+		@Override
 		public synchronized void addObjects(Object... objects) {
 			super.addObjects((V[])objects);
 		}
@@ -202,7 +202,7 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 
 		@Override
 		public synchronized V removeLastObject() {
-			return (V)super.removeLastObject();
+			return super.removeLastObject();
 		}
 
 		@Override
@@ -237,7 +237,7 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 
 		@Override
 		public synchronized V replaceObjectAtIndex(V object, int index) {
-			return (V)super.replaceObjectAtIndex(object, index);
+			return super.replaceObjectAtIndex(object, index);
 		}
 
 		@Override
@@ -366,7 +366,7 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 			return super.objectEnumerator();
 		}
 
-		//@Override
+		@Override
 		public synchronized V[] objects() {
 			return (V[])super.objects();
 		}
@@ -376,7 +376,7 @@ public class ERXMutableArray<E> extends NSMutableArray<E> implements List<E> {
 			return super.objects(range);
 		}
 
-		//@Override
+		@Override
 		protected synchronized V[] objectsNoCopy() {
 			return (V[]) super.objectsNoCopy();
 		}

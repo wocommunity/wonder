@@ -23,7 +23,7 @@ public class LinkingCursor implements Cursor<Neo4JErsatz> {
 	
 	public LinkingCursor(Cursor<? extends PropertyContainer> it, EOEntity entity) {
 		this.entity = entity;
-		this.cursor = it;
+		cursor = it;
 	}
 
 	private Neo4JErsatz asUltimate(PropertyContainer n) {

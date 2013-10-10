@@ -42,11 +42,11 @@ public class ERXOptGroupPopupButton extends PopUpButton
     public ERXOptGroupPopupButton(String name, NSDictionary associations, WOElement template)
     {
         super(name, associations, template);
-        group = (WOAssociation)_associations.removeObjectForKey("group");
-        label = (WOAssociation)_associations.removeObjectForKey("label");
-        itemStyle = (WOAssociation)_associations.removeObjectForKey("itemStyle");
-        itemClass = (WOAssociation)_associations.removeObjectForKey("itemClass");
-        itemDisabled = (WOAssociation) _associations.removeObjectForKey("itemDisabled");
+        group = _associations.removeObjectForKey("group");
+        label = _associations.removeObjectForKey("label");
+        itemStyle = _associations.removeObjectForKey("itemStyle");
+        itemClass = _associations.removeObjectForKey("itemClass");
+        itemDisabled = _associations.removeObjectForKey("itemDisabled");
         
         if (group == null)
         {
@@ -55,6 +55,7 @@ public class ERXOptGroupPopupButton extends PopUpButton
     }
     
 
+    @Override
     public void appendChildrenToResponse(WOResponse response, WOContext context)
     {
          WOComponent parent = context.component();

@@ -8,7 +8,6 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
 import er.directtoweb.assignments.ERDAssignment;
-import er.directtoweb.assignments.ERDComputingAssignmentInterface;
 import er.extensions.foundation.ERXDictionaryUtilities;
 import er.extensions.foundation.ERXStringUtilities;
 
@@ -47,7 +46,7 @@ public class ERDDefaultClassStringAssignment extends ERDAssignment {
     });
 
     /**
-     * Implementation of the {@link ERDComputingAssignmentInterface}. This array
+     * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This array
      * of keys is used when constructing the
      * significant keys for the passed in keyPath.
      * @param keyPath to compute significant keys for.

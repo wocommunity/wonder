@@ -189,6 +189,7 @@ public class AjaxDraggable extends AjaxComponent {
     return draggableID;
   }
 
+  @Override
   protected void addRequiredWebResources(WOResponse res) {
     addScriptResourceInHead(res, "prototype.js");
 	addScriptResourceInHead(res, "effects.js");
@@ -196,6 +197,7 @@ public class AjaxDraggable extends AjaxComponent {
 	addScriptResourceInHead(res, "wonder.js");
   }
 
+  @Override
   public WOActionResults handleRequest(WORequest request, WOContext context) {
     return null;
   }

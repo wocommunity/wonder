@@ -1,10 +1,10 @@
 package er.pdf;
 
-import org.apache.log4j.Logger;
-
 import java.io.ByteArrayOutputStream;
 import java.util.Map;
 
+import org.apache.commons.lang.CharEncoding;
+import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOAssociation;
@@ -75,7 +75,7 @@ public class ERPDFUtilities {
    * @return an NSData object containing raw PDF data.
    */
   public static NSData htmlAsPdf(String content) {
-    return htmlAsPdf(content, "UTF-8", null, null);
+    return htmlAsPdf(content, CharEncoding.UTF_8, null, null);
   }
 
   /**

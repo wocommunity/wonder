@@ -13,7 +13,6 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
 import er.directtoweb.assignments.ERDAssignment;
-import er.directtoweb.assignments.ERDComputingAssignmentInterface;
 
 /**
  * This assignment calculates default actions for the current page
@@ -56,7 +55,7 @@ public class ERDDefaultActionAssignment extends ERDAssignment {
     public ERDDefaultActionAssignment (String key, Object value) { super(key,value); }
 
     /**
-     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This
      * assignment depends upon the context keys: "entity.name" and 
      * "object.entityName". This array of keys is used when constructing the 
      * significant keys for the passed in keyPath.

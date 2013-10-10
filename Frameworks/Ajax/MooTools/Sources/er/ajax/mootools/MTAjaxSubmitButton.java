@@ -1,6 +1,7 @@
 package er.ajax.mootools;
 
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
@@ -67,7 +68,7 @@ public class MTAjaxSubmitButton extends AjaxDynamicElement {
 	// MS: If you change this value, make sure to change it in ERXAjaxApplication and in wonder.js
 	public static final String KEY_PARTIAL_FORM_SENDER_ID = "_partialSenderID";
 
-	public MTAjaxSubmitButton(String name, NSDictionary associations, WOElement children) {
+	public MTAjaxSubmitButton(String name, NSDictionary<String, WOAssociation> associations, WOElement children) {
 		super(name, associations, children);
 	}
 
@@ -106,21 +107,22 @@ public class MTAjaxSubmitButton extends AjaxDynamicElement {
 
 	}
 
+	@Override
 	public void addRequiredWebResources(WOResponse response, WOContext context) {
 		MTAjaxUtils.addScriptResourceInHead(context, context.response(), "MooTools", MTAjaxUtils.MOOTOOLS_CORE_JS);
 		MTAjaxUtils.addScriptResourceInHead(context, context.response(), "MooTools", MTAjaxUtils.MOOTOOLS_MORE_JS);
 		Boolean useSpinner = (Boolean)valueForBinding("useSpinner", Boolean.FALSE, context.component());
-		if(useSpinner) {
+		if(useSpinner.booleanValue()) {
 			Boolean useDefaultSpinnerClass = (Boolean)valueForBinding("defaultSpinnerClass", Boolean.TRUE, context.component());
-			if(useDefaultSpinnerClass) {
-				MTAjaxUtils.addStylesheetResourceInHead(context, context.response(), "MooTools", "scripts/plugins/spinner/spinner.css");
+			if(useDefaultSpinnerClass.booleanValue()) {
+				AjaxUtils.addStylesheetResourceInHead(context, context.response(), "MooTools", "scripts/plugins/spinner/spinner.css");
 			}
 		}
 
 		MTAjaxUtils.addScriptResourceInHead(context, context.response(), "MooTools", MTAjaxUtils.MOOTOOLS_WONDER_JS);
 	}
 
-
+	@Override
 	@SuppressWarnings("rawtypes")
 	public void appendToResponse(WOResponse response, WOContext context) {
 
@@ -355,6 +357,7 @@ public class MTAjaxSubmitButton extends AjaxDynamicElement {
 
 	}	
 
+	@Override
 	public WOActionResults invokeAction(WORequest worequest, WOContext wocontext) {
 
 		WOActionResults result = null;
@@ -368,12 +371,13 @@ public class MTAjaxSubmitButton extends AjaxDynamicElement {
 			MTAjaxUpdateContainer.setUpdateContainerID(worequest, updateContainerID);
 			wocontext.setActionInvoked(true);
 			result = handleRequest(worequest, wocontext);
-			AjaxUtils.updateMutableUserInfoWithAjaxInfo(wocontext);
+			ERXAjaxApplication.enableShouldNotStorePage();
 		}
 
 		return result;
 	}
 
+	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 
 		WOComponent component = context.component();
@@ -401,6 +405,5 @@ public class MTAjaxSubmitButton extends AjaxDynamicElement {
 
 		return result;
 	}
-
 
 }

@@ -43,6 +43,7 @@ public class ERD2WListXMLPage extends ERD2WListPage {
         return (String)d2wContext().valueForKey("displayNameForProperty");
     }
 
+    @Override
     public boolean userPreferencesCanSpecifySorting(){ return false; }
 
 

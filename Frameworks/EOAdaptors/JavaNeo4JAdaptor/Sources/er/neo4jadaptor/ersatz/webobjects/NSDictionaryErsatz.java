@@ -67,7 +67,7 @@ public class NSDictionaryErsatz extends Ersatz {
 	}
 	
 	private NSDictionaryErsatz(NSArray<EOAttribute> attributes, NSDictionary<String, Object> d) {
-		this.md = d.mutableClone();
+		md = d.mutableClone();
 		this.attributes = attributes;
 	}
 

@@ -30,6 +30,7 @@ public class State extends ERXConstant.StringConstant {
         _sortOrder = sortOrder;
     }
     
+    @Override
     public int sortOrder() {
         return _sortOrder;
     }

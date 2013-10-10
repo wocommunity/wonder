@@ -292,8 +292,7 @@ public class ERS3AttachmentProcessor extends
 				}
 
 				try {
-					ERS3AttachmentProcessor.this
-							.performUpload(uploadedFile, originalFileName,
+					performUpload(uploadedFile, originalFileName,
 									bucket, key, mimeType, attachment);
 
 					_editingContext.lock();
@@ -303,15 +302,15 @@ public class ERS3AttachmentProcessor extends
 					} finally {
 						_editingContext.unlock();
 					}
-					if (ERS3AttachmentProcessor.this.delegate() != null) {
-						ERS3AttachmentProcessor.this.delegate()
+					if (delegate() != null) {
+						delegate()
 								.attachmentAvailable(
 										ERS3AttachmentProcessor.this,
 										attachment);
 					}
 				} catch (Throwable t) {
-					if (ERS3AttachmentProcessor.this.delegate() != null) {
-						ERS3AttachmentProcessor.this.delegate()
+					if (delegate() != null) {
+						delegate()
 								.attachmentNotAvailable(
 										ERS3AttachmentProcessor.this,
 										attachment,
@@ -325,8 +324,8 @@ public class ERS3AttachmentProcessor extends
 					}
 				}
 			} else {
-				if (ERS3AttachmentProcessor.this.delegate() != null) {
-					ERS3AttachmentProcessor.this.delegate()
+				if (delegate() != null) {
+					delegate()
 							.attachmentNotAvailable(
 									ERS3AttachmentProcessor.this,
 									attachment,

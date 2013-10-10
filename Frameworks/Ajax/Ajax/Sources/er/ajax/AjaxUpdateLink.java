@@ -302,6 +302,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 		return options;
 	}
 
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		WOComponent component = context.component();
 		
@@ -370,12 +371,14 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 		super.appendToResponse(response, context);
 	}
 
+	@Override
 	protected void addRequiredWebResources(WOResponse res, WOContext context) {
 		addScriptResourceInHead(context, res, "prototype.js");
     	addScriptResourceInHead(context, res, "effects.js");
 		addScriptResourceInHead(context, res, "wonder.js");
 	}
 
+	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		WOComponent component = context.component();
 		boolean disabled = booleanValueForBinding("disabled", false, component);

@@ -25,10 +25,12 @@ public class WOOgnlAssociation extends WOKeyValueAssociation {
 		super(s);
 	}
 
+	@Override
 	public Object clone() {
 		return new WOOgnlAssociation(keyPath());
 	}
 
+	@Override
 	public Object valueInComponent(WOComponent component) {
 		WOAssociation.Event event = _markStartOfEventIfNeeded("valueForKeyPath", keyPath(), component);
 		Object value = null;
@@ -50,6 +52,7 @@ public class WOOgnlAssociation extends WOKeyValueAssociation {
 		return value;
 	}
 
+	@Override
 	public void setValue(Object object, WOComponent component) {
 		WOAssociation.Event event = _markStartOfEventIfNeeded("takeValueForKeyPath", keyPath(), component);
 		try {

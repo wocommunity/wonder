@@ -81,10 +81,12 @@ public class ERXWOConditional extends WODynamicGroup {
 		pullAssociations(dict);
 	}
 
+	@Override
 	public String toString() {
 		return "<WOConditional :  condition: " + (_condition == null ? "null" : _condition.toString()) + " negate: " + (_negate == null ? "null" : _negate.toString()) + ">";
 	}
 
+	@Override
 	public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
 		ERXWOConditional.setLastCondition(Boolean.FALSE);
 		if (meetsConditionInComponent(wocontext.component())) {
@@ -92,22 +94,23 @@ public class ERXWOConditional extends WODynamicGroup {
 		}
 	}
 
+	@Override
 	public void takeChildrenValuesFromRequest(WORequest worequest, WOContext wocontext) {
 		ERXWOConditional.setLastCondition(null);
 		super.takeChildrenValuesFromRequest(worequest, wocontext);
 		ERXWOConditional.setLastCondition(Boolean.TRUE);
 	}
 
+	@Override
 	public WOActionResults invokeAction(WORequest worequest, WOContext wocontext) {
 		ERXWOConditional.setLastCondition(Boolean.FALSE);
 		if (meetsConditionInComponent(wocontext.component())) {
 			return super.invokeAction(worequest, wocontext);
 		}
-		else {
-			return null;
-		}
+		return null;
 	}
 
+	@Override
 	public WOActionResults invokeChildrenAction(WORequest worequest, WOContext wocontext) {
 		ERXWOConditional.setLastCondition(null);
 		WOActionResults results = super.invokeChildrenAction(worequest, wocontext);
@@ -115,6 +118,7 @@ public class ERXWOConditional extends WODynamicGroup {
 		return results;
 	}
 
+	@Override
 	public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
 		ERXWOConditional.setLastCondition(Boolean.FALSE);
 		if (meetsConditionInComponent(wocontext.component())) {
@@ -122,6 +126,7 @@ public class ERXWOConditional extends WODynamicGroup {
 		}
 	}
 
+	@Override
 	public void appendChildrenToResponse(WOResponse woresponse, WOContext wocontext) {
 		ERXWOConditional.setLastCondition(null);
 		super.appendChildrenToResponse(woresponse, wocontext);

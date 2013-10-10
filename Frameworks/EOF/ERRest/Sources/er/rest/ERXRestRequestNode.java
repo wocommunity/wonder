@@ -13,7 +13,6 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.WOResponse;
 import com.webobjects.eoaccess.EOEntityClassDescription;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -24,6 +23,7 @@ import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.appserver.ERXResponse;
 import er.extensions.eof.ERXKey;
 import er.extensions.eof.ERXKeyFilter;
 import er.extensions.foundation.ERXArrayUtilities;
@@ -416,7 +416,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
  					throw new NSKeyValueCoding.UnknownKeyException("There is no key named '" + key._name + "' with a child index " + key._index + " on this node.", this, key._name);
  				}
  				else {
- 					ERXRestRequestNode indexChild = (ERXRestRequestNode)child.children().objectAtIndex(key._index);
+ 					ERXRestRequestNode indexChild = child.children().objectAtIndex(key._index);
  					if (indexChild.children().count() == 0) {
  						value = indexChild.value();
  					}
@@ -473,7 +473,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 				addChild(new ERXRestRequestNode(null, false));
 			}
 		}
-		return (ERXRestRequestNode)_children.objectAtIndex(index);
+		return _children.objectAtIndex(index);
 	}
 
 	/**
@@ -917,7 +917,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 		}
 		
 		Set<ERXKey> visitedKeys = new HashSet<ERXKey>();
-		for (String attributeName : (NSArray<String>) classDescription.attributeKeys()) {
+		for (String attributeName : classDescription.attributeKeys()) {
 			// if (attribute.isClassProperty()) {
 			ERXKey<Object> key = new ERXKey<Object>(attributeName);
 			if (keyFilter.matches(key, ERXKey.Type.Attribute)) {
@@ -927,7 +927,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 			// }
 		}
 
-		for (String relationshipName : (NSArray<String>) classDescription.toOneRelationshipKeys()) {
+		for (String relationshipName : classDescription.toOneRelationshipKeys()) {
 			// if (relationship.isClassProperty()) {
 			ERXKey<Object> key = new ERXKey<Object>(relationshipName);
 			if (keyFilter.matches(key, ERXKey.Type.ToOneRelationship)) {
@@ -937,7 +937,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 			// }
 		}
 
-		for (String relationshipName : (NSArray<String>) classDescription.toManyRelationshipKeys()) {
+		for (String relationshipName : classDescription.toManyRelationshipKeys()) {
 			// if (relationship.isClassProperty()) {
 			ERXKey<Object> key = new ERXKey<Object>(relationshipName);
 			if (keyFilter.matches(key, ERXKey.Type.ToManyRelationship)) {
@@ -1025,6 +1025,9 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 				setAssociatedObject(null);
 			}
 			else {
+				if (_name == null) {
+					_name = classDescription.entityName();
+				}
 				setValue(obj);
 				setAssociatedObject(obj);
 			}
@@ -1072,7 +1075,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 	 * @return a string representation of this request node using the given IERXRestWriter
 	 */
 	public String toString(IERXRestWriter writer, ERXRestFormat.Delegate delegate, ERXRestContext context) {
-		WOResponse octopusHair = new WOResponse();
+		ERXResponse octopusHair = new ERXResponse();
 		writer.appendToResponse(this, new ERXWORestResponse(octopusHair), delegate, context);
 		return octopusHair.contentString();
 	}

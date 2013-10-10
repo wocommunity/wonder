@@ -66,7 +66,7 @@ public class ERDDelayedBooleanAssignment extends ERDDelayedAssignment implements
     public ERDDelayedBooleanAssignment(String key, Object value) { super(key,value); }
 
     /**
-     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This
      * assignment depends upon the value of the key "conditionKey" of the
      * value of this assignment. This key is used when constructing the 
      * significant keys for the passed in keyPath.
@@ -78,6 +78,7 @@ public class ERDDelayedBooleanAssignment extends ERDDelayedAssignment implements
         return new NSArray(booleanConditions.objectForKey("conditionKey"));
     }
 
+    @Override
     public Object fireNow(D2WContext c) {
         NSDictionary booleanConditions = (NSDictionary)value();
         if (log.isDebugEnabled())

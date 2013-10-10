@@ -29,7 +29,7 @@ import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
-public class WOExceptionParser extends Object {
+public class WOExceptionParser {
     protected NSMutableArray _stackTrace;
     protected Throwable _exception;
     protected String _message;
@@ -49,7 +49,7 @@ public class WOExceptionParser extends Object {
         String path, content;
         NSDictionary dic = null;
         NSMutableArray<NSBundle> allBundles = new NSMutableArray<NSBundle>(NSBundle.frameworkBundles());
-        NSMutableArray ignored = new NSMutableArray();
+        NSMutableArray<String> ignored = new NSMutableArray<String>();
 
         for (Enumeration enumerator = allBundles.objectEnumerator(); enumerator.hasMoreElements(); ) {
             bundle = (NSBundle) enumerator.nextElement();
@@ -59,7 +59,8 @@ public class WOExceptionParser extends Object {
                 if (content != null) {
                     dic = (NSDictionary) NSPropertyListSerialization.propertyListFromString(content);
                     if (dic != null && dic.containsKey("ignoredPackages")) {
-                        NSArray tmpArray = (NSArray) dic.objectForKey("ignoredPackages");
+                        @SuppressWarnings("unchecked")
+						NSArray<String> tmpArray = (NSArray<String>) dic.objectForKey("ignoredPackages");
                         if (tmpArray != null && tmpArray.count() > 0) {
                             ignored.addObjectsFromArray(tmpArray);
                         }

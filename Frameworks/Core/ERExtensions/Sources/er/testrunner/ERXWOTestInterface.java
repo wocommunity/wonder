@@ -197,6 +197,7 @@ public class ERXWOTestInterface extends WOComponent implements ERXTestListener {
         errorMessage = "";
     }
 
+    @Override
     public void appendToResponse(WOResponse r, WOContext c) {
     	if (session().objectForKey("ERXWOTestInterface.enabled") != null) {
     		super.appendToResponse(r, c);

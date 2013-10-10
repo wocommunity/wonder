@@ -19,6 +19,7 @@
                 cnctTimeout=NUMBER
                 sendBufSize=NUMBER
                 recvBufSize=NUMBER
+                refuseNewSessions=STRING
                 additionalArgs="unspecified"
         >
         </instance>
@@ -55,6 +56,10 @@ Attributes:
 
 <instance>:    
     Required attributes: id, port, host
+    refuseNewSessions=STRING
+        YES -> instance will get no new sessions from scheduler
+        NO (default) -> instance will get new sessions
+        This Attribute is only available, when activated in make.config
     Attribute values here specify instance scope settings.
 
 -->

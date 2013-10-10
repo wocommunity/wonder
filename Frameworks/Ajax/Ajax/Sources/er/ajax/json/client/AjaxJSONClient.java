@@ -32,18 +32,22 @@ public class AjaxJSONClient extends AjaxStatelessJSONClient {
 		super(context);
 	}
 
+	@Override
 	public boolean isStateless() {
 		return false;
 	}
 
+	@Override
 	public boolean global() {
 		return booleanValueForBinding("global", false);
 	}
 
+	@Override
 	public String jsonComponent() {
 		return stringValueForBinding("component");
 	}
 
+	@Override
 	public String jsonInstance() {
 		String instance = stringValueForBinding("instance");
 		if (instance == null) {

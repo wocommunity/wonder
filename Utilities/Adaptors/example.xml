@@ -1,17 +1,17 @@
-<?xml version="1.0" encoding="ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <adaptor>
 
   <application name="HelloWorld" retries="5" scheduler="ROUNDROBIN" dormant="300" redir="http://www.mydomain.com" urlVersion="4">
     <instance id="1" port="2001" host="appserver1.mydomain.com" sendTimeout="3" recvTimeout="10"/>
     <instance id="2" port="2002" host="appserver1.mydomain.com"/>
-    <instance id="3" port="2001" host="appserver2.mydomain.com"/>
+    <instance id="3" port="2003" host="appserver2.mydomain.com"/>
   </application>
   
   <application name="Movies" retries="1" scheduler="RANDOM" urlVersion="4">
-    <instance id="1" port="2003" host="appserver1.mydomain.com"/>
-    <instance id="2" port="2002" host="appserver2.mydomain.com"/>
-    <instance id="3" port="2003" host="appserver2.mydomain.com"/>
+    <instance id="1" port="2004" host="appserver1.mydomain.com" refuseNewSessions="NO"/>
+    <instance id="2" port="2005" host="appserver2.mydomain.com" refuseNewSessions="NO"/>
+    <instance id="3" port="2006" host="appserver2.mydomain.com" refuseNewSessions="YES"/>
   </application>
   
 </adaptor>

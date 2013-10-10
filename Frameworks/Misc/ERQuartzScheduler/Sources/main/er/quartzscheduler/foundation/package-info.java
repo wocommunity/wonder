@@ -1,5 +1,5 @@
 /**
- * Provides classes to manage threaded background tasks using Quartz scheduler 2.1 {@link http://www.quartz-scheduler.org/} in a WebObjects application.<p>
+ * Provides classes to manage threaded background tasks using {@link <a href="http://www.quartz-scheduler.org/">Quartz scheduler</a>} 2.1 in a WebObjects application.<p>
  * 
  * <h2>Overview</h2>
  * This framework consists of these classes / interfaces:
@@ -100,7 +100,7 @@
  * </pre>
  * 
  * <h2>Quartz documentation</h2>
- * To get more information about Quartz, you can read the documentation {@link http://www.quartz-scheduler.org/documentation} and the javadoc {@link http://quartz-scheduler.org/api/}
+ * To get more information about Quartz, you can read the documentation {@link <a href="http://www.quartz-scheduler.org/documentation">http://www.quartz-scheduler.org/documentation</a>} and the javadoc {@link <a href="http://quartz-scheduler.org/api/">http://quartz-scheduler.org/api/</a>}
  */
 package er.quartzscheduler.foundation;
 

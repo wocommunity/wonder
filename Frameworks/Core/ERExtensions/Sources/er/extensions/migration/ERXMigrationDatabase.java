@@ -297,7 +297,7 @@ public class ERXMigrationDatabase {
 	}
 
 	/**
-	 * @see ERXJDBCUtilities#databaseProductName(EOAdaptorChannel)
+	 * @see er.extensions.jdbc.ERXJDBCUtilities#databaseProductName(EOAdaptorChannel)
 	 * @return database product name
 	 */
 	public String productName() {

@@ -74,9 +74,7 @@ public class ERXFakeRelationship extends WOComponent {
         super(context);
     }
 
-    public boolean isStateless() {
-        return false;
-    }
+    @Override
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }
@@ -292,6 +290,7 @@ public class ERXFakeRelationship extends WOComponent {
 	uiStyle = null;
     }
 
+    @Override
     public void reset() {
         _invalidateCaches();
     }

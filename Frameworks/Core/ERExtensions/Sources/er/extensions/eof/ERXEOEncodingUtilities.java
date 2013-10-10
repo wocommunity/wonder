@@ -1,9 +1,3 @@
-//
-// ERXEOEncodingUtilities.java
-// Project ERExtensions
-//
-// Created by max on Sun Sep 29 2002
-//
 package er.extensions.eof;
 
 import java.util.Enumeration;
@@ -29,7 +23,6 @@ import com.webobjects.foundation.NSTimestampFormatter;
 import er.extensions.crypting.ERXCrypto;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.foundation.ERXProperties;
-import er.extensions.foundation.ERXUtilities;
 
 /**
  * 
@@ -154,19 +147,19 @@ public class ERXEOEncodingUtilities {
     public static NSArray enterpriseObjectsForEntityNamedFromFormValues(EOEditingContext ec, String entityName, NSDictionary formValues) {
         NSArray formValueObjects = decodeEnterpriseObjectsFromFormValues(ec, formValues);
         NSDictionary groups = ERXArrayUtilities.arrayGroupedByKeyPath(formValueObjects, "entityName");
-	EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);        
-	NSMutableArray entityGroup = new NSMutableArray();
+        EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
+        NSMutableArray entityGroup = new NSMutableArray();
         if (entity != null && entity.isAbstractEntity()) {
-            for (Enumeration e = ERXUtilities.allSubEntitiesForEntity(entity, false).objectEnumerator(); e.hasMoreElements();) {
+            for (Enumeration e = ERXEOAccessUtilities.allSubEntitiesForEntity(entity, false).objectEnumerator(); e.hasMoreElements();) {
                 EOEntity subEntity = (EOEntity)e.nextElement();
                 NSArray aGroup = (NSArray)groups.objectForKey(subEntity.name());
                 if (aGroup != null)
                     entityGroup.addObjectsFromArray(aGroup);
             }
         } else {
-            entityGroup.addObjectsFromArray((NSArray)groups.objectForKey(entityName));            
+            entityGroup.addObjectsFromArray((NSArray)groups.objectForKey(entityName));
         }
-        return entityGroup != null ? entityGroup : NSArray.EmptyArray;
+        return entityGroup;
     }
     
     /**

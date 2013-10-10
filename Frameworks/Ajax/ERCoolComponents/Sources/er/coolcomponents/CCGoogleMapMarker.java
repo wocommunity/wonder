@@ -50,15 +50,15 @@ public class CCGoogleMapMarker extends AjaxDynamicElement {
 			NSDictionary<String, WOAssociation> someAssociations, WOElement children) {
 		super(name, someAssociations, children);
 		
-		_elementId = (WOAssociation) someAssociations.objectForKey("id");
-		_elementStyle = (WOAssociation) someAssociations.objectForKey("style");
-		_elementClass = (WOAssociation) someAssociations.objectForKey("class");
+		_elementId = someAssociations.objectForKey("id");
+		_elementStyle = someAssociations.objectForKey("style");
+		_elementClass = someAssociations.objectForKey("class");
 		
-		_googleMapId = (WOAssociation) someAssociations.objectForKey("googleMapId");
-		_draggable = (WOAssociation) someAssociations.objectForKey("draggable");
-		_address = (WOAssociation) someAssociations.objectForKey("address");
-		_lat = (WOAssociation) someAssociations.objectForKey("lat");
-		_lng = (WOAssociation) someAssociations.objectForKey("lng");
+		_googleMapId = someAssociations.objectForKey("googleMapId");
+		_draggable = someAssociations.objectForKey("draggable");
+		_address = someAssociations.objectForKey("address");
+		_lat = someAssociations.objectForKey("lat");
+		_lng = someAssociations.objectForKey("lng");
 		
 		_children = children;
 	}
@@ -98,7 +98,7 @@ public class CCGoogleMapMarker extends AjaxDynamicElement {
 					+ _address.valueInComponent(context.component()) + "\" ");
 		}
     	
-    	if((_lng!=null) && (_lng!=null)) {
+    	if (_lng != null && _lat != null) {
     		response.appendContentString("data-lng=\"" + _lng.valueInComponent(context.component()) + "\" ");
     		response.appendContentString("data-lat=\"" + _lat.valueInComponent(context.component()) + "\"");
     	}

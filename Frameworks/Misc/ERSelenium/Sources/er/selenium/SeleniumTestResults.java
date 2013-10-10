@@ -26,15 +26,17 @@ package er.selenium;
 import java.io.File;
 import java.util.Iterator;
 
+import org.apache.commons.lang.CharEncoding;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
-import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSComparator;
 
+import er.extensions.appserver.ERXHttpStatusCodes;
+import er.extensions.appserver.ERXResponse;
 import er.extensions.foundation.ERXFileUtilities;
 import er.extensions.foundation.ERXProperties;
 
@@ -82,24 +84,24 @@ public class SeleniumTestResults extends WODirectAction {
     	if (filename != null) {
     		filename = ERXProperties.stringForKeyWithDefault("SeleniumReportPath", DEFAULT_REPORT_PATH) + "/" + filename;
     		try {
-    			ERXFileUtilities.stringToFile(report(), new File(filename), "UTF-8");
+    			ERXFileUtilities.stringToFile(report(), new File(filename), CharEncoding.UTF_8);
     		} catch (Exception e) {
     			log.debug(e.getMessage());
     		}
     	}
     	
-    	WOResponse response = new WOResponse();
-    	response.appendContentString(report());
-    	return response;
+    	return new ERXResponse(report());
     }
     
+    @Override
     public WOActionResults defaultAction() {
         return processReport(null);
     }
 
+    @Override
     public WOActionResults performActionNamed(String actionName) {
         if(!ERSelenium.testsEnabled()) {
-            return new WOResponse();
+            return new ERXResponse(ERXHttpStatusCodes.STATUS_FORBIDDEN);
         }
         if (actionName.equals("default"))
             return defaultAction();

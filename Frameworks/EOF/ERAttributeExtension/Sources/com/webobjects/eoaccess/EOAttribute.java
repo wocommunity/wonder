@@ -10,6 +10,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TimeZone;
 
+import org.apache.commons.lang.CharEncoding;
+
 import com.webobjects.eocontrol.changeNotification.EOChangeNotificationOptions;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
@@ -34,7 +36,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 		private String _externalName;
 
 		Characteristic(String externalName) {
-			this._externalName = externalName;
+			_externalName = externalName;
 		}
 
 		public String externalName() {
@@ -148,10 +150,12 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 		_valueTypeClassName = "";
 	}
 
+	@Override
 	public String name() {
 		return _name;
 	}
 
+	@Override
 	public String toString() {
 		return _toString(0);
 	}
@@ -178,6 +182,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 		return aLog.toString();
 	}
 
+	@Override
 	public EOEntity entity() {
 		return _parent;
 	}
@@ -885,7 +890,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 
 		case FactoryMethodArgumentIsString:
 			try {
-				value = _valueFactoryMethod.invoke(valueFactoryClass()==null?_valueClass:valueFactoryClass(), _NSStringUtilities.stringForBytes(bytes, "UTF-8"));
+				value = _valueFactoryMethod.invoke(valueFactoryClass()==null?_valueClass:valueFactoryClass(), _NSStringUtilities.stringForBytes(bytes, CharEncoding.UTF_8));
 				if (!NSLog.debugLoggingAllowedForLevelAndGroups(NSLog.DebugLevelInformational, NSLog.DebugGroupDatabaseAccess))
 					break;
 				if (NSLog.debugLoggingAllowedForLevel(NSLog.DebugLevelDetailed))
@@ -923,7 +928,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 				_valueClass = stringClass;
 		}
 		if (_valueClass == stringClass) {
-			String result = _NSStringUtilities.stringForBytes(bytes, 0, length, "UTF-8");
+			String result = _NSStringUtilities.stringForBytes(bytes, 0, length, CharEncoding.UTF_8);
 			if (NSLog.debugLoggingAllowedForLevelAndGroups(NSLog.DebugLevelInformational, NSLog.DebugGroupDatabaseAccess))
 				if (NSLog.debugLoggingAllowedForLevel(NSLog.DebugLevelDetailed))
 					NSLog.debug.appendln(new RuntimeException("Deprecated implicit bytes->String conversion.  Assuming UTF-8 encoding."));
@@ -932,7 +937,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 			return result;
 		}
 		if (_valueClass == stringClass || _argumentType == 1 || _valueFactoryMethod == null) {
-			value = _NSStringUtilities.stringForBytes(bytes, 0, length, "UTF-8");
+			value = _NSStringUtilities.stringForBytes(bytes, 0, length, CharEncoding.UTF_8);
 			if (NSLog.debugLoggingAllowedForLevelAndGroups(NSLog.DebugLevelInformational, NSLog.DebugGroupDatabaseAccess))
 				if (NSLog.debugLoggingAllowedForLevel(NSLog.DebugLevelDetailed))
 					NSLog.debug.appendln(new RuntimeException("Deprecated implicit bytes->String conversion.  Assuming UTF-8 encoding."));
@@ -1045,7 +1050,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 
 		case FactoryMethodArgumentIsBytes:
 			try {
-				value = _valueFactoryMethod.invoke(valueFactoryClass()==null?_valueClass:valueFactoryClass(), _NSStringUtilities.bytesForString(str, "UTF-8"));
+				value = _valueFactoryMethod.invoke(valueFactoryClass()==null?_valueClass:valueFactoryClass(), _NSStringUtilities.bytesForString(str, CharEncoding.UTF_8));
 				if (!NSLog.debugLoggingAllowedForLevelAndGroups(NSLog.DebugLevelInformational, NSLog.DebugGroupDatabaseAccess))
 					break;
 				if (NSLog.debugLoggingAllowedForLevel(NSLog.DebugLevelDetailed))
@@ -1065,7 +1070,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 
 		case FactoryMethodArgumentIsData:
 			try {
-				value = _valueFactoryMethod.invoke(valueFactoryClass()==null?_valueClass:valueFactoryClass(), new NSData(str, "UTF-8"));
+				value = _valueFactoryMethod.invoke(valueFactoryClass()==null?_valueClass:valueFactoryClass(), new NSData(str, CharEncoding.UTF_8));
 				if (!NSLog.debugLoggingAllowedForLevelAndGroups(NSLog.DebugLevelInformational, NSLog.DebugGroupDatabaseAccess))
 					break;
 				if (NSLog.debugLoggingAllowedForLevel(NSLog.DebugLevelDetailed))
@@ -1506,6 +1511,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 		return _sourceToDestinationKeyMap;
 	}
 
+	@Override
 	public String relationshipPath() {
 		if (!isFlattened())
 			return null;
@@ -1857,15 +1863,13 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 		_setPrimaryKeyAttributesSelector = new NSSelector("setPrimaryKeyAttributes", _NSUtilities._ArrayClassArray);
 		valueClasses = (new Class[] { Number.class, String.class, NSData.class, NSTimestamp._CLASS });
 	}
-	
-	// @Override
+
 	public void setChangeNotificationOptions(
 			EOChangeNotificationOptions changeNotificationOptions) {
 		// AK: method from 5.4.3.1
 		
 	}
 
-	// @Override
 	public EOChangeNotificationOptions changeNotificationOptions() {
 		// AK: method from 5.4.3.1
 		return null;

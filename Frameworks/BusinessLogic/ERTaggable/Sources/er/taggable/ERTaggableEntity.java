@@ -233,8 +233,8 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
   @SuppressWarnings("unchecked")
   public static NSArray<EOEntity> taggableEntities() {
     NSMutableArray<EOEntity> taggableEntities = new NSMutableArray<EOEntity>();
-    for (EOModel model : (NSArray<EOModel>) EOModelGroup.defaultGroup().models()) {
-      for (EOEntity entity : (NSArray<EOEntity>) model.entities()) {
+    for (EOModel model : EOModelGroup.defaultGroup().models()) {
+      for (EOEntity entity : model.entities()) {
         if (ERTaggableEntity.isTaggable(entity)) {
           taggableEntities.addObject(entity);
         }
@@ -253,7 +253,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
   @SuppressWarnings("unchecked")
   public static EORelationship tagsRelationshipForEntity(EOEntity entity, EOEntity tagEntity) {
     EORelationship tagsRelationship = null;
-    for (EORelationship relationship : (NSArray<EORelationship>) entity.relationships()) {
+    for (EORelationship relationship : entity.relationships()) {
       if (relationship.isFlattened() && tagEntity.name().equals(relationship.destinationEntity().name())) {
         tagsRelationship = relationship;
         break;
@@ -365,7 +365,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
       joinToItemRelationship.setToMany(false);
       joinToItemRelationship.setJoinSemantic(EORelationship.InnerJoin);
       joinEntity.addRelationship(joinToItemRelationship);
-      for (EOAttribute itemPrimaryKey : (NSArray<EOAttribute>) entity.primaryKeyAttributes()) {
+      for (EOAttribute itemPrimaryKey : entity.primaryKeyAttributes()) {
         EOAttribute itemFKAttribute = new EOAttribute();
         itemFKAttribute.setExternalType(itemPrimaryKey.externalType());
         itemFKAttribute.setValueType(itemPrimaryKey.valueType());
@@ -388,7 +388,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
       joinToTagRelationship.setToMany(false);
       joinToTagRelationship.setJoinSemantic(EORelationship.InnerJoin);
       joinEntity.addRelationship(joinToTagRelationship);
-      for (EOAttribute tagPrimaryKey : (NSArray<EOAttribute>) tagEntity.primaryKeyAttributes()) {
+      for (EOAttribute tagPrimaryKey : tagEntity.primaryKeyAttributes()) {
         EOAttribute tagFKAttribute = new EOAttribute();
         tagFKAttribute.setExternalType(tagPrimaryKey.externalType());
         tagFKAttribute.setValueType(tagPrimaryKey.valueType());
@@ -691,6 +691,23 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
    */
   @SuppressWarnings("unchecked")
   public NSArray<T> fetchTaggedWith(EOEditingContext editingContext, ERTag.Inclusion inclusion, int limit, Object tags, EOQualifier additionalQualifier) {
+	  return this.fetchTaggedWith(editingContext, inclusion, limit, tags, additionalQualifier, null);
+  }
+  
+  /**
+   * Fetches the sorted list of objects of this entity type that are tagged
+   * with the given tags. 
+   * 
+   * @param editingContext the editing context to fetch into
+   * @param tags the tags to search (String to tokenize, NSArray<String>, etc)
+   * @param inclusion find matches for ANY tags or ALL tags provided
+   * @param limit limit the number of results to be returned (-1 for unlimited)
+   * @param additionalQualifier an additional qualifier to chain in
+   * @param sortOrderings sort orderings for the fetch spec
+   * @return the array of matching eos
+   */
+  @SuppressWarnings("unchecked")
+  public NSArray<T> fetchTaggedWith(EOEditingContext editingContext, ERTag.Inclusion inclusion, int limit, Object tags, EOQualifier additionalQualifier, NSArray<EOSortOrdering> sortOrderings) {
     NSArray<String> tagNames = splitTagNames(tags);
     if (tagNames.count() == 0) {
       throw new IllegalArgumentException("No tags were passed in.");
@@ -702,7 +719,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
     if (additionalQualifier != null) {
       qualifier = ERXQ.and(qualifier, additionalQualifier);
     }
-    NSArray<EOSortOrdering> sortOrderings = null;
+    
     EOFetchSpecification fetchSpec = new EOFetchSpecification(_entity.name(), qualifier, sortOrderings);
 
     EOSQLExpression sqlExpression = sqlHelper.sqlExpressionForFetchSpecification(editingContext, fetchSpec, 0, limit);
@@ -979,7 +996,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
     // it on the end and hope for the best.
     tagsSqlExpression.setStatement(tagsSqlExpression.statement() + " ORDER BY tagCount DESC");
 
-    for (EOAttribute attribute : (NSArray<EOAttribute>) _entity.primaryKeyAttributes()) {
+    for (EOAttribute attribute : _entity.primaryKeyAttributes()) {
       sqlHelper.removeSelectFromExpression(attribute, tagsSqlExpression);
       tagsFetchAttributes.removeObject(attribute);
     }

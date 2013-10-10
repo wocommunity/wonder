@@ -10,7 +10,6 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WEditToManyRelationship;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOUtilities;
-import com.webobjects.eocontrol.EOEnterpriseObject;
 
 import er.extensions.foundation.ERXUtilities;
 import er.extensions.foundation.ERXValueUtilities;
@@ -51,6 +50,7 @@ public class ERD2WEditToManyRelationship extends D2WEditToManyRelationship {
     public ERD2WEditToManyRelationship(WOContext context) { super(context); }
     
     // Validation Support
+    @Override
     public void validationFailedWithException (Throwable e, Object value, String keyPath) {
         parent().validationFailedWithException(e,value,keyPath);
     }
@@ -61,7 +61,7 @@ public class ERD2WEditToManyRelationship extends D2WEditToManyRelationship {
             return valueForKeyPath(restrictedChoiceKey);
         String fetchSpecName=(String)d2wContext().valueForKey("restrictingFetchSpecification");
         if(fetchSpecName != null) {
-            EORelationship relationship = ERXUtilities.relationshipWithObjectAndKeyPath((EOEnterpriseObject)object(), (String)d2wContext().valueForKey("propertyKey"));
+            EORelationship relationship = ERXUtilities.relationshipWithObjectAndKeyPath(object(), (String)d2wContext().valueForKey("propertyKey"));
             if(relationship != null)
                 return EOUtilities.objectsWithFetchSpecificationAndBindings(object().editingContext(), relationship.destinationEntity().name(),fetchSpecName,null);
         }

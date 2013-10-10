@@ -11,6 +11,7 @@ package er.extensions.components.javascript;
 
 import java.util.Enumeration;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;
@@ -110,6 +111,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
     private static final int NOT_FOUND = -1;
     private static final NSArray UNSET = new NSArray();
     
+    @Override
     public void awake() {
         super.awake();
         updateVarNames();
@@ -117,7 +119,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
 
     protected void updateVarNames() {
         String elementID = context().elementID();
-        elementID = ERXStringUtilities.replaceStringByStringInString(".", "_", elementID);
+        elementID = StringUtils.replace(elementID,  ".", "_");
         pickerName = "picker_"+ elementID;
         parentSelectName = "parent_" + elementID;
         childSelectName = "child_" + elementID;
@@ -191,6 +193,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
     }
     
    
+    @Override
     public void takeValuesFromRequest(WORequest request, WOContext context) {
         NSArray parentFormValues = request.formValuesForKey(parentSelectName);
         NSArray childFormValues = request.formValuesForKey(childSelectName);
@@ -459,7 +462,6 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
 
     /**
      * @param aParent
-     * @return
      */
     private boolean isSelectedParent(Object aParent) {
         return parentSelection().containsObject(aParent);
@@ -467,7 +469,6 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
 
     /**
      * @param aChild
-     * @return
      */
     private boolean isSelectedChild(Object aChild) {
         return childrenSelection().containsObject(aChild);
@@ -603,6 +604,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         return _multiple.booleanValue();
     }
     
+    @Override
     public void reset() {
         super.reset();
         _childrenSelection = null;

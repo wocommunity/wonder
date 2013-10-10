@@ -3,6 +3,7 @@ package er.selenium.filters;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.lang.CharEncoding;
 import org.apache.log4j.Logger;
 
 import com.webobjects.foundation.NSArray;
@@ -35,7 +36,7 @@ public class SeleniumIncludeTestFilter extends SeleniumTestFilterHelper implemen
 			if (fio.exists()) {
 				String fileContents;
 				try {
-					fileContents = ERXFileUtilities.stringFromFile(fio, "UTF-8");
+					fileContents = ERXFileUtilities.stringFromFile(fio, CharEncoding.UTF_8);
 				} catch (IOException e) {
 					log.error("Can't read " + fio.getAbsolutePath() + " contents");
 					throw new RuntimeException(e);
@@ -47,8 +48,8 @@ public class SeleniumIncludeTestFilter extends SeleniumTestFilterHelper implemen
 		
 		throw new RuntimeException("Included path not found: " + name);
 	}
-	
-//	 @Override
+
+	@Override
 	protected void processTestElements(NSMutableArray<SeleniumTest.Element> elements) {
 		int includeCount = 0;
 		int i = 0;

@@ -112,7 +112,14 @@ var MTAjaxUpdateContainer = {
 		}
 		
 		var actionUrl = updateElement.get('data-updateUrl');
-		actionUrl = actionUrl.addQueryParameters('__updateID=' + id);
+		if (options && options['_r']) {
+			actionUrl = actionUrl.addQueryParameters('_r='+ id);
+		}
+		else {
+			actionUrl = actionUrl.addQueryParameters('_u='+ id);
+		}
+		actionUrl = actionUrl.addQueryParameters(new Date().getTime());
+
 //		new Ajax.Updater(id, actionUrl, AjaxOptions.defaultOptions(options));
 		new Request.HTML(Object.merge(MTAjaxOptions.defaultOptions(options), {
 			update : $(id),
@@ -192,7 +199,8 @@ var MTAjaxSubmitButton = {
 		return options;
 	},
 	
-	generateActionUrl: function(id, form, queryParams) {
+	generateActionUrl: function(id, form, queryParams, options) {
+
 		var actionUrl = form.action;
 		
 		if(queryParams != null) {
@@ -202,9 +210,14 @@ var MTAjaxSubmitButton = {
 		actionUrl = actionUrl.replace('/wo/', '/ajax/');
 		
 		if(id != null) {
-			actionUrl = actionUrl.addQueryParameters('__updateID=' + id);
+			if (options && options['_r']) {
+				actionUrl = actionUrl.addQueryParameters('_r=' + id);
+			}
+			else {
+				actionUrl = actionUrl.addQueryParameters('_u=' + id);
+			}
 		}
-		
+		actionUrl = actionUrl.addQueryParameters(new Date().getTime());		
 		return actionUrl;
 
 	},
@@ -271,7 +284,7 @@ var MTAjaxSubmitButton = {
 		if(updateElement == null) {
 			alert('There is no element on this page with the id "' + id + '".');
 		}
-		var finalUrl = MTAjaxSubmitButton.generateActionUrl(id, form, queryParams);
+		var finalUrl = MTAjaxSubmitButton.generateActionUrl(id, form, queryParams,options);
 		var finalOptions = MTAjaxSubmitButton.processOptions(form, options);
 		new Request.HTML(Object.merge({
 				update : id,
@@ -282,7 +295,7 @@ var MTAjaxSubmitButton = {
 
 	request : function(form, queryParams, options) {
 		
-		var finalUrl = MTAjaxSubmitButton.generateActionUrl(null, form, queryParams);
+		var finalUrl = MTAjaxSubmitButton.generateActionUrl(null, form, queryParams, options);
 		var finalOptions = MTAjaxSubmitButton.processOptions(form, options);
 
 		new Request.HTML(Object.merge({
@@ -312,7 +325,7 @@ var MTAjaxSubmitButton = {
 		} else if (updateContainerID != null) {
 			submitFunction = function(element, value) {
 				if(!options.onBeforeSubmit || options.onBeforeSubmit(formFieldID)) {
-					MTASB.update(updateContainerID, $(formFieldID), null, options);
+					MTASB.update(updateContainerID, $(formFieldID).form, null, options);
 				}
 			}
 		} else {
@@ -510,5 +523,24 @@ var MTAjaxDraggable = new Class({
 
 var MTAD = MTAjaxDraggable;
 
+var MTAjaxUtils = {
+	toggleClassName: function(element, className, toggled) {
+		element = document.id(element);
+		if (toggled) {
+			element.addClass(className);
+		}
+		else {
+			element.removeClass(className);
+		}
+	},
+	
+	decode: function(input) {
+		var e = document.createElement('div');
+		e.innerHTML = input;
+		return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;	
+	}
+
+	
+};
 
 

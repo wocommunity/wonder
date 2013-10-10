@@ -23,9 +23,10 @@ import er.extensions.foundation.ERXStringUtilities;
  * </p>
  * 
  * <p>
- * If you want to use something fancier than a string as link label, you can put
- * an {@link ERXWOTemplate} with {@code templateName='label'} inside the
- * component. If present, that will replace the label provided by the
+ * You can use an {@code openedLabel} and {@code closedLabel} binding to change
+ * the link text. Or, if you want to use something fancier than a string as link
+ * label, you can put an {@link ERXWOTemplate} with {@code templateName='label'}
+ * inside the component. If present, that will replace the label provided by the
  * {@code string} binding.
  * </p>
  * 
@@ -193,7 +194,7 @@ public class AjaxExpansion extends AjaxComponent {
 
 	/**
 	 * Returns an escaped version of {@link #string()} using
-	 * {@link ERXStringUtilities#escapeJavascriptApostrophes(String)}.
+	 * {@link er.extensions.foundation.ERXStringUtilities#escapeJavascriptApostrophes(String)}.
 	 * 
 	 * @return escaped string
 	 */
@@ -204,6 +205,7 @@ public class AjaxExpansion extends AjaxComponent {
     /**
      * Adds required resources for this component.
      */
+	@Override
 	protected void addRequiredWebResources(WOResponse response) {
 		addScriptResourceInHead(response, "prototype.js");
 		addScriptResourceInHead(response, "effects.js");
@@ -215,6 +217,7 @@ public class AjaxExpansion extends AjaxComponent {
 	 * 
 	 * @return {@code null}
 	 */
+	@Override
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		return null;
 	}

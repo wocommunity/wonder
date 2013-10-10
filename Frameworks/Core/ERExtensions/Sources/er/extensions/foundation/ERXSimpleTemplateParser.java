@@ -21,11 +21,11 @@ import er.extensions.logging.ERXPatternLayout;
 
 /**
  * Very simple template parser.  For example if you have the delimiter:
- * @@, then a possible template might look like: "Hello, @@name@@.  How are
+ * {@literal @}{@literal @}, then a possible template might look like: "Hello, {@literal @}{@literal @}name{@literal @}{@literal @}.  How are
  * you feeling today?",  In this case the object will get asked for the
  * value name. This works with key-paths as well.
  * 
- * @property er.extensions.ERXSimpleTemplateParser.useOldDelimiter if false, only @@ delimeters are supported (defaults to true)
+ * @property er.extensions.ERXSimpleTemplateParser.useOldDelimiter if false, only {@literal @}{@literal @} delimeters are supported (defaults to true)
  */
 public class ERXSimpleTemplateParser {
 
@@ -220,6 +220,12 @@ public class ERXSimpleTemplateParser {
         }
         boolean deriveElement = false; // if the template starts with delim, the first component will be a zero-length string
         StringBuilder sb = new StringBuilder();
+        Object objects[];
+        if (otherObject != null) {
+            objects = new Object[] {object, otherObject};
+        } else {
+            objects = new Object[] {object};
+        }
         for (Enumeration e = components.objectEnumerator(); e.hasMoreElements();) {
             String element = (String)e.nextElement();
             if(!isLoggingDisabled) {
@@ -233,12 +239,6 @@ public class ERXSimpleTemplateParser {
                     throw new IllegalArgumentException("\"\" is not a valid keypath in template: " + template);
                 }
                 Object result = _undefinedKeyLabel;
-                Object objects[];
-                if(otherObject != null) {
-                    objects = new Object[] {object, otherObject};
-                } else {
-                    objects = new Object[] {object};
-                }
                 for (int i = 0; i < objects.length; i++) {
                     Object o = objects[i];
                     if(o != null && result == _undefinedKeyLabel) {

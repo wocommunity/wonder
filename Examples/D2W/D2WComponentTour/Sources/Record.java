@@ -8,10 +8,12 @@ import er.extensions.eof.ERXGenericRecord;
  */
 public class Record extends ERXGenericRecord {
 	
+	@Override
 	public String toString() {
 		return entityName() + ": " + System.identityHashCode(this);
 	}
 	
+	@Override
 	public String userPresentableDescription() {
 		return toString();
 	}

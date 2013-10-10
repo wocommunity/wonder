@@ -86,6 +86,7 @@ public class D2WPage extends D2WComponent {
 		return (b == null) || (b.equals(D2WModel.One));
 	}
 
+	@Override
 	public WOAssociation replacementAssociationForAssociation(WOAssociation oldAssociation, String oldBinding,
 			DTWTemplate aTemplate, WOContext aContext) {
 		if ((oldBinding.equals("border")) || (oldBinding.equals("d2wContext.border"))
@@ -96,6 +97,7 @@ public class D2WPage extends D2WComponent {
 		return super.replacementAssociationForAssociation(oldAssociation, oldBinding, aTemplate, aContext);
 	}
 
+	@Override
 	public String descriptionForResponse(WOResponse r, WOContext c) {
 		return "D2W-" + pageTitle();
 	}
@@ -106,7 +108,7 @@ public class D2WPage extends D2WComponent {
 			_extraBindings = new NSMutableDictionary<String, Object>(16);
 
 			for (Enumeration<String> e = oldBindings.keyEnumerator(); e.hasMoreElements();) {
-				String key = (String) e.nextElement();
+				String key = e.nextElement();
 				Object newValue = valueForKey(key);
 				if (newValue != null) {
 					_extraBindings.setObjectForKey(newValue, key);
@@ -121,7 +123,7 @@ public class D2WPage extends D2WComponent {
 		_extraBindings = extraBindings;
 
 		for (Enumeration<String> e = extraBindings.keyEnumerator(); e.hasMoreElements();) {
-			String key = (String) e.nextElement();
+			String key = e.nextElement();
 			Object newValue = extraBindings.objectForKey(key);
 
 			if (newValue == NSKeyValueCoding.NullValue) {

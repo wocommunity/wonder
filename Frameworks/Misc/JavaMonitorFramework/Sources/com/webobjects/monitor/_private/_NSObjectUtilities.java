@@ -29,14 +29,17 @@ public class _NSObjectUtilities  {
      * These methods will eventually do an exhaustive dump of the Object in question using Reflection APIs.
      * This is very slow, and outputs fully qualified _everything_.
      * These are considered private API, even though they are publicly visible.
-     * Also note that this may alter the state of the object to be dumped - it is _not_ garanteed to be free of side-effects.
-     * showInterfaces - will show implemented interfaces
-     * showConstructors - will show available constructors
-     * showFields - will show ivars
-     * getFields - will attempt to get ivar values (only if showFields)
-     * showMethods - will show method signatures
-     * getMethodsJava - will attempt to invoke all methods starting with "get" and taking no arguments (only if showMethods)
-     * getMethodsNext - will attempt to invoke all methods with the same name as an ivar (ignoring starting '_') and taking no arguments (only if showMethods)
+     * Also note that this may alter the state of the object to be dumped - it is _not_ guaranteed to be free of side-effects.
+     * @param o object to dump
+     * @param showInterfaces - will show implemented interfaces
+     * @param showConstructors - will show available constructors
+     * @param showFields - will show ivars
+     * @param getFields - will attempt to get ivar values (only if showFields)
+     * @param showMethods - will show method signatures
+     * @param getMethodsJava - will attempt to invoke all methods starting with "get" and taking no arguments (only if showMethods)
+     * @param getMethodsNext - will attempt to invoke all methods with the same name as an ivar (ignoring starting '_') and taking no arguments (only if showMethods)
+     * @return serialized object
+     * @throws IOException if something goes wrong
      */
     public static String dumpObjectAsString(Object o,
                                     boolean showInterfaces, boolean showConstructors,
@@ -59,7 +62,7 @@ public class _NSObjectUtilities  {
                 ourLength = Array.getLength(o);
             } catch (IllegalArgumentException e) {}
             outputWriter.write(" and size " + ourLength + CR);
-            // Walk through the array, writeing out the state of all the elements in the array?
+            // Walk through the array, writing out the state of all the elements in the array?
         } else {
             outputWriter.write(ourName + CR);
         }

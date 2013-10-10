@@ -28,7 +28,7 @@ public class ERXBatchFetchUtilities {
 
 	/**
 	 * Defaults skipFaultedSourceObjects to false for backwards compatibility
-	 * @see batchFetch(NSArray, NSArray, boolean)
+	 * @see #batchFetch(NSArray, NSArray, boolean)
 	 * 
      * @param sourceObjects the array of source object to fault keypaths on.
      * @param keypaths the array of keypaths to fault
@@ -54,7 +54,7 @@ public class ERXBatchFetchUtilities {
 
 	/**
 	 * Shortcut for batch fetching a single source object
-	 * @see batchFetch(NSArray, NSArray, boolean)
+	 * @see #batchFetch(NSArray, NSArray, boolean)
 	 * 
      * @param sourceObject source object to fault keypaths on.
      * @param keypaths the array of keypaths to fault
@@ -67,7 +67,7 @@ public class ERXBatchFetchUtilities {
 	/**
 	 * Shortcut for batch fetching a single keypath. 
 	 * Defaults skipFaultedSourceObjects to true
-	 * @see batchFetch(NSArray, NSArray, boolean)
+	 * @see #batchFetch(NSArray, NSArray, boolean)
 	 * 
      * @param sourceObjects the array of source object to fault keypaths on.
      * @param keypath the keypath to fault
@@ -78,7 +78,7 @@ public class ERXBatchFetchUtilities {
 
 	/**
 	 * Shortcut for batch fetching a single keypath. 
-	 * @see batchFetch(NSArray, NSArray, boolean)
+	 * @see #batchFetch(NSArray, NSArray, boolean)
 	 * 
      * @param sourceObjects the array of source object to fault keypaths on.
      * @param keypath the keypath to fault
@@ -89,9 +89,9 @@ public class ERXBatchFetchUtilities {
     }
 
 	/**
-	 * Shortcut for batch fetching a single keypath and returns returns the fetched values. 
+	 * Shortcut for batch fetching a single keypath and returns the fetched values. 
 	 * Defaults skipFaultedSourceObjects to true
-	 * @see batchFetch(NSArray, NSArray, boolean)
+	 * @see #batchFetch(NSArray, NSArray, boolean)
 	 * 
      * @param sourceObjects the array of source object to fault keypaths on.
      * @param keypath the keypath to fault
@@ -101,8 +101,8 @@ public class ERXBatchFetchUtilities {
     }
 
 	/**
-	 * Shortcut for batch fetching a single keypath and returns returns the fetched values. 
-	 * @see batchFetch(NSArray, NSArray, boolean)
+	 * Shortcut for batch fetching a single keypath and returns the fetched values. 
+	 * @see #batchFetch(NSArray, NSArray, boolean)
 	 * 
      * @param sourceObjects the array of source object to fault keypaths on.
      * @param keypath the keypath to fault
@@ -214,6 +214,7 @@ public class ERXBatchFetchUtilities {
          * @see EOFUtils#batchFetch
          * 
          * @param sourceObjects
+         * @param skipFaultedSourceObjects 
          */
         public void traverseForObjects(NSArray sourceObjects, boolean skipFaultedSourceObjects) {
             if (sourceObjects == null || sourceObjects.count() < 1) return;

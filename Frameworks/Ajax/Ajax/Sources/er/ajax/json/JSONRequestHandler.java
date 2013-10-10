@@ -14,13 +14,13 @@ import org.json.JSONObject;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODynamicURL;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WORequestHandler;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.foundation._NSUtilities;
 
-import er.extensions.components.ERXDynamicURL;
 import er.extensions.foundation.ERXMutableURL;
 import er.extensions.foundation.ERXProperties;
 
@@ -217,7 +217,7 @@ public class JSONRequestHandler extends WORequestHandler {
 				try {
 					JSONComponentCallback componentCallback = null;
 					
-					ERXDynamicURL url = new ERXDynamicURL(request._uriDecomposed());
+					WODynamicURL url = request._uriDecomposed();
 					String requestHandlerPath = url.requestHandlerPath();
 					JSONRPCBridge jsonBridge;
 					if (requestHandlerPath != null && requestHandlerPath.length() > 0) {
@@ -291,14 +291,9 @@ public class JSONRequestHandler extends WORequestHandler {
 							contextSession._appendCookieToResponse(response);
 						}
 					}
-					if (output != null) {
-						response.appendContentString(output.toString());
-					}
-
-					if (response != null) {
-						response._finalizeInContext(context);
-						response.disableClientCaching();
-					}
+					response.appendContentString(output.toString());
+					response._finalizeInContext(context);
+					response.disableClientCaching();
 				}
 				finally {
 					try {

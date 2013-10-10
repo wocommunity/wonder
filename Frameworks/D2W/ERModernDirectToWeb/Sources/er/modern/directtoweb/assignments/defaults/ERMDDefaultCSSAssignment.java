@@ -8,7 +8,6 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
 import er.directtoweb.assignments.ERDAssignment;
-import er.directtoweb.assignments.ERDComputingAssignmentInterface;
 import er.extensions.foundation.ERXDictionaryUtilities;
 import er.extensions.foundation.ERXStringUtilities;
 
@@ -20,11 +19,13 @@ import er.extensions.foundation.ERXStringUtilities;
  */
 public class ERMDDefaultCSSAssignment extends ERDAssignment {
 
-    /** logging support */
+	private static final long serialVersionUID = 1L;
+
+	/** logging support */
     public final static Logger log = Logger.getLogger(ERMDDefaultCSSAssignment.class);
 
     /** holds the array of keys this assignment depends upon */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
 	protected static final NSDictionary keys = ERXDictionaryUtilities.dictionaryWithObjectsAndKeys( new Object [] {
 			new NSArray(new Object[] {"task", "parentPageConfiguration", "pageConfiguration"}), "classForAttributeRepetitionWrapper",
 			new NSArray(new Object[] {"task", "pageConfiguration"}), "classForAttributeRepetition",
@@ -64,13 +65,13 @@ public class ERMDDefaultCSSAssignment extends ERDAssignment {
 	});
 
     /**
-     * Implementation of the {@link ERDComputingAssignmentInterface}. This array
+     * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This array
      * of keys is used when constructing the
      * significant keys for the passed in keyPath.
      * @param keyPath to compute significant keys for.
      * @return array of context keys this assignment depends upon.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("rawtypes")
 	public NSArray dependentKeys(String keyPath) {
         return (NSArray)keys.valueForKey(keyPath);
     }

@@ -85,6 +85,7 @@ public class ERD2WEditSortedToManyFault extends D2WEditToManyFault {
         return result;
     }
 
+    @Override
     public String browserStringForItem(){
         String result = super.browserStringForItem();
         if(showIndex()){

@@ -99,7 +99,7 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
         Object result;
         if (shouldHandleRequest(request, context)) {
             result = handleRequest(request, context);
-            AjaxUtils.updateMutableUserInfoWithAjaxInfo(context());
+            ERXAjaxApplication.enableShouldNotStorePage();
             if (result == null && !ERXAjaxApplication.isAjaxReplacement(request)) {
             	result = AjaxUtils.createResponse(request, context);
             }
@@ -135,13 +135,13 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
     /**
      * Overridden to call {@link #addRequiredWebResources(WOResponse)}.
      * 
-     * @param res the HTTP response that an application returns to a Web server to complete a cycle of the request-response loop
-     * @param ctx context of a transaction
+     * @param response the HTTP response that an application returns to a Web server to complete a cycle of the request-response loop
+     * @param context context of a transaction
      */
     @Override
-    public void appendToResponse(WOResponse res, WOContext ctx) {
-        super.appendToResponse(res, ctx);
-        addRequiredWebResources(res);
+    public void appendToResponse(WOResponse response, WOContext context) {
+        super.appendToResponse(response, context);
+        addRequiredWebResources(response);
     }
 
 
@@ -153,14 +153,18 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
 	
     /**
      * Override this method to append the needed scripts for this component.
-     * @param res
+     * @param response
+     *            the response to write to
      */
-    protected abstract void addRequiredWebResources(WOResponse res);
+    protected abstract void addRequiredWebResources(WOResponse response);
     
     /**
      * Override this method to return the response for an Ajax request.
+     * 
      * @param request
+     *            the request
      * @param context
+     *            the context
      */
     public abstract WOActionResults handleRequest(WORequest request, WOContext context);
 

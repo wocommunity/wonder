@@ -49,6 +49,7 @@ public class AjaxFileUploadRequestHandler extends WORequestHandler {
 		_maxUploadSize = maxUploadSize;
 	}
 
+	@Override
 	public WOResponse handleRequest(WORequest request) {
 		WOApplication application = WOApplication.application();
 		application.awake();
@@ -90,6 +91,9 @@ public class AjaxFileUploadRequestHandler extends WORequestHandler {
 					if (context._requestSessionID() != null) {
 						session = WOApplication.application().restoreSessionWithID(sessionId, context);
 					}
+					if (session == null) {
+						throw new Exception("No valid session!");
+					}
 					File tempFile = File.createTempFile("AjaxFileUpload", ".tmp", _tempFileFolder);
 					tempFile.deleteOnExit();
 					AjaxUploadProgress progress = new AjaxUploadProgress(uploadIdentifier, tempFile, uploadFileName, streamLength);
@@ -102,9 +106,11 @@ public class AjaxFileUploadRequestHandler extends WORequestHandler {
 						}
 					}
 
-					NSArray<String> contentType = (NSArray<String>)formData.headers().valueForKey("content-type");
-					if (contentType != null) {
-						progress.setContentType(contentType.objectAtIndex(0));
+					if (formData != null) {
+						NSArray<String> contentType = (NSArray<String>)formData.headers().valueForKey("content-type");
+						if (contentType != null) {
+							progress.setContentType(contentType.objectAtIndex(0));
+						}
 					}
 					
 					try {
@@ -134,6 +140,16 @@ public class AjaxFileUploadRequestHandler extends WORequestHandler {
 			catch (Throwable t) {
 				log.error("Upload failed",t);
 				response.appendContentString("Failed: " + t.getMessage());
+			}
+			finally {
+				if (uploadInputStream != null) {
+					try {
+						uploadInputStream.close();
+					}
+					catch (IOException e) {
+						// ignore
+					}
+				}
 			}
 			return response;
 		}

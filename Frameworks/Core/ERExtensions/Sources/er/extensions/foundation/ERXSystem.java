@@ -17,7 +17,7 @@ import com.webobjects.foundation.NSProperties;
 /**
  * ERXSystem provides support for variable replacement in Properties with
  * 
- * @@key@@ references in values. Additionally, it provides an NSKVC
+ * {@literal @}{@literal @}key{@literal @}{@literal @} references in values. Additionally, it provides an NSKVC
  *         implementation on top of System properties.
  * 
  * @author david teran
@@ -59,7 +59,7 @@ public class ERXSystem implements NSKeyValueCoding, NSKeyValueCodingAdditions {
 	 * @return the converted value
 	 */
 	public static String getProperty(String key, Properties properties) {
-	    String originalValue = (String) properties.getProperty(key);
+	    String originalValue = properties.getProperty(key);
 	    return ERXSimpleTemplateParser.parseTemplatedStringWithObject(originalValue, properties);
 	}
 

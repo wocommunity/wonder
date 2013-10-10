@@ -4,9 +4,9 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 
 import er.extensions.migration.ERXMigrationDatabase;
+import er.extensions.migration.ERXMigrationDatabase.Migration;
 import er.extensions.migration.ERXMigrationTable;
 import er.extensions.migration.ERXModelVersion;
-import er.extensions.migration.ERXMigrationDatabase.Migration;
 
 /**
  * <span class="en">

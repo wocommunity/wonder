@@ -2,11 +2,11 @@ package er.extensions.foundation;
 
 import java.util.UUID;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 
-import er.extensions.ERXExtensions;
 import er.extensions.appserver.ERXResponseRewriter;
 import er.extensions.appserver.ERXWOContext;
 
@@ -357,7 +357,7 @@ public class ERXLazyValue<T> {
 
 		public boolean shouldInvalidate() {
 			Object currentCacheKey = cacheKey();
-			return !ERXExtensions.safeEquals(_lastCacheKey, currentCacheKey);
+			return ObjectUtils.notEqual(_lastCacheKey, currentCacheKey);
 		}
 	}
 
@@ -411,6 +411,7 @@ public class ERXLazyValue<T> {
 			return ERXThreadStorage.valueForKey(_key);
 		}
 
+		@Override
 		public void setCacheKey(Object value) {
 			ERXThreadStorage.takeValueForKey(value, _key);
 		}
@@ -436,6 +437,7 @@ public class ERXLazyValue<T> {
 			return ERXResponseRewriter.pageUserInfo(ERXWOContext.currentContext()).objectForKey(_key);
 		}
 
+		@Override
 		public void setCacheKey(Object value) {
 			ERXResponseRewriter.pageUserInfo(ERXWOContext.currentContext()).setObjectForKey(value, _key);
 		}
@@ -462,6 +464,7 @@ public class ERXLazyValue<T> {
 			return ERXResponseRewriter.ajaxPageUserInfo(ERXWOContext.currentContext()).objectForKey(_key);
 		}
 
+		@Override
 		public void setCacheKey(Object value) {
 			ERXResponseRewriter.ajaxPageUserInfo(ERXWOContext.currentContext()).setObjectForKey(value, _key);
 		}

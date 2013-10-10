@@ -1,5 +1,6 @@
 package er.extensions.components;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
@@ -11,7 +12,6 @@ import com.webobjects.appserver.WOSession;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.ERXExtensions;
 import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ERXResourceManager;
 import er.extensions.appserver.ERXResponse;
@@ -84,7 +84,7 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 			WOResponse response = ERXStyleSheet.cache( session() ).objectForKey( name );
 			String md5 = ERXStringUtilities.md5Hex( response.contentString(), null );
 			String queryMd5 = response.headerForKey( "checksum" );
-			if( ERXExtensions.safeEquals( md5, queryMd5 ) ) {
+			if (ObjectUtils.equals(md5, queryMd5)) {
 				//TODO check for last-whatever time and return not modified if not changed
 			}
 			return response;
@@ -143,7 +143,7 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 	public String styleSheetKey() {
 		String result = stringValueForBinding("key");
 		if( result == null ) {
-			result = context().session().sessionID();
+			result = session().sessionID();
 		}
 		return result;
 	}
@@ -213,7 +213,7 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 			href = wocontext.directActionURLForActionNamed( Sheet.class.getName() + "/" + key, query, wocontext.request().isSecure(), 0, false );
 		}
 
-		response._appendContentAsciiString( "<link " );
+		response._appendContentAsciiString( "<link" );
 
 		response._appendTagAttributeAndValue( "rel", "stylesheet", false );
 		response._appendTagAttributeAndValue( "type", "text/css", false );

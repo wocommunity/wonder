@@ -6,7 +6,7 @@ SHELL = /bin/sh
 INCLUDES = -I${APACHEINCLUDE_DIR} -I../Adaptor
 
 # Common compiler and linker flags
-CFLAGS = -O2 ${INCLUDES} ${DEBUG_FLAG} -DSINGLE_THREADED_ADAPTOR -D${OS} -DFORKING_WEBSERVER -DAPACHE ${ENABLE_SSL_SUPPORT} 
+CFLAGS += -O2 ${INCLUDES} ${DEBUG_FLAG} -DSINGLE_THREADED_ADAPTOR -D${OS} -DFORKING_WEBSERVER -DAPACHE ${ENABLE_SSL_SUPPORT} 
 
 APXSFLAGS = -c -S CC=${CC} -Wc,"${CFLAGS}" -Wl,"${LDFLAGS}"
 
@@ -45,11 +45,8 @@ mod_WebObjects.so : mod_WebObjects.c ${COMMON_SRCFILES}
 
 
 clean:
-	rm -f mod_WebObjects.slo mod_WebObjects.so mod_WebObjects.o *.o
+	rm -f mod_WebObjects.*o mod_WebObjects.la *.o
 	rm -f ../Adaptors/*.o ../*.slo ../*.lo
 	rm -rf .libs
-		
+
 include ../Adaptor/make.postamble
-
-
-

@@ -60,6 +60,7 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
         return switchTab && errorMessages.count()==0;
     }
 
+    @Override
     public void takeValuesFromRequest(WORequest request, WOContext context) {
         // ak: this only works in a direct link or if there are no form
         // values...
@@ -70,20 +71,18 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
 
     //AK: what are these used for? They do nothing?
     protected Integer _tabNumber;
+
     public Integer tabNumber(){ return _tabNumber;}
+
     public void setTabNumber(Integer newTabNumber){ _tabNumber  = newTabNumber;}
 
+    @Override
     public WOComponent printerFriendlyVersion() {
         WOComponent result=ERD2WFactory.erFactory().printerFriendlyPageForD2WContext(d2wContext(),session());
         ((EditPageInterface)result).setObject(object());
         return result;
     }
-    
-    @Override
-    public void awake() {
-        super.awake();
-    }
-    
+
     public void setTabByName(String tabName) {
         if (tabName != null) {
             int i = 0;
@@ -97,7 +96,8 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
             }
         }
     }
-    
+
+    @Override
     public String urlForCurrentState() {
         String url = super.urlForCurrentState();
         if (currentTab() != null) {
@@ -117,6 +117,7 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
      * generated.</p>
      * @return a JavaScript string.
      */
+    @Override
     public String tabScriptString() {
 		if (d2wContext().valueForKey(Keys.firstResponderKey) != null) {
             return scriptForFirstResponderActivation();
@@ -184,7 +185,7 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
             int currentIndex = tabSectionsContents().indexOfObject(currentTab());
             if (tabSectionsContents().count() >= currentIndex + 2 && currentIndex >= 0) {
                 NSNotificationCenter.defaultCenter().postNotification(WILL_SWITCH_TAB, this);
-                setCurrentTab((ERD2WContainer)tabSectionsContents().objectAtIndex(currentIndex + 1));
+                setCurrentTab(tabSectionsContents().objectAtIndex(currentIndex + 1));
             }
             else
                 log.warn("Attempting to move to next tab when current index is: " + currentIndex + " and tab count: " +
@@ -197,7 +198,7 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
         if (switchTabAction()) {
             int currentIndex = tabSectionsContents().indexOfObject(currentTab());
             if (tabSectionsContents().count() >= currentIndex && currentIndex > 0)
-                setCurrentTab((ERD2WContainer)tabSectionsContents().objectAtIndex(currentIndex - 1));
+                setCurrentTab(tabSectionsContents().objectAtIndex(currentIndex - 1));
             else
                 log.warn("Attempting to move to previous tab when current index is: " + currentIndex + " and tab count: " +
                          tabSectionsContents().count());

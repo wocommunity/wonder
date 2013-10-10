@@ -52,6 +52,7 @@ public class ERDUnitResolverAssignment extends ERDDelayedAssignment {
      */
     public ERDUnitResolverAssignment (String key, Object value) { super(key,value); }
 
+    @Override
     public Object fireNow(D2WContext c) {
         String userInfoUnitString = (String)c.valueForKey("unit");
         if (userInfoUnitString == null)

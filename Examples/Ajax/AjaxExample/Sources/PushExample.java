@@ -10,6 +10,7 @@ import com.webobjects.appserver.WOResponse;
 
 import er.ajax.AjaxPushRequestHandler;
 import er.ajax.AjaxUtils;
+import er.extensions.appserver.ERXResponse;
 
 public class PushExample extends WOComponent {
 
@@ -69,8 +70,6 @@ public class PushExample extends WOComponent {
 			System.out.println("PushExample.push: starting " + session().sessionID());
 			_pushSessionIDs.add(session().sessionID());
 		}
-		WOResponse response = new WOResponse();
-		response.setContent("Sent some data");
-		return response;
+		return new ERXResponse("Sent some data");
 	}
 }

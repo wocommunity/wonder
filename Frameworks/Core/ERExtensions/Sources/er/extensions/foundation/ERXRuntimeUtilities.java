@@ -363,7 +363,6 @@ public class ERXRuntimeUtilities {
      */
     public final static Result execute(String[] command, String[] envp,
             File dir, long timeout) throws IOException, TimeoutException {
-        File outputFile = null;
         int exitValue = -1;
         Runtime rt = Runtime.getRuntime();
         Process p = null;
@@ -448,9 +447,6 @@ public class ERXRuntimeUtilities {
             }
 
             freeProcessResources(p);
-
-            if (outputFile != null)
-                outputFile.delete();
         }
         return result;
 

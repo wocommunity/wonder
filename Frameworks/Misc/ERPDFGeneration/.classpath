@@ -3,14 +3,12 @@
 	<classpathentry kind="src" path="Sources"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/iText-2.1.7.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/ujac-1.0.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/commons-logging.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/xml-apis-xerces-2.9.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/core-renderer-20101006.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/fop-hyph.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/fop.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/avalon-framework-4.2.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/xmlgraphics-commons-1.4.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/commons-logging-1.0.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/xalan-2.7.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/xercesImpl-2.7.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/xml-apis-1.3.04.jar"/>

@@ -4,14 +4,9 @@
 	<parent>
 		<groupId>wonder.examples</groupId>
 		<artifactId>examples</artifactId>
-		<version>5.7-SNAPSHOT</version>
+		<version>6.1.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>reporting</artifactId>
 	<packaging>pom</packaging>
 	<name>Reporting Examples</name>
-	<modules>
-		<module>DocsByExample</module>
-		<module>DRGroupingTest</module>
-		<module>DynaReporter</module>
-	</modules>
 </project>

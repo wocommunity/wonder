@@ -6,6 +6,7 @@
 //
 package er.extensions.appserver.navigation;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOComponent;
@@ -66,6 +67,7 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
     	return null;
     }
     
+    @Override
     public void reset() {
         _navigationItem = null;
         _navigationState = null;
@@ -114,9 +116,8 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
         		NSMutableDictionary bindings = navigationItem().queryBindings().mutableClone();
         		bindings.setObjectForKey(context().contextID(), "__cid");
         		return context().directActionURLForActionNamed(navigationItem().directActionName(), bindings);
-        	} else {
-        		return context().componentActionURL();
-            }
+        	}
+        	return context().componentActionURL();
         }
 
         // If the user specified some javascript, put that into the HREF and return it
@@ -124,7 +125,7 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
 
             // Make sure there are no extra quotations marks - replace them with apostrophes
             String theFunction = (String)valueForBinding("javascriptFunction");
-            return ERXStringUtilities.replaceStringByStringInString("\"", "'", theFunction);
+            return StringUtils.replace(theFunction, "\"", "'");
         }
 
         return null;
@@ -133,11 +134,11 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
     public WOComponent menuItemSelected() {
         WOComponent anActionResult = null;
 
-        if ((navigationItem().action() != null) && (navigationItem().action() != "")) {
+        if (!ERXStringUtilities.stringIsNullOrEmpty(navigationItem().action())) {
             anActionResult = (WOComponent)valueForKeyPath(navigationItem().action());
-        } else if ((navigationItem().pageName() != null) && (navigationItem().pageName() != "")) {
+        } else if (!ERXStringUtilities.stringIsNullOrEmpty(navigationItem().pageName())) {
             anActionResult = pageWithName(navigationItem().pageName());
-        } else if ((navigationItem().directActionName() != null) && (navigationItem().directActionName() != "")) {
+        } else if (!ERXStringUtilities.stringIsNullOrEmpty(navigationItem().directActionName())) {
             // FIXME: Need to support directAction classes
             if(_linkDirectlyToDirectActions) {
                 ERXDirectAction da = new ERXDirectAction(context().request());
@@ -256,7 +257,7 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
 
 	public boolean omitLabelSpanTag() {
 		if (_omitLabelSpanTag == null) {
-			_omitLabelSpanTag = new Boolean(!ERXProperties.booleanForKeyWithDefault("er.extensions.ERXNavigationManager.includeLabelSpanTag", false));
+			_omitLabelSpanTag = Boolean.valueOf(!ERXProperties.booleanForKeyWithDefault("er.extensions.ERXNavigationManager.includeLabelSpanTag", false));
 		}
 		return _omitLabelSpanTag;
 	}

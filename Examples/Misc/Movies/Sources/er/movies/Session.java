@@ -52,14 +52,14 @@ public class Session extends ERXSession {
 	}
 
 	public void setMaxSeqId(int seqId) {
-		this.maxSeqId = seqId;
+		maxSeqId = seqId;
 	}
 	
 	public int previousSeqId() {
 		// New session
 		if (previousSeqId == 0) {
 			if (transactions().valueForKeyPath("@min.seqId") != null) {
-				previousSeqId = new Integer(transactions().valueForKeyPath("@min.seqId").toString());
+				previousSeqId = Integer.valueOf(transactions().valueForKeyPath("@min.seqId").toString());
 				previousSeqId = previousSeqId - 1;
 			}
 		}

@@ -156,7 +156,7 @@ public abstract class ERPChart extends ERXStatelessComponent {
         if(_configuration == null) {
             _configuration = (NSDictionary<String,Object>)valueForBinding("configuration");
             if(_configuration == null) {
-                _configuration = (NSDictionary<String, ?>) NSDictionary.EmptyDictionary;
+                _configuration = NSDictionary.EmptyDictionary;
             }
         }
         return _configuration;

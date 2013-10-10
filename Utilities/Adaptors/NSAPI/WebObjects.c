@@ -163,7 +163,7 @@ int WebObjects_init(pblock *pb, Session *sn, Request *rq)
    strtbl *dict;
    int i;
 
-   WOLog_init(NULL,WOLogLevel[WO_DBG]);
+   WOLog_init(NULL, NULL, WOLogLevel[WO_DBG]);
    dump_pb(pb,"init.pb");
 
    dict = st_new(10);

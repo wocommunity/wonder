@@ -46,7 +46,7 @@ public class Neo4JAdaptor extends EOAdaptor {
 			throw new IllegalArgumentException("No \"" + CONFIG_PATH_KEY + "\" value given");
 		}
 		
-		this.db = DatabasePool.instance.get(databasePath);
+		db = DatabasePool.instance.get(databasePath);
 	}
 
 	@Override

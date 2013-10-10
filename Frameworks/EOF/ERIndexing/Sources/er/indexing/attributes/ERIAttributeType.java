@@ -22,6 +22,7 @@ public class ERIAttributeType extends _ERIAttributeType {
 
     public interface Key extends _ERIAttributeType.Key {}
 
+    @Override
     public void init(EOEditingContext ec) {
         super.init(ec);
     }

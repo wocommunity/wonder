@@ -42,14 +42,16 @@ public class EOGenericRecord extends EOCustomObject {
 		__setClassDescription(cd);
 	}
 
+	@Override
 	public final void __setClassDescription(EOClassDescription classDescription) {
 		if (classDescription == null) {
 			throw new IllegalArgumentException("A class description of a generic record cannot be null");
 		}
-		this.__classDescription = classDescription;
-		this.__dictionary = this.__classDescription._newDictionaryForProperties();
+		__classDescription = classDescription;
+		__dictionary = __classDescription._newDictionaryForProperties();
 	}
 
+	@Override
 	public EOClassDescription classDescription() {
 		EOClassDescription cd = __classDescription();
 		if (cd == null) {
@@ -58,6 +60,7 @@ public class EOGenericRecord extends EOCustomObject {
 		return __classDescription();
 	}
 
+	@Override
 	public NSKeyValueCoding._KeyBinding _otherStorageBinding(String key) {
 		boolean lazyBindingNeeded = false;
 		EOClassDescription classDescription = classDescription();
@@ -85,8 +88,8 @@ public class EOGenericRecord extends EOCustomObject {
 			}
 		}
 
-		if ((this.__dictionary instanceof _EOMutableKnownKeyDictionary)) {
-			NSKeyValueCoding._KeyBinding keyBinding = ((_EOMutableKnownKeyDictionary) this.__dictionary).initializer()
+		if ((__dictionary instanceof _EOMutableKnownKeyDictionary)) {
+			NSKeyValueCoding._KeyBinding keyBinding = ((_EOMutableKnownKeyDictionary) __dictionary).initializer()
 					._genericRecordKeyBindingForKey(key, lazyBindingNeeded, enforcedNumberOrBooleanClass);
 			if (keyBinding != null) {
 				return keyBinding;
@@ -102,6 +105,7 @@ public class EOGenericRecord extends EOCustomObject {
 		return new NSKeyValueCoding._KeyBinding(null, key);
 	}
 
+	@Override
 	public NSKeyValueCoding._KeyBinding _keyGetBindingForKey(String key) {
 		Class<?> objectClass = getClass();
 		_NSThreadsafeMutableDictionary mapTable = classDescription()._kvcMapForClass(objectClass)._getBindings;
@@ -114,6 +118,7 @@ public class EOGenericRecord extends EOCustomObject {
 		return keyBinding;
 	}
 
+	@Override
 	public NSKeyValueCoding._KeyBinding _keySetBindingForKey(String key) {
 		Class<?> objectClass = getClass();
 		_NSThreadsafeMutableDictionary mapTable = classDescription()._kvcMapForClass(objectClass)._setBindings;
@@ -126,6 +131,7 @@ public class EOGenericRecord extends EOCustomObject {
 		return keyBinding;
 	}
 
+	@Override
 	public NSKeyValueCoding._KeyBinding _storedKeyGetBindingForKey(String key) {
 		Class<?> objectClass = getClass();
 		_NSThreadsafeMutableDictionary mapTable = classDescription()._kvcMapForClass(objectClass)._storedGetBindings;
@@ -138,6 +144,7 @@ public class EOGenericRecord extends EOCustomObject {
 		return keyBinding;
 	}
 
+	@Override
 	public NSKeyValueCoding._KeyBinding _storedKeySetBindingForKey(String key) {
 		Class<?> objectClass = getClass();
 		_NSThreadsafeMutableDictionary mapTable = classDescription()._kvcMapForClass(objectClass)._storedSetBindings;
@@ -159,6 +166,7 @@ public class EOGenericRecord extends EOCustomObject {
 			super(key, enforcedNumberOrBooleanClass);
 		}
 
+		@Override
 		public Object valueInObject(Object object) {
 			Object value = super.valueInObject(object);
 			return value != null ? ((EOGenericRecord) object).willReadRelationship(value) : null;
@@ -174,17 +182,19 @@ public class EOGenericRecord extends EOCustomObject {
 
 		public _DictionaryBinding(String key, Class<?> enforcedNumberOrBooleanClass) {
 			super(null, key);
-			this._enforcedNumberOrBooleanClass = enforcedNumberOrBooleanClass;
+			_enforcedNumberOrBooleanClass = enforcedNumberOrBooleanClass;
 		}
 
+		@Override
 		public Object valueInObject(Object object) {
 			EOGenericRecord genericRecord = (EOGenericRecord) object;
 			genericRecord.willRead();
 
-			Object value = genericRecord.__dictionary.objectForKey(this._key);
+			Object value = genericRecord.__dictionary.objectForKey(_key);
 			return value == NSKeyValueCoding.NullValue ? null : value;
 		}
 
+		@Override
 		public void setValueInObject(Object value, Object object) {
 			EOGenericRecord genericRecord = (EOGenericRecord) object;
 			genericRecord.willChange();
@@ -192,17 +202,17 @@ public class EOGenericRecord extends EOCustomObject {
 			Object convertedValue = value;
 			if (convertedValue == null) {
 				convertedValue = NSKeyValueCoding.NullValue;
-			} else if (this._enforcedNumberOrBooleanClass != null) {
+			} else if (_enforcedNumberOrBooleanClass != null) {
 				try {
 					convertedValue = _NSUtilities.convertNumberOrBooleanIntoCompatibleValue(convertedValue,
-							this._enforcedNumberOrBooleanClass);
+							_enforcedNumberOrBooleanClass);
 				} catch (ClassCastException exception) {
 					NSLog._conditionallyLogPrivateException(exception);
 				}
 
 			}
 
-			genericRecord.__dictionary.setObjectForKey(convertedValue, this._key);
+			genericRecord.__dictionary.setObjectForKey(convertedValue, _key);
 		}
 	}
 }

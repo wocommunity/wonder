@@ -547,7 +547,8 @@ static String *recvline(net_fd s)
 {
    int len;
    String *result;
-
+   int gotCRLF = 0;
+   
    if (s->status != TR_OK) {
        WOLog(WO_ERR, "Request failed with status %d", s->status);
        return NULL;
@@ -555,56 +556,80 @@ static String *recvline(net_fd s)
    
    result = str_create(NULL, 0);
    if (!result)
-      return NULL;
-   do {
+   {
+       WOLog(WO_ERR, "Error creating String");
+       return NULL;
+   }
+   
+   do
+   {       
+       if (s->count == 0)
+       {
+           fillbuf(s);
+           if (s->status != TR_OK || s->count == 0)
+           {
+               WOLog(WO_ERR, "Request failed with status %d (fillbuf)", s->status);
+               str_free(result);
+               return NULL;
+           }
+       }
+
+       for (len = 0; len < s->count; len++)
+       {
+           if (s->pos[len] == '\r' || s->pos[len] == '\n')
+           {
+               gotCRLF = 1;
+               break;
+           }
+       }
+
+       // if header length > 10240 drop header (see below)
+       if (result->length < 10240)
+       {
+           if(str_appendLength(result, s->pos, len) != 0)
+               WOLog(WO_ERR, "str_appendLength failed (%s, %s, %d)", result, s->pos, len);
+       }
+
+       s->count -= len;
+       s->pos += len;
+
+   } while (!gotCRLF);
+
+   // consume CR/LF
+   s->count -= 1;
+   s->pos += 1;
+
+   len = 0;
+   
+   if (s->pos[-1] == '\r')
+   {
+      /* saw a \r - need to look ahead 1 char for a \n */
       if (s->count == 0)
       {
          fillbuf(s);
          if (s->status != TR_OK || s->count == 0)
          {
-            str_free(result);
-            return NULL;
+             WOLog(WO_ERR, "Request failed with status %d (fillbuf lookahead)", s->status);
+             str_free(result);
+             return NULL;
          }
       }
-      for (len = 0; len < s->count; len++)
-      {
-         if (s->pos[len] == '\r' || s->pos[len] == '\n')
-            break;
-      }
-      if (s->pos[len] != '\r' && s->pos[len] != '\n')
-      {
-         /* append the whole buffer and keep going */
-         str_appendLength(result, s->pos, len);
-         s->count = 0;
-      }
-      /* place an arbitrary limit on the length of a header line */
-      if (result->length > 10240)
-      {
-         str_free(result);
-         return NULL;
-      }
-   } while (s->count == 0);
-   if (len > 0)
-      str_appendLength(result, s->pos, len);
-   if (s->pos[len] == '\r')
-   {
-      /* saw a \r - need to look ahead 1 char for a \n */
-      if (len == s->count)
-      {
-         fillbuf(s);
-         if (s->status != TR_OK || s->count == 0)
-         {
-            str_free(result);
-            return NULL;
-         }
-         len = 0;
-      } else
-         len++;
-      if (s->pos[len] == '\n')
+
+       if (s->pos[len] == '\n')
          len++;
    }
+   
    s->count -= len;
    s->pos += len;
+
+   /* place an arbitrary limit on the length of a header line */
+   if (result->length > 10240)
+   {
+       WOLog(WO_ERR, "Header length > 10240");
+       str_free(result);
+       return NULL;
+   }
+
    return result;
 }
 

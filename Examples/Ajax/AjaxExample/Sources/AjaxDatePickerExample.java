@@ -1,9 +1,13 @@
 
-import java.text.*;
-import java.util.*;
+import java.text.DateFormatSymbols;
+import java.text.Format;
+import java.util.Locale;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSTimestampFormatter;
 
 public class AjaxDatePickerExample extends WOComponent {
 	

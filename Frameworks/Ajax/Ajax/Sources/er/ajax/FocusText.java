@@ -8,7 +8,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 
 import er.extensions.appserver.ERXWOContext;
-import er.extensions.components._private.ERXWOText;
+import er.extensions.foundation.ERXPatcher.DynamicElementsPatches.Text;
 
 /**
  * Focus text is a convenience version of ERXWOText that provides support for grabbing default focus via javascript.
@@ -20,19 +20,19 @@ import er.extensions.components._private.ERXWOText;
  * @binding focus if false, focus will not be grabbed
  * @binding onEnter javascript to execute when the enter key is pressed
  */
-public class FocusText extends ERXWOText {
+public class FocusText extends Text {
 	protected WOAssociation _selectAll;
 	protected WOAssociation _focus;
 	protected WOAssociation _onEnter;
 	protected WOAssociation _onKeyPress;
 
-	public FocusText(String tagname, NSDictionary nsdictionary, WOElement woelement) {
+	public FocusText(String tagname, NSDictionary<String, WOAssociation> nsdictionary, WOElement woelement) {
 		super(tagname, nsdictionary, woelement);
 
-		_selectAll = (WOAssociation) _associations.removeObjectForKey("selectAll");
-		_focus = (WOAssociation) _associations.removeObjectForKey("focus");
-		_onEnter = (WOAssociation) _associations.removeObjectForKey("onEnter");
-		_onKeyPress = (WOAssociation) _associations.removeObjectForKey("onkeypress");
+		_selectAll = _associations.removeObjectForKey("selectAll");
+		_focus = _associations.removeObjectForKey("focus");
+		_onEnter = _associations.removeObjectForKey("onEnter");
+		_onKeyPress = _associations.removeObjectForKey("onkeypress");
 	}
 
   public String id(WOComponent component, WOContext context) {
@@ -46,6 +46,7 @@ public class FocusText extends ERXWOText {
     return id;
   }
 
+	@Override
 	protected void _appendAttributesFromAssociationsToResponse(WOResponse woresponse, WOContext wocontext, NSDictionary nsdictionary) {
 		super._appendAttributesFromAssociationsToResponse(woresponse, wocontext, nsdictionary);
 		WOComponent component = wocontext.component();
@@ -58,6 +59,7 @@ public class FocusText extends ERXWOText {
 		FocusTextField._appendAttributesFromAssociationsToResponse(woresponse, wocontext, id, onKeyPress, onEnterScript);
 	}
 
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
 

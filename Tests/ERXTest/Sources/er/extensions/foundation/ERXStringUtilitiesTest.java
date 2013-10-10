@@ -1,6 +1,6 @@
 package er.extensions.foundation;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import junit.framework.JUnit4TestAdapter;
 
 import org.junit.After;
@@ -44,7 +44,7 @@ public class ERXStringUtilitiesTest {
 		/**
 		 * Levenshtein distance between {@code s1} and {@code s2}
 		 */
-		public double d;
+		public int d;
 
 		/**
 		 * Constructor
@@ -56,7 +56,7 @@ public class ERXStringUtilitiesTest {
 		 * @param d
 		 *            Levenshtein distance
 		 */
-		public LevenshteinExample(String s1, String s2, double d) {
+		public LevenshteinExample(String s1, String s2, int d) {
 			this.s1 = s1;
 			this.s2 = s2;
 			this.d = d;
@@ -235,12 +235,23 @@ public class ERXStringUtilitiesTest {
 	}
 
 	/**
-	 * Tests {@code ERXStringUtilities.distance(String, String)}.
+	 * Tests {@link ERXStringUtilities#distance(String, String)}.
 	 */
 	@Test
 	public void testDistance() {
 		for (LevenshteinExample l : levs) {
 			assertEquals(l.d, ERXStringUtilities.distance(l.s1, l.s2), 0.00001);
+		}
+	}
+
+	/**
+	 * Tests {@link ERXStringUtilities#levenshteinDistance(String, String)}.
+	 */
+	@Test
+	public void testLevenshteinDistance() {
+		for (LevenshteinExample l : levs) {
+			assertEquals(l.d,
+					ERXStringUtilities.levenshteinDistance(l.s1, l.s2));
 		}
 	}
 }

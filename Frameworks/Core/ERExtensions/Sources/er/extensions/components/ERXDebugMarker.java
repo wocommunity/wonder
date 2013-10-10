@@ -23,7 +23,6 @@ import er.extensions.eof.ERXEnterpriseObject;
  * @binding object An EOEditingContext or an EOEnterpriseObject object 
  * @binding debugPageProvider Page to display for showing up details about a EOEnterpriseObject
  */
-
 public class ERXDebugMarker extends WOComponent {
 	/**
 	 * Do I need to update serialVersionUID?
@@ -42,9 +41,9 @@ public class ERXDebugMarker extends WOComponent {
     public static interface DebugPageProvider {
         WOComponent debugPageForObject(EOEnterpriseObject o, WOSession s);
     }
-    
+
+    @Override
     public boolean isStateless() { return true; }
-    public boolean synchronizesVariablesWithBindings() { return false; }
 
     private DebugPageProvider _debugPageProvider;
     public DebugPageProvider debugPageProvider() {
@@ -61,6 +60,8 @@ public class ERXDebugMarker extends WOComponent {
         }
         return _object;
     }
+
+    @Override
     public void reset() {
         super.reset();
         _object=null;

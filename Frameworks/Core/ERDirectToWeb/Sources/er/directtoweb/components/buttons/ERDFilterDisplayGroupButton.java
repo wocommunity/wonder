@@ -41,7 +41,9 @@ public class ERDFilterDisplayGroupButton extends ERDCustomQueryComponent {
 
     public static final Logger log = Logger.getLogger(ERDFilterDisplayGroupButton.class);
 
+    @Override
     public boolean isStateless() { return true; }
+    @Override
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     public static class _FilterDelegate implements NextPageDelegate {

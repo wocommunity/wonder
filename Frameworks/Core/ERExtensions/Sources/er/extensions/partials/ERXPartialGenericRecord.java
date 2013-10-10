@@ -89,9 +89,7 @@ public class ERXPartialGenericRecord extends ERXGenericRecord {
 		if (key != null && key.charAt(0) == '@') {
 			return partialForClass(_NSUtilities.classWithName(key.substring(1)));
 		}
-		else {
-			return super.valueForKey(key);
-		}
+		return super.valueForKey(key);
 	}
 
 	@Override

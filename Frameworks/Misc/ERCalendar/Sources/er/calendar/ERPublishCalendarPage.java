@@ -90,14 +90,15 @@ public class ERPublishCalendarPage extends WOComponent {
      * @param aResponse  the HTTP response that an application returns to a Web server to complete a cycle of the request-response loop
      * @param aContext   context of a transaction
      */
+    @Override
     public void appendToResponse (WOResponse aResponse, WOContext aContext)
     {
 	eventTimestamp = new NSTimestamp();
-	aResponse.setContentEncoding ("UTF-8");
+	aResponse.setContentEncoding("UTF-8");
 	super.appendToResponse (aResponse, aContext);
 	aResponse.setHeader ("text/calendar","content-type");
 	try {
-	    aResponse.setContent (new NSData (foldLongLinesInString (new String (aResponse.content().bytes(), "UTF-8")).getBytes ("UTF-8")));
+	    aResponse.setContent(new NSData(foldLongLinesInString(new String(aResponse.content().bytes(), "UTF-8")).getBytes("UTF-8")));
 	} catch (java.io.UnsupportedEncodingException exception) {
 	    // If encoding is not supported, content of response is left unmodified
 	    // (although exceptions will be thrown elsewhere if UTF-8 is unsupported).
@@ -213,7 +214,7 @@ public class ERPublishCalendarPage extends WOComponent {
     /**
      * @return  status of the current event, backslash escaped
      *		for inclusion in iCalendar document.
-     * @see     ERCalendarEvent#status
+     * @see     ERCalendarEvent#status()
      */
     public String escapedEventStatus()
     {
@@ -223,7 +224,7 @@ public class ERPublishCalendarPage extends WOComponent {
     /**
      * @return  summary of the current event, backslash escaped
      *		for inclusion in iCalendar document.
-     * @see     ERCalendarEvent#summary
+     * @see     ERCalendarEvent#summary()
      */
     public String escapedEventSummary()
     {
@@ -256,7 +257,7 @@ public class ERPublishCalendarPage extends WOComponent {
      *		"WEEKLY", "DAILY", "HOURLY", "MINUTELY", "SECONDLY" depending
      *		on the value returned by {@link ERCalendarEvent#repeatFrequency
      *		repeatFrequency}.
-     * @see	ERCalendarEvent#repeatFrequency
+     * @see	ERCalendarEvent#repeatFrequency()
      */
     public String eventRepeatFrequency()
     {

@@ -12,7 +12,7 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.foundation.NSValidation;
 
 import er.extensions.appserver.ERXRequest;
-import er.extensions.components.ERXComponent;
+import er.extensions.components.ERXNonSynchronizingComponent;
 import er.extensions.components.ERXSimpleSpamCheck;
 import er.extensions.foundation.ERXProperties;
 
@@ -36,15 +36,13 @@ import er.extensions.foundation.ERXProperties;
  * 
  * @author mschrag
  */
-public class ERReCaptcha extends ERXComponent {
+public class ERReCaptcha extends ERXNonSynchronizingComponent {
 	/**
 	 * Do I need to update serialVersionUID?
 	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
 	 * <a href="http://java.sun.com/j2se/1.4/pdf/serial-spec.pdf">Java Object Serialization Spec</a>
 	 */
 	private static final long serialVersionUID = 1L;
-
-	private String _html;
 
 	/**
 	 * Constructs a new ERReCaptcha component.
@@ -54,10 +52,6 @@ public class ERReCaptcha extends ERXComponent {
 	 */
 	public ERReCaptcha(WOContext context) {
 		super(context);
-	}
-
-	public boolean synchronizesVariablesWithBindings() {
-		return false;
 	}
 
 	/**
@@ -99,9 +93,10 @@ public class ERReCaptcha extends ERXComponent {
 		return html;
 	}
 
+	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		super.takeValuesFromRequest(request, context);
-		if (context._wasFormSubmitted()) {
+		if (context.wasFormSubmitted()) {
 			String challenge = request.stringFormValueForKey("recaptcha_challenge_field");
 			if (challenge == null) {
 				challenge = "";
@@ -126,7 +121,6 @@ public class ERReCaptcha extends ERXComponent {
 			else {
 				setValueForBinding(Boolean.TRUE, "valid");
 			}
-			_html = null;
 		}
 	}
 }

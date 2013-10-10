@@ -18,7 +18,7 @@ import er.directtoweb.assignments.defaults.ERDDefaultModelAssignment;
 import er.extensions.eof.ERXEOAccessUtilities;
 
 /**
- * @deprecated use a {@link ERDKeyValueAssignment} or a {@link ERDDefaultModelAssignment} with key entityForPageConfiguration instead
+ * @deprecated use a {@link er.directtoweb.assignments.ERDKeyValueAssignment} or a {@link er.directtoweb.assignments.defaults.ERDDefaultModelAssignment} with key entityForPageConfiguration instead
  */
 @Deprecated
 public class ERDEntityAssignment extends Assignment implements ERDComputingAssignmentInterface {
@@ -64,7 +64,7 @@ public class ERDEntityAssignment extends Assignment implements ERDComputingAssig
     public ERDEntityAssignment(String key, Object value) { super(key,value); }
 
     /**
-     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * Implementation of the {@link er.directtoweb.assignments.ERDComputingAssignmentInterface}. This
      * assignment depends upon the context key: "pageConfiguration". This key 
      * is used when constructing the significant keys for the passed in keyPath.
      * @param keyPath to compute significant keys for. 
@@ -72,6 +72,7 @@ public class ERDEntityAssignment extends Assignment implements ERDComputingAssig
      */
     public NSArray dependentKeys(String keyPath) { return _DEPENDENT_KEYS; }
 
+    @Override
     public Object fire(D2WContext c) {
         Object result = null;
         Object value = value();

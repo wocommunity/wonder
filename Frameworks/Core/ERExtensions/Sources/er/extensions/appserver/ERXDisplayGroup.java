@@ -1,5 +1,6 @@
 package er.extensions.appserver;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WODisplayGroup;
@@ -16,7 +17,6 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSSet;
 
-import er.extensions.ERXExtensions;
 import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.eof.ERXS;
 
@@ -267,7 +267,7 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	public void setDataSource(EODataSource ds) {
 		EODataSource old = dataSource();
 		super.setDataSource(ds);
-		if(old != null && ds != null && ERXExtensions.safeDifferent(old.classDescriptionForObjects(), ds.classDescriptionForObjects())) {
+		if(old != null && ds != null && ObjectUtils.notEqual(old.classDescriptionForObjects(), ds.classDescriptionForObjects())) {
 			setSortOrderings(NSArray.EmptyArray);
 		}
 	}

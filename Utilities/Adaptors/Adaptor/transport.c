@@ -25,6 +25,8 @@ and limitations under the License.
  */
 
 #define NEED_IOVEC_DEFINITION
+//#define DEBUG 1
+
 
 #include "config.h"
 #include "transport.h"
@@ -71,7 +73,12 @@ static TR_STATUS tr_sendBuffers_noiovec(net_fd appfd, struct iovec *buffers, int
    int i, result = 0;
 
    for (i=0; i<bufferCount && result == TR_OK; i++)
+   {
+#ifdef DEBUG
+       WOLog(WO_DBG,"(req) %s",buffers[i].iov_base);
+#endif
       result = transport->sendbytes(appfd, buffers[i].iov_base, buffers[i].iov_len);
+   }
    return result;
 }
 #endif

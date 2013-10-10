@@ -5,8 +5,8 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSComparator;
-import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSComparator.ComparisonException;
+import com.webobjects.foundation.NSForwardException;
 
 import er.extensions.eof.ERXEntityFKConstraintOrder;
 import er.extensions.eof.ERXEntityOrder;

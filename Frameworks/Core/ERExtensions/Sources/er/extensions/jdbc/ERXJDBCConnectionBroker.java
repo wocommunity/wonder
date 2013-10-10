@@ -45,7 +45,7 @@ import er.extensions.foundation.ERXValueUtilities;
  * <dt>connectionRecycle</dt>
  * <dd>Number of days a connection should stay active, default 1.0</dd>
  * </dl>
- * The {@link er.extensions.components.ERXConfigurationManager} adds these entries to each
+ * The {@link er.extensions.foundation.ERXConfigurationManager} adds these entries to each
  * EOModels connectionDictionary.<br/>
  * Usage: check out a connection: <br/><code>
  * <pre>
@@ -147,6 +147,7 @@ public class ERXJDBCConnectionBroker implements ERXJDBCAdaptor.ConnectionBroker 
         setup(dict, DEFAULTMAXCHECKOUTSECONDS);
     }
 
+    @Override
     public String toString() {
         return "<" +getClass().getName() +
         ": dbDriver = " + dbDriver +
@@ -171,10 +172,10 @@ public class ERXJDBCConnectionBroker implements ERXJDBCAdaptor.ConnectionBroker 
         	dbDriver = plugIn.defaultDriverName();
         }
 
-        minimumConnections = ERXValueUtilities.intValueWithDefault((String) dict.objectForKey("minConnections"), ERXProperties.intForKeyWithDefault("er.extensions.ERXJDBCConnectionBroker.minConnections", 1));
-		maximumConnections = ERXValueUtilities.intValueWithDefault((String) dict.objectForKey("maxConnections"), ERXProperties.intForKeyWithDefault("er.extensions.ERXJDBCConnectionBroker.maxConnections", 1));
-		maxCheckoutMillis = ERXValueUtilities.intValueWithDefault((String) dict.objectForKey("maxCheckout"), ERXProperties.intForKeyWithDefault("er.extensions.ERXJDBCConnectionBroker.maxCheckout", maxCheckoutSecond)) * 1000;
-		maxConnectionMillis = ERXValueUtilities.bigDecimalValueWithDefault((String) dict.objectForKey("connectionRecycle"), BigDecimal.valueOf(1)).longValue() * 86400000;
+        minimumConnections = ERXValueUtilities.intValueWithDefault(dict.objectForKey("minConnections"), ERXProperties.intForKeyWithDefault("er.extensions.ERXJDBCConnectionBroker.minConnections", 1));
+		maximumConnections = ERXValueUtilities.intValueWithDefault(dict.objectForKey("maxConnections"), ERXProperties.intForKeyWithDefault("er.extensions.ERXJDBCConnectionBroker.maxConnections", 1));
+		maxCheckoutMillis = ERXValueUtilities.intValueWithDefault(dict.objectForKey("maxCheckout"), ERXProperties.intForKeyWithDefault("er.extensions.ERXJDBCConnectionBroker.maxCheckout", maxCheckoutSecond)) * 1000;
+		maxConnectionMillis = ERXValueUtilities.bigDecimalValueWithDefault(dict.objectForKey("connectionRecycle"), BigDecimal.valueOf(1)).longValue() * 86400000;
         
         if (maxConnectionMillis < 30000) { // Recycle no less than 30 seconds.
             maxConnectionMillis = 30000;
@@ -230,6 +231,7 @@ public class ERXJDBCConnectionBroker implements ERXJDBCAdaptor.ConnectionBroker 
              * application fails to close a Statement). This method acts as fault
              * tolerance for bad connection/statement programming.
              */
+            @Override
             public void run() {
                 while (true) {
                     synchronized (wrappers) {
@@ -264,6 +266,7 @@ public class ERXJDBCConnectionBroker implements ERXJDBCAdaptor.ConnectionBroker 
              * 
              * @see #destroy(int)
              */
+            @Override
             public void destroy() {
                 try {
                     ERXJDBCConnectionBroker.this.destroy(10000);
@@ -341,10 +344,9 @@ public class ERXJDBCConnectionBroker implements ERXJDBCAdaptor.ConnectionBroker 
                         connection.lock();
                         result = connection.getConnection();
                         return result;
-                    } else {
-                        loop++;
-                        roundRobin++;
                     }
+                    loop++;
+                    roundRobin++;
                 }
             } while ((!gotOne) && (loop <= activeConnections));
 
@@ -510,13 +512,14 @@ public class ERXJDBCConnectionBroker implements ERXJDBCAdaptor.ConnectionBroker 
     
         private long creationDate;
     
-        private ConnectionWrapper(ERXJDBCConnectionBroker broker) throws SQLException {
+        public ConnectionWrapper(ERXJDBCConnectionBroker broker) throws SQLException {
             this.broker = broker;
-            this.connection = broker.createConnection();
-            this.status = FREE;
-            this.lockTime = 0;
+            connection = broker.createConnection();
+            status = FREE;
+            lockTime = 0;
         }
     
+        @Override
         public String toString() {
             return getClass().getName()  +
             ": connection = " + connection +
@@ -530,7 +533,7 @@ public class ERXJDBCConnectionBroker implements ERXJDBCAdaptor.ConnectionBroker 
         }
 
         public void setConnection(Connection connection) {
-            this.creationDate = (new Date()).getTime();
+            creationDate = (new Date()).getTime();
             this.connection = connection;
         }
     
@@ -637,10 +640,7 @@ public class ERXJDBCConnectionBroker implements ERXJDBCAdaptor.ConnectionBroker 
                 try {
                     c.isClosed();
                     c.setReadOnly(false);
-                    ResultSet rs = c.createStatement().executeQuery(pingStatement);
-                    if(rs == null) {
-                    	// nothing
-                    }
+                    c.createStatement().executeQuery(pingStatement);
                 } catch (SQLException e) {
                     log.error("Could not ping connection " + c + ", reason: " + e.getMessage(), e);
                 } finally {

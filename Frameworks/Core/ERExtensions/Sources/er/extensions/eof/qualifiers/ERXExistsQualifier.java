@@ -6,6 +6,11 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions.eof.qualifiers;
 
+import java.util.Enumeration;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
@@ -27,9 +32,8 @@ import com.webobjects.foundation.NSCoding;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableSet;
+
 import er.extensions.foundation.ERXStringUtilities;
-import java.util.Enumeration;
-import org.apache.log4j.Logger;
 
 /**
  * A qualifier that qualifies using an EXISTS clause.
@@ -104,6 +108,7 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
 	 * @param aSet of qualifier keys
 	 */
 	// FIXME: Should do something here ...
+	@Override
 	public void addQualifierKeysToSet(NSMutableSet aSet) {
         
 	}
@@ -115,6 +120,7 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
 	 * @param requiresAll tells if the qualifier requires all bindings
 	 * @return clone of the current qualifier.
 	 */
+	@Override
 	public EOQualifier qualifierWithBindings(NSDictionary someBindings, boolean requiresAll) {
 		return (EOQualifier)clone();
 	}
@@ -124,6 +130,7 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
 	 * @param aClassDescription to validation the qualifier keys against.
 	 */
 	// FIXME: Should do something here ...
+	@Override
 	public void validateKeysWithRootClassDescription(EOClassDescription aClassDescription) {
         
 	}
@@ -147,6 +154,7 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
          * @param expression to use during SQL generation
          * @return SQL string for the current sub-query
          */
+        @Override
         public String sqlStringForSQLExpression(EOQualifier qualifier, EOSQLExpression expression) {
             if (null == qualifier || null == expression) {
                 return null;
@@ -214,11 +222,11 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
 
             StringBuilder sb = new StringBuilder();
             sb.append(" EXISTS ( ");
-            sb.append(ERXStringUtilities.replaceStringByStringInString("t0.", destTableAlias + ".", subExpression.statement()));
+            sb.append(StringUtils.replace(subExpression.statement(), "t0.", destTableAlias + "."));
             sb.append(" AND ");
-            sb.append(ERXStringUtilities.replaceStringByStringInString("t0.", destTableAlias + ".", destKey));
+            sb.append(StringUtils.replace(destKey, "t0.", destTableAlias + "."));
             sb.append(" = ");
-            sb.append(ERXStringUtilities.replaceStringByStringInString("t0.", sourceTableAlias + ".", sourceKey));
+            sb.append(StringUtils.replace(sourceKey, "t0.", sourceTableAlias + "."));
             sb.append(" ) ");
             return sb.toString();
         }
@@ -287,6 +295,7 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
          * @return clone of the current qualifier
          */
         // ENHANCEME: This should support restrictive qualifiers on the root entity
+        @Override
         public EOQualifier schemaBasedQualifierWithRootEntity(EOQualifier qualifier, EOEntity entity) {
             return (EOQualifier)qualifier.clone();
         }
@@ -298,6 +307,7 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
          * @param relationshipPath upon which to base the migration
          * @return clone of the current qualifier
          */
+        @Override
         public EOQualifier qualifierMigratedFromEntityRelationshipPath(EOQualifier qualifier,
                                                                        EOEntity entity,
                                                                        String relationshipPath) {
@@ -310,12 +320,14 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
 	 * Description of the qualifier.
 	 * @return human readable description of the qualifier
 	 */
+	@Override
 	public String toString() { return " <" + getClass().getName() +"> '" + subqualifier.toString() + "' : '" + baseKeyPath + "'"; }
 
 	/**
 	 * Implementation of the Clonable interface. Clones the current qualifier.
 	 * @return cloned qualifier
 	 */
+	@Override
 	public Object clone() {
 		return new ERXExistsQualifier(subqualifier, baseKeyPath);
 	}

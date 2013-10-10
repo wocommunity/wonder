@@ -97,6 +97,7 @@ public class ERD2WContext extends D2WContext implements Serializable {
      * but not re-set when you just call task() or entity(). This leads to NPEs, 
      * errors that a pageName can't be found and others. Setting it here fixes it.
      */
+    @Override
     public void setDynamicPage(String page) {
         super.setDynamicPage(page);
         setTask(task());
@@ -107,6 +108,7 @@ public class ERD2WContext extends D2WContext implements Serializable {
      * Overridden so that custom attributes are cached as a performance
      * optimization.
      */
+    @Override
     EOAttribute customAttribute(String s, EOEntity eoentity) {
         String s1 = eoentity.name() + "." + s;
         Object o = customAttributes.get(s1);

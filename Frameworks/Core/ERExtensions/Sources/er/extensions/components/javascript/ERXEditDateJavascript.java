@@ -6,6 +6,7 @@
 //
 package er.extensions.components.javascript;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;
@@ -40,6 +41,7 @@ public class ERXEditDateJavascript extends ERXStatelessComponent {
 		super(context);
 	}
 
+	@Override
 	public void awake() {
 		elementID = context().elementID().replace('.', '_');
 	}
@@ -48,8 +50,9 @@ public class ERXEditDateJavascript extends ERXStatelessComponent {
      * Adds date-picker.js to the header or includes it in an Ajax friendly manner if this is an Ajax request.
      *
      * @see er.extensions.components.ERXNonSynchronizingComponent#appendToResponse(com.webobjects.appserver.WOResponse, com.webobjects.appserver.WOContext)
-     * @see ERXResponseRewriter#addScriptResourceInHead(WOResponse, WOContext, String, String)
+     * @see er.extensions.appserver.ERXResponseRewriter#addScriptResourceInHead(WOResponse, WOContext, String, String)
      */
+    @Override
     public void appendToResponse(WOResponse response, WOContext context)
     {
         ERXResponseRewriter.addScriptResourceInHead(response, context, "ERExtensions", "date-picker.js");
@@ -76,6 +79,7 @@ public class ERXEditDateJavascript extends ERXStatelessComponent {
 		setValueForBinding(value, "dateString");
 	}
 
+	@Override
 	public String name() {
 		return "datebox" + elementID;
 	}
@@ -92,11 +96,11 @@ public class ERXEditDateJavascript extends ERXStatelessComponent {
 
 	public static String formatterStringForScript(String format) {
 		String result = format;
-		result = ERXStringUtilities.replaceStringByStringInString("%Y", "yyyy", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%y", "yy", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%m", "MM", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%d", "dd", result);
-		result = ERXStringUtilities.replaceStringByStringInString("%b", "MON", result);
+		result = StringUtils.replace(result, "%Y", "yyyy");
+		result = StringUtils.replace(result, "%y", "yy");
+		result = StringUtils.replace(result, "%m", "MM");
+		result = StringUtils.replace(result, "%d", "dd");
+		result = StringUtils.replace(result, "%b", "MON");
 		return result;
 	}
 }

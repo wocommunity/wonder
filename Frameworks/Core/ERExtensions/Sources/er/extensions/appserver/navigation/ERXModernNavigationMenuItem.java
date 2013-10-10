@@ -1,5 +1,6 @@
 package er.extensions.appserver.navigation;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOComponent;
@@ -76,6 +77,7 @@ public class ERXModernNavigationMenuItem extends ERXStatelessComponent {
     	return null;
     }
 
+    @Override
     public void reset() {
         _navigationItem = null;
         _navigationState = null;
@@ -129,9 +131,8 @@ public class ERXModernNavigationMenuItem extends ERXStatelessComponent {
                 NSMutableDictionary bindings = navigationItem().queryBindings().mutableClone();
                 bindings.setObjectForKey(context().contextID(), "__cid");
                 return context().directActionURLForActionNamed(navigationItem().directActionName(), bindings);
-            } else {
-                return context().componentActionURL();
             }
+            return context().componentActionURL();
         }
 
         // If the user specified some javascript, put that into the HREF and return it
@@ -139,7 +140,7 @@ public class ERXModernNavigationMenuItem extends ERXStatelessComponent {
 
             // Make sure there are no extra quotations marks - replace them with apostrophes
             String theFunction = (String)valueForBinding("javascriptFunction");
-            return ERXStringUtilities.replaceStringByStringInString("\"", "'", theFunction);
+            return StringUtils.replace(theFunction, "\"", "'");
         }
 
         return null;

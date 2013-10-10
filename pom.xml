@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>wonder</groupId>
     <artifactId>wonder</artifactId>
-    <version>5.7-SNAPSHOT</version>
+    <version>6.1.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Project Wonder</name>
     <url>http://wiki.objectstyle.org/confluence/display/WONDER/Home</url>
@@ -20,6 +20,7 @@
     <properties>
         <!-- VERY BAD PRACTICE: But there are broken tests -->
         <maven.test.skip>true</maven.test.skip>
+        <skip.apple.frameworks>true</skip.apple.frameworks>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <webobjects.version>5.4.3</webobjects.version>
@@ -82,7 +83,7 @@
                 <artifactId>maven-wolifecycle-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
-                    <skipAppleProvidedFrameworks>true</skipAppleProvidedFrameworks>
+                    <skipAppleProvidedFrameworks>${skip.apple.frameworks}</skipAppleProvidedFrameworks>
                 </configuration>
             </plugin>
             <plugin>
@@ -148,6 +149,11 @@
             <dependency>
                 <groupId>com.webobjects</groupId>
                 <artifactId>JavaXML</artifactId>
+                <version>${webobjects.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.webobjects</groupId>
+                <artifactId>JavaEODistribution</artifactId>
                 <version>${webobjects.version}</version>
             </dependency>
             <dependency>
@@ -316,6 +322,11 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
+                <groupId>wonder.ajax</groupId>
+                <artifactId>ERCoolComponents</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>javax.activation</groupId>
                 <artifactId>activation</artifactId>
                 <version>1.1</version>
@@ -324,6 +335,26 @@
                 <groupId>javax.mail</groupId>
                 <artifactId>mail</artifactId>
                 <version>1.4.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.mail</groupId>
+                <artifactId>imap</artifactId>
+                <version>1.4.5</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.mail</groupId>
+                <artifactId>smtp</artifactId>
+                <version>1.4.5</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.mail</groupId>
+                <artifactId>dsn</artifactId>
+                <version>1.4.5</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.mail</groupId>
+                <artifactId>pop3</artifactId>
+                <version>1.4.5</version>
             </dependency>
             <dependency>
                 <groupId>jdom</groupId>
@@ -459,8 +490,8 @@
             </dependency>
             <dependency>
                 <groupId>jgroups</groupId>
-                <artifactId>jgroups-all</artifactId>
-                <version>2.4.1</version>
+                <artifactId>jgroups</artifactId>
+                <version>2.6.8.GA</version>
             </dependency>
             <dependency>
                 <groupId>commons-logging</groupId>
@@ -685,6 +716,26 @@
                 <artifactId>neo4j-kernel</artifactId>
                 <version>1.7.1</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.cayenne</groupId>
+                <artifactId>cayenne-server</artifactId>
+                <version>3.1M3</version>
+            </dependency>
+            <dependency>
+                <groupId>org.quartz-scheduler</groupId>
+                <artifactId>quartz</artifactId>
+                <version>2.1.3</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.sshd</groupId>
+                <artifactId>sshd-core</artifactId>
+                <version>0.7.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.sshd</groupId>
+                <artifactId>sshd-pam</artifactId>
+                <version>0.7.0</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -731,8 +782,8 @@
     </distributionManagement>
 
     <scm>
-        <connection>scm:git:git@github.com:projectwonder/wonder.gitt</connection>
-        <url>scm:git:git@github.com:projectwonder/wonder.git</url>
-        <developerConnection>scm:git:git@github.com:projectwonder/wonder.git</developerConnection>
+        <connection>scm:git:git@github.com:wocommunity/wonder.git</connection>
+        <url>scm:git:git@github.com:wocommunity/wonder.git</url>
+        <developerConnection>scm:git:git@github.com:wocommunity/wonder.git</developerConnection>
     </scm>
 </project>

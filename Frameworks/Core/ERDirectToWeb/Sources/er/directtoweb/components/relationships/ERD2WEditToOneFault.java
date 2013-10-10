@@ -36,6 +36,7 @@ public class ERD2WEditToOneFault extends D2WEditToOneFault {
         super(context);
     }
 
+    @Override
     public WOComponent editRelationship() {
         WOComponent editPage = null;
         String editRelationshipConfigurationName = (String)d2wContext().valueForKey("editRelationshipConfigurationName");
