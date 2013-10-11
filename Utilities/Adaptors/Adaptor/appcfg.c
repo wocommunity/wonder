@@ -1106,7 +1106,8 @@ static void readServerConfig() {
 					oneOrMoreUnModified = 1;
 				else // No response has to be treated as modification, too
 					oneOrMoreModified  = 1;
-			}
+			} else
+        buffer[i] = NULL;
 		}
 	}
    
