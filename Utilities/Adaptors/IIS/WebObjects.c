@@ -602,6 +602,21 @@ __declspec(dllexport) DWORD __stdcall HttpExtensionProc(EXTENSION_CONTROL_BLOCK 
       return HSE_STATUS_ERROR;
    }
    
+   // Deactivate IIS 7.x stream buffering
+   //   IIS 7.x (and above?) behaves differently from IIS 6 by introducing 
+   //   output buffering ISAPI Extension output
+   //   This could cause interrupted and hence incomplete streaming output
+   //   This change does deactivate the output buffering in IIS 7.x
+   //    (see http://support.microsoft.com/kb/946086) and does not harm
+   //    when called within IIS 6
+   //
+   p->ServerSupportFunction (p->ConnID,
+      HSE_REQ_SET_FLUSH_FLAG,
+      (LPVOID) TRUE,
+      NULL,
+      NULL
+      );
+
    /*
     *	extract WebObjects request components from URI
     */
