@@ -75,12 +75,19 @@ Setting WOUSERNAME to "public" allows anyone to see the WOAdaptorInfo page.
 
 <H2>Microsoft IIS 7.x Web Server ISAPI Adaptor for WebObjects</H2>
 
+<p>
 Additionally to the tasks mentioned above, you have to take care that ISAPI-extensions are installed.
 WebObjects.dll has to be registered unter CGI-/ISAPI-Restrictions. Unter Handler-Mappings, enable DLL-Exection.
+</p>
 
+<p>
 By using MINGW you can build WebObjects-Adaptor as 32bit and as 64bit-DLL.
+</p>
 
+<p>
 The 32-Bit-DLL will run fine on 32-Bit IIS and 64-Bit-DLL will run fine on 64-Bit IIS.<br/>
 When you intend to use the 32-Bit-DLL with an 64-Bit IIS, take care to configure the application pool to run in 32 bit mode and configure all registry keys named above in the Wow6432Node.
+</p>
+
 </BODY>
 </HTML>
