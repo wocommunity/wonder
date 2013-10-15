@@ -1360,7 +1360,11 @@ public class ERXSQLHelper {
 			try {
 				String nextLine = reader.readLine();
 				while (nextLine != null) {
-					nextLine = nextLine.trim();
+					if(!inQuotes) {
+						nextLine = nextLine.trim(); // trim only if we not inQuotes
+					} else {
+						statementBuffer.append('\n'); // we are in Quotes but got a new Line
+					}
 					
 					// Skip blank lines and new lines starting with the comment pattern
 					if (nextLine.length() == 0 ||
