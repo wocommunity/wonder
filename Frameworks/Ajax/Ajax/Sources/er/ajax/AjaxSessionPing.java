@@ -1,6 +1,7 @@
 package er.ajax;
 
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODirectAction;
@@ -8,6 +9,7 @@ import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
@@ -49,9 +51,9 @@ public class AjaxSessionPing extends AjaxDynamicElement {
         response.appendContentString("<script>var AjaxSessionPinger = new Ajax.ActivePeriodicalUpdater('AjaxSessionPinger', '");
 
         if (booleanValueForBinding("keepSessionAlive", false, component)) {
-            response.appendContentString(context.directActionURLForActionNamed("AjaxSessionPing$Action/pingSessionAndKeepAlive", null));
+            response.appendContentString(context.directActionURLForActionNamed("AjaxSessionPing$Action/pingSessionAndKeepAlive", null, context.request().isSecure(), false));
         } else {
-            response.appendContentString(context.directActionURLForActionNamed("AjaxSessionPing$Action/pingSession", null));
+            response.appendContentString(context.directActionURLForActionNamed("AjaxSessionPing$Action/pingSession", null, context.request().isSecure(), false));
         }
 
         response.appendContentString("', ");
@@ -135,6 +137,30 @@ public class AjaxSessionPing extends AjaxDynamicElement {
             return pingSessionAction();
         }
 
+    	/**
+    	 * There has been a long standing problem with exceptions thrown from a
+    	 * DirectAction. If the session has been referenced it is not checked back
+    	 * in and the application will deadlock immediately if it is not dispatching
+    	 * requests concurrently. If it is dispatching concurrently, just that one
+    	 * session will deadlock. To avoid this, implement the DirectAction method
+    	 * performAction() along these lines:
+    	 */
+    	@Override
+    	public WOActionResults performActionNamed(String name)
+    	{
+    		try
+    		{
+    			return super.performActionNamed(name);
+    		}
+    		catch (Exception e)
+    		{
+    			return WOApplication.application().handleException(e, context());
+    		}
+    		catch (Throwable t)
+    		{
+    			return WOApplication.application().handleException(new NSForwardException(t), context());
+    		}
+    	}
     }
 
 }
