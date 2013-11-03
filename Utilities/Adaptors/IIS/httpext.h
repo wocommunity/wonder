@@ -64,6 +64,7 @@ typedef   LPVOID  HCONN;
 #define   HSE_REQ_END_RESERVED                     1000
 #define   HSE_REQ_IO_COMPLETION                    (HSE_REQ_END_RESERVED + 5)
 #define   HSE_REQ_CLOSE_CONNECTION                 (HSE_REQ_END_RESERVED + 17)
+#define   HSE_REQ_SET_FLUSH_FLAG                   (HSE_REQ_END_RESERVED + 43)
 
 /*
  * Flags for IO Functions, supported for IO Funcs.
