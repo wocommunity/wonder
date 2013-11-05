@@ -844,14 +844,17 @@ public class _H2PlugIn extends JDBCPlugIn {
 				} catch (JDBCAdaptorException e) {
 					// jw check if H2 has already a sequence with a different name
 					String tableName = entity.externalName().toUpperCase();
+					String columnName = attribute.columnName().toUpperCase();
 					int dotIndex = tableName.indexOf(".");
 					if (dotIndex == -1) {
-						expression.setStatement("select SQL from INFORMATION_SCHEMA.TABLES where TABLE_NAME = '"+ tableName + "'");
+						expression.setStatement("select SEQUENCE_NAME, COLUMN_DEFAULT from INFORMATION_SCHEMA.COLUMNS where UPPER(TABLE_NAME) = '"
+								+ tableName + "' and UPPER(COLUMN_NAME) = '" + columnName + "'");
 					} else {
 						String schemaName = tableName.substring(0, dotIndex);
 						String tableNameOnly = tableName.substring(dotIndex + 1);
-						expression.setStatement("select SQL from INFORMATION_SCHEMA.TABLES where TABLE_NAME = '"+ tableNameOnly
-								+ "' and TABLE_SCHEMA = '" + schemaName + "'");
+						expression.setStatement("select SEQUENCE_NAME, COLUMN_DEFAULT from INFORMATION_SCHEMA.COLUMNS where UPPER(TABLE_NAME) = '"
+								+ tableNameOnly + "' and UPPER(COLUMN_NAME) = '" + columnName + "' and UPPER(TABLE_SCHEMA) = '"
+								+ schemaName + "'");
 					}
 					channel.evaluateExpression(expression);
 					NSDictionary<String, Object> row;
@@ -860,16 +863,32 @@ public class _H2PlugIn extends JDBCPlugIn {
 					} finally {
 						channel.cancelFetch();
 					}
-					if (row != null && row.containsKey("SQL")) {
-						String tableSql = (String) row.objectForKey("SQL");
-						int pkStart = tableSql.indexOf(attribute.columnName().toUpperCase());
-						final String SEQ_START_STRING = " NULL_TO_DEFAULT SEQUENCE ";
-						int start = tableSql.indexOf(SEQ_START_STRING, pkStart);
-						if (start != -1) {
-							start += SEQ_START_STRING.length();
-							int end = tableSql.indexOf(",", start);
-							String h2SequenceName = tableSql.substring(start, end);
-							
+					if (row != null) {
+						Object obj = row.objectForKey("SEQUENCE_NAME");
+						String h2SequenceName = obj == NSKeyValueCoding.NullValue ? null : (String) obj;
+						if (h2SequenceName == null) {
+							obj = row.objectForKey("COLUMN_DEFAULT");
+							String defaultValue = obj == NSKeyValueCoding.NullValue ? null : (String) obj;
+							if (defaultValue != null) {
+								final String NEXT_VAL = "NEXTVAL('";
+								int startPos = defaultValue.indexOf(NEXT_VAL);
+								if (startPos != -1) {
+									int endPos = defaultValue.indexOf("')");
+									h2SequenceName = defaultValue.substring(startPos + NEXT_VAL.length(), endPos);
+								} else {
+									final String NEXT_FOR = "NEXT VALUE FOR ";
+									startPos = defaultValue.indexOf(NEXT_FOR);
+									if (startPos != -1) {
+										int dotPos = defaultValue.indexOf(".", startPos) + NEXT_FOR.length();
+										if (dotPos != -1) {
+											startPos = dotPos;
+										}
+										h2SequenceName = defaultValue.substring(startPos + 1, defaultValue.length() - 1);
+									}
+								}
+							}
+						}
+						if (h2SequenceName != null) {
 							// store sequence name mapping as H2 does not yet support renaming of sequences
 							setSequenceNameOverride(sequenceName, h2SequenceName);
 							sequenceName = h2SequenceName;
