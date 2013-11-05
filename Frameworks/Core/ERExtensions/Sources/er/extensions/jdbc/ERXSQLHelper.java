@@ -1649,12 +1649,10 @@ public class ERXSQLHelper {
 							sqlHelper = new MicrosoftSQLHelper();
 						}
 						else if (databaseProductName.equalsIgnoreCase("h2")) {
-							log.warn("H2Helper");
 							sqlHelper = new H2SQLHelper();
-							
 						} 
 						else if (databaseProductName.equalsIgnoreCase("db2")) {
-								sqlHelper = new DB2SQLHelper();
+							sqlHelper = new DB2SQLHelper();
 						}
 						else if (databaseProductName.equalsIgnoreCase("firebird")) {
 							sqlHelper = new FirebirdSQLHelper();
