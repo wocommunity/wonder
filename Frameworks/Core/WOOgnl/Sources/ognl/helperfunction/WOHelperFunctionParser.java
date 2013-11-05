@@ -73,7 +73,7 @@ public class WOHelperFunctionParser {
 
 	public void didParseClosingWebObjectTag(String s, WOHelperFunctionHTMLParser htmlParser) throws WOHelperFunctionDeclarationFormatException, WOHelperFunctionHTMLFormatException, ClassNotFoundException {
 		WOHTMLWebObjectTag webobjectTag = _currentWebObjectTag.parentTag();
-		if (_currentWebObjectTag == null || webobjectTag == null) {
+		if (webobjectTag == null) {
 			throw new WOHelperFunctionHTMLFormatException("<" + getClass().getName() + "> Unbalanced WebObject tags. Either there is an extra closing </WEBOBJECT> tag in the html template, or one of the opening <WEBOBJECT ...> tag has a typo (extra spaces between a < sign and a WEBOBJECT tag ?).");
 		}
 		try {
