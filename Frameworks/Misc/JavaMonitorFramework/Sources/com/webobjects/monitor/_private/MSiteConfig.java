@@ -49,6 +49,7 @@ import com.webobjects.foundation._NSThreadsafeMutableDictionary;
 
 import er.extensions.appserver.ERXRequest;
 import er.extensions.foundation.ERXFileUtilities;
+import er.extensions.foundation.ERXProperties;
 
 
 public class MSiteConfig extends MObject {
@@ -917,11 +918,16 @@ public class MSiteConfig extends MObject {
     // KH - speed this up by uniquing the strings
     public String generateAdaptorConfigXML(boolean onlyIncludeRunningInstances, boolean shouldIncludeUnregisteredInstances) {
         StringBuilder sb = new StringBuilder("<?xml version=\"1.0\" encoding=\"ASCII\"?>\n<adaptor>\n");
+        boolean includeEmptyApplicationTags = ERXProperties.booleanForKey("er.wotaskd.includeEmptyApplicationTags");
 
         for (Enumeration e = applicationArray().objectEnumerator(); e.hasMoreElements(); ) {
             MApplication anApp = (MApplication) e.nextElement();
+            boolean hostHasInstances = false;
+            if (includeEmptyApplicationTags) {
+                hostHasInstances = anApp.hasConfiguredInstancesOn(localHost());
+            }
 
-            if (!(onlyIncludeRunningInstances && !anApp.isRunning_W())) {
+            if (!(onlyIncludeRunningInstances && !anApp.isRunning_W()) || hostHasInstances) {
 
                 anApp.extractAdaptorValuesFromSiteConfig();
 

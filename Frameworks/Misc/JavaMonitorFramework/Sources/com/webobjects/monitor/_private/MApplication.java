@@ -471,4 +471,15 @@ public class MApplication extends MObject {
         }
         return true;
     }
+
+    public boolean hasConfiguredInstancesOn(MHost host) {
+        int numInstances = _instanceArray.count();
+        for (int i=0; i<numInstances; i++) {
+            MInstance anInstance = (MInstance) _instanceArray.objectAtIndex(i);
+            if (anInstance.host().equals(host)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
