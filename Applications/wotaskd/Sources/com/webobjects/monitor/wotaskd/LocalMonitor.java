@@ -233,12 +233,8 @@ public class LocalMonitor extends ProtoLocalMonitor  {
         try {
             MHost theHost = theApplication.siteConfig().localHost();
             if (theHost != null) {
-                NSArray instArray = theHost.instanceArray();
-                int instArrayCount = instArray.count();
-
-                for (int i=0; i<instArrayCount; i++) {
-                    MInstance anInst = (MInstance) instArray.objectAtIndex(i);
-
+                NSArray<MInstance> instArray = theHost.instanceArray();
+                for (MInstance anInst : instArray) {
                     if ( (!anInst.isRunning_W()) && (anInst.state != MObject.STARTING) &&
                          ( (anInst.isAutoRecovering()) || (anInst.isScheduled()) ) ) {
                         anInst.setRefusingNewSessions(false);

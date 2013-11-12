@@ -203,9 +203,7 @@ public class MHost extends MObject {
 
     public Integer runningInstancesCount_W() {
         int runningInstances = 0;
-        int numInstances = _instanceArray.count();
-        for (int i = 0; i < numInstances; i++) {
-            MInstance anInstance = (MInstance) _instanceArray.objectAtIndex(i);
+        for (MInstance anInstance : _instanceArray) {
             if (anInstance.isRunning_W()) {
                 runningInstances++;
             }
@@ -231,9 +229,7 @@ public class MHost extends MObject {
     }
 
     public MInstance instanceWithPort(Integer port) {
-        int instanceArrayCount = _instanceArray.count();
-        for (int i = 0; i < instanceArrayCount; i++) {
-            MInstance anInst = (MInstance) _instanceArray.objectAtIndex(i);
+        for (MInstance anInst : _instanceArray) {
             if (anInst.port().equals(port)) {
                 return anInst;
             }

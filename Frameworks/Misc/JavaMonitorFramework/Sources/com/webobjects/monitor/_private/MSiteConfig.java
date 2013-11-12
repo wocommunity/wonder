@@ -146,9 +146,9 @@ public class MSiteConfig extends MObject {
 
 
     /********** Object Graph  **********/
-    NSMutableArray _hostArray = new NSMutableArray();
-    NSMutableArray _instanceArray = new NSMutableArray();
-    NSMutableArray _applicationArray = new NSMutableArray();
+    NSMutableArray<MHost> _hostArray = new NSMutableArray<MHost>();
+    NSMutableArray<MInstance> _instanceArray = new NSMutableArray<MInstance>();
+    NSMutableArray<MApplication> _applicationArray = new NSMutableArray<MApplication>();
     MHost _localHost;
 
     public NSMutableArray<MHost> hostArray() { return _hostArray; }
@@ -798,9 +798,7 @@ public class MSiteConfig extends MObject {
 		StringBuilder result = new StringBuilder();
 		result.append("ProxyRequests On\nProxyMaxForwards 10000\nProxyVia Full\n");
 		
-		 for (Enumeration e = applicationArray().objectEnumerator(); e.hasMoreElements(); ) {
-            MApplication anApp = (MApplication) e.nextElement();
-
+		 for (MApplication anApp : applicationArray()) {
 //            if (!(onlyIncludeRunningInstances && !anApp.isRunning_W())) {
 
                 anApp.extractAdaptorValuesFromSiteConfig();
@@ -920,8 +918,7 @@ public class MSiteConfig extends MObject {
         StringBuilder sb = new StringBuilder("<?xml version=\"1.0\" encoding=\"ASCII\"?>\n<adaptor>\n");
         boolean includeEmptyApplicationTags = ERXProperties.booleanForKey("er.wotaskd.includeEmptyApplicationTags");
 
-        for (Enumeration e = applicationArray().objectEnumerator(); e.hasMoreElements(); ) {
-            MApplication anApp = (MApplication) e.nextElement();
+        for (MApplication anApp : applicationArray()) {
             boolean hostHasInstances = false;
             if (includeEmptyApplicationTags) {
                 hostHasInstances = anApp.hasConfiguredInstancesOn(localHost());
@@ -967,9 +964,7 @@ public class MSiteConfig extends MObject {
                 }
                 sb.append("\">\n");
 
-                for (Enumeration e2 = anApp.instanceArray().objectEnumerator(); e2.hasMoreElements(); ) {
-                    MInstance anInst = (MInstance) e2.nextElement();
-
+                for (MInstance anInst : anApp.instanceArray()) {
                     if (!(onlyIncludeRunningInstances && !anInst.isRunning_W())) {
 
                         anInst.extractAdaptorValuesFromApplication();
@@ -1106,10 +1101,8 @@ public class MSiteConfig extends MObject {
 
     // KH - all these should be cached!
     public long autoRecoverInterval() {
-        int instanceArrayCount = _instanceArray.count();
         int smallestInterval = 0;
-        for (int i=0; i<instanceArrayCount; i++) {
-            MInstance anInst = (MInstance) _instanceArray.objectAtIndex(i);
+        for (MInstance anInst : _instanceArray) {
             Integer Interval = anInst.lifebeatInterval();
             if (Interval != null) {
                 int interval = Interval.intValue();
@@ -1127,9 +1120,7 @@ public class MSiteConfig extends MObject {
     public MApplication applicationWithName(String anAppName) {
         if (anAppName == null) return null;
 
-        int applicationArrayCount = _applicationArray.count();
-        for (int i=0; i<applicationArrayCount; i++) {
-            MApplication anApp = (MApplication) _applicationArray.objectAtIndex(i);
+        for (MApplication anApp : _applicationArray) {
             if (anApp.name().equals(anAppName)) {
                 return anApp;
             }
@@ -1143,10 +1134,8 @@ public class MSiteConfig extends MObject {
         if (aHostName.equals("localhost")) {
             return localHost();
         }
-        
-        int hostArrayCount = _hostArray.count();
-        for (int i=0; i<hostArrayCount; i++) {
-            MHost aHost = (MHost) _hostArray.objectAtIndex(i);
+
+        for (MHost aHost : _hostArray) {
             if (aHost.name().equals(aHostName)) {
                 return aHost;
             }
@@ -1157,9 +1146,7 @@ public class MSiteConfig extends MObject {
     public boolean localhostOrLoopbackHostExists() {
         String localhost = "localhost";
         String loopback = "127.0.0.1";
-        int hostArrayCount = _hostArray.count();
-        for (int i=0; i<hostArrayCount; i++) {
-            MHost aHost = (MHost) _hostArray.objectAtIndex(i);
+        for (MHost aHost : _hostArray) {
             if ( (aHost.name().equals(localhost)) || (aHost.name().equals(loopback)) ) {
                 return true;
             }
@@ -1174,9 +1161,7 @@ public class MSiteConfig extends MObject {
             return _localHost;
         }
 
-        int hostArrayCount = _hostArray.count();
-        for (int i=0; i<hostArrayCount; i++) {
-            MHost aHost = (MHost) _hostArray.objectAtIndex(i);
+        for (MHost aHost : _hostArray) {
             if (anAddress.equals(aHost.address())) {
                 return aHost;
             }
@@ -1187,9 +1172,7 @@ public class MSiteConfig extends MObject {
     public MInstance instanceWithName(String anInstanceName) {
         if (anInstanceName == null) return null;
 
-        int instanceArrayCount = _instanceArray.count();
-        for (int i=0; i<instanceArrayCount; i++) {
-            MInstance anInstance = (MInstance) _instanceArray.objectAtIndex(i);
+        for (MInstance anInstance : _instanceArray) {
             if (anInstance.displayName().equals(anInstanceName)) {
                 return anInstance;
             }

@@ -532,8 +532,7 @@ public class DirectAction extends WODirectAction  {
                     instanceResponse = new NSMutableArray(instanceArrayCount);
 
                     NSMutableArray runningInstanceArray = new NSMutableArray();
-                    for (Enumeration e = instanceArray.objectEnumerator(); e.hasMoreElements(); ) {
-                        MInstance anInst = (MInstance) e.nextElement();
+                    for (MInstance anInst : instanceArray) {
                         if (anInst.isRunning_W()) {
                             runningInstanceArray.addObject(anInst);
                         }
