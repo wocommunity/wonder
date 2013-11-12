@@ -7,8 +7,6 @@
 
 package com.webobjects.woextensions;
 
-/* WOParsedErrorLine.java created on Thu 29-Apr-1999 */
-
 /**
  * WOParsedErrorLine is the class that will parse an exception line. After
  * parsing a line (see format in the constructor comment), each instance
@@ -20,7 +18,6 @@ package com.webobjects.woextensions;
  * ")" on a line is not present. This is why in the parsing stuff I try to get
  * the index of this closing parenthesis.
  */
-
 public class WOParsedErrorLine {
     protected String _packageName;
     protected String _className;
@@ -85,8 +82,9 @@ public class WOParsedErrorLine {
     }
 
     public String packageClassPath() {
-        if (_packageName == _className)
+        if (_packageName.equals(_className)) {
             return _className;
+        }
         return _packageName + "." + _className;
     }
 
@@ -124,8 +122,9 @@ public class WOParsedErrorLine {
     public String toString() {
         String lineInfo = (_line >= 0) ? String.valueOf( _line) : "No line info due to compiled code";
         String fileInfo = (_line >= 0) ? _fileName : "Compiled code no file info";
-        if (_packageName == _className)
+        if (_packageName.equals(_className)) {
             return "class : " + _className + ": " + _methodName + " in file :" + fileInfo + " - line :" + lineInfo;
+        }
         return "In package : " + _packageName + ", class : " + _className + " method : " + _methodName + " in file :" + fileInfo + " - line :" + lineInfo;
     }
 }

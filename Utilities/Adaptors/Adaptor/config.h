@@ -57,7 +57,7 @@ typedef int  intptr_t;
 #define CURRENT_WOF_VERSION_MAJOR	4
 #define CURRENT_WOF_VERSION_MINOR	6
 
-#define ADAPTOR_VERSION			"4.6"
+#define ADAPTOR_VERSION			"4.6.1"
 
 /* Used to turn the value of a macro into a string literal */
 #define _Str(x) #x

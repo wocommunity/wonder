@@ -4,6 +4,7 @@ String:ERXFixedLengthString {
 	value=objectKeyPathValue;
 	length = ^length;
 	suffixWhenTrimmed = "...";
+	escapeHTML = ^escapeHTML;
 }
 
 
