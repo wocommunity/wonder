@@ -228,8 +228,7 @@ public class MApplication extends MObject {
     public void _removeInstancePrimitive(MInstance anInstance) {
         _instanceArray.removeObject(anInstance);
         boolean uniqueHost = true;
-        for (Enumeration e = _instanceArray.objectEnumerator(); e.hasMoreElements(); ) {
-            MInstance anInst = (MInstance) e.nextElement();
+        for (MInstance anInst : _instanceArray) {
             if (anInstance._host == anInst._host) {
                 uniqueHost = false;
                 break;
@@ -244,8 +243,8 @@ public class MApplication extends MObject {
 
 
     /********** Object Graph **********/
-    NSMutableArray _instanceArray = new NSMutableArray();
-    NSMutableArray _hostArray = new NSMutableArray();
+    NSMutableArray<MInstance> _instanceArray = new NSMutableArray<MInstance>();
+    NSMutableArray<MHost> _hostArray = new NSMutableArray<MHost>();
 
     public NSArray<MInstance> instanceArray() { return _instanceArray; }
     public NSArray<MHost> hostArray() { return _hostArray; }
@@ -322,9 +321,7 @@ public class MApplication extends MObject {
     }
 
     public void pushValuesToInstances() {
-        int instanceArrayCount = _instanceArray.count();
-        for (int i=0; i<instanceArrayCount; i++) {
-            MInstance anInstance = (MInstance) _instanceArray.objectAtIndex(i);
+        for (MInstance anInstance : _instanceArray) {
             anInstance.takeValuesFromApplication();
         }
     }
@@ -369,10 +366,8 @@ public class MApplication extends MObject {
     /**********/
 
     public Integer nextID() {
-        int instanceArrayCount = _instanceArray.count();
         int lastSequence = 0;
-        for (int i=0; i<instanceArrayCount; i++) {
-            MInstance anInst = (MInstance) _instanceArray.objectAtIndex(i);
+        for (MInstance anInst : _instanceArray) {
             int thisSequence = anInst.id().intValue();
             if (thisSequence > lastSequence) {
                 lastSequence = thisSequence;
@@ -389,9 +384,7 @@ public class MApplication extends MObject {
     }
 
     public MInstance instanceWithID(Integer ID) {
-        int instanceArrayCount = _instanceArray.count();
-        for (int i=0; i<instanceArrayCount; i++) {
-            MInstance anInst = (MInstance) _instanceArray.objectAtIndex(i);
+        for (MInstance anInst : _instanceArray) {
             if (anInst.id().equals(ID)) {
                 return anInst;
             }
@@ -401,9 +394,7 @@ public class MApplication extends MObject {
 
     public Integer runningInstancesCount_W() {
         int runningInstances = 0;
-        int numInstances = _instanceArray.count();
-        for (int i=0; i<numInstances; i++) {
-            MInstance anInstance = (MInstance) _instanceArray.objectAtIndex(i);
+        for (MInstance anInstance : _instanceArray) {
             if (anInstance.isRunning_W()) {
                 runningInstances++;
             }
@@ -444,9 +435,7 @@ public class MApplication extends MObject {
 
     public NSArray<MInstance> runningInstances_M() {
         NSMutableArray<MInstance> instances = new NSMutableArray<MInstance>();
-        int numInstances = _instanceArray.count();
-        for (int i=0; i<numInstances; i++) {
-            MInstance anInstance = (MInstance) _instanceArray.objectAtIndex(i);
+        for (MInstance anInstance : _instanceArray) {
             if (anInstance.isRunning_M()) {
                 instances.addObject(anInstance);
             }
@@ -462,13 +451,20 @@ public class MApplication extends MObject {
     }
 
     public boolean isStopped_M() {
-        int numInstances = _instanceArray.count();
-        for (int i=0; i<numInstances; i++) {
-            MInstance anInstance = (MInstance) _instanceArray.objectAtIndex(i);
+        for (MInstance anInstance : _instanceArray) {
             if (anInstance.state != MObject.DEAD) {
                 return false;
             }
         }
         return true;
+    }
+
+    public boolean hasConfiguredInstancesOn(MHost host) {
+        for (MInstance anInstance : _instanceArray) {
+            if (anInstance.host().equals(host)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

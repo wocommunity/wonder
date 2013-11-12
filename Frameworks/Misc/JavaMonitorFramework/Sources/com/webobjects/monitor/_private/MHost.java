@@ -168,7 +168,16 @@ public class MHost extends MObject {
 
     @Override
     public boolean equals(Object other) {
-        return (other instanceof MHost) && (((MHost) other)._address.equals(_address));
+        if (this == other) {
+            return true;
+        }
+        if (other == null) {
+            return false;
+        }
+        if (other instanceof MHost) {
+            return ((MHost) other)._address.equals(_address);
+        }
+        return false;
     }
 
     @Override
