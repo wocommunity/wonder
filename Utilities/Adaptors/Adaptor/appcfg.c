@@ -853,11 +853,13 @@ void ac_updateApplication(strtbl *appSettingsDict, list *instancesSettings)
             if (app->instances[i] != AC_INVALID_HANDLE)
                count++;
          }
-         if (count == 0)
-         {
-            WOLog(WO_INFO, "ac_updateApplication(): no configured instances; removing %s", app->name);
-            *(char *)&app->name[0] = 0; /* no instances, so remove the app */
-         }
+         // deactivate removal so we keep an entry for the application to lookup
+         // the redirect_url in transaction._errorResponse(...)
+         //if (count == 0)
+         //{
+         //   WOLog(WO_INFO, "ac_updateApplication(): no configured instances; removing %s", app->name);
+         //   *(char *)&app->name[0] = 0; /* no instances, so remove the app */
+         //}
          ac_unlockApp(appHandle);
       }
    } else {
