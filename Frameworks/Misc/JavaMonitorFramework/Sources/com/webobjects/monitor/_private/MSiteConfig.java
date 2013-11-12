@@ -920,8 +920,7 @@ public class MSiteConfig extends MObject {
         StringBuilder sb = new StringBuilder("<?xml version=\"1.0\" encoding=\"ASCII\"?>\n<adaptor>\n");
         boolean includeEmptyApplicationTags = ERXProperties.booleanForKey("er.wotaskd.includeEmptyApplicationTags");
 
-        for (Enumeration e = applicationArray().objectEnumerator(); e.hasMoreElements(); ) {
-            MApplication anApp = (MApplication) e.nextElement();
+        for (MApplication anApp : applicationArray()) {
             boolean hostHasInstances = false;
             if (includeEmptyApplicationTags) {
                 hostHasInstances = anApp.hasConfiguredInstancesOn(localHost());
@@ -967,9 +966,7 @@ public class MSiteConfig extends MObject {
                 }
                 sb.append("\">\n");
 
-                for (Enumeration e2 = anApp.instanceArray().objectEnumerator(); e2.hasMoreElements(); ) {
-                    MInstance anInst = (MInstance) e2.nextElement();
-
+                for (MInstance anInst : anApp.instanceArray()) {
                     if (!(onlyIncludeRunningInstances && !anInst.isRunning_W())) {
 
                         anInst.extractAdaptorValuesFromApplication();
