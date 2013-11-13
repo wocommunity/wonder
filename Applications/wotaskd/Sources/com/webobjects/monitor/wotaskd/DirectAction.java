@@ -107,7 +107,7 @@ public class DirectAction extends WODirectAction  {
             return aResponse;
         }
 
-        // Checking to see if the password was corrent
+        // Checking to see if the password was correct
         theApplication._lock.startReading();
         try {
             String passwordHeader = aRequest.headerForKey("password");
@@ -139,8 +139,8 @@ public class DirectAction extends WODirectAction  {
             NSLog.debug.appendln("@@@@@ monitorRequestAction requestDict: " + requestDict + "\n");
 
         // These 2 get used for everything else - the global response object and the global error object.
-        NSMutableDictionary monitorResponse = new NSMutableDictionary();
-        NSMutableArray errorResponse = new NSMutableArray();
+        NSMutableDictionary<String, Object> monitorResponse = new NSMutableDictionary<String, Object>();
+        NSMutableArray<String> errorResponse = new NSMutableArray<String>();
 
         NSDictionary updateWotaskdDict = (NSDictionary) requestDict.valueForKey("updateWotaskd");
         NSArray commandWotaskdArray = (NSArray) requestDict.valueForKey("commandWotaskd");
@@ -161,11 +161,11 @@ public class DirectAction extends WODirectAction  {
 
                 if (clearString != null) {
                     stopAllInstances();
-                    ( (Application) WOApplication.application()).setSiteConfig(new MSiteConfig(null));
+                    theApplication.setSiteConfig(new MSiteConfig(null));
                     updateWotaskdResponse.takeValueForKey(successElement, "clear");
                 } else if (overwriteDict != null) {
                     stopAllInstances();
-                    ( (Application) WOApplication.application()).setSiteConfig(new MSiteConfig((NSDictionary) overwriteDict.valueForKey("SiteConfig")));
+                    theApplication.setSiteConfig(new MSiteConfig((NSDictionary) overwriteDict.valueForKey("SiteConfig")));
                     updateWotaskdResponse.takeValueForKey(successElement, "overwrite");
                 } else if (syncDict != null) {
                     NSDictionary newConfig = (NSDictionary) syncDict.valueForKey("SiteConfig");
@@ -192,7 +192,7 @@ public class DirectAction extends WODirectAction  {
                                 } else {
                                     if ( anMHost == aConfig.localHost()) {
                                         stopAllInstances();
-                                        ( (Application) WOApplication.application()).setSiteConfig(new MSiteConfig(null));
+                                        theApplication.setSiteConfig(new MSiteConfig(null));
                                     } else {
                                         aConfig.removeHost_W(anMHost);
                                     }
@@ -514,7 +514,7 @@ public class DirectAction extends WODirectAction  {
                 NSMutableArray instanceResponse = null;
                 theApplication._lock.startReading();
                 try {
-                    NSArray instanceArray = (aConfig.localHost() != null) ? aConfig.localHost().instanceArray() : NSArray.EmptyArray;
+                    NSArray<MInstance> instanceArray = (aConfig.localHost() != null) ? aConfig.localHost().instanceArray() : NSArray.EmptyArray;
                     int instanceArrayCount = instanceArray.count();
 
                     MInstance anInstance;
@@ -531,7 +531,7 @@ public class DirectAction extends WODirectAction  {
 
                     instanceResponse = new NSMutableArray(instanceArrayCount);
 
-                    NSMutableArray runningInstanceArray = new NSMutableArray();
+                    NSMutableArray<MInstance> runningInstanceArray = new NSMutableArray<MInstance>();
                     for (MInstance anInst : instanceArray) {
                         if (anInst.isRunning_W()) {
                             runningInstanceArray.addObject(anInst);
@@ -540,7 +540,7 @@ public class DirectAction extends WODirectAction  {
                     getStatisticsForInstanceArray(runningInstanceArray, errorResponse);
 
                     for (int i=0; i<instanceArrayCount; i++) {
-                        anInstance = (MInstance) instanceArray.objectAtIndex(i);
+                        anInstance = instanceArray.objectAtIndex(i);
 
                         String error = anInstance.statisticsError();
                         if (error != null) {
@@ -592,10 +592,10 @@ public class DirectAction extends WODirectAction  {
         return aResponse;
     }
 
-    private void getStatisticsForInstanceArray(NSArray instArray, NSMutableArray errorResponse) {
+    private void getStatisticsForInstanceArray(NSArray<MInstance> instArray, NSMutableArray<String> errorResponse) {
         final LocalMonitor localMonitor = ((Application) WOApplication.application()).localMonitor();
 
-        final NSArray instanceArray = instArray;
+        final NSArray<MInstance> instanceArray = instArray;
         int theCount = instanceArray.count();
 
         if (theCount == 0) return;
@@ -608,12 +608,12 @@ public class DirectAction extends WODirectAction  {
             Runnable work = new Runnable() {
                 public void run() {
                     try {
-                        responses[j] = localMonitor.queryInstance((MInstance) instanceArray.objectAtIndex(j));
+                        responses[j] = localMonitor.queryInstance(instanceArray.objectAtIndex(j));
                     } catch (MonitorException me) {
-                        MInstance badInstance = ((MInstance) instanceArray.objectAtIndex(j));
+                        MInstance badInstance = instanceArray.objectAtIndex(j);
                         if ( (!badInstance.isRunning_W()) &&
                              (NSLog.debugLoggingAllowedForLevelAndGroups(NSLog.DebugLevelCritical, NSLog.DebugGroupDeployment)) ) {
-                            NSLog.debug.appendln("Exception getting Statistics for instance: " + ((MInstance) instanceArray.objectAtIndex(j)).displayName());
+                            NSLog.debug.appendln("Exception getting Statistics for instance: " + instanceArray.objectAtIndex(j).displayName());
                         }
                         //if we get an exception and the instance state is running, that could mean the app may have been too 
                         //busy to respond of may have locked up in either case, we need to notify 
@@ -636,7 +636,7 @@ public class DirectAction extends WODirectAction  {
 
         for (int i=0; i<theCount; i++) {
             WOResponse aResponse = responses[i];
-            MInstance anInstance = (MInstance) instArray.objectAtIndex(i);
+            MInstance anInstance = instArray.objectAtIndex(i);
             if (aResponse != null) {
                 anInstance.updateRegistration(new NSTimestamp());
                 if (aResponse.headerForKey("x-webobjects-refusenewsessions") != null) {
@@ -735,7 +735,7 @@ public class DirectAction extends WODirectAction  {
             MHost anMHost = (MHost) e.nextElement();
             if ( anMHost == aConfig.localHost()) {
                 stopAllInstances();
-                ( (Application) WOApplication.application()).setSiteConfig(new MSiteConfig(null));
+                theApplication.setSiteConfig(new MSiteConfig(null));
                 break;
             }
             aConfig.removeHost_W(anMHost);
@@ -801,9 +801,10 @@ public class DirectAction extends WODirectAction  {
     
     // This will stop all instances in parallel, and return after each stopInstance call has returned.
     private void stopAllInstances() {
-        final LocalMonitor localMonitor = ((Application) WOApplication.application()).localMonitor();
+        Application theApplication = (Application) WOApplication.application();
+        final LocalMonitor localMonitor = theApplication.localMonitor();
 
-        final NSArray instanceArray = ((Application) WOApplication.application()).siteConfig().instanceArray();
+        final NSArray<MInstance> instanceArray = theApplication.siteConfig().instanceArray();
         int theCount = instanceArray.count();
 
         if (theCount == 0) return;
@@ -815,7 +816,7 @@ public class DirectAction extends WODirectAction  {
             Runnable work = new Runnable() {
                 public void run() {
                     try {
-                        localMonitor.stopInstance((MInstance) instanceArray.objectAtIndex(j));
+                        localMonitor.stopInstance(instanceArray.objectAtIndex(j));
                     } catch (MonitorException me) {}
                 }
             };
@@ -865,17 +866,17 @@ public class DirectAction extends WODirectAction  {
 
             aResponse.appendContentString("The Configuration Directory is: " + MSiteConfig.configDirectoryPath());
             aResponse.appendContentString("<br>");
-            if (((Application)WOApplication.application()).shouldWriteAdaptorConfig()) {
+            if (theApplication.shouldWriteAdaptorConfig()) {
                 aResponse.appendContentString("Wotaskd is writing WOConfig.xml to disk");
             } else {
                 aResponse.appendContentString("Wotaskd is NOT writing WOConfig.xml to disk");
             }
             aResponse.appendContentString("<br>");
-            aResponse.appendContentString("The multicast address is: " + ((Application)WOApplication.application()).multicastAddress());
+            aResponse.appendContentString("The multicast address is: " + theApplication.multicastAddress());
             aResponse.appendContentString("<br>");
-            aResponse.appendContentString("This wotaskd is running on Port: " + WOApplication.application().port());
+            aResponse.appendContentString("This wotaskd is running on Port: " + theApplication.port());
             aResponse.appendContentString("<br>");
-            if (((Application)WOApplication.application()).shouldRespondToMulticast()) {
+            if (theApplication.shouldRespondToMulticast()) {
                 aResponse.appendContentString("Wotaskd is responding to Multicast");
             } else {
                 aResponse.appendContentString("Wotaskd is NOT responding to Multicast");
@@ -906,11 +907,11 @@ public class DirectAction extends WODirectAction  {
         theApplication._lock.startReading();
         String xml;
         try {
-            xml = ((Application)WOApplication.application()).siteConfig().generateAdaptorConfigXML(true, shouldIncludeUnregisteredInstances);
+            xml = theApplication.siteConfig().generateAdaptorConfigXML(true, shouldIncludeUnregisteredInstances);
         } finally {
             theApplication._lock.endReading();
         }
-        WOResponse aResponse = WOApplication.application().createResponseInContext(null);
+        WOResponse aResponse = theApplication.createResponseInContext(null);
         aResponse.appendContentString(xml);
         aResponse.setHeader("text/xml", "content-type");
         aResponse.setHeader(aFormat.format(new NSTimestamp()), "Last-Modified");

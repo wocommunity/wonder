@@ -257,7 +257,7 @@ public class LocalMonitor extends ProtoLocalMonitor  {
         theApplication._lock.startReading();
         try {
             MSiteConfig aConfig = theApplication.siteConfig();
-            final NSArray appArray = aConfig.applicationArray();
+            final NSArray<MApplication> appArray = aConfig.applicationArray();
             int appArrayCount = appArray.count();
             final LocalMonitor localMonitor = this;
 
@@ -267,7 +267,7 @@ public class LocalMonitor extends ProtoLocalMonitor  {
                 final int j = i;
                 Runnable work = new Runnable() {
                     public void run() {
-                        localMonitor._autoRecoverApplication((MApplication) appArray.objectAtIndex(j));
+                        localMonitor._autoRecoverApplication(appArray.objectAtIndex(j));
                     }
                 };
                 workers[j] = new Thread(work);
@@ -298,7 +298,7 @@ public class LocalMonitor extends ProtoLocalMonitor  {
     }
 
     private void _autoRecoverApplication(MApplication anApplication) {
-        NSArray instArray = anApplication.instanceArray();
+        NSArray<MInstance> instArray = anApplication.instanceArray();
         int instArrayCount = instArray.count();
 
         long timeForStartup;
@@ -317,7 +317,7 @@ public class LocalMonitor extends ProtoLocalMonitor  {
         }
 
         for (int i=0; i<instArrayCount; i++) {
-            MInstance anInst = (MInstance) instArray.objectAtIndex(i);
+            MInstance anInst = instArray.objectAtIndex(i);
 
             if ( (anInst.isLocal_W()) && (!anInst.isRunning_W()) && (anInst.state != MObject.STARTING) &&
                  ( (anInst.isAutoRecovering()) || (anInst.isScheduled()) ) ) {
@@ -343,7 +343,7 @@ public class LocalMonitor extends ProtoLocalMonitor  {
 
             MHost theHost = theApplication.siteConfig().localHost();
             if (theHost != null) {
-                final NSArray instArray = theHost.instanceArray();
+                final NSArray<MInstance> instArray = theHost.instanceArray();
                 int instArrayCount = instArray.count();
 
                 if (instArrayCount == 0) return;
@@ -357,7 +357,7 @@ public class LocalMonitor extends ProtoLocalMonitor  {
                     Runnable work = new Runnable() {
                         public void run() {
                             try {
-                                MInstance anInst = (MInstance) instArray.objectAtIndex(j);
+                                MInstance anInst = instArray.objectAtIndex(j);
                                 if ( (anInst.isScheduled()) && (anInst.nearNextScheduledShutdown(rightNow)) ) {
                                     if (anInst.isGracefullyScheduled()) {
                                         localMonitor.stopInstance(anInst);

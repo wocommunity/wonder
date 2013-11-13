@@ -12,8 +12,6 @@ SUCH DAMAGE.
  */
 package com.webobjects.monitor._private;
 
-import java.util.Enumeration;
-
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
