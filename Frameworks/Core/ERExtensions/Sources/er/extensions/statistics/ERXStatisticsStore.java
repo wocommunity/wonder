@@ -294,6 +294,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 							}
 							Map<Thread, String> names = getCurrentThreadNames(traces.keySet());
 							_warnTraces.put(thread, traces);
+							_warnTracesNames.put(thread, names);
 						}
 						if (time > _maximumRequestErrorTime/2 && _errorTraces.get(thread) == null) {
 							if(traces == null) {
