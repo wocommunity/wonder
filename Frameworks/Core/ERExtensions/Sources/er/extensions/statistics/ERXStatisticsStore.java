@@ -1,5 +1,6 @@
 package er.extensions.statistics;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -37,6 +38,7 @@ import er.extensions.statistics.store.IERXStatisticsStoreListener;
  * <li>will dump warning and error messages when a request takes too long, complete with stack traces of all threads.</li>
  * <li>logs fatal messages that occurred before a request finished processing.</li>
  * <li>fixes an incompatibility with 5.4.</li>
+ * <li>fixes wrong computation of average session memory</li>
  * </ul>
  *
  * <p>In order to turn on this functionality, you must make this call in your Application null constructor:<br/>
@@ -56,6 +58,16 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 	private static final Logger log = Logger.getLogger(ERXStatisticsStore.class);
 
 	private final StopWatchTimer _timer = new StopWatchTimer();
+	protected static Field initMemoryField;
+
+	static {
+		try {
+			initMemoryField = WOStatisticsStore.class.getDeclaredField("_initializationMemory");
+			initMemoryField.setAccessible(true);
+		} catch (Exception e) {
+			log.warn("Could not access private field WOStatisticsStore._initializationMemory. ", e);
+		}
+	}
 
 	private StopWatchTimer timer() {
 		return _timer;
@@ -417,5 +429,30 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 	public Object valueForKey(String s) {
 		Object result = super.valueForKey(s);
 		return fix(result);
+	}
+
+	@Override
+	public HashMap getAverageSessionMemory() {
+		NSMutableDictionary<String, Long> avg = new NSMutableDictionary<String, Long>();
+		NSDictionary<String, Long> startMemory = null;
+		NSMutableDictionary<String, Long> currentMemory = memoryUsage();
+		try {
+			startMemory = (NSDictionary<String, Long>) initMemoryField.get(this);
+		} catch (Exception e) {
+			// ignore
+		}
+		int sessionCount = activeSession().size();
+
+		Long totalSessionMemory = Long.valueOf(0L);
+		Long averageSessionMemory = Long.valueOf(0L);
+		if (startMemory != null && sessionCount > 0) {
+			totalSessionMemory = Long.valueOf(startMemory.get("Free Memory").longValue()
+					- currentMemory.get("Free Memory").longValue());
+			averageSessionMemory = Long.valueOf(totalSessionMemory.longValue() / sessionCount);
+		}
+		avg.setObjectForKey(totalSessionMemory, "Total Memory");
+		avg.setObjectForKey(averageSessionMemory, "Per Session");
+
+		return avg.hashMap();
 	}
 }
