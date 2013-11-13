@@ -70,7 +70,7 @@ public class MHost extends MObject {
     /** ******* */
 
     /** ******** Object Graph ********* */
-    NSMutableArray _instanceArray;
+    NSMutableArray<MInstance> _instanceArray;
 
     NSMutableArray _applicationArray = new NSMutableArray();
 
@@ -94,7 +94,7 @@ public class MHost extends MObject {
     public MHost(NSDictionary aValuesDict, MSiteConfig aConfig) {
         values = new NSMutableDictionary(aValuesDict);
         _siteConfig = aConfig;
-        _instanceArray = new NSMutableArray();
+        _instanceArray = new NSMutableArray<MInstance>();
 
         int tries = 0;
         while(tries++ < 5) {
@@ -202,15 +202,13 @@ public class MHost extends MObject {
     /** ******* */
 
     public Integer runningInstancesCount_W() {
-        int runningInstances = 0;
-        int numInstances = _instanceArray.count();
-        for (int i = 0; i < numInstances; i++) {
-            MInstance anInstance = (MInstance) _instanceArray.objectAtIndex(i);
+        int runningInstanceCount = 0;
+        for (MInstance anInstance : _instanceArray) {
             if (anInstance.isRunning_W()) {
-                runningInstances++;
+                runningInstanceCount++;
             }
         }
-        return Integer.valueOf(runningInstances);
+        return Integer.valueOf(runningInstanceCount);
     }
 
     public boolean isPortInUse(Integer port) {
@@ -231,9 +229,7 @@ public class MHost extends MObject {
     }
 
     public MInstance instanceWithPort(Integer port) {
-        int instanceArrayCount = _instanceArray.count();
-        for (int i = 0; i < instanceArrayCount; i++) {
-            MInstance anInst = (MInstance) _instanceArray.objectAtIndex(i);
+        for (MInstance anInst : _instanceArray) {
             if (anInst.port().equals(port)) {
                 return anInst;
             }

@@ -146,9 +146,9 @@ public class MSiteConfig extends MObject {
 
 
     /********** Object Graph  **********/
-    NSMutableArray _hostArray = new NSMutableArray();
-    NSMutableArray _instanceArray = new NSMutableArray();
-    NSMutableArray _applicationArray = new NSMutableArray();
+    NSMutableArray<MHost> _hostArray = new NSMutableArray<MHost>();
+    NSMutableArray<MInstance> _instanceArray = new NSMutableArray<MInstance>();
+    NSMutableArray<MApplication> _applicationArray = new NSMutableArray<MApplication>();
     MHost _localHost;
 
     public NSMutableArray<MHost> hostArray() { return _hostArray; }
@@ -497,11 +497,11 @@ public class MSiteConfig extends MObject {
             }
         }
 
-        NSArray errorResponse = (NSArray) xmlDict.valueForKey("errorResponse");
+        NSArray<String> errorResponse = (NSArray<String>) xmlDict.valueForKey("errorResponse");
         if (errorResponse != null) {
             String errorString = "";
             for (int i=0; i<errorResponse.count(); i++)
-                errorString = errorString + (String)errorResponse.objectAtIndex(i) + "\n";
+                errorString = errorString + errorResponse.objectAtIndex(i) + "\n";
             throw new MonitorException(errorString);
         }
         
@@ -798,9 +798,7 @@ public class MSiteConfig extends MObject {
 		StringBuilder result = new StringBuilder();
 		result.append("ProxyRequests On\nProxyMaxForwards 10000\nProxyVia Full\n");
 		
-		 for (Enumeration e = applicationArray().objectEnumerator(); e.hasMoreElements(); ) {
-            MApplication anApp = (MApplication) e.nextElement();
-
+		 for (MApplication anApp : applicationArray()) {
 //            if (!(onlyIncludeRunningInstances && !anApp.isRunning_W())) {
 
                 anApp.extractAdaptorValuesFromSiteConfig();
@@ -1070,17 +1068,17 @@ public class MSiteConfig extends MObject {
 
         NSMutableArray HostArray = new NSMutableArray(hostArrayCount);
         for (int i=0; i<hostArrayCount; i++) {
-            MObject anMobject = (MObject) _hostArray.objectAtIndex(i);
+            MObject anMobject = _hostArray.objectAtIndex(i);
             HostArray.addObject(anMobject.values);
         }
         NSMutableArray ApplicationArray = new NSMutableArray(applicationArrayCount);
         for (int i=0; i<applicationArrayCount; i++) {
-            MObject anMobject = (MObject) _applicationArray.objectAtIndex(i);
+            MObject anMobject = _applicationArray.objectAtIndex(i);
             ApplicationArray.addObject(anMobject.values);
         }
         NSMutableArray InstanceArray = new NSMutableArray(instanceArrayCount);
         for (int i=0; i<instanceArrayCount; i++) {
-            MObject anMobject = (MObject) _instanceArray.objectAtIndex(i);
+            MObject anMobject = _instanceArray.objectAtIndex(i);
             InstanceArray.addObject(anMobject.values);
         }
 
@@ -1103,10 +1101,8 @@ public class MSiteConfig extends MObject {
 
     // KH - all these should be cached!
     public long autoRecoverInterval() {
-        int instanceArrayCount = _instanceArray.count();
         int smallestInterval = 0;
-        for (int i=0; i<instanceArrayCount; i++) {
-            MInstance anInst = (MInstance) _instanceArray.objectAtIndex(i);
+        for (MInstance anInst : _instanceArray) {
             Integer Interval = anInst.lifebeatInterval();
             if (Interval != null) {
                 int interval = Interval.intValue();
@@ -1116,17 +1112,15 @@ public class MSiteConfig extends MObject {
             }
         }
         if (smallestInterval < 1) {
-            return 30 * 1000;
+            return 30 * 1000L;
         }
-        return smallestInterval * 1000;
+        return smallestInterval * 1000L;
     }
 
     public MApplication applicationWithName(String anAppName) {
         if (anAppName == null) return null;
 
-        int applicationArrayCount = _applicationArray.count();
-        for (int i=0; i<applicationArrayCount; i++) {
-            MApplication anApp = (MApplication) _applicationArray.objectAtIndex(i);
+        for (MApplication anApp : _applicationArray) {
             if (anApp.name().equals(anAppName)) {
                 return anApp;
             }
@@ -1140,10 +1134,8 @@ public class MSiteConfig extends MObject {
         if (aHostName.equals("localhost")) {
             return localHost();
         }
-        
-        int hostArrayCount = _hostArray.count();
-        for (int i=0; i<hostArrayCount; i++) {
-            MHost aHost = (MHost) _hostArray.objectAtIndex(i);
+
+        for (MHost aHost : _hostArray) {
             if (aHost.name().equals(aHostName)) {
                 return aHost;
             }
@@ -1154,9 +1146,7 @@ public class MSiteConfig extends MObject {
     public boolean localhostOrLoopbackHostExists() {
         String localhost = "localhost";
         String loopback = "127.0.0.1";
-        int hostArrayCount = _hostArray.count();
-        for (int i=0; i<hostArrayCount; i++) {
-            MHost aHost = (MHost) _hostArray.objectAtIndex(i);
+        for (MHost aHost : _hostArray) {
             if ( (aHost.name().equals(localhost)) || (aHost.name().equals(loopback)) ) {
                 return true;
             }
@@ -1171,9 +1161,7 @@ public class MSiteConfig extends MObject {
             return _localHost;
         }
 
-        int hostArrayCount = _hostArray.count();
-        for (int i=0; i<hostArrayCount; i++) {
-            MHost aHost = (MHost) _hostArray.objectAtIndex(i);
+        for (MHost aHost : _hostArray) {
             if (anAddress.equals(aHost.address())) {
                 return aHost;
             }
@@ -1184,9 +1172,7 @@ public class MSiteConfig extends MObject {
     public MInstance instanceWithName(String anInstanceName) {
         if (anInstanceName == null) return null;
 
-        int instanceArrayCount = _instanceArray.count();
-        for (int i=0; i<instanceArrayCount; i++) {
-            MInstance anInstance = (MInstance) _instanceArray.objectAtIndex(i);
+        for (MInstance anInstance : _instanceArray) {
             if (anInstance.displayName().equals(anInstanceName)) {
                 return anInstance;
             }
@@ -1195,9 +1181,8 @@ public class MSiteConfig extends MObject {
     }
 
     public MInstance instanceWithHostnameAndPort(String hostAndPort) {
-        NSArray hostPortArray = NSArray.componentsSeparatedByString(hostAndPort, "\n");
-        return instanceWithHostnameAndPort( (String) hostPortArray.objectAtIndex(0),
-                                                Integer.valueOf((String) hostPortArray.objectAtIndex(2)) );
+        NSArray<String> hostPortArray = NSArray.componentsSeparatedByString(hostAndPort, "\n");
+        return instanceWithHostnameAndPort(hostPortArray.objectAtIndex(0), Integer.valueOf(hostPortArray.objectAtIndex(2)));
     }
 
     public MInstance instanceWithHostnameAndPort(String hostName, String port) {
@@ -1229,7 +1214,7 @@ public class MSiteConfig extends MObject {
             if (anInstance != null) {
                 if (anInstance.applicationName().equals(name)) {
                     return anInstance;
-                }                       
+                }
             }
         } catch (Exception e) {
             log.error("Exception getting instance: " + host + " + " + port, e);
