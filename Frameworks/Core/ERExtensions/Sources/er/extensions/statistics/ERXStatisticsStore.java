@@ -365,7 +365,18 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 		}
 	}
 
+	/**
+	 * Returns the list of active sessions.
+	 * 
+	 * @return list of active sessions
+	 * @deprecated use {@link #activeSessions()} instead
+	 */
+	@Deprecated
 	public NSArray<WOSession> activeSession() {
+		return sessions;
+	}
+
+	public NSArray<WOSession> activeSessions() {
 		return sessions;
 	}
 
@@ -441,7 +452,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 		} catch (Exception e) {
 			// ignore
 		}
-		int sessionCount = activeSession().size();
+		int sessionCount = activeSessions().size();
 
 		Long totalSessionMemory = Long.valueOf(0L);
 		Long averageSessionMemory = Long.valueOf(0L);
