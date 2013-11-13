@@ -54,9 +54,7 @@ import er.extensions.statistics.store.IERXStatisticsStoreListener;
  * @author kieran (Oct 14, 2009) - minor changes to capture thread name in middle of the request (useful for {@link er.extensions.appserver.ERXSession#threadName()}}
  */
 public class ERXStatisticsStore extends WOStatisticsStore {
-
-	private static final Logger log = Logger.getLogger(ERXStatisticsStore.class);
-
+	protected static final Logger log = Logger.getLogger(ERXStatisticsStore.class);
 	private final StopWatchTimer _timer = new StopWatchTimer();
 	protected static Field initMemoryField;
 
@@ -92,7 +90,6 @@ public class ERXStatisticsStore extends WOStatisticsStore {
     /**
 	 * Thread that checks each second for running requests and makes a snapshot
 	 * after a certain amount of time has expired.
-	 * 
 	 * 
 	 * @author ak
 	 */
@@ -189,7 +186,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 					capturedThreadName = names.get(Thread.currentThread());
 				}
 				
-				StringBuffer sb = new StringBuffer();
+				StringBuilder sb = new StringBuilder();
 				sb.append("\nRequest Thread Name: ").append(capturedThreadName).append("\n\n");
 				for (Iterator iterator = traces.keySet().iterator(); iterator.hasNext();) {
 					Thread t = (Thread) iterator.next();
@@ -204,17 +201,18 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 								String customThreadName = names.get(t);
 								if (customThreadName != null) {
 									sb.append(customThreadName).append(":\n");
-								}					
+								}
 							}
 							sb.append(t).append(":\n");
 							for (int i = 0; i < stack.length; i++) {
 								StackTraceElement stackTraceElement = stack[i];
-								sb.append("\tat ").append(stackTraceElement).append("\n");
+								sb.append("\tat ").append(stackTraceElement).append('\n');
 							}
 						}
 					}
 				}
-				trace = "\n" + sb.toString();
+				sb.insert(0, '\n');
+				trace = sb.toString();
 				// trace =
 				// trace.replaceAll("at\\s+(com.webobjects|java|er|sun)\\..*?\\n",
 				// "...\n");
@@ -227,7 +225,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 		}
 
 		private boolean hasTimerStarted() {
-			return time() != 0;
+			return time() != 0L;
 		}
 
 		protected void startTimer() {
@@ -311,11 +309,16 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 							Map<Thread, String> names = getCurrentThreadNames(traces.keySet());
 							_fatalTraces.put(thread, traces);
 							_fatalTracesNames.put(thread, names);
-							String message = "Request is taking too long, possible deadlock: " + time + " ms ";
-							message += stringFromTracesAndNames(traces, names);
-							message += "EC info:\n" + ERXEC.outstandingLockDescription();
-							message += "OSC info:\n" + ERXObjectStoreCoordinator.outstandingLockDescription();
-							log.fatal(message);
+							StringBuilder sb = new StringBuilder();
+							sb.append("Request is taking too long, possible deadlock: ");
+							sb.append(time);
+							sb.append(" ms ");
+							sb.append(stringFromTracesAndNames(traces, names));
+							sb.append("EC info:\n");
+							sb.append(ERXEC.outstandingLockDescription());
+							sb.append("OSC info:\n");
+							sb.append(ERXObjectStoreCoordinator.outstandingLockDescription());
+							log.fatal(sb.toString());
                             deadlocksCount++;
 						}
 					}
@@ -325,7 +328,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 		}
 
 		private Map<Thread, String> getCurrentThreadNames(Set<Thread> keySet) {
-			Map names = new HashMap<Thread, String>();
+			Map<Thread, String> names = new HashMap<Thread, String>();
 			for (Thread thread : keySet) {
 				names.put(thread, thread.getName());
 			}
@@ -345,7 +348,6 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 		}
 		stats = fixed;
 		return stats;
-		
 	}
 
 	protected NSMutableArray<WOSession> sessions = new NSMutableArray<WOSession>();
