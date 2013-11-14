@@ -9,6 +9,7 @@ public class ERCMailMessageArchive extends _ERCMailMessageArchive {
 	 */
 	private static final long serialVersionUID = 1L;
 
+    @SuppressWarnings("unused")
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ERCMailMessageArchive.class);
 
     public static final ERCMailMessageArchiveClazz clazz = new ERCMailMessageArchiveClazz();
