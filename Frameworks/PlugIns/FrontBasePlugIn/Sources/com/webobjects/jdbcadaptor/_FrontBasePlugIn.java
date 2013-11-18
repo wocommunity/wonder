@@ -346,7 +346,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 		try {
 			Connection con = ((JDBCContext) channel.adaptorContext()).connection();
 
-			NSMutableDictionary d = new NSMutableDictionary();
+			NSMutableDictionary<String, Object> d = new NSMutableDictionary<String, Object>();
 
 			for (int i = 0; i < array.count(); i += 2) {
 				d.setObjectForKey(getLobHandle(con, array.objectAtIndex(i), array.objectAtIndex(i + 1)), ((EOAttribute) array.objectAtIndex(i)).name());
@@ -642,7 +642,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 		public String schemaCreationScriptForEntities(NSArray<EOEntity> allEntities, NSDictionary<String, String> options) {
 			StringBuffer result = new StringBuffer();
 			if (options == null) {
-				options = NSDictionary.EmptyDictionary;
+				options = NSDictionary.emptyDictionary();
 			}
 			NSArray<EOSQLExpression> statements = schemaCreationStatementsForEntities(allEntities, options);
 			int i = 0;
@@ -680,30 +680,31 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 				result.addObjectsFromArray(createDatabaseStatementsForConnectionDictionary(connectionDict, null));
 			}
 			if (boolValueForKeyDefault(options, "dropPrimaryKeySupport", true)) {
-				NSArray nsarray1 = primaryKeyEntityGroupsForEntities(entities);
-				result.addObjectsFromArray(dropPrimaryKeySupportStatementsForEntityGroups(nsarray1));
+				NSArray<NSArray<EOEntity>> entityGroups = primaryKeyEntityGroupsForEntities(entities);
+				result.addObjectsFromArray(dropPrimaryKeySupportStatementsForEntityGroups(entityGroups));
 			}
 			if (boolValueForKeyDefault(options, "dropTables", true)) {
-				NSArray nsarray2 = tableEntityGroupsForEntities(entities);
-				result.addObjectsFromArray(dropTableStatementsForEntityGroups(nsarray2));
+				NSArray<NSArray<EOEntity>> entityGroups = tableEntityGroupsForEntities(entities);
+				result.addObjectsFromArray(dropTableStatementsForEntityGroups(entityGroups));
 			}
 			if (boolValueForKeyDefault(options, "createTables", true)) {
-				NSArray nsarray3 = tableEntityGroupsForEntities(entities);
-				result.addObjectsFromArray(createTableStatementsForEntityGroups(nsarray3));
-				result.addObjectsFromArray(createIndexStatementsForEntityGroups(nsarray3));
+				NSArray<NSArray<EOEntity>> entityGroups = tableEntityGroupsForEntities(entities);
+				result.addObjectsFromArray(createTableStatementsForEntityGroups(entityGroups));
+				result.addObjectsFromArray(createIndexStatementsForEntityGroups(entityGroups));
 			}
 			if (boolValueForKeyDefault(options, "createPrimaryKeySupport", true)) {
-				NSArray nsarray4 = primaryKeyEntityGroupsForEntities(entities);
-				result.addObjectsFromArray(primaryKeySupportStatementsForEntityGroups(nsarray4));
+				NSArray<NSArray<EOEntity>> entityGroups = primaryKeyEntityGroupsForEntities(entities);
+				result.addObjectsFromArray(primaryKeySupportStatementsForEntityGroups(entityGroups));
 			}
 			if (boolValueForKeyDefault(options, "primaryKeyConstraints", true)) {
-				NSArray nsarray5 = tableEntityGroupsForEntities(entities);
-				result.addObjectsFromArray(primaryKeyConstraintStatementsForEntityGroups(nsarray5));
+				NSArray<NSArray<EOEntity>> entityGroups = tableEntityGroupsForEntities(entities);
+				result.addObjectsFromArray(primaryKeyConstraintStatementsForEntityGroups(entityGroups));
 			}
 			if (boolValueForKeyDefault(options, "foreignKeyConstraints", false)) {
-				NSArray nsarray6 = tableEntityGroupsForEntities(entities);
-				for (int i = 0; i < nsarray6.count(); i++)
-					result.addObjectsFromArray(_foreignKeyConstraintStatementsForEntityGroup((NSArray) nsarray6.objectAtIndex(i)));
+				NSArray<NSArray<EOEntity>> entityGroups = tableEntityGroupsForEntities(entities);
+				for (NSArray<EOEntity> entityGroup : entityGroups) {
+					result.addObjectsFromArray(_foreignKeyConstraintStatementsForEntityGroup(entityGroup));
+				}
 			}
 			result.addObject(_expressionForString("COMMIT"));
 			return result;
@@ -750,7 +751,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 		@Override
 		public NSArray<EOSQLExpression> primaryKeySupportStatementsForEntityGroup(NSArray<EOEntity> entityGroup) {
 			if (entityGroup == null)
-				return NSArray.EmptyArray;
+				return NSArray.emptyArray();
 
 			NSMutableArray<EOSQLExpression> result = new NSMutableArray<EOSQLExpression>();
 
@@ -850,7 +851,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 
 				return new NSArray<EOSQLExpression>(_expressionForString(sql.toString()));
 			}
-			return NSArray.EmptyArray;
+			return NSArray.emptyArray();
 		}
 
 		/** 
@@ -878,7 +879,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			int j = entityGroup != null ? entityGroup.count() : 0;
 
 			if (j == 0)
-				return NSArray.EmptyArray;
+				return NSArray.emptyArray();
 
 			// 出力バッファーを準備
 			StringBuilder columns = new StringBuilder();
@@ -941,7 +942,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			int j = entityGroup != null ? entityGroup.count() : 0;
 
 			if (j == 0)
-				return NSArray.EmptyArray;
+				return NSArray.emptyArray();
 
 			eosqlexpression = _expressionForEntity(entityGroup.objectAtIndex(0));
 
@@ -1129,7 +1130,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 					return new NSArray<EOSQLExpression>(_expressionForString(sql.toString()));
 				}
 			}
-			return NSArray.EmptyArray;
+			return NSArray.emptyArray();
 		}
 	}
 
@@ -1746,7 +1747,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 				case FB_BLOB:
 				case FB_CLOB: {
 					if (!(obj instanceof String) && eoattribute.valueFactoryMethod() != null) {
-						Class valueClass = _NSUtilities.classWithName(eoattribute.className());
+						Class<?> valueClass = _NSUtilities.classWithName(eoattribute.className());
 						if (valueClass.isAssignableFrom(obj.getClass())) {
 							obj = eoattribute.adaptorValueByConvertingAttributeValue(obj);
 						}
