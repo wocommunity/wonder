@@ -71,6 +71,36 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 	static final String _frontbaseSqlStatementForGettingTableNames = System.getProperty("jdbcadaptor.frontbase.sqlStatementForGettingTableNames", null);
 	static final String _frontbaseContainsOperatorFix = System.getProperty("jdbcadaptor.frontbase.frontbaseContainsOperatorFix", null);
 
+	/**
+	 * Formatter to use when handling date columns. Each thread has its own copy.
+	 */
+	private static final ThreadLocal<SimpleDateFormat> DATE_FORMATTER = new ThreadLocal<SimpleDateFormat>() {
+		@Override
+		protected SimpleDateFormat initialValue() {
+			return new SimpleDateFormat("yyyy-MM-dd");
+		}
+	};
+
+	/**
+	 * Formatter to use when handling timestamp columns. Each thread has its own copy.
+	 */
+	private static final ThreadLocal<SimpleDateFormat> TIMESTAMP_FORMATTER = new ThreadLocal<SimpleDateFormat>() {
+		@Override
+		protected SimpleDateFormat initialValue() {
+			return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+		}
+	};
+
+	/**
+	 * Formatter to use when handling time only columns. Each thread has its own copy.
+	 */
+	private static final ThreadLocal<SimpleDateFormat> TIME_FORMATTER = new ThreadLocal<SimpleDateFormat>() {
+		@Override
+		protected SimpleDateFormat initialValue() {
+			return new SimpleDateFormat("HH:mm:ss.SSS");
+		}
+	};
+
 	public _FrontBasePlugIn(JDBCAdaptor jdbcadaptor) {
 		super(jdbcadaptor);
 	}
@@ -1742,8 +1772,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 				case FB_Time: {
 					StringBuffer time = new StringBuffer("TIME '");
 					Date d = (Date)eoattribute.adaptorValueByConvertingAttributeValue(obj);
-					SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss.SSS");
-					format.format(d, time, new FieldPosition(0));
+					TIME_FORMATTER.get().format(d, time, new FieldPosition(0));
 					time.append("'");
 					return time.toString();
 				}
@@ -1751,8 +1780,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 				case FB_TimeTZ: {
 					StringBuffer time = new StringBuffer("TIME '");
 					Date d = (Date)eoattribute.adaptorValueByConvertingAttributeValue(obj);
-					SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss.SSS");
-					format.format(d, time, new FieldPosition(0));
+					TIME_FORMATTER.get().format(d, time, new FieldPosition(0));
 					time.append(getTimeZone(NSTimeZone.defaultTimeZone()));
 					time.append("'");
 					return time.toString();
@@ -1761,16 +1789,14 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 				case FB_Timestamp: {
 					StringBuffer time = new StringBuffer("TIMESTAMP '");
 					Date d = (Date)eoattribute.adaptorValueByConvertingAttributeValue(obj);
-					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-					format.format(d, time, new FieldPosition(0));
+					TIMESTAMP_FORMATTER.get().format(d, time, new FieldPosition(0));
 					time.append("'");
 					return time.toString();
 				}
 				case FB_TimestampTZ: {
 					StringBuffer time = new StringBuffer("TIMESTAMP '");
 					Date d = (Date)eoattribute.adaptorValueByConvertingAttributeValue(obj);
-					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-					format.format(d, time, new FieldPosition(0));
+					TIMESTAMP_FORMATTER.get().format(d, time, new FieldPosition(0));
 					time.append(getTimeZone(NSTimeZone.defaultTimeZone()));
 					time.append("'");
 					return time.toString();
@@ -1778,8 +1804,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 				case FB_Date: {
 					StringBuffer time = new StringBuffer("DATE '");
 					Date d = (Date)eoattribute.adaptorValueByConvertingAttributeValue(obj);
-					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-					format.format(d, time, new FieldPosition(0));
+					DATE_FORMATTER.get().format(d, time, new FieldPosition(0));
 					time.append("'");
 					return time.toString();
 				}
