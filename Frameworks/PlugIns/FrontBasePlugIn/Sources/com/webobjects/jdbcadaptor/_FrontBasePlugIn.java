@@ -1161,8 +1161,6 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			sql.append(columnTypeStringForAttribute(attribute));
 
 			NSDictionary dictionary = attribute.userInfo();
-			int internalType = internalTypeForExternal(attribute.externalType());
-			boolean isLOB = internalType == FB_BLOB || internalType == FB_CLOB;
 			if (dictionary == null) {
 				_appendNotNullConstraintIfNecessary(attribute, sql);
 			}
@@ -1230,9 +1228,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 				}
 				sql.append(" NOT NULL");
 
-				int internalType = internalTypeForExternal(attribute.externalType());
-				boolean isLOB = internalType == FB_BLOB || internalType == FB_CLOB;
-				if (isLOB)
+				if (isLOBAttribute(attribute))
 					sql.append(" DEFERRABLE INITIALLY DEFERRED");
 			}
 		}
