@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.TimeZone;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -60,8 +61,10 @@ public class ValueFactory {
 	}
 
 	public static DateTime jodaDateTime(Date value) {
-		DateTime dt = new DateTime(value.getTime());
-		return dt;
+		long dateInMillis = value.getTime();
+		int offset = TimeZone.getDefault().getOffset(dateInMillis);
+		DateTime dateTime = new DateTime(dateInMillis + offset);
+		return dateTime;
 	}
 	
 	@SuppressWarnings("rawtypes")

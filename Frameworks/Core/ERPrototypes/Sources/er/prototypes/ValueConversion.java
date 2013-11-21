@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -45,8 +46,10 @@ public class ValueConversion {
 	}
 
 	public static Date jodaDateTime(DateTime value) {
-		Date d = new Date(value.getMillis());
-		return d;
+		long dateInMillis = value.toInstant().getMillis();
+		int offset = TimeZone.getDefault().getOffset(dateInMillis);
+		Date javaDate = new Date(dateInMillis - offset);
+		return javaDate;
 	}
 	
 	@SuppressWarnings("rawtypes")
