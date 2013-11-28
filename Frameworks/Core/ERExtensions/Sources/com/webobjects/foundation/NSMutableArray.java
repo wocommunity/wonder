@@ -940,6 +940,16 @@ class SubList<E> extends NSMutableArray<E> {
         return new SubList<E>(this, fromIndex, toIndex);
     }
 
+    @Override
+    public Object[] toArray() {
+        int count = count();
+        Object[] objects = new Object[count];
+        if (count > 0) {
+            System.arraycopy(l.objectsNoCopy(), offset, objects, 0, count);
+        }
+        return objects;
+    }
+
     private void rangeCheck(int index) {
         if (index < 0 || index >= size)
             throw new IndexOutOfBoundsException("Index: " + index + ",Size: "
