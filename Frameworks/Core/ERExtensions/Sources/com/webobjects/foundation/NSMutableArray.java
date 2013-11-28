@@ -966,6 +966,30 @@ class SubList<E> extends NSMutableArray<E> {
             throw new ConcurrentModificationException();
     }
 
+    @Override
+    public String toString() {
+        int count = count();
+        if (count == 0) {
+            return "()";
+        }
+        StringBuilder sb = new StringBuilder(128);
+        sb.append('(');
+        for (int i = 0; i < count; i++) {
+            Object object = l.get(i + offset);
+            if (i > 0) {
+                sb.append(", ");
+            }
+            if (object instanceof String) {
+                sb.append('"');
+                sb.append(object);
+                sb.append('"');
+            } else {
+                sb.append(object == this ? "THIS" : object);
+            }
+        }
+        sb.append(')');
+        return sb.toString();
+    }
 }
 
 class RandomAccessSubList<E> extends SubList<E> implements RandomAccess {
