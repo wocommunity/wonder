@@ -799,6 +799,11 @@ class SubList<E> extends NSMutableArray<E> {
     }
 
     @Override
+    public int count() {
+        return size();
+    }
+
+    @Override
     public boolean add(E element) {
     	add(size(), element);
     	return true;
