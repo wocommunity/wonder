@@ -4,6 +4,7 @@
 	<classpathentry exported="true" kind="lib" path="Libraries/ERWebObjects.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/commons-lang-2.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/erxservletadaptor.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/joda-time-2.3.jar" sourcepath="LibrarySources/joda-time-2.3-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/junit-4.10.jar" sourcepath="LibrarySources/junit-4.10-src.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/icu4j-3_8_1.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/ognl-2.6.7.jar"/>
@@ -19,6 +20,5 @@
 	<classpathentry exported="true" kind="lib" path="Libraries/httpmime-4.2.5.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/slf4j-api-1.7.5.jar" sourcepath="LibrarySources/slf4j-api-1.7.5-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/slf4j-log4j12-1.7.5.jar" sourcepath="LibrarySources/slf4j-log4j12-1.7.5-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/joda-time-2.2.jar" sourcepath="LibrarySources/joda-time-2.2-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
