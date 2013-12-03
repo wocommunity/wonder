@@ -990,7 +990,7 @@ public class ERXFileUtilities {
      * @param srcDirectory source directory
      * @param dstDirectory destination directory
      * @param deleteOriginals tells if the original files, the file is deleted even if appuser has no write
-     * rights. This is compareable to a <code>rm -f filename</code> instead of <code>rm filename</code>
+     * rights. This is comparable to a <code>rm -f filename</code> instead of <code>rm filename</code>
      * @param replaceExistingFiles <code>true</code> if the destination should be overwritten if it already exists
      * @param recursiveCopy specifies if directories should be recursively copied
      * @param filter which restricts the files to be copied

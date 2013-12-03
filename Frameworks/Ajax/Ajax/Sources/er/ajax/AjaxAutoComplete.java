@@ -51,9 +51,9 @@ import er.extensions.foundation.ERXValueUtilities;
  *          context, the list should contain all possible objects. the list will
  *          be filtered by the scriptaculous engine.
  * @binding value string that will hold the text entered in the field. It is
- *          continiously updated.
+ *          continuously updated.
  * @binding item pushed and pulled the current element of the list. This can be
- *          used to customized the string representation (in conjuction with the
+ *          used to customized the string representation (in conjunction with the
  *          <cite>displayString</cite> binding) of the object.
  * @binding displayString optional custom string representation of the current
  *          element.
