@@ -74,7 +74,6 @@ public class FrontBaseTypes {
 			return FB_BLOB;
 		else if (externalType.equals("CLOB"))
 			return FB_CLOB;
-		else
-			return -1;
+		return -1;
 	}
 }
