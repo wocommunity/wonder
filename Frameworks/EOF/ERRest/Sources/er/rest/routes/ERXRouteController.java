@@ -261,13 +261,13 @@ public class ERXRouteController extends WODirectAction {
 	 * @return a new editing context
 	 */
 	protected EOEditingContext newEditingContext() {
-		if(existingSession() != null ) {
+		//if(existingSession() != null ) {
 			// use session editing context
-			return session().defaultEditingContext();
-		}
-		else {
+		//	return session().defaultEditingContext();
+		//}
+		//else {
 			return ERXEC.newEditingContext();
-		}
+		//}
 	}
 	
 	/**
