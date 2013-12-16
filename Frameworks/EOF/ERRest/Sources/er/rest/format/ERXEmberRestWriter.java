@@ -44,8 +44,7 @@ public class ERXEmberRestWriter extends ERXJSONRestWriter {
 							nodesToAdd.add(newSubChild);
 							newSubChild.setArray(true);
 							for(ERXRestRequestNode idNode : subChild.children()) {
-								Object id = idNode.id();
-								newSubChild.addChild(new ERXRestRequestNode(null, id, false));
+								newSubChild.addChild(new ERXRestRequestNode(null, idNode.id(), false));
 							}
 							nodesToRemove.add(subChild);
 						}
@@ -57,11 +56,11 @@ public class ERXEmberRestWriter extends ERXJSONRestWriter {
 						}
 					} 
 				}
+				child.children().removeAll(nodesToRemove);
+				child.children().addAll(nodesToAdd);
 				if(linksNode.children().size() > 0) {
 					child.addChild(linksNode);
 				}
-				child.children().removeAll(nodesToRemove);
-				child.children().addAll(nodesToAdd);
 			}
 		}
 		else {  
