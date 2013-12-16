@@ -13,6 +13,7 @@ public class ERXEmberRestWriter extends ERXJSONRestWriter {
 		String rootObjectName;
 		NSMutableArray<ERXRestRequestNode> nodesToAdd = null;
 		NSMutableArray<ERXRestRequestNode> nodesToRemove = null;
+		ERXRestRequestNode linksNode = null;
 		if(node.isArray()) {
 			rootObjectName = ERXStringUtilities.uncapitalize( ERXRestNameRegistry.registry().externalNameForInternalName( ERXLocalizer.englishLocalizer().plurifiedString(node.childAtIndex(0).type(), 2)));
 			ERXRestRequestNode recordsNode = new ERXRestRequestNode(rootObjectName, false);
@@ -22,9 +23,9 @@ public class ERXEmberRestWriter extends ERXJSONRestWriter {
 				System.out.println("!!!!!!!! null key setting to aaa");
 				rootObjectName = "aaa";
 			}
-			for (ERXRestRequestNode child : node.children()) {
+			for(ERXRestRequestNode child : node.children()) {
 				//links 
-				ERXRestRequestNode linksNode = new ERXRestRequestNode("links", false);
+				linksNode = new ERXRestRequestNode("links", false);
 				nodesToAdd = new NSMutableArray<ERXRestRequestNode>();
 				nodesToRemove = new NSMutableArray<ERXRestRequestNode>();
 				//linksNode.setArray(true);
@@ -51,8 +52,6 @@ public class ERXEmberRestWriter extends ERXJSONRestWriter {
 						if(subChild.id() != null) {
 						 	ERXRestRequestNode newSubChild = new ERXRestRequestNode(subChild.name(), subChild.id(), false);
 						 	nodesToAdd.add(newSubChild);
-						 	//Object id = subChild.id();
-							//newSubChild.addChild(new ERXRestRequestNode(null, id, false));
 							nodesToRemove.add(subChild);
 						}
 					} 
@@ -73,7 +72,6 @@ public class ERXEmberRestWriter extends ERXJSONRestWriter {
 		else {  
 			rootNode.addChild(node);
 			rootObjectName = ERXStringUtilities.uncapitalize(node.type());
-			ERXRestRequestNode linksNode = new ERXRestRequestNode("links", false);
 			nodesToAdd = new NSMutableArray<ERXRestRequestNode>();
 			nodesToRemove = new NSMutableArray<ERXRestRequestNode>();
 			for(ERXRestRequestNode subChild : node.children()) {
@@ -81,6 +79,9 @@ public class ERXEmberRestWriter extends ERXJSONRestWriter {
 					if(subChild.children().size() > 300) {
 						nodesToRemove.add(subChild);
 						String url = "/" + rootObjectName + "/" + node.id() + "/" + subChild.name();
+						if(linksNode == null) {
+							linksNode = new ERXRestRequestNode("links", false);
+						}
 						linksNode.addChild(new ERXRestRequestNode(subChild.name(), url, false) );
 					}
 					else {
@@ -89,14 +90,12 @@ public class ERXEmberRestWriter extends ERXJSONRestWriter {
 						nodesToAdd.add(newSubChild);
 						newSubChild.setArray(true);
 						for(ERXRestRequestNode idNode : subChild.children()) {
-							Object id = idNode.id();
-							newSubChild.addChild(new ERXRestRequestNode(null, id, false));
+							newSubChild.addChild(new ERXRestRequestNode(null, idNode.id(), false));
 						}
 						nodesToRemove.add(subChild);
-						
 					}
-					
-				} else {
+				}
+				else {
 					if(subChild.id() != null) {
 					 	ERXRestRequestNode newSubChild = new ERXRestRequestNode(subChild.name(), subChild.id(), false);
 					 	nodesToAdd.add(newSubChild);
@@ -105,14 +104,16 @@ public class ERXEmberRestWriter extends ERXJSONRestWriter {
 				} 
 			}
 			//remove nodes
-			for(ERXRestRequestNode nodeToRemove : nodesToRemove) {
-				node.removeChildNamed(nodeToRemove.name());
-			}
+			node.children().removeAll(nodesToRemove);
+			//for(ERXRestRequestNode nodeToRemove : nodesToRemove) {
+			//	node.removeChildNamed(nodeToRemove.name());
+			//}
 			// add
-			for(ERXRestRequestNode nodeToAdd : nodesToAdd) {
-				node.addChild(nodeToAdd);
-			}
-			if(linksNode.children().size() > 0) {
+			node.children().addAll(nodesToAdd);
+			//for(ERXRestRequestNode nodeToAdd : nodesToAdd) {
+			//	node.addChild(nodeToAdd);
+			//}
+			if(linksNode != null && linksNode.children().size() > 0) {
 				node.addChild(linksNode);
 			}
 		}
