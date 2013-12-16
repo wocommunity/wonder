@@ -15,7 +15,8 @@ public class ERXEmberRestWriter extends ERXJSONRestWriter {
 		NSMutableArray<ERXRestRequestNode> nodesToRemove = null;
 		ERXRestRequestNode linksNode = null;
 		if(node.isArray()) {
-			rootObjectName = ERXStringUtilities.uncapitalize( ERXRestNameRegistry.registry().externalNameForInternalName( ERXLocalizer.englishLocalizer().plurifiedString(node.childAtIndex(0).type(), 2)));
+			//rootObjectName = ERXStringUtilities.uncapitalize( ERXRestNameRegistry.registry().externalNameForInternalName( ERXLocalizer.englishLocalizer().plurifiedString(node.childAtIndex(0).type(), 2)));
+			rootObjectName = ERXStringUtilities.uncapitalize( ERXLocalizer.englishLocalizer().plurifiedString(node.childAtIndex(0).type(), 2));
 			ERXRestRequestNode recordsNode = new ERXRestRequestNode(rootObjectName, false);
 			recordsNode.setArray(true);
 			rootNode.addChild(recordsNode);
