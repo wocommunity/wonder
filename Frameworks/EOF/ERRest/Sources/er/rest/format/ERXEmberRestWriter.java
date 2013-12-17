@@ -4,7 +4,6 @@ import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.foundation.ERXStringUtilities;
 import er.extensions.localization.ERXLocalizer;
-import er.rest.ERXRestNameRegistry;
 import er.rest.ERXRestRequestNode;
 
 public class ERXEmberRestWriter extends ERXJSONRestWriter {
