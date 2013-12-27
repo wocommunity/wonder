@@ -40,7 +40,6 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSRange;
 import com.webobjects.foundation.NSSelector;
-import com.webobjects.foundation.NSTimeZone;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation._NSUtilities;
 
@@ -1753,7 +1752,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 					Date d = (Date)eoattribute.adaptorValueByConvertingAttributeValue(obj);
 					SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss.SSS");
 					format.format(d, time, new FieldPosition(0));
-					time.append(getTimeZone(NSTimeZone.defaultTimeZone()));
+					time.append(getTimeZone(format.getTimeZone()));
 					time.append("'");
 					return time.toString();
 				}
@@ -1771,7 +1770,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 					Date d = (Date)eoattribute.adaptorValueByConvertingAttributeValue(obj);
 					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 					format.format(d, time, new FieldPosition(0));
-					time.append(getTimeZone(NSTimeZone.defaultTimeZone()));
+					time.append(getTimeZone(format.getTimeZone()));
 					time.append("'");
 					return time.toString();
 				}
