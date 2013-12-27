@@ -23,8 +23,8 @@
     <property name="framework.erjars.commons.codec" value="commons-codec-1.6.jar" />
     <property name="framework.erjars.commons.io" value="commons-io-2.2.jar" />
     <property name="framework.erjars.commons.lang" value="commons-lang-2.6.jar" />
-    <property name="framework.erjars.httpclient" value="httpclient-4.2.5.jar" />
-    <property name="framework.erjars.httpcore" value="httpcore-4.2.4.jar" />
+    <property name="framework.erjars.httpclient" value="httpclient-4.3.1.jar" />
+    <property name="framework.erjars.httpcore" value="httpcore-4.3.jar" />
     <property name="framework.erjars.icu4j" value="icu4j-3_8_1.jar" />
     <property name="framework.erjars.joda" value="joda-time-2.3.jar" />
     <property name="framework.erjars.junit" value="junit-4.10.jar" />
