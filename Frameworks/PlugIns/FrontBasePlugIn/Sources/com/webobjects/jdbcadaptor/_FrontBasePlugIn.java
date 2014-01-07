@@ -40,7 +40,6 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSRange;
 import com.webobjects.foundation.NSSelector;
-import com.webobjects.foundation.NSTimeZone;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation._NSUtilities;
 
@@ -1804,8 +1803,9 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 				case FrontBaseTypes.FB_TimeTZ: {
 					StringBuffer time = new StringBuffer("TIME '");
 					Date d = (Date)eoattribute.adaptorValueByConvertingAttributeValue(obj);
-					TIME_FORMATTER.get().format(d, time, new FieldPosition(0));
-					time.append(getTimeZone(NSTimeZone.defaultTimeZone()));
+					SimpleDateFormat formatter = TIME_FORMATTER.get();
+					formatter.format(d, time, new FieldPosition(0));
+					time.append(getTimeZone(formatter.getTimeZone()));
 					time.append("'");
 					return time.toString();
 				}
@@ -1820,8 +1820,9 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 				case FrontBaseTypes.FB_TimestampTZ: {
 					StringBuffer time = new StringBuffer("TIMESTAMP '");
 					Date d = (Date)eoattribute.adaptorValueByConvertingAttributeValue(obj);
-					TIMESTAMP_FORMATTER.get().format(d, time, new FieldPosition(0));
-					time.append(getTimeZone(NSTimeZone.defaultTimeZone()));
+					SimpleDateFormat formatter = TIMESTAMP_FORMATTER.get();
+					formatter.format(d, time, new FieldPosition(0));
+					time.append(getTimeZone(formatter.getTimeZone()));
 					time.append("'");
 					return time.toString();
 				}
