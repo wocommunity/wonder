@@ -1217,6 +1217,10 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 					for (ERXRestRequestNode toManyNode : childNode.children()) {
 						Object id = toManyNode.id();
 
+						if (toManyNode.type() != null) {
+							destinationClassDescription = ERXRestClassDescriptionFactory.classDescriptionForEntityName(toManyNode.type());
+						}
+
 						Object childObj;
 						if (toManyNode.children().count() == 0 && ERXRestUtils.isPrimitive(toManyNode.value())) {
 							if (lockedRelationship) {
@@ -1327,6 +1331,11 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 
 						ERXKeyFilter childKeyFilter = keyFilter._filterForKey(key);
 						Object childObj;
+
+						if (childNode.type() != null) {
+							destinationClassDescription = ERXRestClassDescriptionFactory.classDescriptionForEntityName(childNode.type());
+						}
+
 						if (id == null) {
 							if (lockedRelationship) {
 								childObj = null;
