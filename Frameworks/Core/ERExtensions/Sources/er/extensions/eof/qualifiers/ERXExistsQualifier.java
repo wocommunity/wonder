@@ -316,25 +316,25 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
             // a trailing space for match and replace. This fails when the "t0" is the last breath of subExprStr so 
             // let us match and replace at the end of the string now.
             
-            if (subExprStr.endsWith("t0") || subExprStr.endsWith("T0")) {
+            if (StringUtils.endsWithIgnoreCase(subExprStr, " T0")) {
             	subExprStr = subExprStr.substring(0, subExprStr.length() - 2) + EXISTS_ALIAS + "0";
-            } else if (subExprStr.endsWith("t1") || subExprStr.endsWith("T1")) {
+            } else if (StringUtils.endsWithIgnoreCase(subExprStr, " T1")) {
             	subExprStr = subExprStr.substring(0, subExprStr.length() - 2) + EXISTS_ALIAS + "1";
-            } else if (subExprStr.endsWith("t2") || subExprStr.endsWith("T2")) {
+            } else if (StringUtils.endsWithIgnoreCase(subExprStr, " T2")) {
             	subExprStr = subExprStr.substring(0, subExprStr.length() - 2) + EXISTS_ALIAS + "2";
-            } else if (subExprStr.endsWith("t3") || subExprStr.endsWith("T3")) {
+            } else if (StringUtils.endsWithIgnoreCase(subExprStr, " T3")) {
             	subExprStr = subExprStr.substring(0, subExprStr.length() - 2) + EXISTS_ALIAS + "3";
-            } else if (subExprStr.endsWith("t4") || subExprStr.endsWith("T4")) {
+            } else if (StringUtils.endsWithIgnoreCase(subExprStr, " T4")) {
             	subExprStr = subExprStr.substring(0, subExprStr.length() - 2) + EXISTS_ALIAS + "4";
-            } else if (subExprStr.endsWith("t5") || subExprStr.endsWith("T5")) {
+            } else if (StringUtils.endsWithIgnoreCase(subExprStr, " T5")) {
             	subExprStr = subExprStr.substring(0, subExprStr.length() - 2) + EXISTS_ALIAS + "5";
-            } else if (subExprStr.endsWith("t6") || subExprStr.endsWith("T6")) {
+            } else if (StringUtils.endsWithIgnoreCase(subExprStr, " T6")) {
             	subExprStr = subExprStr.substring(0, subExprStr.length() - 2) + EXISTS_ALIAS + "6";
-            } else if (subExprStr.endsWith("t7") || subExprStr.endsWith("T7")) {
+            } else if (StringUtils.endsWithIgnoreCase(subExprStr, " T7")) {
             	subExprStr = subExprStr.substring(0, subExprStr.length() - 2) + EXISTS_ALIAS + "7";
-            } else if (subExprStr.endsWith("t8") || subExprStr.endsWith("T8")) {
+            } else if (StringUtils.endsWithIgnoreCase(subExprStr, " T8")) {
             	subExprStr = subExprStr.substring(0, subExprStr.length() - 2) + EXISTS_ALIAS + "8";
-            } else if (subExprStr.endsWith("t9") || subExprStr.endsWith("T9")) {
+            } else if (StringUtils.endsWithIgnoreCase(subExprStr, " T9")) {
             	subExprStr = subExprStr.substring(0, subExprStr.length() - 2) + EXISTS_ALIAS + "9";
             }
             
