@@ -428,7 +428,7 @@ public class ERXFileUtilities {
 	    if (s == null) throw new NullPointerException("string argument cannot be null");
 	    if (f == null) throw new NullPointerException("file argument cannot be null");
 	    
-	    byte[] bytes = s.getBytes(charset());
+	    byte[] bytes = s.getBytes(charset().name());
 	    ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
 	    writeInputStreamToGZippedFile(bais, f);
     }
@@ -536,7 +536,7 @@ public class ERXFileUtilities {
      * @throws IOException if things go wrong
      */
     public static String stringFromGZippedFile(File f) throws IOException {
-        return new String(bytesFromGZippedFile(f), charset());
+        return new String(bytesFromGZippedFile(f), charset().name());
     }
  	
     /**
@@ -547,7 +547,7 @@ public class ERXFileUtilities {
      * @throws IOException if things go wrong
      */
     public static String stringFromFile(File f) throws IOException {
-        return new String(bytesFromFile(f), charset());
+        return new String(bytesFromFile(f), charset().name());
     }
 
     /**
@@ -560,7 +560,7 @@ public class ERXFileUtilities {
      */
     public static String stringFromFile(File f, String encoding) throws IOException {
         if (encoding == null) {
-            return new String(bytesFromFile(f), charset());
+            return new String(bytesFromFile(f), charset().name());
         }
         return new String(bytesFromFile(f), encoding);
     }
