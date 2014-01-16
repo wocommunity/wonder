@@ -418,7 +418,7 @@ public class ERXMailAppender extends AppenderSkeleton {
         if (getTitle() != null) {
             composeTitle = getTitle();
         } else {
-            StringBuffer temp = new StringBuffer();
+            StringBuilder temp = new StringBuilder();
             if (titleIncludesPriorityLevelAsBoolean()) {
                 temp.append(event.getLevel().toString() + ": ");
             }

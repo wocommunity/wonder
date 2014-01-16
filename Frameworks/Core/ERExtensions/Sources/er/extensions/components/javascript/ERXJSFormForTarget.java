@@ -39,7 +39,7 @@ public class ERXJSFormForTarget extends WOComponent {
     public String targetString(){
         String result = "";
         if(targetDictionary != null){
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder buffer = new StringBuilder();
             buffer.append( targetDictionary.valueForKey("targetName")!=null ?
                            targetDictionary.valueForKey("targetName") : "foobar");
             buffer.append(":width=");

@@ -1088,7 +1088,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      */
     // FIXME: Needs to find a better home.
     public static String userPreferencesKeyFromContext(String key, NSKeyValueCoding context) {
-        StringBuffer result=new StringBuffer(key);
+        StringBuilder result = new StringBuilder(key);
         result.append('.');
         String pc=(String)context.valueForKey("pageConfiguration");
         if (pc==null || pc.length()==0) {

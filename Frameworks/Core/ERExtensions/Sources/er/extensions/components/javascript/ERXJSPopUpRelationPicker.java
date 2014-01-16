@@ -265,9 +265,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
 
     public String jsString() {
         // this method returns all the javascript we need to embed in the web page.
-        StringBuffer returnString;
-
-        returnString = new StringBuffer(2000);
+        StringBuilder returnString = new StringBuilder(2000);
         returnString.append("\n");
 
         // This Javascript string builds an array of Entity objects on the browser end.
@@ -277,9 +275,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
     }
 
     public String hiddenFormElementStrings() {
-        StringBuffer returnString;
-
-        returnString = new StringBuffer(500);
+        StringBuilder returnString  = new StringBuilder(500);
         returnString.append("\n<script language=\"JavaScript\">");
 		String childToSelect = "";
 		if (!multiple() && 
@@ -401,7 +397,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         // here's an example of the string this method should return:
         //var parentschildren = new Array(new Entity("dogs","1",new Array(new Entity("poodle","4",null,false),new Entity("puli","5",null,true),new Entity("greyhound","5",null,false)),false), new Entity("fish","2",new Array(new Entity("trout","6",null,true),new Entity("mackerel","7",null,false),new Entity("bass","8",null,false)),true), new Entity("birds","3",new Array(new Entity("robin","9",null,false),new Entity("hummingbird","10",null,false),new Entity("crow","11",null,true)),false));
 
-        StringBuffer returnString = new StringBuffer(1000);
+        StringBuilder returnString = new StringBuilder(1000);
         returnString.append("var "+objectsArrayName+" = [");
 
         int iCount = parentEntitiesList().count();

@@ -876,7 +876,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
       // inside of EOSQLExpression because it's not actually part of the entity,
       // so you can't order-by one of these attributes.  So we just have to stick
       // it on the end and hope for the best.
-      StringBuffer sqlBuffer = new StringBuffer(sqlExpression.statement());
+      StringBuilder sqlBuffer = new StringBuilder(sqlExpression.statement());
       int orderByIndex = sqlHelper._orderByIndex(sqlExpression);
       sqlBuffer.insert(orderByIndex, " ORDER BY tagCount DESC");
       sqlExpression.setStatement(sqlBuffer.toString());

@@ -177,7 +177,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 					capturedThreadName = names.get(Thread.currentThread());
 				}
 				
-				StringBuffer sb = new StringBuffer();
+				StringBuilder sb = new StringBuilder();
 				sb.append("\nRequest Thread Name: ").append(capturedThreadName).append("\n\n");
 				for (Iterator iterator = traces.keySet().iterator(); iterator.hasNext();) {
 					Thread t = (Thread) iterator.next();

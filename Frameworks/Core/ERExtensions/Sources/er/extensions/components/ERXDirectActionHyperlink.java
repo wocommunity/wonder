@@ -172,7 +172,7 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
         // Typically, something like "DirectActionClass/actionMethod".
         // Keep consistency with directActionName semantics as it is defined in directActionHref static method
         if(hasBinding("actionClass")) {
-            StringBuffer daBuffer = new StringBuffer();
+            StringBuilder daBuffer = new StringBuilder();
             daBuffer.append(valueForBinding("actionClass"));
             daBuffer.append('/');
             daBuffer.append(valueForBinding("directActionName"));

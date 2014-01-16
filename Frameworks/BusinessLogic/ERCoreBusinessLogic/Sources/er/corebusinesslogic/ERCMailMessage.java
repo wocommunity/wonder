@@ -183,7 +183,7 @@ public class ERCMailMessage extends _ERCMailMessage {
      * @return very verbose description of the mail message.
      */
     public String longDescription() {
-        StringBuffer sb=new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("To: ");
         sb.append(toAddresses());
         sb.append("\n");
@@ -204,7 +204,7 @@ public class ERCMailMessage extends _ERCMailMessage {
 
     @Override
     public String toString() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("To: ");
         sb.append(toAddresses());
         sb.append("\n");

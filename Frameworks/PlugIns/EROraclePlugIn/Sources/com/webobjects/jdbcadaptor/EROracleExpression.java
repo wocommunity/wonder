@@ -255,7 +255,7 @@ public class EROracleExpression extends OracleExpression {
                                                         String joinClause,
                                                         String orderByClause,
                                                         String lockClause) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append(selectString);
         sb.append(columnList);
         // AK: using DISTINCT with ORDER BY UPPER(foo) is an error if it is not

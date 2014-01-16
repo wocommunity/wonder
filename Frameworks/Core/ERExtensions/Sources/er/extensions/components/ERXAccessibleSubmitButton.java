@@ -141,7 +141,7 @@ public class ERXAccessibleSubmitButton  extends ERXSubmitButton {
 		String accesskeyElement = accesskeyElement(component);
 		int index = value.indexOf(accessKey);
 		if (index != -1) {
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			sb.append(value.substring(0, index));
 			sb.append("<");
 			sb.append(accesskeyElement);

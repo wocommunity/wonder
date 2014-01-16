@@ -232,7 +232,7 @@ public class ERXJDBCUtilities {
 			String[] columnNamesWithoutQuotes = columnsFromAttributes(attributes, false);
 
 			// build the select statement, this selects -all- rows
-			StringBuffer selectBuf = new StringBuffer();
+			StringBuilder selectBuf = new StringBuilder();
 			selectBuf.append("select ");
 			selectBuf.append(columnsFromAttributesAsArray(attributes, _quoteSource).componentsJoinedByString(", ")).append(" from ");
 			if (_quoteSource) {
@@ -254,7 +254,7 @@ public class ERXJDBCUtilities {
 			String sql = selectBuf.toString();
 			Statement stmt = _source.createStatement();
 
-			StringBuffer insertBuf = new StringBuffer();
+			StringBuilder insertBuf = new StringBuilder();
 			insertBuf.append("insert into ");
 			if (_quoteDestination) {
 				insertBuf.append("\"" + tableName + "\"");
@@ -370,7 +370,7 @@ public class ERXJDBCUtilities {
 	}
 
 	public static String jdbcTimestamp(NSTimestamp t) {
-		StringBuffer b = new StringBuffer();
+		StringBuilder b = new StringBuilder();
 		b.append("TIMESTAMP '").append(TIMESTAMP_FORMATTER.format(t)).append("'");
 		return b.toString();
 	}

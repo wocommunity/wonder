@@ -122,7 +122,7 @@ public abstract class PayPalSingleItemLinkBase extends WOComponent {
      * @return String
      */
     protected String defaultNotificationURL() {
-        StringBuffer notURL = new StringBuffer();
+        StringBuilder notURL = new StringBuilder();
         WOApplication app = application();
 
         //check if we're in directConnect mode

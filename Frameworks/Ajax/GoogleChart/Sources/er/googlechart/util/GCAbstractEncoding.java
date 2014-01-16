@@ -23,7 +23,7 @@ public abstract class GCAbstractEncoding {
   }
 
   public String encode(Number maxValue, List<List<Number>> dataSets) {
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     sb.append(encodingKey());
     sb.append(":");
     if (dataSets != null && !dataSets.isEmpty()) {

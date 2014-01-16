@@ -249,7 +249,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 			message = message.trim();
 		}
 
-		StringBuffer uri = new StringBuffer();
+		StringBuilder uri = new StringBuilder();
 		Conversation conversation = _instantMessengerConnectionNamed(screenName).conversationForBuddyNamed(buddyName, _conversationTimeout);
 		String requestUrl = conversation.requestUrl();
 		if (requestUrl == null) {

@@ -144,7 +144,7 @@ public class EGSimpleTableParser {
     
     private String keyPathToAttributeString(String aString) {
         int i, cnt = aString.length();
-        StringBuffer result = new StringBuffer(cnt*2);
+        StringBuilder result = new StringBuilder(cnt*2);
         for(i = 0; i < cnt; i++) {
             char c = aString.charAt(i);
             if(Character.isUpperCase(c)) {
@@ -160,7 +160,7 @@ public class EGSimpleTableParser {
     private String attributeStringToKeyPath(String aString) {
         int i, cnt = aString.length();
         boolean upperNext = false;
-        StringBuffer result = new StringBuffer(cnt*2);
+        StringBuilder result = new StringBuilder(cnt*2);
         for(i = 0; i < cnt; i++) {
             char c = aString.charAt(i);
             if(upperNext) {

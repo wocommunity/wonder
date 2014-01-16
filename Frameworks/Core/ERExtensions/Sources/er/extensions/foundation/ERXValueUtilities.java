@@ -827,7 +827,7 @@ public class ERXValueUtilities {
 	 */
 	public static String stringArrayToString(String[] sa) {
 		if((sa == null) || (sa.length <= 0)) return null;
-		StringBuffer sbuff = new StringBuffer();
+		StringBuilder sbuff = new StringBuilder();
 		int len = sa.length;
 		for(int loop = 0; loop < len; loop++){
 			sbuff.append(sa[loop]);

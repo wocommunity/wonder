@@ -117,7 +117,7 @@ public class ERXWOTelField extends ERXWOInput {
 
   @Override
   public String toString() {
-    StringBuffer stringbuffer = new StringBuffer();
+    StringBuilder stringbuffer = new StringBuilder();
     stringbuffer.append("<");
     stringbuffer.append(getClass().getName());
     stringbuffer.append(" placeholder=" + _placeholder);

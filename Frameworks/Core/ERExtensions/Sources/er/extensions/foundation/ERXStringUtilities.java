@@ -2376,7 +2376,7 @@ public class ERXStringUtilities {
      */
     // FIXME: this is so simplistic it will break if you sneeze
     public static String removeHTMLTagsFromString(String s) {
-        StringBuffer result=new StringBuffer();
+        StringBuilder result = new StringBuilder();
         if (s != null && s.length()>0) {
             int position=0;
             while (position<s.length()) {
@@ -2414,7 +2414,7 @@ public class ERXStringUtilities {
         StringTokenizer tokenizer = new StringTokenizer(value, "<", false);
         int token = value.charAt(0) == '<' ? 0 : 1;
         String nextPart = null;
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         int currentLength = result.length();
         while (tokenizer.hasMoreTokens() && currentLength < length && currentLength < value.length()) {
             if(token == 0)

@@ -996,7 +996,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		}
 
 		private void reportErrors() {
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			String message = null;
 			NSArray<String> keys = ERXArrayUtilities.sortedArraySortedWithKey(packages.allKeys(), "toString");
 			for (Enumeration<String> enumerator = keys.objectEnumerator(); enumerator.hasMoreElements();) {
@@ -1010,7 +1010,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			if (message.length() > 0) {
 				startupLog.debug("The following packages appear multiple times:\n" + message);
 			}
-			sb = new StringBuffer();
+			sb = new StringBuilder();
 			NSMutableSet<String> classPackages = new NSMutableSet<String>();
 			keys = ERXArrayUtilities.sortedArraySortedWithKey(classes.allKeys(), "toString");
 			for (Enumeration<String> enumerator = keys.objectEnumerator(); enumerator.hasMoreElements();) {
@@ -2722,7 +2722,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	
 	protected void _debugValueForDeclarationNamed(WOComponent component, String verb, String aDeclarationName, String aDeclarationType, String aBindingName, String anAssociationDescription, Object aValue) {
 		if (aValue instanceof String) {
-			StringBuffer stringbuffer = new StringBuffer(((String) aValue).length() + 2);
+			StringBuilder stringbuffer = new StringBuilder(((String) aValue).length() + 2);
 			stringbuffer.append('"');
 			stringbuffer.append(aValue);
 			stringbuffer.append('"');
@@ -2732,7 +2732,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			aDeclarationName = "[inline]";
 		}
 
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 
 		//NSArray<WOComponent> componentPath = ERXWOContext._componentPath(ERXWOContext.currentContext());
 		//componentPath.lastObject()

@@ -24,7 +24,7 @@ public class Movie extends _Movie {
     	if (log.isDebugEnabled()) {
     		log.debug( "Movie.searchableContent: " + title() );
     	}
-    	StringBuffer buffer = new StringBuffer();
+    	StringBuilder buffer = new StringBuilder();
     	
     	buffer.append(title());
     	buffer.append(" ");

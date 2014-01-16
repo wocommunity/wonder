@@ -146,7 +146,7 @@ public class MTAjaxAutoComplete extends AjaxComponent {
 	}	
 
 	String listeJS() {
-		StringBuffer str = new StringBuffer();
+		StringBuilder str = new StringBuilder();
 		str.append("new Array(");
 		@SuppressWarnings("unchecked")
 		NSArray<Object> list = (NSArray<Object>) valueForBinding("list");

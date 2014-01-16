@@ -327,7 +327,7 @@ public class ERXTimestampUtilities {
      * @return a SimpleDateFormat pattern
      */
     public static String simpleDateFormatForNSTimestampFormat(String timestampFormatterPattern) {
-    	StringBuffer dateFormat = new StringBuffer(timestampFormatterPattern.length());
+    	StringBuilder dateFormat = new StringBuilder(timestampFormatterPattern.length());
     	int length = timestampFormatterPattern.length();
     	for (int i = 0; i < length; i ++) {
     		char ch = timestampFormatterPattern.charAt(i);

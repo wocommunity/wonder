@@ -706,7 +706,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 		String result = "";
 		NSDictionary targetDictionary = (NSDictionary) d2wContext().valueForKey("targetDictionary");
 		if (targetDictionary != null) {
-			StringBuffer buffer = new StringBuffer();
+			StringBuilder buffer = new StringBuilder();
 			buffer.append(targetDictionary.valueForKey("targetName") != null ? targetDictionary.valueForKey("targetName") : "foobar");
 			buffer.append(":width=");
 			buffer.append(targetDictionary.valueForKey("width") != null ? targetDictionary.valueForKey("width") : "{window.screen.width/2}");

@@ -246,7 +246,7 @@ public class ERXConfigurationManager {
             }
             else {
                 if (WOApplication.application() != null) {
-                    StringBuffer appSpecificTouchFile = new StringBuffer();
+                    StringBuilder appSpecificTouchFile = new StringBuilder();
                     
                     appSpecificTouchFile.append(propertiesTouchFile.substring(0, appNamePlaceHolderIndex + 1));
                     appSpecificTouchFile.append(WOApplication.application().name());
@@ -255,7 +255,7 @@ public class ERXConfigurationManager {
                     registerForFileNotification(appSpecificTouchFile.toString(), "updateAllSystemProperties");
                 }
                 
-                StringBuffer globalTouchFile = new StringBuffer();
+                StringBuilder globalTouchFile = new StringBuilder();
                 
                 globalTouchFile.append(propertiesTouchFile.substring(0, appNamePlaceHolderIndex + 1));
                 globalTouchFile.append(propertiesTouchFile.substring(appNamePlaceHolderIndex + appNamePlaceHolder.length()));

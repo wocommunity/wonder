@@ -171,7 +171,7 @@ public class ERCNSnapshot implements Serializable {
     @Override
     public String toString() {
         if (_toString == null) {
-            StringBuffer sbuf = new StringBuffer();
+            StringBuilder sbuf = new StringBuilder();
             sbuf.append("<").append(getClass().getName()).append("\n");
             
             sbuf.append(" sender: ").append(senderHost()).append(":")
@@ -188,7 +188,7 @@ public class ERCNSnapshot implements Serializable {
     }
     
     private String _summaryForChangeType(NSDictionary objectsGroupedByEntity) {
-        StringBuffer sbuf = new StringBuffer();
+        StringBuilder sbuf = new StringBuilder();
         if (objectsGroupedByEntity.allKeys().count() == 0) {
             sbuf.append("none \n");
         } else {

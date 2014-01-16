@@ -233,9 +233,9 @@ public class ERD2WModel extends D2WModel {
     }
 
     protected String descriptionForRuleSet(NSArray set) {
-        StringBuffer buffer = new StringBuffer();
         for (Enumeration e = set.objectEnumerator(); e.hasMoreElements();)
             buffer.append("\t" + descriptionForRule((Rule)e.nextElement()) + "\n");
+        StringBuilder buffer = new StringBuilder();
         return buffer.toString();
     }
 

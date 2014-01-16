@@ -338,7 +338,7 @@ public abstract class GCAbstractChart extends WODynamicElement {
       chartUrl.setQueryParameter("chg", (String) _gridLines.valueInComponent(component));
     }
     else if (_gridXStep != null || _gridYStep != null || _gridLineSize != null || _gridBlankSize != null) {
-      StringBuffer chg = new StringBuffer();
+      StringBuilder chg = new StringBuilder();
       if (_gridXStep != null && _gridYStep != null) {
         chg.append(_gridXStep.valueInComponent(component));
         chg.append(",");
@@ -366,7 +366,7 @@ public abstract class GCAbstractChart extends WODynamicElement {
       chartUrl.setQueryParameter("chg", chg.toString());
     }
 
-    StringBuffer fill = new StringBuffer();
+    StringBuilder fill = new StringBuilder();
 
     String backgroundStyle = "solid";
     if (_backgroundStyle != null) {
@@ -419,7 +419,7 @@ public abstract class GCAbstractChart extends WODynamicElement {
 
     NSArray<Object> axisLabels = AjaxUtils.arrayValueForAssociation(component, _axisLabels);
     if (axisLabels != null) {
-      StringBuffer axisLabelsStr = new StringBuffer();
+      StringBuilder axisLabelsStr = new StringBuilder();
       for (int i = 0; i < axisLabels.count(); i++) {
         Object singleAxisLabels = axisLabels.objectAtIndex(i);
         if (i > 0) {

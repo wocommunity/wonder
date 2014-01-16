@@ -352,7 +352,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
         if (exception instanceof NSForwardException) {
             exception = ((NSForwardException)exception).originalException();
         }
-        StringBuffer s = new StringBuffer();
+        StringBuilder s = new StringBuilder();
         try {
             s.append(" **** Caught: "+exception + "\n");
             s.append(extraInfoString(extraInfo, 3));

@@ -291,7 +291,7 @@ public class MTAjaxUpdateLink extends AjaxUpdateLink {
 			if(updateContainerID == null) {
 				throw new WODynamicElementCreationException("You cannot specify an effect without an updateContainerID.");
 			}
-			StringBuffer effectBuffer = new StringBuffer();
+			StringBuilder effectBuffer = new StringBuilder();
 			effectBuffer.append("function() { ");
 			if(effect.equals("tween")) {
 				if(duration != null) {

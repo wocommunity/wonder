@@ -94,7 +94,7 @@ public class GCBarChart extends GCAbstractChart {
     String stackedKey = (stacked) ? "s" : "g";
     chartUrl.setQueryParameter("cht", "b" + orientationKey + stackedKey);
 
-    StringBuffer chbh = new StringBuffer();
+    StringBuilder chbh = new StringBuilder();
     String barWidth = "23";
     String spacing = "4";
     if (_barWidth != null) {

@@ -851,7 +851,7 @@ public class ERXPropertyListSerialization {
 							break;
 						case DATA:
 							try {
-								StringBuffer stringbuffer = new StringBuffer(_curChars.length());
+								StringBuilder stringbuffer = new StringBuilder(_curChars.length());
 								for (int i = 0; i < _curChars.length(); i++)
 									if (!Character.isWhitespace(_curChars.charAt(i)))
 										stringbuffer.append(_curChars.charAt(i));

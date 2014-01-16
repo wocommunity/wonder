@@ -102,7 +102,7 @@ public class PayPalEmailURLUTF8Encoder
    */
   public static String encode(String s)
   {
-    StringBuffer sbuf = new StringBuffer();
+    StringBuilder sbuf = new StringBuilder();
     int len = s.length();
     for (int i = 0; i < len; i++) {
         int ch = s.charAt(i);

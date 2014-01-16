@@ -319,7 +319,7 @@ public class ERXDictionaryUtilities {
 		if (separator == null) {
 			separator = "&";
 		}
-		StringBuffer sb = new StringBuffer(100);
+		StringBuilder sb = new StringBuilder(100);
 		if (dict != null) {
 			for (Enumeration<?> e = dict.allKeys().objectEnumerator(); e.hasMoreElements();) {
 				Object key = e.nextElement();

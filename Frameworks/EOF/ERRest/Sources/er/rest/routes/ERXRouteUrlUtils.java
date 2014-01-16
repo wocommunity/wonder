@@ -41,7 +41,7 @@ public class ERXRouteUrlUtils {
 	}
 
 	public static String actionUrlPathForEntity(String entityName, Object entityID, String action, String format) {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		ERXRouteRequestHandler requestHandler = (ERXRouteRequestHandler) WOApplication.application().requestHandlerForKey(ERXRouteRequestHandler.Key);
 		sb.append(requestHandler.controllerPathForEntityNamed(entityName));
 		if (entityID != null) {

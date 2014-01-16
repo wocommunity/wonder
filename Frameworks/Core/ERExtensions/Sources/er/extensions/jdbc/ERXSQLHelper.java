@@ -239,7 +239,7 @@ public class ERXSQLHelper {
 		optionsCreateTables.setObjectForKey("NO", EOSchemaGeneration.ForeignKeyConstraintsKey);
 		optionsCreateTables.setObjectForKey("NO", EOSchemaGeneration.CreateDatabaseKey);
 		optionsCreateTables.setObjectForKey("NO", EOSchemaGeneration.DropDatabaseKey);
-		StringBuffer sqlBuffer = new StringBuffer();
+		StringBuilder sqlBuffer = new StringBuilder();
 		EOSynchronizationFactory sf = ((JDBCAdaptor) adaptor).plugIn().synchronizationFactory();
 		String creationScript = sf.schemaCreationScriptForEntities(entities, optionsCreateTables);
 		sqlBuffer.append(creationScript);
@@ -399,7 +399,7 @@ public class ERXSQLHelper {
 		int i = 0;
 		String oldIndexName = null;
 		String lineSeparator = System.getProperty("line.separator");
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 
 		String commandSeparator = commandSeparatorString();
 
@@ -433,8 +433,8 @@ public class ERXSQLHelper {
 							i = 0;
 						}
 						oldIndexName = indexName;
-						StringBuffer localBuf = new StringBuffer();
-						StringBuffer columnBuf = new StringBuffer();
+						StringBuilder localBuf = new StringBuilder();
+						StringBuilder columnBuf = new StringBuilder();
 						boolean validIndex = false;
 						localBuf.append("create index " + indexName + " on " + entity.externalName() + "(");
 						for (Enumeration<String> attributes = NSArray.componentsSeparatedByString(attributeNames, ",").objectEnumerator(); attributes.hasMoreElements();) {
@@ -813,7 +813,7 @@ public class ERXSQLHelper {
 		}
 		groupByBuffer.insert(0, " GROUP BY ");
 
-		StringBuffer sqlBuffer = new StringBuffer(expression.statement());
+		StringBuilder sqlBuffer = new StringBuilder(expression.statement());
 		sqlBuffer.insert(_groupByOrHavingIndex(expression), groupByBuffer);
 		expression.setStatement(sqlBuffer.toString());
 	}
@@ -832,13 +832,13 @@ public class ERXSQLHelper {
 		Integer integerValue = Integer.valueOf(value);
 		String operatorString = expression.sqlStringForSelector(selector, integerValue);
 
-		StringBuffer havingBuffer = new StringBuffer();
+		StringBuilder havingBuffer = new StringBuilder();
 		havingBuffer.append(" HAVING COUNT(*) ");
 		havingBuffer.append(operatorString);
 		havingBuffer.append(" ");
 		havingBuffer.append(integerValue);
 
-		StringBuffer sqlBuffer = new StringBuffer(expression.statement());
+		StringBuilder sqlBuffer = new StringBuilder(expression.statement());
 		sqlBuffer.insert(_groupByOrHavingIndex(expression), havingBuffer);
 		expression.setStatement(sqlBuffer.toString());
 	}
@@ -1274,7 +1274,7 @@ public class ERXSQLHelper {
 		if (valueArray.count() == 0) {
 			return "0=1";
 		}
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		NSArray attributePath = ERXEOAccessUtilities.attributePathForKeyPath(e.entity(), key);
 		EOAttribute attribute = (EOAttribute) attributePath.lastObject();
 		String sqlName;
@@ -1721,7 +1721,7 @@ public class ERXSQLHelper {
 			int i = 0;
 			String s = super.createSchemaSQLForEntitiesInModelWithNameAndOptions(entities, modelName, optionsCreate);
 			NSArray a = NSArray.componentsSeparatedByString(s, "/");
-			StringBuffer buf = new StringBuffer(s.length());
+			StringBuilder buf = new StringBuilder(s.length());
 			Pattern pattern = Pattern.compile(".*ALTER TABLE .* ADD CONSTRAINT (.*) FOREIGN KEY .* REFERENCES .* \\(.*\\) DEFERRABLE INITIALLY DEFERRED.*");
 			Pattern pattern2 = Pattern.compile("(.*ALTER TABLE .* ADD CONSTRAINT ).*( FOREIGN KEY .* REFERENCES .* \\(.*\\) DEFERRABLE INITIALLY DEFERRED.*)");
 			String lineSeparator = System.getProperty("line.separator");
@@ -2035,7 +2035,7 @@ public class ERXSQLHelper {
 
 		@Override
 		public String sqlForFullTextQuery(ERXFullTextQualifier qualifier, EOSQLExpression expression) {
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			sb.append("satisfies(");
 			sb.append(qualifier.indexName());
 			sb.append(", '");

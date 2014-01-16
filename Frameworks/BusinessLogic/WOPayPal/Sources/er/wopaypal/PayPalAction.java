@@ -73,7 +73,7 @@ public class PayPalAction extends WODirectAction {
         	ppEchoConnection = new WOHTTPConnection(sandboxSite, 80); // our echo to PayPal
         } 
         // assemble User-Agent header
-        StringBuffer ua = new StringBuffer();
+        StringBuilder ua = new StringBuilder();
         ua.append("WebObjects/ " + ERXProperties.webObjectsVersion() + " (");
         ua.append(System.getProperty("os.arch"));
         ua.append("; ");

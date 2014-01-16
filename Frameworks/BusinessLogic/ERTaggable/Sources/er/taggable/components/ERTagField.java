@@ -107,8 +107,8 @@ public class ERTagField extends er.extensions.components.ERXComponent {
   }
 
   public String javascriptAvailableTags() {
-    StringBuffer sb = new StringBuffer();
     sb.append("[");
+    StringBuilder sb = new StringBuilder();
     NSMutableArray<String> availableTags = availableTags().mutableClone();
     int availableTagsCount = availableTags.count();
     if (availableTagsCount > 0) {
