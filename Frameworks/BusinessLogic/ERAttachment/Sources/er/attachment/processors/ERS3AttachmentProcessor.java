@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.amazon.s3.AWSAuthConnection;
 import com.amazon.s3.Response;
 import com.silvasoftinc.s3.S3StreamObject;
@@ -148,6 +150,11 @@ public class ERS3AttachmentProcessor extends
 						e);
 			}
 
+		}
+
+		if(request.isSecure()) {
+			attachmentUrl = StringUtils.replaceOnce(attachmentUrl, "http://", "https://");
+			attachmentUrl = StringUtils.replaceOnce(attachmentUrl, ":80/", "/");
 		}
 
 		return attachmentUrl;
