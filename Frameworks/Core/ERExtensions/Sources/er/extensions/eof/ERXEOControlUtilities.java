@@ -2060,9 +2060,12 @@ public class ERXEOControlUtilities {
             String key=(String)e.nextElement();
             String value=(String)object.storedValueForKey(key);
             if (value!=null) {
-                String trimmedValue=value.trim();
-                if (trimmedValue.length()!=value.length())
-                    object.takeStoredValueForKey(trimmedValue,key);
+            	if (!EOUtilities.entityForObject(object.editingContext(), object).isReadOnly() &&
+					!EOUtilities.entityForObject(object.editingContext(), object).attributeNamed(key).isReadOnly()) {
+                    String trimmedValue=value.trim();
+                    if (trimmedValue.length()!=value.length())
+                        object.takeStoredValueForKey(trimmedValue,key);
+                }
             }
         }
     }
