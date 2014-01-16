@@ -266,10 +266,11 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
     public String jsString() {
         // this method returns all the javascript we need to embed in the web page.
         StringBuilder returnString = new StringBuilder(2000);
-        returnString.append("\n");
+        returnString.append('\n');
 
         // This Javascript string builds an array of Entity objects on the browser end.
-        returnString.append("" + objectArrayCreationString() + "\n");
+        returnString.append(objectArrayCreationString());
+        returnString.append('\n');
         if (jsLog.isDebugEnabled()) jsLog.debug("JSPopUpRelationPicker jsString  returnString is " + returnString);
         return returnString.toString();
     }
@@ -398,7 +399,9 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         //var parentschildren = new Array(new Entity("dogs","1",new Array(new Entity("poodle","4",null,false),new Entity("puli","5",null,true),new Entity("greyhound","5",null,false)),false), new Entity("fish","2",new Array(new Entity("trout","6",null,true),new Entity("mackerel","7",null,false),new Entity("bass","8",null,false)),true), new Entity("birds","3",new Array(new Entity("robin","9",null,false),new Entity("hummingbird","10",null,false),new Entity("crow","11",null,true)),false));
 
         StringBuilder returnString = new StringBuilder(1000);
-        returnString.append("var "+objectsArrayName+" = [");
+        returnString.append("var ");
+        returnString.append(objectsArrayName);
+        returnString.append(" = [");
 
         int iCount = parentEntitiesList().count();
         for (int i=0;i<iCount;i++) {
@@ -429,7 +432,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
                     returnString.append(" false");
                 }
                 returnString.append(", null");
-                returnString.append(")");
+                returnString.append(')');
                 if (j != jCount - 1) {
                     // append a comma and a space
                     returnString.append(", ");
@@ -444,7 +447,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
             }
             returnString.append(", ");
             returnString.append(defaultChild!=null ? "\""+defaultChildIndex+"\"" : "-1");
-            returnString.append(")");
+            returnString.append(')');
 
 
             if (i != iCount - 1) {

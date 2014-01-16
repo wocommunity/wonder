@@ -78,9 +78,9 @@ public class PayPalAction extends WODirectAction {
         ua.append(System.getProperty("os.arch"));
         ua.append("; ");
         ua.append(System.getProperty("os.name"));
-        ua.append(" ");
+        ua.append(' ');
         ua.append(System.getProperty("os.version"));
-        ua.append(")");
+        ua.append(')');
 
         NSMutableDictionary headers = new NSMutableDictionary();
         headers.setObjectForKey("en", "Accept-Language");

@@ -180,9 +180,9 @@ public class DB2PlugIn extends JDBCPlugIn {
       while (results.count() < count) {
         try {
           StringBuilder sql = new StringBuilder();
-          sql.append("SELECT ");
-          sql.append("next value for " + sequenceName + " AS KEY");
-          sql.append(" from sysibm.sysdummy1");
+          sql.append("SELECT next value for ");
+          sql.append(sequenceName);
+          sql.append(" AS KEY from sysibm.sysdummy1");
           expression.setStatement(sql.toString());
           channel.evaluateExpression(expression);
           try {

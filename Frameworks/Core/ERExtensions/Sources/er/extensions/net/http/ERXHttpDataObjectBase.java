@@ -259,9 +259,9 @@ public abstract class ERXHttpDataObjectBase {
     useragent.append(System.getProperty("os.arch"));
     useragent.append("; ");
     useragent.append(System.getProperty("os.name"));
-    useragent.append(" ");
+    useragent.append(' ');
     useragent.append(System.getProperty("os.version"));
-    useragent.append(")");
+    useragent.append(')');
     return useragent.toString();
   }
 

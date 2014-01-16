@@ -821,7 +821,7 @@ public class ERXKeyFilter {
 		if (!_lockedRelationships.isEmpty()) {
 			sb.append("; excludesRelationships=" + _lockedRelationships);
 		}
-		sb.append("]");
+		sb.append(']');
 		return sb.toString();
 	}
 	

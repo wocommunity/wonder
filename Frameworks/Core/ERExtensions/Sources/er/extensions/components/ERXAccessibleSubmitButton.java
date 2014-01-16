@@ -143,14 +143,14 @@ public class ERXAccessibleSubmitButton  extends ERXSubmitButton {
 		if (index != -1) {
 			StringBuilder sb = new StringBuilder();
 			sb.append(value.substring(0, index));
-			sb.append("<");
+			sb.append('<');
 			sb.append(accesskeyElement);
-			sb.append(">");
+			sb.append('>');
 			sb.append(accessKey);
 			sb.append("</");
 			int coIndex = accesskeyElement.indexOf(' ');
 			sb.append(coIndex == -1 ? accesskeyElement : accesskeyElement.substring(0, coIndex));
-			sb.append(">");
+			sb.append('>');
 			sb.append(value.substring(index + 1));
 			value = sb.toString();
 		}

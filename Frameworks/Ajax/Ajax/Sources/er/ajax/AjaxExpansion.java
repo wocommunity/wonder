@@ -143,7 +143,7 @@ public class AjaxExpansion extends AjaxComponent {
 			linkClassBuffer.append(" expanded");
 		}
 		if (linkClass != null) {
-			linkClassBuffer.append(" ");
+			linkClassBuffer.append(' ');
 			linkClassBuffer.append(linkClass);
 		}
 		return linkClassBuffer.toString();

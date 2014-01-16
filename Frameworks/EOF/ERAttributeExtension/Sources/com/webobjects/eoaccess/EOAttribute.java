@@ -163,22 +163,22 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 	public String _toString(int indent) {
 		String indentString = "";
 		for (int i = 0; i < indent; i++)
-			indentString = new StringBuilder().append(indentString).append("\t").toString();
+			indentString = new StringBuilder().append(indentString).append('\t').toString();
 
 		StringBuilder aLog = new StringBuilder();
-		aLog.append(new StringBuilder().append(indentString).append("<EOAttribute ").append(name()).append("\n").toString());
+		aLog.append(new StringBuilder().append(indentString).append("<EOAttribute ").append(name()).append('\n').toString());
 		String aKey = "";
 		try {
 			NSMutableDictionary aDictionary = new NSMutableDictionary();
 			encodeIntoPropertyList(aDictionary);
-			for (Enumeration enumerator = aDictionary.keyEnumerator(); enumerator.hasMoreElements(); aLog.append(new StringBuilder().append(indentString).append("\t").append(aKey).append(" : '").append(aDictionary.objectForKey(aKey)).append("'\n").toString()))
+			for (Enumeration enumerator = aDictionary.keyEnumerator(); enumerator.hasMoreElements(); aLog.append(new StringBuilder().append(indentString).append('\t').append(aKey).append(" : '").append(aDictionary.objectForKey(aKey)).append("'\n").toString()))
 				aKey = (String) enumerator.nextElement();
 
 		}
 		catch (Exception exception) {
-			aLog.append(new StringBuilder().append(indentString).append("\t").append(getClass().getName()).append(".toString: characteristics ").append(aKey).append(" exception ").append(exception).append("\n").toString());
+			aLog.append(new StringBuilder().append(indentString).append('\t').append(getClass().getName()).append(".toString: characteristics ").append(aKey).append(" exception ").append(exception).append('\n').toString());
 		}
-		aLog.append(new StringBuilder().append(indentString).append(">").toString());
+		aLog.append(new StringBuilder().append(indentString).append('>').toString());
 		return aLog.toString();
 	}
 
@@ -1140,7 +1140,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 			if (!valueClasses[valueType].isInstance(convertedValue) && (valueClasses[valueType] != Number.class || !(convertedValue instanceof Boolean))) {
 				EOEntity parentEntity = (EOEntity) parent();
 				String entityName = parentEntity == null ? "<unspecified>" : parentEntity.name();
-				throw new IllegalArgumentException(new StringBuilder().append("EOAttribute adaptorValueByConvertingAttributeValue(Object): Unable to convert value of class ").append(convertedValue.getClass().getName()).append(" for attribute '").append(name()).append("' in entity '").append(entityName).append("' to adaptor type EOAttribute.Adaptor").append(valueTypeNames[valueType]).append("Type.  Check the signature of the conversion method ").append(className()).append(".").append(conversionMethod == null ? "NotFound" : conversionMethod.name()).append("().").toString());
+				throw new IllegalArgumentException(new StringBuilder().append("EOAttribute adaptorValueByConvertingAttributeValue(Object): Unable to convert value of class ").append(convertedValue.getClass().getName()).append(" for attribute '").append(name()).append("' in entity '").append(entityName).append("' to adaptor type EOAttribute.Adaptor").append(valueTypeNames[valueType]).append("Type.  Check the signature of the conversion method ").append(className()).append('.').append(conversionMethod == null ? "NotFound" : conversionMethod.name()).append("().").toString());
 			}
 		}
 		return convertedValue;
@@ -1445,12 +1445,12 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 						value = _EOStringUtil.numberWithStringType(valueString, _valueTypeChar());
 				}
 				catch (Exception e) {
-					throw new com.webobjects.foundation.NSValidation.ValidationException(new StringBuilder().append("Error encountered converting value of class ").append(value.getClass().getName()).append(" to type specified in attribute '").append(name()).append("' of entity '").append(entity().name()).append("'").toString(), this, name());
+					throw new com.webobjects.foundation.NSValidation.ValidationException(new StringBuilder().append("Error encountered converting value of class ").append(value.getClass().getName()).append(" to type specified in attribute '").append(name()).append("' of entity '").append(entity().name()).append('\'').toString(), this, name());
 				}
 			}
 		}
 		if (value == null)
-			throw new com.webobjects.foundation.NSValidation.ValidationException(new StringBuilder().append("Error encountered converting null value to type specified in attribute '").append(name()).append("' of entity '").append(entity().name()).append("'").toString(), this, name());
+			throw new com.webobjects.foundation.NSValidation.ValidationException(new StringBuilder().append("Error encountered converting null value to type specified in attribute '").append(name()).append("' of entity '").append(entity().name()).append('\'').toString(), this, name());
 		int maxLen = width();
 		if (maxLen != 0) {
 			int currLength = 0;

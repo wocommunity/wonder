@@ -69,7 +69,7 @@ public class GCQRCode extends GCAbstractChart {
       }
       if (_margin != null) {
         if (chld.length() > 0) {
-          chld.append("|");
+          chld.append('|');
         }
         String margin = (String) _margin.valueInComponent(component);
         chld.append(margin);

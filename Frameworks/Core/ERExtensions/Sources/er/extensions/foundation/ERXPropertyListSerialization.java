@@ -3318,7 +3318,7 @@ public class ERXPropertyListSerialization {
 					} else {
 						buf.append(_objectTable.get(_keyref[i]));
 					}
-					buf.append(":");
+					buf.append(':');
 					if (_objref[i] < 0 || _objref[i] >= _objectTable.size()) {
 						buf.append("#" + _objref[i]);
 					} else if (_objectTable.get(_objref[i]) == this) {

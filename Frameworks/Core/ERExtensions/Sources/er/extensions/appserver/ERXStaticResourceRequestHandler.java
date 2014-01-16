@@ -134,7 +134,7 @@ public class ERXStaticResourceRequestHandler extends WORequestHandler {
 						if (requestHandlerPath == null || requestHandlerPath.length() == 0) {
 							sb.append(uri);
 						} else {
-							sb.append("/");
+							sb.append('/');
 							sb.append(requestHandlerPath);
 						}
 					}

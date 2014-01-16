@@ -1097,7 +1097,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
             if (e!=null) en=e.name();
             result.append("__");
             result.append(context.valueForKey("task"));
-            result.append("_");
+            result.append('_');
             result.append(en);
         } else {
             result.append(pc);

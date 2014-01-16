@@ -25,7 +25,7 @@ public abstract class GCAbstractEncoding {
   public String encode(Number maxValue, List<List<Number>> dataSets) {
     StringBuilder sb = new StringBuilder();
     sb.append(encodingKey());
-    sb.append(":");
+    sb.append(':');
     if (dataSets != null && !dataSets.isEmpty()) {
       NSMutableArray<String> encodedDataSets = new NSMutableArray<String>();
       for (List<Number> dataSet : dataSets) {

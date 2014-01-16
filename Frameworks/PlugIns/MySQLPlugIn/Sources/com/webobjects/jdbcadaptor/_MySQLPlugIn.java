@@ -557,7 +557,7 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 		    String nullStatement = allowsNull ? " NULL" : " NOT NULL";
 		    EOAttribute attribute = attributeInEntityWithColumnName(entityForTableName(tableName), columnName);
 		    String externalType = columnTypeStringForAttribute(attribute);
-		    return new NSArray<EOSQLExpression>(_expressionForString(new StringBuilder().append("ALTER TABLE ").append(formatTableName(tableName)).append(" MODIFY ").append(formatColumnName(columnName)).append(" ").append(externalType).append(nullStatement).toString()));
+		    return new NSArray<EOSQLExpression>(_expressionForString(new StringBuilder().append("ALTER TABLE ").append(formatTableName(tableName)).append(" MODIFY ").append(formatColumnName(columnName)).append(' ').append(externalType).append(nullStatement).toString()));
 		}
 		
 		@Override
@@ -570,7 +570,7 @@ public class _MySQLPlugIn extends JDBCPlugIn {
 		    EOAttribute attribute = attributeInEntityWithColumnName(entityForTableName(tableName), newName);
 		    String nullStatement = attribute.allowsNull() ? " NULL" : " NOT NULL";
 		    String externalType = columnTypeStringForAttribute(attribute);
-		    return new NSArray<EOSQLExpression>(_expressionForString(new StringBuilder().append("ALTER TABLE ").append(formatTableName(tableName)).append(" CHANGE ").append(formatColumnName(columnName)).append(" ").append(formatColumnName(newName)).append(" ").append(externalType).append(nullStatement).toString()));
+		    return new NSArray<EOSQLExpression>(_expressionForString(new StringBuilder().append("ALTER TABLE ").append(formatTableName(tableName)).append(" CHANGE ").append(formatColumnName(columnName)).append(' ').append(formatColumnName(newName)).append(' ').append(externalType).append(nullStatement).toString()));
 		}
 		
 		@Override

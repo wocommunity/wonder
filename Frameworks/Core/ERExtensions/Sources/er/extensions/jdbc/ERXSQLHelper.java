@@ -462,7 +462,7 @@ public class ERXSQLHelper {
 							if (usedColumns.indexOfObject(l) == NSArray.NotFound) {
 								buf.append(localBuf).append(l);
 								usedColumns.addObject(l);
-								buf.append(")").append(commandSeparator).append(lineSeparator);
+								buf.append(')').append(commandSeparator).append(lineSeparator);
 							}
 						}
 					}
@@ -522,7 +522,7 @@ public class ERXSQLHelper {
 							if (usedColumns.indexOfObject(l) == NSArray.NotFound) {
 								buf.append(localBuf).append(l);
 								usedColumns.addObject(l);
-								buf.append(")").append(commandSeparator).append(lineSeparator);
+								buf.append(')').append(commandSeparator).append(lineSeparator);
 							}
 						}
 					}
@@ -835,7 +835,7 @@ public class ERXSQLHelper {
 		StringBuilder havingBuffer = new StringBuilder();
 		havingBuffer.append(" HAVING COUNT(*) ");
 		havingBuffer.append(operatorString);
-		havingBuffer.append(" ");
+		havingBuffer.append(' ');
 		havingBuffer.append(integerValue);
 
 		StringBuilder sqlBuffer = new StringBuilder(expression.statement());
@@ -1296,7 +1296,7 @@ public class ERXSQLHelper {
 			int currentSize = (j + (maxPerQuery - 1) < valueArray.count() ? maxPerQuery : ((valueArray.count() % maxPerQuery)));
 			sb.append(sqlName);
 			sb.append(" IN ");
-			sb.append("(");
+			sb.append('(');
 			for (int i = j; i < j + currentSize; i++) {
 				if (i > j) {
 					sb.append(", ");
@@ -1314,7 +1314,7 @@ public class ERXSQLHelper {
 				}
 				sb.append(value);
 			}
-			sb.append(")");
+			sb.append(')');
 			if (j < valueArray.count() - maxPerQuery) {
 				sb.append(" OR ");
 			}
@@ -1763,7 +1763,7 @@ public class ERXSQLHelper {
 					buf.append(lineSeparator);
 				}
 				if (e.hasMoreElements()) {
-					buf.append("/");
+					buf.append('/');
 				}
 			}
 			return buf.toString();
@@ -2247,7 +2247,7 @@ public class ERXSQLHelper {
 			StringBuffer sql = new StringBuffer();
 			sql.append("ALTER TABLE `" + tableName + "` ADD UNIQUE `" + indexName + "` (");
 			_appendIndexColNames(sql, columnIndexes);
-			sql.append(")");
+			sql.append(')');
 			return sql.toString();
 		}
 		
@@ -2256,7 +2256,7 @@ public class ERXSQLHelper {
 			StringBuffer sql = new StringBuffer();
 			sql.append("CREATE INDEX `"+ indexName + "` ON `"+tableName+"` (");
 			_appendIndexColNames(sql, columnIndexes);
-			sql.append(")");
+			sql.append(')');
 			return sql.toString();
 		}
 

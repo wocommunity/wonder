@@ -1507,7 +1507,7 @@ public class ERXFileUtilities {
         sb.append( s.substring( 0, firstHalf ) );
         sb.append( elips );
         sb.append( s.substring( stringLength-secondHalf, stringLength ) );
-        sb.append( "." );
+        sb.append('.');
         sb.append( ext );
         return sb.toString();
     }

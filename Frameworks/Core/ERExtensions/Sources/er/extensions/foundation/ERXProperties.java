@@ -1639,7 +1639,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 			StringBuilder message = new StringBuilder();
 			message.append("\n\n").append("ERXProperties has found the following Properties files: \n");
 			message.append(projectsInfo.componentsJoinedByString("\n"));
-			message.append("\n");
+			message.append('\n');
 			message.append("ERXProperties currently has the following properties:\n");
 			message.append(ERXProperties.logString(ERXSystem.getProperties()));
 			// ERXLogger.configureLoggingWithSystemProperties();

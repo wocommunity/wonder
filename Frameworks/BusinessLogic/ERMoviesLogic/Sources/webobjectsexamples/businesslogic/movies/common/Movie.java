@@ -27,18 +27,18 @@ public class Movie extends _Movie {
     	StringBuilder buffer = new StringBuilder();
     	
     	buffer.append(title());
-    	buffer.append(" ");
+    	buffer.append(' ');
     	
     	String studioName = (String)valueForKeyPath(Movie.STUDIO.dot(Studio.NameKey).toString());
     	if (studioName != null) {
     		buffer.append(studioName);
-    		buffer.append(" ");
+    		buffer.append(' ');
     	}
     	
 		NSArray directorNames = (NSArray)valueForKeyPath(Movie.DIRECTORS.dot("fullName").toString());
 		if (directorNames != null && directorNames.count() > 0) {
 			buffer.append(directorNames.componentsJoinedByString(" "));
-			buffer.append(" ");
+			buffer.append(' ');
 		}
 		
 		NSArray talentNames = (NSArray)valueForKeyPath(Movie.ROLES.dot(MovieRole.TALENT).dot("fullName").toString());
@@ -46,7 +46,7 @@ public class Movie extends _Movie {
 			String talentNamesString = talentNames.componentsJoinedByString(" ");
 			NSLog.out.appendln( "Movie.searchableContent: talent names: " + talentNamesString);
 			buffer.append(talentNamesString);
-			buffer.append(" ");
+			buffer.append(' ');
 		}
 		if (log.isDebugEnabled()) {
 			log.debug( "Movie.content: " + buffer );

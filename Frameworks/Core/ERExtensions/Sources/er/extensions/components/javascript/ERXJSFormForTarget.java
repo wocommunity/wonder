@@ -48,7 +48,7 @@ public class ERXJSFormForTarget extends WOComponent {
             buffer.append(", height=");
             buffer.append( targetDictionary.valueForKey("height")!=null ?
                            targetDictionary.valueForKey("height") : "{myHeight}");
-            buffer.append(",");
+            buffer.append(',');
             buffer.append( ERXValueUtilities.booleanValueWithDefault(targetDictionary.valueForKey("scrollbars"), true) ? " " : "scrollbars");
             buffer.append(", {(isResizable)?'resizable':''}, status");
             //System.out.println("buffer = "+buffer.toString());

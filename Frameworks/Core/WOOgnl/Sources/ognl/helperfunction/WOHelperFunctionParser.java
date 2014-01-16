@@ -121,13 +121,13 @@ public class WOHelperFunctionParser {
 					currentBuffer.append("\"");
 				}
 				else if (tag.charAt(index) == 'n') {
-					currentBuffer.append("\n");
+					currentBuffer.append('\n');
 				}
 				else if (tag.charAt(index) == 'r') {
-					currentBuffer.append("\r");
+					currentBuffer.append('\r');
 				}
 				else if (tag.charAt(index) == 't') {
-					currentBuffer.append("\t");
+					currentBuffer.append('\t');
 				}
 				else {
 					currentBuffer.append('\\');
@@ -282,7 +282,7 @@ public class WOHelperFunctionParser {
 					helperFunctionName = helperFunctionName.substring(helperFunctionDotIndex + 1);
 				}
 				StringBuilder ognlKeyPath = new StringBuilder();
-				ognlKeyPath.append("~");
+				ognlKeyPath.append('~');
 				ognlKeyPath.append("@" + WOHelperFunctionRegistry.class.getName() + "@registry()._helperInstanceForFrameworkNamed(#this, \"");
 				ognlKeyPath.append(helperFunctionName);
 				ognlKeyPath.append("\", \"");
@@ -291,13 +291,13 @@ public class WOHelperFunctionParser {
 				ognlKeyPath.append(frameworkName);
 				ognlKeyPath.append("\").");
 				ognlKeyPath.append(helperFunctionName);
-				ognlKeyPath.append("(");
+				ognlKeyPath.append('(');
 				ognlKeyPath.append(targetKeyPath);
 				if (otherParams != null) {
-					ognlKeyPath.append(",");
+					ognlKeyPath.append(',');
 					ognlKeyPath.append(otherParams);
 				}
-				ognlKeyPath.append(")");
+				ognlKeyPath.append(')');
 				if (log.isDebugEnabled()) {
 					log.debug("Converted " + originalKeyPath + " into " + ognlKeyPath);
 				}

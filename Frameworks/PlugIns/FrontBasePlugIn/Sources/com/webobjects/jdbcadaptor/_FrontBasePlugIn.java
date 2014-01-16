@@ -485,7 +485,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 			attributesToFetch.addObject(generatedPrimaryKeyAttribute);
 		}
 
-		sql.append(")");
+		sql.append(')');
 
 		boolean pksGenerated = false;
 		EOSQLExpression eosqlexpression = expressionFactory().expressionForString(sql.toString());
@@ -832,7 +832,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 				NSArray<EOAttribute> attributes = relationship.sourceAttributes();
 
 				for (int i = 0; i < attributes.count(); i++) {
-					constraint.append("_");
+					constraint.append('_');
 					if (i != 0)
 						fkSql.append(", ");
 
@@ -844,7 +844,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 				}
 
 				fkSql.append(") REFERENCES ");
-				constraint.append("_");
+				constraint.append('_');
 
 				String referencedExternalName = relationship.destinationEntity().externalName();
 				fkSql.append(quoteTableName(referencedExternalName.toUpperCase()));
@@ -855,7 +855,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 				attributes = relationship.destinationAttributes();
 
 				for (int i = 0; i < attributes.count(); i++) {
-					constraint.append("_");
+					constraint.append('_');
 					if (i != 0)
 						fkSql.append(", ");
 
@@ -1136,9 +1136,9 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 					StringBuilder pkSql = new StringBuilder(" PRIMARY KEY (");
 
 					for (int j = 0; j < keys.count(); j++) {
-						constraint.append("_");
+						constraint.append('_');
 						if (j != 0)
-							pkSql.append(",");
+							pkSql.append(',');
 
 						pkSql.append("\"");
 						String columnName = entity.attributeNamed(keys.objectAtIndex(j)).columnName();
@@ -1550,7 +1550,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 				sb.append(orderByClause);
 			}
 			if (lockClause != null && lockClause.length() > 0) {
-				sb.append(" ");
+				sb.append(' ');
 				sb.append(lockClause);
 			}
 			return sb.toString();
@@ -1732,16 +1732,16 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 				value = sqlStringForValue(qualifier, attrubute);
 
 				sql.append(column);
-				sql.append(" ");
+				sql.append(' ');
 				sql.append(sqlStringForSelector(nsselector, qualifier));
-				sql.append(" ");
+				sql.append(' ');
 				sql.append(value);
 			}
 
 			if (value.indexOf(sqlEscapeChar) != -1 && flag) {
 				sql.append(" ESCAPE '");
 				sql.append(sqlEscapeChar);
-				sql.append("'");
+				sql.append('\'');
 			}
 			return sql.toString();
 		}
@@ -1796,7 +1796,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 					StringBuffer time = new StringBuffer("TIME '");
 					Date d = (Date)eoattribute.adaptorValueByConvertingAttributeValue(obj);
 					TIME_FORMATTER.get().format(d, time, new FieldPosition(0));
-					time.append("'");
+					time.append('\'');
 					return time.toString();
 				}
 
@@ -1806,7 +1806,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 					SimpleDateFormat formatter = TIME_FORMATTER.get();
 					formatter.format(d, time, new FieldPosition(0));
 					time.append(getTimeZone(formatter.getTimeZone()));
-					time.append("'");
+					time.append('\'');
 					return time.toString();
 				}
 
@@ -1814,7 +1814,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 					StringBuffer time = new StringBuffer("TIMESTAMP '");
 					Date d = (Date)eoattribute.adaptorValueByConvertingAttributeValue(obj);
 					TIMESTAMP_FORMATTER.get().format(d, time, new FieldPosition(0));
-					time.append("'");
+					time.append('\'');
 					return time.toString();
 				}
 				case FrontBaseTypes.FB_TimestampTZ: {
@@ -1823,14 +1823,14 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 					SimpleDateFormat formatter = TIMESTAMP_FORMATTER.get();
 					formatter.format(d, time, new FieldPosition(0));
 					time.append(getTimeZone(formatter.getTimeZone()));
-					time.append("'");
+					time.append('\'');
 					return time.toString();
 				}
 				case FrontBaseTypes.FB_Date: {
 					StringBuffer time = new StringBuffer("DATE '");
 					Date d = (Date)eoattribute.adaptorValueByConvertingAttributeValue(obj);
 					DATE_FORMATTER.get().format(d, time, new FieldPosition(0));
-					time.append("'");
+					time.append('\'');
 					return time.toString();
 				}
 				case FrontBaseTypes.FB_Boolean: {
@@ -1976,7 +1976,7 @@ public class _FrontBasePlugIn extends JDBCPlugIn {
 				result.append(heximals[b % 16]);
 			}
 
-			result.append("'");
+			result.append('\'');
 			return result.toString();
 		}
 

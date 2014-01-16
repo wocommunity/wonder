@@ -114,13 +114,17 @@ public class ERXWOEmailField extends ERXWOInput {
   @Override
   public String toString() {
     StringBuilder stringbuffer = new StringBuilder();
-    stringbuffer.append("<");
+    stringbuffer.append('<');
     stringbuffer.append(getClass().getName());
-    stringbuffer.append(" placeholder=" + _placeholder);
-    stringbuffer.append(" pattern=" + _pattern);
-    stringbuffer.append(" size=" + _size);
-    stringbuffer.append(" maxlength=" + _maxlength);
-    stringbuffer.append(">");
+    stringbuffer.append(" placeholder=");
+    stringbuffer.append(_placeholder);
+    stringbuffer.append(" pattern=");
+    stringbuffer.append(_pattern);
+    stringbuffer.append(" size=");
+    stringbuffer.append(_size);
+    stringbuffer.append(" maxlength=");
+    stringbuffer.append(_maxlength);
+    stringbuffer.append('>');
     return stringbuffer.toString();
   }
 }

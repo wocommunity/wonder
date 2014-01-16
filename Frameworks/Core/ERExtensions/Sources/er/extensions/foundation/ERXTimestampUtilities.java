@@ -356,7 +356,7 @@ public class ERXTimestampUtilities {
     				dateFormat.append("dd");
     				break;
     			case 'e':
-    				dateFormat.append("d");
+    				dateFormat.append('d');
     				break;
     			case 'F':
     				dateFormat.append("SSS");
@@ -398,13 +398,13 @@ public class ERXTimestampUtilities {
     				dateFormat.append("yyyy");
     				break;
     			case 'z':
-    				dateFormat.append("Z");
+    				dateFormat.append('Z');
     				break;
     			case 'Z':
-    				dateFormat.append("z");
+    				dateFormat.append('z');
     				break;
     			default:
-    				dateFormat.append("%"); // (this is what NSTimstampFormatter did)
+    				dateFormat.append('%'); // (this is what NSTimstampFormatter did)
     			}
     		}
     		else {

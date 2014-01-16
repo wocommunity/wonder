@@ -170,7 +170,7 @@ public class AjaxModalDialogOpener extends AjaxComponent {
 		// onSuccess callback handler to open AMD
 		StringBuilder sb = new StringBuilder(500);
 		sb.append(AjaxModalDialog.openDialogFunctionName(modalDialogId()));
-		sb.append("(");	
+		sb.append('(');	
 		
 		// Override for dialog name
 		if (hasBinding("title")) {	

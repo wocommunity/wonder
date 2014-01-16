@@ -325,7 +325,7 @@ public class ERXJSToManyRelationshipEditor extends ERXNonSynchronizingComponent 
         sb.append("var ").append(editorName()).append(" = new ERXJSToManyRelationshipEditor();\n");
         sb.append(editorName).append(".elementID = '").append(safeElementID).append("';\n");
         sb.append(editorName).append(".possibleValues = ").append(possibleValuesHashForScript()).append(";\n");
-        sb.append(editorName).append(".selectedValues = ").append(selectedValuesArrayForScript()).append(";");
+        sb.append(editorName).append(".selectedValues = ").append(selectedValuesArrayForScript()).append(';');
         return sb.toString();
     }
 

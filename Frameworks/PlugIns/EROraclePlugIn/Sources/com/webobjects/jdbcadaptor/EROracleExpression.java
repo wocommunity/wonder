@@ -300,7 +300,7 @@ public class EROracleExpression extends OracleExpression {
             sb.append(orderByClause);
         }
         if (lockClause != null && lockClause.length() > 0) {
-            sb.append(" ");
+            sb.append(' ');
             sb.append(lockClause);
         }
         if (_fetchLimit != 0) {

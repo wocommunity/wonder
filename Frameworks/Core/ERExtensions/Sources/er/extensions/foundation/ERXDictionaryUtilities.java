@@ -325,7 +325,7 @@ public class ERXDictionaryUtilities {
 				Object key = e.nextElement();
 				try {
 					sb.append(URLEncoder.encode(key.toString(), encoding));
-					sb.append("=");
+					sb.append('=');
 					sb.append(URLEncoder.encode(dict.objectForKey(key).toString(), encoding));
 					if (e.hasMoreElements()) {
 						sb.append(separator);

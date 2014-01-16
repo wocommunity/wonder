@@ -1360,11 +1360,11 @@ public class ERXEOAccessUtilities {
 		        if (i != 0)
 		            sb.append(", ");
 		        sb.append(i + 1);
-		        sb.append(":");
+		        sb.append(':');
 		        sb.append(obj);
-		        sb.append("[");
+		        sb.append('[');
 		        sb.append(attributeName);
-		        sb.append("]");
+		        sb.append(']');
 		    }
 		}
 

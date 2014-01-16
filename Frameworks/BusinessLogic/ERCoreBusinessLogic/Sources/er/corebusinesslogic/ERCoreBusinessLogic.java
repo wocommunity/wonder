@@ -329,7 +329,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
 	                valueIndent.append("\n         ");
 	            	ERXStringUtilities.indent(valueIndent, indent);
 	                for (int i = 0; i < key.length(); i ++) {
-	                	valueIndent.append(" ");
+	                	valueIndent.append(' ');
 	                }
 	                value = valueStr.replaceAll("\n", valueIndent.toString());
 	            }

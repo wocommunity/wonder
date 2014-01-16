@@ -685,11 +685,11 @@ public class BCrypt {
 		rs.append("$2");
 		if (minor >= 'a')
 			rs.append(minor);
-		rs.append("$");
+		rs.append('$');
 		if (rounds < 10)
-			rs.append("0");
+			rs.append('0');
 		rs.append(Integer.toString(rounds));
-		rs.append("$");
+		rs.append('$');
 		rs.append(encode_base64(saltb, saltb.length));
 		rs.append(encode_base64(hashed,
 		    bf_crypt_ciphertext.length * 4 - 1));
@@ -712,9 +712,9 @@ public class BCrypt {
 
 		rs.append("$2a$");
 		if (log_rounds < 10)
-			rs.append("0");
+			rs.append('0');
 		rs.append(Integer.toString(log_rounds));
-		rs.append("$");
+		rs.append('$');
 		rs.append(encode_base64(rnd, rnd.length));
 		return rs.toString();
 	}

@@ -130,7 +130,7 @@ public class MTAjaxAutoComplete extends AjaxComponent {
 				str.append(divName);
 				str.append("',");
 				str.append(listJS);
-				str.append(",");
+				str.append(',');
 				AjaxOptions.appendToBuffer(createAjaxOptions(), str, ctx);
 				str.append(");\n// ]]>\n</script>\n");
 				res.appendContentString(String.valueOf(str));
@@ -156,7 +156,7 @@ public class MTAjaxAutoComplete extends AjaxComponent {
 		for (int i = 0; i < max; i++) {
 			Object ds = list.objectAtIndex(i);
 			if (i > 0) {
-				str.append(",");
+				str.append(',');
 			}
 			str.append("\n\"");
 			if (hasItem) {
@@ -169,7 +169,7 @@ public class MTAjaxAutoComplete extends AjaxComponent {
 			str.append(cnt);
 			str.append("\"");
 		}
-		str.append(")");
+		str.append(')');
 		return String.valueOf(str);
 	}
 

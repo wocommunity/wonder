@@ -248,7 +248,7 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
                 String value = encryptedDict.objectForKey(key).toString();
                 ERXStringUtilities.appendSeparatorIfLastNot('&', '?', result);
                 result.append(key);
-                result.append("=");
+                result.append('=');
                 result.append(ERXCrypto.crypterForAlgorithm(ERXCrypto.BLOWFISH).encrypt(value));
             }
         }
@@ -260,7 +260,7 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
                 String value = unencryptedDict.objectForKey(key).toString();
                 ERXStringUtilities.appendSeparatorIfLastNot('&', '?', result);
                 result.append(key);
-                result.append("=");
+                result.append('=');
                 result.append(value);
             }
         }

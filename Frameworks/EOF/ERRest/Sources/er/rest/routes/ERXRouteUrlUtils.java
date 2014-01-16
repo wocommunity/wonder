@@ -45,20 +45,20 @@ public class ERXRouteUrlUtils {
 		ERXRouteRequestHandler requestHandler = (ERXRouteRequestHandler) WOApplication.application().requestHandlerForKey(ERXRouteRequestHandler.Key);
 		sb.append(requestHandler.controllerPathForEntityNamed(entityName));
 		if (entityID != null) {
-			sb.append("/");
+			sb.append('/');
 			sb.append(ERXStringUtilities.escapeNonXMLChars(String.valueOf(entityID)));
 			if (action != null && !"show".equals(action)) {
-				sb.append("/");
+				sb.append('/');
 				sb.append(action);
 			}
 		}
 		else if (action != null && !"index".equals(action)) {
 			if ((entityName != null) && (entityName.length() > 0)) {
-				sb.append("/");				
+				sb.append('/');				
 			}
 			sb.append(action);
 		}
-		sb.append(".");
+		sb.append('.');
 		if (format == null) {
 			sb.append("html");
 		}

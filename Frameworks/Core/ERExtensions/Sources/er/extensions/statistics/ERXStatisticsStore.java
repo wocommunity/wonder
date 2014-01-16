@@ -197,7 +197,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 							sb.append(t).append(":\n");
 							for (int i = 0; i < stack.length; i++) {
 								StackTraceElement stackTraceElement = stack[i];
-								sb.append("\tat ").append(stackTraceElement).append("\n");
+								sb.append("\tat ").append(stackTraceElement).append('\n');
 							}
 						}
 					}

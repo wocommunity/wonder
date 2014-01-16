@@ -328,7 +328,7 @@ public class DB2Expression extends JDBCExpression {
             sb.append(orderByClause);
         }
         if (lockClause != null && lockClause.length() > 0) {
-            sb.append(" ");
+            sb.append(' ');
             sb.append(lockClause);
         }
         if (_fetchLimit != 0) {
@@ -615,7 +615,7 @@ public class DB2Expression extends JDBCExpression {
 				.append(sqlStringForSchemaObjectName(relationship.destinationEntity().externalName()))
 				.append(" (")
 				.append(destinationKeyList)
-				.append(")")
+				.append(')')
 				.toString());
 	}
     

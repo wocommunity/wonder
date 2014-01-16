@@ -110,12 +110,15 @@ public class ERXWONumberField extends ERXWOInput {
   @Override
   public String toString() {
     StringBuilder stringbuffer = new StringBuilder();
-    stringbuffer.append("<");
+    stringbuffer.append('<');
     stringbuffer.append(getClass().getName());
-    stringbuffer.append(" min=" + _min);
-    stringbuffer.append(" max=" + _max);
-    stringbuffer.append(" step=" + _step);
-    stringbuffer.append(">");
+    stringbuffer.append(" min=");
+    stringbuffer.append(_min);
+    stringbuffer.append(" max=");
+    stringbuffer.append(_max);
+    stringbuffer.append(" step=");
+    stringbuffer.append(_step);
+    stringbuffer.append('>');
     return stringbuffer.toString();
   }
 }

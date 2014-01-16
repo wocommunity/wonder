@@ -1003,7 +1003,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				String packageName = enumerator.nextElement();
 				NSMutableArray<String> bundles = packages.objectForKey(packageName);
 				if (bundles.count() > 1) {
-					sb.append("\t").append(packageName).append("->").append(bundles).append("\n");
+					sb.append('\t').append(packageName).append("->").append(bundles).append('\n');
 				}
 			}
 			message = sb.toString();
@@ -1018,7 +1018,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				String packageName = className.replaceAll("/[^/]+?$", "");
 				NSMutableSet<Entry> bundles = classes.objectForKey(className);
 				if (bundles.count() > 1 && !classPackages.containsObject(packageName)) {
-					sb.append("\t").append(packageName).append("->").append(bundles).append("\n");
+					sb.append('\t').append(packageName).append("->").append(bundles).append('\n');
 					classPackages.addObject(packageName);
 				}
 			}
@@ -2744,13 +2744,13 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 		if (!aDeclarationName.startsWith("_")) {
 			sb.append(aDeclarationName);
-			sb.append(":");
+			sb.append(':');
 		}
 		sb.append(aDeclarationType);
 
 		sb.append(" { ");
 		sb.append(aBindingName);
-		sb.append("=");
+		sb.append('=');
 
 		String valueStr = aValue != null ? aValue.toString() : "null";
 		if (anAssociationDescription.startsWith("class ")) {
