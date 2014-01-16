@@ -364,7 +364,7 @@ public class DB2SynchronizationFactory extends EOSynchronizationFactory implemen
 					}
 				}
 			}
-			return new NSArray(_expressionForString((new StringBuilder()).append("CREATE TABLE ").append(formatTableName(((EOEntity) entityGroup.objectAtIndex(0)).externalName())).append(" (").append(aStatement.toString()).append(")").toString()));
+			return new NSArray(_expressionForString(new StringBuilder().append("CREATE TABLE ").append(formatTableName(((EOEntity) entityGroup.objectAtIndex(0)).externalName())).append(" (").append(aStatement.toString()).append(")").toString()));
 		}
 		return new NSArray();
 	}

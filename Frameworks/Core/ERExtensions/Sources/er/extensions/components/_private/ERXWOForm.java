@@ -162,7 +162,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 
 	@Override
 	public String toString() {
-		return (new StringBuilder()).append("<").append(getClass().getName()).append(" name: ").append(_formName == null ? "null" : _formName.toString())
+		return new StringBuilder().append("<").append(getClass().getName()).append(" name: ").append(_formName == null ? "null" : _formName.toString())
 				.append(" id: ").append(_id == null ? "null" : _id.toString()).append(" action: ").append(_action == null ? "null" : _action.toString())
 				.append(" actionClass: ").append(_actionClass == null ? "null" : _actionClass.toString()).append(" directActionName: ")
 				.append(_directActionName == null ? "null" : _directActionName.toString()).append(" href: ").append(_href == null ? "null" : _href.toString())

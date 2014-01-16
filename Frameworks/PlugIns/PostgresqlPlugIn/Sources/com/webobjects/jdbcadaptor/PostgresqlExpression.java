@@ -690,9 +690,9 @@ public class PostgresqlExpression extends JDBCExpression {
 		EOModel sourceModel = entity.model();
 		EOModel destModel = relationship.destinationEntity().model();
 		if (sourceModel != destModel && !sourceModel.connectionDictionary().equals(destModel.connectionDictionary())) {
-			throw new IllegalArgumentException((new StringBuilder()).append("prepareConstraintStatementForRelationship unable to create a constraint for ").append(relationship.name()).append(" because the source and destination entities reside in different databases").toString());
+			throw new IllegalArgumentException(new StringBuilder().append("prepareConstraintStatementForRelationship unable to create a constraint for ").append(relationship.name()).append(" because the source and destination entities reside in different databases").toString());
 		} 
-		setStatement((new StringBuilder())
+		setStatement(new StringBuilder()
 				.append("ALTER TABLE ")
 				.append(sqlStringForSchemaObjectName(entity.externalName()))
 				.append(" ADD CONSTRAINT ")
