@@ -168,7 +168,7 @@ public class ERXRemoteShell extends WOComponent {
                 buf.append(c);
             }
         }
-        if (buf.toString().length() > 0)
+        if (buf.length() > 0)
             a.addObject(buf.toString().replaceAll(alternativeQuote, "\""));
         return ERXArrayUtilities.toStringArray(a);
     }
