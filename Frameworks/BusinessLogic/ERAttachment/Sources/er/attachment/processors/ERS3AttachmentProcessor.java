@@ -150,9 +150,8 @@ public class ERS3AttachmentProcessor extends
 						e);
 			}
 
-		}
-
-		if(request.isSecure()) {
+		} else if(request.isSecure()) {
+			// The attachment is not proxied. So, the URL must be fixed if the request is secure.
 			attachmentUrl = StringUtils.replaceOnce(attachmentUrl, "http://", "https://");
 			attachmentUrl = StringUtils.replaceOnce(attachmentUrl, ":80/", "/");
 		}
