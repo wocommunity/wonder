@@ -854,7 +854,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 			return "()";
 		}
 		StringBuilder buffer = new StringBuilder(128);
-		buffer.append("(");
+		buffer.append('(');
 		Object[] objects = objectsNoCopy();
 		for (int i = 0; i < objects.length; i++) {
 			Object object = objects[i];
@@ -874,7 +874,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 			}
 		}
 
-		buffer.append(")");
+		buffer.append(')');
 		return buffer.toString();
 	}
 

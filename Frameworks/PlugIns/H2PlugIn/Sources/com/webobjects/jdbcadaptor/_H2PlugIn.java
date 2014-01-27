@@ -75,7 +75,7 @@ public class _H2PlugIn extends JDBCPlugIn {
 		if (string == null) {
 			return null;
 		}
-		return new StringBuilder("'").append(string).append("'").toString();
+		return new StringBuilder('\'').append(string).append('\'').toString();
 	}
 	
 	/**
@@ -499,7 +499,7 @@ public class _H2PlugIn extends JDBCPlugIn {
 				NSArray<EOAttribute> attributes = relationship.sourceAttributes();
 
 				for (int i = 0; i < attributes.count(); i++) {
-					constraint.append("_");
+					constraint.append('_');
 					if (i != 0)
 						fkSql.append(", ");
 
@@ -509,7 +509,7 @@ public class _H2PlugIn extends JDBCPlugIn {
 				}
 
 				fkSql.append(") REFERENCES ");
-				constraint.append("_");
+				constraint.append('_');
 
 				String referencedExternalName = formatTableName(relationship.destinationEntity().externalName());
 				fkSql.append(referencedExternalName);
@@ -520,7 +520,7 @@ public class _H2PlugIn extends JDBCPlugIn {
 				attributes = relationship.destinationAttributes();
 
 				for (int i = 0; i < attributes.count(); i++) {
-					constraint.append("_");
+					constraint.append('_');
 					if (i != 0)
 						fkSql.append(", ");
 
@@ -532,7 +532,7 @@ public class _H2PlugIn extends JDBCPlugIn {
 				// MS: did i write this code?  sorry about that everything. this is crazy. 
 				constraint.append('"');
 
-				fkSql.append(")");
+				fkSql.append(')');
 				// BOO
 				//fkSql.append(") DEFERRABLE INITIALLY DEFERRED");
 

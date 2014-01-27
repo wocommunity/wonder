@@ -339,14 +339,16 @@ function calendar_update() {
   get_element('calendar_prev_month').onclick = calendar_prev_month;
   get_element('calendar_next_month').onclick = calendar_next_month;
   if (calendar.showYearControls) {
-  	get_element('calendar_prev_year').style.visibility = 'visible';
+  	get_element('calendar_prev_year').childNodes[0].style.visibility = 'visible';
   	get_element('calendar_prev_year').onclick = calendar_prev_year;
-  	get_element('calendar_next_year').style.visibility = 'visible';
+  	get_element('calendar_next_year').childNodes[0].style.visibility = 'visible';
   	get_element('calendar_next_year').onclick = calendar_next_year;
   }
   else {
-  	get_element('calendar_prev_year').style.visibility = 'hidden';
-  	get_element('calendar_next_year').style.visibility = 'hidden';
+  	get_element('calendar_prev_year').childNodes[0].style.visibility = 'hidden';
+  	get_element('calendar_prev_year').onclick = undefined;
+  	get_element('calendar_next_year').childNodes[0].style.visibility = 'hidden';
+  	get_element('calendar_next_year').onclick = undefined;
   }
 
 // Iterate through the 42 calendar date boxes.

@@ -221,7 +221,7 @@ public class ERXUnitAwareDecimalFormat extends DecimalFormat implements Cloneabl
             result = super.format(convertedNumber, toAppendTo, fieldPosition);
             // ENHANCEME: Would be nice to be able to specify the place for  
             //            the unit symbol via the format string. 
-            result.append(" ").append(unitPrefix.unitSymbol());
+            result.append(' ').append(unitPrefix.unitSymbol());
         }
         return result; 
     }

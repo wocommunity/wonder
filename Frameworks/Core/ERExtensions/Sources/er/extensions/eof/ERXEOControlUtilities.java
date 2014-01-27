@@ -2052,21 +2052,27 @@ public class ERXEOControlUtilities {
     }
 
     /**
-     * Trims all values from string attributes from the given EO.
-     * @param object
+     * Trims all values from string attributes from the given EO unless the EO itself
+     * or the string attribute is flagged as read-only.
+     * 
+     * @param object the EO whose string attributes should be trimmed
      */
     public static void trimSpaces(EOEnterpriseObject object) {
+        EOEntity entity = EOUtilities.entityForObject(object.editingContext(), object);
+        if (entity.isReadOnly()) {
+            return;
+        }
         for (Enumeration e=ERXEOControlUtilities.stringAttributeListForEntityNamed(object.editingContext(), object.entityName()).objectEnumerator(); e.hasMoreElements();) {
             String key=(String)e.nextElement();
             String value=(String)object.storedValueForKey(key);
-            if (value!=null) {
+            if (value != null && !entity.attributeNamed(key).isReadOnly()) {
                 String trimmedValue=value.trim();
                 if (trimmedValue.length()!=value.length())
                     object.takeStoredValueForKey(trimmedValue,key);
             }
         }
     }
-    
+
     /**
      * Convenience to get the destination entity name from a key path of an object.
      * Returns null if no destination found.

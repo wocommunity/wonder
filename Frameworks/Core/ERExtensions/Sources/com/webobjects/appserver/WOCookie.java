@@ -96,14 +96,14 @@ public class WOCookie implements NSKeyValueCoding, com.webobjects.foundation.NSK
 
 	@Override
 	public String toString() {
-		String expiresString = _expires != null ? (new StringBuilder()).append(" expires=")
+		String expiresString = _expires != null ? new StringBuilder().append(" expires=")
 				.append(TheDateFormat.format(_expires)).toString() : "";
-		String expires = _timeout < 0 ? "" : (new StringBuilder()).append(" max-age=").append(_timeout).toString();
+		String expires = _timeout < 0 ? "" : new StringBuilder().append(" max-age=").append(_timeout).toString();
 
-		return (new StringBuilder()).append("<").append(getClass().getName()).append(" name=").append(_name)
+		return new StringBuilder().append('<').append(getClass().getName()).append(" name=").append(_name)
 				.append(" value=").append(_value).append(" path=").append(_path).append(" domain=").append(_domain)
-				.append(expiresString).append(expires).append(" isSecure=").append(_isSecure ? "true" : "false")
-				.append(" isHttpOnly=").append(_isHttpOnly ? "true" : "false").append(">").toString();
+				.append(expiresString).append(expires).append(" isSecure=").append(_isSecure)
+				.append(" isHttpOnly=").append(_isHttpOnly).append('>').toString();
 	}
 
 	public String headerString() {
@@ -119,7 +119,7 @@ public class WOCookie implements NSKeyValueCoding, com.webobjects.foundation.NSK
 			header.append(_value);
 			header.append("\"");
 		} else if (_value == null) {
-			header.append(" ");
+			header.append(' ');
 		} else {
 			header.append(_value);
 		}

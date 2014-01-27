@@ -40,7 +40,7 @@ public class ERXDatabaseConsole extends WOComponent {
             Statement s = con.createStatement();
             ResultSet rs = s.executeQuery(sql);
             con.commit();
-            StringBuffer buf = new StringBuffer();
+            StringBuilder buf = new StringBuilder();
             
             // append header
             buf.append("<table border=\"1\"><tr>");

@@ -182,7 +182,7 @@ public class EGSimpleTableCreator {
 		appendAttribute("name", name);
 		appendValueForKey(sheet, "defaultRowHeightInPoints");
 		appendValueForKey(sheet, "defaultColumnWidth");
-		_html.append(">");
+		_html.append('>');
 		for(int i = 0; i < sheet.getPhysicalNumberOfRows(); i++) {
 			HSSFRow row = sheet.getRow(i);
 			appendRow(row);
@@ -217,7 +217,7 @@ public class EGSimpleTableCreator {
 			appendAttribute("class", "egstyle" + idx);
 		}
 		
-		_html.append(">");
+		_html.append('>');
 		
 		int cellType = cell.getCellType();
 		Object value = null;

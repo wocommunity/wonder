@@ -177,7 +177,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 					capturedThreadName = names.get(Thread.currentThread());
 				}
 				
-				StringBuffer sb = new StringBuffer();
+				StringBuilder sb = new StringBuilder();
 				sb.append("\nRequest Thread Name: ").append(capturedThreadName).append("\n\n");
 				for (Iterator iterator = traces.keySet().iterator(); iterator.hasNext();) {
 					Thread t = (Thread) iterator.next();
@@ -197,7 +197,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 							sb.append(t).append(":\n");
 							for (int i = 0; i < stack.length; i++) {
 								StackTraceElement stackTraceElement = stack[i];
-								sb.append("\tat ").append(stackTraceElement).append("\n");
+								sb.append("\tat ").append(stackTraceElement).append('\n');
 							}
 						}
 					}

@@ -152,10 +152,10 @@ public class AjaxSortableList extends AjaxComponent {
       String onUpdate = (String) valueForBinding("onUpdate");
       onUpdateBuffer.append(" var parentOnUpdate = ");
       onUpdateBuffer.append(onUpdate);
-      onUpdateBuffer.append(";");
+      onUpdateBuffer.append(';');
       onUpdateBuffer.append("parentOnUpdate(container);");
     }
-    onUpdateBuffer.append("}");
+    onUpdateBuffer.append('}');
     return onUpdateBuffer.toString();
   }
 

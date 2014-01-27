@@ -202,9 +202,9 @@ public class MTAjaxSortableList extends AjaxComponent {
 		if(canGetValueForBinding("onComplete")) {
 			String onComplete = (String) valueForBinding("onComplete");
 			onCompleteBuffer.append(" var parentOnComplete = ")
-			.append(onComplete).append(";").append("parentOnUpdate(container);");
+			.append(onComplete).append(';').append("parentOnUpdate(container);");
 		}
-		onCompleteBuffer.append("}");
+		onCompleteBuffer.append('}');
 
 		return onCompleteBuffer.toString();
 	}

@@ -81,7 +81,7 @@ public class ERQSUtilities
 			if (cause == null || cause == this)
 				return super.toString();
 			else
-				return (new StringBuilder()).append(super.toString()).append(" [See nested exception: ").append(cause).append("]").toString();
+				return new StringBuilder().append(super.toString()).append(" [See nested exception: ").append(cause).append(']').toString();
 		}
 	}
 

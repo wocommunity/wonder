@@ -1503,11 +1503,11 @@ public class ERXFileUtilities {
         int mod = noOfChars%2;
         int firstHalf = noOfChars/2 + mod;
         int secondHalf = firstHalf - mod;        
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append( s.substring( 0, firstHalf ) );
         sb.append( elips );
         sb.append( s.substring( stringLength-secondHalf, stringLength ) );
-        sb.append( "." );
+        sb.append('.');
         sb.append( ext );
         return sb.toString();
     }

@@ -428,7 +428,7 @@ public abstract class ERXDynamicElement extends WODynamicGroup {
 
 		@Override
 		public String toString() {
-			return (new StringBuilder()).append("<").append(getClass().getName()).append(" key: ").append(_key).append(">")
+			return new StringBuilder().append('<').append(getClass().getName()).append(" key: ").append(_key).append('>')
 					.toString();
 		}
 	}

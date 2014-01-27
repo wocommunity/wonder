@@ -70,7 +70,7 @@ public class SeleniumTestRunnerProxy extends WORequestHandler {
     	while (iter.hasNext()) {
     		builder.append(iter.next());
     		if (iter.hasNext())
-    			builder.append("/");
+    			builder.append('/');
     	}
     	
 		String filePath = builder.toString();

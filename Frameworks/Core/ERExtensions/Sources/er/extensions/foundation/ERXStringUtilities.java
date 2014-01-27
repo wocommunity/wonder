@@ -1320,7 +1320,7 @@ public class ERXStringUtilities {
     			boolean isLastCharacter = (i == length - 1); 
     			boolean nextCharacterIsCapital =  (!isLastCharacter && Character.isUpperCase(camelString.charAt(i + 1)));
     			if (i > 0 && ((!lastCharacterWasWordBreak && !lastCharacterWasCapital) || (!nextCharacterIsCapital && !isLastCharacter))) {
-    				underscore.append("_");
+    				underscore.append('_');
     				lastCharacterWasWordBreak = true;
     			}
     			else {
@@ -1836,7 +1836,7 @@ public class ERXStringUtilities {
     		sb.append(",\n");
     	}
    		indent(sb, level);
-    	sb.append(")");
+    	sb.append(')');
     }
     
     private static void dumpDictionary(StringBuffer sb, NSDictionary dict, int level) {
@@ -1850,7 +1850,7 @@ public class ERXStringUtilities {
     		sb.append(";\n");
     	}
     	indent(sb, level);
-    	sb.append("}");
+    	sb.append('}');
     }
     
     private static NSDictionary databaseOperationAsDictionary(EODatabaseOperation op) {
@@ -1992,7 +1992,7 @@ public class ERXStringUtilities {
 			if(!(value instanceof String)) {
 				stringValue = stringValue.replaceAll("\n", "\n\t");
 			}
-			result.append("\t");
+			result.append('\t');
 			result.append(stringKey);
 			result.append(" = ");
 			result.append(stringValue);
@@ -2376,7 +2376,7 @@ public class ERXStringUtilities {
      */
     // FIXME: this is so simplistic it will break if you sneeze
     public static String removeHTMLTagsFromString(String s) {
-        StringBuffer result=new StringBuffer();
+        StringBuilder result = new StringBuilder();
         if (s != null && s.length()>0) {
             int position=0;
             while (position<s.length()) {
@@ -2414,7 +2414,7 @@ public class ERXStringUtilities {
         StringTokenizer tokenizer = new StringTokenizer(value, "<", false);
         int token = value.charAt(0) == '<' ? 0 : 1;
         String nextPart = null;
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         int currentLength = result.length();
         while (tokenizer.hasMoreTokens() && currentLength < length && currentLength < value.length()) {
             if(token == 0)
