@@ -410,7 +410,6 @@ public class ERXEOControlUtilities {
     public static void clearSnapshotForRelationshipNamed(EOEnterpriseObject eo, String relationshipName) {
         EOEditingContext ec = eo.editingContext();
         EOModel model = EOUtilities.entityForObject(ec, eo).model();
-        EOGlobalID gid = ec.globalIDForObject(eo);
         EODatabaseContext dbc = EODatabaseContext.registeredDatabaseContextForModel(model, ec);
         EODatabase database = dbc.database();
         ERXEOControlUtilities.clearSnapshotForRelationshipNamedInDatabase(eo, relationshipName, database);
@@ -886,8 +885,7 @@ public class ERXEOControlUtilities {
     
     private static Object __aggregateFunctionWithQualifierAndAggregateAttribute(EODatabaseContext databaseContext, EOEditingContext ec, String entityName, EOQualifier qualifier, EOAttribute aggregateAttribute) {
         EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
-        EOModel model = entity.model();
-        
+
         EOSQLExpressionFactory sqlFactory = databaseContext.adaptorContext().adaptor().expressionFactory();
         EOQualifier schemaBasedQualifier = entity.schemaBasedQualifier(qualifier);
         EOFetchSpecification fetchSpec = new EOFetchSpecification(entity.name(), schemaBasedQualifier, null);
