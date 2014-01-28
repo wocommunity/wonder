@@ -1,44 +1,80 @@
 #!/bin/bash
- 
+
 # chkconfig: - 90 20
 # description: Provides wotaskd service
- 
-# Source function library.
-. /etc/rc.d/init.d/functions
- 
+
+### BEGIN INIT INFO
+# Provides:          wotaskd
+# Required-Start:    $all
+# Required-Stop:
+# Default-Start:     3 5 6
+# Default-Stop:      0 1 2 6
+# Short-Description: Starts the WebObjects Task Daemon
+# Description:       Starts the WebObjects Task Daemon which is necessary to
+#       run Web Objects Applications at this host. WebObjects Task Daemon
+#       needs to run to be an configurable host via WebObjects Monitor.
+### END INIT INFO
+
+USER=wouser
 NEXT_ROOT="/opt"
 export NEXT_ROOT
- 
-PATH="/bin:/usr/bin:/usr/java/latest/bin"
-export PATH
- 
-USER=appserver
- 
+TIME="[`date +%d.%m.%Y\ %H:%M:%S`]:"
+
+###############################################################################
+
+# Create Logfile if not already exists and setup permissions.
+if [ ! -e "/var/log/wotaskd.log" ]; then
+    touch "/var/log/wotaskd.log"
+    chown $USER "/var/log/wotaskd.log"
+    chgrp root "/var/log/wotaskd.log"
+    chmod 640 "/var/log/wotaskd.log"
+fi
+
+# Create Logroate Job if available.
+if [ -e "/etc/logrotate.d" ] && [ ! -e "/etc/logrotate.d/wotaskd" ]; then
+    echo '/var/log/wotaskd.log {'   >> /etc/logrotate.d/wotaskd
+    echo '    daily'                >> /etc/logrotate.d/wotaskd
+    echo '    rotate 5'             >> /etc/logrotate.d/wotaskd
+    echo '    compress'             >> /etc/logrotate.d/wotaskd
+    echo '    delaycompress'        >> /etc/logrotate.d/wotaskd
+    echo '    missingok'            >> /etc/logrotate.d/wotaskd
+    echo '    notifempty'           >> /etc/logrotate.d/wotaskd
+    echo '}'                        >> /etc/logrotate.d/wotaskd
+fi
+
+###############################################################################
+
 # See how we were called.
 case "$1" in
+    status)
+        WOTASKD_PID=`ps aux | awk '/WOPort 1085/ && !/awk/ {print $2}'`
+        if [ "$WOTASKD_PID" != "" ]; then
+            echo "$TIME Service is running with PID $WOTASKD_PID" 2>&1 | tee -a /var/log/wotaskd.log
+        else
+            echo "$TIME Service is not running" 2>&1 | tee -a /var/log/wotaskd.log
+        fi
+        ;;
     start)
-        echo -n "Starting wotaskd: "
-        su $USER -c "$NEXT_ROOT/Local/Library/WebObjects/JavaApplications/wotaskd.woa/wotaskd -WOPort 1085 -er.wotaskd.sshd.enabled true &"
-        echo
+        echo "$TIME Starting wotaskd: " 2>&1 | tee -a /var/log/wotaskd.log
+        su $USER -c -l "$NEXT_ROOT/Library/WebObjects/JavaApplications/wotaskd.woa/wotaskd -WOPort 1085 2>&1 | tee -a /var/log/wotaskd.log &"
         ;;
     stop)
-        echo -n "Shutting down wotaskd: "
+        echo "$TIME Shutting down wotaskd" 2>&1 | tee -a /var/log/wotaskd.log
         WOTASKD_PID=`ps aux | awk '/WOPort 1085/ && !/awk/ {print $2}'`
         kill $WOTASKD_PID
-        echo
         ;;
     restart)
         $0 stop
         $0 start
         ;;
     *)
-        echo -n "Usage: $0 {start|stop|restart}"
+        echo "Usage: $0 {start|stop|restart|status}"
         exit 1
 esac
- 
+
 if [ $# -gt 1 ]; then
     shift
     $0 $*
 fi
- 
+
 exit 0
