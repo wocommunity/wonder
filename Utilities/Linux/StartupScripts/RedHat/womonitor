@@ -1,7 +1,7 @@
-#!/bin/bash
+#! /bin/bash
 
-# chkconfig: - 90 20
-# description: Provides JavaMonitor service
+# chkconfig: 90 20
+# description: Provides womonitor service
 
 ### BEGIN INIT INFO
 # Provides:          womonitor
@@ -17,6 +17,7 @@
 USER=wouser
 NEXT_ROOT="/opt"
 export NEXT_ROOT
+TIME="[`date +%d.%m.%Y\ %H:%M:%S`]:"
 
 ###############################################################################
 
@@ -47,17 +48,17 @@ case "$1" in
     status)
         WOMONITOR_PID=`ps aux | awk '/WOPort 1086/ && !/awk/ {print $2}'`
         if [ "$WOMONITOR_PID" != "" ]; then
-            echo "Service is running with PID $WOMONITOR_PID" | tee -a /var/log/womonitor.log
+            echo "$TIME Service is running with PID $WOMONITOR_PID" 2>&1 | tee -a /var/log/womonitor.log
         else
-            echo "Service is not running" | tee -a /var/log/womonitor.log
+            echo "$TIME Service is not running" 2>&1 | tee -a /var/log/womonitor.log
         fi
         ;;
     start)
-        echo "Starting womonitor: " | tee -a /var/log/womonitor.log
-        su $USER -c -l "$NEXT_ROOT/Library/WebObjects/JavaApplications/JavaMonitor.woa/JavaMonitor -WOPort 1086 | tee -a /var/log/womonitor.log &"
+        echo "$TIME Starting womonitor: " 2>&1 | tee -a /var/log/womonitor.log
+        su $USER -c -l "$NEXT_ROOT/Library/WebObjects/JavaApplications/JavaMonitor.woa/JavaMonitor -WOPort 1086 2>&1 | tee -ai /var/log/womonitor.log &"
         ;;
     stop)
-        echo "Shutting down womonitor: " | tee -a /var/log/womonitor.log
+        echo "$TIME Shutting down womonitor: " 2>&1 | tee -a /var/log/womonitor.log
         WOMONITOR_PID=`ps aux | awk '/WOPort 1086/ && !/awk/ {print $2}'`
         kill $WOMONITOR_PID
         ;;
