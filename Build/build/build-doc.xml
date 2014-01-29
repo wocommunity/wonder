@@ -153,6 +153,7 @@
         <copy todir="${dist}/" flatten="true">
             <fileset dir="${wonder.root}">
                 <include name="*.txt"/>
+                <exclude name="BUILD.txt"/>
                 <include name="**/LICENSE*"/>
             </fileset>
         </copy>
