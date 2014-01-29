@@ -34,7 +34,7 @@
     <!-- These properties are derived from other properties.  -->
     <!-- Normally, these should not be redefined.             -->
     <!-- ==================================================== -->
-    <property name="dist" value="${dist.base}/${project.name}-${project.version}"/>
+    <property name="dist" value="${dist.base}/${project.name}"/>
     
     <!-- ==================================================== -->
     <!--              CLASSPATH settings                      -->
