@@ -14,7 +14,6 @@ import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOGlobalID;
-import com.webobjects.eocontrol.EORelationshipManipulation;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
@@ -99,6 +98,15 @@ import er.extensions.foundation.ERXArrayUtilities;
  * <li>Create or modify your own EOGenerator template with the following
  * additions:</li>
  * <ul>
+ * <li>In the imports section, add the following:
+ * 
+ * <pre>
+ *  #if(${entity.userInfo.ERXCopyable})
+ *  import er.extensions.eof.ERXCopyable;
+ *  #end
+ * </pre>
+ * 
+ * </li>
  * <li>At the very end of the class declaration line (just prior to the opening
  * '{') insert the following:
  * 
@@ -133,7 +141,6 @@ import er.extensions.foundation.ERXArrayUtilities;
  *         return duplicate;
  *     }
  * #end
- * 
  * </pre>
  * 
  * </li>
