@@ -1502,7 +1502,7 @@ public class ERXKey<T> {
 	 * @author mschrag
 	 */
 	public static enum Type {
-		Attribute, ToOneRelationship, ToManyRelationship
+		Attribute, ToOneRelationship, ToManyRelationship, Operator, NonModelAttribute, NonModelToOneRelationshiop, NonModelToManyRelationship
 	}
 	
 	public interface ValueCoding {
@@ -1512,6 +1512,7 @@ public class ERXKey<T> {
 	}
 
 	private String _key;
+	private Type _type;
 
 	/**
 	 * Constructs an ERXKey.
@@ -1521,6 +1522,18 @@ public class ERXKey<T> {
 	 */
 	public ERXKey(String key) {
 		_key = key;
+	}
+
+	/**
+	 * Constructs an ERXKey.
+	 * 
+	 * @param key
+	 *            the underlying keypath
+	 * @param type
+	 */
+	public ERXKey(String key, Type type) {
+		_key = key;
+		setType(type);
 	}
 
 	/**
@@ -2552,5 +2565,25 @@ public class ERXKey<T> {
 	 */
 	public ERXSortOrderings dot(NSArray<EOSortOrdering> sortOrderings) {
 		return prefix(sortOrderings);
+	}
+
+	public Type type() {
+		return _type;
+	}
+
+	public void setType(Type type) {
+		_type = type;
+	}
+	
+	public boolean isAttribute() {
+		return type() == ERXKey.Type.Attribute || type() == ERXKey.Type.NonModelAttribute;
+	}
+	
+	public boolean isToOneRelationship() {
+		return type() == ERXKey.Type.ToOneRelationship || type() == ERXKey.Type.NonModelToOneRelationshiop;
+	}
+	
+	public boolean isToManyRelationship() {
+		return type() == ERXKey.Type.ToManyRelationship || type() == ERXKey.Type.NonModelToManyRelationship;
 	}
 }
