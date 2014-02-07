@@ -1505,7 +1505,7 @@ public class ERXKey<T> {
 	 * @author mschrag
 	 */
 	public static enum Type {
-		Attribute, ToOneRelationship, ToManyRelationship, Operator, NonModelAttribute, NonModelToOneRelationshiop, NonModelToManyRelationship
+		Attribute, ToOneRelationship, ToManyRelationship, Operator, NonModelAttribute, NonModelToOneRelationship, NonModelToManyRelationship
 	}
 	
 	public interface ValueCoding {
@@ -2670,7 +2670,7 @@ public class ERXKey<T> {
 	}
 	
 	public boolean isToOneRelationship() {
-		return type() == ERXKey.Type.ToOneRelationship || type() == ERXKey.Type.NonModelToOneRelationshiop;
+		return type() == ERXKey.Type.ToOneRelationship || type() == ERXKey.Type.NonModelToOneRelationship;
 	}
 	
 	public boolean isToManyRelationship() {
