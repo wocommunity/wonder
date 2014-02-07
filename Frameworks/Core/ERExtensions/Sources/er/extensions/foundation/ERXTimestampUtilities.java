@@ -286,7 +286,7 @@ public class ERXTimestampUtilities {
     static NSTimestamp _epoch = new NSTimestamp(1970, 1, 1, 0, 0, 0, null);
 
     /**
-     * Utility method used to retrun the epoch,
+     * Utility method used to return the epoch,
      * Jan 1st, 1970
      * @return the epoch as an NSTimestamp
      */

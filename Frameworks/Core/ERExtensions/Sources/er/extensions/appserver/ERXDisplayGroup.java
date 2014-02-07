@@ -97,7 +97,7 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	}
 	
 	/**
-	 * Will return the qualifer set by "setQualifierForKey()" if it exists. Null returns otherwise.
+	 * Will return the qualifier set by "setQualifierForKey()" if it exists. Null returns otherwise.
 	 * @param key
 	 * @return
 	 */

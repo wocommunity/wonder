@@ -846,7 +846,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
   }
 
   /**
-   * et the current Look for this Session
+   * Get the current Look for this Session.
    * 
    * @return Look Name
    */
