@@ -102,7 +102,7 @@
             externalType = VARCHAR; 
             factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
             name = globalID; 
-            valueClassName = "er.extensions.ERXKeyGlobalID"; 
+            valueClassName = "er.extensions.eof.ERXKeyGlobalID"; 
             valueFactoryMethodName = fromString; 
             valueType = c; 
             width = 255; 
@@ -217,7 +217,7 @@
             columnName = mutableArray; 
             externalType = "BLOB SUB_TYPE 0"; 
             name = mutableArray; 
-            valueClassName = "er.extensions.ERXMutableArray"; 
+            valueClassName = "er.extensions.foundation.ERXMutableArray"; 
             valueFactoryMethodName = fromBlob; 
         }, 
         {
@@ -225,7 +225,7 @@
             columnName = mutableDictionary; 
             externalType = "BLOB SUB_TYPE 0"; 
             name = mutableDictionary; 
-            valueClassName = "er.extensions.ERXMutableDictionary"; 
+            valueClassName = "er.extensions.foundation.ERXMutableDictionary"; 
             valueFactoryMethodName = fromBlob; 
         }, 
         {
