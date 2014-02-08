@@ -8,6 +8,7 @@ import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOSynchronizationFactory;
+import com.webobjects.eoaccess.synchronization.EOSchemaSynchronizationFactory;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSData;
@@ -27,7 +28,7 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
   private static final String QUERY_STRING_USE_BUNDLED_JDBC_INFO = "useBundledJdbcInfo";
   
   static {
-      setPlugInNameForSubprotocol(PostgresqlPlugIn.class.getName(), "postgresql");
+      JDBCPlugIn.setPlugInNameForSubprotocol(PostgresqlPlugIn.class.getName(), "postgresql");
   }
     
   /**
@@ -138,7 +139,7 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
    * Useful for testing purposes.
    */
   @Override
-  public EOSynchronizationFactory createSynchronizationFactory() {
+	public EOSchemaSynchronizationFactory schemaSynchronizationFactory() {
     try {
       return new PostgresqlSynchronizationFactory(adaptor());
     }
@@ -147,15 +148,15 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
     }
   }
 
-  /**                                                                                                                                                         
-   * Expression class to create. We have custom code, so we need our own class.                                                                               
+  /**
+   * Expression class to create. We have custom code, so we need our own class.
    */
   @Override
   public Class defaultExpressionClass() {
     return PostgresqlExpression.class;
   }
 
-  /** 
+  /**
    * Overrides the parent implementation to provide a more efficient mechanism for generating primary keys,
    * while generating the primary key support on the fly.
    *
@@ -175,7 +176,7 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
     boolean isIntType = "i".equals(attribute.valueType());
 
     NSMutableArray<NSDictionary<String, Object>> results = new NSMutableArray<NSDictionary<String, Object>>(count);
-    String sequenceName = _sequenceNameForEntity(entity);
+    String sequenceName = PostgresqlPlugIn._sequenceNameForEntity(entity);
     PostgresqlExpression expression = new PostgresqlExpression(entity);
     
     // MS: The original implementation of this did something like select setval('seq', nextval('seq') + count)
@@ -183,7 +184,7 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
     // instances.  The new implementation does batch requests for keys.
     int keysPerBatch = 20;
     boolean succeeded = false;
-    for (int tries = 0; !succeeded && tries < 2; tries++) {
+    for (int tries = 0; !succeeded && (tries < 2); tries++) {
       while (results.count() < count) {
         try {
           StringBuilder sql = new StringBuilder();
@@ -210,7 +211,7 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
                   pk = Long.valueOf(pkObj.longValue());
                 }
                 results.addObject(new NSDictionary<String, Object>(pk, attrName));
-              }            
+              }
             }
           }
           finally {
@@ -240,7 +241,7 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
           // timc 2006-11-06 row.objectForKey("COUNT") returns BigDecimal not Long
           //if( Long.valueOf( 0 ).equals( row.objectForKey( "COUNT" ) ) ) {
           Number numCount = (Number) row.objectForKey("COUNT");
-          if (numCount != null && numCount.longValue() == 0L) {
+          if ((numCount != null) && (numCount.longValue() == 0L)) {
             EOSynchronizationFactory f = createSynchronizationFactory();
             NSArray<EOSQLExpression> statements = f.primaryKeySupportStatementsForEntityGroup(new NSArray<EOEntity>(entity));
             int stmCount = statements.count();
@@ -273,7 +274,7 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
    * @return  the name of the sequence
    */
   protected static String _sequenceNameForEntity(EOEntity entity) {
-    /* timc 2006-11-06 
+    /* timc 2006-11-06
      * This used to say ... + "_SEQ";
      * _SEQ would get converted to _seq because postgresql converts all unquoted identifiers to lower case.
     * In the future we may use enableIdentifierQuoting for sequence names so we need to set the correct case here in the first place
@@ -288,7 +289,7 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
    * @return  yes/no
    */
   private boolean isPrimaryKeyGenerationNotSupported(EOEntity entity) {
-    return entity.primaryKeyAttributes().count() > 1 || entity.primaryKeyAttributes().lastObject().adaptorValueType() != EOAttribute.AdaptorNumberType;
+    return (entity.primaryKeyAttributes().count() > 1) || (entity.primaryKeyAttributes().lastObject().adaptorValueType() != EOAttribute.AdaptorNumberType);
   }
 
 }
