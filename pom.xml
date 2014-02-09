@@ -167,10 +167,10 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-				<groupId>wonder.core</groupId>
-				<artifactId>ERFoundation</artifactId>
-				<version>1.0</version>
-			</dependency>
+                <groupId>wonder.core</groupId>
+                <artifactId>ERFoundation</artifactId>
+                <version>1.0</version>
+            </dependency>
             <dependency>
                 <groupId>wonder.core</groupId>
                 <artifactId>ERDirectToWeb</artifactId>
@@ -439,9 +439,9 @@
                 <version>1.1.7</version>
             </dependency>
             <dependency>
-				<groupId>io.netty</groupId>
+                <groupId>io.netty</groupId>
                 <artifactId>netty</artifactId>
-				<version>3.3.1.Final</version>
+                <version>3.3.1.Final</version>
             </dependency>
             <dependency>
                 <groupId>commons-cli</groupId>
@@ -524,20 +524,20 @@
                 <version>1.02</version>
             </dependency>
             <dependency>
-    			<groupId>commons-beanutils</groupId>
-    			<artifactId>commons-beanutils</artifactId>
-    			<version>1.8.3</version>
-			</dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>1.8.3</version>
+            </dependency>
             <dependency>
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
                 <version>1.6</version>
             </dependency>
             <dependency>
-    			<groupId>commons-io</groupId>
-    			<artifactId>commons-io</artifactId>
-    			<version>2.2</version>
-			</dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>2.2</version>
+            </dependency>
             <dependency>
                 <groupId>commons-httpclient</groupId>
                 <artifactId>commons-httpclient</artifactId>
@@ -575,10 +575,10 @@
                 <classifier>asl</classifier>
             </dependency>
             <dependency>
-				<groupId>org.seleniumhq.selenium.client-drivers</groupId>
-				<artifactId>selenium-java-client-driver</artifactId>
-				<version>1.0.2</version>
-			</dependency>
+                <groupId>org.seleniumhq.selenium.client-drivers</groupId>
+                <artifactId>selenium-java-client-driver</artifactId>
+                <version>1.0.2</version>
+            </dependency>
             <dependency>
                 <groupId>jtidy</groupId>
                 <artifactId>jtidy</artifactId>
@@ -662,15 +662,15 @@
                 <version>3.6</version>
             </dependency>
             <dependency>
-				<groupId>org.apache.xmlgraphics</groupId>
-				<artifactId>xmlgraphics-commons</artifactId>
-				<version>1.4</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.xmlgraphics</groupId>
-				<artifactId>fop</artifactId>
-				<version>1.0</version>
-			</dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>xmlgraphics-commons</artifactId>
+                <version>1.4</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>fop</artifactId>
+                <version>1.0</version>
+            </dependency>
             <dependency>
                 <groupId>com.intellij</groupId>
                 <artifactId>annotations</artifactId>
