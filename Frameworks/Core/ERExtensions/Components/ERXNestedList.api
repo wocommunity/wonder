@@ -14,5 +14,9 @@
         <validation message="'sublist' is a required binding">
             <unbound name="sublist"/>
         </validation>
+    <binding name="level"/>
+        <validation message="'level' must be bound to a settable value">
+            <unsettable name="level"/>
+        </validation>
     </wo>
 </wodefinitions>
