@@ -3,12 +3,12 @@ package er.attachment.upload;
 import java.io.File;
 
 import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOGlobalID;
 
 import er.attachment.model.ERAttachment;
 import er.attachment.processors.ERAttachmentProcessor;
 import er.extensions.concurrency.ERXAsyncQueue;
 import er.extensions.eof.ERXEC;
-import er.extensions.eof.ERXEOControlUtilities;
 import er.extensions.foundation.ERXExceptionUtilities;
 
 /**
@@ -23,15 +23,13 @@ import er.extensions.foundation.ERXExceptionUtilities;
  *
  * @see ERRemoteAttachment
  */
-public abstract class ERAttachmentUploadQueue<T extends ERAttachment & ERRemoteAttachment> extends ERXAsyncQueue<ERAttachmentQueueEntry<T>> {
-    protected final EOEditingContext _editingContext;
+public abstract class ERAttachmentUploadQueue<T extends ERAttachment & ERRemoteAttachment> extends ERXAsyncQueue<ERAttachmentQueueEntry> {
     protected final ERAttachmentProcessor<T> _processor;
 
     public ERAttachmentUploadQueue(String name, ERAttachmentProcessor<T> processor) {
         super(name);
 
         _processor = processor;
-        _editingContext = ERXEC.newEditingContext();
     }
 
     /**
@@ -41,35 +39,38 @@ public abstract class ERAttachmentUploadQueue<T extends ERAttachment & ERRemoteA
      *            the attachment to upload
      */
     public void enqueue(T attachment) {
-        _editingContext.lock();
+        EOEditingContext editingContext = attachment.editingContext();
+
+        editingContext.lock();
 
         try {
-            T localAttachment = ERXEOControlUtilities.localInstanceOfObject(_editingContext, attachment);
-            ERAttachmentQueueEntry<T> entry = new ERAttachmentQueueEntry<T>(attachment._pendingUploadFile(), localAttachment);
+            EOGlobalID attachmentID = editingContext.globalIDForObject(attachment);
+            ERAttachmentQueueEntry entry = new ERAttachmentQueueEntry(attachment._pendingUploadFile(), attachmentID);
 
             enqueue(entry);
         } finally {
-            _editingContext.unlock();
+            editingContext.unlock();
         }
     }
 
     @Override
-    public void process(ERAttachmentQueueEntry<T> entry) {
-        T attachment = entry.attachment();
+    public void process(ERAttachmentQueueEntry entry) {
+        EOEditingContext editingContext = ERXEC.newEditingContext();
+        T attachment = entry.attachment(editingContext);
         File uploadedFile = entry.uploadedFile();
 
         if (uploadedFile != null && uploadedFile.exists()) {
             try {
-                performUpload(attachment, uploadedFile);
+                performUpload(editingContext, attachment, uploadedFile);
 
-                _editingContext.lock();
+                editingContext.lock();
 
                 try {
                     attachment.setAvailable(Boolean.TRUE);
 
-                    _editingContext.saveChanges();
+                    editingContext.saveChanges();
                 } finally {
-                    _editingContext.unlock();
+                    editingContext.unlock();
                 }
 
                 if (_processor.delegate() != null) {
@@ -103,5 +104,5 @@ public abstract class ERAttachmentUploadQueue<T extends ERAttachment & ERRemoteA
      * @param uploadedFile
      *            the file to upload
      */
-    protected abstract void performUpload(T attachment, File uploadedFile) throws Exception;
+    protected abstract void performUpload(EOEditingContext editingContext, T attachment, File uploadedFile) throws Exception;
 }

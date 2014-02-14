@@ -236,13 +236,13 @@ public class ERCloudFilesAttachmentProcessor extends
 		}
 
 		@Override
-		protected void performUpload(ERCloudFilesAttachment attachment, File uploadedFile) throws Exception {
+		protected void performUpload(EOEditingContext editingContext, ERCloudFilesAttachment attachment, File uploadedFile) throws Exception {
 			String bucket;
 			String key;
 			String mimeType;
 			String originalFileName = null;
 
-			_editingContext.lock();
+			editingContext.lock();
 
 			try {
 				bucket = attachment.container();
@@ -253,7 +253,7 @@ public class ERCloudFilesAttachmentProcessor extends
 					originalFileName = attachment.originalFileName();
 				}
 			} finally {
-				_editingContext.unlock();
+				editingContext.unlock();
 			}
 
 			((ERCloudFilesAttachmentProcessor)_processor).performUpload(uploadedFile, originalFileName, bucket, key, mimeType, attachment);

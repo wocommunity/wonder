@@ -237,13 +237,13 @@ public class ERS3AttachmentProcessor extends
 		}
 
 		@Override
-		protected void performUpload(ERS3Attachment attachment, File uploadedFile) throws Exception {
+		protected void performUpload(EOEditingContext editingContext, ERS3Attachment attachment, File uploadedFile) throws Exception {
 			String bucket;
 			String key;
 			String mimeType;
 			String originalFileName = null;
 
-			_editingContext.lock();
+			editingContext.lock();
 			try {
 				bucket = attachment.bucket();
 				key = attachment.key();
@@ -252,7 +252,7 @@ public class ERS3AttachmentProcessor extends
 					originalFileName = attachment.originalFileName();
 				}
 			} finally {
-				_editingContext.unlock();
+				editingContext.unlock();
 			}
 
 			((ERS3AttachmentProcessor) _processor).performUpload(uploadedFile, originalFileName, bucket, key, mimeType, attachment);
