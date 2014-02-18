@@ -824,7 +824,7 @@ public class ERXStringUtilities {
      * @return multiplied string
      */
     public static String stringWithNtimesString(int n, String s) {
-    	StringBuilder sb = new StringBuilder(n);
+        StringBuilder sb = new StringBuilder(n * (s != null ? s.length() : "null".length()));
         for (int i=0; i<n; i++) sb.append(s);
         return sb.toString();
     }
