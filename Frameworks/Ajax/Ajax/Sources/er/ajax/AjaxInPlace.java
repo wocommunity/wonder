@@ -84,6 +84,7 @@ import er.extensions.components._private.ERXWOForm;
  * @binding cancelAfterInsertionDuration the duration of the after insertion animation (if using insertion)
  * 
  * @binding editClass the class of the div that you click on to trigger edit mode (yes this name sucks)
+ * @binding formClass the class of the form around the edit view
  * @binding canEdit if true, edit mode is entered; if false, view mode remains active
  * @binding editOnly if true, edit mode is locked on (and save controls don't show if it's in a parent form); if false, you can switch between edit and view mode
  * @binding onEditClick the action to fire when edit mode is triggered
@@ -368,9 +369,8 @@ public class AjaxInPlace extends WOComponent {
 	public WOActionResults startEditing() {
 		if (canEdit()) {
 			setEditing(true);
-			WOActionResults results = (WOActionResults) valueForBinding("editAction");
+			valueForBinding("editAction");	// ignore results
 		}
-		// ignore results
 		return null;
 	}
 

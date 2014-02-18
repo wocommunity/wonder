@@ -254,14 +254,14 @@ public abstract class ERXHttpDataObjectBase {
 
   protected String userAgent() {
     // assemble User-Agent header
-    StringBuffer useragent = new StringBuffer();
+    StringBuilder useragent = new StringBuilder();
     useragent.append("WebObjects/ " + ERXProperties.webObjectsVersion() + " (");
     useragent.append(System.getProperty("os.arch"));
     useragent.append("; ");
     useragent.append(System.getProperty("os.name"));
-    useragent.append(" ");
+    useragent.append(' ');
     useragent.append(System.getProperty("os.version"));
-    useragent.append(")");
+    useragent.append(')');
     return useragent.toString();
   }
 

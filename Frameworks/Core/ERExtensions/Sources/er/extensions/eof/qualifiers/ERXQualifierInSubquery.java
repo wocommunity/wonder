@@ -174,7 +174,7 @@ public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQ
 	 * @return sql string for the current sub-query.
 	 */
 	public String sqlStringForSQLExpression(EOSQLExpression e) {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		if (attributeName != null)
 			sb.append(e.sqlStringForAttributeNamed(attributeName));
 		else {

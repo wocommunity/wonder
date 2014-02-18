@@ -207,7 +207,7 @@ public class ERMessage {
 	@Override
 	public String toString() {
 		StringBuilder sbuf = new StringBuilder();
-		sbuf.append("<").append(getClass().getName()).append(" ");
+		sbuf.append('<').append(getClass().getName()).append(' ');
 		if (_message == null) {
 			sbuf.append("No mime message is set.");
 		}
@@ -219,7 +219,7 @@ public class ERMessage {
 				// do nothing
 			}
 		}
-		sbuf.append(">");
+		sbuf.append('>');
 		return sbuf.toString();
 	}
 	

@@ -1944,7 +1944,7 @@ public class ERXArrayUtilities {
         } else if (count == 1) {
             result= (attribute!= null ? NSKeyValueCodingAdditions.Utility.valueForKeyPath(list.objectAtIndex(0), attribute) : list.objectAtIndex(0));
         } else if (count > 1) {
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder buffer = new StringBuilder();
             for(int i = 0; i < count; i++) {
                 Object attributeValue = (attribute!= null ? NSKeyValueCodingAdditions.Utility.valueForKeyPath(list.objectAtIndex(i), attribute) : list.objectAtIndex(i));
                 if (i>0) buffer.append(i == (count - 1) ? finalSeparator : separator);

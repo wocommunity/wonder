@@ -240,11 +240,11 @@ public class ERXWORepetition extends WODynamicGroup {
 
 	@Override
 	public String toString() {
-		return new StringBuilder().append("<").append(getClass().getName())
-				.append(" list: ").append(_list != null ? _list.toString() : "null")
-				.append(" item: ").append(_item != null ? _item.toString() : "null")
-				.append(" count: ").append(_count != null ? _count.toString() : "null")
-				.append(" index: ").append(_index != null ? _index.toString() : "null").append(">").toString();
+		return new StringBuilder().append('<').append(getClass().getName())
+				.append(" list: ").append(_list)
+				.append(" item: ").append(_item)
+				.append(" count: ").append(_count)
+				.append(" index: ").append(_index).append('>').toString();
 	}
 
 	private int hashCodeForObject(WOComponent component, Object object) {

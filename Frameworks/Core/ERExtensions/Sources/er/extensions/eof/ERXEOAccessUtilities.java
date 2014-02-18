@@ -58,6 +58,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSSet;
+import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation._NSDelegate;
 import com.webobjects.jdbcadaptor.JDBCPlugIn;
 
@@ -1332,6 +1333,8 @@ public class ERXEOAccessUtilities {
 		            obj = EOSQLExpression.sqlStringForString((String) obj);
 		        } else if (obj instanceof Number) {
 		        	obj = EOSQLExpression.sqlStringForNumber((Number) obj);
+		        } else if (obj instanceof NSTimestamp) {
+		            obj = obj.toString();
 		        } else if (obj instanceof NSData) {
 		            // ak: this is just for logging, however we would
 		            // like to get readable data
@@ -1360,11 +1363,11 @@ public class ERXEOAccessUtilities {
 		        if (i != 0)
 		            sb.append(", ");
 		        sb.append(i + 1);
-		        sb.append(":");
+		        sb.append(':');
 		        sb.append(obj);
-		        sb.append("[");
+		        sb.append('[');
 		        sb.append(attributeName);
-		        sb.append("]");
+		        sb.append(']');
 		    }
 		}
 

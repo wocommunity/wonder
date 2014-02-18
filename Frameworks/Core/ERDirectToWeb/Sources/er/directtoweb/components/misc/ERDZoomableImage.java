@@ -107,7 +107,7 @@ public class ERDZoomableImage extends ERXStatelessComponent {
     }
 
     public String jsToZoomImage() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         if(enableZoom()) {
             sb.append ("ZoomableImage.openImageFromURL('");
             sb.append(imageSrc()); 

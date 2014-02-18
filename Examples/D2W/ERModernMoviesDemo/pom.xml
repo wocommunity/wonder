@@ -2,7 +2,7 @@
 	<parent>
 		<groupId>wonder.examples</groupId>
 		<artifactId>d2w</artifactId>
-		<version>6.1.1-SNAPSHOT</version>
+		<version>6.1.2-SNAPSHOT</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>

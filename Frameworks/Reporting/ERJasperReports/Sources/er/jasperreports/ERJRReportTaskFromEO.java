@@ -132,14 +132,8 @@ public class ERJRReportTaskFromEO implements Callable<File>, ERXTaskPercentCompl
 		return reportFile;
 	}
 
-	
-	
-	@Override
 	public Double percentComplete() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-
-
 }

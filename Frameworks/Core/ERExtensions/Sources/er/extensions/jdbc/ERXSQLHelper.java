@@ -239,7 +239,7 @@ public class ERXSQLHelper {
 		optionsCreateTables.setObjectForKey("NO", EOSchemaGeneration.ForeignKeyConstraintsKey);
 		optionsCreateTables.setObjectForKey("NO", EOSchemaGeneration.CreateDatabaseKey);
 		optionsCreateTables.setObjectForKey("NO", EOSchemaGeneration.DropDatabaseKey);
-		StringBuffer sqlBuffer = new StringBuffer();
+		StringBuilder sqlBuffer = new StringBuilder();
 		EOSynchronizationFactory sf = ((JDBCAdaptor) adaptor).plugIn().synchronizationFactory();
 		String creationScript = sf.schemaCreationScriptForEntities(entities, optionsCreateTables);
 		sqlBuffer.append(creationScript);
@@ -399,7 +399,7 @@ public class ERXSQLHelper {
 		int i = 0;
 		String oldIndexName = null;
 		String lineSeparator = System.getProperty("line.separator");
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 
 		String commandSeparator = commandSeparatorString();
 
@@ -433,8 +433,8 @@ public class ERXSQLHelper {
 							i = 0;
 						}
 						oldIndexName = indexName;
-						StringBuffer localBuf = new StringBuffer();
-						StringBuffer columnBuf = new StringBuffer();
+						StringBuilder localBuf = new StringBuilder();
+						StringBuilder columnBuf = new StringBuilder();
 						boolean validIndex = false;
 						localBuf.append("create index " + indexName + " on " + entity.externalName() + "(");
 						for (Enumeration<String> attributes = NSArray.componentsSeparatedByString(attributeNames, ",").objectEnumerator(); attributes.hasMoreElements();) {
@@ -462,7 +462,7 @@ public class ERXSQLHelper {
 							if (usedColumns.indexOfObject(l) == NSArray.NotFound) {
 								buf.append(localBuf).append(l);
 								usedColumns.addObject(l);
-								buf.append(")").append(commandSeparator).append(lineSeparator);
+								buf.append(')').append(commandSeparator).append(lineSeparator);
 							}
 						}
 					}
@@ -522,7 +522,7 @@ public class ERXSQLHelper {
 							if (usedColumns.indexOfObject(l) == NSArray.NotFound) {
 								buf.append(localBuf).append(l);
 								usedColumns.addObject(l);
-								buf.append(")").append(commandSeparator).append(lineSeparator);
+								buf.append(')').append(commandSeparator).append(lineSeparator);
 							}
 						}
 					}
@@ -813,7 +813,7 @@ public class ERXSQLHelper {
 		}
 		groupByBuffer.insert(0, " GROUP BY ");
 
-		StringBuffer sqlBuffer = new StringBuffer(expression.statement());
+		StringBuilder sqlBuffer = new StringBuilder(expression.statement());
 		sqlBuffer.insert(_groupByOrHavingIndex(expression), groupByBuffer);
 		expression.setStatement(sqlBuffer.toString());
 	}
@@ -832,13 +832,13 @@ public class ERXSQLHelper {
 		Integer integerValue = Integer.valueOf(value);
 		String operatorString = expression.sqlStringForSelector(selector, integerValue);
 
-		StringBuffer havingBuffer = new StringBuffer();
+		StringBuilder havingBuffer = new StringBuilder();
 		havingBuffer.append(" HAVING COUNT(*) ");
 		havingBuffer.append(operatorString);
-		havingBuffer.append(" ");
+		havingBuffer.append(' ');
 		havingBuffer.append(integerValue);
 
-		StringBuffer sqlBuffer = new StringBuffer(expression.statement());
+		StringBuilder sqlBuffer = new StringBuilder(expression.statement());
 		sqlBuffer.insert(_groupByOrHavingIndex(expression), havingBuffer);
 		expression.setStatement(sqlBuffer.toString());
 	}
@@ -1274,7 +1274,7 @@ public class ERXSQLHelper {
 		if (valueArray.count() == 0) {
 			return "0=1";
 		}
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		NSArray attributePath = ERXEOAccessUtilities.attributePathForKeyPath(e.entity(), key);
 		EOAttribute attribute = (EOAttribute) attributePath.lastObject();
 		String sqlName;
@@ -1296,7 +1296,7 @@ public class ERXSQLHelper {
 			int currentSize = (j + (maxPerQuery - 1) < valueArray.count() ? maxPerQuery : ((valueArray.count() % maxPerQuery)));
 			sb.append(sqlName);
 			sb.append(" IN ");
-			sb.append("(");
+			sb.append('(');
 			for (int i = j; i < j + currentSize; i++) {
 				if (i > j) {
 					sb.append(", ");
@@ -1314,7 +1314,7 @@ public class ERXSQLHelper {
 				}
 				sb.append(value);
 			}
-			sb.append(")");
+			sb.append(')');
 			if (j < valueArray.count() - maxPerQuery) {
 				sb.append(" OR ");
 			}
@@ -1721,7 +1721,7 @@ public class ERXSQLHelper {
 			int i = 0;
 			String s = super.createSchemaSQLForEntitiesInModelWithNameAndOptions(entities, modelName, optionsCreate);
 			NSArray a = NSArray.componentsSeparatedByString(s, "/");
-			StringBuffer buf = new StringBuffer(s.length());
+			StringBuilder buf = new StringBuilder(s.length());
 			Pattern pattern = Pattern.compile(".*ALTER TABLE .* ADD CONSTRAINT (.*) FOREIGN KEY .* REFERENCES .* \\(.*\\) DEFERRABLE INITIALLY DEFERRED.*");
 			Pattern pattern2 = Pattern.compile("(.*ALTER TABLE .* ADD CONSTRAINT ).*( FOREIGN KEY .* REFERENCES .* \\(.*\\) DEFERRABLE INITIALLY DEFERRED.*)");
 			String lineSeparator = System.getProperty("line.separator");
@@ -1763,7 +1763,7 @@ public class ERXSQLHelper {
 					buf.append(lineSeparator);
 				}
 				if (e.hasMoreElements()) {
-					buf.append("/");
+					buf.append('/');
 				}
 			}
 			return buf.toString();
@@ -2035,7 +2035,7 @@ public class ERXSQLHelper {
 
 		@Override
 		public String sqlForFullTextQuery(ERXFullTextQualifier qualifier, EOSQLExpression expression) {
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			sb.append("satisfies(");
 			sb.append(qualifier.indexName());
 			sb.append(", '");
@@ -2247,7 +2247,7 @@ public class ERXSQLHelper {
 			StringBuffer sql = new StringBuffer();
 			sql.append("ALTER TABLE `" + tableName + "` ADD UNIQUE `" + indexName + "` (");
 			_appendIndexColNames(sql, columnIndexes);
-			sql.append(")");
+			sql.append(')');
 			return sql.toString();
 		}
 		
@@ -2256,7 +2256,7 @@ public class ERXSQLHelper {
 			StringBuffer sql = new StringBuffer();
 			sql.append("CREATE INDEX `"+ indexName + "` ON `"+tableName+"` (");
 			_appendIndexColNames(sql, columnIndexes);
-			sql.append(")");
+			sql.append(')');
 			return sql.toString();
 		}
 
@@ -2604,6 +2604,26 @@ public class ERXSQLHelper {
 
 			return limitSqlBuilder.toString();
 		}
+
+		
+		@Override
+		public String sqlForCreateUniqueIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
+			NSMutableArray<String> columnNames = new NSMutableArray<String>();
+			for (ColumnIndex columnIndex : columnIndexes) {
+				columnNames.addObject(columnIndex.columnName());
+			}
+			return "CREATE UNIQUE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
+		}
+		
+		@Override
+		public String sqlForCreateIndex(String indexName, String tableName, ColumnIndex... columnIndexes) {
+			NSMutableArray<String> columnNames = new NSMutableArray<String>();
+			for (ColumnIndex columnIndex : columnIndexes) {
+				columnNames.addObject(columnIndex.columnName());
+			}
+			return "CREATE INDEX " + indexName + " ON " + tableName + "(" + columnNames.componentsJoinedByString(",") + ")";
+		}
+
 	}
 
 	public static class NoSQLHelper extends ERXSQLHelper {

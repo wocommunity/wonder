@@ -111,7 +111,7 @@ public class ERXFixedLengthString extends ERXStatelessComponent {
                 int sl=result.length();
                 if (sl!=l) {
                     if (sl<l) {
-                        StringBuffer sb=new StringBuffer(result);
+                        StringBuilder sb = new StringBuilder(result);
                         if (booleanValueForBinding("shouldPadToLength", true)) {
                             for (int i=sl; i<l; i++) sb.append(' ');
                         }

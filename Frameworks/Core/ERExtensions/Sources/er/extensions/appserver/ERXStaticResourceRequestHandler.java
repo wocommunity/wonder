@@ -107,7 +107,7 @@ public class ERXStaticResourceRequestHandler extends WORequestHandler {
 			WOResourceManager rm = application.resourceManager();
 			String documentRoot = documentRoot();
 			File file = null;
-			StringBuffer sb = new StringBuffer(documentRoot.length() + uri.length());
+			StringBuilder sb = new StringBuilder(documentRoot.length() + uri.length());
 			String wodataKey = request.stringFormValueForKey("wodata");
 			if(uri.startsWith("/cgi-bin") && wodataKey != null) {
 				uri = wodataKey;
@@ -134,7 +134,7 @@ public class ERXStaticResourceRequestHandler extends WORequestHandler {
 						if (requestHandlerPath == null || requestHandlerPath.length() == 0) {
 							sb.append(uri);
 						} else {
-							sb.append("/");
+							sb.append('/');
 							sb.append(requestHandlerPath);
 						}
 					}

@@ -1511,7 +1511,7 @@ public class FilesClient
     		StringBuilder sb = new StringBuilder();
     		for (int j=0; j <= i; ++j) {
     			if (sb.length() != 0) 
-    				sb.append("/");
+    				sb.append('/');
     			sb.append(parts[j]);
     		}
     		createPath(container, sb.toString());

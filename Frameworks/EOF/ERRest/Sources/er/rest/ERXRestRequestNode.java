@@ -728,7 +728,7 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 		for (int i = 0; i < depth; i++) {
 			sb.append("  ");
 		}
-		sb.append("[");
+		sb.append('[');
 		sb.append(_name);
 		if (_id != null || _type != null) {
 			if (_id != null) {
@@ -739,15 +739,15 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 			}
 		}
 		if (!_attributes.isEmpty()) {
-			sb.append(" ");
+			sb.append(' ');
 			sb.append(_attributes);
 		}
 		if (_value != null) {
-			sb.append("=");
+			sb.append('=');
 			sb.append(_value);
 		}
 		if (!_children.isEmpty()) {
-			sb.append("\n");
+			sb.append('\n');
 			for (ERXRestRequestNode child : _children) {
 				child.toString(sb, depth + 1);
 			}
@@ -755,9 +755,9 @@ public class ERXRestRequestNode implements NSKeyValueCoding, NSKeyValueCodingAdd
 				sb.append("  ");
 			}
 		}
-		sb.append("]");
+		sb.append(']');
 		if (depth > 0) {
-			sb.append("\n");
+			sb.append('\n');
 		}
 	}
 	
