@@ -758,8 +758,20 @@ public class ERXStringUtilities {
      * 
      * @param aString string to remove spaces from
      * @return string without spaces
+     * @deprecated use {@link #removeSpaces(String)} instead
      */
+    @Deprecated
     public static String escapeSpace(String aString) {
+        return removeSpaces(aString);
+    }
+
+    /**
+     * Removes the spaces in a given string.
+     * 
+     * @param aString string to remove spaces from
+     * @return string without spaces
+     */
+    public static String removeSpaces(String aString) {
         NSArray<String> parts = NSArray.componentsSeparatedByString(aString, " ");
         return parts.componentsJoinedByString("");
     }
