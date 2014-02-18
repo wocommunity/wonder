@@ -1508,7 +1508,9 @@ public class ERXStringUtilities {
      * 
      * @param aString the string to check
      * @return true if the string contains only digits, false otherwise
+     * @deprecated use {@link StringUtils#isNumeric(String)} instead
      */
+    @Deprecated
     public static boolean isDigitsOnly(String aString) {
         for (int i = aString.length(); i-- > 0;) {
             char c = aString.charAt(i);
@@ -1521,7 +1523,9 @@ public class ERXStringUtilities {
      * 
      * @param aString the string to check
      * @return true if the string contains only Letters, false otherwise
+     * @deprecated use {@link StringUtils#isAlpha(String)} instead
      */
+    @Deprecated
     public static boolean isLettersOnly(String aString) {
         for (int i = aString.length(); i-- > 0;) {
             char c = aString.charAt(i);
