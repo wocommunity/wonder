@@ -49,6 +49,7 @@ import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSPropertyListSerialization;
@@ -539,7 +540,7 @@ public class ERXStringUtilities {
     public static final String firstPropertyKeyInKeyPath(String keyPath) {
         String part = null;
         if (keyPath != null) {
-            int index = keyPath.indexOf(".");
+            int index = keyPath.indexOf(NSKeyValueCodingAdditions.KeyPathSeparator);
             if (index != -1)
                 part = keyPath.substring(0, index);
             else
@@ -551,7 +552,7 @@ public class ERXStringUtilities {
     public static final String lastPropertyKeyInKeyPath(String keyPath) {
         String part = null;
         if (keyPath != null) {
-            int index = keyPath.lastIndexOf(".");
+            int index = keyPath.lastIndexOf(NSKeyValueCodingAdditions.KeyPathSeparator);
             if (index != -1)
                 part = keyPath.substring(index + 1);
             else
@@ -563,7 +564,7 @@ public class ERXStringUtilities {
     public static final String keyPathWithoutLastProperty(String keyPath) {
         String part = null;
         if(keyPath != null) {
-            int index = keyPath.lastIndexOf(".");
+            int index = keyPath.lastIndexOf(NSKeyValueCodingAdditions.KeyPathSeparator);
             if (index != -1)
                 part = keyPath.substring(0, index);
         }
@@ -573,7 +574,7 @@ public class ERXStringUtilities {
     public static final String keyPathWithoutFirstProperty(String keyPath) {
         String part = null;
         if(keyPath != null) {
-            int index = keyPath.indexOf(".");
+            int index = keyPath.indexOf(NSKeyValueCodingAdditions.KeyPathSeparator);
             if (index != -1)
                 part = keyPath.substring(index + 1);
         }
