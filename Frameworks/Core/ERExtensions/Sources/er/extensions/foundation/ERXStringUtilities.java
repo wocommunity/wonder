@@ -1,10 +1,5 @@
-//
-// StringUtilities.java
-// Project linksadmin
-//
-// Created by ak on Mon Nov 05 2001
-//
 package er.extensions.foundation;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -751,7 +746,7 @@ public class ERXStringUtilities {
         }
         
         return result;
-    }    
+    }
 
     /**
      * Removes the spaces in a given string.
@@ -834,7 +829,7 @@ public class ERXStringUtilities {
      * <code>char</code> in a given string.
      * @param c char to count in string
      * @param s string to look for specified char in.
-     * @return number of occurences of a char in the string
+     * @return number of occurrences of a char in the string
      */
     public static int numberOfOccurrencesOfCharInString(char c, String s) {
         int result=0;
@@ -1833,19 +1828,19 @@ public class ERXStringUtilities {
 	// ##########################################################################################
     // private methods
     // ##########################################################################################
-    
+
   public static void indent(PrintWriter writer, int level) {
   	for (int i = 0; i < level; i++) {
   	  writer.append("  ");
 	}
   }
-  
+
     public static void indent(StringBuffer sb, int level) {
     	for (int i = 0; i < level; i++) {
 			sb.append("  ");
 		}
     }
-    
+
    private static void dumpArray(StringBuffer sb, NSArray array, int level) {
     	sb.append("(\n");
     	for(Enumeration e = array.objectEnumerator(); e.hasMoreElements();) {
@@ -1856,7 +1851,7 @@ public class ERXStringUtilities {
    		indent(sb, level);
     	sb.append(')');
     }
-    
+
     private static void dumpDictionary(StringBuffer sb, NSDictionary dict, int level) {
     	sb.append("{\n");
     	for(Enumeration e = dict.keyEnumerator(); e.hasMoreElements();) {
@@ -1897,9 +1892,9 @@ public class ERXStringUtilities {
     		dict.setObjectForKey(op.adaptorOperations(), "_adaptorOps");
     	if(op.object() != null)
     		dict.setObjectForKey(op.object().toString(), "_object");
-       return dict;  	
+       return dict;
     }
-    
+
     /**
      * Debug method to get the EOAdaptorOperation as a dictionary that can be pretty-printed later.
      * The output from a EOGeneralAdaptorException.userInfo.toString is pretty much unreadable.
@@ -1929,7 +1924,7 @@ public class ERXStringUtilities {
     		dict.setObjectForKey(op.exception(), "_exception");
     	return dict;
     }
-    
+
     private static void dumpObject(StringBuffer sb, Object value, int level) {
     	if(value instanceof NSDictionary) {
     		dumpDictionary(sb, (NSDictionary)value, level);
@@ -2010,7 +2005,7 @@ public class ERXStringUtilities {
 		}
 		return "{\n" + result + "}\n";
 	}
-	
+
 	/**
 	 * It's ridiculous that StringBuffer doesn't have a .regionMatches like String.  This is
 	 * stolen from String and re-implemented on top of StringBuffer.  It's slightly slower than
@@ -2103,8 +2098,7 @@ public class ERXStringUtilities {
     	return safeIdentifierName(source, "_", '_');
 
     }
-    
-    
+
     /**
      * Utility to encode an URL without the try/catch. Throws an NSForwardException in the unlikely case that ERXMessageEncoding.defaultEncoding() can't be found.
      * @param string
@@ -2117,7 +2111,7 @@ public class ERXStringUtilities {
 			throw NSForwardException._runtimeExceptionForThrowable(e);
 		}
     }
-    
+
     /**
      * Utility to decode an URL without the try/catch. Throws an NSForwardException in the unlikely case that ERXMessageEncoding.defaultEncoding() can't be found.
      * @param string
@@ -2155,7 +2149,6 @@ public class ERXStringUtilities {
 			throw NSForwardException._runtimeExceptionForThrowable(e);
 		}
     }
-
 
     /**
      * Utility to convert from UTF-8 bytes without the try/catch. Throws an NSForwardException in the unlikely case that your encoding can't be found.
@@ -2202,8 +2195,7 @@ public class ERXStringUtilities {
         }
         return buffer.toString();
     }
-    
-    
+
     /**
      * Pads a string to the specified number of chars by adding the the given pad char on the left side.  If the
      * string is longer than paddedLength, it is returned unchanged.
@@ -2225,9 +2217,9 @@ public class ERXStringUtilities {
         buffer.append(string);
         return buffer.toString();
     }
-    
+
     /**
-     * Inserts the a string into a nother string at a particular offset.
+     * Inserts the a string into another string at a particular offset.
      * 
      * @param destinationString the string to insert into
      * @param contentToInsert the string to insert
@@ -2251,7 +2243,7 @@ public class ERXStringUtilities {
     	}
 		return result;
     }
-    
+
     /**
     * Null-safe wrapper for java.lang.String.trim
     * @param s string to trim
@@ -2263,7 +2255,7 @@ public class ERXStringUtilities {
     	}
     	return s.trim();
     }
-    
+
     /**
      * Removes line breaks and quotes the string if necessary
      * 
@@ -2323,7 +2315,7 @@ public class ERXStringUtilities {
 		s = new StringBuilder().append(quoteSymbol).append(s).append(quoteSymbol).toString();
 		return s;
 	}
-	
+
 	/**
 	 * Appends a CSS class to an existing (possibly null) CSS class string.
 	 * 
@@ -2374,7 +2366,7 @@ public class ERXStringUtilities {
 		}
 		return stripped;
 	}
-	
+
     /**
      * Removes all of the HTML tags from a given string.
      * Note: this is a very simplistic implementation
@@ -2410,7 +2402,7 @@ public class ERXStringUtilities {
         }
         return StringUtils.replace(result.toString(), "&nbsp;"," ");
     }
-    
+
     /**
      * Returns the value stripped from HTML tags if <b>escapeHTML</b> is false.
      * This makes sense because it is not terribly useful to have half-finished tags in your code.
@@ -2442,7 +2434,7 @@ public class ERXStringUtilities {
         }
         return result.toString();
     }
-	
+
 	/**
 	 * @deprecated use {@link #stripHtml(String, boolean)}
 	 */
@@ -2501,7 +2493,6 @@ public class ERXStringUtilities {
 		
 		return val;
 	}
-
 
 	/**
 	 * Attempts to convert string values for attributes into the appropriate
@@ -2660,7 +2651,7 @@ public class ERXStringUtilities {
 		}
 		return rangeMatches;
 	}
-	
+
 	/**
 	 * Masks a given string with a single character in the substring specified by the
 	 * begin and end indexes.  Negative indexes count from the end of the string 
@@ -2720,10 +2711,10 @@ public class ERXStringUtilities {
 	}
 
 	/**
-	* Returns a string trimmed about at the max lenght you define without truncating the last word and adding "..." (if necessary)
+	* Returns a string trimmed about at the max length you define without truncating the last word and adding "..." (if necessary)
 	* 
 	* @param trimmingString the string you would like to trim
-	* @param maxLenght the max lenght you need
+	* @param maxLenght the max length you need
 	* @return the string trimmed
 	*/
 	public static String wordSafeTrimmedString(String trimmingString, int maxLenght) {
@@ -2804,7 +2795,7 @@ public class ERXStringUtilities {
         }
         return result;
     }
-	
+
 	public static boolean isBlank(String value) {
 		boolean isBlank = false;
 		if (value == null || value.trim().length() == 0) {
@@ -2812,7 +2803,7 @@ public class ERXStringUtilities {
 		}
 		return isBlank;
 	}
-	
+
 	public static boolean isNotBlank(String value) {
 		return ! isBlank(value);
 	}
