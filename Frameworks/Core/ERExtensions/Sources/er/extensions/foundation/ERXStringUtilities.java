@@ -32,6 +32,7 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang.CharUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
@@ -1948,14 +1949,6 @@ public class ERXStringUtilities {
 	}
 
     /**
-     * "Borrowed" from 1.5's Class.isAsciiDigit
-     */
-    private static boolean isAsciiDigit(char c) {
-    	return '0' <= c && c <= '9';
-    }
-
-
-    /**
      * "Borrowed" from 1.5's Class.getSimpleClassName
      */
 	public static String getSimpleClassName(Class clazz) {
@@ -1972,7 +1965,7 @@ public class ERXStringUtilities {
 			throw new InternalError("Malformed class name");
 		}
 		int j;
-		for (j = 1; j < i && ERXStringUtilities.isAsciiDigit(declaringClassName.charAt(j)); j++) {
+		for (j = 1; j < i && CharUtils.isAsciiNumeric(declaringClassName.charAt(j)); j++) {
 		}
 		return declaringClassName.substring(j);
 	}
