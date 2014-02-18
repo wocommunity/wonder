@@ -49,6 +49,28 @@ public class _H2PlugIn extends JDBCPlugIn {
 	static final boolean USE_NAMED_CONSTRAINTS = true;
 	protected static NSMutableDictionary<String, String> sequenceNameOverrides = new NSMutableDictionary<String, String>();
 
+	/**
+	 * Formatter to use when handling date columns. Each thread has its own
+	 * copy.
+	 */
+	private static final ThreadLocal<SimpleDateFormat> DATE_FORMATTER = new ThreadLocal<SimpleDateFormat>() {
+		@Override
+		protected SimpleDateFormat initialValue() {
+			return new SimpleDateFormat("yyyy-MM-dd");
+		}
+	};
+
+	/**
+	 * Formatter to use when handling timestamp columns. Each thread has its own
+	 * copy.
+	 */
+	private static final ThreadLocal<SimpleDateFormat> TIMESTAMP_FORMATTER = new ThreadLocal<SimpleDateFormat>() {
+		@Override
+		protected SimpleDateFormat initialValue() {
+			return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+		}
+	};
+
 	protected static String quoteTableName(String name) {
 		String result = null;
 		if (name != null) {
@@ -206,10 +228,10 @@ public class _H2PlugIn extends JDBCPlugIn {
 				result = sqlStringForData((NSData) value);
 			}
 			else if (value instanceof NSTimestamp && isTimestampAttribute(eoattribute)) {
-				result = singleQuotedString(timestampFormatter().format(value));
+				result = singleQuotedString(TIMESTAMP_FORMATTER.get().format(value));
 			}
 			else if (value instanceof NSTimestamp && isDateAttribute(eoattribute)) {
-				result = singleQuotedString(dateFormatter().format(value));
+				result = singleQuotedString(DATE_FORMATTER.get().format(value));
 			}
 			else if (value instanceof String) {
 				result = formatStringValue((String) value);
@@ -646,20 +668,6 @@ public class _H2PlugIn extends JDBCPlugIn {
 	private static final String DRIVER_CLASS_NAME = "org.h2.Driver";
 
 	private static final String DRIVER_NAME = "H2";
-
-	/**
-	 * formatter to use when handling date columns
-	 */
-	private static Format dateFormatter() {
-		return new SimpleDateFormat("yyyy-MM-dd");
-	}
-
-	/**
-	 * formatter to use when handling timestamps
-	 */
-	private static Format timestampFormatter() {
-		return new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
-	}
 
 	/**
 	 * flag for whether jdbcInfo should be written out has been tested.
