@@ -122,7 +122,7 @@ public class Session extends ERXSession {
         //possibleValues:_nil
         smcList.addObject(DRSubMasterCriteria.withKeyUseMethodUseTimeFormatFormatPossibleValuesUseTypeGroupEdgesPossibleValues("category", false, false, null, "usePredefined", false, new NSArray(new Object[]{"Action" , "Drama" , "Cult"})));
         //possibleValuesUseType:@"usePeriodic"
-        smcList3.addObject(DRSubMasterCriteria.withKeyUseMethodUseTimeFormatFormatPossibleValuesUseTypeGroupEdgesPossibleValues("revenue", false, false, null, "useRange", true, new NSArray(new Object[]{Double.valueOf(500.0), Double.valueOf(500000.0), Double.valueOf(10000000.0), Double.vaueOf(14400000.0)})));
+        smcList3.addObject(DRSubMasterCriteria.withKeyUseMethodUseTimeFormatFormatPossibleValuesUseTypeGroupEdgesPossibleValues("revenue", false, false, null, "useRange", true, new NSArray(new Object[]{Double.valueOf(500.0), Double.valueOf(500000.0), Double.valueOf(10000000.0), Double.valueOf(14400000.0)})));
         critArray.addObject(DRMasterCriteria.withSubMasterCriteriaUserInfo(smcList, null));
         critArray.addObject(DRMasterCriteria.withSubMasterCriteriaUserInfo(smcList2, null));
         critArray.addObject(DRMasterCriteria.withSubMasterCriteriaUserInfo(smcList3, null));
