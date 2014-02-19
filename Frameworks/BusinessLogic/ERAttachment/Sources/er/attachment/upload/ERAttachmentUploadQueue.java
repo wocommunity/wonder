@@ -54,7 +54,7 @@ public abstract class ERAttachmentUploadQueue<T extends ERAttachment & ERRemoteA
     }
 
     @Override
-    public <T extends ERAttachment & ERRemoteAttachment> void process(ERAttachmentQueueEntry entry) {
+    public void process(ERAttachmentQueueEntry entry) {
         EOEditingContext editingContext = ERXEC.newEditingContext();
         T attachment = entry.attachment(editingContext);
         File uploadedFile = entry.uploadedFile();
