@@ -23,7 +23,7 @@ import er.extensions.foundation.ERXExceptionUtilities;
  *
  * @see ERRemoteAttachment
  */
-public abstract class ERAttachmentUploadQueue<T extends ERAttachment & ERRemoteAttachment> extends ERXAsyncQueue<ERAttachmentQueueEntry<T>> {
+public abstract class ERAttachmentUploadQueue<T extends ERAttachment & ERRemoteAttachment> extends ERXAsyncQueue<ERAttachmentQueueEntry> {
     protected final ERAttachmentProcessor<T> _processor;
 
     public ERAttachmentUploadQueue(String name, ERAttachmentProcessor<T> processor) {
@@ -45,7 +45,7 @@ public abstract class ERAttachmentUploadQueue<T extends ERAttachment & ERRemoteA
 
         try {
             EOGlobalID attachmentID = editingContext.globalIDForObject(attachment);
-            ERAttachmentQueueEntry<T> entry = new ERAttachmentQueueEntry<T>(attachment._pendingUploadFile(), attachmentID);
+            ERAttachmentQueueEntry entry = new ERAttachmentQueueEntry(attachment._pendingUploadFile(), attachmentID);
 
             enqueue(entry);
         } finally {
@@ -54,7 +54,8 @@ public abstract class ERAttachmentUploadQueue<T extends ERAttachment & ERRemoteA
     }
 
     @Override
-    public void process(ERAttachmentQueueEntry entry) {
+    public void process(ERAttachmentQueueEntry aEntry) {
+    	ERAttachmentQueueEntry<T> entry = aEntry;
         EOEditingContext editingContext = ERXEC.newEditingContext();
         T attachment = entry.attachment(editingContext);
         File uploadedFile = entry.uploadedFile();
