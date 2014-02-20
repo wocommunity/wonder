@@ -4,6 +4,7 @@ import com.webobjects.eoaccess.EODatabaseDataSource;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
 
 /**
  * enhanced version which allows the user to 
@@ -103,7 +104,21 @@ public class ERXDatabaseDataSource extends EODatabaseDataSource {
    public void setPrefetchingRelationshipKeyPaths(NSArray<String> relationshipKeyPaths) {
        _prefetchingRelationshipKeyPaths = relationshipKeyPaths;
    }
-   
+
+   /**
+    * Sets the relationships to prefetch along with the main fetch.
+    * 
+    * @see #setPrefetchingRelationshipKeyPaths(NSArray)
+    * @param prefetchingRelationshipKeyPaths list of keys to prefetch
+    */
+   public void setPrefetchingRelationshipKeyPaths(ERXKey<?>... prefetchingRelationshipKeyPaths) {
+       NSMutableArray<String> keypaths = new NSMutableArray<String>();
+       for (ERXKey<?> key : prefetchingRelationshipKeyPaths) {
+           keypaths.addObject(key.key());
+       }
+       setPrefetchingRelationshipKeyPaths(keypaths);
+   }
+
     /** 
      * Enhanced version which uses the refreshesRefetchedObjects value
      * @see #setRefreshesRefetchedObjects(boolean)

@@ -19,13 +19,13 @@ public class ERXPropertyListSerializationTest extends ERXTestCase {
 		assertEquals("\"fran\\u00e7ais\"", jsonString);
 		assertEquals(stringObject, ERXPropertyListSerialization.propertyListFromJSONString(jsonString));
 		// Integer array
-		NSArray<Integer> integerArray = new NSArray<Integer>(1, 2, 3);
+		NSArray<Integer> integerArray = new NSArray<Integer>(new Integer[] { Integer.valueOf(1), Integer.valueOf(2), Integer.valueOf(3) } );
 		jsonString = ERXPropertyListSerialization.jsonStringFromPropertyList(integerArray);
 		assertEquals("[1,2,3]", jsonString);
 		jsonString = ERXPropertyListSerialization.jsonStringFromPropertyList(integerArray, false);
 		assertEquals("[\n\t1,\n\t2,\n\t3\n]", jsonString);
 		// dictionary
-		NSDictionary<String, Integer> integerDict = new NSDictionary<String, Integer>(new Integer[] {1, 2}, new String[] {"a", "b"});
+		NSDictionary<String, Integer> integerDict = new NSDictionary<String, Integer>(new Integer[] {Integer.valueOf(1), Integer.valueOf(2)}, new String[] {"a", "b"});
 		jsonString = ERXPropertyListSerialization.jsonStringFromPropertyList(integerDict);
 		assertEquals("{\"a\" : 1,\"b\" : 2}", jsonString);
 		jsonString = ERXPropertyListSerialization.jsonStringFromPropertyList(integerDict, false);

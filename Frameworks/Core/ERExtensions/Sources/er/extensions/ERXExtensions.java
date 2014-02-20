@@ -20,6 +20,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
@@ -158,8 +159,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * that are posted when the application is finished launching.
      * This public observer is used to perform basic functions in
      * response to notifications. Specifically it handles
-     * configuring the adapator context so that SQL debugging can
-     * be enabled and disabled on the fly throgh the log4j system.
+     * configuring the adaptor context so that SQL debugging can
+     * be enabled and disabled on the fly through the log4j system.
      * Handling cleanup issues when sessions timeout, i.e. releasing
      * all references to editing contexts created for that session.
      * Handling call all of the <code>did*</code> methods on
@@ -229,17 +230,6 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 
     		ERXEntityClassDescription.registerDescription();
     		ERXPartialInitializer.registerModelGroupListener();
-    		if (!ERXProperties.webObjectsVersionIs52OrHigher()) {
-    			NSNotificationCenter.defaultCenter().addObserver(this,
-    					new NSSelector("sessionDidTimeOut", ERXConstant.NotificationClassArray),
-    					WOSession.SessionDidTimeOutNotification,
-    					null);
-    			NSNotificationCenter.defaultCenter().addObserver(this,
-    					new NSSelector("editingContextDidCreate",
-    							ERXConstant.NotificationClassArray),
-    							ERXEC.EditingContextDidCreateNotification,
-    							null);                    
-    		}
     	} catch (Exception e) {
     		throw NSForwardException._runtimeExceptionForThrowable(e);
     	}
@@ -367,7 +357,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     }
 
     /**
-     * This method is called everytime the configuration file
+     * This method is called every time the configuration file
      * is changed. This allows for turning SQL debugging on and
      * off at runtime.
      * @param n notification posted when the configuration file
@@ -631,7 +621,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param s2 to be inserted
      * @param s string to have the replacement done on it
      * @return string after having all of the replacement done.
-     * @deprecated use {@link er.extensions.foundation.ERXStringUtilities#replaceStringByStringInString(String, String, String)}
+     * @deprecated use {@link StringUtils#replace(String, String, String)} instead
      */
     @Deprecated
     public static String substituteStringByStringInString(String s1, String s2, String s) {
@@ -1098,7 +1088,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      */
     // FIXME: Needs to find a better home.
     public static String userPreferencesKeyFromContext(String key, NSKeyValueCoding context) {
-        StringBuffer result=new StringBuffer(key);
+        StringBuilder result = new StringBuilder(key);
         result.append('.');
         String pc=(String)context.valueForKey("pageConfiguration");
         if (pc==null || pc.length()==0) {
@@ -1107,7 +1097,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
             if (e!=null) en=e.name();
             result.append("__");
             result.append(context.valueForKey("task"));
-            result.append("_");
+            result.append('_');
             result.append(en);
         } else {
             result.append(pc);

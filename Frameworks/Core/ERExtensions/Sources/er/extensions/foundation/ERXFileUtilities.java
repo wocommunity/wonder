@@ -232,9 +232,12 @@ public class ERXFileUtilities {
         if (f == null) throw new IllegalArgumentException("null file");
         FileInputStream fis = new FileInputStream(f);
         GZIPInputStream gis = new GZIPInputStream(fis);
-        byte[] result = bytesFromInputStream(gis);
-        fis.close();
-        gis.close();
+        byte[] result = null;
+        try {
+            result = bytesFromInputStream(gis);
+        } finally {
+            gis.close();
+        }
         return result;
     }
 
@@ -332,19 +335,11 @@ public class ERXFileUtilities {
 	            throw e;
 	        }
 	    }
-	    catch (RuntimeException e) {
-	        stream.close();
-	        throw e;
-	    }
-	    catch (IOException e) {
-	        stream.close();
-	        throw e;
-	    }
 	    finally {
 	        stream.close();
 	    }
 	    return tempFile;
-    	}
+    }
 
     /**
      * Writes the contents of an InputStream to a specified file.
@@ -433,7 +428,7 @@ public class ERXFileUtilities {
 	    if (s == null) throw new NullPointerException("string argument cannot be null");
 	    if (f == null) throw new NullPointerException("file argument cannot be null");
 	    
-	    byte[] bytes = s.getBytes(charset());
+	    byte[] bytes = s.getBytes(charset().name());
 	    ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
 	    writeInputStreamToGZippedFile(bais, f);
     }
@@ -465,15 +460,18 @@ public class ERXFileUtilities {
         if (encoding == null) throw new IllegalArgumentException("encoding argument cannot be null");
         Reader reader = new BufferedReader(new StringReader(s));
         FileOutputStream fos = new FileOutputStream(f);
-        Writer out = new BufferedWriter( new OutputStreamWriter(fos, encoding) );        
+        Writer out = new BufferedWriter( new OutputStreamWriter(fos, encoding) );
         char buf[] = new char[1024 * 50];
         int read = -1;
-        while ((read = reader.read(buf)) != -1) {
-            out.write(buf, 0, read);
+        try {
+            while ((read = reader.read(buf)) != -1) {
+                out.write(buf, 0, read);
+            }
+        } finally {
+            reader.close();
+            out.flush();
+            out.close();
         }
-        reader.close();
-        out.flush();
-        out.close();
     }
 
     /**
@@ -538,7 +536,7 @@ public class ERXFileUtilities {
      * @throws IOException if things go wrong
      */
     public static String stringFromGZippedFile(File f) throws IOException {
-        return new String(bytesFromGZippedFile(f), charset());
+        return new String(bytesFromGZippedFile(f), charset().name());
     }
  	
     /**
@@ -549,7 +547,7 @@ public class ERXFileUtilities {
      * @throws IOException if things go wrong
      */
     public static String stringFromFile(File f) throws IOException {
-        return new String(bytesFromFile(f), charset());
+        return new String(bytesFromFile(f), charset().name());
     }
 
     /**
@@ -562,7 +560,7 @@ public class ERXFileUtilities {
      */
     public static String stringFromFile(File f, String encoding) throws IOException {
         if (encoding == null) {
-            return new String(bytesFromFile(f), charset());
+            return new String(bytesFromFile(f), charset().name());
         }
         return new String(bytesFromFile(f), encoding);
     }
@@ -992,7 +990,7 @@ public class ERXFileUtilities {
      * @param srcDirectory source directory
      * @param dstDirectory destination directory
      * @param deleteOriginals tells if the original files, the file is deleted even if appuser has no write
-     * rights. This is compareable to a <code>rm -f filename</code> instead of <code>rm filename</code>
+     * rights. This is comparable to a <code>rm -f filename</code> instead of <code>rm filename</code>
      * @param replaceExistingFiles <code>true</code> if the destination should be overwritten if it already exists
      * @param recursiveCopy specifies if directories should be recursively copied
      * @param filter which restricts the files to be copied
@@ -1023,10 +1021,11 @@ public class ERXFileUtilities {
                         if (deleteOriginals) {
                             renameTo(srcFile, dstFile);
                         } else {
-                            if (dstFile.mkdirs())
+                            if (dstFile.exists() || dstFile.mkdirs()) {
                                 copyFilesFromDirectory(srcFile, dstFile, deleteOriginals, replaceExistingFiles, recursiveCopy, filter);
-                            else
+                            } else {
                                 log.error("Error creating directories for destination \""+dstDirectory.getPath()+"\"");
+                            }
                         }
                     } else if (!srcFile.isDirectory()) {
                     	if (replaceExistingFiles || ! dstFile.exists()) {
@@ -1504,11 +1503,11 @@ public class ERXFileUtilities {
         int mod = noOfChars%2;
         int firstHalf = noOfChars/2 + mod;
         int secondHalf = firstHalf - mod;        
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append( s.substring( 0, firstHalf ) );
         sb.append( elips );
         sb.append( s.substring( stringLength-secondHalf, stringLength ) );
-        sb.append( "." );
+        sb.append('.');
         sb.append( ext );
         return sb.toString();
     }

@@ -231,10 +231,7 @@ public class WOOgnl {
 			// vs throwing an exception).  They have something called nullHandlers 
 			// in OGNL, but it appears that you have to register it per-class and you
 			// can't override the factory.
-			if (message != null && message.startsWith("source is null for getProperty(null, ")) {
-				value = null;
-			}
-			else {
+			if (message == null || !message.startsWith("source is null for getProperty(null, ")) {
 				throw new RuntimeException("Failed to get value '" + expression + "' on " + obj, ex);
 			}
 		}

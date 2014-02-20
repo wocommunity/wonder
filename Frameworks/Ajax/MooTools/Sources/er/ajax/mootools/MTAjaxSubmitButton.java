@@ -1,6 +1,7 @@
 package er.ajax.mootools;
 
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
@@ -67,7 +68,7 @@ public class MTAjaxSubmitButton extends AjaxDynamicElement {
 	// MS: If you change this value, make sure to change it in ERXAjaxApplication and in wonder.js
 	public static final String KEY_PARTIAL_FORM_SENDER_ID = "_partialSenderID";
 
-	public MTAjaxSubmitButton(String name, NSDictionary associations, WOElement children) {
+	public MTAjaxSubmitButton(String name, NSDictionary<String, WOAssociation> associations, WOElement children) {
 		super(name, associations, children);
 	}
 
@@ -111,10 +112,10 @@ public class MTAjaxSubmitButton extends AjaxDynamicElement {
 		MTAjaxUtils.addScriptResourceInHead(context, context.response(), "MooTools", MTAjaxUtils.MOOTOOLS_CORE_JS);
 		MTAjaxUtils.addScriptResourceInHead(context, context.response(), "MooTools", MTAjaxUtils.MOOTOOLS_MORE_JS);
 		Boolean useSpinner = (Boolean)valueForBinding("useSpinner", Boolean.FALSE, context.component());
-		if(useSpinner) {
+		if(useSpinner.booleanValue()) {
 			Boolean useDefaultSpinnerClass = (Boolean)valueForBinding("defaultSpinnerClass", Boolean.TRUE, context.component());
-			if(useDefaultSpinnerClass) {
-				MTAjaxUtils.addStylesheetResourceInHead(context, context.response(), "MooTools", "scripts/plugins/spinner/spinner.css");
+			if(useDefaultSpinnerClass.booleanValue()) {
+				AjaxUtils.addStylesheetResourceInHead(context, context.response(), "MooTools", "scripts/plugins/spinner/spinner.css");
 			}
 		}
 
@@ -198,15 +199,15 @@ public class MTAjaxSubmitButton extends AjaxDynamicElement {
 				if(beforeEffectDuration != null || mode != null) {
 					onClickBuffer.append(", { ");
 					if(beforeEffectDuration != null) {
-						onClickBuffer.append("duration: '").append(beforeEffectDuration).append("'").append(mode != null || transition != null ? "," : "");
+						onClickBuffer.append("duration: '").append(beforeEffectDuration).append('\'').append(mode != null || transition != null ? "," : "");
 					}
 					if(mode != null) {
-						onClickBuffer.append("mode: '").append(mode).append("'").append(transition != null ? "," : "");
+						onClickBuffer.append("mode: '").append(mode).append('\'').append(transition != null ? "," : "");
 					}
 					if(transition != null) {
 						onClickBuffer.append("transition: ").append(transition);
 					}
-					onClickBuffer.append("}");
+					onClickBuffer.append('}');
 				}
 				onClickBuffer.append("); $('").append(beforeEffectID).append("').get('slide').slide").append(ERXStringUtilities.capitalize(beforeEffectProperty)).append("().chain(function() {");
 			} else if(beforeEffect.equals("highlight")) {
@@ -234,7 +235,7 @@ public class MTAjaxSubmitButton extends AjaxDynamicElement {
 			onClickBuffer.append(", null");
 		}
 
-		onClickBuffer.append(",");
+		onClickBuffer.append(',');
 		NSMutableDictionary options = createAjaxOptions(component);
 
 		String effect = (String) valueForBinding("effect", component);
@@ -260,7 +261,7 @@ public class MTAjaxSubmitButton extends AjaxDynamicElement {
 		}
 
 		AjaxOptions.appendToBuffer(options, onClickBuffer, context);
-		onClickBuffer.append(")");
+		onClickBuffer.append(')');
 		String onClick = (String)valueForBinding("onClick", component);
 		if(onClick != null) {
 			onClickBuffer.append("; ").append(onClick);
@@ -271,7 +272,7 @@ public class MTAjaxSubmitButton extends AjaxDynamicElement {
 		}
 
 		if(onClickBefore != null) {
-			onClickBuffer.append("}");
+			onClickBuffer.append('}');
 		}
 
 		if(functionName != null) {

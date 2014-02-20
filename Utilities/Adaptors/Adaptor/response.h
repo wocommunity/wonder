@@ -54,6 +54,9 @@ typedef struct _HTTPResponse {
 #define RESP_HTTP10		2	/* set if the response was HTTP/1.0 */
 #define RESP_HTTP11		4	/* set if the response was HTTP/1.1 */
 #define RESP_CLOSE_CONNECTION	8	/* set if instanceConnection should be closed */
+#define RESP_LENGTH_INVALID    16       /* 2009/06/09: set if the content length of the response is invalid */
+#define RESP_LENGTH_EXPLICIT   32       /* 2009/06/10: set if the WebObjects instance provides a content-length value */
+#define RESP_CONTENT_TYPE_SET  64       /* 2011/11/16: set if the WebObjects instance provides a content-type value */
 
 HTTPResponse *resp_new(char *status, WOInstanceHandle instHandle, WOConnection *instanceConnection);
 
@@ -76,7 +79,10 @@ HTTPResponse *resp_getResponseHeaders(WOConnection *instanceConnection, WOInstan
  *      content_valid. This data should be sent back to the client. This function should be called in a loop to sent the
  *      entire response content back to the client.
  *	However, if allowStreaming is 0, then the entire content is read in one go.
- *	Returns 0 on success, -1 on error.
+ *	Returns 0 on success, -1 if no data was received from the WebObjects application and > 0 if an incomplete data
+ *      package was received (the return value describes the number of received bytes in such a situation).
+ *
+ *      2009/06/09: Description update to reflect return value changes.
  */
 int resp_getResponseContent(HTTPResponse *resp, int allowStreaming);
 

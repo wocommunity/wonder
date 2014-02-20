@@ -59,10 +59,12 @@ import er.extensions.localization.ERXLocalizer;
  * @binding onDateSelect JavaScript to execute when a date is selected from the calendar
  * @binding fireEvent false if the onChange event for the input should NOT be fired when a date is selected in the calendar, defaults to true
  * 
+ * @binding startDay specify the first day of week to use 0(Sunday)-6(Saturday). The default use the current localizer.
  * @binding dayNames list of day names (Sunday to Saturday) for localization, English is the default
  * @binding monthNames list of month names for localization, English is the default
  * @binding imagesDir directory to take images from, takes them from Ajax.framework by default
  * @binding locale FL: locale can be set if ERXLocalizer returns the wrong one. IE the English localizer returns a US Locale. If you want the UK one then set this binding.
+ * @binding showYearControls: display the prev and next year controls. Default to true.
  * 
  * @binding calendarCSS name of CSS resource with classed for calendar, defaults to "calendar.css"
  * @binding calendarCSSFramework name of framework (null for application) containing calendarCSS resource, defaults to "Ajax"
@@ -211,7 +213,8 @@ public class AjaxDatePicker extends AjaxComponent {
 		
 		// FL Added to support start day, defaults to 0 (Sunday - choice made in calendar.js).
 		ajaxOptionsArray.addObject(new AjaxOption("start_day", "startDay", startDay(), AjaxOption.NUMBER));
-
+		ajaxOptionsArray.addObject(new AjaxOption("showYearControls", "showYearControls", showYearControls(), AjaxOption.BOOLEAN));
+		
 		ajaxOptionsArray.addObject(new AjaxOption("onDateSelect", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("fireEvent", AjaxOption.BOOLEAN));
 
@@ -221,7 +224,11 @@ public class AjaxDatePicker extends AjaxComponent {
     	super.appendToResponse(res, ctx);
     }
     
-    /**
+    private Boolean showYearControls() {
+		return Boolean.valueOf(booleanValueForBinding("showYearControls", true));
+	}
+
+	/**
      * @return JavaScript for onFocus binding of HTML input
      */
     public String onFocusScript() {

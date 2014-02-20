@@ -70,7 +70,7 @@ class ERCNConnectionKeeper implements ExceptionListener {
             return;
         } catch (NameNotFoundException ex) {
             // javax.naming.NameNotFoundException -- no topic
-            new RuntimeException("Cannot find the topic with name \"" + _coordinator.configuration().topicName() + "\"."
+            throw new RuntimeException("Cannot find the topic with name \"" + _coordinator.configuration().topicName() + "\"."
                     + "Please check if the JMS server is properly configured: " + ex.getMessage());
         } catch (NamingException ex) {
             if (verboseLogging) {

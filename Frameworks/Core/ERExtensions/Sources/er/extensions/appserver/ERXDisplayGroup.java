@@ -1,6 +1,7 @@
 package er.extensions.appserver;
 
 import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WODisplayGroup;
@@ -16,7 +17,9 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSSet;
+import com.webobjects.foundation._NSArrayUtilities;
 
+import er.extensions.batching.ERXBatchingDisplayGroup;
 import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.eof.ERXS;
 
@@ -93,6 +96,19 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 		} else {
 			_extraQualifiers.removeObjectForKey(key);
 		}
+	}
+	
+	/**
+	 * Will return the qualifier set by "setQualifierForKey()" if it exists. Null returns otherwise.
+	 * @param key
+	 * @return
+	 */
+	public EOQualifier qualifierForKey(String key) {
+		EOQualifier qualifier = null;
+		if (StringUtils.isNotBlank(key)) {
+			qualifier = _extraQualifiers.objectForKey(key);
+		}
+		return qualifier;
 	}
 
 	/**
@@ -175,11 +191,20 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	}
 
 	@Override
-	public void setSelectedObjects(NSArray nsarray) {
+	public void setSelectedObjects(NSArray objects) {
 		if(log.isDebugEnabled()) {
-			log.debug("setSelectedObjects@" + hashCode()  + ":" + (nsarray != null ? nsarray.count() : "0"));
+			log.debug("setSelectedObjects@" + hashCode()  + ":" + (objects != null ? objects.count() : "0"));
 		}
-		super.setSelectedObjects(nsarray);
+		if (this instanceof ERXBatchingDisplayGroup) {
+			// keep previous behavior
+			// CHECKME a batching display group has its own _displayedObjects variable so setSelectionIndexes won't work
+			super.setSelectedObjects(objects);
+		} else {
+			// jw: don't call super as it does not call setSelectionIndexes as advertised in its
+			// javadocs and thus doesn't invoke events on the delegate
+			NSArray<Integer> newSelection = _NSArrayUtilities.indexesForObjectsIndenticalTo(displayedObjects(), objects);
+			setSelectionIndexes(newSelection);
+		}
 	}
 
 	@Override

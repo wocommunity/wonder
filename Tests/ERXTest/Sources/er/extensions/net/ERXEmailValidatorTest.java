@@ -1,6 +1,9 @@
 package er.extensions.net;
 
 import junit.framework.Assert;
+
+import org.junit.Ignore;
+
 import er.erxtest.ERXTestCase;
 
 public class ERXEmailValidatorTest extends ERXTestCase {
@@ -29,6 +32,7 @@ public class ERXEmailValidatorTest extends ERXTestCase {
 		Assert.assertTrue(allowNeither.isValidEmailString("me@somewhere.com"));
 	}
 	
+	@Ignore
 	public void testIsValidDomainString() {
 		Assert.assertTrue(!Boolean.FALSE.equals(ERXEmailValidator.isValidDomainString("gmail.com", 500)));
 		Assert.assertNull(ERXEmailValidator.isValidDomainString("gmail.com", 0));
@@ -41,5 +45,6 @@ public class ERXEmailValidatorTest extends ERXTestCase {
 		Assert.assertEquals("gmail.com", ERXEmailValidator.hostNameForEmailString("tom@gmail.com"));
 		Assert.assertEquals("74.125.224.182", ERXEmailValidator.hostNameForEmailString("tom@[74.125.224.182]"));
 		Assert.assertEquals("74.125.224.182", ERXEmailValidator.hostNameForEmailString("\"Thomas Thomson\" < tom@[	74.125.224.182 ]>"));
+		Assert.assertEquals("", ERXEmailValidator.hostNameForEmailString("thomas"));
 	}
 }

@@ -10,7 +10,6 @@ import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.directtoweb.Assignment;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.Rule;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;

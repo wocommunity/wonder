@@ -319,13 +319,13 @@ public class ERXDictionaryUtilities {
 		if (separator == null) {
 			separator = "&";
 		}
-		StringBuffer sb = new StringBuffer(100);
+		StringBuilder sb = new StringBuilder(100);
 		if (dict != null) {
 			for (Enumeration<?> e = dict.allKeys().objectEnumerator(); e.hasMoreElements();) {
 				Object key = e.nextElement();
 				try {
 					sb.append(URLEncoder.encode(key.toString(), encoding));
-					sb.append("=");
+					sb.append('=');
 					sb.append(URLEncoder.encode(dict.objectForKey(key).toString(), encoding));
 					if (e.hasMoreElements()) {
 						sb.append(separator);

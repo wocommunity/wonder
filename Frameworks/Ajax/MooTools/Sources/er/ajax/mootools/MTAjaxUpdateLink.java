@@ -54,7 +54,7 @@ import er.extensions.foundation.ERXStringUtilities;
 public class MTAjaxUpdateLink extends AjaxUpdateLink {
 
 	
-	public MTAjaxUpdateLink(String name, NSDictionary associations, WOElement children) {
+	public MTAjaxUpdateLink(String name, NSDictionary<String, WOAssociation> associations, WOElement children) {
 		super(name, associations, children);
 	}
 
@@ -94,10 +94,10 @@ public class MTAjaxUpdateLink extends AjaxUpdateLink {
 		MTAjaxUtils.addScriptResourceInHead(context, context.response(), "MooTools", MTAjaxUtils.MOOTOOLS_CORE_JS);
 		MTAjaxUtils.addScriptResourceInHead(context, context.response(), "MooTools", MTAjaxUtils.MOOTOOLS_MORE_JS);
 		Boolean useSpinner = (Boolean)valueForBinding("useSpinner", Boolean.FALSE, context.component());
-		if(useSpinner) {
+		if(useSpinner.booleanValue()) {
 			Boolean useDefaultSpinnerClass = (Boolean)valueForBinding("defaultSpinnerClass", Boolean.TRUE, context.component());
-			if(useDefaultSpinnerClass) {
-				MTAjaxUtils.addStylesheetResourceInHead(context, context.response(), "MooTools", "scripts/plugins/spinner/spinner.css");
+			if(useDefaultSpinnerClass.booleanValue()) {
+				AjaxUtils.addStylesheetResourceInHead(context, context.response(), "MooTools", "scripts/plugins/spinner/spinner.css");
 			}
 		}
 		
@@ -151,7 +151,7 @@ public class MTAjaxUpdateLink extends AjaxUpdateLink {
 			.append("('").append(updateContainerID).append("', ");
 			AjaxOptions.appendToBuffer(nonDefaultOptions, onClickBuffer, context);
 			onClickBuffer.append(", '").append(context.contextID()).append('.').append(context.elementID())
-			.append("'").append(")").append(";");
+			.append('\'').append(')').append(';');
 
 		} else {
 					
@@ -199,15 +199,15 @@ public class MTAjaxUpdateLink extends AjaxUpdateLink {
 					if(beforeEffectDuration != null || mode != null) {
 						onClickBuffer.append(", { ");
 						if(beforeEffectDuration != null) {
-							onClickBuffer.append("duration: '").append(beforeEffectDuration).append("'").append(mode != null || transition != null ? "," : "");
+							onClickBuffer.append("duration: '").append(beforeEffectDuration).append('\'').append(mode != null || transition != null ? "," : "");
 						}
 						if(mode != null) {
-							onClickBuffer.append("mode: '").append(mode).append("'").append(transition != null ? "," : "");
+							onClickBuffer.append("mode: '").append(mode).append('\'').append(transition != null ? "," : "");
 						}
 						if(transition != null) {
 							onClickBuffer.append("transition: ").append(transition);
 						}
-						onClickBuffer.append("}");
+						onClickBuffer.append('}');
 					}
 					onClickBuffer.append("); $('").append(beforeEffectID).append("').get('slide').slide").append(ERXStringUtilities.capitalize(beforeEffectProperty)).append("().chain(function() {");
 				} else if(beforeEffect.equals("highlight")) {
@@ -259,7 +259,7 @@ public class MTAjaxUpdateLink extends AjaxUpdateLink {
 			}
 			
 			if(onClick != null) {
-				onClickBuffer.append(";")
+				onClickBuffer.append(';')
 				.append(onClick);
 			}
 			
@@ -272,7 +272,7 @@ public class MTAjaxUpdateLink extends AjaxUpdateLink {
 			}
 			
 			if(generateFunctionWrapper) {
-				onClickBuffer.append("}");
+				onClickBuffer.append('}');
 			}
 		}
 
@@ -291,7 +291,7 @@ public class MTAjaxUpdateLink extends AjaxUpdateLink {
 			if(updateContainerID == null) {
 				throw new WODynamicElementCreationException("You cannot specify an effect without an updateContainerID.");
 			}
-			StringBuffer effectBuffer = new StringBuffer();
+			StringBuilder effectBuffer = new StringBuilder();
 			effectBuffer.append("function() { ");
 			if(effect.equals("tween")) {
 				if(duration != null) {
@@ -311,7 +311,7 @@ public class MTAjaxUpdateLink extends AjaxUpdateLink {
 			} else if(effect.equals("highlight")) {
 				effectBuffer.append("$('").append(updateContainerID).append("').highlight(").append(effectProperty != null ? effectProperty : "").append(");");
 			}
-			effectBuffer.append("}");
+			effectBuffer.append('}');
 			options.setObjectForKey(effectBuffer.toString(), "onSuccess");
 		}
 	}

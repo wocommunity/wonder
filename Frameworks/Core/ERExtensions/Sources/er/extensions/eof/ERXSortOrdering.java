@@ -1,6 +1,7 @@
 package er.extensions.eof;
 
 import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
@@ -129,6 +130,11 @@ public class ERXSortOrdering extends EOSortOrdering {
 			return ObjectUtils.equals(key(), other.key()) && ObjectUtils.equals(selector(), other.selector());
 		}
 		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder().append(key()).append(selector()).toHashCode();
 	}
 
 	/**

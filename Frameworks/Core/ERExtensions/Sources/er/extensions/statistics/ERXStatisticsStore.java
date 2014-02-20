@@ -1,5 +1,6 @@
 package er.extensions.statistics;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -37,6 +38,7 @@ import er.extensions.statistics.store.IERXStatisticsStoreListener;
  * <li>will dump warning and error messages when a request takes too long, complete with stack traces of all threads.</li>
  * <li>logs fatal messages that occurred before a request finished processing.</li>
  * <li>fixes an incompatibility with 5.4.</li>
+ * <li>fixes wrong computation of average session memory</li>
  * </ul>
  *
  * <p>In order to turn on this functionality, you must make this call in your Application null constructor:<br/>
@@ -52,10 +54,18 @@ import er.extensions.statistics.store.IERXStatisticsStoreListener;
  * @author kieran (Oct 14, 2009) - minor changes to capture thread name in middle of the request (useful for {@link er.extensions.appserver.ERXSession#threadName()}}
  */
 public class ERXStatisticsStore extends WOStatisticsStore {
-
-	private static final Logger log = Logger.getLogger(ERXStatisticsStore.class);
-
+	protected static final Logger log = Logger.getLogger(ERXStatisticsStore.class);
 	private final StopWatchTimer _timer = new StopWatchTimer();
+	protected static Field initMemoryField;
+
+	static {
+		try {
+			initMemoryField = WOStatisticsStore.class.getDeclaredField("_initializationMemory");
+			initMemoryField.setAccessible(true);
+		} catch (Exception e) {
+			log.warn("Could not access private field WOStatisticsStore._initializationMemory. ", e);
+		}
+	}
 
 	private StopWatchTimer timer() {
 		return _timer;
@@ -80,7 +90,6 @@ public class ERXStatisticsStore extends WOStatisticsStore {
     /**
 	 * Thread that checks each second for running requests and makes a snapshot
 	 * after a certain amount of time has expired.
-	 * 
 	 * 
 	 * @author ak
 	 */
@@ -177,7 +186,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 					capturedThreadName = names.get(Thread.currentThread());
 				}
 				
-				StringBuffer sb = new StringBuffer();
+				StringBuilder sb = new StringBuilder();
 				sb.append("\nRequest Thread Name: ").append(capturedThreadName).append("\n\n");
 				for (Iterator iterator = traces.keySet().iterator(); iterator.hasNext();) {
 					Thread t = (Thread) iterator.next();
@@ -192,17 +201,18 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 								String customThreadName = names.get(t);
 								if (customThreadName != null) {
 									sb.append(customThreadName).append(":\n");
-								}					
+								}
 							}
 							sb.append(t).append(":\n");
 							for (int i = 0; i < stack.length; i++) {
 								StackTraceElement stackTraceElement = stack[i];
-								sb.append("\tat ").append(stackTraceElement).append("\n");
+								sb.append("\tat ").append(stackTraceElement).append('\n');
 							}
 						}
 					}
 				}
-				trace = "\n" + sb.toString();
+				sb.insert(0, '\n');
+				trace = sb.toString();
 				// trace =
 				// trace.replaceAll("at\\s+(com.webobjects|java|er|sun)\\..*?\\n",
 				// "...\n");
@@ -215,7 +225,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 		}
 
 		private boolean hasTimerStarted() {
-			return time() != 0;
+			return time() != 0L;
 		}
 
 		protected void startTimer() {
@@ -282,6 +292,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 							}
 							Map<Thread, String> names = getCurrentThreadNames(traces.keySet());
 							_warnTraces.put(thread, traces);
+							_warnTracesNames.put(thread, names);
 						}
 						if (time > _maximumRequestErrorTime/2 && _errorTraces.get(thread) == null) {
 							if(traces == null) {
@@ -298,11 +309,16 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 							Map<Thread, String> names = getCurrentThreadNames(traces.keySet());
 							_fatalTraces.put(thread, traces);
 							_fatalTracesNames.put(thread, names);
-							String message = "Request is taking too long, possible deadlock: " + time + " ms ";
-							message += stringFromTracesAndNames(traces, names);
-							message += "EC info:\n" + ERXEC.outstandingLockDescription();
-							message += "OSC info:\n" + ERXObjectStoreCoordinator.outstandingLockDescription();
-							log.fatal(message);
+							StringBuilder sb = new StringBuilder();
+							sb.append("Request is taking too long, possible deadlock: ");
+							sb.append(time);
+							sb.append(" ms ");
+							sb.append(stringFromTracesAndNames(traces, names));
+							sb.append("EC info:\n");
+							sb.append(ERXEC.outstandingLockDescription());
+							sb.append("OSC info:\n");
+							sb.append(ERXObjectStoreCoordinator.outstandingLockDescription());
+							log.fatal(sb.toString());
                             deadlocksCount++;
 						}
 					}
@@ -312,7 +328,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 		}
 
 		private Map<Thread, String> getCurrentThreadNames(Set<Thread> keySet) {
-			Map names = new HashMap<Thread, String>();
+			Map<Thread, String> names = new HashMap<Thread, String>();
 			for (Thread thread : keySet) {
 				names.put(thread, thread.getName());
 			}
@@ -332,7 +348,6 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 		}
 		stats = fixed;
 		return stats;
-		
 	}
 
 	protected NSMutableArray<WOSession> sessions = new NSMutableArray<WOSession>();
@@ -353,7 +368,18 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 		}
 	}
 
+	/**
+	 * Returns the list of active sessions.
+	 * 
+	 * @return list of active sessions
+	 * @deprecated use {@link #activeSessions()} instead
+	 */
+	@Deprecated
 	public NSArray<WOSession> activeSession() {
+		return sessions;
+	}
+
+	public NSArray<WOSession> activeSessions() {
 		return sessions;
 	}
 
@@ -417,5 +443,30 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 	public Object valueForKey(String s) {
 		Object result = super.valueForKey(s);
 		return fix(result);
+	}
+
+	@Override
+	public HashMap getAverageSessionMemory() {
+		NSMutableDictionary<String, Long> avg = new NSMutableDictionary<String, Long>();
+		NSDictionary<String, Long> startMemory = null;
+		NSMutableDictionary<String, Long> currentMemory = memoryUsage();
+		try {
+			startMemory = (NSDictionary<String, Long>) initMemoryField.get(this);
+		} catch (Exception e) {
+			// ignore
+		}
+		int sessionCount = activeSessions().size();
+
+		Long totalSessionMemory = Long.valueOf(0L);
+		Long averageSessionMemory = Long.valueOf(0L);
+		if (startMemory != null && sessionCount > 0) {
+			totalSessionMemory = Long.valueOf(startMemory.get("Free Memory").longValue()
+					- currentMemory.get("Free Memory").longValue());
+			averageSessionMemory = Long.valueOf(totalSessionMemory.longValue() / sessionCount);
+		}
+		avg.setObjectForKey(totalSessionMemory, "Total Memory");
+		avg.setObjectForKey(averageSessionMemory, "Per Session");
+
+		return avg.hashMap();
 	}
 }

@@ -127,7 +127,6 @@
     <target name="docs">
         <ant antFile="Build/build/build-doc.xml" target="api">
             <property name="dist.base" value="dist" />
-            <property name="project.version" value="6.0" />
         </ant>
     </target>
 

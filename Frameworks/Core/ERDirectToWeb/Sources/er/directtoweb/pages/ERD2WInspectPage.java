@@ -366,7 +366,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
          */
         if (d2wContext().valueForKey(Keys.firstResponderKey) == null) { return null; }
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("function activateFirstResponder() {\n");
 
         // Get the container element.
@@ -394,7 +394,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
         sb.append("\t\t\t}\n");
         sb.append("\t\t}\n");
         sb.append("\t}\n");
-        sb.append("}");
+        sb.append('}');
 
         // Now call the function.
         sb.append("activateFirstResponder();");

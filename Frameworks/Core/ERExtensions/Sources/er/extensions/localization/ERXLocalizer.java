@@ -1189,7 +1189,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 			return null;
 		}
 		Object result = localizedValueForKey(key);
-		if (result == null || result == NOT_FOUND) {
+		if (result == null || NOT_FOUND.equals(result)) {
 			if (createdKeysLog.isDebugEnabled()) {
 				createdKeysLog.debug("Default key inserted: '" + key + "'/" + language);
 			}

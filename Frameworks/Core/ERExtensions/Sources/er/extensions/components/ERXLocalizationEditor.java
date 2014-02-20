@@ -201,7 +201,7 @@ public class ERXLocalizationEditor extends WOComponent {
     }
 
     public boolean hasCurrentValue() {
-    	return currentValueObject() != UNSET;
+    	return !UNSET.equals(currentValueObject());
     }
 
     public String currentValue() {

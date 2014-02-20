@@ -91,6 +91,7 @@ public class NSMutableSet<E> extends NSSet<E> {
                     throw new IllegalArgumentException("Attempt to insert null into an  " + getClass().getName() + ".");
                 if (_NSCollectionPrimitives.addValueToSet(objects[i], _objects, _flags)) {
                 	_setCount(count() + 1);
+                	_objectsCache = null;
                 }
             }
 		}

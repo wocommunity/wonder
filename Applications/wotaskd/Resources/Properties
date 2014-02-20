@@ -66,10 +66,11 @@ WOShouldUseSpawn=true
 #WOTaskd.receiveTimeout=5000
 
 
+# The TCP port on which the built-in SSH/SCP server will run on
+er.wotaskd.sshd.port=6022
 
-
-
-
+# Enable or disable the built-in SSH/SCP server
+er.wotaskd.sshd.enabled=false
 
 log4j.rootCategory=INFO, A1
 

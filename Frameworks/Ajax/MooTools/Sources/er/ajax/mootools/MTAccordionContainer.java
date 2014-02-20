@@ -35,6 +35,8 @@ import er.extensions.appserver.ERXWOContext;
  */
 public class MTAccordionContainer extends AjaxComponent {
 
+	private static final long serialVersionUID = 1L;
+
 	private String _accordionID;
 	
 	public MTAccordionContainer(WOContext context) {

@@ -76,8 +76,19 @@ public class ERXFileRepository {
 	 * Returns the repository that is registered under the given name.
 	 * @param name the name under which the respository is registered
 	 * @return the repository that is registered under the given name or null
+	 * @deprecated use {@link #repository(String)} instead
 	 */
+	@Deprecated
 	public static ERXFileRepository respository(String name) {
+		return (ERXFileRepository) _repositories.objectForKey(name);
+	}
+
+	/**
+	 * Returns the repository that is registered under the given name.
+	 * @param name the name under which the repository is registered
+	 * @return the repository that is registered under the given name or null
+	 */
+	public static ERXFileRepository repository(String name) {
 		return (ERXFileRepository) _repositories.objectForKey(name);
 	}
 

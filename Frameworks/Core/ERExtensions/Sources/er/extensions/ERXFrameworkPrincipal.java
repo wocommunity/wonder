@@ -127,7 +127,7 @@ public abstract class ERXFrameworkPrincipal {
     }
     
     /**
-     * Sets up a given framework principal class to recieve notification
+     * Sets up a given framework principal class to receive notification
      * when it is safe for the framework to be initialized.
      * @param c principal class
      */

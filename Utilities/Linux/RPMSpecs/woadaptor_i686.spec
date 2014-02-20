@@ -37,8 +37,10 @@ make CC=gcc
 rm -Rf %{buildroot}
 mkdir -p %{buildroot}%{_libdir}/httpd/modules/
 mkdir -p %{buildroot}/etc/httpd/conf.d/
+mkdir -p /opt/Local/Library/WebServer/Documents/WebObjects
 %{__cp} $RPM_BUILD_DIR/wonder-master/Utilities/Adaptors/Apache2.2/mod_WebObjects.so %{buildroot}%{_libdir}/httpd/modules/
 %{__cp} $RPM_BUILD_DIR/wonder-master/Utilities/Adaptors/Apache2.2/apache.conf %{buildroot}/etc/httpd/conf.d/webobjects.conf
+sed -i 's"^ScriptAlias /cgi-bin/"## ScriptAlias /cgi-bin/"' /etc/httpd/conf/httpd.conf
 
 %clean
 rm -rf %{buildroot}

@@ -286,7 +286,7 @@ public class ERXTimestampUtilities {
     static NSTimestamp _epoch = new NSTimestamp(1970, 1, 1, 0, 0, 0, null);
 
     /**
-     * Utility method used to retrun the epoch,
+     * Utility method used to return the epoch,
      * Jan 1st, 1970
      * @return the epoch as an NSTimestamp
      */
@@ -327,7 +327,7 @@ public class ERXTimestampUtilities {
      * @return a SimpleDateFormat pattern
      */
     public static String simpleDateFormatForNSTimestampFormat(String timestampFormatterPattern) {
-    	StringBuffer dateFormat = new StringBuffer(timestampFormatterPattern.length());
+    	StringBuilder dateFormat = new StringBuilder(timestampFormatterPattern.length());
     	int length = timestampFormatterPattern.length();
     	for (int i = 0; i < length; i ++) {
     		char ch = timestampFormatterPattern.charAt(i);
@@ -356,7 +356,7 @@ public class ERXTimestampUtilities {
     				dateFormat.append("dd");
     				break;
     			case 'e':
-    				dateFormat.append("d");
+    				dateFormat.append('d');
     				break;
     			case 'F':
     				dateFormat.append("SSS");
@@ -398,13 +398,13 @@ public class ERXTimestampUtilities {
     				dateFormat.append("yyyy");
     				break;
     			case 'z':
-    				dateFormat.append("Z");
+    				dateFormat.append('Z');
     				break;
     			case 'Z':
-    				dateFormat.append("z");
+    				dateFormat.append('z');
     				break;
     			default:
-    				dateFormat.append("%"); // (this is what NSTimstampFormatter did)
+    				dateFormat.append('%'); // (this is what NSTimstampFormatter did)
     			}
     		}
     		else {

@@ -123,6 +123,11 @@ public class ERXSubmitButton extends WOInput {
         return "<ERXSubmitButton  action: " + (_action == null ? "null" : _action.toString()) + " actionClass: " + (_actionClass == null ? "null" : _actionClass.toString()) + ">";
     }
 
+
+    public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
+    	// ignore
+    }
+
     protected String elementName(WOContext wocontext) {
     	return elementName();
     }

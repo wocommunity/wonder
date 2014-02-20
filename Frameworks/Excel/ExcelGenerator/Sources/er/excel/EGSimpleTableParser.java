@@ -144,7 +144,7 @@ public class EGSimpleTableParser {
     
     private String keyPathToAttributeString(String aString) {
         int i, cnt = aString.length();
-        StringBuffer result = new StringBuffer(cnt*2);
+        StringBuilder result = new StringBuilder(cnt*2);
         for(i = 0; i < cnt; i++) {
             char c = aString.charAt(i);
             if(Character.isUpperCase(c)) {
@@ -160,7 +160,7 @@ public class EGSimpleTableParser {
     private String attributeStringToKeyPath(String aString) {
         int i, cnt = aString.length();
         boolean upperNext = false;
-        StringBuffer result = new StringBuffer(cnt*2);
+        StringBuilder result = new StringBuilder(cnt*2);
         for(i = 0; i < cnt; i++) {
             char c = aString.charAt(i);
             if(upperNext) {
@@ -406,6 +406,21 @@ public class EGSimpleTableParser {
     							} catch (ParseException e1) {
     								log.info(e1);
     							}
+    							
+    						case HSSFCell.CELL_TYPE_BOOLEAN:
+    							cell.setCellType(cellType.intValue());
+    							if (value != null) {
+    								try {
+    									Integer integer = Integer.parseInt(value.toString());
+    									cell.setCellValue(integer > 0);
+    								} catch (NumberFormatException ex) {
+    									if (log.isDebugEnabled()) {
+    										log.debug(ex.getMessage(), ex);
+    									}
+    	    							cell.setCellValue(new Boolean(value.toString()));
+    								}
+    							}
+    							break;
     							
     						case HSSFCell.CELL_TYPE_STRING:
 							default:

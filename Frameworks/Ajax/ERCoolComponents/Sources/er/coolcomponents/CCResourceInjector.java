@@ -8,7 +8,7 @@ import er.extensions.components.ERXStatelessComponent;
 
 /**
  * Stupid little component to allow you to inject a resource at any point on a page.
- * Useful for instance, if you need to guaruntee that your css will override the dynamically 
+ * Useful for instance, if you need to guarantee that your css will override the dynamically 
  * injected css from some other component.
  * 
  * @author davidleber

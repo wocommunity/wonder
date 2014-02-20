@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -23,6 +22,7 @@ import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
 import com.webobjects.foundation._NSUtilities;
 
+import er.extensions.crypting.ERXCryptoString;
 import er.extensions.foundation.ERXProperties;
 import er.extensions.foundation.ERXValueUtilities;
 
@@ -100,6 +100,9 @@ public class ERXRestUtils {
 			primitive = true;
 		}
 		else if (NSKeyValueCoding.Null.class.isAssignableFrom(valueType)) {
+			primitive = true;
+		}
+		else if (ERXCryptoString.class.isAssignableFrom(valueType)) {
 			primitive = true;
 		}
 		return primitive;
@@ -407,6 +410,9 @@ public class ERXRestUtils {
 		}
 		else if (valueType != null && Enum.class.isAssignableFrom(valueType)) {
 			parsedValue = ERXValueUtilities.enumValueWithDefault(value, (Class<? extends Enum>) valueType, null);
+		}
+		else if (valueType != null && ERXCryptoString.class.isAssignableFrom(valueType)) {
+			parsedValue = new ERXCryptoString(value.toString());
 		}
 		else if (resolveEntities) {
 			EOClassDescription entity = ERXRestClassDescriptionFactory.classDescriptionForEntityName(valueTypeName);
