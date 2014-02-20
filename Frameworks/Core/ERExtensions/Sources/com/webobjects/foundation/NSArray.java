@@ -1096,22 +1096,28 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 	}
 
 	/**
-	 * A type-safe wrapper for {@link #valueForKey(String)} that calls
-	 * {@code valueForKey(erxKey, true, true, true)}
-	 * 
 	 * <p>
-	 * This method will automatically
-	 * {@link ERXArrayUtilities#removeNullValues(NSArray) remove}
-	 * {@code NSKeyValueCoding.Null} elements,
-	 * {@link ERXArrayUtilities#flatten(NSArray) flatten} all elements that are
-	 * arrays and {@link ERXArrayUtilities#distinct(NSArray) remove} all
-	 * duplicate objects.
+	 * A type-safe wrapper for {@link #valueForKey(String)} that automatically
+	 * does the following (in order) to the resulting array prior to returning
+	 * it:
+	 * <ol>
+	 * <li>{@link ERXArrayUtilities#removeNullValues(NSArray) remove}
+	 * {@code NSKeyValueCoding.Null} elements</li>
+	 * <li>{@link ERXArrayUtilities#flatten(NSArray) flatten} all elements that
+	 * are arrays (<em>Only</em> if {@link ERXKey#isToManyRelationship()}
+	 * returns <code>true</code>, which can only possibly happen if
+	 * {@link ERXKey#type()} has been set.)</li>
+	 * <li>{@link ERXArrayUtilities#distinct(NSArray) remove} all duplicate
+	 * objects</li>
+	 * </ol>
 	 * </p>
 	 * 
 	 * @param <T>
 	 *            the Type of elements in the returned {@code NSArray}
 	 * @param erxKey
+	 * 
 	 * @return an {@code NSArray} of {@code T} objects.
+	 * 
 	 * @author David Avendasora
 	 */
 	public <T> NSArray<T> valueForKey(ERXKey<T> erxKey) {
@@ -1125,9 +1131,17 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 	 * {@code NSArray<T>}.
 	 * </p>
 	 * <p>
-	 * Then, depending upon the parameters, removes
-	 * {@link NSKeyValueCoding.Null} elements, flattens any {@link NSArray}
-	 * elements and then filters out duplicate values.
+	 * Then, depending upon the parameters,
+	 * <ol>
+	 * <li>{@link ERXArrayUtilities#removeNullValues(NSArray) remove}
+	 * {@code NSKeyValueCoding.Null} elements</li>
+	 * <li>{@link ERXArrayUtilities#flatten(NSArray) flatten} all elements that
+	 * are arrays (<em>Only</em> if {@link ERXKey#isToManyRelationship()}
+	 * returns <code>true</code>, which can only possibly happen if
+	 * {@link ERXKey#type()} has been set.)</li>
+	 * <li>{@link ERXArrayUtilities#distinct(NSArray) remove} all duplicate
+	 * objects</li>
+	 * </ol>
 	 * </p>
 	 * <p>
 	 * <b>If the value cannot be cast it will throw a {@link ClassCastException}
@@ -1147,14 +1161,16 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 	 * @param flatten
 	 *            if {@code true} all {@link NSArray} elements will be
 	 *            {@link ERXArrayUtilities#flatten(NSArray) flattened}
+	 * 
 	 * @return an {@code NSArray} of {@code T} objects.
+	 * 
 	 * @author David Avendasora
 	 */
 	public <T> NSArray<T> valueForKey(ERXKey<T> erxKey, boolean removeNulls, boolean distinct, boolean flatten) {
 		if (erxKey.type() == ERXKey.Type.Operator) {
-			final String message = "You cannot use an Opperator (@sum, @max, etc.) ERXKey with valueForKey(ERXKey) " 
+			final String message = "You cannot use an Operator (@sum, @max, etc.) ERXKey with valueForKey(ERXKey) " 
 								 + "because the value returned by valueForKey(opperator) cannot be cast to NSArray. " 
-								 + "Call valueForKey(myERXKey.key()) instead.";
+								 + "Call valueForKey(MY_OPPERATOR_ERXKEY.key()) instead.";
 			throw new IllegalArgumentException(message);
 		}
 		NSArray<T> values = (NSArray<T>) valueForKeyPath(erxKey.key());
