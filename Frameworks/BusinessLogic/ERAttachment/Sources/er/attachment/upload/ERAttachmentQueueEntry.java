@@ -13,10 +13,13 @@ import er.attachment.model.ERAttachment;
  *
  * @author <a href="mailto:hprange@gmail.com.br">Henrique Prange</a>
  *
+ * @param <T>
+ *            the type of the attachment that can queued for uploading.
+ *
  * @see ERRemoteAttachment
  * @see ERAttachmentUploadQueue
  */
-public class ERAttachmentQueueEntry {
+public class ERAttachmentQueueEntry<T extends ERAttachment & ERRemoteAttachment> {
     private File _uploadedFile;
     private EOGlobalID _attachmentID;
 
@@ -30,7 +33,7 @@ public class ERAttachmentQueueEntry {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends ERAttachment & ERRemoteAttachment> T attachment(EOEditingContext editingContext) {
+    public T attachment(EOEditingContext editingContext) {
         return (T) editingContext.faultForGlobalID(_attachmentID, editingContext);
     }
 }
