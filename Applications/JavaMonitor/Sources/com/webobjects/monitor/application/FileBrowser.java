@@ -42,10 +42,8 @@ public class FileBrowser extends MonitorComponent {
 
     public String errorMsg;
 
-    boolean shouldShowError() {
-        if ((errorMsg != null) && (errorMsg.length() > 0))
-            return true;
-        return false;
+    boolean hasErrorMsg() {
+        return errorMsg != null && errorMsg.length() > 0;
     }
 
     public NSDictionary aCurrentFile;
