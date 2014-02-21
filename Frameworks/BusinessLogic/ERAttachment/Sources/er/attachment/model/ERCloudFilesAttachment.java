@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import com.rackspacecloud.client.cloudfiles.FilesClient;
 import com.webobjects.eocontrol.EOEditingContext;
 
+import er.attachment.upload.ERRemoteAttachment;
 import er.extensions.eof.ERXGenericRecord;
 import er.extensions.foundation.ERXProperties;
 
@@ -17,7 +18,7 @@ import er.extensions.foundation.ERXProperties;
  * 
  * @author probert
  */
-public class ERCloudFilesAttachment extends _ERCloudFilesAttachment {
+public class ERCloudFilesAttachment extends _ERCloudFilesAttachment implements ERRemoteAttachment {
   @SuppressWarnings("unused")
   private static Logger log = Logger.getLogger(ERCloudFilesAttachment.class);
   public static final String STORAGE_TYPE = "cf";
