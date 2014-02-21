@@ -1,5 +1,7 @@
 package er.extensions.appserver;
 
+import java.lang.reflect.Field;
+
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -14,6 +16,8 @@ import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSSet;
@@ -34,6 +38,8 @@ import er.extensions.eof.ERXS;
  * @param <T> data type of the displaygroup's objects
  */
 public class ERXDisplayGroup<T> extends WODisplayGroup {
+	private Field displayedObjectsField;
+	
 	/**
 	 * Do I need to update serialVersionUID?
 	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
@@ -46,6 +52,16 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 
 	public ERXDisplayGroup() {
 		super();
+		try {
+			displayedObjectsField = WODisplayGroup.class.getDeclaredField("_displayedObjects");
+			displayedObjectsField.setAccessible(true);
+		}
+		catch (SecurityException e) {
+			throw NSForwardException._runtimeExceptionForThrowable(e);
+		}
+		catch (NoSuchFieldException e) {
+			throw NSForwardException._runtimeExceptionForThrowable(e);
+		}
 	}
 	
 	/**
@@ -202,7 +218,19 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 		} else {
 			// jw: don't call super as it does not call setSelectionIndexes as advertised in its
 			// javadocs and thus doesn't invoke events on the delegate
-			NSArray<Integer> newSelection = _NSArrayUtilities.indexesForObjectsIndenticalTo(displayedObjects(), objects);
+			// we need to access the private field _displayedObjects directly as we would get
+			// wrong indexes when calling displayedObjects()
+			NSMutableArray displayedObjects;
+			try {
+				displayedObjects = (NSMutableArray) displayedObjectsField.get(this);
+			}
+			catch (IllegalArgumentException e) {
+				throw NSForwardException._runtimeExceptionForThrowable(e);
+			}
+			catch (IllegalAccessException e) {
+				throw NSForwardException._runtimeExceptionForThrowable(e);
+			}
+			NSArray<Integer> newSelection = _NSArrayUtilities.indexesForObjectsIndenticalTo(displayedObjects, objects);
 			setSelectionIndexes(newSelection);
 		}
 	}
