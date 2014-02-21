@@ -11,10 +11,10 @@ import er.extensions.foundation.ERXPropertyListSerialization;
  * to format or parse Objects to and from JSON
  */
 
-public class ERJSONFormatter extends Format {
+public class ERXJSONFormatter extends Format {
 
 	private static final long serialVersionUID = 1L;
-	private static ERJSONFormatter _formatter;
+	private static ERXJSONFormatter _formatter;
 
 
 	@Override
@@ -44,9 +44,9 @@ public class ERJSONFormatter extends Format {
 	 * 
 	 * @return shared instance of the json formatter
 	 */
-	public static ERJSONFormatter formatter() {
+	public static ERXJSONFormatter formatter() {
 		if (_formatter == null)
-			_formatter = new ERJSONFormatter();
+			_formatter = new ERXJSONFormatter();
 		return _formatter;
 	}
 
