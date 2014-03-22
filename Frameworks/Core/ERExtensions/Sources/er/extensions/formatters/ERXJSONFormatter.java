@@ -40,9 +40,9 @@ public class ERXJSONFormatter extends Format {
 
 	
 	/**
-	 * Method used to retrieve the shared instance of the json formatter.
+	 * Method used to retrieve the shared instance of the JSON formatter.
 	 * 
-	 * @return shared instance of the json formatter
+	 * @return shared instance of the JSON formatter
 	 */
 	public static ERXJSONFormatter formatter() {
 		if (_formatter == null)
@@ -51,7 +51,7 @@ public class ERXJSONFormatter extends Format {
 	}
 
 	/**
-	 * Converts an JSON string into an Object like NSDictionary, or NSArray.
+	 * Converts a JSON string into an Object like NSDictionary, or NSArray.
 	 * 
 	 * @param inString
 	 *            JSON string
@@ -67,7 +67,7 @@ public class ERXJSONFormatter extends Format {
 	}
 
 	/**
-	 * Converts an Object into an JSON string
+	 * Converts an Object into a JSON string
 	 * 
 	 * @param anObject
 	 *            an Object
