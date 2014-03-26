@@ -208,9 +208,9 @@ public class ERXRandomGUID {
             // the odds of guessing it at least as great as that
             // of guessing the contents of the file!
             sbValueBeforeMD5.append(s_id);
-            sbValueBeforeMD5.append(":");
+            sbValueBeforeMD5.append(':');
             sbValueBeforeMD5.append(Long.toString(time));
-            sbValueBeforeMD5.append(":");
+            sbValueBeforeMD5.append(':');
             sbValueBeforeMD5.append(Long.toString(rand));
 
             valueBeforeMD5 = sbValueBeforeMD5.toString();

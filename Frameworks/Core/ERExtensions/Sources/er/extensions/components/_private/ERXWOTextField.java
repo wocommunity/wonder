@@ -257,14 +257,18 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 
 	@Override
 	public String toString() {
-		StringBuffer stringbuffer = new StringBuffer();
-		stringbuffer.append("<");
+		StringBuilder stringbuffer = new StringBuilder();
+		stringbuffer.append('<');
 		stringbuffer.append(getClass().getName());
-		stringbuffer.append(" formatter=" + _formatter);
-		stringbuffer.append(" dateFormat=" + _dateFormat);
-		stringbuffer.append(" numberFormat=" + _numberFormat);
-		stringbuffer.append(" useDecimalNumber=" + _useDecimalNumber);
-		stringbuffer.append(">");
+		stringbuffer.append(" formatter=");
+		stringbuffer.append(_formatter);
+		stringbuffer.append(" dateFormat=");
+		stringbuffer.append(_dateFormat);
+		stringbuffer.append(" numberFormat=");
+		stringbuffer.append(_numberFormat);
+		stringbuffer.append(" useDecimalNumber=");
+		stringbuffer.append(_useDecimalNumber);
+		stringbuffer.append('>');
 		return stringbuffer.toString();
 	}
 	

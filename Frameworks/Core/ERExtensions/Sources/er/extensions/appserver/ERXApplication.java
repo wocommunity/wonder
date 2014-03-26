@@ -996,21 +996,21 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		}
 
 		private void reportErrors() {
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			String message = null;
 			NSArray<String> keys = ERXArrayUtilities.sortedArraySortedWithKey(packages.allKeys(), "toString");
 			for (Enumeration<String> enumerator = keys.objectEnumerator(); enumerator.hasMoreElements();) {
 				String packageName = enumerator.nextElement();
 				NSMutableArray<String> bundles = packages.objectForKey(packageName);
 				if (bundles.count() > 1) {
-					sb.append("\t").append(packageName).append("->").append(bundles).append("\n");
+					sb.append('\t').append(packageName).append("->").append(bundles).append('\n');
 				}
 			}
 			message = sb.toString();
 			if (message.length() > 0) {
 				startupLog.debug("The following packages appear multiple times:\n" + message);
 			}
-			sb = new StringBuffer();
+			sb = new StringBuilder();
 			NSMutableSet<String> classPackages = new NSMutableSet<String>();
 			keys = ERXArrayUtilities.sortedArraySortedWithKey(classes.allKeys(), "toString");
 			for (Enumeration<String> enumerator = keys.objectEnumerator(); enumerator.hasMoreElements();) {
@@ -1018,7 +1018,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				String packageName = className.replaceAll("/[^/]+?$", "");
 				NSMutableSet<Entry> bundles = classes.objectForKey(className);
 				if (bundles.count() > 1 && !classPackages.containsObject(packageName)) {
-					sb.append("\t").append(packageName).append("->").append(bundles).append("\n");
+					sb.append('\t').append(packageName).append("->").append(bundles).append('\n');
 					classPackages.addObject(packageName);
 				}
 			}
@@ -1173,6 +1173,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			log.debug("Setting WOMessage default encoding to \"" + defaultMessageEncoding + "\"");
 			WOMessage.setDefaultEncoding(defaultMessageEncoding);
 		}
+
+		log.info("Wonder version: " + ERXProperties.wonderVersion());
 
 		// Configure the WOStatistics CLFF logging since it can't be controlled
 		// by a property, grrr.
@@ -2722,7 +2724,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	
 	protected void _debugValueForDeclarationNamed(WOComponent component, String verb, String aDeclarationName, String aDeclarationType, String aBindingName, String anAssociationDescription, Object aValue) {
 		if (aValue instanceof String) {
-			StringBuffer stringbuffer = new StringBuffer(((String) aValue).length() + 2);
+			StringBuilder stringbuffer = new StringBuilder(((String) aValue).length() + 2);
 			stringbuffer.append('"');
 			stringbuffer.append(aValue);
 			stringbuffer.append('"');
@@ -2732,7 +2734,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			aDeclarationName = "[inline]";
 		}
 
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 
 		//NSArray<WOComponent> componentPath = ERXWOContext._componentPath(ERXWOContext.currentContext());
 		//componentPath.lastObject()
@@ -2744,13 +2746,13 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 		if (!aDeclarationName.startsWith("_")) {
 			sb.append(aDeclarationName);
-			sb.append(":");
+			sb.append(':');
 		}
 		sb.append(aDeclarationType);
 
 		sb.append(" { ");
 		sb.append(aBindingName);
-		sb.append("=");
+		sb.append('=');
 
 		String valueStr = aValue != null ? aValue.toString() : "null";
 		if (anAssociationDescription.startsWith("class ")) {

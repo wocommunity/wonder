@@ -94,7 +94,7 @@ public class GCBarChart extends GCAbstractChart {
     String stackedKey = (stacked) ? "s" : "g";
     chartUrl.setQueryParameter("cht", "b" + orientationKey + stackedKey);
 
-    StringBuffer chbh = new StringBuffer();
+    StringBuilder chbh = new StringBuilder();
     String barWidth = "23";
     String spacing = "4";
     if (_barWidth != null) {
@@ -106,7 +106,7 @@ public class GCBarChart extends GCAbstractChart {
       if (_barWidth == null) {
         chbh.append(barWidth);
       }
-      chbh.append(",");
+      chbh.append(',');
 
       spacing = (String) _spacing.valueInComponent(component);
       chbh.append(spacing);
@@ -115,12 +115,12 @@ public class GCBarChart extends GCAbstractChart {
     if (_groupSpacing != null) {
       if (_barWidth == null) {
         chbh.append(barWidth);
-        chbh.append(",");
+        chbh.append(',');
       }
       if (_spacing == null) {
         chbh.append(spacing);
       }
-      chbh.append(",");
+      chbh.append(',');
 
       String groupSpacing = (String) _groupSpacing.valueInComponent(component);
       chbh.append(groupSpacing);

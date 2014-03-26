@@ -547,7 +547,7 @@ public class ERXMutableURL {
 		}
 		if (_path != null) {
 			if (!_path.startsWith("/")) {
-				sb.append("/");
+				sb.append('/');
 			}
 			sb.append(_path);
 		}

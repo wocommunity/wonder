@@ -163,22 +163,22 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 	public String _toString(int indent) {
 		String indentString = "";
 		for (int i = 0; i < indent; i++)
-			indentString = (new StringBuilder()).append(indentString).append("\t").toString();
+			indentString = new StringBuilder().append(indentString).append('\t').toString();
 
 		StringBuilder aLog = new StringBuilder();
-		aLog.append((new StringBuilder()).append(indentString).append("<EOAttribute ").append(name()).append("\n").toString());
+		aLog.append(new StringBuilder().append(indentString).append("<EOAttribute ").append(name()).append('\n').toString());
 		String aKey = "";
 		try {
 			NSMutableDictionary aDictionary = new NSMutableDictionary();
 			encodeIntoPropertyList(aDictionary);
-			for (Enumeration enumerator = aDictionary.keyEnumerator(); enumerator.hasMoreElements(); aLog.append((new StringBuilder()).append(indentString).append("\t").append(aKey).append(" : '").append(aDictionary.objectForKey(aKey)).append("'\n").toString()))
+			for (Enumeration enumerator = aDictionary.keyEnumerator(); enumerator.hasMoreElements(); aLog.append(new StringBuilder().append(indentString).append('\t').append(aKey).append(" : '").append(aDictionary.objectForKey(aKey)).append("'\n").toString()))
 				aKey = (String) enumerator.nextElement();
 
 		}
 		catch (Exception exception) {
-			aLog.append((new StringBuilder()).append(indentString).append("\t").append(getClass().getName()).append(".toString: characteristics ").append(aKey).append(" exception ").append(exception).append("\n").toString());
+			aLog.append(new StringBuilder().append(indentString).append('\t').append(getClass().getName()).append(".toString: characteristics ").append(aKey).append(" exception ").append(exception).append('\n').toString());
 		}
-		aLog.append((new StringBuilder()).append(indentString).append(">").toString());
+		aLog.append(new StringBuilder().append(indentString).append('>').toString());
 		return aLog.toString();
 	}
 
@@ -987,7 +987,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 	public Object newValueForDate(Object value) {
 		if(valueFactoryMethod() != null) {
 			if(!(value instanceof Date)) {
-				throw new JDBCAdaptorException((new StringBuilder()).append(value).append(" of type ").append(value.getClass().getName()).append(" is not a valid Date type.  You must use java.sql.Timestamp, java.sql.Date, or java.sql.Time").toString(), null);
+				throw new JDBCAdaptorException(new StringBuilder().append(value).append(" of type ").append(value.getClass().getName()).append(" is not a valid Date type.  You must use java.sql.Timestamp, java.sql.Date, or java.sql.Time").toString(), null);
 			}
 			Date date = (Date)value;
 			//Call the custom factory method
@@ -1015,7 +1015,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 				Date temp = (Date)value;
 				return new NSTimestamp(temp.getTime());
 			} else {
-				throw new JDBCAdaptorException((new StringBuilder()).append(value).append(" of type ").append(value.getClass().getName()).append(" is not a valid Date type.  You must use java.sql.Timestamp, java.sql.Date, or java.sql.Time").toString(), null);
+				throw new JDBCAdaptorException(new StringBuilder().append(value).append(" of type ").append(value.getClass().getName()).append(" is not a valid Date type.  You must use java.sql.Timestamp, java.sql.Date, or java.sql.Time").toString(), null);
 			}
 		}
 	}
@@ -1140,7 +1140,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 			if (!valueClasses[valueType].isInstance(convertedValue) && (valueClasses[valueType] != Number.class || !(convertedValue instanceof Boolean))) {
 				EOEntity parentEntity = (EOEntity) parent();
 				String entityName = parentEntity == null ? "<unspecified>" : parentEntity.name();
-				throw new IllegalArgumentException((new StringBuilder()).append("EOAttribute adaptorValueByConvertingAttributeValue(Object): Unable to convert value of class ").append(convertedValue.getClass().getName()).append(" for attribute '").append(name()).append("' in entity '").append(entityName).append("' to adaptor type EOAttribute.Adaptor").append(valueTypeNames[valueType]).append("Type.  Check the signature of the conversion method ").append(className()).append(".").append(conversionMethod == null ? "NotFound" : conversionMethod.name()).append("().").toString());
+				throw new IllegalArgumentException(new StringBuilder().append("EOAttribute adaptorValueByConvertingAttributeValue(Object): Unable to convert value of class ").append(convertedValue.getClass().getName()).append(" for attribute '").append(name()).append("' in entity '").append(entityName).append("' to adaptor type EOAttribute.Adaptor").append(valueTypeNames[valueType]).append("Type.  Check the signature of the conversion method ").append(className()).append('.').append(conversionMethod == null ? "NotFound" : conversionMethod.name()).append("().").toString());
 			}
 		}
 		return convertedValue;
@@ -1170,7 +1170,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 			className = CN_NSData;
 		Class valueClass = _NSUtilities.classWithName(className);
 		if (valueClass == null)
-			throw new IllegalStateException((new StringBuilder()).append("adaptorValueType: unable to load class named '").append(className).append("' for attribute ").append(name()).append(" on entity ").append(entity().name()).toString());
+			throw new IllegalStateException(new StringBuilder().append("adaptorValueType: unable to load class named '").append(className).append("' for attribute ").append(name()).append(" on entity ").append(entity().name()).toString());
 		if (valueFactoryMethodName() == null) {
 			if (valueClass == String.class)
 				_adaptorValueType = AdaptorCharactersType;
@@ -1238,7 +1238,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 				return Byte.class;
 			}
 			if (NSLog.debugLoggingAllowedForLevel(NSLog.DebugLevelInformational))
-				NSLog.debug.appendln((new StringBuilder()).append("value type '").append(_valueTypeChar()).append("' on attribute \"").append(name()).append("\" of entity \"").append(entity().name()).append("\" is invalid.\nYou should fix your EOModel.").toString());
+				NSLog.debug.appendln(new StringBuilder().append("value type '").append(_valueTypeChar()).append("' on attribute \"").append(name()).append("\" of entity \"").append(entity().name()).append("\" is invalid.\nYou should fix your EOModel.").toString());
 			return Integer.class;
 
 		case AdaptorBytesType:
@@ -1295,7 +1295,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 
 							default:
 								if (NSLog.debugLoggingAllowedForLevel(2))
-									NSLog.debug.appendln((new StringBuilder()).append("value type '").append(_valueTypeChar()).append("' on attribute \"").append(name()).append("\" of entity \"").append(entity().name()).append("\" is invalid.\nYou should fix your EOModel.").toString());
+									NSLog.debug.appendln(new StringBuilder().append("value type '").append(_valueTypeChar()).append("' on attribute \"").append(name()).append("\" of entity \"").append(entity().name()).append("\" is invalid.\nYou should fix your EOModel.").toString());
 								valueClass = Integer.class;
 								break;
 							}
@@ -1423,7 +1423,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 			if (entity().primaryKeyAttributes().indexOfIdenticalObject(this) != -1)
 				return valueP;
 
-			throw new com.webobjects.foundation.NSValidation.ValidationException((new StringBuilder()).append("The ").append(name()).append(" property of ").append(entity().name()).append(" is not allowed to be null.").toString(), this, name());
+			throw new com.webobjects.foundation.NSValidation.ValidationException(new StringBuilder().append("The ").append(name()).append(" property of ").append(entity().name()).append(" is not allowed to be null.").toString(), this, name());
 		}
 		String className = className();
 		if (className == null)
@@ -1431,7 +1431,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 		Class aClass = _NSUtilities.classWithName(className);
 		if (aClass == null) {
 			if (NSLog.debugLoggingAllowedForLevelAndGroups(2, 128L))
-				NSLog.debug.appendln((new StringBuilder()).append("Unable to find the class ").append(className).append(" in the Java runtime. Unable to validate. Please check your CLASSPATH, or the type for attribute ").append(name()).toString());
+				NSLog.debug.appendln(new StringBuilder().append("Unable to find the class ").append(className).append(" in the Java runtime. Unable to validate. Please check your CLASSPATH, or the type for attribute ").append(name()).toString());
 			return valueP;
 		}
 		if (!aClass.isInstance(value)) {
@@ -1445,12 +1445,12 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 						value = _EOStringUtil.numberWithStringType(valueString, _valueTypeChar());
 				}
 				catch (Exception e) {
-					throw new com.webobjects.foundation.NSValidation.ValidationException((new StringBuilder()).append("Error encountered converting value of class ").append(value.getClass().getName()).append(" to type specified in attribute '").append(name()).append("' of entity '").append(entity().name()).append("'").toString(), this, name());
+					throw new com.webobjects.foundation.NSValidation.ValidationException(new StringBuilder().append("Error encountered converting value of class ").append(value.getClass().getName()).append(" to type specified in attribute '").append(name()).append("' of entity '").append(entity().name()).append('\'').toString(), this, name());
 				}
 			}
 		}
 		if (value == null)
-			throw new com.webobjects.foundation.NSValidation.ValidationException((new StringBuilder()).append("Error encountered converting null value to type specified in attribute '").append(name()).append("' of entity '").append(entity().name()).append("'").toString(), this, name());
+			throw new com.webobjects.foundation.NSValidation.ValidationException(new StringBuilder().append("Error encountered converting null value to type specified in attribute '").append(name()).append("' of entity '").append(entity().name()).append('\'').toString(), this, name());
 		int maxLen = width();
 		if (maxLen != 0) {
 			int currLength = 0;
@@ -1459,14 +1459,14 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 				primitiveValue = adaptorValueByConvertingAttributeValue(value);
 			}
 			catch (Exception e) {
-				throw new com.webobjects.foundation.NSValidation.ValidationException((new StringBuilder()).append("Error encountered converting value of class ").append(value.getClass().getName()).append(" to type specified in attribute '").append(name()).append("' of entity '").append(entity().name()).append("'. Conversion exception is : ").append(e.getMessage()).toString(), this, name());
+				throw new com.webobjects.foundation.NSValidation.ValidationException(new StringBuilder().append("Error encountered converting value of class ").append(value.getClass().getName()).append(" to type specified in attribute '").append(name()).append("' of entity '").append(entity().name()).append("'. Conversion exception is : ").append(e.getMessage()).toString(), this, name());
 			}
 			if (primitiveValue instanceof String)
 				currLength = ((String) primitiveValue).length();
 			else if (primitiveValue instanceof NSData)
 				currLength = ((NSData) primitiveValue).length();
 			if (currLength > maxLen)
-				throw new com.webobjects.foundation.NSValidation.ValidationException((new StringBuilder()).append("The ").append(name()).append(" property of ").append(entity().name()).append(" exceeds maximum length of ").append(maxLen).append(" characters").toString(), this, name());
+				throw new com.webobjects.foundation.NSValidation.ValidationException(new StringBuilder().append("The ").append(name()).append(" property of ").append(entity().name()).append(" exceeds maximum length of ").append(maxLen).append(" characters").toString(), this, name());
 		}
 		return value;
 	}
@@ -1489,7 +1489,7 @@ public class EOAttribute extends EOProperty implements EOPropertyListEncoding, E
 			_parent = null;
 			_parentStoredProcedure = (EOStoredProcedure) parent;
 		} else {
-			throw new IllegalArgumentException((new StringBuilder()).append("Invalid object of type ").append(parent.getClass().getName()).append(" passed to setParent (expected EOEntity or EOStoredProcedure").toString());
+			throw new IllegalArgumentException(new StringBuilder().append("Invalid object of type ").append(parent.getClass().getName()).append(" passed to setParent (expected EOEntity or EOStoredProcedure").toString());
 		}
 	}
 

@@ -6,7 +6,12 @@
 <!-- Called from "build.xml", normally shouldn't be used as   --> 
 <!-- a standalone buildfile.                                  -->
 <!-- ======================================================== -->
-<project name="wonder-doc" default="api" basedir="../..">
+<project name="wonder-doc" default="api" basedir="../.." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+
+    <path id="maven-ant-tasks.classpath" path="${basedir}/Build/lib/maven-ant-tasks-2.1.3.jar" />
+    <typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="antlib:org.apache.maven.artifact.ant" classpathref="maven-ant-tasks.classpath" />
+    <artifact:pom id="wonder-version" file="pom.xml" />
+    <property name="project.version" value="${wonder-version.version}" />
 
     <property name="wonder.root" value="${basedir}" />
     <property file="${wonder.root}/build.properties" />
@@ -20,12 +25,16 @@
     <property name="wo.local.frameworks" value="${wo.local.root}/Library/Frameworks" />
     <property name="build.classes" value="${build.root}/classes/${project.name}" />
 
+    <tstamp>
+        <format property="current.year" pattern="yyyy"/>
+    </tstamp>
+
     <!-- ==================================================== -->
     <!--              Derived Properties.                     -->
     <!-- These properties are derived from other properties.  -->
     <!-- Normally, these should not be redefined.             -->
     <!-- ==================================================== -->
-    <property name="dist" value="${dist.base}/${project.name}-${project.version}"/>
+    <property name="dist" value="${dist.base}/${project.name}"/>
     
     <!-- ==================================================== -->
     <!--              CLASSPATH settings                      -->
@@ -144,6 +153,7 @@
         <copy todir="${dist}/" flatten="true">
             <fileset dir="${wonder.root}">
                 <include name="*.txt"/>
+                <exclude name="BUILD.txt"/>
                 <include name="**/LICENSE*"/>
             </fileset>
         </copy>
@@ -209,7 +219,7 @@ function change(){
 window.onload=change;
 </script>
 <em>Project Wonder ${project.version}</em>]]></header>
-            <bottom><![CDATA[Copyright &#169; 2002 &#8211; 2013 Project Wonder.]]></bottom>
+            <bottom><![CDATA[Copyright &#169; 2002 &#8211; ${current.year} Project Wonder.]]></bottom>
             <footer><![CDATA[Last updated: ${updated.date} &#149; ${updated.time}]]></footer>
             <link href="http://docs.oracle.com/javase/1.5.0/docs/api/"/>
             <link href="http://wocommunity.org/documents/javadoc/WebObjects/5.4.2/" packagelistLoc="${wonder.root}/Build/build/webobjects-package-list"/>

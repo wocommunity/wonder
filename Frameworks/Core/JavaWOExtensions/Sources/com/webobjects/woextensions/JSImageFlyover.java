@@ -31,7 +31,7 @@ public class JSImageFlyover extends JSComponent {
 
     	StringBuilder uniqueIDBuffer = new StringBuilder("ImageFlyover");
         uniqueIDBuffer.append(context.contextID());
-        uniqueIDBuffer.append("_");
+        uniqueIDBuffer.append('_');
         uniqueIDBuffer.append(context.elementID().replace('.', '_'));
         uniqueID = uniqueIDBuffer.toString();
         super.appendToResponse(response, context);

@@ -121,16 +121,16 @@ public class AjaxValue {
 			if (_value instanceof NSArray) {
 				NSArray arrayValue = (NSArray) _value;
 				StringBuilder sb = new StringBuilder();
-				sb.append("[");
+				sb.append('[');
 				Enumeration objEnum = arrayValue.objectEnumerator();
 				while (objEnum.hasMoreElements()) {
 					Object o = objEnum.nextElement();
 					sb.append(new AjaxValue(o).javascriptValue());
 					if (objEnum.hasMoreElements()) {
-						sb.append(",");
+						sb.append(',');
 					}
 				}
-				sb.append("]");
+				sb.append(']');
 				strValue = sb.toString();
 			}
 			else {
@@ -141,19 +141,19 @@ public class AjaxValue {
 			if (_value instanceof NSDictionary) {
 				NSDictionary dictValue = (NSDictionary) _value;
 				StringBuilder sb = new StringBuilder();
-				sb.append("{");
+				sb.append('{');
 				Enumeration keyEnum = dictValue.keyEnumerator();
 				while (keyEnum.hasMoreElements()) {
 					Object key = keyEnum.nextElement();
 					Object value = dictValue.objectForKey(key);
 					sb.append(new AjaxValue(key).javascriptValue());
-					sb.append(":");
+					sb.append(':');
 					sb.append(new AjaxValue(value).javascriptValue());
 					if (keyEnum.hasMoreElements()) {
-						sb.append(",");
+						sb.append(',');
 					}
 				}
-				sb.append("}");
+				sb.append('}');
 				strValue = sb.toString();
 			}
 			else {
@@ -169,16 +169,16 @@ public class AjaxValue {
 				}
 				else if (count > 0) {
 					StringBuilder sb = new StringBuilder();
-					sb.append("[");
+					sb.append('[');
 					Enumeration objEnum = arrayValue.objectEnumerator();
 					while (objEnum.hasMoreElements()) {
 						Object o = objEnum.nextElement();
 						sb.append(new AjaxValue(AjaxOption.STRING, o).javascriptValue());
 						if (objEnum.hasMoreElements()) {
-							sb.append(",");
+							sb.append(',');
 						}
 					}
-					sb.append("]");
+					sb.append(']');
 					strValue = sb.toString();
 				}
 				else {

@@ -215,7 +215,11 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 
 		response._appendContentAsciiString( "<link" );
 
-		response._appendTagAttributeAndValue( "rel", "stylesheet", false );
+		if (styleSheetName != null && styleSheetName.toLowerCase().endsWith(".less")) {
+			response._appendTagAttributeAndValue( "rel", "stylesheet/less", false );
+		} else {
+			response._appendTagAttributeAndValue( "rel", "stylesheet", false );
+		}
 		response._appendTagAttributeAndValue( "type", "text/css", false );
 		response._appendTagAttributeAndValue( "href", href, false );
 		response._appendTagAttributeAndValue( "media", mediaType(), false );

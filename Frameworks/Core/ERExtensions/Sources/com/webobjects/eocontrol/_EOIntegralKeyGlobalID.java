@@ -58,7 +58,7 @@ public class _EOIntegralKeyGlobalID extends EOKeyGlobalID {
 
 	@Override
 	public String toString() {
-		StringBuffer result = new StringBuffer(_NSUtilities.shortClassName(this));
+		StringBuilder result = new StringBuilder(_NSUtilities.shortClassName(this));
 		result.append('[');
 		result.append(entityName());
 		result.append(" (");

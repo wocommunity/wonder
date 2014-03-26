@@ -1,6 +1,9 @@
 package er.extensions.appserver;
 
+import java.lang.reflect.Field;
+
 import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WODisplayGroup;
@@ -13,10 +16,14 @@ import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSSet;
+import com.webobjects.foundation._NSArrayUtilities;
 
+import er.extensions.batching.ERXBatchingDisplayGroup;
 import er.extensions.eof.ERXEOAccessUtilities;
 import er.extensions.eof.ERXS;
 
@@ -31,6 +38,8 @@ import er.extensions.eof.ERXS;
  * @param <T> data type of the displaygroup's objects
  */
 public class ERXDisplayGroup<T> extends WODisplayGroup {
+	private Field displayedObjectsField;
+	
 	/**
 	 * Do I need to update serialVersionUID?
 	 * See section 5.6 <cite>Type Changes Affecting Serialization</cite> on page 51 of the 
@@ -43,6 +52,16 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 
 	public ERXDisplayGroup() {
 		super();
+		try {
+			displayedObjectsField = WODisplayGroup.class.getDeclaredField("_displayedObjects");
+			displayedObjectsField.setAccessible(true);
+		}
+		catch (SecurityException e) {
+			throw NSForwardException._runtimeExceptionForThrowable(e);
+		}
+		catch (NoSuchFieldException e) {
+			throw NSForwardException._runtimeExceptionForThrowable(e);
+		}
 	}
 	
 	/**
@@ -93,6 +112,19 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 		} else {
 			_extraQualifiers.removeObjectForKey(key);
 		}
+	}
+	
+	/**
+	 * Will return the qualifier set by "setQualifierForKey()" if it exists. Null returns otherwise.
+	 * @param key
+	 * @return
+	 */
+	public EOQualifier qualifierForKey(String key) {
+		EOQualifier qualifier = null;
+		if (StringUtils.isNotBlank(key)) {
+			qualifier = _extraQualifiers.objectForKey(key);
+		}
+		return qualifier;
 	}
 
 	/**
@@ -175,11 +207,32 @@ public class ERXDisplayGroup<T> extends WODisplayGroup {
 	}
 
 	@Override
-	public void setSelectedObjects(NSArray nsarray) {
+	public void setSelectedObjects(NSArray objects) {
 		if(log.isDebugEnabled()) {
-			log.debug("setSelectedObjects@" + hashCode()  + ":" + (nsarray != null ? nsarray.count() : "0"));
+			log.debug("setSelectedObjects@" + hashCode()  + ":" + (objects != null ? objects.count() : "0"));
 		}
-		super.setSelectedObjects(nsarray);
+		if (this instanceof ERXBatchingDisplayGroup) {
+			// keep previous behavior
+			// CHECKME a batching display group has its own _displayedObjects variable so setSelectionIndexes won't work
+			super.setSelectedObjects(objects);
+		} else {
+			// jw: don't call super as it does not call setSelectionIndexes as advertised in its
+			// javadocs and thus doesn't invoke events on the delegate
+			// we need to access the private field _displayedObjects directly as we would get
+			// wrong indexes when calling displayedObjects()
+			NSMutableArray displayedObjects;
+			try {
+				displayedObjects = (NSMutableArray) displayedObjectsField.get(this);
+			}
+			catch (IllegalArgumentException e) {
+				throw NSForwardException._runtimeExceptionForThrowable(e);
+			}
+			catch (IllegalAccessException e) {
+				throw NSForwardException._runtimeExceptionForThrowable(e);
+			}
+			NSArray<Integer> newSelection = _NSArrayUtilities.indexesForObjectsIndenticalTo(displayedObjects, objects);
+			setSelectionIndexes(newSelection);
+		}
 	}
 
 	@Override

@@ -186,7 +186,13 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	public void setRawRowKeyPaths(String keyPath, String... keyPaths) {
 		super.setRawRowKeyPaths(new NSArray<String>(keyPath, keyPaths));
 	}
-	
+
+	/**
+	 * Sets the relationships to prefetch along with the main fetch.
+	 * 
+	 * @see #setPrefetchingRelationshipKeyPaths(NSArray)
+	 * @param prefetchingRelationshipKeyPaths list of keys to prefetch
+	 */
 	public void setPrefetchingRelationshipKeyPaths(ERXKey<?>... prefetchingRelationshipKeyPaths) {
 		NSMutableArray<String> keypaths = new NSMutableArray<String>();
 		for (ERXKey<?> key : prefetchingRelationshipKeyPaths) {

@@ -706,13 +706,13 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 		String result = "";
 		NSDictionary targetDictionary = (NSDictionary) d2wContext().valueForKey("targetDictionary");
 		if (targetDictionary != null) {
-			StringBuffer buffer = new StringBuffer();
+			StringBuilder buffer = new StringBuilder();
 			buffer.append(targetDictionary.valueForKey("targetName") != null ? targetDictionary.valueForKey("targetName") : "foobar");
 			buffer.append(":width=");
 			buffer.append(targetDictionary.valueForKey("width") != null ? targetDictionary.valueForKey("width") : "{window.screen.width/2}");
 			buffer.append(", height=");
 			buffer.append(targetDictionary.valueForKey("height") != null ? targetDictionary.valueForKey("height") : "{myHeight}");
-			buffer.append(",");
+			buffer.append(',');
 			buffer.append((targetDictionary.valueForKey("scrollbars") != null && targetDictionary.valueForKey("scrollbars") == "NO") ? " " : "scrollbars");
 			buffer.append(", {(isResizable)?'resizable':''}, status");
 			result = buffer.toString();
