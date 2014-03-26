@@ -2007,6 +2007,8 @@ public class ERXKey<T> {
 	 * EOQualifier.QualifierOperatorEqual, null);
 	 * 
 	 * @return an ERXKeyValueQualifier
+	 * 
+	 * @see isEmptyRelationship
 	 */
 	public ERXKeyValueQualifier isNull() {
 		return ERXQ.isNull(_key);
@@ -2280,13 +2282,14 @@ public class ERXKey<T> {
 	 * Equivalent to <code>new ERXExistsQualifier(qualifier, key)</code>.
 	 * 
 	 * @param qualifier
-	 *            a qualifier for the wrapped EORelationship's destination
-	 *            entity
-	 * @return a qualifier that evaluates to true when the wrapped
-	 *         EORelationship contains at least one object matching the given
-	 *         {@code qualifier}
+	 *            a qualifier for the {@link EORelationship#destinationEntity()
+	 *            destinationEntity} of the {@link EORelationship} represented
+	 *            by this ERXKey
+	 * @return a qualifier that evaluates to true when the {@link EORelationship}
+	 *         represented by this ERXKey contains at least one object matching
+	 *         the given {@code qualifier}
 	 * 
-	 * @author davendasora
+	 * @author David Avendasora
 	 * @since Mar 26, 2014
 	 */
 	public ERXExistsQualifier containsAnyObjectSatisfying(EOQualifier qualifier) {
@@ -2294,12 +2297,43 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Determines if there are any objects in the wrapped EORelationship.
+	 * <p>
+	 * Equivalent to <code>new ERXExistsQualifier(qualifier, key)</code>.
+	 * </p>
+	 * <p>
+	 * Since this qualifier will <em>not</em> result in a join in the database,
+	 * it can be very useful when testing relationships that use the
+	 * <code>InnerJoin</code> {@link EORelationship#joinSemantic() joinSemantic}
+	 * yet the relationship may be empty (to-many relationships) or
+	 * <code>null</code> (to-one relationships).
+	 * </p>
 	 * 
-	 * @return a qualifier that evaluates to true when the wrapped
-	 *         EORelationship contains at least one object
+	 * @param qualifier
+	 *            a qualifier for the {@link EORelationship#destinationEntity()
+	 *            destinationEntity} of the {@link EORelationship} represented
+	 *            by this ERXKey
+	 * @return a qualifier that evaluates to true when the
+	 *         {@link EORelationship} represented by this ERXKey does not
+	 *         contain any objects that satisfy the given {@code qualifier}
 	 * 
-	 * @author davendasora
+	 * @author David Avendasora
+	 * @since Mar 26, 2014
+	 */
+	public ERXNotQualifier doesNotContainsAnyObjectSatisfying(EOQualifier qualifier) {
+		return new ERXNotQualifier(containsAnyObjectSatisfying(qualifier));
+	}
+
+	/**
+	 * <p>
+	 * Determines if there are any objects in the to-one or to-many
+	 * {@link EORelationship} that this ERXKey represents.
+	 * </p>
+	 * 
+	 * @return a qualifier that evaluates to <code>true</code> when the
+	 *         {@link EORelationship} represented by this ERXKey contains at
+	 *         least one object
+	 * 
+	 * @author David Avendasora
 	 * @since Mar 26, 2014
 	 */
 	public ERXExistsQualifier isNotEmptyRelationship() {
@@ -2307,14 +2341,26 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * @return a qualifier that evaluates to true when the wrapped
-	 *         EORelationship is empty
+	 * <p>
+	 * Determines if there are any objects in the to-one or to-many
+	 * EORelationship that this ERXKey represents.
+	 * </p>
+	 * <p>
+	 * Since this qualifier will <em>not</em> result in a join in the database,
+	 * it can be very useful when testing relationships that use the
+	 * <code>InnerJoin</code> {@link EORelationship#joinSemantic() joinSemantic}
+	 * and the relationship could be empty (to-many relationships) or
+	 * <code>null</code> (to-one relationships).
+	 * </p>
 	 * 
-	 * @author davendasora
+	 * @return a qualifier that evaluates to <code>true</code> when the
+	 *         {@link EORelationship} represented by this ERXKey is empty
+	 * 
+	 * @author David Avendasora
 	 * @since Mar 26, 2014
 	 */
 	public ERXNotQualifier isEmptyRelationship() {
-		return new ERXNotQualifier(isNotEmptyRelationship());
+		return doesNotContainsAnyObjectSatisfying(new ERXTrueQualifier());
 	}
 	
 	/**
