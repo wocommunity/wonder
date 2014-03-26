@@ -16,8 +16,10 @@ import er.extensions.eof.qualifiers.ERXExistsQualifier;
 import er.extensions.qualifiers.ERXAndQualifier;
 import er.extensions.qualifiers.ERXKeyComparisonQualifier;
 import er.extensions.qualifiers.ERXKeyValueQualifier;
+import er.extensions.qualifiers.ERXNotQualifier;
 import er.extensions.qualifiers.ERXOrQualifier;
 import er.extensions.qualifiers.ERXPrefixQualifierTraversal;
+import er.extensions.qualifiers.ERXTrueQualifier;
 
 /**
  * <p>
@@ -2275,29 +2277,44 @@ public class ERXKey<T> {
 	}
 		
 	/**
-	 * Return a qualifier that evaluates to true when the given key contains at
-	 * least one object matching the qualifier
-	 * 
 	 * Equivalent to <code>new ERXExistsQualifier(qualifier, key)</code>.
 	 * 
 	 * @param qualifier
-	 * @return an ERXExistsQualifier
+	 *            a qualifier for the wrapped EORelationship's destination
+	 *            entity
+	 * @return a qualifier that evaluates to true when the wrapped
+	 *         EORelationship contains at least one object matching the given
+	 *         {@code qualifier}
+	 * 
+	 * @author davendasora
+	 * @since Mar 26, 2014
 	 */
-	public ERXExistsQualifier atLeastOneSatisfies(EOQualifier qualifier) {
+	public ERXExistsQualifier containsAnyObjectSatisfying(EOQualifier qualifier) {
 		return new ERXExistsQualifier(qualifier, _key);
 	}
 
 	/**
-	 * Return a qualifier that evaluates to true when the given key contains at
-	 * least one object matching the qualifier
+	 * Determines if there are any objects in the wrapped EORelationship.
 	 * 
-	 * Equivalent to <code>new ERXExistsQualifier(qualifier, key)</code>.
+	 * @return a qualifier that evaluates to true when the wrapped
+	 *         EORelationship contains at least one object
 	 * 
-	 * @param qualifier
-	 * @return an ERXExistsQualifier
+	 * @author davendasora
+	 * @since Mar 26, 2014
 	 */
-	public ERXExistsQualifier anySatisfy(EOQualifier qualifier) {
-		return atLeastOneSatisfies(qualifier);
+	public ERXExistsQualifier isNotEmptyRelationship() {
+		return containsAnyObjectSatisfying(new ERXTrueQualifier());
+	}
+
+	/**
+	 * @return a qualifier that evaluates to true when the wrapped
+	 *         EORelationship is empty
+	 * 
+	 * @author davendasora
+	 * @since Mar 26, 2014
+	 */
+	public ERXNotQualifier isEmptyRelationship() {
+		return new ERXNotQualifier(isNotEmptyRelationship());
 	}
 	
 	/**
