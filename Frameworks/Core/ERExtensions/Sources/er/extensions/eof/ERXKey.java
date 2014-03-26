@@ -12,11 +12,14 @@ import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestamp;
 
 import er.extensions.eof.ERXSortOrdering.ERXSortOrderings;
+import er.extensions.eof.qualifiers.ERXExistsQualifier;
 import er.extensions.qualifiers.ERXAndQualifier;
 import er.extensions.qualifiers.ERXKeyComparisonQualifier;
 import er.extensions.qualifiers.ERXKeyValueQualifier;
+import er.extensions.qualifiers.ERXNotQualifier;
 import er.extensions.qualifiers.ERXOrQualifier;
 import er.extensions.qualifiers.ERXPrefixQualifierTraversal;
+import er.extensions.qualifiers.ERXTrueQualifier;
 
 /**
  * <p>
@@ -2284,6 +2287,47 @@ public class ERXKey<T> {
 	 */
 	public ERXKeyValueQualifier containsObject(Object obj) {
 		return ERXQ.containsObject(_key, obj);
+	}
+		
+	/**
+	 * Equivalent to <code>new ERXExistsQualifier(qualifier, key)</code>.
+	 * 
+	 * @param qualifier
+	 *            a qualifier for the wrapped EORelationship's destination
+	 *            entity
+	 * @return a qualifier that evaluates to true when the wrapped
+	 *         EORelationship contains at least one object matching the given
+	 *         {@code qualifier}
+	 * 
+	 * @author davendasora
+	 * @since Mar 26, 2014
+	 */
+	public ERXExistsQualifier containsAnyObjectSatisfying(EOQualifier qualifier) {
+		return new ERXExistsQualifier(qualifier, _key);
+	}
+
+	/**
+	 * Determines if there are any objects in the wrapped EORelationship.
+	 * 
+	 * @return a qualifier that evaluates to true when the wrapped
+	 *         EORelationship contains at least one object
+	 * 
+	 * @author davendasora
+	 * @since Mar 26, 2014
+	 */
+	public ERXExistsQualifier isNotEmptyRelationship() {
+		return containsAnyObjectSatisfying(new ERXTrueQualifier());
+	}
+
+	/**
+	 * @return a qualifier that evaluates to true when the wrapped
+	 *         EORelationship is empty
+	 * 
+	 * @author davendasora
+	 * @since Mar 26, 2014
+	 */
+	public ERXNotQualifier isEmptyRelationship() {
+		return new ERXNotQualifier(isNotEmptyRelationship());
 	}
 	
 	/**
