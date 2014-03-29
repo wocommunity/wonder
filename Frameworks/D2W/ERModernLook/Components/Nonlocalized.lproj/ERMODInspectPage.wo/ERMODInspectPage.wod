@@ -1,3 +1,13 @@
+AboveDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
+    localContext = d2wContext;
+	extraPropertiesKey = "aboveDisplayPropertyKeys";
+}
+
+BelowDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
+	localContext = d2wContext;
+	extraPropertiesKey = "belowDisplayPropertyKeys";
+}
+
 CancelButton: CCSmartAjaxButton {
 	alt = "Reverts your changes";
 	value = d2wContext.cancelButtonLabel;
