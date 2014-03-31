@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERQMCollapsibleComponentContent" wocomponentcontent="true">
+        <binding name="string"/>
+        <binding name="heading"/>
+        <binding name="data-theme"/>
+        <binding name="data-content-theme"/>
+        <binding defaults="Boolean" name="data-mini"/>
+        <binding defaults="Boolean" name="data-inset"/>
+        <binding defaults="Boolean" name="data-collapsed"/>
+        <binding name="data-collapsed-icon"/>
+        <binding name="data-expanded-icon"/>
+        <binding name="data-iconpos"/>
+        <binding name="data-collapse-cue-text"/>
+        <binding name="data-expand-cue-text"/>
+    <validation message="'string' is a required binding.">
+            <unbound name="string"/>
+        </validation>
+    <binding name="class"/>
+        <binding name="otherTagString"/>
+    
+    <binding defaults="Boolean" name="data-corners"/>
+    <binding defaults="Boolean" name="data-disabled"/>
+    </wo>
+</wodefinitions>

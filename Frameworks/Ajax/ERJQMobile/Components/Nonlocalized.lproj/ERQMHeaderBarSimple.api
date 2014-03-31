@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERQMHeaderBar" wocomponentcontent="false">    <binding name="string"/>
+    <binding defaults="Boolean" name="isFixed"/>
+    <binding name="theme"/>
+    <binding defaults="Boolean" name="hasBackButton"/>
+    <binding name="backButton-title"/>
+        <binding name="backButton-theme"/>
+    <binding name="rightButton-theme"/>
+    <binding name="rightButton-icon"/>
+    <binding name="rightButton-title"/>
+    
+    <binding defaults="Actions" name="rightButton-action"/>
+    
+    
+    <binding name="rightButton-linkResource"/>
+    <binding name="backButton-action"/>
+    <binding name="backButton-iconpos"/>
+        <binding name="rightButton-iconpos"/>
+    <binding defaults="Boolean" name="data-tap-toggle"/>
+    </wo>
+</wodefinitions>

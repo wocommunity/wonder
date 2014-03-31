@@ -1,0 +1,68 @@
+<html>
+<head>
+<title>ERJQMobile</title>
+</head>
+<body>
+<h1>ERJQMobile</h1>
+<h2>Overview</h2>
+<p>This is a framework for the <a href="http://jquerymobile.com" target="_blank">jQueryMobile library</a>.</p>
+<p>It starts with jQueryMobile Version 1.4.x.</p>
+<h2>Upgrade projects von jqm 1.2 (ERJQueryMobile.framework) to 1.4.x (ERJQMobile.framework)</h2>
+<ol>
+	<li>The binding names where changed to the corresponding <a href="http://api.jquerymobile.com" target="_blank">jqm api</a> names.<br />(the old binding names will be recognized also, but you will get a "deprecated" notice in the java console.)</li> 
+	<li>You need to convert the theme css to 1.4.x using <a href = "http://themeroller.jquerymobile.com" target="_blank">theme roler</a></li> 
+	<li>Some components are renamed or set to "deprecated"</li> 
+	<li>Components in er.jquerymobile.components are NOT converted !</li> 
+</ol>
+<h2>New Properties for loading required javascript and css</h2>
+<pre>
+#########################################################################
+#### LOAD Information
+#### 
+#### odn    - Use online version
+#### local  - Use local version (minimized)
+#### dev    - Use local version (developer)
+#### custom - Your own path to files
+#########################################################################
+
+er.jqm.css-theme=local
+er.jqm.css-icons=local
+er.jqm.css-structure=odn
+er.jqm.jquery=odn
+er.jqm.javascript=odn
+er.jqm.autocomplete=local
+
+In development you can use the following lines in your projects Properties file:
+
+er.jqm.css-theme=custom
+er.jqm.css-icons=local
+er.jqm.css-structure=local
+er.jqm.jquery=local
+er.jqm.javascript=local
+er.jqm.autocomplete=local
+
+er.jqm.css-theme.custom.location=static://css.mobile/my-own-theme.css
+</pre>
+
+<h2>Using ERQMAjaxUpdateContainer</h2>
+You need to add the following to your Session class
+
+<pre>
+	@Override
+	public WOActionResults invokeAction(WORequest request, WOContext context)
+	{
+		WOActionResults result = super.invokeAction(request, context);
+		result = ERQMSessionHelper.checkForUpdateContainer(result, request, context);
+		return result;
+	}
+</pre>
+
+<h2>TODO</h2>
+<ol>
+	<li>remove Ajax.framework dependency</li>
+	<li>documentation</li>
+	<li>documentation</li>
+	<li>documentation</li>
+</ol>
+</body>
+</html>

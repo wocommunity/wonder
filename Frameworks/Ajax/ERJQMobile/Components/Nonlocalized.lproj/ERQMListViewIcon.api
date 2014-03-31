@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERQMListViewIcon" wocomponentcontent="true">    <binding name="alt"/>
+    <binding name="imageResource"/>
+        <validation message="'imageResource' is a required binding.">
+            <unbound name="imageResource"/>
+        </validation>
+    <binding name="id"/>
+    </wo>
+</wodefinitions>

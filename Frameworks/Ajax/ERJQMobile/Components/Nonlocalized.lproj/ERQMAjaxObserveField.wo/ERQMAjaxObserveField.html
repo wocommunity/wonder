@@ -1,0 +1,36 @@
+<div data-role="none" style = "display:none;"><webobject name = "InvSubBtn"/></div>
+<script>
+$('<wo:str value = "$jqObserveFieldID" />').change(function(event) {
+	url = $('<wo:str value = "$jqObserveFieldID" />').closest('form').attr('action');
+	/*url = url.replace(/\/wo\//, '/ajax/');*/
+	<wo:if condition = "$fullSubmit">
+		data = $('<wo:str value = "$jqObserveFieldID" />').closest('form').serialize();
+	</wo:if>
+	<wo:else>
+		data = '_partialSenderID=';
+		data = data + $('<wo:str value = "$jqObserveFieldID" />').attr('name');
+		tmp = $('<wo:str value = "$jqObserveFieldID" />').serialize();
+		if (tmp.length > 0) {
+			data = data + "&";
+			data = data + tmp;
+		}
+	</wo:else>
+	url = url + '?_jqma=1&<wo:str value = "$invSubBtnId" />=1&AJAX_SUBMIT_BUTTON_NAME=';
+	url = url + $('<wo:str value = "$jqInvSubBtnId" />').attr('name');
+
+	if (data.length > 0) {
+		url = url + "&";
+		url = url + data;
+	}
+	<wo:if condition = "$updateContainerID">
+		url = url + "&_ju=";
+		url = url + '<wo:str value = "$updateContainerID" />';
+		$(".ui-page").addClass('ui-disabled');
+		$.mobile.loading( "show" );
+		$('#<wo:str value = "$updateContainerID" />').load(url, function() { $.mobile.loading( "hide" ); $(".ui-page").removeClass('ui-disabled'); $('#<wo:str value = "$updateContainerID" />').trigger('create'); } );
+	</wo:if>
+	<wo:else>
+		$.get(url);
+	</wo:else>
+});
+</script>

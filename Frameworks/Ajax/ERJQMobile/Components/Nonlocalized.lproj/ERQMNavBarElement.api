@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERQMNavBarElement" wocomponentcontent="true">
+        <binding defaults="Boolean" name="selected"/>
+        <binding name="id"/>
+        <binding name="string"/>
+        <binding defaults="Actions" name="action"/>
+        <binding defaults="Boolean" name="disabled"/>
+        <binding name="href"/>
+        
+        <binding name="class"/>
+        
+        <binding name="linkResource"/>
+        
+        <binding name="data-icon"/>
+        
+        
+        
+        
+        
+        
+        <binding name="otherTagString"/>
+        <binding defaults="Boolean" name="data-ajax"/>
+        
+        
+        
+        <binding name="data-transition"/>
+        
+    </wo>
+</wodefinitions>
