@@ -1,0 +1,27 @@
+JQBackButton : ERQMButton {
+	href = "#";
+	data-theme = ^backButton-theme;
+	data-icon = "arrow-l";
+	data-rel = "back";
+	class = "ui-btn-left";	
+}
+
+BackLink : ERQMButton {
+	action = ^backButton-action;
+	data-theme = ^backButton-theme;
+	data-icon = "arrow-l";
+	data-iconpos = ^backButton-iconpos;
+	class = "ui-btn-left";	
+}
+
+LnkRight : ERQMButton {
+	linkResource = ^rightButton-linkResource;
+	action = ^rightButton-action;
+	string = ^rightButton-title;
+	data-icon = ^rightButton-icon;
+	data-iconpos = ^rightButton-iconpos;
+	data-theme = ^rightButton-theme;
+	class = "ui-btn-right";	
+}
+
+

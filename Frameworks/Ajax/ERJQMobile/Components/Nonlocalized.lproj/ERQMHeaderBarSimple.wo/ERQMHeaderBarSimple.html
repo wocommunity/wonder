@@ -1,0 +1,12 @@
+<wo:ERQMHeaderBar isNavBar="true" isFixed = "$^isFixed" data-tap-toggle = "$^data-tap-toggle" data-theme = "$^theme">
+  <wo:if condition = "$^hasBackButton">
+    <wo:if condition = "$hasBackButtonAction">
+      <webobject name = "BackLink"><wo:str value = "$^backButton-title" valueWhenEmpty = "$localizer.ERJQMobile.Back" /></webobject>
+    </wo:if>
+    <wo:else>
+      <webobject name = "JQBackButton"><wo:str value = "$^backButton-title" valueWhenEmpty = "$localizer.ERJQMobile.Back" /></webobject>
+    </wo:else>
+  </wo:if>
+  <h1><wo:str value = "$^string" /></h1>
+  <wo:if condition = "$hasRightButton"><webobject name = "LnkRight" /></wo:if>
+</wo:ERQMHeaderBar>

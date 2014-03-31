@@ -1,0 +1,22 @@
+<wo:if condition = "$isMultiBatch">
+  <wo:ERQMGrid columnCount = "3" style = "width:100%;">
+    <wo:ERQMGridBlock blockNumber = "1">
+      <wo:not condition = "$firstBatch">
+        <wo:if condition = "$showFastBack"><webobject name = "FirstBatch" /></wo:if>
+        <webobject name = "PrevBatch" />
+      </wo:not>
+      <wo:else>&nbsp;</wo:else>
+    </wo:ERQMGridBlock>
+    <wo:ERQMGridBlock blockNumber = "2" class = "center" style = "padding-top:14px;">
+      <span style = "font-weight:bold;">
+        <wo:WOString value = "$displayGroup.currentBatchIndex" />
+        / 
+        <wo:WOString value = "$displayGroup.batchCount" />
+      </span>
+    </wo:ERQMGridBlock>
+    <wo:ERQMGridBlock blockNumber = "3" class = "right">
+      <wo:not condition = "$lastBatch"> <webobject name = "NextBatch" /> </wo:not>
+      <wo:else>&nbsp;</wo:else>
+    </wo:ERQMGridBlock>
+  </wo:ERQMGrid>
+</wo:if>

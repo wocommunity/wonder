@@ -1,0 +1,14 @@
+BtnAction : WOSubmitButton {
+	action = ^action;
+	value = ^value;
+	otherTagString = otherTagString;
+	id = javaScriptElementID;
+}
+
+BtnDirectAction : WOSubmitButton {
+	actionClass = ^actionClass;
+	directActionName = ^directActionName;
+	value = ^value;
+	otherTagString = otherTagString;
+	id = javaScriptElementID;
+}

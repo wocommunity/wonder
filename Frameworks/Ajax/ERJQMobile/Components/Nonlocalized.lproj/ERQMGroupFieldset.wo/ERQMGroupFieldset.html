@@ -1,0 +1,18 @@
+<wo:if condition = "$inset">
+  <div class = "ui-field-contain">
+    <wo:genericContainer elementName = "fieldset" data-role = "controlgroup" otherTagString = "$otherTagString">
+      <wo:if condition = "$hasLegend">
+        <legend><wo:str value = "$legend" /></legend>
+      </wo:if>
+      <wo:WOComponentContent />
+    </wo:genericContainer>
+  </div>
+</wo:if>
+<wo:else>
+  <wo:genericContainer elementName = "fieldset" data-role = "controlgroup" otherTagString = "$otherTagString">
+    <wo:if condition = "$hasLegend">
+      <legend><wo:str value = "$legend" /></legend>
+    </wo:if>
+    <wo:WOComponentContent />
+  </wo:genericContainer>
+</wo:else>
