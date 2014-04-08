@@ -317,6 +317,11 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
+                <groupId>wonder.misc</groupId>
+                <artifactId>ERJaxWS</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>wonder.eoadaptors</groupId>
                 <artifactId>JavaMemoryAdaptor</artifactId>
                 <version>${project.version}</version>
