@@ -14,6 +14,7 @@ import com.sun.xml.ws.api.PropertySet;
 import com.sun.xml.ws.api.server.WebServiceContextDelegate;
 import com.sun.xml.ws.transport.http.WSHTTPConnection;
 import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
@@ -34,7 +35,8 @@ import er.extensions.appserver.ERXWOContext;
 public class ERWSWOHTTPConnection
     extends WSHTTPConnection
 {
-	public static final String ERJAXWS_ERXWOCONTEXT = "er.extensions.appserver.ERXWOContext";
+    public static final String ERJAXWS_WOCONTEXT = "com.webobjects.appserver.WOContext";
+    public static final String ERJAXWS_ERXWOCONTEXT = "er.extensions.appserver.ERXWOContext";
 	
     /** the current ERXRequest */
     ERXRequest woRequest;
@@ -290,10 +292,10 @@ public class ERWSWOHTTPConnection
         return woResponse;
     }
 
-	private ERXWOContext context = null;
+	private WOContext context = null;
 
-	@PropertySet.Property({ "er.extensions.appserver.ERXWOContext" })
-	public synchronized ERXWOContext context()
+	@PropertySet.Property({ "com.webobjects.appserver.WOContext" })
+	public synchronized WOContext WOContext()
 	{
 		if(context == null)
 		{
@@ -301,7 +303,7 @@ public class ERWSWOHTTPConnection
 			{
 				if(context == null)
 				{
-					context = new ERXWOContext(woRequest);
+				    context = WOApplication.application().createContextForRequest(woRequest);
 					
 					String sessionID = getSessionIDFromCookie();
 					if(sessionID != null)
@@ -312,7 +314,20 @@ public class ERWSWOHTTPConnection
 		
 		return context;
 	}
-	
+
+    @PropertySet.Property({ "er.extensions.appserver.ERXWOContext" })
+    public synchronized ERXWOContext ERXWOContext()
+    {
+        WOContext c = WOContext();
+        
+        if(c instanceof ERXWOContext)
+        {
+            return (ERXWOContext)c;
+        }
+        
+        throw new IllegalArgumentException("WOContext is no sublass of ERXWOContext");
+    }
+    
 	private String getSessionIDFromCookie()
 	{
 		return woRequest.cookieValueForKey(WOApplication.application().sessionIdKey());

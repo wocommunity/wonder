@@ -33,6 +33,7 @@ import com.sun.xml.ws.server.UnsupportedMediaException;
 import com.sun.xml.ws.transport.http.WSHTTPConnection;
 import com.sun.xml.ws.util.ByteArrayBuffer;
 import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WODynamicURL;
 import com.webobjects.appserver.WOMessage;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
@@ -86,16 +87,14 @@ public class ERJaxWebService<T>
     }
 
     /**
-     * @param aRequest
+     * @param woRequest
      * @return
      */
-    public WOResponse handleRequest(WORequest aRequest)
+    public WOResponse handleRequest(WORequest woRequest)
     {
-        ERXRequest er = (ERXRequest)aRequest;
-
-        if(isMetadataQuery(aRequest.queryString()))
+        if(isMetadataQuery(woRequest.queryString()))
         {
-            SDDocument doc = wsdls.get(aRequest.queryString());
+            SDDocument doc = wsdls.get(woRequest.queryString());
             if(doc == null)
             {
                 ERXResponse resp = new ERXResponse();
@@ -110,10 +109,28 @@ public class ERJaxWebService<T>
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-            String baseUri = er.uri().replaceAll("\\?" + er.queryString(), "");
-            String soapAddress =
-                ERXResourceManager._completeURLForResource(baseUri, er.isSecure(),
-                                                           WOApplication.application().createContextForRequest(er));
+            WODynamicURL du = woRequest._uriDecomposed();
+            String baseUri = String.format("%s/%s.woa/%s/%s",
+                    du.adaptorPath(),
+                    du.applicationName(),
+                    du.requestHandlerKey(),
+                    du.requestHandlerPath());
+
+            boolean isSecure;
+            
+            if(woRequest instanceof ERXRequest)
+            {
+                isSecure = ((ERXRequest)woRequest).isSecure();
+            } else
+            {
+                isSecure = ERXRequest.isRequestSecure(woRequest);
+            }
+                
+            String soapAddress = ERXResourceManager._completeURLForResource(
+                    baseUri, 
+                    isSecure,
+                    WOApplication.application().createContextForRequest(woRequest)
+                    );
 
             try
             {
@@ -131,7 +148,7 @@ public class ERJaxWebService<T>
             return resp;
         }
 
-        ERWSWOHTTPConnection con = new ERWSWOHTTPConnection(aRequest);
+        ERWSWOHTTPConnection con = new ERWSWOHTTPConnection(woRequest);
         try
         {
             Packet packet;
