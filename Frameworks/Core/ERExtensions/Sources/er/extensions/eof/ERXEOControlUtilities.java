@@ -91,7 +91,10 @@ public class ERXEOControlUtilities {
             throw new RuntimeException("ERXUtilites: localInstancesOfObjects: Array is null");
         if (ec == null)
             throw new RuntimeException("ERXUtilites: localInstancesOfObjects: EditingContext is null");
-        NSMutableArray<T> localEos = new NSMutableArray<T>();
+        if (eos.isEmpty()) {
+            return NSArray.emptyArray();
+        }
+        NSMutableArray<T> localEos = new NSMutableArray<T>(eos.count());
         for (Enumeration<T> e = eos.objectEnumerator(); e.hasMoreElements();) {
             localEos.addObject(localInstanceOfObject(ec, e.nextElement()));
         }

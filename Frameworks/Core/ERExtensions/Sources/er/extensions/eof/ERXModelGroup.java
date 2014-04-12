@@ -183,7 +183,7 @@ public class ERXModelGroup extends EOModelGroup {
 
 		NSMutableDictionary<String, URL> modelNameURLDictionary = new NSMutableDictionary<String, URL>();
 		NSMutableArray<String> modelNames = new NSMutableArray<String>();
-		NSMutableArray<NSBundle> bundles = new NSMutableArray<NSBundle>();
+		NSMutableSet<NSBundle> bundles = new NSMutableSet<NSBundle>();
 		bundles.addObject(NSBundle.mainBundle());
 		bundles.addObjectsFromArray(frameworkBundles);
 
