@@ -12,11 +12,14 @@ import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestamp;
 
 import er.extensions.eof.ERXSortOrdering.ERXSortOrderings;
+import er.extensions.eof.qualifiers.ERXExistsQualifier;
 import er.extensions.qualifiers.ERXAndQualifier;
 import er.extensions.qualifiers.ERXKeyComparisonQualifier;
 import er.extensions.qualifiers.ERXKeyValueQualifier;
+import er.extensions.qualifiers.ERXNotQualifier;
 import er.extensions.qualifiers.ERXOrQualifier;
 import er.extensions.qualifiers.ERXPrefixQualifierTraversal;
+import er.extensions.qualifiers.ERXTrueQualifier;
 
 /**
  * <p>
@@ -2004,6 +2007,8 @@ public class ERXKey<T> {
 	 * EOQualifier.QualifierOperatorEqual, null);
 	 * 
 	 * @return an ERXKeyValueQualifier
+	 * 
+	 * @see isEmptyRelationship
 	 */
 	public ERXKeyValueQualifier isNull() {
 		return ERXQ.isNull(_key);
@@ -2271,6 +2276,91 @@ public class ERXKey<T> {
 	 */
 	public ERXKeyValueQualifier containsObject(Object obj) {
 		return ERXQ.containsObject(_key, obj);
+	}
+		
+	/**
+	 * Equivalent to <code>new ERXExistsQualifier(qualifier, key)</code>.
+	 * 
+	 * @param qualifier
+	 *            a qualifier for the {@link EORelationship#destinationEntity()
+	 *            destinationEntity} of the {@link EORelationship} represented
+	 *            by this ERXKey
+	 * @return a qualifier that evaluates to true when the {@link EORelationship}
+	 *         represented by this ERXKey contains at least one object matching
+	 *         the given {@code qualifier}
+	 * 
+	 * @author David Avendasora
+	 * @since Mar 26, 2014
+	 */
+	public ERXExistsQualifier containsAnyObjectSatisfying(EOQualifier qualifier) {
+		return new ERXExistsQualifier(qualifier, _key);
+	}
+
+	/**
+	 * <p>
+	 * Equivalent to <code>new ERXExistsQualifier(qualifier, key)</code>.
+	 * </p>
+	 * <p>
+	 * Since this qualifier will <em>not</em> result in a join in the database,
+	 * it can be very useful when testing relationships that use the
+	 * <code>InnerJoin</code> {@link EORelationship#joinSemantic() joinSemantic}
+	 * yet the relationship may be empty (to-many relationships) or
+	 * <code>null</code> (to-one relationships).
+	 * </p>
+	 * 
+	 * @param qualifier
+	 *            a qualifier for the {@link EORelationship#destinationEntity()
+	 *            destinationEntity} of the {@link EORelationship} represented
+	 *            by this ERXKey
+	 * @return a qualifier that evaluates to true when the
+	 *         {@link EORelationship} represented by this ERXKey does not
+	 *         contain any objects that satisfy the given {@code qualifier}
+	 * 
+	 * @author David Avendasora
+	 * @since Mar 26, 2014
+	 */
+	public ERXNotQualifier doesNotContainsAnyObjectSatisfying(EOQualifier qualifier) {
+		return new ERXNotQualifier(containsAnyObjectSatisfying(qualifier));
+	}
+
+	/**
+	 * <p>
+	 * Determines if there are any objects in the to-one or to-many
+	 * {@link EORelationship} that this ERXKey represents.
+	 * </p>
+	 * 
+	 * @return a qualifier that evaluates to <code>true</code> when the
+	 *         {@link EORelationship} represented by this ERXKey contains at
+	 *         least one object
+	 * 
+	 * @author David Avendasora
+	 * @since Mar 26, 2014
+	 */
+	public ERXExistsQualifier isNotEmptyRelationship() {
+		return containsAnyObjectSatisfying(new ERXTrueQualifier());
+	}
+
+	/**
+	 * <p>
+	 * Determines if there are any objects in the to-one or to-many
+	 * EORelationship that this ERXKey represents.
+	 * </p>
+	 * <p>
+	 * Since this qualifier will <em>not</em> result in a join in the database,
+	 * it can be very useful when testing relationships that use the
+	 * <code>InnerJoin</code> {@link EORelationship#joinSemantic() joinSemantic}
+	 * and the relationship could be empty (to-many relationships) or
+	 * <code>null</code> (to-one relationships).
+	 * </p>
+	 * 
+	 * @return a qualifier that evaluates to <code>true</code> when the
+	 *         {@link EORelationship} represented by this ERXKey is empty
+	 * 
+	 * @author David Avendasora
+	 * @since Mar 26, 2014
+	 */
+	public ERXNotQualifier isEmptyRelationship() {
+		return doesNotContainsAnyObjectSatisfying(new ERXTrueQualifier());
 	}
 	
 	/**
