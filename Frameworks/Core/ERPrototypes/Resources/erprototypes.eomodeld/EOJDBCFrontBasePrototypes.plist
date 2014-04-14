@@ -172,7 +172,7 @@
             adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
             adaptorValueConversionMethodName = jodaLocalDateTime; 
             columnName = ""; 
-            externalType = TIMESTAMP; 
+            externalType = "TIMESTAMP WITH TIME ZONE"; 
             factoryMethodArgumentType = EOFactoryMethodArgumentIsDate; 
             name = jodaLocalDateTime; 
             valueClassName = "org.joda.time.LocalDateTime"; 
@@ -184,7 +184,7 @@
             adaptorValueConversionClassName = "er.prototypes.ValueConversion"; 
             adaptorValueConversionMethodName = jodaLocalTime; 
             columnName = ""; 
-            externalType = TIME; 
+            externalType = "TIME WITH TIME ZONE"; 
             factoryMethodArgumentType = EOFactoryMethodArgumentIsDate; 
             name = jodaLocalTime; 
             valueClassName = "org.joda.time.LocalTime"; 
