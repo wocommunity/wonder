@@ -253,7 +253,7 @@ public class ERXExistsQualifier extends EOQualifier implements Cloneable, NSCodi
             }
             
             EOJoin parentChildJoin = ERXArrayUtilities.firstObject(relationship.joins());
-            String destEntityForeignKey = ".\"" + parentChildJoin.destinationAttribute().columnName() + "\"";
+            String destEntityForeignKey = "." + expression.sqlStringForSchemaObjectName(parentChildJoin.destinationAttribute().columnName());
             
             EOQualifier qual = EOQualifierSQLGeneration.Support._schemaBasedQualifierWithRootEntity(subqualifier, destEntity);
             EOFetchSpecification fetchSpecification = new EOFetchSpecification(destEntity.name(), qual, null, false, true, null);
