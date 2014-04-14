@@ -395,3 +395,18 @@ td.PushButtonWrapper {
 .AdaptorLoginHelp {
 	font-size: small;	
 }
+
+.ApplicationsListBox td.RunningInstanceCount,
+.ApplicationsListBox td.TotalInstancesCount,
+.ApplicationDetailsBox td.TransactionsCount,
+.ApplicationDetailsBox td.DeathCount,
+.ApplicationDetailsBox td.ActiveSessionCount,
+.ApplicationDetailsBox td.AverageTransactionsCount,
+.ApplicationDetailsBox td.AverageIdlePeriod,
+.ApplicationDetailsBox td.TotalTransactionCount,
+.ApplicationDetailsBox td.TotalActiveSessions,
+.ApplicationDetailsBox td.TotalAverageTransaction,
+.ApplicationDetailsBox td.TotalAverageIdleTime
+{
+	text-align: right;
+}
