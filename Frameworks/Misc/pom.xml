@@ -16,6 +16,7 @@
 		<module>ERDistribution</module>
 		<module>ERChronic</module>
 		<module>ERFirebug</module>
+		<module>ERJaxWS</module>
 		<module>ERPDFGeneration</module>
 		<module>ERPersistentSessionStorage</module>
 		<module>ERProfiling</module>
