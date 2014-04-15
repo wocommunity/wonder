@@ -15,6 +15,9 @@ The wsdl had been imported using
 
 wsimport -s Sources -keep <url to wsdl>
 
+Please note, that the classes had been generated using Java 7.
+If you want to compile this under Java 6, you have to regenerate
+these using wsimport from Java 6.
 
 3. WebService_Stateful
 
