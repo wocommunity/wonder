@@ -10,7 +10,6 @@ import your.app.ws.StatefulActionException;
 import your.app.ws.StatefulActionImplService;
 
 import com.webobjects.appserver.WOActionResults;
-import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 
@@ -29,7 +28,7 @@ public class Main extends BaseComponent {
 		WORequest request = context().request();
 		URL url = new URL(
 					String.format("http://localhost:%d/%s/%s.woa/ws/StatefulAction?wsdl", 
-							WOApplication.application().port(),
+							request._acceptingPort(),
 							request.adaptorPrefix(),
 							request.applicationName())
 							);
