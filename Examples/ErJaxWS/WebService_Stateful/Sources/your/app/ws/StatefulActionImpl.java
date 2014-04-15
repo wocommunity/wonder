@@ -15,6 +15,7 @@ import er.extensions.appserver.ws.ERWSWOHTTPConnection;
 
 public class StatefulActionImpl implements StatefulAction 
 {
+	// this WebServiceContext object is injected by JaxWS during the RR cycle
     @Resource
     private WebServiceContext wsContext;
 
