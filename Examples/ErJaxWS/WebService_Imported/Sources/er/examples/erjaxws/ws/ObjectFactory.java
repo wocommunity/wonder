@@ -10,7 +10,7 @@ import javax.xml.namespace.QName;
 /**
  * This object contains factory methods for each 
  * Java content interface and Java element interface 
- * generated in the your.app.ws package. 
+ * generated in the er.examples.erjaxws.ws package. 
  * <p>An ObjectFactory allows you to programatically 
  * construct new instances of the Java representation 
  * for XML content. The Java representation of XML 
@@ -24,11 +24,11 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _AddResponse_QNAME = new QName("http://ws.app.your/", "addResponse");
-    private final static QName _Add_QNAME = new QName("http://ws.app.your/", "add");
+    private final static QName _AddResponse_QNAME = new QName("http://ws.erjaxws.examples.er/", "addResponse");
+    private final static QName _Add_QNAME = new QName("http://ws.erjaxws.examples.er/", "add");
 
     /**
-     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: your.app.ws
+     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: er.examples.erjaxws.ws
      * 
      */
     public ObjectFactory() {
@@ -54,7 +54,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link AddResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://ws.app.your/", name = "addResponse")
+    @XmlElementDecl(namespace = "http://ws.erjaxws.examples.er/", name = "addResponse")
     public JAXBElement<AddResponse> createAddResponse(AddResponse value) {
         return new JAXBElement<AddResponse>(_AddResponse_QNAME, AddResponse.class, null, value);
     }
@@ -63,7 +63,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link Add }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://ws.app.your/", name = "add")
+    @XmlElementDecl(namespace = "http://ws.erjaxws.examples.er/", name = "add")
     public JAXBElement<Add> createAdd(Add value) {
         return new JAXBElement<Add>(_Add_QNAME, Add.class, null, value);
     }

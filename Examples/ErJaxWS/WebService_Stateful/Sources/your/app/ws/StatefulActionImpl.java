@@ -6,7 +6,7 @@ import javax.jws.WebService;
 import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.handler.MessageContext;
 
-import your.app.Session;
+import er.examples.erjaxws.Session;
 import er.extensions.appserver.ERXWOContext;
 import er.extensions.appserver.ws.ERWSWOHTTPConnection;
 

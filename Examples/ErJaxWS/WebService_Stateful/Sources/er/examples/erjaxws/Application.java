@@ -1,4 +1,4 @@
-package your.app;
+package er.examples.erjaxws;
 
 import your.app.ws.StatefulActionImpl;
 import er.extensions.appserver.ERXApplication;
