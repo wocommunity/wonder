@@ -24,22 +24,14 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _AddResponse_QNAME = new QName("http://ws.erjaxws.examples.er/", "addResponse");
     private final static QName _Add_QNAME = new QName("http://ws.erjaxws.examples.er/", "add");
+    private final static QName _AddResponse_QNAME = new QName("http://ws.erjaxws.examples.er/", "addResponse");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: er.examples.erjaxws.ws
      * 
      */
     public ObjectFactory() {
-    }
-
-    /**
-     * Create an instance of {@link AddResponse }
-     * 
-     */
-    public AddResponse createAddResponse() {
-        return new AddResponse();
     }
 
     /**
@@ -51,12 +43,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link AddResponse }{@code >}}
+     * Create an instance of {@link AddResponse }
      * 
      */
-    @XmlElementDecl(namespace = "http://ws.erjaxws.examples.er/", name = "addResponse")
-    public JAXBElement<AddResponse> createAddResponse(AddResponse value) {
-        return new JAXBElement<AddResponse>(_AddResponse_QNAME, AddResponse.class, null, value);
+    public AddResponse createAddResponse() {
+        return new AddResponse();
     }
 
     /**
@@ -66,6 +57,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://ws.erjaxws.examples.er/", name = "add")
     public JAXBElement<Add> createAdd(Add value) {
         return new JAXBElement<Add>(_Add_QNAME, Add.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link AddResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.erjaxws.examples.er/", name = "addResponse")
+    public JAXBElement<AddResponse> createAddResponse(AddResponse value) {
+        return new JAXBElement<AddResponse>(_AddResponse_QNAME, AddResponse.class, null, value);
     }
 
 }
