@@ -1,0 +1,68 @@
+# OGNL
+ognl.helperFunctions=true
+ognl.inlineBindings=true
+
+# Misc
+er.extensions.stackTrace.cleanup=true
+
+# EOF
+er.extensions.ERXEC.safeLocking=true
+er.extensions.ERXEC.useSharedEditingContext=false
+er.extensions.ERXEnterpriseObject.applyRestrictingQualifierOnInsert=true
+er.extensions.ERXEnterpriseObject.updateInverseRelationships=true
+#dbConnectURLGLOBAL=
+#dbConnectUserGLOBAL=
+#dbConnectPasswordGLOBAL=
+
+# Migrations
+#er.migration.migrateAtStartup=true
+#er.migration.createTablesIfNecessary=true
+#er.migration.modelNames=YourModel
+
+# Misc Components
+#er.extensions.ERXWOForm.multipleSubmitDefault=true
+#er.extensions.ERXWORepetition.checkHashCodes=true
+#er.extensions.ERXWORepetition.raiseOnUnmatchedObject=true
+#er.extensions.ERXWORepetition.eoSupport=true
+#er.component.clickToOpen=true
+#wolips.password=wo
+
+# ERJavaMail
+er.javamail.centralize=true
+er.javamail.adminEmail=admin@yourhost.com
+er.javamail.debugEnabled=false
+er.javamail.smtpHost=your.smtpserver.com
+er.javamail.smtpAuth=false
+er.javamail.smtpUser=
+er.javamail.smtpPassword=
+
+# Log4j Configuration
+log4j.loggerFactory=er.extensions.logging.ERXLogger$Factory
+log4j.rootCategory=INFO,A1
+log4j.appender.A1=er.extensions.logging.ERXConsoleAppender
+log4j.appender.A1.layout=er.extensions.logging.ERXPatternLayout
+log4j.appender.A1.layout.ConversionPattern=%d{MMM dd HH:mm:ss} %$[%#] %-5p %c %x - %m%n
+
+# Log4j Categories
+# Here are a few log4j sub-categories that are interesting.
+# Don't forget that in developement mode this file will get reloaded
+# everytime it changes, so if you say want to turn adaptor debugging
+# on in the middle of the app simply set the below category to debug.
+# Very handy.
+# Base Category
+log4j.logger.er=INFO
+
+# ERExtensions
+# Transaction - Switching this to debug will start the sql ouputting.
+log4j.logger.er.transaction.adaptor.EOAdaptorDebugEnabled=DEBUG
+
+# Fixes - Turning this on will show all the models that are loaded
+log4j.logger.er.extensions.fixes.ERSharedEOLoader=INFO
+
+er.extensions.ERXNSLogLog4jBridge=INFO
+#log4j.logger.er.eo.ERXGenericRecord=DEBUG
+#log4j.logger.er.validation.ERXEntityClassDescription=DEBUG
+#log4j.logger.er.default.ERXEntityClassDescription=DEBUG
+log4j.logger.er.extensions.ERXDatabaseContextDelegate=WARN
+log4j.logger.er.extensions.ERXConfigurationManager=INFO
+#log4j.logger.er.extensions.ERXApplication.RequestHandling=DEBUG
