@@ -1,6 +1,6 @@
 package er.examples.erjaxws;
 
-import your.app.ws.StatefulActionImpl;
+import er.examples.erjaxws.ws.StatefulActionImpl;
 import er.extensions.appserver.ERXApplication;
 import er.extensions.appserver.ws.ERJaxWebService;
 import er.extensions.appserver.ws.ERJaxWebServiceRequestHandler;

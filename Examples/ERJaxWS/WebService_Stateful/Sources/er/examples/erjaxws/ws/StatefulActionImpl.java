@@ -1,4 +1,4 @@
-package your.app.ws;
+package er.examples.erjaxws.ws;
 
 import javax.annotation.Resource;
 import javax.jws.WebMethod;
@@ -11,7 +11,7 @@ import er.extensions.appserver.ERXWOContext;
 import er.extensions.appserver.ws.ERWSWOHTTPConnection;
 
 @WebService (
-		endpointInterface = "your.app.ws.StatefulAction")
+		endpointInterface = "er.examples.erjaxws.ws.StatefulAction")
 
 public class StatefulActionImpl implements StatefulAction 
 {

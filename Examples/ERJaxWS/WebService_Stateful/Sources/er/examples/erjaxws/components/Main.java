@@ -3,15 +3,16 @@ package er.examples.erjaxws.components;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
-
-import your.app.ws.StatefulAction;
-import your.app.ws.StatefulActionException;
-import your.app.ws.StatefulActionImplService;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
+
+import er.examples.erjaxws.ws.StatefulAction;
+import er.examples.erjaxws.ws.StatefulActionException;
+import er.examples.erjaxws.ws.StatefulActionImplService;
 
 @SuppressWarnings("serial")
 public class Main extends BaseComponent {
@@ -33,8 +34,8 @@ public class Main extends BaseComponent {
 							request.applicationName())
 							);
 
-		StatefulActionImplService service = new StatefulActionImplService(url);
-
+		StatefulActionImplService service = new StatefulActionImplService(url, 
+				new QName("http://ws.erjaxws.examples.er/", "StatefulActionImplService"));
 		StatefulAction sAction = service.getPort(StatefulAction.class);
 
 		/* setting this property is essential for enabling stateful mode in our client proxy
