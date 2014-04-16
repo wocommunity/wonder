@@ -7,8 +7,8 @@ import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WORequest;
 
 import er.examples.erjaxws.ws.StatefulAction;
 import er.examples.erjaxws.ws.StatefulActionException;
@@ -26,13 +26,8 @@ public class Main extends BaseComponent {
 		 * running application
 		 * */ 
 		
-		WORequest request = context().request();
-		URL url = new URL(
-					String.format("http://localhost:%d/%s/%s.woa/ws/StatefulAction?wsdl", 
-							request._acceptingPort(),
-							request.adaptorPrefix(),
-							request.applicationName())
-							);
+		URL url = new URL(WOApplication.application().directConnectURL() + 
+				"/ws/StatefulAction?wsdl"); 
 
 		StatefulActionImplService service = new StatefulActionImplService(url, 
 				new QName("http://ws.erjaxws.examples.er/", "StatefulActionImplService"));

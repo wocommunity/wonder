@@ -20,4 +20,10 @@ public class Application extends ERXApplication {
         this.registerRequestHandler(wsHandler, this.webServiceRequestHandlerKey());
 
 	}
+	
+	// modify URL to auto open in Browser to show the wsdl 
+	@Override
+	public String directConnectURL() {
+		return super.directConnectURL() + "/ws/Calculator?wsdl";
+	}
 }

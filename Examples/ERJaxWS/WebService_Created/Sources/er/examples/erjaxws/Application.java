@@ -24,6 +24,11 @@ public class Application extends ERXApplication {
 
         // create a standalone endpoint using Jax WS mechanisms
         Endpoint.publish("http://localhost:9999/ws/Calculator", new Calculator());
-
+	}
+	
+	// modify URL to auto open in Browser to show the wsdl 
+	@Override
+	public String directConnectURL() {
+		return super.directConnectURL() + "/ws/Calculator?wsdl";
 	}
 }
