@@ -66,6 +66,18 @@ RunningInstancesCount: WOString {
     value = currentApplication.runningInstancesCount;
 }
 
-TotalInstancesCount: WOString {
+ConfiguredInstanceCount: WOString {
     value = currentApplication.instanceArray.count;
+}
+
+
+TotalsRunningInstanceCount: WOString {
+	value = totals.totalInstancesRunning; // valid
+	numberformat = "#,##0";
+}
+
+
+TotalsConfiguredInstanceCount: WOString {
+	value = totals.totalInstancesConfigured;	// valid
+	numberformat = "#,##0";
 }

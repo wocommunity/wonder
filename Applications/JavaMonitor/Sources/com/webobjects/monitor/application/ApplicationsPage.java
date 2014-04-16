@@ -17,20 +17,24 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.monitor._private.MApplication;
 import com.webobjects.monitor._private.String_Extensions;
 
 public class ApplicationsPage extends MonitorComponent {
 
+    private static final long serialVersionUID = -2523319756655905750L;
+
+	public String TOTAL_INSTANCES_CONFIGURED_KEY_NAME = "totalInstancesConfigured";
+	public String TOTAL_INSTANCES_RUNNING_KEY_NAME = "totalInstancesRunning";
+	
+	private NSMutableDictionary<String, Integer> _totals = null;
+	
     public ApplicationsPage(WOContext aWocontext) {
         super(aWocontext);
         handler().updateForPage(name());
     }
-
-    /**
-     * serialVersionUID
-     */
-    private static final long serialVersionUID = -2523319756655905750L;
+ 
 
     public MApplication currentApplication;
 
@@ -41,6 +45,8 @@ public class ApplicationsPage extends MonitorComponent {
     	result.addObjectsFromArray(mySession().siteConfig().applicationArray());
     	EOSortOrdering order= new EOSortOrdering("name", EOSortOrdering.CompareAscending);
     	EOSortOrdering.sortArrayUsingKeyOrderArray(result, new NSArray(order));
+    	
+    	calculateTotals(result);
      	return result;
     }
     
@@ -125,7 +131,14 @@ public class ApplicationsPage extends MonitorComponent {
 	    });
     }
 
-
+	
+	public Integer runningInstancesCount(){
+		NSMutableDictionary<String, Integer> myTotals = totals();
+		Integer count = (Integer)myTotals.valueForKey(TOTAL_INSTANCES_RUNNING_KEY_NAME);
+		return count;
+	}
+	
+	
     public WOComponent bounceClicked() {
         AppDetailPage page = AppDetailPage.create(context(), currentApplication);
         page = (AppDetailPage) page.bounceClicked();
@@ -137,5 +150,30 @@ public class ApplicationsPage extends MonitorComponent {
         aPage.isNewInstanceSectionVisible = true;
         return aPage;
     }
+    
+    
+    public NSMutableDictionary<String, Integer> calculateTotals(NSMutableArray<MApplication> result){
+    	if (_totals == null){
+    		_totals = new NSMutableDictionary<String, Integer>();
+    	}
+    	int totalRunningInstances = 0;
+    	int totalConfiguredInstances = 0;
+    	for (MApplication mApplication : result) {
+    		totalRunningInstances = totalRunningInstances + mApplication.runningInstancesCount();
+    		totalConfiguredInstances = totalConfiguredInstances +  mApplication.instanceArray().count();
+		}
+		_totals.takeValueForKey(new Integer(totalConfiguredInstances), TOTAL_INSTANCES_CONFIGURED_KEY_NAME);
+		_totals.takeValueForKey(new Integer(totalRunningInstances), TOTAL_INSTANCES_RUNNING_KEY_NAME);		
+    	return _totals;
+    }
+    
+    
+    public NSMutableDictionary<String, Integer> totals(){
+    	return _totals;
+    }
 
+    public void setTotals(NSMutableDictionary<String, Integer> otherTotals){
+    	_totals = otherTotals;
+    }
+    
 }
