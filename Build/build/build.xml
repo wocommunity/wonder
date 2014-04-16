@@ -299,6 +299,17 @@
        </antcall>
     </target>
 
+    <target name="WebService_Created.all">
+        <antcall target="global.application.${build.action}" >
+            <param name="project.type" value="application" />
+            <param name="project.principal.class" value="er.example.erxpartials.Application" />
+            <param name="project.name" value="WebService_Created" />
+            <param name="project.dir" value="Examples/ERXPartials/WebService_Created" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}/ERXPartialBaseModel/ERXPartialBaseModel" />
+            <param name="wo.system.root.bundles" value="${frameworks.system.d2w}" />
+        </antcall>
+    </target>
+
     <target name="ERXPartialBaseModel.all">
         <antcall target="global.framework.${build.action}" >
             <param name="project.name" value="ERXPartialBaseModel" />

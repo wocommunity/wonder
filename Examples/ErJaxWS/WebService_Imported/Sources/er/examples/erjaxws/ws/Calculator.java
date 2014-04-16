@@ -1,5 +1,4 @@
-
-package your.app.ws;
+package er.examples.erjaxws.ws;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -16,7 +15,7 @@ import javax.xml.ws.ResponseWrapper;
  * Generated source version: 2.2
  * 
  */
-@WebService(name = "Calculator", targetNamespace = "http://ws.app.your/")
+@WebService(name = "Calculator", targetNamespace = "http://ws.examples.erjaxws.er/")
 @XmlSeeAlso({
     ObjectFactory.class
 })
@@ -32,8 +31,8 @@ public interface Calculator {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "add", targetNamespace = "http://ws.app.your/", className = "your.app.ws.Add")
-    @ResponseWrapper(localName = "addResponse", targetNamespace = "http://ws.app.your/", className = "your.app.ws.AddResponse")
+    @RequestWrapper(localName = "add", targetNamespace = "http://ws.examples.erjaxws.er/", className = "er.examples.erjaxws.ws.Add")
+    @ResponseWrapper(localName = "addResponse", targetNamespace = "http://ws.examples.erjaxws.er/", className = "er.examples.erjaxws.ws.AddResponse")
     public int add(
         @WebParam(name = "arg0", targetNamespace = "")
         int arg0,

@@ -1,10 +1,10 @@
-package your.app.components;
+package er.examples.erjaxws.components;
 
 import com.webobjects.appserver.WOContext;
 
+import er.examples.erjaxws.Application;
+import er.examples.erjaxws.Session;
 import er.extensions.components.ERXComponent;
-import your.app.Application;
-import your.app.Session;
 
 @SuppressWarnings("serial")
 public class BaseComponent extends ERXComponent {

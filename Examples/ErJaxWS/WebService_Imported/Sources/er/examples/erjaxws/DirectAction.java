@@ -1,12 +1,11 @@
-package your.app;
+package er.examples.erjaxws;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WORequest;
 
+import er.examples.erjaxws.components.Main;
 import er.extensions.appserver.ERXDirectAction;
-
-import your.app.components.Main;
 
 public class DirectAction extends ERXDirectAction {
 	public DirectAction(WORequest request) {

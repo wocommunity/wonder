@@ -1,4 +1,4 @@
-package your.app.components;
+package er.examples.erjaxws.components;
 
 import com.webobjects.appserver.WOContext;
 

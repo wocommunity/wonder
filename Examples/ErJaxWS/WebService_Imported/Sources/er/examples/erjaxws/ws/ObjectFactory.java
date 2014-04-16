@@ -1,5 +1,5 @@
 
-package your.app.ws;
+package er.examples.erjaxws.ws;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlElementDecl;

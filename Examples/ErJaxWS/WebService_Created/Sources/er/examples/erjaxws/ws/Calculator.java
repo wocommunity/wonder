@@ -1,4 +1,4 @@
-package your.app.ws;
+package er.examples.erjaxws.ws;
 
 import javax.jws.WebService;
 

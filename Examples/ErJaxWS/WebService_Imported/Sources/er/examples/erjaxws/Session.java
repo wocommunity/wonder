@@ -1,4 +1,4 @@
-package your.app;
+package er.examples.erjaxws;
 
 import er.extensions.appserver.ERXSession;
 
