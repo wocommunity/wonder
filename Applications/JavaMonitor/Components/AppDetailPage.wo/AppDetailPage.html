@@ -250,6 +250,19 @@
         <webobject name = "ConfigureLink"><span>Configure</span></webobject></td>
       <td><webobject name = "InstDeleteAllLink"><span>Delete</span></webobject></td>
     </tr>
+    
+    <wo:if condition="$showDetailStatistics">
+    <tr class="TotalsForRunningInstances">
+    	<td colspan="10" class="label">Running Sessions</td>
+    	<td class="TotalTransactionCount"><webobject name = "TotalTransactionsForActiveInstances"></webobject></td>
+      	<td class="TotalActiveSessions"><webobject name = "ActiveSessionsForActiveInstances"></webobject></td>
+      	<td class="TotalAverageTransaction"></td>
+      	<td class="TotalAverageIdleTime"></td>
+      	
+  		<td colspan="2"></td>
+    </tr>
+    </wo>
+    
   </webobject>
 </table>
 </div>

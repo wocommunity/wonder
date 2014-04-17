@@ -438,3 +438,9 @@ td.PushButtonWrapper {
 	text-align: right;
 }
 
+
+div.ApplicationDetailsBox table tr.TotalsForRunningInstances .label
+{
+	font-weight: bold;
+	text-align: right;
+}
