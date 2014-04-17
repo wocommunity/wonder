@@ -72,12 +72,12 @@ ConfiguredInstanceCount: WOString {
 
 
 TotalsRunningInstanceCount: WOString {
-	value = totals.totalInstancesRunning; // valid
+	value = totalInstancesRunning;
 	numberformat = "#,##0";
 }
 
 
 TotalsConfiguredInstanceCount: WOString {
-	value = totals.totalInstancesConfigured;	// valid
+	value = totalInstancesConfigured;
 	numberformat = "#,##0";
 }

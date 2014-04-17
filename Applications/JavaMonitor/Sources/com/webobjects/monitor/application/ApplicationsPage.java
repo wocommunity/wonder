@@ -17,7 +17,6 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.monitor._private.MApplication;
 import com.webobjects.monitor._private.String_Extensions;
 
@@ -25,10 +24,9 @@ public class ApplicationsPage extends MonitorComponent {
 
     private static final long serialVersionUID = -2523319756655905750L;
 
-	public String TOTAL_INSTANCES_CONFIGURED_KEY_NAME = "totalInstancesConfigured";
-	public String TOTAL_INSTANCES_RUNNING_KEY_NAME = "totalInstancesRunning";
+	private int _totalInstancesConfigured = 0;
+	private int _totalInstancesRunning = 0;
 	
-	private NSMutableDictionary<String, Integer> _totals = null;
 	
     public ApplicationsPage(WOContext aWocontext) {
         super(aWocontext);
@@ -41,13 +39,13 @@ public class ApplicationsPage extends MonitorComponent {
     public String newApplicationName;
 
     public NSArray<MApplication> applications() {
-    	NSMutableArray<MApplication> result = new NSMutableArray<MApplication>();
-    	result.addObjectsFromArray(mySession().siteConfig().applicationArray());
+    	NSMutableArray<MApplication> applications = new NSMutableArray<MApplication>();
+    	applications.addObjectsFromArray(mySession().siteConfig().applicationArray());
     	EOSortOrdering order= new EOSortOrdering("name", EOSortOrdering.CompareAscending);
-    	EOSortOrdering.sortArrayUsingKeyOrderArray(result, new NSArray(order));
+    	EOSortOrdering.sortArrayUsingKeyOrderArray(applications, new NSArray(order));
     	
-    	calculateTotals(result);
-     	return result;
+    	calculateTotals(applications);
+     	return applications;
     }
     
     public String hrefToApp() {
@@ -132,12 +130,6 @@ public class ApplicationsPage extends MonitorComponent {
     }
 
 	
-	public Integer runningInstancesCount(){
-		NSMutableDictionary<String, Integer> myTotals = totals();
-		Integer count = (Integer)myTotals.valueForKey(TOTAL_INSTANCES_RUNNING_KEY_NAME);
-		return count;
-	}
-	
 	
     public WOComponent bounceClicked() {
         AppDetailPage page = AppDetailPage.create(context(), currentApplication);
@@ -152,28 +144,56 @@ public class ApplicationsPage extends MonitorComponent {
     }
     
     
-    public NSMutableDictionary<String, Integer> calculateTotals(NSMutableArray<MApplication> result){
-    	if (_totals == null){
-    		_totals = new NSMutableDictionary<String, Integer>();
-    	}
+    /**
+     * Calculates and sets the {@link #totalInstancesConfigured()} and {@link #totalInstancesRunning()}
+     * for the given array of applications
+     * 
+     * @param applications
+     */
+    public void calculateTotals(NSMutableArray<MApplication> applications){
     	int totalRunningInstances = 0;
     	int totalConfiguredInstances = 0;
-    	for (MApplication mApplication : result) {
+    	
+    	// use for-loop to preserve compile-time error-checking instead of using valueForKey("runningInstancesCount.@sum")
+    	for (MApplication mApplication : applications) {
     		totalRunningInstances = totalRunningInstances + mApplication.runningInstancesCount();
     		totalConfiguredInstances = totalConfiguredInstances +  mApplication.instanceArray().count();
 		}
-		_totals.takeValueForKey(new Integer(totalConfiguredInstances), TOTAL_INSTANCES_CONFIGURED_KEY_NAME);
-		_totals.takeValueForKey(new Integer(totalRunningInstances), TOTAL_INSTANCES_RUNNING_KEY_NAME);		
-    	return _totals;
-    }
-    
-    
-    public NSMutableDictionary<String, Integer> totals(){
-    	return _totals;
+    	setTotalInstancesConfigured(totalConfiguredInstances);
+    	setTotalInstancesRunning(totalRunningInstances);
     }
 
-    public void setTotals(NSMutableDictionary<String, Integer> otherTotals){
-    	_totals = otherTotals;
-    }
+    
+	/**
+	 * @return the total number of instances configured for all applications
+	 */
+	public int totalInstancesConfigured() {
+		return _totalInstancesConfigured;
+	}
+
+	/**
+	 * Sets the total number of instances configured for all applications
+	 * @param totalInstancesConfigured 
+	 */
+	public void setTotalInstancesConfigured(int totalInstancesConfigured) {
+		_totalInstancesConfigured = totalInstancesConfigured;
+	}
+
+	/**
+	 * @return the total number of running instances for all applications
+	 */
+	public int totalInstancesRunning() {
+		return _totalInstancesRunning;
+	}
+
+	/**
+	 * Sets the total number of running instances for all applications
+	 * @param totalInstancesRunning
+	 */
+	public void setTotalInstancesRunning(int totalInstancesRunning) {
+		_totalInstancesRunning = totalInstancesRunning;
+	}
+
+    
     
 }
