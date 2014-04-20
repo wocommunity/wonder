@@ -3,6 +3,7 @@ package er.modern.directtoweb.assignments.defaults;
 import org.apache.log4j.Logger;
 
 import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -55,13 +56,13 @@ public class ERMDDefaultCSSAssignment extends ERDAssignment {
 			new NSArray(new Object[] {"propertyKey"}), "classForAttributeColumn",
 			new NSArray(new Object[] {"task", "pageConfiguration"}), "pageType",
 			new NSArray(new Object[] {"task", "entity.name", "pageConfiguration"}), "idForRepetitionContainer",
-			new NSArray(new Object[] {"task", "entity.name", "pageConfiguration"}), "idForMainContainer",
+			new NSArray(new Object[] {"task", "entity.name", "pageConfiguration", "currentRelationship"}), "idForMainContainer",
 			new NSArray(new Object[] {"task", "entity.name", "pageConfiguration"}), "idForPageTabContainer",
 			new NSArray(new Object[] {"task", "entity.name", "pageConfiguration"}), "idForPageConfiguration",
 			new NSArray(new Object[] {"task", "entity.name", "pageConfiguration", "propertyKey"}), "idForPropertyContainer",
 			new NSArray(new Object[] {"task", "entity.name", "pageConfiguration"}), "idForMainBusyIndicator",
 			new NSArray(new Object[] {"task", "entity.name", "pageConfiguration", "parentPageConfiguration"}), "idForParentPageConfiguration",
-			new NSArray(new Object[] {"task", "entity.name", "pageConfiguration", "parentPageConfiguration"}), "idForParentMainContainer"
+			new NSArray(new Object[] {"task", "entity.name", "pageConfiguration", "parentPageConfiguration", "parentRelationship", "masterObjectAndRelationshipKey"}), "idForParentMainContainer"
 	});
 
     /**
@@ -265,7 +266,14 @@ public class ERMDDefaultCSSAssignment extends ERDAssignment {
 	// IDs
 	
 	public String idForMainContainer(D2WContext c) {
-		return "MUC_" + idForPageConfiguration(c);
+        String idForMainContainer = "MUC_" + idForPageConfiguration(c);
+        if (c.valueForKey("currentRelationship") != null) {
+            EORelationship relationship = (EORelationship) c
+                    .valueForKey("currentRelationship");
+            // use currentRelationship key to create unique ID (wonder-140)
+            idForMainContainer = idForMainContainer.concat("_" + relationship.name());
+        }
+        return idForMainContainer;
 	}
 	
 	public String idForRepetitionContainer(D2WContext c) {
@@ -281,7 +289,16 @@ public class ERMDDefaultCSSAssignment extends ERDAssignment {
 	}
 	
 	public String idForParentMainContainer(D2WContext c) {
-		return "MUC_" + idForParentPageConfiguration(c);
+        String idForParentMainContainer = "MUC_" + idForParentPageConfiguration(c);
+        if (c.valueForKey("parentRelationship") != null) {
+            EORelationship parentRelationship = (EORelationship) c
+                    .valueForKey("parentRelationship");
+            // use parentRelationship key to create unique parent ID
+            // (wonder-140)
+            idForParentMainContainer = idForParentMainContainer.concat("_"
+                    + parentRelationship.name());
+        }
+        return idForParentMainContainer;
 	}
 	
 	public String idForParentPageConfiguration(D2WContext c) {
