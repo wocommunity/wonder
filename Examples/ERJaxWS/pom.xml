@@ -2,20 +2,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>wonder</groupId>
-		<artifactId>wonder</artifactId>
+		<groupId>wonder.examples</groupId>
+		<artifactId>examples</artifactId>
 		<version>6.1.2-SNAPSHOT</version>
 	</parent>
-	<groupId>wonder.examples</groupId>
-	<artifactId>examples</artifactId>
+
+	<artifactId>erjaxws</artifactId>
 	<packaging>pom</packaging>
-	<name>Examples</name>
+	<name>ERJaxWS Examples</name>
+
 	<modules>
-		<module>Ajax</module>
-		<module>D2W</module>
-		<module>ERJaxWS</module>
-		<module>ERXPartials</module>
-		<module>Misc</module>
-		<module>Reporting</module>
+		<module>WebService_Created</module>
+		<module>WebService_Imported</module>
+		<module>WebService_Stateful</module>
 	</modules>
 </project>

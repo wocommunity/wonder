@@ -299,6 +299,36 @@
        </antcall>
     </target>
 
+    <target name="WebService_Created.all">
+        <antcall target="global.application.${build.action}" >
+            <param name="project.type" value="application" />
+            <param name="project.principal.class" value="er.examples.erjaxws.Application" />
+            <param name="project.name" value="WebService_Created" />
+            <param name="project.dir" value="Examples/ERJaxWS/WebService_Created" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERJaxWS" />
+        </antcall>
+    </target>
+
+    <target name="WebService_Imported.all">
+        <antcall target="global.application.${build.action}" >
+            <param name="project.type" value="application" />
+            <param name="project.principal.class" value="er.examples.erjaxws.Application" />
+            <param name="project.name" value="WebService_Imported" />
+            <param name="project.dir" value="Examples/ERJaxWS/WebService_Imported" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERJaxWS" />
+        </antcall>
+    </target>
+
+    <target name="WebService_Stateful.all">
+        <antcall target="global.application.${build.action}" >
+            <param name="project.type" value="application" />
+            <param name="project.principal.class" value="er.examples.erjaxws.Application" />
+            <param name="project.name" value="WebService_Stateful" />
+            <param name="project.dir" value="Examples/ERJaxWS/WebService_Stateful" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/ERJaxWS" />
+        </antcall>
+    </target>
+
     <target name="ERXPartialBaseModel.all">
         <antcall target="global.framework.${build.action}" >
             <param name="project.name" value="ERXPartialBaseModel" />
@@ -1402,7 +1432,7 @@
 
     <target name="common.applications.all" depends="BugTracker.all, ERMailer.all, Uber.all, SecretPal.all, ERXTest.all, PluginTest.all, WOTested.all" />
     
-	<target name="common.examples.all" depends="ERSeleniumExample.all, ERIndexingExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, AjaxExample2.all, TickTockMan.all, ERComponentTour.all, ERRestRouteExample.all, Movies.all, ERWebSocketExample.all, ERJasperReportsExample.all, BackgroundTasks.all, ERCayenneExample.all, ERDistributionExampleModel.all, ERDistributionExampleServer.all, ERDistributionExampleClient.all, MooToolsExample.all, ERPDFExamples.all, JqueryMobileExample.all, TextSearchDemo.all, ERXPartialsExampleApp.all" />
+	<target name="common.examples.all" depends="ERSeleniumExample.all, ERIndexingExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, AjaxExample2.all, TickTockMan.all, ERComponentTour.all, ERRestRouteExample.all, Movies.all, ERWebSocketExample.all, ERJasperReportsExample.all, BackgroundTasks.all, ERCayenneExample.all, ERDistributionExampleModel.all, ERDistributionExampleServer.all, ERDistributionExampleClient.all, MooToolsExample.all, ERPDFExamples.all, JqueryMobileExample.all, TextSearchDemo.all, ERXPartialsExampleApp.all, WebService_Created.all, WebService_Imported.all, WebService_Stateful.all" />
 
     <target name="dynareporting.frameworks.all" depends="DRGrouping.all, WRReporting.all" />
     <target name="dynareporting.examples.all" depends="DocsByExample.all, DynaReporter.all" />
