@@ -66,7 +66,7 @@ static int WOShmem_fd = -1;
 /*
  * The address in memory at which the file has been mapped.
  */
-static intptr_t WOShmem_base_address = -1;
+static void * WOShmem_base_address = -1;
 
 /*
  * The total size of the mapped memory.
@@ -75,8 +75,8 @@ static unsigned int WOShmem_size = 0;
 
 static WA_recursiveLock WOShmem_mutex;
 
-#define offset_to_addr(offset) ((void *)(WOShmem_base_address + (intptr_t)offset))
-#define addr_to_offset(addr) ((intptr_t)addr - WOShmem_base_address)
+#define offset_to_addr(offset) ((void *)(WOShmem_base_address + (void *)offset))
+#define addr_to_offset(addr) ((void *)addr - WOShmem_base_address)
 
 #ifndef MAP_FAILED
 #define MAP_FAILED -1
@@ -250,8 +250,8 @@ int WOShmem_init(const char *file, size_t memsize)
       WOShmem_size = ensure_file_size(WOShmem_fd, memsize);
       if (WOShmem_size != -1)
       {
-         WOShmem_base_address = (intptr_t)mmap(0, WOShmem_size, PROT_READ|PROT_WRITE, MAP_FILE|MAP_SHARED|MAP_INHERIT, WOShmem_fd, 0);
-         if (WOShmem_base_address == (intptr_t)MAP_FAILED)
+         WOShmem_base_address = (void *)mmap(0, WOShmem_size, PROT_READ|PROT_WRITE, MAP_FILE|MAP_SHARED|MAP_INHERIT, WOShmem_fd, 0);
+         if (WOShmem_base_address == (void *)MAP_FAILED)
          {
             errMsg = WA_errorDescription(WA_error());
             WOLog(WO_ERR, "WOShmem_init(): couldn't map file: %s", errMsg);
@@ -507,7 +507,7 @@ ShmemArray *sha_alloc(const char *name, void *arrayBase, size_t elementSize, uns
       array->elementCount = elementCount;
       for (i=0; i<array->elementCount; i++)
       {
-         array->elements[i].element = (void *)((intptr_t)arrayBase + elementSize * i);
+         array->elements[i].element = (void *)(arrayBase + elementSize * i);
          array->elements[i].lock = WA_createLock("array element lock");
          array->elements[i].writeLock = WA_createLock("array element write lock");
          array->elements[i].lockCount = 0;
