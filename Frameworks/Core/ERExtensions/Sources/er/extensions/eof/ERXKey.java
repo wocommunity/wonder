@@ -16,6 +16,7 @@ import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestamp;
 
 import er.extensions.eof.ERXSortOrdering.ERXSortOrderings;
+import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.eof.qualifiers.ERXExistsQualifier;
 import er.extensions.foundation.ERXArrayUtilities;
 import er.extensions.qualifiers.ERXAndQualifier;
