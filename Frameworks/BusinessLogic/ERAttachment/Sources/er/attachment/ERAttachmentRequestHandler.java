@@ -122,7 +122,12 @@ public class ERAttachmentRequestHandler extends WORequestHandler {
               attachment = (ERAttachment) ERXEOGlobalIDUtilities.fetchObjectWithGlobalID(editingContext, gid);
               String actualWebPath = attachment.webPath();
               if (!actualWebPath.equals(webPath)) {
-                throw new SecurityException("You are not allowed to view the requested attachment."); 
+            	  // Aaron Rosenzweig - April 24, 2014 - If the file name has %20 in it on the server already (because it was uploaded that way)...
+            	  // then we need to compare "decoded" with "decoded" for fairness
+            	  String urlDecodedActualPath = ERXStringUtilities.urlDecode(actualWebPath);
+            	  if ( ! urlDecodedActualPath.equals(webPath)) {
+                      throw new SecurityException("You are not allowed to view the requested attachment."); 
+            	  }
               }
             }
             else {
