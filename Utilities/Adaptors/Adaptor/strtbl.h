@@ -28,8 +28,6 @@ and limitations under the License.
  *	see strdict.
  */
 
-typedef	unsigned char _BOOLEAN_;
-
 /*
  * Flags that can appear in strtblelem->flags or st_add().
  * Note that specifying STR_COPYxxx implies STR_FREExxxx.

@@ -264,11 +264,14 @@ void ac_resetConfigTimers()
 {
    void *lockHandle;
    lockHandle = WOShmem_lock(configTimes, sizeof(ConfigTimes), 1);
-   configTimes->public_mtime = (time_t)0;
-   configTimes->private_mtime = (time_t)0;
-   configTimes->config_read_time = 0;
-   configTimes->config_servers_read_time = 0;
-   WOShmem_unlock(lockHandle);
+   if(lockHandle)
+   {
+	   configTimes->public_mtime = (time_t)0;
+	   configTimes->private_mtime = (time_t)0;
+	   configTimes->config_read_time = 0;
+	   configTimes->config_servers_read_time = 0;
+	   WOShmem_unlock(lockHandle);
+	}
 }
 
 
@@ -1107,7 +1110,8 @@ static void readServerConfig() {
 				else // No response has to be treated as modification, too
 					oneOrMoreModified  = 1;
 			} else
-        buffer[i] = NULL;
+				buffer[i] = NULL;
+			
 		}
 	}
    

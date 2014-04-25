@@ -1,0 +1,51 @@
+all: mod_WebObjects.so
+
+CLFLAGS=/nologo /MD /W3 /O2 /D WIN32 /D _WINDOWS /D NDEBUG /D SINGLE_THREADED_ADAPTOR -I"C:\Apache24\include" -I"../Adaptor" /c
+
+mod_WebObjects.so : mod_WebObjects.c ..\Adaptor\*.c
+	cl $(CLFLAGS) /Fomod_WebObjects.lo mod_WebObjects.c
+	cl $(CLFLAGS) /Fotransport.lo ..\Adaptor\transport.c
+	cl $(CLFLAGS) /FoMoreURLCUtilities.lo ..\Adaptor\MoreURLCUtilities.c
+	cl $(CLFLAGS) /FoPlatform.lo ..\Adaptor\Platform.c
+	cl $(CLFLAGS) /FoWOURLCUtilities.lo ..\Adaptor\WOURLCUtilities.c
+	cl $(CLFLAGS) /FoWOURLCUtilities_3.lo ..\Adaptor\WOURLCUtilities_3.c
+	cl $(CLFLAGS) /Foappcfg.lo ..\Adaptor\appcfg.c
+	cl $(CLFLAGS) /Focfgparse.lo ..\Adaptor\cfgparse.c
+	cl $(CLFLAGS) /Foconfig.lo ..\Adaptor\config.c
+	cl $(CLFLAGS) /Fohostlookup.lo ..\Adaptor\hostlookup.c
+	cl $(CLFLAGS) /Folist.lo ..\Adaptor\list.c
+	cl $(CLFLAGS) /Folisting.lo ..\Adaptor\listing.c
+	cl $(CLFLAGS) /Foloadaverage.lo ..\Adaptor\loadaverage.c
+	cl $(CLFLAGS) /Foloadbalancing.lo ..\Adaptor\loadbalancing.c
+	cl $(CLFLAGS) /Folog.lo ..\Adaptor\log.c
+	cl $(CLFLAGS) /Fonbsocket.lo ..\Adaptor\nbsocket.c
+	cl $(CLFLAGS) /Forandom.lo ..\Adaptor\random.c
+	cl $(CLFLAGS) /Forequest.lo ..\Adaptor\request.c
+	cl $(CLFLAGS) /Foresponse.lo ..\Adaptor\response.c
+	cl $(CLFLAGS) /Foroundrobin.lo ..\Adaptor\roundrobin.c
+	cl $(CLFLAGS) /Foshmem.lo ..\Adaptor\shmem.c
+	cl $(CLFLAGS) /Fostrdict.lo ..\Adaptor\strdict.c
+	cl $(CLFLAGS) /Fostrtbl.lo ..\Adaptor\strtbl.c
+	cl $(CLFLAGS) /Fotransaction.lo ..\Adaptor\transaction.c
+	cl $(CLFLAGS) /Fotransport.lo ..\Adaptor\transport.c
+	cl $(CLFLAGS) /Fowastring.lo ..\Adaptor\wastring.c
+	cl $(CLFLAGS) /Fowomalloc.lo ..\Adaptor\womalloc.c
+	cl $(CLFLAGS) /Foxmlcparser.lo ..\Adaptor\xmlcparser.c
+	cl $(CLFLAGS) /Foxmlctokenizer.lo ..\Adaptor\xmlctokenizer.c
+	cl $(CLFLAGS) /Foxmlparse.lo ..\Adaptor\xmlparse.c
+	link msvcrt.lib kernel32.lib wsock32.lib libhttpd.lib advapi32.lib libapr-1.lib /nologo /subsystem:windows /dll /machine:I386 /libpath:"c:\Apache24\lib" /out:mod_WebObjects.so  *.lo
+
+#	${APXS2.2} -i -A -n WebObjects mod_WebObjects.la #auto-install module into libexec dir
+#	cp .libs/mod_WebObjects.so .  
+#extra copy to put mod_WebObjects.so in traditional location
+
+
+clean:
+	rm -f mod_WebObjects.lo mod_WebObjects.la mod_WebObjects.slo mod_WebObjects.so mod_WebObjects.o *.o *.lib *.exp
+	rm -f ../Adaptors/*.o ../*.slo ../*.lo
+	rm -rf .libs
+
+#include ../Adaptor/make.postamble
+
+
+

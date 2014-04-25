@@ -13,6 +13,7 @@
 	<modules>
 		<module>Ajax</module>
 		<module>D2W</module>
+		<module>ERJaxWS</module>
 		<module>ERXPartials</module>
 		<module>Misc</module>
 		<module>Reporting</module>
