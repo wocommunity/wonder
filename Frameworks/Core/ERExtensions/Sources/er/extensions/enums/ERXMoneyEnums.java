@@ -24,7 +24,7 @@ public enum ERXMoneyEnums {
 	ARS("", "", "", "", ERXDecimalFormatSymbols.MONEY_SEPERATOR_COMMA, ERXDecimalFormatSymbols.MONEY_SEPERATOR_DOT, 100, "Argentine Peso"), // TODO
 	AUD("", "", "", "", ERXDecimalFormatSymbols.MONEY_SEPERATOR_COMMA, ERXDecimalFormatSymbols.MONEY_SEPERATOR_DOT, 100, "Australian Dollar"), // TODO
 	AWG("", "", "", "", ERXDecimalFormatSymbols.MONEY_SEPERATOR_COMMA, ERXDecimalFormatSymbols.MONEY_SEPERATOR_DOT, 100, "Aruban Florin"), // TODO
-	AZN("", "", "", "", ERXDecimalFormatSymbols.MONEY_SEPERATOR_COMMA, ERXDecimalFormatSymbols.MONEY_SEPERATOR_DOT, 100, "Azerbaijani Manat"), // TODO
+	AZM("", "", "", "", ERXDecimalFormatSymbols.MONEY_SEPERATOR_COMMA, ERXDecimalFormatSymbols.MONEY_SEPERATOR_DOT, 100, "Azerbaijani Manat"), // TODO
 
 	/* B */
 	BAM("marka", "fening", "KM", "", ERXDecimalFormatSymbols.MONEY_SEPERATOR_COMMA, ERXDecimalFormatSymbols.MONEY_SEPERATOR_DOT, 100, "Bosnia-Herzegovina Convertible Mark"),

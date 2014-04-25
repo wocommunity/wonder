@@ -395,3 +395,52 @@ td.PushButtonWrapper {
 .AdaptorLoginHelp {
 	font-size: small;	
 }
+
+
+/* if you do not want the ApplicationsListBox table to be as wide as your whole page
+   uncomment the following lines
+*/
+/*
+.ApplicationsListBox table {
+	width: auto;	
+}
+*/
+
+.ApplicationsListBox tr.application td.RunningInstanceCount,
+.ApplicationsListBox tr.application td.ConfiguredInstanceCount,
+
+.ApplicationsListBox tr.Totals td.RunningInstanceCount,
+.ApplicationsListBox tr.Totals td.ConfiguredInstanceCount,
+
+.ApplicationDetailsBox td.TransactionsCount,
+.ApplicationDetailsBox td.DeathCount,
+.ApplicationDetailsBox td.ActiveSessionCount,
+.ApplicationDetailsBox td.AverageTransactionsCount,
+.ApplicationDetailsBox td.AverageIdlePeriod,
+.ApplicationDetailsBox td.TotalTransactionCount,
+.ApplicationDetailsBox td.TotalActiveSessions,
+.ApplicationDetailsBox td.TotalAverageTransaction,
+.ApplicationDetailsBox td.TotalAverageIdleTime
+{
+	text-align: right;
+}
+
+.ApplicationsListBox table tr.Totals td,
+.ApplicationsListBox table tr.Totals th
+{
+	background-color: #ccc;
+	color: #000;
+}
+
+.ApplicationsListBox table tr.Totals td.applicationName
+{
+	font-weight: bold;	
+	text-align: right;
+}
+
+
+div.ApplicationDetailsBox table tr.TotalsForRunningInstances .label
+{
+	font-weight: bold;
+	text-align: right;
+}

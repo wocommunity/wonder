@@ -60,7 +60,7 @@ Ant should be found in /usr/share/ant/bin/ant
 
 4. Invoke ant -projecthelp, but normally you would do for WO:
 
-  ant frameworks; sudo ant frameworks.install
+  ant clean frameworks; sudo ant frameworks.install
   ant applications; sudo ant applications.install
   ant examples; sudo ant examples.install
 

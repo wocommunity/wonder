@@ -8,7 +8,8 @@ import java.io.IOException;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
 
-import com.sun.xml.internal.ws.util.ByteArrayBuffer;
+import com.sun.xml.ws.util.ByteArrayBuffer;
+
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOAdaptorContext;
