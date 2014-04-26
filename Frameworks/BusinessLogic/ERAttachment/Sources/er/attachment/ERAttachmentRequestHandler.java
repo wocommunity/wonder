@@ -193,7 +193,7 @@ public class ERAttachmentRequestHandler extends WORequestHandler {
 	 * @param requestedWebPath
 	 *        a URL-encoded portion of the requested ERAttachment path including the file name of the attachment
 	 * @return an attachment that matches either both the {@code attachmentPrimaryKey} and the {@code requestedWebPath},
-	 *         or just the {@code reqestedWebPath}.
+	 *         or just the {@code reqestedWebPath}. If it is null then we throw a SecurityException. 
 	 * 
 	 * @author davendasora
 	 * @since Apr 25, 2014
@@ -214,6 +214,11 @@ public class ERAttachmentRequestHandler extends WORequestHandler {
 			}
 		} else {
 			/*
+			 * Aaron Rosenzweig April 25, 2014 
+			 * WARNING: This is partially broken on an edge case and no easy fix is available. Any true fix would break
+			 * current WOnder users of ERAttachment. Short version: We cannot URLDecode the column in the database efficiently. 
+			 * See details below:
+			 * 
 			 * If the webPath value that is stored in the database (actualWebPath) contains "%20" (or any other %nn
 			 * code) the following fetch will not find it because the requestedWebPath needs to be decoded, which will
 			 * remove any occurrences of "%20" from it, causing it to no longer match the actualWebPath value.
@@ -225,6 +230,10 @@ public class ERAttachmentRequestHandler extends WORequestHandler {
 			} catch (URISyntaxException exception) {
 				attachment = null;
 				exception.printStackTrace();
+			}
+			
+			if (attachment == null) {
+				throw new SecurityException("You are not allowed to view the requested attachment.");
 			}
 		}
 		return attachment;
@@ -252,17 +261,15 @@ public class ERAttachmentRequestHandler extends WORequestHandler {
 		 * because we only need to ensure that both webPath values decode identically. We can't use URI.getPath() here
 		 * because the webPath value stored in the database (actualWebPath) may contain illegal values (spaces, etc.)
 		 */
-		final String decodedWebPath = ERXStringUtilities.urlDecode(actualWebPath);
+		final String decodedActualWebPath = ERXStringUtilities.urlDecode(actualWebPath);
 		final String decodedRequestedWebPath = ERXStringUtilities.urlDecode(requestedWebPath);
 
 		/*
 		 * Aaron Rosenzweig - April 24, 2014 - Because the attachment may have been originally uploaded with "%20" (or
-		 * another %nn value) already in the file name, we need to compare both the stored value (actualWebPath) and a
-		 * decoded version (decodedWebPath) against the requested value (requestedWebPath) otherwise we could
-		 * incorrectly throw a SecurityException.
+		 * another %nn value) already in the file name, we need to compare both the stored decoded (actualWebPath) 
+		 * against the decoded requested value (requestedWebPath) otherwise we could incorrectly throw a SecurityException.
 		 */
-		final boolean requestedWebPathIsDifferentFromTheAttachmentWebPath = decodedRequestedWebPath.equals(actualWebPath)
-		                                                                 || decodedRequestedWebPath.equals(decodedWebPath);
-		return requestedWebPathIsDifferentFromTheAttachmentWebPath;
+		final boolean requestedWebPathMatchesTheAttachmentWebPath = decodedRequestedWebPath.equals(decodedActualWebPath);
+		return requestedWebPathMatchesTheAttachmentWebPath;
 	}
 }
