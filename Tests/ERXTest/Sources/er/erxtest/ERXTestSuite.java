@@ -52,6 +52,8 @@ public class ERXTestSuite {
     suite.addTestSuite(er.extensions.formatters.ERXOrdinalFormatterTests.class);
     suite.addTestSuite(er.extensions.formatters.ERXOrdinalDateFormatterTests.class);
     
+    suite.addTestSuite(er.javamail.ERMailUtilsTest.class);
+
     suite.addTestSuite(er.extensions.jdbc.MicrosoftSQLHelperTest.class);
 
     suite.addTestSuite(er.extensions.net.ERXEmailValidatorTest.class);
