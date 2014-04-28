@@ -241,9 +241,10 @@ WinMain(HINSTANCE inst, HINSTANCE previnst, LPSTR cmdline, int cmdshow)
  * Helpers to look in the registry for a public JRE.
  */
 		    /* Same for 1.5.0, 1.5.1, 1.5.2 etc. */
-#define DOTRELEASE  "1.5"
+#define DOTRELEASE5  "1.5"
 #define DOTRELEASE6  "1.6"
 #define DOTRELEASE7  "1.7"
+#define DOTRELEASE8  "1.8"
 #define JRE_KEY	    "Software\\JavaSoft\\Java Runtime Environment"
 
 static jboolean
@@ -281,11 +282,13 @@ GetPublicJREHome(char *buf, jint bufsize)
 	return JNI_FALSE;
     }
 
-    if (strcmp(version, DOTRELEASE) != 0 &&
+    if (strcmp(version, DOTRELEASE5) != 0 &&
 		strcmp(version, DOTRELEASE6) != 0 &&
-		strcmp(version, DOTRELEASE7) != 0) {
+		strcmp(version, DOTRELEASE7) != 0 &&
+		strcmp(version, DOTRELEASE8) != 0) 
+	{
 	fprintf(stderr, "Registry key '" JRE_KEY "\\CurrentVersion'\nhas "
-		"value '%s', but '" DOTRELEASE "' or '" DOTRELEASE6 "' or '" DOTRELEASE7 "' is required.\n", version);
+		"value '%s', but '" DOTRELEASE5 "' upto '" DOTRELEASE8 "' is required.\n", version);
 	RegCloseKey(key);
 	return JNI_FALSE;
     }
