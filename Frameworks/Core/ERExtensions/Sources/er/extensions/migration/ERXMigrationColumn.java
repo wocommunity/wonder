@@ -7,8 +7,10 @@ import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOSchemaSynchronization;
+import com.webobjects.eoaccess.synchronization.EOSchemaGenerationOptions;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
 
@@ -373,11 +375,22 @@ public class ERXMigrationColumn {
 	 * 
 	 * @return an array of EOSQLExpressions for creating this column
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked" })
 	public NSArray<EOSQLExpression> _createExpressions() {
-		EOSchemaSynchronization schemaSynchronization = _table.database().synchronizationFactory();
-		NSArray<EOSQLExpression> expressions = schemaSynchronization.statementsToInsertColumnForAttribute(_newAttribute(), NSDictionary.EmptyDictionary);
-		ERXMigrationDatabase._ensureNotEmpty(expressions, "add column", true);
+		com.webobjects.eoaccess.synchronization.EOSchemaSynchronization schemaSynchronization = _table.database().synchronizationFactory();
+		com.webobjects.eoaccess.synchronization.EOSchemaGenerationOptions options = new EOSchemaGenerationOptions();
+		NSArray<EOSQLExpression> expressions = schemaSynchronization.statementsToInsertColumnForAttribute(_newAttribute(), options);
+		
+		if (expressions != null && expressions.count() != 0) {
+			// Assuming only one expression is created, this is a very ugly but effective way to circumvent a bug in EOSchemaSynchronization where the
+			// "add" SQL reserved word would be replaced by the string "null", so generating a wrong SQL expression (at least in MySQL) with something
+			// like "alter table my_table null my_column somedatatype" instead of "alter table my_table add my_column somedatatype"
+			
+			String correctStatement = expressions.objectAtIndex(0).statement();
+			correctStatement = correctStatement.replaceFirst("alter table " + _newAttribute().entity().externalName() + " null", "alter table " + _newAttribute().entity().externalName() + " add");
+			expressions.objectAtIndex(0).setStatement(correctStatement);
+		} else
+			ERXMigrationDatabase._ensureNotEmpty(expressions, "add column", true);
 		return expressions;
 	}
 
