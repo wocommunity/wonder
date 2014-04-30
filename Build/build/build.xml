@@ -1292,33 +1292,37 @@
         </antcall>
     </target>
 
-    <target name="MooTools.all">
+    <target name="Mootools.all">
         <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="er.ajax.Ajax" />
-            <param name="project.name" value="MooTools" />
-            <param name="project.dir" value="Frameworks/Ajax/MooTools" />
+            <param name="project.name" value="Mootools" />
+            <param name="project.dir" value="Frameworks/Ajax/Mootools" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax/ERAttachment" />
         </antcall>
     </target>
 
-    <target name="ERMooToolsDirectToWeb.all">
+<<<<<<< HEAD
+    <target name="MootoolsExample.all" depends="examples.embed.check">
+=======
+    <target name="ERMootoolsDirectToWeb.all">
         <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="" />
-            <param name="project.name" value="ERMooToolsDirectToWeb" />
-            <param name="project.dir" value="Frameworks/D2W/ERMooToolsDirectToWeb" />
+            <param name="project.name" value="ERMootoolsDirectToWeb" />
+            <param name="project.dir" value="Frameworks/D2W/ERMootoolsDirectToWeb" />
             <param name="wo.external.root.bundles" value="${frameworks.wonder.d2w}" />
         </antcall>
     </target>
 
-    <target name="MooToolsExample.all" depends="examples.embed.check">
+    <target name="MootoolsExample.all" depends="examples.embed.check">
+>>>>>>> db172303c8979618b5329ec0b86a080c6b4ee57b
     	<property name="wonder.examples.embed.jars" value="false" />
         <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
             <param name="project.principal.class" value="er.ajax.mootools.example.app.Application" />
-            <param name="project.name" value="MooToolsExample" />
-            <param name="project.dir" value="Examples/Ajax/MooToolsExample" />
+            <param name="project.name" value="MootoolsExample" />
+            <param name="project.dir" value="Examples/Ajax/MootoolsExample" />
 
-            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax/ERPrototypes/JavaMemoryAdaptor/MooTools" />
+            <param name="wo.external.root.bundles" value="${frameworks.wonder.core}/Ajax/ERPrototypes/JavaMemoryAdaptor/Mootools" />
       		<param name="wo.external.root.bundles.embed" value="${wonder.examples.embed.jars}" />
       		<param name="wo.system.root.bundles.embed" value="${wonder.examples.embed.jars}" />            
         </antcall>
@@ -1460,11 +1464,19 @@
         to add your own, add a target definition above and choose the correct group below
      -->
 
-    <target name="common.frameworks.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, Ajax.all, ERDirectToWeb.all, ERNeutralLook.all, ERMooToolsDirectToWeb.all, ERSelenium.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERIndexing.all, ERChronic.all, ERCaptcha.all, ERProfiling.all, EROpenID.all, ERJaxWS.all, ERPDFGeneration.all, ERJGroupsSynchronizer.all, ERRest.all, ERAttachment.all, ERTaggable.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all, BTBusinessLogic.all, JavaMemoryAdaptor.all, JavaNeo4JAdaptor.all, JavaLuceneAdaptor.all, JavaFSAdaptor.all, JavaERJDBCAdaptor.all, WOLips.all, WOJRebel.all, ERMoviesLogic.all, SnapshotExplorer.all, ERJasperReports.all, ERAttributeExtension.all, ERWOAdaptor.all, ERCayenne.all, ERCayenne.all, ERDistribution.all, MooTools.all, ERJQueryMobile.all, ERJQMobile.all, ERPersistentSessionStorage.all, ERQuartzScheduler.all, ERXiss.all, ERFirebug.all, ERXPartialBaseModel.all, ERXPartialsExampleModel.all" />
+<<<<<<< HEAD
+    <target name="common.frameworks.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, Ajax.all, ERDirectToWeb.all, ERNeutralLook.all, ERSelenium.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERIndexing.all, ERChronic.all, ERCaptcha.all, ERProfiling.all, EROpenID.all, ERJaxWS.all, ERPDFGeneration.all, ERJGroupsSynchronizer.all, ERRest.all, ERAttachment.all, ERTaggable.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all, BTBusinessLogic.all, JavaMemoryAdaptor.all, JavaNeo4JAdaptor.all, JavaFSAdaptor.all, JavaERJDBCAdaptor.all, WOLips.all, WOJRebel.all, ERMoviesLogic.all, SnapshotExplorer.all, ERJasperReports.all, ERAttributeExtension.all, ERWOAdaptor.all, ERCayenne.all, ERCayenne.all, ERDistribution.all, Mootools.all, ERJQueryMobile.all, ERJQMobile.all, ERPersistentSessionStorage.all, ERQuartzScheduler.all, ERXiss.all, ERFirebug.all, ERXPartialBaseModel.all, ERXPartialsExampleModel.all" />
 
     <target name="common.applications.all" depends="BugTracker.all, ERMailer.all, Uber.all, SecretPal.all, ERXTest.all, PluginTest.all, WOTested.all" />
     
-	<target name="common.examples.all" depends="ERSeleniumExample.all, ERIndexingExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, AjaxExample2.all, TickTockMan.all, ERComponentTour.all, ERRestRouteExample.all, Movies.all, ERWebSocketExample.all, ERJasperReportsExample.all, BackgroundTasks.all, ERCayenneExample.all, ERDistributionExampleModel.all, ERDistributionExampleServer.all, ERDistributionExampleClient.all, MooToolsExample.all, ERPDFExamples.all, JqueryMobileExample.all, LuceneExample.all, TextSearchDemo.all, ERXPartialsExampleApp.all, WebService_Created.all, WebService_Imported.all, WebService_Stateful.all" />
+	<target name="common.examples.all" depends="ERSeleniumExample.all, ERIndexingExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, AjaxExample2.all, TickTockMan.all, ERComponentTour.all, ERRestRouteExample.all, Movies.all, ERWebSocketExample.all, ERJasperReportsExample.all, BackgroundTasks.all, ERCayenneExample.all, ERDistributionExampleModel.all, ERDistributionExampleServer.all, ERDistributionExampleClient.all, MootoolsExample.all, ERPDFExamples.all, JqueryMobileExample.all, TextSearchDemo.all, ERXPartialsExampleApp.all, WebService_Created.all, WebService_Imported.all, WebService_Stateful.all" />
+=======
+    <target name="common.frameworks.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, Ajax.all, ERDirectToWeb.all, ERNeutralLook.all, ERMootoolsDirectToWeb.all, ERSelenium.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERIndexing.all, ERChronic.all, ERCaptcha.all, ERProfiling.all, EROpenID.all, ERJaxWS.all, ERPDFGeneration.all, ERJGroupsSynchronizer.all, ERRest.all, ERAttachment.all, ERTaggable.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all, BTBusinessLogic.all, JavaMemoryAdaptor.all, JavaNeo4JAdaptor.all, JavaLuceneAdaptor.all, JavaFSAdaptor.all, JavaERJDBCAdaptor.all, WOLips.all, WOJRebel.all, ERMoviesLogic.all, SnapshotExplorer.all, ERJasperReports.all, ERAttributeExtension.all, ERWOAdaptor.all, ERCayenne.all, ERCayenne.all, ERDistribution.all, Mootools.all, ERJQueryMobile.all, ERJQMobile.all, ERPersistentSessionStorage.all, ERQuartzScheduler.all, ERXiss.all, ERFirebug.all, ERXPartialBaseModel.all, ERXPartialsExampleModel.all" />
+
+    <target name="common.applications.all" depends="BugTracker.all, ERMailer.all, Uber.all, SecretPal.all, ERXTest.all, PluginTest.all, WOTested.all" />
+    
+	<target name="common.examples.all" depends="ERSeleniumExample.all, ERIndexingExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, AjaxExample2.all, TickTockMan.all, ERComponentTour.all, ERRestRouteExample.all, Movies.all, ERWebSocketExample.all, ERJasperReportsExample.all, BackgroundTasks.all, ERCayenneExample.all, ERDistributionExampleModel.all, ERDistributionExampleServer.all, ERDistributionExampleClient.all, MootoolsExample.all, ERPDFExamples.all, JqueryMobileExample.all, LuceneExample.all, TextSearchDemo.all, ERXPartialsExampleApp.all, WebService_Created.all, WebService_Imported.all, WebService_Stateful.all" />
+>>>>>>> db172303c8979618b5329ec0b86a080c6b4ee57b
 
     <target name="dynareporting.frameworks.all" depends="DRGrouping.all, WRReporting.all" />
     <target name="dynareporting.examples.all" depends="DocsByExample.all, DynaReporter.all" />
