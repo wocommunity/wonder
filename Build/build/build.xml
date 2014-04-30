@@ -1318,7 +1318,7 @@
     	<property name="wonder.examples.embed.jars" value="false" />
         <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
-            <param name="project.principal.class" value="er.ajax.Mootools.example.app.Application" />
+            <param name="project.principal.class" value="er.ajax.mootools.example.app.Application" />
             <param name="project.name" value="MootoolsExample" />
             <param name="project.dir" value="Examples/Ajax/MootoolsExample" />
 
