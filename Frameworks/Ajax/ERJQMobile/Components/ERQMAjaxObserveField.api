@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERQMAjaxObserveField" wocomponentcontent="false">
+    	<binding name="observeFieldID"/>
+	    <binding name="updateContainerID"/>
+    	<binding name="action"/>
+	    <binding defaults="Boolean" name="fullSubmit"/>
+		<binding defaults="Boolean" name="secure"/>
+    <validation message="'observeFieldID' is a required binding.">
+            <unbound name="observeFieldID"/>
+        </validation>
+        <validation message="'action' is a required binding.">
+            <unbound name="action"/>
+        </validation>
+    </wo>
+</wodefinitions>

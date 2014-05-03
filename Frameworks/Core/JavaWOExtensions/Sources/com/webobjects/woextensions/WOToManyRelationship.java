@@ -346,16 +346,10 @@ public class WOToManyRelationship extends WOComponent {
 
         count = (newValues == null) ? 0 : newValues.count();
 
-        if (isDictionary && currentValues == null) {
-            currentValues = new NSMutableArray(count);
-
-            _dictionary.setObjectForKey(currentValues, masterKey);
-        }
-
         for (int i = count - 1; i >= 0; i--) {
             o = (EOEnterpriseObject) newValues.objectAtIndex(i);
 
-            if (currentValues == null || currentValues.indexOfIdenticalObject(o) == NSArray.NotFound) {  // not found
+            if (currentValues.indexOfIdenticalObject(o) == NSArray.NotFound) {  // not found
 
                 if (isDictionary) {
                     currentValues.addObject(o);

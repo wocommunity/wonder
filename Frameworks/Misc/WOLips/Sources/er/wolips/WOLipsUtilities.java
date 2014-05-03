@@ -44,9 +44,9 @@ public class WOLipsUtilities {
       StringBuilder urlBuffer = new StringBuilder();
       urlBuffer.append("http://");
       urlBuffer.append(host);
-      urlBuffer.append(":");
+      urlBuffer.append(':');
       urlBuffer.append(port);
-      urlBuffer.append("/");
+      urlBuffer.append('/');
       urlBuffer.append(action);
       urlBuffer.append("?pw=");
       urlBuffer.append(URLEncoder.encode(password, CharEncoding.UTF_8));
@@ -54,7 +54,7 @@ public class WOLipsUtilities {
         for (Object key : params.allKeys()) {
           urlBuffer.append("&amp;");
           urlBuffer.append(URLEncoder.encode(key.toString(), CharEncoding.UTF_8));
-          urlBuffer.append("=");
+          urlBuffer.append('=');
           Object value = params.objectForKey(key);
           urlBuffer.append(URLEncoder.encode(value.toString(), CharEncoding.UTF_8));
         }

@@ -172,7 +172,7 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
         // Typically, something like "DirectActionClass/actionMethod".
         // Keep consistency with directActionName semantics as it is defined in directActionHref static method
         if(hasBinding("actionClass")) {
-            StringBuffer daBuffer = new StringBuffer();
+            StringBuilder daBuffer = new StringBuilder();
             daBuffer.append(valueForBinding("actionClass"));
             daBuffer.append('/');
             daBuffer.append(valueForBinding("directActionName"));
@@ -248,7 +248,7 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
                 String value = encryptedDict.objectForKey(key).toString();
                 ERXStringUtilities.appendSeparatorIfLastNot('&', '?', result);
                 result.append(key);
-                result.append("=");
+                result.append('=');
                 result.append(ERXCrypto.crypterForAlgorithm(ERXCrypto.BLOWFISH).encrypt(value));
             }
         }
@@ -260,7 +260,7 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
                 String value = unencryptedDict.objectForKey(key).toString();
                 ERXStringUtilities.appendSeparatorIfLastNot('&', '?', result);
                 result.append(key);
-                result.append("=");
+                result.append('=');
                 result.append(value);
             }
         }

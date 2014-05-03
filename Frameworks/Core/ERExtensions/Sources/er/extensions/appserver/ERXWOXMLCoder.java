@@ -34,7 +34,7 @@ public class ERXWOXMLCoder extends WOXMLCoder {
     private _MappingModel _mappingModel;
 
     /**
-     * Quick and dirty class to en- and decode the generic xml data to full-flegded objects that 
+     * Quick and dirty class to en- and decode the generic xml data to full-fledged objects that 
      * can be bound in the edit interface.
      * 
      *

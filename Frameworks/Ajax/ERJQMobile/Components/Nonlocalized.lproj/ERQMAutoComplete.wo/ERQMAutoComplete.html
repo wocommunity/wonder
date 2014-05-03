@@ -1,0 +1,37 @@
+<wo:if condition = "$inset">
+  <div class = "ui-field-contain">
+    <wo:WOGenericContainer elementName = "label" for = "$javaScriptElementID" otherTagString = "$otherTagStringLabel"><wo:str value = "$label" /></wo:WOGenericContainer>
+    <wo:WOTextField id = "$javaScriptElementID" type = "$type" value = "$^value" otherTagString = "$otherTagString" />
+    <wo:WOGenericContainer elementName = "ul" data-role = "listview" id = "$listID" otherTagString = "$otherTagStringList"><!-- Empty --></wo:WOGenericContainer>
+  </div>
+</wo:if>
+<wo:else>
+  <wo:WOGenericContainer elementName = "label" for = "$javaScriptElementID" otherTagString = "$otherTagStringLabel"><wo:str value = "$label" /></wo:WOGenericContainer>
+  <wo:WOTextField id = "$javaScriptElementID" type = "$type" value = "$^value" otherTagString = "$otherTagString" />
+  <wo:WOGenericContainer elementName = "ul" data-role = "listview" id = "$listID" otherTagString = "$otherTagStringList"><!-- Empty --></wo:WOGenericContainer>
+</wo:else>
+<wo:if condition = "$hasHiddenValue"> <wo:WOHiddenField value = "$^valueHidden" id = "$hiddenValueId" /> </wo:if>
+<script>
+  $( document ).on( "pageshow", function(event, ui){
+        $('#<wo:str value = "$javaScriptElementID" />').autocomplete({
+        target: $('#<wo:str value = "$listID" />'),
+      <wo:if condition = "$jsonDirectActionName">source: '<webobject name = "JsonDirectActionSource" />',</wo:if>
+      <wo:else>source: '<webobject name = "JsonActionSource" />',</wo:else>
+      	minLength: <wo:str value = "$minLength" />,
+        callback: function(e) {
+        var $a = $(e.currentTarget);
+      <wo:if condition = "$isJsonComplex"> 
+        $('#<wo:str value = "$javaScriptElementID" />').val( $a.data('autocomplete').label );
+        <wo:if condition = "$hasHiddenValue">
+          $('#<wo:str value = "$hiddenValueId" />').val( $a.data('autocomplete').value );
+        </wo:if>
+      </wo:if>
+      <wo:else>$('#<wo:str value = "$javaScriptElementID" />').val( $a.text() );</wo:else>
+        $('#<wo:str value = "$javaScriptElementID" />').autocomplete('clear');
+      <wo:if condition = "$isAutosubmit">$('#<wo:str value = "$javaScriptElementID" />').closest('form').submit();</wo:if>
+        },
+        link: '#'
+        });
+        $('#<wo:str value = "$javaScriptElementID" />').blur(function() { setTimeout(function() { $('#<wo:str value = "$javaScriptElementID" />').autocomplete('clear'); }, 500); });
+  });
+</script>

@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.amazon.s3.AWSAuthConnection;
 import com.amazon.s3.Response;
 import com.silvasoftinc.s3.S3StreamObject;
@@ -22,9 +24,7 @@ import com.webobjects.foundation.NSTimestamp;
 
 import er.attachment.ERAttachmentRequestHandler;
 import er.attachment.model.ERS3Attachment;
-import er.extensions.concurrency.ERXAsyncQueue;
-import er.extensions.eof.ERXEC;
-import er.extensions.foundation.ERXExceptionUtilities;
+import er.attachment.upload.ERAttachmentUploadQueue;
 import er.extensions.foundation.ERXProperties;
 
 /**
@@ -49,7 +49,7 @@ public class ERS3AttachmentProcessor extends
 	private ERS3UploadQueue _queue;
 
 	public ERS3AttachmentProcessor() {
-		_queue = new ERS3UploadQueue();
+		_queue = new ERS3UploadQueue("ERS3AsyncQueue", this);
 		_queue.start();
 	}
 
@@ -148,6 +148,10 @@ public class ERS3AttachmentProcessor extends
 						e);
 			}
 
+		} else if(request.isSecure()) {
+			// The attachment is not proxied. So, the URL must be fixed if the request is secure.
+			attachmentUrl = StringUtils.replaceOnce(attachmentUrl, "http://", "https://");
+			attachmentUrl = StringUtils.replaceOnce(attachmentUrl, ":80/", "/");
 		}
 
 		return attachmentUrl;
@@ -227,115 +231,31 @@ public class ERS3AttachmentProcessor extends
 		return (responseCode < 200 || responseCode >= 300);
 	}
 
-	public class ERS3QueueEntry {
-		private File _uploadedFile;
-		private ERS3Attachment _attachment;
-
-		public ERS3QueueEntry(File uploadedFile, ERS3Attachment attachment) {
-			_uploadedFile = uploadedFile;
-			_attachment = attachment;
-		}
-
-		public File uploadedFile() {
-			return _uploadedFile;
-		}
-
-		public ERS3Attachment attachment() {
-			return _attachment;
-		}
-	}
-
-	public class ERS3UploadQueue extends ERXAsyncQueue<ERS3QueueEntry> {
-		private EOEditingContext _editingContext;
-
-		public ERS3UploadQueue() {
-			super("ERS3AsyncQueue");
-			_editingContext = ERXEC.newEditingContext();
-		}
-
-		public void enqueue(ERS3Attachment attachment) {
-			_editingContext.lock();
-			try {
-				ERS3Attachment localAttachment = attachment
-						.localInstanceIn(_editingContext);
-				ERS3QueueEntry entry = new ERS3QueueEntry(
-						attachment._pendingUploadFile(), localAttachment);
-				enqueue(entry);
-			} finally {
-				_editingContext.unlock();
-			}
+	public class ERS3UploadQueue extends ERAttachmentUploadQueue<ERS3Attachment> {
+		public ERS3UploadQueue(String name, ERAttachmentProcessor<ERS3Attachment> processor) {
+			super(name, processor);
 		}
 
 		@Override
-		public void process(ERS3QueueEntry object) {
-			ERS3Attachment attachment = object.attachment();
+		protected void performUpload(EOEditingContext editingContext, ERS3Attachment attachment, File uploadedFile) throws Exception {
+			String bucket;
+			String key;
+			String mimeType;
+			String originalFileName = null;
 
-			File uploadedFile = object.uploadedFile();
-			if (uploadedFile != null && uploadedFile.exists()) {
-				String bucket;
-				String key;
-				String mimeType;
-				String configurationName;
-				String originalFileName = null;
-
-				_editingContext.lock();
-				try {
-					bucket = attachment.bucket();
-					key = attachment.key();
-					mimeType = attachment.mimeType();
-					configurationName = attachment.configurationName();
-					if (proxyAsAttachment(attachment)) {
-						originalFileName = attachment.originalFileName();
-					}
-				} finally {
-					_editingContext.unlock();
+			editingContext.lock();
+			try {
+				bucket = attachment.bucket();
+				key = attachment.key();
+				mimeType = attachment.mimeType();
+				if (proxyAsAttachment(attachment)) {
+					originalFileName = attachment.originalFileName();
 				}
-
-				try {
-					performUpload(uploadedFile, originalFileName,
-									bucket, key, mimeType, attachment);
-
-					_editingContext.lock();
-					try {
-						attachment.setAvailable(Boolean.TRUE);
-						_editingContext.saveChanges();
-					} finally {
-						_editingContext.unlock();
-					}
-					if (delegate() != null) {
-						delegate()
-								.attachmentAvailable(
-										ERS3AttachmentProcessor.this,
-										attachment);
-					}
-				} catch (Throwable t) {
-					if (delegate() != null) {
-						delegate()
-								.attachmentNotAvailable(
-										ERS3AttachmentProcessor.this,
-										attachment,
-										ERXExceptionUtilities.toParagraph(t));
-					}
-					ERAttachmentProcessor.log.error("Failed to upload '"
-							+ uploadedFile + "' to S3.", t);
-				} finally {
-					if (attachment._isPendingDelete()) {
-						uploadedFile.delete();
-					}
-				}
-			} else {
-				if (delegate() != null) {
-					delegate()
-							.attachmentNotAvailable(
-									ERS3AttachmentProcessor.this,
-									attachment,
-									"Missing attachment file '" + uploadedFile
-											+ "'.");
-				}
-				ERAttachmentProcessor.log.error("Missing attachment file '"
-						+ uploadedFile + "'.");
+			} finally {
+				editingContext.unlock();
 			}
+
+			((ERS3AttachmentProcessor) _processor).performUpload(uploadedFile, originalFileName, bucket, key, mimeType, attachment);
 		}
 	}
-
 }

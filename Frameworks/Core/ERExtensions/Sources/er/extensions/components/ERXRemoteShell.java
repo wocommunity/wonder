@@ -134,7 +134,7 @@ public class ERXRemoteShell extends WOComponent {
     private static String[] buildCommandArray(String command) {
         String newCommand = StringUtils.replace(command, "\\\"", alternativeQuote);
         NSMutableArray a = new NSMutableArray();
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         int length = newCommand.length();
         boolean insideQuote = false;
         for (int i = 0; i < length; i++) {
@@ -146,11 +146,11 @@ public class ERXRemoteShell extends WOComponent {
                     if (s.length() > 0) {
                         a.addObject(s);
                     }
-                    buf = new StringBuffer();
+                    buf = new StringBuilder();
                 } else {
                     // quoted string starts here
                     insideQuote = true;
-                    buf = new StringBuffer();
+                    buf = new StringBuilder();
                 }
             } else if (' ' == c) {
                 if (insideQuote) {
@@ -162,13 +162,13 @@ public class ERXRemoteShell extends WOComponent {
                     if (s.length() > 0) {
                         a.addObject(s);
                     }
-                    buf = new StringBuffer();
+                    buf = new StringBuilder();
                 }
             } else {
                 buf.append(c);
             }
         }
-        if (buf.toString().length() > 0)
+        if (buf.length() > 0)
             a.addObject(buf.toString().replaceAll(alternativeQuote, "\""));
         return ERXArrayUtilities.toStringArray(a);
     }

@@ -12,11 +12,14 @@ import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestamp;
 
 import er.extensions.eof.ERXSortOrdering.ERXSortOrderings;
+import er.extensions.eof.qualifiers.ERXExistsQualifier;
 import er.extensions.qualifiers.ERXAndQualifier;
 import er.extensions.qualifiers.ERXKeyComparisonQualifier;
 import er.extensions.qualifiers.ERXKeyValueQualifier;
+import er.extensions.qualifiers.ERXNotQualifier;
 import er.extensions.qualifiers.ERXOrQualifier;
 import er.extensions.qualifiers.ERXPrefixQualifierTraversal;
+import er.extensions.qualifiers.ERXTrueQualifier;
 
 /**
  * <p>
@@ -71,310 +74,532 @@ public class ERXKey<T> {
 	private static final ERXKey<?> UNIQUE = new ERXKey<Object>("@unique");
 
 	/**
-	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' avgNonNull aggregate operator @avgNonNull. For
-	 * instance, if the key is "price" this will return a new ERXKey "@avgNonNull.price".
+	 * Creates a new ERXKey that prepends the given {@code key} with
+	 * ERXArrayUtilities' {@code @avgNonNull} aggregate operator.
 	 * 
 	 * @param key
-	 *            the key to use for this aggregate keypath
-	 * @return the new appended key
+	 *            the key(path) to the value to be averaged
 	 * 
-	 * @see er.extensions.foundation.ERXArrayUtilities.AvgNonNullOperator AvgNonNullOperator
+	 * @return an {@code ERXKey<BigDecimal>} wrapping the
+	 *         {@code @avgNonNull.key} keypath
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.AvgNonNullOperator
+	 *      AvgNonNullOperator
 	 */
 	public static ERXKey<BigDecimal> avgNonNull(ERXKey<?> key) {
 		return (ERXKey<BigDecimal>) avgNonNull().append(key);
 	}
 	
 	/**
-	 * Return ERXArrayUtilities' avgNonNull aggregate operator @avgNonNull.
+	 * Creates a new ERXKey that wraps ERXArrayUtilities' {@code @avgNonNull}
+	 * aggregate operator.
 	 * 
-	 * @return the avgNonNull key
+	 * @return an {@code ERXKey<BigDecimal>} wrapping the {@code @avgNonNull}
+	 *         key
 	 * 
-	 * @see er.extensions.foundation.ERXArrayUtilities.AvgNonNullOperator AvgNonNullOperator
+	 * @see er.extensions.foundation.ERXArrayUtilities.AvgNonNullOperator
+	 *      AvgNonNullOperator
 	 */
 	public static ERXKey<BigDecimal> avgNonNull() {
 		return AVG_NON_NULL;
 	}
 	
 	/**
-	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' avgNonNull aggregate operator @avgNonNull. For
-	 * instance, if the key is "price" this will return a new ERXKey "@avgNonNull.price".
+	 * Creates a new ERXKey that appends ERXArrayUtilities' {@code @avgNonNull}
+	 * aggregate operator and the given {@code key} to this key.
 	 * 
 	 * @param key
-	 *            the key to use for this aggregate keypath
-	 * @return the new appended key
+	 *            the key(path) to the value to be averaged
 	 * 
-	 * @see er.extensions.foundation.ERXArrayUtilities.AvgNonNullOperator AvgNonNullOperator
+	 * @return an {@code ERXKey<BigDecimal>} wrapping the
+	 *         {@code thisKey.@avgNonNull.key} keypath
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.AvgNonNullOperator
+	 *      AvgNonNullOperator
 	 */
 	public ERXKey<BigDecimal> atAvgNonNull(ERXKey<?> key) {
 		return append(ERXKey.avgNonNull(key));
 	}
 
 	/**
-	 * Return a new ERXKey that appends ERXArrayUtilities' avgNonNull aggregate operator @avgNonNull.
+	 * Creates a new ERXKey that appends ERXArrayUtilities' {@code @avgNonNull}
+	 * aggregate operator to this key
 	 * 
-	 * @return the new appended key
+	 * @return an {@code ERXKey<BigDecimal>} wrapping the
+	 *         {@code thisKey.@avgNonNull} keypath
 	 * 
-	 * @see er.extensions.foundation.ERXArrayUtilities.AvgNonNullOperator AvgNonNullOperator
+	 * @see er.extensions.foundation.ERXArrayUtilities.AvgNonNullOperator
+	 *      AvgNonNullOperator
 	 */
 	public ERXKey<BigDecimal> atAvgNonNull() {
 		return append(ERXKey.avgNonNull());
 	}
 	
 	/**
-	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * fetchSpec operator @fetchSpec. For instance, if the key is "price" and 
-	 * fetchSpecName is "newHomes" this will return a new ERXKey "@fetchSpec.newHomes.price".
-	 * @param fetchSpecName the fetchSpec name
-	 * @param <U> the type of the next key
+	 * <p>
+	 * Creates a new ERXKey that prepends the {@code key} with
+	 * ERXArrayUtilities' {@code @fetchSpec} operator and the
+	 * {@code fetchSpecName}.
+	 * </p>
+	 * <p>
+	 * This ERXKey does not perform a fetch itself. It simply makes use of an
+	 * EOFetchSpecification that is defined on the {@code key}'s Entity for its
+	 * qualifier(s) and sortOrdering(s) and uses them to filter and sort the
+	 * values for {@code key}
+	 * </p>
+	 * <p>
+	 * For example, if the {@code fetchSpecName} is "newHomes" and the
+	 * {@code key} is "price" this will return a new ERXKey wrapping
+	 * "@fetchSpec.newHomes.price".
+	 * </p>
 	 * 
+	 * @param <U>
+	 *            the type of the next key
+	 * @param fetchSpecName
+	 *            the name of the fetchSpec
 	 * @param key
-	 *            the key to use for this keypath
-	 * @return the new appended key
+	 *            the key(path) to the values to be filtered and sorted
+	 * @return an {@code ERXKey<U>} wrapping the
+	 *         {@code @fetchSpec.fetchSpecName.key} keypath
 	 * 
-	 * @see er.extensions.foundation.ERXArrayUtilities.FetchSpecOperator FetchSpecOperator
+	 * @see er.extensions.foundation.ERXArrayUtilities.FetchSpecOperator
+	 *      FetchSpecOperator
 	 */
 	public static <U> ERXKey<NSArray<U>> fetchSpec(String fetchSpecName, ERXKey<U> key) {
 		return FETCH_SPEC.append(fetchSpecName).appendAsArray(key);
 	}
 	
 	/**
-	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * fetchSpec operator @fetchSpec. For instance, if the key is "price" and 
-	 * fetchSpecName is "newHomes" this will return a new ERXKey "@fetchSpec.newHomes.price".
-	 * @param fetchSpecName the fetchSpec name
-	 * @param <U> the type of the next key
+	 * <p>
+	 * Creates a new ERXKey that appends ERXArrayUtilities'
+	 * {@code @fetchSpec} operator, the {@code fetchSpecName} and
+	 * the {@code key} to this key.
+	 * </p>
+	 * <p>
+	 * This ERXKey does not perform a fetch itself. It simply makes use of an
+	 * EOFetchSpecification that is defined on the {@code key}'s Entity for its
+	 * qualifier(s) and sortOrdering(s) and uses them to filter and sort the
+	 * values for {@code key}
+	 * </p>
+	 * <p>
+	 * For example, if the {@code fetchSpecName} is "newHomes" and the
+	 * {@code key} is "price" this will return a new ERXKey wrapping
+	 * "thisKey.@fetchSpec.newHomes.price".
+	 * </p>
 	 * 
+	 * @param fetchSpecName
+	 *            the fetchSpec name
+	 * @param <U>
+	 *            the type of the next key
 	 * @param key
 	 *            the key to use for this keypath
-	 * @return the new appended key
 	 * 
-	 * @see er.extensions.foundation.ERXArrayUtilities.FetchSpecOperator FetchSpecOperator
+	 * @return an {@code ERXKey<NSArray<U>>} wrapping the
+	 *         {@code thisKey.@fetchSpec.fetchSpecName.key} keypath
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.FetchSpecOperator
+	 *      FetchSpecOperator
 	 */
 	public <U> ERXKey<NSArray<U>> atFetchSpec(String fetchSpecName, ERXKey<U> key) {
 		return append(ERXKey.fetchSpec(fetchSpecName, key));
 	}
 	
 	/**
-	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * fetchSpec operator @fetchSpec. For instance, if the 
-	 * fetchSpecName is "newHomes" this will return a new ERXKey "@fetchSpec.newHomes".
-	 * @param fetchSpecName the fetchSpec name
-	 * @param <U> the type of the next key
+	 * <p>
+	 * Creates a new ERXKey that appends the {@code fetchSpecName} to
+	 * ERXArrayUtilities' {@code @fetchSpec} operator.
+	 * </p>
+	 * <p>
+	 * This ERXKey does not perform a fetch itself. It simply makes use of an
+	 * EOFetchSpecification that is defined on the {@code key}'s Entity for its
+	 * qualifier(s) and sortOrdering(s) and uses them to filter and sort the
+	 * values for {@code key}
+	 * </p>
+	 * <p>
+	 * For example, if the {@code fetchSpecName} is "newHomes" this will return
+	 * a new ERXKey wrapping "@fetchSpec.newHomes".
+	 * </p>
 	 * 
-	 * @return the new appended key
+	 * @param fetchSpecName
+	 *            the fetchSpec name
+	 * @param <U>
+	 *            the type of the next key
 	 * 
-	 * @see er.extensions.foundation.ERXArrayUtilities.FetchSpecOperator FetchSpecOperator
+	 * @return an {@code ERXKey<U>} wrapping the
+	 *         {@code @fetchSpec.fetchSpecName} keypath
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.FetchSpecOperator
+	 *      FetchSpecOperator
 	 */
 	public static <U> ERXKey<U> fetchSpec(String fetchSpecName) {
 		return FETCH_SPEC.append(fetchSpecName);
 	}
 	
 	/**
-	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * fetchSpec operator @fetchSpec. For instance, if the 
-	 * fetchSpecName is "newHomes" this will return a new ERXKey "@fetchSpec.newHomes".
-	 * @param fetchSpecName the fetchSpec name
-	 * @param <U> the type of the next key
+	 * <p>
+	 * Creates a new ERXKey that appends ERXArrayUtilities' {@code @fetchSpec}
+	 * operator and the {@code fetchSpecName} to this key.
+	 * </p>
+	 * <p>
+	 * This ERXKey does not perform a fetch itself. It simply makes use of an
+	 * EOFetchSpecification that is defined on the {@code key}'s Entity for its
+	 * qualifier(s) and sortOrdering(s) and uses them to filter and sort the
+	 * values for {@code key}
+	 * </p>
+	 * <p>
+	 * For example, if the {@code fetchSpecName} is "newHomes" this will return
+	 * a new ERXKey wrapping {@code thisKey.@fetchSpec.newHomes} keypath
+	 * </p>
 	 * 
-	 * @return the new appended key
+	 * @param fetchSpecName
+	 *            the fetchSpec name
+	 * @param <U>
+	 *            the type of the next key
 	 * 
-	 * @see er.extensions.foundation.ERXArrayUtilities.FetchSpecOperator FetchSpecOperator
+	 * @return an {@code ERXKey<U>} wrapping the
+	 *         {@code thisKey.@fetchSpec.fetchSpecName} keypath
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.FetchSpecOperator
+	 *      FetchSpecOperator
 	 */
 	public <U> ERXKey<U> atFetchSpec(String fetchSpecName) {
 		return (ERXKey<U>) append(ERXKey.fetchSpec(fetchSpecName));
 	}
 	
 	/**
-	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * flatten operator @flatten. For instance, if the key is "price"
-	 *  this will return a new ERXKey "@flatten.price".
-	 * @param key the key to use for this keypath
-	 * @param <U> the type of the next key
+	 * <b>Will flatten an array of arrays or a key it is appended to</b>
+	 * <p>
+	 * Creates a new ERXKey that prepends the {@code key} with
+	 * ERXArrayUtilities' {@code @flatten} operator. The {@code key} should
+	 * resolve to an {@code NSArray<U>} when used.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> the {@code @flatten} operator is applied to the array it is
+	 * called on or the key immediately preceding it, not the key (if any)
+	 * following it. This method is useful for flattening an existing array or
+	 * key that is already included in a keypath.
+	 * </p>
+	 * <p>
+	 * For example, if you are chaining ERXKeys such as
+	 * {@code Customer.ORDERS.dot(Order.ORDER_LINES)} which if called on a
+	 * Customer would return an {@code NSArray<NSArray<OrderLine>>}, you can add
+	 * dot(ERXKey.flatten(OrderLine.PRICE) to get a new ERXKey wrapping the
+	 * {@code orders.orderlines.@flatten.price}, which will return an array of
+	 * prices when called on any Customer object.
+	 * </p>
 	 * 
-	 * @return the new appended key
+	 * @param <U>
+	 *            the type of the next key
+	 * @param key
+	 *            the key <b>following</b> the key to be flattened
 	 * 
-	 * @see er.extensions.foundation.ERXArrayUtilities.FlattenOperator FlattenOperator
+	 * @return an {@code ERXKey<U>} wrapping the {@code @flatten.key} keypath
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.FlattenOperator
+	 *      FlattenOperator
 	 */
 	public static <U> ERXKey<NSArray<U>> flatten(ERXKey<U> key) {
 		return FLATTEN.appendAsArray(key);
 	}
 
 	/**
-	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * flatten operator @flatten. For instance, if the key is "price"
-	 *  this will return a new ERXKey "@flatten.price".
-	 * @param key the key to use for this keypath
-	 * @param <U> the type of the next key
+	 * <b>Flattens this key</b>
+	 * <p>
+	 * Creates a new ERXKey that appends ERXArrayUtilities' {@code @flatten}
+	 * operator and the {@code key} to this key. The {@code key} should resolve
+	 * to an {@code NSArray<U>} when used.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> the {@code @flatten} operator will be applied to this key,
+	 * not the key specified by the {@code key} parameter.
+	 * </p>
+	 * <p>
+	 * For example, if the {@code key} is "price" this will return a new ERXKey
+	 * wrapping the {@code thisKey.@flatten.price} keypath.
+	 * </p>
 	 * 
-	 * @return the new appended key
+	 * @param <U>
+	 *            the type of the next key
+	 * @param key
+	 *            the following key
 	 * 
-	 * @see er.extensions.foundation.ERXArrayUtilities.FlattenOperator FlattenOperator
+	 * @return an {@code ERXKey<U>} wrapping the {@code thisKey.@flatten.key}
+	 *         keypath
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.FlattenOperator
+	 *      FlattenOperator
 	 */
 	public <U> ERXKey<NSArray<U>> atFlatten(ERXKey<U> key) {
 		return append(ERXKey.flatten(key));
 	}
 
 	/**
-	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * flatten operator @flatten.
-	 * @param <U> the type of the next key
+	 * <b>Will flatten an array of arrays or a key it is appended to</b>
+	 * <p>
+	 * Creates a new ERXKey that wraps ERXArrayUtilities' {@code @flatten}
+	 * aggregate operator.
+	 * </p>
 	 * 
-	 * @return the new appended key
+	 * @param <U>
+	 *            the type of the next key
 	 * 
-	 * @see er.extensions.foundation.ERXArrayUtilities.FlattenOperator FlattenOperator
+	 * @return an ERXKey wrapping the {@code @flatten} key
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.FlattenOperator
+	 *      FlattenOperator
 	 */
 	public static <U> ERXKey<U> flatten() {
 		return (ERXKey<U>) FLATTEN;
 	}
 	
 	/**
-	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * flatten operator @flatten.
-	 * @param <U> the type of the next key
+	 * <b>Flattens this key</b>
+	 * <p>
+	 * Creates a new ERXKey that appends ERXArrayUtilities'
+	 * {@code @flatten} operator to this key.
+	 * </p>
 	 * 
-	 * @return the new appended key
+	 * @param <U>
+	 *            the type of the next key
 	 * 
-	 * @see er.extensions.foundation.ERXArrayUtilities.FlattenOperator FlattenOperator
+	 * @return an {@code ERXKey<U>} wrapping the {@code thisKey.@flatten}
+	 *         keypath
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.FlattenOperator
+	 *      FlattenOperator
 	 */
 	public <U> ERXKey<U> atFlatten() {
 		return (ERXKey<U>) append(ERXKey.flatten());
 	}
 
 	/**
-	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * isEmpty operator @isEmpty. Since any keypath beyond @isEmpty is ignored, 
-	 * only a no arg method is available.
+	 * <b>Checks an array or a key it is appended to to</b>
+	 * <p>
+	 * Creates a new ERXKey that wraps ERXArrayUtilities' {@code @isEmpty}
+	 * aggregate operator.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> any key(path) following {@code @isEmpty} is ignored.
+	 * </p>
 	 * 
-	 * @return the new appended key
+	 * @return an {@code ERXKey<Boolean>} wrapping the {@code @isEmpty} key
 	 * 
-	 * @see er.extensions.foundation.ERXArrayUtilities.IsEmptyOperator IsEmptyOperator
+	 * @see er.extensions.foundation.ERXArrayUtilities.IsEmptyOperator
+	 *      IsEmptyOperator
 	 */
 	public static ERXKey<Boolean> isEmpty() {
 		return IS_EMPTY;
 	}
 	
 	/**
-	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * isEmpty operator @isEmpty. Since any keypath beyond @isEmpty is ignored, 
-	 * only a no arg method is available.
+	 * <b>Checks this key.</b>
+	 * <p>
+	 * Creates a new ERXKey that appends this key with ERXArrayUtilities'
+	 * {@code @isEmpty} operator.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> any key(path) following {@code @isEmpty} is ignored.
+	 * </p>
 	 * 
-	 * @return the new appended key
+	 * @return an {@code ERXKey<Boolean>} wrapping the {@code thisKey.@isEmpty}
+	 *         keypath
 	 * 
-	 * @see er.extensions.foundation.ERXArrayUtilities.IsEmptyOperator IsEmptyOperator
+	 * @see er.extensions.foundation.ERXArrayUtilities.IsEmptyOperator
+	 *      IsEmptyOperator
 	 */
 	public ERXKey<Boolean> atIsEmpty() {
 		return append(ERXKey.isEmpty());
 	}
 
 	/**
-	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * limit operator @limit. For instance, if the key is "price" and 
-	 * limit is 3 this will return a new ERXKey "@limit.3.price".
-	 * @param limit the maximum number of objects allowed by the limit
-	 * @param <U> the type of the next key
+	 * <b>Limits the size of the array it is called on or the key it is appended
+	 * to.</b>
+	 * <p>
+	 * Creates a new ERXKey that appends ERXArrayUtilities' {@code @limit}
+	 * operator and then the {@code limit} quantity and then the {@code key},
+	 * which should resolve to an {@code NSArray<U>} when used.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> the {@code @limit} operator will be applied to the array it
+	 * is called on or the key immediately preceding it, not the key specified
+	 * by the {@code key} parameter.
+	 * </p>
+	 * <p>
+	 * For example, if the {@code key} is "price" and limit is 3 this will
+	 * return a new ERXKey {@code @limit.3.price}.
+	 * </p>
 	 * 
+	 * @param <U>
+	 *            the type of the next key
+	 * @param limit
+	 *            the maximum number of objects allowed by the limit
 	 * @param key
-	 *            the key to use for this keypath
-	 * @return the new appended key
+	 *            the key following the key to be limited
 	 * 
-	 * @see er.extensions.foundation.ERXArrayUtilities.LimitOperator LimitOperator
+	 * @return an {@code ERXKey<NSArray<U>>} wrapping the
+	 *         {@code @limit.quantity.key} keypath
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.LimitOperator
+	 *      LimitOperator
 	 */
 	public static <U> ERXKey<NSArray<U>> limit(Integer limit, ERXKey<U> key) {
 		return LIMIT.append(limit.toString()).appendAsArray(key);
 	}
 	
 	/**
-	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * limit operator @limit. For instance, if the key is "price" and 
-	 * limit is 3 this will return a new ERXKey "@limit.3.price".
-	 * @param limit the maximum number of objects allowed by the limit
-	 * @param <U> the type of the next key
+	 * <p>
+	 * Creates a new ERXKey that appends this key with ERXArrayUtilities'
+	 * {@code @limit} operator and then the {@code limit} quantity and then the
+	 * {@code key}, which should resolve to an {@code NSArray<U>} when used.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> the {@code @limit} operator will be applied to this key not
+	 * the key specified by the {@code key} parameter.
+	 * </p>
+	 * <p>
+	 * For example, if the {@code key} is "price" and limit is 3 this will
+	 * return a new ERXKey {@code thiskey.@limit.3.price}.
+	 * </p>
 	 * 
+	 * @param <U>
+	 *            the type of the next key
+	 * @param limit
+	 *            the maximum number of objects allowed by the limit
 	 * @param key
-	 *            the key to use for this keypath
-	 * @return the new appended key
+	 *            the key following the key to be limited
 	 * 
-	 * @see er.extensions.foundation.ERXArrayUtilities.LimitOperator LimitOperator
+	 * @return an {@code ERXKey<NSArray<U>>} wrapping the
+	 *         {@code thisKey.@limit.quantity.key} keypath
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.LimitOperator
+	 *      LimitOperator
 	 */
 	public <U> ERXKey<NSArray<U>> atLimit(Integer limit, ERXKey<U> key) {
 		return append(ERXKey.limit(limit , key));
 	}
 	
 	/**
-	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * limit operator @limit. For instance, if the limit is 3 this will return 
-	 * a new ERXKey "@limit.3".
+	 * <b>Limits the size of the array it is called on or the key it is appended
+	 * to.</b>
+	 * <p>
+	 * Creates a new ERXKey that appends ERXArrayUtilities' {@code @limit}
+	 * operator and then the {@code limit} quantity.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> the {@code @limit} operator will be applied to the array it
+	 * is called on or the key immediately preceding it, not the key (if any)
+	 * following it.
+	 * </p>
+	 * <p>
+	 * For example, if the {@code key} is "price" and limit is 3 this will
+	 * return a new ERXKey {@code @limit.3}.
+	 * </p>
 	 * 
-	 * @param limit the maximum number of objects allowed by the limit
-	 * @param <U> the type of the next key
+	 * @param limit
+	 *            the maximum number of objects allowed by the limit
+	 * @param <U>
+	 *            the type of the next key
+	 * @param key
+	 *            the key following the key to be limited
 	 * 
-	 * @return the new appended key
+	 * @return an {@code ERXKey<NSArray<U>>} wrapping the
+	 *         {@code @limit.quantity} keypath
 	 * 
-	 * @see er.extensions.foundation.ERXArrayUtilities.LimitOperator LimitOperator
+	 * @see er.extensions.foundation.ERXArrayUtilities.LimitOperator
+	 *      LimitOperator
 	 */
 	public static <U> ERXKey<U> limit(Integer limit) {
 		return LIMIT.append(limit.toString());
 	}
 	
 	/**
-	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * limit operator @limit. For instance, if the limit is 3 this will return 
-	 * a new ERXKey "@limit.3".
+	 * <p>
+	 * Creates a new ERXKey that appends this key with ERXArrayUtilities'
+	 * {@code @limit} operator and then the {@code limit} quantity.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> the {@code @limit} operator will be applied to this key not
+	 * the key specified by the {@code key} parameter.
+	 * </p>
+	 * <p>
+	 * For example, if the {@code key} is "price" and limit is 3 this will
+	 * return a new ERXKey {@code thiskey.@limit.3}.
+	 * </p>
 	 * 
-	 * @param limit the maximum number of objects allowed by the limit
-	 * @param <U> the type of the next key
+	 * @param limit
+	 *            the maximum number of objects allowed by the limit
+	 * @param <U>
+	 *            the type of the next key
+	 * @param key
+	 *            the key following the key to be limited
 	 * 
-	 * @return the new appended key
+	 * @return an {@code ERXKey<NSArray<U>>} wrapping the
+	 *         {@code thisKey.@limit.quantity} keypath
 	 * 
-	 * @see er.extensions.foundation.ERXArrayUtilities.LimitOperator LimitOperator
+	 * @see er.extensions.foundation.ERXArrayUtilities.LimitOperator
+	 *      LimitOperator
 	 */
 	public <U> ERXKey<U> atLimit(Integer limit) {
 		return (ERXKey<U>) append(ERXKey.limit(limit));
 	}
 	
 	/**
-	 * Return ERXArrayUtilities' median aggregate operator @median.
+	 * Creates a new ERXKey that wraps ERXArrayUtilities' {@code @median}
+	 * aggregate operator.
 	 * 
-	 * @return the new appended key
+	 * @return an {@code ERXKey<BigDecimal>} wrapping the {@code @median}
+	 *         key
 	 * 
-	 * @see er.extensions.foundation.ERXArrayUtilities.MedianOperator MedianOperator
+	 * @see er.extensions.foundation.ERXArrayUtilities.MedianOperator
+	 *      MedianOperator
 	 */
 	public static ERXKey<BigDecimal> median() {
 		return MEDIAN;
 	}
 
 	/**
-	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' median aggregate operator @median. For
-	 * instance, if the key is "price" this will return a new ERXKey "@median.price".
+	 * <p>
+	 * Creates a new ERXKey that appends the given {@code key} to
+	 * ERXArrayUtilities' {@code @median} aggregate operator.
+	 * </p>
 	 * 
 	 * @param key
-	 *            the key to use for this aggregate keypath
-	 * @return the new appended key
+	 *            the key(path) to the value to be averaged
 	 * 
-	 * @see er.extensions.foundation.ERXArrayUtilities.MedianOperator MedianOperator
+	 * @return an {@code ERXKey<BigDecimal>} wrapping the {@code @median.key}
+	 *         keypath
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.MedianOperator
+	 *      MedianOperator
 	 */
 	public static ERXKey<BigDecimal> median(ERXKey<?> key) {
 		return (ERXKey<BigDecimal>) MEDIAN.append(key);
 	}
 	
 	/**
-	 * Return a new ERXKey that appends the given key with ERXArrayUtilities' median aggregate operator @median.
+	 * Creates a new ERXKey that appends this key with ERXArrayUtilities'
+	 * {@code @median} aggregate operator
 	 * 
-	 * @return the new appended key
+	 * @return an {@code ERXKey<BigDecimal>} wrapping the
+	 *         {@code thisKey.@median} keypath
 	 * 
-	 * @see er.extensions.foundation.ERXArrayUtilities.MedianOperator MedianOperator
+	 * @see er.extensions.foundation.ERXArrayUtilities.MedianOperator
+	 *      MedianOperator
 	 */
 	public ERXKey<BigDecimal> atMedian() {
 		return append(ERXKey.median());
 	}
 	
 	/**
-	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' median aggregate operator @median. For
-	 * instance, if the key is "price" this will return a new ERXKey "@median.price".
+	 * Creates a new ERXKey that appends this key with ERXArrayUtilities'
+	 * {@code @median} aggregate operator and then appends the given
+	 * {@code key}.
 	 * 
 	 * @param key
-	 *            the key to use for this aggregate keypath
-	 * @return the new appended key
+	 *            the key(path) to the value to be averaged
+	 * 
+	 * @return an {@code ERXKey<BigDecimal>} wrapping the
+	 *         {@code thisKey.@median.key} keypath
 	 * 
 	 * @see er.extensions.foundation.ERXArrayUtilities.MedianOperator MedianOperator
 	 */
@@ -475,8 +700,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * RemoveNullValues operator @removeNullValues.
+	 * Return a new ERXKey that uses ERXArrayUtilities' remove null values operator @removeNullValues.
 	 * 
 	 * @param <U> the type of the next key
 	 * 
@@ -533,8 +757,7 @@ public class ERXKey<T> {
 	}
 
 	/**
-	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * Reverse operator @reverse.
+	 * Return a new ERXKey that uses ERXArrayUtilities' reverse operator @reverse.
 	 * 
 	 * @param <U> the type of the next key
 	 * 
@@ -803,354 +1026,474 @@ public class ERXKey<T> {
 	}
 	
 	/**
-	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * Unique operator @unique. For instance, if the key is "price"
-	 * this will return a new ERXKey "@unique.price".
-	 * @param key the key to use for this keypath
-	 * @param <U> the type of the next key
+	 * <b>Will filter an array or a key it is appended to</b>
+	 * <p>
+	 * Creates a new ERXKey that appends ERXArrayUtilities' {@code @unique}
+	 * operator with the {@code key}, which should resolve to an NSArray<U> when
+	 * used.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> the {@code @unique} operator is applied to the array it is
+	 * called on or the key immediately preceding it, not the key (if any)
+	 * following it. This method is useful for flattening an existing array or
+	 * key that is already included in a keypath.
+	 * </p>
+	 * <p>
+	 * For example, if the {@code key} is "price" this will return a new ERXKey
+	 * wrapping the {@code @unique.price} keypath.
+	 * </p>
 	 * 
-	 * @return the new appended key
+	 * @param <U>
+	 *            the type of the next key
+	 * @param key
+	 *            the key <b>following</b> the key to be flattened
 	 * 
-	 * @see er.extensions.foundation.ERXArrayUtilities.UniqueOperator UniqueOperator
+	 * @return an {@code ERXKey<U>} wrapping the {@code @unique.key} keypath
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.FlattenOperator
+	 *      FlattenOperator
 	 */
 	public static <U> ERXKey<NSArray<U>> unique(ERXKey<U> key) {
 		return UNIQUE.appendAsArray(key);
 	}
 
 	/**
-	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * Unique operator @unique. For instance, if the key is "price"
-	 * this will return a new ERXKey "@unique.price".
-	 * @param key the key to use for this keypath
-	 * @param <U> the type of the next key
+	 * <b>Filters for unique values for this key</b>
+	 * <p>
+	 * Creates a new ERXKey that appends this key with ERXArrayUtilities'
+	 * {@code @unique} operator and then with the {@code key}, which should
+	 * resolve to an {@code NSArray<U>} when used.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> the {@code @unique} operator will be applied to this key,
+	 * not the key specified by the {@code key} parameter.
+	 * </p>
+	 * <p>
+	 * For example, if the {@code key} is "price" this will return a new ERXKey
+	 * wrapping the {@code thisKey.@unique.price} keypath.
+	 * </p>
 	 * 
-	 * @return the new appended key
+	 * @param <U>
+	 *            the type of the next key
+	 * @param key
+	 *            the key following the key to be flattened
 	 * 
-	 * @see er.extensions.foundation.ERXArrayUtilities.UniqueOperator UniqueOperator
+	 * @return an {@code ERXKey<U>} wrapping the {@code thisKey.@flatten.key}
+	 *         keypath
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.FlattenOperator
+	 *      FlattenOperator
 	 */
 	public <U> ERXKey<NSArray<U>> atUnique(ERXKey<U> key) {
 		return append(ERXKey.unique(key));
 	}
 
 	/**
-	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * Unique operator @unique.
+	 * <b>Filters the array it is called on or the key it is appended
+	 * to.</b>
+	 * <p>
+	 * Creates a new ERXKey that wraps ERXArrayUtilities' {@code @unique}
+	 * aggregate operator.
+	 * </p>
 	 * 
-	 * @param <U> the type of the next key
+	 * @param <U>
+	 *            the type of the next key
 	 * 
-	 * @return the new appended key
+	 * @return an ERXKey wrapping the {@code @unique} key
 	 * 
-	 * @see er.extensions.foundation.ERXArrayUtilities.UniqueOperator UniqueOperator
+	 * @see er.extensions.foundation.ERXArrayUtilities.UniqueOperator
+	 *      UniqueOperator
 	 */
 	public static <U> ERXKey<U> unique() {
 		return (ERXKey<U>) UNIQUE;
 	}
 	
 	/**
-	 * Return a new ERXKey that prepends the given key with ERXArrayUtilities' 
-	 * Unique operator @unique.
-	 *  
-	 * @param <U> the type of the next key
+	 * <b>Filters for unique values for this key</b>
+	 * <p>
+	 * Creates a new ERXKey that appends this key with ERXArrayUtilities'
+	 * {@code @unique} operator.
+	 * </p>
 	 * 
-	 * @return the new appended key
+	 * @param <U>
+	 *            the type of the next key
 	 * 
-	 * @see er.extensions.foundation.ERXArrayUtilities.UniqueOperator UniqueOperator
+	 * @return an {@code ERXKey<U>} wrapping the {@code thisKey.@unique}
+	 *         keypath
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.UniqueOperator
+	 *      UniqueOperator
 	 */
 	public <U> ERXKey<U> atUnique() {
 		return (ERXKey<U>) append(ERXKey.unique());
 	}
 
 	/**
-	 * Return a new ERXKey that prepends the given key with NSArray's SUM aggregate operator @sum. For
-	 * instance, if the key is "price" this will return a new ERXKey "@sum.price".
+	 * Creates a new ERXKey that appends the given {@code key} to NSArray's
+	 * {@code @sum} aggregate operator.
 	 * 
 	 * @param key
-	 *            the key to use for this aggregate keypath
-	 * @return the new appended key
+	 *            the key(path) to the value to be summed
+	 * 
+	 * @return an {@code ERXKey<BigDecimal>} wrapping the {@code @sum.key}
+	 *         keypath
 	 */
 	public static ERXKey<BigDecimal> sum(ERXKey<?> key) {
 		return (ERXKey<BigDecimal>) SUM.append(key);
 	}
 	
 	/**
-	 * Return a new ERXKey that prepends the given key with NSArray's SUM aggregate operator @sum. For
-	 * instance, if the key is "price" this will return a new ERXKey "@sum.price".
+	 * Creates a new ERXKey that appends this key with NSArray's {@code @sum}
+	 * aggregate operator and then appends the given {@code key}.
 	 * 
 	 * @param key
-	 *            the key to use for this aggregate keypath
-	 * @return the new appended key
+	 *            the key(path) to the value to be summed
+	 * 
+	 * @return an {@code ERXKey<BigDecimal>} wrapping the
+	 *         {@code thisKey.@sum.key} keypath
 	 */
 	public ERXKey<BigDecimal> atSum(ERXKey<?> key) {
 		return append(ERXKey.sum(key));
 	}
 	
 	/**
-	 * Return a new ERXKey that uses NSArray's SUM aggregate operator @sum.
+	 * Creates a new ERXKey that appends this key with NSArray's {@code @sum}
+	 * aggregate operator
 	 * 
-	 * @return the new key
+	 * @return an {@code ERXKey<BigDecimal>} wrapping the {@code thisKey.@sum}
+	 *         keypath
 	 */
 	public ERXKey<BigDecimal> atSum() {
 		return append(ERXKey.sum());
 	}
 	
 	/**
-	 * Return a new ERXKey that uses NSArray's SUM aggregate operator @sum.
+	 * Creates a new ERXKey that wraps NSArray's {@code @sum} aggregate
+	 * operator.
 	 * 
-	 * @return the new key
+	 * @return an {@code ERXKey<BigDecimal>} wrapping the {@code @sum} key
 	 */
 	public static ERXKey<BigDecimal> sum() {
 		return SUM;
 	}
 	
 	/**
-	 * Return a new ERXKey that uses Wonder's standard deviation operator @popStdDev
+	 * Creates a new ERXKey that wraps ERXArrayUtilities' {@code @popStdDev}
+	 * aggregate operator.
 	 * 
-	 * @return the new key
+	 * @return an {@code ERXKey<BigDecimal>} wrapping the {@code @popStdDev} key
 	 * 
-	 * @see er.extensions.foundation.ERXArrayUtilities.StandardDeviationOperator StandardDeviationOperator
+	 * @see er.extensions.foundation.ERXArrayUtilities.StandardDeviationOperator
+	 *      StandardDeviationOperator
 	 */
 	public static ERXKey<BigDecimal> popStdDev() {
 		return POP_STD_DEV;
 	}
 	
 	/**
-	 * Return a new ERXKey that uses Wonder's standard deviation operator @popStdDev
+	 * Creates a new ERXKey that appends this key with ERXArrayUtilities'
+	 * {@code @popStdDev} aggregate operator
 	 * 
-	 * @return the new key
+	 * @return an {@code ERXKey<BigDecimal>} wrapping the
+	 *         {@code thisKey.@popStdDev} keypath
 	 * 
-	 * @see er.extensions.foundation.ERXArrayUtilities.StandardDeviationOperator StandardDeviationOperator
+	 * @see er.extensions.foundation.ERXArrayUtilities.StandardDeviationOperator
+	 *      StandardDeviationOperator
 	 */
 	public ERXKey<BigDecimal> atPopStdDev() {
 		return append(ERXKey.popStdDev());
 	}
 	
 	/**
-	 * Return a new ERXKey that uses Wonder's standard deviation operator @popStdDev
-	 * @param key the key to append
+	 * Creates a new ERXKey that appends the given {@code key} to
+	 * ERXArrayUtilities' {@code @popStdDev} aggregate operator.
 	 * 
-	 * @return the new key
+	 * @param key
+	 *            the key(path) to the values used to derive the standard deviation
 	 * 
-	 * @see er.extensions.foundation.ERXArrayUtilities.StandardDeviationOperator StandardDeviationOperator
+	 * @return an {@code ERXKey<BigDecimal>} wrapping the {@code @popStdDev.key}
+	 *         keypath
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.StandardDeviationOperator
+	 *      StandardDeviationOperator
 	 */
 	public static ERXKey<BigDecimal> popStdDev(ERXKey<?> key) {
-		return (ERXKey<BigDecimal>)popStdDev().append(key);
+		return (ERXKey<BigDecimal>) popStdDev().append(key);
 	}
 	
 	/**
-	 * Return a new ERXKey that uses Wonder's standard deviation operator @popStdDev
-	 * @param key the key to append
+	 * Creates a new ERXKey that appends this key with ERXArrayUtilities'
+	 * {@code @popStdDev} aggregate operator and then appends the given {@code key}
+	 * .
 	 * 
-	 * @return the new key
+	 * @param key
+	 *            the key(path) to the values used to derive the standard deviation
 	 * 
-	 * @see er.extensions.foundation.ERXArrayUtilities.StandardDeviationOperator StandardDeviationOperator
+	 * @return an {@code ERXKey<BigDecimal>} wrapping the
+	 *         {@code thisKey.@popStdDev.key} keypath
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.StandardDeviationOperator
+	 *      StandardDeviationOperator
 	 */
 	public ERXKey<BigDecimal> atPopStdDev(ERXKey<?> key) {
 		return append(ERXKey.popStdDev(key));
 	}
 	
 	/**
-	 * Return a new ERXKey that uses Wonder's standard deviation operator @stdDev
+	 * Creates a new ERXKey that wraps ERXArrayUtilities' {@code @stdDev}
+	 * aggregate operator.
 	 * 
-	 * @return the new key
+	 * @return an {@code ERXKey<BigDecimal>} wrapping the {@code @stdDev} key
 	 * 
-	 * @see er.extensions.foundation.ERXArrayUtilities.StandardDeviationOperator StandardDeviationOperator
+	 * @see er.extensions.foundation.ERXArrayUtilities.StandardDeviationOperator
+	 *      StandardDeviationOperator
 	 */
 	public static ERXKey<BigDecimal> stdDev() {
 		return STD_DEV;
 	}
 	
 	/**
-	 * Return a new ERXKey that uses Wonder's standard deviation operator @stdDev
+	 * Creates a new ERXKey that appends this key with ERXArrayUtilities'
+	 * {@code @stdDev} aggregate operator
 	 * 
-	 * @return the new key
+	 * @return an {@code ERXKey<BigDecimal>} wrapping the
+	 *         {@code thisKey.@stdDev} keypath
 	 * 
-	 * @see er.extensions.foundation.ERXArrayUtilities.StandardDeviationOperator StandardDeviationOperator
+	 * @see er.extensions.foundation.ERXArrayUtilities.StandardDeviationOperator
+	 *      StandardDeviationOperator
 	 */
 	public ERXKey<BigDecimal> atStdDev() {
 		return append(ERXKey.stdDev());
 	}
 	
 	/**
-	 * Return a new ERXKey that uses Wonder's standard deviation operator @stdDev
-	 * @param key the key to append
+	 * Creates a new ERXKey that appends the given {@code key} to
+	 * ERXArrayUtilities' {@code @stdDev} aggregate operator.
 	 * 
-	 * @return the new key
+	 * @param key
+	 *            the key(path) to the values used to derive the standard deviation
 	 * 
-	 * @see er.extensions.foundation.ERXArrayUtilities.StandardDeviationOperator StandardDeviationOperator
+	 * @return an {@code ERXKey<BigDecimal>} wrapping the {@code @stdDev.key}
+	 *         keypath
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.StandardDeviationOperator
+	 *      StandardDeviationOperator
 	 */
 	public static ERXKey<BigDecimal> stdDev(ERXKey<?> key) {
 		return (ERXKey<BigDecimal>)stdDev().append(key);
 	}
 	
 	/**
-	 * Return a new ERXKey that uses Wonder's standard deviation operator @stdDev
-	 * @param key the key to append
+	 * Creates a new ERXKey that appends this key with ERXArrayUtilities'
+	 * {@code @stdDev} aggregate operator and then appends the given {@code key}
+	 * .
 	 * 
-	 * @return the new key
+	 * @param key
+	 *            the key(path) to the values used to derive the standard deviation
 	 * 
-	 * @see er.extensions.foundation.ERXArrayUtilities.StandardDeviationOperator StandardDeviationOperator
+	 * @return an {@code ERXKey<BigDecimal>} wrapping the
+	 *         {@code thisKey.@stdDev.key} keypath
+	 * 
+	 * @see er.extensions.foundation.ERXArrayUtilities.StandardDeviationOperator
+	 *      StandardDeviationOperator
 	 */
 	public ERXKey<BigDecimal> atStdDev(ERXKey<?> key) {
 		return append(ERXKey.stdDev(key));
 	}
 	
 	/**
-	 * Return a new ERXKey that prepends the given key with NSArray's AVERAGE aggregate operator @avg. For
-	 * instance, if the key is "price" this will return a new ERXKey "@avg.price".
+	 * Creates a new ERXKey that appends the given {@code key} to NSArray's
+	 * {@code @avg} aggregate operator.
 	 * 
 	 * @param key
-	 *            the key to use for this aggregate keypath
-	 * @return the new appended key
+	 *            the key(path) to the value to be averaged
+	 * 
+	 * @return an {@code ERXKey<BigDecimal>} wrapping the {@code @avg.key}
+	 *         keypath
 	 */
 	public static ERXKey<BigDecimal> avg(ERXKey<?> key) {
 		return (ERXKey<BigDecimal>) AVG.append(key);
 	}
 	
 	/**
-	 * Return a new ERXKey that prepends the given key with NSArray's AVERAGE aggregate operator @avg. For
-	 * instance, if the key is "price" this will return a new ERXKey "@avg.price".
+	 * Creates a new ERXKey that appends this key with NSArray's {@code @avg}
+	 * aggregate operator and then appends the given {@code key}.
 	 * 
 	 * @param key
-	 *            the key to use for this aggregate keypath
-	 * @return the new appended key
+	 *            the key(path) to the value to be averaged
+	 * 
+	 * @return an {@code ERXKey<BigDecimal>} wrapping the
+	 *         {@code thisKey.@avg.key} keypath
 	 */
 	public ERXKey<BigDecimal> atAvg(ERXKey<?> key) {
 		return append(ERXKey.avg(key));
 	}
 	
 	/**
-	 * Return a new ERXKey that uses NSArray's AVERAGE aggregate operator @avg.
+	 * Creates a new ERXKey that wraps NSArray's {@code @avg} aggregate
+	 * operator.
 	 * 
-	 * @return the new key
+	 * @return an {@code ERXKey<BigDecimal>} wrapping the {@code @avg} key
 	 */
 	public static ERXKey<BigDecimal> avg() {
 		return AVG;
 	}
 	
 	/**
-	 * Return a new ERXKey that uses NSArray's AVERAGE aggregate operator @avg.
+	 * Creates a new ERXKey that appends this key with NSArray's {@code @avg}
+	 * aggregate operator
 	 * 
-	 * @return the new key
+	 * @return an {@code ERXKey<BigDecimal>} wrapping the {@code thisKey.@avg}
+	 *         keypath
 	 */
 	public ERXKey<BigDecimal> atAvg() {
 		return append(ERXKey.avg());
 	}
 	
 	/**
-	 * Return a new ERXKey that prepends the given key with NSArray's MIN aggregate operator @min. For
-	 * instance, if the key is "price" this will return a new ERXKey "@min.price".
+	 * Creates a new ERXKey that appends the given {@code key} to NSArray's
+	 * {@code @min} aggregate operator.
 	 * 
-	 * @param <U> the type of the next key
-	 * 
+	 * @param <U>
+	 *            the type of the next key
 	 * @param key
-	 *            the key to use for this aggregate keypath
-	 * @return the new appended key
+	 *            the key(path) to the values to be filtered for the minimum
+	 *            value
+	 * 
+	 * @return an {@code ERXKey<BigDecimal>} wrapping the {@code @min.key}
+	 *         keypath
 	 */
 	public static <U> ERXKey<U> min(ERXKey<U> key) {
 		return MIN.append(key);
 	}
 	
 	/**
-	 * Return a new ERXKey that prepends the given key with NSArray's MIN aggregate operator @min. For
-	 * instance, if the key is "price" this will return a new ERXKey "@min.price".
+	 * Creates a new ERXKey that appends this key with NSArray's {@code @min}
+	 * aggregate operator and then appends the given {@code key}.
 	 * 
-	 * @param <U> the type of the next key
-	 * 
+	 * @param <U>
+	 *            the type of the next key
 	 * @param key
-	 *            the key to use for this aggregate keypath
-	 * @return the new appended key
+	 *            the key(path) to the values to be filtered for the minimum
+	 *            value
+	 * 
+	 * @return an {@code ERXKey<U>} wrapping the {@code thisKey.@min.key}
+	 *         keypath
 	 */
 	public <U> ERXKey<U> atMin(ERXKey<U> key) {
 		return append(ERXKey.min(key));
 	}
 	
 	/**
-	 * Return a new ERXKey that uses NSArray's MIN aggregate operator @min.
+	 * Creates a new ERXKey that wraps NSArray's {@code @min} aggregate
+	 * operator.
 	 * 
-	 * @param <U> the type of the next key
-	 *
-	 * @return the new key
+	 * @param <U>
+	 *            the type of the next key
+	 * 
+	 * @return an {@code ERXKey<BigDecimal>} wrapping the {@code @min} key
 	 */
 	public static <U> ERXKey<U> min() {
 		return (ERXKey<U>) MIN;
 	}
 	
 	/**
-	 * Return a new ERXKey that uses NSArray's MIN aggregate operator @min.
+	 * Creates a new ERXKey that appends this key with NSArray's {@code @min}
+	 * aggregate operator
 	 * 
-	 * @param <U> the type of the next key
+	 * @param <U>
+	 *            the type of the next key
 	 *
-	 * @return the new key
+	 * @return an {@code ERXKey<BigDecimal>} wrapping the {@code thisKey.@min}
+	 *         keypath
 	 */
 	public <U> ERXKey<U> atMin() {
 		return (ERXKey<U>) append(ERXKey.min());
 	}
 	
 	/**
-	 * Return a new ERXKey that prepends the given key with NSArray's MAX aggregate operator @max. For
-	 * instance, if the key is "price" this will return a new ERXKey "@max.price".
+	 * Creates a new ERXKey that appends the given {@code key} to NSArray's
+	 * {@code @max} aggregate operator.
 	 * 
-	 * @param <U> the type of the next key
-	 * 
+	 * @param <U>
+	 *            the type of the next key
 	 * @param key
-	 *            the key to use for this aggregate keypath
-	 * @return the new appended key
+	 *            the key(path) to the values to be filtered for the maximum
+	 *            value
+	 * 
+	 * @return an {@code ERXKey<U>} wrapping the {@code @max.key}
+	 *         keypath
 	 */
 	public static <U> ERXKey<U> max(ERXKey<U> key) {
 		return MAX.append(key);
 	}
 	
 	/**
-	 * Return a new ERXKey that prepends the given key with NSArray's MAX aggregate operator @max. For
-	 * instance, if the key is "price" this will return a new ERXKey "@max.price".
+	 * Creates a new ERXKey that appends this key with NSArray's {@code @max}
+	 * aggregate operator and then appends the given {@code key}.
 	 * 
-	 * @param <U> the type of the next key
-	 * 
+	 * @param <U>
+	 *            the type of the next key
 	 * @param key
-	 *            the key to use for this aggregate keypath
-	 * @return the new appended key
+	 *            the key(path) to the values to be filtered for the maximum
+	 *            value
+	 * 
+	 * @return an {@code ERXKey<U>} wrapping the
+	 *         {@code thisKey.@max.key} keypath
 	 */
 	public <U> ERXKey<U> atMax(ERXKey<U> key) {
 		return append(ERXKey.max(key));
 	}
 	
 	/**
-	 * Return a new ERXKey that uses NSArray's MAX aggregate operator @max.
+	 * Creates a new ERXKey that wraps NSArray's {@code @max} aggregate
+	 * operator.
 	 * 
-	 * @param <U> the type of the next key
+	 * @param <U>
+	 *            the type of the next key
 	 *
-	 * @return the new key
+	 * @return an {@code ERXKey<U>} wrapping the {@code @max} key
 	 */
 	public static <U> ERXKey<U> max() {
 		return (ERXKey<U>) MAX;
 	}
 
 	/**
-	 * Return a new ERXKey that uses NSArray's MAX aggregate operator @max.
+	 * Creates a new ERXKey that appends this key with NSArray's {@code @max}
+	 * aggregate operator
 	 * 
-	 * @param <U> the type of the next key
+	 * @param <U>
+	 *            the type of the next key
 	 *
-	 * @return the new key
+	 * @return an {@code ERXKey<U>} wrapping the {@code thisKey.@max}
+	 *         keypath
 	 */
 	public <U> ERXKey<U> atMax() {
 		return (ERXKey<U>) append(ERXKey.max());
 	}
 
 	/**
-	 * Return a new ERXKey that uses NSArray's COUNT operator @count. Since any
-	 * keypath beyond @count is ignored, only a no arg method is available.
+	 * Creates a new ERXKey that wraps NSArray's {@code @count} aggregate
+	 * operator.
+	 * <p>
+	 * <b>Note:</b> any key(path) following {@code @count} is ignored.
+	 * </p>
 	 * 
-	 * @return the new key
+	 * @return an {@code ERXKey<BigDecimal>} wrapping the {@code @count} key
 	 */
 	public static ERXKey<Integer> count() {
 		return COUNT;
 	}
 	
 	/**
-	 * Return a new ERXKey that uses NSArray's COUNT operator @count. Since any
-	 * keypath beyond @count is ignored, only a no arg method is available.
+	 * Creates a new ERXKey that appends this key with NSArray's {@code @count}
+	 * aggregate operator
+	 * <p>
+	 * <b>Note:</b> any key(path) following {@code @count} is ignored.
+	 * </p>
 	 * 
-	 * @return the new key
+	 * @return an {@code ERXKey<Integer>} wrapping the {@code thisKey.@count}
+	 *         keypath
 	 */
 	public ERXKey<Integer> atCount() {
 		return append(ERXKey.count());
@@ -1664,6 +2007,8 @@ public class ERXKey<T> {
 	 * EOQualifier.QualifierOperatorEqual, null);
 	 * 
 	 * @return an ERXKeyValueQualifier
+	 * 
+	 * @see isEmptyRelationship
 	 */
 	public ERXKeyValueQualifier isNull() {
 		return ERXQ.isNull(_key);
@@ -1932,6 +2277,91 @@ public class ERXKey<T> {
 	public ERXKeyValueQualifier containsObject(Object obj) {
 		return ERXQ.containsObject(_key, obj);
 	}
+		
+	/**
+	 * Equivalent to <code>new ERXExistsQualifier(qualifier, key)</code>.
+	 * 
+	 * @param qualifier
+	 *            a qualifier for the {@link EORelationship#destinationEntity()
+	 *            destinationEntity} of the {@link EORelationship} represented
+	 *            by this ERXKey
+	 * @return a qualifier that evaluates to true when the {@link EORelationship}
+	 *         represented by this ERXKey contains at least one object matching
+	 *         the given {@code qualifier}
+	 * 
+	 * @author David Avendasora
+	 * @since Mar 26, 2014
+	 */
+	public ERXExistsQualifier containsAnyObjectSatisfying(EOQualifier qualifier) {
+		return new ERXExistsQualifier(qualifier, _key);
+	}
+
+	/**
+	 * <p>
+	 * Equivalent to <code>new ERXExistsQualifier(qualifier, key)</code>.
+	 * </p>
+	 * <p>
+	 * Since this qualifier will <em>not</em> result in a join in the database,
+	 * it can be very useful when testing relationships that use the
+	 * <code>InnerJoin</code> {@link EORelationship#joinSemantic() joinSemantic}
+	 * yet the relationship may be empty (to-many relationships) or
+	 * <code>null</code> (to-one relationships).
+	 * </p>
+	 * 
+	 * @param qualifier
+	 *            a qualifier for the {@link EORelationship#destinationEntity()
+	 *            destinationEntity} of the {@link EORelationship} represented
+	 *            by this ERXKey
+	 * @return a qualifier that evaluates to true when the
+	 *         {@link EORelationship} represented by this ERXKey does not
+	 *         contain any objects that satisfy the given {@code qualifier}
+	 * 
+	 * @author David Avendasora
+	 * @since Mar 26, 2014
+	 */
+	public ERXNotQualifier doesNotContainsAnyObjectSatisfying(EOQualifier qualifier) {
+		return new ERXNotQualifier(containsAnyObjectSatisfying(qualifier));
+	}
+
+	/**
+	 * <p>
+	 * Determines if there are any objects in the to-one or to-many
+	 * {@link EORelationship} that this ERXKey represents.
+	 * </p>
+	 * 
+	 * @return a qualifier that evaluates to <code>true</code> when the
+	 *         {@link EORelationship} represented by this ERXKey contains at
+	 *         least one object
+	 * 
+	 * @author David Avendasora
+	 * @since Mar 26, 2014
+	 */
+	public ERXExistsQualifier isNotEmptyRelationship() {
+		return containsAnyObjectSatisfying(new ERXTrueQualifier());
+	}
+
+	/**
+	 * <p>
+	 * Determines if there are any objects in the to-one or to-many
+	 * EORelationship that this ERXKey represents.
+	 * </p>
+	 * <p>
+	 * Since this qualifier will <em>not</em> result in a join in the database,
+	 * it can be very useful when testing relationships that use the
+	 * <code>InnerJoin</code> {@link EORelationship#joinSemantic() joinSemantic}
+	 * and the relationship could be empty (to-many relationships) or
+	 * <code>null</code> (to-one relationships).
+	 * </p>
+	 * 
+	 * @return a qualifier that evaluates to <code>true</code> when the
+	 *         {@link EORelationship} represented by this ERXKey is empty
+	 * 
+	 * @author David Avendasora
+	 * @since Mar 26, 2014
+	 */
+	public ERXNotQualifier isEmptyRelationship() {
+		return doesNotContainsAnyObjectSatisfying(new ERXTrueQualifier());
+	}
 	
 	/**
 	 * Equivalent to new ERXInQualifier(key, values);
@@ -2009,7 +2439,6 @@ public class ERXKey<T> {
 	 *            the key to append to this keypath
 	 * @return the new appended key
 	 */
-	@SuppressWarnings("unchecked")
 	public <U> ERXKey<U> append(ERXKey<U> key) {
 		return append(key.key());
 	}
@@ -2033,7 +2462,6 @@ public class ERXKey<T> {
 	 * will return a new ERXKey "person.firstName".
 	 * 
 	 * <pre>
-	 * &lt;code&gt;
 	 * 		ERXKey&lt;String&gt; k = new ERXKey&lt;String&gt;(&quot;foo&quot;);
 	 * 		ERXKey&lt;NSArray&lt;String&gt;&gt; a = new ERXKey&lt;NSArray&lt;String&gt;&gt;(&quot;foos&quot;);
 	 * 		k = k.append(k);
@@ -2043,7 +2471,6 @@ public class ERXKey<T> {
 	 * 		a = k.appendAsArray(a);
 	 * 		a = a.appendAsArray(k);
 	 * 		a = a.appendAsArray(a);
-	 * &lt;/code&gt;
 	 * </pre>
 	 * 
 	 * @param <U> the type of the next key in the array 
@@ -2052,7 +2479,6 @@ public class ERXKey<T> {
 	 *            the key to append to this keypath
 	 * @return the new appended key
 	 */
-	@SuppressWarnings("unchecked")
 	public <U> ERXKey<NSArray<U>> appendAsArray(ERXKey<U> key) {
 		return append(key.key());
 	}

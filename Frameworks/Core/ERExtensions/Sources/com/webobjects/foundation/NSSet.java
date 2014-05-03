@@ -465,7 +465,7 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 	@Override
 	public String toString() {
 		StringBuilder buffer = new StringBuilder(128);
-		buffer.append("(");
+		buffer.append('(');
 		Object[] objects = objectsNoCopy();
 		for (int i = 0; i < objects.length; i++) {
 			Object object = objects[i];
@@ -486,7 +486,7 @@ public class NSSet<E> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 			}
 		}
 
-		buffer.append(")");
+		buffer.append(')');
 		return buffer.toString();
 	}
 

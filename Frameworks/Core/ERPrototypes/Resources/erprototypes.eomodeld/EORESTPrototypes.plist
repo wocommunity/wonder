@@ -93,7 +93,7 @@
             externalType = VARCHAR; 
             factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
             name = globalID; 
-            valueClassName = "er.extensions.foundation.ERXKeyGlobalID"; 
+            valueClassName = "er.extensions.eof.ERXKeyGlobalID"; 
             valueFactoryMethodName = fromString; 
             width = 255; 
         }, 

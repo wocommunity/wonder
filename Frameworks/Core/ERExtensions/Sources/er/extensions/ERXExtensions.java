@@ -159,8 +159,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * that are posted when the application is finished launching.
      * This public observer is used to perform basic functions in
      * response to notifications. Specifically it handles
-     * configuring the adapator context so that SQL debugging can
-     * be enabled and disabled on the fly throgh the log4j system.
+     * configuring the adaptor context so that SQL debugging can
+     * be enabled and disabled on the fly through the log4j system.
      * Handling cleanup issues when sessions timeout, i.e. releasing
      * all references to editing contexts created for that session.
      * Handling call all of the <code>did*</code> methods on
@@ -357,7 +357,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     }
 
     /**
-     * This method is called everytime the configuration file
+     * This method is called every time the configuration file
      * is changed. This allows for turning SQL debugging on and
      * off at runtime.
      * @param n notification posted when the configuration file
@@ -1088,7 +1088,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      */
     // FIXME: Needs to find a better home.
     public static String userPreferencesKeyFromContext(String key, NSKeyValueCoding context) {
-        StringBuffer result=new StringBuffer(key);
+        StringBuilder result = new StringBuilder(key);
         result.append('.');
         String pc=(String)context.valueForKey("pageConfiguration");
         if (pc==null || pc.length()==0) {
@@ -1097,7 +1097,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
             if (e!=null) en=e.name();
             result.append("__");
             result.append(context.valueForKey("task"));
-            result.append("_");
+            result.append('_');
             result.append(en);
         } else {
             result.append(pc);

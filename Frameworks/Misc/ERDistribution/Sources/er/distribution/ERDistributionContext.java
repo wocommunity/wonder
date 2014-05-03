@@ -165,7 +165,7 @@ public class ERDistributionContext extends EODistributionContext {
 			for (Object object : arrayResult) {
 				if (object instanceof EOEnterpriseObject) {
 					EOEnterpriseObject eo = (EOEnterpriseObject)object;
-					message.append(eo.toString()).append(" | ").append(eo.snapshot()).append("\n");
+					message.append(eo.toString()).append(" | ").append(eo.snapshot()).append('\n');
 				} else {
 					message.append(object);
 				}
@@ -180,7 +180,7 @@ public class ERDistributionContext extends EODistributionContext {
 				StringBuilder message = new StringBuilder();
 				for (Object gid : notificationCarrier.propertySnapshots().keySet()) {
 					NSArray snapshot = (NSArray) notificationCarrier.propertySnapshots().get(gid); 
-					message.append(gid.toString()).append(" = ").append(snapshot).append("\n");
+					message.append(gid.toString()).append(" = ").append(snapshot).append('\n');
 				}
 				message.append("This also contains GIDs for all the toMany relationship related to the objects.");
 				return "response: " + result.returnValue().toString().replace("\n", "") + "\n" + message.toString().trim();

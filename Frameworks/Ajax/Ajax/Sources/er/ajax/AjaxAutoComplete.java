@@ -51,9 +51,9 @@ import er.extensions.foundation.ERXValueUtilities;
  *          context, the list should contain all possible objects. the list will
  *          be filtered by the scriptaculous engine.
  * @binding value string that will hold the text entered in the field. It is
- *          continiously updated.
+ *          continuously updated.
  * @binding item pushed and pulled the current element of the list. This can be
- *          used to customized the string representation (in conjuction with the
+ *          used to customized the string representation (in conjunction with the
  *          <cite>displayString</cite> binding) of the object.
  * @binding displayString optional custom string representation of the current
  *          element.
@@ -196,7 +196,7 @@ public class AjaxAutoComplete extends AjaxComponent {
 				str.append(divName);
 				str.append("',");
 				str.append(listJS);
-				str.append(",");
+				str.append(',');
 				AjaxOptions.appendToBuffer(createAjaxOptions(), str, ctx);
 				str.append(");\n// ]]>\n</script>\n");
 				res.appendContentString(String.valueOf(str));
@@ -221,7 +221,7 @@ public class AjaxAutoComplete extends AjaxComponent {
 		for (int i = 0; i < max; i++) {
 			Object ds = list.objectAtIndex(i);
 			if (i > 0) {
-				str.append(",");
+				str.append(',');
 			}
 			str.append("\n\"");
 			if (hasItem) {
@@ -234,7 +234,7 @@ public class AjaxAutoComplete extends AjaxComponent {
 			str.append(cnt);
 			str.append("\"");
 		}
-		str.append(")");
+		str.append(')');
 		return str.toString();
 	}		
 

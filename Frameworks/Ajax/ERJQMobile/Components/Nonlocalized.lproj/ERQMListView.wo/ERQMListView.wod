@@ -1,0 +1,11 @@
+FilterField : ERQMTextField {
+	type = "search";
+	id = filterFieldId;
+	value = dummyFilterValue;
+	placeholder = ^data-filter-placeholder;
+	label = ^data-filter-label;
+	hideLabel = ^data-filter-hidelabel;
+	data-theme = ^data-filter-theme;
+	data-mini = ^data-filter-mini;
+	inset = ^data-inset;
+}

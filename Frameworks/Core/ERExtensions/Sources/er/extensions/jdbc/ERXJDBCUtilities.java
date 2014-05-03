@@ -232,11 +232,13 @@ public class ERXJDBCUtilities {
 			String[] columnNamesWithoutQuotes = columnsFromAttributes(attributes, false);
 
 			// build the select statement, this selects -all- rows
-			StringBuffer selectBuf = new StringBuffer();
+			StringBuilder selectBuf = new StringBuilder();
 			selectBuf.append("select ");
 			selectBuf.append(columnsFromAttributesAsArray(attributes, _quoteSource).componentsJoinedByString(", ")).append(" from ");
 			if (_quoteSource) {
-				selectBuf.append("\"" + tableName + "\"");
+				selectBuf.append('"');
+				selectBuf.append(tableName);
+				selectBuf.append('"');
 			}
 			else {
 				selectBuf.append(tableName);
@@ -250,21 +252,23 @@ public class ERXJDBCUtilities {
 				String sqlString = EOQualifierSQLGeneration.Support._sqlStringForSQLExpression(qualifier, sqlExpression);
 				selectBuf.append(" where ").append(sqlString);
 			}
-			selectBuf.append(";");
+			selectBuf.append(';');
 			String sql = selectBuf.toString();
 			Statement stmt = _source.createStatement();
 
-			StringBuffer insertBuf = new StringBuffer();
+			StringBuilder insertBuf = new StringBuilder();
 			insertBuf.append("insert into ");
 			if (_quoteDestination) {
-				insertBuf.append("\"" + tableName + "\"");
+				insertBuf.append('"');
+				insertBuf.append(tableName);
+				insertBuf.append('"');
 			}
 			else {
 				insertBuf.append(tableName);
 			}
 			insertBuf.append(" (").append(columnsFromAttributesAsArray(attributes, _quoteDestination).componentsJoinedByString(", ")).append(") values (");
 			for (int i = columnNames.length; i-- > 0;) {
-				insertBuf.append("?");
+				insertBuf.append('?');
 				if (i > 0) {
 					insertBuf.append(", ");
 				}
@@ -370,8 +374,8 @@ public class ERXJDBCUtilities {
 	}
 
 	public static String jdbcTimestamp(NSTimestamp t) {
-		StringBuffer b = new StringBuffer();
-		b.append("TIMESTAMP '").append(TIMESTAMP_FORMATTER.format(t)).append("'");
+		StringBuilder b = new StringBuilder();
+		b.append("TIMESTAMP '").append(TIMESTAMP_FORMATTER.format(t)).append('\'');
 		return b.toString();
 	}
 

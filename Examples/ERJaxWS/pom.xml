@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>wonder.examples</groupId>
+		<artifactId>examples</artifactId>
+		<version>6.1.2-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>erjaxws</artifactId>
+	<packaging>pom</packaging>
+	<name>ERJaxWS Examples</name>
+
+	<modules>
+		<module>WebService_Created</module>
+		<module>WebService_Imported</module>
+		<module>WebService_Stateful</module>
+	</modules>
+</project>

@@ -305,7 +305,7 @@ public class ERXRedirect extends WOComponent {
 				// Build request handler path with session ID if needed
 		        WOSession aSession = session();
 				String aContextId = context.contextID();
-				StringBuffer requestHandlerPath = new StringBuffer();
+				StringBuilder requestHandlerPath = new StringBuilder();
 				if (WOApplication.application().pageCacheSize() == 0) {
 					if (aSession.storesIDsInURLs()) {
 						requestHandlerPath.append(component.name());

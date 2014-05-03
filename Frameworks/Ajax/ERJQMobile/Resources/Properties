@@ -1,0 +1,47 @@
+##  Properies Info
+er.extensions.load.Properties.framework.ERJQMobile=load
+er.extensions.ERJQMobile.hasLocalization=true
+
+#########################################################################
+#### LOAD Information
+#### 
+#### odn    - Use online version
+#### local  - Use local version (minimized)
+#### dev    - Use local version (developer)
+#### custom - Your own path to files
+#########################################################################
+
+er.jqm.css-theme=local
+er.jqm.css-icons=local
+er.jqm.css-structure=odn
+er.jqm.jquery=odn
+er.jqm.javascript=odn
+er.jqm.autocomplete=local
+
+### 1.4.2 - ODN
+er.jqm.css-theme.odn.location=___USE_LOCAL_THEME___
+er.jqm.css-icons.odn.location=___USE_LOCAL_ICONS___
+er.jqm.css-structure.odn.location=http://code.jquery.com/mobile/1.4.2/jquery.mobile.structure-1.4.2.min.css
+er.jqm.jquery.odn.location=http://code.jquery.com/jquery-1.11.0.min.js
+er.jqm.javascript.odn.location=http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js
+er.jqm.autocomplete.odn.location=static://ERJQMobile:min/javascript/jqm.autoComplete-1.5.2.min.js
+
+### 1.4.2 - LOCAL - MIN
+er.jqm.css-theme.local.location=static://ERJQMobile:min/css/jquery.mobile.theme-1.4.2.min.css
+er.jqm.css-icons.local.location=static://ERJQMobile:min/css/jquery.mobile.icons-1.4.2.min.css
+er.jqm.css-structure.local.location=static://ERJQMobile:min/css/jquery.mobile.structure-1.4.2.min.css
+er.jqm.jquery.local.location=static://ERJQMobile:min/javascript/jquery-1.11.0.min.js
+er.jqm.javascript.local.location=static://ERJQMobile:min/javascript/jquery.mobile-1.4.2.min.js
+er.jqm.autocomplete.local.location=static://ERJQMobile:min/javascript/jqm.autoComplete-1.5.2.min.js
+
+### 1.4.2 - LOCAL - DEV
+er.jqm.css-theme.dev.location=static://ERJQMobile:dev/css/jquery.mobile.theme-1.4.2.css
+er.jqm.css-icons.dev.location=static://ERJQMobile:dev/css/jquery.mobile.icons-1.4.2.css
+er.jqm.css-structure.dev.location=static://ERJQMobile:dev/css/jquery.mobile.structure-1.4.2.css
+er.jqm.jquery.dev.location=static://ERJQMobile:dev/javascript/jquery-1.11.0.js
+er.jqm.javascript.dev.location=static://ERJQMobile:dev/javascript/jquery.mobile-1.4.2.js
+er.jqm.autocomplete.dev.location=static://ERJQMobile:dev/javascript/jqm.autoComplete-1.5.2.js
+
+
+### Example for a custom theme
+# er.jqm.css-theme.custom.location=static://my-mobile-theme.css

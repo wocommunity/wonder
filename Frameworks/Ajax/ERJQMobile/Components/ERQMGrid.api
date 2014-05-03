@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERQMGrid" wocomponentcontent="true">    <binding name="columnCount"/>
+        <validation message="'column' is a required binding.">
+            <unbound name="columnCount"/>
+        </validation>
+    
+    
+        
+        
+        
+    <binding defaults="Boolean" name="responsive"/>
+    <binding name="id"/>
+        <binding name="class"/>
+        <binding name="style"/>
+        <binding name="otherTagString"/>
+    </wo>
+</wodefinitions>

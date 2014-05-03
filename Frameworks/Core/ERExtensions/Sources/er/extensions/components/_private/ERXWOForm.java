@@ -162,13 +162,13 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 
 	@Override
 	public String toString() {
-		return (new StringBuilder()).append("<").append(getClass().getName()).append(" name: ").append(_formName == null ? "null" : _formName.toString())
-				.append(" id: ").append(_id == null ? "null" : _id.toString()).append(" action: ").append(_action == null ? "null" : _action.toString())
-				.append(" actionClass: ").append(_actionClass == null ? "null" : _actionClass.toString()).append(" directActionName: ")
-				.append(_directActionName == null ? "null" : _directActionName.toString()).append(" href: ").append(_href == null ? "null" : _href.toString())
-				.append(" multipleSubmit: ").append(_multipleSubmit == null ? "null" : _multipleSubmit.toString()).append(" queryDictionary: ")
-				.append(_queryDictionary == null ? "null" : _queryDictionary.toString()).append(" otherQueryAssociations: ")
-				.append(_otherQueryAssociations == null ? "null" : _otherQueryAssociations.toString()).append(">").toString();
+		return new StringBuilder().append('<').append(getClass().getName()).append(" name: ").append(_formName)
+				.append(" id: ").append(_id).append(" action: ").append(_action)
+				.append(" actionClass: ").append(_actionClass).append(" directActionName: ")
+				.append(_directActionName).append(" href: ").append(_href)
+				.append(" multipleSubmit: ").append(_multipleSubmit).append(" queryDictionary: ")
+				.append(_queryDictionary).append(" otherQueryAssociations: ")
+				.append(_otherQueryAssociations).append('>').toString();
 	}
 
 	protected boolean _enterFormInContext(WOContext context) {

@@ -226,7 +226,7 @@
             columnName = mutableDictionary; 
             externalType = "OLE Object"; 
             name = mutableDictionary; 
-            valueClassName = "er.extensions.ERXMutableDictionary"; 
+            valueClassName = "er.extensions.foundation.ERXMutableDictionary"; 
             valueFactoryMethodName = fromBlob; 
         }, 
         {

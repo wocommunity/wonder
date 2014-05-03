@@ -151,7 +151,6 @@ public class ERXRouteRequestHandlerTest {
 	}
 	
 	// A dummy controller for testing with valid declarations
-	@SuppressWarnings("unused")
 	private static class SomeController extends ERXRouteController {
 		public SomeController(WORequest request) {
 			super(request);
@@ -191,7 +190,6 @@ public class ERXRouteRequestHandlerTest {
 	
 	// A dummy controller for testing
 	// This class deliberately has two duplicate declared route conflicts
-	@SuppressWarnings("unused")
 	private static class FaultyController extends ERXRouteController {
 		public FaultyController(WORequest request) {
 			super(request);
@@ -212,7 +210,6 @@ public class ERXRouteRequestHandlerTest {
 
 	// A dummy controller for testing
 	// This class deliberately has a duplicate declared route conflict
-	@SuppressWarnings("unused")
 	private static class FaultyController2 extends ERXRouteController {
 		public FaultyController2(WORequest request) {
 			super(request);

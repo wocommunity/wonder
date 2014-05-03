@@ -148,7 +148,7 @@ public class ERDDelayedSelectorInvocationAssignment extends ERDDelayedAssignment
                 }
 
                 if ( _log.isDebugEnabled() ) {
-                    final StringBuffer sb = new StringBuffer("(");
+                    final StringBuilder sb = new StringBuilder('(');
 
                     if ( arguments != null ) {
                         for ( int i = 0; i < arguments.length; i++ ) {
@@ -157,7 +157,7 @@ public class ERDDelayedSelectorInvocationAssignment extends ERDDelayedAssignment
                             sb.append(arguments[i]);
                         }
                     }
-                    sb.append(")");
+                    sb.append(')');
 
                     _log.debug("Going to fire " + selectorName + " on object " + target + " with " + numberOfArguments + " arguments: " + sb);
                 }

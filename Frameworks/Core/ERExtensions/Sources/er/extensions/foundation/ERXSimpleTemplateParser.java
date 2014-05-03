@@ -36,6 +36,7 @@ public class ERXSimpleTemplateParser {
     public static final String DEFAULT_DELIMITER = "@@";
 
     /** The deprecated delimiter */
+    @Deprecated
     private static final String DEPRECATED_DELIMITER = "@";
 
     /** logging support */

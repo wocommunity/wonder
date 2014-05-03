@@ -693,10 +693,20 @@ public class AppDetailPage extends MonitorComponent {
         return StatsUtilities.totalTransactionsForApplication(myApplication());
     }
 
+    public Integer totalTransactionsForActiveInstances(){
+    	return StatsUtilities.totalTransactionsForActiveInstancesOfApplication(myApplication());
+    }
+    
+    
     public Integer totalActiveSessions() {
         return StatsUtilities.totalActiveSessionsForApplication(myApplication());
     }
 
+    public Integer totalActiveSessionsForActiveInstances(){
+    	return StatsUtilities.totalActiveSessionsForActiveInstancesOfApplication(myApplication());
+    }
+ 
+    
     public Float totalAverageTransaction() {
         return StatsUtilities.totalAverageTransactionForApplication(myApplication());
     }

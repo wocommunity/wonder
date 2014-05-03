@@ -129,10 +129,10 @@ public class AjaxDefaultSubmitButton extends AjaxSubmitButton
         AjaxUpdateLink.addEffect(options, (String) valueForBinding("afterEffect", component), afterEffectID, (String) valueForBinding("afterEffectDuration", component));
 
         AjaxOptions.appendToBuffer(options, onClickBuffer, context);
-        onClickBuffer.append(")");
+        onClickBuffer.append(')');
         String onClick = (String) valueForBinding("onClick", component);
         if (onClick != null) {
-          onClickBuffer.append(";");
+          onClickBuffer.append(';');
           onClickBuffer.append(onClick);
         }
 
@@ -141,7 +141,7 @@ public class AjaxDefaultSubmitButton extends AjaxSubmitButton
         }
 
         if (onClickBefore != null) {
-            onClickBuffer.append("}");
+            onClickBuffer.append('}');
         }
         onClickBuffer.append("; return false;");
         

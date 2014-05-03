@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wodefinitions>
+    <wo class="ERQMRadioButton" wocomponentcontent="true">
+    	<binding name="id"/>	    
+	    <binding name="label"/>
+	    <binding name="checked"/>
+        <binding defaults="Boolean" name="inset"/>
+        <binding name="data-theme"/>
+        <binding defaults="Boolean" name="data-mini"/>
+        <binding name="data-role"/>
+        <binding name="selection"/>
+        <binding name="value"/>
+		<validation message="'checked' or ('selection' and 'value') must be bound">
+			<and>
+				<unbound name="checked"/>
+				<unbound name="selection"/>
+				<unbound name="value"/>
+			</and>
+		</validation>
+    <binding name="name"/>
+        <validation message="'name' is a required binding.">
+            <unbound name="name"/>
+        </validation>
+    <binding name="data-disabled"/>
+    <binding name="data-iconpos"/>
+    <binding name="data-wrapper-class"/>
+    <binding defaults="Boolean" name="isFlipswitch"/>
+    <binding defaults="Boolean" name="data-corners"/>
+    </wo>
+</wodefinitions>

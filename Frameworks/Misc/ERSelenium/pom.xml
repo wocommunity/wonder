@@ -35,6 +35,8 @@
 		<sourceDirectory>Sources</sourceDirectory>
 	</build>
 	<repositories>
+	<!-- OpenQA is off the air. I'm just commenting this out
+	instead of deleting it in case a replacement is necessary.
 		<repository>
 			<id>openqa-releases</id>
 			<name>OpenQA Releases</name>
@@ -46,5 +48,6 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
+		-->
 	</repositories>
 </project>

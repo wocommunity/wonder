@@ -118,7 +118,7 @@ public class ERXFakeRelationship extends WOComponent {
 
     public static void setFakeRelationshipForKey(EOEnterpriseObject sourceObject, NSArray objects, String relationshipKey, String destinationEntityName, String delimiter) {
 	if(objects.count() > 0) {
-	    StringBuffer newValue = new StringBuffer();
+	    StringBuilder newValue = new StringBuilder();
 	    Enumeration e = objects.objectEnumerator();
 
 	    while(e.hasMoreElements()) {

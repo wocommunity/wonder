@@ -249,7 +249,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 			message = message.trim();
 		}
 
-		StringBuffer uri = new StringBuffer();
+		StringBuilder uri = new StringBuilder();
 		Conversation conversation = _instantMessengerConnectionNamed(screenName).conversationForBuddyNamed(buddyName, _conversationTimeout);
 		String requestUrl = conversation.requestUrl();
 		if (requestUrl == null) {
@@ -276,23 +276,23 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 		else {
 			uri.append(requestUrl);
 		}
-		uri.append("?");
+		uri.append('?');
 		uri.append(InstantMessengerAdaptor.BUDDY_NAME_KEY);
-		uri.append("=");
+		uri.append('=');
 		uri.append(WOURLEncoder.encode(buddyName));
-		uri.append("&");
+		uri.append('&');
 		uri.append(InstantMessengerAdaptor.MESSAGE_KEY);
-		uri.append("=");
+		uri.append('=');
 		uri.append(WOURLEncoder.encode(message));
-		uri.append("&");
+		uri.append('&');
 		uri.append(InstantMessengerAdaptor.RAW_MESSAGE_KEY);
-		uri.append("=");
+		uri.append('=');
 		uri.append(WOURLEncoder.encode(rawMessage));
 		String sessionID = conversation.sessionID();
 		if (sessionID != null) {
-			uri.append("&");
+			uri.append('&');
 			uri.append(WOApplication.application().sessionIdKey());
-			uri.append("=");
+			uri.append('=');
 			uri.append(sessionID);
 		}
 

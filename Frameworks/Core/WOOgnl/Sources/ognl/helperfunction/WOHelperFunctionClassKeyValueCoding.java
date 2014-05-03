@@ -217,7 +217,7 @@ public class WOHelperFunctionClassKeyValueCoding {
 							keyBinding = keyBindingCreationCallbackObject == null ? _methodKeyGetBinding(objectClass, key, underbarMethodName) : keyBindingCreationCallbackObject._methodKeyGetBinding(key, underbarMethodName);
 							if (keyBinding == null) {
 								underbarMethodNameBuffer.setLength(0);
-								underbarMethodNameBuffer.append("_");
+								underbarMethodNameBuffer.append('_');
 								underbarMethodNameBuffer.append(key);
 								underbarMethodName = underbarMethodNameBuffer.toString();
 								keyBinding = keyBindingCreationCallbackObject == null ? _methodKeyGetBinding(objectClass, key, underbarMethodName) : keyBindingCreationCallbackObject._methodKeyGetBinding(key, underbarMethodName);
@@ -260,7 +260,7 @@ public class WOHelperFunctionClassKeyValueCoding {
 
 						if (canAccessFieldsDirectly) {
 							StringBuilder underbarFieldNameBuffer = new StringBuilder(key.length() + 3);
-							underbarFieldNameBuffer.append("_");
+							underbarFieldNameBuffer.append('_');
 							underbarFieldNameBuffer.append(key);
 							String underbarFieldName = underbarFieldNameBuffer.toString();
 							keyBinding = keyBindingCreationCallbackObject == null ? _fieldKeyBinding(objectClass, key, underbarFieldName) : keyBindingCreationCallbackObject._fieldKeyBinding(key, underbarFieldName);
