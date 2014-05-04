@@ -111,7 +111,7 @@ public class ERJaxWebService<T>
 
             WODynamicURL du = woRequest._uriDecomposed();
             String baseUri = String.format("%s/%s.woa/%s/%s",
-                    du.adaptorPath(),
+                    du.prefix(),
                     du.applicationName(),
                     du.requestHandlerKey(),
                     du.requestHandlerPath());
