@@ -176,6 +176,7 @@
                          <exclude name="**/*Example*/**" /> 
                          <exclude name="**/Applications/**" /> 
                          <exclude name="**/Tests/**" />
+                         <exclude name="**/Archives/**" />
                     </dirset>
                     <dirset dir="${extra.javadoc.dir}" erroronmissingdir="false">
                          <include name="**/Sources/" />
@@ -241,7 +242,6 @@ window.onload=change;
                 <dirset dir="${build.root}/Build/lib" />
             </classpath>
         </java>
-        <echo>components javadoc installation finished</echo>
     </target>
 
     <target name="componentsOnly" depends="build">
@@ -259,6 +259,7 @@ window.onload=change;
                          <include name="Frameworks/**/Sources/" />
                          <exclude name="**/*Example*/**" />
                          <exclude name="**/Applications/**" />
+                         <exclude name="**/Archives/**" />
                     </dirset>
                     <dirset dir="${extra.javadoc.dir}" erroronmissingdir="false">
                          <include name="**/Sources/" />
@@ -285,6 +286,7 @@ window.onload=change;
                          <include name="Frameworks/**/Sources/" />
                          <exclude name="**/*Example*/**" />
                          <exclude name="**/Applications/**" />
+                         <exclude name="**/Archives/**" />
                     </dirset>
                     <dirset dir="${extra.javadoc.dir}" erroronmissingdir="false">
                          <include name="**/Sources/" />
