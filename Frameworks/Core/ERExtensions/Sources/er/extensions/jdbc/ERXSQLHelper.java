@@ -1235,6 +1235,17 @@ public class ERXSQLHelper {
 	protected String sqlForGetNextValFromSequencedNamed(String sequenceName) {
 		throw new UnsupportedOperationException("There is no " + getClass().getSimpleName() + " implementation for sequences.");
 	}
+
+	/**
+	 * Returns the SQL required to set the next value of the given sequence.
+	 * 
+	 * @param sequenceName the name of the sequence
+	 * @param nextValue the value the sequence should return next
+	 * @return the sql expression
+	 */
+	protected String sqlForSetNextValueOfSequencedNamed(String sequenceName, Long nextValue) {
+		throw new UnsupportedOperationException("There is no " + getClass().getSimpleName() + " implementation for sequences.");
+	}
 	
 	/**
 	 * Convenience method to get the next unique ID from a sequence.
@@ -1259,6 +1270,23 @@ public class ERXSQLHelper {
 		NSDictionary dictionary = (NSDictionary) array.objectAtIndex(0);
 		NSArray valuesArray = dictionary.allValues();
 		return (Number) valuesArray.objectAtIndex(0);
+	}
+
+	/**
+	 * Convenience method to set the next value of a sequence.
+	 * 
+	 * @param ec
+	 *            editing context
+	 * @param modelName
+	 *            name of the model which connects to the database that has the
+	 *            sequence in it
+	 * @param sequenceName
+	 *            name of the sequence
+	 * @param nextValue
+	 *            the value the sequence should return next
+	 */
+	public void setNextValueOfSequenceNamed(EOEditingContext ec, String modelName, String sequenceName, Long nextValue) {
+        EOUtilities.rawRowsForSQL(ec, modelName, sqlForSetNextValueOfSequencedNamed(sequenceName, nextValue), null);
 	}
 
 	/**
@@ -1925,6 +1953,11 @@ public class ERXSQLHelper {
 		}
 
 		@Override
+		protected String sqlForSetNextValueOfSequencedNamed(String sequenceName, Long nextValue) {
+			return "ALTER SEQUENCE " + sequenceName + " RESTART WITH " + nextValue; 
+		}
+		
+		@Override
 		public String sqlForRegularExpressionQuery(String key, String value) {
 			return key + " REGEXP " + value + "";
 		}
@@ -2311,6 +2344,11 @@ public class ERXSQLHelper {
 		@Override
 		protected String sqlForGetNextValFromSequencedNamed(String sequenceName) {
 			return "select NEXTVAL('" + sequenceName + "') as key"; 
+		}
+		
+		@Override
+		protected String sqlForSetNextValueOfSequencedNamed(String sequenceName, Long nextValue) {
+			return "select SETVAL('" + sequenceName + "', " + nextValue + ")"; 
 		}
 		
 		@Override
