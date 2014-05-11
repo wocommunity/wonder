@@ -12,6 +12,11 @@ AttributeRepetition: WORepetition {
 	list = currentSectionKeys;
 }
 
+IsNotOmitted : WOConditional {
+	condition = isKeyOmitted;
+	negate = true;
+}
+
 ColumnLabelRepetition: WORepetition {
 	_unroll = true;
 	item = propertyKey;

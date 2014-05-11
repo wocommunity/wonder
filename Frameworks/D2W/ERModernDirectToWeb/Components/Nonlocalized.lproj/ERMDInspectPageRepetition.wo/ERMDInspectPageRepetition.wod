@@ -2,11 +2,17 @@ AttributeRepetitionDiv : WOGenericContainer {
 	elementName = "div";
 	class = d2wContext.classForAttributeRepetitionWrapper;
 }
+
 AttributeRepetition: WORepetition {
 	_unroll = true;
 	item = propertyKey;
 	list = currentSectionKeys;
 	index = index;
+}
+
+IsNotOmitted : WOConditional {
+	condition = isKeyOmitted;
+	negate = true;
 }
 
 AttributeValue: WOSwitchComponent { 
@@ -29,6 +35,7 @@ LabelWrapper : WOGenericContainer {
 	elementName = "span";
 	class = d2wContext.classForLabelSpan;
 }
+
 AttributeWrapper : WOGenericContainer {
 	elementName = "span";
 	class = d2wContext.classForAttributeValue;

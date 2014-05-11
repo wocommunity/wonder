@@ -12,6 +12,11 @@ AttributeRepetition: WORepetition {
 	list = currentSectionKeys;
 }
 
+IsNotOmitted : WOConditional {
+	condition = isKeyOmitted;
+	negate = true;
+}
+
 ObjectsRepetition: WORepetition {
 	item = d2wContext.object;
 	list = ^displayGroup.displayedObjects;
