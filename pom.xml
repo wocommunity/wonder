@@ -516,7 +516,7 @@
             <dependency>
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
-                <version>1.4.177</version>
+                <version>1.2.125</version>
             </dependency>
             <dependency>
                 <groupId>com.octo.captcha</groupId>
