@@ -630,7 +630,7 @@ int shmem_do_tests()
       long long testaddr2 = 0x1111222280000003;
       ShmemArray *mem = sha_alloc("Test", (void *)testaddr, 4, 2);
 
-      printf("Testing against 64 bit address handling (long long=%d, int=%d, void *=%d)\n", (int)sizeof(long long), (int)sizeof(int), (int)sizeof(void *));
+      printf("Testing against 64 bit address handling (long long=%d, long=%d, int=%d, void *=%d)\n", (int)sizeof(long long), (int)sizeof(long), (int)sizeof(int), (int)sizeof(void *));
 
       if(mem->elements[1].element != (void *)testaddr2)
       {
