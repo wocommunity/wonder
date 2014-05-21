@@ -648,7 +648,7 @@ static int updateNumericSetting(const char *settingName, int *dest, const char *
 /*
  * Callback to update a particular setting in a WOApp.
  */
-static void updateAppKey(const char *key, const char *value, _WOApp *app)
+static int updateAppKey(const char *key, const char *value, _WOApp *app)
 {
    int changed = 0;
    if (strcmp(key, WOSCHEDULER) == 0)
@@ -674,12 +674,14 @@ static void updateAppKey(const char *key, const char *value, _WOApp *app)
       /* The setting was not recognized. Log and ignore it. */
       WOLog(WO_INFO, "Unknown attribute in application config: \"%s\", value = \"%s\"", key, value);
    }
+   
+   return changed;
 }
 
 /*
  * Callback to update a particular setting in a WOApp.
  */
-static void updateInstanceKey(const char *key, const char *value, _WOInstance *instance)
+static int updateInstanceKey(const char *key, const char *value, _WOInstance *instance)
 {
    int changed = 0;
 
@@ -719,6 +721,8 @@ static void updateInstanceKey(const char *key, const char *value, _WOInstance *i
       /* The setting was not recognized. Log and ignore it. */
       WOLog(WO_INFO, "Unknown attribute in instance config: \"%s\", value = \"%s\"", key, value);
    }
+   
+   return changed;
 }
 
 /*

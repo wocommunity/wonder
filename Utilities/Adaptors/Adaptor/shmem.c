@@ -28,11 +28,11 @@ and limitations under the License.
 
 #include <errno.h>
 #include <sys/types.h>
+#include <stdio.h>
 
 #ifndef DISABLE_SHARED_MEMORY
 
 #include <fcntl.h>
-#include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/file.h>
