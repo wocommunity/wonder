@@ -64,10 +64,14 @@ typedef struct {
  */
 static int WOShmem_fd = -1;
 
+#ifndef MAP_FAILED
+#define MAP_FAILED ((void *)-1)
+#endif
+
 /*
  * The address in memory at which the file has been mapped.
  */
-static void * WOShmem_base_address = (void *)-1;
+static void * WOShmem_base_address = MAP_FAILED;
 
 /*
  * The total size of the mapped memory.
@@ -78,10 +82,6 @@ static WA_recursiveLock WOShmem_mutex;
 
 #define offset_to_addr(offset) ((void *)(WOShmem_base_address + offset))
 #define addr_to_offset(addr) ((void *)addr - WOShmem_base_address)
-
-#ifndef MAP_FAILED
-#define MAP_FAILED -1
-#endif
 
 #ifndef MAP_FILE
 #define MAP_FILE 0
@@ -252,7 +252,7 @@ int WOShmem_init(const char *file, size_t memsize)
       if (WOShmem_size != -1)
       {
          WOShmem_base_address = (void *)mmap(0, WOShmem_size, PROT_READ|PROT_WRITE, MAP_FILE|MAP_SHARED|MAP_INHERIT, WOShmem_fd, 0);
-         if (WOShmem_base_address == (void *)MAP_FAILED)
+         if (WOShmem_base_address == MAP_FAILED)
          {
             errMsg = WA_errorDescription(WA_error());
             WOLog(WO_ERR, "WOShmem_init(): couldn't map file: %s", errMsg);
